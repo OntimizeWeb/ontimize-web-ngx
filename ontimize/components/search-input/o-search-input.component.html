@@ -1,0 +1,8 @@
+<form #innerForm [formGroup]="formGroup" layout-fill>
+    <div layout="row" layout-align="space-between center" layout-fill layout-align="space-between center" >
+        <span class="icon-btn"><i class="material-icons">search</i></span>
+        <md-input class="md-input" #term type="search" id="term" layout-fill
+            [placeholder]="placeHolder" formControlName="term">
+        </md-input>
+    </div>
+</form>

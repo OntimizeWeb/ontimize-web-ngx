@@ -1,0 +1,119 @@
+
+span.icon-btn{
+  cursor: pointer;
+  padding-top: 4px;
+  i {
+    padding-top: 4px;
+  }
+}
+
+$baseline-grid: 8px !default;
+$input-container-padding: 2px !default;
+
+$input-label-default-offset: 24px !default;
+$input-label-default-scale: 1.0 !default;
+$input-label-float-offset: 6px !default;
+$input-label-float-scale: 0.75 !default;
+
+$input-placeholder-offset: $input-label-default-offset !default;
+
+@mixin pie-clearfix {
+  &:after {
+    content: '';
+    display: table;
+    clear: both;
+  }
+}
+
+@mixin rtl($prop, $value, $rtl-value) {
+  #{$prop}: $value;
+
+  html[dir=rtl] & {
+    #{$prop}: $rtl-value;
+    unicode-bidi: embed;
+  }
+  body[dir=rtl] & {
+    #{$prop}: $rtl-value;
+    unicode-bidi: embed;
+  }
+
+  bdo[dir=rtl] {
+    direction: rtl;
+    unicode-bidi: bidi-override;
+  }
+  bdo[dir=ltr] {
+    direction: ltr;
+    unicode-bidi: bidi-override;
+  }
+
+}
+
+$swift-ease-out-duration: 0.4s !default;
+$swift-ease-out-timing-function: cubic-bezier(0.25, 0.8, 0.25, 1) !default;
+$swift-ease-out: all $swift-ease-out-duration $swift-ease-out-timing-function !default;
+
+md-input-container {
+  @include pie-clearfix();
+  display: inline-block;
+  position: relative;
+  padding: $input-container-padding;
+  margin: 18px 0;
+  vertical-align: middle;
+
+   &.md-block {
+    display: block;
+  }
+
+  label:not(.md-container-ignore) {
+    position: absolute;
+    bottom: 100%;
+    @include rtl(left, 0, auto);
+    @include rtl(right, auto, 0);
+  }
+
+    .md-placeholder {
+    position: absolute;
+    top: 0;
+    opacity: 0;
+    transition-property: opacity, transform;
+    transform: translate3d(0, $input-placeholder-offset + $baseline-grid * 0.75, 0);
+  }
+
+  label:not(.md-no-float):not(.md-container-ignore),
+  .md-placeholder {
+    order: 1;
+    pointer-events: none;
+    -webkit-font-smoothing: antialiased;
+    @include rtl(padding-left, $input-container-padding + 1px, 0);
+    @include rtl(padding-right, 0, $input-container-padding + 1px);
+    z-index: 1;
+    transform: translate3d(0, $input-label-default-offset + 4, 0) scale($input-label-default-scale);
+    transition: transform $swift-ease-out-timing-function 0.25s;
+
+    @include rtl(transform-origin, left top, right top);
+  }
+  &.md-input-focused .md-placeholder {
+    opacity: 1;
+    transform: translate3d(0, $input-placeholder-offset, 0);
+  }
+  // Placeholder should immediately disappear when the user starts typing
+  &.md-input-has-value .md-placeholder {
+    transition: none;
+    opacity: 0;
+  }
+
+  &:not( .md-input-has-value ) input:not( :focus ),
+  &:not( .md-input-has-value ) input:not( :focus )::-webkit-datetime-edit-ampm-field,
+  &:not( .md-input-has-value ) input:not( :focus )::-webkit-datetime-edit-day-field,
+  &:not( .md-input-has-value ) input:not( :focus )::-webkit-datetime-edit-hour-field,
+  &:not( .md-input-has-value ) input:not( :focus )::-webkit-datetime-edit-millisecond-field,
+  &:not( .md-input-has-value ) input:not( :focus )::-webkit-datetime-edit-minute-field,
+  &:not( .md-input-has-value ) input:not( :focus )::-webkit-datetime-edit-month-field,
+  &:not( .md-input-has-value ) input:not( :focus )::-webkit-datetime-edit-second-field,
+  &:not( .md-input-has-value ) input:not( :focus )::-webkit-datetime-edit-week-field,
+  &:not( .md-input-has-value ) input:not( :focus )::-webkit-datetime-edit-year-field,
+  &:not( .md-input-has-value ) input:not( :focus )::-webkit-datetime-edit-text {
+    color: transparent;
+  }
+
+}

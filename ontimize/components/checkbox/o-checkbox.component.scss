@@ -1,0 +1,11 @@
+md-checkbox{
+  z-index: 1;
+}
+
+.read-only-blocker{
+  z-index: 2;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+}

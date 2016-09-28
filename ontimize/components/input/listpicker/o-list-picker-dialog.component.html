@@ -1,0 +1,17 @@
+<md-toolbar color="primary" class="md-whiteframe-5dp" *ngIf="filter">
+  <o-search-input class="list-picker-search" (onSearch)="searchVal=$event"></o-search-input>
+</md-toolbar>
+
+<div class="dialog-list-container">
+  <md-list>
+    <md-list-item class="md-1-line" (click)="onClickListItem($event, item)"
+      *ngFor="let item of data | columnsfilter: {filtervalue: searchVal, filtercolumns: visibleColsArray }">
+      <div layout="row" layout-fill>
+        <div #colWrapper *ngFor="let col of visibleColsArray" class="clip-text" flex="auto">
+          <p class="md-list-item-text"> {{item[col]}} </p>
+        </div>
+      </div>
+      <md-divider></md-divider>
+    </md-list-item>
+  </md-list>
+</div>

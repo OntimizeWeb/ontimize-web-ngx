@@ -1,0 +1,16 @@
+<md-toolbar color="primary">
+  <div md-ripple layout-padding layout="row" layout-align="space-between stretch" class="o-side-menu-icon-open" (click)="showSidenav()">
+    <md-icon class="md-24">menu</md-icon>
+  </div>
+</md-toolbar>
+
+<md-sidenav-layout [class.menu-opened]="opened === true">
+  <md-sidenav #sidenav>
+    <h3>
+      <span>{{ title | oTranslate }}</span>
+    </h3>
+    <md-nav-list>
+      <ng-content></ng-content>
+    </md-nav-list>
+  </md-sidenav>
+</md-sidenav-layout>

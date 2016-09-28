@@ -1,0 +1,7 @@
+<md-list-item o-md-selectable-list-item *ngFor="let item of list.data | orderBy : [orderByCol]"  (click)="onClick(item, $event)"
+  md-ink class="md-1-line">
+  <!--TODO solve this-> [model]="item"-->
+    <md-checkbox [checked]="isItemSelected(item)" aria-label="Mark to select"></md-checkbox>
+    {{getListItemDisplayValue(item) }}
+  <md-divider></md-divider>
+</md-list-item>

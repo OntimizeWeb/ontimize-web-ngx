@@ -1,0 +1,18 @@
+textarea:disabled,
+input:not([type]):disabled,
+input[type="color"]:disabled,
+input[type="date"]:disabled,
+input[type="datetime"]:disabled,
+input[type="datetime-local"]:disabled,
+input[type="email"]:disabled,
+input[type="month"]:disabled,
+input[type="password"]:disabled,
+input[type="number"]:disabled,
+input[type="search"]:disabled,
+input[type="tel"]:disabled,
+input[type="text"]:disabled,
+input[type="time"]:disabled,
+input[type="url"]:disabled,
+input[type="week"]:disabled {
+    color: rgba(0,0,0,0.36);
+}

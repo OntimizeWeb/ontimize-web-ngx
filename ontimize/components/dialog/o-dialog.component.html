@@ -1,0 +1,13 @@
+<md-dialog #dialog>
+  <md-dialog-title>{{ title | oTranslate }}</md-dialog-title>
+  {{ message | oTranslate }}
+  <md-dialog-actions>
+    <span flex></span>
+    <button md-button class="md-primary" (click)="dialog.close(true)">
+      <span>{{ okButtonText | oTranslate }}</span>
+    </button>
+    <button *ngIf="twoOptions" md-button class="md-primary" (click)="dialog.close(false)">
+      <span>{{ cancelButtonText | oTranslate }}</span>
+    </button>
+  </md-dialog-actions>
+</md-dialog>

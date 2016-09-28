@@ -1,0 +1,24 @@
+<md-toolbar color="primary" class="toolbar-form-header">
+
+  <div class="md-toolbar-tools" layout-fill *ngIf="initialMode">
+    <md-icon aria-label="Back" (click)="onCloseDetail()" *ngIf="isDetail">arrow_back</md-icon>
+    <span   *ngIf="labelheader!=''" >{{labelHeader | oTranslate }}</span>
+    <md-icon aria-label="First" (click)="first()" *ngIf="showNavigation()" layout-padding>first_page</md-icon>
+    <md-icon aria-label="Previous" (click)="previous()" *ngIf="showNavigation()" layout-padding>keyboard_arrow_left</md-icon>
+    <span>{{numberOfRecords()}}</span>
+    <md-icon aria-label="Next" (click)="next()" *ngIf="showNavigation()" layout-padding>keyboard_arrow_right</md-icon>
+    <md-icon aria-label="Last" (click)="last()" *ngIf="showNavigation()" layout-padding>last_page</md-icon>
+    <span class="fill-remaining"></span>
+    <md-icon aria-label="Refresh" (click)="onReload()" *ngIf="refreshBtnEnabled" layout-padding>refresh</md-icon>
+    <md-icon aria-label="Insert" (click)="onInsert()" *ngIf="insertBtnEnabled" layout-padding>add</md-icon>
+    <md-icon aria-label="Edit" (click)="onEdit()" *ngIf="editBtnEnabled" layout-padding>mode_edit</md-icon>
+    <md-icon aria-label="Delete" (click)="onDelete()" *ngIf="deleteBtnEnabled" layout-padding>delete</md-icon>
+  </div>
+
+  <div class="md-toolbar-tools" layout-fill *ngIf="editMode || insertMode">
+    <md-icon id="cancelButton" (click)="cancelOperation($event)">clear</md-icon>
+    <span class="fill-remaining"></span>
+    <md-icon id="acceptButton" (click)="acceptOperation($event)">done</md-icon>
+  </div>
+
+</md-toolbar>

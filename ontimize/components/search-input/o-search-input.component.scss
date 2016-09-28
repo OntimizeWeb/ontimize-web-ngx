@@ -1,0 +1,22 @@
+.o-search {
+  position: relative;
+  height: 30px;
+}
+
+.o-search>.md-icon {
+  position: absolute;
+  top: 0.15em;
+  left: 0.3em;
+  color: inherit;
+}
+
+.o-search-input {
+  height: 25px;
+  width: 80%;
+  font-size: 15px;
+  border: 1px solid inherit;
+  border-radius: 20px;
+  padding-left: 30px;
+}
+
+

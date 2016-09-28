@@ -1,0 +1,14 @@
+<div class="fake-li md-primary" *ngIf="!restricted">
+  <a *ngIf="!action && route" md-list-item [routerLink]="[ route ]">
+    <md-icon *ngIf="icon" class="o-bar-menu-item-icon md-24">{{ icon }}</md-icon>
+    <div class="o-bar-menu-item-title">{{ title | oTranslate }}</div>
+  </a>
+  <a *ngIf="!route && action" md-list-item (click)="action()">
+    <md-icon *ngIf="icon" class="o-bar-menu-item-icon md-24">{{ icon }}</md-icon>
+    <div class="o-bar-menu-item-title">{{ title | oTranslate }}</div>
+  </a>
+  <div *ngIf="!route && !action" class="o-bar-menu-item-text" md-list-item>
+    <md-icon *ngIf="icon" class="o-bar-menu-item-icon md-24">{{ icon }}</md-icon>
+    <div class="o-bar-menu-item-title">{{ title | oTranslate }}</div>
+  </div>
+</div>

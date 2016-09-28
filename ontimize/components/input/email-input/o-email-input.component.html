@@ -1,0 +1,13 @@
+<div layout="row" layout-fill layout-align="space-between center" [formGroup]="form?.formGroup">
+    <md-input class="md-input" type="email" [attr.id]="oattr" layout-fill [formControlName]="oattr"
+        [placeholder]="placeHolder" [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)"
+        [readonly]="isReadOnly" >
+        <md-hint *ngIf="!isReadOnly && _fControl.touched && _fControl.errors">
+            <span *ngIf="_fControl.errors?.required">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</span>
+            <span *ngIf="_fControl.errors?.minlength">{{ 'FORM_VALIDATION.MIN_LENGTH' | oTranslate }}: {{ _fControl.errors?.minlength.requiredLength }}</span>
+            <span *ngIf="_fControl.errors?.maxlength">{{ 'FORM_VALIDATION.MAX_LENGTH' | oTranslate }}: {{ _fControl.errors?.maxlength.requiredLength }}</span>
+            <span *ngIf="_fControl.errors?.invalidEmailAddress"> {{ 'FORM_VALIDATION.EMAIL_FORMAT' | oTranslate}} </span>
+        </md-hint>
+    </md-input>
+    <span class="icon-btn"><i class="material-icons">mail_outline</i></span>
+</div>

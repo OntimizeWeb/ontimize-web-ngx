@@ -1,0 +1,10 @@
+<div layout-fill [formGroup]="form?.formGroup" class="relative">
+    <md-checkbox [attr.id]="oattr" [id]="oattr" layout-fill [formControlName]="oattr"
+        [checked]="isChecked()" [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)">
+        {{ placeHolder }}
+        <md-hint *ngIf="!isReadOnly && _fControl.touched && _fControl.errors">
+            <span *ngIf="_fControl.errors?.required">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</span>
+        </md-hint>
+    </md-checkbox>
+    <div *ngIf="isReadOnly" layout-fill class="read-only-blocker" (click)="onClickBlocker($event)" ></div>
+</div>

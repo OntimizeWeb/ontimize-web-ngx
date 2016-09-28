@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "declaration": true,
+    "noImplicitAny": false,
+    "removeComments": true,
+    "noLib": false,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "sourceMap": true,
+    "listFiles": true
+  },
+  "files": [
+    "ontimize.ts",
+    "typings/browser.d.ts",
+    "tools/manual_typings/manual.typings.d.ts"
+  ],
+  "compileOnSave": false
+}

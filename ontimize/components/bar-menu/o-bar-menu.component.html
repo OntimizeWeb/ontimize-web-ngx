@@ -1,0 +1,9 @@
+<md-toolbar color="primary">
+  <nav>
+    <label [attr.for]="id" class="toggle">{{ title | oTranslate }}</label>
+    <input [attr.id]="id" type="checkbox" />
+    <div class="fake-ul md-primary menu">
+      <ng-content></ng-content>
+    </div>
+  </nav>
+</md-toolbar>

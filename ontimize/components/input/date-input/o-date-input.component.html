@@ -1,0 +1,11 @@
+<div layout="row" layout-fill layout-align="space-between center" [formGroup]="form?.formGroup">
+    <md-input #inputModel type="text" [attr.id]="oattr" [id]="oattr" layout-fill [formControlName]="oattr" [ngModel]="getValue()"
+        (ngModelChange)="innerOnChange($event)" class="input-model">
+    </md-input>
+
+    <md-input #displayInputModel class="md-input" type="text" [attr.id]="opickerattr" [id]="opickerattr" layout-fill [placeholder]="placeHolder" [value]="getDescriptionValue()"
+        [readonly]="isReadOnly" (blur)="onDisplayInputBlur()" (click)="onInputClick()">
+        <md-hint *ngIf="!isReadOnly && _fControl.errors">{{'FORM_VALIDATION.REQUIRED' | oTranslate}}</md-hint>
+    </md-input>
+    <span class="icon-btn" (click)="onClickIcon($event)" ><i class="material-icons">today</i></span>
+</div>

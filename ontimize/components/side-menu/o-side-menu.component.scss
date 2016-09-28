@@ -1,0 +1,30 @@
+o-side-menu {
+
+  .o-side-menu-icon-open {
+    cursor: pointer;
+  }
+
+  md-sidenav-layout.menu-opened {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1001;
+  }
+
+  md-nav-list {
+    padding: 0px;
+  }
+
+  h3 {
+    padding: 25px;
+    border-bottom: 3px solid;
+    margin: 0px;
+  }
+
+}
+
+.md-input-placeholder {
+  z-index: 1000;
+}

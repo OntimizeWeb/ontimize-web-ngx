@@ -1,0 +1,26 @@
+<div layout-fill [formGroup]="form?.formGroup">
+    <md-combo *ngIf="!isReadOnly" class="md-combo" [attr.id]="oattr" [id]="oattr" layout-fill [formControlName]="oattr"
+        [placeholder]="placeHolder" [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)"
+        [separator]="separator" [translate]="translate"
+        [value-column]="valueColumn" [data]="dataArray" [description-columns]="descriptionColArray"
+        [null-selection]="nullSelection">
+        <md-hint *ngIf="!isReadOnly && _fControl.touched && _fControl.errors">
+            <span *ngIf="_fControl.errors?.required">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</span>
+        </md-hint>
+    </md-combo>
+
+    <md-input *ngIf="isReadOnly" class="md-input" type="text" [attr.id]="'fake_' + oattr" [id]="'fake_' + oattr" layout-fill
+        [class.ng-untouched]="_fControl && _fControl.untouched"
+        [class.ng-touched]="_fControl && _fControl.touched"
+        [class.ng-dirty]="_fControl && _fControl.dirty"
+        [class.ng-pristine]="_fControl && _fControl.pristine"
+        [class.ng-invalid]="_fControl && !_fControl.valid"
+        [class.ng-valid]="_fControl && _fControl.valid"
+        [placeholder]="placeHolder" [value]="getDescriptionValue()"
+        [readonly]="isReadOnly" >
+        <md-hint *ngIf="!isReadOnly && _fControl.touched && _fControl.errors">
+            <span *ngIf="_fControl.errors?.required">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</span>
+        </md-hint>
+    </md-input>
+
+</div>

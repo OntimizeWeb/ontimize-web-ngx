@@ -1,0 +1,30 @@
+.md-overlay-container {
+
+  .md-overlay-pane {
+
+    position: fixed !important;
+    top: 0px !important;
+    left: 0px !important;
+    right: 0px !important;
+    bottom: 0px !important;
+    background: rgba(0, 0, 0, 0.8);
+    transform: none !important;
+    z-index: 10000;
+
+    .md-dialog {
+
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      -webkit-transform: translateX(-50%) translateX(0px) translateY(-50%) translateY(0px) !important;
+      -moz-transform: translateX(-50%) translateX(0px) translateY(-50%) translateY(0px) !important;
+      -ms-transform: translateX(-50%) translateX(0px) translateY(-50%) translateY(0px) !important;
+      -o-transform: translateX(-50%) translateX(0px) translateY(-50%) translateY(0px) !important;
+      transform: translateX(-50%) translateX(0px) translateY(-50%) translateY(0px) !important;
+      opacity: 1;
+
+    }
+
+  }
+
+}

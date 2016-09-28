@@ -1,0 +1,36 @@
+o-side-menu-item {
+
+  .o-side-menu-item-text {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: row;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
+    box-sizing: border-box;
+    font-size: 16px;
+    height: 48px;
+    padding: 0 16px;
+  }
+
+  .o-side-menu-item-icon {
+    margin: 0px 10px 0px 0px;
+    & ~ .o-side-menu-item-title {
+      padding-left: 0px;
+    }
+  }
+
+  .o-side-menu-item-title {
+    position: relative;
+    top: 1px;
+    padding-left: 33px;
+  }
+
+}

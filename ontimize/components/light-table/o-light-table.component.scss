@@ -1,0 +1,62 @@
+
+.container{
+  overflow-y:hidden;
+}
+  md-toolbar.o-light-table-header {
+
+    background-color: rgb(238,238,238);
+    color: rgba(0,0,0,0.87);
+    border-top: 1px solid #fff;
+    border-bottom: 1px solid #fff;
+
+    padding: 0px 40px 0px 0px;
+    height: 48px;
+    min-height: 48px;
+
+    @media (max-width: 600px) and (min-width: 0) and (orientation: portrait) {
+      top: 112px;
+    }
+
+    @media (max-width: 600px) and (min-width: 0) and (orientation: landscape) {
+      top: 96px;
+    }
+
+    &.no-padding {
+      padding: 0px;
+    }
+
+    md-checkbox {
+      width: 50px;
+      height: 18px;
+      margin-left: 3px;
+      padding: 0px 12px 0px 60px;
+    }
+
+    div {
+      font-weight: bold;
+      font-size: 16px;
+    }
+  }
+
+  md-list {
+    overflow-y: auto;
+    height: calc(100% - (48px + 16px));
+    height: -moz-calc(100% - (48px + 16px));
+    height: -webkit-calc(100% - (48px + 16px));
+
+    md-list-item {
+      cursor: pointer;
+
+      md-checkbox[disabled] {
+        cursor: pointer;
+      }
+
+      md-icon {
+        margin-left: 15px;
+        font-size: 30px;
+      }
+
+    }
+
+  }
+

@@ -1,0 +1,11 @@
+<div flex="grow">
+  <o-form-toolbar *ngIf="showHeader" [label-header]="labelheader" [header-actions]="headeractions"></o-form-toolbar>
+  <div flex="100" *ngIf="loading">
+    <md-progress-bar mode="indeterminate"></md-progress-bar>
+  </div>
+  <form #innerForm [formGroup]="formGroup" flex="grow">
+    <div layout-padding>
+      <ng-content></ng-content>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,33 @@
+.input-model {
+  display: none !important;
+}
+
+.dialog-list-container {
+  overflow-y: auto;
+  max-height: 570px;
+
+  md-list-item {
+    cursor: pointer;
+  }
+}
+
+md-toolbar {
+  o-search-input{
+    color: white !important;
+    font-size: 16px;
+  }
+
+  o-search-input.list-picker-search {
+    md-input {
+      .md-input-underline {
+        border-top: 1px solid rgba(255,255,255,0.78);
+
+        .md-input-ripple {
+          background-color: white;
+        }
+      }
+    }
+  }
+}
+
+
