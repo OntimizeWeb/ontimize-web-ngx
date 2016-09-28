@@ -6,22 +6,19 @@
 * **angular2 router:** update to 3.0.0-rc.2.
 * **angular2 forms:** update to 2.0.0.
 * **angular2-material:** update to v2.0.0-alpha.8-2.
-
-* **services** services of data components now must implement IDataService interface. (see Breaking changes)
-* **services** services configuration parameters (SERVICE_CONF) now is easier to configure.
-
-
+* **services**: services of data components now must implement IDataService interface. (see Breaking changes)
+* **services**: services configuration parameters (SERVICE_CONF) now is easier to configure.
 
 ### PEER-DEPENDENCY UPDATES ###
 
-* **Updated** zone.js@0.6.23
-* **Updated** rxjs@5.0.0-beta.12
-* **Updated** systemjs@0.19.38
-* **Updated** ng2-translate@2.5.0
-* **Removed** es6-module-loader@0.17.11
-* **Removed** es6-promise@3.2.1
-* **Removed** es6-shim@0.35.1
-* **Added** core-js@2.4.1
+* **Updated**: zone.js@0.6.23
+* **Updated**: rxjs@5.0.0-beta.12
+* **Updated**: systemjs@0.19.38
+* **Updated**: ng2-translate@2.5.0
+* **Removed**: es6-module-loader@0.17.11
+* **Removed**: es6-promise@3.2.1
+* **Removed**: es6-shim@0.35.1
+* **Added**:   core-js@2.4.1
 
 
 ### BREAKING CHANGES
