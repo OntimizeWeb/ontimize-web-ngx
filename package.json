@@ -43,14 +43,12 @@
     "@angular2-material/tabs": "v2.0.0-alpha.8-2",
     "@angular2-material/toolbar": "v2.0.0-alpha.8-2",
     "@angular2-material/tooltip": "v2.0.0-alpha.8-2",
-
     "core-js": "^2.4.1",
     "hammerjs": "^2.0.8",
     "reflect-metadata": "^0.1.3",
     "rxjs": "5.0.0-beta.12",
     "systemjs": "0.19.38",
     "zone.js": "0.6.23",
-
     "moment": "^2.13.0",
     "ng2-translate": "2.5.0",
     "jquery": "^3.0.0",
@@ -162,7 +160,7 @@
     "tslint-stylish": "2.1.0-beta",
     "typedoc": "^0.3.12",
     "typescript": "2.0.0",
-    "typings": "^0.6.2",
+    "typings": "^0.8.1",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0",
     "yargs": "^4.7.1",

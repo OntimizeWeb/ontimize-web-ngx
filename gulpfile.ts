@@ -8,6 +8,7 @@ gulp.task('clean.dist',  task('clean', 'dist'));
 gulp.task('clean.test',  task('clean', 'test'));
 gulp.task('clean.tmp',   task('clean', 'tmp'));
 gulp.task('clean.out',   task('clean', 'out'));
+gulp.task('clean.css',   task('clean', 'css'));
 
 gulp.task('check.versions', task('check.versions'));
 
@@ -37,6 +38,7 @@ gulp.task('build.out', (done:any) =>
               'build.assets.out',
               'build.js.out',
               'build.js.main.out',
+              'clean.css',
               'bump',
               done));
 

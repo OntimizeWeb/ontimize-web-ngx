@@ -3,7 +3,7 @@ import * as util from 'gulp-util';
 import * as chalk from 'chalk';
 import * as del from 'del';
 import {join} from 'path';
-import {APP_DEST, TEST_DEST, TMP_DIR, OUT_DIR} from '../config';
+import {APP_SRC, APP_DEST, TEST_DEST, TMP_DIR, OUT_DIR} from '../config';
 
 export = function clean(gulp:any, plugins:any, option:any) {
   return function (done:any) {
@@ -14,6 +14,7 @@ export = function clean(gulp:any, plugins:any, option:any) {
       case 'test'   : cleanTest(done);    break;
       case 'tmp'    : cleanTmp(done);     break;
       case 'out'    : cleanOut(done);     break;
+      case 'css'    : cleanCSSFiles(done); break;
       default: done();
     }
 
@@ -51,7 +52,17 @@ function cleanOut(done:any) {
     join(OUT_DIR, 'ontimize/**'),
     join(OUT_DIR, '**/*.*'),
     '!' + join(OUT_DIR, '.git'),
-    '!' + join(OUT_DIR, '.gitignore')
+    '!' + join(OUT_DIR, '.gitignore'),
+    '!' + join(OUT_DIR, '.npmignore')
+  ]).then((paths) => {
+    /*util.log('Deleted', chalk.yellow(paths && paths.join(', ') || '-'));*/
+    done();
+  });
+}
+
+function cleanCSSFiles(done:any) {
+  del([
+   join(APP_SRC, '**', '*.css')
   ]).then((paths) => {
     /*util.log('Deleted', chalk.yellow(paths && paths.join(', ') || '-'));*/
     done();
