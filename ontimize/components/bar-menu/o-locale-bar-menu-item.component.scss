@@ -1,5 +1,12 @@
 o-bar-menu-item {
 
+  .md-list-item {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    height: auto;
+  }
+
   .o-bar-menu-item-text {
     display: -webkit-box;
     display: -webkit-flex;
@@ -22,7 +29,7 @@ o-bar-menu-item {
 
   .o-bar-menu-item-icon {
     display: inline-block;
-    margin: 0px 10px 0px 0px;
+    margin: 6px 10px 0px 0px;
     & ~ .o-bar-menu-item-title {
       padding-left: 0px;
     }
