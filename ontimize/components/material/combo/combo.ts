@@ -99,7 +99,7 @@ export class MdHint {
   styleUrls: ['/material/combo/combo.css'],
   providers: [MD_COMBO_CONTROL_VALUE_ACCESSOR],
   host: { '(click)': 'focus()' },
-  encapsulation: ViewEncapsulation.Native
+  encapsulation: ViewEncapsulation.None
 })
 export class MdCombo implements ControlValueAccessor, AfterContentInit, OnChanges {
 

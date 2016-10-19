@@ -16,8 +16,8 @@ import {
   Output,
   Injector,
   NgModule,
-  ModuleWithProviders
-  // ViewEncapsulation
+  ModuleWithProviders,
+  ViewEncapsulation
 } from '@angular/core';
 import {
   NG_VALUE_ACCESSOR,
@@ -99,7 +99,7 @@ export class MdHint {
   styleUrls: ['/material/textarea/textarea.css'],
   providers: [MD_TEXTAREA_CONTROL_VALUE_ACCESSOR],
   host: { '(click)': 'focus()' },
-  // encapsulation: ViewEncapsulation.Native
+  encapsulation: ViewEncapsulation.None
 })
 export class MdTextarea implements ControlValueAccessor, AfterContentInit, OnChanges {
 

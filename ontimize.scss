@@ -1,4 +1,3 @@
-/*@import "node_modules/ng2-material/all";*/
 @import "ontimize/components/material/ng2-material/all.scss";
 @import "ontimize/components/input/input.scss";
 @import "ontimize/components/material/date-picker/datepicker.scss";
@@ -80,96 +79,22 @@ div.md-dialog.md-dialog-custom > md-dialog-actions{
     right: 0;
 }
 
-.md-input {
-  height: 60px;
-  .md-input-wrapper {
-    .md-hint {
-      bottom: 4px;
-    }
-  }
-  &.ng-invalid.ng-touched {
-    .md-input-underline {
-      border-top-color: $md-input-underline-color-warn;
-      .md-input-ripple {
-        background-color: $md-input-underline-color-warn;
-      }
-    }
-    .md-input-placeholder.md-focused {
-      color: $md-input-underline-color-warn;
-    }
-    .md-hint {
-      color: $md-input-underline-color-warn;
-    }
-  }
-}
+.md-hint {
+  position: absolute;
+  font-size: 75%;
+  bottom: 4px;
 
-.md-combo {
-  height: 60px;
-  .md-combo-wrapper {
-    .md-hint {
-      bottom: 4px;
-    }
-  }
-  &.ng-invalid.ng-touched {
-    .md-combo-underline {
-      border-top-color: $md-input-underline-color-warn;
-      .md-combo-ripple {
-        background-color: $md-input-underline-color-warn;
-      }
-    }
-    .md-combo-placeholder.md-focused {
-      color: $md-input-underline-color-warn;
-    }
-    .md-hint {
-      color: $md-input-underline-color-warn;
-    }
-  }
-}
-
-.md-textarea {
-  height: 60px;
-  .md-textarea-wrapper {
-    .md-hint {
-      bottom: 4px;
-    }
-  }
-  &.ng-invalid.ng-touched {
-    .md-textarea-underline {
-      border-top-color: $md-input-underline-color-warn;
-      .md-textarea-ripple {
-        background-color: $md-input-underline-color-warn;
-      }
-    }
-    .md-textarea-placeholder.md-focused {
-      color: $md-input-underline-color-warn;
-    }
-    .md-hint {
-      color: $md-input-underline-color-warn;
-    }
-  }
-}
-
-.ckeditor {
-  height: auto;
-  &.ng-invalid.ng-touched {
-    .md-input-underline {
-      border-top-color: $md-input-underline-color-warn;
-      .md-input-ripple {
-        background-color: $md-input-underline-color-warn;
-      }
-    }
-    .md-input-placeholder.md-focused {
-      color: $md-input-underline-color-warn;
-    }
-    .md-hint {
-      color: $md-input-underline-color-warn;
-    }
+  &.md-right {
+    right: 0;
   }
 
-  .cke{
-    border-bottom: none !important;
-  }
-  .cke_top{
-    padding: 0px !important;
+  [dir='rtl'] & {
+    right: 0;
+    left: auto;
+
+    &.md-right {
+      right: auto;
+      left: 0;
+    }
   }
 }
