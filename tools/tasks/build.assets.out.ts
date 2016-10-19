@@ -2,7 +2,7 @@ import {join} from 'path';
 import * as merge from 'merge-stream';
 import {APP_SRC, OUT_DIR} from '../config';
 
-export = function buildAssetsOut(gulp:any, plugins:any) {
+export = function buildAssetsOut(gulp:any, plugins:any) : any {
   return function () {
 
     return merge(getMainFile(), getSources());
