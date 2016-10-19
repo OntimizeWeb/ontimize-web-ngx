@@ -2,7 +2,9 @@ import {
   Component,
   OnInit,
   Inject,
+  Injector,
   forwardRef,
+  ElementRef,
   NgModule,
   ModuleWithProviders,
   ViewEncapsulation
@@ -12,11 +14,15 @@ import {RouterModule} from '@angular/router';
 import {MdIconModule} from '@angular2-material/icon';
 
 import {OBarMenuModule, OBarMenuComponent} from './o-bar-menu.component';
-import {OTranslateModule} from '../../pipes/o-translate.pipe';
+import { OTranslateModule } from '../../pipes/o-translate.pipe';
+import { OTranslateService } from '../../services';
 
 export const DEFAULT_INPUTS_O_BAR_MENU_ITEM = [
   // title [string]: menu item title. Default: no value.
   'title',
+
+  // tooltip [string]: menu group tooltip. Default: 'title' value.
+  'tooltip',
 
   // icon [string]: material icon. Default: no value.
   'icon',
@@ -44,16 +50,22 @@ export class OBarMenuItemComponent implements OnInit {
   public static DEFAULT_INPUTS_O_BAR_MENU_ITEM = DEFAULT_INPUTS_O_BAR_MENU_ITEM;
 
   protected menu: OBarMenuComponent;
+  protected translateService: OTranslateService;
 
   protected title: string;
+  protected tooltip: string;
   protected icon: string;
   protected route: string;
   protected action: Function;
 
   protected restricted: boolean;
 
-  constructor(@Inject(forwardRef(() => OBarMenuComponent)) menu: OBarMenuComponent) {
+  constructor(
+    @Inject(forwardRef(() => OBarMenuComponent)) menu: OBarMenuComponent,
+    protected elRef: ElementRef,
+    protected injector: Injector) {
     this.menu = menu;
+    this.translateService = this.injector.get(OTranslateService);
   }
 
   public ngOnInit() {
@@ -63,6 +75,14 @@ export class OBarMenuItemComponent implements OnInit {
         .catch(err => this.restricted = true);
     } else {
       this.restricted = false;
+    }
+
+    if (!this.tooltip) {
+      this.tooltip = this.title;
+    }
+    if (this.translateService) {
+      let tooltip = this.translateService.get(this.tooltip);
+      this.elRef.nativeElement.setAttribute('title', tooltip);
     }
   }
 
