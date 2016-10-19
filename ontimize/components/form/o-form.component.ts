@@ -52,7 +52,8 @@ export const DEFAULT_INPUTS_O_FORM = [
 ];
 
 export const DEFAULT_OUTPUTS_O_FORM = [
-  'onFormDataLoaded'
+  'onFormDataLoaded',
+  'beforeCloseDetail'
 ];
 
 
@@ -103,6 +104,8 @@ export class OFormComponent implements OnInit, OnDestroy {
 
   formGroup: FormGroup;
   onFormDataLoaded: EventEmitter<Object> = new EventEmitter<Object>();
+  beforeCloseDetail: EventEmitter<any> = new EventEmitter<any>();
+  beforeGoEditMode: EventEmitter<any> = new EventEmitter<any>();
 
   public loading: boolean = false;
   public formData: Array<any> = [];
@@ -155,8 +158,10 @@ export class OFormComponent implements OnInit, OnDestroy {
           && this.formDataCache.hasOwnProperty(comp.getAttribute())
           && this.getDataValues()
           && this._components.hasOwnProperty(comp.getAttribute())) {
-            let cachedValue = this.formDataCache[comp.getAttribute()];
+          let cachedValue = this.formDataCache[comp.getAttribute()];
+          if (cachedValue !== null) {
             this._components[attr].setValue(cachedValue);
+          }
         }
       }
     }
@@ -520,6 +525,8 @@ export class OFormComponent implements OnInit, OnDestroy {
 
   _closeDetailAction() {
 
+    this.beforeCloseDetail.emit();
+
     // Copy current url segments array...
     let urlArray = this.urlSegments.slice(0);
     //TODO do it better (maybe propagation nested level number?)
@@ -667,6 +674,9 @@ _stayInRecordAfterInsert(insertedKeys: Object) {
    * Navigates to 'edit' mode
    */
   _goEditMode() {
+
+    this.beforeGoEditMode.emit();
+
     let url = '';
     this.keysArray.map(key => {
       if (this.urlParams[key]) {

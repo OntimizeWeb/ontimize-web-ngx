@@ -45,7 +45,7 @@ export const DEFAULT_INPUTS_O_COMBO = [
   'descriptionColumns: description-columns',
 
   'separator',
-  '',
+  'translate',
   'nullSelection: null-selection',
 
   'queryOnInit: query-on-init',
@@ -99,7 +99,7 @@ export class OComboComponent implements IFormComponent, IFormControlComponent, I
 
   protected separator: string;
   @InputConverter()
-  protected : boolean = false;
+  protected translate: boolean = false;
   @InputConverter()
   protected nullSelection: boolean = true;
 
@@ -282,8 +282,10 @@ export class OComboComponent implements IFormComponent, IFormControlComponent, I
   getControl(): FormControl {
     if (!this._fControl) {
       let validators: ValidatorFn[] = this.resolveValidators();
-      let val = this.nullSelection ? null : '';
-      this._fControl = new FormControl(val, validators);
+      let cfg = {
+        value: this.value ? this.value.value : undefined
+      };
+      this._fControl = new FormControl(cfg, validators);
     }
     return this._fControl;
   }

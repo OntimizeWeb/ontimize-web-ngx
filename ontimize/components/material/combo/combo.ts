@@ -196,7 +196,9 @@ export class MdCombo implements ControlValueAccessor, AfterContentInit, OnChange
     return this._focusEmitter.asObservable();
   }
 
-  get value(): any { return this._value; };
+  get value(): any {
+    return this._value;
+  };
   @Input() set value(v: any) {
     if (v !== this._value) {
       if (typeof v === 'string' && v.length === 0 && this.nullSelection) {
@@ -207,7 +209,9 @@ export class MdCombo implements ControlValueAccessor, AfterContentInit, OnChange
     }
   }
 
-  get data(): any[] { return this._data; };
+  get data(): any[] {
+    return this._data;
+  };
   @Input() set data(d: any[]) {
     if (d !== this._data) {
       this._data = d;
