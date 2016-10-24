@@ -16,7 +16,6 @@ import {DialogService} from '../../services';
 import {OTranslateModule} from '../../pipes/o-translate.pipe';
 
 export const DEFAULT_INPUTS_O_FORM_TOOLBAR = [
-  'formData: form-data',
   'labelHeader: label-header',
   'headeractions: header-actions'
 ];
@@ -36,7 +35,6 @@ export class OFormToolbarComponent implements OnInit {
   public static DEFAULT_INPUTS_O_FORM_TOOLBAR = DEFAULT_INPUTS_O_FORM_TOOLBAR;
 
   /* Bindings */
-  formData: Array<any>;
   labelHeader: string = '';
   headeractions: string = '';
 
@@ -191,7 +189,7 @@ export class OFormToolbarComponent implements OnInit {
   }
 
   next() {
-    let total = this._form.formData.length;
+    let total = this._form.navigationData.length;
     let index = this._form.currentIndex + 1;
     if (total > index) {
       this._form.move(index);
@@ -214,13 +212,13 @@ export class OFormToolbarComponent implements OnInit {
   }
 
   last() {
-    let index = this._form.formData.length - 1;
+    let index = this._form.navigationData.length - 1;
     this._form.move(index);
   }
 
   numberOfRecords() {
     if (this.navigationEnabled) {
-      let total = this._form.formData.length;
+      let total = this._form.navigationData.length;
       let index = this._form.currentIndex + 1;
       if (total === 0 || total === 1) {
         return '';
@@ -233,7 +231,7 @@ export class OFormToolbarComponent implements OnInit {
   showNavigation() {
     //navigationEnabled
     if (this.navigationEnabled) {
-      return this._form.formData.length >= 1;
+      return this._form.navigationData.length >= 1;
     }
     return false;
   }

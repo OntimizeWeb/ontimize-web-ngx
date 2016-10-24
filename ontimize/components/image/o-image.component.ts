@@ -11,7 +11,10 @@ import {DomSanitizer } from '@angular/platform-browser';
 import {MdIconModule} from '@angular2-material/icon';
 import {MdInputModule, MdInput} from '@angular2-material/input';
 
-import {IFormComponent, IFormControlComponent, IFormDataTypeComponent} from '../../interfaces';
+import {
+  IFormComponent, IFormControlComponent, IFormDataTypeComponent,
+  IFormDataComponent
+} from '../../interfaces';
 import {InputConverter} from '../../decorators';
 import {OFormComponent, Mode} from '../form/o-form.component';
 import {OFormValue} from '../form/OFormValue';
@@ -23,6 +26,7 @@ export const DEFAULT_INPUTS_O_IMAGE = [
   'oattr: attr',
   'olabel: label',
   'data',
+  'autoBinding: automatic-binding',
   'oenabled: enabled',
   'orequired: required',
   'emptyimage: empty-image',
@@ -49,7 +53,7 @@ export const DEFAULT_OUTPUTS_O_IMAGE = [
   ],
   encapsulation: ViewEncapsulation.None
 })
-export class OImageComponent implements IFormComponent, IFormControlComponent, IFormDataTypeComponent, OnInit {
+export class OImageComponent implements IFormComponent, IFormControlComponent, IFormDataTypeComponent, IFormDataComponent, OnInit {
 
   public static DEFAULT_INPUTS_O_IMAGE = DEFAULT_INPUTS_O_IMAGE;
   public static DEFAULT_OUTPUTS_O_IMAGE = DEFAULT_OUTPUTS_O_IMAGE;
@@ -60,6 +64,8 @@ export class OImageComponent implements IFormComponent, IFormControlComponent, I
   oenabled: boolean = true;
   @InputConverter()
   orequired: boolean = false;
+  @InputConverter()
+  autoBinding: boolean = true;
   emptyimage: string;
   @InputConverter()
   showControls: boolean = true;
@@ -167,6 +173,10 @@ export class OImageComponent implements IFormComponent, IFormControlComponent, I
 
   set data(value: any) {
     this.ensureOFormValue(value);
+  }
+
+  isAutomaticBinding(): Boolean {
+    return this.autoBinding;
   }
 
    getValue() : any {

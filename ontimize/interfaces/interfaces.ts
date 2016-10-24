@@ -49,6 +49,11 @@ export interface IFormControlComponent extends IFormComponent {
   getControl(): FormControl;
 }
 
+export interface IFormDataComponent {
+  data(value: any);
+  isAutomaticBinding(): Boolean;
+}
+
 export interface IComponentMeta {
   id: string;
   name: string;

@@ -12,7 +12,9 @@ import { ValidatorFn } from '@angular/forms/src/directives/validators';
 import { MdInputModule } from '@angular2-material/input';
 import { MdComboModule } from '../material/combo/combo';
 
-import { IFormComponent, IFormControlComponent, IFormDataTypeComponent} from '../../interfaces';
+import {
+  IFormComponent, IFormControlComponent, IFormDataTypeComponent,
+  IFormDataComponent} from '../../interfaces';
 import {dataServiceFactory} from '../../services/data-service.provider';
 import {OTranslateService, OntimizeService} from '../../services';
 import {InputConverter} from '../../decorators';
@@ -27,6 +29,7 @@ export const DEFAULT_INPUTS_O_COMBO = [
   'olabel: label',
   //data [any] : sets selected value of the combo
   'data',
+  'autoBinding: automatic-binding',
   'oenabled: enabled',
   'orequired: required',
   //static-data [Array<any>] : way to populate with static data. Default: no value.
@@ -74,7 +77,7 @@ export const DEFAULT_OUTPUTS_O_COMBO = [
   styleUrls: ['/combo/o-combo.component.css'],
   encapsulation: ViewEncapsulation.None
 })
-export class OComboComponent implements IFormComponent, IFormControlComponent, IFormDataTypeComponent, OnInit {
+export class OComboComponent implements IFormComponent, IFormControlComponent, IFormDataTypeComponent, IFormDataComponent, OnInit {
 
   public static DEFAULT_INPUTS_O_COMBO = DEFAULT_INPUTS_O_COMBO;
   public static DEFAULT_OUTPUTS_O_COMBO = DEFAULT_OUTPUTS_O_COMBO;
@@ -86,6 +89,8 @@ export class OComboComponent implements IFormComponent, IFormControlComponent, I
   protected oenabled: boolean = true;
   @InputConverter()
   protected orequired: boolean = false;
+  @InputConverter()
+  autoBinding: boolean = true;
 
   protected staticData: Array<any>;
 
@@ -329,10 +334,6 @@ export class OComboComponent implements IFormComponent, IFormControlComponent, I
         return;
       }
 
-      if (this._currentIndex !== undefined) {
-        // Force change detection on hidden md-input...
-        this.cd.detectChanges();
-      }
 
     }
   }
@@ -345,6 +346,10 @@ export class OComboComponent implements IFormComponent, IFormControlComponent, I
 
   set data(value: any) {
     this.ensureOFormValue(value);
+  }
+
+  isAutomaticBinding(): Boolean {
+    return this.autoBinding;
   }
 
   isEmpty(): boolean {

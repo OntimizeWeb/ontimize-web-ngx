@@ -1,4 +1,4 @@
-import { IDataService } from '../interfaces';
+import { IDataService, IFormDataComponent } from '../interfaces';
 
 export class Util {
 
@@ -64,6 +64,16 @@ export class Util {
   static isDataService(arg: any): arg is IDataService {
     return ((arg as IDataService).getDefaultServiceConfiguration !== undefined &&
       (arg as IDataService).configureService !== undefined);
+  }
+
+  /**
+   * Checks wether specified component as argument implements 'IFormDataComponent' interface
+   * @param  {any} arg The component instance for checking.
+   * @returns boolean
+   */
+  static isFormDataComponent(arg: any): arg is IFormDataComponent {
+    return ((arg as IFormDataComponent).data !== undefined &&
+      (arg as IFormDataComponent).isAutomaticBinding !== undefined);
   }
 
 }

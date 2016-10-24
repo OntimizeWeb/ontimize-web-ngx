@@ -1,6 +1,6 @@
 import {Component, OnInit, OnDestroy, EventEmitter,
   Injector, NgZone, ChangeDetectorRef,
-  NgModule,
+  NgModule, ContentChildren, QueryList,
   ModuleWithProviders,
   ViewEncapsulation} from '@angular/core';
 import {CommonModule} from '@angular/common';
@@ -9,6 +9,7 @@ import {FormGroup, ReactiveFormsModule, FormControl, FormsModule} from '@angular
 import {Observable} from 'rxjs/Observable';
 
 import { MdProgressBarModule } from '@angular2-material/progress-bar';
+import { MdTabGroup } from '@angular2-material/tabs';
 
 import {OntimizeService, DialogService,
   dataServiceFactory} from '../../services';
@@ -108,7 +109,7 @@ export class OFormComponent implements OnInit, OnDestroy {
   beforeGoEditMode: EventEmitter<any> = new EventEmitter<any>();
 
   public loading: boolean = false;
-  public formData: Array<any> = [];
+  public formData: Object = {};/* Array<any> = [];*/
   public navigationData: Array<any> = [];
   public currentIndex = 0;
   public mode: Mode = Mode.INITIAL;
@@ -116,6 +117,9 @@ export class OFormComponent implements OnInit, OnDestroy {
   protected dialogService: DialogService;
 
   protected _formToolbar: OFormToolbarComponent;
+
+  @ContentChildren(MdTabGroup)
+  protected tabGroupChildren: QueryList<MdTabGroup>;
 
   protected _components: Object = {};
   protected _compSQLTypes: Object = {};
@@ -130,6 +134,7 @@ export class OFormComponent implements OnInit, OnDestroy {
   protected urlSegments: any;
 
   protected formDataCache: Object;
+  protected tabSelectChangeFired: boolean = false;
 
   constructor(
     protected router: Router,
@@ -246,7 +251,7 @@ export class OFormComponent implements OnInit, OnDestroy {
   getDataValue(attr: string) {
 
     if (this.mode === Mode.INITIAL) {
-      let data = this.formData[this.currentIndex];
+      let data = this.formData;
       if (data && data.hasOwnProperty(attr)) {
         return data[attr];
       }
@@ -254,16 +259,26 @@ export class OFormComponent implements OnInit, OnDestroy {
       let val = this.formGroup.value[attr];
       return new OFormValue(val);
     } else if (this.mode === Mode.UPDATE) {
-      // Checking if component was modified...
-      if (this.formGroup.controls[attr] &&
-        this.formGroup.controls[attr].dirty === true) {
-        let val = this.formGroup.value[attr];
-        return new OFormValue(val);
-      } else {
-        // Return original value stored into form data...
-        let data = this.formData[this.currentIndex];
-        if (data && data.hasOwnProperty(attr)) {
-          return data[attr];
+      if (this.formData && Object.keys(this.formData).length > 0 ) {
+        // Checking if field value is stored in form cache...
+        // if (this.formGroup.controls[attr] &&
+        // this.formGroup.controls[attr].dirty === true) {
+        //   let val = this.formGroup.value[attr];
+        //   return new OFormValue(val);
+        // } else {
+        if (this.formGroup.dirty && this.formDataCache &&
+            this.formDataCache.hasOwnProperty(attr)) {
+          let val = this.formDataCache[attr];
+          if (val instanceof OFormValue) {
+            return val;
+          }
+          return new OFormValue(val);
+        } else {
+          // Return original value stored into form data...
+          let data = this.formData;
+          if (data && data.hasOwnProperty(attr)) {
+            return data[attr];
+          }
         }
       }
     }
@@ -271,8 +286,7 @@ export class OFormComponent implements OnInit, OnDestroy {
   }
 
   getDataValues() {
-     let data = this.formData[this.currentIndex];
-     return data;
+    return this.formData;
   }
 
   clearData() {
@@ -294,7 +308,7 @@ export class OFormComponent implements OnInit, OnDestroy {
     switch (action) {
       case OFormComponent.BACK_ACTION: this._backAction(); break;
       case OFormComponent.CLOSE_DETAIL_ACTION: this._closeDetailAction(); break;
-      case OFormComponent.RELOAD_ACTION: this._reloadAction(); break;
+      case OFormComponent.RELOAD_ACTION: this._reloadAction(true); break;
       case OFormComponent.GO_INSERT_ACTION: this._goInsertMode(); break;
       case OFormComponent.INSERT_ACTION: this._insertAction(); break;
       case OFormComponent.GO_EDIT_ACTION: this._goEditMode(); break;
@@ -316,11 +330,13 @@ export class OFormComponent implements OnInit, OnDestroy {
     */
     this.formGroup.valueChanges
       .subscribe((value: any) => {
-        if (self.formDataCache === undefined) {
-          // initialize cache
-          self.formDataCache = {};
+        if (!self.tabSelectChangeFired) {
+          if (self.formDataCache === undefined) {
+            // initialize cache
+            self.formDataCache = {};
+          }
+          Object.assign(self.formDataCache, value);
         }
-        Object.assign(self.formDataCache, value);
       });
 
     if (this.headeractions === 'all') {
@@ -331,7 +347,6 @@ export class OFormComponent implements OnInit, OnDestroy {
 
     this.configureService();
 
-    //TODO check it!!! let qParamObs = this.router.routerState.queryParams;
     let qParamObs = this.actRoute.queryParams;
     this.qParamSub = qParamObs.subscribe(params => {
       if (params) {
@@ -349,11 +364,11 @@ export class OFormComponent implements OnInit, OnDestroy {
       .params
       .subscribe(params => {
         self.urlParams = params;
-        //TODO Obtain 'datatype' of each key contained into urlParams for
-        // for building correctly query filter!!!!
-        if (self.urlParams && Object.keys(self.urlParams).length > 0) {
-          self._reloadAction();
-        }
+        // //TODO Obtain 'datatype' of each key contained into urlParams for
+        // // for building correctly query filter!!!!
+        // if (self.urlParams && Object.keys(self.urlParams).length > 0) {
+        //   self._reloadAction();
+        // }
       });
 
     this.urlSub = this.actRoute
@@ -374,6 +389,14 @@ export class OFormComponent implements OnInit, OnDestroy {
         serviceCfg['entity'] = this.entity;
       }
       this.dataService.configureService(serviceCfg);
+    }
+  }
+
+  ngAfterViewChecked() {
+    if (this.tabGroupChildren && this.tabSelectChangeFired) {
+      this.tabSelectChangeFired = false;
+      // reload tab content...
+      this._reloadTabContent();
     }
   }
 
@@ -407,11 +430,21 @@ export class OFormComponent implements OnInit, OnDestroy {
       }
 
 
-//TODO Obtain 'datatype' of each key contained into urlParams for
-// for building correctly query filter!!!!
+    //TODO Obtain 'datatype' of each key contained into urlParams for
+    // for building correctly query filter!!!!
     if (this.urlParams && Object.keys(this.urlParams).length > 0) {
       this._reloadAction();
+      }
+
+    if (this.tabGroupChildren) {
+      var self = this;
+      this.tabGroupChildren.forEach((item: MdTabGroup, index: number) => {
+        item.selectChange.subscribe((evt: any) => {
+          self.tabSelectChangeFired = true;
+        });
+      });
     }
+
   }
 
   /**
@@ -419,7 +452,6 @@ export class OFormComponent implements OnInit, OnDestroy {
    * */
 
   _setComponentsEditable(state: boolean) {
-    //TODO Ahora mismo no funciona debido a la nueva arquitectura de los componentes @angular2-material
     let comps: any = this.getComponents();
     if (comps) {
       let keys = Object.keys(comps);
@@ -459,13 +491,30 @@ export class OFormComponent implements OnInit, OnDestroy {
   }
 
   move(index) {
+    this.queryByIndex(index);
+  }
+
+  _setData(data) {
+    if (Util.isArray(data)) {
+      this.navigationData = <Array<Object>>this.toFormValueData(data);
+      this.syncCurrentIndex();
+      this.queryByIndex(this.currentIndex);
+    } else if(Util.isObject(data)) {
+      this._updateFormData(this.toFormValueData(data));
+      this._emitData(data);
+    } else {
+      console.warn('Form has received not supported service data. Supported data are Array or Object');
+      this._updateFormData({});
+    }
+  }
+
+  protected queryByIndex(index: number) {
     var self = this;
     this._query(index).subscribe(resp => {
       if (resp.code === 0) {
         let currentData = resp.data[0];
-        self.currentIndex = index;
-        self.formData[self.currentIndex] = this.toFormValueData(currentData);
-        this._emitData(currentData);
+        self._updateFormData(self.toFormValueData(currentData));
+        self._emitData(currentData);
       } else {
         console.log('error ');
       }
@@ -474,42 +523,21 @@ export class OFormComponent implements OnInit, OnDestroy {
     });
   }
 
-  _setData(data) {
-    var self = this;
-    if (Util.isArray(data)) {
-      // TODO check it!!!! this.formData = <Array<Object>> this.toFormValueData(data);
-      this.navigationData = <Array<Object>> this.toFormValueData(data);
-      this._query(this.currentIndex).subscribe(resp => {
-        if (resp.code === 0) {
-          let currentData = resp.data[0];
-         // self.formData[self.currentIndex] = self.toFormValueData(currentData);
-          let newFormData = self.formData.slice(0);
-          newFormData.splice(self.currentIndex, 1, self.toFormValueData(currentData));
-          //It is necessary to assign new variable to force change detector
-          // RIGHT NOW IT IS NOT RUNNING! change detection is not done
-          self._updateFormData(newFormData);
-          self._emitData(currentData);
-        } else {
-          console.log('error ');
+  protected _updateFormData(newFormData: Object) {
+    this.formData = newFormData;
+    if (this._components) {
+      var self = this;
+      Object.keys(this._components).forEach(key => {
+        let comp = this._components[key];
+        if (Util.isFormDataComponent(comp) && comp.isAutoBinding()) {
+          try {
+            comp.data = self.getDataValue(key);
+          } catch (error) {
+            console.error(error);
+          }
         }
-      }, err => {
-        console.log(err);
       });
-    } else if(Util.isObject(data)) {
-      // this.formData = [ this.toFormValueData(data) ];
-      self._updateFormData( [ this.toFormValueData(data) ]);
-      this._emitData(data);
-    } else {
-      console.warn('Form has received not supported service data. Supported data are Array or Object');
-      // this.formData = [];
-      this._updateFormData([]);
     }
-  }
-
-  protected _updateFormData(newFormData: Array<any>) {
-    this.zone.run(() => {
-      this.formData = newFormData;
-    });
   }
 
   _emitData(data) {
@@ -567,7 +595,7 @@ export class OFormComponent implements OnInit, OnDestroy {
     });
   }
 
-_stayInRecordAfterInsert(insertedKeys: Object) {
+  _stayInRecordAfterInsert(insertedKeys: Object) {
 
     // Copy current url segments array...
     let urlArray = this.urlSegments.slice(0);
@@ -613,16 +641,21 @@ _stayInRecordAfterInsert(insertedKeys: Object) {
     });
   }
 
-  _reloadAction() {
+  _reloadAction(useFilter: boolean = false) {
     let filter = {};
-    if (this.urlParams && this.keysArray) {
-      this.keysArray.map(key => {
-        if (this.urlParams[key]) {
-          filter[key] = this.urlParams[key];
-        }
-      });
-    };
+    if (useFilter) {
+      filter = this.getCurrentKeysValues();
+    }
     this.queryData(filter);
+  }
+
+  _reloadTabContent() {
+    if (this.mode === Mode.INITIAL) {
+      this.queryByIndex(this.currentIndex);
+    } else if (this.mode === Mode.UPDATE) {
+      // TODO query only fields not stored in formData nor formDataCache
+      this.queryByIndex(this.currentIndex);
+    }
   }
 
   /**
@@ -729,7 +762,6 @@ _stayInRecordAfterInsert(insertedKeys: Object) {
       .subscribe(resp => {
         self.postCorrectUpdate(resp);
         //TODO mostrar un toast indicando que la operación fue correcta...
-        // self._formToolbar.setInitialMode();
         self._closeDetailAction();
       }, error => {
         self.postIncorrectUpdate(error);
@@ -755,7 +787,7 @@ _stayInRecordAfterInsert(insertedKeys: Object) {
   queryData(filter) {
     var self = this;
     var loader = self.load();
-    this.dataService.query(filter, this.keysArray /*this.colsArray*/, this.entity)
+    this.dataService.query(filter, this.keysArray, this.entity)
       .subscribe(resp => {
         loader.unsubscribe();
         if (resp.code === 0) {
@@ -786,17 +818,28 @@ _stayInRecordAfterInsert(insertedKeys: Object) {
 
   protected getAttributesToQuery(): Array<any> {
     let attributes: Array<any> = [];
-    //add form keys...
+    // add form keys...
     if (this.keysArray && this.keysArray.length > 0) {
       attributes.push(...this.keysArray);
     }
-    //add only the fields contained into the form...
+    // add only the fields contained into the form...
     let keys = Object.keys(this._components);
     keys.map(item => {
       if (attributes.indexOf(item) < 0) {
         attributes.push(item);
       }
     });
+
+    // add fields stored into form cache...
+    if (this.formDataCache) {
+      let keys = Object.keys(this.formDataCache);
+      keys.map(item => {
+        if (attributes.indexOf(item) < 0) {
+          attributes.push(item);
+        }
+      });
+     }
+
     return attributes;
   }
 
@@ -954,6 +997,18 @@ _stayInRecordAfterInsert(insertedKeys: Object) {
     return valueData;
   }
 
+  protected getCurrentKeysValues() {
+    let filter = {};
+    if (this.urlParams && this.keysArray) {
+      this.keysArray.map(key => {
+        if (this.urlParams[key]) {
+          filter[key] = this.urlParams[key];
+        }
+      });
+    };
+    return filter;
+  }
+
   protected getKeysValues(index: number) {
     let filter = {};
     if (index >= 0) {
@@ -972,6 +1027,38 @@ _stayInRecordAfterInsert(insertedKeys: Object) {
       }
     }
     return filter;
+  }
+
+  protected syncCurrentIndex() {
+    if (this.navigationData) {
+      var self = this;
+      let currKV = this.getCurrentKeysValues();
+      if (currKV && Object.keys(currKV).length > 0) {
+        let current = this.objectToFormValueData(currKV);
+        this.navigationData.forEach((value: any, index: number) => {
+          // if (current === value) {
+          //   self.currentIndex = index;
+          // }
+
+          // check whether current === value
+          let equals = false;
+          Object.keys(current).forEach(function (key) {
+            let pair = value[key];
+            if (pair && pair.value) {
+              if (current[key].value === pair.value.toString()) {
+                equals = true;
+              } else {
+                equals = false;
+              }
+            }
+          });
+          if (equals) {
+            self.currentIndex = index;
+          }
+        });
+      }
+    }
+    // this.currentIndex = 22;
   }
 
 }

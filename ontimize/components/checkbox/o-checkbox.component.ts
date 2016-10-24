@@ -12,20 +12,27 @@ import {ValidatorFn } from '@angular/forms/src/directives/validators';
 import { MdInputModule } from '@angular2-material/input';
 import {MdCheckboxModule} from '@angular2-material/checkbox';
 
-import {IFormComponent, IFormControlComponent} from '../../interfaces';
+import {
+  IFormComponent, IFormControlComponent, IFormDataTypeComponent,
+  IFormDataComponent
+} from '../../interfaces';
 import {InputConverter} from '../../decorators';
 import {OFormComponent, Mode} from '../form/o-form.component';
 import {OFormValue} from '../form/OFormValue';
 import {OTranslateService} from '../../services';
-import {OTranslateModule} from '../../pipes/o-translate.pipe';
+import { OTranslateModule } from '../../pipes/o-translate.pipe';
+import {SQLTypes} from '../../utils';
 
 
 export const DEFAULT_INPUTS_O_CHECKBOX = [
   'oattr: attr',
   'olabel: label',
   'data',
+  'autoBinding: automatic-binding',
   'oenabled: enabled',
-  'orequired: required'
+  'orequired: required',
+  // sqltype[string]: Data type according to Java standard. See SQLType class. Default: 'OTHER'
+  'sqlType: sql-type'
 ];
 
 export const DEFAULT_OUTPUTS_O_CHECKBOX = [
@@ -45,7 +52,7 @@ export const DEFAULT_OUTPUTS_O_CHECKBOX = [
   encapsulation: ViewEncapsulation.None
 })
 
-export class OCheckboxComponent implements IFormComponent, IFormControlComponent, OnInit {
+export class OCheckboxComponent implements IFormComponent, IFormControlComponent, IFormDataTypeComponent, IFormDataComponent, OnInit {
 
   public static DEFAULT_INPUTS_O_CHECKBOX = DEFAULT_INPUTS_O_CHECKBOX;
   public static DEFAULT_OUTPUTS_O_CHECKBOX = DEFAULT_OUTPUTS_O_CHECKBOX;
@@ -56,12 +63,15 @@ export class OCheckboxComponent implements IFormComponent, IFormControlComponent
   oenabled: boolean = true;
   @InputConverter()
   orequired: boolean = true;
+  @InputConverter()
+  autoBinding: boolean = true;
+  sqlType: string;
 
   onChange: EventEmitter<Object> = new EventEmitter<Object>();
 
   protected value: OFormValue;
   protected translateService: OTranslateService;
-
+  protected _SQLType: number = SQLTypes.OTHER;
   protected _disabled: boolean;
   protected _isReadOnly: boolean;
   protected _placeholder: string;
@@ -86,6 +96,7 @@ export class OCheckboxComponent implements IFormComponent, IFormControlComponent
     if (this.form) {
       this.form.registerFormComponent(this);
       this.form.registerFormControlComponent(this);
+      this.form.registerSQLTypeFormComponent(this);
 
       this._isReadOnly = this.form.mode === Mode.INITIAL ? true : false;
     } else {
@@ -110,6 +121,7 @@ export class OCheckboxComponent implements IFormComponent, IFormControlComponent
     if (this.form) {
       this.form.unregisterFormComponent(this);
       this.form.unregisterFormControlComponent(this);
+      this.form.unregisterSQLTypeFormComponent(this);
     }
   }
 
@@ -139,8 +151,18 @@ export class OCheckboxComponent implements IFormComponent, IFormControlComponent
     return validators;
   }
 
+  getSQLType(): number {
+    let sqlt = this.sqlType && this.sqlType.length > 0 ? this.sqlType : 'BOOLEAN';
+    this._SQLType = SQLTypes.getSQLTypeValue(sqlt);
+    return this._SQLType;
+  }
+
   set data(value: any) {
     this.ensureOFormValue(value);
+  }
+
+  isAutomaticBinding(): Boolean {
+    return this.autoBinding;
   }
 
   getValue(): any {

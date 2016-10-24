@@ -9,7 +9,9 @@ import {ValidatorFn } from '@angular/forms/src/directives/validators';
 
 import {MdInputModule} from '@angular2-material/input';
 
-import {IFormComponent, IFormControlComponent, IFormDataTypeComponent} from '../../../interfaces';
+import {
+  IFormComponent, IFormControlComponent, IFormDataTypeComponent,
+  IFormDataComponent} from '../../../interfaces';
 import {InputConverter} from '../../../decorators';
 import {OFormComponent, Mode} from '../../form/o-form.component';
 import {OFormValue} from '../../form/OFormValue';
@@ -21,6 +23,7 @@ export const DEFAULT_INPUTS_O_TEXT_INPUT = [
   'oattr: attr',
   'olabel: label',
   'data',
+  'autoBinding: automatic-binding',
   'oenabled: enabled',
   'orequired: required',
   'minLength: min-length',
@@ -46,7 +49,7 @@ export const DEFAULT_OUTPUTS_O_TEXT_INPUT = [
   ],
   encapsulation: ViewEncapsulation.None
 })
-export class OTextInputComponent implements IFormComponent, IFormControlComponent, IFormDataTypeComponent, OnInit {
+export class OTextInputComponent implements IFormComponent, IFormControlComponent, IFormDataTypeComponent, IFormDataComponent, OnInit {
 
   public static DEFAULT_INPUTS_O_TEXT_INPUT = DEFAULT_INPUTS_O_TEXT_INPUT;
   public static DEFAULT_OUTPUTS_O_TEXT_INPUT = DEFAULT_OUTPUTS_O_TEXT_INPUT;
@@ -57,6 +60,8 @@ export class OTextInputComponent implements IFormComponent, IFormControlComponen
   oenabled: boolean = true;
   @InputConverter()
   orequired: boolean = false;
+  @InputConverter()
+  autoBinding: boolean = true;
   @InputConverter()
   minLength: number = -1;
   @InputConverter()
@@ -160,6 +165,10 @@ export class OTextInputComponent implements IFormComponent, IFormControlComponen
 
   set data(value: any) {
     this.ensureOFormValue(value);
+  }
+
+  isAutomaticBinding(): Boolean {
+    return this.autoBinding;
   }
 
   getValue() : any {

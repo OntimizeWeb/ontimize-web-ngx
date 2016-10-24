@@ -13,7 +13,10 @@ import {MdListModule} from '@angular2-material/list';
 import {MdToolbarModule} from '@angular2-material/toolbar';
 import {MdDialog, MdDividerModule } from '../../material/ng2-material/index';
 
-import { IFormComponent, IFormControlComponent, IFormDataTypeComponent} from '../../../interfaces';
+import {
+  IFormComponent, IFormControlComponent, IFormDataTypeComponent,
+  IFormDataComponent
+} from '../../../interfaces';
 import {OntimizeService, OTranslateService, dataServiceFactory} from '../../../services';
 import {ColumnsFilterPipe} from '../../../pipes';
 import {InputConverter} from '../../../decorators';
@@ -30,6 +33,7 @@ export const DEFAULT_INPUTS_O_LIST_PICKER = [
   'oattr: attr',
   'olabel: label',
   'data',
+  'autoBinding: automatic-binding',
   'oenabled: enabled',
   'orequired: required',
 
@@ -74,7 +78,7 @@ export const DEFAULT_OUTPUTS_O_LIST_PICKER = [
   ],
   encapsulation: ViewEncapsulation.None
 })
-export class OListPickerComponent implements IFormComponent, IFormControlComponent, IFormDataTypeComponent, OnInit {
+export class OListPickerComponent implements IFormComponent, IFormControlComponent, IFormDataTypeComponent, IFormDataComponent, OnInit {
 
   public static DEFAULT_INPUTS_O_LIST_PICKER = DEFAULT_INPUTS_O_LIST_PICKER;
   public static DEFAULT_OUTPUTS_O_LIST_PICKER = DEFAULT_OUTPUTS_O_LIST_PICKER;
@@ -87,6 +91,8 @@ export class OListPickerComponent implements IFormComponent, IFormControlCompone
   oenabled: boolean = true;
   @InputConverter()
   orequired: boolean = false;
+  @InputConverter()
+  autoBinding: boolean = true;
 
   entity: string;
   service: string;
@@ -343,6 +349,10 @@ export class OListPickerComponent implements IFormComponent, IFormControlCompone
 
   set data(value: any) {
     this.ensureOFormValue(value);
+  }
+
+  isAutomaticBinding(): Boolean {
+    return this.autoBinding;
   }
 
   isEmpty(): boolean {
