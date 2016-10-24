@@ -1,5 +1,24 @@
-<a name="1.0.0"></a>
-## 1.0.0 (2016-09-30)
+## 1.0.0-rc.1 (2016-10-21)
+
+### Features
+
+* **Components:** it is no longer necessary to set 'data' attribute parameter on form data components, the form will set values automatically.
+- Example:
+  * Before: `<o-text-input attr="NAME" flex  [data]="oForm.getDataValue('NAME')"></o-text-input>`
+  * After: `<o-text-input attr="NAME" flex  ></o-text-input>`
+* **Components:** new parameter *'automatic-binding'* for specifying custom data value on form data components.
+- Example:
+  `<o-text-input attr="NAME" flex automatic-binding="yes" [data]="myCustomFn()" ></o-text-input>`
+
+### Bug Fixes
+
+* **Form:** refresh does not work from all tabs  ([#10](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/10)) ([b6b7151](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/b6b7151))
+* **HTMLInput:** component is editable in a detial form  ([#11](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/11)) ([65bdcb8](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/65bdcb8))
+* **Combo:** selected value is lost when move between tabs  ([#13](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/13)) ([b6b7151](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/b6b7151))
+* **Styling:** validation errors styling fixings  ([#14](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/14)) ([fe1e144](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/fe1e144))
+* **BarMenu:** tooltip translation  ([#15](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/15)) ([1f5dea6](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/1f5dea6))
+
+## 1.0.0-rc.0 (2016-09-30)
 
 ### Features
 * **angular2:** update to official version 2.0.0
@@ -32,9 +51,7 @@
 
 
 
-<a name="0.0.4"></a>
 ## 0.0.4 (2016-08-24)
-
 
 ### Features
 
@@ -43,9 +60,8 @@
 * **angular2 forms:** update to 0.3.0.
 * **angular2-material:** update to v2.0.0-alpha.7-3.
 
-<a name="0.0.3"></a>
-## 0.0.3 (2016-08-02)
 
+## 0.0.3 (2016-08-02)
 
 ### Features
 
@@ -53,17 +69,15 @@
 * **angular2 router:** update to 3.0.0-beta.2.
 * **angular2-material:** update to v2.0.0-alpha.6.
 
-<a name="0.0.2"></a>
-## 0.0.2 (2016-04-08)
 
+## 0.0.2 (2016-04-08)
 
 ### Features
 
 * **angular2:** update to beta 13 (adapt code to version changes).
 
-<a name="0.0.1"></a>
-## 0.0.1 (2016-04-06)
 
+## 0.0.1 (2016-04-06)
 
 ### Features
 
