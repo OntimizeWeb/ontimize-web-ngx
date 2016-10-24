@@ -16,7 +16,10 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {NG_VALUE_ACCESSOR} from '@angular/forms';
+import {
+  NG_VALUE_ACCESSOR,
+  ControlValueAccessor
+} from '@angular/forms';
 
 import {
   MdInputModule,
@@ -53,7 +56,7 @@ let nextUniqueId = 0;
   styleUrls: ['/material/ckeditor/ckeditor.component.css'],
   encapsulation: ViewEncapsulation.None
 })
-export class CKEditor {
+export class CKEditor implements ControlValueAccessor {
 
   /**
    * Bindings.
@@ -102,10 +105,12 @@ export class CKEditor {
   @ViewChild('host') host;
   instance;
   debounceTimeout;
+  elementRef;
   zone;
 
   private _focused: boolean = false;
   private _value: any = '';
+  private _isReadOnly: boolean = false;
 
   private _blurEmitter: EventEmitter<FocusEvent> = new EventEmitter<FocusEvent>();
   private _focusEmitter: EventEmitter<FocusEvent> = new EventEmitter<FocusEvent>();
@@ -121,7 +126,8 @@ export class CKEditor {
   /**
    * Constructor
    */
-  constructor(elementRef:ElementRef, zone:NgZone) {
+  constructor(elementRef: ElementRef, zone: NgZone) {
+    this.elementRef = elementRef;
     this.zone = zone;
   }
 
@@ -141,6 +147,10 @@ export class CKEditor {
    * On component destroy
    */
   ngOnDestroy() {
+    this.destroyCKEditor();
+  }
+
+  public destroyCKEditor() {
     if (this.instance) {
       this.instance.removeAllListeners();
       this.instance.destroy();
@@ -184,7 +194,8 @@ export class CKEditor {
     this.instance = window['CKEDITOR'].replace(this.host.nativeElement, config);
 
     // Set initial value
-    this.instance.setData(this.value);
+    // this.instance.setData(this._value);
+    this.setInstanceData('');
 
     // CKEditor events
     this.instance.on('change', (evt:any) => this._handleChange(evt));
@@ -198,8 +209,10 @@ export class CKEditor {
    */
   writeValue(value) {
     this._value = value;
-    if (this.instance)
-      this.instance.setData(value);
+    // if (this.instance) {
+      // this.instance.setData(value);
+      this.setInstanceData(value);
+    // }
   }
 
     /**
@@ -252,6 +265,39 @@ export class CKEditor {
 
   _hasPlaceholder(): boolean {
     return !!this.placeholder || this._placeholderChild !== null;
+  }
+
+  setReadOnlyState(value: boolean) {
+    this._isReadOnly = value;
+    if (this.instance) {
+      var self = this;
+      var retryCount = 0;
+      var delayedSetReadOnly = function () {
+         var status = self.instance.status;
+          if (status !== 'loaded' && retryCount++ < 10) {
+              setTimeout(delayedSetReadOnly, retryCount * 10); //Wait a while longer each iteration
+          } else {
+              self.instance.setReadOnly(self._isReadOnly);
+          }
+      };
+      setTimeout(delayedSetReadOnly, 50);
+    }
+  }
+
+  protected setInstanceData(data: any) {
+    if (this.instance) {
+      var self = this;
+      var retryCount = 0;
+      var delayedSetData = function () {
+         var status = self.instance.status;
+          if (status !== 'loaded' && retryCount++ < 10) {
+              setTimeout(delayedSetData, retryCount * 10); //Wait a while longer each iteration
+          } else {
+              self.instance.setData(self._value);
+          }
+      };
+      setTimeout(delayedSetData, 50);
+    }
   }
 
 

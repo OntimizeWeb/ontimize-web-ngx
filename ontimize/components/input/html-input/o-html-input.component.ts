@@ -1,6 +1,6 @@
 import {Component, Inject, Injector, forwardRef,
   ElementRef, OnInit, EventEmitter, ViewChild,
-  ChangeDetectorRef, NgZone,
+  ChangeDetectorRef, NgZone, Optional,
   NgModule,
   ModuleWithProviders,
   ViewEncapsulation} from '@angular/core';
@@ -10,9 +10,13 @@ import {FormsModule, ReactiveFormsModule, FormControl, Validators } from '@angul
 import {ValidatorFn } from '@angular/forms/src/directives/validators';
 
 import {MdCKEditorModule, CKEditor} from '../../material/ckeditor/ckeditor.component';
-import {MdInputModule} from '@angular2-material/input';
+import { MdInputModule } from '@angular2-material/input';
+import { MdTabGroup } from '@angular2-material/tabs';
 
-import {IFormComponent, IFormControlComponent, IFormDataTypeComponent} from '../../../interfaces';
+import {
+  IFormComponent, IFormControlComponent, IFormDataTypeComponent,
+  IFormDataComponent
+} from '../../../interfaces';
 import {InputConverter} from '../../../decorators';
 import {OFormComponent, Mode} from '../../form/o-form.component';
 import {OFormValue} from '../../form/OFormValue';
@@ -24,6 +28,7 @@ export const DEFAULT_INPUTS_O_HTML_INPUT = [
   'oattr: attr',
   'olabel: label',
   'data',
+  'autoBinding: automatic-binding',
   'oenabled: enabled',
   'orequired: required',
   'minLength: min-length',
@@ -49,7 +54,7 @@ export const DEFAULT_OUTPUTS_O_HTML_INPUT = [
   ],
   encapsulation: ViewEncapsulation.None
 })
-export class OHTMLInputComponent implements IFormComponent, IFormControlComponent, IFormDataTypeComponent, OnInit {
+export class OHTMLInputComponent implements IFormComponent, IFormControlComponent, IFormDataTypeComponent, IFormDataComponent, OnInit {
 
   public static DEFAULT_INPUTS_O_HTML_INPUT = DEFAULT_INPUTS_O_HTML_INPUT;
   public static DEFAULT_OUTPUTS_O_HTML_INPUT = DEFAULT_OUTPUTS_O_HTML_INPUT;
@@ -60,6 +65,8 @@ export class OHTMLInputComponent implements IFormComponent, IFormControlComponen
   oenabled: boolean = true;
   @InputConverter()
   orequired: boolean = true;
+  @InputConverter()
+  autoBinding: boolean = true;
   @InputConverter()
   minLength: number = -1;
   @InputConverter()
@@ -79,7 +86,9 @@ export class OHTMLInputComponent implements IFormComponent, IFormControlComponen
   private _placeholder: string;
   private _fControl: FormControl;
 
-  constructor( @Inject(forwardRef(() => OFormComponent)) protected form: OFormComponent,
+  constructor(
+    @Inject(forwardRef(() => OFormComponent)) protected form: OFormComponent,
+    @Optional() @Inject(forwardRef(() => MdTabGroup)) protected tabGroup: MdTabGroup,
     protected elRef: ElementRef,
     protected ngZone: NgZone,
     protected cd: ChangeDetectorRef,
@@ -95,9 +104,25 @@ export class OHTMLInputComponent implements IFormComponent, IFormControlComponen
     if (this.form) {
       this.form.registerFormComponent(this);
       this.form.registerFormControlComponent(this);
-      this.isReadOnly = (this.form.mode === Mode.INITIAL ? true : false) ;
+      this.isReadOnly = (this.form.mode === Mode.INITIAL ? true : false);
+
+      var self = this;
+      this.form.beforeCloseDetail.subscribe((evt: any) => {
+        self.destroyCKEditor();
+      });
+      this.form.beforeGoEditMode.subscribe((evt: any) => {
+        self.destroyCKEditor();
+      });
+
     } else {
       this.isReadOnly = this._disabled;
+    }
+
+    if (this.tabGroup) {
+      var self = this;
+      this.tabGroup.selectChange.subscribe((evt: any) => {
+        self.destroyCKEditor();
+      });
     }
   }
 
@@ -115,6 +140,7 @@ export class OHTMLInputComponent implements IFormComponent, IFormControlComponen
      if (this.form) {
       this.form.unregisterFormComponent(this);
       this.form.unregisterFormControlComponent(this);
+      this.form.unregisterSQLTypeFormComponent(this);
     }
   }
 
@@ -129,8 +155,10 @@ export class OHTMLInputComponent implements IFormComponent, IFormControlComponen
   getControl(): FormControl {
     if (!this._fControl) {
       let validators: ValidatorFn[] = this.resolveValidators();
-
-      this._fControl = new FormControl('', validators);
+      let cfg = {
+        value: this.value ? this.value.value : undefined
+      };
+      this._fControl = new FormControl(cfg, validators);
     }
     return this._fControl;
   }
@@ -161,6 +189,10 @@ export class OHTMLInputComponent implements IFormComponent, IFormControlComponen
     this.ensureOFormValue(value);
   }
 
+  isAutomaticBinding(): Boolean {
+    return this.autoBinding;
+  }
+
   getValue() : any {
     if (this.value instanceof OFormValue) {
       if (this.value.value) {
@@ -171,7 +203,10 @@ export class OHTMLInputComponent implements IFormComponent, IFormControlComponen
   }
 
   setValue(val: any) {
-    this.ensureOFormValue(val);
+    var self = this;
+    window.setTimeout(() => {
+      self.ensureOFormValue(val);
+    }, 0);
   }
 
   get placeHolder(): string {
@@ -199,9 +234,8 @@ export class OHTMLInputComponent implements IFormComponent, IFormControlComponen
     var self = this;
     window.setTimeout(() => {
       self._isReadOnly = value;
-      if (self.ckEditor && self.ckEditor.instance
-        && self.ckEditor.instance.setReadOnly) {
-        self.ckEditor.instance.setReadOnly(value);
+      if (self.ckEditor) {
+        self.ckEditor.setReadOnlyState(value);
       }
     }, 0);
   }
@@ -218,10 +252,7 @@ export class OHTMLInputComponent implements IFormComponent, IFormControlComponen
   }
 
   innerOnChange(event: any) {
-    if (!this.value) {
-      this.value = new OFormValue();
-    }
-    this.ensureOFormValue(event);
+    this.setValue(event);
     this.onChange.emit(event);
   }
 
@@ -230,6 +261,16 @@ export class OHTMLInputComponent implements IFormComponent, IFormControlComponen
       return this._fControl.valid;
     }
     return false;
+  }
+
+  /*
+  * When ckEditor is inside a TabGroup it is necessary to destroy the component before
+  * Angular detaches md-tab-content from DOM
+  */
+  destroyCKEditor() {
+    if (this.ckEditor) {
+      this.ckEditor.destroyCKEditor();
+    }
   }
 
 }
