@@ -91,8 +91,6 @@ export class OCheckboxComponent implements IFormComponent, IFormControlComponent
 
     this._placeholder = this.olabel ? this.olabel : this.oattr;
 
-    this.ensureOFormValue(this.data);
-
     if (this.form) {
       this.form.registerFormComponent(this);
       this.form.registerFormControlComponent(this);
