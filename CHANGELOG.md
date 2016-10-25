@@ -1,3 +1,12 @@
+## 1.0.1 (2016-11-03)
+
+### Bug Fixes
+* **Table:**  Configuration parameter for navigate detail mode ([#3](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/3)) ([cb9821d](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/cb9821d))
+
+### Features
+* **o-table-cell-renderer-action:** Allowing to set edition type using 'editionMode' (inline or not)
+
+
 ## 1.0.0-rc.1 (2016-10-21)
 
 ### Features

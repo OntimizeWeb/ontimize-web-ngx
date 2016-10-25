@@ -36,7 +36,7 @@ export class OTableCellRendererActionComponent implements OnInit, ITableCellRend
 
   protected static DEFAULT_RENDER_TYPE = 'icon';
   protected static DEFAULT_RENDER_VALUES = {
-    'detail': 'arrow_forward',
+    'detail': 'search',
     'delete': 'delete',
     'edit': 'edit'
   };
