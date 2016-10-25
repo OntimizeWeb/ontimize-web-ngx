@@ -9,7 +9,8 @@ import {
   OTableCellRendererRealComponent,
   OTableCellRendererCurrencyComponent,
   OTableCellRendererDateComponent,
-  OTableCellRendererImageComponent
+  OTableCellRendererImageComponent,
+  OTableCellRendererActionComponent
 } from './cell-renderer/cell-renderer';
 import {
   OTableCellEditorStringComponent,
@@ -63,7 +64,7 @@ export const DEFAULT_INPUTS_O_TABLE_COLUMN = [
     ...OTableCellRendererCurrencyComponent.DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_CURRENCY, // includes Integer and Real
     ...OTableCellRendererDateComponent.DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_DATE,
     ...OTableCellRendererImageComponent.DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_IMAGE,
-    ...OTableCellRendererImageComponent.DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_IMAGE,
+    ...OTableCellRendererActionComponent.DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_ACTION,
     ...OTableCellEditorDateComponent.DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_DATE
   ]
 })
@@ -92,19 +93,22 @@ export class OTableColumnComponent implements OnInit {
   protected format: string;
   protected dateModelType: string;
   protected dateModelFormat: string;
-  protected trueValueType : string;
-  protected trueValue : string;
-  protected falseValueType : string;
-  protected falseValue : string;
-  protected grouping : any;
-  protected thousandSeparator : string;
-  protected decimalSeparator : string;
-  protected decimalDigits : number;
-  protected currencySymbol : string;
-  protected currencySymbolPosition : string;
-  protected imageType : string;
-  protected avatar : string;
-  protected emptyImage : string;
+  protected trueValueType: string;
+  protected trueValue: string;
+  protected falseValueType: string;
+  protected falseValue: string;
+  protected grouping: any;
+  protected thousandSeparator: string;
+  protected decimalSeparator: string;
+  protected decimalDigits: number;
+  protected currencySymbol: string;
+  protected currencySymbolPosition: string;
+  protected imageType: string;
+  protected avatar: string;
+  protected emptyImage: string;
+  protected action: string;
+  protected renderType: string;
+  protected renderValue: string;
 
   constructor( @Inject(forwardRef(() => OTableComponent)) table: OTableComponent,
     protected injector: Injector) {
@@ -118,110 +122,118 @@ export class OTableColumnComponent implements OnInit {
   public ngOnInit() {
     this.orderable = Util.parseBoolean(this.orderable, true);
     this.searchable = Util.parseBoolean(this.searchable, true);
-    this.editable = (typeof(this.editable) !== 'undefined') ?
+    this.editable = (typeof (this.editable) !== 'undefined') ?
       Util.parseBoolean(this.editable, false) :
       this.table.isColumnEditable(this.attr);
     this.grouping = Util.parseBoolean(this.grouping, true);
-    if (typeof(this.dateModelType) === 'undefined') {
+    if (typeof (this.dateModelType) === 'undefined') {
       this.dateModelType = OTableColumnComponent.DEFAULT_DATE_MODEL_TYPE;
       this.dateModelType = OTableCellEditorDateComponent.DEFAULT_DATE_MODEL_TYPE;
     }
-    if (typeof(this.dateModelFormat) === 'undefined') {
+    if (typeof (this.dateModelFormat) === 'undefined') {
       this.dateModelFormat = OTableColumnComponent.DEFAULT_DATE_MODEL_FORMAT;
       this.dateModelFormat = OTableCellEditorDateComponent.DEFAULT_DATE_MODEL_FORMAT;
     }
-    if (typeof(this.thousandSeparator) === 'undefined') {
+    if (typeof (this.thousandSeparator) === 'undefined') {
       this.thousandSeparator = this.numberService.thousandSeparator;
     }
-    if (typeof(this.decimalSeparator) === 'undefined') {
+    if (typeof (this.decimalSeparator) === 'undefined') {
       this.decimalSeparator = this.numberService.decimalSeparator;
     }
-    if (typeof(this.decimalDigits) === 'undefined') {
+    if (typeof (this.decimalDigits) === 'undefined') {
       this.decimalDigits = this.numberService.decimalDigits;
     }
-    if (typeof(this.currencySymbol) === 'undefined') {
+    if (typeof (this.currencySymbol) === 'undefined') {
       this.currencySymbol = this.currencyService.symbol;
     }
-    if (typeof(this.currencySymbolPosition) === 'undefined') {
+    if (typeof (this.currencySymbolPosition) === 'undefined') {
       this.currencySymbolPosition = this.currencyService.symbolPosition;
     }
     // create renderer
     // create renderer and editor
-    if (typeof(this.renderer) === 'undefined') {
+    if (typeof (this.renderer) === 'undefined') {
       switch (this.type) {
         case 'boolean':
           this.renderer = new OTableCellRendererBooleanComponent(this, this.injector);
           this.renderer.init({
-            trueValueType : this.trueValueType,
-            trueValue : this.trueValue,
-            falseValueType : this.falseValueType,
-            falseValue : this.falseValue
+            trueValueType: this.trueValueType,
+            trueValue: this.trueValue,
+            falseValueType: this.falseValueType,
+            falseValue: this.falseValue
           });
-          if (this.editable && (typeof(this.editor) === 'undefined')) {
+          if (this.editable && (typeof (this.editor) === 'undefined')) {
             this.editor = new OTableCellEditorBooleanComponent(this);
           }
           break;
         case 'integer':
           this.renderer = new OTableCellRendererIntegerComponent(this, this.injector);
           this.renderer.init({
-            grouping : this.grouping,
-            thousandSeparator : this.thousandSeparator
+            grouping: this.grouping,
+            thousandSeparator: this.thousandSeparator
           });
-          if (this.editable && (typeof(this.editor) === 'undefined')) {
+          if (this.editable && (typeof (this.editor) === 'undefined')) {
             this.editor = new OTableCellEditorIntegerComponent(this);
           }
           break;
         case 'real':
           this.renderer = new OTableCellRendererRealComponent(this, this.injector);
           this.renderer.init({
-            grouping : this.grouping,
-            thousandSeparator : this.thousandSeparator,
-            decimalSeparator : this.decimalSeparator,
-            decimalDigits : this.decimalDigits
+            grouping: this.grouping,
+            thousandSeparator: this.thousandSeparator,
+            decimalSeparator: this.decimalSeparator,
+            decimalDigits: this.decimalDigits
           });
-          if (this.editable && (typeof(this.editor) === 'undefined')) {
+          if (this.editable && (typeof (this.editor) === 'undefined')) {
             this.editor = new OTableCellEditorRealComponent(this);
           }
           break;
         case 'currency':
           this.renderer = new OTableCellRendererCurrencyComponent(this, this.injector);
           this.renderer.init({
-            grouping : this.grouping,
-            thousandSeparator : this.thousandSeparator,
-            decimalSeparator : this.decimalSeparator,
-            decimalDigits : this.decimalDigits,
-            currencySymbol : this.currencySymbol,
-            currencySymbolPosition : this.currencySymbolPosition
+            grouping: this.grouping,
+            thousandSeparator: this.thousandSeparator,
+            decimalSeparator: this.decimalSeparator,
+            decimalDigits: this.decimalDigits,
+            currencySymbol: this.currencySymbol,
+            currencySymbolPosition: this.currencySymbolPosition
           });
-          if (this.editable && (typeof(this.editor) === 'undefined')) {
+          if (this.editable && (typeof (this.editor) === 'undefined')) {
             this.editor = new OTableCellEditorRealComponent(this);
           }
           break;
         case 'date':
           this.renderer = new OTableCellRendererDateComponent(this, this.injector);
           this.renderer.init({
-            format : this.format
+            format: this.format
           });
-          if (this.editable && (typeof(this.editor) === 'undefined')) {
+          if (this.editable && (typeof (this.editor) === 'undefined')) {
             this.editor = new OTableCellEditorDateComponent(this, this.injector);
             this.editor.init({
-              dateModelType : this.dateModelType,
-              dateModelFormat : this.dateModelFormat,
-              rendererFormat : this.format
+              dateModelType: this.dateModelType,
+              dateModelFormat: this.dateModelFormat,
+              rendererFormat: this.format
             });
           }
           break;
         case 'image':
           this.renderer = new OTableCellRendererImageComponent(this);
           this.renderer.init({
-            imageType : this.imageType,
-            avatar : this.avatar,
-            emptyImage : this.emptyImage
+            imageType: this.imageType,
+            avatar: this.avatar,
+            emptyImage: this.emptyImage
+          });
+          break;
+        case 'action':
+          this.renderer = new OTableCellRendererActionComponent(this, this.injector);
+          this.renderer.init({
+            action: this.action,
+            renderType: this.renderType,
+            renderValue: this.renderValue
           });
           break;
         default:
           this.renderer = new OTableCellRendererStringComponent(this);
-          if (this.editable && (typeof(this.editor) === 'undefined')) {
+          if (this.editable && (typeof (this.editor) === 'undefined')) {
             this.editor = new OTableCellEditorStringComponent(this);
           }
           break;
@@ -256,6 +268,10 @@ export class OTableColumnComponent implements OnInit {
 
   public viewDetail(item: any) {
     this.table.viewDetail(item);
+  }
+
+  public editDetail(item: any) {
+    this.table.editDetail(item);
   }
 
   public remove(item: any) {

@@ -9,12 +9,14 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_ACTION = [
   // action [detail|delete|edit]: action to perform. Default: no value.
   'action',
 
+  // edition-mode [string]: edition mode. Default: none
+  'editionMode : edition-mode',
+
   // render-type [string|icon|image|button]: type of value to render. Default: 'icon'.
   'renderType: render-type',
 
   // render-value [string]: value to render. Default: it depends of render-type.
   'renderValue: render-value'
-
 ];
 
 @Component({
@@ -34,9 +36,9 @@ export class OTableCellRendererActionComponent implements OnInit, ITableCellRend
 
   protected static DEFAULT_RENDER_TYPE = 'icon';
   protected static DEFAULT_RENDER_VALUES = {
-    'detail' : 'arrow_forward',
-    'delete' : 'delete',
-    'edit' : 'edit'
+    'detail': 'arrow_forward',
+    'delete': 'delete',
+    'edit': 'edit'
   };
   protected static EDIT_SAVE_ICON = 'done';
   protected static EDIT_CANCEL_ICON = 'clear';
@@ -44,6 +46,7 @@ export class OTableCellRendererActionComponent implements OnInit, ITableCellRend
   protected tableColumn: OTableColumnComponent;
   protected translateService: OTranslateService;
   protected action: string;
+  protected editionMode: string;
   protected renderType: string;
   protected renderValue: string;
 
@@ -56,18 +59,33 @@ export class OTableCellRendererActionComponent implements OnInit, ITableCellRend
   }
 
   public ngOnInit() {
-    if ((typeof(this.renderValue) === 'undefined') &&
-        OTableCellRendererActionComponent.DEFAULT_RENDER_VALUES.hasOwnProperty(this.action)) {
+    if ((typeof (this.renderValue) === 'undefined') &&
+      OTableCellRendererActionComponent.DEFAULT_RENDER_VALUES.hasOwnProperty(this.action)) {
       this.renderValue = OTableCellRendererActionComponent.DEFAULT_RENDER_VALUES[this.action];
     }
   }
 
   public init(parameters: any) {
-    // nothing to initialize here
+    if (typeof (parameters) !== 'undefined') {
+      if (typeof (parameters.action) !== 'undefined') {
+        this.action = parameters.action;
+      }
+      if (typeof (parameters.editionMode) !== 'undefined') {
+        this.editionMode = parameters.editionMode;
+      }
+      if (typeof (parameters.renderType) !== 'undefined') {
+        this.renderType = parameters.renderType;
+      }
+      if (typeof (parameters.renderValue) !== 'undefined') {
+        this.renderValue = parameters.renderValue;
+      } else if (OTableCellRendererActionComponent.DEFAULT_RENDER_VALUES.hasOwnProperty(this.action)) {
+        this.renderValue = OTableCellRendererActionComponent.DEFAULT_RENDER_VALUES[this.action];
+      }
+    }
   }
 
   public render(cellData: any, rowData: any): string {
-    let actionTranslated = (typeof(this.action) !== 'undefined') ? this.translateService.get(this.action.toUpperCase()) : '';
+    let actionTranslated = (typeof (this.action) !== 'undefined') ? this.translateService.get(this.action.toUpperCase()) : '';
     let result = '<div class="o-table-row-action" title="' + actionTranslated + '">';
     switch (this.renderType) {
       case 'string':
@@ -90,7 +108,7 @@ export class OTableCellRendererActionComponent implements OnInit, ITableCellRend
   }
 
   public handleCreatedCell(cellElement: any, rowData: any) {
-    if (typeof(this.action) !== 'undefined') {
+    if (typeof (this.action) !== 'undefined') {
       switch (this.action.toLowerCase()) {
         case OTableCellRendererActionComponent.ACTION_DETAIL:
           cellElement.bind('click', (e) => {
@@ -105,13 +123,21 @@ export class OTableCellRendererActionComponent implements OnInit, ITableCellRend
           });
           break;
         case OTableCellRendererActionComponent.ACTION_EDIT:
-          this.handleEditActionClick(cellElement, rowData);
+          if (this.editionMode === 'inline') {
+            this.handleInlineEditActionClick(cellElement, rowData);
+          } else {
+            cellElement.bind('click', (e) => {
+              e.stopPropagation();
+              this.tableColumn.editDetail(rowData);
+            });
+          }
           break;
       }
     }
   }
 
-  protected handleEditActionClick(cellElement: any, rowData: any) {
+
+  protected handleInlineEditActionClick(cellElement: any, rowData: any) {
     cellElement.bind('click', (e) => {
       e.stopPropagation();
 
@@ -135,7 +161,7 @@ export class OTableCellRendererActionComponent implements OnInit, ITableCellRend
 
         // save
         let av = this.tableColumn.getRowEditorsAttrValues(cellElement);
-        if (typeof(av) !== 'undefined') {
+        if (typeof (av) !== 'undefined') {
           for (let i in av) {
             if (rowData.hasOwnProperty(i)) {
               rowData[i] = av[i];

@@ -672,7 +672,8 @@ o-table {
             .o-table-row-action {
               text-transform: uppercase;
               text-decoration: underline;
-              line-height: 46px;
+            //   line-height: 46px;
+              line-height: 1;  
               width: 100%;
               cursor: pointer;
             }
