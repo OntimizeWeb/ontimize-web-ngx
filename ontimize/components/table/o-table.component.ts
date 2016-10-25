@@ -1,18 +1,19 @@
-import {Component, OnInit, OnDestroy, OnChanges, SimpleChange, Inject, Injector, ElementRef, forwardRef,
-  Optional, EventEmitter,
-  NgModule,
-  ModuleWithProviders,
-  ViewEncapsulation} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {ObservableWrapper} from '../../util/async';
-import {Router, ActivatedRoute, NavigationStart, RoutesRecognized} from '@angular/router';
-import {Observable} from 'rxjs/Observable';
+import { Component, OnInit, OnDestroy, OnChanges,
+  SimpleChange, Inject, Injector,
+  ElementRef, forwardRef, Optional,
+  EventEmitter, NgModule, ModuleWithProviders, ViewEncapsulation
+} from '@angular/core';
+
+import { CommonModule } from '@angular/common';
+import { ObservableWrapper } from '../../util/async';
+import { Router, ActivatedRoute, NavigationStart, RoutesRecognized } from '@angular/router';
+import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/from';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/mergeAll';
 
 
-import {OTableColumnComponent} from './o-table-column.component';
+import { OTableColumnComponent } from './o-table-column.component';
 import {
   OTableCellEditorBooleanComponent,
   OTableCellEditorComboComponent,
@@ -21,6 +22,7 @@ import {
   OTableCellEditorRealComponent,
   OTableCellEditorStringComponent
 } from './cell-editor/cell-editor';
+
 import {
   OTableCellRendererActionComponent,
   OTableCellRendererBooleanComponent,
@@ -32,11 +34,12 @@ import {
   OTableCellRendererServiceComponent,
   OTableCellRendererStringComponent
 } from './cell-renderer/cell-renderer';
-import {dataServiceFactory} from '../../services/data-service.provider';
-import {AuthGuardService, DialogService, OTranslateService, OntimizeService, MomentService} from '../../services';
-import {Util} from '../../util/util';
-import {OFormComponent} from '../form/o-form.component';
-import {OFormValue} from '../form/OFormValue';
+
+import { dataServiceFactory } from '../../services/data-service.provider';
+import { AuthGuardService, DialogService, OTranslateService, OntimizeService, MomentService } from '../../services';
+import { Util } from '../../util/util';
+import { OFormComponent } from '../form/o-form.component';
+import { OFormValue } from '../form/OFormValue';
 
 import './o-table.loader';
 
