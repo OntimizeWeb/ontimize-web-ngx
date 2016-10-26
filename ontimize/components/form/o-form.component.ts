@@ -27,22 +27,22 @@ export const enum Mode {
 };
 
 export const DEFAULT_INPUTS_O_FORM = [
-  // showHeader [boolean]: visibility of form toolbar. Default: yes.
+  // show-header [boolean]: visibility of form toolbar. Default: yes.
   'showHeader: show-header',
 
-  // headerMode [string][ none | floating]: painting mode of form toolbar. Default: 'floating'
+  // header-mode [string][ none | floating]: painting mode of form toolbar. Default: 'floating'
   'headerMode: header-mode',
 
-  // labelheader [string]: displayable text on form toolbar. Default: ''.
+  // label-header [string]: displayable text on form toolbar. Default: ''.
   'labelheader: label-header',
 
-  // labelHeaderAlign [string][start | center | end]: alignment of form toolbar text. Default: 'center'
+  // label-header-align [string][start | center | end]: alignment of form toolbar text. Default: 'center'
   'labelHeaderAlign: label-header-align',
 
-  // headeractions [string]: available action buttons on form toolbar of standard CRUD operations, separated by ';'. Available options are R;I;U;D (Refresh, Insert, Update, Delete). Default: R;I;U;D
+  // header-actions [string]: available action buttons on form toolbar of standard CRUD operations, separated by ';'. Available options are R;I;U;D (Refresh, Insert, Update, Delete). Default: R;I;U;D
   'headeractions: header-actions',
 
-  // showHeaderActionsText: show-header-text-button
+  // show-header-actions-text [string][yes|no|true|false]: show text of form toolbar buttons
   'showHeaderActionsText: show-header-actions-text',
 
    // entity [string]: entity of the service. Default: no value.
@@ -57,7 +57,7 @@ export const DEFAULT_INPUTS_O_FORM = [
   // service [string]: JEE service path. Default: no value.
   'service',
 
-  // showDetailAfterInsert [string][yes|no|true|false]: shows detail form after insert new record. Default: false;
+  // stay-in-record-after-insert [string][yes|no|true|false]: shows detail form after insert new record. Default: false;
   'stayInRecordAfterInsert: stay-in-record-after-insert'
 ];
 
