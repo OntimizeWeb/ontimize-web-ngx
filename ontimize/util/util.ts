@@ -72,8 +72,7 @@ export class Util {
    * @returns boolean
    */
   static isFormDataComponent(arg: any): arg is IFormDataComponent {
-    return ((arg as IFormDataComponent).data !== undefined &&
-      (arg as IFormDataComponent).isAutomaticBinding !== undefined);
+    return ((arg as IFormDataComponent).isAutomaticBinding !== undefined);
   }
 
 }

@@ -1,7 +1,7 @@
 import {Component, OnInit, OnDestroy, EventEmitter,
   Injector, NgZone, ChangeDetectorRef,
   NgModule, ContentChildren, QueryList,
-  ModuleWithProviders,
+  ModuleWithProviders, HostListener,
   ViewEncapsulation} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {Router, ActivatedRoute } from '@angular/router';
@@ -30,11 +30,20 @@ export const DEFAULT_INPUTS_O_FORM = [
   // showHeader [boolean]: visibility of form toolbar. Default: yes.
   'showHeader: show-header',
 
+  // headerMode [string][ none | floating]: painting mode of form toolbar. Default: 'floating'
+  'headerMode: header-mode',
+
   // labelheader [string]: displayable text on form toolbar. Default: ''.
   'labelheader: label-header',
 
+  // labelHeaderAlign [string][start | center | end]: alignment of form toolbar text. Default: 'center'
+  'labelHeaderAlign: label-header-align',
+
   // headeractions [string]: available action buttons on form toolbar of standard CRUD operations, separated by ';'. Available options are R;I;U;D (Refresh, Insert, Update, Delete). Default: R;I;U;D
   'headeractions: header-actions',
+
+  // showHeaderActionsText: show-header-text-button
+  'showHeaderActionsText: show-header-actions-text',
 
    // entity [string]: entity of the service. Default: no value.
   'entity',
@@ -89,8 +98,11 @@ export class OFormComponent implements OnInit, OnDestroy {
 
   @InputConverter()
   showHeader: boolean = true;
+  headerMode: string = 'floating';
   labelheader: string = '';
+  labelHeaderAlign: string = 'center';
   headeractions: string = '';
+  showHeaderActionsText: string = 'yes';
   entity: string;
   keys: string = '';
   columns: string = '';
@@ -135,6 +147,19 @@ export class OFormComponent implements OnInit, OnDestroy {
 
   protected formDataCache: Object;
   protected tabSelectChangeFired: boolean = false;
+  protected hasScrolled: boolean = false;
+
+  @HostListener('window:scroll', ['$event'])
+  track(event) {
+    if (this.showHeader && event.currentTarget instanceof Window) {
+      let win: Window = event.currentTarget;
+      if (win.scrollY > 50) {
+        this.hasScrolled = true;
+      } else {
+        this.hasScrolled = false;
+      }
+    }
+  }
 
   constructor(
     protected router: Router,
@@ -529,9 +554,11 @@ export class OFormComponent implements OnInit, OnDestroy {
       var self = this;
       Object.keys(this._components).forEach(key => {
         let comp = this._components[key];
-        if (Util.isFormDataComponent(comp) && comp.isAutoBinding()) {
+        if (Util.isFormDataComponent(comp)) {
           try {
-            comp.data = self.getDataValue(key);
+            if (comp.isAutomaticBinding()) {
+              comp.data = self.getDataValue(key);
+            }
           } catch (error) {
             console.error(error);
           }

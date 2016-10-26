@@ -1,4 +1,10 @@
+.toolbar-form-header{
+  background: #eee;
+  min-height: 50px;
 
+  md-toolbar-row {
+    height: 50px;
+  }
 
   .md-toolbar-tools {
     display: -webkit-box;
@@ -20,9 +26,20 @@
       flex: 1 1 auto;
     }
 
+    button {
+      color: #009688;
+      min-width: 100px;
+      padding: 0px 6px;
+    }
+
     md-icon {
       cursor: pointer;
+      color: #009688;
+      vertical-align: middle;
     }
 
   }
+
+
+}
 

@@ -10,14 +10,17 @@ import {Router, ActivatedRoute } from '@angular/router';
 import {MdIconModule} from '@angular2-material/icon';
 import {MdToolbarModule} from '@angular2-material/toolbar';
 
-import {OFormComponent} from './o-form.component';
+import { OFormComponent } from './o-form.component';
+import {InputConverter} from '../../decorators';
 import {Util} from '../../util/util';
 import {DialogService} from '../../services';
 import {OTranslateModule} from '../../pipes/o-translate.pipe';
 
 export const DEFAULT_INPUTS_O_FORM_TOOLBAR = [
   'labelHeader: label-header',
-  'headeractions: header-actions'
+  'labelHeaderAlign: label-header-align',
+  'headeractions: header-actions',
+  'showHeaderActionsText: show-header-actions-text'
 ];
 
 @Component({
@@ -37,6 +40,9 @@ export class OFormToolbarComponent implements OnInit {
   /* Bindings */
   labelHeader: string = '';
   headeractions: string = '';
+  labelHeaderAlign: string = 'center';
+  @InputConverter()
+  showHeaderActionsText: boolean = true;
 
   formActions: string[];
   isDetail: boolean = true;
@@ -234,6 +240,10 @@ export class OFormToolbarComponent implements OnInit {
       return this._form.navigationData.length >= 1;
     }
     return false;
+  }
+
+  getLabelHeaderAlign(): string {
+    return this.labelHeaderAlign;
   }
 }
 
