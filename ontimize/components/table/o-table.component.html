@@ -1,3 +1,27 @@
-<div class="o-table-container" *ngIf="visible" [class.disabled]="enabled === false" [class.detail]="detailMode !== 'none'" title="">
-  <table [id]="attr"></table>
+<div class="o-table-container" *ngIf="visible" [class.disabled]="enabled === false" [class.detail]="detailMode !== 'none'"
+	title="">
+	<table [id]="attr"></table>
 </div>
+<!---->
+<button *ngIf="showOptionsButton" class="table-menu-button" style="position:absolute; top: 19px; right:29px;" md-icon-button [md-menu-trigger-for]="menu">
+
+  <md-icon>more_vert</md-icon>
+</button>
+
+<md-menu #menu="mdMenu" x-position="before">
+	<!--<button *ngIf="exportButton" md-menu-item> {{ 'TABLE.BUTTONS.COPY_TO_CLIPBOARD' | oTranslate }} </button>
+	<button *ngIf="exportButton" md-menu-item> {{ 'TABLE.BUTTONS.PRINT' | oTranslate }} </button>
+	<button *ngIf="exportButton" md-menu-item> {{ 'TABLE.BUTTONS.EXCEL' | oTranslate }} </button>
+	<button *ngIf="exportButton" md-menu-item> {{ 'TABLE.BUTTONS.CSV' | oTranslate }} </button>
+	<button *ngIf="exportButton" md-menu-item> {{ 'TABLE.BUTTONS.PDF' | oTranslate }} </button>-->
+	<button *ngIf="exportButton" md-menu-item> {{ 'TABLE.BUTTONS.EXPORT' | oTranslate }} </button>
+
+	<button *ngIf="columnsGroupButton" md-menu-item> {{ 'TABLE.BUTTONS.GROUP_ROWS' | oTranslate }} </button>
+	<button *ngIf="columnsResizeButton" md-menu-item> {{ 'TABLE.BUTTONS.RESIZE_COLUMNS' | oTranslate }} </button>
+	<button *ngIf="columnsVisibilityButton" md-menu-item> {{ 'TABLE.BUTTONS.COLVIS' | oTranslate }} </button>
+
+	<button md-menu-item *ngFor="let option of headerOptions">
+		 {{ option.text | oTranslate }}
+		 <md-icon *ngIf="option.icon" class="md-24">{{ option.icon }}</md-icon>
+	</button>
+</md-menu>
