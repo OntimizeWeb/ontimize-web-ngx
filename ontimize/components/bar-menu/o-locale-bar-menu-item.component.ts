@@ -7,6 +7,7 @@ import {
   OnInit,
   NgModule,
   ModuleWithProviders,
+  HostListener,
   ViewEncapsulation} from '@angular/core';
 import {CommonModule} from '@angular/common';
 
@@ -55,6 +56,11 @@ export class OLocaleBarMenuItemComponent implements OnInit {
   protected icon: string;
   protected locale: string;
 
+  isHovered: boolean = false;
+
+  @HostListener('mouseover') onMouseover = () => this.isHovered = true;
+  @HostListener('mouseout') onMouseout = () => this.isHovered = false;
+
   constructor(
     @Inject(forwardRef(() => OBarMenuComponent)) menu: OBarMenuComponent,
     protected elRef: ElementRef,
@@ -68,14 +74,24 @@ export class OLocaleBarMenuItemComponent implements OnInit {
       this.tooltip = this.title;
     }
     if (this.translateService) {
-      let tooltip = this.translateService.get(this.tooltip);
-      this.elRef.nativeElement.setAttribute('title', tooltip);
+      this.translateService.onLanguageChanged.subscribe(() => {
+        this.setDOMTitle();
+      });
+      this.setDOMTitle();
     }
+  }
+
+  setDOMTitle() {
+    let tooltip = this.translateService.get(this.tooltip);
+    this.elRef.nativeElement.setAttribute('title', tooltip);
   }
 
   configureI18n() {
     if (this.translateService) {
       this.translateService.use(this.locale);
+    }
+    if (this.menu) {
+      this.menu.collapseAll();
     }
   }
 }

@@ -2,10 +2,12 @@ $bg-color: #FFF;
 $fg-color: rgba(0, 0, 0, 0.7);
 
 /* menu items */
-$item-bg-color-hover: rgba(0,0,0, 0.16);
+$item-bg-color-hover-dark: rgba(0,0,0, 0.16);
+$item-bg-color-hover-light: rgba(255,255,255, 0.16);
 $item-fg-color-hover: rgba(0, 0, 0, 0.7);
 
 o-bar-menu {
+  box-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12);
 
   .toggle, input {
     display: none;
@@ -92,20 +94,20 @@ o-bar-menu {
 
   @media all and (min-width : 768px) {
 
-    nav .fake-ul .fake-li .fake-ul .fake-li:hover {
-      background: $item-bg-color-hover;
+    nav .fake-ul .fake-li .fake-ul .fake-li-hover {
+      background: $item-bg-color-hover-dark;
     }
 
-    nav .fake-ul .fake-li:hover {
-      background-color: rgba(255,255,255,0.16);
+    nav .fake-ul .fake-li-hover {
+      background-color: $item-bg-color-hover-light;
     }
 
-    nav .fake-ul .fake-li:hover > .fake-ul {
+    nav .fake-ul .fake-li-hover > .fake-ul {
       display: inline-block;
       z-index: 1000;
     }
 
-    nav .fake-ul .fake-ul .fake-li:hover > .fake-ul {
+    nav .fake-ul .fake-ul .fake-li-hover > .fake-ul {
       display: inline-block;
       z-index: 1000;
       left: 250px;
@@ -147,12 +149,24 @@ o-bar-menu {
       background-color: rgba(255, 255, 255, 0.15);
     }
 
+    label.title-label {
+      display: inline-block;
+    }
+
+    md-icon.menu-icon {
+      vertical-align: middle;
+      display: inline-block;
+      line-height: 1;
+      padding: 0 4px;
+    }
+
     input:checked + .fake-ul {
       display: block;
     }
 
     nav .fake-ul {
       width: 100%;
+      border-top: 1px solid rgba(255,255,255,0.5);
     }
 
     nav .fake-ul .fake-li {
@@ -183,11 +197,6 @@ o-bar-menu {
       position: static;
       width: 100%;
     }
-
-    /*nav .fake-ul .fake-ul .fake-li:hover > .fake-ul,
-    nav .fake-ul .fake-li:hover > .fake-ul {
-      display: inherit;
-    }*/
 
     nav .fake-ul .fake-ul .fake-li {
       width: 100%;

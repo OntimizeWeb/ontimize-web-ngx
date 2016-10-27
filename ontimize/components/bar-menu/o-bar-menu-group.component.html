@@ -1,7 +1,7 @@
-<div class="fake-li md-primary">
+<div class="fake-li md-primary" [class.fake-li-hover]="isHovered">
   <md-icon *ngIf="icon" class="o-bar-menu-group-icon md-24">{{ icon }}</md-icon>
-  <label [attr.for]="id" class="toggle">{{ title | oTranslate }}</label>
-  <a class="o-bar-menu-group-title" href="#">{{ title | oTranslate }}</a>
+  <label [attr.for]="id" class="toggle">{{ groupTitle | oTranslate }}</label>
+  <a class="o-bar-menu-group-title" >{{ groupTitle | oTranslate }}</a>
   <input [attr.id]="id" type="checkbox" />
   <div class="fake-ul md-primary md-whiteframe-4dp">
     <ng-content></ng-content>
