@@ -1,7 +1,8 @@
 <md-toolbar color="primary">
   <nav>
-    <label [attr.for]="id" class="toggle">{{ title | oTranslate }}</label>
-    <input [attr.id]="id" type="checkbox" />
+    <md-icon class="md-24 menu-icon toggle" (click)="input.checked = !input.checked">menu</md-icon>
+    <label [attr.for]="id" class="toggle title-label">{{ menuTitle | oTranslate }}</label>
+    <input #input [attr.id]="id" type="checkbox" />
     <div class="fake-ul md-primary menu">
       <ng-content></ng-content>
     </div>

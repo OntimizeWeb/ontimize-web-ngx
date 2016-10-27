@@ -7,11 +7,12 @@ import {
   ElementRef,
   NgModule,
   ModuleWithProviders,
+  HostListener,
   ViewEncapsulation
 } from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {RouterModule} from '@angular/router';
-import {MdIconModule} from '@angular2-material/icon';
+import { MdIconModule } from '@angular2-material/icon';
 
 import {OBarMenuModule, OBarMenuComponent} from './o-bar-menu.component';
 import { OTranslateModule } from '../../pipes/o-translate.pipe';
@@ -19,7 +20,7 @@ import { OTranslateService } from '../../services';
 
 export const DEFAULT_INPUTS_O_BAR_MENU_ITEM = [
   // title [string]: menu item title. Default: no value.
-  'title',
+  'itemTitle: title',
 
   // tooltip [string]: menu group tooltip. Default: 'title' value.
   'tooltip',
@@ -52,13 +53,18 @@ export class OBarMenuItemComponent implements OnInit {
   protected menu: OBarMenuComponent;
   protected translateService: OTranslateService;
 
-  protected title: string;
+  protected itemTitle: string;
   protected tooltip: string;
   protected icon: string;
   protected route: string;
   protected action: Function;
 
   protected restricted: boolean;
+
+  isHovered: boolean = false;
+
+  @HostListener('mouseover') onMouseover = () => this.isHovered = true;
+  @HostListener('mouseout') onMouseout = () => this.isHovered = false;
 
   constructor(
     @Inject(forwardRef(() => OBarMenuComponent)) menu: OBarMenuComponent,
@@ -78,11 +84,24 @@ export class OBarMenuItemComponent implements OnInit {
     }
 
     if (!this.tooltip) {
-      this.tooltip = this.title;
+      this.tooltip = this.itemTitle;
     }
     if (this.translateService) {
-      let tooltip = this.translateService.get(this.tooltip);
-      this.elRef.nativeElement.setAttribute('title', tooltip);
+      this.translateService.onLanguageChanged.subscribe(() => {
+        this.setDOMTitle();
+      });
+      this.setDOMTitle();
+    }
+  }
+
+  setDOMTitle() {
+    let tooltip = this.translateService.get(this.tooltip);
+    this.elRef.nativeElement.setAttribute('title', tooltip);
+  }
+
+  collapseMenu(evt: Event) {
+    if (this.menu) {
+      this.menu.collapseAll();
     }
   }
 

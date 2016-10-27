@@ -7,6 +7,7 @@ import {
   OnInit,
   NgModule,
   ModuleWithProviders,
+  HostListener,
   ViewEncapsulation
 } from '@angular/core';
 import {CommonModule} from '@angular/common';
@@ -19,7 +20,7 @@ import { OTranslateService } from '../../services';
 
 export const DEFAULT_INPUTS_O_BAR_MENU_GROUP = [
   // title [string]: menu group title. Default: no value.
-  'title',
+  'groupTitle: title',
 
   // tooltip [string]: menu group tooltip. Default: 'title' value.
   'tooltip',
@@ -46,9 +47,14 @@ export class OBarMenuGroupComponent implements OnInit {
   protected menu: OBarMenuComponent;
   protected translateService: OTranslateService;
 
-  protected title: string;
+  protected groupTitle: string;
   protected tooltip: string;
   protected id: string;
+
+  isHovered: boolean = false;
+
+  @HostListener('mouseover') onMouseover = () => this.isHovered = true;
+  @HostListener('mouseout') onMouseout = () => this.isHovered = false;
 
   constructor(
     @Inject(forwardRef(() => OBarMenuComponent)) menu: OBarMenuComponent,
@@ -62,12 +68,19 @@ export class OBarMenuGroupComponent implements OnInit {
 
   ngOnInit() {
     if (!this.tooltip) {
-      this.tooltip = this.title;
+      this.tooltip = this.groupTitle;
     }
     if (this.translateService) {
-      let tooltip = this.translateService.get(this.tooltip);
-      this.elRef.nativeElement.setAttribute('title', tooltip);
+      this.translateService.onLanguageChanged.subscribe(() => {
+        this.setDOMTitle();
+      });
+      this.setDOMTitle();
     }
+  }
+
+  setDOMTitle() {
+    let tooltip = this.translateService.get(this.tooltip);
+    this.elRef.nativeElement.setAttribute('title', tooltip);
   }
 
 }
