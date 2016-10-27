@@ -69,6 +69,7 @@ import {
   OSideMenuModule,
   OSideMenuGroupModule,
   OSideMenuItemModule,
+  OLocaleSideMenuItemModule,
   OSideMenuSeparatorModule
 } from '../components';
 
@@ -146,5 +147,6 @@ export const ONTIMIZE_MODULES: any = [
   OSideMenuModule.forRoot(),
   OSideMenuGroupModule.forRoot(),
   OSideMenuItemModule.forRoot(),
+  OLocaleSideMenuItemModule.forRoot(),
   OSideMenuSeparatorModule.forRoot()
 ];
