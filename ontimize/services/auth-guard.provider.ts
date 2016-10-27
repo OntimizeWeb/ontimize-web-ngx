@@ -20,10 +20,10 @@ class AuthGuardServiceFactory {
     if (typeof(type) === 'undefined') {
       obj = new AuthGuardService(this.injector);
     } else {
-      
+
       let newInstance = Object.create((type as any).prototype);
-      obj = type.apply(newInstance, new Array(this.injector)); 
-     
+      obj = type.apply(newInstance, new Array(this.injector));
+
       return newInstance;
 
     }
