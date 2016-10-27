@@ -523,7 +523,9 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
 
   public ngAfterViewInit() {
     this.initTableAfterViewInit();
-    this.trigger.onMenuOpen.subscribe(args => this.onOptionsMenuShow(args));
+    if (this.trigger) {
+      this.trigger.onMenuOpen.subscribe(args => this.onOptionsMenuShow(args));
+    }
   }
 
   public ngOnChanges(changes: { [propName: string]: SimpleChange }) {
@@ -834,6 +836,16 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
 
   protected parseTableOptions() {
     var options = this.getTableOptions();
+    // new ($ as any).fn.dataTable.Buttons(this.table, {
+    //   buttons: options
+    // });
+    // var self = this;
+    // this.table.buttons(1, null).container().appendTo(
+    //   self.table().container()
+    // );
+
+
+
     this.showOptionsButton = (options.length > 0 && this.headerOptions.length > 0);
   }
 
