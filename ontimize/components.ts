@@ -35,6 +35,7 @@ export * from './components/search-input/o-search-input.component';
 export * from './components/side-menu/o-side-menu.component';
 export * from './components/side-menu/o-side-menu-group.component';
 export * from './components/side-menu/o-side-menu-item.component';
+export * from './components/side-menu/o-locale-side-menu-item.component';
 export * from './components/side-menu/o-side-menu-separator.component';
 export * from './components/table/o-table.component';
 export * from './components/table/o-table-column.component';

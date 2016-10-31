@@ -23,6 +23,24 @@ o-side-menu {
     margin: 0px;
   }
 
+  @media all and (min-width : 768px) {
+    md-sidenav {
+      width: 250px;
+    }
+  }
+
+  @media all and (max-width : 767px) {
+    md-sidenav {
+      width: 250px;
+    }
+  }
+
+  @media all and (max-width : 330px) {
+    md-sidenav {
+      width: 96%;
+    }
+  }
+
 }
 
 .md-input-placeholder {

@@ -63,8 +63,7 @@ o-table {
 
     .dt-buttons {
 
-      margin: 10px;
-      text-align: right;
+      margin: 0 10px;
 
       a {
         text-decoration: none;
@@ -165,7 +164,7 @@ o-table {
 
           &.generic-action-delete::after {
             font-family: 'Material Icons';
-            content: "delete";
+            content: "remove_circle_outline";
             font-size: 24px;
             margin: 0px 5px;
             line-height: 40px;
@@ -174,12 +173,21 @@ o-table {
 
           &.generic-action-add::after {
             font-family: 'Material Icons';
-            content: "note_add";
+            content: "add_circle_outline";
             font-size: 24px;
             margin: 0px 5px;
             line-height: 40px;
             padding: 5px;
           }
+
+          // &.generic-action-options::after {
+          //   font-family: 'Material Icons';
+          //   content: "more_vert";
+          //   font-size: 24px;
+          //   margin: 0px 5px;
+          //   line-height: 40px;
+          //   padding: 5px;
+          // }
 
         }
 
@@ -241,14 +249,13 @@ o-table {
     }
 
     .dataTables_filter {
-
-      display: none;
-      margin: 20px 50px;
+      margin: 0px 50px;
       color: rgba(0, 0, 0, 0.9);
+      height: 40px;
 
       label {
-
         position: relative;
+        vertical-align: top;
 
         &::before {
           font-family: 'Material Icons';
@@ -257,8 +264,8 @@ o-table {
           line-height: 40px;
           width: 50px;
           position: absolute;
-          top: -11px;
-          left: -48px;
+          top: 0px;
+          left: -50px;
           text-align: center;
         }
 
@@ -269,7 +276,9 @@ o-table {
         outline: none;
         font-size: 100%;
         width: 100%;
-        height: 38px;
+        height: 26px;
+        margin: 7px 0;
+        padding: 0px;
         color: rgba(0, 0, 0, 0.9);
         border-bottom: 1px rgba(0, 0, 0, 0.9) solid;
       }
@@ -278,6 +287,62 @@ o-table {
         border-bottom-width: 2px;
       }
 
+    }
+
+    .dataTables_top_wrapper {
+      margin: 10px 0.5%;
+    }
+
+    .dataTables_top_wrapper {
+        display: -ms-flexbox;
+        display: -webkit-flex;
+        display: flex;
+        -webkit-flex-direction: row;
+        -ms-flex-direction: row;
+        flex-direction: row;
+        -webkit-flex-wrap: wrap;
+        -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+        -webkit-justify-content: center;
+        -ms-flex-pack: center;
+        justify-content: center;
+        -webkit-align-content: center;
+        -ms-flex-line-pack: center;
+        align-content: center;
+        -webkit-align-items: flex-start;
+        -ms-flex-align: start;
+        align-items: flex-start;
+
+      .dt-buttons,
+      .dataTables_options {
+        -webkit-order: 0;
+        -ms-flex-order: 0;
+        order: 0;
+        -webkit-flex: 0 1 auto;
+        -ms-flex: 0 1 auto;
+        flex: 0 1 auto;
+        -webkit-align-self: auto;
+        -ms-flex-item-align: auto;
+        align-self: auto;
+      }
+
+      .dataTables_filter_wrapper {
+        -webkit-order: 0;
+        -ms-flex-order: 0;
+        order: 0;
+        -webkit-flex: 1 0 auto;
+        -ms-flex: 1 0 auto;
+        flex: 1 0 auto;
+        -webkit-align-self: auto;
+        -ms-flex-item-align: auto;
+        align-self: auto;
+
+        .dataTables_filter {
+          width: 15%;
+          min-width: 200px;
+          float: right;
+        }
+      }
     }
 
     table {
@@ -673,7 +738,7 @@ o-table {
               text-transform: uppercase;
               text-decoration: underline;
             //   line-height: 46px;
-              line-height: 1;  
+              line-height: 1;
               width: 100%;
               cursor: pointer;
             }

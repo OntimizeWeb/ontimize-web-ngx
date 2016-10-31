@@ -42,7 +42,8 @@ export class ODialogComponent implements OnInit {
     this.twoOptions = false;
     this.title = title;
     this.message = message;
-    this.okButtonText = (typeof(okButtonText) !== 'undefined') ? okButtonText : ODialogComponent.DEFAULT_OK_BUTTON_TEXT;
+    this.okButtonText = (typeof (okButtonText) !== 'undefined') ? okButtonText : ODialogComponent.DEFAULT_OK_BUTTON_TEXT;
+    this.dialog.onShow.subscribe(evt => this.onDialogShow(evt));
     return this.dialog.show();
   }
 
@@ -52,9 +53,16 @@ export class ODialogComponent implements OnInit {
     this.message = message;
     this.okButtonText = (typeof(okButtonText) !== 'undefined') ? okButtonText : ODialogComponent.DEFAULT_OK_BUTTON_TEXT;
     this.cancelButtonText = (typeof(cancelButtonText) !== 'undefined') ? cancelButtonText : ODialogComponent.DEFAULT_CANCEL_BUTTON_TEXT;
+
+    this.dialog.onShow.subscribe(evt => this.onDialogShow(evt));
     return this.dialog.show();
   }
 
+  public onDialogShow(evt: any) {
+    if (evt.overlayRef._pane) {
+      evt.overlayRef._pane.classList.add('o-dialog-fullscreen');
+    }
+  }
 }
 
 

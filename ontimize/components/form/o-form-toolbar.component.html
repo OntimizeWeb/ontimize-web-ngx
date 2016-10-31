@@ -15,10 +15,8 @@
     </div>
     <span *ngIf="getLabelHeaderAlign() === 'start' || getLabelHeaderAlign() === 'center'" class="fill-remaining"></span>
 
-    <!--<md-icon aria-label="Refresh" (click)="onReload()" *ngIf="refreshBtnEnabled" layout-padding>refresh</md-icon>
-    <md-icon aria-label="Insert" (click)="onInsert()" *ngIf="insertBtnEnabled" layout-padding>add</md-icon>
-    <md-icon aria-label="Edit" (click)="onEdit()" *ngIf="editBtnEnabled" layout-padding>mode_edit</md-icon>
-    <md-icon aria-label="Delete" (click)="onDelete()" *ngIf="deleteBtnEnabled" layout-padding>delete</md-icon>-->
+    <ng-content select="[o-custom-form-toolbar-buttons-wrapper]"></ng-content>
+
     <button md-button (click)="onReload($event)" *ngIf="refreshBtnEnabled">
       <md-icon>refresh</md-icon>
       <span *ngIf="showHeaderActionsText">{{ 'REFRESH' | oTranslate }}</span>
