@@ -58,6 +58,7 @@ export class AuthGuardService implements CanActivate, IProfileService {
 
   configureService() {
     let localInjector = ReflectiveInjector.resolveAndCreate([{ provide: OntimizeService, useFactory: dataServiceFactory, deps: [Injector] }], this.injector);
+
     this.ontimizeService = localInjector.get(OntimizeService);
 
     if (Util.isDataService(this.ontimizeService)) {
