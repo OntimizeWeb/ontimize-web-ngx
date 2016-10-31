@@ -1,10 +1,12 @@
-import { Injector, Injectable } from '@angular/core';
+import { Injector, Injectable, ReflectiveInjector } from '@angular/core';
 import { CanActivate, Router, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 
 import { IProfileService } from '../interfaces';
 import { OntimizeService, LoginService } from '../services';
 import { APP_CONFIG, Config } from '../config/app-config';
+import { Util } from '../util/util';
+import { dataServiceFactory } from './data-service.provider';
 
 @Injectable()
 export class AuthGuardService implements CanActivate, IProfileService {
@@ -16,13 +18,15 @@ export class AuthGuardService implements CanActivate, IProfileService {
   protected router: Router;
   protected loginService: LoginService;
   protected config: Config;
-  protected ontimizeService: OntimizeService;
+  protected ontimizeService: any;
+  protected service: any;
   protected entity: any;
   protected keyColumn: any;
   protected valueColumn: any;
   protected user: any;
   protected profile: any;
   protected profileObservable: Observable<any>;
+
 
   constructor(private inj: Injector) {
     this.injector = inj;
@@ -46,10 +50,24 @@ export class AuthGuardService implements CanActivate, IProfileService {
       if (typeof(this.config.authGuard.valueColumn) !== 'undefined') {
         this.valueColumn = this.config.authGuard.valueColumn;
       }
+      if (typeof (this.config.authGuard.service)!== 'undefined') {
+        this.service = this.config.authGuard.service;
+      }
     }
+  }
 
-    this.ontimizeService = this.injector.get(OntimizeService);
+  configureService() {
+    let localInjector = ReflectiveInjector.resolveAndCreate([{ provide: OntimizeService, useFactory: dataServiceFactory, deps: [Injector] }], this.injector);
+    this.ontimizeService = localInjector.get(OntimizeService);
 
+    if (Util.isDataService(this.ontimizeService)) {
+      let serviceCfg = this.ontimizeService.getDefaultServiceConfiguration(this.service);
+      if (this.entity) {
+        serviceCfg['entity'] = this.entity;
+        //serviceCfg['session'] = this.loginService.getSessionInfo();
+      }
+      this.ontimizeService.configureService(serviceCfg);
+    }
   }
 
   public canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
@@ -64,10 +82,9 @@ export class AuthGuardService implements CanActivate, IProfileService {
         this.profile = undefined;
         this.profileObservable = new Observable(observer => {
           // get user profile from service
-          this.ontimizeService.configureService({
-            'session': this.loginService.getSessionInfo()
-          });
-          let filter = {};
+
+         this.configureService();
+         let filter = {};
           filter[this.keyColumn] = this.loginService.user;
           this.ontimizeService.query(filter, [ this.valueColumn ], this.entity)
             .subscribe(
@@ -75,7 +92,7 @@ export class AuthGuardService implements CanActivate, IProfileService {
                 this.user = this.loginService.user;
                 if ((res.code === 0) && (typeof(res.data) !== 'undefined') && (res.data.length === 1) &&
                     (typeof(res.data[0]) === 'object')) {
-                  this.profile = res.data[0].hasOwnProperty('JSONWEB') ? JSON.parse(res.data[0]['JSONWEB']) : {};
+                  this.profile = res.data[0].hasOwnProperty(this.valueColumn) ? JSON.parse(res.data[0][this.valueColumn]) : {};
                 } else {
                   //TODO JEE?
                 }
