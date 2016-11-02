@@ -16,6 +16,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/mergeAll';
 import { MdMenuModule, MdMenuTrigger } from '@angular2-material/menu';
 import { MdIconModule } from '@angular2-material/icon';
+import { MdCheckboxModule } from '@angular2-material/checkbox';
 
 import { OTableColumnComponent } from './o-table-column.component';
 import {
@@ -170,6 +171,12 @@ export const DEFAULT_INPUTS_O_TABLE = [
 
   // recursive-edit [no|yes]: do not append detail keys when navigate (overwrite current). Default: no.
   'recursiveEdit: recursive-edit',
+
+  // show-header-buttons-text [string][yes|no|true|false]: show text of header buttons
+  'showHeaderButtonText: show-header-buttons-text',
+
+  // select-all-checkbox [string][yes|no|true|false]:
+  'selectAllCheckbox: select-all-checkbox'
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE = [
@@ -292,7 +299,10 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
   protected onInsertRowSubmitSubscribe: any;
   protected headerButtons: Array<OTableButtonComponent>;
   protected headerOptions: Array<OTableOptionComponent>;
-  protected showOptionsButton: boolean = false;
+  protected showOptionsButton: boolean = true;
+  protected showExportOptions: boolean = false;
+  protected showHeaderButtonsText: any;
+  protected selectAllCheckbox: any;
 
   public onRowSelected: EventEmitter<any> = new EventEmitter();
   public onRowDelected: EventEmitter<any> = new EventEmitter();
@@ -300,7 +310,6 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
   public onDoubleClick: EventEmitter<any> = new EventEmitter();
 
   @ViewChild(MdMenuTrigger) trigger: MdMenuTrigger;
-
 
   constructor(
     protected _router: Router,
@@ -440,6 +449,8 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
     this.detailButtonInRow = Util.parseBoolean(this.detailButtonInRow, true);
     this.editButtonInRow = Util.parseBoolean(this.editButtonInRow, false);
     this.recursiveEdit = Util.parseBoolean(this.recursiveEdit, false);
+    this.showHeaderButtonsText = Util.parseBoolean(this.showHeaderButtonsText, false);
+    this.selectAllCheckbox = Util.parseBoolean(this.selectAllCheckbox, false);
 
     // get previous position
     let localStorageState = localStorage.getItem('DataTables' + '_' + this.attr + '_' + this._router.url);
@@ -544,6 +555,7 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   protected initTableOnInit(columns: any = undefined) {
+    var self = this;
     this.dataTableOptions = {
       data: this.componentData,
       /*dom attribute
@@ -555,9 +567,9 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
       i: {information}
       l: {length}
       */
-      dom: '<"dataTables_top_wrapper"B<"dataTables_filter_wrapper"f><"dataTables_options">>rtpil',
+      dom: '<"dataTables_top_wrapper"B<"dataTables_filter_wrapper"<"dataTables_hidden_options">f><"dataTables_options">>rtpil',
       buttons: this.getTableButtons(),
-      select: true,
+      select: !this.selectAllCheckbox,
       autoWidth: false,
       stateSave: true,
       filter: this.quickFilter,
@@ -581,7 +593,7 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
       ],
       createdRow: (row, data, dataIndex) => {
         let tr = $(row) as any;
-        tr.children().each(function(i, e) {
+        tr.children().each(function (i, e) {
           let td = $(e) as any;
           let order = td.children().attr('data-order');
           if ((td.children().length > 0) && (typeof (order) !== 'undefined')) {
@@ -595,9 +607,22 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
       initComplete: (settings) => {
         this.handleColumnWidth();
         let controlButtons = $('#' + this.attr + '_wrapper .generic-action') as any;
-        ($ as any).each(controlButtons, function(i, el) {
+        ($ as any).each(controlButtons, function (i, el) {
           ($(this) as any).attr('title', ($(this) as any).find('span').text());
         });
+
+        let customButtons = $('#' + this.attr + '_wrapper .custom-generic-action') as any;
+        ($ as any).each(customButtons, function (i, el) {
+          var btnEl = ($(this) as any);
+          var iconMatch = btnEl.attr('class').match(/icon-(.*)/);
+          var icon = '';
+          if (iconMatch !== null) {
+            icon = iconMatch[1];
+          }
+          btnEl.attr('data-icon', icon);
+          btnEl.attr('title', ($(this) as any).find('span').text());
+        });
+
         let filterButton = $('#' + this.attr + '_wrapper .generic-action-filter') as any;
         let filterInput = ($('#' + this.attr + '_filter') as any).find('input');
         if ((filterInput.length > 0) && (filterInput.val().length > 0)) {
@@ -605,7 +630,7 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
         } else {
           filterButton.removeClass('filtering');
         }
-        filterInput.keyup(function() {
+        filterInput.keyup(function () {
           if (filterInput.val().length > 0) {
             filterButton.addClass('filtering');
           } else {
@@ -729,7 +754,15 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
         if (emptyRow.length > 0) {
           emptyRow.parent().addClass('empty');
         }
+      },
+      headerCallback: function (thead, data, start, end, display) {
+        if (self.selectAllCheckbox) {
+          var checkboxCell = ($(thead) as any).find('th').eq(0);
+          checkboxCell.removeClass();
+          checkboxCell.html('<input class="" name="select_all" id="select_all" type="checkbox"/>');
+        }
       }
+
     };
 
     if (typeof (columns) !== 'undefined') {
@@ -799,6 +832,8 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
   protected addDefaultRowButtons() {
     this.editColumnIndex = -1;
     this.detailColumnIndex = -1;
+    var excludingColVis = [];
+
     if (this.editButtonInRow) {
       var editColumn = new OTableColumnComponent(this, this.injector);
       var editColumnRenderer = new OTableCellRendererActionComponent(editColumn, this.injector);
@@ -809,6 +844,7 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
         renderValue: this.editButtonInRowIcon
       });
       this.editColumnIndex = this.dataTableOptions.columns.length;
+      excludingColVis.push(this.editColumnIndex);
       this.registerColumn(editColumn);
     }
     if (this.detailButtonInRow) {
@@ -820,14 +856,21 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
         renderValue: this.detailButtonInRowIcon
       });
       this.detailColumnIndex = this.dataTableOptions.columns.length;
+      excludingColVis.push(this.detailColumnIndex);
       this.registerColumn(detailColumn);
+    }
+
+    if (excludingColVis.length > 0) {
+      this.dataTableOptions.colVis = {
+        exclude: excludingColVis
+      };
     }
   }
 
   protected onOptionsMenuShow(args: any) {
     var menuEl = ($('.md-overlay-container .md-menu') as any);
     var menuContainer = menuEl.parent();
-    var menuBtn = ($(this.element.nativeElement) as any).find('.table-menu-button');
+    var menuBtn = ($(this.element.nativeElement) as any).find('.o-table-menu-button');
     var menuBtnOffset = menuBtn.offset();
     var top = menuBtnOffset.top + menuBtn.outerHeight(true);
     var left = menuBtnOffset.left - menuEl.outerWidth(true) + menuBtn.outerWidth(true);
@@ -835,18 +878,17 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   protected parseTableOptions() {
-    var options = this.getTableOptions();
-    // new ($ as any).fn.dataTable.Buttons(this.table, {
-    //   buttons: options
-    // });
-    // var self = this;
-    // this.table.buttons(1, null).container().appendTo(
-    //   self.table().container()
-    // );
-
-
-
-    this.showOptionsButton = (options.length > 0 && this.headerOptions.length > 0);
+    var tableOptions = this.getTableOptions();
+    if (tableOptions.length > 0) {
+      var table = this.table;
+      new ($ as any).fn.dataTable.Buttons(table, {
+        buttons: tableOptions
+      });
+      table.buttons(1, null).container().appendTo(
+        ($(table.table().container()) as any).find('.dataTables_top_wrapper .dataTables_hidden_options')
+      );
+    }
+    this.showOptionsButton = (tableOptions.length > 0 && this.headerOptions.length > 0);
   }
 
   protected initTableAfterViewInit() {
@@ -861,26 +903,32 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
     this.table = this.tableHtmlEl.DataTable(this.dataTableOptions);
     this.parseTableOptions();
 
-
     if (typeof (this.state.length) === 'number') {
       this.table.page.len(this.state.length);
     } else {
       this.table.page.len(this.queryRows);
     }
-    this.table.on('select', (event: any, dt: Array<any>, type: string, indexes: Array<any>) => {
-      if (this.enabled) {
-        if (typeof (indexes) !== 'undefined') {
-          this.handleSelection(event, dt, type, indexes);
+
+    if (!this.selectAllCheckbox) {
+
+      this.table.on('select', (event: any, dt: Array<any>, type: string, indexes: Array<any>) => {
+        if (this.enabled) {
+          if (typeof (indexes) !== 'undefined') {
+            this.handleSelection(event, dt, type, indexes);
+          }
         }
-      }
-    });
-    this.table.on('deselect', (event: any, dt: Array<any>, type: string, indexes: Array<any>) => {
-      if (this.enabled) {
-        if (typeof (indexes) !== 'undefined') {
-          this.handleDeselection(event, dt, type, indexes);
+      });
+
+      this.table.on('deselect', (event: any, dt: Array<any>, type: string, indexes: Array<any>) => {
+        if (this.enabled) {
+          if (typeof (indexes) !== 'undefined') {
+            this.handleDeselection(event, dt, type, indexes);
+          }
         }
-      }
-    });
+      });
+
+    }
+
     this.table.on('key', (event, dt, key, cell, originalEvent) => {
       if (this.enabled) {
         let colIndex = cell.index()['column'];
@@ -896,11 +944,14 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
         }
       }
     });
+
     this.table.on('key-focus', (event, dt, cell) => {
       if (this.enabled) {
         // select row
-        let indexes = [cell.index()['row']];
-        this.table.rows(indexes).select();
+        if (!this.selectAllCheckbox) {
+          let indexes = [cell.index()['row']];
+          this.table.rows(indexes).select();
+        }
         // if cell is editable, create editor
         let cellEl = $(cell.nodes()) as any;
         let colIndex = cell.index()['column'];
@@ -933,12 +984,22 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
         }
       }
     });
+    var self = this;
     this.table.on('draw.dt', () => {
-      this.tableHtmlEl.find('tr').off('click');
-      this.tableHtmlEl.find('tr').on('click', (event: any) => this.handleClick(event));
-      this.tableHtmlEl.find('tr').off('dblclick');
-      this.tableHtmlEl.find('tr').on('dblclick', (event: any) => this.handleDoubleClick(event));
+      self.tableHtmlEl.find('tr').off('click');
+      self.tableHtmlEl.find('tr').on('click', (event: any) => this.handleClick(event));
+      self.tableHtmlEl.find('tr').off('dblclick');
+      self.tableHtmlEl.find('tr').on('dblclick', (event: any) => this.handleDoubleClick(event));
+
+      if (this.selectAllCheckbox) {
+        self.tableHtmlEl.find('th #select_all').off('click');
+        self.tableHtmlEl.find('th #select_all').on('click', (event: any) => this.handleSelectAllClick(event));
+        self.tableHtmlEl.find('tr .select-row').off('click');
+        self.tableHtmlEl.find('tr .select-row').on('click', (event: any) => this.handleRowCheckboxChange(event));
+        // , 'input[type="checkbox"]'
+      }
     });
+
     this.table.on('order.dt', () => {
       let order = this.table.order();
       if ((this.groupColumnIndex !== -1) && (order[0][0] !== this.groupColumnIndex)) {
@@ -977,6 +1038,7 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
         }
       }, 100);
     });
+
     this.initColumnGroup();
     this.dataTable = this.tableHtmlEl.dataTable();
     if (this.queryOnInit) {
@@ -986,9 +1048,21 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
     }
   }
 
-  public registerColumn(column: OTableColumnComponent) {
+  public registerColumn(column: OTableColumnComponent, index?: number) {
     if (!this.columnComponentsRegistered) {
       this.dataTableOptions.columns = [];
+
+      if (this.selectAllCheckbox) {
+        this.dataTableOptions.columns.push({
+          'searchable': false,
+          'orderable': false,
+          'className': 'row-checkbox',
+          'render': function (data, type, full, meta) {
+            return `<input class="select-row" type="checkbox" name="id[]">`;
+          }
+        });
+      }
+
       this.columnComponentsRegistered = true;
     }
     let colDef = {
@@ -1142,7 +1216,7 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
       let actionsWidth = ((actionColumns * 50) / ($('#' + this.attr) as any).outerWidth(true)) * 100;
       let width = String((100 - actionsWidth) / (columns.length - actionColumns)) + '%';
       var self = this;
-      ($ as any).each(columns, function(i, el) {
+      ($ as any).each(columns, function (i, el) {
         if (i !== self.editColumnIndex && i !== self.detailColumnIndex) {
           ($(this) as any).width(width);
         } else {
@@ -1169,38 +1243,36 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   protected handleSelection(event: any, dt: Array<any>, type: string, indexes: Array<any>) {
-
     let localStorageState = localStorage.getItem('DataTables' + '_' + this.attr + '_' + this._router.url);
     if (localStorageState) {
       let state = JSON.parse(localStorageState);
       state.selectedIndex = indexes[0];
       localStorage.setItem('DataTables' + '_' + this.attr + '_' + this._router.url, JSON.stringify(state));
-    }
 
-    let selection = this.table.rows(indexes).data().toArray();
-    for (let i = 0; i < selection.length; ++i) {
-      let selected = false;
-      for (let j = this.selectedItems.length; j >= 0; --j) {
-        if (selection[i] === this.selectedItems[j]) {
-          selected = true;
-          break;
+      let selection = this.table.rows(indexes).data().toArray();
+      for (let i = 0; i < selection.length; ++i) {
+        let selected = false;
+        for (let j = this.selectedItems.length; j >= 0; --j) {
+          if (selection[i] === this.selectedItems[j]) {
+            selected = true;
+            break;
+          }
+        }
+        if (!selected) {
+          this.selectedItems.push(selection[i]);
         }
       }
-      if (!selected) {
-        this.selectedItems.push(selection[i]);
+      let deleteButton = $('#' + this.attr + '_wrapper .generic-action-delete') as any;
+      if (this.selectedItems.length > 0) {
+        deleteButton.removeClass('disabled');
+      } else {
+        deleteButton.addClass('disabled');
       }
+      ObservableWrapper.callEmit(this.onRowSelected, selection);
     }
-    let deleteButton = $('#' + this.attr + '_wrapper .generic-action-delete') as any;
-    if (this.selectedItems.length > 0) {
-      deleteButton.removeClass('disabled');
-    } else {
-      deleteButton.addClass('disabled');
-    }
-    ObservableWrapper.callEmit(this.onRowSelected, selection);
   }
 
   protected handleDeselection(event: any, dt: Array<any>, type: string, indexes: Array<any>) {
-
     this.lastDeselection = {
       event: event,
       dt: dt,
@@ -1280,6 +1352,32 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
           }
         }
       );
+    }
+  }
+
+  protected handleSelectAllClick(event: any) {
+    var rows = this.table.rows().nodes();
+    rows.$('input[type="checkbox"].select-row').prop('checked', event.target.checked);
+    if (event.target.checked) {
+      this.table.rows().select();
+    } else {
+      this.table.rows().deselect();
+    }
+  }
+
+  protected handleRowCheckboxChange(event: any) {
+    let index = ($(event.target) as any).parents('tr:first').index();
+    let tableRow = this.table.rows(index);
+    if (!event.target.checked) {
+      tableRow.deselect();
+      var el = this.tableHtmlEl.find('th #select_all')[0];
+      // If "Select all" control is checked and has 'indeterminate' property
+      if (el && el.checked && ('indeterminate' in el)) {
+        // Set visual state of "Select all" control as 'indeterminate'
+        el.indeterminate = true;
+      }
+    } else {
+      tableRow.select();
     }
   }
 
@@ -1572,10 +1670,12 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
 
   protected getTableOptions() {
     let options = [];
+    var self = this;
     // export actions
     if (this.exportButton) {
       options.push({
         extend: 'copyHtml5',
+        name: 'copyHtml5',
         text: this.translateService.get('TABLE.BUTTONS.COPY_TO_CLIPBOARD'),
         className: 'export-action',
         exportOptions: {
@@ -1584,6 +1684,7 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
       });
       options.push({
         extend: 'print',
+        name: 'print',
         text: this.translateService.get('TABLE.BUTTONS.PRINT'),
         className: 'export-action',
         exportOptions: {
@@ -1593,6 +1694,7 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
       options.push({
         extend: 'excelHtml5',
         text: 'Excel',
+        name: 'excel',
         className: 'export-action',
         filename: this.title ? this.title : '*',
         exportOptions: {
@@ -1602,6 +1704,7 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
       options.push({
         extend: 'csvHtml5',
         text: 'CSV',
+        name: 'csv',
         className: 'export-action',
         filename: this.title ? this.title : '*',
         fieldSeparator: ',',
@@ -1613,6 +1716,7 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
       options.push({
         extend: 'pdfHtml5',
         text: 'PDF',
+        name: 'pdf',
         className: 'export-action',
         filename: this.title ? this.title : '*',
         title: this.title ? this.title : '*',
@@ -1623,20 +1727,11 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
           orthogonal: 'export'
         }
       });
-
       options.push({
         text: this.translateService.get('TABLE.BUTTONS.EXPORT'),
         className: 'generic-action generic-action-export',
         action: () => {
-          let exportActions = $('#' + this.attr + '_wrapper .export-action') as any;
-          let exportButton = $('#' + this.attr + '_wrapper .generic-action-export') as any;
-          if (exportButton.hasClass('active')) {
-            exportButton.removeClass('active');
-            exportActions.hide();
-          } else {
-            exportButton.addClass('active');
-            exportActions.show();
-          }
+          self.exportButtonAction();
         }
       });
     }
@@ -1647,17 +1742,7 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
         text: this.translateService.get('TABLE.BUTTONS.GROUP_ROWS'),
         className: 'generic-action generic-action-group',
         action: () => {
-          let header = this.tableHtmlEl.find('th');
-          let groupButton = $('#' + this.attr + '_wrapper .generic-action-group') as any;
-          if (groupButton.hasClass('active')) {
-            groupButton.removeClass('active');
-            header.removeClass('grouping');
-            this.dataTable.fnSortOnOff('_all', true);
-          } else {
-            groupButton.addClass('active');
-            header.addClass('grouping');
-            this.dataTable.fnSortOnOff('_all', false);
-          }
+          self.columnsGroupButtonAction();
         }
       });
     }
@@ -1668,14 +1753,7 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
         text: this.translateService.get('TABLE.BUTTONS.RESIZE_COLUMNS'),
         className: 'generic-action generic-action-resize',
         action: () => {
-          let resizeButton = $('#' + this.attr + '_wrapper .generic-action-resize') as any;
-          if (resizeButton.hasClass('active')) {
-            resizeButton.removeClass('active');
-            ($('#' + this.attr + '_wrapper .JCLRgrips') as any).remove();
-          } else {
-            resizeButton.addClass('active');
-            this.initColumnResize();
-          }
+          self.columnsResizeButtonAction();
         }
       });
     }
@@ -1713,27 +1791,73 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
     return options;
   }
 
+  protected exportButtonAction() {
+    this.showExportOptions = !this.showExportOptions;
+    // let exportActions = $('#' + this.attr + '_wrapper .export-action') as any;
+    // let exportButton = $('#' + this.attr + '_wrapper .generic-action-export') as any;
+    // if (exportButton.hasClass('active')) {
+    //   exportButton.removeClass('active');
+    //   exportActions.hide();
+    // } else {
+    //   exportButton.addClass('active');
+    //   exportActions.show();
+    // }
+  }
+
+  protected columnsGroupButtonAction() {
+    let header = this.tableHtmlEl.find('th');
+    let groupButton = $('#' + this.attr + '_wrapper .generic-action-group') as any;
+    if (groupButton.hasClass('active')) {
+      groupButton.removeClass('active');
+      header.removeClass('grouping');
+      this.dataTable.fnSortOnOff('_all', true);
+    } else {
+      groupButton.addClass('active');
+      header.addClass('grouping');
+      this.dataTable.fnSortOnOff('_all', false);
+    }
+  }
+
+  protected columnsResizeButtonAction() {
+    let resizeButton = $('#' + this.attr + '_wrapper .generic-action-resize') as any;
+    if (resizeButton.hasClass('active')) {
+      resizeButton.removeClass('active');
+      ($('#' + this.attr + '_wrapper .JCLRgrips') as any).remove();
+    } else {
+      resizeButton.addClass('active');
+      this.initColumnResize();
+    }
+  }
+
+  protected columnsVisibilityButtonAction() {
+    this.table.buttons('.generic-action-view-column').trigger();
+  }
+
+  protected exportAction(buttonName: String) {
+    this.table.buttons(buttonName + ':name').trigger();
+  }
+
+
   protected getTableButtons() {
     let buttons = [];
 
     // select all
-    /*
-    buttons.push({
-      text: this.translateService.get('TABLE.BUTTONS.SELECT_ALL'),
-      className: 'generic-action generic-action-select-all',
-      action: () => {
-        this.table.rows().select();
-      }
-    });*/
+    // buttons.push({
+    //   text: this.translateService.get('TABLE.BUTTONS.SELECT_ALL'),
+    //   className: 'generic-action generic-action-select-all',
+    //   action: () => {
+    //     this.table.rows().select();
+    //   }
+    // });
 
-    // clear selection
-    /*buttons.push({
-      text: this.translateService.get('TABLE.BUTTONS.CLEAR_SELECTION'),
-      className: 'generic-action generic-action-clear-selection',
-      action: () => {
-        this.table.rows().deselect();
-      }
-    });*/
+    // // clear selection
+    // buttons.push({
+    //   text: this.translateService.get('TABLE.BUTTONS.CLEAR_SELECTION'),
+    //   className: 'generic-action generic-action-clear-selection',
+    //   action: () => {
+    //     this.table.rows().deselect();
+    //   }
+    // });
     // add
     if (this.insertButton) {
       buttons.push({
@@ -1771,14 +1895,13 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
       var headerBtn = this.headerButtons[i];
       buttons.push({
         text: this.translateService.get(headerBtn.getText()),
-        className: 'table-button-action',
+        className: 'custom-generic-action icon-' + headerBtn.getIcon(),
         action: () => {
-          console.log('header buton click');
+          headerBtn.innerOnClick();
         }
+
       });
     }
-
-
     return buttons;
   }
 
@@ -1956,7 +2079,7 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
     OTableButtonComponent,
     OTableOptionComponent
   ],
-  imports: [CommonModule, MdMenuModule, OTranslateModule, MdIconModule],
+  imports: [CommonModule, MdMenuModule, OTranslateModule, MdIconModule, MdCheckboxModule],
   exports: [OTableComponent,
     OTableColumnComponent,
     OTableCellRendererActionComponent,

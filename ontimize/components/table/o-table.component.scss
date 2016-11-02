@@ -3,6 +3,7 @@ o-table {
   width: 100%;
   height: 100%;
   border: 1px rgba(0, 0, 0, 0.12) solid;
+  position: relative;
 
   .o-table-container {
 
@@ -68,7 +69,7 @@ o-table {
       a {
         text-decoration: none;
         outline: none;
-        color: rgba(0,0,0,.9);
+        color: rgba(0,0,0,.7);
         cursor: pointer;
         font-size: 14px;
         display: inline-block;
@@ -78,7 +79,7 @@ o-table {
 
         &.active {
 
-          color: rgba(0,0,0,.9);
+          color: rgba(0,0,0,.7);
 
           &::after {
             background: #eee;
@@ -98,9 +99,29 @@ o-table {
 
         }
 
+        &.custom-generic-action {
+          & > span {
+            display: none;
+          }
+
+          &::after {
+            font-family: 'Material Icons';
+            content: attr(data-icon);
+            font-size: 24px;
+            margin: 0px 5px;
+            line-height: 40px;
+            padding: 5px;
+          }
+
+        }
+
         &.generic-action {
 
           & > span {
+            display: none;
+          }
+
+          &.generic-action-export {
             display: none;
           }
 
@@ -164,7 +185,7 @@ o-table {
 
           &.generic-action-delete::after {
             font-family: 'Material Icons';
-            content: "remove_circle_outline";
+            content: "delete";
             font-size: 24px;
             margin: 0px 5px;
             line-height: 40px;
@@ -173,26 +194,16 @@ o-table {
 
           &.generic-action-add::after {
             font-family: 'Material Icons';
-            content: "add_circle_outline";
+            content: "add_circle";
             font-size: 24px;
             margin: 0px 5px;
             line-height: 40px;
             padding: 5px;
           }
 
-          // &.generic-action-options::after {
-          //   font-family: 'Material Icons';
-          //   content: "more_vert";
-          //   font-size: 24px;
-          //   margin: 0px 5px;
-          //   line-height: 40px;
-          //   padding: 5px;
-          // }
-
         }
 
         &.export-action {
-
           display: none;
 
           &.buttons-copy > span,
@@ -248,10 +259,22 @@ o-table {
 
     }
 
+    .dataTables_hidden_options {
+      width: 75%;
+      float: left;
+      text-align: right;
+      display:none;
+    }
+
     .dataTables_filter {
-      margin: 0px 50px;
+      margin: 0px ;
+      padding: 0px 50px;
       color: rgba(0, 0, 0, 0.9);
       height: 40px;
+
+      width: 25%;
+      float: right;
+      box-sizing: border-box;
 
       label {
         position: relative;
@@ -276,7 +299,7 @@ o-table {
         outline: none;
         font-size: 100%;
         width: 100%;
-        height: 26px;
+        height: 24px;
         margin: 7px 0;
         padding: 0px;
         color: rgba(0, 0, 0, 0.9);
@@ -290,7 +313,7 @@ o-table {
     }
 
     .dataTables_top_wrapper {
-      margin: 10px 0.5%;
+      margin: 0px 0.5%;
     }
 
     .dataTables_top_wrapper {
@@ -336,12 +359,6 @@ o-table {
         -webkit-align-self: auto;
         -ms-flex-item-align: auto;
         align-self: auto;
-
-        .dataTables_filter {
-          width: 15%;
-          min-width: 200px;
-          float: right;
-        }
       }
     }
 
@@ -399,7 +416,7 @@ o-table {
             white-space: nowrap;
             min-width: 42px;
 
-            &:last-child {
+            &:last-child:not(.o-table-column-action) {
               padding: 0 42px 0 24px !important;
               /*border-top: 1px rgba(0, 0, 0, 0.12) solid;
               border-left: 1px rgba(0, 0, 0, 0.12) solid;*/
@@ -416,7 +433,7 @@ o-table {
               border-left: 1px rgba(0, 0, 0, 0.12) solid;*/
             }
 
-            &:nth-child(n+3):nth-last-child(n+2) {
+            &:nth-child(n+3):nth-last-child(n+2):not(.o-table-column-action) {
               padding: 0 42px 0 24px !important;
               /*border-top: 1px rgba(0, 0, 0, 0.12) solid;
               border-left: 1px rgba(0, 0, 0, 0.12) solid;*/
@@ -489,6 +506,15 @@ o-table {
             &.grouping {
               background: #f5f5f5;
             }
+
+            &.o-table-column-action {
+              padding: 0 18px 0 18px !important;
+            }
+
+            &.o-table-column-action:last-child {
+              padding-right: 24px !important;
+            }
+
 
           }
 
@@ -889,6 +915,12 @@ o-table {
 
     }
 
+  }
+
+  .o-table-menu-button {
+    position:absolute;
+    top: 0px;
+    right:10px;
   }
 
   .JCLRgrip:not(.JCLRLastGrip) {
