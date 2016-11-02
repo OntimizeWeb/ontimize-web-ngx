@@ -93,6 +93,8 @@ export class OFormComponent implements OnInit, OnDestroy {
   public static GO_INSERT_ACTION: string = 'GO_INSERT';
   public static DELETE_ACTION: string = 'DELETE';
 
+  public static PARENT_KEYS_KEY = 'pk';
+
   public static DEFAULT_INPUTS_O_FORM = DEFAULT_INPUTS_O_FORM;
   public static DEFAULT_OUTPUTS_O_FORM = DEFAULT_OUTPUTS_O_FORM;
 
@@ -146,6 +148,7 @@ export class OFormComponent implements OnInit, OnDestroy {
   protected urlSegments: any;
 
   protected formDataCache: Object;
+  protected formParentKeysValues: Object;
   protected tabSelectChangeFired: boolean = false;
   protected hasScrolled: boolean = false;
 
@@ -176,6 +179,14 @@ export class OFormComponent implements OnInit, OnDestroy {
       let attr = comp.getAttribute();
       if (attr && attr.length > 0) {
         this._components[attr] = comp;
+
+        // Setting parent key values...
+        if (this.formParentKeysValues &&
+          this.formParentKeysValues[attr] !== undefined) {
+          let val = this.formParentKeysValues[attr];
+          this._components[attr].setValue(val);
+        }
+
         /*
         * TODO. Check it!!!
         * En un formulario con tabs, cuando se cambia de uno a otro, se destruyen las vistas
@@ -389,6 +400,9 @@ export class OFormComponent implements OnInit, OnDestroy {
       .params
       .subscribe(params => {
         self.urlParams = params;
+        if (params[OFormComponent.PARENT_KEYS_KEY] !== undefined) {
+          self.formParentKeysValues = Util.decodeParentKeys(params[OFormComponent.PARENT_KEYS_KEY]);
+        }
         // //TODO Obtain 'datatype' of each key contained into urlParams for
         // // for building correctly query filter!!!!
         // if (self.urlParams && Object.keys(self.urlParams).length > 0) {
@@ -689,8 +703,10 @@ export class OFormComponent implements OnInit, OnDestroy {
    * Navigates to 'insert' mode
    */
   _goInsertMode() {
-    this.router.navigate(['../', 'new'], { relativeTo: this.actRoute })
-    .catch(err => {
+
+    let extras = { relativeTo: this.actRoute };
+    this.router.navigate(['../', 'new'], extras)
+      .catch(err => {
         console.error(err.message);
       });
   }
@@ -892,7 +908,11 @@ export class OFormComponent implements OnInit, OnDestroy {
   }
 
   protected getAttributesValuesToInsert(): Object {
-    return this.formGroup.value;
+    let attrValues = {};
+    if (this.formParentKeysValues) {
+       Object.assign(attrValues, this.formParentKeysValues);
+    }
+    return Object.assign(attrValues, this.formGroup.value);
   }
 
   protected getAttributesSQLTypes(): Object {

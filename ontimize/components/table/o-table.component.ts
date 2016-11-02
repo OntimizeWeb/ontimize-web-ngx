@@ -1660,12 +1660,32 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
       route.push(this.detailFormRoute);
     }
     route.push('new');
+
+    // adding parent-keys info...
+    if ((this.dataParentKeys.length > 0) && (typeof (this.parentItem) !== 'undefined')) {
+      let pKeys = {};
+      for (let k = 0; k < this.dataParentKeys.length; ++k) {
+        let parentKey = this.dataParentKeys[k];
+        if (this.parentItem.hasOwnProperty(parentKey['alias'])) {
+          let currentData = this.parentItem[parentKey['alias']];
+          if (currentData instanceof OFormValue) {
+            currentData = currentData.value;
+          }
+          pKeys[parentKey['name']] = currentData;
+        }
+      }
+      if (Object.keys(pKeys).length > 0) {
+        let encoded = Util.encodeParentKeys(pKeys);
+        route.push( {'pk' : encoded});
+      }
+    }
+    let extras = { relativeTo: this._actRoute };
     this._router.navigate(
       route,
-      {
-        relativeTo: this._actRoute
-      }
-    );
+      extras
+    ).catch(err => {
+        console.error(err.message);
+      });
   }
 
   protected getTableOptions() {

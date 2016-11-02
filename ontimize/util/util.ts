@@ -1,4 +1,5 @@
 import { IDataService, IFormDataComponent } from '../interfaces';
+import { Base64 } from './base64';
 
 export class Util {
 
@@ -47,6 +48,28 @@ export class Util {
       });
     }
     return equivalences;
+  }
+
+  static encodeParentKeys(parentKeys: Object): string {
+    let encoded: string = '';
+    if (parentKeys) {
+      encoded = Base64.encode(JSON.stringify(parentKeys));
+      var d = Base64.decode( encoded );
+
+      // test
+      console.log( parentKeys, encoded, d, JSON.parse( d ) );
+
+    }
+    return encoded;
+  }
+
+  static decodeParentKeys(parentKeys: string): Object {
+    let decoded = {};
+    if (parentKeys && parentKeys.length > 0) {
+      let d = Base64.decode(parentKeys);
+      decoded = JSON.parse(d);
+    }
+    return decoded;
   }
 
   static isArrayEmpty(array: any[]): boolean {
