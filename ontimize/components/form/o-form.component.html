@@ -2,7 +2,13 @@
   <o-form-toolbar *ngIf="showHeader" [label-header]="labelheader" [label-header-align]="labelHeaderAlign" [header-actions]="headeractions"
   [show-header-actions-text]="showHeaderActionsText"
   [class.o-form-toolbar-floating]="headerMode === 'floating'"
-  [class.o-form-toolbar-floating-scrolled]="hasScrolled"></o-form-toolbar>
+  [class.o-form-toolbar-floating-scrolled]="hasScrolled">
+    <div o-custom-form-toolbar-buttons-wrapper
+      layout="row"  layout-align="end center">
+      <ng-content select="[o-form-toolbar-buttons]"></ng-content>
+    </div>
+  </o-form-toolbar>
+
   <form #innerForm [formGroup]="formGroup" [class.form-no-toolbar]="!showHeader">
     <div flex="100" *ngIf="loading">
       <md-progress-bar mode="indeterminate"></md-progress-bar>

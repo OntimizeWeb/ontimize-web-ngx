@@ -34,6 +34,7 @@ export interface Config {
   // authGuard [Object]: Configuration parameters of application permissions.
   authGuard?: {
     type?: any;
+    service?: string;
     entity?: string;
     keyColumn?: string;
     valueColumn?: string;
