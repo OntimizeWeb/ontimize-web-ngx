@@ -7,6 +7,7 @@ import {
 } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
+import { InputConverter } from '../../decorators';
 import { ObservableWrapper } from '../../util/async';
 import { Router, ActivatedRoute, NavigationStart, RoutesRecognized } from '@angular/router';
 import { OTranslateModule } from '../../pipes/o-translate.pipe';
@@ -186,10 +187,16 @@ export const DEFAULT_INPUTS_O_TABLE = [
   'recursiveEdit: recursive-edit',
 
   // show-header-buttons-text [string][yes|no|true|false]: show text of header buttons
-  'showHeaderButtonText: show-header-buttons-text',
+  'showHeaderButtonsText: show-header-buttons-text',
 
   // select-all-checkbox [string][yes|no|true|false]:
-  'selectAllCheckbox: select-all-checkbox'
+  'selectAllCheckbox: select-all-checkbox',
+
+  //controls [string][yes|no|true|false]:
+  'controls',
+
+  // row-height [small | medium | large]
+  'rowHeight : row-height'
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE = [
@@ -243,10 +250,50 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
   protected dialogService: DialogService;
   protected momentService: MomentService;
 
+  @InputConverter()
+  quickFilter: boolean = true;
+  @InputConverter()
+  insertButton: boolean = true;
+  @InputConverter()
+  deleteButton: boolean = true;
+  @InputConverter()
+  refreshButton: boolean = true;
+  @InputConverter()
+  columnsVisibilityButton: boolean = true;
+  @InputConverter()
+  columnsResizeButton: boolean = true;
+  @InputConverter()
+  columnsGroupButton: boolean = true;
+  @InputConverter()
+  exportButton: boolean = true;
+  @InputConverter()
+  editOnFocus: boolean = true;
+  @InputConverter()
+  queryOnInit: boolean = true;
+  @InputConverter()
+  recursiveDetail: boolean = false;
+  @InputConverter()
+  insertTable: boolean = false;
+  @InputConverter()
+  detailButtonInRow: boolean = true;
+  @InputConverter()
+  editButtonInRow: boolean = true;
+  @InputConverter()
+  recursiveEdit: boolean = false;
+  @InputConverter()
+  selectAllCheckbox: boolean = false;
+  @InputConverter()
+  showHeaderButtonsText: boolean = false;
+  @InputConverter()
+  controls: boolean = true;
+
+
   protected attr: string;
   protected title: string;
-  protected visible: any;
-  protected enabled: any;
+  @InputConverter()
+  visible: boolean = true;
+  @InputConverter()
+  enabled: boolean = true;
   protected data: Array<any>;
   protected service: string;
   protected dataService: any;
@@ -264,37 +311,22 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
   protected dataVisibleColumns: Array<string>;
   protected editableColumns: string;
   protected dataEditableColumns: Array<string>;
-  protected editOnFocus: any;
   protected sortColumns: string;
   protected dataSortColumns: Array<any>;
   protected queryRows: any;
   protected queryRowsMenu: Array<any>;
-  protected queryOnInit: any;
-  protected quickFilter: any;
-  protected insertButton: any;
-  protected deleteButton: any;
-  protected refreshButton: any;
-  protected columnsVisibilityButton: any;
-  protected columnsResizeButton: any;
-  protected columnsGroupButton: any;
-  protected exportButton: any;
   protected queryMethod: string;
   protected insertMethod: string;
   protected updateMethod: string;
   protected deleteMethod: string;
   protected detailMode: string;
   protected detailFormRoute: string;
-  protected recursiveDetail: any;
-  protected insertTable: any;
-  protected detailButtonInRow: any;
-  protected editButtonInRow: any;
   protected editColumnIndex: number;
   protected detailColumnIndex: number;
   protected detailButtonInRowIcon: string;
   protected editButtonInRowIcon: string;
   protected editionMode: string;
   protected editFormRoute: string;
-  protected recursiveEdit: any;
   protected state: any;
   protected table: any;
   protected tableHtmlEl: any;
@@ -314,8 +346,7 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
   protected headerOptions: Array<OTableOptionComponent>;
   protected showOptionsButton: boolean = true;
   protected showExportOptions: boolean = false;
-  protected showHeaderButtonsText: any;
-  protected selectAllCheckbox: any;
+  protected rowHeight: string;
 
   public onRowSelected: EventEmitter<any> = new EventEmitter();
   public onRowDelected: EventEmitter<any> = new EventEmitter();
@@ -398,9 +429,6 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
       this.title = this.translateService.get(this.title);
     }
 
-    this.visible = Util.parseBoolean(this.visible, true);
-    this.enabled = Util.parseBoolean(this.enabled, true);
-
     this.authGuardService.getPermissions(this._router.url, this.attr)
       .then(
       permissions => {
@@ -447,23 +475,11 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
       this.queryRows = OTableComponent.DEFAULT_QUERY_ROWS;
     }
     this.queryRowsMenu = OTableComponent.DEFAULT_QUERY_ROWS_MENU;
-    this.quickFilter = Util.parseBoolean(this.quickFilter, true);
-    this.insertButton = Util.parseBoolean(this.insertButton, true);
-    this.deleteButton = Util.parseBoolean(this.deleteButton, true);
-    this.refreshButton = Util.parseBoolean(this.refreshButton, true);
-    this.columnsVisibilityButton = Util.parseBoolean(this.columnsVisibilityButton, true);
-    this.columnsResizeButton = Util.parseBoolean(this.columnsResizeButton, true);
-    this.columnsGroupButton = Util.parseBoolean(this.columnsGroupButton, true);
-    this.exportButton = Util.parseBoolean(this.exportButton, true);
-    this.editOnFocus = Util.parseBoolean(this.editOnFocus, true);
-    this.queryOnInit = Util.parseBoolean(this.queryOnInit, true);
-    this.recursiveDetail = Util.parseBoolean(this.recursiveDetail, false);
-    this.insertTable = Util.parseBoolean(this.insertTable, false);
-    this.detailButtonInRow = Util.parseBoolean(this.detailButtonInRow, true);
-    this.editButtonInRow = Util.parseBoolean(this.editButtonInRow, false);
-    this.recursiveEdit = Util.parseBoolean(this.recursiveEdit, false);
-    this.showHeaderButtonsText = Util.parseBoolean(this.showHeaderButtonsText, false);
-    this.selectAllCheckbox = Util.parseBoolean(this.selectAllCheckbox, false);
+
+    this.rowHeight = this.rowHeight ? this.rowHeight.toLowerCase() : this.rowHeight;
+    if (!this.rowHeight || (['small', 'medium', 'large'].indexOf(this.rowHeight) === -1)) {
+      this.rowHeight = 'medium';
+    }
 
     // get previous position
     let localStorageState = localStorage.getItem('DataTables' + '_' + this.attr + '_' + this._router.url);
@@ -569,6 +585,12 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
 
   protected initTableOnInit(columns: any = undefined) {
     var self = this;
+
+    let domOption = 'rtpil';
+    if (this.controls) {
+      domOption = '<"dataTables_top_wrapper"B<"dataTables_filter_wrapper"<"dataTables_hidden_options">f><"dataTables_options">>' + domOption;
+    }
+
     this.dataTableOptions = {
       data: this.componentData,
       /*dom attribute
@@ -580,7 +602,8 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
       i: {information}
       l: {length}
       */
-      dom: '<"dataTables_top_wrapper"B<"dataTables_filter_wrapper"<"dataTables_hidden_options">f><"dataTables_options">>rtpil',
+      // dom: '<"dataTables_top_wrapper"B<"dataTables_filter_wrapper"<"dataTables_hidden_options">f><"dataTables_options">>rtpil',
+      dom: domOption,
       buttons: this.getTableButtons(),
       select: !this.selectAllCheckbox,
       autoWidth: false,
@@ -622,6 +645,8 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
         let controlButtons = $('#' + this.attr + '_wrapper .generic-action') as any;
         ($ as any).each(controlButtons, function (i, el) {
           ($(this) as any).attr('title', ($(this) as any).find('span').text());
+
+
         });
 
         let customButtons = $('#' + this.attr + '_wrapper .custom-generic-action') as any;
@@ -882,17 +907,20 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   protected parseTableOptions() {
-    var tableOptions = this.getTableOptions();
-    if (tableOptions.length > 0) {
-      var table = this.table;
-      new ($ as any).fn.dataTable.Buttons(table, {
-        buttons: tableOptions
-      });
-      table.buttons(1, null).container().appendTo(
-        ($(table.table().container()) as any).find('.dataTables_top_wrapper .dataTables_hidden_options')
-      );
+    let tableOptions = [];
+    if (this.controls) {
+      tableOptions = this.getTableOptions();
+      if (tableOptions.length > 0) {
+        var table = this.table;
+        new ($ as any).fn.dataTable.Buttons(table, {
+          buttons: tableOptions
+        });
+        table.buttons(1, null).container().appendTo(
+          ($(table.table().container()) as any).find('.dataTables_top_wrapper .dataTables_hidden_options')
+        );
+      }
     }
-    this.showOptionsButton = (tableOptions.length > 0 && this.headerOptions.length > 0);
+    this.showOptionsButton = (tableOptions.length > 0 || this.headerOptions.length > 0);
   }
 
   protected initTableAfterViewInit() {
@@ -1900,12 +1928,12 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
 
   protected getTableButtons() {
     let buttons = [];
-
+    let buttonTextClass = this.showHeaderButtonsText ? '': ' hidden-action-text';
     // add
     if (this.insertButton) {
       buttons.push({
         text: this.translateService.get('TABLE.BUTTONS.ADD'),
-        className: 'generic-action generic-action-add',
+        className: 'generic-action generic-action-add' + buttonTextClass,
         action: () => {
           this.add();
         }
@@ -1916,7 +1944,7 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
     if (this.deleteButton) {
       buttons.push({
         text: this.translateService.get('TABLE.BUTTONS.DELETE'),
-        className: 'generic-action generic-action-delete disabled',
+        className: 'generic-action generic-action-delete disabled' + buttonTextClass,
         action: () => {
           this.remove();
         }
@@ -1927,7 +1955,7 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
     if (this.refreshButton) {
       buttons.push({
         text: this.translateService.get('TABLE.BUTTONS.REFRESH'),
-        className: 'generic-action generic-action-refresh',
+        className: 'generic-action generic-action-refresh' + buttonTextClass,
         action: () => {
           this.update(this.parentItem);
         }
@@ -1938,7 +1966,7 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
       var headerBtn = this.headerButtons[i];
       buttons.push({
         text: this.translateService.get(headerBtn.getText()),
-        className: 'custom-generic-action icon-' + headerBtn.getIcon(),
+        className: 'custom-generic-action icon-' + headerBtn.getIcon() + buttonTextClass,
         action: () => {
           headerBtn.innerOnClick();
         }

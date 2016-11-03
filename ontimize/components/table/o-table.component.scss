@@ -64,12 +64,12 @@ o-table {
 
     .dt-buttons {
 
-      margin: 0 10px;
+      margin: 0 10px 0 4px;
 
       a {
         text-decoration: none;
         outline: none;
-        color: rgba(0,0,0,.7);
+        color: rgba(0, 0, 0, 0.54);
         cursor: pointer;
         font-size: 14px;
         display: inline-block;
@@ -79,7 +79,7 @@ o-table {
 
         &.active {
 
-          color: rgba(0,0,0,.7);
+           color: rgba(0, 0, 0, 0.54);
 
           &::after {
             background: #eee;
@@ -93,17 +93,11 @@ o-table {
         }
 
         &.disabled {
-
           color: rgba(0, 0, 0, 0.15);
           cursor: not-allowed;
-
         }
 
         &.custom-generic-action {
-          & > span {
-            display: none;
-          }
-
           &::after {
             font-family: 'Material Icons';
             content: attr(data-icon);
@@ -112,20 +106,25 @@ o-table {
             line-height: 40px;
             padding: 5px;
           }
+        }
 
+        &.generic-action,
+        &.custom-generic-action {
+          & > span {
+            float: right;
+            line-height: 40px;
+          }
+          &.hidden-action-text > span {
+            display: none;
+          }
         }
 
         &.generic-action {
-
-          & > span {
-            display: none;
-          }
-
           &.generic-action-export {
             display: none;
           }
 
-          &.generic-action-export::after {
+          &.generic-action-export::before {
             font-family: 'Material Icons';
             content: "file_download";
             font-size: 24px;
@@ -134,7 +133,7 @@ o-table {
             padding: 5px;
           }
 
-          &.generic-action-group::after {
+          &.generic-action-group::before {
             font-family: 'Material Icons';
             content: "view_list";
             font-size: 24px;
@@ -143,7 +142,7 @@ o-table {
             padding: 5px;
           }
 
-          &.generic-action-resize::after {
+          &.generic-action-resize::before {
             font-family: 'Material Icons';
             content: "compare_arrows";
             font-size: 24px;
@@ -152,7 +151,7 @@ o-table {
             padding: 5px;
           }
 
-          &.generic-action-view-column::after {
+          &.generic-action-view-column::before {
             font-family: 'Material Icons';
             content: "view_column";
             font-size: 24px;
@@ -161,7 +160,7 @@ o-table {
             padding: 5px;
           }
 
-          &.generic-action-filter::after {
+          &.generic-action-filter::before {
             font-family: 'Material Icons';
             content: "filter_list";
             font-size: 24px;
@@ -170,11 +169,7 @@ o-table {
             padding: 5px;
           }
 
-          &.generic-action-filter.filtering::after {
-            color: red;
-          }
-
-          &.generic-action-refresh::after {
+          &.generic-action-refresh::before {
             font-family: 'Material Icons';
             content: "refresh";
             font-size: 24px;
@@ -183,7 +178,7 @@ o-table {
             padding: 5px;
           }
 
-          &.generic-action-delete::after {
+          &.generic-action-delete::before {
             font-family: 'Material Icons';
             content: "delete";
             font-size: 24px;
@@ -192,7 +187,7 @@ o-table {
             padding: 5px;
           }
 
-          &.generic-action-add::after {
+          &.generic-action-add::before {
             font-family: 'Material Icons';
             content: "add_circle";
             font-size: 24px;
@@ -268,8 +263,9 @@ o-table {
 
     .dataTables_filter {
       margin: 0px ;
-      padding: 0px 50px;
-      color: rgba(0, 0, 0, 0.9);
+      padding: 0px 75px 0 50px;
+      // color: rgba(0, 0, 0, 0.9);
+      color: rgba(0, 0, 0, 0.54);
       height: 40px;
 
       width: 25%;
@@ -290,6 +286,14 @@ o-table {
           top: 0px;
           left: -50px;
           text-align: center;
+
+
+          line-height: 1;
+          width: 30px;
+
+          top: 6px;
+          left: -33px;
+
         }
 
       }
@@ -303,7 +307,8 @@ o-table {
         margin: 7px 0;
         padding: 0px;
         color: rgba(0, 0, 0, 0.9);
-        border-bottom: 1px rgba(0, 0, 0, 0.9) solid;
+        // border-bottom: 1px rgba(0, 0, 0, 0.9) solid;
+        border-bottom: 1px rgba(0, 0, 0, 0.54) solid;
       }
 
       input:focus {
@@ -364,6 +369,41 @@ o-table {
 
     table {
 
+      &.small {
+        thead tr {
+          height: 32px;
+        }
+        tbody tr {
+          height: 28px;
+        }
+      }
+
+      &.medium {
+        thead tr {
+          height: 38px;
+        }
+        tbody tr {
+          height: 34px;
+        }
+      }
+
+      &.small,
+      &.medium {
+        .o-table-column.o-table-column-action md-icon {
+          font-size: 18px;
+          line-height: 22px;
+        }
+      }
+
+      &.large {
+        thead tr {
+          height: 52px;
+        }
+        tbody tr {
+          height: 48px;
+        }
+      }
+
       width: 99.0% !important;
       margin: 0 0.5%;
       border-spacing: 0;
@@ -387,32 +427,23 @@ o-table {
             text-overflow: ellipsis;
             white-space: nowrap;
             min-width: 42px;
+            outline: none;
 
             &:last-child:not(.o-table-column-action) {
               padding: 0 42px 0 24px !important;
-              /*border-top: 1px rgba(0, 0, 0, 0.12) solid;
-              border-left: 1px rgba(0, 0, 0, 0.12) solid;*/
             }
 
             &:first-child:not(.o-table-column-select-checkbox) {
               padding: 0 42px 0 54px !important;
-              /*border-top: 1px rgba(0, 0, 0, 0.12) solid;*/
             }
 
             &:first-child.o-table-column-select-checkbox {
               padding:0 12px 0 12px !important
             }
 
-            &:nth-child(2) {
-              padding: 0 42px 0 24px !important;
-              /*border-top: 1px rgba(0, 0, 0, 0.12) solid;
-              border-left: 1px rgba(0, 0, 0, 0.12) solid;*/
-            }
-
             &:nth-child(n+3):nth-last-child(n+2):not(.o-table-column-action) {
               padding: 0 42px 0 24px !important;
-              /*border-top: 1px rgba(0, 0, 0, 0.12) solid;
-              border-left: 1px rgba(0, 0, 0, 0.12) solid;*/
+              border-left: 1px rgba(0, 0, 0, 0.12) solid;
             }
 
             &.o-table-select-checkbox {
@@ -435,7 +466,7 @@ o-table {
               font-family: 'Material Icons';
               content: "arrow_upward";
               position: absolute;
-              bottom: 22px;
+              // bottom: 22px;
               display: block;
               font-size: 16px;
               font-weight: normal;
@@ -450,8 +481,8 @@ o-table {
               font-family: 'Material Icons';
               content: "arrow_downward";
               position: absolute;
-              bottom: 20px;
-              display: block;
+              // bottom: 20px;
+              // display: block;
               font-size: 16px;
               font-weight: normal;
             }
@@ -480,7 +511,7 @@ o-table {
             }
 
             &.grouping {
-              background: #f5f5f5;
+              background: #eee;
             }
 
             &.o-table-column-action {
@@ -509,40 +540,19 @@ o-table {
             height: 0px !important;
           }
 
-          /*&:not(.group)::before {
-            font-family: 'Material Icons';
-            content: "check_box_outline_blank";
-            font-size: 24px;
-            line-height: 48px;
-            position: absolute;
-            left: 22px;
-            pointer-events: none;
+          &.selected {
+            background-color: #eee;
           }
 
-          &.empty::before {
-            content: "";
-          }*/
-
-          &.selected {
-            background-color: #f5f5f5;
-
-            /*&::before {
-              font-family: 'Material Icons';
-              content: "check_box";
-              font-size: 24px;
-              line-height: 48px;
-              position: absolute;
-              left: 22px;
-              pointer-events: none;
-            }*/
-
+          &.even {
+            background-color: #f8f8f8;
           }
 
           &:not(.group):not(.empty):not(.insertRow):hover {
             background-color: #eee!important;
           }
 
-          &:last-child {
+          &:last-child.odd {
 
             td {
               border-bottom: 1px rgba(0,0,0,.12) solid;
@@ -629,7 +639,7 @@ o-table {
           text-align: left;
           color: rgba(0,0,0,.7);
           font-size: 13px;
-          border-top: 1px rgba(0,0,0,.12) solid;
+          // border-top: 1px rgba(0,0,0,.12) solid;
           overflow: hidden;
           text-overflow: ellipsis;
           white-space: nowrap;
@@ -684,21 +694,15 @@ o-table {
 
           &:last-child:not(.o-table-column-action) {
             padding: 0 42px 0 24px !important;
-            /*border-left: 1px rgba(0, 0, 0, 0.12) solid;*/
           }
 
           &:first-child:not(.o-table-column-action):not(.o-table-column-select-checkbox) {
             padding: 0 42px 0 54px !important;
           }
 
-          &:nth-child(2):not(.o-table-column-action) {
-            padding: 0 42px 0 24px !important;
-            /*border-left: 1px rgba(0, 0, 0, 0.12) solid;*/
-          }
-
           &:nth-child(n+3):nth-last-child(n+2):not(.o-table-column-action) {
             padding: 0 42px 0 24px !important;
-            /*border-left: 1px rgba(0, 0, 0, 0.12) solid;*/
+            border-left: 1px rgba(0, 0, 0, 0.12) solid;
           }
 
           & > div {
@@ -739,10 +743,10 @@ o-table {
             .o-table-row-action {
               text-transform: uppercase;
               text-decoration: underline;
-            //   line-height: 46px;
               line-height: 1;
               width: 100%;
               cursor: pointer;
+              color: rgba(0, 0, 0, 0.54);
             }
             .o-table-row-action-edit-cancel,
             .o-table-row-action-edit-save {
@@ -895,7 +899,8 @@ o-table {
   .o-table-menu-button {
     position:absolute;
     top: 0px;
-    right:10px;
+    right: 4px;
+    color: rgba(0, 0, 0, 0.54);
 
     .material-icons {
       top: 7px;
@@ -909,7 +914,6 @@ o-table {
     margin-left: 8px;
     width: 1px;
     background: rgba(0,0,0,.9);
-    z-index: inherit;
   }
 
   .JCLRgripDrag {
