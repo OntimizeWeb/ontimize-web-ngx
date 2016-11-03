@@ -901,8 +901,8 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
     var menuContainer = menuEl.parent();
     var menuBtn = ($(this.element.nativeElement) as any).find('.o-table-menu-button');
     var menuBtnOffset = menuBtn.offset();
-    var top = menuBtnOffset.top + menuBtn.outerHeight(true);
-    var left = menuBtnOffset.left - menuEl.outerWidth(true) + menuBtn.outerWidth(true);
+    var top = menuBtnOffset.top + menuBtn.outerHeight(true) - 30;
+    var left = menuBtnOffset.left - menuEl.outerWidth(true) + menuBtn.outerWidth(true) - 16;
     menuContainer.css('transform', 'translateX(' + left + 'px) translateY(' + top + 'px)');
   }
 

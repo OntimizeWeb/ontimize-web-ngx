@@ -73,6 +73,14 @@ o-table {
         cursor: pointer;
         font-size: 14px;
         display: inline-block;
+        margin: 4px 4px 4px 0;
+        padding-right: 8px;
+      }
+
+      a:hover {
+        background: rgba(0,0,0,0.16);
+
+        border-radius: 4px;
       }
 
       .dt-button {
@@ -413,7 +421,7 @@ o-table {
       thead {
 
         tr {
-
+          background: #dedede;
           height: 56px;
 
           th {
