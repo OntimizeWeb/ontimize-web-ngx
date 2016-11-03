@@ -11,7 +11,7 @@ import {Observable} from 'rxjs/Observable';
 import { MdProgressBarModule } from '@angular2-material/progress-bar';
 import { MdTabGroup } from '@angular2-material/tabs';
 
-import {OntimizeService, DialogService,
+import {OntimizeService, DialogService, NavigationService,
   dataServiceFactory} from '../../services';
 import {InputConverter} from '../../decorators';
 import { IFormComponent, IFormControlComponent, IFormDataTypeComponent} from '../../interfaces';
@@ -129,6 +129,7 @@ export class OFormComponent implements OnInit, OnDestroy {
   public mode: Mode = Mode.INITIAL;
 
   protected dialogService: DialogService;
+  protected navigationService: NavigationService;
 
   protected _formToolbar: OFormToolbarComponent;
 
@@ -172,6 +173,7 @@ export class OFormComponent implements OnInit, OnDestroy {
     protected injector: Injector) {
 
     this.dialogService = injector.get(DialogService);
+    this.navigationService = injector.get(NavigationService);
   }
 
   registerFormComponent(comp: any) {
@@ -415,6 +417,13 @@ export class OFormComponent implements OnInit, OnDestroy {
       .subscribe(urlSegments => {
         self.urlSegments = urlSegments;
       });
+
+    if (this.navigationService) {
+      var self = this;
+      this.navigationService.onVisibleChange(visible => {
+        self.showHeader = visible;
+      });
+    }
 
     this.mode = Mode.INITIAL;
   }

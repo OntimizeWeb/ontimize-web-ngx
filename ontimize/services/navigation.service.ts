@@ -1,27 +1,16 @@
 import {Injectable} from '@angular/core';
 import {EventEmitter} from '@angular/core';
 import {ObservableWrapper} from '../util/async';
-import {IComponentMeta, INavigationLink} from '../interfaces';
-
 
 
 @Injectable()
 export class NavigationService {
   public currentTitle: string = null;
   public visible: boolean = true;
-  public nextLink: INavigationLink = null;
-  public prevLink: INavigationLink = null;
 
   private _titleEmitter: EventEmitter<any> = new EventEmitter();
-  private _visibleEmitter: EventEmitter<any> = new EventEmitter();
+  private _visibleEmitter: EventEmitter<Boolean> = new EventEmitter<Boolean>();
   private _sidenavEmitter: EventEmitter<any> = new EventEmitter();
-
-  componentLink(comp: IComponentMeta): INavigationLink {
-    return {
-      brief: comp.name,
-      routeLink: [comp.path, { id: comp.id }]
-    };
-  }
 
   public setTitle(title: string): void {
     this.currentTitle = title;
@@ -48,7 +37,7 @@ export class NavigationService {
     return ObservableWrapper.subscribe(this._titleEmitter, onNext);
   }
 
-  public onVisibleChange(onNext: (value: any) => void): Object {
+  public onVisibleChange(onNext: (value: boolean) => void): Object {
     return ObservableWrapper.subscribe(this._visibleEmitter, onNext);
   }
 
