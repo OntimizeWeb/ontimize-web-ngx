@@ -4,7 +4,6 @@ import {Component, Inject, Injector, forwardRef, ElementRef, OnInit,
   ModuleWithProviders,
   ViewEncapsulation} from '@angular/core';
 
-import {Validators } from '@angular/forms';
 import {ValidatorFn } from '@angular/forms/src/directives/validators';
 
 import {OFormComponent} from '../../form/o-form.component';
@@ -69,9 +68,6 @@ export class OCurrencyInputComponent extends ORealInputComponent implements OnIn
 
   resolveValidators(): ValidatorFn[] {
     let validators: ValidatorFn[] = super.resolveValidators();
-    //Inject pattern validator for formatting value
-    let pattern = '^[0-9]+(\.[0-9]{' + this.minDecimalDigits + ',' + this.maxDecimalDigits + '})?$';
-    validators.push(Validators.pattern(pattern));
     return validators;
   }
 

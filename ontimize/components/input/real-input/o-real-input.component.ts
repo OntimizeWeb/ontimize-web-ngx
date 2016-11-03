@@ -55,8 +55,8 @@ export class ORealInputComponent extends OIntegerInputComponent implements OnIni
 
   resolveValidators(): ValidatorFn[] {
     let validators: ValidatorFn[] = super.resolveValidators();
-    //Inject pattern validator for formatting value
-    let pattern = '-?^[0-9]+(\.[0-9]{' + this.minDecimalDigits + ',' + this.maxDecimalDigits + '})?$';
+    // Inject pattern validator for formatting value
+    let pattern = '[-+]?[0-9]+(\.[0-9]{' + this.minDecimalDigits + ',' + this.maxDecimalDigits + '})?';
     validators.push(Validators.pattern(pattern));
     return validators;
   }
