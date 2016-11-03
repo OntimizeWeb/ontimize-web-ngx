@@ -54,23 +54,6 @@ export interface IFormDataComponent {
   isAutomaticBinding(): Boolean;
 }
 
-export interface IComponentMeta {
-  id: string;
-  name: string;
-  path: string;
-}
-
-export interface INavigationLink {
-  /**
-   * Brief description of no more than a few words
-   */
-  brief:string;
-  /**
-   * Value to bind to routeLink.
-   */
-  routeLink:any[];
-}
-
 export interface IProfileService {
   isRestricted(route: string): Promise<boolean>;
   getPermissions(route: string, attr: string): Promise<any>;

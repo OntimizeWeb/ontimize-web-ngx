@@ -13,7 +13,7 @@ import {MdToolbarModule} from '@angular2-material/toolbar';
 import { OFormComponent } from './o-form.component';
 import {InputConverter} from '../../decorators';
 import {Util} from '../../util/util';
-import {DialogService} from '../../services';
+import {DialogService, NavigationService } from '../../services';
 import {OTranslateModule} from '../../pipes/o-translate.pipe';
 
 export const DEFAULT_INPUTS_O_FORM_TOOLBAR = [
@@ -59,6 +59,7 @@ export class OFormToolbarComponent implements OnInit {
 
 
   protected _dialogService: DialogService;
+  protected _navigationService: NavigationService;
 
   constructor( @Inject(forwardRef(() => OFormComponent)) private _form: OFormComponent,
     public element: ElementRef,
@@ -68,6 +69,7 @@ export class OFormToolbarComponent implements OnInit {
     protected injector: Injector) {
     _form.registerToolbar(this);
     this._dialogService = this.injector.get(DialogService);
+    this._navigationService = this.injector.get(NavigationService);
   }
 
   ngOnInit() {
@@ -77,6 +79,12 @@ export class OFormToolbarComponent implements OnInit {
       this.insertBtnEnabled = this.formActions.indexOf('I') !== -1;
       this.editBtnEnabled = this.formActions.indexOf('U') !== -1;
       this.deleteBtnEnabled = this.formActions.indexOf('D') !== -1;
+    }
+    if (this._navigationService) {
+      var self = this;
+      this._navigationService.onTitleChange(title => {
+        self.labelHeader = title;
+      });
     }
   }
 
