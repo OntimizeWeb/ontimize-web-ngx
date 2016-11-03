@@ -16,7 +16,6 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/mergeAll';
 import { MdMenuModule, MdMenuTrigger } from '@angular2-material/menu';
 import { MdIconModule } from '@angular2-material/icon';
-import { MdCheckboxModule } from '@angular2-material/checkbox';
 
 import { OTableColumnComponent } from './o-table-column.component';
 import {
@@ -52,6 +51,20 @@ import { OFormComponent } from '../form/o-form.component';
 import { OFormValue } from '../form/OFormValue';
 
 import './o-table.loader';
+
+
+const TABLE_CHECKBOX_TEMPLATE = `
+  <div class="md-checkbox-inner-container">
+    <input class="select-row" type="checkbox" name="id[]">
+    <div class="md-checkbox-frame"></div>
+    <div class="md-checkbox-background">
+      <svg space="preserve" class="md-checkbox-checkmark" version="1.1" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path class="md-checkbox-checkmark-path" d="M4.1,12.7 9,17.6 20.3,6.3" fill="none" stroke="white"></path>
+      </svg>
+      <div class="md-checkbox-mixedmark"></div>
+    </div>
+  </div>
+`;
 
 export const DEFAULT_INPUTS_O_TABLE = [
 
@@ -758,11 +771,11 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
       headerCallback: function (thead, data, start, end, display) {
         if (self.selectAllCheckbox) {
           var checkboxCell = ($(thead) as any).find('th').eq(0);
-          checkboxCell.removeClass();
-          checkboxCell.html('<input class="" name="select_all" id="select_all" type="checkbox"/>');
+          checkboxCell.attr('class', 'o-table-column-select-checkbox');
+          checkboxCell.html(TABLE_CHECKBOX_TEMPLATE);
+          checkboxCell.find('.select-row').attr('id', 'select_all');
         }
       }
-
     };
 
     if (typeof (columns) !== 'undefined') {
@@ -832,7 +845,6 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
   protected addDefaultRowButtons() {
     this.editColumnIndex = -1;
     this.detailColumnIndex = -1;
-    var excludingColVis = [];
 
     if (this.editButtonInRow) {
       var editColumn = new OTableColumnComponent(this, this.injector);
@@ -844,7 +856,6 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
         renderValue: this.editButtonInRowIcon
       });
       this.editColumnIndex = this.dataTableOptions.columns.length;
-      excludingColVis.push(this.editColumnIndex);
       this.registerColumn(editColumn);
     }
     if (this.detailButtonInRow) {
@@ -856,14 +867,7 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
         renderValue: this.detailButtonInRowIcon
       });
       this.detailColumnIndex = this.dataTableOptions.columns.length;
-      excludingColVis.push(this.detailColumnIndex);
       this.registerColumn(detailColumn);
-    }
-
-    if (excludingColVis.length > 0) {
-      this.dataTableOptions.colVis = {
-        exclude: excludingColVis
-      };
     }
   }
 
@@ -994,9 +998,8 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
       if (this.selectAllCheckbox) {
         self.tableHtmlEl.find('th #select_all').off('click');
         self.tableHtmlEl.find('th #select_all').on('click', (event: any) => this.handleSelectAllClick(event));
-        self.tableHtmlEl.find('tr .select-row').off('click');
-        self.tableHtmlEl.find('tr .select-row').on('click', (event: any) => this.handleRowCheckboxChange(event));
-        // , 'input[type="checkbox"]'
+        self.tableHtmlEl.find('tbody tr .select-row').off('change');
+        self.tableHtmlEl.find('tbody tr .select-row').on('change', (event: any) => this.handleRowCheckboxChange(event));
       }
     });
 
@@ -1056,9 +1059,9 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
         this.dataTableOptions.columns.push({
           'searchable': false,
           'orderable': false,
-          'className': 'row-checkbox',
+          'className': 'o-table-column-select-checkbox',
           'render': function (data, type, full, meta) {
-            return `<input class="select-row" type="checkbox" name="id[]">`;
+            return TABLE_CHECKBOX_TEMPLATE;
           }
         });
       }
@@ -1208,21 +1211,30 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   protected handleColumnWidth() {
+    var fixedWidthColumns = 0;
+    fixedWidthColumns += (this.selectAllCheckbox ? 1 : 0);
     var actionColumns = 0;
     actionColumns += (this.editColumnIndex !== -1 ? 1 : 0);
     actionColumns += (this.detailColumnIndex !== -1 ? 1 : 0);
+    fixedWidthColumns += actionColumns;
     let columns = $('#' + this.attr + '_wrapper table thead th') as any;
     if (columns.length > 0) {
-      let actionsWidth = ((actionColumns * 50) / ($('#' + this.attr) as any).outerWidth(true)) * 100;
-      let width = String((100 - actionsWidth) / (columns.length - actionColumns)) + '%';
+      let actionsWidth = ((fixedWidthColumns * 50) / ($('#' + this.attr) as any).outerWidth(true)) * 100;
+      let width = String((100 - actionsWidth) / ((columns.length - fixedWidthColumns) || 1)) + '%';
       var self = this;
+
       ($ as any).each(columns, function (i, el) {
-        if (i !== self.editColumnIndex && i !== self.detailColumnIndex) {
-          ($(this) as any).width(width);
+        let columnWidth = '0px';
+        let isActionColumn = i >= (columns.length - actionColumns);
+        if (self.selectAllCheckbox && i === 0) {
+          columnWidth = '26px';
+        } else if (!isActionColumn) {
+          columnWidth = width;
         } else {
           // using width = 2 because padding-left and right is 24 (total width = 50  )
-          ($(this) as any).width(2 + 'px');
+          columnWidth = '2px';
         }
+        ($(this) as any).width(columnWidth);
       });
     }
   }
@@ -1356,28 +1368,50 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   protected handleSelectAllClick(event: any) {
-    var rows = this.table.rows().nodes();
-    rows.$('input[type="checkbox"].select-row').prop('checked', event.target.checked);
+    let headerCheckboxCol = this.tableHtmlEl.find('th.o-table-column-select-checkbox') as any;
+    let wasIndeterminate = headerCheckboxCol.hasClass('md-checkbox-indeterminate');
+
+    headerCheckboxCol.attr('class', 'o-table-column-select-checkbox');
     if (event.target.checked) {
-      this.table.rows().select();
+      headerCheckboxCol.addClass('md-checkbox-checked md-checkbox-anim-unchecked-checked');
+    } else if (wasIndeterminate) {
+      headerCheckboxCol.addClass('md-checkbox-anim-indeterminate-unchecked');
     } else {
-      this.table.rows().deselect();
+      headerCheckboxCol.addClass('md-checkbox-anim-checked-unchecked');
     }
+    let tableRows = this.table.rows();
+    tableRows.nodes().$('input[type="checkbox"].select-row').prop('checked', event.target.checked).change();
   }
 
   protected handleRowCheckboxChange(event: any) {
-    let index = ($(event.target) as any).parents('tr:first').index();
-    let tableRow = this.table.rows(index);
-    if (!event.target.checked) {
-      tableRow.deselect();
-      var el = this.tableHtmlEl.find('th #select_all')[0];
-      // If "Select all" control is checked and has 'indeterminate' property
-      if (el && el.checked && ('indeterminate' in el)) {
-        // Set visual state of "Select all" control as 'indeterminate'
-        el.indeterminate = true;
-      }
-    } else {
+    let rowEL = ($(event.target) as any).parents('tr:first');
+    let checkBoxColumn = rowEL.find('.o-table-column-select-checkbox:first');
+    checkBoxColumn.attr('class', 'o-table-column-select-checkbox');
+
+    let tableRow = this.table.rows(rowEL);
+
+    if (event.target.checked) {
+      checkBoxColumn.addClass('md-checkbox-checked md-checkbox-anim-unchecked-checked');
       tableRow.select();
+    } else {
+      checkBoxColumn.addClass('md-checkbox-anim-checked-unchecked');
+      tableRow.deselect();
+      var selectAllEL = this.tableHtmlEl.find('th #select_all')[0];
+      // If "Select all" control is checked and has 'indeterminate' property
+      if (selectAllEL && selectAllEL.checked && ('indeterminate' in selectAllEL)) {
+        // Set visual state of "Select all" control as 'indeterminate'
+        selectAllEL.indeterminate = true;
+        let headerCheckboxCol = this.tableHtmlEl.find('th.o-table-column-select-checkbox');
+        headerCheckboxCol.attr('class', 'o-table-column-select-checkbox');
+        headerCheckboxCol.addClass('md-checkbox-indeterminate md-checkbox-anim-checked-indeterminate');
+      }
+    }
+
+    let deleteButton = $('#' + this.attr + '_wrapper .generic-action-delete') as any;
+    if (this.table.rows('.selected').nodes().length) {
+      deleteButton.removeClass('disabled');
+    } else {
+      deleteButton.addClass('disabled');
     }
   }
 
@@ -1402,15 +1436,35 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   protected initColumnResize() {
+
     if (typeof (this.tableHtmlEl) !== 'undefined') {
+      let disabledResizeColumns = [];
+
+      if (this.selectAllCheckbox) {
+        disabledResizeColumns.push(0);
+      }
+      if (this.editButtonInRow) {
+        disabledResizeColumns.push(this.editColumnIndex);
+        if (disabledResizeColumns.indexOf(this.editColumnIndex - 1) === -1) {
+          disabledResizeColumns.push(this.editColumnIndex - 1);
+        }
+      }
+      if (this.detailButtonInRow) {
+        disabledResizeColumns.push(this.detailColumnIndex);
+        if (disabledResizeColumns.indexOf(this.detailColumnIndex - 1) === -1) {
+          disabledResizeColumns.push(this.detailColumnIndex - 1);
+        }
+      }
+
       ($('#' + this.attr + '_wrapper .JCLRgrips') as any).remove();
       this.tableHtmlEl.colResizable({
         liveDrag: false,
         postbackSafe: false,
         partialRefresh: true,
-        minWidth: 50/*,
-        onResize: (e) => {
-        }*/
+        minWidth: 50,
+        disabledColumns: disabledResizeColumns
+        // onResize: (e) => {
+        // }*/
       });
     }
   }
@@ -1676,7 +1730,7 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
       }
       if (Object.keys(pKeys).length > 0) {
         let encoded = Util.encodeParentKeys(pKeys);
-        route.push( {'pk' : encoded});
+        route.push({ 'pk': encoded });
       }
     }
     let extras = { relativeTo: this._actRoute };
@@ -1684,8 +1738,8 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
       route,
       extras
     ).catch(err => {
-        console.error(err.message);
-      });
+      console.error(err.message);
+    });
   }
 
   protected getTableOptions() {
@@ -1780,48 +1834,34 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
 
     // columns visibility option
     if (this.columnsVisibilityButton) {
-      // menu selector
-      options.push({
+      let columnsParam = undefined;
+      if (this.selectAllCheckbox) {
+        columnsParam = ':gt(0)';
+      }
+      if (this.editButtonInRow) {
+        columnsParam += ':not(:nth-child(' + (this.editColumnIndex + 1) + '))';
+      }
+      if (this.detailButtonInRow) {
+        columnsParam += ':not(:nth-child(' + (this.detailColumnIndex + 1) + '))';
+      }
+
+      let colVisOptions = {
         extend: 'colvis',
         text: this.translateService.get('TABLE.BUTTONS.COLVIS'),
         className: 'generic-action generic-action-view-column',
         collectionLayout: 'fixed'
-      });
-    }
+      };
 
-    // filter
-    // if (this.quickFilter) {
-    //   buttons.push({
-    //     text: this.translateService.get('TABLE.BUTTONS.FILTER'),
-    //     className: 'generic-action generic-action-filter',
-    //     action: () => {
-    //       let filterButton = $('#' + this.attr + '_wrapper .generic-action-filter') as any;
-    //       let filter = $('#' + this.attr + '_filter') as any;
-    //       if (filterButton.hasClass('active')) {
-    //         filterButton.removeClass('active');
-    //         filter.hide();
-    //       } else {
-    //         filterButton.addClass('active');
-    //         filter.show();
-    //         filter.find('input').focus();
-    //       }
-    //     }
-    //   });
-    // }
+      if (typeof columnsParam !== 'undefined') {
+        colVisOptions['columns'] = columnsParam;
+      }
+      options.push(colVisOptions);
+    }
     return options;
   }
 
   protected exportButtonAction() {
     this.showExportOptions = !this.showExportOptions;
-    // let exportActions = $('#' + this.attr + '_wrapper .export-action') as any;
-    // let exportButton = $('#' + this.attr + '_wrapper .generic-action-export') as any;
-    // if (exportButton.hasClass('active')) {
-    //   exportButton.removeClass('active');
-    //   exportActions.hide();
-    // } else {
-    //   exportButton.addClass('active');
-    //   exportActions.show();
-    // }
   }
 
   protected columnsGroupButtonAction() {
@@ -1861,23 +1901,6 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
   protected getTableButtons() {
     let buttons = [];
 
-    // select all
-    // buttons.push({
-    //   text: this.translateService.get('TABLE.BUTTONS.SELECT_ALL'),
-    //   className: 'generic-action generic-action-select-all',
-    //   action: () => {
-    //     this.table.rows().select();
-    //   }
-    // });
-
-    // // clear selection
-    // buttons.push({
-    //   text: this.translateService.get('TABLE.BUTTONS.CLEAR_SELECTION'),
-    //   className: 'generic-action generic-action-clear-selection',
-    //   action: () => {
-    //     this.table.rows().deselect();
-    //   }
-    // });
     // add
     if (this.insertButton) {
       buttons.push({
@@ -2099,7 +2122,7 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
     OTableButtonComponent,
     OTableOptionComponent
   ],
-  imports: [CommonModule, MdMenuModule, OTranslateModule, MdIconModule, MdCheckboxModule],
+  imports: [CommonModule, MdMenuModule, OTranslateModule, MdIconModule],
   exports: [OTableComponent,
     OTableColumnComponent,
     OTableCellRendererActionComponent,

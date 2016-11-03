@@ -376,35 +376,7 @@ o-table {
 
           height: 56px;
 
-          /*&::before {
-            font-family: 'Material Icons';
-            content: "";
-            font-size: 24px;
-            line-height: 48px;
-            position: absolute;
-            left: 12px;
-          }
-
-          &.some-selected::before {
-            font-family: 'Material Icons';
-            content: "indeterminate_check_box";
-            font-size: 24px;
-            line-height: 48px;
-            position: absolute;
-            left: 12px;
-          }
-
-          &.all-selected::before {
-            font-family: 'Material Icons';
-            content: "check_box";
-            font-size: 24px;
-            line-height: 48px;
-            position: absolute;
-            left: 12px;
-          }*/
-
           th {
-
             position: relative;
             color: rgba(0,0,0,.54);
             font-size: 14px;
@@ -422,9 +394,13 @@ o-table {
               border-left: 1px rgba(0, 0, 0, 0.12) solid;*/
             }
 
-            &:first-child {
+            &:first-child:not(.o-table-column-select-checkbox) {
               padding: 0 42px 0 54px !important;
               /*border-top: 1px rgba(0, 0, 0, 0.12) solid;*/
+            }
+
+            &:first-child.o-table-column-select-checkbox {
+              padding:0 12px 0 12px !important
             }
 
             &:nth-child(2) {
@@ -711,7 +687,7 @@ o-table {
             /*border-left: 1px rgba(0, 0, 0, 0.12) solid;*/
           }
 
-          &:first-child:not(.o-table-column-action) {
+          &:first-child:not(.o-table-column-action):not(.o-table-column-select-checkbox) {
             padding: 0 42px 0 54px !important;
           }
 
@@ -778,7 +754,6 @@ o-table {
           }
 
           .image-plain {
-
             height: 30px;
 
             img {
@@ -921,17 +896,26 @@ o-table {
     position:absolute;
     top: 0px;
     right:10px;
+
+    .material-icons {
+      top: 7px;
+      position: absolute;
+      left: 0;
+      width: 100%;
+    }
   }
 
-  .JCLRgrip:not(.JCLRLastGrip) {
+  .JCLRgrip:not(.JCLRLastGrip):not(.JCLRdisabledGrip) {
     margin-left: 8px;
     width: 1px;
     background: rgba(0,0,0,.9);
+    z-index: inherit;
   }
 
   .JCLRgripDrag {
     border: 1px rgba(0, 0, 0, 0.12) solid !important;
   }
+
 
 }
 
@@ -1065,4 +1049,352 @@ div.dt-button-background {
   height: 100%;
   background: rgba(0, 0, 0, 0.8);
   z-index: 2001;
+}
+
+
+o-table .o-table-container table thead tr th.o-table-column-select-checkbox {
+  &::before,
+  &::after {
+    content: initial;
+  }
+
+}
+
+
+
+o-table .o-table-container table thead tr th,
+o-table .o-table-container table tbody td {
+
+  &.o-table-column-select-checkbox {
+
+    text-align: center;
+    outline: none;
+
+    input[type="checkbox"].select-row {
+      height: 89%;
+      width: 16px;
+      padding: 0px;
+      margin-left: 0px;
+      margin: 0;
+      -webkit-appearance: none;
+      background: transparent;
+      cursor: pointer;
+    }
+    &.md-checkbox-checked .md-checkbox-inner-container {
+
+      .md-checkbox-checkmark-path {
+        stroke-dashoffset: 0;
+      }
+
+      .md-checkbox-mixedmark {
+        transform: scaleX(1) rotate(-45deg);
+      }
+
+      .md-checkbox-checkmark,
+      .md-checkbox-background {
+        opacity: 1;
+      }
+    }
+
+    &.md-checkbox-indeterminate .md-checkbox-inner-container{
+      .md-checkbox-background {
+        opacity: 1;
+      }
+
+      .md-checkbox-checkmark {
+        opacity: 0;
+        transform: rotate(45deg);
+      }
+
+      .md-checkbox-checkmark-path {
+        stroke-dashoffset: 0;
+      }
+
+      .md-checkbox-mixedmark {
+        opacity: 1;
+        transform: scaleX(1) rotate(0deg);
+      }
+    }
+
+    .md-checkbox-inner-container {
+        display: inline-block;
+        height: 18px;
+        line-height: 0;
+        margin: auto;
+        order: 0;
+        position: relative;
+        vertical-align: middle;
+        white-space: nowrap;
+        width: 18px;
+        cursor: pointer;
+
+        .md-checkbox-frame,
+        .md-checkbox-background,
+        .md-checkbox-checkmark {
+            bottom: 0;
+            left: 0;
+            position: absolute;
+            right: 0;
+            top: 0;
+        }
+
+        .md-checkbox-frame,
+        .md-checkbox-background {
+            border-radius: 2px;
+            box-sizing: border-box;
+            pointer-events: none;
+        }
+
+        .md-checkbox-frame {
+          background-color: transparent;
+          border: 2px solid rgba(0, 0, 0, 0.54);
+          transition: border-color 140ms cubic-bezier(0, 0, 0.2, 0.1);
+          will-change: border-color;
+        }
+
+        .md-checkbox-background {
+          align-items: center;
+          background-color: #2196f3;
+          opacity: 0;
+          display: inline-flex;
+          justify-content: center;
+          transition: background-color 140ms cubic-bezier(0, 0, 0.2, 0.1), opacity 140ms cubic-bezier(0, 0, 0.2, 0.1);
+          will-change: background-color, opacity;
+        }
+
+        .md-checkbox-checkmark,
+        .md-checkbox-mixedmark {
+            width: calc(100% - 4px);
+        }
+
+        .md-checkbox-checkmark {
+          fill: #fafafa;
+          width: 100%;
+        }
+
+        .md-checkbox-mixedmark {
+          background-color: #fafafa;
+          height: 2.4px;
+          opacity: 0;
+          transform: scaleX(0) rotate(0deg);
+        }
+
+        .md-checkbox-checkmark-path {
+            stroke: #fafafa !important;
+            stroke-dashoffset: 22.91026;
+            stroke-dasharray: 22.91026;
+            stroke-width: 2.4px;
+        }
+    }
+
+    &.md-checkbox-anim-unchecked-checked {
+      .md-checkbox-background {
+        animation: 280ms linear 0s md-checkbox-fade-in-background;
+      }
+      .md-checkbox-checkmark-path {
+        animation: 280ms linear 0s md-checkbox-unchecked-checked-checkmark-path;
+      }
+    }
+
+    &.md-checkbox-anim-unchecked-indeterminate {
+      .md-checkbox-background {
+        animation: 280ms linear 0s md-checkbox-fade-in-background;
+      }
+
+      .md-checkbox-mixedmark {
+        animation: 140ms linear 0s md-checkbox-unchecked-indeterminate-mixedmark;
+      }
+    }
+
+    &.md-checkbox-anim-checked-unchecked {
+      .md-checkbox-background {
+        animation: 280ms linear 0s md-checkbox-fade-out-background;
+      }
+
+      .md-checkbox-checkmark-path {
+        animation: 140ms linear 0s md-checkbox-checked-unchecked-checkmark-path;
+      }
+    }
+
+    &.md-checkbox-anim-checked-indeterminate .md-checkbox-checkmark {
+      .md-checkbox-checkmark {
+        animation: 140ms linear 0s md-checkbox-checked-indeterminate-checkmark;
+      }
+
+      .md-checkbox-mixedmark {
+        animation: 140ms linear 0s md-checkbox-checked-indeterminate-mixedmark;
+      }
+    }
+
+    &.md-checkbox-anim-indeterminate-checked {
+     .md-checkbox-checkmark {
+        animation: 500ms linear 0s md-checkbox-indeterminate-checked-checkmark;
+      }
+
+     .md-checkbox-mixedmark {
+        animation: 500ms linear 0s md-checkbox-indeterminate-checked-mixedmark;
+      }
+    }
+
+    &.md-checkbox-anim-indeterminate-unchecked {
+      .md-checkbox-background {
+        animation: 280ms linear 0s md-checkbox-fade-out-background;
+      }
+
+      .md-checkbox-mixedmark {
+        animation: 300ms linear 0s md-checkbox-indeterminate-unchecked-mixedmark;
+      }
+    }
+
+  }
+}
+
+/**
+ * Fades in the background of the checkbox when it goes from unchecked -> {checked,indeterminate}.
+ */
+@keyframes md-checkbox-fade-in-background {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/**
+ * Fades out the background of the checkbox when it goes from {checked,indeterminate} -> unchecked.
+ */
+@keyframes md-checkbox-fade-out-background {
+  0%, 50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/**
+ * "Draws" in the checkmark when the checkbox goes from unchecked -> checked.
+ */
+@keyframes md-checkbox-unchecked-checked-checkmark-path {
+  0%, 50% {
+    stroke-dashoffset: 22.91026;
+  }
+  50% {
+    animation-timing-function: cubic-bezier(0, 0, 0.2, 0.1);
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+/**
+ * Horizontally expands the mixedmark when the checkbox goes from unchecked -> indeterminate.
+ */
+@keyframes md-checkbox-unchecked-indeterminate-mixedmark {
+  0%, 68.2% {
+    transform: scaleX(0);
+  }
+  68.2% {
+    animation-timing-function: cubic-bezier(0, 0, 0, 1);
+  }
+  100% {
+    transform: scaleX(1);
+  }
+}
+
+/**
+ * "Erases" the checkmark when the checkbox goes from checked -> unchecked.
+ */
+@keyframes md-checkbox-checked-unchecked-checkmark-path {
+  from {
+    animation-timing-function: cubic-bezier(0.4, 0, 1, 1);
+    stroke-dashoffset: 0;
+  }
+  to {
+    stroke-dashoffset: -22.91026;
+  }
+}
+
+/**
+ * Rotates and fades out the checkmark when the checkbox goes from checked -> indeterminate. This
+ * animation helps provide the illusion of the checkmark "morphing" into the mixedmark.
+ */
+@keyframes md-checkbox-checked-indeterminate-checkmark {
+  from {
+    animation-timing-function: cubic-bezier(0, 0, 0.2, 0.1);
+    opacity: 1;
+    transform: rotate(0deg);
+  }
+  to {
+    opacity: 0;
+    transform: rotate(45deg);
+  }
+}
+
+/**
+ * Rotates and fades the checkmark back into position when the checkbox goes from indeterminate ->
+ * checked. This animation helps provide the illusion that the mixedmark is "morphing" into the
+ * checkmark.
+ */
+@keyframes md-checkbox-indeterminate-checked-checkmark {
+  from {
+    animation-timing-function: cubic-bezier(0.14, 0, 0, 1);
+    opacity: 0;
+    transform: rotate(45deg);
+  }
+  to {
+    opacity: 1;
+    transform: rotate(360deg);
+  }
+}
+
+/**
+ * Rotates and fades in the mixedmark when the checkbox goes from checked -> indeterminate. This
+ * animation, similar to md-checkbox-checked-indeterminate-checkmark, helps provide an illusion
+ * of "morphing" from checkmark -> mixedmark.
+ */
+@keyframes md-checkbox-checked-indeterminate-mixedmark {
+  from {
+    animation-timing-function: cubic-bezier(0, 0, 0.2, 0.1);
+    opacity: 0;
+    transform: rotate(-45deg);
+  }
+  to {
+    opacity: 1;
+    transform: rotate(0deg);
+  }
+}
+
+/**
+ * Rotates and fades out the mixedmark when the checkbox goes from indeterminate -> checked. This
+ * animation, similar to md-checkbox-indeterminate-checked-checkmark, helps provide an illusion
+ * of "morphing" from mixedmark -> checkmark.
+ */
+@keyframes md-checkbox-indeterminate-checked-mixedmark {
+  from {
+    animation-timing-function: cubic-bezier(0.14, 0, 0, 1);
+    opacity: 1;
+    transform: rotate(0deg);
+  }
+  to {
+    opacity: 0;
+    transform: rotate(315deg);
+  }
+}
+
+/**
+ * Horizontally collapses and fades out the mixedmark when the checkbox goes from indeterminate ->
+ * unchecked.
+ */
+@keyframes md-checkbox-indeterminate-unchecked-mixedmark {
+  0% {
+    animation-timing-function: linear;
+    opacity: 1;
+    transform: scaleX(1);
+  }
+  32.8%, 100% {
+    opacity: 0;
+    transform: scaleX(0);
+  }
 }

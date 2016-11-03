@@ -17,11 +17,11 @@ title="">
   <button *ngIf="showExportOptions" (click)="exportAction('pdf')" md-menu-item> {{ 'TABLE.BUTTONS.PDF' | oTranslate }} </button>-->
 
   <!--<button *ngIf="exportButton" md-menu-item (click)="exportButtonAction()"> {{ 'TABLE.BUTTONS.EXPORT' | oTranslate }} </button>-->
-  <button *ngIf="exportButton" (click)="exportAction('copyHtml5')" md-menu-item> {{ 'TABLE.BUTTONS.COPY_TO_CLIPBOARD' | oTranslate }} </button>
-  <button *ngIf="exportButton" (click)="exportAction('print')" md-menu-item> {{ 'TABLE.BUTTONS.PRINT' | oTranslate }} </button>
-  <button *ngIf="exportButton" (click)="exportAction('excel')" md-menu-item> {{ 'TABLE.BUTTONS.EXCEL' | oTranslate }} </button>
-  <button *ngIf="exportButton" (click)="exportAction('csv')" md-menu-item> {{ 'TABLE.BUTTONS.CSV' | oTranslate }} </button>
-  <button *ngIf="exportButton" (click)="exportAction('pdf')" md-menu-item> {{ 'TABLE.BUTTONS.PDF' | oTranslate }} </button>
+  <button *ngIf="exportButton || showExportOptions" (click)="exportAction('copyHtml5')" md-menu-item> {{ 'TABLE.BUTTONS.COPY_TO_CLIPBOARD' | oTranslate }} </button>
+  <button *ngIf="exportButton || showExportOptions" (click)="exportAction('print')" md-menu-item> {{ 'TABLE.BUTTONS.PRINT' | oTranslate }} </button>
+  <button *ngIf="exportButton || showExportOptions" (click)="exportAction('excel')" md-menu-item> {{ 'TABLE.BUTTONS.EXCEL' | oTranslate }} </button>
+  <button *ngIf="exportButton || showExportOptions" (click)="exportAction('csv')" md-menu-item> {{ 'TABLE.BUTTONS.CSV' | oTranslate }} </button>
+  <button *ngIf="exportButton || showExportOptions" (click)="exportAction('pdf')" md-menu-item> {{ 'TABLE.BUTTONS.PDF' | oTranslate }} </button>
 
 
   <button *ngIf="columnsGroupButton" md-menu-item (click)="columnsGroupButtonAction()"> {{ 'TABLE.BUTTONS.GROUP_ROWS' | oTranslate }} </button>
@@ -33,5 +33,3 @@ title="">
     <md-icon *ngIf="option.icon" class="md-24">{{ option.icon }}</md-icon>
   </button>
 </md-menu>
-
-<md-checkbox></md-checkbox>
