@@ -1,3 +1,8 @@
+## 1.0.1 (2016-11-04)
+
+### Bug Fixes
+* **i18n:** Fixing configuration path for i18n files. ([47aaeff](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/47aaeff))
+
 ## 1.0.1 (2016-11-03)
 
 ### Features
