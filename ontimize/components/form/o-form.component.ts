@@ -404,11 +404,11 @@ export class OFormComponent implements OnInit, OnDestroy {
         if (params[OFormComponent.PARENT_KEYS_KEY] !== undefined) {
           self.formParentKeysValues = Util.decodeParentKeys(params[OFormComponent.PARENT_KEYS_KEY]);
         }
-        // //TODO Obtain 'datatype' of each key contained into urlParams for
-        // // for building correctly query filter!!!!
-        // if (self.urlParams && Object.keys(self.urlParams).length > 0) {
-        //   self._reloadAction();
-        // }
+        //TODO Obtain 'datatype' of each key contained into urlParams for
+        // for building correctly query filter!!!!
+        if (self.urlParams && Object.keys(self.urlParams).length > 0) {
+          self._reloadAction();
+        }
       });
 
     this.urlSub = this.actRoute
@@ -474,13 +474,6 @@ export class OFormComponent implements OnInit, OnDestroy {
         this.setFormMode(Mode.UPDATE);
       } else {
         this.setFormMode(Mode.INITIAL);
-      }
-
-
-    //TODO Obtain 'datatype' of each key contained into urlParams for
-    // for building correctly query filter!!!!
-    if (this.urlParams && Object.keys(this.urlParams).length > 0) {
-      this._reloadAction();
       }
 
     if (this.tabGroupChildren) {

@@ -15,7 +15,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/from';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/mergeAll';
-import { MdMenuModule, MdMenuTrigger, MdIconModule } from '@angular/material';
+import { MdMenuModule, MdMenuTrigger, MdIconModule, MdProgressCircleModule } from '@angular/material';
 
 import { OTableColumnComponent } from './o-table-column.component';
 import {
@@ -201,8 +201,6 @@ export const DEFAULT_INPUTS_O_TABLE = [
 export const DEFAULT_OUTPUTS_O_TABLE = [
 ];
 
-
-
 @Component({
   selector: 'o-table',
   templateUrl: './table/o-table.component.html',
@@ -242,6 +240,7 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
   public static ROW_BUTTON_DETAIL = 'DETAIL';
   public static ROW_BUTTON_DELETE = 'DELETE';
 
+  public loading: boolean = false;
   protected initialized: boolean;
 
   protected authGuardService: AuthGuardService;
@@ -276,7 +275,7 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
   @InputConverter()
   detailButtonInRow: boolean = true;
   @InputConverter()
-  editButtonInRow: boolean = true;
+  editButtonInRow: boolean = false;
   @InputConverter()
   recursiveEdit: boolean = false;
   @InputConverter()
@@ -331,7 +330,6 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
   protected tableHtmlEl: any;
   protected dataTable: any;
   protected dataTableOptions: any;
-  protected columnComponentsRegistered: boolean;
   protected selectedItems: Array<Object>;
   protected lastDeselection: any;
   protected groupColumnIndex: number;
@@ -353,6 +351,7 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
   public onDoubleClick: EventEmitter<any> = new EventEmitter();
 
   @ViewChild(MdMenuTrigger) trigger: MdMenuTrigger;
+  private columnWidthHandlerInterval: any;
 
   constructor(
     protected _router: Router,
@@ -370,14 +369,12 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
     this.translateService = injector.get(OTranslateService);
     this.parentItem = undefined;
     this.filterForm = false;
-    this.columnComponentsRegistered = false;
     this.selectedItems = [];
     this.lastDeselection = undefined;
     this.groupColumnIndex = -1;
     this.groupColumnOrder = OTableComponent.TYPE_ASC_NAME;
     OTableComponent.DEFAULT_QUERY_ROWS_MENU[1][4] = this.translateService.get('TABLE.SHOW_ALL');
     this.detailMode = OTableComponent.DEFAULT_DETAIL_MODE;
-
     this.headerButtons = [];
     this.headerOptions = [];
 
@@ -414,6 +411,7 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
 
     this.onInsertRowFocusSubscribe = [];
     this.onInsertRowSubmitSubscribe = undefined;
+    this.element.nativeElement.classList.add('o-table');
   }
 
   public ngOnInit(): any {
@@ -644,8 +642,6 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
         let controlButtons = $('#' + this.attr + '_wrapper .generic-action') as any;
         ($ as any).each(controlButtons, function (i, el) {
           ($(this) as any).attr('title', ($(this) as any).find('span').text());
-
-
         });
 
         let customButtons = $('#' + this.attr + '_wrapper .custom-generic-action') as any;
@@ -759,6 +755,7 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
 
                         // perform insert
                         console.log('[OTable.initTableOnInit]: insert', av);
+                        var loader = this.load();
                         this.dataService[this.insertMethod](av, this.entity)
                           .subscribe(
                           res => {
@@ -770,9 +767,11 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
                               console.log('[OTable.initTableOnInit]: error', res.code);
                               this.dialogService.alert('ERROR', 'MESSAGES.ERROR_INSERT');
                             }
+                            loader.unsubscribe();
                           },
                           err => {
                             console.log('[OTable.initTableOnInit]: error', err);
+                            loader.unsubscribe();
                             this.dialogService.alert('ERROR', 'MESSAGES.ERROR_INSERT');
                           }
                           );
@@ -814,9 +813,19 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
       }
       this.dataTableOptions.columns = columns;
     } else {
-      // columns defined only with the 'columns' attribute
-      for (let i = 0; i < this.dataColumns.length; ++i) {
-        let col = this.dataColumns[i];
+      if (this.selectAllCheckbox) {
+        this.dataTableOptions.columns.push({
+          searchable: false,
+          orderable: false,
+          className: 'o-table-column-select-checkbox',
+          render: function (data, type, full, meta) {
+            return TABLE_CHECKBOX_TEMPLATE;
+          }
+        });
+      }
+      // columns defined only with the 'visible-columns' attribute
+      for (let i = 0; i < this.dataVisibleColumns.length; ++i) {
+        let col = this.dataVisibleColumns[i];
         let colDef = {
           data: col,
           name: col,
@@ -863,7 +872,25 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
         this.dataTableOptions.order = this.dataSortColumns;
       }
     }
+  }
 
+  public load(): any {
+    var self = this;
+    var loadObservable = new Observable(observer => {
+      var timer = window.setTimeout(() => {
+        observer.next(true);
+      }, 250);
+
+      return () => {
+        window.clearTimeout(timer);
+        self.loading = false;
+      };
+
+    });
+    var subscription = loadObservable.subscribe(val => {
+      self.loading = val as boolean;
+    });
+    return subscription;
   }
 
   protected addDefaultRowButtons() {
@@ -1079,22 +1106,6 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   public registerColumn(column: OTableColumnComponent, index?: number) {
-    if (!this.columnComponentsRegistered) {
-      this.dataTableOptions.columns = [];
-
-      if (this.selectAllCheckbox) {
-        this.dataTableOptions.columns.push({
-          'searchable': false,
-          'orderable': false,
-          'className': 'o-table-column-select-checkbox',
-          'render': function (data, type, full, meta) {
-            return TABLE_CHECKBOX_TEMPLATE;
-          }
-        });
-      }
-
-      this.columnComponentsRegistered = true;
-    }
     let colDef = {
       data: undefined,
       name: undefined,
@@ -1156,7 +1167,25 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
       }
       colDef.visible = (this.dataVisibleColumns.indexOf(column.attr) !== -1);
     }
-    this.dataTableOptions.columns.push(colDef);
+
+    //find column definition by name
+    if (typeof (column.attr) !== 'undefined') {
+      // adding to dataColums for using it in service queries
+      if (this.dataColumns.indexOf(column.attr) === -1) {
+        this.dataColumns.push(column.attr);
+      }
+      var alreadyExisting = this.dataTableOptions.columns.filter(function (existingColumn) {
+        return existingColumn.name === column.attr;
+      });
+      if (alreadyExisting.length === 1) {
+        var replacingIndex = this.dataTableOptions.columns.indexOf(alreadyExisting[0]);
+        this.dataTableOptions.columns[replacingIndex] = colDef;
+      } else if (alreadyExisting.length === 0) {
+        this.dataTableOptions.columns.push(colDef);
+      }
+    } else {
+      this.dataTableOptions.columns.push(colDef);
+    }
   }
 
   public updateCell(cellElement: any, value: any) {
@@ -1179,6 +1208,7 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
         }
         let av = {};
         av[colDef.name] = value;
+        var loader = this.load();
         this.dataService[this.updateMethod](kv, av, this.entity)
           .subscribe(
           res => {
@@ -1195,11 +1225,13 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
               this.dialogService.alert('ERROR', 'MESSAGES.ERROR_UPDATE');
               cell.data(oldValue);
             }
+            loader.unsubscribe();
           },
           err => {
             console.log('[OTable.updateCell]: error', err);
             this.dialogService.alert('ERROR', 'MESSAGES.ERROR_UPDATE');
             cell.data(oldValue);
+            loader.unsubscribe();
           }
           );
       }
@@ -1218,6 +1250,7 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
         let key = this.dataKeys[k];
         kv[key] = rowCurrentData[key];
       }
+      var loader = this.load();
       this.dataService[this.updateMethod](kv, av, this.entity)
         .subscribe(
         res => {
@@ -1228,16 +1261,33 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
             console.log('[OTable.updateRow]: error', res.code);
             this.dialogService.alert('ERROR', 'MESSAGES.ERROR_UPDATE');
           }
+          loader.unsubscribe();
         },
         err => {
           console.log('[OTable.updateRow]: error', err);
           this.dialogService.alert('ERROR', 'MESSAGES.ERROR_UPDATE');
+          loader.unsubscribe();
         }
         );
     }
   }
 
   protected handleColumnWidth() {
+    var tableEl = ($('#' + this.attr) as any);
+    if (!tableEl.is(':visible')) {
+      var self = this;
+      if (typeof this.columnWidthHandlerInterval === 'undefined') {
+        this.columnWidthHandlerInterval = setInterval(function () {
+          if (tableEl.is(':visible')) {
+            clearInterval(self.columnWidthHandlerInterval);
+            self.columnWidthHandlerInterval = undefined;
+            self.handleColumnWidth();
+            console.log('columnWidthHandlerInterval');
+          }
+        }, 250);
+      }
+      return;
+    }
     var fixedWidthColumns = 0;
     fixedWidthColumns += (this.selectAllCheckbox ? 1 : 0);
     var actionColumns = 0;
@@ -1246,7 +1296,7 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
     fixedWidthColumns += actionColumns;
     let columns = $('#' + this.attr + '_wrapper table thead th') as any;
     if (columns.length > 0) {
-      let actionsWidth = ((fixedWidthColumns * 50) / ($('#' + this.attr) as any).outerWidth(true)) * 100;
+      let actionsWidth = ((fixedWidthColumns * 50) / tableEl.outerWidth(true)) * 100;
       let width = String((100 - actionsWidth) / ((columns.length - fixedWidthColumns) || 1)) + '%';
       var self = this;
 
@@ -1603,7 +1653,7 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
           }
         }
         console.log('[OTable.update]: filter', filter);
-
+        var loader = this.load();
         this.dataService[this.queryMethod](filter, this.dataColumns, this.entity)
           .subscribe(
           res => {
@@ -1637,11 +1687,12 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
             } else {
               console.log('[OTable.update]: error code ' + res.code + ' when querying data');
             }
-
+            loader.unsubscribe();
             this.initialized = true;
           },
           err => {
             console.log('[OTable.update]: error', err);
+            loader.unsubscribe();
             this.initialized = true;
           }
           );
@@ -1861,26 +1912,15 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
 
     // columns visibility option
     if (this.columnsVisibilityButton) {
-      let columnsParam = undefined;
-      if (this.selectAllCheckbox) {
-        columnsParam = ':gt(0)';
-      }
-      if (this.editButtonInRow) {
-        columnsParam += ':not(:nth-child(' + (this.editColumnIndex + 1) + '))';
-      }
-      if (this.detailButtonInRow) {
-        columnsParam += ':not(:nth-child(' + (this.detailColumnIndex + 1) + '))';
-      }
-
       let colVisOptions = {
         extend: 'colvis',
         text: this.translateService.get('TABLE.BUTTONS.COLVIS'),
         className: 'generic-action generic-action-view-column',
-        collectionLayout: 'fixed'
+        collectionLayout: 'fixed',
+        columns: []
       };
-
-      if (typeof columnsParam !== 'undefined') {
-        colVisOptions['columns'] = columnsParam;
+      for (var i = 0; i < this.dataVisibleColumns.length; i++) {
+        colVisOptions.columns.push(this.dataVisibleColumns[i] + ':name');
       }
       options.push(colVisOptions);
     }
@@ -1927,7 +1967,7 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
 
   protected getTableButtons() {
     let buttons = [];
-    let buttonTextClass = this.showHeaderButtonsText ? '': ' hidden-action-text';
+    let buttonTextClass = this.showHeaderButtonsText ? '' : ' hidden-action-text';
     // add
     if (this.insertButton) {
       buttons.push({
@@ -2025,7 +2065,7 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
     );
 
     let dataValues = this.form.getDataValues();
-    if (dataValues) {
+    if (dataValues && Object.keys(dataValues).length > 0) {
       self.parentItem = dataValues;
       self.update(dataValues);
     } else {
@@ -2149,7 +2189,7 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
     OTableButtonComponent,
     OTableOptionComponent
   ],
-  imports: [CommonModule, MdMenuModule, OTranslateModule, MdIconModule],
+  imports: [CommonModule, MdMenuModule, OTranslateModule, MdIconModule, MdProgressCircleModule],
   exports: [OTableComponent,
     OTableColumnComponent,
     OTableCellRendererActionComponent,
