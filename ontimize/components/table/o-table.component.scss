@@ -1,4 +1,4 @@
-o-table {
+.o-table {
 
   width: 100%;
   height: 100%;
@@ -12,6 +12,23 @@ o-table {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
     position: relative;
+
+    .spinner-container {
+      &.hidden-loading {
+        display:none;
+      }
+      position: absolute;
+      top: 0px;
+      left: 0px;
+      right: 0px;
+      bottom: 0px;
+      z-index: 1000;
+      background: rgba(255,255,255, 1);
+
+      path {
+        stroke-width: 5px;
+      }
+    }
 
     &.disabled {
 
@@ -73,21 +90,28 @@ o-table {
         cursor: pointer;
         font-size: 14px;
         display: inline-block;
-        margin: 4px 4px 4px 0;
+        margin: 0;
+
+      }
+      a:not(.hidden-action-text) {
         padding-right: 8px;
       }
-
-      a:hover {
-        background: rgba(0,0,0,0.16);
-
+      a:not(.hidden-action-text):not(.disabled):hover {
         border-radius: 4px;
+        background-color: rgba(0, 0, 0, 0.12);
+      }
+
+      a.hidden-action-text:not(.disabled):hover {
+        background-color: rgba(0, 0, 0, 0.12);
+        border-radius: 50%;
+        //padding: 0;
       }
 
       .dt-button {
 
         &.active {
 
-           color: rgba(0, 0, 0, 0.54);
+          color: rgba(0, 0, 0, 0.54);
 
           &::after {
             background: #eee;
@@ -110,9 +134,8 @@ o-table {
             font-family: 'Material Icons';
             content: attr(data-icon);
             font-size: 24px;
-            margin: 0px 5px;
             line-height: 40px;
-            padding: 5px;
+            padding: 8px;
           }
         }
 
@@ -181,27 +204,24 @@ o-table {
             font-family: 'Material Icons';
             content: "refresh";
             font-size: 24px;
-            margin: 0px 5px;
             line-height: 40px;
-            padding: 5px;
+            padding: 8px;
           }
 
           &.generic-action-delete::before {
             font-family: 'Material Icons';
             content: "delete";
             font-size: 24px;
-            margin: 0px 5px;
             line-height: 40px;
-            padding: 5px;
+            padding: 8px;
           }
 
           &.generic-action-add::before {
             font-family: 'Material Icons';
             content: "add_circle";
             font-size: 24px;
-            margin: 0px 5px;
             line-height: 40px;
-            padding: 5px;
+            padding: 8px;
           }
 
         }
@@ -272,10 +292,9 @@ o-table {
     .dataTables_filter {
       margin: 0px ;
       padding: 0px 75px 0 50px;
-      // color: rgba(0, 0, 0, 0.9);
       color: rgba(0, 0, 0, 0.54);
       height: 40px;
-
+      min-width: 250px;
       width: 25%;
       float: right;
       box-sizing: border-box;
@@ -326,7 +345,7 @@ o-table {
     }
 
     .dataTables_top_wrapper {
-      margin: 0px 0.5%;
+      margin: 4px 0.5%;
     }
 
     .dataTables_top_wrapper {
@@ -439,14 +458,20 @@ o-table {
 
             &:last-child:not(.o-table-column-action) {
               padding: 0 42px 0 24px !important;
+              border-left: 1px rgba(0, 0, 0, 0.12) solid;
             }
 
             &:first-child:not(.o-table-column-select-checkbox) {
               padding: 0 42px 0 54px !important;
+              border-right: 1px rgba(0, 0, 0, 0.12) solid;
             }
 
             &:first-child.o-table-column-select-checkbox {
               padding:0 12px 0 12px !important
+            }
+
+            &:nth-child(2) {
+              padding: 0 42px 0 24px !important;
             }
 
             &:nth-child(n+3):nth-last-child(n+2):not(.o-table-column-action) {
@@ -549,7 +574,7 @@ o-table {
           }
 
           &.selected {
-            background-color: #eee;
+            background-color: #eee!important;
           }
 
           &.even {
@@ -702,10 +727,16 @@ o-table {
 
           &:last-child:not(.o-table-column-action) {
             padding: 0 42px 0 24px !important;
+            border-left: 1px rgba(0, 0, 0, 0.12) solid;
           }
 
           &:first-child:not(.o-table-column-action):not(.o-table-column-select-checkbox) {
             padding: 0 42px 0 54px !important;
+            border-right: 1px rgba(0, 0, 0, 0.12) solid;
+          }
+
+          &:nth-child(2):not(.o-table-column-action) {
+            padding: 0 42px 0 24px !important;
           }
 
           &:nth-child(n+3):nth-last-child(n+2):not(.o-table-column-action) {
@@ -906,7 +937,7 @@ o-table {
 
   .o-table-menu-button {
     position:absolute;
-    top: 0px;
+    top: 4px;
     right: 4px;
     color: rgba(0, 0, 0, 0.54);
 
@@ -1067,20 +1098,20 @@ div.dt-button-background {
 o-table .o-table-container table thead tr th.o-table-column-select-checkbox {
   &::before,
   &::after {
-    content: initial;
+    content: initial!important;
   }
 
 }
-
-
 
 o-table .o-table-container table thead tr th,
 o-table .o-table-container table tbody td {
 
   &.o-table-column-select-checkbox {
 
+    &.focus {
+      outline: none;
+    }
     text-align: center;
-    outline: none;
 
     input[type="checkbox"].select-row {
       height: 89%;
