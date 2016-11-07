@@ -1,5 +1,10 @@
 <div class="o-table-container" *ngIf="visible" [class.disabled]="enabled === false" [class.detail]="detailMode !== 'none'"
-title="">
+  title="">
+
+  <div [class.hidden-loading]="!loading" class="spinner-container" flex="100" layout="row" layout-align="center center">
+    <md-spinner></md-spinner>
+  </div>
+
   <table [id]="attr" [class]="rowHeight"></table>
 
   <button *ngIf="showOptionsButton" class="o-table-menu-button" md-icon-button [md-menu-trigger-for]="menu">
