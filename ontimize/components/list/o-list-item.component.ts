@@ -3,7 +3,7 @@ import {Component, Input,
   ModuleWithProviders,
   ViewEncapsulation} from '@angular/core';
 
-import { MdListModule } from '@angular2-material/list';
+import { MdListModule } from '@angular/material';
 
 import {MdListItemDirective} from '../../directives/MdListItemDirective';
 import {IListItem} from '../../interfaces';

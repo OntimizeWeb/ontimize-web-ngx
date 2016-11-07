@@ -12,9 +12,7 @@ import {
   ModuleWithProviders
 } from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {Overlay, OVERLAY_PROVIDERS} from '@angular2-material/core';
-import {OverlayState} from '@angular2-material/core';
-import {OverlayRef} from '@angular2-material/core';
+import {Overlay, OVERLAY_PROVIDERS, OverlayState, OverlayRef } from '@angular/material';
 import {Animate} from '../../core/util/animate';
 import {MdDialogPortal} from './dialog-portal';
 import {MdDialogActions} from './dialog-actions';

@@ -3,8 +3,7 @@ import {Component, Injector,
   ElementRef,
   ModuleWithProviders,
   ViewEncapsulation} from '@angular/core';
-import {MdToolbarModule} from '@angular2-material/toolbar';
-import {MdIconModule} from '@angular2-material/icon';
+import { MdToolbarModule, MdIconModule } from '@angular/material';
 import {AuthGuardService} from '../../services';
 import { OTranslateModule } from '../../pipes/o-translate.pipe';
 import { OTranslateService } from '../../services';

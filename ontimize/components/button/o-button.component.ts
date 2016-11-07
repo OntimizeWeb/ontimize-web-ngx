@@ -5,8 +5,7 @@ import {
   ModuleWithProviders,
   ViewEncapsulation} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import { MdIconModule } from '@angular2-material/icon';
-import { MdButtonModule } from '@angular2-material/button';
+import { MdIconModule, MdButtonModule } from '@angular/material';
 
 import {OTranslateModule} from '../../pipes/o-translate.pipe';
 

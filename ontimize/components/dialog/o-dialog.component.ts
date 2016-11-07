@@ -6,7 +6,7 @@ import {CommonModule} from '@angular/common';
 import { MdDialogModule, MdDialog } from '../material/ng2-material/index';
 import { DialogService } from '../../services';
 
-import { MdButtonModule } from '@angular2-material/button';
+import { MdButtonModule } from '@angular/material';
 
 import {OTranslateModule} from '../../pipes/o-translate.pipe';
 

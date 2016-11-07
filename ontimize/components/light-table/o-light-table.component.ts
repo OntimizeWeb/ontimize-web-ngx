@@ -9,9 +9,7 @@ import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/mergeAll';
 
-import {MdCheckboxModule} from '@angular2-material/checkbox';
-import {MdListModule} from '@angular2-material/list';
-import {MdToolbarModule} from '@angular2-material/toolbar';
+import  {MdCheckboxModule, MdListModule, MdToolbarModule } from '@angular/material';
 
 import {OLightTableButtonPanelModule} from './o-light-table-button-panel.component';
 import {OLightTableColumnModule, OLightTableColumnComponent} from './o-light-table-column.component';

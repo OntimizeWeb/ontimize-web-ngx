@@ -7,7 +7,7 @@ import {CommonModule } from '@angular/common';
 import {FormsModule, ReactiveFormsModule, FormControl, Validators } from '@angular/forms';
 import {ValidatorFn } from '@angular/forms/src/directives/validators';
 
-import {MdInputModule} from '@angular2-material/input';
+import { MdInputModule } from '@angular/material';
 
 import {
   IFormComponent, IFormControlComponent, IFormDataTypeComponent,

@@ -4,7 +4,7 @@ import {Component, Inject, Injector, forwardRef, ElementRef, ViewChild, OnInit,
   ModuleWithProviders,
   ViewEncapsulation} from '@angular/core';
 
-import {MdInput} from '@angular2-material/input';
+import {MdInput} from '@angular/material';
 
 import {ValidatorFn } from '@angular/forms/src/directives/validators';
 

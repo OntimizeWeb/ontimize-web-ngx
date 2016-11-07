@@ -8,8 +8,7 @@ import {FormsModule, ReactiveFormsModule, FormControl, Validators } from '@angul
 import {ValidatorFn } from '@angular/forms/src/directives/validators';
 import {DomSanitizer } from '@angular/platform-browser';
 
-import {MdIconModule} from '@angular2-material/icon';
-import {MdInputModule, MdInput} from '@angular2-material/input';
+import { MdIconModule, MdInputModule, MdInput } from '@angular/material';
 
 import {
   IFormComponent, IFormControlComponent, IFormDataTypeComponent,

@@ -8,8 +8,7 @@ import { FormGroup, FormControl, FormsModule, ReactiveFormsModule } from '@angul
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/distinctUntilChanged';
 
-import {MdInputModule} from '@angular2-material/input';
-
+import { MdInputModule } from '@angular/material';
 import {OTranslateService} from '../../services';
 
 export const DEFAULT_INPUTS_O_SEARCH_INPUT = [

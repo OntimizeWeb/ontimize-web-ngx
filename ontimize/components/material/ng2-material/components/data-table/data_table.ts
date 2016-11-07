@@ -3,7 +3,7 @@ import {Component, Input, Output, EventEmitter, ContentChild,
   NgModule,
   ModuleWithProviders} from '@angular/core';
 import 'rxjs/add/operator/share';
-import { MdCheckboxModule } from '@angular2-material/checkbox';
+import { MdCheckboxModule } from '@angular/material';
 
 import {MdDataTableHeaderSelectableRow,
   MdDataTableSelectableRow,

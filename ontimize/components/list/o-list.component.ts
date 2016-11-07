@@ -8,10 +8,7 @@ import {Router, ActivatedRoute} from '@angular/router';
 import {EventEmitter} from '@angular/core';
 import {ObservableWrapper} from '../../util/async';
 
-import { MdListModule } from '@angular2-material/list';
-import { MdIconModule } from '@angular2-material/icon';
-import { MdToolbarModule } from '@angular2-material/toolbar';
-import { MdButtonModule } from '@angular2-material/button';
+import { MdListModule, MdIconModule, MdToolbarModule, MdButtonModule } from '@angular/material';
 
 import {OntimizeService} from '../../services';
 import {dataServiceFactory} from '../../services/data-service.provider';

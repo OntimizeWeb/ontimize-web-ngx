@@ -1,8 +1,8 @@
-import {Injector} from '@angular/core';
-import {/*Http,*/ BaseRequestOptions, XHRBackend} from '@angular/http';
-import {MATERIAL_BROWSER_PROVIDERS} from '../components/material/ng2-material/index';
+import { Injector } from '@angular/core';
+import { BaseRequestOptions, XHRBackend } from '@angular/http';
+import { MATERIAL_BROWSER_PROVIDERS } from '../components/material/ng2-material/index';
 
-import {MdIconRegistry} from '@angular2-material/icon';
+import { MdIconRegistry } from '@angular/material';
 
 import {LoginService, NavigationService, OntimizeService, MomentService, NumberService, CurrencyService,
   OTranslateService, DialogService, AuthGuardService, authGuardServiceFactory, dataServiceFactory } from '../services';
@@ -14,7 +14,6 @@ import {OHttp} from '../util/http/OHttp';
 
 
 const APP_HTTP_PROVIDERS = [
-  // HTTP_PROVIDERS,
   XHRBackend,
   BaseRequestOptions,
   { provide: OHttp,
@@ -67,8 +66,6 @@ function getOntimizeServiceProvider() {
   return [
     APP_HTTP_PROVIDERS,
     { provide : OntimizeService,
-      // useFactory: (http) => new OntimizeService(http),
-      // deps: [Http]
       useFactory: dataServiceFactory,
       deps: [Injector]
     },

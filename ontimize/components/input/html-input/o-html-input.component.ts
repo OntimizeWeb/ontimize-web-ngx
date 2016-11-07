@@ -10,8 +10,7 @@ import {FormsModule, ReactiveFormsModule, FormControl, Validators } from '@angul
 import {ValidatorFn } from '@angular/forms/src/directives/validators';
 
 import {MdCKEditorModule, CKEditor} from '../../material/ckeditor/ckeditor.component';
-import { MdInputModule } from '@angular2-material/input';
-import { MdTabGroup } from '@angular2-material/tabs';
+import { MdInputModule, MdTabGroup } from '@angular/material';
 
 import {
   IFormComponent, IFormControlComponent, IFormDataTypeComponent,

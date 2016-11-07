@@ -25,7 +25,7 @@ import {
   FormsModule, ReactiveFormsModule
 } from '@angular/forms';
 import {CommonModule} from '@angular/common';
-import {MdError} from '@angular2-material/core';
+import {MdError} from '@angular/material';
 import {Observable} from 'rxjs/Observable';
 
 import {InputConverter} from '../../../decorators';

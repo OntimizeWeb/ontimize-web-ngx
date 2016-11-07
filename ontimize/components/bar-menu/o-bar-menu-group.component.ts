@@ -12,7 +12,7 @@ import {
 } from '@angular/core';
 import {CommonModule} from '@angular/common';
 
-import { MdIconModule } from '@angular2-material/icon';
+import { MdIconModule } from '@angular/material';
 
 import {OBarMenuModule, OBarMenuComponent} from './o-bar-menu.component';
 import { OTranslateModule } from '../../pipes/o-translate.pipe';

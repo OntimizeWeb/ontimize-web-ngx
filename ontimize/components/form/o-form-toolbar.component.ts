@@ -7,8 +7,7 @@ import {
 import {CommonModule} from '@angular/common';
 import {Router, ActivatedRoute } from '@angular/router';
 
-import {MdIconModule} from '@angular2-material/icon';
-import {MdToolbarModule} from '@angular2-material/toolbar';
+import { MdIconModule, MdToolbarModule} from '@angular/material';
 
 import { OFormComponent } from './o-form.component';
 import {InputConverter} from '../../decorators';

@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {RouterModule} from '@angular/router';
-import {MdIconModule} from '@angular2-material/icon';
+import { MdIconModule } from '@angular/material';
 
 import { OSideMenuModule, OSideMenuComponent } from './o-side-menu.component';
 import {OTranslateModule} from '../../pipes/o-translate.pipe';

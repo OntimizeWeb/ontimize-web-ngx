@@ -3,8 +3,7 @@ import {Component, OnInit, forwardRef, Inject,
   ModuleWithProviders,
   ViewEncapsulation} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import { MdListModule } from '@angular2-material/list';
-import { MdCheckboxModule } from '@angular2-material/checkbox';
+import { MdListModule, MdCheckboxModule } from '@angular/material';
 import { MdDividerModule } from '../material/ng2-material/index';
 
 import {MdSelectableListItemDirective} from '../../directives/MdSelectableListItemDirective';

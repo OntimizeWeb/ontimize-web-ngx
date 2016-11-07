@@ -15,8 +15,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/from';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/mergeAll';
-import { MdMenuModule, MdMenuTrigger } from '@angular2-material/menu';
-import { MdIconModule } from '@angular2-material/icon';
+import { MdMenuModule, MdMenuTrigger, MdIconModule } from '@angular/material';
 
 import { OTableColumnComponent } from './o-table-column.component';
 import {

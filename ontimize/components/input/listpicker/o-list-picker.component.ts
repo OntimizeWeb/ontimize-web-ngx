@@ -8,10 +8,8 @@ import {CommonModule} from '@angular/common';
 import {FormControl, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import {ValidatorFn } from '@angular/forms/src/directives/validators';
 
-import {MdInputModule, MdInput} from '@angular2-material/input';
-import {MdListModule} from '@angular2-material/list';
-import {MdToolbarModule} from '@angular2-material/toolbar';
-import {MdDialog, MdDividerModule } from '../../material/ng2-material/index';
+import { MdInputModule, MdInput, MdListModule, MdToolbarModule} from '@angular/material';
+import { MdDialog, MdDividerModule } from '../../material/ng2-material/index';
 
 import {
   IFormComponent, IFormControlComponent, IFormDataTypeComponent,

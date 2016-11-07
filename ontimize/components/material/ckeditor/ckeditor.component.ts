@@ -25,7 +25,7 @@ import {
   MdInputModule,
   MdPlaceholder,
   MdHint
-} from '@angular2-material/input';
+} from '@angular/material';
 import {Observable} from 'rxjs/Observable';
 
 import {InputConverter} from '../../../decorators';

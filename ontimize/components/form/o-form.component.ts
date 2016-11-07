@@ -8,8 +8,7 @@ import {Router, ActivatedRoute } from '@angular/router';
 import {FormGroup, ReactiveFormsModule, FormControl, FormsModule} from '@angular/forms';
 import {Observable} from 'rxjs/Observable';
 
-import { MdProgressBarModule } from '@angular2-material/progress-bar';
-import { MdTabGroup } from '@angular2-material/tabs';
+import { MdProgressBarModule, MdTabGroup } from '@angular/material';
 
 import {OntimizeService, DialogService, NavigationService,
   dataServiceFactory} from '../../services';

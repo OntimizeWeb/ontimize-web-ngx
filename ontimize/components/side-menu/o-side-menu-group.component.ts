@@ -6,8 +6,8 @@ import {
   ModuleWithProviders,
   ViewEncapsulation
 } from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {MdIconModule} from '@angular2-material/icon';
+import { CommonModule } from '@angular/common';
+import { MdIconModule } from '@angular/material';
 
 import { OSideMenuModule, OSideMenuComponent} from './o-side-menu.component';
 import {OTranslateModule} from '../../pipes/o-translate.pipe';

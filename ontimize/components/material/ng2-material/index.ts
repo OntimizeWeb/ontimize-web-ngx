@@ -21,7 +21,7 @@ import {
 import {MdSubheader} from './components/subheader/subheader';
 import {Media} from './core/util/media';
 import {ViewportHelper, BrowserViewportHelper, NodeViewportHelper} from './core/util/viewport';
-import {OverlayContainer} from '@angular2-material/core';
+import {OverlayContainer} from '@angular/material';
 import {MdBackdrop} from './components/backdrop/backdrop';
 
 /** Token used to inject the DOM element that serves as the overlay container. */

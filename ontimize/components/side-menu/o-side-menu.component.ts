@@ -5,10 +5,10 @@ import {
   NgModule,
   ModuleWithProviders,
   ViewEncapsulation} from '@angular/core';
-import {MdSidenavModule, MdSidenav} from '@angular2-material/sidenav';
-import {MdListModule} from '@angular2-material/list';
-import {MdToolbarModule} from '@angular2-material/toolbar';
-import {MdIconModule} from '@angular2-material/icon';
+import {
+  MdSidenavModule, MdSidenav, MdListModule,
+  MdToolbarModule, MdIconModule
+} from '@angular/material';
 import {AuthGuardService} from '../../services';
 import {OTranslateModule} from '../../pipes/o-translate.pipe';
 

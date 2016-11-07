@@ -6,7 +6,7 @@ import {CommonModule} from '@angular/common';
 import {Router, ActivatedRoute} from '@angular/router';
 // import {ObservableWrapper} from '../../util/async';
 
-import { MdListModule } from '@angular2-material/list';
+import { MdListModule } from '@angular/material';
 
 import {OntimizeService} from '../../services';
 import {OSearchInputModule, OSearchInputComponent} from '../search-input/o-search-input.component';

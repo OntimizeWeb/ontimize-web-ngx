@@ -5,9 +5,7 @@ import {Component, Inject, forwardRef,
 import {CommonModule} from '@angular/common';
 import {OLightTableComponent} from './o-light-table.component';
 
-import {MdIconModule} from '@angular2-material/icon';
-import {MdToolbarModule} from '@angular2-material/toolbar';
-import { MdButtonModule } from '@angular2-material/button';
+import { MdIconModule, MdToolbarModule, MdButtonModule } from '@angular/material';
 
 @Component({
   selector: 'o-light-table-button-panel',

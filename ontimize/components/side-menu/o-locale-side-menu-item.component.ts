@@ -10,8 +10,8 @@ import {
   ViewEncapsulation} from '@angular/core';
 import {CommonModule} from '@angular/common';
 
-import {RouterModule} from '@angular/router';
-import {MdIconModule} from '@angular2-material/icon';
+import { RouterModule } from '@angular/router';
+import { MdIconModule } from '@angular/material';
 
 import {OTranslateService} from '../../services';
 
