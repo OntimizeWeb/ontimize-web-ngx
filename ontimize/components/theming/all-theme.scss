@@ -1,0 +1,17 @@
+// Import all the theming functionality.
+@import 'node_modules/@angular/material/core/theming/all-theme.scss';
+@import '../form/o-form-toolbar-theme.scss';
+@import '../input/date-input/o-date-input-theme.scss';
+@import '../material/textarea/textarea-theme.scss';
+@import '../material/combo/combo-theme.scss';
+@import '../material/ckeditor/ckeditor-theme.scss';
+
+// Create a theme.
+@mixin o-material-theme($theme) {
+  @include o-form-toolbar-theme($theme);
+  @include o-date-input-theme($theme);
+  @include textarea-theme($theme);
+  @include combo-theme($theme);
+  @include ckeditor-theme($theme);
+}
+

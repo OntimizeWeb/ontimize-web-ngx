@@ -1,0 +1,36 @@
+@import 'node_modules/@angular/material/core/theming/theming';
+
+
+@mixin o-form-toolbar-theme($theme) {
+  $primary: map-get($theme, primary);
+  $accent: map-get($theme, accent);
+  $warn: map-get($theme, warn);
+  $background: map-get($theme, background);
+  $foreground: map-get($theme, foreground);
+
+  .toolbar-form-header{
+    .md-toolbar-tools {
+      button {
+        color: md-color($primary);
+      }
+
+      md-icon {
+        color: md-color($primary);
+      }
+
+    }
+  }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+

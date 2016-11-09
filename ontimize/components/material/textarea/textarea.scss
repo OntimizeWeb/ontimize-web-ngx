@@ -4,18 +4,6 @@
 
 $md-textarea-floating-placeholder-scale-factor: 0.75 !default;
 
-// Placeholder colors. Required is used for the `*` star shown in the placeholder.
-$md-textarea-placeholder-color: md-color($md-foreground, hint-text);
-$md-textarea-floating-placeholder-color: md-color($md-primary);
-$md-textarea-required-placeholder-color: md-color($md-accent);
-
-// Underline colors.
-$md-textarea-underline-color: md-color($md-foreground, hint-text);
-$md-textarea-underline-color-accent: md-color($md-accent);
-$md-textarea-underline-color-warn: md-color($md-warn);
-$md-textarea-underline-disabled-color: md-color($md-foreground, hint-text);
-$md-textarea-underline-focused-color: md-color($md-primary);
-
 // Gradient for showing the dashed line when the textarea is disabled.
 $md-textarea-underline-disabled-background-image: linear-gradient(to right,
         rgba(0, 0, 0, 0.26) 0%, rgba(0, 0, 0, 0.26) 33%, transparent 0%);
@@ -36,10 +24,6 @@ $md-textarea-underline-disabled-background-image: linear-gradient(to right,
   padding-bottom: 5px;
   transform: translateY(-100%) scale($md-textarea-floating-placeholder-scale-factor);
   width: 100% / $md-textarea-floating-placeholder-scale-factor;
-
-  .md-placeholder-required {
-    color: $md-textarea-required-placeholder-color;
-  }
 }
 
 md-textarea {
@@ -49,18 +33,9 @@ md-textarea {
 
   // To avoid problems with text-align.
   text-align: left;
-
-  // The hint is shown below the underline. There can be more than one; one at the start
-  // and one at the end.
-  /*.md-hint {
-    position: absolute;
-    font-size: 75%;
-    bottom: -0.5em;
-
-    &.md-right {
-      right: 0;
-    }
-  }*/
+  [dir='rtl'] & {
+    text-align: right;
+  }
 }
 
 // Global wrapper. We need to apply margin to the element for spacing, but
@@ -130,7 +105,6 @@ md-textarea {
 
   font-size: 100%;
   pointer-events: none;  // We shouldn't catch mouse events (let them through).
-  color: $md-textarea-placeholder-color;
   z-index: 1;
 
   // Put ellipsis text overflow.
@@ -157,19 +131,6 @@ md-textarea {
     @include md-textarea-placeholder-floating;
   }
 
-  // :focus is applied to the textarea, but we apply md-focused to the other elements
-  // that need to listen to it.
-  &.md-focused {
-    color: $md-textarea-floating-placeholder-color;
-
-    &.md-accent {
-      color: $md-textarea-underline-color-accent;
-    }
-    &.md-warn {
-      color: $md-textarea-underline-color-warn;
-    }
-  }
-
   [dir='rtl'] & {
     transform-origin: bottom right;
   }
@@ -191,7 +152,8 @@ textarea:-webkit-autofill + .md-textarea-placeholder {
   height: 1px;
   width: 100%;
   margin-top: 4px;
-  border-top: 1px solid $md-textarea-underline-color;
+  border-top-width: 1px;
+  border-top-style: solid;
 
   &.md-disabled {
     border-top: 0;
@@ -205,7 +167,6 @@ textarea:-webkit-autofill + .md-textarea-placeholder {
     position: absolute;
     height: 2px;
     z-index: 1;
-    background-color: $md-textarea-underline-focused-color;
     top: -1px;
     width: 100%;
     transform-origin: top;
@@ -213,13 +174,6 @@ textarea:-webkit-autofill + .md-textarea-placeholder {
     transform: scaleY(0);
     transition: transform $swift-ease-out-duration $swift-ease-out-timing-function,
                 opacity $swift-ease-out-duration $swift-ease-out-timing-function;
-
-    &.md-accent {
-      background-color: $md-textarea-underline-color-accent;
-    }
-    &.md-warn {
-      background-color: $md-textarea-underline-color-warn;
-    }
 
     &.md-focused {
       opacity: 1;
@@ -234,20 +188,6 @@ textarea:-webkit-autofill + .md-textarea-placeholder {
   .md-textarea-wrapper {
     .md-hint {
       bottom: -0.5em;
-    }
-  }
-  &.ng-invalid.ng-touched {
-    .md-textarea-underline {
-      border-top-color: $md-textarea-underline-color-warn;
-      .md-textarea-ripple {
-        background-color: $md-textarea-underline-color-warn;
-      }
-    }
-    .md-textarea-placeholder.md-focused {
-      color: $md-textarea-underline-color-warn;
-    }
-    .md-hint {
-      color: $md-textarea-underline-color-warn;
     }
   }
 }

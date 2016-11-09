@@ -2,22 +2,10 @@
 @import 'ontimize/components/material/style/mixins.scss';
 @import 'ontimize/components/material/style/variables.scss';
 
-$md-input-floating-placeholder-scale-factor: 0.75 !default;
-
-// Placeholder colors. Required is used for the `*` star shown in the placeholder.
-$md-input-placeholder-color: md-color($md-foreground, hint-text);
-$md-input-floating-placeholder-color: md-color($md-primary);
-$md-input-required-placeholder-color: md-color($md-accent);
-
-// Underline colors.
-$md-input-underline-color: md-color($md-foreground, hint-text);
-$md-input-underline-color-accent: md-color($md-accent);
-$md-input-underline-color-warn: md-color($md-warn);
-$md-input-underline-disabled-color: md-color($md-foreground, hint-text);
-$md-input-underline-focused-color: md-color($md-primary);
+$md-ckeditor-floating-placeholder-scale-factor: 0.75 !default;
 
 // Gradient for showing the dashed line when the input is disabled.
-$md-input-underline-disabled-background-image: linear-gradient(to right,
+$md-ckeditor-underline-disabled-background-image: linear-gradient(to right,
         rgba(0, 0, 0, 0.26) 0%, rgba(0, 0, 0, 0.26) 33%, transparent 0%);
 
 /**
@@ -31,15 +19,11 @@ $md-input-underline-disabled-background-image: linear-gradient(to right,
 /**
  * Applies a floating placeholder above the input itself.
  */
-@mixin md-input-placeholder-floating {
+@mixin md-ckeditor-placeholder-floating {
   display: block;
   padding-bottom: 5px;
-  transform: translateY(-100%) scale($md-input-floating-placeholder-scale-factor);
-  width: 100% / $md-input-floating-placeholder-scale-factor;
-
-  .md-placeholder-required {
-    color: $md-input-required-placeholder-color;
-  }
+  transform: translateY(-100%) scale($md-ckeditor-floating-placeholder-scale-factor);
+  width: 100% / $md-ckeditor-floating-placeholder-scale-factor;
 }
 
 .ckeditor{
@@ -53,12 +37,14 @@ ckeditor {
 
   // To avoid problems with text-align.
   text-align: left;
-
+  [dir='rtl'] & {
+    text-align: right;
+  }
 }
 
 // Global wrapper. We need to apply margin to the element for spacing, but
 // cannot apply it to the host element directly.
-.md-input-wrapper {
+.md-ckeditor-wrapper {
   margin: 16px 0;
 }
 
@@ -67,7 +53,7 @@ ckeditor {
 // this table.
 // Flex does not respect the baseline. What we really want is akin to a table
 // as want an inline-block where elements don't wrap.
-.md-input-table {
+.md-ckeditor-table {
   display: inline-table;
   flex-flow: column;
   vertical-align: bottom;
@@ -78,14 +64,14 @@ ckeditor {
   }
 }
 
-.md-input-infix {
+.md-ckeditor-infix {
   position: relative;
 }
 
 // The placeholder label. This is invisible unless it is. The logic to show it is
 // basically `empty || (float && (!empty || focused))`. Float is dependent on the
 // `floatingPlaceholder` input.
-.md-input-placeholder {
+.md-ckeditor-placeholder {
   // The placeholder is after the <input>, but needs to be aligned top-left of the
   // infix <div>.
   position: absolute;
@@ -94,7 +80,6 @@ ckeditor {
 
   font-size: 100%;
   pointer-events: none;  // We shouldn't catch mouse events (let them through).
-  color: $md-input-placeholder-color;
   z-index: 1;
 
   // Put ellipsis text overflow.
@@ -119,21 +104,8 @@ ckeditor {
 
   // Show the placeholder above the input when it's not empty, or focused.
   &.md-float:not(.md-empty), &.md-float.md-focused {
-    @include md-input-placeholder-floating;
+    @include md-ckeditor-placeholder-floating;
     top: 0px;
-  }
-
-  // :focus is applied to the input, but we apply md-focused to the other elements
-  // that need to listen to it.
-  &.md-focused {
-    color: $md-input-floating-placeholder-color;
-
-    &.md-accent {
-      color: $md-input-underline-color-accent;
-    }
-    &.md-warn {
-      color: $md-input-underline-color-warn;
-    }
   }
 
   [dir='rtl'] & {
@@ -145,34 +117,34 @@ ckeditor {
 // Pseudo-class for Chrome and Safari auto-fill to move the placeholder to
 // the floating position. This is necessary because these browsers do not actually
 // fire any events when a form auto-fill is occurring.
-// Once the autofill is committed, a change event happen and the regular md-input
+// Once the autofill is committed, a change event happen and the regular md-ckeditor
 // classes take over to fulfill this behaviour.
-input:-webkit-autofill + .md-input-placeholder {
-  @include md-input-placeholder-floating;
+input:-webkit-autofill + .md-ckeditor-placeholder {
+  @include md-ckeditor-placeholder-floating;
 }
 
 // The underline is what's shown under the input, its prefix and its suffix.
 // The ripple is the blue animation coming on top of it.
-.md-input-underline {
+.md-ckeditor-underline {
   position: absolute;
   height: 1px;
   width: 100%;
   margin-top: 4px;
-  border-top: 1px solid $md-input-underline-color;
+  border-top-width: 1px;
+  border-top-style: solid;
 
   &.md-disabled {
     border-top: 0;
-    background-image: $md-input-underline-disabled-background-image;
+    background-image: $md-ckeditor-underline-disabled-background-image;
     background-position: 0;
     background-size: 4px 1px;
     background-repeat: repeat-x;
   }
 
-  .md-input-ripple {
+  .md-ckeditor-ripple {
     position: absolute;
     height: 2px;
     z-index: 1;
-    background-color: $md-input-underline-focused-color;
     top: -1px;
     width: 100%;
     transform-origin: top;
@@ -181,13 +153,6 @@ input:-webkit-autofill + .md-input-placeholder {
     transition: transform $swift-ease-out-duration $swift-ease-out-timing-function,
                 opacity $swift-ease-out-duration $swift-ease-out-timing-function;
 
-    &.md-accent {
-      background-color: $md-input-underline-color-accent;
-    }
-    &.md-warn {
-      background-color: $md-input-underline-color-warn;
-    }
-
     &.md-focused {
       opacity: 1;
       transform: scaleY(1);
@@ -195,28 +160,13 @@ input:-webkit-autofill + .md-input-placeholder {
   }
 }
 
-.ckeditor {
+.md-ckeditor {
   height: auto;
-  .md-input-wrapper {
+  .md-ckeditor-wrapper {
     .md-hint {
       bottom: -0.5em;
     }
   }
-  &.ng-invalid.ng-touched {
-    .md-input-underline {
-      border-top-color: $md-input-underline-color-warn;
-      .md-input-ripple {
-        background-color: $md-input-underline-color-warn;
-      }
-    }
-    .md-input-placeholder.md-focused {
-      color: $md-input-underline-color-warn;
-    }
-    .md-hint {
-      color: $md-input-underline-color-warn;
-    }
-  }
-
   .cke{
     border-bottom: none !important;
   }

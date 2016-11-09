@@ -10,8 +10,8 @@ export = function buildAssetsOut(gulp:any, plugins:any) : any {
     function getSources() {
       return gulp.src([
           join(APP_SRC, '**'),
-          '!' + join(APP_SRC, '**', '*.ts'),
-          '!' + join(APP_SRC, '**', '*.scss')
+          '!' + join(APP_SRC, '**', '*.ts')
+          // '!' + join(APP_SRC, '**', '*.scss')
         ])
         .pipe(gulp.dest(`${OUT_DIR}/${APP_SRC}`));
     }
@@ -19,6 +19,7 @@ export = function buildAssetsOut(gulp:any, plugins:any) : any {
     function getMainFile() {
       return gulp.src([
         './ontimize.css',
+        './ontimize.scss',
         './CHANGELOG.md',
         './LICENSE',
         './README.md'

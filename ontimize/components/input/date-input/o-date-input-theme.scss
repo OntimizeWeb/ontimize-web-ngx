@@ -1,0 +1,51 @@
+@import 'node_modules/@angular/material/core/theming/theming';
+
+
+@mixin o-date-input-theme($theme) {
+  $primary: map-get($theme, primary);
+  $accent: map-get($theme, accent);
+  $warn: map-get($theme, warn);
+  $background: map-get($theme, background);
+  $foreground: map-get($theme, foreground);
+
+  $color-inactive: #999999;
+
+    div.ui-datepicker {
+      .ui-datepicker-custom-header {
+        background: md-color($primary);
+        color: #fafafa;
+      }
+
+      .ui-datepicker-calendar {
+        .ui-state-default {
+          background: none;
+          border: none;
+
+          &.ui-priority-secondary {
+            color: $color-inactive;
+            opacity: 0.75;
+          }
+        }
+        .ui-state-highlight {
+          color: md-color($primary);
+        }
+
+        .ui-state-active {
+          background-color: md-color($primary);
+          color: white;
+        }
+
+        thead th {
+          color: $color-inactive;
+        }
+
+        tr td a {
+          color : md-color($foreground, text);
+        }
+      }
+
+    }
+
+
+}
+

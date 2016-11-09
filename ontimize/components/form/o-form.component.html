@@ -9,7 +9,7 @@
     </div>
   </o-form-toolbar>
 
-  <form #innerForm [formGroup]="formGroup" [class.form-no-toolbar]="!showHeader">
+  <form #innerForm [formGroup]="formGroup" class="inner-form" [class.form-no-toolbar]="!showHeader">
     <div flex="100" *ngIf="loading">
       <md-progress-bar mode="indeterminate"></md-progress-bar>
     </div>

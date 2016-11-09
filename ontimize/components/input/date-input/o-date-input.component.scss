@@ -1,4 +1,4 @@
-md-input {
+.o-date-input {
   width: calc(100% - 32px);
 //   height: 18px;
 }
@@ -6,19 +6,6 @@ md-input {
 .input-model {
   display: none !important;
 }
-
-input {
-    // height: 18px;
-}
-
-span {
-    // margin-top: 6px;
-}
-
-
-$highlight-color: #009688;
-$color: rgba(0, 0, 0, 0.87);
-$color-inactive: #999999;
 
 div.ui-datepicker {
   box-shadow: 2px 5px 15px 1px rgba(0,0,0,.65);
@@ -36,8 +23,6 @@ div.ui-datepicker {
   }
 
   .ui-datepicker-custom-header {
-    background: $highlight-color;
-    color: #fafafa;
     padding-left: 24px;
 
     span {
@@ -59,9 +44,7 @@ div.ui-datepicker {
 
 
   .ui-datepicker-header {
-
     text-align: center;
-    // padding-bottom: 15px;
     padding: 16px 0;
     font-weight: 300;
 
@@ -94,7 +77,6 @@ div.ui-datepicker {
     .ui-datepicker-title {
       border: none;
       outline: none;
-      // margin: 5px;
       margin: 0;
     }
 
@@ -117,42 +99,23 @@ div.ui-datepicker {
 
   }
 
-
   .ui-datepicker-calendar {
     .ui-state-default {
-      background: none;
-      border: none;
       text-align: center;
       height: 32px;
       width: 32px;
       line-height: 32px;
-
-      &.ui-priority-secondary {
-        color: $color-inactive;
-        opacity: 0.75;
-      }
-    }
-
-
-    .ui-state-highlight {
-      color: $highlight-color;
     }
 
     .ui-state-active {
       border-radius: 50%;
-      background-color: $highlight-color;
-      color: white;
     }
 
     thead th {
-      color: $color-inactive;
       font-weight: 200;
       text-transform: uppercase;
     }
 
-    tr td a {
-      color : $color;
-    }
   }
 
   .ui-datepicker-buttonpane {

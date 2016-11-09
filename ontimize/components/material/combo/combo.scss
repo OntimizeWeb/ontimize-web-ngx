@@ -4,18 +4,6 @@
 
 $md-combo-floating-placeholder-scale-factor: 0.75 !default;
 
-// Placeholder colors. Required is used for the `*` star shown in the placeholder.
-$md-combo-placeholder-color: md-color($md-foreground, hint-text);
-$md-combo-floating-placeholder-color: md-color($md-primary);
-$md-combo-required-placeholder-color: md-color($md-accent);
-
-// Underline colors.
-$md-combo-underline-color: md-color($md-foreground, hint-text);
-$md-combo-underline-color-accent: md-color($md-accent);
-$md-combo-underline-color-warn: md-color($md-warn);
-$md-combo-underline-disabled-color: md-color($md-foreground, hint-text);
-$md-combo-underline-focused-color: md-color($md-primary);
-
 // Gradient for showing the dashed line when the combo is disabled.
 $md-combo-underline-disabled-background-image: linear-gradient(to right,
         rgba(0, 0, 0, 0.26) 0%, rgba(0, 0, 0, 0.26) 33%, transparent 0%);
@@ -36,10 +24,6 @@ $md-combo-underline-disabled-background-image: linear-gradient(to right,
   padding-bottom: 5px;
   transform: translateY(-100%) scale($md-combo-floating-placeholder-scale-factor);
   width: 100% / $md-combo-floating-placeholder-scale-factor;
-
-  .md-placeholder-required {
-    color: $md-combo-required-placeholder-color;
-  }
 }
 
 md-combo {
@@ -49,6 +33,9 @@ md-combo {
 
   // To avoid problems with text-align.
   text-align: left;
+  [dir='rtl'] & {
+    text-align: right;
+  }
 }
 
 // Global wrapper. We need to apply margin to the element for spacing, but
@@ -118,7 +105,6 @@ md-combo {
 
   font-size: 100%;
   pointer-events: none;  // We shouldn't catch mouse events (let them through).
-  color: $md-combo-placeholder-color;
   z-index: 1;
 
   // Put ellipsis text overflow.
@@ -145,23 +131,9 @@ md-combo {
     @include md-combo-placeholder-floating;
   }
 
-  // :focus is applied to the combo, but we apply md-focused to the other elements
-  // that need to listen to it.
-  &.md-focused {
-    color: $md-combo-floating-placeholder-color;
-
-    &.md-accent {
-      color: $md-combo-underline-color-accent;
-    }
-    &.md-warn {
-      color: $md-combo-underline-color-warn;
-    }
-  }
-
   [dir='rtl'] & {
     transform-origin: bottom right;
   }
-
 }
 
 // Pseudo-class for Chrome and Safari auto-fill to move the placeholder to
@@ -180,7 +152,8 @@ combo:-webkit-autofill + .md-combo-placeholder {
   height: 1px;
   width: 100%;
   margin-top: 4px;
-  border-top: 1px solid $md-combo-underline-color;
+  border-top-width: 1px;
+  border-top-style: solid;
 
   &.md-disabled {
     border-top: 0;
@@ -194,7 +167,6 @@ combo:-webkit-autofill + .md-combo-placeholder {
     position: absolute;
     height: 2px;
     z-index: 1;
-    background-color: $md-combo-underline-focused-color;
     top: -1px;
     width: 100%;
     transform-origin: top;
@@ -203,13 +175,6 @@ combo:-webkit-autofill + .md-combo-placeholder {
     transition: transform $swift-ease-out-duration $swift-ease-out-timing-function,
                 opacity $swift-ease-out-duration $swift-ease-out-timing-function;
 
-    &.md-accent {
-      background-color: $md-combo-underline-color-accent;
-    }
-    &.md-warn {
-      background-color: $md-combo-underline-color-warn;
-    }
-
     &.md-focused {
       opacity: 1;
       transform: scaleY(1);
@@ -217,7 +182,7 @@ combo:-webkit-autofill + .md-combo-placeholder {
   }
 }
 
-.icon-btn {
+.combo-arrow-btn {
   position: absolute;
   top: 0px;
   right: 4px;
@@ -243,19 +208,5 @@ combo:-webkit-autofill + .md-combo-placeholder {
 
 .md-combo {
   height: 60px;
-  &.ng-invalid.ng-touched {
-    .md-combo-underline {
-      border-top-color: $md-combo-underline-color-warn;
-      .md-combo-ripple {
-        background-color: $md-combo-underline-color-warn;
-      }
-    }
-    .md-combo-placeholder.md-focused {
-      color: $md-combo-underline-color-warn;
-    }
-    .md-hint {
-      color: $md-combo-underline-color-warn;
-    }
-  }
 }
 

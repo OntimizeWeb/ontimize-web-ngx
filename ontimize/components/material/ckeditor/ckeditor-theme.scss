@@ -1,0 +1,85 @@
+@import 'node_modules/@angular/material/core/theming/theming';
+
+
+@mixin ckeditor-theme($theme) {
+  $primary: map-get($theme, primary);
+  $accent: map-get($theme, accent);
+  $warn: map-get($theme, warn);
+  $background: map-get($theme, background);
+  $foreground: map-get($theme, foreground);
+
+
+  // Placeholder colors. Required is used for the `*` star shown in the placeholder.
+  $md-ckeditor-placeholder-color: md-color($foreground, hint-text);
+  $md-ckeditor-floating-placeholder-color: md-color($primary);
+  $md-ckeditor-required-placeholder-color: md-color($accent);
+
+  // Underline colors.
+  $md-ckeditor-underline-color: md-color($foreground, hint-text);
+  $md-ckeditor-underline-color-accent: md-color($accent);
+  $md-ckeditor-underline-color-warn: md-color($warn);
+  $md-ckeditor-underline-disabled-color: md-color($foreground, hint-text);
+  $md-ckeditor-underline-focused-color: md-color($primary);
+
+
+  .md-ckeditor-placeholder {
+    color: $md-ckeditor-placeholder-color;
+
+    // :focus is applied to the combo, but we apply md-focused to the other elements
+    // that need to listen to it.
+    &.md-focused {
+      color: $md-ckeditor-floating-placeholder-color;
+
+      &.md-accent {
+        color: $md-ckeditor-underline-color-accent;
+      }
+      &.md-warn {
+        color: $md-ckeditor-underline-color-warn;
+      }
+    }
+  }
+
+
+  // See md-ckeditor-placeholder-floating mixin in combo.scss
+  ckeditor:-webkit-autofill + .md-ckeditor-placeholder,
+  .md-ckeditor-placeholder.md-float:not(.md-empty), .md-ckeditor-placeholder.md-float.md-focused {
+
+    .md-placeholder-required {
+      color: $md-ckeditor-required-placeholder-color;
+    }
+  }
+
+  .md-ckeditor-underline {
+    border-color: $md-ckeditor-underline-color;
+
+    .md-ckeditor-ripple {
+      background-color: $md-ckeditor-underline-focused-color;
+
+      &.md-accent {
+        background-color: $md-ckeditor-underline-color-accent;
+      }
+      &.md-warn {
+        background-color: $md-ckeditor-underline-color-warn;
+      }
+    }
+  }
+
+  .md-ckeditor {
+    &.ng-invalid.ng-touched {
+      .md-ckeditor-underline {
+        border-top-color: $md-ckeditor-underline-color-warn;
+        .md-ckeditor-ripple {
+          background-color: $md-ckeditor-underline-color-warn;
+        }
+      }
+      .md-ckeditor-placeholder.md-focused {
+        color: $md-ckeditor-underline-color-warn;
+      }
+      .md-hint {
+        color: $md-ckeditor-underline-color-warn;
+      }
+    }
+  }
+
+}
+

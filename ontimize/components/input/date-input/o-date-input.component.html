@@ -3,7 +3,7 @@
         (ngModelChange)="innerOnChange($event)" class="input-model">
     </md-input>
 
-    <md-input #displayInputModel class="md-input" type="text" [attr.id]="opickerattr" [id]="opickerattr" layout-fill [placeholder]="placeHolder" [value]="getDescriptionValue()"
+    <md-input #displayInputModel class="md-input o-date-input" type="text" [attr.id]="opickerattr" [id]="opickerattr" layout-fill [placeholder]="placeHolder" [value]="getDescriptionValue()"
         [readonly]="isReadOnly" (blur)="onDisplayInputBlur()" (click)="onInputClick()">
         <md-hint *ngIf="!isReadOnly && _fControl.errors">{{'FORM_VALIDATION.REQUIRED' | oTranslate}}</md-hint>
     </md-input>
