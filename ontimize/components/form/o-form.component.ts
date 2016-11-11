@@ -492,13 +492,17 @@ export class OFormComponent implements OnInit, OnDestroy {
    * */
 
   _setComponentsEditable(state: boolean) {
-    let comps: any = this.getComponents();
-    if (comps) {
-      let keys = Object.keys(comps);
-      keys.forEach(element => {
-        comps[element].isReadOnly = !state;
-      });
-    }
+
+    var self = this;
+     window.setTimeout(() => {
+      let comps: any = self.getComponents();
+      if (comps) {
+        let keys = Object.keys(comps);
+        keys.forEach(element => {
+          comps[element].isReadOnly = !state;
+        });
+      }
+    },100);
   }
 
 
@@ -513,18 +517,22 @@ export class OFormComponent implements OnInit, OnDestroy {
         if (this._formToolbar) {
           this._formToolbar.setInitialMode();
         }
+        this._setComponentsEditable(false);
         break;
       case Mode.INSERT:
         this.mode = Mode.INSERT;
         if (this._formToolbar) {
           this._formToolbar.setInsertMode();
         }
+        this.clearData();
+        this._setComponentsEditable(true);
         break;
       case Mode.UPDATE:
         this.mode = Mode.UPDATE;
         if (this._formToolbar) {
           this._formToolbar.setEditMode();
         }
+        this._setComponentsEditable(true);
       default:
         break;
     }
@@ -564,22 +572,24 @@ export class OFormComponent implements OnInit, OnDestroy {
   }
 
   protected _updateFormData(newFormData: Object) {
-    this.formData = newFormData;
-    if (this._components) {
-      var self = this;
-      Object.keys(this._components).forEach(key => {
-        let comp = this._components[key];
-        if (Util.isFormDataComponent(comp)) {
-          try {
-            if (comp.isAutomaticBinding()) {
-              comp.data = self.getDataValue(key);
+    this.zone.run(() => {
+        this.formData = newFormData;
+        if (this._components) {
+          var self = this;
+          Object.keys(this._components).forEach(key => {
+            let comp = this._components[key];
+            if (Util.isFormDataComponent(comp)) {
+              try {
+                if (comp.isAutomaticBinding()) {
+                  comp.data = self.getDataValue(key);
+                }
+              } catch (error) {
+                console.error(error);
+              }
             }
-          } catch (error) {
-            console.error(error);
-          }
+          });
         }
       });
-    }
   }
 
   _emitData(data) {

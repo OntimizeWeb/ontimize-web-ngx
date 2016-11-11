@@ -5,7 +5,7 @@ import {Component, Inject, Injector, forwardRef, ElementRef, OnInit,
   ViewEncapsulation} from '@angular/core';
 
 import {ValidatorFn } from '@angular/forms/src/directives/validators';
-
+import { OSharedModule } from '../../../shared.module';
 import {OFormComponent} from '../../form/o-form.component';
 import {ORealInputModule, ORealInputComponent,
   DEFAULT_INPUTS_O_REAL_INPUT, DEFAULT_OUTPUTS_O_REAL_INPUT} from '../real-input/o-real-input.component';
@@ -75,7 +75,7 @@ export class OCurrencyInputComponent extends ORealInputComponent implements OnIn
 
 @NgModule({
   declarations: [OCurrencyInputComponent],
-  imports: [ORealInputModule],
+  imports: [OSharedModule, ORealInputModule],
   exports: [OCurrencyInputComponent, ORealInputModule],
 })
 export class OCurrencyInputModule {

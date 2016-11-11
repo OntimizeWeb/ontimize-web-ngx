@@ -2,11 +2,35 @@
 @import 'ontimize/components/material/style/mixins.scss';
 @import 'ontimize/components/material/style/variables.scss';
 
+textarea:disabled,
+input:not([type]):disabled,
+input[type="color"]:disabled,
+input[type="date"]:disabled,
+input[type="datetime"]:disabled,
+input[type="datetime-local"]:disabled,
+input[type="email"]:disabled,
+input[type="month"]:disabled,
+input[type="password"]:disabled,
+input[type="number"]:disabled,
+input[type="search"]:disabled,
+input[type="tel"]:disabled,
+input[type="text"]:disabled,
+input[type="time"]:disabled,
+input[type="url"]:disabled,
+input[type="week"]:disabled {
+    color: rgba(0,0,0,0.36);
+}
+
 span.icon-btn{
   cursor: pointer;
-  color: rgba(0, 0, 0, 0.38);
+  color: rgba(0, 0, 0, 0.47);
   i {
     padding-top: 4px;
+  }
+
+  &.md-disabled {
+    cursor: default;
+    color: rgba(0, 0, 0, 0.26);
   }
 }
 

@@ -10,13 +10,13 @@
         [class.ng-invalid]="_fControl && !_fControl.valid"
         [class.ng-valid]="_fControl && _fControl.valid"
         [placeholder]="placeHolder" [value]="getDescriptionValue()" (focus)="onFocus($event)" (blur)="onBlur($event)"
-        [readonly]="isReadOnly" >
+        [readonly]="isReadOnly" [disabled]="isDisabled">
         <md-hint *ngIf="!isReadOnly && _fControl.touched && _fControl.errors">
             <span *ngIf="_fControl.errors?.required">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</span>
         </md-hint>
     </md-input>
-    <span class="icon-btn"><i class="material-icons">search</i></span>
-    <span class="icon-btn" (click)="onClickClear($event)"><i class="material-icons">clear</i></span>
+    <span class="icon-btn" [class.md-disabled]="isDisabled"><i class="material-icons">search</i></span>
+    <span class="icon-btn" [class.md-disabled]="isDisabled" (click)="onClickClear($event)"><i class="material-icons">clear</i></span>
 </div>
 <md-dialog #dialog (onShow)="onDialogShow($event)" (onClose)="onDialogClose($event)" class="md-dialog-custom">
     <o-list-picker-dialog [data]="dataArray" [visible-columns]="visibleColumns" [filter]="filter" ></o-list-picker-dialog>

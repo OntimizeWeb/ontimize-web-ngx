@@ -3,7 +3,7 @@ import {Component, Inject, Injector, forwardRef, ElementRef, OnInit,
   NgModule,
   ModuleWithProviders,
   ViewEncapsulation} from '@angular/core';
-
+import { OSharedModule } from '../../../shared.module';
 import {OFormComponent} from '../../form/o-form.component';
 import {OTextInputModule, OTextInputComponent, DEFAULT_INPUTS_O_TEXT_INPUT,
   DEFAULT_OUTPUTS_O_TEXT_INPUT} from '../text-input/o-text-input.component';
@@ -45,7 +45,7 @@ export class OPasswordInputComponent extends OTextInputComponent implements OnIn
 
 @NgModule({
   declarations: [OPasswordInputComponent],
-  imports: [OTextInputModule],
+  imports: [OSharedModule, OTextInputModule],
   exports: [OPasswordInputComponent, OTextInputModule],
 })
 export class OPasswordInputModule {

@@ -55,6 +55,10 @@ import {
   OSideMenuSeparatorModule
 } from '../components';
 
+import {
+  OSharedModule
+} from '../shared.module';
+
 export const ONTIMIZE_MODULES: any = [
   // Standard modules
   BrowserModule,
@@ -112,5 +116,6 @@ export const ONTIMIZE_MODULES: any = [
   OSideMenuGroupModule.forRoot(),
   OSideMenuItemModule.forRoot(),
   OLocaleSideMenuItemModule.forRoot(),
-  OSideMenuSeparatorModule.forRoot()
+  OSideMenuSeparatorModule.forRoot(),
+  OSharedModule.forRoot()
 ];

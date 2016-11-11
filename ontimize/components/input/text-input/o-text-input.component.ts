@@ -11,7 +11,9 @@ import { MdInputModule } from '@angular/material';
 
 import {
   IFormComponent, IFormControlComponent, IFormDataTypeComponent,
-  IFormDataComponent} from '../../../interfaces';
+  IFormDataComponent
+} from '../../../interfaces';
+import { OSharedModule } from '../../../shared.module';
 import {InputConverter} from '../../../decorators';
 import {OFormComponent, Mode} from '../../form/o-form.component';
 import {OFormValue} from '../../form/OFormValue';
@@ -133,8 +135,8 @@ export class OTextInputComponent implements IFormComponent, IFormControlComponen
     if (!this._fControl) {
       let validators: ValidatorFn[] = this.resolveValidators();
       let cfg = {
-        value: this.value ? this.value.value : undefined
-        // disabled: this._disabled
+        value: this.value ? this.value.value : undefined,
+        disabled: this.isDisabled
       };
       this._fControl = new FormControl(cfg, validators);
     }
@@ -192,10 +194,7 @@ export class OTextInputComponent implements IFormComponent, IFormControlComponen
   }
 
   set placeHolder(value: string) {
-    var self = this;
-    window.setTimeout(() => {
-      self._placeholder = value;
-    }, 0);
+    this._placeholder = value;
   }
 
   get isReadOnly(): boolean {
@@ -204,12 +203,10 @@ export class OTextInputComponent implements IFormComponent, IFormControlComponen
 
   set isReadOnly(value: boolean) {
     if (this._disabled) {
+      this._isReadOnly = false;
       return;
     }
-    var self = this;
-    window.setTimeout(() => {
-      self._isReadOnly = value;
-    }, 0);
+    this._isReadOnly = value;
   }
 
   get isDisabled(): boolean {
@@ -217,20 +214,7 @@ export class OTextInputComponent implements IFormComponent, IFormControlComponen
   }
 
   set disabled(value: boolean) {
-    var self = this;
-    window.setTimeout(() => {
-      self._disabled = value;
-      //TODO Provisional mientras en la version angular2-material no incluyan el método
-      // 'setDisabledState()' en la implementación de ControlValueAccessor
-      let input = self.elRef.nativeElement.getElementsByClassName('md-input-element');
-      if (self._disabled) {
-        self.elRef.nativeElement.classList.add('md-disabled');
-        input[0].setAttribute('disabled', self._disabled);
-      } else {
-        self.elRef.nativeElement.classList.remove('md-disabled');
-        input[0].removeAttribute('disabled');
-      }
-     }, 0);
+    this._disabled = value;
   }
 
   get isRequired(): boolean {
@@ -238,10 +222,7 @@ export class OTextInputComponent implements IFormComponent, IFormControlComponen
   }
 
   set required(value: boolean) {
-    var self = this;
-    window.setTimeout(() => {
-      self.orequired = value;
-    }, 0);
+    this.orequired = value;
   }
 
   innerOnChange(event: any) {
@@ -263,7 +244,7 @@ export class OTextInputComponent implements IFormComponent, IFormControlComponen
 
 @NgModule({
   declarations: [OTextInputComponent],
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, MdInputModule, OTranslateModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, OSharedModule, MdInputModule, OTranslateModule],
   exports: [OTextInputComponent, CommonModule, FormsModule, ReactiveFormsModule, MdInputModule, OTranslateModule],
 })
 export class OTextInputModule {

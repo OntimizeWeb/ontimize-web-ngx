@@ -15,6 +15,7 @@ import {
   IFormComponent, IFormControlComponent, IFormDataTypeComponent,
   IFormDataComponent
 } from '../../interfaces';
+import { OSharedModule } from '../../shared.module';
 import {InputConverter} from '../../decorators';
 import {OFormComponent, Mode} from '../form/o-form.component';
 import {OFormValue} from '../form/OFormValue';
@@ -133,8 +134,11 @@ export class OCheckboxComponent implements IFormComponent, IFormControlComponent
   getControl(): FormControl {
     if (!this._fControl) {
       let validators: ValidatorFn[] = this.resolveValidators();
-
-      this._fControl = new FormControl(false, validators);
+      let cfg = {
+        value: this.value ? this.value.value : undefined,
+        disabled: this._disabled
+      };
+      this._fControl = new FormControl(cfg, validators);
     }
     return this._fControl;
   }
@@ -216,10 +220,10 @@ export class OCheckboxComponent implements IFormComponent, IFormControlComponent
   }
 
   set disabled(value: boolean) {
-    var self = this;
-     window.setTimeout(() => {
-      self._disabled = value;
-    }, 0);
+    // var self = this;
+    //  window.setTimeout(() => {
+      this._disabled = value;
+    // }, 0);
   }
 
   innerOnChange(event: any) {
@@ -246,7 +250,7 @@ export class OCheckboxComponent implements IFormComponent, IFormControlComponent
 
 @NgModule({
   declarations: [OCheckboxComponent],
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, MdInputModule, MdCheckboxModule, OTranslateModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, OSharedModule, MdInputModule, MdCheckboxModule, OTranslateModule],
   exports: [OCheckboxComponent],
 })
 export class OCheckboxModule {

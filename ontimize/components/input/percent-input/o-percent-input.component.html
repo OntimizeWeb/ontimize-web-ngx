@@ -1,7 +1,7 @@
 <div layout="row" layout-fill layout-align="space-between center" [formGroup]="form?.formGroup">
     <md-input class="md-input" type="number" [attr.id]="oattr" layout-fill [formControlName]="oattr"
         [placeholder]="placeHolder" [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)"
-        [readonly]="isReadOnly"
+        [readonly]="isReadOnly" [o-disabled]="innerInput" #innerInput
         [min]="min" [max]="max" [step]="step">
         <md-hint *ngIf="!isReadOnly && _fControl.touched && _fControl.errors">
             <span *ngIf="_fControl.errors?.required">{{'FORM_VALIDATION.REQUIRED' | oTranslate}}</span>
@@ -10,5 +10,5 @@
             <span *ngIf="_fControl.errors?.pattern">{{ 'FORM_VALIDATION.FORMAT' | oTranslate}}</span>
         </md-hint>
     </md-input>
-    <span class="icon-btn">%</span>
+    <span class="icon-btn" [class.md-disabled]="isDisabled">%</span>
 </div>

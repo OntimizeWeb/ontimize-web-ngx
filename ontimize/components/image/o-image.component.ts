@@ -152,7 +152,11 @@ export class OImageComponent implements IFormComponent, IFormControlComponent, I
   getControl(): FormControl {
     if (!this._fControl) {
       let validators: ValidatorFn[] = this.resolveValidators();
-      this._fControl = new FormControl('', validators);
+      let cfg = {
+        value: this.value ? this.value.value : undefined,
+        disabled: this._disabled
+      };
+      this._fControl = new FormControl(cfg, validators);
     }
     return this._fControl;
   }
@@ -219,10 +223,10 @@ export class OImageComponent implements IFormComponent, IFormControlComponent, I
   }
 
   set disabled(value: boolean) {
-    var self = this;
-    window.setTimeout(() => {
-      self._disabled = value;
-    }, 0);
+    // var self = this;
+    // window.setTimeout(() => {
+      this._disabled = value;
+    // }, 0);
   }
 
   get isRequired(): boolean {

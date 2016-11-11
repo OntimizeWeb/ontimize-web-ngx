@@ -6,7 +6,7 @@ import {Component, Inject, Injector, forwardRef, ElementRef, OnInit,
 
 import {FormControl } from '@angular/forms';
 import {ValidatorFn } from '@angular/forms/src/directives/validators';
-
+import { OSharedModule } from '../../../shared.module';
 import {OFormComponent} from '../../form/o-form.component';
 import {InputConverter} from '../../../decorators';
 import {OTextInputModule, OTextInputComponent, DEFAULT_INPUTS_O_TEXT_INPUT,
@@ -91,7 +91,7 @@ export class OIntegerInputComponent extends OTextInputComponent implements OnIni
 
 @NgModule({
   declarations: [OIntegerInputComponent],
-  imports: [OTextInputModule],
+  imports: [OSharedModule, OTextInputModule],
   exports: [OIntegerInputComponent, OTextInputModule],
 })
 export class OIntegerInputModule {

@@ -6,7 +6,7 @@ import {Component, Inject, Injector, forwardRef, ElementRef, OnInit,
 
 import {Validators } from '@angular/forms';
 import {ValidatorFn } from '@angular/forms/src/directives/validators';
-
+import { OSharedModule } from '../../../shared.module';
 import {OFormComponent} from '../../form/o-form.component';
 import {InputConverter} from '../../../decorators';
 import {OIntegerInputModule, OIntegerInputComponent,
@@ -65,7 +65,7 @@ export class ORealInputComponent extends OIntegerInputComponent implements OnIni
 
 @NgModule({
   declarations: [ORealInputComponent],
-  imports: [OIntegerInputModule],
+  imports: [OSharedModule, OIntegerInputModule],
   exports: [ORealInputComponent, OIntegerInputModule],
 })
 export class ORealInputModule {

@@ -285,7 +285,8 @@ export class OListPickerComponent implements IFormComponent, IFormControlCompone
     if (!this._fControl) {
       let validators: ValidatorFn[] = this.resolveValidators();
       let cfg = {
-        value: this.value ? this.value.value : undefined
+        value: this.value ? this.value.value : undefined,
+        disabled: this._disabled
       };
       this._fControl = new FormControl(cfg, validators);
     }
@@ -429,24 +430,24 @@ export class OListPickerComponent implements IFormComponent, IFormControlCompone
   }
 
   set disabled(value: boolean) {
-    var self = this;
-    window.setTimeout(() => {
-      self._disabled = value;
-      //TODO Provisional mientras en la version angular2-material no incluyan el método
-      // 'setDisabledState()' en la implementación de ControlValueAccessor
-      let input = self.elRef.nativeElement.getElementsByClassName('md-input-element');
-      if (self._disabled) {
-        self.elRef.nativeElement.classList.add('md-disabled');
-        if(input && input[1]) {
-          input[1].setAttribute('disabled', self._disabled);
-        }
-      } else {
-        self.elRef.nativeElement.classList.remove('md-disabled');
-        if(input && input[1]) {
-          input[1].removeAttribute('disabled');
-        }
-      }
-    }, 0);
+    // var self = this;
+    // window.setTimeout(() => {
+      this._disabled = value;
+      // //TODO Provisional mientras en la version angular2-material no incluyan el método
+      // // 'setDisabledState()' en la implementación de ControlValueAccessor
+      // let input = self.elRef.nativeElement.getElementsByClassName('md-input-element');
+      // if (self._disabled) {
+      //   self.elRef.nativeElement.classList.add('md-disabled');
+      //   if(input && input[1]) {
+      //     input[1].setAttribute('disabled', self._disabled);
+      //   }
+      // } else {
+      //   self.elRef.nativeElement.classList.remove('md-disabled');
+      //   if(input && input[1]) {
+      //     input[1].removeAttribute('disabled');
+      //   }
+      // }
+    // }, 0);
   }
 
   get isRequired(): boolean {

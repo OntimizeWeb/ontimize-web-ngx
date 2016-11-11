@@ -155,7 +155,8 @@ export class OHTMLInputComponent implements IFormComponent, IFormControlComponen
     if (!this._fControl) {
       let validators: ValidatorFn[] = this.resolveValidators();
       let cfg = {
-        value: this.value ? this.value.value : undefined
+        value: this.value ? this.value.value : undefined,
+        disabled: this._disabled
       };
       this._fControl = new FormControl(cfg, validators);
     }
@@ -244,10 +245,10 @@ export class OHTMLInputComponent implements IFormComponent, IFormControlComponen
   }
 
   set disabled(value: boolean) {
-    var self = this;
-    window.setTimeout(() => {
-      self._disabled = value;
-    }, 0);
+    // var self = this;
+    // window.setTimeout(() => {
+      this._disabled = value;
+    // }, 0);
   }
 
   innerOnChange(event: any) {

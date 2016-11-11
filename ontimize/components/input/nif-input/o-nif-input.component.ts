@@ -4,7 +4,7 @@ import {Component, Inject, Injector, forwardRef, ElementRef, OnInit,
   ModuleWithProviders,
   ViewEncapsulation} from '@angular/core';
 import {ValidatorFn } from '@angular/forms/src/directives/validators';
-
+import { OSharedModule } from '../../../shared.module';
 import {OFormComponent} from '../../form/o-form.component';
 import {OTextInputModule, OTextInputComponent, DEFAULT_INPUTS_O_TEXT_INPUT,
   DEFAULT_OUTPUTS_O_TEXT_INPUT} from '../text-input/o-text-input.component';
@@ -54,7 +54,7 @@ export class ONIFInputComponent extends OTextInputComponent implements OnInit {
 
 @NgModule({
   declarations: [ONIFInputComponent],
-  imports: [OTextInputModule],
+  imports: [OSharedModule, OTextInputModule],
   exports: [ONIFInputComponent, OTextInputModule],
 })
 export class ONIFInputModule {

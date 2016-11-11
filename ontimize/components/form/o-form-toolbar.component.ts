@@ -3,17 +3,18 @@ import {
   forwardRef, ElementRef, NgZone,
   NgModule,
   ModuleWithProviders,
-  ViewEncapsulation} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {Router, ActivatedRoute } from '@angular/router';
+  ViewEncapsulation
+} from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Router, ActivatedRoute } from '@angular/router';
 
-import { MdIconModule, MdToolbarModule} from '@angular/material';
+import { MdIconModule, MdToolbarModule } from '@angular/material';
 
 import { OFormComponent } from './o-form.component';
-import {InputConverter} from '../../decorators';
-import {Util} from '../../util/util';
-import {DialogService, NavigationService } from '../../services';
-import {OTranslateModule} from '../../pipes/o-translate.pipe';
+import { InputConverter } from '../../decorators';
+import { Util } from '../../util/util';
+import { DialogService, NavigationService } from '../../services';
+import { OTranslateModule } from '../../pipes/o-translate.pipe';
 
 export const DEFAULT_INPUTS_O_FORM_TOOLBAR = [
   'labelHeader: label-header',
@@ -88,39 +89,21 @@ export class OFormToolbarComponent implements OnInit {
   }
 
   public setInitialMode() {
-    var self = this;
-     this.zone.run(() => {
-      self.initialMode = true;
-      self.insertMode = false;
-      self.editMode = false;
-
-      self._form._setComponentsEditable(false);
-    });
+    this.initialMode = true;
+    this.insertMode = false;
+    this.editMode = false;
   }
 
   public setInsertMode() {
-    var self = this;
-    this._form.clearData();
-
-    this.zone.run(() => {
-      self.insertMode = true;
-      self.editMode = false;
-      self.initialMode = false;
-
-      self._form._setComponentsEditable(true);
-    });
-
+    this.insertMode = true;
+    this.editMode = false;
+    this.initialMode = false;
   }
 
   public setEditMode() {
-    var self = this;
-    this.zone.run(() => {
-      self.editMode = true;
-      self.insertMode = false;
-      self.initialMode = false;
-
-      self._form._setComponentsEditable(true);
-    });
+    this.editMode = true;
+    this.insertMode = false;
+    this.initialMode = false;
   }
 
   onCloseDetail() {
@@ -160,7 +143,7 @@ export class OFormToolbarComponent implements OnInit {
       this.onCloseDetail();
     } else if (!this.isDetail && this.insertMode) {
       this.onCloseDetail();
-    }else {
+    } else {
       this.onReload();
     }
     this.setInitialMode();

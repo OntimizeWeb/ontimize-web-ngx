@@ -2,7 +2,7 @@
     <span *ngIf="currencySymbol !== 'none' && currencySymbolPosition === 'left' " md-suffix>{{ currency_symbols[currencySymbol] }}</span>
     <md-input class="md-input" type="number" [attr.id]="oattr" layout-fill [formControlName]="oattr"
         [placeholder]="placeHolder" [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)"
-        [readonly]="isReadOnly"
+        [readonly]="isReadOnly" [o-disabled]="innerInput" #innerInput
         [min]="min" [max]="max" [step]="step">
         <md-hint *ngIf="!isReadOnly && _fControl.touched && _fControl.errors">
             <span *ngIf="_fControl.errors?.required">{{'FORM_VALIDATION.REQUIRED' | oTranslate}}</span>
@@ -11,5 +11,6 @@
             <span *ngIf="_fControl.errors?.pattern">{{ 'FORM_VALIDATION.FORMAT' | oTranslate}}</span>
         </md-hint>
     </md-input>
-    <span class="icon-btn" *ngIf="currencySymbol !== 'none' && currencySymbolPosition === 'right' " md-suffix>{{ currency_symbols[currencySymbol] }}</span>
+    <span class="icon-btn" *ngIf="currencySymbol !== 'none' && currencySymbolPosition === 'right' " md-suffix
+        [class.md-disabled]="isDisabled">{{ currency_symbols[currencySymbol] }}</span>
 </div>

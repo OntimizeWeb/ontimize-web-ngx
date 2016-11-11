@@ -3,7 +3,7 @@ import {Component, Inject, Injector, forwardRef, ElementRef, OnInit,
   NgModule,
   ModuleWithProviders,
   ViewEncapsulation} from '@angular/core';
-
+import { OSharedModule } from '../../../shared.module';
 import {OFormComponent} from '../../form/o-form.component';
 import {ORealInputModule, ORealInputComponent,
   DEFAULT_INPUTS_O_REAL_INPUT, DEFAULT_OUTPUTS_O_REAL_INPUT} from '../real-input/o-real-input.component';
@@ -55,7 +55,7 @@ export class OPercentInputComponent extends ORealInputComponent implements OnIni
 
 @NgModule({
   declarations: [OPercentInputComponent],
-  imports: [ORealInputModule],
+  imports: [OSharedModule, ORealInputModule],
   exports: [OPercentInputComponent, ORealInputModule],
 })
 export class OPercentInputModule {

@@ -1,5 +1,5 @@
 <div layout-fill [formGroup]="form?.formGroup" class="relative">
-    <md-checkbox [attr.id]="oattr" [id]="oattr" layout-fill [formControlName]="oattr"
+    <md-checkbox [attr.id]="oattr" [id]="oattr" layout-fill [formControlName]="oattr" [o-disabled]="innerInput" #innerInput
         [checked]="isChecked()" [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)">
         {{ placeHolder }}
         <md-hint *ngIf="!isReadOnly && _fControl.touched && _fControl.errors">

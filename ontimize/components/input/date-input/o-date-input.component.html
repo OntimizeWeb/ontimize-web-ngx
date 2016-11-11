@@ -4,8 +4,9 @@
     </md-input>
 
     <md-input #displayInputModel class="md-input o-date-input" type="text" [attr.id]="opickerattr" [id]="opickerattr" layout-fill [placeholder]="placeHolder" [value]="getDescriptionValue()"
-        [readonly]="isReadOnly" (blur)="onDisplayInputBlur()" (click)="onInputClick()">
+        [readonly]="isReadOnly" (blur)="onDisplayInputBlur()" (click)="onInputClick()" [disabled]="isDisabled">
         <md-hint *ngIf="!isReadOnly && _fControl.errors">{{'FORM_VALIDATION.REQUIRED' | oTranslate}}</md-hint>
     </md-input>
-    <span class="icon-btn" (click)="onClickIcon($event)" ><i class="material-icons">today</i></span>
+    <span class="icon-btn" (click)="onClickIcon($event)"
+        [class.md-disabled]="isDisabled"><i class="material-icons">today</i></span>
 </div>

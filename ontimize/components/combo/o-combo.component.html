@@ -17,7 +17,7 @@
         [class.ng-invalid]="_fControl && !_fControl.valid"
         [class.ng-valid]="_fControl && _fControl.valid"
         [placeholder]="placeHolder" [value]="getDescriptionValue()"
-        [readonly]="isReadOnly" >
+        [readonly]="isReadOnly" [disabled]="isDisabled">
         <md-hint *ngIf="!isReadOnly && _fControl.touched && _fControl.errors">
             <span *ngIf="_fControl.errors?.required">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</span>
         </md-hint>
