@@ -10,6 +10,21 @@
       max-height: 100%;
       max-width: 100%;
     }
+
+    .empty-icon {
+      font-size: 8em;
+      height: auto;
+      width: auto;
+      cursor: pointer;
+      color: rgba(0,0,0,0.47);
+      vertical-align: middle;
+
+      &.md-disabled {
+        cursor: default;
+        color: rgba(0, 0, 0, 0.26);
+      }
+    }
+
   }
 
   .input-image-container {

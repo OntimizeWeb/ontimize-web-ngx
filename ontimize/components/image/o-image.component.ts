@@ -1,12 +1,14 @@
-import {Component, Inject, Injector, forwardRef, ElementRef, OnInit,
+import {
+  Component, Inject, Injector, forwardRef, ElementRef, OnInit,
   EventEmitter, NgZone, ChangeDetectorRef, ViewChild,
   NgModule,
   ModuleWithProviders,
-  ViewEncapsulation} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {FormsModule, ReactiveFormsModule, FormControl, Validators } from '@angular/forms';
-import {ValidatorFn } from '@angular/forms/src/directives/validators';
-import {DomSanitizer } from '@angular/platform-browser';
+  ViewEncapsulation
+} from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule, FormControl, Validators } from '@angular/forms';
+import { ValidatorFn } from '@angular/forms/src/directives/validators';
+import { DomSanitizer } from '@angular/platform-browser';
 
 import { MdIconModule, MdInputModule, MdInput } from '@angular/material';
 
@@ -14,12 +16,12 @@ import {
   IFormComponent, IFormControlComponent, IFormDataTypeComponent,
   IFormDataComponent
 } from '../../interfaces';
-import {InputConverter} from '../../decorators';
-import {OFormComponent, Mode} from '../form/o-form.component';
-import {OFormValue} from '../form/OFormValue';
-import {OTranslateService} from '../../services';
-import {SQLTypes} from '../../utils';
-import {OTranslateModule} from '../../pipes/o-translate.pipe';
+import { InputConverter } from '../../decorators';
+import { OFormComponent, Mode } from '../form/o-form.component';
+import { OFormValue } from '../form/OFormValue';
+import { OTranslateService } from '../../services';
+import { SQLTypes } from '../../utils';
+import { OTranslateModule } from '../../pipes/o-translate.pipe';
 
 export const DEFAULT_INPUTS_O_IMAGE = [
   'oattr: attr',
@@ -29,6 +31,8 @@ export const DEFAULT_INPUTS_O_IMAGE = [
   'oenabled: enabled',
   'orequired: required',
   'emptyimage: empty-image',
+  // empty-icon [string]: material icon. Default: photo.
+  'emptyicon: empty-icon',
   // show-controls [yes|no true|false]: Shows or hides selection controls. Default: true.
   'showControls: show-controls',
 
@@ -66,6 +70,7 @@ export class OImageComponent implements IFormComponent, IFormControlComponent, I
   @InputConverter()
   autoBinding: boolean = true;
   emptyimage: string;
+  emptyicon: string;
   @InputConverter()
   showControls: boolean = true;
   sqlType: string;
@@ -74,6 +79,11 @@ export class OImageComponent implements IFormComponent, IFormControlComponent, I
 
   @ViewChild('inputControl')
   protected inputControl: MdInput;
+  @ViewChild('titleLabel')
+  protected titleLabel: ElementRef;
+
+  protected useEmptyIcon: boolean = true;
+  protected useEmptyImage: boolean = false;
 
   protected value: OFormValue;
   protected translateService: OTranslateService;
@@ -90,16 +100,24 @@ export class OImageComponent implements IFormComponent, IFormControlComponent, I
     protected ngZone: NgZone,
     protected cd: ChangeDetectorRef,
     protected injector: Injector) {
-    // domSanitizer: DomSanitizer) {
 
     this._domSanitizer = this.injector.get(DomSanitizer);
     this.translateService = this.injector.get(OTranslateService);
   }
 
   ngOnInit() {
-    this._disabled = !this.oenabled;
+    this.disabled = !this.oenabled;
 
-    this._SQLType = SQLTypes.getSQLTypeValue(this.sqlType ? this.sqlType : 'BLOB');
+    if (this.emptyimage && this.emptyimage.length > 0) {
+      this.useEmptyIcon = false;
+      this.useEmptyImage = true;
+    }
+
+    if (this.emptyicon === undefined && !this.useEmptyImage) {
+      this.emptyicon = 'photo';
+      this.useEmptyIcon = true;
+      this.useEmptyImage = false;
+    }
 
     if (this.form) {
       this.form.registerFormComponent(this);
@@ -118,15 +136,15 @@ export class OImageComponent implements IFormComponent, IFormControlComponent, I
         return;
       } else if (val.value === undefined) {
         val.value = '';
-       }
+      }
       this.value = new OFormValue(val.value);
     } else if (val && !(val instanceof OFormValue)) {
       if (val['bytes'] !== undefined) {
         val = val['bytes'];
       } else if (val.length > 300 && val.substring(0, 4) === 'data') {
         // Removing "data:image/*;base64,"
-          val = val.substring(val.indexOf('base64') + 7);
-        }
+        val = val.substring(val.indexOf('base64') + 7);
+      }
       this.value = new OFormValue(val);
     } else {
       this.value = new OFormValue('');
@@ -171,6 +189,8 @@ export class OImageComponent implements IFormComponent, IFormControlComponent, I
   }
 
   getSQLType(): number {
+    let sqlt = this.sqlType && this.sqlType.length > 0 ? this.sqlType : 'BLOB';
+    this._SQLType = SQLTypes.getSQLTypeValue(sqlt);
     return this._SQLType;
   }
 
@@ -182,7 +202,7 @@ export class OImageComponent implements IFormComponent, IFormControlComponent, I
     return this.autoBinding;
   }
 
-   getValue() : any {
+  getValue(): any {
     if (this.value instanceof OFormValue) {
       if (this.value.value) {
         return this.value.value;
@@ -191,7 +211,7 @@ export class OImageComponent implements IFormComponent, IFormControlComponent, I
     return '';
   }
 
-   setValue(val: string): void {
+  setValue(val: string): void {
 
     var self = this;
     window.setTimeout(() => {
@@ -210,12 +230,10 @@ export class OImageComponent implements IFormComponent, IFormControlComponent, I
 
   set isReadOnly(value: boolean) {
     if (this._disabled) {
+      this._isReadOnly = false;
       return;
     }
-    var self = this;
-    window.setTimeout(() => {
-      self._isReadOnly = value;
-    }, 0);
+    this._isReadOnly = value;
   }
 
   get isDisabled(): boolean {
@@ -223,10 +241,7 @@ export class OImageComponent implements IFormComponent, IFormControlComponent, I
   }
 
   set disabled(value: boolean) {
-    // var self = this;
-    // window.setTimeout(() => {
-      this._disabled = value;
-    // }, 0);
+    this._disabled = value;
   }
 
   get isRequired(): boolean {
@@ -234,10 +249,7 @@ export class OImageComponent implements IFormComponent, IFormControlComponent, I
   }
 
   set required(value: boolean) {
-    var self = this;
-    window.setTimeout(() => {
-      self.orequired = value;
-    }, 0);
+    this.orequired = value;
   }
 
   innerOnChange(event: any) {
@@ -248,7 +260,7 @@ export class OImageComponent implements IFormComponent, IFormControlComponent, I
     return !this.getValue() || this.getValue().length === 0;
   }
 
-  fileChange(input, label): void {
+  fileChange(input): void {
     if (input.files[0]) {
       var reader = new FileReader();
       var self = this;
@@ -264,8 +276,8 @@ export class OImageComponent implements IFormComponent, IFormControlComponent, I
       if (input.files[0]) {
         reader.readAsDataURL(input.files[0]);
       }
-      if (label) {
-        label.textContent = input.files[0]['name'];
+      if (this.titleLabel) {
+        this.titleLabel.nativeElement.textContent = input.files[0]['name'];
       }
     }
   }
@@ -302,12 +314,12 @@ export class OImageComponent implements IFormComponent, IFormControlComponent, I
     evt.stopPropagation();
   }
 
-  onClickClear(e: Event, label:any): void {
+  onClickClear(e: Event): void {
     e.stopPropagation();
     if (!this._isReadOnly) {
       this.setValue('');
-      if (label) {
-        label.textContent = '';
+      if (this.titleLabel) {
+        this.titleLabel.nativeElement.textContent = '';
       }
     }
   }

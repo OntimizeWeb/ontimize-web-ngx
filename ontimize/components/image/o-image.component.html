@@ -4,16 +4,18 @@
       [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)"
       class="md-input input-control" ></md-input>
     <input [hidden]="!showControls" class="md-primary" #input type="file"
-      (change)="fileChange(input, label)" class="input-file" />
-    <label *ngIf="showControls" #label (click)="input.click()">{{ 'CHOOSE_FILE' | oTranslate }}</label>
-    <span *ngIf="showControls" class="icon-btn" (click)="input.click()"><i class="material-icons">search</i></span>
-    <span *ngIf="showControls" class="icon-btn" (click)="onClickClear($event, label)"><i class="material-icons">clear</i></span>
+      (change)="fileChange(input, titleLabel)" class="input-file" />
+    <label *ngIf="showControls" #titleLabel (click)="input.click()">{{ 'CHOOSE_FILE' | oTranslate }}</label>
+    <span *ngIf="showControls" class="icon-btn" [class.md-disabled]="isDisabled" (click)="input.click()"><i class="material-icons">search</i></span>
+    <span *ngIf="showControls" class="icon-btn" [class.md-disabled]="isDisabled" (click)="onClickClear($event, titleLabel)"><i class="material-icons">clear</i></span>
   </div>
   <div layout="row" class="input-image-preview" layout-align="center center">
     <img *ngIf="!(isEmpty())"
       [src]="getSrcValue()"
       alt="" (click)="input.click()" />
-    <md-icon aria-label="empty image" *ngIf="isEmpty()" (click)="input.click()">photo</md-icon>
+    <md-icon class="empty-icon" [class.md-disabled]="isDisabled" aria-label="empty image"
+      *ngIf="isEmpty() && useEmptyIcon" (click)="input.click()">{{ emptyicon }}</md-icon>
+    <img [src]="getSrcValue()" alt="empty image" *ngIf="isEmpty() && useEmptyImage" (click)="input.click()" />
   </div>
   <div *ngIf="isReadOnly" layout-fill class="read-only-blocker" (click)="onClickBlocker($event)" ></div>
 </div>
