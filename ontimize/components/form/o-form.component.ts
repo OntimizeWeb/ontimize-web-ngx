@@ -6,7 +6,8 @@ import {Component, OnInit, OnDestroy, EventEmitter,
 import {CommonModule} from '@angular/common';
 import {Router, ActivatedRoute } from '@angular/router';
 import {FormGroup, ReactiveFormsModule, FormControl, FormsModule} from '@angular/forms';
-import {Observable} from 'rxjs/Observable';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/observable/combineLatest';
 
 import { MdProgressBarModule, MdTabGroup } from '@angular/material';
 
@@ -152,6 +153,11 @@ export class OFormComponent implements OnInit, OnDestroy {
   protected tabSelectChangeFired: boolean = false;
   protected hasScrolled: boolean = false;
 
+
+  protected onFormInitStream: EventEmitter<Object> = new EventEmitter<Object>();
+  protected onUrlParamChangedStream: EventEmitter<Object> = new EventEmitter<Object>();
+  protected reloadStream: Observable<any>;
+
   @HostListener('window:scroll', ['$event'])
   track(event) {
     if (this.showHeader && event.currentTarget instanceof Window) {
@@ -173,6 +179,21 @@ export class OFormComponent implements OnInit, OnDestroy {
 
     this.dialogService = injector.get(DialogService);
     this.navigationService = injector.get(NavigationService);
+
+    this.reloadStream = Observable.combineLatest(
+      this.onFormInitStream.asObservable(),
+      this.onUrlParamChangedStream.asObservable()
+    );
+
+    var self = this;
+    this.reloadStream.subscribe(
+      function (valArr) {
+        if (Util.isArray(valArr) && valArr.length === 2) {
+          if (valArr[0] === true && valArr[1] === true) {
+            self._reloadAction(true);
+          }
+        }
+      });
   }
 
   registerFormComponent(comp: any) {
@@ -407,7 +428,7 @@ export class OFormComponent implements OnInit, OnDestroy {
         //TODO Obtain 'datatype' of each key contained into urlParams for
         // for building correctly query filter!!!!
         if (self.urlParams && Object.keys(self.urlParams).length > 0) {
-          self._reloadAction();
+          self.onUrlParamChangedStream.emit(true);
         }
       });
 
@@ -461,20 +482,8 @@ export class OFormComponent implements OnInit, OnDestroy {
   }
 
   ngAfterViewInit() {
-      var _path = '';
-      let segment = this.urlSegments[this.urlSegments.length - 1];
-      _path = segment['path'];
-
-      if (_path === 'new') {
-        //insert mode
-        this.setFormMode(Mode.INSERT);
-        return;
-      } else if (_path === 'edit') {
-        //edit mode
-        this.setFormMode(Mode.UPDATE);
-      } else {
-        this.setFormMode(Mode.INITIAL);
-      }
+    this.determinateFormMode();
+    this.onFormInitStream.emit(true);
 
     if (this.tabGroupChildren) {
       var self = this;
@@ -487,6 +496,23 @@ export class OFormComponent implements OnInit, OnDestroy {
 
   }
 
+  protected determinateFormMode() {
+    var _path = '';
+    let segment = this.urlSegments[this.urlSegments.length - 1];
+    _path = segment['path'];
+
+    if (_path === 'new') {
+      //insert mode
+      this.setFormMode(Mode.INSERT);
+      return;
+    } else if (_path === 'edit') {
+      //edit mode
+      this.setFormMode(Mode.UPDATE);
+    } else {
+      this.setFormMode(Mode.INITIAL);
+    }
+  }
+
   /**
    * Inner methods
    * */
@@ -494,7 +520,7 @@ export class OFormComponent implements OnInit, OnDestroy {
   _setComponentsEditable(state: boolean) {
 
     var self = this;
-     window.setTimeout(() => {
+    //  window.setTimeout(() => {
       let comps: any = self.getComponents();
       if (comps) {
         let keys = Object.keys(comps);
@@ -502,7 +528,7 @@ export class OFormComponent implements OnInit, OnDestroy {
           comps[element].isReadOnly = !state;
         });
       }
-    },100);
+    // },100);
   }
 
 
@@ -543,10 +569,14 @@ export class OFormComponent implements OnInit, OnDestroy {
   }
 
   _setData(data) {
-    if (Util.isArray(data)) {
-      this.navigationData = <Array<Object>>this.toFormValueData(data);
-      this.syncCurrentIndex();
-      this.queryByIndex(this.currentIndex);
+    if (Util.isArray(data) && data.length === 1) {
+      // this.navigationData = <Array<Object>>this.toFormValueData(data);
+      // this.syncCurrentIndex();
+      // this.queryByIndex(this.currentIndex);
+      let currentData = data[0];
+      this._updateFormData(this.toFormValueData(currentData));
+      this._emitData(currentData);
+
     } else if(Util.isObject(data)) {
       this._updateFormData(this.toFormValueData(data));
       this._emitData(data);
@@ -841,7 +871,8 @@ export class OFormComponent implements OnInit, OnDestroy {
   queryData(filter) {
     var self = this;
     var loader = self.load();
-    this.dataService.query(filter, this.keysArray, this.entity)
+    // this.dataService.query(filter, this.keysArray, this.entity)
+    this.dataService.query(filter, this.getAttributesToQuery(), this.entity)
       .subscribe(resp => {
         loader.unsubscribe();
         if (resp.code === 0) {

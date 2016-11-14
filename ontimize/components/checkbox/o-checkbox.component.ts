@@ -1,13 +1,15 @@
-import {Component, Inject, Injector, OnInit,
+import {
+  Component, Inject, Injector, OnInit,
   forwardRef, ElementRef, EventEmitter,
   NgZone, ChangeDetectorRef,
   NgModule,
   ModuleWithProviders,
-  ViewEncapsulation} from '@angular/core';
+  ViewEncapsulation
+} from '@angular/core';
 
-import {CommonModule } from '@angular/common';
-import {FormsModule, ReactiveFormsModule, FormControl, Validators } from '@angular/forms';
-import {ValidatorFn } from '@angular/forms/src/directives/validators';
+import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule, FormControl, Validators } from '@angular/forms';
+import { ValidatorFn } from '@angular/forms/src/directives/validators';
 
 import { MdInputModule, MdCheckboxModule } from '@angular/material';
 
@@ -16,12 +18,12 @@ import {
   IFormDataComponent
 } from '../../interfaces';
 import { OSharedModule } from '../../shared.module';
-import {InputConverter} from '../../decorators';
-import {OFormComponent, Mode} from '../form/o-form.component';
-import {OFormValue} from '../form/OFormValue';
-import {OTranslateService} from '../../services';
+import { InputConverter } from '../../decorators';
+import { OFormComponent, Mode } from '../form/o-form.component';
+import { OFormValue } from '../form/OFormValue';
+import { OTranslateService } from '../../services';
 import { OTranslateModule } from '../../pipes/o-translate.pipe';
-import {SQLTypes} from '../../utils';
+import { SQLTypes } from '../../utils';
 
 
 export const DEFAULT_INPUTS_O_CHECKBOX = [
@@ -108,7 +110,7 @@ export class OCheckboxComponent implements IFormComponent, IFormControlComponent
         value.value = false;
       }
       this.value = new OFormValue(value.value);
-    } else if ( typeof value === 'boolean') {
+    } else if (typeof value === 'boolean') {
       this.value = new OFormValue(value);
     } else {
       this.value = new OFormValue(false);
@@ -195,10 +197,7 @@ export class OCheckboxComponent implements IFormComponent, IFormControlComponent
   }
 
   set placeHolder(value: string) {
-    var self = this;
-     window.setTimeout(() => {
-      self._placeholder = value;
-    }, 0);
+    this._placeholder = value;
   }
 
   get isReadOnly(): boolean {
@@ -207,12 +206,10 @@ export class OCheckboxComponent implements IFormComponent, IFormControlComponent
 
   set isReadOnly(value: boolean) {
     if (this._disabled) {
+      this._isReadOnly = false;
       return;
     }
-    var self = this;
-     window.setTimeout(() => {
-      self._isReadOnly = value;
-    }, 0);
+    this._isReadOnly = value;
   }
 
   get isDisabled(): boolean {
@@ -220,10 +217,7 @@ export class OCheckboxComponent implements IFormComponent, IFormControlComponent
   }
 
   set disabled(value: boolean) {
-    // var self = this;
-    //  window.setTimeout(() => {
-      this._disabled = value;
-    // }, 0);
+    this._disabled = value;
   }
 
   innerOnChange(event: any) {
