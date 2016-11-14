@@ -49,3 +49,23 @@
 .o-list-title {
   font-size: 1.5em;
 }
+
+.o-list-container{
+  position: relative;
+  .spinner-container {
+      &.hidden-loading {
+        display:none;
+      }
+      position: absolute;
+      top: 0px;
+      left: 0px;
+      right: 0px;
+      bottom: 0px;
+      z-index: 500;
+      background: rgba(255,255,255, 1);
+
+      path {
+        stroke-width: 5px;
+      }
+    }
+}

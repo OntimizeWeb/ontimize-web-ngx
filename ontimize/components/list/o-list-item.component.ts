@@ -5,27 +5,24 @@ import {Component, Input,
 
 import { MdListModule } from '@angular2-material/list';
 
-import {MdListItemDirective} from '../../directives/MdListItemDirective';
-import {IListItem} from '../../interfaces';
-
 @Component({
   selector: 'o-list-item',
   templateUrl: 'list/o-list-item.component.html',
   styleUrls: ['list/o-list-item.component.css'],
   encapsulation: ViewEncapsulation.None
 })
-export class OListItemComponent implements IListItem {
+
+export class OListItemComponent {
 
   @Input() model: Object;
 
   getModel() {
     return this.model;
   }
-
 }
 
 @NgModule({
-  declarations: [MdListItemDirective, OListItemComponent],
+  declarations: [OListItemComponent],
   imports: [MdListModule],
   exports: [OListItemComponent],
 })
