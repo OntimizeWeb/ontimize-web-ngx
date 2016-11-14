@@ -11,7 +11,7 @@ import {EventEmitter} from '@angular/core';
 import { ObservableWrapper } from '../../util/async';
 import { Observable } from 'rxjs/Observable';
 
-import { MdListModule, MdIconModule, MdToolbarModule, MdButtonModule } from '@angular/material';
+import { MdListModule, MdIconModule, MdToolbarModule, MdButtonModule, MdProgressCircleModule } from '@angular/material';
 
 import {OntimizeService} from '../../services';
 import {dataServiceFactory} from '../../services/data-service.provider';
@@ -23,7 +23,6 @@ import {Util} from '../../util/util';
 import {OListItemDirective} from './o-list-item.directive';
 import { IList } from '../../interfaces';
 import { OListItemComponent } from './o-list-item.component';
-import { MdProgressCircleModule } from '@angular2-material/progress-circle';
 
 export const DEFAULT_INPUTS_O_LIST = [
   'title',
