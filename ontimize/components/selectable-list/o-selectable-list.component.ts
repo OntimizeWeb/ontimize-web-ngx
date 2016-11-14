@@ -71,8 +71,8 @@ export class OSelectableListComponent extends OListComponent implements IList {
     //Not implmented
   }
 
-  getKey() {
-    return this.key;
+  getKeys() {
+    return this.dataKeys;
   }
 
   doListitemClick(mdItem: MdSelectableListItemDirective): void {

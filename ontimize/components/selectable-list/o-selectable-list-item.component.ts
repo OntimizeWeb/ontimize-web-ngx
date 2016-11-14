@@ -10,7 +10,7 @@ import {MdSelectableListItemDirective} from '../../directives/MdSelectableListIt
 import {OSelectableListComponent} from './o-selectable-list.component';
 import {Util} from '../../util/util';
 import {OrderByPipe} from '../../pipes';
-import {IListItem} from '../../interfaces';
+
 
 @Component({
   selector: 'o-selectable-list-item',
@@ -23,7 +23,7 @@ import {IListItem} from '../../interfaces';
   styleUrls: ['selectable-list/o-selectable-list-item.component.css'],
   encapsulation: ViewEncapsulation.None
 })
-export class OSelectableListItemComponent implements OnInit, IListItem {
+export class OSelectableListItemComponent implements OnInit {
 
   separator: string;
   display: string;

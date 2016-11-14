@@ -1,15 +1,11 @@
-import {MdListItemDirective} from '../directives/MdListItemDirective';
-
-export interface IListItem {
-  getModel(): any;
-
-}
+import {OListItemDirective} from '../components/list/o-list-item.directive';
 
 export interface IList {
 
-  registerListItem(item: MdListItemDirective): void;
+  registerListItem(item: OListItemDirective): void;
 
-  getKey(): string;
+  getKeys(): Array<string>;
+
 }
 
 

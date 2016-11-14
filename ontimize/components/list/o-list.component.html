@@ -1,16 +1,21 @@
-<md-toolbar class="toolbar-filter-list" *ngIf="filter">
-  <div class="md-toolbar-tools">
-    <button type="button" md-icon-button aria-label="Refresh" (click)="onReload()" *ngIf="refreshButton">
+<div class="o-list-container">
+  <span *ngIf="title" class="o-list-title">{{title}}</span>
+  <div [class.hidden-loading]="!loading" class="spinner-container" flex="100" layout="row" layout-align="center center">
+    <md-spinner></md-spinner>
+  </div>
+
+  <md-toolbar class="toolbar-filter-list" *ngIf="controls">
+    <div class="md-toolbar-tools" layout="row" layout-fill layout-align="start center">
+      <button type="button" md-icon-button aria-label="Refresh" (click)="onReload()" *ngIf="refreshButton">
       <md-icon>refresh</md-icon>
     </button>
-    <span flex></span>
-    <o-search-input></o-search-input>
+      <span flex></span>
+      <o-search-input *ngIf="quickFilter" placeholder=""></o-search-input>
+    </div>
+  </md-toolbar>
+  <div layout="column">
+    <md-list layout-fill>
+      <ng-content></ng-content>
+    </md-list>
   </div>
-</md-toolbar>
-
-<span *ngIf="title" class="o-list-title">{{title}}</span>
-<div layout="column">
-  <md-list  layout-fill>
-    <ng-content></ng-content>
-  </md-list>
 </div>
