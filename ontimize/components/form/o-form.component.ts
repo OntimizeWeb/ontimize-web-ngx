@@ -810,7 +810,7 @@ export class OFormComponent implements OnInit, OnDestroy {
 
     // retrieving keys...
     var self = this;
-    let filter = this.getKeysValues(this.currentIndex);
+    let filter = this.getKeysValues();
 
     // retrieving values to update...
     let values = this.getAttributesValuesToUpdate();
@@ -1063,22 +1063,19 @@ export class OFormComponent implements OnInit, OnDestroy {
     return filter;
   }
 
-  protected getKeysValues(index: number) {
+  protected getKeysValues() {
     let filter = {};
-    if (index >= 0) {
-      //TODO check it!!! let currentRecord = this.formData[index];
-      let currentRecord = this.navigationData[index];
-      if (this.keysArray) {
-        this.keysArray.map(key => {
-          if (currentRecord[key]) {
-            let currentData = currentRecord[key];
-            if (currentData instanceof OFormValue) {
-              currentData = currentData.value;
-            }
-            filter[key] = currentData;
+    let currentRecord = this.formData;
+    if (this.keysArray) {
+      this.keysArray.map(key => {
+        if (currentRecord[key]) {
+          let currentData = currentRecord[key];
+          if (currentData instanceof OFormValue) {
+            currentData = currentData.value;
           }
-        });
-      }
+          filter[key] = currentData;
+        }
+      });
     }
     return filter;
   }
