@@ -22,6 +22,11 @@
   $md-combo-underline-focused-color: md-color($primary);
 
 
+  .md-combo-element {
+     color: md-color($foreground, text);
+     background-color: md-color($background, dialog);
+  }
+
   .md-combo-placeholder {
     color: $md-combo-placeholder-color;
 

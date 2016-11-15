@@ -65,9 +65,6 @@ md-combo {
   // Font needs to be inherited, because by default <select> has a system font.
   font: inherit;
 
-  // The Material combo should match whatever background it is above.
-  background: transparent;
-
   /* remove default appearance from select */
   -moz-appearance: none;
   -webkit-appearance: none;

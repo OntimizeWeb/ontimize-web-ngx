@@ -11,9 +11,19 @@
   $color-inactive: #999999;
 
     div.ui-datepicker {
+      background-color: md-color($background, dialog);
+
       .ui-datepicker-custom-header {
         background: md-color($primary);
         color: #fafafa;
+      }
+
+      .ui-datepicker-header {
+        .ui-datepicker-prev,
+        .ui-datepicker-next,
+        .ui-datepicker-title {
+          color: md-color($foreground, text);
+        }
       }
 
       .ui-datepicker-calendar {

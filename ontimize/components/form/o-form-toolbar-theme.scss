@@ -9,6 +9,7 @@
   $foreground: map-get($theme, foreground);
 
   .toolbar-form-header{
+    background-color: md-color($background, app-bar);
     .md-toolbar-tools {
       button {
         color: md-color($primary);
@@ -22,15 +23,4 @@
   }
 
 }
-
-
-
-
-
-
-
-
-
-
-
 

@@ -2,7 +2,6 @@
 
   width: 100%;
   height: 100%;
-  border: 1px rgba(0, 0, 0, 0.12) solid;
   position: relative;
 
   .o-table-container {
@@ -23,7 +22,6 @@
       right: 0px;
       bottom: 0px;
       z-index: 1000;
-      background: rgba(255,255,255, 1);
 
       path {
         stroke-width: 5px;
@@ -48,9 +46,6 @@
         tr {
           &:not(.group)::before {
             display: none;
-          }
-          &.selected {
-            background-color: transparent;
           }
           &.selected::before {
             display: none;
@@ -86,7 +81,6 @@
       a {
         text-decoration: none;
         outline: none;
-        color: rgba(0, 0, 0, 0.54);
         cursor: pointer;
         font-size: 14px;
         display: inline-block;
@@ -98,11 +92,9 @@
       }
       a:not(.hidden-action-text):not(.disabled):hover {
         border-radius: 4px;
-        background-color: rgba(0, 0, 0, 0.12);
       }
 
       a.hidden-action-text:not(.disabled):hover {
-        background-color: rgba(0, 0, 0, 0.12);
         border-radius: 50%;
         //padding: 0;
       }
@@ -111,10 +103,7 @@
 
         &.active {
 
-          color: rgba(0, 0, 0, 0.54);
-
           &::after {
-            background: #eee;
             border-radius: 50%;
           }
 
@@ -125,7 +114,6 @@
         }
 
         &.disabled {
-          color: rgba(0, 0, 0, 0.15);
           cursor: not-allowed;
         }
 
@@ -292,7 +280,6 @@
     .dataTables_filter {
       margin: 0px ;
       padding: 0px 75px 0 50px;
-      color: rgba(0, 0, 0, 0.54);
       height: 40px;
       min-width: 250px;
       width: 25%;
@@ -326,16 +313,12 @@
       }
 
       input {
-        border: 0px;
         outline: none;
         font-size: 100%;
         width: 100%;
         height: 24px;
         margin: 7px 0;
         padding: 0px;
-        color: rgba(0, 0, 0, 0.9);
-        // border-bottom: 1px rgba(0, 0, 0, 0.9) solid;
-        border-bottom: 1px rgba(0, 0, 0, 0.54) solid;
       }
 
       input:focus {
@@ -407,10 +390,10 @@
 
       &.medium {
         thead tr {
-          height: 38px;
+          height: 40px;
         }
         tbody tr {
-          height: 34px;
+          height: 36px;
         }
       }
 
@@ -440,12 +423,10 @@
       thead {
 
         tr {
-          background: #dedede;
           height: 56px;
 
           th {
             position: relative;
-            color: rgba(0,0,0,.54);
             font-size: 14px;
             font-weight: 700;
             vertical-align: middle;
@@ -458,12 +439,10 @@
 
             &:last-child:not(.o-table-column-action) {
               padding: 0 42px 0 24px !important;
-              border-left: 1px rgba(0, 0, 0, 0.12) solid;
             }
 
             &:first-child:not(.o-table-column-select-checkbox) {
               padding: 0 42px 0 54px !important;
-              border-right: 1px rgba(0, 0, 0, 0.12) solid;
             }
 
             &:first-child.o-table-column-select-checkbox {
@@ -476,7 +455,6 @@
 
             &:nth-child(n+3):nth-last-child(n+2):not(.o-table-column-action) {
               padding: 0 42px 0 24px !important;
-              border-left: 1px rgba(0, 0, 0, 0.12) solid;
             }
 
             &.o-table-select-checkbox {
@@ -499,7 +477,6 @@
               font-family: 'Material Icons';
               content: "arrow_upward";
               position: absolute;
-              // bottom: 22px;
               display: block;
               font-size: 16px;
               font-weight: normal;
@@ -514,17 +491,14 @@
               font-family: 'Material Icons';
               content: "arrow_downward";
               position: absolute;
-              // bottom: 20px;
-              // display: block;
               font-size: 16px;
               font-weight: normal;
             }
 
-	          &.sorting_desc::before,
+	          /*&.sorting_desc::before,
             &.sorting_asc::after {
-              color: rgba(0,0,0,.9);
               font-weight: bold;
-            }
+            }*/
 
             &.sorting_disabled::before,
             &.sorting_disabled::after {
@@ -541,10 +515,6 @@
 
             &.group {
               text-decoration: underline;
-            }
-
-            &.grouping {
-              background: #eee;
             }
 
             &.o-table-column-action {
@@ -573,34 +543,11 @@
             height: 0px !important;
           }
 
-          &.selected {
-            background-color: #eee!important;
-          }
-
-          &.even {
-            background-color: #f8f8f8;
-          }
-
-          &:not(.group):not(.empty):not(.insertRow):hover {
-            background-color: #eee!important;
-          }
-
-          &:last-child.odd {
-
-            td {
-              border-bottom: 1px rgba(0,0,0,.12) solid;
-            }
-
-          }
-
           &.group {
 
             td {
 
               font-weight: bold;
-              color: rgba(0,0,0,.9);
-              border-top: 1px rgba(0, 0, 0, 0.12) solid;
-              border-bottom: 1px solid rgba(0,0,0,.9);
 
               &:last-child {
                 padding: 0 16px !important;
@@ -620,7 +567,6 @@
 
           &.editRow {
             input:not([type="checkbox"]) {
-              background: #f5f5f5;
               top: 3px;
               left: 3px;
               bottom: 3px;
@@ -628,32 +574,23 @@
               width: 90%;
             }
             select {
-              background: #f5f5f5;
               top: 3px;
               left: 3px;
               bottom: 3px;
               height: auto;
               width: 98%;
             }
-            &.selected {
-              input:not([type="checkbox"]),
-              select {
-                background-color: #fff;
-              }
-            }
           }
 
           &.insertRow {
             td {
               input:not([type="checkbox"]) {
-                background: #f5f5f5;
                 top: 3px;
                 left: 3px;
                 bottom: 3px;
                 height: auto;
               }
               select {
-                background: #f5f5f5;
                 top: 3px;
                 left: 3px;
                 bottom: 3px;
@@ -670,9 +607,7 @@
 
           vertical-align: middle;
           text-align: left;
-          color: rgba(0,0,0,.7);
           font-size: 13px;
-          // border-top: 1px rgba(0,0,0,.12) solid;
           overflow: hidden;
           text-overflow: ellipsis;
           white-space: nowrap;
@@ -680,7 +615,6 @@
           cursor: default;
 
           &.focus {
-            outline: 1px solid #000;
             outline-offset: -1px;
           }
 
@@ -690,21 +624,18 @@
           }
 
           &.editing {
-            outline: 1px solid #000;
             outline-offset: -1px;
-            background: #fff;
           }
 
           input {
             position: absolute;
-            top: -1px;
-            left: 1px;
+            top: 2px;
+            left: 2px;
             width: 100%;
             height: 100%;
             padding: 0px 10px;
             border: none;
             outline: none;
-            background: white;
           }
 
           select {
@@ -716,23 +647,20 @@
             padding: 0px 5px 0px 10px;
             border: none;
             outline: none;
-            background: white;
           }
 
           input[type="checkbox"] {
-            height: 89%;
+            height: 14px;
             padding: 0px;
             margin-left: 0px;
           }
 
           &:last-child:not(.o-table-column-action) {
             padding: 0 42px 0 24px !important;
-            border-left: 1px rgba(0, 0, 0, 0.12) solid;
           }
 
           &:first-child:not(.o-table-column-action):not(.o-table-column-select-checkbox) {
             padding: 0 42px 0 54px !important;
-            border-right: 1px rgba(0, 0, 0, 0.12) solid;
           }
 
           &:nth-child(2):not(.o-table-column-action) {
@@ -741,7 +669,6 @@
 
           &:nth-child(n+3):nth-last-child(n+2):not(.o-table-column-action) {
             padding: 0 42px 0 24px !important;
-            border-left: 1px rgba(0, 0, 0, 0.12) solid;
           }
 
           & > div {
@@ -785,7 +712,6 @@
               line-height: 1;
               width: 100%;
               cursor: pointer;
-              color: rgba(0, 0, 0, 0.54);
             }
             .o-table-row-action-edit-cancel,
             .o-table-row-action-edit-save {
@@ -852,12 +778,10 @@
       float: right;
       margin: 20px 20px 20px 0px;
       font-size: 14px;
-      color: rgba(0,0,0,.54);
       line-height: 22px;
 
       select {
         border: none;
-        color: rgba(0, 0, 0, 0.54);
         margin-left: 10px;
         outline: none;
       }
@@ -869,7 +793,6 @@
       float: right;
       margin: 20px 20px 20px 0px;
       font-size: 14px;
-      color: rgba(0,0,0,.54);
       line-height: 24px;
 
       .select-info {
@@ -885,7 +808,6 @@
       float: right;
       margin: 20px 20px 20px 0px;
       font-size: 0px;
-      color: rgba(0,0,0,.9);
 
       .paginate_button {
 
@@ -925,7 +847,6 @@
         }
 
         &.disabled {
-          color: rgba(0,0,0,0.15);
           cursor: not-allowed;
         }
 
@@ -939,7 +860,6 @@
     position:absolute;
     top: 4px;
     right: 4px;
-    color: rgba(0, 0, 0, 0.54);
 
     .material-icons {
       top: 7px;
@@ -948,17 +868,6 @@
       width: 100%;
     }
   }
-
-  .JCLRgrip:not(.JCLRLastGrip):not(.JCLRdisabledGrip) {
-    margin-left: 8px;
-    width: 1px;
-    background: rgba(0,0,0,.9);
-  }
-
-  .JCLRgripDrag {
-    border: 1px rgba(0, 0, 0, 0.12) solid !important;
-  }
-
 
 }
 
@@ -969,7 +878,6 @@ div.dt-button-collection {
   min-width: 200px;
   margin-top: 3px;
   padding: 12px 12px 8px 12px;
-  background-color: white;
   border-radius: 4px !important;
   box-shadow: 0px 7px 8px -4px rgba(0, 0, 0, 0.2), 0px 13px 19px 2px rgba(0, 0, 0, 0.14), 0px 5px 24px 4px rgba(0, 0, 0, 0.12);
   z-index: 2002;
@@ -992,18 +900,13 @@ div.dt-button-collection a.dt-button {
   margin-bottom: 8px;
   margin-right: 0;
   text-decoration: none;
-  color: #000;
   line-height: 34px;
   min-height: 34px;
   font-size: 14px;
   padding: 0px 10px 0px 34px;
-  /*text-align: center;
-  border: 1px solid #eee;
-  border-radius: 5px;*/
   outline: none;
 }
 div.dt-button-collection a.dt-button:hover {
-  background: #eee;
   border-radius: 4px;
 }
 div.dt-button-collection button.dt-button::before,
@@ -1021,7 +924,6 @@ div.dt-button-collection div.dt-button:active:not(.disabled),
 div.dt-button-collection div.dt-button.active:not(.disabled),
 div.dt-button-collection a.dt-button:active:not(.disabled),
 div.dt-button-collection a.dt-button.active:not(.disabled) {
-  /*background: #eee;*/
   font-weight: bold;
 }
 div.dt-button-collection button.dt-button:active:not(.disabled), div.dt-button-collection button.dt-button.active:not(.disabled)::before,
@@ -1090,7 +992,6 @@ div.dt-button-background {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.8);
   z-index: 2001;
 }
 
@@ -1103,8 +1004,8 @@ o-table .o-table-container table thead tr th.o-table-column-select-checkbox {
 
 }
 
-o-table .o-table-container table thead tr th,
-o-table .o-table-container table tbody td {
+.o-table .o-table-container table thead tr th,
+.o-table .o-table-container table tbody td {
 
   &.o-table-column-select-checkbox {
 
@@ -1114,14 +1015,16 @@ o-table .o-table-container table tbody td {
     text-align: center;
 
     input[type="checkbox"].select-row {
-      height: 89%;
-      width: 16px;
+      height: 14px;
+      width: 14px;
       padding: 0px;
       margin-left: 0px;
       margin: 0;
       -webkit-appearance: none;
-      background: transparent;
       cursor: pointer;
+      position: absolute;
+      top: 2px;
+      left: 2px;
     }
     &.md-checkbox-checked .md-checkbox-inner-container {
 
@@ -1189,15 +1092,12 @@ o-table .o-table-container table tbody td {
         }
 
         .md-checkbox-frame {
-          background-color: transparent;
-          border: 2px solid rgba(0, 0, 0, 0.54);
           transition: border-color 140ms cubic-bezier(0, 0, 0.2, 0.1);
           will-change: border-color;
         }
 
         .md-checkbox-background {
           align-items: center;
-          background-color: #2196f3;
           opacity: 0;
           display: inline-flex;
           justify-content: center;
@@ -1211,19 +1111,16 @@ o-table .o-table-container table tbody td {
         }
 
         .md-checkbox-checkmark {
-          fill: #fafafa;
           width: 100%;
         }
 
         .md-checkbox-mixedmark {
-          background-color: #fafafa;
           height: 2.4px;
           opacity: 0;
           transform: scaleX(0) rotate(0deg);
         }
 
         .md-checkbox-checkmark-path {
-            stroke: #fafafa !important;
             stroke-dashoffset: 22.91026;
             stroke-dasharray: 22.91026;
             stroke-width: 2.4px;
