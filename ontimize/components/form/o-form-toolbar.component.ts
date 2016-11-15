@@ -185,31 +185,35 @@ export class OFormToolbarComponent implements OnInit {
   }
 
   next() {
-    let total = this._form.navigationData.length;
-    let index = this._form.currentIndex + 1;
-    if (total > index) {
-      this._form.move(index);
-    } else {
-      console.log('form-toolbar->next(): total > index');
-    }
+    //TODO
+    // let total = this._form.navigationData.length;
+    // let index = this._form.currentIndex + 1;
+    // if (total > index) {
+    //   this._form.move(index);
+    // } else {
+    //   console.log('form-toolbar->next(): total > index');
+    // }
   }
 
   previous() {
-    let index = this._form.currentIndex - 1;
-    if (index >= 0) {
-      this._form.move(index);
-    } else {
-      console.log('form-toolbar->next(): index < 0');
-    }
+    //TODO
+    // let index = this._form.currentIndex - 1;
+    // if (index >= 0) {
+    //   this._form.move(index);
+    // } else {
+    //   console.log('form-toolbar->next(): index < 0');
+    // }
   }
 
   first() {
-    this._form.move(0);
+    //TODO
+    // this._form.move(0);
   }
 
   last() {
-    let index = this._form.navigationData.length - 1;
-    this._form.move(index);
+    //TODO
+    // let index = this._form.navigationData.length - 1;
+    // this._form.move(index);
   }
 
   numberOfRecords() {

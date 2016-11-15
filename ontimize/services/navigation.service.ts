@@ -1,6 +1,6 @@
-import {Injectable} from '@angular/core';
-import {EventEmitter} from '@angular/core';
-import {ObservableWrapper} from '../util/async';
+import { Injectable } from '@angular/core';
+import { EventEmitter } from '@angular/core';
+import { ObservableWrapper } from '../util/async';
 
 
 @Injectable()
@@ -60,4 +60,76 @@ export class NavigationService {
   private _emitCloseSidenav() {
     ObservableWrapper.callEmit(this._sidenavEmitter, 'close');
   }
+
+  //* Provisional
+  // protected move(index) {
+  //   this.queryByIndex(index);
+  // }
+
+  // protected _setData(data) {
+  //   if (Util.isArray(data) && data.length === 1) {
+  //     this.navigationData = <Array<Object>>this.toFormValueData(data);
+  //     this.syncCurrentIndex();
+  //   } else {
+  //     console.warn('Form has received not supported service data. Supported data are Array');
+  //     this._updateFormData({});
+  //   }
+  // }
+
+  // protected queryByIndex(index: number) {
+  //   var self = this;
+  //   this._query(index).subscribe(resp => {
+  //     if (resp.code === 0) {
+  //       let currentData = resp.data[0];
+  //       self._updateFormData(self.toFormValueData(currentData));
+  //       self._emitData(currentData);
+  //     } else {
+  //       console.log('error ');
+  //     }
+  //   }, err => {
+  //     console.log(err);
+  //   });
+  // }
+
+  //  _query(index): Observable<any> {
+  //   var self = this;
+  //   var loader = self.load();
+  //   let filter = this.getKeysValues(index);
+  //   let observable = this.dataService.query(filter, this.getAttributesToQuery(), this.entity);
+  //   observable.subscribe(resp => {
+  //     loader.unsubscribe();
+  //   }, err => {
+  //     console.log(err);
+  //     loader.unsubscribe();
+  //   });
+  //   return observable;
+  // }
+
+  // protected syncCurrentIndex() {
+  //   if (this.navigationData) {
+  //     var self = this;
+  //     let currKV = this.getCurrentKeysValues();
+  //     if (currKV && Object.keys(currKV).length > 0) {
+  //       let current = this.objectToFormValueData(currKV);
+  //       this.navigationData.forEach((value: any, index: number) => {
+  //         // check whether current === value
+  //         let equals = false;
+  //         Object.keys(current).forEach(function (key) {
+  //           let pair = value[key];
+  //           if (pair && pair.value) {
+  //             if (current[key].value === pair.value.toString()) {
+  //               equals = true;
+  //             } else {
+  //               equals = false;
+  //             }
+  //           }
+  //         });
+  //         if (equals) {
+  //           self.currentIndex = index;
+  //         }
+  //       });
+  //     }
+  //   }
+  // }
+
 }

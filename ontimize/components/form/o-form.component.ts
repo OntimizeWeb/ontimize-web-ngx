@@ -564,15 +564,8 @@ export class OFormComponent implements OnInit, OnDestroy {
     }
   }
 
-  move(index) {
-    this.queryByIndex(index);
-  }
-
   _setData(data) {
     if (Util.isArray(data) && data.length === 1) {
-      // this.navigationData = <Array<Object>>this.toFormValueData(data);
-      // this.syncCurrentIndex();
-      // this.queryByIndex(this.currentIndex);
       let currentData = data[0];
       this._updateFormData(this.toFormValueData(currentData));
       this._emitData(currentData);
@@ -584,21 +577,6 @@ export class OFormComponent implements OnInit, OnDestroy {
       console.warn('Form has received not supported service data. Supported data are Array or Object');
       this._updateFormData({});
     }
-  }
-
-  protected queryByIndex(index: number) {
-    var self = this;
-    this._query(index).subscribe(resp => {
-      if (resp.code === 0) {
-        let currentData = resp.data[0];
-        self._updateFormData(self.toFormValueData(currentData));
-        self._emitData(currentData);
-      } else {
-        console.log('error ');
-      }
-    }, err => {
-      console.log(err);
-    });
   }
 
   protected _updateFormData(newFormData: Object) {
@@ -732,11 +710,14 @@ export class OFormComponent implements OnInit, OnDestroy {
   }
 
   _reloadTabContent() {
+    // With new tabs (@angular/material@v2.0.0-alpha.10), does it make sense???
     if (this.mode === Mode.INITIAL) {
-      this.queryByIndex(this.currentIndex);
+      // this.queryByIndex(this.currentIndex);
+      this._reloadAction(true);
     } else if (this.mode === Mode.UPDATE) {
       // TODO query only fields not stored in formData nor formDataCache
-      this.queryByIndex(this.currentIndex);
+      // this.queryByIndex(this.currentIndex);
+      this._reloadAction(true);
     }
   }
 
@@ -871,7 +852,6 @@ export class OFormComponent implements OnInit, OnDestroy {
   queryData(filter) {
     var self = this;
     var loader = self.load();
-    // this.dataService.query(filter, this.keysArray, this.entity)
     this.dataService.query(filter, this.getAttributesToQuery(), this.entity)
       .subscribe(resp => {
         loader.unsubscribe();
@@ -884,21 +864,6 @@ export class OFormComponent implements OnInit, OnDestroy {
         console.log(err);
         loader.unsubscribe();
       });
-  }
-
-
-  _query(index): Observable<any> {
-    var self = this;
-    var loader = self.load();
-    let filter = this.getKeysValues(index);
-    let observable = this.dataService.query(filter, this.getAttributesToQuery(), this.entity);
-    observable.subscribe(resp => {
-      loader.unsubscribe();
-    }, err => {
-      console.log(err);
-      loader.unsubscribe();
-    });
-    return observable;
   }
 
   protected getAttributesToQuery(): Array<any> {
@@ -1118,37 +1083,7 @@ export class OFormComponent implements OnInit, OnDestroy {
     return filter;
   }
 
-  protected syncCurrentIndex() {
-    if (this.navigationData) {
-      var self = this;
-      let currKV = this.getCurrentKeysValues();
-      if (currKV && Object.keys(currKV).length > 0) {
-        let current = this.objectToFormValueData(currKV);
-        this.navigationData.forEach((value: any, index: number) => {
-          // if (current === value) {
-          //   self.currentIndex = index;
-          // }
 
-          // check whether current === value
-          let equals = false;
-          Object.keys(current).forEach(function (key) {
-            let pair = value[key];
-            if (pair && pair.value) {
-              if (current[key].value === pair.value.toString()) {
-                equals = true;
-              } else {
-                equals = false;
-              }
-            }
-          });
-          if (equals) {
-            self.currentIndex = index;
-          }
-        });
-      }
-    }
-    // this.currentIndex = 22;
-  }
 
 }
 
