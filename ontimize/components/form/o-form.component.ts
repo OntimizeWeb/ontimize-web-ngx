@@ -1,7 +1,6 @@
 import {Component, OnInit, OnDestroy, EventEmitter,
   Injector, NgZone, ChangeDetectorRef,
-  NgModule, ContentChildren, QueryList,
-  ModuleWithProviders, HostListener,
+  NgModule, ModuleWithProviders, HostListener,
   ViewEncapsulation} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {Router, ActivatedRoute } from '@angular/router';
@@ -9,7 +8,7 @@ import {FormGroup, ReactiveFormsModule, FormControl, FormsModule} from '@angular
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/combineLatest';
 
-import { MdProgressBarModule, MdTabGroup } from '@angular/material';
+import { MdProgressBarModule } from '@angular/material';
 
 import {OntimizeService, DialogService, NavigationService,
   dataServiceFactory} from '../../services';
@@ -133,9 +132,6 @@ export class OFormComponent implements OnInit, OnDestroy {
 
   protected _formToolbar: OFormToolbarComponent;
 
-  @ContentChildren(MdTabGroup)
-  protected tabGroupChildren: QueryList<MdTabGroup>;
-
   protected _components: Object = {};
   protected _compSQLTypes: Object = {};
 
@@ -150,7 +146,6 @@ export class OFormComponent implements OnInit, OnDestroy {
 
   protected formDataCache: Object;
   protected formParentKeysValues: Object;
-  protected tabSelectChangeFired: boolean = false;
   protected hasScrolled: boolean = false;
 
 
@@ -388,13 +383,11 @@ export class OFormComponent implements OnInit, OnDestroy {
     */
     this.formGroup.valueChanges
       .subscribe((value: any) => {
-        if (!self.tabSelectChangeFired) {
-          if (self.formDataCache === undefined) {
-            // initialize cache
-            self.formDataCache = {};
-          }
-          Object.assign(self.formDataCache, value);
+        if (self.formDataCache === undefined) {
+          // initialize cache
+          self.formDataCache = {};
         }
+        Object.assign(self.formDataCache, value);
       });
 
     if (this.headeractions === 'all') {
@@ -460,14 +453,6 @@ export class OFormComponent implements OnInit, OnDestroy {
     }
   }
 
-  ngAfterViewChecked() {
-    if (this.tabGroupChildren && this.tabSelectChangeFired) {
-      this.tabSelectChangeFired = false;
-      // reload tab content...
-      this._reloadTabContent();
-    }
-  }
-
   ngOnDestroy() {
     if (this.urlParamSub) {
       this.urlParamSub.unsubscribe();
@@ -484,16 +469,6 @@ export class OFormComponent implements OnInit, OnDestroy {
   ngAfterViewInit() {
     this.determinateFormMode();
     this.onFormInitStream.emit(true);
-
-    if (this.tabGroupChildren) {
-      var self = this;
-      this.tabGroupChildren.forEach((item: MdTabGroup, index: number) => {
-        item.selectChange.subscribe((evt: any) => {
-          self.tabSelectChangeFired = true;
-        });
-      });
-    }
-
   }
 
   protected determinateFormMode() {
@@ -707,18 +682,6 @@ export class OFormComponent implements OnInit, OnDestroy {
       filter = this.getCurrentKeysValues();
     }
     this.queryData(filter);
-  }
-
-  _reloadTabContent() {
-    // With new tabs (@angular/material@v2.0.0-alpha.10), does it make sense???
-    if (this.mode === Mode.INITIAL) {
-      // this.queryByIndex(this.currentIndex);
-      this._reloadAction(true);
-    } else if (this.mode === Mode.UPDATE) {
-      // TODO query only fields not stored in formData nor formDataCache
-      // this.queryByIndex(this.currentIndex);
-      this._reloadAction(true);
-    }
   }
 
   /**

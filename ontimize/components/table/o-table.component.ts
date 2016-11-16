@@ -15,7 +15,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/from';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/mergeAll';
-import { MdMenuModule, MdMenuTrigger, MdIconModule, MdProgressCircleModule } from '@angular/material';
+import { MdMenuModule, MdMenuTrigger, MdIconModule, MdProgressCircleModule, MdTabGroup, MdTab } from '@angular/material';
 
 import { OTableColumnComponent } from './o-table-column.component';
 import {
@@ -345,6 +345,9 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
   protected showExportOptions: boolean = false;
   protected rowHeight: string;
 
+  protected mdTabGroupContainer: MdTabGroup;
+  protected mdTabContainer: MdTab;
+
   public onRowSelected: EventEmitter<any> = new EventEmitter();
   public onRowDelected: EventEmitter<any> = new EventEmitter();
   public onClick: EventEmitter<any> = new EventEmitter();
@@ -360,6 +363,13 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
     protected injector: Injector,
     @Optional() @Inject(forwardRef(() => OFormComponent)) protected form: OFormComponent
   ) {
+
+    try {
+      this.mdTabGroupContainer = this.injector.get(MdTabGroup);
+      this.mdTabContainer = this.injector.get(MdTab);
+    } catch (error) {
+      // Do nothing due to not always is contained on tab.
+    }
 
     this.initialized = false;
 
@@ -381,14 +391,7 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
     this.onLanguageChangeSubscribe = this.translateService.onLanguageChanged.subscribe(
       res => {
         //if (this.initialized) {
-        this.dataTable.fnDestroy();
-        this.dataTable = null;
-        this.initTableOnInit(this.dataTableOptions.columns);
-        this.initTableAfterViewInit();
-        if ((typeof (this.table) !== 'undefined') && (this.dataSortColumns.length > 0)) {
-          this.table.order(this.dataSortColumns);
-          this.table.draw();
-        }
+        this.reinitializeTable();
         //}
       }
     );
@@ -412,6 +415,17 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
     this.onInsertRowFocusSubscribe = [];
     this.onInsertRowSubmitSubscribe = undefined;
     this.element.nativeElement.classList.add('o-table');
+  }
+
+  protected reinitializeTable() {
+    this.dataTable.fnDestroy();
+    this.dataTable = null;
+    this.initTableOnInit(this.dataTableOptions.columns);
+    this.initTableAfterViewInit();
+    if ((typeof (this.table) !== 'undefined') && (this.dataSortColumns.length > 0)) {
+      this.table.order(this.dataSortColumns);
+      this.table.draw();
+    }
   }
 
   public ngOnInit(): any {
@@ -527,6 +541,28 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
 
     if (this.form) {
       this.setFormComponent(this.form);
+    }
+
+    if (this.mdTabGroupContainer && this.mdTabContainer) {
+      /*
+      * When table is contained into tab component, it is necessary to init
+      * table component when attached to DOM.
+      */
+      var self = this;
+      this.mdTabGroupContainer.selectChange.subscribe((evt) => {
+
+        var interval = setInterval(function () { timerCallback(evt.tab); }, 100);
+
+        function timerCallback(tab: MdTab) {
+          if (tab && tab.content.isAttached) {
+            clearInterval(interval);
+            if (tab === self.mdTabContainer) {
+              self.reinitializeTable();
+            }
+          }
+        }
+
+      });
     }
 
     this.initTableOnInit();
