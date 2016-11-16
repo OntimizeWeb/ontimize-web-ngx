@@ -24,7 +24,7 @@
 
   .md-combo-element {
      color: md-color($foreground, text);
-     background-color: md-color($background, dialog);
+     background-color: transparent;
   }
 
   .md-combo-placeholder {
