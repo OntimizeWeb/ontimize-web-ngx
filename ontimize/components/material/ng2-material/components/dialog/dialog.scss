@@ -40,13 +40,6 @@ $dialog-border-radius: 4px !default;
 
 .md-dialog {
   border-radius: $dialog-border-radius;
-  background-color: md-color($md-background, lighter); //'{{background-color}}';
-
-  &.md-content-overflow {
-    .md-actions, md-dialog-actions {
-      border-top-color: md-color($md-foreground, divider); //'{{foreground-4}}';
-    }
-  }
 }
 
 @import "dialog-actions.scss";
