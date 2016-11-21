@@ -1,0 +1,9 @@
+<div class="row-container" layout-fill>
+	<!-- layout-fill layout-padding layout-align flex-->
+	<div *ngIf="hasTitle()" layout="row" class="row-title-item container-title">
+		<span layout-padding>{{ title }}</span>
+	</div>
+	<div id="innerRow" class="row-content-item" layout="row" layout-padding>
+		<ng-content></ng-content>
+	</div>
+</div>
