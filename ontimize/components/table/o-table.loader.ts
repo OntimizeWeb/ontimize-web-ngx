@@ -11,6 +11,7 @@ require('datatables.net-buttons/js/buttons.colVis.js');
 require('datatables.net-buttons/js/buttons.html5.js');
 require('datatables.net-buttons/js/buttons.print.js');
 require('datatables.net-colreorder');
+require('./vendor/custom.dataTables.fixedHeader.js');
 require('datatables.net-select');
 require('./vendor/custom.dataTables.keyTable.js');
 require('colresizable');

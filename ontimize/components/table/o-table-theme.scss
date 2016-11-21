@@ -9,19 +9,21 @@
   $foreground: map-get($theme, foreground);
 
     .o-table {
-      border-width: 1px;
-      border-style: solid;
-      border-color: md-color($foreground, divider);
-
       input[type="checkbox" ]:focus {
         outline: none;
       }
 
-      .o-table-container {
+      .spinner-container {
+        background-color: md-color($background, background);
+      }
 
-        .spinner-container {
-          background-color: md-color($background, background);
-        }
+      .expandable-container {
+        border-width: 1px;
+        border-style: solid;
+        border-color: md-color($foreground, divider);
+      }
+
+      .o-table-container {
 
         &.disabled {
           tbody {
@@ -249,7 +251,7 @@
 
           select {
             color: md-color($foreground, secondary-text);
-            background-color: md-color($background, dialog);
+            background-color: md-color($background, background);
           }
 
         }
@@ -326,6 +328,13 @@
       }
     }
 
+  table.fixedHeader-floating {
+    background-color:  md-color($background, background);
+  }
+
+  table.fixedHeader-locked {
+    background-color: md-color($background, background);
+  }
 
 }
 

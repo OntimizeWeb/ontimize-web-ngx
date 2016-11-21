@@ -4,29 +4,59 @@
   height: 100%;
   position: relative;
 
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  box-sizing: border-box;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+
+  .spinner-container {
+    &.hidden-loading {
+      visibility: hidden;
+      opacity: 0;
+
+         -moz-transition: visibility 0s 1s, opacity 1s linear;
+      -webkit-transition: visibility 0s 1s, opacity 1s linear;
+              transition: visibility 0s 1s, opacity 1s linear;
+    }
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    z-index: 500;
+
+    visibility: visible;
+    opacity: 1;
+
+        -moz-transition: opacity 0.25s linear;
+    -webkit-transition: opacity 0.25s linear;
+            transition: opacity 0.25s linear;
+
+    path {
+      stroke-width: 5px !important;
+    }
+  }
+
   .o-table-container {
 
     display: block;
     max-width: 100%;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
+    height: 100%;
+    /*overflow-x: auto;
+    -webkit-overflow-scrolling: touch;*/
+    overflow: hidden;
     position: relative;
-
-    .spinner-container {
-      &.hidden-loading {
-        display:none;
-      }
-      position: absolute;
-      top: 0px;
-      left: 0px;
-      right: 0px;
-      bottom: 0px;
-      z-index: 1000;
-
-      path {
-        stroke-width: 5px;
-      }
-    }
+    margin: 0 0.5%;
 
     &.disabled {
 
@@ -327,8 +357,32 @@
 
     }
 
+    .dataTables_wrapper {
+      display: -webkit-flex;
+      display: flex;
+      -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+      flex-direction: column;
+      -webkit-flex-wrap: nowrap;
+      -ms-flex-wrap: nowrap;
+      flex-wrap: nowrap;
+      -webkit-justify-content: center;
+      -ms-flex-pack: center;
+      justify-content: center;
+      -webkit-align-content: stretch;
+      -ms-flex-line-pack: stretch;
+      align-content: stretch;
+      -webkit-align-items: stretch;
+      -ms-flex-align: stretch;
+      align-items: stretch;
+
+      margin: 0;
+      width: 100%;
+      height: 100%
+    }
+
     .dataTables_top_wrapper {
-      margin: 4px 0.5%;
+      margin: 4px 0px;
     }
 
     .dataTables_top_wrapper {
@@ -350,6 +404,16 @@
         -webkit-align-items: flex-start;
         -ms-flex-align: start;
         align-items: flex-start;
+
+        -webkit-order: 0;
+        -ms-flex-order: 0;
+        order: 0;
+        -webkit-flex: 0 1 auto;
+        -ms-flex: 0 1 auto;
+        flex: 0 1 auto;
+        -webkit-align-self: auto;
+        -ms-flex-item-align: auto;
+        align-self: auto;
 
       .dt-buttons,
       .dataTables_options {
@@ -375,6 +439,46 @@
         -ms-flex-item-align: auto;
         align-self: auto;
       }
+    }
+
+    .dataTables_fill_remaining{
+      -webkit-order: 0;
+      -ms-flex-order: 0;
+      order: 0;
+      -webkit-flex: 1 1 auto;
+      -ms-flex: 1 1 auto;
+      flex: 1 1 auto;
+      -webkit-align-self: auto;
+      -ms-flex-item-align: auto;
+      align-self: auto;
+      -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+      flex-direction: column;
+      box-sizing: border-box;
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: -moz-box;
+      display: -ms-flexbox;
+      display: flex;
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      .o-table-scroll {
+        overflow: auto;
+        height: 100%;
+      }
+    }
+
+    .dataTables_pagination_wrapper {
+      -webkit-order: 0;
+      -ms-flex-order: 0;
+      order: 0;
+      -webkit-flex: 0 1 auto;
+      -ms-flex: 0 1 auto;
+      flex: 0 1 auto;
+      -webkit-align-self: auto;
+      -ms-flex-item-align: auto;
+      align-self: auto;
     }
 
     table {
@@ -414,8 +518,8 @@
         }
       }
 
-      width: 99.0% !important;
-      margin: 0 0.5%;
+      width: 100.0%;
+      margin: 0;
       border-spacing: 0;
       overflow: hidden;
       table-layout: fixed;
@@ -776,7 +880,7 @@
     .dataTables_length {
 
       float: right;
-      margin: 20px 20px 20px 0px;
+      margin: 10px 10px 10px 0px;
       font-size: 14px;
       line-height: 22px;
 
@@ -791,7 +895,7 @@
     .dataTables_info {
 
       float: right;
-      margin: 20px 20px 20px 0px;
+      margin: 10px 10px 10px 0px;
       font-size: 14px;
       line-height: 24px;
 
@@ -806,7 +910,7 @@
     .dataTables_paginate {
 
       float: right;
-      margin: 20px 20px 20px 0px;
+      margin: 10px 10px 10px 0px;
       font-size: 0px;
 
       .paginate_button {
@@ -1336,5 +1440,27 @@ o-table .o-table-container table thead tr th.o-table-column-select-checkbox {
   32.8%, 100% {
     opacity: 0;
     transform: scaleX(0);
+  }
+}
+
+
+
+table.fixedHeader-floating {
+  position: fixed !important;
+  z-index: 200;
+}
+
+table.fixedHeader-floating.no-footer {
+  border-bottom-width: 0;
+}
+
+table.fixedHeader-locked {
+  position: absolute !important;
+  z-index: 200;
+}
+
+@media print {
+  table.fixedHeader-floating {
+    display: none;
   }
 }

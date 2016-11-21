@@ -3,7 +3,7 @@ import {
   SimpleChange, Inject, Injector,
   ElementRef, forwardRef, Optional,
   EventEmitter, NgModule, ModuleWithProviders, ViewEncapsulation,
-  ViewChild
+  ViewChild, NgZone
 } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
@@ -12,6 +12,7 @@ import { ObservableWrapper } from '../../util/async';
 import { Router, ActivatedRoute, NavigationStart, RoutesRecognized } from '@angular/router';
 import { OTranslateModule } from '../../pipes/o-translate.pipe';
 import { Observable } from 'rxjs/Observable';
+import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/observable/from';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/mergeAll';
@@ -348,6 +349,11 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
   protected mdTabGroupContainer: MdTabGroup;
   protected mdTabContainer: MdTab;
 
+  protected loaderSuscription: Subscription;
+  protected querySuscription: Subscription;
+  protected pendingQuery: boolean = false;
+  protected pendingQueryFilter = undefined;
+
   public onRowSelected: EventEmitter<any> = new EventEmitter();
   public onRowDelected: EventEmitter<any> = new EventEmitter();
   public onClick: EventEmitter<any> = new EventEmitter();
@@ -390,9 +396,10 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
 
     this.onLanguageChangeSubscribe = this.translateService.onLanguageChanged.subscribe(
       res => {
-        //if (this.initialized) {
-        this.reinitializeTable();
-        //}
+        if (this.mdTabContainer === undefined
+          || this.mdTabContainer.content.isAttached) {
+          this.reinitializeTable();
+        }
       }
     );
 
@@ -418,7 +425,9 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   protected reinitializeTable() {
-    this.dataTable.fnDestroy();
+    if (this.dataTable) {
+      this.dataTable.fnDestroy();
+    }
     this.dataTable = null;
     this.initTableOnInit(this.dataTableOptions.columns);
     this.initTableAfterViewInit();
@@ -557,7 +566,12 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
           if (tab && tab.content.isAttached) {
             clearInterval(interval);
             if (tab === self.mdTabContainer) {
-              self.reinitializeTable();
+              if (self.table === undefined) {
+                self.reinitializeTable();
+              }
+              if (self.pendingQuery) {
+                self.update(self.pendingQueryFilter);
+              }
             }
           }
         }
@@ -595,7 +609,10 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   public ngAfterViewInit() {
-    this.initTableAfterViewInit();
+    if (this.mdTabContainer === undefined
+     ||  this.mdTabContainer.content.isAttached) {
+      this.initTableAfterViewInit();
+    }
     if (this.trigger) {
       this.trigger.onMenuOpen.subscribe(args => this.onOptionsMenuShow(args));
     }
@@ -619,7 +636,7 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
   protected initTableOnInit(columns: any = undefined) {
     var self = this;
 
-    let domOption = 'rtpil';
+    let domOption = 'r<"dataTables_fill_remaining"<"o-table-scroll"t>><"dataTables_pagination_wrapper"pil>';
     if (this.controls) {
       domOption = '<"dataTables_top_wrapper"B<"dataTables_filter_wrapper"<"dataTables_hidden_options">f><"dataTables_options">>' + domOption;
     }
@@ -791,7 +808,7 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
 
                         // perform insert
                         console.log('[OTable.initTableOnInit]: insert', av);
-                        var loader = this.load();
+                        this.loaderSuscription = this.load();
                         this.dataService[this.insertMethod](av, this.entity)
                           .subscribe(
                           res => {
@@ -803,11 +820,11 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
                               console.log('[OTable.initTableOnInit]: error', res.code);
                               this.dialogService.alert('ERROR', 'MESSAGES.ERROR_INSERT');
                             }
-                            loader.unsubscribe();
+                            this.loaderSuscription.unsubscribe();
                           },
                           err => {
                             console.log('[OTable.initTableOnInit]: error', err);
-                            loader.unsubscribe();
+                            this.loaderSuscription.unsubscribe();
                             this.dialogService.alert('ERROR', 'MESSAGES.ERROR_INSERT');
                           }
                           );
@@ -912,6 +929,7 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
 
   public load(): any {
     var self = this;
+    var zone = this.injector.get(NgZone);
     var loadObservable = new Observable(observer => {
       var timer = window.setTimeout(() => {
         observer.next(true);
@@ -919,12 +937,16 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
 
       return () => {
         window.clearTimeout(timer);
-        self.loading = false;
+        zone.run(() => {
+          self.loading = false;
+        });
       };
 
     });
     var subscription = loadObservable.subscribe(val => {
-      self.loading = val as boolean;
+      zone.run(() => {
+        self.loading = val as boolean;
+       });
     });
     return subscription;
   }
@@ -995,6 +1017,9 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
       this.addDefaultRowButtons();
     }
     this.table = this.tableHtmlEl.DataTable(this.dataTableOptions);
+    new ($ as any).fn.dataTable.FixedHeader(this.table, {
+      header: true
+     });
     this.parseTableOptions();
 
     if (typeof (this.state.length) === 'number') {
@@ -1134,10 +1159,9 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
 
     this.initColumnGroup();
     this.dataTable = this.tableHtmlEl.dataTable();
+    this.initialized = true;
     if (this.queryOnInit) {
-      this.update();
-    } else {
-      this.initialized = true;
+      this.update(this.parentItem);
     }
   }
 
@@ -1244,7 +1268,7 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
         }
         let av = {};
         av[colDef.name] = value;
-        var loader = this.load();
+        this.loaderSuscription = this.load();
         this.dataService[this.updateMethod](kv, av, this.entity)
           .subscribe(
           res => {
@@ -1261,13 +1285,13 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
               this.dialogService.alert('ERROR', 'MESSAGES.ERROR_UPDATE');
               cell.data(oldValue);
             }
-            loader.unsubscribe();
+            this.loaderSuscription.unsubscribe();
           },
           err => {
             console.log('[OTable.updateCell]: error', err);
             this.dialogService.alert('ERROR', 'MESSAGES.ERROR_UPDATE');
             cell.data(oldValue);
-            loader.unsubscribe();
+            this.loaderSuscription.unsubscribe();
           }
           );
       }
@@ -1286,7 +1310,7 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
         let key = this.dataKeys[k];
         kv[key] = rowCurrentData[key];
       }
-      var loader = this.load();
+      this.loaderSuscription = this.load();
       this.dataService[this.updateMethod](kv, av, this.entity)
         .subscribe(
         res => {
@@ -1297,12 +1321,12 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
             console.log('[OTable.updateRow]: error', res.code);
             this.dialogService.alert('ERROR', 'MESSAGES.ERROR_UPDATE');
           }
-          loader.unsubscribe();
+          this.loaderSuscription.unsubscribe();
         },
         err => {
           console.log('[OTable.updateRow]: error', err);
           this.dialogService.alert('ERROR', 'MESSAGES.ERROR_UPDATE');
-          loader.unsubscribe();
+          this.loaderSuscription.unsubscribe();
         }
         );
     }
@@ -1634,7 +1658,14 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   protected update(parentItem: any = undefined) {
+    if (!this.initialized) {
+      this.pendingQuery = true;
+      this.pendingQueryFilter = parentItem;
+      return;
+    }
     if (this.dataService && (this.queryMethod in this.dataService) && this.entity) {
+      this.pendingQuery = false;
+      this.pendingQueryFilter = undefined;
 
       if (typeof (this.dataTable) !== 'undefined') {
         this.dataTable.fnClearTable();
@@ -1689,8 +1720,12 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
           }
         }
         console.log('[OTable.update]: filter', filter);
-        var loader = this.load();
-        this.dataService[this.queryMethod](filter, this.dataColumns, this.entity)
+        if (this.querySuscription) {
+          this.querySuscription.unsubscribe();
+          this.loaderSuscription.unsubscribe();
+        }
+        this.loaderSuscription = this.load();
+        this.querySuscription = this.dataService[this.queryMethod](filter, this.dataColumns, this.entity)
           .subscribe(
           res => {
 
@@ -1723,13 +1758,13 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
             } else {
               console.log('[OTable.update]: error code ' + res.code + ' when querying data');
             }
-            loader.unsubscribe();
-            this.initialized = true;
+            this.loaderSuscription.unsubscribe();
+            // this.initialized = true;
           },
           err => {
             console.log('[OTable.update]: error', err);
-            loader.unsubscribe();
-            this.initialized = true;
+            this.loaderSuscription.unsubscribe();
+            // this.initialized = true;
           }
           );
 
