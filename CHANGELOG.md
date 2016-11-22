@@ -1,5 +1,26 @@
-## 1.0.2 (2016-11-07)
+## 1.1.0 (2016-11-24)
 
+### Features
+* **angular2:** update to official version 2.1.2
+* **angular/material:** v2.0.0-alpha.10 ([#1](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/1))
+* **container components:** New container components: 'o-row' and 'o-column'. ([c055f59](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/c055f59))
+* **o-list:** enhancements on 'o-list' component ([8fe285a](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/8fe285a))
+
+### PEER-DEPENDENCY UPDATES ###
+* **Removed**: angular2-material@v2.0.0-alpha.8-2
+* **Added**:   angular/material@v2.0.0-alpha.10
+
+### BREAKING CHANGES
+* **tabs components:** see new definition mode ([2.0.0-alpha.10 mithril-hoverboard](https://github.com/angular/material2/blob/master/CHANGELOG.md#breaking-changes))
+
+### Bug Fixes
+* **i18n:** Fixing core translations. ([ecb38ca](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/ecb38ca)) ([796f613](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/796f613))
+* **o-form:** Fixing minor bugs. ([ecb38ca](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/ecb38ca))
+* **disable state:** Fixing errors when setting 'disabled' state on input components. ([bd04120](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/bd04120))
+* **o-image:** Fixing errors ([2c12065](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/2c12065))
+
+
+## 1.0.2 (2016-11-07)
 
 ### Bug Fixes
 * **i18n:** Fixing configuration path for i18n files. ([47aaeff](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/47aaeff))
