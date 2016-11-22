@@ -13,7 +13,7 @@ import { InputConverter } from '../../../decorators';
 import { OTranslateService } from '../../../services';
 import { OTranslateModule } from '../../../pipes/o-translate.pipe';
 
-export const DEFAULT_INPUTS_O_ROW = [
+export const DEFAULT_INPUTS_O_COLUMN = [
   'oattr: attr',
   'titleLabel: title-label',
   'layoutAlign: layout-align',
@@ -22,17 +22,17 @@ export const DEFAULT_INPUTS_O_ROW = [
 ];
 
 @Component({
-  selector: 'o-row',
-  templateUrl: '/container/row/o-row.component.html',
-  styleUrls: ['/container/row/o-row.component.css'],
+  selector: 'o-column',
+  templateUrl: '/container/column/o-column.component.html',
+  styleUrls: ['/container/column/o-column.component.css'],
   inputs: [
-    ...DEFAULT_INPUTS_O_ROW
+    ...DEFAULT_INPUTS_O_COLUMN
   ],
   encapsulation: ViewEncapsulation.None
 })
-export class ORowComponent implements OnInit {
+export class OColumnComponent implements OnInit {
 
-  public static DEFAULT_INPUTS_O_ROW = DEFAULT_INPUTS_O_ROW;
+  public static DEFAULT_INPUTS_O_COLUMN = DEFAULT_INPUTS_O_COLUMN;
 
   oattr: string;
   titleLabel: string;
@@ -51,17 +51,17 @@ export class ORowComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.elRef.nativeElement.classList.add('o-row');
+    this.elRef.nativeElement.classList.add('o-column');
     if (this.elevation > 0) {
       let clazz = 'md-whiteframe-' + this.elevation + 'dp';
       this.elRef.nativeElement.classList.add(clazz);
       this.elRef.nativeElement.classList.add('margin-top-bottom');
     }
 
-    let innerRow = this.elRef.nativeElement.querySelectorAll('div#innerRow');
-    if (innerRow.length) {
+    let innerCol = this.elRef.nativeElement.querySelectorAll('div#innerCol');
+    if (innerCol.length) {
       var self = this;
-      let element = innerRow[0]; // Take only first, nested element does not matter.
+      let element = innerCol[0]; // Take only first, nested element does not matter.
       element.setAttribute('layout-align', this.layoutAlign);
       if (self.hasTitle()) {
         element.classList.add('container-content');
@@ -103,14 +103,14 @@ export class ORowComponent implements OnInit {
 }
 
 @NgModule({
-  declarations: [ORowComponent],
+  declarations: [OColumnComponent],
   imports: [CommonModule, OTranslateModule],
-  exports: [ORowComponent],
+  exports: [OColumnComponent],
 })
-export class ORowModule {
+export class OColumnModule {
   static forRoot(): ModuleWithProviders {
     return {
-      ngModule: ORowModule,
+      ngModule: OColumnModule,
       providers: []
     };
   }
