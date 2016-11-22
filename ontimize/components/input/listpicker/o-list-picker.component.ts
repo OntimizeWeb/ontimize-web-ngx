@@ -510,7 +510,9 @@ export class OListPickerComponent implements IFormComponent, IFormControlCompone
   }
 
   onBlur(evt: any) {
-     //nothing to do...
+    if (!this.isReadOnly && !this.isDisabled) {
+        this._fControl.markAsTouched();
+     }
   }
 
 }

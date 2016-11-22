@@ -205,5 +205,8 @@ combo:-webkit-autofill + .md-combo-placeholder {
 
 .md-combo {
   height: 60px;
+  .md-hint {
+    bottom: 4px;
+  }
 }
 

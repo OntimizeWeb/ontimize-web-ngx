@@ -3,6 +3,7 @@
 
 @mixin input-theme($theme) {
   $foreground: map-get($theme, foreground);
+  $warn: map-get($theme, warn);
 
   .md-input-element {
     /* Necessary !important due to 'currentColor' value on md-input-element of library*/
@@ -34,6 +35,24 @@
   input[type="url"]:disabled,
   input[type="week"]:disabled {
       color: md-color($foreground, text, 0.36);
+  }
+
+  .md-input,
+  .md-textarea {
+    &.ng-invalid.ng-touched {
+      .md-input-underline {
+        border-top-color: md-color($warn);
+        .md-input-ripple {
+          background-color: md-color($warn);
+        }
+      }
+      .md-input-placeholder.md-focused {
+        color: md-color($warn);
+      }
+      .md-hint {
+        color: md-color($warn);
+      }
+    }
   }
 
 }

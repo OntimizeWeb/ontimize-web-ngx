@@ -1,38 +1,29 @@
-@import 'ontimize/components/material/style/default-theme.scss';
+/*@import 'ontimize/components/material/style/default-theme.scss';
 @import 'ontimize/components/material/style/mixins.scss';
-@import 'ontimize/components/material/style/variables.scss';
+@import 'ontimize/components/material/style/variables.scss';*/
 
 
 
 span.icon-btn{
   cursor: pointer;
-  /*color: rgba(0, 0, 0, 0.47);*/
   i {
     padding-top: 4px;
   }
 
   &.md-disabled {
     cursor: default;
-    /*color: rgba(0, 0, 0, 0.26);*/
   }
 }
 
-$md-input-underline-color-warn: md-color($md-warn);
-
 .md-input {
   height: 60px;
-  &.ng-invalid.ng-touched {
-    .md-input-underline {
-      border-top-color: $md-input-underline-color-warn;
-      .md-input-ripple {
-        background-color: $md-input-underline-color-warn;
-      }
-    }
-    .md-input-placeholder.md-focused {
-      color: $md-input-underline-color-warn;
-    }
-    .md-hint {
-      color: $md-input-underline-color-warn;
-    }
+  .md-hint {
+    bottom: 4px;
+  }
+}
+
+.md-textarea {
+  .md-hint{
+    bottom: -0.5em !important;
   }
 }

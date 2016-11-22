@@ -347,6 +347,8 @@ export class ODateInputComponent extends OTextInputComponent implements OnInit {
       }
       this.setValue(newTimestamp);
       this.displayInputModel.value = newDisplayValue;
+
+      this._fControl.markAsTouched();
     }
   }
 
