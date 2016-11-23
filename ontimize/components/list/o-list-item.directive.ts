@@ -1,6 +1,6 @@
 import {
   Directive, ElementRef, forwardRef, OnInit, OnDestroy,
-  Inject, Input, HostListener, Renderer, AfterViewInit,
+  Inject, Input, HostListener, Renderer,
   ViewContainerRef,ComponentFactoryResolver, ContentChild
 } from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
@@ -10,7 +10,7 @@ import {ObservableWrapper} from '../../util/async';
 
 import {OListComponent} from './o-list.component';
 
-import { MdCheckbox, MdLine } from '@angular/material';
+import { MdLine } from '@angular/material';
 
 @Directive({
   selector: '[o-list-item]',
