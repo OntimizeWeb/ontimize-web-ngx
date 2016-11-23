@@ -9,7 +9,6 @@ import {
 import { CommonModule } from '@angular/common';
 
 import { OFormComponent } from '../../form/o-form.component';
-import { InputConverter } from '../../../decorators';
 import { OTranslateService } from '../../../services';
 import { OTranslateModule } from '../../../pipes/o-translate.pipe';
 
@@ -35,11 +34,11 @@ export class OColumnComponent implements OnInit {
   public static DEFAULT_INPUTS_O_COLUMN = DEFAULT_INPUTS_O_COLUMN;
 
   oattr: string;
-  titleLabel: string;
-  protected layoutAlign: string = 'start start';
-  @InputConverter()
-  protected elevation: number = 0;
 
+  protected _titleLabel: string;
+  protected _elevation: number = 0;
+  protected defaultLayoutAlign: string = 'start start';
+  protected _layoutAlign: string;
   protected translateService: OTranslateService;
 
   constructor(
@@ -51,21 +50,9 @@ export class OColumnComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.elRef.nativeElement.classList.add('o-column');
-    if (this.elevation > 0) {
-      let clazz = 'md-whiteframe-' + this.elevation + 'dp';
-      this.elRef.nativeElement.classList.add(clazz);
-      this.elRef.nativeElement.classList.add('margin-top-bottom');
-    }
-
-    let innerCol = this.elRef.nativeElement.querySelectorAll('div#innerCol');
-    if (innerCol.length) {
-      var self = this;
-      let element = innerCol[0]; // Take only first, nested element does not matter.
-      element.setAttribute('layout-align', this.layoutAlign);
-      if (self.hasTitle()) {
-        element.classList.add('container-content');
-      }
+    this.elRef.nativeElement.classList.add('o-row');
+    if (this.layoutAlign === undefined) {
+      this.propagateLayoutAligmentToDOM();
     }
   }
 
@@ -77,26 +64,89 @@ export class OColumnComponent implements OnInit {
     }
   }
 
-  hasTitle(): boolean {
-    return this.titleLabel && this.titleLabel.length > 0;
+  get elevation() {
+    return this._elevation;
   }
 
-  get title(): string {
-    if (this.translateService) {
-      return this.translateService.get(this.titleLabel);
+  set elevation(elevation: number) {
+    this._elevation = elevation;
+    this.propagateElevationToDOM();
+    this.propagatePaddingToDOM();
+  }
+
+  get layoutAlign() {
+    return this._layoutAlign;
+  }
+
+  set layoutAlign(align: string) {
+    if (!align || align.length === 0) {
+      align = this.defaultLayoutAlign;
     }
-    return this.titleLabel;
+    this._layoutAlign = align;
+    this.propagateLayoutAligmentToDOM();
   }
 
-  set title(value: string) {
-    var self = this;
-    window.setTimeout(() => {
-      self.titleLabel = value;
-    }, 0);
+  hasTitle(): boolean {
+    return this._titleLabel && this._titleLabel.length > 0;
   }
 
-  getLayoutAlign() {
-    return this.layoutAlign;
+  get titleLabel(): string {
+    if (this.translateService) {
+      return this.translateService.get(this._titleLabel);
+    }
+    return this._titleLabel;
+  }
+
+  set titleLabel(value: string) {
+    this._titleLabel = value;
+    this.propagatePaddingToDOM();
+  }
+
+  propagatePaddingToDOM() {
+    let innerCol = this.elRef.nativeElement.querySelectorAll('div#innerCol');
+    if (innerCol.length) {
+      var self = this;
+      let element = innerCol[0]; // Take only first, nested element does not matter.
+      if (self.hasTitle()
+          || (self.elevation>0 && self.elevation<=12) ) {
+        element.classList.add('container-content');
+      } else {
+        element.classList.remove('container-content');
+      }
+    }
+  }
+
+  propagateLayoutAligmentToDOM() {
+    let innerCol = this.elRef.nativeElement.querySelectorAll('div#innerCol');
+    if (innerCol.length) {
+      var self = this;
+      let element = innerCol[0]; // Take only first, nested element does not matter.
+      element.setAttribute('layout-align', this.layoutAlign);
+      if (self.hasTitle()) {
+        element.classList.add('container-content');
+      }
+    }
+  }
+
+  propagateElevationToDOM() {
+    this.cleanElevationCSSclasses();
+     if (this.elevation > 0 && this.elevation <= 12) {
+      let clazz = 'md-whiteframe-' + this.elevation + 'dp';
+      this.elRef.nativeElement.classList.add(clazz);
+      this.elRef.nativeElement.classList.add('margin-top-bottom');
+    }
+  }
+
+  cleanElevationCSSclasses() {
+    let arr_ = this.elRef.nativeElement.classList;
+    if (arr_ && arr_.length) {
+      var self = this;
+      arr_.forEach((item, index) => {
+        if (item.startsWith('md-whiteframe')) {
+          self.elRef.nativeElement.classList.remove(item);
+        }
+      });
+    }
   }
 
 
