@@ -41,6 +41,9 @@ export class OPercentInputComponent extends ORealInputComponent implements OnIni
   @InputConverter()
   grouping: boolean = true;
 
+  @InputConverter()
+  decimalDigits: number = 2;
+
   constructor( @Inject(forwardRef(() => OFormComponent)) protected form: OFormComponent,
     protected elRef: ElementRef,
     protected ngZone: NgZone,
