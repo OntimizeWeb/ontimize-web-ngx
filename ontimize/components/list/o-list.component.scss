@@ -52,6 +52,11 @@
 
 .o-list-container{
   position: relative;
+  display: flex;
+  flex-direction: column;
+  .md-list{
+    overflow: auto;
+  }
   .spinner-container {
       &.hidden-loading {
         display:none;
@@ -68,4 +73,8 @@
         stroke-width: 5px;
       }
     }
+}
+
+.fill-remaining {
+      flex: 1 1 auto;
 }
