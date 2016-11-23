@@ -1,6 +1,7 @@
 import {
   Directive, ElementRef, forwardRef, OnInit, OnDestroy,
-  Inject, Input, HostListener, Renderer
+  Inject, Input, HostListener, Renderer, AfterViewInit,
+  ViewContainerRef,ComponentFactoryResolver, ContentChild
 } from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import { EventEmitter } from '@angular/core';
@@ -8,10 +9,12 @@ import { EventEmitter } from '@angular/core';
 import {ObservableWrapper} from '../../util/async';
 
 import {OListComponent} from './o-list.component';
-import {IList} from '../../interfaces/list.interface';
+
+import { MdCheckbox, MdLine } from '@angular/material';
 
 @Directive({
   selector: '[o-list-item]',
+  exportAs: 'olistitem',
   host: {
       '(click)' : 'onItemClicked($event)'
   }
@@ -27,17 +30,26 @@ export class OListItemDirective implements OnInit, OnDestroy {
   @Input('o-list-item')
   modelData: Object;
 
+ // @ContentChild(OListItemDirective, { read: ViewContainerRef }) other;
+  @ContentChild(MdLine, { read: ViewContainerRef }) other;
+
+  @Input('selectable')
+  selectable: boolean = false;
 
   constructor(public _el: ElementRef,
     private renderer: Renderer,
     public actRoute: ActivatedRoute,
-    @Inject(forwardRef(() => OListComponent)) public _list: IList) {
+    @Inject(forwardRef(() => OListComponent)) public _list: OListComponent,
+    private containerRef: ViewContainerRef,
+    private componentFactoryResolver : ComponentFactoryResolver) {
        this._list.registerListItem(this);
   }
 
   @HostListener('mouseenter')
   onMouseEnter() {
-    this.renderer.setElementStyle(this._el.nativeElement, 'cursor', 'pointer');
+    if (!this.selectable) {
+      this.renderer.setElementStyle(this._el.nativeElement, 'cursor', 'pointer');
+    }
   }
 
   ngOnInit() {
@@ -69,8 +81,25 @@ export class OListItemDirective implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.subcription.unsubscribe();
+    if (this.subcription) {
+      this.subcription.unsubscribe();
+    }
   }
+
+  /*
+  ngAfterViewInit() {
+
+    let checkBoxFactory = this.componentFactoryResolver.resolveComponentFactory(MdCheckbox);
+    let checkBoxRef = this.other.createComponent(checkBoxFactory, 0);
+    checkBoxRef.instance.change.subscribe((value: any) => {
+      this.onSelect();
+    });
+    window.setTimeout(() => {
+      checkBoxRef.instance.checked = this._list.isItemSelected(this.modelData);
+    }, 50);
+
+    // this.containerRef.move(checkBoxRef.hostView, 0);
+  }*/
 
   onItemClicked(evt) {
     var self = this;
@@ -80,7 +109,17 @@ export class OListItemDirective implements OnInit, OnDestroy {
 
   }
 
+
   public onClick(onNext: (item: OListItemDirective) => void): Object {
     return ObservableWrapper.subscribe(this.mdClick, onNext);
   }
+
+  public isSelected() {
+    return this._list.isItemSelected(this.modelData);
+  }
+
+  public onSelect() {
+    this._list.setSelected(this.modelData);
+  }
+
 }
