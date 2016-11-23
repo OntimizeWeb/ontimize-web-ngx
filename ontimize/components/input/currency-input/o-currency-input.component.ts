@@ -1,14 +1,18 @@
-import {Component, Inject, Injector, forwardRef, ElementRef, OnInit,
+import {
+  Component, Inject, Injector, forwardRef, ElementRef, OnInit,
   NgZone, ChangeDetectorRef,
   NgModule,
   ModuleWithProviders,
-  ViewEncapsulation} from '@angular/core';
+  ViewEncapsulation
+} from '@angular/core';
 
-import {ValidatorFn } from '@angular/forms/src/directives/validators';
+import { ValidatorFn } from '@angular/forms/src/directives/validators';
 import { OSharedModule } from '../../../shared.module';
-import {OFormComponent} from '../../form/o-form.component';
-import {ORealInputModule, ORealInputComponent,
-  DEFAULT_INPUTS_O_REAL_INPUT, DEFAULT_OUTPUTS_O_REAL_INPUT} from '../real-input/o-real-input.component';
+import { OFormComponent } from '../../form/o-form.component';
+import {
+  ORealInputModule, ORealInputComponent,
+  DEFAULT_INPUTS_O_REAL_INPUT, DEFAULT_OUTPUTS_O_REAL_INPUT
+} from '../real-input/o-real-input.component';
 
 export const DEFAULT_INPUTS_O_CURRENCY_INPUT = [
   ...DEFAULT_INPUTS_O_REAL_INPUT,
@@ -28,7 +32,7 @@ export const DEFAULT_OUTPUTS_O_CURRENCY_INPUT = [
     ...DEFAULT_INPUTS_O_CURRENCY_INPUT
   ],
   outputs: [
-     ...DEFAULT_OUTPUTS_O_CURRENCY_INPUT
+    ...DEFAULT_OUTPUTS_O_CURRENCY_INPUT
   ],
   encapsulation: ViewEncapsulation.None
 })
@@ -37,7 +41,7 @@ export class OCurrencyInputComponent extends ORealInputComponent implements OnIn
   public static DEFAULT_INPUTS_O_CURRENCY_INPUT = DEFAULT_INPUTS_O_CURRENCY_INPUT;
   public static DEFAULT_OUTPUTS_O_CURRENCY_INPUT = DEFAULT_OUTPUTS_O_CURRENCY_INPUT;
 
-   currency_symbols = {
+  currency_symbols = {
     'USD': '$', // US Dollar
     'EUR': '€', // Euro
     'CRC': '₡', // Costa Rican Colón

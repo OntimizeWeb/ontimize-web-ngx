@@ -1,9 +1,10 @@
-import {Pipe} from '@angular/core';
+import { Pipe, PipeTransform  } from '@angular/core';
 
 @Pipe({
   name: 'columnsfilter'
 })
-export class ColumnsFilterPipe {
+
+export class ColumnsFilterPipe implements PipeTransform {
 
   filterValue: string;
   filterColumns: Array<string>;
