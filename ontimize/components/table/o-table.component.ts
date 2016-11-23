@@ -186,8 +186,8 @@ export const DEFAULT_INPUTS_O_TABLE = [
   // recursive-edit [no|yes]: do not append detail keys when navigate (overwrite current). Default: no.
   'recursiveEdit: recursive-edit',
 
-  // show-header-buttons-text [string][yes|no|true|false]: show text of header buttons
-  'showHeaderButtonsText: show-header-buttons-text',
+  // show-table-buttons-text [string][yes|no|true|false]: show text of header buttons
+  'showTableButtonsText: show-table-buttons-text',
 
   // select-all-checkbox [string][yes|no|true|false]:
   'selectAllCheckbox: select-all-checkbox',
@@ -282,7 +282,7 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
   @InputConverter()
   selectAllCheckbox: boolean = false;
   @InputConverter()
-  showHeaderButtonsText: boolean = false;
+  showTableButtonsText: boolean = true;
   @InputConverter()
   controls: boolean = true;
 
@@ -2038,7 +2038,7 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
 
   protected getTableButtons() {
     let buttons = [];
-    let buttonTextClass = this.showHeaderButtonsText ? '' : ' hidden-action-text';
+    let buttonTextClass = this.showTableButtonsText ? '' : ' hidden-action-text';
     // add
     if (this.insertButton) {
       buttons.push({
@@ -2075,7 +2075,7 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
     for (var i = 0; i < this.headerButtons.length; i++) {
       var headerBtn = this.headerButtons[i];
       buttons.push({
-        text: this.translateService.get(headerBtn.getText()),
+        text: this.translateService.get(headerBtn.getLabel()),
         className: 'custom-generic-action icon-' + headerBtn.getIcon() + buttonTextClass,
         action: () => {
           headerBtn.innerOnClick();

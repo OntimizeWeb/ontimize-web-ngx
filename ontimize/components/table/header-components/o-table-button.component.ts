@@ -4,10 +4,8 @@ import { OTableComponent } from '../o-table.component';
 
 
 export const DEFAULT_INPUTS_O_TABLE_BUTTON = [
-
   'icon',
-
-  'text'
+  'olabel: label'
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE_BUTTON = [
@@ -34,7 +32,7 @@ export class OTableButtonComponent implements OnInit {
   protected table: OTableComponent;
   protected translateService: OTranslateService;
   protected icon: string;
-  protected text: string;
+  protected olabel: string;
 
 
   constructor(protected injector: Injector, @Inject(forwardRef(() => OTableComponent)) table: OTableComponent) {
@@ -44,16 +42,16 @@ export class OTableButtonComponent implements OnInit {
 
   public ngOnInit() {
     this.table.registerHeaderButton(this);
-    if (typeof this.text !== 'undefined' && this.text.length > 0) {
-      this.text = this.translateService.get(this.text);
+    if (typeof this.olabel !== 'undefined' && this.olabel.length > 0) {
+      this.olabel = this.translateService.get(this.olabel);
     }
     if (typeof this.icon === 'undefined') {
       this.icon = 'priority_high';
     }
   }
 
-  public getText() {
-    return this.text;
+  public getLabel() {
+    return this.olabel;
   }
 
   public getIcon() {

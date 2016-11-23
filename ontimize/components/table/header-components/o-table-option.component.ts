@@ -5,11 +5,8 @@ import { OTableComponent } from '../o-table.component';
 
 
 export const DEFAULT_INPUTS_O_TABLE_OPTION = [
-
-  //.
   'icon',
-  //
-  'text'
+  'olabel: label'
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE_OPTION = [
@@ -35,7 +32,7 @@ export class OTableOptionComponent implements OnInit {
 
   protected table: OTableComponent;
   protected icon: string;
-  protected text: string;
+  protected olabel: string;
 
   constructor( @Inject(forwardRef(() => OTableComponent)) table: OTableComponent) {
     this.table = table;
