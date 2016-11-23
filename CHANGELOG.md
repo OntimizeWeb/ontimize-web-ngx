@@ -5,6 +5,7 @@
 * **angular/material:** v2.0.0-alpha.10 ([#1](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/1))
 * **container components:** New container components: 'o-row' and 'o-column'. ([c055f59](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/c055f59))
 * **o-list:** enhancements on 'o-list' component ([8fe285a](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/8fe285a))
+* **creating pipes**: adding o-integer.pipe and o-real.pipe to o-integer-input, o-real-input, o-currency-input and o-percent-input([#23](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/23)) ([cc74967](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/cc74967))
 
 ### PEER-DEPENDENCY UPDATES ###
 * **Removed**: angular2-material@v2.0.0-alpha.8-2
@@ -12,6 +13,9 @@
 
 ### BREAKING CHANGES
 * **tabs components:** see new definition mode ([2.0.0-alpha.10 mithril-hoverboard](https://github.com/angular/material2/blob/master/CHANGELOG.md#breaking-changes))
+* **o-table:** show-header-buttons-text attribute changed to show-table-buttons-text ([fc96884](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/fc96884))
+* **o-table-button:** text attribute changed to label ([fc96884](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/fc96884))
+* **o-table-option:** text attribute changed to label ([fc96884](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/fc96884))
 
 ### Bug Fixes
 * **i18n:** Fixing core translations. ([ecb38ca](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/ecb38ca)) ([796f613](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/796f613))
