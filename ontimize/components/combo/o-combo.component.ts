@@ -194,6 +194,8 @@ export class OComboComponent implements IFormComponent, IFormControlComponent, I
     }
 
     if (this.staticData) {
+      this.queryOnBind = false;
+      this.queryOnInit = false;
       this.setDataArray(this.staticData);
     } else {
       this.configureService();
@@ -263,6 +265,10 @@ export class OComboComponent implements IFormComponent, IFormControlComponent, I
 
   queryData(filter: Object = {}) {
     var that = this;
+    if (this.dataService === undefined) {
+      console.warn('No service configured! aborting query');
+      return;
+    }
     this.dataService.query(filter, this.colArray, this.entity)
       .subscribe(resp => {
         if (resp.code === 0) {
@@ -312,7 +318,7 @@ export class OComboComponent implements IFormComponent, IFormControlComponent, I
     } else if (Util.isObject(data)) {
       this.dataArray = [data];
     } else {
-      console.warn('Form has received not supported service data. Supported data are Array or Object');
+      console.warn('Combo has received not supported service data. Supported data are Array or Object');
       this.dataArray = [];
     }
   }
