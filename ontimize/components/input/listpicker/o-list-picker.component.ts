@@ -34,6 +34,8 @@ export const DEFAULT_INPUTS_O_LIST_PICKER = [
   'autoBinding: automatic-binding',
   'oenabled: enabled',
   'orequired: required',
+  //static-data [Array<any>] : way to populate with static data. Default: no value.
+  'staticData: static-data',
 
   'entity',
   'service',
@@ -82,40 +84,42 @@ export class OListPickerComponent implements IFormComponent, IFormControlCompone
   public static DEFAULT_OUTPUTS_O_LIST_PICKER = DEFAULT_OUTPUTS_O_LIST_PICKER;
 
   /* Inputs */
-  oattr: string;
-  olabel: string;
+  protected oattr: string;
+  protected olabel: string;
   // data: any;
   @InputConverter()
-  oenabled: boolean = true;
+  protected oenabled: boolean = true;
   @InputConverter()
-  orequired: boolean = false;
+  protected orequired: boolean = false;
   @InputConverter()
-  autoBinding: boolean = true;
+  protected autoBinding: boolean = true;
 
-  entity: string;
-  service: string;
-  columns: string;
-  valueColumn: string;
-  parentKeys: string;
-  visibleColumns: string;
-  descriptionColumns: string;
+  protected staticData: Array<any>;
 
-  @InputConverter()
-  filter: boolean = true;
-  separator: string;
+  protected entity: string;
+  protected service: string;
+  protected columns: string;
+  protected valueColumn: string;
+  protected parentKeys: string;
+  protected visibleColumns: string;
+  protected descriptionColumns: string;
 
   @InputConverter()
-  queryOnInit :boolean = true;
+  protected filter: boolean = true;
+  protected separator: string;
+
   @InputConverter()
-  queryOnBind: boolean = false;
+  protected queryOnInit :boolean = true;
+  @InputConverter()
+  protected queryOnBind: boolean = false;
   protected sqlType: string;
   /* End inputs */
 
 
-  dataArray: any[] = [];
-  colArray: string[] = [];
-  visibleColArray: string[] = [];
-  descriptionColArray: string[] = [];
+  protected dataArray: any[] = [];
+  protected colArray: string[] = [];
+  protected visibleColArray: string[] = [];
+  protected descriptionColArray: string[] = [];
 
   @ViewChild('dialog')
   protected dialog: MdDialog;
@@ -123,7 +127,7 @@ export class OListPickerComponent implements IFormComponent, IFormControlCompone
   @ViewChild('inputModel')
   protected inputModel: MdInput;
 
-  onChange: EventEmitter<Object> = new EventEmitter<Object>();
+  public onChange: EventEmitter<Object> = new EventEmitter<Object>();
 
   protected value: OFormValue;
   protected translateService: OTranslateService;
@@ -189,7 +193,13 @@ export class OListPickerComponent implements IFormComponent, IFormControlCompone
       this._isReadOnly = this._disabled;
     }
 
-    this.configureService();
+    if (this.staticData) {
+      this.queryOnBind = false;
+      this.queryOnInit = false;
+      this.setDataArray(this.staticData);
+    } else {
+      this.configureService();
+    }
 
   }
 
@@ -257,6 +267,10 @@ export class OListPickerComponent implements IFormComponent, IFormControlCompone
     if (filter) {
       kv = filter;
     }
+    if (this.dataService === undefined) {
+      console.warn('No service configured! aborting query');
+      return;
+    }
     this.dataService.query(kv, this.colArray, this.entity)
       .subscribe(
         (res: any) => {
@@ -309,7 +323,7 @@ export class OListPickerComponent implements IFormComponent, IFormControlCompone
     } else if (Util.isObject(data)) {
       this.dataArray = [data];
     } else {
-      console.warn('Form has received not supported service data. Supported data are Array or Object');
+      console.warn('ListPicker has received not supported service data. Supported data are Array or Object');
       this.dataArray = [];
     }
   }
