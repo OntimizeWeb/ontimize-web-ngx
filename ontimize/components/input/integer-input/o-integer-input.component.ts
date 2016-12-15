@@ -109,7 +109,20 @@ export class OIntegerInputComponent extends OTextInputComponent implements OnIni
     return control;
   }
 
-  innerOnFocus(val: any) {
+  innerOnChange(event: any) {
+    if (!this.value) {
+      this.value = new OFormValue();
+    }
+    if (this.focused) {
+      let parsedValue = this.componentPipe.transform(this.value.value, this.pipeArguments);
+      this.value.value = parsedValue;
+    }
+    this.ensureOFormValue(event);
+    this.onChange.emit(event);
+  }
+
+  innerOnFocus(event: any) {
+    event.stopPropagation();
     this.focused = true;
     if (this.isReadOnly) {
       return;
@@ -117,12 +130,17 @@ export class OIntegerInputComponent extends OTextInputComponent implements OnIni
     this.setDOMValue(this.getValue());
   }
 
-  innerOnBlur(val: any) {
+  innerOnBlur(event: any) {
+    event.stopPropagation();
     this.focused = false;
     if (this.isReadOnly) {
       return;
     }
     this.setPipeValue();
+    let formControl = this.getControl();
+    if (formControl) {
+      formControl.updateValueAndValidity();
+    }
   }
 
   setPipeValue() {
@@ -149,6 +167,9 @@ export class OIntegerInputComponent extends OTextInputComponent implements OnIni
       inputElement = this.elRef.nativeElement.getElementsByTagName('INPUT')[0];
     }
     if (typeof inputElement !== 'undefined') {
+      if (this.focused) {
+        ($ as any )(inputElement).width(($ as any )(inputElement).outerWidth(true));
+      }
       inputElement.type = this.focused ? 'number' : 'text';
       inputElement.value = val;
     }
