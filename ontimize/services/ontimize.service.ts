@@ -1,13 +1,13 @@
-import {Injector, Injectable} from '@angular/core';
-import {Http, Headers} from '@angular/http';
-import {Router} from '@angular/router';
-import {Observable} from 'rxjs/Observable';
+import { Injector, Injectable } from '@angular/core';
+import { Http, Headers } from '@angular/http';
+import { Router } from '@angular/router';
+import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/share';
 
-import {LoginService, SERVICE_CONFIG} from '../services';
-import {IAuthService, IDataService} from '../interfaces';
-import {APP_CONFIG, Config} from '../config/app-config';
+import { LoginService, SERVICE_CONFIG } from '../services';
+import { IAuthService, IDataService } from '../interfaces';
+import { APP_CONFIG, Config } from '../config/app-config';
 
 
 @Injectable()
@@ -27,7 +27,7 @@ export class OntimizeService implements IAuthService, IDataService {
   protected _sessionid: number = -1;
   protected _user: string;
   protected _urlBase: string;
-  protected _appConfig:Config;
+  protected _appConfig: Config;
 
 
   constructor(protected injector: Injector) {
@@ -50,7 +50,7 @@ export class OntimizeService implements IAuthService, IDataService {
   }
 
   public configureService(config: any): void {
-    this._urlBase = config.urlBase ? config.urlBase : this._appConfig['apiEndpoint'] ;
+    this._urlBase = config.urlBase ? config.urlBase : this._appConfig['apiEndpoint'];
     this._sessionid = config.session ? config.session.id : -1;
     this._user = config.session ? config.session.user : '';
 
@@ -140,7 +140,7 @@ export class OntimizeService implements IAuthService, IDataService {
     return dataObservable;
   }
 
-  public query(kv?: Object, av?: Array<string>, entity?: string, sqltypes?: Object) : Observable<any> {
+  public query(kv?: Object, av?: Array<string>, entity?: string, sqltypes?: Object): Observable<any> {
     entity = (this.isNullOrUndef(entity)) ? this.entity : entity;
 
     //TODO improve this -> merge between global conf and specific params of method calling
@@ -190,20 +190,20 @@ export class OntimizeService implements IAuthService, IDataService {
   }
 
   public advancedQuery(kv?: Object, av?: Array<string>, entity?: string, sqltypes?: Object,
-    offset?: number, pagesize?: number, orderby?: Array<Object>) : Observable<any> {
+    offset?: number, pagesize?: number, orderby?: Array<Object>): Observable<any> {
     entity = (this.isNullOrUndef(entity)) ? this.entity : entity;
 
     //TODO improve this -> merge between global conf and specific params of method calling
     kv = (this.isNullOrUndef(kv)) ? this.kv : kv;
     av = (this.isNullOrUndef(av)) ? this.av : av;
     sqltypes = (this.isNullOrUndef(sqltypes)) ? this.sqltypes : sqltypes;
-    if (offset) {
+    if (!this.isNullOrUndef(offset)) {
       this.offset = offset;
     }
-    if (pagesize) {
+    if (!this.isNullOrUndef(pagesize)) {
       this.pagesize = pagesize;
     }
-    if (orderby) {
+    if (!this.isNullOrUndef(orderby)) {
       this.orderby = orderby;
     }
 
@@ -227,7 +227,7 @@ export class OntimizeService implements IAuthService, IDataService {
     });
 
     var self = this;
-     let _innerObserver: any;
+    let _innerObserver: any;
     let dataObservable = new Observable(observer => _innerObserver = observer).share();
 
     this.http
@@ -389,7 +389,7 @@ export class OntimizeService implements IAuthService, IDataService {
 
   protected redirectLogin(sessionExpired: boolean = false) {
     let router = this.injector.get(Router);
-    router.navigate(['login'],{ queryParams: { 'isdetail': 'true' } });
+    router.navigate(['login'], { queryParams: { 'isdetail': 'true' } });
   }
 
   protected isNullOrUndef(arg: any): boolean {
