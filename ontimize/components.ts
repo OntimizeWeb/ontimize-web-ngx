@@ -41,6 +41,7 @@ export * from './components/side-menu/o-locale-side-menu-item.component';
 export * from './components/side-menu/o-side-menu-separator.component';
 export * from './components/table/o-table.component';
 export * from './components/table/o-table-column.component';
+export * from './components/table/header-components/header-components';
 export * from './components/table/cell-renderer/cell-renderer';
 export * from './components/table/cell-editor/cell-editor';
 

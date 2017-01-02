@@ -26,8 +26,9 @@
       <button *ngIf="columnsVisibilityButton" md-menu-item (click)="columnsVisibilityButtonAction()"> {{ 'TABLE.BUTTONS.COLVIS' | oTranslate }} </button>
 
       <button md-menu-item *ngFor="let option of headerOptions" (click)="option.innerOnClick($event)">
-        {{ option.text | oTranslate }}
-        <md-icon *ngIf="option.icon" class="md-24">{{ option.icon }}</md-icon>
+        <md-icon *ngIf="option.icon && option.iconPosition === 'before'" class="md-24">{{ option.icon }}</md-icon>
+        {{ option.olabel | oTranslate }}
+        <md-icon *ngIf="option.icon && option.iconPosition === 'after'" class="md-24" style="margin-left: 16px;">{{ option.icon }}</md-icon>
       </button>
     </md-menu>
 
