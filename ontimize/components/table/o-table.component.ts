@@ -1071,17 +1071,21 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
 
     if (!this.selectAllCheckbox) {
 
-      this.table.on('select', (event: any, dt: Array<any>, type: string, indexes: Array<any>) => {
+      this.table.off('select').on('select', (event: any, dt: Array<any>, type: string, indexes: Array<any>) => {
         if (this.enabled) {
           if (typeof (indexes) !== 'undefined') {
+            event.preventDefault();
+            event.stopPropagation();
             this.handleSelection(event, dt, type, indexes);
           }
         }
       });
 
-      this.table.on('deselect', (event: any, dt: Array<any>, type: string, indexes: Array<any>) => {
+      this.table.off('deselect').on('deselect', (event: any, dt: Array<any>, type: string, indexes: Array<any>) => {
         if (this.enabled) {
           if (typeof (indexes) !== 'undefined') {
+            event.preventDefault();
+            event.stopPropagation();
             this.handleDeselection(event, dt, type, indexes);
           }
         }
@@ -1089,7 +1093,7 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
 
     }
 
-    this.table.on('key', (event, dt, key, cell, originalEvent) => {
+    this.table.off('key').on('key', (event, dt, key, cell, originalEvent) => {
       if (this.enabled) {
         let colIndex = cell.index()['column'];
         let colDef = this.table.settings().init().columns[colIndex];
@@ -1105,7 +1109,7 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
       }
     });
 
-    this.table.on('key-focus', (event, dt, cell) => {
+    this.table.off('key-focus').on('key-focus', (event, dt, cell) => {
       if (this.enabled) {
         // select row
         if (!this.selectAllCheckbox) {
@@ -1128,7 +1132,7 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
         }
       }
     });
-    this.table.on('key-blur', (event, dt, cell) => {
+    this.table.off('key-blur').on('key-blur', (event, dt, cell) => {
       if (this.enabled) {
         // if cell is editable, perform insertion
         let colIndex = cell.index()['column'];
@@ -1145,21 +1149,16 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
       }
     });
     var self = this;
-    this.table.on('draw.dt', () => {
-      self.tableHtmlEl.find('tr').off('click');
-      self.tableHtmlEl.find('tr').on('click', (event: any) => this.handleClick(event));
-      self.tableHtmlEl.find('tr').off('dblclick');
-      self.tableHtmlEl.find('tr').on('dblclick', (event: any) => this.handleDoubleClick(event));
-
+    this.table.off('draw.dt').on('draw.dt', () => {
+      self.tableHtmlEl.find('tr').off('click').on('click', (event: any) => this.handleClick(event));
+      self.tableHtmlEl.find('tr').off('dblclick').on('dblclick', (event: any) => this.handleDoubleClick(event));
       if (this.selectAllCheckbox) {
-        self.tableHtmlEl.find('th #select_all').off('click');
-        self.tableHtmlEl.find('th #select_all').on('click', (event: any) => this.handleSelectAllClick(event));
-        self.tableHtmlEl.find('tbody tr .select-row').off('change');
-        self.tableHtmlEl.find('tbody tr .select-row').on('change', (event: any) => this.handleRowCheckboxChange(event));
+        self.tableHtmlEl.find('th #select_all').off('click').on('click', (event: any) => this.handleSelectAllClick(event));
+        self.tableHtmlEl.find('tbody tr .select-row').off('change').on('change', (event: any) => this.handleRowCheckboxChange(event));
       }
     });
 
-    this.table.on('order.dt', () => {
+    this.table.off('order.dt').on('order.dt', () => {
       let order = this.table.order();
       if ((this.groupColumnIndex !== -1) && (order[0][0] !== this.groupColumnIndex)) {
         order.unshift([this.groupColumnIndex, this.groupColumnOrder]);
@@ -1172,7 +1171,7 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
         emptyRow.parent().addClass('empty');
       }
     });
-    this.table.on('column-visibility.dt', (e, settings, column, state) => {
+    this.table.off('column-visibility.dt').on('column-visibility.dt', (e, settings, column, state) => {
       this.handleColumnWidth();
       this.handleOrderIndex();
       let resizeButton = $('#' + this.attr + '_wrapper .generic-action-resize') as any;
@@ -1182,7 +1181,7 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
       this.initColumnGroup();
     });
 
-    this.table.on('length.dt', (e, settings, len) => {
+    this.table.off('length.dt').on('length.dt', (e, settings, len) => {
       setTimeout(() => {
         let resizeButton = $('#' + self.attr + '_wrapper .generic-action-resize') as any;
         if (resizeButton.hasClass('active')) {
@@ -1204,7 +1203,7 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
       }, 100);
     });
 
-    this.table.on('search.dt', () => {
+    this.table.off('search.dt').on('search.dt', () => {
       setTimeout(() => {
         let resizeButton = $('#' + this.attr + '_wrapper .generic-action-resize') as any;
         if (resizeButton.hasClass('active')) {
@@ -1467,13 +1466,17 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
           this.selectedItems.push(selection[i]);
         }
       }
-      let deleteButton = $('#' + this.attr + '_wrapper .generic-action-delete') as any;
-      if (this.selectedItems.length > 0) {
-        deleteButton.removeClass('disabled');
-      } else {
-        deleteButton.addClass('disabled');
-      }
+      this.updateDeleteButtonState();
       ObservableWrapper.callEmit(this.onRowSelected, selection);
+    }
+  }
+
+  protected updateDeleteButtonState() {
+    let deleteButton = $('#' + this.attr + '_wrapper .generic-action-delete') as any;
+    if (this.selectedItems.length > 0) {
+      deleteButton.removeClass('disabled');
+    } else {
+      deleteButton.addClass('disabled');
     }
   }
 
@@ -1501,12 +1504,7 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
         }
       }
     }
-    let deleteButton = $('#' + this.attr + '_wrapper .generic-action-delete') as any;
-    if (this.selectedItems.length > 0) {
-      deleteButton.removeClass('disabled');
-    } else {
-      deleteButton.addClass('disabled');
-    }
+    this.updateDeleteButtonState();
     ObservableWrapper.callEmit(this.onRowDeleted, selection);
   }
 
@@ -1582,13 +1580,15 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
     checkBoxColumn.attr('class', 'o-table-column-select-checkbox');
 
     let tableRow = this.table.rows(rowEL);
-
+    let rowData = tableRow.data().toArray()[0];
     if (event.target.checked) {
       checkBoxColumn.addClass('md-checkbox-checked md-checkbox-anim-unchecked-checked');
       tableRow.select();
+      this.selectedItems.push(rowData);
     } else {
       checkBoxColumn.addClass('md-checkbox-anim-checked-unchecked');
       tableRow.deselect();
+      this.selectedItems.splice(this.selectedItems.indexOf(rowData), 1);
       var selectAllEL = this.tableHtmlEl.find('th #select_all')[0];
       // If "Select all" control is checked and has 'indeterminate' property
       if (selectAllEL && selectAllEL.checked && ('indeterminate' in selectAllEL)) {
@@ -1599,13 +1599,7 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
         headerCheckboxCol.addClass('md-checkbox-indeterminate md-checkbox-anim-checked-indeterminate');
       }
     }
-
-    let deleteButton = $('#' + this.attr + '_wrapper .generic-action-delete') as any;
-    if (this.table.rows('.selected').nodes().length) {
-      deleteButton.removeClass('disabled');
-    } else {
-      deleteButton.addClass('disabled');
-    }
+    this.updateDeleteButtonState();
   }
 
   protected handleClick(event: any) {
@@ -1664,7 +1658,7 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
 
   protected initColumnGroup() {
     let header = this.tableHtmlEl.find('th');
-    header.on('click', (event: any) => {
+    header.off('click').on('click', (event: any) => {
       // TODO: only .off this event handler, instead of stopping propagation
       if (event.isPropagationStopped()) {
         return;
@@ -1838,9 +1832,16 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
                   self.dataTable.fnPageChange(newPage);
                 }
               }
+              this.selectedItems = [];
+
               if (typeof (self.state.selectedIndex) !== 'undefined') {
-                self.table.rows(self.state.selectedIndex).select();
+                let selectedRow = self.table.rows(self.state.selectedIndex);
+                let selectedRowData = selectedRow.data().toArray()[0];
+                if (this.selectedItems.indexOf(selectedRowData) === -1) {
+                  this.selectedItems.push(selectedRowData);
+                }
               }
+              this.updateDeleteButtonState();
               self.state = {};
             } else {
               console.log('[OTable.update]: error code ' + res.code + ' when querying data');
@@ -2109,9 +2110,8 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
                   }
                 }
               }
-              let deleteButton = $('#' + this.attr + '_wrapper .generic-action-delete') as any;
-              deleteButton.addClass('disabled');
               this.selectedItems = [];
+              this.updateDeleteButtonState();
               this.dataTable.fnClearTable();
               if (this.componentData.length > 0) {
                 this.dataTable.fnAddData(this.componentData);
