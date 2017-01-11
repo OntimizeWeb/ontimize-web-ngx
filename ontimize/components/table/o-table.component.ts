@@ -397,10 +397,10 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
 
     this.initialized = false;
 
-    this.authGuardService = injector.get(AuthGuardService);
-    this.momentService = injector.get(MomentService);
-    this.dialogService = injector.get(DialogService);
-    this.translateService = injector.get(OTranslateService);
+    this.authGuardService = this.injector.get(AuthGuardService);
+    this.momentService = this.injector.get(MomentService);
+    this.dialogService = this.injector.get(DialogService);
+    this.translateService = this.injector.get(OTranslateService);
     this.parentItem = undefined;
     this.filterForm = false;
     this.selectedItems = [];
