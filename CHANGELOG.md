@@ -1,3 +1,14 @@
+## 1.1.1 (2017-01-11)
+
+### Features
+* **o-table**: adding remote pagination ([#22](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/22)) ([6593db8](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/6593db8))
+* **o-table-option**: adding icon position parameter ([1c65a80](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/1c65a80))
+* **ontimize.service**: adding advancedQuery method.
+* **o-list-picker**: adding new parameter (static-data) ([1d0f2cc](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/1d0f2cc))
+
+### Bug Fixes
+* **minor bugs**: Fixing minor bugs in components.
+
 ## 1.1.0 (2016-11-24)
 
 ### Features
@@ -6,8 +17,6 @@
 * **container components:** New container components: 'o-row' and 'o-column'. ([c055f59](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/c055f59))
 * **o-list:** enhancements on 'o-list' component ([8fe285a](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/8fe285a))
 * **creating pipes**: adding o-integer.pipe and o-real.pipe to o-integer-input, o-real-input, o-currency-input and o-percent-input([#23](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/23)) ([cc74967](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/cc74967))
-* **o-table**: adding remote pagination ([#22](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/22)) ([6593db8](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/6593db8))
-* **ontimize.service**: adding advancedQuery method.
 
 ### PEER-DEPENDENCY UPDATES ###
 * **Removed**: angular2-material@v2.0.0-alpha.8-2
