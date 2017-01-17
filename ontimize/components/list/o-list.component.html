@@ -1,6 +1,7 @@
 <div class="o-list-container" layout-fill>
   <!--<span *ngIf="title" class="o-list-title">{{title}}</span>-->
-  <div [class.hidden-loading]="!loading" class="spinner-container" flex="100" layout="row" layout-align="center center">
+  <div [class.hidden-loading]="!loading" [class.pageable-loading]="pageable && queryRecordOffset > 0" class="spinner-container"
+    flex="100" layout="row" layout-align="center center">
     <md-spinner></md-spinner>
   </div>
 
@@ -9,19 +10,19 @@
       <button type="button" md-icon-button aria-label="Refresh" (click)="onReload()" *ngIf="refreshButton">
         <md-icon>refresh</md-icon>
       </button>
-    <span class="fill-remaining"></span>
-     <div *ngIf="title" layout="row" layout-align="center center">
-       <span>{{  title | oTranslate }}</span>
-      </div >
-    <span *ngIf="title" class="fill-remaining"></span>
+      <span class="fill-remaining"></span>
+      <div *ngIf="title" layout="row" layout-align="center center">
+        <span>{{  title | oTranslate }}</span>
+      </div>
+      <span *ngIf="title" class="fill-remaining"></span>
 
-    <o-search-input *ngIf="quickFilter" placeholder=""></o-search-input>
+      <o-search-input *ngIf="quickFilter" placeholder=""></o-search-input>
     </div>
-</md-toolbar>
+  </md-toolbar>
 
-<div layout="column" class="fill-remaining">
-  <md-list class="md-list">
-    <ng-content></ng-content>
-  </md-list>
-</div>
+  <div layout="column" class="fill-remaining">
+    <md-list class="md-list" (scroll)="onScroll($event)">
+      <ng-content></ng-content>
+    </md-list>
+  </div>
 </div>
