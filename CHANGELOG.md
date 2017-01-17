@@ -1,3 +1,9 @@
+## 1.2.0
+
+### Features
+* **o-list**:  adding remote pagination ([#40](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/40)) ([8fbbb73](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/8fbbb73))
+
+
 ## 1.1.1 (2017-01-11)
 
 ### Features
