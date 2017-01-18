@@ -1,37 +1,43 @@
 import {
-  Directive, ElementRef, forwardRef, OnInit, OnDestroy,
-  Inject, Input, HostListener, Renderer,
-  ViewContainerRef,ComponentFactoryResolver, ContentChild
+  Directive, ElementRef, OnInit, OnDestroy,
+  Input, HostListener, Renderer,
+  ViewContainerRef, ComponentFactoryResolver, ContentChild
 } from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { EventEmitter } from '@angular/core';
 
-import {ObservableWrapper} from '../../util/async';
+import { ObservableWrapper } from '../../util/async';
 
-import {OListComponent} from './o-list.component';
+import { IList } from '../../interfaces/list.interface';
 
 import { MdLine } from '@angular/material';
 
 @Directive({
-  selector: '[o-list-item]',
+  selector: 'md-list-item[o-list-item]',
   exportAs: 'olistitem',
   host: {
-      '(click)' : 'onItemClicked($event)'
+    '(click)': 'onItemClicked($event)',
+    '(dblclick)': 'onItemDblClicked($event)'
   }
 })
 export class OListItemDirective implements OnInit, OnDestroy {
 
   mdClick: EventEmitter<any> = new EventEmitter();
+  mdDblClick: EventEmitter<any> = new EventEmitter();
 
-  active:boolean = false;
+  active: boolean = false;
 
   subcription: any;
+  _list: IList;
 
   @Input('o-list-item')
   modelData: Object;
 
- // @ContentChild(OListItemDirective, { read: ViewContainerRef }) other;
+  // @ContentChild(OListItemDirective, { read: ViewContainerRef }) other;
   @ContentChild(MdLine, { read: ViewContainerRef }) other;
+
+  // @ContentChildren(OListItemDirective)
+  //   listItemDirectives: QueryList<OListItemDirective>;
 
   @Input('selectable')
   selectable: boolean = false;
@@ -39,10 +45,8 @@ export class OListItemDirective implements OnInit, OnDestroy {
   constructor(public _el: ElementRef,
     private renderer: Renderer,
     public actRoute: ActivatedRoute,
-    @Inject(forwardRef(() => OListComponent)) public _list: OListComponent,
     private containerRef: ViewContainerRef,
-    private componentFactoryResolver : ComponentFactoryResolver) {
-       this._list.registerListItem(this);
+    private componentFactoryResolver: ComponentFactoryResolver) {
   }
 
   @HostListener('mouseenter')
@@ -56,28 +60,34 @@ export class OListItemDirective implements OnInit, OnDestroy {
     this.subcription = this.actRoute
       .params
       .subscribe(params => {
-        let aKeys = this._list.getKeys();
-        if (this.modelData) {
-          let _act = false;
-          if (aKeys.length > 0) {
-            for (let k = 0; k < aKeys.length; ++k) {
-              let key = aKeys[k];
-              let id = params[key];
-              _act = (this.modelData[key] === id);
-              if (_act === false) {
-                break;
-              }
+        this.updateActiveState(params);
+      });
+  }
+
+  updateActiveState(params) {
+    if (this._list) {
+      let aKeys = this._list.getKeys();
+      if (this.modelData) {
+        let _act = false;
+        if (aKeys.length > 0) {
+          for (let k = 0; k < aKeys.length; ++k) {
+            let key = aKeys[k];
+            let id = params[key];
+            _act = (this.modelData[key] === id);
+            if (_act === false) {
+              break;
             }
           }
-          if (_act) {
-            this._el.nativeElement.classList.add('md-active');
-          } else {
-            this._el.nativeElement.classList.remove('md-active');
-          }
+        }
+        if (_act) {
+          this._el.nativeElement.classList.add('md-active');
         } else {
           this._el.nativeElement.classList.remove('md-active');
         }
-      });
+      } else {
+        this._el.nativeElement.classList.remove('md-active');
+      }
+    }
   }
 
   ngOnDestroy() {
@@ -104,11 +114,9 @@ export class OListItemDirective implements OnInit, OnDestroy {
   onItemClicked(evt) {
     var self = this;
     window.setTimeout(() => {
-       ObservableWrapper.callEmit(self.mdClick, self);
+      ObservableWrapper.callEmit(self.mdClick, self);
     }, 250);
-
   }
-
 
   public onClick(onNext: (item: OListItemDirective) => void): Object {
     return ObservableWrapper.subscribe(this.mdClick, onNext);
@@ -122,4 +130,28 @@ export class OListItemDirective implements OnInit, OnDestroy {
     this._list.setSelected(this.modelData);
   }
 
+  onItemDblClicked(evt) {
+    var self = this;
+    window.setTimeout(() => {
+      ObservableWrapper.callEmit(self.mdDblClick, self);
+    }, 250);
+  }
+
+  public onDblClick(onNext: (item: OListItemDirective) => void): Object {
+    return ObservableWrapper.subscribe(this.mdDblClick, onNext);
+  }
+
+  setListComponent(list: IList) {
+    this._list = list;
+  }
+
+  setItemData(data) {
+    if (!this.modelData) {
+      this.modelData = data;
+    }
+  }
+
+  getItemData() {
+    return this.modelData;
+  }
 }

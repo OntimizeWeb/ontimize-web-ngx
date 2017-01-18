@@ -1,21 +1,23 @@
-import {Component, Inject, ElementRef, NgZone, Injector, forwardRef, Optional,
+import {
+  Component, Inject, ElementRef, NgZone, Injector, forwardRef, Optional,
   NgModule,
   ModuleWithProviders,
-  ViewEncapsulation} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {Router, ActivatedRoute} from '@angular/router';
+  ViewEncapsulation
+} from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Router, ActivatedRoute } from '@angular/router';
 // import {ObservableWrapper} from '../../util/async';
 
 import { MdListModule } from '@angular/material';
 
-import {OntimizeService} from '../../services';
-import {OSearchInputModule, OSearchInputComponent} from '../search-input/o-search-input.component';
-import {dataServiceFactory} from '../../services/data-service.provider';
-import {OListModule, OListComponent, DEFAULT_INPUTS_O_LIST, DEFAULT_OUTPUTS_O_LIST} from '../list/o-list.component';
-import {OFormComponent} from '../form/o-form.component';
-import {OSelectableListItemModule} from './o-selectable-list-item.component';
-import {MdSelectableListItemDirective} from '../../directives/MdSelectableListItemDirective';
-import {IList} from '../../interfaces';
+import { OntimizeService } from '../../services';
+import { OSearchInputModule, OSearchInputComponent } from '../search-input/o-search-input.component';
+import { dataServiceFactory } from '../../services/data-service.provider';
+import { OListModule, OListComponent, DEFAULT_INPUTS_O_LIST, DEFAULT_OUTPUTS_O_LIST } from '../list/o-list.component';
+import { OFormComponent } from '../form/o-form.component';
+import { OSelectableListItemModule } from './o-selectable-list-item.component';
+import { MdSelectableListItemDirective } from '../../directives/MdSelectableListItemDirective';
+import { IList } from '../../interfaces';
 
 export const DEFAULT_INPUTS_O_SELECTABLE_LIST = [
   ...DEFAULT_INPUTS_O_LIST
@@ -30,7 +32,7 @@ export const DEFAULT_OUTPUTS_O_SELECTABLE_LIST = [
   templateUrl: 'selectable-list/o-selectable-list.component.html',
   styleUrls: ['selectable-list/o-selectable-list.component.css'],
   providers: [
-    { provide: OntimizeService, useFactory: dataServiceFactory, deps:[Injector] }
+    { provide: OntimizeService, useFactory: dataServiceFactory, deps: [Injector] }
   ],
   inputs: [
     ...DEFAULT_INPUTS_O_SELECTABLE_LIST
@@ -47,14 +49,14 @@ export class OSelectableListComponent extends OListComponent implements IList {
 
   selected: any[] = [];
 
- constructor(
-    router: Router,
-    actRoute: ActivatedRoute,
-    el: ElementRef,
-    zone: NgZone,
-    injector: Injector,
+  constructor(
+    protected _router: Router,
+    protected _actRoute: ActivatedRoute,
+    public element: ElementRef,
+    protected zone: NgZone,
+    protected _injector: Injector,
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent) {
-      super(router, actRoute, el, zone, injector, form);
+    super(_router, _actRoute,element, zone, _injector, form);
   }
 
   registerListItem(item: MdSelectableListItemDirective) {

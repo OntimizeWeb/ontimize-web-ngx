@@ -1,13 +1,14 @@
 import {
   NgModule,
-  ModuleWithProviders,
+  ModuleWithProviders
 } from '@angular/core';
 
 import { DisabledComponentDirective } from './directives/DisabledComponentDirective';
+import { OListItemDirective } from './components/list/o-list-item.directive';
 
 @NgModule({
-  declarations: [DisabledComponentDirective],
-  exports: [DisabledComponentDirective],
+  declarations: [DisabledComponentDirective, OListItemDirective],
+  exports: [DisabledComponentDirective, OListItemDirective],
 })
 export class OSharedModule {
   static forRoot(): ModuleWithProviders {

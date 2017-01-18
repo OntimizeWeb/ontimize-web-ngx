@@ -4,11 +4,10 @@ import {
   QueryList, Optional, forwardRef,
   NgModule,
   ModuleWithProviders,
-  ViewEncapsulation
+  ViewEncapsulation, EventEmitter
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
-import { EventEmitter } from '@angular/core';
 import { ObservableWrapper } from '../../util/async';
 import { Observable } from 'rxjs/Observable';
 
@@ -22,46 +21,61 @@ import { OListItemModule } from './o-list-item.component';
 import { OFormComponent } from '../form/o-form.component';
 import { InputConverter } from '../../decorators';
 import { Util } from '../../util/util';
-import { OListItemDirective } from './o-list-item.directive';
 import { IList } from '../../interfaces';
 import { OListItemComponent } from './o-list-item.component';
+import { OListItemDirective } from './o-list-item.directive';
 import { OTranslateModule } from '../../pipes/o-translate.pipe';
 
 import { Subscription } from 'rxjs/Subscription';
 export const DEFAULT_INPUTS_O_LIST = [
   // attr [string]: list identifier. It is mandatory if data are provided through the data attribute. Default: entity (if set).
   'attr',
+
   'title',
   // visible [no|yes]: visibility. Default: yes.
+
   'visible',
   // enabled [no|yes]: editability. Default: yes.
+
   'enabled',
   // quick-filter [no|yes]: show quick filter. Default: yes.
+
   'quickFilter: quick-filter',
   // quick-filter-columns [string]: columns of the filter, separated by ';'. Default: no value.
+
   'quickFilterColumns: quick-filter-columns',
   //controls [string][yes|no|true|false]:
+
   'controls',
   // refresh-button [no|yes]: show refresh button. Default: yes.
+
   'refreshButton: refresh-button',
   // query-on-init [no|yes]: query table on init. Default: yes.
+
   'queryOnInit: query-on-init',
+
   'pageable',
+
   'cssClass: css-class',
   // columns [string]: columns of the entity, separated by ';'. Default: no value.
+
   'columns',
   // parent-keys [string]: parent keys to filter, separated by ';'. Default: no value.
+
   'parentKeys: parent-keys',
   // entity [string]: entity of the service. Default: no value.
+
   'entity',
+
   'service',
   // keys [string]: entity keys, separated by ';'. Default: no value.
+
   'keys',
+
   'route',
   //static-data [Array<any>] : way to populate with static data. Default: no value.
+
   'listData: static-data',
-  // detail-form-route [string]: route of detail form. Default: 'detail'.
-  'detailFormRoute: detail-form-route',
 
   // paginated-query-method [string]: name of the service method to perform paginated queries. Default: advancedQuery.
   'paginatedQueryMethod : paginated-query-method',
@@ -70,7 +84,34 @@ export const DEFAULT_INPUTS_O_LIST = [
   'queryRows: query-rows',
 
   // query-method [string]: name of the service method to perform queries. Default: query.
-  'queryMethod: query-method'
+  'queryMethod: query-method',
+
+  // detail-mode [none|click|doubleclick]: way to open the detail form of a row. Default: 'none'.
+  'detailMode: detail-mode',
+
+  // detail-form-route [string]: route of detail form. Default: 'detail'.
+  'detailFormRoute: detail-form-route',
+
+  // recursive-detail [no|yes]: do not append detail keys when navigate (overwrite current). Default: no.
+  'recursiveDetail: recursive-detail',
+
+  // detail-button-in-row [no|yes]: adding a button in row for opening detail form. Default: yes.
+  'detailButtonInRow: detail-button-in-row',
+
+  // detail-button-in-row-icon [string]: material icon. Default: mode_edit.
+  'detailButtonInRowIcon: detail-button-in-row-icon',
+
+  // edit-form-route [string]: route of edit form. Default: 'edit'.
+  'editFormRoute: edit-form-route',
+
+  // recursive-edit [no|yes]: do not append detail keys when navigate (overwrite current). Default: no.
+  'recursiveEdit: recursive-edit',
+
+  // edit-button-in-row [no|yes]: adding a button in row for opening edition form. Default: no.
+  'editButtonInRow: edit-button-in-row',
+
+  // edit-button-in-row-icon [string]: material icon. Default: search.
+  'editButtonInRowIcon: edit-button-in-row-icon'
 ];
 
 export const DEFAULT_OUTPUTS_O_LIST = [
@@ -97,6 +138,12 @@ export class OListComponent implements OnInit, IList, AfterContentInit {
   public static DEFAULT_INPUTS_O_LIST = DEFAULT_INPUTS_O_LIST;
   public static DEFAULT_OUTPUTS_O_LIST = DEFAULT_OUTPUTS_O_LIST;
   public static DEFAULT_QUERY_ROWS = 10;
+  public static DEFAULT_DETAIL_MODE = 'none';
+  public static DETAIL_MODE_CLICK = 'click';
+  public static DETAIL_MODE_DBLCLICK = 'dblclick';
+
+  public static DEFAULT_DETAIL_ICON = 'chevron_right';
+  public static DEFAULT_EDIT_ICON = 'mode_edit';
 
   public loading: boolean = false;
   protected authGuardService: AuthGuardService;
@@ -116,6 +163,14 @@ export class OListComponent implements OnInit, IList, AfterContentInit {
   visible: boolean = true;
   @InputConverter()
   enabled: boolean = true;
+  @InputConverter()
+  recursiveDetail: boolean = false;
+  @InputConverter()
+  detailButtonInRow: boolean = true;
+  @InputConverter()
+  recursiveEdit: boolean = false;
+  @InputConverter()
+  editButtonInRow: boolean = false;
 
   protected attr: string;
   protected title: string;
@@ -130,17 +185,26 @@ export class OListComponent implements OnInit, IList, AfterContentInit {
   protected dataParentKeys: {};
   protected parentItem: any;
   protected route: string;
-  protected detailFormRoute: string;
   protected onFormDataSubscribe: any;
+
+  protected detailMode: string;
+  protected detailFormRoute: string;
+  protected detailButtonInRowIcon: string;
+  protected editFormRoute: string;
+  public editButtonInRowIcon: string;
   /* End Inputs */
 
   @ContentChildren(OListItemComponent)
-  templateItem: QueryList<OListItemComponent>;
+  listItemComponents: QueryList<OListItemComponent>;
+
+  @ContentChildren(OListItemDirective)
+  listItemDirectives: QueryList<OListItemDirective>;
 
   @ViewChild(OSearchInputComponent)
   searchInputComponent: OSearchInputComponent;
 
   public mdClick: EventEmitter<any> = new EventEmitter();
+  public mdDblClick: EventEmitter<any> = new EventEmitter();
 
   protected dataArray: any[] = [];
   protected listData: any[] = null;
@@ -173,6 +237,8 @@ export class OListComponent implements OnInit, IList, AfterContentInit {
     this.authGuardService = this._injector.get(AuthGuardService);
     this.translateService = this._injector.get(OTranslateService);
 
+    this.detailMode = OListComponent.DEFAULT_DETAIL_MODE;
+
     this.onLanguageChangeSubscribe = this.translateService.onLanguageChanged.subscribe(
       res => {
         console.log('OListComponent TODO onLanguageChangeSubscribe');
@@ -180,26 +246,14 @@ export class OListComponent implements OnInit, IList, AfterContentInit {
     );
   }
 
-  registerListItem(item: OListItemDirective) {
-    if (item) {
-      var self = this;
-      item.onClick(mdItem => {
-        self.doListItemClick(mdItem);
-        ObservableWrapper.callEmit(self.mdClick, item);
-      });
-    }
-  }
-
   registerSearchInput(input: OSearchInputComponent) {
     if (input && this.quickFilter) {
       var self = this;
       input.onSearch.subscribe(val => {
-        //console.log(val);
         self.filterData(val);
       });
     }
   }
-
 
   public onListItemClicked(onNext: (item: OListItemDirective) => void): Object {
     return ObservableWrapper.subscribe(this.mdClick, onNext);
@@ -273,6 +327,14 @@ export class OListComponent implements OnInit, IList, AfterContentInit {
       this.queryRows = OListComponent.DEFAULT_QUERY_ROWS;
     }
 
+    if (!this.detailButtonInRowIcon) {
+      this.detailButtonInRowIcon = OListComponent.DEFAULT_DETAIL_ICON;
+    }
+
+    if (!this.editButtonInRowIcon) {
+      this.editButtonInRowIcon = OListComponent.DEFAULT_EDIT_ICON;
+    }
+
     if (this.queryOnInit) {
       this.queryData();
     }
@@ -280,19 +342,6 @@ export class OListComponent implements OnInit, IList, AfterContentInit {
 
   public ngOnDestroy() {
     this.onLanguageChangeSubscribe.unsubscribe();
-  }
-
-  ngAfterContentInit() {
-    //console.log(this.dataArray);
-    this.templateItem.changes.subscribe(() => {
-      console.log(this.dataArray);
-    });
-  }
-
-  ngAfterViewInit() {
-    if (this.searchInputComponent) {
-      this.registerSearchInput(this.searchInputComponent);
-    }
   }
 
   configureService() {
@@ -304,6 +353,54 @@ export class OListComponent implements OnInit, IList, AfterContentInit {
         serviceCfg['entity'] = this.entity;
       }
       this.dataService.configureService(serviceCfg);
+    }
+  }
+
+  ngAfterViewInit() {
+    if (this.searchInputComponent) {
+      this.registerSearchInput(this.searchInputComponent);
+    }
+  }
+
+  ngAfterContentInit() {
+    var self = this;
+    this.listItemComponents.changes.subscribe(() => {
+      self.listItemComponents.forEach(function (element: OListItemComponent, index, array) {
+        element.setItemData(self.dataArray[index]);
+      });
+    });
+
+    this.listItemDirectives.changes.subscribe(() => {
+      self.listItemDirectives.forEach(function (element: OListItemDirective, index, array) {
+        element.setItemData(self.dataArray[index]);
+        element.setListComponent(self);
+        self.registerListItemDirective(element);
+      });
+    });
+  }
+
+  registerListItemDirective(item: OListItemDirective) {
+    if (item) {
+      if (this.detailMode === OListComponent.DETAIL_MODE_CLICK) {
+        item.onClick(this.onItemDetailClick);
+      }
+      if (this.detailMode === OListComponent.DETAIL_MODE_DBLCLICK) {
+        item.onDblClick(this.onItemDetailDblClick);
+      }
+    }
+  }
+
+  onItemDetailClick(item: OListItemDirective | OListItemComponent) {
+    if (this.enabled && this.detailMode === OListComponent.DETAIL_MODE_CLICK) {
+      this.viewDetail(item.getItemData());
+      ObservableWrapper.callEmit(this.mdClick, item);
+    }
+  }
+
+  onItemDetailDblClick(item: OListItemDirective | OListItemComponent) {
+    if (this.enabled && this.detailMode === OListComponent.DETAIL_MODE_DBLCLICK) {
+      this.viewDetail(item.getItemData());
+      ObservableWrapper.callEmit(this.mdDblClick, item);
     }
   }
 
@@ -387,23 +484,6 @@ export class OListComponent implements OnInit, IList, AfterContentInit {
       };
     }
     this.queryData({}, queryArgs);
-  }
-
-  doListItemClick(mdItem: OListItemDirective): void {
-    if (mdItem && mdItem.modelData) {
-      let route = this.getRouteOfSelectedRow(mdItem.modelData, this.detailFormRoute);
-      if (route.length > 0) {
-        this._router.navigate(route,
-          {
-            relativeTo: this._actRoute,
-            queryParams: {
-              'isdetail': 'true'
-            }
-          }
-        );
-      }
-    }
-    // this._router.navigate(['/' + this.route, params]);
   }
 
   protected getRouteOfSelectedRow(item: any, modeRoute: any) {
@@ -577,6 +657,36 @@ export class OListComponent implements OnInit, IList, AfterContentInit {
         };
         this.queryData({}, queryArgs);
       }
+    }
+  }
+
+  viewDetail(item: any): void {
+    let route = this.getRouteOfSelectedRow(item, this.detailFormRoute);
+    if (route.length > 0) {
+      this._router.navigate(route,
+        {
+          relativeTo: this.recursiveDetail ? this._actRoute.parent : this._actRoute,
+          queryParams: {
+            'isdetail': 'true'
+          }
+        }
+      );
+    }
+  }
+
+  public editDetail(item: any) {
+    let route = this.getRouteOfSelectedRow(item, this.editFormRoute);
+    if (route.length > 0) {
+      route.push('edit');
+      this._router.navigate(
+        route,
+        {
+          relativeTo: this.recursiveEdit ? this._actRoute.parent : this._actRoute,
+          queryParams: {
+            'isdetail': 'true'
+          }
+        }
+      );
     }
   }
 }

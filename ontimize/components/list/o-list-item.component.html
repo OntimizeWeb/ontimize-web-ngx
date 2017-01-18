@@ -1,3 +1,13 @@
-<md-list-item md-ink o-md-list-item class="md-1-line o-list-item" layout-fill>
+<div [class.md-list-item-focus]="_hasFocus" class="o-list-item md-list-item" layout-fill (click)="onItemClick($event)" (dblclick)="onItemDblClick($event)">
+  <ng-content select="[md-list-avatar],[md-list-icon], [mat-list-avatar], [mat-list-icon]"></ng-content>
+  <div class="md-list-text">
+    <ng-content select="[md-line], [mat-line]"></ng-content>
+  </div>
   <ng-content></ng-content>
-</md-list-item>
+  <div class="o-list-row-action" *ngIf="_list && _list.editButtonInRow" (click)="onEditIconClicked($event)">
+    <md-icon class="material-icons">{{ _list.editButtonInRowIcon }}</md-icon>
+  </div>
+  <div class="o-list-row-action" *ngIf="_list && _list.detailButtonInRow" (click)="onDetailIconClicked($event)">
+    <md-icon class="material-icons">{{ _list.detailButtonInRowIcon }}</md-icon>
+  </div>
+</div>
