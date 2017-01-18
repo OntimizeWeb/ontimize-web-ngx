@@ -2,11 +2,12 @@
 
 ### Features
 * **o-list**: adding remote pagination ([#40](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/40)) ([8fbbb73](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/8fbbb73))
-* **o-list**: adding 'detail-mode' attribute
-* **o-list**: adding 'recursive-detail', 'detail-form-route', 'detail-button-in-row', 'detail-button-in-row-icon' attributes
-* **o-list**: adding 'recursive-edit', 'edit-form-route', 'edit-button-in-row', 'edit-button-in-row-icon' attributes
+* **o-list**: adding 'detail-mode' attribute for choosing which action ('click', 'dblclick' or 'none') will navigate to detail form.
+* **o-list**: adding 'recursive-detail', 'detail-form-route', 'detail-button-in-row', 'detail-button-in-row-icon' attributes for managing detail mode access.
+* **o-list**: adding 'recursive-edit', 'edit-form-route', 'edit-button-in-row', 'edit-button-in-row-icon' attributes for managing edition mode access.
 * **o-list-item**: updating item rendering for allowing to add detail or/and edit button.
 * **o-list-item.directive**: adding dblclick event handler.
+* **o-list**: adding default item for empty list.
 
 
 ## 1.1.1 (2017-01-11)

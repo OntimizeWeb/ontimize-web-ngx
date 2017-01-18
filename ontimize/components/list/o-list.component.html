@@ -22,6 +22,9 @@
 
   <div layout="column" class="fill-remaining">
     <md-list class="md-list" (scroll)="onScroll($event)">
+      <md-list-item *ngIf="!dataArray.length" layout="row" layout-align="center center" style="cursor: default;">
+        <h3 md-line>{{ 'TABLE.EMPTY' | oTranslate }}</h3>
+      </md-list-item>
       <ng-content></ng-content>
     </md-list>
   </div>
