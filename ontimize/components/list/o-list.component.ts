@@ -381,11 +381,16 @@ export class OListComponent implements OnInit, IList, AfterContentInit {
 
   registerListItemDirective(item: OListItemDirective) {
     if (item) {
+      var self = this;
       if (this.detailMode === OListComponent.DETAIL_MODE_CLICK) {
-        item.onClick(this.onItemDetailClick);
+        item.onClick(directiveItem => {
+          self.onItemDetailClick(directiveItem);
+        });
       }
       if (this.detailMode === OListComponent.DETAIL_MODE_DBLCLICK) {
-        item.onDblClick(this.onItemDetailDblClick);
+        item.onDblClick(directiveItem => {
+          self.onItemDetailDblClick(directiveItem);
+        });
       }
     }
   }
