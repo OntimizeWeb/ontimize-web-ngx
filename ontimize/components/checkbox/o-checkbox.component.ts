@@ -1,34 +1,30 @@
 import {
   Component, Inject, Injector, OnInit,
   forwardRef, ElementRef, EventEmitter,
-  NgZone, ChangeDetectorRef,
+  Optional,
   NgModule,
   ModuleWithProviders,
   ViewEncapsulation
 } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule, FormControl, Validators } from '@angular/forms';
-import { ValidatorFn } from '@angular/forms/src/directives/validators';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { MdInputModule, MdCheckboxModule } from '@angular/material';
 
-import {
-  IFormComponent, IFormControlComponent, IFormDataTypeComponent,
-  IFormDataComponent
-} from '../../interfaces';
 import { OSharedModule } from '../../shared.module';
-import { InputConverter } from '../../decorators';
-import { OFormComponent, Mode } from '../form/o-form.component';
+import { OFormComponent } from '../form/o-form.component';
 import { OFormValue } from '../form/OFormValue';
-import { OTranslateService } from '../../services';
 import { OTranslateModule } from '../../pipes/o-translate.pipe';
-import { SQLTypes } from '../../utils';
+import { OFormDataComponent } from '../o-form-data-component.class';
 
 
 export const DEFAULT_INPUTS_O_CHECKBOX = [
   'oattr: attr',
   'olabel: label',
+  'tooltip',
+  'tooltipPosition: tooltip-position',
+  'tooltipShowDelay: tooltip-show-delay',
   'data',
   'autoBinding: automatic-binding',
   'oenabled: enabled',
@@ -54,54 +50,28 @@ export const DEFAULT_OUTPUTS_O_CHECKBOX = [
   encapsulation: ViewEncapsulation.None
 })
 
-export class OCheckboxComponent implements IFormComponent, IFormControlComponent, IFormDataTypeComponent, IFormDataComponent, OnInit {
+export class OCheckboxComponent extends OFormDataComponent implements OnInit {
 
   public static DEFAULT_INPUTS_O_CHECKBOX = DEFAULT_INPUTS_O_CHECKBOX;
   public static DEFAULT_OUTPUTS_O_CHECKBOX = DEFAULT_OUTPUTS_O_CHECKBOX;
 
-  oattr: string;
-  olabel: string;
-  @InputConverter()
-  oenabled: boolean = true;
-  @InputConverter()
-  orequired: boolean = true;
-  @InputConverter()
-  autoBinding: boolean = true;
-  sqlType: string;
-
   onChange: EventEmitter<Object> = new EventEmitter<Object>();
 
-  protected value: OFormValue;
-  protected translateService: OTranslateService;
-  protected _SQLType: number = SQLTypes.OTHER;
-  protected _disabled: boolean;
-  protected _isReadOnly: boolean;
-  protected _placeholder: string;
-  protected _fControl: FormControl;
-
-  constructor( @Inject(forwardRef(() => OFormComponent)) protected form: OFormComponent,
-    protected elRef: ElementRef,
-    protected ngZone: NgZone,
-    protected cd: ChangeDetectorRef,
-    protected injector: Injector) {
-
-    this.translateService = this.injector.get(OTranslateService);
+  constructor(
+    @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
+    elRef: ElementRef,
+    injector: Injector) {
+    super(form, elRef, injector);
+    this._defaultSQLTypeKey = 'BOOLEAN';
+    this.defaultValue = false;
   }
 
   ngOnInit(): void {
-    this._disabled = !this.oenabled;
+    this.initialize();
+  }
 
-    this._placeholder = this.olabel ? this.olabel : this.oattr;
-
-    if (this.form) {
-      this.form.registerFormComponent(this);
-      this.form.registerFormControlComponent(this);
-      this.form.registerSQLTypeFormComponent(this);
-
-      this._isReadOnly = this.form.mode === Mode.INITIAL ? true : false;
-    } else {
-      this._isReadOnly = this._disabled;
-    }
+  ngOnDestroy() {
+    this.destroy();
   }
 
   ensureOFormValue(value: any) {
@@ -115,57 +85,6 @@ export class OCheckboxComponent implements IFormComponent, IFormControlComponent
     } else {
       this.value = new OFormValue(false);
     }
-  }
-
-  ngOnDestroy() {
-    if (this.form) {
-      this.form.unregisterFormComponent(this);
-      this.form.unregisterFormControlComponent(this);
-      this.form.unregisterSQLTypeFormComponent(this);
-    }
-  }
-
-  getAttribute() {
-    if (this.oattr) {
-      return this.oattr;
-    } else if (this.elRef && this.elRef.nativeElement.attributes['attr']) {
-      return this.elRef.nativeElement.attributes['attr'].value;
-    }
-  }
-
-  getControl(): FormControl {
-    if (!this._fControl) {
-      let validators: ValidatorFn[] = this.resolveValidators();
-      let cfg = {
-        value: this.value ? this.value.value : undefined,
-        disabled: this._disabled
-      };
-      this._fControl = new FormControl(cfg, validators);
-    }
-    return this._fControl;
-  }
-
-  resolveValidators(): ValidatorFn[] {
-    let validators: ValidatorFn[] = [];
-
-    if (this.orequired) {
-      validators.push(Validators.required);
-    }
-    return validators;
-  }
-
-  getSQLType(): number {
-    let sqlt = this.sqlType && this.sqlType.length > 0 ? this.sqlType : 'BOOLEAN';
-    this._SQLType = SQLTypes.getSQLTypeValue(sqlt);
-    return this._SQLType;
-  }
-
-  set data(value: any) {
-    this.ensureOFormValue(value);
-  }
-
-  isAutomaticBinding(): Boolean {
-    return this.autoBinding;
   }
 
   getValue(): any {
@@ -185,54 +104,12 @@ export class OCheckboxComponent implements IFormComponent, IFormControlComponent
     return false;
   }
 
-  setValue(val: any) {
-    this.ensureOFormValue(val);
-  }
-
-  get placeHolder(): string {
-    if (this.translateService) {
-      return this.translateService.get(this._placeholder);
-    }
-    return this._placeholder;
-  }
-
-  set placeHolder(value: string) {
-    this._placeholder = value;
-  }
-
-  get isReadOnly(): boolean {
-    return this._isReadOnly;
-  }
-
-  set isReadOnly(value: boolean) {
-    if (this._disabled) {
-      this._isReadOnly = false;
-      return;
-    }
-    this._isReadOnly = value;
-  }
-
-  get isDisabled(): boolean {
-    return this._disabled;
-  }
-
-  set disabled(value: boolean) {
-    this._disabled = value;
-  }
-
   innerOnChange(event: any) {
     if (!this.value) {
       this.value = new OFormValue(false);
     }
     this.ensureOFormValue(event);
     this.onChange.emit(event);
-  }
-
-  get isValid() {
-    if (this._fControl) {
-      return this._fControl.valid;
-    }
-    return false;
   }
 
   onClickBlocker(evt: Event) {

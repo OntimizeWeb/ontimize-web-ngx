@@ -37,15 +37,15 @@ export interface IOntimizeServiceConf {
   totalsize?: number;
 }
 
-export interface IFormComponent {
+export interface IComponent {
   getAttribute(): string;
 }
 
-export interface IFormDataTypeComponent extends IFormComponent {
+export interface IFormDataTypeComponent extends IComponent {
   getSQLType(): number;
 }
 
-export interface IFormControlComponent extends IFormComponent {
+export interface IFormControlComponent extends IComponent {
   getControl(): FormControl;
 }
 

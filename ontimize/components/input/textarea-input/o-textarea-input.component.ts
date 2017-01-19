@@ -1,13 +1,18 @@
-import {Component, Inject, Injector, forwardRef, ElementRef,
-  NgZone, ChangeDetectorRef,
+import {
+  Component, Inject, Injector, forwardRef, ElementRef,
+  Optional,
   NgModule,
   ModuleWithProviders,
-  ViewEncapsulation} from '@angular/core';
+  ViewEncapsulation
+} from '@angular/core';
 
 import { OSharedModule } from '../../../shared.module';
-import {OFormComponent} from '../../form/o-form.component';
-import {OTextInputModule, OTextInputComponent,
-  DEFAULT_INPUTS_O_TEXT_INPUT, DEFAULT_OUTPUTS_O_TEXT_INPUT} from '../text-input/o-text-input.component';
+import { InputConverter } from '../../../decorators';
+import { OFormComponent } from '../../form/o-form.component';
+import {
+  OTextInputModule, OTextInputComponent,
+  DEFAULT_INPUTS_O_TEXT_INPUT, DEFAULT_OUTPUTS_O_TEXT_INPUT
+} from '../text-input/o-text-input.component';
 
 export const DEFAULT_INPUTS_O_TEXTAREA_INPUT = [
   ...DEFAULT_INPUTS_O_TEXT_INPUT,
@@ -36,12 +41,14 @@ export class OTextareaInputComponent extends OTextInputComponent {
   public static DEFAULT_INPUTS_O_TEXTAREA_INPUT = DEFAULT_INPUTS_O_TEXTAREA_INPUT;
   public static DEFAULT_OUTPUTS_O_TEXTAREA_INPUT = DEFAULT_OUTPUTS_O_TEXTAREA_INPUT;
 
-  constructor( @Inject(forwardRef(() => OFormComponent)) protected form: OFormComponent,
-    protected elRef: ElementRef,
-    protected ngZone: NgZone,
-    protected cd: ChangeDetectorRef,
-    protected injector: Injector) {
-    super(form, elRef, ngZone, cd, injector);
+  @InputConverter()
+  rows: number = 5;
+
+  constructor(
+    @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
+    elRef: ElementRef,
+    injector: Injector) {
+    super(form, elRef, injector);
   }
 
   isResizable() {
@@ -56,7 +63,7 @@ export class OTextareaInputComponent extends OTextInputComponent {
 
 @NgModule({
   declarations: [OTextareaInputComponent],
-  imports: [ OSharedModule, OTextInputModule],
+  imports: [OSharedModule, OTextInputModule],
   exports: [OTextareaInputComponent, OTextInputModule],
 })
 export class OTextareaInputModule {

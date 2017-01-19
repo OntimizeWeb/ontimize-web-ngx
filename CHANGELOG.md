@@ -8,7 +8,20 @@
 * **o-list-item**: updating item rendering for allowing to add detail or/and edit button.
 * **o-list-item.directive**: adding dblclick event handler.
 * **o-list**: adding default item for empty list.
+* **input components**: new parameter *'tooltip'* for specifying tip display on input components.
 
+### PEER-DEPENDENCY UPDATES ###
+* **Updated**:   @angular/material@2.0.0-beta.1
+* **Updated**:   @angular@2.4.2
+* **Updated**:   @angular/router@3.4.2
+* **Updated**:   rxjs@5.0.1
+* **Updated**:   zone.js@0.7.4
+* **Updated**:   moment@2.17.1
+* **Updated**:   ng2-translate@5.0.0
+
+### BREAKING CHANGES
+* **Interfaces**: The interface 'IFormComponent' was renamded to 'IComponent'.
+* **Components**: Several components have changed its constructor.
 
 ## 1.1.1 (2017-01-11)
 

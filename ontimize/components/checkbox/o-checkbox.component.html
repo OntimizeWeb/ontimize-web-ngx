@@ -1,4 +1,5 @@
-<div layout-fill [formGroup]="form?.formGroup" class="relative">
+<div layout-fill [formGroup]="form?.formGroup" class="relative"
+    [mdTooltip]="tooltip" [mdTooltipPosition]="tooltipPosition" [mdTooltipShowDelay]="tooltipShowDelay">
     <md-checkbox [attr.id]="oattr" [id]="oattr" layout-fill [formControlName]="oattr" [o-disabled]="innerInput" #innerInput
         [checked]="isChecked()" [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)">
         {{ placeHolder }}

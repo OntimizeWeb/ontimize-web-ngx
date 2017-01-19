@@ -13,7 +13,7 @@ import { MdProgressBarModule } from '@angular/material';
 import {OntimizeService, DialogService, NavigationService,
   dataServiceFactory} from '../../services';
 import {InputConverter} from '../../decorators';
-import { IFormComponent, IFormControlComponent, IFormDataTypeComponent} from '../../interfaces';
+import { IComponent, IFormControlComponent, IFormDataTypeComponent} from '../../interfaces';
 import {OFormToolbarModule, OFormToolbarComponent} from './o-form-toolbar.component';
 import {OFormValue} from './OFormValue';
 import {Util, SQLTypes} from '../../utils';
@@ -244,7 +244,7 @@ export class OFormComponent implements OnInit, OnDestroy {
     }
   }
 
-  unregisterFormComponent(comp: IFormComponent) {
+  unregisterFormComponent(comp: IComponent) {
     if (comp) {
       let attr = comp.getAttribute();
       if (attr && attr.length > 0) {

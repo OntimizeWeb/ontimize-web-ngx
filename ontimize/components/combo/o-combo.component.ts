@@ -1,32 +1,34 @@
-import {Component, ElementRef, EventEmitter,
+import {
+  Component, ElementRef, EventEmitter,
   forwardRef, Inject, Injector,
   OnInit, ViewChild, Optional,
-  NgZone, ChangeDetectorRef,
   NgModule,
   ModuleWithProviders,
-  ViewEncapsulation} from '@angular/core';
+  ViewEncapsulation
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule, FormControl, Validators} from '@angular/forms';
-import { ValidatorFn } from '@angular/forms/src/directives/validators';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { MdInputModule } from '@angular/material';
-import { MdComboModule } from '../material/combo/combo';
+import { MdInputModule, MdSelectModule, MdSelect, MdOption } from '@angular/material';
 
-import {
-  IFormComponent, IFormControlComponent, IFormDataTypeComponent,
-  IFormDataComponent} from '../../interfaces';
-import {dataServiceFactory} from '../../services/data-service.provider';
-import {OTranslateService, OntimizeService} from '../../services';
-import {InputConverter} from '../../decorators';
-import {OFormComponent, Mode} from '../form/o-form.component';
-import {OFormValue} from '../form/OFormValue';
-import {Util, SQLTypes} from '../../utils';
-import {OTranslateModule} from '../../pipes/o-translate.pipe';
+import { dataServiceFactory } from '../../services/data-service.provider';
+import { OntimizeService } from '../../services';
+import { OSharedModule } from '../../shared.module';
+import { InputConverter } from '../../decorators';
+import { OFormComponent } from '../form/o-form.component';
+import { OFormValue } from '../form/OFormValue';
+import { Util } from '../../utils';
+import { OTranslateModule } from '../../pipes/o-translate.pipe';
+
+import { OFormDataComponent } from '../o-form-data-component.class';
 
 
 export const DEFAULT_INPUTS_O_COMBO = [
   'oattr: attr',
   'olabel: label',
+  'tooltip',
+  'tooltipPosition: tooltip-position',
+  'tooltipShowDelay: tooltip-show-delay',
   //data [any] : sets selected value of the combo
   'data',
   'autoBinding: automatic-binding',
@@ -65,7 +67,7 @@ export const DEFAULT_OUTPUTS_O_COMBO = [
 @Component({
   selector: 'o-combo',
   providers: [
-    { provide: OntimizeService, useFactory: dataServiceFactory, deps:[Injector] }
+    { provide: OntimizeService, useFactory: dataServiceFactory, deps: [Injector] }
   ],
   inputs: [
     ...DEFAULT_INPUTS_O_COMBO
@@ -77,21 +79,12 @@ export const DEFAULT_OUTPUTS_O_COMBO = [
   styleUrls: ['/combo/o-combo.component.css'],
   encapsulation: ViewEncapsulation.None
 })
-export class OComboComponent implements IFormComponent, IFormControlComponent, IFormDataTypeComponent, IFormDataComponent, OnInit {
+export class OComboComponent extends OFormDataComponent implements OnInit {
 
   public static DEFAULT_INPUTS_O_COMBO = DEFAULT_INPUTS_O_COMBO;
   public static DEFAULT_OUTPUTS_O_COMBO = DEFAULT_OUTPUTS_O_COMBO;
 
   /* Inputs */
-  protected oattr: string;
-  protected olabel: string;
-  @InputConverter()
-  protected oenabled: boolean = true;
-  @InputConverter()
-  protected orequired: boolean = false;
-  @InputConverter()
-  autoBinding: boolean = true;
-
   protected staticData: Array<any>;
 
   protected entity: string;
@@ -112,11 +105,13 @@ export class OComboComponent implements IFormComponent, IFormControlComponent, I
   protected queryOnInit: boolean = true;
   @InputConverter()
   protected queryOnBind: boolean = false;
-  protected sqlType: string;
   /* End inputs*/
 
   @ViewChild('inputModel')
   protected inputModel: ElementRef;
+
+  @ViewChild('selectModel')
+  protected selectModel: MdSelect;
 
   public onChange: EventEmitter<Object> = new EventEmitter<Object>();
 
@@ -125,39 +120,22 @@ export class OComboComponent implements IFormComponent, IFormControlComponent, I
   protected visibleColArray: string[] = [];
   protected descriptionColArray: string[] = [];
   protected oColumns: Object = {};
-
-  protected  value: OFormValue;
   protected dataService: any;
   protected cacheQueried: boolean = false;
-
-  protected translateService: OTranslateService;
-  protected _SQLType: number = SQLTypes.OTHER;
-
-  protected _disabled: boolean;
-  protected _isReadOnly: boolean;
-  protected _placeholder: string;
-  protected _fControl: FormControl;
-
   protected _pKeysEquiv = {};
-
   protected _formDataSubcribe;
-
   protected _currentIndex;
 
   constructor(
-    @Optional() @Inject(forwardRef(() => OFormComponent)) protected form: OFormComponent,
-    protected elRef: ElementRef,
-    protected ngZone: NgZone,
-    protected cd: ChangeDetectorRef,
-    protected injector: Injector) {
-
-    this.translateService = this.injector.get(OTranslateService);
+    @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
+    elRef: ElementRef,
+    injector: Injector) {
+    super(form, elRef, injector);
   }
 
   ngOnInit() {
     this.cacheQueried = false;
-    this.disabled = !this.oenabled;
-    this._placeholder = this.olabel ? this.olabel : this.oattr;
+    this.initialize();
 
     this.colArray = Util.parseArray(this.columns);
 
@@ -177,20 +155,12 @@ export class OComboComponent implements IFormComponent, IFormControlComponent, I
     this._pKeysEquiv = Util.parseParentKeysEquivalences(pkArray);
 
     if (this.form) {
-      this.form.registerFormComponent(this);
-      this.form.registerFormControlComponent(this);
-      this.form.registerSQLTypeFormComponent(this);
-
       var self = this;
       if (self.queryOnBind) {
         this._formDataSubcribe = this.form.onFormDataLoaded.subscribe(data => {
           self.onFormDataBind(data);
         });
       }
-
-      this._isReadOnly = this.form.mode === Mode.INITIAL ? true : false;
-    } else {
-      this._isReadOnly = this._disabled;
     }
 
     if (this.staticData) {
@@ -206,7 +176,7 @@ export class OComboComponent implements IFormComponent, IFormControlComponent, I
   ensureOFormValue(value: any) {
     if (value instanceof OFormValue) {
       this.value = new OFormValue(value.value);
-    } else if ( value && !(value instanceof OFormValue)) {
+    } else if (value && !(value instanceof OFormValue)) {
       this.value = new OFormValue(value);
     } else if ((value === undefined || value === null) && this.nullSelection) {
       this.value = new OFormValue(undefined);
@@ -229,11 +199,7 @@ export class OComboComponent implements IFormComponent, IFormControlComponent, I
   }
 
   ngOnDestroy() {
-    if (this.form) {
-      this.form.unregisterFormComponent(this);
-      this.form.unregisterFormControlComponent(this);
-      this.form.unregisterSQLTypeFormComponent(this);
-    }
+    this.destroy();
 
     if (this._formDataSubcribe) {
       this._formDataSubcribe.unsubscribe();
@@ -282,35 +248,6 @@ export class OComboComponent implements IFormComponent, IFormControlComponent, I
       });
   }
 
-  getAttribute() {
-    if (this.oattr) {
-      return this.oattr;
-    } else if (this.elRef && this.elRef.nativeElement.attributes['attr']) {
-      return this.elRef.nativeElement.attributes['attr'].value;
-    }
-  }
-
-  getControl(): FormControl {
-    if (!this._fControl) {
-      let validators: ValidatorFn[] = this.resolveValidators();
-      let cfg = {
-        value: this.value ? this.value.value : undefined,
-        disabled: this._disabled
-      };
-      this._fControl = new FormControl(cfg, validators);
-    }
-    return this._fControl;
-  }
-
-  resolveValidators(): ValidatorFn[] {
-    let validators: ValidatorFn[] = [];
-
-    if (this.orequired) {
-      validators.push(Validators.required);
-    }
-    return validators;
-  }
-
   setDataArray(data: any): void {
     if (Util.isArray(data)) {
       this.dataArray = data;
@@ -329,7 +266,12 @@ export class OComboComponent implements IFormComponent, IFormControlComponent, I
       let self = this;
       this.dataArray.forEach((item, index) => {
         if (item[self.valueColumn] === this.value.value) {
-          self._currentIndex = index;
+          if (self.nullSelection) {
+            // first position is for null selection that it is not included into dataArray
+            self._currentIndex = index + 1;
+          } else {
+            self._currentIndex = index;
+          }
         }
       });
 
@@ -343,42 +285,32 @@ export class OComboComponent implements IFormComponent, IFormControlComponent, I
     }
   }
 
-  getSQLType(): number {
-    let sqlt = this.sqlType && this.sqlType.length > 0 ? this.sqlType : 'OTHER';
-    this._SQLType = SQLTypes.getSQLTypeValue(sqlt);
-    return this._SQLType;
-  }
-
-  set data(value: any) {
-    this.ensureOFormValue(value);
-  }
-
-  isAutomaticBinding(): Boolean {
-    return this.autoBinding;
-  }
-
-  isEmpty(): boolean {
-    if (this.value instanceof OFormValue) {
-      if (this.value.value !== undefined) {
-        return false;
-      }
-    }
-    return true;
-  }
-
   getDescriptionValue() {
     let descTxt = '';
-    if (this.descriptionColArray && this._currentIndex !== undefined ) {
-      var self = this;
-      this.descriptionColArray.forEach((item, index) => {
-        let txt = self.dataArray[self._currentIndex][item];
-        if (txt) {
-          descTxt += txt;
+    if (this._currentIndex !== undefined && this.selectModel) {
+      if (this.selectModel.selected) {
+        descTxt = this.selectModel.selected.viewValue;
+      } else if(this.selectModel.options) {
+        let option: MdOption = this.selectModel.options.toArray()[this._currentIndex];
+        if (option) {
+          option.select();
+          descTxt = option.viewValue;
         }
-        if (index < self.descriptionColArray.length - 1) {
-          descTxt += self.separator;
-        }
-      });
+      }
+
+    }
+    /*
+    * Temporary code
+    * I do not understand the reason why MdInput is not removing 'md-empty' clase despite of the fact that
+    * the input element of the description is binding value attribute
+    */
+    let placeHolderLbl = this.elRef.nativeElement.querySelectorAll('label.md-input-placeholder');
+    if (placeHolderLbl.length) {
+      // Take only first, nested element does not matter.
+      let element = placeHolderLbl[0];
+      if (descTxt && descTxt.length > 0) {
+        element.classList.remove('md-empty');
+      }
     }
     return descTxt;
   }
@@ -395,60 +327,6 @@ export class OComboComponent implements IFormComponent, IFormControlComponent, I
       return null;
     }
     return '';
-  }
-
-  setValue(val: any): void {
-    var self = this;
-    window.setTimeout(() => {
-      self.ensureOFormValue(val);
-    }, 0);
-  }
-
-  get placeHolder(): string {
-    if (this.translateService) {
-      return this.translateService.get(this._placeholder);
-    }
-    return this._placeholder;
-  }
-
-  set placeHolder(value: string) {
-    var self = this;
-    window.setTimeout(() => {
-      self._placeholder = value;
-    }, 0);
-  }
-
-  get isReadOnly(): boolean {
-    return this._isReadOnly;
-  }
-
-  set isReadOnly(value: boolean) {
-    if (this._disabled) {
-      return;
-    }
-    var self = this;
-    window.setTimeout(() => {
-      self._isReadOnly = value;
-    }, 0);
-  }
-
-  get isDisabled(): boolean {
-    return this._disabled;
-  }
-
-  set disabled(value: boolean) {
-    this._disabled = value;
-  }
-
-  get isRequired(): boolean {
-    return this.orequired;
-  }
-
-  set required(value: boolean) {
-    var self = this;
-    window.setTimeout(() => {
-      self.orequired = value;
-    }, 0);
   }
 
   innerOnChange(event: any) {
@@ -478,17 +356,55 @@ export class OComboComponent implements IFormComponent, IFormControlComponent, I
     this.onChange.emit(event);
   }
 
-  get isValid() {
-    if (this._fControl) {
-      return this._fControl.valid;
+  getOptionDescriptionValue(item: any = {}) {
+    let descTxt = '';
+    if (this.descriptionColArray && this.descriptionColArray.length > 0) {
+      var self = this;
+      this.descriptionColArray.forEach((col, index) => {
+        let txt = item[col];
+        if (txt) {
+          if (self.translate && self.translateService) {
+            txt = self.translateService.get(txt);
+          }
+          descTxt += txt;
+        }
+        if (index < self.descriptionColArray.length - 1) {
+          descTxt += self.separator;
+        }
+      });
     }
-    return false;
+    return descTxt;
   }
+
+  getValueColumn(item: any) {
+    if (item && item.hasOwnProperty(this.valueColumn)) {
+      let option = item[this.valueColumn];
+      if (option === 'undefined') {
+        option = null;
+      }
+      return option;
+    }
+    return '';
+  }
+
+  isSelected(item: any, rowIndex: number): boolean {
+    let selected = false;
+    if (item && item.hasOwnProperty(this.valueColumn)
+      && this.value) {
+      let val = item[this.valueColumn];
+      if (val === this.value.value) {
+        selected = true;
+        this._currentIndex = rowIndex;
+      }
+    }
+    return selected;
+  }
+
 }
 
 @NgModule({
   declarations: [OComboComponent],
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, MdInputModule, MdComboModule, OTranslateModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, OSharedModule, MdInputModule, MdSelectModule, OTranslateModule],
   exports: [OComboComponent],
 })
 export class OComboModule {

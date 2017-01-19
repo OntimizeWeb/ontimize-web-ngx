@@ -1,12 +1,14 @@
-<div layout-fill [formGroup]="form?.formGroup">
-    <md-input class="md-input" type="number" [attr.id]="oattr" [id]="oattr" layout-fill [formControlName]="oattr" [placeholder]="placeHolder"
-        [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)" (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)"
-        [readonly]="isReadOnly" [o-disabled]="innerInput" #innerInput [min]="min" [max]="max" [step]="step">
-        <md-hint *ngIf="!isReadOnly && _fControl.touched && _fControl.errors">
-            <span *ngIf="_fControl.errors?.required">{{'FORM_VALIDATION.REQUIRED' | oTranslate}}</span>
-            <span *ngIf="_fControl.errors?.min">{{ 'FORM_VALIDATION.MIN_VALUE' | oTranslate }}: {{ _fControl.errors?.min.requiredMin }}</span>
-            <span *ngIf="_fControl.errors?.max">{{ 'FORM_VALIDATION.MAX_VALUE' | oTranslate }}: {{ _fControl.errors?.max.requiredMax }}</span>
-            <span *ngIf="_fControl.errors?.pattern">{{ 'FORM_VALIDATION.FORMAT' | oTranslate}}</span>
-        </md-hint>
-    </md-input>
+<div flex layout-fill [formGroup]="form?.formGroup"
+    [mdTooltip]="tooltip" [mdTooltipPosition]="tooltipPosition" [mdTooltipShowDelay]="tooltipShowDelay">
+    <md-input-container #innerInputContainer flex layout-fill>
+        <input md-input class="md-input" type="number" [attr.id]="oattr" [id]="oattr" layout-fill [formControlName]="oattr" [placeholder]="placeHolder"
+            [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)" (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)"
+            [readonly]="isReadOnly" [o-disabled]="innerInputContainer" [min]="min" [max]="max" [step]="step">
+            <md-hint *ngIf="!isReadOnly && _fControl.touched && _fControl.errors">
+                <span *ngIf="_fControl.errors?.required">{{'FORM_VALIDATION.REQUIRED' | oTranslate}}</span>
+                <span *ngIf="_fControl.errors?.min">{{ 'FORM_VALIDATION.MIN_VALUE' | oTranslate }}: {{ _fControl.errors?.min.requiredMin }}</span>
+                <span *ngIf="_fControl.errors?.max">{{ 'FORM_VALIDATION.MAX_VALUE' | oTranslate }}: {{ _fControl.errors?.max.requiredMax }}</span>
+                <span *ngIf="_fControl.errors?.pattern">{{ 'FORM_VALIDATION.FORMAT' | oTranslate}}</span>
+            </md-hint>
+    </md-input-container>
 </div>

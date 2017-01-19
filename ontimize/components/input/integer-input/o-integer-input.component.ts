@@ -1,6 +1,6 @@
 import {
   Component, Inject, Injector, forwardRef, ElementRef, OnInit,
-  NgZone, ChangeDetectorRef,
+  Optional,
   NgModule,
   ModuleWithProviders,
   ViewEncapsulation
@@ -68,12 +68,11 @@ export class OIntegerInputComponent extends OTextInputComponent implements OnIni
   protected pipeArguments: IIntegerPipeArgument;
   protected focused: boolean = false;
 
-  constructor( @Inject(forwardRef(() => OFormComponent)) protected form: OFormComponent,
-    protected elRef: ElementRef,
-    protected ngZone: NgZone,
-    protected cd: ChangeDetectorRef,
-    protected injector: Injector) {
-    super(form, elRef, ngZone, cd, injector);
+  constructor(
+    @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
+    elRef: ElementRef,
+    injector: Injector) {
+    super(form, elRef, injector);
 
     this.setComponentPipe();
   }
@@ -168,7 +167,7 @@ export class OIntegerInputComponent extends OTextInputComponent implements OnIni
     }
     if (typeof inputElement !== 'undefined') {
       if (this.focused) {
-        ($ as any )(inputElement).width(($ as any )(inputElement).outerWidth(true));
+        ($ as any)(inputElement).width(($ as any)(inputElement).outerWidth(true));
       }
       inputElement.type = this.focused ? 'number' : 'text';
       inputElement.value = val;

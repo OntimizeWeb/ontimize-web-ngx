@@ -1,6 +1,6 @@
 import {
   Component, Inject, Injector, forwardRef, ElementRef, OnInit,
-  NgZone, ChangeDetectorRef, NgModule, ModuleWithProviders,
+  Optional, NgModule, ModuleWithProviders,
   ViewEncapsulation
 } from '@angular/core';
 
@@ -65,12 +65,11 @@ export class ORealInputComponent extends OIntegerInputComponent implements OnIni
   protected decimalSeparator: string;
   protected pipeArguments: IRealPipeArgument;
 
-  constructor( @Inject(forwardRef(() => OFormComponent)) protected form: OFormComponent,
-    protected elRef: ElementRef,
-    protected ngZone: NgZone,
-    protected cd: ChangeDetectorRef,
-    protected injector: Injector) {
-    super(form, elRef, ngZone, cd, injector);
+  constructor(
+    @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
+    elRef: ElementRef,
+    injector: Injector) {
+    super(form, elRef, injector);
   }
 
   setComponentPipe() {

@@ -1,6 +1,6 @@
 import {
   Component, Inject, Injector, forwardRef, ElementRef, OnInit,
-  NgZone, ChangeDetectorRef,
+  Optional,
   NgModule,
   ModuleWithProviders,
   ViewEncapsulation
@@ -44,12 +44,11 @@ export class OPercentInputComponent extends ORealInputComponent implements OnIni
   @InputConverter()
   decimalDigits: number = 2;
 
-  constructor( @Inject(forwardRef(() => OFormComponent)) protected form: OFormComponent,
-    protected elRef: ElementRef,
-    protected ngZone: NgZone,
-    protected cd: ChangeDetectorRef,
-    protected injector: Injector) {
-    super(form, elRef, ngZone, cd, injector);
+  constructor(
+    @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
+    elRef: ElementRef,
+    injector: Injector) {
+    super(form, elRef, injector);
   }
 
   public ngOnInit() {

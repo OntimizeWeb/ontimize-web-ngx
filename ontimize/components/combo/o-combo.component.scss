@@ -4,3 +4,33 @@
 .visible{
   display: inline-block;
 }
+
+.md-combo-container{
+  position: relative;
+}
+
+md-select{
+  &.md-combo {
+    .md-select-trigger {
+      margin: 16px 0 11px 0px;
+      height: 23px;
+
+      .md-select-placeholder.md-floating-placeholder{
+        left: 0px;
+        top: -20px;
+      }
+      .md-select-value{
+        top: 0px;
+        left: 0px;
+      }
+    }
+  }
+}
+
+md-select:focus:not(.md-select-disabled) .md-select-trigger{
+    border-bottom-width: 2px;
+}
+
+.md-tooltip {
+  margin: 0px !important;
+}

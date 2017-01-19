@@ -5,16 +5,11 @@
   $foreground: map-get($theme, foreground);
   $warn: map-get($theme, warn);
 
-  .md-input-element {
-    /* Necessary !important due to 'currentColor' value on md-input-element of library*/
-    color: md-color($foreground, text) !important;
-  }
-
   span.icon-btn{
-    color: md-color($foreground, text, 0.47);
+    color: md-color($foreground, icon);
 
     &.md-disabled {
-      color: md-color($foreground, text, 0.26);
+      color: md-color($foreground, disabled-text);
     }
   }
 
@@ -34,23 +29,24 @@
   input[type="time"]:disabled,
   input[type="url"]:disabled,
   input[type="week"]:disabled {
-      color: md-color($foreground, text, 0.36);
+      color: md-color($foreground, disabled-text);
   }
 
-  .md-input,
-  .md-textarea {
+  md-input-container {
     &.ng-invalid.ng-touched {
-      .md-input-underline {
-        border-top-color: md-color($warn);
-        .md-input-ripple {
-          background-color: md-color($warn);
+      .md-input-wrapper {
+        .md-input-underline {
+          border-top-color: md-color($warn);
+          .md-input-ripple {
+            background-color: md-color($warn);
+          }
         }
-      }
-      .md-input-placeholder.md-focused {
-        color: md-color($warn);
-      }
-      .md-hint {
-        color: md-color($warn);
+        .md-input-placeholder.md-focused {
+          color: md-color($warn);
+        }
+        .md-hint {
+          color: md-color($warn);
+        }
       }
     }
   }

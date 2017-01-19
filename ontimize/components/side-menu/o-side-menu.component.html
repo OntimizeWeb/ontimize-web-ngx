@@ -4,7 +4,7 @@
   </div>
 </md-toolbar>
 
-<md-sidenav-layout [class.menu-opened]="opened === true">
+<md-sidenav-container [class.menu-opened]="opened === true">
   <md-sidenav #sidenav>
     <h3>
       <span>{{ title | oTranslate }}</span>
@@ -13,4 +13,4 @@
       <ng-content></ng-content>
     </md-nav-list>
   </md-sidenav>
-</md-sidenav-layout>
+</md-sidenav-container>

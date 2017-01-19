@@ -1,13 +1,9 @@
 .md-textarea {
   &.no-resize {
-    textarea {
-      resize: none;
-    }
+    resize: none;
   }
 }
 
 .md-textarea {
-  textarea {
-    resize: vertical;
-  }
+  resize: vertical;
 }

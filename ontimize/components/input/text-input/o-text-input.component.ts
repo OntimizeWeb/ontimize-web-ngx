@@ -1,29 +1,30 @@
-import {Component, Inject, Injector, forwardRef, ElementRef, OnInit, EventEmitter,
-  NgZone, ChangeDetectorRef,
+import {
+  Component, Inject, Injector, forwardRef, ElementRef, OnInit, EventEmitter,
+  Optional, ViewChild,
   NgModule,
   ModuleWithProviders,
-  ViewEncapsulation} from '@angular/core';
-import {CommonModule } from '@angular/common';
-import {FormsModule, ReactiveFormsModule, FormControl, Validators } from '@angular/forms';
-import {ValidatorFn } from '@angular/forms/src/directives/validators';
+  ViewEncapsulation
+} from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ValidatorFn } from '@angular/forms/src/directives/validators';
 
-import { MdInputModule } from '@angular/material';
+import { MdInputModule, MdInput } from '@angular/material';
 
-import {
-  IFormComponent, IFormControlComponent, IFormDataTypeComponent,
-  IFormDataComponent
-} from '../../../interfaces';
 import { OSharedModule } from '../../../shared.module';
-import {InputConverter} from '../../../decorators';
-import {OFormComponent, Mode} from '../../form/o-form.component';
-import {OFormValue} from '../../form/OFormValue';
-import {OTranslateService} from '../../../services';
-import {SQLTypes} from '../../../utils';
-import {OTranslateModule} from '../../../pipes/o-translate.pipe';
+import { InputConverter } from '../../../decorators';
+import { OFormComponent } from '../../form/o-form.component';
+import { OFormValue } from '../../form/OFormValue';
+import { OTranslateModule } from '../../../pipes/o-translate.pipe';
+
+import { OFormDataComponent } from '../../o-form-data-component.class';
 
 export const DEFAULT_INPUTS_O_TEXT_INPUT = [
   'oattr: attr',
   'olabel: label',
+  'tooltip',
+  'tooltipPosition: tooltip-position',
+  'tooltipShowDelay: tooltip-show-delay',
   'data',
   'autoBinding: automatic-binding',
   'oenabled: enabled',
@@ -51,104 +52,39 @@ export const DEFAULT_OUTPUTS_O_TEXT_INPUT = [
   ],
   encapsulation: ViewEncapsulation.None
 })
-export class OTextInputComponent implements IFormComponent, IFormControlComponent, IFormDataTypeComponent, IFormDataComponent, OnInit {
+export class OTextInputComponent extends OFormDataComponent implements OnInit {
 
   public static DEFAULT_INPUTS_O_TEXT_INPUT = DEFAULT_INPUTS_O_TEXT_INPUT;
   public static DEFAULT_OUTPUTS_O_TEXT_INPUT = DEFAULT_OUTPUTS_O_TEXT_INPUT;
 
-  oattr: string;
-  olabel: string;
-  @InputConverter()
-  oenabled: boolean = true;
-  @InputConverter()
-  orequired: boolean = false;
-  @InputConverter()
-  autoBinding: boolean = true;
   @InputConverter()
   minLength: number = -1;
   @InputConverter()
   maxLength: number = -1;
-  sqlType: string;
 
   onChange: EventEmitter<Object> = new EventEmitter<Object>();
 
-  protected value: OFormValue;
-  protected translateService: OTranslateService;
-  protected _SQLType: number = SQLTypes.OTHER;
-  protected _fControl: FormControl;
-  protected _disabled: boolean;
-  protected _isReadOnly: boolean;
-  protected _placeholder: string;
+  @ViewChild('mdInputRef')
+  protected mdInputRef: MdInput;
 
-  constructor( @Inject(forwardRef(() => OFormComponent)) protected form: OFormComponent,
-    protected elRef: ElementRef,
-    protected ngZone: NgZone,
-    protected cd: ChangeDetectorRef,
-    protected injector: Injector) {
-
-    this.translateService = this.injector.get(OTranslateService);
+  constructor(
+    @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
+    elRef: ElementRef,
+    injector: Injector) {
+    super(form, elRef, injector);
   }
 
   ngOnInit() {
-    this.disabled = !this.oenabled;
-
-    this._placeholder = this.olabel ? this.olabel : this.oattr;
-
-    if (this.form) {
-      this.form.registerFormComponent(this);
-      this.form.registerFormControlComponent(this);
-      this.form.registerSQLTypeFormComponent(this);
-
-      this._isReadOnly = this.form.mode === Mode.INITIAL ? true : false;
-    } else {
-      this._isReadOnly = this._disabled;
-    }
-  }
-
-  ensureOFormValue(value: any) {
-    if (value instanceof OFormValue) {
-      this.value = new OFormValue(value.value);
-    } else if ( value && !(value instanceof OFormValue)) {
-      this.value = new OFormValue(value);
-    } else {
-      this.value = new OFormValue(undefined);
-    }
+    this.initialize();
   }
 
   ngOnDestroy() {
-     if (this.form) {
-      this.form.unregisterFormComponent(this);
-      this.form.unregisterFormControlComponent(this);
-      this.form.unregisterSQLTypeFormComponent(this);
-    }
-  }
-
-  getAttribute() {
-    if (this.oattr) {
-      return this.oattr;
-    } else if (this.elRef && this.elRef.nativeElement.attributes['attr']) {
-      return this.elRef.nativeElement.attributes['attr'].value;
-    }
-  }
-
-  getControl(): FormControl {
-    if (!this._fControl) {
-      let validators: ValidatorFn[] = this.resolveValidators();
-      let cfg = {
-        value: this.value ? this.value.value : undefined,
-        disabled: this.isDisabled
-      };
-      this._fControl = new FormControl(cfg, validators);
-    }
-    return this._fControl;
+    this.destroy();
   }
 
   resolveValidators(): ValidatorFn[] {
-    let validators: ValidatorFn[] = [];
+    let validators: ValidatorFn[] = super.resolveValidators();
 
-    if (this.orequired) {
-      validators.push(Validators.required);
-    }
     if (this.minLength >= 0) {
       validators.push(Validators.minLength(this.minLength));
     }
@@ -159,85 +95,12 @@ export class OTextInputComponent implements IFormComponent, IFormControlComponen
     return validators;
   }
 
-  getSQLType(): number {
-    let sqlt = this.sqlType && this.sqlType.length > 0 ? this.sqlType : 'OTHER';
-    this._SQLType = SQLTypes.getSQLTypeValue(sqlt);
-    return this._SQLType;
-  }
-
-  set data(value: any) {
-    this.ensureOFormValue(value);
-  }
-
-  isAutomaticBinding(): Boolean {
-    return this.autoBinding;
-  }
-
-  getValue() : any {
-    if (this.value instanceof OFormValue) {
-      if (this.value.value) {
-        return this.value.value;
-      }
-    }
-    return undefined;
-  }
-
-  setValue(val: any) {
-    this.ensureOFormValue(val);
-  }
-
-  get placeHolder(): string {
-    if (this.translateService) {
-      return this.translateService.get(this._placeholder);
-    }
-    return this._placeholder;
-  }
-
-  set placeHolder(value: string) {
-    this._placeholder = value;
-  }
-
-  get isReadOnly(): boolean {
-    return this._isReadOnly;
-  }
-
-  set isReadOnly(value: boolean) {
-    if (this._disabled) {
-      this._isReadOnly = false;
-      return;
-    }
-    this._isReadOnly = value;
-  }
-
-  get isDisabled(): boolean {
-    return this._disabled;
-  }
-
-  set disabled(value: boolean) {
-    this._disabled = value;
-  }
-
-  get isRequired(): boolean {
-    return this.orequired;
-  }
-
-  set required(value: boolean) {
-    this.orequired = value;
-  }
-
   innerOnChange(event: any) {
     if (!this.value) {
       this.value = new OFormValue();
     }
     this.ensureOFormValue(event);
     this.onChange.emit(event);
-  }
-
-  get isValid() {
-    if (this._fControl) {
-      return this._fControl.valid;
-    }
-    return false;
   }
 
 }

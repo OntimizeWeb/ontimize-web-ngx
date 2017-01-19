@@ -1,35 +1,38 @@
-import {Component, ElementRef, EventEmitter, forwardRef, Inject, Injector,
-  OnInit, ViewChild, Optional, ChangeDetectorRef, NgZone,
+import {
+  Component, ElementRef, EventEmitter, forwardRef, Inject, Injector,
+  OnInit, ViewChild, Optional,
   NgModule,
   ModuleWithProviders,
-  ViewEncapsulation} from '@angular/core';
+  ViewEncapsulation
+} from '@angular/core';
 
-import {CommonModule} from '@angular/common';
-import {FormControl, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
-import {ValidatorFn } from '@angular/forms/src/directives/validators';
+import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { MdInputModule, MdInput, MdListModule, MdToolbarModule} from '@angular/material';
+import { MdInputModule, MdInput, MdListModule, MdToolbarModule } from '@angular/material';
 import { MdDialog, MdDividerModule } from '../../material/ng2-material/index';
 
-import {
-  IFormComponent, IFormControlComponent, IFormDataTypeComponent,
-  IFormDataComponent
-} from '../../../interfaces';
-import {OntimizeService, OTranslateService, dataServiceFactory} from '../../../services';
-import {ColumnsFilterPipe} from '../../../pipes';
-import {InputConverter} from '../../../decorators';
-import {OFormComponent, Mode} from '../../form/o-form.component';
-import {OSearchInputModule} from '../../search-input/o-search-input.component';
-import {OFormValue} from '../../form/OFormValue';
-import {Util, SQLTypes} from '../../../utils';
-import {ODialogModule} from '../../dialog/o-dialog.component';
+import { OntimizeService, dataServiceFactory } from '../../../services';
+import { ColumnsFilterPipe } from '../../../pipes';
+import { OSharedModule } from '../../../shared.module';
+import { InputConverter } from '../../../decorators';
+import { OFormComponent } from '../../form/o-form.component';
+import { OSearchInputModule } from '../../search-input/o-search-input.component';
+import { OFormValue } from '../../form/OFormValue';
+import { Util } from '../../../utils';
+import { ODialogModule } from '../../dialog/o-dialog.component';
 
-import {OListPickerDialogComponent} from './o-list-picker-dialog.component';
-import {OTranslateModule} from '../../../pipes/o-translate.pipe';
+import { OListPickerDialogComponent } from './o-list-picker-dialog.component';
+import { OTranslateModule } from '../../../pipes/o-translate.pipe';
+
+import { OFormDataComponent } from '../../o-form-data-component.class';
 
 export const DEFAULT_INPUTS_O_LIST_PICKER = [
   'oattr: attr',
   'olabel: label',
+  'tooltip',
+  'tooltipPosition: tooltip-position',
+  'tooltipShowDelay: tooltip-show-delay',
   'data',
   'autoBinding: automatic-binding',
   'oenabled: enabled',
@@ -55,7 +58,7 @@ export const DEFAULT_INPUTS_O_LIST_PICKER = [
   'queryOnInit: query-on-init',
   'queryOnBind: query-on-bind',
 
-   // sqltype[string]: Data type according to Java standard. See SQLType class. Default: 'OTHER'
+  // sqltype[string]: Data type according to Java standard. See SQLType class. Default: 'OTHER'
   'sqlType: sql-type'
 ];
 
@@ -68,7 +71,7 @@ export const DEFAULT_OUTPUTS_O_LIST_PICKER = [
   templateUrl: '/input/listpicker/o-list-picker.component.html',
   styleUrls: ['/input/listpicker/o-list-picker.component.css'],
   providers: [
-    {provide:OntimizeService,  useFactory:  dataServiceFactory, deps:[Injector]}
+    { provide: OntimizeService, useFactory: dataServiceFactory, deps: [Injector] }
   ],
   inputs: [
     ...DEFAULT_INPUTS_O_LIST_PICKER
@@ -78,22 +81,12 @@ export const DEFAULT_OUTPUTS_O_LIST_PICKER = [
   ],
   encapsulation: ViewEncapsulation.None
 })
-export class OListPickerComponent implements IFormComponent, IFormControlComponent, IFormDataTypeComponent, IFormDataComponent, OnInit {
+export class OListPickerComponent extends OFormDataComponent implements OnInit {
 
   public static DEFAULT_INPUTS_O_LIST_PICKER = DEFAULT_INPUTS_O_LIST_PICKER;
   public static DEFAULT_OUTPUTS_O_LIST_PICKER = DEFAULT_OUTPUTS_O_LIST_PICKER;
 
   /* Inputs */
-  protected oattr: string;
-  protected olabel: string;
-  // data: any;
-  @InputConverter()
-  protected oenabled: boolean = true;
-  @InputConverter()
-  protected orequired: boolean = false;
-  @InputConverter()
-  protected autoBinding: boolean = true;
-
   protected staticData: Array<any>;
 
   protected entity: string;
@@ -109,12 +102,10 @@ export class OListPickerComponent implements IFormComponent, IFormControlCompone
   protected separator: string;
 
   @InputConverter()
-  protected queryOnInit :boolean = true;
+  protected queryOnInit: boolean = true;
   @InputConverter()
   protected queryOnBind: boolean = false;
-  protected sqlType: string;
   /* End inputs */
-
 
   protected dataArray: any[] = [];
   protected colArray: string[] = [];
@@ -129,37 +120,22 @@ export class OListPickerComponent implements IFormComponent, IFormControlCompone
 
   public onChange: EventEmitter<Object> = new EventEmitter<Object>();
 
-  protected value: OFormValue;
-  protected translateService: OTranslateService;
-  protected _SQLType: number = SQLTypes.OTHER;
-
   protected dataService: OntimizeService;
   protected cacheQueried: boolean = false;
-
-  protected _disabled: boolean;
-  protected _isReadOnly: boolean;
-  protected _placeholder: string;
-  protected _fControl: FormControl;
   protected _pKeysEquiv = {};
-
   protected _formDataSubcribe;
-
   protected _currentIndex;
 
   constructor(
-    @Optional() @Inject(forwardRef(() => OFormComponent)) protected form: OFormComponent,
-    protected elRef: ElementRef,
-    protected ngZone: NgZone,
-    protected cd: ChangeDetectorRef,
-    protected injector: Injector) {
-
-    this.translateService = this.injector.get(OTranslateService);
+    @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
+    elRef: ElementRef,
+    injector: Injector) {
+    super(form, elRef, injector);
   }
 
   ngOnInit(): any {
     this.cacheQueried = false;
-    this.disabled = !this.oenabled;
-    this._placeholder = this.olabel ? this.olabel : this.oattr;
+    this.initialize();
 
     this.colArray = Util.parseArray(this.columns);
 
@@ -179,18 +155,12 @@ export class OListPickerComponent implements IFormComponent, IFormControlCompone
     this._pKeysEquiv = Util.parseParentKeysEquivalences(pkArray);
 
     if (this.form) {
-      this.form.registerFormComponent(this);
-      this.form.registerFormControlComponent(this);
-
       var self = this;
       if (self.queryOnBind) {
-       this._formDataSubcribe = this.form.onFormDataLoaded.subscribe(data => {
+        this._formDataSubcribe = this.form.onFormDataLoaded.subscribe(data => {
           self.onFormDataBind(data);
         });
       }
-      this._isReadOnly = this.form.mode === Mode.INITIAL ? true : false;
-    } else {
-      this._isReadOnly = this._disabled;
     }
 
     if (this.staticData) {
@@ -206,7 +176,7 @@ export class OListPickerComponent implements IFormComponent, IFormControlCompone
   ensureOFormValue(value: any) {
     if (value instanceof OFormValue) {
       this.value = new OFormValue(value.value);
-    } else if ( value && !(value instanceof OFormValue)) {
+    } else if (value && !(value instanceof OFormValue)) {
       this.value = new OFormValue(value);
     } else {
       this.value = new OFormValue(undefined);
@@ -228,10 +198,7 @@ export class OListPickerComponent implements IFormComponent, IFormControlCompone
   }
 
   ngOnDestroy() {
-     if (this.form) {
-      this.form.unregisterFormComponent(this);
-      this.form.unregisterFormControlComponent(this);
-    }
+    this.destroy();
 
     if (this._formDataSubcribe) {
       this._formDataSubcribe.unsubscribe();
@@ -247,7 +214,7 @@ export class OListPickerComponent implements IFormComponent, IFormControlCompone
     }
   }
 
-  onFormDataBind(bindedData:Object) {
+  onFormDataBind(bindedData: Object) {
     let filter = {};
     let keys = Object.keys(this._pKeysEquiv);
     if (keys && keys.length > 0 && bindedData) {
@@ -273,47 +240,18 @@ export class OListPickerComponent implements IFormComponent, IFormControlCompone
     }
     this.dataService.query(kv, this.colArray, this.entity)
       .subscribe(
-        (res: any) => {
-          if (res.code === 0) {
-            self.cacheQueried = true;
-            self.setDataArray(res.data);
-          } else {
-            console.log('error');
-          }
-        },
-        (error: string) => {
-          console.log(error);
+      (res: any) => {
+        if (res.code === 0) {
+          self.cacheQueried = true;
+          self.setDataArray(res.data);
+        } else {
+          console.log('error');
         }
+      },
+      (error: string) => {
+        console.log(error);
+      }
       );
-  }
-
-  getAttribute() {
-    if (this.oattr) {
-      return this.oattr;
-    } else if (this.elRef && this.elRef.nativeElement.attributes['attr']) {
-      return this.elRef.nativeElement.attributes['attr'].value;
-    }
-  }
-
-  getControl(): FormControl {
-    if (!this._fControl) {
-      let validators: ValidatorFn[] = this.resolveValidators();
-      let cfg = {
-        value: this.value ? this.value.value : undefined,
-        disabled: this._disabled
-      };
-      this._fControl = new FormControl(cfg, validators);
-    }
-    return this._fControl;
-  }
-
-  resolveValidators(): ValidatorFn[] {
-    let validators: ValidatorFn[] = [];
-
-    if (this.orequired) {
-      validators.push(Validators.required);
-    }
-    return validators;
   }
 
   setDataArray(data: any): void {
@@ -345,50 +283,12 @@ export class OListPickerComponent implements IFormComponent, IFormControlCompone
         }
         return;
       }
-
-      if (this._currentIndex !== undefined) {
-        // Force change detection on hidden md-input...
-        // this.cDetect.detectChanges();
-      }
-
     }
-  }
-
-  getSQLType(): number {
-    let sqlt = this.sqlType && this.sqlType.length > 0 ? this.sqlType : 'OTHER';
-    this._SQLType = SQLTypes.getSQLTypeValue(sqlt);
-    return this._SQLType;
-  }
-
-  set data(value: any) {
-    this.ensureOFormValue(value);
-  }
-
-  isAutomaticBinding(): Boolean {
-    return this.autoBinding;
-  }
-
-  isEmpty(): boolean {
-    if (this.value instanceof OFormValue) {
-      if (this.value.value !== undefined) {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  getValue() : any {
-    if (this.value instanceof OFormValue) {
-     if (this.value.value) {
-        return this.value.value;
-      }
-    }
-    return undefined;
   }
 
   getDescriptionValue() {
     let descTxt = '';
-    if (this.descriptionColArray && this._currentIndex !== undefined ) {
+    if (this.descriptionColArray && this._currentIndex !== undefined) {
       var self = this;
       this.descriptionColArray.forEach((item, index) => {
         let txt = self.dataArray[self._currentIndex][item];
@@ -400,96 +300,37 @@ export class OListPickerComponent implements IFormComponent, IFormControlCompone
         }
       });
     }
+    /*
+    * Temporary code
+    * I do not understand the reason why MdInput is not removing 'md-empty' clase despite of the fact that
+    * the input element of the description is binding value attribute
+    */
+    let placeHolderLbl = this.elRef.nativeElement.querySelectorAll('label.md-input-placeholder');
+    if (placeHolderLbl.length) {
+      // Take only first, nested element does not matter.
+      let element = placeHolderLbl[0];
+      if (descTxt && descTxt.length > 0) {
+        element.classList.remove('md-empty');
+      }
+    }
     return descTxt;
   }
 
-  setValue(val: any): void {
-    var self = this;
-    window.setTimeout(() => {
-      self.inputModel.value = val;
-      self.ensureOFormValue(val);
-    }, 0);
-  }
-
-  get placeHolder(): string {
-    if (this.translateService) {
-      return this.translateService.get(this._placeholder);
-    }
-    return this._placeholder;
-  }
-
-  set placeHolder(value: string) {
-    var self = this;
-    window.setTimeout(() => {
-      self._placeholder = value;
-    }, 0);
-  }
-
-  get isReadOnly(): boolean {
-    return this._isReadOnly;
-  }
-
-  set isReadOnly(value: boolean) {
-    if (this._disabled) {
-      return;
-    }
-    var self = this;
-    window.setTimeout(() => {
-      self._isReadOnly = value;
-    }, 0);
-  }
-
-  get isDisabled(): boolean {
-    return this._disabled;
-  }
-
-  set disabled(value: boolean) {
-    // var self = this;
-    // window.setTimeout(() => {
-      this._disabled = value;
-      // //TODO Provisional mientras en la version angular2-material no incluyan el método
-      // // 'setDisabledState()' en la implementación de ControlValueAccessor
-      // let input = self.elRef.nativeElement.getElementsByClassName('md-input-element');
-      // if (self._disabled) {
-      //   self.elRef.nativeElement.classList.add('md-disabled');
-      //   if(input && input[1]) {
-      //     input[1].setAttribute('disabled', self._disabled);
-      //   }
-      // } else {
-      //   self.elRef.nativeElement.classList.remove('md-disabled');
-      //   if(input && input[1]) {
-      //     input[1].removeAttribute('disabled');
-      //   }
-      // }
-    // }, 0);
-  }
-
-  get isRequired(): boolean {
-    return this.orequired;
-  }
-
-  set required(value: boolean) {
-    var self = this;
-    window.setTimeout(() => {
-      self.orequired = value;
-    }, 0);
-  }
-
   innerOnChange(e: any) {
-    this.onChange.emit(e);
-  }
-
-  get isValid() {
-    if (this._fControl) {
-      return this._fControl.valid;
+    this.ensureOFormValue(e);
+    if (this._fControl && this._fControl.touched) {
+      this._fControl.markAsDirty();
     }
-    return false;
+    this.onChange.emit(e);
   }
 
   onClickClear(e: Event): void {
     e.stopPropagation();
     if (!this._isReadOnly) {
       this.setValue('');
+    }
+    if (this._fControl) {
+      this._fControl.markAsTouched();
     }
   }
 
@@ -515,6 +356,9 @@ export class OListPickerComponent implements IFormComponent, IFormControlCompone
     } else if (evt instanceof Object) {
       if (evt[this.valueColumn]) {
         this.setValue(evt[this.valueColumn]);
+        if (this._fControl) {
+          this._fControl.markAsTouched();
+        }
       }
     }
   }
@@ -525,15 +369,18 @@ export class OListPickerComponent implements IFormComponent, IFormControlCompone
 
   onBlur(evt: any) {
     if (!this.isReadOnly && !this.isDisabled) {
-        this._fControl.markAsTouched();
-     }
+      this._fControl.markAsTouched();
+    }
   }
 
 }
 
 @NgModule({
   declarations: [ColumnsFilterPipe, OListPickerDialogComponent, OListPickerComponent],
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, MdInputModule, MdListModule, ODialogModule, MdDividerModule, MdToolbarModule, OSearchInputModule, OTranslateModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule,
+    MdInputModule, MdListModule, ODialogModule,
+    MdDividerModule, MdToolbarModule,
+    OSharedModule, OSearchInputModule, OTranslateModule],
   exports: [OListPickerComponent],
 })
 export class OListPickerModule {

@@ -1,18 +1,26 @@
-<div layout="row" layout-fill layout-align="space-between center" [formGroup]="form?.formGroup">
-    <md-input #inputModel type="text" [attr.id]="oattr" [id]="oattr" layout-fill [formControlName]="oattr" [ngModel]="getValue()"
+<div layout="row" layout-fill layout-align="space-between center" [formGroup]="form?.formGroup"
+    [mdTooltip]="tooltip" [mdTooltipPosition]="tooltipPosition" [mdTooltipShowDelay]="tooltipShowDelay">
+    <input md-input #inputModel type="text" [attr.id]="oattr" [id]="oattr" layout-fill [formControlName]="oattr" [ngModel]="getValue()"
         (ngModelChange)="innerOnChange($event)" class="input-model">
-    </md-input>
 
-    <md-input #displayInputModel class="md-input o-date-input" type="text" [attr.id]="opickerattr" [id]="opickerattr" layout-fill [placeholder]="placeHolder" [value]="getDescriptionValue()"
-        [readonly]="isReadOnly" (blur)="onDisplayInputBlur()" (click)="onInputClick()" [disabled]="isDisabled"
+    <md-input-container #innerInputContainer flex layout-fill
         [class.ng-untouched]="_fControl && _fControl.untouched"
         [class.ng-touched]="_fControl && _fControl.touched"
         [class.ng-dirty]="_fControl && _fControl.dirty"
         [class.ng-pristine]="_fControl && _fControl.pristine"
         [class.ng-invalid]="_fControl && !_fControl.valid"
         [class.ng-valid]="_fControl && _fControl.valid">
-        <md-hint *ngIf="!isReadOnly && _fControl.touched && _fControl.errors">{{'FORM_VALIDATION.REQUIRED' | oTranslate}}</md-hint>
-    </md-input>
+        <input md-input #displayInputModel class="md-input o-date-input" type="text" [attr.id]="opickerattr" [id]="opickerattr" layout-fill [placeholder]="placeHolder" [value]="getDescriptionValue()"
+            [readonly]="isReadOnly" (blur)="onDisplayInputBlur()" (click)="onInputClick()" [disabled]="isDisabled" [o-disabled]="innerInputContainer"
+            [class.ng-untouched]="_fControl && _fControl.untouched"
+            [class.ng-touched]="_fControl && _fControl.touched"
+            [class.ng-dirty]="_fControl && _fControl.dirty"
+            [class.ng-pristine]="_fControl && _fControl.pristine"
+            [class.ng-invalid]="_fControl && !_fControl.valid"
+            [class.ng-valid]="_fControl && _fControl.valid">
+            <md-hint *ngIf="!isReadOnly && _fControl.touched && _fControl.errors">{{'FORM_VALIDATION.REQUIRED' | oTranslate}}</md-hint>
+    </md-input-container>
+
     <span class="icon-btn" (click)="onClickIcon($event)"
         [class.md-disabled]="isDisabled"><i class="material-icons">today</i></span>
 </div>

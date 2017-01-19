@@ -1,20 +1,24 @@
-import {Component, Inject, Injector, forwardRef, ElementRef, ViewChild, OnInit,
-  NgZone, ChangeDetectorRef,
+import {
+  Component, Inject, Injector, forwardRef, ElementRef, ViewChild, OnInit,
+  Optional,
   NgModule,
   ModuleWithProviders,
-  ViewEncapsulation} from '@angular/core';
+  ViewEncapsulation
+} from '@angular/core';
 
-import {MdInput} from '@angular/material';
+import { MdInput } from '@angular/material';
 
-import {ValidatorFn } from '@angular/forms/src/directives/validators';
+import { ValidatorFn } from '@angular/forms/src/directives/validators';
 
-import {OFormComponent} from '../../form/o-form.component';
-import {OTextInputModule, OTextInputComponent, DEFAULT_INPUTS_O_TEXT_INPUT,
-  DEFAULT_OUTPUTS_O_TEXT_INPUT} from '../text-input/o-text-input.component';
+import { OFormComponent } from '../../form/o-form.component';
+import {
+  OTextInputModule, OTextInputComponent, DEFAULT_INPUTS_O_TEXT_INPUT,
+  DEFAULT_OUTPUTS_O_TEXT_INPUT
+} from '../text-input/o-text-input.component';
 
-import {OFormValue} from '../../form/OFormValue';
-import {SQLTypes} from '../../../util/sqltypes';
-import {MomentService} from '../../../services';
+import { OFormValue } from '../../form/OFormValue';
+import { MomentService } from '../../../services';
+import { OSharedModule } from '../../../shared.module';
 import * as moment from 'moment';
 
 import './o-date-input.loader';
@@ -64,13 +68,14 @@ export class ODateInputComponent extends OTextInputComponent implements OnInit {
 
   private momentSrv: MomentService;
 
-  constructor( @Inject(forwardRef(() => OFormComponent)) protected form: OFormComponent,
-    protected elRef: ElementRef,
-    protected ngZone: NgZone,
-    protected cd: ChangeDetectorRef,
-    protected injector: Injector) {
-    super(form, elRef, ngZone, cd, injector);
+  constructor(
+    @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
+    elRef: ElementRef,
+    injector: Injector) {
+    super(form, elRef, injector);
     this.momentSrv = this.injector.get(MomentService);
+    this._defaultSQLTypeKey = 'DATE';
+    this.defaultValue = '';
   }
 
   ngOnInit() {
@@ -94,19 +99,13 @@ export class ODateInputComponent extends OTextInputComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    this.inputHtmlEl = ($(this.elRef.nativeElement) as any).find('.md-input input');
-  }
-
-  getSQLType(): number {
-    let sqlt = this.sqlType && this.sqlType.length > 0 ? this.sqlType : 'DATE';
-    this._SQLType = SQLTypes.getSQLTypeValue(sqlt);
-    return this._SQLType;
+    this.inputHtmlEl = ($(this.elRef.nativeElement) as any).find('input.o-date-input');
   }
 
   resolveValidators(): ValidatorFn[] {
     let validators: ValidatorFn[] = super.resolveValidators();
     //  Inject date validator
-    //validators.push(OValidators.dateValidator);
+    //TODO validators.push(OValidators.dateValidator);
     return validators;
   }
 
@@ -353,6 +352,9 @@ export class ODateInputComponent extends OTextInputComponent implements OnInit {
   }
 
   onInputClick() {
+    if (this.isDisabled) {
+      return;
+    }
     let isDatepickerInitialized = ($.hasOwnProperty('datepicker') && this.inputHtmlEl.hasClass('hasDatepicker'));
     if (!this.isReadOnly && !this.isDisabled && !isDatepickerInitialized) {
       this.initializeDatepicker();
@@ -375,6 +377,19 @@ export class ODateInputComponent extends OTextInputComponent implements OnInit {
     }
     if (timestampValue) {
       descTxt = this.parseTimestamp(timestampValue);
+    }
+    /*
+    * Temporary code
+    * I do not understand the reason why MdInput is not removing 'md-empty' clase despite of the fact that
+    * the input element of the description is binding value attribute
+    */
+    let placeHolderLbl = this.elRef.nativeElement.querySelectorAll('label.md-input-placeholder');
+    if (placeHolderLbl.length) {
+      // Take only first, nested element does not matter.
+      let element = placeHolderLbl[0];
+      if (descTxt && descTxt.length > 0) {
+        element.classList.remove('md-empty');
+      }
     }
     return descTxt;
   }
@@ -415,7 +430,7 @@ export class ODateInputComponent extends OTextInputComponent implements OnInit {
 
 @NgModule({
   declarations: [ODateInputComponent],
-  imports: [OTextInputModule],
+  imports: [OTextInputModule, OSharedModule],
   exports: [ODateInputComponent, OTextInputModule],
 })
 export class ODateInputModule {

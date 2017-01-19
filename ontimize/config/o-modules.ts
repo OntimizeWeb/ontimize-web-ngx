@@ -7,7 +7,7 @@ import { HttpModule } from '@angular/http';
 import {
   TranslateModule,
   TranslateLoader,
-  TranslateStaticLoader} from 'ng2-translate/ng2-translate';
+  TranslateStaticLoader} from 'ng2-translate';
 
 import { MaterialModule } from '@angular/material';
 
