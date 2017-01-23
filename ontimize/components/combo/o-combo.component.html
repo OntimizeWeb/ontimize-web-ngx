@@ -11,7 +11,8 @@
         <span *ngIf="_fControl.errors?.required">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</span>
     </md-hint>
 
-    <md-input-container #innerInputContainer [class.visible]="isReadOnly" [class.hidden]="!isReadOnly">
+    <md-input-container #innerInputContainer [class.visible]="isReadOnly" [class.hidden]="!isReadOnly"
+        flex layout-fill>
         <input md-input class="md-input" type="text" [attr.id]="'fake_' + oattr" [id]="'fake_' + oattr" layout-fill
             [class.ng-untouched]="_fControl && _fControl.untouched"
             [class.ng-touched]="_fControl && _fControl.touched"

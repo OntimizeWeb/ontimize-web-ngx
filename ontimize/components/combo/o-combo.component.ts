@@ -17,10 +17,9 @@ import { OSharedModule } from '../../shared.module';
 import { InputConverter } from '../../decorators';
 import { OFormComponent } from '../form/o-form.component';
 import { OFormValue } from '../form/OFormValue';
-import { Util } from '../../utils';
 import { OTranslateModule } from '../../pipes/o-translate.pipe';
 
-import { OFormDataComponent } from '../o-form-data-component.class';
+import { OFormServiceComponent } from '../o-form-service-component.class';
 
 
 export const DEFAULT_INPUTS_O_COMBO = [
@@ -79,32 +78,17 @@ export const DEFAULT_OUTPUTS_O_COMBO = [
   styleUrls: ['/combo/o-combo.component.css'],
   encapsulation: ViewEncapsulation.None
 })
-export class OComboComponent extends OFormDataComponent implements OnInit {
+export class OComboComponent extends OFormServiceComponent implements OnInit {
 
   public static DEFAULT_INPUTS_O_COMBO = DEFAULT_INPUTS_O_COMBO;
   public static DEFAULT_OUTPUTS_O_COMBO = DEFAULT_OUTPUTS_O_COMBO;
 
   /* Inputs */
-  protected staticData: Array<any>;
-
-  protected entity: string;
-  protected service: string;
-  protected columns: string;
-  protected valueColumn: string;
-  protected parentKeys: string;
-  protected visibleColumns: string;
-  protected descriptionColumns: string;
-
   protected separator: string;
   @InputConverter()
   protected translate: boolean = false;
   @InputConverter()
   protected nullSelection: boolean = true;
-
-  @InputConverter()
-  protected queryOnInit: boolean = true;
-  @InputConverter()
-  protected queryOnBind: boolean = false;
   /* End inputs*/
 
   @ViewChild('inputModel')
@@ -115,62 +99,16 @@ export class OComboComponent extends OFormDataComponent implements OnInit {
 
   public onChange: EventEmitter<Object> = new EventEmitter<Object>();
 
-  protected dataArray: any[] = [];
-  protected colArray: string[] = [];
-  protected visibleColArray: string[] = [];
-  protected descriptionColArray: string[] = [];
-  protected oColumns: Object = {};
-  protected dataService: any;
-  protected cacheQueried: boolean = false;
-  protected _pKeysEquiv = {};
-  protected _formDataSubcribe;
-  protected _currentIndex;
-
   constructor(
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
     elRef: ElementRef,
     injector: Injector) {
     super(form, elRef, injector);
+    this.defaultValue = '';
   }
 
   ngOnInit() {
-    this.cacheQueried = false;
     this.initialize();
-
-    this.colArray = Util.parseArray(this.columns);
-
-    this.visibleColArray = Util.parseArray(this.visibleColumns);
-    if (Util.isArrayEmpty(this.visibleColArray)) {
-      //It is necessary to assing value to visibleColumns to propagate the parameter to dialog component.
-      this.visibleColumns = this.columns;
-      this.visibleColArray = this.colArray;
-    }
-
-    this.descriptionColArray = Util.parseArray(this.descriptionColumns);
-    if (Util.isArrayEmpty(this.descriptionColArray)) {
-      this.descriptionColArray = this.visibleColArray;
-    }
-
-    let pkArray = Util.parseArray(this.parentKeys);
-    this._pKeysEquiv = Util.parseParentKeysEquivalences(pkArray);
-
-    if (this.form) {
-      var self = this;
-      if (self.queryOnBind) {
-        this._formDataSubcribe = this.form.onFormDataLoaded.subscribe(data => {
-          self.onFormDataBind(data);
-        });
-      }
-    }
-
-    if (this.staticData) {
-      this.queryOnBind = false;
-      this.queryOnInit = false;
-      this.setDataArray(this.staticData);
-    } else {
-      this.configureService();
-    }
-
   }
 
   ensureOFormValue(value: any) {
@@ -181,29 +119,13 @@ export class OComboComponent extends OFormDataComponent implements OnInit {
     } else if ((value === undefined || value === null) && this.nullSelection) {
       this.value = new OFormValue(undefined);
     } else {
-      this.value = new OFormValue('');
+      this.value = new OFormValue(this.defaultValue);
     }
     this.syncDataIndex();
   }
 
-  configureService() {
-    this.dataService = this.injector.get(OntimizeService);
-
-    if (Util.isDataService(this.dataService)) {
-      let serviceCfg = this.dataService.getDefaultServiceConfiguration(this.service);
-      if (this.entity) {
-        serviceCfg['entity'] = this.entity;
-      }
-      this.dataService.configureService(serviceCfg);
-    }
-  }
-
   ngOnDestroy() {
     this.destroy();
-
-    if (this._formDataSubcribe) {
-      this._formDataSubcribe.unsubscribe();
-    }
   }
 
   ngAfterViewInit(): void {
@@ -215,73 +137,11 @@ export class OComboComponent extends OFormDataComponent implements OnInit {
     }
   }
 
-  onFormDataBind(bindedData: Object) {
-    let filter = {};
-    let keys = Object.keys(this._pKeysEquiv);
-    if (keys && keys.length > 0 && bindedData) {
-      keys.forEach(item => {
-        let value = bindedData[item];
-        if (value) {
-          filter[this._pKeysEquiv[item]] = value;
-        }
-      });
-    }
-    this.queryData(filter);
-  }
-
-  queryData(filter: Object = {}) {
-    var that = this;
-    if (this.dataService === undefined) {
-      console.warn('No service configured! aborting query');
-      return;
-    }
-    this.dataService.query(filter, this.colArray, this.entity)
-      .subscribe(resp => {
-        if (resp.code === 0) {
-          that.cacheQueried = true;
-          that.setDataArray(resp.data);
-        } else {
-          console.log('error');
-        }
-      }, err => {
-        console.log(err);
-      });
-  }
-
-  setDataArray(data: any): void {
-    if (Util.isArray(data)) {
-      this.dataArray = data;
-      this.syncDataIndex();
-    } else if (Util.isObject(data)) {
-      this.dataArray = [data];
-    } else {
-      console.warn('Combo has received not supported service data. Supported data are Array or Object');
-      this.dataArray = [];
-    }
-  }
-
   syncDataIndex() {
-    this._currentIndex = undefined;
-    if (this.value && this.value.value && this.dataArray) {
-      let self = this;
-      this.dataArray.forEach((item, index) => {
-        if (item[self.valueColumn] === this.value.value) {
-          if (self.nullSelection) {
-            // first position is for null selection that it is not included into dataArray
-            self._currentIndex = index + 1;
-          } else {
-            self._currentIndex = index;
-          }
-        }
-      });
-
-      if (this._currentIndex === undefined) {
-        if (this.queryOnBind && this.dataArray && this.dataArray.length === 0
-          && !this.cacheQueried && !this.isEmpty()) {
-          this.queryData();
-        }
-        return;
-      }
+    super.syncDataIndex();
+    if (this._currentIndex !== undefined && this.nullSelection) {
+      // first position is for null selection that it is not included into dataArray
+      this._currentIndex += 1;
     }
   }
 
@@ -290,7 +150,7 @@ export class OComboComponent extends OFormDataComponent implements OnInit {
     if (this._currentIndex !== undefined && this.selectModel) {
       if (this.selectModel.selected) {
         descTxt = this.selectModel.selected.viewValue;
-      } else if(this.selectModel.options) {
+      } else if (this.selectModel.options) {
         let option: MdOption = this.selectModel.options.toArray()[this._currentIndex];
         if (option) {
           option.select();
