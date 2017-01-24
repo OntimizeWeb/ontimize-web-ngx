@@ -2,13 +2,17 @@
 
 ### Features
 * **o-list**: adding remote pagination ([#40](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/40)) ([8fbbb73](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/8fbbb73))
-* **o-list**: adding 'detail-mode' attribute for choosing which action ('click', 'dblclick' or 'none') will navigate to detail form.
-* **o-list**: adding 'recursive-detail', 'detail-form-route', 'detail-button-in-row', 'detail-button-in-row-icon' attributes for managing detail mode access.
-* **o-list**: adding 'recursive-edit', 'edit-form-route', 'edit-button-in-row', 'edit-button-in-row-icon' attributes for managing edition mode access.
+* **o-list**: adding *'detail-mode'* attribute for choosing which action (*'click'*, *'dblclick'* or *'none'*) will navigate to detail form.
+* **o-list**: adding *'recursive-detail'*, *'detail-form-route'*, *'detail-button-in-row'*, *'detail-button-in-row-icon'* attributes for managing detail mode access.
+* **o-list**: adding *'recursive-edit'*, *'edit-form-route'*, *'edit-button-in-row'*, *'edit-button-in-row-icon'* attributes for managing edition mode access.
 * **o-list-item**: updating item rendering for allowing to add detail or/and edit button.
 * **o-list-item.directive**: adding dblclick event handler.
 * **o-list**: adding default item for empty list.
 * **input components**: new parameter *'tooltip'* for specifying tip display on input components.
+* **o-list**: adding *'selectable'* attribute ([#41](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/41)) ([719042c](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/719042c))
+* **o-list-item**: updating item rendering for allowing to add a checkbox for selectable state.
+* **local-storage.service**: adding service for storing components state in navigator local storage.
+* **Interfaces**: adding *'ILocalStorageComponent'* for components using *'local-storage.service'*.
 
 ### PEER-DEPENDENCY UPDATES ###
 * **Updated**:   @angular/material@2.0.0-beta.1
@@ -20,8 +24,10 @@
 * **Updated**:   ng2-translate@5.0.0
 
 ### BREAKING CHANGES
-* **Interfaces**: The interface 'IFormComponent' was renamded to 'IComponent'.
+* **Interfaces**: The interface *'IFormComponent'* was renamded to *'IComponent'*.
 * **Components**: Several components have changed its constructor.
+* **o-selectable-list**: Deleted component (use *'selectable'* attribute in o-list instead).
+* **o-selectable-list-item**: Deleted component (use *'selectable'* attribute in o-list instead).
 
 ## 1.1.1 (2017-01-11)
 
@@ -39,9 +45,9 @@
 ### Features
 * **angular2:** update to official version 2.1.2
 * **angular/material:** v2.0.0-alpha.10 ([#1](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/1))
-* **container components:** New container components: 'o-row' and 'o-column'. ([c055f59](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/c055f59))
-* **o-list:** enhancements on 'o-list' component ([8fe285a](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/8fe285a))
-* **creating pipes**: adding o-integer.pipe and o-real.pipe to o-integer-input, o-real-input, o-currency-input and o-percent-input([#23](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/23)) ([cc74967](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/cc74967))
+* **container components:** New container components: *'o-row'* and *'o-column'*. ([c055f59](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/c055f59))
+* **o-list:** enhancements on *'o-list'* component ([8fe285a](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/8fe285a))
+* **creating pipes**: adding *'o-integer.pipe'* and *'o-real.pipe'* to *'o-integer-input'*, *'o-real-input'*, *'o-currency-input'* and *'o-percent-input'* ([#23](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/23)) ([cc74967](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/cc74967))
 
 ### PEER-DEPENDENCY UPDATES ###
 * **Removed**: angular2-material@v2.0.0-alpha.8-2
@@ -56,7 +62,7 @@
 ### Bug Fixes
 * **i18n:** Fixing core translations. ([ecb38ca](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/ecb38ca)) ([796f613](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/796f613))
 * **o-form:** Fixing minor bugs. ([ecb38ca](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/ecb38ca))
-* **disable state:** Fixing errors when setting 'disabled' state on input components. ([bd04120](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/bd04120))
+* **disable state:** Fixing errors when setting *'disabled'* state on input components. ([bd04120](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/bd04120))
 * **o-image:** Fixing errors ([2c12065](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/2c12065))
 
 
@@ -72,13 +78,13 @@
 ## 1.0.1 (2016-11-03)
 
 ### Features
-* **o-table-cell-renderer-action:** Allowing to set edition type using 'editionMode' (inline or not)
+* **o-table-cell-renderer-action:** Allowing to set edition type using *'editionMode'* (inline or not)
 * **Table:** Set parent-key values on detail form ([#9](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/9)) ([7967481](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/7967481))
 * **Table:** Material style ([#4](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/4))
 * **Table:** Customizing options: rows height, options, buttons and header visibility.
 * **Form:** Change styling of form buttons panel ([#18](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/18)) ([5ebe4ba](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/5ebe4ba))
 * **Form:** Adding custom buttons to form buttons panel ([#19](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/19)) ([6cf8f37](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/6cf8f37))
-* **Menu:** Implementing 'locale-item' on 'o-side-menu' ([#21](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/21)) ([82166a5](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/82166a5))
+* **Menu:** Implementing *'locale-item'* on *'o-side-menu'* ([#21](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/21)) ([82166a5](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/82166a5))
 
 ### Bug Fixes
 * **Table:**  Configuration parameter for navigate detail mode ([#3](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/3)) ([cb9821d](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/cb9821d))
@@ -91,7 +97,7 @@
 
 ### Features
 
-* **Components:** it is no longer necessary to set 'data' attribute parameter on form data components, the form will set values automatically.
+* **Components:** it is no longer necessary to set *'data'* attribute parameter on form data components, the form will set values automatically.
 - Example:
   * Before: `<o-text-input attr="NAME" flex  [data]="oForm.getDataValue('NAME')"></o-text-input>`
   * After: `<o-text-input attr="NAME" flex  ></o-text-input>`
@@ -132,8 +138,8 @@
 ### BREAKING CHANGES
 
 * **configuration** application configuration parameters (app.config) perform camelCase standard.
-* **services** IDataService interface change the 'entity' argument position in CRUD methods (query, insert, delete, update).
-  Now it is not always necessary to pass 'entity' argument, simply configure it once in service.
+* **services** IDataService interface change the *'entity'* argument position in CRUD methods (query, insert, delete, update).
+  Now it is not always necessary to pass *'entity'* argument, simply configure it once in service.
 - Example:
   * Before: `query('ECustomers', filter, columns)`
   * After: `query(filter, columns, 'ECustomers')`
