@@ -1,6 +1,6 @@
 <div class="o-list-container" layout-fill>
   <!--<span *ngIf="title" class="o-list-title">{{title}}</span>-->
-  <div [class.hidden-loading]="!loading" [class.pageable-loading]="pageable && queryRecordOffset > 0" class="spinner-container"
+  <div [class.hidden-loading]="!loading" [class.pageable-loading]="pageable && state.queryRecordOffset > 0" class="spinner-container"
     flex="100" layout="row" layout-align="center center">
     <md-spinner></md-spinner>
   </div>

@@ -1,14 +1,11 @@
 import {
-  Component, NgModule,
-  ModuleWithProviders, ViewEncapsulation, ElementRef,
-  NgZone, Inject, Injector, Optional, forwardRef
+  Component, NgModule, ModuleWithProviders, NgZone,
+  ViewEncapsulation, ElementRef, forwardRef,
+  Inject, Injector, Optional, ContentChildren, QueryList
 } from '@angular/core';
-// , EventEmitter
 import { Router, ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { MdListModule, MdIconModule } from '@angular/material';
-
-// import { ObservableWrapper } from '../../util/async';
+import { MdListModule, MdIconModule, MdLine } from '@angular/material';
 import { OListComponent } from './o-list.component';
 
 @Component({
@@ -22,6 +19,10 @@ export class OListItemComponent {
 
   modelData: Object;
 
+  @ContentChildren(MdLine)
+  private mdLines: QueryList<MdLine>;
+  private mdLinesClass: string = '';
+
   constructor(
     protected _router: Router,
     protected _actRoute: ActivatedRoute,
@@ -29,6 +30,12 @@ export class OListItemComponent {
     protected zone: NgZone,
     protected _injector: Injector,
     @Optional() @Inject(forwardRef(() => OListComponent)) protected _list: OListComponent) {
+  }
+
+  ngAfterContentInit() {
+    if (this.mdLines && this.mdLines.length) {
+      this.mdLinesClass = 'md-' + this.mdLines.length + '-line';
+    }
   }
 
   onItemClick(evt) {

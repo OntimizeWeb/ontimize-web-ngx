@@ -1,10 +1,7 @@
 import {
-  Component, ElementRef, OnInit, Inject, Injector, NgZone, AfterContentInit, ContentChildren,
-  ViewChild,
-  QueryList, Optional, forwardRef,
-  NgModule,
-  ModuleWithProviders,
-  ViewEncapsulation, EventEmitter
+  Component, OnInit, Inject, Injector, AfterContentInit, ContentChildren,
+  ViewChild, QueryList, Optional, forwardRef,
+  NgModule, ModuleWithProviders, ViewEncapsulation, EventEmitter
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -14,7 +11,7 @@ import { Observable } from 'rxjs/Observable';
 import { MdCheckbox } from '@angular/material';
 import { MdListModule, MdIconModule, MdToolbarModule, MdButtonModule, MdProgressCircleModule } from '@angular/material';
 
-import { OntimizeService, AuthGuardService, OTranslateService } from '../../services';
+import { OntimizeService, AuthGuardService, OTranslateService, LocalStorageService } from '../../services';
 import { dataServiceFactory } from '../../services/data-service.provider';
 import { OSearchInputModule, OSearchInputComponent } from '../search-input/o-search-input.component';
 import { OListItemModule } from './o-list-item.component';
@@ -27,54 +24,57 @@ import { OListItemDirective } from './o-list-item.directive';
 import { OTranslateModule } from '../../pipes/o-translate.pipe';
 
 import { Subscription } from 'rxjs/Subscription';
+
+import { ILocalStorageComponent } from '../../interfaces';
+
 export const DEFAULT_INPUTS_O_LIST = [
   // attr [string]: list identifier. It is mandatory if data are provided through the data attribute. Default: entity (if set).
-  'attr',
+  'oattr: attr',
 
   'title',
+
   // visible [no|yes]: visibility. Default: yes.
-
   'visible',
+
   // enabled [no|yes]: editability. Default: yes.
+  'oenabled: enabled',
 
-  'enabled',
   // quick-filter [no|yes]: show quick filter. Default: yes.
-
   'quickFilter: quick-filter',
+
   // quick-filter-columns [string]: columns of the filter, separated by ';'. Default: no value.
-
   'quickFilterColumns: quick-filter-columns',
+
   //controls [string][yes|no|true|false]:
-
   'controls',
+
   // refresh-button [no|yes]: show refresh button. Default: yes.
-
   'refreshButton: refresh-button',
-  // query-on-init [no|yes]: query table on init. Default: yes.
 
+  // query-on-init [no|yes]: query table on init. Default: yes.
   'queryOnInit: query-on-init',
 
   'pageable',
 
   'cssClass: css-class',
+
   // columns [string]: columns of the entity, separated by ';'. Default: no value.
-
   'columns',
+
   // parent-keys [string]: parent keys to filter, separated by ';'. Default: no value.
-
   'parentKeys: parent-keys',
-  // entity [string]: entity of the service. Default: no value.
 
+  // entity [string]: entity of the service. Default: no value.
   'entity',
 
   'service',
-  // keys [string]: entity keys, separated by ';'. Default: no value.
 
+  // keys [string]: entity keys, separated by ';'. Default: no value.
   'keys',
 
   'route',
-  //static-data [Array<any>] : way to populate with static data. Default: no value.
 
+  //static-data [Array<any>] : way to populate with static data. Default: no value.
   'listData: static-data',
 
   // paginated-query-method [string]: name of the service method to perform paginated queries. Default: advancedQuery.
@@ -133,7 +133,7 @@ export const DEFAULT_OUTPUTS_O_LIST = [
   ],
   encapsulation: ViewEncapsulation.None
 })
-export class OListComponent implements OnInit, IList, AfterContentInit {
+export class OListComponent implements OnInit, IList, AfterContentInit, ILocalStorageComponent {
 
   public static DEFAULT_INPUTS_O_LIST = DEFAULT_INPUTS_O_LIST;
   public static DEFAULT_OUTPUTS_O_LIST = DEFAULT_OUTPUTS_O_LIST;
@@ -148,6 +148,7 @@ export class OListComponent implements OnInit, IList, AfterContentInit {
   public loading: boolean = false;
   protected authGuardService: AuthGuardService;
   protected translateService: OTranslateService;
+  protected localStorageService: LocalStorageService;
 
   @InputConverter()
   controls: boolean = true;
@@ -162,7 +163,7 @@ export class OListComponent implements OnInit, IList, AfterContentInit {
   @InputConverter()
   visible: boolean = true;
   @InputConverter()
-  enabled: boolean = true;
+  oenabled: boolean = true;
   @InputConverter()
   recursiveDetail: boolean = false;
   @InputConverter()
@@ -172,7 +173,7 @@ export class OListComponent implements OnInit, IList, AfterContentInit {
   @InputConverter()
   editButtonInRow: boolean = false;
 
-  protected attr: string;
+  protected oattr: string;
   protected title: string;
   protected cssclass: string;
   protected columns: string;
@@ -191,7 +192,8 @@ export class OListComponent implements OnInit, IList, AfterContentInit {
   protected detailFormRoute: string;
   protected detailButtonInRowIcon: string;
   protected editFormRoute: string;
-  public editButtonInRowIcon: string;
+  protected editButtonInRowIcon: string;
+  protected state: any;
   /* End Inputs */
 
   @ContentChildren(OListItemComponent)
@@ -206,6 +208,9 @@ export class OListComponent implements OnInit, IList, AfterContentInit {
   public mdClick: EventEmitter<any> = new EventEmitter();
   public mdDblClick: EventEmitter<any> = new EventEmitter();
 
+  public onListDataLoaded: EventEmitter<any> = new EventEmitter();
+  public onPaginatedListDataLoaded: EventEmitter<any> = new EventEmitter();
+
   protected dataArray: any[] = [];
   protected listData: any[] = null;
   protected dataColumns: string[] = [];
@@ -219,31 +224,42 @@ export class OListComponent implements OnInit, IList, AfterContentInit {
   protected paginatedQueryMethod: string;
   protected queryRows: any;
 
-  protected queryRecordOffset: number = 0;
-  protected queryTotalRecordNumber: number = 0;
   protected onLanguageChangeSubscribe: any;
+  protected onRouteChangeStorageSubscribe: any;
 
   protected dataSelected: any[] = [];
-  private _filterValue: string;
 
   constructor(
     protected _router: Router,
     protected _actRoute: ActivatedRoute,
-    public element: ElementRef,
-    protected zone: NgZone,
     protected _injector: Injector,
     @Optional() @Inject(forwardRef(() => OFormComponent)) protected form: OFormComponent) {
 
     this.authGuardService = this._injector.get(AuthGuardService);
     this.translateService = this._injector.get(OTranslateService);
+    this.localStorageService = this._injector.get(LocalStorageService);
 
     this.detailMode = OListComponent.DEFAULT_DETAIL_MODE;
 
+    var self = this;
     this.onLanguageChangeSubscribe = this.translateService.onLanguageChanged.subscribe(
       res => {
         console.log('OListComponent TODO onLanguageChangeSubscribe');
       }
     );
+    this.onRouteChangeStorageSubscribe = this.localStorageService.onRouteChange.subscribe(
+      res => {
+        self.localStorageService.updateComponentStorage(self);
+      }
+    );
+  }
+
+  getComponentKey(): string {
+    return 'OListComponent_' + this.oattr;
+  }
+
+  getDataToStore(): Object {
+    return this.state;
   }
 
   registerSearchInput(input: OSearchInputComponent) {
@@ -264,9 +280,9 @@ export class OListComponent implements OnInit, IList, AfterContentInit {
   }
 
   ngOnInit(): void {
-    if (typeof (this.attr) === 'undefined') {
+    if (typeof (this.oattr) === 'undefined') {
       if (typeof (this.entity) !== 'undefined') {
-        this.attr = this.entity.replace('.', '_');
+        this.oattr = this.entity.replace('.', '_');
       }
     }
 
@@ -274,15 +290,15 @@ export class OListComponent implements OnInit, IList, AfterContentInit {
       this.title = this.translateService.get(this.title);
     }
 
-    this.authGuardService.getPermissions(this._router.url, this.attr)
+    this.authGuardService.getPermissions(this._router.url, this.oattr)
       .then(
       permissions => {
         if (typeof (permissions) !== 'undefined') {
           if (this.visible && permissions.visible === false) {
             this.visible = false;
           }
-          if (this.enabled && permissions.enabled === false) {
-            this.enabled = false;
+          if (this.oenabled && permissions.enabled === false) {
+            this.oenabled = false;
           }
         }
       }
@@ -335,13 +351,27 @@ export class OListComponent implements OnInit, IList, AfterContentInit {
       this.editButtonInRowIcon = OListComponent.DEFAULT_EDIT_ICON;
     }
 
+    this.state = this.localStorageService.getComponentStorage(this);
+    let initialQueryLength = undefined;
+    if (this.state.hasOwnProperty('queryRecordOffset')) {
+      initialQueryLength = this.state.queryRecordOffset;
+    }
+    this.state.queryRecordOffset = 0;
+    if (!this.state.hasOwnProperty('queryTotalRecordNumber')) {
+      this.state.queryTotalRecordNumber = 0;
+    }
     if (this.queryOnInit) {
-      this.queryData();
+      let queryArgs = {
+        offset: 0,
+        length: initialQueryLength || this.queryRows
+      };
+      this.queryData({}, queryArgs);
     }
   }
 
   public ngOnDestroy() {
     this.onLanguageChangeSubscribe.unsubscribe();
+    this.onRouteChangeStorageSubscribe.unsubscribe();
   }
 
   configureService() {
@@ -396,14 +426,14 @@ export class OListComponent implements OnInit, IList, AfterContentInit {
   }
 
   onItemDetailClick(item: OListItemDirective | OListItemComponent) {
-    if (this.enabled && this.detailMode === OListComponent.DETAIL_MODE_CLICK) {
+    if (this.oenabled && this.detailMode === OListComponent.DETAIL_MODE_CLICK) {
       this.viewDetail(item.getItemData());
       ObservableWrapper.callEmit(this.mdClick, item);
     }
   }
 
   onItemDetailDblClick(item: OListItemDirective | OListItemComponent) {
-    if (this.enabled && this.detailMode === OListComponent.DETAIL_MODE_DBLCLICK) {
+    if (this.oenabled && this.detailMode === OListComponent.DETAIL_MODE_DBLCLICK) {
       this.viewDetail(item.getItemData());
       ObservableWrapper.callEmit(this.mdDblClick, item);
     }
@@ -426,7 +456,7 @@ export class OListComponent implements OnInit, IList, AfterContentInit {
       this.loaderSuscription = this.load();
       let queryArguments = [filter, this.dataColumns, this.entity];
       if (this.pageable) {
-        let queryOffset = (ovrrArgs && ovrrArgs.hasOwnProperty('offset')) ? ovrrArgs.offset : this.queryRecordOffset;
+        let queryOffset = (ovrrArgs && ovrrArgs.hasOwnProperty('offset')) ? ovrrArgs.offset : this.state.queryRecordOffset;
         let queryRowsN = (ovrrArgs && ovrrArgs.hasOwnProperty('length')) ? ovrrArgs.length : this.queryRows;
         queryArguments = queryArguments.concat([undefined, queryOffset, queryRowsN, undefined]);
       }
@@ -449,9 +479,13 @@ export class OListComponent implements OnInit, IList, AfterContentInit {
               dataArray = (self.listData || []).concat(data);
             }
             self.listData = dataArray;
-            self.filterData(self._filterValue);
+            self.filterData(self.state.filterValue);
           }
           self.loaderSuscription.unsubscribe();
+          if (self.pageable) {
+            ObservableWrapper.callEmit(self.onPaginatedListDataLoaded, data);
+          }
+          ObservableWrapper.callEmit(self.onListDataLoaded, self.listData);
         }, err => {
           console.log('[OList.queryData]: error', err);
           self.loaderSuscription.unsubscribe();
@@ -462,10 +496,10 @@ export class OListComponent implements OnInit, IList, AfterContentInit {
   updatePaginationInfo(queryRes: any) {
     let resultEndIndex = queryRes.startRecordIndex + queryRes.data.length;
     if (queryRes.startRecordIndex !== undefined) {
-      this.queryRecordOffset = resultEndIndex;
+      this.state.queryRecordOffset = resultEndIndex;
     }
     if (queryRes.totalQueryRecordsNumber !== undefined) {
-      this.queryTotalRecordNumber = queryRes.totalQueryRecordsNumber;
+      this.state.queryTotalRecordNumber = queryRes.totalQueryRecordsNumber;
     }
   }
 
@@ -482,7 +516,7 @@ export class OListComponent implements OnInit, IList, AfterContentInit {
   onReload() {
     let queryArgs = {};
     if (this.pageable) {
-      this.queryRecordOffset = 0;
+      this.state.queryRecordOffset = 0;
       queryArgs = {
         length: this.listData.length,
         replace: true
@@ -542,7 +576,7 @@ export class OListComponent implements OnInit, IList, AfterContentInit {
    * Filters data locally.
    *  */
   filterData(value: string): void {
-    this._filterValue = value;
+    this.state.filterValue = value;
     if (value && value.length > 0 && this.listData && this.listData.length > 0) {
       var _val = this.configureFilterValue(value);
 
@@ -564,11 +598,7 @@ export class OListComponent implements OnInit, IList, AfterContentInit {
         });
         return found;
       });
-
-      //if (filteredData.length > 0) {
       this.setData(filteredData);
-      //}
-
     } else {
       this.setData(this.listData);
     }
@@ -592,7 +622,6 @@ export class OListComponent implements OnInit, IList, AfterContentInit {
     });
     return subscription;
   }
-
 
   public setFormComponent(form: OFormComponent) {
     var self = this;
@@ -639,7 +668,6 @@ export class OListComponent implements OnInit, IList, AfterContentInit {
     } else {
       return false;
     }
-    //return this.dataSelected.indexOf(item) > -1;
   }
 
   setSelected(item) {
@@ -652,12 +680,12 @@ export class OListComponent implements OnInit, IList, AfterContentInit {
   }
 
   onScroll($event: Event): void {
-    let pendingRegistries = this.listData.length < this.queryTotalRecordNumber;
+    let pendingRegistries = this.listData.length < this.state.queryTotalRecordNumber;
     if (!this.loading && pendingRegistries) {
       let element = $event.srcElement as any;
       if (element.offsetHeight + element.scrollTop + 5 >= element.scrollHeight) {
         let queryArgs = {
-          offset: this.queryRecordOffset,
+          offset: this.state.queryRecordOffset,
           length: this.queryRows
         };
         this.queryData({}, queryArgs);
