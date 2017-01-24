@@ -1,4 +1,4 @@
-import {Http} from '@angular/http';
+import { Http } from '@angular/http';
 
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -7,7 +7,8 @@ import { HttpModule } from '@angular/http';
 import {
   TranslateModule,
   TranslateLoader,
-  TranslateStaticLoader} from 'ng2-translate';
+  TranslateStaticLoader
+} from 'ng2-translate';
 
 import { MaterialModule } from '@angular/material';
 
@@ -46,8 +47,6 @@ import {
   OTextareaInputModule,
   OListModule,
   OListItemModule,
-  OSelectableListModule,
-  OSelectableListItemModule,
   OSearchInputModule,
   OTableModule,
   OSideMenuModule,
@@ -112,8 +111,6 @@ export const ONTIMIZE_MODULES: any = [
   OLightTableColumnModule.forRoot(),
   OListModule.forRoot(),
   OListItemModule.forRoot(),
-  OSelectableListModule.forRoot(),
-  OSelectableListItemModule.forRoot(),
   OSearchInputModule.forRoot(),
   OTableModule.forRoot(),
   OSideMenuModule.forRoot(),
