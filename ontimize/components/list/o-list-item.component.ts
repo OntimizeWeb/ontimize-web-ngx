@@ -5,7 +5,7 @@ import {
 } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { MdListModule, MdIconModule, MdLine } from '@angular/material';
+import { MdListModule, MdIconModule, MdLine, MdCheckboxModule } from '@angular/material';
 import { OListComponent } from './o-list.component';
 
 @Component({
@@ -18,6 +18,7 @@ import { OListComponent } from './o-list.component';
 export class OListItemComponent {
 
   modelData: Object;
+  isSelected: boolean = false;
 
   @ContentChildren(MdLine)
   private mdLines: QueryList<MdLine>;
@@ -61,17 +62,26 @@ export class OListItemComponent {
   setItemData(data) {
     if (!this.modelData) {
       this.modelData = data;
+      if (this._list.selectable) {
+        this.isSelected = this._list.isItemSelected(this.modelData);
+      }
     }
   }
 
   getItemData() {
     return this.modelData;
   }
+
+  onCheckboxChange(evt) {
+    if (this._list.selectable) {
+      this.isSelected = this._list.setSelected(this.modelData);
+    }
+  }
 }
 
 @NgModule({
   declarations: [OListItemComponent],
-  imports: [MdListModule, MdIconModule, CommonModule],
+  imports: [MdListModule, MdIconModule, CommonModule, MdCheckboxModule],
   exports: [OListItemComponent],
 })
 export class OListItemModule {

@@ -111,7 +111,9 @@ export const DEFAULT_INPUTS_O_LIST = [
   'editButtonInRow: edit-button-in-row',
 
   // edit-button-in-row-icon [string]: material icon. Default: search.
-  'editButtonInRowIcon: edit-button-in-row-icon'
+  'editButtonInRowIcon: edit-button-in-row-icon',
+
+  'selectable'
 ];
 
 export const DEFAULT_OUTPUTS_O_LIST = [
@@ -172,6 +174,8 @@ export class OListComponent implements OnInit, IList, AfterContentInit, ILocalSt
   recursiveEdit: boolean = false;
   @InputConverter()
   editButtonInRow: boolean = false;
+  @InputConverter()
+  selectable: boolean = false;
 
   protected oattr: string;
   protected title: string;
@@ -478,6 +482,14 @@ export class OListComponent implements OnInit, IList, AfterContentInit, ILocalSt
             if (self.pageable && !(ovrrArgs && ovrrArgs['replace'])) {
               dataArray = (self.listData || []).concat(data);
             }
+
+            let selectedIndexes = self.state.selectedIndexes || [];
+            for (let i = 0; i < selectedIndexes.length; i++) {
+              if (selectedIndexes[i] < self.listData.length) {
+                self.dataSelected.push(self.listData[selectedIndexes[i]]);
+              }
+            }
+
             self.listData = dataArray;
             self.filterData(self.state.filterValue);
           }
@@ -521,6 +533,10 @@ export class OListComponent implements OnInit, IList, AfterContentInit, ILocalSt
         length: this.listData.length,
         replace: true
       };
+    }
+    if (this.selectable) {
+      this.dataSelected = [];
+      this.state.selectedIndexes = [];
     }
     this.queryData({}, queryArgs);
   }
@@ -671,12 +687,28 @@ export class OListComponent implements OnInit, IList, AfterContentInit, ILocalSt
   }
 
   setSelected(item) {
-    let idx = this.dataSelected.indexOf(item);
-    if (idx > -1) {
-      this.dataSelected.splice(idx, 1);
-    } else {
-      this.dataSelected.push(item);
+    if (this.selectable) {
+      let idx = this.dataSelected.indexOf(item);
+      let wasSelected = idx > -1;
+      if (wasSelected) {
+        this.dataSelected.splice(idx, 1);
+      } else {
+        this.dataSelected.push(item);
+      }
+      this.updateSelectedState(item, !wasSelected);
+      return !wasSelected;
     }
+  }
+
+  updateSelectedState(item: Object, isSelected: boolean) {
+    let selectedIndexes = this.state.selectedIndexes || [];
+    let itemIndex = this.listData.indexOf(item);
+    if (isSelected && selectedIndexes.indexOf(itemIndex) === -1) {
+      selectedIndexes.push(itemIndex);
+    } else if (!isSelected) {
+      selectedIndexes.splice(selectedIndexes.indexOf(itemIndex), 1);
+    }
+    this.state.selectedIndexes = selectedIndexes;
   }
 
   onScroll($event: Event): void {
