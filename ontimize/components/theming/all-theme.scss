@@ -7,6 +7,7 @@
 @import '../input/input-theme.scss';
 @import '../input/date-input/o-date-input-theme.scss';
 @import '../combo/o-combo-theme.scss';
+@import '../dialog/o-dialog-theme.scss';
 @import '../table/o-table-theme.scss';
 @import '../material/ckeditor/ckeditor-theme.scss';
 
@@ -19,6 +20,7 @@
   @include input-theme($theme);
   @include o-date-input-theme($theme);
   @include o-combo-theme($theme);
+  @include o-dialog-theme($theme);
   @include o-table-theme($theme);
   @include ckeditor-theme($theme);
 }

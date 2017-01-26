@@ -1,8 +1,7 @@
 <md-toolbar color="primary" class="md-whiteframe-5dp" *ngIf="filter">
   <o-search-input class="list-picker-search" (onSearch)="searchVal=$event"></o-search-input>
 </md-toolbar>
-
-<div class="dialog-list-container">
+<div md-dialog-content class="dialog-list-container">
   <md-list>
     <md-list-item class="md-1-line" (click)="onClickListItem($event, item)" layout-fill
       *ngFor="let item of data | columnsfilter: {filtervalue: searchVal, filtercolumns: visibleColsArray }">
@@ -17,3 +16,9 @@
     </md-list-item>
   </md-list>
 </div>
+<md-dialog-actions align="end">
+    <span flex></span>
+    <button md-button class="md-primary" md-dialog-close>
+      <span>{{ 'CANCEL' | oTranslate | uppercase }}</span>
+    </button>
+</md-dialog-actions>

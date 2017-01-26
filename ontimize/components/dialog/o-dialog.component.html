@@ -1,13 +1,21 @@
-<md-dialog #dialog>
-  <md-dialog-title>{{ title | oTranslate }}</md-dialog-title>
-  {{ message | oTranslate }}
-  <md-dialog-actions>
+  <h1 *ngIf="title && title.length > 0" md-dialog-title>{{ title | oTranslate }}</h1>
+  <div md-dialog-content>
+    <div layout="row" class="alert-content" [class.alert-content-icon]="useIcon" layout-align="space-between center">
+      <md-icon *ngIf="useIcon" class="alert-icon"
+        [class.info] = "isInfo"
+        [class.warn] = "isWarn"
+        [class.error] = "isError"
+      >{{ icon }}</md-icon>
+      <span>{{ message | oTranslate }}</span>
+    </div>
+  </div>
+  <md-dialog-actions align="end">
     <span flex></span>
-    <button md-button class="md-primary" (click)="dialog.close(true)">
-      <span>{{ okButtonText | oTranslate }}</span>
+    <button md-button class="md-primary" (click)="onOkClick($event)">
+      <span>{{ okButtonText | oTranslate | uppercase }}</span>
     </button>
-    <button *ngIf="twoOptions" md-button class="md-primary" (click)="dialog.close(false)">
-      <span>{{ cancelButtonText | oTranslate }}</span>
+    <button *ngIf="twoOptions" md-button class="md-primary" md-dialog-close>
+      <span>{{ cancelButtonText | oTranslate | uppercase }}</span>
     </button>
   </md-dialog-actions>
-</md-dialog>
+

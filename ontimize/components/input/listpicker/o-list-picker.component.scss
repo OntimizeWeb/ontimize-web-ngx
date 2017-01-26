@@ -3,11 +3,11 @@
 }
 
 .dialog-list-container {
-  overflow-y: auto;
-  max-height: 570px;
-
-  md-list-item {
-    cursor: pointer;
+  md-list {
+    margin: 12px 0;
+    md-list-item {
+      cursor: pointer;
+    }
   }
 }
 
