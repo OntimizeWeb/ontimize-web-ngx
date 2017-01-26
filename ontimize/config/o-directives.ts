@@ -1,11 +1,8 @@
 import {
   MdContent,
-  MdBackdrop,
-  MdInk,
   MdPatternValidator, MdMaxLengthValidator,
   MdMinValueValidator, MdMaxValueValidator,
   MdNumberRequiredValidator,
-  MdSubheader
 } from '../components/material/ng2-material/index';
 
 import {FormComponentDirective} from '../directives/FormComponentDirective';
@@ -16,12 +13,9 @@ import {FormComponentDirective} from '../directives/FormComponentDirective';
 */
 export const NG2_MATERIAL_DIRECTIVES = [
   MdContent,
-  MdBackdrop,
-  MdInk,
   MdPatternValidator, MdMaxLengthValidator,
   MdMinValueValidator, MdMaxValueValidator,
-  MdNumberRequiredValidator,
-  MdSubheader
+  MdNumberRequiredValidator
 ];
 
 export const ONTIMIZE_DIRECTIVES = [
