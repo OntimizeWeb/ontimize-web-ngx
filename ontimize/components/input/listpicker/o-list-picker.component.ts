@@ -14,7 +14,8 @@ import {
   MdDialog, MdDialogRef, MdDialogConfig
 } from '@angular/material';
 
-import { OntimizeService, dataServiceFactory } from '../../../services';
+import { dataServiceFactory } from '../../../services/data-service.provider';
+import { OntimizeService } from '../../../services';
 import { ColumnsFilterPipe } from '../../../pipes';
 import { OSharedModule } from '../../../shared.module';
 import { InputConverter } from '../../../decorators';

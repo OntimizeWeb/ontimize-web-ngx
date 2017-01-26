@@ -10,8 +10,8 @@ import 'rxjs/add/observable/combineLatest';
 
 import { MdProgressBarModule } from '@angular/material';
 
-import {OntimizeService, DialogService, NavigationService,
-  dataServiceFactory} from '../../services';
+import { dataServiceFactory } from '../../services/data-service.provider';
+import {OntimizeService, DialogService, NavigationService } from '../../services';
 import {InputConverter} from '../../decorators';
 import { IComponent, IFormControlComponent, IFormDataTypeComponent} from '../../interfaces';
 import {OFormToolbarModule, OFormToolbarComponent} from './o-form-toolbar.component';
@@ -114,7 +114,7 @@ export class OFormComponent implements OnInit, OnDestroy {
   isDetailForm: boolean = false;
   keysArray: string[] = [];
   colsArray: string[] = [];
-  dataService: OntimizeService;
+  dataService: any;
 
   formGroup: FormGroup;
   onFormDataLoaded: EventEmitter<Object> = new EventEmitter<Object>();
@@ -815,6 +815,10 @@ export class OFormComponent implements OnInit, OnDestroy {
   queryData(filter) {
     var self = this;
     var loader = self.load();
+    if (this.dataService === undefined) {
+      console.warn('No service configured! aborting query');
+      return;
+    }
     this.dataService.query(filter, this.getAttributesToQuery(), this.entity)
       .subscribe(resp => {
         loader.unsubscribe();
