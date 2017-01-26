@@ -1,13 +1,13 @@
 <div class="o-list-container" layout-fill>
   <!--<span *ngIf="title" class="o-list-title">{{title}}</span>-->
-  <div [class.hidden-loading]="!loading" [class.pageable-loading]="pageable && queryRecordOffset > 0" class="spinner-container"
+  <div [class.hidden-loading]="!loading" [class.pageable-loading]="pageable && state.queryRecordOffset > 0" class="spinner-container"
     flex="100" layout="row" layout-align="center center">
     <md-spinner></md-spinner>
   </div>
 
   <md-toolbar class="toolbar-filter-list" *ngIf="controls">
     <div class="md-toolbar-tools" layout="row" layout-fill layout-align="start center">
-      <button type="button" md-icon-button aria-label="Refresh" (click)="onReload()" *ngIf="refreshButton">
+      <button type="button" md-icon-button aria-label="Refresh" (click)="reloadData()" *ngIf="refreshButton">
         <md-icon>refresh</md-icon>
       </button>
       <span class="fill-remaining"></span>

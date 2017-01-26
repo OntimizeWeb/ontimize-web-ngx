@@ -10,7 +10,7 @@ import { ObservableWrapper } from '../../util/async';
 
 import { IList } from '../../interfaces/list.interface';
 
-import { MdLine } from '@angular/material';
+import { MdListItem } from '@angular/material';
 
 @Directive({
   selector: 'md-list-item[o-list-item]',
@@ -25,19 +25,13 @@ export class OListItemDirective implements OnInit, OnDestroy {
   mdClick: EventEmitter<any> = new EventEmitter();
   mdDblClick: EventEmitter<any> = new EventEmitter();
 
-  active: boolean = false;
-
   subcription: any;
   _list: IList;
 
   @Input('o-list-item')
   modelData: Object;
 
-  // @ContentChild(OListItemDirective, { read: ViewContainerRef }) other;
-  @ContentChild(MdLine, { read: ViewContainerRef }) other;
-
-  // @ContentChildren(OListItemDirective)
-  //   listItemDirectives: QueryList<OListItemDirective>;
+  @ContentChild(MdListItem, { read: ViewContainerRef }) other;
 
   @Input('selectable')
   selectable: boolean = false;
@@ -46,14 +40,8 @@ export class OListItemDirective implements OnInit, OnDestroy {
     private renderer: Renderer,
     public actRoute: ActivatedRoute,
     private containerRef: ViewContainerRef,
-    private componentFactoryResolver: ComponentFactoryResolver) {
-  }
-
-  @HostListener('mouseenter')
-  onMouseEnter() {
-    if (!this.selectable) {
-      this.renderer.setElementStyle(this._el.nativeElement, 'cursor', 'pointer');
-    }
+    private componentFactoryResolver: ComponentFactoryResolver
+  ) {
   }
 
   ngOnInit() {
@@ -62,6 +50,13 @@ export class OListItemDirective implements OnInit, OnDestroy {
       .subscribe(params => {
         this.updateActiveState(params);
       });
+  }
+
+  @HostListener('mouseenter')
+  onMouseEnter() {
+    if (!this.selectable) {
+      this.renderer.setElementStyle(this._el.nativeElement, 'cursor', 'pointer');
+    }
   }
 
   updateActiveState(params) {
@@ -96,22 +91,7 @@ export class OListItemDirective implements OnInit, OnDestroy {
     }
   }
 
-  /*
-  ngAfterViewInit() {
-
-    let checkBoxFactory = this.componentFactoryResolver.resolveComponentFactory(MdCheckbox);
-    let checkBoxRef = this.other.createComponent(checkBoxFactory, 0);
-    checkBoxRef.instance.change.subscribe((value: any) => {
-      this.onSelect();
-    });
-    window.setTimeout(() => {
-      checkBoxRef.instance.checked = this._list.isItemSelected(this.modelData);
-    }, 50);
-
-    // this.containerRef.move(checkBoxRef.hostView, 0);
-  }*/
-
-  onItemClicked(evt) {
+  onItemClicked(evt?) {
     var self = this;
     window.setTimeout(() => {
       ObservableWrapper.callEmit(self.mdClick, self);

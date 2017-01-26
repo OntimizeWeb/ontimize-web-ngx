@@ -24,20 +24,23 @@ o-list-item {
     font-size: 16px;
     height: 48px;
     padding: 0 16px;
+    &.md-2-line {
+      height: 72px;
+    }
+    &.md-3-line {
+      height: 88px;
+    }
   }
-  &.md-list-avatar .md-list-item {
+
+  &.md-list-avatar.md-list-item {
     height: 56px;
   }
-  &.md-2-line .md-list-item {
-    height: 72px;
-  }
-  &.md-3-line .md-list-item {
-    height: 88px;
-  }
+
   &.md-multi-line .md-list-item {
     height: 100%;
     padding: 8px 16px;
   }
+
   .md-list-text {
     display: flex;
     flex-direction: column;

@@ -1,4 +1,9 @@
-<div [class.md-list-item-focus]="_hasFocus" class="o-list-item md-list-item" layout-fill (click)="onItemClick($event)" (dblclick)="onItemDblClick($event)">
+<div [class.md-list-item-focus]="_hasFocus" class="o-list-item md-list-item {{ mdLinesClass }}" layout-fill (click)="onItemClick($event)"
+  (dblclick)="onItemDblClick($event)">
+  <div class="o-list-row-action" *ngIf="_list && _list.selectable">
+    <md-checkbox [checked]="isSelected" (change)="onCheckboxChange($event)">
+    </md-checkbox>
+  </div>
   <ng-content select="[md-list-avatar],[md-list-icon], [mat-list-avatar], [mat-list-icon]"></ng-content>
   <div class="md-list-text">
     <ng-content select="[md-line], [mat-line]"></ng-content>

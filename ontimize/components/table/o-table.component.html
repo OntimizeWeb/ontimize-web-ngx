@@ -3,10 +3,10 @@
 </div>
 
 <div layout="column" class="expandable-container fill-remaining" layout-fill>
-  <div class="o-table-container" *ngIf="visible" [class.disabled]="enabled === false" [class.detail]="detailMode !== 'none'"
+  <div class="o-table-container" *ngIf="ovisible" [class.disabled]="oenabled === false" [class.detail]="detailMode !== 'none'"
     title="">
 
-    <table [id]="attr" [class]="rowHeight"></table>
+    <table [id]="oattr" [class]="rowHeight"></table>
 
     <button *ngIf="showOptionsButton" class="o-table-menu-button" md-icon-button [md-menu-trigger-for]="menu">
       <md-icon>more_vert</md-icon>
