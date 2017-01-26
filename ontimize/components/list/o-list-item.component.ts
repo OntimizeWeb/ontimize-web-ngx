@@ -3,7 +3,7 @@ import {
   ViewEncapsulation, ElementRef, forwardRef,
   Inject, Injector, Optional, ContentChildren, QueryList
 } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+
 import { CommonModule } from '@angular/common';
 import { MdListModule, MdIconModule, MdLine, MdCheckboxModule } from '@angular/material';
 import { OListComponent } from './o-list.component';
@@ -25,8 +25,6 @@ export class OListItemComponent {
   private mdLinesClass: string = '';
 
   constructor(
-    protected _router: Router,
-    protected _actRoute: ActivatedRoute,
     public element: ElementRef,
     protected zone: NgZone,
     protected _injector: Injector,

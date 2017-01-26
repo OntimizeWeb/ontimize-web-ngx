@@ -1,17 +1,17 @@
 import {
   Component, OnInit, Inject, Injector, AfterContentInit, ContentChildren,
-  ViewChild, QueryList, Optional, forwardRef,
+  ViewChild, QueryList, Optional, forwardRef, ElementRef,
   NgModule, ModuleWithProviders, ViewEncapsulation, EventEmitter
 } from '@angular/core';
+
 import { CommonModule } from '@angular/common';
-import { Router, ActivatedRoute } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { ObservableWrapper } from '../../util/async';
-import { Observable } from 'rxjs/Observable';
 
 import { MdCheckbox } from '@angular/material';
 import { MdListModule, MdIconModule, MdToolbarModule, MdButtonModule, MdProgressCircleModule } from '@angular/material';
 
-import { OntimizeService, AuthGuardService, OTranslateService, LocalStorageService } from '../../services';
+import { OntimizeService } from '../../services';
 import { dataServiceFactory } from '../../services/data-service.provider';
 import { OSearchInputModule, OSearchInputComponent } from '../search-input/o-search-input.component';
 import { OListItemModule } from './o-list-item.component';
@@ -23,21 +23,10 @@ import { OListItemComponent } from './o-list-item.component';
 import { OListItemDirective } from './o-list-item.directive';
 import { OTranslateModule } from '../../pipes/o-translate.pipe';
 
-import { Subscription } from 'rxjs/Subscription';
-
-import { ILocalStorageComponent } from '../../interfaces';
+import { OServiceComponent } from '../o-service-component.class';
 
 export const DEFAULT_INPUTS_O_LIST = [
-  // attr [string]: list identifier. It is mandatory if data are provided through the data attribute. Default: entity (if set).
-  'oattr: attr',
-
-  'title',
-
-  // visible [no|yes]: visibility. Default: yes.
-  'visible',
-
-  // enabled [no|yes]: editability. Default: yes.
-  'oenabled: enabled',
+  ...OServiceComponent.DEFAULT_INPUTS_O_SERVICE_COMPONENT,
 
   // quick-filter [no|yes]: show quick filter. Default: yes.
   'quickFilter: quick-filter',
@@ -45,73 +34,10 @@ export const DEFAULT_INPUTS_O_LIST = [
   // quick-filter-columns [string]: columns of the filter, separated by ';'. Default: no value.
   'quickFilterColumns: quick-filter-columns',
 
-  //controls [string][yes|no|true|false]:
-  'controls',
-
   // refresh-button [no|yes]: show refresh button. Default: yes.
   'refreshButton: refresh-button',
 
-  // query-on-init [no|yes]: query table on init. Default: yes.
-  'queryOnInit: query-on-init',
-
-  'pageable',
-
-  'cssClass: css-class',
-
-  // columns [string]: columns of the entity, separated by ';'. Default: no value.
-  'columns',
-
-  // parent-keys [string]: parent keys to filter, separated by ';'. Default: no value.
-  'parentKeys: parent-keys',
-
-  // entity [string]: entity of the service. Default: no value.
-  'entity',
-
-  'service',
-
-  // keys [string]: entity keys, separated by ';'. Default: no value.
-  'keys',
-
   'route',
-
-  //static-data [Array<any>] : way to populate with static data. Default: no value.
-  'listData: static-data',
-
-  // paginated-query-method [string]: name of the service method to perform paginated queries. Default: advancedQuery.
-  'paginatedQueryMethod : paginated-query-method',
-
-  // query-rows [number]: number of rows per page. Default: 10.
-  'queryRows: query-rows',
-
-  // query-method [string]: name of the service method to perform queries. Default: query.
-  'queryMethod: query-method',
-
-  // detail-mode [none|click|doubleclick]: way to open the detail form of a row. Default: 'none'.
-  'detailMode: detail-mode',
-
-  // detail-form-route [string]: route of detail form. Default: 'detail'.
-  'detailFormRoute: detail-form-route',
-
-  // recursive-detail [no|yes]: do not append detail keys when navigate (overwrite current). Default: no.
-  'recursiveDetail: recursive-detail',
-
-  // detail-button-in-row [no|yes]: adding a button in row for opening detail form. Default: yes.
-  'detailButtonInRow: detail-button-in-row',
-
-  // detail-button-in-row-icon [string]: material icon. Default: mode_edit.
-  'detailButtonInRowIcon: detail-button-in-row-icon',
-
-  // edit-form-route [string]: route of edit form. Default: 'edit'.
-  'editFormRoute: edit-form-route',
-
-  // recursive-edit [no|yes]: do not append detail keys when navigate (overwrite current). Default: no.
-  'recursiveEdit: recursive-edit',
-
-  // edit-button-in-row [no|yes]: adding a button in row for opening edition form. Default: no.
-  'editButtonInRow: edit-button-in-row',
-
-  // edit-button-in-row-icon [string]: material icon. Default: search.
-  'editButtonInRowIcon: edit-button-in-row-icon',
 
   'selectable'
 ];
@@ -135,69 +61,20 @@ export const DEFAULT_OUTPUTS_O_LIST = [
   ],
   encapsulation: ViewEncapsulation.None
 })
-export class OListComponent implements OnInit, IList, AfterContentInit, ILocalStorageComponent {
+export class OListComponent extends OServiceComponent implements OnInit, IList, AfterContentInit {
 
   public static DEFAULT_INPUTS_O_LIST = DEFAULT_INPUTS_O_LIST;
   public static DEFAULT_OUTPUTS_O_LIST = DEFAULT_OUTPUTS_O_LIST;
-  public static DEFAULT_QUERY_ROWS = 10;
-  public static DEFAULT_DETAIL_MODE = 'none';
-  public static DETAIL_MODE_CLICK = 'click';
-  public static DETAIL_MODE_DBLCLICK = 'dblclick';
 
-  public static DEFAULT_DETAIL_ICON = 'chevron_right';
-  public static DEFAULT_EDIT_ICON = 'mode_edit';
-
-  public loading: boolean = false;
-  protected authGuardService: AuthGuardService;
-  protected translateService: OTranslateService;
-  protected localStorageService: LocalStorageService;
-
-  @InputConverter()
-  controls: boolean = true;
+  /* Inputs */
   @InputConverter()
   quickFilter: boolean = true;
-  @InputConverter()
-  queryOnInit: boolean = true;
+  protected quickFilterColumns: string;
   @InputConverter()
   refreshButton: boolean = true;
-  @InputConverter()
-  pageable: boolean = false;
-  @InputConverter()
-  visible: boolean = true;
-  @InputConverter()
-  oenabled: boolean = true;
-  @InputConverter()
-  recursiveDetail: boolean = false;
-  @InputConverter()
-  detailButtonInRow: boolean = true;
-  @InputConverter()
-  recursiveEdit: boolean = false;
-  @InputConverter()
-  editButtonInRow: boolean = false;
+  protected route: string;
   @InputConverter()
   selectable: boolean = false;
-
-  protected oattr: string;
-  protected title: string;
-  protected cssclass: string;
-  protected columns: string;
-  protected quickFilterColumns: string;
-  protected parentKeys: string;
-  protected entity: string;
-  protected service: string;
-  protected keys: string;
-  protected dataKeys: Array<string>;
-  protected dataParentKeys: {};
-  protected parentItem: any;
-  protected route: string;
-  protected onFormDataSubscribe: any;
-
-  protected detailMode: string;
-  protected detailFormRoute: string;
-  protected detailButtonInRowIcon: string;
-  protected editFormRoute: string;
-  protected editButtonInRowIcon: string;
-  protected state: any;
   /* End Inputs */
 
   @ContentChildren(OListItemComponent)
@@ -214,56 +91,21 @@ export class OListComponent implements OnInit, IList, AfterContentInit, ILocalSt
 
   public onListDataLoaded: EventEmitter<any> = new EventEmitter();
   public onPaginatedListDataLoaded: EventEmitter<any> = new EventEmitter();
-
-  protected dataArray: any[] = [];
-  protected listData: any[] = null;
-  protected dataColumns: string[] = [];
   protected quickFilterColArray: string[];
 
-  protected dataService: any;
-
-  protected loaderSuscription: Subscription;
-  protected querySuscription: Subscription;
-  protected queryMethod: string;
-  protected paginatedQueryMethod: string;
-  protected queryRows: any;
-
-  protected onLanguageChangeSubscribe: any;
-  protected onRouteChangeStorageSubscribe: any;
-
-  protected dataSelected: any[] = [];
+  protected dataSelected: Array<any> = [];
+  protected dataResponseArray: Array<any> = [];
 
   constructor(
-    protected _router: Router,
-    protected _actRoute: ActivatedRoute,
-    protected _injector: Injector,
-    @Optional() @Inject(forwardRef(() => OFormComponent)) protected form: OFormComponent) {
-
-    this.authGuardService = this._injector.get(AuthGuardService);
-    this.translateService = this._injector.get(OTranslateService);
-    this.localStorageService = this._injector.get(LocalStorageService);
-
-    this.detailMode = OListComponent.DEFAULT_DETAIL_MODE;
-
-    var self = this;
-    this.onLanguageChangeSubscribe = this.translateService.onLanguageChanged.subscribe(
-      res => {
-        console.log('OListComponent TODO onLanguageChangeSubscribe');
-      }
-    );
-    this.onRouteChangeStorageSubscribe = this.localStorageService.onRouteChange.subscribe(
-      res => {
-        self.localStorageService.updateComponentStorage(self);
-      }
-    );
+    injector: Injector,
+    elRef: ElementRef,
+    @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent
+  ) {
+    super(injector, elRef, form);
   }
 
   getComponentKey(): string {
     return 'OListComponent_' + this.oattr;
-  }
-
-  getDataToStore(): Object {
-    return this.state;
   }
 
   registerSearchInput(input: OSearchInputComponent) {
@@ -279,80 +121,17 @@ export class OListComponent implements OnInit, IList, AfterContentInit, ILocalSt
     return ObservableWrapper.subscribe(this.mdClick, onNext);
   }
 
-  getKeys() {
-    return this.dataKeys;
-  }
-
   ngOnInit(): void {
-    if (typeof (this.oattr) === 'undefined') {
-      if (typeof (this.entity) !== 'undefined') {
-        this.oattr = this.entity.replace('.', '_');
-      }
+    super.ngOnInit();
+
+    if (this.staticData && this.staticData.length) {
+      this.dataResponseArray = this.staticData;
     }
-
-    if (typeof (this.title) !== 'undefined') {
-      this.title = this.translateService.get(this.title);
-    }
-
-    this.authGuardService.getPermissions(this._router.url, this.oattr)
-      .then(
-      permissions => {
-        if (typeof (permissions) !== 'undefined') {
-          if (this.visible && permissions.visible === false) {
-            this.visible = false;
-          }
-          if (this.oenabled && permissions.enabled === false) {
-            this.oenabled = false;
-          }
-        }
-      }
-      );
-
-    this.dataColumns = Util.parseArray(this.columns);
 
     if (this.quickFilterColumns) {
       this.quickFilterColArray = Util.parseArray(this.quickFilterColumns);
     } else {
-      this.quickFilterColArray = this.dataColumns;
-    }
-
-    let pkArray = Util.parseArray(this.parentKeys);
-    this.dataParentKeys = Util.parseParentKeysEquivalences(pkArray);
-
-    if (this.keys) {
-      this.dataKeys = Util.parseArray(this.keys);
-    } else {
-      this.dataKeys = [];
-    }
-
-    if (this.listData) {
-      this.setData(this.listData);
-    } else {
-      this.configureService();
-    }
-
-    if (this.form) {
-      this.setFormComponent(this.form);
-    }
-
-    if (!this.queryMethod) {
-      this.queryMethod = 'query';
-    }
-    if (!this.paginatedQueryMethod) {
-      this.paginatedQueryMethod = 'advancedQuery';
-    }
-    if (this.queryRows) {
-      this.queryRows = parseInt(this.queryRows);
-    } else {
-      this.queryRows = OListComponent.DEFAULT_QUERY_ROWS;
-    }
-
-    if (!this.detailButtonInRowIcon) {
-      this.detailButtonInRowIcon = OListComponent.DEFAULT_DETAIL_ICON;
-    }
-
-    if (!this.editButtonInRowIcon) {
-      this.editButtonInRowIcon = OListComponent.DEFAULT_EDIT_ICON;
+      this.quickFilterColArray = this.colArray;
     }
 
     this.state = this.localStorageService.getComponentStorage(this);
@@ -374,20 +153,8 @@ export class OListComponent implements OnInit, IList, AfterContentInit, ILocalSt
   }
 
   public ngOnDestroy() {
-    this.onLanguageChangeSubscribe.unsubscribe();
+    super.ngOnDestroy();
     this.onRouteChangeStorageSubscribe.unsubscribe();
-  }
-
-  configureService() {
-    this.dataService = this._injector.get(OntimizeService);
-
-    if (Util.isDataService(this.dataService)) {
-      let serviceCfg = this.dataService.getDefaultServiceConfiguration(this.service);
-      if (this.entity) {
-        serviceCfg['entity'] = this.entity;
-      }
-      this.dataService.configureService(serviceCfg);
-    }
   }
 
   ngAfterViewInit() {
@@ -400,13 +167,13 @@ export class OListComponent implements OnInit, IList, AfterContentInit, ILocalSt
     var self = this;
     this.listItemComponents.changes.subscribe(() => {
       self.listItemComponents.forEach(function (element: OListItemComponent, index, array) {
-        element.setItemData(self.dataArray[index]);
+        element.setItemData(self.dataResponseArray[index]);
       });
     });
 
     this.listItemDirectives.changes.subscribe(() => {
       self.listItemDirectives.forEach(function (element: OListItemDirective, index, array) {
-        element.setItemData(self.dataArray[index]);
+        element.setItemData(self.dataResponseArray[index]);
         element.setListComponent(self);
         self.registerListItemDirective(element);
       });
@@ -416,12 +183,12 @@ export class OListComponent implements OnInit, IList, AfterContentInit, ILocalSt
   registerListItemDirective(item: OListItemDirective) {
     if (item) {
       var self = this;
-      if (this.detailMode === OListComponent.DETAIL_MODE_CLICK) {
+      if (this.detailMode === OServiceComponent.DETAIL_MODE_CLICK) {
         item.onClick(directiveItem => {
           self.onItemDetailClick(directiveItem);
         });
       }
-      if (this.detailMode === OListComponent.DETAIL_MODE_DBLCLICK) {
+      if (this.detailMode === OServiceComponent.DETAIL_MODE_DBLCLICK) {
         item.onDblClick(directiveItem => {
           self.onItemDetailDblClick(directiveItem);
         });
@@ -430,21 +197,17 @@ export class OListComponent implements OnInit, IList, AfterContentInit, ILocalSt
   }
 
   onItemDetailClick(item: OListItemDirective | OListItemComponent) {
-    if (this.oenabled && this.detailMode === OListComponent.DETAIL_MODE_CLICK) {
+    if (this.oenabled && this.detailMode === OServiceComponent.DETAIL_MODE_CLICK) {
       this.viewDetail(item.getItemData());
       ObservableWrapper.callEmit(this.mdClick, item);
     }
   }
 
   onItemDetailDblClick(item: OListItemDirective | OListItemComponent) {
-    if (this.oenabled && this.detailMode === OListComponent.DETAIL_MODE_DBLCLICK) {
+    if (this.oenabled && this.detailMode === OServiceComponent.DETAIL_MODE_DBLCLICK) {
       this.viewDetail(item.getItemData());
       ObservableWrapper.callEmit(this.mdDblClick, item);
     }
-  }
-
-  setData(data: any) {
-    this.dataArray = data;
   }
 
   queryData(filter: Object = {}, ovrrArgs?: any) {
@@ -458,12 +221,8 @@ export class OListComponent implements OnInit, IList, AfterContentInit, ILocalSt
       this.setParentKeyValues(filter);
 
       this.loaderSuscription = this.load();
-      let queryArguments = [filter, this.dataColumns, this.entity];
-      if (this.pageable) {
-        let queryOffset = (ovrrArgs && ovrrArgs.hasOwnProperty('offset')) ? ovrrArgs.offset : this.state.queryRecordOffset;
-        let queryRowsN = (ovrrArgs && ovrrArgs.hasOwnProperty('length')) ? ovrrArgs.length : this.queryRows;
-        queryArguments = queryArguments.concat([undefined, queryOffset, queryRowsN, undefined]);
-      }
+
+      let queryArguments = this.getQueryArguments(filter, ovrrArgs);
       var self = this;
       this.querySuscription = this.dataService[queryMethodName].apply(this.dataService, queryArguments)
         .subscribe(res => {
@@ -478,26 +237,25 @@ export class OListComponent implements OnInit, IList, AfterContentInit, ILocalSt
           }
           // set list data
           if (($ as any).isArray(data)) {
-            let dataArray = data;
+            let respDataArray = data;
             if (self.pageable && !(ovrrArgs && ovrrArgs['replace'])) {
-              dataArray = (self.listData || []).concat(data);
+              respDataArray = (self.dataResponseArray || []).concat(data);
             }
 
             let selectedIndexes = self.state.selectedIndexes || [];
             for (let i = 0; i < selectedIndexes.length; i++) {
-              if (selectedIndexes[i] < self.listData.length) {
-                self.dataSelected.push(self.listData[selectedIndexes[i]]);
+              if (selectedIndexes[i] < self.dataResponseArray.length) {
+                self.dataSelected.push(self.dataResponseArray[selectedIndexes[i]]);
               }
             }
-
-            self.listData = dataArray;
+            self.dataResponseArray = respDataArray;
             self.filterData(self.state.filterValue);
           }
           self.loaderSuscription.unsubscribe();
           if (self.pageable) {
             ObservableWrapper.callEmit(self.onPaginatedListDataLoaded, data);
           }
-          ObservableWrapper.callEmit(self.onListDataLoaded, self.listData);
+          ObservableWrapper.callEmit(self.onListDataLoaded, self.dataResponseArray);
         }, err => {
           console.log('[OList.queryData]: error', err);
           self.loaderSuscription.unsubscribe();
@@ -505,32 +263,29 @@ export class OListComponent implements OnInit, IList, AfterContentInit, ILocalSt
     }
   }
 
-  updatePaginationInfo(queryRes: any) {
-    let resultEndIndex = queryRes.startRecordIndex + queryRes.data.length;
-    if (queryRes.startRecordIndex !== undefined) {
-      this.state.queryRecordOffset = resultEndIndex;
-    }
-    if (queryRes.totalQueryRecordsNumber !== undefined) {
-      this.state.queryTotalRecordNumber = queryRes.totalQueryRecordsNumber;
-    }
-  }
-
   setParentKeyValues(filter: Object) {
-    if (this.dataParentKeys && this.parentItem) {
-      for (let key in this.dataParentKeys) {
+    if (this._pKeysEquiv && this.parentItem) {
+      for (let key in this._pKeysEquiv) {
         if (this.parentItem.hasOwnProperty(key)) {
-          filter[this.dataParentKeys[key]] = this.parentItem[key];
+          filter[this._pKeysEquiv[key]] = this.parentItem[key];
         }
       }
     }
   }
 
+  /**
+   *@deprecated
+   */
   onReload() {
+    this.reloadData();
+  }
+
+  reloadData() {
     let queryArgs = {};
     if (this.pageable) {
       this.state.queryRecordOffset = 0;
       queryArgs = {
-        length: this.listData.length,
+        length: this.dataResponseArray.length,
         replace: true
       };
     }
@@ -539,25 +294,6 @@ export class OListComponent implements OnInit, IList, AfterContentInit, ILocalSt
       this.state.selectedIndexes = [];
     }
     this.queryData({}, queryArgs);
-  }
-
-  protected getRouteOfSelectedRow(item: any, modeRoute: any) {
-    let route = [];
-    // TODO: multiple keys
-    let filter = undefined;
-    if (typeof (item) === 'object') {
-      for (let k = 0; k < this.dataKeys.length; ++k) {
-        let key = this.dataKeys[k];
-        filter = item[key];
-      }
-    }
-    if (typeof (filter) !== 'undefined') {
-      if (modeRoute) {
-        route.push(modeRoute);
-      }
-      route.push(filter);
-    }
-    return route;
   }
 
   configureFilterValue(value: string) {
@@ -593,12 +329,10 @@ export class OListComponent implements OnInit, IList, AfterContentInit, ILocalSt
    *  */
   filterData(value: string): void {
     this.state.filterValue = value;
-    if (value && value.length > 0 && this.listData && this.listData.length > 0) {
+    if (value && value.length > 0 && this.dataResponseArray && this.dataResponseArray.length > 0) {
       var _val = this.configureFilterValue(value);
-
       var self = this;
-      //var filteredData: any[] = [];
-      var filteredData = this.listData.filter(item => {
+      var filteredData = this.dataResponseArray.filter(item => {
         let found = false;
         let regExp: RegExp = new RegExp(_val, 'i');
         self.quickFilterColArray.forEach(col => {
@@ -614,45 +348,9 @@ export class OListComponent implements OnInit, IList, AfterContentInit, ILocalSt
         });
         return found;
       });
-      this.setData(filteredData);
+      this.setDataArray(filteredData);
     } else {
-      this.setData(this.listData);
-    }
-  }
-
-  public load(): any {
-    var self = this;
-    var loadObservable = new Observable(observer => {
-      var timer = window.setTimeout(() => {
-        observer.next(true);
-      }, 250);
-
-      return () => {
-        window.clearTimeout(timer);
-        self.loading = false;
-      };
-
-    });
-    var subscription = loadObservable.subscribe(val => {
-      self.loading = val as boolean;
-    });
-    return subscription;
-  }
-
-  public setFormComponent(form: OFormComponent) {
-    var self = this;
-    this.onFormDataSubscribe = this.form.onFormDataLoaded.subscribe(data => {
-      self.parentItem = data;
-      self.queryData();
-    }
-    );
-
-    let dataValues = this.form.getDataValues();
-    if (dataValues && Object.keys(dataValues).length > 0) {
-      self.parentItem = dataValues;
-      self.queryData();
-    } else {
-      //this.filterForm = true;
+      this.setDataArray(this.dataResponseArray);
     }
   }
 
@@ -702,7 +400,7 @@ export class OListComponent implements OnInit, IList, AfterContentInit, ILocalSt
 
   updateSelectedState(item: Object, isSelected: boolean) {
     let selectedIndexes = this.state.selectedIndexes || [];
-    let itemIndex = this.listData.indexOf(item);
+    let itemIndex = this.dataResponseArray.indexOf(item);
     if (isSelected && selectedIndexes.indexOf(itemIndex) === -1) {
       selectedIndexes.push(itemIndex);
     } else if (!isSelected) {
@@ -712,7 +410,7 @@ export class OListComponent implements OnInit, IList, AfterContentInit, ILocalSt
   }
 
   onScroll($event: Event): void {
-    let pendingRegistries = this.listData.length < this.state.queryTotalRecordNumber;
+    let pendingRegistries = this.dataResponseArray.length < this.state.queryTotalRecordNumber;
     if (!this.loading && pendingRegistries) {
       let element = $event.srcElement as any;
       if (element.offsetHeight + element.scrollTop + 5 >= element.scrollHeight) {
@@ -724,41 +422,11 @@ export class OListComponent implements OnInit, IList, AfterContentInit, ILocalSt
       }
     }
   }
-
-  viewDetail(item: any): void {
-    let route = this.getRouteOfSelectedRow(item, this.detailFormRoute);
-    if (route.length > 0) {
-      this._router.navigate(route,
-        {
-          relativeTo: this.recursiveDetail ? this._actRoute.parent : this._actRoute,
-          queryParams: {
-            'isdetail': 'true'
-          }
-        }
-      );
-    }
-  }
-
-  public editDetail(item: any) {
-    let route = this.getRouteOfSelectedRow(item, this.editFormRoute);
-    if (route.length > 0) {
-      route.push('edit');
-      this._router.navigate(
-        route,
-        {
-          relativeTo: this.recursiveEdit ? this._actRoute.parent : this._actRoute,
-          queryParams: {
-            'isdetail': 'true'
-          }
-        }
-      );
-    }
-  }
 }
 
 @NgModule({
   declarations: [OListComponent],
-  imports: [CommonModule, MdListModule, MdToolbarModule, MdIconModule, MdButtonModule, OListItemModule, OSearchInputModule, MdProgressCircleModule, OTranslateModule],
+  imports: [CommonModule, MdListModule, MdToolbarModule, MdIconModule, MdButtonModule, OListItemModule, OSearchInputModule, MdProgressCircleModule, OTranslateModule, RouterModule],
   exports: [OListComponent],
   entryComponents: [MdCheckbox]
 })

@@ -7,7 +7,7 @@
 
   <md-toolbar class="toolbar-filter-list" *ngIf="controls">
     <div class="md-toolbar-tools" layout="row" layout-fill layout-align="start center">
-      <button type="button" md-icon-button aria-label="Refresh" (click)="onReload()" *ngIf="refreshButton">
+      <button type="button" md-icon-button aria-label="Refresh" (click)="reloadData()" *ngIf="refreshButton">
         <md-icon>refresh</md-icon>
       </button>
       <span class="fill-remaining"></span>

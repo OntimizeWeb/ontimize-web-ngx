@@ -28,6 +28,9 @@
 * **Components**: Several components have changed its constructor.
 * **o-selectable-list**: Deleted component (use *'selectable'* attribute in o-list instead).
 * **o-selectable-list-item**: Deleted component (use *'selectable'* attribute in o-list instead).
+* **o-list**: *'onReload'* method changed (marked as deprecated) for *'reloadData'*.
+* **o-table**: *'onReload'* method changed (marked as deprecated) for *'reloadData'*.
+* **o-table**: *'data'* attribute changed for *'static-data'*.
 
 ## 1.1.1 (2017-01-11)
 
