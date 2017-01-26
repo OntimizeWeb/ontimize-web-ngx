@@ -1,5 +1,5 @@
 
-import { Inject, Injector, EventEmitter } from '@angular/core';
+import { Injector, EventEmitter } from '@angular/core';
 import { Router, NavigationStart } from '@angular/router';
 import { ObservableWrapper } from '../util/async';
 import { APP_CONFIG, Config } from '../config/app-config';
@@ -11,11 +11,13 @@ export class LocalStorageService {
 
   public onRouteChange: EventEmitter<any> = new EventEmitter();
 
-  constructor(
-    @Inject(APP_CONFIG) private _config: Config,
-    protected injector: Injector,
-    protected _router: Router
-  ) {
+  private _config: Config;
+  private _router: Router;
+
+  constructor( protected injector: Injector ) {
+    this._config = this.injector.get(APP_CONFIG);
+    this._router = this.injector.get(Router);
+
     var self = this;
     this._router.events.subscribe(
       event => {

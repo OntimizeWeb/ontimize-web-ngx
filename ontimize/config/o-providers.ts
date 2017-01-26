@@ -1,6 +1,5 @@
 import { Injector } from '@angular/core';
 import { BaseRequestOptions, XHRBackend } from '@angular/http';
-import { MATERIAL_BROWSER_PROVIDERS } from '../components/material/ng2-material/index';
 
 import { MdIconRegistry } from '@angular/material';
 
@@ -44,8 +43,6 @@ export function ontimizeProviders(args: any = {}): any {
 
   return [
     //Standard
-    MATERIAL_BROWSER_PROVIDERS,
-
     MdIconRegistry,
 
     { provide: Events, useValue: events },
@@ -54,14 +51,14 @@ export function ontimizeProviders(args: any = {}): any {
 
     //Custom
     getOntimizeServiceProvider(),
-    LoginService,
-    NavigationService,
-    MomentService,
-    CurrencyService,
-    NumberService,
-    DialogService,
-    OTranslateService,
-    LocalStorageService,
+    getLoginServiceProvider(),
+    getNavigationServiceProvider(),
+    getMomentServiceProvider(),
+    getCurrencyServiceProvider(),
+    getNumberServiceProvider(),
+    getDialogServiceProvider(),
+    getTranslateServiceProvider(),
+    getLocalStorageServiceProvider(),
     getAuthServiceProvider()
   ];
 }
@@ -75,6 +72,70 @@ function getOntimizeServiceProvider() {
       deps: [Injector]
     },
   ];
+}
+
+function getLoginServiceProvider() {
+  return {
+    provide: LoginService,
+    useFactory: (injector) => new LoginService(injector),
+    deps: [Injector]
+  };
+}
+
+function getNavigationServiceProvider() {
+  return {
+    provide: NavigationService,
+    useFactory: (injector) => new NavigationService(injector),
+    deps: [Injector]
+  };
+}
+
+function getMomentServiceProvider() {
+  return {
+    provide: MomentService,
+    useFactory: (injector) => new MomentService(injector),
+    deps: [Injector]
+  };
+}
+
+function getCurrencyServiceProvider() {
+  return {
+    provide: CurrencyService,
+    useFactory: (injector) => new CurrencyService(injector),
+    deps: [Injector]
+  };
+}
+
+function getNumberServiceProvider() {
+  return {
+    provide: NumberService,
+    useFactory: (injector) => new NumberService(injector),
+    deps: [Injector]
+  };
+}
+
+function getDialogServiceProvider() {
+  return {
+    provide: DialogService,
+    useFactory: (injector) => new DialogService(injector),
+    deps: [Injector]
+  };
+}
+
+function getTranslateServiceProvider() {
+  return {
+    provide: OTranslateService,
+    useFactory: (injector) => new OTranslateService(injector),
+    deps: [Injector]
+  };
+}
+
+function getLocalStorageServiceProvider() {
+  return {
+    provide: LocalStorageService,
+    useFactory: (injector) => new LocalStorageService(injector),
+    deps: [Injector]
+  };
 }
 
 function getAuthServiceProvider() {

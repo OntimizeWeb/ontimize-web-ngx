@@ -1,6 +1,8 @@
-import { Pipe, PipeTransform, Inject,
+import {
+  Pipe, PipeTransform, Injector,
   NgModule,
-  ModuleWithProviders} from '@angular/core';
+  ModuleWithProviders
+} from '@angular/core';
 import { OTranslateService } from '../services';
 
 @Pipe({
@@ -9,11 +11,17 @@ import { OTranslateService } from '../services';
 })
 export class OTranslatePipe implements PipeTransform {
 
-  constructor(@Inject(OTranslateService) private translateService: OTranslateService) {
+  protected translateService: OTranslateService;
+
+  constructor( protected injector: Injector ) {
+    this.translateService = this.injector.get(OTranslateService);
   }
 
   transform(text: string): string {
-    return this.translateService.get(text);
+    if (this.translateService) {
+      return this.translateService.get(text);
+    }
+    return text;
   }
 
 }
@@ -21,7 +29,7 @@ export class OTranslatePipe implements PipeTransform {
 @NgModule({
   declarations: [OTranslatePipe],
   imports: [],
-  exports: [OTranslatePipe],
+  exports: [OTranslatePipe]
 })
 export class OTranslateModule {
   static forRoot(): ModuleWithProviders {
