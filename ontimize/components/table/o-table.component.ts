@@ -321,21 +321,27 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       this.dataTable.fnDestroy();
     }
     this.dataTable = null;
-    this.initTableOnInit(this.dataTableOptions.columns);
-    this.initTableAfterViewInit();
-    if ((typeof (this.table) !== 'undefined') && (this.sortColumnsArray.length > 0)) {
-      this.table.order(this.sortColumnsArray);
-      this.table.draw();
+    if (this.dataTableOptions) {
+      this.initTableOnInit(this.dataTableOptions.columns);
+      this.initTableAfterViewInit();
+      if ((typeof (this.table) !== 'undefined') && (this.sortColumnsArray.length > 0)) {
+        this.table.order(this.sortColumnsArray);
+        this.table.draw();
+      }
     }
   }
 
-  public ngOnInit(): any {
+  ngOnInit(): void {
+    this.initialize();
+  }
+
+  initialize(): any {
 
     if (!this.detailButtonInRowIcon) {
       this.detailButtonInRowIcon = OTableComponent.DEFAULT_DETAIL_ICON;
     }
 
-    super.ngOnInit();
+    super.initialize();
 
     this.dataParentKeys = [];
     if (this.parentKeys) {
@@ -425,8 +431,12 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     this.initTableOnInit();
   }
 
-  public ngOnDestroy() {
-    super.ngOnDestroy();
+  ngOnDestroy() {
+    this.destroy();
+  }
+
+  destroy() {
+    super.destroy();
     this.onRouterNavigateSubscribe.unsubscribe();
     for (let i = 0; i < this.onInsertRowFocusSubscribe.length; ++i) {
       this.onInsertRowFocusSubscribe[i].unsubscribe();

@@ -94,7 +94,7 @@ export const DEFAULT_INPUTS_O_SERVICE_COMPONENT = [
   'queryRows: query-rows'
 ];
 
-export class OServiceComponent implements OnInit, ILocalStorageComponent {
+export class OServiceComponent implements ILocalStorageComponent {
 
   public static DEFAULT_INPUTS_O_SERVICE_COMPONENT = DEFAULT_INPUTS_O_SERVICE_COMPONENT;
 
@@ -226,7 +226,7 @@ export class OServiceComponent implements OnInit, ILocalStorageComponent {
     return this.keysArray;
   }
 
-  ngOnInit(): void {
+  initialize(): void {
     if (typeof (this.oattr) === 'undefined') {
       if (typeof (this.entity) !== 'undefined') {
         this.oattr = this.entity.replace('.', '_');
@@ -292,7 +292,7 @@ export class OServiceComponent implements OnInit, ILocalStorageComponent {
     }
   }
 
-  ngOnDestroy() {
+  destroy() {
     this.onLanguageChangeSubscribe.unsubscribe();
     if (this.onFormDataSubscribe) {
       this.onFormDataSubscribe.unsubscribe();
@@ -337,15 +337,15 @@ export class OServiceComponent implements OnInit, ILocalStorageComponent {
     } else {
       this.filterForm = true;
     }
-
-    //   // var self = this;
-    //   // this.form.onFormDataLoaded.subscribe(data => {
-    //   // //  if (self.queryOnBind) {
-    //   //     self.parentItem = data;
-    //   //      self.update(data);
-    //   //       // self.onFormDataBind(data);
-    //   //     // }
-    //   // });
+    // TODO PENDING QUERY ON BIND
+    // var self = this;
+    // this.form.onFormDataLoaded.subscribe(data => {
+    // //  if (self.queryOnBind) {
+    //     self.parentItem = data;
+    //      self.update(data);
+    //       // self.onFormDataBind(data);
+    //     // }
+    // });
   }
 
   queryData() {
@@ -410,7 +410,7 @@ export class OServiceComponent implements OnInit, ILocalStorageComponent {
     }
   }
 
-  protected getRouteOfSelectedRow(item: any, modeRoute: any) {
+  getRouteOfSelectedRow(item: any, modeRoute: any) {
     let route = [];
     // TODO: multiple keys
     let filter = undefined;

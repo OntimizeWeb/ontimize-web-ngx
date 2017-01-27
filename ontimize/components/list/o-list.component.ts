@@ -122,7 +122,11 @@ export class OListComponent extends OServiceComponent implements OnInit, IList, 
   }
 
   ngOnInit(): void {
-    super.ngOnInit();
+    this.initialize();
+  }
+
+  initialize(): void {
+    super.initialize();
 
     if (this.staticData && this.staticData.length) {
       this.dataResponseArray = this.staticData;
@@ -152,8 +156,12 @@ export class OListComponent extends OServiceComponent implements OnInit, IList, 
     }
   }
 
-  public ngOnDestroy() {
-    super.ngOnDestroy();
+  ngOnDestroy() {
+    this.destroy();
+  }
+
+  destroy() {
+    super.destroy();
     this.onRouteChangeStorageSubscribe.unsubscribe();
   }
 
