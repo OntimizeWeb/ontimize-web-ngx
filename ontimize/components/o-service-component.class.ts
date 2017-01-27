@@ -1,6 +1,6 @@
 import {
   Injector, Inject, ElementRef,
-  OnInit, NgZone, Optional, forwardRef
+  NgZone, Optional, forwardRef
 } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
