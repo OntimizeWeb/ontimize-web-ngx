@@ -27,12 +27,3 @@
     <span class="icon-btn" [class.md-disabled]="isDisabled"><i class="material-icons">search</i></span>
     <span class="icon-btn" [class.md-disabled]="isDisabled" (click)="onClickClear($event)"><i class="material-icons">clear</i></span>
 </div>
-<md-dialog #dialog (onShow)="onDialogShow($event)" (onClose)="onDialogClose($event)" class="md-dialog-custom">
-    <o-list-picker-dialog [data]="dataArray" [visible-columns]="visibleColumns" [filter]="filter" ></o-list-picker-dialog>
-    <md-dialog-actions>
-        <span flex></span>
-        <button md-button (click)="dialog.close()">
-            <span>{{ 'CANCEL' | oTranslate }}</span>
-        </button>
-    </md-dialog-actions>
-</md-dialog>

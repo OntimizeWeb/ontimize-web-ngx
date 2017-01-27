@@ -1,14 +1,13 @@
-import {Observable} from 'rxjs/Observable';
-import {Inject, Injectable, /*,ReflectiveInjector,*/ Injector} from '@angular/core';
-import {EventEmitter} from '@angular/core';
-import {ObservableWrapper} from '../util/async';
-import {Router} from '@angular/router';
-// import {BaseRequestOptions, XHRBackend} from '@angular/http';
-import {SessionInfo, IAuthService} from '../interfaces';
-import {OntimizeService, DialogService} from '../services';
-// import {dataServiceFactory} from './dataservice.provider';
-
-import {APP_CONFIG, Config} from '../config/app-config';
+import {
+  Injectable, Injector,
+  EventEmitter
+} from '@angular/core';
+import { Router } from '@angular/router';
+import { Observable } from 'rxjs/Observable';
+import { ObservableWrapper } from '../util/async';
+import { SessionInfo, IAuthService } from '../interfaces';
+import { OntimizeService, DialogService } from '../services';
+import { APP_CONFIG, Config } from '../config/app-config';
 
 @Injectable()
 export class LoginService {
@@ -20,11 +19,14 @@ export class LoginService {
 
   private _user: string;
   private _localStorageKey: string;
+  private _config: Config;
+  private router: Router;
   private ontService: OntimizeService;
   private dialogService: DialogService;
 
-  constructor(@Inject(APP_CONFIG) private _config: Config, @Inject(Router) private router: Router,
-      protected injector: Injector) {
+  constructor(protected injector: Injector) {
+    this._config = this.injector.get(APP_CONFIG);
+    this.router = this.injector.get(Router);
     this._localStorageKey = this._config['uuid'];
     let sessionInfo = this.getSessionInfo();
     if (sessionInfo && sessionInfo.id && sessionInfo.user && sessionInfo.user.length > 0) {
@@ -42,13 +44,6 @@ export class LoginService {
   }
 
   configureOntimizeAuthService(config: Object): void {
-    // let reflectiveInjector = ReflectiveInjector.resolveAndCreate([
-    //   // HTTP_PROVIDERS,
-    //   BaseRequestOptions,
-    //   XHRBackend,
-    //   {provide: OntimizeService, useFactory:  dataServiceFactory, deps:[Injector]}
-    // ]);
-    // this.ontService = reflectiveInjector.get(OntimizeService);
     this.ontService = this.injector.get(OntimizeService);
     var servConf = {
       'session': this.getSessionInfo()
@@ -110,17 +105,17 @@ export class LoginService {
     let observable = new Observable(observer => {
       let sessionInfo = this.getSessionInfo();
       this.retrieveAuthService().then((service) => {
-          service.endsession(sessionInfo.user, sessionInfo.id)
-            .subscribe(resp => {
-              self.onLogoutSuccess(resp);
-              observer.next();
-              observer.complete();
-            }, error => {
-              self.onLoginError(error);
-              observer.error(error);
-            });
-        });
-     });
+        service.endsession(sessionInfo.user, sessionInfo.id)
+          .subscribe(resp => {
+            self.onLogoutSuccess(resp);
+            observer.next();
+            observer.complete();
+          }, error => {
+            self.onLoginError(error);
+            observer.error(error);
+          });
+      });
+    });
     return observable;
   }
 
@@ -130,8 +125,6 @@ export class LoginService {
       delete sessionInfo.id;
       delete sessionInfo.user;
       this.storeSessionInfo(sessionInfo);
-
-      // this.router.navigate(['/login']);
     }
   }
 
@@ -149,9 +142,9 @@ export class LoginService {
   isLoggedIn(): boolean {
     let sessionInfo = this.getSessionInfo();
     if (sessionInfo && sessionInfo.id && sessionInfo.user && sessionInfo.user.length > 0) {
-        if (isNaN(sessionInfo.id) && sessionInfo.id<0) {
-          return false;
-        }
+      if (isNaN(sessionInfo.id) && sessionInfo.id < 0) {
+        return false;
+      }
       return true;
     }
     return false;

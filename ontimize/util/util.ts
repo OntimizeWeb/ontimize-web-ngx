@@ -85,6 +85,9 @@ export class Util {
    * @returns boolean
    */
   static isDataService(arg: any): arg is IDataService {
+    if (arg === undefined || arg === null) {
+      return false;
+    }
     return ((arg as IDataService).getDefaultServiceConfiguration !== undefined &&
       (arg as IDataService).configureService !== undefined);
   }
@@ -95,6 +98,9 @@ export class Util {
    * @returns boolean
    */
   static isFormDataComponent(arg: any): arg is IFormDataComponent {
+    if (arg === undefined || arg === null) {
+      return false;
+    }
     return ((arg as IFormDataComponent).isAutomaticBinding !== undefined);
   }
 

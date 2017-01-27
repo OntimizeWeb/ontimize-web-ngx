@@ -9,10 +9,13 @@ import {
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { MdInputModule, MdInput, MdListModule, MdToolbarModule } from '@angular/material';
-import { MdDialog, MdDividerModule } from '../../material/ng2-material/index';
+import {
+  MdInputModule, MdInput, MdListModule, MdToolbarModule,
+  MdDialog, MdDialogRef, MdDialogConfig
+} from '@angular/material';
 
-import { OntimizeService, dataServiceFactory } from '../../../services';
+import { dataServiceFactory } from '../../../services/data-service.provider';
+import { OntimizeService } from '../../../services';
 import { ColumnsFilterPipe } from '../../../pipes';
 import { OSharedModule } from '../../../shared.module';
 import { InputConverter } from '../../../decorators';
@@ -91,8 +94,8 @@ export class OListPickerComponent extends OFormServiceComponent implements OnIni
   protected separator: string;
   /* End inputs */
 
-  @ViewChild('dialog')
-  protected dialog: MdDialog;
+  protected ng2Dialog: MdDialog;
+  protected dialogRef: MdDialogRef<OListPickerDialogComponent>;
 
   @ViewChild('inputModel')
   protected inputModel: MdInput;
@@ -104,6 +107,7 @@ export class OListPickerComponent extends OFormServiceComponent implements OnIni
     elRef: ElementRef,
     injector: Injector) {
     super(form, elRef, injector);
+    this.ng2Dialog = this.injector.get(MdDialog);
   }
 
   ngOnInit(): any {
@@ -184,8 +188,24 @@ export class OListPickerComponent extends OFormServiceComponent implements OnIni
 
   onClickListpicker(e: Event): void {
     if (!this._isReadOnly) {
-      this.dialog.show();
+      this.openDialog();
     }
+  }
+
+  protected openDialog() {
+    let cfg: MdDialogConfig = {
+      role: 'dialog',
+      disableClose: false
+    };
+    this.dialogRef = this.ng2Dialog.open(OListPickerDialogComponent, cfg);
+    this.dialogRef.afterClosed().subscribe(result => {
+      this.onDialogClose(result);
+    });
+    this.dialogRef.componentInstance.initialize({
+      data: this.dataArray,
+      filter: this.filter,
+      visibleColumns: this.visibleColArray
+    });
   }
 
   onDialogShow(evt: any) {
@@ -198,16 +218,17 @@ export class OListPickerComponent extends OFormServiceComponent implements OnIni
     }
   }
 
-  onDialogClose(evt: Event) {
-    if (!evt) {
-      return;
-    } else if (evt instanceof Object) {
-      if (evt[this.valueColumn]) {
-        this.setValue(evt[this.valueColumn]);
-        if (this._fControl) {
+  onDialogClose(evt: any) {
+    this.dialogRef = null;
+    if (evt instanceof Object &&
+      typeof evt[this.valueColumn] !== 'undefined') {
+      var self = this;
+      window.setTimeout(() => {
+        self.setValue(evt[self.valueColumn]);
+        if (self._fControl) {
           this._fControl.markAsTouched();
         }
-      }
+      }, 0);
     }
   }
 
@@ -227,9 +248,12 @@ export class OListPickerComponent extends OFormServiceComponent implements OnIni
   declarations: [ColumnsFilterPipe, OListPickerDialogComponent, OListPickerComponent],
   imports: [CommonModule, FormsModule, ReactiveFormsModule,
     MdInputModule, MdListModule, ODialogModule,
-    MdDividerModule, MdToolbarModule,
+    MdToolbarModule,
     OSharedModule, OSearchInputModule, OTranslateModule],
   exports: [OListPickerComponent],
+  entryComponents: [
+    OListPickerDialogComponent
+  ]
 })
 export class OListPickerModule {
   static forRoot(): ModuleWithProviders {

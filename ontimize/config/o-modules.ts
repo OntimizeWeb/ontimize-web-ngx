@@ -13,10 +13,6 @@ import {
 import { MaterialModule } from '@angular/material';
 
 import {
-  MATERIAL_MODULES
-} from '../components/material/ng2-material/index';
-
-import {
   OBarMenuModule,
   OBarMenuGroupModule,
   OBarMenuItemModule,
@@ -76,9 +72,6 @@ export const ONTIMIZE_MODULES: any = [
 
   // Material modules
   MaterialModule.forRoot(),
-
-  // Ng2-material
-  ...MATERIAL_MODULES,
 
   // Ontimize modules
   OBarMenuModule.forRoot(),
