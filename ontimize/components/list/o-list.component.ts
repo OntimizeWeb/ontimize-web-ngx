@@ -1,7 +1,9 @@
 import {
-  Component, OnInit, Inject, Injector, AfterContentInit, ContentChildren,
-  ViewChild, QueryList, Optional, forwardRef, ElementRef,
-  NgModule, ModuleWithProviders, ViewEncapsulation, EventEmitter
+  Component, OnInit, Inject, Injector,
+  AfterContentInit, ContentChildren,
+  ViewChild, QueryList, Optional, forwardRef,
+  ElementRef, NgModule, ModuleWithProviders,
+  ViewEncapsulation, EventEmitter
 } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
@@ -24,6 +26,8 @@ import { OListItemDirective } from './o-list-item.directive';
 import { OTranslateModule } from '../../pipes/o-translate.pipe';
 
 import { OServiceComponent } from '../o-service-component.class';
+// import { OFormValue } from '../form/OFormValue';
+import { Observable } from 'rxjs/Observable';
 
 export const DEFAULT_INPUTS_O_LIST = [
   ...OServiceComponent.DEFAULT_INPUTS_O_SERVICE_COMPONENT,
@@ -39,7 +43,9 @@ export const DEFAULT_INPUTS_O_LIST = [
 
   'route',
 
-  'selectable'
+  'selectable',
+
+  'odense : dense'
 ];
 
 export const DEFAULT_OUTPUTS_O_LIST = [
@@ -48,8 +54,6 @@ export const DEFAULT_OUTPUTS_O_LIST = [
 
 @Component({
   selector: 'o-list',
-  templateUrl: 'list/o-list.component.html',
-  styleUrls: ['list/o-list.component.css'],
   providers: [
     { provide: OntimizeService, useFactory: dataServiceFactory, deps: [Injector] }
   ],
@@ -59,6 +63,8 @@ export const DEFAULT_OUTPUTS_O_LIST = [
   outputs: [
     ...DEFAULT_OUTPUTS_O_LIST
   ],
+  templateUrl: 'list/o-list.component.html',
+  styleUrls: ['list/o-list.component.css'],
   encapsulation: ViewEncapsulation.None
 })
 export class OListComponent extends OServiceComponent implements OnInit, IList, AfterContentInit {
@@ -75,6 +81,8 @@ export class OListComponent extends OServiceComponent implements OnInit, IList, 
   protected route: string;
   @InputConverter()
   selectable: boolean = false;
+  @InputConverter()
+  odense: boolean = false;
   /* End Inputs */
 
   @ContentChildren(OListItemComponent)
@@ -93,7 +101,6 @@ export class OListComponent extends OServiceComponent implements OnInit, IList, 
   public onPaginatedListDataLoaded: EventEmitter<any> = new EventEmitter();
   protected quickFilterColArray: string[];
 
-  protected dataSelected: Array<any> = [];
   protected dataResponseArray: Array<any> = [];
 
   constructor(
@@ -171,20 +178,35 @@ export class OListComponent extends OServiceComponent implements OnInit, IList, 
     }
   }
 
+  getDense() {
+    return this.odense || undefined;
+  }
+
+  protected setListItemsData() {
+    var self = this;
+    this.listItemComponents.forEach(function (element: OListItemComponent, index, array) {
+      element.setItemData(self.dataResponseArray[index]);
+    });
+  }
+
+  protected setListItemDirectivesData() {
+    var self = this;
+    this.listItemDirectives.forEach(function (element: OListItemDirective, index, array) {
+      element.setItemData(self.dataResponseArray[index]);
+      element.setListComponent(self);
+      self.registerListItemDirective(element);
+    });
+  }
+
   ngAfterContentInit() {
     var self = this;
+    self.setListItemsData();
     this.listItemComponents.changes.subscribe(() => {
-      self.listItemComponents.forEach(function (element: OListItemComponent, index, array) {
-        element.setItemData(self.dataResponseArray[index]);
-      });
+      self.setListItemsData();
     });
-
+    self.setListItemDirectivesData();
     this.listItemDirectives.changes.subscribe(() => {
-      self.listItemDirectives.forEach(function (element: OListItemDirective, index, array) {
-        element.setItemData(self.dataResponseArray[index]);
-        element.setListComponent(self);
-        self.registerListItemDirective(element);
-      });
+      self.setListItemDirectivesData();
     });
   }
 
@@ -253,7 +275,7 @@ export class OListComponent extends OServiceComponent implements OnInit, IList, 
             let selectedIndexes = self.state.selectedIndexes || [];
             for (let i = 0; i < selectedIndexes.length; i++) {
               if (selectedIndexes[i] < self.dataResponseArray.length) {
-                self.dataSelected.push(self.dataResponseArray[selectedIndexes[i]]);
+                self.selectedItems.push(self.dataResponseArray[selectedIndexes[i]]);
               }
             }
             self.dataResponseArray = respDataArray;
@@ -298,7 +320,7 @@ export class OListComponent extends OServiceComponent implements OnInit, IList, 
       };
     }
     if (this.selectable) {
-      this.dataSelected = [];
+      this.selectedItems = [];
       this.state.selectedIndexes = [];
     }
     this.queryData({}, queryArgs);
@@ -363,11 +385,11 @@ export class OListComponent extends OServiceComponent implements OnInit, IList, 
   }
 
   getSelectedItems(): any[] {
-    return this.dataSelected;
+    return this.selectedItems;
   }
 
   isItemSelected(item) {
-    let result = this.dataSelected.find(current => {
+    let result = this.selectedItems.find(current => {
       let itemKeys = Object.keys(item);
       let currentKeys = Object.keys(current);
       if (itemKeys.length !== currentKeys.length) {
@@ -394,12 +416,12 @@ export class OListComponent extends OServiceComponent implements OnInit, IList, 
 
   setSelected(item) {
     if (this.selectable) {
-      let idx = this.dataSelected.indexOf(item);
+      let idx = this.selectedItems.indexOf(item);
       let wasSelected = idx > -1;
       if (wasSelected) {
-        this.dataSelected.splice(idx, 1);
+        this.selectedItems.splice(idx, 1);
       } else {
-        this.dataSelected.push(item);
+        this.selectedItems.push(item);
       }
       this.updateSelectedState(item, !wasSelected);
       return !wasSelected;
@@ -428,6 +450,56 @@ export class OListComponent extends OServiceComponent implements OnInit, IList, 
         };
         this.queryData({}, queryArgs);
       }
+    }
+  }
+
+  remove(clearSelectedItems: boolean = false) {
+    this.dialogService.confirm('CONFIRM', 'MESSAGES.CONFIRM_DELETE').then(
+      res => {
+        if (res === true) {
+          if (this.dataService && (this.deleteMethod in this.dataService) && this.entity && (this.keysArray.length > 0)) {
+            let filters = [];
+            this.selectedItems.map(item => {
+              let kv = {};
+              for (let k = 0; k < this.keysArray.length; ++k) {
+                let key = this.keysArray[k];
+                kv[key] = item[key];
+              }
+              filters.push(kv);
+            });
+
+            let observable = (Observable as any).from(filters)
+              .map(kv => this.dataService[this.deleteMethod](kv, this.entity)).mergeAll();
+            observable.subscribe(
+              res => {
+                console.log('[OList.remove]: response', res);
+              },
+              error => {
+                console.log('[OList.remove]: error', error);
+                this.dialogService.alert('ERROR', 'MESSAGES.ERROR_DELETE');
+              },
+              () => {
+                console.log('[OList.remove]: success');
+                this.queryData(this.parentItem);
+              }
+            );
+          } else {
+            this.deleteLocalItems();
+          }
+        } else if (clearSelectedItems) {
+          this.selectedItems = [];
+        }
+      });
+  }
+
+  protected add() {
+    let route = this.getRouteOfSelectedRow(undefined, 'new');
+    if (route.length > 0) {
+      this.router.navigate(route,
+        {
+          relativeTo: this.actRoute,
+        }
+      );
     }
   }
 }

@@ -1,106 +1,24 @@
 .o-list-item {
-  //padding: 0.4em;
-
-  .o-list-row-action {
-
-    cursor:pointer;
-
-    md-icon {
-      font-size: 18px;
-      line-height: 22px;
+  .row-buttons-container {
+    .o-list-row-action {
+      height: 24px;
+      text-align: center;
+      cursor: pointer;
     }
   }
-
-
 }
 
-o-list-item {
-  .md-list-item {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    font-family: Roboto, "Helvetica Neue", sans-serif;
-    box-sizing: border-box;
-    font-size: 16px;
-    height: 48px;
-    padding: 0 16px;
-    &.md-2-line {
-      height: 72px;
+.md-list {
+  .md-checkbox-inner-container {
+    margin: 0;
+  }
+  &[dense] .o-list-item {
+    .o-list-row-action {
+      .md-checkbox-inner-container {
+        height: 16px;
+        width: 16px;
+        margin: 0;
+      }
     }
-    &.md-3-line {
-      height: 88px;
-    }
-  }
-
-  &.md-list-avatar.md-list-item {
-    height: 56px;
-  }
-
-  &.md-multi-line .md-list-item {
-    height: 100%;
-    padding: 8px 16px;
-  }
-
-  .md-list-text {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    box-sizing: border-box;
-    overflow: hidden;
-    padding: 0 16px;
-
-    > * {
-      margin: 0;
-      padding: 0;
-      font-weight: normal;
-      font-size: inherit;
-    }
-    :empty {
-      display: none;
-    }
-    :first-child {
-      padding: 0;
-    }
-  }
-
-  [md-list-avatar]{
-    flex-shrink: 0;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-  }
-
-  [md-list-icon]{
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    padding: 4px;
-  }
-
-  [md-line]{
-    white-space: nowrap;
-    overflow-x: hidden;
-    text-overflow: ellipsis;
-    display: block;
-    box-sizing: border-box;
-  }
-
-  [md-line]:nth-child(n+2) {
-    font-size: 14px;
-  }
-}
-/*
-.o-list-item-active {
-  background-color: #8E0C39;
-  color: #FFFFFF;
-}
-*/
-
-md-list-item {
-  cursor: pointer;
- /* will-change: color;
-  transition: color $swift-ease-in-duration $swift-ease-in-timing-function;*/
-  &.md-active {
-    color: #8E0C39;
   }
 }

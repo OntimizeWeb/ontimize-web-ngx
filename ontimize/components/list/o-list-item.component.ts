@@ -1,11 +1,24 @@
 import {
-  Component, NgModule, ModuleWithProviders, NgZone,
-  ViewEncapsulation, ElementRef, forwardRef,
-  Inject, Injector, Optional, ContentChildren, QueryList
+  Component,
+  Inject,
+  Injector,
+  forwardRef,
+  ViewEncapsulation,
+  ContentChildren,
+  ContentChild,
+  QueryList,
+  ElementRef,
+  Renderer,
+  AfterContentInit,
+  Optional,
+  ViewChild,
+  NgModule,
+  ModuleWithProviders
 } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
-import { MdListModule, MdIconModule, MdLine, MdCheckboxModule } from '@angular/material';
+import { MdListModule, MdIconModule, MdCheckboxModule, MdLine, MdListAvatar, MdListItem } from '@angular/material';
+
 import { OListComponent } from './o-list.component';
 
 @Component({
@@ -15,26 +28,45 @@ import { OListComponent } from './o-list.component';
   encapsulation: ViewEncapsulation.None
 })
 
-export class OListItemComponent {
+export class OListItemComponent implements AfterContentInit {
 
   modelData: Object;
   isSelected: boolean = false;
 
-  @ContentChildren(MdLine)
-  private mdLines: QueryList<MdLine>;
-  private mdLinesClass: string = '';
+  _hasFocus: boolean = false;
+
+  @ContentChildren(MdLine) _lines: QueryList<MdLine>;
+
+  @ViewChild('innerListItem') _innerListItem: MdListItem;
+
+  @ContentChild(MdListAvatar)
+  set _hasAvatar(avatar: MdListAvatar) {
+    let mdListItemNativeEl = this.elRef.nativeElement.getElementsByTagName('md-list-item');
+    if (mdListItemNativeEl && mdListItemNativeEl.length === 1) {
+      this._renderer.setElementClass(mdListItemNativeEl[0], 'md-list-avatar', (avatar !== null && avatar !== undefined));
+    }
+  }
 
   constructor(
-    public element: ElementRef,
-    protected zone: NgZone,
+    public elRef: ElementRef,
+    protected _renderer: Renderer,
     protected _injector: Injector,
-    @Optional() @Inject(forwardRef(() => OListComponent)) protected _list: OListComponent) {
+    @Optional() @Inject(forwardRef(() => OListComponent)) public _list: OListComponent
+  ) {
+    this.elRef.nativeElement.classList.add('o-list-item');
   }
 
   ngAfterContentInit() {
-    if (this.mdLines && this.mdLines.length) {
-      this.mdLinesClass = 'md-' + this.mdLines.length + '-line';
-    }
+    var mdLinesRef = this._lines;
+    var ngAfterContentInitOriginal = this._innerListItem.ngAfterContentInit;
+    this._innerListItem.ngAfterContentInit = function () {
+      let emptyDiv = this._element.nativeElement.querySelector('.md-list-text:first-child:empty');
+      if (emptyDiv) {
+        emptyDiv.remove();
+      }
+      this._lines = mdLinesRef;
+      ngAfterContentInitOriginal.apply(this);
+    };
   }
 
   onItemClick(evt) {

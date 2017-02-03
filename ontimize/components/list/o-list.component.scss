@@ -1,24 +1,3 @@
-.o-search {
-  position: relative;
-  height: 30px;
-}
-
-.o-search>.md-icon {
-  position: absolute;
-  top: 0.15em;
-  left: 0.3em;
-  color: #8E0C39;
-}
-
-.o-search-input {
-  height: 25px;
-  width: 80%;
-  font-size: 15px;
-  border: 1px solid #8E0C39;
-  border-radius: 20px;
-  padding-left: 30px;
-}
-
 ::-webkit-input-placeholder { /* WebKit, Blink, Edge */
     color: #8E0C39;
 }
@@ -45,6 +24,38 @@
   position: relative;
   display: flex;
   flex-direction: column;
+
+
+  md-toolbar.dense {
+
+    min-height: 48px;
+
+    md-toolbar-row {
+      height: 48px;
+    }
+  }
+
+
+  .o-search {
+    position: relative;
+    height: 30px;
+
+    > .md-icon {
+      position: absolute;
+      top: 0.15em;
+      left: 0.3em;
+      color: #8E0C39;
+    }
+  }
+
+  .o-search-input {
+    height: 25px;
+    width: 80%;
+    font-size: 15px;
+    border: 1px solid #8E0C39;
+    border-radius: 20px;
+    padding-left: 30px;
+  }
 
   .o-list-title {
     font-size: 1.5em;
@@ -77,5 +88,70 @@
 
   .md-list {
     overflow: auto;
+
+    .md-3-line .o-custom-list-item {
+      position: relative;
+    }
+
+    .o-custom-list-item {
+      .o-list-item-icon {
+        cursor: pointer;
+        &.top {
+          position: absolute;
+          top: 0;
+          right: 0;
+        }
+      }
+    }
+
+    &.o-list-1-detail-buttons,
+    &.o-list-2-detail-buttons {
+      md-list-item {
+        -moz-box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        .md-list-item {
+          padding-right: 0px;
+        }
+      }
+    }
+
+    &:not(.selectable).o-list-1-detail-buttons {
+      md-list-item {
+       padding-right: 40px;
+      }
+    }
+
+    &:not(.selectable).o-list-2-detail-buttons {
+      md-list-item {
+       padding-right: 64px;
+      }
+    }
+
+    &:not(.selectable):not(.o-list-1-detail-buttons):not(.o-list-2-detail-buttons) .md-list-text {
+      padding-right: 0px;
+    }
+
+    &.selectable.o-list-1-detail-buttons .md-list-item {
+      padding-right: 60px;
+    }
+
+    &.selectable[dense].o-list-1-detail-buttons .md-list-item {
+      padding-right: 56px;
+    }
+
+    &.selectable.o-list-2-detail-buttons .md-list-item {
+      padding-right: 84px;
+    }
+
+    &.selectable[dense].o-list-2-detail-buttons .md-list-item {
+      padding-right: 80px;
+    }
+  }
+
+  .add-button {
+    right: 16px;
+    bottom: 16px;
+    position: absolute;
   }
 }

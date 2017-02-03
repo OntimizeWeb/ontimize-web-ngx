@@ -9,7 +9,7 @@ import { Subscription } from 'rxjs/Subscription';
 
 
 import { InputConverter } from '../decorators';
-import { OntimizeService, AuthGuardService, OTranslateService, LocalStorageService } from '../services';
+import { OntimizeService, AuthGuardService, OTranslateService, LocalStorageService, DialogService } from '../services';
 import { ILocalStorageComponent } from '../interfaces';
 import { OFormComponent } from './form/o-form.component';
 import { Util } from '../utils';
@@ -42,6 +42,9 @@ export const DEFAULT_INPUTS_O_SERVICE_COMPONENT = [
 
   // paginated-query-method [string]: name of the service method to perform paginated queries. Default: advancedQuery.
   'paginatedQueryMethod : paginated-query-method',
+
+  // delete-method [string]: name of the service method to perform deletions. Default: delete.
+  'deleteMethod: delete-method',
 
   // query-on-init [no|yes]: query on init. Default: yes.
   'queryOnInit: query-on-init',
@@ -91,7 +94,10 @@ export const DEFAULT_INPUTS_O_SERVICE_COMPONENT = [
   'editButtonInRowIcon: edit-button-in-row-icon',
 
   // query-rows [number]: number of rows per page. Default: 10.
-  'queryRows: query-rows'
+  'queryRows: query-rows',
+
+  // insert-button [no|yes]: show insert button. Default: yes.
+  'insertButton: insert-button',
 ];
 
 export class OServiceComponent implements ILocalStorageComponent {
@@ -100,6 +106,7 @@ export class OServiceComponent implements ILocalStorageComponent {
 
   public static DEFAULT_QUERY_METHOD = 'query';
   public static DEFAULT_PAGINATED_QUERY_METHOD = 'advancedQuery';
+  public static DEFAULT_DELETE_METHOD = 'delete';
   public static DEFAULT_QUERY_ROWS = 10;
   public static DEFAULT_DETAIL_ICON = 'chevron_right';
   public static DEFAULT_EDIT_ICON = 'mode_edit';
@@ -112,6 +119,7 @@ export class OServiceComponent implements ILocalStorageComponent {
   protected authGuardService: AuthGuardService;
   protected translateService: OTranslateService;
   protected localStorageService: LocalStorageService;
+  protected dialogService: DialogService;
 
   /* inputs variables */
   protected oattr: string;
@@ -127,6 +135,7 @@ export class OServiceComponent implements ILocalStorageComponent {
   protected entity: string;
   protected queryMethod: string;
   protected paginatedQueryMethod: string;
+  protected deleteMethod: string;
   @InputConverter()
   protected queryOnInit: boolean = true;
   @InputConverter()
@@ -142,15 +151,17 @@ export class OServiceComponent implements ILocalStorageComponent {
   @InputConverter()
   protected recursiveDetail: boolean = false;
   @InputConverter()
-  public detailButtonInRow: boolean = true;
+  detailButtonInRow: boolean = true;
   protected detailButtonInRowIcon: string;
   protected editFormRoute: string;
   @InputConverter()
   protected recursiveEdit: boolean = false;
   @InputConverter()
-  protected editButtonInRow: boolean = false;
+  editButtonInRow: boolean = false;
   protected editButtonInRowIcon: string;
   protected queryRows: any;
+   @InputConverter()
+  insertButton: boolean;
   /* end of inputs variables */
 
   /*parsed inputs variables */
@@ -171,11 +182,12 @@ export class OServiceComponent implements ILocalStorageComponent {
   protected filterForm: boolean = false;
   protected dataService: any;
   protected state: any;
+  protected selectedItems: Array<Object> = [];;
 
   protected router: Router;
   protected actRoute: ActivatedRoute;
   protected injector: Injector;
-  protected elRef: ElementRef;
+  public elRef: ElementRef;
   protected form: OFormComponent;
 
   constructor(
@@ -194,6 +206,7 @@ export class OServiceComponent implements ILocalStorageComponent {
     if (this.injector) {
       this.authGuardService = this.injector.get(AuthGuardService);
       this.translateService = this.injector.get(OTranslateService);
+      this.dialogService = this.injector.get(DialogService);
       this.localStorageService = this.injector.get(LocalStorageService);
       let self = this;
       this.onLanguageChangeSubscribe = this.translateService.onLanguageChanged.subscribe(
@@ -263,6 +276,10 @@ export class OServiceComponent implements ILocalStorageComponent {
 
     if (!this.paginatedQueryMethod) {
       this.paginatedQueryMethod = OServiceComponent.DEFAULT_PAGINATED_QUERY_METHOD;
+    }
+
+    if (!this.deleteMethod) {
+      this.deleteMethod = OServiceComponent.DEFAULT_DELETE_METHOD;
     }
 
     if (this.queryRows) {
@@ -448,4 +465,35 @@ export class OServiceComponent implements ILocalStorageComponent {
       this.state.queryTotalRecordNumber = queryRes.totalQueryRecordsNumber;
     }
   }
+
+  protected deleteLocalItems() {
+    for (let i = 0; i < this.selectedItems.length; ++i) {
+      let selectedItem = this.selectedItems[i];
+      let selectedItemKv = {};
+      for (let k = 0; k < this.keysArray.length; ++k) {
+        let key = this.keysArray[k];
+        selectedItemKv[key] = selectedItem[key];
+      }
+      for (let j = this.dataArray.length - 1; j >= 0; --j) {
+        let item = this.dataArray[j];
+        let itemKv = {};
+        for (let k = 0; k < this.keysArray.length; ++k) {
+          let key = this.keysArray[k];
+          itemKv[key] = item[key];
+        }
+        let found = false;
+        for (let k in selectedItemKv) {
+          if (selectedItemKv.hasOwnProperty(k)) {
+            found = itemKv.hasOwnProperty(k) && (selectedItemKv[k] === itemKv[k]);
+          }
+        }
+        if (found) {
+          this.dataArray.splice(j, 1);
+          break;
+        }
+      }
+    }
+    this.selectedItems = [];
+  }
+
 }

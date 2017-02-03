@@ -13,6 +13,8 @@
 * **o-list-item**: updating item rendering for allowing to add a checkbox for selectable state.
 * **local-storage.service**: adding service for storing components state in navigator local storage.
 * **Interfaces**: adding *'ILocalStorageComponent'* for components using *'local-storage.service'*.
+* **o-list**: adding *'delete-method'* attribute and delete button when list is selectable.
+* **o-list**: adding *'insert-button'* and  *'dense'* attribute.
 
 ### PEER-DEPENDENCY UPDATES ###
 * **Updated**:   @angular/material@2.0.0-beta.1
@@ -27,6 +29,7 @@
 * **Interfaces**: The interface *'IFormComponent'* was renamded to *'IComponent'*.
 * **Components**: Several components have changed its constructor.
 * **o-selectable-list**: Deleted component (use *'selectable'* attribute in o-list instead).
+* **o-md-selectable-list-item**: Deleted directive (use *'selectable'* attribute in o-list instead).
 * **o-selectable-list-item**: Deleted component (use *'selectable'* attribute in o-list instead).
 * **o-list**: *'onReload'* method changed (marked as deprecated) for *'reloadData'*.
 * **o-table**: *'onReload'* method changed (marked as deprecated) for *'reloadData'*.

@@ -10,6 +10,7 @@
 @import '../dialog/o-dialog-theme.scss';
 @import '../table/o-table-theme.scss';
 @import '../material/ckeditor/ckeditor-theme.scss';
+@import '../list/o-list-theme.scss';
 
 // Create a theme.
 @mixin o-material-theme($theme) {
@@ -23,5 +24,6 @@
   @include o-dialog-theme($theme);
   @include o-table-theme($theme);
   @include ckeditor-theme($theme);
+  @include o-list-theme($theme);
 }
 

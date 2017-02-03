@@ -1,9 +1,8 @@
 import {
-  Component, OnInit, OnDestroy, OnChanges,
-  SimpleChange, Inject, Injector,
-  ElementRef, forwardRef, Optional,
-  EventEmitter, NgModule, ModuleWithProviders, ViewEncapsulation,
-  ViewChild
+  Component, OnInit, OnDestroy, OnChanges, SimpleChange,
+  Inject, Injector, ElementRef,
+  forwardRef, Optional, EventEmitter, NgModule,
+  ModuleWithProviders, ViewEncapsulation, ViewChild
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { InputConverter } from '../../decorators';
@@ -44,7 +43,7 @@ import {
 } from './header-components/header-components';
 
 import { dataServiceFactory } from '../../services/data-service.provider';
-import { DialogService, OntimizeService, MomentService } from '../../services';
+import { OntimizeService, MomentService } from '../../services';
 import { Util } from '../../util/util';
 import { OFormComponent } from '../form/o-form.component';
 import { OFormValue } from '../form/OFormValue';
@@ -75,9 +74,6 @@ export const DEFAULT_INPUTS_O_TABLE = [
   // update-method [string]: name of the service method to perform updates. Default: update.
   'updateMethod: update-method',
 
-  // delete-method [string]: name of the service method to perform deletions. Default: delete.
-  'deleteMethod: delete-method',
-
   // visible-columns [string]: visible columns, separated by ';'. Default: no value.
   'visibleColumns: visible-columns',
 
@@ -92,9 +88,6 @@ export const DEFAULT_INPUTS_O_TABLE = [
 
   // quick-filter [no|yes]: show quick filter. Default: yes.
   'quickFilter: quick-filter',
-
-  // insert-button [no|yes]: show insert button. Default: yes.
-  'insertButton: insert-button',
 
   // delete-button [no|yes]: show delete button. Default: yes.
   'deleteButton: delete-button',
@@ -177,7 +170,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   /* Inputs */
   protected insertMethod: string;
   protected updateMethod: string;
-  protected deleteMethod: string;
   protected visibleColumns: string;
   protected editableColumns: string;
   @InputConverter()
@@ -185,8 +177,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   protected sortColumns: string;
   @InputConverter()
   quickFilter: boolean = true;
-  @InputConverter()
-  insertButton: boolean = true;
   @InputConverter()
   deleteButton: boolean = true;
   @InputConverter()
@@ -219,7 +209,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   /* end of parsed inputs variables */
 
   protected initialized: boolean;
-  protected dialogService: DialogService;
   protected momentService: MomentService;
 
   protected queryRowsMenu: Array<any>;
@@ -229,7 +218,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   protected tableHtmlEl: any;
   protected dataTable: any;
   protected dataTableOptions: any;
-  protected selectedItems: Array<Object>;
+  // protected selectedItems: Array<Object>;
   protected lastDeselection: any;
   protected groupColumnIndex: number;
   protected groupColumnOrder: string;
@@ -274,9 +263,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
     this.initialized = false;
     this.momentService = this.injector.get(MomentService);
-    this.dialogService = this.injector.get(DialogService);
-
-    this.selectedItems = [];
     this.lastDeselection = undefined;
     this.groupColumnIndex = -1;
     this.groupColumnOrder = OTableComponent.TYPE_ASC_NAME;
@@ -398,8 +384,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     if (!this.updateMethod) {
       this.updateMethod = 'update';
     }
-    if (!this.deleteMethod) {
-      this.deleteMethod = 'delete';
+
+    if (this.insertButton === undefined) {
+      this.insertButton = true;
     }
 
     if (this.mdTabGroupContainer && this.mdTabContainer) {
@@ -409,9 +396,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       */
       var self = this;
       this.mdTabGroupContainer.selectChange.subscribe((evt) => {
-
         var interval = setInterval(function () { timerCallback(evt.tab); }, 100);
-
         function timerCallback(tab: MdTab) {
           if (tab && tab.content.isAttached) {
             clearInterval(interval);
@@ -1820,33 +1805,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
             } else {
               // remove local
-              for (let i = 0; i < this.selectedItems.length; ++i) {
-                let selectedItem = this.selectedItems[i];
-                let selectedItemKv = {};
-                for (let k = 0; k < this.keysArray.length; ++k) {
-                  let key = this.keysArray[k];
-                  selectedItemKv[key] = selectedItem[key];
-                }
-                for (let j = this.dataArray.length - 1; j >= 0; --j) {
-                  let item = this.dataArray[j];
-                  let itemKv = {};
-                  for (let k = 0; k < this.keysArray.length; ++k) {
-                    let key = this.keysArray[k];
-                    itemKv[key] = item[key];
-                  }
-                  let found = false;
-                  for (let k in selectedItemKv) {
-                    if (selectedItemKv.hasOwnProperty(k)) {
-                      found = itemKv.hasOwnProperty(k) && (selectedItemKv[k] === itemKv[k]);
-                    }
-                  }
-                  if (found) {
-                    this.dataArray.splice(j, 1);
-                    break;
-                  }
-                }
-              }
-              this.selectedItems = [];
+              this.deleteLocalItems();
               this.updateDeleteButtonState();
               this.dataTable.fnClearTable(false);
               if (this.dataArray.length > 0) {

@@ -5,10 +5,13 @@
     <md-spinner></md-spinner>
   </div>
 
-  <md-toolbar class="toolbar-filter-list" *ngIf="controls">
+  <md-toolbar class="toolbar-filter-list" [class.dense]="odense" *ngIf="controls">
     <div class="md-toolbar-tools" layout="row" layout-fill layout-align="start center">
       <button type="button" md-icon-button aria-label="Refresh" (click)="reloadData()" *ngIf="refreshButton">
         <md-icon>refresh</md-icon>
+      </button>
+      <button type="button" md-icon-button aria-label="Delete" (click)="remove()" *ngIf="selectedItems.length">
+        <md-icon>delete</md-icon>
       </button>
       <span class="fill-remaining"></span>
       <div *ngIf="title" layout="row" layout-align="center center">
@@ -21,11 +24,17 @@
   </md-toolbar>
 
   <div layout="column" class="fill-remaining">
-    <md-list class="md-list" (scroll)="onScroll($event)">
+    <md-list class="md-list" [attr.dense]="getDense()" [class.selectable]="selectable" (scroll)="onScroll($event)"
+      [class.o-list-1-detail-buttons]="(editButtonInRow || detailButtonInRow) && !(editButtonInRow && detailButtonInRow)"
+      [class.o-list-2-detail-buttons]="editButtonInRow && detailButtonInRow">
       <md-list-item *ngIf="!dataArray.length" layout="row" layout-align="center center" style="cursor: default;">
         <h3 md-line>{{ 'TABLE.EMPTY' | oTranslate }}</h3>
       </md-list-item>
       <ng-content></ng-content>
+
     </md-list>
+    <button *ngIf="insertButton" md-fab (click)="add()" class="add-button">
+      <md-icon class="md-24">add</md-icon>
+    </button>
   </div>
 </div>
