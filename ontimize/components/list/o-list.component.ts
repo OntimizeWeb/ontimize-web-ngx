@@ -16,17 +16,16 @@ import { MdListModule, MdIconModule, MdToolbarModule, MdButtonModule, MdProgress
 import { OntimizeService } from '../../services';
 import { dataServiceFactory } from '../../services/data-service.provider';
 import { OSearchInputModule, OSearchInputComponent } from '../search-input/o-search-input.component';
-import { OListItemModule } from './o-list-item.component';
+import { OListItemModule } from './list-item/o-list-item.component';
 import { OFormComponent } from '../form/o-form.component';
 import { InputConverter } from '../../decorators';
 import { Util } from '../../util/util';
 import { IList } from '../../interfaces';
-import { OListItemComponent } from './o-list-item.component';
-import { OListItemDirective } from './o-list-item.directive';
+import { OListItemComponent } from './list-item/o-list-item.component';
+import { OListItemDirective } from './list-item/o-list-item.directive';
 import { OTranslateModule } from '../../pipes/o-translate.pipe';
 
 import { OServiceComponent } from '../o-service-component.class';
-// import { OFormValue } from '../form/OFormValue';
 import { Observable } from 'rxjs/Observable';
 
 export const DEFAULT_INPUTS_O_LIST = [

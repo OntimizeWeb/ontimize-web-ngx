@@ -119,9 +119,6 @@ export const DEFAULT_INPUTS_O_TABLE = [
   // select-all-checkbox [string][yes|no|true|false]:
   'selectAllCheckbox: select-all-checkbox',
 
-  // row-height [small | medium | large]
-  'rowHeight : row-height',
-
   // pagination mode [string][yes|no|true|false]
   'singlePageMode : single-page-mode'
 ];
@@ -196,7 +193,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   showTableButtonsText: boolean = true;
   @InputConverter()
   selectAllCheckbox: boolean = true;
-  rowHeight: string;
   @InputConverter()
   singlePageMode: boolean = false;
   /* End of Inputs */
@@ -359,11 +355,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
           break;
         }
       }
-    }
-
-    this.rowHeight = this.rowHeight ? this.rowHeight.toLowerCase() : this.rowHeight;
-    if (!this.rowHeight || (['small', 'medium', 'large'].indexOf(this.rowHeight) === -1)) {
-      this.rowHeight = 'medium';
     }
 
     // get previous position

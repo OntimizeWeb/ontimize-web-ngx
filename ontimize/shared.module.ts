@@ -6,7 +6,7 @@ import {
 import { MdTooltipModule } from '@angular/material';
 
 import { DisabledComponentDirective } from './directives/DisabledComponentDirective';
-import { OListItemDirective } from './components/list/o-list-item.directive';
+import { OListItemDirective } from './components/list/list-item/o-list-item.directive';
 
 @NgModule({
   declarations: [DisabledComponentDirective, OListItemDirective],

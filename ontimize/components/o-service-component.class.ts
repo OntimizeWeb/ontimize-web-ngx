@@ -98,6 +98,9 @@ export const DEFAULT_INPUTS_O_SERVICE_COMPONENT = [
 
   // insert-button [no|yes]: show insert button. Default: yes.
   'insertButton: insert-button',
+
+  // row-height [small | medium | large]
+  'rowHeight : row-height'
 ];
 
 export class OServiceComponent implements ILocalStorageComponent {
@@ -110,6 +113,8 @@ export class OServiceComponent implements ILocalStorageComponent {
   public static DEFAULT_QUERY_ROWS = 10;
   public static DEFAULT_DETAIL_ICON = 'chevron_right';
   public static DEFAULT_EDIT_ICON = 'mode_edit';
+  public static DEFAULT_ROW_HEIGHT = 'medium';
+  public static AVAILABLE_ROW_HEIGHTS = ['small', 'medium', 'large'];
 
   public static DEFAULT_DETAIL_MODE = 'none';
   public static DETAIL_MODE_CLICK = 'click';
@@ -160,8 +165,9 @@ export class OServiceComponent implements ILocalStorageComponent {
   editButtonInRow: boolean = false;
   protected editButtonInRowIcon: string;
   protected queryRows: any;
-   @InputConverter()
+  @InputConverter()
   insertButton: boolean;
+  rowHeight: string;
   /* end of inputs variables */
 
   /*parsed inputs variables */
@@ -306,6 +312,11 @@ export class OServiceComponent implements ILocalStorageComponent {
 
     if (this.form) {
       this.setFormComponent(this.form);
+    }
+
+    this.rowHeight = this.rowHeight ? this.rowHeight.toLowerCase() : this.rowHeight;
+    if (!this.rowHeight || (OServiceComponent.AVAILABLE_ROW_HEIGHTS.indexOf(this.rowHeight) === -1)) {
+      this.rowHeight = OServiceComponent.DEFAULT_ROW_HEIGHT;
     }
   }
 

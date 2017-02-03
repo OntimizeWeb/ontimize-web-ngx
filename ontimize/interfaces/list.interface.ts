@@ -1,4 +1,4 @@
-import { OListItemDirective } from '../components/list/o-list-item.directive';
+import { OListItemDirective } from '../components/list/list-item/o-list-item.directive';
 
 export interface IList {
 

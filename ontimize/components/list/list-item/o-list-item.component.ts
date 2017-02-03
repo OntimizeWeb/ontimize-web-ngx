@@ -19,12 +19,12 @@ import {
 import { CommonModule } from '@angular/common';
 import { MdListModule, MdIconModule, MdCheckboxModule, MdLine, MdListAvatar, MdListItem } from '@angular/material';
 
-import { OListComponent } from './o-list.component';
+import { OListComponent } from '../o-list.component';
 
 @Component({
   selector: 'o-list-item',
-  templateUrl: 'list/o-list-item.component.html',
-  styleUrls: ['list/o-list-item.component.css'],
+  templateUrl: 'list/list-item/o-list-item.component.html',
+  styleUrls: ['list/list-item/o-list-item.component.css'],
   encapsulation: ViewEncapsulation.None
 })
 

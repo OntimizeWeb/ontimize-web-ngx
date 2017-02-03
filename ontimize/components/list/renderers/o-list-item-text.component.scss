@@ -1,0 +1,15 @@
+.md-list {
+
+  &.selectable {
+    &[dense] .md-list-item {
+      padding-right: 32px;
+    }
+    &:not([dense]) .md-list-item {
+      padding-right: 36px;
+    }
+  }
+
+  .o-list-row-action + .o-list-item-text {
+    padding-left: 36px;
+  }
+}
