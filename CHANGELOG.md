@@ -14,7 +14,10 @@
 * **local-storage.service**: adding service for storing components state in navigator local storage.
 * **Interfaces**: adding *'ILocalStorageComponent'* for components using *'local-storage.service'*.
 * **o-list**: adding *'delete-method'* attribute and delete button when list is selectable.
-* **o-list**: adding *'insert-button'* and  *'dense'* attribute.
+* **o-list**: adding *'insert-button'* and *'dense'* attributes.
+* **o-list**: adding *'row-height'* attribute.
+* **o-list**: adding list item predefined renderers *'o-list-item-avatar'*, *'o-list-item-text'*, *'o-list-item-card'* ([#25](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/25)) ([9b559a3](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/9b559a3))
+
 
 ### PEER-DEPENDENCY UPDATES ###
 * **Updated**:   @angular/material@2.0.0-beta.1
