@@ -16,7 +16,7 @@
 * **o-list**: adding *'delete-method'* attribute and delete button when list is selectable.
 * **o-list**: adding *'insert-button'* and *'dense'* attributes.
 * **o-list**: adding *'row-height'* attribute.
-* **o-list**: adding list item predefined renderers *'o-list-item-avatar'*, *'o-list-item-text'*, *'o-list-item-card'* ([#25](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/25)) ([9b559a3](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/9b559a3))
+* **o-list**: adding list item predefined renderers *'o-list-item-avatar'*, *'o-list-item-text'*, *'o-list-item-card'*, *'o-list-item-card-image'* ([#25](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/25)) ([9b559a3](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/9b559a3))
 
 
 ### PEER-DEPENDENCY UPDATES ###

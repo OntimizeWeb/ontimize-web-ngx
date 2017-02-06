@@ -1,0 +1,43 @@
+<md-card class="o-item-card" [class.small]="compareListHeight('small')" [class.medium]="compareListHeight('medium')" [class.large]="compareListHeight('large')">
+
+  <md-card-header *ngIf="avatar">
+    <img md-card-avatar src="{{ avatar }}">
+    <md-card-title *ngIf="title"> {{ title }}</md-card-title>
+    <md-card-subtitle *ngIf="subtitle"> {{ subtitle }}</md-card-subtitle>
+  </md-card-header>
+
+  <img *ngIf="image" md-card-image src="{{ image }}" [class.action-button]="icon">
+
+  <button *ngIf="icon" [attr.md-mini-fab]="compareListHeight('small')" [attr.md-fab]="compareListHeight('medium') || compareListHeight('large')"
+    (click)="onActionIconClick($event)" class="action-button">
+    <md-icon class="md-24">{{ icon }}</md-icon>
+    </button>
+
+    <md-card-title *ngIf="!avatar && title"> {{ title }}</md-card-title>
+    <md-card-subtitle *ngIf="!avatar && subtitle"> {{ subtitle }}</md-card-subtitle>
+
+    <md-card-content *ngIf="!collapsible">
+      <p>
+        {{ content }}
+      </p>
+    </md-card-content>
+
+    <md-card-actions flex layout="row">
+      <button md-button *ngIf="action1Text" (click)="onAction1ButtonClick($event)">{{ action1Text }}</button>
+      <button md-button *ngIf="action2Text" (click)="onAction2ButtonClick($event)">{{ action2Text }}</button>
+
+      <div class="collapse-button-container">
+        <button md-icon-button *ngIf="collapsible" (click)="collapsed = !collapsed" class="collapse-button">
+        <md-icon *ngIf="collapsed">keyboard_arrow_down</md-icon>
+        <md-icon *ngIf="!collapsed">keyboard_arrow_up</md-icon>
+      </button>
+      </div>
+    </md-card-actions>
+
+    <md-card-content *ngIf="collapsible && !collapsed">
+      <p>
+        {{ content }}
+      </p>
+    </md-card-content>
+
+</md-card>
