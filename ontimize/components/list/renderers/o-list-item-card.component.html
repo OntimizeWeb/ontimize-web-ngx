@@ -1,9 +1,7 @@
 <md-card>
   <md-card-title-group>
-    <img [attr.md-card-sm-image]="compareListHeight('small')"
-         [attr.md-card-md-image]="compareListHeight('medium')"
-         [attr.md-card-lg-image]="compareListHeight('large')"
-         src="{{ image }}">
+    <img [attr.md-card-sm-image]="compareListHeight('small')" [attr.md-card-md-image]="compareListHeight('medium')" [attr.md-card-lg-image]="compareListHeight('large')"
+      src="{{ image }}">
       <md-card-title *ngIf="title"> {{ title }}</md-card-title>
       <md-card-subtitle *ngIf="subtitle"> {{ subtitle }}</md-card-subtitle>
   </md-card-title-group>

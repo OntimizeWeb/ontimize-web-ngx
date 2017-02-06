@@ -34,6 +34,7 @@ export * from './components/list/list-item/o-list-item.component';
 export * from './components/list/renderers/o-list-item-avatar.component';
 export * from './components/list/renderers/o-list-item-text.component';
 export * from './components/list/renderers/o-list-item-card.component';
+export * from './components/list/renderers/o-list-item-card-image.component';
 export * from './components/search-input/o-search-input.component';
 export * from './components/side-menu/o-side-menu.component';
 export * from './components/side-menu/o-side-menu-group.component';

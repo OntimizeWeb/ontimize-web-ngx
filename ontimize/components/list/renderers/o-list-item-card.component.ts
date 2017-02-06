@@ -12,14 +12,13 @@ import {
 } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
-import { MdIconModule, MdCardModule } from '@angular/material';
+import { MdIconModule, MdCardModule, MdButtonModule } from '@angular/material';
 
 import { OListItemComponent } from '../list-item/o-list-item.component';
 import { OListItemCardRenderer } from './o-list-item-card-renderer.class';
 
 export const DEFAULT_INPUTS_O_LIST_ITEM_CARD = [
-  ...OListItemCardRenderer.DEFAULT_INPUTS_O_CARD_RENDERER,
-  'avatar'
+  ...OListItemCardRenderer.DEFAULT_INPUTS_O_CARD_RENDERER
 ];
 
 export const DEFAULT_OUTPUTS_O_LIST_ITEM_CARD = [
@@ -54,15 +53,11 @@ export class OListItemCardComponent extends OListItemCardRenderer {
   ngAfterViewInit() {
     this.modifyMdListItemElement();
   }
-
-  compareListHeight(height: string) {
-    return (height === this._listItem._list.rowHeight) || undefined;
-  }
 }
 
 @NgModule({
   declarations: [OListItemCardComponent],
-  imports: [MdIconModule, CommonModule, MdCardModule],
+  imports: [MdIconModule, CommonModule, MdCardModule, MdButtonModule],
   exports: [OListItemCardComponent]
 })
 export class OListItemCardModule {

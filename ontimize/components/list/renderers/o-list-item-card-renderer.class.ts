@@ -14,7 +14,6 @@ export const DEFAULT_INPUTS_O_CARD_RENDERER = [
   'title',
   'subtitle',
   'image',
-  'content',
   'action1Text : action-1-text',
   'action2Text : action-2-text'
 ];
@@ -33,7 +32,6 @@ export class OListItemCardRenderer {
   protected title: string;
   protected subtitle: string;
   protected image: string;
-  protected content: string;
   protected action1Text: string;
   protected action2Text: string;
 
@@ -62,6 +60,7 @@ export class OListItemCardRenderer {
       mdListItem.classList.add('o-card-item');
     }
   }
+
   // initialize() {
   // }
 
@@ -74,5 +73,9 @@ export class OListItemCardRenderer {
 
   onAction2ButtonClick(event: any) {
     this.onAction2Click.emit(event);
+  }
+
+  compareListHeight(height: string) {
+    return (height === this._listItem._list.rowHeight) || undefined;
   }
 }
