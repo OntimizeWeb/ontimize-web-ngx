@@ -4,6 +4,7 @@ import { OntimizeService } from '../services';
 import { OFormComponent } from './form/o-form.component';
 import { OFormDataComponent } from './o-form-data-component.class';
 import { Util } from '../utils';
+import { Subscription } from 'rxjs/Subscription';
 
 export class OFormServiceComponent extends OFormDataComponent {
 
@@ -28,6 +29,7 @@ export class OFormServiceComponent extends OFormDataComponent {
   protected visibleColArray: string[] = [];
   protected descriptionColArray: string[] = [];
   protected dataService: OntimizeService;
+  protected querySuscription: Subscription;
   protected cacheQueried: boolean = false;
   protected _pKeysEquiv = {};
   protected _formDataSubcribe;
@@ -124,7 +126,10 @@ export class OFormServiceComponent extends OFormDataComponent {
       console.warn('No service configured! aborting query');
       return;
     }
-    this.dataService.query(filter, columns, this.entity)
+    if (this.querySuscription) {
+      this.querySuscription.unsubscribe();
+    }
+    this.querySuscription = this.dataService.query(filter, columns, this.entity)
       .subscribe(resp => {
         if (resp.code === 0) {
           self.cacheQueried = true;
