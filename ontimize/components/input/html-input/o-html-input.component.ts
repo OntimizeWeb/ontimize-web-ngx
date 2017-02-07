@@ -1,27 +1,29 @@
-import {Component, Inject, Injector, forwardRef,
+import {
+  Component, Inject, Injector, forwardRef,
   ElementRef, OnInit, EventEmitter, ViewChild,
   ChangeDetectorRef, NgZone, Optional,
   NgModule,
   ModuleWithProviders,
-  ViewEncapsulation} from '@angular/core';
+  ViewEncapsulation
+} from '@angular/core';
 
-import {CommonModule } from '@angular/common';
-import {FormsModule, ReactiveFormsModule, FormControl, Validators } from '@angular/forms';
-import {ValidatorFn } from '@angular/forms/src/directives/validators';
+import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule, FormControl, Validators } from '@angular/forms';
+import { ValidatorFn } from '@angular/forms/src/directives/validators';
 
-import {MdCKEditorModule, CKEditor} from '../../material/ckeditor/ckeditor.component';
-import { MdInputModule, MdTabGroup } from '@angular/material';
+import { MdCKEditorModule, CKEditor } from '../../material/ckeditor/ckeditor.component';
+import { MdInputModule, MdTabGroup, MdTab } from '@angular/material';
 
 import {
   IFormComponent, IFormControlComponent, IFormDataTypeComponent,
   IFormDataComponent
 } from '../../../interfaces';
-import {InputConverter} from '../../../decorators';
-import {OFormComponent, Mode} from '../../form/o-form.component';
-import {OFormValue} from '../../form/OFormValue';
-import {OTranslateService} from '../../../services';
-import {SQLTypes} from '../../../utils';
-import {OTranslateModule} from '../../../pipes/o-translate.pipe';
+import { InputConverter } from '../../../decorators';
+import { OFormComponent, Mode } from '../../form/o-form.component';
+import { OFormValue } from '../../form/OFormValue';
+import { OTranslateService } from '../../../services';
+import { SQLTypes } from '../../../utils';
+import { OTranslateModule } from '../../../pipes/o-translate.pipe';
 
 export const DEFAULT_INPUTS_O_HTML_INPUT = [
   'oattr: attr',
@@ -74,7 +76,7 @@ export class OHTMLInputComponent implements IFormComponent, IFormControlComponen
 
   onChange: EventEmitter<Object> = new EventEmitter<Object>();
 
-  @ViewChild('ckEditor') ckEditor:CKEditor;
+  @ViewChild('ckEditor') ckEditor: CKEditor;
 
   protected value: OFormValue;
   protected translateService: OTranslateService;
@@ -88,6 +90,7 @@ export class OHTMLInputComponent implements IFormComponent, IFormControlComponen
   constructor(
     @Inject(forwardRef(() => OFormComponent)) protected form: OFormComponent,
     @Optional() @Inject(forwardRef(() => MdTabGroup)) protected tabGroup: MdTabGroup,
+    @Optional() @Inject(forwardRef(() => MdTab)) protected tab: MdTab,
     protected elRef: ElementRef,
     protected ngZone: NgZone,
     protected cd: ChangeDetectorRef,
@@ -121,14 +124,38 @@ export class OHTMLInputComponent implements IFormComponent, IFormControlComponen
       var self = this;
       this.tabGroup.selectChange.subscribe((evt: any) => {
         self.destroyCKEditor();
+        if (self.isInActiveTab()) {
+          self.ckEditor.initializeCkEditor(self.getValue());
+        }
       });
     }
+  }
+
+  isInActiveTab(): boolean {
+    var result: boolean = !(this.tabGroup && this.tab);
+    if (!result) {
+      var self = this;
+      this.tabGroup._tabs.forEach(function (tab, index) {
+        if (tab === self.tab) {
+          result = (self.tabGroup.selectedIndex === index);
+        }
+      });
+    }
+    return result;
+  }
+
+  isLoaded(): boolean {
+    var result = true;
+    if (this.tabGroup && this.tab) {
+      result = this.isInActiveTab();
+    }
+    return result;
   }
 
   ensureOFormValue(value: any) {
     if (value instanceof OFormValue) {
       this.value = new OFormValue(value.value);
-    } else if ( value && !(value instanceof OFormValue)) {
+    } else if (value && !(value instanceof OFormValue)) {
       this.value = new OFormValue(value);
     } else {
       this.value = new OFormValue('');
@@ -136,7 +163,7 @@ export class OHTMLInputComponent implements IFormComponent, IFormControlComponen
   }
 
   ngOnDestroy() {
-     if (this.form) {
+    if (this.form) {
       this.form.unregisterFormComponent(this);
       this.form.unregisterFormControlComponent(this);
       this.form.unregisterSQLTypeFormComponent(this);
@@ -193,7 +220,7 @@ export class OHTMLInputComponent implements IFormComponent, IFormControlComponen
     return this.autoBinding;
   }
 
-  getValue() : any {
+  getValue(): any {
     if (this.value instanceof OFormValue) {
       if (this.value.value) {
         return this.value.value;
@@ -247,7 +274,7 @@ export class OHTMLInputComponent implements IFormComponent, IFormControlComponen
   set disabled(value: boolean) {
     // var self = this;
     // window.setTimeout(() => {
-      this._disabled = value;
+    this._disabled = value;
     // }, 0);
   }
 
