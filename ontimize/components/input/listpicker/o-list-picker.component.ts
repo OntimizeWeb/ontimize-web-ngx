@@ -6,7 +6,8 @@ import {Component, ElementRef, EventEmitter, forwardRef, Inject, Injector,
 
 import {CommonModule} from '@angular/common';
 import {FormControl, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
-import {ValidatorFn } from '@angular/forms/src/directives/validators';
+import { ValidatorFn } from '@angular/forms/src/directives/validators';
+import { Subscription } from 'rxjs/Subscription';
 
 import { MdInputModule, MdInput, MdListModule, MdToolbarModule} from '@angular/material';
 import { MdDialog, MdDividerModule } from '../../material/ng2-material/index';
@@ -143,6 +144,7 @@ export class OListPickerComponent implements IFormComponent, IFormControlCompone
   protected _pKeysEquiv = {};
 
   protected _formDataSubcribe;
+  protected querySuscription: Subscription;
 
   protected _currentIndex;
 
@@ -249,16 +251,27 @@ export class OListPickerComponent implements IFormComponent, IFormControlCompone
 
   onFormDataBind(bindedData:Object) {
     let filter = {};
-    let keys = Object.keys(this._pKeysEquiv);
-    if (keys && keys.length > 0 && bindedData) {
-      keys.forEach(item => {
-        let value = bindedData[item];
-        if (value) {
-          filter[this._pKeysEquiv[item]] = value;
-        }
-      });
-    }
+    filter = this.getParentKeysFilter(bindedData);
     this.queryData(filter);
+  }
+
+  getParentKeysFilter(formData: any) {
+    let filter = {};
+    if (formData !== undefined || formData !== null) {
+      let keys = Object.keys(this._pKeysEquiv);
+      if (keys && keys.length > 0) {
+        keys.forEach(item => {
+          let value = formData[item];
+          if (value instanceof OFormValue) {
+            value = value['value'];
+          }
+          if (value) {
+            filter[this._pKeysEquiv[item]] = value;
+          }
+        });
+      }
+    }
+    return filter;
   }
 
   queryData(filter?: Object): void {
@@ -271,7 +284,10 @@ export class OListPickerComponent implements IFormComponent, IFormControlCompone
       console.warn('No service configured! aborting query');
       return;
     }
-    this.dataService.query(kv, this.colArray, this.entity)
+    if (this.querySuscription) {
+      this.querySuscription.unsubscribe();
+    }
+    this.querySuscription = this.dataService.query(kv, this.colArray, this.entity)
       .subscribe(
         (res: any) => {
           if (res.code === 0) {
@@ -330,7 +346,7 @@ export class OListPickerComponent implements IFormComponent, IFormControlCompone
 
   syncDataIndex() {
     this._currentIndex = undefined;
-    if (this.value && this.value.value && this.dataArray) {
+    if (!this.isEmpty() && this.dataArray) {
       let self = this;
       this.dataArray.forEach((item, index) => {
         if (item[self.valueColumn] === this.value.value) {
@@ -339,16 +355,15 @@ export class OListPickerComponent implements IFormComponent, IFormControlCompone
       });
 
       if (this._currentIndex === undefined) {
-        if (this.queryOnBind && this.dataArray && this.dataArray.length === 0
-          && !this.cacheQueried && !this.isEmpty()) {
-          this.queryData();
+        if (this.queryOnBind && this.dataArray.length === 0
+          && !this.cacheQueried) {
+          let filter = {};
+          if (this.form) {
+            filter = this.getParentKeysFilter(this.form.getDataValues());
+          }
+          this.queryData(filter);
         }
         return;
-      }
-
-      if (this._currentIndex !== undefined) {
-        // Force change detection on hidden md-input...
-        // this.cDetect.detectChanges();
       }
 
     }
