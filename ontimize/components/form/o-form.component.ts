@@ -62,7 +62,8 @@ export const DEFAULT_INPUTS_O_FORM = [
 
 export const DEFAULT_OUTPUTS_O_FORM = [
   'onFormDataLoaded',
-  'beforeCloseDetail'
+  'beforeCloseDetail',
+  'beforeGoEditMode'
 ];
 
 
