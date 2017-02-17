@@ -17,6 +17,8 @@
 * **o-list**: adding *'insert-button'* and *'dense'* attributes.
 * **o-list**: adding *'row-height'* attribute.
 * **o-list**: adding list item predefined renderers *'o-list-item-avatar'*, *'o-list-item-text'*, *'o-list-item-card'*, *'o-list-item-card-image'* ([#25](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/25)) ([9b559a3](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/9b559a3))
+* **o-table**: adding *'pagination-controls'* attribute ([#44](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/44)) ([b69f69a](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/b69f69a))
+* **o-table-column**: adding *'width'* attribute ([#48](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/48)) ([7ee86dd](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/7ee86dd))
 
 
 ### PEER-DEPENDENCY UPDATES ###
@@ -37,6 +39,11 @@
 * **o-list**: *'onReload'* method changed (marked as deprecated) for *'reloadData'*.
 * **o-table**: *'onReload'* method changed (marked as deprecated) for *'reloadData'*.
 * **o-table**: *'data'* attribute changed for *'static-data'*.
+
+
+### Bug Fixes
+* **o-html-input**: Fixing component bugs ([#32](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/32)) ([3d2d121](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/3d2d121))
+* **o-table**: Fixing options documents generation bugs.
 
 ## 1.1.1 (2017-01-11)
 
