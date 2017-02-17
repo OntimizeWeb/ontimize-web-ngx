@@ -204,7 +204,10 @@ export const DEFAULT_INPUTS_O_TABLE = [
   'paginatedQueryMethod : paginated-query-method',
 
   // pagination mode [string][yes|no|true|false]
-  'singlePageMode : single-page-mode'
+  'singlePageMode : single-page-mode',
+
+  // pagination-controls [string][yes|no|true|false]
+  'paginationControls : pagination-controls'
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE = [
@@ -297,6 +300,8 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
   pageable: boolean = false;
   @InputConverter()
   singlePageMode: boolean = false;
+  @InputConverter()
+  paginationControls: boolean = true;
 
   protected attr: string;
   protected title: string;
@@ -674,7 +679,10 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
   protected initTableOnInit(columns: any = undefined) {
     var self = this;
 
-    let domOption = 'r<"dataTables_fill_remaining"<"o-table-scroll"t>><"dataTables_pagination_wrapper"pil>';
+    let domOption = 'r<"dataTables_fill_remaining"<"o-table-scroll"t>>';
+    if (this.paginationControls) {
+      domOption += '<"dataTables_pagination_wrapper"pil>';
+    }
     if (this.controls) {
       domOption = '<"dataTables_top_wrapper"B<"dataTables_filter_wrapper"<"dataTables_hidden_options">f><"dataTables_options">>' + domOption;
     }
