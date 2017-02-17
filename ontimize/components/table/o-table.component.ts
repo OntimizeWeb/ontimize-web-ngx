@@ -240,6 +240,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   public onPaginatedTableDataLoaded: EventEmitter<any> = new EventEmitter();
 
   protected storedRecordsIndexes: Array<any> = [];
+  protected initialColumnsWidths: Array<any> = [];
 
   @ViewChild(MdMenuTrigger) menuTrigger: MdMenuTrigger;
   private columnWidthHandlerInterval: any;
@@ -465,7 +466,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   protected initTableOnInit(columns: any = undefined) {
     var self = this;
 
-    let domOption = 'r<"dataTables_fill_remaining"<"o-table-scroll"t>><"dataTables_pagination_wrapper"pil>';
     if (this.controls) {
       domOption = '<"dataTables_top_wrapper"B<"dataTables_filter_wrapper"<"dataTables_hidden_options">f><"dataTables_options">>' + domOption;
     }
@@ -520,7 +520,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
         });
       },
       initComplete: (settings) => {
-        this.handleColumnWidth();
+        this.handleColumnWidth(settings);
         let controlButtons = $('#' + this.oattr + '_wrapper .generic-action') as any;
         ($ as any).each(controlButtons, function (i, el) {
           ($(this) as any).attr('title', ($(this) as any).find('span').text());
@@ -940,7 +940,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       }
     });
     this.table.off('column-visibility.dt').on('column-visibility.dt', (e, settings, column, state) => {
-      this.handleColumnWidth();
+      this.handleColumnWidth(settings);
       this.handleOrderIndex();
       let resizeButton = $('#' + this.oattr + '_wrapper .generic-action-resize') as any;
       if (resizeButton.hasClass('active')) {
@@ -1005,6 +1005,13 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       createdCell: (cellElement: any, cellData: any, item: Object, rowIndex: number, colIndex: number) =>
         column.handleCreatedCell($(cellElement) as any, item)
     };
+    if (column.width) {
+      this.initialColumnsWidths.push({
+        name: column.attr,
+        width: column.width
+      });
+    }
+
     if (typeof (column.attr) === 'undefined') {
       // column without 'attr' should contain only renderers that do not depend on cell data, but row data (e.g. actions)
       colDef.className += ' o-table-column-action';
@@ -1155,7 +1162,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
   }
 
-  protected handleColumnWidth() {
+  protected handleColumnWidth(settings) {
     var tableEl = ($('#' + this.oattr) as any);
     if (!tableEl.is(':visible')) {
       var self = this;
@@ -1164,39 +1171,59 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
           if (tableEl.is(':visible')) {
             clearInterval(self.columnWidthHandlerInterval);
             self.columnWidthHandlerInterval = undefined;
-            self.handleColumnWidth();
+            self.handleColumnWidth(settings);
             console.log('columnWidthHandlerInterval');
           }
         }, 250);
       }
       return;
     }
+    let api = ($ as any).fn.dataTable.Api(settings);
+    let tableColumns = api.columns();
+    let columnsNumber = tableColumns[0].length;
+
     var fixedWidthColumns = 0;
     fixedWidthColumns += (this.selectAllCheckbox ? 1 : 0);
     var actionColumns = 0;
     actionColumns += (this.editColumnIndex !== -1 ? 1 : 0);
     actionColumns += (this.detailColumnIndex !== -1 ? 1 : 0);
     fixedWidthColumns += actionColumns;
-    let columns = $('#' + this.oattr + '_wrapper table thead th') as any;
-    if (columns.length > 0) {
-      let actionsWidth = ((fixedWidthColumns * 50) / tableEl.outerWidth(true)) * 100;
-      let width = String((100 - actionsWidth) / ((columns.length - fixedWidthColumns) || 1)) + '%';
-      var self = this;
 
-      ($ as any).each(columns, function (i, el) {
+    let tableWidth = tableEl.outerWidth(true);
+    let actionsWidth = ((fixedWidthColumns * 50) / tableWidth) * 100;
+
+    var self = this;
+    var avoidIndex = [];
+    let fixedWidths = 0;
+    for (var i = 0; i < this.initialColumnsWidths.length; i++) {
+      let colObj: any = this.initialColumnsWidths[i];
+      let tableCol = api.column(colObj.name + ':name');
+      if (tableCol) {
+        avoidIndex.push(tableCol.index());
+        let header = ($(tableCol.header()) as any);
+        header.width(colObj.width);
+        fixedWidths += parseInt(colObj.width);
+      }
+    }
+
+    let remainingColumns = columnsNumber - this.initialColumnsWidths.length - fixedWidthColumns;
+    let calcWidth = String((100 - actionsWidth - fixedWidths) / (remainingColumns || 1)) + '%';
+
+    tableColumns.every(function (i) {
+      if (avoidIndex.indexOf(i) === -1) {
         let columnWidth = '0px';
-        let isActionColumn = i >= (columns.length - actionColumns);
+        let isActionColumn = (i >= (columnsNumber - actionColumns));
         if (self.selectAllCheckbox && i === 0) {
           columnWidth = '26px';
         } else if (!isActionColumn) {
-          columnWidth = width;
+          columnWidth = calcWidth;
         } else {
-          // using width = 2 because padding-left and right is 24 (total width = 50  )
+          // using width = 2 because padding-left and right is 24 (total width = 50)
           columnWidth = '2px';
         }
-        ($(this) as any).width(columnWidth);
-      });
-    }
+        ($(api.columns(i).header()) as any).width(columnWidth);
+      }
+    });
   }
 
   protected handleOrderIndex() {
@@ -1852,6 +1879,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   protected getTableOptions() {
     let options = [];
     var self = this;
+    var columnsSelector = ':visible:not(.o-table-select-checkbox):not(.o-table-column-action)';
     // export actions
     if (this.exportButton) {
       options.push({
@@ -1860,7 +1888,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
         text: this.translateService.get('TABLE.BUTTONS.COPY_TO_CLIPBOARD'),
         className: 'export-action',
         exportOptions: {
-          columns: ':visible:not(.o-table-select-checkbox)'
+          columns: columnsSelector
         }
       });
       options.push({
@@ -1869,7 +1897,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
         text: this.translateService.get('TABLE.BUTTONS.PRINT'),
         className: 'export-action',
         exportOptions: {
-          columns: ':visible:not(.o-table-select-checkbox)'
+          columns: columnsSelector
         }
       });
       options.push({
@@ -1879,7 +1907,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
         className: 'export-action',
         filename: this.title ? this.title : '*',
         exportOptions: {
-          columns: ':visible:not(.o-table-select-checkbox)'
+          columns: columnsSelector
         }
       });
       options.push({
@@ -1891,7 +1919,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
         fieldSeparator: ',',
         extension: '.csv',
         exportOptions: {
-          columns: ':visible:not(.o-table-select-checkbox)'
+          columns: columnsSelector
         }
       });
       options.push({
@@ -1904,7 +1932,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
         orientation: 'portrait',
         pageSize: 'A4',
         exportOptions: {
-          columns: ':visible:not(.o-table-select-checkbox)',
+          columns: columnsSelector,
           orthogonal: 'export'
         }
       });
