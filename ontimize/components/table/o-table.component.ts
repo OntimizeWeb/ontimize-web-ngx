@@ -120,7 +120,10 @@ export const DEFAULT_INPUTS_O_TABLE = [
   'selectAllCheckbox: select-all-checkbox',
 
   // pagination mode [string][yes|no|true|false]
-  'singlePageMode : single-page-mode'
+  'singlePageMode : single-page-mode',
+
+  // pagination-controls [string][yes|no|true|false]
+  'paginationControls : pagination-controls'
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE = [
@@ -195,6 +198,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   selectAllCheckbox: boolean = true;
   @InputConverter()
   singlePageMode: boolean = false;
+  @InputConverter()
+  paginationControls: boolean = true;
   /* End of Inputs */
 
   /*parsed inputs variables */
@@ -466,6 +471,10 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   protected initTableOnInit(columns: any = undefined) {
     var self = this;
 
+    let domOption = 'r<"dataTables_fill_remaining"<"o-table-scroll"t>>';
+    if (this.paginationControls) {
+      domOption += '<"dataTables_pagination_wrapper"pil>';
+    }
     if (this.controls) {
       domOption = '<"dataTables_top_wrapper"B<"dataTables_filter_wrapper"<"dataTables_hidden_options">f><"dataTables_options">>' + domOption;
     }
