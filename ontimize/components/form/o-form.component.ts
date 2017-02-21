@@ -869,6 +869,8 @@ export class OFormComponent implements OnInit, OnDestroy {
       });
     }
 
+	attributes = attributes.concat(this.colsArray.filter(col => attributes.indexOf(col) < 0));
+
     return attributes;
   }
 
