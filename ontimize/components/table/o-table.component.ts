@@ -1246,6 +1246,12 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
       createdCell: (cellElement: any, cellData: any, item: Object, rowIndex: number, colIndex: number) =>
         column.handleCreatedCell($(cellElement) as any, item)
     };
+    if (column.width) {
+      this.initialColumnsWidths.push({
+        name: column.attr,
+        width: column.width
+      });
+    }
     if (typeof (column.attr) === 'undefined') {
       // column without 'attr' should contain only renderers that do not depend on cell data, but row data (e.g. actions)
       colDef.className += ' o-table-column-action';

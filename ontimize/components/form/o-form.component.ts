@@ -627,7 +627,7 @@ export class OFormComponent implements OnInit, OnDestroy {
 
     let extras = {};
     if (nestedLevel || (urlArray.length > 1 && this.isDetailForm)) {
-      extras['queryParams'] = { 'isdetail': 'true' };
+      extras['queryParams'] = Object.assign({}, this.queryParams, { 'isdetail': 'true' });
     }
 
     let actRoute = this.actRoute;
@@ -682,9 +682,7 @@ export class OFormComponent implements OnInit, OnDestroy {
       });
     }
 
-    let extras = {
-      'queryParams': { 'isdetail': 'true' }
-    };
+    let extras = Object.assign({}, this.queryParams, { 'isdetail': 'true' });
 
     this.router.navigate([urlText], extras)
       .catch(err => {
@@ -765,6 +763,7 @@ export class OFormComponent implements OnInit, OnDestroy {
     if (this.isDetailForm) {
       extras['queryParams'] = { 'isdetail': 'true' };
     }
+    extras['queryParams'] = Object.assign({}, this.queryParams, extras['queryParams'] || {});
     this.router.navigate(['../', url, 'edit'], extras)
       .catch(err => {
         console.error(err.message);
@@ -831,7 +830,9 @@ export class OFormComponent implements OnInit, OnDestroy {
   queryData(filter) {
     var self = this;
     var loader = self.load();
-    this.dataService.query(filter, this.getAttributesToQuery(), this.entity)
+
+    let sqlTypes = this.getAttributesSQLTypes();
+    this.dataService.query(filter, this.getAttributesToQuery(), this.entity, sqlTypes)
       .subscribe(resp => {
         loader.unsubscribe();
         if (resp.code === 0) {

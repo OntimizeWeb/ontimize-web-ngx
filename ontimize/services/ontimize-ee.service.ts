@@ -287,7 +287,8 @@ export class OntimizeEEService implements IAuthService, IDataService {
 
     var body = JSON.stringify({
       filter: kv,
-      data: av
+      data: av,
+      sqltypes: sqltypes
     });
 
     let _innerObserver: any;
@@ -333,7 +334,8 @@ export class OntimizeEEService implements IAuthService, IDataService {
     headers.append('Authorization', authorizationToken);
 
     var body = JSON.stringify({
-      filter: kv
+      filter: kv,
+      sqltypes: sqltypes
     });
 
     let options = new RequestOptions({
