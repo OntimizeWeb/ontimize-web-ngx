@@ -111,6 +111,7 @@ export class OTableColumnComponent implements OnInit {
   protected renderType: string;
   protected renderValue: string;
 
+  public generatedAttr: string;
   public width: string;
 
   constructor( @Inject(forwardRef(() => OTableComponent)) table: OTableComponent,
@@ -242,7 +243,28 @@ export class OTableColumnComponent implements OnInit {
           break;
       }
     }
+    if (this.attr === undefined) {
+      let columnIndex = this.table.getColumsNumber();
+      this.generatedAttr = 'o-table-column-' + columnIndex;
+    }
+    if (this.width && this.width.length && this.width.endsWith('px')) {
+      // using width -= 24 because padding-left and right is 24
+      let newWidth = (parseInt(this.width) - 24);
+      if (newWidth <= 0) {
+        newWidth = 1;
+      }
+      this.width = newWidth + 'px';
+    }
     this.table.registerColumn(this);
+  }
+
+  public setWidth(value) {
+    this.width = value;
+    this.table.setInitialColumnWidth(this);
+  }
+
+  public getColumnName() {
+    return this.attr || this.generatedAttr;
   }
 
   public registerRenderer(renderer: ITableCellRenderer) {

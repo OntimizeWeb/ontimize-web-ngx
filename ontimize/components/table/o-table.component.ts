@@ -998,6 +998,10 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
     return subscription;
   }
 
+  getColumsNumber(): number {
+    return this.dataTableOptions.columns.length;
+  }
+
   protected addDefaultRowButtons() {
     this.editColumnIndex = -1;
     this.detailColumnIndex = -1;
@@ -1229,6 +1233,14 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
     }
   }
 
+  public setInitialColumnWidth(column: OTableColumnComponent) {
+    this.initialColumnsWidths.push({
+      name: column.getColumnName(),
+      width: column.width
+    });
+  }
+
+
   public registerColumn(column: OTableColumnComponent, index?: number) {
     let colDef = {
       data: undefined,
@@ -1247,16 +1259,14 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
         column.handleCreatedCell($(cellElement) as any, item)
     };
     if (column.width) {
-      this.initialColumnsWidths.push({
-        name: column.attr,
-        width: column.width
-      });
+       this.setInitialColumnWidth(column);
     }
     if (typeof (column.attr) === 'undefined') {
       // column without 'attr' should contain only renderers that do not depend on cell data, but row data (e.g. actions)
       colDef.className += ' o-table-column-action';
       colDef.orderable = false;
       colDef.searchable = false;
+      colDef.name = column.generatedAttr;
     } else {
       // columns with 'attr' are linked to service data
       colDef.data = column.attr;
