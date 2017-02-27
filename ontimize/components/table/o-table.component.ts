@@ -1337,8 +1337,12 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     } else {
       headerCheckboxCol.addClass('md-checkbox-anim-checked-unchecked');
     }
-    let tableRows = this.table.rows();
-    tableRows.nodes().$('input[type="checkbox"].select-row').prop('checked', event.target.checked).change();
+    var self = this;
+    this.table.rows({ filter: 'applied' }).every(function (el) {
+      let checkboxEl = self.table.row(el).node().querySelector('input[type="checkbox"].select-row');
+      checkboxEl.checked = event.target.checked;
+      ($(checkboxEl) as any).change();
+    });
   }
 
   protected handleRowCheckboxChange(event: any) {
