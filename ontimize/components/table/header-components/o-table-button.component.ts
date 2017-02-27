@@ -9,7 +9,7 @@ export const DEFAULT_INPUTS_O_TABLE_BUTTON = [
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE_BUTTON = [
-  'click'
+  'onClick'
 ];
 
 @Component({
@@ -27,7 +27,7 @@ export class OTableButtonComponent implements OnInit {
   public static DEFAULT_INPUTS_O_TABLE_BUTTON = DEFAULT_INPUTS_O_TABLE_BUTTON;
   public static DEFAULT_OUTPUTS_O_TABLE_BUTTON = DEFAULT_OUTPUTS_O_TABLE_BUTTON;
 
-  public click: EventEmitter<Object> = new EventEmitter<Object>();
+  public onClick: EventEmitter<Object> = new EventEmitter<Object>();
 
   protected table: OTableComponent;
   protected translateService: OTranslateService;
@@ -59,6 +59,6 @@ export class OTableButtonComponent implements OnInit {
   }
 
   innerOnClick() {
-    this.click.emit();
+    this.onClick.emit();
   }
 }
