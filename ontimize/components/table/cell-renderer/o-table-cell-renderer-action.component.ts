@@ -1,11 +1,10 @@
-import { Component, OnInit, Inject, Injector, forwardRef } from '@angular/core';
+import { Component, OnInit, Inject, Injector, forwardRef, EventEmitter } from '@angular/core';
 
 import { ITableCellRenderer } from '../../../interfaces';
 import { OTableColumnComponent } from '../o-table-column.component';
 import { OTranslateService } from '../../../services';
 
 export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_ACTION = [
-
   // action [detail|delete|edit]: action to perform. Default: no value.
   'action',
 
@@ -19,16 +18,24 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_ACTION = [
   'renderValue: render-value'
 ];
 
+export const DEFAULT_OUTPUTS_O_TABLE_CELL_RENDERER_ACTION = [
+  'onClick'
+];
+
 @Component({
   selector: 'o-table-cell-renderer-action',
   template: '',
   inputs: [
     ...DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_ACTION
+  ],
+  outputs: [
+    ...DEFAULT_OUTPUTS_O_TABLE_CELL_RENDERER_ACTION
   ]
 })
 export class OTableCellRendererActionComponent implements OnInit, ITableCellRenderer {
 
   public static DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_ACTION = DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_ACTION;
+  public static DEFAULT_OUTPUTS_O_TABLE_CELL_RENDERER_ACTION = DEFAULT_OUTPUTS_O_TABLE_CELL_RENDERER_ACTION;
 
   public static ACTION_DETAIL = 'detail';
   public static ACTION_DELETE = 'delete';
@@ -49,6 +56,7 @@ export class OTableCellRendererActionComponent implements OnInit, ITableCellRend
   protected editionMode: string;
   protected renderType: string;
   protected renderValue: string;
+  onClick: EventEmitter<Object> = new EventEmitter<Object>();
 
   constructor( @Inject(forwardRef(() => OTableColumnComponent)) tableColumn: OTableColumnComponent,
     protected injector: Injector) {
@@ -108,32 +116,27 @@ export class OTableCellRendererActionComponent implements OnInit, ITableCellRend
   }
 
   public handleCreatedCell(cellElement: any, rowData: any) {
-    if (typeof (this.action) !== 'undefined') {
-      switch (this.action.toLowerCase()) {
-        case OTableCellRendererActionComponent.ACTION_DETAIL:
-          cellElement.bind('click', (e) => {
-            e.stopPropagation();
+    cellElement.bind('click', (e) => {
+      e.stopPropagation();
+      this.onClick.emit(rowData);
+      if (typeof (this.action) !== 'undefined') {
+        switch (this.action.toLowerCase()) {
+          case OTableCellRendererActionComponent.ACTION_DETAIL:
             this.tableColumn.viewDetail(rowData);
-          });
-          break;
-        case OTableCellRendererActionComponent.ACTION_DELETE:
-          cellElement.bind('click', (e) => {
-            e.stopPropagation();
+            break;
+          case OTableCellRendererActionComponent.ACTION_DELETE:
             this.tableColumn.remove(rowData);
-          });
-          break;
-        case OTableCellRendererActionComponent.ACTION_EDIT:
-          if (this.editionMode === 'inline') {
-            this.handleInlineEditActionClick(cellElement, rowData);
-          } else {
-            cellElement.bind('click', (e) => {
-              e.stopPropagation();
+            break;
+          case OTableCellRendererActionComponent.ACTION_EDIT:
+            if (this.editionMode === 'inline') {
+              this.handleInlineEditActionClick(cellElement, rowData);
+            } else {
               this.tableColumn.editDetail(rowData);
-            });
-          }
-          break;
+            }
+            break;
+        }
       }
-    }
+    });
   }
 
 

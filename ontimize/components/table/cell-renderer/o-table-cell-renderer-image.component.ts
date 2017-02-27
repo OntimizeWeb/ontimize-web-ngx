@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, forwardRef } from '@angular/core';
+import { Component, OnInit, Inject, forwardRef, EventEmitter } from '@angular/core';
 
 import { ITableCellRenderer } from '../../../interfaces';
 import { OTableColumnComponent } from '../o-table-column.component';
@@ -17,6 +17,10 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_IMAGE = [
 
 ];
 
+export const DEFAULT_OUTPUTS_O_TABLE_CELL_RENDERER_IMAGE = [
+  'onClick'
+];
+
 @Component({
   selector: 'o-table-cell-renderer-image',
   template: '',
@@ -27,12 +31,15 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_IMAGE = [
 export class OTableCellRendererImageComponent implements OnInit, ITableCellRenderer {
 
   public static DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_IMAGE = DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_IMAGE;
+  public static DEFAULT_OUTPUTS_O_TABLE_CELL_RENDERER_IMAGE = DEFAULT_OUTPUTS_O_TABLE_CELL_RENDERER_IMAGE;
 
-  protected imageType : string;
-  protected avatar : any;
-  protected emptyImage : string;
+  protected imageType: string;
+  protected avatar: any;
+  protected emptyImage: string;
 
-  constructor(@Inject(forwardRef(() => OTableColumnComponent)) tableColumn: OTableColumnComponent) {
+  onClick: EventEmitter<Object> = new EventEmitter<Object>();
+
+  constructor( @Inject(forwardRef(() => OTableColumnComponent)) tableColumn: OTableColumnComponent) {
     tableColumn.registerRenderer(this);
   }
 
@@ -41,14 +48,14 @@ export class OTableCellRendererImageComponent implements OnInit, ITableCellRende
   }
 
   public init(parameters: any) {
-    if (typeof(parameters) !== 'undefined') {
-      if (typeof(parameters.imageType) !== 'undefined') {
+    if (typeof (parameters) !== 'undefined') {
+      if (typeof (parameters.imageType) !== 'undefined') {
         this.imageType = parameters.imageType;
       }
-      if (typeof(parameters.avatar) !== 'undefined') {
+      if (typeof (parameters.avatar) !== 'undefined') {
         this.avatar = parameters.avatar;
       }
-      if (typeof(parameters.emptyImage) !== 'undefined') {
+      if (typeof (parameters.emptyImage) !== 'undefined') {
         this.emptyImage = parameters.emptyImage;
       }
     }
@@ -59,7 +66,7 @@ export class OTableCellRendererImageComponent implements OnInit, ITableCellRende
     let imageSrc = '';
     switch (this.imageType) {
       case 'base64':
-        imageSrc = cellData ? ('data:image/*;base64,' + ((typeof(cellData.bytes) !== 'undefined') ? cellData.bytes : cellData)) : this.emptyImage;
+        imageSrc = cellData ? ('data:image/*;base64,' + ((typeof (cellData.bytes) !== 'undefined') ? cellData.bytes : cellData)) : this.emptyImage;
         break;
       case 'url':
         imageSrc = cellData ? cellData : this.emptyImage;
@@ -68,7 +75,7 @@ export class OTableCellRendererImageComponent implements OnInit, ITableCellRende
         imageSrc = this.emptyImage;
         break;
     }
-    if (typeof(imageSrc) !== 'undefined') {
+    if (typeof (imageSrc) !== 'undefined') {
       template += '<img src="' + imageSrc + '" />';
     }
     template += '</div>';
@@ -76,7 +83,10 @@ export class OTableCellRendererImageComponent implements OnInit, ITableCellRende
   }
 
   public handleCreatedCell(cellElement: any, rowData: any) {
-    // nothing to do here
+    cellElement.bind('click', (e) => {
+      e.stopPropagation();
+      this.onClick.emit(rowData);
+    });
   }
 
 }
