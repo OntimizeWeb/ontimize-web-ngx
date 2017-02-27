@@ -1259,7 +1259,7 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
         column.handleCreatedCell($(cellElement) as any, item)
     };
     if (column.width) {
-       this.setInitialColumnWidth(column);
+      this.setInitialColumnWidth(column);
     }
     if (typeof (column.attr) === 'undefined') {
       // column without 'attr' should contain only renderers that do not depend on cell data, but row data (e.g. actions)
@@ -1615,8 +1615,12 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
     } else {
       headerCheckboxCol.addClass('md-checkbox-anim-checked-unchecked');
     }
-    let tableRows = this.table.rows();
-    tableRows.nodes().$('input[type="checkbox"].select-row').prop('checked', event.target.checked).change();
+    var self = this;
+    this.table.rows({ filter: 'applied' }).every(function (el) {
+      let checkboxEl = self.table.row(el).node().querySelector('input[type="checkbox"].select-row');
+      checkboxEl.checked = event.target.checked;
+      ($(checkboxEl) as any).change();
+    });
   }
 
   protected handleRowCheckboxChange(event: any) {
