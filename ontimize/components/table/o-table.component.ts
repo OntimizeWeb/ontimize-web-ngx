@@ -458,10 +458,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   public reloadData() {
     let queryArgs = {
-      // offset: this.queryRecordOffset - this.queryRows,
       offset: this.state.queryRecordOffset - this.queryRows,
       length: this.queryRows,
-      // resultRecordsIndex: this.queryRecordOffset - this.queryRows,
       resultRecordsIndex: this.state.queryRecordOffset - this.queryRows,
       replace: true
     };
@@ -766,6 +764,10 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
   }
 
+  getColumsNumber(): number {
+    return this.dataTableOptions.columns.length;
+  }
+
   protected addDefaultRowButtons() {
     this.editColumnIndex = -1;
     this.detailColumnIndex = -1;
@@ -997,6 +999,19 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
   }
 
+  public setInitialColumnWidth(column: OTableColumnComponent) {
+    // let existing: any = this.initialColumnsWidths.filter(
+    //   element => element.name === column.getColumnName());
+    // if (existing) {
+    //   existing.width = column.width;
+    // } else {
+    this.initialColumnsWidths.push({
+      name: column.getColumnName(),
+      width: column.width
+    });
+    // }
+  }
+
   public registerColumn(column: OTableColumnComponent, index?: number) {
     let colDef = {
       data: undefined,
@@ -1015,10 +1030,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
         column.handleCreatedCell($(cellElement) as any, item)
     };
     if (column.width) {
-      this.initialColumnsWidths.push({
-        name: column.attr,
-        width: column.width
-      });
+      this.setInitialColumnWidth(column);
     }
 
     if (typeof (column.attr) === 'undefined') {
@@ -1026,6 +1038,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       colDef.className += ' o-table-column-action';
       colDef.orderable = false;
       colDef.searchable = false;
+      colDef.name = column.generatedAttr;
     } else {
       // columns with 'attr' are linked to service data
       colDef.data = column.attr;
@@ -1560,17 +1573,16 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
               }
 
               if (self.dataArray.length > 0) {
-                self.dataTable.fnAddData(self.dataArray, false);
+                self.dataTable.fnAddData(self.dataArray);
               }
 
               if (self.table && self.pageable) {
                 let pagesInfo = self.table.page.info();
-                let activePage = pagesInfo.pages - 1;
+                let activePage = pagesInfo.pages > 0 ? (pagesInfo.pages - 1) : 0;
                 if (!self.singlePageMode && ovrrArgs && ovrrArgs.hasOwnProperty('resultRecordsIndex')) {
                   activePage = Math.floor((ovrrArgs['resultRecordsIndex'] / self.queryRows));
                 }
-                self.dataTable.fnPageChange(activePage, true);
-                // self.table.page(activePage).draw(true);
+                self.table.page(activePage).draw(false);
                 self.updatePaginationFooterText(true);
               } else {
                 self.dataTable.fnDraw();

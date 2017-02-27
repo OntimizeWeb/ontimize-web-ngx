@@ -71,6 +71,10 @@ export class OTableCellRendererActionComponent implements OnInit, ITableCellRend
       OTableCellRendererActionComponent.DEFAULT_RENDER_VALUES.hasOwnProperty(this.action)) {
       this.renderValue = OTableCellRendererActionComponent.DEFAULT_RENDER_VALUES[this.action];
     }
+    if (this.renderType === 'icon' && this.tableColumn.width === undefined) {
+      // using width = 2 because padding-left and right is 24 so total width will be 50
+      this.tableColumn.setWidth('2px');
+    }
   }
 
   public init(parameters: any) {
