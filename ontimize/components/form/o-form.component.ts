@@ -61,7 +61,9 @@ export const DEFAULT_INPUTS_O_FORM = [
   // stay-in-record-after-insert [string][yes|no|true|false]: shows detail form after insert new record. Default: false;
   'stayInRecordAfterInsert: stay-in-record-after-insert',
 
-  'serviceType : service-type'
+  'serviceType : service-type',
+
+  'queryOnInit : query-on-init'
 ];
 
 export const DEFAULT_OUTPUTS_O_FORM = [
@@ -116,6 +118,9 @@ export class OFormComponent implements OnInit, OnDestroy {
   @InputConverter()
   stayInRecordAfterInsert: boolean = false;
   serviceType: string;
+  @InputConverter()
+  protected queryOnInit: boolean = true;
+
 
   isDetailForm: boolean = false;
   keysArray: string[] = [];
@@ -190,7 +195,7 @@ export class OFormComponent implements OnInit, OnDestroy {
     this.reloadStream.subscribe(
       function (valArr) {
         if (Util.isArray(valArr) && valArr.length === 2) {
-          if (valArr[0] === true && valArr[1] === true) {
+          if (self.queryOnInit && valArr[0] === true && valArr[1] === true) {
             self._reloadAction(true);
           }
         }
