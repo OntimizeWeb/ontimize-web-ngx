@@ -19,7 +19,11 @@
 * **o-list**: adding list item predefined renderers *'o-list-item-avatar'*, *'o-list-item-text'*, *'o-list-item-card'*, *'o-list-item-card-image'* ([#25](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/25)) ([9b559a3](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/9b559a3))
 * **o-table**: adding *'pagination-controls'* attribute ([#44](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/44)) ([b69f69a](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/b69f69a))
 * **o-table-column**: adding *'width'* attribute ([#48](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/48)) ([7ee86dd](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/7ee86dd))
-
+* **o-table-cell-renderer-action**: adding *'onClick'* output ([#54](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/54)) ([7fc0ded](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/7fc0ded))
+* **o-table-cell-renderer-image**: adding *'onClick'* output.
+* **o-table-cell-renderer-action**: adding default width if *'render-type'* is *'icon'* ([#53](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/53)) ([2bedc7e](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/2bedc7e))
+* **service components**: adding *'service-type'* attribute to configurable service components for setting a custom service.
+* **o-table-cell-renderer-action**: adding *'action-title'* attribute ([#58](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/58)) ([c9fc19a](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/c9fc19a))
 
 ### PEER-DEPENDENCY UPDATES ###
 * **Updated**:   @angular/material@2.0.0-beta.1
@@ -39,11 +43,13 @@
 * **o-list**: *'onReload'* method changed (marked as deprecated) for *'reloadData'*.
 * **o-table**: *'onReload'* method changed (marked as deprecated) for *'reloadData'*.
 * **o-table**: *'data'* attribute changed for *'static-data'*.
-
+* **o-table-button**: *'click'* output changed for *'onClick'*.
+* **o-table-option**: *'click'* output changed for *'onClick'*.
 
 ### Bug Fixes
 * **o-html-input**: Fixing component bugs ([#32](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/32)) ([3d2d121](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/3d2d121))
 * **o-table**: Fixing options documents generation bugs.
+* **o-table-column**: Fixing bugs in width attribute ([#53](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/53)) ([2bedc7e](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/2bedc7e))
 
 ## 1.1.1 (2017-01-11)
 
