@@ -1,6 +1,6 @@
 <div layout-fill [formGroup]="form?.formGroup">
     <ckeditor #ckEditor [attr.id]="oattr" [id]="oattr" layout-fill [formControlName]="oattr"
-        [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)" class="md-ckeditor"
+        [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)" (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)" class="md-ckeditor"
         [placeholder]="placeHolder" [readonly]="isReadOnly" >
 
         <md-hint class="md-hint" *ngIf="!isReadOnly && _fControl.touched && _fControl.errors">

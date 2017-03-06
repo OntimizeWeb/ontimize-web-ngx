@@ -42,7 +42,9 @@ export const DEFAULT_INPUTS_O_HTML_INPUT = [
 ];
 
 export const DEFAULT_OUTPUTS_O_HTML_INPUT = [
-  'onChange'
+  'onChange',
+  'onFocus',
+  'onBlur'
 ];
 
 @Component({
@@ -77,6 +79,8 @@ export class OHTMLInputComponent implements IComponent, IFormControlComponent, I
   sqlType: string;
 
   onChange: EventEmitter<Object> = new EventEmitter<Object>();
+  onFocus: EventEmitter<Object> = new EventEmitter<Object>();
+  onBlur: EventEmitter<Object> = new EventEmitter<Object>();
 
   @ViewChild('ckEditor') ckEditor: CKEditor;
 
@@ -283,6 +287,18 @@ export class OHTMLInputComponent implements IComponent, IFormControlComponent, I
   innerOnChange(event: any) {
     this.setValue(event);
     this.onChange.emit(event);
+  }
+
+  innerOnFocus(event: any) {
+    if (!this.isReadOnly && !this.isDisabled) {
+      this.onFocus.emit(event);
+    }
+  }
+
+  innerOnBlur(event: any) {
+    if (!this.isReadOnly && !this.isDisabled) {
+      this.onBlur.emit(event);
+    }
   }
 
   get isValid() {

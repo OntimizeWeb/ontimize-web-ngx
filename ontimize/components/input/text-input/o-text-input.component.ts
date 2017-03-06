@@ -37,7 +37,9 @@ export const DEFAULT_INPUTS_O_TEXT_INPUT = [
 ];
 
 export const DEFAULT_OUTPUTS_O_TEXT_INPUT = [
-  'onChange'
+  'onChange',
+  'onFocus',
+  'onBlur'
 ];
 
 @Component({
@@ -63,6 +65,8 @@ export class OTextInputComponent extends OFormDataComponent implements OnInit {
   maxLength: number = -1;
 
   onChange: EventEmitter<Object> = new EventEmitter<Object>();
+  onFocus: EventEmitter<Object> = new EventEmitter<Object>();
+  onBlur: EventEmitter<Object> = new EventEmitter<Object>();
 
   @ViewChild('mdInputRef')
   protected mdInputRef: MdInput;
@@ -101,6 +105,18 @@ export class OTextInputComponent extends OFormDataComponent implements OnInit {
     }
     this.ensureOFormValue(event);
     this.onChange.emit(event);
+  }
+
+  innerOnFocus(event: any) {
+    if (!this.isReadOnly && !this.isDisabled) {
+      this.onFocus.emit(event);
+    }
+  }
+
+  innerOnBlur(event: any) {
+    if (!this.isReadOnly && !this.isDisabled) {
+      this.onBlur.emit(event);
+    }
   }
 
 }

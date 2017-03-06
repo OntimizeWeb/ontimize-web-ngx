@@ -334,6 +334,12 @@ export class ODateInputComponent extends OTextInputComponent implements OnInit {
     });
   }
 
+  onDisplayInputFocus(event: any) {
+    if (!this.isReadOnly && !this.isDisabled) {
+      this.onFocus.emit(event);
+    }
+  }
+
   onDisplayInputBlur() {
     if (!this.isReadOnly && !this.isDisabled) {
       let datepickerDate = this.inputHtmlEl.datepicker('getDate');
@@ -348,6 +354,7 @@ export class ODateInputComponent extends OTextInputComponent implements OnInit {
       this.displayInputModel.value = newDisplayValue;
 
       this._fControl.markAsTouched();
+      this.onBlur.emit(event);
     }
   }
 

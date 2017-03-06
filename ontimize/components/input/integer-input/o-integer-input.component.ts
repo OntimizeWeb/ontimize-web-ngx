@@ -13,7 +13,9 @@ import { OFormComponent } from '../../form/o-form.component';
 import { OFormValue } from '../../form/OFormValue';
 import { InputConverter } from '../../../decorators';
 import {
-  OTextInputModule, OTextInputComponent, DEFAULT_INPUTS_O_TEXT_INPUT,
+  OTextInputModule,
+  OTextInputComponent,
+  DEFAULT_INPUTS_O_TEXT_INPUT,
   DEFAULT_OUTPUTS_O_TEXT_INPUT
 } from '../text-input/o-text-input.component';
 
@@ -127,6 +129,9 @@ export class OIntegerInputComponent extends OTextInputComponent implements OnIni
       return;
     }
     this.setDOMValue(this.getValue());
+    if (!this.isReadOnly && !this.isDisabled) {
+      this.onFocus.emit(event);
+    }
   }
 
   innerOnBlur(event: any) {
@@ -139,6 +144,9 @@ export class OIntegerInputComponent extends OTextInputComponent implements OnIni
     let formControl = this.getControl();
     if (formControl) {
       formControl.updateValueAndValidity();
+    }
+    if (!this.isReadOnly && !this.isDisabled) {
+      this.onBlur.emit(event);
     }
   }
 

@@ -2,7 +2,7 @@
     [mdTooltip]="tooltip" [mdTooltipPosition]="tooltipPosition" [mdTooltipShowDelay]="tooltipShowDelay">
     <md-input-container #innerInputContainer flex layout-fill>
         <textarea md-input class="md-textarea" type="text" [attr.id]="oattr" [id]="oattr" layout-fill [formControlName]="oattr"
-            [placeholder]="placeHolder" [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)"
+            [placeholder]="placeHolder" [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)" (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)"
             [readonly]="isReadOnly" [o-disabled]="innerInputContainer"
             [class.no-resize]="!isResizable()" [rows]="rows" [cols]="columns">
             <md-hint *ngIf="!isReadOnly && _fControl.touched && _fControl.errors">
