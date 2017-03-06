@@ -56,7 +56,9 @@ export const DEFAULT_INPUTS_O_COMBO = [
   'queryOnBind: query-on-bind',
 
   // sqltype[string]: Data type according to Java standard. See SQLType class. Default: 'OTHER'
-  'sqlType: sql-type'
+  'sqlType: sql-type',
+
+  'serviceType : service-type'
 ];
 
 export const DEFAULT_OUTPUTS_O_COMBO = [

@@ -21,7 +21,7 @@ export class OFormServiceComponent extends OFormDataComponent {
   protected queryOnInit: boolean = true;
   @InputConverter()
   protected queryOnBind: boolean = false;
-
+  protected serviceType: string;
 
   /* Internal variables */
   protected dataArray: any[] = [];
@@ -34,7 +34,6 @@ export class OFormServiceComponent extends OFormDataComponent {
   protected _pKeysEquiv = {};
   protected _formDataSubcribe;
   protected _currentIndex;
-
 
   constructor(form: OFormComponent, elRef: ElementRef, injector: Injector) {
     super(form, elRef, injector);
@@ -89,17 +88,23 @@ export class OFormServiceComponent extends OFormDataComponent {
   }
 
   /* Utility methods */
-
-
   configureService() {
-    this.dataService = this.injector.get(OntimizeService);
+    let loadingService: any = OntimizeService;
+    if (this.serviceType) {
+      loadingService = this.serviceType;
+    }
+    try {
+      this.dataService = this.injector.get(loadingService);
 
-    if (Util.isDataService(this.dataService)) {
-      let serviceCfg = this.dataService.getDefaultServiceConfiguration(this.service);
-      if (this.entity) {
-        serviceCfg['entity'] = this.entity;
+      if (Util.isDataService(this.dataService)) {
+        let serviceCfg = this.dataService.getDefaultServiceConfiguration(this.service);
+        if (this.entity) {
+          serviceCfg['entity'] = this.entity;
+        }
+        this.dataService.configureService(serviceCfg);
       }
-      this.dataService.configureService(serviceCfg);
+    } catch (e) {
+      console.error(e);
     }
   }
 

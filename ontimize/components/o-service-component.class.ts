@@ -100,7 +100,9 @@ export const DEFAULT_INPUTS_O_SERVICE_COMPONENT = [
   'insertButton: insert-button',
 
   // row-height [small | medium | large]
-  'rowHeight : row-height'
+  'rowHeight : row-height',
+
+  'serviceType : service-type'
 ];
 
 export class OServiceComponent implements ILocalStorageComponent {
@@ -168,6 +170,7 @@ export class OServiceComponent implements ILocalStorageComponent {
   @InputConverter()
   insertButton: boolean;
   rowHeight: string;
+  protected serviceType: string;
   /* end of inputs variables */
 
   /*parsed inputs variables */
@@ -328,14 +331,21 @@ export class OServiceComponent implements ILocalStorageComponent {
   }
 
   configureService() {
-    this.dataService = this.injector.get(OntimizeService);
-
-    if (Util.isDataService(this.dataService)) {
-      let serviceCfg = this.dataService.getDefaultServiceConfiguration(this.service);
-      if (this.entity) {
-        serviceCfg['entity'] = this.entity;
+    let loadingService: any = OntimizeService;
+    if (this.serviceType) {
+      loadingService = this.serviceType;
+    }
+    try {
+      this.dataService = this.injector.get(loadingService);
+      if (Util.isDataService(this.dataService)) {
+        let serviceCfg = this.dataService.getDefaultServiceConfiguration(this.service);
+        if (this.entity) {
+          serviceCfg['entity'] = this.entity;
+        }
+        this.dataService.configureService(serviceCfg);
       }
-      this.dataService.configureService(serviceCfg);
+    } catch (e) {
+      console.error(e);
     }
   }
 
