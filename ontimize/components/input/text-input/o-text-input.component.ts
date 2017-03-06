@@ -1,11 +1,13 @@
-import {Component, Inject, Injector, forwardRef, ElementRef, OnInit, EventEmitter,
+import {
+  Component, Inject, Injector, forwardRef, ElementRef, OnInit, EventEmitter,
   NgZone, ChangeDetectorRef,
   NgModule,
   ModuleWithProviders,
-  ViewEncapsulation} from '@angular/core';
-import {CommonModule } from '@angular/common';
-import {FormsModule, ReactiveFormsModule, FormControl, Validators } from '@angular/forms';
-import {ValidatorFn } from '@angular/forms/src/directives/validators';
+  ViewEncapsulation
+} from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule, FormControl, Validators } from '@angular/forms';
+import { ValidatorFn } from '@angular/forms/src/directives/validators';
 
 import { MdInputModule } from '@angular/material';
 
@@ -14,12 +16,12 @@ import {
   IFormDataComponent
 } from '../../../interfaces';
 import { OSharedModule } from '../../../shared.module';
-import {InputConverter} from '../../../decorators';
-import {OFormComponent, Mode} from '../../form/o-form.component';
-import {OFormValue} from '../../form/OFormValue';
-import {OTranslateService} from '../../../services';
-import {SQLTypes} from '../../../utils';
-import {OTranslateModule} from '../../../pipes/o-translate.pipe';
+import { InputConverter } from '../../../decorators';
+import { OFormComponent, Mode } from '../../form/o-form.component';
+import { OFormValue } from '../../form/OFormValue';
+import { OTranslateService } from '../../../services';
+import { SQLTypes } from '../../../utils';
+import { OTranslateModule } from '../../../pipes/o-translate.pipe';
 
 export const DEFAULT_INPUTS_O_TEXT_INPUT = [
   'oattr: attr',
@@ -36,7 +38,9 @@ export const DEFAULT_INPUTS_O_TEXT_INPUT = [
 ];
 
 export const DEFAULT_OUTPUTS_O_TEXT_INPUT = [
-  'onChange'
+  'onChange',
+  'onFocus',
+  'onBlur'
 ];
 
 @Component({
@@ -71,6 +75,8 @@ export class OTextInputComponent implements IFormComponent, IFormControlComponen
   sqlType: string;
 
   onChange: EventEmitter<Object> = new EventEmitter<Object>();
+  onFocus: EventEmitter<Object> = new EventEmitter<Object>();
+  onBlur: EventEmitter<Object> = new EventEmitter<Object>();
 
   protected value: OFormValue;
   protected translateService: OTranslateService;
@@ -108,7 +114,7 @@ export class OTextInputComponent implements IFormComponent, IFormControlComponen
   ensureOFormValue(value: any) {
     if (value instanceof OFormValue) {
       this.value = new OFormValue(value.value);
-    } else if ( value && !(value instanceof OFormValue)) {
+    } else if (value && !(value instanceof OFormValue)) {
       this.value = new OFormValue(value);
     } else {
       this.value = new OFormValue(undefined);
@@ -116,7 +122,7 @@ export class OTextInputComponent implements IFormComponent, IFormControlComponen
   }
 
   ngOnDestroy() {
-     if (this.form) {
+    if (this.form) {
       this.form.unregisterFormComponent(this);
       this.form.unregisterFormControlComponent(this);
       this.form.unregisterSQLTypeFormComponent(this);
@@ -173,7 +179,7 @@ export class OTextInputComponent implements IFormComponent, IFormControlComponen
     return this.autoBinding;
   }
 
-  getValue() : any {
+  getValue(): any {
     if (this.value instanceof OFormValue) {
       if (this.value.value) {
         return this.value.value;
@@ -231,6 +237,18 @@ export class OTextInputComponent implements IFormComponent, IFormControlComponen
     }
     this.ensureOFormValue(event);
     this.onChange.emit(event);
+  }
+
+  innerOnFocus(event: any) {
+    if (!this.isReadOnly && !this.isDisabled) {
+      this.onFocus.emit(event);
+    }
+  }
+
+  innerOnBlur(event: any) {
+    if (!this.isReadOnly && !this.isDisabled) {
+      this.onBlur.emit(event);
+    }
   }
 
   get isValid() {
