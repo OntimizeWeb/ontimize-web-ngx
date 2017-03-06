@@ -15,7 +15,10 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_ACTION = [
   'renderType: render-type',
 
   // render-value [string]: value to render. Default: it depends of render-type.
-  'renderValue: render-value'
+  'renderValue: render-value',
+
+  // action-title[string]: title for action cell
+  'actionTitle : action-title'
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE_CELL_RENDERER_ACTION = [
@@ -56,6 +59,7 @@ export class OTableCellRendererActionComponent implements OnInit, ITableCellRend
   protected editionMode: string;
   protected renderType: string;
   protected renderValue: string;
+  protected actionTitle: string;
   onClick: EventEmitter<Object> = new EventEmitter<Object>();
 
   constructor( @Inject(forwardRef(() => OTableColumnComponent)) tableColumn: OTableColumnComponent,
@@ -97,7 +101,11 @@ export class OTableCellRendererActionComponent implements OnInit, ITableCellRend
   }
 
   public render(cellData: any, rowData: any): string {
-    let actionTranslated = (typeof (this.action) !== 'undefined') ? this.translateService.get(this.action.toUpperCase()) : '';
+    let actionTitleKey = this.actionTitle;
+    if (!this.actionTitle && (typeof (this.action) !== 'undefined')) {
+      actionTitleKey = this.action.toUpperCase();
+    }
+    let actionTranslated = (typeof (actionTitleKey) !== 'undefined') ? this.translateService.get(actionTitleKey) : '';
     let result = '<div class="o-table-row-action" title="' + actionTranslated + '">';
     switch (this.renderType) {
       case 'string':
