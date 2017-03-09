@@ -383,10 +383,6 @@ export class OListComponent extends OServiceComponent implements OnInit, IList, 
     }
   }
 
-  getSelectedItems(): any[] {
-    return this.selectedItems;
-  }
-
   isItemSelected(item) {
     let result = this.selectedItems.find(current => {
       let itemKeys = Object.keys(item);

@@ -232,6 +232,10 @@ export class OServiceComponent implements ILocalStorageComponent {
     }
   }
 
+  getSelectedItems(): any[] {
+    return this.selectedItems;
+  }
+
   getComponentKey(): string {
     return this.oattr;
   }
