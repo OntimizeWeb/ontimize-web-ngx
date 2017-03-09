@@ -63,7 +63,9 @@ export const DEFAULT_INPUTS_O_FORM = [
 
   'serviceType : service-type',
 
-  'queryOnInit : query-on-init'
+  'queryOnInit : query-on-init',
+
+  'parentKeys: parent-keys'
 ];
 
 export const DEFAULT_OUTPUTS_O_FORM = [
@@ -120,12 +122,13 @@ export class OFormComponent implements OnInit, OnDestroy {
   serviceType: string;
   @InputConverter()
   protected queryOnInit: boolean = true;
-
+  protected parentKeys: string;
 
   isDetailForm: boolean = false;
   keysArray: string[] = [];
   colsArray: string[] = [];
   dataService: any;
+  _pKeysEquiv = {};
 
   formGroup: FormGroup;
   onFormDataLoaded: EventEmitter<Object> = new EventEmitter<Object>();
@@ -406,6 +409,8 @@ export class OFormComponent implements OnInit, OnDestroy {
     }
     this.keysArray = Util.parseArray(this.keys);
     this.colsArray = Util.parseArray(this.columns);
+    let pkArray = Util.parseArray(this.parentKeys);
+    this._pKeysEquiv = Util.parseParentKeysEquivalences(pkArray);
 
     this.configureService();
 
@@ -636,7 +641,16 @@ export class OFormComponent implements OnInit, OnDestroy {
 
     let extras = {};
     if (nestedLevel || (urlArray.length > 1 && this.isDetailForm)) {
-      extras['queryParams'] = { 'isdetail': 'true' };
+      extras['queryParams'] = Object.assign({}, this.queryParams, { 'isdetail': 'true' });
+    }
+    let actRoute = this.actRoute;
+    let i = 0;
+    while (actRoute.parent) {
+      actRoute = actRoute.parent;
+      i++;
+    }
+    if (i > 2) {
+      extras['relativeTo'] = this.actRoute.parent;
     }
     this.router.navigate([urlText], extras)
       .catch(err => {
@@ -680,9 +694,7 @@ export class OFormComponent implements OnInit, OnDestroy {
       });
     }
 
-    let extras = {
-      'queryParams': { 'isdetail': 'true' }
-    };
+    let extras = Object.assign({}, this.queryParams, { 'isdetail': 'true' });
 
     this.router.navigate([urlText], extras)
       .catch(err => {
@@ -763,6 +775,7 @@ export class OFormComponent implements OnInit, OnDestroy {
     if (this.isDetailForm) {
       extras['queryParams'] = { 'isdetail': 'true' };
     }
+    extras['queryParams'] = Object.assign({}, this.queryParams, extras['queryParams'] || {});
     this.router.navigate(['../', url, 'edit'], extras)
       .catch(err => {
         console.error(err.message);
@@ -1035,6 +1048,7 @@ export class OFormComponent implements OnInit, OnDestroy {
 
   protected getCurrentKeysValues() {
     let filter = {};
+
     if (this.urlParams && this.keysArray) {
       this.keysArray.map(key => {
         if (this.urlParams[key]) {
@@ -1042,6 +1056,16 @@ export class OFormComponent implements OnInit, OnDestroy {
         }
       });
     };
+
+    let keys = Object.keys(this._pKeysEquiv);
+    if (this.urlParams && keys && keys.length > 0) {
+      keys.forEach(item => {
+        let urlVal = this.urlParams[this._pKeysEquiv[item]];
+        if (urlVal) {
+          filter[item] = urlVal;
+        }
+      });
+    }
     return filter;
   }
 
