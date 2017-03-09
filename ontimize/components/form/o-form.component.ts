@@ -2,7 +2,7 @@ import {
   Component, OnInit, OnDestroy, EventEmitter,
   Injector, NgZone, ChangeDetectorRef,
   NgModule, ModuleWithProviders, HostListener,
-  ViewEncapsulation
+  ViewEncapsulation, ElementRef
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -184,7 +184,8 @@ export class OFormComponent implements OnInit, OnDestroy {
     protected actRoute: ActivatedRoute,
     protected zone: NgZone,
     protected cd: ChangeDetectorRef,
-    protected injector: Injector) {
+    protected injector: Injector,
+    protected elRef: ElementRef) {
 
     this.dialogService = injector.get(DialogService);
     this.navigationService = injector.get(NavigationService);
@@ -203,6 +204,8 @@ export class OFormComponent implements OnInit, OnDestroy {
           }
         }
       });
+
+    this.elRef.nativeElement.classList.add('o-form');
   }
 
   registerFormComponent(comp: any) {
