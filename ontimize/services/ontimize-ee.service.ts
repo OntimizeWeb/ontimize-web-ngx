@@ -26,6 +26,7 @@ export class OntimizeEEService implements IAuthService, IDataService {
   protected _sessionid: string;
   protected _urlBase: string;
   protected _appConfig: Config;
+  protected _startSessionPath: string;
 
 
   constructor(protected injector: Injector) {
@@ -50,6 +51,7 @@ export class OntimizeEEService implements IAuthService, IDataService {
     this._urlBase = config.urlBase ? config.urlBase : this._appConfig['apiEndpoint'];
     this._sessionid = config.session ? config.session.id : -1;
     this.path = config.path;
+    this._startSessionPath = this._appConfig['startSessionPath'] ? this._appConfig['startSessionPath'] : '/users/login';
     //TODO init other params
   }
 
@@ -63,7 +65,7 @@ export class OntimizeEEService implements IAuthService, IDataService {
 
   public startsession(user: string, password: string) {
 
-    var url = this.urlBase + '/users/login';
+    var url = this.urlBase + this._startSessionPath;
 
     var headers: Headers = new Headers();
     let authorization = 'Basic ' + btoa(user + ':' + password);
