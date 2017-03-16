@@ -1178,7 +1178,7 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
       }
     });
 
-    this.table.off('order.dt').on('order.dt', () => {
+    this.table.on('order.dt', () => {
       let order = this.table.order();
       if ((this.groupColumnIndex !== -1) && (order[0][0] !== this.groupColumnIndex)) {
         order.unshift([this.groupColumnIndex, this.groupColumnOrder]);
