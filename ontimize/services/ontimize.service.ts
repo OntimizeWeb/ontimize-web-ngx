@@ -28,7 +28,7 @@ export class OntimizeService implements IAuthService, IDataService {
   protected _user: string;
   protected _urlBase: string;
   protected _appConfig: Config;
-
+  protected _startSessionPath: string;
 
   constructor(protected injector: Injector) {
 
@@ -53,6 +53,7 @@ export class OntimizeService implements IAuthService, IDataService {
     this._urlBase = config.urlBase ? config.urlBase : this._appConfig['apiEndpoint'];
     this._sessionid = config.session ? config.session.id : -1;
     this._user = config.session ? config.session.user : '';
+    this._startSessionPath = this._appConfig['startSessionPath'] ? this._appConfig['startSessionPath'] : '/startsession';
 
     if (config.entity !== undefined) {
       this.entity = config.entity;
@@ -70,8 +71,7 @@ export class OntimizeService implements IAuthService, IDataService {
 
   public startsession(user: string, password: string): Observable<any> {
 
-
-    var url = this._urlBase + '/startsession?user=' + user + '&password=' + password;
+    var url = this._urlBase + this._startSessionPath + '?user=' + user + '&password=' + password;
 
     /* TODO
      var headers: Headers = new Headers();

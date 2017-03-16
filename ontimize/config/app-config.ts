@@ -1,4 +1,4 @@
-import {OpaqueToken} from '@angular/core';
+import { OpaqueToken } from '@angular/core';
 
 const isObject = val => typeof val === 'object';
 const isArray = Array.isArray;
@@ -15,6 +15,9 @@ export const APP_CONFIG = new OpaqueToken('app.config');
 export interface Config {
   // apiEndpoint [string]: The base path of the URL used by app services.
   apiEndpoint?: string;
+
+  // startSessionPath [string]: The path of the URL to startsession method.
+  startSessionPath?: string;
 
   // uuid [string]: Application identifier. Is the unique package identifier of the app. It is used when storing or managing temporal data related with the app. By default is set as 'ontimize-web-uuid'./
   uuid: string;
@@ -44,12 +47,12 @@ export interface Config {
 export class AppConfig {
   private _config: any;
 
- constructor(config?) {
+  constructor(config?) {
     this._config = config && isObject(config) && !isArray(config) ? config : {};
   }
 
- public getConfiguration() : Config {
-   return Object.assign(DEFAULT_CONFIG, this._config);
+  public getConfiguration(): Config {
+    return Object.assign(DEFAULT_CONFIG, this._config);
   }
 }
 
