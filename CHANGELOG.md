@@ -1,4 +1,4 @@
-## 1.2.0
+## 1.2.0 (2017-03-16)
 
 ### Features
 * **o-list**: adding remote pagination ([#40](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/40)) ([8fbbb73](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/8fbbb73))
@@ -28,6 +28,8 @@
 * **o-table**: adding *'selectRowsByData'* and *'setSelectAllCheckboxValue'* methods.
 * **configuration** : adding *'startSessionPath'* property.
 * **o-form** : adding *'query-method'*, *'delete-method'*, *'update-method'* and *'insert-method'* attributes.
+* **o-table-column** : adding *'getRowData'* method.
+* **o-table** : adding *'getRowDataFromColumn'* method.
 
 ### PEER-DEPENDENCY UPDATES ###
 * **Updated**:   @angular/material@2.0.0-beta.1
@@ -54,6 +56,9 @@
 * **o-html-input**: Fixing component bugs ([#32](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/32)) ([3d2d121](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/3d2d121))
 * **o-table**: Fixing options documents generation bugs.
 * **o-table-column**: Fixing bugs in width attribute ([#53](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/53)) ([2bedc7e](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/2bedc7e))
+* **o-table**: fixing selection bugs ([#51](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/51)) ([d617194](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/d617194))
+
+* **o-form**: Fixing routing bugs.
 
 ## 1.1.1 (2017-01-11)
 
