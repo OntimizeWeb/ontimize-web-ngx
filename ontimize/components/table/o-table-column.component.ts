@@ -114,6 +114,9 @@ export class OTableColumnComponent implements OnInit {
   public generatedAttr: string;
   public width: string;
 
+  public cellData: any;
+  public cellElement: any;
+
   constructor( @Inject(forwardRef(() => OTableComponent)) table: OTableComponent,
     protected injector: Injector) {
     this.table = table;
@@ -276,10 +279,12 @@ export class OTableColumnComponent implements OnInit {
   }
 
   public render(cellData: any, rowData: any) {
+    this.cellData = cellData;
     return this.renderer.render(cellData, rowData);
   }
 
   public handleCreatedCell(cellElement: any, rowData: any) {
+    this.cellElement = cellElement;
     this.renderer.handleCreatedCell(cellElement, rowData);
   }
 
@@ -314,6 +319,13 @@ export class OTableColumnComponent implements OnInit {
 
   public getRowEditorsAttrValues(cellElement: any) {
     return this.table.getRowEditorsAttrValues(cellElement);
+  }
+
+  public getRowData() {
+    if (!this.table || !this.cellElement) {
+      return undefined;
+    }
+    return this.table.getRowDataFromColumn(this);
   }
 
 }

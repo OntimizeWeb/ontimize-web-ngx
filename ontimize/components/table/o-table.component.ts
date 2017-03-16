@@ -371,6 +371,7 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
   protected pendingQueryFilter = undefined;
 
   public onRowSelected: EventEmitter<any> = new EventEmitter();
+  public onRowDeselected: EventEmitter<any> = new EventEmitter();
   public onRowDeleted: EventEmitter<any> = new EventEmitter();
   public onClick: EventEmitter<any> = new EventEmitter();
   public onDoubleClick: EventEmitter<any> = new EventEmitter();
@@ -385,6 +386,8 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
 
   @ViewChild(MdMenuTrigger) menuTrigger: MdMenuTrigger;
   private columnWidthHandlerInterval: any;
+
+  private isProgrammaticChange: boolean = false;
 
   constructor(
     protected _router: Router,
@@ -617,6 +620,10 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     this.initTableOnInit();
+  }
+
+  getSelectedItems(): any[] {
+    return this.selectedItems;
   }
 
   configureService() {
@@ -1512,7 +1519,9 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
         }
       }
       this.updateDeleteButtonState();
-      ObservableWrapper.callEmit(this.onRowSelected, selection);
+      if (!this.isProgrammaticChange) {
+        ObservableWrapper.callEmit(this.onRowSelected, selection);
+      }
     }
   }
 
@@ -1550,7 +1559,9 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
       }
     }
     this.updateDeleteButtonState();
-    ObservableWrapper.callEmit(this.onRowDeleted, selection);
+    if (!this.isProgrammaticChange) {
+      ObservableWrapper.callEmit(this.onRowDeselected, selection);
+    }
   }
 
   protected getRouteOfSelectedRow(item: any, modeRoute: any) {
@@ -1604,23 +1615,72 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   protected handleSelectAllClick(event: any) {
-    let headerCheckboxCol = this.tableHtmlEl.find('th.o-table-column-select-checkbox') as any;
-    let wasIndeterminate = headerCheckboxCol.hasClass('md-checkbox-indeterminate');
+    this.setSelectAllCheckboxValue(event.target.checked);
+  }
 
-    headerCheckboxCol.attr('class', 'o-table-column-select-checkbox');
-    if (event.target.checked) {
-      headerCheckboxCol.addClass('md-checkbox-checked md-checkbox-anim-unchecked-checked');
-    } else if (wasIndeterminate) {
-      headerCheckboxCol.addClass('md-checkbox-anim-indeterminate-unchecked');
-    } else {
-      headerCheckboxCol.addClass('md-checkbox-anim-checked-unchecked');
+  public setSelectAllCheckboxValue(val: boolean) {
+    if (this.selectAllCheckbox) {
+      let headerCheckboxCol = this.tableHtmlEl.find('th.o-table-column-select-checkbox') as any;
+      let wasIndeterminate = headerCheckboxCol.hasClass('md-checkbox-indeterminate');
+
+      headerCheckboxCol.attr('class', 'o-table-column-select-checkbox');
+      if (val) {
+        headerCheckboxCol.addClass('md-checkbox-checked md-checkbox-anim-unchecked-checked');
+      } else if (wasIndeterminate) {
+        headerCheckboxCol.addClass('md-checkbox-anim-indeterminate-unchecked');
+      } else {
+        headerCheckboxCol.addClass('md-checkbox-anim-checked-unchecked');
+      }
+      var self = this;
+      this.table.rows({ filter: 'applied' }).every(function (el) {
+        let checkboxEl = self.table.row(el).node().querySelector('input[type="checkbox"].select-row');
+        checkboxEl.checked = val;
+        ($(checkboxEl) as any).change();
+      });
     }
-    var self = this;
-    this.table.rows({ filter: 'applied' }).every(function (el) {
-      let checkboxEl = self.table.row(el).node().querySelector('input[type="checkbox"].select-row');
-      checkboxEl.checked = event.target.checked;
-      ($(checkboxEl) as any).change();
-    });
+  }
+
+  public selectRowsByData(data: Array<any>, value: boolean = true) {
+    this.isProgrammaticChange = true;
+    let rowsSelectors = [];
+    for (var i = 0; i < data.length; i++) {
+      let current = data[i];
+      let currentSelector = {};
+      this.dataKeys.forEach(key => currentSelector[key] = current[key]);
+      rowsSelectors.push(currentSelector);
+    }
+    if (this.table && rowsSelectors.length) {
+      var self = this;
+      let alterRowIndexes = [];
+      this.table.rows({ filter: 'applied' }).eq(0).each(function (index) {
+        var row = self.table.row(index);
+        var rowData = row.data();
+        rowsSelectors.forEach(selectorObj => {
+          let props = Object.keys(selectorObj);
+          let alterRow = true;
+          for (var i = 0; i < props.length; i++) {
+            alterRow = alterRow && (selectorObj[props[i]] === rowData[props[i]]);
+          }
+          if (alterRow && self.selectAllCheckbox) {
+            let checkboxEl = row.node().querySelector('input[type="checkbox"].select-row');
+            if (checkboxEl) {
+              checkboxEl.checked = value;
+              ($(checkboxEl) as any).change();
+            }
+          } else if (alterRow) {
+            alterRowIndexes.push(index);
+          }
+        });
+      });
+      if (!this.selectAllCheckbox && alterRowIndexes.length) {
+        if (value) {
+          this.table.rows(alterRowIndexes).select();
+        } else {
+          this.table.rows(alterRowIndexes).deselect();
+        }
+      }
+    }
+    this.isProgrammaticChange = false;
   }
 
   protected handleRowCheckboxChange(event: any) {
@@ -1649,6 +1709,11 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
       }
     }
     this.updateDeleteButtonState();
+    if (!this.isProgrammaticChange && event.target.checked) {
+      ObservableWrapper.callEmit(this.onRowSelected, rowData);
+    } else if (!this.isProgrammaticChange) {
+      ObservableWrapper.callEmit(this.onRowDeselected, rowData);
+    }
   }
 
   protected handleClick(event: any) {
@@ -2120,6 +2185,7 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
               observable.subscribe(
                 res => {
                   console.log('[OTable.remove]: response', res);
+                  ObservableWrapper.callEmit(this.onRowDeleted, this.selectedItems);
                 },
                 error => {
                   console.log('[OTable.remove]: error', error);
@@ -2170,6 +2236,7 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
               if (emptyRow.length > 0) {
                 emptyRow.parent().addClass('empty');
               }
+              ObservableWrapper.callEmit(this.onRowDeleted, this.selectedItems);
             }
 
           } else if (clearSelectedItems) {
@@ -2551,6 +2618,12 @@ export class OTableComponent implements OnInit, OnDestroy, OnChanges {
       }
     }
     return rowData;
+  }
+
+  public getRowDataFromColumn(tableColumn : OTableColumnComponent) {
+    if (tableColumn && tableColumn.cellElement) {
+      return this.table.row(tableColumn.cellElement).data();
+    }
   }
 
   public registerHeaderButton(button: OTableButtonComponent) {
