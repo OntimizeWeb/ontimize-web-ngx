@@ -25,7 +25,9 @@
 * **service components**: adding *'service-type'* attribute to configurable service components for setting a custom service.
 * **o-table-cell-renderer-action**: adding *'action-title'* attribute ([#58](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/58)) ([c9fc19a](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/c9fc19a))
 * **input components**: adding *'onFocus'* and *'onBlur'* outputs ([#56](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/56)) ([978fdaf](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/978fdaf)).
-
+* **o-table**: adding *'selectRowsByData'* and *'setSelectAllCheckboxValue'* methods.
+* **configuration** : adding *'startSessionPath'* property.
+* **o-form** : adding *'query-method'*, *'delete-method'*, *'update-method'* and *'insert-method'* attributes.
 
 ### PEER-DEPENDENCY UPDATES ###
 * **Updated**:   @angular/material@2.0.0-beta.1
