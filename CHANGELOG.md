@@ -1,3 +1,20 @@
+## 1.1.1 (2017-03-16)
+
+### Features
+* **o-table-cell-renderer-action**: adding *'action-title'* attribute ([#58](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/58)) ([0aa7207](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/0aa7207))
+* **input components**: adding *'onFocus'* and *'onBlur'* outputs ([#56](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/56)) ([e557575](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/e557575)).
+* **o-table-cell-renderer-action**: adding default width if *'render-type'* is *'icon'* ([#53](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/53)) ([e45cf53](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/e45cf53))
+* **o-table-cell-renderer-action**: adding *'onClick'* output ([#54](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/54)) ([ea81be1](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/ea81be1))
+* **o-table**: adding *'pagination-controls'* attribute ([#44](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/44)) ([ba7b6b4](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/ba7b6b4))
+* **o-table-column**: adding *'width'* attribute ([#48](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/48)) ([3b32e28](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/3b32e28))
+
+
+### BREAKING CHANGES
+
+### Bug Fixes
+* **o-table**: fixing selection bugs ([#51](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/51)) ([0f4a85d](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/0f4a85d))
+* **o-table-column**: Fixing bugs in width attribute ([#53](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/53)) ([e45cf53](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/e45cf53))
+
 ## 1.1.1 (2017-01-11)
 
 ### Features
