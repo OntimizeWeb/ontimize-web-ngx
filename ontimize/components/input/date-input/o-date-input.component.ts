@@ -1,20 +1,24 @@
-import {Component, Inject, Injector, forwardRef, ElementRef, ViewChild, OnInit,
+import {
+  Component, Inject, Injector, forwardRef, ElementRef, ViewChild, OnInit,
   NgZone, ChangeDetectorRef,
   NgModule,
   ModuleWithProviders,
-  ViewEncapsulation} from '@angular/core';
+  ViewEncapsulation
+} from '@angular/core';
 
-import {MdInput} from '@angular/material';
+import { MdInput } from '@angular/material';
 
-import {ValidatorFn } from '@angular/forms/src/directives/validators';
+import { ValidatorFn } from '@angular/forms/src/directives/validators';
 
-import {OFormComponent} from '../../form/o-form.component';
-import {OTextInputModule, OTextInputComponent, DEFAULT_INPUTS_O_TEXT_INPUT,
-  DEFAULT_OUTPUTS_O_TEXT_INPUT} from '../text-input/o-text-input.component';
+import { OFormComponent } from '../../form/o-form.component';
+import {
+  OTextInputModule, OTextInputComponent, DEFAULT_INPUTS_O_TEXT_INPUT,
+  DEFAULT_OUTPUTS_O_TEXT_INPUT
+} from '../text-input/o-text-input.component';
 
-import {OFormValue} from '../../form/OFormValue';
-import {SQLTypes} from '../../../util/sqltypes';
-import {MomentService} from '../../../services';
+import { OFormValue } from '../../form/OFormValue';
+import { SQLTypes } from '../../../util/sqltypes';
+import { MomentService } from '../../../services';
 import * as moment from 'moment';
 
 import './o-date-input.loader';
@@ -335,7 +339,13 @@ export class ODateInputComponent extends OTextInputComponent implements OnInit {
     });
   }
 
-  onDisplayInputBlur() {
+  onDisplayInputFocus(event: any) {
+    if (!this.isReadOnly && !this.isDisabled) {
+      this.onFocus.emit(event);
+    }
+  }
+
+  onDisplayInputBlur(event: any) {
     if (!this.isReadOnly && !this.isDisabled) {
       let datepickerDate = this.inputHtmlEl.datepicker('getDate');
       let newTimestamp = undefined;
@@ -349,6 +359,7 @@ export class ODateInputComponent extends OTextInputComponent implements OnInit {
       this.displayInputModel.value = newDisplayValue;
 
       this._fControl.markAsTouched();
+      this.onBlur.emit(event);
     }
   }
 
@@ -389,7 +400,7 @@ export class ODateInputComponent extends OTextInputComponent implements OnInit {
     if (timestampValue) {
       return timestampValue;
     }
-    return '';
+    return undefined;
   }
 
   setValue(val: any) {

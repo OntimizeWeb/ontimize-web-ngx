@@ -48,8 +48,9 @@ export const DEFAULT_INPUTS_O_TABLE_COLUMN = [
   'dateModelType: date-model-type',
 
   // date-model-format [string]: if date model type is string, its date model format should be defined. Default: ISO date.
-  'dateModelFormat: date-model-format'
+  'dateModelFormat: date-model-format',
 
+  'width'
 ];
 
 @Component({
@@ -109,6 +110,12 @@ export class OTableColumnComponent implements OnInit {
   protected action: string;
   protected renderType: string;
   protected renderValue: string;
+
+  public generatedAttr: string;
+  public width: string;
+
+  public cellData: any;
+  public cellElement: any;
 
   constructor( @Inject(forwardRef(() => OTableComponent)) table: OTableComponent,
     protected injector: Injector) {
@@ -239,7 +246,28 @@ export class OTableColumnComponent implements OnInit {
           break;
       }
     }
+    if (this.attr === undefined) {
+      let columnIndex = this.table.getColumsNumber();
+      this.generatedAttr = 'o-table-column-' + columnIndex;
+    }
+    if (this.width && this.width.length && this.width.endsWith('px')) {
+      // using width -= 24 because padding-left and right is 24
+      let newWidth = (parseInt(this.width) - 24);
+      if (newWidth <= 0) {
+        newWidth = 1;
+      }
+      this.width = newWidth + 'px';
+    }
     this.table.registerColumn(this);
+  }
+
+  public setWidth(value) {
+    this.width = value;
+    this.table.setInitialColumnWidth(this);
+  }
+
+  public getColumnName() {
+    return this.attr || this.generatedAttr;
   }
 
   public registerRenderer(renderer: ITableCellRenderer) {
@@ -251,10 +279,12 @@ export class OTableColumnComponent implements OnInit {
   }
 
   public render(cellData: any, rowData: any) {
+    this.cellData = cellData;
     return this.renderer.render(cellData, rowData);
   }
 
   public handleCreatedCell(cellElement: any, rowData: any) {
+    this.cellElement = cellElement;
     this.renderer.handleCreatedCell(cellElement, rowData);
   }
 
@@ -289,6 +319,13 @@ export class OTableColumnComponent implements OnInit {
 
   public getRowEditorsAttrValues(cellElement: any) {
     return this.table.getRowEditorsAttrValues(cellElement);
+  }
+
+  public getRowData() {
+    if (!this.table || !this.cellElement) {
+      return undefined;
+    }
+    return this.table.getRowDataFromColumn(this);
   }
 
 }

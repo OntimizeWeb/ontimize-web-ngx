@@ -13,9 +13,11 @@ import {
   QueryList,
   NgModule,
   ModuleWithProviders,
-  ViewEncapsulation
+  ViewEncapsulation,
+  Optional,
+  Inject
 } from '@angular/core';
-import {CommonModule} from '@angular/common';
+import { CommonModule } from '@angular/common';
 import {
   NG_VALUE_ACCESSOR,
   ControlValueAccessor
@@ -26,14 +28,14 @@ import {
   MdPlaceholder,
   MdHint
 } from '@angular/material';
-import {Observable} from 'rxjs/Observable';
+import { Observable } from 'rxjs/Observable';
 
-import {InputConverter} from '../../../decorators';
-
+import { InputConverter } from '../../../decorators';
+import { OHTMLInputComponent } from '../../input/html-input/o-html-input.component';
 
 const noop = () => {
   //nothing to do
- };
+};
 
 // Control Value accessor provider
 const CKEDITOR_CONTROL_VALUE_ACCESSOR: any = {
@@ -105,6 +107,8 @@ export class CKEditor implements ControlValueAccessor {
   @ViewChild('host') host;
   instance;
   debounceTimeout;
+  setInstanceDataTimeout;
+  setReadOnlyStateTimeout;
   elementRef;
   zone;
 
@@ -116,7 +120,7 @@ export class CKEditor implements ControlValueAccessor {
   private _focusEmitter: EventEmitter<FocusEvent> = new EventEmitter<FocusEvent>();
   private _changeEmitter: EventEmitter<any> = new EventEmitter<any>();
 
-      /** Callback registered via registerOnTouched (ControlValueAccessor) */
+  /** Callback registered via registerOnTouched (ControlValueAccessor) */
   private _onTouchedCallback: () => void = noop;
 
   /** Callback registered via registerOnChange (ControlValueAccessor) */
@@ -126,7 +130,11 @@ export class CKEditor implements ControlValueAccessor {
   /**
    * Constructor
    */
-  constructor(elementRef: ElementRef, zone: NgZone) {
+  constructor(
+    elementRef: ElementRef,
+    zone: NgZone,
+    @Optional() @Inject(forwardRef(() => OHTMLInputComponent)) protected htmlInputComponent: OHTMLInputComponent
+  ) {
     this.elementRef = elementRef;
     this.zone = zone;
   }
@@ -152,8 +160,12 @@ export class CKEditor implements ControlValueAccessor {
 
   public destroyCKEditor() {
     if (this.instance) {
-      this.instance.removeAllListeners();
-      this.instance.destroy();
+      // workaround for deleting dom element
+      let editorDom = document.getElementsByClassName(this.instance.id)[0];
+      this.instance.destroy(true);
+      if (editorDom) {
+        editorDom.remove();
+      }
       this.instance = null;
     }
   }
@@ -162,9 +174,15 @@ export class CKEditor implements ControlValueAccessor {
    * On component view init
    */
   ngAfterViewInit() {
-    // Configuration
-    var config = this.config || {};
-    this.ckeditorInit(config);
+    this.initializeCkEditor();
+  }
+
+  initializeCkEditor(value?) {
+    if (this.htmlInputComponent.isLoaded()) {
+      // Configuration
+      var config = this.config || {};
+      this.ckeditorInit(config, value);
+    }
   }
 
   /**
@@ -184,7 +202,7 @@ export class CKEditor implements ControlValueAccessor {
   /**
    * CKEditor init
    */
-  ckeditorInit(config) {
+  ckeditorInit(config, value?) {
     if (!window['CKEDITOR']) {
       console.error('Please include CKEditor in your page');
       return;
@@ -192,16 +210,19 @@ export class CKEditor implements ControlValueAccessor {
 
     // CKEditor replace textarea
     this.instance = window['CKEDITOR'].replace(this.host.nativeElement, config);
+    var self = this;
+    this.instance.once('instanceReady', function () {
+      // Set initial value
+      self.setInstanceData(value || '');
 
-    // Set initial value
-    // this.instance.setData(this._value);
-    this.setInstanceData('');
+      // ensuring readOnly state
+      self.setReadOnlyState(self._isReadOnly);
 
-    // CKEditor events
-    this.instance.on('change', (evt:any) => this._handleChange(evt));
-    this.instance.on('blur', (evt:any) => this._handleBlur(evt));
-    this.instance.on('focus', (evt:any) => this._handleFocus(evt));
-
+      // CKEditor events
+      self.instance.on('change', (evt: any) => self._handleChange(evt));
+      self.instance.on('blur', (evt: any) => self._handleBlur(evt));
+      self.instance.on('focus', (evt: any) => self._handleFocus(evt));
+    });
   }
 
   /**
@@ -210,14 +231,14 @@ export class CKEditor implements ControlValueAccessor {
   writeValue(value) {
     this._value = value;
     // if (this.instance) {
-      // this.instance.setData(value);
-      this.setInstanceData(value);
+    // this.instance.setData(value);
+    this.setInstanceData(value);
     // }
   }
 
-    /**
-   * Implemented as part of ControlValueAccessor.
-   */
+  /**
+ * Implemented as part of ControlValueAccessor.
+ */
   registerOnChange(fn: any) {
     this._onChangeCallback = fn;
   }
@@ -246,21 +267,23 @@ export class CKEditor implements ControlValueAccessor {
   }
 
   _handleChange(event: Event) {
-      this._onTouchedCallback();
-      let value = this.instance.getData();
+    this._onTouchedCallback();
+    let value = this.instance.getData();
 
-      // Debounce update
-      if (this.debounce) {
-        if(this.debounceTimeout) clearTimeout(this.debounceTimeout);
-        this.debounceTimeout = setTimeout(() => {
-          this.updateValue(value);
-          this.debounceTimeout = null;
-        }, parseInt(this.debounce));
+    // Debounce update
+    if (this.debounce) {
+      if (this.debounceTimeout) {
+        clearTimeout(this.debounceTimeout);
+      }
+      this.debounceTimeout = setTimeout(() => {
+        this.updateValue(value);
+        this.debounceTimeout = null;
+      }, parseInt(this.debounce));
 
       // Live update
-      } else {
-        this.updateValue(value);
-      }
+    } else {
+      this.updateValue(value);
+    }
   }
 
   _hasPlaceholder(): boolean {
@@ -273,14 +296,19 @@ export class CKEditor implements ControlValueAccessor {
       var self = this;
       var retryCount = 0;
       var delayedSetReadOnly = function () {
-         var status = self.instance.status;
-          if (status !== 'loaded' && retryCount++ < 10) {
-              setTimeout(delayedSetReadOnly, retryCount * 10); //Wait a while longer each iteration
-          } else {
-              self.instance.setReadOnly(self._isReadOnly);
-          }
+        var status = self.instance.status;
+        if (status !== 'loaded' && retryCount++ < 10) {
+          self.setReadOnlyStateTimeout = setTimeout(delayedSetReadOnly, retryCount * 10);
+          //Wait a while longer each iteration
+        } else {
+          self.instance.setReadOnly(self._isReadOnly);
+          self.setReadOnlyStateTimeout = null;
+        }
       };
-      setTimeout(delayedSetReadOnly, 50);
+      if (this.setReadOnlyStateTimeout) {
+        clearTimeout(this.setReadOnlyStateTimeout);
+      }
+      this.setReadOnlyStateTimeout = setTimeout(delayedSetReadOnly, 50);
     }
   }
 
@@ -289,18 +317,20 @@ export class CKEditor implements ControlValueAccessor {
       var self = this;
       var retryCount = 0;
       var delayedSetData = function () {
-         var status = self.instance.status;
-          if (status !== 'loaded' && retryCount++ < 10) {
-              setTimeout(delayedSetData, retryCount * 10); //Wait a while longer each iteration
-          } else {
-              self.instance.setData(self._value);
-          }
+        var status = self.instance.status;
+        if (status !== 'loaded' && retryCount++ < 10) {
+          self.setInstanceDataTimeout = setTimeout(delayedSetData, retryCount * 10); //Wait a while longer each iteration
+        } else {
+          self.instance.setData(self._value);
+          self.setInstanceDataTimeout = null;
+        }
       };
-      setTimeout(delayedSetData, 50);
+      if (this.setInstanceDataTimeout) {
+        clearTimeout(this.setInstanceDataTimeout);
+      }
+      this.setInstanceDataTimeout = setTimeout(delayedSetData, 50);
     }
   }
-
-
 }
 
 @NgModule({

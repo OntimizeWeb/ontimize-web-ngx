@@ -1,6 +1,6 @@
 <div layout-fill [formGroup]="form?.formGroup">
-    <md-input class="md-input" type="text" [attr.id]="oattr" [id]="oattr" layout-fill [formControlName]="oattr"
-        [placeholder]="placeHolder" [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)"
+    <md-input class="md-input" type="text" [attr.id]="oattr" [id]="oattr" layout-fill [formControlName]="oattr" [placeholder]="placeHolder"
+        [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)" (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)"
         [readonly]="isReadOnly" [o-disabled]="innerInput" #innerInput>
         <md-hint *ngIf="!isReadOnly && _fControl.touched && _fControl.errors">
             <span *ngIf="_fControl.errors?.required">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</span>
