@@ -2281,6 +2281,12 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   public registerHeaderOption(option: OTableOptionComponent) {
     this.headerOptions.push(option);
   }
+
+  public getRowDataFromColumn(tableColumn: OTableColumnComponent) {
+    if (tableColumn && tableColumn.cellElement) {
+      return this.table.row(tableColumn.cellElement).data();
+    }
+  }
 }
 
 @NgModule({
