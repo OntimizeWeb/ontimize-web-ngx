@@ -65,7 +65,19 @@ export const DEFAULT_INPUTS_O_FORM = [
 
   'queryOnInit : query-on-init',
 
-  'parentKeys: parent-keys'
+  'parentKeys: parent-keys',
+
+  // query-method [string]: name of the service method to perform queries. Default: query.
+  'queryMethod: query-method',
+
+  // insert-method [string]: name of the service method to perform inserts. Default: insert.
+  'insertMethod: insert-method',
+
+  // update-method [string]: name of the service method to perform updates. Default: update.
+  'updateMethod: update-method',
+
+  // delete-method [string]: name of the service method to perform deletions. Default: delete.
+  'deleteMethod: delete-method'
 ];
 
 export const DEFAULT_OUTPUTS_O_FORM = [
@@ -106,6 +118,11 @@ export class OFormComponent implements OnInit, OnDestroy {
   public static DEFAULT_INPUTS_O_FORM = DEFAULT_INPUTS_O_FORM;
   public static DEFAULT_OUTPUTS_O_FORM = DEFAULT_OUTPUTS_O_FORM;
 
+  public static DEFAULT_QUERY_METHOD = 'query';
+  public static DEFAULT_INSERT_METHOD = 'insert';
+  public static DEFAULT_UPDATE_METHOD = 'update';
+  public static DEFAULT_DELETE_METHOD = 'delete';
+
   @InputConverter()
   showHeader: boolean = true;
   headerMode: string = 'floating';
@@ -123,6 +140,10 @@ export class OFormComponent implements OnInit, OnDestroy {
   @InputConverter()
   protected queryOnInit: boolean = true;
   protected parentKeys: string;
+  protected queryMethod: string;
+  protected insertMethod: string;
+  protected updateMethod: string;
+  protected deleteMethod: string;
 
   isDetailForm: boolean = false;
   keysArray: string[] = [];
@@ -414,6 +435,22 @@ export class OFormComponent implements OnInit, OnDestroy {
     this.colsArray = Util.parseArray(this.columns);
     let pkArray = Util.parseArray(this.parentKeys);
     this._pKeysEquiv = Util.parseParentKeysEquivalences(pkArray);
+
+    if (!this.queryMethod) {
+      this.queryMethod = OFormComponent.DEFAULT_QUERY_METHOD;
+    }
+
+    if (!this.insertMethod) {
+      this.insertMethod = OFormComponent.DEFAULT_INSERT_METHOD;
+    }
+
+    if (!this.updateMethod) {
+      this.updateMethod = OFormComponent.DEFAULT_UPDATE_METHOD;
+    }
+
+    if (!this.deleteMethod) {
+      this.deleteMethod = OFormComponent.DEFAULT_DELETE_METHOD;
+    }
 
     this.configureService();
 
@@ -850,7 +887,7 @@ export class OFormComponent implements OnInit, OnDestroy {
       return;
     }
     let sqlTypes = this.getAttributesSQLTypes();
-    this.dataService.query(filter, this.getAttributesToQuery(), this.entity, sqlTypes)
+    this.dataService[this.queryMethod](filter, this.getAttributesToQuery(), this.entity, sqlTypes)
       .subscribe(resp => {
         loader.unsubscribe();
         if (resp.code === 0) {
@@ -895,7 +932,7 @@ export class OFormComponent implements OnInit, OnDestroy {
     var self = this;
     var loader = self.load();
     let observable = new Observable(observer => {
-      this.dataService.insert(values, this.entity, sqlTypes)
+      this.dataService[this.insertMethod](values, this.entity, sqlTypes)
         .subscribe(resp => {
           loader.unsubscribe();
           if (resp.code === 0) {
@@ -941,7 +978,7 @@ export class OFormComponent implements OnInit, OnDestroy {
     var self = this;
     var loader = self.load();
     let observable = new Observable(observer => {
-      this.dataService.update(filter, values, this.entity, sqlTypes)
+      this.dataService[this.updateMethod](filter, values, this.entity, sqlTypes)
         .subscribe(resp => {
           loader.unsubscribe();
           if (resp.code === 0) {
@@ -982,7 +1019,7 @@ export class OFormComponent implements OnInit, OnDestroy {
     var self = this;
     var loader = self.load();
     let observable = new Observable(observer => {
-      this.dataService.delete(filter, this.entity)
+      this.dataService[this.deleteMethod](filter, this.entity)
         .subscribe(resp => {
           loader.unsubscribe();
           if (resp.code === 0) {
