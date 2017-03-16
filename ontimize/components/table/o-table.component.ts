@@ -939,7 +939,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       }
     });
 
-    this.table.off('order.dt').on('order.dt', () => {
+    this.table.on('order.dt', () => {
       let order = this.table.order();
       if ((this.groupColumnIndex !== -1) && (order[0][0] !== this.groupColumnIndex)) {
         order.unshift([this.groupColumnIndex, this.groupColumnOrder]);
@@ -1489,7 +1489,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   protected initColumnGroup() {
     let header = this.tableHtmlEl.find('th');
-    header.off('click').on('click', (event: any) => {
+    header.on('click', (event: any) => {
       // TODO: only .off this event handler, instead of stopping propagation
       if (event.isPropagationStopped()) {
         return;
