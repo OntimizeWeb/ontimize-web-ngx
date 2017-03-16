@@ -630,13 +630,7 @@ export class OFormComponent implements OnInit, OnDestroy {
       extras['queryParams'] = Object.assign({}, this.queryParams, { 'isdetail': 'true' });
     }
 
-    let actRoute = this.actRoute;
-    let i = 0;
-    while (actRoute.parent) {
-      actRoute = actRoute.parent;
-      i++;
-    }
-    if (i > 2) {
+    if (this.isActivatedRouteMultiple()) {
       extras['relativeTo'] = this.actRoute.parent;
     }
 
@@ -683,6 +677,10 @@ export class OFormComponent implements OnInit, OnDestroy {
     }
 
     let extras = Object.assign({}, this.queryParams, { 'isdetail': 'true' });
+
+    if (this.isActivatedRouteMultiple()) {
+      extras['relativeTo'] = this.actRoute.parent;
+    }
 
     this.router.navigate([urlText], extras)
       .catch(err => {
@@ -870,7 +868,7 @@ export class OFormComponent implements OnInit, OnDestroy {
       });
     }
 
-	attributes = attributes.concat(this.colsArray.filter(col => attributes.indexOf(col) < 0));
+    attributes = attributes.concat(this.colsArray.filter(col => attributes.indexOf(col) < 0));
 
     return attributes;
   }
@@ -1062,7 +1060,15 @@ export class OFormComponent implements OnInit, OnDestroy {
     return filter;
   }
 
-
+  protected isActivatedRouteMultiple() {
+    let actRoute = this.actRoute;
+    let i = 0;
+    while (actRoute.parent) {
+      actRoute = actRoute.parent;
+      i++;
+    }
+    return (i > 2);
+  }
 
 }
 
