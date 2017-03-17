@@ -411,7 +411,7 @@ export class ODateInputComponent extends OTextInputComponent implements OnInit {
     if (timestampValue) {
       return timestampValue;
     }
-    return '';
+    return undefined;
   }
 
   setValue(val: any) {

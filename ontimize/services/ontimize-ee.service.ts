@@ -28,7 +28,6 @@ export class OntimizeEEService implements IAuthService, IDataService {
   protected _appConfig: Config;
   protected _startSessionPath: string;
 
-
   constructor(protected injector: Injector) {
 
     this.http = this.injector.get(Http);
