@@ -1,5 +1,7 @@
-import { Injectable } from '@angular/core';
-import { EventEmitter } from '@angular/core';
+import {
+  Injectable, Injector,
+  EventEmitter
+} from '@angular/core';
 import { ObservableWrapper } from '../util/async';
 
 
@@ -11,6 +13,9 @@ export class NavigationService {
   private _titleEmitter: EventEmitter<any> = new EventEmitter();
   private _visibleEmitter: EventEmitter<Boolean> = new EventEmitter<Boolean>();
   private _sidenavEmitter: EventEmitter<any> = new EventEmitter();
+
+  constructor(protected injector: Injector) {
+  }
 
   public setTitle(title: string): void {
     this.currentTitle = title;

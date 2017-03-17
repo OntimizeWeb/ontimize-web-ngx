@@ -88,7 +88,7 @@ export var MAP = {
     'MESSAGES.SAVED': 'Saved',
     'MESSAGES.NO_RESULTS': 'No results were obtained.',
 
-    'TABLE.EMPTY': ' ',
+    'TABLE.EMPTY': 'No results found',
     'TABLE.INFO': '_START_ - _END_ of _TOTAL_',
     'TABLE.INFO_EMPTY': '0 - 0 of 0',
     'TABLE.INFO_FILTERED': '(filtered from _MAX_ total entries)',
@@ -216,7 +216,7 @@ export var MAP = {
     'MESSAGES.SAVED': 'Guardado',
     'MESSAGES.NO_RESULTS': 'No se obtuvieron resultados.',
 
-    'TABLE.EMPTY': ' ',
+    'TABLE.EMPTY': 'No se han obtenido resultados',
     'TABLE.INFO': '_START_ - _END_ de _TOTAL_',
     'TABLE.INFO_EMPTY': '0 - 0 de 0',
     'TABLE.INFO_FILTERED': '(filtrados de un total de _MAX_ registros)',

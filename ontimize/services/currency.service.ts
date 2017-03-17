@@ -1,6 +1,6 @@
-import {Inject, Injector} from '@angular/core';
-import {APP_CONFIG, Config} from '../config/app-config';
-import {NumberService} from './number.service';
+import { Injector } from '@angular/core';
+import { APP_CONFIG, Config } from '../config/app-config';
+import { NumberService } from './number.service';
 
 export class CurrencyService {
 
@@ -9,43 +9,45 @@ export class CurrencyService {
 
   protected _numberService: NumberService;
 
-  protected _symbol : string;
-  protected _symbolPosition : string;
+  protected _symbol: string;
+  protected _symbolPosition: string;
 
-  constructor( @Inject(APP_CONFIG) private _config: Config,
-    protected injector: Injector) {
+  private _config: Config;
+
+  constructor(protected injector: Injector) {
+    this._config = this.injector.get(APP_CONFIG);
     this._numberService = this.injector.get(NumberService);
     //TODO: initialize from config
     this._symbol = CurrencyService.DEFAULT_CURRENCY_SYMBOL;
     this._symbolPosition = CurrencyService.DEFAULT_CURRENCY_SYMBOL_POSITION;
   }
 
-  public get symbol () : string {
+  public get symbol(): string {
     return this._symbol;
   }
 
-  public set symbol (value : string) {
+  public set symbol(value: string) {
     this._symbol = value;
   }
 
-  public get symbolPosition () : string {
+  public get symbolPosition(): string {
     return this._symbolPosition;
   }
 
-  public set symbolPosition (value : string) {
+  public set symbolPosition(value: string) {
     this._symbolPosition = value;
   }
 
-  public getCurrencyValue (value: any, symbol?: string, symbolPosition?: string, grouping?: boolean,
-      thousandSeparator?: string, decimalSeparator?: string, decimalDigits?: number) {
-    if (typeof(symbol) === 'undefined') {
+  public getCurrencyValue(value: any, symbol?: string, symbolPosition?: string, grouping?: boolean,
+    thousandSeparator?: string, decimalSeparator?: string, decimalDigits?: number) {
+    if (typeof (symbol) === 'undefined') {
       symbol = this._symbol;
     }
-    if (typeof(symbolPosition) === 'undefined') {
+    if (typeof (symbolPosition) === 'undefined') {
       symbolPosition = this._symbolPosition;
     }
     let currencyValue = this._numberService.getRealValue(value, grouping, thousandSeparator,
-        decimalSeparator, decimalDigits);
+      decimalSeparator, decimalDigits);
     switch (symbolPosition) {
       case 'left':
         currencyValue = symbol + ' ' + currencyValue;

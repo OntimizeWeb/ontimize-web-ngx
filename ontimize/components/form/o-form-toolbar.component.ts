@@ -8,7 +8,7 @@ import {
 import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { MdIconModule, MdToolbarModule } from '@angular/material';
+import { MdIconModule, MdToolbarModule, MdButtonModule } from '@angular/material';
 
 import { OFormComponent } from './o-form.component';
 import { InputConverter } from '../../decorators';
@@ -243,7 +243,7 @@ export class OFormToolbarComponent implements OnInit {
 
 @NgModule({
   declarations: [OFormToolbarComponent],
-  imports: [CommonModule, MdIconModule, MdToolbarModule, OTranslateModule],
+  imports: [CommonModule, MdIconModule, MdToolbarModule, MdButtonModule, OTranslateModule],
   exports: [OFormToolbarComponent],
 })
 export class OFormToolbarModule {

@@ -1,16 +1,14 @@
 import {
-  Component, ElementRef, OnInit, Inject, Injector, NgZone, AfterContentInit, ContentChildren,
-  ViewChild,
-  QueryList, Optional, forwardRef,
-  NgModule,
-  ModuleWithProviders,
-  ViewEncapsulation
+  Component, OnInit, Inject, Injector,
+  AfterContentInit, ContentChildren,
+  ViewChild, QueryList, Optional, forwardRef,
+  ElementRef, NgModule, ModuleWithProviders,
+  ViewEncapsulation, EventEmitter
 } from '@angular/core';
+
 import { CommonModule } from '@angular/common';
-import { Router, ActivatedRoute } from '@angular/router';
-import { EventEmitter } from '@angular/core';
+import { RouterModule } from '@angular/router';
 import { ObservableWrapper } from '../../util/async';
-import { Observable } from 'rxjs/Observable';
 
 import { MdCheckbox } from '@angular/material';
 import { MdListModule, MdIconModule, MdToolbarModule, MdButtonModule, MdProgressCircleModule } from '@angular/material';
@@ -18,43 +16,35 @@ import { MdListModule, MdIconModule, MdToolbarModule, MdButtonModule, MdProgress
 import { OntimizeService } from '../../services';
 import { dataServiceFactory } from '../../services/data-service.provider';
 import { OSearchInputModule, OSearchInputComponent } from '../search-input/o-search-input.component';
-import { OListItemModule } from './o-list-item.component';
+import { OListItemModule } from './list-item/o-list-item.component';
 import { OFormComponent } from '../form/o-form.component';
 import { InputConverter } from '../../decorators';
 import { Util } from '../../util/util';
-import { OListItemDirective } from './o-list-item.directive';
 import { IList } from '../../interfaces';
-import { OListItemComponent } from './o-list-item.component';
+import { OListItemComponent } from './list-item/o-list-item.component';
+import { OListItemDirective } from './list-item/o-list-item.directive';
 import { OTranslateModule } from '../../pipes/o-translate.pipe';
 
+import { OServiceComponent } from '../o-service-component.class';
+import { Observable } from 'rxjs/Observable';
+
 export const DEFAULT_INPUTS_O_LIST = [
-  'title',
+  ...OServiceComponent.DEFAULT_INPUTS_O_SERVICE_COMPONENT,
+
   // quick-filter [no|yes]: show quick filter. Default: yes.
   'quickFilter: quick-filter',
+
   // quick-filter-columns [string]: columns of the filter, separated by ';'. Default: no value.
   'quickFilterColumns: quick-filter-columns',
-  //controls [string][yes|no|true|false]:
-  'controls',
+
   // refresh-button [no|yes]: show refresh button. Default: yes.
   'refreshButton: refresh-button',
-  // query-on-init [no|yes]: query table on init. Default: yes.
-  'queryOnInit: query-on-init',
-  'pageable',
-  'cssClass: css-class',
-  // columns [string]: columns of the entity, separated by ';'. Default: no value.
-  'columns',
-  // parent-keys [string]: parent keys to filter, separated by ';'. Default: no value.
-  'parentKeys: parent-keys',
-  // entity [string]: entity of the service. Default: no value.
-  'entity',
-  'service',
-  // keys [string]: entity keys, separated by ';'. Default: no value.
-  'keys',
+
   'route',
-  //static-data [Array<any>] : way to populate with static data. Default: no value.
-  'listData: static-data',
-  // detail-form-route [string]: route of detail form. Default: 'detail'.
-  'detailFormRoute: detail-form-route',
+
+  'selectable',
+
+  'odense : dense'
 ];
 
 export const DEFAULT_OUTPUTS_O_LIST = [
@@ -63,8 +53,6 @@ export const DEFAULT_OUTPUTS_O_LIST = [
 
 @Component({
   selector: 'o-list',
-  templateUrl: 'list/o-list.component.html',
-  styleUrls: ['list/o-list.component.css'],
   providers: [
     { provide: OntimizeService, useFactory: dataServiceFactory, deps: [Injector] }
   ],
@@ -74,110 +62,81 @@ export const DEFAULT_OUTPUTS_O_LIST = [
   outputs: [
     ...DEFAULT_OUTPUTS_O_LIST
   ],
+  templateUrl: 'list/o-list.component.html',
+  styleUrls: ['list/o-list.component.css'],
   encapsulation: ViewEncapsulation.None
 })
-export class OListComponent implements OnInit, IList, AfterContentInit {
+export class OListComponent extends OServiceComponent implements OnInit, IList, AfterContentInit {
 
   public static DEFAULT_INPUTS_O_LIST = DEFAULT_INPUTS_O_LIST;
   public static DEFAULT_OUTPUTS_O_LIST = DEFAULT_OUTPUTS_O_LIST;
 
-  @InputConverter()
-  controls: boolean = true;
-  title: string;
+  /* Inputs */
   @InputConverter()
   quickFilter: boolean = true;
-  @InputConverter()
-  queryOnInit: boolean = true;
+  protected quickFilterColumns: string;
   @InputConverter()
   refreshButton: boolean = true;
+  protected route: string;
   @InputConverter()
-  pageable: boolean = false;
-  cssclass: string;
-
-  columns: string;
-  quickFilterColumns: string;
-  parentKeys: string;
-  entity: string;
-  service: string;
-  keys: string;
-  protected dataKeys: Array<string>;
-  protected dataParentKeys: {};
-  protected parentItem: any;
-  route: string;
-  protected detailFormRoute: string;
-  protected onFormDataSubscribe: any;
+  selectable: boolean = false;
+  @InputConverter()
+  odense: boolean = false;
   /* End Inputs */
 
   @ContentChildren(OListItemComponent)
-  templateItem: QueryList<OListItemComponent>;
+  listItemComponents: QueryList<OListItemComponent>;
+
+  @ContentChildren(OListItemDirective)
+  listItemDirectives: QueryList<OListItemDirective>;
 
   @ViewChild(OSearchInputComponent)
   searchInputComponent: OSearchInputComponent;
 
   public mdClick: EventEmitter<any> = new EventEmitter();
+  public mdDblClick: EventEmitter<any> = new EventEmitter();
 
-  protected dataArray: any[] = [];
-  listData: any[] = null;
-  colArray: string[] = [];
-  quickFilterColArray: string[];
+  public onListDataLoaded: EventEmitter<any> = new EventEmitter();
+  public onPaginatedListDataLoaded: EventEmitter<any> = new EventEmitter();
+  protected quickFilterColArray: string[];
 
-  protected dataService: any;
-
-  public loading: boolean = false;
-  protected dataSelected: any[] = [];
-
-  private _injector;
-  private _router: Router;
-  private _actRoute: ActivatedRoute;
-  private elRef: ElementRef;
-
-  private _filterValue: string;
+  protected dataResponseArray: Array<any> = [];
 
   constructor(
-    router: Router,
-    actRoute: ActivatedRoute,
-    el: ElementRef,
-    zone: NgZone,
     injector: Injector,
-    @Optional() @Inject(forwardRef(() => OFormComponent)) protected form: OFormComponent) {
-
-    this._router = router;
-    this._actRoute = actRoute;
-    this.elRef = el;
-    this._injector = injector;
+    elRef: ElementRef,
+    @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent
+  ) {
+    super(injector, elRef, form);
   }
 
-  registerListItem(item: OListItemDirective) {
-    if (item) {
-      var self = this;
-      item.onClick(mdItem => {
-        self.doListItemClick(mdItem);
-        ObservableWrapper.callEmit(self.mdClick, item);
-      });
-    }
+  getComponentKey(): string {
+    return 'OListComponent_' + this.oattr;
   }
 
   registerSearchInput(input: OSearchInputComponent) {
     if (input && this.quickFilter) {
       var self = this;
       input.onSearch.subscribe(val => {
-        //console.log(val);
         self.filterData(val);
       });
     }
   }
 
-
   public onListItemClicked(onNext: (item: OListItemDirective) => void): Object {
     return ObservableWrapper.subscribe(this.mdClick, onNext);
   }
 
-  getKeys() {
-    return this.dataKeys;
+  ngOnInit(): void {
+    this.initialize();
   }
 
-  ngOnInit(): void {
-    this.colArray = Util.parseArray(this.columns);
+  initialize(): void {
+    super.initialize();
+
+    if (this.staticData && this.staticData.length) {
+      this.dataResponseArray = this.staticData;
+    }
 
     if (this.quickFilterColumns) {
       this.quickFilterColArray = Util.parseArray(this.quickFilterColumns);
@@ -185,130 +144,185 @@ export class OListComponent implements OnInit, IList, AfterContentInit {
       this.quickFilterColArray = this.colArray;
     }
 
-    let pkArray = Util.parseArray(this.parentKeys);
-    this.dataParentKeys = Util.parseParentKeysEquivalences(pkArray);
-
-    if (this.keys) {
-      this.dataKeys = Util.parseArray(this.keys);
-    } else {
-      this.dataKeys = [];
+    this.state = this.localStorageService.getComponentStorage(this);
+    let initialQueryLength = undefined;
+    if (this.state.hasOwnProperty('queryRecordOffset')) {
+      initialQueryLength = this.state.queryRecordOffset;
     }
-
-    if (this.listData) {
-      this.setData(this.listData);
-    } else {
-      this.configureService();
+    this.state.queryRecordOffset = 0;
+    if (!this.state.hasOwnProperty('queryTotalRecordNumber')) {
+      this.state.queryTotalRecordNumber = 0;
     }
-
-    if (this.form) {
-      this.setFormComponent(this.form);
-    }
-
     if (this.queryOnInit) {
-      this.queryData();
+      let queryArgs = {
+        offset: 0,
+        length: initialQueryLength || this.queryRows
+      };
+      this.queryData({}, queryArgs);
     }
   }
 
-  ngAfterContentInit() {
-    //console.log(this.dataArray);
-    this.templateItem.changes.subscribe(() => {
-      console.log(this.dataArray);
-    });
+  ngOnDestroy() {
+    this.destroy();
+  }
+
+  destroy() {
+    super.destroy();
+    this.onRouteChangeStorageSubscribe.unsubscribe();
   }
 
   ngAfterViewInit() {
-    //console.log(this.dataArray);
     if (this.searchInputComponent) {
       this.registerSearchInput(this.searchInputComponent);
     }
   }
 
-  configureService() {
-    this.dataService = this._injector.get(OntimizeService);
+  getDense() {
+    return this.odense || undefined;
+  }
 
-    if (Util.isDataService(this.dataService)) {
-      let serviceCfg = this.dataService.getDefaultServiceConfiguration(this.service);
-      if (this.entity) {
-        serviceCfg['entity'] = this.entity;
+  protected setListItemsData() {
+    var self = this;
+    this.listItemComponents.forEach(function (element: OListItemComponent, index, array) {
+      element.setItemData(self.dataResponseArray[index]);
+    });
+  }
+
+  protected setListItemDirectivesData() {
+    var self = this;
+    this.listItemDirectives.forEach(function (element: OListItemDirective, index, array) {
+      element.setItemData(self.dataResponseArray[index]);
+      element.setListComponent(self);
+      self.registerListItemDirective(element);
+    });
+  }
+
+  ngAfterContentInit() {
+    var self = this;
+    self.setListItemsData();
+    this.listItemComponents.changes.subscribe(() => {
+      self.setListItemsData();
+    });
+    self.setListItemDirectivesData();
+    this.listItemDirectives.changes.subscribe(() => {
+      self.setListItemDirectivesData();
+    });
+  }
+
+  registerListItemDirective(item: OListItemDirective) {
+    if (item) {
+      var self = this;
+      if (this.detailMode === OServiceComponent.DETAIL_MODE_CLICK) {
+        item.onClick(directiveItem => {
+          self.onItemDetailClick(directiveItem);
+        });
       }
-      this.dataService.configureService(serviceCfg);
+      if (this.detailMode === OServiceComponent.DETAIL_MODE_DBLCLICK) {
+        item.onDblClick(directiveItem => {
+          self.onItemDetailDblClick(directiveItem);
+        });
+      }
     }
   }
 
-  setData(data: any) {
-    this.dataArray = data;
+  onItemDetailClick(item: OListItemDirective | OListItemComponent) {
+    if (this.oenabled && this.detailMode === OServiceComponent.DETAIL_MODE_CLICK) {
+      this.viewDetail(item.getItemData());
+      ObservableWrapper.callEmit(this.mdClick, item);
+    }
   }
 
-  queryData(filter: Object = {}) {
-    var self = this;
-    if (this.entity && this.entity.length > 0) {
+  onItemDetailDblClick(item: OListItemDirective | OListItemComponent) {
+    if (this.oenabled && this.detailMode === OServiceComponent.DETAIL_MODE_DBLCLICK) {
+      this.viewDetail(item.getItemData());
+      ObservableWrapper.callEmit(this.mdDblClick, item);
+    }
+  }
+
+  queryData(filter: Object = {}, ovrrArgs?: any) {
+    if (this.querySuscription) {
+      this.querySuscription.unsubscribe();
+      this.loaderSuscription.unsubscribe();
+    }
+    let queryMethodName = this.pageable ? this.paginatedQueryMethod : this.queryMethod;
+    if (this.dataService && (queryMethodName in this.dataService) && this.entity) {
+
       this.setParentKeyValues(filter);
-      let loader = this.load();
-      this.dataService.query(filter, this.colArray, this.entity)
-        .subscribe(resp => {
-          if (resp.code === 0) {
-            //self.setData(resp.data);
-            self.listData = resp.data;
-            self.filterData(self._filterValue);
-          } else {
-            console.log('error');
+
+      this.loaderSuscription = this.load();
+
+      let queryArguments = this.getQueryArguments(filter, ovrrArgs);
+      var self = this;
+      this.querySuscription = this.dataService[queryMethodName].apply(this.dataService, queryArguments)
+        .subscribe(res => {
+          let data = undefined;
+          if (($ as any).isArray(res)) {
+            data = res;
+          } else if ((res.code === 0) && ($ as any).isArray(res.data)) {
+            data = res.data;
+            if (this.pageable) {
+              this.updatePaginationInfo(res);
+            }
           }
-          loader.unsubscribe();
+          // set list data
+          if (($ as any).isArray(data)) {
+            let respDataArray = data;
+            if (self.pageable && !(ovrrArgs && ovrrArgs['replace'])) {
+              respDataArray = (self.dataResponseArray || []).concat(data);
+            }
+
+            let selectedIndexes = self.state.selectedIndexes || [];
+            for (let i = 0; i < selectedIndexes.length; i++) {
+              if (selectedIndexes[i] < self.dataResponseArray.length) {
+                self.selectedItems.push(self.dataResponseArray[selectedIndexes[i]]);
+              }
+            }
+            self.dataResponseArray = respDataArray;
+            self.filterData(self.state.filterValue);
+          }
+          self.loaderSuscription.unsubscribe();
+          if (self.pageable) {
+            ObservableWrapper.callEmit(self.onPaginatedListDataLoaded, data);
+          }
+          ObservableWrapper.callEmit(self.onListDataLoaded, self.dataResponseArray);
         }, err => {
-          console.log(err);
-          loader.unsubscribe();
+          console.log('[OList.queryData]: error', err);
+          self.loaderSuscription.unsubscribe();
         });
     }
   }
 
   setParentKeyValues(filter: Object) {
-    if (this.dataParentKeys && this.parentItem) {
-      for (let key in this.dataParentKeys) {
+    if (this._pKeysEquiv && this.parentItem) {
+      for (let key in this._pKeysEquiv) {
         if (this.parentItem.hasOwnProperty(key)) {
-          filter[this.dataParentKeys[key]] = this.parentItem[key];
+          filter[this._pKeysEquiv[key]] = this.parentItem[key];
         }
       }
     }
   }
 
+  /**
+   *@deprecated
+   */
   onReload() {
-    this.queryData();
+    this.reloadData();
   }
 
-  doListItemClick(mdItem: OListItemDirective): void {
-    if (mdItem && mdItem.modelData) {
-      let route = this.getRouteOfSelectedRow(mdItem.modelData, this.detailFormRoute);
-      if (route.length > 0) {
-        this._router.navigate(route,
-          {
-            relativeTo: this._actRoute,
-            queryParams: {
-              'isdetail': 'true'
-            }
-          }
-        );
-      }
+  reloadData() {
+    let queryArgs = {};
+    if (this.pageable) {
+      this.state.queryRecordOffset = 0;
+      queryArgs = {
+        length: this.dataResponseArray.length,
+        replace: true
+      };
     }
-    // this._router.navigate(['/' + this.route, params]);
-  }
-
-  protected getRouteOfSelectedRow(item: any, modeRoute: any) {
-    let route = [];
-    // TODO: multiple keys
-    let filter = undefined;
-    if (typeof (item) === 'object') {
-      for (let k = 0; k < this.dataKeys.length; ++k) {
-        let key = this.dataKeys[k];
-        filter = item[key];
-      }
+    if (this.selectable) {
+      this.selectedItems = [];
+      this.state.selectedIndexes = [];
     }
-    if (typeof (filter) !== 'undefined') {
-      if (modeRoute) {
-        route.push(modeRoute);
-      }
-      route.push(filter);
-    }
-    return route;
+    this.queryData({}, queryArgs);
   }
 
   configureFilterValue(value: string) {
@@ -343,13 +357,11 @@ export class OListComponent implements OnInit, IList, AfterContentInit {
    * Filters data locally.
    *  */
   filterData(value: string): void {
-    this._filterValue = value;
-    if (value && value.length > 0 && this.listData && this.listData.length > 0) {
+    this.state.filterValue = value;
+    if (value && value.length > 0 && this.dataResponseArray && this.dataResponseArray.length > 0) {
       var _val = this.configureFilterValue(value);
-
       var self = this;
-      //var filteredData: any[] = [];
-      var filteredData = this.listData.filter(item => {
+      var filteredData = this.dataResponseArray.filter(item => {
         let found = false;
         let regExp: RegExp = new RegExp(_val, 'i');
         self.quickFilterColArray.forEach(col => {
@@ -365,59 +377,14 @@ export class OListComponent implements OnInit, IList, AfterContentInit {
         });
         return found;
       });
-
-      //if (filteredData.length > 0) {
-      this.setData(filteredData);
-      //}
-
+      this.setDataArray(filteredData);
     } else {
-      this.setData(this.listData);
+      this.setDataArray(this.dataResponseArray);
     }
-  }
-
-  public load(): any {
-    var self = this;
-    var loadObservable = new Observable(observer => {
-      var timer = window.setTimeout(() => {
-        observer.next(true);
-      }, 250);
-
-      return () => {
-        window.clearTimeout(timer);
-        self.loading = false;
-      };
-
-    });
-    var subscription = loadObservable.subscribe(val => {
-      self.loading = val as boolean;
-    });
-    return subscription;
-  }
-
-
-  public setFormComponent(form: OFormComponent) {
-    var self = this;
-    this.onFormDataSubscribe = this.form.onFormDataLoaded.subscribe(data => {
-      self.parentItem = data;
-      self.queryData();
-    }
-    );
-
-    let dataValues = this.form.getDataValues();
-    if (dataValues && Object.keys(dataValues).length > 0) {
-      self.parentItem = dataValues;
-      self.queryData();
-    } else {
-      //this.filterForm = true;
-    }
-  }
-
-  getSelectedItems(): any[] {
-    return this.dataSelected;
   }
 
   isItemSelected(item) {
-    let result = this.dataSelected.find(current => {
+    let result = this.selectedItems.find(current => {
       let itemKeys = Object.keys(item);
       let currentKeys = Object.keys(current);
       if (itemKeys.length !== currentKeys.length) {
@@ -440,22 +407,101 @@ export class OListComponent implements OnInit, IList, AfterContentInit {
     } else {
       return false;
     }
-    //return this.dataSelected.indexOf(item) > -1;
   }
 
   setSelected(item) {
-    let idx = this.dataSelected.indexOf(item);
-    if (idx > -1) {
-      this.dataSelected.splice(idx, 1);
-    } else {
-      this.dataSelected.push(item);
+    if (this.selectable) {
+      let idx = this.selectedItems.indexOf(item);
+      let wasSelected = idx > -1;
+      if (wasSelected) {
+        this.selectedItems.splice(idx, 1);
+      } else {
+        this.selectedItems.push(item);
+      }
+      this.updateSelectedState(item, !wasSelected);
+      return !wasSelected;
+    }
+  }
+
+  updateSelectedState(item: Object, isSelected: boolean) {
+    let selectedIndexes = this.state.selectedIndexes || [];
+    let itemIndex = this.dataResponseArray.indexOf(item);
+    if (isSelected && selectedIndexes.indexOf(itemIndex) === -1) {
+      selectedIndexes.push(itemIndex);
+    } else if (!isSelected) {
+      selectedIndexes.splice(selectedIndexes.indexOf(itemIndex), 1);
+    }
+    this.state.selectedIndexes = selectedIndexes;
+  }
+
+  onScroll($event: Event): void {
+    let pendingRegistries = this.dataResponseArray.length < this.state.queryTotalRecordNumber;
+    if (!this.loading && pendingRegistries) {
+      let element = $event.srcElement as any;
+      if (element.offsetHeight + element.scrollTop + 5 >= element.scrollHeight) {
+        let queryArgs = {
+          offset: this.state.queryRecordOffset,
+          length: this.queryRows
+        };
+        this.queryData({}, queryArgs);
+      }
+    }
+  }
+
+  remove(clearSelectedItems: boolean = false) {
+    this.dialogService.confirm('CONFIRM', 'MESSAGES.CONFIRM_DELETE').then(
+      res => {
+        if (res === true) {
+          if (this.dataService && (this.deleteMethod in this.dataService) && this.entity && (this.keysArray.length > 0)) {
+            let filters = [];
+            this.selectedItems.map(item => {
+              let kv = {};
+              for (let k = 0; k < this.keysArray.length; ++k) {
+                let key = this.keysArray[k];
+                kv[key] = item[key];
+              }
+              filters.push(kv);
+            });
+
+            let observable = (Observable as any).from(filters)
+              .map(kv => this.dataService[this.deleteMethod](kv, this.entity)).mergeAll();
+            observable.subscribe(
+              res => {
+                console.log('[OList.remove]: response', res);
+              },
+              error => {
+                console.log('[OList.remove]: error', error);
+                this.dialogService.alert('ERROR', 'MESSAGES.ERROR_DELETE');
+              },
+              () => {
+                console.log('[OList.remove]: success');
+                this.queryData(this.parentItem);
+              }
+            );
+          } else {
+            this.deleteLocalItems();
+          }
+        } else if (clearSelectedItems) {
+          this.selectedItems = [];
+        }
+      });
+  }
+
+  protected add() {
+    let route = this.getRouteOfSelectedRow(undefined, 'new');
+    if (route.length > 0) {
+      this.router.navigate(route,
+        {
+          relativeTo: this.actRoute,
+        }
+      );
     }
   }
 }
 
 @NgModule({
   declarations: [OListComponent],
-  imports: [CommonModule, MdListModule, MdToolbarModule, MdIconModule, MdButtonModule, OListItemModule, OSearchInputModule, MdProgressCircleModule, OTranslateModule],
+  imports: [CommonModule, MdListModule, MdToolbarModule, MdIconModule, MdButtonModule, OListItemModule, OSearchInputModule, MdProgressCircleModule, OTranslateModule, RouterModule],
   exports: [OListComponent],
   entryComponents: [MdCheckbox]
 })
@@ -467,4 +513,3 @@ export class OListModule {
     };
   }
 }
-

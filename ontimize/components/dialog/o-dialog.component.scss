@@ -1,3 +1,4 @@
+/*
 .md-overlay-container {
 
   .md-overlay-pane.o-dialog-fullscreen {
@@ -27,4 +28,17 @@
 
   }
 
+}
+*/
+.alert-content {
+  padding: 12px 0;
+}
+.alert-content-icon{
+  min-height: 70px;
+}
+.alert-icon {
+  font-size: 50px;
+  margin-right: 16px;
+  min-height: 50px;
+  min-width: 50px;
 }

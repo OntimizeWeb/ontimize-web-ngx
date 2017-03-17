@@ -1,0 +1,12 @@
+<md-card>
+  <md-card-title-group>
+    <img [attr.md-card-sm-image]="compareListHeight('small')" [attr.md-card-md-image]="compareListHeight('medium')" [attr.md-card-lg-image]="compareListHeight('large')"
+      src="{{ image }}">
+      <md-card-title *ngIf="title"> {{ title }}</md-card-title>
+      <md-card-subtitle *ngIf="subtitle"> {{ subtitle }}</md-card-subtitle>
+  </md-card-title-group>
+  <md-card-actions>
+    <button md-button *ngIf="action1Text" (click)="onAction1ButtonClick($event)">{{ action1Text }}</button>
+    <button md-button *ngIf="action2Text" (click)="onAction2ButtonClick($event)">{{ action2Text }}</button>
+  </md-card-actions>
+</md-card>

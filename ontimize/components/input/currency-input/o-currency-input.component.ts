@@ -1,6 +1,6 @@
 import {
   Component, Inject, Injector, forwardRef, ElementRef, OnInit,
-  NgZone, ChangeDetectorRef,
+  Optional,
   NgModule,
   ModuleWithProviders,
   ViewEncapsulation
@@ -62,12 +62,11 @@ export class OCurrencyInputComponent extends ORealInputComponent implements OnIn
   currencySymbol: string = 'EUR';
   currencySymbolPosition: string = 'right';
 
-  constructor( @Inject(forwardRef(() => OFormComponent)) protected form: OFormComponent,
-    protected elRef: ElementRef,
-    protected ngZone: NgZone,
-    protected cd: ChangeDetectorRef,
-    protected injector: Injector) {
-    super(form, elRef, ngZone, cd, injector);
+  constructor(
+    @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
+    elRef: ElementRef,
+    injector: Injector) {
+    super(form, elRef, injector);
   }
 
   resolveValidators(): ValidatorFn[] {

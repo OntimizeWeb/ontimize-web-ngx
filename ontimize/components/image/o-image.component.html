@@ -1,8 +1,9 @@
-<div layout="column" layout-align="center center" class="input-image relative" [formGroup]="form?.formGroup">
+<div layout="column" layout-align="center center" class="input-image relative" [formGroup]="form?.formGroup"
+  [mdTooltip]="tooltip" [mdTooltipPosition]="tooltipPosition" [mdTooltipShowDelay]="tooltipShowDelay">
   <div layout="row" layout-fill layout-align="end center" class="input-image-container">
-    <md-input #inputControl [formControlName]="oattr" type="text" [attr.id]="oattr" [id]="oattr"
+    <input md-input #inputControl [formControlName]="oattr" type="text" [attr.id]="oattr" [id]="oattr"
       [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)"
-      class="md-input input-control" ></md-input>
+      class="md-input input-control" >
     <input [hidden]="!showControls" class="md-primary" #input type="file"
       (change)="fileChange(input, titleLabel)" class="input-file" />
     <label *ngIf="showControls" #titleLabel (click)="input.click()">{{ 'CHOOSE_FILE' | oTranslate }}</label>

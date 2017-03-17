@@ -1,6 +1,5 @@
-import { Inject, Injector } from '@angular/core';
+import { Injector } from '@angular/core';
 import { APP_CONFIG, Config } from '../config/app-config';
-// import { MomentService } from './moment.service.ts';
 
 export class NumberService {
 
@@ -13,20 +12,17 @@ export class NumberService {
   protected _decimalSeparator: string;
   protected _decimalDigits: number;
   protected _locale: string;
+  private _config: Config;
 
-  // private momentSrv: MomentService;
-
-  constructor( @Inject(APP_CONFIG) private _config: Config, protected injector: Injector) {
+  constructor( protected injector: Injector ) {
+    this._config = this.injector.get(APP_CONFIG);
     //TODO: initialize from config
-    // this.momentSrv = this.injector.get(MomentService);
-
     this._thousandSeparator = NumberService.DEFAULT_THOUSAND_SEPARATOR;
     this._decimalSeparator = NumberService.DEFAULT_DECIMAL_SEPARATOR;
     this._decimalDigits = NumberService.DEFAULT_DECIMAL_DIGITS;
 
     this._grouping = true;
-    // this._locale = this.momentSrv.getLocale();
-    this._locale = 'es';
+    this._locale = this._config.locale;
   }
 
   public get grouping(): boolean {

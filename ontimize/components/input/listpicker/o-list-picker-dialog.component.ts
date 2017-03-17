@@ -1,11 +1,10 @@
-import {Component, forwardRef, Inject, OnInit,
-  ViewEncapsulation} from '@angular/core';
+import {
+  Component,
+  ViewEncapsulation
+} from '@angular/core';
 
-import {MdDialog } from '../../material/ng2-material/index';
-
-import {InputConverter} from '../../../decorators';
+import { MdDialogRef } from '@angular/material';
 import {Util} from '../../../util/util';
-
 
 export const DEFAULT_INPUTS_O_LIST_PICKER = [
   'data',
@@ -22,25 +21,29 @@ export const DEFAULT_INPUTS_O_LIST_PICKER = [
   ],
   encapsulation: ViewEncapsulation.None
 })
-export class OListPickerDialogComponent implements OnInit {
+export class OListPickerDialogComponent {
 
   data: Array<any>;
-  visibleColumns: string;
-  @InputConverter()
   filter: boolean = true;
 
   visibleColsArray: Array<string>;
 
-  constructor(
-    @Inject(forwardRef(() => MdDialog)) private dialog: MdDialog
-  ) {}
+  constructor( protected dialogRef: MdDialogRef<OListPickerDialogComponent>) { }
 
-  ngOnInit(): any {
-    this.visibleColsArray = Util.parseArray(this.visibleColumns);
+  initialize(parameters: Object): any {
+    if ( Util.isArray(parameters['data']) ) {
+      this.data = parameters['data'];
+    }
+    if ( Util.isArray(parameters['visibleColumns']) ) {
+      this.visibleColsArray = parameters['visibleColumns'];
+    }
+    if (typeof parameters['filter'] !== 'undefined') {
+      this.filter = parameters['filter'];
+    }
   }
 
   onClickListItem(e: Event, value: any): void {
-    this.dialog.close(value);
+    this.dialogRef.close(value);
   }
 
 }

@@ -1,27 +1,40 @@
 <div class="o-list-container" layout-fill>
   <!--<span *ngIf="title" class="o-list-title">{{title}}</span>-->
-  <div [class.hidden-loading]="!loading" class="spinner-container" flex="100" layout="row" layout-align="center center">
+  <div [class.hidden-loading]="!loading" [class.pageable-loading]="pageable && state.queryRecordOffset > 0" class="spinner-container"
+    flex="100" layout="row" layout-align="center center">
     <md-spinner></md-spinner>
   </div>
 
-  <md-toolbar class="toolbar-filter-list" *ngIf="controls">
+  <md-toolbar class="toolbar-filter-list" [class.dense]="odense" *ngIf="controls">
     <div class="md-toolbar-tools" layout="row" layout-fill layout-align="start center">
-      <button type="button" md-icon-button aria-label="Refresh" (click)="onReload()" *ngIf="refreshButton">
+      <button type="button" md-icon-button aria-label="Refresh" (click)="reloadData()" *ngIf="refreshButton">
         <md-icon>refresh</md-icon>
       </button>
-    <span class="fill-remaining"></span>
-     <div *ngIf="title" layout="row" layout-align="center center">
-       <span>{{  title | oTranslate }}</span>
-      </div >
-    <span *ngIf="title" class="fill-remaining"></span>
+      <button type="button" md-icon-button aria-label="Delete" (click)="remove()" *ngIf="selectedItems.length">
+        <md-icon>delete</md-icon>
+      </button>
+      <span class="fill-remaining"></span>
+      <div *ngIf="title" layout="row" layout-align="center center">
+        <span>{{  title | oTranslate }}</span>
+      </div>
+      <span *ngIf="title" class="fill-remaining"></span>
 
-    <o-search-input *ngIf="quickFilter" placeholder=""></o-search-input>
+      <o-search-input *ngIf="quickFilter" placeholder=""></o-search-input>
     </div>
-</md-toolbar>
+  </md-toolbar>
 
-<div layout="column" class="fill-remaining">
-  <md-list class="md-list">
-    <ng-content></ng-content>
-  </md-list>
-</div>
+  <div layout="column" class="fill-remaining">
+    <md-list class="md-list" [attr.dense]="getDense()" [class.selectable]="selectable" (scroll)="onScroll($event)"
+      [class.o-list-1-detail-buttons]="(editButtonInRow || detailButtonInRow) && !(editButtonInRow && detailButtonInRow)"
+      [class.o-list-2-detail-buttons]="editButtonInRow && detailButtonInRow">
+      <md-list-item *ngIf="!dataArray.length" layout="row" layout-align="center center" style="cursor: default;">
+        <h3 md-line>{{ 'TABLE.EMPTY' | oTranslate }}</h3>
+      </md-list-item>
+      <ng-content></ng-content>
+
+    </md-list>
+    <button *ngIf="insertButton" md-fab (click)="add()" class="add-button">
+      <md-icon>add</md-icon>
+    </button>
+  </div>
 </div>

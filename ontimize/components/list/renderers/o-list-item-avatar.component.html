@@ -1,0 +1,7 @@
+<img md-list-avatar class="avatar" [src]="avatar" [alt]="title">
+<div class="md-list-text">
+  <h3 md-line class="primary-text"> {{ title }} </h3>
+  <h4 *ngIf="primaryText" md-line class="primary-text">{{ primaryText }}</h4>
+  <p *ngIf="secondaryText" md-line class="secondary-text">{{ secondaryText }}</p>
+</div>
+<md-icon *ngIf="icon" [class.top]="has3Lines" class="material-icons o-list-item-icon" (click)="onActionIconClick($event)">{{ icon }}</md-icon>

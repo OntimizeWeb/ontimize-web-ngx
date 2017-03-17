@@ -1,16 +1,6 @@
 import {OpaqueToken} from '@angular/core';
 import {MdContent} from './components/content/content';
 import {
-  MdDataTable,
-  MdDataTableModule,
-  MdDataTableHeaderSelectableRow,
-  MdDataTableSelectableRow
-} from './components/data-table/index';
-import {MdDialog, MdDialogTitle, MdDialogActions, MdDialogPortal,
-  MdDialogModule} from './components/dialog/index';
-import {MdDividerModule, MdDivider} from './components/divider/divider';
-import {MdInk} from './components/ink/ink';
-import {
   MdPatternValidator,
   MdMaxLengthValidator,
   MdMinValueValidator,
@@ -18,23 +8,15 @@ import {
   MdNumberRequiredValidator,
   INPUT_VALIDATORS
 } from './components/form/validators';
-import {MdSubheader} from './components/subheader/subheader';
 import {Media} from './core/util/media';
 import {ViewportHelper, BrowserViewportHelper, NodeViewportHelper} from './core/util/viewport';
 import {OverlayContainer} from '@angular/material';
-import {MdBackdrop} from './components/backdrop/backdrop';
 
 /** Token used to inject the DOM element that serves as the overlay container. */
 export declare const OVERLAY_CONTAINER_TOKEN: OpaqueToken;
 
-export * from './components/backdrop/backdrop';
 export * from './components/content/content';
-export * from './components/data-table/index';
-export * from './components/dialog/index';
-export * from './components/divider/divider';
-export * from './components/ink/ink';
 export * from './components/form/validators';
-export * from './components/subheader/subheader';
 export * from './core/util/media';
 export * from './core/util/ink';
 export * from './core/util/viewport';
@@ -45,21 +27,9 @@ export * from './core/util/animate';
  */
 export const MATERIAL_DIRECTIVES: any[] = [
   MdContent,
-  MdDataTable, MdDataTableHeaderSelectableRow, MdDataTableSelectableRow,
-  MdDivider,
-  MdBackdrop,
-  MdDialog, MdDialogActions, MdDialogTitle, MdDialogPortal,
-  MdInk,
   MdPatternValidator, MdMaxLengthValidator,
   MdMinValueValidator, MdMaxValueValidator,
-  MdNumberRequiredValidator,
-  MdSubheader
-];
-
-export const MATERIAL_MODULES: any[] = [
-  MdDialogModule,
-  MdDataTableModule,
-  MdDividerModule
+  MdNumberRequiredValidator
 ];
 
 /**

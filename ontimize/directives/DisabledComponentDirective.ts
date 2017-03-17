@@ -7,14 +7,13 @@ import {
 import { AbstractControl, FormControl, ControlContainer, FormGroup } from '@angular/forms';
 
 import {
-  MdInput,
-  MdCheckbox
+  MdInputContainer
 } from '@angular/material';
 
 
 
 @Directive({
-  selector: '[formControlName][o-disabled]'
+  selector: '[formControlName][o-disabled], input[o-disabled]'
 })
 export class DisabledComponentDirective implements OnInit {
 
@@ -45,29 +44,32 @@ export class DisabledComponentDirective implements OnInit {
   }
 
   renderDOM() {
-    // if (this.elRef && this.ctrl) {
-    //   let input = this.elRef.nativeElement.getElementsByClassName('md-input-element');
-    //   if (input && input.length > 0) {
-    //     if (this.ctrl.disabled) {
-    //       this.elRef.nativeElement.classList.add('md-disabled');
-    //       input[0].setAttribute('disabled', true);
-    //     } else {
-    //       this.elRef.nativeElement.classList.remove('md-disabled');
-    //       input[0].removeAttribute('disabled');
-    //     }
-    //   }
-    // }
-    if (this.isAllowedComponent()
-      && this.ctrl && this.ctrl.disabled) {
-      this.component.disabled = this.ctrl.disabled;
+    if (this.component instanceof MdInputContainer) {
+      let _disabled = false;
+      if (this.ctrl && this.ctrl.disabled) {
+        _disabled = this.ctrl.disabled;
+      } else if (this.ctrl === null) {
+        // case of fake display components (e.g. datepicker, listpicker, ...)
+        let element = this.elRef.nativeElement;
+        if (element && element.attributes['ng-reflect-disabled']) {
+          element.disabled = true;
+          _disabled = true;
+        }
+      }
+      // Angular/material bug ???
+      // It is necessary to force disabled on _mdInputChild for painting md-underline ok
+      if (_disabled) {
+        let inputContainer: MdInputContainer = <MdInputContainer>this.component;
+        if (inputContainer._mdInputChild) {
+          inputContainer._mdInputChild.disabled = true;
+        }
+      }
     }
   }
 
   isAllowedComponent() {
     let allowed = false;
-    if (this.component instanceof MdInput) {
-      allowed = true;
-    } else if (this.component instanceof MdCheckbox) {
+    if (this.component instanceof MdInputContainer) {
       allowed = true;
     }
     return allowed;

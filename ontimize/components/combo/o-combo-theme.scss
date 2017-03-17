@@ -1,0 +1,19 @@
+@import 'node_modules/@angular/material/core/theming/theming';
+
+
+@mixin o-combo-theme($theme) {
+  $foreground: map-get($theme, foreground);
+  $warn: map-get($theme, warn);
+
+  .md-combo-container{
+    &.ng-invalid.ng-touched {
+        .md-hint {
+          color: md-color($warn);
+        }
+      }
+  }
+
+}
+
+
+

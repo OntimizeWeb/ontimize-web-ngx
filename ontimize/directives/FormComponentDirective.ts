@@ -1,12 +1,12 @@
 import {Directive, ElementRef, forwardRef, Inject} from '@angular/core';
 
-import {IFormComponent} from '../interfaces';
+import {IComponent} from '../interfaces';
 import {OFormComponent} from '../components';
 
 @Directive({
     selector: '[form-component]'
 })
-export class FormComponentDirective implements IFormComponent {
+export class FormComponentDirective implements IComponent {
     constructor(@Inject(forwardRef(() => OFormComponent)) private _form: OFormComponent,
       private _el: ElementRef) {
         if(this._form) {

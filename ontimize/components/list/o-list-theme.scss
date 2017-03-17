@@ -1,0 +1,24 @@
+@import 'node_modules/@angular/material/core/theming/theming';
+
+@mixin o-list-theme($theme) {
+  $foreground: map-get($theme, foreground);
+
+  .o-list-container {
+
+    .primary-text {
+      color: md-color($foreground, text);
+    }
+
+    .secondary-text {
+      color: md-color($foreground, secondary-text);
+    }
+
+    .o-list-row-action .md-checkbox-inner-container,
+    .o-list-item-icon {
+      color: md-color($foreground, icon);
+    }
+
+
+
+  }
+}

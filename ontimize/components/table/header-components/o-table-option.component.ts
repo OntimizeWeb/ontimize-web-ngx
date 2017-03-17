@@ -11,7 +11,7 @@ export const DEFAULT_INPUTS_O_TABLE_OPTION = [
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE_OPTION = [
-  'click'
+  'onClick'
 ];
 
 @Component({
@@ -29,7 +29,7 @@ export class OTableOptionComponent implements OnInit {
   public static DEFAULT_INPUTS_O_TABLE_OPTION = DEFAULT_INPUTS_O_TABLE_OPTION;
   public static DEFAULT_OUTPUTS_O_TABLE_OPTION = DEFAULT_OUTPUTS_O_TABLE_OPTION;
 
-  public click: EventEmitter<Object> = new EventEmitter<Object>();
+  public onClick: EventEmitter<Object> = new EventEmitter<Object>();
 
   protected table: OTableComponent;
   protected icon: string;
@@ -48,7 +48,7 @@ export class OTableOptionComponent implements OnInit {
   }
 
   innerOnClick(event: any) {
-    this.click.emit(event);
+    this.onClick.emit(event);
   }
 
 }

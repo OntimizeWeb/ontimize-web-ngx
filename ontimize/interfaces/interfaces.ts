@@ -1,11 +1,11 @@
-import {EventEmitter} from '@angular/core';
-import {Observable} from 'rxjs/Observable';
-import {FormControl} from '@angular/forms';
+import { EventEmitter } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { FormControl } from '@angular/forms';
 
 
 export interface SessionInfo {
-  id:number;
-  user:string;
+  id: number;
+  user: string;
 }
 
 export interface IDataService {
@@ -37,15 +37,15 @@ export interface IOntimizeServiceConf {
   totalsize?: number;
 }
 
-export interface IFormComponent {
+export interface IComponent {
   getAttribute(): string;
 }
 
-export interface IFormDataTypeComponent extends IFormComponent {
+export interface IFormDataTypeComponent extends IComponent {
   getSQLType(): number;
 }
 
-export interface IFormControlComponent extends IFormComponent {
+export interface IFormControlComponent extends IComponent {
   getControl(): FormControl;
 }
 
@@ -78,4 +78,9 @@ export interface ITableCellEditor {
   performInsertion(cellElement: any);
   createEditorForInsertTable(cellElement: any, data: any);
   getInsertTableValue(): any;
+}
+
+export interface ILocalStorageComponent {
+  getDataToStore(): Object;
+  getComponentKey(): string;
 }

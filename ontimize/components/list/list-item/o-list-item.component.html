@@ -1,0 +1,19 @@
+<md-list-item #innerListItem layout-fill>
+  <div class="o-list-row-action" *ngIf="_list && _list.selectable">
+    <md-checkbox [checked]="isSelected" (change)="onCheckboxChange($event)">
+    </md-checkbox>
+  </div>
+  <ng-content select="[md-list-avatar],[md-list-icon], [mat-list-avatar], [mat-list-icon]"></ng-content>
+  <div class="md-list-text">
+    <ng-content select="[md-line], [mat-line]"></ng-content>
+  </div>
+  <ng-content></ng-content>
+  <div layout="row" class="row-buttons-container">
+    <div class="o-list-row-action o-list-item-icon" *ngIf="_list && _list.editButtonInRow" (click)="onEditIconClicked($event)">
+      <md-icon class="material-icons">{{ _list.editButtonInRowIcon }}</md-icon>
+    </div>
+    <div class="o-list-row-action o-list-item-icon" *ngIf="_list && _list.detailButtonInRow" (click)="onDetailIconClicked($event)">
+      <md-icon class="material-icons">{{ _list.detailButtonInRowIcon }}</md-icon>
+    </div>
+  </div>
+</md-list-item>

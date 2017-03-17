@@ -1,0 +1,24 @@
+.o-list-item {
+  .row-buttons-container {
+    .o-list-row-action {
+      height: 24px;
+      text-align: center;
+      cursor: pointer;
+    }
+  }
+}
+
+.md-list {
+  .md-checkbox-inner-container {
+    margin: 0;
+  }
+  &[dense] .o-list-item {
+    .o-list-row-action {
+      .md-checkbox-inner-container {
+        height: 16px;
+        width: 16px;
+        margin: 0;
+      }
+    }
+  }
+}

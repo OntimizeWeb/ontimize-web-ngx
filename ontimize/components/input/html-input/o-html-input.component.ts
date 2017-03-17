@@ -15,7 +15,9 @@ import { MdCKEditorModule, CKEditor } from '../../material/ckeditor/ckeditor.com
 import { MdInputModule, MdTabGroup, MdTab } from '@angular/material';
 
 import {
-  IFormComponent, IFormControlComponent, IFormDataTypeComponent,
+  IComponent,
+  IFormControlComponent,
+  IFormDataTypeComponent,
   IFormDataComponent
 } from '../../../interfaces';
 import { InputConverter } from '../../../decorators';
@@ -57,7 +59,7 @@ export const DEFAULT_OUTPUTS_O_HTML_INPUT = [
   ],
   encapsulation: ViewEncapsulation.None
 })
-export class OHTMLInputComponent implements IFormComponent, IFormControlComponent, IFormDataTypeComponent, IFormDataComponent, OnInit {
+export class OHTMLInputComponent implements IComponent, IFormControlComponent, IFormDataTypeComponent, IFormDataComponent, OnInit {
 
   public static DEFAULT_INPUTS_O_HTML_INPUT = DEFAULT_INPUTS_O_HTML_INPUT;
   public static DEFAULT_OUTPUTS_O_HTML_INPUT = DEFAULT_OUTPUTS_O_HTML_INPUT;

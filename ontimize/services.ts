@@ -13,3 +13,5 @@ export * from './services/o-translate.service';
 export * from './services/data-service.provider';
 export * from './services/auth-guard.service';
 export * from './services/auth-guard.provider';
+
+export * from './services/local-storage.service';

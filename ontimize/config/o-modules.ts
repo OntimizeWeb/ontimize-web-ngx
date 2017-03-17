@@ -1,4 +1,4 @@
-import {Http} from '@angular/http';
+import { Http } from '@angular/http';
 
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -7,13 +7,10 @@ import { HttpModule } from '@angular/http';
 import {
   TranslateModule,
   TranslateLoader,
-  TranslateStaticLoader} from 'ng2-translate/ng2-translate';
+  TranslateStaticLoader
+} from 'ng2-translate';
 
 import { MaterialModule } from '@angular/material';
-
-import {
-  MATERIAL_MODULES
-} from '../components/material/ng2-material/index';
 
 import {
   OBarMenuModule,
@@ -46,8 +43,10 @@ import {
   OTextareaInputModule,
   OListModule,
   OListItemModule,
-  OSelectableListModule,
-  OSelectableListItemModule,
+  OListItemAvatarModule,
+  OListItemTextModule,
+  OListItemCardModule,
+  OListItemCardImageModule,
   OSearchInputModule,
   OTableModule,
   OSideMenuModule,
@@ -77,9 +76,6 @@ export const ONTIMIZE_MODULES: any = [
 
   // Material modules
   MaterialModule.forRoot(),
-
-  // Ng2-material
-  ...MATERIAL_MODULES,
 
   // Ontimize modules
   OBarMenuModule.forRoot(),
@@ -112,8 +108,10 @@ export const ONTIMIZE_MODULES: any = [
   OLightTableColumnModule.forRoot(),
   OListModule.forRoot(),
   OListItemModule.forRoot(),
-  OSelectableListModule.forRoot(),
-  OSelectableListItemModule.forRoot(),
+  OListItemAvatarModule.forRoot(),
+  OListItemTextModule.forRoot(),
+  OListItemCardModule.forRoot(),
+  OListItemCardImageModule.forRoot(),
   OSearchInputModule.forRoot(),
   OTableModule.forRoot(),
   OSideMenuModule.forRoot(),

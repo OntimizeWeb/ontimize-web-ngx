@@ -1,18 +1,23 @@
-import { Inject } from '@angular/core';
+import { Injector, Injectable } from '@angular/core';
 import { EventEmitter } from '@angular/core';
-import { TranslateService } from 'ng2-translate/ng2-translate';
+import { TranslateService } from 'ng2-translate';
 import { MomentService } from '../services';
 
 import CORE_TRANSLATIONS = require('../i18n/i18n');
 
 import {ObservableWrapper} from '../util/async';
 
+@Injectable()
 export class OTranslateService {
 
   public onLanguageChanged: EventEmitter<any> = new EventEmitter();
 
-  constructor (@Inject(TranslateService) private translateService: TranslateService,
-      @Inject(MomentService) private momentService: MomentService) {
+  protected translateService: TranslateService;
+  protected momentService: MomentService;
+
+  constructor( protected injector: Injector ) {
+    this.translateService = this.injector.get(TranslateService);
+    this.momentService = this.injector.get(MomentService);
   }
 
   public setDefaultLang (lang: string): void {

@@ -2,7 +2,7 @@ import {
   Component, OnInit, OnDestroy, EventEmitter,
   Injector, NgZone, ChangeDetectorRef,
   NgModule, ModuleWithProviders, HostListener,
-  ViewEncapsulation
+  ViewEncapsulation, ElementRef
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -12,12 +12,11 @@ import 'rxjs/add/observable/combineLatest';
 
 import { MdProgressBarModule } from '@angular/material';
 
-import {
-  OntimizeService, DialogService, NavigationService,
-  dataServiceFactory
-} from '../../services';
+import { dataServiceFactory } from '../../services/data-service.provider';
+import { OntimizeService, DialogService, NavigationService } from '../../services';
 import { InputConverter } from '../../decorators';
-import { IFormComponent, IFormControlComponent, IFormDataTypeComponent } from '../../interfaces';
+import { IComponent, IFormControlComponent, IFormDataTypeComponent } from '../../interfaces';
+
 import { OFormToolbarModule, OFormToolbarComponent } from './o-form-toolbar.component';
 import { OFormValue } from './OFormValue';
 import { Util, SQLTypes } from '../../utils';
@@ -61,7 +60,25 @@ export const DEFAULT_INPUTS_O_FORM = [
   'service',
 
   // stay-in-record-after-insert [string][yes|no|true|false]: shows detail form after insert new record. Default: false;
-  'stayInRecordAfterInsert: stay-in-record-after-insert'
+  'stayInRecordAfterInsert: stay-in-record-after-insert',
+
+  'serviceType : service-type',
+
+  'queryOnInit : query-on-init',
+
+  'parentKeys: parent-keys',
+
+  // query-method [string]: name of the service method to perform queries. Default: query.
+  'queryMethod: query-method',
+
+  // insert-method [string]: name of the service method to perform inserts. Default: insert.
+  'insertMethod: insert-method',
+
+  // update-method [string]: name of the service method to perform updates. Default: update.
+  'updateMethod: update-method',
+
+  // delete-method [string]: name of the service method to perform deletions. Default: delete.
+  'deleteMethod: delete-method'
 ];
 
 export const DEFAULT_OUTPUTS_O_FORM = [
@@ -102,6 +119,11 @@ export class OFormComponent implements OnInit, OnDestroy {
   public static DEFAULT_INPUTS_O_FORM = DEFAULT_INPUTS_O_FORM;
   public static DEFAULT_OUTPUTS_O_FORM = DEFAULT_OUTPUTS_O_FORM;
 
+  public static DEFAULT_QUERY_METHOD = 'query';
+  public static DEFAULT_INSERT_METHOD = 'insert';
+  public static DEFAULT_UPDATE_METHOD = 'update';
+  public static DEFAULT_DELETE_METHOD = 'delete';
+
   @InputConverter()
   showHeader: boolean = true;
   headerMode: string = 'floating';
@@ -115,11 +137,20 @@ export class OFormComponent implements OnInit, OnDestroy {
   service: string;
   @InputConverter()
   stayInRecordAfterInsert: boolean = false;
+  serviceType: string;
+  @InputConverter()
+  protected queryOnInit: boolean = true;
+  protected parentKeys: string;
+  protected queryMethod: string;
+  protected insertMethod: string;
+  protected updateMethod: string;
+  protected deleteMethod: string;
 
   isDetailForm: boolean = false;
   keysArray: string[] = [];
   colsArray: string[] = [];
-  dataService: OntimizeService;
+  dataService: any;
+  _pKeysEquiv = {};
 
   formGroup: FormGroup;
   onFormDataLoaded: EventEmitter<Object> = new EventEmitter<Object>();
@@ -175,7 +206,8 @@ export class OFormComponent implements OnInit, OnDestroy {
     protected actRoute: ActivatedRoute,
     protected zone: NgZone,
     protected cd: ChangeDetectorRef,
-    protected injector: Injector) {
+    protected injector: Injector,
+    protected elRef: ElementRef) {
 
     this.dialogService = injector.get(DialogService);
     this.navigationService = injector.get(NavigationService);
@@ -189,11 +221,13 @@ export class OFormComponent implements OnInit, OnDestroy {
     this.reloadStream.subscribe(
       function (valArr) {
         if (Util.isArray(valArr) && valArr.length === 2) {
-          if (valArr[0] === true && valArr[1] === true) {
+          if (self.queryOnInit && valArr[0] === true && valArr[1] === true) {
             self._reloadAction(true);
           }
         }
       });
+
+    this.elRef.nativeElement.classList.add('o-form');
   }
 
   registerFormComponent(comp: any) {
@@ -249,7 +283,7 @@ export class OFormComponent implements OnInit, OnDestroy {
     }
   }
 
-  unregisterFormComponent(comp: IFormComponent) {
+  unregisterFormComponent(comp: IComponent) {
     if (comp) {
       let attr = comp.getAttribute();
       if (attr && attr.length > 0) {
@@ -400,6 +434,24 @@ export class OFormComponent implements OnInit, OnDestroy {
     }
     this.keysArray = Util.parseArray(this.keys);
     this.colsArray = Util.parseArray(this.columns);
+    let pkArray = Util.parseArray(this.parentKeys);
+    this._pKeysEquiv = Util.parseParentKeysEquivalences(pkArray);
+
+    if (!this.queryMethod) {
+      this.queryMethod = OFormComponent.DEFAULT_QUERY_METHOD;
+    }
+
+    if (!this.insertMethod) {
+      this.insertMethod = OFormComponent.DEFAULT_INSERT_METHOD;
+    }
+
+    if (!this.updateMethod) {
+      this.updateMethod = OFormComponent.DEFAULT_UPDATE_METHOD;
+    }
+
+    if (!this.deleteMethod) {
+      this.deleteMethod = OFormComponent.DEFAULT_DELETE_METHOD;
+    }
 
     this.configureService();
 
@@ -447,14 +499,21 @@ export class OFormComponent implements OnInit, OnDestroy {
   }
 
   configureService() {
-    this.dataService = this.injector.get(OntimizeService);
-
-    if (Util.isDataService(this.dataService)) {
-      let serviceCfg = this.dataService.getDefaultServiceConfiguration(this.service);
-      if (this.entity) {
-        serviceCfg['entity'] = this.entity;
+    let loadingService: any = OntimizeService;
+    if (this.serviceType) {
+      loadingService = this.serviceType;
+    }
+    try {
+      this.dataService = this.injector.get(loadingService);
+      if (Util.isDataService(this.dataService)) {
+        let serviceCfg = this.dataService.getDefaultServiceConfiguration(this.service);
+        if (this.entity) {
+          serviceCfg['entity'] = this.entity;
+        }
+        this.dataService.configureService(serviceCfg);
       }
-      this.dataService.configureService(serviceCfg);
+    } catch (e) {
+      console.error(e);
     }
   }
 
@@ -464,9 +523,6 @@ export class OFormComponent implements OnInit, OnDestroy {
     }
     if (this.qParamSub) {
       this.qParamSub.unsubscribe();
-    }
-    if (this.urlParamSub) {
-      this.urlParamSub.unsubscribe();
     }
     this.formDataCache = undefined;
   }
@@ -549,7 +605,6 @@ export class OFormComponent implements OnInit, OnDestroy {
       let currentData = data[0];
       this._updateFormData(this.toFormValueData(currentData));
       this._emitData(currentData);
-
     } else if (Util.isObject(data)) {
       this._updateFormData(this.toFormValueData(data));
       this._emitData(data);
@@ -664,6 +719,7 @@ export class OFormComponent implements OnInit, OnDestroy {
         }
       });
     }
+
     if (this.keysArray && insertedKeys) {
       urlText += '/';
       this.keysArray.forEach((current, index) => {
@@ -828,9 +884,12 @@ export class OFormComponent implements OnInit, OnDestroy {
   queryData(filter) {
     var self = this;
     var loader = self.load();
-
+    if (this.dataService === undefined) {
+      console.warn('No service configured! aborting query');
+      return;
+    }
     let sqlTypes = this.getAttributesSQLTypes();
-    this.dataService.query(filter, this.getAttributesToQuery(), this.entity, sqlTypes)
+    this.dataService[this.queryMethod](filter, this.getAttributesToQuery(), this.entity, sqlTypes)
       .subscribe(resp => {
         loader.unsubscribe();
         if (resp.code === 0) {
@@ -867,9 +926,7 @@ export class OFormComponent implements OnInit, OnDestroy {
         }
       });
     }
-
     attributes = attributes.concat(this.colsArray.filter(col => attributes.indexOf(col) < 0));
-
     return attributes;
   }
 
@@ -877,7 +934,7 @@ export class OFormComponent implements OnInit, OnDestroy {
     var self = this;
     var loader = self.load();
     let observable = new Observable(observer => {
-      this.dataService.insert(values, this.entity, sqlTypes)
+      this.dataService[this.insertMethod](values, this.entity, sqlTypes)
         .subscribe(resp => {
           loader.unsubscribe();
           if (resp.code === 0) {
@@ -923,7 +980,7 @@ export class OFormComponent implements OnInit, OnDestroy {
     var self = this;
     var loader = self.load();
     let observable = new Observable(observer => {
-      this.dataService.update(filter, values, this.entity, sqlTypes)
+      this.dataService[this.updateMethod](filter, values, this.entity, sqlTypes)
         .subscribe(resp => {
           loader.unsubscribe();
           if (resp.code === 0) {
@@ -964,7 +1021,7 @@ export class OFormComponent implements OnInit, OnDestroy {
     var self = this;
     var loader = self.load();
     let observable = new Observable(observer => {
-      this.dataService.delete(filter, this.entity)
+      this.dataService[this.deleteMethod](filter, this.entity)
         .subscribe(resp => {
           loader.unsubscribe();
           if (resp.code === 0) {
@@ -1033,6 +1090,7 @@ export class OFormComponent implements OnInit, OnDestroy {
 
   protected getCurrentKeysValues() {
     let filter = {};
+
     if (this.urlParams && this.keysArray) {
       this.keysArray.map(key => {
         if (this.urlParams[key]) {
@@ -1040,6 +1098,16 @@ export class OFormComponent implements OnInit, OnDestroy {
         }
       });
     };
+
+    let keys = Object.keys(this._pKeysEquiv);
+    if (this.urlParams && keys && keys.length > 0) {
+      keys.forEach(item => {
+        let urlVal = this.urlParams[this._pKeysEquiv[item]];
+        if (urlVal) {
+          filter[item] = urlVal;
+        }
+      });
+    }
     return filter;
   }
 
@@ -1069,7 +1137,6 @@ export class OFormComponent implements OnInit, OnDestroy {
     }
     return (i > 2);
   }
-
 }
 
 @NgModule({
