@@ -62,6 +62,9 @@ export const DEFAULT_INPUTS_O_FORM = [
   // stay-in-record-after-insert [string][yes|no|true|false]: shows detail form after insert new record. Default: false;
   'stayInRecordAfterInsert: stay-in-record-after-insert',
 
+  // stay-in-record-after-edit [string][yes|no|true|false]: shows edit form after edit a record. Default: false;
+  'stayInRecordAfterEdit: stay-in-record-after-edit',
+
   'serviceType : service-type',
 
   'queryOnInit : query-on-init',
@@ -140,6 +143,8 @@ export class OFormComponent implements OnInit, OnDestroy {
   service: string;
   @InputConverter()
   stayInRecordAfterInsert: boolean = false;
+  @InputConverter()
+  stayInRecordAfterEdit: boolean = false;
   serviceType: string;
   @InputConverter()
   protected queryOnInit: boolean = true;
@@ -866,8 +871,12 @@ export class OFormComponent implements OnInit, OnDestroy {
     this.updateData(filter, values, sqlTypes)
       .subscribe(resp => {
         self.postCorrectUpdate(resp);
-        //TODO mostrar un toast indicando que la operación fue correcta...
-        self._closeDetailAction();
+        // TODO mostrar un toast indicando que la operación fue correcta...
+        if (self.stayInRecordAfterEdit) {
+          self._reloadAction(true);
+        } else {
+          self._closeDetailAction();
+        }
       }, error => {
         self.postIncorrectUpdate(error);
       });
