@@ -9,18 +9,26 @@
     z-index: 100;
     box-shadow: none;
   }
+
   .o-form-toolbar-floating-scrolled {
     box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 2px 1px -1px rgba(0, 0, 0, 0.12);
   }
 
-  form.inner-form {
-    position: absolute;
-    top: 50px;
-    left: 0px;
-    right: 0px;
-  }
+  form {
+    &.inner-form {
+      position: absolute;
+      top: 50px;
+      left: 0px;
+      right: 0px;
+    }
 
-  form.form-no-toolbar {
-    top: 0px;
+    &.form-no-toolbar {
+      top: 0px;
+    }
+
+    .o-form-content-wrapper {
+      height: 100%;
+      box-sizing: border-box;
+    }
   }
 }

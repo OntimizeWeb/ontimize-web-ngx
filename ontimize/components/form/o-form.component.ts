@@ -78,7 +78,10 @@ export const DEFAULT_INPUTS_O_FORM = [
   'updateMethod: update-method',
 
   // delete-method [string]: name of the service method to perform deletions. Default: delete.
-  'deleteMethod: delete-method'
+  'deleteMethod: delete-method',
+
+  // layout-fill [string][yes|no|true|false]: Default: true;
+  'layoutFill: layout-fill'
 ];
 
 export const DEFAULT_OUTPUTS_O_FORM = [
@@ -145,6 +148,8 @@ export class OFormComponent implements OnInit, OnDestroy {
   protected insertMethod: string;
   protected updateMethod: string;
   protected deleteMethod: string;
+  @InputConverter()
+  layoutFill: boolean = true;
 
   isDetailForm: boolean = false;
   keysArray: string[] = [];
@@ -228,6 +233,9 @@ export class OFormComponent implements OnInit, OnDestroy {
       });
 
     this.elRef.nativeElement.classList.add('o-form');
+    if (this.layoutFill) {
+      this.elRef.nativeElement.setAttribute('layout-fill', '');
+    }
   }
 
   registerFormComponent(comp: any) {
