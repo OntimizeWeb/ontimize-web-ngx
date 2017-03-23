@@ -1622,7 +1622,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
             if (($ as any).isArray(res)) {
               data = res;
             } else if ((res.code === 0) && ($ as any).isArray(res.data)) {
-              data = res.data;
+              data = (res.data !== undefined) ? res.data : [];
               if (self.pageable) {
                 self.updatePaginationInfo(res);
               }
@@ -1630,10 +1630,10 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
             // set table data
             if (($ as any).isArray(data)) {
               self.dataTable.fnClearTable(false);
-              if (!self.pageable) {
-                self.dataArray = data;
-              } else {
+              if (self.pageable) {
                 self.setPaginatedTableData(data, ovrrArgs);
+              } else {
+                self.dataArray = data;
               }
 
               if (self.dataArray.length > 0) {
@@ -1718,7 +1718,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     if (!this.singlePageMode) {
       this.storedRecordsIndexes.push({
         start: queryRes.startRecordIndex,
-        end: queryRes.startRecordIndex + queryRes.data.length
+        end: queryRes.startRecordIndex + (queryRes.data ? queryRes.data.length : 0)
       });
     }
   }
@@ -1752,7 +1752,12 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       let endIndex = (this.state.queryRecordOffset < this.state.queryTotalRecordNumber) ? (initIndex + this.queryRows - 1) : this.state.queryRecordOffset;
 
       let newText = initIndex + ' - ' + endIndex + ' ';
-      newText += existingText.substring(existingText.search('\d'), existingText.lastIndexOf(' '));
+      let match = existingText.match('[0-9]+ - [0-9]+');
+      let initTrimIdx = existingText.search('\d');
+      if (match.length === 1) {
+        initTrimIdx = match[0].length + 1;
+      }
+      newText += existingText.substring(initTrimIdx, existingText.lastIndexOf(' '));
       newText += ' ' + this.state.queryTotalRecordNumber;
 
       footerTextEl.text(newText);
