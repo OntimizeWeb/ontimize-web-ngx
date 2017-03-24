@@ -38,7 +38,7 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_COMBO = [
   selector: 'o-table-cell-editor-combo',
   template: '',
   providers: [
-    { provide: OntimizeService, useFactory: dataServiceFactory, deps:[Injector] }
+    { provide: OntimizeService, useFactory: dataServiceFactory, deps: [Injector] }
   ],
   inputs: [
     ...DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_COMBO
@@ -76,36 +76,36 @@ export class OTableCellEditorComboComponent implements OnInit, ITableCellEditor 
   }
 
   public ngOnInit() {
-    if (typeof(this.separator) === 'undefined') {
+    if (typeof (this.separator) === 'undefined') {
       this.separator = '';
     }
-    if (typeof(this.queryMethod) === 'undefined') {
+    if (typeof (this.queryMethod) === 'undefined') {
       this.queryMethod = 'query';
     }
     this.init(undefined);
   }
 
   public init(parameters: any) {
-    if (typeof(parameters) !== 'undefined') {
-      if (typeof(parameters.service) !== 'undefined') {
+    if (typeof (parameters) !== 'undefined') {
+      if (typeof (parameters.service) !== 'undefined') {
         this.service = parameters.service;
       }
-      if (typeof(parameters.entity) !== 'undefined') {
+      if (typeof (parameters.entity) !== 'undefined') {
         this.entity = parameters.entity;
       }
-      if (typeof(parameters.valueColumn) !== 'undefined') {
+      if (typeof (parameters.valueColumn) !== 'undefined') {
         this.valueColumn = parameters.valueColumn;
       }
-      if (typeof(parameters.columns) !== 'undefined') {
+      if (typeof (parameters.columns) !== 'undefined') {
         this.columns = parameters.columns;
       }
-      if (typeof(parameters.visibleColumns) !== 'undefined') {
+      if (typeof (parameters.visibleColumns) !== 'undefined') {
         this.visibleColumns = parameters.visibleColumns;
       }
-      if (typeof(parameters.separator) !== 'undefined') {
+      if (typeof (parameters.separator) !== 'undefined') {
         this.separator = parameters.separator;
       }
-      if (typeof(parameters.queryMethod) !== 'undefined') {
+      if (typeof (parameters.queryMethod) !== 'undefined') {
         this.queryMethod = parameters.queryMethod;
       }
     }
@@ -163,8 +163,8 @@ export class OTableCellEditorComboComponent implements OnInit, ITableCellEditor 
       cellElement.addClass('editing');
       cellElement.html(this.getHtml(data));
       input = cellElement.find('select');
-      if (typeof(data) !== 'undefined') {
-        this.dataType = typeof(data);
+      if (typeof (data) !== 'undefined') {
+        this.dataType = typeof (data);
         input.val(data);
       }
       input.bind('change', (e) => {
@@ -211,24 +211,24 @@ export class OTableCellEditorComboComponent implements OnInit, ITableCellEditor 
   public createEditorForInsertTable(cellElement: any, data: any) {
     cellElement.html(this.getHtml(data));
     this.insertTableInput = cellElement.find('select');
-    if (typeof(data) !== 'undefined') {
-      this.dataType = typeof(data);
+    if (typeof (data) !== 'undefined') {
+      this.dataType = typeof (data);
       this.insertTableInput.val(data);
     }
     this.insertTableInput.bind('change', (e) => {
-      ObservableWrapper.callEmit(this.onSubmit, { inserTable: true, editor: this });
+      ObservableWrapper.callEmit(this.onSubmit, { insertTable: true, editor: this });
     });
     this.insertTableInput.bind('focus', (e) => {
-      ObservableWrapper.callEmit(this.onFocus, { inserTable: true, editor: this });
+      ObservableWrapper.callEmit(this.onFocus, { insertTable: true, editor: this });
     });
     this.insertTableInput.bind('focusout', (e) => {
-      ObservableWrapper.callEmit(this.onBlur, { inserTable: true, editor: this });
+      ObservableWrapper.callEmit(this.onBlur, { insertTable: true, editor: this });
     });
   }
 
   public getInsertTableValue(): any {
     let value = undefined;
-    if (typeof(this.insertTableInput) !== 'undefined') {
+    if (typeof (this.insertTableInput) !== 'undefined') {
       value = this.insertTableInput.val();
       if (value === 'null') {
         value = null;
@@ -247,38 +247,38 @@ export class OTableCellEditorComboComponent implements OnInit, ITableCellEditor 
     if (this.dataService && (this.queryMethod in this.dataService) && this.entity && this.valueColumn) {
       this.dataService[this.queryMethod](this.entity, {}, this.dataColumns)
         .subscribe(
-          res => {
-            let data = undefined;
-            if (($ as any).isArray(res)) {
-              data = res;
-            } else if ((res.code === 0) && ($ as any).isArray(res.data)) {
-              data = res.data;
-            }
-            if (($ as any).isArray(data)) {
-              for (let i = 0; i < data.length; ++i) {
-                let item = data[i];
-                let key = item[this.valueColumn];
-                if (typeof(key) !== 'undefined') {
-                  let value = '';
-                  for (let j = 0; j < this.dataVisibleColumns.length; ++j) {
-                    let col = this.dataVisibleColumns[j];
-                    if (typeof(item[col]) !== 'undefined') {
-                      if (j > 0) {
-                        value += this.separator;
-                      }
-                      value += String(item[col]);
-                    }
-                  }
-                  this.componentData[key] = value;
-                }
-              }
-            } else {
-              console.log('[OTableCellEditorComboComponent.init]: error code ' + res.code + ' when querying data');
-            }
-          },
-          err => {
-            console.log('[OTableCellEditorComboComponent.init]: error', err);
+        res => {
+          let data = undefined;
+          if (($ as any).isArray(res)) {
+            data = res;
+          } else if ((res.code === 0) && ($ as any).isArray(res.data)) {
+            data = res.data;
           }
+          if (($ as any).isArray(data)) {
+            for (let i = 0; i < data.length; ++i) {
+              let item = data[i];
+              let key = item[this.valueColumn];
+              if (typeof (key) !== 'undefined') {
+                let value = '';
+                for (let j = 0; j < this.dataVisibleColumns.length; ++j) {
+                  let col = this.dataVisibleColumns[j];
+                  if (typeof (item[col]) !== 'undefined') {
+                    if (j > 0) {
+                      value += this.separator;
+                    }
+                    value += String(item[col]);
+                  }
+                }
+                this.componentData[key] = value;
+              }
+            }
+          } else {
+            console.log('[OTableCellEditorComboComponent.init]: error code ' + res.code + ' when querying data');
+          }
+        },
+        err => {
+          console.log('[OTableCellEditorComboComponent.init]: error', err);
+        }
         );
     }
   }

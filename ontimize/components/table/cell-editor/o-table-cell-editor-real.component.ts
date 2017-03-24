@@ -17,7 +17,7 @@ export class OTableCellEditorRealComponent implements ITableCellEditor {
   protected tableColumn: OTableColumnComponent;
   protected insertTableInput: any;
 
-  constructor(@Inject(forwardRef(() => OTableColumnComponent)) tableColumn: OTableColumnComponent) {
+  constructor( @Inject(forwardRef(() => OTableColumnComponent)) tableColumn: OTableColumnComponent) {
     this.tableColumn = tableColumn;
     this.tableColumn.registerEditor(this);
   }
@@ -28,7 +28,7 @@ export class OTableCellEditorRealComponent implements ITableCellEditor {
 
   public getHtml(data: any): string {
     let html = '<input type="number" step="any" ';
-    if (typeof(data) !== 'undefined') {
+    if (typeof (data) !== 'undefined') {
       html += 'value="' + data + '" ';
     }
     html += 'onclick="event.stopPropagation();" ondblclick="event.stopPropagation();" />';
@@ -95,20 +95,20 @@ export class OTableCellEditorRealComponent implements ITableCellEditor {
     this.insertTableInput.bind('keydown', (e) => {
       let code = e.keyCode || e.which;
       if (code === 13 /*|| code === 9*/) {
-        ObservableWrapper.callEmit(this.onSubmit, { inserTable: true, editor: this });
+        ObservableWrapper.callEmit(this.onSubmit, { insertTable: true, editor: this });
       }
     });
     this.insertTableInput.bind('focus', (e) => {
-      ObservableWrapper.callEmit(this.onFocus, { inserTable: true, editor: this });
+      ObservableWrapper.callEmit(this.onFocus, { insertTable: true, editor: this });
     });
     this.insertTableInput.bind('focusout', (e) => {
-      ObservableWrapper.callEmit(this.onBlur, { inserTable: true, editor: this });
+      ObservableWrapper.callEmit(this.onBlur, { insertTable: true, editor: this });
     });
   }
 
   public getInsertTableValue(): any {
     let value = undefined;
-    if (typeof(this.insertTableInput) !== 'undefined') {
+    if (typeof (this.insertTableInput) !== 'undefined') {
       value = parseFloat(this.insertTableInput.val());
       if (isNaN(value)) {
         value = 0;
