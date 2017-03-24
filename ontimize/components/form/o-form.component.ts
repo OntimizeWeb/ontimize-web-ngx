@@ -93,7 +93,6 @@ export const DEFAULT_OUTPUTS_O_FORM = [
   'beforeGoEditMode'
 ];
 
-
 @Component({
   selector: 'o-form',
   providers: [
@@ -1154,6 +1153,23 @@ export class OFormComponent implements OnInit, OnDestroy {
     }
     return (i > 2);
   }
+
+  isInQueryMode(): boolean {
+    return this.mode === Mode.QUERY;
+  }
+
+  isInInsertMode(): boolean {
+    return this.mode === Mode.INSERT;
+  }
+
+  isInUpdateMode(): boolean {
+    return this.mode === Mode.UPDATE;
+  }
+
+  isInInitialMode(): boolean {
+    return this.mode === Mode.INITIAL;
+  }
+
 }
 
 @NgModule({
