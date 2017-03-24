@@ -595,7 +595,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
           for (let i = settings.aoColumns.length - 1; i >= 0; --i) {
             let colDef = settings.aoColumns[i];
             if (colDef.bVisible) {
-              insertRow.prepend('<td></td>');
+              let tdClass = (i === 0 && this.selectAllCheckbox) ? 'o-table-column-select-checkbox' : 'o-table-column-insert-table';
+              insertRow.prepend('<td class=' + tdClass + '></td>');
               if (colDef.editable && (typeof (colDef.component) !== 'undefined') &&
                 (typeof (colDef.component.editor) !== 'undefined')) {
                 let insertCell = insertRow.find('td:first');
@@ -1340,8 +1341,10 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       var self = this;
       this.table.rows({ filter: 'applied' }).every(function (el) {
         let checkboxEl = self.table.row(el).node().querySelector('input[type="checkbox"].select-row');
-        checkboxEl.checked = val;
-        ($(checkboxEl) as any).change();
+        if (checkboxEl) {
+          checkboxEl.checked = val;
+          ($(checkboxEl) as any).change();
+        }
       });
     }
   }
