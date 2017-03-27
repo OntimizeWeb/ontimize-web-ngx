@@ -441,9 +441,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   public ngOnChanges(changes: { [propName: string]: SimpleChange }) {
-    if ((typeof (changes['data']) !== 'undefined') && (typeof (this.dataTable) !== 'undefined')) {
+    if ((typeof (changes['staticData']) !== 'undefined') && (typeof (this.dataTable) !== 'undefined')) {
       this.dataTable.fnClearTable(false);
-      this.dataArray = changes['data'].currentValue;
+      this.dataArray = changes['staticData'].currentValue;
       if (this.dataArray.length > 0) {
         this.dataTable.fnAddData(this.dataArray);
       }
@@ -595,7 +595,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
           for (let i = settings.aoColumns.length - 1; i >= 0; --i) {
             let colDef = settings.aoColumns[i];
             if (colDef.bVisible) {
-              insertRow.prepend('<td></td>');
+              let tdClass = (i === 0 && this.selectAllCheckbox) ? 'o-table-column-select-checkbox' : 'o-table-column-insert-table';
+              insertRow.prepend('<td class=' + tdClass + '></td>');
               if (colDef.editable && (typeof (colDef.component) !== 'undefined') &&
                 (typeof (colDef.component.editor) !== 'undefined')) {
                 let insertCell = insertRow.find('td:first');
@@ -603,7 +604,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
                 this.onInsertRowFocusSubscribe.push(
                   colDef.component.editor.onFocus.subscribe(
                     res => {
-                      if (res.inserTable) {
+                      if (res.insertTable) {
                         this.table.rows().deselect();
                         this.table.cell.blur();
                       }
@@ -613,36 +614,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
                 if (lastEditor && this.dataService && (this.insertMethod in this.dataService) && this.entity) {
                   this.onInsertRowSubmitSubscribe = colDef.component.editor.onSubmit.subscribe(
                     res => {
-                      if (res.inserTable) {
-
-                        // get av from insert row
-                        let av = {};
-                        for (let j = 0; j < settings.aoColumns.length; ++j) {
-                          let iColDef = settings.aoColumns[j];
-                          if (iColDef.bVisible && iColDef.editable && (typeof (iColDef.component) !== 'undefined') &&
-                            (typeof (iColDef.component.editor) !== 'undefined')) {
-                            let iName = iColDef.name;
-                            let iValue = iColDef.component.editor.getInsertTableValue();
-                            if (typeof (iValue) !== 'undefined') {
-                              av[iName] = iValue;
-                            }
-                          }
-                        }
-
-                        // add parent-keys to av
-                        if ((this.dataParentKeys.length > 0) && (typeof (this.parentItem) !== 'undefined')) {
-                          for (let k = 0; k < this.dataParentKeys.length; ++k) {
-                            let parentKey = this.dataParentKeys[k];
-                            if (this.parentItem.hasOwnProperty(parentKey['alias'])) {
-                              let currentData = this.parentItem[parentKey['alias']];
-                              if (currentData instanceof OFormValue) {
-                                currentData = currentData.value;
-                              }
-                              av[parentKey['name']] = currentData;
-                            }
-                          }
-                        }
-
+                      if (res.insertTable) {
+                        let av = this.getAvToInsertFromTableSettings(settings, true);
                         // perform insert
                         console.log('[OTable.initTableOnInit]: insert', av);
                         this.loaderSuscription = this.load();
@@ -669,6 +642,23 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
                       }
                     }
                   );
+                  lastEditor = false;
+                } else if (lastEditor && this.staticData) {
+                  this.onInsertRowSubmitSubscribe = colDef.component.editor.onSubmit.subscribe(
+                    res => {
+                      if (res.insertTable) {
+                        let av = this.getAvToInsertFromTableSettings(settings, false);
+                        this.staticData.push(av);
+                        this.setDataArray(this.staticData);
+                        if (typeof (this.dataTable) !== 'undefined') {
+                          this.dataTable.fnClearTable(false);
+                          if (this.dataArray.length > 0) {
+                            this.dataTable.fnAddData(this.dataArray);
+                          }
+                          this.dataTable.fnDraw();
+                        }
+                      }
+                    });
                   lastEditor = false;
                 }
               }
@@ -1351,8 +1341,10 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       var self = this;
       this.table.rows({ filter: 'applied' }).every(function (el) {
         let checkboxEl = self.table.row(el).node().querySelector('input[type="checkbox"].select-row');
-        checkboxEl.checked = val;
-        ($(checkboxEl) as any).change();
+        if (checkboxEl) {
+          checkboxEl.checked = val;
+          ($(checkboxEl) as any).change();
+        }
       });
     }
   }
@@ -1622,7 +1614,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
             if (($ as any).isArray(res)) {
               data = res;
             } else if ((res.code === 0) && ($ as any).isArray(res.data)) {
-              data = res.data;
+              data = (res.data !== undefined) ? res.data : [];
               if (self.pageable) {
                 self.updatePaginationInfo(res);
               }
@@ -1630,10 +1622,10 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
             // set table data
             if (($ as any).isArray(data)) {
               self.dataTable.fnClearTable(false);
-              if (!self.pageable) {
-                self.dataArray = data;
-              } else {
+              if (self.pageable) {
                 self.setPaginatedTableData(data, ovrrArgs);
+              } else {
+                self.dataArray = data;
               }
 
               if (self.dataArray.length > 0) {
@@ -1718,7 +1710,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     if (!this.singlePageMode) {
       this.storedRecordsIndexes.push({
         start: queryRes.startRecordIndex,
-        end: queryRes.startRecordIndex + queryRes.data.length
+        end: queryRes.startRecordIndex + (queryRes.data ? queryRes.data.length : 0)
       });
     }
   }
@@ -1752,7 +1744,12 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       let endIndex = (this.state.queryRecordOffset < this.state.queryTotalRecordNumber) ? (initIndex + this.queryRows - 1) : this.state.queryRecordOffset;
 
       let newText = initIndex + ' - ' + endIndex + ' ';
-      newText += existingText.substring(existingText.search('\d'), existingText.lastIndexOf(' '));
+      let match = existingText.match('[0-9]+ - [0-9]+');
+      let initTrimIdx = existingText.search('\d');
+      if (match.length === 1) {
+        initTrimIdx = match[0].length + 1;
+      }
+      newText += existingText.substring(initTrimIdx, existingText.lastIndexOf(' '));
       newText += ' ' + this.state.queryTotalRecordNumber;
 
       footerTextEl.text(newText);
@@ -2287,6 +2284,38 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       return this.table.row(tableColumn.cellElement).data();
     }
   }
+
+  private getAvToInsertFromTableSettings(settings, includeParentKeys: boolean = true) {
+    // get av from insert row
+    let av = {};
+    for (let j = 0; j < settings.aoColumns.length; ++j) {
+      let iColDef = settings.aoColumns[j];
+      if (iColDef.bVisible && iColDef.editable && (typeof (iColDef.component) !== 'undefined') &&
+        (typeof (iColDef.component.editor) !== 'undefined')) {
+        let iName = iColDef.name;
+        let iValue = iColDef.component.editor.getInsertTableValue();
+        if (typeof (iValue) !== 'undefined') {
+          av[iName] = iValue;
+        }
+      }
+    }
+
+    // add parent-keys to av
+    if (includeParentKeys && (this.dataParentKeys.length > 0) && (typeof (this.parentItem) !== 'undefined')) {
+      for (let k = 0; k < this.dataParentKeys.length; ++k) {
+        let parentKey = this.dataParentKeys[k];
+        if (this.parentItem.hasOwnProperty(parentKey['alias'])) {
+          let currentData = this.parentItem[parentKey['alias']];
+          if (currentData instanceof OFormValue) {
+            currentData = currentData.value;
+          }
+          av[parentKey['name']] = currentData;
+        }
+      }
+    }
+    return av;
+  }
+
 }
 
 @NgModule({

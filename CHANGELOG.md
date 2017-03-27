@@ -1,3 +1,21 @@
+## 1.2.1 (2017-03-27)
+
+### Features
+* **o-form**: Adding attribute '*layout-fill*'.
+* **o-form**: Adding attribute '*stay-in-record-after-edit*' ([#65](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/65)) ([600437f](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/600437f))
+* **o-table**: updating '*static-data*' when '*insert-table*' is true([#64](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/64)) ([c98709c](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/c98709c))
+* **o-form**: Adding '*isInQueryMode*', '*isInInsertMode*', '*isInUpdateMode*', '*isInInitialMode*' state checking methods.
+* **o-form**: Adding support for inner '*o-dynamic-form*' component.
+
+### PEER-DEPENDENCY UPDATES ###
+
+### BREAKING CHANGES
+
+### Bug Fixes
+* **o-table**: Using parent-keys (inside md-tab) ([#62](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/62)) ([5eb088d](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/5eb088d))
+* **o-form**: Updating styles for adapting to container height.
+* **o-table editors**: Fixing variable bugs.
+* **o-table**: Fixing input '*static-data*' update ([#63](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/63)) ([c98709c](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/c98709c))
 
 ## 1.2.0 (2017-03-16)
 

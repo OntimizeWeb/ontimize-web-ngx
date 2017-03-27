@@ -8,8 +8,8 @@ import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup, ReactiveFormsModule, FormControl, FormsModule } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
+import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/observable/combineLatest';
-
 import { MdProgressBarModule } from '@angular/material';
 
 import { dataServiceFactory } from '../../services/data-service.provider';
@@ -62,6 +62,9 @@ export const DEFAULT_INPUTS_O_FORM = [
   // stay-in-record-after-insert [string][yes|no|true|false]: shows detail form after insert new record. Default: false;
   'stayInRecordAfterInsert: stay-in-record-after-insert',
 
+  // stay-in-record-after-edit [string][yes|no|true|false]: shows edit form after edit a record. Default: false;
+  'stayInRecordAfterEdit: stay-in-record-after-edit',
+
   'serviceType : service-type',
 
   'queryOnInit : query-on-init',
@@ -78,7 +81,10 @@ export const DEFAULT_INPUTS_O_FORM = [
   'updateMethod: update-method',
 
   // delete-method [string]: name of the service method to perform deletions. Default: delete.
-  'deleteMethod: delete-method'
+  'deleteMethod: delete-method',
+
+  // layout-fill [string][yes|no|true|false]: Default: true;
+  'layoutFill: layout-fill'
 ];
 
 export const DEFAULT_OUTPUTS_O_FORM = [
@@ -86,7 +92,6 @@ export const DEFAULT_OUTPUTS_O_FORM = [
   'beforeCloseDetail',
   'beforeGoEditMode'
 ];
-
 
 @Component({
   selector: 'o-form',
@@ -137,6 +142,8 @@ export class OFormComponent implements OnInit, OnDestroy {
   service: string;
   @InputConverter()
   stayInRecordAfterInsert: boolean = false;
+  @InputConverter()
+  stayInRecordAfterEdit: boolean = false;
   serviceType: string;
   @InputConverter()
   protected queryOnInit: boolean = true;
@@ -145,6 +152,8 @@ export class OFormComponent implements OnInit, OnDestroy {
   protected insertMethod: string;
   protected updateMethod: string;
   protected deleteMethod: string;
+  @InputConverter()
+  layoutFill: boolean = true;
 
   isDetailForm: boolean = false;
   keysArray: string[] = [];
@@ -184,10 +193,11 @@ export class OFormComponent implements OnInit, OnDestroy {
   protected formParentKeysValues: Object;
   protected hasScrolled: boolean = false;
 
-
   protected onFormInitStream: EventEmitter<Object> = new EventEmitter<Object>();
   protected onUrlParamChangedStream: EventEmitter<Object> = new EventEmitter<Object>();
   protected reloadStream: Observable<any>;
+
+  protected dynamicFormSuscription: Subscription;
 
   @HostListener('window:scroll', ['$event'])
   track(event) {
@@ -228,6 +238,9 @@ export class OFormComponent implements OnInit, OnDestroy {
       });
 
     this.elRef.nativeElement.classList.add('o-form');
+    if (this.layoutFill) {
+      this.elRef.nativeElement.setAttribute('layout-fill', '');
+    }
   }
 
   registerFormComponent(comp: any) {
@@ -858,8 +871,12 @@ export class OFormComponent implements OnInit, OnDestroy {
     this.updateData(filter, values, sqlTypes)
       .subscribe(resp => {
         self.postCorrectUpdate(resp);
-        //TODO mostrar un toast indicando que la operación fue correcta...
-        self._closeDetailAction();
+        // TODO mostrar un toast indicando que la operación fue correcta...
+        if (self.stayInRecordAfterEdit) {
+          self._reloadAction(true);
+        } else {
+          self._closeDetailAction();
+        }
       }, error => {
         self.postIncorrectUpdate(error);
       });
@@ -1136,6 +1153,41 @@ export class OFormComponent implements OnInit, OnDestroy {
       i++;
     }
     return (i > 2);
+  }
+
+  isInQueryMode(): boolean {
+    return this.mode === Mode.QUERY;
+  }
+
+  isInInsertMode(): boolean {
+    return this.mode === Mode.INSERT;
+  }
+
+  isInUpdateMode(): boolean {
+    return this.mode === Mode.UPDATE;
+  }
+
+  isInInitialMode(): boolean {
+    return this.mode === Mode.INITIAL;
+  }
+
+  registerDynamicFormComponent(dynamicForm) {
+    var self = this;
+    if (dynamicForm) {
+      this.dynamicFormSuscription = dynamicForm.render.subscribe(
+        res => {
+          if (res) {
+            self._reloadAction(true);
+          }
+        }
+      );
+    }
+  }
+
+  unregisterDynamicFormComponent(dynamicForm) {
+    if (dynamicForm) {
+      this.dynamicFormSuscription.unsubscribe();
+    }
   }
 }
 

@@ -368,14 +368,14 @@ export class OServiceComponent implements ILocalStorageComponent {
     var self = this;
     this.onFormDataSubscribe = this.form.onFormDataLoaded.subscribe(data => {
       self.parentItem = data;
-      self.queryData();
+      self.queryData(data);
     }
     );
 
     let dataValues = this.form.getDataValues();
     if (dataValues && Object.keys(dataValues).length > 0) {
       self.parentItem = dataValues;
-      self.queryData();
+      self.queryData(dataValues);
     } else {
       this.filterForm = true;
     }
@@ -390,7 +390,7 @@ export class OServiceComponent implements ILocalStorageComponent {
     // });
   }
 
-  queryData() {
+  queryData(parentItem: any = undefined, ovrrArgs?: any) {
     console.log('queryData');
   }
 
@@ -482,7 +482,7 @@ export class OServiceComponent implements ILocalStorageComponent {
   }
 
   updatePaginationInfo(queryRes: any) {
-    let resultEndIndex = queryRes.startRecordIndex + queryRes.data.length;
+    let resultEndIndex = queryRes.startRecordIndex + (queryRes.data ? queryRes.data.length : 0);
     if (queryRes.startRecordIndex !== undefined) {
       this.state.queryRecordOffset = resultEndIndex;
     }

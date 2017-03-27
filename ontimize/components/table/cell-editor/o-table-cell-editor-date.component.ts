@@ -54,7 +54,7 @@ export class OTableCellEditorDateComponent implements OnInit, ITableCellEditor {
     this.tableColumn = tableColumn;
     this.momentService = this.injector.get(MomentService);
     this.tableColumn.registerEditor(this);
-    if (typeof(OTableCellEditorDateComponent.datePicker) !== 'undefined') {
+    if (typeof (OTableCellEditorDateComponent.datePicker) !== 'undefined') {
       OTableCellEditorDateComponent.datePicker.datepicker('hide');
     }
     OTableCellEditorDateComponent.datePicker = undefined;
@@ -67,23 +67,23 @@ export class OTableCellEditorDateComponent implements OnInit, ITableCellEditor {
   }
 
   public ngOnInit() {
-    if (typeof(this.dateModelType) === 'undefined') {
+    if (typeof (this.dateModelType) === 'undefined') {
       this.dateModelType = OTableCellEditorDateComponent.DEFAULT_DATE_MODEL_TYPE;
     }
-    if (typeof(this.dateModelFormat) === 'undefined') {
+    if (typeof (this.dateModelFormat) === 'undefined') {
       this.dateModelFormat = OTableCellEditorDateComponent.DEFAULT_DATE_MODEL_FORMAT;
     }
   }
 
   public init(parameters: any) {
-    if (typeof(parameters) !== 'undefined') {
-      if (typeof(parameters.dateModelType) !== 'undefined') {
+    if (typeof (parameters) !== 'undefined') {
+      if (typeof (parameters.dateModelType) !== 'undefined') {
         this.dateModelType = parameters.dateModelType;
       }
-      if (typeof(parameters.dateModelFormat) !== 'undefined') {
+      if (typeof (parameters.dateModelFormat) !== 'undefined') {
         this.dateModelFormat = parameters.dateModelFormat;
       }
-      if (typeof(parameters.rendererFormat) !== 'undefined') {
+      if (typeof (parameters.rendererFormat) !== 'undefined') {
         this.rendererFormat = parameters.rendererFormat;
       }
     }
@@ -132,7 +132,7 @@ export class OTableCellEditorDateComponent implements OnInit, ITableCellEditor {
           if (input.length > 0) {
             ObservableWrapper.callEmit(this.onBlur, { editor: this });
             cellElement.removeClass('editing');
-            if (typeof(inst) !== 'undefined') {
+            if (typeof (inst) !== 'undefined') {
               this.setFormattedDate(cellElement, (new Date(inst.currentYear, inst.currentMonth, inst.currentDay)).getTime());
             } else {
               input.remove();
@@ -178,7 +178,7 @@ export class OTableCellEditorDateComponent implements OnInit, ITableCellEditor {
             newValue = datePickerDate.getTime();
             break;
           case 'string':
-            if (typeof(this.dateModelFormat) !== 'undefined') {
+            if (typeof (this.dateModelFormat) !== 'undefined') {
               newValue = moment(datePickerDate).format(this.dateModelFormat);
             } else {
               newValue = datePickerDate.toISOString();
@@ -188,11 +188,11 @@ export class OTableCellEditorDateComponent implements OnInit, ITableCellEditor {
         // previous check due to different input/output formats
         if (datePickerDate.getTime() !== this.previousValue) {
           this.tableColumn.updateCell(cellElement, newValue);
-        } else if (typeof(this.previousValue) !== 'undefined') {
+        } else if (typeof (this.previousValue) !== 'undefined') {
           // removing input element
           this.setFormattedDate(cellElement, this.previousValue);
         }
-      } else if (typeof(this.previousValue) !== 'undefined') {
+      } else if (typeof (this.previousValue) !== 'undefined') {
         // removing input element
         this.setFormattedDate(cellElement, this.previousValue);
       }
@@ -217,33 +217,33 @@ export class OTableCellEditorDateComponent implements OnInit, ITableCellEditor {
       showButtonPanel: true,
       autoClose: true,
       onSelect: (dateText, inst) => {
-        ObservableWrapper.callEmit(this.onSubmit, { inserTable: true, editor: this });
+        ObservableWrapper.callEmit(this.onSubmit, { insertTable: true, editor: this });
         this.insertTableInput.datepicker('hide');
       },
       onClose: (dateText, inst) => {
-        ObservableWrapper.callEmit(this.onBlur, { inserTable: true, editor: this });
+        ObservableWrapper.callEmit(this.onBlur, { insertTable: true, editor: this });
       }
     });
-    if (typeof(data) !== 'undefined') {
+    if (typeof (data) !== 'undefined') {
       this.insertTableInput.datepicker('setDate', new Date(data));
     }
     this.insertTableInput.bind('keydown', (e) => {
       let code = e.keyCode || e.which;
       if (code === 13 /*|| code === 9*/) {
-        ObservableWrapper.callEmit(this.onSubmit, { inserTable: true, editor: this });
+        ObservableWrapper.callEmit(this.onSubmit, { insertTable: true, editor: this });
       }
     });
     this.insertTableInput.bind('focus', (e) => {
-      ObservableWrapper.callEmit(this.onFocus, { inserTable: true, editor: this });
+      ObservableWrapper.callEmit(this.onFocus, { insertTable: true, editor: this });
     });
     this.insertTableInput.bind('focusout', (e) => {
-      ObservableWrapper.callEmit(this.onBlur, { inserTable: true, editor: this });
+      ObservableWrapper.callEmit(this.onBlur, { insertTable: true, editor: this });
     });
   }
 
   public getInsertTableValue(): any {
     let value = undefined;
-    if (typeof(this.insertTableInput) !== 'undefined') {
+    if (typeof (this.insertTableInput) !== 'undefined') {
       let datePickerDate = this.insertTableInput.datepicker('getDate');
       if (datePickerDate) {
         switch (this.dateModelType) {
@@ -251,7 +251,7 @@ export class OTableCellEditorDateComponent implements OnInit, ITableCellEditor {
             value = datePickerDate.getTime();
             break;
           case 'string':
-            if (typeof(this.dateModelFormat) !== 'undefined') {
+            if (typeof (this.dateModelFormat) !== 'undefined') {
               value = moment(datePickerDate).format(this.dateModelFormat);
             } else {
               value = datePickerDate.toISOString();
@@ -264,7 +264,7 @@ export class OTableCellEditorDateComponent implements OnInit, ITableCellEditor {
   }
 
   protected setFormattedDate(cellElement, value) {
-    if (typeof(this.rendererFormat) !== 'undefined') {
+    if (typeof (this.rendererFormat) !== 'undefined') {
       cellElement.html(this.momentService.parseDate(value, this.rendererFormat));
     } else {
       cellElement.html(value);
@@ -276,20 +276,20 @@ export class OTableCellEditorDateComponent implements OnInit, ITableCellEditor {
     return {
       days: localeData['_weekdays'],
       daysShort: localeData['_weekdaysShort'],
-      daysMin: localeData['_weekdaysShort'].map(function(d) {
+      daysMin: localeData['_weekdaysShort'].map(function (d) {
         return d.substr(0, 1);
       }),
       months: localeData['_months'],
-      monthsMin: localeData['_months'].map(function(m) {
+      monthsMin: localeData['_months'].map(function (m) {
         return m.substr(0, 3);
       })
     };
   }
 
   protected extendDatePickerHTML() {
-    if (typeof($['datepicker']._generateHTML_old) === 'undefined') {
+    if (typeof ($['datepicker']._generateHTML_old) === 'undefined') {
       $['datepicker']._generateHTML_old = $['datepicker']._generateHTML;
-      $['datepicker']._generateHTML = function(inst) {
+      $['datepicker']._generateHTML = function (inst) {
         let $html = $(this._generateHTML_old(inst));
         let datepickerPrev = $html['find']('.ui-datepicker-prev');
         datepickerPrev.attr('layout', 'row').attr('layout-align', 'center center').children().remove();
