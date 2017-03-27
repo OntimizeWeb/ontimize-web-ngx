@@ -1,4 +1,4 @@
-## 1.2.1
+## 1.2.1 (2017-03-27)
 
 ### Features
 * **o-form**: Adding attribute '*layout-fill*'.
