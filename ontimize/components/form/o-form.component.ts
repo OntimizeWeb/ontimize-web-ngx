@@ -8,8 +8,8 @@ import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup, ReactiveFormsModule, FormControl, FormsModule } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
+import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/observable/combineLatest';
-
 import { MdProgressBarModule } from '@angular/material';
 
 import { dataServiceFactory } from '../../services/data-service.provider';
@@ -193,10 +193,11 @@ export class OFormComponent implements OnInit, OnDestroy {
   protected formParentKeysValues: Object;
   protected hasScrolled: boolean = false;
 
-
   protected onFormInitStream: EventEmitter<Object> = new EventEmitter<Object>();
   protected onUrlParamChangedStream: EventEmitter<Object> = new EventEmitter<Object>();
   protected reloadStream: Observable<any>;
+
+  protected dynamicFormSuscription: Subscription;
 
   @HostListener('window:scroll', ['$event'])
   track(event) {
@@ -1170,6 +1171,24 @@ export class OFormComponent implements OnInit, OnDestroy {
     return this.mode === Mode.INITIAL;
   }
 
+  registerDynamicFormComponent(dynamicForm) {
+    var self = this;
+    if (dynamicForm) {
+      this.dynamicFormSuscription = dynamicForm.render.subscribe(
+        res => {
+          if (res) {
+            self._reloadAction(true);
+          }
+        }
+      );
+    }
+  }
+
+  unregisterDynamicFormComponent(dynamicForm) {
+    if (dynamicForm) {
+      this.dynamicFormSuscription.unsubscribe();
+    }
+  }
 }
 
 @NgModule({
