@@ -1611,16 +1611,16 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
           .subscribe(
           res => {
             let data = undefined;
-            if (($ as any).isArray(res)) {
+            if (Util.isArray(res)) {
               data = res;
-            } else if ((res.code === 0) && ($ as any).isArray(res.data)) {
+            } else if ((res.code === 0) && Util.isArray(res.data)) {
               data = (res.data !== undefined) ? res.data : [];
               if (self.pageable) {
                 self.updatePaginationInfo(res);
               }
             }
             // set table data
-            if (($ as any).isArray(data)) {
+            if (Util.isArray(data)) {
               self.dataTable.fnClearTable(false);
               if (self.pageable) {
                 self.setPaginatedTableData(data, ovrrArgs);
@@ -1666,6 +1666,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
               self.updateDeleteButtonState();
             } else {
               console.log('[OTable.queryData]: error code ' + res.code + ' when querying data');
+              self.setDataArray([]);
+              self.dataTable.fnClearTable(true);
             }
             self.loaderSuscription.unsubscribe();
             if (self.pageable) {
