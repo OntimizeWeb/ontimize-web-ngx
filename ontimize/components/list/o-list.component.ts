@@ -279,7 +279,10 @@ export class OListComponent extends OServiceComponent implements OnInit, IList, 
             }
             self.dataResponseArray = respDataArray;
             self.filterData(self.state.filterValue);
+          } else {
+            self.setDataArray([]);
           }
+
           self.loaderSuscription.unsubscribe();
           if (self.pageable) {
             ObservableWrapper.callEmit(self.onPaginatedListDataLoaded, data);
