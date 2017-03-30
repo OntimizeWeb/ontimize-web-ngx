@@ -332,6 +332,10 @@ export class OServiceComponent implements ILocalStorageComponent {
     if (this.onFormDataSubscribe) {
       this.onFormDataSubscribe.unsubscribe();
     }
+    if (this.querySuscription) {
+      this.querySuscription.unsubscribe();
+      this.loaderSuscription.unsubscribe();
+    }
   }
 
   configureService() {
