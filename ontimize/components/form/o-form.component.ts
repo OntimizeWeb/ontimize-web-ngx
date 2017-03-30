@@ -920,7 +920,7 @@ export class OFormComponent implements OnInit, OnDestroy {
       });
   }
 
-  protected getAttributesToQuery(): Array<any> {
+  getAttributesToQuery(): Array<any> {
     let attributes: Array<any> = [];
     // add form keys...
     if (this.keysArray && this.keysArray.length > 0) {
@@ -968,7 +968,7 @@ export class OFormComponent implements OnInit, OnDestroy {
     return observable;
   }
 
-  protected getAttributesValuesToInsert(): Object {
+  getAttributesValuesToInsert(): Object {
     let attrValues = {};
     if (this.formParentKeysValues) {
       Object.assign(attrValues, this.formParentKeysValues);
@@ -976,7 +976,7 @@ export class OFormComponent implements OnInit, OnDestroy {
     return Object.assign(attrValues, this.formGroup.value);
   }
 
-  protected getAttributesSQLTypes(): Object {
+  getAttributesSQLTypes(): Object {
     let types: Object = {};
     if (this._compSQLTypes && Object.keys(this._compSQLTypes).length > 0) {
       Object.assign(types, this._compSQLTypes);
@@ -1014,7 +1014,7 @@ export class OFormComponent implements OnInit, OnDestroy {
     return observable;
   }
 
-  protected getAttributesValuesToUpdate(): Object {
+  getAttributesValuesToUpdate(): Object {
     let values = {};
     var self = this;
     Object.keys(this.formGroup.controls).forEach(function (item) {
