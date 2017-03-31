@@ -541,7 +541,7 @@ export class OServiceComponent implements ILocalStorageComponent {
         delete clonedOpts.entity;
       }
       for (var prop in clonedOpts) {
-        if (this.hasOwnProperty(prop) && clonedOpts.hasOwnProperty(prop)) {
+        if (clonedOpts.hasOwnProperty(prop)) {
           this[prop] = clonedOpts[prop];
         }
       }

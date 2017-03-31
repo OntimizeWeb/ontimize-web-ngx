@@ -20,7 +20,7 @@ export class OFormDataComponent extends OComponent implements IFormControlCompon
 
   /* Internal variables */
   protected value: OFormValue;
-  protected defaultValue: any = null;
+  protected defaultValue: any = undefined;
   protected _SQLType: number = SQLTypes.OTHER;
   protected _defaultSQLTypeKey: string = 'OTHER';
   protected _fControl: FormControl;
