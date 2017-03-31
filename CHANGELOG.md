@@ -2,7 +2,7 @@
 
 ### Features
 * **o-form**, **o-table**, **o-list**: adding '*reinitialize*' method ([#71](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/71)) ([d8af657](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/d8af657))
-* **interfaces**: adding '*OFormInitializationOptions*', '*OTableInitializationOptions*' and '*OListInitializationOptions*' interfaces that must implement the arguments in '*reinitialize*' method ([#71](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/71)).
+* **interfaces**: adding '*OFormInitializationOptions*', '*OTableInitializationOptions*' and '*OListInitializationOptions*' interfaces that must implement the arguments in '*reinitialize*' method ([#71](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/71)) ([d8af657](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/d8af657))
 
 ### BREAKING CHANGES
 * **o-form**: Changing '*getAttributesToQuery*', '*getAttributesValuesToUpdate*', '*getAttributesValuesToInsert*' and '*getAttributesSQLTypes*' methods visibility to public.
@@ -12,7 +12,7 @@
 ### Bug Fixes
 * **o-table**: Rendering empty table when result data is empty ([#70](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/70)) ([34ff7a7](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/34ff7a7))
 * **o-list**: Rendering empty list when result data is empty ([#72](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/72)) ([74047bd](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/74047bd))
-* **o-form**: Empty form fields value bug fixed ([#73](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/73)) ([](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/))
+* **o-form**: Empty form fields value bug fixed ([#73](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/73)) ([741f609](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/741f609))
 
 ## 1.2.1 (2017-03-27)
 
