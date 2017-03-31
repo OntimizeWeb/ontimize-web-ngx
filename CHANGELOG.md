@@ -1,3 +1,19 @@
+## 1.2.2  (2017-03-31)
+
+### Features
+* **o-form**, **o-table**, **o-list**: adding '*reinitialize*' method ([#71](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/71)) ([d8af657](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/d8af657))
+* **interfaces**: adding '*OFormInitializationOptions*', '*OTableInitializationOptions*' and '*OListInitializationOptions*' interfaces that must implement the arguments in '*reinitialize*' method ([#71](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/71)).
+
+### BREAKING CHANGES
+* **o-form**: Changing '*getAttributesToQuery*', '*getAttributesValuesToUpdate*', '*getAttributesValuesToInsert*' and '*getAttributesSQLTypes*' methods visibility to public.
+* **o-form**: Changing '*onFormInitStream*' and '*onUrlParamChangedStream*' emmiters visibility to public.
+* **o-form**: Changing '*urlParams*' property visibility to public.
+
+### Bug Fixes
+* **o-table**: Rendering empty table when result data is empty ([#70](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/70)) ([34ff7a7](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/34ff7a7))
+* **o-list**: Rendering empty list when result data is empty ([#72](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/72)) ([74047bd](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/74047bd))
+* **o-form**: Empty form fields value bug fixed ([#73](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/73)) ([](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/))
+
 ## 1.2.1 (2017-03-27)
 
 ### Features
@@ -6,10 +22,6 @@
 * **o-table**: updating '*static-data*' when '*insert-table*' is true([#64](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/64)) ([c98709c](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/c98709c))
 * **o-form**: Adding '*isInQueryMode*', '*isInInsertMode*', '*isInUpdateMode*', '*isInInitialMode*' state checking methods.
 * **o-form**: Adding support for inner '*o-dynamic-form*' component.
-
-### PEER-DEPENDENCY UPDATES ###
-
-### BREAKING CHANGES
 
 ### Bug Fixes
 * **o-table**: Using parent-keys (inside md-tab) ([#62](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/62)) ([5eb088d](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/5eb088d))
