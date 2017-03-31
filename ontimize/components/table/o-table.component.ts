@@ -827,7 +827,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
     this.table = this.tableHtmlEl.DataTable(this.dataTableOptions);
     new ($ as any).fn.dataTable.FixedHeader(this.table, {
-      header: true
+      header: true,
+      forceFloating: true,
+      scrollWidth: 20
     });
     this.parseTableOptions();
 
