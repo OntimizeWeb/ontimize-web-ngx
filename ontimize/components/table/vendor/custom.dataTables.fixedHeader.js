@@ -437,7 +437,7 @@ $.extend( FixedHeader.prototype, {
 				itemDom.floating = null;
 			}
 		}
-		else if ( mode === 'in' ) {
+		else if ( mode === 'in' || (this.c && this.c.forceFloating)) {
 			// Remove the header from the read header and insert into a fixed
 			// positioned floating table clone
 			this._clone( item, forceChange );
@@ -446,7 +446,7 @@ $.extend( FixedHeader.prototype, {
 				.addClass( 'fixedHeader-floating' )
 				.css( item === 'header' ? 'top' : 'bottom', this.c[item+'Offset'] )
 				.css( 'left', position.left+'px' )
-				.css( 'width', position.width+'px' );
+				.css('width', (position.width - (this.c && this.c.scrollWidth ? this.c.scrollWidth : 0)) + 'px');
 
 			if ( item === 'footer' ) {
 				itemDom.floating.css( 'top', '' );

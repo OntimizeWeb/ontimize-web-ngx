@@ -51,6 +51,15 @@ export const DEFAULT_OUTPUTS_O_LIST = [
   'onChange'
 ];
 
+export interface OListInitializationOptions {
+  entity?: string;
+  service?: string;
+  columns?: string;
+  quickFilterColumns?: string;
+  keys?: string;
+  parentKeys?: string;
+};
+
 @Component({
   selector: 'o-list',
   providers: [
@@ -129,6 +138,10 @@ export class OListComponent extends OServiceComponent implements OnInit, IList, 
 
   ngOnInit(): void {
     this.initialize();
+  }
+
+  reinitialize(options: OListInitializationOptions) {
+    super.reinitialize(options);
   }
 
   initialize(): void {
@@ -279,7 +292,10 @@ export class OListComponent extends OServiceComponent implements OnInit, IList, 
             }
             self.dataResponseArray = respDataArray;
             self.filterData(self.state.filterValue);
+          } else {
+            self.setDataArray([]);
           }
+
           self.loaderSuscription.unsubscribe();
           if (self.pageable) {
             ObservableWrapper.callEmit(self.onPaginatedListDataLoaded, data);

@@ -129,6 +129,17 @@ export const DEFAULT_INPUTS_O_TABLE = [
 export const DEFAULT_OUTPUTS_O_TABLE = [
 ];
 
+export interface OTableInitializationOptions {
+  entity?: string;
+  service?: string;
+  columns?: string;
+  visibleColumns?: string;
+  keys?: string;
+  sortColumns?: string;
+  editableColumns?: string;
+  parentKeys?: string;
+};
+
 @Component({
   selector: 'o-table',
   templateUrl: './table/o-table.component.html',
@@ -323,6 +334,20 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   ngOnInit(): void {
     this.initialize();
+  }
+
+  reinitialize(options: OTableInitializationOptions) {
+    super.reinitialize(options);
+    this.editColumnIndex = undefined;
+    this.detailColumnIndex= undefined;
+
+    if (options && Object.keys(options).length) {
+      if (this.table) {
+        this.table.destroy();
+        this.dataTable.children().remove();
+      }
+      this.reinitializeTable();
+    }
   }
 
   initialize(): any {
@@ -827,7 +852,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
     this.table = this.tableHtmlEl.DataTable(this.dataTableOptions);
     new ($ as any).fn.dataTable.FixedHeader(this.table, {
-      header: true
+      header: true,
+      forceFloating: true,
+      scrollWidth: 20
     });
     this.parseTableOptions();
 
@@ -1611,16 +1638,16 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
           .subscribe(
           res => {
             let data = undefined;
-            if (($ as any).isArray(res)) {
+            if (Util.isArray(res)) {
               data = res;
-            } else if ((res.code === 0) && ($ as any).isArray(res.data)) {
+            } else if ((res.code === 0) && Util.isArray(res.data)) {
               data = (res.data !== undefined) ? res.data : [];
               if (self.pageable) {
                 self.updatePaginationInfo(res);
               }
             }
             // set table data
-            if (($ as any).isArray(data)) {
+            if (Util.isArray(data)) {
               self.dataTable.fnClearTable(false);
               if (self.pageable) {
                 self.setPaginatedTableData(data, ovrrArgs);
@@ -1666,6 +1693,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
               self.updateDeleteButtonState();
             } else {
               console.log('[OTable.queryData]: error code ' + res.code + ' when querying data');
+              self.setDataArray([]);
+              self.dataTable.fnClearTable(true);
             }
             self.loaderSuscription.unsubscribe();
             if (self.pageable) {

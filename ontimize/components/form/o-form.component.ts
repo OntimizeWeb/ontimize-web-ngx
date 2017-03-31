@@ -93,6 +93,18 @@ export const DEFAULT_OUTPUTS_O_FORM = [
   'beforeGoEditMode'
 ];
 
+export interface OFormInitializationOptions {
+  entity?: string;
+  service?: string;
+  columns?: string;
+  visibleColumns?: string;
+  keys?: string;
+  sortColumns?: string;
+  editableColumns?: string;
+  parentKeys?: string;
+};
+
+
 @Component({
   selector: 'o-form',
   providers: [
@@ -184,7 +196,7 @@ export class OFormComponent implements OnInit, OnDestroy {
   protected queryParams: any;
 
   protected urlParamSub: any;
-  protected urlParams: Object;
+  public urlParams: Object;
 
   protected urlSub: any;
   protected urlSegments: any;
@@ -193,8 +205,8 @@ export class OFormComponent implements OnInit, OnDestroy {
   protected formParentKeysValues: Object;
   protected hasScrolled: boolean = false;
 
-  protected onFormInitStream: EventEmitter<Object> = new EventEmitter<Object>();
-  protected onUrlParamChangedStream: EventEmitter<Object> = new EventEmitter<Object>();
+  public onFormInitStream: EventEmitter<Object> = new EventEmitter<Object>();
+  public onUrlParamChangedStream: EventEmitter<Object> = new EventEmitter<Object>();
   protected reloadStream: Observable<any>;
 
   protected dynamicFormSuscription: Subscription;
@@ -424,10 +436,8 @@ export class OFormComponent implements OnInit, OnDestroy {
     return;
   }
 
-  /**
-   * Angular methods
-   */
-  ngOnInit() {
+
+  ngOnInit(): void {
     this.formGroup = new FormGroup({});
     var self = this;
     /*
@@ -441,7 +451,14 @@ export class OFormComponent implements OnInit, OnDestroy {
         }
         Object.assign(self.formDataCache, value);
       });
+    this.initialize();
+  }
 
+  /**
+   * Angular methods
+   */
+  initialize() {
+    var self = this;
     if (this.headeractions === 'all') {
       this.headeractions = 'R;I;U;D';
     }
@@ -511,6 +528,19 @@ export class OFormComponent implements OnInit, OnDestroy {
     this.mode = Mode.INITIAL;
   }
 
+  reinitialize(options: OFormInitializationOptions) {
+    if (options && Object.keys(options).length) {
+      let clonedOpts = Object.assign({}, options);
+      for (var prop in clonedOpts) {
+        if (this.hasOwnProperty(prop) && clonedOpts.hasOwnProperty(prop)) {
+          this[prop] = clonedOpts[prop];
+        }
+      }
+      this.destroy();
+      this.initialize();
+    }
+  }
+
   configureService() {
     let loadingService: any = OntimizeService;
     if (this.serviceType) {
@@ -531,6 +561,10 @@ export class OFormComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.destroy();
+  }
+
+  destroy() {
     if (this.urlParamSub) {
       this.urlParamSub.unsubscribe();
     }
@@ -920,7 +954,7 @@ export class OFormComponent implements OnInit, OnDestroy {
       });
   }
 
-  protected getAttributesToQuery(): Array<any> {
+  getAttributesToQuery(): Array<any> {
     let attributes: Array<any> = [];
     // add form keys...
     if (this.keysArray && this.keysArray.length > 0) {
@@ -968,7 +1002,7 @@ export class OFormComponent implements OnInit, OnDestroy {
     return observable;
   }
 
-  protected getAttributesValuesToInsert(): Object {
+  getAttributesValuesToInsert(): Object {
     let attrValues = {};
     if (this.formParentKeysValues) {
       Object.assign(attrValues, this.formParentKeysValues);
@@ -976,7 +1010,7 @@ export class OFormComponent implements OnInit, OnDestroy {
     return Object.assign(attrValues, this.formGroup.value);
   }
 
-  protected getAttributesSQLTypes(): Object {
+  getAttributesSQLTypes(): Object {
     let types: Object = {};
     if (this._compSQLTypes && Object.keys(this._compSQLTypes).length > 0) {
       Object.assign(types, this._compSQLTypes);
@@ -1014,7 +1048,7 @@ export class OFormComponent implements OnInit, OnDestroy {
     return observable;
   }
 
-  protected getAttributesValuesToUpdate(): Object {
+  getAttributesValuesToUpdate(): Object {
     let values = {};
     var self = this;
     Object.keys(this.formGroup.controls).forEach(function (item) {
