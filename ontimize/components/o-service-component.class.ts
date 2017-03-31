@@ -7,11 +7,14 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 
-
 import { InputConverter } from '../decorators';
 import { OntimizeService, AuthGuardService, OTranslateService, LocalStorageService, DialogService } from '../services';
 import { ILocalStorageComponent } from '../interfaces';
 import { OFormComponent } from './form/o-form.component';
+
+import { OListInitializationOptions } from './list/o-list.component';
+import { OTableInitializationOptions } from './table/o-table.component';
+
 import { Util } from '../utils';
 
 export const DEFAULT_INPUTS_O_SERVICE_COMPONENT = [
@@ -179,6 +182,7 @@ export class OServiceComponent implements ILocalStorageComponent {
   protected _pKeysEquiv = {};
   protected dataArray: Array<any> = [];
   protected parentItem: any;
+  protected oattrFromEntity: boolean = false;
   /* end of parsed inputs variables */
 
   protected onLanguageChangeSubscribe: any;
@@ -256,6 +260,7 @@ export class OServiceComponent implements ILocalStorageComponent {
     if (typeof (this.oattr) === 'undefined') {
       if (typeof (this.entity) !== 'undefined') {
         this.oattr = this.entity.replace('.', '_');
+        this.oattrFromEntity = true;
       }
     }
 
@@ -525,4 +530,23 @@ export class OServiceComponent implements ILocalStorageComponent {
     this.selectedItems = [];
   }
 
+  reinitialize(options: OListInitializationOptions | OTableInitializationOptions) {
+    if (options && Object.keys(options).length) {
+      let clonedOpts = Object.assign({}, options);
+      if (clonedOpts.hasOwnProperty('entity')) {
+        this.entity = clonedOpts.entity;
+        if (this.oattrFromEntity) {
+          this.oattr = undefined;
+        }
+        delete clonedOpts.entity;
+      }
+      for (var prop in clonedOpts) {
+        if (this.hasOwnProperty(prop) && clonedOpts.hasOwnProperty(prop)) {
+          this[prop] = clonedOpts[prop];
+        }
+      }
+      this.destroy();
+      this.initialize();
+    }
+  }
 }

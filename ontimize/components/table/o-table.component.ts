@@ -129,6 +129,17 @@ export const DEFAULT_INPUTS_O_TABLE = [
 export const DEFAULT_OUTPUTS_O_TABLE = [
 ];
 
+export interface OTableInitializationOptions {
+  entity?: string;
+  service?: string;
+  columns?: string;
+  visibleColumns?: string;
+  keys?: string;
+  sortColumns?: string;
+  editableColumns?: string;
+  parentKeys?: string;
+};
+
 @Component({
   selector: 'o-table',
   templateUrl: './table/o-table.component.html',
@@ -323,6 +334,20 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   ngOnInit(): void {
     this.initialize();
+  }
+
+  reinitialize(options: OTableInitializationOptions) {
+    super.reinitialize(options);
+    this.editColumnIndex = undefined;
+    this.detailColumnIndex= undefined;
+
+    if (options && Object.keys(options).length) {
+      if (this.table) {
+        this.table.destroy();
+        this.dataTable.children().remove();
+      }
+      this.reinitializeTable();
+    }
   }
 
   initialize(): any {
