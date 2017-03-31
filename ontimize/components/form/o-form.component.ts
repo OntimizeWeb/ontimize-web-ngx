@@ -532,7 +532,7 @@ export class OFormComponent implements OnInit, OnDestroy {
     if (options && Object.keys(options).length) {
       let clonedOpts = Object.assign({}, options);
       for (var prop in clonedOpts) {
-        if (this.hasOwnProperty(prop) && clonedOpts.hasOwnProperty(prop)) {
+        if (clonedOpts.hasOwnProperty(prop)) {
           this[prop] = clonedOpts[prop];
         }
       }
@@ -1054,6 +1054,9 @@ export class OFormComponent implements OnInit, OnDestroy {
     Object.keys(this.formGroup.controls).forEach(function (item) {
       if (self.formGroup.controls[item].dirty === true) {
         values[item] = self.formGroup.value[item];
+        if (values[item] === undefined) {
+          values[item] = null;
+        }
       }
     });
     return values;

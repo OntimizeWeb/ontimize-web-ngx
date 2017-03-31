@@ -1,3 +1,10 @@
+## 1.2.3  (2017-03-31)
+### Bug Fixes
+* **o-form**, **o-table**, **o-list**: fixing '*reinitialize*' serious bug.
+* **o-form**: Empty form fields value bug fixed. Updating '*getAttributesValuesToUpdate*' method.
+
+
+
 ## 1.2.2  (2017-03-31)
 
 ### Features
