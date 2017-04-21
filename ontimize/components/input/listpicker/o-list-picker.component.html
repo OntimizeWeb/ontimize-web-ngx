@@ -1,6 +1,6 @@
 <div layout="row" layout-fill layout-align="space-between center" [formGroup]="form?.formGroup" (click)="onClickListpicker($event)"
     [mdTooltip]="tooltip" [mdTooltipPosition]="tooltipPosition" [mdTooltipShowDelay]="tooltipShowDelay">
-    <input md-input #inputModel class="md-input input-model" type="text" [attr.id]="oattr" [id]="oattr" layout-fill [formControlName]="oattr"
+    <input mdInput #inputModel class="mat-input input-model" type="text" [attr.id]="oattr" [id]="oattr" layout-fill [formControlName]="oattr"
          [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)">
 
     <md-input-container #innerInputContainer flex layout-fill
@@ -10,7 +10,7 @@
         [class.ng-pristine]="_fControl && _fControl.pristine"
         [class.ng-invalid]="_fControl && !_fControl.valid"
         [class.ng-valid]="_fControl && _fControl.valid">
-        <input md-input class="md-input" type="text" [attr.id]="'desc_' + oattr" [id]="'desc_' + oattr" layout-fill
+        <input mdInput class="mat-input" type="text" [attr.id]="'desc_' + oattr" [id]="'desc_' + oattr" layout-fill
             [class.ng-untouched]="_fControl && _fControl.untouched"
             [class.ng-touched]="_fControl && _fControl.touched"
             [class.ng-dirty]="_fControl && _fControl.dirty"
@@ -24,6 +24,6 @@
             </md-hint>
     </md-input-container>
 
-    <span class="icon-btn" [class.md-disabled]="isDisabled"><i class="material-icons">search</i></span>
-    <span class="icon-btn" [class.md-disabled]="isDisabled" (click)="onClickClear($event)"><i class="material-icons">clear</i></span>
+    <span class="icon-btn" [class.mat-disabled]="isDisabled"><i class="material-icons">search</i></span>
+    <span class="icon-btn" [class.mat-disabled]="isDisabled" (click)="onClickClear($event)"><i class="material-icons">clear</i></span>
 </div>

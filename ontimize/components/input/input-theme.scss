@@ -1,15 +1,14 @@
-@import 'node_modules/@angular/material/core/theming/theming';
-
+@import 'node_modules/@angular/material/_theming.scss';
 
 @mixin input-theme($theme) {
   $foreground: map-get($theme, foreground);
   $warn: map-get($theme, warn);
 
   span.icon-btn{
-    color: md-color($foreground, icon);
+    color: mat-color($foreground, icon);
 
-    &.md-disabled {
-      color: md-color($foreground, disabled-text);
+    &.mat-disabled {
+      color: mat-color($foreground, disabled-text);
     }
   }
 
@@ -29,23 +28,23 @@
   input[type="time"]:disabled,
   input[type="url"]:disabled,
   input[type="week"]:disabled {
-      color: md-color($foreground, disabled-text);
+      color: mat-color($foreground, disabled-text);
   }
 
   md-input-container {
     &.ng-invalid.ng-touched {
-      .md-input-wrapper {
-        .md-input-underline {
-          border-top-color: md-color($warn);
-          .md-input-ripple {
-            background-color: md-color($warn);
+      .mat-input-wrapper {
+        .mat-input-underline {
+          border-top-color: mat-color($warn);
+          .mat-input-ripple {
+            background-color: mat-color($warn);
           }
         }
-        .md-input-placeholder.md-focused {
-          color: md-color($warn);
+        .mat-input-placeholder.mat-focused {
+          color: mat-color($warn);
         }
-        .md-hint {
-          color: md-color($warn);
+        .mat-hint {
+          color: mat-color($warn);
         }
       }
     }

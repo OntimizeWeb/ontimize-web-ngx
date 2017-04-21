@@ -151,7 +151,7 @@ export class OComboComponent extends OFormServiceComponent implements OnInit {
     let descTxt = '';
     if (this._currentIndex !== undefined && this.selectModel) {
       if (this.selectModel.selected) {
-        descTxt = this.selectModel.selected.viewValue;
+        descTxt = (this.selectModel.selected as any).viewValue;
       } else if (this.selectModel.options) {
         let option: MdOption = this.selectModel.options.toArray()[this._currentIndex];
         if (option) {
@@ -163,15 +163,15 @@ export class OComboComponent extends OFormServiceComponent implements OnInit {
     }
     /*
     * Temporary code
-    * I do not understand the reason why MdInput is not removing 'md-empty' clase despite of the fact that
+    * I do not understand the reason why MdInput is not removing 'mat-empty' clase despite of the fact that
     * the input element of the description is binding value attribute
     */
-    let placeHolderLbl = this.elRef.nativeElement.querySelectorAll('label.md-input-placeholder');
+    let placeHolderLbl = this.elRef.nativeElement.querySelectorAll('label.mat-input-placeholder');
     if (placeHolderLbl.length) {
       // Take only first, nested element does not matter.
       let element = placeHolderLbl[0];
       if (descTxt && descTxt.length > 0) {
-        element.classList.remove('md-empty');
+        element.classList.remove('mat-empty');
       }
     }
     return descTxt;

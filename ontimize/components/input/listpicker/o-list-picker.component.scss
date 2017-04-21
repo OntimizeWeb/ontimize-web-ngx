@@ -18,11 +18,11 @@ md-toolbar {
   }
 
   o-search-input.list-picker-search {
-    md-input {
-      .md-input-underline {
+    input {
+      .mat-input-underline {
         border-top: 1px solid rgba(255,255,255,0.78);
 
-        .md-input-ripple {
+        .mat-input-ripple {
           background-color: white;
         }
       }

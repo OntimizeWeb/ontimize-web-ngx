@@ -70,8 +70,8 @@ export class OListItemTextRenderer {
           mdLines--;
         }
         this.has3Lines = (mdLines === 3);
-        mdListItem.classList.add('md-' + mdLines + '-line');
-        mdListItem.querySelector('.md-list-text').remove();
+        mdListItem.classList.add('mat-' + mdLines + '-line');
+        mdListItem.querySelector('.mat-list-text').remove();
       }
     }
   }

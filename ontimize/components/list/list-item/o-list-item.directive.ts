@@ -75,12 +75,12 @@ export class OListItemDirective implements OnInit, OnDestroy {
           }
         }
         if (_act) {
-          this._el.nativeElement.classList.add('md-active');
+          this._el.nativeElement.classList.add('mat-active');
         } else {
-          this._el.nativeElement.classList.remove('md-active');
+          this._el.nativeElement.classList.remove('mat-active');
         }
       } else {
-        this._el.nativeElement.classList.remove('md-active');
+        this._el.nativeElement.classList.remove('mat-active');
       }
     }
   }

@@ -1,7 +1,7 @@
 <div layout="row" layout-fill layout-align="space-between center" [formGroup]="form?.formGroup"
     [mdTooltip]="tooltip" [mdTooltipPosition]="tooltipPosition" [mdTooltipShowDelay]="tooltipShowDelay">
     <md-input-container #innerInputContainer flex layout-fill>
-        <input md-input class="md-input" type="email" [attr.id]="oattr" layout-fill [formControlName]="oattr"
+        <input mdInput class="mat-input" type="email" [attr.id]="oattr" layout-fill [formControlName]="oattr"
             [placeholder]="placeHolder" [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)" (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)"
             [readonly]="isReadOnly" [o-disabled]="innerInputContainer">
             <md-hint *ngIf="!isReadOnly && _fControl.touched && _fControl.errors">
@@ -11,5 +11,5 @@
                 <span *ngIf="_fControl.errors?.invalidEmailAddress"> {{ 'FORM_VALIDATION.EMAIL_FORMAT' | oTranslate}} </span>
             </md-hint>
     </md-input-container>
-    <span class="icon-btn" [class.md-disabled]="isDisabled"><i class="material-icons">mail_outline</i></span>
+    <span class="icon-btn" [class.mat-disabled]="isDisabled"><i class="material-icons">mail_outline</i></span>
 </div>

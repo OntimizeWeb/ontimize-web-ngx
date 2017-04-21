@@ -6,7 +6,7 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 
-import { MdInput } from '@angular/material';
+import { MdInputDirective } from '@angular/material';
 
 import { ValidatorFn } from '@angular/forms/src/directives/validators';
 
@@ -57,10 +57,10 @@ export class ODateInputComponent extends OTextInputComponent implements OnInit {
   opickerattr: string;
 
   @ViewChild('inputModel')
-  protected inputModel: MdInput;
+  protected inputModel: MdInputDirective;
 
   @ViewChild('displayInputModel')
-  protected displayInputModel: MdInput;
+  protected displayInputModel: MdInputDirective;
 
   protected inputHtmlEl: any;
   protected datepicker: any;
@@ -147,8 +147,8 @@ export class ODateInputComponent extends OTextInputComponent implements OnInit {
       html += this._generateHTML_old(inst);
 
       html += '<div class="ui-datepicker-custom-buttonpane" layout="row" layout-align="end">';
-      html += '<button md-button class="md-primary" data-event="click" data-handler-custom="cancel">CANCELAR</button>';//TODO translate button text
-      html += '<button md-button class="md-primary" data-event="click" data-handler-custom="accept">ACEPTAR</button>';
+      html += '<button md-button class="mat-primary" data-event="click" data-handler-custom="cancel">CANCELAR</button>';//TODO translate button text
+      html += '<button md-button class="mat-primary" data-event="click" data-handler-custom="accept">ACEPTAR</button>';
       html += '</div>';
 
       let $html = $(html);
@@ -298,7 +298,7 @@ export class ODateInputComponent extends OTextInputComponent implements OnInit {
         var momentVal = moment(dateText, self.oformat);
         self.updateDatepickerHeader(momentVal, inst.dpDiv);
 
-        self.inputModel.value = momentVal.valueOf();
+        self.inputModel.value = momentVal.valueOf().toString();
         var control = self.form.formGroup.controls[self.oattr];
         if (control) {
           control.markAsDirty();
@@ -387,15 +387,15 @@ export class ODateInputComponent extends OTextInputComponent implements OnInit {
     }
     /*
     * Temporary code
-    * I do not understand the reason why MdInput is not removing 'md-empty' clase despite of the fact that
+    * I do not understand the reason why MdInput is not removing 'mat-empty' clase despite of the fact that
     * the input element of the description is binding value attribute
     */
-    let placeHolderLbl = this.elRef.nativeElement.querySelectorAll('label.md-input-placeholder');
+    let placeHolderLbl = this.elRef.nativeElement.querySelectorAll('label.mat-input-placeholder');
     if (placeHolderLbl.length) {
       // Take only first, nested element does not matter.
       let element = placeHolderLbl[0];
       if (descTxt && descTxt.length > 0) {
-        element.classList.remove('md-empty');
+        element.classList.remove('mat-empty');
       }
     }
     return descTxt;

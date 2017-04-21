@@ -13,7 +13,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/from';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/mergeAll';
-import { MdMenuModule, MdMenuTrigger, MdIconModule, MdProgressCircleModule, MdTabGroup, MdTab } from '@angular/material';
+import { MdMenuModule, MdMenuTrigger, MdIconModule, MdProgressSpinnerModule, MdTabGroup, MdTab } from '@angular/material';
 
 import { OTableColumnComponent } from './o-table-column.component';
 import {
@@ -51,14 +51,14 @@ import { OFormValue } from '../form/OFormValue';
 import './o-table.loader';
 
 const TABLE_CHECKBOX_TEMPLATE = `
-  <div class="md-checkbox-inner-container">
+  <div class="mat-checkbox-inner-container">
     <input class="select-row" type="checkbox" name="id[]">
-    <div class="md-checkbox-frame"></div>
-    <div class="md-checkbox-background">
-      <svg space="preserve" class="md-checkbox-checkmark" version="1.1" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <path class="md-checkbox-checkmark-path" d="M4.1,12.7 9,17.6 20.3,6.3" fill="none" stroke="white"></path>
+    <div class="mat-checkbox-frame"></div>
+    <div class="mat-checkbox-background">
+      <svg space="preserve" class="mat-checkbox-checkmark" version="1.1" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path class="mat-checkbox-checkmark-path" d="M4.1,12.7 9,17.6 20.3,6.3" fill="none" stroke="white"></path>
       </svg>
-      <div class="md-checkbox-mixedmark"></div>
+      <div class="mat-checkbox-mixedmark"></div>
     </div>
   </div>
 `;
@@ -339,7 +339,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   reinitialize(options: OTableInitializationOptions) {
     super.reinitialize(options);
     this.editColumnIndex = undefined;
-    this.detailColumnIndex= undefined;
+    this.detailColumnIndex = undefined;
 
     if (options && Object.keys(options).length) {
       if (this.table) {
@@ -815,7 +815,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   protected onOptionsMenuShow(args: any) {
-    var menuEl = ($('.md-overlay-container .md-menu') as any);
+    var menuEl = ($('.mat-overlay-container .mat-menu') as any);
     var menuContainer = menuEl.parent();
     var menuBtn = ($(this.elRef.nativeElement) as any).find('.o-table-menu-button');
     var menuBtnOffset = menuBtn.offset();
@@ -1355,15 +1355,15 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   public setSelectAllCheckboxValue(val: boolean) {
     if (this.selectAllCheckbox) {
       let headerCheckboxCol = this.tableHtmlEl.find('th.o-table-column-select-checkbox') as any;
-      let wasIndeterminate = headerCheckboxCol.hasClass('md-checkbox-indeterminate');
+      let wasIndeterminate = headerCheckboxCol.hasClass('mat-checkbox-indeterminate');
 
       headerCheckboxCol.attr('class', 'o-table-column-select-checkbox');
       if (val) {
-        headerCheckboxCol.addClass('md-checkbox-checked md-checkbox-anim-unchecked-checked');
+        headerCheckboxCol.addClass('mat-checkbox-checked mat-checkbox-anim-unchecked-checked');
       } else if (wasIndeterminate) {
-        headerCheckboxCol.addClass('md-checkbox-anim-indeterminate-unchecked');
+        headerCheckboxCol.addClass('mat-checkbox-anim-indeterminate-unchecked');
       } else {
-        headerCheckboxCol.addClass('md-checkbox-anim-checked-unchecked');
+        headerCheckboxCol.addClass('mat-checkbox-anim-checked-unchecked');
       }
       var self = this;
       this.table.rows({ filter: 'applied' }).every(function (el) {
@@ -1427,11 +1427,11 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     let tableRow = this.table.rows(rowEL);
     let rowData = tableRow.data().toArray()[0];
     if (event.target.checked) {
-      checkBoxColumn.addClass('md-checkbox-checked md-checkbox-anim-unchecked-checked');
+      checkBoxColumn.addClass('mat-checkbox-checked mat-checkbox-anim-unchecked-checked');
       tableRow.select();
       this.selectedItems.push(rowData);
     } else {
-      checkBoxColumn.addClass('md-checkbox-anim-checked-unchecked');
+      checkBoxColumn.addClass('mat-checkbox-anim-checked-unchecked');
       tableRow.deselect();
       this.selectedItems.splice(this.selectedItems.indexOf(rowData), 1);
       var selectAllEL = this.tableHtmlEl.find('th #select_all')[0];
@@ -1441,7 +1441,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
         selectAllEL.indeterminate = true;
         let headerCheckboxCol = this.tableHtmlEl.find('th.o-table-column-select-checkbox');
         headerCheckboxCol.attr('class', 'o-table-column-select-checkbox');
-        headerCheckboxCol.addClass('md-checkbox-indeterminate md-checkbox-anim-checked-indeterminate');
+        headerCheckboxCol.addClass('mat-checkbox-indeterminate mat-checkbox-anim-checked-indeterminate');
       }
     }
     this.updateDeleteButtonState();
@@ -2369,7 +2369,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     OTableButtonComponent,
     OTableOptionComponent
   ],
-  imports: [CommonModule, MdMenuModule, OTranslateModule, MdIconModule, MdProgressCircleModule, RouterModule],
+  imports: [CommonModule, MdMenuModule, OTranslateModule, MdIconModule, MdProgressSpinnerModule, RouterModule],
   exports: [OTableComponent,
     OTableColumnComponent,
     OTableCellRendererActionComponent,

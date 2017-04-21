@@ -4,13 +4,19 @@ import {
   Injector,
   NgModule,
   ModuleWithProviders,
-  ViewEncapsulation} from '@angular/core';
+  ViewEncapsulation
+} from '@angular/core';
+
 import {
-  MdSidenavModule, MdSidenav, MdListModule,
-  MdToolbarModule, MdIconModule
+  MdSidenavModule,
+  MdSidenav,
+  MdListModule,
+  MdToolbarModule,
+  MdIconModule
 } from '@angular/material';
-import {AuthGuardService} from '../../services';
-import {OTranslateModule} from '../../pipes/o-translate.pipe';
+
+import { AuthGuardService } from '../../services';
+import { OTranslateModule } from '../../pipes/o-translate.pipe';
 
 
 export const DEFAULT_INPUTS_O_SIDE_MENU = [

@@ -11,7 +11,7 @@ import { RouterModule } from '@angular/router';
 import { ObservableWrapper } from '../../util/async';
 
 import { MdCheckbox } from '@angular/material';
-import { MdListModule, MdIconModule, MdToolbarModule, MdButtonModule, MdProgressCircleModule } from '@angular/material';
+import { MdListModule, MdIconModule, MdToolbarModule, MdButtonModule, MdProgressSpinnerModule } from '@angular/material';
 
 import { OntimizeService } from '../../services';
 import { dataServiceFactory } from '../../services/data-service.provider';
@@ -517,7 +517,7 @@ export class OListComponent extends OServiceComponent implements OnInit, IList, 
 
 @NgModule({
   declarations: [OListComponent],
-  imports: [CommonModule, MdListModule, MdToolbarModule, MdIconModule, MdButtonModule, OListItemModule, OSearchInputModule, MdProgressCircleModule, OTranslateModule, RouterModule],
+  imports: [CommonModule, MdListModule, MdToolbarModule, MdIconModule, MdButtonModule, OListItemModule, OSearchInputModule, MdProgressSpinnerModule, OTranslateModule, RouterModule],
   exports: [OListComponent],
   entryComponents: [MdCheckbox]
 })

@@ -10,7 +10,10 @@ import {
   TranslateStaticLoader
 } from 'ng2-translate';
 
-import { MaterialModule } from '@angular/material';
+import {
+  MaterialModule
+} from '@angular/material';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import {
   OBarMenuModule,
@@ -75,7 +78,8 @@ export const ONTIMIZE_MODULES: any = [
   }),
 
   // Material modules
-  MaterialModule.forRoot(),
+  MaterialModule,
+  BrowserAnimationsModule,
 
   // Ontimize modules
   OBarMenuModule.forRoot(),

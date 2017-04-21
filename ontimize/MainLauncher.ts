@@ -1,9 +1,9 @@
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { NgModuleRef } from '@angular/core';
 
-import {APP_CONFIG, Config} from './config/app-config';
+import { APP_CONFIG, Config } from './config/app-config';
 
-import {OTranslateService} from './services';
+import { OTranslateService } from './services';
 
 
 export function ontimizeBootstrap(appModule: any, config?: any): Promise<NgModuleRef<any>> {

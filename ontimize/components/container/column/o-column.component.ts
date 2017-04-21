@@ -131,7 +131,7 @@ export class OColumnComponent implements OnInit {
   propagateElevationToDOM() {
     this.cleanElevationCSSclasses();
      if (this.elevation > 0 && this.elevation <= 12) {
-      let clazz = 'md-whiteframe-' + this.elevation + 'dp';
+      let clazz = 'mat-elevation-z' + this.elevation;
       this.elRef.nativeElement.classList.add(clazz);
       this.elRef.nativeElement.classList.add('margin-top-bottom');
     }
@@ -142,7 +142,7 @@ export class OColumnComponent implements OnInit {
     if (arr_ && arr_.length) {
       var self = this;
       arr_.forEach((item, index) => {
-        if (item.startsWith('md-whiteframe')) {
+        if (item.startsWith('mat-elevation')) {
           self.elRef.nativeElement.classList.remove(item);
         }
       });

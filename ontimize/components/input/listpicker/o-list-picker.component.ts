@@ -10,7 +10,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import {
-  MdInputModule, MdInput, MdListModule, MdToolbarModule,
+  MdInputModule, MdInputDirective, MdListModule, MdToolbarModule,
   MdDialog, MdDialogRef, MdDialogConfig
 } from '@angular/material';
 
@@ -100,7 +100,7 @@ export class OListPickerComponent extends OFormServiceComponent implements OnIni
   protected dialogRef: MdDialogRef<OListPickerDialogComponent>;
 
   @ViewChild('inputModel')
-  protected inputModel: MdInput;
+  protected inputModel: MdInputDirective;
 
   public onChange: EventEmitter<Object> = new EventEmitter<Object>();
 
@@ -156,15 +156,15 @@ export class OListPickerComponent extends OFormServiceComponent implements OnIni
     }
     /*
     * Temporary code
-    * I do not understand the reason why MdInput is not removing 'md-empty' clase despite of the fact that
+    * I do not understand the reason why MdInput is not removing 'mat-empty' clase despite of the fact that
     * the input element of the description is binding value attribute
     */
-    let placeHolderLbl = this.elRef.nativeElement.querySelectorAll('label.md-input-placeholder');
+    let placeHolderLbl = this.elRef.nativeElement.querySelectorAll('label.mat-input-placeholder');
     if (placeHolderLbl.length) {
       // Take only first, nested element does not matter.
       let element = placeHolderLbl[0];
       if (descTxt && descTxt.length > 0) {
-        element.classList.remove('md-empty');
+        element.classList.remove('mat-empty');
       }
     }
     return descTxt;
@@ -215,7 +215,7 @@ export class OListPickerComponent extends OFormServiceComponent implements OnIni
       && evt.overlayRef._pane.children.length >= 0) {
       let el = evt.overlayRef._pane.children[0];
       if (el) {
-        el.classList.add('md-dialog-custom');
+        el.classList.add('mat-dialog-custom');
       }
     }
   }

@@ -9,7 +9,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ValidatorFn } from '@angular/forms/src/directives/validators';
 
-import { MdInputModule, MdInput } from '@angular/material';
+import { MdInputModule, MdInputDirective } from '@angular/material';
 
 import { OSharedModule } from '../../../shared.module';
 import { InputConverter } from '../../../decorators';
@@ -69,7 +69,7 @@ export class OTextInputComponent extends OFormDataComponent implements OnInit {
   onBlur: EventEmitter<Object> = new EventEmitter<Object>();
 
   @ViewChild('mdInputRef')
-  protected mdInputRef: MdInput;
+  protected mdInputRef: MdInputDirective;
 
   constructor(
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,

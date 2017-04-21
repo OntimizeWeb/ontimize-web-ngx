@@ -56,7 +56,7 @@ export class OListItemCardRenderer {
   modifyMdListItemElement() {
     if (this.elRef.nativeElement && this.elRef.nativeElement.parentElement) {
       let mdListItem = this.elRef.nativeElement.parentElement.parentElement;
-      mdListItem.querySelector('.md-list-text').remove();
+      mdListItem.querySelector('.mat-list-text').remove();
       mdListItem.classList.add('o-card-item');
     }
   }

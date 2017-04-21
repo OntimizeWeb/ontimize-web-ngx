@@ -1,6 +1,4 @@
-@import 'node_modules/@angular/material/core/theming/theming';
-
-
+@import 'node_modules/@angular/material/_theming.scss';
 @mixin o-table-theme($theme) {
   $primary: map-get($theme, primary);
   $accent: map-get($theme, accent);
@@ -14,13 +12,13 @@
       }
 
       .spinner-container {
-        background-color: md-color($background, background);
+        background-color: mat-color($background, background);
       }
 
       .expandable-container {
         border-width: 1px;
         border-style: solid;
-        border-color: md-color($foreground, divider);
+        border-color: mat-color($foreground, divider);
       }
 
       .o-table-container {
@@ -38,20 +36,20 @@
         .dt-buttons {
 
           a {
-            color: md-color($foreground, secondary-text);
+            color: mat-color($foreground, secondary-text);
           }
           a:not(.hidden-action-text):not(.disabled):hover {
-            background-color: md-color($background, hover);
+            background-color: mat-color($background, hover);
           }
 
           a.hidden-action-text:not(.disabled):hover {
-            background-color: md-color($background, hover);
+            background-color: mat-color($background, hover);
           }
 
           .dt-button {
 
             &.active {
-              color: md-color($foreground, secondary-text);
+              color: mat-color($foreground, secondary-text);
 
               &::after {
                 background: #eee;
@@ -59,7 +57,7 @@
             }
 
             &.disabled {
-              color: md-color($background, disabled-button);
+              color: mat-color($background, disabled-button);
             }
 
           }
@@ -67,15 +65,15 @@
         }
 
         .dataTables_filter {
-          color: md-color($foreground, secondary-text);
+          color: mat-color($foreground, secondary-text);
 
           input {
             background: transparent;
-            color: md-color($foreground, secondary-text);
+            color: mat-color($foreground, secondary-text);
             border: 0px;
             border-bottom-width: 1px;
             border-bottom-style: solid;
-            border-bottom-color: md-color($foreground, secondary-text);
+            border-bottom-color: mat-color($foreground, secondary-text);
           }
 
         }
@@ -85,32 +83,32 @@
           thead {
 
             tr {
-              background-color: md-color($background, status-bar, 0.9);
+              background-color: mat-color($background, status-bar, 0.9);
 
               th {
-                color: md-color($foreground, text);
+                color: mat-color($foreground, text);
 
                 &:last-child:not(.o-table-column-action) {
                   border-left-width: 1px;
                   border-left-style: solid;
-                  border-left-color: md-color($foreground, divider);
+                  border-left-color: mat-color($foreground, divider);
                 }
 
                 &:first-child:not(.o-table-column-select-checkbox) {
                   border-right-width: 1px;
                   border-right-style: solid;
-                  border-right-color: md-color($foreground, divider);
+                  border-right-color: mat-color($foreground, divider);
                 }
 
                 &:nth-child(n+3):nth-last-child(n+2):not(.o-table-column-action) {
                   border-left-width: 1px;
                   border-left-style: solid;
-                  border-left-color: md-color($foreground, divider);
+                  border-left-color: mat-color($foreground, divider);
                 }
 
                 &.sorting_desc::before,
                 &.sorting_asc::after {
-                  color: md-color($accent, 400);
+                  color: mat-color($accent, 400);
                 }
 
                 &.grouping {
@@ -128,15 +126,15 @@
             tr {
 
               &.selected {
-                background-color: md-color($foreground, base, 0.18) !important;
+                background-color: mat-color($foreground, base, 0.18) !important;
               }
 
               &.even {
-                background-color: md-color($background, hover);
+                background-color: mat-color($background, hover);
               }
 
               &:not(.group):not(.empty):not(.insertRow):hover {
-                background-color: md-color($foreground, base, 0.18) !important;
+                background-color: mat-color($foreground, base, 0.18) !important;
               }
 
               &:last-child.odd {
@@ -144,7 +142,7 @@
                 td {
                   border-bottom-width: 1px;
                   border-bottom-style: solid;
-                  border-bottom-color: md-color($foreground, divider)
+                  border-bottom-color: mat-color($foreground, divider)
                 }
 
               }
@@ -188,23 +186,23 @@
 
 
             td {
-              color: md-color($foreground, secondary-text);
+              color: mat-color($foreground, secondary-text);
 
               &.focus {
                 outline-width: 1px;
                 outline-style: solid;
-                outline-color: md-color($accent, 200);
+                outline-color: mat-color($accent, 200);
               }
 
               &.editing {
                 outline-width: 1px;
                 outline-style: solid;
-                outline-color: md-color($accent, 200);
-                background-color: md-color($background, background);
+                outline-color: mat-color($accent, 200);
+                background-color: mat-color($background, background);
               }
 
               input {
-                background-color: md-color($background, background);
+                background-color: mat-color($background, background);
               }
 
               input.select-row {
@@ -212,30 +210,30 @@
               }
 
               select {
-                background-color: md-color($background, background);
+                background-color: mat-color($background, background);
               }
 
               &:last-child:not(.o-table-column-action) {
                 border-left-width: 1px;
                 border-left-style: solid;
-                border-left-color: md-color($foreground, divider);
+                border-left-color: mat-color($foreground, divider);
               }
 
               &:first-child:not(.o-table-column-action):not(.o-table-column-select-checkbox) {
                 border-right-width: 1px;
                 border-right-style: solid;
-                border-right-color: md-color($foreground, divider);
+                border-right-color: mat-color($foreground, divider);
               }
 
               &:nth-child(n+3):nth-last-child(n+2):not(.o-table-column-action) {
                 border-left-width: 1px;
                 border-left-style: solid;
-                border-left-color: md-color($foreground, divider);
+                border-left-color: mat-color($foreground, divider);
               }
 
               &.o-table-column-action {
                 .o-table-row-action {
-                  color: md-color($foreground, secondary-text);
+                  color: mat-color($foreground, secondary-text);
                 }
               }
 
@@ -247,26 +245,26 @@
 
         .dataTables_length {
 
-          color: md-color($foreground, secondary-text);
+          color: mat-color($foreground, secondary-text);
 
           select {
-            color: md-color($foreground, secondary-text);
-            background-color: md-color($background, background);
+            color: mat-color($foreground, secondary-text);
+            background-color: mat-color($background, background);
           }
 
         }
 
         .dataTables_info {
-          color: md-color($foreground, secondary-text);
+          color: mat-color($foreground, secondary-text);
         }
 
         .dataTables_paginate {
-          color: md-color($foreground, text);
+          color: mat-color($foreground, text);
 
           .paginate_button {
 
             &.disabled {
-              color: md-color($foreground, disabled-text);
+              color: mat-color($foreground, disabled-text);
             }
 
           }
@@ -276,17 +274,17 @@
       }
 
       .o-table-menu-button {
-        color: md-color($foreground, secondary-text);
+        color: mat-color($foreground, secondary-text);
       }
 
       .JCLRgrip:not(.JCLRLastGrip):not(.JCLRdisabledGrip) {
-        color: md-color($foreground, text);
+        color: mat-color($foreground, text);
       }
 
       .JCLRgripDrag {
         border-width: 1px !important;
         border-style: solid !important;
-        border-color:  md-color($foreground, divider) !important;
+        border-color:  mat-color($foreground, divider) !important;
       }
 
     }
@@ -311,17 +309,17 @@
 
       &.o-table-column-select-checkbox {
 
-        .md-checkbox-inner-container {
+        .mat-checkbox-inner-container {
 
-            .md-checkbox-frame {
+            .mat-checkbox-frame {
               background-color: transparent;
               border-width: 2px;
               border-style: solid;
-              border-color: md-color($foreground, secondary-text);
+              border-color: mat-color($foreground, secondary-text);
             }
 
-            .md-checkbox-background {
-              background-color: md-color($accent);
+            .mat-checkbox-background {
+              background-color: mat-color($accent);
             }
         }
 
@@ -329,11 +327,11 @@
     }
 
   table.fixedHeader-floating {
-    background-color:  md-color($background, background);
+    background-color:  mat-color($background, background);
   }
 
   table.fixedHeader-locked {
-    background-color: md-color($background, background);
+    background-color: mat-color($background, background);
   }
 
 }

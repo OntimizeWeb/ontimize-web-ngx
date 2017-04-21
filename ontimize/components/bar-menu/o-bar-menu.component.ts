@@ -1,10 +1,12 @@
-import {Component, Injector,
+import {
+  Component, Injector,
   NgModule,
   ElementRef,
   ModuleWithProviders,
-  ViewEncapsulation} from '@angular/core';
+  ViewEncapsulation
+} from '@angular/core';
 import { MdToolbarModule, MdIconModule } from '@angular/material';
-import {AuthGuardService} from '../../services';
+import { AuthGuardService } from '../../services';
 import { OTranslateModule } from '../../pipes/o-translate.pipe';
 import { OTranslateService } from '../../services';
 
@@ -21,7 +23,7 @@ export const DEFAULT_INPUTS_O_BAR_MENU = [
   selector: 'o-bar-menu',
   templateUrl: './bar-menu/o-bar-menu.component.html',
   styleUrls: [
-    './bar-menu/o-bar-menu.component.css'
+    '/bar-menu/o-bar-menu.component.css'
   ],
   inputs: [
     ...DEFAULT_INPUTS_O_BAR_MENU

@@ -1,16 +1,17 @@
 o-bar-menu-group {
-
-  .fake-ul .o-bar-menu-group-icon {
-    display: inline-block;
-    margin: 0px 10px 0px 0px;
-    & ~ .o-bar-menu-group-title {
-      padding-left: 0px;
+  .fake-ul {
+    .o-bar-menu-group-icon {
+      display: inline-block;
+      margin: 0px 10px 0px 0px;
+      & ~ .o-bar-menu-group-title {
+        padding-left: 0px;
+      }
     }
-  }
 
-  .fake-ul .o-bar-menu-group-title {
-    display: inline-block;
-    padding-left: 60px;
-  }
+    .o-bar-menu-group-title {
+      display: inline-block;
+      padding-left: 60px;
+    }
 
+  }
 }

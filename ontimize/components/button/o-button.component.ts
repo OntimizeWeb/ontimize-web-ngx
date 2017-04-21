@@ -3,11 +3,12 @@ import {
   OnInit,
   NgModule,
   ModuleWithProviders,
-  ViewEncapsulation} from '@angular/core';
-import {CommonModule} from '@angular/common';
+  ViewEncapsulation
+} from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { MdIconModule, MdButtonModule } from '@angular/material';
 
-import {OTranslateModule} from '../../pipes/o-translate.pipe';
+import { OTranslateModule } from '../../pipes/o-translate.pipe';
 
 export const DEFAULT_INPUTS_O_BUTTON = [
   'oattr: attr',

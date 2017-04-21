@@ -17,7 +17,7 @@ import {
 } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
-import { MdListModule, MdIconModule, MdCheckboxModule, MdLine, MdListAvatar, MdListItem } from '@angular/material';
+import { MdListModule, MdIconModule, MdCheckboxModule, MdLine, MdListAvatarCssMatStyler, MdListItem } from '@angular/material';
 
 import { OListComponent } from '../o-list.component';
 
@@ -39,11 +39,11 @@ export class OListItemComponent implements AfterContentInit {
 
   @ViewChild('innerListItem') _innerListItem: MdListItem;
 
-  @ContentChild(MdListAvatar)
-  set _hasAvatar(avatar: MdListAvatar) {
-    let mdListItemNativeEl = this.elRef.nativeElement.getElementsByTagName('md-list-item');
+  @ContentChild(MdListAvatarCssMatStyler)
+  set _hasAvatar(avatar: MdListAvatarCssMatStyler) {
+    let mdListItemNativeEl = this.elRef.nativeElement.getElementsByTagName('mat-list-item');
     if (mdListItemNativeEl && mdListItemNativeEl.length === 1) {
-      this._renderer.setElementClass(mdListItemNativeEl[0], 'md-list-avatar', (avatar !== null && avatar !== undefined));
+      this._renderer.setElementClass(mdListItemNativeEl[0], 'mat-list-avatar', (avatar !== null && avatar !== undefined));
     }
   }
 
@@ -60,7 +60,7 @@ export class OListItemComponent implements AfterContentInit {
     var mdLinesRef = this._lines;
     var ngAfterContentInitOriginal = this._innerListItem.ngAfterContentInit;
     this._innerListItem.ngAfterContentInit = function () {
-      let emptyDiv = this._element.nativeElement.querySelector('.md-list-text:first-child:empty');
+      let emptyDiv = this._element.nativeElement.querySelector('.mat-list-text:first-child:empty');
       if (emptyDiv) {
         emptyDiv.remove();
       }

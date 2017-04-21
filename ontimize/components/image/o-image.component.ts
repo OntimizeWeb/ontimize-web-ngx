@@ -9,7 +9,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 
-import { MdIconModule, MdInputModule, MdInput } from '@angular/material';
+import { MdIconModule, MdInputModule, MdInputDirective } from '@angular/material';
 
 import { OSharedModule } from '../../shared.module';
 import { InputConverter } from '../../decorators';
@@ -68,7 +68,7 @@ export class OImageComponent extends OFormDataComponent implements OnInit {
   onChange: EventEmitter<Object> = new EventEmitter<Object>();
 
   @ViewChild('inputControl')
-  protected inputControl: MdInput;
+  protected inputControl: MdInputDirective;
   @ViewChild('titleLabel')
   protected titleLabel: ElementRef;
 

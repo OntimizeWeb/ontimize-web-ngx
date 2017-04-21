@@ -1,16 +1,15 @@
-@import 'node_modules/@angular/material/core/theming/theming';
-
+@import 'node_modules/@angular/material/_theming.scss';
 
 @mixin md-dialog-theme($theme) {
   $background: map-get($theme, background);
   $foreground: map-get($theme, foreground);
 
-  .md-dialog {
-    background-color: md-color($background, dialog);
+  .mat-dialog {
+    background-color: mat-color($background, dialog);
 
-    &.md-content-overflow {
-      .md-actions, md-dialog-actions {
-        border-top-color: md-color($foreground, divider);
+    &.mat-content-overflow {
+      .mat-actions, md-dialog-actions {
+        border-top-color: mat-color($foreground, divider);
       }
     }
   }
