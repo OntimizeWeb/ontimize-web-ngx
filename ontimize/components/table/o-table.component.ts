@@ -13,7 +13,15 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/from';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/mergeAll';
-import { MdMenuModule, MdMenuTrigger, MdIconModule, MdProgressSpinnerModule, MdTabGroup, MdTab } from '@angular/material';
+import {
+  MdMenuModule,
+  MdMenuTrigger,
+  MdIconModule,
+  MdProgressSpinnerModule,
+  MdTabGroup,
+  MdTab,
+  MdButtonModule
+} from '@angular/material';
 
 import { OTableColumnComponent } from './o-table-column.component';
 import {
@@ -52,7 +60,8 @@ import './o-table.loader';
 
 const TABLE_CHECKBOX_TEMPLATE = `
   <div class="mat-checkbox-inner-container">
-    <input class="select-row" type="checkbox" name="id[]">
+    <input class="mat-checkbox-input select-row" type="checkbox" name="id[]">
+    <div class="mat-checkbox-ripple mat-ripple" md-ripple=""></div>
     <div class="mat-checkbox-frame"></div>
     <div class="mat-checkbox-background">
       <svg space="preserve" class="mat-checkbox-checkmark" version="1.1" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -2369,7 +2378,15 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     OTableButtonComponent,
     OTableOptionComponent
   ],
-  imports: [CommonModule, MdMenuModule, OTranslateModule, MdIconModule, MdProgressSpinnerModule, RouterModule],
+  imports: [
+    CommonModule,
+    MdMenuModule,
+    OTranslateModule,
+    MdIconModule,
+    MdButtonModule,
+    MdProgressSpinnerModule,
+    RouterModule
+  ],
   exports: [OTableComponent,
     OTableColumnComponent,
     OTableCellRendererActionComponent,

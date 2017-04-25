@@ -118,7 +118,7 @@ export class OTableCellRendererActionComponent implements OnInit, ITableCellRend
         result += '<img src="' + this.renderValue + '" />';
         break;
       case 'button':
-        result += '<button md-button type="button" md-raised-button>';
+        result += '<button type="button" md-raised-button>';
         result += '<span class="o-button-text">' + this.translateService.get(this.renderValue) + '</span>';
         result += '</button>';
         break;
