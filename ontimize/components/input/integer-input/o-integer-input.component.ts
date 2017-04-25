@@ -217,7 +217,7 @@ export class OIntegerInputComponent extends OTextInputComponent implements OnIni
 
 
 @NgModule({
-  declarations: [OIntegerInputComponent],
+  declarations: [OIntegerInputComponent, OIntegerPipe],
   imports: [OSharedModule, OTextInputModule],
   exports: [OIntegerInputComponent, OTextInputModule],
 })

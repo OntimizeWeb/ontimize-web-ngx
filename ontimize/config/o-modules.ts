@@ -4,12 +4,13 @@ import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
-import {
-  TranslateModule,
-  TranslateLoader,
-  TranslateStaticLoader
-} from 'ng2-translate';
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
+// AoT requires an exported function for factories
+export function HttpLoaderFactory(http: Http) {
+  return new TranslateHttpLoader(http);
+}
 import {
   MaterialModule
 } from '@angular/material';
@@ -70,11 +71,13 @@ export const ONTIMIZE_MODULES: any = [
   ReactiveFormsModule,
   HttpModule,
 
-  // Ng2-translate
+  // Ngx-translate
   TranslateModule.forRoot({
-    provide: TranslateLoader,
-    useFactory: (http: Http) => new TranslateStaticLoader(http, './assets/i18n', '.json'),
-    deps: [Http]
+    loader: {
+      provide: TranslateLoader,
+      useFactory: HttpLoaderFactory,
+      deps: [Http]
+    }
   }),
 
   // Material modules

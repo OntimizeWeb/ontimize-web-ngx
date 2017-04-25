@@ -10,7 +10,13 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "sourceMap": true,
-    "listFiles": true
+    "listFiles": true,
+    "lib": [
+      "dom",
+      "es5",
+      "es2015",
+      "es2015.iterable"
+    ]
   },
   "files": [
     "ontimize.ts",
