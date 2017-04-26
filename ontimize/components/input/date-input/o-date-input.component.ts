@@ -1,18 +1,29 @@
 import {
-  Component, Inject, Injector, forwardRef, ElementRef, ViewChild, OnInit,
+  Component,
+  Inject,
+  Injector,
+  forwardRef,
+  ElementRef,
+  ViewChild,
+  OnInit,
   Optional,
   NgModule,
   ModuleWithProviders,
   ViewEncapsulation
 } from '@angular/core';
 
-import { MdInputDirective } from '@angular/material';
+import {
+  MdInputDirective,
+  MdButtonModule
+} from '@angular/material';
 
 import { ValidatorFn } from '@angular/forms/src/directives/validators';
 
 import { OFormComponent } from '../../form/o-form.component';
 import {
-  OTextInputModule, OTextInputComponent, DEFAULT_INPUTS_O_TEXT_INPUT,
+  OTextInputModule,
+  OTextInputComponent,
+  DEFAULT_INPUTS_O_TEXT_INPUT,
   DEFAULT_OUTPUTS_O_TEXT_INPUT
 } from '../text-input/o-text-input.component';
 
@@ -147,8 +158,8 @@ export class ODateInputComponent extends OTextInputComponent implements OnInit {
       html += this._generateHTML_old(inst);
 
       html += '<div class="ui-datepicker-custom-buttonpane" layout="row" layout-align="end">';
-      html += '<button md-button class="mat-primary" data-event="click" data-handler-custom="cancel">CANCELAR</button>';//TODO translate button text
-      html += '<button md-button class="mat-primary" data-event="click" data-handler-custom="accept">ACEPTAR</button>';
+      html += '<button class="mat-button mat-primary" data-event="click" data-handler-custom="cancel">CANCELAR</button>';//TODO translate button text
+      html += '<button class="mat-button mat-primary" data-event="click" data-handler-custom="accept">ACEPTAR</button>';
       html += '</div>';
 
       let $html = $(html);
@@ -437,8 +448,15 @@ export class ODateInputComponent extends OTextInputComponent implements OnInit {
 
 @NgModule({
   declarations: [ODateInputComponent],
-  imports: [OTextInputModule, OSharedModule],
-  exports: [ODateInputComponent, OTextInputModule],
+  imports: [
+    OTextInputModule,
+    OSharedModule,
+    MdButtonModule
+  ],
+  exports: [
+    ODateInputComponent,
+    OTextInputModule
+  ],
 })
 export class ODateInputModule {
   static forRoot(): ModuleWithProviders {

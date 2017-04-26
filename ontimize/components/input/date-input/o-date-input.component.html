@@ -11,7 +11,8 @@
         [class.ng-invalid]="_fControl && !_fControl.valid"
         [class.ng-valid]="_fControl && _fControl.valid">
         <input mdInput #displayInputModel class="mat-input o-date-input" type="text" [attr.id]="opickerattr" [id]="opickerattr" layout-fill [placeholder]="placeHolder" [value]="getDescriptionValue()"
-            [readonly]="isReadOnly" (blur)="onDisplayInputBlur()" (focus)="onDisplayInputFocus($event)" (click)="onInputClick()" [disabled]="isDisabled" [o-disabled]="innerInputContainer"
+            [readonly]="isReadOnly" (blur)="onDisplayInputBlur()" (focus)="onDisplayInputFocus($event)" (click)="onInputClick()"
+            [disabled]="isDisabled"
             [class.ng-untouched]="_fControl && _fControl.untouched"
             [class.ng-touched]="_fControl && _fControl.touched"
             [class.ng-dirty]="_fControl && _fControl.dirty"

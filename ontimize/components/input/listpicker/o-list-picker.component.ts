@@ -180,16 +180,16 @@ export class OListPickerComponent extends OFormServiceComponent implements OnIni
 
   onClickClear(e: Event): void {
     e.stopPropagation();
-    if (!this._isReadOnly) {
+    if (!this._isReadOnly && !this.isDisabled) {
       this.setValue('');
-    }
-    if (this._fControl) {
-      this._fControl.markAsTouched();
+      if (this._fControl) {
+        this._fControl.markAsTouched();
+      }
     }
   }
 
   onClickListpicker(e: Event): void {
-    if (!this._isReadOnly) {
+    if (!this._isReadOnly && !this.isDisabled) {
       this.openDialog();
     }
   }
@@ -203,6 +203,7 @@ export class OListPickerComponent extends OFormServiceComponent implements OnIni
     this.dialogRef.afterClosed().subscribe(result => {
       this.onDialogClose(result);
     });
+    this.onDialogShow();
     this.dialogRef.componentInstance.initialize({
       data: this.dataArray,
       filter: this.filter,
@@ -210,12 +211,14 @@ export class OListPickerComponent extends OFormServiceComponent implements OnIni
     });
   }
 
-  onDialogShow(evt: any) {
-    if (evt.overlayRef._pane && evt.overlayRef._pane.children
-      && evt.overlayRef._pane.children.length >= 0) {
-      let el = evt.overlayRef._pane.children[0];
-      if (el) {
-        el.classList.add('mat-dialog-custom');
+  onDialogShow() {
+    if (this.dialogRef) {
+      let dRef = (this.dialogRef as any);
+      if (dRef._overlayRef && dRef._overlayRef._pane && dRef._overlayRef._pane.children && dRef._overlayRef._pane.children.length >= 0) {
+        let el = dRef._overlayRef._pane.children[0];
+        if (el) {
+          el.classList.add('mat-dialog-custom');
+        }
       }
     }
   }
@@ -247,12 +250,26 @@ export class OListPickerComponent extends OFormServiceComponent implements OnIni
 }
 
 @NgModule({
-  declarations: [ColumnsFilterPipe, OListPickerDialogComponent, OListPickerComponent],
-  imports: [CommonModule, FormsModule, ReactiveFormsModule,
-    MdInputModule, MdListModule, ODialogModule,
+  declarations: [
+    ColumnsFilterPipe,
+    OListPickerDialogComponent,
+    OListPickerComponent
+    ],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MdInputModule,
+    MdListModule,
+    ODialogModule,
     MdToolbarModule,
-    OSharedModule, OSearchInputModule, OTranslateModule],
-  exports: [OListPickerComponent],
+    OSharedModule,
+    OSearchInputModule,
+    OTranslateModule
+    ],
+  exports: [
+    OListPickerComponent
+  ],
   entryComponents: [
     OListPickerDialogComponent
   ]

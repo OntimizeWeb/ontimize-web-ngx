@@ -1,6 +1,6 @@
 <div layout="row" layout-fill layout-align="space-between center" [formGroup]="form?.formGroup"
     [mdTooltip]="tooltip" [mdTooltipPosition]="tooltipPosition" [mdTooltipShowDelay]="tooltipShowDelay">
-    <span *ngIf="currencySymbol !== 'none' && currencySymbolPosition === 'left' " md-suffix>{{ currency_symbols[currencySymbol] }}</span>
+    <span *ngIf="currencySymbol !== 'none' && currencySymbolPosition === 'left' " mdSuffix>{{ currency_symbols[currencySymbol] }}</span>
     <md-input-container #innerInputContainer flex layout-fill>
         <input mdInput class="mat-input" type="number" [attr.id]="oattr" layout-fill [formControlName]="oattr" [placeholder]="placeHolder"
             [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)" (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)"
@@ -12,5 +12,5 @@
                 <span *ngIf="_fControl.errors?.pattern">{{ 'FORM_VALIDATION.FORMAT' | oTranslate}}</span>
             </md-hint>
     </md-input-container>
-    <span class="icon-btn" *ngIf="currencySymbol !== 'none' && currencySymbolPosition === 'right' " md-suffix [class.mat-disabled]="isDisabled">{{ currency_symbols[currencySymbol] }}</span>
+    <span class="icon-btn" *ngIf="currencySymbol !== 'none' && currencySymbolPosition === 'right' " mdSuffix [class.mat-disabled]="isDisabled">{{ currency_symbols[currencySymbol] }}</span>
 </div>

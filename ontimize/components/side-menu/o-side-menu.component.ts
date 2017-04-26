@@ -18,7 +18,6 @@ import {
 import { AuthGuardService } from '../../services';
 import { OTranslateModule } from '../../pipes/o-translate.pipe';
 
-
 export const DEFAULT_INPUTS_O_SIDE_MENU = [
   // title [string]: menu title. Default: no value.
   'title'
@@ -64,8 +63,14 @@ export class OSideMenuComponent {
 
 @NgModule({
   declarations: [OSideMenuComponent],
-  imports: [MdSidenavModule, MdListModule, MdToolbarModule, MdIconModule, OTranslateModule],
-  exports: [OSideMenuComponent],
+  imports: [
+    MdSidenavModule,
+    MdListModule,
+    MdToolbarModule,
+    MdIconModule,
+    OTranslateModule
+  ],
+  exports: [OSideMenuComponent]
 })
 export class OSideMenuModule {
   static forRoot(): ModuleWithProviders {

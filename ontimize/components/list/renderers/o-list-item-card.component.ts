@@ -12,7 +12,12 @@ import {
 } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
-import { MdIconModule, MdCardModule, MdButtonModule } from '@angular/material';
+import {
+  MdIconModule,
+  MdCardModule,
+  MdButtonModule,
+  MdListModule
+} from '@angular/material';
 
 import { OListItemComponent } from '../list-item/o-list-item.component';
 import { OListItemCardRenderer } from './o-list-item-card-renderer.class';
@@ -57,7 +62,13 @@ export class OListItemCardComponent extends OListItemCardRenderer {
 
 @NgModule({
   declarations: [OListItemCardComponent],
-  imports: [MdIconModule, CommonModule, MdCardModule, MdButtonModule],
+  imports: [
+    MdIconModule,
+    CommonModule,
+    MdCardModule,
+    MdButtonModule,
+    MdListModule
+  ],
   exports: [OListItemCardComponent]
 })
 export class OListItemCardModule {

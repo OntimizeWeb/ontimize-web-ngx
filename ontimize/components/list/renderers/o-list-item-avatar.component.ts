@@ -12,7 +12,10 @@ import {
 } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
-import { MdIconModule } from '@angular/material';
+import {
+  MdIconModule,
+  MdListModule
+} from '@angular/material';
 
 import { OListItemComponent } from '../list-item/o-list-item.component';
 import { OListItemTextRenderer } from './o-list-item-text-renderer.class';
@@ -60,7 +63,11 @@ export class OListItemAvatarComponent extends OListItemTextRenderer {
 
 @NgModule({
   declarations: [OListItemAvatarComponent],
-  imports: [MdIconModule, CommonModule],
+  imports: [
+    MdIconModule,
+    CommonModule,
+    MdListModule
+  ],
   exports: [OListItemAvatarComponent]
 })
 export class OListItemAvatarModule {

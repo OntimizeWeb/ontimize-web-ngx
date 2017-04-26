@@ -14,7 +14,9 @@ o-side-menu {
   }
 
   md-nav-list {
-    padding: 0px;
+    &.mat-nav-list{
+      padding-top: 0px;
+    }
   }
 
   h3 {

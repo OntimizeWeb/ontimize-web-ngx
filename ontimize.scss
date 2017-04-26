@@ -7,19 +7,16 @@
 }
 
 .mat-dialog-custom{
-  padding: 0px !important;
-
-  .dialog-list-container {
-    md-list {
-      padding: 8px;
-    }
+  padding: 0 0 24px 0 !important;
+  .mat-dialog-content.dialog-list-container {
+    margin: 0;
   }
 }
 
 div.mat-dialog.mat-dialog-custom > md-dialog-actions{
- width: 100%;
-    margin: 0;
-    right: 0;
+  width: 100%;
+  margin: 0;
+  right: 0;
 }
 
 .mathint {

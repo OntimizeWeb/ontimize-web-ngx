@@ -1,12 +1,12 @@
-<a *ngIf="!restricted && !action && route" class="mat-list-item" [routerLink]="[ route ]">
+<a *ngIf="!restricted && !action && route" class="mat-list-item-content" [routerLink]="[ route ]">
   <md-icon *ngIf="icon" class="o-side-menu-item-icon mat-24">{{ icon }}</md-icon>
   <div class="o-side-menu-item-title">{{ title | oTranslate }}</div>
 </a>
-<a *ngIf="!restricted && !route && action" class="mat-list-item" (click)="action()">
+<a *ngIf="!restricted && !route && action" class="mat-list-item-content" (click)="action()">
   <md-icon *ngIf="icon" class="o-side-menu-item-icon mat-24">{{ icon }}</md-icon>
   <div class="o-side-menu-item-title">{{ title | oTranslate }}</div>
 </a>
-<div *ngIf="!restricted && !route && !action" class="o-side-menu-item-text mat-list-item">
+<div *ngIf="!restricted && !route && !action" class="o-side-menu-item-text mat-list-item-content">
   <md-icon *ngIf="icon" class="o-side-menu-item-icon mat-24">{{ icon }}</md-icon>
   <div class="o-side-menu-item-title">{{ title | oTranslate }}</div>
 </div>
