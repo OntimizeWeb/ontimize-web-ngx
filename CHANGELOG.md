@@ -1,3 +1,29 @@
+## 2.0.0  (2017-04-27)
+
+### Features
+* **Styles**: Adding pre-built themes '*deeppurple-amber*', '*indigo-pink*', '*pink-bluegrey*' and '*purple-green*'.
+  Example of theme import: '*@import 'node_modules/ontimize-web-ng2/ontimize/components/theming/indigo-pink.scss';*'
+* **entryComponents**: Including '*ODialogComponent*' in '*ONTIMIZE_MODULES*'. User will no longer need to include '*ODialogComponent*' on its module '*entryComponents*'.
+
+
+### PEER-DEPENDENCY UPDATES ###
+* **Updated**:   @angular/material@2.0.0-beta.3
+* **Updated**:   @angular@4.0.3
+* **Updated**:   @angular/router@4.0.3
+* **Updated**:   zone.js@0.8.4
+* **Added**:     @angular/platform-server@4.0.3
+* **Added**:     @angular/animations@4.0.3
+* **Added**:     @ngx-translate/core@6.0.1
+* **Added**:     @ngx-translate/http-loader@0.0.3
+* **Added**:     typescript@2.3.0
+* **Removed**:   ng2-translate@5.0.0
+
+### BREAKING CHANGES
+
+* **Styles**: Updating styles for ([@angular/material@2.0.0-beta.3](https://github.com/angular/material2/blob/master/CHANGELOG.md))
+* **Directives**: Removing '*ONTIMIZE_DIRECTIVES*' export. User will no longer need to import this declarations on its module.
+
+
 ## 1.2.3  (2017-03-31)
 ### Bug Fixes
 * **o-form**, **o-table**, **o-list**: fixing '*reinitialize*' serious bug.
