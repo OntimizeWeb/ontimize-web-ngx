@@ -1,10 +1,10 @@
 .mat-list {
 
   &.selectable {
-    &[dense] .mat-list-item {
+    &[dense] .mat-list-item-content {
       padding-right: 32px;
     }
-    &:not([dense]) .mat-list-item {
+    &:not([dense]) .mat-list-item-content {
       padding-right: 36px;
     }
   }
