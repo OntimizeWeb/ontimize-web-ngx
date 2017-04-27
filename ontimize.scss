@@ -6,17 +6,14 @@
   position: relative;
 }
 
-.mat-dialog-custom{
+.mat-dialog-custom {
   padding: 0 0 24px 0 !important;
   .mat-dialog-content.dialog-list-container {
     margin: 0;
   }
-}
-
-div.mat-dialog.mat-dialog-custom > md-dialog-actions{
-  width: 100%;
-  margin: 0;
-  right: 0;
+  .mat-dialog-actions {
+    padding: 12px 24px;
+  }
 }
 
 .mathint {

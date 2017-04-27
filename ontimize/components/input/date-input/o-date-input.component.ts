@@ -44,6 +44,26 @@ export const DEFAULT_OUTPUTS_O_DATE_INPUT = [
   ...DEFAULT_OUTPUTS_O_TEXT_INPUT
 ];
 
+const CUSTOM_DATEPICKER_HEADER = `
+  <div class="ui-datepicker-custom-header">
+    <div class="ui-datepicker-custom-title" layout="row">
+      <span class="ui-datepicker-custom-year"></span>
+    </div>
+    <div class="ui-datepicker-custom-text" layout="row">
+      <span class="ui-datepicker-custom-day"></span>&nbsp;
+      <span class="ui-datepicker-custom-dayNumber"></span>&nbsp;
+      <span class="ui-datepicker-custom-month"></span>
+    </div>
+  </div>
+`;
+
+//TODO translate button text
+const CUSTOM_DATEPICKER_BUTTONS = `
+  <div class="ui-datepicker-custom-buttonpane" layout="row" layout-align="end">
+    <button class="mat-button mat-primary" data-event="click" data-handler-custom="cancel">CANCELAR</button>
+    <button class="mat-button mat-primary" data-event="click" data-handler-custom="accept">ACEPTAR</button>
+  </div>
+`;
 
 @Component({
   selector: 'o-date-input',
@@ -144,22 +164,14 @@ export class ODateInputComponent extends OTextInputComponent implements OnInit {
 
     $['datepicker']._generateHTML = function (inst) {
       let html = '';
-      html += '<div class="ui-datepicker-custom-header">';
-      html += '<div class="ui-datepicker-custom-title" layout="row">';
-      html += '<span class="ui-datepicker-custom-year"></span>';
-      html += '</div>';
-      html += '<div class="ui-datepicker-custom-text" layout="row">';
-      html += '<span class="ui-datepicker-custom-day"></span>&nbsp;';
-      html += '<span class="ui-datepicker-custom-dayNumber"></span>&nbsp;';
-      html += '<span class="ui-datepicker-custom-month"></span>';
-      html += '</div>';
-      html += '</div>';
+      html += CUSTOM_DATEPICKER_HEADER;
+
+      html += '<div class="ui-datepicker-custom-body-container">';
 
       html += this._generateHTML_old(inst);
 
-      html += '<div class="ui-datepicker-custom-buttonpane" layout="row" layout-align="end">';
-      html += '<button class="mat-button mat-primary" data-event="click" data-handler-custom="cancel">CANCELAR</button>';//TODO translate button text
-      html += '<button class="mat-button mat-primary" data-event="click" data-handler-custom="accept">ACEPTAR</button>';
+      html += CUSTOM_DATEPICKER_BUTTONS;
+
       html += '</div>';
 
       let $html = $(html);
@@ -339,7 +351,7 @@ export class ODateInputComponent extends OTextInputComponent implements OnInit {
             momentArg = datepickerTimestamp;
           }
         }
-        var momentVal = moment(momentArg);
+        var momentVal = moment(parseInt(momentArg));
         self.updateDatepickerHeader(momentVal, inst.dpDiv);
       }
     });

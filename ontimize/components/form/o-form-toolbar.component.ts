@@ -107,34 +107,28 @@ export class OFormToolbarComponent implements OnInit {
   }
 
   onCloseDetail() {
-    console.log('close detail form');
     this._form.executeToolbarAction(OFormComponent.CLOSE_DETAIL_ACTION);
   }
 
   onBack() {
-    console.log('go back');
     this._form.executeToolbarAction(OFormComponent.BACK_ACTION);
   }
 
   onReload() {
-    console.log('reload form');
     this._form.executeToolbarAction(OFormComponent.RELOAD_ACTION);
   }
 
   onInsert() {
-    console.log('go insert mode');
     this.setInsertMode();
     this._form.executeToolbarAction(OFormComponent.GO_INSERT_ACTION);
   }
 
   onEdit() {
-    console.log('go edit mode');
     this.setEditMode();
     this._form.executeToolbarAction(OFormComponent.GO_EDIT_ACTION);
   }
 
   onDelete(evt: any) {
-    console.log('delete register');
     this.showConfirmDelete(evt);
   }
 
@@ -176,7 +170,6 @@ export class OFormToolbarComponent implements OnInit {
               //TODO mostrar un toast indicando que la operación fue correcta...
               this.onCloseDetail();
             }, err => {
-              console.log('error');
               alert('Se ha producido un error!');
             });
         }

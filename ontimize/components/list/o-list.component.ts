@@ -302,7 +302,6 @@ export class OListComponent extends OServiceComponent implements OnInit, IList, 
           }
           ObservableWrapper.callEmit(self.onListDataLoaded, self.dataResponseArray);
         }, err => {
-          console.log('[OList.queryData]: error', err);
           self.loaderSuscription.unsubscribe();
         });
     }
@@ -486,11 +485,9 @@ export class OListComponent extends OServiceComponent implements OnInit, IList, 
                 console.log('[OList.remove]: response', res);
               },
               error => {
-                console.log('[OList.remove]: error', error);
                 this.dialogService.alert('ERROR', 'MESSAGES.ERROR_DELETE');
               },
               () => {
-                console.log('[OList.remove]: success');
                 this.queryData(this.parentItem);
               }
             );
