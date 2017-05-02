@@ -12,8 +12,8 @@ import { OTranslateModule } from '../../pipes/o-translate.pipe';
 
 @Component({
   selector: 'o-dialog',
-  templateUrl: '/dialog/o-dialog.component.html',
-  styleUrls: ['/dialog/o-dialog.component.css'],
+  templateUrl: 'o-dialog.component.html',
+  styleUrls: ['o-dialog.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
 export class ODialogComponent {

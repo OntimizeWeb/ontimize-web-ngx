@@ -9,9 +9,9 @@ import {OTranslateModule} from '../../pipes/o-translate.pipe';
 
 @Component({
   selector: 'o-bar-menu-separator',
-  templateUrl: './bar-menu/o-bar-menu-separator.component.html',
+  templateUrl: 'o-bar-menu-separator.component.html',
   styleUrls: [
-    './bar-menu/o-bar-menu-separator.component.css'
+    'o-bar-menu-separator.component.scss'
   ],
   encapsulation: ViewEncapsulation.None
 })

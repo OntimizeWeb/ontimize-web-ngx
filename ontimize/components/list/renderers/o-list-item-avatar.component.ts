@@ -31,8 +31,8 @@ export const DEFAULT_OUTPUTS_O_LIST_ITEM_AVATAR = [
 
 @Component({
   selector: 'o-list-item-avatar',
-  templateUrl: 'list/renderers/o-list-item-avatar.component.html',
-  styleUrls: ['list/renderers/o-list-item-avatar.component.css'],
+  templateUrl: 'o-list-item-avatar.component.html',
+  styleUrls: ['o-list-item-avatar.component.scss'],
   inputs: [
     ...DEFAULT_INPUTS_O_LIST_ITEM_AVATAR
   ],

@@ -22,9 +22,9 @@ export const DEFAULT_INPUTS_O_SIDE_MENU_GROUP = [
 
 @Component({
   selector: 'o-side-menu-group',
-  templateUrl: './side-menu/o-side-menu-group.component.html',
+  templateUrl: 'o-side-menu-group.component.html',
   styleUrls: [
-    './side-menu/o-side-menu-group.component.css'
+    'o-side-menu-group.component.scss'
   ],
   inputs: [
     ...DEFAULT_INPUTS_O_SIDE_MENU_GROUP

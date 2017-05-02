@@ -37,9 +37,9 @@ export const DEFAULT_INPUTS_O_BAR_MENU_ITEM = [
 
 @Component({
   selector: 'o-bar-menu-item',
-  templateUrl: './bar-menu/o-bar-menu-item.component.html',
+  templateUrl: 'o-bar-menu-item.component.html',
   styleUrls: [
-    './bar-menu/o-bar-menu-item.component.css'
+    'o-bar-menu-item.component.scss'
   ],
   inputs: [
     ...DEFAULT_INPUTS_O_BAR_MENU_ITEM

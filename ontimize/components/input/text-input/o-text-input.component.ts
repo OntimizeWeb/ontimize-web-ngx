@@ -44,8 +44,8 @@ export const DEFAULT_OUTPUTS_O_TEXT_INPUT = [
 
 @Component({
   selector: 'o-text-input',
-  templateUrl: '/input/text-input/o-text-input.component.html',
-  styleUrls: ['/input/text-input/o-text-input.component.css'],
+  templateUrl: 'o-text-input.component.html',
+  styleUrls: ['o-text-input.component.scss'],
   inputs: [
     ...DEFAULT_INPUTS_O_TEXT_INPUT
   ],

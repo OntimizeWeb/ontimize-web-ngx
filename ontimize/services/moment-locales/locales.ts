@@ -1,5 +1,6 @@
 import * as moment from 'moment';
 
+declare function require(name:string);
 const MOM_LOCALES = {
   'es': require('moment/locale/es'),
   'fr': require('moment/locale/fr'),
@@ -19,6 +20,6 @@ export function loadLocale(locale: string) {
     keys.map(item => {
       config[item.substring(1)] = loc_mom[item];
     });
-    moment.locale(locale, config);
+    moment.updateLocale(locale, config);
   }
 }

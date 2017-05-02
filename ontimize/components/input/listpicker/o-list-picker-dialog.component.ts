@@ -14,8 +14,8 @@ export const DEFAULT_INPUTS_O_LIST_PICKER = [
 
 @Component({
   selector: 'o-list-picker-dialog',
-  templateUrl: '/input/listpicker/o-list-picker-dialog.component.html',
-  styleUrls: ['/input/listpicker/o-list-picker.component.css'],
+  templateUrl: 'o-list-picker-dialog.component.html',
+  styleUrls: ['o-list-picker.component.scss'],
   inputs: [
     ...DEFAULT_INPUTS_O_LIST_PICKER
   ],

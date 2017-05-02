@@ -9,9 +9,9 @@ import {OTranslateModule} from '../../pipes/o-translate.pipe';
 
 @Component({
   selector: 'o-side-menu-separator',
-  templateUrl: './side-menu/o-side-menu-separator.component.html',
+  templateUrl: 'o-side-menu-separator.component.html',
   styleUrls: [
-    './side-menu/o-side-menu-separator.component.css'
+    'o-side-menu-separator.component.scss'
   ],
   encapsulation: ViewEncapsulation.None
 })

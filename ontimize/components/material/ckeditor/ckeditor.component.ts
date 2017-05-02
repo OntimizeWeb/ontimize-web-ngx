@@ -54,8 +54,8 @@ let nextUniqueId = 0;
 @Component({
   selector: 'ckeditor',
   providers: [CKEDITOR_CONTROL_VALUE_ACCESSOR],
-  templateUrl: '/material/ckeditor/ckeditor.component.html',
-  styleUrls: ['/material/ckeditor/ckeditor.component.css'],
+  templateUrl: 'ckeditor.component.html',
+  styleUrls: ['ckeditor.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
 export class CKEditor implements ControlValueAccessor {

@@ -26,8 +26,8 @@ export const DEFAULT_OUTPUTS_O_CURRENCY_INPUT = [
 
 @Component({
   selector: 'o-currency-input',
-  templateUrl: '/input/currency-input/o-currency-input.component.html',
-  styleUrls: ['/input/currency-input/o-currency-input.component.css'],
+  templateUrl: 'o-currency-input.component.html',
+  styleUrls: ['o-currency-input.component.scss'],
   inputs: [
     ...DEFAULT_INPUTS_O_CURRENCY_INPUT
   ],

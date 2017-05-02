@@ -76,8 +76,8 @@ export const DEFAULT_OUTPUTS_O_COMBO = [
   outputs: [
     ...DEFAULT_OUTPUTS_O_COMBO
   ],
-  templateUrl: '/combo/o-combo.component.html',
-  styleUrls: ['/combo/o-combo.component.css'],
+  templateUrl: 'o-combo.component.html',
+  styleUrls: ['o-combo.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
 export class OComboComponent extends OFormServiceComponent implements OnInit {

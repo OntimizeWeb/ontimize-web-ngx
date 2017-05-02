@@ -72,8 +72,8 @@ export const DEFAULT_OUTPUTS_O_LIST_PICKER = [
 
 @Component({
   selector: 'o-list-picker',
-  templateUrl: '/input/listpicker/o-list-picker.component.html',
-  styleUrls: ['/input/listpicker/o-list-picker.component.css'],
+  templateUrl: 'o-list-picker.component.html',
+  styleUrls: ['o-list-picker.component.scss'],
   providers: [
     { provide: OntimizeService, useFactory: dataServiceFactory, deps: [Injector] }
   ],

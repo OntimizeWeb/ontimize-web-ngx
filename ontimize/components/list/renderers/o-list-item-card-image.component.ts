@@ -35,8 +35,8 @@ export const DEFAULT_OUTPUTS_O_LIST_ITEM_CARD_IMAGE = [
 
 @Component({
   selector: 'o-list-item-card-image',
-  templateUrl: 'list/renderers/o-list-item-card-image.component.html',
-  styleUrls: ['list/renderers/o-list-item-card-image.component.css'],
+  templateUrl: 'o-list-item-card-image.component.html',
+  styleUrls: ['o-list-item-card-image.component.scss'],
   inputs: [
     ...DEFAULT_INPUTS_O_LIST_ITEM_CARD_IMAGE,
     'content',

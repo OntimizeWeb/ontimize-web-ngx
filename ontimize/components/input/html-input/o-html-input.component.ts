@@ -49,8 +49,8 @@ export const DEFAULT_OUTPUTS_O_HTML_INPUT = [
 
 @Component({
   selector: 'o-html-input',
-  templateUrl: '/input/html-input/o-html-input.component.html',
-  styleUrls: ['/input/html-input/o-html-input.component.css'],
+  templateUrl: 'o-html-input.component.html',
+  styleUrls: ['o-html-input.component.scss'],
   inputs: [
     ...DEFAULT_INPUTS_O_HTML_INPUT
   ],

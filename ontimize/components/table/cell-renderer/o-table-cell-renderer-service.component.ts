@@ -1,3 +1,4 @@
+import * as $ from 'jquery';
 import { Component, OnInit, Inject, Injector, forwardRef } from '@angular/core';
 
 import { ITableCellRenderer } from '../../../interfaces';

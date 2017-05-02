@@ -35,9 +35,9 @@ export const DEFAULT_INPUTS_O_LOCALE_BAR_MENU_ITEM = [
 
 @Component({
   selector: 'o-locale-bar-menu-item',
-  templateUrl: './bar-menu/o-locale-bar-menu-item.component.html',
+  templateUrl: 'o-locale-bar-menu-item.component.html',
   styleUrls: [
-    './bar-menu/o-locale-bar-menu-item.component.css'
+    'o-locale-bar-menu-item.component.scss'
   ],
   inputs: [
     ...DEFAULT_INPUTS_O_LOCALE_BAR_MENU_ITEM

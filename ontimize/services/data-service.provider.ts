@@ -23,7 +23,7 @@ class DataServiceFactory {
       return new OntimizeService(this.injector);
     }else if ('OntimizeEE' === this.config.serviceType) {
       return new OntimizeEEService(this.injector);
-    }else {
+    } else {
       //  let newInstace =(this.config.servicetype as any).prototype;
       //  return newInstace.constructor.apply(newInstace, new Array(this.http));
       let newInstance = Object.create((this.config.serviceType as any).prototype);
@@ -33,6 +33,6 @@ class DataServiceFactory {
   }
 };
 
-export let dataServiceFactory = function (injector: Injector) {
+export function dataServiceFactory (injector: Injector) {
   return new DataServiceFactory(injector).factory();
 };

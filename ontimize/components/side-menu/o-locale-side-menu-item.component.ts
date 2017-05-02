@@ -34,9 +34,9 @@ export const DEFAULT_INPUTS_O_LOCALE_SIDE_MENU_ITEM = [
 
 @Component({
   selector: 'o-locale-side-menu-item',
-  templateUrl: './side-menu/o-locale-side-menu-item.component.html',
+  templateUrl: 'o-locale-side-menu-item.component.html',
   styleUrls: [
-    './side-menu/o-locale-side-menu-item.component.css'
+    'o-locale-side-menu-item.component.scss'
   ],
   inputs: [
     ...DEFAULT_INPUTS_O_LOCALE_SIDE_MENU_ITEM

@@ -1,3 +1,4 @@
+import * as $ from 'jquery';
 import {
   Component, OnInit, Inject, Injector,
   AfterContentInit, ContentChildren,
@@ -71,8 +72,8 @@ export interface OListInitializationOptions {
   outputs: [
     ...DEFAULT_OUTPUTS_O_LIST
   ],
-  templateUrl: 'list/o-list.component.html',
-  styleUrls: ['list/o-list.component.css'],
+  templateUrl: 'o-list.component.html',
+  styleUrls: ['o-list.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
 export class OListComponent extends OServiceComponent implements OnInit, IList, AfterContentInit {

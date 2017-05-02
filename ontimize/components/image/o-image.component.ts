@@ -45,8 +45,8 @@ export const DEFAULT_OUTPUTS_O_IMAGE = [
 
 @Component({
   selector: 'o-image',
-  templateUrl: '/image/o-image.component.html',
-  styleUrls: ['/image/o-image.component.css'],
+  templateUrl: 'o-image.component.html',
+  styleUrls: ['o-image.component.scss'],
   inputs: [
     ...DEFAULT_INPUTS_O_IMAGE
   ],

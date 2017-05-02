@@ -1,3 +1,5 @@
+import * as $ from 'jquery';
+// declare function require(name: string);
 require('jquery');
 //TODO NOT WORKS WITH NG2 2.0.0 (window as any).JSZip = require('jszip');
 // TODO: require pdfmake from node_modules if files are available at its build directory
@@ -14,7 +16,7 @@ require('datatables.net-colreorder');
 require('./vendor/custom.dataTables.fixedHeader.js');
 require('datatables.net-select');
 require('./vendor/custom.dataTables.keyTable.js');
-require('colresizable');
+require('colresizable/colResizable-1.6.min.js');
 
 // added custom methods to order timestamps
 ($ as any).fn.dataTableExt.oSort['timestamp-asc']  = function(x, y) {

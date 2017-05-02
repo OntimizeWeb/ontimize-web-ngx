@@ -3,7 +3,7 @@ import { EventEmitter } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { MomentService } from '../services';
 
-import CORE_TRANSLATIONS = require('../i18n/i18n');
+import * as CORE_TRANSLATIONS from '../i18n/i18n';
 
 import { ObservableWrapper } from '../util/async';
 

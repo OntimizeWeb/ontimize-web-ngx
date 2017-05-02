@@ -30,9 +30,9 @@ export const DEFAULT_INPUTS_O_SIDE_MENU_ITEM = [
 
 @Component({
   selector: 'o-side-menu-item',
-  templateUrl: './side-menu/o-side-menu-item.component.html',
+  templateUrl: 'o-side-menu-item.component.html',
   styleUrls: [
-    './side-menu/o-side-menu-item.component.css'
+    'o-side-menu-item.component.scss'
   ],
   inputs: [
     ...DEFAULT_INPUTS_O_SIDE_MENU_ITEM

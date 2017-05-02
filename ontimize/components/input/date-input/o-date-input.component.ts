@@ -1,3 +1,4 @@
+import * as $ from 'jquery';
 import {
   Component,
   Inject,
@@ -67,8 +68,8 @@ const CUSTOM_DATEPICKER_BUTTONS = `
 
 @Component({
   selector: 'o-date-input',
-  templateUrl: '/input/date-input/o-date-input.component.html',
-  styleUrls: ['/input/date-input/o-date-input.component.css'],
+  templateUrl: 'o-date-input.component.html',
+  styleUrls: ['o-date-input.component.scss'],
   inputs: [
     ...DEFAULT_INPUTS_O_DATE_INPUT
   ],

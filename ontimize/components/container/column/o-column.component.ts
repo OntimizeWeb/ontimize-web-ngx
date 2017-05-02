@@ -22,8 +22,8 @@ export const DEFAULT_INPUTS_O_COLUMN = [
 
 @Component({
   selector: 'o-column',
-  templateUrl: '/container/column/o-column.component.html',
-  styleUrls: ['/container/column/o-column.component.css'],
+  templateUrl: 'o-column.component.html',
+  styleUrls: ['o-column.component.scss'],
   inputs: [
     ...DEFAULT_INPUTS_O_COLUMN
   ],

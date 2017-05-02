@@ -1,3 +1,4 @@
+import * as $ from 'jquery';
 import {
   Component, OnInit, OnDestroy, OnChanges, SimpleChange,
   Inject, Injector, ElementRef,
@@ -151,9 +152,9 @@ export interface OTableInitializationOptions {
 
 @Component({
   selector: 'o-table',
-  templateUrl: './table/o-table.component.html',
+  templateUrl: 'o-table.component.html',
   styleUrls: [
-    './table/o-table.component.css'
+    'o-table.component.scss'
   ],
   providers: [
     { provide: OntimizeService, useFactory: dataServiceFactory, deps: [Injector] }
@@ -830,7 +831,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     var menuBtnOffset = menuBtn.offset();
     var top = menuBtnOffset.top + menuBtn.outerHeight(true) - 30;
     var left = menuBtnOffset.left - menuEl.outerWidth(true) + menuBtn.outerWidth(true) - 16;
-    menuContainer.css('transform', 'translateX(' + left + 'px) translateY(' + top + 'px)');
+    menuContainer.scss('transform', 'translateX(' + left + 'px) translateY(' + top + 'px)');
   }
 
   protected parseTableOptions() {

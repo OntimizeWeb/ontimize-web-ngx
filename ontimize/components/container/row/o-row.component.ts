@@ -22,8 +22,8 @@ export const DEFAULT_INPUTS_O_ROW = [
 
 @Component({
   selector: 'o-row',
-  templateUrl: '/container/row/o-row.component.html',
-  styleUrls: ['/container/row/o-row.component.css'],
+  templateUrl: 'o-row.component.html',
+  styleUrls: ['o-row.component.scss'],
   inputs: [
     ...DEFAULT_INPUTS_O_ROW
   ],

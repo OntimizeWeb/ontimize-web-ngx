@@ -25,8 +25,8 @@ export const DEFAULT_INPUTS_O_FORM_TOOLBAR = [
 
 @Component({
   selector: 'o-form-toolbar',
-  templateUrl: '/form/o-form-toolbar.component.html',
-  styleUrls: ['/form/o-form-toolbar.component.css'],
+  templateUrl: 'o-form-toolbar.component.html',
+  styleUrls: ['o-form-toolbar.component.scss'],
   inputs: [
     ...DEFAULT_INPUTS_O_FORM_TOOLBAR
   ],

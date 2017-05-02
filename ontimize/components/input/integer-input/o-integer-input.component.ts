@@ -1,3 +1,4 @@
+import * as $ from 'jquery';
 import {
   Component, Inject, Injector, forwardRef, ElementRef, OnInit,
   Optional,
@@ -38,8 +39,8 @@ export const DEFAULT_OUTPUTS_O_INTEGER_INPUT = [
 
 @Component({
   selector: 'o-integer-input',
-  templateUrl: '/input/integer-input/o-integer-input.component.html',
-  styleUrls: ['/input/integer-input/o-integer-input.component.css'],
+  templateUrl: 'o-integer-input.component.html',
+  styleUrls: ['o-integer-input.component.scss'],
   inputs: [
     ...DEFAULT_INPUTS_O_INTEGER_INPUT
   ],

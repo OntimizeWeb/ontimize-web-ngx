@@ -1,27 +1,33 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "module": "commonjs",
     "moduleResolution": "node",
-    "declaration": true,
-    "noImplicitAny": false,
+    "declaration": false,
     "removeComments": true,
-    "noLib": false,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "sourceMap": true,
     "listFiles": true,
+    "types": [
+      "node"
+    ],
+    "typeRoots": [
+      "node_modules/@types"
+    ],
     "lib": [
-      "dom",
-      "es5",
-      "es2015",
-      "es2015.iterable"
+      "es2016",
+      "dom"
     ]
   },
+  "exclude": [
+    "node_modules"
+  ],
+  "angularCompilerOptions": {
+    "strictMetadataEmit": true,
+    "skipTemplateCodegen": true
+  },
   "files": [
-    "ontimize.ts",
-    "typings/browser.d.ts",
-    "tools/manual_typings/manual.typings.d.ts"
+    "ontimize.ts"
   ],
   "compileOnSave": false
 }

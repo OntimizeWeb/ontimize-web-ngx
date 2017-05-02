@@ -39,8 +39,8 @@ export const DEFAULT_OUTPUTS_O_LIGHT_TABLE = [
 
 @Component({
   selector: 'o-light-table',
-  templateUrl: './light-table/o-light-table.component.html',
-  styleUrls: ['./light-table/o-light-table.component.css'],
+  templateUrl: 'o-light-table.component.html',
+  styleUrls: ['o-light-table.component.scss'],
   providers: [OntimizeService],
   inputs: [
     ...DEFAULT_INPUTS_O_LIGHT_TABLE

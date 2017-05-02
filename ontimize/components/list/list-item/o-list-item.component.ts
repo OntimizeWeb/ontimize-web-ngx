@@ -23,8 +23,8 @@ import { OListComponent } from '../o-list.component';
 
 @Component({
   selector: 'o-list-item',
-  templateUrl: 'list/list-item/o-list-item.component.html',
-  styleUrls: ['list/list-item/o-list-item.component.css'],
+  templateUrl: 'o-list-item.component.html',
+  styleUrls: ['o-list-item.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
 

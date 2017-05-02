@@ -31,8 +31,8 @@ export const DEFAULT_OUTPUTS_O_LIST_ITEM_TEXT = [
 
 @Component({
   selector: 'o-list-item-text',
-  templateUrl: 'list/renderers/o-list-item-text.component.html',
-  styleUrls: ['list/renderers/o-list-item-text.component.css'],
+  templateUrl: 'o-list-item-text.component.html',
+  styleUrls: ['o-list-item-text.component.scss'],
   inputs: [
     ...DEFAULT_INPUTS_O_LIST_ITEM_TEXT
   ],

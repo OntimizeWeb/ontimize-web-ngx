@@ -28,8 +28,8 @@ export const DEFAULT_INPUTS_O_BUTTON = [
   inputs: [
     ...DEFAULT_INPUTS_O_BUTTON
   ],
-  templateUrl: '/button/o-button.component.html',
-  styleUrls: ['/button/o-button.component.css'],
+  templateUrl: 'o-button.component.html',
+  styleUrls: ['o-button.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
 

@@ -110,8 +110,8 @@ export interface OFormInitializationOptions {
   providers: [
     { provide: OntimizeService, useFactory: dataServiceFactory, deps: [Injector] }
   ],
-  templateUrl: '/form/o-form.component.html',
-  styleUrls: ['/form/o-form.component.css'],
+  templateUrl: 'o-form.component.html',
+  styleUrls: ['o-form.component.scss'],
   inputs: [
     ...DEFAULT_INPUTS_O_FORM
   ],

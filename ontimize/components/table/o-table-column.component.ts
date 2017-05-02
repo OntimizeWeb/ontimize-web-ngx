@@ -55,9 +55,9 @@ export const DEFAULT_INPUTS_O_TABLE_COLUMN = [
 
 @Component({
   selector: 'o-table-column',
-  templateUrl: 'table/o-table-column.component.html',
+  templateUrl: 'o-table-column.component.html',
   styleUrls: [
-    'table/o-table-column.component.css'
+    'o-table-column.component.scss'
   ],
   inputs: [
     ...DEFAULT_INPUTS_O_TABLE_COLUMN,

@@ -21,8 +21,8 @@ export const DEFAULT_OUTPUTS_O_SEARCH_INPUT = [
 
 @Component({
   selector: 'o-search-input',
-  templateUrl: '/search-input/o-search-input.component.html',
-  styleUrls: ['/search-input/o-search-input.component.css'],
+  templateUrl: 'o-search-input.component.html',
+  styleUrls: ['o-search-input.component.scss'],
   inputs: [
     ...DEFAULT_INPUTS_O_SEARCH_INPUT
   ],

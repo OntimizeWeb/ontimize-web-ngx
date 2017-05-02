@@ -9,8 +9,8 @@ import { MdIconModule, MdToolbarModule, MdButtonModule } from '@angular/material
 
 @Component({
   selector: 'o-light-table-button-panel',
-  templateUrl: './light-table/o-light-table-button-panel.component.html',
-  styleUrls: ['./light-table/o-light-table-button-panel.component.css'],
+  templateUrl: 'o-light-table-button-panel.component.html',
+  styleUrls: ['o-light-table-button-panel.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
 export class OLightTableButtonPanelComponent {
