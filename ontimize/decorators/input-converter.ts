@@ -62,5 +62,4 @@ export function InputConverter(converter?: (value: any) => any) {
       });
     }
   };
-};
-
+}

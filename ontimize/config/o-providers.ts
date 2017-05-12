@@ -1,12 +1,22 @@
 import { Injector } from '@angular/core';
 import { BaseRequestOptions, XHRBackend } from '@angular/http';
-
 import { MdIconRegistry } from '@angular/material';
 
 import {
-  LoginService, NavigationService, OntimizeService, MomentService, NumberService, CurrencyService,
-  OTranslateService, DialogService, AuthGuardService, authGuardServiceFactory, dataServiceFactory, LocalStorageService
+  LoginService,
+  NavigationService,
+  OntimizeService,
+  MomentService,
+  NumberService,
+  CurrencyService,
+  OTranslateService,
+  DialogService,
+  AuthGuardService,
+  authGuardServiceFactory,
+  dataServiceFactory,
+  LocalStorageService
 } from '../services';
+
 import { SERVICE_CONFIG } from '../services/data-service.provider';
 
 import { APP_CONFIG, AppConfig } from '../config/app-config';

@@ -1,13 +1,16 @@
 {
   "compilerOptions": {
+    "noImplicitReturns": true,
     "target": "es5",
     "moduleResolution": "node",
-    "declaration": false,
     "removeComments": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "sourceMap": true,
+    "sourceMap": false,
     "listFiles": true,
+    "module": "es2015",
+    "declaration": true,
+    "outDir": "dist",
     "types": [
       "node"
     ],
@@ -20,14 +23,16 @@
     ]
   },
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "dist"
   ],
   "angularCompilerOptions": {
-    "strictMetadataEmit": true,
-    "skipTemplateCodegen": true
+    "skipMetadataEmit": false,
+    "strictMetadataEmit": true
   },
   "files": [
-    "ontimize.ts"
+    "index.ts",
+    "ontimize/**"
   ],
   "compileOnSave": false
 }

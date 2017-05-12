@@ -214,7 +214,7 @@ export class OImageComponent extends OFormDataComponent implements OnInit {
 
 @NgModule({
   declarations: [OImageComponent],
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, OSharedModule, MdInputModule, MdIconModule, OTranslateModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, OSharedModule, MdInputModule, MdIconModule ],
   exports: [OImageComponent],
 })
 export class OImageModule {

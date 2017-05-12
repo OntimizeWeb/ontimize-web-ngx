@@ -101,7 +101,7 @@ export class ORealInputComponent extends OIntegerInputComponent implements OnIni
 }
 
 @NgModule({
-  declarations: [ORealInputComponent, ORealPipe],
+  declarations: [ORealInputComponent],
   imports: [OSharedModule, OIntegerInputModule],
   exports: [ORealInputComponent, OIntegerInputModule],
 })

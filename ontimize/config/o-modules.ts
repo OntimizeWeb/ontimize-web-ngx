@@ -11,9 +11,7 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 export function HttpLoaderFactory(http: Http) {
   return new TranslateHttpLoader(http);
 }
-import {
-  MaterialModule
-} from '@angular/material';
+import { MaterialModule } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import {
@@ -60,9 +58,12 @@ import {
   OSideMenuSeparatorModule
 } from '../components';
 
-import {
-  OSharedModule
-} from '../shared.module';
+import { OTranslateModule } from '../pipes';
+// import { OSharedModule } from '../shared.module';
+
+export function ontimizeModules(): any {
+  return ONTIMIZE_MODULES;
+}
 
 export const ONTIMIZE_MODULES: any = [
   // Standard modules
@@ -70,6 +71,8 @@ export const ONTIMIZE_MODULES: any = [
   FormsModule,
   ReactiveFormsModule,
   HttpModule,
+
+  OTranslateModule.forRoot(),
 
   // Ngx-translate
   TranslateModule.forRoot({
@@ -126,5 +129,5 @@ export const ONTIMIZE_MODULES: any = [
   OSideMenuItemModule.forRoot(),
   OLocaleSideMenuItemModule.forRoot(),
   OSideMenuSeparatorModule.forRoot(),
-  OSharedModule.forRoot()
+  // OSharedModule
 ];

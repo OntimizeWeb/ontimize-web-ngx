@@ -166,7 +166,9 @@ export class LoginService {
 
   public getSessionInfo(): SessionInfo {
     const info = localStorage.getItem(this._localStorageKey);
-    if (!info) return;
+    if (!info) {
+      return undefined;
+    }
     let stored = JSON.parse(info);
     return stored['session'];
   }

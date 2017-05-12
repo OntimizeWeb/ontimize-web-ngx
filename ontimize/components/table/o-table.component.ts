@@ -148,7 +148,7 @@ export interface OTableInitializationOptions {
   sortColumns?: string;
   editableColumns?: string;
   parentKeys?: string;
-};
+}
 
 @Component({
   selector: 'o-table',
@@ -840,7 +840,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       tableOptions = this.getTableOptions();
       if (tableOptions.length > 0) {
         var table = this.table;
-        new ($ as any).fn.dataTable.Buttons(table, {
+        let btns = new ($ as any).fn.dataTable.Buttons(table, {
           buttons: tableOptions
         });
         table.buttons(1, null).container().appendTo(
@@ -861,7 +861,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       this.addDefaultRowButtons();
     }
     this.table = this.tableHtmlEl.DataTable(this.dataTableOptions);
-    new ($ as any).fn.dataTable.FixedHeader(this.table, {
+    let fxdHeader = new ($ as any).fn.dataTable.FixedHeader(this.table, {
       header: true,
       forceFloating: true,
       scrollWidth: 20
@@ -1243,7 +1243,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     let tableWidth = tableEl.outerWidth(true);
     let actionsWidth = ((fixedWidthColumns * 50) / tableWidth) * 100;
 
-    var self = this;
     var avoidIndex = [];
     let fixedWidths = 0;
     for (var i = 0; i < this.initialColumnsWidths.length; i++) {
@@ -2382,7 +2381,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   imports: [
     CommonModule,
     MdMenuModule,
-    OTranslateModule,
     MdIconModule,
     MdButtonModule,
     MdProgressSpinnerModule,

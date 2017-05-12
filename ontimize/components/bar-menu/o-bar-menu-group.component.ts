@@ -87,7 +87,7 @@ export class OBarMenuGroupComponent implements OnInit {
 
 @NgModule({
   declarations: [OBarMenuGroupComponent],
-  imports: [CommonModule, MdIconModule, OBarMenuModule, OTranslateModule],
+  imports: [CommonModule, MdIconModule, OBarMenuModule ],
   exports: [OBarMenuGroupComponent],
 })
 export class OBarMenuGroupModule {

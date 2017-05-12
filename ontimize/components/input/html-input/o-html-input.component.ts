@@ -127,7 +127,6 @@ export class OHTMLInputComponent implements IComponent, IFormControlComponent, I
     }
 
     if (this.tabGroup) {
-      var self = this;
       this.tabGroup.selectChange.subscribe((evt: any) => {
         self.destroyCKEditor();
         if (self.isInActiveTab()) {
@@ -322,7 +321,7 @@ export class OHTMLInputComponent implements IComponent, IFormControlComponent, I
 
 @NgModule({
   declarations: [OHTMLInputComponent],
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, MdInputModule, MdCKEditorModule, OTranslateModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, MdInputModule, MdCKEditorModule ],
   exports: [OHTMLInputComponent],
 })
 export class OHTMLInputModule {

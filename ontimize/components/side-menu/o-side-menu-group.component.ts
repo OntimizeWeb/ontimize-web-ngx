@@ -47,7 +47,7 @@ export class OSideMenuGroupComponent {
 
 @NgModule({
   declarations: [OSideMenuGroupComponent],
-  imports: [CommonModule, MdIconModule, OSideMenuModule, OTranslateModule],
+  imports: [CommonModule, MdIconModule, OSideMenuModule ],
   exports: [OSideMenuGroupComponent],
 })
 export class OSideMenuGroupModule {

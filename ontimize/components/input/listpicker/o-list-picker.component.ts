@@ -251,10 +251,9 @@ export class OListPickerComponent extends OFormServiceComponent implements OnIni
 
 @NgModule({
   declarations: [
-    ColumnsFilterPipe,
     OListPickerDialogComponent,
     OListPickerComponent
-    ],
+  ],
   imports: [
     CommonModule,
     FormsModule,
@@ -264,9 +263,8 @@ export class OListPickerComponent extends OFormServiceComponent implements OnIni
     ODialogModule,
     MdToolbarModule,
     OSharedModule,
-    OSearchInputModule,
-    OTranslateModule
-    ],
+    OSearchInputModule
+  ],
   exports: [
     OListPickerComponent
   ],

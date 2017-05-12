@@ -124,7 +124,7 @@ export class OTextInputComponent extends OFormDataComponent implements OnInit {
 @NgModule({
   declarations: [OTextInputComponent],
   imports: [CommonModule, FormsModule, ReactiveFormsModule, OSharedModule, MdInputModule, OTranslateModule],
-  exports: [OTextInputComponent, CommonModule, FormsModule, ReactiveFormsModule, MdInputModule, OTranslateModule],
+  exports: [OTextInputComponent, CommonModule, FormsModule, ReactiveFormsModule, MdInputModule, OTranslateModule]
 })
 export class OTextInputModule {
   static forRoot(): ModuleWithProviders {

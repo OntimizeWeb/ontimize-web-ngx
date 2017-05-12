@@ -3,6 +3,8 @@
  */
 var path = require('path');
 
+const EVENT = process.env.npm_lifecycle_event || '';
+
 // Helper functions
 var ROOT = path.resolve(__dirname, '..');
 
@@ -26,7 +28,13 @@ function checkNodeImport(context, request, cb) {
     cb();
 }
 
+function hasNpmFlag(flag) {
+  return EVENT.includes(flag);
+}
+
+
 exports.hasProcessFlag = hasProcessFlag;
 exports.isWebpackDevServer = isWebpackDevServer;
 exports.root = root;
 exports.checkNodeImport = checkNodeImport;
+exports.hasNpmFlag = hasNpmFlag;

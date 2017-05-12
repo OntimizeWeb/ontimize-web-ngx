@@ -98,7 +98,7 @@ export class OLocaleBarMenuItemComponent implements OnInit {
 
 @NgModule({
   declarations: [OLocaleBarMenuItemComponent],
-  imports: [CommonModule, MdIconModule, RouterModule, OBarMenuModule, OTranslateModule],
+  imports: [CommonModule, MdIconModule, RouterModule, OBarMenuModule ],
   exports: [OLocaleBarMenuItemComponent],
 })
 export class OLocaleBarMenuItemModule {

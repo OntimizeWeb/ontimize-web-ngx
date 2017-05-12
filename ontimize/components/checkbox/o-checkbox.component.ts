@@ -121,7 +121,7 @@ export class OCheckboxComponent extends OFormDataComponent implements OnInit {
 
 @NgModule({
   declarations: [OCheckboxComponent],
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, OSharedModule, MdInputModule, MdCheckboxModule, OTranslateModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, OSharedModule, MdInputModule, MdCheckboxModule ],
   exports: [OCheckboxComponent],
 })
 export class OCheckboxModule {

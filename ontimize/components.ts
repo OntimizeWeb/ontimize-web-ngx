@@ -46,3 +46,8 @@ export * from './components/table/o-table-column.component';
 export * from './components/table/header-components/header-components';
 export * from './components/table/cell-renderer/cell-renderer';
 export * from './components/table/cell-editor/cell-editor';
+
+// export * from './components/o-component.class';
+export * from './components/o-form-data-component.class';
+export * from './components/o-form-service-component.class';
+export * from './components/o-service-component.class';

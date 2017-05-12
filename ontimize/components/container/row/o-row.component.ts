@@ -154,7 +154,7 @@ export class ORowComponent implements OnInit {
 
 @NgModule({
   declarations: [ORowComponent],
-  imports: [CommonModule, OTranslateModule],
+  imports: [CommonModule ],
   exports: [ORowComponent],
 })
 export class ORowModule {

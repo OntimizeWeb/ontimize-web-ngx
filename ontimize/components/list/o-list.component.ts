@@ -59,7 +59,7 @@ export interface OListInitializationOptions {
   quickFilterColumns?: string;
   keys?: string;
   parentKeys?: string;
-};
+}
 
 @Component({
   selector: 'o-list',
@@ -437,6 +437,7 @@ export class OListComponent extends OServiceComponent implements OnInit, IList, 
       this.updateSelectedState(item, !wasSelected);
       return !wasSelected;
     }
+    return undefined;
   }
 
   updateSelectedState(item: Object, isSelected: boolean) {
@@ -515,7 +516,7 @@ export class OListComponent extends OServiceComponent implements OnInit, IList, 
 
 @NgModule({
   declarations: [OListComponent],
-  imports: [CommonModule, MdListModule, MdToolbarModule, MdIconModule, MdButtonModule, OListItemModule, OSearchInputModule, MdProgressSpinnerModule, OTranslateModule, RouterModule],
+  imports: [CommonModule, MdListModule, MdToolbarModule, MdIconModule, MdButtonModule, OListItemModule, OSearchInputModule, MdProgressSpinnerModule , RouterModule],
   exports: [OListComponent],
   entryComponents: [MdCheckbox]
 })

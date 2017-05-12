@@ -71,7 +71,7 @@ export class OSideMenuItemComponent implements OnInit {
 
 @NgModule({
   declarations: [OSideMenuItemComponent],
-  imports: [CommonModule, MdIconModule, RouterModule, OSideMenuModule, OTranslateModule],
+  imports: [CommonModule, MdIconModule, RouterModule, OSideMenuModule ],
   exports: [OSideMenuItemComponent],
 })
 export class OSideMenuItemModule {

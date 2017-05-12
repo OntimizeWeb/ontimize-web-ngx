@@ -27,7 +27,7 @@ export class OBarMenuSeparatorComponent {
 
 @NgModule({
   declarations: [OBarMenuSeparatorComponent],
-  imports: [CommonModule, OBarMenuModule, OTranslateModule],
+  imports: [CommonModule, OBarMenuModule ],
   exports: [OBarMenuSeparatorComponent],
 })
 export class OBarMenuSeparatorModule {

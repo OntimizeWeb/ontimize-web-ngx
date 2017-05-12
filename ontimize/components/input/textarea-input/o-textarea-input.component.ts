@@ -64,7 +64,7 @@ export class OTextareaInputComponent extends OTextInputComponent {
 @NgModule({
   declarations: [OTextareaInputComponent],
   imports: [OSharedModule, OTextInputModule],
-  exports: [OTextareaInputComponent, OTextInputModule],
+  exports: [OTextareaInputComponent, OTextInputModule]
 })
 export class OTextareaInputModule {
   static forRoot(): ModuleWithProviders {

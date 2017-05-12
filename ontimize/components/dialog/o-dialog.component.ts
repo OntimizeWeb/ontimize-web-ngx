@@ -118,7 +118,7 @@ export class ODialogComponent {
 
 @NgModule({
   declarations: [ODialogComponent],
-  imports: [CommonModule, MdButtonModule, MdIconModule, MdDialogModule, OTranslateModule],
+  imports: [CommonModule, MdButtonModule, MdIconModule, MdDialogModule ],
   exports: [ODialogComponent, CommonModule, MdButtonModule, MdDialogModule],
 })
 export class ODialogModule {

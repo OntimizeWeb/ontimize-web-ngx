@@ -67,8 +67,7 @@ export class OSideMenuComponent {
     MdSidenavModule,
     MdListModule,
     MdToolbarModule,
-    MdIconModule,
-    OTranslateModule
+    MdIconModule
   ],
   exports: [OSideMenuComponent]
 })

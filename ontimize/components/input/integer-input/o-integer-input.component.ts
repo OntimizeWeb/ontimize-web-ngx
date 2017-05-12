@@ -202,6 +202,7 @@ export class OIntegerInputComponent extends OTextInputComponent implements OnIni
         }
       };
     }
+    return {};
   }
 
   protected maxValidator(control: FormControl) {
@@ -212,13 +213,14 @@ export class OIntegerInputComponent extends OTextInputComponent implements OnIni
         }
       };
     }
+    return {};
   }
 
 }
 
 
 @NgModule({
-  declarations: [OIntegerInputComponent, OIntegerPipe],
+  declarations: [OIntegerInputComponent],
   imports: [OSharedModule, OTextInputModule],
   exports: [OIntegerInputComponent, OTextInputModule],
 })

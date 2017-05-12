@@ -27,7 +27,7 @@ export class OSideMenuSeparatorComponent {
 
 @NgModule({
   declarations: [OSideMenuSeparatorComponent],
-  imports: [OSideMenuModule, OTranslateModule],
+  imports: [OSideMenuModule ],
   exports: [OSideMenuSeparatorComponent],
 })
 export class OSideMenuSeparatorModule {

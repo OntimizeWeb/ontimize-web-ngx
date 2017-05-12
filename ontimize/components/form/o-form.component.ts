@@ -26,7 +26,7 @@ export const enum Mode {
   INSERT,
   UPDATE,
   INITIAL
-};
+}
 
 export const DEFAULT_INPUTS_O_FORM = [
   // show-header [boolean]: visibility of form toolbar. Default: yes.
@@ -102,8 +102,7 @@ export interface OFormInitializationOptions {
   sortColumns?: string;
   editableColumns?: string;
   parentKeys?: string;
-};
-
+}
 
 @Component({
   selector: 'o-form',
@@ -433,7 +432,7 @@ export class OFormComponent implements OnInit, OnDestroy {
       case OFormComponent.DELETE_ACTION: return this._deleteAction();
       default: break;
     }
-    return;
+    return undefined;
   }
 
 
@@ -519,7 +518,6 @@ export class OFormComponent implements OnInit, OnDestroy {
       });
 
     if (this.navigationService) {
-      var self = this;
       this.navigationService.onVisibleChange(visible => {
         self.showHeader = visible;
       });
@@ -1124,6 +1122,7 @@ export class OFormComponent implements OnInit, OnDestroy {
     } else if (data && Util.isObject(data)) {
       return this.objectToFormValueData(data);
     }
+    return undefined;
   }
 
   protected objectToFormValueData(data: Object): Object {
@@ -1148,7 +1147,7 @@ export class OFormComponent implements OnInit, OnDestroy {
           filter[key] = this.urlParams[key];
         }
       });
-    };
+    }
 
     let keys = Object.keys(this._pKeysEquiv);
     if (this.urlParams && keys && keys.length > 0) {

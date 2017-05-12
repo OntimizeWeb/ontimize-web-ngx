@@ -154,7 +154,7 @@ export class OColumnComponent implements OnInit {
 
 @NgModule({
   declarations: [OColumnComponent],
-  imports: [CommonModule, OTranslateModule],
+  imports: [CommonModule ],
   exports: [OColumnComponent],
 })
 export class OColumnModule {

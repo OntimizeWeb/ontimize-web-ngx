@@ -266,7 +266,7 @@ export class OComboComponent extends OFormServiceComponent implements OnInit {
 
 @NgModule({
   declarations: [OComboComponent],
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, OSharedModule, MdInputModule, MdSelectModule, OTranslateModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, OSharedModule, MdInputModule, MdSelectModule ],
   exports: [OComboComponent],
 })
 export class OComboModule {

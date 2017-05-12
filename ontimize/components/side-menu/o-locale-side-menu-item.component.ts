@@ -89,7 +89,7 @@ export class OLocaleSideMenuItemComponent implements OnInit {
 
 @NgModule({
   declarations: [OLocaleSideMenuItemComponent],
-  imports: [CommonModule, MdIconModule, RouterModule, OSideMenuModule, OTranslateModule],
+  imports: [CommonModule, MdIconModule, RouterModule, OSideMenuModule ],
   exports: [OLocaleSideMenuItemComponent],
 })
 export class OLocaleSideMenuItemModule {

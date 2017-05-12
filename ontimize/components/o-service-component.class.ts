@@ -1,7 +1,9 @@
 import {
-  Injector, Inject, ElementRef,
-  NgZone, Optional, forwardRef
+  Injector,
+  ElementRef,
+  NgZone
 } from '@angular/core';
+
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { Observable } from 'rxjs/Observable';
@@ -195,7 +197,7 @@ export class OServiceComponent implements ILocalStorageComponent {
   protected filterForm: boolean = false;
   protected dataService: any;
   protected state: any;
-  protected selectedItems: Array<Object> = [];;
+  protected selectedItems: Array<Object> = [];
 
   protected router: Router;
   protected actRoute: ActivatedRoute;
@@ -206,7 +208,7 @@ export class OServiceComponent implements ILocalStorageComponent {
   constructor(
     injector: Injector,
     elRef: ElementRef,
-    @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent
+    form: OFormComponent
   ) {
     this.injector = injector;
     this.elRef = elRef;

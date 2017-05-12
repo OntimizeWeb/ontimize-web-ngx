@@ -141,7 +141,7 @@ export class CKEditor implements ControlValueAccessor {
 
   get value(): any {
     return this._value;
-  };
+  }
 
   @Input()
   set value(v) {

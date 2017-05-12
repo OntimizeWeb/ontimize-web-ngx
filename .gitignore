@@ -5,7 +5,11 @@
 /out
 /ontimize/**/*.css
 ontimize.css
-
+/bundles
+# /ontimize/**/*.js
+# /ontimize/**/*.js.map
+# /ontimize/**/*.metadata.json
+/dll
 
 # dependencies
 /node_modules

@@ -110,7 +110,7 @@ export class OBarMenuItemComponent implements OnInit {
 
 @NgModule({
   declarations: [OBarMenuItemComponent],
-  imports: [CommonModule, MdIconModule, RouterModule, OBarMenuModule, OTranslateModule],
+  imports: [CommonModule, MdIconModule, RouterModule, OBarMenuModule ],
   exports: [OBarMenuItemComponent],
 })
 export class OBarMenuItemModule {

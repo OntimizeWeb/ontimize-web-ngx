@@ -236,7 +236,7 @@ export class OFormToolbarComponent implements OnInit {
 
 @NgModule({
   declarations: [OFormToolbarComponent],
-  imports: [CommonModule, MdIconModule, MdToolbarModule, MdButtonModule, OTranslateModule],
+  imports: [CommonModule, MdIconModule, MdToolbarModule, MdButtonModule ],
   exports: [OFormToolbarComponent],
 })
 export class OFormToolbarModule {
