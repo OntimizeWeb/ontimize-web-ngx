@@ -25,8 +25,8 @@ export const DEFAULT_OUTPUTS_O_EMAIL_INPUT = [
 
 @Component({
   selector: 'o-email-input',
-  templateUrl: 'o-email-input.component.html',
-  styleUrls: ['o-email-input.component.scss'],
+  template: require('./o-email-input.component.html'),
+  styles: [require('./o-email-input.component.scss')],
   inputs: [
     ...DEFAULT_INPUTS_O_EMAIL_INPUT
   ],

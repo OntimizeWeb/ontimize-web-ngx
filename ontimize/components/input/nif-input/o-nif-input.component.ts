@@ -24,8 +24,8 @@ export const DEFAULT_OUTPUTS_O_NIF_INPUT = [
 
 @Component({
   selector: 'o-nif-input',
-  templateUrl: 'o-nif-input.component.html',
-  styleUrls: ['o-nif-input.component.scss'],
+  template: require('./o-nif-input.component.html'),
+  styles: [require('./o-nif-input.component.scss')],
   inputs: [
     ...DEFAULT_INPUTS_O_NIF_INPUT
   ],

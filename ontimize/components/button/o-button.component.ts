@@ -5,10 +5,9 @@ import {
   ModuleWithProviders,
   ViewEncapsulation
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { MdIconModule, MdButtonModule } from '@angular/material';
 
-import { OTranslateModule } from '../../pipes/o-translate.pipe';
+import { OSharedModule } from '../../shared.module';
 
 export const DEFAULT_INPUTS_O_BUTTON = [
   'oattr: attr',
@@ -28,8 +27,8 @@ export const DEFAULT_INPUTS_O_BUTTON = [
   inputs: [
     ...DEFAULT_INPUTS_O_BUTTON
   ],
-  templateUrl: 'o-button.component.html',
-  styleUrls: ['o-button.component.scss'],
+  template: require('./o-button.component.html'),
+  styles: [require('./o-button.component.scss')],
   encapsulation: ViewEncapsulation.None
 })
 
@@ -60,7 +59,7 @@ export class OButtonComponent implements OnInit {
 
 @NgModule({
   declarations: [OButtonComponent],
-  imports: [CommonModule, MdIconModule, MdButtonModule ],
+  imports: [OSharedModule, MdIconModule, MdButtonModule],
   exports: [OButtonComponent],
 })
 export class OButtonModule {

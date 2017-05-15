@@ -6,14 +6,12 @@ import {
   ElementRef, NgModule, ModuleWithProviders,
   ViewEncapsulation, EventEmitter
 } from '@angular/core';
-
-import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { ObservableWrapper } from '../../util/async';
 
 import { MdCheckbox } from '@angular/material';
 import { MdListModule, MdIconModule, MdToolbarModule, MdButtonModule, MdProgressSpinnerModule } from '@angular/material';
-
+import { OSharedModule } from '../../shared.module';
 import { OntimizeService } from '../../services';
 import { dataServiceFactory } from '../../services/data-service.provider';
 import { OSearchInputModule, OSearchInputComponent } from '../search-input/o-search-input.component';
@@ -24,7 +22,6 @@ import { Util } from '../../util/util';
 import { IList } from '../../interfaces';
 import { OListItemComponent } from './list-item/o-list-item.component';
 import { OListItemDirective } from './list-item/o-list-item.directive';
-import { OTranslateModule } from '../../pipes/o-translate.pipe';
 
 import { OServiceComponent } from '../o-service-component.class';
 import { Observable } from 'rxjs/Observable';
@@ -72,8 +69,8 @@ export interface OListInitializationOptions {
   outputs: [
     ...DEFAULT_OUTPUTS_O_LIST
   ],
-  templateUrl: 'o-list.component.html',
-  styleUrls: ['o-list.component.scss'],
+  template: require('./o-list.component.html'),
+  styles: [require('./o-list.component.scss')],
   encapsulation: ViewEncapsulation.None
 })
 export class OListComponent extends OServiceComponent implements OnInit, IList, AfterContentInit {
@@ -516,7 +513,7 @@ export class OListComponent extends OServiceComponent implements OnInit, IList, 
 
 @NgModule({
   declarations: [OListComponent],
-  imports: [CommonModule, MdListModule, MdToolbarModule, MdIconModule, MdButtonModule, OListItemModule, OSearchInputModule, MdProgressSpinnerModule , RouterModule],
+  imports: [OSharedModule, MdListModule, MdToolbarModule, MdIconModule, MdButtonModule, OListItemModule, OSearchInputModule, MdProgressSpinnerModule, RouterModule],
   exports: [OListComponent],
   entryComponents: [MdCheckbox]
 })

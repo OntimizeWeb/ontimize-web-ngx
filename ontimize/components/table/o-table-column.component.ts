@@ -55,10 +55,8 @@ export const DEFAULT_INPUTS_O_TABLE_COLUMN = [
 
 @Component({
   selector: 'o-table-column',
-  templateUrl: 'o-table-column.component.html',
-  styleUrls: [
-    'o-table-column.component.scss'
-  ],
+  template: require('./o-table-column.component.html'),
+  styles: [require('./o-table-column.component.scss')],
   inputs: [
     ...DEFAULT_INPUTS_O_TABLE_COLUMN,
     ...OTableCellRendererBooleanComponent.DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_BOOLEAN,

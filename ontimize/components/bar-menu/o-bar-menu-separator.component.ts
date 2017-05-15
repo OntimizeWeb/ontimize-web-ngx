@@ -2,32 +2,30 @@ import {
   Component, Inject, forwardRef,
   NgModule,
   ModuleWithProviders,
-  ViewEncapsulation} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {OBarMenuModule, OBarMenuComponent} from './o-bar-menu.component';
-import {OTranslateModule} from '../../pipes/o-translate.pipe';
+  ViewEncapsulation
+} from '@angular/core';
+import { OBarMenuModule, OBarMenuComponent } from './o-bar-menu.component';
+import { OSharedModule } from '../../shared.module';
+
 
 @Component({
   selector: 'o-bar-menu-separator',
-  templateUrl: 'o-bar-menu-separator.component.html',
-  styleUrls: [
-    'o-bar-menu-separator.component.scss'
-  ],
+  template: require('./o-bar-menu-separator.component.html'),
+  styles: [require('./o-bar-menu-separator.component.scss')],
   encapsulation: ViewEncapsulation.None
 })
 export class OBarMenuSeparatorComponent {
 
   protected menu: OBarMenuComponent;
 
-  constructor(@Inject(forwardRef(() => OBarMenuComponent)) menu: OBarMenuComponent) {
+  constructor( @Inject(forwardRef(() => OBarMenuComponent)) menu: OBarMenuComponent) {
     this.menu = menu;
   }
-
 }
 
 @NgModule({
   declarations: [OBarMenuSeparatorComponent],
-  imports: [CommonModule, OBarMenuModule ],
+  imports: [OSharedModule, OBarMenuModule],
   exports: [OBarMenuSeparatorComponent],
 })
 export class OBarMenuSeparatorModule {

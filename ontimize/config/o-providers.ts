@@ -17,9 +17,12 @@ import {
   LocalStorageService
 } from '../services';
 
-import { SERVICE_CONFIG } from '../services/data-service.provider';
+// import { SERVICE_CONFIG } from '../services/data-service.provider';
 
-import { APP_CONFIG, AppConfig } from '../config/app-config';
+// import {
+// //   // APP_CONFIG,
+//   AppConfig
+// } from '../config/app-config';
 import { Events } from '../util/events';
 import { OHttp } from '../util/http/OHttp';
 
@@ -35,127 +38,77 @@ const APP_HTTP_PROVIDERS = [
 ];
 
 
-/**
- * @private
- */
-export function ontimizeProviders(args: any = {}): any {
+const events = new Events();
+bindEvents(window, document, events);
 
-  let events = new Events();
-  bindEvents(window, document, events);
+export const ONTIMIZE_PROVIDERS = [
+  //Standard
+  MdIconRegistry,
 
-  var config = args.config;
-  let appConfig = new AppConfig(config);
-  config = appConfig.getConfiguration();
-  let servicesConf = {};
-  if (config.hasOwnProperty('servicesConfiguration')) {
-    servicesConf = config['servicesConfiguration'];
-  }
+  { provide: Events, useValue: events },
 
-  return [
-    //Standard
-    MdIconRegistry,
-
-    { provide: Events, useValue: events },
-    { provide: APP_CONFIG, useValue: config },
-    { provide: SERVICE_CONFIG, useValue: servicesConf },
-
-    //Custom
-    getOntimizeServiceProvider(),
-    getLoginServiceProvider(),
-    getNavigationServiceProvider(),
-    getMomentServiceProvider(),
-    getCurrencyServiceProvider(),
-    getNumberServiceProvider(),
-    getDialogServiceProvider(),
-    getTranslateServiceProvider(),
-    getLocalStorageServiceProvider(),
-    getAuthServiceProvider()
-  ];
-}
-
-function getOntimizeServiceProvider() {
-  return [
-    APP_HTTP_PROVIDERS,
-    {
-      provide: OntimizeService,
-      useFactory: dataServiceFactory,
-      deps: [Injector]
-    },
-  ];
-}
-
-function getLoginServiceProvider() {
-  return {
+  // getOntimizeServiceProvider
+  APP_HTTP_PROVIDERS,
+  {
+    provide: OntimizeService,
+    useFactory: dataServiceFactory,
+    deps: [Injector]
+  },
+  // getLoginServiceProvider
+  {
     provide: LoginService,
     useFactory: (injector) => new LoginService(injector),
     deps: [Injector]
-  };
-}
-
-function getNavigationServiceProvider() {
-  return {
+  },
+  //getNavigationServiceProvider
+  {
     provide: NavigationService,
     useFactory: (injector) => new NavigationService(injector),
     deps: [Injector]
-  };
-}
-
-function getMomentServiceProvider() {
-  return {
+  },
+  // getMomentServiceProvider
+  {
     provide: MomentService,
     useFactory: (injector) => new MomentService(injector),
     deps: [Injector]
-  };
-}
-
-function getCurrencyServiceProvider() {
-  return {
+  },
+  // getCurrencyServiceProvider
+  {
     provide: CurrencyService,
     useFactory: (injector) => new CurrencyService(injector),
     deps: [Injector]
-  };
-}
-
-function getNumberServiceProvider() {
-  return {
+  },
+  //getNumberServiceProvider
+  {
     provide: NumberService,
     useFactory: (injector) => new NumberService(injector),
     deps: [Injector]
-  };
-}
-
-function getDialogServiceProvider() {
-  return {
+  },
+  // getDialogServiceProvider
+  {
     provide: DialogService,
     useFactory: (injector) => new DialogService(injector),
     deps: [Injector]
-  };
-}
-
-function getTranslateServiceProvider() {
-  return {
+  },
+  // getTranslateServiceProvider
+  {
     provide: OTranslateService,
     useFactory: (injector) => new OTranslateService(injector),
     deps: [Injector]
-  };
-}
-
-function getLocalStorageServiceProvider() {
-  return {
+  },
+  // getLocalStorageServiceProvider
+  {
     provide: LocalStorageService,
     useFactory: (injector) => new LocalStorageService(injector),
     deps: [Injector]
-  };
-}
-
-function getAuthServiceProvider() {
-  return {
+  },
+  // getAuthServiceProvider
+  {
     provide: AuthGuardService,
     useFactory: authGuardServiceFactory,
     deps: [Injector]
-  };
-}
-
+  }
+];
 
 /**
  * Bind some global events and publish on the 'app' channel

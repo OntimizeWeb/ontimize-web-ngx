@@ -10,13 +10,11 @@ import {
   HostListener,
   ViewEncapsulation
 } from '@angular/core';
-import {CommonModule} from '@angular/common';
 
 import { MdIconModule } from '@angular/material';
-
-import {OBarMenuModule, OBarMenuComponent} from './o-bar-menu.component';
-import { OTranslateModule } from '../../pipes/o-translate.pipe';
+import { OBarMenuModule, OBarMenuComponent } from './o-bar-menu.component';
 import { OTranslateService } from '../../services';
+import { OSharedModule } from '../../shared.module';
 
 export const DEFAULT_INPUTS_O_BAR_MENU_GROUP = [
   // title [string]: menu group title. Default: no value.
@@ -31,10 +29,8 @@ export const DEFAULT_INPUTS_O_BAR_MENU_GROUP = [
 
 @Component({
   selector: 'o-bar-menu-group',
-  templateUrl: 'o-bar-menu-group.component.html',
-  styleUrls: [
-    'o-bar-menu-group.component.scss'
-  ],
+  template: require('./o-bar-menu-group.component.html'),
+  styles: [require('./o-bar-menu-group.component.scss')],
   inputs: [
     ...DEFAULT_INPUTS_O_BAR_MENU_GROUP
   ],
@@ -87,7 +83,7 @@ export class OBarMenuGroupComponent implements OnInit {
 
 @NgModule({
   declarations: [OBarMenuGroupComponent],
-  imports: [CommonModule, MdIconModule, OBarMenuModule ],
+  imports: [OSharedModule, MdIconModule, OBarMenuModule],
   exports: [OBarMenuGroupComponent],
 })
 export class OBarMenuGroupModule {

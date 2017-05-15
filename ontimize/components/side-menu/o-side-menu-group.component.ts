@@ -6,11 +6,10 @@ import {
   ModuleWithProviders,
   ViewEncapsulation
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { MdIconModule } from '@angular/material';
 
-import { OSideMenuModule, OSideMenuComponent} from './o-side-menu.component';
-import {OTranslateModule} from '../../pipes/o-translate.pipe';
+import { OSideMenuModule, OSideMenuComponent } from './o-side-menu.component';
+import { OSharedModule } from '../../shared.module';
 
 export const DEFAULT_INPUTS_O_SIDE_MENU_GROUP = [
   // title [string]: menu group title. Default: no value.
@@ -22,10 +21,8 @@ export const DEFAULT_INPUTS_O_SIDE_MENU_GROUP = [
 
 @Component({
   selector: 'o-side-menu-group',
-  templateUrl: 'o-side-menu-group.component.html',
-  styleUrls: [
-    'o-side-menu-group.component.scss'
-  ],
+  template: require('./o-side-menu-group.component.html'),
+  styles: [require('./o-side-menu-group.component.scss')],
   inputs: [
     ...DEFAULT_INPUTS_O_SIDE_MENU_GROUP
   ],
@@ -39,7 +36,7 @@ export class OSideMenuGroupComponent {
 
   protected title: string;
 
-  constructor(@Inject(forwardRef(() => OSideMenuComponent)) menu: OSideMenuComponent) {
+  constructor( @Inject(forwardRef(() => OSideMenuComponent)) menu: OSideMenuComponent) {
     this.menu = menu;
   }
 
@@ -47,7 +44,7 @@ export class OSideMenuGroupComponent {
 
 @NgModule({
   declarations: [OSideMenuGroupComponent],
-  imports: [CommonModule, MdIconModule, OSideMenuModule ],
+  imports: [OSharedModule, MdIconModule, OSideMenuModule],
   exports: [OSideMenuGroupComponent],
 })
 export class OSideMenuGroupModule {

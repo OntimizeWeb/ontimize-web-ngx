@@ -5,7 +5,6 @@ import {
   ModuleWithProviders,
   ViewEncapsulation
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 
@@ -15,7 +14,6 @@ import { OSharedModule } from '../../shared.module';
 import { InputConverter } from '../../decorators';
 import { OFormComponent } from '../form/o-form.component';
 import { OFormValue } from '../form/OFormValue';
-import { OTranslateModule } from '../../pipes/o-translate.pipe';
 
 import { OFormDataComponent } from '../o-form-data-component.class';
 
@@ -45,8 +43,8 @@ export const DEFAULT_OUTPUTS_O_IMAGE = [
 
 @Component({
   selector: 'o-image',
-  templateUrl: 'o-image.component.html',
-  styleUrls: ['o-image.component.scss'],
+  template: require('./o-image.component.html'),
+  styles: [require('./o-image.component.scss')],
   inputs: [
     ...DEFAULT_INPUTS_O_IMAGE
   ],
@@ -214,7 +212,7 @@ export class OImageComponent extends OFormDataComponent implements OnInit {
 
 @NgModule({
   declarations: [OImageComponent],
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, OSharedModule, MdInputModule, MdIconModule ],
+  imports: [FormsModule, ReactiveFormsModule, OSharedModule, MdInputModule, MdIconModule],
   exports: [OImageComponent],
 })
 export class OImageModule {

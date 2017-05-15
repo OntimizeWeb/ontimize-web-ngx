@@ -4,7 +4,6 @@ import {
   NgModule, ModuleWithProviders, HostListener,
   ViewEncapsulation, ElementRef
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup, ReactiveFormsModule, FormControl, FormsModule } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
@@ -20,6 +19,7 @@ import { IComponent, IFormControlComponent, IFormDataTypeComponent } from '../..
 import { OFormToolbarModule, OFormToolbarComponent } from './o-form-toolbar.component';
 import { OFormValue } from './OFormValue';
 import { Util, SQLTypes } from '../../utils';
+import { OSharedModule } from '../../shared.module';
 
 export const enum Mode {
   QUERY,
@@ -109,8 +109,8 @@ export interface OFormInitializationOptions {
   providers: [
     { provide: OntimizeService, useFactory: dataServiceFactory, deps: [Injector] }
   ],
-  templateUrl: 'o-form.component.html',
-  styleUrls: ['o-form.component.scss'],
+  template: require('./o-form.component.html'),
+  styles: [require('./o-form.component.scss')],
   inputs: [
     ...DEFAULT_INPUTS_O_FORM
   ],
@@ -1226,7 +1226,7 @@ export class OFormComponent implements OnInit, OnDestroy {
 
 @NgModule({
   declarations: [OFormComponent],
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, OFormToolbarModule, MdProgressBarModule],
+  imports: [OSharedModule, FormsModule, ReactiveFormsModule, OFormToolbarModule, MdProgressBarModule],
   exports: [OFormComponent, OFormToolbarModule],
 })
 export class OFormModule {

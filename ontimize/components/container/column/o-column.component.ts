@@ -6,11 +6,9 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 
-import { CommonModule } from '@angular/common';
-
 import { OFormComponent } from '../../form/o-form.component';
 import { OTranslateService } from '../../../services';
-import { OTranslateModule } from '../../../pipes/o-translate.pipe';
+import { OSharedModule } from '../../../shared.module';
 
 export const DEFAULT_INPUTS_O_COLUMN = [
   'oattr: attr',
@@ -22,8 +20,8 @@ export const DEFAULT_INPUTS_O_COLUMN = [
 
 @Component({
   selector: 'o-column',
-  templateUrl: 'o-column.component.html',
-  styleUrls: ['o-column.component.scss'],
+  template: require('./o-column.component.html'),
+  styles: [require('./o-column.component.scss')],
   inputs: [
     ...DEFAULT_INPUTS_O_COLUMN
   ],
@@ -108,7 +106,7 @@ export class OColumnComponent implements OnInit {
       var self = this;
       let element = innerCol[0]; // Take only first, nested element does not matter.
       if (self.hasTitle()
-          || (self.elevation>0 && self.elevation<=12) ) {
+        || (self.elevation > 0 && self.elevation <= 12)) {
         element.classList.add('container-content');
       } else {
         element.classList.remove('container-content');
@@ -130,7 +128,7 @@ export class OColumnComponent implements OnInit {
 
   propagateElevationToDOM() {
     this.cleanElevationCSSclasses();
-     if (this.elevation > 0 && this.elevation <= 12) {
+    if (this.elevation > 0 && this.elevation <= 12) {
       let clazz = 'mat-elevation-z' + this.elevation;
       this.elRef.nativeElement.classList.add(clazz);
       this.elRef.nativeElement.classList.add('margin-top-bottom');
@@ -154,7 +152,7 @@ export class OColumnComponent implements OnInit {
 
 @NgModule({
   declarations: [OColumnComponent],
-  imports: [CommonModule ],
+  imports: [OSharedModule],
   exports: [OColumnComponent],
 })
 export class OColumnModule {

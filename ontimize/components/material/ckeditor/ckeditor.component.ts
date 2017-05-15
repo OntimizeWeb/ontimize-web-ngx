@@ -17,7 +17,6 @@ import {
   Optional,
   Inject
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import {
   NG_VALUE_ACCESSOR,
   ControlValueAccessor
@@ -32,6 +31,7 @@ import { Observable } from 'rxjs/Observable';
 
 import { InputConverter } from '../../../decorators';
 import { OHTMLInputComponent } from '../../input/html-input/o-html-input.component';
+import { OSharedModule } from '../../../shared.module';
 
 const noop = () => {
   //nothing to do
@@ -54,8 +54,8 @@ let nextUniqueId = 0;
 @Component({
   selector: 'ckeditor',
   providers: [CKEDITOR_CONTROL_VALUE_ACCESSOR],
-  templateUrl: 'ckeditor.component.html',
-  styleUrls: ['ckeditor.component.scss'],
+  template: require('./ckeditor.component.html'),
+  styles: [require('./ckeditor.component.scss')],
   encapsulation: ViewEncapsulation.None
 })
 export class CKEditor implements ControlValueAccessor {
@@ -335,7 +335,7 @@ export class CKEditor implements ControlValueAccessor {
 
 @NgModule({
   declarations: [CKEditor],
-  imports: [CommonModule, MdInputModule],
+  imports: [OSharedModule, MdInputModule],
   exports: [CKEditor],
 })
 export class MdCKEditorModule {

@@ -5,7 +5,6 @@ import {
   ModuleWithProviders,
   ViewEncapsulation
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { MdIconModule, MdToolbarModule, MdButtonModule } from '@angular/material';
@@ -14,7 +13,7 @@ import { OFormComponent } from './o-form.component';
 import { InputConverter } from '../../decorators';
 import { Util } from '../../util/util';
 import { DialogService, NavigationService } from '../../services';
-import { OTranslateModule } from '../../pipes/o-translate.pipe';
+import { OSharedModule } from '../../shared.module';
 
 export const DEFAULT_INPUTS_O_FORM_TOOLBAR = [
   'labelHeader: label-header',
@@ -25,8 +24,8 @@ export const DEFAULT_INPUTS_O_FORM_TOOLBAR = [
 
 @Component({
   selector: 'o-form-toolbar',
-  templateUrl: 'o-form-toolbar.component.html',
-  styleUrls: ['o-form-toolbar.component.scss'],
+  template: require('./o-form-toolbar.component.html'),
+  styles: [require('./o-form-toolbar.component.scss')],
   inputs: [
     ...DEFAULT_INPUTS_O_FORM_TOOLBAR
   ],
@@ -236,7 +235,7 @@ export class OFormToolbarComponent implements OnInit {
 
 @NgModule({
   declarations: [OFormToolbarComponent],
-  imports: [CommonModule, MdIconModule, MdToolbarModule, MdButtonModule ],
+  imports: [OSharedModule, MdIconModule, MdToolbarModule, MdButtonModule ],
   exports: [OFormToolbarComponent],
 })
 export class OFormToolbarModule {

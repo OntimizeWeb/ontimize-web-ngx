@@ -11,6 +11,8 @@
     "module": "es2015",
     "declaration": true,
     "outDir": "dist",
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
     "types": [
       "node"
     ],

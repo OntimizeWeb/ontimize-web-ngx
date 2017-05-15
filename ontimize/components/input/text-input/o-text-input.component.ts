@@ -5,7 +5,6 @@ import {
   ModuleWithProviders,
   ViewEncapsulation
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ValidatorFn } from '@angular/forms/src/directives/validators';
 
@@ -15,7 +14,6 @@ import { OSharedModule } from '../../../shared.module';
 import { InputConverter } from '../../../decorators';
 import { OFormComponent } from '../../form/o-form.component';
 import { OFormValue } from '../../form/OFormValue';
-import { OTranslateModule } from '../../../pipes/o-translate.pipe';
 
 import { OFormDataComponent } from '../../o-form-data-component.class';
 
@@ -44,8 +42,8 @@ export const DEFAULT_OUTPUTS_O_TEXT_INPUT = [
 
 @Component({
   selector: 'o-text-input',
-  templateUrl: 'o-text-input.component.html',
-  styleUrls: ['o-text-input.component.scss'],
+  template: require('./o-text-input.component.html'),
+  styles: [require('./o-text-input.component.scss')],
   inputs: [
     ...DEFAULT_INPUTS_O_TEXT_INPUT
   ],
@@ -123,8 +121,8 @@ export class OTextInputComponent extends OFormDataComponent implements OnInit {
 
 @NgModule({
   declarations: [OTextInputComponent],
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, OSharedModule, MdInputModule, OTranslateModule],
-  exports: [OTextInputComponent, CommonModule, FormsModule, ReactiveFormsModule, MdInputModule, OTranslateModule]
+  imports: [FormsModule, ReactiveFormsModule, OSharedModule, MdInputModule],
+  exports: [OTextInputComponent, FormsModule, ReactiveFormsModule, MdInputModule]
 })
 export class OTextInputModule {
   static forRoot(): ModuleWithProviders {

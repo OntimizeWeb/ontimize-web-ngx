@@ -7,9 +7,8 @@ import {
 } from '@angular/core';
 import { MdToolbarModule, MdIconModule } from '@angular/material';
 import { AuthGuardService } from '../../services';
-import { OTranslateModule } from '../../pipes/o-translate.pipe';
 import { OTranslateService } from '../../services';
-
+import { OSharedModule } from '../../shared.module';
 
 export const DEFAULT_INPUTS_O_BAR_MENU = [
   // title [string]: menu title. Default: no value.
@@ -21,10 +20,8 @@ export const DEFAULT_INPUTS_O_BAR_MENU = [
 
 @Component({
   selector: 'o-bar-menu',
-  templateUrl: './o-bar-menu.component.html',
-  styleUrls: [
-    './o-bar-menu.component.scss'
-  ],
+  template: require('./o-bar-menu.component.html'),
+  styles: [require('./o-bar-menu.component.scss')],
   inputs: [
     ...DEFAULT_INPUTS_O_BAR_MENU
   ],
@@ -88,7 +85,7 @@ export class OBarMenuComponent {
 
 @NgModule({
   declarations: [OBarMenuComponent],
-  imports: [MdIconModule, MdToolbarModule],
+  imports: [OSharedModule, MdIconModule, MdToolbarModule],
   exports: [OBarMenuComponent],
 })
 export class OBarMenuModule {

@@ -2,15 +2,15 @@ import {Component, Inject, forwardRef,
   NgModule,
   ModuleWithProviders,
   ViewEncapsulation} from '@angular/core';
-import {CommonModule} from '@angular/common';
 import {OLightTableComponent} from './o-light-table.component';
 
 import { MdIconModule, MdToolbarModule, MdButtonModule } from '@angular/material';
+import { OSharedModule } from '../../shared.module';
 
 @Component({
   selector: 'o-light-table-button-panel',
-  templateUrl: 'o-light-table-button-panel.component.html',
-  styleUrls: ['o-light-table-button-panel.component.scss'],
+  template: require('./o-light-table-button-panel.component.html'),
+  styles: [require('./o-light-table-button-panel.component.scss')],
   encapsulation: ViewEncapsulation.None
 })
 export class OLightTableButtonPanelComponent {
@@ -25,7 +25,7 @@ export class OLightTableButtonPanelComponent {
 
 @NgModule({
   declarations: [OLightTableButtonPanelComponent],
-  imports: [CommonModule, MdIconModule, MdToolbarModule, MdButtonModule],
+  imports: [OSharedModule, MdIconModule, MdToolbarModule, MdButtonModule],
   exports: [OLightTableButtonPanelComponent],
 })
 export class OLightTableButtonPanelModule {

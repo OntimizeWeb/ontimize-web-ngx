@@ -1,15 +1,17 @@
-import {Component, OnInit, EventEmitter, Injector,
+import {
+  Component, OnInit, EventEmitter, Injector,
   NgModule,
   ModuleWithProviders,
-  ViewEncapsulation} from '@angular/core';
-import {CommonModule } from '@angular/common';
+  ViewEncapsulation
+} from '@angular/core';
 import { FormGroup, FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/distinctUntilChanged';
 
 import { MdInputModule } from '@angular/material';
-import {OTranslateService} from '../../services';
+import { OTranslateService } from '../../services';
+import { OSharedModule } from '../../shared.module';
 
 export const DEFAULT_INPUTS_O_SEARCH_INPUT = [
   'placeholder'
@@ -21,8 +23,8 @@ export const DEFAULT_OUTPUTS_O_SEARCH_INPUT = [
 
 @Component({
   selector: 'o-search-input',
-  templateUrl: 'o-search-input.component.html',
-  styleUrls: ['o-search-input.component.scss'],
+  template: require('./o-search-input.component.html'),
+  styles: [require('./o-search-input.component.scss')],
   inputs: [
     ...DEFAULT_INPUTS_O_SEARCH_INPUT
   ],
@@ -68,7 +70,7 @@ export class OSearchInputComponent implements OnInit {
     return this.value;
   }
 
-    get placeHolder(): string {
+  get placeHolder(): string {
     if (this.translateService) {
       return this.translateService.get(this.placeholder);
     }
@@ -86,7 +88,7 @@ export class OSearchInputComponent implements OnInit {
 
 @NgModule({
   declarations: [OSearchInputComponent],
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, MdInputModule],
+  imports: [OSharedModule, FormsModule, ReactiveFormsModule, MdInputModule],
   exports: [OSearchInputComponent],
 })
 export class OSearchInputModule {

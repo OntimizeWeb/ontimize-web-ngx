@@ -12,8 +12,8 @@ import { OTranslateModule } from '../../pipes/o-translate.pipe';
 
 @Component({
   selector: 'o-dialog',
-  templateUrl: 'o-dialog.component.html',
-  styleUrls: ['o-dialog.component.scss'],
+  template: require('./o-dialog.component.html'),
+  styles: [require('./o-dialog.component.scss')],
   encapsulation: ViewEncapsulation.None
 })
 export class ODialogComponent {
@@ -118,7 +118,7 @@ export class ODialogComponent {
 
 @NgModule({
   declarations: [ODialogComponent],
-  imports: [CommonModule, MdButtonModule, MdIconModule, MdDialogModule ],
+  imports: [CommonModule, MdButtonModule, MdIconModule, MdDialogModule, OTranslateModule],
   exports: [ODialogComponent, CommonModule, MdButtonModule, MdDialogModule],
 })
 export class ODialogModule {

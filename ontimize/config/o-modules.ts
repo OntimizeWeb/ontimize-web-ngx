@@ -58,12 +58,55 @@ import {
   OSideMenuSeparatorModule
 } from '../components';
 
-import { OTranslateModule } from '../pipes';
-// import { OSharedModule } from '../shared.module';
+// import { OTranslateModule } from '../pipes';
+import { OSharedModule } from '../shared.module';
 
-export function ontimizeModules(): any {
-  return ONTIMIZE_MODULES;
-}
+
+export const ONTIMIZE_EXPORTS_MODULES: any = [
+   // Ontimize modules
+  OBarMenuModule.forRoot(),
+  OBarMenuGroupModule.forRoot(),
+  OBarMenuItemModule.forRoot(),
+  OLocaleBarMenuItemModule.forRoot(),
+  OBarMenuSeparatorModule.forRoot(),
+  OButtonModule.forRoot(),
+  OCheckboxModule.forRoot(),
+  OComboModule.forRoot(),
+  OColumnModule.forRoot(),
+  ORowModule.forRoot(),
+  ODialogModule.forRoot(),
+  OFormModule.forRoot(),
+  OImageModule.forRoot(),
+  OCurrencyInputModule.forRoot(),
+  ODateInputModule.forRoot(),
+  OEmailInputModule.forRoot(),
+  OHTMLInputModule.forRoot(),
+  OIntegerInputModule.forRoot(),
+  OListPickerModule.forRoot(),
+  ONIFInputModule.forRoot(),
+  OPasswordInputModule.forRoot(),
+  OPercentInputModule.forRoot(),
+  ORealInputModule.forRoot(),
+  OTextInputModule.forRoot(),
+  OTextareaInputModule.forRoot(),
+  OLightTableModule.forRoot(),
+  OLightTableButtonPanelModule.forRoot(),
+  OLightTableColumnModule.forRoot(),
+  OListModule.forRoot(),
+  OListItemModule.forRoot(),
+  OListItemAvatarModule.forRoot(),
+  OListItemTextModule.forRoot(),
+  OListItemCardModule.forRoot(),
+  OListItemCardImageModule.forRoot(),
+  OSearchInputModule.forRoot(),
+  OTableModule.forRoot(),
+  OSideMenuModule.forRoot(),
+  OSideMenuGroupModule.forRoot(),
+  OSideMenuItemModule.forRoot(),
+  OLocaleSideMenuItemModule.forRoot(),
+  OSideMenuSeparatorModule.forRoot(),
+  OSharedModule
+];
 
 export const ONTIMIZE_MODULES: any = [
   // Standard modules
@@ -72,7 +115,7 @@ export const ONTIMIZE_MODULES: any = [
   ReactiveFormsModule,
   HttpModule,
 
-  OTranslateModule.forRoot(),
+  // OTranslateModule.forRoot(),
 
   // Ngx-translate
   TranslateModule.forRoot({
@@ -129,5 +172,5 @@ export const ONTIMIZE_MODULES: any = [
   OSideMenuItemModule.forRoot(),
   OLocaleSideMenuItemModule.forRoot(),
   OSideMenuSeparatorModule.forRoot(),
-  // OSharedModule
+  OSharedModule
 ];

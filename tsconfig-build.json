@@ -14,7 +14,7 @@
     "noImplicitReturns": true,
     "moduleResolution": "node",
     "listFiles": true,
-
+    "noUnusedLocals": false,
     "types": [
       "hammerjs",
       "node"

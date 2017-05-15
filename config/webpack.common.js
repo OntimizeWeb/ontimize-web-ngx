@@ -8,13 +8,9 @@ const helpers = require('./helpers');
 const AssetsPlugin = require('assets-webpack-plugin');
 const NormalModuleReplacementPlugin = require('webpack/lib/NormalModuleReplacementPlugin');
 const ContextReplacementPlugin = require('webpack/lib/ContextReplacementPlugin');
-const CommonsChunkPlugin = require('webpack/lib/optimize/CommonsChunkPlugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const CheckerPlugin = require('awesome-typescript-loader').CheckerPlugin;
 const HtmlElementsPlugin = require('./html-elements-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin');
-const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
 const ngcWebpack = require('ngc-webpack');
 
 /*
@@ -56,33 +52,6 @@ module.exports = function (options) {
           use: ['style-loader', 'css-loader', 'sass-loader'],
           include: [helpers.root('ontimize')]
         },
-
-
-        // {
-        //   test: /\.ts$/,
-        //   use: [{
-        //     loader: 'awesome-typescript-loader',
-        //     options: {
-        //       configFileName: 'tsconfig-build.json'
-        //     }
-        //   }, {
-        //     loader: 'angular2-template-loader'
-        //   }
-        //   ],
-        //   exclude: [/\.(spec|e2e)\.ts$/]
-        // },
-
-        // {
-        //   test: /\.scss$/,
-        //   use: ['to-string-loader', 'css-loader', 'sass-loader'],
-        //   include: [helpers.root('ontimize')]
-        // }, {
-        //   test: /\.html$/,
-        //   use: 'raw-loader'
-        // }
-
-
-
         // , {
         //   test: /\.json$/,
         //   use: 'json-loader'
@@ -112,29 +81,17 @@ module.exports = function (options) {
         { from: 'README.md', to: '../' },
         { from: 'package.json', to: '../' },
         { from: 'ontimize.scss', to: '../' },
-        { from: 'ontimize/components/**/*-theme.scss', to: '../' },
-        { from: 'ontimize/components/material/**/*.scss', to: '../' },
-        { from: 'ontimize/components/theming/**/*.scss', to: '../' },
-
-
-        { from: 'ontimize/components/container/o-container.component.scss', to: '../' },
-        { from: 'ontimize/components/input/input.scss', to: '../' },
-
-
-
-        // { from: 'ontimize/**/*.scss', to: '../' },
+        { from: 'ontimize/**/*.scss', to: '../' },
         { from: 'ontimize/**/*.html', to: '../' },
         { from: 'ontimize/components/table/vendor/**', to: '../' }
       ]),
+
       // new AssetsPlugin({
       //   path: helpers.root('dist'),
       //   filename: 'webpack-assets.json',
       //   prettyPrint: true
       // }),
 
-      // new ScriptExtHtmlWebpackPlugin({
-      //   defaultAttribute: 'defer'
-      // }),
 
       // new HtmlElementsPlugin({
       //   headTags: require('./head-config.common')
@@ -165,21 +122,22 @@ module.exports = function (options) {
       // ),
 
       new ngcWebpack.NgcWebpackPlugin({
-        // disabled: !AOT,
+        disabled: true,
         tsConfig: helpers.root('tsconfig-build.json'),
         resourceOverride: helpers.root('config/resource-override.js')
       })
 
-    ],
+    ]
+    // ,
 
-    node: {
-      global: true,
-      crypto: 'empty',
-      process: true,
-      module: false,
-      clearImmediate: false,
-      setImmediate: false
-    }
+    // node: {
+    //   global: true,
+    //   crypto: 'empty',
+    //   process: true,
+    //   module: false,
+    //   clearImmediate: false,
+    //   setImmediate: false
+    // }
 
   };
 }

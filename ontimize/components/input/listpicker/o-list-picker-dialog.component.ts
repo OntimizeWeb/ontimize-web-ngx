@@ -4,7 +4,7 @@ import {
 } from '@angular/core';
 
 import { MdDialogRef } from '@angular/material';
-import {Util} from '../../../util/util';
+import { Util } from '../../../util/util';
 
 export const DEFAULT_INPUTS_O_LIST_PICKER = [
   'data',
@@ -14,8 +14,8 @@ export const DEFAULT_INPUTS_O_LIST_PICKER = [
 
 @Component({
   selector: 'o-list-picker-dialog',
-  templateUrl: 'o-list-picker-dialog.component.html',
-  styleUrls: ['o-list-picker.component.scss'],
+  template: require('./o-list-picker-dialog.component.html'),
+  styles: [require('./o-list-picker.component.scss')],
   inputs: [
     ...DEFAULT_INPUTS_O_LIST_PICKER
   ],
@@ -28,13 +28,13 @@ export class OListPickerDialogComponent {
 
   visibleColsArray: Array<string>;
 
-  constructor( protected dialogRef: MdDialogRef<OListPickerDialogComponent>) { }
+  constructor(protected dialogRef: MdDialogRef<OListPickerDialogComponent>) { }
 
   initialize(parameters: Object): any {
-    if ( Util.isArray(parameters['data']) ) {
+    if (Util.isArray(parameters['data'])) {
       this.data = parameters['data'];
     }
-    if ( Util.isArray(parameters['visibleColumns']) ) {
+    if (Util.isArray(parameters['visibleColumns'])) {
       this.visibleColsArray = parameters['visibleColumns'];
     }
     if (typeof parameters['filter'] !== 'undefined') {

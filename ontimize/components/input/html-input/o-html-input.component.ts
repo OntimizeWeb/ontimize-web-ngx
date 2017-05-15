@@ -6,13 +6,12 @@ import {
   ModuleWithProviders,
   ViewEncapsulation
 } from '@angular/core';
-
-import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormControl, Validators } from '@angular/forms';
 import { ValidatorFn } from '@angular/forms/src/directives/validators';
 
 import { MdCKEditorModule, CKEditor } from '../../material/ckeditor/ckeditor.component';
 import { MdInputModule, MdTabGroup, MdTab } from '@angular/material';
+import { OSharedModule } from '../../../shared.module';
 
 import {
   IComponent,
@@ -25,7 +24,6 @@ import { OFormComponent, Mode } from '../../form/o-form.component';
 import { OFormValue } from '../../form/OFormValue';
 import { OTranslateService } from '../../../services';
 import { SQLTypes } from '../../../utils';
-import { OTranslateModule } from '../../../pipes/o-translate.pipe';
 
 export const DEFAULT_INPUTS_O_HTML_INPUT = [
   'oattr: attr',
@@ -49,8 +47,8 @@ export const DEFAULT_OUTPUTS_O_HTML_INPUT = [
 
 @Component({
   selector: 'o-html-input',
-  templateUrl: 'o-html-input.component.html',
-  styleUrls: ['o-html-input.component.scss'],
+  template: require('./o-html-input.component.html'),
+  styles: [require('./o-html-input.component.scss')],
   inputs: [
     ...DEFAULT_INPUTS_O_HTML_INPUT
   ],
@@ -321,7 +319,7 @@ export class OHTMLInputComponent implements IComponent, IFormControlComponent, I
 
 @NgModule({
   declarations: [OHTMLInputComponent],
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, MdInputModule, MdCKEditorModule ],
+  imports: [OSharedModule, FormsModule, ReactiveFormsModule, MdInputModule, MdCKEditorModule],
   exports: [OHTMLInputComponent],
 })
 export class OHTMLInputModule {

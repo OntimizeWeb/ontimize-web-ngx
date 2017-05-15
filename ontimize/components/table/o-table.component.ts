@@ -5,11 +5,9 @@ import {
   forwardRef, Optional, EventEmitter, NgModule,
   ModuleWithProviders, ViewEncapsulation, ViewChild
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { InputConverter } from '../../decorators';
 import { ObservableWrapper } from '../../util/async';
 import { RouterModule, NavigationStart, RoutesRecognized } from '@angular/router';
-import { OTranslateModule } from '../../pipes/o-translate.pipe';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/from';
 import 'rxjs/add/operator/map';
@@ -56,6 +54,7 @@ import { OntimizeService, MomentService } from '../../services';
 import { Util } from '../../util/util';
 import { OFormComponent } from '../form/o-form.component';
 import { OFormValue } from '../form/OFormValue';
+import { OSharedModule } from '../../shared.module';
 
 import './o-table.loader';
 
@@ -152,10 +151,8 @@ export interface OTableInitializationOptions {
 
 @Component({
   selector: 'o-table',
-  templateUrl: 'o-table.component.html',
-  styleUrls: [
-    'o-table.component.scss'
-  ],
+  template: require('./o-table.component.html'),
+  styles: [require('./o-table.component.scss')],
   providers: [
     { provide: OntimizeService, useFactory: dataServiceFactory, deps: [Injector] }
   ],
@@ -2379,7 +2376,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     OTableOptionComponent
   ],
   imports: [
-    CommonModule,
+    OSharedModule,
     MdMenuModule,
     MdIconModule,
     MdButtonModule,

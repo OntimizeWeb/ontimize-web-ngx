@@ -16,7 +16,7 @@ import {
 } from '@angular/material';
 
 import { AuthGuardService } from '../../services';
-import { OTranslateModule } from '../../pipes/o-translate.pipe';
+import { OSharedModule } from '../../shared.module';
 
 export const DEFAULT_INPUTS_O_SIDE_MENU = [
   // title [string]: menu title. Default: no value.
@@ -25,10 +25,8 @@ export const DEFAULT_INPUTS_O_SIDE_MENU = [
 
 @Component({
   selector: 'o-side-menu',
-  templateUrl: 'o-side-menu.component.html',
-  styleUrls: [
-    'o-side-menu.component.scss'
-  ],
+  template: require('./o-side-menu.component.html'),
+  styles: [require('./o-side-menu.component.scss')],
   inputs: [
     ...DEFAULT_INPUTS_O_SIDE_MENU
   ],
@@ -64,6 +62,7 @@ export class OSideMenuComponent {
 @NgModule({
   declarations: [OSideMenuComponent],
   imports: [
+    OSharedModule,
     MdSidenavModule,
     MdListModule,
     MdToolbarModule,

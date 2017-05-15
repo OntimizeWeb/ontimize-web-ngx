@@ -68,8 +68,8 @@ const CUSTOM_DATEPICKER_BUTTONS = `
 
 @Component({
   selector: 'o-date-input',
-  templateUrl: 'o-date-input.component.html',
-  styleUrls: ['o-date-input.component.scss'],
+  template: require('./o-date-input.component.html'),
+  styles: [require('./o-date-input.component.scss')],
   inputs: [
     ...DEFAULT_INPUTS_O_DATE_INPUT
   ],

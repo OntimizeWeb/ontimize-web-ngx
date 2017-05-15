@@ -6,11 +6,9 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 
-import { CommonModule } from '@angular/common';
-
 import { OFormComponent } from '../../form/o-form.component';
 import { OTranslateService } from '../../../services';
-import { OTranslateModule } from '../../../pipes/o-translate.pipe';
+import { OSharedModule } from '../../../shared.module';
 
 export const DEFAULT_INPUTS_O_ROW = [
   'oattr: attr',
@@ -22,8 +20,8 @@ export const DEFAULT_INPUTS_O_ROW = [
 
 @Component({
   selector: 'o-row',
-  templateUrl: 'o-row.component.html',
-  styleUrls: ['o-row.component.scss'],
+  template: require('./o-row.component.html'),
+  styles: [require('./o-row.component.scss')],
   inputs: [
     ...DEFAULT_INPUTS_O_ROW
   ],
@@ -108,7 +106,7 @@ export class ORowComponent implements OnInit {
       var self = this;
       let element = innerRow[0]; // Take only first, nested element does not matter.
       if (self.hasTitle()
-          || (self.elevation>0 && self.elevation<=12) ) {
+        || (self.elevation > 0 && self.elevation <= 12)) {
         element.classList.add('container-content');
       } else {
         element.classList.remove('container-content');
@@ -130,7 +128,7 @@ export class ORowComponent implements OnInit {
 
   propagateElevationToDOM() {
     this.cleanElevationCSSclasses();
-     if (this.elevation > 0 && this.elevation <= 12) {
+    if (this.elevation > 0 && this.elevation <= 12) {
       let clazz = 'mat-elevation-z' + this.elevation;
       this.elRef.nativeElement.classList.add(clazz);
       this.elRef.nativeElement.classList.add('margin-top-bottom');
@@ -154,7 +152,7 @@ export class ORowComponent implements OnInit {
 
 @NgModule({
   declarations: [ORowComponent],
-  imports: [CommonModule ],
+  imports: [OSharedModule],
   exports: [ORowComponent],
 })
 export class ORowModule {

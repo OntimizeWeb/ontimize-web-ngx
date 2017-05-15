@@ -16,15 +16,14 @@ import {
   ModuleWithProviders
 } from '@angular/core';
 
-import { CommonModule } from '@angular/common';
 import { MdListModule, MdIconModule, MdCheckboxModule, MdLine, MdListAvatarCssMatStyler, MdListItem } from '@angular/material';
-
 import { OListComponent } from '../o-list.component';
+import { OSharedModule } from '../../../shared.module';
 
 @Component({
   selector: 'o-list-item',
-  templateUrl: 'o-list-item.component.html',
-  styleUrls: ['o-list-item.component.scss'],
+  template: require('./o-list-item.component.html'),
+  styles: [require('./o-list-item.component.scss')],
   encapsulation: ViewEncapsulation.None
 })
 
@@ -111,7 +110,7 @@ export class OListItemComponent implements AfterContentInit {
 
 @NgModule({
   declarations: [OListItemComponent],
-  imports: [MdListModule, MdIconModule, CommonModule, MdCheckboxModule],
+  imports: [OSharedModule, MdListModule, MdIconModule, MdCheckboxModule],
   exports: [OListItemComponent],
 })
 export class OListItemModule {

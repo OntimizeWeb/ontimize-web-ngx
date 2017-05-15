@@ -11,7 +11,6 @@ import {
   ModuleWithProviders
 } from '@angular/core';
 
-import { CommonModule } from '@angular/common';
 import {
   MdIconModule,
   MdListModule
@@ -19,6 +18,7 @@ import {
 
 import { OListItemComponent } from '../list-item/o-list-item.component';
 import { OListItemTextRenderer } from './o-list-item-text-renderer.class';
+import { OSharedModule } from '../../../shared.module';
 
 export const DEFAULT_INPUTS_O_LIST_ITEM_AVATAR = [
   ...OListItemTextRenderer.DEFAULT_INPUTS_O_TEXT_RENDERER,
@@ -31,8 +31,8 @@ export const DEFAULT_OUTPUTS_O_LIST_ITEM_AVATAR = [
 
 @Component({
   selector: 'o-list-item-avatar',
-  templateUrl: 'o-list-item-avatar.component.html',
-  styleUrls: ['o-list-item-avatar.component.scss'],
+  template: require('./o-list-item-avatar.component.html'),
+  styles: [require('./o-list-item-avatar.component.scss')],
   inputs: [
     ...DEFAULT_INPUTS_O_LIST_ITEM_AVATAR
   ],
@@ -64,8 +64,8 @@ export class OListItemAvatarComponent extends OListItemTextRenderer {
 @NgModule({
   declarations: [OListItemAvatarComponent],
   imports: [
+    OSharedModule,
     MdIconModule,
-    CommonModule,
     MdListModule
   ],
   exports: [OListItemAvatarComponent]

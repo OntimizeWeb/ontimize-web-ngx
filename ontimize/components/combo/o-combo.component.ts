@@ -6,7 +6,6 @@ import {
   ModuleWithProviders,
   ViewEncapsulation
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { MdInputModule, MdSelectModule, MdSelect, MdOption } from '@angular/material';
@@ -17,7 +16,6 @@ import { OSharedModule } from '../../shared.module';
 import { InputConverter } from '../../decorators';
 import { OFormComponent } from '../form/o-form.component';
 import { OFormValue } from '../form/OFormValue';
-import { OTranslateModule } from '../../pipes/o-translate.pipe';
 
 import { OFormServiceComponent } from '../o-form-service-component.class';
 
@@ -76,8 +74,8 @@ export const DEFAULT_OUTPUTS_O_COMBO = [
   outputs: [
     ...DEFAULT_OUTPUTS_O_COMBO
   ],
-  templateUrl: 'o-combo.component.html',
-  styleUrls: ['o-combo.component.scss'],
+  template: require('./o-combo.component.html'),
+  styles: [require('./o-combo.component.scss')],
   encapsulation: ViewEncapsulation.None
 })
 export class OComboComponent extends OFormServiceComponent implements OnInit {
@@ -266,7 +264,7 @@ export class OComboComponent extends OFormServiceComponent implements OnInit {
 
 @NgModule({
   declarations: [OComboComponent],
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, OSharedModule, MdInputModule, MdSelectModule ],
+  imports: [FormsModule, ReactiveFormsModule, OSharedModule, MdInputModule, MdSelectModule],
   exports: [OComboComponent],
 })
 export class OComboModule {

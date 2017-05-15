@@ -1,10 +1,13 @@
-import {Component, OnInit, Inject, Injector, forwardRef,
+import {
+  Component, OnInit, Inject, Injector, forwardRef,
   NgModule,
   ModuleWithProviders,
-  ViewEncapsulation} from '@angular/core';
+  ViewEncapsulation
+} from '@angular/core';
 
-import {OLightTableComponent} from './o-light-table.component';
-import {MomentService} from '../../services';
+import { OLightTableComponent } from './o-light-table.component';
+import { MomentService } from '../../services';
+import { OSharedModule } from '../../shared.module';
 
 export const DEFAULT_INPUTS_O_LIGHT_TABLE_COLUMN = [
   'id',
@@ -21,10 +24,10 @@ export const DEFAULT_OUTPUTS_O_LIGHT_TABLE_COLUMN = [
 
 @Component({
   selector: 'o-light-table-column',
-  templateUrl: 'o-light-table-column.component.html',
-  styleUrls: ['o-light-table-column.component.scss'],
+  template: require('./o-light-table-column.component.html'),
+  styles: [require('./o-light-table-column.component.scss')],
   inputs: [
-   ...DEFAULT_INPUTS_O_LIGHT_TABLE_COLUMN
+    ...DEFAULT_INPUTS_O_LIGHT_TABLE_COLUMN
   ],
   outputs: [
     ...DEFAULT_OUTPUTS_O_LIGHT_TABLE_COLUMN
@@ -44,7 +47,7 @@ export class OLightTableColumnComponent implements OnInit {
   format: string;
   flex: string;
 
-  protected _table:any;
+  protected _table: any;
 
   private momentSrv: MomentService;
 
@@ -83,7 +86,7 @@ export class OLightTableColumnComponent implements OnInit {
 
 @NgModule({
   declarations: [OLightTableColumnComponent],
-  imports: [],
+  imports: [OSharedModule],
   exports: [OLightTableColumnComponent],
 })
 export class OLightTableColumnModule {

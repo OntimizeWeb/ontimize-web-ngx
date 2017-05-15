@@ -5,8 +5,6 @@ import {
   ModuleWithProviders,
   ViewEncapsulation
 } from '@angular/core';
-
-import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import {
@@ -17,15 +15,15 @@ import {
 import { dataServiceFactory } from '../../../services/data-service.provider';
 import { OntimizeService } from '../../../services';
 import { ColumnsFilterPipe } from '../../../pipes';
-import { OSharedModule } from '../../../shared.module';
 import { InputConverter } from '../../../decorators';
 import { OFormComponent } from '../../form/o-form.component';
 import { OSearchInputModule } from '../../search-input/o-search-input.component';
 import { OFormValue } from '../../form/OFormValue';
+
+import { OSharedModule } from '../../../shared.module';
 import { ODialogModule } from '../../dialog/o-dialog.component';
 
 import { OListPickerDialogComponent } from './o-list-picker-dialog.component';
-import { OTranslateModule } from '../../../pipes/o-translate.pipe';
 
 import { OFormServiceComponent } from '../../o-form-service-component.class';
 
@@ -72,8 +70,8 @@ export const DEFAULT_OUTPUTS_O_LIST_PICKER = [
 
 @Component({
   selector: 'o-list-picker',
-  templateUrl: 'o-list-picker.component.html',
-  styleUrls: ['o-list-picker.component.scss'],
+  template: require('./o-list-picker.component.html'),
+  styles: [require('./o-list-picker.component.scss')],
   providers: [
     { provide: OntimizeService, useFactory: dataServiceFactory, deps: [Injector] }
   ],
@@ -255,14 +253,13 @@ export class OListPickerComponent extends OFormServiceComponent implements OnIni
     OListPickerComponent
   ],
   imports: [
-    CommonModule,
+    OSharedModule,
     FormsModule,
     ReactiveFormsModule,
     MdInputModule,
     MdListModule,
     ODialogModule,
     MdToolbarModule,
-    OSharedModule,
     OSearchInputModule
   ],
   exports: [
