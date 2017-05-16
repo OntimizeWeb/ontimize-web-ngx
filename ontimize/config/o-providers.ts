@@ -17,98 +17,17 @@ import {
   LocalStorageService
 } from '../services';
 
-// import { SERVICE_CONFIG } from '../services/data-service.provider';
+import {
+  APP_CONFIG,
+  AppConfig
+} from '../config/app-config';
+import { SERVICE_CONFIG } from '../services/data-service.provider';
 
-// import {
-// //   // APP_CONFIG,
-//   AppConfig
-// } from '../config/app-config';
 import { Events } from '../util/events';
 import { OHttp } from '../util/http/OHttp';
 
-
-const APP_HTTP_PROVIDERS = [
-  XHRBackend,
-  BaseRequestOptions,
-  {
-    provide: OHttp,
-    useFactory: (backend, defaultOptions) => new OHttp(backend, defaultOptions),
-    deps: [XHRBackend, BaseRequestOptions]
-  }
-];
-
-
 const events = new Events();
 bindEvents(window, document, events);
-
-export const ONTIMIZE_PROVIDERS = [
-  //Standard
-  MdIconRegistry,
-
-  { provide: Events, useValue: events },
-
-  // getOntimizeServiceProvider
-  APP_HTTP_PROVIDERS,
-  {
-    provide: OntimizeService,
-    useFactory: dataServiceFactory,
-    deps: [Injector]
-  },
-  // getLoginServiceProvider
-  {
-    provide: LoginService,
-    useFactory: (injector) => new LoginService(injector),
-    deps: [Injector]
-  },
-  //getNavigationServiceProvider
-  {
-    provide: NavigationService,
-    useFactory: (injector) => new NavigationService(injector),
-    deps: [Injector]
-  },
-  // getMomentServiceProvider
-  {
-    provide: MomentService,
-    useFactory: (injector) => new MomentService(injector),
-    deps: [Injector]
-  },
-  // getCurrencyServiceProvider
-  {
-    provide: CurrencyService,
-    useFactory: (injector) => new CurrencyService(injector),
-    deps: [Injector]
-  },
-  //getNumberServiceProvider
-  {
-    provide: NumberService,
-    useFactory: (injector) => new NumberService(injector),
-    deps: [Injector]
-  },
-  // getDialogServiceProvider
-  {
-    provide: DialogService,
-    useFactory: (injector) => new DialogService(injector),
-    deps: [Injector]
-  },
-  // getTranslateServiceProvider
-  {
-    provide: OTranslateService,
-    useFactory: (injector) => new OTranslateService(injector),
-    deps: [Injector]
-  },
-  // getLocalStorageServiceProvider
-  {
-    provide: LocalStorageService,
-    useFactory: (injector) => new LocalStorageService(injector),
-    deps: [Injector]
-  },
-  // getAuthServiceProvider
-  {
-    provide: AuthGuardService,
-    useFactory: authGuardServiceFactory,
-    deps: [Injector]
-  }
-];
 
 /**
  * Bind some global events and publish on the 'app' channel
@@ -139,4 +58,98 @@ function bindEvents(window, document, events) {
       events.publish('app:resize', ev);
     });
   }, 2000);
+}
+
+
+export class OntimizeProvidersFactory {
+
+  public factory(config : any, servicesConf : any): any {
+    return [
+      //Standard
+      MdIconRegistry,
+
+      { provide: Events, useValue: events },
+      { provide: APP_CONFIG, useValue: config },
+      { provide: SERVICE_CONFIG, useValue: servicesConf },
+
+      // getOntimizeServiceProvider
+      XHRBackend,
+      BaseRequestOptions,
+      {
+        provide: OHttp,
+        useFactory: (backend, defaultOptions) => new OHttp(backend, defaultOptions),
+        deps: [XHRBackend, BaseRequestOptions]
+      },
+      {
+        provide: OntimizeService,
+        useFactory: dataServiceFactory,
+        deps: [Injector]
+      },
+      // getLoginServiceProvider
+      {
+        provide: LoginService,
+        useFactory: (injector) => new LoginService(injector),
+        deps: [Injector]
+      },
+      //getNavigationServiceProvider
+      {
+        provide: NavigationService,
+        useFactory: (injector) => new NavigationService(injector),
+        deps: [Injector]
+      },
+      // getMomentServiceProvider
+      {
+        provide: MomentService,
+        useFactory: (injector) => new MomentService(injector),
+        deps: [Injector]
+      },
+      // getCurrencyServiceProvider
+      {
+        provide: CurrencyService,
+        useFactory: (injector) => new CurrencyService(injector),
+        deps: [Injector]
+      },
+      //getNumberServiceProvider
+      {
+        provide: NumberService,
+        useFactory: (injector) => new NumberService(injector),
+        deps: [Injector]
+      },
+      // getDialogServiceProvider
+      {
+        provide: DialogService,
+        useFactory: (injector) => new DialogService(injector),
+        deps: [Injector]
+      },
+      // getTranslateServiceProvider
+      {
+        provide: OTranslateService,
+        useFactory: (injector) => new OTranslateService(injector),
+        deps: [Injector]
+      },
+      // getLocalStorageServiceProvider
+      {
+        provide: LocalStorageService,
+        useFactory: (injector) => new LocalStorageService(injector),
+        deps: [Injector]
+      },
+      // getAuthServiceProvider
+      {
+        provide: AuthGuardService,
+        useFactory: authGuardServiceFactory,
+        deps: [Injector]
+      }
+    ];
+  }
+}
+
+export function ontimizeProvidersFactory(args: any = {}): any {
+  var config = args.config;
+  let appConfig = new AppConfig(config);
+  config = appConfig.getConfiguration();
+  let servicesConf = {};
+  if (config.hasOwnProperty('servicesConfiguration')) {
+    servicesConf = config['servicesConfiguration'];
+  }
+  return new OntimizeProvidersFactory().factory(config, servicesConf);
 }

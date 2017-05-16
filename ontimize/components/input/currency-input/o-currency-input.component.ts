@@ -2,7 +2,6 @@ import {
   Component, Inject, Injector, forwardRef, ElementRef, OnInit,
   Optional,
   NgModule,
-  ModuleWithProviders,
   ViewEncapsulation
 } from '@angular/core';
 
@@ -82,10 +81,4 @@ export class OCurrencyInputComponent extends ORealInputComponent implements OnIn
   exports: [OCurrencyInputComponent, ORealInputModule],
 })
 export class OCurrencyInputModule {
-  static forRoot(): ModuleWithProviders {
-    return {
-      ngModule: OCurrencyInputModule,
-      providers: []
-    };
-  }
 }

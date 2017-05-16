@@ -114,10 +114,4 @@ export class OListItemComponent implements AfterContentInit {
   exports: [OListItemComponent],
 })
 export class OListItemModule {
-  static forRoot(): ModuleWithProviders {
-    return {
-      ngModule: OListItemModule,
-      providers: []
-    };
-  }
 }

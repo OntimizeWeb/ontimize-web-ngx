@@ -2,7 +2,6 @@ import {
   Component, Inject, Injector, forwardRef, ElementRef,
   Optional,
   NgModule,
-  ModuleWithProviders,
   ViewEncapsulation
 } from '@angular/core';
 
@@ -67,10 +66,4 @@ export class OTextareaInputComponent extends OTextInputComponent {
   exports: [OTextareaInputComponent, OTextInputModule]
 })
 export class OTextareaInputModule {
-  static forRoot(): ModuleWithProviders {
-    return {
-      ngModule: OTextareaInputModule,
-      providers: []
-    };
-  }
 }

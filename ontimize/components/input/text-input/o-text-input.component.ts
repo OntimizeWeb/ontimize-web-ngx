@@ -2,7 +2,6 @@ import {
   Component, Inject, Injector, forwardRef, ElementRef, OnInit, EventEmitter,
   Optional, ViewChild,
   NgModule,
-  ModuleWithProviders,
   ViewEncapsulation
 } from '@angular/core';
 import { FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -125,10 +124,4 @@ export class OTextInputComponent extends OFormDataComponent implements OnInit {
   exports: [OTextInputComponent, FormsModule, ReactiveFormsModule, MdInputModule]
 })
 export class OTextInputModule {
-  static forRoot(): ModuleWithProviders {
-    return {
-      ngModule: OTextInputModule,
-      providers: []
-    };
-  }
 }

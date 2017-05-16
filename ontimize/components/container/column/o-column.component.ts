@@ -2,7 +2,6 @@ import {
   Component, Inject, Injector, forwardRef,
   ElementRef, OnInit, Optional,
   NgModule,
-  ModuleWithProviders,
   ViewEncapsulation
 } from '@angular/core';
 
@@ -156,10 +155,4 @@ export class OColumnComponent implements OnInit {
   exports: [OColumnComponent],
 })
 export class OColumnModule {
-  static forRoot(): ModuleWithProviders {
-    return {
-      ngModule: OColumnModule,
-      providers: []
-    };
-  }
 }

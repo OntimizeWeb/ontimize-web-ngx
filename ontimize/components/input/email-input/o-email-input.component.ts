@@ -2,7 +2,6 @@ import {
   Component, Inject, Injector, forwardRef, ElementRef, OnInit,
   Optional,
   NgModule,
-  ModuleWithProviders,
   ViewEncapsulation
 } from '@angular/core';
 
@@ -62,10 +61,4 @@ export class OEmailInputComponent extends OTextInputComponent implements OnInit 
   exports: [OEmailInputComponent, OTextInputModule],
 })
 export class OEmailInputModule {
-  static forRoot(): ModuleWithProviders {
-    return {
-      ngModule: OEmailInputModule,
-      providers: []
-    };
-  }
 }

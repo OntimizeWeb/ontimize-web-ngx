@@ -6,7 +6,6 @@ import {
   ElementRef,
   OnInit,
   NgModule,
-  ModuleWithProviders,
   HostListener,
   ViewEncapsulation
 } from '@angular/core';
@@ -99,10 +98,4 @@ export class OLocaleBarMenuItemComponent implements OnInit {
   exports: [OLocaleBarMenuItemComponent],
 })
 export class OLocaleBarMenuItemModule {
-  static forRoot(): ModuleWithProviders {
-    return {
-      ngModule: OLocaleBarMenuItemModule,
-      providers: []
-    };
-  }
 }

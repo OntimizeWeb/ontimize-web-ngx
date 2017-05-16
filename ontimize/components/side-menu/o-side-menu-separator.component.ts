@@ -1,7 +1,6 @@
 import {
   Component, Inject, forwardRef,
   NgModule,
-  ModuleWithProviders,
   ViewEncapsulation
 } from '@angular/core';
 
@@ -30,10 +29,4 @@ export class OSideMenuSeparatorComponent {
   exports: [OSideMenuSeparatorComponent],
 })
 export class OSideMenuSeparatorModule {
-  static forRoot(): ModuleWithProviders {
-    return {
-      ngModule: OSideMenuSeparatorModule,
-      providers: []
-    };
-  }
 }

@@ -1,7 +1,6 @@
 import {
   Component, OnInit, Inject, Injector, Optional, NgZone, ElementRef, forwardRef,
   NgModule,
-  ModuleWithProviders,
   ViewEncapsulation
 } from '@angular/core';
 import { EventEmitter } from '@angular/core';
@@ -324,10 +323,4 @@ export class OLightTableComponent implements OnInit {
   exports: [OLightTableComponent],
 })
 export class OLightTableModule {
-  static forRoot(): ModuleWithProviders {
-    return {
-      ngModule: OLightTableModule,
-      providers: []
-    };
-  }
 }

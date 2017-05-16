@@ -5,7 +5,8 @@ require('jquery');
 // TODO: require pdfmake from node_modules if files are available at its build directory
 //(window as any).pdfMake = require('pdfmake/build/pdfmake.min.js');
 //require('pdfmake/build/vfs_fonts.js');
-(window as any).pdfMake = require('./vendor/pdfmake.min.js');
+
+// (window as any).pdfMake = require('./vendor/pdfmake.min.js');
 require('./vendor/vfs_fonts.js');
 require('datatables.net');
 require('datatables.net-buttons');
@@ -16,7 +17,7 @@ require('datatables.net-colreorder');
 require('./vendor/custom.dataTables.fixedHeader.js');
 require('datatables.net-select');
 require('./vendor/custom.dataTables.keyTable.js');
-require('colresizable/colResizable-1.6.min.js');
+// require('colresizable/colResizable-1.6.min.js');
 
 // added custom methods to order timestamps
 ($ as any).fn.dataTableExt.oSort['timestamp-asc']  = function(x, y) {

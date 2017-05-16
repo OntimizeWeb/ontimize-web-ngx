@@ -3,7 +3,7 @@ import {
   Component, OnInit, OnDestroy, OnChanges, SimpleChange,
   Inject, Injector, ElementRef,
   forwardRef, Optional, EventEmitter, NgModule,
-  ModuleWithProviders, ViewEncapsulation, ViewChild
+  ViewEncapsulation, ViewChild
 } from '@angular/core';
 import { InputConverter } from '../../decorators';
 import { ObservableWrapper } from '../../util/async';
@@ -2405,10 +2405,4 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   ]
 })
 export class OTableModule {
-  static forRoot(): ModuleWithProviders {
-    return {
-      ngModule: OTableModule,
-      providers: []
-    };
-  }
 }

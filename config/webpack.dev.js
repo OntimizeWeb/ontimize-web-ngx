@@ -30,7 +30,25 @@ module.exports = function (options) {
       libraryTarget: 'umd'
     },
 
-    externals: [/^\@angular\//, /^rxjs\//],
+    // externals: {
+    //     // require("jquery") is external and available
+    //     //  on the global var jQuery
+    //     "jquery": "jquery"
+    // },
+
+    // externals: {
+    //   '/^\@angular\//': '/^\@angular\//',
+    //   'jquery': 'jquery',
+    //   '/^\@rxjs\//' : '/^\@rxjs\//'
+    // },
+
+    externals: [/^\@angular\//,/^\@rxjs\//],
+// , 'jquery', 'jQuery']
+    // resolve : {
+    //     alias: {
+    //         jquery: "./vendor/jquery/jquery.js",
+    //     }
+    // },
 
     module: {
       loaders: [{
@@ -50,7 +68,7 @@ module.exports = function (options) {
           }
         }
         ],
-        exclude: [helpers.root('node_modules'), /\.(spec|e2e)\.ts$/]
+        exclude: [helpers.root('node_modules'), /\.(spec|e2e)\.ts$/, '@angular/compiler']
       }
         // ,
         // {

@@ -9,7 +9,6 @@ import {
   OnInit,
   Optional,
   NgModule,
-  ModuleWithProviders,
   ViewEncapsulation
 } from '@angular/core';
 
@@ -472,10 +471,4 @@ export class ODateInputComponent extends OTextInputComponent implements OnInit {
   ],
 })
 export class ODateInputModule {
-  static forRoot(): ModuleWithProviders {
-    return {
-      ngModule: ODateInputModule,
-      providers: []
-    };
-  }
 }

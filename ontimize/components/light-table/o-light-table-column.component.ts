@@ -1,7 +1,6 @@
 import {
   Component, OnInit, Inject, Injector, forwardRef,
   NgModule,
-  ModuleWithProviders,
   ViewEncapsulation
 } from '@angular/core';
 
@@ -90,10 +89,4 @@ export class OLightTableColumnComponent implements OnInit {
   exports: [OLightTableColumnComponent],
 })
 export class OLightTableColumnModule {
-  static forRoot(): ModuleWithProviders {
-    return {
-      ngModule: OLightTableColumnModule,
-      providers: []
-    };
-  }
 }

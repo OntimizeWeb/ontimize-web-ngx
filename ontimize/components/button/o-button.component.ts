@@ -2,7 +2,6 @@ import {
   Component,
   OnInit,
   NgModule,
-  ModuleWithProviders,
   ViewEncapsulation
 } from '@angular/core';
 import { MdIconModule, MdButtonModule } from '@angular/material';
@@ -63,10 +62,4 @@ export class OButtonComponent implements OnInit {
   exports: [OButtonComponent],
 })
 export class OButtonModule {
-  static forRoot(): ModuleWithProviders {
-    return {
-      ngModule: OButtonModule,
-      providers: []
-    };
-  }
 }

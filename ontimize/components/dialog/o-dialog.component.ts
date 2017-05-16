@@ -1,12 +1,11 @@
 import {
   Component,
   NgModule,
-  ModuleWithProviders,
   ViewEncapsulation
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { MdButtonModule, MdIconModule, MdDialogModule, MdDialogRef } from '@angular/material';
+import { MdCheckboxModule, MdButtonModule, MdIconModule, MdDialogModule, MdDialogRef } from '@angular/material';
 import { ODialogConfig } from './o-dialog.config';
 import { OTranslateModule } from '../../pipes/o-translate.pipe';
 
@@ -118,16 +117,10 @@ export class ODialogComponent {
 
 @NgModule({
   declarations: [ODialogComponent],
-  imports: [CommonModule, MdButtonModule, MdIconModule, MdDialogModule, OTranslateModule],
+  imports: [CommonModule, MdButtonModule, MdIconModule, MdDialogModule, MdCheckboxModule, OTranslateModule],
   exports: [ODialogComponent, CommonModule, MdButtonModule, MdDialogModule],
 })
 export class ODialogModule {
-  static forRoot(): ModuleWithProviders {
-    return {
-      ngModule: ODialogModule,
-      providers: []
-    };
-  }
 }
 
 export * from './o-dialog.config';

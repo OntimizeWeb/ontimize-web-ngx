@@ -2,7 +2,6 @@ import {
   Component, ElementRef, EventEmitter, forwardRef, Inject, Injector,
   OnInit, ViewChild, Optional,
   NgModule,
-  ModuleWithProviders,
   ViewEncapsulation
 } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -270,10 +269,4 @@ export class OListPickerComponent extends OFormServiceComponent implements OnIni
   ]
 })
 export class OListPickerModule {
-  static forRoot(): ModuleWithProviders {
-    return {
-      ngModule: OListPickerModule,
-      providers: []
-    };
-  }
 }

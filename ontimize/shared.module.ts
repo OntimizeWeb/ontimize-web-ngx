@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MdTooltipModule } from '@angular/material';
+import { MdTooltipModule, MdDialogModule } from '@angular/material';
 
 import {
   ColumnsFilterPipe,
@@ -18,6 +18,8 @@ import { ONTIMIZE_DIRECTIVES } from './config/o-directives';
 @NgModule({
   imports: [
     CommonModule,
+    MdTooltipModule,
+    MdDialogModule,
     OTranslateModule
   ],
   declarations: [
@@ -39,7 +41,8 @@ import { ONTIMIZE_DIRECTIVES } from './config/o-directives';
     ORealPipe,
     OTranslatePipe,
     ONTIMIZE_DIRECTIVES,
-    MdTooltipModule
+    MdTooltipModule,
+    MdDialogModule
   ]
 })
 export class OSharedModule {

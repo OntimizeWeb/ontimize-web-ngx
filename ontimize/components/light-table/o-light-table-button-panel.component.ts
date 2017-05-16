@@ -1,7 +1,7 @@
 import {Component, Inject, forwardRef,
   NgModule,
-  ModuleWithProviders,
-  ViewEncapsulation} from '@angular/core';
+  ViewEncapsulation
+} from '@angular/core';
 import {OLightTableComponent} from './o-light-table.component';
 
 import { MdIconModule, MdToolbarModule, MdButtonModule } from '@angular/material';
@@ -29,10 +29,4 @@ export class OLightTableButtonPanelComponent {
   exports: [OLightTableButtonPanelComponent],
 })
 export class OLightTableButtonPanelModule {
-  static forRoot(): ModuleWithProviders {
-    return {
-      ngModule: OLightTableButtonPanelModule,
-      providers: []
-    };
-  }
 }

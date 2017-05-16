@@ -3,7 +3,6 @@ import {
   Component, Inject, Injector, forwardRef, ElementRef, OnInit,
   Optional,
   NgModule,
-  ModuleWithProviders,
   ViewEncapsulation
 } from '@angular/core';
 
@@ -225,10 +224,4 @@ export class OIntegerInputComponent extends OTextInputComponent implements OnIni
   exports: [OIntegerInputComponent, OTextInputModule],
 })
 export class OIntegerInputModule {
-  static forRoot(): ModuleWithProviders {
-    return {
-      ngModule: OIntegerInputModule,
-      providers: []
-    };
-  }
 }

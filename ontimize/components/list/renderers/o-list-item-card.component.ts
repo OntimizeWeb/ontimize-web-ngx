@@ -72,10 +72,4 @@ export class OListItemCardComponent extends OListItemCardRenderer {
   exports: [OListItemCardComponent]
 })
 export class OListItemCardModule {
-  static forRoot(): ModuleWithProviders {
-    return {
-      ngModule: OListItemCardModule,
-      providers: []
-    };
-  }
 }

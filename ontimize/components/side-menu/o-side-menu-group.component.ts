@@ -3,7 +3,6 @@ import {
   Inject,
   forwardRef,
   NgModule,
-  ModuleWithProviders,
   ViewEncapsulation
 } from '@angular/core';
 import { MdIconModule } from '@angular/material';
@@ -48,10 +47,4 @@ export class OSideMenuGroupComponent {
   exports: [OSideMenuGroupComponent],
 })
 export class OSideMenuGroupModule {
-  static forRoot(): ModuleWithProviders {
-    return {
-      ngModule: OSideMenuGroupModule,
-      providers: []
-    };
-  }
 }

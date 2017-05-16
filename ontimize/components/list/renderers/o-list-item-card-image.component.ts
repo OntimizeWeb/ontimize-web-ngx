@@ -8,7 +8,6 @@ import {
   Renderer,
   Optional,
   NgModule,
-  ModuleWithProviders,
   EventEmitter
 } from '@angular/core';
 
@@ -95,10 +94,4 @@ export class OListItemCardImageComponent extends OListItemCardRenderer {
   exports: [OListItemCardImageComponent]
 })
 export class OListItemCardImageModule {
-  static forRoot(): ModuleWithProviders {
-    return {
-      ngModule: OListItemCardImageModule,
-      providers: []
-    };
-  }
 }

@@ -6,7 +6,6 @@ import {
   forwardRef,
   OnInit,
   NgModule,
-  ModuleWithProviders,
   HostListener,
   ViewEncapsulation
 } from '@angular/core';
@@ -87,10 +86,4 @@ export class OBarMenuGroupComponent implements OnInit {
   exports: [OBarMenuGroupComponent],
 })
 export class OBarMenuGroupModule {
-  static forRoot(): ModuleWithProviders {
-    return {
-      ngModule: OBarMenuGroupModule,
-      providers: []
-    };
-  }
 }

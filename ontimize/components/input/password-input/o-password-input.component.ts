@@ -2,7 +2,6 @@ import {
   Component, Inject, Injector, forwardRef, ElementRef, OnInit,
   Optional,
   NgModule,
-  ModuleWithProviders,
   ViewEncapsulation
 } from '@angular/core';
 import { OSharedModule } from '../../../shared.module';
@@ -52,10 +51,4 @@ export class OPasswordInputComponent extends OTextInputComponent implements OnIn
   exports: [OPasswordInputComponent, OTextInputModule],
 })
 export class OPasswordInputModule {
-  static forRoot(): ModuleWithProviders {
-    return {
-      ngModule: OPasswordInputModule,
-      providers: []
-    };
-  }
 }

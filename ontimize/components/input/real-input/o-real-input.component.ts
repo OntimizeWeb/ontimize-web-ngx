@@ -1,7 +1,6 @@
 import {
   Component, Inject, Injector, forwardRef, ElementRef, OnInit,
-  Optional, NgModule, ModuleWithProviders,
-  ViewEncapsulation
+  Optional, NgModule, ViewEncapsulation
 } from '@angular/core';
 
 import { Validators } from '@angular/forms';
@@ -106,10 +105,4 @@ export class ORealInputComponent extends OIntegerInputComponent implements OnIni
   exports: [ORealInputComponent, OIntegerInputModule],
 })
 export class ORealInputModule {
-  static forRoot(): ModuleWithProviders {
-    return {
-      ngModule: ORealInputModule,
-      providers: []
-    };
-  }
 }

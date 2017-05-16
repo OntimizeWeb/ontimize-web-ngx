@@ -71,10 +71,5 @@ export class OListItemAvatarComponent extends OListItemTextRenderer {
   exports: [OListItemAvatarComponent]
 })
 export class OListItemAvatarModule {
-  static forRoot(): ModuleWithProviders {
-    return {
-      ngModule: OListItemAvatarModule,
-      providers: []
-    };
-  }
+
 }

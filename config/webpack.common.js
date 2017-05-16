@@ -12,6 +12,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlElementsPlugin = require('./html-elements-plugin');
 const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin');
 const ngcWebpack = require('ngc-webpack');
+const ProvidePlugin = require('webpack/lib/ProvidePlugin');
 
 /*
  * Webpack Constants
@@ -38,7 +39,7 @@ module.exports = function (options) {
 
         {
           test: /\.ts$/,
-          loaders: ['awesome-typescript-loader?configFileName=tsconfig-build.json', 'angular2-template-loader'],
+          loaders: ['awesome-typescript-loader?configFileName=tsconfig-webpack.json', 'angular2-template-loader'],
           exclude: [/\.(spec|e2e)\.ts$/]
         },
         /* Embed files. */
@@ -52,6 +53,16 @@ module.exports = function (options) {
           use: ['style-loader', 'css-loader', 'sass-loader'],
           include: [helpers.root('ontimize')]
         },
+
+        {
+          test: /\.(ts|js)$/,
+          loader: 'source-map-loader',
+          exclude: [
+            // these packages have problems with their sourcemaps
+            helpers.root('node_modules/rxjs'),
+            helpers.root('node_modules/@angular')
+          ]
+        }
         // , {
         //   test: /\.json$/,
         //   use: 'json-loader'
@@ -69,6 +80,12 @@ module.exports = function (options) {
       ]
     },
     plugins: [
+      new webpack.ProvidePlugin({
+        $: "jquery",
+        jQuery: "jquery",
+        jQuery: "jquery"
+      }),
+
       new ContextReplacementPlugin(
         /angular(\\|\/)core(\\|\/)@angular/,
         helpers.root('./ontimize')
@@ -84,7 +101,10 @@ module.exports = function (options) {
         { from: 'ontimize/**/*.scss', to: '../' },
         { from: 'ontimize/**/*.html', to: '../' },
         { from: 'ontimize/components/table/vendor/**', to: '../' }
+        // ,
+        // { from: 'dist1/**/*.metadata.json', to: '../../dist' }
       ]),
+      //
 
       // new AssetsPlugin({
       //   path: helpers.root('dist'),
@@ -122,8 +142,9 @@ module.exports = function (options) {
       // ),
 
       new ngcWebpack.NgcWebpackPlugin({
-        disabled: true,
-        tsConfig: helpers.root('tsconfig-build.json'),
+        disabled: false,
+        //  disabled: !AOT,
+        tsConfig: helpers.root('tsconfig.ngc.json'),
         resourceOverride: helpers.root('config/resource-override.js')
       })
 

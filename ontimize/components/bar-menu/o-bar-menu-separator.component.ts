@@ -1,7 +1,6 @@
 import {
   Component, Inject, forwardRef,
   NgModule,
-  ModuleWithProviders,
   ViewEncapsulation
 } from '@angular/core';
 import { OBarMenuModule, OBarMenuComponent } from './o-bar-menu.component';
@@ -29,10 +28,4 @@ export class OBarMenuSeparatorComponent {
   exports: [OBarMenuSeparatorComponent],
 })
 export class OBarMenuSeparatorModule {
-  static forRoot(): ModuleWithProviders {
-    return {
-      ngModule: OBarMenuSeparatorModule,
-      providers: []
-    };
-  }
 }

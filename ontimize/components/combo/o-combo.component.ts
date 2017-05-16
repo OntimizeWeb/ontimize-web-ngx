@@ -3,7 +3,6 @@ import {
   forwardRef, Inject, Injector,
   OnInit, ViewChild, Optional,
   NgModule,
-  ModuleWithProviders,
   ViewEncapsulation
 } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -268,10 +267,4 @@ export class OComboComponent extends OFormServiceComponent implements OnInit {
   exports: [OComboComponent],
 })
 export class OComboModule {
-  static forRoot(): ModuleWithProviders {
-    return {
-      ngModule: OComboModule,
-      providers: []
-    };
-  }
 }

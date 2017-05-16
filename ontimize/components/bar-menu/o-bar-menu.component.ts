@@ -2,7 +2,6 @@ import {
   Component, Injector,
   NgModule,
   ElementRef,
-  ModuleWithProviders,
   ViewEncapsulation
 } from '@angular/core';
 import { MdToolbarModule, MdIconModule } from '@angular/material';
@@ -89,10 +88,4 @@ export class OBarMenuComponent {
   exports: [OBarMenuComponent],
 })
 export class OBarMenuModule {
-  static forRoot(): ModuleWithProviders {
-    return {
-      ngModule: OBarMenuModule,
-      providers: []
-    };
-  }
 }

@@ -2,7 +2,6 @@ import {
   Component, Inject, Injector, forwardRef, ElementRef, OnInit,
   Optional,
   NgModule,
-  ModuleWithProviders,
   ViewEncapsulation
 } from '@angular/core';
 import { ValidatorFn } from '@angular/forms/src/directives/validators';
@@ -61,10 +60,4 @@ export class ONIFInputComponent extends OTextInputComponent implements OnInit {
   exports: [ONIFInputComponent, OTextInputModule],
 })
 export class ONIFInputModule {
-  static forRoot(): ModuleWithProviders {
-    return {
-      ngModule: ONIFInputModule,
-      providers: []
-    };
-  }
 }

@@ -3,7 +3,6 @@ import {
   forwardRef, ElementRef, EventEmitter,
   Optional,
   NgModule,
-  ModuleWithProviders,
   ViewEncapsulation
 } from '@angular/core';
 
@@ -122,10 +121,4 @@ export class OCheckboxComponent extends OFormDataComponent implements OnInit {
   exports: [OCheckboxComponent],
 })
 export class OCheckboxModule {
-  static forRoot(): ModuleWithProviders {
-    return {
-      ngModule: OCheckboxModule,
-      providers: []
-    };
-  }
 }

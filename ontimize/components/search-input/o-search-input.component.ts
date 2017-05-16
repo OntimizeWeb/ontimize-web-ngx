@@ -1,7 +1,6 @@
 import {
   Component, OnInit, EventEmitter, Injector,
   NgModule,
-  ModuleWithProviders,
   ViewEncapsulation
 } from '@angular/core';
 import { FormGroup, FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -92,10 +91,4 @@ export class OSearchInputComponent implements OnInit {
   exports: [OSearchInputComponent],
 })
 export class OSearchInputModule {
-  static forRoot(): ModuleWithProviders {
-    return {
-      ngModule: OSearchInputModule,
-      providers: []
-    };
-  }
 }

@@ -8,13 +8,15 @@ import { OTranslateService } from './services';
 
 export function ontimizeBootstrap(appModule: any, config?: any): Promise<NgModuleRef<any>> {
 
-  return platformBrowserDynamic().bootstrapModule(appModule)
-    .then(moduleRef => {
-      console.log('Bootstrap Successful');
-      return postBootstrap(moduleRef);
-    }).catch(err => {
-      console.error(err.message);
-    });
+  var promise = platformBrowserDynamic().bootstrapModule(appModule);
+  promise.then(moduleRef => {
+    console.log('Bootstrap Successful');
+    return postBootstrap(moduleRef);
+  }).catch(err => {
+    console.error(err.message);
+  });
+
+  return promise;
 }
 
 

@@ -3,7 +3,6 @@ import {
   ViewChild,
   Injector,
   NgModule,
-  ModuleWithProviders,
   ViewEncapsulation
 } from '@angular/core';
 
@@ -71,10 +70,4 @@ export class OSideMenuComponent {
   exports: [OSideMenuComponent]
 })
 export class OSideMenuModule {
-  static forRoot(): ModuleWithProviders {
-    return {
-      ngModule: OSideMenuModule,
-      providers: []
-    };
-  }
 }

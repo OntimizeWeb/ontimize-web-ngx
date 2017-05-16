@@ -4,7 +4,6 @@ import {
   Inject,
   forwardRef,
   NgModule,
-  ModuleWithProviders,
   ViewEncapsulation
 } from '@angular/core';
 import { RouterModule } from '@angular/router';
@@ -72,10 +71,4 @@ export class OSideMenuItemComponent implements OnInit {
   exports: [OSideMenuItemComponent],
 })
 export class OSideMenuItemModule {
-  static forRoot(): ModuleWithProviders {
-    return {
-      ngModule: OSideMenuItemModule,
-      providers: []
-    };
-  }
 }

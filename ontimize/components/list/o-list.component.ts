@@ -3,7 +3,7 @@ import {
   Component, OnInit, Inject, Injector,
   AfterContentInit, ContentChildren,
   ViewChild, QueryList, Optional, forwardRef,
-  ElementRef, NgModule, ModuleWithProviders,
+  ElementRef, NgModule,
   ViewEncapsulation, EventEmitter
 } from '@angular/core';
 import { RouterModule } from '@angular/router';
@@ -518,10 +518,4 @@ export class OListComponent extends OServiceComponent implements OnInit, IList, 
   entryComponents: [MdCheckbox]
 })
 export class OListModule {
-  static forRoot(): ModuleWithProviders {
-    return {
-      ngModule: OListModule,
-      providers: []
-    };
-  }
 }

@@ -2,7 +2,6 @@ import {
   Component, Inject, Injector, forwardRef,
   ElementRef, OnInit, Optional,
   NgModule,
-  ModuleWithProviders,
   ViewEncapsulation
 } from '@angular/core';
 
@@ -156,10 +155,4 @@ export class ORowComponent implements OnInit {
   exports: [ORowComponent],
 })
 export class ORowModule {
-  static forRoot(): ModuleWithProviders {
-    return {
-      ngModule: ORowModule,
-      providers: []
-    };
-  }
 }

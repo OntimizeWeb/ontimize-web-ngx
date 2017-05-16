@@ -1,7 +1,7 @@
 {
   "name": "ontimize-web-ng2",
   "homepage": "https://github.com/OntimizeWeb/ontimize-web-ng2#readme",
-  "version": "2.0.0",
+  "version": "2.0.0-rc.0",
   "description": "Ontimize Web framework with Angular 2",
   "bugs": "https://github.com/OntimizeWeb/ontimize-web-ng2/issues",
   "author": "Imatia S.L.",
@@ -19,16 +19,7 @@
     "webpack": "webpack",
     "test": "karma start",
     "clean": "rimraf dist",
-    "tslintConf": "tslint tslint.json",
-    "build:dev": "ntsc --p tsconfig-build.json",
-    "webpack:dev": "webpack --config config/webpack.dev.js --progress",
-    "ngc": "ngc -p tsconfig-build.json ",
-    "ngcw": "ngc-w -p tsconfig-build.json ",
-    "nodesass": "node-sass ontimize.scss ontimize.css",
-    "sass": "node-sass ontimize/ -o dist/ontimize",
-    "developmentOLD": "npm run clean && npm run sass && npm run webpack:dev",
-    "development": "npm run clean && npm run webpack:dev",
-    "hhh" : "ng --help > NG_HELP"
+    "webpack:dev": "npm run clean && webpack --config config/webpack.dev.js --progress"
   },
   "dependencies": {
     "@angular/animations": "4.1.2",
@@ -38,13 +29,13 @@
     "@angular/core": "4.1.2",
     "@angular/forms": "4.1.2",
     "@angular/http": "4.1.2",
-    "@angular/material": "2.0.0-beta.3",
+    "@angular/material": "2.0.0-beta.5",
     "@angular/platform-browser": "4.1.2",
     "@angular/platform-browser-dynamic": "4.1.2",
     "@angular/platform-server": "4.1.2",
     "@angular/router": "4.1.2",
     "@angular/upgrade": "4.1.2",
-    "@angular/cli": "^1.0.3",
+    "@angular/cli": "1.0.0",
     "@ngx-translate/core": "6.0.1",
     "@ngx-translate/http-loader": "0.0.3",
     "colresizable": "1.6.0",
@@ -58,9 +49,7 @@
     "moment": "2.17.1",
     "pdfmake": "^0.1.18",
     "rxjs": "5.0.1",
-    "zone.js": "0.8.10"
-  },
-  "devDependencies": {
+    "zone.js": "0.8.10",
     "@angularclass/conventions-loader": "^1.0.13",
     "@types/hammerjs": "2.0.34",
     "@types/jasmine": "2.5.46",

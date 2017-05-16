@@ -1,7 +1,7 @@
 import {
   Component, OnInit, OnDestroy, EventEmitter,
   Injector, NgZone, ChangeDetectorRef,
-  NgModule, ModuleWithProviders, HostListener,
+  NgModule, HostListener,
   ViewEncapsulation, ElementRef
 } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -1230,10 +1230,4 @@ export class OFormComponent implements OnInit, OnDestroy {
   exports: [OFormComponent, OFormToolbarModule],
 })
 export class OFormModule {
-  static forRoot(): ModuleWithProviders {
-    return {
-      ngModule: OFormModule,
-      providers: []
-    };
-  }
 }

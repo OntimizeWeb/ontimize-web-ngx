@@ -80,10 +80,4 @@ export class OListItemTextComponent extends OListItemTextRenderer {
 })
 
 export class OListItemTextModule {
-  static forRoot(): ModuleWithProviders {
-    return {
-      ngModule: OListItemTextModule,
-      providers: []
-    };
-  }
 }

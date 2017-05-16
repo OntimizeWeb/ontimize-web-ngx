@@ -12,7 +12,6 @@ import {
   forwardRef,
   QueryList,
   NgModule,
-  ModuleWithProviders,
   ViewEncapsulation,
   Optional,
   Inject
@@ -339,10 +338,4 @@ export class CKEditor implements ControlValueAccessor {
   exports: [CKEditor],
 })
 export class MdCKEditorModule {
-  static forRoot(): ModuleWithProviders {
-    return {
-      ngModule: MdCKEditorModule,
-      providers: []
-    };
-  }
 }

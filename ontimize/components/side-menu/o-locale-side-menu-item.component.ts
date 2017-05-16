@@ -6,7 +6,6 @@ import {
   ElementRef,
   OnInit,
   NgModule,
-  ModuleWithProviders,
   ViewEncapsulation
 } from '@angular/core';
 import { RouterModule } from '@angular/router';
@@ -90,10 +89,4 @@ export class OLocaleSideMenuItemComponent implements OnInit {
   exports: [OLocaleSideMenuItemComponent],
 })
 export class OLocaleSideMenuItemModule {
-  static forRoot(): ModuleWithProviders {
-    return {
-      ngModule: OLocaleSideMenuItemModule,
-      providers: []
-    };
-  }
 }

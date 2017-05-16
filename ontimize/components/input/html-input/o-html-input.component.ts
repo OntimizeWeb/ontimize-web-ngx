@@ -3,7 +3,6 @@ import {
   ElementRef, OnInit, EventEmitter, ViewChild,
   ChangeDetectorRef, NgZone, Optional,
   NgModule,
-  ModuleWithProviders,
   ViewEncapsulation
 } from '@angular/core';
 import { FormsModule, ReactiveFormsModule, FormControl, Validators } from '@angular/forms';
@@ -323,10 +322,4 @@ export class OHTMLInputComponent implements IComponent, IFormControlComponent, I
   exports: [OHTMLInputComponent],
 })
 export class OHTMLInputModule {
-  static forRoot(): ModuleWithProviders {
-    return {
-      ngModule: OHTMLInputModule,
-      providers: []
-    };
-  }
 }

@@ -2,7 +2,6 @@ import {
   Component, OnInit, Inject, Injector,
   forwardRef, ElementRef, NgZone,
   NgModule,
-  ModuleWithProviders,
   ViewEncapsulation
 } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -239,10 +238,4 @@ export class OFormToolbarComponent implements OnInit {
   exports: [OFormToolbarComponent],
 })
 export class OFormToolbarModule {
-  static forRoot(): ModuleWithProviders {
-    return {
-      ngModule: OFormToolbarModule,
-      providers: []
-    };
-  }
 }

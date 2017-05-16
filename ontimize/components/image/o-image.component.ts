@@ -2,7 +2,6 @@ import {
   Component, Inject, Injector, forwardRef, ElementRef, OnInit,
   EventEmitter, Optional, ViewChild,
   NgModule,
-  ModuleWithProviders,
   ViewEncapsulation
 } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -216,11 +215,5 @@ export class OImageComponent extends OFormDataComponent implements OnInit {
   exports: [OImageComponent],
 })
 export class OImageModule {
-  static forRoot(): ModuleWithProviders {
-    return {
-      ngModule: OImageModule,
-      providers: []
-    };
-  }
 }
 
