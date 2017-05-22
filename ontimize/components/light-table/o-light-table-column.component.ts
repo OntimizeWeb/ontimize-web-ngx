@@ -6,7 +6,7 @@ import {
 
 import { OLightTableComponent } from './o-light-table.component';
 import { MomentService } from '../../services';
-import { OSharedModule } from '../../shared.module';
+import { OSharedModule } from '../../shared';
 
 export const DEFAULT_INPUTS_O_LIGHT_TABLE_COLUMN = [
   'id',

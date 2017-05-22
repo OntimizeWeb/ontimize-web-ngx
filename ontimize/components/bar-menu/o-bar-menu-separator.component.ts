@@ -4,7 +4,7 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 import { OBarMenuModule, OBarMenuComponent } from './o-bar-menu.component';
-import { OSharedModule } from '../../shared.module';
+import { OSharedModule } from '../../shared';
 
 
 @Component({

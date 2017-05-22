@@ -10,7 +10,7 @@ import { RouterModule } from '@angular/router';
 import { MdIconModule } from '@angular/material';
 
 import { OSideMenuModule, OSideMenuComponent } from './o-side-menu.component';
-import { OSharedModule } from '../../shared.module';
+import { OSharedModule } from '../../shared';
 
 export const DEFAULT_INPUTS_O_SIDE_MENU_ITEM = [
   // title [string]: menu item title. Default: no value.

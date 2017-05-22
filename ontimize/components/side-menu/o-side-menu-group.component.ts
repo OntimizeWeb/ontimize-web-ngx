@@ -8,7 +8,7 @@ import {
 import { MdIconModule } from '@angular/material';
 
 import { OSideMenuModule, OSideMenuComponent } from './o-side-menu.component';
-import { OSharedModule } from '../../shared.module';
+import { OSharedModule } from '../../shared';
 
 export const DEFAULT_INPUTS_O_SIDE_MENU_GROUP = [
   // title [string]: menu group title. Default: no value.

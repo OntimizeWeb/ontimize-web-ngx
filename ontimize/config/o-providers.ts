@@ -143,7 +143,7 @@ export class OntimizeProvidersFactory {
   }
 }
 
-export function ontimizeProvidersFactory(args: any = {}): any {
+export const ontimizeProviders = (args: any = {}): any => {
   var config = args.config;
   let appConfig = new AppConfig(config);
   config = appConfig.getConfiguration();
@@ -152,4 +152,4 @@ export function ontimizeProvidersFactory(args: any = {}): any {
     servicesConf = config['servicesConfiguration'];
   }
   return new OntimizeProvidersFactory().factory(config, servicesConf);
-}
+};

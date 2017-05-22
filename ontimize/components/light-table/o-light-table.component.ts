@@ -19,7 +19,7 @@ import { InputConverter } from '../../decorators';
 import { Util } from '../../util/util';
 
 import { ObservableWrapper } from '../../util/async';
-import { OSharedModule } from '../../shared.module';
+import { OSharedModule } from '../../shared';
 
 export const DEFAULT_INPUTS_O_LIGHT_TABLE = [
   'refreshButton: refresh-button',

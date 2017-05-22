@@ -8,7 +8,7 @@ import {
 
 import { FormControl } from '@angular/forms';
 import { ValidatorFn } from '@angular/forms/src/directives/validators';
-import { OSharedModule } from '../../../shared.module';
+import { OSharedModule } from '../../../shared';
 import { OFormComponent } from '../../form/o-form.component';
 import { OFormValue } from '../../form/OFormValue';
 import { InputConverter } from '../../../decorators';

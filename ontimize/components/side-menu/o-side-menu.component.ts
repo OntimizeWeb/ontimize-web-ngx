@@ -15,7 +15,7 @@ import {
 } from '@angular/material';
 
 import { AuthGuardService } from '../../services';
-import { OSharedModule } from '../../shared.module';
+import { OSharedModule } from '../../shared';
 
 export const DEFAULT_INPUTS_O_SIDE_MENU = [
   // title [string]: menu title. Default: no value.
@@ -55,11 +55,12 @@ export class OSideMenuComponent {
       this.opened = false;
     });
   }
-
 }
 
 @NgModule({
-  declarations: [OSideMenuComponent],
+  declarations: [
+    OSideMenuComponent
+  ],
   imports: [
     OSharedModule,
     MdSidenavModule,
@@ -67,7 +68,9 @@ export class OSideMenuComponent {
     MdToolbarModule,
     MdIconModule
   ],
-  exports: [OSideMenuComponent]
+  exports: [
+    OSideMenuComponent
+  ]
 })
 export class OSideMenuModule {
 }

@@ -18,7 +18,7 @@ import {
 
 import { OListItemComponent } from '../list-item/o-list-item.component';
 import { OListItemTextRenderer } from './o-list-item-text-renderer.class';
-import { OSharedModule } from '../../../shared.module';
+import { OSharedModule } from '../../../shared';
 
 export const DEFAULT_INPUTS_O_LIST_ITEM_AVATAR = [
   ...OListItemTextRenderer.DEFAULT_INPUTS_O_TEXT_RENDERER,

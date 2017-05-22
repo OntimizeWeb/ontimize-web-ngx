@@ -10,7 +10,7 @@ import { ValidatorFn } from '@angular/forms/src/directives/validators';
 
 import { MdCKEditorModule, CKEditor } from '../../material/ckeditor/ckeditor.component';
 import { MdInputModule, MdTabGroup, MdTab } from '@angular/material';
-import { OSharedModule } from '../../../shared.module';
+import { OSharedModule } from '../../../shared';
 
 import {
   IComponent,

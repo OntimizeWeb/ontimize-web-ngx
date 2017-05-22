@@ -11,7 +11,7 @@ import { ObservableWrapper } from '../../util/async';
 
 import { MdCheckbox } from '@angular/material';
 import { MdListModule, MdIconModule, MdToolbarModule, MdButtonModule, MdProgressSpinnerModule } from '@angular/material';
-import { OSharedModule } from '../../shared.module';
+import { OSharedModule } from '../../shared';
 import { OntimizeService } from '../../services';
 import { dataServiceFactory } from '../../services/data-service.provider';
 import { OSearchInputModule, OSearchInputComponent } from '../search-input/o-search-input.component';

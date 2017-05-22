@@ -7,7 +7,7 @@ import {
 
 import { OFormComponent } from '../../form/o-form.component';
 import { OTranslateService } from '../../../services';
-import { OSharedModule } from '../../../shared.module';
+import { OSharedModule } from '../../../shared';
 
 export const DEFAULT_INPUTS_O_COLUMN = [
   'oattr: attr',

@@ -7,7 +7,7 @@ import {
 import { MdToolbarModule, MdIconModule } from '@angular/material';
 import { AuthGuardService } from '../../services';
 import { OTranslateService } from '../../services';
-import { OSharedModule } from '../../shared.module';
+import { OSharedModule } from '../../shared';
 
 export const DEFAULT_INPUTS_O_BAR_MENU = [
   // title [string]: menu title. Default: no value.

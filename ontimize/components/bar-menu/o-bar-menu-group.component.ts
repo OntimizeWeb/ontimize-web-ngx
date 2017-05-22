@@ -13,7 +13,7 @@ import {
 import { MdIconModule } from '@angular/material';
 import { OBarMenuModule, OBarMenuComponent } from './o-bar-menu.component';
 import { OTranslateService } from '../../services';
-import { OSharedModule } from '../../shared.module';
+import { OSharedModule } from '../../shared';
 
 export const DEFAULT_INPUTS_O_BAR_MENU_GROUP = [
   // title [string]: menu group title. Default: no value.

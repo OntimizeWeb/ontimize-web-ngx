@@ -1,8 +1,11 @@
 import {
-  Pipe, PipeTransform, Injector,
+  Pipe,
+  PipeTransform,
+  Injector,
   NgModule,
   ModuleWithProviders
 } from '@angular/core';
+
 import { OTranslateService } from '../services';
 
 @Pipe({

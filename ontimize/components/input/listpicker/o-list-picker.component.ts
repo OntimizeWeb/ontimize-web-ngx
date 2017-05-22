@@ -19,7 +19,7 @@ import { OFormComponent } from '../../form/o-form.component';
 import { OSearchInputModule } from '../../search-input/o-search-input.component';
 import { OFormValue } from '../../form/OFormValue';
 
-import { OSharedModule } from '../../../shared.module';
+import { OSharedModule } from '../../../shared';
 import { ODialogModule } from '../../dialog/o-dialog.component';
 
 import { OListPickerDialogComponent } from './o-list-picker-dialog.component';

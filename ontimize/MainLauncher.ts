@@ -11,7 +11,7 @@ export function ontimizeBootstrap(appModule: any, config?: any): Promise<NgModul
   var promise = platformBrowserDynamic().bootstrapModule(appModule);
   promise.then(moduleRef => {
     console.log('Bootstrap Successful');
-    return postBootstrap(moduleRef);
+    return ontimizePostBootstrap(moduleRef);
   }).catch(err => {
     console.error(err.message);
   });
@@ -20,8 +20,7 @@ export function ontimizeBootstrap(appModule: any, config?: any): Promise<NgModul
 }
 
 
-export function postBootstrap(ngModuleRef: NgModuleRef<any>): NgModuleRef<any> {
-
+export function ontimizePostBootstrap(ngModuleRef: NgModuleRef<any>): NgModuleRef<any> {
   // Configuring i18n...
   let translate: OTranslateService = ngModuleRef.injector.get(OTranslateService);
   let config: Config = ngModuleRef.injector.get(APP_CONFIG);

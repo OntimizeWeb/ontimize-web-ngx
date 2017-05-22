@@ -18,7 +18,7 @@ import {
 
 import { MdListModule, MdIconModule, MdCheckboxModule, MdLine, MdListAvatarCssMatStyler, MdListItem } from '@angular/material';
 import { OListComponent } from '../o-list.component';
-import { OSharedModule } from '../../../shared.module';
+import { OSharedModule } from '../../../shared';
 
 @Component({
   selector: 'o-list-item',

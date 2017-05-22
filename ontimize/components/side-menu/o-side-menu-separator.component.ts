@@ -5,7 +5,7 @@ import {
 } from '@angular/core';
 
 import { OSideMenuModule, OSideMenuComponent } from './o-side-menu.component';
-import { OSharedModule } from '../../shared.module';
+import { OSharedModule } from '../../shared';
 
 @Component({
   selector: 'o-side-menu-separator',

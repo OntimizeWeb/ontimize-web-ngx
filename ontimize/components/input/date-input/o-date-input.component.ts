@@ -29,7 +29,7 @@ import {
 
 import { OFormValue } from '../../form/OFormValue';
 import { MomentService } from '../../../services';
-import { OSharedModule } from '../../../shared.module';
+import { OSharedModule } from '../../../shared';
 import * as moment from 'moment';
 
 import './o-date-input.loader';
@@ -156,7 +156,7 @@ export class ODateInputComponent extends OTextInputComponent implements OnInit {
   }
 
   extendGenerateHTML() {
-    if ($['datepicker']._generateHTML_old !== undefined) {
+    if (!$['datepicker'] || $['datepicker']._generateHTML_old !== undefined) {
       return;
     }
 
@@ -189,7 +189,7 @@ export class ODateInputComponent extends OTextInputComponent implements OnInit {
   }
 
   extendAttachHandlers() {
-    if ($['datepicker']._attachHandlers_old !== undefined) {
+    if (!$['datepicker'] || $['datepicker']._attachHandlers_old !== undefined) {
       return;
     }
 
@@ -221,7 +221,7 @@ export class ODateInputComponent extends OTextInputComponent implements OnInit {
   }
 
   extendUpdateDatepicker() {
-    if ($['datepicker']._updateDatepicker_old !== undefined) {
+    if (!$['datepicker'] || $['datepicker']._updateDatepicker_old !== undefined) {
       return;
     }
 
@@ -239,7 +239,7 @@ export class ODateInputComponent extends OTextInputComponent implements OnInit {
   }
 
   overwriteDoKeyUp() {
-    if ($['datepicker']._doKeyUp_overwrited === true) {
+    if (!$['datepicker'] || $['datepicker']._doKeyUp_overwrited === true) {
       return;
     }
     $['datepicker']._doKeyUp_overwrited = true;

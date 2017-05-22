@@ -30,7 +30,7 @@ import { Observable } from 'rxjs/Observable';
 
 import { InputConverter } from '../../../decorators';
 import { OHTMLInputComponent } from '../../input/html-input/o-html-input.component';
-import { OSharedModule } from '../../../shared.module';
+import { OSharedModule } from '../../../shared';
 
 const noop = () => {
   //nothing to do

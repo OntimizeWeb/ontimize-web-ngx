@@ -4,9 +4,9 @@ import {
   NgModule,
   ViewEncapsulation
 } from '@angular/core';
-import { MdIconModule, MdButtonModule } from '@angular/material';
+// import { MdIconModule, MdButtonModule } from '@angular/material';
 
-import { OSharedModule } from '../../shared.module';
+import { OSharedModule } from '../../shared';
 
 export const DEFAULT_INPUTS_O_BUTTON = [
   'oattr: attr',
@@ -58,7 +58,8 @@ export class OButtonComponent implements OnInit {
 
 @NgModule({
   declarations: [OButtonComponent],
-  imports: [OSharedModule, MdIconModule, MdButtonModule],
+  // imports: [OSharedModule, MdIconModule, MdButtonModule],
+  imports: [OSharedModule],
   exports: [OButtonComponent],
 })
 export class OButtonModule {

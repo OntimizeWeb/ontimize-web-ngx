@@ -54,7 +54,7 @@ import { OntimizeService, MomentService } from '../../services';
 import { Util } from '../../util/util';
 import { OFormComponent } from '../form/o-form.component';
 import { OFormValue } from '../form/OFormValue';
-import { OSharedModule } from '../../shared.module';
+import { OSharedModule } from '../../shared';
 
 import './o-table.loader';
 

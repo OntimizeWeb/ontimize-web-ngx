@@ -19,7 +19,7 @@ import { IComponent, IFormControlComponent, IFormDataTypeComponent } from '../..
 import { OFormToolbarModule, OFormToolbarComponent } from './o-form-toolbar.component';
 import { OFormValue } from './OFormValue';
 import { Util, SQLTypes } from '../../utils';
-import { OSharedModule } from '../../shared.module';
+import { OSharedModule } from '../../shared';
 
 export const enum Mode {
   QUERY,

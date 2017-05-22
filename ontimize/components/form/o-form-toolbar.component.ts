@@ -12,7 +12,7 @@ import { OFormComponent } from './o-form.component';
 import { InputConverter } from '../../decorators';
 import { Util } from '../../util/util';
 import { DialogService, NavigationService } from '../../services';
-import { OSharedModule } from '../../shared.module';
+import { OSharedModule } from '../../shared';
 
 export const DEFAULT_INPUTS_O_FORM_TOOLBAR = [
   'labelHeader: label-header',

@@ -9,7 +9,7 @@ import { ValidatorFn } from '@angular/forms/src/directives/validators';
 
 import { MdInputModule, MdInputDirective } from '@angular/material';
 
-import { OSharedModule } from '../../../shared.module';
+import { OSharedModule } from '../../../shared';
 import { InputConverter } from '../../../decorators';
 import { OFormComponent } from '../../form/o-form.component';
 import { OFormValue } from '../../form/OFormValue';

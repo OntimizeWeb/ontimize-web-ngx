@@ -21,7 +21,7 @@ import {
 import { InputConverter } from '../../../decorators';
 import { OListItemComponent } from '../list-item/o-list-item.component';
 import { OListItemCardRenderer } from './o-list-item-card-renderer.class';
-import { OSharedModule } from '../../../shared.module';
+import { OSharedModule } from '../../../shared';
 
 export const DEFAULT_INPUTS_O_LIST_ITEM_CARD_IMAGE = [
   ...OListItemCardRenderer.DEFAULT_INPUTS_O_CARD_RENDERER,

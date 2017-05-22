@@ -1,7 +1,5 @@
 import { Http } from '@angular/http';
 
-import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
@@ -11,7 +9,6 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 export function HttpLoaderFactory(http: Http) {
   return new TranslateHttpLoader(http);
 }
-// import { MaterialModule } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import {
@@ -58,9 +55,18 @@ import {
   OSideMenuSeparatorModule
 } from '../components';
 
-import { OSharedModule } from '../shared.module';
+import { OCustomMaterialModule } from '../shared/custom.material.module';
+import { OSharedModule } from '../shared';
 
 export const ONTIMIZE_EXPORTS_MODULES: any = [
+  // Standard modules
+  // ,
+  // FormsModule,
+  // ReactiveFormsModule,
+  HttpModule,
+  BrowserAnimationsModule,
+
+  OCustomMaterialModule,
   OSharedModule,
 
   // Ontimize modules
@@ -109,10 +115,10 @@ export const ONTIMIZE_EXPORTS_MODULES: any = [
 
 export const ONTIMIZE_MODULES: any = [
   // Standard modules
-  BrowserModule,
-  FormsModule,
-  ReactiveFormsModule,
+  // FormsModule,
+  // ReactiveFormsModule,
   HttpModule,
+  BrowserAnimationsModule,
 
   // Ngx-translate
   TranslateModule.forRoot({
@@ -123,10 +129,7 @@ export const ONTIMIZE_MODULES: any = [
     }
   }),
 
-  // Material modules
-  // MaterialModule,
-  BrowserAnimationsModule,
-
+  OCustomMaterialModule,
   OSharedModule,
 
   // Ontimize modules

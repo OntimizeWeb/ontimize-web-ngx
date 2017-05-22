@@ -4,7 +4,7 @@ import {
   NgModule,
   ViewEncapsulation
 } from '@angular/core';
-import { OSharedModule } from '../../../shared.module';
+import { OSharedModule } from '../../../shared';
 import { OFormComponent } from '../../form/o-form.component';
 import {
   ORealInputModule, ORealInputComponent,

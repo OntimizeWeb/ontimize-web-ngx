@@ -17,10 +17,16 @@ export * from './ontimize/services';
 export * from './ontimize/decorators';
 export * from './ontimize/components';
 export * from './ontimize/utils';
+export * from './ontimize/shared';
+
+import { ODialogComponent } from './ontimize/components';
 
 @NgModule({
   imports: ONTIMIZE_MODULES,
-  exports: ONTIMIZE_EXPORTS_MODULES
+  exports: ONTIMIZE_EXPORTS_MODULES,
+  entryComponents: [
+    ODialogComponent
+  ]
 })
 export class OntimizeWebModule {
 }

@@ -5,7 +5,7 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 
-import { OSharedModule } from '../../../shared.module';
+import { OSharedModule } from '../../../shared';
 import { InputConverter } from '../../../decorators';
 import { OFormComponent } from '../../form/o-form.component';
 import {

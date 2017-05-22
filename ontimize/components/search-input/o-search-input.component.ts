@@ -10,7 +10,7 @@ import 'rxjs/add/operator/distinctUntilChanged';
 
 import { MdInputModule } from '@angular/material';
 import { OTranslateService } from '../../services';
-import { OSharedModule } from '../../shared.module';
+import { OSharedModule } from '../../shared';
 
 export const DEFAULT_INPUTS_O_SEARCH_INPUT = [
   'placeholder'

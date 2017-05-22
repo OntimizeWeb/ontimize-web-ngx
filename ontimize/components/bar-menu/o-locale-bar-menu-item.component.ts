@@ -15,7 +15,7 @@ import { MdIconModule } from '@angular/material';
 import { OTranslateService } from '../../services';
 
 import { OBarMenuModule, OBarMenuComponent } from './o-bar-menu.component';
-import { OSharedModule } from '../../shared.module';
+import { OSharedModule } from '../../shared';
 
 export const DEFAULT_INPUTS_O_LOCALE_BAR_MENU_ITEM = [
   // title [string]: menu item title. Default: no value.
