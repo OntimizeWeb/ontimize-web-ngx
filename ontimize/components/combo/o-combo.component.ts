@@ -5,13 +5,13 @@ import {
   NgModule,
   ViewEncapsulation
 } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { MdInputModule, MdSelectModule, MdSelect, MdOption } from '@angular/material';
+import {MdSelect, MdOption } from '@angular/material';
 
 import { dataServiceFactory } from '../../services/data-service.provider';
 import { OntimizeService } from '../../services';
 import { OSharedModule } from '../../shared';
+import { CommonModule } from '@angular/common';
 import { InputConverter } from '../../decorators';
 import { OFormComponent } from '../form/o-form.component';
 import { OFormValue } from '../form/OFormValue';
@@ -263,7 +263,7 @@ export class OComboComponent extends OFormServiceComponent implements OnInit {
 
 @NgModule({
   declarations: [OComboComponent],
-  imports: [FormsModule, ReactiveFormsModule, OSharedModule, MdInputModule, MdSelectModule],
+  imports: [OSharedModule, CommonModule],
   exports: [OComboComponent],
 })
 export class OComboModule {

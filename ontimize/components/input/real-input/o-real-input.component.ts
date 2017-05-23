@@ -1,16 +1,27 @@
 import {
-  Component, Inject, Injector, forwardRef, ElementRef, OnInit,
-  Optional, NgModule, ViewEncapsulation
+  Component,
+  Inject,
+  Injector,
+  forwardRef,
+  ElementRef,
+  OnInit,
+  Optional,
+  NgModule,
+  ViewEncapsulation
 } from '@angular/core';
 
+import { CommonModule } from '@angular/common';
 import { Validators } from '@angular/forms';
 import { ValidatorFn } from '@angular/forms/src/directives/validators';
+
 import { OSharedModule } from '../../../shared';
 import { OFormComponent } from '../../form/o-form.component';
 import { InputConverter } from '../../../decorators';
 import {
-  OIntegerInputModule, OIntegerInputComponent,
-  DEFAULT_INPUTS_O_INTEGER_INPUT, DEFAULT_OUTPUTS_O_INTEGER_INPUT
+  OIntegerInputModule,
+  OIntegerInputComponent,
+  DEFAULT_INPUTS_O_INTEGER_INPUT,
+  DEFAULT_OUTPUTS_O_INTEGER_INPUT
 } from '../integer-input/o-integer-input.component';
 
 import { ORealPipe } from '../../../pipes';
@@ -101,7 +112,7 @@ export class ORealInputComponent extends OIntegerInputComponent implements OnIni
 
 @NgModule({
   declarations: [ORealInputComponent],
-  imports: [OSharedModule, OIntegerInputModule],
+  imports: [OSharedModule, CommonModule, OIntegerInputModule],
   exports: [ORealInputComponent, OIntegerInputModule],
 })
 export class ORealInputModule {

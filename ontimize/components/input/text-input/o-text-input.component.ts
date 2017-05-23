@@ -10,6 +10,7 @@ import { ValidatorFn } from '@angular/forms/src/directives/validators';
 import { MdInputModule, MdInputDirective } from '@angular/material';
 
 import { OSharedModule } from '../../../shared';
+import { CommonModule } from '@angular/common';
 import { InputConverter } from '../../../decorators';
 import { OFormComponent } from '../../form/o-form.component';
 import { OFormValue } from '../../form/OFormValue';
@@ -120,7 +121,7 @@ export class OTextInputComponent extends OFormDataComponent implements OnInit {
 
 @NgModule({
   declarations: [OTextInputComponent],
-  imports: [FormsModule, ReactiveFormsModule, OSharedModule, MdInputModule],
+  imports: [FormsModule, ReactiveFormsModule, OSharedModule, CommonModule, MdInputModule],
   exports: [OTextInputComponent, FormsModule, ReactiveFormsModule, MdInputModule]
 })
 export class OTextInputModule {

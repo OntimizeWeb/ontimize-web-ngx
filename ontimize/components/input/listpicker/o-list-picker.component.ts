@@ -4,16 +4,18 @@ import {
   NgModule,
   ViewEncapsulation
 } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 import {
-  MdInputModule, MdInputDirective, MdListModule, MdToolbarModule,
-  MdDialog, MdDialogRef, MdDialogConfig
+  MdInputDirective,
+  MdDialog,
+  MdDialogRef,
+  MdDialogConfig
 } from '@angular/material';
 
 import { dataServiceFactory } from '../../../services/data-service.provider';
 import { OntimizeService } from '../../../services';
-import { ColumnsFilterPipe } from '../../../pipes';
+
 import { InputConverter } from '../../../decorators';
 import { OFormComponent } from '../../form/o-form.component';
 import { OSearchInputModule } from '../../search-input/o-search-input.component';
@@ -253,12 +255,8 @@ export class OListPickerComponent extends OFormServiceComponent implements OnIni
   ],
   imports: [
     OSharedModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MdInputModule,
-    MdListModule,
+    CommonModule,
     ODialogModule,
-    MdToolbarModule,
     OSearchInputModule
   ],
   exports: [

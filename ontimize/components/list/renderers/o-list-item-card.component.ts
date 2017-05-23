@@ -7,16 +7,10 @@ import {
   ElementRef,
   Renderer,
   Optional,
-  NgModule,
-  ModuleWithProviders
+  NgModule
 } from '@angular/core';
 
-import {
-  MdIconModule,
-  MdCardModule,
-  MdButtonModule,
-  MdListModule
-} from '@angular/material';
+import { CommonModule } from '@angular/common';
 
 import { OListItemComponent } from '../list-item/o-list-item.component';
 import { OListItemCardRenderer } from './o-list-item-card-renderer.class';
@@ -64,10 +58,7 @@ export class OListItemCardComponent extends OListItemCardRenderer {
   declarations: [OListItemCardComponent],
   imports: [
     OSharedModule,
-    MdIconModule,
-    MdCardModule,
-    MdButtonModule,
-    MdListModule
+    CommonModule
   ],
   exports: [OListItemCardComponent]
 })

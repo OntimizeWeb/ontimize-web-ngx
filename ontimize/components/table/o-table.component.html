@@ -1,5 +1,7 @@
 <div [class.hidden-loading]="!loading" class="spinner-container" flex="100" layout="row" layout-align="center center">
-  <md-spinner [mode]="loading?'indeterminate':'determinate'"></md-spinner>
+  <md-progress-spinner mode="indeterminate">
+  </md-progress-spinner>
+
 </div>
 
 <div layout="column" class="expandable-container fill-remaining" layout-fill>

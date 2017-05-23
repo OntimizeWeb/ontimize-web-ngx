@@ -7,15 +7,12 @@ import {
 } from '@angular/core';
 
 import {
-  MdSidenavModule,
-  MdSidenav,
-  MdListModule,
-  MdToolbarModule,
-  MdIconModule
+  MdSidenav
 } from '@angular/material';
 
 import { AuthGuardService } from '../../services';
 import { OSharedModule } from '../../shared';
+import { CommonModule } from '@angular/common';
 
 export const DEFAULT_INPUTS_O_SIDE_MENU = [
   // title [string]: menu title. Default: no value.
@@ -63,10 +60,7 @@ export class OSideMenuComponent {
   ],
   imports: [
     OSharedModule,
-    MdSidenavModule,
-    MdListModule,
-    MdToolbarModule,
-    MdIconModule
+    CommonModule
   ],
   exports: [
     OSideMenuComponent

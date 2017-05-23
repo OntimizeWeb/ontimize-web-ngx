@@ -7,10 +7,10 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { MdIconModule } from '@angular/material';
 
 import { OSideMenuModule, OSideMenuComponent } from './o-side-menu.component';
 import { OSharedModule } from '../../shared';
+import { CommonModule } from '@angular/common';
 
 export const DEFAULT_INPUTS_O_SIDE_MENU_ITEM = [
   // title [string]: menu item title. Default: no value.
@@ -67,7 +67,7 @@ export class OSideMenuItemComponent implements OnInit {
 
 @NgModule({
   declarations: [OSideMenuItemComponent],
-  imports: [OSharedModule, MdIconModule, RouterModule, OSideMenuModule],
+  imports: [OSharedModule, CommonModule, RouterModule, OSideMenuModule],
   exports: [OSideMenuItemComponent],
 })
 export class OSideMenuItemModule {

@@ -9,8 +9,6 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/mergeAll';
 
-import { MdCheckboxModule, MdListModule, MdToolbarModule } from '@angular/material';
-
 import { OLightTableButtonPanelModule } from './o-light-table-button-panel.component';
 import { OLightTableColumnModule, OLightTableColumnComponent } from './o-light-table-column.component';
 import { OntimizeService, DialogService } from '../../services';
@@ -20,6 +18,7 @@ import { Util } from '../../util/util';
 
 import { ObservableWrapper } from '../../util/async';
 import { OSharedModule } from '../../shared';
+import { CommonModule } from '@angular/common';
 
 export const DEFAULT_INPUTS_O_LIGHT_TABLE = [
   'refreshButton: refresh-button',
@@ -319,7 +318,7 @@ export class OLightTableComponent implements OnInit {
 
 @NgModule({
   declarations: [OLightTableComponent],
-  imports: [OSharedModule, MdCheckboxModule, MdListModule, MdToolbarModule, OLightTableColumnModule, OLightTableButtonPanelModule],
+  imports: [OSharedModule, CommonModule, OLightTableColumnModule, OLightTableButtonPanelModule],
   exports: [OLightTableComponent],
 })
 export class OLightTableModule {

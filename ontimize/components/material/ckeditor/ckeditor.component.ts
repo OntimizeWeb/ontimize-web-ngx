@@ -1,4 +1,3 @@
-// Imports
 import {
   Component,
   Input,
@@ -16,13 +15,14 @@ import {
   Optional,
   Inject
 } from '@angular/core';
+
 import {
   NG_VALUE_ACCESSOR,
   ControlValueAccessor
 } from '@angular/forms';
 
+import { CommonModule } from '@angular/common';
 import {
-  MdInputModule,
   MdPlaceholder,
   MdHint
 } from '@angular/material';
@@ -334,7 +334,7 @@ export class CKEditor implements ControlValueAccessor {
 
 @NgModule({
   declarations: [CKEditor],
-  imports: [OSharedModule, MdInputModule],
+  imports: [OSharedModule, CommonModule],
   exports: [CKEditor],
 })
 export class MdCKEditorModule {

@@ -4,12 +4,12 @@ import {
   NgModule,
   ViewEncapsulation
 } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 
-import { MdIconModule, MdInputModule, MdInputDirective } from '@angular/material';
+import { MdInputDirective } from '@angular/material';
 
 import { OSharedModule } from '../../shared';
+import { CommonModule } from '@angular/common';
 import { InputConverter } from '../../decorators';
 import { OFormComponent } from '../form/o-form.component';
 import { OFormValue } from '../form/OFormValue';
@@ -211,7 +211,7 @@ export class OImageComponent extends OFormDataComponent implements OnInit {
 
 @NgModule({
   declarations: [OImageComponent],
-  imports: [FormsModule, ReactiveFormsModule, OSharedModule, MdInputModule, MdIconModule],
+  imports: [OSharedModule, CommonModule],
   exports: [OImageComponent],
 })
 export class OImageModule {

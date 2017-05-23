@@ -7,6 +7,7 @@ import {
 // import { MdIconModule, MdButtonModule } from '@angular/material';
 
 import { OSharedModule } from '../../shared';
+import { CommonModule } from '@angular/common';
 
 export const DEFAULT_INPUTS_O_BUTTON = [
   'oattr: attr',
@@ -58,8 +59,7 @@ export class OButtonComponent implements OnInit {
 
 @NgModule({
   declarations: [OButtonComponent],
-  // imports: [OSharedModule, MdIconModule, MdButtonModule],
-  imports: [OSharedModule],
+  imports: [OSharedModule, CommonModule],
   exports: [OButtonComponent],
 })
 export class OButtonModule {

@@ -4,10 +4,11 @@ import {
   ElementRef,
   ViewEncapsulation
 } from '@angular/core';
-import { MdToolbarModule, MdIconModule } from '@angular/material';
+
 import { AuthGuardService } from '../../services';
 import { OTranslateService } from '../../services';
 import { OSharedModule } from '../../shared';
+import { CommonModule } from '@angular/common';
 
 export const DEFAULT_INPUTS_O_BAR_MENU = [
   // title [string]: menu title. Default: no value.
@@ -84,7 +85,7 @@ export class OBarMenuComponent {
 
 @NgModule({
   declarations: [OBarMenuComponent],
-  imports: [OSharedModule, MdIconModule, MdToolbarModule],
+  imports: [OSharedModule, CommonModule],
   exports: [OBarMenuComponent],
 })
 export class OBarMenuModule {

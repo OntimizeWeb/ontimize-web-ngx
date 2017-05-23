@@ -9,12 +9,11 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { MdIconModule } from '@angular/material';
-
 import { OTranslateService } from '../../services';
 
 import { OSideMenuModule, OSideMenuComponent } from './o-side-menu.component';
 import { OSharedModule } from '../../shared';
+import { CommonModule } from '@angular/common';
 
 export const DEFAULT_INPUTS_O_LOCALE_SIDE_MENU_ITEM = [
   // title [string]: menu item title. Default: no value.
@@ -85,7 +84,7 @@ export class OLocaleSideMenuItemComponent implements OnInit {
 
 @NgModule({
   declarations: [OLocaleSideMenuItemComponent],
-  imports: [OSharedModule, MdIconModule, RouterModule, OSideMenuModule],
+  imports: [OSharedModule, CommonModule, RouterModule, OSideMenuModule],
   exports: [OLocaleSideMenuItemComponent],
 })
 export class OLocaleSideMenuItemModule {

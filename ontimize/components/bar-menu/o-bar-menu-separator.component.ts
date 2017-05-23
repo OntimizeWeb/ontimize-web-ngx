@@ -5,6 +5,7 @@ import {
 } from '@angular/core';
 import { OBarMenuModule, OBarMenuComponent } from './o-bar-menu.component';
 import { OSharedModule } from '../../shared';
+import { CommonModule } from '@angular/common';
 
 
 @Component({
@@ -24,7 +25,7 @@ export class OBarMenuSeparatorComponent {
 
 @NgModule({
   declarations: [OBarMenuSeparatorComponent],
-  imports: [OSharedModule, OBarMenuModule],
+  imports: [OSharedModule, CommonModule, OBarMenuModule],
   exports: [OBarMenuSeparatorComponent],
 })
 export class OBarMenuSeparatorModule {

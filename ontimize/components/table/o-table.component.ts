@@ -55,6 +55,7 @@ import { Util } from '../../util/util';
 import { OFormComponent } from '../form/o-form.component';
 import { OFormValue } from '../form/OFormValue';
 import { OSharedModule } from '../../shared';
+import { CommonModule } from '@angular/common';
 
 import './o-table.loader';
 
@@ -1211,9 +1212,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   protected handleColumnWidth(settings) {
+    var self = this;
     var tableEl = ($('#' + this.oattr) as any);
     if (!tableEl.is(':visible')) {
-      var self = this;
       if (typeof this.columnWidthHandlerInterval === 'undefined') {
         this.columnWidthHandlerInterval = setInterval(function () {
           if (tableEl.is(':visible')) {
@@ -2377,10 +2378,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   ],
   imports: [
     OSharedModule,
-    MdMenuModule,
-    MdIconModule,
-    MdButtonModule,
-    MdProgressSpinnerModule,
+    CommonModule,
     RouterModule
   ],
   exports: [OTableComponent,

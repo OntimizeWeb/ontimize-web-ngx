@@ -5,10 +5,10 @@ import {
   NgModule,
   ViewEncapsulation
 } from '@angular/core';
-import { MdIconModule } from '@angular/material';
 
 import { OSideMenuModule, OSideMenuComponent } from './o-side-menu.component';
 import { OSharedModule } from '../../shared';
+import { CommonModule } from '@angular/common';
 
 export const DEFAULT_INPUTS_O_SIDE_MENU_GROUP = [
   // title [string]: menu group title. Default: no value.
@@ -43,7 +43,7 @@ export class OSideMenuGroupComponent {
 
 @NgModule({
   declarations: [OSideMenuGroupComponent],
-  imports: [OSharedModule, MdIconModule, OSideMenuModule],
+  imports: [OSharedModule, CommonModule,OSideMenuModule],
   exports: [OSideMenuGroupComponent],
 })
 export class OSideMenuGroupModule {

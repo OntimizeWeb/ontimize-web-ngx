@@ -13,7 +13,9 @@ import {
 import { MdIconModule } from '@angular/material';
 import { OBarMenuModule, OBarMenuComponent } from './o-bar-menu.component';
 import { OTranslateService } from '../../services';
+
 import { OSharedModule } from '../../shared';
+import { CommonModule } from '@angular/common';
 
 export const DEFAULT_INPUTS_O_BAR_MENU_GROUP = [
   // title [string]: menu group title. Default: no value.
@@ -82,7 +84,7 @@ export class OBarMenuGroupComponent implements OnInit {
 
 @NgModule({
   declarations: [OBarMenuGroupComponent],
-  imports: [OSharedModule, MdIconModule, OBarMenuModule],
+  imports: [OSharedModule, CommonModule, MdIconModule, OBarMenuModule],
   exports: [OBarMenuGroupComponent],
 })
 export class OBarMenuGroupModule {

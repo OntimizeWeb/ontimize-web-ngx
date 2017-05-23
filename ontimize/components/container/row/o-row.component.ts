@@ -8,7 +8,7 @@ import {
 import { OFormComponent } from '../../form/o-form.component';
 import { OTranslateService } from '../../../services';
 import { OSharedModule } from '../../../shared';
-
+import { CommonModule } from '@angular/common';
 export const DEFAULT_INPUTS_O_ROW = [
   'oattr: attr',
   'titleLabel: title-label',
@@ -151,7 +151,7 @@ export class ORowComponent implements OnInit {
 
 @NgModule({
   declarations: [ORowComponent],
-  imports: [OSharedModule],
+  imports: [OSharedModule, CommonModule],
   exports: [ORowComponent],
 })
 export class ORowModule {

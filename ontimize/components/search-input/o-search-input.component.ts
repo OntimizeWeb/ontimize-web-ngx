@@ -3,14 +3,14 @@ import {
   NgModule,
   ViewEncapsulation
 } from '@angular/core';
-import { FormGroup, FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormGroup, FormControl} from '@angular/forms';
 
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/distinctUntilChanged';
 
-import { MdInputModule } from '@angular/material';
 import { OTranslateService } from '../../services';
 import { OSharedModule } from '../../shared';
+import { CommonModule } from '@angular/common';
 
 export const DEFAULT_INPUTS_O_SEARCH_INPUT = [
   'placeholder'
@@ -87,7 +87,7 @@ export class OSearchInputComponent implements OnInit {
 
 @NgModule({
   declarations: [OSearchInputComponent],
-  imports: [OSharedModule, FormsModule, ReactiveFormsModule, MdInputModule],
+  imports: [OSharedModule, CommonModule],
   exports: [OSearchInputComponent],
 })
 export class OSearchInputModule {

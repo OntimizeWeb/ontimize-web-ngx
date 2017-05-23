@@ -7,14 +7,10 @@ import {
   ElementRef,
   Renderer,
   Optional,
-  NgModule,
-  ModuleWithProviders
+  NgModule
 } from '@angular/core';
 
-import {
-  MdIconModule,
-  MdListModule
-} from '@angular/material';
+import { CommonModule } from '@angular/common';
 
 import { OListItemComponent } from '../list-item/o-list-item.component';
 import { OListItemTextRenderer } from './o-list-item-text-renderer.class';
@@ -72,9 +68,8 @@ export class OListItemTextComponent extends OListItemTextRenderer {
 @NgModule({
   declarations: [OListItemTextComponent],
   imports: [
-    OSharedModule,
-    MdIconModule,
-    MdListModule
+    CommonModule,
+    OSharedModule
   ],
   exports: [OListItemTextComponent]
 })

@@ -4,7 +4,7 @@ import {
   NgModule,
   ViewEncapsulation
 } from '@angular/core';
-
+import { CommonModule } from '@angular/common';
 import { ValidatorFn } from '@angular/forms/src/directives/validators';
 import { OSharedModule } from '../../../shared';
 import { OFormComponent } from '../../form/o-form.component';
@@ -77,7 +77,7 @@ export class OCurrencyInputComponent extends ORealInputComponent implements OnIn
 
 @NgModule({
   declarations: [OCurrencyInputComponent],
-  imports: [OSharedModule, ORealInputModule],
+  imports: [OSharedModule, CommonModule, ORealInputModule],
   exports: [OCurrencyInputComponent, ORealInputModule],
 })
 export class OCurrencyInputModule {

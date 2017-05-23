@@ -6,13 +6,12 @@ import {
 } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { MdIconModule, MdToolbarModule, MdButtonModule } from '@angular/material';
-
 import { OFormComponent } from './o-form.component';
 import { InputConverter } from '../../decorators';
 import { Util } from '../../util/util';
 import { DialogService, NavigationService } from '../../services';
 import { OSharedModule } from '../../shared';
+import { CommonModule } from '@angular/common';
 
 export const DEFAULT_INPUTS_O_FORM_TOOLBAR = [
   'labelHeader: label-header',
@@ -234,7 +233,7 @@ export class OFormToolbarComponent implements OnInit {
 
 @NgModule({
   declarations: [OFormToolbarComponent],
-  imports: [OSharedModule, MdIconModule, MdToolbarModule, MdButtonModule ],
+  imports: [OSharedModule, CommonModule ],
   exports: [OFormToolbarComponent],
 })
 export class OFormToolbarModule {

@@ -5,11 +5,10 @@ import {
   ViewEncapsulation, ElementRef
 } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { FormGroup, ReactiveFormsModule, FormControl, FormsModule } from '@angular/forms';
+import { FormGroup, FormControl } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/observable/combineLatest';
-import { MdProgressBarModule } from '@angular/material';
 
 import { dataServiceFactory } from '../../services/data-service.provider';
 import { OntimizeService, DialogService, NavigationService } from '../../services';
@@ -20,6 +19,7 @@ import { OFormToolbarModule, OFormToolbarComponent } from './o-form-toolbar.comp
 import { OFormValue } from './OFormValue';
 import { Util, SQLTypes } from '../../utils';
 import { OSharedModule } from '../../shared';
+import { CommonModule } from '@angular/common';
 
 export const enum Mode {
   QUERY,
@@ -1226,7 +1226,7 @@ export class OFormComponent implements OnInit, OnDestroy {
 
 @NgModule({
   declarations: [OFormComponent],
-  imports: [OSharedModule, FormsModule, ReactiveFormsModule, OFormToolbarModule, MdProgressBarModule],
+  imports: [OSharedModule, CommonModule, OFormToolbarModule],
   exports: [OFormComponent, OFormToolbarModule],
 })
 export class OFormModule {

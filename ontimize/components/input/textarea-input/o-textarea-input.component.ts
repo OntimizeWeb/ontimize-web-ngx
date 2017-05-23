@@ -5,6 +5,7 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 
+import { CommonModule } from '@angular/common';
 import { OSharedModule } from '../../../shared';
 import { InputConverter } from '../../../decorators';
 import { OFormComponent } from '../../form/o-form.component';
@@ -62,7 +63,7 @@ export class OTextareaInputComponent extends OTextInputComponent {
 
 @NgModule({
   declarations: [OTextareaInputComponent],
-  imports: [OSharedModule, OTextInputModule],
+  imports: [OSharedModule, CommonModule, OTextInputModule],
   exports: [OTextareaInputComponent, OTextInputModule]
 })
 export class OTextareaInputModule {

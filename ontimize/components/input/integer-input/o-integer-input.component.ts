@@ -5,7 +5,7 @@ import {
   NgModule,
   ViewEncapsulation
 } from '@angular/core';
-
+import { CommonModule } from '@angular/common';
 import { FormControl } from '@angular/forms';
 import { ValidatorFn } from '@angular/forms/src/directives/validators';
 import { OSharedModule } from '../../../shared';
@@ -220,7 +220,7 @@ export class OIntegerInputComponent extends OTextInputComponent implements OnIni
 
 @NgModule({
   declarations: [OIntegerInputComponent],
-  imports: [OSharedModule, OTextInputModule],
+  imports: [OSharedModule, CommonModule, OTextInputModule],
   exports: [OIntegerInputComponent, OTextInputModule],
 })
 export class OIntegerInputModule {

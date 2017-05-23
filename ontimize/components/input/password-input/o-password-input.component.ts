@@ -4,6 +4,8 @@ import {
   NgModule,
   ViewEncapsulation
 } from '@angular/core';
+
+import { CommonModule } from '@angular/common';
 import { OSharedModule } from '../../../shared';
 import { OFormComponent } from '../../form/o-form.component';
 import {
@@ -47,7 +49,7 @@ export class OPasswordInputComponent extends OTextInputComponent implements OnIn
 
 @NgModule({
   declarations: [OPasswordInputComponent],
-  imports: [OSharedModule, OTextInputModule],
+  imports: [OSharedModule, CommonModule, OTextInputModule],
   exports: [OPasswordInputComponent, OTextInputModule],
 })
 export class OPasswordInputModule {

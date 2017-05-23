@@ -4,6 +4,7 @@ import {
   NgModule,
   ViewEncapsulation
 } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { OSharedModule } from '../../../shared';
 import { OFormComponent } from '../../form/o-form.component';
 import {
@@ -64,7 +65,7 @@ export class OPercentInputComponent extends ORealInputComponent implements OnIni
 
 @NgModule({
   declarations: [OPercentInputComponent],
-  imports: [OSharedModule, ORealInputModule],
+  imports: [OSharedModule, CommonModule, ORealInputModule],
   exports: [OPercentInputComponent, ORealInputModule],
 })
 export class OPercentInputModule {

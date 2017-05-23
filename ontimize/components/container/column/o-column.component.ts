@@ -8,7 +8,7 @@ import {
 import { OFormComponent } from '../../form/o-form.component';
 import { OTranslateService } from '../../../services';
 import { OSharedModule } from '../../../shared';
-
+import { CommonModule } from '@angular/common';
 export const DEFAULT_INPUTS_O_COLUMN = [
   'oattr: attr',
   'titleLabel: title-label',
@@ -151,7 +151,7 @@ export class OColumnComponent implements OnInit {
 
 @NgModule({
   declarations: [OColumnComponent],
-  imports: [OSharedModule],
+  imports: [OSharedModule, CommonModule],
   exports: [OColumnComponent],
 })
 export class OColumnModule {

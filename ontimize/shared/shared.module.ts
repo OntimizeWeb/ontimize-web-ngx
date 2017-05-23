@@ -1,5 +1,4 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
@@ -37,7 +36,6 @@ import { OCustomMaterialModule } from './custom.material.module';
   //   ODialogComponent
   // ],
   exports: [
-    CommonModule,
     FormsModule,
     ReactiveFormsModule,
     OTranslateModule,

@@ -11,12 +11,7 @@ import {
   EventEmitter
 } from '@angular/core';
 
-import {
-  MdIconModule,
-  MdCardModule,
-  MdButtonModule,
-  MdListModule
-} from '@angular/material';
+import { CommonModule } from '@angular/common';
 
 import { InputConverter } from '../../../decorators';
 import { OListItemComponent } from '../list-item/o-list-item.component';
@@ -86,10 +81,7 @@ export class OListItemCardImageComponent extends OListItemCardRenderer {
   declarations: [OListItemCardImageComponent],
   imports: [
     OSharedModule,
-    MdIconModule,
-    MdCardModule,
-    MdButtonModule,
-    MdListModule
+    CommonModule
   ],
   exports: [OListItemCardImageComponent]
 })

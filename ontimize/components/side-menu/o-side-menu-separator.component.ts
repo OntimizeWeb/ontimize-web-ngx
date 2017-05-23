@@ -6,6 +6,7 @@ import {
 
 import { OSideMenuModule, OSideMenuComponent } from './o-side-menu.component';
 import { OSharedModule } from '../../shared';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'o-side-menu-separator',
@@ -25,7 +26,7 @@ export class OSideMenuSeparatorComponent {
 
 @NgModule({
   declarations: [OSideMenuSeparatorComponent],
-  imports: [OSharedModule, OSideMenuModule],
+  imports: [OSharedModule, CommonModule, OSideMenuModule],
   exports: [OSideMenuSeparatorComponent],
 })
 export class OSideMenuSeparatorModule {

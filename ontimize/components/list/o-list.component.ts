@@ -10,8 +10,8 @@ import { RouterModule } from '@angular/router';
 import { ObservableWrapper } from '../../util/async';
 
 import { MdCheckbox } from '@angular/material';
-import { MdListModule, MdIconModule, MdToolbarModule, MdButtonModule, MdProgressSpinnerModule } from '@angular/material';
 import { OSharedModule } from '../../shared';
+import { CommonModule } from '@angular/common';
 import { OntimizeService } from '../../services';
 import { dataServiceFactory } from '../../services/data-service.provider';
 import { OSearchInputModule, OSearchInputComponent } from '../search-input/o-search-input.component';
@@ -513,7 +513,7 @@ export class OListComponent extends OServiceComponent implements OnInit, IList, 
 
 @NgModule({
   declarations: [OListComponent],
-  imports: [OSharedModule, MdListModule, MdToolbarModule, MdIconModule, MdButtonModule, OListItemModule, OSearchInputModule, MdProgressSpinnerModule, RouterModule],
+  imports: [OSharedModule, CommonModule,OListItemModule, OSearchInputModule,RouterModule],
   exports: [OListComponent],
   entryComponents: [MdCheckbox]
 })

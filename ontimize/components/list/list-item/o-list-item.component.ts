@@ -12,11 +12,10 @@ import {
   AfterContentInit,
   Optional,
   ViewChild,
-  NgModule,
-  ModuleWithProviders
+  NgModule
 } from '@angular/core';
-
-import { MdListModule, MdIconModule, MdCheckboxModule, MdLine, MdListAvatarCssMatStyler, MdListItem } from '@angular/material';
+import { CommonModule } from '@angular/common';
+import { MdLine, MdListAvatarCssMatStyler, MdListItem } from '@angular/material';
 import { OListComponent } from '../o-list.component';
 import { OSharedModule } from '../../../shared';
 
@@ -110,7 +109,7 @@ export class OListItemComponent implements AfterContentInit {
 
 @NgModule({
   declarations: [OListItemComponent],
-  imports: [OSharedModule, MdListModule, MdIconModule, MdCheckboxModule],
+  imports: [OSharedModule, CommonModule],
   exports: [OListItemComponent],
 })
 export class OListItemModule {

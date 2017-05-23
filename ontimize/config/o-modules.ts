@@ -60,9 +60,6 @@ import { OSharedModule } from '../shared';
 
 export const ONTIMIZE_EXPORTS_MODULES: any = [
   // Standard modules
-  // ,
-  // FormsModule,
-  // ReactiveFormsModule,
   HttpModule,
   BrowserAnimationsModule,
 

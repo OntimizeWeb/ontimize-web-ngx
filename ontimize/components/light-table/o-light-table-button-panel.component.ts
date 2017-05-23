@@ -4,8 +4,8 @@ import {Component, Inject, forwardRef,
 } from '@angular/core';
 import {OLightTableComponent} from './o-light-table.component';
 
-import { MdIconModule, MdToolbarModule, MdButtonModule } from '@angular/material';
 import { OSharedModule } from '../../shared';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'o-light-table-button-panel',
@@ -25,7 +25,7 @@ export class OLightTableButtonPanelComponent {
 
 @NgModule({
   declarations: [OLightTableButtonPanelComponent],
-  imports: [OSharedModule, MdIconModule, MdToolbarModule, MdButtonModule],
+  imports: [OSharedModule, CommonModule],
   exports: [OLightTableButtonPanelComponent],
 })
 export class OLightTableButtonPanelModule {

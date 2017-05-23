@@ -11,10 +11,9 @@ import {
   NgModule,
   ViewEncapsulation
 } from '@angular/core';
-
+import { CommonModule } from '@angular/common';
 import {
-  MdInputDirective,
-  MdButtonModule
+  MdInputDirective
 } from '@angular/material';
 
 import { ValidatorFn } from '@angular/forms/src/directives/validators';
@@ -463,7 +462,7 @@ export class ODateInputComponent extends OTextInputComponent implements OnInit {
   imports: [
     OTextInputModule,
     OSharedModule,
-    MdButtonModule
+    CommonModule
   ],
   exports: [
     ODateInputComponent,

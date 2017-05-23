@@ -4,7 +4,7 @@ import {
   NgModule,
   ViewEncapsulation
 } from '@angular/core';
-
+import { CommonModule } from '@angular/common';
 import { ValidatorFn } from '@angular/forms/src/directives/validators';
 import { OSharedModule } from '../../../shared';
 import { OFormComponent } from '../../form/o-form.component';
@@ -57,7 +57,7 @@ export class OEmailInputComponent extends OTextInputComponent implements OnInit 
 
 @NgModule({
   declarations: [OEmailInputComponent],
-  imports: [OSharedModule, OTextInputModule],
+  imports: [OSharedModule, CommonModule, OTextInputModule],
   exports: [OEmailInputComponent, OTextInputModule],
 })
 export class OEmailInputModule {

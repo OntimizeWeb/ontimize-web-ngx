@@ -5,11 +5,12 @@ import {
   NgModule,
   ViewEncapsulation
 } from '@angular/core';
-import { FormsModule, ReactiveFormsModule, FormControl, Validators } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { FormControl, Validators } from '@angular/forms';
 import { ValidatorFn } from '@angular/forms/src/directives/validators';
 
 import { MdCKEditorModule, CKEditor } from '../../material/ckeditor/ckeditor.component';
-import { MdInputModule, MdTabGroup, MdTab } from '@angular/material';
+import { MdTabGroup, MdTab } from '@angular/material';
 import { OSharedModule } from '../../../shared';
 
 import {
@@ -318,7 +319,7 @@ export class OHTMLInputComponent implements IComponent, IFormControlComponent, I
 
 @NgModule({
   declarations: [OHTMLInputComponent],
-  imports: [OSharedModule, FormsModule, ReactiveFormsModule, MdInputModule, MdCKEditorModule],
+  imports: [OSharedModule, CommonModule, MdCKEditorModule],
   exports: [OHTMLInputComponent],
 })
 export class OHTMLInputModule {

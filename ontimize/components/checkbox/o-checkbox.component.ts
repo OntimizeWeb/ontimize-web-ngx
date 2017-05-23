@@ -6,10 +6,8 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MdInputModule, MdCheckboxModule } from '@angular/material';
-
 import { OSharedModule } from '../../shared';
+import { CommonModule } from '@angular/common';
 import { OFormComponent } from '../form/o-form.component';
 import { OFormValue } from '../form/OFormValue';
 import { OFormDataComponent } from '../o-form-data-component.class';
@@ -117,8 +115,7 @@ export class OCheckboxComponent extends OFormDataComponent implements OnInit {
 
 @NgModule({
   declarations: [OCheckboxComponent],
-  // imports: [FormsModule, ReactiveFormsModule, OSharedModule],
-  imports: [FormsModule, ReactiveFormsModule, OSharedModule, MdInputModule, MdCheckboxModule],
+  imports: [OSharedModule, CommonModule],
   exports: [OCheckboxComponent],
 })
 export class OCheckboxModule {

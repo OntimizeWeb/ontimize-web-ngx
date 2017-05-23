@@ -7,6 +7,7 @@ import {
 import { OLightTableComponent } from './o-light-table.component';
 import { MomentService } from '../../services';
 import { OSharedModule } from '../../shared';
+import { CommonModule } from '@angular/common';
 
 export const DEFAULT_INPUTS_O_LIGHT_TABLE_COLUMN = [
   'id',
@@ -85,7 +86,7 @@ export class OLightTableColumnComponent implements OnInit {
 
 @NgModule({
   declarations: [OLightTableColumnComponent],
-  imports: [OSharedModule],
+  imports: [OSharedModule, CommonModule],
   exports: [OLightTableColumnComponent],
 })
 export class OLightTableColumnModule {
