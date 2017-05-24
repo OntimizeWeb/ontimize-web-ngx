@@ -578,9 +578,8 @@ export class OFormComponent implements OnInit, OnDestroy {
   }
 
   protected determinateFormMode() {
-    var _path = '';
     let segment = this.urlSegments[this.urlSegments.length - 1];
-    _path = segment['path'];
+    var _path = segment ? segment['path'] : '';
 
     if (_path === 'new') {
       //insert mode

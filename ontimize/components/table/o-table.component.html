@@ -1,5 +1,5 @@
 <div [class.hidden-loading]="!loading" class="spinner-container" flex="100" layout="row" layout-align="center center">
-  <md-progress-spinner mode="indeterminate">
+  <md-progress-spinner *ngIf="loading" mode="indeterminate">
   </md-progress-spinner>
 
 </div>

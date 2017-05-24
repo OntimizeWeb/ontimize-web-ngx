@@ -825,11 +825,13 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   protected onOptionsMenuShow(args: any) {
     var menuEl = ($('.mat-overlay-container .mat-menu') as any);
     var menuContainer = menuEl.parent();
-    var menuBtn = ($(this.elRef.nativeElement) as any).find('.o-table-menu-button');
-    var menuBtnOffset = menuBtn.offset();
-    var top = menuBtnOffset.top + menuBtn.outerHeight(true) - 30;
-    var left = menuBtnOffset.left - menuEl.outerWidth(true) + menuBtn.outerWidth(true) - 16;
-    menuContainer.scss('transform', 'translateX(' + left + 'px) translateY(' + top + 'px)');
+    if (menuContainer) {
+      var menuBtn = ($(this.elRef.nativeElement) as any).find('.o-table-menu-button');
+      var menuBtnOffset = menuBtn.offset();
+      var top = menuBtnOffset.top + menuBtn.outerHeight(true) - 30;
+      var left = menuBtnOffset.left - menuEl.outerWidth(true) + menuBtn.outerWidth(true) - 16;
+      menuContainer.scss('transform', 'translateX(' + left + 'px) translateY(' + top + 'px)');
+    }
   }
 
   protected parseTableOptions() {

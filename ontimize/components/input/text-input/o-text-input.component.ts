@@ -1,20 +1,25 @@
 import {
-  Component, Inject, Injector, forwardRef, ElementRef, OnInit, EventEmitter,
-  Optional, ViewChild,
+  Component,
+  Inject,
+  Injector,
+  forwardRef,
+  ElementRef,
+  OnInit,
+  EventEmitter,
+  Optional,
+  ViewChild,
   NgModule,
   ViewEncapsulation
 } from '@angular/core';
-import { FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { Validators } from '@angular/forms';
 import { ValidatorFn } from '@angular/forms/src/directives/validators';
-
-import { MdInputModule, MdInputDirective } from '@angular/material';
+import { MdInputDirective } from '@angular/material';
 
 import { OSharedModule } from '../../../shared';
-import { CommonModule } from '@angular/common';
 import { InputConverter } from '../../../decorators';
 import { OFormComponent } from '../../form/o-form.component';
 import { OFormValue } from '../../form/OFormValue';
-
 import { OFormDataComponent } from '../../o-form-data-component.class';
 
 export const DEFAULT_INPUTS_O_TEXT_INPUT = [
@@ -121,8 +126,8 @@ export class OTextInputComponent extends OFormDataComponent implements OnInit {
 
 @NgModule({
   declarations: [OTextInputComponent],
-  imports: [FormsModule, ReactiveFormsModule, OSharedModule, CommonModule, MdInputModule],
-  exports: [OTextInputComponent, FormsModule, ReactiveFormsModule, MdInputModule]
+  imports: [OSharedModule, CommonModule],
+  exports: [OTextInputComponent]
 })
 export class OTextInputModule {
 }
