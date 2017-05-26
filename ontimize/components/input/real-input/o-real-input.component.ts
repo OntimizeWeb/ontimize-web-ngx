@@ -24,9 +24,10 @@ import {
   DEFAULT_OUTPUTS_O_INTEGER_INPUT
 } from '../integer-input/o-integer-input.component';
 
-import { ORealPipe } from '../../../pipes';
-import { IRealPipeArgument } from '../../../interfaces/pipes.interfaces';
-
+import {
+  ORealPipe,
+  IRealPipeArgument
+} from '../../../pipes';
 
 export const DEFAULT_INPUTS_O_REAL_INPUT = [
   ...DEFAULT_INPUTS_O_INTEGER_INPUT,

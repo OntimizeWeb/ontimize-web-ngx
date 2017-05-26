@@ -7,8 +7,7 @@ import { ActivatedRoute } from '@angular/router';
 import { EventEmitter } from '@angular/core';
 
 import { ObservableWrapper } from '../../../util/async';
-
-import { IList } from '../../../interfaces/list.interface';
+import { IList } from '../o-list.component';
 
 import { MdListItem } from '@angular/material';
 

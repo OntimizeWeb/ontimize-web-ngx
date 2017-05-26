@@ -1,7 +1,12 @@
-import {Directive, ElementRef, forwardRef, Inject} from '@angular/core';
+import {
+  Directive,
+  ElementRef,
+  forwardRef,
+  Inject
+} from '@angular/core';
 
-import {IComponent} from '../interfaces';
-import {OFormComponent} from '../components';
+import { IComponent } from '../components/o-component.class';
+import { OFormComponent } from '../components';
 
 @Directive({
     selector: '[form-component]'

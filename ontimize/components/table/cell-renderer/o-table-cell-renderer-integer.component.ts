@@ -1,7 +1,7 @@
 import { Component, OnInit, Inject, Injector, forwardRef } from '@angular/core';
 
-import { ITableCellRenderer } from '../../../interfaces';
-import { OTableColumnComponent } from '../o-table-column.component';
+
+import { OTableColumnComponent, ITableCellRenderer } from '../o-table-column.component';
 import { NumberService } from '../../../services';
 import { Util } from '../../../util/util';
 

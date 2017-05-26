@@ -1,6 +1,13 @@
 import { Pipe, PipeTransform, Injector } from '@angular/core';
 import { OIntegerPipe } from './o-integer.pipe';
-import { IRealPipeArgument } from '../interfaces/pipes.interfaces';
+
+export interface IRealPipeArgument {
+  grouping?: boolean;
+  thousandSeparator?: string;
+  locale?: string;
+  decimalSeparator?: string;
+  decimalDigits?: number;
+}
 
 @Pipe({
   name: 'oReal'

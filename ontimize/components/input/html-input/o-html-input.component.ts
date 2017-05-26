@@ -14,11 +14,13 @@ import { MdTabGroup, MdTab } from '@angular/material';
 import { OSharedModule } from '../../../shared';
 
 import {
-  IComponent,
+  IFormDataComponent,
   IFormControlComponent,
-  IFormDataTypeComponent,
-  IFormDataComponent
-} from '../../../interfaces';
+  IFormDataTypeComponent
+} from '../../o-form-data-component.class';
+
+import { IComponent } from '../../o-component.class';
+
 import { InputConverter } from '../../../decorators';
 import { OFormComponent, Mode } from '../../form/o-form.component';
 import { OFormValue } from '../../form/OFormValue';

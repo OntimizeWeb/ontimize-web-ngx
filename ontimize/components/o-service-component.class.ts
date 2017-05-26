@@ -11,13 +11,18 @@ import { Subscription } from 'rxjs/Subscription';
 
 import { InputConverter } from '../decorators';
 import { OntimizeService, AuthGuardService, OTranslateService, LocalStorageService, DialogService } from '../services';
-import { ILocalStorageComponent } from '../interfaces';
+
 import { OFormComponent } from './form/o-form.component';
 
 import { OListInitializationOptions } from './list/o-list.component';
 import { OTableInitializationOptions } from './table/o-table.component';
 
 import { Util } from '../utils';
+
+export interface ILocalStorageComponent {
+  getDataToStore(): Object;
+  getComponentKey(): string;
+}
 
 export const DEFAULT_INPUTS_O_SERVICE_COMPONENT = [
   // attr [string]: list identifier. It is mandatory if data are provided through the data attribute. Default: entity (if set).

@@ -19,12 +19,18 @@ import { OListItemModule } from './list-item/o-list-item.component';
 import { OFormComponent } from '../form/o-form.component';
 import { InputConverter } from '../../decorators';
 import { Util } from '../../util/util';
-import { IList } from '../../interfaces';
 import { OListItemComponent } from './list-item/o-list-item.component';
 import { OListItemDirective } from './list-item/o-list-item.directive';
 
 import { OServiceComponent } from '../o-service-component.class';
 import { Observable } from 'rxjs/Observable';
+
+export interface IList {
+  registerListItemDirective(item: OListItemDirective): void;
+  getKeys(): Array<string>;
+  setSelected(item: Object);
+  isItemSelected(item: Object);
+}
 
 export const DEFAULT_INPUTS_O_LIST = [
   ...OServiceComponent.DEFAULT_INPUTS_O_SERVICE_COMPONENT,

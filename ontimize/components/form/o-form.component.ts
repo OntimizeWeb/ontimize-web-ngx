@@ -13,7 +13,13 @@ import 'rxjs/add/observable/combineLatest';
 import { dataServiceFactory } from '../../services/data-service.provider';
 import { OntimizeService, DialogService, NavigationService } from '../../services';
 import { InputConverter } from '../../decorators';
-import { IComponent, IFormControlComponent, IFormDataTypeComponent } from '../../interfaces';
+
+import {
+  IFormControlComponent,
+  IFormDataTypeComponent
+} from '../o-form-data-component.class';
+
+import { IComponent } from '../o-component.class';
 
 import { OFormToolbarModule, OFormToolbarComponent } from './o-form-toolbar.component';
 import { OFormValue } from './OFormValue';
@@ -419,8 +425,7 @@ export class OFormComponent implements OnInit, OnDestroy {
     }, 0);
   }
 
-  executeToolbarAction(action: string, ...args: any[]) {
-
+  executeToolbarAction(action: string) {
     switch (action) {
       case OFormComponent.BACK_ACTION: this._backAction(); break;
       case OFormComponent.CLOSE_DETAIL_ACTION: this._closeDetailAction(); break;
@@ -577,7 +582,7 @@ export class OFormComponent implements OnInit, OnDestroy {
     this.onFormInitStream.emit(true);
   }
 
-  protected determinateFormMode() {
+  protected determinateFormMode_deprecated() {
     let segment = this.urlSegments[this.urlSegments.length - 1];
     var _path = segment ? segment['path'] : '';
 
@@ -591,6 +596,29 @@ export class OFormComponent implements OnInit, OnDestroy {
     } else {
       this.setFormMode(Mode.INITIAL);
     }
+  }
+
+  protected determinateFormMode() {
+    var self = this;
+    this.actRoute.parent
+      .url
+      .subscribe(urlSegments => {
+
+        let segment = urlSegments[urlSegments.length - 1];
+        var _path = segment ? segment['path'] : '';
+
+        if (_path === 'new') {
+          //insert mode
+          self.setFormMode(Mode.INSERT);
+          return;
+        } else if (_path === 'edit') {
+          //edit mode
+          self.setFormMode(Mode.UPDATE);
+        } else {
+          self.setFormMode(Mode.INITIAL);
+        }
+
+      });
   }
 
   /**
@@ -683,7 +711,7 @@ export class OFormComponent implements OnInit, OnDestroy {
     this.onFormDataLoaded.emit(data);
   }
 
-  _backAction(...args: any[]) {
+  _backAction() {
     this.router.navigate(['../../'], { relativeTo: this.actRoute })
       .catch(err => {
         console.error(err.message);
@@ -1020,6 +1048,7 @@ export class OFormComponent implements OnInit, OnDestroy {
   }
 
   protected postIncorrectInsert(result: any) {
+    console.log('[OFormComponent.postIncorrectInsert]', result);
     this.dialogService.alert('ERROR', 'MESSAGES.ERROR_INSERT');
   }
 
@@ -1063,6 +1092,7 @@ export class OFormComponent implements OnInit, OnDestroy {
   }
 
   protected postIncorrectUpdate(result: any) {
+    console.log('[OFormComponent.postIncorrectUpdate]', result);
     this.dialogService.alert('ERROR', 'MESSAGES.ERROR_UPDATE');
   }
 
@@ -1095,6 +1125,7 @@ export class OFormComponent implements OnInit, OnDestroy {
   }
 
   protected postIncorrectDelete(result: any) {
+    console.log('[OFormComponent.postIncorrectDelete]', result);
     this.dialogService.alert('ERROR', 'MESSAGES.ERROR_DELETE');
   }
 

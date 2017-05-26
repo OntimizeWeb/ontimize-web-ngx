@@ -3,14 +3,28 @@ import { FormControl, Validators } from '@angular/forms';
 import { ValidatorFn } from '@angular/forms/src/directives/validators';
 
 import {
-  IFormControlComponent, IFormDataTypeComponent,
-  IFormDataComponent
-} from '../interfaces';
-import { OComponent } from './o-component.class';
+  OComponent,
+  IComponent
+} from './o-component.class';
+
 import { InputConverter } from '../decorators';
 import { OFormComponent, Mode } from './form/o-form.component';
 import { OFormValue } from './form/OFormValue';
 import { SQLTypes } from '../utils';
+
+
+export interface IFormDataTypeComponent extends IComponent {
+  getSQLType(): number;
+}
+
+export interface IFormControlComponent extends IComponent {
+  getControl(): FormControl;
+}
+
+export interface IFormDataComponent {
+  data(value: any);
+  isAutomaticBinding(): Boolean;
+}
 
 export class OFormDataComponent extends OComponent implements IFormControlComponent, IFormDataTypeComponent, IFormDataComponent {
   /* Inputs */

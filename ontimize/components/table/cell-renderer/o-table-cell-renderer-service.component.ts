@@ -1,8 +1,8 @@
 import * as $ from 'jquery';
 import { Component, OnInit, Inject, Injector, forwardRef } from '@angular/core';
 
-import { ITableCellRenderer } from '../../../interfaces';
-import { OTableColumnComponent } from '../o-table-column.component';
+
+import { OTableColumnComponent, ITableCellRenderer } from '../o-table-column.component';
 import { OTableComponent } from '../o-table.component';
 import { OntimizeService } from '../../../services';
 import { dataServiceFactory } from '../../../services/data-service.provider';

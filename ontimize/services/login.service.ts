@@ -5,12 +5,24 @@ import {
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { ObservableWrapper } from '../util/async';
-import { SessionInfo, IAuthService } from '../interfaces';
+import { IAuthService } from '../util/util';
 import { OntimizeService, DialogService } from '../services';
 import { APP_CONFIG, Config } from '../config/app-config';
 
+export interface SessionInfo {
+  id: number;
+  user: string;
+}
+
+export interface ILoginService {
+  login(user, password): Observable<any>;
+  logout(): void;
+  sessionExpired();
+  isLoggedIn(): boolean;
+}
+
 @Injectable()
-export class LoginService {
+export class LoginService implements ILoginService {
 
   public static LOGIN_ROUTE = 'login';
 

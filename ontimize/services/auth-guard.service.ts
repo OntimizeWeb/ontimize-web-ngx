@@ -2,11 +2,15 @@ import { Injector, Injectable, ReflectiveInjector } from '@angular/core';
 import { CanActivate, Router, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 
-import { IProfileService } from '../interfaces';
 import { OntimizeService, LoginService } from '../services';
 import { APP_CONFIG, Config } from '../config/app-config';
 import { Util } from '../util/util';
 import { dataServiceFactory } from './data-service.provider';
+
+export interface IProfileService {
+  isRestricted(route: string): Promise<boolean>;
+  getPermissions(route: string, attr: string): Promise<any>;
+}
 
 @Injectable()
 export class AuthGuardService implements CanActivate, IProfileService {

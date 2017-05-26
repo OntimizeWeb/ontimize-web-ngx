@@ -1,5 +1,36 @@
-import { IDataService, IFormDataComponent } from '../interfaces';
 import { Base64 } from './base64';
+import { Observable } from 'rxjs/Observable';
+import { IFormDataComponent } from '../components/o-form-data-component.class';
+import { SessionInfo } from '../services/login.service';
+
+export interface IDataService {
+  getDefaultServiceConfiguration(serviceName?: string): Object;
+  configureService(config: any): void;
+  query(kv?: Object, av?: Array<string>, entity?: string, sqltypes?: Object): Observable<any>;
+  advancedQuery(kv?: Object, av?: Array<string>, entity?: string, sqltypes?: Object,
+    offset?: number, pagesize?: number, orderby?: Array<Object>): Observable<any>;
+  insert(av: Object, entity?: string, sqltypes?: Object): Observable<any>;
+  update(kv: Object, av: Object, entity?: string, sqltypes?: Object): Observable<any>;
+  'delete'(kv: Object, entity?: string, sqltypes?: Object): Observable<any>;
+}
+
+export interface IAuthService {
+  startsession(user: string, password: string): Observable<any>;
+  endsession(user: string, sessionId: number): Observable<any>;
+}
+
+export interface IOntimizeServiceConf {
+  urlBase?: string;
+  session: SessionInfo;
+  entity?: string;
+  kv?: Object;
+  av?: Array<string>;
+  sqltypes?: Object;
+  pagesize?: number;
+  offset?: number;
+  orderby?: Array<Object>;
+  totalsize?: number;
+}
 
 export class Util {
 

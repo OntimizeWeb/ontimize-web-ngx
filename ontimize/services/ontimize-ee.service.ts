@@ -5,10 +5,10 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/share';
 
-import { IAuthService, IDataService } from '../interfaces';
 import { LoginService, SERVICE_CONFIG } from '../services';
 import { APP_CONFIG, Config } from '../config/app-config';
 
+import { IAuthService, IDataService } from '../util/util';
 
 @Injectable()
 export class OntimizeEEService implements IAuthService, IDataService {
