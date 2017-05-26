@@ -137,6 +137,7 @@ export const DEFAULT_INPUTS_O_TABLE = [
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE = [
+  'onClick'
 ];
 
 export interface OTableInitializationOptions {
