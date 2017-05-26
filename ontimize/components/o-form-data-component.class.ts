@@ -85,9 +85,9 @@ export class OFormDataComponent extends OComponent implements IFormControlCompon
     return this.autoBinding;
   }
 
-   getValue() : any {
+  getValue(): any {
     if (this.value instanceof OFormValue) {
-      if (this.value.value) {
+      if (this.value.value !== undefined) {
         return this.value.value;
       }
     }

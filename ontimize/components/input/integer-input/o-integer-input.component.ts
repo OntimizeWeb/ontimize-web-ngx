@@ -180,7 +180,7 @@ export class OIntegerInputComponent extends OTextInputComponent implements OnIni
         ($ as any)(inputElement).width(($ as any)(inputElement).outerWidth(true));
       }
       inputElement.type = this.focused ? 'number' : 'text';
-      inputElement.value = val;
+      inputElement.value = (val !== undefined) ? val : '';
     }
   }
 
