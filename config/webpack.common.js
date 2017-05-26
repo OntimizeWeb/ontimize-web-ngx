@@ -6,6 +6,7 @@ const helpers = require('./helpers');
  */
 // problem with copy-webpack-plugin
 const AssetsPlugin = require('assets-webpack-plugin');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const NormalModuleReplacementPlugin = require('webpack/lib/NormalModuleReplacementPlugin');
 const ContextReplacementPlugin = require('webpack/lib/ContextReplacementPlugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
@@ -34,9 +35,15 @@ module.exports = function (options) {
     resolve: {
       extensions: ['.ts', '.js', '.html']
     },
+    externals: [/^\@angular\//,/^\@ngx-translate\//,/^\@rxjs\//],
     module: {
+      // loaders: [{
+      //   test: /\.scss$/,
+      //   use: ExtractTextPlugin.extract({
+      //     use: ['style-loader', 'css-loader', 'sass-loader'],
+      //   })
+      // }],
       rules: [
-
         {
           test: /\.ts$/,
           loaders: ['awesome-typescript-loader?configFileName=tsconfig-webpack.json', 'angular2-template-loader'],
@@ -48,11 +55,11 @@ module.exports = function (options) {
           loader: 'raw-loader',
           exclude: /\.async\.(html|css)$/
         },
-        {
-          test: /\.scss$/,
-          use: ['style-loader', 'css-loader', 'sass-loader'],
-          include: [helpers.root('ontimize')]
-        },
+        // {
+        //   test: /\.scss$/,
+        //   use: ['style-loader', 'css-loader', 'sass-loader'],
+        //   include: [helpers.root('ontimize')]
+        // },
 
         {
           test: /\.(ts|js)$/,
@@ -62,6 +69,12 @@ module.exports = function (options) {
             helpers.root('node_modules/rxjs'),
             helpers.root('node_modules/@angular')
           ]
+        },
+
+        {
+          test: /\.scss$/,
+          exclude: /node_modules/,
+          loaders: ['raw-loader', 'sass-loader'] // sass-loader not scss-loader
         }
         // , {
         //   test: /\.json$/,
@@ -90,75 +103,13 @@ module.exports = function (options) {
         /angular(\\|\/)core(\\|\/)@angular/,
         helpers.root('./ontimize')
       ),
-
       new CopyWebpackPlugin([
-        // { from: 'config', to: '../config' },
         { from: 'CHANGELOG.md', to: '../' },
         { from: 'LICENSE', to: '../' },
         { from: 'README.md', to: '../' },
         { from: 'package.json', to: '../' },
         { from: 'ontimize.scss', to: '../' },
-        { from: 'ontimize/**/*.scss', to: '../' },
-        { from: 'ontimize/**/*.html', to: '../' },
-        { from: 'ontimize/components/table/vendor/**', to: '../' }
-        // ,
-        // { from: 'dist1/**/*.metadata.json', to: '../../dist' }
-      ]),
-      //
-
-      // new AssetsPlugin({
-      //   path: helpers.root('dist'),
-      //   filename: 'webpack-assets.json',
-      //   prettyPrint: true
-      // }),
-
-
-      // new HtmlElementsPlugin({
-      //   headTags: require('./head-config.common')
-      // }),
-
-      // new LoaderOptionsPlugin({}),
-
-      // // Fix Angular 2
-      // new NormalModuleReplacementPlugin(
-      //   /facade(\\|\/)async/,
-      //   helpers.root('node_modules/@angular/core/src/facade/async.js')
-      // ),
-      // new NormalModuleReplacementPlugin(
-      //   /facade(\\|\/)collection/,
-      //   helpers.root('node_modules/@angular/core/src/facade/collection.js')
-      // ),
-      // new NormalModuleReplacementPlugin(
-      //   /facade(\\|\/)errors/,
-      //   helpers.root('node_modules/@angular/core/src/facade/errors.js')
-      // ),
-      // new NormalModuleReplacementPlugin(
-      //   /facade(\\|\/)lang/,
-      //   helpers.root('node_modules/@angular/core/src/facade/lang.js')
-      // ),
-      // new NormalModuleReplacementPlugin(
-      //   /facade(\\|\/)math/,
-      //   helpers.root('node_modules/@angular/core/src/facade/math.js')
-      // ),
-
-      new ngcWebpack.NgcWebpackPlugin({
-        disabled: false,
-        //  disabled: !AOT,
-        tsConfig: helpers.root('tsconfig.ngc.json'),
-        resourceOverride: helpers.root('config/resource-override.js')
-      })
-
+      ])
     ]
-    // ,
-
-    // node: {
-    //   global: true,
-    //   crypto: 'empty',
-    //   process: true,
-    //   module: false,
-    //   clearImmediate: false,
-    //   setImmediate: false
-    // }
-
   };
 }

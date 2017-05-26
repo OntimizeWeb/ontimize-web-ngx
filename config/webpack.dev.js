@@ -5,8 +5,10 @@ const commonConfig = require('./webpack.common.js'); // the settings that are co
 /**
  * Webpack Plugins
  */
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin');
+const ngcWebpack = require('ngc-webpack');
 
 /**
  * Webpack Constants
@@ -15,7 +17,6 @@ const ENV = process.env.ENV = process.env.NODE_ENV = 'development';
 const METADATA = webpackMerge(commonConfig({ env: ENV }).metadata, {
   ENV: ENV
 });
-
 
 module.exports = function (options) {
   return webpackMerge(commonConfig({ env: ENV }), {
@@ -30,35 +31,7 @@ module.exports = function (options) {
       libraryTarget: 'umd'
     },
 
-    // externals: {
-    //     // require("jquery") is external and available
-    //     //  on the global var jQuery
-    //     "jquery": "jquery"
-    // },
-
-    // externals: {
-    //   '/^\@angular\//': '/^\@angular\//',
-    //   'jquery': 'jquery',
-    //   '/^\@rxjs\//' : '/^\@rxjs\//'
-    // },
-
-    externals: [/^\@angular\//,/^\@rxjs\//],
-// , 'jquery', 'jQuery']
-    // resolve : {
-    //     alias: {
-    //         jquery: "./vendor/jquery/jquery.js",
-    //     }
-    // },
-
     module: {
-      loaders: [{
-        test: /\.scss$/,
-        use: ExtractTextPlugin.extract({
-          use: ['style-loader', 'css-loader', 'sass-loader'],
-        })
-      },
-      ],
-
       rules: [{
         test: /\.ts$/,
         use: [{
@@ -68,45 +41,21 @@ module.exports = function (options) {
           }
         }
         ],
-        exclude: [helpers.root('node_modules'), /\.(spec|e2e)\.ts$/, '@angular/compiler']
-      }
-        // ,
-        // {
-        //   test: /\.scss$/,
-        //   use: ExtractTextPlugin.extract({
-        //     use: ['style-loader', 'css-loader', 'sass-loader'],
-        //   })
-        // }
-
-        // , {
-        //   test: /\.css$/,
-        //   use: ['style-loader', 'css-loader'],
-        //   include: [helpers.root('ontimize')]
-        // }, {
-        //   test: /\.scss$/,
-        //   use: ['style-loader', 'css-loader', 'sass-loader'],
-        //   include: [helpers.root('ontimize')]
-        // }, {
-        //   test: /\.scss$/,
-        //   use: [{
-        //     loader: "style-loader"
-        //   }, {
-        //     loader: "css-loader",
-        //     options: {
-        //       sourceMap: true
-        //     }
-        //   }, {
-        //     loader: "sass-loader",
-        //     options: {
-        //       sourceMap: true
-        //     }
-        //   }]
-        // }
-      ]
+        exclude: [helpers.root('node_modules'), /\.(spec|e2e)\.ts$/,'@angular/compiler']
+      }]
     },
-
     plugins: [
-
+      new CopyWebpackPlugin([
+        { from: 'ontimize/**/*.scss', to: '../' },
+        { from: 'ontimize/**/*.html', to: '../' },
+        { from: 'ontimize/components/table/vendor/**', to: '../' }
+      ]),
+      new ngcWebpack.NgcWebpackPlugin({
+        disabled: false,
+        //  disabled: !AOT,
+        tsConfig: helpers.root('tsconfig.ngc.json'),
+        resourceOverride: helpers.root('config/resource-override.js')
+      }),
       new LoaderOptionsPlugin({
         debug: true,
         options: {

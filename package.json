@@ -20,6 +20,7 @@
     "test": "karma start",
     "clean": "rimraf dist",
     "webpack:dev": "npm run clean && webpack --config config/webpack.dev.js --progress",
+    "webpack:prod": "npm run clean && webpack --config config/webpack.prod.js --progress",
     "ontimizecss": "node-sass ontimize.scss dist/ontimize.css"
   },
   "peerDependencies": {
