@@ -5,15 +5,11 @@ const commonConfig = require('./webpack.common.js'); // the settings that are co
 /**
  * Webpack Plugins
  */
-const DefinePlugin = require('webpack/lib/DefinePlugin');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const IgnorePlugin = require('webpack/lib/IgnorePlugin');
 const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin');
-const NormalModuleReplacementPlugin = require('webpack/lib/NormalModuleReplacementPlugin');
-const ProvidePlugin = require('webpack/lib/ProvidePlugin');
 const UglifyJsPlugin = require('webpack/lib/optimize/UglifyJsPlugin');
 const OptimizeJsPlugin = require('optimize-js-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const ngcWebpack = require('ngc-webpack');
 /**
  * Webpack Constants
  */
@@ -45,8 +41,8 @@ module.exports = function (env) {
           }
         }
         ],
-        exclude: [helpers.root('node_modules'), /\.(spec|e2e)\.ts$/,'@angular/compiler']
-      } ]
+        exclude: [helpers.root('node_modules'), /\.(spec|e2e)\.ts$/, '@angular/compiler']
+      }]
     },
 
     plugins: [
@@ -61,7 +57,11 @@ module.exports = function (env) {
         { from: 'ontimize/components/container/*o-container.component.scss', to: '../' },
         { from: 'ontimize/components/input/*input.scss', to: '../' },
         { from: 'ontimize/components/**/*-theme.scss', to: '../' },
-        { from: 'ontimize/components/theming/*.scss', to: '../' }
+        { from: 'ontimize/components/theming/*.scss', to: '../' },
+
+        { from: 'ontimize/**/*.scss', to: '../' },
+        { from: 'ontimize/**/*.html', to: '../' },
+        { from: 'ontimize/components/table/vendor/**', to: '../' }
       ]),
 
       /**
@@ -83,6 +83,7 @@ module.exports = function (env) {
         // }, // debug
         // // comments: true //debug
         // comments: false //debug
+
         beautify: false, //prod
         output: {
           comments: false
@@ -105,26 +106,17 @@ module.exports = function (env) {
         }
       }),
 
-      // /**
-      //  * Plugin: NormalModuleReplacementPlugin
-      //  * Description: Replace resources that matches resourceRegExp with newResource
-      //  *
-      //  * See: http://webpack.github.io/docs/list-of-plugins.html#normalmodulereplacementplugin
-      //  */
-
-      // // new NormalModuleReplacementPlugin(
-      // //   /angular2-hmr/,
-      // //   helpers.root('config/empty.js')
-      // // ),
-
-      // // new NormalModuleReplacementPlugin(
-      // //   /zone\.js(\\|\/)dist(\\|\/)long-stack-trace-zone/,
-      // //   helpers.root('config/empty.js')
-      // // ),
       new LoaderOptionsPlugin({
         debug: true,
         options: {
         }
+      }),
+
+      new ngcWebpack.NgcWebpackPlugin({
+        disabled: false,
+        //  disabled: !AOT,
+        tsConfig: helpers.root('tsconfig.ngc.json'),
+        resourceOverride: helpers.root('config/resource-override.js')
       })
 
       // new LoaderOptionsPlugin({

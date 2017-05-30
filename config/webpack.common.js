@@ -5,15 +5,11 @@ const helpers = require('./helpers');
  * Webpack Plugins
  */
 // problem with copy-webpack-plugin
-const AssetsPlugin = require('assets-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const NormalModuleReplacementPlugin = require('webpack/lib/NormalModuleReplacementPlugin');
 const ContextReplacementPlugin = require('webpack/lib/ContextReplacementPlugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const HtmlElementsPlugin = require('./html-elements-plugin');
-const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin');
-const ngcWebpack = require('ngc-webpack');
 const ProvidePlugin = require('webpack/lib/ProvidePlugin');
+const ngcWebpack = require('ngc-webpack');
 
 /*
  * Webpack Constants
@@ -35,7 +31,7 @@ module.exports = function (options) {
     resolve: {
       extensions: ['.ts', '.js', '.html']
     },
-    externals: [/^\@angular\//,/^\@ngx-translate\//,/^\@rxjs\//],
+    externals: [/^\@angular\//, /^\@ngx-translate\//, /^\@rxjs\//],
     module: {
       // loaders: [{
       //   test: /\.scss$/,
@@ -60,7 +56,6 @@ module.exports = function (options) {
         //   use: ['style-loader', 'css-loader', 'sass-loader'],
         //   include: [helpers.root('ontimize')]
         // },
-
         {
           test: /\.(ts|js)$/,
           loader: 'source-map-loader',
@@ -96,19 +91,22 @@ module.exports = function (options) {
       new webpack.ProvidePlugin({
         $: "jquery",
         jQuery: "jquery",
-        jQuery: "jquery"
+        'window.jQuery': 'jquery',
+        'window.$': 'jquery'
       }),
 
       new ContextReplacementPlugin(
         /angular(\\|\/)core(\\|\/)@angular/,
         helpers.root('./ontimize')
       ),
+
       new CopyWebpackPlugin([
         { from: 'CHANGELOG.md', to: '../' },
         { from: 'LICENSE', to: '../' },
         { from: 'README.md', to: '../' },
         { from: 'package.json', to: '../' },
         { from: 'ontimize.scss', to: '../' },
+        { from: '.npmignore', to: '../' }
       ])
     ]
   };

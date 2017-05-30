@@ -6,7 +6,6 @@ const commonConfig = require('./webpack.common.js'); // the settings that are co
  * Webpack Plugins
  */
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin');
 const ngcWebpack = require('ngc-webpack');
 
@@ -41,7 +40,7 @@ module.exports = function (options) {
           }
         }
         ],
-        exclude: [helpers.root('node_modules'), /\.(spec|e2e)\.ts$/,'@angular/compiler']
+        exclude: [helpers.root('node_modules'), /\.(spec|e2e)\.ts$/, '@angular/compiler']
       }]
     },
     plugins: [
@@ -50,12 +49,14 @@ module.exports = function (options) {
         { from: 'ontimize/**/*.html', to: '../' },
         { from: 'ontimize/components/table/vendor/**', to: '../' }
       ]),
+
       new ngcWebpack.NgcWebpackPlugin({
         disabled: false,
         //  disabled: !AOT,
         tsConfig: helpers.root('tsconfig.ngc.json'),
         resourceOverride: helpers.root('config/resource-override.js')
       }),
+
       new LoaderOptionsPlugin({
         debug: true,
         options: {
