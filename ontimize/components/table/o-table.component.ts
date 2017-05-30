@@ -831,7 +831,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       var menuBtnOffset = menuBtn.offset();
       var top = menuBtnOffset.top + menuBtn.outerHeight(true) - 30;
       var left = menuBtnOffset.left - menuEl.outerWidth(true) + menuBtn.outerWidth(true) - 16;
-      menuContainer.scss('transform', 'translateX(' + left + 'px) translateY(' + top + 'px)');
+      menuContainer.css('transform', 'translateX(' + left + 'px) translateY(' + top + 'px)');
     }
   }
 
@@ -1714,6 +1714,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
           },
           err => {
             console.log('[OTable.queryData]: error', err);
+            self.setDataArray([]);
+            self.dataTable.fnClearTable(true);
             self.loaderSuscription.unsubscribe();
           }
           );

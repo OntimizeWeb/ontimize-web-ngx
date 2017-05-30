@@ -306,6 +306,8 @@ export class OListComponent extends OServiceComponent implements OnInit, IList, 
           }
           ObservableWrapper.callEmit(self.onListDataLoaded, self.dataResponseArray);
         }, err => {
+          console.log('[OList.queryData]: error', err);
+          self.setDataArray([]);
           self.loaderSuscription.unsubscribe();
         });
     }
@@ -519,7 +521,7 @@ export class OListComponent extends OServiceComponent implements OnInit, IList, 
 
 @NgModule({
   declarations: [OListComponent],
-  imports: [OSharedModule, CommonModule,OListItemModule, OSearchInputModule,RouterModule],
+  imports: [OSharedModule, CommonModule, OListItemModule, OSearchInputModule, RouterModule],
   exports: [OListComponent],
   entryComponents: [MdCheckbox]
 })
