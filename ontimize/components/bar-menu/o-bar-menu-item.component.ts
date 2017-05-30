@@ -6,17 +6,15 @@ import {
   forwardRef,
   ElementRef,
   NgModule,
-  ModuleWithProviders,
   HostListener,
   ViewEncapsulation
 } from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {RouterModule} from '@angular/router';
-import { MdIconModule } from '@angular/material';
+import { RouterModule } from '@angular/router';
 
-import {OBarMenuModule, OBarMenuComponent} from './o-bar-menu.component';
-import { OTranslateModule } from '../../pipes/o-translate.pipe';
+import { OBarMenuModule, OBarMenuComponent } from './o-bar-menu.component';
 import { OTranslateService } from '../../services';
+import { OSharedModule } from '../../shared';
+import { CommonModule } from '@angular/common';
 
 export const DEFAULT_INPUTS_O_BAR_MENU_ITEM = [
   // title [string]: menu item title. Default: no value.
@@ -37,10 +35,8 @@ export const DEFAULT_INPUTS_O_BAR_MENU_ITEM = [
 
 @Component({
   selector: 'o-bar-menu-item',
-  templateUrl: './bar-menu/o-bar-menu-item.component.html',
-  styleUrls: [
-    './bar-menu/o-bar-menu-item.component.css'
-  ],
+  template: require('./o-bar-menu-item.component.html'),
+  styles: [require('./o-bar-menu-item.component.scss')],
   inputs: [
     ...DEFAULT_INPUTS_O_BAR_MENU_ITEM
   ],
@@ -75,7 +71,7 @@ export class OBarMenuItemComponent implements OnInit {
   }
 
   public ngOnInit() {
-    if (typeof(this.route) === 'string') {
+    if (typeof (this.route) === 'string') {
       this.menu.authGuardService.isRestricted(this.route)
         .then(restricted => this.restricted = restricted)
         .catch(err => this.restricted = true);
@@ -110,14 +106,8 @@ export class OBarMenuItemComponent implements OnInit {
 
 @NgModule({
   declarations: [OBarMenuItemComponent],
-  imports: [CommonModule, MdIconModule, RouterModule, OBarMenuModule, OTranslateModule],
+  imports: [OSharedModule, CommonModule, RouterModule, OBarMenuModule],
   exports: [OBarMenuItemComponent],
 })
 export class OBarMenuItemModule {
-  static forRoot(): ModuleWithProviders {
-    return {
-      ngModule: OBarMenuItemModule,
-      providers: []
-    };
-  }
 }

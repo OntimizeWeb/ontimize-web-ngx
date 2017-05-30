@@ -7,15 +7,14 @@ import {
   ElementRef,
   Renderer,
   Optional,
-  NgModule,
-  ModuleWithProviders
+  NgModule
 } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
-import { MdIconModule, MdCardModule, MdButtonModule } from '@angular/material';
 
 import { OListItemComponent } from '../list-item/o-list-item.component';
 import { OListItemCardRenderer } from './o-list-item-card-renderer.class';
+import { OSharedModule } from '../../../shared';
 
 export const DEFAULT_INPUTS_O_LIST_ITEM_CARD = [
   ...OListItemCardRenderer.DEFAULT_INPUTS_O_CARD_RENDERER
@@ -27,8 +26,8 @@ export const DEFAULT_OUTPUTS_O_LIST_ITEM_CARD = [
 
 @Component({
   selector: 'o-list-item-card',
-  templateUrl: 'list/renderers/o-list-item-card.component.html',
-  styleUrls: ['list/renderers/o-list-item-card.component.css'],
+  template: require('./o-list-item-card.component.html'),
+  styles: [require('./o-list-item-card.component.scss')],
   inputs: [
     ...DEFAULT_INPUTS_O_LIST_ITEM_CARD
   ],
@@ -57,14 +56,11 @@ export class OListItemCardComponent extends OListItemCardRenderer {
 
 @NgModule({
   declarations: [OListItemCardComponent],
-  imports: [MdIconModule, CommonModule, MdCardModule, MdButtonModule],
+  imports: [
+    OSharedModule,
+    CommonModule
+  ],
   exports: [OListItemCardComponent]
 })
 export class OListItemCardModule {
-  static forRoot(): ModuleWithProviders {
-    return {
-      ngModule: OListItemCardModule,
-      providers: []
-    };
-  }
 }

@@ -3,15 +3,16 @@ import {
   ViewChild,
   Injector,
   NgModule,
-  ModuleWithProviders,
-  ViewEncapsulation} from '@angular/core';
-import {
-  MdSidenavModule, MdSidenav, MdListModule,
-  MdToolbarModule, MdIconModule
-} from '@angular/material';
-import {AuthGuardService} from '../../services';
-import {OTranslateModule} from '../../pipes/o-translate.pipe';
+  ViewEncapsulation
+} from '@angular/core';
 
+import {
+  MdSidenav
+} from '@angular/material';
+
+import { AuthGuardService } from '../../services';
+import { OSharedModule } from '../../shared';
+import { CommonModule } from '@angular/common';
 
 export const DEFAULT_INPUTS_O_SIDE_MENU = [
   // title [string]: menu title. Default: no value.
@@ -20,10 +21,8 @@ export const DEFAULT_INPUTS_O_SIDE_MENU = [
 
 @Component({
   selector: 'o-side-menu',
-  templateUrl: './side-menu/o-side-menu.component.html',
-  styleUrls: [
-    './side-menu/o-side-menu.component.css'
-  ],
+  template: require('./o-side-menu.component.html'),
+  styles: [require('./o-side-menu.component.scss')],
   inputs: [
     ...DEFAULT_INPUTS_O_SIDE_MENU
   ],
@@ -53,19 +52,19 @@ export class OSideMenuComponent {
       this.opened = false;
     });
   }
-
 }
 
 @NgModule({
-  declarations: [OSideMenuComponent],
-  imports: [MdSidenavModule, MdListModule, MdToolbarModule, MdIconModule, OTranslateModule],
-  exports: [OSideMenuComponent],
+  declarations: [
+    OSideMenuComponent
+  ],
+  imports: [
+    OSharedModule,
+    CommonModule
+  ],
+  exports: [
+    OSideMenuComponent
+  ]
 })
 export class OSideMenuModule {
-  static forRoot(): ModuleWithProviders {
-    return {
-      ngModule: OSideMenuModule,
-      providers: []
-    };
-  }
 }

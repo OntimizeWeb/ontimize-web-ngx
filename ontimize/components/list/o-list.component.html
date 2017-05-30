@@ -6,7 +6,7 @@
   </div>
 
   <md-toolbar class="toolbar-filter-list" [class.dense]="odense" *ngIf="controls">
-    <div class="md-toolbar-tools" layout="row" layout-fill layout-align="start center">
+    <div class="mat-toolbar-tools" layout="row" layout-fill layout-align="start center">
       <button type="button" md-icon-button aria-label="Refresh" (click)="reloadData()" *ngIf="refreshButton">
         <md-icon>refresh</md-icon>
       </button>
@@ -24,8 +24,7 @@
   </md-toolbar>
 
   <div layout="column" class="fill-remaining">
-    <md-list class="md-list" [attr.dense]="getDense()" [class.selectable]="selectable" (scroll)="onScroll($event)"
-      [class.o-list-1-detail-buttons]="(editButtonInRow || detailButtonInRow) && !(editButtonInRow && detailButtonInRow)"
+    <md-list class="mat-list" [attr.dense]="odense || undefined" [class.selectable]="selectable" (scroll)="onScroll($event)" [class.o-list-1-detail-buttons]="(editButtonInRow || detailButtonInRow) && !(editButtonInRow && detailButtonInRow)"
       [class.o-list-2-detail-buttons]="editButtonInRow && detailButtonInRow">
       <md-list-item *ngIf="!dataArray.length" layout="row" layout-align="center center" style="cursor: default;">
         <h3 md-line>{{ 'TABLE.EMPTY' | oTranslate }}</h3>
@@ -33,7 +32,10 @@
       <ng-content></ng-content>
 
     </md-list>
-    <button *ngIf="insertButton" md-fab (click)="add()" class="add-button">
+    <button *ngIf="insertButton && odense" md-mini-fab (click)="add()" class="add-button">
+      <md-icon>add</md-icon>
+    </button>
+    <button *ngIf="insertButton && !odense" md-fab (click)="add()" class="add-button">
       <md-icon>add</md-icon>
     </button>
   </div>

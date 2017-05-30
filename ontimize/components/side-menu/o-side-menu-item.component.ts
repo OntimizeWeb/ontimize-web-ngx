@@ -4,15 +4,13 @@ import {
   Inject,
   forwardRef,
   NgModule,
-  ModuleWithProviders,
   ViewEncapsulation
 } from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {RouterModule} from '@angular/router';
-import { MdIconModule } from '@angular/material';
+import { RouterModule } from '@angular/router';
 
 import { OSideMenuModule, OSideMenuComponent } from './o-side-menu.component';
-import {OTranslateModule} from '../../pipes/o-translate.pipe';
+import { OSharedModule } from '../../shared';
+import { CommonModule } from '@angular/common';
 
 export const DEFAULT_INPUTS_O_SIDE_MENU_ITEM = [
   // title [string]: menu item title. Default: no value.
@@ -30,10 +28,8 @@ export const DEFAULT_INPUTS_O_SIDE_MENU_ITEM = [
 
 @Component({
   selector: 'o-side-menu-item',
-  templateUrl: './side-menu/o-side-menu-item.component.html',
-  styleUrls: [
-    './side-menu/o-side-menu-item.component.css'
-  ],
+  template: require('./o-side-menu-item.component.html'),
+  styles: [require('./o-side-menu-item.component.scss')],
   inputs: [
     ...DEFAULT_INPUTS_O_SIDE_MENU_ITEM
   ],
@@ -52,12 +48,12 @@ export class OSideMenuItemComponent implements OnInit {
 
   protected restricted: boolean;
 
-  constructor(@Inject(forwardRef(() => OSideMenuComponent)) menu: OSideMenuComponent) {
+  constructor( @Inject(forwardRef(() => OSideMenuComponent)) menu: OSideMenuComponent) {
     this.menu = menu;
   }
 
   public ngOnInit() {
-    if (typeof(this.route) === 'string') {
+    if (typeof (this.route) === 'string') {
       this.menu.authGuardService.isRestricted(this.route)
         .then(restricted => this.restricted = restricted)
         .catch(err => this.restricted = true);
@@ -71,14 +67,8 @@ export class OSideMenuItemComponent implements OnInit {
 
 @NgModule({
   declarations: [OSideMenuItemComponent],
-  imports: [CommonModule, MdIconModule, RouterModule, OSideMenuModule, OTranslateModule],
+  imports: [OSharedModule, CommonModule, RouterModule, OSideMenuModule],
   exports: [OSideMenuItemComponent],
 })
 export class OSideMenuItemModule {
-  static forRoot(): ModuleWithProviders {
-    return {
-      ngModule: OSideMenuItemModule,
-      providers: []
-    };
-  }
 }

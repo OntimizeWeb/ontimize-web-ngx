@@ -7,8 +7,7 @@ import { ActivatedRoute } from '@angular/router';
 import { EventEmitter } from '@angular/core';
 
 import { ObservableWrapper } from '../../../util/async';
-
-import { IList } from '../../../interfaces/list.interface';
+import { IList } from '../o-list.component';
 
 import { MdListItem } from '@angular/material';
 
@@ -75,12 +74,12 @@ export class OListItemDirective implements OnInit, OnDestroy {
           }
         }
         if (_act) {
-          this._el.nativeElement.classList.add('md-active');
+          this._el.nativeElement.classList.add('mat-active');
         } else {
-          this._el.nativeElement.classList.remove('md-active');
+          this._el.nativeElement.classList.remove('mat-active');
         }
       } else {
-        this._el.nativeElement.classList.remove('md-active');
+        this._el.nativeElement.classList.remove('mat-active');
       }
     }
   }

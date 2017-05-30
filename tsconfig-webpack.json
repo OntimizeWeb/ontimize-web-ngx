@@ -1,0 +1,41 @@
+{
+  "compileOnSave": false,
+  "buildOnSave": false,
+  "compilerOptions": {
+    "target": "es5",
+    "module": "es2015",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "sourceMap": true,
+    "declaration": true,
+    "allowSyntheticDefaultImports": true,
+    "removeComments": true,
+    "outDir": "dist",
+    "noImplicitReturns": true,
+    "moduleResolution": "node",
+    "listFiles": true,
+    "noUnusedLocals": false,
+    "types": [
+      "hammerjs",
+      "node"
+    ],
+    "typeRoots": [
+      "node_modules/@types"
+    ],
+    "lib": [
+      "dom",
+      "es2015"
+    ]
+  },
+  "files": [
+    "index.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ],
+  "angularCompilerOptions": {
+    "strictMetadataEmit": true,
+    "skipTemplateCodegen": true
+  }
+}

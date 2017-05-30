@@ -1,25 +1,24 @@
 import {
   Component, Inject, forwardRef,
   NgModule,
-  ModuleWithProviders,
-  ViewEncapsulation} from '@angular/core';
+  ViewEncapsulation
+} from '@angular/core';
 
 import { OSideMenuModule, OSideMenuComponent } from './o-side-menu.component';
-import {OTranslateModule} from '../../pipes/o-translate.pipe';
+import { OSharedModule } from '../../shared';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'o-side-menu-separator',
-  templateUrl: './side-menu/o-side-menu-separator.component.html',
-  styleUrls: [
-    './side-menu/o-side-menu-separator.component.css'
-  ],
+  template: require('./o-side-menu-separator.component.html'),
+  styles: [require('./o-side-menu-separator.component.scss')],
   encapsulation: ViewEncapsulation.None
 })
 export class OSideMenuSeparatorComponent {
 
   protected menu: OSideMenuComponent;
 
-  constructor(@Inject(forwardRef(() => OSideMenuComponent)) menu: OSideMenuComponent) {
+  constructor( @Inject(forwardRef(() => OSideMenuComponent)) menu: OSideMenuComponent) {
     this.menu = menu;
   }
 
@@ -27,14 +26,8 @@ export class OSideMenuSeparatorComponent {
 
 @NgModule({
   declarations: [OSideMenuSeparatorComponent],
-  imports: [OSideMenuModule, OTranslateModule],
+  imports: [OSharedModule, CommonModule, OSideMenuModule],
   exports: [OSideMenuSeparatorComponent],
 })
 export class OSideMenuSeparatorModule {
-  static forRoot(): ModuleWithProviders {
-    return {
-      ngModule: OSideMenuSeparatorModule,
-      providers: []
-    };
-  }
 }

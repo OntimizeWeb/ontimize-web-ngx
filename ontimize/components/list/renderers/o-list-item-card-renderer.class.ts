@@ -1,10 +1,7 @@
 import {
-  Inject,
   Injector,
-  forwardRef,
   ElementRef,
   Renderer,
-  Optional,
   EventEmitter
 } from '@angular/core';
 
@@ -43,7 +40,7 @@ export class OListItemCardRenderer {
     public elRef: ElementRef,
     protected _renderer: Renderer,
     protected _injector: Injector,
-    @Optional() @Inject(forwardRef(() => OListItemComponent)) protected _listItem: OListItemComponent
+    protected _listItem: OListItemComponent
   ) {
     this.elRef.nativeElement.setAttribute('flex', '');
     this.elRef.nativeElement.setAttribute('layout-padding', '');
@@ -56,7 +53,7 @@ export class OListItemCardRenderer {
   modifyMdListItemElement() {
     if (this.elRef.nativeElement && this.elRef.nativeElement.parentElement) {
       let mdListItem = this.elRef.nativeElement.parentElement.parentElement;
-      mdListItem.querySelector('.md-list-text').remove();
+      mdListItem.querySelector('.mat-list-text').remove();
       mdListItem.classList.add('o-card-item');
     }
   }

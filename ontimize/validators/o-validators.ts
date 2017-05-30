@@ -20,6 +20,7 @@ export class OValidators {
     if (control.value && control.value.length > 0 && !EMAIL_REGEXP.test(control.value)) {
       return { 'invalidEmailAddress': true };
     }
+    return {};
   }
 
   /**

@@ -8,16 +8,15 @@ import {
   Renderer,
   Optional,
   NgModule,
-  ModuleWithProviders,
   EventEmitter
 } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
-import { MdIconModule, MdCardModule, MdButtonModule } from '@angular/material';
 
 import { InputConverter } from '../../../decorators';
 import { OListItemComponent } from '../list-item/o-list-item.component';
 import { OListItemCardRenderer } from './o-list-item-card-renderer.class';
+import { OSharedModule } from '../../../shared';
 
 export const DEFAULT_INPUTS_O_LIST_ITEM_CARD_IMAGE = [
   ...OListItemCardRenderer.DEFAULT_INPUTS_O_CARD_RENDERER,
@@ -30,8 +29,8 @@ export const DEFAULT_OUTPUTS_O_LIST_ITEM_CARD_IMAGE = [
 
 @Component({
   selector: 'o-list-item-card-image',
-  templateUrl: 'list/renderers/o-list-item-card-image.component.html',
-  styleUrls: ['list/renderers/o-list-item-card-image.component.css'],
+  template: require('./o-list-item-card-image.component.html'),
+  styles: [require('./o-list-item-card-image.component.scss')],
   inputs: [
     ...DEFAULT_INPUTS_O_LIST_ITEM_CARD_IMAGE,
     'content',
@@ -80,14 +79,11 @@ export class OListItemCardImageComponent extends OListItemCardRenderer {
 
 @NgModule({
   declarations: [OListItemCardImageComponent],
-  imports: [MdIconModule, CommonModule, MdCardModule, MdButtonModule],
+  imports: [
+    OSharedModule,
+    CommonModule
+  ],
   exports: [OListItemCardImageComponent]
 })
 export class OListItemCardImageModule {
-  static forRoot(): ModuleWithProviders {
-    return {
-      ngModule: OListItemCardImageModule,
-      providers: []
-    };
-  }
 }

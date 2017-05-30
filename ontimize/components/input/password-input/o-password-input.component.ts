@@ -2,10 +2,11 @@ import {
   Component, Inject, Injector, forwardRef, ElementRef, OnInit,
   Optional,
   NgModule,
-  ModuleWithProviders,
   ViewEncapsulation
 } from '@angular/core';
-import { OSharedModule } from '../../../shared.module';
+
+import { CommonModule } from '@angular/common';
+import { OSharedModule } from '../../../shared';
 import { OFormComponent } from '../../form/o-form.component';
 import {
   OTextInputModule, OTextInputComponent, DEFAULT_INPUTS_O_TEXT_INPUT,
@@ -22,8 +23,8 @@ export const DEFAULT_OUTPUTS_O_PASSWORD_INPUT = [
 
 @Component({
   selector: 'o-password-input',
-  templateUrl: '/input/password-input/o-password-input.component.html',
-  styleUrls: ['/input/password-input/o-password-input.component.css'],
+  template: require('./o-password-input.component.html'),
+  styles: [require('./o-password-input.component.scss')],
   inputs: [
     ...DEFAULT_INPUTS_O_PASSWORD_INPUT
   ],
@@ -48,14 +49,8 @@ export class OPasswordInputComponent extends OTextInputComponent implements OnIn
 
 @NgModule({
   declarations: [OPasswordInputComponent],
-  imports: [OSharedModule, OTextInputModule],
+  imports: [OSharedModule, CommonModule, OTextInputModule],
   exports: [OPasswordInputComponent, OTextInputModule],
 })
 export class OPasswordInputModule {
-  static forRoot(): ModuleWithProviders {
-    return {
-      ngModule: OPasswordInputModule,
-      providers: []
-    };
-  }
 }

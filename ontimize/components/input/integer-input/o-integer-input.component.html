@@ -1,7 +1,7 @@
 <div flex layout-fill [formGroup]="form?.formGroup"
     [mdTooltip]="tooltip" [mdTooltipPosition]="tooltipPosition" [mdTooltipShowDelay]="tooltipShowDelay">
     <md-input-container #innerInputContainer flex layout-fill>
-        <input md-input class="md-input" type="number" [attr.id]="oattr" [id]="oattr" layout-fill [formControlName]="oattr" [placeholder]="placeHolder"
+        <input mdInput class="mat-input" type="number" [attr.id]="oattr" [id]="oattr" layout-fill [formControlName]="oattr" [placeholder]="placeHolder"
             [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)" (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)"
             [readonly]="isReadOnly" [o-disabled]="innerInputContainer" [min]="min" [max]="max" [step]="step">
             <md-hint *ngIf="!isReadOnly && _fControl.touched && _fControl.errors">

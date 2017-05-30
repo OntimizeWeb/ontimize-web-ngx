@@ -1,4 +1,3 @@
-// Imports
 import {
   Component,
   Input,
@@ -12,19 +11,18 @@ import {
   forwardRef,
   QueryList,
   NgModule,
-  ModuleWithProviders,
   ViewEncapsulation,
   Optional,
   Inject
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import {
   NG_VALUE_ACCESSOR,
   ControlValueAccessor
 } from '@angular/forms';
 
+import { CommonModule } from '@angular/common';
 import {
-  MdInputModule,
   MdPlaceholder,
   MdHint
 } from '@angular/material';
@@ -32,6 +30,7 @@ import { Observable } from 'rxjs/Observable';
 
 import { InputConverter } from '../../../decorators';
 import { OHTMLInputComponent } from '../../input/html-input/o-html-input.component';
+import { OSharedModule } from '../../../shared';
 
 const noop = () => {
   //nothing to do
@@ -54,8 +53,8 @@ let nextUniqueId = 0;
 @Component({
   selector: 'ckeditor',
   providers: [CKEDITOR_CONTROL_VALUE_ACCESSOR],
-  templateUrl: '/material/ckeditor/ckeditor.component.html',
-  styleUrls: ['/material/ckeditor/ckeditor.component.css'],
+  template: require('./ckeditor.component.html'),
+  styles: [require('./ckeditor.component.scss')],
   encapsulation: ViewEncapsulation.None
 })
 export class CKEditor implements ControlValueAccessor {
@@ -141,7 +140,7 @@ export class CKEditor implements ControlValueAccessor {
 
   get value(): any {
     return this._value;
-  };
+  }
 
   @Input()
   set value(v) {
@@ -335,14 +334,8 @@ export class CKEditor implements ControlValueAccessor {
 
 @NgModule({
   declarations: [CKEditor],
-  imports: [CommonModule, MdInputModule],
+  imports: [OSharedModule, CommonModule],
   exports: [CKEditor],
 })
 export class MdCKEditorModule {
-  static forRoot(): ModuleWithProviders {
-    return {
-      ngModule: MdCKEditorModule,
-      providers: []
-    };
-  }
 }

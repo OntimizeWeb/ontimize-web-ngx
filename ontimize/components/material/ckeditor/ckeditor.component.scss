@@ -1,11 +1,8 @@
-@import 'ontimize/components/material/style/default-theme.scss';
-@import 'ontimize/components/material/style/mixins.scss';
-@import 'ontimize/components/material/style/variables.scss';
 
-$md-ckeditor-floating-placeholder-scale-factor: 0.75 !default;
+$mat-ckeditor-floating-placeholder-scale-factor: 0.75 !default;
 
 // Gradient for showing the dashed line when the input is disabled.
-$md-ckeditor-underline-disabled-background-image: linear-gradient(to right,
+$mat-ckeditor-underline-disabled-background-image: linear-gradient(to right,
         rgba(0, 0, 0, 0.26) 0%, rgba(0, 0, 0, 0.26) 33%, transparent 0%);
 
 /**
@@ -19,11 +16,11 @@ $md-ckeditor-underline-disabled-background-image: linear-gradient(to right,
 /**
  * Applies a floating placeholder above the input itself.
  */
-@mixin md-ckeditor-placeholder-floating {
+@mixin mat-ckeditor-placeholder-floating {
   display: block;
   padding-bottom: 5px;
-  transform: translateY(-100%) scale($md-ckeditor-floating-placeholder-scale-factor);
-  width: 100% / $md-ckeditor-floating-placeholder-scale-factor;
+  transform: translateY(-100%) scale($mat-ckeditor-floating-placeholder-scale-factor);
+  width: 100% / $mat-ckeditor-floating-placeholder-scale-factor;
 }
 
 .ckeditor{
@@ -33,7 +30,7 @@ $md-ckeditor-underline-disabled-background-image: linear-gradient(to right,
 ckeditor {
   display: inline-block;
   position: relative;
-  font-family: $md-font-family;
+  // font-family: $mat-font-family;
 
   // To avoid problems with text-align.
   text-align: left;
@@ -44,7 +41,7 @@ ckeditor {
 
 // Global wrapper. We need to apply margin to the element for spacing, but
 // cannot apply it to the host element directly.
-.md-ckeditor-wrapper {
+.mat-ckeditor-wrapper {
   margin: 16px 0;
 }
 
@@ -53,7 +50,7 @@ ckeditor {
 // this table.
 // Flex does not respect the baseline. What we really want is akin to a table
 // as want an inline-block where elements don't wrap.
-.md-ckeditor-table {
+.mat-ckeditor-table {
   display: inline-table;
   flex-flow: column;
   vertical-align: bottom;
@@ -64,14 +61,14 @@ ckeditor {
   }
 }
 
-.md-ckeditor-infix {
+.mat-ckeditor-infix {
   position: relative;
 }
 
 // The placeholder label. This is invisible unless it is. The logic to show it is
 // basically `empty || (float && (!empty || focused))`. Float is dependent on the
 // `floatingPlaceholder` input.
-.md-ckeditor-placeholder {
+.mat-ckeditor-placeholder {
   // The placeholder is after the <input>, but needs to be aligned top-left of the
   // infix <div>.
   position: absolute;
@@ -89,22 +86,16 @@ ckeditor {
   text-overflow: ellipsis;
   overflow-x: hidden;
 
-  transform: translateY(0);
-  transform-origin: bottom left;
-  transition: transform $swift-ease-out-duration $swift-ease-out-timing-function,
-              scale $swift-ease-out-duration $swift-ease-out-timing-function,
-              color $swift-ease-out-duration $swift-ease-out-timing-function,
-              width $swift-ease-out-duration $swift-ease-out-timing-function;
 
-  &.md-empty {
+  &.mat-empty {
     display: block;
     cursor: text;
     top: 65px;
   }
 
   // Show the placeholder above the input when it's not empty, or focused.
-  &.md-float:not(.md-empty), &.md-float.md-focused {
-    @include md-ckeditor-placeholder-floating;
+  &.mat-float:not(.mat-empty), &.mat-float.mat-focused {
+    @include mat-ckeditor-placeholder-floating;
     top: 0px;
   }
 
@@ -117,15 +108,15 @@ ckeditor {
 // Pseudo-class for Chrome and Safari auto-fill to move the placeholder to
 // the floating position. This is necessary because these browsers do not actually
 // fire any events when a form auto-fill is occurring.
-// Once the autofill is committed, a change event happen and the regular md-ckeditor
+// Once the autofill is committed, a change event happen and the regular mat-ckeditor
 // classes take over to fulfill this behaviour.
-input:-webkit-autofill + .md-ckeditor-placeholder {
-  @include md-ckeditor-placeholder-floating;
+input:-webkit-autofill + .mat-ckeditor-placeholder {
+  @include mat-ckeditor-placeholder-floating;
 }
 
 // The underline is what's shown under the input, its prefix and its suffix.
 // The ripple is the blue animation coming on top of it.
-.md-ckeditor-underline {
+.mat-ckeditor-underline {
   position: absolute;
   height: 1px;
   width: 100%;
@@ -133,37 +124,33 @@ input:-webkit-autofill + .md-ckeditor-placeholder {
   border-top-width: 1px;
   border-top-style: solid;
 
-  &.md-disabled {
+  &.mat-disabled {
     border-top: 0;
-    background-image: $md-ckeditor-underline-disabled-background-image;
+    background-image: $mat-ckeditor-underline-disabled-background-image;
     background-position: 0;
     background-size: 4px 1px;
     background-repeat: repeat-x;
   }
 
-  .md-ckeditor-ripple {
+  .mat-ckeditor-ripple {
     position: absolute;
     height: 2px;
     z-index: 1;
     top: -1px;
     width: 100%;
-    transform-origin: top;
     opacity: 0;
-    transform: scaleY(0);
-    transition: transform $swift-ease-out-duration $swift-ease-out-timing-function,
-                opacity $swift-ease-out-duration $swift-ease-out-timing-function;
 
-    &.md-focused {
+    &.mat-focused {
       opacity: 1;
       transform: scaleY(1);
     }
   }
 }
 
-.md-ckeditor {
+.mat-ckeditor {
   height: auto;
-  .md-ckeditor-wrapper {
-    .md-hint {
+  .mat-ckeditor-wrapper {
+    .mat-hint {
       bottom: -0.5em;
     }
   }

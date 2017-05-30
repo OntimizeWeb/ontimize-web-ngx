@@ -2,12 +2,11 @@ import {
   Component, Inject, Injector, forwardRef, ElementRef, OnInit,
   Optional,
   NgModule,
-  ModuleWithProviders,
   ViewEncapsulation
 } from '@angular/core';
-
+import { CommonModule } from '@angular/common';
 import { ValidatorFn } from '@angular/forms/src/directives/validators';
-import { OSharedModule } from '../../../shared.module';
+import { OSharedModule } from '../../../shared';
 import { OFormComponent } from '../../form/o-form.component';
 import {
   OTextInputModule, OTextInputComponent, DEFAULT_INPUTS_O_TEXT_INPUT,
@@ -25,8 +24,8 @@ export const DEFAULT_OUTPUTS_O_EMAIL_INPUT = [
 
 @Component({
   selector: 'o-email-input',
-  templateUrl: '/input/email-input/o-email-input.component.html',
-  styleUrls: ['/input/email-input/o-email-input.component.css'],
+  template: require('./o-email-input.component.html'),
+  styles: [require('./o-email-input.component.scss')],
   inputs: [
     ...DEFAULT_INPUTS_O_EMAIL_INPUT
   ],
@@ -58,14 +57,8 @@ export class OEmailInputComponent extends OTextInputComponent implements OnInit 
 
 @NgModule({
   declarations: [OEmailInputComponent],
-  imports: [OSharedModule, OTextInputModule],
+  imports: [OSharedModule, CommonModule, OTextInputModule],
   exports: [OEmailInputComponent, OTextInputModule],
 })
 export class OEmailInputModule {
-  static forRoot(): ModuleWithProviders {
-    return {
-      ngModule: OEmailInputModule,
-      providers: []
-    };
-  }
 }

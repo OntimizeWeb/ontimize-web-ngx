@@ -1,151 +1,33 @@
 import { Injector } from '@angular/core';
 import { BaseRequestOptions, XHRBackend } from '@angular/http';
-
 import { MdIconRegistry } from '@angular/material';
 
 import {
-  LoginService, NavigationService, OntimizeService, MomentService, NumberService, CurrencyService,
-  OTranslateService, DialogService, AuthGuardService, authGuardServiceFactory, dataServiceFactory, LocalStorageService
+  LoginService,
+  NavigationService,
+  OntimizeService,
+  MomentService,
+  NumberService,
+  CurrencyService,
+  OTranslateService,
+  DialogService,
+  AuthGuardService,
+  authGuardServiceFactory,
+  dataServiceFactory,
+  LocalStorageService
 } from '../services';
+
+import {
+  APP_CONFIG,
+  AppConfig
+} from '../config/app-config';
 import { SERVICE_CONFIG } from '../services/data-service.provider';
 
-import { APP_CONFIG, AppConfig } from '../config/app-config';
 import { Events } from '../util/events';
 import { OHttp } from '../util/http/OHttp';
 
-
-const APP_HTTP_PROVIDERS = [
-  XHRBackend,
-  BaseRequestOptions,
-  {
-    provide: OHttp,
-    useFactory: (backend, defaultOptions) => new OHttp(backend, defaultOptions),
-    deps: [XHRBackend, BaseRequestOptions]
-  }
-];
-
-
-/**
- * @private
- */
-export function ontimizeProviders(args: any = {}): any {
-
-  let events = new Events();
-  bindEvents(window, document, events);
-
-  var config = args.config;
-  let appConfig = new AppConfig(config);
-  config = appConfig.getConfiguration();
-  let servicesConf = {};
-  if (config.hasOwnProperty('servicesConfiguration')) {
-    servicesConf = config['servicesConfiguration'];
-  }
-
-  return [
-    //Standard
-    MdIconRegistry,
-
-    { provide: Events, useValue: events },
-    { provide: APP_CONFIG, useValue: config },
-    { provide: SERVICE_CONFIG, useValue: servicesConf },
-
-    //Custom
-    getOntimizeServiceProvider(),
-    getLoginServiceProvider(),
-    getNavigationServiceProvider(),
-    getMomentServiceProvider(),
-    getCurrencyServiceProvider(),
-    getNumberServiceProvider(),
-    getDialogServiceProvider(),
-    getTranslateServiceProvider(),
-    getLocalStorageServiceProvider(),
-    getAuthServiceProvider()
-  ];
-}
-
-function getOntimizeServiceProvider() {
-  return [
-    APP_HTTP_PROVIDERS,
-    {
-      provide: OntimizeService,
-      useFactory: dataServiceFactory,
-      deps: [Injector]
-    },
-  ];
-}
-
-function getLoginServiceProvider() {
-  return {
-    provide: LoginService,
-    useFactory: (injector) => new LoginService(injector),
-    deps: [Injector]
-  };
-}
-
-function getNavigationServiceProvider() {
-  return {
-    provide: NavigationService,
-    useFactory: (injector) => new NavigationService(injector),
-    deps: [Injector]
-  };
-}
-
-function getMomentServiceProvider() {
-  return {
-    provide: MomentService,
-    useFactory: (injector) => new MomentService(injector),
-    deps: [Injector]
-  };
-}
-
-function getCurrencyServiceProvider() {
-  return {
-    provide: CurrencyService,
-    useFactory: (injector) => new CurrencyService(injector),
-    deps: [Injector]
-  };
-}
-
-function getNumberServiceProvider() {
-  return {
-    provide: NumberService,
-    useFactory: (injector) => new NumberService(injector),
-    deps: [Injector]
-  };
-}
-
-function getDialogServiceProvider() {
-  return {
-    provide: DialogService,
-    useFactory: (injector) => new DialogService(injector),
-    deps: [Injector]
-  };
-}
-
-function getTranslateServiceProvider() {
-  return {
-    provide: OTranslateService,
-    useFactory: (injector) => new OTranslateService(injector),
-    deps: [Injector]
-  };
-}
-
-function getLocalStorageServiceProvider() {
-  return {
-    provide: LocalStorageService,
-    useFactory: (injector) => new LocalStorageService(injector),
-    deps: [Injector]
-  };
-}
-
-function getAuthServiceProvider() {
-  return {
-    provide: AuthGuardService,
-    useFactory: authGuardServiceFactory,
-    deps: [Injector]
-  };
-}
-
+const events = new Events();
+bindEvents(window, document, events);
 
 /**
  * Bind some global events and publish on the 'app' channel
@@ -177,3 +59,82 @@ function bindEvents(window, document, events) {
     });
   }, 2000);
 }
+
+export const ONTIMIZE_PROVIDERS: any = [
+  //Standard
+  MdIconRegistry,
+
+  { provide: Events, useValue: events },
+  // This two dependencies are now loaded in OntimizeWebModule.forRoot method
+  // { provide: APP_CONFIG, useValue: config },
+  // { provide: SERVICE_CONFIG, useValue: servicesConf },
+
+  // getOntimizeServiceProvider
+  XHRBackend,
+  BaseRequestOptions,
+  {
+    provide: OHttp,
+    useFactory: (backend, defaultOptions) => new OHttp(backend, defaultOptions),
+    deps: [XHRBackend, BaseRequestOptions]
+  },
+  {
+    provide: OntimizeService,
+    useFactory: dataServiceFactory,
+    deps: [Injector]
+  },
+  // getLoginServiceProvider
+  {
+    provide: LoginService,
+    useFactory: (injector) => new LoginService(injector),
+    deps: [Injector]
+  },
+  //getNavigationServiceProvider
+  {
+    provide: NavigationService,
+    useFactory: (injector) => new NavigationService(injector),
+    deps: [Injector]
+  },
+  // getMomentServiceProvider
+  {
+    provide: MomentService,
+    useFactory: (injector) => new MomentService(injector),
+    deps: [Injector]
+  },
+  // getCurrencyServiceProvider
+  {
+    provide: CurrencyService,
+    useFactory: (injector) => new CurrencyService(injector),
+    deps: [Injector]
+  },
+  //getNumberServiceProvider
+  {
+    provide: NumberService,
+    useFactory: (injector) => new NumberService(injector),
+    deps: [Injector]
+  },
+  // getDialogServiceProvider
+  {
+    provide: DialogService,
+    useFactory: (injector) => new DialogService(injector),
+    deps: [Injector]
+  },
+  // getTranslateServiceProvider
+  {
+    provide: OTranslateService,
+    useFactory: (injector) => new OTranslateService(injector),
+    deps: [Injector]
+  },
+  // getLocalStorageServiceProvider
+  {
+    provide: LocalStorageService,
+    useFactory: (injector) => new LocalStorageService(injector),
+    deps: [Injector]
+  },
+  // getAuthServiceProvider
+  {
+    provide: AuthGuardService,
+    useFactory: authGuardServiceFactory,
+    deps: [Injector]
+  }
+];
+

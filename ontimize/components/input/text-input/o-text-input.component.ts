@@ -1,22 +1,25 @@
 import {
-  Component, Inject, Injector, forwardRef, ElementRef, OnInit, EventEmitter,
-  Optional, ViewChild,
+  Component,
+  Inject,
+  Injector,
+  forwardRef,
+  ElementRef,
+  OnInit,
+  EventEmitter,
+  Optional,
+  ViewChild,
   NgModule,
-  ModuleWithProviders,
   ViewEncapsulation
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Validators } from '@angular/forms';
 import { ValidatorFn } from '@angular/forms/src/directives/validators';
+import { MdInputDirective } from '@angular/material';
 
-import { MdInputModule, MdInput } from '@angular/material';
-
-import { OSharedModule } from '../../../shared.module';
+import { OSharedModule } from '../../../shared';
 import { InputConverter } from '../../../decorators';
 import { OFormComponent } from '../../form/o-form.component';
 import { OFormValue } from '../../form/OFormValue';
-import { OTranslateModule } from '../../../pipes/o-translate.pipe';
-
 import { OFormDataComponent } from '../../o-form-data-component.class';
 
 export const DEFAULT_INPUTS_O_TEXT_INPUT = [
@@ -44,8 +47,8 @@ export const DEFAULT_OUTPUTS_O_TEXT_INPUT = [
 
 @Component({
   selector: 'o-text-input',
-  templateUrl: '/input/text-input/o-text-input.component.html',
-  styleUrls: ['/input/text-input/o-text-input.component.css'],
+  template: require('./o-text-input.component.html'),
+  styles: [require('./o-text-input.component.scss')],
   inputs: [
     ...DEFAULT_INPUTS_O_TEXT_INPUT
   ],
@@ -69,7 +72,7 @@ export class OTextInputComponent extends OFormDataComponent implements OnInit {
   onBlur: EventEmitter<Object> = new EventEmitter<Object>();
 
   @ViewChild('mdInputRef')
-  protected mdInputRef: MdInput;
+  protected mdInputRef: MdInputDirective;
 
   constructor(
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
@@ -123,14 +126,8 @@ export class OTextInputComponent extends OFormDataComponent implements OnInit {
 
 @NgModule({
   declarations: [OTextInputComponent],
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, OSharedModule, MdInputModule, OTranslateModule],
-  exports: [OTextInputComponent, CommonModule, FormsModule, ReactiveFormsModule, MdInputModule, OTranslateModule],
+  imports: [OSharedModule, CommonModule],
+  exports: [OTextInputComponent]
 })
 export class OTextInputModule {
-  static forRoot(): ModuleWithProviders {
-    return {
-      ngModule: OTextInputModule,
-      providers: []
-    };
-  }
 }

@@ -1,18 +1,17 @@
+import * as $ from 'jquery';
 import {
   Component, OnInit, Inject, Injector,
   AfterContentInit, ContentChildren,
   ViewChild, QueryList, Optional, forwardRef,
-  ElementRef, NgModule, ModuleWithProviders,
+  ElementRef, NgModule,
   ViewEncapsulation, EventEmitter
 } from '@angular/core';
-
-import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { ObservableWrapper } from '../../util/async';
 
 import { MdCheckbox } from '@angular/material';
-import { MdListModule, MdIconModule, MdToolbarModule, MdButtonModule, MdProgressCircleModule } from '@angular/material';
-
+import { OSharedModule } from '../../shared';
+import { CommonModule } from '@angular/common';
 import { OntimizeService } from '../../services';
 import { dataServiceFactory } from '../../services/data-service.provider';
 import { OSearchInputModule, OSearchInputComponent } from '../search-input/o-search-input.component';
@@ -20,13 +19,18 @@ import { OListItemModule } from './list-item/o-list-item.component';
 import { OFormComponent } from '../form/o-form.component';
 import { InputConverter } from '../../decorators';
 import { Util } from '../../util/util';
-import { IList } from '../../interfaces';
 import { OListItemComponent } from './list-item/o-list-item.component';
 import { OListItemDirective } from './list-item/o-list-item.directive';
-import { OTranslateModule } from '../../pipes/o-translate.pipe';
 
 import { OServiceComponent } from '../o-service-component.class';
 import { Observable } from 'rxjs/Observable';
+
+export interface IList {
+  registerListItemDirective(item: OListItemDirective): void;
+  getKeys(): Array<string>;
+  setSelected(item: Object);
+  isItemSelected(item: Object);
+}
 
 export const DEFAULT_INPUTS_O_LIST = [
   ...OServiceComponent.DEFAULT_INPUTS_O_SERVICE_COMPONENT,
@@ -58,7 +62,7 @@ export interface OListInitializationOptions {
   quickFilterColumns?: string;
   keys?: string;
   parentKeys?: string;
-};
+}
 
 @Component({
   selector: 'o-list',
@@ -71,8 +75,8 @@ export interface OListInitializationOptions {
   outputs: [
     ...DEFAULT_OUTPUTS_O_LIST
   ],
-  templateUrl: 'list/o-list.component.html',
-  styleUrls: ['list/o-list.component.css'],
+  template: require('./o-list.component.html'),
+  styles: [require('./o-list.component.scss')],
   encapsulation: ViewEncapsulation.None
 })
 export class OListComponent extends OServiceComponent implements OnInit, IList, AfterContentInit {
@@ -303,6 +307,7 @@ export class OListComponent extends OServiceComponent implements OnInit, IList, 
           ObservableWrapper.callEmit(self.onListDataLoaded, self.dataResponseArray);
         }, err => {
           console.log('[OList.queryData]: error', err);
+          self.setDataArray([]);
           self.loaderSuscription.unsubscribe();
         });
     }
@@ -437,6 +442,7 @@ export class OListComponent extends OServiceComponent implements OnInit, IList, 
       this.updateSelectedState(item, !wasSelected);
       return !wasSelected;
     }
+    return undefined;
   }
 
   updateSelectedState(item: Object, isSelected: boolean) {
@@ -486,11 +492,9 @@ export class OListComponent extends OServiceComponent implements OnInit, IList, 
                 console.log('[OList.remove]: response', res);
               },
               error => {
-                console.log('[OList.remove]: error', error);
                 this.dialogService.alert('ERROR', 'MESSAGES.ERROR_DELETE');
               },
               () => {
-                console.log('[OList.remove]: success');
                 this.queryData(this.parentItem);
               }
             );
@@ -517,15 +521,9 @@ export class OListComponent extends OServiceComponent implements OnInit, IList, 
 
 @NgModule({
   declarations: [OListComponent],
-  imports: [CommonModule, MdListModule, MdToolbarModule, MdIconModule, MdButtonModule, OListItemModule, OSearchInputModule, MdProgressCircleModule, OTranslateModule, RouterModule],
+  imports: [OSharedModule, CommonModule, OListItemModule, OSearchInputModule, RouterModule],
   exports: [OListComponent],
   entryComponents: [MdCheckbox]
 })
 export class OListModule {
-  static forRoot(): ModuleWithProviders {
-    return {
-      ngModule: OListModule,
-      providers: []
-    };
-  }
 }

@@ -2,19 +2,16 @@ import {
   Component, OnInit, Inject, Injector,
   forwardRef, ElementRef, NgZone,
   NgModule,
-  ModuleWithProviders,
   ViewEncapsulation
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
-
-import { MdIconModule, MdToolbarModule, MdButtonModule } from '@angular/material';
 
 import { OFormComponent } from './o-form.component';
 import { InputConverter } from '../../decorators';
 import { Util } from '../../util/util';
 import { DialogService, NavigationService } from '../../services';
-import { OTranslateModule } from '../../pipes/o-translate.pipe';
+import { OSharedModule } from '../../shared';
+import { CommonModule } from '@angular/common';
 
 export const DEFAULT_INPUTS_O_FORM_TOOLBAR = [
   'labelHeader: label-header',
@@ -25,8 +22,8 @@ export const DEFAULT_INPUTS_O_FORM_TOOLBAR = [
 
 @Component({
   selector: 'o-form-toolbar',
-  templateUrl: '/form/o-form-toolbar.component.html',
-  styleUrls: ['/form/o-form-toolbar.component.css'],
+  template: require('./o-form-toolbar.component.html'),
+  styles: [require('./o-form-toolbar.component.scss')],
   inputs: [
     ...DEFAULT_INPUTS_O_FORM_TOOLBAR
   ],
@@ -107,34 +104,28 @@ export class OFormToolbarComponent implements OnInit {
   }
 
   onCloseDetail() {
-    console.log('close detail form');
     this._form.executeToolbarAction(OFormComponent.CLOSE_DETAIL_ACTION);
   }
 
   onBack() {
-    console.log('go back');
     this._form.executeToolbarAction(OFormComponent.BACK_ACTION);
   }
 
   onReload() {
-    console.log('reload form');
     this._form.executeToolbarAction(OFormComponent.RELOAD_ACTION);
   }
 
   onInsert() {
-    console.log('go insert mode');
     this.setInsertMode();
     this._form.executeToolbarAction(OFormComponent.GO_INSERT_ACTION);
   }
 
   onEdit() {
-    console.log('go edit mode');
     this.setEditMode();
     this._form.executeToolbarAction(OFormComponent.GO_EDIT_ACTION);
   }
 
   onDelete(evt: any) {
-    console.log('delete register');
     this.showConfirmDelete(evt);
   }
 
@@ -176,7 +167,6 @@ export class OFormToolbarComponent implements OnInit {
               //TODO mostrar un toast indicando que la operación fue correcta...
               this.onCloseDetail();
             }, err => {
-              console.log('error');
               alert('Se ha producido un error!');
             });
         }
@@ -243,14 +233,8 @@ export class OFormToolbarComponent implements OnInit {
 
 @NgModule({
   declarations: [OFormToolbarComponent],
-  imports: [CommonModule, MdIconModule, MdToolbarModule, MdButtonModule, OTranslateModule],
+  imports: [OSharedModule, CommonModule ],
   exports: [OFormToolbarComponent],
 })
 export class OFormToolbarModule {
-  static forRoot(): ModuleWithProviders {
-    return {
-      ngModule: OFormToolbarModule,
-      providers: []
-    };
-  }
 }

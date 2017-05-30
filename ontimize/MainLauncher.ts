@@ -1,25 +1,26 @@
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { NgModuleRef } from '@angular/core';
 
-import {APP_CONFIG, Config} from './config/app-config';
+import { APP_CONFIG, Config } from './config/app-config';
 
-import {OTranslateService} from './services';
+import { OTranslateService } from './services';
 
 
 export function ontimizeBootstrap(appModule: any, config?: any): Promise<NgModuleRef<any>> {
 
-  return platformBrowserDynamic().bootstrapModule(appModule)
-    .then(moduleRef => {
-      console.log('Bootstrap Successful');
-      return postBootstrap(moduleRef);
-    }).catch(err => {
-      console.error(err.message);
-    });
+  var promise = platformBrowserDynamic().bootstrapModule(appModule);
+  promise.then(moduleRef => {
+    console.log('Bootstrap Successful');
+    return ontimizePostBootstrap(moduleRef);
+  }).catch(err => {
+    console.error(err.message);
+  });
+
+  return promise;
 }
 
 
-export function postBootstrap(ngModuleRef: NgModuleRef<any>): NgModuleRef<any> {
-
+export function ontimizePostBootstrap(ngModuleRef: NgModuleRef<any>): NgModuleRef<any> {
   // Configuring i18n...
   let translate: OTranslateService = ngModuleRef.injector.get(OTranslateService);
   let config: Config = ngModuleRef.injector.get(APP_CONFIG);

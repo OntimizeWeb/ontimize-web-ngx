@@ -2,10 +2,10 @@ import {
   Component, Inject, Injector, forwardRef, ElementRef, OnInit,
   Optional,
   NgModule,
-  ModuleWithProviders,
   ViewEncapsulation
 } from '@angular/core';
-import { OSharedModule } from '../../../shared.module';
+import { CommonModule } from '@angular/common';
+import { OSharedModule } from '../../../shared';
 import { OFormComponent } from '../../form/o-form.component';
 import {
   ORealInputModule, ORealInputComponent,
@@ -23,8 +23,8 @@ export const DEFAULT_OUTPUTS_O_PERCENT_INPUT = [
 
 @Component({
   selector: 'o-percent-input',
-  templateUrl: '/input/percent-input/o-percent-input.component.html',
-  styleUrls: ['/input/percent-input/o-percent-input.component.css'],
+  template: require('./o-percent-input.component.html'),
+  styles: [require('./o-percent-input.component.scss')],
   inputs: [
     ...DEFAULT_INPUTS_O_PERCENT_INPUT
   ],
@@ -65,14 +65,8 @@ export class OPercentInputComponent extends ORealInputComponent implements OnIni
 
 @NgModule({
   declarations: [OPercentInputComponent],
-  imports: [OSharedModule, ORealInputModule],
+  imports: [OSharedModule, CommonModule, ORealInputModule],
   exports: [OPercentInputComponent, ORealInputModule],
 })
 export class OPercentInputModule {
-  static forRoot(): ModuleWithProviders {
-    return {
-      ngModule: OPercentInputModule,
-      providers: []
-    };
-  }
 }

@@ -1,32 +1,38 @@
 import {
   Component, OnInit, OnDestroy, EventEmitter,
   Injector, NgZone, ChangeDetectorRef,
-  NgModule, ModuleWithProviders, HostListener,
+  NgModule, HostListener,
   ViewEncapsulation, ElementRef
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { Router, ActivatedRoute } from '@angular/router';
-import { FormGroup, ReactiveFormsModule, FormControl, FormsModule } from '@angular/forms';
+import { Router, ActivatedRoute, UrlSegment, UrlSegmentGroup } from '@angular/router';
+import { FormGroup, FormControl } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/observable/combineLatest';
-import { MdProgressBarModule } from '@angular/material';
 
 import { dataServiceFactory } from '../../services/data-service.provider';
 import { OntimizeService, DialogService, NavigationService } from '../../services';
 import { InputConverter } from '../../decorators';
-import { IComponent, IFormControlComponent, IFormDataTypeComponent } from '../../interfaces';
+
+import {
+  IFormControlComponent,
+  IFormDataTypeComponent
+} from '../o-form-data-component.class';
+
+import { IComponent } from '../o-component.class';
 
 import { OFormToolbarModule, OFormToolbarComponent } from './o-form-toolbar.component';
 import { OFormValue } from './OFormValue';
 import { Util, SQLTypes } from '../../utils';
+import { OSharedModule } from '../../shared';
+import { CommonModule } from '@angular/common';
 
 export const enum Mode {
   QUERY,
   INSERT,
   UPDATE,
   INITIAL
-};
+}
 
 export const DEFAULT_INPUTS_O_FORM = [
   // show-header [boolean]: visibility of form toolbar. Default: yes.
@@ -102,16 +108,15 @@ export interface OFormInitializationOptions {
   sortColumns?: string;
   editableColumns?: string;
   parentKeys?: string;
-};
-
+}
 
 @Component({
   selector: 'o-form',
   providers: [
     { provide: OntimizeService, useFactory: dataServiceFactory, deps: [Injector] }
   ],
-  templateUrl: '/form/o-form.component.html',
-  styleUrls: ['/form/o-form.component.css'],
+  template: require('./o-form.component.html'),
+  styles: [require('./o-form.component.scss')],
   inputs: [
     ...DEFAULT_INPUTS_O_FORM
   ],
@@ -420,8 +425,7 @@ export class OFormComponent implements OnInit, OnDestroy {
     }, 0);
   }
 
-  executeToolbarAction(action: string, ...args: any[]) {
-
+  executeToolbarAction(action: string) {
     switch (action) {
       case OFormComponent.BACK_ACTION: this._backAction(); break;
       case OFormComponent.CLOSE_DETAIL_ACTION: this._closeDetailAction(); break;
@@ -433,7 +437,7 @@ export class OFormComponent implements OnInit, OnDestroy {
       case OFormComponent.DELETE_ACTION: return this._deleteAction();
       default: break;
     }
-    return;
+    return undefined;
   }
 
 
@@ -512,14 +516,11 @@ export class OFormComponent implements OnInit, OnDestroy {
         }
       });
 
-    this.urlSub = this.actRoute
-      .url
-      .subscribe(urlSegments => {
-        self.urlSegments = urlSegments;
-      });
+    this.urlSub = this.actRoute.url.subscribe(urlSegments => {
+      self.urlSegments = urlSegments;
+    });
 
     if (this.navigationService) {
-      var self = this;
       this.navigationService.onVisibleChange(visible => {
         self.showHeader = visible;
       });
@@ -580,10 +581,21 @@ export class OFormComponent implements OnInit, OnDestroy {
   }
 
   protected determinateFormMode() {
-    var _path = '';
-    let segment = this.urlSegments[this.urlSegments.length - 1];
-    _path = segment['path'];
+    if (this.urlSegments.length > 0) {
+      let segment = this.urlSegments[this.urlSegments.length - 1];
+      this.determinateModeFromUrlSegment(segment);
+    } else if (this.actRoute.parent) {
+      this.actRoute.parent.url.subscribe(segments => {
+        let segment = segments[segments.length - 1];
+        this.determinateModeFromUrlSegment(segment);
+      });
+    } else {
+      this.setFormMode(Mode.INITIAL);
+    }
+  }
 
+  protected determinateModeFromUrlSegment(segment: UrlSegment) {
+    var _path = segment ? segment['path'] : '';
     if (_path === 'new') {
       //insert mode
       this.setFormMode(Mode.INSERT);
@@ -686,7 +698,7 @@ export class OFormComponent implements OnInit, OnDestroy {
     this.onFormDataLoaded.emit(data);
   }
 
-  _backAction(...args: any[]) {
+  _backAction() {
     this.router.navigate(['../../'], { relativeTo: this.actRoute })
       .catch(err => {
         console.error(err.message);
@@ -694,20 +706,18 @@ export class OFormComponent implements OnInit, OnDestroy {
   }
 
   _closeDetailAction() {
-
     this.beforeCloseDetail.emit();
-
+    var fullUrlSegments = this.getFullUrlSegments();
+    var thisUrlSegments = this.urlSegments.slice(0);
     // Copy current url segments array...
-    let urlArray = this.urlSegments.slice(0);
+    let urlArray = fullUrlSegments.length ? fullUrlSegments : thisUrlSegments;
     //TODO do it better (maybe propagation nested level number?)
-    let nestedLevel = urlArray.length > 3;
-
+    let nestedLevelN = this.getNestedLevelsNumber();
     // Extract segments for proper navigation...
-    if (nestedLevel) {
-      if (this.mode === Mode.UPDATE /*action === 'edit'*/) {
+    if (nestedLevelN > 3) {
+      if (this.isInUpdateMode()) {
         urlArray.pop();
-        // } else if (action === undefined || action === 'new') {
-      } else if (this.mode === Mode.INITIAL || this.mode === Mode.INSERT) {
+      } else if (this.isInInitialMode() || this.isInInsertMode()) {
         urlArray.pop();
         urlArray.pop();
       }
@@ -716,7 +726,6 @@ export class OFormComponent implements OnInit, OnDestroy {
     }
     // If we are in nested detail form we have to go up two levels
     // home/:key/subhome/:key2
-
     let urlText = '';
     if (urlArray) {
       urlArray.forEach((item, index) => {
@@ -728,29 +737,26 @@ export class OFormComponent implements OnInit, OnDestroy {
     }
 
     let extras = {};
-    if (nestedLevel || (urlArray.length > 1 && this.isDetailForm)) {
+    if (nestedLevelN > 3 || this.urlSegments.length > 1 && this.isDetailForm) {
       extras['queryParams'] = Object.assign({}, this.queryParams, { 'isdetail': 'true' });
     }
 
-    if (this.isActivatedRouteMultiple()) {
-      extras['relativeTo'] = this.actRoute.parent;
-    }
+    this.router.navigate([urlText], extras).catch(err => {
+      console.error(err.message);
+    });
 
-    this.router.navigate([urlText], extras)
-      .catch(err => {
-        console.error(err.message);
-      });
   }
 
   _stayInRecordAfterInsert(insertedKeys: Object) {
 
+    var fullUrlSegments = this.getFullUrlSegments();
     // Copy current url segments array...
-    let urlArray = this.urlSegments.slice(0);
-    //TODO do it better (maybe propagation nested level number?)
-    let nestedLevel = urlArray.length > 3;
+    let urlArray = fullUrlSegments.length ? fullUrlSegments : this.urlSegments.slice(0);
+
+    let nestedLevelN = this.getNestedLevelsNumber();
 
     // Extract segments for proper navigation...
-    if (nestedLevel) {
+    if (nestedLevelN > 3) {
       urlArray.pop();
       urlArray.pop();
     } else {
@@ -780,10 +786,6 @@ export class OFormComponent implements OnInit, OnDestroy {
     }
 
     let extras = Object.assign({}, this.queryParams, { 'isdetail': 'true' });
-
-    if (this.isActivatedRouteMultiple()) {
-      extras['relativeTo'] = this.actRoute.parent;
-    }
 
     this.router.navigate([urlText], extras)
       .catch(err => {
@@ -1127,6 +1129,7 @@ export class OFormComponent implements OnInit, OnDestroy {
     } else if (data && Util.isObject(data)) {
       return this.objectToFormValueData(data);
     }
+    return undefined;
   }
 
   protected objectToFormValueData(data: Object): Object {
@@ -1151,7 +1154,7 @@ export class OFormComponent implements OnInit, OnDestroy {
           filter[key] = this.urlParams[key];
         }
       });
-    };
+    }
 
     let keys = Object.keys(this._pKeysEquiv);
     if (this.urlParams && keys && keys.length > 0) {
@@ -1182,14 +1185,25 @@ export class OFormComponent implements OnInit, OnDestroy {
     return filter;
   }
 
-  protected isActivatedRouteMultiple() {
+  protected getNestedLevelsNumber() {
     let actRoute = this.actRoute;
     let i = 0;
     while (actRoute.parent) {
       actRoute = actRoute.parent;
       i++;
     }
-    return (i > 2);
+    return i;
+  }
+
+  protected getFullUrlSegments() {
+    var fullUrlSegments = [];
+    if (this.router && this.router.url && this.router.url.length) {
+      var root: UrlSegmentGroup = this.router.parseUrl(this.router.url).root;
+      if (root && root.hasChildren() && root.children.primary) {
+        fullUrlSegments = root.children.primary.segments;
+      }
+    }
+    return fullUrlSegments;
   }
 
   isInQueryMode(): boolean {
@@ -1230,14 +1244,8 @@ export class OFormComponent implements OnInit, OnDestroy {
 
 @NgModule({
   declarations: [OFormComponent],
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, OFormToolbarModule, MdProgressBarModule],
+  imports: [OSharedModule, CommonModule, OFormToolbarModule],
   exports: [OFormComponent, OFormToolbarModule],
 })
 export class OFormModule {
-  static forRoot(): ModuleWithProviders {
-    return {
-      ngModule: OFormModule,
-      providers: []
-    };
-  }
 }

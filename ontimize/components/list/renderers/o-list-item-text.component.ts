@@ -7,15 +7,14 @@ import {
   ElementRef,
   Renderer,
   Optional,
-  NgModule,
-  ModuleWithProviders
+  NgModule
 } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
-import { MdIconModule } from '@angular/material';
 
 import { OListItemComponent } from '../list-item/o-list-item.component';
 import { OListItemTextRenderer } from './o-list-item-text-renderer.class';
+import { OSharedModule } from '../../../shared';
 
 export const DEFAULT_INPUTS_O_LIST_ITEM_TEXT = [
   ...OListItemTextRenderer.DEFAULT_INPUTS_O_TEXT_RENDERER,
@@ -28,8 +27,8 @@ export const DEFAULT_OUTPUTS_O_LIST_ITEM_TEXT = [
 
 @Component({
   selector: 'o-list-item-text',
-  templateUrl: 'list/renderers/o-list-item-text.component.html',
-  styleUrls: ['list/renderers/o-list-item-text.component.css'],
+  template: require('./o-list-item-text.component.html'),
+  styles: [require('./o-list-item-text.component.scss')],
   inputs: [
     ...DEFAULT_INPUTS_O_LIST_ITEM_TEXT
   ],
@@ -68,14 +67,12 @@ export class OListItemTextComponent extends OListItemTextRenderer {
 
 @NgModule({
   declarations: [OListItemTextComponent],
-  imports: [MdIconModule, CommonModule],
+  imports: [
+    CommonModule,
+    OSharedModule
+  ],
   exports: [OListItemTextComponent]
 })
+
 export class OListItemTextModule {
-  static forRoot(): ModuleWithProviders {
-    return {
-      ngModule: OListItemTextModule,
-      providers: []
-    };
-  }
 }

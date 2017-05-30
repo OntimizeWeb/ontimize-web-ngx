@@ -1,8 +1,9 @@
+import * as $ from 'jquery';
 import { Component, OnInit, Inject, Injector, forwardRef, EventEmitter } from '@angular/core';
 import { ObservableWrapper } from '../../../util/async';
 
-import { ITableCellEditor } from '../../../interfaces';
-import { OTableColumnComponent } from '../o-table-column.component';
+
+import { OTableColumnComponent, ITableCellEditor } from '../o-table-column.component';
 import { MomentService } from '../../../services';
 
 import * as moment from 'moment';

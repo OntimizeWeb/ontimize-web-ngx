@@ -1,9 +1,10 @@
 import { Injector } from '@angular/core';
 import { InputConverter } from '../decorators';
 import { OTranslateService } from '../services';
-import {
-  IComponent
-} from '../interfaces';
+
+export interface IComponent {
+  getAttribute(): string;
+}
 
 export class OComponent implements IComponent {
   /* Inputs */

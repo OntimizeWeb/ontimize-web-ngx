@@ -1,21 +1,40 @@
 {
   "compilerOptions": {
+    "noImplicitReturns": true,
     "target": "es5",
-    "module": "commonjs",
     "moduleResolution": "node",
-    "declaration": true,
-    "noImplicitAny": false,
     "removeComments": true,
-    "noLib": false,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "sourceMap": true,
-    "listFiles": true
+    "sourceMap": false,
+    "listFiles": true,
+    "module": "es2015",
+    "declaration": true,
+    "outDir": "dist",
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "types": [
+      "node"
+    ],
+    "typeRoots": [
+      "node_modules/@types"
+    ],
+    "lib": [
+      "es2016",
+      "dom"
+    ]
+  },
+  "exclude": [
+    "node_modules",
+    "dist"
+  ],
+  "angularCompilerOptions": {
+    "skipMetadataEmit": false,
+    "strictMetadataEmit": true
   },
   "files": [
-    "ontimize.ts",
-    "typings/browser.d.ts",
-    "tools/manual_typings/manual.typings.d.ts"
+    "index.ts",
+    "ontimize/**"
   ],
   "compileOnSave": false
 }

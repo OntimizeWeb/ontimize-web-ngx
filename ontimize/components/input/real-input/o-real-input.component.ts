@@ -1,22 +1,33 @@
 import {
-  Component, Inject, Injector, forwardRef, ElementRef, OnInit,
-  Optional, NgModule, ModuleWithProviders,
+  Component,
+  Inject,
+  Injector,
+  forwardRef,
+  ElementRef,
+  OnInit,
+  Optional,
+  NgModule,
   ViewEncapsulation
 } from '@angular/core';
 
+import { CommonModule } from '@angular/common';
 import { Validators } from '@angular/forms';
 import { ValidatorFn } from '@angular/forms/src/directives/validators';
-import { OSharedModule } from '../../../shared.module';
+
+import { OSharedModule } from '../../../shared';
 import { OFormComponent } from '../../form/o-form.component';
 import { InputConverter } from '../../../decorators';
 import {
-  OIntegerInputModule, OIntegerInputComponent,
-  DEFAULT_INPUTS_O_INTEGER_INPUT, DEFAULT_OUTPUTS_O_INTEGER_INPUT
+  OIntegerInputModule,
+  OIntegerInputComponent,
+  DEFAULT_INPUTS_O_INTEGER_INPUT,
+  DEFAULT_OUTPUTS_O_INTEGER_INPUT
 } from '../integer-input/o-integer-input.component';
 
-import { ORealPipe } from '../../../pipes';
-import { IRealPipeArgument } from '../../../interfaces/pipes.interfaces';
-
+import {
+  ORealPipe,
+  IRealPipeArgument
+} from '../../../pipes';
 
 export const DEFAULT_INPUTS_O_REAL_INPUT = [
   ...DEFAULT_INPUTS_O_INTEGER_INPUT,
@@ -32,8 +43,8 @@ export const DEFAULT_OUTPUTS_O_REAL_INPUT = [
 
 @Component({
   selector: 'o-real-input',
-  templateUrl: '/input/real-input/o-real-input.component.html',
-  styleUrls: ['/input/real-input/o-real-input.component.css'],
+  template: require('./o-real-input.component.html'),
+  styles: [require('./o-real-input.component.scss')],
   inputs: [
     ...DEFAULT_INPUTS_O_REAL_INPUT
   ],
@@ -102,14 +113,8 @@ export class ORealInputComponent extends OIntegerInputComponent implements OnIni
 
 @NgModule({
   declarations: [ORealInputComponent],
-  imports: [OSharedModule, OIntegerInputModule],
+  imports: [OSharedModule, CommonModule, OIntegerInputModule],
   exports: [ORealInputComponent, OIntegerInputModule],
 })
 export class ORealInputModule {
-  static forRoot(): ModuleWithProviders {
-    return {
-      ngModule: ORealInputModule,
-      providers: []
-    };
-  }
 }

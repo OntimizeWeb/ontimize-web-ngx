@@ -1,6 +1,6 @@
 <div layout="row" layout-fill layout-align="space-between center" [formGroup]="form?.formGroup"
     [mdTooltip]="tooltip" [mdTooltipPosition]="tooltipPosition" [mdTooltipShowDelay]="tooltipShowDelay">
-    <input md-input #inputModel type="text" [attr.id]="oattr" [id]="oattr" layout-fill [formControlName]="oattr" [ngModel]="getValue()"
+    <input mdInput #inputModel type="text" [attr.id]="oattr" [id]="oattr" layout-fill [formControlName]="oattr" [ngModel]="getValue()"
         (ngModelChange)="innerOnChange($event)" class="input-model">
 
     <md-input-container #innerInputContainer flex layout-fill
@@ -10,8 +10,9 @@
         [class.ng-pristine]="_fControl && _fControl.pristine"
         [class.ng-invalid]="_fControl && !_fControl.valid"
         [class.ng-valid]="_fControl && _fControl.valid">
-        <input md-input #displayInputModel class="md-input o-date-input" type="text" [attr.id]="opickerattr" [id]="opickerattr" layout-fill [placeholder]="placeHolder" [value]="getDescriptionValue()"
-            [readonly]="isReadOnly" (blur)="onDisplayInputBlur()" (focus)="onDisplayInputFocus($event)" (click)="onInputClick()" [disabled]="isDisabled" [o-disabled]="innerInputContainer"
+        <input mdInput #displayInputModel class="mat-input o-date-input" type="text" [attr.id]="opickerattr" [id]="opickerattr" layout-fill [placeholder]="placeHolder" [value]="getDescriptionValue()"
+            [readonly]="isReadOnly" (blur)="onDisplayInputBlur()" (focus)="onDisplayInputFocus($event)" (click)="onInputClick()"
+            [disabled]="isDisabled"
             [class.ng-untouched]="_fControl && _fControl.untouched"
             [class.ng-touched]="_fControl && _fControl.touched"
             [class.ng-dirty]="_fControl && _fControl.dirty"
@@ -22,5 +23,5 @@
     </md-input-container>
 
     <span class="icon-btn" (click)="onClickIcon($event)"
-        [class.md-disabled]="isDisabled"><i class="material-icons">today</i></span>
+        [class.mat-disabled]="isDisabled"><i class="material-icons">today</i></span>
 </div>

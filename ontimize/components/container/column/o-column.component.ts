@@ -2,16 +2,13 @@ import {
   Component, Inject, Injector, forwardRef,
   ElementRef, OnInit, Optional,
   NgModule,
-  ModuleWithProviders,
   ViewEncapsulation
 } from '@angular/core';
 
-import { CommonModule } from '@angular/common';
-
 import { OFormComponent } from '../../form/o-form.component';
 import { OTranslateService } from '../../../services';
-import { OTranslateModule } from '../../../pipes/o-translate.pipe';
-
+import { OSharedModule } from '../../../shared';
+import { CommonModule } from '@angular/common';
 export const DEFAULT_INPUTS_O_COLUMN = [
   'oattr: attr',
   'titleLabel: title-label',
@@ -22,8 +19,8 @@ export const DEFAULT_INPUTS_O_COLUMN = [
 
 @Component({
   selector: 'o-column',
-  templateUrl: '/container/column/o-column.component.html',
-  styleUrls: ['/container/column/o-column.component.css'],
+  template: require('./o-column.component.html'),
+  styles: [require('./o-column.component.scss')],
   inputs: [
     ...DEFAULT_INPUTS_O_COLUMN
   ],
@@ -108,7 +105,7 @@ export class OColumnComponent implements OnInit {
       var self = this;
       let element = innerCol[0]; // Take only first, nested element does not matter.
       if (self.hasTitle()
-          || (self.elevation>0 && self.elevation<=12) ) {
+        || (self.elevation > 0 && self.elevation <= 12)) {
         element.classList.add('container-content');
       } else {
         element.classList.remove('container-content');
@@ -130,8 +127,8 @@ export class OColumnComponent implements OnInit {
 
   propagateElevationToDOM() {
     this.cleanElevationCSSclasses();
-     if (this.elevation > 0 && this.elevation <= 12) {
-      let clazz = 'md-whiteframe-' + this.elevation + 'dp';
+    if (this.elevation > 0 && this.elevation <= 12) {
+      let clazz = 'mat-elevation-z' + this.elevation;
       this.elRef.nativeElement.classList.add(clazz);
       this.elRef.nativeElement.classList.add('margin-top-bottom');
     }
@@ -142,7 +139,7 @@ export class OColumnComponent implements OnInit {
     if (arr_ && arr_.length) {
       var self = this;
       arr_.forEach((item, index) => {
-        if (item.startsWith('md-whiteframe')) {
+        if (item.startsWith('mat-elevation')) {
           self.elRef.nativeElement.classList.remove(item);
         }
       });
@@ -154,14 +151,8 @@ export class OColumnComponent implements OnInit {
 
 @NgModule({
   declarations: [OColumnComponent],
-  imports: [CommonModule, OTranslateModule],
+  imports: [OSharedModule, CommonModule],
   exports: [OColumnComponent],
 })
 export class OColumnModule {
-  static forRoot(): ModuleWithProviders {
-    return {
-      ngModule: OColumnModule,
-      providers: []
-    };
-  }
 }

@@ -2,20 +2,17 @@ import {
   Component, Inject, Injector, forwardRef, ElementRef, OnInit,
   EventEmitter, Optional, ViewChild,
   NgModule,
-  ModuleWithProviders,
   ViewEncapsulation
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 
-import { MdIconModule, MdInputModule, MdInput } from '@angular/material';
+import { MdInputDirective } from '@angular/material';
 
-import { OSharedModule } from '../../shared.module';
+import { OSharedModule } from '../../shared';
+import { CommonModule } from '@angular/common';
 import { InputConverter } from '../../decorators';
 import { OFormComponent } from '../form/o-form.component';
 import { OFormValue } from '../form/OFormValue';
-import { OTranslateModule } from '../../pipes/o-translate.pipe';
 
 import { OFormDataComponent } from '../o-form-data-component.class';
 
@@ -45,8 +42,8 @@ export const DEFAULT_OUTPUTS_O_IMAGE = [
 
 @Component({
   selector: 'o-image',
-  templateUrl: '/image/o-image.component.html',
-  styleUrls: ['/image/o-image.component.css'],
+  template: require('./o-image.component.html'),
+  styles: [require('./o-image.component.scss')],
   inputs: [
     ...DEFAULT_INPUTS_O_IMAGE
   ],
@@ -68,7 +65,7 @@ export class OImageComponent extends OFormDataComponent implements OnInit {
   onChange: EventEmitter<Object> = new EventEmitter<Object>();
 
   @ViewChild('inputControl')
-  protected inputControl: MdInput;
+  protected inputControl: MdInputDirective;
   @ViewChild('titleLabel')
   protected titleLabel: ElementRef;
 
@@ -214,15 +211,9 @@ export class OImageComponent extends OFormDataComponent implements OnInit {
 
 @NgModule({
   declarations: [OImageComponent],
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, OSharedModule, MdInputModule, MdIconModule, OTranslateModule],
+  imports: [OSharedModule, CommonModule],
   exports: [OImageComponent],
 })
 export class OImageModule {
-  static forRoot(): ModuleWithProviders {
-    return {
-      ngModule: OImageModule,
-      providers: []
-    };
-  }
 }
 

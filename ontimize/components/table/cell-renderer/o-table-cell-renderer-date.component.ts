@@ -1,7 +1,7 @@
 import { Component, Inject, Injector, forwardRef } from '@angular/core';
 
-import { ITableCellRenderer } from '../../../interfaces';
-import { OTableColumnComponent } from '../o-table-column.component';
+
+import { OTableColumnComponent, ITableCellRenderer } from '../o-table-column.component';
 import { MomentService } from '../../../services';
 
 export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_DATE = [

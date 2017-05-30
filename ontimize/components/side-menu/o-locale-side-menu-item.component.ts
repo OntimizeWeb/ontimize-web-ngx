@@ -6,17 +6,14 @@ import {
   ElementRef,
   OnInit,
   NgModule,
-  ModuleWithProviders,
-  ViewEncapsulation} from '@angular/core';
-import {CommonModule} from '@angular/common';
-
+  ViewEncapsulation
+} from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { MdIconModule } from '@angular/material';
-
-import {OTranslateService} from '../../services';
+import { OTranslateService } from '../../services';
 
 import { OSideMenuModule, OSideMenuComponent } from './o-side-menu.component';
-import {OTranslateModule} from '../../pipes/o-translate.pipe';
+import { OSharedModule } from '../../shared';
+import { CommonModule } from '@angular/common';
 
 export const DEFAULT_INPUTS_O_LOCALE_SIDE_MENU_ITEM = [
   // title [string]: menu item title. Default: no value.
@@ -34,10 +31,8 @@ export const DEFAULT_INPUTS_O_LOCALE_SIDE_MENU_ITEM = [
 
 @Component({
   selector: 'o-locale-side-menu-item',
-  templateUrl: './side-menu/o-locale-side-menu-item.component.html',
-  styleUrls: [
-    './side-menu/o-locale-side-menu-item.component.css'
-  ],
+  template: require('./o-locale-side-menu-item.component.html'),
+  styles: [require('./o-locale-side-menu-item.component.scss')],
   inputs: [
     ...DEFAULT_INPUTS_O_LOCALE_SIDE_MENU_ITEM
   ],
@@ -89,14 +84,8 @@ export class OLocaleSideMenuItemComponent implements OnInit {
 
 @NgModule({
   declarations: [OLocaleSideMenuItemComponent],
-  imports: [CommonModule, MdIconModule, RouterModule, OSideMenuModule, OTranslateModule],
+  imports: [OSharedModule, CommonModule, RouterModule, OSideMenuModule],
   exports: [OLocaleSideMenuItemComponent],
 })
 export class OLocaleSideMenuItemModule {
-  static forRoot(): ModuleWithProviders {
-    return {
-      ngModule: OLocaleSideMenuItemModule,
-      providers: []
-    };
-  }
 }

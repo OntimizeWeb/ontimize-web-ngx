@@ -8,13 +8,13 @@
   }
 }
 
-.md-list {
-  .md-checkbox-inner-container {
+.mat-list {
+  .mat-checkbox-inner-container {
     margin: 0;
   }
   &[dense] .o-list-item {
     .o-list-row-action {
-      .md-checkbox-inner-container {
+      .mat-checkbox-inner-container {
         height: 16px;
         width: 16px;
         margin: 0;

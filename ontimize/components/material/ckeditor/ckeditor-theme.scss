@@ -1,5 +1,4 @@
-@import 'node_modules/@angular/material/core/theming/theming';
-
+@import 'node_modules/@angular/material/theming';
 
 @mixin ckeditor-theme($theme) {
   $primary: map-get($theme, primary);
@@ -10,73 +9,85 @@
 
 
   // Placeholder colors. Required is used for the `*` star shown in the placeholder.
-  $md-ckeditor-placeholder-color: md-color($foreground, hint-text);
-  $md-ckeditor-floating-placeholder-color: md-color($primary);
-  $md-ckeditor-required-placeholder-color: md-color($accent);
+  $mat-ckeditor-placeholder-color: mat-color($foreground, hint-text);
+  $mat-ckeditor-floating-placeholder-color: mat-color($primary);
+  $mat-ckeditor-required-placeholder-color: mat-color($accent);
 
   // Underline colors.
-  $md-ckeditor-underline-color: md-color($foreground, hint-text);
-  $md-ckeditor-underline-color-accent: md-color($accent);
-  $md-ckeditor-underline-color-warn: md-color($warn);
-  $md-ckeditor-underline-disabled-color: md-color($foreground, hint-text);
-  $md-ckeditor-underline-focused-color: md-color($primary);
+  $mat-ckeditor-underline-color: mat-color($foreground, hint-text);
+  $mat-ckeditor-underline-color-accent: mat-color($accent);
+  $mat-ckeditor-underline-color-warn: mat-color($warn);
+  $mat-ckeditor-underline-disabled-color: mat-color($foreground, hint-text);
+  $mat-ckeditor-underline-focused-color: mat-color($primary);
 
 
-  .md-ckeditor-placeholder {
-    color: $md-ckeditor-placeholder-color;
+  .mat-ckeditor-placeholder {
+    color: $mat-ckeditor-placeholder-color;
 
-    // :focus is applied to the combo, but we apply md-focused to the other elements
+    transform: translateY(0);
+    transform-origin: bottom left;
+    transition: transform $swift-ease-out-duration $swift-ease-out-timing-function,
+                scale $swift-ease-out-duration $swift-ease-out-timing-function,
+                color $swift-ease-out-duration $swift-ease-out-timing-function,
+                width $swift-ease-out-duration $swift-ease-out-timing-function;
+
+    // :focus is applied to the combo, but we apply mat-focused to the other elements
     // that need to listen to it.
-    &.md-focused {
-      color: $md-ckeditor-floating-placeholder-color;
+    &.mat-focused {
+      color: $mat-ckeditor-floating-placeholder-color;
 
-      &.md-accent {
-        color: $md-ckeditor-underline-color-accent;
+      &.mat-accent {
+        color: $mat-ckeditor-underline-color-accent;
       }
-      &.md-warn {
-        color: $md-ckeditor-underline-color-warn;
-      }
-    }
-  }
-
-
-  // See md-ckeditor-placeholder-floating mixin in combo.scss
-  ckeditor:-webkit-autofill + .md-ckeditor-placeholder,
-  .md-ckeditor-placeholder.md-float:not(.md-empty), .md-ckeditor-placeholder.md-float.md-focused {
-
-    .md-placeholder-required {
-      color: $md-ckeditor-required-placeholder-color;
-    }
-  }
-
-  .md-ckeditor-underline {
-    border-color: $md-ckeditor-underline-color;
-
-    .md-ckeditor-ripple {
-      background-color: $md-ckeditor-underline-focused-color;
-
-      &.md-accent {
-        background-color: $md-ckeditor-underline-color-accent;
-      }
-      &.md-warn {
-        background-color: $md-ckeditor-underline-color-warn;
+      &.mat-warn {
+        color: $mat-ckeditor-underline-color-warn;
       }
     }
   }
 
-  .md-ckeditor {
+
+  // See mat-ckeditor-placeholder-floating mixin in combo.scss
+  ckeditor:-webkit-autofill + .mat-ckeditor-placeholder,
+  .mat-ckeditor-placeholder.mat-float:not(.mat-empty), .mat-ckeditor-placeholder.mat-float.mat-focused {
+
+    .mat-placeholder-required {
+      color: $mat-ckeditor-required-placeholder-color;
+    }
+  }
+
+  .mat-ckeditor-underline {
+    border-color: $mat-ckeditor-underline-color;
+
+    .mat-ckeditor-ripple {
+      background-color: $mat-ckeditor-underline-focused-color;
+
+      transform-origin: top;
+      transform: scaleY(0);
+      transition: transform $swift-ease-out-duration $swift-ease-out-timing-function,
+                  opacity $swift-ease-out-duration $swift-ease-out-timing-function;
+
+      &.mat-accent {
+        background-color: $mat-ckeditor-underline-color-accent;
+      }
+      &.mat-warn {
+        background-color: $mat-ckeditor-underline-color-warn;
+      }
+    }
+  }
+
+  .mat-ckeditor {
     &.ng-invalid.ng-touched {
-      .md-ckeditor-underline {
-        border-top-color: $md-ckeditor-underline-color-warn;
-        .md-ckeditor-ripple {
-          background-color: $md-ckeditor-underline-color-warn;
+      .mat-ckeditor-underline {
+        border-top-color: $mat-ckeditor-underline-color-warn;
+        .mat-ckeditor-ripple {
+          background-color: $mat-ckeditor-underline-color-warn;
         }
       }
-      .md-ckeditor-placeholder.md-focused {
-        color: $md-ckeditor-underline-color-warn;
+      .mat-ckeditor-placeholder.mat-focused {
+        color: $mat-ckeditor-underline-color-warn;
       }
-      .md-hint {
-        color: $md-ckeditor-underline-color-warn;
+      .mat-hint {
+        color: $mat-ckeditor-underline-color-warn;
       }
     }
   }

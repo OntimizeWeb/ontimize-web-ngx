@@ -1,7 +1,7 @@
 <div layout="row" layout-fill layout-align="space-between center" [formGroup]="form?.formGroup"
     [mdTooltip]="tooltip" [mdTooltipPosition]="tooltipPosition" [mdTooltipShowDelay]="tooltipShowDelay">
     <md-input-container #innerInputContainer flex layout-fill>
-        <input md-input class="md-input" type="text" [attr.id]="oattr" [id]="oattr" layout-fill [formControlName]="oattr" [placeholder]="placeHolder"
+        <input mdInput class="mat-input" type="text" [attr.id]="oattr" [id]="oattr" layout-fill [formControlName]="oattr" [placeholder]="placeHolder"
             [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)" (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)" [readonly]="isReadOnly" [o-disabled]="innerInputContainer">
             <md-hint *ngIf="!isReadOnly && _fControl.touched && _fControl.errors">
                 <span *ngIf="_fControl.errors?.required">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</span>
@@ -9,5 +9,5 @@
                 <span *ngIf="_fControl.errors?.invalidNIFLetter"> {{ 'FORM_VALIDATION.DNI_LETTER' | oTranslate}} </span>
             </md-hint>
     </md-input-container>
-    <span class="icon-btn" [class.md-disabled]="isDisabled"><i class="material-icons">perm_identity</i></span>
+    <span class="icon-btn" [class.mat-disabled]="isDisabled"><i class="material-icons">perm_identity</i></span>
 </div>

@@ -16,7 +16,7 @@
    color: #8E0C39;
 }
 
-:placeholder-shown { /* Standard (https://drafts.csswg.org/selectors-4/#placeholder) */
+:placeholder-shown { /* Standard (https://drafts.scsswg.org/selectors-4/#placeholder) */
   color: #8E0C39;
 }
 
@@ -40,7 +40,7 @@
     position: relative;
     height: 30px;
 
-    > .md-icon {
+    > .mat-icon {
       position: absolute;
       top: 0.15em;
       left: 0.3em;
@@ -86,10 +86,10 @@
     flex: 1 1 auto;
   }
 
-  .md-list {
+  .mat-list {
     overflow: auto;
 
-    .md-3-line .o-custom-list-item {
+    .mat-3-line .o-custom-list-item {
       position: relative;
     }
 
@@ -110,41 +110,41 @@
         -moz-box-sizing: border-box;
         -webkit-box-sizing: border-box;
         box-sizing: border-box;
-        .md-list-item {
+        .mat-list-item {
           padding-right: 0px;
         }
       }
     }
 
     &:not(.selectable).o-list-1-detail-buttons {
-      md-list-item {
-       padding-right: 40px;
+      .mat-list-item-content {
+        padding-right: 40px;
       }
     }
 
     &:not(.selectable).o-list-2-detail-buttons {
-      md-list-item {
-       padding-right: 64px;
+      .mat-list-item-content {
+        padding-right: 64px;
       }
     }
 
-    &:not(.selectable):not(.o-list-1-detail-buttons):not(.o-list-2-detail-buttons) .md-list-text {
+    &:not(.selectable):not(.o-list-1-detail-buttons):not(.o-list-2-detail-buttons) .mat-list-text {
       padding-right: 0px;
     }
 
-    &.selectable.o-list-1-detail-buttons .md-list-item {
+    &.selectable.o-list-1-detail-buttons .mat-list-item-content {
       padding-right: 60px;
     }
 
-    &.selectable[dense].o-list-1-detail-buttons .md-list-item {
+    &.selectable[dense].o-list-1-detail-buttons .mat-list-item-content {
       padding-right: 56px;
     }
 
-    &.selectable.o-list-2-detail-buttons .md-list-item {
+    &.selectable.o-list-2-detail-buttons .mat-list-item-content {
       padding-right: 84px;
     }
 
-    &.selectable[dense].o-list-2-detail-buttons .md-list-item {
+    &.selectable[dense].o-list-2-detail-buttons .mat-list-item-content {
       padding-right: 80px;
     }
   }

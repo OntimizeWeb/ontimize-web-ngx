@@ -1,10 +1,10 @@
 import { Injector } from '@angular/core';
-import {OpaqueToken} from '@angular/core';
-import {Http} from '@angular/http';
+import { OpaqueToken } from '@angular/core';
+import { Http } from '@angular/http';
 
-import {OntimizeEEService} from './ontimize-ee.service';
-import {OntimizeService} from './ontimize.service';
-import {APP_CONFIG, Config} from '../config/app-config';
+import { OntimizeEEService } from './ontimize-ee.service';
+import { OntimizeService } from './ontimize.service';
+import { APP_CONFIG, Config } from '../config/app-config';
 
 export const SERVICE_CONFIG = new OpaqueToken('service.config');
 
@@ -19,11 +19,11 @@ class DataServiceFactory {
   }
 
   public factory(): any {
-    if (typeof(this.config.serviceType)==='undefined') {
+    if (typeof (this.config.serviceType) === 'undefined') {
       return new OntimizeService(this.injector);
-    }else if ('OntimizeEE' === this.config.serviceType) {
+    } else if ('OntimizeEE' === this.config.serviceType) {
       return new OntimizeEEService(this.injector);
-    }else {
+    } else {
       //  let newInstace =(this.config.servicetype as any).prototype;
       //  return newInstace.constructor.apply(newInstace, new Array(this.http));
       let newInstance = Object.create((this.config.serviceType as any).prototype);
@@ -31,8 +31,8 @@ class DataServiceFactory {
       return newInstance;
     }
   }
-};
+}
 
-export let dataServiceFactory = function (injector: Injector) {
+export function dataServiceFactory(injector: Injector) {
   return new DataServiceFactory(injector).factory();
-};
+}

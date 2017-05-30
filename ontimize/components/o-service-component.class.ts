@@ -1,7 +1,9 @@
 import {
-  Injector, Inject, ElementRef,
-  NgZone, Optional, forwardRef
+  Injector,
+  ElementRef,
+  NgZone
 } from '@angular/core';
+
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { Observable } from 'rxjs/Observable';
@@ -9,13 +11,18 @@ import { Subscription } from 'rxjs/Subscription';
 
 import { InputConverter } from '../decorators';
 import { OntimizeService, AuthGuardService, OTranslateService, LocalStorageService, DialogService } from '../services';
-import { ILocalStorageComponent } from '../interfaces';
+
 import { OFormComponent } from './form/o-form.component';
 
 import { OListInitializationOptions } from './list/o-list.component';
 import { OTableInitializationOptions } from './table/o-table.component';
 
 import { Util } from '../utils';
+
+export interface ILocalStorageComponent {
+  getDataToStore(): Object;
+  getComponentKey(): string;
+}
 
 export const DEFAULT_INPUTS_O_SERVICE_COMPONENT = [
   // attr [string]: list identifier. It is mandatory if data are provided through the data attribute. Default: entity (if set).
@@ -195,7 +202,7 @@ export class OServiceComponent implements ILocalStorageComponent {
   protected filterForm: boolean = false;
   protected dataService: any;
   protected state: any;
-  protected selectedItems: Array<Object> = [];;
+  protected selectedItems: Array<Object> = [];
 
   protected router: Router;
   protected actRoute: ActivatedRoute;
@@ -206,7 +213,7 @@ export class OServiceComponent implements ILocalStorageComponent {
   constructor(
     injector: Injector,
     elRef: ElementRef,
-    @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent
+    form: OFormComponent
   ) {
     this.injector = injector;
     this.elRef = elRef;

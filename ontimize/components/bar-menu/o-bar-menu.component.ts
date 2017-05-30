@@ -1,13 +1,14 @@
-import {Component, Injector,
+import {
+  Component, Injector,
   NgModule,
   ElementRef,
-  ModuleWithProviders,
-  ViewEncapsulation} from '@angular/core';
-import { MdToolbarModule, MdIconModule } from '@angular/material';
-import {AuthGuardService} from '../../services';
-import { OTranslateModule } from '../../pipes/o-translate.pipe';
-import { OTranslateService } from '../../services';
+  ViewEncapsulation
+} from '@angular/core';
 
+import { AuthGuardService } from '../../services';
+import { OTranslateService } from '../../services';
+import { OSharedModule } from '../../shared';
+import { CommonModule } from '@angular/common';
 
 export const DEFAULT_INPUTS_O_BAR_MENU = [
   // title [string]: menu title. Default: no value.
@@ -19,10 +20,8 @@ export const DEFAULT_INPUTS_O_BAR_MENU = [
 
 @Component({
   selector: 'o-bar-menu',
-  templateUrl: './bar-menu/o-bar-menu.component.html',
-  styleUrls: [
-    './bar-menu/o-bar-menu.component.css'
-  ],
+  template: require('./o-bar-menu.component.html'),
+  styles: [require('./o-bar-menu.component.scss')],
   inputs: [
     ...DEFAULT_INPUTS_O_BAR_MENU
   ],
@@ -86,14 +85,8 @@ export class OBarMenuComponent {
 
 @NgModule({
   declarations: [OBarMenuComponent],
-  imports: [MdIconModule, MdToolbarModule, OTranslateModule],
+  imports: [OSharedModule, CommonModule],
   exports: [OBarMenuComponent],
 })
 export class OBarMenuModule {
-  static forRoot(): ModuleWithProviders {
-    return {
-      ngModule: OBarMenuModule,
-      providers: []
-    };
-  }
 }

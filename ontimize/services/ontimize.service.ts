@@ -6,9 +6,9 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/share';
 
 import { LoginService, SERVICE_CONFIG } from '../services';
-import { IAuthService, IDataService } from '../interfaces';
 import { APP_CONFIG, Config } from '../config/app-config';
 
+import { IAuthService, IDataService } from '../util/util';
 
 @Injectable()
 export class OntimizeService implements IAuthService, IDataService {
@@ -31,7 +31,6 @@ export class OntimizeService implements IAuthService, IDataService {
   protected _startSessionPath: string;
 
   constructor(protected injector: Injector) {
-
     this.http = this.injector.get(Http);
     this._appConfig = this.injector.get(APP_CONFIG);
   }
@@ -389,7 +388,9 @@ export class OntimizeService implements IAuthService, IDataService {
 
   protected redirectLogin(sessionExpired: boolean = false) {
     let router = this.injector.get(Router);
-    router.navigate(['login'], { queryParams: { 'isdetail': 'true' } });
+    router.navigate(['/login'], {
+      queryParams: { 'isdetail': 'true' }
+    });
   }
 
   protected isNullOrUndef(arg: any): boolean {

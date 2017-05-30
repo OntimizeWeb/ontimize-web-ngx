@@ -2,11 +2,11 @@ import {
   Component, Inject, Injector, forwardRef, ElementRef, OnInit,
   Optional,
   NgModule,
-  ModuleWithProviders,
   ViewEncapsulation
 } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { ValidatorFn } from '@angular/forms/src/directives/validators';
-import { OSharedModule } from '../../../shared.module';
+import { OSharedModule } from '../../../shared';
 import { OFormComponent } from '../../form/o-form.component';
 import {
   OTextInputModule, OTextInputComponent, DEFAULT_INPUTS_O_TEXT_INPUT,
@@ -24,8 +24,8 @@ export const DEFAULT_OUTPUTS_O_NIF_INPUT = [
 
 @Component({
   selector: 'o-nif-input',
-  templateUrl: '/input/nif-input/o-nif-input.component.html',
-  styleUrls: ['/input/nif-input/o-nif-input.component.css'],
+  template: require('./o-nif-input.component.html'),
+  styles: [require('./o-nif-input.component.scss')],
   inputs: [
     ...DEFAULT_INPUTS_O_NIF_INPUT
   ],
@@ -57,14 +57,8 @@ export class ONIFInputComponent extends OTextInputComponent implements OnInit {
 
 @NgModule({
   declarations: [ONIFInputComponent],
-  imports: [OSharedModule, OTextInputModule],
+  imports: [OSharedModule, CommonModule, OTextInputModule],
   exports: [ONIFInputComponent, OTextInputModule],
 })
 export class ONIFInputModule {
-  static forRoot(): ModuleWithProviders {
-    return {
-      ngModule: ONIFInputModule,
-      providers: []
-    };
-  }
 }

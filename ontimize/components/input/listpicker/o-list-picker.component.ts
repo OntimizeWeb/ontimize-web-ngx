@@ -2,30 +2,29 @@ import {
   Component, ElementRef, EventEmitter, forwardRef, Inject, Injector,
   OnInit, ViewChild, Optional,
   NgModule,
-  ModuleWithProviders,
   ViewEncapsulation
 } from '@angular/core';
-
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import {
-  MdInputModule, MdInput, MdListModule, MdToolbarModule,
-  MdDialog, MdDialogRef, MdDialogConfig
+  MdInputDirective,
+  MdDialog,
+  MdDialogRef,
+  MdDialogConfig
 } from '@angular/material';
 
 import { dataServiceFactory } from '../../../services/data-service.provider';
 import { OntimizeService } from '../../../services';
-import { ColumnsFilterPipe } from '../../../pipes';
-import { OSharedModule } from '../../../shared.module';
+
 import { InputConverter } from '../../../decorators';
 import { OFormComponent } from '../../form/o-form.component';
 import { OSearchInputModule } from '../../search-input/o-search-input.component';
 import { OFormValue } from '../../form/OFormValue';
+
+import { OSharedModule } from '../../../shared';
 import { ODialogModule } from '../../dialog/o-dialog.component';
 
 import { OListPickerDialogComponent } from './o-list-picker-dialog.component';
-import { OTranslateModule } from '../../../pipes/o-translate.pipe';
 
 import { OFormServiceComponent } from '../../o-form-service-component.class';
 
@@ -72,8 +71,8 @@ export const DEFAULT_OUTPUTS_O_LIST_PICKER = [
 
 @Component({
   selector: 'o-list-picker',
-  templateUrl: '/input/listpicker/o-list-picker.component.html',
-  styleUrls: ['/input/listpicker/o-list-picker.component.css'],
+  template: require('./o-list-picker.component.html'),
+  styles: [require('./o-list-picker.component.scss')],
   providers: [
     { provide: OntimizeService, useFactory: dataServiceFactory, deps: [Injector] }
   ],
@@ -100,7 +99,7 @@ export class OListPickerComponent extends OFormServiceComponent implements OnIni
   protected dialogRef: MdDialogRef<OListPickerDialogComponent>;
 
   @ViewChild('inputModel')
-  protected inputModel: MdInput;
+  protected inputModel: MdInputDirective;
 
   public onChange: EventEmitter<Object> = new EventEmitter<Object>();
 
@@ -156,15 +155,15 @@ export class OListPickerComponent extends OFormServiceComponent implements OnIni
     }
     /*
     * Temporary code
-    * I do not understand the reason why MdInput is not removing 'md-empty' clase despite of the fact that
+    * I do not understand the reason why MdInput is not removing 'mat-empty' clase despite of the fact that
     * the input element of the description is binding value attribute
     */
-    let placeHolderLbl = this.elRef.nativeElement.querySelectorAll('label.md-input-placeholder');
+    let placeHolderLbl = this.elRef.nativeElement.querySelectorAll('label.mat-input-placeholder');
     if (placeHolderLbl.length) {
       // Take only first, nested element does not matter.
       let element = placeHolderLbl[0];
       if (descTxt && descTxt.length > 0) {
-        element.classList.remove('md-empty');
+        element.classList.remove('mat-empty');
       }
     }
     return descTxt;
@@ -180,16 +179,16 @@ export class OListPickerComponent extends OFormServiceComponent implements OnIni
 
   onClickClear(e: Event): void {
     e.stopPropagation();
-    if (!this._isReadOnly) {
+    if (!this._isReadOnly && !this.isDisabled) {
       this.setValue('');
-    }
-    if (this._fControl) {
-      this._fControl.markAsTouched();
+      if (this._fControl) {
+        this._fControl.markAsTouched();
+      }
     }
   }
 
   onClickListpicker(e: Event): void {
-    if (!this._isReadOnly) {
+    if (!this._isReadOnly && !this.isDisabled) {
       this.openDialog();
     }
   }
@@ -203,6 +202,7 @@ export class OListPickerComponent extends OFormServiceComponent implements OnIni
     this.dialogRef.afterClosed().subscribe(result => {
       this.onDialogClose(result);
     });
+    this.onDialogShow();
     this.dialogRef.componentInstance.initialize({
       data: this.dataArray,
       filter: this.filter,
@@ -210,12 +210,14 @@ export class OListPickerComponent extends OFormServiceComponent implements OnIni
     });
   }
 
-  onDialogShow(evt: any) {
-    if (evt.overlayRef._pane && evt.overlayRef._pane.children
-      && evt.overlayRef._pane.children.length >= 0) {
-      let el = evt.overlayRef._pane.children[0];
-      if (el) {
-        el.classList.add('md-dialog-custom');
+  onDialogShow() {
+    if (this.dialogRef) {
+      let dRef = (this.dialogRef as any);
+      if (dRef._overlayRef && dRef._overlayRef._pane && dRef._overlayRef._pane.children && dRef._overlayRef._pane.children.length >= 0) {
+        let el = dRef._overlayRef._pane.children[0];
+        if (el) {
+          el.classList.add('mat-dialog-custom');
+        }
       }
     }
   }
@@ -247,21 +249,22 @@ export class OListPickerComponent extends OFormServiceComponent implements OnIni
 }
 
 @NgModule({
-  declarations: [ColumnsFilterPipe, OListPickerDialogComponent, OListPickerComponent],
-  imports: [CommonModule, FormsModule, ReactiveFormsModule,
-    MdInputModule, MdListModule, ODialogModule,
-    MdToolbarModule,
-    OSharedModule, OSearchInputModule, OTranslateModule],
-  exports: [OListPickerComponent],
+  declarations: [
+    OListPickerDialogComponent,
+    OListPickerComponent
+  ],
+  imports: [
+    OSharedModule,
+    CommonModule,
+    ODialogModule,
+    OSearchInputModule
+  ],
+  exports: [
+    OListPickerComponent
+  ],
   entryComponents: [
     OListPickerDialogComponent
   ]
 })
 export class OListPickerModule {
-  static forRoot(): ModuleWithProviders {
-    return {
-      ngModule: OListPickerModule,
-      providers: []
-    };
-  }
 }

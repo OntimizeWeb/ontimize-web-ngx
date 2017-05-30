@@ -1,11 +1,11 @@
 import { Injector, Injectable } from '@angular/core';
 import { EventEmitter } from '@angular/core';
-import { TranslateService } from 'ng2-translate';
+import { TranslateService } from '@ngx-translate/core';
 import { MomentService } from '../services';
 
-import CORE_TRANSLATIONS = require('../i18n/i18n');
+import * as CORE_TRANSLATIONS from '../i18n/i18n';
 
-import {ObservableWrapper} from '../util/async';
+import { ObservableWrapper } from '../util/async';
 
 @Injectable()
 export class OTranslateService {
@@ -15,26 +15,23 @@ export class OTranslateService {
   protected translateService: TranslateService;
   protected momentService: MomentService;
 
-  constructor( protected injector: Injector ) {
+  constructor(protected injector: Injector) {
     this.translateService = this.injector.get(TranslateService);
     this.momentService = this.injector.get(MomentService);
   }
 
-  public setDefaultLang (lang: string): void {
+  public setDefaultLang(lang: string): void {
     this.translateService.setDefaultLang(lang);
   }
 
-  public get (text: string): string {
+  public get(text: string): string {
     let textTranslated = undefined;
     try {
       let bundle = this.translateService.get(text);
       if (bundle && bundle['value']) {
         textTranslated = bundle['value'];
       }
-      /*
-      * Due to a bug fixed on ng2-translate (v2.2.2) library, exceptions is not thrown
-      * anymore when asking for a key that does not exist.
-      */
+
       textTranslated = textTranslated === text ? undefined : textTranslated;
     } catch (e) {
       textTranslated = undefined;
@@ -50,13 +47,13 @@ export class OTranslateService {
     return textTranslated;
   }
 
-  public use (lang: string): void {
+  public use(lang: string): void {
     this.translateService.use(lang)
       .subscribe(
-        res => {
-          this.momentService.load(lang);
-          ObservableWrapper.callEmit(this.onLanguageChanged, lang);
-        }
+      res => {
+        this.momentService.load(lang);
+        ObservableWrapper.callEmit(this.onLanguageChanged, lang);
+      }
       );
   }
 

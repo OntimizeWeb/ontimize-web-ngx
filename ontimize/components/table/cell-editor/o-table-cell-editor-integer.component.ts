@@ -1,8 +1,8 @@
 import { Component, Inject, forwardRef, EventEmitter } from '@angular/core';
 import { ObservableWrapper } from '../../../util/async';
 
-import { ITableCellEditor } from '../../../interfaces';
-import { OTableColumnComponent } from '../o-table-column.component';
+
+import { OTableColumnComponent, ITableCellEditor } from '../o-table-column.component';
 
 @Component({
   selector: 'o-table-cell-editor-integer',

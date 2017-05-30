@@ -1,24 +1,24 @@
-import {Component, OnInit, Inject, Injector, Optional, NgZone, ElementRef, forwardRef,
+import {
+  Component, OnInit, Inject, Injector, Optional, NgZone, ElementRef, forwardRef,
   NgModule,
-  ModuleWithProviders,
-  ViewEncapsulation} from '@angular/core';
-import {EventEmitter} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {Router, ActivatedRoute} from '@angular/router';
-import {Observable} from 'rxjs/Observable';
+  ViewEncapsulation
+} from '@angular/core';
+import { EventEmitter } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
+import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/mergeAll';
 
-import  {MdCheckboxModule, MdListModule, MdToolbarModule } from '@angular/material';
+import { OLightTableButtonPanelModule } from './o-light-table-button-panel.component';
+import { OLightTableColumnModule, OLightTableColumnComponent } from './o-light-table-column.component';
+import { OntimizeService, DialogService } from '../../services';
+import { OFormComponent } from '../form/o-form.component';
+import { InputConverter } from '../../decorators';
+import { Util } from '../../util/util';
 
-import {OLightTableButtonPanelModule} from './o-light-table-button-panel.component';
-import {OLightTableColumnModule, OLightTableColumnComponent} from './o-light-table-column.component';
-import {OntimizeService, DialogService} from '../../services';
-import {OFormComponent} from '../form/o-form.component';
-import {InputConverter} from '../../decorators';
-import {Util} from '../../util/util';
-
-import {ObservableWrapper} from '../../util/async';
+import { ObservableWrapper } from '../../util/async';
+import { OSharedModule } from '../../shared';
+import { CommonModule } from '@angular/common';
 
 export const DEFAULT_INPUTS_O_LIGHT_TABLE = [
   'refreshButton: refresh-button',
@@ -39,8 +39,8 @@ export const DEFAULT_OUTPUTS_O_LIGHT_TABLE = [
 
 @Component({
   selector: 'o-light-table',
-  templateUrl: './light-table/o-light-table.component.html',
-  styleUrls: ['./light-table/o-light-table.component.css'],
+  template: require('./o-light-table.component.html'),
+  styles: [require('./o-light-table.component.scss')],
   providers: [OntimizeService],
   inputs: [
     ...DEFAULT_INPUTS_O_LIGHT_TABLE
@@ -118,7 +118,7 @@ export class OLightTableComponent implements OnInit {
   ngOnInit(): any {
     this.colArray = Util.parseArray(this.columns);
 
-     //TODO Move to ParseUtils to be used on table, combo, etc....
+    //TODO Move to ParseUtils to be used on table, combo, etc....
     let pkArray = Util.parseArray(this.parentKeys);
     if (pkArray && pkArray.length > 0) {
       pkArray.forEach(item => {
@@ -240,7 +240,7 @@ export class OLightTableComponent implements OnInit {
     ObservableWrapper.callEmit(this.onRowClick, item);
   }
 
- public onRowClicked(onNext: (item: any) => void): Object {
+  public onRowClicked(onNext: (item: any) => void): Object {
     return ObservableWrapper.subscribe(this.onRowClick, onNext);
   }
 
@@ -271,11 +271,11 @@ export class OLightTableComponent implements OnInit {
   showConfirmDelete(evt) {
     this._dialogService.confirm('CONFIRM', 'MESSAGES.CONFIRM_DELETE')
       .then(
-          res => {
-            if (res === true) {
-              this.executeMassiveRemove();
-            }
-          }
+      res => {
+        if (res === true) {
+          this.executeMassiveRemove();
+        }
+      }
       );
   }
 
@@ -303,10 +303,10 @@ export class OLightTableComponent implements OnInit {
     }, () => {
       this._dialogService.alert('INFO', 'MESSAGES.SUCCESS_DELETE')
         .then(
-            res => {
-              this.deleting = false;
-              this.queryData();
-            }
+        res => {
+          this.deleting = false;
+          this.queryData();
+        }
         );
     });
 
@@ -318,14 +318,8 @@ export class OLightTableComponent implements OnInit {
 
 @NgModule({
   declarations: [OLightTableComponent],
-  imports: [CommonModule, MdCheckboxModule, MdListModule, MdToolbarModule, OLightTableColumnModule, OLightTableButtonPanelModule],
+  imports: [OSharedModule, CommonModule, OLightTableColumnModule, OLightTableButtonPanelModule],
   exports: [OLightTableComponent],
 })
 export class OLightTableModule {
-  static forRoot(): ModuleWithProviders {
-    return {
-      ngModule: OLightTableModule,
-      providers: []
-    };
-  }
 }

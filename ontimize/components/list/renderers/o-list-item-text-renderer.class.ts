@@ -1,10 +1,7 @@
 import {
-  Inject,
   Injector,
-  forwardRef,
   ElementRef,
   Renderer,
-  Optional,
   EventEmitter
 } from '@angular/core';
 
@@ -41,7 +38,7 @@ export class OListItemTextRenderer {
     public elRef: ElementRef,
     protected _renderer: Renderer,
     protected _injector: Injector,
-    @Optional() @Inject(forwardRef(() => OListItemComponent)) protected _listItem: OListItemComponent
+    protected _listItem: OListItemComponent
   ) {
     this.elRef.nativeElement.setAttribute('flex', '');
     this.elRef.nativeElement.setAttribute('layout', 'row');
@@ -70,8 +67,8 @@ export class OListItemTextRenderer {
           mdLines--;
         }
         this.has3Lines = (mdLines === 3);
-        mdListItem.classList.add('md-' + mdLines + '-line');
-        mdListItem.querySelector('.md-list-text').remove();
+        mdListItem.classList.add('mat-' + mdLines + '-line');
+        mdListItem.querySelector('.mat-list-text').remove();
       }
     }
   }

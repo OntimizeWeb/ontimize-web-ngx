@@ -4,7 +4,7 @@ import { Router, NavigationStart } from '@angular/router';
 import { ObservableWrapper } from '../util/async';
 import { APP_CONFIG, Config } from '../config/app-config';
 
-import { ILocalStorageComponent } from '../interfaces';
+import { ILocalStorageComponent } from '../components/o-service-component.class';
 
 export class LocalStorageService {
   static COMPONENTS_STORAGE_KEY: string = 'components';

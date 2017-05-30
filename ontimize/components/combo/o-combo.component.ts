@@ -3,21 +3,18 @@ import {
   forwardRef, Inject, Injector,
   OnInit, ViewChild, Optional,
   NgModule,
-  ModuleWithProviders,
   ViewEncapsulation
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { MdInputModule, MdSelectModule, MdSelect, MdOption } from '@angular/material';
+import {MdSelect, MdOption } from '@angular/material';
 
 import { dataServiceFactory } from '../../services/data-service.provider';
 import { OntimizeService } from '../../services';
-import { OSharedModule } from '../../shared.module';
+import { OSharedModule } from '../../shared';
+import { CommonModule } from '@angular/common';
 import { InputConverter } from '../../decorators';
 import { OFormComponent } from '../form/o-form.component';
 import { OFormValue } from '../form/OFormValue';
-import { OTranslateModule } from '../../pipes/o-translate.pipe';
 
 import { OFormServiceComponent } from '../o-form-service-component.class';
 
@@ -76,8 +73,8 @@ export const DEFAULT_OUTPUTS_O_COMBO = [
   outputs: [
     ...DEFAULT_OUTPUTS_O_COMBO
   ],
-  templateUrl: '/combo/o-combo.component.html',
-  styleUrls: ['/combo/o-combo.component.css'],
+  template: require('./o-combo.component.html'),
+  styles: [require('./o-combo.component.scss')],
   encapsulation: ViewEncapsulation.None
 })
 export class OComboComponent extends OFormServiceComponent implements OnInit {
@@ -151,7 +148,7 @@ export class OComboComponent extends OFormServiceComponent implements OnInit {
     let descTxt = '';
     if (this._currentIndex !== undefined && this.selectModel) {
       if (this.selectModel.selected) {
-        descTxt = this.selectModel.selected.viewValue;
+        descTxt = (this.selectModel.selected as any).viewValue;
       } else if (this.selectModel.options) {
         let option: MdOption = this.selectModel.options.toArray()[this._currentIndex];
         if (option) {
@@ -163,15 +160,15 @@ export class OComboComponent extends OFormServiceComponent implements OnInit {
     }
     /*
     * Temporary code
-    * I do not understand the reason why MdInput is not removing 'md-empty' clase despite of the fact that
+    * I do not understand the reason why MdInput is not removing 'mat-empty' clase despite of the fact that
     * the input element of the description is binding value attribute
     */
-    let placeHolderLbl = this.elRef.nativeElement.querySelectorAll('label.md-input-placeholder');
+    let placeHolderLbl = this.elRef.nativeElement.querySelectorAll('label.mat-input-placeholder');
     if (placeHolderLbl.length) {
       // Take only first, nested element does not matter.
       let element = placeHolderLbl[0];
       if (descTxt && descTxt.length > 0) {
-        element.classList.remove('md-empty');
+        element.classList.remove('mat-empty');
       }
     }
     return descTxt;
@@ -266,14 +263,8 @@ export class OComboComponent extends OFormServiceComponent implements OnInit {
 
 @NgModule({
   declarations: [OComboComponent],
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, OSharedModule, MdInputModule, MdSelectModule, OTranslateModule],
+  imports: [OSharedModule, CommonModule],
   exports: [OComboComponent],
 })
 export class OComboModule {
-  static forRoot(): ModuleWithProviders {
-    return {
-      ngModule: OComboModule,
-      providers: []
-    };
-  }
 }

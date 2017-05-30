@@ -1,24 +1,34 @@
 import {
-  Component, Inject, Injector, forwardRef, ElementRef, ViewChild, OnInit,
+  Component,
+  Inject,
+  Injector,
+  forwardRef,
+  ElementRef,
+  ViewChild,
+  OnInit,
   Optional,
   NgModule,
-  ModuleWithProviders,
   ViewEncapsulation
 } from '@angular/core';
 
-import { MdInput } from '@angular/material';
+import { CommonModule } from '@angular/common';
+import {
+  MdInputDirective
+} from '@angular/material';
 
 import { ValidatorFn } from '@angular/forms/src/directives/validators';
 
 import { OFormComponent } from '../../form/o-form.component';
 import {
-  OTextInputModule, OTextInputComponent, DEFAULT_INPUTS_O_TEXT_INPUT,
+  OTextInputModule,
+  OTextInputComponent,
+  DEFAULT_INPUTS_O_TEXT_INPUT,
   DEFAULT_OUTPUTS_O_TEXT_INPUT
 } from '../text-input/o-text-input.component';
 
 import { OFormValue } from '../../form/OFormValue';
 import { MomentService } from '../../../services';
-import { OSharedModule } from '../../../shared.module';
+import { OSharedModule } from '../../../shared';
 import * as moment from 'moment';
 
 import './o-date-input.loader';
@@ -33,11 +43,31 @@ export const DEFAULT_OUTPUTS_O_DATE_INPUT = [
   ...DEFAULT_OUTPUTS_O_TEXT_INPUT
 ];
 
+const CUSTOM_DATEPICKER_HEADER = `
+  <div class="ui-datepicker-custom-header">
+    <div class="ui-datepicker-custom-title" layout="row">
+      <span class="ui-datepicker-custom-year"></span>
+    </div>
+    <div class="ui-datepicker-custom-text" layout="row">
+      <span class="ui-datepicker-custom-day"></span>&nbsp;
+      <span class="ui-datepicker-custom-dayNumber"></span>&nbsp;
+      <span class="ui-datepicker-custom-month"></span>
+    </div>
+  </div>
+`;
+
+//TODO translate button text
+const CUSTOM_DATEPICKER_BUTTONS = `
+  <div class="ui-datepicker-custom-buttonpane" layout="row" layout-align="end">
+    <button class="mat-button mat-primary" data-event="click" data-handler-custom="cancel">CANCELAR</button>
+    <button class="mat-button mat-primary" data-event="click" data-handler-custom="accept">ACEPTAR</button>
+  </div>
+`;
 
 @Component({
   selector: 'o-date-input',
-  templateUrl: '/input/date-input/o-date-input.component.html',
-  styleUrls: ['/input/date-input/o-date-input.component.css'],
+  template: require('./o-date-input.component.html'),
+  styles: [require('./o-date-input.component.scss')],
   inputs: [
     ...DEFAULT_INPUTS_O_DATE_INPUT
   ],
@@ -57,10 +87,10 @@ export class ODateInputComponent extends OTextInputComponent implements OnInit {
   opickerattr: string;
 
   @ViewChild('inputModel')
-  protected inputModel: MdInput;
+  protected inputModel: MdInputDirective;
 
   @ViewChild('displayInputModel')
-  protected displayInputModel: MdInput;
+  protected displayInputModel: MdInputDirective;
 
   protected inputHtmlEl: any;
   protected datepicker: any;
@@ -125,7 +155,7 @@ export class ODateInputComponent extends OTextInputComponent implements OnInit {
   }
 
   extendGenerateHTML() {
-    if ($['datepicker']._generateHTML_old !== undefined) {
+    if (!$['datepicker'] || $['datepicker']._generateHTML_old !== undefined) {
       return;
     }
 
@@ -133,22 +163,14 @@ export class ODateInputComponent extends OTextInputComponent implements OnInit {
 
     $['datepicker']._generateHTML = function (inst) {
       let html = '';
-      html += '<div class="ui-datepicker-custom-header">';
-      html += '<div class="ui-datepicker-custom-title" layout="row">';
-      html += '<span class="ui-datepicker-custom-year"></span>';
-      html += '</div>';
-      html += '<div class="ui-datepicker-custom-text" layout="row">';
-      html += '<span class="ui-datepicker-custom-day"></span>&nbsp;';
-      html += '<span class="ui-datepicker-custom-dayNumber"></span>&nbsp;';
-      html += '<span class="ui-datepicker-custom-month"></span>';
-      html += '</div>';
-      html += '</div>';
+      html += CUSTOM_DATEPICKER_HEADER;
+
+      html += '<div class="ui-datepicker-custom-body-container">';
 
       html += this._generateHTML_old(inst);
 
-      html += '<div class="ui-datepicker-custom-buttonpane" layout="row" layout-align="end">';
-      html += '<button md-button class="md-primary" data-event="click" data-handler-custom="cancel">CANCELAR</button>';//TODO translate button text
-      html += '<button md-button class="md-primary" data-event="click" data-handler-custom="accept">ACEPTAR</button>';
+      html += CUSTOM_DATEPICKER_BUTTONS;
+
       html += '</div>';
 
       let $html = $(html);
@@ -166,7 +188,7 @@ export class ODateInputComponent extends OTextInputComponent implements OnInit {
   }
 
   extendAttachHandlers() {
-    if ($['datepicker']._attachHandlers_old !== undefined) {
+    if (!$['datepicker'] || $['datepicker']._attachHandlers_old !== undefined) {
       return;
     }
 
@@ -198,7 +220,7 @@ export class ODateInputComponent extends OTextInputComponent implements OnInit {
   }
 
   extendUpdateDatepicker() {
-    if ($['datepicker']._updateDatepicker_old !== undefined) {
+    if (!$['datepicker'] || $['datepicker']._updateDatepicker_old !== undefined) {
       return;
     }
 
@@ -216,7 +238,7 @@ export class ODateInputComponent extends OTextInputComponent implements OnInit {
   }
 
   overwriteDoKeyUp() {
-    if ($['datepicker']._doKeyUp_overwrited === true) {
+    if (!$['datepicker'] || $['datepicker']._doKeyUp_overwrited === true) {
       return;
     }
     $['datepicker']._doKeyUp_overwrited = true;
@@ -270,7 +292,10 @@ export class ODateInputComponent extends OTextInputComponent implements OnInit {
     var self = this;
 
     this.inputHtmlEl.removeClass('hasDatepicker');
-
+    if (!this.inputHtmlEl.datepicker) {
+      console.error('datepicker not available');
+      return;
+    }
     this.datepicker = this.inputHtmlEl.datepicker({
       dateFormat: this.oformat.toLowerCase().replace(/yyyy/g, 'yy'),
       showAnim: 'slideDown',
@@ -298,7 +323,7 @@ export class ODateInputComponent extends OTextInputComponent implements OnInit {
         var momentVal = moment(dateText, self.oformat);
         self.updateDatepickerHeader(momentVal, inst.dpDiv);
 
-        self.inputModel.value = momentVal.valueOf();
+        self.inputModel.value = momentVal.valueOf().toString();
         var control = self.form.formGroup.controls[self.oattr];
         if (control) {
           control.markAsDirty();
@@ -328,7 +353,8 @@ export class ODateInputComponent extends OTextInputComponent implements OnInit {
             momentArg = datepickerTimestamp;
           }
         }
-        var momentVal = moment(momentArg);
+        var parsedMomentArg = parseInt(momentArg);
+        var momentVal = isNaN(parsedMomentArg) ? moment() : moment(parsedMomentArg);
         self.updateDatepickerHeader(momentVal, inst.dpDiv);
       }
     });
@@ -387,15 +413,15 @@ export class ODateInputComponent extends OTextInputComponent implements OnInit {
     }
     /*
     * Temporary code
-    * I do not understand the reason why MdInput is not removing 'md-empty' clase despite of the fact that
+    * I do not understand the reason why MdInput is not removing 'mat-empty' clase despite of the fact that
     * the input element of the description is binding value attribute
     */
-    let placeHolderLbl = this.elRef.nativeElement.querySelectorAll('label.md-input-placeholder');
+    let placeHolderLbl = this.elRef.nativeElement.querySelectorAll('label.mat-input-placeholder');
     if (placeHolderLbl.length) {
       // Take only first, nested element does not matter.
       let element = placeHolderLbl[0];
       if (descTxt && descTxt.length > 0) {
-        element.classList.remove('md-empty');
+        element.classList.remove('mat-empty');
       }
     }
     return descTxt;
@@ -437,14 +463,15 @@ export class ODateInputComponent extends OTextInputComponent implements OnInit {
 
 @NgModule({
   declarations: [ODateInputComponent],
-  imports: [OTextInputModule, OSharedModule],
-  exports: [ODateInputComponent, OTextInputModule],
+  imports: [
+    OTextInputModule,
+    OSharedModule,
+    CommonModule
+  ],
+  exports: [
+    ODateInputComponent,
+    OTextInputModule
+  ],
 })
 export class ODateInputModule {
-  static forRoot(): ModuleWithProviders {
-    return {
-      ngModule: ODateInputModule,
-      providers: []
-    };
-  }
 }

@@ -1,14 +1,14 @@
+import * as $ from 'jquery';
 import {
   Component, Inject, Injector, forwardRef, ElementRef, OnInit,
   Optional,
   NgModule,
-  ModuleWithProviders,
   ViewEncapsulation
 } from '@angular/core';
-
+import { CommonModule } from '@angular/common';
 import { FormControl } from '@angular/forms';
 import { ValidatorFn } from '@angular/forms/src/directives/validators';
-import { OSharedModule } from '../../../shared.module';
+import { OSharedModule } from '../../../shared';
 import { OFormComponent } from '../../form/o-form.component';
 import { OFormValue } from '../../form/OFormValue';
 import { InputConverter } from '../../../decorators';
@@ -19,8 +19,10 @@ import {
   DEFAULT_OUTPUTS_O_TEXT_INPUT
 } from '../text-input/o-text-input.component';
 
-import { OIntegerPipe } from '../../../pipes';
-import { IIntegerPipeArgument } from '../../../interfaces/pipes.interfaces';
+import {
+  OIntegerPipe,
+  IIntegerPipeArgument
+} from '../../../pipes';
 
 export const DEFAULT_INPUTS_O_INTEGER_INPUT = [
   ...DEFAULT_INPUTS_O_TEXT_INPUT,
@@ -38,8 +40,8 @@ export const DEFAULT_OUTPUTS_O_INTEGER_INPUT = [
 
 @Component({
   selector: 'o-integer-input',
-  templateUrl: '/input/integer-input/o-integer-input.component.html',
-  styleUrls: ['/input/integer-input/o-integer-input.component.css'],
+  template: require('./o-integer-input.component.html'),
+  styles: [require('./o-integer-input.component.scss')],
   inputs: [
     ...DEFAULT_INPUTS_O_INTEGER_INPUT
   ],
@@ -178,7 +180,7 @@ export class OIntegerInputComponent extends OTextInputComponent implements OnIni
         ($ as any)(inputElement).width(($ as any)(inputElement).outerWidth(true));
       }
       inputElement.type = this.focused ? 'number' : 'text';
-      inputElement.value = val;
+      inputElement.value = (val !== undefined) ? val : '';
     }
   }
 
@@ -201,6 +203,7 @@ export class OIntegerInputComponent extends OTextInputComponent implements OnIni
         }
       };
     }
+    return {};
   }
 
   protected maxValidator(control: FormControl) {
@@ -211,6 +214,7 @@ export class OIntegerInputComponent extends OTextInputComponent implements OnIni
         }
       };
     }
+    return {};
   }
 
 }
@@ -218,14 +222,8 @@ export class OIntegerInputComponent extends OTextInputComponent implements OnIni
 
 @NgModule({
   declarations: [OIntegerInputComponent],
-  imports: [OSharedModule, OTextInputModule],
+  imports: [OSharedModule, CommonModule, OTextInputModule],
   exports: [OIntegerInputComponent, OTextInputModule],
 })
 export class OIntegerInputModule {
-  static forRoot(): ModuleWithProviders {
-    return {
-      ngModule: OIntegerInputModule,
-      providers: []
-    };
-  }
 }

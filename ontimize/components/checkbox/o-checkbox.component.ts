@@ -3,19 +3,13 @@ import {
   forwardRef, ElementRef, EventEmitter,
   Optional,
   NgModule,
-  ModuleWithProviders,
   ViewEncapsulation
 } from '@angular/core';
 
+import { OSharedModule } from '../../shared';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
-import { MdInputModule, MdCheckboxModule } from '@angular/material';
-
-import { OSharedModule } from '../../shared.module';
 import { OFormComponent } from '../form/o-form.component';
 import { OFormValue } from '../form/OFormValue';
-import { OTranslateModule } from '../../pipes/o-translate.pipe';
 import { OFormDataComponent } from '../o-form-data-component.class';
 
 
@@ -45,8 +39,8 @@ export const DEFAULT_OUTPUTS_O_CHECKBOX = [
   outputs: [
     ...DEFAULT_OUTPUTS_O_CHECKBOX
   ],
-  templateUrl: '/checkbox/o-checkbox.component.html',
-  styleUrls: ['/checkbox/o-checkbox.component.css'],
+  template: require('./o-checkbox.component.html'),
+  styles: [require('./o-checkbox.component.scss')],
   encapsulation: ViewEncapsulation.None
 })
 
@@ -121,14 +115,8 @@ export class OCheckboxComponent extends OFormDataComponent implements OnInit {
 
 @NgModule({
   declarations: [OCheckboxComponent],
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, OSharedModule, MdInputModule, MdCheckboxModule, OTranslateModule],
+  imports: [OSharedModule, CommonModule],
   exports: [OCheckboxComponent],
 })
 export class OCheckboxModule {
-  static forRoot(): ModuleWithProviders {
-    return {
-      ngModule: OCheckboxModule,
-      providers: []
-    };
-  }
 }

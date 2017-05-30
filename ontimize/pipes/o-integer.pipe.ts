@@ -1,6 +1,11 @@
 import { Pipe, PipeTransform, Injector } from '@angular/core';
 import { NumberService } from '../services';
-import { IIntegerPipeArgument } from '../interfaces/pipes.interfaces';
+
+export interface IIntegerPipeArgument {
+  grouping?: boolean;
+  thousandSeparator?: string;
+  locale?: string;
+}
 
 @Pipe({
   name: 'oInteger'

@@ -2,11 +2,11 @@ import {
   Component, Inject, Injector, forwardRef, ElementRef,
   Optional,
   NgModule,
-  ModuleWithProviders,
   ViewEncapsulation
 } from '@angular/core';
 
-import { OSharedModule } from '../../../shared.module';
+import { CommonModule } from '@angular/common';
+import { OSharedModule } from '../../../shared';
 import { InputConverter } from '../../../decorators';
 import { OFormComponent } from '../../form/o-form.component';
 import {
@@ -26,8 +26,8 @@ export const DEFAULT_OUTPUTS_O_TEXTAREA_INPUT = [
 
 @Component({
   selector: 'o-textarea-input',
-  templateUrl: '/input/textarea-input/o-textarea-input.component.html',
-  styleUrls: ['/input/textarea-input/o-textarea-input.component.css'],
+  template: require('./o-textarea-input.component.html'),
+  styles: [require('./o-textarea-input.component.scss')],
   inputs: [
     ...DEFAULT_INPUTS_O_TEXTAREA_INPUT
   ],
@@ -63,14 +63,8 @@ export class OTextareaInputComponent extends OTextInputComponent {
 
 @NgModule({
   declarations: [OTextareaInputComponent],
-  imports: [OSharedModule, OTextInputModule],
-  exports: [OTextareaInputComponent, OTextInputModule],
+  imports: [OSharedModule, CommonModule, OTextInputModule],
+  exports: [OTextareaInputComponent, OTextInputModule]
 })
 export class OTextareaInputModule {
-  static forRoot(): ModuleWithProviders {
-    return {
-      ngModule: OTextareaInputModule,
-      providers: []
-    };
-  }
 }

@@ -1,5 +1,7 @@
 <div [class.hidden-loading]="!loading" class="spinner-container" flex="100" layout="row" layout-align="center center">
-  <md-spinner></md-spinner>
+  <md-progress-spinner *ngIf="loading" mode="indeterminate">
+  </md-progress-spinner>
+
 </div>
 
 <div layout="column" class="expandable-container fill-remaining" layout-fill>
@@ -26,9 +28,9 @@
       <button *ngIf="columnsVisibilityButton" md-menu-item (click)="columnsVisibilityButtonAction()"> {{ 'TABLE.BUTTONS.COLVIS' | oTranslate }} </button>
 
       <button md-menu-item *ngFor="let option of headerOptions" (click)="option.innerOnClick($event)">
-        <md-icon *ngIf="option.icon && option.iconPosition === 'before'" class="md-24">{{ option.icon }}</md-icon>
+        <md-icon *ngIf="option.icon && option.iconPosition === 'before'" class="mat-24">{{ option.icon }}</md-icon>
         {{ option.olabel | oTranslate }}
-        <md-icon *ngIf="option.icon && option.iconPosition === 'after'" class="md-24" style="margin-left: 16px;">{{ option.icon }}</md-icon>
+        <md-icon *ngIf="option.icon && option.iconPosition === 'after'" class="mat-24" style="margin-left: 16px;">{{ option.icon }}</md-icon>
       </button>
     </md-menu>
 

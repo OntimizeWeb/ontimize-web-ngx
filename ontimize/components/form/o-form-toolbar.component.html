@@ -1,6 +1,6 @@
 <md-toolbar class="toolbar-form-header">
 
-  <div class="md-toolbar-tools" layout-fill *ngIf="initialMode">
+  <div class="mat-toolbar-tools" layout-fill *ngIf="initialMode">
     <md-icon aria-label="Back" (click)="onCloseDetail()" *ngIf="isDetail">arrow_back</md-icon>
 
     <md-icon aria-label="First" (click)="first()" *ngIf="showNavigation()" layout-padding>first_page</md-icon>
@@ -35,7 +35,7 @@
     </button>
   </div>
 
-  <div class="md-toolbar-tools" layout-fill *ngIf="editMode || insertMode">
+  <div class="mat-toolbar-tools" layout-fill *ngIf="editMode || insertMode">
     <span class="fill-remaining"></span>
     <button md-button (click)="cancelOperation($event)">
       <md-icon>clear</md-icon>

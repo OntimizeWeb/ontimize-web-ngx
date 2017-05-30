@@ -1,7 +1,7 @@
-import { Component, OnInit, Inject, Injector, forwardRef } from '@angular/core';
+import { Component, OnInit, Inject, Injector, forwardRef, EventEmitter } from '@angular/core';
 
 import { OTableComponent } from './o-table.component';
-import { ITableCellRenderer, ITableCellEditor } from '../../interfaces';
+
 import {
   OTableCellRendererStringComponent,
   OTableCellRendererBooleanComponent,
@@ -21,6 +21,27 @@ import {
 } from './cell-editor/cell-editor';
 import { OTranslateService, MomentService, NumberService, CurrencyService } from '../../services';
 import { Util } from '../../util/util';
+
+export interface ITableCellRenderer {
+  init(parameters: any);
+  render(cellData: any, rowData: any): string;
+  handleCreatedCell(cellElement: any, rowData: any);
+}
+
+export interface ITableCellEditor {
+  onFocus: EventEmitter<any>;
+  onBlur: EventEmitter<any>;
+  onSubmit: EventEmitter<any>;
+  init(parameters: any);
+  getHtml(data: any): string;
+  handleCellFocus(cellElement: any, data: any);
+  handleCellBlur(cellElement: any);
+  create(cellElement: any, data: any);
+  destroy(cellElement: any);
+  performInsertion(cellElement: any);
+  createEditorForInsertTable(cellElement: any, data: any);
+  getInsertTableValue(): any;
+}
 
 export const DEFAULT_INPUTS_O_TABLE_COLUMN = [
 
@@ -55,10 +76,8 @@ export const DEFAULT_INPUTS_O_TABLE_COLUMN = [
 
 @Component({
   selector: 'o-table-column',
-  templateUrl: 'table/o-table-column.component.html',
-  styleUrls: [
-    'table/o-table-column.component.css'
-  ],
+  template: require('./o-table-column.component.html'),
+  styles: [require('./o-table-column.component.scss')],
   inputs: [
     ...DEFAULT_INPUTS_O_TABLE_COLUMN,
     ...OTableCellRendererBooleanComponent.DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_BOOLEAN,

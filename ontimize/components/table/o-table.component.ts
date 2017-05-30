@@ -1,19 +1,26 @@
+import * as $ from 'jquery';
 import {
   Component, OnInit, OnDestroy, OnChanges, SimpleChange,
   Inject, Injector, ElementRef,
   forwardRef, Optional, EventEmitter, NgModule,
-  ModuleWithProviders, ViewEncapsulation, ViewChild
+  ViewEncapsulation, ViewChild
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { InputConverter } from '../../decorators';
 import { ObservableWrapper } from '../../util/async';
 import { RouterModule, NavigationStart, RoutesRecognized } from '@angular/router';
-import { OTranslateModule } from '../../pipes/o-translate.pipe';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/from';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/mergeAll';
-import { MdMenuModule, MdMenuTrigger, MdIconModule, MdProgressCircleModule, MdTabGroup, MdTab } from '@angular/material';
+import {
+  MdMenuModule,
+  MdMenuTrigger,
+  MdIconModule,
+  MdProgressSpinnerModule,
+  MdTabGroup,
+  MdTab,
+  MdButtonModule
+} from '@angular/material';
 
 import { OTableColumnComponent } from './o-table-column.component';
 import {
@@ -47,18 +54,21 @@ import { OntimizeService, MomentService } from '../../services';
 import { Util } from '../../util/util';
 import { OFormComponent } from '../form/o-form.component';
 import { OFormValue } from '../form/OFormValue';
+import { OSharedModule } from '../../shared';
+import { CommonModule } from '@angular/common';
 
 import './o-table.loader';
 
 const TABLE_CHECKBOX_TEMPLATE = `
-  <div class="md-checkbox-inner-container">
-    <input class="select-row" type="checkbox" name="id[]">
-    <div class="md-checkbox-frame"></div>
-    <div class="md-checkbox-background">
-      <svg space="preserve" class="md-checkbox-checkmark" version="1.1" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <path class="md-checkbox-checkmark-path" d="M4.1,12.7 9,17.6 20.3,6.3" fill="none" stroke="white"></path>
+  <div class="mat-checkbox-inner-container">
+    <input class="mat-checkbox-input select-row" type="checkbox" name="id[]">
+    <div class="mat-checkbox-ripple mat-ripple" md-ripple=""></div>
+    <div class="mat-checkbox-frame"></div>
+    <div class="mat-checkbox-background">
+      <svg space="preserve" class="mat-checkbox-checkmark" version="1.1" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path class="mat-checkbox-checkmark-path" d="M4.1,12.7 9,17.6 20.3,6.3" fill="none" stroke="white"></path>
       </svg>
-      <div class="md-checkbox-mixedmark"></div>
+      <div class="mat-checkbox-mixedmark"></div>
     </div>
   </div>
 `;
@@ -127,6 +137,7 @@ export const DEFAULT_INPUTS_O_TABLE = [
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE = [
+  'onClick'
 ];
 
 export interface OTableInitializationOptions {
@@ -138,14 +149,12 @@ export interface OTableInitializationOptions {
   sortColumns?: string;
   editableColumns?: string;
   parentKeys?: string;
-};
+}
 
 @Component({
   selector: 'o-table',
-  templateUrl: './table/o-table.component.html',
-  styleUrls: [
-    './table/o-table.component.css'
-  ],
+  template: require('./o-table.component.html'),
+  styles: [require('./o-table.component.scss')],
   providers: [
     { provide: OntimizeService, useFactory: dataServiceFactory, deps: [Injector] }
   ],
@@ -339,7 +348,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   reinitialize(options: OTableInitializationOptions) {
     super.reinitialize(options);
     this.editColumnIndex = undefined;
-    this.detailColumnIndex= undefined;
+    this.detailColumnIndex = undefined;
 
     if (options && Object.keys(options).length) {
       if (this.table) {
@@ -815,13 +824,15 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   protected onOptionsMenuShow(args: any) {
-    var menuEl = ($('.md-overlay-container .md-menu') as any);
+    var menuEl = ($('.mat-overlay-container .mat-menu') as any);
     var menuContainer = menuEl.parent();
-    var menuBtn = ($(this.elRef.nativeElement) as any).find('.o-table-menu-button');
-    var menuBtnOffset = menuBtn.offset();
-    var top = menuBtnOffset.top + menuBtn.outerHeight(true) - 30;
-    var left = menuBtnOffset.left - menuEl.outerWidth(true) + menuBtn.outerWidth(true) - 16;
-    menuContainer.css('transform', 'translateX(' + left + 'px) translateY(' + top + 'px)');
+    if (menuContainer) {
+      var menuBtn = ($(this.elRef.nativeElement) as any).find('.o-table-menu-button');
+      var menuBtnOffset = menuBtn.offset();
+      var top = menuBtnOffset.top + menuBtn.outerHeight(true) - 30;
+      var left = menuBtnOffset.left - menuEl.outerWidth(true) + menuBtn.outerWidth(true) - 16;
+      menuContainer.css('transform', 'translateX(' + left + 'px) translateY(' + top + 'px)');
+    }
   }
 
   protected parseTableOptions() {
@@ -830,7 +841,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       tableOptions = this.getTableOptions();
       if (tableOptions.length > 0) {
         var table = this.table;
-        new ($ as any).fn.dataTable.Buttons(table, {
+        let btns = new ($ as any).fn.dataTable.Buttons(table, {
           buttons: tableOptions
         });
         table.buttons(1, null).container().appendTo(
@@ -851,7 +862,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       this.addDefaultRowButtons();
     }
     this.table = this.tableHtmlEl.DataTable(this.dataTableOptions);
-    new ($ as any).fn.dataTable.FixedHeader(this.table, {
+    let fxdHeader = new ($ as any).fn.dataTable.FixedHeader(this.table, {
       header: true,
       forceFloating: true,
       scrollWidth: 20
@@ -1204,9 +1215,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   protected handleColumnWidth(settings) {
+    var self = this;
     var tableEl = ($('#' + this.oattr) as any);
     if (!tableEl.is(':visible')) {
-      var self = this;
       if (typeof this.columnWidthHandlerInterval === 'undefined') {
         this.columnWidthHandlerInterval = setInterval(function () {
           if (tableEl.is(':visible')) {
@@ -1233,7 +1244,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     let tableWidth = tableEl.outerWidth(true);
     let actionsWidth = ((fixedWidthColumns * 50) / tableWidth) * 100;
 
-    var self = this;
     var avoidIndex = [];
     let fixedWidths = 0;
     for (var i = 0; i < this.initialColumnsWidths.length; i++) {
@@ -1355,15 +1365,15 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   public setSelectAllCheckboxValue(val: boolean) {
     if (this.selectAllCheckbox) {
       let headerCheckboxCol = this.tableHtmlEl.find('th.o-table-column-select-checkbox') as any;
-      let wasIndeterminate = headerCheckboxCol.hasClass('md-checkbox-indeterminate');
+      let wasIndeterminate = headerCheckboxCol.hasClass('mat-checkbox-indeterminate');
 
       headerCheckboxCol.attr('class', 'o-table-column-select-checkbox');
       if (val) {
-        headerCheckboxCol.addClass('md-checkbox-checked md-checkbox-anim-unchecked-checked');
+        headerCheckboxCol.addClass('mat-checkbox-checked mat-checkbox-anim-unchecked-checked');
       } else if (wasIndeterminate) {
-        headerCheckboxCol.addClass('md-checkbox-anim-indeterminate-unchecked');
+        headerCheckboxCol.addClass('mat-checkbox-anim-indeterminate-unchecked');
       } else {
-        headerCheckboxCol.addClass('md-checkbox-anim-checked-unchecked');
+        headerCheckboxCol.addClass('mat-checkbox-anim-checked-unchecked');
       }
       var self = this;
       this.table.rows({ filter: 'applied' }).every(function (el) {
@@ -1427,11 +1437,11 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     let tableRow = this.table.rows(rowEL);
     let rowData = tableRow.data().toArray()[0];
     if (event.target.checked) {
-      checkBoxColumn.addClass('md-checkbox-checked md-checkbox-anim-unchecked-checked');
+      checkBoxColumn.addClass('mat-checkbox-checked mat-checkbox-anim-unchecked-checked');
       tableRow.select();
       this.selectedItems.push(rowData);
     } else {
-      checkBoxColumn.addClass('md-checkbox-anim-checked-unchecked');
+      checkBoxColumn.addClass('mat-checkbox-anim-checked-unchecked');
       tableRow.deselect();
       this.selectedItems.splice(this.selectedItems.indexOf(rowData), 1);
       var selectAllEL = this.tableHtmlEl.find('th #select_all')[0];
@@ -1441,7 +1451,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
         selectAllEL.indeterminate = true;
         let headerCheckboxCol = this.tableHtmlEl.find('th.o-table-column-select-checkbox');
         headerCheckboxCol.attr('class', 'o-table-column-select-checkbox');
-        headerCheckboxCol.addClass('md-checkbox-indeterminate md-checkbox-anim-checked-indeterminate');
+        headerCheckboxCol.addClass('mat-checkbox-indeterminate mat-checkbox-anim-checked-indeterminate');
       }
     }
     this.updateDeleteButtonState();
@@ -1494,6 +1504,12 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       }
 
       ($('#' + this.oattr + '_wrapper .JCLRgrips') as any).remove();
+
+      if (!this.tableHtmlEl.colResizable) {
+        console.error('colResizable not defined');
+        return;
+      }
+
       this.tableHtmlEl.colResizable({
         liveDrag: false,
         postbackSafe: false,
@@ -1704,6 +1720,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
           },
           err => {
             console.log('[OTable.queryData]: error', err);
+            self.setDataArray([]);
+            self.dataTable.fnClearTable(true);
             self.loaderSuscription.unsubscribe();
           }
           );
@@ -2369,7 +2387,11 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     OTableButtonComponent,
     OTableOptionComponent
   ],
-  imports: [CommonModule, MdMenuModule, OTranslateModule, MdIconModule, MdProgressCircleModule, RouterModule],
+  imports: [
+    OSharedModule,
+    CommonModule,
+    RouterModule
+  ],
   exports: [OTableComponent,
     OTableColumnComponent,
     OTableCellRendererActionComponent,
@@ -2392,10 +2414,4 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   ]
 })
 export class OTableModule {
-  static forRoot(): ModuleWithProviders {
-    return {
-      ngModule: OTableModule,
-      providers: []
-    };
-  }
 }

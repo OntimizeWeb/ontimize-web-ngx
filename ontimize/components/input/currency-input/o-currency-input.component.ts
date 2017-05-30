@@ -2,12 +2,11 @@ import {
   Component, Inject, Injector, forwardRef, ElementRef, OnInit,
   Optional,
   NgModule,
-  ModuleWithProviders,
   ViewEncapsulation
 } from '@angular/core';
-
+import { CommonModule } from '@angular/common';
 import { ValidatorFn } from '@angular/forms/src/directives/validators';
-import { OSharedModule } from '../../../shared.module';
+import { OSharedModule } from '../../../shared';
 import { OFormComponent } from '../../form/o-form.component';
 import {
   ORealInputModule, ORealInputComponent,
@@ -26,8 +25,8 @@ export const DEFAULT_OUTPUTS_O_CURRENCY_INPUT = [
 
 @Component({
   selector: 'o-currency-input',
-  templateUrl: '/input/currency-input/o-currency-input.component.html',
-  styleUrls: ['/input/currency-input/o-currency-input.component.css'],
+  template: require('./o-currency-input.component.html'),
+  styles: [require('./o-currency-input.component.scss')],
   inputs: [
     ...DEFAULT_INPUTS_O_CURRENCY_INPUT
   ],
@@ -78,14 +77,8 @@ export class OCurrencyInputComponent extends ORealInputComponent implements OnIn
 
 @NgModule({
   declarations: [OCurrencyInputComponent],
-  imports: [OSharedModule, ORealInputModule],
+  imports: [OSharedModule, CommonModule, ORealInputModule],
   exports: [OCurrencyInputComponent, ORealInputModule],
 })
 export class OCurrencyInputModule {
-  static forRoot(): ModuleWithProviders {
-    return {
-      ngModule: OCurrencyInputModule,
-      providers: []
-    };
-  }
 }

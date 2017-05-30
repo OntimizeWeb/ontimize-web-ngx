@@ -19,7 +19,7 @@
       color: rgba(0,0,0,0.47);
       vertical-align: middle;
 
-      &.md-disabled {
+      &.mat-disabled {
         cursor: default;
         color: rgba(0, 0, 0, 0.26);
       }
@@ -41,8 +41,8 @@
     }
 
     .input-file + label {
-      /* color: md-color($md-accent, 50);*/
-      /* background-color: md-color($md-primary);*/
+      /* color: mat-color($mat-accent, 50);*/
+      /* background-color: mat-color($mat-primary);*/
       /*display: inline-block;*/
       cursor: pointer;
       text-align: center;
@@ -58,7 +58,7 @@
 /*
     .input-file:focus + label,
     .input-file + label:hover {
-      background-color: md-color($md-primary);
+      background-color: mat-color($mat-primary);
     }
     */
   }

@@ -1,7 +1,7 @@
 import { Component, Inject, forwardRef } from '@angular/core';
 
-import { ITableCellRenderer } from '../../../interfaces';
-import { OTableColumnComponent } from '../o-table-column.component';
+
+import { OTableColumnComponent, ITableCellRenderer } from '../o-table-column.component';
 
 @Component({
   selector: 'o-table-cell-renderer-string',

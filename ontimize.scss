@@ -1,34 +1,27 @@
-@import "ontimize/components/material/ng2-material/all.scss";
-@import "ontimize/components/container/o-container.component.scss";
-@import "ontimize/components/input/input.scss";
-@import "ontimize/components/material/date-picker/datepicker.scss";
+@import 'ontimize/components/material/styles.scss';
+@import 'ontimize/components/container/o-container.component.scss';
+@import 'ontimize/components/input/input.scss';
 
 .relative {
   position: relative;
 }
 
-.md-dialog-custom{
-  padding: 0px !important;
-
-  .dialog-list-container {
-    md-list {
-      padding: 8px;
-    }
+.mat-dialog-custom {
+  padding: 0 0 24px 0 !important;
+  .mat-dialog-content.dialog-list-container {
+    margin: 0;
+  }
+  .mat-dialog-actions {
+    padding: 12px 24px;
   }
 }
 
-div.md-dialog.md-dialog-custom > md-dialog-actions{
- width: 100%;
-    margin: 0;
-    right: 0;
-}
-
-.md-hint {
+.mathint {
   position: absolute;
   font-size: 75%;
   bottom: 4px;
 
-  &.md-right {
+  &.mat-right {
     right: 0;
   }
 
@@ -36,7 +29,7 @@ div.md-dialog.md-dialog-custom > md-dialog-actions{
     right: 0;
     left: auto;
 
-    &.md-right {
+    &.mat-right {
       right: auto;
       left: 0;
     }
