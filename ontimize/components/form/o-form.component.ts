@@ -4,7 +4,7 @@ import {
   NgModule, HostListener,
   ViewEncapsulation, ElementRef
 } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, UrlSegment, UrlSegmentGroup } from '@angular/router';
 import { FormGroup, FormControl } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
@@ -516,11 +516,9 @@ export class OFormComponent implements OnInit, OnDestroy {
         }
       });
 
-    this.urlSub = this.actRoute
-      .url
-      .subscribe(urlSegments => {
-        self.urlSegments = urlSegments;
-      });
+    this.urlSub = this.actRoute.url.subscribe(urlSegments => {
+      self.urlSegments = urlSegments;
+    });
 
     if (this.navigationService) {
       this.navigationService.onVisibleChange(visible => {
@@ -582,10 +580,22 @@ export class OFormComponent implements OnInit, OnDestroy {
     this.onFormInitStream.emit(true);
   }
 
-  protected determinateFormMode_deprecated() {
-    let segment = this.urlSegments[this.urlSegments.length - 1];
-    var _path = segment ? segment['path'] : '';
+  protected determinateFormMode() {
+    if (this.urlSegments.length > 0) {
+      let segment = this.urlSegments[this.urlSegments.length - 1];
+      this.determinateModeFromUrlSegment(segment);
+    } else if (this.actRoute.parent) {
+      this.actRoute.parent.url.subscribe(segments => {
+        let segment = segments[segments.length - 1];
+        this.determinateModeFromUrlSegment(segment);
+      });
+    } else {
+      this.setFormMode(Mode.INITIAL);
+    }
+  }
 
+  protected determinateModeFromUrlSegment(segment: UrlSegment) {
+    var _path = segment ? segment['path'] : '';
     if (_path === 'new') {
       //insert mode
       this.setFormMode(Mode.INSERT);
@@ -596,29 +606,6 @@ export class OFormComponent implements OnInit, OnDestroy {
     } else {
       this.setFormMode(Mode.INITIAL);
     }
-  }
-
-  protected determinateFormMode() {
-    var self = this;
-    this.actRoute.parent
-      .url
-      .subscribe(urlSegments => {
-
-        let segment = urlSegments[urlSegments.length - 1];
-        var _path = segment ? segment['path'] : '';
-
-        if (_path === 'new') {
-          //insert mode
-          self.setFormMode(Mode.INSERT);
-          return;
-        } else if (_path === 'edit') {
-          //edit mode
-          self.setFormMode(Mode.UPDATE);
-        } else {
-          self.setFormMode(Mode.INITIAL);
-        }
-
-      });
   }
 
   /**
@@ -719,20 +706,18 @@ export class OFormComponent implements OnInit, OnDestroy {
   }
 
   _closeDetailAction() {
-
     this.beforeCloseDetail.emit();
-
+    var fullUrlSegments = this.getFullUrlSegments();
+    var thisUrlSegments = this.urlSegments.slice(0);
     // Copy current url segments array...
-    let urlArray = this.urlSegments.slice(0);
+    let urlArray = fullUrlSegments.length ? fullUrlSegments : thisUrlSegments;
     //TODO do it better (maybe propagation nested level number?)
-    let nestedLevel = urlArray.length > 3;
-
+    let nestedLevelN = this.getNestedLevelsNumber();
     // Extract segments for proper navigation...
-    if (nestedLevel) {
-      if (this.mode === Mode.UPDATE /*action === 'edit'*/) {
+    if (nestedLevelN > 3) {
+      if (this.isInUpdateMode()) {
         urlArray.pop();
-        // } else if (action === undefined || action === 'new') {
-      } else if (this.mode === Mode.INITIAL || this.mode === Mode.INSERT) {
+      } else if (this.isInInitialMode() || this.isInInsertMode()) {
         urlArray.pop();
         urlArray.pop();
       }
@@ -741,7 +726,6 @@ export class OFormComponent implements OnInit, OnDestroy {
     }
     // If we are in nested detail form we have to go up two levels
     // home/:key/subhome/:key2
-
     let urlText = '';
     if (urlArray) {
       urlArray.forEach((item, index) => {
@@ -753,29 +737,26 @@ export class OFormComponent implements OnInit, OnDestroy {
     }
 
     let extras = {};
-    if (nestedLevel || (urlArray.length > 1 && this.isDetailForm)) {
+    if (nestedLevelN > 3 || this.urlSegments.length > 1 && this.isDetailForm) {
       extras['queryParams'] = Object.assign({}, this.queryParams, { 'isdetail': 'true' });
     }
 
-    if (this.isActivatedRouteMultiple()) {
-      extras['relativeTo'] = this.actRoute.parent;
-    }
+    this.router.navigate([urlText], extras).catch(err => {
+      console.error(err.message);
+    });
 
-    this.router.navigate([urlText], extras)
-      .catch(err => {
-        console.error(err.message);
-      });
   }
 
   _stayInRecordAfterInsert(insertedKeys: Object) {
 
+    var fullUrlSegments = this.getFullUrlSegments();
     // Copy current url segments array...
-    let urlArray = this.urlSegments.slice(0);
-    //TODO do it better (maybe propagation nested level number?)
-    let nestedLevel = urlArray.length > 3;
+    let urlArray = fullUrlSegments.length ? fullUrlSegments : this.urlSegments.slice(0);
+
+    let nestedLevelN = this.getNestedLevelsNumber();
 
     // Extract segments for proper navigation...
-    if (nestedLevel) {
+    if (nestedLevelN > 3) {
       urlArray.pop();
       urlArray.pop();
     } else {
@@ -805,10 +786,6 @@ export class OFormComponent implements OnInit, OnDestroy {
     }
 
     let extras = Object.assign({}, this.queryParams, { 'isdetail': 'true' });
-
-    if (this.isActivatedRouteMultiple()) {
-      extras['relativeTo'] = this.actRoute.parent;
-    }
 
     this.router.navigate([urlText], extras)
       .catch(err => {
@@ -1208,14 +1185,25 @@ export class OFormComponent implements OnInit, OnDestroy {
     return filter;
   }
 
-  protected isActivatedRouteMultiple() {
+  protected getNestedLevelsNumber() {
     let actRoute = this.actRoute;
     let i = 0;
     while (actRoute.parent) {
       actRoute = actRoute.parent;
       i++;
     }
-    return (i > 2);
+    return i;
+  }
+
+  protected getFullUrlSegments() {
+    var fullUrlSegments = [];
+    if (this.router && this.router.url && this.router.url.length) {
+      var root: UrlSegmentGroup = this.router.parseUrl(this.router.url).root;
+      if (root && root.hasChildren() && root.children.primary) {
+        fullUrlSegments = root.children.primary.segments;
+      }
+    }
+    return fullUrlSegments;
   }
 
   isInQueryMode(): boolean {
