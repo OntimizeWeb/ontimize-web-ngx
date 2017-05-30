@@ -1,4 +1,3 @@
-import * as $ from 'jquery';
 import {
   Component,
   Inject,
@@ -11,6 +10,7 @@ import {
   NgModule,
   ViewEncapsulation
 } from '@angular/core';
+
 import { CommonModule } from '@angular/common';
 import {
   MdInputDirective
@@ -292,7 +292,10 @@ export class ODateInputComponent extends OTextInputComponent implements OnInit {
     var self = this;
 
     this.inputHtmlEl.removeClass('hasDatepicker');
-
+    if (!this.inputHtmlEl.datepicker) {
+      console.error('datepicker not available');
+      return;
+    }
     this.datepicker = this.inputHtmlEl.datepicker({
       dateFormat: this.oformat.toLowerCase().replace(/yyyy/g, 'yy'),
       showAnim: 'slideDown',
@@ -350,7 +353,8 @@ export class ODateInputComponent extends OTextInputComponent implements OnInit {
             momentArg = datepickerTimestamp;
           }
         }
-        var momentVal = moment(parseInt(momentArg));
+        var parsedMomentArg = parseInt(momentArg);
+        var momentVal = isNaN(parsedMomentArg) ? moment() : moment(parsedMomentArg);
         self.updateDatepickerHeader(momentVal, inst.dpDiv);
       }
     });
