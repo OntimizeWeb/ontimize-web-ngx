@@ -1,34 +1,43 @@
-## 2.0.0  (2017-04-27)
+## 2.0.0-rc.0
 
 ### Features
-* **Styles**: Adding pre-built themes '*deeppurple-amber*', '*indigo-pink*', '*pink-bluegrey*' and '*purple-green*'.
+* **Module**: Defining framework as a ngModule ('*OntimizeWebModule*') that includes all components, directives and providers.
+* **Styles**: Adding pre-built themes '*deeppurple-amber*', '*indigo-pink*', '*pink-bluegrey*' and '*purple-green*' loaded in '*$theme*' var.
   Example of theme import: '*@import 'node_modules/ontimize-web-ng2/ontimize/components/theming/indigo-pink.scss';*'
-* **entryComponents**: Including '*ODialogComponent*' in '*ONTIMIZE_MODULES*'. User will no longer need to include '*ODialogComponent*' on its module '*entryComponents*'.
+* **entryComponents**: Including '*ODialogComponent*' in '*OntimizeWebModule*'. User will no longer need to include '*ODialogComponent*' on its module '*entryComponents*'.
+* **OServiceComponent**: exporting '*OServiceComponent*' class from which '*o-table*' and '*o-list*' extends ([#83](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/83))
+* **o-table**: adding '*onClick*' output ([#84](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/84)) ([c9966a0](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/c9966a0))
 
 
 ### PEER-DEPENDENCY UPDATES ###
-* **Updated**:   @angular/material@2.0.0-beta.3
-* **Updated**:   @angular@4.0.3
-* **Updated**:   @angular/router@4.0.3
-* **Updated**:   zone.js@0.8.4
-* **Added**:     @angular/platform-server@4.0.3
-* **Added**:     @angular/animations@4.0.3
+* **Updated**:   @angular/material@2.0.0-beta.5
+* **Updated**:   @angular@4.1.2
+* **Updated**:   @angular/router@4.1.2
+* **Updated**:   zone.js@0.8.10
+* **Added**:     @angular/animations@4.1.2
+* **Added**:     @angular/compiler-cli@4.1.2
+* **Added**:     @angular/cli@1.0.6
+* **Added**:     @angular/platform-server@4.1.2
 * **Added**:     @ngx-translate/core@6.0.1
 * **Added**:     @ngx-translate/http-loader@0.0.3
-* **Added**:     typescript@2.3.0
+* **Added**:     typescript@2.2.0
 * **Removed**:   ng2-translate@5.0.0
+* **Removed**:   systemjs@0.19.38
 
 ### BREAKING CHANGES
+* **Styles**: Updating styles for ([@angular/material@2.0.0-beta.5](https://github.com/angular/material2/blob/master/CHANGELOG.md))
+* **Directives**: Removing '*ONTIMIZE_DIRECTIVES*' export. User will no longer need to import this declarations on its module. This directives are now included in '*OSharedModule*' that is also included in '*OntimizeWebModule*'.
+* **Modules**: Removing '*ONTIMIZE_MODULES*' export. This modules are now included in '*OntimizeWebModule*'. User will no longer need to import this modules on its module.
+* **Providers**: Removing '*ontimizeProviders*' export. User will no longer need to call this function on its module. Declaration of providers is now done with '*OntimizeWebModule.forRoot({ config: CONFIG })*' module import.
 
-* **Styles**: Updating styles for ([@angular/material@2.0.0-beta.3](https://github.com/angular/material2/blob/master/CHANGELOG.md))
-* **Directives**: Removing '*ONTIMIZE_DIRECTIVES*' export. User will no longer need to import this declarations on its module.
-
+### Bug Fixes
+* **o-integer-input**: setting value bug ([#88](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/88)) ([167af16](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/167af16))
+* **o-table**, **o-list**: empty collection when error occurs ([#93](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/93)) ([4815e6b](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/4815e6b))
 
 ## 1.2.3  (2017-03-31)
 ### Bug Fixes
 * **o-form**, **o-table**, **o-list**: fixing '*reinitialize*' serious bug.
 * **o-form**: Empty form fields value bug fixed. Updating '*getAttributesValuesToUpdate*' method.
-
 
 
 ## 1.2.2  (2017-03-31)
