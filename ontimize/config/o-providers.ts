@@ -60,96 +60,81 @@ function bindEvents(window, document, events) {
   }, 2000);
 }
 
+export const ONTIMIZE_PROVIDERS: any = [
+  //Standard
+  MdIconRegistry,
 
-export class OntimizeProvidersFactory {
+  { provide: Events, useValue: events },
+  // This two dependencies are now loaded in OntimizeWebModule.forRoot method
+  // { provide: APP_CONFIG, useValue: config },
+  // { provide: SERVICE_CONFIG, useValue: servicesConf },
 
-  public factory(config : any, servicesConf : any): any {
-    return [
-      //Standard
-      MdIconRegistry,
-
-      { provide: Events, useValue: events },
-      { provide: APP_CONFIG, useValue: config },
-      { provide: SERVICE_CONFIG, useValue: servicesConf },
-
-      // getOntimizeServiceProvider
-      XHRBackend,
-      BaseRequestOptions,
-      {
-        provide: OHttp,
-        useFactory: (backend, defaultOptions) => new OHttp(backend, defaultOptions),
-        deps: [XHRBackend, BaseRequestOptions]
-      },
-      {
-        provide: OntimizeService,
-        useFactory: dataServiceFactory,
-        deps: [Injector]
-      },
-      // getLoginServiceProvider
-      {
-        provide: LoginService,
-        useFactory: (injector) => new LoginService(injector),
-        deps: [Injector]
-      },
-      //getNavigationServiceProvider
-      {
-        provide: NavigationService,
-        useFactory: (injector) => new NavigationService(injector),
-        deps: [Injector]
-      },
-      // getMomentServiceProvider
-      {
-        provide: MomentService,
-        useFactory: (injector) => new MomentService(injector),
-        deps: [Injector]
-      },
-      // getCurrencyServiceProvider
-      {
-        provide: CurrencyService,
-        useFactory: (injector) => new CurrencyService(injector),
-        deps: [Injector]
-      },
-      //getNumberServiceProvider
-      {
-        provide: NumberService,
-        useFactory: (injector) => new NumberService(injector),
-        deps: [Injector]
-      },
-      // getDialogServiceProvider
-      {
-        provide: DialogService,
-        useFactory: (injector) => new DialogService(injector),
-        deps: [Injector]
-      },
-      // getTranslateServiceProvider
-      {
-        provide: OTranslateService,
-        useFactory: (injector) => new OTranslateService(injector),
-        deps: [Injector]
-      },
-      // getLocalStorageServiceProvider
-      {
-        provide: LocalStorageService,
-        useFactory: (injector) => new LocalStorageService(injector),
-        deps: [Injector]
-      },
-      // getAuthServiceProvider
-      {
-        provide: AuthGuardService,
-        useFactory: authGuardServiceFactory,
-        deps: [Injector]
-      }
-    ];
+  // getOntimizeServiceProvider
+  XHRBackend,
+  BaseRequestOptions,
+  {
+    provide: OHttp,
+    useFactory: (backend, defaultOptions) => new OHttp(backend, defaultOptions),
+    deps: [XHRBackend, BaseRequestOptions]
+  },
+  {
+    provide: OntimizeService,
+    useFactory: dataServiceFactory,
+    deps: [Injector]
+  },
+  // getLoginServiceProvider
+  {
+    provide: LoginService,
+    useFactory: (injector) => new LoginService(injector),
+    deps: [Injector]
+  },
+  //getNavigationServiceProvider
+  {
+    provide: NavigationService,
+    useFactory: (injector) => new NavigationService(injector),
+    deps: [Injector]
+  },
+  // getMomentServiceProvider
+  {
+    provide: MomentService,
+    useFactory: (injector) => new MomentService(injector),
+    deps: [Injector]
+  },
+  // getCurrencyServiceProvider
+  {
+    provide: CurrencyService,
+    useFactory: (injector) => new CurrencyService(injector),
+    deps: [Injector]
+  },
+  //getNumberServiceProvider
+  {
+    provide: NumberService,
+    useFactory: (injector) => new NumberService(injector),
+    deps: [Injector]
+  },
+  // getDialogServiceProvider
+  {
+    provide: DialogService,
+    useFactory: (injector) => new DialogService(injector),
+    deps: [Injector]
+  },
+  // getTranslateServiceProvider
+  {
+    provide: OTranslateService,
+    useFactory: (injector) => new OTranslateService(injector),
+    deps: [Injector]
+  },
+  // getLocalStorageServiceProvider
+  {
+    provide: LocalStorageService,
+    useFactory: (injector) => new LocalStorageService(injector),
+    deps: [Injector]
+  },
+  // getAuthServiceProvider
+  {
+    provide: AuthGuardService,
+    useFactory: authGuardServiceFactory,
+    deps: [Injector]
   }
-}
+];
 
-export const ontimizeProviders = (args: any = {}): any => {
-  var config = args.config;
-  let appConfig = new AppConfig(config);
-  config = appConfig.getConfiguration();
-  let servicesConf = {};
-  if (config.hasOwnProperty('servicesConfiguration')) {
-    servicesConf = config['servicesConfiguration'];
-  }
-  return new OntimizeProvidersFactory().factory(config, servicesConf);
-};
