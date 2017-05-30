@@ -1504,6 +1504,12 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       }
 
       ($('#' + this.oattr + '_wrapper .JCLRgrips') as any).remove();
+
+      if (!this.tableHtmlEl.colResizable) {
+        console.error('colResizable not defined');
+        return;
+      }
+
       this.tableHtmlEl.colResizable({
         liveDrag: false,
         postbackSafe: false,
