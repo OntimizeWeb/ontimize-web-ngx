@@ -14,67 +14,105 @@ import {
   AuthGuardService,
   authGuardServiceFactory,
   dataServiceFactory,
-  LocalStorageService
+  LocalStorageService,
+  appConfigFactory,
+  serviceConfigFactory
 } from '../services';
-
-import {
-  APP_CONFIG,
-  AppConfig
-} from '../config/app-config';
-import { SERVICE_CONFIG } from '../services/data-service.provider';
 
 import { Events } from '../util/events';
 import { OHttp } from '../util/http/OHttp';
-
-const events = new Events();
-bindEvents(window, document, events);
+import {
+  AppConfig,
+  ServiceConfig
+} from '../config/app-config';
 
 /**
  * Bind some global events and publish on the 'app' channel
  */
-function bindEvents(window, document, events) {
-  window.addEventListener('online', (ev) => {
-    console.log('app online');
-    events.publish('app:online', ev);
-  }, false);
-
-  window.addEventListener('offline', (ev) => {
-    console.log('app offline');
-    events.publish('app:offline', ev);
-  }, false);
-
-  window.addEventListener('orientationchange', (ev) => {
-    events.publish('app:rotated', ev);
-  });
-
+export function bindEvents(window, document) {
+  const events = new Events();
+  function publishEventWrapper(channel): Function {
+    return function (ev) {
+      events.publish(channel, ev);
+    };
+  }
+  window.addEventListener('online', publishEventWrapper('app:online'), false);
+  window.addEventListener('offline', publishEventWrapper('app:offline'), false);
+  window.addEventListener('orientationchange', publishEventWrapper('app:rotated'));
   // When that status taps, we respond
-  window.addEventListener('statusTap', (ev) => {
-    events.publish('app:statusTap', ev);
-  });
-
+  window.addEventListener('statusTap', publishEventWrapper('app:statusTap'));
   // start listening for resizes XXms after the app starts
   setTimeout(function () {
-    window.addEventListener('resize', function (ev) {
-      events.publish('app:resize', ev);
-    });
+    window.addEventListener('resize', publishEventWrapper('app:resize'));
   }, 2000);
+  return events;
 }
 
-export const ONTIMIZE_PROVIDERS: any = [
+export function getEvents() {
+  return bindEvents(window, document);
+}
+
+
+export function getOntimizeServiceProvider(backend, defaultOptions) {
+  return new OHttp(backend, defaultOptions);
+}
+
+export function getLoginServiceProvider(injector) {
+  return new LoginService(injector);
+}
+
+export function getNavigationServiceProvider(injector) {
+  return new NavigationService(injector);
+}
+
+export function getMomentServiceProvider(injector) {
+  return new MomentService(injector);
+}
+
+export function getCurrencyServiceProvider(injector) {
+  return new CurrencyService(injector);
+}
+
+export function getNumberServiceProvider(injector) {
+  return new NumberService(injector);
+}
+
+export function getDialogServiceProvider(injector) {
+  return new DialogService(injector);
+}
+
+export function getTranslateServiceProvider(injector) {
+  return new OTranslateService(injector);
+}
+
+export function getLocalStorageServiceProvider(injector) {
+  return new LocalStorageService(injector);
+}
+
+export const ONTIMIZE_PROVIDERS = [
   //Standard
   MdIconRegistry,
 
-  { provide: Events, useValue: events },
-  // This two dependencies are now loaded in OntimizeWebModule.forRoot method
-  // { provide: APP_CONFIG, useValue: config },
-  // { provide: SERVICE_CONFIG, useValue: servicesConf },
+  { provide: Events, useValue: getEvents },
+
+  {
+    provide: AppConfig,
+    useFactory: appConfigFactory,
+    deps: [Injector]
+  },
+
+  {
+    provide: ServiceConfig,
+    useFactory: serviceConfigFactory,
+    deps: [Injector]
+  },
 
   // getOntimizeServiceProvider
   XHRBackend,
   BaseRequestOptions,
   {
     provide: OHttp,
-    useFactory: (backend, defaultOptions) => new OHttp(backend, defaultOptions),
+    useFactory: getOntimizeServiceProvider,
     deps: [XHRBackend, BaseRequestOptions]
   },
   {
@@ -85,49 +123,49 @@ export const ONTIMIZE_PROVIDERS: any = [
   // getLoginServiceProvider
   {
     provide: LoginService,
-    useFactory: (injector) => new LoginService(injector),
+    useFactory: getLoginServiceProvider,
     deps: [Injector]
   },
   //getNavigationServiceProvider
   {
     provide: NavigationService,
-    useFactory: (injector) => new NavigationService(injector),
+    useFactory: getNavigationServiceProvider,
     deps: [Injector]
   },
   // getMomentServiceProvider
   {
     provide: MomentService,
-    useFactory: (injector) => new MomentService(injector),
+    useFactory: getMomentServiceProvider,
     deps: [Injector]
   },
   // getCurrencyServiceProvider
   {
     provide: CurrencyService,
-    useFactory: (injector) => new CurrencyService(injector),
+    useFactory: getCurrencyServiceProvider,
     deps: [Injector]
   },
   //getNumberServiceProvider
   {
     provide: NumberService,
-    useFactory: (injector) => new NumberService(injector),
+    useFactory: getNumberServiceProvider,
     deps: [Injector]
   },
   // getDialogServiceProvider
   {
     provide: DialogService,
-    useFactory: (injector) => new DialogService(injector),
+    useFactory: getDialogServiceProvider,
     deps: [Injector]
   },
   // getTranslateServiceProvider
   {
     provide: OTranslateService,
-    useFactory: (injector) => new OTranslateService(injector),
+    useFactory: getTranslateServiceProvider,
     deps: [Injector]
   },
   // getLocalStorageServiceProvider
   {
     provide: LocalStorageService,
-    useFactory: (injector) => new LocalStorageService(injector),
+    useFactory: getLocalStorageServiceProvider,
     deps: [Injector]
   },
   // getAuthServiceProvider
@@ -137,4 +175,3 @@ export const ONTIMIZE_PROVIDERS: any = [
     deps: [Injector]
   }
 ];
-
