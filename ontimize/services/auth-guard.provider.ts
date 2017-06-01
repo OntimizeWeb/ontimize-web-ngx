@@ -2,7 +2,7 @@ import { Injector } from '@angular/core';
 import { APP_CONFIG, Config } from '../config/app-config';
 import { AuthGuardService } from './auth-guard.service';
 
-class AuthGuardServiceFactory {
+export class AuthGuardServiceFactory {
 
   protected config: Config;
 
@@ -29,6 +29,6 @@ class AuthGuardServiceFactory {
 
 }
 
-export let authGuardServiceFactory = function (injector: Injector) {
+export function authGuardServiceFactory(injector) {
   return new AuthGuardServiceFactory(injector).factory();
-};
+}

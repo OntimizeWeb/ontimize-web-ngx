@@ -35,7 +35,8 @@ export interface IOntimizeServiceConf {
 export class Util {
 
   static isObject(val: any): boolean {
-    return typeof val === 'object';
+    const valType = typeof val;
+    return valType === 'object';
   }
 
   static isArray(val: any): boolean {
@@ -43,18 +44,18 @@ export class Util {
   }
 
 
-  static  parseBoolean(value: string, defaultValue ?:boolean ) :boolean {
+  static parseBoolean(value: string, defaultValue?: boolean): boolean {
     if ((typeof value === 'string') && (value.toUpperCase() === 'TRUE' || value.toUpperCase() === 'YES')) {
       return true;
     } else if ((typeof value === 'string') && (value.toUpperCase() === 'FALSE' || value.toUpperCase() === 'NO')) {
       return false;
-    } else if ( defaultValue!== undefined && defaultValue !== null) {
+    } else if (defaultValue !== undefined && defaultValue !== null) {
       return defaultValue;
     }
     return false;
   }
 
-  static parseArray(value: string) : string[] {
+  static parseArray(value: string): string[] {
     if (value) {
       return value.split(';');
     }
@@ -85,10 +86,10 @@ export class Util {
     let encoded: string = '';
     if (parentKeys) {
       encoded = Base64.encode(JSON.stringify(parentKeys));
-      var d = Base64.decode( encoded );
+      var d = Base64.decode(encoded);
 
       // test
-      console.log( parentKeys, encoded, d, JSON.parse( d ) );
+      console.log(parentKeys, encoded, d, JSON.parse(d));
 
     }
     return encoded;

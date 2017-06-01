@@ -1,9 +1,9 @@
-import {Component} from '@angular/core';
+import { Component } from '@angular/core';
 
 const _reflect: any = Reflect;
 
-export function OComponent(annotation : any) {
-  return function (target: Function) {
+export function OComponent(annotation: any) {
+  function OComponentInner(target: Function) {
     var parentTarget = Object.getPrototypeOf(target.prototype).constructor;
     var parentAnnotations = _reflect.getMetadata('annotations', parentTarget);
     var parentAnnotation = parentAnnotations[0];
@@ -22,10 +22,11 @@ export function OComponent(annotation : any) {
       }
     });
     var metadata = new Component(annotation);
-    _reflect.defineMetadata('annotations', [ metadata ], target);
-  };
+    _reflect.defineMetadata('annotations', [metadata], target);
+  }
+  return OComponentInner;
 }
 
 function isPresent(obj) {
-    return obj !== undefined && obj !== null;
+  return obj !== undefined && obj !== null;
 }
