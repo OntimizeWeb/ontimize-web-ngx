@@ -22,8 +22,8 @@ export function ontimizeBootstrap(appModule: any, config?: any): Promise<NgModul
 
 export function ontimizePostBootstrap(ngModuleRef: NgModuleRef<any>): NgModuleRef<any> {
   // Configuring i18n...
-  let translate: OTranslateService = ngModuleRef.injector.get(OTranslateService);
   let config: Config = ngModuleRef.injector.get(APP_CONFIG);
+  let translate: OTranslateService = ngModuleRef.injector.get(OTranslateService);
   configureI18n(config, translate);
 
   // Hiding loader...
