@@ -57,16 +57,9 @@ export class AppConfig {
   public getConfiguration(): Config {
     return Object.assign(DEFAULT_CONFIG, this._config);
   }
-}
 
-export class ServiceConfig {
-  private _serviceConfig: any;
-
-  constructor(serviceConfig?) {
-    this._serviceConfig = (serviceConfig && isObject(serviceConfig) && !isArray(serviceConfig)) ? serviceConfig : {};
-  }
-
-  public getConfiguration(): Config {
-    return this._serviceConfig;
+  public getServiceConfiguration(): Config {
+    return this._config['servicesConfiguration'] || {};
   }
 }
+

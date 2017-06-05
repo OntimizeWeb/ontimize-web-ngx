@@ -15,16 +15,12 @@ import {
   authGuardServiceFactory,
   dataServiceFactory,
   LocalStorageService,
-  appConfigFactory,
-  serviceConfigFactory
+  appConfigFactory
 } from '../services';
 
 import { Events } from '../util/events';
 import { OHttp } from '../util/http/OHttp';
-import {
-  AppConfig,
-  ServiceConfig
-} from '../config/app-config';
+import { AppConfig } from '../config/app-config';
 
 /**
  * Bind some global events and publish on the 'app' channel
@@ -100,13 +96,6 @@ export const ONTIMIZE_PROVIDERS = [
     useFactory: appConfigFactory,
     deps: [Injector]
   },
-
-  {
-    provide: ServiceConfig,
-    useFactory: serviceConfigFactory,
-    deps: [Injector]
-  },
-
   // getOntimizeServiceProvider
   XHRBackend,
   BaseRequestOptions,

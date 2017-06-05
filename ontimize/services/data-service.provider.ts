@@ -1,14 +1,9 @@
-import {
-  Injector,
-  InjectionToken
-} from '@angular/core';
+import { Injector } from '@angular/core';
 import { Http } from '@angular/http';
 
 import { OntimizeEEService } from './ontimize-ee.service';
 import { OntimizeService } from './ontimize.service';
-import { APP_CONFIG, Config, ServiceConfig } from '../config/app-config';
-
-export const SERVICE_CONFIG = new InjectionToken<ServiceConfig>('service.config');
+import { APP_CONFIG, Config } from '../config/app-config';
 
 export class DataServiceFactory {
 
