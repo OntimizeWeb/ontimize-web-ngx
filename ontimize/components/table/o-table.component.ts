@@ -335,6 +335,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       $(this.tableHtmlEl).children().remove();
     }
     this.dataTable = null;
+    this.state.queryRecordOffset = 0;
     if (this.dataTableOptions) {
       this.setTableInitialState();
       this.initTableOnInit(this.dataTableOptions.columns);
@@ -905,9 +906,12 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     this.isProgrammaticChange = true;
     this.table.page.len(this.queryRows).draw(false);
     this.isProgrammaticChange = false;
+
+    let startRecordValue = 0;
     if (typeof (this.state.start) === 'number') {
-      this.state.queryRecordOffset = this.state.start;
+      startRecordValue = this.state.start;
     }
+    this.state.queryRecordOffset = startRecordValue;
 
     if (!this.selectAllCheckbox) {
 
