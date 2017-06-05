@@ -13,13 +13,9 @@ import 'rxjs/add/observable/from';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/mergeAll';
 import {
-  MdMenuModule,
   MdMenuTrigger,
-  MdIconModule,
-  MdProgressSpinnerModule,
   MdTabGroup,
-  MdTab,
-  MdButtonModule
+  MdTab
 } from '@angular/material';
 
 import { OTableColumnComponent } from './o-table-column.component';
@@ -270,6 +266,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   @ViewChild(MdMenuTrigger) menuTrigger: MdMenuTrigger;
   private columnWidthHandlerInterval: any;
 
+  private isProgrammaticSelection: boolean = false;
   private isProgrammaticChange: boolean = false;
 
   constructor(
@@ -326,12 +323,20 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     return 'DataTables_' + this.oattr;
   }
 
+  protected setTableInitialState() {
+    this.dataArray = [];
+    this.storedRecordsIndexes = [];
+  }
+
   protected reinitializeTable() {
+    this.isProgrammaticChange = true;
     if (this.dataTable) {
       this.dataTable.fnDestroy();
+      $(this.tableHtmlEl).children().remove();
     }
     this.dataTable = null;
     if (this.dataTableOptions) {
+      this.setTableInitialState();
       this.initTableOnInit(this.dataTableOptions.columns);
       this.initTableAfterViewInit();
       if ((typeof (this.table) !== 'undefined') && (this.sortColumnsArray.length > 0)) {
@@ -339,6 +344,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
         this.table.draw();
       }
     }
+    this.isProgrammaticChange = false;
   }
 
   ngOnInit(): void {
@@ -499,6 +505,17 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       resultRecordsIndex: this.state.queryRecordOffset - this.queryRows,
       replace: true
     };
+    let endIndex = queryArgs.offset + queryArgs.length;
+
+    for (var i = this.storedRecordsIndexes.length - 1; i >= 0; i--) {
+      var storedStart = this.storedRecordsIndexes[i].start;
+      var storedEnd = this.storedRecordsIndexes[i].end;
+
+      if ((storedStart === queryArgs.offset) && (storedEnd === endIndex)) {
+        this.storedRecordsIndexes.splice(i, 1);
+        break;
+      }
+    }
     this.queryData(this.parentItem, queryArgs);
   }
 
@@ -721,16 +738,29 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       // columns defined with 'o-table-column' directives
       for (let i = 0; i < columns.length; ++i) {
         let col = columns[i];
-        if ((typeof (col.title) === 'string') && (col.name === col.title)) {
+        if ((typeof (col.title) === 'string') && (col.name === col.data)) {
           // little trick to translate titles whose translation had not been loaded at initialization time
           col.title = this.translateService.get(col.name);
           col.sTitle = col.title;
         }
+        // else if (col.selectAllColumn) {
+        //   //workaround for selectAllCheckbox
+        //   columns[i] = {
+        //     selectAllColumn: true,
+        //     searchable: false,
+        //     orderable: false,
+        //     className: 'o-table-column-select-checkbox',
+        //     render: function (data, type, full, meta) {
+        //       return TABLE_CHECKBOX_TEMPLATE;
+        //     }
+        //   };
+        // }
       }
       this.dataTableOptions.columns = columns;
     } else {
       if (this.selectAllCheckbox) {
         this.dataTableOptions.columns.push({
+          selectAllColumn: true,
           searchable: false,
           orderable: false,
           className: 'o-table-column-select-checkbox',
@@ -872,8 +902,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     if (typeof (this.state.length) === 'number') {
       this.queryRows = this.state.length;
     }
+    this.isProgrammaticChange = true;
     this.table.page.len(this.queryRows).draw(false);
-
+    this.isProgrammaticChange = false;
     if (typeof (this.state.start) === 'number') {
       this.state.queryRecordOffset = this.state.start;
     }
@@ -968,6 +999,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     });
 
     this.table.on('order.dt', () => {
+      if (self.isProgrammaticChange) {
+        return;
+      }
       let order = this.table.order();
       if ((this.groupColumnIndex !== -1) && (order[0][0] !== this.groupColumnIndex)) {
         order.unshift([this.groupColumnIndex, this.groupColumnOrder]);
@@ -981,6 +1015,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       }
     });
     this.table.off('column-visibility.dt').on('column-visibility.dt', (e, settings, column, state) => {
+      if (self.isProgrammaticChange) {
+        return;
+      }
       this.handleColumnWidth(settings);
       this.handleOrderIndex();
       let resizeButton = $('#' + this.oattr + '_wrapper .generic-action-resize') as any;
@@ -991,6 +1028,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     });
 
     this.table.off('length.dt').on('length.dt', (e, settings, len) => {
+      if (self.isProgrammaticChange) {
+        return;
+      }
       setTimeout(() => {
         let resizeButton = $('#' + self.oattr + '_wrapper .generic-action-resize') as any;
         if (resizeButton.hasClass('active')) {
@@ -999,8 +1039,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
         if (self.pageable && self.dataArray && self.dataArray.length > 0) {
           let newFirstPageRecord = Math.floor((self.state.queryRecordOffset - self.queryRows) / len) * len;
 
-          self.dataArray = [];
-          self.storedRecordsIndexes = [];
+          self.setTableInitialState();
           self.queryRows = len;
 
           let queryArgs = {
@@ -1013,6 +1052,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     });
 
     this.table.off('search.dt').on('search.dt', () => {
+      if (self.isProgrammaticChange) {
+        return;
+      }
       setTimeout(() => {
         let resizeButton = $('#' + this.oattr + '_wrapper .generic-action-resize') as any;
         if (resizeButton.hasClass('active')) {
@@ -1313,7 +1355,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
         }
       }
       this.updateDeleteButtonState();
-      if (!this.isProgrammaticChange) {
+      if (!this.isProgrammaticSelection) {
         ObservableWrapper.callEmit(this.onRowSelected, selection);
       }
     }
@@ -1353,7 +1395,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       }
     }
     this.updateDeleteButtonState();
-    if (!this.isProgrammaticChange) {
+    if (!this.isProgrammaticSelection) {
       ObservableWrapper.callEmit(this.onRowDeselected, selection);
     }
   }
@@ -1387,7 +1429,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   public selectRowsByData(data: Array<any>, value: boolean = true) {
-    this.isProgrammaticChange = true;
+    this.isProgrammaticSelection = true;
     let rowsSelectors = [];
     for (var i = 0; i < data.length; i++) {
       let current = data[i];
@@ -1426,7 +1468,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
         }
       }
     }
-    this.isProgrammaticChange = false;
+    this.isProgrammaticSelection = false;
   }
 
   protected handleRowCheckboxChange(event: any) {
@@ -1455,9 +1497,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       }
     }
     this.updateDeleteButtonState();
-    if (!this.isProgrammaticChange && event.target.checked) {
+    if (!this.isProgrammaticSelection && event.target.checked) {
       ObservableWrapper.callEmit(this.onRowSelected, rowData);
-    } else if (!this.isProgrammaticChange) {
+    } else if (!this.isProgrammaticSelection) {
       ObservableWrapper.callEmit(this.onRowDeselected, rowData);
     }
   }
@@ -1793,7 +1835,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       let newText = initIndex + ' - ' + endIndex + ' ';
       let match = existingText.match('[0-9]+ - [0-9]+');
       let initTrimIdx = existingText.search('\d');
-      if (match.length === 1) {
+      if (match && match.length === 1) {
         initTrimIdx = match[0].length + 1;
       }
       newText += existingText.substring(initTrimIdx, existingText.lastIndexOf(' '));
