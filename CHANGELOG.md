@@ -1,3 +1,39 @@
+## 2.0.0-rc.1
+### BREAKING CHANGES
+* **OntimizeWebModule**: Removing '*forRoot*' method.
+* **Providers**: Removing declaration of providers done in '*OntimizeWebModule.forRoot*' method. Now exporting '*ONTIMIZE_PROVIDERS*' array containig all default module providers. Also exporting '*APP_CONFIG*' provider. Example of framework providers use:
+* **Modules**: Exporting '*ONTIMIZE_MODULES*' array of common modules that should be imported in app module.
+
+```javascript
+[...]
+import {
+  APP_CONFIG,
+  ONTIMIZE_PROVIDERS,
+  OntimizeWebModule
+} from 'ontimize-web-ng2';
+
+import { CONFIG } from './app.config';
+
+[...]
+
+@NgModule({
+  imports: [
+    [...]
+    ONTIMIZE_MODULES,
+    OntimizeWebModule,
+    [...]
+  ],
+  [...]
+  providers: [
+   { provide: APP_CONFIG , useValue: CONFIG },
+   ...ONTIMIZE_PROVIDERS
+   [...]
+  ],
+  [...]
+})
+[...]
+```
+
 ## 2.0.0-rc.0
 
 ### Features
