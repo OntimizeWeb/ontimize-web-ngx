@@ -3,11 +3,9 @@ import { HttpModule } from '@angular/http';
 
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-// AoT requires an exported function for factories
-export function HttpLoaderFactory(http: Http) {
-  return new TranslateHttpLoader(http);
-}
 
 import {
   OBarMenuModule,
@@ -55,7 +53,7 @@ import {
 
 import { OSharedModule } from '../shared';
 
-export const ONTIMIZE_EXPORTS_MODULES: any = [
+export const INTERNAL_ONTIMIZE_MODULES_EXPORTED: any = [
   // Standard modules
   HttpModule,
   OSharedModule,
@@ -104,7 +102,12 @@ export const ONTIMIZE_EXPORTS_MODULES: any = [
   OSideMenuSeparatorModule
 ];
 
-export const ONTIMIZE_MODULES: any = [
+// AoT requires an exported function for factories
+export function HttpLoaderFactory(http: Http) {
+  return new TranslateHttpLoader(http);
+}
+
+export const INTERNAL_ONTIMIZE_MODULES: any = [
   HttpModule,
   // Ngx-translate
   TranslateModule.forRoot({
@@ -159,4 +162,9 @@ export const ONTIMIZE_MODULES: any = [
   OSideMenuItemModule,
   OLocaleSideMenuItemModule,
   OSideMenuSeparatorModule
+];
+
+export const ONTIMIZE_MODULES: any = [
+  BrowserModule,
+  BrowserAnimationsModule
 ];
