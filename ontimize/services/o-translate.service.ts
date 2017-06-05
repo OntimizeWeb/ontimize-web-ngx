@@ -57,4 +57,8 @@ export class OTranslateService {
       );
   }
 
+  public getCurrentLang() {
+    return this.translateService.currentLang;
+  }
+
 }
