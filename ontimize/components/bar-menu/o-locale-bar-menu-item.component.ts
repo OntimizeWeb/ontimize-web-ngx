@@ -83,12 +83,22 @@ export class OLocaleBarMenuItemComponent implements OnInit {
   }
 
   configureI18n() {
+    if (this.isConfiguredLang()) {
+      return;
+    }
     if (this.translateService) {
       this.translateService.use(this.locale);
     }
     if (this.menu) {
       this.menu.collapseAll();
     }
+  }
+
+  isConfiguredLang() {
+    if (this.translateService) {
+      return (this.translateService.getCurrentLang() === this.locale);
+    }
+    return false;
   }
 }
 

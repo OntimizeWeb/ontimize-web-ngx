@@ -1,14 +1,11 @@
 import { Injector } from '@angular/core';
-import { OpaqueToken } from '@angular/core';
 import { Http } from '@angular/http';
 
 import { OntimizeEEService } from './ontimize-ee.service';
 import { OntimizeService } from './ontimize.service';
 import { APP_CONFIG, Config } from '../config/app-config';
 
-export const SERVICE_CONFIG = new OpaqueToken('service.config');
-
-class DataServiceFactory {
+export class DataServiceFactory {
 
   protected config: Config;
   protected http: Http;

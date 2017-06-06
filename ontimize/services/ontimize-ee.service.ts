@@ -5,8 +5,12 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/share';
 
-import { LoginService, SERVICE_CONFIG } from '../services';
-import { APP_CONFIG, Config } from '../config/app-config';
+import { LoginService } from '../services';
+
+import {
+  AppConfig,
+  Config
+} from '../config/app-config';
 
 import { IAuthService, IDataService } from '../util/util';
 
@@ -26,17 +30,18 @@ export class OntimizeEEService implements IAuthService, IDataService {
   protected _sessionid: string;
   protected _urlBase: string;
   protected _appConfig: Config;
+  protected _config: AppConfig;
   protected _startSessionPath: string;
 
   constructor(protected injector: Injector) {
-
     this.http = this.injector.get(Http);
-    this._appConfig = this.injector.get(APP_CONFIG);
+    this._config = this.injector.get(AppConfig);
+    this._appConfig = this._config.getConfiguration();
   }
 
   public getDefaultServiceConfiguration(serviceName?: string) {
     let loginService = this.injector.get(LoginService);
-    let configuration = this.injector.get(SERVICE_CONFIG);
+    let configuration = this._config.getServiceConfiguration();
 
     let servConfig = {};
     if (serviceName && configuration.hasOwnProperty(serviceName)) {

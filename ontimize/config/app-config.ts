@@ -1,8 +1,11 @@
-import { OpaqueToken } from '@angular/core';
+import { InjectionToken } from '@angular/core';
 
-const isObject = val => typeof val === 'object';
+export function isObject(val) {
+  const valType = typeof val;
+  return valType === 'object';
+}
+
 const isArray = Array.isArray;
-
 
 let DEFAULT_LOCAL_STORAGE_KEY = 'ontimize-web-uuid';
 let DEFAULT_CONFIG: Config = {
@@ -10,7 +13,7 @@ let DEFAULT_CONFIG: Config = {
   title: 'Ontimize Web App'
 };
 
-export const APP_CONFIG = new OpaqueToken('app.config');
+export const APP_CONFIG = new InjectionToken<Config>('app.config');
 
 export interface Config {
   // apiEndpoint [string]: The base path of the URL used by app services.
@@ -48,11 +51,15 @@ export class AppConfig {
   private _config: any;
 
   constructor(config?) {
-    this._config = config && isObject(config) && !isArray(config) ? config : {};
+    this._config = (config && isObject(config) && !isArray(config)) ? config : {};
   }
 
   public getConfiguration(): Config {
     return Object.assign(DEFAULT_CONFIG, this._config);
+  }
+
+  public getServiceConfiguration(): Config {
+    return this._config['servicesConfiguration'] || {};
   }
 }
 

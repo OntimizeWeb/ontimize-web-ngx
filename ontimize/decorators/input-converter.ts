@@ -1,29 +1,26 @@
-
-
-export var StringConverter = (value: any) => {
-  if (value === null || value === undefined || typeof value === 'string')
+export function StringConverter(value: any) {
+  if (value === null || value === undefined || typeof value === 'string') {
     return value;
-
+  }
   return value.toString();
-};
+}
 
-export var BooleanConverter = (value: any) => {
-  if (value === null || value === undefined || typeof value === 'boolean')
+export function BooleanConverter(value: any) {
+  if (value === null || value === undefined || typeof value === 'boolean') {
     return value;
-
+  }
   return value.toString() === 'true' || value.toString() === 'yes';
-};
+}
 
-export var NumberConverter = (value: any) => {
-  if (value === null || value === undefined || typeof value === 'number')
+export function NumberConverter(value: any) {
+  if (value === null || value === undefined || typeof value === 'number') {
     return value;
-
+  }
   return parseFloat(value.toString());
-};
+}
 
-
-export function InputConverter(converter?: (value: any) => any) {
-  return (target: Object, key: string) => {
+export function InputConverter(converter?: Function) {
+  function InputConverterInner(target: Object, key: string) {
     if (converter === undefined) {
       var metadata = (<any>Reflect).getMetadata('design:type', target, key);
       if (metadata === undefined || metadata === null)
@@ -61,5 +58,6 @@ export function InputConverter(converter?: (value: any) => any) {
         configurable: true
       });
     }
-  };
+  }
+  return InputConverterInner;
 }

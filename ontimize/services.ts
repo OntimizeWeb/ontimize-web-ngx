@@ -15,3 +15,5 @@ export * from './services/auth-guard.service';
 export * from './services/auth-guard.provider';
 
 export * from './services/local-storage.service';
+
+export * from './services/app-config.provider';
