@@ -3,7 +3,7 @@ import { FormControl, Validators } from '@angular/forms';
 import { ValidatorFn } from '@angular/forms/src/directives/validators';
 
 import {
-  OComponent,
+  OBaseComponent,
   IComponent
 } from './o-component.class';
 
@@ -26,7 +26,7 @@ export interface IFormDataComponent {
   isAutomaticBinding(): Boolean;
 }
 
-export class OFormDataComponent extends OComponent implements IFormControlComponent, IFormDataTypeComponent, IFormDataComponent {
+export class OFormDataComponent extends OBaseComponent implements IFormControlComponent, IFormDataTypeComponent, IFormDataComponent {
   /* Inputs */
   protected sqlType: string;
   @InputConverter()
