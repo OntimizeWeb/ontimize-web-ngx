@@ -10,6 +10,11 @@
 @import '../material/ckeditor/ckeditor-theme.scss';
 @import '../list/o-list-theme.scss';
 
+@import '../app-header/o-app-header-theme.scss';
+@import '../app-sidenav/o-app-sidenav-theme.scss';
+
+@import '../../layouts/app-layout/o-app-layout-theme.scss';
+
 // Create a theme.
 @mixin o-material-theme($theme) {
   @include app-global-theme($theme);
@@ -23,5 +28,8 @@
   @include o-table-theme($theme);
   @include ckeditor-theme($theme);
   @include o-list-theme($theme);
+  @include o-app-header-theme($theme);
+  @include o-app-sidenav-theme($theme);
+  @include o-app-layout-theme($theme);
 }
 
