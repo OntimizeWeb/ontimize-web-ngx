@@ -185,4 +185,22 @@ export class LoginService implements ILoginService {
     return stored['session'];
   }
 
+  public logoutAndRedirect() {
+    this.logout().subscribe(() => {
+      this.router.navigate(['/login', {
+        'session-expired': false
+      }]);
+    });
+  }
+
+  public logoutWithConfirmationAndRedirect() {
+    this.dialogService.confirm('CONFIRM', 'MESSAGES.CONFIRM_LOGOUT').then(
+      res => {
+        if (res === true) {
+          this.logoutAndRedirect();
+        }
+      }
+    );
+  }
+
 }
