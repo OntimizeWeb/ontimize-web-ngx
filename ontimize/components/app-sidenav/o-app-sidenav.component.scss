@@ -1,0 +1,132 @@
+$sidenav-spacing-unit: 8px;
+$sidenav-width: 240px;
+$sidenav-closed-width: 40px;
+$sidenav-diff: -200px;
+
+
+o-app-sidenav {
+  // display: flex;
+
+  .application-sidenav-container {
+    width: 100%;
+    height: 100%;
+
+    &:not(.opened) {
+      .mat-sidenav-content {
+        margin-right: $sidenav-closed-width;
+        transform: translate3d($sidenav-closed-width, 0px, 0px)!important;
+      }
+    }
+
+    .mat-sidenav-content {
+      position: absolute;
+      right: 0;
+      left: 0;
+    }
+
+    .mat-sidenav.application-sidenav-sidenav {
+      box-shadow: 3px 0 6px rgba(0, 0, 0, .24);
+      padding-bottom: 72px;
+      width: $sidenav-width;
+      bottom: 0;
+      overflow: auto;
+      height: 100%;
+
+      &.mat-sidenav-closing {
+        transform: translate3d($sidenav-diff,0,0);
+      }
+
+      &.mat-sidenav-closed {
+        visibility: visible;
+        transform: translate3d($sidenav-diff,0,0);
+        text-align: center;
+
+        > nav {
+          width: $sidenav-closed-width;
+          min-width: $sidenav-closed-width;
+          margin-left: auto;
+        }
+
+        li > a {
+          padding: 0;
+        }
+
+        .mat-icon {
+          margin: 0 calc($sidenav-closed-width - 24px);
+        }
+      }
+
+      &.mat-sidenav-opened {
+        box-shadow: 3px 0 6px rgba(0, 0, 0, .24);
+      }
+
+      // Section divider
+      h3 {
+        border: none;
+        font-size: 10px;
+        letter-spacing: 1px;
+        line-height: $sidenav-spacing-unit * 3;
+        text-transform: uppercase;
+        font-weight: 400;
+        margin: 0;
+        padding: 0 ($sidenav-spacing-unit * 2);
+      }
+
+      ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      // Sidenav navigation item
+      li {
+        border-bottom-width: 1px;
+        border-bottom-style: solid;
+        margin: 0;
+        padding: 0;
+
+
+        // Hide the border on the last item
+        &:last-child {
+          border-color: transparent;
+        }
+
+        > a {
+          box-sizing: border-box;
+          display: block;
+          font-size: 14px;
+          font-weight: 400;
+          line-height: ($sidenav-spacing-unit * 6) - 1;
+          text-decoration: none;
+          transition: all .3s;
+          padding: 0 ($sidenav-spacing-unit * 2);
+          position: relative;
+
+          &.application-sidenav-viewer-sidenav-item-selected {
+            font-weight: 600;
+          }
+        }
+      }
+    }
+
+    .application-sidenav-content {
+      min-height: 100%;
+      display: flex;
+      flex-direction: column;
+
+      // .mat-sidenav-content {
+
+      // }
+      &:not(.sidenav-opened) {
+        //margin-left: $sidenav-closed-width;
+        // margin-right: $sidenav-closed-width;
+        // transform: translate3d($sidenav-diff, 0px, 0px);
+      }
+      // The rule will match the element following the router-outlet which will be the routed component.
+      router-outlet + * {
+        flex-grow: 1;
+      }
+    }
+
+  }
+}

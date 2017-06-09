@@ -1,0 +1,36 @@
+@import '~@angular/material/theming';
+
+@mixin o-app-sidenav-theme($theme) {
+  $primary: map-get($theme, primary);
+  $accent: map-get($theme, accent);
+  $warn: map-get($theme, warn);
+  $background: map-get($theme, background);
+  $foreground: map-get($theme, foreground);
+  $sidenav: '.application-sidenav-sidenav';
+
+  .application-sidenav-sidenav {
+
+    // Section divider
+    h3 {
+      background: rgba(mat-color($foreground, secondary-text), .32);
+      color: mat-color($primary, default-contrast);
+    }
+
+    // Sidenav navigation items
+    li {
+      border-color: rgba(mat-color($foreground, secondary-text), .06);
+      color: mat-color($foreground, secondary-text);
+
+      > a {
+      color: mat-color($foreground, secondary-text);
+
+        &.is-selected,
+        &:hover,
+        &:focus {
+          background: mat-color($background, background);
+          color: mat-color($primary);
+        }
+      }
+    }
+  }
+}

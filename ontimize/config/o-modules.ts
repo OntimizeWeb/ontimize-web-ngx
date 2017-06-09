@@ -48,8 +48,16 @@ import {
   OSideMenuGroupModule,
   OSideMenuItemModule,
   OLocaleSideMenuItemModule,
-  OSideMenuSeparatorModule
+  OSideMenuSeparatorModule,
+  OAppHeaderModule,
+  OAppSidenavImageModule,
+  OAppSidenavModule,
+  OUserInfoModule
 } from '../components';
+
+import {
+  OAppLayoutModule
+} from '../layouts';
 
 import { OSharedModule } from '../shared';
 
@@ -99,7 +107,12 @@ export const INTERNAL_ONTIMIZE_MODULES_EXPORTED: any = [
   OSideMenuGroupModule,
   OSideMenuItemModule,
   OLocaleSideMenuItemModule,
-  OSideMenuSeparatorModule
+  OSideMenuSeparatorModule,
+  OAppHeaderModule,
+  OAppSidenavImageModule,
+  OAppSidenavModule,
+  OAppLayoutModule,
+  OUserInfoModule
 ];
 
 // AoT requires an exported function for factories
@@ -161,7 +174,12 @@ export const INTERNAL_ONTIMIZE_MODULES: any = [
   OSideMenuGroupModule,
   OSideMenuItemModule,
   OLocaleSideMenuItemModule,
-  OSideMenuSeparatorModule
+  OSideMenuSeparatorModule,
+  OAppHeaderModule,
+  OAppSidenavImageModule,
+  OAppSidenavModule,
+  OAppLayoutModule,
+  OUserInfoModule
 ];
 
 export const ONTIMIZE_MODULES: any = [
