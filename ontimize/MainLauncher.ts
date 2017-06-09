@@ -29,7 +29,8 @@ export function ontimizePostBootstrap(ngModuleRef: NgModuleRef<any>): NgModuleRe
   // Hiding loader...
   let loader = document.getElementById('loader-wrapper');
   if (loader) {
-    loader.classList.add('loaded');
+    loader.remove();
+    // loader.classList.add('loaded');
   }
 
   return ngModuleRef;
@@ -52,5 +53,15 @@ export function configureI18n(config: Config, translate: OTranslateService) {
   // this trigger the use of the spanish or english language after setting the translations
   translate.use(userLang);
 
+  // initialize available locales array if needed
+  if (!config.applicationLocales) {
+    config.applicationLocales = [];
+  }
+  if (config.applicationLocales.indexOf('en') === -1) {
+    config.applicationLocales.push('en');
+  }
+  if (userLang && config.applicationLocales.indexOf(userLang) === -1) {
+    config.applicationLocales.push(userLang);
+  }
 }
 
