@@ -15,7 +15,9 @@ import {
   authGuardServiceFactory,
   dataServiceFactory,
   LocalStorageService,
-  appConfigFactory
+  appConfigFactory,
+  AppMenuService,
+  OUserInfoService
 } from '../services';
 
 import { Events } from '../util/events';
@@ -83,6 +85,14 @@ export function getTranslateServiceProvider(injector) {
 
 export function getLocalStorageServiceProvider(injector) {
   return new LocalStorageService(injector);
+}
+
+export function getAppMenuServiceProvider(injector) {
+  return new AppMenuService(injector);
+}
+
+export function getOUserInfoServiceProvider(injector) {
+  return new OUserInfoService(injector);
 }
 
 export const ONTIMIZE_PROVIDERS = [
@@ -161,6 +171,16 @@ export const ONTIMIZE_PROVIDERS = [
   {
     provide: AuthGuardService,
     useFactory: authGuardServiceFactory,
+    deps: [Injector]
+  },
+  {
+    provide: AppMenuService,
+    useFactory: getAppMenuServiceProvider,
+    deps: [Injector]
+  },
+  {
+    provide: OUserInfoService,
+    useFactory: getOUserInfoServiceProvider,
     deps: [Injector]
   }
 ];
