@@ -2,65 +2,17 @@
 
   <md-sidenav #sidenav class="application-sidenav-sidenav" [opened]="!isScreenSmall()" [mode]="'side'">
     <!--isScreenSmall() ? 'over' : 'side'-->
-    <!--<ng-content select=".o-app-sidenav-image"></ng-content>-->
+    <ng-content select="[o-app-sidenav-image]"></ng-content>
 
-    <nav *ngFor="let menuGroup of menuGroupArray">
+    <nav *ngFor="let menuRootItem of menuRootArray">
 
-      <md-icon *ngIf="menuGroup.icon">{{ menuGroup.icon }}</md-icon>
-      <h3 *ngIf="sidenav.opened">{{ menuGroup.name | oTranslate }}</h3>
-
-      <ul *ngIf="sidenav.opened">
-        <li *ngFor="let menuItem of menuGroup.items" [ngSwitch]="appMenuService.getMenuItemType(menuItem)">
-
-          <a *ngSwitchCase="'route'" [routerLink]="[ menuItem.route ]" routerLinkActive="application-sidenav-viewer-sidenav-item-selected">
-            <md-icon *ngIf="menuItem.icon">{{ menuItem.icon }}</md-icon>
-            {{ menuItem.name | oTranslate }}
-          </a>
-
-          <a *ngSwitchCase="'action'" (click)="onMenuItemActionClick(menuItem)">
-            <md-icon *ngIf="menuItem.icon">{{ menuItem.icon }}</md-icon>
-            {{ menuItem.name | oTranslate }}
-          </a>
-
-          <a *ngSwitchCase="'locale'" layout="row" layout-align="space-between center" (click)="configureI18n(menuItem)">
-            <md-icon *ngIf="menuItem.icon">{{ icon }}</md-icon>
-            {{ menuItem.name | oTranslate }}
-            <md-icon *ngIf="isConfiguredLang(menuItem)" class="configured-lang">check_circle</md-icon>
-          </a>
-
-          <a *ngSwitchCase="'logout'" (click)="onLogoutClick(menuItem)">
-            <md-icon *ngIf="menuItem.icon">{{ icon }}</md-icon>
-            {{ menuItem.name | oTranslate }}
-          </a>
-
-          <div *ngSwitchDefault>
-            <md-icon *ngIf="menuItem.icon">{{ menuItem.icon }}</md-icon>
-            {{ menuItem.name | oTranslate }}
-          </div>
-        </li>
+      <ul *ngIf="appMenuService.getMenuItemType(menuRootItem) !== 'group'">
+        <o-app-sidenav-menu-item [menu-item]="menuRootItem" [menu-item-type]="appMenuService.getMenuItemType(menuRootItem)" [sidenav-opened]="sidenav.opened">
+        </o-app-sidenav-menu-item>
       </ul>
 
-      <ul *ngIf="!sidenav.opened">
-        <li *ngFor="let menuItem of menuGroup.items" [ngSwitch]="appMenuService.getMenuItemType(menuItem)">
-
-          <a *ngSwitchCase="'route'" [routerLink]="[ menuItem.route ]" routerLinkActive="application-sidenav-viewer-sidenav-item-selected">
-            <md-icon *ngIf="menuItem.icon">{{ menuItem.icon }}</md-icon>
-          </a>
-
-          <a *ngSwitchCase="'action'" (click)="menuItem.action()">
-            <md-icon *ngIf="menuItem.icon">{{ menuItem.icon }}</md-icon>
-          </a>
-
-          <a *ngSwitchCase="'locale'" layout="row" layout-align="space-between center" (click)="configureI18n(menuItem)">
-            <md-icon *ngIf="menuItem.icon">{{ icon }}</md-icon>
-          </a>
-
-          <div *ngSwitchDefault>
-            <md-icon *ngIf="menuItem.icon">{{ menuItem.icon }}</md-icon>
-          </div>
-        </li>
-      </ul>
-
+      <o-app-sidenav-menu-group [menu-group]="menuRootItem" [sidenav-opened]="sidenav.opened" *ngIf="appMenuService.getMenuItemType(menuRootItem) === 'group'">
+      </o-app-sidenav-menu-group>
     </nav>
   </md-sidenav>
 

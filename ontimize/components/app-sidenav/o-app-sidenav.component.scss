@@ -1,19 +1,26 @@
 $sidenav-spacing-unit: 8px;
 $sidenav-width: 240px;
-$sidenav-closed-width: 40px;
-$sidenav-diff: -200px;
+// $sidenav-closed-width: 40px;
+$sidenav-closed-width: 48px;
+//($sidenav-width - $sidenav-closed-width)
+$sidenav-diff: -191px;
+$header-height: 55px;
+$transition-duration: 500ms;
 
+.o-app-sidenav {
 
-o-app-sidenav {
-  // display: flex;
+  .example-fill-remaining-space {
+    flex: 1 1 auto;
+  }
 
   .application-sidenav-container {
     width: 100%;
     height: 100%;
 
+
     &:not(.opened) {
       .mat-sidenav-content {
-        margin-right: $sidenav-closed-width;
+        margin-right: $sidenav-closed-width!important;
         transform: translate3d($sidenav-closed-width, 0px, 0px)!important;
       }
     }
@@ -25,12 +32,65 @@ o-app-sidenav {
     }
 
     .mat-sidenav.application-sidenav-sidenav {
-      box-shadow: 3px 0 6px rgba(0, 0, 0, .24);
+      box-shadow: 3px $header-height 6px rgba(0, 0, 0, .24);
       padding-bottom: 72px;
+      padding-top: 55px;
       width: $sidenav-width;
       bottom: 0;
       overflow: auto;
       height: 100%;
+
+      h3 {
+        border: none;
+        font-size: 16px;
+        font-weight: 700;
+        line-height: $sidenav-spacing-unit * 3;
+        text-transform: capitalize;
+        margin: 0;
+        padding-left: ($sidenav-spacing-unit * 2);
+      }
+
+      ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      li {
+        margin: 0;
+        padding: 0;
+
+        > a {
+          box-sizing: border-box;
+          display: block;
+          font-size: 14px;
+          font-weight: 400;
+          line-height: ($sidenav-spacing-unit * 6) - 1;
+          text-decoration: none;
+          // transition: all .3s;
+          padding: 0 ($sidenav-spacing-unit * 2);
+          position: relative;
+        }
+      }
+
+      .application-sidenav-menugroup {
+        transition: background-color $transition-duration;
+
+        &.active + .application-sidenav-menugroup-items-container ul {
+          margin-top: 0px;
+          li {
+            border-color: transparent;
+          }
+        }
+      }
+
+      .application-sidenav-menugroup-items-container {
+        overflow: hidden;
+        ul {
+          transition: margin-top $transition-duration;
+          margin-top: -100%;
+        }
+      }
 
       &.mat-sidenav-closing {
         transform: translate3d($sidenav-diff,0,0);
@@ -41,69 +101,65 @@ o-app-sidenav {
         transform: translate3d($sidenav-diff,0,0);
         text-align: center;
 
+        .application-sidenav-item {
+
+          &.application-sidenav-menuitem a {
+            width: $sidenav-closed-width;
+            line-height: $sidenav-closed-width;
+            padding: $sidenav-spacing-unit;
+            height: $sidenav-closed-width;
+          }
+
+          &.application-sidenav-menugroup {
+            padding: $sidenav-spacing-unit;
+            height: $sidenav-closed-width;
+            -webkit-box-pack: center;
+            -ms-flex-pack: center;
+            justify-content: center;
+          }
+        }
+
         > nav {
           width: $sidenav-closed-width;
           min-width: $sidenav-closed-width;
           margin-left: auto;
         }
-
-        li > a {
-          padding: 0;
-        }
-
         .mat-icon {
           margin: 0 calc($sidenav-closed-width - 24px);
         }
       }
 
       &.mat-sidenav-opened {
-        box-shadow: 3px 0 6px rgba(0, 0, 0, .24);
-      }
 
-      // Section divider
-      h3 {
-        border: none;
-        font-size: 10px;
-        letter-spacing: 1px;
-        line-height: $sidenav-spacing-unit * 3;
-        text-transform: uppercase;
-        font-weight: 400;
-        margin: 0;
-        padding: 0 ($sidenav-spacing-unit * 2);
-      }
-
-      ul {
-        list-style-type: none;
-        margin: 0;
-        padding: 0;
-      }
-
-      // Sidenav navigation item
-      li {
-        border-bottom-width: 1px;
-        border-bottom-style: solid;
-        margin: 0;
-        padding: 0;
-
-
-        // Hide the border on the last item
-        &:last-child {
-          border-color: transparent;
+        .application-sidenav-item {
+          border-bottom-width: 1px;
+          border-bottom-style: solid;
         }
 
-        > a {
-          box-sizing: border-box;
-          display: block;
-          font-size: 14px;
-          font-weight: 400;
-          line-height: ($sidenav-spacing-unit * 6) - 1;
-          text-decoration: none;
-          transition: all .3s;
-          padding: 0 ($sidenav-spacing-unit * 2);
-          position: relative;
+        .application-sidenav-menugroup {
+          padding: ($sidenav-spacing-unit * 2);
+          .application-sidenav-menugroup-arrow {
+            transition: transform $transition-duration ease all;
+          }
 
-          &.application-sidenav-viewer-sidenav-item-selected {
-            font-weight: 600;
+          &.active {
+            > .application-sidenav-menugroup-arrow {
+              transform: rotate(90deg);
+            }
+            + .application-sidenav-menugroup-items-container {
+              ul {
+                padding-bottom: ($sidenav-spacing-unit * 2);
+                li > a {
+                  padding-left: ($sidenav-spacing-unit * 4);
+                }
+              }
+            }
+          }
+        }
+
+        .application-sidenav-menuitem {
+          md-icon {
+            margin-right: ($sidenav-spacing-unit * 2);
           }
         }
       }
@@ -114,19 +170,10 @@ o-app-sidenav {
       display: flex;
       flex-direction: column;
 
-      // .mat-sidenav-content {
-
-      // }
-      &:not(.sidenav-opened) {
-        //margin-left: $sidenav-closed-width;
-        // margin-right: $sidenav-closed-width;
-        // transform: translate3d($sidenav-diff, 0px, 0px);
-      }
       // The rule will match the element following the router-outlet which will be the routed component.
       router-outlet + * {
         flex-grow: 1;
       }
     }
-
   }
 }

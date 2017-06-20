@@ -4,24 +4,23 @@ import {
   Component,
   OnInit,
   ViewEncapsulation,
-  ViewChild
+  ViewChild,
+  ElementRef
 } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 import { MdSidenav } from '@angular/material';
 import { RouterModule, Router } from '@angular/router';
 import { OSharedModule } from '../../shared';
-import { CommonModule } from '@angular/common';
+
+
+import { OAppSidenavMenuItemModule } from './o-app-sidenav-menu-item.component';
+import { OAppSidenavMenuGroupModule } from './o-app-sidenav-menu-group.component';
+
+
 import {
-  DialogService,
-  OTranslateService,
   AppMenuService,
-  MenuGroup,
-  MenuItemLogout,
-  MenuItemAction,
-  // MenuItem,
-  // MenuItemRoute,
-  MenuItemLocale,
-  LoginService
+  MenuRootItem
 } from '../../services';
 
 const SMALL_WIDTH_BREAKPOINT = 840;
@@ -35,7 +34,7 @@ export const DEFAULT_OUTPUTS_O_APP_SIDENAV = [];
   outputs: DEFAULT_OUTPUTS_O_APP_SIDENAV,
   template: require('./o-app-sidenav.component.html'),
   styles: [require('./o-app-sidenav.component.scss')],
-  encapsulation: ViewEncapsulation.None,
+  encapsulation: ViewEncapsulation.None
 })
 export class OAppSidenavComponent implements OnInit {
 
@@ -44,24 +43,20 @@ export class OAppSidenavComponent implements OnInit {
 
   @ViewChild(MdSidenav) sidenav: MdSidenav;
 
-  protected dialogService: DialogService;
-  protected translateService: OTranslateService;
   protected appMenuService: AppMenuService;
-  protected loginService: LoginService;
-
-  protected menuGroupArray: MenuGroup[];
+  protected menuRootArray: MenuRootItem[];
 
   protected imageSrc: string;
 
   constructor(
     protected injector: Injector,
-    private router: Router
+    private router: Router,
+    protected elRef: ElementRef
   ) {
-    this.dialogService = this.injector.get(DialogService);
-    this.translateService = this.injector.get(OTranslateService);
-    this.loginService = this.injector.get(LoginService);
     this.appMenuService = this.injector.get(AppMenuService);
-    this.menuGroupArray = this.appMenuService.getMenuGroups();
+    this.menuRootArray = this.appMenuService.getMenuRoots();
+
+    this.elRef.nativeElement.classList.add('o-app-sidenav');
   }
 
   ngOnInit() {
@@ -76,50 +71,14 @@ export class OAppSidenavComponent implements OnInit {
     return window.matchMedia(`(max-width: ${SMALL_WIDTH_BREAKPOINT}px)`).matches;
   }
 
-  configureI18n(item: MenuItemLocale) {
-    if (this.isConfiguredLang(item)) {
-      return;
-    }
-    if (this.translateService) {
-      this.translateService.use(item.locale);
-    }
-    // if (this.menu) {
-    //   this.menu.collapseAll();
-    // }
-  }
-
-  isConfiguredLang(item: MenuItemLocale) {
-    if (this.translateService) {
-      return (this.translateService.getCurrentLang() === item.locale);
-    }
-    return false;
-  }
-
-  onMenuItemActionClick(item: MenuItemAction) {
-    if (item.confirm !== undefined) {
-      this.dialogService.confirm('CONFIRM', item.confirm).then(
-        res => {
-          if (res === true) {
-            item.action();
-          }
-        }
-      );
-    } else {
-      item.action();
-    }
-  }
-
-  onLogoutClick() {
-    this.loginService.logoutWithConfirmationAndRedirect();
-  }
-
-
 }
 
 @NgModule({
   imports: [
     CommonModule,
     OSharedModule,
+    OAppSidenavMenuItemModule,
+    OAppSidenavMenuGroupModule,
     RouterModule
   ],
   declarations: [
