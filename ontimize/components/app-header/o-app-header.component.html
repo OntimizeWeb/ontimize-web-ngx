@@ -1,0 +1,14 @@
+<nav class="application-header">
+  <md-icon class="sidenav-toggle" (click)="toggleSidenav.emit()">menu</md-icon>
+  <span layout="row" layout-align="center center" class="application-header-title">{{ headerTitle | oTranslate }}</span>
+  <o-user-info></o-user-info>
+  <button class="menu-button" md-icon-button [mdMenuTriggerFor]="langMenu">
+    <span class="flag-icon flag-icon-{{ translateService.getCurrentLang() }}"></span>
+  </button>
+  <md-menu #langMenu="mdMenu" yPosition="below">
+    <button md-menu-item *ngFor="let lang of availableLangs" (click)="configureI18n(lang)">
+      <span class="flag-icon flag-icon-{{ lang }}"></span>
+      <span>{{ 'LOCALE_' + lang | oTranslate }}</span>
+    </button>
+  </md-menu>
+</nav>

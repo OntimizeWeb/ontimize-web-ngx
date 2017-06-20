@@ -1,0 +1,27 @@
+<md-sidenav-container class="application-sidenav-container" [class.opened]="sidenav.opened">
+
+  <md-sidenav #sidenav class="application-sidenav-sidenav" [opened]="!isScreenSmall()" [mode]="'side'">
+    <!--isScreenSmall() ? 'over' : 'side'-->
+    <!--<ng-content select="o-app-sidenav-image, [o-app-sidenav-image], .o-app-sidenav-image, [.o-app-sidenav-image]"></ng-content>-->
+    <o-app-sidenav-image class="o-app-sidenav-image"
+      opened-src="../../assets/images/sidenav-opened.png"
+      closed-src="../../assets/images/sidenav-closed.png">
+    </o-app-sidenav-image>
+
+
+    <nav *ngFor="let menuRootItem of menuRootArray">
+
+      <ul *ngIf="appMenuService.getMenuItemType(menuRootItem) !== 'group'">
+        <o-app-sidenav-menu-item [menu-item]="menuRootItem" [menu-item-type]="appMenuService.getMenuItemType(menuRootItem)" [sidenav-opened]="sidenav.opened">
+        </o-app-sidenav-menu-item>
+      </ul>
+
+      <o-app-sidenav-menu-group [menu-group]="menuRootItem" [sidenav-opened]="sidenav.opened" *ngIf="appMenuService.getMenuItemType(menuRootItem) === 'group'">
+      </o-app-sidenav-menu-group>
+    </nav>
+  </md-sidenav>
+
+  <div class="application-sidenav-content">
+    <ng-content></ng-content>
+  </div>
+</md-sidenav-container>

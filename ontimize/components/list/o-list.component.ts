@@ -1,10 +1,21 @@
 import * as $ from 'jquery';
 import {
-  Component, OnInit, Inject, Injector,
-  AfterContentInit, ContentChildren,
-  ViewChild, QueryList, Optional, forwardRef,
-  ElementRef, NgModule,
-  ViewEncapsulation, EventEmitter
+  Component,
+  OnChanges,
+  SimpleChange,
+  OnInit,
+  Inject,
+  Injector,
+  AfterContentInit,
+  ContentChildren,
+  ViewChild,
+  QueryList,
+  Optional,
+  forwardRef,
+  ElementRef,
+  NgModule,
+  ViewEncapsulation,
+  EventEmitter
 } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { ObservableWrapper } from '../../util/async';
@@ -79,7 +90,7 @@ export interface OListInitializationOptions {
   styles: [require('./o-list.component.scss')],
   encapsulation: ViewEncapsulation.None
 })
-export class OListComponent extends OServiceComponent implements OnInit, IList, AfterContentInit {
+export class OListComponent extends OServiceComponent implements OnInit, IList, AfterContentInit, OnChanges {
 
   public static DEFAULT_INPUTS_O_LIST = DEFAULT_INPUTS_O_LIST;
   public static DEFAULT_OUTPUTS_O_LIST = DEFAULT_OUTPUTS_O_LIST;
@@ -142,6 +153,13 @@ export class OListComponent extends OServiceComponent implements OnInit, IList, 
 
   ngOnInit(): void {
     this.initialize();
+  }
+
+  public ngOnChanges(changes: { [propName: string]: SimpleChange }) {
+    if (typeof (changes['staticData']) !== 'undefined') {
+      this.dataResponseArray = changes['staticData'].currentValue;
+      this.setDataArray(changes['staticData'].currentValue);
+    }
   }
 
   reinitialize(options: OListInitializationOptions) {

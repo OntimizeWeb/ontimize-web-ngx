@@ -1095,7 +1095,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       component: column,
       title: this.translateService.get(column.title),
       type: 'string',
-      className: 'o-table-column',
+      className: 'o-table-column ' + (column.class || '') + ' ',
       defaultContent: '',
       orderable: true,
       searchable: true,
@@ -1121,29 +1121,29 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       colDef.name = column.attr;
       switch (column.type) {
         case 'boolean':
-          colDef.className = 'o-table-column o-table-column-boolean';
+          colDef.className += 'o-table-column-boolean';
           colDef.type = 'string';
           break;
         case 'string':
-          colDef.className = 'o-table-column o-table-column-string';
+          colDef.className += 'o-table-column-string';
           colDef.type = 'string';
           break;
         case 'integer':
         case 'real':
         case 'currency':
-          colDef.className = 'o-table-column o-table-column-number';
+          colDef.className += 'o-table-column-number';
           colDef.type = 'num';
           break;
         case 'date':
-          colDef.className = 'o-table-column o-table-column-date';
+          colDef.className += 'o-table-column-date';
           colDef.type = 'timestamp';
           break;
         case 'image':
-          colDef.className = 'o-table-column o-table-column-image';
+          colDef.className += 'o-table-column-image';
           colDef.type = 'string';
           break;
         default:
-          colDef.className = 'o-table-column o-table-column-string';
+          colDef.className += 'o-table-column-string';
           colDef.type = 'string';
           break;
       }

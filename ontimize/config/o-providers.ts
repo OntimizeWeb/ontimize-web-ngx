@@ -1,4 +1,9 @@
-import { Injector } from '@angular/core';
+import {
+  //   APP_INITIALIZER,
+  //   InjectionToken,
+  Injector
+} from '@angular/core';
+import { LOCATION_INITIALIZED } from '@angular/common';
 import { BaseRequestOptions, XHRBackend } from '@angular/http';
 import { MdIconRegistry } from '@angular/material';
 
@@ -15,12 +20,47 @@ import {
   authGuardServiceFactory,
   dataServiceFactory,
   LocalStorageService,
-  appConfigFactory
+  appConfigFactory,
+  AppMenuService,
+  OUserInfoService,
+  OModulesInfoService
 } from '../services';
 
 import { Events } from '../util/events';
 import { OHttp } from '../util/http/OHttp';
-import { AppConfig } from '../config/app-config';
+import {
+  AppConfig,
+  Config
+} from '../config/app-config';
+
+
+export function appInitializerFactory(injector: Injector, config: Config, translate: OTranslateService) {
+  return () => new Promise<any>((resolve: any) => {
+    const locationInitialized = injector.get(LOCATION_INITIALIZED, Promise.resolve(null));
+    locationInitialized.then(() => {
+      translate.setDefaultLang('en');
+      let userLang = config['locale'];
+      if (!userLang) {
+        userLang = navigator.language.split('-')[0]; // use navigator lang if available
+      }
+      userLang = /(es|en)/gi.test(userLang) ? userLang : 'en';
+
+      // initialize available locales array if needed
+      if (!config.applicationLocales) {
+        config.applicationLocales = [];
+      }
+      if (config.applicationLocales.indexOf('en') === -1) {
+        config.applicationLocales.push('en');
+      }
+      if (userLang && config.applicationLocales.indexOf(userLang) === -1) {
+        config.applicationLocales.push(userLang);
+      }
+
+      // this trigger the use of the spanish or english language after setting the translations
+      translate.use(userLang).subscribe(resolve, resolve, resolve);
+    });
+  });
+}
 
 /**
  * Bind some global events and publish on the 'app' channel
@@ -83,6 +123,18 @@ export function getTranslateServiceProvider(injector) {
 
 export function getLocalStorageServiceProvider(injector) {
   return new LocalStorageService(injector);
+}
+
+export function getAppMenuServiceProvider(injector) {
+  return new AppMenuService(injector);
+}
+
+export function getOUserInfoServiceProvider(injector) {
+  return new OUserInfoService(injector);
+}
+
+export function getOModulesInfoServiceProvider(injector) {
+  return new OModulesInfoService(injector);
 }
 
 export const ONTIMIZE_PROVIDERS = [
@@ -161,6 +213,21 @@ export const ONTIMIZE_PROVIDERS = [
   {
     provide: AuthGuardService,
     useFactory: authGuardServiceFactory,
+    deps: [Injector]
+  },
+  {
+    provide: AppMenuService,
+    useFactory: getAppMenuServiceProvider,
+    deps: [Injector]
+  },
+  {
+    provide: OUserInfoService,
+    useFactory: getOUserInfoServiceProvider,
+    deps: [Injector]
+  },
+  {
+    provide: OModulesInfoService,
+    useFactory: getOModulesInfoServiceProvider,
     deps: [Injector]
   }
 ];

@@ -1,0 +1,24 @@
+.user-info-container {
+  cursor: pointer;
+
+  .user-info-avatar-wrapper {
+    width: 30px;
+    height: 30px;
+    overflow: hidden;
+    border-radius: 100%;
+
+    img {
+      max-width: 100%;
+      height: auto;
+    }
+  }
+  .user-info-username {
+    padding-left: 6px;
+  }
+
+  md-icon {
+    padding-left: 4px;
+    font-size: 16px;
+    line-height: 26px;
+  }
+}

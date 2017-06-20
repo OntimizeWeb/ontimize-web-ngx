@@ -1,0 +1,181 @@
+$sidenav-spacing-unit: 8px;
+$sidenav-width: 240px;
+// $sidenav-closed-width: 40px;
+$sidenav-closed-width: 48px;
+//($sidenav-width - $sidenav-closed-width)
+$sidenav-diff: -191px;
+$header-height: 55px;
+$transition-duration: 500ms;
+
+.o-app-sidenav {
+
+  .example-fill-remaining-space {
+    flex: 1 1 auto;
+  }
+
+  .application-sidenav-container {
+    width: 100%;
+    height: 100%;
+
+
+    &:not(.opened) {
+      .mat-sidenav-content {
+        margin-right: $sidenav-closed-width!important;
+        transform: translate3d($sidenav-closed-width, 0px, 0px)!important;
+      }
+    }
+
+    .mat-sidenav-content {
+      position: absolute;
+      right: 0;
+      left: 0;
+    }
+
+    .mat-sidenav.application-sidenav-sidenav {
+      box-shadow: 3px $header-height 6px rgba(0, 0, 0, .24);
+      padding-bottom: 72px;
+      padding-top: 55px;
+      width: $sidenav-width;
+      bottom: 0;
+      overflow: auto;
+      height: 100%;
+
+      h3 {
+        border: none;
+        font-size: 16px;
+        font-weight: 700;
+        line-height: $sidenav-spacing-unit * 3;
+        text-transform: capitalize;
+        margin: 0;
+        padding-left: ($sidenav-spacing-unit * 2);
+      }
+
+      ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      li {
+        margin: 0;
+        padding: 0;
+
+        > a {
+          box-sizing: border-box;
+          display: block;
+          font-size: 14px;
+          font-weight: 400;
+          line-height: ($sidenav-spacing-unit * 6) - 1;
+          text-decoration: none;
+          // transition: all .3s;
+          padding: 0 ($sidenav-spacing-unit * 2);
+          position: relative;
+        }
+      }
+
+      .application-sidenav-menugroup {
+        transition: background-color $transition-duration;
+
+        &.active + .application-sidenav-menugroup-items-container ul {
+          margin-top: 0px;
+          li {
+            border-color: transparent;
+          }
+        }
+      }
+
+      .application-sidenav-menugroup-items-container {
+        overflow: hidden;
+        ul {
+          transition: margin-top $transition-duration;
+          margin-top: -100%;
+        }
+      }
+
+      &.mat-sidenav-closing {
+        transform: translate3d($sidenav-diff,0,0);
+      }
+
+      &.mat-sidenav-closed {
+        visibility: visible;
+        transform: translate3d($sidenav-diff,0,0);
+        text-align: center;
+
+        .application-sidenav-item {
+
+          &.application-sidenav-menuitem a {
+            width: $sidenav-closed-width;
+            line-height: $sidenav-closed-width;
+            padding: $sidenav-spacing-unit;
+            height: $sidenav-closed-width;
+          }
+
+          &.application-sidenav-menugroup {
+            padding: $sidenav-spacing-unit;
+            height: $sidenav-closed-width;
+            -webkit-box-pack: center;
+            -ms-flex-pack: center;
+            justify-content: center;
+          }
+        }
+
+        > nav {
+          width: $sidenav-closed-width;
+          min-width: $sidenav-closed-width;
+          margin-left: auto;
+        }
+        .mat-icon {
+          margin: 0 calc($sidenav-closed-width - 24px);
+        }
+      }
+
+      &.mat-sidenav-opening,
+      &.mat-sidenav-closing,
+      &.mat-sidenav-opened {
+
+        .application-sidenav-item {
+          border-bottom-width: 1px;
+          border-bottom-style: solid;
+        }
+
+        .application-sidenav-menugroup {
+          padding: ($sidenav-spacing-unit * 2);
+          .application-sidenav-menugroup-arrow {
+            transition: transform $transition-duration ease all;
+          }
+
+          &.active {
+            > .application-sidenav-menugroup-arrow {
+              transform: rotate(90deg);
+            }
+            + .application-sidenav-menugroup-items-container {
+              ul {
+                padding-bottom: ($sidenav-spacing-unit * 2);
+                li > a {
+                  padding-left: ($sidenav-spacing-unit * 4);
+                }
+              }
+            }
+          }
+        }
+
+        .application-sidenav-menuitem {
+          md-icon {
+            margin-right: ($sidenav-spacing-unit * 2);
+          }
+        }
+      }
+    }
+
+    .application-sidenav-content {
+      min-height: 100%;
+      display: flex;
+      flex-direction: column;
+
+      // The rule will match the element following the router-outlet which will be the routed component.
+      router-outlet + * {
+        flex-grow: 1;
+      }
+    }
+  }
+}

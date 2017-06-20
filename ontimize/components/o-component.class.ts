@@ -6,7 +6,7 @@ export interface IComponent {
   getAttribute(): string;
 }
 
-export class OComponent implements IComponent {
+export class OBaseComponent implements IComponent {
   /* Inputs */
   protected oattr: string;
   protected olabel: string;

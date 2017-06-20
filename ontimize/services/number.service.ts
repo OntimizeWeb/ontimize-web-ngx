@@ -1,5 +1,5 @@
 import { Injector } from '@angular/core';
-import { APP_CONFIG, Config } from '../config/app-config';
+import { AppConfig, Config } from '../config/app-config';
 
 export class NumberService {
 
@@ -15,7 +15,7 @@ export class NumberService {
   private _config: Config;
 
   constructor( protected injector: Injector ) {
-    this._config = this.injector.get(APP_CONFIG);
+    this._config = this.injector.get(AppConfig).getConfiguration();
     //TODO: initialize from config
     this._thousandSeparator = NumberService.DEFAULT_THOUSAND_SEPARATOR;
     this._decimalSeparator = NumberService.DEFAULT_DECIMAL_SEPARATOR;

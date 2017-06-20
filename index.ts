@@ -14,6 +14,7 @@ export * from './ontimize/pipes';
 export * from './ontimize/services';
 export * from './ontimize/decorators';
 export * from './ontimize/components';
+export * from './ontimize/layouts';
 export * from './ontimize/utils';
 export * from './ontimize/shared';
 

@@ -7,7 +7,7 @@ import { Observable } from 'rxjs/Observable';
 import { ObservableWrapper } from '../util/async';
 import { IAuthService } from '../util/util';
 import { OntimizeService, DialogService } from '../services';
-import { APP_CONFIG, Config } from '../config/app-config';
+import { AppConfig, Config } from '../config/app-config';
 
 export interface SessionInfo {
   id: number;
@@ -37,7 +37,7 @@ export class LoginService implements ILoginService {
   private dialogService: DialogService;
 
   constructor(protected injector: Injector) {
-    this._config = this.injector.get(APP_CONFIG);
+    this._config = this.injector.get(AppConfig).getConfiguration();
     this.router = this.injector.get(Router);
     this._localStorageKey = this._config['uuid'];
     let sessionInfo = this.getSessionInfo();
@@ -183,6 +183,24 @@ export class LoginService implements ILoginService {
     }
     let stored = JSON.parse(info);
     return stored['session'];
+  }
+
+  public logoutAndRedirect() {
+    this.logout().subscribe(() => {
+      this.router.navigate(['/login', {
+        'session-expired': false
+      }]);
+    });
+  }
+
+  public logoutWithConfirmationAndRedirect() {
+    this.dialogService.confirm('CONFIRM', 'MESSAGES.CONFIRM_LOGOUT').then(
+      res => {
+        if (res === true) {
+          this.logoutAndRedirect();
+        }
+      }
+    );
   }
 
 }

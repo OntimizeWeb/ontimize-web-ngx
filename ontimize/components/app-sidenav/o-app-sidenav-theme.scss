@@ -1,0 +1,45 @@
+@import '~@angular/material/theming';
+
+@mixin o-app-sidenav-theme($theme) {
+  $primary: map-get($theme, primary);
+  $accent: map-get($theme, accent);
+  $warn: map-get($theme, warn);
+  $background: map-get($theme, background);
+  $foreground: map-get($theme, foreground);
+
+  .o-app-sidenav {
+
+    .application-sidenav-sidenav {
+
+      background: mat-color($primary);
+      .application-sidenav-item {
+        cursor: pointer;
+        border-color: rgba(45, 45, 45, 1);
+        color: #aaaaaa;
+
+        .application-sidenav-viewer-sidenav-item-selected,
+        > a.is-selected,
+        > a:hover,
+        > a:focus,
+        &:hover,
+        &:focus {
+          background: rgba(50, 50, 50, 1);
+          color: mat-color($accent);
+        }
+      }
+
+      .application-sidenav-menugroup.active {
+        background: #000;
+        color: #fff;
+
+        + .application-sidenav-menugroup-items-container ul {
+          background: #3a3a3a;
+        }
+      }
+
+      li a {
+        color: inherit;
+      }
+    }
+  }
+}

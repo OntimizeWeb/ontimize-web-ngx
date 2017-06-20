@@ -2,13 +2,14 @@
   <!--<span *ngIf="title" class="o-list-title">{{title}}</span>-->
   <div [class.hidden-loading]="!loading" [class.pageable-loading]="pageable && state.queryRecordOffset > 0" class="spinner-container"
     flex="100" layout="row" layout-align="center center">
-    <md-spinner></md-spinner>
+    <md-progress-spinner *ngIf="loading" mode="indeterminate">
+    </md-progress-spinner>
   </div>
 
   <md-toolbar class="toolbar-filter-list" [class.dense]="odense" *ngIf="controls">
     <div class="mat-toolbar-tools" layout="row" layout-fill layout-align="start center">
       <button type="button" md-icon-button aria-label="Refresh" (click)="reloadData()" *ngIf="refreshButton">
-        <md-icon>refresh</md-icon>
+        <md-icon>autorenew</md-icon>
       </button>
       <button type="button" md-icon-button aria-label="Delete" (click)="remove()" *ngIf="selectedItems.length">
         <md-icon>delete</md-icon>
@@ -24,8 +25,8 @@
   </md-toolbar>
 
   <div layout="column" class="fill-remaining">
-    <md-list class="mat-list" [attr.dense]="odense || undefined" [class.selectable]="selectable" (scroll)="onScroll($event)" [class.o-list-1-detail-buttons]="(editButtonInRow || detailButtonInRow) && !(editButtonInRow && detailButtonInRow)"
-      [class.o-list-2-detail-buttons]="editButtonInRow && detailButtonInRow">
+    <md-list class="mat-list" [attr.dense]="odense || undefined" [class.selectable]="selectable" (scroll)="onScroll($event)"
+      [class.o-list-1-detail-buttons]="(editButtonInRow || detailButtonInRow) && !(editButtonInRow && detailButtonInRow)" [class.o-list-2-detail-buttons]="editButtonInRow && detailButtonInRow">
       <md-list-item *ngIf="!dataArray.length" layout="row" layout-align="center center" style="cursor: default;">
         <h3 md-line>{{ 'TABLE.EMPTY' | oTranslate }}</h3>
       </md-list-item>

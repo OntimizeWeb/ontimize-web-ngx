@@ -1,7 +1,7 @@
 import * as moment from 'moment';
 
 import { Injector } from '@angular/core';
-import { APP_CONFIG, Config } from '../config/app-config';
+import { AppConfig, Config } from '../config/app-config';
 import { loadLocale } from './moment-locales/locales';
 
 export class MomentService {
@@ -14,7 +14,7 @@ export class MomentService {
   private _config: Config;
 
   constructor(protected injector: Injector) {
-    this._config = this.injector.get(APP_CONFIG);
+    this._config = this.injector.get(AppConfig).getConfiguration();
     this.load(this._config.locale);
   }
 

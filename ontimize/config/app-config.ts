@@ -1,4 +1,5 @@
 import { InjectionToken } from '@angular/core';
+import { MenuRootItem } from '../services';
 
 export function isObject(val) {
   const valType = typeof val;
@@ -31,11 +32,16 @@ export interface Config {
   // locale [string][en|es]: Language of the application. By default 'en'
   locale?: string;
 
+  applicationLocales?: string[];
+
   // serviceType [ undefined | '' | class ]: The service type used (Ontimize REST standart, Ontimize REST JEE or custom implementation) in the whole application. By default 'undefined', that is, Ontimize REST standard service.
   serviceType?: any;
 
   // servicesConfiguration: [Object]: Configuration parameters of application services.
   servicesConfiguration?: Object;
+
+  // appMenuConfiguration?: MenuGroup[];
+  appMenuConfiguration?: MenuRootItem[];
 
   // authGuard [Object]: Configuration parameters of application permissions.
   authGuard?: {
@@ -60,6 +66,10 @@ export class AppConfig {
 
   public getServiceConfiguration(): Config {
     return this._config['servicesConfiguration'] || {};
+  }
+
+  public getMenuConfiguration(): MenuRootItem[] {
+    return this._config['appMenuConfiguration'] || [];
   }
 }
 

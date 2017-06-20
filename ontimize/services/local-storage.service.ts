@@ -2,7 +2,7 @@
 import { Injector, EventEmitter } from '@angular/core';
 import { Router, NavigationStart } from '@angular/router';
 import { ObservableWrapper } from '../util/async';
-import { APP_CONFIG, Config } from '../config/app-config';
+import { AppConfig, Config } from '../config/app-config';
 
 import { ILocalStorageComponent } from '../components/o-service-component.class';
 
@@ -15,7 +15,7 @@ export class LocalStorageService {
   private _router: Router;
 
   constructor( protected injector: Injector ) {
-    this._config = this.injector.get(APP_CONFIG);
+    this._config = this.injector.get(AppConfig).getConfiguration();
     this._router = this.injector.get(Router);
 
     var self = this;
