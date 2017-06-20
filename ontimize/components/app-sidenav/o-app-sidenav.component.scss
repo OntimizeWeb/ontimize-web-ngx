@@ -129,6 +129,8 @@ $transition-duration: 500ms;
         }
       }
 
+      &.mat-sidenav-opening,
+      &.mat-sidenav-closing,
       &.mat-sidenav-opened {
 
         .application-sidenav-item {

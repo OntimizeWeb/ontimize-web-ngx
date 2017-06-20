@@ -1,7 +1,5 @@
 import {
-  Optional,
-  Inject,
-  forwardRef,
+  Injector,
   NgModule,
   Component,
   OnInit,
@@ -11,7 +9,7 @@ import { MdSidenav } from '@angular/material';
 import { CommonModule } from '@angular/common';
 
 import { OSharedModule } from '../../shared';
-import { OAppSidenavComponent } from './o-app-sidenav.component';
+// import { OAppSidenavComponent } from './o-app-sidenav.component';
 
 export const DEFAULT_INPUTS_O_APP_SIDENAV_IMAGE = [
   'openedSrc:  opened-src',
@@ -34,26 +32,35 @@ export class OAppSidenavImageComponent implements OnInit {
   public static DEFAULT_INPUTS_O_APP_SIDENAV_IMAGE = DEFAULT_INPUTS_O_APP_SIDENAV_IMAGE;
   public static DEFAULT_OUTPUTS_O_APP_SIDENAV_IMAGE = DEFAULT_OUTPUTS_O_APP_SIDENAV_IMAGE;
 
+  // protected sidenavComp: OAppSidenavComponent;
   protected sidenav: MdSidenav;
   protected openedSrc: string;
   protected closedSrc: string;
   private _src: string;
 
   constructor(
-    @Optional() @Inject(forwardRef(() => OAppSidenavComponent)) protected sidenavComp: OAppSidenavComponent,
+    protected injector: Injector
   ) {
-    this.sidenav = this.sidenavComp ? this.sidenavComp.sidenav : undefined;
-    if (this.sidenav) {
-      this.sidenav.onOpenStart.subscribe(this.setOpenedImg);
-      this.sidenav.onCloseStart.subscribe(this.setClosedImg);
-    }
+    // this.sidenavComp = this.injector.get(OAppSidenavComponent);
+    // this.sidenav = this.sidenavComp ? this.sidenavComp.sidenav : undefined;
+    this.sidenav = this.injector.get(MdSidenav);
+
   }
 
   ngOnInit() {
-    if (this.sidenav && this.sidenav.opened) {
-      this.setOpenedImg();
-    } else if (this.sidenav) {
-      this.setClosedImg();
+    if (this.sidenav) {
+      let self = this;
+      this.sidenav.onOpenStart.subscribe(() => {
+        self.setOpenedImg();
+      });
+      this.sidenav.onCloseStart.subscribe(() => {
+        self.setClosedImg();
+      });
+      if (this.sidenav.opened) {
+        this.setOpenedImg();
+      } else {
+        this.setClosedImg();
+      }
     }
   }
 

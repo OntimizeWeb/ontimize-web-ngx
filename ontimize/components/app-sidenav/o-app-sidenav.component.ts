@@ -13,7 +13,7 @@ import { MdSidenav } from '@angular/material';
 import { RouterModule, Router } from '@angular/router';
 import { OSharedModule } from '../../shared';
 
-
+import { OAppSidenavImageModule } from './o-app-sidenav-image.component';
 import { OAppSidenavMenuItemModule } from './o-app-sidenav-menu-item.component';
 import { OAppSidenavMenuGroupModule } from './o-app-sidenav-menu-group.component';
 
@@ -77,6 +77,7 @@ export class OAppSidenavComponent implements OnInit {
   imports: [
     CommonModule,
     OSharedModule,
+    OAppSidenavImageModule,
     OAppSidenavMenuItemModule,
     OAppSidenavMenuGroupModule,
     RouterModule
