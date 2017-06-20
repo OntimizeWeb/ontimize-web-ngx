@@ -1,51 +1,24 @@
-.application-header {
-  display: flex;
-  flex-wrap: wrap;
-  padding: 8px 16px 8px 0;
+.o-app-header {
+  z-index: 2;
+  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.24);
 
-  // .menu-button {
-  //   margin-left: auto;
-  // }
+  .application-header {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 8px 16px 8px 0;
 
-  // &.sidenav-toggle {
-  //   padding: 0;
-  //   margin: 8px;
-  //   min-width: 64px;
-  // }
+    .sidenav-toggle {
+      text-align: center;
+      position: absolute;
+      top: 0px;
+      padding: 16px 16px;
+    }
 
-  .example-fill-remaining-space {
-    // This fills the remaining space, by using flexbox.
-    // Every toolbar row uses a flexbox row layout.
-    flex: 1 1 auto;
-  }
-
-  .sidenav-toggle {
-  //   padding: 0;
-  //   margin: 8px;
-  //   min-width: 64px;
-  //   display: none;
-  //   // @media (max-width: $small-breakpoint-width) {
-  //   //   display: flex;
-  //   //   align-items: center;
-  //   //   justify-content: center;
-  //   // }
-
-  //   md-icon {
-  //     font-size: 30px;
-  //     height: 64px;
-  //     width: 64px;
-  //     line-height: 64px;
-  //     color: white;
-  //   }
+    .application-header-title {
+      cursor: initial;
+      // This fills the remaining space, by using flexbox.
+      // Every toolbar row uses a flexbox row layout.
+      flex: 1 1 auto;
+    }
   }
 }
-
-
-
-// .github-logo {
-//   height: 21px;
-//   margin: 0 7px 2px 0;
-//   vertical-align: middle;
-// }
-
-
