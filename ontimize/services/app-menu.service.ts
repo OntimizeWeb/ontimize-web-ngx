@@ -5,12 +5,14 @@ import {
 
 import { AppConfig } from '../config/app-config';
 
+export type MenuRootItem = (MenuGroup | MenuItem | MenuItemRoute | MenuItemAction | MenuItemLocale | MenuItemLogout);
 
 export interface MenuGroup {
   id: string;
   name: string;
   icon?: string;
-  items?: (MenuItem | MenuItemRoute | MenuItemAction | MenuItemLocale | MenuItemLogout)[];
+  items: (MenuItem | MenuItemRoute | MenuItemAction | MenuItemLocale | MenuItemLogout)[];
+  opened?: boolean;
 }
 
 export interface MenuItem {
@@ -42,21 +44,27 @@ export interface MenuItemLogout extends MenuItem {
 export class AppMenuService {
 
   protected _config: AppConfig;
-  protected MENU_GROUPS: MenuGroup[];
+  protected MENU_ROOTS: MenuRootItem[];
   protected ALL_MENU_ITEMS: MenuItem[];
 
   constructor(protected injector: Injector) {
     this._config = this.injector.get(AppConfig);
-    this.MENU_GROUPS = this._config.getMenuConfiguration();
-    this.ALL_MENU_ITEMS = this.MENU_GROUPS.reduce((result, category) => result.concat(category.items), []);
+    this.MENU_ROOTS = this._config.getMenuConfiguration();
+
+    this.ALL_MENU_ITEMS = [];
+    for (let i = 0, len = this.MENU_ROOTS.length; i < len; i++) {
+      let item: MenuRootItem = this.MENU_ROOTS[i];
+      this.ALL_MENU_ITEMS = this.ALL_MENU_ITEMS.concat(this.getMenuItems(item));
+    }
+    //this.ALL_MENU_ITEMS = this.MENU_ROOTS.reduce((result, category) => result.concat(category.items), []);
   }
 
-  getMenuGroups(): MenuGroup[] {
-    return this.MENU_GROUPS;
+  getMenuRoots(): MenuRootItem[] {
+    return this.MENU_ROOTS;
   }
 
-  getMenuGroupById(id: string): MenuGroup {
-    return this.MENU_GROUPS.find(c => c.id === id);
+  getMenuRootById(id: string): MenuRootItem {
+    return this.MENU_ROOTS.find(c => c.id === id);
   }
 
   getAllMenuItems(): MenuItem[] {
@@ -67,7 +75,7 @@ export class AppMenuService {
     return this.ALL_MENU_ITEMS.find(i => i.id === id);
   }
 
-  getMenuItemType(item: MenuItem): string {
+  getMenuItemType(item: MenuRootItem): string {
     let type: string;
     switch (true) {
       case ((item as MenuItemLogout).route === '/login'):
@@ -82,6 +90,9 @@ export class AppMenuService {
       case ((item as MenuItemLocale).locale !== undefined):
         type = 'locale';
         break;
+      case ((item as MenuGroup).items !== undefined):
+        type = 'group';
+        break;
       default:
         type = 'default';
         break;
@@ -89,4 +100,10 @@ export class AppMenuService {
     return type;
   }
 
+  private getMenuItems(item: MenuRootItem): MenuItem[] {
+    if ((item as MenuGroup).items !== undefined) {
+      return (item as MenuGroup).items;
+    }
+    return [item];
+  }
 }

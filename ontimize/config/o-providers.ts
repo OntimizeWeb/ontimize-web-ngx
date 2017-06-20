@@ -29,7 +29,6 @@ import {
 import { Events } from '../util/events';
 import { OHttp } from '../util/http/OHttp';
 import {
-  // APP_CONFIG,
   AppConfig,
   Config
 } from '../config/app-config';
@@ -231,11 +230,4 @@ export const ONTIMIZE_PROVIDERS = [
     useFactory: getOModulesInfoServiceProvider,
     deps: [Injector]
   }
-  // ,
-  // {
-  //   provide: APP_INITIALIZER,
-  //   useFactory: appInitializerFactory,
-  //   deps: [Injector, APP_CONFIG, OTranslateService],
-  //   multi: true
-  // }
 ];

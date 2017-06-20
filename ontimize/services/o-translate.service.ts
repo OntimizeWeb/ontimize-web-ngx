@@ -2,10 +2,9 @@ import { Injector, Injectable } from '@angular/core';
 import { EventEmitter } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { MomentService } from '../services';
-
 import * as CORE_TRANSLATIONS from '../i18n/i18n';
-
 import { ObservableWrapper } from '../util/async';
+import { Observable } from 'rxjs/Observable';
 
 @Injectable()
 export class OTranslateService {
@@ -47,14 +46,18 @@ export class OTranslateService {
     return textTranslated;
   }
 
-  public use(lang: string): void {
-    this.translateService.use(lang)
-      .subscribe(
-      res => {
-        this.momentService.load(lang);
-        ObservableWrapper.callEmit(this.onLanguageChanged, lang);
-      }
-      );
+  public use(lang: string): Observable<any> {
+    var observable = new Observable(observer => {
+      this.translateService.use(lang)
+        .subscribe(
+        res => {
+          this.momentService.load(lang);
+          ObservableWrapper.callEmit(this.onLanguageChanged, lang);
+          observer.next(res);
+        }
+        );
+    });
+    return observable;
   }
 
   public getCurrentLang() {

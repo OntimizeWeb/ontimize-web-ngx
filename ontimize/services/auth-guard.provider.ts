@@ -1,5 +1,5 @@
 import { Injector } from '@angular/core';
-import { APP_CONFIG, Config } from '../config/app-config';
+import { AppConfig, Config } from '../config/app-config';
 import { AuthGuardService } from './auth-guard.service';
 
 export class AuthGuardServiceFactory {
@@ -7,7 +7,7 @@ export class AuthGuardServiceFactory {
   protected config: Config;
 
   constructor(protected injector: Injector) {
-    this.config = this.injector.get(APP_CONFIG);
+    this.config = this.injector.get(AppConfig).getConfiguration();
   }
 
   public factory(): any {
