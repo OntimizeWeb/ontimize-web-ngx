@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 
 import {
-  // Router,
+  Router,
   RouterModule
 } from '@angular/router';
 
@@ -50,7 +50,7 @@ export class OUserInfoComponent implements OnDestroy {
   constructor(
     protected elRef: ElementRef,
     protected injector: Injector,
-    // private router: Router
+    private router: Router
   ) {
     this.dialogService = this.injector.get(DialogService);
     this.loginService = this.injector.get(LoginService);
@@ -71,6 +71,10 @@ export class OUserInfoComponent implements OnDestroy {
 
   onLogoutClick() {
     this.loginService.logoutWithConfirmationAndRedirect();
+  }
+
+  onSettingsClick() {
+    this.router.navigate(['main/settings']);
   }
 }
 
