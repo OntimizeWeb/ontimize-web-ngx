@@ -71,7 +71,9 @@ export const DEFAULT_INPUTS_O_TABLE_COLUMN = [
   // date-model-format [string]: if date model type is string, its date model format should be defined. Default: ISO date.
   'dateModelFormat: date-model-format',
 
-  'width'
+  'width',
+
+  'class'
 ];
 
 @Component({
@@ -132,6 +134,7 @@ export class OTableColumnComponent implements OnInit {
 
   public generatedAttr: string;
   public width: string;
+  public class: string;
 
   public cellData: any;
   public cellElement: any;
