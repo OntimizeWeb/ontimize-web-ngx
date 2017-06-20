@@ -1,5 +1,5 @@
 import { InjectionToken } from '@angular/core';
-import { MenuGroup } from '../services';
+import { MenuRootItem } from '../services';
 
 export function isObject(val) {
   const valType = typeof val;
@@ -40,7 +40,8 @@ export interface Config {
   // servicesConfiguration: [Object]: Configuration parameters of application services.
   servicesConfiguration?: Object;
 
-  appMenuConfiguration?: MenuGroup[];
+  // appMenuConfiguration?: MenuGroup[];
+  appMenuConfiguration?: MenuRootItem[];
 
   // authGuard [Object]: Configuration parameters of application permissions.
   authGuard?: {
@@ -67,7 +68,7 @@ export class AppConfig {
     return this._config['servicesConfiguration'] || {};
   }
 
-  public getMenuConfiguration(): MenuGroup[] {
+  public getMenuConfiguration(): MenuRootItem[] {
     return this._config['appMenuConfiguration'] || [];
   }
 }

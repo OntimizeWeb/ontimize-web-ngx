@@ -1,11 +1,20 @@
-import { Http } from '@angular/http';
-import { HttpModule } from '@angular/http';
-
+import { Http, HttpModule } from '@angular/http';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
+import {
+  Injector,
+  NgModule,
+  APP_INITIALIZER
+} from '@angular/core';
+
+import { appInitializerFactory } from './o-providers';
+
+import { OTranslateService } from '../services';
+
+import { APP_CONFIG } from '../config/app-config';
 
 import {
   OBarMenuModule,
@@ -51,6 +60,8 @@ import {
   OSideMenuSeparatorModule,
   OAppHeaderModule,
   OAppSidenavImageModule,
+  OAppSidenavMenuItemModule,
+  OAppSidenavMenuGroupModule,
   OAppSidenavModule,
   OUserInfoModule
 } from '../components';
@@ -110,6 +121,8 @@ export const INTERNAL_ONTIMIZE_MODULES_EXPORTED: any = [
   OSideMenuSeparatorModule,
   OAppHeaderModule,
   OAppSidenavImageModule,
+  OAppSidenavMenuItemModule,
+  OAppSidenavMenuGroupModule,
   OAppSidenavModule,
   OAppLayoutModule,
   OUserInfoModule
@@ -177,12 +190,26 @@ export const INTERNAL_ONTIMIZE_MODULES: any = [
   OSideMenuSeparatorModule,
   OAppHeaderModule,
   OAppSidenavImageModule,
+  OAppSidenavMenuItemModule,
+  OAppSidenavMenuGroupModule,
   OAppSidenavModule,
   OAppLayoutModule,
   OUserInfoModule
 ];
 
+@NgModule({
+  providers: [{
+    provide: APP_INITIALIZER,
+    useFactory: appInitializerFactory,
+    deps: [Injector, APP_CONFIG, OTranslateService],
+    multi: true
+  }
+  ]
+})
+export class OntimizeWebTranslateModule { }
+
 export const ONTIMIZE_MODULES: any = [
   BrowserModule,
-  BrowserAnimationsModule
+  BrowserAnimationsModule,
+  OntimizeWebTranslateModule
 ];
