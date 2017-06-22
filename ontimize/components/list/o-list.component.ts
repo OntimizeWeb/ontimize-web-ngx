@@ -361,7 +361,7 @@ export class OListComponent extends OServiceComponent implements OnInit, IList, 
       this.selectedItems = [];
       this.state.selectedIndexes = [];
     }
-    this.queryData({}, queryArgs);
+    this.queryData(this.parentItem, queryArgs);
   }
 
   configureFilterValue(value: string) {

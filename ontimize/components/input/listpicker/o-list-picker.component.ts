@@ -1,6 +1,15 @@
 import {
-  Component, ElementRef, EventEmitter, forwardRef, Inject, Injector,
-  OnInit, ViewChild, Optional,
+  Component,
+  ElementRef,
+  EventEmitter,
+  forwardRef,
+  Inject,
+  Injector,
+  OnInit,
+  OnChanges,
+  SimpleChange,
+  ViewChild,
+  Optional,
   NgModule,
   ViewEncapsulation
 } from '@angular/core';
@@ -62,7 +71,10 @@ export const DEFAULT_INPUTS_O_LIST_PICKER = [
   // sqltype[string]: Data type according to Java standard. See SQLType class. Default: 'OTHER'
   'sqlType: sql-type',
 
-  'serviceType : service-type'
+  'serviceType : service-type',
+
+  'dialogWidth : dialog-width',
+  'dialogHeight : dialog-height'
 ];
 
 export const DEFAULT_OUTPUTS_O_LIST_PICKER = [
@@ -84,7 +96,7 @@ export const DEFAULT_OUTPUTS_O_LIST_PICKER = [
   ],
   encapsulation: ViewEncapsulation.None
 })
-export class OListPickerComponent extends OFormServiceComponent implements OnInit {
+export class OListPickerComponent extends OFormServiceComponent implements OnInit, OnChanges {
 
   public static DEFAULT_INPUTS_O_LIST_PICKER = DEFAULT_INPUTS_O_LIST_PICKER;
   public static DEFAULT_OUTPUTS_O_LIST_PICKER = DEFAULT_OUTPUTS_O_LIST_PICKER;
@@ -93,6 +105,8 @@ export class OListPickerComponent extends OFormServiceComponent implements OnIni
   @InputConverter()
   protected filter: boolean = true;
   protected separator: string;
+  protected dialogWidth: string;
+  protected dialogHeight: string;
   /* End inputs */
 
   protected ng2Dialog: MdDialog;
@@ -113,6 +127,13 @@ export class OListPickerComponent extends OFormServiceComponent implements OnIni
 
   ngOnInit(): any {
     this.initialize();
+  }
+
+  public ngOnChanges(changes: { [propName: string]: SimpleChange }) {
+    if (typeof (changes['staticData']) !== 'undefined') {
+      this.cacheQueried = true;
+      this.setDataArray(changes['staticData'].currentValue);
+    }
   }
 
   ensureOFormValue(value: any) {
@@ -196,8 +217,14 @@ export class OListPickerComponent extends OFormServiceComponent implements OnIni
   protected openDialog() {
     let cfg: MdDialogConfig = {
       role: 'dialog',
-      disableClose: false
+      disableClose: false,
     };
+    if (this.dialogWidth !== undefined) {
+      cfg.width = this.dialogWidth;
+    }
+    if (this.dialogHeight !== undefined) {
+      cfg.height = this.dialogHeight;
+    }
     this.dialogRef = this.ng2Dialog.open(OListPickerDialogComponent, cfg);
     this.dialogRef.afterClosed().subscribe(result => {
       this.onDialogClose(result);

@@ -57,7 +57,7 @@ export function appInitializerFactory(injector: Injector, config: Config, transl
       }
 
       // this trigger the use of the spanish or english language after setting the translations
-      translate.use(userLang).subscribe(resolve, resolve, resolve);
+      translate.setAppLang(userLang).subscribe(resolve, resolve, resolve);
     });
   });
 }

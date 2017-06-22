@@ -142,7 +142,7 @@ export class AuthGuardService implements CanActivate, IProfileService {
     // TODO query user information
     this.oUserInfoService.setUserInfo({
       username: sessionInfo.user,
-      avatar: 'assets/images/user_profile.jpg'
+      avatar: 'assets/images/user_profile.png'
     });
   }
 

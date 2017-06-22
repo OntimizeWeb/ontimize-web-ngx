@@ -1,3 +1,41 @@
+## 2.0.0-rc.3
+### Features
+* **o-list-picker**: adding '*dialog-width*' and '*dialog-height*' inputs.
+* **o-list-picker**: adding internal '*o-list-picker-theme*'
+* **OTranslateService**: adding '*setAppLang*' method for app language initialization (before this point it was made with '*use*' method).
+* **o-table-cell-renderer-boolean**: adding '*data-type*' input ([#97](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/97)) ([1fceee9](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/1fceee9))
+
+### Bug Fixes
+* **o-list-picker**: fixing styling bugs.
+* **o-list**: listening to '*static-data*' changes.
+* **o-table**: fixing general bugs ('*reloadData*', '*remove*' and footer text and buttons).
+* **OTranslateService**: bugs in '*use*' method fixed.
+
+
+## 2.0.0-rc.2
+### Features
+* **LoginService**: adding '*logoutAndRedirect*' and '*logoutWithConfirmationAndRedirect*' methods.
+* **Providers**: adding '*AppMenuService*' for standard menu definition, '*OUserInfoService*' for basic user info storage and  '*OModulesInfoService*' for modules communication.
+* **Components**: adding '*o-user-info*', '*o-app-header*', '*o-app-sidenav*', '*o-app-sidenav-menu-group*', '*o-app-sidenav-menu-item*' and '*o-app-sidenav-image*' components.
+* **Layouts**: adding standard app layout ('*o-app-layout*') component definition.
+* **Config**: adding new configurable properties to app general '*Config*' object: '*applicationLocales*' (available in '*app-header*') and '*appMenuConfiguration*'.
+* **o-table-column**: adding '*class*' input.
+* **o-list-item-avatar**: adding '*avatar-type*' and '*empty-avatar*' inputs.
+
+### PEER-DEPENDENCY UPDATES ###
+* **Updated**:   @angular/material@2.0.0-beta.6
+* **Updated**:   @ngx-translate/core@7.0.0
+* **Updated**:   @ngx-translate/http-loader@0.1.0
+* **Updated**:   moment@2.18.1
+
+### BREAKING CHANGES
+* **OComponent**: Changing '*OComponent*' components base class for '*OBaseComponent*'.
+
+### Bug Fixes
+* **OTranslateService**: translate service bugs at first app load ([#91](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/91)) ([82edcd9](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/82edcd9)) ([b79d1fd](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/b79d1fd))
+* **o-list**: listening to '*static-data*' changes ([#89](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/89)) ([b267c51](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/b267c51))
+
+
 ## 2.0.0-rc.1
 ### BREAKING CHANGES
 * **OntimizeWebModule**: Removing '*forRoot*' method.

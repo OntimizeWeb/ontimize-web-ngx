@@ -287,8 +287,10 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     this.lastDeselection = undefined;
     this.groupColumnIndex = -1;
     this.groupColumnOrder = OTableComponent.TYPE_ASC_NAME;
-    OTableComponent.DEFAULT_QUERY_ROWS_MENU[1][4] = this.translateService.get('TABLE.SHOW_ALL');
-
+    const showAllIndex = OTableComponent.DEFAULT_QUERY_ROWS_MENU[0].indexOf(-1);
+    if (showAllIndex !== -1) {
+      OTableComponent.DEFAULT_QUERY_ROWS_MENU[1][showAllIndex] = this.translateService.get('TABLE.SHOW_ALL');
+    }
     this.headerButtons = [];
     this.headerOptions = [];
 
@@ -393,8 +395,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
         }
       }
     }
-
-    this.queryRowsMenu = OTableComponent.DEFAULT_QUERY_ROWS_MENU;
+    this.queryRowsMenu = [];
+    this.queryRowsMenu[0] = OTableComponent.DEFAULT_QUERY_ROWS_MENU[0].slice();
+    this.queryRowsMenu[1] = OTableComponent.DEFAULT_QUERY_ROWS_MENU[1].slice();
     if (this.queryRowsMenu[0].indexOf(this.queryRows) === -1) {
       for (let i = 0; i < this.queryRowsMenu[0].length; i++) {
         var item = this.queryRowsMenu[0][i];
@@ -500,10 +503,11 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   public reloadData() {
+    let newOffset = Math.max(this.state.queryRecordOffset - this.queryRows, 0);
     let queryArgs = {
-      offset: this.state.queryRecordOffset - this.queryRows,
+      offset: newOffset,
       length: this.queryRows,
-      resultRecordsIndex: this.state.queryRecordOffset - this.queryRows,
+      resultRecordsIndex: newOffset,
       replace: true
     };
     let endIndex = queryArgs.offset + queryArgs.length;
@@ -1831,20 +1835,26 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     let footerTextEl = tableWrapperEl.find('.dataTables_pagination_wrapper .dataTables_info');
     if (footerTextEl && footerTextEl.length && this.state.queryTotalRecordNumber > 0) {
       let existingText = footerTextEl.text().trim();
-
+      const tableSettings = this.table.settings();
+      const isFiltering = ((tableSettings.search() || '').length > 0);
       let initIndex = (this.state.queryRecordOffset - this.queryRows) + 1;
       initIndex = initIndex <= 0 ? 1 : initIndex;
       let endIndex = (this.state.queryRecordOffset < this.state.queryTotalRecordNumber) ? (initIndex + this.queryRows - 1) : this.state.queryRecordOffset;
-
+      if (isFiltering) {
+        endIndex = this.table.rows({ filter: 'applied' })[0].length;
+      }
       let newText = initIndex + ' - ' + endIndex + ' ';
       let match = existingText.match('[0-9]+ - [0-9]+');
       let initTrimIdx = existingText.search('\d');
       if (match && match.length === 1) {
         initTrimIdx = match[0].length + 1;
       }
-      newText += existingText.substring(initTrimIdx, existingText.lastIndexOf(' '));
-      newText += ' ' + this.state.queryTotalRecordNumber;
-
+      if (isFiltering) {
+        newText += ' ' + existingText.substring(initTrimIdx);
+      } else {
+        newText += existingText.substring(initTrimIdx, existingText.lastIndexOf(' '));
+        newText += ' ' + this.state.queryTotalRecordNumber;
+      }
       footerTextEl.text(newText);
     }
   }
@@ -1865,7 +1875,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     var self = this;
     var tableState = this.state;
 
-    let activateNextBtns = (tableState.queryRecordOffset + self.queryRows <= tableState.queryTotalRecordNumber);
+    let activateNextBtns = (tableState.queryRecordOffset < tableState.queryTotalRecordNumber);
     if (activateNextBtns) {
       let nextBtn = tableWrapperEl.find('.dataTables_pagination_wrapper .next');
       if (nextBtn) {
@@ -1993,7 +2003,12 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
                 },
                 () => {
                   console.log('[OTable.remove]: success');
-                  this.queryData(this.parentItem);
+                  this.setTableInitialState();
+                  let queryArgs = {
+                    offset: 0,
+                    length: this.queryRows
+                  };
+                  this.queryData(this.parentItem, queryArgs);
                 }
               );
 
