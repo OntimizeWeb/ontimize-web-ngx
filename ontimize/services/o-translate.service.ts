@@ -46,7 +46,7 @@ export class OTranslateService {
     return textTranslated;
   }
 
-  public use(lang: string): Observable<any> {
+  public setAppLang(lang: string): Observable<any> {
     var observable = new Observable(observer => {
       this.translateService.use(lang)
         .subscribe(
@@ -58,6 +58,16 @@ export class OTranslateService {
         );
     });
     return observable;
+  }
+
+  public use(lang: string): void {
+    this.translateService.use(lang)
+      .subscribe(
+      res => {
+        this.momentService.load(lang);
+        ObservableWrapper.callEmit(this.onLanguageChanged, lang);
+      }
+      );
   }
 
   public getCurrentLang() {
