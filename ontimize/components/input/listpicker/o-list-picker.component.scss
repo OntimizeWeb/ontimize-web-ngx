@@ -11,23 +11,13 @@
   }
 }
 
-md-toolbar {
-  o-search-input{
-    color: white !important;
-    font-size: 16px;
+o-list-picker-dialog  md-toolbar {
+  &.mat-toolbar .mat-toolbar-row {
+    padding-top: 8px;
+    box-sizing: content-box;
   }
-
-  o-search-input.list-picker-search {
-    input {
-      .mat-input-underline {
-        border-top: 1px solid rgba(255,255,255,0.78);
-
-        .mat-input-ripple {
-          background-color: white;
-        }
-      }
-    }
+  o-search-input,
+  o-search-input md-input-container {
+    width: 100%;
   }
 }
-
-
