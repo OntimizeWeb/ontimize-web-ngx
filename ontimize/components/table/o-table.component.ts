@@ -1048,7 +1048,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
           let newFirstPageRecord = Math.floor((self.state.queryRecordOffset - self.queryRows) / len) * len;
 
           self.setTableInitialState();
-          self.queryRows = len;
+
+          self.queryRows = (len !== -1) ? len : (self.state.queryTotalRecordNumber || -1);
 
           let queryArgs = {
             offset: newFirstPageRecord,
