@@ -906,6 +906,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
     if (typeof (this.state.length) === 'number') {
       this.queryRows = this.state.length;
+      if (this.queryRows === -1) {
+        this.queryRows = this.state.queryTotalRecordNumber ? this.state.queryTotalRecordNumber : OServiceComponent.DEFAULT_QUERY_ROWS;
+      }
     }
     this.isProgrammaticChange = true;
     this.table.page.len(this.queryRows).draw(false);
@@ -1048,7 +1051,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
           let newFirstPageRecord = Math.floor((self.state.queryRecordOffset - self.queryRows) / len) * len;
 
           self.setTableInitialState();
-          self.queryRows = len;
+
+          self.queryRows = (len !== -1) ? len : (self.state.queryTotalRecordNumber || -1);
 
           let queryArgs = {
             offset: newFirstPageRecord,
