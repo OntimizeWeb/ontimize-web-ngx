@@ -91,6 +91,11 @@ export class OAppHeaderComponent implements OnDestroy {
       this.translateService.use(lang);
     }
   }
+
+  getFlagClass(lang: string) {
+    const flagName = (lang !== 'en') ? lang : 'gb';
+    return 'flag-icon-' + flagName;
+  }
 }
 
 @NgModule({
