@@ -3,22 +3,10 @@
     <input mdInput #inputModel type="text" [attr.id]="oattr" [id]="oattr" layout-fill [formControlName]="oattr" [ngModel]="getValue()"
         (ngModelChange)="innerOnChange($event)" class="input-model">
 
-    <md-input-container #innerInputContainer flex layout-fill
-        [class.ng-untouched]="_fControl && _fControl.untouched"
-        [class.ng-touched]="_fControl && _fControl.touched"
-        [class.ng-dirty]="_fControl && _fControl.dirty"
-        [class.ng-pristine]="_fControl && _fControl.pristine"
-        [class.ng-invalid]="_fControl && !_fControl.valid"
-        [class.ng-valid]="_fControl && _fControl.valid">
+    <md-input-container #innerInputContainer flex layout-fill>
         <input mdInput #displayInputModel class="mat-input o-date-input" type="text" [attr.id]="opickerattr" [id]="opickerattr" layout-fill [placeholder]="placeHolder" [value]="getDescriptionValue()"
             [readonly]="isReadOnly" (blur)="onDisplayInputBlur()" (focus)="onDisplayInputFocus($event)" (click)="onInputClick()"
-            [disabled]="isDisabled"
-            [class.ng-untouched]="_fControl && _fControl.untouched"
-            [class.ng-touched]="_fControl && _fControl.touched"
-            [class.ng-dirty]="_fControl && _fControl.dirty"
-            [class.ng-pristine]="_fControl && _fControl.pristine"
-            [class.ng-invalid]="_fControl && !_fControl.valid"
-            [class.ng-valid]="_fControl && _fControl.valid">
+            [disabled]="isDisabled">
             <md-hint *ngIf="!isReadOnly && _fControl.touched && _fControl.errors">{{'FORM_VALIDATION.REQUIRED' | oTranslate}}</md-hint>
     </md-input-container>
 

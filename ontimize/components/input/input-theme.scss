@@ -31,23 +31,39 @@
       color: mat-color($foreground, disabled-text);
   }
 
-  md-input-container {
-    &.ng-invalid.ng-touched {
-      .mat-input-wrapper {
-        .mat-input-underline {
-          border-top-color: mat-color($warn);
-          .mat-input-ripple {
-            background-color: mat-color($warn);
-          }
-        }
-        .mat-input-placeholder.mat-focused {
-          color: mat-color($warn);
-        }
-        .mat-hint {
-          color: mat-color($warn);
+  .input-model.ng-invalid.ng-touched + md-input-container {
+
+    .mat-input-placeholder,
+    .mat-placeholder-required {
+      color: mat-color($warn);
+    }
+
+    .mat-input-underline .mat-input-ripple {
+      visibility: visible;
+      transform: scaleX(1);
+      transition: transform ($swift-ease-in-duration/2) linear,background-color $swift-ease-in-duration $swift-ease-in-timing-function;
+    }
+  }
+
+
+  .input-model.ng-invalid.ng-touched + md-input-container,
+  md-input-container.ng-invalid.ng-touched  {
+
+    .mat-input-wrapper {
+      .mat-input-underline {
+        border-top-color: mat-color($warn);
+        .mat-input-ripple {
+          background-color: mat-color($warn);
         }
       }
+      .mat-input-placeholder.mat-focused {
+        color: mat-color($warn);
+      }
+      .mat-hint {
+        color: mat-color($warn);
+      }
     }
+
   }
 
 }
