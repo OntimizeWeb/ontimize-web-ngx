@@ -5,7 +5,6 @@ const helpers = require('./helpers');
  * Webpack Plugins
  */
 // problem with copy-webpack-plugin
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const ContextReplacementPlugin = require('webpack/lib/ContextReplacementPlugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const ProvidePlugin = require('webpack/lib/ProvidePlugin');
@@ -33,12 +32,6 @@ module.exports = function (options) {
     },
     externals: [/^\@angular\//, /^\@ngx-translate\//, /^\@rxjs\//],
     module: {
-      // loaders: [{
-      //   test: /\.scss$/,
-      //   use: ExtractTextPlugin.extract({
-      //     use: ['style-loader', 'css-loader', 'sass-loader'],
-      //   })
-      // }],
       rules: [
         {
           test: /\.ts$/,
