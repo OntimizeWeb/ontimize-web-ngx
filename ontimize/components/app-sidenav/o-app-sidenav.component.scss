@@ -113,9 +113,10 @@ $transition-duration: 500ms;
           &.application-sidenav-menugroup {
             padding: $sidenav-spacing-unit;
             height: $sidenav-closed-width;
-            -webkit-box-pack: center;
-            -ms-flex-pack: center;
-            justify-content: center;
+
+            -webkit-box-pack: center!important;
+            -ms-flex-pack: center!important;
+            justify-content: center!important;
           }
         }
 

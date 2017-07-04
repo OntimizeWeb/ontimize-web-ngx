@@ -1,4 +1,4 @@
-<md-list-item #innerListItem layout-fill>
+<md-list-item #innerListItem fxFill>
   <div class="o-list-row-action" *ngIf="_list && _list.selectable">
     <md-checkbox [checked]="isSelected" (change)="onCheckboxChange($event)">
     </md-checkbox>
@@ -11,7 +11,7 @@
     <ng-content select="[md-line], [mat-line]"></ng-content>
   </div>
   <ng-content></ng-content>
-  <div layout="row" class="row-buttons-container">
+  <div fxLayout="row" class="row-buttons-container">
     <div class="o-list-row-action o-list-item-icon" *ngIf="_list && _list.editButtonInRow" (click)="onEditIconClicked($event)">
       <md-icon class="material-icons">{{ _list.editButtonInRowIcon }}</md-icon>
     </div>

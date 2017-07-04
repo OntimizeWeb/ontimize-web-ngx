@@ -1,21 +1,21 @@
 <ng-container *ngIf="sidenavOpened">
   <li class="application-sidenav-menuitem application-sidenav-item">
     <a *ngIf="menuItemType === 'route'" [routerLink]="[ menuItem.route ]" routerLinkActive="application-sidenav-viewer-sidenav-item-selected">
-      <div layout="row" layout-align="start center">
+      <div fxLayout="row" fxLayoutAlign="start center">
         <md-icon *ngIf="menuItem.icon">{{ menuItem.icon }}</md-icon>
         {{ menuItem.name | oTranslate }}
       </div>
     </a>
 
     <a *ngIf="menuItemType === 'action'" (click)="onClick()">
-      <div layout="row" layout-align="start center">
+      <div fxLayout="row" fxLayoutAlign="start center">
         <md-icon *ngIf="menuItem.icon">{{ menuItem.icon }}</md-icon>
         {{ menuItem.name | oTranslate }}
       </div>
     </a>
 
     <a *ngIf="menuItemType === 'locale'" (click)="onClick()">
-      <div layout="row" layout-align="space-between center">
+      <div fxLayout="row" fxLayoutAlign="space-between center">
         <md-icon *ngIf="menuItem.icon">{{ icon }}</md-icon>
         {{ menuItem.name | oTranslate }}
         <md-icon *ngIf="isConfiguredLang()" class="configured-lang">check_circle</md-icon>
@@ -23,14 +23,14 @@
     </a>
 
     <a *ngIf="menuItemType === 'logout'" (click)="onClick()">
-      <div layout="row" layout-align="start center">
+      <div fxLayout="row" fxLayoutAlign="start center">
         <md-icon *ngIf="menuItem.icon">{{ icon }}</md-icon>
         {{ menuItem.name | oTranslate }}
       </div>
     </a>
 
     <div *ngIf="menuItemType === 'default'">
-      <div layout="row" layout-align="start center">
+      <div fxLayout="row" fxLayoutAlign="start center">
         <md-icon *ngIf="menuItem.icon">{{ menuItem.icon }}</md-icon>
         {{ menuItem.name | oTranslate }}
       </div>
@@ -49,7 +49,7 @@
       <md-icon *ngIf="menuItem.icon">{{ menuItem.icon }}</md-icon>
     </a>
 
-    <a *ngSwitchCase="'locale'" layout="row" layout-align="space-between center" (click)="onClick()">
+    <a *ngSwitchCase="'locale'" fxLayout="row" fxLayoutAlign="space-between center" (click)="onClick()">
       <md-icon *ngIf="menuItem.icon">{{ icon }}</md-icon>
     </a>
 

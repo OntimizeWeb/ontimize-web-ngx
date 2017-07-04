@@ -1,5 +1,5 @@
 <div class="application-sidenav-item application-sidenav-menugroup" [class.active]="menuGroup.opened"
-  layout="row" layout-align="start center" (click)="onClick()">
+  fxLayout="row" fxLayoutAlign="start center" (click)="onClick()">
 
   <md-icon *ngIf="menuGroup.icon">{{ menuGroup.icon }}</md-icon>
   <h3 *ngIf="sidenavOpened">{{ menuGroup.name | oTranslate }}</h3>

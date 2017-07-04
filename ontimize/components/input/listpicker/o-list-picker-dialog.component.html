@@ -3,11 +3,11 @@
 </md-toolbar>
 <div md-dialog-content class="dialog-list-container">
   <md-list>
-    <md-list-item class="mat-1-line" (click)="onClickListItem($event, item)" layout-fill
+    <md-list-item class="mat-1-line" (click)="onClickListItem($event, item)" fxFill
       *ngFor="let item of data | columnsfilter: {filtervalue: searchVal, filtercolumns: visibleColsArray }">
-      <div layout="column" layout-fill>
-        <div layout="row" layout-fill>
-          <div #colWrapper *ngFor="let col of visibleColsArray" class="clip-text" flex="auto">
+      <div fxLayout="column" fxFill>
+        <div fxLayout="row" fxFill>
+          <div #colWrapper *ngFor="let col of visibleColsArray" class="clip-text" fxFlex="auto">
             <p class="mat-list-item-text"> {{item[col]}} </p>
           </div>
         </div>
@@ -17,7 +17,7 @@
   </md-list>
 </div>
 <md-dialog-actions align="end">
-    <span flex></span>
+    <span fxFlex></span>
     <button md-button class="mat-primary" md-dialog-close>
       <span>{{ 'CANCEL' | oTranslate | uppercase }}</span>
     </button>

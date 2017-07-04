@@ -1,6 +1,6 @@
 <nav class="application-header">
   <md-icon class="sidenav-toggle" (click)="toggleSidenav.emit()">menu</md-icon>
-  <span layout="row" layout-align="center center" class="application-header-title">{{ headerTitle | oTranslate }}</span>
+  <span fxLayout="row" fxLayoutAlign="center center" class="application-header-title">{{ headerTitle | oTranslate }}</span>
   <o-user-info></o-user-info>
   <button class="menu-button" md-icon-button [mdMenuTriggerFor]="langMenu">
     <span class="flag-icon {{ getFlagClass(translateService.getCurrentLang()) }}"></span>

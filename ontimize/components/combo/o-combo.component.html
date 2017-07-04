@@ -1,6 +1,6 @@
-<div layout-fill [formGroup]="form?.formGroup" class="mat-combo-container"
+<div fxFill [formGroup]="form?.formGroup" class="mat-combo-container"
     [mdTooltip]="tooltip" [mdTooltipPosition]="tooltipPosition" [mdTooltipShowDelay]="tooltipShowDelay">
-    <md-select #selectModel [class.visible]="!isReadOnly" [class.hidden]="isReadOnly" class="mat-combo" [attr.id]="oattr" [id]="oattr" layout-fill [formControlName]="oattr"
+    <md-select #selectModel [class.visible]="!isReadOnly" [class.hidden]="isReadOnly" class="mat-combo" [attr.id]="oattr" [id]="oattr" fxFill [formControlName]="oattr"
         [placeholder]="placeHolder" [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)">
         <md-option *ngIf="nullSelection" value selected></md-option>
         <md-option *ngFor="let item of dataArray; let rowIndex = index" [value]="getValueColumn(item)"  >
@@ -12,8 +12,8 @@
     </md-hint>
 
     <md-input-container #innerInputContainer [class.visible]="isReadOnly" [class.hidden]="!isReadOnly"
-        flex layout-fill>
-        <input mdInput class="mat-input" type="text" [attr.id]="'fake_' + oattr" [id]="'fake_' + oattr" layout-fill
+        fxFlex fxFill>
+        <input mdInput class="mat-input" type="text" [attr.id]="'fake_' + oattr" [id]="'fake_' + oattr" fxFill
             [class.ng-untouched]="_fControl && _fControl.untouched"
             [class.ng-touched]="_fControl && _fControl.touched"
             [class.ng-dirty]="_fControl && _fControl.dirty"

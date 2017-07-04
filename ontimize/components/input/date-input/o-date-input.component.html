@@ -1,10 +1,10 @@
-<div layout="row" layout-fill layout-align="space-between center" [formGroup]="form?.formGroup"
+<div fxLayout="row" fxFill fxLayoutAlign="space-between center" [formGroup]="form?.formGroup"
     [mdTooltip]="tooltip" [mdTooltipPosition]="tooltipPosition" [mdTooltipShowDelay]="tooltipShowDelay">
-    <input mdInput #inputModel type="text" [attr.id]="oattr" [id]="oattr" layout-fill [formControlName]="oattr" [ngModel]="getValue()"
+    <input mdInput #inputModel type="text" [attr.id]="oattr" [id]="oattr" fxFill [formControlName]="oattr" [ngModel]="getValue()"
         (ngModelChange)="innerOnChange($event)" class="input-model">
 
-    <md-input-container #innerInputContainer flex layout-fill>
-        <input mdInput #displayInputModel class="mat-input o-date-input" type="text" [attr.id]="opickerattr" [id]="opickerattr" layout-fill [placeholder]="placeHolder" [value]="getDescriptionValue()"
+    <md-input-container #innerInputContainer fxFlex fxFill>
+        <input mdInput #displayInputModel class="mat-input o-date-input" type="text" [attr.id]="opickerattr" [id]="opickerattr" fxFill [placeholder]="placeHolder" [value]="getDescriptionValue()"
             [readonly]="isReadOnly" (blur)="onDisplayInputBlur()" (focus)="onDisplayInputFocus($event)" (click)="onInputClick()"
             [disabled]="isDisabled">
             <md-hint *ngIf="!isReadOnly && _fControl.touched && _fControl.errors">{{'FORM_VALIDATION.REQUIRED' | oTranslate}}</md-hint>

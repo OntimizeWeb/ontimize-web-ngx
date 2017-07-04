@@ -36,6 +36,7 @@
     "moment": "2.18.1"
   },
   "peerDependencies": {
+    "@angular/flex-layout": "2.0.0-beta.8",
     "@angular/animations": "4.2.4",
     "@angular/common": "4.2.4",
     "@angular/compiler": "4.2.4",
@@ -59,6 +60,7 @@
     "typescript": "2.3.4"
   },
   "devDependencies": {
+    "@angular/flex-layout": "2.0.0-beta.8",
     "@angular/animations": "4.2.4",
     "@angular/common": "4.2.4",
     "@angular/compiler": "4.2.4",
@@ -93,7 +95,7 @@
     "assets-webpack-plugin": "^3.5.1",
     "awesome-typescript-loader": "3.1.2",
     "clean-webpack-plugin": "0.1.16",
-    "codelyzer": "3.0.0-beta.4",
+    "codelyzer": "3.1.1",
     "commitizen": "2.9.6",
     "copy-webpack-plugin": "^4.0.1",
     "css-loader": "^0.28.0",
