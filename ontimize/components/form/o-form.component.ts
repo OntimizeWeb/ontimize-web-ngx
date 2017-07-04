@@ -947,10 +947,14 @@ export class OFormComponent implements OnInit, OnDestroy {
         if (resp.code === 0) {
           self._setData(resp.data);
         } else {
+          self._updateFormData({});
+          self.dialogService.alert('ERROR', 'MESSAGES.ERROR_QUERY');
           console.log('error ');
         }
       }, err => {
         console.log(err);
+        self._updateFormData({});
+        self.dialogService.alert('ERROR', 'MESSAGES.ERROR_QUERY');
         loader.unsubscribe();
       });
   }
