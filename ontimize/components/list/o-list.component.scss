@@ -62,9 +62,6 @@
   }
 
   .spinner-container {
-    &.hidden-loading {
-      display:none;
-    }
     position: absolute;
     &:not(.pageable-loading) {
       top: 0px;

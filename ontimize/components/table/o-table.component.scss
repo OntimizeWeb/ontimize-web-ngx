@@ -20,14 +20,6 @@
   align-items: center;
 
   .spinner-container {
-    &.hidden-loading {
-      visibility: hidden;
-      opacity: 0;
-
-         -moz-transition: visibility 0s 1s, opacity 1s linear;
-      -webkit-transition: visibility 0s 1s, opacity 1s linear;
-              transition: visibility 0s 1s, opacity 1s linear;
-    }
     position: absolute;
     top: 0px;
     left: 0px;

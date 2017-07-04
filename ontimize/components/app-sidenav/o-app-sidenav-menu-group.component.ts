@@ -33,7 +33,7 @@ export const DEFAULT_OUTPUTS_O_APP_SIDENAV_MENU_GROUP = [];
   outputs: DEFAULT_OUTPUTS_O_APP_SIDENAV_MENU_GROUP,
   template: require('./o-app-sidenav-menu-group.component.html'),
   styles: [require('./o-app-sidenav-menu-group.component.scss')],
-  encapsulation: ViewEncapsulation.None,
+  encapsulation: ViewEncapsulation.None
 })
 export class OAppSidenavMenuGroupComponent {
   // implements OnInit

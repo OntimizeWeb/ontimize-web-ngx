@@ -23,7 +23,10 @@ import { OSharedModule } from '../../../shared';
   selector: 'o-list-item',
   template: require('./o-list-item.component.html'),
   styles: [require('./o-list-item.component.scss')],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  host: {
+    '[class.o-list-item]': 'true'
+  }
 })
 
 export class OListItemComponent implements AfterContentInit {
@@ -51,7 +54,6 @@ export class OListItemComponent implements AfterContentInit {
     protected _injector: Injector,
     @Optional() @Inject(forwardRef(() => OListComponent)) public _list: OListComponent
   ) {
-    this.elRef.nativeElement.classList.add('o-list-item');
   }
 
   ngAfterContentInit() {

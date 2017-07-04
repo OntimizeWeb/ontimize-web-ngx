@@ -56,9 +56,6 @@ export class OUserInfoComponent implements OnDestroy {
     this.loginService = this.injector.get(LoginService);
     this.oUserInfoService = this.injector.get(OUserInfoService);
 
-    this.elRef.nativeElement.setAttribute('layout', 'column');
-    this.elRef.nativeElement.setAttribute('layout-align', 'center');
-
     this.userInfo = this.oUserInfoService.getUserInfo();
     this.userInfoSubscription = this.oUserInfoService.getUserInfoObservable().subscribe(res => {
       this.userInfo = res;

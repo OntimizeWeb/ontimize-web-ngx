@@ -43,7 +43,11 @@ export const DEFAULT_OUTPUTS_O_LIST_ITEM_AVATAR = [
   outputs: [
     ...DEFAULT_OUTPUTS_O_LIST_ITEM_AVATAR
   ],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  host: {
+    '[class.o-custom-list-item]': 'true',
+    '[class.o-list-item-avatar]': 'true'
+  }
 })
 
 export class OListItemAvatarComponent extends OListItemTextRenderer implements OnInit, AfterViewInit {
@@ -60,7 +64,6 @@ export class OListItemAvatarComponent extends OListItemTextRenderer implements O
     public sanitizer: DomSanitizer
   ) {
     super(elRef, _renderer, _injector, _listItem);
-    this.elRef.nativeElement.classList.add('o-list-item-avatar');
   }
 
   ngAfterViewInit() {

@@ -24,7 +24,10 @@ export const DEFAULT_INPUTS_O_ROW = [
   inputs: [
     ...DEFAULT_INPUTS_O_ROW
   ],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  host: {
+    '[class.o-row]': 'true'
+  }
 })
 export class ORowComponent implements OnInit {
 
@@ -47,7 +50,6 @@ export class ORowComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.elRef.nativeElement.classList.add('o-row');
     if (this.layoutAlign === undefined) {
       this.propagateLayoutAligmentToDOM();
     }
@@ -102,10 +104,8 @@ export class ORowComponent implements OnInit {
   propagatePaddingToDOM() {
     let innerRow = this.elRef.nativeElement.querySelectorAll('div#innerRow');
     if (innerRow.length) {
-      var self = this;
       let element = innerRow[0]; // Take only first, nested element does not matter.
-      if (self.hasTitle()
-        || (self.elevation > 0 && self.elevation <= 12)) {
+      if (this.hasTitle() || (this.elevation > 0 && this.elevation <= 12)) {
         element.classList.add('container-content');
       } else {
         element.classList.remove('container-content');
@@ -116,10 +116,9 @@ export class ORowComponent implements OnInit {
   propagateLayoutAligmentToDOM() {
     let innerRow = this.elRef.nativeElement.querySelectorAll('div#innerRow');
     if (innerRow.length) {
-      var self = this;
-      let element = innerRow[0]; // Take only first, nested element does not matter.
-      element.setAttribute('layout-align', this.layoutAlign);
-      if (self.hasTitle()) {
+      let element = innerRow[0];
+      // Take only first, nested element does not matter.
+      if (this.hasTitle()) {
         element.classList.add('container-content');
       }
     }

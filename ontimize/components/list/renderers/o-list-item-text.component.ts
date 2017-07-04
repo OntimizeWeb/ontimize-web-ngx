@@ -35,7 +35,10 @@ export const DEFAULT_OUTPUTS_O_LIST_ITEM_TEXT = [
   outputs: [
     ...DEFAULT_OUTPUTS_O_LIST_ITEM_TEXT
   ],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  host: {
+    '[class.o-custom-list-item]': 'true'
+  }
 })
 
 export class OListItemTextComponent extends OListItemTextRenderer {
