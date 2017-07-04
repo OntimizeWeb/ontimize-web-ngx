@@ -160,7 +160,10 @@ export interface OTableInitializationOptions {
   outputs: [
     ...DEFAULT_OUTPUTS_O_TABLE
   ],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  host: {
+    '[class.o-table]': 'true'
+  }
 })
 
 export class OTableComponent extends OServiceComponent implements OnInit, OnDestroy, OnChanges {
@@ -312,7 +315,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
     this.onInsertRowFocusSubscribe = [];
     this.onInsertRowSubmitSubscribe = undefined;
-    this.elRef.nativeElement.classList.add('o-table');
   }
 
   onLanguageChangeCallback(res: any) {
@@ -1078,7 +1080,10 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     this.initColumnGroup();
     this.dataTable = this.tableHtmlEl.dataTable();
     this.initialized = true;
-    if (this.queryOnInit) {
+
+    if (this.staticData) {
+      this.setDataArray(this.staticData);
+    } else if (this.queryOnInit) {
       this.queryData(this.parentItem);
     }
   }
