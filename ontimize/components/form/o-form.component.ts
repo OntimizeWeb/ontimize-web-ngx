@@ -1243,12 +1243,27 @@ export class OFormComponent implements OnInit, OnDestroy {
       this.dynamicFormSuscription.unsubscribe();
     }
   }
+
+  getRequiredComponents(): Object {
+    const requiredCompontents: Object = {};
+    const components = this.getComponents();
+    if (components) {
+      Object.keys(components).forEach(key => {
+        let comp = components[key];
+        if (comp.isRequired) {
+          let attr = comp.getAttribute();
+          requiredCompontents[attr] = comp;
+        }
+      });
+    }
+    return requiredCompontents;
+  }
 }
 
 @NgModule({
   declarations: [OFormComponent],
   imports: [OSharedModule, CommonModule, OFormToolbarModule],
-  exports: [OFormComponent, OFormToolbarModule],
+  exports: [OFormComponent, OFormToolbarModule]
 })
 export class OFormModule {
 }
