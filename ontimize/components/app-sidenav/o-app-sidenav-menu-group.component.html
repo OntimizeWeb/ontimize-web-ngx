@@ -1,21 +1,17 @@
-<div class="application-sidenav-item application-sidenav-menugroup" [class.active]="menuGroup.opened"
-  fxLayout="row" fxLayoutAlign="start center" (click)="onClick()">
-
-  <md-icon *ngIf="menuGroup.icon">{{ menuGroup.icon }}</md-icon>
-  <h3 *ngIf="sidenavOpened">{{ menuGroup.name | oTranslate }}</h3>
-  <span *ngIf="sidenavOpened" class="example-fill-remaining-space"></span>
-  <md-icon *ngIf="sidenavOpened" class="application-sidenav-menugroup-arrow">keyboard_arrow_right</md-icon>
-</div>
-<!--[@menuGroupState]="menuGroup.opened"-->
-
+<button md-button class="application-sidenav-item application-sidenav-menugroup" [class.active]="menuGroup.opened" fxLayout="column"
+  fxFill (click)="onClick()">
+  <div  fxLayout="row" fxLayoutAlign="start center" fxFill>
+    <md-icon *ngIf="menuGroup.icon">{{ menuGroup.icon }}</md-icon>
+    <h3 *ngIf="sidenavOpened">{{ menuGroup.name | oTranslate }}</h3>
+    <span *ngIf="sidenavOpened" class="example-fill-remaining-space"></span>
+    <md-icon *ngIf="sidenavOpened" class="application-sidenav-menugroup-arrow">keyboard_arrow_right</md-icon>
+  </div>
+</button>
 
 <div class="application-sidenav-menugroup-items-container">
   <ul class="application-sidenav-menugroup-ul">
-    <o-app-sidenav-menu-item  *ngFor="let menuItem of menuGroup.items"
-      [sidenav-opened]="sidenavOpened" [menu-item]="menuItem" [menu-item-type]="appMenuService.getMenuItemType(menuItem)">
+    <o-app-sidenav-menu-item *ngFor="let menuItem of menuGroup.items" [sidenav-opened]="sidenavOpened" [menu-item]="menuItem"
+      [menu-item-type]="appMenuService.getMenuItemType(menuItem)">
     </o-app-sidenav-menu-item>
   </ul>
 </div>
-
-
-

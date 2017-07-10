@@ -1,20 +1,20 @@
 <ng-container *ngIf="sidenavOpened">
   <li class="application-sidenav-menuitem application-sidenav-item">
-    <a *ngIf="menuItemType === 'route'" [routerLink]="[ menuItem.route ]" routerLinkActive="application-sidenav-viewer-sidenav-item-selected">
+    <a md-button *ngIf="menuItemType === 'route'" [routerLink]="[ menuItem.route ]" routerLinkActive="application-sidenav-viewer-sidenav-item-selected">
       <div fxLayout="row" fxLayoutAlign="start center">
         <md-icon *ngIf="menuItem.icon">{{ menuItem.icon }}</md-icon>
         {{ menuItem.name | oTranslate }}
       </div>
     </a>
 
-    <a *ngIf="menuItemType === 'action'" (click)="onClick()">
+    <a md-button *ngIf="menuItemType === 'action'" (click)="onClick()">
       <div fxLayout="row" fxLayoutAlign="start center">
         <md-icon *ngIf="menuItem.icon">{{ menuItem.icon }}</md-icon>
         {{ menuItem.name | oTranslate }}
       </div>
     </a>
 
-    <a *ngIf="menuItemType === 'locale'" (click)="onClick()">
+    <a md-button *ngIf="menuItemType === 'locale'" (click)="onClick()">
       <div fxLayout="row" fxLayoutAlign="space-between center">
         <md-icon *ngIf="menuItem.icon">{{ icon }}</md-icon>
         {{ menuItem.name | oTranslate }}
@@ -22,7 +22,7 @@
       </div>
     </a>
 
-    <a *ngIf="menuItemType === 'logout'" (click)="onClick()">
+    <a md-button *ngIf="menuItemType === 'logout'" (click)="onClick()">
       <div fxLayout="row" fxLayoutAlign="start center">
         <md-icon *ngIf="menuItem.icon">{{ icon }}</md-icon>
         {{ menuItem.name | oTranslate }}
@@ -41,15 +41,15 @@
 <ng-container *ngIf="!sidenavOpened">
   <li class="application-sidenav-menuitem application-sidenav-item" [ngSwitch]="menuItemType">
 
-    <a *ngSwitchCase="'route'" [routerLink]="[ menuItem.route ]" routerLinkActive="application-sidenav-viewer-sidenav-item-selected">
+    <a md-button *ngSwitchCase="'route'" [routerLink]="[ menuItem.route ]" routerLinkActive="application-sidenav-viewer-sidenav-item-selected">
       <md-icon *ngIf="menuItem.icon">{{ menuItem.icon }}</md-icon>
     </a>
 
-    <a *ngSwitchCase="'action'" (click)="onClick()">
+    <a md-button *ngSwitchCase="'action'" (click)="onClick()">
       <md-icon *ngIf="menuItem.icon">{{ menuItem.icon }}</md-icon>
     </a>
 
-    <a *ngSwitchCase="'locale'" fxLayout="row" fxLayoutAlign="space-between center" (click)="onClick()">
+    <a md-button *ngSwitchCase="'locale'" fxLayout="row" fxLayoutAlign="space-between center" (click)="onClick()">
       <md-icon *ngIf="menuItem.icon">{{ icon }}</md-icon>
     </a>
 
