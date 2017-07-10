@@ -55,6 +55,9 @@ export class OButtonComponent implements OnInit {
     }
   }
 
+  get needsIconButtonClass(): boolean {
+    return this.icon !== undefined && (this.olabel === undefined || this.olabel === '');
+  }
 }
 
 @NgModule({
