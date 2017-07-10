@@ -1,8 +1,8 @@
-<form #innerForm [formGroup]="formGroup" layout-fill>
-    <div layout="row" layout-align="space-between center" layout-fill layout-align="space-between center" >
+<form #innerForm [formGroup]="formGroup" fxFill>
+    <div fxLayout="row" fxLayoutAlign="space-between center" fxFill fxLayoutAlign="space-between center" >
         <span class="icon-btn"><i class="material-icons">search</i></span>
         <md-input-container>
-            <input mdInput class="mat-input" #term type="search" id="term" layout-fill
+            <input mdInput class="mat-input" #term type="search" id="term" fxFill
                 [placeholder]="placeHolder" formControlName="term">
         </md-input-container>
     </div>

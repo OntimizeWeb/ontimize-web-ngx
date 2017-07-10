@@ -1,6 +1,6 @@
   <h1 *ngIf="title && title.length > 0" md-dialog-title>{{ title | oTranslate }}</h1>
   <div md-dialog-content>
-    <div layout="row" class="alert-content" [class.alert-content-icon]="useIcon" layout-align="space-between center">
+    <div fxLayout="row" class="alert-content" [class.alert-content-icon]="useIcon" fxLayoutAlign="space-between center">
       <md-icon *ngIf="useIcon" class="alert-icon"
         [class.info] = "isInfo"
         [class.warn] = "isWarn"
@@ -10,7 +10,7 @@
     </div>
   </div>
   <md-dialog-actions align="end">
-    <span flex></span>
+    <span fxFlex></span>
     <button md-button class="mat-primary" (click)="onOkClick($event)">
       <span>{{ okButtonText | oTranslate | uppercase }}</span>
     </button>

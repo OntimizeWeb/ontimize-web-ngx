@@ -1,6 +1,6 @@
-<div layout="column" layout-align="center center" class="input-image relative" [formGroup]="form?.formGroup"
+<div fxLayout="column" fxLayoutAlign="center center" class="input-image relative" [formGroup]="form?.formGroup"
   [mdTooltip]="tooltip" [mdTooltipPosition]="tooltipPosition" [mdTooltipShowDelay]="tooltipShowDelay">
-  <div layout="row" layout-fill layout-align="end center" class="input-image-container">
+  <div fxLayout="row" fxFill fxLayoutAlign="end center" class="input-image-container">
     <input mdInput #inputControl [formControlName]="oattr" type="text" [attr.id]="oattr" [id]="oattr"
       [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)"
       class="mat-input input-control" >
@@ -10,7 +10,7 @@
     <span *ngIf="showControls" class="icon-btn" [class.mat-disabled]="isDisabled" (click)="input.click()"><i class="material-icons">search</i></span>
     <span *ngIf="showControls" class="icon-btn" [class.mat-disabled]="isDisabled" (click)="onClickClear($event, titleLabel)"><i class="material-icons">clear</i></span>
   </div>
-  <div layout="row" class="input-image-preview" layout-align="center center">
+  <div fxLayout="row" class="input-image-preview" fxLayoutAlign="center center">
     <img *ngIf="!(isEmpty())"
       [src]="getSrcValue()"
       alt="" (click)="input.click()" />
@@ -18,7 +18,7 @@
       *ngIf="isEmpty() && useEmptyIcon" (click)="input.click()">{{ emptyicon }}</md-icon>
     <img [src]="getSrcValue()" alt="empty image" *ngIf="isEmpty() && useEmptyImage" (click)="input.click()" />
   </div>
-  <div *ngIf="isReadOnly" layout-fill class="read-only-blocker" (click)="onClickBlocker($event)" ></div>
+  <div *ngIf="isReadOnly" fxFill class="read-only-blocker" (click)="onClickBlocker($event)" ></div>
 </div>
 
 <!--(ngModelChange)="innerOnChange($event)"-->

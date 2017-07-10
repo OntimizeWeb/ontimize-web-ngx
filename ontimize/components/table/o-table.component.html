@@ -1,10 +1,9 @@
-<div [class.hidden-loading]="!loading" class="spinner-container" flex="100" layout="row" layout-align="center center">
-  <md-progress-spinner *ngIf="loading" mode="indeterminate">
+<div *ngIf="loading" class="spinner-container" fxFlex="100" fxLayout="row" fxLayoutAlign="center center">
+  <md-progress-spinner mode="indeterminate">
   </md-progress-spinner>
-
 </div>
 
-<div layout="column" class="expandable-container fill-remaining" layout-fill>
+<div fxLayout="column" class="expandable-container fill-remaining" fxFill>
   <div class="o-table-container" *ngIf="ovisible" [class.disabled]="oenabled === false" [class.detail]="detailMode !== 'none'"
     title="">
 

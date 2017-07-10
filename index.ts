@@ -17,6 +17,7 @@ export * from './ontimize/components';
 export * from './ontimize/layouts';
 export * from './ontimize/utils';
 export * from './ontimize/shared';
+export * from './ontimize/validators/o-validators';
 
 import { ODialogComponent } from './ontimize/components';
 

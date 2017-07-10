@@ -34,7 +34,12 @@ export const DEFAULT_OUTPUTS_O_LIST_ITEM_CARD = [
   outputs: [
     ...DEFAULT_OUTPUTS_O_LIST_ITEM_CARD
   ],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  host: {
+    'layout-padding': '',
+    '[class.o-custom-list-item]': 'true',
+    '[class.o-list-item-card]': 'true'
+  }
 })
 
 export class OListItemCardComponent extends OListItemCardRenderer {
@@ -46,7 +51,6 @@ export class OListItemCardComponent extends OListItemCardRenderer {
     @Optional() @Inject(forwardRef(() => OListItemComponent)) _listItem: OListItemComponent
   ) {
     super(elRef, _renderer, _injector, _listItem);
-    this.elRef.nativeElement.classList.add('o-list-item-card');
   }
 
   ngAfterViewInit() {

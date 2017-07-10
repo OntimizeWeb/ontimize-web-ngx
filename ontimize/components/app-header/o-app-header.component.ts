@@ -35,7 +35,10 @@ export const DEFAULT_OUTPUTS_O_APP_HEADER = [
   outputs: DEFAULT_OUTPUTS_O_APP_HEADER,
   template: require('./o-app-header.component.html'),
   styles: [require('./o-app-header.component.scss')],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  host: {
+    '[class.o-app-header]': 'true'
+  }
 })
 export class OAppHeaderComponent implements OnDestroy {
 
@@ -67,7 +70,6 @@ export class OAppHeaderComponent implements OnDestroy {
     this.modulesInfoSubscription = this.modulesInfoService.getModuleChangeObservable().subscribe(res => {
       this.headerTitle = res.name;
     });
-    this.elRef.nativeElement.classList.add('o-app-header');
   }
 
   ngOnDestroy() {

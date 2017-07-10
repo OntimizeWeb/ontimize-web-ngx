@@ -34,7 +34,10 @@ export const DEFAULT_OUTPUTS_O_APP_SIDENAV = [];
   outputs: DEFAULT_OUTPUTS_O_APP_SIDENAV,
   template: require('./o-app-sidenav.component.html'),
   styles: [require('./o-app-sidenav.component.scss')],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  host: {
+    '[class.o-app-sidenav]': 'true'
+  }
 })
 export class OAppSidenavComponent implements OnInit {
 
@@ -55,8 +58,6 @@ export class OAppSidenavComponent implements OnInit {
   ) {
     this.appMenuService = this.injector.get(AppMenuService);
     this.menuRootArray = this.appMenuService.getMenuRoots();
-
-    this.elRef.nativeElement.classList.add('o-app-sidenav');
   }
 
   ngOnInit() {

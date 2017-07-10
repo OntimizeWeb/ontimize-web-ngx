@@ -16,7 +16,12 @@ import {
 import { ONTIMIZE_DIRECTIVES } from '../config/o-directives';
 import { OCustomMaterialModule } from './custom.material.module';
 
+import { FlexLayoutModule } from '@angular/flex-layout';
+
 @NgModule({
+  imports: [
+    FlexLayoutModule
+  ],
   declarations: [
     ColumnsFilterPipe,
     OrderByPipe,
@@ -25,6 +30,7 @@ import { OCustomMaterialModule } from './custom.material.module';
     ONTIMIZE_DIRECTIVES
   ],
   exports: [
+    FlexLayoutModule,
     FormsModule,
     ReactiveFormsModule,
     OTranslateModule,

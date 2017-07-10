@@ -101,7 +101,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormControlCo
   ensureOFormValue(value: any) {
     if (value instanceof OFormValue) {
       this.value = new OFormValue(value.value);
-    } else if (value && !(value instanceof OFormValue)) {
+    } else if (value !== undefined && !(value instanceof OFormValue)) {
       this.value = new OFormValue(value);
     } else {
       this.value = new OFormValue(this.defaultValue);

@@ -5,7 +5,7 @@ import {
   OnInit,
   ViewEncapsulation
 } from '@angular/core';
-import { MdSidenav } from '@angular/material';
+import { MdSidenav, MdSidenavModule } from '@angular/material';
 import { CommonModule } from '@angular/common';
 
 import { OSharedModule } from '../../shared';
@@ -84,7 +84,8 @@ export class OAppSidenavImageComponent implements OnInit {
 @NgModule({
   imports: [
     CommonModule,
-    OSharedModule
+    OSharedModule,
+    MdSidenavModule
   ],
   declarations: [
     OAppSidenavImageComponent

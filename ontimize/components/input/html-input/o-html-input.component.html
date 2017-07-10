@@ -1,6 +1,6 @@
-<div layout-fill [formGroup]="form?.formGroup">
+<div fxFill [formGroup]="form?.formGroup">
 
-    <ckeditor #ckEditor [attr.id]="oattr" [id]="oattr" layout-fill [formControlName]="oattr"
+    <ckeditor #ckEditor [attr.id]="oattr" [id]="oattr" fxFill [formControlName]="oattr"
         [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)" (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)" class="mat-ckeditor"
         [placeholder]="placeHolder" [readonly]="isReadOnly" >
 

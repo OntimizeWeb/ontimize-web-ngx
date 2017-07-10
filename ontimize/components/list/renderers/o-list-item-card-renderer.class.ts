@@ -42,11 +42,6 @@ export class OListItemCardRenderer {
     protected _injector: Injector,
     protected _listItem: OListItemComponent
   ) {
-    this.elRef.nativeElement.setAttribute('flex', '');
-    this.elRef.nativeElement.setAttribute('layout-padding', '');
-    this.elRef.nativeElement.setAttribute('layout', 'row');
-    this.elRef.nativeElement.setAttribute('layout-align', 'center center');
-    this.elRef.nativeElement.classList.add('o-custom-list-item');
   }
 
 

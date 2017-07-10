@@ -293,10 +293,10 @@ export class OTableCellEditorDateComponent implements OnInit, ITableCellEditor {
       $['datepicker']._generateHTML = function (inst) {
         let $html = $(this._generateHTML_old(inst));
         let datepickerPrev = $html['find']('.ui-datepicker-prev');
-        datepickerPrev.attr('layout', 'row').attr('layout-align', 'center center').children().remove();
+        datepickerPrev.attr('fxLayout', 'row').attr('fxLayoutAlign', 'center center').children().remove();
         datepickerPrev.html('<i class="material-icons">keyboard_arrow_left</i>');
         let datepickerNext = $html['find']('.ui-datepicker-next');
-        datepickerNext.attr('layout', 'row').attr('layout-align', 'center center').children().remove();
+        datepickerNext.attr('fxLayout', 'row').attr('fxLayoutAlign', 'center center').children().remove();
         datepickerNext.html('<i class="material-icons">keyboard_arrow_right</i>');
         return $html;
       };

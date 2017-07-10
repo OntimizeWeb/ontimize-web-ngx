@@ -76,9 +76,11 @@ $transition-duration: 500ms;
       .application-sidenav-menugroup {
         transition: background-color $transition-duration;
 
-        &.active + .application-sidenav-menugroup-items-container ul {
-          margin-top: 0px;
-          li {
+        &.active + .application-sidenav-menugroup-items-container {
+          ul {
+            margin-top: 0px;
+          }
+          o-app-sidenav-menu-item:last-child li{
             border-color: transparent;
           }
         }
@@ -105,17 +107,21 @@ $transition-duration: 500ms;
 
           &.application-sidenav-menuitem a {
             width: $sidenav-closed-width;
+            max-width: $sidenav-closed-width;
+            min-width: $sidenav-closed-width;
             line-height: $sidenav-closed-width;
-            padding: $sidenav-spacing-unit;
+            padding: 0 $sidenav-spacing-unit;
             height: $sidenav-closed-width;
           }
 
           &.application-sidenav-menugroup {
             padding: $sidenav-spacing-unit;
+            padding-left: $sidenav-spacing-unit * 1.5;
             height: $sidenav-closed-width;
-            -webkit-box-pack: center;
-            -ms-flex-pack: center;
-            justify-content: center;
+
+            -webkit-box-pack: center!important;
+            -ms-flex-pack: center!important;
+            justify-content: center!important;
           }
         }
 
@@ -124,9 +130,9 @@ $transition-duration: 500ms;
           min-width: $sidenav-closed-width;
           margin-left: auto;
         }
-        .mat-icon {
-          margin: 0 calc($sidenav-closed-width - 24px);
-        }
+        // .mat-icon {
+        //   margin: 0 calc($sidenav-closed-width - 24px);
+        // }
       }
 
       &.mat-sidenav-opening,
@@ -134,26 +140,25 @@ $transition-duration: 500ms;
       &.mat-sidenav-opened {
 
         .application-sidenav-item {
-          border-bottom-width: 1px;
+          border-bottom-width: 0px;
           border-bottom-style: solid;
         }
 
         .application-sidenav-menugroup {
           padding: ($sidenav-spacing-unit * 2);
           .application-sidenav-menugroup-arrow {
-            transition: transform $transition-duration ease all;
+            position: absolute;
+            right: ($sidenav-spacing-unit * 2);
+            transition: $transition-duration transform cubic-bezier(.25,.8,.25,1);
           }
 
           &.active {
-            > .application-sidenav-menugroup-arrow {
+            .application-sidenav-menugroup-arrow {
               transform: rotate(90deg);
             }
             + .application-sidenav-menugroup-items-container {
-              ul {
-                padding-bottom: ($sidenav-spacing-unit * 2);
-                li > a {
-                  padding-left: ($sidenav-spacing-unit * 4);
-                }
+              ul li > a {
+                padding-left: ($sidenav-spacing-unit * 4);
               }
             }
           }

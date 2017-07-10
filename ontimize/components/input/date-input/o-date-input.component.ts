@@ -45,10 +45,10 @@ export const DEFAULT_OUTPUTS_O_DATE_INPUT = [
 
 const CUSTOM_DATEPICKER_HEADER = `
   <div class="ui-datepicker-custom-header">
-    <div class="ui-datepicker-custom-title" layout="row">
+    <div class="ui-datepicker-custom-title" fxLayout="row">
       <span class="ui-datepicker-custom-year"></span>
     </div>
-    <div class="ui-datepicker-custom-text" layout="row">
+    <div class="ui-datepicker-custom-text" fxLayout="row">
       <span class="ui-datepicker-custom-day"></span>&nbsp;
       <span class="ui-datepicker-custom-dayNumber"></span>&nbsp;
       <span class="ui-datepicker-custom-month"></span>
@@ -58,7 +58,7 @@ const CUSTOM_DATEPICKER_HEADER = `
 
 //TODO translate button text
 const CUSTOM_DATEPICKER_BUTTONS = `
-  <div class="ui-datepicker-custom-buttonpane" layout="row" layout-align="end">
+  <div class="ui-datepicker-custom-buttonpane" fxLayout="row" fxLayoutAlign="end">
     <button class="mat-button mat-primary" data-event="click" data-handler-custom="cancel">CANCELAR</button>
     <button class="mat-button mat-primary" data-event="click" data-handler-custom="accept">ACEPTAR</button>
   </div>
@@ -176,11 +176,11 @@ export class ODateInputComponent extends OTextInputComponent implements OnInit {
       let $html = $(html);
 
       let datepickerPrev = $html['find']('.ui-datepicker-prev');
-      datepickerPrev.attr('layout', 'row').attr('layout-align', 'center center').children().remove();
+      datepickerPrev.attr('fxLayout', 'row').attr('fxLayoutAlign', 'center center').children().remove();
       datepickerPrev.html('<i class="material-icons">keyboard_arrow_left</i>');
 
       let datepickerNext = $html['find']('.ui-datepicker-next');
-      datepickerNext.attr('layout', 'row').attr('layout-align', 'center center').children().remove();
+      datepickerNext.attr('fxLayout', 'row').attr('fxLayoutAlign', 'center center').children().remove();
       datepickerNext.html('<i class="material-icons">keyboard_arrow_right</i>');
 
       return $html;

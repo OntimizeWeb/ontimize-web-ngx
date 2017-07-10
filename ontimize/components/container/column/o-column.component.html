@@ -1,8 +1,8 @@
-<div class="o-container" layout-fill>
-	<div *ngIf="hasTitle()" layout="row" class="o-container-title-item container-title">
+<div class="o-container" fxFill>
+	<div *ngIf="hasTitle()" fxLayout="row" class="o-container-title-item container-title">
 		<span layout-padding>{{ titleLabel }}</span>
 	</div>
-	<div id="innerCol" class="o-container-content-item" layout="column">
+	<div id="innerCol" class="o-container-content-item" fxLayoutAlign="{{ layoutAlign }}" fxLayout="column">
 		<ng-content></ng-content>
 	</div>
 </div>

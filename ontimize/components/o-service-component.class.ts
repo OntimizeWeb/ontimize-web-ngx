@@ -369,6 +369,10 @@ export class OServiceComponent implements ILocalStorageComponent {
     }
   }
 
+  getDataArray() {
+    return this.dataArray;
+  }
+
   setDataArray(data: any): void {
     if (Util.isArray(data)) {
       this.dataArray = data;

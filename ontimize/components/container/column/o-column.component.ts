@@ -24,7 +24,10 @@ export const DEFAULT_INPUTS_O_COLUMN = [
   inputs: [
     ...DEFAULT_INPUTS_O_COLUMN
   ],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  host: {
+    '[class.o-column]': 'true'
+  }
 })
 export class OColumnComponent implements OnInit {
 
@@ -47,7 +50,6 @@ export class OColumnComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.elRef.nativeElement.classList.add('o-row');
     if (this.layoutAlign === undefined) {
       this.propagateLayoutAligmentToDOM();
     }
@@ -102,10 +104,8 @@ export class OColumnComponent implements OnInit {
   propagatePaddingToDOM() {
     let innerCol = this.elRef.nativeElement.querySelectorAll('div#innerCol');
     if (innerCol.length) {
-      var self = this;
       let element = innerCol[0]; // Take only first, nested element does not matter.
-      if (self.hasTitle()
-        || (self.elevation > 0 && self.elevation <= 12)) {
+      if (this.hasTitle() || (this.elevation > 0 && this.elevation <= 12)) {
         element.classList.add('container-content');
       } else {
         element.classList.remove('container-content');
@@ -116,10 +116,9 @@ export class OColumnComponent implements OnInit {
   propagateLayoutAligmentToDOM() {
     let innerCol = this.elRef.nativeElement.querySelectorAll('div#innerCol');
     if (innerCol.length) {
-      var self = this;
-      let element = innerCol[0]; // Take only first, nested element does not matter.
-      element.setAttribute('layout-align', this.layoutAlign);
-      if (self.hasTitle()) {
+      let element = innerCol[0];
+      // Take only first, nested element does not matter.
+      if (this.hasTitle()) {
         element.classList.add('container-content');
       }
     }

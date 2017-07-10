@@ -1,6 +1,6 @@
 <md-toolbar class="o-light-table-button-panel">
   <div class="mat-toolbar-tools" *ngIf="!table.deleting">
-    <span flex></span>
+    <span fxFlex></span>
     <button type="button" md-icon-button (click)="table.filter($event)">
       <md-icon aria-label="Filter items">filter_list</md-icon>
     </button>
@@ -16,7 +16,7 @@
     <button  type="button" md-icon-button (click)="table.cancelRemove($event)">
       <md-icon aria-label="Cancel selection of items to delete">clear</md-icon>
     </button>
-    <span flex></span>
+    <span fxFlex></span>
     <button type="button" md-icon-button (click)="table.remove($event)">
       <md-icon aria-label="Delete selected items">done</md-icon>
     </button>

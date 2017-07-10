@@ -123,7 +123,11 @@ export interface OFormInitializationOptions {
   outputs: [
     ...DEFAULT_OUTPUTS_O_FORM
   ],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  host: {
+    '[class.o-form]': 'true',
+    '[class.fill]': 'layoutFill'
+  }
 })
 export class OFormComponent implements OnInit, OnDestroy {
 
@@ -253,11 +257,6 @@ export class OFormComponent implements OnInit, OnDestroy {
           }
         }
       });
-
-    this.elRef.nativeElement.classList.add('o-form');
-    if (this.layoutFill) {
-      this.elRef.nativeElement.setAttribute('layout-fill', '');
-    }
   }
 
   registerFormComponent(comp: any) {
@@ -948,10 +947,14 @@ export class OFormComponent implements OnInit, OnDestroy {
         if (resp.code === 0) {
           self._setData(resp.data);
         } else {
+          self._updateFormData({});
+          self.dialogService.alert('ERROR', 'MESSAGES.ERROR_QUERY');
           console.log('error ');
         }
       }, err => {
         console.log(err);
+        self._updateFormData({});
+        self.dialogService.alert('ERROR', 'MESSAGES.ERROR_QUERY');
         loader.unsubscribe();
       });
   }
@@ -992,7 +995,7 @@ export class OFormComponent implements OnInit, OnDestroy {
           loader.unsubscribe();
           if (resp.code === 0) {
             observer.next(resp.data);
-            observer.complete(resp.data);
+            observer.complete();
           } else {
             observer.error(resp.message);
           }
@@ -1083,7 +1086,7 @@ export class OFormComponent implements OnInit, OnDestroy {
           if (resp.code === 0) {
             self.postCorrectDelete(resp);
             observer.next(resp.data);
-            observer.complete(resp.data);
+            observer.complete();
           } else {
             self.postIncorrectDelete(resp);
             observer.error(resp.message);
@@ -1240,12 +1243,27 @@ export class OFormComponent implements OnInit, OnDestroy {
       this.dynamicFormSuscription.unsubscribe();
     }
   }
+
+  getRequiredComponents(): Object {
+    const requiredCompontents: Object = {};
+    const components = this.getComponents();
+    if (components) {
+      Object.keys(components).forEach(key => {
+        let comp = components[key];
+        if (comp.isRequired) {
+          let attr = comp.getAttribute();
+          requiredCompontents[attr] = comp;
+        }
+      });
+    }
+    return requiredCompontents;
+  }
 }
 
 @NgModule({
   declarations: [OFormComponent],
   imports: [OSharedModule, CommonModule, OFormToolbarModule],
-  exports: [OFormComponent, OFormToolbarModule],
+  exports: [OFormComponent, OFormToolbarModule]
 })
 export class OFormModule {
 }

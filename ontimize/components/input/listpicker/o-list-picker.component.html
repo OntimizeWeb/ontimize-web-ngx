@@ -1,10 +1,10 @@
-<div layout="row" layout-fill layout-align="space-between center" [formGroup]="form?.formGroup" (click)="onClickListpicker($event)"
+<div fxLayout="row" fxFill fxLayoutAlign="space-between center" [formGroup]="form?.formGroup" (click)="onClickListpicker($event)"
     [mdTooltip]="tooltip" [mdTooltipPosition]="tooltipPosition" [mdTooltipShowDelay]="tooltipShowDelay">
-    <input mdInput #inputModel class="mat-input input-model" type="text" [attr.id]="oattr" [id]="oattr" layout-fill [formControlName]="oattr"
+    <input mdInput #inputModel class="mat-input input-model" type="text" [attr.id]="oattr" [id]="oattr" fxFill [formControlName]="oattr"
         [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)">
 
-    <md-input-container #innerInputContainer flex layout-fill>
-        <input mdInput class="mat-input" type="text" [attr.id]="'desc_' + oattr" [id]="'desc_' + oattr" layout-fill [placeholder]="placeHolder"
+    <md-input-container #innerInputContainer fxFlex fxFill>
+        <input mdInput class="mat-input" type="text" [attr.id]="'desc_' + oattr" [id]="'desc_' + oattr" fxFill [placeholder]="placeHolder"
             [value]="getDescriptionValue()" (focus)="onFocus($event)" (blur)="onBlur($event)" [readonly]="isReadOnly" [disabled]="isDisabled">
             <md-hint *ngIf="!isReadOnly && _fControl.touched && _fControl.errors">
                 <span *ngIf="_fControl.errors?.required">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</span>
