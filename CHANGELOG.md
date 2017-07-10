@@ -1,3 +1,61 @@
+## 2.0.0-rc.5
+
+### DEPENDENCY UPDATES ###
+* **Added**:  colresizable@1.6.0
+* **Added**:  datatables.net@^1.10.12
+* **Added**:  datatables.net-buttons@^1.2.1
+* **Added**:  datatables.net-colreorder@^1.3.2
+* **Added**:  datatables.net-select@^1.2.0
+* **Added**:  jquery@^3.0.0
+* **Added**:  jquery-ui@^1.12.0
+* **Added**:  pdfmake@^0.1.18
+* **Added**:  moment@2.18.1
+
+### PEER-DEPENDENCY UPDATES ###
+
+* **Added**:    @angular/flex-layout@2.0.0-beta.8
+* **Updated**:  @angular/material@2.0.0-beta.7
+* **Updated**:  @angular@4.2.4
+* **Updated**:  rxjs@^5.4.2
+* **Updated**:  zone.js@^0.8.12,
+* **Updated**:  reflect-metadata@0.1.10,
+* **Updated**:  typescript@2.3.4
+* **Removed**:  colresizable@1.6.0
+* **Removed**:  datatables.net@^1.10.12
+* **Removed**:  datatables.net-buttons@^1.2.1
+* **Removed**:  datatables.net-colreorder@^1.3.2
+* **Removed**:  datatables.net-select@^1.2.0
+* **Removed**:  jquery@^3.0.0
+* **Removed**:  jquery-ui@^1.12.0
+* **Removed**:  pdfmake@^0.1.18
+* **Removed**:  moment@2.18.1
+
+### BREAKING CHANGES
+* **FlexLayoutModule**: ([#34](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/34)) ([337143c](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/337143c)) adding angular '*FlexLayoutModule*'. This change makes necessary to change the following alignment attributes (only its name):
+```javascript
+  layout        ->  fxLayout
+  layout-align  ->  fxLayoutAlign
+  layout-fill   ->  fxFill
+  flex          ->  fxFlex
+```
+**Note: '*layout-align*' input in '*o-row*' and '*o-column*' remains unchanged (it makes flex layout module update internally).
+
+### Features
+* **OValidators**: exporting '*OValidators*' class.
+* **OServiceComponent**: adding '*getDataArray*' method ('*o-list*' and '*o-table*').
+* **o-form**: adding '*getRequiredComponents*' method ([#76](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/76)) ([568abf6](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/568abf6))
+
+### Bug Fixes
+* **o-table**: bug in table reinitialization ([#101](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/101)) ([4b94bf3](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/4b94bf3))
+* **OFormDataComponent**: bug when setting data ([#77](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/77)) ([11fb596](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/11fb596))
+* **o-form**: bug when setting data ([#82](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/82)) ([b2bad20](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/b2bad20))
+
+## 2.0.0-rc.4
+
+### Bug Fixes
+* **o-table**: pagination bugs fixed.
+* **o-app-header**: fixing flags icons bugs.
+
 ## 2.0.0-rc.3
 ### Features
 * **o-list-picker**: adding '*dialog-width*' and '*dialog-height*' inputs.
