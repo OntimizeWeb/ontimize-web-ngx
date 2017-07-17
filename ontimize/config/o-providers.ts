@@ -41,9 +41,10 @@ export function appInitializerFactory(injector: Injector, config: Config, transl
       translate.setDefaultLang('en');
       let userLang = config['locale'];
       if (!userLang) {
-        userLang = navigator.language.split('-')[0]; // use navigator lang if available
+        // use navigator lang if available
+        userLang = navigator.language.split('-')[0];
       }
-      userLang = /(es|en)/gi.test(userLang) ? userLang : 'en';
+      //   userLang = /(es|en)/gi.test(userLang) ? userLang : 'en';
 
       // initialize available locales array if needed
       if (!config.applicationLocales) {

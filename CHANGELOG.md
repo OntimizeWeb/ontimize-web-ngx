@@ -1,3 +1,12 @@
+## 2.0.0-rc.6
+
+### PEER-DEPENDENCY UPDATES ###
+* **Updated**:  @angular/cli@^1.2.1
+
+### Bug Fixes
+* **OComponent**: fixing bugs in '*OComponent*' decorator.
+* **providers**: fixing language initialization bugs.
+
 ## 2.0.0-rc.5
 
 ### DEPENDENCY UPDATES ###
