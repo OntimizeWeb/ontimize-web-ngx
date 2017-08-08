@@ -2,6 +2,9 @@
   height: auto;
 }
 
-.o-list-item-card md-card {
-  width: 100%;
+.o-list-item-card {
+  md-card,
+  md-card-actions {
+    width: 100%;
+  }
 }
