@@ -10,6 +10,7 @@ export * from './components/container/column/o-column.component';
 export * from './components/container/row/o-row.component';
 export * from './components/dialog/o-dialog.component';
 export * from './components/form/o-form.component';
+export { Mode } from './components/form/o-form.component';
 export * from './components/form/o-form-toolbar.component';
 export * from './components/form/OFormValue';
 export * from './components/image/o-image.component';
