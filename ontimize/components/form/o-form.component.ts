@@ -96,7 +96,8 @@ export const DEFAULT_INPUTS_O_FORM = [
 export const DEFAULT_OUTPUTS_O_FORM = [
   'onFormDataLoaded',
   'beforeCloseDetail',
-  'beforeGoEditMode'
+  'beforeGoEditMode',
+  'onFormModeChange'
 ];
 
 export interface OFormInitializationOptions {
@@ -130,7 +131,6 @@ export interface OFormInitializationOptions {
   }
 })
 export class OFormComponent implements OnInit, OnDestroy {
-
   public static BACK_ACTION: string = 'BACK';
   public static CLOSE_DETAIL_ACTION: string = 'CLOSE';
   public static RELOAD_ACTION: string = 'RELOAD';
@@ -186,6 +186,7 @@ export class OFormComponent implements OnInit, OnDestroy {
   onFormDataLoaded: EventEmitter<Object> = new EventEmitter<Object>();
   beforeCloseDetail: EventEmitter<any> = new EventEmitter<any>();
   beforeGoEditMode: EventEmitter<any> = new EventEmitter<any>();
+  onFormModeChange: EventEmitter<Object> = new EventEmitter<Object>();
 
   public loading: boolean = false;
   public formData: Object = {};/* Array<any> = [];*/
@@ -638,6 +639,7 @@ export class OFormComponent implements OnInit, OnDestroy {
           this._formToolbar.setInitialMode();
         }
         this._setComponentsEditable(false);
+        this.onFormModeChange.emit(this.mode);
         break;
       case Mode.INSERT:
         this.mode = Mode.INSERT;
@@ -646,6 +648,7 @@ export class OFormComponent implements OnInit, OnDestroy {
         }
         this.clearData();
         this._setComponentsEditable(true);
+        this.onFormModeChange.emit(this.mode);
         break;
       case Mode.UPDATE:
         this.mode = Mode.UPDATE;
@@ -653,6 +656,7 @@ export class OFormComponent implements OnInit, OnDestroy {
           this._formToolbar.setEditMode();
         }
         this._setComponentsEditable(true);
+        this.onFormModeChange.emit(this.mode);
       default:
         break;
     }
