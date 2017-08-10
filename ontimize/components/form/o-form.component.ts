@@ -27,13 +27,6 @@ import { Util, SQLTypes } from '../../utils';
 import { OSharedModule } from '../../shared';
 import { CommonModule } from '@angular/common';
 
-export const enum Mode {
-  QUERY,
-  INSERT,
-  UPDATE,
-  INITIAL
-}
-
 export const DEFAULT_INPUTS_O_FORM = [
   // show-header [boolean]: visibility of form toolbar. Default: yes.
   'showHeader: show-header',
@@ -192,7 +185,7 @@ export class OFormComponent implements OnInit, OnDestroy {
   public formData: Object = {};/* Array<any> = [];*/
   public navigationData: Array<any> = [];
   public currentIndex = 0;
-  public mode: Mode = Mode.INITIAL;
+  public mode: number = OFormComponent.Mode().INITIAL;
 
   protected dialogService: DialogService;
   protected navigationService: NavigationService;
@@ -220,6 +213,16 @@ export class OFormComponent implements OnInit, OnDestroy {
   protected reloadStream: Observable<any>;
 
   protected dynamicFormSuscription: Subscription;
+
+  public static Mode(): any {
+    enum m {
+      QUERY,
+      INSERT,
+      UPDATE,
+      INITIAL
+    }
+    return m;
+  }
 
   @HostListener('window:scroll', ['$event'])
   track(event) {
@@ -259,6 +262,8 @@ export class OFormComponent implements OnInit, OnDestroy {
         }
       });
   }
+
+
 
   registerFormComponent(comp: any) {
     if (comp) {
@@ -371,16 +376,15 @@ export class OFormComponent implements OnInit, OnDestroy {
   }
 
   getDataValue(attr: string) {
-
-    if (this.mode === Mode.INITIAL) {
+    if (this.isInInitialMode()) {
       let data = this.formData;
       if (data && data.hasOwnProperty(attr)) {
         return data[attr];
       }
-    } else if (this.mode === Mode.INSERT) {
+    } else if (this.isInInsertMode()) {
       let val = this.formGroup.value[attr];
       return new OFormValue(val);
-    } else if (this.mode === Mode.UPDATE) {
+    } else if (this.isInUpdateMode()) {
       if (this.formData && Object.keys(this.formData).length > 0) {
         // Checking if field value is stored in form cache...
         // if (this.formGroup.controls[attr] &&
@@ -526,7 +530,7 @@ export class OFormComponent implements OnInit, OnDestroy {
       });
     }
 
-    this.mode = Mode.INITIAL;
+    this.mode = OFormComponent.Mode().INITIAL;
   }
 
   reinitialize(options: OFormInitializationOptions) {
@@ -590,7 +594,7 @@ export class OFormComponent implements OnInit, OnDestroy {
         this.determinateModeFromUrlSegment(segment);
       });
     } else {
-      this.setFormMode(Mode.INITIAL);
+      this.setFormMode(OFormComponent.Mode().INITIAL);
     }
   }
 
@@ -598,13 +602,13 @@ export class OFormComponent implements OnInit, OnDestroy {
     var _path = segment ? segment['path'] : '';
     if (_path === 'new') {
       //insert mode
-      this.setFormMode(Mode.INSERT);
+      this.setFormMode(OFormComponent.Mode().INSERT);
       return;
     } else if (_path === 'edit') {
       //edit mode
-      this.setFormMode(Mode.UPDATE);
+      this.setFormMode(OFormComponent.Mode().UPDATE);
     } else {
-      this.setFormMode(Mode.INITIAL);
+      this.setFormMode(OFormComponent.Mode().INITIAL);
     }
   }
 
@@ -631,18 +635,18 @@ export class OFormComponent implements OnInit, OnDestroy {
    * Sets form operation mode.
    * @param  {Mode} mode The mode to be established
    */
-  setFormMode(mode: Mode) {
+  setFormMode(mode: number) {
     switch (mode) {
-      case Mode.INITIAL:
-        this.mode = Mode.INITIAL;
+      case OFormComponent.Mode().INITIAL:
+        this.mode = mode;
         if (this._formToolbar) {
           this._formToolbar.setInitialMode();
         }
         this._setComponentsEditable(false);
         this.onFormModeChange.emit(this.mode);
         break;
-      case Mode.INSERT:
-        this.mode = Mode.INSERT;
+      case OFormComponent.Mode().INSERT:
+        this.mode = mode;
         if (this._formToolbar) {
           this._formToolbar.setInsertMode();
         }
@@ -650,8 +654,8 @@ export class OFormComponent implements OnInit, OnDestroy {
         this._setComponentsEditable(true);
         this.onFormModeChange.emit(this.mode);
         break;
-      case Mode.UPDATE:
-        this.mode = Mode.UPDATE;
+      case OFormComponent.Mode().UPDATE:
+        this.mode = mode;
         if (this._formToolbar) {
           this._formToolbar.setEditMode();
         }
@@ -1214,19 +1218,19 @@ export class OFormComponent implements OnInit, OnDestroy {
   }
 
   isInQueryMode(): boolean {
-    return this.mode === Mode.QUERY;
+    return this.mode === OFormComponent.Mode().QUERY;
   }
 
   isInInsertMode(): boolean {
-    return this.mode === Mode.INSERT;
+    return this.mode === OFormComponent.Mode().INSERT;
   }
 
   isInUpdateMode(): boolean {
-    return this.mode === Mode.UPDATE;
+    return this.mode === OFormComponent.Mode().UPDATE;
   }
 
   isInInitialMode(): boolean {
-    return this.mode === Mode.INITIAL;
+    return this.mode === OFormComponent.Mode().INITIAL;
   }
 
   registerDynamicFormComponent(dynamicForm) {

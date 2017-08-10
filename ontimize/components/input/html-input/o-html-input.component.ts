@@ -22,7 +22,7 @@ import {
 import { IComponent } from '../../o-component.class';
 
 import { InputConverter } from '../../../decorators';
-import { OFormComponent, Mode } from '../../form/o-form.component';
+import { OFormComponent } from '../../form/o-form.component';
 import { OFormValue } from '../../form/OFormValue';
 import { OTranslateService } from '../../../services';
 import { SQLTypes } from '../../../utils';
@@ -112,7 +112,7 @@ export class OHTMLInputComponent implements IComponent, IFormControlComponent, I
     if (this.form) {
       this.form.registerFormComponent(this);
       this.form.registerFormControlComponent(this);
-      this.isReadOnly = (this.form.mode === Mode.INITIAL ? true : false);
+      this.isReadOnly = (this.form.isInInitialMode() ? true : false);
 
       var self = this;
       this.form.beforeCloseDetail.subscribe((evt: any) => {
