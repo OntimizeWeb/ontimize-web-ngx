@@ -286,11 +286,9 @@ export class OFormComponent implements OnInit, OnDestroy {
         * La idea es asignar ese valor al campo cuando se registre de nuevo (Hay que asegurar el proceso
         * para que sólo sea cuando se registra de nuevo ;) )
         */
-        if (this.formDataCache
-          && this.formDataCache.hasOwnProperty(comp.getAttribute())
-          && this.getDataValues()
-          && this._components.hasOwnProperty(comp.getAttribute())) {
-          let cachedValue = this.formDataCache[comp.getAttribute()];
+        if (this.formDataCache && this.formDataCache.hasOwnProperty(attr)
+          && this.getDataValues() && this._components.hasOwnProperty(attr)) {
+          let cachedValue = this.formDataCache[attr];
           if (cachedValue !== null) {
             this._components[attr].setValue(cachedValue);
           }
@@ -302,18 +300,22 @@ export class OFormComponent implements OnInit, OnDestroy {
   registerSQLTypeFormComponent(comp: IFormDataTypeComponent) {
     if (comp) {
       let type = comp.getSQLType();
-      if (type !== SQLTypes.OTHER) {
+      let attr = comp.getAttribute();
+      if (type !== SQLTypes.OTHER && attr && attr.length > 0) {
         // Right now just store values different of 'OTHER'
-        this._compSQLTypes[comp.getAttribute()] = type;
+        this._compSQLTypes[attr] = type;
       }
     }
   }
 
   registerFormControlComponent(comp: IFormControlComponent) {
     if (comp) {
-      let control: FormControl = comp.getControl();
-      if (control) {
-        this.formGroup.addControl(comp.getAttribute(), control);
+      let attr = comp.getAttribute();
+      if (attr && attr.length > 0) {
+        let control: FormControl = comp.getControl();
+        if (control) {
+          this.formGroup.addControl(attr, control);
+        }
       }
     }
   }
@@ -330,8 +332,9 @@ export class OFormComponent implements OnInit, OnDestroy {
   unregisterFormControlComponent(comp: IFormControlComponent) {
     if (comp) {
       let control: FormControl = comp.getControl();
-      if (control) {
-        this.formGroup.removeControl(comp.getAttribute());
+      let attr = comp.getAttribute();
+      if (control && attr && attr.length > 0) {
+        this.formGroup.removeControl(attr);
       }
     }
   }
@@ -451,14 +454,13 @@ export class OFormComponent implements OnInit, OnDestroy {
     /*
     * Keeping updated a cache of form data values
     */
-    this.formGroup.valueChanges
-      .subscribe((value: any) => {
-        if (self.formDataCache === undefined) {
-          // initialize cache
-          self.formDataCache = {};
-        }
-        Object.assign(self.formDataCache, value);
-      });
+    this.formGroup.valueChanges.subscribe((value: any) => {
+      if (self.formDataCache === undefined) {
+        // initialize cache
+        self.formDataCache = {};
+      }
+      Object.assign(self.formDataCache, value);
+    });
     this.initialize();
   }
 
@@ -985,7 +987,7 @@ export class OFormComponent implements OnInit, OnDestroy {
     if (this.formDataCache) {
       let keys = Object.keys(this.formDataCache);
       keys.map(item => {
-        if (attributes.indexOf(item) < 0) {
+        if (item !== undefined && attributes.indexOf(item) === -1) {
           attributes.push(item);
         }
       });
@@ -1258,8 +1260,8 @@ export class OFormComponent implements OnInit, OnDestroy {
     if (components) {
       Object.keys(components).forEach(key => {
         let comp = components[key];
-        if (comp.isRequired) {
-          let attr = comp.getAttribute();
+        let attr = comp.getAttribute();
+        if (comp.isRequired && attr && attr.length > 0) {
           requiredCompontents[attr] = comp;
         }
       });
