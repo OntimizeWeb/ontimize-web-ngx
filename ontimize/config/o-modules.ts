@@ -1,4 +1,5 @@
-import { Http, HttpModule } from '@angular/http';
+import { HttpModule } from '@angular/http';
+import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { BrowserModule } from '@angular/platform-browser';
@@ -75,6 +76,7 @@ import { OSharedModule } from '../shared';
 export const INTERNAL_ONTIMIZE_MODULES_EXPORTED: any = [
   // Standard modules
   HttpModule,
+  HttpClientModule,
   OSharedModule,
 
   // Ontimize modules
@@ -129,18 +131,19 @@ export const INTERNAL_ONTIMIZE_MODULES_EXPORTED: any = [
 ];
 
 // AoT requires an exported function for factories
-export function HttpLoaderFactory(http: Http) {
-  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+export function HttpLoaderFactory(http: HttpClient) {
+  return new TranslateHttpLoader(http, OTranslateService.ASSETS_PATH, OTranslateService.ASSETS_EXTENSION);
 }
 
 export const INTERNAL_ONTIMIZE_MODULES: any = [
   HttpModule,
+  HttpClientModule,
   // Ngx-translate
   TranslateModule.forRoot({
     loader: {
       provide: TranslateLoader,
       useFactory: HttpLoaderFactory,
-      deps: [Http]
+      deps: [HttpClient]
     }
   }),
 

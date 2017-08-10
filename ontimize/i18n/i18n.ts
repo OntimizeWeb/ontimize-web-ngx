@@ -89,6 +89,7 @@ export var MAP = {
     'MESSAGES.SAVING': 'Saving, please wait...',
     'MESSAGES.SAVED': 'Saved',
     'MESSAGES.NO_RESULTS': 'No results were obtained.',
+    'MESSAGES.ERROR_MISSING_LANG': 'Selected language bundle file not found',
 
     'TABLE.EMPTY': 'No results found',
     'TABLE.INFO': '_START_ - _END_ of _TOTAL_',
@@ -219,6 +220,7 @@ export var MAP = {
     'MESSAGES.SAVING': 'Guardando, espere...',
     'MESSAGES.SAVED': 'Guardado',
     'MESSAGES.NO_RESULTS': 'No se obtuvieron resultados.',
+    'MESSAGES.ERROR_MISSING_LANG': 'No se ha encontrado el fichero de configuración del idioma seleccionado',
 
     'TABLE.EMPTY': 'No se han obtenido resultados',
     'TABLE.INFO': '_START_ - _END_ de _TOTAL_',
