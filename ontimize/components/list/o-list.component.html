@@ -1,5 +1,4 @@
 <div class="o-list-container" fxFill>
-  <!--<span *ngIf="title" class="o-list-title">{{title}}</span>-->
   <div *ngIf="loading" [class.pageable-loading]="pageable && state.queryRecordOffset > 0" class="spinner-container" fxFlex="100"
     fxLayout="row" fxLayoutAlign="center center">
     <md-progress-spinner *ngIf="loading" mode="indeterminate">
@@ -31,7 +30,6 @@
         <h3 md-line>{{ 'TABLE.EMPTY' | oTranslate }}</h3>
       </md-list-item>
       <ng-content></ng-content>
-
     </md-list>
     <button *ngIf="insertButton && odense" md-mini-fab (click)="add()" class="add-button">
       <md-icon>add</md-icon>
