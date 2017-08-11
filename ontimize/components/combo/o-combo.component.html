@@ -1,4 +1,4 @@
-<div fxFill [formGroup]="form?.formGroup" class="mat-combo-container"
+<div [formGroup]="form?.formGroup" class="mat-combo-container"
     [mdTooltip]="tooltip" [mdTooltipPosition]="tooltipPosition" [mdTooltipShowDelay]="tooltipShowDelay">
     <md-select #selectModel [class.visible]="!isReadOnly" [class.hidden]="isReadOnly" class="mat-combo" [attr.id]="oattr" [id]="oattr" fxFill [formControlName]="oattr"
         [placeholder]="placeHolder" [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)">

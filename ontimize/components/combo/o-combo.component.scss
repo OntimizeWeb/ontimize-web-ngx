@@ -8,28 +8,36 @@
 
 .mat-combo-container {
   position: relative;
-}
 
-md-select {
-  &.mat-combo {
-    .mat-select-trigger {
-      margin: 16px 0 11px 0px;
-      height: 23px;
+  .mat-hint {
+    display: block;
+    position: absolute;
+    font-size: 75%;
+    bottom: -1.5em;
+  }
 
-      .mat-select-placeholder.mat-floating-placeholder {
-        left: 0px;
-        top: -20px;
+  md-select {
+    &.mat-combo {
+      .mat-select-trigger {
+        margin: 22px 0 0px 0px;
+        height: 24px;
+
+        .mat-select-placeholder.mat-floating-placeholder {
+          left: 0px;
+          top: -20px;
+        }
+        .mat-select-value{
+          top: 0px;
+          left: 0px;
+        }
       }
-      .mat-select-value{
-        top: 0px;
-        left: 0px;
-      }
+    }
+
+    &:focus:not(.mat-select-disabled) .mat-select-trigger {
+      border-bottom-width: 2px;
     }
   }
 
-  &:focus:not(.mat-select-disabled) .mat-select-trigger {
-    border-bottom-width: 2px;
-  }
 }
 
 .mat-tooltip {

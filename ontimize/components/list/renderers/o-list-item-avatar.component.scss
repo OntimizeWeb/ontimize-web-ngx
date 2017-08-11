@@ -5,3 +5,10 @@
 .mat-list.selectable .o-list-item-avatar .mat-list-text {
   padding-right: 0px;
 }
+
+.mat-list,
+.mat-nav-list {
+  .mat-list-item .mat-list-item-content .o-list-item-avatar.o-custom-list-item .mat-list-text {
+    padding: 0 16px;
+  }
+}

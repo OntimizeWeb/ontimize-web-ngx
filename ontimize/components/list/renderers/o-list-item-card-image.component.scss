@@ -2,9 +2,14 @@ o-list-item md-list-item.o-card-item .mat-list-item-content {
   height: auto;
 }
 
-.o-list-item-card-image {
+.o-list-item-card-image md-card {
 
-  md-card {
+    md-card-title,
+    md-card-subtitle,
+    md-card-actions,
+    md-card-header {
+      width: 100%;
+    }
 
     &.large {
       width: 100%;
@@ -33,10 +38,6 @@ o-list-item md-list-item.o-card-item .mat-list-item-content {
       left: calc(100% - 48px);
     }
 
-
-
-
-
     img.action-button {
       margin-bottom: -25px;
     }
@@ -51,6 +52,4 @@ o-list-item md-list-item.o-card-item .mat-list-item-content {
         margin-left: calc(100% - 40px);
       }
     }
-
-  }
 }

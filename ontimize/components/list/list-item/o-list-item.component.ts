@@ -60,7 +60,7 @@ export class OListItemComponent implements AfterContentInit {
     var mdLinesRef = this._lines;
     var ngAfterContentInitOriginal = this._innerListItem.ngAfterContentInit;
     this._innerListItem.ngAfterContentInit = function () {
-      let emptyDiv = this._element.nativeElement.querySelector('.mat-list-text:first-child:empty');
+      let emptyDiv = this._element.nativeElement.querySelector('.mat-list-text:empty');
       if (emptyDiv) {
         emptyDiv.remove();
       }

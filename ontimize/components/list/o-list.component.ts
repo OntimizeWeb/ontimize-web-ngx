@@ -158,7 +158,8 @@ export class OListComponent extends OServiceComponent implements OnInit, IList, 
   public ngOnChanges(changes: { [propName: string]: SimpleChange }) {
     if (typeof (changes['staticData']) !== 'undefined') {
       this.dataResponseArray = changes['staticData'].currentValue;
-      this.setDataArray(changes['staticData'].currentValue);
+      let filter = (this.state && this.state.filterValue) ? this.state.filterValue : undefined;
+      this.filterData(filter);
     }
   }
 
@@ -218,14 +219,14 @@ export class OListComponent extends OServiceComponent implements OnInit, IList, 
 
   protected setListItemsData() {
     var self = this;
-    this.listItemComponents.forEach(function (element: OListItemComponent, index, array) {
+    this.listItemComponents.forEach(function (element: OListItemComponent, index) {
       element.setItemData(self.dataResponseArray[index]);
     });
   }
 
   protected setListItemDirectivesData() {
     var self = this;
-    this.listItemDirectives.forEach(function (element: OListItemDirective, index, array) {
+    this.listItemDirectives.forEach(function (element: OListItemDirective, index) {
       element.setItemData(self.dataResponseArray[index]);
       element.setListComponent(self);
       self.registerListItemDirective(element);
@@ -396,7 +397,9 @@ export class OListComponent extends OServiceComponent implements OnInit, IList, 
    * Filters data locally.
    *  */
   filterData(value: string): void {
-    this.state.filterValue = value;
+    if (this.state) {
+      this.state.filterValue = value;
+    }
     if (value && value.length > 0 && this.dataResponseArray && this.dataResponseArray.length > 0) {
       var _val = this.configureFilterValue(value);
       var self = this;
@@ -511,6 +514,7 @@ export class OListComponent extends OServiceComponent implements OnInit, IList, 
               },
               error => {
                 this.dialogService.alert('ERROR', 'MESSAGES.ERROR_DELETE');
+                console.log('[OList.remove]: error', error);
               },
               () => {
                 this.queryData(this.parentItem);

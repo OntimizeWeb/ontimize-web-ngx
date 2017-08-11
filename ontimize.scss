@@ -35,3 +35,24 @@
     }
   }
 }
+
+.display-none {
+  display: none;
+}
+
+.visibility-hidden {
+  visibility: hidden;
+}
+
+$steps: 6;
+@mixin padding-margin-x {
+  @for $i from 1 through $steps {
+    $val: $i * 4;
+    .vertical-padding-#{$val} { padding-top: $val px; padding-bottom: $val px; }
+    .horizontal-padding-#{$val} { padding-left: $val px; padding-right: $val px; }
+    .vertical-margin-#{$val} { margin-top: $val px; margin-bottom: $val px; }
+    .horizontal-margin-#{$val} { margin-left: $val px; margin-right: $val px; }
+  }
+}
+
+@include padding-margin-x();

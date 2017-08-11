@@ -8,7 +8,7 @@ import {
 } from './o-component.class';
 
 import { InputConverter } from '../decorators';
-import { OFormComponent, Mode } from './form/o-form.component';
+import { OFormComponent } from './form/o-form.component';
 import { OFormValue } from './form/OFormValue';
 import { SQLTypes } from '../utils';
 
@@ -51,7 +51,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormControlCo
     super.initialize();
     if (this.form) {
       this.registerFormListeners();
-      this._isReadOnly = this.form.mode === Mode.INITIAL ? true : false;
+      this._isReadOnly = this.form.isInInitialMode() ? true : false;
     } else {
       this._isReadOnly = this._disabled;
     }
@@ -96,6 +96,10 @@ export class OFormDataComponent extends OBaseComponent implements IFormControlCo
 
   setValue(val: any) {
     this.ensureOFormValue(val);
+    if (this._fControl) {
+      this._fControl.setValue(val);
+      this._fControl.markAsDirty();
+    }
   }
 
   ensureOFormValue(value: any) {

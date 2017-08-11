@@ -1,4 +1,4 @@
-<md-card fxFlex fxLayout="row" fxLayoutAlign="center center"
+<md-card fxFlex fxFill fxLayout="column" fxLayoutAlign="center center"
         class="o-item-card"
         [class.small]="compareListHeight('small')"
         [class.medium]="compareListHeight('medium')"
@@ -29,7 +29,7 @@
     </p>
   </md-card-content>
 
-  <md-card-actions fxFlex fxLayout="row">
+  <md-card-actions>
     <button md-button *ngIf="action1Text" (click)="onAction1ButtonClick($event)">{{ action1Text }}</button>
     <button md-button *ngIf="action2Text" (click)="onAction2ButtonClick($event)">{{ action2Text }}</button>
 

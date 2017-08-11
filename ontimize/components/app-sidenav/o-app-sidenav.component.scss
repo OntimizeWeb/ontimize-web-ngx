@@ -34,7 +34,7 @@ $transition-duration: 500ms;
     .mat-sidenav.application-sidenav-sidenav {
       box-shadow: 3px $header-height 6px rgba(0, 0, 0, .24);
       padding-bottom: 72px;
-      padding-top: 55px;
+      padding-top: 5px;
       width: $sidenav-width;
       bottom: 0;
       overflow: auto;
@@ -130,9 +130,11 @@ $transition-duration: 500ms;
           min-width: $sidenav-closed-width;
           margin-left: auto;
         }
-        // .mat-icon {
-        //   margin: 0 calc($sidenav-closed-width - 24px);
-        // }
+
+        o-app-sidenav-image .application-sidenav-image-container .application-sidenav-image {
+          margin-left:auto;
+          margin-right: -10px;
+        }
       }
 
       &.mat-sidenav-opening,

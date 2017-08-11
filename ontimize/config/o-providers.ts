@@ -34,17 +34,16 @@ import {
 } from '../config/app-config';
 
 
-export function appInitializerFactory(injector: Injector, config: Config, translate: OTranslateService) {
+export function appInitializerFactory(injector: Injector, config: Config, oTranslate: OTranslateService) {
   return () => new Promise<any>((resolve: any) => {
     const locationInitialized = injector.get(LOCATION_INITIALIZED, Promise.resolve(null));
     locationInitialized.then(() => {
-      translate.setDefaultLang('en');
+      oTranslate.setDefaultLang('en');
       let userLang = config['locale'];
       if (!userLang) {
         // use navigator lang if available
-        userLang = navigator.language.split('-')[0];
+        userLang = oTranslate.getBrowserLang();
       }
-      //   userLang = /(es|en)/gi.test(userLang) ? userLang : 'en';
 
       // initialize available locales array if needed
       if (!config.applicationLocales) {
@@ -57,8 +56,7 @@ export function appInitializerFactory(injector: Injector, config: Config, transl
         config.applicationLocales.push(userLang);
       }
 
-      // this trigger the use of the spanish or english language after setting the translations
-      translate.setAppLang(userLang).subscribe(resolve, resolve, resolve);
+      oTranslate.setAppLang(userLang).subscribe(resolve, resolve, resolve);
     });
   });
 }
