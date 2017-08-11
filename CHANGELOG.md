@@ -1,3 +1,27 @@
+## 2.0.0-rc.7
+
+### PEER-DEPENDENCY UPDATES ###
+* **Updated**:  @ngx-translate/core@7.1.0
+* **Updated**:  @ngx-translate/http-loader@1.0.2
+* **Updated**:  @angular@4.3.3
+* **Updated**:  @angular/cli@1.2.7
+* **Updated**:  @angular/material@2.0.0-beta.8
+* **Added**:    @angular/cdk@2.0.0-beta.8
+
+### BREAKING CHANGES
+* **o-form**: '*Mode*' enum is no longer available. Using static '*OFormComponent.Mode()*' method instead ([#103](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/103)) ([bcfc61d](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/bcfc61d))
+
+### Features
+* **o-form**: Adding '*onFormModeChange*' output ([#105](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/105)) ([721d570](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/721d570))
+* **OTranslate**: Updating translate service according to '*ngx-translate*' version and adding testing methods on language change ([#109](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/109)) ([e37b0d8](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/e37b0d8))
+* **o-form**: Adding '*setQueryMode*', '*setInsertMode*', '*setUpdateMode*', '*setInitialMode*' state checking methods.
+
+### Bug Fixes
+* **o-list**: Fixing bugs in list and inner renderers.
+* **o-form**: Fixing bugs when inner component '*attr*' is undefined ([#107](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/107)) ([ce6bc93](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/ce6bc93))
+* **o-list**: Filtering '*static-data*' bugs fixed ([#90](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/90)) ([6e58311](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/6e58311))
+* **Form components**: Updating form data cache when changing inner components data with '*setValue*' method ([#80](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/80)) ([c92b1b8](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/c92b1b8))
+
 ## 2.0.0-rc.6
 
 ### PEER-DEPENDENCY UPDATES ###
