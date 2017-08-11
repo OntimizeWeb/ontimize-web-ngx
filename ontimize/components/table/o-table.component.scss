@@ -701,6 +701,10 @@
 
         td {
 
+          &.o-table-column-centered {
+            text-align: center;
+          }
+
           vertical-align: middle;
           text-align: left;
           font-size: 13px;
