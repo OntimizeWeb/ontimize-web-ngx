@@ -96,6 +96,10 @@ export class OFormDataComponent extends OBaseComponent implements IFormControlCo
 
   setValue(val: any) {
     this.ensureOFormValue(val);
+    if (this._fControl) {
+      this._fControl.setValue(val);
+      this._fControl.markAsDirty();
+    }
   }
 
   ensureOFormValue(value: any) {
