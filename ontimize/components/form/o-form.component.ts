@@ -1235,6 +1235,22 @@ export class OFormComponent implements OnInit, OnDestroy {
     return this.mode === OFormComponent.Mode().INITIAL;
   }
 
+  setQueryMode() {
+    this.setFormMode(OFormComponent.Mode().QUERY);
+  }
+
+  setInsertMode() {
+    this.setFormMode(OFormComponent.Mode().INSERT);
+  }
+
+  setUpdateMode() {
+    this.setFormMode(OFormComponent.Mode().UPDATE);
+  }
+
+  setInitialMode() {
+    this.setFormMode(OFormComponent.Mode().INITIAL);
+  }
+
   registerDynamicFormComponent(dynamicForm) {
     var self = this;
     if (dynamicForm) {
