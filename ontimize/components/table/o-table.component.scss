@@ -1097,7 +1097,7 @@ div.dt-button-background {
 }
 
 
-o-table .o-table-container table thead tr th.o-table-column-select-checkbox {
+.o-table .o-table-container table thead tr th.o-table-column-select-checkbox {
   &::before,
   &::after {
     content: initial!important;
@@ -1440,21 +1440,24 @@ o-table .o-table-container table thead tr th.o-table-column-select-checkbox {
   }
 }
 
+.o-table {
+  table.fixedHeader-floating {
+    position: fixed !important;
+    z-index: 200;
+    left: initial!important;
+  }
 
+  table.fixedHeader-floating.no-footer {
+    border-bottom-width: 0;
+  }
 
-table.fixedHeader-floating {
-  position: fixed !important;
-  z-index: 200;
+  table.fixedHeader-locked {
+    position: absolute !important;
+    z-index: 200;
+  }
 }
 
-table.fixedHeader-floating.no-footer {
-  border-bottom-width: 0;
-}
 
-table.fixedHeader-locked {
-  position: absolute !important;
-  z-index: 200;
-}
 
 @media print {
   table.fixedHeader-floating {
