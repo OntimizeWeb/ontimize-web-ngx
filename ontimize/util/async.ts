@@ -5,9 +5,8 @@
  * Code copied from '@angular/core/src/facade/async of RC4. On RC5 this classes are removed!!
  */
 import { EventEmitter } from '@angular/core';
-
-export {Observable} from 'rxjs/Observable';
-export {Subject} from 'rxjs/Subject';
+export { Observable } from 'rxjs/Observable';
+export { Subject } from 'rxjs/Subject';
 
 
 export function noop() {
@@ -17,13 +16,13 @@ export function noop() {
 export class ObservableWrapper {
   // TODO(vsavkin): when we use rxnext, try inferring the generic type from the first arg
   static subscribe<T>(
-      emitter: any, onNext: (value: T) => void, onError?: (exception: any) => void,
-      onComplete: () => void = () => {
-        //nothing to do
-      }): Object {
+    emitter: any, onNext: (value: T) => void, onError?: (exception: any) => void,
+    onComplete: () => void = () => {
+      //nothing to do
+    }): Object {
     onError = (typeof onError === 'function') && onError || noop;
     onComplete = (typeof onComplete === 'function') && onComplete || noop;
-    return emitter.subscribe({next: onNext, error: onError, complete: onComplete});
+    return emitter.subscribe({ next: onNext, error: onError, complete: onComplete });
   }
 
   static isObservable(obs: any): boolean { return !!obs.subscribe; }
