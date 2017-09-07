@@ -23,8 +23,8 @@ export const DEFAULT_OUTPUTS_O_PERCENT_INPUT = [
 
 @Component({
   selector: 'o-percent-input',
-  template: require('./o-percent-input.component.html'),
-  styles: [require('./o-percent-input.component.scss')],
+  templateUrl: './o-percent-input.component.html',
+  styleUrls: ['./o-percent-input.component.scss'],
   inputs: [
     ...DEFAULT_INPUTS_O_PERCENT_INPUT
   ],

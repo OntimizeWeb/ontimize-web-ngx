@@ -19,8 +19,8 @@ export const DEFAULT_INPUTS_O_COLUMN = [
 
 @Component({
   selector: 'o-column',
-  template: require('./o-column.component.html'),
-  styles: [require('./o-column.component.scss')],
+  templateUrl: './o-column.component.html',
+  styleUrls: ['./o-column.component.scss'],
   inputs: [
     ...DEFAULT_INPUTS_O_COLUMN
   ],

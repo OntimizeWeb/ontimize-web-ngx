@@ -1,24 +1,17 @@
-<div fxLayout="column" fxLayoutAlign="center center" class="input-image relative" [formGroup]="form?.formGroup"
-  [mdTooltip]="tooltip" [mdTooltipPosition]="tooltipPosition" [mdTooltipShowDelay]="tooltipShowDelay">
+<div fxLayout="column" fxLayoutAlign="center center" class="input-image relative" [formGroup]="getFormGroup()" [mdTooltip]="tooltip"
+  [mdTooltipPosition]="tooltipPosition" [mdTooltipShowDelay]="tooltipShowDelay">
   <div fxLayout="row" fxFill fxLayoutAlign="end center" class="input-image-container">
-    <input mdInput #inputControl [formControlName]="oattr" type="text" [attr.id]="oattr" [id]="oattr"
-      [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)"
-      class="mat-input input-control" >
-    <input [hidden]="!showControls" class="mat-primary" #input type="file"
-      (change)="fileChange(input, titleLabel)" class="input-file" />
-    <label *ngIf="showControls" #titleLabel (click)="input.click()">{{ 'CHOOSE_FILE' | oTranslate }}</label>
-    <span *ngIf="showControls" class="icon-btn" [class.mat-disabled]="isDisabled" (click)="input.click()"><i class="material-icons">search</i></span>
-    <span *ngIf="showControls" class="icon-btn" [class.mat-disabled]="isDisabled" (click)="onClickClear($event, titleLabel)"><i class="material-icons">clear</i></span>
+    <input mdInput #inputControl [formControlName]="getAttribute()" type="text" [attr.id]="getAttribute()" [id]="getAttribute()"
+      [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)" class="mat-input input-control">
+    <input [hidden]="!hasControls()" class="mat-primary" #input type="file" (change)="fileChange(input)" class="input-file" />
+    <label *ngIf="hasControls()" #titleLabel (click)="input.click()">{{ 'CHOOSE_FILE' | oTranslate }}</label>
+    <span *ngIf="hasControls()" class="icon-btn" [class.mat-disabled]="isDisabled" (click)="input.click()"><i class="material-icons">search</i></span>
+    <span *ngIf="hasControls()" class="icon-btn" [class.mat-disabled]="isDisabled" (click)="onClickClear($event)"><i class="material-icons">clear</i></span>
   </div>
   <div fxLayout="row" class="input-image-preview" fxLayoutAlign="center center">
-    <img *ngIf="!(isEmpty())"
-      [src]="getSrcValue()"
-      alt="" (click)="input.click()" />
-    <md-icon class="empty-icon" [class.mat-disabled]="isDisabled" aria-label="empty image"
-      *ngIf="isEmpty() && useEmptyIcon" (click)="input.click()">{{ emptyicon }}</md-icon>
-    <img [src]="getSrcValue()" alt="empty image" *ngIf="isEmpty() && useEmptyImage" (click)="input.click()" />
+    <img *ngIf="!(isEmpty())" [src]="getSrcValue()" alt="" (click)="input.click()" />
+    <md-icon class="empty-icon" [class.mat-disabled]="isDisabled" aria-label="empty image" *ngIf="useEmptyIcon" (click)="input.click()">{{ emptyicon }}</md-icon>
+    <img [src]="getSrcValue()" alt="empty image" *ngIf="useEmptyImage" (click)="input.click()" />
   </div>
-  <div *ngIf="isReadOnly" fxFill class="read-only-blocker" (click)="onClickBlocker($event)" ></div>
+  <div *ngIf="isReadOnly" fxFill class="read-only-blocker" (click)="onClickBlocker($event)"></div>
 </div>
-
-<!--(ngModelChange)="innerOnChange($event)"-->

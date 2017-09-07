@@ -1,4 +1,5 @@
 @import 'node_modules/@angular/material/theming';
+
 @mixin o-combo-theme($theme) {
   $foreground: map-get($theme, foreground);
   $warn: map-get($theme, warn);

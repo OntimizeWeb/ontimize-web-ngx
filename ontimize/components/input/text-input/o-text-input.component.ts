@@ -14,7 +14,7 @@ import {
 import { CommonModule } from '@angular/common';
 import { Validators } from '@angular/forms';
 import { ValidatorFn } from '@angular/forms/src/directives/validators';
-import { MdInputDirective } from '@angular/material';
+import { MdInput } from '@angular/material';
 
 import { OSharedModule } from '../../../shared';
 import { InputConverter } from '../../../decorators';
@@ -35,7 +35,7 @@ export const DEFAULT_INPUTS_O_TEXT_INPUT = [
   'minLength: min-length',
   'maxLength: max-length',
 
-  // sqltype[string]: Data type according to Java standard. See SQLType class. Default: 'OTHER'
+  // sqltype[string]: Data type according to Java standard. See SQLType ngClass. Default: 'OTHER'
   'sqlType: sql-type'
 ];
 
@@ -47,8 +47,8 @@ export const DEFAULT_OUTPUTS_O_TEXT_INPUT = [
 
 @Component({
   selector: 'o-text-input',
-  template: require('./o-text-input.component.html'),
-  styles: [require('./o-text-input.component.scss')],
+  templateUrl: './o-text-input.component.html',
+  styleUrls: ['./o-text-input.component.scss'],
   inputs: [
     ...DEFAULT_INPUTS_O_TEXT_INPUT
   ],
@@ -72,7 +72,7 @@ export class OTextInputComponent extends OFormDataComponent implements OnInit {
   onBlur: EventEmitter<Object> = new EventEmitter<Object>();
 
   @ViewChild('mdInputRef')
-  protected mdInputRef: MdInputDirective;
+  protected mdInputRef: MdInput;
 
   constructor(
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,

@@ -13,7 +13,7 @@ import {
 
 import { CommonModule } from '@angular/common';
 import {
-  MdInputDirective
+  MdInput
 } from '@angular/material';
 
 import { ValidatorFn } from '@angular/forms/src/directives/validators';
@@ -66,8 +66,8 @@ const CUSTOM_DATEPICKER_BUTTONS = `
 
 @Component({
   selector: 'o-date-input',
-  template: require('./o-date-input.component.html'),
-  styles: [require('./o-date-input.component.scss')],
+  templateUrl: './o-date-input.component.html',
+  styleUrls: ['./o-date-input.component.scss'],
   inputs: [
     ...DEFAULT_INPUTS_O_DATE_INPUT
   ],
@@ -87,10 +87,10 @@ export class ODateInputComponent extends OTextInputComponent implements OnInit {
   opickerattr: string;
 
   @ViewChild('inputModel')
-  protected inputModel: MdInputDirective;
+  protected inputModel: MdInput;
 
   @ViewChild('displayInputModel')
-  protected displayInputModel: MdInputDirective;
+  protected displayInputModel: MdInput;
 
   protected inputHtmlEl: any;
   protected datepicker: any;
@@ -155,13 +155,14 @@ export class ODateInputComponent extends OTextInputComponent implements OnInit {
   }
 
   extendGenerateHTML() {
-    if (!$['datepicker'] || $['datepicker']._generateHTML_old !== undefined) {
+    let datepickerObj = ($['datepicker'] as any);
+    if (!$['datepicker'] || datepickerObj.hasOwnProperty('_generateHTML_old')) {
       return;
     }
 
-    $['datepicker']._generateHTML_old = $['datepicker']._generateHTML;
+    datepickerObj._generateHTML_old = datepickerObj._generateHTML;
 
-    $['datepicker']._generateHTML = function (inst) {
+    datepickerObj._generateHTML = function (inst) {
       let html = '';
       html += CUSTOM_DATEPICKER_HEADER;
 
@@ -188,30 +189,31 @@ export class ODateInputComponent extends OTextInputComponent implements OnInit {
   }
 
   extendAttachHandlers() {
-    if (!$['datepicker'] || $['datepicker']._attachHandlers_old !== undefined) {
+    let datepickerObj = ($['datepicker'] as any);
+    if (!$['datepicker'] || datepickerObj.hasOwnProperty('_attachHandlers_old')) {
       return;
     }
 
-    $['datepicker']._attachHandlers_old = $['datepicker']._attachHandlers;
+    datepickerObj._attachHandlers_old = datepickerObj._attachHandlers;
 
-    $['datepicker']._attachHandlers = function (inst) {
+    datepickerObj._attachHandlers = function (inst) {
       this._attachHandlers_old(inst);
 
       inst.dpDiv.find('[data-handler-custom]').map(function () {
         var handler = {
           cancel: function () {
-            let onCancelCallback = $['datepicker']._get(inst, 'onCustomCancel');
+            let onCancelCallback = datepickerObj._get(inst, 'onCustomCancel');
             if (onCancelCallback) {
               onCancelCallback.apply((inst.input ? inst.input[0] : null), [inst]);
             }
-            $['datepicker']._hideDatepicker();
+            datepickerObj._hideDatepicker();
           },
           accept: function () {
-            let onAcceptCallback = $['datepicker']._get(inst, 'onCustomAccept');
+            let onAcceptCallback = datepickerObj._get(inst, 'onCustomAccept');
             if (onAcceptCallback) {
               onAcceptCallback.apply((inst.input ? inst.input[0] : null), [inst]);
             }
-            $['datepicker']._hideDatepicker();
+            datepickerObj._hideDatepicker();
           }
         };
         ($(this) as any).on(this.getAttribute('data-event'), handler[this.getAttribute('data-handler-custom')]);
@@ -220,16 +222,17 @@ export class ODateInputComponent extends OTextInputComponent implements OnInit {
   }
 
   extendUpdateDatepicker() {
-    if (!$['datepicker'] || $['datepicker']._updateDatepicker_old !== undefined) {
+    let datepickerObj = ($['datepicker'] as any);
+    if (!$['datepicker'] || datepickerObj.hasOwnProperty('_updateDatepicker_old')) {
       return;
     }
 
-    $['datepicker']._updateDatepicker_old = $['datepicker']._updateDatepicker;
+    datepickerObj._updateDatepicker_old = datepickerObj._updateDatepicker;
 
-    $['datepicker']._updateDatepicker = function (inst) {
+    datepickerObj._updateDatepicker = function (inst) {
       this._updateDatepicker_old(inst);
 
-      let customAfterUpdate = $['datepicker']._get(inst, 'customAfterUpdate');
+      let customAfterUpdate = datepickerObj._get(inst, 'customAfterUpdate');
       if (customAfterUpdate) {
         let input = (inst.input ? inst.input[0] : null);
         customAfterUpdate.apply(input, [input, inst]);
@@ -238,31 +241,32 @@ export class ODateInputComponent extends OTextInputComponent implements OnInit {
   }
 
   overwriteDoKeyUp() {
-    if (!$['datepicker'] || $['datepicker']._doKeyUp_overwrited === true) {
+    let datepickerObj = ($['datepicker'] as any);
+    if (!$['datepicker'] || datepickerObj._doKeyUp_overwrited === true) {
       return;
     }
-    $['datepicker']._doKeyUp_overwrited = true;
+    datepickerObj._doKeyUp_overwrited = true;
 
-    $['datepicker']._doKeyUp = function (event) {
-      var date, inst = $['datepicker']._getInst(event.target);
+    datepickerObj._doKeyUp = function (event) {
+      var date, inst = datepickerObj._getInst(event.target);
       if (inst.input.val() !== inst.lastVal) {
         try {
-          let datepickerFormat = $['datepicker']._get(inst, 'dateFormat');
+          let datepickerFormat = datepickerObj._get(inst, 'dateFormat');
           let input = (inst.input ? inst.input.val() : null);
-          let formatConfig = $['datepicker']._getFormatConfig(inst);
-          date = $['datepicker'].parseDate(datepickerFormat, input, formatConfig);
+          let formatConfig = datepickerObj._getFormatConfig(inst);
+          date = datepickerObj.parseDate(datepickerFormat, input, formatConfig);
           if (date) {
             // only if valid
-            $['datepicker']._setDateFromField(inst);
-            $['datepicker']._updateAlternate(inst);
-            $['datepicker']._updateDatepicker(inst);
+            datepickerObj._setDateFromField(inst);
+            datepickerObj._updateAlternate(inst);
+            datepickerObj._updateDatepicker(inst);
           }
         } catch (err) {
           // extended code
           date = undefined;
         }
       }
-      let customAfterDoKeyUp = $['datepicker']._get(inst, 'customAfterDoKeyUp');
+      let customAfterDoKeyUp = datepickerObj._get(inst, 'customAfterDoKeyUp');
       if (customAfterDoKeyUp) {
         let input = (inst.input ? inst.input[0] : null);
         customAfterDoKeyUp.apply(input, [input, inst, date]);

@@ -39,8 +39,8 @@ export const DEFAULT_OUTPUTS_O_CHECKBOX = [
   outputs: [
     ...DEFAULT_OUTPUTS_O_CHECKBOX
   ],
-  template: require('./o-checkbox.component.html'),
-  styles: [require('./o-checkbox.component.scss')],
+  templateUrl: './o-checkbox.component.html',
+  styleUrls: ['./o-checkbox.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
 

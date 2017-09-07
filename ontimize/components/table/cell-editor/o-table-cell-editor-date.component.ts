@@ -288,9 +288,10 @@ export class OTableCellEditorDateComponent implements OnInit, ITableCellEditor {
   }
 
   protected extendDatePickerHTML() {
-    if (typeof ($['datepicker']._generateHTML_old) === 'undefined') {
-      $['datepicker']._generateHTML_old = $['datepicker']._generateHTML;
-      $['datepicker']._generateHTML = function (inst) {
+    let datepickerObj = ($['datepicker'] as any);
+    if (typeof (datepickerObj._generateHTML_old) === 'undefined') {
+      datepickerObj._generateHTML_old = datepickerObj._generateHTML;
+      datepickerObj._generateHTML = function (inst) {
         let $html = $(this._generateHTML_old(inst));
         let datepickerPrev = $html['find']('.ui-datepicker-prev');
         datepickerPrev.attr('fxLayout', 'row').attr('fxLayoutAlign', 'center center').children().remove();

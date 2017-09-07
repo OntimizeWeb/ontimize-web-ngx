@@ -40,8 +40,8 @@ export const DEFAULT_OUTPUTS_O_INTEGER_INPUT = [
 
 @Component({
   selector: 'o-integer-input',
-  template: require('./o-integer-input.component.html'),
-  styles: [require('./o-integer-input.component.scss')],
+  templateUrl: './o-integer-input.component.html',
+  styleUrls: ['./o-integer-input.component.scss'],
   inputs: [
     ...DEFAULT_INPUTS_O_INTEGER_INPUT
   ],

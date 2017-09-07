@@ -31,8 +31,8 @@ export const DEFAULT_OUTPUTS_O_APP_SIDENAV_MENU_GROUP = [];
   selector: 'o-app-sidenav-menu-group',
   inputs: DEFAULT_INPUTS_O_APP_SIDENAV_MENU_GROUP,
   outputs: DEFAULT_OUTPUTS_O_APP_SIDENAV_MENU_GROUP,
-  template: require('./o-app-sidenav-menu-group.component.html'),
-  styles: [require('./o-app-sidenav-menu-group.component.scss')],
+  templateUrl: './o-app-sidenav-menu-group.component.html',
+  styleUrls: ['./o-app-sidenav-menu-group.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
 export class OAppSidenavMenuGroupComponent {

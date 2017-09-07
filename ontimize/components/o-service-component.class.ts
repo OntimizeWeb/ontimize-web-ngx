@@ -243,6 +243,14 @@ export class OServiceComponent implements ILocalStorageComponent {
     }
   }
 
+  isVisible() : boolean {
+    return this.ovisible;
+  }
+
+  hasControls() : boolean {
+    return this.controls;
+  }
+
   getSelectedItems(): any[] {
     return this.selectedItems;
   }

@@ -147,6 +147,10 @@ export class OFormServiceComponent extends OFormDataComponent {
       });
   }
 
+  getDataArray(): any[] {
+    return this.dataArray;
+  }
+
   setDataArray(data: any): void {
     if (Util.isArray(data)) {
       this.dataArray = data;

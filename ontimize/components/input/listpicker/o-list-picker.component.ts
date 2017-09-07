@@ -16,7 +16,7 @@ import {
 import { CommonModule } from '@angular/common';
 
 import {
-  MdInputDirective,
+  MdInput,
   MdDialog,
   MdDialogRef,
   MdDialogConfig
@@ -83,8 +83,8 @@ export const DEFAULT_OUTPUTS_O_LIST_PICKER = [
 
 @Component({
   selector: 'o-list-picker',
-  template: require('./o-list-picker.component.html'),
-  styles: [require('./o-list-picker.component.scss')],
+  templateUrl: './o-list-picker.component.html',
+  styleUrls: ['./o-list-picker.component.scss'],
   providers: [
     { provide: OntimizeService, useFactory: dataServiceFactory, deps: [Injector] }
   ],
@@ -113,7 +113,7 @@ export class OListPickerComponent extends OFormServiceComponent implements OnIni
   protected dialogRef: MdDialogRef<OListPickerDialogComponent>;
 
   @ViewChild('inputModel')
-  protected inputModel: MdInputDirective;
+  protected inputModel: MdInput;
 
   public onChange: EventEmitter<Object> = new EventEmitter<Object>();
 

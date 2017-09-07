@@ -86,8 +86,8 @@ export interface OListInitializationOptions {
   outputs: [
     ...DEFAULT_OUTPUTS_O_LIST
   ],
-  template: require('./o-list.component.html'),
-  styles: [require('./o-list.component.scss')],
+  templateUrl: './o-list.component.html',
+  styleUrls: ['./o-list.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
 export class OListComponent extends OServiceComponent implements OnInit, IList, AfterContentInit, OnChanges {

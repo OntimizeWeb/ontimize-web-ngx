@@ -73,8 +73,8 @@ export const DEFAULT_OUTPUTS_O_COMBO = [
   outputs: [
     ...DEFAULT_OUTPUTS_O_COMBO
   ],
-  template: require('./o-combo.component.html'),
-  styles: [require('./o-combo.component.scss')],
+  templateUrl: './o-combo.component.html',
+  styleUrls: ['./o-combo.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
 export class OComboComponent extends OFormServiceComponent implements OnInit {
@@ -134,6 +134,10 @@ export class OComboComponent extends OFormServiceComponent implements OnInit {
       //TODO do it better. When changing tabs it is necessary to invoke new query
       this.syncDataIndex();
     }
+  }
+
+  hasNullSelection() : boolean {
+    return this.nullSelection;
   }
 
   syncDataIndex() {

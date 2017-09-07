@@ -36,8 +36,8 @@ export const DEFAULT_OUTPUTS_O_APP_SIDENAV_MENU_ITEM = [];
   selector: 'o-app-sidenav-menu-item',
   inputs: DEFAULT_INPUTS_O_APP_SIDENAV_MENU_ITEM,
   outputs: DEFAULT_OUTPUTS_O_APP_SIDENAV_MENU_ITEM,
-  template: require('./o-app-sidenav-menu-item.component.html'),
-  styles: [require('./o-app-sidenav-menu-item.component.scss')],
+  templateUrl: './o-app-sidenav-menu-item.component.html',
+  styleUrls: ['./o-app-sidenav-menu-item.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
 export class OAppSidenavMenuItemComponent implements OnInit {

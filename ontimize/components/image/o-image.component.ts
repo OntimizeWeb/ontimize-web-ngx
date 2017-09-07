@@ -6,7 +6,7 @@ import {
 } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
-import { MdInputDirective } from '@angular/material';
+import { MdInput } from '@angular/material';
 
 import { OSharedModule } from '../../shared';
 import { CommonModule } from '@angular/common';
@@ -42,8 +42,8 @@ export const DEFAULT_OUTPUTS_O_IMAGE = [
 
 @Component({
   selector: 'o-image',
-  template: require('./o-image.component.html'),
-  styles: [require('./o-image.component.scss')],
+  templateUrl: './o-image.component.html',
+  styleUrls: ['./o-image.component.scss'],
   inputs: [
     ...DEFAULT_INPUTS_O_IMAGE
   ],
@@ -60,17 +60,17 @@ export class OImageComponent extends OFormDataComponent implements OnInit {
   emptyimage: string;
   emptyicon: string;
   @InputConverter()
-  showControls: boolean = true;
+  protected showControls: boolean = true;
 
   onChange: EventEmitter<Object> = new EventEmitter<Object>();
 
   @ViewChild('inputControl')
-  protected inputControl: MdInputDirective;
+  protected inputControl: MdInput;
   @ViewChild('titleLabel')
   protected titleLabel: ElementRef;
 
-  protected useEmptyIcon: boolean = true;
-  protected useEmptyImage: boolean = false;
+  protected _useEmptyIcon: boolean = true;
+  protected _useEmptyImage: boolean = false;
 
   private _domSanitizer: DomSanitizer;
 
@@ -206,6 +206,20 @@ export class OImageComponent extends OFormDataComponent implements OnInit {
       this._fControl.markAsTouched();
     }
   }
+
+  hasControls(): boolean {
+    return this.showControls;
+  }
+
+  get useEmptyIcon(): boolean {
+    return this._useEmptyIcon && this.isEmpty();
+  }
+
+  get useEmptyImage(): boolean {
+    return this._useEmptyImage && this.isEmpty();
+  }
+
+
 
 }
 

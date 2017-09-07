@@ -31,8 +31,8 @@ export const DEFAULT_OUTPUTS_O_USER_INFO = [];
   selector: 'o-user-info',
   inputs: DEFAULT_INPUTS_O_USER_INFO,
   outputs: DEFAULT_OUTPUTS_O_USER_INFO,
-  template: require('./o-user-info.component.html'),
-  styles: [require('./o-user-info.component.scss')],
+  templateUrl: './o-user-info.component.html',
+  styleUrls: ['./o-user-info.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
 
@@ -72,6 +72,17 @@ export class OUserInfoComponent implements OnDestroy {
 
   onSettingsClick() {
     this.router.navigate(['main/settings']);
+  }
+
+  get existsUserInfo() : boolean {
+    return this.userInfo !== undefined;
+  }
+  get avatar() : string {
+    return this.userInfo ? this.userInfo.avatar : undefined;
+  }
+
+  get username() : string {
+    return this.userInfo ? this.userInfo.username : undefined;
   }
 }
 

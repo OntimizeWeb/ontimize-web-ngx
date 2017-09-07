@@ -1,15 +1,15 @@
-<div fxLayout="row" fxFill fxLayoutAlign="space-between center" [formGroup]="form?.formGroup" (click)="onClickListpicker($event)"
+<div fxLayout="row" fxFill fxLayoutAlign="space-between center" [formGroup]="getFormGroup()" (click)="onClickListpicker($event)"
     [mdTooltip]="tooltip" [mdTooltipPosition]="tooltipPosition" [mdTooltipShowDelay]="tooltipShowDelay">
-    <input mdInput #inputModel class="mat-input input-model" type="text" [attr.id]="oattr" [id]="oattr" fxFill [formControlName]="oattr"
+    <input mdInput #inputModel class="mat-input input-model" type="text" [attr.id]="getAttribute()" [id]="getAttribute()" fxFill [formControlName]="getAttribute()"
         [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)">
 
-    <md-input-container #innerInputContainer fxFlex fxFill>
-        <input mdInput class="mat-input" type="text" [attr.id]="'desc_' + oattr" [id]="'desc_' + oattr" fxFill [placeholder]="placeHolder"
+    <md-form-field #innerInputContainer fxFlex fxFill>
+        <input mdInput class="mat-input" type="text" [attr.id]="'desc_' + getAttribute()" [id]="'desc_' + getAttribute()" fxFill [placeholder]="placeHolder"
             [value]="getDescriptionValue()" (focus)="onFocus($event)" (blur)="onBlur($event)" [readonly]="isReadOnly" [disabled]="isDisabled">
-            <md-hint *ngIf="!isReadOnly && _fControl.touched && _fControl.errors">
-                <span *ngIf="_fControl.errors?.required">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</span>
+            <md-hint *ngIf="!isReadOnly && getFormControl().touched && ( getFormControl().errors !== undefined )">
+                <span *ngIf="getFormControl().errors?.required">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</span>
             </md-hint>
-    </md-input-container>
+    </md-form-field>
 
     <span class="icon-btn" [class.mat-disabled]="isDisabled"><i class="material-icons">search</i></span>
     <span class="icon-btn" [class.mat-disabled]="isDisabled" (click)="onClickClear($event)"><i class="material-icons">clear</i></span>

@@ -31,7 +31,7 @@
       color: mat-color($foreground, disabled-text);
   }
 
-  .input-model.ng-invalid.ng-touched + md-input-container {
+  .input-model.ng-invalid.ng-touched + md-form-field {
 
     .mat-input-placeholder,
     .mat-placeholder-required {
@@ -46,8 +46,8 @@
   }
 
 
-  .input-model.ng-invalid.ng-touched + md-input-container,
-  md-input-container.ng-invalid.ng-touched  {
+  .input-model.ng-invalid.ng-touched + md-form-field,
+  md-form-field.ng-invalid.ng-touched  {
 
     .mat-input-wrapper {
       .mat-input-underline {

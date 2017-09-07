@@ -5,7 +5,7 @@
     </md-progress-spinner>
   </div>
 
-  <md-toolbar class="toolbar-filter-list" [class.dense]="odense" *ngIf="controls">
+  <md-toolbar class="toolbar-filter-list" [class.dense]="odense" *ngIf="hasControls()">
     <div class="mat-toolbar-tools" fxLayout="row" fxFill fxLayoutAlign="start center">
       <button type="button" md-icon-button aria-label="Refresh" (click)="reloadData()" *ngIf="refreshButton">
         <md-icon>autorenew</md-icon>
@@ -26,8 +26,8 @@
   <div fxLayout="column" class="fill-remaining">
     <md-list class="mat-list" [attr.dense]="odense || undefined" [class.selectable]="selectable" (scroll)="onScroll($event)"
       [class.o-list-1-detail-buttons]="(editButtonInRow || detailButtonInRow) && !(editButtonInRow && detailButtonInRow)" [class.o-list-2-detail-buttons]="editButtonInRow && detailButtonInRow">
-      <md-list-item *ngIf="!dataArray.length" fxLayout="row" fxLayoutAlign="center center" style="cursor: default;">
-        <h3 md-line>{{ 'TABLE.EMPTY' | oTranslate }}</h3>
+      <md-list-item *ngIf="!getDataArray().length" fxLayout="row" fxLayoutAlign="center center" style="cursor: default;">
+        <h3 mdLine>{{ 'TABLE.EMPTY' | oTranslate }}</h3>
       </md-list-item>
       <ng-content></ng-content>
     </md-list>

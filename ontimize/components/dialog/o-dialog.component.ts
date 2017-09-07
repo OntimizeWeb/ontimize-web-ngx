@@ -11,8 +11,8 @@ import { OTranslateModule } from '../../pipes/o-translate.pipe';
 
 @Component({
   selector: 'o-dialog',
-  template: require('./o-dialog.component.html'),
-  styles: [require('./o-dialog.component.scss')],
+  templateUrl: './o-dialog.component.html',
+  styleUrls: ['./o-dialog.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
 export class ODialogComponent {
@@ -20,14 +20,14 @@ export class ODialogComponent {
   protected static DEFAULT_OK_BUTTON_TEXT = 'OK';
   protected static DEFAULT_CANCEL_BUTTON_TEXT = 'CANCEL';
 
-  protected title: string;
-  protected message: string;
-  protected okButtonText: string;
-  protected cancelButtonText: string;
-  protected twoOptions: boolean;
-  protected useIcon: boolean;
-  protected icon: string;
-  protected alertType: string;
+  protected _title: string;
+  protected _message: string;
+  protected _okButtonText: string;
+  protected _cancelButtonText: string;
+  protected _twoOptions: boolean;
+  protected _useIcon: boolean;
+  protected _icon: string;
+  protected _alertType: string;
 
   constructor(
     public dialogRef: MdDialogRef<ODialogComponent>) {
@@ -100,16 +100,81 @@ export class ODialogComponent {
     this.cancelButtonText = (typeof (config.cancelButtonText) !== 'undefined') ? config.cancelButtonText : ODialogComponent.DEFAULT_CANCEL_BUTTON_TEXT;
   }
 
-  protected get isInfo(): boolean {
+  get isInfo(): boolean {
     return this.alertType === 'info';
   }
 
-  protected get isWarn(): boolean {
+  get isWarn(): boolean {
     return this.alertType === 'warn';
   }
 
-  protected get isError(): boolean {
+  get isError(): boolean {
     return this.alertType === 'error';
+  }
+
+  get title() : string {
+    return this._title;
+  }
+
+  set title(val : string)  {
+    this._title = val;
+  }
+
+  get message() : string {
+    return this._messagee;
+  }
+
+  set message(val : string)  {
+    this._message = val;
+  }
+
+  get okButtonText() : string {
+    return this._okButtonText;
+  }
+
+  set okButtonText(val : string)  {
+    this._okButtonText = val;
+  }
+
+  get cancelButtonText() : string {
+    return this._cancelButtonText;
+  }
+
+  set cancelButtonText(val : string)  {
+    this._cancelButtonText = val;
+  }
+
+  get icon() : string {
+    return this._icon;
+  }
+
+  set icon(val : string)  {
+    this._icon = val;
+  }
+
+  get alertType() : string {
+    return this._alertType;
+  }
+
+  set alertType(val : string)  {
+    this._alertType = val;
+  }
+
+
+  get twoOptions() : boolean {
+    return this._twoOptions;
+  }
+
+  set twoOptions(val : boolean)  {
+    this._twoOptions = val;
+  }
+
+  get useIcon() : boolean {
+    return this._useIcon;
+  }
+
+  set useIcon(val : boolean)  {
+    this._useIcon = val;
   }
 
 }

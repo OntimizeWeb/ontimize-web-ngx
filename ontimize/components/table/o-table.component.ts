@@ -149,8 +149,8 @@ export interface OTableInitializationOptions {
 
 @Component({
   selector: 'o-table',
-  template: require('./o-table.component.html'),
-  styles: [require('./o-table.component.scss')],
+  templateUrl: './o-table.component.html',
+  styleUrls: ['./o-table.component.scss'],
   providers: [
     { provide: OntimizeService, useFactory: dataServiceFactory, deps: [Injector] }
   ],

@@ -49,8 +49,8 @@ export const DEFAULT_OUTPUTS_O_HTML_INPUT = [
 
 @Component({
   selector: 'o-html-input',
-  template: require('./o-html-input.component.html'),
-  styles: [require('./o-html-input.component.scss')],
+  templateUrl: './o-html-input.component.html',
+  styleUrls: ['./o-html-input.component.scss'],
   inputs: [
     ...DEFAULT_INPUTS_O_HTML_INPUT
   ],
@@ -88,13 +88,14 @@ export class OHTMLInputComponent implements IComponent, IFormControlComponent, I
   protected translateService: OTranslateService;
   protected _SQLType: number = SQLTypes.OTHER;
 
+  public _fControl: FormControl;
+
   private _disabled: boolean;
   private _isReadOnly: boolean;
   private _placeholder: string;
-  private _fControl: FormControl;
 
   constructor(
-    @Inject(forwardRef(() => OFormComponent)) protected form: OFormComponent,
+    @Inject(forwardRef(() => OFormComponent)) public form: OFormComponent,
     @Optional() @Inject(forwardRef(() => MdTabGroup)) protected tabGroup: MdTabGroup,
     @Optional() @Inject(forwardRef(() => MdTab)) protected tab: MdTab,
     protected elRef: ElementRef,

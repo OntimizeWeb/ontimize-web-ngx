@@ -1,14 +1,14 @@
-<div fxLayout="row" fxFill fxLayoutAlign="space-between center" [formGroup]="form?.formGroup"
+<div fxLayout="row" fxFill fxLayoutAlign="space-between center" [formGroup]="getFormGroup()"
     [mdTooltip]="tooltip" [mdTooltipPosition]="tooltipPosition" [mdTooltipShowDelay]="tooltipShowDelay">
-    <input mdInput #inputModel type="text" [attr.id]="oattr" [id]="oattr" fxFill [formControlName]="oattr" [ngModel]="getValue()"
+    <input mdInput #inputModel type="text" [attr.id]="getAttribute()" [id]="getAttribute()" fxFill [formControlName]="getAttribute()" [ngModel]="getValue()"
         (ngModelChange)="innerOnChange($event)" class="input-model">
 
-    <md-input-container #innerInputContainer fxFlex fxFill>
+    <md-form-field #innerInputContainer fxFlex fxFill>
         <input mdInput #displayInputModel class="mat-input o-date-input" type="text" [attr.id]="opickerattr" [id]="opickerattr" fxFill [placeholder]="placeHolder" [value]="getDescriptionValue()"
             [readonly]="isReadOnly" (blur)="onDisplayInputBlur()" (focus)="onDisplayInputFocus($event)" (click)="onInputClick()"
             [disabled]="isDisabled">
-            <md-hint *ngIf="!isReadOnly && _fControl.touched && _fControl.errors">{{'FORM_VALIDATION.REQUIRED' | oTranslate}}</md-hint>
-    </md-input-container>
+            <md-hint *ngIf="!isReadOnly && getFormControl().touched && ( getFormControl().errors !== undefined )">{{'FORM_VALIDATION.REQUIRED' | oTranslate}}</md-hint>
+    </md-form-field>
 
     <span class="icon-btn" (click)="onClickIcon($event)"
         [class.mat-disabled]="isDisabled"><i class="material-icons">today</i></span>
