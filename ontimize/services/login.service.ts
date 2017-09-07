@@ -15,9 +15,9 @@ export interface SessionInfo {
 }
 
 export interface ILoginService {
-  login(user, password): Observable<any>;
+  login(user: string, password: string): Observable<any>;
   logout(): void;
-  sessionExpired();
+  sessionExpired(): void;
   isLoggedIn(): boolean;
 }
 
@@ -65,7 +65,7 @@ export class LoginService implements ILoginService {
 
   retrieveAuthService(): Promise<IAuthService> {
     var self = this;
-    let promise = new Promise<IAuthService>((resolve) => {
+    let promise = new Promise<IAuthService>((resolve: any) => {
       if (self.ontService !== undefined) {
         resolve(self.ontService);
       } else {
@@ -77,7 +77,7 @@ export class LoginService implements ILoginService {
 
   }
 
-  login(user, password): Observable<any> {
+  login(user: string, password: string): Observable<any> {
 
     this._user = user;
     var self = this;
@@ -97,7 +97,7 @@ export class LoginService implements ILoginService {
     });
     return observable;
   }
-  onLoginSuccess(sessionId) {
+  onLoginSuccess(sessionId: number) {
     // save user and sessionid into local storage
     let session = {
       user: this._user,
@@ -107,7 +107,7 @@ export class LoginService implements ILoginService {
     ObservableWrapper.callEmit(this.onLogin, session);
   }
 
-  onLoginError(error) {
+  onLoginError(error: any) {
     this.dialogService.alert('ERROR', 'MESSAGES.ERROR_LOGIN');
   }
 
@@ -131,7 +131,7 @@ export class LoginService implements ILoginService {
     return observable;
   }
 
-  onLogoutSuccess(sessionId) {
+  onLogoutSuccess(sessionId: number) {
     if (sessionId === 0) {
       let sessionInfo = this.getSessionInfo();
       delete sessionInfo.id;
@@ -140,7 +140,7 @@ export class LoginService implements ILoginService {
     }
   }
 
-  onLogoutError(error) {
+  onLogoutError(error: any) {
     console.error('Error on logout');
   }
 

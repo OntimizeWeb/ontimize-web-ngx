@@ -29,6 +29,6 @@ export class AuthGuardServiceFactory {
 
 }
 
-export function authGuardServiceFactory(injector) {
+export function authGuardServiceFactory(injector: Injector) {
   return new AuthGuardServiceFactory(injector).factory();
 }

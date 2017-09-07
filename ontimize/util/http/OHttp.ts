@@ -1,11 +1,12 @@
 import {Observable} from 'rxjs/Observable';
 import {Injectable} from '@angular/core';
 import {
-  Http as NgHttp,
+  Http,
   RequestOptionsArgs,
   RequestOptions,
   Headers,
   Response,
+  ConnectionBackend
 } from '@angular/http';
 
 
@@ -24,9 +25,9 @@ const mergeAuthToken = (options:RequestOptionsArgs) => {
 };
 
 @Injectable()
-export class OHttp extends NgHttp {
+export class OHttp extends Http {
 
-  constructor(protected _backend:any, protected _defaultOptions:any) {
+  constructor(_backend: ConnectionBackend, _defaultOptions: RequestOptions) {
     super(_backend, _defaultOptions);
   }
 

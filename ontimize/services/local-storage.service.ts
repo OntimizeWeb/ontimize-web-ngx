@@ -14,7 +14,7 @@ export class LocalStorageService {
   private _config: Config;
   private _router: Router;
 
-  constructor( protected injector: Injector ) {
+  constructor(protected injector: Injector) {
     this._config = this.injector.get(AppConfig).getConfiguration();
     this._router = this.injector.get(Router);
 
@@ -59,7 +59,7 @@ export class LocalStorageService {
       } catch (e) {
         appData = {};
       }
-      let storedComponents = appData[LocalStorageService.COMPONENTS_STORAGE_KEY] || {};
+      let storedComponents: Object = appData[LocalStorageService.COMPONENTS_STORAGE_KEY] || {};
       if (storedComponents[key]) {
         let decoded = atob(storedComponents[key]);
         try {
@@ -82,7 +82,7 @@ export class LocalStorageService {
     if (componentDataB64) {
       let appStoredData = localStorage.getItem(this._config['uuid']);
       if (!appStoredData) {
-        let newAppData = {};
+        let newAppData: Object = {};
         newAppData[LocalStorageService.COMPONENTS_STORAGE_KEY] = { componentKey: componentDataB64 };
         localStorage.setItem(this._config['uuid'], JSON.stringify(newAppData));
       } else {
@@ -92,7 +92,7 @@ export class LocalStorageService {
         } catch (e) {
           appData = {};
         }
-        let componentsData = appData[LocalStorageService.COMPONENTS_STORAGE_KEY] || {};
+        let componentsData: Object = appData[LocalStorageService.COMPONENTS_STORAGE_KEY] || {};
         componentsData[componentKey] = componentDataB64;
         appData[LocalStorageService.COMPONENTS_STORAGE_KEY] = componentsData;
         localStorage.setItem(this._config['uuid'], JSON.stringify(appData));

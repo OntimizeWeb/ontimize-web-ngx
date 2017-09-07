@@ -69,7 +69,7 @@ export class AuthGuardService implements CanActivate, IProfileService {
     this.ontimizeService = localInjector.get(OntimizeService);
 
     if (Util.isDataService(this.ontimizeService)) {
-      let serviceCfg = this.ontimizeService.getDefaultServiceConfiguration(this.service);
+      let serviceCfg: Object = this.ontimizeService.getDefaultServiceConfiguration(this.service);
       if (this.entity) {
         serviceCfg['entity'] = this.entity;
         //serviceCfg['session'] = this.loginService.getSessionInfo();
@@ -92,11 +92,11 @@ export class AuthGuardService implements CanActivate, IProfileService {
           // get user profile from service
 
           this.configureService();
-          let filter = {};
+          let filter: Object = {};
           filter[this.keyColumn] = this.loginService.user;
           this.ontimizeService.query(filter, [this.valueColumn], this.entity)
             .subscribe(
-            res => {
+            (res: any) => {
               this.user = this.loginService.user;
               if ((res.code === 0) && (typeof (res.data) !== 'undefined') && (res.data.length === 1) &&
                 (typeof (res.data[0]) === 'object')) {
@@ -107,7 +107,7 @@ export class AuthGuardService implements CanActivate, IProfileService {
               observer.next();
               observer.complete();
             },
-            err => {
+            (err: any) => {
               console.log('[AuthGuardService.canActivate]: error', err);
               observer.error(err);
             }
@@ -148,7 +148,7 @@ export class AuthGuardService implements CanActivate, IProfileService {
 
   public isRestricted(route: string): Promise<boolean> {
     return new Promise(
-      (resolve, reject) => {
+      (resolve: any, reject: any) => {
         if ((typeof (this.entity) !== 'undefined') && (typeof (this.keyColumn) !== 'undefined') &&
           (typeof (this.valueColumn) !== 'undefined') && (typeof (this.profile) === 'undefined')) {
           this.profileObservable
@@ -184,7 +184,7 @@ export class AuthGuardService implements CanActivate, IProfileService {
 
   public getPermissions(route: string, attr: string): Promise<any> {
     return new Promise(
-      (resolve, reject) => {
+      (resolve: any, reject: any) => {
         if ((typeof (this.entity) !== 'undefined') && (typeof (this.keyColumn) !== 'undefined') &&
           (typeof (this.valueColumn) !== 'undefined') && (typeof (this.profile) === 'undefined')) {
           this.profileObservable

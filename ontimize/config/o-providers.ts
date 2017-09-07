@@ -64,11 +64,13 @@ export function appInitializerFactory(injector: Injector, config: Config, oTrans
 /**
  * Bind some global events and publish on the 'app' channel
  */
-export function bindEvents(window, document) {
+export function bindEvents(window: Window) {
   const events = new Events();
-  function publishEventWrapper(channel): Function {
-    return function (ev) {
-      events.publish(channel, ev);
+  function publishEventWrapper(channel: string): EventListenerObject {
+    return {
+      handleEvent: function (ev: Event) {
+        events.publish(channel, ev);
+      }
     };
   }
   window.addEventListener('online', publishEventWrapper('app:online'), false);
@@ -84,55 +86,55 @@ export function bindEvents(window, document) {
 }
 
 export function getEvents() {
-  return bindEvents(window, document);
+  return bindEvents(window);
 }
 
 
-export function getOntimizeServiceProvider(backend, defaultOptions) {
+export function getOntimizeServiceProvider(backend: XHRBackend, defaultOptions: BaseRequestOptions) {
   return new OHttp(backend, defaultOptions);
 }
 
-export function getLoginServiceProvider(injector) {
+export function getLoginServiceProvider(injector: Injector) {
   return new LoginService(injector);
 }
 
-export function getNavigationServiceProvider(injector) {
+export function getNavigationServiceProvider(injector: Injector) {
   return new NavigationService(injector);
 }
 
-export function getMomentServiceProvider(injector) {
+export function getMomentServiceProvider(injector: Injector) {
   return new MomentService(injector);
 }
 
-export function getCurrencyServiceProvider(injector) {
+export function getCurrencyServiceProvider(injector: Injector) {
   return new CurrencyService(injector);
 }
 
-export function getNumberServiceProvider(injector) {
+export function getNumberServiceProvider(injector: Injector) {
   return new NumberService(injector);
 }
 
-export function getDialogServiceProvider(injector) {
+export function getDialogServiceProvider(injector: Injector) {
   return new DialogService(injector);
 }
 
-export function getTranslateServiceProvider(injector) {
+export function getTranslateServiceProvider(injector: Injector) {
   return new OTranslateService(injector);
 }
 
-export function getLocalStorageServiceProvider(injector) {
+export function getLocalStorageServiceProvider(injector: Injector) {
   return new LocalStorageService(injector);
 }
 
-export function getAppMenuServiceProvider(injector) {
+export function getAppMenuServiceProvider(injector: Injector) {
   return new AppMenuService(injector);
 }
 
-export function getOUserInfoServiceProvider(injector) {
+export function getOUserInfoServiceProvider(injector: Injector) {
   return new OUserInfoService(injector);
 }
 
-export function getOModulesInfoServiceProvider(injector) {
+export function getOModulesInfoServiceProvider(injector: Injector) {
   return new OModulesInfoService(injector);
 }
 
