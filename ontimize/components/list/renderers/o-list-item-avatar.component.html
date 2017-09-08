@@ -1,9 +1,9 @@
 <div fxFlex fxFill fxLayout="row" fxLayoutAlign="center center">
-  <img md-list-avatar class="avatar" [src]="avatarSrc" [alt]="title">
+  <img mdListAvatar class="avatar" [src]="avatarSrc" [alt]="title">
   <div class="mat-list-text">
-    <h3 md-line class="primary-text"> {{ title }} </h3>
-    <h4 *ngIf="primaryText" md-line class="primary-text">{{ primaryText }}</h4>
-    <p *ngIf="secondaryText" md-line class="secondary-text">{{ secondaryText }}</p>
+    <h3 mdLine class="primary-text"> {{ title }} </h3>
+    <h4 *ngIf="primaryText !== undefined" mdLine class="primary-text">{{ primaryText }}</h4>
+    <p *ngIf="secondaryText !== undefined" mdLine class="secondary-text">{{ secondaryText }}</p>
   </div>
-  <md-icon *ngIf="icon" [class.top]="has3Lines" class="material-icons o-list-item-icon" (click)="onActionIconClick($event)">{{ icon }}</md-icon>
+  <md-icon *ngIf="icon !== undefined" [class.top]="has3Lines" class="material-icons o-list-item-icon" (click)="onActionIconClick($event)">{{ icon }}</md-icon>
 </div>

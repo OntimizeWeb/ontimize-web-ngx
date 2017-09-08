@@ -21,8 +21,8 @@ import { OSharedModule } from '../../../shared';
 
 @Component({
   selector: 'o-list-item',
-  template: require('./o-list-item.component.html'),
-  styles: [require('./o-list-item.component.scss')],
+  templateUrl: './o-list-item.component.html',
+  styleUrls: ['./o-list-item.component.scss'],
   encapsulation: ViewEncapsulation.None,
   host: {
     '[class.o-list-item]': 'true'
@@ -32,7 +32,7 @@ import { OSharedModule } from '../../../shared';
 export class OListItemComponent implements AfterContentInit {
 
   modelData: Object;
-  isSelected: boolean = false;
+  protected _isSelected: boolean = false;
 
   _hasFocus: boolean = false;
 
@@ -106,6 +106,16 @@ export class OListItemComponent implements AfterContentInit {
     if (this._list.selectable) {
       this.isSelected = this._list.setSelected(this.modelData);
     }
+  }
+
+
+
+  get isSelected() : boolean {
+    return this._isSelected;
+  }
+
+  set isSelected(val : boolean) {
+    this._isSelected = val;
   }
 }
 

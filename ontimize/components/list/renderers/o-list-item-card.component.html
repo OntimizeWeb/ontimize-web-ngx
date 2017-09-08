@@ -2,11 +2,11 @@
   <md-card-title-group fxFill>
     <img src="{{ image }}" [class.mat-card-sm-image]="compareListHeight('small')" [class.mat-card-md-image]="compareListHeight('medium')"
       [class.mat-card-lg-image]="compareListHeight('large')">
-    <md-card-title *ngIf="title"> {{ title }}</md-card-title>
-    <md-card-subtitle *ngIf="subtitle"> {{ subtitle }}</md-card-subtitle>
+    <md-card-title *ngIf="title !== undefined"> {{ title }}</md-card-title>
+    <md-card-subtitle *ngIf="subtitle !== undefined"> {{ subtitle }}</md-card-subtitle>
   </md-card-title-group>
   <md-card-actions>
-    <button md-button *ngIf="action1Text" (click)="onAction1ButtonClick($event)">{{ action1Text }}</button>
-    <button md-button *ngIf="action2Text" (click)="onAction2ButtonClick($event)">{{ action2Text }}</button>
+    <button md-button *ngIf="action1Text !== undefined" (click)="onAction1ButtonClick($event)">{{ action1Text }}</button>
+    <button md-button *ngIf="action2Text !== undefined" (click)="onAction2ButtonClick($event)">{{ action2Text }}</button>
   </md-card-actions>
 </md-card>

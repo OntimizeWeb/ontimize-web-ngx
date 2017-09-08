@@ -1,27 +1,24 @@
-<md-card fxFlex fxFill fxLayout="column" fxLayoutAlign="center center"
-        class="o-item-card"
-        [class.small]="compareListHeight('small')"
-        [class.medium]="compareListHeight('medium')"
-        [class.large]="compareListHeight('large')">
+<md-card fxFlex fxFill fxLayout="column" fxLayoutAlign="center center" class="o-item-card" [class.small]="compareListHeight('small')"
+  [class.medium]="compareListHeight('medium')" [class.large]="compareListHeight('large')">
 
-  <md-card-header *ngIf="avatar">
-    <img md-card-avatar src="{{ avatar }}">
-    <md-card-title *ngIf="title"> {{ title }}</md-card-title>
-    <md-card-subtitle *ngIf="subtitle"> {{ subtitle }}</md-card-subtitle>
+  <md-card-header *ngIf="avatar !== undefined">
+    <img mdCardAvatar src="{{ avatar }}">
+    <md-card-title *ngIf="title !== undefined"> {{ title }}</md-card-title>
+    <md-card-subtitle *ngIf="subtitle !== undefined"> {{ subtitle }}</md-card-subtitle>
   </md-card-header>
 
-  <img *ngIf="image" md-card-image src="{{ image }}" [class.action-button]="icon">
+  <img *ngIf="image !== undefined" mdCardImage src="{{ image }}" [class.action-button]="icon">
 
-  <button *ngIf="icon && compareListHeight('small')" md-mini-fab (click)="onActionIconClick($event)" class="action-button">
+  <button *ngIf="icon !== undefined && compareListHeight('small')" md-mini-fab (click)="onActionIconClick($event)" class="action-button">
       <md-icon>{{ icon }}</md-icon>
     </button>
-  <button *ngIf="icon && (compareListHeight('medium') || compareListHeight('large'))" md-fab (click)="onActionIconClick($event)"
+  <button *ngIf="icon !== undefined && (compareListHeight('medium') || compareListHeight('large'))" md-fab (click)="onActionIconClick($event)"
     class="action-button">
       <md-icon>{{ icon }}</md-icon>
     </button>
 
-  <md-card-title *ngIf="!avatar && title"> {{ title }}</md-card-title>
-  <md-card-subtitle *ngIf="!avatar && subtitle"> {{ subtitle }}</md-card-subtitle>
+  <md-card-title *ngIf="avatar === undefined && title !== undefined"> {{ title }}</md-card-title>
+  <md-card-subtitle *ngIf="avatar === undefined && subtitle !== undefined"> {{ subtitle }}</md-card-subtitle>
 
   <md-card-content *ngIf="!collapsible">
     <p>
@@ -30,8 +27,8 @@
   </md-card-content>
 
   <md-card-actions>
-    <button md-button *ngIf="action1Text" (click)="onAction1ButtonClick($event)">{{ action1Text }}</button>
-    <button md-button *ngIf="action2Text" (click)="onAction2ButtonClick($event)">{{ action2Text }}</button>
+    <button md-button *ngIf="action1Text !== undefined" (click)="onAction1ButtonClick($event)">{{ action1Text }}</button>
+    <button md-button *ngIf="action2Text !== undefined" (click)="onAction2ButtonClick($event)">{{ action2Text }}</button>
 
     <div class="collapse-button-container">
       <button md-icon-button *ngIf="collapsible" (click)="collapsed = !collapsed" class="collapse-button">

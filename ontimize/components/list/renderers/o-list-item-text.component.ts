@@ -27,8 +27,8 @@ export const DEFAULT_OUTPUTS_O_LIST_ITEM_TEXT = [
 
 @Component({
   selector: 'o-list-item-text',
-  template: require('./o-list-item-text.component.html'),
-  styles: [require('./o-list-item-text.component.scss')],
+  templateUrl: './o-list-item-text.component.html',
+  styleUrls: ['./o-list-item-text.component.scss'],
   inputs: [
     ...DEFAULT_INPUTS_O_LIST_ITEM_TEXT
   ],
@@ -43,9 +43,10 @@ export const DEFAULT_OUTPUTS_O_LIST_ITEM_TEXT = [
 
 export class OListItemTextComponent extends OListItemTextRenderer {
 
-  protected iconPosition: string;
-  private ICON_POSITION_LEFT = 'left';
-  private ICON_POSITION_RIGHT = 'right';
+  public static ICON_POSITION_LEFT = 'left';
+  public static ICON_POSITION_RIGHT = 'right';
+
+  public _iconPosition: string;
 
   constructor(
     elRef: ElementRef,
@@ -65,6 +66,14 @@ export class OListItemTextComponent extends OListItemTextRenderer {
 
   ngAfterViewInit() {
     this.modifyMdListItemElement();
+  }
+
+  get iconPosition() : string {
+    return this._iconPosition;
+  }
+
+  set iconPosition(val : string) {
+    this._iconPosition = val;
   }
 }
 

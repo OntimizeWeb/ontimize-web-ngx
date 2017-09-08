@@ -29,8 +29,8 @@ export const DEFAULT_OUTPUTS_O_LIST_ITEM_CARD_IMAGE = [
 
 @Component({
   selector: 'o-list-item-card-image',
-  template: require('./o-list-item-card-image.component.html'),
-  styles: [require('./o-list-item-card-image.component.scss')],
+  templateUrl: './o-list-item-card-image.component.html',
+  styleUrls: ['./o-list-item-card-image.component.scss'],
   inputs: [
     ...DEFAULT_INPUTS_O_LIST_ITEM_CARD_IMAGE,
     'content',
@@ -53,12 +53,13 @@ export const DEFAULT_OUTPUTS_O_LIST_ITEM_CARD_IMAGE = [
 
 export class OListItemCardImageComponent extends OListItemCardRenderer {
 
-  protected content: string;
-  protected avatar: string;
+  protected _content: string;
+  protected _avatar: string;
+  protected _icon: string;
   @InputConverter()
-  collapsible: boolean = false;
+  protected _collapsible: boolean = false;
   @InputConverter()
-  collapsed: boolean = true;
+  protected _collapsed: boolean = true;
 
   onIconClick: EventEmitter<Object> = new EventEmitter<Object>();
 
@@ -77,6 +78,46 @@ export class OListItemCardImageComponent extends OListItemCardRenderer {
 
   onActionIconClick(event: any) {
     this.onIconClick.emit(event);
+  }
+
+  get content(): string {
+    return this._content;
+  }
+
+  set content(val : string) {
+    this._content = val;
+  }
+
+  get avatar(): string {
+    return this._avatar;
+  }
+
+  set avatar(val : string) {
+    this._avatar = val;
+  }
+
+  get icon(): string {
+    return this._icon;
+  }
+
+  set icon(val : string) {
+    this._icon = val;
+  }
+
+  get collapsible(): boolean {
+    return this._collapsible;
+  }
+
+  set collapsible(val : boolean) {
+    this._collapsible = val;
+  }
+
+  get collapsed(): boolean {
+    return this._collapsed;
+  }
+
+  set collapsed(val : boolean) {
+    this._collapsed = val;
   }
 }
 

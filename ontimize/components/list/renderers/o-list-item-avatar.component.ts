@@ -35,8 +35,8 @@ export const DEFAULT_OUTPUTS_O_LIST_ITEM_AVATAR = [
 
 @Component({
   selector: 'o-list-item-avatar',
-  template: require('./o-list-item-avatar.component.html'),
-  styles: [require('./o-list-item-avatar.component.scss')],
+  templateUrl: './o-list-item-avatar.component.html',
+  styleUrls: ['./o-list-item-avatar.component.scss'],
   inputs: [
     ...DEFAULT_INPUTS_O_LIST_ITEM_AVATAR
   ],
@@ -55,7 +55,8 @@ export class OListItemAvatarComponent extends OListItemTextRenderer implements O
   protected avatar: string;
   protected avatarType: string;
   protected emptyAvatar: string;
-  protected avatarSrc: SafeResourceUrl;
+  protected _avatarSrc: SafeResourceUrl;
+
   constructor(
     elRef: ElementRef,
     _renderer: Renderer,
@@ -86,7 +87,14 @@ export class OListItemAvatarComponent extends OListItemTextRenderer implements O
       }
     }
     this.avatarSrc = this.sanitizer.bypassSecurityTrustResourceUrl(avatarValue);
+  }
 
+  get avatarSrc(): SafeResourceUrl {
+    return this._avatarSrc;
+  }
+
+  set avatarSrc(val: SafeResourceUrl) {
+    this._avatarSrc = val;
   }
 }
 
