@@ -80,6 +80,10 @@ export class OBarMenuComponent {
     }
   }
 
+  getAuthGuardService() : AuthGuardService {
+    return this.authGuardService;
+  }
+
   get menuTitle(): string {
     return this._menuTitle;
   }

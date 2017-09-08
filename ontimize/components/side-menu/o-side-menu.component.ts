@@ -53,6 +53,10 @@ export class OSideMenuComponent {
     });
   }
 
+  getAuthGuardService() : AuthGuardService {
+    return this.authGuardService;
+  }
+
   get title(): string {
     return this._title;
   }

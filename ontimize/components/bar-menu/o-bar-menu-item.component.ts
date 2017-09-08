@@ -70,7 +70,7 @@ export class OBarMenuItemComponent implements OnInit {
 
   public ngOnInit() {
     if (typeof (this.route) === 'string') {
-      this.menu.authGuardService.isRestricted(this.route)
+      this.menu.getAuthGuardService().isRestricted(this.route)
         .then(restricted => this.restricted = restricted)
         .catch(err => this.restricted = true);
     } else {
