@@ -11,18 +11,14 @@ const replace = require('gulp-replace');
 
 const ONTIMIZE_SCSS_CONF = {
   SRC : './ontimize.scss',
-  DIST: './dist',
-  OPTIONS : {
-    //  matchPattern: "!node_modules/@angular/material/theming*"
-  }
+  DIST: './dist'
 };
 
-gulp.task('ontimize.scss', (callback) => {
+gulp.task('ontimize.styles', ['themes.styles'], (callback) => {
   return gulp.src(ONTIMIZE_SCSS_CONF.SRC)
     .pipe(cssimport(THEMES_STYLES_CONF.OPTIONS))
     .pipe(gulp.dest(ONTIMIZE_SCSS_CONF.DIST));
 });
-
 
 
 const THEMES_STYLES_CONF = {
@@ -36,11 +32,11 @@ const THEMES_STYLES_CONF = {
   MATERIAL_IMPORT : '@import \'node_modules/@angular/material/theming\';'
 };
 
-gulp.task('build.themes.scss', (callback) => {
-  gulp.run('concat.themes.scss');
-  gulp.run('remove.imports.themes.scss');
+gulp.task('themes.styles', ['concat.themes.scss'], function(){
+  gulp.src([THEMES_STYLES_CONF.DIST_TMP_FILENAME])
+    .pipe(replace(THEMES_STYLES_CONF.MATERIAL_IMPORT, ''))
+    .pipe(gulp.dest(THEMES_STYLES_CONF.DIST));
 });
-
 
 gulp.task('concat.themes.scss', (callback) => {
   return gulp.src(THEMES_STYLES_CONF.SRC)
@@ -48,11 +44,6 @@ gulp.task('concat.themes.scss', (callback) => {
     .pipe(gulp.dest(THEMES_STYLES_CONF.DIST_TMP));
 });
 
-gulp.task('remove.imports.themes.scss', function(){
-  gulp.src([THEMES_STYLES_CONF.DIST_TMP_FILENAME])
-    .pipe(replace(THEMES_STYLES_CONF.MATERIAL_IMPORT, ''))
-    .pipe(gulp.dest(THEMES_STYLES_CONF.DIST));
-});
 
 const FILES = [
   'CHANGELOG.md',
@@ -67,33 +58,13 @@ const FILES = [
 const DIST_ONTIMIZE_COMPS = 'dist/ontimize/components/';
 const DIST_ONTIMIZE_LAYOUTS = 'dist/ontimize/layouts/';
 
-gulp.task('copy-framework-files', (callback) => {
+gulp.task('copy-files', ['copy-table-files', 'copy-themes-files'], (callback) => {
   copyfiles(FILES, true, callback);
 });
 
 gulp.task('copy-table-files', (callback) => {
   copyfiles(['ontimize/components/table/vendor/**/*', DIST_ONTIMIZE_COMPS], 2, callback);
 });
-
-// gulp.task('copy-material-styles', (callback) => {
-//   copyfiles(['ontimize/components/material/**/*.scss', DIST_ONTIMIZE_COMPS], 2, callback);
-// });
-
-// gulp.task('copy-container-styles', (callback) => {
-//   copyfiles(['ontimize/components/container/*o-container.component.scss', DIST_ONTIMIZE_COMPS], 2, callback);
-// });
-
-// gulp.task('copy-input-styles', (callback) => {
-//   copyfiles(['ontimize/components/input/*input.scss', DIST_ONTIMIZE_COMPS], 2, callback);
-// });
-
-// gulp.task('copy-components-themes-files', (callback) => {
-//   copyfiles(['ontimize/components/**/*-theme.scss', DIST_ONTIMIZE_COMPS], 2, callback);
-// });
-
-// gulp.task('copy-layouts-themes-files', (callback) => {
-//   copyfiles(['ontimize/layouts/**/*-theme.scss', DIST_ONTIMIZE_LAYOUTS], 2, callback);
-// });
 
 gulp.task('copy-themes-files', (callback) => {
   copyfiles([
@@ -104,18 +75,6 @@ gulp.task('copy-themes-files', (callback) => {
     'dist/ontimize'
   ], 1, callback);
 });
-
-gulp.task('copy-files', (callback) => {
-  gulp.run('copy-framework-files');
-  gulp.run('copy-table-files');
-  // gulp.run('copy-material-styles');
-  // gulp.run('copy-container-styles');
-  // gulp.run('copy-input-styles');
-  // gulp.run('copy-components-themes-files');
-  // gulp.run('copy-layouts-themes-files');
-  gulp.run('copy-themes-files');
-});
-
 
 /**
  * Inline templates configuration.
