@@ -9,13 +9,13 @@ import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'o-light-table-button-panel',
-  template: require('./o-light-table-button-panel.component.html'),
-  styles: [require('./o-light-table-button-panel.component.scss')],
+  templateUrl: './o-light-table-button-panel.component.html',
+  styleUrls: ['./o-light-table-button-panel.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
 export class OLightTableButtonPanelComponent {
 
-  private table: OLightTableComponent;
+  public table: OLightTableComponent;
   constructor( @Inject(forwardRef(() => OLightTableComponent)) table: OLightTableComponent) {
     this.table = table;
   }

@@ -21,8 +21,8 @@ export const DEFAULT_INPUTS_O_SIDE_MENU = [
 
 @Component({
   selector: 'o-side-menu',
-  template: require('./o-side-menu.component.html'),
-  styles: [require('./o-side-menu.component.scss')],
+  templateUrl: './o-side-menu.component.html',
+  styleUrls: ['./o-side-menu.component.scss'],
   inputs: [
     ...DEFAULT_INPUTS_O_SIDE_MENU
   ],
@@ -32,10 +32,10 @@ export class OSideMenuComponent {
 
   public static DEFAULT_INPUTS_O_SIDE_MENU = DEFAULT_INPUTS_O_SIDE_MENU;
 
-  public authGuardService: AuthGuardService;
+  protected authGuardService: AuthGuardService;
 
-  protected title: string;
-  protected opened: boolean;
+  protected _title: string;
+  protected _opened: boolean;
 
   @ViewChild('sidenav')
   protected sidenav: MdSidenav;
@@ -51,6 +51,22 @@ export class OSideMenuComponent {
     this.sidenav.onClose.subscribe(res => {
       this.opened = false;
     });
+  }
+
+  get title(): string {
+    return this._title;
+  }
+
+  set title(val : string) {
+    this._title = val;
+  }
+
+  get opened(): boolean {
+    return this._opened;
+  }
+
+  set opened(val : boolean) {
+    this._opened = val;
   }
 }
 

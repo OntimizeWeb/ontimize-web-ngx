@@ -8,7 +8,7 @@
     </div>
   </md-toolbar>
   <md-list>
-    <md-list-item *ngFor="let item of data; let rowIndex = index" (click)="onListItemClick(item, $event)">
+    <md-list-item *ngFor="let item of dataArray; let rowIndex = index" (click)="onListItemClick(item, $event)">
       <div id="row_{{rowIndex}}" class="mat-no-style mat-list-item-inner">
         <md-checkbox [checked]="isItemSelected(item)"  aria-label="Mark to delete" *ngIf="deleting"></md-checkbox>
         <div fxLayout="row" fxFill>

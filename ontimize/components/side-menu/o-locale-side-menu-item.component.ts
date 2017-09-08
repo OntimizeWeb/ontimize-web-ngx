@@ -31,8 +31,8 @@ export const DEFAULT_INPUTS_O_LOCALE_SIDE_MENU_ITEM = [
 
 @Component({
   selector: 'o-locale-side-menu-item',
-  template: require('./o-locale-side-menu-item.component.html'),
-  styles: [require('./o-locale-side-menu-item.component.scss')],
+  templateUrl: './o-locale-side-menu-item.component.html',
+  styleUrls: ['./o-locale-side-menu-item.component.scss'],
   inputs: [
     ...DEFAULT_INPUTS_O_LOCALE_SIDE_MENU_ITEM
   ],
@@ -45,10 +45,10 @@ export class OLocaleSideMenuItemComponent implements OnInit {
   protected menu: OSideMenuComponent;
   protected translateService: OTranslateService;
 
-  protected title: string;
-  protected tooltip: string;
-  protected icon: string;
-  protected locale: string;
+  public title: string;
+  public tooltip: string;
+  public icon: string;
+  public locale: string;
 
   constructor(
     @Inject(forwardRef(() => OSideMenuComponent)) menu: OSideMenuComponent,

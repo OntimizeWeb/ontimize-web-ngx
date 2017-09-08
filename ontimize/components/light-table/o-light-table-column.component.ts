@@ -24,8 +24,8 @@ export const DEFAULT_OUTPUTS_O_LIGHT_TABLE_COLUMN = [
 
 @Component({
   selector: 'o-light-table-column',
-  template: require('./o-light-table-column.component.html'),
-  styles: [require('./o-light-table-column.component.scss')],
+  templateUrl: './o-light-table-column.component.html',
+  styleUrls: ['./o-light-table-column.component.scss'],
   inputs: [
     ...DEFAULT_INPUTS_O_LIGHT_TABLE_COLUMN
   ],

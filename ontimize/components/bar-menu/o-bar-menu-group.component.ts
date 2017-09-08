@@ -30,8 +30,8 @@ export const DEFAULT_INPUTS_O_BAR_MENU_GROUP = [
 
 @Component({
   selector: 'o-bar-menu-group',
-  template: require('./o-bar-menu-group.component.html'),
-  styles: [require('./o-bar-menu-group.component.scss')],
+  templateUrl: './o-bar-menu-group.component.html',
+  styleUrls: ['./o-bar-menu-group.component.scss'],
   inputs: [
     ...DEFAULT_INPUTS_O_BAR_MENU_GROUP
   ],
@@ -44,11 +44,12 @@ export class OBarMenuGroupComponent implements OnInit {
   protected menu: OBarMenuComponent;
   protected translateService: OTranslateService;
 
-  protected groupTitle: string;
-  protected tooltip: string;
-  protected id: string;
+  protected _groupTitle: string;
+  protected _tooltip: string;
+  protected _icon: string;
+  protected _id: string;
 
-  isHovered: boolean = false;
+  protected _isHovered: boolean = false;
 
   @HostListener('mouseover') onMouseover = () => this.isHovered = true;
   @HostListener('mouseout') onMouseout = () => this.isHovered = false;
@@ -80,6 +81,45 @@ export class OBarMenuGroupComponent implements OnInit {
     this.elRef.nativeElement.setAttribute('title', tooltip);
   }
 
+  get groupTitle(): string {
+    return this._groupTitle;
+  }
+
+  set groupTitle(val : string) {
+    this._groupTitle = val;
+  }
+
+  get tooltip(): string {
+    return this._tooltip;
+  }
+
+  set tooltip(val : string) {
+    this._tooltip = val;
+  }
+
+  get icon(): string {
+    return this._icon;
+  }
+
+  set icon(val : string) {
+    this._icon = val;
+  }
+
+  get id(): string {
+    return this._id;
+  }
+
+  set id(val : string) {
+    this._id = val;
+  }
+
+  get isHovered(): boolean {
+    return this._isHovered;
+  }
+
+  set isHovered(val : boolean) {
+    this._isHovered = val;
+  }
 }
 
 @NgModule({
