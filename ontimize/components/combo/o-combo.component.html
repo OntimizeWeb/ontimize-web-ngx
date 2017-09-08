@@ -21,7 +21,7 @@
             [class.ng-invalid]="getFormControl() && !getFormControl().valid"
             [class.ng-valid]="getFormControl() && getFormControl().valid"
             [placeholder]="placeHolder" [value]="getDescriptionValue()"
-            [readonly]="isReadOnly" [disabled]="isDisabled" [o-disabled]="innerInputContainer">
+            [readonly]="isReadOnly" [disabled]="isDisabled" >
             <md-hint *ngIf="!isReadOnly && getFormControl().touched && ( getFormControl().errors !== undefined )">
                 <span *ngIf="getFormControl().errors?.required">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</span>
             </md-hint>

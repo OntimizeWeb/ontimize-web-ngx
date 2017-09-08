@@ -1,5 +1,5 @@
 <div fxFill [formGroup]="getFormGroup()" class="relative" [mdTooltip]="tooltip" [mdTooltipPosition]="tooltipPosition" [mdTooltipShowDelay]="tooltipShowDelay">
-    <md-checkbox [attr.id]="getAttribute()" [id]="getAttribute()" fxFill [formControlName]="getAttribute()" [o-disabled]="innerInput" #innerInput [checked]="isChecked()"
+    <md-checkbox [attr.id]="getAttribute()" [id]="getAttribute()" fxFill [formControlName]="getAttribute()" #innerInput [checked]="isChecked()"
         [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)">
         {{ placeHolder }}
         <md-hint *ngIf="!isReadOnly && getFormControl().touched && ( getFormControl().errors !== undefined )">
