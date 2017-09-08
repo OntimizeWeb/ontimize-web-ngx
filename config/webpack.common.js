@@ -4,9 +4,7 @@ const helpers = require('./helpers');
 /*
  * Webpack Plugins
  */
-// problem with copy-webpack-plugin
 const ContextReplacementPlugin = require('webpack/lib/ContextReplacementPlugin');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
 const ProvidePlugin = require('webpack/lib/ProvidePlugin');
 const ngcWebpack = require('ngc-webpack');
 
@@ -91,16 +89,7 @@ module.exports = function (options) {
       new ContextReplacementPlugin(
         /angular(\\|\/)core(\\|\/)@angular/,
         helpers.root('./ontimize')
-      ),
-
-      new CopyWebpackPlugin([
-        { from: 'CHANGELOG.md', to: '../' },
-        { from: 'LICENSE', to: '../' },
-        { from: 'README.md', to: '../' },
-        { from: 'package.json', to: '../' },
-        { from: 'ontimize.scss', to: '../' },
-        { from: '.npmignore', to: '../' }
-      ])
+      )
     ]
   };
 }
