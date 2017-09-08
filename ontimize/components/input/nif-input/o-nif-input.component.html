@@ -1,13 +1,14 @@
-<div fxLayout="row" fxFill fxLayoutAlign="space-between center" [formGroup]="getFormGroup()"
-    [mdTooltip]="tooltip" [mdTooltipPosition]="tooltipPosition" [mdTooltipShowDelay]="tooltipShowDelay">
+<div fxLayout="row" fxFill fxLayoutAlign="space-between center" [formGroup]="getFormGroup()" [mdTooltip]="tooltip" [mdTooltipPosition]="tooltipPosition"
+    [mdTooltipShowDelay]="tooltipShowDelay">
     <md-form-field #innerInputContainer fxFlex fxFill>
-        <input mdInput class="mat-input" type="text" [attr.id]="getAttribute()" [id]="getAttribute()" fxFill [formControlName]="getAttribute()" [placeholder]="placeHolder"
-            [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)" (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)" [readonly]="isReadOnly" [o-disabled]="innerInputContainer">
-            <md-hint *ngIf="!isReadOnly && getFormControl().touched && ( getFormControl().errors !== undefined )">
-                <span *ngIf="getFormControl().errors?.required">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</span>
-                <span *ngIf="getFormControl().errors?.invalidNIF"> {{ 'FORM_VALIDATION.NIF_FORMAT' | oTranslate}} </span>
-                <span *ngIf="getFormControl().errors?.invalidNIFLetter"> {{ 'FORM_VALIDATION.DNI_LETTER' | oTranslate}} </span>
-            </md-hint>
+        <input mdInput class="mat-input" type="text" [attr.id]="getAttribute()" [id]="getAttribute()" fxFill [formControlName]="getAttribute()"
+            [placeholder]="placeHolder" [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)" (focus)="innerOnFocus($event)"
+            (blur)="innerOnBlur($event)" [readonly]="isReadOnly">
+        <md-hint *ngIf="!isReadOnly && getFormControl().touched && ( getFormControl().errors !== undefined )">
+            <span *ngIf="getFormControl().errors?.required">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</span>
+            <span *ngIf="getFormControl().errors?.invalidNIF"> {{ 'FORM_VALIDATION.NIF_FORMAT' | oTranslate}} </span>
+            <span *ngIf="getFormControl().errors?.invalidNIFLetter"> {{ 'FORM_VALIDATION.DNI_LETTER' | oTranslate}} </span>
+        </md-hint>
     </md-form-field>
     <span class="icon-btn" [class.mat-disabled]="isDisabled"><i class="material-icons">perm_identity</i></span>
 </div>
