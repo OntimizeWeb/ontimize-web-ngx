@@ -99,7 +99,7 @@ $transition-duration: 500ms;
       }
 
       &.mat-drawer-closed {
-        visibility: visible;
+        visibility: visible!important;
         transform: translate3d($sidenav-diff,0,0);
         text-align: center;
 

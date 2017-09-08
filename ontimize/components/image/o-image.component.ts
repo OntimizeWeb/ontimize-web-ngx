@@ -72,7 +72,7 @@ export class OImageComponent extends OFormDataComponent implements OnInit {
   protected _useEmptyIcon: boolean = true;
   protected _useEmptyImage: boolean = false;
 
-  private _domSanitizer: DomSanitizer;
+  protected _domSanitizer: DomSanitizer;
 
   constructor(
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
@@ -88,14 +88,14 @@ export class OImageComponent extends OFormDataComponent implements OnInit {
     this.initialize();
 
     if (this.emptyimage && this.emptyimage.length > 0) {
-      this.useEmptyIcon = false;
-      this.useEmptyImage = true;
+      this._useEmptyIcon = false;
+      this._useEmptyImage = true;
     }
 
-    if (this.emptyicon === undefined && !this.useEmptyImage) {
+    if (this.emptyicon === undefined && !this._useEmptyImage) {
       this.emptyicon = 'photo';
-      this.useEmptyIcon = true;
-      this.useEmptyImage = false;
+      this._useEmptyIcon = true;
+      this._useEmptyImage = false;
     }
 
   }
@@ -211,16 +211,13 @@ export class OImageComponent extends OFormDataComponent implements OnInit {
     return this.showControls;
   }
 
-  get useEmptyIcon(): boolean {
+  useEmptyIcon(): boolean {
     return this._useEmptyIcon && this.isEmpty();
   }
 
-  get useEmptyImage(): boolean {
+  useEmptyImage(): boolean {
     return this._useEmptyImage && this.isEmpty();
   }
-
-
-
 }
 
 @NgModule({

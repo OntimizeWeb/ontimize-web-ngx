@@ -10,8 +10,8 @@
   </div>
   <div fxLayout="row" class="input-image-preview" fxLayoutAlign="center center">
     <img *ngIf="!(isEmpty())" [src]="getSrcValue()" alt="" (click)="input.click()" />
-    <md-icon class="empty-icon" [class.mat-disabled]="isDisabled" aria-label="empty image" *ngIf="useEmptyIcon" (click)="input.click()">{{ emptyicon }}</md-icon>
-    <img [src]="getSrcValue()" alt="empty image" *ngIf="useEmptyImage" (click)="input.click()" />
+    <md-icon class="empty-icon" [class.mat-disabled]="isDisabled" aria-label="empty image" *ngIf="useEmptyIcon()" (click)="input.click()">{{ emptyicon }}</md-icon>
+    <img [src]="getSrcValue()" alt="empty image" *ngIf="useEmptyImage()" (click)="input.click()" />
   </div>
   <div *ngIf="isReadOnly" fxFill class="read-only-blocker" (click)="onClickBlocker($event)"></div>
 </div>

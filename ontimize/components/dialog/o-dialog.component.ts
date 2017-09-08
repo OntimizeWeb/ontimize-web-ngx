@@ -121,7 +121,7 @@ export class ODialogComponent {
   }
 
   get message() : string {
-    return this._messagee;
+    return this._message;
   }
 
   set message(val : string)  {

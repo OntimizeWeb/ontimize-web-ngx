@@ -6,7 +6,7 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormControl, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ValidatorFn } from '@angular/forms/src/directives/validators';
 
 import { MdCKEditorModule, CKEditor } from '../../material/ckeditor/ckeditor.component';
@@ -88,14 +88,14 @@ export class OHTMLInputComponent implements IComponent, IFormControlComponent, I
   protected translateService: OTranslateService;
   protected _SQLType: number = SQLTypes.OTHER;
 
-  public _fControl: FormControl;
+  protected _fControl: FormControl;
 
   private _disabled: boolean;
   private _isReadOnly: boolean;
   private _placeholder: string;
 
   constructor(
-    @Inject(forwardRef(() => OFormComponent)) public form: OFormComponent,
+    @Inject(forwardRef(() => OFormComponent)) protected form: OFormComponent,
     @Optional() @Inject(forwardRef(() => MdTabGroup)) protected tabGroup: MdTabGroup,
     @Optional() @Inject(forwardRef(() => MdTab)) protected tab: MdTab,
     protected elRef: ElementRef,
@@ -135,6 +135,14 @@ export class OHTMLInputComponent implements IComponent, IFormControlComponent, I
         }
       });
     }
+  }
+
+  getFormGroup(): FormGroup {
+    return this.form ? this.form.formGroup : undefined;
+  }
+
+  getFormControl(): FormControl {
+    return this._fControl;
   }
 
   isInActiveTab(): boolean {
