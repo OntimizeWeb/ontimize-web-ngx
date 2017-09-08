@@ -43,8 +43,8 @@ export const DEFAULT_OUTPUTS_O_LIST_ITEM_TEXT = [
 
 export class OListItemTextComponent extends OListItemTextRenderer {
 
-  public static ICON_POSITION_LEFT = 'left';
-  public static ICON_POSITION_RIGHT = 'right';
+  public ICON_POSITION_LEFT = 'left';
+  public ICON_POSITION_RIGHT = 'right';
 
   public _iconPosition: string;
 

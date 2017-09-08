@@ -7,15 +7,16 @@
     <md-card-subtitle *ngIf="subtitle !== undefined"> {{ subtitle }}</md-card-subtitle>
   </md-card-header>
 
-  <img *ngIf="image !== undefined" mdCardImage src="{{ image }}" [class.action-button]="icon">
+  <img *ngIf="image !== undefined" mdCardImage src="{{ image }}" [class.exists-action-button]="icon !== undefined">
 
   <button *ngIf="icon !== undefined && compareListHeight('small')" md-mini-fab (click)="onActionIconClick($event)" class="action-button">
       <md-icon>{{ icon }}</md-icon>
     </button>
+
   <button *ngIf="icon !== undefined && (compareListHeight('medium') || compareListHeight('large'))" md-fab (click)="onActionIconClick($event)"
     class="action-button">
       <md-icon>{{ icon }}</md-icon>
-    </button>
+  </button>
 
   <md-card-title *ngIf="avatar === undefined && title !== undefined"> {{ title }}</md-card-title>
   <md-card-subtitle *ngIf="avatar === undefined && subtitle !== undefined"> {{ subtitle }}</md-card-subtitle>

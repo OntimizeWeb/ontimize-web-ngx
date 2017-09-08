@@ -33,13 +33,11 @@ o-list-item md-list-item.o-card-item .mat-list-item-content {
     }
 
     .action-button {
-      // top: -48px;
-      top: -7px;
-      left: calc(100% - 48px);
+      margin-left: auto;
     }
 
-    img.action-button {
-      margin-bottom: -25px;
+    img.exists-action-button {
+      margin-bottom: -28px;
     }
 
     .collapse-button-container {
