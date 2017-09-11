@@ -19,13 +19,13 @@
     "rimraf": "rimraf",
     "test": "karma start",
     "clean": "rimraf dist tmp",
-    "webpack:dev": "npm run clean && gulp inline-templates && webpack --config config/webpack.dev.js --progress && npm run gulptasks",
-    "webpack:prod": "npm run clean && gulp inline-templates && webpack --config config/webpack.prod.js --progress && npm run gulptasks",
+    "common": "npm run clean && gulp inline-templates",
+    "webpack:dev": "npm run common && webpack --config config/webpack.dev.js --progress && npm run gulptasks",
+    "webpack:prod": "npm run common && webpack --config config/webpack.prod.js --progress && npm run gulptasks",
+    "aot": "npm run common && npm run aot:compile && npm run gulptasks",
+    "aot:compile": "node_modules/.bin/ngc -p tsconfig.aot.json",
 
-    "build:aot": "npm run clean && gulp inline-templates && npm run build:aot:compile && npm run gulptasks",
-    "build:aot:compile": "node_modules/.bin/ngc -p tsconfig.aot.json",
-
-    "aot:pack": "npm run build:aot && npm run pack",
+    "aot:pack": "npm run aot && npm run pack",
     "pack": "cd dist && npm pack && cd ..",
 
     "gulptasks": "gulp copy-files && gulp ontimize.styles"

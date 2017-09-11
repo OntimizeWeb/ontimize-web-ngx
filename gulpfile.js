@@ -10,7 +10,7 @@ const replace = require('gulp-replace');
 
 
 const ONTIMIZE_SCSS_CONF = {
-  SRC : './ontimize.scss',
+  SRC: './ontimize.scss',
   DIST: './dist'
 };
 
@@ -22,17 +22,17 @@ gulp.task('ontimize.styles', ['themes.styles'], (callback) => {
 
 
 const THEMES_STYLES_CONF = {
-  SRC : './ontimize/components/theming/all-theme.scss',
+  SRC: './ontimize/components/theming/all-theme.scss',
   DIST_TMP: './tmp',
   DIST_TMP_FILENAME: './tmp/all-theme.scss',
   DIST: './dist/ontimize/components/theming',
-  OPTIONS : {
-     matchPattern: "!node_modules/@angular/material/theming*"
+  OPTIONS: {
+    matchPattern: "!node_modules/@angular/material/theming*"
   },
-  MATERIAL_IMPORT : '@import \'node_modules/@angular/material/theming\';'
+  MATERIAL_IMPORT: '@import \'node_modules/@angular/material/theming\';'
 };
 
-gulp.task('themes.styles', ['concat.themes.scss'], function(){
+gulp.task('themes.styles', ['concat.themes.scss'], function () {
   gulp.src([THEMES_STYLES_CONF.DIST_TMP_FILENAME])
     .pipe(replace(THEMES_STYLES_CONF.MATERIAL_IMPORT, ''))
     .pipe(gulp.dest(THEMES_STYLES_CONF.DIST));
@@ -56,7 +56,6 @@ const FILES = [
 ];
 
 const DIST_ONTIMIZE_COMPS = 'dist/ontimize/components/';
-const DIST_ONTIMIZE_LAYOUTS = 'dist/ontimize/layouts/';
 
 gulp.task('copy-files', ['copy-table-files', 'copy-themes-files'], (callback) => {
   copyfiles(FILES, true, callback);
