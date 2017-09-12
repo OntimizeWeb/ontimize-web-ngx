@@ -15,8 +15,8 @@
     "allowUnusedLabels": false,
     "pretty": true,
     "stripInternal": true,
-    "outDir": "dist/ontimize",
-    "rootDir": "./tmp/ontimize",
+    "outDir": "dist",
+    "rootDir": "./tmp",
     "lib": [
       "dom",
       "es6"

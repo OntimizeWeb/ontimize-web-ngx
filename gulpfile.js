@@ -80,10 +80,10 @@ gulp.task('copy-themes-files', (callback) => {
  * @see  https://github.com/ludohenin/gulp-inline-ng2-template
  */
 const INLINE_TEMPLATES_CONF = {
-  SRC: './ontimize/**/*.ts',
-  DIST: './tmp/ontimize',
+  SRC: ['./**/*.ts', '!./tmp/**/*', '!./node_modules/**/*', '!./custom-typings.d.ts'],
+  DIST: './tmp',
   CONFIG: {
-    base: '/ontimize',
+    base: '.',
     target: 'es6',
     useRelativePaths: true,
     styleProcessor: compileSass

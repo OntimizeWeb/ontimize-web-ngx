@@ -11,9 +11,9 @@
   },
   "license": "Apache-2.0",
   "readmeFilename": "README.md",
-  "main": "./ontimize/index.js",
-  "module": "./ontimize/index.js",
-  "typings": "./ontimize/index.d.ts",
+  "main": "./index.js",
+  "module": "./index.js",
+  "typings": "./index.d.ts",
   "scripts": {
     "preinstall": "npm config set package-lock false",
     "rimraf": "rimraf",
@@ -24,10 +24,8 @@
     "webpack:prod": "npm run common && webpack --config config/webpack.prod.js --progress && npm run gulptasks",
     "aot": "npm run common && npm run aot:compile && npm run gulptasks",
     "aot:compile": "node_modules/.bin/ngc -p tsconfig.aot.json",
-
     "aot:pack": "npm run aot && npm run pack",
     "pack": "cd dist && npm pack && cd ..",
-
     "gulptasks": "gulp copy-files && gulp ontimize.styles"
   },
   "dependencies": {
@@ -63,8 +61,7 @@
     "core-js": "^2.4.1",
     "rxjs": "^5.4.2",
     "zone.js": "^0.8.12",
-    "reflect-metadata": "0.1.10",
-    "typescript": "2.3.4"
+    "reflect-metadata": "0.1.10"
   },
   "devDependencies": {
     "@angular/animations": "4.3.6",
@@ -104,12 +101,8 @@
     "commitizen": "2.9.6",
     "copyfiles": "^1.2.0",
     "core-js": "^2.4.1",
-    "css-loader": "^0.28.0",
     "cz-conventional-changelog": "2.0.0",
-    "exports-loader": "^0.6.4",
     "expose-loader": "^0.7.3",
-    "extract-text-webpack-plugin": "^2.1.0",
-    "file-loader": "^0.11.1",
     "find-root": "^1.0.0",
     "gh-pages": "^0.12.0",
     "gulp": "^3.9.1",
@@ -117,11 +110,9 @@
     "gulp-inline-ng2-template": "^4.0.0",
     "gulp-replace": "^0.6.1",
     "html-minifier": "3.5.3",
-    "html-webpack-plugin": "^2.28.0",
     "http-server": "^0.9.0",
     "ie-shim": "^0.1.0",
     "imports-loader": "^0.7.1",
-    "istanbul-instrumenter-loader": "0.2.0",
     "jasmine-core": "^2.5.2",
     "json-loader": "^0.5.4",
     "karma": "1.5.0",
@@ -132,7 +123,6 @@
     "karma-remap-coverage": "0.1.4",
     "karma-sourcemap-loader": "0.3.7",
     "karma-webpack": "2.0.3",
-    "loader-utils": "1.1.0",
     "ng-router-loader": "^2.1.0",
     "ngc-webpack": "~2.0.0",
     "node-sass": "^4.5.2",
@@ -141,15 +131,11 @@
     "optimize-js-plugin": "0.0.4",
     "parse5": "^3.0.2",
     "protractor": "^5.1.1",
-    "raw-loader": "0.5.1",
     "reflect-metadata": "0.1.10",
     "rimraf": "^2.5.2",
     "rxjs": "^5.4.2",
-    "sass-loader": "^6.0.3",
     "script-ext-html-webpack-plugin": "^1.7.1",
-    "source-map-loader": "0.2.0",
     "string-replace-loader": "~1.2.0",
-    "style-loader": "^0.16.1",
     "to-string-loader": "^1.1.5",
     "ts-helpers": "1.1.2",
     "ts-node": "^3.0.2",
@@ -157,11 +143,7 @@
     "tslint": "5.2.0",
     "tslint-loader": "3.5.3",
     "typedoc": "^0.5.10",
-    "typescript": "2.3.4",
-    "url-loader": "^0.5.8",
-    "webpack": "2.3.1",
     "webpack-dll-bundles-plugin": "^1.0.0-beta.5",
-    "webpack-merge": "~4.1.0",
     "zone.js": "^0.8.12"
   }
 }
