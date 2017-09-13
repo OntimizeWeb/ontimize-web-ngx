@@ -19,14 +19,11 @@
     "rimraf": "rimraf",
     "test": "karma start",
     "clean": "rimraf dist tmp",
-    "common": "npm run clean && gulp inline-templates",
-    "webpack:dev": "npm run common && webpack --config config/webpack.dev.js --progress && npm run gulptasks",
-    "webpack:prod": "npm run common && webpack --config config/webpack.prod.js --progress && npm run gulptasks",
-    "aot": "npm run common && npm run aot:compile && npm run gulptasks",
-    "aot:compile": "node_modules/.bin/ngc -p tsconfig.aot.json",
-    "aot:pack": "npm run aot && npm run pack",
-    "pack": "cd dist && npm pack && cd ..",
-    "gulptasks": "gulp copy-files && gulp ontimize.styles"
+    "init-common": "npm run clean && gulp inline-templates && gulp copy-table-files-tmp",
+    "end-common": "gulp copy-files && gulp ontimize.styles",
+    "webpack:dev": "npm run init-common && webpack --config config/webpack.dev.js --progress && npm run end-common",
+    "webpack:prod": "npm run common && webpack --config config/webpack.prod.js --progress && npm run end-common",
+    "aot": "npm run common && node_modules/.bin/ngc -p tsconfig.aot.json && npm run end-common"
   },
   "dependencies": {
     "colresizable": "1.6.0",
