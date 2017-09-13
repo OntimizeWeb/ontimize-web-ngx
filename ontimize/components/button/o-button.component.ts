@@ -75,7 +75,7 @@ export class OButtonComponent implements OnInit {
 @NgModule({
   declarations: [OButtonComponent],
   imports: [OSharedModule, CommonModule],
-  exports: [OButtonComponent],
+  exports: [OButtonComponent]
 })
 export class OButtonModule {
 }
