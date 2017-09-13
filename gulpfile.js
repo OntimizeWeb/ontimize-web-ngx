@@ -55,14 +55,16 @@ const FILES = [
   'dist'
 ];
 
-const DIST_ONTIMIZE_COMPS = 'dist/ontimize/components/';
-
 gulp.task('copy-files', ['copy-table-files', 'copy-themes-files'], (callback) => {
   copyfiles(FILES, true, callback);
 });
 
 gulp.task('copy-table-files', (callback) => {
-  copyfiles(['ontimize/components/table/vendor/**/*', DIST_ONTIMIZE_COMPS], 2, callback);
+  copyfiles(['ontimize/components/table/vendor/**/*', 'dist/ontimize/components/'], 2, callback);
+});
+
+gulp.task('copy-table-files-tmp', (callback) => {
+  copyfiles(['ontimize/components/table/vendor/**/*', 'tmp/ontimize/components/'], 2, callback);
 });
 
 gulp.task('copy-themes-files', (callback) => {

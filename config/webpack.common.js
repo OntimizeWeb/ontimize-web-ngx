@@ -23,7 +23,7 @@ module.exports = function (options) {
   return {
 
     entry: {
-      'ontimize-web-ng2': helpers.root('ontimize/index.ts')
+      'ontimize-web-ng2': helpers.root('tmp/index.ts')
     },
     resolve: {
       extensions: ['.ts', '.js', '.html']
@@ -33,7 +33,7 @@ module.exports = function (options) {
       rules: [
         {
           test: /\.ts$/,
-          loaders: ['awesome-typescript-loader?configFileName=tsconfig-webpack.json', 'angular2-template-loader'],
+          loaders: ['awesome-typescript-loader?configFileName=tsconfig.webpack.json', 'angular2-template-loader'],
           exclude: [/\.(spec|e2e)\.ts$/]
         },
         { test: /\.(html|css)$/, loader: 'raw-loader', exclude: /\.async\.(html|css)$/ },

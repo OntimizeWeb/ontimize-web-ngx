@@ -1,38 +1,18 @@
 {
-  "compileOnSave": false,
-  "buildOnSave": false,
+  "extends": "./tsconfig.json",
   "compilerOptions": {
-    "target": "es5",
-    "module": "es2015",
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "declaration": true,
     "allowSyntheticDefaultImports": true,
-    "removeComments": true,
-    "noImplicitReturns": true,
-    "moduleResolution": "node",
-    "listFiles": true,
     "noUnusedLocals": false,
-    // "sourceMap": true,
+    "noUnusedParameters": false,
     "inlineSourceMap": true,
     "inlineSources": true,
-    "outDir": "dist/ontimize",
-    "rootDir": "./tmp/ontimize",
-    "types": [
-      "hammerjs",
-      "node"
-    ],
-    "typeRoots": [
-      "node_modules/@types"
-    ],
+    "outDir": "dist",
+    "rootDir": "./tmp",
     "lib": [
       "dom",
       "es2015"
     ]
   },
-  // "files": [
-  //   "index.ts"
-  // ],
   "exclude": [
     "node_modules",
     "dist"
