@@ -165,12 +165,6 @@ export class OTableColumnComponent implements OnInit {
       this.dateModelFormat = OTableColumnComponent.DEFAULT_DATE_MODEL_FORMAT;
       this.dateModelFormat = OTableCellEditorDateComponent.DEFAULT_DATE_MODEL_FORMAT;
     }
-    if (typeof (this.thousandSeparator) === 'undefined') {
-      this.thousandSeparator = this.numberService.thousandSeparator;
-    }
-    if (typeof (this.decimalSeparator) === 'undefined') {
-      this.decimalSeparator = this.numberService.decimalSeparator;
-    }
     if (typeof (this.decimalDigits) === 'undefined') {
       this.decimalDigits = this.numberService.decimalDigits;
     }

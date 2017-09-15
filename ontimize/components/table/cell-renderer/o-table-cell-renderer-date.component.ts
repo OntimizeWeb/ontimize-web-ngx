@@ -40,7 +40,7 @@ export class OTableCellRendererDateComponent implements ITableCellRenderer {
   }
 
   public render(cellData: any, rowData: any): string {
-    return '<div data-order="' + ((typeof(cellData) !== 'undefined') ? cellData : 0) +'">' +
+    return '<div o-timestamp-value="' + ((typeof(cellData) !== 'undefined') ? cellData : 0) +'">' +
         ((typeof(cellData) !== 'undefined') ? this.momentService.parseDate(cellData, this.format) : '') +
         '</div>';
   }

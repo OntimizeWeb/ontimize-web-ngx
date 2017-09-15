@@ -30,8 +30,8 @@ export class OTableCellRendererRealComponent extends OTableCellRendererIntegerCo
 
   public static DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_REAL = DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_REAL;
 
-  protected decimalSeparator : string;
-  protected decimalDigits : number;
+  protected decimalSeparator: string;
+  protected decimalDigits: number;
 
   constructor( @Inject(forwardRef(() => OTableColumnComponent)) tableColumn: OTableColumnComponent,
     protected injector: Injector) {
@@ -40,28 +40,24 @@ export class OTableCellRendererRealComponent extends OTableCellRendererIntegerCo
 
   public ngOnInit() {
     super.ngOnInit();
-    if (typeof(this.decimalSeparator) === 'undefined') {
-      this.decimalSeparator = this.numberService.decimalSeparator;
-    }
-    if (typeof(this.decimalDigits) === 'undefined') {
-      this.decimalDigits = this.numberService.decimalDigits;
-    }
   }
 
   public init(parameters: any) {
     super.init(parameters);
-    if (typeof(parameters) !== 'undefined') {
-      if (typeof(parameters.decimalSeparator) !== 'undefined') {
+    if (typeof (parameters) !== 'undefined') {
+      if (typeof (parameters.decimalSeparator) !== 'undefined') {
         this.decimalSeparator = parameters.decimalSeparator;
       }
-      if (typeof(parameters.decimalDigits) !== 'undefined') {
+      if (typeof (parameters.decimalDigits) !== 'undefined') {
         this.decimalDigits = parameters.decimalDigits;
       }
     }
   }
 
   public render(cellData: any, rowData: any): string {
-    return this.numberService.getRealValue(cellData, this.grouping, this.thousandSeparator, this.decimalSeparator, this.decimalDigits);
+    return '<div o-number-value="' + ((typeof (cellData) !== 'undefined') ? cellData : 0) + '">' +
+      this.numberService.getRealValue(cellData, this.grouping, this.thousandSeparator, this.decimalSeparator, this.decimalDigits) +
+      '</div>';
   }
 
   public handleCreatedCell(cellElement: any, rowData: any) {
