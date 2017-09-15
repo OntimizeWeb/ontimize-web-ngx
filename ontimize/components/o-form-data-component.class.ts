@@ -55,6 +55,14 @@ export class OFormDataComponent extends OBaseComponent implements IFormControlCo
     return this._fControl;
   }
 
+  hasError(error: string): boolean {
+    return !this.isReadOnly && this._fControl.touched && this._fControl.hasError(error);
+  }
+
+  getErrorValue(error: string, prop: string): string {
+    return this._fControl.hasError(error) ? this._fControl.getError(error)[prop] || '' : '';
+  }
+
   initialize() {
     super.initialize();
     if (this.form) {
