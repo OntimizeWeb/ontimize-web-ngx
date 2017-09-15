@@ -35,6 +35,9 @@
     .o-form-content-wrapper {
       height: 100%;
       box-sizing: border-box;
+      &.force-display-block {
+        display: block!important;
+      }
     }
   }
 }
