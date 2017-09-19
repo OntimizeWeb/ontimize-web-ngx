@@ -1,3 +1,5 @@
+## 2.0.0-rc.8
+
 ## 2.0.0-rc.7
 
 ### PEER-DEPENDENCY UPDATES ###
