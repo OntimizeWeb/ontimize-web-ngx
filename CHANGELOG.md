@@ -1,3 +1,41 @@
+## 2.0.0-rc.8
+
+### PEER-DEPENDENCY UPDATES ###
+* **Updated**:  @ngx-translate/core@8.0.0
+* **Updated**:  @angular@4.3.6
+* **Updated**:  @angular/cli@1.3.2
+* **Updated**:  @angular/material@2.0.0-beta.10
+* **Updated**:  @angular/cdk@2.0.0-beta.10
+* **Updated**:  @angular/flex-layout@2.0.0-beta.9
+
+### BREAKING CHANGES
+* **@angular/material**: Updating styles and templates for ([@angular/material@2.0.0-beta.10](https://github.com/angular/material2/blob/master/CHANGELOG.md)) breaking changes.
+  * Some of the important changes for '*ontimize-web-ng2*':
+    * `md-input-container` renamed to `md-form-field`
+    * `MdSidenav` has been split into `MdSidenav` and `MdDrawer`. The `MdSidenav`
+    * CSS classes have changed from `mat-sidenav-` to `mat-drawer-`
+    * All dash-case `@Directive` selectors are deprecated in favor of the camelCase equivalent.
+
+* **@angular/flex-layout**: Updating styles and templates for ([@angular/flex-layout@2.0.0-beta.9](https://github.com/angular/flex-layout/blob/master/CHANGELOG.md)) breaking changes.
+* **deleted directives**: '*DisabledComponentDirective (o-disabled)*' and '*FormComponentDirective*' are no longer available (or needed).
+
+### Features
+* **ontimize-web-ng2**: '*OntimizeWebModule*' is now AoT compatible.
+* **o-table-cell-renderer-string**: adding '*translate*' input ([#118](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/118)) ([f9da979](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/f9da979))
+* **o-form**: adding '*layout-direction*' input ([#114](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/114)) ([afb25e7](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/afb25e7))
+* **o-table-cell-editor**: Adding '*onFocus*', '*onBlur*' and '*onSubmit*' outputs to all cell editor components ([#120](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/120)) ([a1ee4e2](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/a1ee4e2))
+
+
+
+
+### Bug Fixes
+* **Exports**: exporting content from '*util/async*', '*util/base64*' and '*util/events*'.
+* **o-table**: Column header ordering icon state bug fixed. ([#116](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/116)) ([589f3a9](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/589f3a9))
+* **o-table and cell renderers**: Fixing ordering bugs ([#116](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/116)) ([589f3a9](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/589f3a9))
+* **NumberService**: Formatting bugs fixed. ([#116](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/116)) ([#117](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/117)) ([589f3a9](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/589f3a9))
+* **o-table-cell-editor-combo**, **o-table-cell-renderer-service**: Fixing service calls bugs ([#119](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/119)) ([eafff5c](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/eafff5c))
+
+
 ## 2.0.0-rc.7
 
 ### PEER-DEPENDENCY UPDATES ###
