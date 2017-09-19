@@ -43,6 +43,11 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_COMBO = [
   ],
   inputs: [
     ...DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_COMBO
+  ],
+  outputs: [
+    'onFocus',
+    'onBlur',
+    'onSubmit'
   ]
 })
 export class OTableCellEditorComboComponent implements OnInit, ITableCellEditor {

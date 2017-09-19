@@ -6,7 +6,12 @@ import { OTableColumnComponent, ITableCellEditor } from '../o-table-column.compo
 
 @Component({
   selector: 'o-table-cell-editor-real',
-  template: ''
+  template: '',
+  outputs: [
+    'onFocus',
+    'onBlur',
+    'onSubmit'
+  ]
 })
 export class OTableCellEditorRealComponent implements ITableCellEditor {
 
