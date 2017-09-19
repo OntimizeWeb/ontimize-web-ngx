@@ -251,8 +251,7 @@ export class OTableCellEditorComboComponent implements OnInit, ITableCellEditor 
 
   protected queryData() {
     if (this.dataService && (this.queryMethod in this.dataService) && this.entity && this.valueColumn) {
-      this.dataService[this.queryMethod](this.entity, {}, this.dataColumns)
-        .subscribe(
+      this.dataService[this.queryMethod]({}, this.dataColumns, this.entity).subscribe(
         res => {
           let data = undefined;
           if (($ as any).isArray(res)) {
@@ -285,7 +284,7 @@ export class OTableCellEditorComboComponent implements OnInit, ITableCellEditor 
         err => {
           console.log('[OTableCellEditorComboComponent.init]: error', err);
         }
-        );
+      );
     }
   }
 
