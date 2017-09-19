@@ -135,8 +135,8 @@
                 border-left-color: mat-color($foreground, divider);
               }
 
-              &.sorting_desc::before,
-              &.sorting_asc::after {
+              &.sorting_desc::after,
+              &.sorting_asc::before {
                 color: mat-color($accent, 400);
               }
 

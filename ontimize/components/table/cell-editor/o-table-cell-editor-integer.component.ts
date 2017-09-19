@@ -6,7 +6,12 @@ import { OTableColumnComponent, ITableCellEditor } from '../o-table-column.compo
 
 @Component({
   selector: 'o-table-cell-editor-integer',
-  template: ''
+  template: '',
+  outputs: [
+    'onFocus',
+    'onBlur',
+    'onSubmit'
+  ]
 })
 export class OTableCellEditorIntegerComponent implements ITableCellEditor {
 

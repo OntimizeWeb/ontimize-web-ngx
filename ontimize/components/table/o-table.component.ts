@@ -354,7 +354,69 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   ngOnInit(): void {
     this.initialize();
+    this.extendDataTablesSortMethods();
   }
+
+  getNumberComparisionValues(x: any, y: any, valueAttr: string): any {
+    let result = [];
+    if ((x.indexOf(valueAttr) !== -1) && (y.indexOf(valueAttr) !== -1)) {
+      let tmpx = x.substr(x.indexOf(valueAttr) + valueAttr.length + 2);
+      tmpx = tmpx.substr(0, tmpx.indexOf('"'));
+      result.push(parseFloat(tmpx));
+
+      let tmpy = y.substr(y.indexOf(valueAttr) + valueAttr.length + 2);
+      tmpy = tmpy.substr(0, tmpy.indexOf('"'));
+      result.push(parseFloat(tmpy));
+    }
+    return result;
+  }
+
+  compareNumeric(x: any, y: any, valueAttr: string, asc: boolean) {
+    const [xV, yV] = this.getNumberComparisionValues(x, y, valueAttr);
+    let diff = 0;
+    if (xV !== undefined && yV !== undefined) {
+      diff = xV - yV;
+    } else {
+      diff = x - y;
+    }
+    if (diff === 0) {
+      return 0;
+    }
+    if (asc) {
+      return (diff < 0) ? -1 : 1;
+    } else {
+      return (diff < 0) ? 1 : -1;
+    }
+  }
+
+  extendDataTablesSortMethods() {
+    const self = this;
+    let sortMethods = ((($ as any).fn.dataTableExt.oSort) as any);
+    if (!sortMethods.hasOwnProperty('o-number-asc')) {
+      sortMethods['o-number-asc'] = function (x, y) {
+        return self.compareNumeric(x, y, 'o-number-value', true);
+      };
+    }
+
+    if (!sortMethods.hasOwnProperty('o-number-desc')) {
+      sortMethods['o-number-desc'] = function (x, y) {
+        return self.compareNumeric(x, y, 'o-number-value', false);
+      };
+    }
+
+    if (!sortMethods.hasOwnProperty('o-timestamp-asc')) {
+      sortMethods['o-timestamp-asc'] = function (x, y) {
+        return self.compareNumeric(x, y, 'o-timestamp-value', true);
+      };
+    }
+
+    if (!sortMethods.hasOwnProperty('o-timestamp-desc')) {
+      sortMethods['o-timestamp-desc'] = function (x, y) {
+        return self.compareNumeric(x, y, 'o-timestamp-value', false);
+      };
+    }
+  }
+
 
   reinitialize(options: OTableInitializationOptions) {
     super.reinitialize(options);
@@ -577,12 +639,19 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
         let tr = $(row) as any;
         tr.children().each(function (i, e) {
           let td = $(e) as any;
-          let order = td.children().attr('data-order');
-          if ((td.children().length > 0) && (typeof (order) !== 'undefined')) {
-            td.attr('data-order', order);
-            td.html(td.children().text());
-          } else {
-            td.attr('data-order', td.text());
+          const hasChildren = (td.children().length > 0);
+          if (hasChildren) {
+            let timestampVal = td.children().attr('o-timestamp-value');
+            if ((typeof (timestampVal) !== 'undefined')) {
+              td.attr('o-timestamp-value', timestampVal);
+              td.html(td.children().text());
+            } else {
+              let numberVal = td.children().attr('o-number-value');
+              if ((typeof (numberVal) !== 'undefined')) {
+                td.attr('o-number-value', numberVal);
+                td.html(td.children().text());
+              }
+            }
           }
         });
       },
@@ -878,7 +947,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       tableOptions = this.getTableOptions();
       if (tableOptions.length > 0) {
         var table = this.table;
-        let btns = new ($ as any).fn.dataTable.Buttons(table, {
+        const btns = new ($ as any).fn.dataTable.Buttons(table, {
           buttons: tableOptions
         });
         table.buttons(1, null).container().appendTo(
@@ -899,7 +968,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       this.addDefaultRowButtons();
     }
     this.table = this.tableHtmlEl.DataTable(this.dataTableOptions);
-    let fxdHeader = new ($ as any).fn.dataTable.FixedHeader(this.table, {
+    const fxdHeader = new ($ as any).fn.dataTable.FixedHeader(this.table, {
       header: true,
       forceFloating: true,
       scrollWidth: 20
@@ -1145,11 +1214,11 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
         case 'real':
         case 'currency':
           colDef.className += 'o-table-column-number';
-          colDef.type = 'num';
+          colDef.type = 'o-number';
           break;
         case 'date':
           colDef.className += 'o-table-column-date';
-          colDef.type = 'timestamp';
+          colDef.type = 'o-timestamp';
           break;
         case 'image':
           colDef.className += 'o-table-column-image';
@@ -1217,8 +1286,11 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
               ((typeof (res.code) !== 'undefined') && (res.code === 0))) {
               // set table data
               cell.data(value);
-              if (typeof (cellElement.attr('data-order')) !== 'undefined') {
-                cellElement.attr('data-order', value);
+              if (typeof (cellElement.attr('o-timestamp-value')) !== 'undefined') {
+                cellElement.attr('o-timestamp-value', value);
+              }
+              if (typeof (cellElement.attr('o-number-value')) !== 'undefined') {
+                cellElement.attr('o-number-value', value);
               }
               console.log('[OTable.updateCell]: after update', rowData);
             } else {

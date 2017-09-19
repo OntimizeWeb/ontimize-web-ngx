@@ -3,22 +3,16 @@ import { AppConfig, Config } from '../config/app-config';
 
 export class NumberService {
 
-  public static DEFAULT_THOUSAND_SEPARATOR = ',';
-  public static DEFAULT_DECIMAL_SEPARATOR = '.';
   public static DEFAULT_DECIMAL_DIGITS = 2;
 
   protected _grouping: boolean;
-  protected _thousandSeparator: string;
-  protected _decimalSeparator: string;
   protected _decimalDigits: number;
   protected _locale: string;
   private _config: Config;
 
-  constructor( protected injector: Injector ) {
+  constructor(protected injector: Injector) {
     this._config = this.injector.get(AppConfig).getConfiguration();
     //TODO: initialize from config
-    this._thousandSeparator = NumberService.DEFAULT_THOUSAND_SEPARATOR;
-    this._decimalSeparator = NumberService.DEFAULT_DECIMAL_SEPARATOR;
     this._decimalDigits = NumberService.DEFAULT_DECIMAL_DIGITS;
 
     this._grouping = true;
@@ -31,22 +25,6 @@ export class NumberService {
 
   public set grouping(value: boolean) {
     this._grouping = value;
-  }
-
-  public get thousandSeparator(): string {
-    return this._thousandSeparator;
-  }
-
-  public set thousandSeparator(value: string) {
-    this._thousandSeparator = value;
-  }
-
-  public get decimalSeparator(): string {
-    return this._decimalSeparator;
-  }
-
-  public set decimalSeparator(value: string) {
-    this._decimalSeparator = value;
   }
 
   public get decimalDigits(): number {

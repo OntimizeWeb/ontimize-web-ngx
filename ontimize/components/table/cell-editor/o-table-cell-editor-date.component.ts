@@ -25,6 +25,11 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_DATE = [
   template: '',
   inputs: [
     ...DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_DATE
+  ],
+  outputs: [
+    'onFocus',
+    'onBlur',
+    'onSubmit'
   ]
 })
 export class OTableCellEditorDateComponent implements OnInit, ITableCellEditor {

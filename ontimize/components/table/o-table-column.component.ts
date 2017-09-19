@@ -87,7 +87,8 @@ export const DEFAULT_INPUTS_O_TABLE_COLUMN = [
     ...OTableCellRendererDateComponent.DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_DATE,
     ...OTableCellRendererImageComponent.DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_IMAGE,
     ...OTableCellRendererActionComponent.DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_ACTION,
-    ...OTableCellEditorDateComponent.DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_DATE
+    ...OTableCellEditorDateComponent.DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_DATE,
+    ...OTableCellRendererStringComponent.DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_STRING
   ]
 })
 export class OTableColumnComponent implements OnInit {
@@ -131,7 +132,7 @@ export class OTableColumnComponent implements OnInit {
   protected action: string;
   protected renderType: string;
   protected renderValue: string;
-
+  protected translate: any;
   public generatedAttr: string;
   public width: string;
   public class: string;
@@ -155,6 +156,7 @@ export class OTableColumnComponent implements OnInit {
       Util.parseBoolean(this.editable, false) :
       this.table.isColumnEditable(this.attr);
     this.grouping = Util.parseBoolean(this.grouping, true);
+    this.translate = Util.parseBoolean(this.translate, false);
     if (typeof (this.dateModelType) === 'undefined') {
       this.dateModelType = OTableColumnComponent.DEFAULT_DATE_MODEL_TYPE;
       this.dateModelType = OTableCellEditorDateComponent.DEFAULT_DATE_MODEL_TYPE;
@@ -162,12 +164,6 @@ export class OTableColumnComponent implements OnInit {
     if (typeof (this.dateModelFormat) === 'undefined') {
       this.dateModelFormat = OTableColumnComponent.DEFAULT_DATE_MODEL_FORMAT;
       this.dateModelFormat = OTableCellEditorDateComponent.DEFAULT_DATE_MODEL_FORMAT;
-    }
-    if (typeof (this.thousandSeparator) === 'undefined') {
-      this.thousandSeparator = this.numberService.thousandSeparator;
-    }
-    if (typeof (this.decimalSeparator) === 'undefined') {
-      this.decimalSeparator = this.numberService.decimalSeparator;
     }
     if (typeof (this.decimalDigits) === 'undefined') {
       this.decimalDigits = this.numberService.decimalDigits;
@@ -261,7 +257,10 @@ export class OTableColumnComponent implements OnInit {
           });
           break;
         default:
-          this.renderer = new OTableCellRendererStringComponent(this);
+          this.renderer = new OTableCellRendererStringComponent(this, this.injector);
+          this.renderer.init({
+            translate: this.translate
+          });
           if (this.editable && (typeof (this.editor) === 'undefined')) {
             this.editor = new OTableCellEditorStringComponent(this);
           }

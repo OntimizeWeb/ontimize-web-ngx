@@ -83,7 +83,10 @@ export const DEFAULT_INPUTS_O_FORM = [
   'deleteMethod: delete-method',
 
   // layout-fill [string][yes|no|true|false]: Default: true;
-  'layoutFill: layout-fill'
+  'layoutFill: layout-fill',
+
+  // layout-direction [string][column|row]: Default: column
+  'layoutDirection: layout-direction'
 ];
 
 export const DEFAULT_OUTPUTS_O_FORM = [
@@ -143,6 +146,8 @@ export class OFormComponent implements OnInit, OnDestroy {
   public static DEFAULT_UPDATE_METHOD = 'update';
   public static DEFAULT_DELETE_METHOD = 'delete';
 
+  public static DEFAULT_LAYOUT_DIRECTION = 'column';
+
   @InputConverter()
   showHeader: boolean = true;
   headerMode: string = 'floating';
@@ -168,6 +173,7 @@ export class OFormComponent implements OnInit, OnDestroy {
   protected deleteMethod: string;
   @InputConverter()
   layoutFill: boolean = true;
+  protected _layoutDirection: string = OFormComponent.DEFAULT_LAYOUT_DIRECTION;
 
   isDetailForm: boolean = false;
   keysArray: string[] = [];
@@ -1283,6 +1289,15 @@ export class OFormComponent implements OnInit, OnDestroy {
       });
     }
     return requiredCompontents;
+  }
+
+  get layoutDirection(): string {
+    return this._layoutDirection;
+  }
+
+  set layoutDirection(val: string) {
+    const parsedVal = (val || '').toLowerCase();
+    this._layoutDirection = ['row', 'column'].indexOf(parsedVal) !== -1 ? parsedVal : OFormComponent.DEFAULT_LAYOUT_DIRECTION;
   }
 }
 

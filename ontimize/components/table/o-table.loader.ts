@@ -18,40 +18,9 @@ require('./vendor/custom.dataTables.fixedHeader.js');
 require('datatables.net-select');
 require('./vendor/custom.dataTables.keyTable.js');
 require('colresizable/colResizable-1.6.min.js');
-// added custom methods to order timestamps
-($ as any).fn.dataTableExt.oSort['timestamp-asc']  = function(x, y) {
-  let result = undefined;
-  if ((x.indexOf('data-order') !== -1) && (y.indexOf('data-order') !== -1)) {
-    let tmpx = x.substr(x.indexOf('data-order') + 12);
-    tmpx = tmpx.substr(0, tmpx.indexOf('"'));
-    tmpx = parseFloat(tmpx);
-    let tmpy = y.substr(y.indexOf('data-order') + 12);
-    tmpy = tmpy.substr(0, tmpy.indexOf('"'));
-    tmpy = parseFloat(tmpy);
-    result = ((tmpx < tmpy) ? -1 : ((tmpx > tmpy) ?  1 : 0));
-  } else {
-    result = ((x < y) ? -1 : ((x > y) ?  1 : 0));
-  }
-  return result;
-};
-($ as any).fn.dataTableExt.oSort['timestamp-desc'] = function(x, y) {
-  let result = undefined;
-  if ((x.indexOf('data-order') !== -1) && (y.indexOf('data-order') !== -1)) {
-    let tmpx = x.substr(x.indexOf('data-order') + 12);
-    tmpx = tmpx.substr(0, tmpx.indexOf('"'));
-    tmpx = parseFloat(tmpx);
-    let tmpy = y.substr(y.indexOf('data-order') + 12);
-    tmpy = tmpy.substr(0, tmpy.indexOf('"'));
-    tmpy = parseFloat(tmpy);
-    result = ((tmpx < tmpy) ? 1 : ((tmpx > tmpy) ?  -1 : 0));
-  } else {
-    result = ((x < y) ? 1 : ((x > y) ?  -1 : 0));
-  }
-  return result;
-};
 
 // turn on/off sorting capability
-($ as any).fn.dataTableExt.oApi.fnSortOnOff = function(oSettings, aiColumns, bOn) {
+($ as any).fn.dataTableExt.oApi.fnSortOnOff = function (oSettings, aiColumns, bOn) {
   let cols = ((typeof aiColumns === 'string') && (aiColumns === '_all')) ? oSettings.aoColumns : aiColumns;
   for (let i = 0, len = cols.length; i < len; ++i) {
     oSettings.aoColumns[i].bSortable = bOn;

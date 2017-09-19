@@ -27,8 +27,8 @@ export class OTableCellRendererIntegerComponent implements OnInit, ITableCellRen
   public static DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_INTEGER = DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_INTEGER;
 
   protected numberService: NumberService;
-  protected grouping : any;
-  protected thousandSeparator : string;
+  protected grouping: any;
+  protected thousandSeparator: string;
 
   constructor( @Inject(forwardRef(() => OTableColumnComponent)) tableColumn: OTableColumnComponent,
     protected injector: Injector) {
@@ -38,24 +38,23 @@ export class OTableCellRendererIntegerComponent implements OnInit, ITableCellRen
 
   public ngOnInit() {
     this.grouping = Util.parseBoolean(this.grouping, true);
-    if (typeof(this.thousandSeparator) === 'undefined') {
-      this.thousandSeparator = this.numberService.thousandSeparator;
-    }
   }
 
   public init(parameters: any) {
-    if (typeof(parameters) !== 'undefined') {
-      if (typeof(parameters.grouping) !== 'undefined') {
+    if (typeof (parameters) !== 'undefined') {
+      if (typeof (parameters.grouping) !== 'undefined') {
         this.grouping = parameters.grouping;
       }
-      if (typeof(parameters.thousandSeparator) !== 'undefined') {
+      if (typeof (parameters.thousandSeparator) !== 'undefined') {
         this.thousandSeparator = parameters.thousandSeparator;
       }
     }
   }
 
   public render(cellData: any, rowData: any): string {
-    return this.numberService.getIntegerValue(cellData, this.grouping, this.thousandSeparator);
+    return '<div o-number-value="' + ((typeof (cellData) !== 'undefined') ? cellData : 0) + '">' +
+      this.numberService.getIntegerValue(cellData, this.grouping, this.thousandSeparator) +
+      '</div>';
   }
 
   public handleCreatedCell(cellElement: any, rowData: any) {
