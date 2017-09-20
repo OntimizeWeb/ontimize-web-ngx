@@ -641,16 +641,14 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
           let td = $(e) as any;
           const hasChildren = (td.children().length > 0);
           if (hasChildren) {
-            let timestampVal = td.children().attr('o-timestamp-value');
-            if ((typeof (timestampVal) !== 'undefined')) {
-              td.attr('o-timestamp-value', timestampVal);
+            const children = td.children();
+            if (typeof (children.attr('o-timestamp-value')) !== 'undefined') {
+              td.attr('o-timestamp-value', children.attr('o-timestamp-value'));
               td.html(td.children().text());
-            } else {
-              let numberVal = td.children().attr('o-number-value');
-              if ((typeof (numberVal) !== 'undefined')) {
-                td.attr('o-number-value', numberVal);
-                td.html(td.children().text());
-              }
+            }
+            if (typeof (children.attr('o-number-value')) !== 'undefined') {
+              td.attr('o-number-value', children.attr('o-number-value'));
+              td.html(td.children().text());
             }
           }
         });
@@ -2290,7 +2288,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     this.table.buttons('.generic-action-view-column').trigger();
   }
 
-  protected exportAction(buttonName: String) {
+  protected exportAction(buttonName: string) {
     this.table.buttons(buttonName + ':name').trigger();
   }
 

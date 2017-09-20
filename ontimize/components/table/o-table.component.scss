@@ -1122,11 +1122,15 @@ div.dt-button-background {
       margin-left: 0px;
       margin: 0;
       -webkit-appearance: none;
+      appearance:none; 
+      -moz-appearance:none;
       cursor: pointer;
       position: absolute;
       top: 2px;
       left: 2px;
     }
+    
+    
     &.mat-checkbox-checked .mat-checkbox-inner-container {
 
       .mat-checkbox-checkmark-path {
