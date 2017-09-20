@@ -18,7 +18,7 @@
     // "inlineSourceMap": false,
     // "inlineSources": false,
     "outDir": "dist",
-    "noUnusedParameters": true,
+    "noUnusedParameters": false,
     "types": [
       "hammerjs",
       "node"
