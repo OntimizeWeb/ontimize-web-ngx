@@ -20,3 +20,5 @@ export * from './services/app-config.provider';
 export * from './services/app-menu.service';
 export * from './services/o-user-info.service';
 export * from './services/o-modules-info.service';
+
+export * from './services/md-date-formats.factory';

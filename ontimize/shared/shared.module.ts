@@ -14,7 +14,7 @@ import {
 } from '../pipes';
 
 import { ONTIMIZE_DIRECTIVES } from '../config/o-directives';
-import { OCustomMaterialModule } from './custom.material.module';
+import { OCustomMaterialModule } from './material/custom.material.module';
 
 import { FlexLayoutModule } from '@angular/flex-layout';
 
