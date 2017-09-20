@@ -6,7 +6,47 @@ import { OFormDataComponent } from './o-form-data-component.class';
 import { Util } from '../utils';
 import { Subscription } from 'rxjs/Subscription';
 
+export const DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT = [
+  'oattr: attr',
+  'olabel: label',
+  'tooltip',
+  'tooltipPosition: tooltip-position',
+  'tooltipShowDelay: tooltip-show-delay',
+  //data [any] : sets selected value of the combo
+  'data',
+  'autoBinding: automatic-binding',
+  'oenabled: enabled',
+  'orequired: required',
+  //static-data [Array<any>] : way to populate with static data. Default: no value.
+  'staticData: static-data',
+
+  'entity',
+  'service',
+  'columns',
+  'valueColumn: value-column',
+  'valueColumnType: value-column-type',
+  'parentKeys: parent-keys',
+
+  // Visible columns into selection dialog from parameter 'columns'. With empty parameter all columns are visible.
+  'visibleColumns: visible-columns',
+
+  // Visible columns in text field. By default, it is the parameter value of visible columns.
+  'descriptionColumns: description-columns',
+
+  'separator',
+
+  'queryOnInit: query-on-init',
+  'queryOnBind: query-on-bind',
+
+  // sqltype[string]: Data type according to Java standard. See SQLType class. Default: 'OTHER'
+  'sqlType: sql-type',
+
+  'serviceType : service-type'
+];
+
 export class OFormServiceComponent extends OFormDataComponent {
+
+  public static DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT = DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT;
 
   /* Inputs */
   protected staticData: Array<any>;
@@ -14,9 +54,11 @@ export class OFormServiceComponent extends OFormDataComponent {
   protected service: string;
   protected columns: string;
   protected valueColumn: string;
+  protected valueColumnType: string = 'int';
   protected parentKeys: string;
   protected visibleColumns: string;
   protected descriptionColumns: string;
+  protected separator: string;
   @InputConverter()
   protected queryOnInit: boolean = true;
   @InputConverter()
@@ -181,6 +223,17 @@ export class OFormServiceComponent extends OFormDataComponent {
         return;
       }
     }
+  }
+
+  setValue(val: any) {
+    let value = val;
+    if (this.valueColumnType === 'int') {
+      const parsed = parseInt(value);
+      if (!isNaN(parsed)) {
+        value = parsed;
+      }
+    }
+    super.setValue(value);
   }
 
 }
