@@ -224,8 +224,7 @@ export class OFormServiceComponent extends OFormDataComponent {
       }
     }
   }
-
-  setValue(val: any) {
+  protected parseByValueColumnType(val : any) {
     let value = val;
     if (this.valueColumnType === 'int') {
       const parsed = parseInt(value);
@@ -233,6 +232,11 @@ export class OFormServiceComponent extends OFormDataComponent {
         value = parsed;
       }
     }
+    return value;
+  }
+
+  setValue(val: any) {
+    const value = this.parseByValueColumnType(val);
     super.setValue(value);
   }
 

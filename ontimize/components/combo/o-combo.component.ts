@@ -170,18 +170,24 @@ export class OComboComponent extends OFormServiceComponent implements OnInit {
           let val = item[self.valueColumn];
           val = val ? val.toString() : '';
           if (val === event) {
-            self.setValue(item[self.valueColumn]);
+            const value = this.parseByValueColumnType(val);
+            self.setValueOnChange(value);
           }
         }
       });
-
     } else if (event === null && this.nullSelection) {
-      this.setValue(undefined);
+      this.setValueOnChange(undefined);
     } else if (typeof event === 'string' && event.length === 0 && this.nullSelection) {
-      this.setValue(undefined);
+      this.setValueOnChange(undefined);
     }
+  }
 
-    this.onChange.emit(event);
+  setValueOnChange(value: any) {
+    this.ensureOFormValue(value);
+    if (this._fControl && this._fControl.touched) {
+      this._fControl.markAsDirty();
+    }
+    this.onChange.emit(value);
   }
 
   getOptionDescriptionValue(item: any = {}) {
