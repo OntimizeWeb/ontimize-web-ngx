@@ -78,7 +78,7 @@ export class OListItemAvatarComponent extends OListItemTextRenderer implements O
     } else {
       switch (this.avatarType) {
         case 'base64':
-          avatarValue = ('data:image/*;base64,' + ((typeof (avatarValue.bytes) !== 'undefined') ? avatarValue.bytes : avatarValue));
+          avatarValue = ('data:image/png;base64,' + ((typeof (avatarValue.bytes) !== 'undefined') ? avatarValue.bytes : avatarValue));
           break;
         case 'url':
         default:

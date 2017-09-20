@@ -167,9 +167,9 @@ export class OImageComponent extends OFormDataComponent implements OnInit {
       if (this.value.value instanceof Object && this.value.value.bytes) {
         let src: string = '';
         if (this.value.value.bytes.substring(0, 4) === 'data') {
-          src = 'data:image/*;base64,' + this.value.value.bytes.substring(this.value.value.bytes.indexOf('base64') + 7);
+          src = 'data:image/png;base64,' + this.value.value.bytes.substring(this.value.value.bytes.indexOf('base64') + 7);
         } else {
-          src = 'data:image/*;base64,' + this.value.value.bytes;
+          src = 'data:image/png;base64,' + this.value.value.bytes;
         }
 
         return this._domSanitizer.bypassSecurityTrustUrl(src);
@@ -177,9 +177,9 @@ export class OImageComponent extends OFormDataComponent implements OnInit {
         this.value.value.length > 300) {
         let src: string = '';
         if (this.value.value.substring(0, 4) === 'data') {
-          src = 'data:image/*;base64,' + this.value.value.substring(this.value.value.indexOf('base64') + 7);
+          src = 'data:image/png;base64,' + this.value.value.substring(this.value.value.indexOf('base64') + 7);
         } else {
-          src = 'data:image/*;base64,' + this.value.value;
+          src = 'data:image/png;base64,' + this.value.value;
         }
 
         return this._domSanitizer.bypassSecurityTrustUrl(src);
