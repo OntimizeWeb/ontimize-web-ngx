@@ -2,7 +2,6 @@ import { Injector } from '@angular/core';
 import { LOCATION_INITIALIZED } from '@angular/common';
 import { BaseRequestOptions, XHRBackend } from '@angular/http';
 import { MdIconRegistry } from '@angular/material';
-
 import { Events } from '../util/events';
 import { OHttp } from '../util/http/OHttp';
 import { AppConfig, Config } from '../config/app-config';

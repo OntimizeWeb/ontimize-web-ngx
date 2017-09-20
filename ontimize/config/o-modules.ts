@@ -5,20 +5,9 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Injector, NgModule, APP_INITIALIZER } from '@angular/core';
-import { MD_DATE_FORMATS, MdNativeDateModule } from '@angular/material';
 import { appInitializerFactory } from './o-providers';
-import { OTranslateService, mdDateFormatsFactory } from '../services';
+import { OTranslateService } from '../services';
 import { APP_CONFIG } from '../config/app-config';
-
-@NgModule({
-  imports: [MdNativeDateModule],
-  providers: [{
-    provide: MD_DATE_FORMATS,
-    useFactory: mdDateFormatsFactory,
-    deps: [Injector]
-  }]
-})
-export class OntimizeWebMdDateFormatsModule { }
 
 import {
   OBarMenuModule,
@@ -141,7 +130,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 export const INTERNAL_ONTIMIZE_MODULES: any = [
   HttpModule,
   HttpClientModule,
-  OntimizeWebMdDateFormatsModule,
 
   // Ngx-translate
   TranslateModule.forRoot({

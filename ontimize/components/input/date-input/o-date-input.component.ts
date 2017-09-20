@@ -12,7 +12,6 @@ import {
 import { CommonModule } from '@angular/common';
 import { ValidatorFn } from '@angular/forms/src/directives/validators';
 import {
-  // MdNativeDateModule,
   MdDateFormats,
   DateAdapter,
   MdDatepicker,
@@ -56,6 +55,11 @@ export const DEFAULT_INPUTS_O_DATE_INPUT = [
 
 export type DateFilterFunction = (date: Date) => boolean;
 
+export let O_DATE_INPUT_DEFAULT_FORMATS: MdDateFormats = {
+  parse: { dateInput: 'L' },
+  display: { dateInput: 'L', monthYearLabel: 'Y', dateA11yLabel: 'LL', monthYearA11yLabel: 'MMMM Y' }
+};
+
 @Component({
   selector: 'o-date-input',
   templateUrl: './o-date-input.component.html',
@@ -65,7 +69,11 @@ export type DateFilterFunction = (date: Date) => boolean;
   ],
   inputs: [
     ...DEFAULT_INPUTS_O_DATE_INPUT
-  ]
+  ],
+  providers: [{
+    provide: MD_DATE_FORMATS,
+    useValue: O_DATE_INPUT_DEFAULT_FORMATS
+  }]
 })
 
 export class ODateInputComponent extends OFormDataComponent implements OnInit {
