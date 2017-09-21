@@ -60,13 +60,14 @@ export class OTableCellRendererServiceComponent implements OnInit, ITableCellRen
   protected separator: string;
   protected queryMethod: string;
 
-  constructor( @Inject(forwardRef(() => OTableColumnComponent)) tableColumn: OTableColumnComponent,
+  constructor( @Inject(forwardRef(() => OTableColumnComponent)) protected tableColumn: OTableColumnComponent,
     protected injector: Injector) {
     tableColumn.registerRenderer(this);
     this.componentData = {};
   }
 
   public ngOnInit() {
+    this.tableColumn.updateRendererType('service');
     if (typeof (this.separator) === 'undefined') {
       this.separator = '';
     }

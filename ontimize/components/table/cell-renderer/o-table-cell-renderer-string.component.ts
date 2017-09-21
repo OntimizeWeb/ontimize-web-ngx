@@ -33,7 +33,7 @@ export class OTableCellRendererStringComponent implements ITableCellRenderer {
   protected translateService: OTranslateService;
 
   constructor(
-    @Inject(forwardRef(() => OTableColumnComponent)) tableColumn: OTableColumnComponent,
+    @Inject(forwardRef(() => OTableColumnComponent)) protected tableColumn: OTableColumnComponent,
     protected injector: Injector
   ) {
     tableColumn.registerRenderer(this);
@@ -41,6 +41,7 @@ export class OTableCellRendererStringComponent implements ITableCellRenderer {
   }
 
   public ngOnInit() {
+    this.tableColumn.updateRendererType('string');
     this.translate = Util.parseBoolean(this.translate, false);
     this.init(undefined);
   }

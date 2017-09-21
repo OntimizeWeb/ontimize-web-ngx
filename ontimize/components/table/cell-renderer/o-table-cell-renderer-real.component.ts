@@ -32,6 +32,7 @@ export class OTableCellRendererRealComponent extends OTableCellRendererIntegerCo
 
   protected decimalSeparator: string;
   protected decimalDigits: number;
+  public type = 'real';
 
   constructor( @Inject(forwardRef(() => OTableColumnComponent)) tableColumn: OTableColumnComponent,
     protected injector: Injector) {
@@ -40,6 +41,7 @@ export class OTableCellRendererRealComponent extends OTableCellRendererIntegerCo
 
   public ngOnInit() {
     super.ngOnInit();
+    this.tableColumn.updateRendererType('real');
   }
 
   public init(parameters: any) {

@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, Injector, forwardRef, EventEmitter } from '@angular/core';
+import { Component, OnInit, Inject, Injector, forwardRef, EventEmitter, ViewContainerRef } from '@angular/core';
 
 import { OTableComponent } from './o-table.component';
 
@@ -140,8 +140,10 @@ export class OTableColumnComponent implements OnInit {
   public cellData: any;
   public cellElement: any;
 
-  constructor( @Inject(forwardRef(() => OTableComponent)) table: OTableComponent,
-    protected injector: Injector) {
+  constructor(
+    @Inject(forwardRef(() => OTableComponent)) table: OTableComponent,
+    protected injector: Injector
+  ) {
     this.table = table;
     this.translateService = this.injector.get(OTranslateService);
     this.momentService = this.injector.get(MomentService);
@@ -150,11 +152,11 @@ export class OTableColumnComponent implements OnInit {
   }
 
   public ngOnInit() {
-    this.orderable = Util.parseBoolean(this.orderable, true);
-    this.searchable = Util.parseBoolean(this.searchable, true);
     this.editable = (typeof (this.editable) !== 'undefined') ?
       Util.parseBoolean(this.editable, false) :
-      this.table.isColumnEditable(this.attr);
+      this.table.isColumnEditable(this.attr) || (this.editor !== undefined);
+    this.orderable = Util.parseBoolean(this.orderable, true);
+    this.searchable = Util.parseBoolean(this.searchable, true);
     this.grouping = Util.parseBoolean(this.grouping, true);
     this.translate = Util.parseBoolean(this.translate, false);
     if (typeof (this.dateModelType) === 'undefined') {
@@ -293,6 +295,10 @@ export class OTableColumnComponent implements OnInit {
 
   public registerRenderer(renderer: ITableCellRenderer) {
     this.renderer = renderer;
+  }
+
+  public updateRendererType(rendererType: string) {
+    this.table.updateDataTableOptions(this.attr, rendererType);
   }
 
   public registerEditor(editor: ITableCellEditor) {
