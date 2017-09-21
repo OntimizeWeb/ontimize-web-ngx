@@ -46,6 +46,8 @@ export interface IList {
 export const DEFAULT_INPUTS_O_LIST = [
   ...OServiceComponent.DEFAULT_INPUTS_O_SERVICE_COMPONENT,
 
+  'title',
+
   // quick-filter [no|yes]: show quick filter. Default: yes.
   'quickFilter: quick-filter',
 
@@ -106,6 +108,7 @@ export class OListComponent extends OServiceComponent implements OnInit, IList, 
   selectable: boolean = false;
   @InputConverter()
   odense: boolean = false;
+  protected title: string;
   /* End Inputs */
 
   @ContentChildren(OListItemComponent)
