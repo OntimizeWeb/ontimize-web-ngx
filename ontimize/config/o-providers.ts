@@ -1,11 +1,10 @@
-import {
-  //   APP_INITIALIZER,
-  //   InjectionToken,
-  Injector
-} from '@angular/core';
+import { Injector } from '@angular/core';
 import { LOCATION_INITIALIZED } from '@angular/common';
 import { BaseRequestOptions, XHRBackend } from '@angular/http';
 import { MdIconRegistry } from '@angular/material';
+import { Events } from '../util/events';
+import { OHttp } from '../util/http/OHttp';
+import { AppConfig, Config } from '../config/app-config';
 
 import {
   LoginService,
@@ -25,14 +24,6 @@ import {
   OUserInfoService,
   OModulesInfoService
 } from '../services';
-
-import { Events } from '../util/events';
-import { OHttp } from '../util/http/OHttp';
-import {
-  AppConfig,
-  Config
-} from '../config/app-config';
-
 
 export function appInitializerFactory(injector: Injector, config: Config, oTranslate: OTranslateService) {
   return () => new Promise<any>((resolve: any) => {

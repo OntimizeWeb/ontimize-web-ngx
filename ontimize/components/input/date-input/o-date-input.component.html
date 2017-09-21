@@ -1,15 +1,16 @@
-<div fxLayout="row" fxFill fxLayoutAlign="space-between center" [formGroup]="getFormGroup()"
-    [mdTooltip]="tooltip" [mdTooltipPosition]="tooltipPosition" [mdTooltipShowDelay]="tooltipShowDelay">
-    <input mdInput #inputModel type="text" [attr.id]="getAttribute()" [id]="getAttribute()" fxFill [formControlName]="getAttribute()" [ngModel]="getValue()"
-        (ngModelChange)="innerOnChange($event)" class="input-model">
-
+<div fxLayout="row" fxFill fxLayoutAlign="space-between center" [formGroup]="getFormGroup()" [mdTooltip]="tooltip" [mdTooltipPosition]="tooltipPosition"
+    [mdTooltipShowDelay]="tooltipShowDelay">
     <md-form-field #innerInputContainer fxFlex fxFill>
-        <input mdInput #displayInputModel class="mat-input o-date-input" type="text" [attr.id]="opickerattr" [id]="opickerattr" fxFill [placeholder]="placeHolder" [value]="getDescriptionValue()"
-            [readonly]="isReadOnly" (blur)="onDisplayInputBlur()" (focus)="onDisplayInputFocus($event)" (click)="onInputClick()"
-            [disabled]="isDisabled">
-            <md-hint *ngIf="!isReadOnly && getFormControl().touched && ( getFormControl().errors !== undefined )">{{'FORM_VALIDATION.REQUIRED' | oTranslate}}</md-hint>
-    </md-form-field>
+        <input mdInput #mdInputRef [mdDatepicker]="d" fxFill [attr.id]="getAttribute()" [id]="getAttribute()" [formControlName]="getAttribute()"
+            [placeholder]="placeHolder" [readonly]="isReadOnly" [ngModel]="getValueAsDate()" [mdDatepickerFilter]="filterDate">
+        <!-- (blur)="onDisplayInputBlur($event)" (change)="called()" -->
+        <md-datepicker-toggle [disabled]="isReadOnly" mdSuffix [for]="d"></md-datepicker-toggle>
+        <md-datepicker #d [disabled]="isReadOnly"></md-datepicker>
 
-    <span class="icon-btn" (click)="onClickIcon($event)"
-        [class.mat-disabled]="isDisabled"><i class="material-icons">today</i></span>
+        <md-error *ngIf="hasError('required')">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</md-error>
+        <md-error *ngIf="hasError('mdDatepickerParse')">{{ 'FORM_VALIDATION.DATE_PARSE' | oTranslate }} {{ oformat }}</md-error>
+        <md-error *ngIf="hasError('mdDatepickerFilter')">{{ 'FORM_VALIDATION.DATE_FILTER' | oTranslate }}</md-error>
+        <md-error *ngIf="hasError('mdDatepickerMin')">{{ 'FORM_VALIDATION.DATE_MIN' | oTranslate }} {{ minDate }}</md-error>
+        <md-error *ngIf="hasError('mdDatepickerMax')">{{ 'FORM_VALIDATION.DATE_MAX' | oTranslate }} {{ maxDate }}</md-error>
+    </md-form-field>
 </div>

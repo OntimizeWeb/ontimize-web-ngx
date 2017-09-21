@@ -6,7 +6,7 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 
-import {MdSelect, MdOption } from '@angular/material';
+import { MdSelect, MdOption } from '@angular/material';
 
 import { dataServiceFactory } from '../../services/data-service.provider';
 import { OntimizeService } from '../../services';
@@ -20,42 +20,9 @@ import { OFormServiceComponent } from '../o-form-service-component.class';
 
 
 export const DEFAULT_INPUTS_O_COMBO = [
-  'oattr: attr',
-  'olabel: label',
-  'tooltip',
-  'tooltipPosition: tooltip-position',
-  'tooltipShowDelay: tooltip-show-delay',
-  //data [any] : sets selected value of the combo
-  'data',
-  'autoBinding: automatic-binding',
-  'oenabled: enabled',
-  'orequired: required',
-  //static-data [Array<any>] : way to populate with static data. Default: no value.
-  'staticData: static-data',
-
-  'entity',
-  'service',
-  'columns',
-  'valueColumn: value-column',
-  'parentKeys: parent-keys',
-
-  // Visible columns into selection dialog from parameter 'columns'. With empty parameter all columns are visible.
-  'visibleColumns: visible-columns',
-
-  // Visible columns in text field. By default, it is the parameter value of visible columns.
-  'descriptionColumns: description-columns',
-
-  'separator',
+  ...OFormServiceComponent.DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT,
   'translate',
-  'nullSelection: null-selection',
-
-  'queryOnInit: query-on-init',
-  'queryOnBind: query-on-bind',
-
-  // sqltype[string]: Data type according to Java standard. See SQLType class. Default: 'OTHER'
-  'sqlType: sql-type',
-
-  'serviceType : service-type'
+  'nullSelection: null-selection'
 ];
 
 export const DEFAULT_OUTPUTS_O_COMBO = [
@@ -83,7 +50,6 @@ export class OComboComponent extends OFormServiceComponent implements OnInit {
   public static DEFAULT_OUTPUTS_O_COMBO = DEFAULT_OUTPUTS_O_COMBO;
 
   /* Inputs */
-  protected separator: string;
   @InputConverter()
   protected translate: boolean = false;
   @InputConverter()
@@ -136,7 +102,7 @@ export class OComboComponent extends OFormServiceComponent implements OnInit {
     }
   }
 
-  hasNullSelection() : boolean {
+  hasNullSelection(): boolean {
     return this.nullSelection;
   }
 
@@ -193,7 +159,6 @@ export class OComboComponent extends OFormServiceComponent implements OnInit {
   }
 
   innerOnChange(event: any) {
-
     /*
     * It is neccessary to modify this.value to advice ngControl
     */
@@ -205,18 +170,24 @@ export class OComboComponent extends OFormServiceComponent implements OnInit {
           let val = item[self.valueColumn];
           val = val ? val.toString() : '';
           if (val === event) {
-            self.setValue(item[self.valueColumn]);
+            const value = this.parseByValueColumnType(val);
+            self.setValueOnChange(value);
           }
         }
       });
-
     } else if (event === null && this.nullSelection) {
-      this.setValue(undefined);
+      this.setValueOnChange(undefined);
     } else if (typeof event === 'string' && event.length === 0 && this.nullSelection) {
-      this.setValue(undefined);
+      this.setValueOnChange(undefined);
     }
+  }
 
-    this.onChange.emit(event);
+  setValueOnChange(value: any) {
+    this.ensureOFormValue(value);
+    if (this._fControl && this._fControl.touched) {
+      this._fControl.markAsDirty();
+    }
+    this.onChange.emit(value);
   }
 
   getOptionDescriptionValue(item: any = {}) {
@@ -268,7 +239,7 @@ export class OComboComponent extends OFormServiceComponent implements OnInit {
 @NgModule({
   declarations: [OComboComponent],
   imports: [OSharedModule, CommonModule],
-  exports: [OComboComponent],
+  exports: [OComboComponent]
 })
 export class OComboModule {
 }

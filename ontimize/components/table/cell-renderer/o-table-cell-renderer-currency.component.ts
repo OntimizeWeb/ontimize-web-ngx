@@ -32,10 +32,10 @@ export class OTableCellRendererCurrencyComponent extends OTableCellRendererRealC
   public static DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_CURRENCY = DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_CURRENCY;
 
   protected currencyService: CurrencyService;
-  protected currencySymbol : string;
-  protected currencySymbolPosition : string;
+  protected currencySymbol: string;
+  protected currencySymbolPosition: string;
 
-  constructor(@Inject(forwardRef(() => OTableColumnComponent)) tableColumn: OTableColumnComponent,
+  constructor( @Inject(forwardRef(() => OTableColumnComponent)) tableColumn: OTableColumnComponent,
     protected injector: Injector) {
     super(tableColumn, injector);
     this.currencyService = this.injector.get(CurrencyService);
@@ -43,29 +43,32 @@ export class OTableCellRendererCurrencyComponent extends OTableCellRendererRealC
 
   public ngOnInit() {
     super.ngOnInit();
-    if (typeof(this.currencySymbol) === 'undefined') {
+    if (typeof (this.currencySymbol) === 'undefined') {
       this.currencySymbol = this.currencyService.symbol;
     }
-    if (typeof(this.currencySymbolPosition) === 'undefined') {
+    if (typeof (this.currencySymbolPosition) === 'undefined') {
       this.currencySymbolPosition = this.currencyService.symbolPosition;
     }
   }
 
   public init(parameters: any) {
     super.init(parameters);
-    if (typeof(parameters) !== 'undefined') {
-      if (typeof(parameters.currencySymbol) !== 'undefined') {
+    if (typeof (parameters) !== 'undefined') {
+      if (typeof (parameters.currencySymbol) !== 'undefined') {
         this.currencySymbol = parameters.currencySymbol;
       }
-      if (typeof(parameters.currencySymbolPosition) !== 'undefined') {
+      if (typeof (parameters.currencySymbolPosition) !== 'undefined') {
         this.currencySymbolPosition = parameters.currencySymbolPosition;
       }
     }
   }
 
   public render(cellData: any, rowData: any): string {
-    return this.currencyService.getCurrencyValue(cellData, this.currencySymbol, this.currencySymbolPosition, this.grouping,
-        this.thousandSeparator, this.decimalSeparator, this.decimalDigits);
+    const value = this.currencyService.getCurrencyValue(cellData, this.currencySymbol, this.currencySymbolPosition, this.grouping,
+      this.thousandSeparator, this.decimalSeparator, this.decimalDigits);
+    return '<div o-number-value="' + ((typeof (cellData) !== 'undefined') ? cellData : 0) + '">' +
+      value +
+      '</div>';
   }
 
   public handleCreatedCell(cellElement: any, rowData: any) {
