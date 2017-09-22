@@ -7,8 +7,6 @@ const copyfiles = require('copyfiles');
 const cssimport = require("gulp-cssimport");
 const replace = require('gulp-replace');
 
-
-
 const ONTIMIZE_SCSS_CONF = {
   SRC: './ontimize.scss',
   DIST: './dist'
@@ -55,16 +53,8 @@ const FILES = [
   'dist'
 ];
 
-gulp.task('copy-files', ['copy-table-files', 'copy-themes-files'], (callback) => {
+gulp.task('copy-files', ['copy-themes-files'], (callback) => {
   copyfiles(FILES, true, callback);
-});
-
-gulp.task('copy-table-files', (callback) => {
-  copyfiles(['ontimize/components/table/vendor/**/*', 'dist/ontimize/components/'], 2, callback);
-});
-
-gulp.task('copy-table-files-tmp', (callback) => {
-  copyfiles(['ontimize/components/table/vendor/**/*', 'tmp/ontimize/components/'], 2, callback);
 });
 
 gulp.task('copy-themes-files', (callback) => {

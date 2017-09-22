@@ -5,7 +5,6 @@ const helpers = require('./helpers');
  * Webpack Plugins
  */
 const ContextReplacementPlugin = require('webpack/lib/ContextReplacementPlugin');
-const ProvidePlugin = require('webpack/lib/ProvidePlugin');
 const ngcWebpack = require('ngc-webpack');
 
 /*
@@ -69,12 +68,6 @@ module.exports = function (options) {
       ]
     },
     plugins: [
-      new webpack.ProvidePlugin({
-        $: "jquery",
-        jQuery: "jquery",
-        'window.jQuery': 'jquery',
-        'window.$': 'jquery'
-      }),
 
       new ContextReplacementPlugin(
         /angular(\\|\/)core(\\|\/)@angular/,
