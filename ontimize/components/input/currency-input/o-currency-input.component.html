@@ -1,18 +1,17 @@
 <div fxLayout="row" fxLayoutAlign="space-between center" [formGroup]="getFormGroup()" [mdTooltip]="tooltip" [mdTooltipPosition]="tooltipPosition"
     [mdTooltipShowDelay]="tooltipShowDelay">
-    <span *ngIf="currencySymbol !== 'none' && currencySymbolPosition === 'left' " mdSuffix>{{ currency_symbols[currencySymbol] }}</span>
+    <span *ngIf="currencySymbol !== 'none' && currencySymbolPosition === 'left'" mdSuffix [class.mat-disabled]="isDisabled" class="icon-btn">{{ currency_symbols[currencySymbol] }}</span>
     <md-form-field #innerInputContainer fxFill>
-        <input mdInput type="number" [attr.id]="getAttribute()" [formControlName]="getAttribute()" [placeholder]="placeHolder"
-            [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)" (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)"
-            [readonly]="isReadOnly" [min]="min" [max]="max" [step]="step">
-            
-            <md-icon *ngIf="currencySymbol !== 'none' && currencySymbolPosition === 'right' " mdSuffix [class.mat-disabled]="isDisabled">{{ currency_symbols[currencySymbol] }}</md-icon> 
-
+        <input mdInput type="number" [attr.id]="getAttribute()" [formControlName]="getAttribute()" [placeholder]="placeHolder" [ngModel]="getValue()"
+            (ngModelChange)="innerOnChange($event)" (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)" [readonly]="isReadOnly"
+            [min]="min" [max]="max" [step]="step">
+        <span *ngIf="currencySymbol !== 'none' && currencySymbolPosition === 'right' " mdSuffix [class.mat-disabled]="isDisabled"
+            class="icon-btn">{{ currency_symbols[currencySymbol] }}</span>
         <md-error *ngIf="hasError('required')">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</md-error>
         <md-error *ngIf="hasError('min')">{{ 'FORM_VALIDATION.MIN_VALUE' | oTranslate }}: {{ getErrorValue('min', 'requiredMin') }}</md-error>
         <md-error *ngIf="hasError('max')">{{ 'FORM_VALIDATION.MAX_VALUE' | oTranslate }}: {{ getErrorValue('max', 'requiredMax') }}</md-error>
         <md-error *ngIf="hasError('pattern')">{{ 'FORM_VALIDATION.FORMAT' | oTranslate }}</md-error>
 
     </md-form-field>
-    
+
 </div>
