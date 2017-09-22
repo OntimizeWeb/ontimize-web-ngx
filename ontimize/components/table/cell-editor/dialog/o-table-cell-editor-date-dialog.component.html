@@ -1,0 +1,14 @@
+<h2 md-dialog-title>{{ 'TABLE.SELECT_DATE' | oTranslate }}</h2>
+<md-dialog-content>
+  <o-form #form show-header="no" style="height: 120px;">
+    <o-date-input attr="dateInput" [label]="label" layout-padding [data]="date" required="true"></o-date-input>
+  </o-form>
+</md-dialog-content>
+<md-dialog-actions>
+  <button md-button class="mat-primary" [md-dialog-close]="getDateValue()">
+    <span>{{ 'ACCEPT' | oTranslate | uppercase }}</span>
+  </button>
+  <button md-button class="mat-primary" [md-dialog-close]="undefined">
+    <span>{{ 'CANCEL' | oTranslate | uppercase }}</span>
+  </button>
+</md-dialog-actions>

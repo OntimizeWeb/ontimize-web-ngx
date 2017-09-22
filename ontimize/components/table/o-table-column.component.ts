@@ -315,8 +315,8 @@ export class OTableColumnComponent implements OnInit {
     this.renderer.handleCreatedCell(cellElement, rowData);
   }
 
-  public updateCell(cellElement: any, value: any) {
-    this.table.updateCell(cellElement, value);
+  public updateCell(cellElement: any, value: any, sqltypes?: any) {
+    this.table.updateCell(cellElement, value, sqltypes);
   }
 
   public updateRow(cellElement: any, av: any) {

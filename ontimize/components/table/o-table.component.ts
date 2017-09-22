@@ -1,22 +1,30 @@
 import * as $ from 'jquery';
 import {
-  Component, OnInit, OnDestroy, OnChanges, SimpleChange,
-  Inject, Injector, ElementRef,
-  forwardRef, Optional, EventEmitter, NgModule,
-  ViewEncapsulation, ViewChild
+  Component,
+  OnInit,
+  OnDestroy,
+  OnChanges,
+  SimpleChange,
+  Inject,
+  Injector,
+  ElementRef,
+  forwardRef,
+  Optional,
+  EventEmitter,
+  NgModule,
+  ViewEncapsulation,
+  ViewChild
 } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { MdMenuTrigger, MdTabGroup, MdTab } from '@angular/material';
+import { RouterModule, NavigationStart, RoutesRecognized } from '@angular/router';
+
 import { InputConverter } from '../../decorators';
 import { ObservableWrapper } from '../../util/async';
-import { RouterModule, NavigationStart, RoutesRecognized } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/from';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/mergeAll';
-import {
-  MdMenuTrigger,
-  MdTabGroup,
-  MdTab
-} from '@angular/material';
 
 import { OTableColumnComponent } from './o-table-column.component';
 import {
@@ -48,10 +56,10 @@ import {
 import { dataServiceFactory } from '../../services/data-service.provider';
 import { OntimizeService, MomentService } from '../../services';
 import { Util } from '../../util/util';
-import { OFormComponent } from '../form/o-form.component';
+import { OFormComponent, OFormModule } from '../form/o-form.component';
 import { OFormValue } from '../form/OFormValue';
+import { ODateInputModule } from '../input/date-input/o-date-input.component';
 import { OSharedModule } from '../../shared';
-import { CommonModule } from '@angular/common';
 
 import './o-table.loader';
 
@@ -1021,11 +1029,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
         if (typeof (colDef.component) !== 'undefined') {
           colType = colDef.component.type;
         }
-        // hide datepicker when moving with arrows
-        if ((37 <= key) && (key <= 40) && (typeof (OTableCellEditorDateComponent.datePicker) !== 'undefined') && (colType !== 'date')) {
-          OTableCellEditorDateComponent.datePicker.datepicker('hide');
-          OTableCellEditorDateComponent.datePicker = undefined;
-        }
       }
     });
 
@@ -1199,34 +1202,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       // columns with 'attr' are linked to service data
       colDef.data = column.attr;
       colDef.name = column.attr;
-      switch (column.type) {
-        case 'boolean':
-          colDef.className += 'o-table-column-boolean';
-          colDef.type = 'string';
-          break;
-        case 'string':
-          colDef.className += 'o-table-column-string';
-          colDef.type = 'string';
-          break;
-        case 'integer':
-        case 'real':
-        case 'currency':
-          colDef.className += 'o-table-column-number';
-          colDef.type = 'o-number';
-          break;
-        case 'date':
-          colDef.className += 'o-table-column-date';
-          colDef.type = 'o-timestamp';
-          break;
-        case 'image':
-          colDef.className += 'o-table-column-image';
-          colDef.type = 'string';
-          break;
-        default:
-          colDef.className += 'o-table-column-string';
-          colDef.type = 'string';
-          break;
-      }
+      this.setColumnDefTypeAttributes(colDef, column.type);
       colDef.orderable = column.orderable;
       colDef.searchable = column.searchable;
       colDef.editable = column.editable;
@@ -1235,7 +1211,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       }
       colDef.visible = (this.visibleColumnsArray.indexOf(column.attr) !== -1);
     }
-
     //find column definition by name
     if (typeof (column.attr) !== 'undefined') {
       // adding to dataColums for using it in service queries
@@ -1256,7 +1231,50 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
   }
 
-  public updateCell(cellElement: any, value: any) {
+  protected setColumnDefTypeAttributes(colDef: any, type: string) {
+    switch (type) {
+      case 'boolean':
+        colDef.className += 'o-table-column-boolean';
+        colDef.type = 'string';
+        break;
+      case 'string':
+        colDef.className += 'o-table-column-string';
+        colDef.type = 'string';
+        break;
+      case 'integer':
+      case 'real':
+      case 'currency':
+        colDef.className += 'o-table-column-number';
+        colDef.type = 'o-number';
+        break;
+      case 'date':
+        colDef.className += 'o-table-column-date';
+        colDef.type = 'o-timestamp';
+        break;
+      case 'image':
+        colDef.className += 'o-table-column-image';
+        colDef.type = 'string';
+        break;
+      default:
+        colDef.className += 'o-table-column-string';
+        colDef.type = 'string';
+        break;
+    }
+  }
+
+  public updateDataTableOptions(columnAttr: string, type: string) {
+    if (type !== undefined && this.dataTableOptions !== undefined && this.dataTableOptions.columns !== undefined) {
+      let columns = this.dataTableOptions.columns;
+      for (let i = 0, len = columns.length; i < len; i++) {
+        if (columns[i].data === columnAttr) {
+          this.setColumnDefTypeAttributes(columns[i], type);
+          break;
+        }
+      }
+    }
+  }
+
+  public updateCell(cellElement: any, value: any, sqltypes?: any) {
     let cell = this.table.cell(cellElement);
     if ((value !== cell.data()) && this.dataService && (this.updateMethod in this.dataService) && this.entity &&
       (this.keysArray.length > 0)) {
@@ -1277,8 +1295,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
         let av = {};
         av[colDef.name] = value;
         this.loaderSuscription = this.load();
-        this.dataService[this.updateMethod](kv, av, this.entity)
-          .subscribe(
+        this.dataService[this.updateMethod](kv, av, this.entity, sqltypes).subscribe(
           res => {
             if ((typeof (res.code) === 'undefined') ||
               ((typeof (res.code) !== 'undefined') && (res.code === 0))) {
@@ -1304,7 +1321,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
             cell.data(oldValue);
             this.loaderSuscription.unsubscribe();
           }
-          );
+        );
       }
     } else {
       // removing input element
@@ -2505,6 +2522,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
 }
 
+import { OTableCellEditorDateDialog } from './cell-editor/dialog/o-table-cell-editor-date-dialog.component';
+
 @NgModule({
   declarations: [
     OTableComponent,
@@ -2525,14 +2544,19 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     OTableCellEditorRealComponent,
     OTableCellEditorStringComponent,
     OTableButtonComponent,
-    OTableOptionComponent
+    OTableOptionComponent,
+    OTableCellEditorDateDialog
   ],
   imports: [
     OSharedModule,
     CommonModule,
+    ODateInputModule,
+    OFormModule,
     RouterModule
   ],
-  exports: [OTableComponent,
+  entryComponents: [OTableCellEditorDateDialog],
+  exports: [
+    OTableComponent,
     OTableColumnComponent,
     OTableCellRendererActionComponent,
     OTableCellRendererBooleanComponent,
