@@ -8,7 +8,7 @@
             [placeholder]="placeHolder" [value]="getDescriptionValue()" (focus)="onFocus($event)" (blur)="onBlur($event)" [readonly]="isReadOnly"
             [disabled]="isDisabled">
             <md-icon [class.mat-disabled]="isDisabled" mdSuffix>search</md-icon>
-            <md-icon [class.mat-disabled]="isDisabled" (click)="onClickClear($event)">clear</md-icon>
+            <md-icon [class.mat-disabled]="isDisabled" (click)="onClickClear($event)" mdSuffix>clear</md-icon>
         <md-hint *ngIf="hasError('required')">
             <span>{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</span>
         </md-hint>
