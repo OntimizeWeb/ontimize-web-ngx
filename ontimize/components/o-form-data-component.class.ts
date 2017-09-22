@@ -19,6 +19,8 @@ export interface IFormDataTypeComponent extends IComponent {
 
 export interface IFormControlComponent extends IComponent {
   getControl(): FormControl;
+  getFormControl(): FormControl;
+  hasError(error: string): boolean;
 }
 
 export interface IFormDataComponent {

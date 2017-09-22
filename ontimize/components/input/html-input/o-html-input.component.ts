@@ -145,6 +145,10 @@ export class OHTMLInputComponent implements IComponent, IFormControlComponent, I
     return this._fControl;
   }
 
+  hasError(error: string): boolean {
+    return !this.isReadOnly && this._fControl.touched && this._fControl.hasError(error);
+  }
+
   isInActiveTab(): boolean {
     var result: boolean = !(this.tabGroup && this.tab);
     if (!result) {
