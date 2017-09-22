@@ -1,13 +1,14 @@
-<div fxLayout="row" fxFill fxLayoutAlign="space-between center" [formGroup]="getFormGroup()" [mdTooltip]="tooltip" [mdTooltipPosition]="tooltipPosition"
+<div fxLayout="row" fxLayoutAlign="space-between center" [formGroup]="getFormGroup()" [mdTooltip]="tooltip" [mdTooltipPosition]="tooltipPosition"
     [mdTooltipShowDelay]="tooltipShowDelay">
-    <md-form-field #innerInputContainer fxFlex fxFill>
-        <input mdInput class="mat-input" type="email" [attr.id]="getAttribute()" fxFill [formControlName]="getAttribute()" [placeholder]="placeHolder"
+    <md-form-field #innerInputContainer fxFlexFill>
+        <input mdInput type="email" [attr.id]="getAttribute()" [formControlName]="getAttribute()" [placeholder]="placeHolder"
             [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)" (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)"
             [readonly]="isReadOnly">
+        <md-icon mdSuffix [class.mat-disabled]="isDisabled">mail_outline</md-icon>
         <md-error *ngIf="hasError('required')">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</md-error>
         <md-error *ngIf="hasError('minlength')">{{ 'FORM_VALIDATION.MIN_LENGTH' | oTranslate }}: {{ getErrorValue('minlength', 'requiredLength') }}</md-error>
         <md-error *ngIf="hasError('maxlength')">{{ 'FORM_VALIDATION.MAX_LENGTH' | oTranslate }}: {{ getErrorValue('maxlength', 'requiredLength') }}</md-error>
         <md-error *ngIf="hasError('invalidEmailAddress')">{{ 'FORM_VALIDATION.EMAIL_FORMAT' | oTranslate }}</md-error>
     </md-form-field>
-    <span class="icon-btn" [class.mat-disabled]="isDisabled"><i class="material-icons">mail_outline</i></span>
+
 </div>

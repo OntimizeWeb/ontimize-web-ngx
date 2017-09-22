@@ -4,7 +4,8 @@
   $foreground: map-get($theme, foreground);
   $warn: map-get($theme, warn);
 
-  span.icon-btn{
+  //span.icon-btn,
+  .mat-input-suffix.mat-form-field-suffix .mat-icon.material-icons{
     color: mat-color($foreground, icon);
 
     &.mat-disabled {

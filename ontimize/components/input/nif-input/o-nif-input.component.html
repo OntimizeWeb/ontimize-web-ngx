@@ -1,12 +1,12 @@
-<div fxLayout="row" fxFill fxLayoutAlign="space-between center" [formGroup]="getFormGroup()" [mdTooltip]="tooltip" [mdTooltipPosition]="tooltipPosition"
+<div fxLayout="row" fxLayoutAlign="space-between center" [formGroup]="getFormGroup()" [mdTooltip]="tooltip" [mdTooltipPosition]="tooltipPosition"
     [mdTooltipShowDelay]="tooltipShowDelay">
-    <md-form-field #innerInputContainer fxFlex fxFill>
-        <input mdInput class="mat-input" type="text" [attr.id]="getAttribute()" [id]="getAttribute()" fxFill [formControlName]="getAttribute()"
+    <md-form-field #innerInputContainer fxFlexFill>
+        <input mdInput type="text" [attr.id]="getAttribute()" [id]="getAttribute()" [formControlName]="getAttribute()"
             [placeholder]="placeHolder" [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)" (focus)="innerOnFocus($event)"
             (blur)="innerOnBlur($event)" [readonly]="isReadOnly">
+            <md-icon mdSuffix [class.mat-disabled]="isDisabled">perm_identity</md-icon>
         <md-error *ngIf="hasError('required')">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</md-error>
         <md-error *ngIf="hasError('invalidNIF')">{{ 'FORM_VALIDATION.NIF_FORMAT' | oTranslate}}</md-error>
         <md-error *ngIf="hasError('invalidNIFLetter')">{{ 'FORM_VALIDATION.DNI_LETTER' | oTranslate}}</md-error>
     </md-form-field>
-    <span class="icon-btn" [class.mat-disabled]="isDisabled"><i class="material-icons">perm_identity</i></span>
 </div>

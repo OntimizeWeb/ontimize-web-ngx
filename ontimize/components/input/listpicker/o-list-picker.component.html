@@ -1,17 +1,16 @@
-<div fxLayout="row" fxFill fxLayoutAlign="space-between center" [formGroup]="getFormGroup()" (click)="onClickListpicker($event)"
+<div fxLayout="row" fxLayoutAlign="space-between center" [formGroup]="getFormGroup()" (click)="onClickListpicker($event)"
     [mdTooltip]="tooltip" [mdTooltipPosition]="tooltipPosition" [mdTooltipShowDelay]="tooltipShowDelay" class="custom-error">
-    <input mdInput #inputModel class="mat-input input-model" type="text" [attr.id]="getAttribute()" [id]="getAttribute()" fxFill
+    <input mdInput #inputModel class=" input-model" type="text" [attr.id]="getAttribute()" [id]="getAttribute()" 
         [formControlName]="getAttribute()" [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)">
 
-    <md-form-field #innerInputContainer fxFlex fxFill>
-        <input mdInput class="mat-input" type="text" [attr.id]="'desc_' + getAttribute()" [id]="'desc_' + getAttribute()" fxFill
+    <md-form-field #innerInputContainer fxFlexFill>
+        <input mdInput type="text" [attr.id]="'desc_' + getAttribute()" [id]="'desc_' + getAttribute()" 
             [placeholder]="placeHolder" [value]="getDescriptionValue()" (focus)="onFocus($event)" (blur)="onBlur($event)" [readonly]="isReadOnly"
             [disabled]="isDisabled">
+            <md-icon [class.mat-disabled]="isDisabled" mdSuffix>search</md-icon>
+            <md-icon [class.mat-disabled]="isDisabled" (click)="onClickClear($event)">clear</md-icon>
         <md-hint *ngIf="hasError('required')">
             <span>{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</span>
         </md-hint>
-    </md-form-field>
-
-    <span class="icon-btn" [class.mat-disabled]="isDisabled"><i class="material-icons">search</i></span>
-    <span class="icon-btn" [class.mat-disabled]="isDisabled" (click)="onClickClear($event)"><i class="material-icons">clear</i></span>
+    </md-form-field>    
 </div>

@@ -1,8 +1,7 @@
-<div fxFill [formGroup]="getFormGroup()">
-
-    <ckeditor #ckEditor [attr.id]="getAttribute()" [id]="getAttribute()" fxFill [formControlName]="getAttribute()" [ngModel]="getValue()"
+<div [formGroup]="getFormGroup()">
+    <ckeditor #ckEditor [attr.id]="getAttribute()" [id]="getAttribute()" [formControlName]="getAttribute()" [ngModel]="getValue()"
         (ngModelChange)="innerOnChange($event)" (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)" class="mat-ckeditor"
-        [placeholder]="placeHolder" [readonly]="isReadOnly">
+        [placeholder]="placeHolder" [readonly]="isReadOnly" fxFlexFill>
         <md-error *ngIf="hasError('required')">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</md-error>
         <md-error *ngIf="hasError('minlength')">{{ 'FORM_VALIDATION.MIN_LENGTH' | oTranslate }}: {{ getErrorValue('minlength', 'requiredLength') }}</md-error>
         <md-error *ngIf="hasError('maxlength')">{{ 'FORM_VALIDATION.MAX_LENGTH' | oTranslate }}: {{ getErrorValue('maxlength', 'requiredLength') }}</md-error>

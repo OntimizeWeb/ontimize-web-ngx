@@ -1,6 +1,6 @@
-<div fxFlex fxFill [formGroup]="getFormGroup()" [mdTooltip]="tooltip" [mdTooltipPosition]="tooltipPosition" [mdTooltipShowDelay]="tooltipShowDelay">
-    <md-form-field #innerInputContainer fxFlex fxFill>
-        <input #mdInputRef mdInput class="mat-input" type="text" [attr.id]="getAttribute()" [id]="getAttribute()" fxFill [formControlName]="getAttribute()"
+<div [formGroup]="getFormGroup()" [mdTooltip]="tooltip" [mdTooltipPosition]="tooltipPosition" [mdTooltipShowDelay]="tooltipShowDelay">
+    <md-form-field #innerInputContainer fxFlexFill>
+        <input #mdInputRef mdInput type="text" [attr.id]="getAttribute()" [id]="getAttribute()"  [formControlName]="getAttribute()"
             [placeholder]="placeHolder" [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)" (focus)="innerOnFocus($event)"
             (blur)="innerOnBlur($event)" [readonly]="isReadOnly">
         <md-error *ngIf="hasError('required')">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</md-error>
