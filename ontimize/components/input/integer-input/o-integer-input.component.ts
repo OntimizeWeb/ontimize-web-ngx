@@ -1,4 +1,4 @@
-import * as $ from 'jquery';
+// import * as $ from 'jquery';
 import {
   Component, Inject, Injector, forwardRef, ElementRef, OnInit,
   Optional,
@@ -177,7 +177,7 @@ export class OIntegerInputComponent extends OTextInputComponent implements OnIni
     }
     if (typeof inputElement !== 'undefined') {
       if (this.focused) {
-        ($ as any)(inputElement).width(($ as any)(inputElement).outerWidth(true));
+        // ($ as any)(inputElement).width(($ as any)(inputElement).outerWidth(true));
       }
       inputElement.type = this.focused ? 'number' : 'text';
       inputElement.value = (val !== undefined) ? val : '';

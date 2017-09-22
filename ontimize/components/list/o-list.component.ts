@@ -292,16 +292,16 @@ export class OListComponent extends OServiceComponent implements OnInit, IList, 
       this.querySuscription = this.dataService[queryMethodName].apply(this.dataService, queryArguments)
         .subscribe(res => {
           let data = undefined;
-          if (($ as any).isArray(res)) {
+          if (Util.isArray(res)) {
             data = res;
-          } else if ((res.code === 0) && ($ as any).isArray(res.data)) {
+          } else if ((res.code === 0) && Util.isArray(res.data)) {
             data = res.data;
             if (this.pageable) {
               this.updatePaginationInfo(res);
             }
           }
           // set list data
-          if (($ as any).isArray(data)) {
+          if (Util.isArray(data)) {
             let respDataArray = data;
             if (self.pageable && !(ovrrArgs && ovrrArgs['replace'])) {
               respDataArray = (self.dataResponseArray || []).concat(data);
