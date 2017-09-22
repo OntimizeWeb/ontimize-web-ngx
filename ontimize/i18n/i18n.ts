@@ -132,8 +132,8 @@ export var MAP = {
     'TABLE.SELECT.ROWS._': '%d rows selected',
     'TABLE.SELECT.ROWS.0': ' ',
     'TABLE.SELECT.ROWS.1': '1 row selected',
-    'TABLE.SHOW_ALL': 'All'
-
+    'TABLE.SHOW_ALL': 'All',
+    'TABLE.SELECT_DATE': 'Select date'
   },
 
   // Spanish
@@ -268,7 +268,8 @@ export var MAP = {
     'TABLE.SELECT.ROWS._': '%d registros seleccionados',
     'TABLE.SELECT.ROWS.0': ' ',
     'TABLE.SELECT.ROWS.1': '1 registro seleccionado',
-    'TABLE.SHOW_ALL': 'Todo'
+    'TABLE.SHOW_ALL': 'Todo',
+    'TABLE.SELECT_DATE': 'Seleccionar fecha'
 
   }
 
