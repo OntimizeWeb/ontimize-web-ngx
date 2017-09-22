@@ -39,12 +39,13 @@ export class OTableCellRendererImageComponent implements OnInit, ITableCellRende
 
   onClick: EventEmitter<Object> = new EventEmitter<Object>();
 
-  constructor( @Inject(forwardRef(() => OTableColumnComponent)) tableColumn: OTableColumnComponent) {
+  constructor( @Inject(forwardRef(() => OTableColumnComponent)) protected tableColumn: OTableColumnComponent) {
     tableColumn.registerRenderer(this);
   }
 
   public ngOnInit() {
     this.avatar = Util.parseBoolean(this.avatar, false);
+    this.tableColumn.updateRendererType('image');
   }
 
   public init(parameters: any) {

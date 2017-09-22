@@ -28,8 +28,6 @@ export const DEFAULT_INPUTS_O_SERVICE_COMPONENT = [
   // attr [string]: list identifier. It is mandatory if data are provided through the data attribute. Default: entity (if set).
   'oattr: attr',
 
-  'title',
-
   'cssClass: css-class',
 
   // visible [no|yes]: visibility. Default: yes.
@@ -140,7 +138,6 @@ export class OServiceComponent implements ILocalStorageComponent {
 
   /* inputs variables */
   protected oattr: string;
-  protected title: string;
   protected cssclass: string;
   @InputConverter()
   protected ovisible: boolean = true;

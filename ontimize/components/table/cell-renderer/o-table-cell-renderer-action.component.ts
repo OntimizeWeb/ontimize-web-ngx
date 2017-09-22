@@ -71,6 +71,7 @@ export class OTableCellRendererActionComponent implements OnInit, ITableCellRend
   }
 
   public ngOnInit() {
+    this.tableColumn.updateRendererType('action');
     if ((typeof (this.renderValue) === 'undefined') &&
       OTableCellRendererActionComponent.DEFAULT_RENDER_VALUES.hasOwnProperty(this.action)) {
       this.renderValue = OTableCellRendererActionComponent.DEFAULT_RENDER_VALUES[this.action];

@@ -25,10 +25,14 @@ export class OTableCellRendererDateComponent implements ITableCellRenderer {
   protected momentService: MomentService;
   protected format: string;
 
-  constructor( @Inject(forwardRef(() => OTableColumnComponent)) tableColumn: OTableColumnComponent,
+  constructor( @Inject(forwardRef(() => OTableColumnComponent)) protected tableColumn: OTableColumnComponent,
     protected injector: Injector) {
     tableColumn.registerRenderer(this);
     this.momentService = this.injector.get(MomentService);
+  }
+
+  public ngOnInit() {
+    this.tableColumn.updateRendererType('date');
   }
 
   public init(parameters: any) {

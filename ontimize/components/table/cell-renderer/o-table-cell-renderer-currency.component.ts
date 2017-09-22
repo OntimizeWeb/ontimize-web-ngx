@@ -34,6 +34,7 @@ export class OTableCellRendererCurrencyComponent extends OTableCellRendererRealC
   protected currencyService: CurrencyService;
   protected currencySymbol: string;
   protected currencySymbolPosition: string;
+  public type = 'currency';
 
   constructor( @Inject(forwardRef(() => OTableColumnComponent)) tableColumn: OTableColumnComponent,
     protected injector: Injector) {
@@ -43,6 +44,7 @@ export class OTableCellRendererCurrencyComponent extends OTableCellRendererRealC
 
   public ngOnInit() {
     super.ngOnInit();
+    this.tableColumn.updateRendererType('currency');
     if (typeof (this.currencySymbol) === 'undefined') {
       this.currencySymbol = this.currencyService.symbol;
     }
