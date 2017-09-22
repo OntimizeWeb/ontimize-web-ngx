@@ -73,6 +73,12 @@ export var MAP = {
     'FORM_VALIDATION.MIN_VALUE': 'Minimum value',
     'FORM_VALIDATION.MAX_VALUE': 'Maximum value',
 
+    'FORM_VALIDATION.DATE_PARSE':'Date not valid format',
+    'FORM_VALIDATION.DATE_FILTER':'Date is not valid for the defined filter',
+    'FORM_VALIDATION.DATE_MIN':'Date min',
+    'FORM_VALIDATION.DATE_MAX':'Date max',
+
+
     'MESSAGES.FORM_VALIDATION_ERROR': 'Form values are not valid!',
     'MESSAGES.FORM_NOTHING_TO_UPDATE_INFO': 'There are no values to update!',
     'MESSAGES.ERROR_LOGIN': 'Login failed. Check username and/or password.',
@@ -203,6 +209,11 @@ export var MAP = {
     'FORM_VALIDATION.DATE_RANGE': 'Fecha fuera del rango válido',
     'FORM_VALIDATION.MIN_VALUE': 'Valor mínimo',
     'FORM_VALIDATION.MAX_VALUE': 'Valor máximo',
+
+    'FORM_VALIDATION.DATE_PARSE':'Formato no válido',
+    'FORM_VALIDATION.DATE_FILTER':'Fecha no es válida para el filtro definido',
+    'FORM_VALIDATION.DATE_MIN':'Fecha mínima',
+    'FORM_VALIDATION.DATE_MAX':'Fecha máxima',
 
     'MESSAGES.FORM_VALIDATION_ERROR': 'El formulario contiene campos con valores no válidos',
     'MESSAGES.FORM_NOTHING_TO_UPDATE_INFO': '¡No existen valores para actualizar!',
