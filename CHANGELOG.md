@@ -30,6 +30,7 @@
 * **o-date-input**: with new angular-material datepicker is possible to do a time selection setting component 'format' attribute that shows time (see [momentjs](https://momentjs.com/docs/#/displaying/format/) docs) and editing the input ([#68](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/68))
 * **o-table** : adding '*onRowSelected*', '*onRowDeselected*', '*onRowDeleted*', '*onDoubleClick*', '*onTableDataLoaded*' and '*onPaginatedTableDataLoaded*' outputs.
 
+
 ### Bug Fixes
 * **Exports**: exporting content from '*util/async*', '*util/base64*' and '*util/events*'.
 * **o-table**: column header ordering icon state bug fixed. ([#116](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/116)) ([589f3a9](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/589f3a9))
@@ -62,6 +63,10 @@
 * **o-form**: Fixing bugs when inner component '*attr*' is undefined ([#107](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/107)) ([ce6bc93](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/ce6bc93))
 * **o-list**: Filtering '*static-data*' bugs fixed ([#90](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/90)) ([6e58311](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/6e58311))
 * **Form components**: Updating form data cache when changing inner components data with '*setValue*' method ([#80](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/80)) ([c92b1b8](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/c92b1b8))
+* **Template components**: 
+  * Fixing bugs in render image base64 and checkbox style in IE  ([2c13c29](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/2c13c2))
+  * Updating icons in components with attribute mdSuffix ([6567e3](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/6567e3)
+  * Fixing bugs of flex-layout in IE ([6567e3](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/6567e3)
 
 ## 2.0.0-rc.6
 
