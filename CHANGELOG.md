@@ -18,14 +18,16 @@
 
 * **@angular/flex-layout**: updating styles and templates for ([@angular/flex-layout@2.0.0-beta.9](https://github.com/angular/flex-layout/blob/master/CHANGELOG.md)) breaking changes.
 * **deleted directives**: '*DisabledComponentDirective (o-disabled)*' and '*FormComponentDirective*' are no longer available (or needed).
+* **o-date-input**: date input not longer using jquery-ui datepicker. Now using angular-material [datepicker](https://material.angular.io/components/datepicker/overview)
+**IMPORTANT: dont forget to remove a possible jquery-ui datepicker script import (node_modules/jquery-ui/ui/widgets/datepicker.js)
 
 ### Features
 * **ontimize-web-ng2**: '*OntimizeWebModule*' is now AoT compatible.
-
 * **o-form**: adding '*layout-direction*' input ([#114](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/114)) ([afb25e7](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/afb25e7))
 * **o-list-picker**, **o-combo**: adding 'value-column-type' attribute ([#115](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/115)) ([56b7db3](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/56b7db3))
 * **o-table-cell-renderer-string**: adding '*translate*' input ([#118](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/118)) ([f9da979](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/f9da979))
 * **o-table-cell-editor**: adding '*onFocus*', '*onBlur*' and '*onSubmit*' outputs to all cell editor components ([#120](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/120)) ([a1ee4e2](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/a1ee4e2))
+* **o-date-input**: with new angular-material datepicker is possible to do a time selection setting component 'format' attribute that shows time (see [momentjs](https://momentjs.com/docs/#/displaying/format/) docs) and editing the input ([#68](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/68))
 
 
 ### Bug Fixes
