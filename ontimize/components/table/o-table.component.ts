@@ -141,7 +141,13 @@ export const DEFAULT_INPUTS_O_TABLE = [
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE = [
-  'onClick'
+  'onClick',
+  'onRowSelected',
+  'onRowDeselected',
+  'onRowDeleted',
+  'onDoubleClick',
+  'onTableDataLoaded',
+  'onPaginatedTableDataLoaded'
 ];
 
 export interface OTableInitializationOptions {
@@ -170,7 +176,8 @@ export interface OTableInitializationOptions {
   ],
   encapsulation: ViewEncapsulation.None,
   host: {
-    '[class.o-table]': 'true'
+    '[class.o-table]': 'true',
+    '[class.ontimize-table]': 'true'
   }
 })
 
