@@ -22,6 +22,15 @@
     * Theming styles in your '*app.scss*' file:
       `@import 'node_modules/ontimize-web-ngx-datatable/o-datatable-theme.scss';`
       `@include o-datatable-theme($theme);`
+  * **angular-cli.json**:
+    * If you dont install '*ontimize-web-ngx-datatable*' you must delete the following scripts from '*scripts*' property:
+      * `../node_modules/jquery/dist/jquery.js`
+      *  `../node_modules/colresizable/colResizable-1.6.min.js`
+      *  `../node_modules/pdfmake/build/pdfmake.js`
+      *  `../node_modules/pdfmake/build/vfs_fonts.js`
+    * If you install '*ontimize-web-ngx-datatable*' you must add the following stylesheet to '*styles*' property:
+      * `../node_modules/ontimize-web-ngx-datatable/styles.scss`      
+      
 **Note**: From now on, all information about '*o-datatable*' will be available in [ontimize-web-ngx-datatable](https://github.com/OntimizeWeb/ontimize-web-ngx-datatable)
 
 * **@angular/material**: updating styles and templates for ([@angular/material@2.0.0-beta.10](https://github.com/angular/material2/blob/master/CHANGELOG.md)) breaking changes.
