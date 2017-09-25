@@ -1,9 +1,9 @@
   .o-container {
-    /*display: -webkit-box;
+   /* display: -webkit-box;
     display: -moz-box;
     display: -ms-flexbox;
     display: -webkit-flex;
-    display: flex;*/
+    display: initial;
     -webkit-box-direction: normal;
     -moz-box-direction: normal;
     -webkit-box-orient: vertical;
@@ -26,7 +26,7 @@
     -moz-box-align: stretch;
     -webkit-align-items: stretch;
     -ms-flex-align: stretch;
-    align-items: stretch;
+    align-items: stretch;*/
   }
 
   .o-container-title-item {
