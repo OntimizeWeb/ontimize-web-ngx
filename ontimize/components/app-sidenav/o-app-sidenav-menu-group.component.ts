@@ -1,21 +1,7 @@
-import {
-  // Optional,
-  // Inject,
-  // forwardRef,
-  ElementRef,
-  Injector,
-  NgModule,
-  Component,
-  // OnInit,
-  ViewEncapsulation
-} from '@angular/core';
+import { ElementRef, Injector, NgModule, Component, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
 import { OSharedModule } from '../../shared';
-import {
-  AppMenuService,
-  MenuGroup
-} from '../../services';
+import { AppMenuService, MenuGroup } from '../../services';
 import { InputConverter } from '../../decorators';
 // import { OAppSidenavComponent } from './o-app-sidenav.component';
 import { OAppSidenavMenuItemModule } from './o-app-sidenav-menu-item.component';
@@ -60,12 +46,6 @@ export class OAppSidenavMenuGroupComponent {
   // }
 
   onClick() {
-    let ul = $(this.elRef.nativeElement).find('.application-sidenav-menugroup-ul:first');
-    let newMarginTop = 0;
-    if (this.menuGroup.opened) {
-      newMarginTop = -(ul.outerHeight() + 50);
-    }
-    ul.css('margin-top', newMarginTop);
     this.menuGroup.opened = !this.menuGroup.opened;
   }
 }

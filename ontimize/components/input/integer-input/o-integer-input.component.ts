@@ -1,9 +1,14 @@
-// import * as $ from 'jquery';
 import {
-  Component, Inject, Injector, forwardRef, ElementRef, OnInit,
+  Component,
+  Inject,
+  Injector,
+  forwardRef,
+  ElementRef,
+  OnInit,
   Optional,
   NgModule,
-  ViewEncapsulation
+  ViewEncapsulation,
+  Renderer
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl } from '@angular/forms';
@@ -71,13 +76,16 @@ export class OIntegerInputComponent extends OTextInputComponent implements OnIni
   protected componentPipe: OIntegerPipe;
   protected pipeArguments: IIntegerPipeArgument;
   protected focused: boolean = false;
+  protected renderer: Renderer;
+  protected inputWidth;
 
   constructor(
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
     elRef: ElementRef,
-    injector: Injector) {
+    injector: Injector
+  ) {
     super(form, elRef, injector);
-
+    this.renderer = this.injector.get(Renderer);
     this.setComponentPipe();
   }
 
@@ -176,10 +184,13 @@ export class OIntegerInputComponent extends OTextInputComponent implements OnIni
       inputElement = this.elRef.nativeElement.getElementsByTagName('INPUT')[0];
     }
     if (typeof inputElement !== 'undefined') {
-      if (this.focused) {
-        // ($ as any)(inputElement).width(($ as any)(inputElement).outerWidth(true));
+      if (!this.inputWidth && this.focused) {
+        this.inputWidth = inputElement.parentElement.clientWidth;
       }
       inputElement.type = this.focused ? 'number' : 'text';
+      if (this.focused) {
+        this.renderer.setElementStyle(this.elRef.nativeElement, 'width', (this.inputWidth + 'px'));
+      }
       inputElement.value = (val !== undefined) ? val : '';
     }
   }
