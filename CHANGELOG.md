@@ -9,6 +9,21 @@
 * **Updated**:  @angular/flex-layout@2.0.0-beta.9
 
 ### BREAKING CHANGES
+* **o-date-input**: date input not longer using jquery-ui datepicker. Now using angular-material [datepicker](https://material.angular.io/components/datepicker/overview)
+**IMPORTANT: dont forget to remove a possible jquery-ui datepicker script import (node_modules/jquery-ui/ui/widgets/datepicker.js)
+
+* **o-table**: ontimize web table component ('*o-table*') and all its inner components ('*o-table-column*', cell renderers and cell editors) are not longer available in '*OntimizeWebModule*', you must install '*ontimize-web-ngx-datatable*' to import '*ODataTableModule*' and have the full '*o-table*' component with the following breaking changes:
+  * **ODataTableModule**: you must add the import of '*ODataTableModule*' in that modules using the table component (`import { ODataTableModule } from 'ontimize-web-ngx-datatable;'`).
+  * **html templates**: Change all '*o-table*' html tags for '*o-datatable*'. This also includes all the inner components ('*o-table-column*' is now '*o-datatable-column*' and so on).
+  * **typescript**: Every import of table components references must also change using the new naming. For example  `import { OTableComponent } from 'ontimize-web-ng2';` must be changed to `import { ODataTableComponent } from 'ontimize-web-ngx-datatable';`. This also applies to all table components or interfaces (all '*OTable...*' references must be changed to '*ODataTable...*'.).
+  * **styles**: You must import the styles of the '*o-datatable*' component:
+    * Module styles:
+      `node_modules/ontimize-web-ngx-datatable/styles.scss`
+    * Theming styles in your '*app.scss*' file:
+      `@import 'node_modules/ontimize-web-ngx-datatable/o-datatable-theme.scss';`
+      `@include o-datatable-theme($theme);`
+**Note**: From now on, all information about '*o-datatable*' will be available in [ontimize-web-ngx-datatable](https://github.com/OntimizeWeb/ontimize-web-ngx-datatable)
+
 * **@angular/material**: updating styles and templates for ([@angular/material@2.0.0-beta.10](https://github.com/angular/material2/blob/master/CHANGELOG.md)) breaking changes.
   * Some of the important changes for '*ontimize-web-ng2*':
     * `md-input-container` renamed to `md-form-field`
@@ -18,8 +33,6 @@
 
 * **@angular/flex-layout**: updating styles and templates for ([@angular/flex-layout@2.0.0-beta.9](https://github.com/angular/flex-layout/blob/master/CHANGELOG.md)) breaking changes.
 * **deleted directives**: '*DisabledComponentDirective (o-disabled)*' and '*FormComponentDirective*' are no longer available (or needed).
-* **o-date-input**: date input not longer using jquery-ui datepicker. Now using angular-material [datepicker](https://material.angular.io/components/datepicker/overview)
-**IMPORTANT: dont forget to remove a possible jquery-ui datepicker script import (node_modules/jquery-ui/ui/widgets/datepicker.js)
 
 ### Features
 * **ontimize-web-ng2**: '*OntimizeWebModule*' is now AoT compatible.
@@ -28,16 +41,22 @@
 * **o-table-cell-renderer-string**: adding '*translate*' input ([#118](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/118)) ([f9da979](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/f9da979))
 * **o-table-cell-editor**: adding '*onFocus*', '*onBlur*' and '*onSubmit*' outputs to all cell editor components ([#120](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/120)) ([a1ee4e2](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/a1ee4e2))
 * **o-date-input**: with new angular-material datepicker is possible to do a time selection setting component 'format' attribute that shows time (see [momentjs](https://momentjs.com/docs/#/displaying/format/) docs) and editing the input ([#68](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/68))
-* **o-table** : adding '*onRowSelected*', '*onRowDeselected*', '*onRowDeleted*', '*onDoubleClick*', '*onTableDataLoaded*' and '*onPaginatedTableDataLoaded*' outputs.
+* **o-table** : adding '*onRowSelected*', '*onRowDeselected*', '*onRowDeleted*', '*onDoubleClick*', '*onTableDataLoaded*' and '*onPaginatedTableDataLoaded*' outputs ([#123](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/123)) ([b5aabb2](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/b5aabb2))
 
 
 ### Bug Fixes
 * **Exports**: exporting content from '*util/async*', '*util/base64*' and '*util/events*'.
+* **inputs**: edition mode bug fixed ([#112](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/112)) ([f19eba7](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/f19eba7))
 * **o-table**: column header ordering icon state bug fixed. ([#116](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/116)) ([589f3a9](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/589f3a9))
 * **o-table and cell renderers**: fixing ordering bugs ([#116](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/116)) ([589f3a9](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/589f3a9))
 * **NumberService**: formatting bugs fixed. ([#116](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/116)) ([#117](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/117)) ([589f3a9](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/589f3a9))
 * **o-table-cell-editor-combo**, **o-table-cell-renderer-service**: fixing service calls bugs ([#119](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/119)) ([eafff5c](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/eafff5c))
 * **o-combo**: fixing value setting bugs ([#121](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/121)) ([a8a0eb2](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/a8a0eb2))
+* **Template components**:
+  * Fixing bugs in render image base64 and checkbox style in IE  ([2c13c29](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/2c13c2))
+  * Updating icons in components with attribute mdSuffix ([6567e3](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/6567e3)
+  * Fixing bugs of flex-layout in IE ([6567e3](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/6567e3)
+* **OntimizeEE service**: logout bug fixed ([#124](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/124)) ([c341fc7](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/c341fc7))
 
 
 ## 2.0.0-rc.7
@@ -63,10 +82,6 @@
 * **o-form**: Fixing bugs when inner component '*attr*' is undefined ([#107](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/107)) ([ce6bc93](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/ce6bc93))
 * **o-list**: Filtering '*static-data*' bugs fixed ([#90](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/90)) ([6e58311](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/6e58311))
 * **Form components**: Updating form data cache when changing inner components data with '*setValue*' method ([#80](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/80)) ([c92b1b8](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/c92b1b8))
-* **Template components**: 
-  * Fixing bugs in render image base64 and checkbox style in IE  ([2c13c29](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/2c13c2))
-  * Updating icons in components with attribute mdSuffix ([6567e3](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/6567e3)
-  * Fixing bugs of flex-layout in IE ([6567e3](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/6567e3)
 
 ## 2.0.0-rc.6
 
