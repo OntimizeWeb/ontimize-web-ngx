@@ -1,5 +1,5 @@
 import { Injector, ElementRef } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ValidatorFn } from '@angular/forms/src/directives/validators';
 
 import {
@@ -19,6 +19,8 @@ export interface IFormDataTypeComponent extends IComponent {
 
 export interface IFormControlComponent extends IComponent {
   getControl(): FormControl;
+  getFormControl(): FormControl;
+  hasError(error: string): boolean;
 }
 
 export interface IFormDataComponent {
@@ -45,6 +47,22 @@ export class OFormDataComponent extends OBaseComponent implements IFormControlCo
     super(injector);
     this.form = form;
     this.elRef = elRef;
+  }
+
+  getFormGroup(): FormGroup {
+    return this.form ? this.form.formGroup : undefined;
+  }
+
+  getFormControl(): FormControl {
+    return this._fControl;
+  }
+
+  hasError(error: string): boolean {
+    return !this.isReadOnly && this._fControl.touched && this._fControl.hasError(error);
+  }
+
+  getErrorValue(error: string, prop: string): string {
+    return this._fControl.hasError(error) ? this._fControl.getError(error)[prop] || '' : '';
   }
 
   initialize() {

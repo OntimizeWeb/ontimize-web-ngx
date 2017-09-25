@@ -1,7 +1,7 @@
 <div class="fake-li mat-primary" [class.fake-li-hover]="isHovered" [class.is-selected]="isConfiguredLang()">
   <a fxLayout="row" fxLayoutAlign="space-between center" (click)="configureI18n()">
-    <md-icon *ngIf="icon" class="o-bar-menu-item-icon mat-24">{{ icon }}</md-icon>
-    <div fxFlex md-line class="o-bar-menu-item-title">{{ title | oTranslate }}</div>
+    <md-icon *ngIf="icon !== undefined" class="o-bar-menu-item-icon mat-24">{{ icon }}</md-icon>
+    <div fxFlex mdLine class="o-bar-menu-item-title">{{ title | oTranslate }}</div>
     <md-icon *ngIf="isConfiguredLang()" class="o-bar-menu-item-icon configured-lang mat-24">check_circle</md-icon>
   </a>
 </div>

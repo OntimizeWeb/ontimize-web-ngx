@@ -5,7 +5,6 @@ const commonConfig = require('./webpack.common.js'); // the settings that are co
 /**
  * Webpack Plugins
  */
-const CopyWebpackPlugin = require('copy-webpack-plugin');
 const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin');
 const ngcWebpack = require('ngc-webpack');
 
@@ -44,12 +43,6 @@ module.exports = function (options) {
       }]
     },
     plugins: [
-      new CopyWebpackPlugin([
-        { from: 'ontimize/**/*.scss', to: '../' },
-        { from: 'ontimize/**/*.html', to: '../' },
-        { from: 'ontimize/components/table/vendor/**', to: '../' }
-      ]),
-
       new ngcWebpack.NgcWebpackPlugin({
         disabled: false,
         //  disabled: !AOT,

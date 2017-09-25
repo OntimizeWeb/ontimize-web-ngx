@@ -53,8 +53,8 @@ let nextUniqueId = 0;
 @Component({
   selector: 'ckeditor',
   providers: [CKEDITOR_CONTROL_VALUE_ACCESSOR],
-  template: require('./ckeditor.component.html'),
-  styles: [require('./ckeditor.component.scss')],
+  templateUrl: './ckeditor.component.html',
+  styleUrls: ['./ckeditor.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
 export class CKEditor implements ControlValueAccessor {
@@ -72,6 +72,7 @@ export class CKEditor implements ControlValueAccessor {
   @Input() placeholder: string = null;
   @Input() dividerColor: 'primary' | 'accent' | 'warn' = 'primary';
 
+  protected disabled = false;
   /**
    * Content directives.
    */
@@ -100,6 +101,10 @@ export class CKEditor implements ControlValueAccessor {
   @Output('focus')
   get onFocus(): Observable<FocusEvent> {
     return this._focusEmitter.asObservable();
+  }
+
+  get isDisabled() : boolean {
+    return this.disabled;
   }
 
 

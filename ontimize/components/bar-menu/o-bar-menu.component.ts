@@ -20,8 +20,8 @@ export const DEFAULT_INPUTS_O_BAR_MENU = [
 
 @Component({
   selector: 'o-bar-menu',
-  template: require('./o-bar-menu.component.html'),
-  styles: [require('./o-bar-menu.component.scss')],
+  templateUrl: './o-bar-menu.component.html',
+  styleUrls: ['./o-bar-menu.component.scss'],
   inputs: [
     ...DEFAULT_INPUTS_O_BAR_MENU
   ],
@@ -31,12 +31,12 @@ export class OBarMenuComponent {
 
   public static DEFAULT_INPUTS_O_BAR_MENU = DEFAULT_INPUTS_O_BAR_MENU;
 
-  public authGuardService: AuthGuardService;
+  protected authGuardService: AuthGuardService;
   protected translateService: OTranslateService;
 
-  protected menuTitle: string;
-  protected tooltip: string;
-  protected id: string;
+  protected _menuTitle: string;
+  protected _tooltip: string;
+  protected _id: string;
 
   constructor(
     protected elRef: ElementRef,
@@ -78,15 +78,41 @@ export class OBarMenuComponent {
         element.classList.remove('fake-li-hover');
       });
     }
-
   }
 
+  getAuthGuardService() : AuthGuardService {
+    return this.authGuardService;
+  }
+
+  get menuTitle(): string {
+    return this._menuTitle;
+  }
+
+  set menuTitle(val : string) {
+    this._menuTitle = val;
+  }
+
+  get tooltip(): string {
+    return this._tooltip;
+  }
+
+  set tooltip(val : string) {
+    this._tooltip = val;
+  }
+
+  get id(): string {
+    return this._id;
+  }
+
+  set id(val : string) {
+    this._id = val;
+  }
 }
 
 @NgModule({
   declarations: [OBarMenuComponent],
   imports: [OSharedModule, CommonModule],
-  exports: [OBarMenuComponent],
+  exports: [OBarMenuComponent]
 })
 export class OBarMenuModule {
 }

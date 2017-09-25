@@ -23,17 +23,18 @@ export function InputConverter(converter?: Function) {
   function InputConverterInner(target: Object, key: string) {
     if (converter === undefined) {
       var metadata = (<any>Reflect).getMetadata('design:type', target, key);
-      if (metadata === undefined || metadata === null)
+      if (metadata === undefined || metadata === null) {
         throw new Error('The reflection metadata could not be found.');
-
+      }
       if (metadata.name === 'String') {
         converter = StringConverter;
       } else if (metadata.name === 'Boolean') {
         converter = BooleanConverter;
       } else if (metadata.name === 'Number') {
         converter = NumberConverter;
-      } else
+      } else {
         throw new Error('There is no converter for the given property type "' + metadata.name + '".');
+      }
     }
 
     var definition = Object.getOwnPropertyDescriptor(target, key);

@@ -23,8 +23,8 @@ export const DEFAULT_OUTPUTS_O_PASSWORD_INPUT = [
 
 @Component({
   selector: 'o-password-input',
-  template: require('./o-password-input.component.html'),
-  styles: [require('./o-password-input.component.scss')],
+  templateUrl: './o-password-input.component.html',
+  styleUrls: ['./o-password-input.component.scss'],
   inputs: [
     ...DEFAULT_INPUTS_O_PASSWORD_INPUT
   ],

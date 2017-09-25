@@ -13,15 +13,15 @@ import {
   OAppHeaderModule
 } from '../../components';
 
-export const DEFAULT_INPUTS_O_APP_LAYOUT = [];
-export const DEFAULT_OUTPUTS_O_APP_LAYOUT = [];
+export const DEFAULT_INPUTS_O_APP_LAYOUT : any[] = [];
+export const DEFAULT_OUTPUTS_O_APP_LAYOUT : any[] = [];
 
 @Component({
   selector: 'o-app-layout',
   inputs: DEFAULT_INPUTS_O_APP_LAYOUT,
   outputs: DEFAULT_OUTPUTS_O_APP_LAYOUT,
-  template: require('./o-app-layout.component.html'),
-  styles: [require('./o-app-layout.component.scss')],
+  templateUrl: './o-app-layout.component.html',
+  styleUrls: ['./o-app-layout.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
 

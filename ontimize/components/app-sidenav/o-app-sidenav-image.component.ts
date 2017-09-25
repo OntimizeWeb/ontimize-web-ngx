@@ -23,8 +23,8 @@ export const DEFAULT_OUTPUTS_O_APP_SIDENAV_IMAGE = [
   selector: 'o-app-sidenav-image',
   inputs: DEFAULT_INPUTS_O_APP_SIDENAV_IMAGE,
   outputs: DEFAULT_OUTPUTS_O_APP_SIDENAV_IMAGE,
-  template: require('./o-app-sidenav-image.component.html'),
-  styles: [require('./o-app-sidenav-image.component.scss')],
+  templateUrl: './o-app-sidenav-image.component.html',
+  styleUrls: ['./o-app-sidenav-image.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
 export class OAppSidenavImageComponent implements OnInit {
@@ -50,10 +50,10 @@ export class OAppSidenavImageComponent implements OnInit {
   ngOnInit() {
     if (this.sidenav) {
       let self = this;
-      this.sidenav.onOpenStart.subscribe(() => {
+      this.sidenav.onOpen.subscribe(() => {
         self.setOpenedImg();
       });
-      this.sidenav.onCloseStart.subscribe(() => {
+      this.sidenav.onClose.subscribe(() => {
         self.setClosedImg();
       });
       if (this.sidenav.opened) {

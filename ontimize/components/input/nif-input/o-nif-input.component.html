@@ -1,13 +1,12 @@
-<div fxLayout="row" fxFill fxLayoutAlign="space-between center" [formGroup]="form?.formGroup"
-    [mdTooltip]="tooltip" [mdTooltipPosition]="tooltipPosition" [mdTooltipShowDelay]="tooltipShowDelay">
-    <md-input-container #innerInputContainer fxFlex fxFill>
-        <input mdInput class="mat-input" type="text" [attr.id]="oattr" [id]="oattr" fxFill [formControlName]="oattr" [placeholder]="placeHolder"
-            [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)" (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)" [readonly]="isReadOnly" [o-disabled]="innerInputContainer">
-            <md-hint *ngIf="!isReadOnly && _fControl.touched && _fControl.errors">
-                <span *ngIf="_fControl.errors?.required">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</span>
-                <span *ngIf="_fControl.errors?.invalidNIF"> {{ 'FORM_VALIDATION.NIF_FORMAT' | oTranslate}} </span>
-                <span *ngIf="_fControl.errors?.invalidNIFLetter"> {{ 'FORM_VALIDATION.DNI_LETTER' | oTranslate}} </span>
-            </md-hint>
-    </md-input-container>
-    <span class="icon-btn" [class.mat-disabled]="isDisabled"><i class="material-icons">perm_identity</i></span>
+<div fxLayout="row" fxLayoutAlign="space-between center" [formGroup]="getFormGroup()" [mdTooltip]="tooltip" [mdTooltipPosition]="tooltipPosition"
+    [mdTooltipShowDelay]="tooltipShowDelay">
+    <md-form-field #innerInputContainer fxFlexFill>
+        <input mdInput type="text" [attr.id]="getAttribute()" [id]="getAttribute()" [formControlName]="getAttribute()"
+            [placeholder]="placeHolder" [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)" (focus)="innerOnFocus($event)"
+            (blur)="innerOnBlur($event)" [readonly]="isReadOnly">
+            <md-icon mdSuffix [class.mat-disabled]="isDisabled">perm_identity</md-icon>
+        <md-error *ngIf="hasError('required')">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</md-error>
+        <md-error *ngIf="hasError('invalidNIF')">{{ 'FORM_VALIDATION.NIF_FORMAT' | oTranslate}}</md-error>
+        <md-error *ngIf="hasError('invalidNIFLetter')">{{ 'FORM_VALIDATION.DNI_LETTER' | oTranslate}}</md-error>
+    </md-form-field>
 </div>

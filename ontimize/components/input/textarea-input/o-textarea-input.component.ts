@@ -26,8 +26,8 @@ export const DEFAULT_OUTPUTS_O_TEXTAREA_INPUT = [
 
 @Component({
   selector: 'o-textarea-input',
-  template: require('./o-textarea-input.component.html'),
-  styles: [require('./o-textarea-input.component.scss')],
+  templateUrl: './o-textarea-input.component.html',
+  styleUrls: ['./o-textarea-input.component.scss'],
   inputs: [
     ...DEFAULT_INPUTS_O_TEXTAREA_INPUT
   ],
@@ -43,6 +43,8 @@ export class OTextareaInputComponent extends OTextInputComponent {
 
   @InputConverter()
   rows: number = 5;
+  @InputConverter()
+  columns: number = 3;
 
   constructor(
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,

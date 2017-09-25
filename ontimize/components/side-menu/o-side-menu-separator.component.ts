@@ -10,8 +10,8 @@ import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'o-side-menu-separator',
-  template: require('./o-side-menu-separator.component.html'),
-  styles: [require('./o-side-menu-separator.component.scss')],
+  templateUrl: './o-side-menu-separator.component.html',
+  styleUrls: ['./o-side-menu-separator.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
 export class OSideMenuSeparatorComponent {
@@ -27,7 +27,7 @@ export class OSideMenuSeparatorComponent {
 @NgModule({
   declarations: [OSideMenuSeparatorComponent],
   imports: [OSharedModule, CommonModule, OSideMenuModule],
-  exports: [OSideMenuSeparatorComponent],
+  exports: [OSideMenuSeparatorComponent]
 })
 export class OSideMenuSeparatorModule {
 }

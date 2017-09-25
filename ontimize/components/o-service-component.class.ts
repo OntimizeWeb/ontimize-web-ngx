@@ -15,7 +15,7 @@ import { OntimizeService, AuthGuardService, OTranslateService, LocalStorageServi
 import { OFormComponent } from './form/o-form.component';
 
 import { OListInitializationOptions } from './list/o-list.component';
-import { OTableInitializationOptions } from './table/o-table.component';
+// import { OTableInitializationOptions } from './table/o-table.component';
 
 import { Util } from '../utils';
 
@@ -243,8 +243,20 @@ export class OServiceComponent implements ILocalStorageComponent {
     }
   }
 
+  isVisible() : boolean {
+    return this.ovisible;
+  }
+
+  hasControls() : boolean {
+    return this.controls;
+  }
+
   getSelectedItems(): any[] {
     return this.selectedItems;
+  }
+
+  getAttribute(): string {
+    return this.oattr;
   }
 
   getComponentKey(): string {
@@ -541,7 +553,7 @@ export class OServiceComponent implements ILocalStorageComponent {
     this.selectedItems = [];
   }
 
-  reinitialize(options: OListInitializationOptions | OTableInitializationOptions) {
+  reinitialize(options: OListInitializationOptions /*| OTableInitializationOptions*/) {
     if (options && Object.keys(options).length) {
       let clonedOpts = Object.assign({}, options);
       if (clonedOpts.hasOwnProperty('entity')) {

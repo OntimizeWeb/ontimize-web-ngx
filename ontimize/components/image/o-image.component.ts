@@ -6,7 +6,7 @@ import {
 } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
-import { MdInputDirective } from '@angular/material';
+import { MdInput } from '@angular/material';
 
 import { OSharedModule } from '../../shared';
 import { CommonModule } from '@angular/common';
@@ -42,8 +42,8 @@ export const DEFAULT_OUTPUTS_O_IMAGE = [
 
 @Component({
   selector: 'o-image',
-  template: require('./o-image.component.html'),
-  styles: [require('./o-image.component.scss')],
+  templateUrl: './o-image.component.html',
+  styleUrls: ['./o-image.component.scss'],
   inputs: [
     ...DEFAULT_INPUTS_O_IMAGE
   ],
@@ -60,19 +60,19 @@ export class OImageComponent extends OFormDataComponent implements OnInit {
   emptyimage: string;
   emptyicon: string;
   @InputConverter()
-  showControls: boolean = true;
+  protected showControls: boolean = true;
 
   onChange: EventEmitter<Object> = new EventEmitter<Object>();
 
   @ViewChild('inputControl')
-  protected inputControl: MdInputDirective;
+  protected inputControl: MdInput;
   @ViewChild('titleLabel')
   protected titleLabel: ElementRef;
 
-  protected useEmptyIcon: boolean = true;
-  protected useEmptyImage: boolean = false;
+  protected _useEmptyIcon: boolean = true;
+  protected _useEmptyImage: boolean = false;
 
-  private _domSanitizer: DomSanitizer;
+  protected _domSanitizer: DomSanitizer;
 
   constructor(
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
@@ -88,14 +88,14 @@ export class OImageComponent extends OFormDataComponent implements OnInit {
     this.initialize();
 
     if (this.emptyimage && this.emptyimage.length > 0) {
-      this.useEmptyIcon = false;
-      this.useEmptyImage = true;
+      this._useEmptyIcon = false;
+      this._useEmptyImage = true;
     }
 
-    if (this.emptyicon === undefined && !this.useEmptyImage) {
+    if (this.emptyicon === undefined && !this._useEmptyImage) {
       this.emptyicon = 'photo';
-      this.useEmptyIcon = true;
-      this.useEmptyImage = false;
+      this._useEmptyIcon = true;
+      this._useEmptyImage = false;
     }
 
   }
@@ -167,9 +167,9 @@ export class OImageComponent extends OFormDataComponent implements OnInit {
       if (this.value.value instanceof Object && this.value.value.bytes) {
         let src: string = '';
         if (this.value.value.bytes.substring(0, 4) === 'data') {
-          src = 'data:image/*;base64,' + this.value.value.bytes.substring(this.value.value.bytes.indexOf('base64') + 7);
+          src = 'data:image/png;base64,' + this.value.value.bytes.substring(this.value.value.bytes.indexOf('base64') + 7);
         } else {
-          src = 'data:image/*;base64,' + this.value.value.bytes;
+          src = 'data:image/png;base64,' + this.value.value.bytes;
         }
 
         return this._domSanitizer.bypassSecurityTrustUrl(src);
@@ -177,9 +177,9 @@ export class OImageComponent extends OFormDataComponent implements OnInit {
         this.value.value.length > 300) {
         let src: string = '';
         if (this.value.value.substring(0, 4) === 'data') {
-          src = 'data:image/*;base64,' + this.value.value.substring(this.value.value.indexOf('base64') + 7);
+          src = 'data:image/png;base64,' + this.value.value.substring(this.value.value.indexOf('base64') + 7);
         } else {
-          src = 'data:image/*;base64,' + this.value.value;
+          src = 'data:image/png;base64,' + this.value.value;
         }
 
         return this._domSanitizer.bypassSecurityTrustUrl(src);
@@ -207,6 +207,17 @@ export class OImageComponent extends OFormDataComponent implements OnInit {
     }
   }
 
+  hasControls(): boolean {
+    return this.showControls;
+  }
+
+  useEmptyIcon(): boolean {
+    return this._useEmptyIcon && this.isEmpty();
+  }
+
+  useEmptyImage(): boolean {
+    return this._useEmptyImage && this.isEmpty();
+  }
 }
 
 @NgModule({

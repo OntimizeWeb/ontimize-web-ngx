@@ -1,11 +1,8 @@
-<div fxFill [formGroup]="form?.formGroup" class="relative"
-    [mdTooltip]="tooltip" [mdTooltipPosition]="tooltipPosition" [mdTooltipShowDelay]="tooltipShowDelay">
-    <md-checkbox [attr.id]="oattr" [id]="oattr" fxFill [formControlName]="oattr" [o-disabled]="innerInput" #innerInput
-        [checked]="isChecked()" [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)">
+<div fxFill [formGroup]="getFormGroup()" class="relative" [mdTooltip]="tooltip" [mdTooltipPosition]="tooltipPosition" [mdTooltipShowDelay]="tooltipShowDelay">
+    <md-checkbox [attr.id]="getAttribute()" [id]="getAttribute()" fxFill [formControlName]="getAttribute()" #innerInput [checked]="isChecked()"
+        [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)">
         {{ placeHolder }}
-        <md-hint *ngIf="!isReadOnly && _fControl.touched && _fControl.errors">
-            <span *ngIf="_fControl.errors?.required">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</span>
-        </md-hint>
+        <md-error *ngIf="hasError('required')">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</md-error>
     </md-checkbox>
-    <div *ngIf="isReadOnly" fxFill class="read-only-blocker" (click)="onClickBlocker($event)" ></div>
+    <div *ngIf="isReadOnly" fxFill class="read-only-blocker" (click)="onClickBlocker($event)"></div>
 </div>

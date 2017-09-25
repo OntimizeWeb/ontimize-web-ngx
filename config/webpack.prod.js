@@ -8,7 +8,6 @@ const commonConfig = require('./webpack.common.js'); // the settings that are co
 const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin');
 const UglifyJsPlugin = require('webpack/lib/optimize/UglifyJsPlugin');
 const OptimizeJsPlugin = require('optimize-js-plugin');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
 const ngcWebpack = require('ngc-webpack');
 /**
  * Webpack Constants
@@ -50,19 +49,6 @@ module.exports = function (env) {
       // new OptimizeJsPlugin({
       //   sourceMap: false
       // }),
-
-      new CopyWebpackPlugin([
-        { from: 'ontimize/components/material/styles/*.scss', to: '../' },
-        { from: 'ontimize/components/material/*styles.scss', to: '../' },
-        { from: 'ontimize/components/container/*o-container.component.scss', to: '../' },
-        { from: 'ontimize/components/input/*input.scss', to: '../' },
-        { from: 'ontimize/components/**/*-theme.scss', to: '../' },
-        { from: 'ontimize/components/theming/*.scss', to: '../' },
-
-        { from: 'ontimize/**/*.scss', to: '../' },
-        { from: 'ontimize/**/*.html', to: '../' },
-        { from: 'ontimize/components/table/vendor/**', to: '../' }
-      ]),
 
       /**
        * See: https://webpack.github.io/docs/list-of-plugins.html#uglifyjsplugin

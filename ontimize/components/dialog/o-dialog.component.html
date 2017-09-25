@@ -1,21 +1,16 @@
-  <h1 *ngIf="title && title.length > 0" md-dialog-title>{{ title | oTranslate }}</h1>
-  <div md-dialog-content>
-    <div fxLayout="row" class="alert-content" [class.alert-content-icon]="useIcon" fxLayoutAlign="space-between center">
-      <md-icon *ngIf="useIcon" class="alert-icon"
-        [class.info] = "isInfo"
-        [class.warn] = "isWarn"
-        [class.error] = "isError"
-      >{{ icon }}</md-icon>
-      <span>{{ message | oTranslate }}</span>
-    </div>
+<h1 *ngIf="title && title.length > 0" md-dialog-title>{{ title | oTranslate }}</h1>
+<div md-dialog-content>
+  <div fxLayout="row" class="alert-content" [class.alert-content-icon]="useIcon" fxLayoutAlign="space-between center">
+    <md-icon *ngIf="useIcon" class="alert-icon" [class.info]="isInfo" [class.warn]="isWarn" [class.error]="isError">{{ icon }}</md-icon>
+    <span>{{ message | oTranslate }}</span>
   </div>
-  <md-dialog-actions align="end">
-    <span fxFlex></span>
-    <button md-button class="mat-primary" (click)="onOkClick($event)">
+</div>
+<md-dialog-actions align="end">
+  <span fxFlex></span>
+  <button md-button class="mat-primary" (click)="onOkClick($event)">
       <span>{{ okButtonText | oTranslate | uppercase }}</span>
     </button>
-    <button *ngIf="twoOptions" md-button class="mat-primary" md-dialog-close>
+  <button *ngIf="twoOptions" md-button class="mat-primary" md-dialog-close>
       <span>{{ cancelButtonText | oTranslate | uppercase }}</span>
     </button>
-  </md-dialog-actions>
-
+</md-dialog-actions>

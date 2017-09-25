@@ -22,8 +22,8 @@ export const DEFAULT_OUTPUTS_O_SEARCH_INPUT = [
 
 @Component({
   selector: 'o-search-input',
-  template: require('./o-search-input.component.html'),
-  styles: [require('./o-search-input.component.scss')],
+  templateUrl: './o-search-input.component.html',
+  styleUrls: ['./o-search-input.component.scss'],
   inputs: [
     ...DEFAULT_INPUTS_O_SEARCH_INPUT
   ],
@@ -37,15 +37,15 @@ export class OSearchInputComponent implements OnInit {
   public static DEFAULT_INPUTS_O_SEARCH_INPUT = DEFAULT_INPUTS_O_SEARCH_INPUT;
   public static DEFAULT_OUTPUTS_O_SEARCH_INPUT = DEFAULT_OUTPUTS_O_SEARCH_INPUT;
 
-  placeholder: string = 'SEARCH';
+  protected placeholder: string = 'SEARCH';
 
   onSearch: EventEmitter<any> = new EventEmitter<any>();
 
-  private formGroup: FormGroup;
-  private term: FormControl;
-  private value: string = '';
+  protected formGroup: FormGroup;
+  protected term: FormControl;
+  protected value: string = '';
 
-  private translateService: OTranslateService;
+  protected translateService: OTranslateService;
 
   constructor(protected injector: Injector) {
     this.translateService = this.injector.get(OTranslateService);
@@ -63,6 +63,10 @@ export class OSearchInputComponent implements OnInit {
       .subscribe(term => {
         this.onSearch.emit(term);
       });
+  }
+
+  getFormGroup(): FormGroup {
+    return this.formGroup;
   }
 
   getValue(): string {

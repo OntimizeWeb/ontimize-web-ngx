@@ -1,14 +1,17 @@
 @import 'node_modules/@angular/material/theming';
+
 @mixin o-combo-theme($theme) {
   $foreground: map-get($theme, foreground);
   $warn: map-get($theme, warn);
 
-  .mat-combo-container{
-    &.ng-invalid.ng-touched {
-        .mat-hint {
-          color: mat-color($warn);
-        }
-      }
+  .mat-combo-container.ng-invalid.ng-touched {
+    .mat-hint {
+      color: mat-color($warn);
+    }
+  }
+  .mat-select:focus:not(.mat-select-disabled).mat-warn .mat-select-underline,
+  .mat-select-invalid .mat-select-underline {
+      background-color: mat-color($warn)!important;
   }
 
 }

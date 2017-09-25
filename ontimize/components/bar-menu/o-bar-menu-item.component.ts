@@ -35,8 +35,8 @@ export const DEFAULT_INPUTS_O_BAR_MENU_ITEM = [
 
 @Component({
   selector: 'o-bar-menu-item',
-  template: require('./o-bar-menu-item.component.html'),
-  styles: [require('./o-bar-menu-item.component.scss')],
+  templateUrl: './o-bar-menu-item.component.html',
+  styleUrls: ['./o-bar-menu-item.component.scss'],
   inputs: [
     ...DEFAULT_INPUTS_O_BAR_MENU_ITEM
   ],
@@ -49,15 +49,13 @@ export class OBarMenuItemComponent implements OnInit {
   protected menu: OBarMenuComponent;
   protected translateService: OTranslateService;
 
-  protected itemTitle: string;
-  protected tooltip: string;
-  protected icon: string;
-  protected route: string;
-  protected action: Function;
-
-  protected restricted: boolean;
-
-  isHovered: boolean = false;
+  protected _itemTitle: string;
+  protected _tooltip: string;
+  protected _icon: string;
+  protected _route: string;
+  protected _action: Function;
+  protected _restricted: boolean;
+  protected _isHovered: boolean = false;
 
   @HostListener('mouseover') onMouseover = () => this.isHovered = true;
   @HostListener('mouseout') onMouseout = () => this.isHovered = false;
@@ -72,7 +70,7 @@ export class OBarMenuItemComponent implements OnInit {
 
   public ngOnInit() {
     if (typeof (this.route) === 'string') {
-      this.menu.authGuardService.isRestricted(this.route)
+      this.menu.getAuthGuardService().isRestricted(this.route)
         .then(restricted => this.restricted = restricted)
         .catch(err => this.restricted = true);
     } else {
@@ -101,6 +99,61 @@ export class OBarMenuItemComponent implements OnInit {
     }
   }
 
+  get itemTitle(): string {
+    return this._itemTitle;
+  }
+
+  set itemTitle(val : string) {
+    this._itemTitle = val;
+  }
+
+  get tooltip(): string {
+    return this._tooltip;
+  }
+
+  set tooltip(val : string) {
+    this._tooltip = val;
+  }
+
+  get icon(): string {
+    return this._icon;
+  }
+
+  set icon(val : string) {
+    this._icon = val;
+  }
+
+  get route(): string {
+    return this._route;
+  }
+
+  set route(val : string) {
+    this._route = val;
+  }
+
+  get action(): Function {
+    return this._action;
+  }
+
+  set action(val : Function) {
+    this._action = val;
+  }
+
+  get restricted(): boolean {
+    return this._restricted;
+  }
+
+  set restricted(val : boolean) {
+    this._restricted = val;
+  }
+
+  get isHovered(): boolean {
+    return this._isHovered;
+  }
+
+  set isHovered(val : boolean) {
+    this._isHovered = val;
+  }
 }
 
 

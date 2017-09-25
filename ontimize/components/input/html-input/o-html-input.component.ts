@@ -6,7 +6,7 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormControl, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ValidatorFn } from '@angular/forms/src/directives/validators';
 
 import { MdCKEditorModule, CKEditor } from '../../material/ckeditor/ckeditor.component';
@@ -49,8 +49,8 @@ export const DEFAULT_OUTPUTS_O_HTML_INPUT = [
 
 @Component({
   selector: 'o-html-input',
-  template: require('./o-html-input.component.html'),
-  styles: [require('./o-html-input.component.scss')],
+  templateUrl: './o-html-input.component.html',
+  styleUrls: ['./o-html-input.component.scss'],
   inputs: [
     ...DEFAULT_INPUTS_O_HTML_INPUT
   ],
@@ -88,10 +88,11 @@ export class OHTMLInputComponent implements IComponent, IFormControlComponent, I
   protected translateService: OTranslateService;
   protected _SQLType: number = SQLTypes.OTHER;
 
+  protected _fControl: FormControl;
+
   private _disabled: boolean;
   private _isReadOnly: boolean;
   private _placeholder: string;
-  private _fControl: FormControl;
 
   constructor(
     @Inject(forwardRef(() => OFormComponent)) protected form: OFormComponent,
@@ -134,6 +135,18 @@ export class OHTMLInputComponent implements IComponent, IFormControlComponent, I
         }
       });
     }
+  }
+
+  getFormGroup(): FormGroup {
+    return this.form ? this.form.formGroup : undefined;
+  }
+
+  getFormControl(): FormControl {
+    return this._fControl;
+  }
+
+  hasError(error: string): boolean {
+    return !this.isReadOnly && this._fControl.touched && this._fControl.hasError(error);
   }
 
   isInActiveTab(): boolean {

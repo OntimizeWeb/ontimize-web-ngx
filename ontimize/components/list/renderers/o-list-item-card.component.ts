@@ -26,8 +26,8 @@ export const DEFAULT_OUTPUTS_O_LIST_ITEM_CARD = [
 
 @Component({
   selector: 'o-list-item-card',
-  template: require('./o-list-item-card.component.html'),
-  styles: [require('./o-list-item-card.component.scss')],
+  templateUrl: './o-list-item-card.component.html',
+  styleUrls: ['./o-list-item-card.component.scss'],
   inputs: [
     ...DEFAULT_INPUTS_O_LIST_ITEM_CARD
   ],

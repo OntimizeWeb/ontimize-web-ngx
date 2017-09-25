@@ -43,8 +43,8 @@ export const DEFAULT_OUTPUTS_O_REAL_INPUT = [
 
 @Component({
   selector: 'o-real-input',
-  template: require('./o-real-input.component.html'),
-  styles: [require('./o-real-input.component.scss')],
+  templateUrl: './o-real-input.component.html',
+  styleUrls: ['./o-real-input.component.scss'],
   inputs: [
     ...DEFAULT_INPUTS_O_REAL_INPUT
   ],

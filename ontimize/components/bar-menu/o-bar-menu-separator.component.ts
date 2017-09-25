@@ -10,8 +10,8 @@ import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'o-bar-menu-separator',
-  template: require('./o-bar-menu-separator.component.html'),
-  styles: [require('./o-bar-menu-separator.component.scss')],
+  templateUrl: './o-bar-menu-separator.component.html',
+  styleUrls: ['./o-bar-menu-separator.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
 export class OBarMenuSeparatorComponent {

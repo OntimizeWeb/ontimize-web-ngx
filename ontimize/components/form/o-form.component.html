@@ -10,7 +10,7 @@
     <div fxFlex="100" *ngIf="loading">
       <md-progress-bar mode="indeterminate"></md-progress-bar>
     </div>
-    <div layout-padding fxLayout="column" class="o-form-content-wrapper">
+    <div layout-padding [class.force-display-block]="layoutDirection === 'column'" [fxLayout]="layoutDirection" class="o-form-content-wrapper">
       <ng-content></ng-content>
     </div>
   </form>

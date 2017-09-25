@@ -27,8 +27,8 @@ export const DEFAULT_INPUTS_O_BUTTON = [
   inputs: [
     ...DEFAULT_INPUTS_O_BUTTON
   ],
-  template: require('./o-button.component.html'),
-  styles: [require('./o-button.component.scss')],
+  templateUrl: './o-button.component.html',
+  styleUrls: ['./o-button.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
 
@@ -58,12 +58,24 @@ export class OButtonComponent implements OnInit {
   get needsIconButtonClass(): boolean {
     return this.icon !== undefined && (this.olabel === undefined || this.olabel === '');
   }
+
+  isFloating() : boolean {
+    return this.otype === 'FLOATING';
+  }
+
+  isRaised() : boolean {
+    return ((this.otype === 'RAISED') || !this.otype);
+  }
+
+  isFlat() : boolean {
+    return this.otype === 'FLAT';
+  }
 }
 
 @NgModule({
   declarations: [OButtonComponent],
   imports: [OSharedModule, CommonModule],
-  exports: [OButtonComponent],
+  exports: [OButtonComponent]
 })
 export class OButtonModule {
 }

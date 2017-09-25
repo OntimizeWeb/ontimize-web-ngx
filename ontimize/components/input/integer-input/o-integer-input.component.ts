@@ -1,9 +1,14 @@
-import * as $ from 'jquery';
 import {
-  Component, Inject, Injector, forwardRef, ElementRef, OnInit,
+  Component,
+  Inject,
+  Injector,
+  forwardRef,
+  ElementRef,
+  OnInit,
   Optional,
   NgModule,
-  ViewEncapsulation
+  ViewEncapsulation,
+  Renderer
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl } from '@angular/forms';
@@ -40,8 +45,8 @@ export const DEFAULT_OUTPUTS_O_INTEGER_INPUT = [
 
 @Component({
   selector: 'o-integer-input',
-  template: require('./o-integer-input.component.html'),
-  styles: [require('./o-integer-input.component.scss')],
+  templateUrl: './o-integer-input.component.html',
+  styleUrls: ['./o-integer-input.component.scss'],
   inputs: [
     ...DEFAULT_INPUTS_O_INTEGER_INPUT
   ],
@@ -71,13 +76,18 @@ export class OIntegerInputComponent extends OTextInputComponent implements OnIni
   protected componentPipe: OIntegerPipe;
   protected pipeArguments: IIntegerPipeArgument;
   protected focused: boolean = false;
+  protected renderer: Renderer;
+  protected inputWidth;
+  protected avoidBlur: boolean = false;
+  protected changeTimeout: any;
 
   constructor(
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
     elRef: ElementRef,
-    injector: Injector) {
+    injector: Injector
+  ) {
     super(form, elRef, injector);
-
+    this.renderer = this.injector.get(Renderer);
     this.setComponentPipe();
   }
 
@@ -102,12 +112,11 @@ export class OIntegerInputComponent extends OTextInputComponent implements OnIni
   getControl(): FormControl {
     let control: FormControl = super.getControl();
     if (control) {
-      control.statusChanges.debounceTime(100)
-        .subscribe(values => {
-          if (!this.focused) {
-            this.setPipeValue();
-          }
-        });
+      control.statusChanges.debounceTime(100).subscribe(values => {
+        if (!this.focused) {
+          this.setPipeValue();
+        }
+      });
     }
     return control;
   }
@@ -122,22 +131,46 @@ export class OIntegerInputComponent extends OTextInputComponent implements OnIni
     }
     this.ensureOFormValue(event);
     this.onChange.emit(event);
+    this.registerInactivityCallback();
+  }
+
+  registerInactivityCallback() {
+    if (this.changeTimeout) {
+      clearInterval(this.changeTimeout);
+    }
+    const self = this;
+    function timerCallback() {
+      self.avoidBlur = false;
+      self.innerOnBlur();
+    }
+    this.changeTimeout = setTimeout(function () {
+      timerCallback();
+    }, 1000);
   }
 
   innerOnFocus(event: any) {
     event.stopPropagation();
+    event.preventDefault();
+    this.avoidBlur = true;
     this.focused = true;
     if (this.isReadOnly) {
       return;
     }
-    this.setDOMValue(this.getValue());
+    this.setNumberDOMValue(this.getValue());
     if (!this.isReadOnly && !this.isDisabled) {
       this.onFocus.emit(event);
     }
   }
 
-  innerOnBlur(event: any) {
-    event.stopPropagation();
+  innerOnBlur(event?: any) {
+    if (event) {
+      event.stopPropagation();
+      event.preventDefault();
+    }
+    if (this.avoidBlur) {
+      this.registerInactivityCallback();
+      return;
+    }
     this.focused = false;
     if (this.isReadOnly) {
       return;
@@ -155,7 +188,7 @@ export class OIntegerInputComponent extends OTextInputComponent implements OnIni
   setPipeValue() {
     if (typeof this.pipeArguments !== 'undefined' && !this.isEmpty()) {
       let parsedValue = this.componentPipe.transform(this.getValue(), this.pipeArguments);
-      this.setDOMValue(parsedValue);
+      this.setTextDOMValue(parsedValue);
     }
   }
 
@@ -168,18 +201,32 @@ export class OIntegerInputComponent extends OTextInputComponent implements OnIni
     return true;
   }
 
-  setDOMValue(val: any) {
+  getInputEl() {
     var inputElement = undefined;
     if (this.elRef.nativeElement.tagName === 'INPUT') {
       inputElement = this.elRef.nativeElement;
     } else {
       inputElement = this.elRef.nativeElement.getElementsByTagName('INPUT')[0];
     }
-    if (typeof inputElement !== 'undefined') {
-      if (this.focused) {
-        ($ as any)(inputElement).width(($ as any)(inputElement).outerWidth(true));
+    return inputElement;
+  }
+
+  setNumberDOMValue(val: any) {
+    const inputElement = this.getInputEl();
+    if (inputElement !== undefined) {
+      if (!this.inputWidth) {
+        this.inputWidth = inputElement.parentElement.parentElement.clientWidth;
       }
-      inputElement.type = this.focused ? 'number' : 'text';
+      this.renderer.setElementStyle(this.elRef.nativeElement, 'width', (this.inputWidth + 'px'));
+      inputElement.type = 'number';
+      inputElement.value = (val !== undefined) ? val : '';
+    }
+  }
+
+  setTextDOMValue(val: any) {
+    const inputElement = this.getInputEl();
+    if (inputElement !== undefined) {
+      inputElement.type = 'text';
       inputElement.value = (val !== undefined) ? val : '';
     }
   }

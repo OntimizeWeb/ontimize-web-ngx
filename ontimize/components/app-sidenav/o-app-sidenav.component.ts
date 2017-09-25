@@ -32,8 +32,8 @@ export const DEFAULT_OUTPUTS_O_APP_SIDENAV = [];
   selector: 'o-app-sidenav',
   inputs: DEFAULT_INPUTS_O_APP_SIDENAV,
   outputs: DEFAULT_OUTPUTS_O_APP_SIDENAV,
-  template: require('./o-app-sidenav.component.html'),
-  styles: [require('./o-app-sidenav.component.scss')],
+  templateUrl: './o-app-sidenav.component.html',
+  styleUrls: ['./o-app-sidenav.component.scss'],
   encapsulation: ViewEncapsulation.None,
   host: {
     '[class.o-app-sidenav]': 'true'
@@ -47,7 +47,7 @@ export class OAppSidenavComponent implements OnInit {
   @ViewChild(MdSidenav) sidenav: MdSidenav;
 
   protected appMenuService: AppMenuService;
-  protected menuRootArray: MenuRootItem[];
+  protected _menuRootArray: MenuRootItem[];
 
   protected imageSrc: string;
 
@@ -70,6 +70,14 @@ export class OAppSidenavComponent implements OnInit {
 
   isScreenSmall(): boolean {
     return window.matchMedia(`(max-width: ${SMALL_WIDTH_BREAKPOINT}px)`).matches;
+  }
+
+  get menuRootArray (): MenuRootItem[] {
+    return this._menuRootArray;
+  }
+
+  set menuRootArray (val : MenuRootItem[]) {
+    this._menuRootArray = val;
   }
 
 }

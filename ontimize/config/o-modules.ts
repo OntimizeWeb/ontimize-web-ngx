@@ -4,17 +4,9 @@ import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
-import {
-  Injector,
-  NgModule,
-  APP_INITIALIZER
-} from '@angular/core';
-
+import { Injector, NgModule, APP_INITIALIZER } from '@angular/core';
 import { appInitializerFactory } from './o-providers';
-
 import { OTranslateService } from '../services';
-
 import { APP_CONFIG } from '../config/app-config';
 
 import {
@@ -36,9 +28,6 @@ import {
   OEmailInputModule,
   OHTMLInputModule,
   OIntegerInputModule,
-  OLightTableModule,
-  OLightTableButtonPanelModule,
-  OLightTableColumnModule,
   OListPickerModule,
   ONIFInputModule,
   OPasswordInputModule,
@@ -105,9 +94,6 @@ export const INTERNAL_ONTIMIZE_MODULES_EXPORTED: any = [
   ORealInputModule,
   OTextInputModule,
   OTextareaInputModule,
-  OLightTableModule,
-  OLightTableButtonPanelModule,
-  OLightTableColumnModule,
   OListModule,
   OListItemModule,
   OListItemAvatarModule,
@@ -138,6 +124,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 export const INTERNAL_ONTIMIZE_MODULES: any = [
   HttpModule,
   HttpClientModule,
+
   // Ngx-translate
   TranslateModule.forRoot({
     loader: {
@@ -175,9 +162,6 @@ export const INTERNAL_ONTIMIZE_MODULES: any = [
   ORealInputModule,
   OTextInputModule,
   OTextareaInputModule,
-  OLightTableModule,
-  OLightTableButtonPanelModule,
-  OLightTableColumnModule,
   OListModule,
   OListItemModule,
   OListItemAvatarModule,
@@ -206,8 +190,7 @@ export const INTERNAL_ONTIMIZE_MODULES: any = [
     useFactory: appInitializerFactory,
     deps: [Injector, APP_CONFIG, OTranslateService],
     multi: true
-  }
-  ]
+  }]
 })
 export class OntimizeWebTranslateModule { }
 

@@ -1,13 +1,10 @@
-<div fxFlex fxFill [formGroup]="form?.formGroup"
-    [mdTooltip]="tooltip" [mdTooltipPosition]="tooltipPosition" [mdTooltipShowDelay]="tooltipShowDelay">
-    <md-input-container #innerInputContainer fxFlex fxFill>
-        <input #mdInputRef mdInput class="mat-input" type="text" [attr.id]="oattr" [id]="oattr" fxFill [formControlName]="oattr"
-            [placeholder]="placeHolder" [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)" (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)"
-            [readonly]="isReadOnly" [o-disabled]="innerInputContainer" >
-            <md-hint *ngIf="!isReadOnly && _fControl.touched && _fControl.errors">
-                <span *ngIf="_fControl.errors?.required">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</span>
-                <span *ngIf="_fControl.errors?.minlength">{{ 'FORM_VALIDATION.MIN_LENGTH' | oTranslate }}: {{ _fControl.errors?.minlength.requiredLength }}</span>
-                <span *ngIf="_fControl.errors?.maxlength">{{ 'FORM_VALIDATION.MAX_LENGTH' | oTranslate }}: {{ _fControl.errors?.maxlength.requiredLength }}</span>
-            </md-hint>
-    </md-input-container>
+<div [formGroup]="getFormGroup()" [mdTooltip]="tooltip" [mdTooltipPosition]="tooltipPosition" [mdTooltipShowDelay]="tooltipShowDelay">
+    <md-form-field #innerInputContainer fxFlexFill>
+        <input #mdInputRef mdInput type="text" [attr.id]="getAttribute()" [id]="getAttribute()"  [formControlName]="getAttribute()"
+            [placeholder]="placeHolder" [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)" (focus)="innerOnFocus($event)"
+            (blur)="innerOnBlur($event)" [readonly]="isReadOnly">
+        <md-error *ngIf="hasError('required')">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</md-error>
+        <md-error *ngIf="hasError('minlength')">{{ 'FORM_VALIDATION.MIN_LENGTH' | oTranslate }}: {{ getErrorValue('minlength', 'requiredLength') }}</md-error>
+        <md-error *ngIf="hasError('maxlength')">{{ 'FORM_VALIDATION.MAX_LENGTH' | oTranslate }}: {{ getErrorValue('maxlength', 'requiredLength') }}</md-error>
+    </md-form-field>
 </div>

@@ -33,8 +33,8 @@ export const DEFAULT_OUTPUTS_O_APP_HEADER = [
   selector: 'o-app-header',
   inputs: DEFAULT_INPUTS_O_APP_HEADER,
   outputs: DEFAULT_OUTPUTS_O_APP_HEADER,
-  template: require('./o-app-header.component.html'),
-  styles: [require('./o-app-header.component.scss')],
+  templateUrl: './o-app-header.component.html',
+  styleUrls: ['./o-app-header.component.scss'],
   encapsulation: ViewEncapsulation.None,
   host: {
     '[class.o-app-header]': 'true'
@@ -50,10 +50,10 @@ export class OAppHeaderComponent implements OnDestroy {
   protected modulesInfoService: OModulesInfoService;
   protected _config: AppConfig;
   protected availableLangs: string[];
-  protected headerTitle: '';
+  protected _headerTitle = '';
 
-  modulesInfoSubscription: Subscription;
-  toggleSidenav = new EventEmitter<void>();
+  protected modulesInfoSubscription: Subscription;
+  public toggleSidenav = new EventEmitter<void>();
 
   constructor(
     private router: Router,
@@ -97,6 +97,22 @@ export class OAppHeaderComponent implements OnDestroy {
   getFlagClass(lang: string) {
     const flagName = (lang !== 'en') ? lang : 'gb';
     return 'flag-icon-' + flagName;
+  }
+
+  getCurrentLang() : string {
+    return this.translateService.getCurrentLang();
+  }
+
+  getAvailableLangs() : string[] {
+    return this.availableLangs;
+  }
+
+  get headerTitle() : string {
+    return this._headerTitle;
+  }
+
+  set headerTitle(value : string) {
+    this._headerTitle = value;
   }
 }
 

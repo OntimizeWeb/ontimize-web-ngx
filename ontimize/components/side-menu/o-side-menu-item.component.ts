@@ -28,8 +28,8 @@ export const DEFAULT_INPUTS_O_SIDE_MENU_ITEM = [
 
 @Component({
   selector: 'o-side-menu-item',
-  template: require('./o-side-menu-item.component.html'),
-  styles: [require('./o-side-menu-item.component.scss')],
+  templateUrl: './o-side-menu-item.component.html',
+  styleUrls: ['./o-side-menu-item.component.scss'],
   inputs: [
     ...DEFAULT_INPUTS_O_SIDE_MENU_ITEM
   ],
@@ -41,12 +41,12 @@ export class OSideMenuItemComponent implements OnInit {
 
   protected menu: OSideMenuComponent;
 
-  protected title: string;
-  protected icon: string;
-  protected route: string;
-  protected action: Function;
+  protected _title: string;
+  protected _icon: string;
+  protected _route: string;
+  protected _action: Function;
 
-  protected restricted: boolean;
+  protected _restricted: boolean;
 
   constructor( @Inject(forwardRef(() => OSideMenuComponent)) menu: OSideMenuComponent) {
     this.menu = menu;
@@ -54,7 +54,7 @@ export class OSideMenuItemComponent implements OnInit {
 
   public ngOnInit() {
     if (typeof (this.route) === 'string') {
-      this.menu.authGuardService.isRestricted(this.route)
+      this.menu.getAuthGuardService().isRestricted(this.route)
         .then(restricted => this.restricted = restricted)
         .catch(err => this.restricted = true);
     } else {
@@ -62,13 +62,52 @@ export class OSideMenuItemComponent implements OnInit {
     }
   }
 
+  get title(): string {
+    return this._title;
+  }
+
+  set title(val : string) {
+    this._title = val;
+  }
+
+  get icon(): string {
+    return this._icon;
+  }
+
+  set icon(val : string) {
+    this._icon = val;
+  }
+
+  get route(): string {
+    return this._route;
+  }
+
+  set route(val : string) {
+    this._route = val;
+  }
+
+  get action(): Function {
+    return this._action;
+  }
+
+  set action(val : Function) {
+    this._action = val;
+  }
+
+  get restricted(): boolean {
+    return this._restricted;
+  }
+
+  set restricted(val : boolean) {
+    this._restricted = val;
+  }
 }
 
 
 @NgModule({
   declarations: [OSideMenuItemComponent],
   imports: [OSharedModule, CommonModule, RouterModule, OSideMenuModule],
-  exports: [OSideMenuItemComponent],
+  exports: [OSideMenuItemComponent]
 })
 export class OSideMenuItemModule {
 }

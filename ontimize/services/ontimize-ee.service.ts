@@ -104,7 +104,9 @@ export class OntimizeEEService implements IAuthService, IDataService {
     let _closeSessionObserver: any;
     let closeSessionObservable = new Observable(observer =>
       _closeSessionObserver = observer).share();
-
+    setTimeout(() => {
+      _closeSessionObserver.next(0);
+    }, 0);
     return closeSessionObservable;
   }
 

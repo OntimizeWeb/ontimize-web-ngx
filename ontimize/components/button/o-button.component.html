@@ -1,26 +1,20 @@
-<button *ngIf="otype==='FLOATING'" md-fab class="mat-fab">
-  <span class="mat-button-wrapper">
-    <img src="{{ image }}" class="o-button-image" *ngIf="image!=undefined"/>
-    <i md-icon class="material-icons o-button-icon" *ngIf="icon!=undefined" style="vertical-align:middle">{{icon}}</i>
-  </span>
+<button *ngIf="isFloating()" md-fab class="mat-fab">
+  <img src="{{ image }}" class="o-button-image" *ngIf="image!=undefined"/>
+  <i md-icon class="material-icons o-button-icon" *ngIf="icon!=undefined" style="vertical-align:middle">{{icon}}</i>
   <br *ngIf="iconposition==='top'" />
   <span *ngIf="olabel!=undefined" class="o-button-text">{{ olabel | oTranslate }}</span>
 </button>
 
-<button *ngIf="otype==='RAISED' || !otype" md-raised-button class="mat-raised-button" [class.mat-icon-button]="needsIconButtonClass">
-  <span class="mat-button-wrapper">
-    <img src="{{ image }}" class="o-button-image" *ngIf="image!=undefined"/>
-    <i md-icon class="material-icons o-button-icon" *ngIf="icon!=undefined" style="vertical-align:middle">{{icon}}</i>
-  </span>
+<button *ngIf="isRaised()" md-raised-button class="mat-raised-button" [class.mat-icon-button]="needsIconButtonClass">
+  <img src="{{ image }}" class="o-button-image" *ngIf="image!=undefined"/>
+  <i md-icon class="material-icons o-button-icon" *ngIf="icon!=undefined" style="vertical-align:middle">{{icon}}</i>
   <br *ngIf="iconposition==='top'" />
   <span *ngIf="olabel!==undefined" class="o-button-text">{{ olabel  | oTranslate }}</span>
 </button>
 
-<button *ngIf="otype==='FLAT'" md-button class="mat-button" [class.mat-icon-button]="needsIconButtonClass">
-  <span class="mat-button-wrapper">
-    <img src="{{ image }}" class="o-button-image" *ngIf="image!=undefined"/>
-    <i md-icon class="material-icons o-button-icon" *ngIf="icon!=undefined" style="vertical-align:middle">{{icon}}</i>
-  </span>
+<button *ngIf="isFlat()" md-button class="mat-button" [class.mat-icon-button]="needsIconButtonClass">
+  <img src="{{ image }}" class="o-button-image" *ngIf="image!=undefined"/>
+  <i md-icon class="material-icons o-button-icon" *ngIf="icon!=undefined" style="vertical-align:middle">{{icon}}</i>
   <br *ngIf="iconposition==='top'" />
   <span *ngIf="olabel!=undefined" class="o-button-text">{{ olabel | oTranslate }}</span>
 </button>

@@ -1,13 +1,9 @@
-<div fxFlex fxFill [formGroup]="form?.formGroup"
-    [mdTooltip]="tooltip" [mdTooltipPosition]="tooltipPosition" [mdTooltipShowDelay]="tooltipShowDelay">
-    <md-input-container #innerInputContainer fxFlex fxFill>
-        <textarea mdInput class="mat-textarea" type="text" [attr.id]="oattr" [id]="oattr" fxFill [formControlName]="oattr"
-            [placeholder]="placeHolder" [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)" (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)"
-            [readonly]="isReadOnly" [o-disabled]="innerInputContainer"
-            [class.no-resize]="!isResizable()" [rows]="rows" [cols]="columns">
-            <md-hint *ngIf="!isReadOnly && _fControl.touched && _fControl.errors">
-                <span *ngIf="_fControl.errors?.required">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</span>
-            </md-hint>
+<div fxFlexFill [formGroup]="getFormGroup()" [mdTooltip]="tooltip" [mdTooltipPosition]="tooltipPosition" [mdTooltipShowDelay]="tooltipShowDelay">
+    <md-form-field #innerInputContainer fxFlexFill>
+        <textarea mdInput class="mat-textarea" type="text" [attr.id]="getAttribute()" [id]="getAttribute()" [formControlName]="getAttribute()"
+            [placeholder]="placeHolder" [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)" (focus)="innerOnFocus($event)"
+            (blur)="innerOnBlur($event)" [readonly]="isReadOnly" [class.no-resize]="!isResizable()" [rows]="rows" [cols]="columns">
+            <md-error *ngIf="hasError('required')">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</md-error>
         </textarea>
-    </md-input-container>
+    </md-form-field>
 </div>

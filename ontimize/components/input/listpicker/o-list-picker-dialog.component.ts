@@ -14,8 +14,8 @@ export const DEFAULT_INPUTS_O_LIST_PICKER = [
 
 @Component({
   selector: 'o-list-picker-dialog',
-  template: require('./o-list-picker-dialog.component.html'),
-  styles: [require('./o-list-picker.component.scss')],
+  templateUrl: './o-list-picker-dialog.component.html',
+  styleUrls: ['./o-list-picker.component.scss'],
   inputs: [
     ...DEFAULT_INPUTS_O_LIST_PICKER
   ],
@@ -27,6 +27,7 @@ export class OListPickerDialogComponent {
   filter: boolean = true;
 
   visibleColsArray: Array<string>;
+  searchVal : string;
 
   constructor(protected dialogRef: MdDialogRef<OListPickerDialogComponent>) { }
 

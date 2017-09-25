@@ -1,16 +1,17 @@
-<div fxLayout="row" fxFill fxLayoutAlign="space-between center" [formGroup]="form?.formGroup"
-    [mdTooltip]="tooltip" [mdTooltipPosition]="tooltipPosition" [mdTooltipShowDelay]="tooltipShowDelay">
-    <span *ngIf="currencySymbol !== 'none' && currencySymbolPosition === 'left' " mdSuffix>{{ currency_symbols[currencySymbol] }}</span>
-    <md-input-container #innerInputContainer fxFlex fxFill>
-        <input mdInput class="mat-input" type="number" [attr.id]="oattr" fxFill [formControlName]="oattr" [placeholder]="placeHolder"
-            [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)" (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)"
-            [readonly]="isReadOnly" [o-disabled]="innerInputContainer" [min]="min" [max]="max" [step]="step">
-            <md-hint *ngIf="!isReadOnly && _fControl.touched && _fControl.errors">
-                <span *ngIf="_fControl.errors?.required">{{'FORM_VALIDATION.REQUIRED' | oTranslate}}</span>
-                <span *ngIf="_fControl.errors?.min">{{ 'FORM_VALIDATION.MIN_VALUE' | oTranslate }}: {{ _fControl.errors?.min.requiredMin }}</span>
-                <span *ngIf="_fControl.errors?.max">{{ 'FORM_VALIDATION.MAX_VALUE' | oTranslate }}: {{ _fControl.errors?.max.requiredMax }}</span>
-                <span *ngIf="_fControl.errors?.pattern">{{ 'FORM_VALIDATION.FORMAT' | oTranslate}}</span>
-            </md-hint>
-    </md-input-container>
-    <span class="icon-btn" *ngIf="currencySymbol !== 'none' && currencySymbolPosition === 'right' " mdSuffix [class.mat-disabled]="isDisabled">{{ currency_symbols[currencySymbol] }}</span>
+<div fxLayout="row" fxLayoutAlign="space-between center" [formGroup]="getFormGroup()" [mdTooltip]="tooltip" [mdTooltipPosition]="tooltipPosition"
+    [mdTooltipShowDelay]="tooltipShowDelay">
+    <span *ngIf="currencySymbol !== 'none' && currencySymbolPosition === 'left'" mdSuffix [class.mat-disabled]="isDisabled" class="icon-btn">{{ currency_symbols[currencySymbol] }}</span>
+    <md-form-field #innerInputContainer fxFill>
+        <input mdInput type="number" [attr.id]="getAttribute()" [formControlName]="getAttribute()" [placeholder]="placeHolder" [ngModel]="getValue()"
+            (ngModelChange)="innerOnChange($event)" (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)" [readonly]="isReadOnly"
+            [min]="min" [max]="max" [step]="step">
+        <span *ngIf="currencySymbol !== 'none' && currencySymbolPosition === 'right' " mdSuffix [class.mat-disabled]="isDisabled"
+            class="icon-btn">{{ currency_symbols[currencySymbol] }}</span>
+        <md-error *ngIf="hasError('required')">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</md-error>
+        <md-error *ngIf="hasError('min')">{{ 'FORM_VALIDATION.MIN_VALUE' | oTranslate }}: {{ getErrorValue('min', 'requiredMin') }}</md-error>
+        <md-error *ngIf="hasError('max')">{{ 'FORM_VALIDATION.MAX_VALUE' | oTranslate }}: {{ getErrorValue('max', 'requiredMax') }}</md-error>
+        <md-error *ngIf="hasError('pattern')">{{ 'FORM_VALIDATION.FORMAT' | oTranslate }}</md-error>
+
+    </md-form-field>
+
 </div>

@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
+import { MomentDateAdapter } from '../../components/input/date-input/adapter/moment.adapter';
 import {
   MdButtonToggleModule,
   MdButtonModule,
   MdCheckboxModule,
-  // MdDatepickerModule,
+  MdDatepickerModule,
   MdRadioModule,
   MdRippleModule,
   MdSelectModule,
@@ -18,6 +18,7 @@ import {
   MdChipsModule,
   MdIconModule,
   MdInputModule,
+  MdFormFieldModule,
   MdProgressSpinnerModule,
   MdProgressBarModule,
   MdSnackBarModule,
@@ -26,7 +27,9 @@ import {
   MdTooltipModule,
   MdMenuModule,
   MdDialogModule,
-  MdAutocompleteModule
+  MdAutocompleteModule,
+  DateAdapter,
+  MdNativeDateModule
   // ,
   // PlatformModule,
   // StyleModule,
@@ -38,7 +41,6 @@ import {
   // ObserveContentModule
 } from '@angular/material';
 
-
 const MATERIAL_MODULES = [
   MdAutocompleteModule,
   MdButtonModule,
@@ -46,11 +48,12 @@ const MATERIAL_MODULES = [
   MdCardModule,
   MdChipsModule,
   MdCheckboxModule,
-  // MdDatepickerModule,
+  MdDatepickerModule,
   MdDialogModule,
   MdGridListModule,
   MdIconModule,
   MdInputModule,
+  MdFormFieldModule,
   MdListModule,
   MdMenuModule,
   MdProgressBarModule,
@@ -64,7 +67,8 @@ const MATERIAL_MODULES = [
   MdSnackBarModule,
   MdTabsModule,
   MdToolbarModule,
-  MdTooltipModule
+  MdTooltipModule,
+  MdNativeDateModule
   // ,
   // OverlayModule,
   // PortalModule,
@@ -76,10 +80,14 @@ const MATERIAL_MODULES = [
   // ObserveContentModule
 ];
 
+
 @NgModule({
   imports: [
     CommonModule
   ],
-  exports: MATERIAL_MODULES
+  exports: MATERIAL_MODULES,
+  providers: [
+    { provide: DateAdapter, useClass: MomentDateAdapter }
+  ]
 })
 export class OCustomMaterialModule { }

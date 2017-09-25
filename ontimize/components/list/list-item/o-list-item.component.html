@@ -1,14 +1,14 @@
-<md-list-item #innerListItem fxFill>
+<md-list-item #innerListItem>
   <div class="o-list-row-action" *ngIf="_list && _list.selectable">
     <md-checkbox [checked]="isSelected" (change)="onCheckboxChange($event)">
     </md-checkbox>
   </div>
   <ng-content select="[o-list-item-avatar],
-    [md-list-avatar], [md-list-icon],
-    [mat-list-avatar], [mat-list-icon]">
+    [mdListAvatar], [mdListIcon],
+    [matListAvatar], [matListIcon]">
   </ng-content>
   <div class="mat-list-text">
-    <ng-content select="[md-line], [mat-line]"></ng-content>
+    <ng-content select="[mdLine], [matLine]"></ng-content>
   </div>
   <ng-content></ng-content>
   <div fxLayout="row" class="row-buttons-container">

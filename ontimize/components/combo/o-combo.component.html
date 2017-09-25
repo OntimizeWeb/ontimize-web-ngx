@@ -1,30 +1,25 @@
-<div [formGroup]="form?.formGroup" class="mat-combo-container"
-    [mdTooltip]="tooltip" [mdTooltipPosition]="tooltipPosition" [mdTooltipShowDelay]="tooltipShowDelay">
-    <md-select #selectModel [class.visible]="!isReadOnly" [class.hidden]="isReadOnly" class="mat-combo" [attr.id]="oattr" [id]="oattr" fxFill [formControlName]="oattr"
-        [placeholder]="placeHolder" [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)">
-        <md-option *ngIf="nullSelection" value selected></md-option>
-        <md-option *ngFor="let item of dataArray; let rowIndex = index" [value]="getValueColumn(item)"  >
+<div [formGroup]="getFormGroup()" class="mat-combo-container custom-error" [mdTooltip]="tooltip" [mdTooltipPosition]="tooltipPosition"
+    [mdTooltipShowDelay]="tooltipShowDelay">
+    <md-select #selectModel [class.visible]="!isReadOnly" [class.hidden]="isReadOnly" class="mat-combo" [attr.id]="getAttribute()"
+        [id]="getAttribute()" fxFill [formControlName]="getAttribute()" [placeholder]="placeHolder" [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)">
+        <md-option *ngIf="hasNullSelection()" value selected></md-option>
+        <md-option *ngFor="let item of getDataArray(); let rowIndex = index" [value]="getValueColumn(item)">
             {{ getOptionDescriptionValue(item) }}
         </md-option>
     </md-select>
-    <md-hint *ngIf="!isReadOnly && _fControl.touched && _fControl.errors">
-        <span *ngIf="_fControl.errors?.required">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</span>
+    <md-hint *ngIf="hasError('required')">
+        <span>{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</span>
     </md-hint>
 
-    <md-input-container #innerInputContainer [class.visible]="isReadOnly" [class.hidden]="!isReadOnly"
-        fxFlex fxFill>
-        <input mdInput class="mat-input" type="text" [attr.id]="'fake_' + oattr" [id]="'fake_' + oattr" fxFill
-            [class.ng-untouched]="_fControl && _fControl.untouched"
-            [class.ng-touched]="_fControl && _fControl.touched"
-            [class.ng-dirty]="_fControl && _fControl.dirty"
-            [class.ng-pristine]="_fControl && _fControl.pristine"
-            [class.ng-invalid]="_fControl && !_fControl.valid"
-            [class.ng-valid]="_fControl && _fControl.valid"
-            [placeholder]="placeHolder" [value]="getDescriptionValue()"
-            [readonly]="isReadOnly" [disabled]="isDisabled" [o-disabled]="innerInputContainer">
-            <md-hint *ngIf="!isReadOnly && _fControl.touched && _fControl.errors">
-                <span *ngIf="_fControl.errors?.required">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</span>
-            </md-hint>
-    </md-input-container>
+    <md-form-field #innerInputContainer [class.visible]="isReadOnly" [class.hidden]="!isReadOnly" fxFlex fxFill>
+        <input mdInput class="mat-input" type="text" [attr.id]="'fake_' + getAttribute()" [id]="'fake_' + getAttribute()" fxFill
+            [class.ng-untouched]="getFormControl() && getFormControl().untouched" [class.ng-touched]="getFormControl() && getFormControl().touched"
+            [class.ng-dirty]="getFormControl() && getFormControl().dirty" [class.ng-pristine]="getFormControl() && getFormControl().pristine"
+            [class.ng-invalid]="getFormControl() && !getFormControl().valid" [class.ng-valid]="getFormControl() && getFormControl().valid"
+            [placeholder]="placeHolder" [value]="getDescriptionValue()" [readonly]="isReadOnly" [disabled]="isDisabled">
+        <md-hint *ngIf="hasError('required')">
+            <span>{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</span>
+        </md-hint>
+    </md-form-field>
 
 </div>

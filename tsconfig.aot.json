@@ -1,0 +1,20 @@
+{
+  "extends": "./tsconfig.ngc.json",
+  "compilerOptions": {
+    "skipLibCheck": false,
+    "suppressImplicitAnyIndexErrors": true,
+    "inlineSourceMap": false,
+    "sourceMap": true,
+    "lib": [
+      "dom",
+      "es6"
+    ]
+  },
+  "angularCompilerOptions": {
+    "genDir": "dist",
+    "debug": false,
+    "skipTemplateCodegen": true,
+    "skipMetadataEmit": false,
+    "strictMetadataEmit": true
+  }
+}

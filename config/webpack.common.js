@@ -4,10 +4,7 @@ const helpers = require('./helpers');
 /*
  * Webpack Plugins
  */
-// problem with copy-webpack-plugin
 const ContextReplacementPlugin = require('webpack/lib/ContextReplacementPlugin');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
-const ProvidePlugin = require('webpack/lib/ProvidePlugin');
 const ngcWebpack = require('ngc-webpack');
 
 /*
@@ -25,7 +22,7 @@ module.exports = function (options) {
   return {
 
     entry: {
-      'ontimize-web-ng2': helpers.root('index.ts')
+      'ontimize-web-ng2': helpers.root('tmp/index.ts')
     },
     resolve: {
       extensions: ['.ts', '.js', '.html']
@@ -35,20 +32,10 @@ module.exports = function (options) {
       rules: [
         {
           test: /\.ts$/,
-          loaders: ['awesome-typescript-loader?configFileName=tsconfig-webpack.json', 'angular2-template-loader'],
+          loaders: ['awesome-typescript-loader?configFileName=tsconfig.webpack.json', 'angular2-template-loader'],
           exclude: [/\.(spec|e2e)\.ts$/]
         },
-        /* Embed files. */
-        {
-          test: /\.(html|css)$/,
-          loader: 'raw-loader',
-          exclude: /\.async\.(html|css)$/
-        },
-        // {
-        //   test: /\.scss$/,
-        //   use: ['style-loader', 'css-loader', 'sass-loader'],
-        //   include: [helpers.root('ontimize')]
-        // },
+        { test: /\.(html|css)$/, loader: 'raw-loader', exclude: /\.async\.(html|css)$/ },
         {
           test: /\.(ts|js)$/,
           loader: 'source-map-loader',
@@ -81,26 +68,11 @@ module.exports = function (options) {
       ]
     },
     plugins: [
-      new webpack.ProvidePlugin({
-        $: "jquery",
-        jQuery: "jquery",
-        'window.jQuery': 'jquery',
-        'window.$': 'jquery'
-      }),
 
       new ContextReplacementPlugin(
         /angular(\\|\/)core(\\|\/)@angular/,
         helpers.root('./ontimize')
-      ),
-
-      new CopyWebpackPlugin([
-        { from: 'CHANGELOG.md', to: '../' },
-        { from: 'LICENSE', to: '../' },
-        { from: 'README.md', to: '../' },
-        { from: 'package.json', to: '../' },
-        { from: 'ontimize.scss', to: '../' },
-        { from: '.npmignore', to: '../' }
-      ])
+      )
     ]
   };
 }

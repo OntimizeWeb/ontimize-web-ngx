@@ -26,11 +26,11 @@ export class OListItemCardRenderer {
   public static DEFAULT_OUTPUTS_O_CARD_RENDERER = DEFAULT_OUTPUTS_O_CARD_RENDERER;
 
   /* inputs variables */
-  protected title: string;
-  protected subtitle: string;
-  protected image: string;
-  protected action1Text: string;
-  protected action2Text: string;
+  protected _title: string;
+  protected _subtitle: string;
+  protected _image: string;
+  protected _action1Text: string;
+  protected _action2Text: string;
 
   onAction1Click: EventEmitter<Object> = new EventEmitter<Object>();
   onAction2Click: EventEmitter<Object> = new EventEmitter<Object>();
@@ -53,12 +53,6 @@ export class OListItemCardRenderer {
     }
   }
 
-  // initialize() {
-  // }
-
-  // destroy() {
-  // }
-
   onAction1ButtonClick(event: any) {
     this.onAction1Click.emit(event);
   }
@@ -69,5 +63,45 @@ export class OListItemCardRenderer {
 
   compareListHeight(height: string) {
     return (height === this._listItem._list.rowHeight) || undefined;
+  }
+
+  get title(): string {
+    return this._title;
+  }
+
+  set title(val : string) {
+    this._title = val;
+  }
+
+  get subtitle(): string {
+    return this._subtitle;
+  }
+
+  set subtitle(val : string) {
+    this._subtitle = val;
+  }
+
+  get image(): string {
+    return this._image;
+  }
+
+  set image(val : string) {
+    this._image= val;
+  }
+
+  get action1Text(): string {
+    return this._action1Text;
+  }
+
+  set action1Text(val : string) {
+    this._action1Text = val;
+  }
+
+  get action2Text(): string {
+    return this._action2Text;
+  }
+
+  set action2Text(val : string) {
+    this._action2Text = val;
   }
 }

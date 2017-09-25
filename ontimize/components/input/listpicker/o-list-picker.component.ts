@@ -16,7 +16,7 @@ import {
 import { CommonModule } from '@angular/common';
 
 import {
-  MdInputDirective,
+  MdInput,
   MdDialog,
   MdDialogRef,
   MdDialogConfig
@@ -38,41 +38,8 @@ import { OListPickerDialogComponent } from './o-list-picker-dialog.component';
 import { OFormServiceComponent } from '../../o-form-service-component.class';
 
 export const DEFAULT_INPUTS_O_LIST_PICKER = [
-  'oattr: attr',
-  'olabel: label',
-  'tooltip',
-  'tooltipPosition: tooltip-position',
-  'tooltipShowDelay: tooltip-show-delay',
-  'data',
-  'autoBinding: automatic-binding',
-  'oenabled: enabled',
-  'orequired: required',
-  //static-data [Array<any>] : way to populate with static data. Default: no value.
-  'staticData: static-data',
-
-  'entity',
-  'service',
-  'columns',
-  'valueColumn: value-column',
-  'parentKeys: parent-keys',
-
-  // Visible columns into selection dialog from parameter 'columns'. With empty parameter all columns are visible.
-  'visibleColumns: visible-columns',
-
-  // Visible columns in text field. By default, it is the parameter value of visible columns.
-  'descriptionColumns: description-columns',
-
+  ...OFormServiceComponent.DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT,
   'filter',
-  'separator',
-
-  'queryOnInit: query-on-init',
-  'queryOnBind: query-on-bind',
-
-  // sqltype[string]: Data type according to Java standard. See SQLType class. Default: 'OTHER'
-  'sqlType: sql-type',
-
-  'serviceType : service-type',
-
   'dialogWidth : dialog-width',
   'dialogHeight : dialog-height'
 ];
@@ -83,8 +50,8 @@ export const DEFAULT_OUTPUTS_O_LIST_PICKER = [
 
 @Component({
   selector: 'o-list-picker',
-  template: require('./o-list-picker.component.html'),
-  styles: [require('./o-list-picker.component.scss')],
+  templateUrl: './o-list-picker.component.html',
+  styleUrls: ['./o-list-picker.component.scss'],
   providers: [
     { provide: OntimizeService, useFactory: dataServiceFactory, deps: [Injector] }
   ],
@@ -104,7 +71,6 @@ export class OListPickerComponent extends OFormServiceComponent implements OnIni
   /* Inputs */
   @InputConverter()
   protected filter: boolean = true;
-  protected separator: string;
   protected dialogWidth: string;
   protected dialogHeight: string;
   /* End inputs */
@@ -113,7 +79,7 @@ export class OListPickerComponent extends OFormServiceComponent implements OnIni
   protected dialogRef: MdDialogRef<OListPickerDialogComponent>;
 
   @ViewChild('inputModel')
-  protected inputModel: MdInputDirective;
+  protected inputModel: MdInput;
 
   public onChange: EventEmitter<Object> = new EventEmitter<Object>();
 

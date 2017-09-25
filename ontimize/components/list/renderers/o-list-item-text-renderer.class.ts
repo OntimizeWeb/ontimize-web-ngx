@@ -24,10 +24,10 @@ export class OListItemTextRenderer {
   public static DEFAULT_OUTPUTS_O_TEXT_RENDERER = DEFAULT_OUTPUTS_O_TEXT_RENDERER;
 
   /* inputs variables */
-  protected title: string;
-  protected primaryText: string;
-  protected secondaryText: string;
-  protected icon: string;
+  protected _title: string;
+  protected _primaryText: string;
+  protected _secondaryText: string;
+  protected _icon: string;
 
   onIconClick: EventEmitter<Object> = new EventEmitter<Object>();
   /* end of inputs variables */
@@ -41,12 +41,6 @@ export class OListItemTextRenderer {
     protected _listItem: OListItemComponent
   ) {
   }
-
-  // initialize() {
-  // }
-
-  // destroy() {
-  // }
 
   modifyMdListItemElement() {
     if (this.elRef.nativeElement && this.elRef.nativeElement.parentElement) {
@@ -71,5 +65,37 @@ export class OListItemTextRenderer {
 
   onActionIconClick(event: any) {
     this.onIconClick.emit(event);
+  }
+
+  get title(): string {
+    return this._title;
+  }
+
+  set title(val : string) {
+    this._title = val;
+  }
+
+  get primaryText(): string {
+    return this._primaryText;
+  }
+
+  set primaryText(val : string) {
+    this._primaryText = val;
+  }
+
+  get secondaryText(): string {
+    return this._secondaryText;
+  }
+
+  set secondaryText(val : string) {
+    this._secondaryText= val;
+  }
+
+  get icon(): string {
+    return this._icon;
+  }
+
+  set icon(val : string) {
+    this._icon = val;
   }
 }
