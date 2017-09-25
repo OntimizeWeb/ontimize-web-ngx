@@ -78,6 +78,8 @@ export class OIntegerInputComponent extends OTextInputComponent implements OnIni
   protected focused: boolean = false;
   protected renderer: Renderer;
   protected inputWidth;
+  protected avoidBlur: boolean = false;
+  protected changeTimeout: any;
 
   constructor(
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
@@ -110,12 +112,11 @@ export class OIntegerInputComponent extends OTextInputComponent implements OnIni
   getControl(): FormControl {
     let control: FormControl = super.getControl();
     if (control) {
-      control.statusChanges.debounceTime(100)
-        .subscribe(values => {
-          if (!this.focused) {
-            this.setPipeValue();
-          }
-        });
+      control.statusChanges.debounceTime(100).subscribe(values => {
+        if (!this.focused) {
+          this.setPipeValue();
+        }
+      });
     }
     return control;
   }
@@ -130,22 +131,46 @@ export class OIntegerInputComponent extends OTextInputComponent implements OnIni
     }
     this.ensureOFormValue(event);
     this.onChange.emit(event);
+    this.registerInactivityCallback();
+  }
+
+  registerInactivityCallback() {
+    if (this.changeTimeout) {
+      clearInterval(this.changeTimeout);
+    }
+    const self = this;
+    function timerCallback() {
+      self.avoidBlur = false;
+      self.innerOnBlur();
+    }
+    this.changeTimeout = setTimeout(function () {
+      timerCallback();
+    }, 1000);
   }
 
   innerOnFocus(event: any) {
     event.stopPropagation();
+    event.preventDefault();
+    this.avoidBlur = true;
     this.focused = true;
     if (this.isReadOnly) {
       return;
     }
-    this.setDOMValue(this.getValue());
+    this.setNumberDOMValue(this.getValue());
     if (!this.isReadOnly && !this.isDisabled) {
       this.onFocus.emit(event);
     }
   }
 
-  innerOnBlur(event: any) {
-    event.stopPropagation();
+  innerOnBlur(event?: any) {
+    if (event) {
+      event.stopPropagation();
+      event.preventDefault();
+    }
+    if (this.avoidBlur) {
+      this.registerInactivityCallback();
+      return;
+    }
     this.focused = false;
     if (this.isReadOnly) {
       return;
@@ -163,7 +188,7 @@ export class OIntegerInputComponent extends OTextInputComponent implements OnIni
   setPipeValue() {
     if (typeof this.pipeArguments !== 'undefined' && !this.isEmpty()) {
       let parsedValue = this.componentPipe.transform(this.getValue(), this.pipeArguments);
-      this.setDOMValue(parsedValue);
+      this.setTextDOMValue(parsedValue);
     }
   }
 
@@ -176,21 +201,32 @@ export class OIntegerInputComponent extends OTextInputComponent implements OnIni
     return true;
   }
 
-  setDOMValue(val: any) {
+  getInputEl() {
     var inputElement = undefined;
     if (this.elRef.nativeElement.tagName === 'INPUT') {
       inputElement = this.elRef.nativeElement;
     } else {
       inputElement = this.elRef.nativeElement.getElementsByTagName('INPUT')[0];
     }
-    if (typeof inputElement !== 'undefined') {
-      if (!this.inputWidth && this.focused) {
-        this.inputWidth = inputElement.parentElement.clientWidth;
+    return inputElement;
+  }
+
+  setNumberDOMValue(val: any) {
+    const inputElement = this.getInputEl();
+    if (inputElement !== undefined) {
+      if (!this.inputWidth) {
+        this.inputWidth = inputElement.parentElement.parentElement.clientWidth;
       }
-      inputElement.type = this.focused ? 'number' : 'text';
-      if (this.focused) {
-        this.renderer.setElementStyle(this.elRef.nativeElement, 'width', (this.inputWidth + 'px'));
-      }
+      this.renderer.setElementStyle(this.elRef.nativeElement, 'width', (this.inputWidth + 'px'));
+      inputElement.type = 'number';
+      inputElement.value = (val !== undefined) ? val : '';
+    }
+  }
+
+  setTextDOMValue(val: any) {
+    const inputElement = this.getInputEl();
+    if (inputElement !== undefined) {
+      inputElement.type = 'text';
       inputElement.value = (val !== undefined) ? val : '';
     }
   }
