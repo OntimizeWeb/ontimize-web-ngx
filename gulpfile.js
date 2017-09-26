@@ -53,18 +53,8 @@ const FILES = [
   'dist'
 ];
 
-gulp.task('copy-files', ['copy-themes-files'], (callback) => {
+gulp.task('copy-files', (callback) => {
   copyfiles(FILES, true, callback);
-});
-
-gulp.task('copy-themes-files', (callback) => {
-  copyfiles([
-    'ontimize/components/theming/deeppurple-amber.scss',
-    'ontimize/components/theming/indigo-pink.scss',
-    'ontimize/components/theming/pink-bluegrey.scss',
-    'ontimize/components/theming/purple-green.scss',
-    'dist/ontimize'
-  ], 1, callback);
 });
 
 /**
