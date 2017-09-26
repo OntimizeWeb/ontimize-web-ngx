@@ -194,7 +194,7 @@ export class ODateInputComponent extends OFormDataComponent implements OnInit {
   }
 
   open() {
-    if (!this.isReadOnly) {
+    if (!this.isReadOnly && !this.isDisabled) {
       this.datepicker.open();
     }
   }

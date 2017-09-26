@@ -54,7 +54,9 @@ export class MomentDateAdapter extends DateAdapter<Date> {
   }
 
   isValid(date: Date) {
-    return !isNaN(date.getTime());
+    if(date instanceof Date)
+      return !isNaN(date.getTime());
+    return false;
   }
 
   /** Creates a date but allows the month and date to overflow. */
