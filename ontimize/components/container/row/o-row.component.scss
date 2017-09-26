@@ -2,4 +2,8 @@
   display: -ms-flexbox;
   display: -webkit-flex;
   display: flex;
+
+  > .o-container {
+    width: 100%;
+  }
 }

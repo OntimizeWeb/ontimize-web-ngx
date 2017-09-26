@@ -22,7 +22,7 @@ module.exports = function (options) {
   return {
 
     entry: {
-      'ontimize-web-ng2': helpers.root('tmp/index.ts')
+      'ontimize-web-ngx': helpers.root('tmp/index.ts')
     },
     resolve: {
       extensions: ['.ts', '.js', '.html']
