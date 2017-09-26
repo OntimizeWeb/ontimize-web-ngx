@@ -48,7 +48,6 @@ const FILES = [
   'LICENSE',
   'README.md',
   'package.json',
-  'ontimize.scss',
   '.npmignore',
   'dist'
 ];
