@@ -1,3 +1,18 @@
+## 2.0.0
+
+### BREAKING CHANGES
+* **OntimizeWebModule**: '*ontimize-web-ng2*' is now called '*ontimize-web-ngx*'.
+
+**IMPORTANT: you must update your imports for changing '*ontimize-web-ng2*' for '*ontimize-web-ngx*'. This includes module and components import and '*ontimize.scss*' reference.
+
+* **Theming**: deleting material design pre-built exported themes. In your '*app.scss*' you wont be able to import anymore the following files:
+  * `node_modules/ontimize-web-ng2/ontimize/components/theming/indigo-pink.scss`
+  * `node_modules/ontimize-web-ng2/ontimize/components/theming/deeppurple-amber.scss`
+  * `node_modules/ontimize-web-ng2/ontimize/components/theming/pink-bluegrey.scss`
+  * `node_modules/ontimize-web-ng2/ontimize/components/theming/purple-green.scss`
+
+**Note**: From now on, all information about theming will be available at [ontimize-web-ngx-theming](https://github.com/OntimizeWeb/ontimize-web-ngx-theming)
+
 ## 2.0.0-rc.8
 
 ### PEER-DEPENDENCY UPDATES ###
@@ -10,7 +25,8 @@
 
 ### BREAKING CHANGES
 * **o-date-input**: date input not longer using jquery-ui datepicker. Now using angular-material [datepicker](https://material.angular.io/components/datepicker/overview)
-**IMPORTANT: dont forget to remove a possible jquery-ui datepicker script import (node_modules/jquery-ui/ui/widgets/datepicker.js)
+
+**IMPORTANT: dont forget to remove a possible jquery-ui datepicker script import in *angular-cli.json*(`node_modules/jquery-ui/ui/widgets/datepicker.js`)
 
 * **o-table**: ontimize web table component ('*o-table*') and all its inner components ('*o-table-column*', cell renderers and cell editors) are not longer available in '*OntimizeWebModule*', you must install '*ontimize-web-ngx-datatable*' to import '*ODataTableModule*' and have the full '*o-table*' component with the following breaking changes:
   * **ODataTableModule**: you must add the import of '*ODataTableModule*' in that modules using the table component (`import { ODataTableModule } from 'ontimize-web-ngx-datatable;'`).
@@ -19,7 +35,7 @@
   * **styles**: You must import the styles of the '*o-datatable*' component:
     * Module styles:
       `node_modules/ontimize-web-ngx-datatable/styles.scss`
-    * Theming styles in your '*app.scss*' file:
+    * Theming styles in your '*app.scss*' file (it must be included after '*o-material-theme*'):
       `@import 'node_modules/ontimize-web-ngx-datatable/o-datatable-theme.scss';`
       `@include o-datatable-theme($theme);`
   * **angular-cli.json**:
@@ -29,9 +45,9 @@
       *  `../node_modules/pdfmake/build/pdfmake.js`
       *  `../node_modules/pdfmake/build/vfs_fonts.js`
     * If you install '*ontimize-web-ngx-datatable*' you must add the following stylesheet to '*styles*' property:
-      * `../node_modules/ontimize-web-ngx-datatable/styles.scss`      
-      
-**Note**: From now on, all information about '*o-datatable*' will be available in [ontimize-web-ngx-datatable](https://github.com/OntimizeWeb/ontimize-web-ngx-datatable)
+      * `../node_modules/ontimize-web-ngx-datatable/styles.scss`
+
+**Note**: From now on, all information about '*o-datatable*' will be available at [ontimize-web-ngx-datatable](https://github.com/OntimizeWeb/ontimize-web-ngx-datatable)
 
 * **@angular/material**: updating styles and templates for ([@angular/material@2.0.0-beta.10](https://github.com/angular/material2/blob/master/CHANGELOG.md)) breaking changes.
   * Some of the important changes for '*ontimize-web-ng2*':
