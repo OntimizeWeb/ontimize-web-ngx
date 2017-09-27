@@ -1,7 +1,7 @@
 {
   "name": "ontimize-web-ngx",
   "homepage": "https://github.com/OntimizeWeb/ontimize-web-ngx#readme",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Ontimize Web framework with Angular 2",
   "bugs": "https://github.com/OntimizeWeb/ontimize-web-ngx/issues",
   "author": "Imatia S.L.",
@@ -25,7 +25,8 @@
     "webpack:dev": "npm run init-common && webpack --config config/webpack.dev.js --progress && npm run end-common",
     "webpack:prod": "npm run init-common && webpack --config config/webpack.prod.js --progress && npm run end-common",
     "aot:compile": "node_modules/.bin/ngc -p tsconfig.aot.json",
-    "aot": "npm run init-common && npm run aot:compile && npm run end-common"
+    "aot": "npm run init-common && npm run aot:compile && npm run end-common",
+    "pack":"npm run aot && cd dist && npm pack && cd .."
   },
   "dependencies": {
     "moment": "2.18.1"
