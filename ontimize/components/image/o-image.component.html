@@ -1,6 +1,6 @@
 <div fxLayout="column" fxLayoutAlign="center center" class="input-image relative" [formGroup]="getFormGroup()" [mdTooltip]="tooltip"
   [mdTooltipPosition]="tooltipPosition" [mdTooltipShowDelay]="tooltipShowDelay">
-  <div fxLayout="row" fxFill fxLayoutAlign="end center" class="input-image-container">
+  <div fxLayout="row" fxFill fxLayoutAlign="end center" class="input-image-container" layout-padding>
     <input mdInput #inputControl [formControlName]="getAttribute()" type="text" [attr.id]="getAttribute()" [id]="getAttribute()"
       [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)" class="mat-input input-control">
     <input [hidden]="!hasControls()" class="mat-primary" #input type="file" (change)="fileChange(input)" class="input-file" />
