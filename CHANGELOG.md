@@ -47,7 +47,11 @@
     * If you install '*ontimize-web-ngx-datatable*' you must add the following stylesheet to '*styles*' property:
       * `../node_modules/ontimize-web-ngx-datatable/styles.scss`
 
+<<<<<<< HEAD
 **Note**: From now on, all information about '*o-datatable*' will be available at [ontimize-web-ngx-datatable](https://github.com/OntimizeWeb/ontimize-web-ngx-datatable)
+=======
+**Note**: From now on, all information about '*o-datatable*' will be available in [ontimize-web-ngx-datatable](https://github.com/OntimizeWeb/ontimize-web-ngx-datatable)
+>>>>>>> 706899b4331de784a4822aa2d2ffc6e59297d3ce
 
 * **@angular/material**: updating styles and templates for ([@angular/material@2.0.0-beta.10](https://github.com/angular/material2/blob/master/CHANGELOG.md)) breaking changes.
   * Some of the important changes for '*ontimize-web-ng2*':
