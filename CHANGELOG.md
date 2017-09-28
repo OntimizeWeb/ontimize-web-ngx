@@ -1,3 +1,19 @@
+## 2.0.0
+
+### BREAKING CHANGES
+* **OntimizeWebModule**: '*ontimize-web-ng2*' is now called '*ontimize-web-ngx*'.
+
+**IMPORTANT: you must update your imports for changing '*ontimize-web-ng2*' for '*ontimize-web-ngx*'. This includes module and components import and '*ontimize.scss*' reference.
+
+* **Theming**: deleting material design pre-built exported themes. In your '*app.scss*' you wont be able to import anymore the following files:
+  * `node_modules/ontimize-web-ng2/ontimize/components/theming/indigo-pink.scss`
+  * `node_modules/ontimize-web-ng2/ontimize/components/theming/deeppurple-amber.scss`
+  * `node_modules/ontimize-web-ng2/ontimize/components/theming/pink-bluegrey.scss`
+  * `node_modules/ontimize-web-ng2/ontimize/components/theming/purple-green.scss`
+
+**Note**: From now on, all information about theming will be available at [ontimize-web-ngx-theming](https://github.com/OntimizeWeb/ontimize-web-ngx-theming)
+
+
 ## 2.0.0-rc.8
 
 ### PEER-DEPENDENCY UPDATES ###
@@ -29,8 +45,8 @@
       *  `../node_modules/pdfmake/build/pdfmake.js`
       *  `../node_modules/pdfmake/build/vfs_fonts.js`
     * If you install '*ontimize-web-ngx-datatable*' you must add the following stylesheet to '*styles*' property:
-      * `../node_modules/ontimize-web-ngx-datatable/styles.scss`      
-      
+      * `../node_modules/ontimize-web-ngx-datatable/styles.scss`
+
 **Note**: From now on, all information about '*o-datatable*' will be available in [ontimize-web-ngx-datatable](https://github.com/OntimizeWeb/ontimize-web-ngx-datatable)
 
 * **@angular/material**: updating styles and templates for ([@angular/material@2.0.0-beta.10](https://github.com/angular/material2/blob/master/CHANGELOG.md)) breaking changes.
