@@ -47,11 +47,7 @@
     * If you install '*ontimize-web-ngx-datatable*' you must add the following stylesheet to '*styles*' property:
       * `../node_modules/ontimize-web-ngx-datatable/styles.scss`
 
-<<<<<<< HEAD
 **Note**: From now on, all information about '*o-datatable*' will be available at [ontimize-web-ngx-datatable](https://github.com/OntimizeWeb/ontimize-web-ngx-datatable)
-=======
-**Note**: From now on, all information about '*o-datatable*' will be available in [ontimize-web-ngx-datatable](https://github.com/OntimizeWeb/ontimize-web-ngx-datatable)
->>>>>>> 706899b4331de784a4822aa2d2ffc6e59297d3ce
 
 * **@angular/material**: updating styles and templates for ([@angular/material@2.0.0-beta.10](https://github.com/angular/material2/blob/master/CHANGELOG.md)) breaking changes.
   * Some of the important changes for '*ontimize-web-ng2*':
@@ -66,7 +62,10 @@
 ### Features
 * **ontimize-web-ng2**: '*OntimizeWebModule*' is now AoT compatible.
 * **o-form**: adding '*layout-direction*' input ([#114](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/114)) ([afb25e7](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/afb25e7))
-* **o-list-picker**, **o-combo**: adding 'value-column-type' attribute ([#115](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/115)) ([56b7db3](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/56b7db3))
+* **o-list-picker**, **o-combo**: adding '*value-column-type*' attribute ([#115](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/115)) ([56b7db3](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/56b7db3))
+
+**IMPORTANT: '*value-column-type*' attribute is set to '*int*' by default, so the '*value-column*' will be *always* parsed to int.
+
 * **o-table-cell-renderer-string**: adding '*translate*' input ([#118](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/118)) ([f9da979](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/f9da979))
 * **o-table-cell-editor**: adding '*onFocus*', '*onBlur*' and '*onSubmit*' outputs to all cell editor components ([#120](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/120)) ([a1ee4e2](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/a1ee4e2))
 * **o-date-input**: with new angular-material datepicker is possible to do a time selection setting component 'format' attribute that shows time (see [momentjs](https://momentjs.com/docs/#/displaying/format/) docs) and editing the input ([#68](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/68))
