@@ -43,7 +43,7 @@ export const DEFAULT_INPUTS_O_FORM = [
   // header-actions [string]: available action buttons on form toolbar of standard CRUD operations, separated by ';'. Available options are R;I;U;D (Refresh, Insert, Update, Delete). Default: R;I;U;D
   'headeractions: header-actions',
 
-  // show-header-actions-text [string][yes|no|true|false]: show text of form toolbar buttons
+  // show-header-actions-text [string][yes|no|true|false]: show text of form toolbar buttons. Default yes
   'showHeaderActionsText: show-header-actions-text',
 
   // entity [string]: entity of the service. Default: no value.
@@ -1209,7 +1209,11 @@ export class OFormComponent implements OnInit, OnDestroy {
     let i = 0;
     while (actRoute.parent) {
       actRoute = actRoute.parent;
-      i++;
+      actRoute.url.subscribe(function (x) {
+        if (x && x.length) {
+          i++;
+        }
+      });
     }
     return i;
   }
