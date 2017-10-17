@@ -76,7 +76,7 @@ export const DEFAULT_INPUTS_O_SERVICE_COMPONENT = [
   //static-data [Array<any>] : way to populate with static data. Default: no value.
   'staticData: static-data',
 
-  // detail-mode [none|click|doubleclick]: way to open the detail form of a row. Default: 'none'.
+  // detail-mode [none|click|doubleclick]: way to open the detail form of a row. Default: 'click'.
   'detailMode: detail-mode',
 
   // detail-form-route [string]: route of detail form. Default: 'detail'.
@@ -128,7 +128,8 @@ export class OServiceComponent implements ILocalStorageComponent {
   public static DEFAULT_ROW_HEIGHT = 'medium';
   public static AVAILABLE_ROW_HEIGHTS = ['small', 'medium', 'large'];
 
-  public static DEFAULT_DETAIL_MODE = 'none';
+  public static DEFAULT_DETAIL_MODE = 'click';
+  public static DETAIL_MODE_NONE = 'none';
   public static DETAIL_MODE_CLICK = 'click';
   public static DETAIL_MODE_DBLCLICK = 'dblclick';
 
@@ -168,7 +169,7 @@ export class OServiceComponent implements ILocalStorageComponent {
   @InputConverter()
   protected recursiveDetail: boolean = false;
   @InputConverter()
-  detailButtonInRow: boolean = true;
+  detailButtonInRow: boolean = false;
   protected detailButtonInRowIcon: string;
   protected editFormRoute: string;
   @InputConverter()
@@ -218,12 +219,12 @@ export class OServiceComponent implements ILocalStorageComponent {
     this.injector = injector;
     this.elRef = elRef;
     this.form = form;
-    this.router = this.injector.get(Router);
-    this.actRoute = this.injector.get(ActivatedRoute);
-
     this.detailMode = OServiceComponent.DEFAULT_DETAIL_MODE;
 
     if (this.injector) {
+      this.router = this.injector.get(Router);
+      this.actRoute = this.injector.get(ActivatedRoute);
+
       this.authGuardService = this.injector.get(AuthGuardService);
       this.translateService = this.injector.get(OTranslateService);
       this.dialogService = this.injector.get(DialogService);
@@ -243,11 +244,11 @@ export class OServiceComponent implements ILocalStorageComponent {
     }
   }
 
-  isVisible() : boolean {
+  isVisible(): boolean {
     return this.ovisible;
   }
 
-  hasControls() : boolean {
+  hasControls(): boolean {
     return this.controls;
   }
 
@@ -331,6 +332,10 @@ export class OServiceComponent implements ILocalStorageComponent {
 
     if (!this.editButtonInRowIcon) {
       this.editButtonInRowIcon = OServiceComponent.DEFAULT_EDIT_ICON;
+    }
+
+    if (this.detailButtonInRow || this.editButtonInRow) {
+      this.detailMode = OServiceComponent.DETAIL_MODE_NONE;
     }
 
     if (this.staticData) {
