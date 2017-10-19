@@ -1,6 +1,10 @@
 import {
-  Component, Inject, Injector, OnInit,
-  forwardRef, ElementRef, EventEmitter,
+  Component,
+  Inject,
+  Injector,
+  forwardRef,
+  ElementRef,
+  EventEmitter,
   Optional,
   NgModule,
   ViewEncapsulation
@@ -44,7 +48,7 @@ export const DEFAULT_OUTPUTS_O_CHECKBOX = [
   encapsulation: ViewEncapsulation.None
 })
 
-export class OCheckboxComponent extends OFormDataComponent implements OnInit {
+export class OCheckboxComponent extends OFormDataComponent {
 
   public static DEFAULT_INPUTS_O_CHECKBOX = DEFAULT_INPUTS_O_CHECKBOX;
   public static DEFAULT_OUTPUTS_O_CHECKBOX = DEFAULT_OUTPUTS_O_CHECKBOX;
@@ -61,11 +65,11 @@ export class OCheckboxComponent extends OFormDataComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.initialize();
+    super.ngOnInit();
   }
 
   ngOnDestroy() {
-    this.destroy();
+    super.ngOnDestroy();
   }
 
   ensureOFormValue(value: any) {

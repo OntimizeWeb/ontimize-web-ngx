@@ -224,7 +224,7 @@ export class OFormServiceComponent extends OFormDataComponent {
       }
     }
   }
-  protected parseByValueColumnType(val : any) {
+  protected parseByValueColumnType(val: any) {
     let value = val;
     if (this.valueColumnType === 'int') {
       const parsed = parseInt(value);

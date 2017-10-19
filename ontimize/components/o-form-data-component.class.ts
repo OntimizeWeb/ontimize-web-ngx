@@ -1,12 +1,8 @@
-import { Injector, ElementRef } from '@angular/core';
+import { Injector, ElementRef, OnInit, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ValidatorFn } from '@angular/forms/src/directives/validators';
 
-import {
-  OBaseComponent,
-  IComponent
-} from './o-component.class';
-
+import { OBaseComponent, IComponent } from './o-component.class';
 import { InputConverter } from '../decorators';
 import { OFormComponent } from './form/o-form.component';
 import { OFormValue } from './form/OFormValue';
@@ -28,7 +24,8 @@ export interface IFormDataComponent {
   isAutomaticBinding(): Boolean;
 }
 
-export class OFormDataComponent extends OBaseComponent implements IFormControlComponent, IFormDataTypeComponent, IFormDataComponent {
+export class OFormDataComponent extends OBaseComponent implements IFormControlComponent, IFormDataTypeComponent,
+  IFormDataComponent, OnInit, OnDestroy {
   /* Inputs */
   protected sqlType: string;
   @InputConverter()
@@ -43,10 +40,22 @@ export class OFormDataComponent extends OBaseComponent implements IFormControlCo
   protected elRef: ElementRef;
   protected form: OFormComponent;
 
-  constructor(form: OFormComponent, elRef: ElementRef, injector: Injector) {
+  constructor(
+    form: OFormComponent,
+    elRef: ElementRef,
+    injector: Injector
+  ) {
     super(injector);
     this.form = form;
     this.elRef = elRef;
+  }
+
+  ngOnInit() {
+    this.initialize();
+  }
+
+  ngOnDestroy() {
+    this.destroy();
   }
 
   getFormGroup(): FormGroup {
@@ -75,16 +84,16 @@ export class OFormDataComponent extends OBaseComponent implements IFormControlCo
     }
   }
 
+  destroy() {
+    this.unregisterFormListeners();
+  }
+
   registerFormListeners() {
     if (this.form) {
       this.form.registerFormComponent(this);
       this.form.registerFormControlComponent(this);
       this.form.registerSQLTypeFormComponent(this);
     }
-  }
-
-  destroy() {
-    this.unregisterFormListeners();
   }
 
   unregisterFormListeners() {
@@ -96,7 +105,17 @@ export class OFormDataComponent extends OBaseComponent implements IFormControlCo
   }
 
   set data(value: any) {
+    this.setData(value);
+  }
+
+  setData(value: any) {
     this.ensureOFormValue(value);
+    if (this._fControl) {
+      this._fControl.setValue(value.value, {
+        emitModelToViewChange: false,
+        emitEvent: false
+      });
+    }
   }
 
   isAutomaticBinding(): Boolean {
