@@ -81,6 +81,7 @@ export var MAP = {
 
     'MESSAGES.FORM_VALIDATION_ERROR': 'Form values are not valid!',
     'MESSAGES.FORM_NOTHING_TO_UPDATE_INFO': 'There are no values to update!',
+    'MESSAGES.FORM_CHANGES_WILL_BE_LOST': 'Are you sure you want to continue? All unsaved changes will be lost',
     'MESSAGES.ERROR_LOGIN': 'Login failed. Check username and/or password.',
     'MESSAGES.ERROR_SESSION': 'Session expired.',
     'MESSAGES.ERROR_INSERT': 'Failed to insert data.',
@@ -219,6 +220,7 @@ export var MAP = {
 
     'MESSAGES.FORM_VALIDATION_ERROR': 'El formulario contiene campos con valores no válidos',
     'MESSAGES.FORM_NOTHING_TO_UPDATE_INFO': '¡No existen valores para actualizar!',
+    'MESSAGES.FORM_CHANGES_WILL_BE_LOST': '¿Está seguro de que quiere continuar? Perderá los cambios realizados',
     'MESSAGES.ERROR_LOGIN': 'Error de inicio de sesión. Compruebe nombre de usuario y/o contraseña.',
     'MESSAGES.ERROR_SESSION': 'La sesión ha caducado',
     'MESSAGES.ERROR_INSERT': 'Error al insertar datos.',

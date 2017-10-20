@@ -4,7 +4,6 @@ import {
   Injector,
   forwardRef,
   ElementRef,
-  OnInit,
   EventEmitter,
   Optional,
   ViewChild,
@@ -57,7 +56,8 @@ export const DEFAULT_OUTPUTS_O_TEXT_INPUT = [
   ],
   encapsulation: ViewEncapsulation.None
 })
-export class OTextInputComponent extends OFormDataComponent implements OnInit {
+
+export class OTextInputComponent extends OFormDataComponent {
 
   public static DEFAULT_INPUTS_O_TEXT_INPUT = DEFAULT_INPUTS_O_TEXT_INPUT;
   public static DEFAULT_OUTPUTS_O_TEXT_INPUT = DEFAULT_OUTPUTS_O_TEXT_INPUT;
@@ -82,11 +82,11 @@ export class OTextInputComponent extends OFormDataComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.initialize();
+    super.ngOnInit();
   }
 
   ngOnDestroy() {
-    this.destroy();
+    super.ngOnDestroy();
   }
 
   resolveValidators(): ValidatorFn[] {

@@ -10,7 +10,12 @@
   .toolbar-form-header{
     background-color: mat-color($background, app-bar);
     .mat-toolbar-tools {
-      button {
+      button.mat-button {
+        &[disabled],
+        &[disabled] md-icon {
+          color: mat-color($background, disabled-button);
+          cursor: initial;
+        }
         color: mat-color($primary);
       }
 

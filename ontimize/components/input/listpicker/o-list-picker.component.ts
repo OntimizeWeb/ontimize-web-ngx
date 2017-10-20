@@ -114,7 +114,7 @@ export class OListPickerComponent extends OFormServiceComponent implements OnIni
   }
 
   ngOnDestroy() {
-    this.destroy();
+    super.ngOnDestroy();
   }
 
   ngAfterViewInit(): void {

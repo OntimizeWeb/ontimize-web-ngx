@@ -1,6 +1,5 @@
 import {
   Component,
-  OnInit,
   Optional,
   Inject,
   ElementRef,
@@ -38,7 +37,7 @@ import {
 } from '../text-input/o-text-input.component';
 
 export const DEFAULT_OUTPUTS_O_DATE_INPUT = [
-  ...DEFAULT_OUTPUTS_O_TEXT_INPUT,
+  ...DEFAULT_OUTPUTS_O_TEXT_INPUT
 ];
 
 export const DEFAULT_INPUTS_O_DATE_INPUT = [
@@ -76,7 +75,7 @@ export let O_DATE_INPUT_DEFAULT_FORMATS: MdDateFormats = {
   }]
 })
 
-export class ODateInputComponent extends OFormDataComponent implements OnInit {
+export class ODateInputComponent extends OFormDataComponent {
 
   @ViewChild(MdDatepicker)
   datepicker: MdDatepicker<Date>;
@@ -161,15 +160,25 @@ export class ODateInputComponent extends OFormDataComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this.destroy();
+    super.ngOnDestroy();
+  }
+
+  set data(value: any) {
+    if (value && typeof value.value !== 'undefined') {
+      if (typeof value.value === 'number') {
+        value.value = new Date(value.value);
+      }
+    }
+    super.setData.call(this, value);
   }
 
   getValueAsDate(): any {
     let value = this.getValue();
     if (typeof value !== 'undefined') {
       if (typeof value === 'number') {
-        this.ensureOFormValue(new Date(value));
-        return new Date(value);
+        let dateObj = new Date(value);
+        this.ensureOFormValue(dateObj);
+        return dateObj;
       }
     }
     return value;

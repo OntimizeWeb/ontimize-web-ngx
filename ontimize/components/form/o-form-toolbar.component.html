@@ -3,11 +3,11 @@
   <div class="mat-toolbar-tools" fxFill *ngIf="initialMode">
     <md-icon aria-label="Back" (click)="onCloseDetail()" *ngIf="isDetail">arrow_back</md-icon>
 
-    <md-icon aria-label="First" (click)="first()" *ngIf="showNavigation()" layout-padding>first_page</md-icon>
-    <md-icon aria-label="Previous" (click)="previous()" *ngIf="showNavigation()" layout-padding>keyboard_arrow_left</md-icon>
-    <span>{{numberOfRecords()}}</span>
-    <md-icon aria-label="Next" (click)="next()" *ngIf="showNavigation()" layout-padding>keyboard_arrow_right</md-icon>
-    <md-icon aria-label="Last" (click)="last()" *ngIf="showNavigation()" layout-padding>last_page</md-icon>
+    <md-icon aria-label="First" (click)="first()" *ngIf="showNavigation" layout-padding>first_page</md-icon>
+    <md-icon aria-label="Previous" (click)="previous()" *ngIf="showNavigation" layout-padding>keyboard_arrow_left</md-icon>
+    <span *ngIf="showNavigation">{{ numberOfRecords() }}</span>
+    <md-icon aria-label="Next" (click)="next()" *ngIf="showNavigation" layout-padding>keyboard_arrow_right</md-icon>
+    <md-icon aria-label="Last" (click)="last()" *ngIf="showNavigation" layout-padding>last_page</md-icon>
 
     <span *ngIf="getLabelHeaderAlign() === 'center' || getLabelHeaderAlign() === 'end'" class="fill-remaining"></span>
     <div *ngIf="labelheader!=''" fxLayout="row" fxLayoutAlign="center center">
@@ -32,6 +32,10 @@
     <button md-button (click)="onDelete($event)" *ngIf="deleteBtnEnabled">
       <md-icon>delete</md-icon>
       <span *ngIf="showHeaderActionsText">{{ 'DELETE' | oTranslate }}</span>
+    </button>
+    <button md-button (click)="onSave($event)" [disabled]="!existsChangesToSave" *ngIf="saveBtnEnabled">
+      <md-icon>save</md-icon>
+      <span *ngIf="showHeaderActionsText">{{ 'SAVE' | oTranslate }}</span>
     </button>
   </div>
 
