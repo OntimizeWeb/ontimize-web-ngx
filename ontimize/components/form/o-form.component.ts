@@ -1346,14 +1346,6 @@ export class OFormComponent implements OnInit, OnDestroy {
     return this.editableDetail;
   }
 
-  areAllComponentsInitialized(): boolean {
-    let res = true;
-    Object.keys(this._components).forEach(key => {
-      res = res && this._components[key].isInitialized();
-    });
-    return res;
-  }
-
   isInitialStateChanged(): boolean {
     let res = false;
     let initialKeys = Object.keys(this.initialDataCache);
