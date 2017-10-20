@@ -1,2 +1,32 @@
-o-table is not available yet
-<span href="https://github.com/OntimizeWeb/ontimize-web-ngx/blob/master/CHANGELOG.md"></span>
+<div fxLayoutAlign="center top" class="o-table-wrapper" fxLayout="column">
+  
+
+    <div class="o-table-container">
+              
+        <md-table #table [dataSource]="dataSource" >
+            <!-- Generic column definition -->
+            <ng-container *ngFor="let column of columnsArray" [cdkColumnDef]="column.name">
+                <div *ngIf="column.orderable">
+                    <md-header-cell *cdkHeaderCellDef mat-sort-header start="asc">{{ column.title | oTranslate }}</md-header-cell>
+                </div>
+                <div *ngIf="!column.orderable">
+                    <md-header-cell *cdkHeaderCellDef>{{ column.title | oTranslate }}</md-header-cell>
+                </div>
+               <md-cell *cdkCellDef="let row">
+                    <div>{{row[column.name]}}</div>
+                </md-cell>
+            </ng-container>
+            <md-header-row *cdkHeaderRowDef="visibleColumnsArray"></md-header-row>
+            <md-row *cdkRowDef="let row; columns: visibleColumnsArray;"> </md-row>
+        </md-table>
+
+          <!--LOADING-->
+        <div *ngIf="!daoTable.isLoadingResults">
+            <md-progress-spinner mode="indeterminate" style="margin:0 auto;" *ngIf="daoTable.isLoadingResults"></md-progress-spinner>
+        </div>
+        <div class="mat-row o-table-no-results" [style.display]="dataSource.resultsLength > 0 ? '' : 'none'"  *ngIf="!daoTable.isLoadingResults">
+           {{'TABLE.EMPTY' | oTranslate}}
+        </div>
+      
+    </div>
+</div>

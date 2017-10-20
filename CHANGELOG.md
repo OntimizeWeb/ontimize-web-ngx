@@ -1,3 +1,9 @@
+## 2.0.1
+### Highlights
+* **o-table**: new component o-table, provider new simple table  using angular-material [table](https://material.angular.io/components/table/overview)
+
+**Note**: Developing sorting and filtering 
+
 ## 2.0.0
 
 ### BREAKING CHANGES

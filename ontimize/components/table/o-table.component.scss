@@ -1,0 +1,425 @@
+.o-table{
+  align-items: normal!important;
+
+.o-table-container {
+    
+        display: block;
+        max-width: 100%;
+        height: 100%;
+       
+        overflow: hidden;
+        position: relative;
+        margin: 0 0.5%;
+    
+        &.disabled {
+    
+          .dt-buttons {
+            display: none;
+          }
+    
+          thead {
+            tr {
+              &::before {
+                display: none;
+              }
+            }
+          }
+    
+          tbody {
+            tr {
+              &:not(.group)::before {
+                display: none;
+              }
+              &.selected::before {
+                display: none;
+              }
+              td {
+                &.focus {
+                  outline: none;
+                }
+              }
+            }
+          }
+    
+          .dataTables_info .select-info {
+            display: none;
+          }
+    
+        }
+    
+        &.detail {
+          tbody {
+            tr:not(.insertRow) {
+              td {
+                cursor: pointer;
+              }
+            }
+          }
+        }
+    
+        .dt-buttons {
+    
+          margin: 0 10px 0 4px;
+    
+          a {
+            text-decoration: none;
+            outline: none;
+            cursor: pointer;
+            font-size: 14px;
+            display: inline-block;
+            margin: 0;
+    
+          }
+          a:not(.hidden-action-text) {
+            padding-right: 8px;
+          }
+          a:not(.hidden-action-text):not(.disabled):hover {
+            border-radius: 4px;
+          }
+    
+          a.hidden-action-text:not(.disabled):hover {
+            border-radius: 50%;
+            //padding: 0;
+          }
+    
+          .dt-button {
+    
+            &.active {
+    
+              &::after {
+                border-radius: 50%;
+              }
+    
+              & > span {
+                font-weight: bold;
+              }
+    
+            }
+    
+            &.disabled {
+              cursor: not-allowed;
+            }
+    
+            &.custom-generic-action {
+              &::after {
+                font-family: 'Material Icons';
+                content: attr(data-icon);
+                font-size: 24px;
+                line-height: 40px;
+                padding: 8px;
+                font-feature-settings:'liga'
+    
+              }
+            }
+    
+            &.generic-action,
+            &.custom-generic-action {
+              & > span {
+                float: right;
+                line-height: 40px;
+              }
+              &.hidden-action-text > span {
+                display: none;
+              }
+            }
+    
+            &.generic-action {
+              &.generic-action-export {
+                display: none;
+              }
+    
+              &.generic-action-export::before {
+                font-family: 'Material Icons';
+                content: "file_download";
+                font-size: 24px;
+                margin: 0px 5px;
+                line-height: 40px;
+                padding: 5px;
+                font-feature-settings:'liga'
+              }
+    
+              &.generic-action-group::before {
+                font-family: 'Material Icons';
+                content: "view_list";
+                font-size: 24px;
+                margin: 0px 5px;
+                line-height: 40px;
+                padding: 5px;
+                font-feature-settings:'liga'
+              }
+    
+              &.generic-action-resize::before {
+                font-family: 'Material Icons';
+                content: "compare_arrows";
+                font-size: 24px;
+                margin: 0px 5px;
+                line-height: 40px;
+                padding: 5px;
+                font-feature-settings:'liga'
+              }
+    
+              &.generic-action-view-column::before {
+                font-family: 'Material Icons';
+                content: "view_column";
+                font-size: 24px;
+                margin: 0px 5px;
+                line-height: 40px;
+                padding: 5px;
+                font-feature-settings:'liga'
+              }
+    
+              &.generic-action-filter::before {
+                font-family: 'Material Icons';
+                content: "filter_list";
+                font-size: 24px;
+                margin: 0px 5px;
+                line-height: 40px;
+                padding: 5px;
+                font-feature-settings:'liga'
+              }
+    
+              &.generic-action-refresh::before {
+                font-family: 'Material Icons';
+                content: "autorenew";
+                font-size: 24px;
+                line-height: 40px;
+                padding: 8px;
+                font-feature-settings:'liga'
+              }
+    
+              &.generic-action-delete::before {
+                font-family: 'Material Icons';
+                content: "delete";
+                font-size: 24px;
+                line-height: 40px;
+                padding: 8px;
+                font-feature-settings:'liga'
+              }
+    
+              &.generic-action-add::before {
+                font-family: 'Material Icons';
+                content: "add";
+                font-size: 24px;
+                line-height: 40px;
+                padding: 8px;
+                font-feature-settings:'liga'
+              }
+    
+            }
+    
+            &.export-action {
+              display: none;
+    
+              &.buttons-copy > span,
+              &.buttons-print > span,
+              &.buttons-pdf > span {
+                display: none;
+              }
+    
+              &.buttons-excel > span,
+              &.buttons-csv > span {
+                font-weight: bold;
+                margin: 0px 5px;
+                vertical-align: 6px;
+              }
+    
+              &.buttons-copy::after {
+                font-family: 'Material Icons';
+                content: "content_copy";
+                font-size: 24px;
+                margin: 0px 5px;
+                line-height: 40px;
+                padding: 5px;
+                font-feature-settings:'liga'
+              }
+    
+              &.buttons-print::after {
+                font-family: 'Material Icons';
+                content: "print";
+                font-size: 24px;
+                margin: 0px 5px;
+                line-height: 40px;
+                padding: 5px;
+                font-feature-settings:'liga';
+              }
+    
+              &.buttons-pdf::after {
+                font-family: 'Material Icons';
+                content: "picture_as_pdf";
+                font-size: 24px;
+                margin: 0px 5px;
+                line-height: 40px;
+                padding: 5px;
+                font-feature-settings:'liga'
+              }
+    
+            }
+    
+            &.buttons-columnVisibility {
+              display: none;
+              float: left;
+              margin: 10px 4px 10px 8px;
+              font-size: 14px;
+            }
+    
+          }
+    
+        }
+    
+        .dataTables_hidden_options {
+          width: 75%;
+          float: left;
+          text-align: right;
+          display:none;
+        }
+    
+        .dataTables_filter {
+          margin: 0px ;
+        /*  padding: 0px 75px 0 50px;*/
+          height: 40px;
+          min-width: 250px;
+          width: 25%;
+          float: right;
+          box-sizing: border-box;
+    
+          label {
+            position: relative;
+            vertical-align: top;
+    
+            &::before {
+              font-family: 'Material Icons';
+              content: "search";
+              font-size: 24px;
+              line-height: 40px;
+              width: 50px;
+              position: absolute;
+              top: 0px;
+              left: -50px;
+              text-align: center;
+    
+    
+              line-height: 1;
+              width: 30px;
+    
+              top: 6px;
+              left: -33px;
+              font-feature-settings:'liga'
+    
+            }
+    
+          }
+    
+          
+    
+        }
+    
+        .dataTables_wrapper {
+          -webkit-flex-direction: column;
+          -ms-flex-direction: column;
+          flex-direction: column;
+          -webkit-flex-wrap: nowrap;
+          -ms-flex-wrap: nowrap;
+          flex-wrap: nowrap;
+          -webkit-justify-content: center;
+          -ms-flex-pack: center;
+          justify-content: center;
+          -webkit-align-content: stretch;
+          -ms-flex-line-pack: stretch;
+          align-content: stretch;
+          -webkit-align-items: stretch;
+          -ms-flex-align: stretch;
+          align-items: stretch;
+    
+          margin: 0;
+          width: 100%;
+          height: 100%
+        }
+    
+        .dataTables_top_wrapper {
+          margin: 4px 0px;
+        }
+    
+        .dataTables_top_wrapper {
+            display: flex;    
+            -webkit-flex-direction: row;
+            -ms-flex-direction: row;
+            flex-direction: row;
+            justify-content: space-between;
+            /*-webkit-flex-direction: row;
+            -ms-flex-direction: row;
+            flex-direction: row;
+            -webkit-flex-wrap: wrap;
+            -ms-flex-wrap: wrap;
+            flex-wrap: wrap;
+            -webkit-justify-content: center;
+            -ms-flex-pack: center;
+            justify-content: center;
+            -webkit-align-content: center;
+            -ms-flex-line-pack: center;
+            align-content: center;
+            -webkit-align-items: flex-start;
+            -ms-flex-align: start;
+            align-items: flex-start;
+    
+            -webkit-order: 0;
+            -ms-flex-order: 0;
+            order: 0;
+            -webkit-flex: 0 1 auto;
+            -ms-flex: 0 1 auto;
+            flex: 0 1 auto;
+            -webkit-align-self: auto;
+            -ms-flex-item-align: auto;
+            align-self: auto;*/
+    
+          .dt-buttons,
+          .dataTables_options {
+            -webkit-order: 0;
+            -ms-flex-order: 0;
+            order: 0;
+            -webkit-flex: 0 1 auto;
+            -ms-flex: 0 1 auto;
+            flex: 0 1 auto;
+            -webkit-align-self: auto;
+            -ms-flex-item-align: auto;
+            align-self: auto;
+          }
+    
+          .dataTables_filter_wrapper {
+            -webkit-order: 0;
+            -ms-flex-order: 0;
+            order: 0;
+            -webkit-flex: 1 0 auto;
+            -ms-flex: 1 0 auto;
+            flex: 1 0 auto;
+            -webkit-align-self: auto;
+            -ms-flex-item-align: auto;
+            align-self: auto;
+          }
+        }
+    
+        .dataTables_fill_remaining{
+          -webkit-order: 0;
+          -ms-flex-order: 0;
+          order: 0;
+          -webkit-flex: 1 1 auto;
+          -ms-flex: 1 1 auto;
+          flex: 1 1 auto;
+          -webkit-align-self: auto;
+          -ms-flex-item-align: auto;
+          align-self: auto;
+          -webkit-flex-direction: column;
+          -ms-flex-direction: column;
+          flex-direction: column;
+          box-sizing: border-box;
+          margin: 0;
+          width: 100%;
+          height: 100%;
+          .o-table-scroll {
+            overflow: auto;
+            height: 100%;
+          }
+        }
+    
+       
+      }
+    }
