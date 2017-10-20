@@ -1,9 +1,22 @@
-## 2.0.0
+## 2.0.1
+
+### Features
+* **o-form**: new '*editable-detail*' input (default value = '*true*'). When this input is true the default '*detail*' form mode allows the inner components edition ([488f997](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/488f997)).
+
+
+### BREAKING CHANGES
+* **o-table** and **o-list**: following inputs default values have changed ([0a356c9](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/0a356c9)):
+  * '*detail-mode*': changed from '*none*' to '*click*'.
+  * '*detail-button-in-row*': changed from '*true*' to '*false*'.
+* **OFormDataComponent**: this class now implements '*OnInit*' and '*onDestroy*' to forcing user to implement this methods at form components creation ([4c6c23b](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/4c6c23b)).
+
+
+## 2.0.0 (2017-09-26)
 
 ### BREAKING CHANGES
 * **OntimizeWebModule**: '*ontimize-web-ng2*' is now called '*ontimize-web-ngx*'.
 
-**IMPORTANT: you must update your imports for changing '*ontimize-web-ng2*' for '*ontimize-web-ngx*'. This includes module and components import and '*ontimize.scss*' reference.
+**IMPORTANT**: you must update your imports for changing '*ontimize-web-ng2*' for '*ontimize-web-ngx*'. This includes module and components import and '*ontimize.scss*' reference.
 
 * **Theming**: deleting material design pre-built exported themes. In your '*app.scss*' you wont be able to import anymore the following files:
   * `node_modules/ontimize-web-ng2/ontimize/components/theming/indigo-pink.scss`
@@ -13,7 +26,7 @@
 
 **Note**: From now on, all information about theming will be available at [ontimize-web-ngx-theming](https://github.com/OntimizeWeb/ontimize-web-ngx-theming)
 
-## 2.0.0-rc.8
+## 2.0.0-rc.8 (2017-09-25)
 
 ### PEER-DEPENDENCY UPDATES ###
 * **Updated**:  @ngx-translate/core@8.0.0
@@ -87,7 +100,7 @@
 * **OntimizeEE service**: logout bug fixed ([#124](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/124)) ([c341fc7](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/c341fc7))
 
 
-## 2.0.0-rc.7
+## 2.0.0-rc.7 (2017-08-11)
 
 ### PEER-DEPENDENCY UPDATES ###
 * **Updated**:  @ngx-translate/core@7.1.0
@@ -111,7 +124,7 @@
 * **o-list**: Filtering '*static-data*' bugs fixed ([#90](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/90)) ([6e58311](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/6e58311))
 * **Form components**: Updating form data cache when changing inner components data with '*setValue*' method ([#80](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/80)) ([c92b1b8](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/c92b1b8))
 
-## 2.0.0-rc.6
+## 2.0.0-rc.6 (2017-07-17)
 
 ### PEER-DEPENDENCY UPDATES ###
 * **Updated**:  @angular/cli@^1.2.1
@@ -120,7 +133,7 @@
 * **OComponent**: fixing bugs in '*OComponent*' decorator.
 * **providers**: fixing language initialization bugs.
 
-## 2.0.0-rc.5
+## 2.0.0-rc.5 (2017-07-10)
 
 ### DEPENDENCY UPDATES ###
 * **Added**:  colresizable@1.6.0
@@ -172,13 +185,14 @@
 * **OFormDataComponent**: bug when setting data ([#77](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/77)) ([11fb596](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/11fb596))
 * **o-form**: bug when setting data ([#82](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/82)) ([b2bad20](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/b2bad20))
 
-## 2.0.0-rc.4
+## 2.0.0-rc.4 (2017-06-23)
 
 ### Bug Fixes
 * **o-table**: pagination bugs fixed.
 * **o-app-header**: fixing flags icons bugs.
 
-## 2.0.0-rc.3
+## 2.0.0-rc.3 (2017-06-22)
+
 ### Features
 * **o-list-picker**: adding '*dialog-width*' and '*dialog-height*' inputs.
 * **o-list-picker**: adding internal '*o-list-picker-theme*'
@@ -192,7 +206,8 @@
 * **OTranslateService**: bugs in '*use*' method fixed.
 
 
-## 2.0.0-rc.2
+## 2.0.0-rc.2 (2017-06-20)
+
 ### Features
 * **LoginService**: adding '*logoutAndRedirect*' and '*logoutWithConfirmationAndRedirect*' methods.
 * **Providers**: adding '*AppMenuService*' for standard menu definition, '*OUserInfoService*' for basic user info storage and  '*OModulesInfoService*' for modules communication.
@@ -216,7 +231,8 @@
 * **o-list**: listening to '*static-data*' changes ([#89](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/89)) ([b267c51](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/b267c51))
 
 
-## 2.0.0-rc.1
+## 2.0.0-rc.1 (2017-06-06)
+
 ### BREAKING CHANGES
 * **OntimizeWebModule**: Removing '*forRoot*' method.
 * **Providers**: Removing declaration of providers done in '*OntimizeWebModule.forRoot*' method. Now exporting '*ONTIMIZE_PROVIDERS*' array containig all default module providers. Also exporting '*APP_CONFIG*' provider. Example of framework providers use:
@@ -252,7 +268,7 @@ import { CONFIG } from './app.config';
 [...]
 ```
 
-## 2.0.0-rc.0
+## 2.0.0-rc.0 (2017-05-30)
 
 ### Features
 * **Module**: Defining framework as a ngModule ('*OntimizeWebModule*') that includes all components, directives and providers.

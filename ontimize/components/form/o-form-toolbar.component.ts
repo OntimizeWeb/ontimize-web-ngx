@@ -113,7 +113,7 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
 
     let self = this;
     this.formCacheSubscription = this._form.formGroup.valueChanges.subscribe((value: any) => {
-      if (self._form.isEditableDetail() && self._form.areAllComponentsInitialized()) {
+      if (self._form.isEditableDetail()) {
         self.existsChangesToSave = self._form.isInitialStateChanged();
       }
     });
