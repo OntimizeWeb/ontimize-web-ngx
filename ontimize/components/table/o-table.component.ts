@@ -23,7 +23,7 @@ import { OFormComponent } from '../form/o-form.component';
 import { OSharedModule } from '../../shared';
 import { OServiceComponent } from '../o-service-component.class';
 import { CdkTableModule } from "@angular/cdk/table";
-
+import { Observable } from 'rxjs/Observable';
 
 import { OTableDataSource } from './o-table.datasource';
 import { OTableDao } from './o-table.dao';
@@ -116,6 +116,15 @@ export class OColumn {
   constructor() { }
 }
 
+export class OTableOptions {
+  columns: Array<OColumn> = [];
+  visibleColumns: Array<any> = [];
+  filter: boolean;
+  filterCanseSentive: boolean
+  constructor() { }
+}
+
+
 @Component({
   selector: 'o-table',
   templateUrl: './o-table.component.html',
@@ -143,23 +152,13 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   @ViewChild('filter') filter: ElementRef;
 
+  protected _oTableOptions: OTableOptions;
 
-  protected visibleColumns: string;
-  protected _visibleColumnsArray: Array<string> = [];
-
-  get visibleColumnsArray(): Array<string> {
-    return this._visibleColumnsArray
+  get oTableOptions(): OTableOptions {
+    return this._oTableOptions;
   }
-  set visibleColumnsArray(value: Array<string>) {
-    this._visibleColumnsArray = value;
-  }
-
-  protected _columnsArray: Array<any> = [];
-  get columnsArray(): Array<any> {
-    return this._columnsArray;
-  }
-  set columnsArray(value: Array<any>) {
-    this._columnsArray = value;
+  set oTableOptions(value: OTableOptions) {
+    this._oTableOptions = value;
   }
 
 
@@ -184,11 +183,11 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   public daoTable: OTableDao | null;
   public dataSource: OTableDataSource | null;
+  protected visibleColumns: string;
+
 
   ngOnInit() {
-
     this.initialize();
-
   }
 
   /**
@@ -197,31 +196,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   initialize(): any {
 
     super.initialize();
-
-    //if not declare visible-columns then visible-columns is all columns
-    if (this.visibleColumns)
-      this.visibleColumns.split(";").map(x => this._visibleColumnsArray.push(x));
-    else {
-      this.visibleColumns = this.columns;
-      this.columns.split(";").map(x => this._visibleColumnsArray.push(x));
-    }
-
-    if (this.columns)
-      this.columns.split(";").map(x => this.registerColumn(x));
-
-
-    let queryArguments = this.getQueryArguments({});
-    let queryMethodName = this.pageable ? this.paginatedQueryMethod : this.queryMethod;
-    this.daoTable = new OTableDao(this.injector, this.service, this.entity, queryMethodName, queryArguments);
-    this.dataSource = new OTableDataSource(this.daoTable);
-
-    if (this.staticData) {
-      this.daoTable.setDataArray(this.staticData);
-    } else if (this.queryOnInit) {
-      //this.configureService();
-      this.daoTable.getQuery();
-    }
-
+    this.initializeParams();
+  
   }
 
 
@@ -258,19 +234,62 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     //find column definition by name
     if (typeof (column.attr) !== 'undefined') {
 
-      var alreadyExisting = this.columnsArray.filter(function (existingColumn) {
+      var alreadyExisting = this._oTableOptions.columns.filter(function (existingColumn) {
         return existingColumn.name === column.attr;
       });
       if (alreadyExisting.length === 1) {
-        var replacingIndex = this.columnsArray.indexOf(alreadyExisting[0]);
-        this.columnsArray[replacingIndex] = colDef;
+        var replacingIndex = this._oTableOptions.columns.indexOf(alreadyExisting[0]);
+        this._oTableOptions.columns[replacingIndex] = colDef;
       } else if (alreadyExisting.length === 0) {
-        this.columnsArray.push(colDef);
+        this._oTableOptions.columns.push(colDef);
       }
     } else {
-      this.columnsArray.push(colDef);
+      this._oTableOptions.columns.push(colDef);
     }
     //return colDef;
+  }
+
+
+  initializeEventFilter() {
+    Observable.fromEvent(this.filter.nativeElement, 'keyup')
+      .debounceTime(150)
+      .distinctUntilChanged()
+      .subscribe(() => {
+        if (!this.dataSource) { return; }
+        this.dataSource.filter = this.filter.nativeElement.value;
+      });
+  }
+  /**
+   * get/set parametres to component
+   */
+  initializeParams() {
+
+    this._oTableOptions = new OTableOptions();
+    //if not declare visible-columns then visible-columns is all columns
+    if (this.visibleColumns)
+      this.visibleColumns.split(";").map(x => this._oTableOptions.visibleColumns.push(x));
+    else {
+      this.visibleColumns = this.columns;
+      this.columns.split(";").map(x => this._oTableOptions.visibleColumns.push(x));
+    }
+    this._oTableOptions.filter = this.quickFilter;
+    this._oTableOptions.filterCanseSentive = this.filterCanseSentive;
+
+    if (this.columns)
+      this.columns.split(";").map(x => this.registerColumn(x));
+
+
+    let queryArguments = this.getQueryArguments({});
+    let queryMethodName = this.pageable ? this.paginatedQueryMethod : this.queryMethod;
+    this.daoTable = new OTableDao(this.injector, this.service, this.entity, queryMethodName, queryArguments);
+    this.dataSource = new OTableDataSource(this.daoTable, this._oTableOptions);
+
+    if (this.staticData) {
+      this.daoTable.setDataArray(this.staticData);
+    } else if (this.queryOnInit) {
+      //this.configureService();
+      this.daoTable.getQuery();
+    }
   }
 
   ngOnDestroy() {
@@ -278,7 +297,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   ngAfterViewInit() {
-    // TODO
+    if (this.quickFilter)
+      this.initializeEventFilter();
   }
 
   ngOnChanges(changes: { [propName: string]: SimpleChange }) {
