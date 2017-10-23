@@ -217,6 +217,9 @@ export var MAP = {
     'FORM_VALIDATION.DATE_MIN':'Fecha mínima',
     'FORM_VALIDATION.DATE_MAX':'Fecha máxima',
 
+    'FORM_VALIDATION.FILE_TYPE':'Formato no válido',
+    'FORM_VALIDATION.FILE_MAXSIZE':'Tamaño de fichero máximo',
+
     'MESSAGES.FORM_VALIDATION_ERROR': 'El formulario contiene campos con valores no válidos',
     'MESSAGES.FORM_NOTHING_TO_UPDATE_INFO': '¡No existen valores para actualizar!',
     'MESSAGES.ERROR_LOGIN': 'Error de inicio de sesión. Compruebe nombre de usuario y/o contraseña.',
