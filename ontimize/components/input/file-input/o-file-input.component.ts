@@ -46,9 +46,6 @@ export const DEFAULT_INPUTS_O_FILE_INPUT = [
 
   // max-file-size [string]: maximum file size allowed, in bytes. Default: no value.
   'maxFileSize: max-file-size',
-
-  // sqltype[string]: Data type according to Java standard. See SQLType ngClass. Default: 'OTHER'
-  'sqlType: sql-type'
 ];
 
 export const DEFAULT_OUTPUTS_O_FILE_INPUT = [
@@ -78,6 +75,7 @@ export class OFileInputComponent extends OFormDataComponent implements OnDestroy
   protected service: string;
   protected entity: string;
   protected serviceType: string;
+  autoBinding: boolean = false;
 
   /* Outputs */
   onChange: EventEmitter<Object> = new EventEmitter<Object>();
@@ -113,6 +111,13 @@ export class OFileInputComponent extends OFormDataComponent implements OnDestroy
 
   initialize() {
     super.initialize();
+
+    if (!this.service) {
+      this.service = this.form.service;
+    }
+    if (!this.entity) {
+      this.entity = this.form.entity;
+    }
 
     this.configureService();
   }

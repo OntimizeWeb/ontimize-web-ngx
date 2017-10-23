@@ -3,11 +3,11 @@
     <div fxLayout="row">
       <input #inputShowValue mdInput type="text" [attr.id]="getAttribute()" [id]="getAttribute()" [formControlName]="getAttribute()"
         [placeholder]="placeHolder" [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)" [readonly]="isReadOnly">
-      <div mdSuffix (click)="$event.stopPropagation()" fxLayout="row" fxLayoutAlign="space-between center" class="o-file-input-buttons">
-        <button md-icon-button *ngIf="getValue()" (click)="clearData($event)">
+      <div mdSuffix *ngIf="getValue()" (click)="$event.stopPropagation()" fxLayout="row" fxLayoutAlign="space-between center" class="o-file-input-buttons">
+        <button md-icon-button (click)="onClickClear($event)">
           <md-icon aria-label="Clear">clear</md-icon>
         </button>
-        <button md-icon-button *ngIf="getValue()" [disabled]="!isValid" (click)="onClickUpload($event)">
+        <button md-icon-button [disabled]="!isValid" (click)="onClickUpload($event)">
           <md-icon aria-label="Upload">file_upload</md-icon>
         </button>
       </div>
