@@ -23,7 +23,7 @@ import { OFormComponent } from '../form/o-form.component';
 import { OSharedModule } from '../../shared';
 import { OServiceComponent } from '../o-service-component.class';
 import { CdkTableModule } from "@angular/cdk/table";
-import { Util } from '../../util/util';
+
 
 import { OTableDataSource } from './o-table.datasource';
 import { OTableDao } from './o-table.dao';
@@ -113,7 +113,7 @@ export class OColumn {
   orderable: boolean;
   searchable: boolean;
   visible: boolean
-  constructor(){}
+  constructor() { }
 }
 
 @Component({
@@ -140,12 +140,12 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   ) {
     super(injector, elRef, form);
   }
-  
+
   @ViewChild('filter') filter: ElementRef;
 
 
   protected visibleColumns: string;
-  protected _visibleColumnsArray: Array<string>=[];
+  protected _visibleColumnsArray: Array<string> = [];
 
   get visibleColumnsArray(): Array<string> {
     return this._visibleColumnsArray
@@ -153,7 +153,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   set visibleColumnsArray(value: Array<string>) {
     this._visibleColumnsArray = value;
   }
-  
+
   protected _columnsArray: Array<any> = [];
   get columnsArray(): Array<any> {
     return this._columnsArray;
@@ -188,7 +188,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   ngOnInit() {
 
     this.initialize();
-    
+
   }
 
   /**
@@ -197,37 +197,33 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   initialize(): any {
 
     super.initialize();
-    if (this.columns)
-    this.columns.split(";").map(x => this.registerColumn(x));
 
     //if not declare visible-columns then visible-columns is all columns
     if (this.visibleColumns)
       this.visibleColumns.split(";").map(x => this._visibleColumnsArray.push(x));
-    else
+    else {
+      this.visibleColumns = this.columns;
       this.columns.split(";").map(x => this._visibleColumnsArray.push(x));
+    }
 
-    this.configureService();
+    if (this.columns)
+      this.columns.split(";").map(x => this.registerColumn(x));
+
 
     let queryArguments = this.getQueryArguments({});
     let queryMethodName = this.pageable ? this.paginatedQueryMethod : this.queryMethod;
-    this.daoTable = new OTableDao(this.dataService, queryMethodName, queryArguments);
+    this.daoTable = new OTableDao(this.injector, this.service, this.entity, queryMethodName, queryArguments);
     this.dataSource = new OTableDataSource(this.daoTable);
-    this.daoTable.getQuery();
-  }
- /**
-  * Method what its configure  call service
-  */
-  configureService() {
-    this.dataService = this.injector.get(OntimizeService);
 
-    if (Util.isDataService(this.dataService)) {
-      let serviceCfg = this.dataService.getDefaultServiceConfiguration(this.service);
-      if (this.entity) {
-        serviceCfg['entity'] = this.entity;
-      }
-      this.dataService.configureService(serviceCfg);
+    if (this.staticData) {
+      this.daoTable.setDataArray(this.staticData);
+    } else if (this.queryOnInit) {
+      //this.configureService();
+      this.daoTable.getQuery();
     }
+
   }
+
 
   /**
    * Store all columns and properties in var columnsArray
@@ -236,7 +232,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   public registerColumn(column: any) {
     let colDef: OColumn = new OColumn();
     colDef.type = 'string',
-    colDef.className = 'o-table-column ' + (column.class || '') + ' ';
+      colDef.className = 'o-table-column ' + (column.class || '') + ' ';
     colDef.orderable = true;
     colDef.searchable = true;
 
@@ -258,7 +254,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       colDef.type = column.type
     }
     colDef.visible = (this.visibleColumns.indexOf(colDef.attr) !== -1);
-    
+
     //find column definition by name
     if (typeof (column.attr) !== 'undefined') {
 
@@ -274,7 +270,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     } else {
       this.columnsArray.push(colDef);
     }
-//return colDef;
+    //return colDef;
   }
 
   ngOnDestroy() {

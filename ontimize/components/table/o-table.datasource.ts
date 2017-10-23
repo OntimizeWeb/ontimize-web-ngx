@@ -18,13 +18,11 @@ export class OTableDataSource extends DataSource<any> {
 
   /** Connect function called by the table to retrieve one stream containing the data to render. */
   connect(): Observable<any[]> {
+    this.resultsLength = this._database.dataChange.getValue().length;
     return this._database.dataChange;
-
   }
 
   disconnect() { };
-
- 
 
 
 }
