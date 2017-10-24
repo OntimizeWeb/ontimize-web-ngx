@@ -17,6 +17,7 @@ import { ValidatorFn } from '@angular/forms/src/directives/validators';
 import { Subscription } from 'rxjs/Subscription';
 
 import { OSharedModule } from '../../../shared';
+import { InputConverter } from '../../../decorators';
 import { OntimizeFileService } from '../../../services';
 import { OFormComponent } from '../../form/o-form.component';
 import { OFormDataComponent } from '../../o-form-data-component.class';
@@ -44,8 +45,11 @@ export const DEFAULT_INPUTS_O_FILE_INPUT = [
   // file_extension, audio/*, video/*, image/*, media_type. See https://www.w3schools.com/tags/att_input_accept.asp
   'acceptFileType: accept-file-type',
 
-  // max-file-size [string]: maximum file size allowed, in bytes. Default: no value.
+  // max-file-size [number]: maximum file size allowed, in bytes. Default: no value.
   'maxFileSize: max-file-size',
+
+  // multiple [boolean]: multiple file selection allowed. Default: no.
+  'multiple'
 ];
 
 export const DEFAULT_OUTPUTS_O_FILE_INPUT = [
@@ -76,6 +80,8 @@ export class OFileInputComponent extends OFormDataComponent implements OnDestroy
   protected entity: string;
   protected serviceType: string;
   autoBinding: boolean = false;
+  @InputConverter()
+  multiple: boolean = false;
 
   /* Outputs */
   onChange: EventEmitter<Object> = new EventEmitter<Object>();

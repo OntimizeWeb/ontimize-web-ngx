@@ -17,5 +17,5 @@
     <md-error *ngIf="hasError('fileSize')">{{ 'FORM_VALIDATION.FILE_MAXSIZE' | oTranslate }}: {{ getErrorValue('fileSize', 'maxFileSize') }} bytes</md-error>
   </md-form-field>
   <input #inputFile type="file" id="{{getAttribute()+'-file-input'}}" [attr.accept]="acceptFileType ? acceptFileType.replace(';',',') : null"
-    (change)="fileSelected($event)" hidden="true">
+    (change)="fileSelected($event)" hidden="true" [attr.multiple]="multiple ? '' : null">
 </div>
