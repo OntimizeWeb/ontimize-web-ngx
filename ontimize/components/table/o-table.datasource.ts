@@ -2,6 +2,7 @@ import { Observable } from 'rxjs/Observable';
 import { DataSource } from '@angular/cdk/collections';
 import { OTableDao } from './o-table.dao';
 import { OTableOptions, OColumn } from './o-table.component';
+import { MdSort } from '@angular/material';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 export class OTableDataSource extends DataSource<any> {
@@ -13,7 +14,7 @@ export class OTableDataSource extends DataSource<any> {
   renderedData: any[] = [];
   resultsLength: number = 0;
 
-  constructor(private _database: OTableDao, private tableOptions: OTableOptions) {
+  constructor(private _database: OTableDao, private tableOptions: OTableOptions, private _sort: MdSort) {
     super();
 
   }
@@ -22,6 +23,7 @@ export class OTableDataSource extends DataSource<any> {
   connect(): Observable<any[]> {
     let displayDataChanges: any[] = [
       this._database.dataChange,
+      this._sort.mdSortChange
     ];
 
     if (this.tableOptions.filter)
@@ -46,6 +48,9 @@ export class OTableDataSource extends DataSource<any> {
         });
       }
 
+      // Sort filtered data
+      this.renderedData = this.sortData(this.renderedData.slice());
+
       this.resultsLength = this.renderedData.length
       return this.renderedData;
     });
@@ -62,4 +67,21 @@ export class OTableDataSource extends DataSource<any> {
     }).join(" ");
   }
 
+  /** Returns a sorted copy of the database data. */
+  sortData(data: any[]): any[] {
+    if (!this._sort.active || this._sort.direction == '') { return data; }
+    this._sort.sortables.forEach((value, key) => {
+      this._sort.deregister(value)
+    })
+    return data.sort((a, b) => {
+      let propertyA: number | string = '';
+      let propertyB: number | string = '';
+      [propertyA, propertyB] = [a[this._sort.active], b[this._sort.active]];
+
+      let valueA = propertyA == "" ? propertyA : isNaN(+propertyA) ? propertyA.toString().trim().toUpperCase() : +propertyA;
+      let valueB = propertyB == "" ? propertyB : isNaN(+propertyB) ? propertyB.toString().trim().toUpperCase() : +propertyB;
+      return (valueA <= valueB ? -1 : 1) * (this._sort.direction == 'asc' ? 1 : -1);
+    });
+
+  }
 }

@@ -24,10 +24,11 @@ import { OSharedModule } from '../../shared';
 import { OServiceComponent } from '../o-service-component.class';
 import { CdkTableModule } from "@angular/cdk/table";
 import { Observable } from 'rxjs/Observable';
+import { MdSort, MdSortModule } from '@angular/material';
 
 import { OTableDataSource } from './o-table.datasource';
 import { OTableDao } from './o-table.dao';
-
+import { Util } from '../../util/util';
 
 export const DEFAULT_INPUTS_O_TABLE = [
   ...OServiceComponent.DEFAULT_INPUTS_O_SERVICE_COMPONENT,
@@ -120,7 +121,7 @@ export class OTableOptions {
   columns: Array<OColumn> = [];
   visibleColumns: Array<any> = [];
   filter: boolean;
-  filterCanseSentive: boolean
+  filterCanseSentive: boolean;
   constructor() { }
 }
 
@@ -151,6 +152,12 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   @ViewChild('filter') filter: ElementRef;
+  @ViewChild(MdSort) sort: MdSort;
+
+  public static TYPE_SEPARATOR = ':';
+  public static VALUES_SEPARATOR = '=';
+  public static TYPE_ASC_NAME = 'asc';
+  public static TYPE_DESC_NAME = 'desc';
 
   protected _oTableOptions: OTableOptions;
 
@@ -184,6 +191,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   public daoTable: OTableDao | null;
   public dataSource: OTableDataSource | null;
   protected visibleColumns: string;
+  protected sortColumns: string;
 
 
   ngOnInit() {
@@ -197,7 +205,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
     super.initialize();
     this.initializeParams();
-  
+
   }
 
 
@@ -208,15 +216,13 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   public registerColumn(column: any) {
     let colDef: OColumn = new OColumn();
     colDef.type = 'string',
-      colDef.className = 'o-table-column ' + (column.class || '') + ' ';
+    colDef.className = 'o-table-column ' + (column.class || '') + ' ';
     colDef.orderable = true;
     colDef.searchable = true;
 
     if (typeof (column.attr) === 'undefined') {
       // column without 'attr' should contain only renderers that do not depend on cell data, but row data (e.g. actions)
       colDef.className += ' o-table-column-action ';
-      colDef.orderable = true;
-      colDef.searchable = true;
       colDef.name = column;
       colDef.attr = column;
       colDef.title = column;
@@ -225,8 +231,12 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       // columns with 'attr' are linked to service data
       colDef.name = column.attr;
       colDef.title = column.title;
-      colDef.orderable = column.orderable;
-      colDef.searchable = column.searchable;
+      if (typeof column.orderable !== "undefined")
+        colDef.orderable = column.orderable;
+
+      if (typeof column.searchable !== "undefined")
+        colDef.searchable = column.searchable;
+
       colDef.type = column.type
     }
     colDef.visible = (this.visibleColumns.indexOf(colDef.attr) !== -1);
@@ -278,16 +288,50 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     if (this.columns)
       this.columns.split(";").map(x => this.registerColumn(x));
 
+    //parse input sort-columns
+    let sortColumnsArray = [];
+    if (this.sortColumns) {
+      let cols = Util.parseArray(this.sortColumns);
+      for (let i = 0; i < cols.length; ++i) {
+        let col = cols[i];
+        let colDef = col.split(OTableComponent.TYPE_SEPARATOR);
+        if (colDef.length > 0) {
+          let colName = colDef[0];
+          for (let colIndex = 0; colIndex < this._oTableOptions.columns.length; ++colIndex) {
+            if (colName === this._oTableOptions.columns[colIndex].name) {
+              let sortDirection = OTableComponent.TYPE_ASC_NAME;
+              if (colDef.length > 1) {
+                sortDirection = colDef[1].toLowerCase();
+                switch (sortDirection) {
+                  case OTableComponent.TYPE_DESC_NAME:
+                    sortDirection = OTableComponent.TYPE_DESC_NAME;
+                    break;
+                }
+              }
+              sortColumnsArray.push([colName, sortDirection]);
+            }
+          }
+        }
+      }
+
+      //set values of sort-columns to mdsort
+      if ((typeof ( this._oTableOptions.columns) !== 'undefined') && (sortColumnsArray.length > 0)) {
+        let temp = sortColumnsArray[0];
+        this.sort.active = temp[0];
+        this.sort.direction= temp[1].toLowerCase();
+      }
+    }
+
 
     let queryArguments = this.getQueryArguments({});
     let queryMethodName = this.pageable ? this.paginatedQueryMethod : this.queryMethod;
     this.daoTable = new OTableDao(this.injector, this.service, this.entity, queryMethodName, queryArguments);
-    this.dataSource = new OTableDataSource(this.daoTable, this._oTableOptions);
+    this.dataSource = new OTableDataSource(this.daoTable, this._oTableOptions, this.sort);
+    this.dataSource.resultsLength = 0;
 
     if (this.staticData) {
       this.daoTable.setDataArray(this.staticData);
     } else if (this.queryOnInit) {
-      //this.configureService();
       this.daoTable.getQuery();
     }
   }
@@ -313,7 +357,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   imports: [
     CommonModule,
     OSharedModule,
-    CdkTableModule
+    CdkTableModule,
+    MdSortModule
 
   ],
   exports: [

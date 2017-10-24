@@ -1,5 +1,5 @@
-<div fxLayoutAlign="center top" class="o-table-wrapper" fxLayout="column" *ngIf="isVisible()">
-  
+
+<div fxLayoutAlign="center top" class="o-table-wrapper" fxLayout="column"  [style.display]="isVisible()? '' : 'none'">
     <div class="o-table-container">
         <div fxLayoutAlign="end center" *ngIf="oTableOptions.filter">
             <md-form-field floatPlaceholder="never">
@@ -7,12 +7,13 @@
                 <span class="icon-btn" mdPrefix><i class="material-icons">search</i></span>
             </md-form-field>
         </div>      
-        <md-table #table [dataSource]="dataSource" >
+        <md-table #table [dataSource]="dataSource" mdSort >
             <!-- Generic column definition -->
             <ng-container *ngFor="let column of oTableOptions.columns" [cdkColumnDef]="column.name">
                 <div *ngIf="column.orderable">
-                    <md-header-cell *cdkHeaderCellDef mat-sort-header start="asc">{{ column.title | oTranslate }}</md-header-cell>
+                    <md-header-cell *cdkHeaderCellDef md-sort-header>{{ column.title | oTranslate }}</md-header-cell>
                 </div>
+
                 <div *ngIf="!column.orderable">
                     <md-header-cell *cdkHeaderCellDef>{{ column.title | oTranslate }}</md-header-cell>
                 </div>
