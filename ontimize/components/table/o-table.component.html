@@ -29,7 +29,7 @@
         <div *ngIf="!daoTable.isLoadingResults">
             <md-progress-spinner mode="indeterminate" style="margin:0 auto;" *ngIf="daoTable.isLoadingResults"></md-progress-spinner>
         </div>
-        <div class="mat-row o-table-no-results" [style.display]="dataSource.resultsLength > 0 ? '' : 'none'"  *ngIf="daoTable.isLoadingResults"  fxLayoutAlign="center center">
+        <div class="mat-row o-table-no-results" style.display="dataSource.resultsLength > 0 ? '' : 'none'"  *ngIf="daoTable.isLoadingResults"  fxLayoutAlign="center center">
            {{'TABLE.EMPTY' | oTranslate}}
            'dataSource.resultsLength' {{dataSource.resultsLength}}<br>
            'daoTable.isLoadingResults' {{!daoTable.isLoadingResults}}

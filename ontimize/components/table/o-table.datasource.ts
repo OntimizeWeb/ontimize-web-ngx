@@ -84,8 +84,8 @@ export class OTableDataSource extends DataSource<any> {
       let propertyB: number | string = '';
       [propertyA, propertyB] = [a[this._sort.active], b[this._sort.active]];
 
-      let valueA = propertyA == "" ? propertyA : isNaN(+propertyA) ? propertyA.toString().trim().toUpperCase() : +propertyA;
-      let valueB = propertyB == "" ? propertyB : isNaN(+propertyB) ? propertyB.toString().trim().toUpperCase() : +propertyB;
+      let valueA = typeof propertyA ==='undefined'?"": propertyA == "" ? propertyA : isNaN(+propertyA) ? propertyA.toString().trim() : +propertyA;
+      let valueB = typeof propertyB ==='undefined'?"": propertyB == "" ? propertyB : isNaN(+propertyB) ? propertyB.toString().trim() : +propertyB;
       return (valueA <= valueB ? -1 : 1) * (this._sort.direction == 'asc' ? 1 : -1);
     });
 
