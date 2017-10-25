@@ -11,6 +11,7 @@ import {
   ViewEncapsulation,
   ElementRef
 } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute, UrlSegment, UrlSegmentGroup } from '@angular/router';
 import { FormGroup, FormControl } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
@@ -26,7 +27,8 @@ import { OFormToolbarModule, OFormToolbarComponent } from './o-form-toolbar.comp
 import { OFormValue } from './OFormValue';
 import { Util, SQLTypes } from '../../utils';
 import { OSharedModule } from '../../shared';
-import { CommonModule } from '@angular/common';
+
+import { CanDeactivateFormGuard } from './guards/o-form-can-deactivate.guard';
 
 export const DEFAULT_INPUTS_O_FORM = [
   // show-header [boolean]: visibility of form toolbar. Default: yes.
@@ -118,12 +120,8 @@ export interface OFormInitializationOptions {
   ],
   templateUrl: './o-form.component.html',
   styleUrls: ['./o-form.component.scss'],
-  inputs: [
-    ...DEFAULT_INPUTS_O_FORM
-  ],
-  outputs: [
-    ...DEFAULT_OUTPUTS_O_FORM
-  ],
+  inputs: DEFAULT_INPUTS_O_FORM,
+  outputs: DEFAULT_OUTPUTS_O_FORM,
   encapsulation: ViewEncapsulation.None,
   host: {
     '[class.o-form]': 'true',
@@ -229,6 +227,8 @@ export class OFormComponent implements OnInit, OnDestroy {
   protected loaderSubscription: Subscription;
   protected formCacheSubscription: Subscription;
   protected dynamicFormSubscription: Subscription;
+
+  protected deactivateGuard: CanDeactivateFormGuard;
 
   public static Mode(): any {
     enum m {
@@ -395,12 +395,12 @@ export class OFormComponent implements OnInit, OnDestroy {
     if (this.isInInsertMode()) {
       let val = this.formGroup.value[attr];
       return new OFormValue(val);
-    } else if (this.isInInitialMode() && !this.editableDetail) {
+    } else if (this.isInInitialMode() && !this.isEditableDetail()) {
       let data = this.formData;
       if (data && data.hasOwnProperty(attr)) {
         return data[attr];
       }
-    } else if (this.isInUpdateMode() || this.editableDetail) {
+    } else if (this.isInUpdateMode() || this.isEditableDetail()) {
       if (this.formData && Object.keys(this.formData).length > 0) {
         if (this.formGroup.dirty && this.formDataCache &&
           this.formDataCache.hasOwnProperty(attr)) {
@@ -439,9 +439,9 @@ export class OFormComponent implements OnInit, OnDestroy {
     }, 0);
   }
 
-  confirmToolbarAction() {
+  showConfirmDiscardChanges() {
     let subscription = undefined;
-    if (this.editableDetail && this.isInitialStateChanged()) {
+    if (this.isInitialStateChanged()) {
       subscription = this.dialogService.confirm('CONFIRM', 'MESSAGES.FORM_CHANGES_WILL_BE_LOST');
     }
     if (subscription === undefined) {
@@ -456,14 +456,14 @@ export class OFormComponent implements OnInit, OnDestroy {
     return subscription;
   }
 
-  executeToolbarAction(action: string) {
+  executeToolbarAction(action: string, options?: any) {
     switch (action) {
       case OFormComponent.BACK_ACTION: this._backAction(); break;
-      case OFormComponent.CLOSE_DETAIL_ACTION: this._closeDetailAction(); break;
+      case OFormComponent.CLOSE_DETAIL_ACTION: this._closeDetailAction(options); break;
       case OFormComponent.RELOAD_ACTION: this._reloadAction(true); break;
-      case OFormComponent.GO_INSERT_ACTION: this._goInsertMode(); break;
+      case OFormComponent.GO_INSERT_ACTION: this._goInsertMode(options); break;
       case OFormComponent.INSERT_ACTION: this._insertAction(); break;
-      case OFormComponent.GO_EDIT_ACTION: this._goEditMode(); break;
+      case OFormComponent.GO_EDIT_ACTION: this._goEditMode(options); break;
       case OFormComponent.EDIT_ACTION: this._editAction(); break;
       case OFormComponent.DELETE_ACTION: return this._deleteAction();
       default: break;
@@ -471,10 +471,12 @@ export class OFormComponent implements OnInit, OnDestroy {
     return undefined;
   }
 
-
   ngOnInit(): void {
-    // stayInRecordAfterEdit is true if form has editableDetail = true
-    this.stayInRecordAfterEdit = this.stayInRecordAfterEdit || this.editableDetail;
+    // stayInRecordAfterEdit is true if form has editable detail = true
+    this.stayInRecordAfterEdit = this.stayInRecordAfterEdit || this.isEditableDetail();
+
+    this.addDeactivateGuard();
+
     this.formGroup = new FormGroup({});
     var self = this;
     /*
@@ -490,9 +492,43 @@ export class OFormComponent implements OnInit, OnDestroy {
     this.initialize();
   }
 
+  addDeactivateGuard() {
+    if (this.isInInitialMode() && !this.isEditableDetail()) {
+      return;
+    }
+    this.deactivateGuard = this.injector.get(CanDeactivateFormGuard);
+    this.deactivateGuard.setForm(this);
+    let canDeactivateArray = (this.actRoute.routeConfig.canDeactivate || []);
+    let previouslyAdded = false;
+    for (let i = 0, len = canDeactivateArray.length; i < len; i++) {
+      previouslyAdded = (canDeactivateArray[i].name === 'CanDeactivateFormGuard');
+      if (previouslyAdded) {
+        break;
+      }
+    }
+    if (!previouslyAdded) {
+      canDeactivateArray.push(this.deactivateGuard.constructor);
+      this.actRoute.routeConfig.canDeactivate = canDeactivateArray;
+      this.router.resetConfig(this.router.config);
+    }
+  }
+
+  destroyDeactivateGuard() {
+    if (this.deactivateGuard) {
+      this.deactivateGuard.setForm(undefined);
+      for (let i = this.actRoute.routeConfig.canDeactivate.length - 1; i >= 0; i--) {
+        if (this.actRoute.routeConfig.canDeactivate[i].name === 'CanDeactivateFormGuard') {
+          this.actRoute.routeConfig.canDeactivate.splice(i, 1);
+          break;
+        }
+      }
+      this.router.resetConfig(this.router.config);
+    }
+  }
+
   /**
- * Angular methods
- */
+  * Angular methods
+  */
   initialize() {
     var self = this;
     if (this.headeractions === 'all') {
@@ -612,6 +648,7 @@ export class OFormComponent implements OnInit, OnDestroy {
       this.formCacheSubscription.unsubscribe();
     }
     this.formDataCache = undefined;
+    this.destroyDeactivateGuard();
   }
 
   ngAfterViewInit() {
@@ -639,7 +676,6 @@ export class OFormComponent implements OnInit, OnDestroy {
       this.setInsertMode();
       return;
     } else if (_path === 'edit') {
-      //edit mode
       this.setUpdateMode();
     } else {
       this.setInitialMode();
@@ -675,7 +711,7 @@ export class OFormComponent implements OnInit, OnDestroy {
         if (this._formToolbar) {
           this._formToolbar.setInitialMode();
         }
-        this._setComponentsEditable(this.editableDetail);
+        this._setComponentsEditable(this.isEditableDetail());
         this.onFormModeChange.emit(this.mode);
         break;
       case OFormComponent.Mode().INSERT:
@@ -747,7 +783,7 @@ export class OFormComponent implements OnInit, OnDestroy {
       });
   }
 
-  _closeDetailAction() {
+  _closeDetailAction(options?: any) {
     this.beforeCloseDetail.emit();
     var fullUrlSegments = this.getFullUrlSegments();
     var thisUrlSegments = this.urlSegments.slice(0);
@@ -783,7 +819,11 @@ export class OFormComponent implements OnInit, OnDestroy {
       extras['queryParams'] = Object.assign({}, this.queryParams, { 'isdetail': 'true' });
     }
 
-    this.router.navigate([urlText], extras).catch(err => {
+    this.router.navigate([urlText], extras).then(val => {
+      if (val && options && options.changeToolbarMode) {
+        this._formToolbar.setInitialMode();
+      }
+    }).catch(err => {
       console.error(err.message);
     });
 
@@ -847,13 +887,15 @@ export class OFormComponent implements OnInit, OnDestroy {
   /**
    * Navigates to 'insert' mode
    */
-  _goInsertMode() {
-
+  _goInsertMode(options?: any) {
     let extras = { relativeTo: this.actRoute };
-    this.router.navigate(['../', 'new'], extras)
-      .catch(err => {
-        console.error(err.message);
-      });
+    this.router.navigate(['../', 'new'], extras).then((val) => {
+      if (val && options && options.changeToolbarMode) {
+        this._formToolbar.setInsertMode();
+      }
+    }).catch(err => {
+      console.error(err.message);
+    });
   }
 
   /**
@@ -875,26 +917,24 @@ export class OFormComponent implements OnInit, OnDestroy {
     var self = this;
     let values = this.getAttributesValuesToInsert();
     let sqlTypes = this.getAttributesSQLTypes();
-    this.insertData(values, sqlTypes)
-      .subscribe(resp => {
-        self.postCorrectInsert(resp);
-        //TODO mostrar un toast indicando que la operación fue correcta...
+    this.insertData(values, sqlTypes).subscribe(resp => {
+      self.postCorrectInsert(resp);
+      //TODO mostrar un toast indicando que la operación fue correcta...
+      if (self.stayInRecordAfterInsert) {
+        this._stayInRecordAfterInsert(resp);
+      } else {
+        self._closeDetailAction();
+      }
 
-        if (self.stayInRecordAfterInsert) {
-          this._stayInRecordAfterInsert(resp);
-        } else {
-          self._closeDetailAction();
-        }
-
-      }, error => {
-        self.postIncorrectInsert(error);
-      });
+    }, error => {
+      self.postIncorrectInsert(error);
+    });
   }
 
   /**
    * Navigates to 'edit' mode
    */
-  _goEditMode() {
+  _goEditMode(options?: any) {
 
     this.beforeGoEditMode.emit();
 
@@ -910,10 +950,13 @@ export class OFormComponent implements OnInit, OnDestroy {
       extras['queryParams'] = { 'isdetail': 'true' };
     }
     extras['queryParams'] = Object.assign({}, this.queryParams, extras['queryParams'] || {});
-    this.router.navigate(['../', url, 'edit'], extras)
-      .catch(err => {
-        console.error(err.message);
-      });
+    this.router.navigate(['../', url, 'edit'], extras).then((val) => {
+      if (val && options && options.changeToolbarMode) {
+        this._formToolbar.setEditMode();
+      }
+    }).catch(err => {
+      console.error(err.message);
+    });
   }
 
   /**
@@ -1279,14 +1322,20 @@ export class OFormComponent implements OnInit, OnDestroy {
   }
 
   setQueryMode() {
+    // ensuring that editable detail is false
+    this.editableDetail = false;
     this.setFormMode(OFormComponent.Mode().QUERY);
   }
 
   setInsertMode() {
+    // ensuring that editable detail is false
+    this.editableDetail = false;
     this.setFormMode(OFormComponent.Mode().INSERT);
   }
 
   setUpdateMode() {
+    // ensuring that editable detail is false
+    this.editableDetail = false;
     this.setFormMode(OFormComponent.Mode().UPDATE);
   }
 
@@ -1368,7 +1417,8 @@ export class OFormComponent implements OnInit, OnDestroy {
 @NgModule({
   declarations: [OFormComponent],
   imports: [OSharedModule, CommonModule, OFormToolbarModule],
-  exports: [OFormComponent, OFormToolbarModule]
+  exports: [OFormComponent, OFormToolbarModule],
+  providers: [{ provide: CanDeactivateFormGuard, useClass: CanDeactivateFormGuard }]
 })
 export class OFormModule {
 }

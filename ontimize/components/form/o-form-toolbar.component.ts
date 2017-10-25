@@ -139,26 +139,18 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
   }
 
   onCloseDetail() {
-    let self = this;
-    this._form.confirmToolbarAction().then(val => {
-      if (val) {
-        self._form.executeToolbarAction(OFormComponent.CLOSE_DETAIL_ACTION);
-      }
+    this._form.executeToolbarAction(OFormComponent.CLOSE_DETAIL_ACTION, {
+      changeToolbarMode: true
     });
   }
 
   onBack() {
-    let self = this;
-    this._form.confirmToolbarAction().then(val => {
-      if (val) {
-        self._form.executeToolbarAction(OFormComponent.BACK_ACTION);
-      }
-    });
+    this._form.executeToolbarAction(OFormComponent.BACK_ACTION);
   }
 
   onReload() {
     let self = this;
-    this._form.confirmToolbarAction().then(val => {
+    this._form.showConfirmDiscardChanges().then(val => {
       if (val) {
         self._form.executeToolbarAction(OFormComponent.RELOAD_ACTION);
       }
@@ -166,18 +158,15 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
   }
 
   onInsert() {
-    let self = this;
-    this._form.confirmToolbarAction().then(val => {
-      if (val) {
-        self.setInsertMode();
-        self._form.executeToolbarAction(OFormComponent.GO_INSERT_ACTION);
-      }
+    this._form.executeToolbarAction(OFormComponent.GO_INSERT_ACTION, {
+      changeToolbarMode: true
     });
   }
 
   onEdit() {
-    this.setEditMode();
-    this._form.executeToolbarAction(OFormComponent.GO_EDIT_ACTION);
+    this._form.executeToolbarAction(OFormComponent.GO_EDIT_ACTION, {
+      changeToolbarMode: true
+    });
   }
 
   onDelete(evt: any) {
@@ -203,8 +192,8 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
       this.onCloseDetail();
     } else {
       this.onReload();
+      this.setInitialMode();
     }
-    this.setInitialMode();
   }
 
   acceptOperation() {
