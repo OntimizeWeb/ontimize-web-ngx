@@ -1,0 +1,21 @@
+<div [formGroup]="getFormGroup()" [mdTooltip]="tooltip" [mdTooltipPosition]="tooltipPosition" [mdTooltipShowDelay]="tooltipShowDelay">
+  <md-form-field #innerInputContainer (click)="isDisabled || isReadOnly ? null : inputFile.click()" fxFlexFill>
+    <div fxLayout="row">
+      <input #inputShowValue mdInput type="text" [attr.id]="getAttribute()" [id]="getAttribute()" [formControlName]="getAttribute()"
+        [placeholder]="placeHolder" [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)" [readonly]="isReadOnly">
+      <div mdSuffix *ngIf="getValue()" (click)="$event.stopPropagation()" fxLayout="row" fxLayoutAlign="space-between center" class="o-file-input-buttons">
+        <button md-icon-button (click)="onClickClear($event)">
+          <md-icon aria-label="Clear">clear</md-icon>
+        </button>
+        <button md-icon-button [disabled]="!isValid" (click)="onClickUpload($event)">
+          <md-icon aria-label="Upload">file_upload</md-icon>
+        </button>
+      </div>
+    </div>
+    <md-error *ngIf="hasError('required')">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</md-error>
+    <md-error *ngIf="hasError('fileType')">{{ 'FORM_VALIDATION.FILE_TYPE' | oTranslate}} ({{ getErrorValue('fileType', 'allowedFileTypes') }})</md-error>
+    <md-error *ngIf="hasError('fileSize')">{{ 'FORM_VALIDATION.FILE_MAXSIZE' | oTranslate }}: {{ getErrorValue('fileSize', 'maxFileSize') }} bytes</md-error>
+  </md-form-field>
+  <input #inputFile type="file" id="{{getAttribute()+'-file-input'}}" [attr.accept]="acceptFileType ? acceptFileType.replace(';',',') : null"
+    (change)="fileSelected($event)" hidden="true" [attr.multiple]="multiple ? '' : null">
+</div>

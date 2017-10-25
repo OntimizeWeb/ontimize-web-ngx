@@ -16,6 +16,7 @@ export * from './components/image/o-image.component';
 export * from './components/input/currency-input/o-currency-input.component';
 export * from './components/input/date-input/o-date-input.component';
 export * from './components/input/email-input/o-email-input.component';
+export * from './components/input/file-input/o-file-input.component';
 export * from './components/input/html-input/o-html-input.component';
 export * from './components/input/integer-input/o-integer-input.component';
 export * from './components/input/listpicker/o-list-picker.component';

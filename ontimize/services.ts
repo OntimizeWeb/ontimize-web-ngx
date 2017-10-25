@@ -3,6 +3,7 @@ export * from './services/navigation.service';
 
 export * from './services/ontimize.service';
 export * from './services/ontimize-ee.service';
+export * from './services/ontimize-file.service';
 
 export * from './services/moment.service';
 

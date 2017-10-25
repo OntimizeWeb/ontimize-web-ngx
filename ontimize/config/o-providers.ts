@@ -10,6 +10,7 @@ import {
   LoginService,
   NavigationService,
   OntimizeService,
+  OntimizeFileService,
   MomentService,
   NumberService,
   CurrencyService,
@@ -85,6 +86,10 @@ export function getOntimizeServiceProvider(backend: XHRBackend, defaultOptions: 
   return new OHttp(backend, defaultOptions);
 }
 
+export function getOntimizeFileServiceProvider(injector: Injector) {
+  return new OntimizeFileService(injector);
+}
+
 export function getLoginServiceProvider(injector: Injector) {
   return new LoginService(injector);
 }
@@ -151,6 +156,11 @@ export const ONTIMIZE_PROVIDERS = [
   {
     provide: OntimizeService,
     useFactory: dataServiceFactory,
+    deps: [Injector]
+  },
+  {
+    provide: OntimizeFileService,
+    useFactory: getOntimizeFileServiceProvider,
     deps: [Injector]
   },
   // getLoginServiceProvider
