@@ -3,7 +3,13 @@ import { DataSource } from '@angular/cdk/collections';
 import { OTableDao } from './o-table.dao';
 import { OTableOptions, OColumn } from './o-table.component';
 import { MdSort } from '@angular/material';
+
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import 'rxjs/add/operator/startWith';
+import 'rxjs/add/observable/merge';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/observable/fromEvent';
+
 
 export class OTableDataSource extends DataSource<any> {
   _filterChange = new BehaviorSubject('');
@@ -39,7 +45,7 @@ export class OTableDataSource extends DataSource<any> {
         let filterData = this.filter;
         this.renderedData = this.renderedData.slice().filter((item: any) => {
           let searchStr = this.getStringSearchable(item);
-          if (!this.tableOptions.filterCanseSentive) {
+          if (!this.tableOptions.filterCaseSentive) {
             searchStr = searchStr.toLowerCase();
             filterData = filterData.toLowerCase();
           }

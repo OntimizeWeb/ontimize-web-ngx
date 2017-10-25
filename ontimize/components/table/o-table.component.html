@@ -1,5 +1,5 @@
 
-<div fxLayoutAlign="center top" class="o-table-wrapper" fxLayout="column"  [style.display]="isVisible()? '' : 'none'">
+<div fxLayoutAlign="center top" class="o-table-wrapper" fxLayout="column"  [style.display]="isVisible()? '' : 'none'" fxFill>
     <div class="o-table-container">
         <div fxLayoutAlign="end center" *ngIf="oTableOptions.filter">
             <md-form-field floatPlaceholder="never">
@@ -29,8 +29,10 @@
         <div *ngIf="!daoTable.isLoadingResults">
             <md-progress-spinner mode="indeterminate" style="margin:0 auto;" *ngIf="daoTable.isLoadingResults"></md-progress-spinner>
         </div>
-        <div class="mat-row o-table-no-results" [style.display]="dataSource.resultsLength > 0 ? '' : 'none'"  *ngIf="!daoTable.isLoadingResults">
+        <div class="mat-row o-table-no-results" [style.display]="dataSource.resultsLength > 0 ? '' : 'none'"  *ngIf="daoTable.isLoadingResults"  fxLayoutAlign="center center">
            {{'TABLE.EMPTY' | oTranslate}}
+           'dataSource.resultsLength' {{dataSource.resultsLength}}<br>
+           'daoTable.isLoadingResults' {{!daoTable.isLoadingResults}}
         </div>
       
     </div>

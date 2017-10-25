@@ -14,7 +14,7 @@ export class OTableDao {
   get data(): any[] { return this.dataChange.value; }
   dataService:any;
 
-  constructor(private injector: Injector,private service:string,private entity:string, private method: any, private queryArgs: Array<any>) {
+  constructor(private injector: Injector,private service:string,private entity:string, private method: any) {
     this.configureService();
    }
 
@@ -37,11 +37,11 @@ export class OTableDao {
   /**
    * Call the service query and emit data has ben modified
    */
-  getQuery() {
+  getQuery(queryArgs:any) {
 
     this.isLoadingResults = false;
     let dataArray: any[];
-    this.dataService[this.method].apply(this.dataService, this.queryArgs)
+    this.dataService[this.method].apply(this.dataService, queryArgs)
       .subscribe(
       res => {
         let data = undefined;

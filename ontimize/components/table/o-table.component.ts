@@ -24,11 +24,13 @@ import { OSharedModule } from '../../shared';
 import { OServiceComponent } from '../o-service-component.class';
 import { CdkTableModule } from "@angular/cdk/table";
 import { Observable } from 'rxjs/Observable';
-import { MdSort, MdSortModule } from '@angular/material';
+import { MdSort, MdSortModule, MdTabGroup, MdTab } from '@angular/material';
 
 import { OTableDataSource } from './o-table.datasource';
 import { OTableDao } from './o-table.dao';
+import { OTableColumnComponent } from './column/o-table-column.component';
 import { Util } from '../../util/util';
+import { OFormValue } from '../form/OFormValue';
 
 export const DEFAULT_INPUTS_O_TABLE = [
   ...OServiceComponent.DEFAULT_INPUTS_O_SERVICE_COMPONENT,
@@ -121,7 +123,7 @@ export class OTableOptions {
   columns: Array<OColumn> = [];
   visibleColumns: Array<any> = [];
   filter: boolean;
-  filterCanseSentive: boolean;
+  filterCaseSentive: boolean;
   constructor() { }
 }
 
@@ -149,6 +151,12 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent
   ) {
     super(injector, elRef, form);
+    try {
+      this.mdTabGroupContainer = this.injector.get(MdTabGroup);
+      this.mdTabContainer = this.injector.get(MdTab);
+    } catch (error) {
+      // Do nothing due to not always is contained on tab.
+    }
   }
 
   @ViewChild('filter') filter: ElementRef;
@@ -158,6 +166,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   public static VALUES_SEPARATOR = '=';
   public static TYPE_ASC_NAME = 'asc';
   public static TYPE_DESC_NAME = 'desc';
+  public static COLUMNS_ALIAS_SEPARATOR = ':';
 
   protected _oTableOptions: OTableOptions;
 
@@ -186,13 +195,19 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   @InputConverter()
   columnsVisibilityButton: boolean = true;
   @InputConverter()
-  filterCanseSentive: boolean = false;
+  filterCaseSentive: boolean = false;
 
   public daoTable: OTableDao | null;
   public dataSource: OTableDataSource | null;
   protected visibleColumns: string;
   protected sortColumns: string;
+  protected dataParentKeys: Array<Object>;
 
+  protected mdTabGroupContainer: MdTabGroup;
+  protected mdTabContainer: MdTab;
+
+  protected pendingQuery: boolean = true;
+  protected pendingQueryFilter = undefined;
 
   ngOnInit() {
     this.initialize();
@@ -204,6 +219,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   initialize(): any {
 
     super.initialize();
+
+   
     this.initializeParams();
 
   }
@@ -216,7 +233,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   public registerColumn(column: any) {
     let colDef: OColumn = new OColumn();
     colDef.type = 'string',
-    colDef.className = 'o-table-column ' + (column.class || '') + ' ';
+      colDef.className = 'o-table-column ' + (column.class || '') + ' ';
     colDef.orderable = true;
     colDef.searchable = true;
 
@@ -274,6 +291,25 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
    */
   initializeParams() {
 
+    this.dataParentKeys = [];
+    if (this.parentKeys) {
+      let keys = Util.parseArray(this.parentKeys);
+      for (let i = 0; i < keys.length; ++i) {
+        let key = keys[i];
+        let keyDef = key.split(OTableComponent.COLUMNS_ALIAS_SEPARATOR);
+        if (keyDef.length === 1) {
+          this.dataParentKeys.push({
+            'alias': keyDef[0],
+            'name': keyDef[0]
+          });
+        } else if (keyDef.length === 2) {
+          this.dataParentKeys.push({
+            'alias': keyDef[0],
+            'name': keyDef[1]
+          });
+        }
+      }
+    }
     this._oTableOptions = new OTableOptions();
     //if not declare visible-columns then visible-columns is all columns
     if (this.visibleColumns)
@@ -283,7 +319,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       this.columns.split(";").map(x => this._oTableOptions.visibleColumns.push(x));
     }
     this._oTableOptions.filter = this.quickFilter;
-    this._oTableOptions.filterCanseSentive = this.filterCanseSentive;
+    this._oTableOptions.filterCaseSentive = this.filterCaseSentive;
 
     if (this.columns)
       this.columns.split(";").map(x => this.registerColumn(x));
@@ -315,25 +351,48 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       }
 
       //set values of sort-columns to mdsort
-      if ((typeof ( this._oTableOptions.columns) !== 'undefined') && (sortColumnsArray.length > 0)) {
+      if ((typeof (this._oTableOptions.columns) !== 'undefined') && (sortColumnsArray.length > 0)) {
         let temp = sortColumnsArray[0];
         this.sort.active = temp[0];
-        this.sort.direction= temp[1].toLowerCase();
+        this.sort.direction = temp[1].toLowerCase();
       }
     }
 
+    if (this.mdTabGroupContainer && this.mdTabContainer) {
+      /*
+      * When table is contained into tab component, it is necessary to init
+      * table component when attached to DOM.
+      */
+      var self = this;
+      this.mdTabGroupContainer.selectChange.subscribe((evt) => {
+        var interval = setInterval(function () { timerCallback(evt.tab); }, 100);
+        function timerCallback(tab: MdTab) {
+          if (tab && tab.content.isAttached) {
+            clearInterval(interval);
+            if (tab === self.mdTabContainer) {
+              if (self.pendingQuery) {
+                self.queryData(self.pendingQueryFilter);
+              }
+            }
+          }
+        }
+
+      });
+    }
 
     let queryArguments = this.getQueryArguments({});
     let queryMethodName = this.pageable ? this.paginatedQueryMethod : this.queryMethod;
-    this.daoTable = new OTableDao(this.injector, this.service, this.entity, queryMethodName, queryArguments);
+    this.daoTable = new OTableDao(this.injector, this.service, this.entity, queryMethodName);
     this.dataSource = new OTableDataSource(this.daoTable, this._oTableOptions, this.sort);
     this.dataSource.resultsLength = 0;
 
     if (this.staticData) {
       this.daoTable.setDataArray(this.staticData);
     } else if (this.queryOnInit) {
-      this.daoTable.getQuery();
+      this.queryData(queryArguments);
     }
+
+   
   }
 
   ngOnDestroy() {
@@ -348,11 +407,45 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   ngOnChanges(changes: { [propName: string]: SimpleChange }) {
     // TODO
   }
+
+
+
+  queryData(parentItem: any = undefined, ovrrArgs?: any) {
+    //if exit tab and not is active then waiting call queryData
+    if(this.mdTabContainer && !this.mdTabContainer.isActive){
+       this.pendingQuery = true;
+       this.pendingQueryFilter = parentItem;
+       return ;
+    }
+
+    console.log("queryData ",parentItem,ovrrArgs);
+    if(this.pendingQuery){
+      let filter = {};
+      if ((this.dataParentKeys.length > 0) && (typeof (parentItem) !== 'undefined')) {
+        for (let k = 0; k < this.dataParentKeys.length; ++k) {
+          let parentKey = this.dataParentKeys[k];
+          if (parentItem.hasOwnProperty(parentKey['alias'])) {
+            let currentData = parentItem[parentKey['alias']];
+            if (currentData instanceof OFormValue) {
+              currentData = currentData.value;
+            }
+            filter[parentKey['name']] = currentData;
+          }
+        }
+      }
+
+      let queryArguments = this.getQueryArguments(filter, ovrrArgs);
+      this.daoTable.getQuery(queryArguments);
+      this.pendingQuery = false;
+    }
+  }
 }
 
 @NgModule({
   declarations: [
-    OTableComponent
+    OTableComponent,
+    OTableColumnComponent,
+
   ],
   imports: [
     CommonModule,
@@ -362,7 +455,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   ],
   exports: [
-    OTableComponent
+    OTableComponent,
+    OTableColumnComponent,
   ]
 })
 export class OTableModule {
