@@ -123,7 +123,7 @@ export class OTableOptions {
   columns: Array<OColumn> = [];
   visibleColumns: Array<any> = [];
   filter: boolean;
-  filterCaseSentive: boolean;
+  filterCaseSensitive: boolean;
   constructor() { }
 }
 
@@ -168,7 +168,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   public static TYPE_DESC_NAME = 'desc';
   public static COLUMNS_ALIAS_SEPARATOR = ':';
 
-  protected _oTableOptions: OTableOptions;
+  protected _oTableOptions: OTableOptions = new OTableOptions();
 
   get oTableOptions(): OTableOptions {
     return this._oTableOptions;
@@ -177,9 +177,15 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     this._oTableOptions = value;
   }
 
-
   @InputConverter()
-  quickFilter: boolean = true;
+  set quickFilter(value: boolean) {
+    this._oTableOptions.filter = value;
+    
+    if (value)
+      this.initializeEventFilter();
+    this.setDatasource();
+  }
+
   @InputConverter()
   selectAllCheckbox: boolean = true;
   @InputConverter()
@@ -194,8 +200,15 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   showExportOptions: boolean = true;
   @InputConverter()
   columnsVisibilityButton: boolean = true;
+
   @InputConverter()
-  filterCaseSentive: boolean = false;
+  set filterCaseSensitive(value: boolean) {
+    this._oTableOptions.filterCaseSensitive = value;
+    this.setDatasource();
+  
+  }
+
+
 
   public daoTable: OTableDao | null;
   public dataSource: OTableDataSource | null;
@@ -219,8 +232,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   initialize(): any {
 
     super.initialize();
-
-   
     this.initializeParams();
 
   }
@@ -276,15 +287,22 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     //return colDef;
   }
 
-
+  /**
+   * initialize event to filtering the columns, when change value then filter the data
+   */
   initializeEventFilter() {
-    Observable.fromEvent(this.filter.nativeElement, 'keyup')
-      .debounceTime(150)
-      .distinctUntilChanged()
-      .subscribe(() => {
-        if (!this.dataSource) { return; }
-        this.dataSource.filter = this.filter.nativeElement.value;
-      });
+    setTimeout(() => {
+      if (this.filter) {
+        Observable.fromEvent(this.filter.nativeElement, 'keyup')
+          .debounceTime(150)
+          .distinctUntilChanged()
+          .subscribe(() => {
+            if (!this.dataSource) { return; }
+            this.dataSource.filter = this.filter.nativeElement.value;
+          });
+        
+      }
+    })
   }
   /**
    * get/set parametres to component
@@ -310,7 +328,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
         }
       }
     }
-    this._oTableOptions = new OTableOptions();
+
     //if not declare visible-columns then visible-columns is all columns
     if (this.visibleColumns)
       this.visibleColumns.split(";").map(x => this._oTableOptions.visibleColumns.push(x));
@@ -318,9 +336,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       this.visibleColumns = this.columns;
       this.columns.split(";").map(x => this._oTableOptions.visibleColumns.push(x));
     }
-    this._oTableOptions.filter = this.quickFilter;
-    this._oTableOptions.filterCaseSentive = this.filterCaseSentive;
-
+ /*   this._oTableOptions.filter = this.quickFilter;
+    this._oTableOptions.filterCaseSensitive = this.filterCaseSensitive;*/
     if (this.columns)
       this.columns.split(";").map(x => this.registerColumn(x));
 
@@ -383,16 +400,20 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     let queryArguments = this.getQueryArguments({});
     let queryMethodName = this.pageable ? this.paginatedQueryMethod : this.queryMethod;
     this.daoTable = new OTableDao(this.injector, this.service, this.entity, queryMethodName);
-    this.dataSource = new OTableDataSource(this.daoTable, this._oTableOptions, this.sort);
-    this.dataSource.resultsLength = 0;
-
+    this.setDatasource();
     if (this.staticData) {
       this.daoTable.setDataArray(this.staticData);
     } else if (this.queryOnInit) {
       this.queryData(queryArguments);
     }
 
-   
+
+  }
+
+  setDatasource() {
+    this.dataSource = new OTableDataSource(this.daoTable, this._oTableOptions, this.sort);
+    this.dataSource.resultsLength = 0;
+
   }
 
   ngOnDestroy() {
@@ -400,26 +421,33 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   ngAfterViewInit() {
-    if (this.quickFilter)
+
+    if (this._oTableOptions.filter)
       this.initializeEventFilter();
+
   }
+
 
   ngOnChanges(changes: { [propName: string]: SimpleChange }) {
     // TODO
   }
 
 
-
+/**
+ * This method manages the call to the service
+ * @param parentItem it is defined if its called from a form
+ * @param ovrrArgs 
+ */
   queryData(parentItem: any = undefined, ovrrArgs?: any) {
     //if exit tab and not is active then waiting call queryData
-    if(this.mdTabContainer && !this.mdTabContainer.isActive){
-       this.pendingQuery = true;
-       this.pendingQueryFilter = parentItem;
-       return ;
+    if (this.mdTabContainer && !this.mdTabContainer.isActive) {
+      this.pendingQuery = true;
+      this.pendingQueryFilter = parentItem;
+      return;
     }
 
-    console.log("queryData ",parentItem,ovrrArgs);
-    if(this.pendingQuery){
+    
+    if (this.pendingQuery) {
       let filter = {};
       if ((this.dataParentKeys.length > 0) && (typeof (parentItem) !== 'undefined')) {
         for (let k = 0; k < this.dataParentKeys.length; ++k) {

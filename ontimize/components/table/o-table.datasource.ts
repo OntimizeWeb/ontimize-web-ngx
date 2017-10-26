@@ -22,7 +22,6 @@ export class OTableDataSource extends DataSource<any> {
 
   constructor(private _database: OTableDao, private tableOptions: OTableOptions, private _sort: MdSort) {
     super();
-
   }
 
   /** Connect function called by the table to retrieve one stream containing the data to render. */
@@ -45,7 +44,7 @@ export class OTableDataSource extends DataSource<any> {
         let filterData = this.filter;
         this.renderedData = this.renderedData.slice().filter((item: any) => {
           let searchStr = this.getStringSearchable(item);
-          if (!this.tableOptions.filterCaseSentive) {
+          if (!this.tableOptions.filterCaseSensitive) {
             searchStr = searchStr.toLowerCase();
             filterData = filterData.toLowerCase();
           }
