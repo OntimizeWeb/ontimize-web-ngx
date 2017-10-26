@@ -78,6 +78,9 @@ export var MAP = {
     'FORM_VALIDATION.DATE_MIN':'Date min',
     'FORM_VALIDATION.DATE_MAX':'Date max',
 
+    'FORM_VALIDATION.FILE_TYPE': 'Invalid formato',
+    'FORM_VALIDATION.FILE_MAXSIZE': 'Maximum file size',
+    'FORM_VALIDATION.FILE_MAXNUM': 'Max. files',
 
     'MESSAGES.FORM_VALIDATION_ERROR': 'Form values are not valid!',
     'MESSAGES.FORM_NOTHING_TO_UPDATE_INFO': 'There are no values to update!',
@@ -217,8 +220,9 @@ export var MAP = {
     'FORM_VALIDATION.DATE_MIN':'Fecha mínima',
     'FORM_VALIDATION.DATE_MAX':'Fecha máxima',
 
-    'FORM_VALIDATION.FILE_TYPE':'Formato no válido',
-    'FORM_VALIDATION.FILE_MAXSIZE':'Tamaño de fichero máximo',
+    'FORM_VALIDATION.FILE_TYPE': 'Formato no válido',
+    'FORM_VALIDATION.FILE_MAXSIZE': 'Tamaño de fichero máximo',
+    'FORM_VALIDATION.FILE_MAXNUM': 'Número máximo de ficheros',
 
     'MESSAGES.FORM_VALIDATION_ERROR': 'El formulario contiene campos con valores no válidos',
     'MESSAGES.FORM_NOTHING_TO_UPDATE_INFO': '¡No existen valores para actualizar!',

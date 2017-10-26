@@ -49,7 +49,10 @@ export const DEFAULT_INPUTS_O_FILE_INPUT = [
   'maxFileSize: max-file-size',
 
   // multiple [boolean]: multiple file selection allowed. Default: no.
-  'multiple'
+  'multiple',
+
+  // max-num-files [number]: maximum number of files allowed. Default: -1.
+  'maxNumFiles: max-num-files'
 ];
 
 export const DEFAULT_OUTPUTS_O_FILE_INPUT = [
@@ -82,6 +85,8 @@ export class OFileInputComponent extends OFormDataComponent implements OnDestroy
   autoBinding: boolean = false;
   @InputConverter()
   multiple: boolean = false;
+  @InputConverter()
+  maxNumFiles: number = -1;
 
   /* Outputs */
   onChange: EventEmitter<Object> = new EventEmitter<Object>();
@@ -155,6 +160,9 @@ export class OFileInputComponent extends OFormDataComponent implements OnDestroy
     }
     if (this.maxFileSize) {
       validators.push(this.maxFileSizeValidator.bind(this));
+    }
+    if (this.multiple && this.maxNumFiles !== -1) {
+      validators.push(this.maxNumFilesValidator.bind(this));
     }
     return validators;
   }
@@ -277,6 +285,19 @@ export class OFileInputComponent extends OFormDataComponent implements OnDestroy
         return {
           'fileSize': {
             'maxFileSize': this.maxFileSize
+          }
+        };
+      }
+    }
+    return {};
+  }
+
+  protected maxNumFilesValidator(control: FormControl) {
+    if (control.value && control.value.length > 0 && this.multiple && this.maxNumFiles !== -1) {
+      if (this.maxNumFiles < this._files.length) {
+        return {
+          'numFile': {
+            'maxNumFiles': this.maxNumFiles
           }
         };
       }
