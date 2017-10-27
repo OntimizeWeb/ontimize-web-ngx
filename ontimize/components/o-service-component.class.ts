@@ -1,7 +1,8 @@
 import {
   Injector,
   ElementRef,
-  NgZone
+  NgZone,
+  HostListener
 } from '@angular/core';
 
 import { Router, ActivatedRoute } from '@angular/router';
@@ -240,7 +241,7 @@ export class OServiceComponent implements ILocalStorageComponent {
           self.localStorageService.updateComponentStorage(self);
         }
       );
-
+      
     }
   }
 
@@ -364,6 +365,23 @@ export class OServiceComponent implements ILocalStorageComponent {
     if (this.querySuscription) {
       this.querySuscription.unsubscribe();
       this.loaderSuscription.unsubscribe();
+    }
+    this.localStorageService.updateComponentStorage(this);
+  }
+  ngOnDestroy() {
+    //Called once, before the instance is destroyed.
+    //Add 'implements OnDestroy' to the class.
+   
+  }
+
+  /**
+   * call when close browser and save storage
+   * @param event 
+   */
+  @HostListener('window:beforeunload', ['$event'])
+  beforeunloadHandler(event) {
+    if(this.localStorageService){
+      this.localStorageService.updateComponentStorage(this);
     }
   }
 

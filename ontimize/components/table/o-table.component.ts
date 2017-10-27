@@ -115,7 +115,8 @@ export class OColumn {
   className: string;
   orderable: boolean;
   searchable: boolean;
-  visible: boolean
+  visible: boolean;
+  renderer: any;
   constructor() { }
 }
 
@@ -168,24 +169,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   public static TYPE_DESC_NAME = 'desc';
   public static COLUMNS_ALIAS_SEPARATOR = ':';
 
-  protected _oTableOptions: OTableOptions = new OTableOptions();
-
-  get oTableOptions(): OTableOptions {
-    return this._oTableOptions;
-  }
-  set oTableOptions(value: OTableOptions) {
-    this._oTableOptions = value;
-  }
-
-  @InputConverter()
-  set quickFilter(value: boolean) {
-    this._oTableOptions.filter = value;
-    
-    if (value)
-      this.initializeEventFilter();
-    this.setDatasource();
-  }
-
+  
   @InputConverter()
   selectAllCheckbox: boolean = true;
   @InputConverter()
@@ -201,11 +185,30 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   @InputConverter()
   columnsVisibilityButton: boolean = true;
 
+  protected _oTableOptions: OTableOptions = new OTableOptions();
+
+  get oTableOptions(): OTableOptions {
+    return this._oTableOptions;
+  }
+  set oTableOptions(value: OTableOptions) {
+    this._oTableOptions = value;
+  }
+
+  @InputConverter()
+  set quickFilter(value: boolean) {
+    this._oTableOptions.filter = value;
+
+    if (value)
+      this.initializeEventFilter();
+    this.setDatasource();
+  }
+
+
   @InputConverter()
   set filterCaseSensitive(value: boolean) {
     this._oTableOptions.filterCaseSensitive = value;
     this.setDatasource();
-  
+
   }
 
 
@@ -232,19 +235,33 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   initialize(): any {
 
     super.initialize();
+    // get previous position
+    this.state = this.localStorageService.getComponentStorage(this);
+    //initialize params of the table
     this.initializeParams();
 
   }
 
+  /**
+   * Method update store localstorage, call of the ILocalStorage
+   */
+
+  getDataToStore() {
+    return {
+      'sort-columns': this.sort.active + ':' + this.sort.direction,
+      'filter': this.filter ? this.filter.nativeElement.value : ""
+    }
+  }
 
   /**
    * Store all columns and properties in var columnsArray
    * @param column 
    */
+
   public registerColumn(column: any) {
     let colDef: OColumn = new OColumn();
     colDef.type = 'string',
-      colDef.className = 'o-table-column ' + (column.class || '') + ' ';
+    colDef.className = 'o-table-column ' + (column.class || '') + ' ';
     colDef.orderable = true;
     colDef.searchable = true;
 
@@ -259,12 +276,13 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       // columns with 'attr' are linked to service data
       colDef.name = column.attr;
       colDef.title = column.title;
-      if (typeof column.orderable !== "undefined")
+      if (typeof column.orderable !== "undefined") {
         colDef.orderable = column.orderable;
+      }
 
-      if (typeof column.searchable !== "undefined")
+      if (typeof column.searchable !== "undefined") {
         colDef.searchable = column.searchable;
-
+      }
       colDef.type = column.type
     }
     colDef.visible = (this.visibleColumns.indexOf(colDef.attr) !== -1);
@@ -284,7 +302,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     } else {
       this._oTableOptions.columns.push(colDef);
     }
-    //return colDef;
+    
   }
 
   /**
@@ -300,7 +318,14 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
             if (!this.dataSource) { return; }
             this.dataSource.filter = this.filter.nativeElement.value;
           });
-        
+
+
+        //if exists filter value in storage then filter result table
+        let filterValue = this.state.filter || this.filter.nativeElement.value;
+        this.filter.nativeElement.value = filterValue;
+        if (this.dataSource) {
+          this.dataSource.filter = filterValue;
+        }
       }
     })
   }
@@ -330,21 +355,21 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
 
     //if not declare visible-columns then visible-columns is all columns
-    if (this.visibleColumns)
+    if (this.visibleColumns) {
       this.visibleColumns.split(";").map(x => this._oTableOptions.visibleColumns.push(x));
-    else {
+    } else {
       this.visibleColumns = this.columns;
       this.columns.split(";").map(x => this._oTableOptions.visibleColumns.push(x));
     }
- /*   this._oTableOptions.filter = this.quickFilter;
-    this._oTableOptions.filterCaseSensitive = this.filterCaseSensitive;*/
-    if (this.columns)
-      this.columns.split(";").map(x => this.registerColumn(x));
 
+    if (this.columns) {
+      this.columns.split(";").map(x => this.registerColumn(x));
+    }
     //parse input sort-columns
     let sortColumnsArray = [];
-    if (this.sortColumns) {
-      let cols = Util.parseArray(this.sortColumns);
+    let sortColumnsParam = this.state['sort-columns'] || this.sortColumns;
+    if (sortColumnsParam) {
+      let cols = Util.parseArray(sortColumnsParam);
       for (let i = 0; i < cols.length; ++i) {
         let col = cols[i];
         let colDef = col.split(OTableComponent.TYPE_SEPARATOR);
@@ -412,16 +437,19 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   setDatasource() {
     this.dataSource = new OTableDataSource(this.daoTable, this._oTableOptions, this.sort);
-    this.dataSource.resultsLength = 0;
+    if (this.daoTable) {
+      this.dataSource.resultsLength = this.daoTable.data.length;
+    }
+    /*  this.dataSource.resultsLength = 0;*/
 
   }
 
   ngOnDestroy() {
     // TODO
+    console.debug();
   }
 
   ngAfterViewInit() {
-
     if (this._oTableOptions.filter)
       this.initializeEventFilter();
 
@@ -433,11 +461,11 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
 
-/**
- * This method manages the call to the service
- * @param parentItem it is defined if its called from a form
- * @param ovrrArgs 
- */
+  /**
+   * This method manages the call to the service
+   * @param parentItem it is defined if its called from a form
+   * @param ovrrArgs 
+   */
   queryData(parentItem: any = undefined, ovrrArgs?: any) {
     //if exit tab and not is active then waiting call queryData
     if (this.mdTabContainer && !this.mdTabContainer.isActive) {
@@ -446,7 +474,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       return;
     }
 
-    
+
     if (this.pendingQuery) {
       let filter = {};
       if ((this.dataParentKeys.length > 0) && (typeof (parentItem) !== 'undefined')) {
