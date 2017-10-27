@@ -14,7 +14,6 @@ import {
 import { FormControl } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ValidatorFn } from '@angular/forms/src/directives/validators';
-import { Subscription } from 'rxjs/Subscription';
 
 import { OSharedModule } from '../../../shared';
 import { InputConverter } from '../../../decorators';
@@ -22,12 +21,8 @@ import { OntimizeFileService } from '../../../services';
 import { OFormComponent } from '../../form/o-form.component';
 import { OFormDataComponent } from '../../o-form-data-component.class';
 
-export interface IFileData {
-  name: string;
-  size: number;
-  type: string;
-  lastModifiedDate: Date;
-}
+import { OFileItem } from './o-file-item.class';
+import { OFileUploader } from './o-file-uploader.class';
 
 export const DEFAULT_INPUTS_O_FILE_INPUT = [
   'oattr: attr',
@@ -51,13 +46,28 @@ export const DEFAULT_INPUTS_O_FILE_INPUT = [
   // multiple [boolean]: multiple file selection allowed. Default: no.
   'multiple',
 
-  // max-num-files [number]: maximum number of files allowed. Default: -1.
-  'maxNumFiles: max-num-files'
+  // max-files [number]: maximum number of files allowed. Default: -1.
+  'maxFiles: max-files',
+
+  // show-info [boolean]: show files information. Default: no.
+  'showInfo: show-info',
+
+  // split-upload [boolean]: each file is uploaded in a request (true) or all files are uploaded in a single request (false). Default: yes.
+  'splitUpload: split-upload'
 ];
 
 export const DEFAULT_OUTPUTS_O_FILE_INPUT = [
   'onChange',
-  'onUpload'
+  'onBeforeUpload',
+  'onBeforeUploadFile',
+  'onProgress',
+  'onProgressFile',
+  'onCancel',
+  'onCancelFile',
+  'onUpload',
+  'onUploadFile',
+  'onComplete',
+  'onCompleteFile'
 ];
 
 @Component({
@@ -84,22 +94,30 @@ export class OFileInputComponent extends OFormDataComponent implements OnDestroy
   protected serviceType: string;
   autoBinding: boolean = false;
   @InputConverter()
+  showInfo: boolean = false;
+  @InputConverter()
   multiple: boolean = false;
   @InputConverter()
-  maxNumFiles: number = -1;
+  protected maxFiles: number = -1;
+  @InputConverter()
+  splitUpload: boolean = true;
 
   /* Outputs */
-  onChange: EventEmitter<Object> = new EventEmitter<Object>();
-  onUpload: EventEmitter<Object> = new EventEmitter<Object>();
+  onChange: EventEmitter<any> = new EventEmitter<any>();
+  onBeforeUpload: EventEmitter<any> = new EventEmitter<any>();
+  onBeforeUploadFile: EventEmitter<any> = new EventEmitter<any>();
+  onProgress: EventEmitter<any> = new EventEmitter<any>();
+  onProgressFile: EventEmitter<any> = new EventEmitter<any>();
+  onCancel: EventEmitter<any> = new EventEmitter<any>();
+  onCancelFile: EventEmitter<any> = new EventEmitter<any>();
+  onUpload: EventEmitter<any> = new EventEmitter<any>();
+  onUploadFile: EventEmitter<any> = new EventEmitter<any>();
+  onComplete: EventEmitter<any> = new EventEmitter<any>();
+  onCompleteFile: EventEmitter<any> = new EventEmitter<any>();
 
   /* Internal variables */
-  protected fileService: OntimizeFileService;
-  protected uploadSuscription: Subscription;
-
-  /* Data model */
-  protected _files: File[] = [];
-  protected _filesData: IFileData[] = [];
-  protected _remoteFileData: any[];
+  uploader: OFileUploader;
+  fileService: OntimizeFileService;
 
   @ViewChild('inputFile')
   private inputFile: ElementRef;
@@ -114,6 +132,17 @@ export class OFileInputComponent extends OFormDataComponent implements OnDestroy
 
   ngOnInit() {
     this.initialize();
+
+    this.uploader.onBeforeUploadAll = () => this.onBeforeUpload.emit();
+    this.uploader.onBeforeUploadItem = (item) => this.onBeforeUploadFile.emit(item);
+    this.uploader.onProgressAll = (progress) => this.onProgress.emit(progress);
+    this.uploader.onProgressItem = (item, progress) => this.onProgressFile.emit({ item, progress });
+    this.uploader.onCancelAll = () => this.onCancel.emit();
+    this.uploader.onCancelItem = (item) => this.onCancelFile.emit();
+    this.uploader.onSuccessAll = (response) => this.onUpload.emit({ response });
+    this.uploader.onSuccessItem = (item, response) => this.onUploadFile.emit({ item, response });
+    this.uploader.onCompleteAll = () => this.onComplete.emit();
+    this.uploader.onCompleteItem = (item) => this.onCompleteFile.emit(item);
   }
 
   ngOnDestroy() {
@@ -131,6 +160,8 @@ export class OFileInputComponent extends OFormDataComponent implements OnDestroy
     }
 
     this.configureService();
+    this.uploader = new OFileUploader(this.fileService, this.entity);
+    this.uploader.splitUpload = this.splitUpload;
   }
 
   configureService() {
@@ -161,8 +192,8 @@ export class OFileInputComponent extends OFormDataComponent implements OnDestroy
     if (this.maxFileSize) {
       validators.push(this.maxFileSizeValidator.bind(this));
     }
-    if (this.multiple && this.maxNumFiles !== -1) {
-      validators.push(this.maxNumFilesValidator.bind(this));
+    if (this.multiple && this.maxFiles !== -1) {
+      validators.push(this.maxFilesValidator.bind(this));
     }
     return validators;
   }
@@ -177,23 +208,13 @@ export class OFileInputComponent extends OFormDataComponent implements OnDestroy
 
   fileSelected(event: Event): void {
     let value: string = '';
-    this._files = [];
-    this._filesData = [];
     if (event) {
       let files: FileList = event.target['files'];
       for (var i = 0, f: File; f = files[i]; i++) {
-        value += f.name;
-        if (i < files.length - 1) {
-          value += ', ';
-        }
-        this._files.push(f);
-        this._filesData.push({
-          'name': f.name,
-          'size': f.size,
-          'type': f.type,
-          'lastModifiedDate': f.lastModifiedDate
-        });
+        let fileItem: OFileItem = new OFileItem(f, this.uploader);
+        this.uploader.addFile(fileItem);
       }
+      value = this.uploader.files.map(file => file.name).join(', ');
     }
     window.setTimeout(() => {
       this.setValue(value !== '' ? value : undefined);
@@ -211,15 +232,15 @@ export class OFileInputComponent extends OFormDataComponent implements OnDestroy
   onClickUpload(e: Event) {
     e.stopPropagation();
     if (this.isValid) {
-      this.upload(this._files);
+      this.upload();
     }
   }
 
   clearData() {
     if (!this._isReadOnly && !this.isDisabled) {
-      this.setValue(undefined);
-      this._files = [];
-      this._filesData = [];
+      this.uploader.clear();
+      let value = this.uploader.files.map(file => file.name).join(', ');
+      this.setValue(value);
       this.inputFile.nativeElement.value = '';
       if (this._fControl) {
         this._fControl.markAsTouched();
@@ -227,48 +248,18 @@ export class OFileInputComponent extends OFormDataComponent implements OnDestroy
     }
   }
 
-  upload(files: File[]) {
-    if (this.fileService === undefined) {
-      console.warn('No service configured! aborting upload');
-      return;
-    }
-    if (this.uploadSuscription) {
-      this.uploadSuscription.unsubscribe();
-    }
-    var self = this;
-    this.uploadSuscription = this.fileService.upload(files, this.entity).subscribe(
-      resp => {
-        if (resp.code === 0) {
-          self.remoteFileData = resp.data;
-          self.onUpload.emit(resp.data);
-        } else {
-          console.log('error');
-        }
-      },
-      err => console.log(err)
-    );
+  upload() {
+    this.uploader.upload();
   }
 
-  get file() {
-    return this._files;
-  }
-
-  get fileData() {
-    return this._filesData;
-  }
-
-  get remoteFileData() {
-    return this._remoteFileData;
-  }
-
-  set remoteFileData(data: any[]) {
-    this._remoteFileData = data;
+  get files() {
+    return this.uploader.files;
   }
 
   protected filetypeValidator(control: FormControl) {
     if (control.value && control.value.length > 0 && this.acceptFileType) {
       let regex: RegExp = new RegExp(this.acceptFileType.replace(';', '|'));
-      if (!this._filesData.every(file => file.type.match(regex) !== null || file.name.substr(file.name.lastIndexOf('.')).match(regex) !== null)) {
+      if (!this.files.every(file => file.type.match(regex) !== null || file.name.substr(file.name.lastIndexOf('.')).match(regex) !== null)) {
         return {
           'fileType': {
             'allowedFileTypes': this.acceptFileType.replace(';', ', ')
@@ -281,7 +272,7 @@ export class OFileInputComponent extends OFormDataComponent implements OnDestroy
 
   protected maxFileSizeValidator(control: FormControl) {
     if (control.value && control.value.length > 0 && this.maxFileSize) {
-      if (!this._filesData.every(file => file.size < this.maxFileSize)) {
+      if (!this.files.every(file => file.size < this.maxFileSize)) {
         return {
           'fileSize': {
             'maxFileSize': this.maxFileSize
@@ -292,12 +283,12 @@ export class OFileInputComponent extends OFormDataComponent implements OnDestroy
     return {};
   }
 
-  protected maxNumFilesValidator(control: FormControl) {
-    if (control.value && control.value.length > 0 && this.multiple && this.maxNumFiles !== -1) {
-      if (this.maxNumFiles < this._files.length) {
+  protected maxFilesValidator(control: FormControl) {
+    if (control.value && control.value.length > 0 && this.multiple && this.maxFiles !== -1) {
+      if (this.maxFiles < this.files.length) {
         return {
           'numFile': {
-            'maxNumFiles': this.maxNumFiles
+            'maxFiles': this.maxFiles
           }
         };
       }

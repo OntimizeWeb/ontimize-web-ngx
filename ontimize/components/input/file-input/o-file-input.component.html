@@ -7,7 +7,7 @@
         <button md-icon-button (click)="onClickClear($event)">
           <md-icon aria-label="Clear">clear</md-icon>
         </button>
-        <button md-icon-button [disabled]="!isValid" (click)="onClickUpload($event)">
+        <button md-icon-button [disabled]="!isValid || uploader.isUploading" (click)="onClickUpload($event)">
           <md-icon aria-label="Upload">file_upload</md-icon>
         </button>
       </div>
@@ -15,8 +15,21 @@
     <md-error *ngIf="hasError('required')">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</md-error>
     <md-error *ngIf="hasError('fileType')">{{ 'FORM_VALIDATION.FILE_TYPE' | oTranslate}} ({{ getErrorValue('fileType', 'allowedFileTypes') }})</md-error>
     <md-error *ngIf="hasError('fileSize')">{{ 'FORM_VALIDATION.FILE_MAXSIZE' | oTranslate }}: {{ getErrorValue('fileSize', 'maxFileSize') }} bytes</md-error>
-    <md-error *ngIf="hasError('numFile')">{{ 'FORM_VALIDATION.FILE_MAXNUM' | oTranslate }}: {{ getErrorValue('numFile', 'maxNumFiles') }}</md-error>
+    <md-error *ngIf="hasError('numFile')">{{ 'FORM_VALIDATION.FILE_MAXNUM' | oTranslate }}: {{ getErrorValue('numFile', 'maxFiles') }}</md-error>
   </md-form-field>
   <input #inputFile type="file" id="{{getAttribute()+'-file-input'}}" [attr.accept]="acceptFileType ? acceptFileType.replace(';',',') : null"
     (change)="fileSelected($event)" hidden="true" [attr.multiple]="multiple ? '' : null">
+  <div *ngIf="showInfo && files">
+    <md-progress-bar *ngIf="!splitUpload && uploader.isUploading" color="accent" mode="determinate" [value]="uploader.progress"></md-progress-bar>
+    <md-list>
+      <md-list-item *ngFor="let file of files">
+        <md-icon md-list-icon>insert_drive_file</md-icon>
+        <span md-line>{{ file.name }}</span>
+        <div fxLayout="row" fxLayoutAlign="space-between center">
+          <md-progress-spinner *ngIf="splitUpload && file.isUploading" color="accent" mode="determinate" [value]="file.progress" class="uploading"></md-progress-spinner>
+          <md-icon *ngIf="splitUpload && file.isUploaded" class="uploaded">check_circle</md-icon>
+        </div>
+      </md-list-item>
+    </md-list>
+  </div>
 </div>

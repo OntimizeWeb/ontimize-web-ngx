@@ -78,7 +78,7 @@ export var MAP = {
     'FORM_VALIDATION.DATE_MIN':'Date min',
     'FORM_VALIDATION.DATE_MAX':'Date max',
 
-    'FORM_VALIDATION.FILE_TYPE': 'Invalid formato',
+    'FORM_VALIDATION.FILE_TYPE': 'Invalid format',
     'FORM_VALIDATION.FILE_MAXSIZE': 'Maximum file size',
     'FORM_VALIDATION.FILE_MAXNUM': 'Max. files',
 
