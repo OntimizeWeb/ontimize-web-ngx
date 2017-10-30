@@ -241,7 +241,7 @@ export class OServiceComponent implements ILocalStorageComponent {
           self.localStorageService.updateComponentStorage(self);
         }
       );
-      
+
     }
   }
 
@@ -371,16 +371,16 @@ export class OServiceComponent implements ILocalStorageComponent {
   ngOnDestroy() {
     //Called once, before the instance is destroyed.
     //Add 'implements OnDestroy' to the class.
-   
+
   }
 
   /**
    * call when close browser and save storage
-   * @param event 
+   * @param event
    */
   @HostListener('window:beforeunload', ['$event'])
   beforeunloadHandler(event) {
-    if(this.localStorageService){
+    if (this.localStorageService) {
       this.localStorageService.updateComponentStorage(this);
     }
   }
@@ -423,9 +423,10 @@ export class OServiceComponent implements ILocalStorageComponent {
     var self = this;
     this.onFormDataSubscribe = this.form.onFormDataLoaded.subscribe(data => {
       self.parentItem = data;
-      self.queryData(data);
-    }
-    );
+      if (self.queryOnBind) {
+        self.queryData(data);
+      }
+    });
 
     let dataValues = this.form.getDataValues();
     if (dataValues && Object.keys(dataValues).length > 0) {
