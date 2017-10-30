@@ -27,7 +27,8 @@
         <span md-line>{{ file.name }}</span>
         <div fxLayout="row" fxLayoutAlign="space-between center">
           <md-progress-spinner *ngIf="splitUpload && file.isUploading" color="accent" mode="determinate" [value]="file.progress" class="uploading"></md-progress-spinner>
-          <md-icon *ngIf="splitUpload && file.isUploaded" class="uploaded">check_circle</md-icon>
+          <md-icon *ngIf="splitUpload && file.isUploaded && file.isSuccess" class="uploaded">check_circle</md-icon>
+          <md-icon *ngIf="splitUpload && file.isUploaded && file.isError" class="error">error</md-icon>
         </div>
       </md-list-item>
     </md-list>

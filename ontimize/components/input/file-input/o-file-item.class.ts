@@ -8,7 +8,9 @@ export class OFileItem {
   public isReady: boolean = false;
   public isUploading: boolean = false;
   public isUploaded: boolean = false;
+  public isSuccess: boolean = false;
   public isCancel: boolean = false;
+  public isError: boolean = false;
   public progress: number = 0;
   public _uploadSuscription: Subscription;
 
@@ -61,7 +63,9 @@ export class OFileItem {
     this.isReady = true;
     this.isUploading = true;
     this.isUploaded = false;
+    this.isSuccess = false;
     this.isCancel = false;
+    this.isError = false;
     this.progress = 0;
     if (notify) {
       this.onBeforeUpload();
@@ -78,7 +82,9 @@ export class OFileItem {
     this.isReady = false;
     this.isUploading = false;
     this.isUploaded = true;
+    this.isSuccess = true;
     this.isCancel = false;
+    this.isError = false;
     this.progress = 100;
     if (notify) {
       this.onSuccess(data);
@@ -90,7 +96,9 @@ export class OFileItem {
     this.isReady = false;
     this.isUploading = false;
     this.isUploaded = true;
+    this.isSuccess = false;
     this.isCancel = false;
+    this.isError = true;
     this.progress = 0;
     if (notify) {
       this.onError(error);
@@ -101,7 +109,9 @@ export class OFileItem {
     this.isReady = false;
     this.isUploading = false;
     this.isUploaded = false;
+    this.isSuccess = false;
     this.isCancel = true;
+    this.isError = false;
     this.progress = 0;
     this.index = void 0;
     if (notify) {
