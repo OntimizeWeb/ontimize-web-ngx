@@ -472,9 +472,6 @@ export class OFormComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    // stayInRecordAfterEdit is true if form has editable detail = true
-    this.stayInRecordAfterEdit = this.stayInRecordAfterEdit || this.isEditableDetail();
-
     this.addDeactivateGuard();
 
     this.formGroup = new FormGroup({});
@@ -668,6 +665,8 @@ export class OFormComponent implements OnInit, OnDestroy {
     } else {
       this.setFormMode(OFormComponent.Mode().INITIAL);
     }
+    // stayInRecordAfterEdit is true if form has editable detail = true
+    this.stayInRecordAfterEdit = this.stayInRecordAfterEdit || this.isEditableDetail();
   }
 
   protected determinateModeFromUrlSegment(segment: UrlSegment) {
@@ -903,11 +902,9 @@ export class OFormComponent implements OnInit, OnDestroy {
    */
   _insertAction() {
 
-    Object.keys(this.formGroup.controls).forEach(
-      (control) => {
-        this.formGroup.controls[control].markAsTouched();
-      }
-    );
+    Object.keys(this.formGroup.controls).forEach((control) => {
+      this.formGroup.controls[control].markAsTouched();
+    });
 
     if (!this.formGroup.valid) {
       this.dialogService.alert('ERROR', 'MESSAGES.FORM_VALIDATION_ERROR');
@@ -919,13 +916,13 @@ export class OFormComponent implements OnInit, OnDestroy {
     let sqlTypes = this.getAttributesSQLTypes();
     this.insertData(values, sqlTypes).subscribe(resp => {
       self.postCorrectInsert(resp);
+      self.initialDataCache = self.formDataCache;
       //TODO mostrar un toast indicando que la operación fue correcta...
       if (self.stayInRecordAfterInsert) {
-        this._stayInRecordAfterInsert(resp);
+        self._stayInRecordAfterInsert(resp);
       } else {
         self._closeDetailAction();
       }
-
     }, error => {
       self.postIncorrectInsert(error);
     });
@@ -992,6 +989,7 @@ export class OFormComponent implements OnInit, OnDestroy {
     // invoke update method...
     this.updateData(filter, values, sqlTypes).subscribe(resp => {
       self.postCorrectUpdate(resp);
+      self.initialDataCache = self.formDataCache;
       // TODO mostrar un toast indicando que la operación fue correcta...
       if (self.stayInRecordAfterEdit) {
         self._reloadAction(true);
@@ -1007,11 +1005,7 @@ export class OFormComponent implements OnInit, OnDestroy {
    * Performs 'delete' action
     */
   _deleteAction() {
-    var self = this;
-    let filter = {};
-    this.keysArray.map(key => {
-      filter[key] = self.urlParams[key];
-    });
+    let filter = this.getKeysValues();
     return this.deleteData(filter);
   }
 
@@ -1082,19 +1076,18 @@ export class OFormComponent implements OnInit, OnDestroy {
     var self = this;
     var loader = self.load();
     let observable = new Observable(observer => {
-      this.dataService[this.insertMethod](values, this.entity, sqlTypes)
-        .subscribe(resp => {
-          loader.unsubscribe();
-          if (resp.code === 0) {
-            observer.next(resp.data);
-            observer.complete();
-          } else {
-            observer.error(resp.message);
-          }
-        }, err => {
-          loader.unsubscribe();
-          observer.error(err);
-        });
+      this.dataService[this.insertMethod](values, this.entity, sqlTypes).subscribe(resp => {
+        loader.unsubscribe();
+        if (resp.code === 0) {
+          observer.next(resp.data);
+          observer.complete();
+        } else {
+          observer.error(resp.message);
+        }
+      }, err => {
+        loader.unsubscribe();
+        observer.error(err);
+      });
     });
     return observable;
   }
@@ -1128,19 +1121,18 @@ export class OFormComponent implements OnInit, OnDestroy {
     var self = this;
     var loader = self.load();
     let observable = new Observable(observer => {
-      this.dataService[this.updateMethod](filter, values, this.entity, sqlTypes)
-        .subscribe(resp => {
-          loader.unsubscribe();
-          if (resp.code === 0) {
-            observer.next(resp.data);
-            observer.complete();
-          } else {
-            observer.error(resp.message);
-          }
-        }, err => {
-          loader.unsubscribe();
-          observer.error(err);
-        });
+      this.dataService[this.updateMethod](filter, values, this.entity, sqlTypes).subscribe(resp => {
+        loader.unsubscribe();
+        if (resp.code === 0) {
+          observer.next(resp.data);
+          observer.complete();
+        } else {
+          observer.error(resp.message);
+        }
+      }, err => {
+        loader.unsubscribe();
+        observer.error(err);
+      });
     });
     return observable;
   }
@@ -1172,22 +1164,22 @@ export class OFormComponent implements OnInit, OnDestroy {
     var self = this;
     var loader = self.load();
     let observable = new Observable(observer => {
-      this.dataService[this.deleteMethod](filter, this.entity)
-        .subscribe(resp => {
-          loader.unsubscribe();
-          if (resp.code === 0) {
-            self.postCorrectDelete(resp);
-            observer.next(resp.data);
-            observer.complete();
-          } else {
-            self.postIncorrectDelete(resp);
-            observer.error(resp.message);
-          }
-        }, err => {
-          loader.unsubscribe();
-          self.postIncorrectDelete(err);
-          observer.error(err);
-        });
+      this.dataService[this.deleteMethod](filter, this.entity).subscribe(resp => {
+        loader.unsubscribe();
+        if (resp.code === 0) {
+          self.initialDataCache = self.formDataCache;
+          self.postCorrectDelete(resp);
+          observer.next(resp.data);
+          observer.complete();
+        } else {
+          self.postIncorrectDelete(resp);
+          observer.error(resp.message);
+        }
+      }, err => {
+        loader.unsubscribe();
+        self.postIncorrectDelete(err);
+        observer.error(err);
+      });
     });
     return observable;
   }
@@ -1266,17 +1258,18 @@ export class OFormComponent implements OnInit, OnDestroy {
   protected getKeysValues() {
     let filter = {};
     let currentRecord = this.formData;
-    if (this.keysArray) {
-      this.keysArray.map(key => {
-        if (currentRecord[key]) {
-          let currentData = currentRecord[key];
-          if (currentData instanceof OFormValue) {
-            currentData = currentData.value;
-          }
-          filter[key] = currentData;
-        }
-      });
+    if (!this.keysArray) {
+      return filter;
     }
+    this.keysArray.map(key => {
+      if (currentRecord[key] !== undefined) {
+        let currentData = currentRecord[key];
+        if (currentData instanceof OFormValue) {
+          currentData = currentData.value;
+        }
+        filter[key] = currentData;
+      }
+    });
     return filter;
   }
 
