@@ -26,6 +26,10 @@
       top: 50px;
       left: 0px;
       right: 0px;
+
+      .progress-bar-container {
+        padding: 8px 8px 0px 8px;
+      }
     }
 
     &.form-no-toolbar {

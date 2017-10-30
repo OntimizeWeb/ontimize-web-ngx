@@ -6,8 +6,8 @@
     </div>
   </o-form-toolbar>
 
-  <form #innerForm [formGroup]="formGroup" class="inner-form" [class.form-no-toolbar]="!showHeader">
-    <div fxFlex="100" *ngIf="loading">
+  <form #innerForm [formGroup]="formGroup" class="inner-form" [class.form-no-toolbar]="!showHeader" fxLayout="column">
+    <div fxFlex="100" *ngIf="loading" class="progress-bar-container">
       <md-progress-bar mode="indeterminate"></md-progress-bar>
     </div>
     <div layout-padding [class.force-display-block]="layoutDirection === 'column'" [fxLayout]="layoutDirection" class="o-form-content-wrapper">
