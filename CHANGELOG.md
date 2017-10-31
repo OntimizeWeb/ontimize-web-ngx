@@ -2,6 +2,20 @@
 ### Highlights
 * **o-table**: new component o-table, provider new simple table  using angular-material [table](https://material.angular.io/components/table/overview)
 This component allows to sort and filter data.
+
+(https://github.com/OntimizeWeb/ontimize-web-ngx/commit/be6ffcb) ([be6ffcb])
+(https://github.com/OntimizeWeb/ontimize-web-ngx/commit/8e8d71b) ([8e8d71b])
+(https://github.com/OntimizeWeb/ontimize-web-ngx/commit/055a685) ([055a685])
+(https://github.com/OntimizeWeb/ontimize-web-ngx/commit/522a5d1) ([522a5d1])
+(https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2a85f19) ([2a85f19])
+
+(https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3d3706a)([3d3706a])
+(https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5f177d5)([5f177d5])
+(https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5f177d5)([5f177d5])
+(https://github.com/OntimizeWeb/ontimize-web-ngx/commit/66072b6)([66072b6])
+(https://github.com/OntimizeWeb/ontimize-web-ngx/commit/66072b6)([66072b6])
+(https://github.com/OntimizeWeb/ontimize-web-ngx/commit/89fde1d)([89fde1d])
+(https://github.com/OntimizeWeb/ontimize-web-ngx/commit/baeefc4) ([baeefc4])
 * **o-file-input**: new component. It allows to upload files to a Ontimize-JEE server ([d77b588](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d77b588)) ([552e4d9](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/552e4d9)) ([ee27960](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ee27960)) ([f666992](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f666992))
 
 ## 2.0.0
