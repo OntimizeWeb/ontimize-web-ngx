@@ -109,7 +109,6 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
     this.refreshBtnEnabled = this.refreshBtnEnabled && isEditableDetail;
     this.insertBtnEnabled = this.insertBtnEnabled && isEditableDetail;
     this.editBtnEnabled = this.editBtnEnabled && !isEditableDetail;
-    this.deleteBtnEnabled = this.deleteBtnEnabled && !isEditableDetail;
 
     let self = this;
     this.formCacheSubscription = this._form.formGroup.valueChanges.subscribe((value: any) => {
@@ -219,7 +218,7 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
           //TODO mostrar un toast indicando que la operación fue correcta...
           this.onCloseDetail();
         }, err => {
-          alert('Se ha producido un error!');
+          console.log('OFormToolbar.delete error');
         });
       }
     }
