@@ -92,7 +92,10 @@ export const DEFAULT_INPUTS_O_FORM = [
   'layoutDirection: layout-direction',
 
   // editable-detail [string][yes|no|true|false]: Default: true;
-  'editableDetail: editable-detail'
+  'editableDetail: editable-detail',
+
+  // keys-sql-types [string]: entity keys types, separated by ';'. Default: no value.
+  'keysSqlTypes: keys-sql-types'
 ];
 
 export const DEFAULT_OUTPUTS_O_FORM = [
@@ -150,6 +153,7 @@ export class OFormComponent implements OnInit, OnDestroy {
 
   public static DEFAULT_LAYOUT_DIRECTION = 'column';
 
+  /* inputs variables */
   @InputConverter()
   showHeader: boolean = true;
   headerMode: string = 'floating';
@@ -178,12 +182,17 @@ export class OFormComponent implements OnInit, OnDestroy {
   protected _layoutDirection: string = OFormComponent.DEFAULT_LAYOUT_DIRECTION;
   @InputConverter()
   protected editableDetail: boolean = true;
+  protected keysSqlTypes: string;
+  /* end of inputs variables */
 
+  /*parsed inputs variables */
   isDetailForm: boolean = false;
   keysArray: string[] = [];
   colsArray: string[] = [];
   dataService: any;
   _pKeysEquiv = {};
+  protected keysSqlTypesArray: Array<string> = [];
+  /* end of parsed inputs variables */
 
   formGroup: FormGroup;
   onFormDataLoaded: EventEmitter<Object> = new EventEmitter<Object>();
@@ -535,6 +544,7 @@ export class OFormComponent implements OnInit, OnDestroy {
     this.colsArray = Util.parseArray(this.columns);
     let pkArray = Util.parseArray(this.parentKeys);
     this._pKeysEquiv = Util.parseParentKeysEquivalences(pkArray);
+    this.keysSqlTypesArray = Util.parseArray(this.keysSqlTypes);
 
     if (!this.queryMethod) {
       this.queryMethod = OFormComponent.DEFAULT_QUERY_METHOD;
@@ -867,11 +877,9 @@ export class OFormComponent implements OnInit, OnDestroy {
     }
 
     let extras = Object.assign({}, this.queryParams, { 'isdetail': 'true' });
-
-    this.router.navigate([urlText], extras)
-      .catch(err => {
-        console.error(err.message);
-      });
+    this.router.navigate([urlText], extras).catch(err => {
+      console.error(err.message);
+    });
   }
 
   _reloadAction(useFilter: boolean = false) {
@@ -1234,11 +1242,10 @@ export class OFormComponent implements OnInit, OnDestroy {
 
   protected getCurrentKeysValues() {
     let filter = {};
-
     if (this.urlParams && this.keysArray) {
-      this.keysArray.map(key => {
+      this.keysArray.map((key, index) => {
         if (this.urlParams[key]) {
-          filter[key] = this.urlParams[key];
+          filter[key] = SQLTypes.parseUsingSQLType(this.urlParams[key], this.keysSqlTypesArray[index]);
         }
       });
     }
