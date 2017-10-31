@@ -65,7 +65,8 @@ export const DEFAULT_INPUTS_O_LIST = [
 ];
 
 export const DEFAULT_OUTPUTS_O_LIST = [
-  'onChange'
+  'onChange',
+  'onInsertButtonClick'
 ];
 
 export interface OListInitializationOptions {
@@ -123,6 +124,7 @@ export class OListComponent extends OServiceComponent implements OnInit, IList, 
 
   public mdClick: EventEmitter<any> = new EventEmitter();
   public mdDblClick: EventEmitter<any> = new EventEmitter();
+  public onInsertButtonClick: EventEmitter<any> = new EventEmitter();
 
   public onListDataLoaded: EventEmitter<any> = new EventEmitter();
   public onPaginatedListDataLoaded: EventEmitter<any> = new EventEmitter();
@@ -534,6 +536,7 @@ export class OListComponent extends OServiceComponent implements OnInit, IList, 
   }
 
   protected add() {
+    this.onInsertButtonClick.emit();
     let route = this.getRouteOfSelectedRow(undefined, 'new');
     if (route.length > 0) {
       this.router.navigate(route,
