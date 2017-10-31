@@ -58,7 +58,10 @@ export const DEFAULT_INPUTS_O_LIST = [
 
   'selectable',
 
-  'odense : dense'
+  'odense : dense',
+
+  // delete-button [no|yes]: show delete button when user select items. Default: yes.
+  'deleteButton: delete-button',
 ];
 
 export const DEFAULT_OUTPUTS_O_LIST = [
@@ -105,6 +108,8 @@ export class OListComponent extends OServiceComponent implements OnInit, IList, 
   selectable: boolean = false;
   @InputConverter()
   odense: boolean = false;
+  @InputConverter()
+  deleteButton: boolean = true;
   /* End Inputs */
 
   @ContentChildren(OListItemComponent)
