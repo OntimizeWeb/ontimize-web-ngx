@@ -11,6 +11,7 @@ export class OFileUploader {
   public progress: number = 0;
   public nextIndex: number = 0;
   public splitUpload: boolean = true;
+  public data: Object;
 
   protected _uploadSuscription: Subscription;
 
@@ -74,11 +75,6 @@ export class OFileUploader {
 
     this._onBeforeUploadItem(item);
 
-    let toUpload: any;
-    toUpload = new FormData();
-    toUpload.append('name', item.name);
-    toUpload.append('file', item.file);
-
     if (this.service === undefined) {
       console.warn('No service configured! aborting upload');
       return;
@@ -88,7 +84,7 @@ export class OFileUploader {
     }
 
     var self = this;
-    this._uploadSuscription = item._uploadSuscription = this.service.upload(toUpload, this.entity).subscribe(
+    this._uploadSuscription = item._uploadSuscription = this.service.upload([item], this.entity, this.data).subscribe(
       resp => {
         if (resp.loaded && resp.total) {
           let progress = Math.round(resp.loaded * 100 / resp.total);
@@ -97,6 +93,7 @@ export class OFileUploader {
           self._onSuccessItem(item, resp);
         } else {
           console.log('error');
+          self._onErrorItem(item, "Unknow error");
         }
       },
       err => self._onErrorItem(item, err),
@@ -116,15 +113,6 @@ export class OFileUploader {
 
     this._onBeforeUploadAll();
 
-    let toUpload: any;
-    toUpload = new FormData();
-    items.forEach(item => {
-      item.prepareToUpload();
-      item.isUploading = true;
-      toUpload.append('name', item.name);
-      toUpload.append('file', item.file);
-    });
-
     if (this.service === undefined) {
       console.warn('No service configured! aborting upload');
       return;
@@ -134,7 +122,7 @@ export class OFileUploader {
     }
 
     var self = this;
-    this._uploadSuscription = this.service.upload(toUpload, this.entity).subscribe(
+    this._uploadSuscription = this.service.upload(items, this.entity, this.data).subscribe(
       resp => {
         if (resp.loaded && resp.total) {
           let progress = Math.round(resp.loaded * 100 / resp.total);

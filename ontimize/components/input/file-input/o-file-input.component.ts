@@ -53,7 +53,10 @@ export const DEFAULT_INPUTS_O_FILE_INPUT = [
   'showInfo: show-info',
 
   // split-upload [boolean]: each file is uploaded in a request (true) or all files are uploaded in a single request (false). Default: yes.
-  'splitUpload: split-upload'
+  'splitUpload: split-upload',
+
+  // additional-data [JSON]: used to send aditional information in the upload request.
+  'additionalData: additional-data'
 ];
 
 export const DEFAULT_OUTPUTS_O_FILE_INPUT = [
@@ -67,7 +70,9 @@ export const DEFAULT_OUTPUTS_O_FILE_INPUT = [
   'onUpload',
   'onUploadFile',
   'onComplete',
-  'onCompleteFile'
+  'onCompleteFile',
+  'onError',
+  'onErrorFile'
 ];
 
 @Component({
@@ -114,6 +119,8 @@ export class OFileInputComponent extends OFormDataComponent implements OnDestroy
   onUploadFile: EventEmitter<any> = new EventEmitter<any>();
   onComplete: EventEmitter<any> = new EventEmitter<any>();
   onCompleteFile: EventEmitter<any> = new EventEmitter<any>();
+  onError: EventEmitter<any> = new EventEmitter<any>();
+  onErrorFile: EventEmitter<any> = new EventEmitter<any>();
 
   /* Internal variables */
   uploader: OFileUploader;
@@ -143,6 +150,8 @@ export class OFileInputComponent extends OFormDataComponent implements OnDestroy
     this.uploader.onSuccessItem = (item, response) => this.onUploadFile.emit({ item, response });
     this.uploader.onCompleteAll = () => this.onComplete.emit();
     this.uploader.onCompleteItem = (item) => this.onCompleteFile.emit(item);
+    this.uploader.onErrorAll = (error) => this.onError.emit(error);
+    this.uploader.onErrorItem = (item, error) => this.onErrorFile.emit({ item, error });
   }
 
   ngOnDestroy() {
@@ -210,6 +219,9 @@ export class OFileInputComponent extends OFormDataComponent implements OnDestroy
     let value: string = '';
     if (event) {
       let files: FileList = event.target['files'];
+      if (!this.multiple) {
+        this.uploader.clear();
+      }
       for (var i = 0, f: File; f = files[i]; i++) {
         let fileItem: OFileItem = new OFileItem(f, this.uploader);
         this.uploader.addFile(fileItem);
@@ -254,6 +266,19 @@ export class OFileInputComponent extends OFormDataComponent implements OnDestroy
 
   get files() {
     return this.uploader.files;
+  }
+
+  get additionalData(): any {
+    if (this.uploader) {
+      return this.uploader.data;
+    }
+    return null;
+  }
+
+  set additionalData(data: any) {
+    if (this.uploader) {
+      this.uploader.data = data;
+    }
   }
 
   protected filetypeValidator(control: FormControl) {

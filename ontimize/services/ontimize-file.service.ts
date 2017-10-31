@@ -52,10 +52,10 @@ export class OntimizeFileService {
   /**
    * Sends file/s upload request/s
    *
-   * @param files
+   * @param files the array of files to upload
    * @param entity the entity
    */
-  public upload(files, entity: string): Observable<any> {
+  public upload(files: any[], entity: string, data?: Object): Observable<any> {
     var url = this._urlBase + this.path + '/' + entity;
 
     let authorizationToken = 'Bearer ' + this._sessionid;
@@ -67,7 +67,19 @@ export class OntimizeFileService {
     let _innerObserver: any;
     let dataObservable = new Observable(observer => _innerObserver = observer).share();
 
-    const request = new HttpRequest('POST', url, files, {
+    let toUpload: any;
+    toUpload = new FormData();
+    files.forEach(item => {
+      item.prepareToUpload();
+      item.isUploading = true;
+      toUpload.append('name', item.name);
+      toUpload.append('file', item.file);
+    });
+    if (data) {
+      toUpload.append('data', JSON.stringify(data));
+    }
+
+    const request = new HttpRequest('POST', url, toUpload, {
       headers: headers,
       reportProgress: true
     });
