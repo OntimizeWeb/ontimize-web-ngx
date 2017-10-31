@@ -1,5 +1,5 @@
 ## 2.0.1
-### Highlights
+### Features
 * **o-table**: new component o-table, provider new simple table  using angular-material [table](https://material.angular.io/components/table/overview)
 This component allows to sort and filter data.
 
@@ -17,6 +17,20 @@ This component allows to sort and filter data.
 (https://github.com/OntimizeWeb/ontimize-web-ngx/commit/89fde1d)([89fde1d])
 (https://github.com/OntimizeWeb/ontimize-web-ngx/commit/baeefc4) ([baeefc4])
 * **o-file-input**: new component. It allows to upload files to a Ontimize-JEE server ([d77b588](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d77b588)) ([552e4d9](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/552e4d9)) ([ee27960](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ee27960)) ([f666992](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f666992))
+* **o-form**: new '*editable-detail*' input (default value = '*true*'). When this input is true the default '*detail*' form mode allows the inner components edition ([488f997](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/488f997)).
+* **o-form, o-list**: new '*keys-sql-types*' input.
+* **o-list**: new '*delete-button*' input (default value = '*true*') ([#133](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/133)) ([8185483](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/8185483))
+* **o-list**: new '*onInsertButtonClick*' output ([#134](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/134)) ([dd4a0e2](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/dd4a0e2))
+
+
+### BREAKING CHANGES
+* **o-table** and **o-list**: following inputs default values have changed ([0a356c9](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/0a356c9)):
+  * '*detail-mode*': changed from '*none*' to '*click*'.
+  * '*detail-button-in-row*': changed from '*true*' to '*false*'.
+* **OFormDataComponent**: this class now implements '*OnInit*' and '*onDestroy*' to forcing user to implement this methods at form components creation ([4c6c23b](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/4c6c23b)).
+
+### Bug Fixes
+* **o-form**: fixing bug in keys values ([#132](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/132)) ([4b5fd5e](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/4b5fd5e))
 
 ## 2.0.0
 
