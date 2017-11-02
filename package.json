@@ -25,8 +25,7 @@
     "webpack:dev": "npm run init-common && webpack --config config/webpack.dev.js --progress && npm run end-common",
     "webpack:prod": "npm run init-common && webpack --config config/webpack.prod.js --progress && npm run end-common",
     "aot:compile": "node_modules/.bin/ngc -p tsconfig.aot.json",
-    "aot": "npm run init-common && npm run aot:compile && npm run end-common",
-    "pack":"npm run aot && cd dist && npm pack && cd .."
+    "aot": "npm run init-common && npm run aot:compile && npm run end-common"
   },
   "dependencies": {
     "moment": "2.18.1"
