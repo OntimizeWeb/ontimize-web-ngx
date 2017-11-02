@@ -1,17 +1,24 @@
 import {
-  Component, OnInit, Inject, Injector,
-  forwardRef, ElementRef, NgZone,
+  Component,
+  OnInit,
+  OnDestroy,
+  Inject,
+  Injector,
+  forwardRef,
+  ElementRef,
+  NgZone,
   NgModule,
   ViewEncapsulation
 } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { Subscription } from 'rxjs/Subscription';
 
 import { OFormComponent } from './o-form.component';
 import { InputConverter } from '../../decorators';
 import { Util } from '../../util/util';
 import { DialogService, NavigationService } from '../../services';
 import { OSharedModule } from '../../shared';
-import { CommonModule } from '@angular/common';
 
 export const DEFAULT_INPUTS_O_FORM_TOOLBAR = [
   'labelHeader: label-header',
@@ -30,7 +37,7 @@ export const DEFAULT_INPUTS_O_FORM_TOOLBAR = [
   encapsulation: ViewEncapsulation.None
 })
 
-export class OFormToolbarComponent implements OnInit {
+export class OFormToolbarComponent implements OnInit, OnDestroy {
 
   public static DEFAULT_INPUTS_O_FORM_TOOLBAR = DEFAULT_INPUTS_O_FORM_TOOLBAR;
 
@@ -53,10 +60,14 @@ export class OFormToolbarComponent implements OnInit {
   protected editBtnEnabled: boolean = false;
   protected deleteBtnEnabled: boolean = false;
   protected navigationEnabled: boolean = false;
+  protected saveBtnEnabled: boolean = false;
 
+  protected _existsChangesToSave: boolean = false;
 
   protected _dialogService: DialogService;
   protected _navigationService: NavigationService;
+
+  protected formCacheSubscription: Subscription;
 
   constructor( @Inject(forwardRef(() => OFormComponent)) private _form: OFormComponent,
     public element: ElementRef,
@@ -85,26 +96,51 @@ export class OFormToolbarComponent implements OnInit {
     }
   }
 
-  public setInitialMode() {
+  ngOnDestroy() {
+    if (this.formCacheSubscription) {
+      this.formCacheSubscription.unsubscribe();
+    }
+  }
+
+  protected manageEditableDetail() {
+    let isEditableDetail = this._form.isEditableDetail();
+    this.saveBtnEnabled = isEditableDetail;
+
+    this.refreshBtnEnabled = this.refreshBtnEnabled && isEditableDetail;
+    this.insertBtnEnabled = this.insertBtnEnabled && isEditableDetail;
+    this.editBtnEnabled = this.editBtnEnabled && !isEditableDetail;
+
+    let self = this;
+    this.formCacheSubscription = this._form.formGroup.valueChanges.subscribe((value: any) => {
+      if (self._form.isEditableDetail()) {
+        self.existsChangesToSave = self._form.isInitialStateChanged();
+      }
+    });
+  }
+
+  setInitialMode() {
+    this.manageEditableDetail();
     this.initialMode = true;
     this.insertMode = false;
     this.editMode = false;
   }
 
-  public setInsertMode() {
+  setInsertMode() {
+    this.initialMode = false;
     this.insertMode = true;
     this.editMode = false;
-    this.initialMode = false;
   }
 
-  public setEditMode() {
-    this.editMode = true;
-    this.insertMode = false;
+  setEditMode() {
     this.initialMode = false;
+    this.insertMode = false;
+    this.editMode = true;
   }
 
   onCloseDetail() {
-    this._form.executeToolbarAction(OFormComponent.CLOSE_DETAIL_ACTION);
+    this._form.executeToolbarAction(OFormComponent.CLOSE_DETAIL_ACTION, {
+      changeToolbarMode: true
+    });
   }
 
   onBack() {
@@ -112,21 +148,40 @@ export class OFormToolbarComponent implements OnInit {
   }
 
   onReload() {
-    this._form.executeToolbarAction(OFormComponent.RELOAD_ACTION);
+    let self = this;
+    this._form.showConfirmDiscardChanges().then(val => {
+      if (val) {
+        self._form.executeToolbarAction(OFormComponent.RELOAD_ACTION);
+      }
+    });
   }
 
   onInsert() {
-    this.setInsertMode();
-    this._form.executeToolbarAction(OFormComponent.GO_INSERT_ACTION);
+    this._form.executeToolbarAction(OFormComponent.GO_INSERT_ACTION, {
+      changeToolbarMode: true
+    });
   }
 
   onEdit() {
-    this.setEditMode();
-    this._form.executeToolbarAction(OFormComponent.GO_EDIT_ACTION);
+    this._form.executeToolbarAction(OFormComponent.GO_EDIT_ACTION, {
+      changeToolbarMode: true
+    });
   }
 
   onDelete(evt: any) {
     this.showConfirmDelete(evt);
+  }
+
+  onSave(evt: any) {
+    this.handleAcceptEditOperation();
+  }
+
+  get existsChangesToSave(): boolean {
+    return this._existsChangesToSave;
+  }
+
+  set existsChangesToSave(val: boolean) {
+    this._existsChangesToSave = val;
   }
 
   cancelOperation() {
@@ -136,12 +191,11 @@ export class OFormToolbarComponent implements OnInit {
       this.onCloseDetail();
     } else {
       this.onReload();
+      this.setInitialMode();
     }
-    this.setInitialMode();
   }
 
   acceptOperation() {
-
     if (this.editMode) {
       this.handleAcceptEditOperation();
     } else if (this.insertMode) {
@@ -158,20 +212,17 @@ export class OFormToolbarComponent implements OnInit {
   }
 
   showConfirmDelete(evt: any) {
-    this._dialogService.confirm('CONFIRM', 'MESSAGES.CONFIRM_DELETE')
-      .then(
-      res => {
-        if (res === true) {
-          this._form.executeToolbarAction(OFormComponent.DELETE_ACTION)
-            .subscribe(resp => {
-              //TODO mostrar un toast indicando que la operación fue correcta...
-              this.onCloseDetail();
-            }, err => {
-              alert('Se ha producido un error!');
-            });
-        }
+    this._dialogService.confirm('CONFIRM', 'MESSAGES.CONFIRM_DELETE').then(res => {
+      if (res === true) {
+        this._form.executeToolbarAction(OFormComponent.DELETE_ACTION).subscribe(resp => {
+          //TODO mostrar un toast indicando que la operación fue correcta...
+          this.onCloseDetail();
+        }, err => {
+          console.log('OFormToolbar.delete error');
+        });
       }
-      );
+    }
+    );
   }
 
   next() {
@@ -218,8 +269,7 @@ export class OFormToolbarComponent implements OnInit {
     return '';
   }
 
-  showNavigation() {
-    //navigationEnabled
+  get showNavigation(): boolean {
     if (this.navigationEnabled) {
       return this._form.navigationData.length >= 1;
     }
@@ -233,8 +283,8 @@ export class OFormToolbarComponent implements OnInit {
 
 @NgModule({
   declarations: [OFormToolbarComponent],
-  imports: [OSharedModule, CommonModule ],
-  exports: [OFormToolbarComponent],
+  imports: [OSharedModule, CommonModule],
+  exports: [OFormToolbarComponent]
 })
 export class OFormToolbarModule {
 }

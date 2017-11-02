@@ -5,12 +5,14 @@ import {
   ReactiveFormsModule
 } from '@angular/forms';
 
+
 import {
   ColumnsFilterPipe,
   OrderByPipe,
   OIntegerPipe,
   ORealPipe,
-  OTranslateModule
+  OTranslateModule,
+  oMomentPipe,
 } from '../pipes';
 
 import { ONTIMIZE_DIRECTIVES } from '../config/o-directives';
@@ -27,6 +29,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     OrderByPipe,
     OIntegerPipe,
     ORealPipe,
+    oMomentPipe,
     ONTIMIZE_DIRECTIVES
   ],
   exports: [
@@ -38,6 +41,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     OrderByPipe,
     OIntegerPipe,
     ORealPipe,
+    oMomentPipe,
     ONTIMIZE_DIRECTIVES,
     OCustomMaterialModule
   ]

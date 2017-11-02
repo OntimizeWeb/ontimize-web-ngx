@@ -1,6 +1,12 @@
 import {
-  Component, Inject, Injector, forwardRef, ElementRef, OnInit,
-  EventEmitter, Optional, ViewChild,
+  Component,
+  Inject,
+  Injector,
+  forwardRef,
+  ElementRef,
+  EventEmitter,
+  Optional,
+  ViewChild,
   NgModule,
   ViewEncapsulation
 } from '@angular/core';
@@ -52,7 +58,7 @@ export const DEFAULT_OUTPUTS_O_IMAGE = [
   ],
   encapsulation: ViewEncapsulation.None
 })
-export class OImageComponent extends OFormDataComponent implements OnInit {
+export class OImageComponent extends OFormDataComponent {
 
   public static DEFAULT_INPUTS_O_IMAGE = DEFAULT_INPUTS_O_IMAGE;
   public static DEFAULT_OUTPUTS_O_IMAGE = DEFAULT_OUTPUTS_O_IMAGE;
@@ -97,7 +103,10 @@ export class OImageComponent extends OFormDataComponent implements OnInit {
       this._useEmptyIcon = true;
       this._useEmptyImage = false;
     }
+  }
 
+  ngOnDestroy() {
+    super.ngOnDestroy();
   }
 
   ensureOFormValue(val: any) {
@@ -120,10 +129,6 @@ export class OImageComponent extends OFormDataComponent implements OnInit {
     } else {
       this.value = new OFormValue('');
     }
-  }
-
-  ngOnDestroy() {
-    this.destroy();
   }
 
   innerOnChange(event: any) {

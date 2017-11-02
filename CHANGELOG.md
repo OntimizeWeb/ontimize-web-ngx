@@ -1,9 +1,57 @@
+## 2.1.0
+
+### Features
+* **o-table**: new component o-table, provider new simple table  using angular-material [table](https://material.angular.io/components/table/overview)
+This component allows to sort and filter data.
+
+(https://github.com/OntimizeWeb/ontimize-web-ngx/commit/be6ffcb) ([be6ffcb])
+(https://github.com/OntimizeWeb/ontimize-web-ngx/commit/8e8d71b) ([8e8d71b])
+(https://github.com/OntimizeWeb/ontimize-web-ngx/commit/055a685) ([055a685])
+(https://github.com/OntimizeWeb/ontimize-web-ngx/commit/522a5d1) ([522a5d1])
+(https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2a85f19) ([2a85f19])
+
+(https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3d3706a)([3d3706a])
+(https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5f177d5)([5f177d5])
+(https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5f177d5)([5f177d5])
+(https://github.com/OntimizeWeb/ontimize-web-ngx/commit/66072b6)([66072b6])
+(https://github.com/OntimizeWeb/ontimize-web-ngx/commit/66072b6)([66072b6])
+(https://github.com/OntimizeWeb/ontimize-web-ngx/commit/89fde1d)([89fde1d])
+(https://github.com/OntimizeWeb/ontimize-web-ngx/commit/baeefc4) ([baeefc4])
+* **o-file-input**: new component. It allows to upload files to a Ontimize-JEE server ([d77b588](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d77b588)) ([552e4d9](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/552e4d9)) ([ee27960](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ee27960)) ([f666992](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f666992))
+* **o-form**: new '*editable-detail*' input (default value = '*true*'). When this input is true the default '*detail*' form mode allows the inner components edition ([488f997](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/488f997)).
+* **o-form**: new '*keys-sql-types*' input ([76f0e88](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/76f0e88))
+* **o-list**: new '*delete-button*' input (default value = '*true*') ([#133](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/133)) ([8185483](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/8185483))
+* **o-list**: new '*onInsertButtonClick*' output ([#134](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/134)) ([dd4a0e2](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/dd4a0e2))
+
+
+### BREAKING CHANGES
+* **o-table** and **o-list**: following inputs default values have changed ([0a356c9](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/0a356c9)):
+  * '*detail-mode*': changed from '*none*' to '*click*'.
+  * '*detail-button-in-row*': changed from '*true*' to '*false*'.
+* **OFormDataComponent**: this class now implements '*OnInit*' and '*onDestroy*' to forcing user to implement this methods at form components creation ([4c6c23b](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/4c6c23b)).
+
+### Bug Fixes
+* **o-form**: fixing bug in keys values ([#132](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/132)) ([4b5fd5e](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/4b5fd5e))
+
 ## 2.0.0
+
+### Features
+* **o-form**: new '*editable-detail*' input (default value = '*true*'). When this input is true the default '*detail*' form mode allows the inner components edition ([488f997](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/488f997)).
+
+
+### BREAKING CHANGES
+* **o-table** and **o-list**: following inputs default values have changed ([0a356c9](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/0a356c9)):
+  * '*detail-mode*': changed from '*none*' to '*click*'.
+  * '*detail-button-in-row*': changed from '*true*' to '*false*'.
+* **OFormDataComponent**: this class now implements '*OnInit*' and '*onDestroy*' to forcing user to implement this methods at form components creation ([4c6c23b](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/4c6c23b)).
+
+
+## 2.0.0 (2017-09-26)
 
 ### BREAKING CHANGES
 * **OntimizeWebModule**: '*ontimize-web-ng2*' is now called '*ontimize-web-ngx*'.
 
-**IMPORTANT: you must update your imports for changing '*ontimize-web-ng2*' for '*ontimize-web-ngx*'. This includes module and components import and '*ontimize.scss*' reference.
+**IMPORTANT**: you must update your imports for changing '*ontimize-web-ng2*' for '*ontimize-web-ngx*'. This includes module and components import and '*ontimize.scss*' reference.
 
 * **Theming**: deleting material design pre-built exported themes. In your '*app.scss*' you wont be able to import anymore the following files:
   * `node_modules/ontimize-web-ng2/ontimize/components/theming/indigo-pink.scss`
@@ -13,8 +61,7 @@
 
 **Note**: From now on, all information about theming will be available at [ontimize-web-ngx-theming](https://github.com/OntimizeWeb/ontimize-web-ngx-theming)
 
-
-## 2.0.0-rc.8
+## 2.0.0-rc.8 (2017-09-25)
 
 ### PEER-DEPENDENCY UPDATES ###
 * **Updated**:  @ngx-translate/core@8.0.0
@@ -26,7 +73,8 @@
 
 ### BREAKING CHANGES
 * **o-date-input**: date input not longer using jquery-ui datepicker. Now using angular-material [datepicker](https://material.angular.io/components/datepicker/overview)
-**IMPORTANT: dont forget to remove a possible jquery-ui datepicker script import (node_modules/jquery-ui/ui/widgets/datepicker.js)
+
+**IMPORTANT: dont forget to remove a possible jquery-ui datepicker script import in *angular-cli.json*(`node_modules/jquery-ui/ui/widgets/datepicker.js`)
 
 * **o-table**: ontimize web table component ('*o-table*') and all its inner components ('*o-table-column*', cell renderers and cell editors) are not longer available in '*OntimizeWebModule*', you must install '*ontimize-web-ngx-datatable*' to import '*ODataTableModule*' and have the full '*o-table*' component with the following breaking changes:
   * **ODataTableModule**: you must add the import of '*ODataTableModule*' in that modules using the table component (`import { ODataTableModule } from 'ontimize-web-ngx-datatable;'`).
@@ -35,7 +83,7 @@
   * **styles**: You must import the styles of the '*o-datatable*' component:
     * Module styles:
       `node_modules/ontimize-web-ngx-datatable/styles.scss`
-    * Theming styles in your '*app.scss*' file:
+    * Theming styles in your '*app.scss*' file (it must be included after '*o-material-theme*'):
       `@import 'node_modules/ontimize-web-ngx-datatable/o-datatable-theme.scss';`
       `@include o-datatable-theme($theme);`
   * **angular-cli.json**:
@@ -47,7 +95,7 @@
     * If you install '*ontimize-web-ngx-datatable*' you must add the following stylesheet to '*styles*' property:
       * `../node_modules/ontimize-web-ngx-datatable/styles.scss`
 
-**Note**: From now on, all information about '*o-datatable*' will be available in [ontimize-web-ngx-datatable](https://github.com/OntimizeWeb/ontimize-web-ngx-datatable)
+**Note**: From now on, all information about '*o-datatable*' will be available at [ontimize-web-ngx-datatable](https://github.com/OntimizeWeb/ontimize-web-ngx-datatable)
 
 * **@angular/material**: updating styles and templates for ([@angular/material@2.0.0-beta.10](https://github.com/angular/material2/blob/master/CHANGELOG.md)) breaking changes.
   * Some of the important changes for '*ontimize-web-ng2*':
@@ -62,7 +110,10 @@
 ### Features
 * **ontimize-web-ng2**: '*OntimizeWebModule*' is now AoT compatible.
 * **o-form**: adding '*layout-direction*' input ([#114](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/114)) ([afb25e7](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/afb25e7))
-* **o-list-picker**, **o-combo**: adding 'value-column-type' attribute ([#115](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/115)) ([56b7db3](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/56b7db3))
+* **o-list-picker**, **o-combo**: adding '*value-column-type*' attribute ([#115](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/115)) ([56b7db3](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/56b7db3))
+
+**IMPORTANT: '*value-column-type*' attribute is set to '*int*' by default, so the '*value-column*' will be *always* parsed to int.
+
 * **o-table-cell-renderer-string**: adding '*translate*' input ([#118](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/118)) ([f9da979](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/f9da979))
 * **o-table-cell-editor**: adding '*onFocus*', '*onBlur*' and '*onSubmit*' outputs to all cell editor components ([#120](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/120)) ([a1ee4e2](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/a1ee4e2))
 * **o-date-input**: with new angular-material datepicker is possible to do a time selection setting component 'format' attribute that shows time (see [momentjs](https://momentjs.com/docs/#/displaying/format/) docs) and editing the input ([#68](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/68))
@@ -84,7 +135,7 @@
 * **OntimizeEE service**: logout bug fixed ([#124](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/124)) ([c341fc7](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/c341fc7))
 
 
-## 2.0.0-rc.7
+## 2.0.0-rc.7 (2017-08-11)
 
 ### PEER-DEPENDENCY UPDATES ###
 * **Updated**:  @ngx-translate/core@7.1.0
@@ -108,7 +159,7 @@
 * **o-list**: Filtering '*static-data*' bugs fixed ([#90](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/90)) ([6e58311](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/6e58311))
 * **Form components**: Updating form data cache when changing inner components data with '*setValue*' method ([#80](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/80)) ([c92b1b8](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/c92b1b8))
 
-## 2.0.0-rc.6
+## 2.0.0-rc.6 (2017-07-17)
 
 ### PEER-DEPENDENCY UPDATES ###
 * **Updated**:  @angular/cli@^1.2.1
@@ -117,7 +168,7 @@
 * **OComponent**: fixing bugs in '*OComponent*' decorator.
 * **providers**: fixing language initialization bugs.
 
-## 2.0.0-rc.5
+## 2.0.0-rc.5 (2017-07-10)
 
 ### DEPENDENCY UPDATES ###
 * **Added**:  colresizable@1.6.0
@@ -169,13 +220,14 @@
 * **OFormDataComponent**: bug when setting data ([#77](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/77)) ([11fb596](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/11fb596))
 * **o-form**: bug when setting data ([#82](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/82)) ([b2bad20](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/b2bad20))
 
-## 2.0.0-rc.4
+## 2.0.0-rc.4 (2017-06-23)
 
 ### Bug Fixes
 * **o-table**: pagination bugs fixed.
 * **o-app-header**: fixing flags icons bugs.
 
-## 2.0.0-rc.3
+## 2.0.0-rc.3 (2017-06-22)
+
 ### Features
 * **o-list-picker**: adding '*dialog-width*' and '*dialog-height*' inputs.
 * **o-list-picker**: adding internal '*o-list-picker-theme*'
@@ -189,7 +241,8 @@
 * **OTranslateService**: bugs in '*use*' method fixed.
 
 
-## 2.0.0-rc.2
+## 2.0.0-rc.2 (2017-06-20)
+
 ### Features
 * **LoginService**: adding '*logoutAndRedirect*' and '*logoutWithConfirmationAndRedirect*' methods.
 * **Providers**: adding '*AppMenuService*' for standard menu definition, '*OUserInfoService*' for basic user info storage and  '*OModulesInfoService*' for modules communication.
@@ -213,7 +266,8 @@
 * **o-list**: listening to '*static-data*' changes ([#89](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/89)) ([b267c51](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/b267c51))
 
 
-## 2.0.0-rc.1
+## 2.0.0-rc.1 (2017-06-06)
+
 ### BREAKING CHANGES
 * **OntimizeWebModule**: Removing '*forRoot*' method.
 * **Providers**: Removing declaration of providers done in '*OntimizeWebModule.forRoot*' method. Now exporting '*ONTIMIZE_PROVIDERS*' array containig all default module providers. Also exporting '*APP_CONFIG*' provider. Example of framework providers use:
@@ -249,7 +303,7 @@ import { CONFIG } from './app.config';
 [...]
 ```
 
-## 2.0.0-rc.0
+## 2.0.0-rc.0 (2017-05-30)
 
 ### Features
 * **Module**: Defining framework as a ngModule ('*OntimizeWebModule*') that includes all components, directives and providers.
