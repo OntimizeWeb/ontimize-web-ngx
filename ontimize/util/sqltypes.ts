@@ -393,5 +393,31 @@ export class SQLTypes {
     }
     return value;
   }
+
+  public static parseUsingSQLType(arg: any, type: string): any {
+    let value = arg;
+    type = type ? type.toUpperCase() : '';
+    try {
+      switch (type) {
+        case 'TINYINT':
+        case 'SMALLINT':
+        case 'INTEGER':
+        case 'BIGINT':
+          value = parseInt(arg);
+          break;
+        case 'FLOAT':
+        case 'REAL':
+        case 'DOUBLE':
+        case 'NUMERIC':
+        case 'DECIMAL':
+          value = parseFloat(arg);
+        default:
+          break;
+      }
+    } catch (err) {
+      console.log('SQLTypes.parseUsingSQLType error');
+    }
+    return value;
+  }
 }
 

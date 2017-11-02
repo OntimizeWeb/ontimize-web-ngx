@@ -219,6 +219,9 @@ export class OFileInputComponent extends OFormDataComponent implements OnDestroy
     let value: string = '';
     if (event) {
       let files: FileList = event.target['files'];
+      if (!this.multiple) {
+        this.uploader.clear();
+      }
       for (var i = 0, f: File; f = files[i]; i++) {
         let fileItem: OFileItem = new OFileItem(f, this.uploader);
         this.uploader.addFile(fileItem);

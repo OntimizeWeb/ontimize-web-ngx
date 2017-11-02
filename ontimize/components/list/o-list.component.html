@@ -10,7 +10,7 @@
       <button type="button" md-icon-button aria-label="Refresh" (click)="reloadData()" *ngIf="refreshButton">
         <md-icon>autorenew</md-icon>
       </button>
-      <button type="button" md-icon-button aria-label="Delete" (click)="remove()" *ngIf="selectedItems.length">
+      <button type="button" md-icon-button aria-label="Delete" (click)="remove()" *ngIf="selectedItems.length && deleteButton">
         <md-icon>delete</md-icon>
       </button>
       <span class="fill-remaining"></span>
