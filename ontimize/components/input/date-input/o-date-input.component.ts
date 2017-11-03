@@ -6,7 +6,8 @@ import {
   Injector,
   forwardRef,
   ViewChild,
-  NgModule
+  NgModule,
+  EventEmitter
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ValidatorFn } from '@angular/forms/src/directives/validators';
@@ -15,7 +16,8 @@ import {
   DateAdapter,
   MdDatepicker,
   MdDatepickerInput,
-  MD_DATE_FORMATS
+  MD_DATE_FORMATS,
+  MdDatepickerInputEvent
 } from '@angular/material';
 
 import { OSharedModule } from '../../../shared';
@@ -23,10 +25,7 @@ import { OFormComponent } from '../../form/o-form.component';
 import { OFormValue } from '../../form/OFormValue';
 import { OFormDataComponent } from '../../o-form-data-component.class';
 import { InputConverter } from '../../../decorators';
-import {
-  MomentService,
-  // mdDateFormatsFactory
-} from '../../../services';
+import { MomentService } from '../../../services';
 
 import { MomentDateAdapter } from './adapter/moment.adapter';
 import * as moment from 'moment';
@@ -99,6 +98,10 @@ export class ODateInputComponent extends OFormDataComponent {
   protected _maxDateString: string;
 
   private momentSrv: MomentService;
+
+  onChange: EventEmitter<Object> = new EventEmitter<Object>();
+  onFocus: EventEmitter<Object> = new EventEmitter<Object>();
+  onBlur: EventEmitter<Object> = new EventEmitter<Object>();
 
   constructor(
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
@@ -205,6 +208,26 @@ export class ODateInputComponent extends OFormDataComponent {
   open() {
     if (!this.isReadOnly && !this.isDisabled) {
       this.datepicker.open();
+    }
+  }
+
+  innerOnChange(event: MdDatepickerInputEvent<any>) {
+    if (!this.value) {
+      this.value = new OFormValue();
+    }
+    this.ensureOFormValue(event.value);
+    this.onChange.emit(event);
+  }
+
+  innerOnFocus(event: any) {
+    if (!this.isReadOnly && !this.isDisabled) {
+      this.onFocus.emit(event);
+    }
+  }
+
+  innerOnBlur(event: any) {
+    if (!this.isReadOnly && !this.isDisabled) {
+      this.onBlur.emit(event);
     }
   }
 
