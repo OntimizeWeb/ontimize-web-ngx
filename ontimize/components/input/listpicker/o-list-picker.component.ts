@@ -45,7 +45,9 @@ export const DEFAULT_INPUTS_O_LIST_PICKER = [
 ];
 
 export const DEFAULT_OUTPUTS_O_LIST_PICKER = [
-  'onChange'
+  'onChange',
+  'onFocus',
+  'onBlur'
 ];
 
 @Component({
@@ -81,7 +83,9 @@ export class OListPickerComponent extends OFormServiceComponent implements OnIni
   @ViewChild('inputModel')
   protected inputModel: MdInput;
 
-  public onChange: EventEmitter<Object> = new EventEmitter<Object>();
+  onChange: EventEmitter<Object> = new EventEmitter<Object>();
+  onFocus: EventEmitter<Object> = new EventEmitter<Object>();
+  onBlur: EventEmitter<Object> = new EventEmitter<Object>();
 
   constructor(
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
@@ -229,13 +233,16 @@ export class OListPickerComponent extends OFormServiceComponent implements OnIni
     }
   }
 
-  onFocus(evt: any) {
-    //nothing to do...
+  innerOnFocus(evt: any) {
+    if (!this.isReadOnly && !this.isDisabled) {
+      this.onFocus.emit(event);
+    }
   }
 
-  onBlur(evt: any) {
+  innerOnBlur(evt: any) {
     if (!this.isReadOnly && !this.isDisabled) {
       this._fControl.markAsTouched();
+      this.onBlur.emit(event);
     }
   }
 
