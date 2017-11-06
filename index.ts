@@ -13,6 +13,7 @@ export * from './ontimize/MainLauncher';
 export * from './ontimize/pipes';
 export * from './ontimize/services';
 export * from './ontimize/decorators';
+export * from './ontimize/directives';
 export * from './ontimize/components';
 export * from './ontimize/layouts';
 export * from './ontimize/utils';
