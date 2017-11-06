@@ -161,13 +161,6 @@ export class OListPickerComponent extends OFormServiceComponent implements OnIni
   }
 
   innerOnChange(event: any) {
-    // this.ensureOFormValue(e);
-    // if (this._fControl && this._fControl.touched) {
-    //   this._fControl.markAsDirty();
-    // }
-    // this.onChange.emit(e);
-
-
     if (!this.value) {
       this.value = new OFormValue();
     }
