@@ -1,22 +1,22 @@
-## 2.1.0
+## 2.1.0-rc.1
+
+### Features
+* **o-list-picker**: adding *'onFocus'* and *'onBlur'* outputs ([afdd027](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/afdd027))
+* **o-date-input**:  adding *'onChange'*, *'onFocus'* and *'onBlur'* outputs ([ba802aa](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ba802aa))
+* **oKeyboardListener**: creating directive *'oKeyboardListener'* having *'keyboardKeys'* input and *'onKeysPressed'* event output ([b410584](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b410584))
+* **o-form**: addding the feature of undo form inner components changes stored in the form cache. The *'undo-button'* (default=true) input controls the existence of a undo button in form toolbar. It also works with *'ctrl+z'* ([d026ae7](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d026ae7))
+
+
+### BREAKING CHANGES
+* **o-moment-pipe**: moment pipe class name has changed from '*oMomentPipe*' to '*OMomentPipe*', this will not affect to pipe use (still using '*oMoment*' selector) ([6ba54de](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6ba54de))
+
+
+## 2.1.0-rc.0 (2017-11-02)
 
 ### Features
 * **o-table**: new component o-table, provider new simple table  using angular-material [table](https://material.angular.io/components/table/overview)
-This component allows to sort and filter data.
+This component allows to sort and filter data. ([be6ffcb](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/be6ffcb)) ([8e8d71b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/8e8d71b)) ([055a685](https://github.com/OntimizeWeb/ontimize-web-ngx/commit055a685/)) ([522a5d1](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/522a5d1)) ([2a85f19](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2a85f19)) ([3d3706a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3d3706a)) ([5f177d5](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5f177d5)) ([66072b6](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/66072b6)) ([89fde1d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/89fde1d)) ([baeefc4](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/baeefc4))
 
-(https://github.com/OntimizeWeb/ontimize-web-ngx/commit/be6ffcb) ([be6ffcb])
-(https://github.com/OntimizeWeb/ontimize-web-ngx/commit/8e8d71b) ([8e8d71b])
-(https://github.com/OntimizeWeb/ontimize-web-ngx/commit/055a685) ([055a685])
-(https://github.com/OntimizeWeb/ontimize-web-ngx/commit/522a5d1) ([522a5d1])
-(https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2a85f19) ([2a85f19])
-
-(https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3d3706a)([3d3706a])
-(https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5f177d5)([5f177d5])
-(https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5f177d5)([5f177d5])
-(https://github.com/OntimizeWeb/ontimize-web-ngx/commit/66072b6)([66072b6])
-(https://github.com/OntimizeWeb/ontimize-web-ngx/commit/66072b6)([66072b6])
-(https://github.com/OntimizeWeb/ontimize-web-ngx/commit/89fde1d)([89fde1d])
-(https://github.com/OntimizeWeb/ontimize-web-ngx/commit/baeefc4) ([baeefc4])
 * **o-file-input**: new component. It allows to upload files to a Ontimize-JEE server ([d77b588](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d77b588)) ([552e4d9](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/552e4d9)) ([ee27960](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ee27960)) ([f666992](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f666992))
 * **o-form**: new '*editable-detail*' input (default value = '*true*'). When this input is true the default '*detail*' form mode allows the inner components edition ([488f997](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/488f997)).
 * **o-form**: new '*keys-sql-types*' input ([76f0e88](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/76f0e88))
@@ -32,18 +32,6 @@ This component allows to sort and filter data.
 
 ### Bug Fixes
 * **o-form**: fixing bug in keys values ([#132](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/132)) ([4b5fd5e](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/4b5fd5e))
-
-## 2.0.0
-
-### Features
-* **o-form**: new '*editable-detail*' input (default value = '*true*'). When this input is true the default '*detail*' form mode allows the inner components edition ([488f997](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/488f997)).
-
-
-### BREAKING CHANGES
-* **o-table** and **o-list**: following inputs default values have changed ([0a356c9](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/0a356c9)):
-  * '*detail-mode*': changed from '*none*' to '*click*'.
-  * '*detail-button-in-row*': changed from '*true*' to '*false*'.
-* **OFormDataComponent**: this class now implements '*OnInit*' and '*onDestroy*' to forcing user to implement this methods at form components creation ([4c6c23b](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/4c6c23b)).
 
 
 ## 2.0.0 (2017-09-26)
