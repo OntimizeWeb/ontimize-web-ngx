@@ -3,15 +3,17 @@ PLEASE HELP US PROCESS GITHUB ISSUES FASTER BY PROVIDING THE FOLLOWING INFORMATI
 
 ISSUES MISSING IMPORTANT INFORMATION MAY BE CLOSED WITHOUT INVESTIGATION.
 -->
+You can help us process issues faster by providing the following information. Issues missing important information may be harder to resolve.
 
 ## I'm submitting a...
-<!-- Check one of the following options with "x" -->
+*Check one of the following options with "x"*
 <pre><code>
 [ ] Regression (a behavior that used to work and stopped working in a new release)
-[ ] Bug report  <!-- Please search GitHub for a similar issue or PR before submitting -->
+[ ] Bug report  <em>Please search in other issues for a similar case before submitting</em>
+<!-- Please search GitHub for a similar issue or PR before submitting -->
 [ ] Feature request
 [ ] Documentation issue or request
-[ ] Support request => Please do not submit support request here, instead use https://question2answer.imatia.com/
+[ ] Support request => Please do not submit support request here, instead use [this](https://question2answer.imatia.com/)
 </code></pre>
 
 ## Current behavior
@@ -23,6 +25,9 @@ ISSUES MISSING IMPORTANT INFORMATION MAY BE CLOSED WITHOUT INVESTIGATION.
 
 
 ## Minimal reproduction of the problem with instructions
+<em>For bug reports provide, if you can, a minimal set of steps to reproduce it</em>
+<em>In case you are reporting a styling issue or something similar it would be great if you give us a screenshot describing your problem</em>
+
 <!--
 For bug reports please provide the *STEPS TO REPRODUCE* and if possible a *MINIMAL DEMO* of the problem via
 https://plnkr.co or similar (you can use this template as a starting point: http://plnkr.co/edit/tpl:AvJOMERrnz94ekVua0u5).
@@ -38,7 +43,7 @@ https://plnkr.co or similar (you can use this template as a starting point: http
 Angular version: X.Y.Z
 <!-- Check whether this is still an issue in the most recent Angular version -->
 
-Browser:
+Browser: <em>Check one of the following options with "x"</em>
 - [ ] Chrome (desktop) version XX
 - [ ] Chrome (Android) version XX
 - [ ] Chrome (iOS) version XX
