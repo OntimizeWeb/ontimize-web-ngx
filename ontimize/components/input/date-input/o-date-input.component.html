@@ -1,10 +1,10 @@
 <div fxLayout="row"  fxLayoutAlign="space-between center" [formGroup]="getFormGroup()" [mdTooltip]="tooltip" [mdTooltipPosition]="tooltipPosition"
     [mdTooltipShowDelay]="tooltipShowDelay">
     <md-form-field #innerInputContainer fxFlexFill>
-        <input mdInput #mdInputRef [mdDatepicker]="d" (dateChange)="innerOnChange($event)"
+        <input mdInput #mdInputRef [mdDatepicker]="d"
             [attr.id]="getAttribute()" [id]="getAttribute()" [formControlName]="getAttribute()"
             [placeholder]="placeHolder" [readonly]="isReadOnly"
-            [ngModel]="getValueAsDate()"
+            [ngModel]="getValueAsDate()" (ngModelChange)="onModelChange($event)"
             (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)"
             [mdDatepickerFilter]="filterDate">
         <!--<md-datepicker-toggle [disabled]="isReadOnly" mdSuffix [for]="d"></md-datepicker-toggle>-->

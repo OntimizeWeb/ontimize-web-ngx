@@ -16,8 +16,7 @@ import {
   DateAdapter,
   MdDatepicker,
   MdDatepickerInput,
-  MD_DATE_FORMATS,
-  MdDatepickerInputEvent
+  MD_DATE_FORMATS
 } from '@angular/material';
 
 import { OSharedModule } from '../../../shared';
@@ -211,11 +210,7 @@ export class ODateInputComponent extends OFormDataComponent {
     }
   }
 
-  innerOnChange(event: MdDatepickerInputEvent<any>) {
-    if (!this.value) {
-      this.value = new OFormValue();
-    }
-    this.ensureOFormValue(event.value);
+  onModelChange() {
     this.onChange.emit(event);
   }
 
