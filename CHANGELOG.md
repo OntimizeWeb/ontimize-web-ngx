@@ -5,7 +5,8 @@
 * **o-date-input**:  adding *'onChange'*, *'onFocus'* and *'onBlur'* outputs ([ba802aa](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ba802aa))
 * **oKeyboardListener**: creating directive *'oKeyboardListener'* having *'keyboardKeys'* input and *'onKeysPressed'* event output ([b410584](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b410584))
 * **o-form**: addding the feature of undo form inner components changes stored in the form cache. The *'undo-button'* (default=true) input controls the existence of a undo button in form toolbar. It also works with *'ctrl+z'* ([d026ae7](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d026ae7))
-
+* **o-table**: adding '*row-height*' input (small|medium|large) ([59cd9a2](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/59cd9a2))
+* **o-form**: undo feature allows to undo blocks of changes (instead of undoing changes characters one by one) ([2438a46](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2438a46))
 
 ### BREAKING CHANGES
 * **o-moment-pipe**: moment pipe class name has changed from '*oMomentPipe*' to '*OMomentPipe*', this will not affect to pipe use (still using '*oMoment*' selector) ([6ba54de](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6ba54de))

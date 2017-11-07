@@ -96,7 +96,8 @@ export class OFormCacheClass {
   undoLastChange(options?) {
     options = (options || {});
     //removing last element because it is the last changed value
-    const lastElement = this.valueChangesStack.pop();
+    // const lastElement = this.valueChangesStack.pop();
+    var lastElement = this.valueChangesStack[this.valueChangesStack.length - 1];
     // && !options.keyboardEvent
     if (lastElement) {
       const lastCacheValue = this.getCacheLastValue(lastElement.attr);
@@ -118,6 +119,7 @@ export class OFormCacheClass {
   }
 
   protected getCacheLastValue(attr: string): any {
+    this.updateChangesStack(attr);
     let result = null;
     for (let i = this.valueChangesStack.length - 1; i >= 0; i--) {
       const current = this.valueChangesStack[i];
@@ -127,6 +129,31 @@ export class OFormCacheClass {
       }
     }
     return result;
+  }
+
+  protected updateChangesStack(attr: string) {
+    let index: number = undefined;
+    for (let i = this.valueChangesStack.length - 1; i >= 0; i--) {
+      const current = this.valueChangesStack[i];
+      if (current.attr === attr) {
+        index = i;
+        break;
+      }
+    }
+    if (index !== undefined) {
+      for (let i = index; i >= 0; i--) {
+        const prev = this.valueChangesStack[i - 1];
+        const current = this.valueChangesStack[i];
+        if (current.attr === attr) {
+          this.valueChangesStack.splice(i, 1);
+          if (!prev || prev.attr === attr) {
+            continue;
+          } else {
+            break;
+          }
+        }
+      }
+    }
   }
 
   get isCacheStackEmpty(): boolean {
