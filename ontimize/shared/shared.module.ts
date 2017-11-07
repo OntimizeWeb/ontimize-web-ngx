@@ -8,6 +8,7 @@ import {
   ORealPipe,
   OTranslateModule,
   OMomentPipe,
+  OCurrencyPipe
 } from '../pipes';
 
 import { ONTIMIZE_DIRECTIVES } from '../config/o-directives';
@@ -24,6 +25,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     OIntegerPipe,
     ORealPipe,
     OMomentPipe,
+    OCurrencyPipe,
     ONTIMIZE_DIRECTIVES
   ],
   exports: [
@@ -36,6 +38,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     OIntegerPipe,
     ORealPipe,
     OMomentPipe,
+    OCurrencyPipe,
     ONTIMIZE_DIRECTIVES,
     OCustomMaterialModule
   ]
