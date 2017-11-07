@@ -24,6 +24,7 @@
           max-height: 28px;
         }
       }
+
       &.medium {
         .mat-header-row {
           min-height: 40px;
@@ -35,6 +36,7 @@
           max-height: 36px;
         }
       }
+
       &.large {
         .mat-header-row {
           min-height: 52px;
@@ -49,9 +51,27 @@
 
       .mat-header-row {
         line-height: 48px;
-        .mat-sort-header-arrow  {
-          margin-top: auto;
-          margin-bottom: auto;
+        .mat-header-cell {
+
+          &:not(.mat-sort-header-sorted) {
+            .mat-sort-header-button {
+              padding-right: 16px;
+            }
+          }
+
+          .mat-sort-header-button {
+            margin-left: auto;
+            margin-right: auto;
+            max-width: calc(100% - 48px);
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+          }
+
+          .mat-sort-header-arrow  {
+            margin-top: auto;
+            margin-bottom: auto;
+          }
         }
       }
 
