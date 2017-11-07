@@ -1,37 +1,47 @@
-
-<div fxLayoutAlign="center top" class="o-table-wrapper" fxLayout="column"  [style.display]="isVisible()? '' : 'none'" fxFill>
+<div fxLayoutAlign="center top" class="o-table-wrapper" [style.display]="isVisible()? '' : 'none'" fxFlex>
     <div class="o-table-container">
-        <div fxLayoutAlign="end center" *ngIf="oTableOptions.filter">
+        <div fxLayoutAlign="end" *ngIf="oTableOptions.filter" class="quickFilter">
             <md-form-field floatPlaceholder="never">
                 <input mdInput #filter placeholder="{{ 'filter' | oTranslate}}">
-                <span class="icon-btn" mdPrefix><i class="material-icons">search</i></span>
+                <span class="icon-btn" mdPrefix fxFlexLayout="flex-end">
+                    <i class="material-icons">search</i>
+                </span>
             </md-form-field>
-        </div>      
-        <md-table #table [dataSource]="dataSource" mdSort >
+            <button md-icon-button [mdMenuTriggerFor]="menu">
+                <md-icon>more_vert</md-icon>
+            </button>
+
+            <md-menu #menu="mdMenu" x-position="before">
+                <button *ngIf="exportButton || showExportOptions" (click)="exportAction('pdf')" md-menu-item> {{ 'TABLE.BUTTONS.EXPORT' | oTranslate }} </button>
+                <button *ngIf="columnsVisibilityButton" md-menu-item (click)="columnsVisibilityButtonAction()"> {{ 'TABLE.BUTTONS.COLVIS' | oTranslate }} </button>
+
+            </md-menu>
+        </div>
+        <md-table #table [dataSource]="dataSource" mdSort (cdkObserveContent)="projectContentChanged()">
             <!-- Generic column definition -->
             <ng-container *ngFor="let column of oTableOptions.columns" [cdkColumnDef]="column.name">
-                <div *ngIf="column.orderable">
-                    <md-header-cell *cdkHeaderCellDef md-sort-header>{{ column.title | oTranslate }}</md-header-cell>
-                </div>
 
-                <div *ngIf="!column.orderable">
-                    <md-header-cell *cdkHeaderCellDef>{{ column.title | oTranslate }}</md-header-cell>
-                </div>
-               <md-cell *cdkCellDef="let row">
-                    <div>{{row[column.name]}}</div>
+                <md-header-cell *ngIf="column.orderable" *cdkHeaderCellDef md-sort-header>{{ column.title | oTranslate }}</md-header-cell>
+
+                <md-header-cell *ngIf="!column.orderable" *cdkHeaderCellDef>{{ column.title | oTranslate }}</md-header-cell>
+
+                <md-cell *cdkCellDef="let row">
+                    <ng-container *ngIf="!column.renderer">{{row[column.name]}}</ng-container>
+                    <ng-template *ngIf="column.renderer" [ngTemplateOutlet]="column.renderer.templateref" [ngOutletContext]="{cellvalue: row[column.name]}"></ng-template>
                 </md-cell>
             </ng-container>
             <md-header-row *cdkHeaderRowDef="oTableOptions.visibleColumns"></md-header-row>
             <md-row *cdkRowDef="let row; columns: oTableOptions.visibleColumns;"> </md-row>
         </md-table>
 
-          <!--LOADING-->
+        <!--LOADING-->
         <div *ngIf="!daoTable.isLoadingResults">
             <md-progress-spinner mode="indeterminate" style="margin:0 auto;" *ngIf="daoTable.isLoadingResults"></md-progress-spinner>
         </div>
-        <div class="mat-row o-table-no-results" [style.display]="dataSource.resultsLength > 0 ? 'none' : ''"  *ngIf="daoTable.isLoadingResults"  fxLayoutAlign="center center">
-           {{'TABLE.EMPTY' | oTranslate}}
+        <div class="mat-row o-table-no-results" [style.display]="dataSource.resultsLength > 0 ? 'none' : ''" *ngIf="daoTable.isLoadingResults"
+            fxLayoutAlign="center center">
+            {{'TABLE.EMPTY' | oTranslate}}
         </div>
-      
+
     </div>
 </div>
