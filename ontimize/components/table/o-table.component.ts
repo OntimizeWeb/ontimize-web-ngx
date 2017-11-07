@@ -32,6 +32,17 @@ import { OTableColumnComponent } from './column/o-table-column.component';
 import { Util } from '../../util/util';
 import { OFormValue } from '../form/OFormValue';
 
+import {
+  
+    OTableCellRendererDateComponent,
+    OTableCellRendererBooleanComponent,
+    OTableCellRendererCurrencyComponent,
+    OTableCellRendererImageComponent,
+    OTableCellRendererIntegerComponent,
+    OTableCellRendererRealComponent
+  } from './column/cell-renderer/cell-renderer'
+  
+
 export const DEFAULT_INPUTS_O_TABLE = [
   ...OServiceComponent.DEFAULT_INPUTS_O_SERVICE_COMPONENT,
 
@@ -125,7 +136,10 @@ export class OTableOptions {
   visibleColumns: Array<any> = [];
   filter: boolean;
   filterCaseSensitive: boolean;
-  constructor() { }
+  constructor() { 
+    this.filter=true;
+    this.filterCaseSensitive = false;
+  }
 }
 
 
@@ -202,7 +216,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       this.initializeEventFilter();
     this.setDatasource();
   }
-
+  
 
   @InputConverter()
   set filterCaseSensitive(value: boolean) {
@@ -225,6 +239,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   protected pendingQuery: boolean = true;
   protected pendingQueryFilter = undefined;
 
+  protected setStaticData:boolean= false;
+
   ngOnInit() {
     this.initialize();
   }
@@ -237,6 +253,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     super.initialize();
     // get previous position
     this.state = this.localStorageService.getComponentStorage(this);
+    
     //initialize params of the table
     this.initializeParams();
 
@@ -274,6 +291,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
     } else {
       // columns with 'attr' are linked to service data
+      colDef.attr = column.attr;
       colDef.name = column.attr;
       colDef.title = column.title;
       if (typeof column.orderable !== "undefined") {
@@ -283,6 +301,11 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       if (typeof column.searchable !== "undefined") {
         colDef.searchable = column.searchable;
       }
+
+      if (typeof column.renderer !== "undefined") {
+        colDef.renderer = column.renderer;
+      }
+
       colDef.type = column.type
     }
     colDef.visible = (this.visibleColumns.indexOf(colDef.attr) !== -1);
@@ -302,6 +325,11 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     } else {
       this._oTableOptions.columns.push(colDef);
     }
+    /*
+    if(this.staticData && this.setStaticData){
+      this.setDatasource();
+      this.daoTable.setDataArray(this.staticData);
+    }*/
     
   }
 
@@ -495,24 +523,63 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       this.pendingQuery = false;
     }
   }
+
+  getAttributesValuesToQuery(): Object {
+    let columns = [];
+    this.colArray.forEach(col => {
+      // if (this.asyncLoadColumns.indexOf(col) === -1) {
+        columns.push(col);
+      // }
+    });
+    return columns;
+  }
+
+  getQueryArguments(filter: Object, ovrrArgs?: any): Array<any> {
+    let queryArguments = super.getQueryArguments(filter, ovrrArgs);
+    queryArguments[1] = this.getAttributesValuesToQuery();
+    return queryArguments;
+  }
+  
 }
 
 @NgModule({
   declarations: [
     OTableComponent,
     OTableColumnComponent,
+    OTableCellRendererDateComponent,
+    OTableCellRendererBooleanComponent,
+    OTableCellRendererImageComponent,
+    OTableCellRendererIntegerComponent,
+    OTableCellRendererRealComponent,
+    OTableCellRendererCurrencyComponent,
 
   ],
   imports: [
     CommonModule,
     OSharedModule,
     CdkTableModule,
-    MdSortModule
+    MdSortModule,
+
 
   ],
   exports: [
     OTableComponent,
     OTableColumnComponent,
+    OTableCellRendererDateComponent,
+    OTableCellRendererBooleanComponent,
+    OTableCellRendererImageComponent,
+    OTableCellRendererIntegerComponent,
+    OTableCellRendererRealComponent,
+    OTableCellRendererCurrencyComponent,
+  ],
+  entryComponents:[
+    OTableCellRendererDateComponent,
+    OTableCellRendererBooleanComponent,
+    OTableCellRendererImageComponent,
+    OTableCellRendererIntegerComponent,
+    OTableCellRendererRealComponent,
+    OTableCellRendererCurrencyComponent,
+    
   ]
 })
 export class OTableModule {

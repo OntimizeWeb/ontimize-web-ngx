@@ -1,4 +1,4 @@
-<div fxLayoutAlign="center top" class="o-table-wrapper" [style.display]="isVisible()? '' : 'none'" fxFlex>
+<div fxLayoutAlign="center top" class="o-table-wrapper" [style.display]="isVisible()? '' : 'none'" >
     <div class="o-table-container">
         <div fxLayoutAlign="end" *ngIf="oTableOptions.filter" class="quickFilter">
             <md-form-field floatPlaceholder="never">
@@ -17,14 +17,16 @@
 
             </md-menu>
         </div>
-        <md-table #table [dataSource]="dataSource" mdSort (cdkObserveContent)="projectContentChanged()" [class]="rowHeight">
+        <md-table #table [dataSource]="dataSource" mdSort (cdkObserveContent)="projectContentChanged()" >
             <!-- Generic column definition -->
             <ng-container *ngFor="let column of oTableOptions.columns" [cdkColumnDef]="column.name">
+                <ng-container *ngIf="column.orderable">
+                    <md-header-cell *cdkHeaderCellDef md-sort-header>{{ column.title | oTranslate }}</md-header-cell>
+                </ng-container>
 
-                <md-header-cell *ngIf="column.orderable" *cdkHeaderCellDef md-sort-header>{{ column.title | oTranslate }}</md-header-cell>
-
-                <md-header-cell *ngIf="!column.orderable" *cdkHeaderCellDef>{{ column.title | oTranslate }}</md-header-cell>
-
+                <ng-container *ngIf="!column.orderable">
+                    <md-header-cell *cdkHeaderCellDef>{{ column.title | oTranslate }}</md-header-cell>
+                </ng-container>
                 <md-cell *cdkCellDef="let row">
                     <ng-container *ngIf="!column.renderer">{{row[column.name]}}</ng-container>
                     <ng-template *ngIf="column.renderer" [ngTemplateOutlet]="column.renderer.templateref" [ngOutletContext]="{cellvalue: row[column.name]}"></ng-template>

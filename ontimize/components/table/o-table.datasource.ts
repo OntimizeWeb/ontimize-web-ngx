@@ -63,11 +63,14 @@ export class OTableDataSource extends DataSource<any> {
   }
 
   disconnect() { };
-
+  
   getStringSearchable(item) {
     return this.tableOptions.columns.map(function (v: OColumn, i, a) {
       if (typeof v.searchable != 'undefined' && v.searchable
         && typeof v.visible != 'undefined' && v.visible)
+        if(v.renderer && v.renderer.getCellData){
+          return v.renderer.getCellData(item[v.name])
+        }
         return item[v.name];
     }).join(" ");
   }
