@@ -17,7 +17,7 @@
 
             </md-menu>
         </div>
-        <md-table #table [dataSource]="dataSource" mdSort (cdkObserveContent)="projectContentChanged()">
+        <md-table #table [dataSource]="dataSource" mdSort (cdkObserveContent)="projectContentChanged()" [class]="rowHeight">
             <!-- Generic column definition -->
             <ng-container *ngFor="let column of oTableOptions.columns" [cdkColumnDef]="column.name">
 
