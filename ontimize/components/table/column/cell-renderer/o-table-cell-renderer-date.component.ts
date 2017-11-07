@@ -1,6 +1,6 @@
 import { Component, Injector, Inject, forwardRef, ViewChild, TemplateRef } from '@angular/core';
 
-import { OTableColumnComponent } from '../o-table-column.component'
+import { OTableColumnComponent } from '../o-table-column.component';
 import { OTableCellRenderer } from './o-table-cell-renderer';
 
 export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_DATE = [
@@ -35,9 +35,8 @@ export class OTableCellRendererDateComponent extends OTableCellRenderer {
     protected injector: Injector) {
     super();
     this.tableColumn = this.injector.get(OTableColumnComponent);
-    this.tableColumn.type = "date";
+    this.tableColumn.type = 'date';
     this.tableColumn.registerRenderer(this);
-
 
     this.setComponentPipe();
   }
@@ -52,9 +51,10 @@ export class OTableCellRendererDateComponent extends OTableCellRenderer {
     //Add 'implements OnInit' to the class.
     this.pipeArguments = {
       format:this.format
-    }
+    };
+
     this.tableColumn.registerRenderer(this);
-  };
+  }
 
 
 }
