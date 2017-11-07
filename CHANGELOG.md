@@ -6,10 +6,9 @@
 * **oKeyboardListener**: creating directive *'oKeyboardListener'* having *'keyboardKeys'* input and *'onKeysPressed'* event output ([b410584](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b410584))
 * **o-form**: addding the feature of undo form inner components changes stored in the form cache. The *'undo-button'* (default=true) input controls the existence of a undo button in form toolbar. It also works with *'ctrl+z'* ([d026ae7](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d026ae7))
 * **o-table**:
-* adding '*row-height*' input (small|medium|large) ([59cd9a2](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/59cd9a2))*
-* adding predefined renderers *'o-table-renderer-integer'* ([628aacf](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/628aacf)), *'o-table-renderer-real'* ([12477e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/12477e)), *'o-table-renderer-currency'* [cfc1889](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/cfc1889)), *'o-table-renderer-date'* [b978c45](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b978c45)),*'o-table-renderer-boolean'* [17da1e5](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/17da1e5)),*'o-table-renderer-image'* [17da1e5](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/17da1e5)) *
+  * adding '*row-height*' input (small|medium|large) ([59cd9a2](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/59cd9a2))*
+  * adding predefined renderers *'o-table-renderer-integer'* ([628aacf](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/628aacf)), *'o-table-renderer-real'* ([12477e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/12477e)), *'o-table-renderer-currency'* [cfc1889](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/cfc1889)), *'o-table-renderer-date'* [b978c45](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b978c45)),*'o-table-renderer-boolean'* [17da1e5](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/17da1e5)),*'o-table-renderer-image'* [17da1e5](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/17da1e5)) *
 
-b978c45
 * **o-form**: undo feature allows to undo blocks of changes (instead of undoing changes characters one by one) ([2438a46](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2438a46))
 
 ### BREAKING CHANGES
