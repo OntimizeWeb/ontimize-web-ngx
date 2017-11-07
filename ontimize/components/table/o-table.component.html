@@ -1,4 +1,4 @@
-<div fxLayoutAlign="center top" class="o-table-wrapper" [style.display]="isVisible()? '' : 'none'" >
+<div fxLayoutAlign="center top" class="o-table-wrapper" [style.display]="isVisible()? '' : 'none'">
     <div class="o-table-container">
         <div fxLayoutAlign="end" *ngIf="oTableOptions.filter" class="quickFilter">
             <md-form-field floatPlaceholder="never">
@@ -12,12 +12,11 @@
             </button>
 
             <md-menu #menu="mdMenu" x-position="before">
-                <button *ngIf="exportButton || showExportOptions" (click)="exportAction('pdf')" md-menu-item> {{ 'TABLE.BUTTONS.EXPORT' | oTranslate }} </button>
-                <button *ngIf="columnsVisibilityButton" md-menu-item (click)="columnsVisibilityButtonAction()"> {{ 'TABLE.BUTTONS.COLVIS' | oTranslate }} </button>
-
+                <button *ngIf="exportButton || showExportOptions" (click)="onExportButtonClicked()" md-menu-item> {{ 'TABLE.BUTTONS.EXPORT' | oTranslate }} </button>
+                <button *ngIf="columnsVisibilityButton" md-menu-item (click)="onChangeColumnsVisibilityClicked()"> {{ 'TABLE.BUTTONS.COLVIS' | oTranslate }} </button>
             </md-menu>
         </div>
-        <md-table #table [dataSource]="dataSource" mdSort (cdkObserveContent)="projectContentChanged()" >
+        <md-table #table [dataSource]="dataSource" mdSort [class]="rowHeight">
             <!-- Generic column definition -->
             <ng-container *ngFor="let column of oTableOptions.columns" [cdkColumnDef]="column.name">
                 <ng-container *ngIf="column.orderable">
@@ -28,7 +27,7 @@
                     <md-header-cell *cdkHeaderCellDef>{{ column.title | oTranslate }}</md-header-cell>
                 </ng-container>
                 <md-cell *cdkCellDef="let row">
-                    <ng-container *ngIf="!column.renderer">{{row[column.name]}}</ng-container>
+                    <ng-container *ngIf="!column.renderer">{{ row[column.name] }}</ng-container>
                     <ng-template *ngIf="column.renderer" [ngTemplateOutlet]="column.renderer.templateref" [ngOutletContext]="{cellvalue: row[column.name]}"></ng-template>
                 </md-cell>
             </ng-container>

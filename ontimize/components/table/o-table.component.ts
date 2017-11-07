@@ -22,7 +22,7 @@ import { OntimizeService } from '../../services';
 import { OFormComponent } from '../form/o-form.component';
 import { OSharedModule } from '../../shared';
 import { OServiceComponent } from '../o-service-component.class';
-import { CdkTableModule } from "@angular/cdk/table";
+import { CdkTableModule } from '@angular/cdk/table';
 import { Observable } from 'rxjs/Observable';
 import { MdSort, MdSortModule, MdTabGroup, MdTab } from '@angular/material';
 
@@ -33,15 +33,14 @@ import { Util } from '../../util/util';
 import { OFormValue } from '../form/OFormValue';
 
 import {
-  
-    OTableCellRendererDateComponent,
-    OTableCellRendererBooleanComponent,
-    OTableCellRendererCurrencyComponent,
-    OTableCellRendererImageComponent,
-    OTableCellRendererIntegerComponent,
-    OTableCellRendererRealComponent
-  } from './column/cell-renderer/cell-renderer'
-  
+  OTableCellRendererDateComponent,
+  OTableCellRendererBooleanComponent,
+  OTableCellRendererCurrencyComponent,
+  OTableCellRendererImageComponent,
+  OTableCellRendererIntegerComponent,
+  OTableCellRendererRealComponent
+} from './column/cell-renderer/cell-renderer';
+
 
 export const DEFAULT_INPUTS_O_TABLE = [
   ...OServiceComponent.DEFAULT_INPUTS_O_SERVICE_COMPONENT,
@@ -128,7 +127,6 @@ export class OColumn {
   searchable: boolean;
   visible: boolean;
   renderer: any;
-  constructor() { }
 }
 
 export class OTableOptions {
@@ -136,8 +134,8 @@ export class OTableOptions {
   visibleColumns: Array<any> = [];
   filter: boolean;
   filterCaseSensitive: boolean;
-  constructor() { 
-    this.filter=true;
+  constructor() {
+    this.filter = true;
     this.filterCaseSensitive = false;
   }
 }
@@ -183,7 +181,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   public static TYPE_DESC_NAME = 'desc';
   public static COLUMNS_ALIAS_SEPARATOR = ':';
 
-  
+
   @InputConverter()
   selectAllCheckbox: boolean = true;
   @InputConverter()
@@ -211,21 +209,18 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   @InputConverter()
   set quickFilter(value: boolean) {
     this._oTableOptions.filter = value;
-
-    if (value)
+    if (value) {
       this.initializeEventFilter();
+    }
     this.setDatasource();
   }
-  
+
 
   @InputConverter()
   set filterCaseSensitive(value: boolean) {
     this._oTableOptions.filterCaseSensitive = value;
     this.setDatasource();
-
   }
-
-
 
   public daoTable: OTableDao | null;
   public dataSource: OTableDataSource | null;
@@ -239,24 +234,24 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   protected pendingQuery: boolean = true;
   protected pendingQueryFilter = undefined;
 
-  protected setStaticData:boolean= false;
+  protected setStaticData: boolean = false;
+  protected asyncLoadColumns: Array<any> = [];
 
   ngOnInit() {
     this.initialize();
   }
 
   /**
-   * Method what initialize vars and configuration 
+   * Method what initialize vars and configuration
    */
   initialize(): any {
 
     super.initialize();
     // get previous position
     this.state = this.localStorageService.getComponentStorage(this);
-    
+
     //initialize params of the table
     this.initializeParams();
-
   }
 
   /**
@@ -266,18 +261,18 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   getDataToStore() {
     return {
       'sort-columns': this.sort.active + ':' + this.sort.direction,
-      'filter': this.filter ? this.filter.nativeElement.value : ""
-    }
+      'filter': this.filter ? this.filter.nativeElement.value : ''
+    };
   }
 
   /**
    * Store all columns and properties in var columnsArray
-   * @param column 
+   * @param column
    */
 
   public registerColumn(column: any) {
     let colDef: OColumn = new OColumn();
-    colDef.type = 'string',
+    colDef.type = 'string';
     colDef.className = 'o-table-column ' + (column.class || '') + ' ';
     colDef.orderable = true;
     colDef.searchable = true;
@@ -288,31 +283,28 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       colDef.name = column;
       colDef.attr = column;
       colDef.title = column;
-
     } else {
       // columns with 'attr' are linked to service data
       colDef.attr = column.attr;
       colDef.name = column.attr;
       colDef.title = column.title;
-      if (typeof column.orderable !== "undefined") {
+      if (typeof column.orderable !== 'undefined') {
         colDef.orderable = column.orderable;
       }
-
-      if (typeof column.searchable !== "undefined") {
+      if (typeof column.searchable !== 'undefined') {
         colDef.searchable = column.searchable;
       }
-
-      if (typeof column.renderer !== "undefined") {
+      if (typeof column.renderer !== 'undefined') {
         colDef.renderer = column.renderer;
       }
-
-      colDef.type = column.type
+      colDef.type = column.type;
     }
     colDef.visible = (this.visibleColumns.indexOf(colDef.attr) !== -1);
-
+    if (column.asyncLoad) {
+      this.asyncLoadColumns.push(column.attr);
+    }
     //find column definition by name
     if (typeof (column.attr) !== 'undefined') {
-
       var alreadyExisting = this._oTableOptions.columns.filter(function (existingColumn) {
         return existingColumn.name === column.attr;
       });
@@ -330,7 +322,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       this.setDatasource();
       this.daoTable.setDataArray(this.staticData);
     }*/
-    
+
   }
 
   /**
@@ -355,7 +347,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
           this.dataSource.filter = filterValue;
         }
       }
-    })
+    });
   }
   /**
    * get/set parametres to component
@@ -384,14 +376,14 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
     //if not declare visible-columns then visible-columns is all columns
     if (this.visibleColumns) {
-      this.visibleColumns.split(";").map(x => this._oTableOptions.visibleColumns.push(x));
+      this.visibleColumns.split(';').map(x => this._oTableOptions.visibleColumns.push(x));
     } else {
       this.visibleColumns = this.columns;
-      this.columns.split(";").map(x => this._oTableOptions.visibleColumns.push(x));
+      this.columns.split(';').map(x => this._oTableOptions.visibleColumns.push(x));
     }
 
     if (this.columns) {
-      this.columns.split(";").map(x => this.registerColumn(x));
+      this.columns.split(';').map(x => this.registerColumn(x));
     }
     //parse input sort-columns
     let sortColumnsArray = [];
@@ -478,9 +470,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   ngAfterViewInit() {
-    if (this._oTableOptions.filter)
+    if (this._oTableOptions.filter) {
       this.initializeEventFilter();
-
+    }
   }
 
 
@@ -492,7 +484,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   /**
    * This method manages the call to the service
    * @param parentItem it is defined if its called from a form
-   * @param ovrrArgs 
+   * @param ovrrArgs
    */
   queryData(parentItem: any = undefined, ovrrArgs?: any) {
     //if exit tab and not is active then waiting call queryData
@@ -527,9 +519,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   getAttributesValuesToQuery(): Object {
     let columns = [];
     this.colArray.forEach(col => {
-      // if (this.asyncLoadColumns.indexOf(col) === -1) {
+      if (this.asyncLoadColumns.indexOf(col) === -1) {
         columns.push(col);
-      // }
+      }
     });
     return columns;
   }
@@ -539,7 +531,20 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     queryArguments[1] = this.getAttributesValuesToQuery();
     return queryArguments;
   }
-  
+
+  onExportButtonClicked() {
+    console.log('onExportButtonClicked');
+  }
+
+  onChangeColumnsVisibilityClicked() {
+    console.log('onChangeColumnsVisibilityClicked');
+  }
+
+  onMdTableContentChanged() {
+    console.log('onMdTableContentChanged');
+  }
+
+
 }
 
 @NgModule({
@@ -551,16 +556,13 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     OTableCellRendererImageComponent,
     OTableCellRendererIntegerComponent,
     OTableCellRendererRealComponent,
-    OTableCellRendererCurrencyComponent,
-
+    OTableCellRendererCurrencyComponent
   ],
   imports: [
     CommonModule,
     OSharedModule,
     CdkTableModule,
-    MdSortModule,
-
-
+    MdSortModule
   ],
   exports: [
     OTableComponent,
@@ -572,14 +574,13 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     OTableCellRendererRealComponent,
     OTableCellRendererCurrencyComponent,
   ],
-  entryComponents:[
+  entryComponents: [
     OTableCellRendererDateComponent,
     OTableCellRendererBooleanComponent,
     OTableCellRendererImageComponent,
     OTableCellRendererIntegerComponent,
     OTableCellRendererRealComponent,
-    OTableCellRendererCurrencyComponent,
-    
+    OTableCellRendererCurrencyComponent
   ]
 })
 export class OTableModule {

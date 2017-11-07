@@ -1,19 +1,16 @@
 import { Component, OnInit, Injector, forwardRef, Inject, ComponentFactoryResolver, ComponentFactory, ViewChild, ViewContainerRef } from '@angular/core';
 import { InputConverter } from '../../../decorators';
 import {
-
   OTableCellRendererDateComponent,
   OTableCellRendererCurrencyComponent,
   OTableCellRendererImageComponent,
   OTableCellRendererIntegerComponent,
   OTableCellRendererRealComponent,
   OTableCellRendererBooleanComponent
-
 } from './cell-renderer/cell-renderer';
 
 import { OTableComponent } from '../o-table.component';
-import { Util } from '../../../util/util'
-
+import { Util } from '../../../util/util';
 
 export const DEFAULT_INPUTS_O_TABLE_COLUMN = [
 
@@ -48,7 +45,10 @@ export const DEFAULT_INPUTS_O_TABLE_COLUMN = [
   'class',
 
   // break-word [no|yes|true|false]: content column can show in multiple lines if it not catch in the cell. Default: no and if content of the cell overflow.
-  'breakWord:break-word'
+  'breakWord:break-word',
+
+  // async-load [no|yes|true|false]: asynchronous query. Default: no
+  'asyncLoad : async-load'
 ];
 
 
@@ -69,7 +69,6 @@ export const DEFAULT_INPUTS_O_TABLE_COLUMN = [
 })
 export class OTableColumnComponent implements OnInit {
 
-
   public type: string;
   public renderer: any;
   public attr: string;
@@ -82,9 +81,9 @@ export class OTableColumnComponent implements OnInit {
   protected format: string;
   /*input renderer integer */
   protected grouping: any = true;
-  protected thousandSeparator: string = ",";
+  protected thousandSeparator: string = ',';
   /*input renderer real */
-  protected decimalSeparator: string = ".";
+  protected decimalSeparator: string = '.';
   protected decimalDigits: number = 2;
   /*input renderer currency */
   protected currencySymbol: string;
@@ -95,7 +94,7 @@ export class OTableColumnComponent implements OnInit {
   protected trueValue: string;
   protected falseValueType: string;
   protected falseValue: string;
-  protected dataType: string = "boolean";
+  protected dataType: string = 'boolean';
 
   /*input image */
   protected imageType: string;
@@ -104,6 +103,8 @@ export class OTableColumnComponent implements OnInit {
 
   @InputConverter()
   protected breakWord: boolean = false;
+  @InputConverter()
+  protected asyncLoad: boolean = false;
 
   protected table: OTableComponent;
 
@@ -115,12 +116,9 @@ export class OTableColumnComponent implements OnInit {
     private resolver: ComponentFactoryResolver,
     protected injector: Injector) {
     this.table = table;
-
   }
 
-
   public ngOnInit() {
-    
     let factory: ComponentFactory<any>;
     this.orderable = Util.parseBoolean(this.orderable, true);
     this.searchable = Util.parseBoolean(this.searchable, true);
@@ -145,8 +143,6 @@ export class OTableColumnComponent implements OnInit {
         case 'image':
           factory = this.resolver.resolveComponentFactory(OTableCellRendererImageComponent);
           break;
-
-
       }
 
       if (factory) {
@@ -188,21 +184,14 @@ export class OTableColumnComponent implements OnInit {
             this.renderer.avatar = this.avatar;
             this.renderer.emptyImage = this.emptyImage;
             break;
-
-
         }
 
       }
     }
     this.table.registerColumn(this);
-
   }
-
-
 
   public registerRenderer(renderer: any) {
     this.renderer = renderer;
   }
-
-
 }
