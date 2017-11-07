@@ -2,7 +2,7 @@ import { Component, Inject, forwardRef, Injector, TemplateRef, ViewChild } from 
 
 
 //import { InputConverter } from '../../../../decorators';
-import { OTableColumnComponent } from '../o-table-column.component'
+import { OTableColumnComponent } from '../o-table-column.component';
 
 export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_IMAGE = [
 
@@ -37,8 +37,7 @@ export class OTableCellRendererImageComponent {
 
   public imageType: string;
   public emptyImage: string;
-  protected _source: string
-  
+  protected _source: string;
 
   @ViewChild('templateref', { read: TemplateRef }) public templateref: TemplateRef<any>;
 
@@ -46,7 +45,7 @@ export class OTableCellRendererImageComponent {
     protected injector: Injector) {
 
     this.tableColumn = this.injector.get(OTableColumnComponent);
-    this.tableColumn.type = "image"
+    this.tableColumn.type = 'image';
     this.tableColumn.registerRenderer(this);
   }
 
@@ -65,7 +64,7 @@ export class OTableCellRendererImageComponent {
       default:
         this._source = this.emptyImage;
         break;
-    };
+    }
     return this._source;
   }
 

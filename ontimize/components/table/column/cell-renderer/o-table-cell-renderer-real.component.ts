@@ -33,7 +33,7 @@ export class OTableCellRendererRealComponent extends OTableCellRendererIntegerCo
 
   protected tableColumn: OTableColumnComponent;
 
-  protected decimalSeparator: string = ".";
+  protected decimalSeparator: string = '.';
   protected decimalDigits: number = 2;
   protected numberService: NumberService;
 
@@ -47,7 +47,7 @@ export class OTableCellRendererRealComponent extends OTableCellRendererIntegerCo
     protected injector: Injector) {
     super(tableColumn, injector);
     this.tableColumn = this.injector.get(OTableColumnComponent);
-    this.tableColumn.type = "real";
+    this.tableColumn.type = 'real';
     this.numberService = this.injector.get(NumberService);
 
     if (typeof (this.decimalDigits) === 'undefined') {
@@ -56,20 +56,19 @@ export class OTableCellRendererRealComponent extends OTableCellRendererIntegerCo
     this.setComponentPipe();
   }
 
-  
   setComponentPipe() {
     this.componentPipe = new ORealPipe(this.injector);
   }
 
   ngOnInit() {
     this.pipeArguments = {
-      decimalDigits:this.decimalDigits,
-      decimalSeparator:this.decimalSeparator,
+      decimalDigits: this.decimalDigits,
+      decimalSeparator: this.decimalSeparator,
       grouping: this.grouping,
       thousandSeparator: this.thousandSeparator
     };
     this.tableColumn.registerRenderer(this);
   }
 
- 
+
 }
