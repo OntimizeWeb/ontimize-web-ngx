@@ -6,4 +6,27 @@
   $background: map-get($theme, background);
   $foreground: map-get($theme, foreground);
 
+  .o-table {
+    .mat-header-row {
+      background-color: mat-color($background, status-bar, 0.9);
+      .mat-header-cell {
+        color: mat-color($foreground, text);
+      }
+    }
+    .mat-row {
+      &:hover {
+        cursor: pointer;
+        background-color: mat-color($foreground, base, 0.18);
+      }
+      .mat-cell {
+        color: mat-color($foreground, secondary-text);
+      }
+      // .o-table-column-action {
+      //   .o-table-row-action {
+      //     color: mat-color($foreground, secondary-text);
+      //   }
+      // }
+    }
+  }
+
 }
