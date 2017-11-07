@@ -32,7 +32,8 @@
                 </md-cell>
             </ng-container>
             <md-header-row *cdkHeaderRowDef="oTableOptions.visibleColumns"></md-header-row>
-            <md-row *cdkRowDef="let row; columns: oTableOptions.visibleColumns;"> </md-row>
+            <md-row *cdkRowDef="let row; columns: oTableOptions.visibleColumns;"
+                (click)="handleClick(row)" (dblclick)="handleDoubleClick(row)"> </md-row>
         </md-table>
 
         <!--LOADING-->

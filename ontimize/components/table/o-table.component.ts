@@ -11,7 +11,8 @@ import {
   Optional,
   NgModule,
   ViewEncapsulation,
-  ViewChild
+  ViewChild,
+  EventEmitter
 } from '@angular/core';
 
 import { InputConverter } from '../../decorators';
@@ -30,6 +31,8 @@ import { OTableDataSource } from './o-table.datasource';
 import { OTableDao } from './o-table.dao';
 import { OTableColumnComponent } from './column/o-table-column.component';
 import { Util } from '../../util/util';
+import { ObservableWrapper } from '../../util/async';
+
 import { OFormValue } from '../form/OFormValue';
 
 import {
@@ -108,12 +111,13 @@ export const DEFAULT_INPUTS_O_TABLE = [
 
 export const DEFAULT_OUTPUTS_O_TABLE = [
   'onClick',
-  'onRowSelected',
-  'onRowDeselected',
-  'onRowDeleted',
-  'onDoubleClick',
-  'onTableDataLoaded',
-  'onPaginatedTableDataLoaded'
+  'onDoubleClick'
+  // ,
+  // 'onRowSelected',
+  // 'onRowDeselected',
+  // 'onRowDeleted',
+  // 'onTableDataLoaded',
+  // 'onPaginatedTableDataLoaded'
 ];
 
 
@@ -181,7 +185,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   public static TYPE_DESC_NAME = 'desc';
   public static COLUMNS_ALIAS_SEPARATOR = ':';
 
-
   @InputConverter()
   selectAllCheckbox: boolean = true;
   @InputConverter()
@@ -236,6 +239,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   protected setStaticData: boolean = false;
   protected asyncLoadColumns: Array<any> = [];
+
+  public onClick: EventEmitter<any> = new EventEmitter();
+  public onDoubleClick: EventEmitter<any> = new EventEmitter();
 
   ngOnInit() {
     this.initialize();
@@ -544,7 +550,19 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     console.log('onMdTableContentChanged');
   }
 
+  handleClick(item: any) {
+    ObservableWrapper.callEmit(this.onClick, item);
+    if (this.oenabled && (this.detailMode === OServiceComponent.DETAIL_MODE_CLICK)) {
+      this.viewDetail(item);
+    }
+  }
 
+  handleDoubleClick(item: any) {
+    ObservableWrapper.callEmit(this.onDoubleClick, item);
+    if (this.oenabled && (this.detailMode === OServiceComponent.DETAIL_MODE_DBLCLICK)) {
+      this.viewDetail(item);
+    }
+  }
 }
 
 @NgModule({
