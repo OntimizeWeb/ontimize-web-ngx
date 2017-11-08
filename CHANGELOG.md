@@ -8,7 +8,8 @@
 * **o-table**:
   * adding '*row-height*' input (small|medium|large) ([59cd9a2](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/59cd9a2))
   * adding predefined renderers *'o-table-renderer-integer'* ([628aacf](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/628aacf)), *'o-table-renderer-real'* ([12477e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/12477e)), *'o-table-renderer-currency'* [cfc1889](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/cfc1889)), *'o-table-renderer-date'* [b978c45](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b978c45)),*'o-table-renderer-boolean'* [17da1e5](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/17da1e5)),*'o-table-renderer-image'* [17da1e5](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/17da1e5)) *
-* **o-table-column**: adding *'async-load'* input ([e075e0e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e075e0e))
+* **o-table-column**: adding *'async-load'* input ([e075e0e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e075e0e)) ([f077876](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f077876))
+
 * **o-table**: adding '*onClick*' and '*onDoubleClick*' outputs and detail mode navigation ([d68ae72](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d68ae72))
 
 
