@@ -243,6 +243,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   protected asyncLoadColumns: Array<any> = [];
   protected asyncLoadSubscriptions: Object = {};
 
+  protected querySubscription: Subscription;
+
   public onClick: EventEmitter<any> = new EventEmitter();
   public onDoubleClick: EventEmitter<any> = new EventEmitter();
 
@@ -257,7 +259,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
   }
 
-
   ngOnChanges(changes: { [propName: string]: SimpleChange }) {
     // TODO
   }
@@ -270,7 +271,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
    * Method what initialize vars and configuration
    */
   initialize(): any {
-
     super.initialize();
     // get previous position
     this.state = this.localStorageService.getComponentStorage(this);
@@ -278,7 +278,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     // initialize params of the table
     this.initializeParams();
   }
-
 
   protected initTableAfterViewInit() {
     let queryArguments = this.getQueryArguments({});
@@ -295,6 +294,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     if (this.mdTabGroupChangeSubscription) {
       this.mdTabGroupChangeSubscription.unsubscribe();
     }
+    if (this.querySubscription) {
+      this.querySubscription.unsubscribe();
+    }
     Object.keys(this.asyncLoadSubscriptions).forEach(idx => {
       if (this.asyncLoadSubscriptions[idx]) {
         this.asyncLoadSubscriptions[idx].unsubscribe();
@@ -305,7 +307,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   /**
    * Method update store localstorage, call of the ILocalStorage
    */
-
   getDataToStore() {
     return {
       'sort-columns': this.sort.active + ':' + this.sort.direction,
@@ -317,7 +318,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
    * Store all columns and properties in var columnsArray
    * @param column
    */
-
   public registerColumn(column: any) {
     let colDef: OColumn = new OColumn();
     colDef.type = 'string';
@@ -517,7 +517,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       return;
     }
 
-
     if (this.pendingQuery) {
       let filter = {};
       if ((this.dataParentKeys.length > 0) && (typeof (parentItem) !== 'undefined')) {
@@ -534,7 +533,10 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       }
 
       let queryArguments = this.getQueryArguments(filter, ovrrArgs);
-      this.daoTable.getQuery(queryArguments);
+      if (this.querySubscription) {
+        this.querySubscription.unsubscribe();
+      }
+      this.querySubscription = this.daoTable.getQuery(queryArguments);
       this.pendingQuery = false;
     }
   }
@@ -578,6 +580,45 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     ObservableWrapper.callEmit(this.onDoubleClick, item);
     if (this.oenabled && (this.detailMode === OServiceComponent.DETAIL_MODE_DBLCLICK)) {
       this.viewDetail(item);
+    }
+  }
+
+  getTrackByFunction(): Function {
+    const self = this;
+    return (index: number, item: any) => {
+      if (self.asyncLoadColumns.length) {
+        self.queryRowAsyncData(index, item);
+      }
+    };
+  }
+
+  queryRowAsyncData(rowIndex: number, rowData: any) {
+    let kv = {};
+    for (let k = 0; k < this.keysArray.length; ++k) {
+      let key = this.keysArray[k];
+      kv[key] = rowData[key];
+    }
+    let av = [];
+    for (let i = 0; i < this.asyncLoadColumns.length; i++) {
+      av.push(this.asyncLoadColumns[i]);
+    }
+    const columnQueryArgs = [kv, av, this.entity];
+    let queryMethodName = this.pageable ? this.paginatedQueryMethod : this.queryMethod;
+    if (this.dataService && (queryMethodName in this.dataService) && this.entity) {
+      const self = this;
+      if (this.asyncLoadSubscriptions[rowIndex]) {
+        this.asyncLoadSubscriptions[rowIndex].unsubscribe();
+      }
+      this.asyncLoadSubscriptions[rowIndex] = this.dataService[queryMethodName].apply(this.dataService, columnQueryArgs).subscribe(res => {
+        if (res.code === 0) {
+          let data = undefined;
+          if (Util.isArray(res.data) && res.data.length === 1) {
+            data = res.data[0];
+          } else if (Util.isObject(res.data)) {
+            data = res.data;
+          }
+        }
+      });
     }
   }
 }

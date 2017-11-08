@@ -16,7 +16,7 @@
                 <button *ngIf="columnsVisibilityButton" md-menu-item (click)="onChangeColumnsVisibilityClicked()"> {{ 'TABLE.BUTTONS.COLVIS' | oTranslate }} </button>
             </md-menu>
         </div>
-        <md-table #table [dataSource]="dataSource" mdSort [class]="rowHeight">
+        <md-table #table [trackBy]="getTrackByFunction()" [dataSource]="dataSource" mdSort [class]="rowHeight">
             <!-- Generic column definition -->
             <ng-container *ngFor="let column of oTableOptions.columns" [cdkColumnDef]="column.name">
                 <ng-container *ngIf="column.orderable">
@@ -32,8 +32,8 @@
                 </md-cell>
             </ng-container>
             <md-header-row *cdkHeaderRowDef="oTableOptions.visibleColumns"></md-header-row>
-            <md-row *cdkRowDef="let row; columns: oTableOptions.visibleColumns;"
-                (click)="handleClick(row)" (dblclick)="handleDoubleClick(row)"> </md-row>
+            <md-row *cdkRowDef="let row; columns: oTableOptions.visibleColumns;" (click)="handleClick(row)" (dblclick)="handleDoubleClick(row)">
+            </md-row>
         </md-table>
 
         <!--LOADING-->
