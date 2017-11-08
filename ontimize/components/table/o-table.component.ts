@@ -25,6 +25,7 @@ import { OSharedModule } from '../../shared';
 import { OServiceComponent } from '../o-service-component.class';
 import { CdkTableModule } from '@angular/cdk/table';
 import { Observable } from 'rxjs/Observable';
+import { Subscription } from 'rxjs/Subscription';
 import { MdSort, MdSortModule, MdTabGroup, MdTab } from '@angular/material';
 
 import { OTableDataSource } from './o-table.datasource';
@@ -233,18 +234,36 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   protected mdTabGroupContainer: MdTabGroup;
   protected mdTabContainer: MdTab;
+  protected mdTabGroupChangeSubscription: Subscription;
 
   protected pendingQuery: boolean = true;
   protected pendingQueryFilter = undefined;
 
   protected setStaticData: boolean = false;
   protected asyncLoadColumns: Array<any> = [];
+  protected asyncLoadSubscriptions: Object = {};
 
   public onClick: EventEmitter<any> = new EventEmitter();
   public onDoubleClick: EventEmitter<any> = new EventEmitter();
 
   ngOnInit() {
     this.initialize();
+  }
+
+  ngAfterViewInit() {
+    this.initTableAfterViewInit();
+    if (this._oTableOptions.filter) {
+      this.initializeEventFilter();
+    }
+  }
+
+
+  ngOnChanges(changes: { [propName: string]: SimpleChange }) {
+    // TODO
+  }
+
+  ngOnDestroy() {
+    this.destroy();
   }
 
   /**
@@ -256,8 +275,31 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     // get previous position
     this.state = this.localStorageService.getComponentStorage(this);
 
-    //initialize params of the table
+    // initialize params of the table
     this.initializeParams();
+  }
+
+
+  protected initTableAfterViewInit() {
+    let queryArguments = this.getQueryArguments({});
+    this.setDatasource();
+    if (this.staticData) {
+      this.daoTable.setDataArray(this.staticData);
+    } else if (this.queryOnInit) {
+      this.queryData(queryArguments);
+    }
+  }
+
+  destroy() {
+    super.destroy();
+    if (this.mdTabGroupChangeSubscription) {
+      this.mdTabGroupChangeSubscription.unsubscribe();
+    }
+    Object.keys(this.asyncLoadSubscriptions).forEach(idx => {
+      if (this.asyncLoadSubscriptions[idx]) {
+        this.asyncLoadSubscriptions[idx].unsubscribe();
+      }
+    });
   }
 
   /**
@@ -355,6 +397,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       }
     });
   }
+
   /**
    * get/set parametres to component
    */
@@ -432,7 +475,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       * table component when attached to DOM.
       */
       var self = this;
-      this.mdTabGroupContainer.selectChange.subscribe((evt) => {
+      this.mdTabGroupChangeSubscription = this.mdTabGroupContainer.selectChange.subscribe((evt) => {
         var interval = setInterval(function () { timerCallback(evt.tab); }, 100);
         function timerCallback(tab: MdTab) {
           if (tab && tab.content.isAttached) {
@@ -447,18 +490,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
       });
     }
-
-    let queryArguments = this.getQueryArguments({});
     let queryMethodName = this.pageable ? this.paginatedQueryMethod : this.queryMethod;
     this.daoTable = new OTableDao(this.injector, this.service, this.entity, queryMethodName);
     this.setDatasource();
-    if (this.staticData) {
-      this.daoTable.setDataArray(this.staticData);
-    } else if (this.queryOnInit) {
-      this.queryData(queryArguments);
-    }
-
-
   }
 
   setDatasource() {
@@ -469,23 +503,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     /*  this.dataSource.resultsLength = 0;*/
 
   }
-
-  ngOnDestroy() {
-    // TODO
-    console.debug();
-  }
-
-  ngAfterViewInit() {
-    if (this._oTableOptions.filter) {
-      this.initializeEventFilter();
-    }
-  }
-
-
-  ngOnChanges(changes: { [propName: string]: SimpleChange }) {
-    // TODO
-  }
-
 
   /**
    * This method manages the call to the service
