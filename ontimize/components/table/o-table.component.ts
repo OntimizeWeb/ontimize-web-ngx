@@ -30,6 +30,7 @@ import { MdSort, MdSortModule, MdTabGroup, MdTab } from '@angular/material';
 
 import { OTableDataSource } from './o-table.datasource';
 import { OTableDao } from './o-table.dao';
+import { OTableButtonComponent } from './header/o-table-button.component';
 import { OTableColumnComponent } from './column/o-table-column.component';
 import { Util } from '../../util/util';
 import { ObservableWrapper } from '../../util/async';
@@ -137,12 +138,10 @@ export class OColumn {
 export class OTableOptions {
   columns: Array<OColumn> = [];
   visibleColumns: Array<any> = [];
-  filter: boolean;
-  filterCaseSensitive: boolean;
-  constructor() {
-    this.filter = true;
-    this.filterCaseSensitive = false;
-  }
+  filter: boolean = true;
+  filterCaseSensitive: boolean = false;
+  buttons: Array<OTableButtonComponent> = [];
+
 }
 
 
@@ -158,6 +157,7 @@ export class OTableOptions {
   encapsulation: ViewEncapsulation.None,
   host: {
     '[class.o-table]': 'true',
+    '[class.ontimize-table]': 'true'
   }
 })
 
@@ -200,6 +200,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   showExportOptions: boolean = true;
   @InputConverter()
   columnsVisibilityButton: boolean = true;
+  @InputConverter()
+  showTableButtonsText: boolean = true;
 
   protected _oTableOptions: OTableOptions = new OTableOptions();
 
@@ -225,9 +227,15 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     this._oTableOptions.filterCaseSensitive = value;
     this.setDatasource();
   }
+  @InputConverter()
+  insertButton: boolean = true;
+
+  @InputConverter()
+  refreshButton: boolean = true;
 
   public daoTable: OTableDao | null;
   public dataSource: OTableDataSource | null;
+
   protected visibleColumns: string;
   protected sortColumns: string;
   protected dataParentKeys: Array<Object>;
@@ -244,11 +252,11 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   protected asyncLoadSubscriptions: Object = {};
 
   protected querySubscription: Subscription;
-
   protected finishQuerSubscription: boolean = false;
-
+  //protected headerButtons: Array<OTableButtonComponent>;
   public onClick: EventEmitter<any> = new EventEmitter();
   public onDoubleClick: EventEmitter<any> = new EventEmitter();
+
 
   ngOnInit() {
     this.initialize();
@@ -375,6 +383,13 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   }
 
+
+  public registerHeaderButton(button: OTableButtonComponent) {
+
+    if (this.oTableOptions) {
+      this.oTableOptions.buttons.push(button);
+    }
+  }
   /**
    * initialize event to filtering the columns, when change value then filter the data
    */
@@ -571,6 +586,48 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     console.log('onMdTableContentChanged');
   }
 
+  add() {
+    let route = [];
+    if (this.detailFormRoute) {
+      route.push(this.detailFormRoute);
+    }
+    route.push('new');
+    // adding parent-keys info...
+    if ((this.dataParentKeys.length > 0) && (typeof (this.parentItem) !== 'undefined')) {
+      let pKeys = {};
+      for (let k = 0; k < this.dataParentKeys.length; ++k) {
+        let parentKey = this.dataParentKeys[k];
+        if (this.parentItem.hasOwnProperty(parentKey['alias'])) {
+          let currentData = this.parentItem[parentKey['alias']];
+          if (currentData instanceof OFormValue) {
+            currentData = currentData.value;
+          }
+          pKeys[parentKey['name']] = currentData;
+        }
+      }
+      if (Object.keys(pKeys).length > 0) {
+        let encoded = Util.encodeParentKeys(pKeys);
+        route.push({ 'pk': encoded });
+      }
+    }
+    let extras = { relativeTo: this.actRoute };
+    this.router.navigate(
+      route,
+      extras
+    ).catch(err => {
+      console.error(err.message);
+    });
+  }
+
+  public refresh() {
+    this.reloadData();
+  }
+
+  public reloadData() {
+    this.finishQuerSubscription = false;
+    let queryArguments = this.getQueryArguments({});
+    this.daoTable.getQuery(queryArguments);
+  }
   handleClick(item: any) {
     ObservableWrapper.callEmit(this.onClick, item);
     if (this.oenabled && (this.detailMode === OServiceComponent.DETAIL_MODE_CLICK)) {
@@ -630,6 +687,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       });
     }
   }
+
+
 }
 
 @NgModule({
@@ -641,7 +700,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     OTableCellRendererImageComponent,
     OTableCellRendererIntegerComponent,
     OTableCellRendererRealComponent,
-    OTableCellRendererCurrencyComponent
+    OTableCellRendererCurrencyComponent,
+    OTableButtonComponent
   ],
   imports: [
     CommonModule,
@@ -651,13 +711,14 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   ],
   exports: [
     OTableComponent,
+    OTableButtonComponent,
     OTableColumnComponent,
     OTableCellRendererDateComponent,
     OTableCellRendererBooleanComponent,
     OTableCellRendererImageComponent,
     OTableCellRendererIntegerComponent,
     OTableCellRendererRealComponent,
-    OTableCellRendererCurrencyComponent,
+    OTableCellRendererCurrencyComponent
   ],
   entryComponents: [
     OTableCellRendererDateComponent,
