@@ -1,6 +1,6 @@
 
 import { Component, forwardRef, Inject, Injector, ViewChild, TemplateRef } from '@angular/core';
-import { OTableColumnComponent } from '../o-table-column.component'
+import { OTableColumnComponent } from '../o-table-column.component';
 import { OTableCellRenderer } from './o-table-cell-renderer';
 import {
     OTableCellRendererRealComponent
@@ -38,15 +38,15 @@ export class OTableCellRendererCurrencyComponent extends OTableCellRenderer {
 
     protected currencySymbol: string;
     protected currencySymbolPosition: string;
-    protected decimalSeparator: string = ".";
+    protected decimalSeparator: string = '.';
     protected decimalDigits: number = 2;
     protected grouping: boolean = true;
-    protected thousandSeparator: string = ",";
+    protected thousandSeparator: string = ',';
 
     protected currencyService: CurrencyService;
     protected tableColumn: OTableColumnComponent;
 
-    protected componentPipe: OCurrencyPipe
+    protected componentPipe: OCurrencyPipe;
     protected pipeArguments: ICurrencyPipeArgument;
     @ViewChild('templateref', { read: TemplateRef }) public templateref: TemplateRef<any>;
 
@@ -54,7 +54,7 @@ export class OTableCellRendererCurrencyComponent extends OTableCellRenderer {
         protected injector: Injector) {
         super();
         this.tableColumn = this.injector.get(OTableColumnComponent);
-        this.tableColumn.type = "currency";
+        this.tableColumn.type = 'currency';
         this.currencyService = this.injector.get(CurrencyService);
         this.setComponentPipe();
     }
@@ -66,15 +66,15 @@ export class OTableCellRendererCurrencyComponent extends OTableCellRenderer {
     ngOnInit() {
         //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
         //Add 'implements OnInit' to the class.
-        if (typeof this.currencySymbol === "undefined") {
+        if (typeof this.currencySymbol === 'undefined') {
             this.currencySymbol = this.currencyService.symbol;
         }
-        if (typeof this.currencySymbolPosition === "undefined") {
+        if (typeof this.currencySymbolPosition === 'undefined') {
             this.currencySymbolPosition = this.currencyService.symbolPosition;
         }
         this.pipeArguments = {
-            currencySimbol:this.currencySymbol,
-            currencySymbolPosition:this.currencySymbolPosition,
+            currencySimbol: this.currencySymbol,
+            currencySymbolPosition: this.currencySymbolPosition,
             decimalDigits: this.decimalDigits,
             decimalSeparator: this.decimalSeparator,
             grouping: this.grouping,
@@ -84,4 +84,4 @@ export class OTableCellRendererCurrencyComponent extends OTableCellRenderer {
 
         this.tableColumn.registerRenderer(this);
     }
-}  
+}

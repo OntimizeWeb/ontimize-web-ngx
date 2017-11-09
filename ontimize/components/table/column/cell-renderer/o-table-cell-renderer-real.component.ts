@@ -1,6 +1,6 @@
 import { Component, Inject, forwardRef, Injector, TemplateRef, ViewChild } from '@angular/core';
-import { OTableCellRendererIntegerComponent, DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_INTEGER } from './o-table-cell-renderer-integer.component'
-import { OTableColumnComponent } from '../o-table-column.component'
+import { OTableCellRendererIntegerComponent, DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_INTEGER } from './o-table-cell-renderer-integer.component';
+import { OTableColumnComponent } from '../o-table-column.component';
 
 import { NumberService } from '../../../../services';
 import {
