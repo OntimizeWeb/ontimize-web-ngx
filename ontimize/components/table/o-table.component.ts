@@ -587,14 +587,14 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   getTrackByFunction(): Function {
     const self = this;
-    
+
     return (index: number, item: any) => {
       if (self.asyncLoadColumns.length && !this.finishQuerSubscription) {
         self.queryRowAsyncData(index, item);
         if (index === (this.daoTable.data.length - 1)) {
           self.finishQuerSubscription = true;
         }
-      }else{
+      } else {
         return item;
       }
     };

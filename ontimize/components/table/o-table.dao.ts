@@ -82,6 +82,6 @@ export class OTableDao {
     if (index !== null) {
       Object.assign(this.data[index], value);
     }
-  
+
   }
 }
