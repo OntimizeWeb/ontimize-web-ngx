@@ -7,7 +7,7 @@
 * **o-form**: addding the feature of undo form inner components changes stored in the form cache. The *'undo-button'* (default=true) input controls the existence of a undo button in form toolbar. It also works with *'ctrl+z'* ([d026ae7](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d026ae7))
 * **o-table**:
   * adding '*row-height*' input (small|medium|large) ([59cd9a2](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/59cd9a2))
-  * adding predefined renderers *'o-table-renderer-integer'* ([628aacf](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/628aacf)), *'o-table-renderer-real'* ([12477e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/12477e)), *'o-table-renderer-currency'* ([cfc1889](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/cfc1889)), *'o-table-renderer-date'* ([b978c45](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b978c45)),*'o-table-renderer-boolean'* ([17da1e5](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/17da1e5))  ([258b2b0d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/258b2b0d)),*'o-table-renderer-image'* ([17da1e5](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/17da1e5)) 
+  * adding predefined renderers *'o-table-renderer-integer'* ([628aacf](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/628aacf)), *'o-table-renderer-real'* ([12477e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/12477e)), *'o-table-renderer-currency'* ([cfc1889](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/cfc1889)), *'o-table-renderer-date'* ([b978c45](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b978c45)),*'o-table-renderer-boolean'* ([17da1e5](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/17da1e5))  ([258b2b0d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/258b2b0d)),*'o-table-renderer-image'* ([17da1e5](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/17da1e5))
 * **o-table-column**: adding *'async-load'* input ([e075e0e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e075e0e)) ([f077876](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f077876)) ([258b2b0d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/258b2b0d))
 
 * **o-table**: adding '*onClick*' and '*onDoubleClick*' outputs and detail mode navigation ([d68ae72](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d68ae72))
@@ -19,6 +19,8 @@
 * **o-moment-pipe**: moment pipe class name has changed from '*oMomentPipe*' to '*OMomentPipe*', this will not affect to pipe use (still using '*oMoment*' selector) ([6ba54de](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6ba54de))
 * **o-currency-pipe**: new currency pipe class name '*oCurrencyPipe*', this selector is '*oCurrency*' and the arguments must extend ICurrencyPipeArguments) ([0a87fe0](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0a87fe0))
 
+### Bug Fixes
+* **o-combo, o-list-picker**: Fixing value ensuring bug (comparing 0 value as undefined) ([c6a23f3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c6a23f3))
 
 ## 2.1.0-rc.0 (2017-11-02)
 
