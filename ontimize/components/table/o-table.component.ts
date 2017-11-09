@@ -245,6 +245,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   protected querySubscription: Subscription;
 
+  protected finishQuerSubscription: boolean = false;
+
   public onClick: EventEmitter<any> = new EventEmitter();
   public onDoubleClick: EventEmitter<any> = new EventEmitter();
 
@@ -585,9 +587,15 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   getTrackByFunction(): Function {
     const self = this;
+    
     return (index: number, item: any) => {
-      if (self.asyncLoadColumns.length) {
+      if (self.asyncLoadColumns.length && !this.finishQuerSubscription) {
         self.queryRowAsyncData(index, item);
+        if (index === (this.daoTable.data.length - 1)) {
+          self.finishQuerSubscription = true;
+        }
+      }else{
+        return item;
       }
     };
   }
@@ -605,7 +613,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     const columnQueryArgs = [kv, av, this.entity];
     let queryMethodName = this.pageable ? this.paginatedQueryMethod : this.queryMethod;
     if (this.dataService && (queryMethodName in this.dataService) && this.entity) {
-      const self = this;
+      //const self = this;
       if (this.asyncLoadSubscriptions[rowIndex]) {
         this.asyncLoadSubscriptions[rowIndex].unsubscribe();
       }
@@ -617,6 +625,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
           } else if (Util.isObject(res.data)) {
             data = res.data;
           }
+          this.daoTable.setAsincronColumn(data, rowData);
         }
       });
     }

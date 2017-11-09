@@ -68,4 +68,20 @@ export class OTableDao {
     return Observable.of(data);
 
   }
+
+  setAsincronColumn(value: Array<any>, rowData: any) {
+    //Object.assign(this.data[rowIndex], value);
+    let index = null;
+    for (let i = 0; i < this.data.length; i++) {
+      if (this.data[i] === rowData) {
+        index = i;
+        break;
+      }
+    }
+
+    if (index !== null) {
+      Object.assign(this.data[index], value);
+    }
+  
+  }
 }
