@@ -1,7 +1,6 @@
 import { Component, Injector, Inject, forwardRef, ViewChild, TemplateRef } from '@angular/core';
 import { OTableColumnComponent } from '../o-table-column.component';
 import { OTranslateService } from '../../../../services/o-translate.service';
-import { OTableCellRenderer } from './o-table-cell-renderer';
 
 
 export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_BOOLEAN = [
@@ -14,7 +13,7 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_BOOLEAN = [
   // false-value [string]: false value. Default: no value.
   'falseValue: false-value',
   // false-value [number|boolean|string]: cellData value type. Default: boolean
-  'dataType: data-type'
+  'booleanType: boolean-type'
 ];
 
 @Component({
@@ -24,7 +23,7 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_BOOLEAN = [
     ...DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_BOOLEAN
   ]
 })
-export class OTableCellRendererBooleanComponent  extends OTableCellRenderer {
+export class OTableCellRendererBooleanComponent {
 
   public static DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_BOOLEAN = DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_BOOLEAN;
 
@@ -33,7 +32,7 @@ export class OTableCellRendererBooleanComponent  extends OTableCellRenderer {
   public falseValueType: string;
   public falseValue: string;
 
-  protected dataType: string = 'boolean';
+  protected booleanType: string = 'boolean';
   protected translateService: OTranslateService;
   protected tableColumn: OTableColumnComponent;
 
@@ -42,7 +41,6 @@ export class OTableCellRendererBooleanComponent  extends OTableCellRenderer {
 
   constructor( @Inject(forwardRef(() => OTableColumnComponent)) tableColumn: OTableColumnComponent,
     protected injector: Injector) {
-    super();
     this.tableColumn = this.injector.get(OTableColumnComponent);
     this.tableColumn.type = 'boolean';
     this.translateService = this.injector.get(OTranslateService);
@@ -51,7 +49,7 @@ export class OTableCellRendererBooleanComponent  extends OTableCellRenderer {
 
   public hasCellDataTrueValue(cellData: any): boolean {
     let comparisonValue: boolean = undefined;
-    switch (this.dataType) {
+    switch (this.booleanType) {
       case 'string':
         const stringVal = cellData.toString().toLowerCase();
         comparisonValue = (stringVal === 'true' || stringVal === 'yes');
