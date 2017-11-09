@@ -1,20 +1,42 @@
 <div fxLayoutAlign="center top" class="o-table-wrapper" [style.display]="isVisible()? '' : 'none'">
     <div class="o-table-container">
-        <div fxLayoutAlign="end" *ngIf="oTableOptions.filter" class="quickFilter">
-            <md-form-field floatPlaceholder="never">
-                <input mdInput #filter placeholder="{{ 'filter' | oTranslate}}">
-                <span class="icon-btn" mdPrefix fxFlexLayout="flex-end">
-                    <i class="material-icons">search</i>
-                </span>
-            </md-form-field>
-            <button md-icon-button [mdMenuTriggerFor]="menu">
-                <md-icon>more_vert</md-icon>
-            </button>
+        <div class="toolbar" fxLayout="row" fxLayoutAlign="space-between center">
+            <div class ="buttons">
+                <button md-button *ngIf="insertButton" (click)="add()" [ngClass]="{'generic-action generic-action-add':true, 'hidden-action-text':!showTableButtonsText}">
+                    <ng-container *ngIf="showTableButtonsText">{{'TABLE.BUTTONS.ADD' | oTranslate}} </ng-container>
+                </button>
+                <button md-button *ngIf="refreshButton" (click)="reloadData()" [ngClass]="{'generic-action generic-action-refresh':true, 'hidden-action-text':!showTableButtonsText}">
+                    <ng-container  *ngIf="showTableButtonsText">
+                        {{'TABLE.BUTTONS.REFRESH' | oTranslate}}
+                    </ng-container>
+                </button>
+                
+                
+                <button md-button *ngFor="let headerButton of oTableOptions.buttons"
+                        attr.data-icon="{{ headerButton.icon}}"
+                        [ngClass]="{'custom-generic-action':true,'hidden-action-text':!showTableButtonsText}"
+                        (click)="headerButton.onClick.emit()">
+                    {{headerButton.olabel | oTranslate}}
+                   
+                </button>
+                    <!--data-icon="'icon-'{{headerButton.getIcon()}}" -->
+            </div>
+            <div  *ngIf="oTableOptions.filter" class="quickFilter">
+                <md-form-field floatPlaceholder="never">
+                    <input mdInput #filter placeholder="{{ 'filter' | oTranslate}}">
+                    <span class="icon-btn" mdPrefix fxFlexLayout="flex-end">
+                        <i class="material-icons">search</i>
+                    </span>
+                </md-form-field>
+                <button md-icon-button [mdMenuTriggerFor]="menu">
+                    <md-icon>more_vert</md-icon>
+                </button>
 
-            <md-menu #menu="mdMenu" x-position="before">
-                <button *ngIf="exportButton || showExportOptions" (click)="onExportButtonClicked()" md-menu-item> {{ 'TABLE.BUTTONS.EXPORT' | oTranslate }} </button>
-                <button *ngIf="columnsVisibilityButton" md-menu-item (click)="onChangeColumnsVisibilityClicked()"> {{ 'TABLE.BUTTONS.COLVIS' | oTranslate }} </button>
-            </md-menu>
+                <md-menu #menu="mdMenu" x-position="before">
+                    <button *ngIf="exportButton || showExportOptions" (click)="onExportButtonClicked()" md-menu-item> {{ 'TABLE.BUTTONS.EXPORT' | oTranslate }} </button>
+                    <button *ngIf="columnsVisibilityButton" md-menu-item (click)="onChangeColumnsVisibilityClicked()"> {{ 'TABLE.BUTTONS.COLVIS' | oTranslate }} </button>
+                </md-menu>
+            </div>
         </div>
         <md-table #table [trackBy]="getTrackByFunction()" [dataSource]="dataSource" mdSort [class]="rowHeight">
             <!-- Generic column definition -->

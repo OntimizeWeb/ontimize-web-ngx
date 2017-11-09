@@ -178,211 +178,222 @@
       }
     }
 
-    // .dt-buttons {
+    .toolbar{
+      margin: 4px 0px;
 
-    //   margin: 0 10px 0 4px;
+      .buttons {
 
-    //   a {
-    //     text-decoration: none;
-    //     outline: none;
-    //     cursor: pointer;
-    //     font-size: 14px;
-    //     display: inline-block;
-    //     margin: 0;
-    //   }
+        margin: 0 10px 0 4px;
 
-    //   a:not(.hidden-action-text) {
-    //     padding-right: 8px;
-    //   }
-    //   a:not(.hidden-action-text):not(.disabled):hover {
-    //     border-radius: 4px;
-    //   }
+        button {
+          text-decoration: none;
+          outline: none;
+          cursor: pointer;
+          font-size: 14px;
+          display: inline-block;
+          margin: 0;
+        }
 
-    //   a.hidden-action-text:not(.disabled):hover {
-    //     border-radius: 50%;
-    //     //padding: 0;
-    //   }
+        button:not(.hidden-action-text) {
+          padding-right: 8px;
+        }
+        button:not(.hidden-action-text):not(.disabled):hover {
+          border-radius: 4px;
+        }
 
-    //   .dt-button {
+        button.hidden-action-text:not(.disabled):hover {
+          border-radius: 50%;
+          //padding: 0;
+        }
 
-    //     &.active {
-    //       &::after {
-    //         border-radius: 50%;
-    //       }
+        a:not(.hidden-action-text),  a:not(.hidden-action-text):not(.disabled):hover {
+          border: 1px solid #242424;
+          border-radius: 6px;
+          margin: 0 8px;
 
-    //       & > span {
-    //         font-weight: bold;
-    //       }
-    //     }
+        }
+    
 
-    //     &.disabled {
-    //       cursor: not-allowed;
-    //     }
+          .mat-button {
 
-    //     &.custom-generic-action {
-    //       &::after {
-    //         font-family: 'Material Icons';
-    //         content: attr(data-icon);
-    //         font-size: 24px;
-    //         line-height: 40px;
-    //         padding: 8px;
-    //         font-feature-settings:'liga'
+            &.active {
+              &::after {
+                border-radius: 50%;
+              }
 
-    //       }
-    //     }
+              & > span {
+                font-weight: bold;
+              }
+            }
 
-    //     &.generic-action,
-    //     &.custom-generic-action {
-    //       & > span {
-    //         float: right;
-    //         line-height: 40px;
-    //       }
-    //       &.hidden-action-text > span {
-    //         display: none;
-    //       }
-    //     }
+            &.disabled {
+              cursor: not-allowed;
+            }
 
-    //     &.generic-action {
-    //     &.generic-action-export {
-    //       display: none;
-    //     }
+            &.custom-generic-action {
+              &::after {
+                font-family: 'Material Icons';
+                content: attr(data-icon);
+                font-size: 24px;
+                line-height: 40px;
+                padding: 8px;
+                font-feature-settings:'liga'
 
-    //     &.generic-action-export::before {
-    //       font-family: 'Material Icons';
-    //       content: "file_download";
-    //       font-size: 24px;
-    //       margin: 0px 5px;
-    //       line-height: 40px;
-    //       padding: 5px;
-    //       font-feature-settings:'liga';
-    //     }
+              }
+            }
 
-    //     &.generic-action-group::before {
-    //       font-family: 'Material Icons';
-    //       content: "view_list";
-    //       font-size: 24px;
-    //       margin: 0px 5px;
-    //       line-height: 40px;
-    //       padding: 5px;
-    //       font-feature-settings:'liga';
-    //     }
+            &.generic-action,
+            &.custom-generic-action {
+              & > span {
+                float: right;
+                line-height: 40px;
+              }
+              &.hidden-action-text > span {
+                display: none;
+              }
+            }
 
-    //     &.generic-action-resize::before {
-    //       font-family: 'Material Icons';
-    //       content: "compare_arrows";
-    //       font-size: 24px;
-    //       margin: 0px 5px;
-    //       line-height: 40px;
-    //       padding: 5px;
-    //       font-feature-settings:'liga';
-    //     }
+            &.generic-action {
+            &.generic-action-export {
+              display: none;
+            }
 
-    //     &.generic-action-view-column::before {
-    //       font-family: 'Material Icons';
-    //       content: "view_column";
-    //       font-size: 24px;
-    //       margin: 0px 5px;
-    //       line-height: 40px;
-    //       padding: 5px;
-    //       font-feature-settings:'liga';
-    //     }
+            &.generic-action-export::before {
+              font-family: 'Material Icons';
+              content: "file_download";
+              font-size: 24px;
+              margin: 0px 5px;
+              line-height: 40px;
+              padding: 5px;
+              font-feature-settings:'liga';
+            }
 
-    //     &.generic-action-filter::before {
-    //       font-family: 'Material Icons';
-    //       content: "filter_list";
-    //       font-size: 24px;
-    //       margin: 0px 5px;
-    //       line-height: 40px;
-    //       padding: 5px;
-    //       font-feature-settings:'liga';
-    //     }
+            &.generic-action-group::before {
+              font-family: 'Material Icons';
+              content: "view_list";
+              font-size: 24px;
+              margin: 0px 5px;
+              line-height: 40px;
+              padding: 5px;
+              font-feature-settings:'liga';
+            }
 
-    //     &.generic-action-refresh::before {
-    //       font-family: 'Material Icons';
-    //       content: "autorenew";
-    //       font-size: 24px;
-    //       line-height: 40px;
-    //       padding: 8px;
-    //       font-feature-settings:'liga';
-    //     }
+            &.generic-action-resize::before {
+              font-family: 'Material Icons';
+              content: "compare_arrows";
+              font-size: 24px;
+              margin: 0px 5px;
+              line-height: 40px;
+              padding: 5px;
+              font-feature-settings:'liga';
+            }
 
-    //     &.generic-action-delete::before {
-    //       font-family: 'Material Icons';
-    //       content: "delete";
-    //       font-size: 24px;
-    //       line-height: 40px;
-    //       padding: 8px;
-    //       font-feature-settings:'liga';
-    //     }
+            &.generic-action-view-column::before {
+              font-family: 'Material Icons';
+              content: "view_column";
+              font-size: 24px;
+              margin: 0px 5px;
+              line-height: 40px;
+              padding: 5px;
+              font-feature-settings:'liga';
+            }
 
-    //     &.generic-action-add::before {
-    //       font-family: 'Material Icons';
-    //       content: "add";
-    //       font-size: 24px;
-    //       line-height: 40px;
-    //       padding: 8px;
-    //       font-feature-settings:'liga';
-    //     }
+            &.generic-action-filter::before {
+              font-family: 'Material Icons';
+              content: "filter_list";
+              font-size: 24px;
+              margin: 0px 5px;
+              line-height: 40px;
+              padding: 5px;
+              font-feature-settings:'liga';
+            }
 
-    //     }
+            &.generic-action-refresh::before {
+              font-family: 'Material Icons';
+              content: "autorenew";
+              font-size: 24px;
+              line-height: 40px;
+              padding: 8px;
+              font-feature-settings:'liga';
+            }
 
-    //     &.export-action {
-    //       display: none;
+            &.generic-action-delete::before {
+              font-family: 'Material Icons';
+              content: "delete";
+              font-size: 24px;
+              line-height: 40px;
+              padding: 8px;
+              font-feature-settings:'liga';
+            }
 
-    //       &.buttons-copy > span,
-    //       &.buttons-print > span,
-    //       &.buttons-pdf > span {
-    //         display: none;
-    //       }
+            &.generic-action-add::before {
+              font-family: 'Material Icons';
+              content: "add";
+              font-size: 24px;
+              line-height: 40px;
+              padding: 8px;
+              font-feature-settings:'liga';
+            }
+          }
+        }
+/*
+        &.export-action {
+          display: none;
 
-    //       &.buttons-excel > span,
-    //       &.buttons-csv > span {
-    //         font-weight: bold;
-    //         margin: 0px 5px;
-    //         vertical-align: 6px;
-    //       }
+          &.buttons-copy > span,
+          &.buttons-print > span,
+          &.buttons-pdf > span {
+            display: none;
+          }
 
-    //       &.buttons-copy::after {
-    //         font-family: 'Material Icons';
-    //         content: "content_copy";
-    //         font-size: 24px;
-    //         margin: 0px 5px;
-    //         line-height: 40px;
-    //         padding: 5px;
-    //         font-feature-settings:'liga'
-    //       }
+          &.buttons-excel > span,
+          &.buttons-csv > span {
+            font-weight: bold;
+            margin: 0px 5px;
+            vertical-align: 6px;
+          }
 
-    //       &.buttons-print::after {
-    //         font-family: 'Material Icons';
-    //         content: "print";
-    //         font-size: 24px;
-    //         margin: 0px 5px;
-    //         line-height: 40px;
-    //         padding: 5px;
-    //         font-feature-settings:'liga';
-    //       }
+          &.buttons-copy::after {
+            font-family: 'Material Icons';
+            content: "content_copy";
+            font-size: 24px;
+            margin: 0px 5px;
+            line-height: 40px;
+            padding: 5px;
+            font-feature-settings:'liga'
+          }
 
-    //       &.buttons-pdf::after {
-    //         font-family: 'Material Icons';
-    //         content: "picture_as_pdf";
-    //         font-size: 24px;
-    //         margin: 0px 5px;
-    //         line-height: 40px;
-    //         padding: 5px;
-    //         font-feature-settings:'liga'
-    //       }
+          &.buttons-print::after {
+            font-family: 'Material Icons';
+            content: "print";
+            font-size: 24px;
+            margin: 0px 5px;
+            line-height: 40px;
+            padding: 5px;
+            font-feature-settings:'liga';
+          }
 
-    //     }
+          &.buttons-pdf::after {
+            font-family: 'Material Icons';
+            content: "picture_as_pdf";
+            font-size: 24px;
+            margin: 0px 5px;
+            line-height: 40px;
+            padding: 5px;
+            font-feature-settings:'liga'
+          }
 
-    //     &.buttons-columnVisibility {
-    //       display: none;
-    //       float: left;
-    //       margin: 10px 4px 10px 8px;
-    //       font-size: 14px;
-    //     }
+        }
 
-    //   }
+        &.buttons-columnVisibility {
+          display: none;
+          float: left;
+          margin: 10px 4px 10px 8px;
+          font-size: 14px;
+        }
+*/
+      }
 
-    // }
+    }
   }
 }
