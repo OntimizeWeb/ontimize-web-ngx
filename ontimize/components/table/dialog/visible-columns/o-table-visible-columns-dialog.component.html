@@ -1,0 +1,17 @@
+<span md-dialog-title>{{ 'TABLE.BUTTONS.COLVIS' | oTranslate }}</span>
+
+<md-dialog-content class="o-table-vcd-content">
+  <md-list [dragula]="'o-table-vcd-list'" [dragulaModel]="columns">
+    <md-list-item *ngFor="let column of columns" (click)="onClickColumn(column)" class="o-table-vcd-listitem">
+      <md-icon md-list-icon>drag_handle</md-icon>
+      <span md-line>{{ column.name }}</span>
+      <md-icon *ngIf="column.visible">visibility</md-icon>
+      <md-icon *ngIf="!column.visible">visibility_off</md-icon>
+    </md-list-item>
+  </md-list>
+</md-dialog-content>
+
+<md-dialog-actions fxLayoutAlign="end center">
+  <button md-button [md-dialog-close]="false">{{ 'CANCEL' | oTranslate }}</button>
+  <button md-button [md-dialog-close]="true">{{ 'ACCEPT' | oTranslate }}</button>
+</md-dialog-actions>

@@ -44,6 +44,46 @@
   visibility: hidden;
 }
 
+// o-table ->  dialog -> visible columns list
+// Dom element with 'gu-mirror' class is placed outside the list
+.o-table-vcd-listitem.gu-mirror {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  box-sizing: border-box;
+  height: 48px;
+  padding: 0 16px;
+  position: fixed;
+  z-index: 9999;
+  pointer-events: none;
+
+  .mat-list-item-content {
+    width: 100%;
+    display: flex;
+    box-sizing: border-box;
+    flex-direction: row;
+    align-items: center;
+
+    .mat-list-icon {
+      width: 24px;
+      height: 24px;
+      font-size: 24px;
+      box-sizing: content-box;
+      border-radius: 50%;
+      padding: 4px;
+    }
+
+    .mat-list-text {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      box-sizing: border-box;
+      overflow: hidden;
+      padding: 0 16px;
+    }
+  }
+}
+
 $steps: 6;
 @mixin padding-margin-x {
   @for $i from 1 through $steps {

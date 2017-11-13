@@ -28,7 +28,8 @@
     "aot": "npm run init-common && npm run aot:compile && npm run end-common"
   },
   "dependencies": {
-    "moment": "2.18.1"
+    "moment": "2.18.1",
+    "ng2-dragula": "1.5.0"
   },
   "peerDependencies": {
     "@angular/flex-layout": "2.0.0-beta.9",

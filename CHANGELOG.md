@@ -1,5 +1,8 @@
 ## 2.1.0-rc.1
 
+### DEPENDENCIES ###
+* `ontimize-web-ngx` now depends on `ng2-dragula` as a dependency.
+
 ### Features
 * **o-list-picker**: adding *'onFocus'* and *'onBlur'* outputs ([afdd027](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/afdd027))
 * **o-date-input**:  adding *'onChange'*, *'onFocus'* and *'onBlur'* outputs ([ba802aa](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ba802aa))
@@ -10,6 +13,7 @@
   * adding predefined renderers *'o-table-renderer-integer'* ([628aacf](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/628aacf)), *'o-table-renderer-real'* ([12477e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/12477e)), *'o-table-renderer-currency'* ([cfc1889](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/cfc1889)), *'o-table-renderer-date'* ([b978c45](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b978c45)),*'o-table-renderer-boolean'* ([17da1e5](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/17da1e5))  ([258b2b0d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/258b2b0d)),*'o-table-renderer-image'* ([17da1e5](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/17da1e5))
   * adding '*onClick*' and '*onDoubleClick*' outputs and detail mode navigation ([d68ae72](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d68ae72))
   * adding predefined buttons in the toolbar (add & refresh) and optional buttons (using *o-table-button* selector) ([a0010e2](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a0010e2))
+  * adding the capability of selecting visible columns and their order ([d3dd172](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d3dd172c2bc1a3ebb92546449a9d5f461afcc125))
 * **o-table-column**: adding *'async-load'* input ([e075e0e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e075e0e)) ([f077876](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f077876)) ([258b2b0d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/258b2b0d))
 * **o-form**: undo feature allows to undo blocks of changes (instead of undoing changes characters one by one) ([2438a46](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2438a46))
 
