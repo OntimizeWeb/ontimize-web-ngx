@@ -403,3 +403,16 @@
     }
   }
 }
+
+.o-table-menu  {
+  .o-table-option-active {
+    md-icon{
+      display:initial
+    }
+  }
+ 
+  md-icon{
+    display:none
+  }
+
+}

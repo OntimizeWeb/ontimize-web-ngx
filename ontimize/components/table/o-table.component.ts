@@ -194,6 +194,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   public static TYPE_ASC_NAME = 'asc';
   public static TYPE_DESC_NAME = 'desc';
   public static COLUMNS_ALIAS_SEPARATOR = ':';
+  public static O_TABLE_OPTION_ACTIVE_CLASS = 'o-table-option-active';
 
   @InputConverter()
   selectAllCheckbox: boolean = true;
@@ -729,10 +730,26 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
   }
 
-  onShowsSelects() {
+  onShowsSelects(event?) {
+    if (event) {
+      this.toggleButtonActiveClass(event);
+    }
+
     this.oTableOptions.selectColumn.visible = true;
     if (this._oTableOptions.visibleColumns && this._oTableOptions.visibleColumns[0] !== OTableComponent.NAME_COLUMN_SELECT) {
       this._oTableOptions.visibleColumns.unshift(OTableComponent.NAME_COLUMN_SELECT);
+    }
+  }
+
+  public toggleButtonActiveClass(event) {
+    if (!event.currentTarget) {
+      return;
+    }
+    let classList = event.currentTarget.classList;
+    if (classList.contains(OTableComponent.O_TABLE_OPTION_ACTIVE_CLASS)) {
+      classList.remove(OTableComponent.O_TABLE_OPTION_ACTIVE_CLASS);
+    } else {
+      classList.add(OTableComponent.O_TABLE_OPTION_ACTIVE_CLASS);
     }
   }
 
