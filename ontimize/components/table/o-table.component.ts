@@ -134,6 +134,7 @@ export class OColumn {
   searchable: boolean;
   visible: boolean;
   renderer: any;
+  width: string;
 }
 
 export class OTableOptions {
@@ -341,6 +342,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     colDef.className = 'o-table-column ' + (column.class || '') + ' ';
     colDef.orderable = true;
     colDef.searchable = true;
+    colDef.width = '';
 
     if (typeof (column.attr) === 'undefined') {
       // column without 'attr' should contain only renderers that do not depend on cell data, but row data (e.g. actions)
@@ -353,6 +355,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       colDef.attr = column.attr;
       colDef.name = column.attr;
       colDef.title = column.title;
+      if (column.width !== '') {
+        colDef.width = column.width;
+      }
       if (typeof column.orderable !== 'undefined') {
         colDef.orderable = column.orderable;
       }
@@ -635,40 +640,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       console.error(err.message);
     });
   }
-  /*
-    public remove(clearSelectedItems: boolean = false) {
-      if ((this.keysArray.length > 0) && (this.selectedItems.length > 0)) {
-        this.dialogService.confirm('CONFIRM', 'MESSAGES.CONFIRM_DELETE')
-          .then(
-          res => {
-            if (res === true) {
-  
-              if (this.dataService && (this.deleteMethod in this.dataService) && this.entity && (this.keysArray.length > 0)) {
-  
-                let filters = [];
-                this.selectedItems.map(item => {
-                  let kv = {};
-                  for (let k = 0; k < this.keysArray.length; ++k) {
-                    let key = this.keysArray[k];
-                    kv[key] = item[key];
-                  }
-                  filters.push(kv);
-                });
-  
-               
-  
-              } else {
-                // remove local
-                this.deleteLocalItems();
-  
-              }
-            } else if (clearSelectedItems) {
-              this.selectedItems = [];
-            }
-          }
-          );
-      }
-    }*/
 
 
   public remove(clearSelectedItems: boolean = false) {

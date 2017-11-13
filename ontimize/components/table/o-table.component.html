@@ -60,17 +60,17 @@
             <!-- Generic column definition -->
             <ng-container *ngFor="let column of oTableOptions.columns" [cdkColumnDef]="column.name">
                 <ng-container *ngIf="column.orderable">
-                    <md-header-cell *cdkHeaderCellDef md-sort-header>{{ column.title | oTranslate }}</md-header-cell>
+                    <md-header-cell *cdkHeaderCellDef md-sort-header [fxFlex]="column.width" >{{ column.title | oTranslate }}</md-header-cell>
                 </ng-container>
-
                 <ng-container *ngIf="!column.orderable">
-                    <md-header-cell *cdkHeaderCellDef>{{ column.title | oTranslate }}</md-header-cell>
+                    <md-header-cell *cdkHeaderCellDef [fxFlex]="column.width">{{ column.title | oTranslate }}</md-header-cell>
                 </ng-container>
-                <md-cell *cdkCellDef="let row">
-                    <ng-container *ngIf="!column.renderer">{{ row[column.name] }}</ng-container>
+                <md-cell *cdkCellDef="let row" [fxFlex]="column.width">
+                    <ng-container *ngIf="!column.renderer" >{{ row[column.name] }}</ng-container>
                     <ng-template *ngIf="column.renderer" [ngTemplateOutlet]="column.renderer.templateref" [ngOutletContext]="{cellvalue: row[column.name]}"></ng-template>
                 </md-cell>
             </ng-container>
+            
             <md-header-row *cdkHeaderRowDef="oTableOptions.visibleColumns"></md-header-row>
             <md-row *cdkRowDef="let row; columns: oTableOptions.visibleColumns;" (click)="handleClick(row)" (dblclick)="handleDoubleClick(row)">
             </md-row>

@@ -76,6 +76,7 @@ export class OTableColumnComponent implements OnInit {
   public orderable: any;
   public searchable: any;
   public editable: any;
+  public width:string='';
 
   /*input renderer date */
   protected format: string;
