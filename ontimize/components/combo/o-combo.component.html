@@ -2,7 +2,7 @@
     [mdTooltipShowDelay]="tooltipShowDelay">
     <md-select #selectModel [class.visible]="!isReadOnly" [class.hidden]="isReadOnly" class="mat-combo" [attr.id]="getAttribute()"
         [id]="getAttribute()" fxFill [formControlName]="getAttribute()" [placeholder]="placeHolder" [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)">
-        <md-option *ngIf="hasNullSelection()" value selected></md-option>
+        <md-option *ngIf="hasNullSelection()"></md-option>
         <md-option *ngFor="let item of getDataArray(); let rowIndex = index" [value]="getValueColumn(item)">
             {{ getOptionDescriptionValue(item) }}
         </md-option>
