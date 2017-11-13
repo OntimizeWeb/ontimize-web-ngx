@@ -24,6 +24,7 @@ import { OFormComponent } from '../form/o-form.component';
 import { OSharedModule } from '../../shared';
 import { OServiceComponent } from '../o-service-component.class';
 import { CdkTableModule } from '@angular/cdk/table';
+import { SelectionModel } from '@angular/cdk/collections';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { MdSort, MdSortModule, MdTabGroup, MdTab } from '@angular/material';
@@ -136,6 +137,7 @@ export class OColumn {
 }
 
 export class OTableOptions {
+  selectColumn: OColumn = new OColumn();
   columns: Array<OColumn> = [];
   visibleColumns: Array<any> = [];
   filter: boolean = true;
@@ -177,6 +179,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
   }
 
+  static NAME_COLUMN_SELECT = 'select';
   @ViewChild('filter') filter: ElementRef;
   @ViewChild(MdSort) sort: MdSort;
 
@@ -253,9 +256,13 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   protected querySubscription: Subscription;
   protected finishQuerSubscription: boolean = false;
-  //protected headerButtons: Array<OTableButtonComponent>;
+
+
   public onClick: EventEmitter<any> = new EventEmitter();
   public onDoubleClick: EventEmitter<any> = new EventEmitter();
+  public deleteButton: boolean = false;//show/hidde delete button
+  selection = new SelectionModel<Element>(true, []);
+
 
 
   ngOnInit() {
@@ -439,6 +446,16 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
         }
       }
     }
+    //add column checkbox
+    //1. create object ocolumn
+    //2. not add visiblesColumns
+    let checkboxColumn = new OColumn();
+    checkboxColumn.name = OTableComponent.NAME_COLUMN_SELECT;
+    checkboxColumn.title = '';
+    checkboxColumn.visible = false;
+    this._oTableOptions.selectColumn = checkboxColumn;
+
+
 
     //if not declare visible-columns then visible-columns is all columns
     if (this.visibleColumns) {
@@ -618,6 +635,87 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       console.error(err.message);
     });
   }
+  /*
+    public remove(clearSelectedItems: boolean = false) {
+      if ((this.keysArray.length > 0) && (this.selectedItems.length > 0)) {
+        this.dialogService.confirm('CONFIRM', 'MESSAGES.CONFIRM_DELETE')
+          .then(
+          res => {
+            if (res === true) {
+  
+              if (this.dataService && (this.deleteMethod in this.dataService) && this.entity && (this.keysArray.length > 0)) {
+  
+                let filters = [];
+                this.selectedItems.map(item => {
+                  let kv = {};
+                  for (let k = 0; k < this.keysArray.length; ++k) {
+                    let key = this.keysArray[k];
+                    kv[key] = item[key];
+                  }
+                  filters.push(kv);
+                });
+  
+               
+  
+              } else {
+                // remove local
+                this.deleteLocalItems();
+  
+              }
+            } else if (clearSelectedItems) {
+              this.selectedItems = [];
+            }
+          }
+          );
+      }
+    }*/
+
+
+  public remove(clearSelectedItems: boolean = false) {
+    if ((this.keysArray.length > 0) && (this.selectedItems.length > 0)) {
+      this.dialogService.confirm('CONFIRM', 'MESSAGES.CONFIRM_DELETE')
+        .then(
+        res => {
+          if (res === true) {
+
+            if (this.dataService && (this.deleteMethod in this.dataService) && this.entity && (this.keysArray.length > 0)) {
+
+              let filters = [];
+              this.selectedItems.map(item => {
+                let kv = {};
+                for (let k = 0; k < this.keysArray.length; ++k) {
+                  let key = this.keysArray[k];
+                  kv[key] = item[key];
+                }
+                filters.push(kv);
+              });
+
+              this.daoTable.removeQuery(this.deleteMethod, filters).subscribe(
+                res => {
+                  console.log('[OTable.remove]: response', res);
+                  //ObservableWrapper.callEmit(this.onRowDeleted, this.selectedItems);
+                },
+                error => {
+                  console.log('[OTable.remove]: error', error);
+                  this.dialogService.alert('ERROR', 'MESSAGES.ERROR_DELETE');
+                },
+                () => {
+                  console.log('[OTable.remove]: success');
+                  // this.setTableInitialState();
+                  this.reloadData();
+                }
+              );
+            } else {
+              // remove local
+              this.deleteLocalItems();
+            }
+          } else if (clearSelectedItems) {
+            this.selectedItems = [];
+          }
+        }
+        );
+    }
+  }
 
   public refresh() {
     this.reloadData();
@@ -640,6 +738,33 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     if (this.oenabled && (this.detailMode === OServiceComponent.DETAIL_MODE_DBLCLICK)) {
       this.viewDetail(item);
     }
+  }
+
+  onShowsSelects() {
+    this.oTableOptions.selectColumn.visible = true;
+    if (this._oTableOptions.visibleColumns && this._oTableOptions.visibleColumns[0] !== OTableComponent.NAME_COLUMN_SELECT) {
+      this._oTableOptions.visibleColumns.unshift(OTableComponent.NAME_COLUMN_SELECT);
+    }
+  }
+
+  isAllSelected() {
+    const numSelected = this.selection.selected.length;
+    const numRows = this.dataSource.renderedData.length;
+    return numSelected === numRows;
+  }
+
+  masterToggle() {
+    this.isAllSelected() ?
+      this.selection.clear() :
+      this.dataSource.renderedData.forEach(row => this.selection.select(row));
+    this.selectedItems = this.selection.selected;
+    this.deleteButton = this.selectedItems.length > 0;
+
+  }
+  selectedRow(row: any) {
+    this.selection.toggle(row);
+    this.selectedItems = this.selection.selected;
+    this.deleteButton = this.selectedItems.length > 0;
   }
 
   getTrackByFunction(): Function {

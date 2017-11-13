@@ -11,6 +11,9 @@
     position: relative;
     margin: 0 0.5%;
 
+    .mat-column-select {
+      max-width: 54px;
+    }
     .mat-table {
 
       &.small {
@@ -119,10 +122,13 @@
       .mat-cell,
       .mat-header-cell {
         padding: 0 12px;
-
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
+
+       .mat-checkbox{
+          overflow: hidden;
+        }
       }
     }
 

@@ -58,6 +58,11 @@ export class OTableDao {
       this.isLoadingResults = true;
     });
   }
+  removeQuery(deletedMethod: string, filters: any): Observable<any> {
+
+    return (Observable as any).from(filters).map(kv => this.dataService[deletedMethod](kv, this.entity)).mergeAll();
+
+  }
   /**
    * set data array and emit data has ben modified
    * @param data

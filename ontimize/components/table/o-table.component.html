@@ -5,13 +5,17 @@
                 <button md-button *ngIf="insertButton" (click)="add()" [ngClass]="{'generic-action generic-action-add':true, 'hidden-action-text':!showTableButtonsText}">
                     <ng-container *ngIf="showTableButtonsText">{{'TABLE.BUTTONS.ADD' | oTranslate}} </ng-container>
                 </button>
-                <button md-button *ngIf="refreshButton" (click)="reloadData()" [ngClass]="{'generic-action generic-action-refresh':true, 'hidden-action-text':!showTableButtonsText}">
+                <button md-button *ngIf="deleteButton" (click)="remove()" [ngClass]="{'generic-action generic-action-delete':true, 'hidden-action-text':!showTableButtonsText}">
+                    <ng-container  *ngIf="showTableButtonsText">
+                        {{'TABLE.BUTTONS.DELETE' | oTranslate}}
+                    </ng-container>
+                </button>
+                <button md-button *ngIf="refreshButton" (click)="reloadData()" [ngClass]="{'generic-action generic-action-refresh ':true, 'hidden-action-text':!showTableButtonsText}">
                     <ng-container  *ngIf="showTableButtonsText">
                         {{'TABLE.BUTTONS.REFRESH' | oTranslate}}
                     </ng-container>
                 </button>
-                
-                
+                                
                 <button md-button *ngFor="let headerButton of oTableOptions.buttons"
                         attr.data-icon="{{ headerButton.icon}}"
                         [ngClass]="{'custom-generic-action':true,'hidden-action-text':!showTableButtonsText}"
@@ -19,7 +23,6 @@
                     {{headerButton.olabel | oTranslate}}
                    
                 </button>
-                    <!--data-icon="'icon-'{{headerButton.getIcon()}}" -->
             </div>
             <div  *ngIf="oTableOptions.filter" class="quickFilter">
                 <md-form-field floatPlaceholder="never">
@@ -33,12 +36,27 @@
                 </button>
 
                 <md-menu #menu="mdMenu" x-position="before">
+                    <button (click)="onShowsSelects()" md-menu-item> {{ 'TABLE.BUTTONS.SELECT' | oTranslate }} </button>
                     <button *ngIf="exportButton || showExportOptions" (click)="onExportButtonClicked()" md-menu-item> {{ 'TABLE.BUTTONS.EXPORT' | oTranslate }} </button>
                     <button *ngIf="columnsVisibilityButton" md-menu-item (click)="onChangeColumnsVisibilityClicked()"> {{ 'TABLE.BUTTONS.COLVIS' | oTranslate }} </button>
                 </md-menu>
             </div>
         </div>
         <md-table #table [trackBy]="getTrackByFunction()" [dataSource]="dataSource" mdSort [class]="rowHeight">
+            <!--Checkbox Column -->
+            <ng-container [cdkColumnDef]="oTableOptions.selectColumn.name" *ngIf="oTableOptions.selectColumn.visible">
+                <md-header-cell *cdkHeaderCellDef>
+                    <md-checkbox 
+                    (change)="$event ? masterToggle() : null" [checked]="isAllSelected()" [indeterminate]="selection.hasValue() && !isAllSelected()"></md-checkbox>
+                </md-header-cell>
+                <md-cell *cdkCellDef="let row">
+                    <md-checkbox name="id[]" (click)="$event.stopPropagation()"
+                    (change)="$event ? selectedRow(row) : null"
+                    [checked]="selection.isSelected(row)">
+                    </md-checkbox>
+                </md-cell>
+            </ng-container>
+
             <!-- Generic column definition -->
             <ng-container *ngFor="let column of oTableOptions.columns" [cdkColumnDef]="column.name">
                 <ng-container *ngIf="column.orderable">

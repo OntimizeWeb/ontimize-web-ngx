@@ -1,5 +1,5 @@
 import { Component, ViewChild, TemplateRef, Injector, forwardRef, Inject } from '@angular/core';
-import { OTableColumnComponent } from '../o-table-column.component'
+import { OTableColumnComponent } from '../o-table-column.component';
 import { InputConverter } from '../../../../decorators';
 import { OTableCellRenderer } from './o-table-cell-renderer';
 
@@ -33,7 +33,7 @@ export class OTableCellRendererIntegerComponent extends OTableCellRenderer {
 
   @InputConverter()
   protected grouping: boolean = true;
-  protected thousandSeparator: string = ",";
+  protected thousandSeparator: string =',';
 
   protected tableColumn: OTableColumnComponent;
 
@@ -46,7 +46,7 @@ export class OTableCellRendererIntegerComponent extends OTableCellRenderer {
     protected injector: Injector) {
     super();
     this.tableColumn = this.injector.get(OTableColumnComponent);
-    this.tableColumn.type = "integer";
+    this.tableColumn.type ='integer';
     this.setComponentPipe();
   }
 
