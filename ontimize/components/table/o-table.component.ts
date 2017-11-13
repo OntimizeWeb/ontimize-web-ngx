@@ -15,6 +15,8 @@ import {
   EventEmitter
 } from '@angular/core';
 
+import { DragulaModule } from 'ng2-dragula/ng2-dragula';
+
 import { InputConverter } from '../../decorators';
 
 import { CommonModule } from '@angular/common';
@@ -27,7 +29,7 @@ import { CdkTableModule } from '@angular/cdk/table';
 import { SelectionModel } from '@angular/cdk/collections';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
-import { MdSort, MdSortModule, MdTabGroup, MdTab } from '@angular/material';
+import { MdDialog, MdSort, MdSortModule, MdTabGroup, MdTab } from '@angular/material';
 
 import { OTableDataSource } from './o-table.datasource';
 import { OTableDao } from './o-table.dao';
@@ -37,6 +39,8 @@ import { Util } from '../../util/util';
 import { ObservableWrapper } from '../../util/async';
 
 import { OFormValue } from '../form/OFormValue';
+
+import { OTableVisibleColumnsDialogComponent } from './dialog/visible-columns/o-table-visible-columns-dialog.component';
 
 import {
   OTableCellRendererDateComponent,
@@ -168,6 +172,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   constructor(
     injector: Injector,
     elRef: ElementRef,
+    private dialog: MdDialog,
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent
   ) {
     super(injector, elRef, form);
@@ -596,7 +601,20 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   onChangeColumnsVisibilityClicked() {
-    console.log('onChangeColumnsVisibilityClicked');
+    let dialogRef = this.dialog.open(OTableVisibleColumnsDialogComponent, {
+      data: {
+        columnArray: Util.parseArray(this.visibleColumns),
+        columnsData: this._oTableOptions.columns
+      },
+      disableClose: true
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this._oTableOptions.visibleColumns = dialogRef.componentInstance.getVisibleColumns();
+        this._oTableOptions.columns = dialogRef.componentInstance.getColumnsData();
+      }
+    });
   }
 
   onMdTableContentChanged() {
@@ -642,9 +660,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
           .then(
           res => {
             if (res === true) {
-  
+
               if (this.dataService && (this.deleteMethod in this.dataService) && this.entity && (this.keysArray.length > 0)) {
-  
+
                 let filters = [];
                 this.selectedItems.map(item => {
                   let kv = {};
@@ -654,13 +672,13 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
                   }
                   filters.push(kv);
                 });
-  
-               
-  
+
+
+
               } else {
                 // remove local
                 this.deleteLocalItems();
-  
+
               }
             } else if (clearSelectedItems) {
               this.selectedItems = [];
@@ -826,13 +844,15 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     OTableCellRendererIntegerComponent,
     OTableCellRendererRealComponent,
     OTableCellRendererCurrencyComponent,
+    OTableVisibleColumnsDialogComponent,
     OTableButtonComponent
   ],
   imports: [
     CommonModule,
     OSharedModule,
     CdkTableModule,
-    MdSortModule
+    MdSortModule,
+    DragulaModule
   ],
   exports: [
     OTableComponent,
@@ -851,7 +871,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     OTableCellRendererImageComponent,
     OTableCellRendererIntegerComponent,
     OTableCellRendererRealComponent,
-    OTableCellRendererCurrencyComponent
+    OTableCellRendererCurrencyComponent,
+    OTableVisibleColumnsDialogComponent
   ]
 })
 export class OTableModule {
