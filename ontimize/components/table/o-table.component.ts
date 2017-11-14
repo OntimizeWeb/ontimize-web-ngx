@@ -185,10 +185,10 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
   }
 
-  static NAME_COLUMN_SELECT = 'select';
   @ViewChild('filter') filter: ElementRef;
   @ViewChild(MdSort) sort: MdSort;
 
+  public static NAME_COLUMN_SELECT = 'select';
   public static TYPE_SEPARATOR = ':';
   public static VALUES_SEPARATOR = '=';
   public static TYPE_ASC_NAME = 'asc';
@@ -197,7 +197,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   public static O_TABLE_OPTION_ACTIVE_CLASS = 'o-table-option-active';
 
   @InputConverter()
-  selectAllCheckbox: boolean = true;
+  selectAllCheckbox: boolean = false;
   @InputConverter()
   exportButton: boolean = true;
   @InputConverter()
@@ -206,8 +206,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   columnsGroupButton: boolean = true;
   @InputConverter()
   pageable: boolean = true;
-  @InputConverter()
-  showExportOptions: boolean = true;
   @InputConverter()
   columnsVisibilityButton: boolean = true;
   @InputConverter()
@@ -243,6 +241,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   @InputConverter()
   refreshButton: boolean = true;
 
+  @InputConverter()
+  deleteButton: boolean = true;
+
   public daoTable: OTableDao | null;
   public dataSource: OTableDataSource | null;
 
@@ -267,9 +268,11 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   public onClick: EventEmitter<any> = new EventEmitter();
   public onDoubleClick: EventEmitter<any> = new EventEmitter();
-  public deleteButton: boolean = false;//show/hidde delete button
-  selection = new SelectionModel<Element>(true, []);
+  protected selection = new SelectionModel<Element>(true, []);
 
+  get selectedItemsLenght() {
+    return this.selectedItems.length;
+  }
 
 
   ngOnInit() {
@@ -735,9 +738,12 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       this.toggleButtonActiveClass(event);
     }
 
-    this.oTableOptions.selectColumn.visible = true;
-    if (this._oTableOptions.visibleColumns && this._oTableOptions.visibleColumns[0] !== OTableComponent.NAME_COLUMN_SELECT) {
+    this._oTableOptions.selectColumn.visible = !this._oTableOptions.selectColumn.visible;
+
+    if (this._oTableOptions.visibleColumns &&   this._oTableOptions.selectColumn.visible && this._oTableOptions.visibleColumns[0] !== OTableComponent.NAME_COLUMN_SELECT) {
       this._oTableOptions.visibleColumns.unshift(OTableComponent.NAME_COLUMN_SELECT);
+    }else if (this._oTableOptions.visibleColumns &&  !this._oTableOptions.selectColumn.visible && this._oTableOptions.visibleColumns[0] === OTableComponent.NAME_COLUMN_SELECT) {
+      this._oTableOptions.visibleColumns.shift();
     }
   }
 
@@ -764,13 +770,13 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       this.selection.clear() :
       this.dataSource.renderedData.forEach(row => this.selection.select(row));
     this.selectedItems = this.selection.selected;
-    this.deleteButton = this.selectedItems.length > 0;
+    this.deleteButton = this.selectedItems.length > 0 && this.deleteButton;
 
   }
   selectedRow(row: any) {
     this.selection.toggle(row);
     this.selectedItems = this.selection.selected;
-    this.deleteButton = this.selectedItems.length > 0;
+    this.deleteButton = this.selectedItems.length > 0 && this.deleteButton;
   }
 
   getTrackByFunction(): Function {
