@@ -100,7 +100,7 @@ export var MAP = {
     'MESSAGES.SAVED': 'Saved',
     'MESSAGES.NO_RESULTS': 'No results were obtained.',
     'MESSAGES.ERROR_MISSING_LANG': 'Selected language bundle file not found',
-
+    'TABLE.FILTER':'Filter',
     'TABLE.EMPTY': 'No results found',
     'TABLE.INFO': '_START_ - _END_ of _TOTAL_',
     'TABLE.INFO_EMPTY': '0 - 0 of 0',
@@ -280,6 +280,7 @@ export var MAP = {
     'TABLE.BUTTONS.DELETE': 'Eliminar',
     'TABLE.BUTTONS.ADD': 'Nuevo',
     'TABLE.BUTTONS.SELECT': 'Seleccionar...',
+    'TABLE.FILTER':'Filtrar',
     'TABLE.SELECT.ROWS._': '%d registros seleccionados',
     'TABLE.SELECT.ROWS.0': ' ',
     'TABLE.SELECT.ROWS.1': '1 registro seleccionado',
