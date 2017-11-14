@@ -3,15 +3,15 @@
         <div class="o-table-container">
             <div class="toolbar" fxLayout="row" fxLayoutAlign="space-between center">
                 <div class ="buttons">
-                    <button md-button *ngIf="insertButton" (click)="add()" [ngClass]="{'generic-action generic-action-add':true, 'hidden-action-text':!showTableButtonsText}">
+                    <button md-button *ngIf="insertButton" (click)="add()" title="{{'TABLE.BUTTONS.ADD' | oTranslate}}"  [ngClass]="{'generic-action generic-action-add':true, 'hidden-action-text':!showTableButtonsText}">
                         <ng-container *ngIf="showTableButtonsText">{{'TABLE.BUTTONS.ADD' | oTranslate}} </ng-container>
                     </button>
-                    <button md-button *ngIf="deleteButton" (click)="remove()" [ngClass]="{'generic-action generic-action-delete':true, 'hidden-action-text':!showTableButtonsText}">
+                    <button md-button *ngIf="deleteButton" (click)="remove()" title="{{'TABLE.BUTTONS.DELETE' | oTranslate}}" [ngClass]="{'generic-action generic-action-delete':true, 'hidden-action-text':!showTableButtonsText}">
                         <ng-container  *ngIf="showTableButtonsText">
                             {{'TABLE.BUTTONS.DELETE' | oTranslate}}
                         </ng-container>
                     </button>
-                    <button md-button *ngIf="refreshButton" (click)="reloadData()" [ngClass]="{'generic-action generic-action-refresh ':true, 'hidden-action-text':!showTableButtonsText}">
+                    <button md-button *ngIf="refreshButton" (click)="reloadData()" title="{{'TABLE.BUTTONS.REFRESH' | oTranslate}}" [ngClass]="{'generic-action generic-action-refresh ':true, 'hidden-action-text':!showTableButtonsText}">
                         <ng-container  *ngIf="showTableButtonsText">
                             {{'TABLE.BUTTONS.REFRESH' | oTranslate}}
                         </ng-container>
@@ -20,7 +20,8 @@
                     <button md-button *ngFor="let headerButton of oTableOptions.buttons"
                             attr.data-icon="{{ headerButton.icon}}"
                             [ngClass]="{'custom-generic-action':true,'hidden-action-text':!showTableButtonsText}"
-                            (click)="headerButton.onClick.emit()">
+                            (click)="headerButton.onClick.emit()"
+                            title="{{headerButton.olabel | oTranslate}}">
                         {{headerButton.olabel | oTranslate}}
                     
                     </button>
