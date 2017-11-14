@@ -16,8 +16,8 @@
   * adding the capability of selecting visible columns and their order ([d3dd172](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d3dd172c2bc1a3ebb92546449a9d5f461afcc125))
   * adding the capability of multiple selection  ([1c2979b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1c2979b))
 * **o-table-column**: 
-  *adding *'async-load'* input ([e075e0e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e075e0e)) ([f077876](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f077876)) ([258b2b0d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/258b2b0d))
-  *adding *'width'* input ([c8b1ec2](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c8b1ec2)) 
+  * adding *'async-load'* input ([e075e0e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e075e0e)) ([f077876](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f077876)) ([258b2b0d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/258b2b0d))
+  * adding *'width'* input ([c8b1ec2](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c8b1ec2)) 
 * **o-form**: undo feature allows to undo blocks of changes (instead of undoing changes characters one by one) ([2438a46](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2438a46))
 
 ### BREAKING CHANGES
