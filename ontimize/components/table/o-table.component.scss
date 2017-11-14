@@ -260,7 +260,7 @@
                 float: right;
                 line-height: 40px;
               }
-              &.hidden-action-text > span {
+              &.hidden-action-text > .mat-button-wrapper > span {
                 display: none;
               }
             }
