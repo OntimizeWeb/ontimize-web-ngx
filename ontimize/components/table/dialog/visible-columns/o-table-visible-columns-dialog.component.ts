@@ -16,7 +16,7 @@ export class OTableVisibleColumnsDialogComponent implements OnDestroy {
 
   public static O_TABLE_VCD_DRAGULA_BAG_NAME: string = O_TABLE_VCD_DRAGULA_BAG_NAME;
 
-  protected columns: Array<OColumn> = [];
+  columns: Array<OColumn> = [];
   protected originalColumns: Array<OColumn> = [];
 
   constructor(
