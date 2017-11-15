@@ -655,6 +655,7 @@ export class OFormComponent implements OnInit, OnDestroy {
   ngAfterViewInit() {
     this.determinateFormMode();
     this.onFormInitStream.emit(true);
+    this.formCache.initializeCache({});
   }
 
   protected determinateFormMode() {
