@@ -7,12 +7,18 @@
   $foreground: map-get($theme, foreground);
 
   .o-table {
+
+    .o-table-menu-button {
+      color: mat-color($foreground, secondary-text);
+    }
+
     .mat-header-row {
       background-color: mat-color($background, status-bar, 0.9);
       .mat-header-cell {
         color: mat-color($foreground, text);
       }
     }
+
     .mat-row {
       &:hover {
         cursor: pointer;
@@ -21,15 +27,14 @@
       .mat-cell {
         color: mat-color($foreground, secondary-text);
       }
-     
-        
     }
 
     .buttons {
-      
+
       button {
         color: mat-color($foreground, secondary-text);
       }
+
       button:not(.hidden-action-text):not(.disabled):hover {
         background-color: mat-color($background, hover);
       }
@@ -51,10 +56,8 @@
         &.disabled {
           color: mat-color($background, disabled-button);
         }
-
-
+      }
     }
-  }
 
-}
+  }
 }
