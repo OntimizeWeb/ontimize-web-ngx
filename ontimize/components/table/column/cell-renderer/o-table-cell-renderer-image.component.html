@@ -1,0 +1,10 @@
+
+<ng-template #templateref let-cellvalue="cellvalue">
+    <div [ngClass]="{'image-avatar':avatar,'image-plain':!avatar} ">
+        <img [src]="getSource(cellvalue)">
+    </div>
+</ng-template>
+
+
+
+  

@@ -31,9 +31,9 @@ export class OTableDataSource extends DataSource<any> {
       this._sort.mdSortChange
     ];
 
-    if (this.tableOptions.filter)
+    if (this.tableOptions.filter) {
       displayDataChanges.push(this._filterChange);
-
+    }
 
     return Observable.merge(...displayDataChanges).map(() => {
 
@@ -49,43 +49,48 @@ export class OTableDataSource extends DataSource<any> {
             filterData = filterData.toLowerCase();
           }
 
-          return searchStr.indexOf(filterData) != -1;
+          return searchStr.indexOf(filterData) !== -1;
         });
       }
 
       // Sort filtered data
       this.renderedData = this.sortData(this.renderedData.slice());
 
-      this.resultsLength = this.renderedData.length
+      this.resultsLength = this.renderedData.length;
       return this.renderedData;
     });
 
   }
 
-  disconnect() { };
+  disconnect() { }
 
   getStringSearchable(item) {
     return this.tableOptions.columns.map(function (v: OColumn, i, a) {
-      if (typeof v.searchable != 'undefined' && v.searchable
-        && typeof v.visible != 'undefined' && v.visible)
-        return item[v.name];
-    }).join(" ");
+      if (typeof v.searchable !== 'undefined' && v.searchable && typeof v.visible !== 'undefined' && v.visible) {
+        if (v.renderer && v.renderer.getCellData) {
+          return v.renderer.getCellData(item[v.name]);
+        } else {
+          return item[v.name];
+        }
+      }
+
+    }).join(' ');
   }
 
   /** Returns a sorted copy of the database data. */
   sortData(data: any[]): any[] {
-    if (!this._sort.active || this._sort.direction == '') { return data; }
+    if (!this._sort.active || this._sort.direction === '') { return data; }
     this._sort.sortables.forEach((value, key) => {
-      this._sort.deregister(value)
-    })
+      this._sort.deregister(value);
+    });
     return data.sort((a, b) => {
       let propertyA: number | string = '';
       let propertyB: number | string = '';
       [propertyA, propertyB] = [a[this._sort.active], b[this._sort.active]];
 
-      let valueA = typeof propertyA ==='undefined'?"": propertyA == "" ? propertyA : isNaN(+propertyA) ? propertyA.toString().trim() : +propertyA;
-      let valueB = typeof propertyB ==='undefined'?"": propertyB == "" ? propertyB : isNaN(+propertyB) ? propertyB.toString().trim() : +propertyB;
-      return (valueA <= valueB ? -1 : 1) * (this._sort.direction == 'asc' ? 1 : -1);
+      let valueA = typeof propertyA === 'undefined' ? '' : propertyA === '' ? propertyA : isNaN(+propertyA) ? propertyA.toString().trim() : +propertyA;
+      let valueB = typeof propertyB === 'undefined' ? '' : propertyB === '' ? propertyB : isNaN(+propertyB) ? propertyB.toString().trim() : +propertyB;
+      return (valueA <= valueB ? -1 : 1) * (this._sort.direction === 'asc' ? 1 : -1);
     });
 
   }

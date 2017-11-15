@@ -39,6 +39,9 @@ export * from './components/side-menu/o-side-menu-item.component';
 export * from './components/side-menu/o-locale-side-menu-item.component';
 export * from './components/side-menu/o-side-menu-separator.component';
 export * from './components/table/o-table.component';
+export * from './components/table/header/o-table-button.component';
+
+
 export * from './components/o-component.class';
 export * from './components/o-form-data-component.class';
 export * from './components/o-form-service-component.class';

@@ -201,8 +201,8 @@ export class OImageComponent extends OFormDataComponent {
 
   onClickClear(e: Event): void {
     e.stopPropagation();
-    if (!this._isReadOnly) {
-      this.setValue('');
+    if (!this._isReadOnly && !this.isDisabled) {
+      this.setValue(undefined);
       if (this.titleLabel) {
         this.titleLabel.nativeElement.textContent = '';
       }
@@ -228,8 +228,7 @@ export class OImageComponent extends OFormDataComponent {
 @NgModule({
   declarations: [OImageComponent],
   imports: [OSharedModule, CommonModule],
-  exports: [OImageComponent],
+  exports: [OImageComponent]
 })
 export class OImageModule {
 }
-

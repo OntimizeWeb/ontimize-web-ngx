@@ -1,5 +1,11 @@
-.input-model {
-  display: none !important;
+.o-list-picker-content {
+  .input-model {
+    display: none !important;
+  }
+
+  md-icon {
+    cursor: pointer;
+  }
 }
 
 .dialog-list-container {
@@ -11,7 +17,7 @@
   }
 }
 
-o-list-picker-dialog  md-toolbar {
+.o-list-picker-dialog  md-toolbar {
   &.mat-toolbar .mat-toolbar-row {
     padding-top: 8px;
     box-sizing: content-box;
@@ -21,3 +27,4 @@ o-list-picker-dialog  md-toolbar {
     width: 100%;
   }
 }
+

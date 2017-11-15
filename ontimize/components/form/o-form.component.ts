@@ -9,7 +9,8 @@ import {
   NgModule,
   HostListener,
   ViewEncapsulation,
-  ElementRef
+  ElementRef,
+  CUSTOM_ELEMENTS_SCHEMA
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute, UrlSegment, UrlSegmentGroup } from '@angular/router';
@@ -27,6 +28,7 @@ import { OFormToolbarModule, OFormToolbarComponent } from './o-form-toolbar.comp
 import { OFormValue } from './OFormValue';
 import { Util, SQLTypes } from '../../utils';
 import { OSharedModule } from '../../shared';
+import { OFormCacheClass } from './cache/o-form.cache.class';
 
 import { CanDeactivateFormGuard } from './guards/o-form-can-deactivate.guard';
 
@@ -95,7 +97,10 @@ export const DEFAULT_INPUTS_O_FORM = [
   'editableDetail: editable-detail',
 
   // keys-sql-types [string]: entity keys types, separated by ';'. Default: no value.
-  'keysSqlTypes: keys-sql-types'
+  'keysSqlTypes: keys-sql-types',
+
+  // undo-button [string][yes|no|true|false]: Include undo button in form-toolbar. Default: true;
+  'undoButton: undo-button'
 ];
 
 export const DEFAULT_OUTPUTS_O_FORM = [
@@ -140,6 +145,7 @@ export class OFormComponent implements OnInit, OnDestroy {
   public static INSERT_ACTION: string = 'INSERT';
   public static GO_INSERT_ACTION: string = 'GO_INSERT';
   public static DELETE_ACTION: string = 'DELETE';
+  public static UNDO_LAST_CHANGE_ACTION: string = 'UNDO_LAST_CHANGE';
 
   public static PARENT_KEYS_KEY = 'pk';
 
@@ -183,6 +189,8 @@ export class OFormComponent implements OnInit, OnDestroy {
   @InputConverter()
   protected editableDetail: boolean = true;
   protected keysSqlTypes: string;
+  @InputConverter()
+  undoButton: boolean = true;
   /* end of inputs variables */
 
   /*parsed inputs variables */
@@ -223,8 +231,6 @@ export class OFormComponent implements OnInit, OnDestroy {
   protected urlSub: any;
   protected urlSegments: any;
 
-  protected initialDataCache: Object = {};
-  protected formDataCache: Object;
   protected formParentKeysValues: Object;
   protected hasScrolled: boolean = false;
 
@@ -234,10 +240,10 @@ export class OFormComponent implements OnInit, OnDestroy {
 
   protected querySubscription: Subscription;
   protected loaderSubscription: Subscription;
-  protected formCacheSubscription: Subscription;
   protected dynamicFormSubscription: Subscription;
 
   protected deactivateGuard: CanDeactivateFormGuard;
+  protected formCache: OFormCacheClass;
 
   public static Mode(): any {
     enum m {
@@ -269,6 +275,7 @@ export class OFormComponent implements OnInit, OnDestroy {
     protected injector: Injector,
     protected elRef: ElementRef) {
 
+    this.formCache = new OFormCacheClass(this);
     this.dialogService = injector.get(DialogService);
     this.navigationService = injector.get(NavigationService);
 
@@ -292,7 +299,6 @@ export class OFormComponent implements OnInit, OnDestroy {
       let attr = comp.getAttribute();
       if (attr && attr.length > 0) {
         this._components[attr] = comp;
-
         // Setting parent key values...
         if (this.formParentKeysValues &&
           this.formParentKeysValues[attr] !== undefined) {
@@ -308,12 +314,9 @@ export class OFormComponent implements OnInit, OnDestroy {
         * La idea es asignar ese valor al campo cuando se registre de nuevo (Hay que asegurar el proceso
         * para que sólo sea cuando se registra de nuevo ;) )
         */
-        if (this.formDataCache && this.formDataCache.hasOwnProperty(attr)
-          && this.getDataValues() && this._components.hasOwnProperty(attr)) {
-          let cachedValue = this.formDataCache[attr];
-          if (cachedValue !== null) {
-            this._components[attr].setValue(cachedValue);
-          }
+        const cachedValue = this.formCache.getCachedValue(attr);
+        if (cachedValue && this.getDataValues() && this._components.hasOwnProperty(attr)) {
+          this._components[attr].setValue(cachedValue);
         }
       }
     }
@@ -337,6 +340,7 @@ export class OFormComponent implements OnInit, OnDestroy {
         let control: FormControl = comp.getControl();
         if (control) {
           this.formGroup.registerControl(attr, control);
+          this.formCache.registerComponentCaching(attr, comp);
         }
       }
     }
@@ -357,6 +361,7 @@ export class OFormComponent implements OnInit, OnDestroy {
       let attr = comp.getAttribute();
       if (control && attr && attr.length > 0) {
         this.formGroup.removeControl(attr);
+        this.formCache.unregisterComponentCaching(attr);
       }
     }
   }
@@ -411,9 +416,8 @@ export class OFormComponent implements OnInit, OnDestroy {
       }
     } else if (this.isInUpdateMode() || this.isEditableDetail()) {
       if (this.formData && Object.keys(this.formData).length > 0) {
-        if (this.formGroup.dirty && this.formDataCache &&
-          this.formDataCache.hasOwnProperty(attr)) {
-          let val = this.formDataCache[attr];
+        const val = this.formCache.getCachedValue(attr);
+        if (this.formGroup.dirty && val) {
           if (val instanceof OFormValue) {
             return val;
           }
@@ -474,6 +478,7 @@ export class OFormComponent implements OnInit, OnDestroy {
       case OFormComponent.INSERT_ACTION: this._insertAction(); break;
       case OFormComponent.GO_EDIT_ACTION: this._goEditMode(options); break;
       case OFormComponent.EDIT_ACTION: this._editAction(); break;
+      case OFormComponent.UNDO_LAST_CHANGE_ACTION: this._undoLastChangeAction(); break;
       case OFormComponent.DELETE_ACTION: return this._deleteAction();
       default: break;
     }
@@ -484,17 +489,9 @@ export class OFormComponent implements OnInit, OnDestroy {
     this.addDeactivateGuard();
 
     this.formGroup = new FormGroup({});
-    var self = this;
-    /*
-    * Keeping updated a cache of form data values
-    */
-    this.formCacheSubscription = this.formGroup.valueChanges.subscribe((value: any) => {
-      if (self.formDataCache === undefined) {
-        // initialize cache
-        self.formDataCache = {};
-      }
-      Object.assign(self.formDataCache, value);
-    });
+
+    this.formCache.registerFormGroupListener();
+
     this.initialize();
   }
 
@@ -651,16 +648,14 @@ export class OFormComponent implements OnInit, OnDestroy {
     if (this.loaderSubscription) {
       this.loaderSubscription.unsubscribe();
     }
-    if (this.formCacheSubscription) {
-      this.formCacheSubscription.unsubscribe();
-    }
-    this.formDataCache = undefined;
+    this.formCache.destroy();
     this.destroyDeactivateGuard();
   }
 
   ngAfterViewInit() {
     this.determinateFormMode();
     this.onFormInitStream.emit(true);
+    this.formCache.initializeCache({});
   }
 
   protected determinateFormMode() {
@@ -775,8 +770,11 @@ export class OFormComponent implements OnInit, OnDestroy {
             }
           }
         });
-        self.initialDataCache = self.formGroup.getRawValue();
-        (self.formGroup.valueChanges as EventEmitter<any>).emit(self.initialDataCache);
+        Object.keys(self.formGroup.controls).forEach(control => {
+          self.formGroup.controls[control].markAsPristine();
+        });
+        self.formCache.initializeCache(self.formGroup.getRawValue());
+        (self.formGroup.valueChanges as EventEmitter<any>).emit(self.formCache.getInitialDataCache());
       }
     });
   }
@@ -887,7 +885,7 @@ export class OFormComponent implements OnInit, OnDestroy {
     if (useFilter) {
       filter = this.getCurrentKeysValues();
     }
-    this.restartCache();
+    this.formCache.restartCache();
     this.queryData(filter);
   }
 
@@ -924,7 +922,7 @@ export class OFormComponent implements OnInit, OnDestroy {
     let sqlTypes = this.getAttributesSQLTypes();
     this.insertData(values, sqlTypes).subscribe(resp => {
       self.postCorrectInsert(resp);
-      self.initialDataCache = self.formDataCache;
+      self.formCache.setCacheSnapshot();
       //TODO mostrar un toast indicando que la operación fue correcta...
       if (self.stayInRecordAfterInsert) {
         self._stayInRecordAfterInsert(resp);
@@ -997,7 +995,7 @@ export class OFormComponent implements OnInit, OnDestroy {
     // invoke update method...
     this.updateData(filter, values, sqlTypes).subscribe(resp => {
       self.postCorrectUpdate(resp);
-      self.initialDataCache = self.formDataCache;
+      self.formCache.setCacheSnapshot();
       // TODO mostrar un toast indicando que la operación fue correcta...
       if (self.stayInRecordAfterEdit) {
         self._reloadAction(true);
@@ -1060,17 +1058,15 @@ export class OFormComponent implements OnInit, OnDestroy {
       attributes.push(...this.keysArray);
     }
     // add only the fields contained into the form...
-    let keys = Object.keys(this._components);
-    keys.map(item => {
+    Object.keys(this._components).map(item => {
       if (attributes.indexOf(item) < 0) {
         attributes.push(item);
       }
     });
 
     // add fields stored into form cache...
-    if (this.formDataCache) {
-      let keys = Object.keys(this.formDataCache);
-      keys.map(item => {
+    if (this.formCache.getDataCache()) {
+      Object.keys(this.formCache.getDataCache()).map(item => {
         if (item !== undefined && attributes.indexOf(item) === -1) {
           attributes.push(item);
         }
@@ -1175,7 +1171,7 @@ export class OFormComponent implements OnInit, OnDestroy {
       this.dataService[this.deleteMethod](filter, this.entity).subscribe(resp => {
         loader.unsubscribe();
         if (resp.code === 0) {
-          self.initialDataCache = self.formDataCache;
+          self.formCache.setCacheSnapshot();
           self.postCorrectDelete(resp);
           observer.next(resp.data);
           observer.complete();
@@ -1200,7 +1196,6 @@ export class OFormComponent implements OnInit, OnDestroy {
     console.log('[OFormComponent.postIncorrectDelete]', result);
     this.dialogService.alert('ERROR', 'MESSAGES.ERROR_DELETE');
   }
-
 
   toJSONData(data) {
     if (!data) {
@@ -1386,31 +1381,26 @@ export class OFormComponent implements OnInit, OnDestroy {
     this._layoutDirection = ['row', 'column'].indexOf(parsedVal) !== -1 ? parsedVal : OFormComponent.DEFAULT_LAYOUT_DIRECTION;
   }
 
-  restartCache() {
-    this.formDataCache = {};
-    this.initialDataCache = {};
-  }
-
   isEditableDetail() {
     return this.editableDetail;
   }
 
   isInitialStateChanged(): boolean {
-    let res = false;
-    let initialKeys = Object.keys(this.initialDataCache);
-    let currentKeys = Object.keys(this.formDataCache);
-    if (initialKeys.length !== currentKeys.length) {
-      return true;
-    }
-    for (let i = 0, leni = initialKeys.length; i < leni; i++) {
-      let key = initialKeys[i];
-      // TODO be careful with types comparisions
-      res = (this.initialDataCache[key] !== this.formDataCache[key]);
-      if (res) {
-        break;
-      }
-    }
-    return res;
+    return this.formCache.isInitialStateChanged();
+  }
+
+  _undoLastChangeAction() {
+    this.formCache.undoLastChange();
+  }
+
+  get isCacheStackEmpty(): boolean {
+    return this.formCache.isCacheStackEmpty;
+  }
+
+  undoKeyboardPressed() {
+    this.formCache.undoLastChange({
+      keyboardEvent: true
+    });
   }
 }
 
@@ -1418,7 +1408,8 @@ export class OFormComponent implements OnInit, OnDestroy {
   declarations: [OFormComponent],
   imports: [OSharedModule, CommonModule, OFormToolbarModule],
   exports: [OFormComponent, OFormToolbarModule],
-  providers: [{ provide: CanDeactivateFormGuard, useClass: CanDeactivateFormGuard }]
+  providers: [{ provide: CanDeactivateFormGuard, useClass: CanDeactivateFormGuard }],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class OFormModule {
 }

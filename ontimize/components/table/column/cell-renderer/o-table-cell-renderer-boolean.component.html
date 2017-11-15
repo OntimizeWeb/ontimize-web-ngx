@@ -1,0 +1,26 @@
+<ng-template #templateref let-cellvalue="cellvalue">
+    <ng-container *ngIf="hasCellDataTrueValue(cellvalue)=== true">
+        <ng-container [ngSwitch]="trueValueType">
+            <ng-container *ngSwitchCase="'number'">{{trueValue}}</ng-container>
+            <ng-container *ngSwitchCase="'icon'">
+                <md-icon class="material-icons"> {{trueValue}}</md-icon>
+            </ng-container>
+            <ng-container *ngSwitchCase="'image'">
+                <img [src]="trueValue" />
+            </ng-container>
+            <span *ngSwitchDefault>{{trueValue | oTranslate}}</span>
+        </ng-container>
+    </ng-container>
+    <ng-container *ngIf="hasCellDataTrueValue(cellvalue)=== false">
+        <ng-container [ngSwitch]="falseValueType">
+            <ng-container *ngSwitchCase="'number'">{{falseValue}}</ng-container>
+            <ng-container *ngSwitchCase="'icon'">
+                <md-icon class="material-icons"> {{falseValue}}</md-icon>
+            </ng-container>
+            <ng-container *ngSwitchCase="'image'">
+                <img [src]="falseValue" />
+            </ng-container>
+            <ng-container *ngSwitchDefault>{{falseValue | oTranslate}}</ng-container>
+        </ng-container>
+    </ng-container>
+</ng-template>

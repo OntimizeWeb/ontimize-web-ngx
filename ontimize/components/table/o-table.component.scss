@@ -1,285 +1,340 @@
-.o-table{
+$mat-checkbox-size-medium: 18px !default;
+$_mat-checkbox-mark-stroke-size-medim: 2 / 15 * $mat-checkbox-size-medium !default;
+
+$mat-checkbox-size-small: 16px !default;
+$_mat-checkbox-mark-stroke-size-small: 2 / 15 * $mat-checkbox-size-small !default;
+
+.o-table {
   align-items: normal!important;
 
-.o-table-container {
-    
-        display: block;
-        max-width: 100%;
-        height: 100%;
-       
-        overflow: hidden;
-        position: relative;
-        margin: 0 0.5%;
+  .o-table-container {
 
-       
-        &.disabled {
-    
-          .dt-buttons {
-            display: none;
-          }
-    
-          thead {
-            tr {
-              &::before {
-                display: none;
-              }
-            }
-          }
-    
-          tbody {
-            tr {
-              &:not(.group)::before {
-                display: none;
-              }
-              &.selected::before {
-                display: none;
-              }
-              td {
-                &.focus {
-                  outline: none;
-                }
-              }
-            }
-          }
-    
-          .dataTables_info .select-info {
-            display: none;
-          }
-    
+    .fill-remaining {
+      flex: 1 1 auto;
+    }
+
+    display: block;
+    max-width: 100%;
+    height: 100%;
+
+    overflow: hidden;
+    position: relative;
+    margin: 0 0.5%;
+
+    .mat-column-select {
+      min-height: inherit;
+      max-width: 20px;
+      display: flex;
+      align-items: center;
+    }
+    .mat-table {
+
+      &.small {
+        .mat-header-row {
+          min-height: 32px;
+          max-height: 32px;
+          line-height: 32px;
         }
-    
-        &.detail {
-          tbody {
-            tr:not(.insertRow) {
-              td {
-                cursor: pointer;
-              }
+        .mat-row {
+          min-height: 28px;
+          max-height: 28px;
+          .mat-cell {
+            .image-avatar {
+              width: 22px;
+              height: 22px;
             }
           }
         }
-        .quickFilter{
-          .mat-form-field-flex{
-            align-items: flex-end;
+        .mat-checkbox-inner-container {
+          height: $mat-checkbox-size-small;
+          width: $mat-checkbox-size-small;
+          .mat-checkbox-checkmark-path {
+            width: $_mat-checkbox-mark-stroke-size-small;
+          }
+          .mat-checkbox-mixedmark {
+            height: floor($_mat-checkbox-mark-stroke-size-small);
           }
         }
-        .mat-table{
-          .mat-cell, .mat-header-cell {
+      }
+
+      &.medium {
+        .mat-header-row {
+          min-height: 40px;
+          max-height: 40px;
+          line-height: 40px;
+        }
+        .mat-row {
+          min-height: 36px;
+          max-height: 36px;
+          .mat-cell {
+            .image-avatar {
+              width: 28px;
+              height: 28px;
+            }
+          }
+        }
+        .mat-checkbox-inner-container {
+          height: $mat-checkbox-size-medium;
+          width: $mat-checkbox-size-medium;
+          .mat-checkbox-checkmark-path {
+            width: $_mat-checkbox-mark-stroke-size-medim;
+          }
+          .mat-checkbox-mixedmark {
+            height: floor($_mat-checkbox-mark-stroke-size-medim);
+          }
+        }
+      }
+
+      &.large {
+        .mat-header-row {
+          min-height: 52px;
+          max-height: 52px;
+          line-height: 52px;
+        }
+        .mat-row {
+          min-height: 48px;
+          max-height: 48px;
+        }
+      }
+
+      .mat-header-row {
+        line-height: 48px;
+        .mat-header-cell {
+
+          &:not(.mat-sort-header-sorted) {
+            .mat-sort-header-button {
+              padding-right: 16px;
+            }
+          }
+
+          .mat-sort-header-button {
+            margin-left: auto;
+            margin-right: auto;
+            max-width: calc(100% - 48px);
             overflow: hidden;
             white-space: nowrap;
-            overflow: hidden;
             text-overflow: ellipsis;
-            
+          }
+
+          .mat-sort-header-arrow  {
+            margin-top: auto;
+            margin-bottom: auto;
           }
         }
-        .dt-buttons {
-    
-          margin: 0 10px 0 4px;
-    
-          a {
-            text-decoration: none;
-            outline: none;
-            cursor: pointer;
-            font-size: 14px;
-            display: inline-block;
-            margin: 0;
-    
-          }
-          a:not(.hidden-action-text) {
-            padding-right: 8px;
-          }
-          a:not(.hidden-action-text):not(.disabled):hover {
-            border-radius: 4px;
-          }
-    
-          a.hidden-action-text:not(.disabled):hover {
+      }
+
+      .mat-row {
+        box-sizing: border-box;
+        transition: background-color .2s;
+
+        &:last-child {
+          border-bottom: none;
+        }
+
+        .mat-cell {
+          .image-avatar {
+            width:34px;
+            height: 34px;
+            margin: 1px auto;
+            overflow: hidden;
             border-radius: 50%;
-            //padding: 0;
+            position: relative;
+            z-index: 1;
+            img {
+              position: absolute;
+              top: 50%;
+              left: 50%;
+              -webkit-transform: translate(-50%, -50%);
+              -moz-transform: translate(-50%, -50%);
+              -ms-transform: translate(-50%, -50%);
+              -o-transform: translate(-50%, -50%);
+              transform: translate(-50%, -50%);
+              width: 100%;
+              max-width: inherit;
+              max-height: inherit;
+            }
           }
-    
-          .dt-button {
-    
-            &.active {
-    
-              &::after {
-                border-radius: 50%;
-              }
-    
-              & > span {
-                font-weight: bold;
-              }
-    
-            }
-    
-            &.disabled {
-              cursor: not-allowed;
-            }
-    
-            &.custom-generic-action {
-              &::after {
-                font-family: 'Material Icons';
-                content: attr(data-icon);
-                font-size: 24px;
-                line-height: 40px;
-                padding: 8px;
-                font-feature-settings:'liga'
-    
-              }
-            }
-    
-            &.generic-action,
-            &.custom-generic-action {
-              & > span {
-                float: right;
-                line-height: 40px;
-              }
-              &.hidden-action-text > span {
-                display: none;
-              }
-            }
-    
-            &.generic-action {
-              &.generic-action-export {
-                display: none;
-              }
-    
-              &.generic-action-export::before {
-                font-family: 'Material Icons';
-                content: "file_download";
-                font-size: 24px;
-                margin: 0px 5px;
-                line-height: 40px;
-                padding: 5px;
-                font-feature-settings:'liga'
-              }
-    
-              &.generic-action-group::before {
-                font-family: 'Material Icons';
-                content: "view_list";
-                font-size: 24px;
-                margin: 0px 5px;
-                line-height: 40px;
-                padding: 5px;
-                font-feature-settings:'liga'
-              }
-    
-              &.generic-action-resize::before {
-                font-family: 'Material Icons';
-                content: "compare_arrows";
-                font-size: 24px;
-                margin: 0px 5px;
-                line-height: 40px;
-                padding: 5px;
-                font-feature-settings:'liga'
-              }
-    
-              &.generic-action-view-column::before {
-                font-family: 'Material Icons';
-                content: "view_column";
-                font-size: 24px;
-                margin: 0px 5px;
-                line-height: 40px;
-                padding: 5px;
-                font-feature-settings:'liga'
-              }
-    
-              &.generic-action-filter::before {
-                font-family: 'Material Icons';
-                content: "filter_list";
-                font-size: 24px;
-                margin: 0px 5px;
-                line-height: 40px;
-                padding: 5px;
-                font-feature-settings:'liga'
-              }
-    
-              &.generic-action-refresh::before {
-                font-family: 'Material Icons';
-                content: "autorenew";
-                font-size: 24px;
-                line-height: 40px;
-                padding: 8px;
-                font-feature-settings:'liga'
-              }
-    
-              &.generic-action-delete::before {
-                font-family: 'Material Icons';
-                content: "delete";
-                font-size: 24px;
-                line-height: 40px;
-                padding: 8px;
-                font-feature-settings:'liga'
-              }
-    
-              &.generic-action-add::before {
-                font-family: 'Material Icons';
-                content: "add";
-                font-size: 24px;
-                line-height: 40px;
-                padding: 8px;
-                font-feature-settings:'liga'
-              }
-    
-            }
-    
-            &.export-action {
-              display: none;
-    
-              &.buttons-copy > span,
-              &.buttons-print > span,
-              &.buttons-pdf > span {
-                display: none;
-              }
-    
-              &.buttons-excel > span,
-              &.buttons-csv > span {
-                font-weight: bold;
-                margin: 0px 5px;
-                vertical-align: 6px;
-              }
-    
-              &.buttons-copy::after {
-                font-family: 'Material Icons';
-                content: "content_copy";
-                font-size: 24px;
-                margin: 0px 5px;
-                line-height: 40px;
-                padding: 5px;
-                font-feature-settings:'liga'
-              }
-    
-              &.buttons-print::after {
-                font-family: 'Material Icons';
-                content: "print";
-                font-size: 24px;
-                margin: 0px 5px;
-                line-height: 40px;
-                padding: 5px;
-                font-feature-settings:'liga';
-              }
-    
-              &.buttons-pdf::after {
-                font-family: 'Material Icons';
-                content: "picture_as_pdf";
-                font-size: 24px;
-                margin: 0px 5px;
-                line-height: 40px;
-                padding: 5px;
-                font-feature-settings:'liga'
-              }
-    
-            }
-    
-            &.buttons-columnVisibility {
-              display: none;
-              float: left;
-              margin: 10px 4px 10px 8px;
-              font-size: 14px;
-            }
-    
-          }
-    
         }
-    
-       
+      }
+
+      .mat-cell,
+      .mat-header-cell {
+        padding: 0 12px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
       }
     }
+
+    &.disabled {
+
+      // .dt-buttons {
+      //   display: none;
+      // }
+
+      thead {
+        tr {
+          &::before {
+            display: none;
+          }
+        }
+      }
+
+      tbody {
+        tr {
+          &:not(.group)::before {
+            display: none;
+          }
+          &.selected::before {
+            display: none;
+          }
+          td {
+            &.focus {
+              outline: none;
+            }
+          }
+        }
+      }
+
+      .dataTables_info .select-info {
+        display: none;
+      }
+
+    }
+
+    &.detail {
+      tbody {
+        tr:not(.insertRow) {
+          td {
+            cursor: pointer;
+          }
+        }
+      }
+    }
+
+    .quickFilter {
+      padding-right: 75px;
+      .mat-form-field-flex {
+        align-items: flex-end;
+      }
+    }
+
+    .toolbar {
+      margin-bottom: 4px;
+      height: 40px;
+
+      .buttons {
+
+        margin: 0 10px 0 4px;
+
+        button {
+          text-decoration: none;
+          outline: none;
+          cursor: pointer;
+          font-size: 14px;
+          display: inline-block;
+          margin: 0;
+          padding:0;
+          min-width:auto;
+          border-radius: 0;
+          height: 40px;
+        }
+
+        button:not(.hidden-action-text) {
+          padding-right: 8px;
+        }
+
+        button.hidden-action-text:not(.disabled):hover {
+          border-radius: 50%;
+          .mat-button-focus-overlay{
+            background-color: transparent;
+          }
+        }
+
+        .mat-button {
+
+          &.active {
+            &::after {
+              border-radius: 50%;
+            }
+
+            & > span {
+              font-weight: bold;
+            }
+          }
+
+          &.disabled {
+            cursor: not-allowed;
+          }
+
+          &.custom-generic-action {
+            &::after {
+              font-family: 'Material Icons';
+              content: attr(data-icon);
+              font-size: 24px;
+              line-height: 1;
+              padding: 0 8px;
+              font-feature-settings:'liga'
+
+            }
+          }
+
+          &.generic-action,
+          &.custom-generic-action {
+            & > span {
+              float: right;
+              line-height: 40px;
+            }
+            &.hidden-action-text > .mat-button-wrapper > span {
+              display: none;
+            }
+          }
+
+          &.generic-action {
+
+            &.generic-action-refresh::before {
+              font-family: 'Material Icons';
+              content: "autorenew";
+              font-size: 24px;
+              line-height: 40px;
+              padding: 0 8px;
+              font-feature-settings:'liga';
+            }
+
+            &.generic-action-delete::before {
+              font-family: 'Material Icons';
+              content: "delete";
+              font-size: 24px;
+              line-height: 40px;
+              padding: 0 8px;
+              font-feature-settings:'liga';
+            }
+
+            &.generic-action-add::before {
+              font-family: 'Material Icons';
+              content: "add";
+              font-size: 24px;
+              line-height: 40px;
+              padding: 0 8px;
+              font-feature-settings:'liga';
+            }
+          }
+        }
+      }
+
+    }
+  }
+}
+
+.o-table-menu {
+  .o-table-option-active {
+    md-icon {
+      display:initial
+    }
+  }
+
+  md-icon {
+    display:none
+  }
+
+}

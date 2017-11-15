@@ -19,7 +19,10 @@ export const DEFAULT_INPUTS_O_LIST_PICKER = [
   inputs: [
     ...DEFAULT_INPUTS_O_LIST_PICKER
   ],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  host: {
+    '[class.o-list-picker-dialog]': 'true'
+  }
 })
 export class OListPickerDialogComponent {
 
@@ -27,7 +30,7 @@ export class OListPickerDialogComponent {
   filter: boolean = true;
 
   visibleColsArray: Array<string>;
-  searchVal : string;
+  searchVal: string;
 
   constructor(protected dialogRef: MdDialogRef<OListPickerDialogComponent>) { }
 

@@ -6,4 +6,58 @@
   $background: map-get($theme, background);
   $foreground: map-get($theme, foreground);
 
+  .o-table {
+
+    .o-table-menu-button {
+      color: mat-color($foreground, secondary-text);
+    }
+
+    .mat-header-row {
+      background-color: mat-color($background, status-bar, 0.9);
+      .mat-header-cell {
+        color: mat-color($foreground, text);
+      }
+    }
+
+    .mat-row {
+      &:hover {
+        cursor: pointer;
+        background-color: mat-color($foreground, base, 0.18);
+      }
+      .mat-cell {
+        color: mat-color($foreground, secondary-text);
+      }
+    }
+
+    .buttons {
+
+      button {
+        color: mat-color($foreground, secondary-text);
+      }
+
+      button:not(.hidden-action-text):not(.disabled):hover {
+        background-color: mat-color($background, hover);
+      }
+
+      button.hidden-action-text:not(.disabled):hover {
+        background-color: mat-color($background, hover);
+      }
+
+      .button {
+
+        &.active {
+          color: mat-color($foreground, secondary-text);
+
+          &::after {
+            background: #eee;
+          }
+        }
+
+        &.disabled {
+          color: mat-color($background, disabled-button);
+        }
+      }
+    }
+
+  }
 }

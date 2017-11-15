@@ -1,7 +1,7 @@
 {
   "name": "ontimize-web-ngx",
   "homepage": "https://github.com/OntimizeWeb/ontimize-web-ngx#readme",
-  "version": "2.1.0-rc.0",
+  "version": "2.1.0-rc.1",
   "description": "Ontimize Web framework with Angular 2",
   "bugs": "https://github.com/OntimizeWeb/ontimize-web-ngx/issues",
   "author": "Imatia S.L.",
@@ -28,7 +28,8 @@
     "aot": "npm run init-common && npm run aot:compile && npm run end-common"
   },
   "dependencies": {
-    "moment": "2.18.1"
+    "moment": "2.18.1",
+    "ng2-dragula": "1.5.0"
   },
   "peerDependencies": {
     "@angular/flex-layout": "2.0.0-beta.9",

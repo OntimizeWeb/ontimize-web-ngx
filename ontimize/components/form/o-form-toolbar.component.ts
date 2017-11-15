@@ -279,6 +279,18 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
   getLabelHeaderAlign(): string {
     return this.labelHeaderAlign;
   }
+
+  get showUndoButton(): boolean {
+    return this._form.undoButton && (!this.initialMode || this._form.isEditableDetail());
+  }
+
+  get isChangesStackEmpty(): boolean {
+    return this._form.isCacheStackEmpty;
+  }
+
+  onUndoLastChange() {
+    this._form.executeToolbarAction(OFormComponent.UNDO_LAST_CHANGE_ACTION);
+  }
 }
 
 @NgModule({

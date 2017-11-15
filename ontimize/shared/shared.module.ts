@@ -1,10 +1,5 @@
 import { NgModule } from '@angular/core';
-
-import {
-  FormsModule,
-  ReactiveFormsModule
-} from '@angular/forms';
-
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import {
   ColumnsFilterPipe,
@@ -12,12 +7,12 @@ import {
   OIntegerPipe,
   ORealPipe,
   OTranslateModule,
-  oMomentPipe,
+  OMomentPipe,
+  OCurrencyPipe
 } from '../pipes';
 
 import { ONTIMIZE_DIRECTIVES } from '../config/o-directives';
 import { OCustomMaterialModule } from './material/custom.material.module';
-
 import { FlexLayoutModule } from '@angular/flex-layout';
 
 @NgModule({
@@ -29,7 +24,8 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     OrderByPipe,
     OIntegerPipe,
     ORealPipe,
-    oMomentPipe,
+    OMomentPipe,
+    OCurrencyPipe,
     ONTIMIZE_DIRECTIVES
   ],
   exports: [
@@ -41,7 +37,8 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     OrderByPipe,
     OIntegerPipe,
     ORealPipe,
-    oMomentPipe,
+    OMomentPipe,
+    OCurrencyPipe,
     ONTIMIZE_DIRECTIVES,
     OCustomMaterialModule
   ]
