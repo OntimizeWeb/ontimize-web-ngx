@@ -6,7 +6,7 @@
                     <button md-button *ngIf="insertButton" (click)="add()" title="{{'TABLE.BUTTONS.ADD' | oTranslate}}" [ngClass]="{'generic-action generic-action-add':true, 'hidden-action-text':!showTableButtonsText}">
                         <ng-container *ngIf="showTableButtonsText">{{'TABLE.BUTTONS.ADD' | oTranslate}} </ng-container>
                     </button>
-                    <button md-button *ngIf="deleteButton && selectedItems.length>0" (click)="remove()" title="{{'TABLE.BUTTONS.DELETE' | oTranslate}}"
+                    <button md-button *ngIf="deleteButton && getSelectedItems().length > 0" (click)="remove()" title="{{'TABLE.BUTTONS.DELETE' | oTranslate}}"
                         [ngClass]="{'generic-action generic-action-delete':true, 'hidden-action-text':!showTableButtonsText}">
                         <ng-container *ngIf="showTableButtonsText">
                             <span>{{'TABLE.BUTTONS.DELETE' | oTranslate}}</span>

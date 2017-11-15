@@ -210,7 +210,7 @@ export class ODateInputComponent extends OFormDataComponent {
     }
   }
 
-  onModelChange() {
+  onModelChange(event: any) {
     this.onChange.emit(event);
   }
 
