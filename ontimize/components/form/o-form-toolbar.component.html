@@ -17,7 +17,7 @@
     </ng-container>
 
     <span *ngIf="getLabelHeaderAlign() === 'center' || getLabelHeaderAlign() === 'end'" class="fill-remaining"></span>
-    <div *ngIf="labelheader!=''" fxLayout="row" fxLayoutAlign="center center">
+    <div *ngIf="labelHeader!=''" fxLayout="row" fxLayoutAlign="center center">
       <span>{{ labelHeader | oTranslate }}</span>
     </div>
     <span *ngIf="getLabelHeaderAlign() === 'start' || getLabelHeaderAlign() === 'center'" class="fill-remaining"></span>
