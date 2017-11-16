@@ -1,5 +1,8 @@
 ## 2.1.0-rc.2
 
+### Features
+* **o-table-button**: adding '*icon-position*' input ([66f0acb](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/66f0acb))
+
 ### Bug Fixes
 * **o-translate-service**: fixing *'getBrowserLang'* bug ([#138](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/138)) ([4a5d2e7](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/4a5d2e7))
 
