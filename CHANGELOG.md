@@ -1,10 +1,9 @@
 ## 2.1.0-rc.2
 
 ### Bug Fixes
-* **o-translate-service**: fixing *'getBrowserLang'* bug ([#59](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/59)) ([6ed6bda](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/6ed6bda))
+* **o-translate-service**: fixing *'getBrowserLang'* bug ([#138](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/138)) ([4a5d2e7](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/4a5d2e7))
 
-* **o-form**, **o-table**, **o-datatable**, **o-list**,**o-list-picker**,**o-combo**: fixing to show server messages in the client when the requested action fails in the components bug ([#138](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/138)) ([bceae37](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/bceae37)) ([6ed6bda](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/6ed6bda))
-
+* **o-form**, **o-table**, **o-datatable**, **o-list**,**o-list-picker**,**o-combo**: fixing to show server messages in the client when the requested action fails in the components bug ([#59](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/59)) ([bceae37](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/bceae37)) ([6ed6bda](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/6ed6bda))
 
 ## 2.1.0-rc.1 (2017-11-15)
 
