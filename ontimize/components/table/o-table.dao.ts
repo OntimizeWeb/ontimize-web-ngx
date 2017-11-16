@@ -1,5 +1,4 @@
 import { Observable } from 'rxjs/Observable';
-import { Subscription } from 'rxjs/Subscription';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Util } from '../../util/util';
 import { Injector } from '@angular/core';
@@ -38,25 +37,10 @@ export class OTableDao {
   /**
    * Call the service query and emit data has ben modified
    */
-  getQuery(queryArgs: any): Subscription {
+  getQuery(queryArgs: any): Observable<any> {
     this.isLoadingResults = false;
-    let dataArray: any[];
-    return this.dataService[this.method].apply(this.dataService, queryArgs).subscribe(res => {
-      let data = undefined;
-      if (Util.isArray(res)) {
-        data = res;
-      } else if ((res.code === 0) && Util.isArray(res.data)) {
-        data = (res.data !== undefined) ? res.data : [];
+    return this.dataService[this.method].apply(this.dataService, queryArgs);
 
-      }
-      this.dataChange.next(data);
-      this.isLoadingResults = true;
-      return Observable.of(dataArray);
-    }, err => {
-      dataArray = [];
-      this.dataChange.next(dataArray);
-      this.isLoadingResults = true;
-    });
   }
   removeQuery(deletedMethod: string, filters: any): Observable<any> {
 

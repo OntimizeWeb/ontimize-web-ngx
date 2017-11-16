@@ -584,11 +584,33 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       if (this.querySubscription) {
         this.querySubscription.unsubscribe();
       }
-      this.querySubscription = this.daoTable.getQuery(queryArguments);
-      this.pendingQuery = false;
+      this.querySubscription = this.daoTable.getQuery(queryArguments).subscribe(res => {
+        let data = undefined;
+        if (Util.isArray(res)) {
+          data = res;
+        } else if ((res.code === 0) && Util.isArray(res.data)) {
+          data = (res.data !== undefined) ? res.data : [];
+
+        }
+        this.daoTable.dataChange.next(data);
+        this.daoTable.isLoadingResults = true;
+      }, err => {
+        this.showDialogError(err, 'MESSAGES.ERROR_QUERY');
+        this.pendingQuery = false;
+        this.daoTable.dataChange.next([]);
+        this.daoTable.isLoadingResults = true;
+      });
     }
   }
 
+  showDialogError(error: string, errorOptional?: string) {
+
+    if (error && typeof error !== 'object') {
+      this.dialogService.alert('ERROR', error);
+    } else {
+      this.dialogService.alert('ERROR', errorOptional);
+    }
+  }
   getAttributesValuesToQuery(): Object {
     let columns = [];
     this.colArray.forEach(col => {
@@ -670,9 +692,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
         .then(
         res => {
           if (res === true) {
-
             if (this.dataService && (this.deleteMethod in this.dataService) && this.entity && (this.keysArray.length > 0)) {
-
               let filters = [];
               this.selectedItems.map(item => {
                 let kv = {};
@@ -689,12 +709,11 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
                   //ObservableWrapper.callEmit(this.onRowDeleted, this.selectedItems);
                 },
                 error => {
+                  this.showDialogError(error, 'MESSAGES.ERROR_DELETE');
                   console.log('[OTable.remove]: error', error);
-                  this.dialogService.alert('ERROR', 'MESSAGES.ERROR_DELETE');
                 },
                 () => {
                   console.log('[OTable.remove]: success');
-                  // this.setTableInitialState();
                   this.reloadData();
                 }
               );
@@ -716,8 +735,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   public reloadData() {
     this.finishQuerSubscription = false;
+    this.pendingQuery = true;
     let queryArguments = this.getQueryArguments({});
-    this.daoTable.getQuery(queryArguments);
+    this.queryData(queryArguments);
   }
   handleClick(item: any) {
     ObservableWrapper.callEmit(this.onClick, item);
@@ -740,9 +760,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
     this._oTableOptions.selectColumn.visible = !this._oTableOptions.selectColumn.visible;
 
-    if (this._oTableOptions.visibleColumns &&   this._oTableOptions.selectColumn.visible && this._oTableOptions.visibleColumns[0] !== OTableComponent.NAME_COLUMN_SELECT) {
+    if (this._oTableOptions.visibleColumns && this._oTableOptions.selectColumn.visible && this._oTableOptions.visibleColumns[0] !== OTableComponent.NAME_COLUMN_SELECT) {
       this._oTableOptions.visibleColumns.unshift(OTableComponent.NAME_COLUMN_SELECT);
-    }else if (this._oTableOptions.visibleColumns &&  !this._oTableOptions.selectColumn.visible && this._oTableOptions.visibleColumns[0] === OTableComponent.NAME_COLUMN_SELECT) {
+    } else if (this._oTableOptions.visibleColumns && !this._oTableOptions.selectColumn.visible && this._oTableOptions.visibleColumns[0] === OTableComponent.NAME_COLUMN_SELECT) {
       this._oTableOptions.visibleColumns.shift();
     }
   }
@@ -771,8 +791,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       this.dataSource.renderedData.forEach(row => this.selection.select(row));
     this.selectedItems = this.selection.selected;
     this.deleteButton = this.selectedItems.length > 0 && this.deleteButton;
-
   }
+
   selectedRow(row: any) {
     this.selection.toggle(row);
     this.selectedItems = this.selection.selected;

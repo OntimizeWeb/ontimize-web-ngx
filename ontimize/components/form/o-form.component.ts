@@ -1046,7 +1046,11 @@ export class OFormComponent implements OnInit, OnDestroy {
     }, err => {
       console.log(err);
       self._updateFormData({});
-      self.dialogService.alert('ERROR', 'MESSAGES.ERROR_QUERY');
+      if (err) {
+        self.dialogService.alert('ERROR', err);
+      } else {
+        self.dialogService.alert('ERROR', 'MESSAGES.ERROR_QUERY');
+      }
       self.loaderSubscription.unsubscribe();
     });
   }
@@ -1118,7 +1122,29 @@ export class OFormComponent implements OnInit, OnDestroy {
 
   protected postIncorrectInsert(result: any) {
     console.log('[OFormComponent.postIncorrectInsert]', result);
-    this.dialogService.alert('ERROR', 'MESSAGES.ERROR_INSERT');
+    if (result && typeof result !=='object') {
+      this.dialogService.alert('ERROR', result);
+    } else {
+      this.dialogService.alert('ERROR', 'MESSAGES.ERROR_INSERT');
+    }
+  }
+
+  protected postIncorrectDelete(result: any) {
+    console.log('[OFormComponent.postIncorrectDelete]', result);
+    if (result && typeof result !=='object') {
+      this.dialogService.alert('ERROR', result);
+    } else {
+      this.dialogService.alert('ERROR', 'MESSAGES.ERROR_DELETE');
+    }
+  }
+
+  protected postIncorrectUpdate(result: any) {
+    console.log('[OFormComponent.postIncorrectUpdate]', result);
+    if (result && typeof result !=='object') {
+      this.dialogService.alert('ERROR', result);
+    } else {
+      this.dialogService.alert('ERROR', 'MESSAGES.ERROR_UPDATE');
+    }
   }
 
   updateData(filter, values, sqlTypes?: Object): Observable<any> {
@@ -1159,11 +1185,6 @@ export class OFormComponent implements OnInit, OnDestroy {
     console.log('[OFormComponent.postCorrectUpdate]', result);
   }
 
-  protected postIncorrectUpdate(result: any) {
-    console.log('[OFormComponent.postIncorrectUpdate]', result);
-    this.dialogService.alert('ERROR', 'MESSAGES.ERROR_UPDATE');
-  }
-
   deleteData(filter): Observable<any> {
     var self = this;
     var loader = self.load();
@@ -1192,10 +1213,7 @@ export class OFormComponent implements OnInit, OnDestroy {
     console.log('[OFormComponent.postCorrectDelete]', result);
   }
 
-  protected postIncorrectDelete(result: any) {
-    console.log('[OFormComponent.postIncorrectDelete]', result);
-    this.dialogService.alert('ERROR', 'MESSAGES.ERROR_DELETE');
-  }
+  
 
   toJSONData(data) {
     if (!data) {
