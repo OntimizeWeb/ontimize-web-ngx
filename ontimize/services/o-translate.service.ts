@@ -118,7 +118,20 @@ export class OTranslateService {
   }
 
   public getBrowserLang() {
-    return this.ngxTranslateService.getBrowserLang();
+    // copying this.ngxTranslateService.getBrowserLang() but with a fix for default selected language (browserLang)
+    if (typeof window === 'undefined' || typeof window.navigator === 'undefined') {
+      return undefined;
+    }
+    const navigator: any = window.navigator;
+    var browserLang = navigator.languages ? navigator.languages[0] : null;
+    browserLang = navigator.language || browserLang || navigator.browserLanguage || navigator.userLanguage;
+    if (browserLang.indexOf('-') !== -1) {
+      browserLang = browserLang.split('-')[0];
+    }
+    if (browserLang.indexOf('_') !== -1) {
+      browserLang = browserLang.split('_')[0];
+    }
+    return browserLang;
   }
 
 }
