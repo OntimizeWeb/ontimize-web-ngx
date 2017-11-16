@@ -220,106 +220,11 @@ $_mat-checkbox-mark-stroke-size-small: 2 / 15 * $mat-checkbox-size-small !defaul
     }
 
     .toolbar {
-      margin-bottom: 4px;
+      margin: 4px 0px;
       height: 40px;
 
       .buttons {
-
         margin: 0 10px 0 4px;
-
-        button {
-          text-decoration: none;
-          outline: none;
-          cursor: pointer;
-          font-size: 14px;
-          display: inline-block;
-          margin: 0;
-          padding:0;
-          min-width:auto;
-          border-radius: 0;
-          height: 40px;
-        }
-
-        button:not(.hidden-action-text) {
-          padding-right: 8px;
-        }
-
-        button.hidden-action-text:not(.disabled):hover {
-          border-radius: 50%;
-          .mat-button-focus-overlay{
-            background-color: transparent;
-          }
-        }
-
-        .mat-button {
-
-          &.active {
-            &::after {
-              border-radius: 50%;
-            }
-
-            & > span {
-              font-weight: bold;
-            }
-          }
-
-          &.disabled {
-            cursor: not-allowed;
-          }
-
-          &.custom-generic-action {
-            &::after {
-              font-family: 'Material Icons';
-              content: attr(data-icon);
-              font-size: 24px;
-              line-height: 1;
-              padding: 0 8px;
-              font-feature-settings:'liga'
-
-            }
-          }
-
-          &.generic-action,
-          &.custom-generic-action {
-            & > span {
-              float: right;
-              line-height: 40px;
-            }
-            &.hidden-action-text > .mat-button-wrapper > span {
-              display: none;
-            }
-          }
-
-          &.generic-action {
-
-            &.generic-action-refresh::before {
-              font-family: 'Material Icons';
-              content: "autorenew";
-              font-size: 24px;
-              line-height: 40px;
-              padding: 0 8px;
-              font-feature-settings:'liga';
-            }
-
-            &.generic-action-delete::before {
-              font-family: 'Material Icons';
-              content: "delete";
-              font-size: 24px;
-              line-height: 40px;
-              padding: 0 8px;
-              font-feature-settings:'liga';
-            }
-
-            &.generic-action-add::before {
-              font-family: 'Material Icons';
-              content: "add";
-              font-size: 24px;
-              line-height: 40px;
-              padding: 0 8px;
-              font-feature-settings:'liga';
-            }
-          }
-        }
       }
 
     }

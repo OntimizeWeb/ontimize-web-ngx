@@ -33,7 +33,7 @@ import { MdDialog, MdSort, MdSortModule, MdTabGroup, MdTab } from '@angular/mate
 
 import { OTableDataSource } from './o-table.datasource';
 import { OTableDao } from './o-table.dao';
-import { OTableButtonComponent } from './header/o-table-button.component';
+import { OTableButtonComponent } from './header/table-button/o-table-button.component';
 import { OTableColumnComponent } from './column/o-table-column.component';
 import { Util } from '../../util/util';
 import { ObservableWrapper } from '../../util/async';
@@ -147,8 +147,6 @@ export class OTableOptions {
   visibleColumns: Array<any> = [];
   filter: boolean = true;
   filterCaseSensitive: boolean = false;
-  buttons: Array<OTableButtonComponent> = [];
-
 }
 
 
@@ -404,13 +402,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   }
 
-
-  public registerHeaderButton(button: OTableButtonComponent) {
-
-    if (this.oTableOptions) {
-      this.oTableOptions.buttons.push(button);
-    }
-  }
   /**
    * initialize event to filtering the columns, when change value then filter the data
    */
