@@ -3,7 +3,7 @@ import { DataSource } from '@angular/cdk/collections';
 import { OTableDao } from './o-table.dao';
 import { OTableOptions, OColumn } from './o-table.component';
 import { ITableFilterByColumnDataInterface } from './extensions/dialog/o-table-dialog-components';
-import { MdSort } from '@angular/material';
+import { MdSort,MdPaginator } from '@angular/material';
 
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import 'rxjs/add/operator/startWith';
@@ -25,7 +25,7 @@ export class OTableDataSource extends DataSource<any> {
   get filter(): string { return this._filterChange.value; }
   set filter(filter: string) { this._filterChange.next(filter); }
 
-  constructor(private _database: OTableDao, private tableOptions: OTableOptions, private _sort: MdSort) {
+  constructor(private _database: OTableDao, private _paginator: MdPaginator, private tableOptions: OTableOptions, private _sort: MdSort) {
     super();
   }
 
@@ -38,6 +38,9 @@ export class OTableDataSource extends DataSource<any> {
 
     if (this.tableOptions.filter) {
       displayDataChanges.push(this._filterChange);
+    }
+    if (this._paginator) {
+      displayDataChanges.push(this._paginator.page);
     }
 
     return Observable.merge(...displayDataChanges).map(() => {
@@ -61,7 +64,12 @@ export class OTableDataSource extends DataSource<any> {
       }
 
       // Sort filtered data
-      this.renderedData = this.sortData(this.renderedData.slice());
+      if (this._paginator && !isNaN(this._paginator.pageSize)) {
+        const startIndex = this._paginator.pageIndex * this._paginator.pageSize;
+        this.renderedData = this.renderedData.splice(startIndex, this._paginator.pageSize);
+      } else {
+        this.renderedData = this.sortData(this.renderedData.slice());
+      }
 
       this.resultsLength = this.renderedData.length;
       return this.renderedData;

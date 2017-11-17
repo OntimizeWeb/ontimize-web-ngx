@@ -69,7 +69,6 @@
           <md-row *cdkRowDef="let row; columns: oTableOptions.visibleColumns;" (click)="handleClick(row)" (dblclick)="handleDoubleClick(row)">
           </md-row>
         </md-table>
-
         <!--LOADING-->
         <div *ngIf="!daoTable.isLoadingResults">
           <md-progress-spinner mode="indeterminate" style="margin:0 auto;" *ngIf="daoTable.isLoadingResults"></md-progress-spinner>
@@ -78,7 +77,10 @@
           fxLayoutAlign="center center">
           {{'TABLE.EMPTY' | oTranslate}}
         </div>
-
+      <!-- <ng-container ngIf="paginationControls">-->
+          <o-table-paginator #paginator [page-lenght]="dataSource.resultsLength"  [page-size]="rowQuery" ></o-table-paginator>
+        <!--</ng-container>-->
+  
       </div>
     </div>
   </div>

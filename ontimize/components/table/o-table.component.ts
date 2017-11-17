@@ -29,7 +29,9 @@ import { CdkTableModule } from '@angular/cdk/table';
 import { SelectionModel } from '@angular/cdk/collections';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
-import { MdDialog, MdSort, MdSortModule, MdTabGroup, MdTab } from '@angular/material';
+import { MdDialog, MdSort, MdSortModule, MdTabGroup, MdTab, MdPaginatorModule } from '@angular/material';
+
+import { OTablePaginatorComponent } from './extensions/footer/paginator/o-table-paginator.component';
 
 import { OTableDataSource } from './o-table.datasource';
 import { OTableDao } from './o-table.dao';
@@ -193,6 +195,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
   }
 
+  @ViewChild(OTablePaginatorComponent) paginator: OTablePaginatorComponent;
   @ViewChild('filter') filter: ElementRef;
   @ViewChild(MdSort) sort: MdSort;
 
@@ -278,10 +281,13 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   protected filterableColumnsArray: Array<String> = [];
   public showFilterByColumnIcon: boolean = false;
+  public paginationControls: boolean = true;
 
-  get selectedItemsLenght() {
-    return this.selectedItems.length;
+
+  get rowQuery() {
+    return this.queryRows;
   }
+
 
   ngOnInit() {
     this.initialize();
@@ -545,7 +551,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   setDatasource() {
-    this.dataSource = new OTableDataSource(this.daoTable, this._oTableOptions, this.sort);
+    this.dataSource = new OTableDataSource(this.daoTable, this.paginator.mdpaginator, this._oTableOptions, this.sort);
     if (this.daoTable) {
       this.dataSource.resultsLength = this.daoTable.data.length;
     }
@@ -897,14 +903,16 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     OTableFilterByColumnDataDialogComponent,
     OTableButtonComponent,
     OTableOptionComponent,
-    OTableColumnsFilterComponent
+    OTableColumnsFilterComponent,
+    OTablePaginatorComponent
   ],
   imports: [
     CommonModule,
     OSharedModule,
     CdkTableModule,
     MdSortModule,
-    DragulaModule
+    DragulaModule,
+    MdPaginatorModule
   ],
   exports: [
     OTableComponent,
@@ -917,7 +925,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     OTableCellRendererImageComponent,
     OTableCellRendererIntegerComponent,
     OTableCellRendererRealComponent,
-    OTableCellRendererCurrencyComponent
+    OTableCellRendererCurrencyComponent,
+    OTablePaginatorComponent
   ],
   entryComponents: [
     OTableCellRendererDateComponent,
