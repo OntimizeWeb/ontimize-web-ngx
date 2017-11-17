@@ -1,0 +1,23 @@
+<span md-dialog-title>{{ 'TABLE.BUTTONS.FILTER_BY_COLUMN' | oTranslate }} : {{ attr }}</span>
+
+<md-dialog-content>
+  <md-checkbox (change)="onSelectAllChange($event)" [checked]="areAllSelected()" [indeterminate]="isIndeterminate()">
+    {{ 'TABLE.FILTER_BY_COLUMN.CHECK_ALL' | oTranslate }}
+  </md-checkbox>
+
+  <md-list>
+    <md-list-item *ngFor="let record of columnData; let i = index">
+      <span md-line>
+        <md-checkbox (change)="onRecordSelectionChange($event, record)" [checked]="isRecordChecked(record)">
+          {{ record.renderedValue }}
+        </md-checkbox>
+      </span>
+    </md-list-item>
+  </md-list>
+
+</md-dialog-content>
+
+<md-dialog-actions fxLayoutAlign="end center">
+  <button md-button [md-dialog-close]="false">{{ 'CANCEL' | oTranslate }}</button>
+  <button md-button [md-dialog-close]="true">{{ 'ACCEPT' | oTranslate }}</button>
+</md-dialog-actions>

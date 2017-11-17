@@ -1,57 +1,63 @@
 <div fxLayoutAlign="center top" class="o-table-wrapper" [style.display]="isVisible()? '' : 'none'">
-  <div class="expandable-container">
-    <div class="o-table-container">
-      <div class="toolbar" fxLayout="row" fxLayoutAlign="space-between center">
-        <div class="buttons">
-          <o-table-button *ngIf="insertButton" (onClick)="add()" label="TABLE.BUTTONS.ADD" icon="add"> </o-table-button>
-          <o-table-button *ngIf="deleteButton && getSelectedItems().length > 0" (onClick)="remove()" label="TABLE.BUTTONS.DELETE" icon="delete"></o-table-button>
-          <o-table-button *ngIf="refreshButton" (onClick)="reloadData()" label="TABLE.BUTTONS.REFRESH" icon="autorenew"> </o-table-button>
-          <ng-content select="o-table-button"></ng-content>
+    <div class="expandable-container">
+      <div class="o-table-container">
+        <div class="toolbar" fxLayout="row" fxLayoutAlign="space-between center">
+          <div class="buttons">
+            <o-table-button *ngIf="insertButton" (onClick)="add()" label="TABLE.BUTTONS.ADD" icon="add"> </o-table-button>
+            <o-table-button *ngIf="deleteButton && getSelectedItems().length > 0" (onClick)="remove()" label="TABLE.BUTTONS.DELETE" icon="delete"></o-table-button>
+            <o-table-button *ngIf="refreshButton" (onClick)="reloadData()" label="TABLE.BUTTONS.REFRESH" icon="autorenew"> </o-table-button>
+            <ng-content select="o-table-button"></ng-content>
+          </div>
+          <span class="fill-remaining"></span>
+          <div *ngIf="oTableOptions.filter" class="quickFilter" fxLayout="row">
+            <md-form-field floatPlaceholder="never">
+              <input mdInput #filter placeholder="{{'TABLE.FILTER' | oTranslate}}">
+              <span class="icon-btn" mdPrefix fxFlexLayout="flex-end">
+                <i class="material-icons">search</i>
+              </span>
+            </md-form-field>
+          </div>
+          <button md-icon-button class="o-table-menu-button" [mdMenuTriggerFor]="menu">
+            <md-icon>more_vert</md-icon>
+          </button>
+          <md-menu #menu="mdMenu" x-position="before" class="o-table-menu">
+            <o-table-option *ngIf="selectAllCheckbox" (onClick)="onShowsSelects($event)" label="TABLE.BUTTONS.SELECT" show-active-icon="true">
+            </o-table-option>
+            <o-table-option *ngIf="exportButton" (onClick)="onExportButtonClicked()" label="TABLE.BUTTONS.EXPORT"> </o-table-option>
+            <o-table-option *ngIf="columnsVisibilityButton" (onClick)="onChangeColumnsVisibilityClicked()" label="TABLE.BUTTONS.COLVIS">
+            </o-table-option>
+            <o-table-option *ngIf="areFilterableColumns()" (onClick)="onFilterByColumnClicked()" label="TABLE.BUTTONS.FILTER_BY_COLUMN"
+              show-active-icon="true">
+            </o-table-option>
+            <ng-content select="o-table-option"></ng-content>
+          </md-menu>
         </div>
-        <span class="fill-remaining"></span>
-        <div *ngIf="oTableOptions.filter" class="quickFilter" fxLayout="row">
-          <md-form-field floatPlaceholder="never">
-            <input mdInput #filter placeholder="{{'TABLE.FILTER' | oTranslate}}">
-            <span class="icon-btn" mdPrefix fxFlexLayout="flex-end">
-              <i class="material-icons">search</i>
-            </span>
-          </md-form-field>
-        </div>
-        <button md-icon-button class="o-table-menu-button" [mdMenuTriggerFor]="menu">
-          <md-icon>more_vert</md-icon>
-        </button>
-        <md-menu #menu="mdMenu" x-position="before" class="o-table-menu">
-          <o-table-option *ngIf="selectAllCheckbox" (onClick)="onShowsSelects($event)" label="TABLE.BUTTONS.SELECT" show-active-icon="true">
-          </o-table-option>
-          <o-table-option *ngIf="exportButton" (onClick)="onExportButtonClicked()" label="TABLE.BUTTONS.EXPORT"> </o-table-option>
-          <o-table-option *ngIf="columnsVisibilityButton" (onClick)="onChangeColumnsVisibilityClicked()" label="TABLE.BUTTONS.COLVIS">
-          </o-table-option>
-          <o-table-option *ngIf="areFilterableColumns()" (onClick)="onFilterByColumnClicked()" label="TABLE.BUTTONS.FILTER_BY_COLUMN"
-            show-active-icon="true">
-          </o-table-option>
-          <ng-content select="o-table-option"></ng-content>
-        </md-menu>
-      </div>
 
-      <md-table #table [trackBy]="getTrackByFunction()" [dataSource]="dataSource" mdSort [class]="rowHeight">
-        <!--Checkbox Column -->
-        <ng-container [cdkColumnDef]="oTableOptions.selectColumn.name" *ngIf="oTableOptions.selectColumn.visible">
-          <md-header-cell *cdkHeaderCellDef>
-            <md-checkbox (change)="$event ? masterToggle() : null" [checked]="isAllSelected()" [indeterminate]="selection.hasValue() && !isAllSelected()"></md-checkbox>
-          </md-header-cell>
-          <md-cell *cdkCellDef="let row">
-            <md-checkbox name="id[]" (click)="$event.stopPropagation()" (change)="$event ? selectedRow(row) : null" [checked]="selection.isSelected(row)">
-            </md-checkbox>
-          </md-cell>
-        </ng-container>
+        <md-table #table [trackBy]="getTrackByFunction()" [dataSource]="dataSource" mdSort [class]="rowHeight">
+          <!--Checkbox Column -->
+          <ng-container [cdkColumnDef]="oTableOptions.selectColumn.name" *ngIf="oTableOptions.selectColumn.visible">
+            <md-header-cell *cdkHeaderCellDef>
+              <md-checkbox (change)="$event ? masterToggle() : null" [checked]="isAllSelected()" [indeterminate]="selection.hasValue() && !isAllSelected()"></md-checkbox>
+            </md-header-cell>
+            <md-cell *cdkCellDef="let row">
+              <md-checkbox name="id[]" (click)="$event.stopPropagation()" (change)="$event ? selectedRow(row) : null" [checked]="selection.isSelected(row)">
+              </md-checkbox>
+            </md-cell>
+          </ng-container>
 
-        <!-- Generic column definition -->
-        <ng-container *ngFor="let column of oTableOptions.columns" [cdkColumnDef]="column.name">
+          <!-- Generic column definition -->
+          <ng-container *ngFor="let column of oTableOptions.columns" [cdkColumnDef]="column.name">
             <ng-container *ngIf="column.orderable">
-              <md-header-cell *cdkHeaderCellDef md-sort-header [fxFlex]="column.width">{{ column.title | oTranslate }}</md-header-cell>
+              <md-header-cell *cdkHeaderCellDef md-sort-header [fxFlex]="column.width">
+                <md-icon *ngIf="isColumnFilterable(column)" (click)="openColumnFilterDialog(column)">filter_list</md-icon>
+                {{ column.title | oTranslate }}
+              </md-header-cell>
             </ng-container>
             <ng-container *ngIf="!column.orderable">
-              <md-header-cell *cdkHeaderCellDef [fxFlex]="column.width">{{ column.title | oTranslate }}</md-header-cell>
+              <md-header-cell *cdkHeaderCellDef [fxFlex]="column.width">
+                <md-icon *ngIf="isColumnFilterable(column)" (click)="openColumnFilterDialog(column)">filter_list</md-icon>
+                {{ column.title | oTranslate }}
+              </md-header-cell>
             </ng-container>
             <md-cell *cdkCellDef="let row" [fxFlex]="column.width">
               <ng-container *ngIf="!column.renderer">{{ row[column.name] }}</ng-container>
@@ -59,20 +65,20 @@
             </md-cell>
           </ng-container>
 
-        <md-header-row *cdkHeaderRowDef="oTableOptions.visibleColumns"></md-header-row>
-        <md-row *cdkRowDef="let row; columns: oTableOptions.visibleColumns;" (click)="handleClick(row)" (dblclick)="handleDoubleClick(row)">
-        </md-row>
-      </md-table>
+          <md-header-row *cdkHeaderRowDef="oTableOptions.visibleColumns"></md-header-row>
+          <md-row *cdkRowDef="let row; columns: oTableOptions.visibleColumns;" (click)="handleClick(row)" (dblclick)="handleDoubleClick(row)">
+          </md-row>
+        </md-table>
 
-      <!--LOADING-->
-      <div *ngIf="!daoTable.isLoadingResults">
-        <md-progress-spinner mode="indeterminate" style="margin:0 auto;" *ngIf="daoTable.isLoadingResults"></md-progress-spinner>
-      </div>
-      <div class="mat-row o-table-no-results" [style.display]="dataSource.resultsLength > 0 ? 'none' : ''" *ngIf="daoTable.isLoadingResults"
-        fxLayoutAlign="center center">
-        {{'TABLE.EMPTY' | oTranslate}}
-      </div>
+        <!--LOADING-->
+        <div *ngIf="!daoTable.isLoadingResults">
+          <md-progress-spinner mode="indeterminate" style="margin:0 auto;" *ngIf="daoTable.isLoadingResults"></md-progress-spinner>
+        </div>
+        <div class="mat-row o-table-no-results" [style.display]="dataSource.resultsLength > 0 ? 'none' : ''" *ngIf="daoTable.isLoadingResults"
+          fxLayoutAlign="center center">
+          {{'TABLE.EMPTY' | oTranslate}}
+        </div>
 
+      </div>
     </div>
   </div>
-</div>

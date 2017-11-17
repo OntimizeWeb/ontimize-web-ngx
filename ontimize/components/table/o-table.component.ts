@@ -33,16 +33,20 @@ import { MdDialog, MdSort, MdSortModule, MdTabGroup, MdTab } from '@angular/mate
 
 import { OTableDataSource } from './o-table.datasource';
 import { OTableDao } from './o-table.dao';
-import { OTableButtonComponent } from './header/table-button/o-table-button.component';
-import { OTableOptionComponent } from './header/table-option/o-table-option.component';
-
+import {
+  OTableButtonComponent,
+  OTableOptionComponent,
+  OTableColumnsFilterComponent
+} from './header/o-table-header-components';
 import { OTableColumnComponent } from './column/o-table-column.component';
+
 import { Util } from '../../util/util';
 import { ObservableWrapper } from '../../util/async';
 
 import { OFormValue } from '../form/OFormValue';
 
 import { OTableVisibleColumnsDialogComponent } from './dialog/visible-columns/o-table-visible-columns-dialog.component';
+import { OTableFilterByColumnDataDialogComponent, ITableFilterByColumnDataInterface } from './dialog/filter-by-column/o-table-filter-by-column-data-dialog.component';
 
 import {
   OTableCellRendererDateComponent,
@@ -268,7 +272,10 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   public onDoubleClick: EventEmitter<any> = new EventEmitter();
   protected selection = new SelectionModel<Element>(true, []);
 
-   get selectedItemsLenght() {
+  protected filterableColumnsArray: Array<String> = [];
+  public showFilterByColumnIcon: boolean = false;
+
+  get selectedItemsLenght() {
     return this.selectedItems.length;
   }
 
@@ -823,15 +830,51 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
   }
 
-  public getValue() {
+  getValue() {
     return this.dataSource.getCurrentData();
   }
-  public getRenderedValue() {
+
+  getRenderedValue() {
     return this.dataSource.getCurrentRendererData();
   }
 
-  public getSqlTypes() {
+  getSqlTypes() {
     return this.dataSource.sqlTypes;
+  }
+
+  areFilterableColumns() {
+    return this.filterableColumnsArray.length > 0;
+  }
+
+  setFilterableColumns(columns: Array<String>) {
+    this.filterableColumnsArray = columns.length ? columns : this._oTableOptions.visibleColumns;
+  }
+
+  onFilterByColumnClicked() {
+    this.showFilterByColumnIcon = true;
+  }
+
+  isColumnFilterable(column: OColumn) {
+    return this.showFilterByColumnIcon && (this.filterableColumnsArray.indexOf(column.attr) !== -1);
+  }
+
+  openColumnFilterDialog(column: OColumn) {
+    const columnDataArray: ITableFilterByColumnDataInterface[] = this.dataSource.getColumnDataToFilter(column);
+    let dialogRef = this.dialog.open(OTableFilterByColumnDataDialogComponent, {
+      data: {
+        columnAttr: column.attr,
+        columnDataArray: columnDataArray,
+        columnsData: this._oTableOptions.columns
+      },
+      disableClose: true
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        // this._oTableOptions.visibleColumns = dialogRef.componentInstance.getVisibleColumns();
+        // this._oTableOptions.columns = dialogRef.componentInstance.getColumnsData();
+      }
+    });
   }
 
 }
@@ -847,8 +890,10 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     OTableCellRendererRealComponent,
     OTableCellRendererCurrencyComponent,
     OTableVisibleColumnsDialogComponent,
+    OTableFilterByColumnDataDialogComponent,
     OTableButtonComponent,
-    OTableOptionComponent
+    OTableOptionComponent,
+    OTableColumnsFilterComponent
   ],
   imports: [
     CommonModule,
@@ -861,6 +906,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     OTableComponent,
     OTableButtonComponent,
     OTableOptionComponent,
+    OTableColumnsFilterComponent,
     OTableColumnComponent,
     OTableCellRendererDateComponent,
     OTableCellRendererBooleanComponent,
@@ -876,7 +922,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     OTableCellRendererIntegerComponent,
     OTableCellRendererRealComponent,
     OTableCellRendererCurrencyComponent,
-    OTableVisibleColumnsDialogComponent
+    OTableVisibleColumnsDialogComponent,
+    OTableFilterByColumnDataDialogComponent
   ]
 })
 export class OTableModule {
