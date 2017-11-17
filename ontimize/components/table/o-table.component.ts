@@ -37,7 +37,8 @@ import {
   OTableButtonComponent,
   OTableOptionComponent,
   OTableColumnsFilterComponent
-} from './header/o-table-header-components';
+} from './extensions/header/o-table-header-components';
+
 import { OTableColumnComponent } from './column/o-table-column.component';
 
 import { Util } from '../../util/util';
@@ -45,8 +46,11 @@ import { ObservableWrapper } from '../../util/async';
 
 import { OFormValue } from '../form/OFormValue';
 
-import { OTableVisibleColumnsDialogComponent } from './dialog/visible-columns/o-table-visible-columns-dialog.component';
-import { OTableFilterByColumnDataDialogComponent, ITableFilterByColumnDataInterface } from './dialog/filter-by-column/o-table-filter-by-column-data-dialog.component';
+import {
+  OTableVisibleColumnsDialogComponent,
+  OTableFilterByColumnDataDialogComponent,
+  ITableFilterByColumnDataInterface
+} from './extensions/dialog/o-table-dialog-components';
 
 import {
   OTableCellRendererDateComponent,

@@ -1,6 +1,6 @@
 import { Component, Inject, forwardRef, OnInit, Injector } from '@angular/core';
-import { OTableComponent } from '../../o-table.component';
-import { Util } from '../../../../utils';
+import { OTableComponent } from '../../../o-table.component';
+import { Util } from '../../../../../utils';
 
 export const DEFAULT_INPUTS_O_TABLE_COLUMN_FILTER = [
   // columns [string]: columns that might be filtered, separated by ';'. Default: all visible columns.

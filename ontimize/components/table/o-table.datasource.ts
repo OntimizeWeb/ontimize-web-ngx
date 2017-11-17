@@ -2,7 +2,7 @@ import { Observable } from 'rxjs/Observable';
 import { DataSource } from '@angular/cdk/collections';
 import { OTableDao } from './o-table.dao';
 import { OTableOptions, OColumn } from './o-table.component';
-import { ITableFilterByColumnDataInterface } from './dialog/filter-by-column/o-table-filter-by-column-data-dialog.component';
+import { ITableFilterByColumnDataInterface } from './extensions/dialog/o-table-dialog-components';
 import { MdSort } from '@angular/material';
 
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';

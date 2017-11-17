@@ -3,7 +3,7 @@ import { MdDialogRef, MD_DIALOG_DATA } from '@angular/material';
 
 import { DragulaService } from 'ng2-dragula/ng2-dragula';
 
-import { OColumn } from '../../o-table.component';
+import { OColumn } from '../../../o-table.component';
 
 export const O_TABLE_VCD_DRAGULA_BAG_NAME: string = 'o-table-vcd-list';
 

@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject, forwardRef, EventEmitter, Injector, ViewEncapsulation } from '@angular/core';
-import { OTableComponent } from '../../o-table.component';
+import { OTableComponent } from '../../../o-table.component';
 
 export const DEFAULT_INPUTS_O_TABLE_BUTTON = [
   'icon',
