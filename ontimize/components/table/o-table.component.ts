@@ -29,9 +29,9 @@ import { CdkTableModule } from '@angular/cdk/table';
 import { SelectionModel } from '@angular/cdk/collections';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
-import { MdDialog, MdSort, MdSortModule, MdTabGroup, MdTab, MdPaginatorModule } from '@angular/material';
+import { MdDialog, MdSort, MdSortModule, MdTabGroup, MdTab, MdPaginatorModule, MdPaginatorIntl } from '@angular/material';
 
-import { OTablePaginatorComponent } from './extensions/footer/paginator/o-table-paginator.component';
+import { OTablePaginatorComponent, OTableMdPaginatorIntl } from './extensions/footer/paginator/o-table-paginator.component';
 
 import { OTableDataSource } from './o-table.datasource';
 import { OTableDao } from './o-table.dao';
@@ -253,6 +253,10 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   @InputConverter()
   deleteButton: boolean = true;
 
+  @InputConverter()
+  public paginationControls: boolean = true;
+
+
   public daoTable: OTableDao | null;
   public dataSource: OTableDataSource | null;
 
@@ -281,7 +285,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   protected filterableColumnsArray: Array<String> = [];
   public showFilterByColumnIcon: boolean = false;
-  public paginationControls: boolean = true;
 
 
   get rowQuery() {
@@ -551,7 +554,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   setDatasource() {
-    this.dataSource = new OTableDataSource(this.daoTable, this.paginator.mdpaginator, this._oTableOptions, this.sort);
+    this.dataSource = new OTableDataSource(this.daoTable, this.paginator, this._oTableOptions, this.sort);
     if (this.daoTable) {
       this.dataSource.resultsLength = this.daoTable.data.length;
     }
@@ -937,6 +940,10 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     OTableCellRendererCurrencyComponent,
     OTableVisibleColumnsDialogComponent,
     OTableFilterByColumnDataDialogComponent
+  ],
+  providers: [
+
+    { provide: MdPaginatorIntl, useClass: OTableMdPaginatorIntl }
   ]
 })
 export class OTableModule {

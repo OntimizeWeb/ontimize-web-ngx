@@ -2,12 +2,13 @@ import {
     Component,
     OnInit,
     Injector,
-    ViewChild
+    ViewChild,
+    Injectable
 } from '@angular/core';
 
 import { OTranslateService } from '../../../../../services';
 
-import {MdPaginator} from '@angular/material';
+import { MdPaginator, MdPaginatorIntl } from '@angular/material';
 
 export const DEFAULT_PAGINATOR_TABLE = [
 
@@ -46,6 +47,43 @@ export class OTablePaginatorComponent implements OnInit {
 
     ngOnInit() {
         this.pageSizeOptions = [10, 25, 50, 100, this.translateService.get('TABLE.SHOW_ALL')];
-        console.log('pageLenght',this.pageLenght);
+        console.log('pageLenght', this.pageLenght);
     }
+}
+
+
+@Injectable()
+export class OTableMdPaginatorIntl extends MdPaginatorIntl {
+
+    itemsPerPageLabel;
+    nextPageLabel;
+    previousPageLabel;
+    translateService: OTranslateService;
+
+    constructor(protected injector: Injector) {
+
+        super();
+        this.translateService = this.injector.get(OTranslateService);
+        this.itemsPerPageLabel = this.translateService.get('TABLE.PAGINATE.ITEMSPERPAGELABEL');
+        this.nextPageLabel = this.translateService.get('TABLE.PAGINATE.NEXT');
+        this.previousPageLabel = this.translateService.get('TABLE.PAGINATE.PREVIOUS');
+        this.getRangeLabel = this.getORangeLabel;
+
+    }
+
+
+    getORangeLabel(page: number, pageSize: number, length: number): string {
+        if (length === 0 || pageSize === 0) {
+            return `0 de ${length}`;
+        }
+        length = Math.max(length, 0);
+        const startIndex = page * pageSize;
+        // If the start index exceeds the list length, do not try and fix the end index to the end.
+        const endIndex = startIndex < length ?
+            Math.min(startIndex + pageSize, length) :
+            startIndex + pageSize;
+
+        return `${startIndex + 1} - ${endIndex}  ${this.translateService.get('TABLE.PAGINATE.RANGE_LABEL')} ${length}`;
+    }
+
 }

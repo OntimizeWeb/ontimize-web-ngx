@@ -3,7 +3,8 @@ import { DataSource } from '@angular/cdk/collections';
 import { OTableDao } from './o-table.dao';
 import { OTableOptions, OColumn } from './o-table.component';
 import { ITableFilterByColumnDataInterface } from './extensions/dialog/o-table-dialog-components';
-import { MdSort,MdPaginator } from '@angular/material';
+import { MdSort, MdPaginator } from '@angular/material';
+import { OTablePaginatorComponent } from './extensions/footer/paginator/o-table-paginator.component';
 
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import 'rxjs/add/operator/startWith';
@@ -18,6 +19,7 @@ export class OTableDataSource extends DataSource<any> {
   protected _filterChange = new BehaviorSubject('');
   protected _sqlTypes: any;
   protected filteredData: any[] = [];
+  protected paginator: MdPaginator;
   renderedData: any[] = [];
   resultsLength: number = 0;
 
@@ -25,8 +27,9 @@ export class OTableDataSource extends DataSource<any> {
   get filter(): string { return this._filterChange.value; }
   set filter(filter: string) { this._filterChange.next(filter); }
 
-  constructor(private _database: OTableDao, private _paginator: MdPaginator, private tableOptions: OTableOptions, private _sort: MdSort) {
+  constructor(private _database: OTableDao, private _paginator: OTablePaginatorComponent, private tableOptions: OTableOptions, private _sort: MdSort) {
     super();
+    this.paginator = _paginator ? _paginator.mdpaginator : null;
   }
 
   /** Connect function called by the table to retrieve one stream containing the data to render. */
@@ -39,8 +42,8 @@ export class OTableDataSource extends DataSource<any> {
     if (this.tableOptions.filter) {
       displayDataChanges.push(this._filterChange);
     }
-    if (this._paginator) {
-      displayDataChanges.push(this._paginator.page);
+    if (this.paginator) {
+      displayDataChanges.push(this.paginator.page);
     }
 
     return Observable.merge(...displayDataChanges).map(() => {
@@ -64,9 +67,9 @@ export class OTableDataSource extends DataSource<any> {
       }
 
       // Sort filtered data
-      if (this._paginator && !isNaN(this._paginator.pageSize)) {
-        const startIndex = this._paginator.pageIndex * this._paginator.pageSize;
-        this.renderedData = this.renderedData.splice(startIndex, this._paginator.pageSize);
+      if (this.paginator && !isNaN(this.paginator.pageSize)) {
+        const startIndex = this.paginator.pageIndex * this.paginator.pageSize;
+        this.renderedData = this.renderedData.splice(startIndex, this.paginator.pageSize);
       } else {
         this.renderedData = this.sortData(this.renderedData.slice());
       }
