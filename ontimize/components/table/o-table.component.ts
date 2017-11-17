@@ -580,10 +580,11 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
         if (Util.isArray(res)) {
           data = res;
         } else if ((res.code === 0) && Util.isArray(res.data)) {
-          data = (res.data !== undefined) ? res.data : [];
+          res.data = (res.data !== undefined) ? res.data : [];
 
         }
-        this.daoTable.dataChange.next(data);
+        //this.dataSource.sqlTypes = res.sqlTypes;
+        this.daoTable.dataChange.next(res);
         this.daoTable.isLoadingResults = true;
       }, err => {
         this.showDialogError(err, 'MESSAGES.ERROR_QUERY');
@@ -620,6 +621,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   onExportButtonClicked() {
     console.log('onExportButtonClicked');
+    console.log('get value',this.getValue());
+    console.log('get valueRenderer',this.getRenderedValue());
+    console.log('get valueRenderer',this.getSqlTypes());
   }
 
   onChangeColumnsVisibilityClicked() {
@@ -836,6 +840,16 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
   }
 
+  public getValue() {
+    return this.dataSource.getCurrentData();
+  }
+  public getRenderedValue() {
+    return this.dataSource.getCurrentRendererData();
+  }
+
+  public getSqlTypes() {
+    return this.dataSource.sqlTypes;
+  }
 
 }
 

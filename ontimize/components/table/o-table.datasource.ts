@@ -12,13 +12,17 @@ import 'rxjs/add/observable/fromEvent';
 
 
 export class OTableDataSource extends DataSource<any> {
-  _filterChange = new BehaviorSubject('');
-  get filter(): string { return this._filterChange.value; }
-  set filter(filter: string) { this._filterChange.next(filter); }
 
-  filteredData: any[] = [];
+
+  protected _filterChange = new BehaviorSubject('');
+  protected _sqlTypes: any;
+  protected filteredData: any[] = [];
   renderedData: any[] = [];
   resultsLength: number = 0;
+
+
+  get filter(): string { return this._filterChange.value; }
+  set filter(filter: string) { this._filterChange.next(filter); }
 
   constructor(private _database: OTableDao, private tableOptions: OTableOptions, private _sort: MdSort) {
     super();
@@ -37,7 +41,9 @@ export class OTableDataSource extends DataSource<any> {
 
     return Observable.merge(...displayDataChanges).map(() => {
 
-      this.renderedData = this._database.data;
+      let data: any = this._database.data;
+      this.renderedData = data.data ? data.data : [];
+      this._sqlTypes = data.sqlTypes ? data.sqlTypes : [];
 
       // Filter data
       if (this.tableOptions.filter) {
@@ -60,11 +66,13 @@ export class OTableDataSource extends DataSource<any> {
       return this.renderedData;
     });
 
+
+
   }
 
   disconnect() { }
 
-  getStringSearchable(item) {
+  protected getStringSearchable(item) {
     return this.tableOptions.columns.map(function (v: OColumn, i, a) {
       if (typeof v.searchable !== 'undefined' && v.searchable && typeof v.visible !== 'undefined' && v.visible) {
         if (v.renderer && v.renderer.getCellData) {
@@ -78,7 +86,7 @@ export class OTableDataSource extends DataSource<any> {
   }
 
   /** Returns a sorted copy of the database data. */
-  sortData(data: any[]): any[] {
+  protected sortData(data: any[]): any[] {
     if (!this._sort.active || this._sort.direction === '') { return data; }
     this._sort.sortables.forEach((value, key) => {
       this._sort.deregister(value);
@@ -94,4 +102,47 @@ export class OTableDataSource extends DataSource<any> {
     });
 
   }
+
+  /**Return data of the visible columns of the table  without rendering */
+  getCurrentData(): any[] {
+    return this.getData();
+  }
+
+  /**Return data of the visible columns of the table  rendering */
+  getCurrentRendererData(): any[] {
+    return this.getData(true);
+
+  }
+
+  /**Return sql types of the current data */
+  get sqlTypes(): any {
+    return this._sqlTypes;
+  }
+
+  protected getData(render?: boolean) {
+    let self = this;
+
+    return this.renderedData.map(function (row, i, a) {
+      /** render each column*/
+      var obj = {};
+      Object.keys(row).map(function (column, i, a) {
+        self.tableOptions.columns.map(function (ocolumn: OColumn, i, a) {
+          if (column === ocolumn.attr && ocolumn.visible) {
+            var key = column;
+            if (render && ocolumn.renderer && ocolumn.renderer.getCellData) {
+              obj[key] = ocolumn.renderer.getCellData(row[column]);
+            } else {
+              obj[key] = row[column];
+            }
+          }
+        });
+      });
+
+      return obj;
+    });
+  }
+
+
+
+
 }
