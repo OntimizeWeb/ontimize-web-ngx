@@ -2,7 +2,10 @@
 
 ### Features
 * **o-table-button**: adding '*icon-position*' input ([66f0acb](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/66f0acb))
-* **o-table**:adding public methods *'getValue'*, *'getRendererValue'*, *'getSqlTypes'*  ([236b9b6](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/236b9b6))
+* **o-table**: adding public methods *'getValue'*, *'getRendererValue'*, *'getSqlTypes'* ([236b9b6](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/236b9b6))
+* **o-table-option**: new '*o-table-option*' component for adding options to '*o-table*' menu ([f48a591](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/f48a591))
+* **o-table, o-table-columns-filter**: new '*o-table-columns-filter*' component ([a0a3eed](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/a0a3eed))
+
 
 ### Bug Fixes
 * **o-translate-service**: fixing *'getBrowserLang'* bug ([#138](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/138)) ([4a5d2e7](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/4a5d2e7))
