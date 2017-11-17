@@ -21,10 +21,15 @@
           <md-icon>more_vert</md-icon>
         </button>
         <md-menu #menu="mdMenu" x-position="before" class="o-table-menu">
-          <button (click)="onShowsSelects($event)" md-menu-item *ngIf="selectAllCheckbox">
-            <md-icon> done </md-icon> {{ 'TABLE.BUTTONS.SELECT' | oTranslate }} </button>
-          <button *ngIf="exportButton" (click)="onExportButtonClicked()" md-menu-item> {{ 'TABLE.BUTTONS.EXPORT' | oTranslate }} </button>
-          <button *ngIf="columnsVisibilityButton" md-menu-item (click)="onChangeColumnsVisibilityClicked()"> {{ 'TABLE.BUTTONS.COLVIS' | oTranslate }} </button>
+          <o-table-option *ngIf="selectAllCheckbox" (onClick)="onShowsSelects($event)" label="TABLE.BUTTONS.SELECT" show-active-icon="true">
+          </o-table-option>
+          <o-table-option *ngIf="exportButton" (onClick)="onExportButtonClicked()" label="TABLE.BUTTONS.EXPORT"> </o-table-option>
+          <o-table-option *ngIf="columnsVisibilityButton" (onClick)="onChangeColumnsVisibilityClicked()" label="TABLE.BUTTONS.COLVIS">
+          </o-table-option>
+          <o-table-option *ngIf="areFilterableColumns()" (onClick)="onFilterByColumnClicked()" label="TABLE.BUTTONS.FILTER_BY_COLUMN"
+            show-active-icon="true">
+          </o-table-option>
+          <ng-content select="o-table-option"></ng-content>
         </md-menu>
       </div>
 
@@ -42,17 +47,17 @@
 
         <!-- Generic column definition -->
         <ng-container *ngFor="let column of oTableOptions.columns" [cdkColumnDef]="column.name">
-          <ng-container *ngIf="column.orderable">
-            <md-header-cell *cdkHeaderCellDef md-sort-header [fxFlex]="column.width">{{ column.title | oTranslate }}</md-header-cell>
+            <ng-container *ngIf="column.orderable">
+              <md-header-cell *cdkHeaderCellDef md-sort-header [fxFlex]="column.width">{{ column.title | oTranslate }}</md-header-cell>
+            </ng-container>
+            <ng-container *ngIf="!column.orderable">
+              <md-header-cell *cdkHeaderCellDef [fxFlex]="column.width">{{ column.title | oTranslate }}</md-header-cell>
+            </ng-container>
+            <md-cell *cdkCellDef="let row" [fxFlex]="column.width">
+              <ng-container *ngIf="!column.renderer">{{ row[column.name] }}</ng-container>
+              <ng-template *ngIf="column.renderer" [ngTemplateOutlet]="column.renderer.templateref" [ngOutletContext]="{cellvalue: row[column.name]}"></ng-template>
+            </md-cell>
           </ng-container>
-          <ng-container *ngIf="!column.orderable">
-            <md-header-cell *cdkHeaderCellDef [fxFlex]="column.width">{{ column.title | oTranslate }}</md-header-cell>
-          </ng-container>
-          <md-cell *cdkCellDef="let row" [fxFlex]="column.width">
-            <ng-container *ngIf="!column.renderer">{{ row[column.name] }}</ng-container>
-            <ng-template *ngIf="column.renderer" [ngTemplateOutlet]="column.renderer.templateref" [ngOutletContext]="{cellvalue: row[column.name]}"></ng-template>
-          </md-cell>
-        </ng-container>
 
         <md-header-row *cdkHeaderRowDef="oTableOptions.visibleColumns"></md-header-row>
         <md-row *cdkRowDef="let row; columns: oTableOptions.visibleColumns;" (click)="handleClick(row)" (dblclick)="handleDoubleClick(row)">

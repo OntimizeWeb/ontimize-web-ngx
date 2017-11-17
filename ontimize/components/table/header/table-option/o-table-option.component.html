@@ -1,0 +1,5 @@
+<button (click)="innerOnClick($event)" md-menu-item fxLayout="row" fxLayoutAlign="space-between center">
+  <md-icon *ngIf="showActiveOptionIcon()"> done </md-icon>
+  {{ olabel | oTranslate }}
+  <md-icon *ngIf="icon"> {{ icon }}</md-icon>
+</button>

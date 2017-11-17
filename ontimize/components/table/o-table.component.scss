@@ -99,7 +99,13 @@ $_mat-checkbox-mark-stroke-size-small: 2 / 15 * $mat-checkbox-size-small !defaul
 
       .mat-header-row {
         line-height: 48px;
+
         .mat-header-cell {
+
+          &:not([md-sort-header]) {
+            text-align:center;
+            cursor: default;
+          }
 
           &:not(.mat-sort-header-sorted) {
             .mat-sort-header-button {
@@ -229,17 +235,4 @@ $_mat-checkbox-mark-stroke-size-small: 2 / 15 * $mat-checkbox-size-small !defaul
 
     }
   }
-}
-
-.o-table-menu {
-  .o-table-option-active {
-    md-icon {
-      display:initial
-    }
-  }
-
-  md-icon {
-    display:none
-  }
-
 }

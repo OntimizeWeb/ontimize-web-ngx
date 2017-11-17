@@ -34,6 +34,8 @@ import { MdDialog, MdSort, MdSortModule, MdTabGroup, MdTab } from '@angular/mate
 import { OTableDataSource } from './o-table.datasource';
 import { OTableDao } from './o-table.dao';
 import { OTableButtonComponent } from './header/table-button/o-table-button.component';
+import { OTableOptionComponent } from './header/table-option/o-table-option.component';
+
 import { OTableColumnComponent } from './column/o-table-column.component';
 import { Util } from '../../util/util';
 import { ObservableWrapper } from '../../util/async';
@@ -192,7 +194,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   public static TYPE_ASC_NAME = 'asc';
   public static TYPE_DESC_NAME = 'desc';
   public static COLUMNS_ALIAS_SEPARATOR = ':';
-  public static O_TABLE_OPTION_ACTIVE_CLASS = 'o-table-option-active';
 
   @InputConverter()
   selectAllCheckbox: boolean = false;
@@ -226,7 +227,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
     this.setDatasource();
   }
-
 
   @InputConverter()
   set filterCaseSensitive(value: boolean) {
@@ -268,10 +268,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   public onDoubleClick: EventEmitter<any> = new EventEmitter();
   protected selection = new SelectionModel<Element>(true, []);
 
-  get selectedItemsLenght() {
+   get selectedItemsLenght() {
     return this.selectedItems.length;
   }
-
 
   ngOnInit() {
     this.initialize();
@@ -596,13 +595,13 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   showDialogError(error: string, errorOptional?: string) {
-
     if (error && typeof error !== 'object') {
       this.dialogService.alert('ERROR', error);
     } else {
       this.dialogService.alert('ERROR', errorOptional);
     }
   }
+
   getAttributesValuesToQuery(): Object {
     let columns = [];
     this.colArray.forEach(col => {
@@ -621,9 +620,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   onExportButtonClicked() {
     console.log('onExportButtonClicked');
-    console.log('get value',this.getValue());
-    console.log('get valueRenderer',this.getRenderedValue());
-    console.log('get valueRenderer',this.getSqlTypes());
+    console.log('get value', this.getValue());
+    console.log('get valueRenderer', this.getRenderedValue());
+    console.log('get valueRenderer', this.getSqlTypes());
   }
 
   onChangeColumnsVisibilityClicked() {
@@ -749,28 +748,12 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   onShowsSelects(event?) {
-    if (event) {
-      this.toggleButtonActiveClass(event);
-    }
-
     this._oTableOptions.selectColumn.visible = !this._oTableOptions.selectColumn.visible;
 
     if (this._oTableOptions.visibleColumns && this._oTableOptions.selectColumn.visible && this._oTableOptions.visibleColumns[0] !== OTableComponent.NAME_COLUMN_SELECT) {
       this._oTableOptions.visibleColumns.unshift(OTableComponent.NAME_COLUMN_SELECT);
     } else if (this._oTableOptions.visibleColumns && !this._oTableOptions.selectColumn.visible && this._oTableOptions.visibleColumns[0] === OTableComponent.NAME_COLUMN_SELECT) {
       this._oTableOptions.visibleColumns.shift();
-    }
-  }
-
-  public toggleButtonActiveClass(event) {
-    if (!event.currentTarget) {
-      return;
-    }
-    let classList = event.currentTarget.classList;
-    if (classList.contains(OTableComponent.O_TABLE_OPTION_ACTIVE_CLASS)) {
-      classList.remove(OTableComponent.O_TABLE_OPTION_ACTIVE_CLASS);
-    } else {
-      classList.add(OTableComponent.O_TABLE_OPTION_ACTIVE_CLASS);
     }
   }
 
@@ -864,7 +847,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     OTableCellRendererRealComponent,
     OTableCellRendererCurrencyComponent,
     OTableVisibleColumnsDialogComponent,
-    OTableButtonComponent
+    OTableButtonComponent,
+    OTableOptionComponent
   ],
   imports: [
     CommonModule,
@@ -876,6 +860,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   exports: [
     OTableComponent,
     OTableButtonComponent,
+    OTableOptionComponent,
     OTableColumnComponent,
     OTableCellRendererDateComponent,
     OTableCellRendererBooleanComponent,
