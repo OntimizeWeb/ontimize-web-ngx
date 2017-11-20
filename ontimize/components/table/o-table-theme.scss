@@ -16,6 +16,9 @@
       background-color: mat-color($background, status-bar, 0.9);
       .mat-header-cell {
         color: mat-color($foreground, text);
+        .column-filter-icon.active {
+          color: mat-color($accent);
+        }
       }
     }
 

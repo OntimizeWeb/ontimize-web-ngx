@@ -1,47 +1,57 @@
 import { Component, Inject, ChangeDetectionStrategy } from '@angular/core';
 import { MdDialogRef, MD_DIALOG_DATA, MdCheckboxChange } from '@angular/material';
-
-// import { OColumn } from '../../o-table.component';
+import { IColumnValueFilter } from '../../../o-table.datasource';
+// import { OColumn } from '../../../o-table.component';
 
 export interface ITableFilterByColumnDataInterface {
   value: any;
-  renderedValue: any;
+  selected: boolean;
 }
 
 @Component({
   selector: 'o-table-filter-by-column-data-dialog',
   templateUrl: 'o-table-filter-by-column-data-dialog.component.html',
   styleUrls: ['o-table-filter-by-column-data-dialog.component.scss'],
-  changeDetection : ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class OTableFilterByColumnDataDialogComponent {
 
   attr: string;
   columnData: Array<ITableFilterByColumnDataInterface> = [];
-  // protected originalColumns: Array<OColumn> = [];
-
-  selectedValues = [];
 
   constructor(
     public dialogRef: MdDialogRef<OTableFilterByColumnDataDialogComponent>,
     @Inject(MD_DIALOG_DATA) data: any
   ) {
-    // if (data.columnsData && Array.isArray(data.columnsData)) {
-
-    // }
     if (data.columnAttr) {
       this.attr = data.columnAttr;
     }
-    if (data.columnDataArray && Array.isArray(data.columnDataArray)) {
-      this.columnData = data.columnDataArray;
+    let previousFilter: IColumnValueFilter = {
+      attr: undefined,
+      values: undefined
+    };
+    if (data.previousFilter) {
+      previousFilter = data.previousFilter;
     }
-    //   data.columnsData.forEach((colData: OColumn) => {
-    //     let column = Object.assign(new OColumn(), colData);
-    //     this.originalColumns.push(column);
-    //     if (data.columnArray.includes(colData.attr)) {
-    //       this.columns.push(column);
-    //     }
-    //   });
+    if (data.columnDataArray && Array.isArray(data.columnDataArray)) {
+      this.columnData = this.getDistinctValues(data.columnDataArray, previousFilter);
+    }
+  }
+
+  getDistinctValues(data: Array<ITableFilterByColumnDataInterface>, previousFilter: IColumnValueFilter): Array<ITableFilterByColumnDataInterface> {
+    let result: Array<ITableFilterByColumnDataInterface> = [];
+    const distinctValues = Array.from(new Set(data.map(item => item.value)));
+    distinctValues.forEach(item => {
+      result.push({
+        value: item,
+        selected: (previousFilter.values || []).indexOf(item) !== -1
+      });
+    });
+    return result;
+  }
+
+  get selectedValues(): Array<ITableFilterByColumnDataInterface> {
+    return this.columnData.filter(item => item.selected);
   }
 
   areAllSelected(): boolean {
@@ -53,24 +63,15 @@ export class OTableFilterByColumnDataDialogComponent {
   }
 
   onSelectAllChange(event: MdCheckboxChange) {
-    let selected = [];
-    if (event.checked) {
-      this.columnData.forEach((item: ITableFilterByColumnDataInterface) => {
-        selected.push(item);
-      });
-    }
-    this.selectedValues = selected;
+    this.columnData.forEach((item: ITableFilterByColumnDataInterface) => {
+      item.selected = event.checked;
+    });
   }
 
-  isRecordChecked(record: ITableFilterByColumnDataInterface): boolean {
-    return this.selectedValues.indexOf(record) !== -1;
-  }
-
-  onRecordSelectionChange(event: MdCheckboxChange, record: ITableFilterByColumnDataInterface) {
-    if (event.checked) {
-      this.selectedValues.push(record);
-    } else {
-      this.selectedValues.splice(this.selectedValues.indexOf(record), 1);
-    }
+  getColumnValuesFilter(): IColumnValueFilter {
+    return {
+      attr: this.attr,
+      values: this.selectedValues.map((item) => item.value)
+    };
   }
 }

@@ -1,4 +1,4 @@
-<span md-dialog-title>{{ 'TABLE.BUTTONS.FILTER_BY_COLUMN' | oTranslate }} : {{ attr }}</span>
+<span md-dialog-title>{{ 'TABLE.BUTTONS.FILTER_BY_COLUMN' | oTranslate }} : {{ attr | oTranslate }}</span>
 
 <md-dialog-content>
   <md-checkbox (change)="onSelectAllChange($event)" [checked]="areAllSelected()" [indeterminate]="isIndeterminate()">
@@ -8,8 +8,8 @@
   <md-list>
     <md-list-item *ngFor="let record of columnData; let i = index">
       <span md-line>
-        <md-checkbox (change)="onRecordSelectionChange($event, record)" [checked]="isRecordChecked(record)">
-          {{ record.renderedValue }}
+        <md-checkbox (change)="record.selected = $event.checked" [checked]="record.selected">
+          {{ record.value }}
         </md-checkbox>
       </span>
     </md-list-item>

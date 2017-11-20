@@ -101,7 +101,13 @@ $_mat-checkbox-mark-stroke-size-small: 2 / 15 * $mat-checkbox-size-small !defaul
         line-height: 48px;
 
         .mat-header-cell {
-
+          .column-filter-icon {
+            font-size: 20px;
+            width: 16px;
+            height: 16px;
+            margin-right: 8px;
+            margin-bottom: 4px;
+          }
           &:not([md-sort-header]) {
             text-align:center;
             cursor: default;

@@ -73,10 +73,10 @@ export var MAP = {
     'FORM_VALIDATION.MIN_VALUE': 'Minimum value',
     'FORM_VALIDATION.MAX_VALUE': 'Maximum value',
 
-    'FORM_VALIDATION.DATE_PARSE':'Date not valid format',
-    'FORM_VALIDATION.DATE_FILTER':'Date is not valid for the defined filter',
-    'FORM_VALIDATION.DATE_MIN':'Date min',
-    'FORM_VALIDATION.DATE_MAX':'Date max',
+    'FORM_VALIDATION.DATE_PARSE': 'Date not valid format',
+    'FORM_VALIDATION.DATE_FILTER': 'Date is not valid for the defined filter',
+    'FORM_VALIDATION.DATE_MIN': 'Date min',
+    'FORM_VALIDATION.DATE_MAX': 'Date max',
 
     'FORM_VALIDATION.FILE_TYPE': 'Invalid format',
     'FORM_VALIDATION.FILE_MAXSIZE': 'Maximum file size',
@@ -100,7 +100,9 @@ export var MAP = {
     'MESSAGES.SAVED': 'Saved',
     'MESSAGES.NO_RESULTS': 'No results were obtained.',
     'MESSAGES.ERROR_MISSING_LANG': 'Selected language bundle file not found',
-    'TABLE.FILTER':'Filter',
+    'MESSAGES.CONFIRM_DISCARD_FILTER_BY_COLUMN': 'Are you sure you want to discard all active columns filters?',
+    'TABLE.FILTER_BY_COLUMN.CHECK_ALL': 'Select all',
+    'TABLE.FILTER': 'Filter',
     'TABLE.EMPTY': 'No results found',
     'TABLE.INFO': '_START_ - _END_ of _TOTAL_',
     'TABLE.INFO_EMPTY': '0 - 0 of 0',
@@ -119,7 +121,7 @@ export var MAP = {
     'TABLE.PAGINATE.ITEMSPERPAGELABEL': 'Items per page',
     'TABLE.ARIA.SORT_ASCENDING': ': activate to sort column ascending',
     'TABLE.ARIA.SORT_DESCENDING': ': activate to sort column descending',
-    '.COLVIS': 'Show / hide columns',
+    'TABLE.BUTTONS.COLVIS': 'Show / hide columns',
     'TABLE.BUTTONS.COPY_TITLE': 'Added to clipboard',
     'TABLE.BUTTONS.COPY_SUCCESS._': '%d rows copied',
     'TABLE.BUTTONS.COPY_SUCCESS.1': '1 row copied',
@@ -136,7 +138,8 @@ export var MAP = {
     'TABLE.BUTTONS.DELETE': 'Delete',
     'TABLE.BUTTONS.ADD': 'New',
     'TABLE.BUTTONS.SELECT': 'Select...',
-    'TABLE.SELECT.ROWS._': '%d rows selected',
+    'TABLE.BUTTONS.FILTER_BY_COLUMN': 'Filter by column',
+    'TABLE.SELECT.ROWS._': '%d selected rows',
     'TABLE.SELECT.ROWS.0': ' ',
     'TABLE.SELECT.ROWS.1': '1 row selected',
     'TABLE.SHOW_ALL': 'All',
@@ -217,10 +220,10 @@ export var MAP = {
     'FORM_VALIDATION.MIN_VALUE': 'Valor mínimo',
     'FORM_VALIDATION.MAX_VALUE': 'Valor máximo',
 
-    'FORM_VALIDATION.DATE_PARSE':'Formato no válido',
-    'FORM_VALIDATION.DATE_FILTER':'Fecha no es válida para el filtro definido',
-    'FORM_VALIDATION.DATE_MIN':'Fecha mínima',
-    'FORM_VALIDATION.DATE_MAX':'Fecha máxima',
+    'FORM_VALIDATION.DATE_PARSE': 'Formato no válido',
+    'FORM_VALIDATION.DATE_FILTER': 'Fecha no es válida para el filtro definido',
+    'FORM_VALIDATION.DATE_MIN': 'Fecha mínima',
+    'FORM_VALIDATION.DATE_MAX': 'Fecha máxima',
 
     'FORM_VALIDATION.FILE_TYPE': 'Formato no válido',
     'FORM_VALIDATION.FILE_MAXSIZE': 'Tamaño de fichero máximo',
@@ -244,7 +247,9 @@ export var MAP = {
     'MESSAGES.SAVED': 'Guardado',
     'MESSAGES.NO_RESULTS': 'No se obtuvieron resultados.',
     'MESSAGES.ERROR_MISSING_LANG': 'No se ha encontrado el fichero de configuración del idioma seleccionado',
-
+    'MESSAGES.CONFIRM_DISCARD_FILTER_BY_COLUMN': '¿Está seguro de que quiere descartar todos los filtros de columna activos?',
+    'TABLE.FILTER_BY_COLUMN.CHECK_ALL': 'Seleccionar todos',
+    'TABLE.FILTER': 'Filtrar',
     'TABLE.EMPTY': 'No se han obtenido resultados',
     'TABLE.INFO': '_START_ - _END_ de _TOTAL_',
     'TABLE.INFO_EMPTY': '0 - 0 de 0',
@@ -280,13 +285,12 @@ export var MAP = {
     'TABLE.BUTTONS.DELETE': 'Eliminar',
     'TABLE.BUTTONS.ADD': 'Nuevo',
     'TABLE.BUTTONS.SELECT': 'Seleccionar...',
-    'TABLE.FILTER':'Filtrar',
+    'TABLE.BUTTONS.FILTER_BY_COLUMN': 'Filtrado por columnas',
     'TABLE.SELECT.ROWS._': '%d registros seleccionados',
     'TABLE.SELECT.ROWS.0': ' ',
     'TABLE.SELECT.ROWS.1': '1 registro seleccionado',
     'TABLE.SHOW_ALL': 'Todo',
     'TABLE.SELECT_DATE': 'Seleccionar fecha'
-
   }
 
 };
