@@ -38,7 +38,7 @@ export class OTableOptionComponent {
   @InputConverter()
   showActiveIcon: boolean = false;
 
-  protected active: boolean = false;
+  active: boolean = false;
 
   constructor(
     protected injector: Injector,
@@ -48,8 +48,8 @@ export class OTableOptionComponent {
   }
 
   innerOnClick() {
-    this.active = !this.active;
     this.onClick.emit();
+    this.active = !this.active;
   }
 
   showActiveOptionIcon() {
