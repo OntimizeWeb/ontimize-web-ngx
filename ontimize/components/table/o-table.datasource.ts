@@ -23,9 +23,9 @@ export class OTableDataSource extends DataSource<any> {
   renderedData: any[] = [];
   resultsLength: number = 0;
 
-
   get filter(): string { return this._filterChange.value; }
   set filter(filter: string) { this._filterChange.next(filter); }
+
 
   constructor(private _database: OTableDao, private _paginator: OTablePaginatorComponent, private tableOptions: OTableOptions, private _sort: MdSort) {
     super();
@@ -48,10 +48,7 @@ export class OTableDataSource extends DataSource<any> {
 
     return Observable.merge(...displayDataChanges).map(() => {
 
-      let data: any = this._database.data;
-      this.renderedData = data.data ? data.data : [];
-      this._sqlTypes = data.sqlTypes ? data.sqlTypes : [];
-
+      this.renderedData = this._database.data;
       // Filter data
       if (this.tableOptions.filter) {
         let filterData = this.filter;
@@ -128,7 +125,7 @@ export class OTableDataSource extends DataSource<any> {
 
   /**Return sql types of the current data */
   get sqlTypes(): any {
-    return this._sqlTypes;
+    return this._database.sqlTypes;
   }
 
   protected getData(render?: boolean) {

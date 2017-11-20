@@ -596,22 +596,28 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       }
       this.querySubscription = this.daoTable.getQuery(queryArguments).subscribe(res => {
         let data = undefined;
+        let sqlTypes = undefined;
         if (Util.isArray(res)) {
           data = res;
+          sqlTypes = [];
         } else if ((res.code === 0) && Util.isArray(res.data)) {
-          res.data = (res.data !== undefined) ? res.data : [];
-
+          data = (res.data !== undefined) ? res.data : [];
+          sqlTypes = res.sqlTypes;
         }
-        //this.dataSource.sqlTypes = res.sqlTypes;
-        this.daoTable.dataChange.next(res);
-        this.daoTable.isLoadingResults = true;
+        this.setData(data, sqlTypes);
+
       }, err => {
         this.showDialogError(err, 'MESSAGES.ERROR_QUERY');
         this.pendingQuery = false;
-        this.daoTable.dataChange.next([]);
-        this.daoTable.isLoadingResults = true;
+        this.setData([], []);
       });
     }
+  }
+
+  private setData(data: any, sqlTypes: any) {
+    this.daoTable.sqlTypesChange.next(sqlTypes);
+    this.daoTable.dataChange.next(data);
+    this.daoTable.isLoadingResults = true;
   }
 
   showDialogError(error: string, errorOptional?: string) {
