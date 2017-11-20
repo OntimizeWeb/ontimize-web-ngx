@@ -49,6 +49,8 @@ import { ObservableWrapper } from '../../util/async';
 import { OFormValue } from '../form/OFormValue';
 
 import {
+  OTableExportConfiguration,
+  OTableExportDialogComponent,
   OTableVisibleColumnsDialogComponent,
   OTableFilterByColumnDataDialogComponent,
   ITableFilterByColumnDataInterface
@@ -639,10 +641,29 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   onExportButtonClicked() {
-    console.log('onExportButtonClicked');
-    console.log('get value', this.getValue());
-    console.log('get valueRenderer', this.getRenderedValue());
-    console.log('get valueRenderer', this.getSqlTypes());
+    let exportCnfg: OTableExportConfiguration = new OTableExportConfiguration();
+    // Table data
+    exportCnfg.data = this.getRenderedValue();
+    // get column's attr whose renderer is OTableCellRendererImageComponent
+    let colsNotIncluded: string[] = this._oTableOptions.columns.filter(c => void 0 !== c.renderer && c.renderer instanceof OTableCellRendererImageComponent).map(c => c.attr);
+    colsNotIncluded.forEach(attr => exportCnfg.data.forEach(row => delete row[attr]));
+    // Table columns
+    exportCnfg.columns = this._oTableOptions.visibleColumns.filter(c => colsNotIncluded.indexOf(c) === -1);
+    // Table column names
+    let tableColumnNames = {};
+    this._oTableOptions.visibleColumns.filter(c => colsNotIncluded.indexOf(c) === -1).map(c => tableColumnNames[c] = this.translateService.get(c));
+    exportCnfg.columnNames = tableColumnNames;
+    // Table column sqlTypes
+    exportCnfg.sqlTypes = this.getSqlTypes();
+    // Table service, needed for configuring ontimize export service with table service configuration
+    exportCnfg.service = this.service;
+
+    let dialogRef = this.dialog.open(OTableExportDialogComponent, {
+      data: exportCnfg,
+      disableClose: true
+    });
+
+    dialogRef.afterClosed().subscribe(result => result ? this.dialogService.info('INFO', 'MESSAGES.SUCCESS_EXPORT_TABLE_DATA') : null);
   }
 
   onChangeColumnsVisibilityClicked() {
@@ -918,6 +939,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     OTableCellRendererIntegerComponent,
     OTableCellRendererRealComponent,
     OTableCellRendererCurrencyComponent,
+    OTableExportDialogComponent,
     OTableVisibleColumnsDialogComponent,
     OTableFilterByColumnDataDialogComponent,
     OTableButtonComponent,
@@ -954,6 +976,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     OTableCellRendererIntegerComponent,
     OTableCellRendererRealComponent,
     OTableCellRendererCurrencyComponent,
+    OTableExportDialogComponent,
     OTableVisibleColumnsDialogComponent,
     OTableFilterByColumnDataDialogComponent
   ],

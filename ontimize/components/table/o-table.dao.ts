@@ -11,9 +11,9 @@ export class OTableDao {
 
   /** Stream that emits whenever the data has been modified. */
   dataChange = new BehaviorSubject<any[]>([]);
-  sqlTypesChange = new BehaviorSubject<any[]>([]);
+  sqlTypesChange = new BehaviorSubject<Object>({});
   get data(): any[] { return this.dataChange.value; }
-  get sqlTypes(): any[] { return this.sqlTypesChange.value; }
+  get sqlTypes(): Object { return this.sqlTypesChange.value; }
   dataService: any;
 
   constructor(private injector: Injector, private service: string, private entity: string, private method: any) {
