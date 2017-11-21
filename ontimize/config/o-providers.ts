@@ -11,6 +11,7 @@ import {
   NavigationService,
   OntimizeService,
   OntimizeFileService,
+  OntimizeExportService,
   MomentService,
   NumberService,
   CurrencyService,
@@ -90,6 +91,10 @@ export function getOntimizeFileServiceProvider(injector: Injector) {
   return new OntimizeFileService(injector);
 }
 
+export function getOntimizeExportServiceProvider(injector: Injector) {
+  return new OntimizeExportService(injector);
+}
+
 export function getLoginServiceProvider(injector: Injector) {
   return new LoginService(injector);
 }
@@ -161,6 +166,11 @@ export const ONTIMIZE_PROVIDERS = [
   {
     provide: OntimizeFileService,
     useFactory: getOntimizeFileServiceProvider,
+    deps: [Injector]
+  },
+  {
+    provide: OntimizeExportService,
+    useFactory: getOntimizeExportServiceProvider,
     deps: [Injector]
   },
   // getLoginServiceProvider
