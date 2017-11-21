@@ -1,6 +1,6 @@
 import { Injectable, Injector } from '@angular/core';
 import { Router } from '@angular/router';
-import { Http, Headers } from '@angular/http';
+import { Http, Headers, ResponseContentType } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 
 import { LoginService } from '../services';
@@ -102,9 +102,31 @@ export class OntimizeExportService {
     return dataObservable;
   }
 
-  public downloadFile(fileId: string, fileExtension: string): void {
-    var url = this._urlBase + DOWNLOAD_PATH_DEFAULT + '/' + fileExtension + '/' + fileId;
-    window.open(url, '_self');
+  public downloadFile(fileId: string, fileExtension: string): Observable<any> {
+    var url = this._urlBase + this.downloadPath + '/' + fileExtension + '/' + fileId;
+
+    var headers: Headers = new Headers();
+    headers.append('Access-Control-Allow-Origin', '*');
+
+    let authorizationToken = 'Bearer ' + this._sessionid;
+    headers.append('Authorization', authorizationToken);
+
+    let _innerObserver: any;
+    let dataObservable = new Observable(observer => _innerObserver = observer).share();
+
+    this.http.get(url, {
+      headers: headers,
+      responseType: ResponseContentType.Blob
+    })
+      .map(res => new Blob([res.blob()], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }))
+      .subscribe(resp => {
+        let fileURL = URL.createObjectURL(resp);
+        window.open(fileURL, '_self');
+        _innerObserver.next(resp);
+      }, error => _innerObserver.error(error),
+      () => _innerObserver.complete());
+
+    return dataObservable;
   }
 
   protected redirectLogin(sessionExpired: boolean = false): void {

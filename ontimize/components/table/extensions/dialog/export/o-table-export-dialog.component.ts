@@ -67,8 +67,13 @@ export class OTableExportDialogComponent implements OnInit {
     this.proccessExportData(exportData.data, exportData.sqlTypes);
     this.exportService.exportData(exportData, OExportExtension.Excel).subscribe(
       (resp) => {
-        self.exportService.downloadFile(resp.data[0]['xslxId'], OExportExtension.Excel);
-        self.dialogRef.close(true);
+        self.exportService.downloadFile(resp.data[0]['xslxId'], OExportExtension.Excel).subscribe(
+          () => self.dialogRef.close(true),
+          downloadError => {
+            console.log(downloadError);
+            self.dialogRef.close(false);
+          }
+        );
       },
       (err) => {
         console.log(err);
