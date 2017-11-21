@@ -17,6 +17,7 @@ import {
   CurrencyService,
   OTranslateService,
   DialogService,
+  SnackBarService,
   AuthGuardService,
   authGuardServiceFactory,
   dataServiceFactory,
@@ -119,6 +120,10 @@ export function getDialogServiceProvider(injector: Injector) {
   return new DialogService(injector);
 }
 
+export function getSnackBarServiceProvider(injector: Injector) {
+  return new SnackBarService(injector);
+}
+
 export function getTranslateServiceProvider(injector: Injector) {
   return new OTranslateService(injector);
 }
@@ -207,6 +212,12 @@ export const ONTIMIZE_PROVIDERS = [
   {
     provide: DialogService,
     useFactory: getDialogServiceProvider,
+    deps: [Injector]
+  },
+  // getSnackbarServiceProvider
+  {
+    provide: SnackBarService,
+    useFactory: getSnackBarServiceProvider,
     deps: [Injector]
   },
   // getTranslateServiceProvider

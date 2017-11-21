@@ -11,6 +11,7 @@ export * from './services/moment.service';
 export * from './services/currency.service';
 export * from './services/number.service';
 export * from './services/dialog.service';
+export * from './services/snackbar.service';
 export * from './services/o-translate.service';
 export * from './services/data-service.provider';
 export * from './services/auth-guard.service';
