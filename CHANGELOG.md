@@ -5,7 +5,8 @@
 * **o-table**: adding public methods *'getValue'*, *'getRendererValue'*, *'getSqlTypes'* ([236b9b6](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/236b9b6))
 * **o-table-option**: new '*o-table-option*' component for adding options to '*o-table*' menu ([f48a591](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/f48a591))
 * **o-table, o-table-columns-filter**: new '*o-table-columns-filter*' component ([a0a3eed](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/a0a3eed)) ([21ad0b7](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/21ad0b7)) ([0d69818](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/0d69818))
-* **o-table-paginator**: new '*o-table-paginator*' component ([23b4e4d](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/23b4e4d)) ([2213a0d](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/2213a0d))
+* **o-table-paginator**: new '*o-table-paginator*' component ([23b4e4d](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/23b4e4d)) ([2213a0d](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/2213a0d)) ([a19fa4b](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/a19fa4b))
+
 
 
 ### Bug Fixes
