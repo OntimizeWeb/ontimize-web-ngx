@@ -119,6 +119,10 @@ export class OTableDataSource extends DataSource<any> {
       // let data: any = this.getDatabaseData();
       this.renderedData = this.renderedData.splice(startIndex, this._paginator.pageSize);
       this._paginationChangeApplied.next('');
+    } else if (this._paginator && isNaN(this._paginator.pageSize)) {
+      //option show all
+      this._paginator.length = this.renderedData.length;
+      this.renderedData = this.renderedData.splice(0, this._paginator.pageSize);
     }
   }
 
