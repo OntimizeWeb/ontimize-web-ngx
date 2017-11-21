@@ -1,9 +1,6 @@
-.o-table-vcd-content {
-  md-list-item {
-    cursor: pointer;
-  }
-
-  .o-table-vcd-listitem.gu-transit {
-    background: #EBEBEB;
+.o-filter-by-column-dialog {
+  .content-wrapper {
+    max-height: 430px;
+    min-height: 430px;
   }
 }

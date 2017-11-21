@@ -26,7 +26,7 @@
           <o-table-option *ngIf="exportButton" (onClick)="onExportButtonClicked()" label="TABLE.BUTTONS.EXPORT"> </o-table-option>
           <o-table-option *ngIf="columnsVisibilityButton" (onClick)="onChangeColumnsVisibilityClicked()" label="TABLE.BUTTONS.COLVIS">
           </o-table-option>
-          <o-table-option *ngIf="oTableColumnsFilterComponent !== undefined" #columnFilterOption (onClick)="onFilterByColumnClicked(columnFilterOption)"
+          <o-table-option *ngIf="oTableColumnsFilterComponent !== undefined" #columnFilterOption (onClick)="onFilterByColumnClicked()"
             label="TABLE.BUTTONS.FILTER_BY_COLUMN" show-active-icon="true">
           </o-table-option>
           <ng-content select="o-table-option"></ng-content>
@@ -80,9 +80,9 @@
         fxLayoutAlign="center center">
         {{'TABLE.EMPTY' | oTranslate}}
       </div>
-     
-     <o-table-paginator *ngIf="paginationControls" #paginator  [page-size]="rowQuery">   </o-table-paginator>
-     
+
+      <o-table-paginator *ngIf="paginationControls" #paginator [page-size]="rowQuery"> </o-table-paginator>
+
     </div>
   </div>
 </div>

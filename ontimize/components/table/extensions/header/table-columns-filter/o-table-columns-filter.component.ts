@@ -10,6 +10,11 @@ export const DEFAULT_INPUTS_O_TABLE_COLUMN_FILTER = [
 export const DEFAULT_OUTPUTS_O_TABLE_COLUMN_FILTER = [
 ];
 
+export interface IColumnValueFilter {
+  attr: string;
+  values: any[];
+}
+
 @Component({
   selector: 'o-table-columns-filter',
   templateUrl: './o-table-columns-filter.component.html',
@@ -27,7 +32,7 @@ export class OTableColumnsFilterComponent implements OnInit {
   public static DEFAULT_COMPARISON_TYPE = 'VIEW';
   public static MODEL_COMPARISON_TYPE = 'MODEL';
 
-  protected columns: string;
+  columns: string;
   protected columnsArray: Array<string> = [];
   protected columnsComparisonProperty: Object = {};
 

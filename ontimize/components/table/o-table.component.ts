@@ -199,6 +199,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   @ViewChild(OTablePaginatorComponent) paginator: OTablePaginatorComponent;
   @ViewChild('filter') filter: ElementRef;
   @ViewChild(MdSort) sort: MdSort;
+  @ViewChild('columnFilterOption') columnFilterOption: OTableOptionComponent;
+
   //public mdpaginator: MdPaginator;
   //@ViewChild('opaginator', { read: ViewContainerRef })
   //container: ViewContainerRef;
@@ -327,8 +329,10 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   protected initTableAfterViewInit() {
-    let queryArguments = this.getQueryArguments({});
     this.setDatasource();
+    this.showFilterByColumnIcon = !!this.state['o-table-option-columns-filter-active'];
+    this.columnFilterOption.active = !!this.state['o-table-option-columns-filter-active'];
+    let queryArguments = this.getQueryArguments({});
     if (this.staticData) {
       this.daoTable.setDataArray(this.staticData);
     } else if (this.queryOnInit) {
@@ -355,11 +359,16 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
    * Method update store localstorage, call of the ILocalStorage
    */
   getDataToStore() {
-    return {
+    var dataToStore = {
       'sort-columns': this.sort.active + ':' + this.sort.direction,
       'filter': this.filter ? this.filter.nativeElement.value : '',
       'query-rows': this.paginator ? this.paginator.mdpaginator.pageSize : ''
     };
+    if (this.oTableColumnsFilterComponent) {
+      dataToStore['column-value-filters'] = this.dataSource.getColumnValueFilters();
+      dataToStore['o-table-option-columns-filter-active'] = this.dataSource.getColumnValueFilters();
+    }
+    return dataToStore;
   }
 
   /**
@@ -499,10 +508,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
     // Initializing quickFilter
     this._oTableOptions.filter = this.quickFilter;
-    if (this.quickFilter) {
-      this.initializeEventFilter();
-    }
-
     this._oTableOptions.filterCaseSensitive = this.filterCaseSensitive;
 
     //parse input sort-columns
@@ -896,19 +901,21 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     this.oTableColumnsFilterComponent = tableColumnsFilter;
   }
 
-  onFilterByColumnClicked(columnFilterOption: OTableOptionComponent) {
+  getStoredColumnsFilters() {
+    return this.state['column-value-filters'] || [];
+  }
+
+  onFilterByColumnClicked() {
     if (this.showFilterByColumnIcon && this.dataSource.isColumnValueFilterActive()) {
       const self = this;
       this.dialogService.confirm('CONFIRM', 'MESSAGES.CONFIRM_DISCARD_FILTER_BY_COLUMN').then(res => {
         if (res) {
-          self.showFilterByColumnIcon = false;
           self.dataSource.clearColumnFilters();
-        } else {
-          columnFilterOption.active = true;
         }
+        self.showFilterByColumnIcon = !res;
       });
     } else {
-      this.showFilterByColumnIcon = true;
+      this.showFilterByColumnIcon = !this.showFilterByColumnIcon;
     }
   }
 
@@ -919,7 +926,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   isColumnFilterActive(column: OColumn): boolean {
     return this.showFilterByColumnIcon &&
-      this.dataSource.getColumnValueFilter(column.attr) !== undefined;
+      this.dataSource.getColumnValueFilterByAttr(column.attr) !== undefined;
   }
 
   openColumnFilterDialog(column: OColumn, event: Event) {
@@ -928,7 +935,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     const columnDataArray: ITableFilterByColumnDataInterface[] = this.dataSource.getColumnDataToFilter(column, this);
     let dialogRef = this.dialog.open(OTableFilterByColumnDataDialogComponent, {
       data: {
-        previousFilter: this.dataSource.getColumnValueFilter(column.attr),
+        previousFilter: this.dataSource.getColumnValueFilterByAttr(column.attr),
         columnAttr: column.attr,
         columnDataArray: columnDataArray
       },

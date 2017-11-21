@@ -1,7 +1,7 @@
-import { Component, Inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, Inject, ViewEncapsulation, ViewChild, ElementRef, OnInit, AfterViewInit } from '@angular/core';
 import { MdDialogRef, MD_DIALOG_DATA, MdCheckboxChange } from '@angular/material';
-import { IColumnValueFilter } from '../../../o-table.datasource';
-// import { OColumn } from '../../../o-table.component';
+import { Observable } from 'rxjs/Observable';
+import { IColumnValueFilter } from '../../header/o-table-header-components';
 
 export interface ITableFilterByColumnDataInterface {
   value: any;
@@ -12,17 +12,24 @@ export interface ITableFilterByColumnDataInterface {
   selector: 'o-table-filter-by-column-data-dialog',
   templateUrl: 'o-table-filter-by-column-data-dialog.component.html',
   styleUrls: ['o-table-filter-by-column-data-dialog.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  encapsulation: ViewEncapsulation.None,
+  host: {
+    '[class.o-filter-by-column-dialog]': 'true'
+  }
 })
-export class OTableFilterByColumnDataDialogComponent {
+export class OTableFilterByColumnDataDialogComponent implements OnInit, AfterViewInit {
 
   attr: string;
-  columnData: Array<ITableFilterByColumnDataInterface> = [];
+  protected columnData: Array<ITableFilterByColumnDataInterface> = [];
+  protected _listData: Array<ITableFilterByColumnDataInterface> = [];
+
+  @ViewChild('filter') filter: ElementRef;
 
   constructor(
     public dialogRef: MdDialogRef<OTableFilterByColumnDataDialogComponent>,
     @Inject(MD_DIALOG_DATA) data: any
   ) {
+
     if (data.columnAttr) {
       this.attr = data.columnAttr;
     }
@@ -35,6 +42,47 @@ export class OTableFilterByColumnDataDialogComponent {
     }
     if (data.columnDataArray && Array.isArray(data.columnDataArray)) {
       this.columnData = this.getDistinctValues(data.columnDataArray, previousFilter);
+      this.listData = this.columnData.slice();
+    }
+  }
+
+  ngOnInit() {
+    this.addCustomClass();
+  }
+
+  ngAfterViewInit() {
+    this.initializeFilterEvent();
+  }
+
+  addCustomClass() {
+    if (this.dialogRef) {
+      let dRef = (this.dialogRef as any);
+      if (dRef._overlayRef && dRef._overlayRef._pane && dRef._overlayRef._pane.children && dRef._overlayRef._pane.children.length >= 0) {
+        let el = dRef._overlayRef._pane.children[0];
+        if (el) {
+          el.classList.add('mat-dialog-custom');
+        }
+      }
+    }
+  }
+
+  get listData(): Array<ITableFilterByColumnDataInterface> {
+    return this._listData;
+  }
+
+  set listData(arg: Array<ITableFilterByColumnDataInterface>) {
+    this._listData = arg;
+  }
+
+  initializeFilterEvent() {
+    if (this.filter) {
+      const self = this;
+      Observable.fromEvent(this.filter.nativeElement, 'keyup')
+        .debounceTime(150).distinctUntilChanged().subscribe(() => {
+          let filterValue: string = self.filter.nativeElement.value;
+          filterValue = filterValue.toLowerCase();
+          self.listData = self.columnData.filter(item => (item.value.toLowerCase().indexOf(filterValue) !== -1));
+        });
     }
   }
 
