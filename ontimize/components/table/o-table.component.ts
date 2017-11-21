@@ -331,7 +331,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   protected initTableAfterViewInit() {
     this.setDatasource();
     this.showFilterByColumnIcon = !!this.state['o-table-option-columns-filter-active'];
-    this.columnFilterOption.active = !!this.state['o-table-option-columns-filter-active'];
+    if (this.columnFilterOption) {
+      this.columnFilterOption.active = !!this.state['o-table-option-columns-filter-active'];
+    }
     let queryArguments = this.getQueryArguments({});
     if (this.staticData) {
       this.daoTable.setDataArray(this.staticData);
