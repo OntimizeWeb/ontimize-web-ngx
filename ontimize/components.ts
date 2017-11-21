@@ -38,10 +38,7 @@ export * from './components/side-menu/o-side-menu-group.component';
 export * from './components/side-menu/o-side-menu-item.component';
 export * from './components/side-menu/o-locale-side-menu-item.component';
 export * from './components/side-menu/o-side-menu-separator.component';
-export * from './components/table/o-table.component';
-export * from './components/table/column/o-table-column.component';
-export * from './components/table/column/cell-renderer/cell-renderer';
-export * from './components/table/extensions/header/o-table-header-components';
+export * from './components/table/o-table-components';
 
 export * from './components/o-component.class';
 export * from './components/o-form-data-component.class';
