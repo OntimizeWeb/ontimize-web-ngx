@@ -1,23 +1,20 @@
 import {
     Component,
     OnInit,
+    Inject,
     Injector,
     ViewChild,
-    Injectable
+    Injectable,
+    forwardRef,
+    TemplateRef
 } from '@angular/core';
 
 import { OTranslateService } from '../../../../../services';
+import { OTableComponent } from '../../../o-table.component';
 
 import { MdPaginator, MdPaginatorIntl } from '@angular/material';
 
 export const DEFAULT_PAGINATOR_TABLE = [
-
-    // page-lenght [number]: The length of the total number of items that are being paginated. Defaulted to 0.
-    'pageLenght: page-lenght',
-
-    // page-index [number]: The zero-based page index of the displayed list of items. Defaulted to 0.
-    'pageIndex: page-index',
-
     // page-size [number]: Number of items to display on a page. By default set to 50.
     'pageSize: page-size'
 ];
@@ -33,22 +30,37 @@ export class OTablePaginatorComponent implements OnInit {
 
     private translateService: OTranslateService;
     public pageLenght: number = 0;
-    public pageIndex: number = 0;
-    public pageSize: number = 50;
+    public pageIndex: number = 1;
+    public pageSize: number = 10;
     public pageSizeOptions: Array<any>;
 
+    @ViewChild('templateref', { read: TemplateRef }) public templateref: TemplateRef<any>;
     @ViewChild(MdPaginator) mdpaginator: MdPaginator;
 
-    constructor(protected injector: Injector) {
+    constructor(
+        protected injector: Injector,
+        @Inject(forwardRef(() => OTableComponent)) protected table: OTableComponent
+    ) {
         this.translateService = this.injector.get(OTranslateService);
 
     }
 
 
     ngOnInit() {
+        //this.table.mdpaginator = this.mdpaginator;
         this.pageSizeOptions = [10, 25, 50, 100, this.translateService.get('TABLE.SHOW_ALL')];
-        console.log('pageLenght', this.pageLenght);
+        //this.pageLenght = this.table.daoTable.data.length;
+        if (this.pageSize <= 0) {
+            this.pageSize = this.pageSizeOptions[0];
+        }
+        this.table.rowQuery = this.pageSize;
+        this.table.paginationControls = true;
     }
+    /*
+    ngAfterViewInit() {
+        console.log('set data source en el paginator');
+        this.table.setDatasource();
+    }*/
 }
 
 

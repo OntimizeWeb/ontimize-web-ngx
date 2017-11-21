@@ -80,10 +80,9 @@
         fxLayoutAlign="center center">
         {{'TABLE.EMPTY' | oTranslate}}
       </div>
-
-      <!--PAGINATION-->
-      <o-table-paginator *ngIf="paginationControls" #paginator [page-lenght]="daoTable.data.length" [page-size]="rowQuery"></o-table-paginator>
-
+     
+     <o-table-paginator *ngIf="paginationControls" #paginator  [page-size]="rowQuery">   </o-table-paginator>
+     
     </div>
   </div>
 </div>

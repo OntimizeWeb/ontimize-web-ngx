@@ -5,7 +5,6 @@ import { OTableOptions, OColumn, OTableComponent } from './o-table.component';
 import { ITableFilterByColumnDataInterface } from './extensions/dialog/o-table-dialog-components';
 import { MdSort, MdPaginator } from '@angular/material';
 // import { OTablePaginatorComponent } from './extensions/footer/paginator/o-table-paginator.component';
-
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import 'rxjs/add/operator/startWith';
 import 'rxjs/add/observable/merge';
@@ -63,17 +62,20 @@ export class OTableDataSource extends DataSource<any> {
 
     this._database.dataChange.subscribe(() => {
       self.dataBaseDataChange();
+      self.applyPaginationChange();
     });
 
     if (this._tableOptions.filter) {
       this._quickFilterChange.subscribe(() => {
         self.applyQuickFilter();
+        self.applyPaginationChange();
       });
       displayDataChanges.push(this._quickFilterApplied);
     }
 
     if (this._paginator) {
       this._paginator.page.subscribe(() => {
+        self.applyQuickFilter();
         self.applyPaginationChange();
       });
       displayDataChanges.push(this._paginationChangeApplied);
@@ -113,6 +115,7 @@ export class OTableDataSource extends DataSource<any> {
   applyPaginationChange() {
     if (this._paginator && !isNaN(this._paginator.pageSize)) {
       const startIndex = this._paginator.pageIndex * this._paginator.pageSize;
+      this._paginator.length = this.renderedData.length;
       // let data: any = this.getDatabaseData();
       this.renderedData = this.renderedData.splice(startIndex, this._paginator.pageSize);
       this._paginationChangeApplied.next('');
@@ -259,6 +262,5 @@ export class OTableDataSource extends DataSource<any> {
     });
     this._columnValueFilterChange.next('');
   }
-
 
 }

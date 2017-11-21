@@ -64,6 +64,7 @@ import {
 } from './column/cell-renderer/cell-renderer';
 
 
+
 export const DEFAULT_INPUTS_O_TABLE = [
   ...OServiceComponent.DEFAULT_INPUTS_O_SERVICE_COMPONENT,
 
@@ -196,6 +197,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   @ViewChild(OTablePaginatorComponent) paginator: OTablePaginatorComponent;
   @ViewChild('filter') filter: ElementRef;
   @ViewChild(MdSort) sort: MdSort;
+  //public mdpaginator: MdPaginator;
+  //@ViewChild('opaginator', { read: ViewContainerRef })
+  //container: ViewContainerRef;
 
   public static NAME_COLUMN_SELECT = 'select';
   public static TYPE_SEPARATOR = ':';
@@ -275,7 +279,11 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   public showFilterByColumnIcon: boolean = false;
 
   get rowQuery() {
-    return this.queryRows;
+    return this.state['query-rows'] || this.queryRows;
+  }
+
+  set rowQuery(value) {
+    this.queryRows = value;
   }
 
   ngOnInit() {
@@ -283,6 +291,13 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   ngAfterViewInit() {
+    /*
+        if (!this.paginator && this.paginationControls) {
+          let factory = this.resolver.resolveComponentFactory(OTablePaginatorComponent);
+          let ref = this.container.createComponent(factory);
+          this.paginator = ref.instance;
+        }
+    */
     this.initTableAfterViewInit();
     if (this._oTableOptions.filter) {
       this.initializeEventFilter();
@@ -340,7 +355,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   getDataToStore() {
     return {
       'sort-columns': this.sort.active + ':' + this.sort.direction,
-      'filter': this.filter ? this.filter.nativeElement.value : ''
+      'filter': this.filter ? this.filter.nativeElement.value : '',
+      'query-rows': this.paginator ? this.paginator.mdpaginator.pageSize : ''
     };
   }
 
