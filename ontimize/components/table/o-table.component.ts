@@ -415,7 +415,10 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       if (typeof column.renderer !== 'undefined') {
         colDef.renderer = column.renderer;
       }
-      colDef.type = column.type;
+      if (typeof column.type !== 'undefined') {
+        colDef.type = column.type;
+      }
+
     }
     colDef.visible = (this.visibleColumns.indexOf(colDef.attr) !== -1);
     if (column.asyncLoad) {

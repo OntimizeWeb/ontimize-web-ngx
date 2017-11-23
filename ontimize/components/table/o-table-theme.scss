@@ -29,6 +29,17 @@
       }
       .mat-cell {
         color: mat-color($foreground, secondary-text);
+        &.mat-column-currency,
+        &.mat-column-integer,
+        &.mat-column-real,
+        {
+          text-align: right
+        }
+        &.mat-column-boolean,
+        &.mat-column-date{
+          text-align: center
+        }
+
       }
     }
 

@@ -59,7 +59,7 @@
               {{ column.title | oTranslate }}
             </md-header-cell>
           </ng-container>
-          <md-cell *cdkCellDef="let row" [fxFlex]="column.width">
+          <md-cell *cdkCellDef="let row" [fxFlex]="column.width" class="mat-column-{{column.type}}">
             <ng-container *ngIf="!column.renderer">{{ row[column.name] }}</ng-container>
             <ng-template *ngIf="column.renderer" [ngTemplateOutlet]="column.renderer.templateref" [ngOutletContext]="{cellvalue: row[column.name]}"></ng-template>
           </md-cell>
@@ -69,8 +69,14 @@
         <md-row *cdkRowDef="let row; columns: oTableOptions.visibleColumns;" (click)="handleClick(row)" (dblclick)="handleDoubleClick(row)">
         </md-row>
       </md-table>
+      
+      <!--TABLE EMPTY-->
+      <div class="mat-row o-table-no-results" [style.display]="dataSource.resultsLength > 0 ? 'none' : ''" *ngIf="daoTable.isLoadingResults"
+        fxLayoutAlign="center center">
+        {{'TABLE.EMPTY' | oTranslate}}
+      </div>
 
-      <!--table totals-->
+      <!--TABLE AGGREGATE-->
       <o-table-aggregate [o-table-options]="oTableOptions" [datasource]="dataSource" *ngIf="showTotals"> </o-table-aggregate>
 
       <!--LOADING-->
@@ -78,11 +84,6 @@
         <md-progress-spinner mode="indeterminate" style="margin:0 auto;" *ngIf="daoTable.isLoadingResults"></md-progress-spinner>
       </div>
 
-      <!--TABLE EMPTY-->
-      <div class="mat-row o-table-no-results" [style.display]="dataSource.resultsLength > 0 ? 'none' : ''" *ngIf="daoTable.isLoadingResults"
-        fxLayoutAlign="center center">
-        {{'TABLE.EMPTY' | oTranslate}}
-      </div>
 
       <o-table-paginator *ngIf="paginationControls" #paginator [page-size]="rowQuery"> </o-table-paginator>
 

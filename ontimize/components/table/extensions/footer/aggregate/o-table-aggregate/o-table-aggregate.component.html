@@ -1,11 +1,9 @@
-<md-table [dataSource]="dataSourceTotals" class="totals-table" >
-
+<md-table [dataSource]="dataSourceTotals" class="totals-table">
     <ng-container *ngFor="let column of oTableOptions.columns" [cdkColumnDef]="column.name">
-
         <md-header-cell *cdkHeaderCellDef [fxFlex]="column.width" style="display: none;"> {{ column.title | oTranslate }}
         </md-header-cell>
 
-        <md-cell *cdkCellDef="let row" [fxFlex]="column.width">
+        <md-cell *cdkCellDef="let row" [fxFlex]="column.width" class="mat-column-{{column.type}}">
             <ng-container *ngIf="!column.renderer">{{ row[column.name] }}</ng-container>
             <ng-template *ngIf="column.renderer" [ngTemplateOutlet]="column.renderer.templateref" [ngOutletContext]="{cellvalue: row[column.name]}"></ng-template>
         </md-cell>
