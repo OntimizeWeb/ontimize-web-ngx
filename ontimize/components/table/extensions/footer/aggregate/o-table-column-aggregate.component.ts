@@ -4,18 +4,19 @@ import { OTableComponent } from '../../../o-table.component';
 export type AggregateFunction = (value: any[]) => number;
 
 export const DEFAULT_TABLE_COLUMN_AGGREGATE = [
-    // string
+    // attr [string]: column name.
     'attr: attr',
-    // string
+
+    //aggregate [sum | count | avg | min |max]
     'aggregate:aggregate',
-    //function
+
+    //function-aggregate [ (value: any[]) => number] Function that calculates a value on the values of the column 'attr'
     'functionAggregate:function-aggregate'
 ];
 
 @Component({
     selector: 'o-table-column-aggregate',
     templateUrl: './o-table-column-aggregate.component.html',
-    styleUrls: ['./o-table-column-aggregate.component.scss'],
     inputs: DEFAULT_TABLE_COLUMN_AGGREGATE
 
 })
@@ -30,7 +31,6 @@ export class OTableColumnAggregateComponent implements OnInit {
         @Inject(forwardRef(() => OTableComponent)) table: OTableComponent,
         protected injector: Injector) {
         this.table = table;
-
     }
 
     get functionAggregate(): AggregateFunction {
@@ -49,8 +49,6 @@ export class OTableColumnAggregateComponent implements OnInit {
     }
 
     ngOnInit() {
-        //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
-        //Add 'implements OnInit' to the class.
         this.table.registerColumnAggregate(this);
     }
 }

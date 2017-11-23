@@ -10,8 +10,7 @@ import 'rxjs/add/operator/startWith';
 import 'rxjs/add/observable/merge';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/fromEvent';
-import { OTableColumnsFilterComponent } from '../../../index';
-
+import { OTableAggregateComponent } from '../../../index';
 
 export class OTableDataSource extends DataSource<any> {
   dataTotalsChange = new BehaviorSubject<any[]>([]);
@@ -272,21 +271,24 @@ export class OTableDataSource extends DataSource<any> {
 export class OTableTotalDataSource extends DataSource<any> {
 
   private _tableOptions: OTableOptions;
-  constructor(protected table: OTableComponent) {
+  private _datasourceData: OTableDataSource;
+  constructor(table: OTableAggregateComponent) {
     super();
-    if (table.oTableOptions) {
-      this._tableOptions = table.oTableOptions;
-    }
+    this._tableOptions = table.oTableOptions;
+    this._datasourceData = table.dataSource;
   }
 
   /** Connect function called by the table to retrieve one stream containing the data to render. */
   connect(): Observable<any[]> {
-    let displayDataChanges: any[] = [
-      this.table.dataSource.dataTotalsChange
-    ];
 
+    let displayDataChanges: any[];
+    if (this._datasourceData) {
+      displayDataChanges = [
+        this._datasourceData.dataTotalsChange
+      ];
+    }
     return Observable.merge(...displayDataChanges).map(() => {
-      let data = this.table.dataSource.data;
+      let data = this._datasourceData.data;
       data = this.getTotals(data);
       return data;
 
@@ -339,7 +341,7 @@ export class OTableTotalDataSource extends DataSource<any> {
           break;
       }
     } else {
-      resultAggregate = column.aggregate(this.table.dataSource.getColumnData(column.attr));
+      resultAggregate = column.aggregate(this._datasourceData.getColumnData(column.attr));
     }
     return resultAggregate;
   }

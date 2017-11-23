@@ -32,7 +32,13 @@ import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { MdDialog, MdSort, MdSortModule, MdTabGroup, MdTab, MdPaginatorModule, MdPaginatorIntl } from '@angular/material';
 
-import { OTablePaginatorComponent, OTableMdPaginatorIntl } from './extensions/footer/paginator/o-table-paginator.component';
+import {
+  OTablePaginatorComponent,
+  OTableMdPaginatorIntl,
+  OTableColumnAggregateComponent,
+  AggregateFunction,
+  OTableAggregateComponent
+} from './extensions/footer/o-table-footer-components';
 
 import { OTableDataSource } from './o-table.datasource';
 import { OTableDao } from './o-table.dao';
@@ -65,9 +71,6 @@ import {
   OTableCellRendererIntegerComponent,
   OTableCellRendererRealComponent
 } from './column/cell-renderer/cell-renderer';
-import { OTableColumnAggregateComponent, AggregateFunction } from './extensions/footer/aggregate/o-table-column-aggregate.component';
-import { OTableTotalDataSource } from '../../../index';
-
 
 
 export const DEFAULT_INPUTS_O_TABLE = [
@@ -260,8 +263,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   public daoTable: OTableDao | null;
   public dataSource: OTableDataSource | null;
-  public dataSourceTotals: OTableTotalDataSource | null;
-
   protected visibleColumns: string;
   protected sortColumns: string;
   protected dataParentKeys: Array<Object>;
@@ -448,6 +449,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     var alreadyExisting = this._oTableOptions.columns.filter(function (existingColumn) {
       return existingColumn.name === column.attr;
     });
+    
     if (alreadyExisting.length === 1) {
       var replacingIndex = this._oTableOptions.columns.indexOf(alreadyExisting[0]);
       let ocolumn: OColumn = alreadyExisting[0];
@@ -600,10 +602,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       this.dataSource.resultsLength = this.daoTable.data.length;
     }
 
-    //if aggregate columns
-    if (this.showTotals) {
-      this.dataSourceTotals = new OTableTotalDataSource(this);
-    }
   }
 
   /**
@@ -996,7 +994,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     OTableOptionComponent,
     OTableColumnsFilterComponent,
     OTablePaginatorComponent,
-    OTableColumnAggregateComponent
+    OTableColumnAggregateComponent,
+    OTableAggregateComponent
   ],
   imports: [
     CommonModule,
