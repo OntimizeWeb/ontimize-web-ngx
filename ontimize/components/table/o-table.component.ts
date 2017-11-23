@@ -449,7 +449,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     var alreadyExisting = this._oTableOptions.columns.filter(function (existingColumn) {
       return existingColumn.name === column.attr;
     });
-    
+
     if (alreadyExisting.length === 1) {
       var replacingIndex = this._oTableOptions.columns.indexOf(alreadyExisting[0]);
       let ocolumn: OColumn = alreadyExisting[0];
