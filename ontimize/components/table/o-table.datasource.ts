@@ -334,7 +334,7 @@ export class OTableTotalDataSource extends DataSource<any> {
           resultAggregate = this.max(column.attr, data);
           break;
         case 'avg':
-          resultAggregate = this.max(column.attr, data);
+          resultAggregate = this.avg(column.attr, data);
           break;
         default:
           resultAggregate = this.sum(column.attr, data);
