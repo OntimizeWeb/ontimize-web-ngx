@@ -10,8 +10,12 @@ import 'rxjs/add/operator/startWith';
 import 'rxjs/add/observable/merge';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/fromEvent';
+import { OTableColumnsFilterComponent } from '../../../index';
 
 export class OTableDataSource extends DataSource<any> {
+  dataTotalsChange = new BehaviorSubject<any[]>([]);
+  get data(): any[] { return this.dataTotalsChange.value; }
+
   private _database: OTableDao;
   private _paginator: MdPaginator;
   private _tableOptions: OTableOptions;
@@ -72,6 +76,10 @@ export class OTableDataSource extends DataSource<any> {
       data = this.getSortedData(data);
       data = this.getPaginationData(data);
       this.renderedData = data;
+      //if exist one o-table-column-aggregate then emit observable
+      if (this.table.showTotals) {
+        this.dataTotalsChange.next(this.renderedData);
+      }
       this.resultsLength = this.renderedData.length;
       return this.renderedData;
     });
@@ -97,6 +105,7 @@ export class OTableDataSource extends DataSource<any> {
     this._paginator.length = data.length;
     return data.splice(startIndex, this._paginator.pageSize);
   }
+
 
   disconnect() {
     // TODO
@@ -165,6 +174,21 @@ export class OTableDataSource extends DataSource<any> {
             }
           }
         });
+      });
+      return obj;
+    });
+  }
+  public getColumnData(ocolumn: string) {
+
+    return this.renderedData.map(function (row, i, a) {
+      /** render each column*/
+      var obj = {};
+      Object.keys(row).map(function (column, i, a) {
+        if (column === ocolumn && ocolumn) {
+          var key = column;
+          obj[key] = row[column];
+
+        }
       });
       return obj;
     });
@@ -240,4 +264,113 @@ export class OTableDataSource extends DataSource<any> {
     return data;
   }
 
+}
+
+
+
+export class OTableTotalDataSource extends DataSource<any> {
+
+  private _tableOptions: OTableOptions;
+  constructor(protected table: OTableComponent) {
+    super();
+    if (table.oTableOptions) {
+      this._tableOptions = table.oTableOptions;
+    }
+  }
+
+  /** Connect function called by the table to retrieve one stream containing the data to render. */
+  connect(): Observable<any[]> {
+    let displayDataChanges: any[] = [
+      this.table.dataSource.dataTotalsChange
+    ];
+
+    return Observable.merge(...displayDataChanges).map(() => {
+      let data = this.table.dataSource.data;
+      data = this.getTotals(data);
+      return data;
+
+    });
+  }
+
+  getTotals(data: any[]): any[] {
+    var self = this;
+    // let totalsResult=0;
+    var obj = {};
+    this._tableOptions.columns.map(function (column, i) {
+      let totalValue: number = 0;
+      if (column.aggregate) {
+        totalValue = self.calculateAggregate(data, column);
+      }
+      var key = column.attr;
+      if (totalValue > 0) {
+        obj[key] = totalValue;
+      } else {
+        obj[key] = '';
+      }
+
+      return obj;
+    });
+    return new Array(obj);
+    //return data[0];
+  }
+
+
+  calculateAggregate(data: any[], column: OColumn): any {
+    let operator = column.aggregate.toLowerCase();
+    let resultAggregate;
+    switch (operator) {
+      case 'count':
+        resultAggregate = this.count(column.attr, data);
+        break;
+      case 'min':
+        resultAggregate = this.min(column.attr, data);
+        break;
+      case 'max':
+        resultAggregate = this.max(column.attr, data);
+        break;
+      case 'avg':
+        resultAggregate = this.max(column.attr, data);
+        break;
+      default:
+        resultAggregate = this.sum(column.attr, data);
+        break;
+    }
+    return resultAggregate;
+  }
+
+  sum(column, data): number {
+    let value = 0;
+    if (data) {
+      value = data.reduce(function (acumulator, currentValue, currentIndex) {
+        return acumulator + currentValue[column];
+      }, 0);
+    }
+    return value;
+  }
+
+  count(column, data): number {
+    let value = 0;
+    if (data) {
+      value = data.reduce(function (acumulator, currentValue, currentIndex) {
+        return acumulator + 1;
+      }, 0);
+    }
+    return value;
+  }
+
+  avg(column, data): number {
+    return this.sum(column, data) / this.count(column, data);
+  }
+
+  min(column, data): number {
+    const tempMin = data.map(x => x[column]);
+    return Math.min(...tempMin);
+  }
+  max(column, data): number {
+    const tempMin = data.map(x => x[column]);
+    return Math.max(...tempMin);
+  }
+  disconnect() {
+    // TODO
+  }
 }

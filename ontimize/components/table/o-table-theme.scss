@@ -62,5 +62,17 @@
       }
     }
 
+    .mat-table.totals-table{
+      .mat-header-row {
+        display: none!important;
+      }
+      .mat-row{
+          font-weight: bold;
+          background-color: mat-color($background, status-bar, 0.9);
+      }
+     
+      
+    }
+      
   }
 }

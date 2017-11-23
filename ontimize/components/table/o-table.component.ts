@@ -26,6 +26,7 @@ import { OFormComponent } from '../form/o-form.component';
 import { OSharedModule } from '../../shared';
 import { OServiceComponent } from '../o-service-component.class';
 import { CdkTableModule } from '@angular/cdk/table';
+
 import { SelectionModel } from '@angular/cdk/collections';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
@@ -64,6 +65,8 @@ import {
   OTableCellRendererIntegerComponent,
   OTableCellRendererRealComponent
 } from './column/cell-renderer/cell-renderer';
+import { OTableColumnAggregateComponent } from './extensions/footer/aggregate/o-table-column-aggregate.component';
+import { OTableTotalDataSource } from '../../../index';
 
 
 
@@ -154,6 +157,7 @@ export class OColumn {
   visible: boolean;
   renderer: any;
   width: string;
+  aggregate: string;
 }
 
 export class OTableOptions {
@@ -256,6 +260,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   public daoTable: OTableDao | null;
   public dataSource: OTableDataSource | null;
+  public dataSourceTotals: OTableTotalDataSource | null;
 
   protected visibleColumns: string;
   protected sortColumns: string;
@@ -281,6 +286,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   oTableColumnsFilterComponent: OTableColumnsFilterComponent;
   public showFilterByColumnIcon: boolean = false;
+  public showTotals: boolean = false;
 
   get rowQuery() {
     return this.state['query-rows'] || this.queryRows;
@@ -436,6 +442,21 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   }
 
+  public registerColumnAggregate(column: OTableColumnAggregateComponent) {
+
+    this.showTotals = true;
+    var alreadyExisting = this._oTableOptions.columns.filter(function (existingColumn) {
+      return existingColumn.name === column.attr;
+    });
+    if (alreadyExisting.length === 1) {
+      var replacingIndex = this._oTableOptions.columns.indexOf(alreadyExisting[0]);
+      let ocolumn: OColumn = alreadyExisting[0];
+      ocolumn.aggregate = column.aggregate ? column.aggregate :OTableColumnAggregateComponent.DEFAULT_AGGREGATE;
+      this._oTableOptions.columns[replacingIndex] = ocolumn;
+    }
+  }
+
+
   /**
    * initialize event to filtering the columns, when change value then filter the data
    */
@@ -577,8 +598,11 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     if (this.daoTable) {
       this.dataSource.resultsLength = this.daoTable.data.length;
     }
-    /*  this.dataSource.resultsLength = 0;*/
 
+    //if aggregate columns
+    if (this.showTotals) {
+      this.dataSourceTotals = new OTableTotalDataSource(this);
+    }
   }
 
   /**
@@ -970,7 +994,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     OTableButtonComponent,
     OTableOptionComponent,
     OTableColumnsFilterComponent,
-    OTablePaginatorComponent
+    OTablePaginatorComponent,
+    OTableColumnAggregateComponent
   ],
   imports: [
     CommonModule,
@@ -992,7 +1017,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     OTableCellRendererIntegerComponent,
     OTableCellRendererRealComponent,
     OTableCellRendererCurrencyComponent,
-    OTablePaginatorComponent
+    OTablePaginatorComponent,
+    OTableColumnAggregateComponent
   ],
   entryComponents: [
     OTableCellRendererDateComponent,
@@ -1003,7 +1029,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     OTableCellRendererCurrencyComponent,
     OTableExportDialogComponent,
     OTableVisibleColumnsDialogComponent,
-    OTableFilterByColumnDataDialogComponent
+    OTableFilterByColumnDataDialogComponent,
+    OTableColumnAggregateComponent
   ],
   providers: [{
     provide: MdPaginatorIntl,

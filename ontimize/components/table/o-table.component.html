@@ -70,6 +70,26 @@
         </md-row>
       </md-table>
 
+
+      <!--TABLE TOTALS-->
+      <md-table [dataSource]="dataSourceTotals" class="totals-table" *ngIf="showTotals">
+
+        <ng-container *ngFor="let column of oTableOptions.columns" [cdkColumnDef]="column.name">
+
+          <md-header-cell *cdkHeaderCellDef [fxFlex]="column.width" style="display: none;"> {{ column.title | oTranslate }}
+          </md-header-cell>
+
+          <md-cell *cdkCellDef="let row" [fxFlex]="column.width">
+            <ng-container *ngIf="!column.renderer">{{ row[column.name] }}</ng-container>
+            <ng-template *ngIf="column.renderer" [ngTemplateOutlet]="column.renderer.templateref" [ngOutletContext]="{cellvalue: row[column.name]}"></ng-template>
+          </md-cell>
+        </ng-container>
+
+        <md-header-row *cdkHeaderRowDef="oTableOptions.visibleColumns" style="display: none;"></md-header-row>
+        <md-row *cdkRowDef="let row; columns: oTableOptions.visibleColumns;">
+        </md-row>
+      </md-table>
+
       <!--LOADING-->
       <div *ngIf="!daoTable.isLoadingResults">
         <md-progress-spinner mode="indeterminate" style="margin:0 auto;" *ngIf="daoTable.isLoadingResults"></md-progress-spinner>
