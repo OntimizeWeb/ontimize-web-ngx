@@ -65,7 +65,7 @@ import {
   OTableCellRendererIntegerComponent,
   OTableCellRendererRealComponent
 } from './column/cell-renderer/cell-renderer';
-import { OTableColumnAggregateComponent } from './extensions/footer/aggregate/o-table-column-aggregate.component';
+import { OTableColumnAggregateComponent, AggregateFunction } from './extensions/footer/aggregate/o-table-column-aggregate.component';
 import { OTableTotalDataSource } from '../../../index';
 
 
@@ -157,7 +157,7 @@ export class OColumn {
   visible: boolean;
   renderer: any;
   width: string;
-  aggregate: string;
+  aggregate: string | AggregateFunction;
 }
 
 export class OTableOptions {
@@ -451,7 +451,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     if (alreadyExisting.length === 1) {
       var replacingIndex = this._oTableOptions.columns.indexOf(alreadyExisting[0]);
       let ocolumn: OColumn = alreadyExisting[0];
-      ocolumn.aggregate = column.aggregate ? column.aggregate :OTableColumnAggregateComponent.DEFAULT_AGGREGATE;
+
+      ocolumn.aggregate = column.aggregate ? column.aggregate : (column.functionAggregate ? column.functionAggregate : OTableColumnAggregateComponent.DEFAULT_AGGREGATE);
       this._oTableOptions.columns[replacingIndex] = ocolumn;
     }
   }

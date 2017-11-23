@@ -12,6 +12,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/fromEvent';
 import { OTableColumnsFilterComponent } from '../../../index';
 
+
 export class OTableDataSource extends DataSource<any> {
   dataTotalsChange = new BehaviorSubject<any[]>([]);
   get data(): any[] { return this.dataTotalsChange.value; }
@@ -316,24 +317,29 @@ export class OTableTotalDataSource extends DataSource<any> {
 
 
   calculateAggregate(data: any[], column: OColumn): any {
-    let operator = column.aggregate.toLowerCase();
     let resultAggregate;
-    switch (operator) {
-      case 'count':
-        resultAggregate = this.count(column.attr, data);
-        break;
-      case 'min':
-        resultAggregate = this.min(column.attr, data);
-        break;
-      case 'max':
-        resultAggregate = this.max(column.attr, data);
-        break;
-      case 'avg':
-        resultAggregate = this.max(column.attr, data);
-        break;
-      default:
-        resultAggregate = this.sum(column.attr, data);
-        break;
+    if (typeof column.aggregate === 'string') {
+      let operator = column.aggregate.toLowerCase();
+
+      switch (operator) {
+        case 'count':
+          resultAggregate = this.count(column.attr, data);
+          break;
+        case 'min':
+          resultAggregate = this.min(column.attr, data);
+          break;
+        case 'max':
+          resultAggregate = this.max(column.attr, data);
+          break;
+        case 'avg':
+          resultAggregate = this.max(column.attr, data);
+          break;
+        default:
+          resultAggregate = this.sum(column.attr, data);
+          break;
+      }
+    } else {
+      resultAggregate = column.aggregate(this.table.dataSource.getColumnData(column.attr));
     }
     return resultAggregate;
   }
