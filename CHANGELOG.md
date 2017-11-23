@@ -9,6 +9,7 @@
 
 * **o-table-paginator**: new '*o-table-paginator*' component ([23b4e4d](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/23b4e4d)) ([2213a0d](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/2213a0d)) ([a19fa4b](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/a19fa4b))
 
+* **o-table-column-aggregate ** *: new *o-table-column-aggregate* componente allows to display columns of totals. ([eb7c9d7](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/eb7c9d7)) ([6f466d7](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/6f466d7)) ([80b7f04](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/80b7f04))
 
 
 ### Bug Fixes
