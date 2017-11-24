@@ -36,8 +36,8 @@ import {
   OTablePaginatorComponent,
   OTableMdPaginatorIntl,
   OTableColumnAggregateComponent,
-  AggregateFunction,
-  OTableAggregateComponent
+  OTableAggregateComponent,
+  OColumnAggregate
 } from './extensions/footer/o-table-footer-components';
 
 import { OTableDataSource } from './o-table.datasource';
@@ -71,7 +71,6 @@ import {
   OTableCellRendererIntegerComponent,
   OTableCellRendererRealComponent
 } from './column/cell-renderer/cell-renderer';
-
 
 export const DEFAULT_INPUTS_O_TABLE = [
   ...OServiceComponent.DEFAULT_INPUTS_O_SERVICE_COMPONENT,
@@ -148,7 +147,6 @@ export const DEFAULT_OUTPUTS_O_TABLE = [
   // 'onPaginatedTableDataLoaded'
 ];
 
-
 export class OColumn {
   attr: string;
   name: string;
@@ -160,7 +158,7 @@ export class OColumn {
   visible: boolean;
   renderer: any;
   width: string;
-  aggregate: string | AggregateFunction;
+  aggregate: OColumnAggregate;
 }
 
 export class OTableOptions {
@@ -446,7 +444,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   }
 
-  public registerColumnAggregate(column: OTableColumnAggregateComponent) {
+  public registerColumnAggregate(column: OColumnAggregate) {
 
     this.showTotals = true;
     var alreadyExisting = this._oTableOptions.columns.filter(function (existingColumn) {
@@ -455,11 +453,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
     if (alreadyExisting.length === 1) {
       var replacingIndex = this._oTableOptions.columns.indexOf(alreadyExisting[0]);
-      let ocolumn: OColumn = alreadyExisting[0];
-
-      ocolumn.aggregate = column.aggregate ? column.aggregate : (column.functionAggregate ? column.functionAggregate : OTableColumnAggregateComponent.DEFAULT_AGGREGATE);
-      this._oTableOptions.columns[replacingIndex] = ocolumn;
+      this._oTableOptions.columns[replacingIndex].aggregate = column;
     }
+
   }
 
 

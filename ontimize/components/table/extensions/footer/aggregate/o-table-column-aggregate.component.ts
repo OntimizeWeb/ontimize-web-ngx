@@ -1,11 +1,22 @@
 import { Component, OnInit, forwardRef, Inject, Injector } from '@angular/core';
 import { OTableComponent } from '../../../o-table.component';
 
+
+
+export class OColumnAggregate {
+    title: string;
+    attr: string;
+    operator: string | AggregateFunction;
+}
+
 export type AggregateFunction = (value: any[]) => number;
 
 export const DEFAULT_TABLE_COLUMN_AGGREGATE = [
     // attr [string]: column name.
     'attr: attr',
+
+    // title [string]: Title for the header total column
+    'title: title',
 
     //aggregate [sum | count | avg | min |max]
     'aggregate:aggregate',
@@ -24,6 +35,7 @@ export class OTableColumnAggregateComponent implements OnInit {
     public attr: string;
     public aggregate: string;
     public table: OTableComponent;
+    public title: string = '';
     protected _aggregateFunction: AggregateFunction;
     public static DEFAULT_AGGREGATE = 'SUM';
 
@@ -49,6 +61,17 @@ export class OTableColumnAggregateComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.table.registerColumnAggregate(this);
+        if (!this.attr) {
+            return;
+        }
+
+        let ocolumnaggregate: OColumnAggregate = new OColumnAggregate();
+        ocolumnaggregate.attr = this.attr;
+        if (this.title) {
+            ocolumnaggregate.title = this.title;
+        }
+
+        ocolumnaggregate.operator = this.aggregate ? this.aggregate : (this.functionAggregate ? this.functionAggregate : OTableColumnAggregateComponent.DEFAULT_AGGREGATE);
+        this.table.registerColumnAggregate(ocolumnaggregate);
     }
 }

@@ -10,7 +10,7 @@ import 'rxjs/add/operator/startWith';
 import 'rxjs/add/observable/merge';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/fromEvent';
-import { OTableAggregateComponent } from '../../../index';
+import { OTableAggregateComponent} from './extensions/footer/o-table-footer-components';
 
 export class OTableDataSource extends DataSource<any> {
   dataTotalsChange = new BehaviorSubject<any[]>([]);
@@ -320,10 +320,10 @@ export class OTableTotalDataSource extends DataSource<any> {
 
   calculateAggregate(data: any[], column: OColumn): any {
     let resultAggregate;
-    if (typeof column.aggregate === 'string') {
-      let operator = column.aggregate.toLowerCase();
+    let operator = column.aggregate.operator;
+    if (typeof operator === 'string') {
 
-      switch (operator) {
+      switch (operator.toLowerCase()) {
         case 'count':
           resultAggregate = this.count(column.attr, data);
           break;
@@ -341,7 +341,10 @@ export class OTableTotalDataSource extends DataSource<any> {
           break;
       }
     } else {
-      resultAggregate = column.aggregate(this._datasourceData.getColumnData(column.attr));
+      let data: any[] = this._datasourceData.getColumnData(column.attr);
+      if (typeof operator === 'function') {
+        resultAggregate = operator(data);
+      }
     }
     return resultAggregate;
   }
