@@ -385,14 +385,13 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   public registerColumn(column: any) {
     let colDef: OColumn = new OColumn();
     colDef.type = 'string';
-    colDef.className = 'o-table-column ' + (column.class || '') + ' ';
+    colDef.className = 'o-colum-' + ( colDef.type) + ' ';
     colDef.orderable = true;
     colDef.searchable = true;
     colDef.width = '';
 
     if (typeof (column.attr) === 'undefined') {
       // column without 'attr' should contain only renderers that do not depend on cell data, but row data (e.g. actions)
-      colDef.className += ' o-table-column-action ';
       colDef.name = column;
       colDef.attr = column;
       colDef.title = column;
@@ -415,6 +414,11 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       }
       if (typeof column.type !== 'undefined') {
         colDef.type = column.type;
+        colDef.className = 'o-column-' + ( colDef.type) + ' ';
+      }
+
+      if (typeof column.className !== 'undefined') {
+        colDef.className += column.class;
       }
 
     }

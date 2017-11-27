@@ -59,7 +59,7 @@
               {{ column.title | oTranslate }}
             </md-header-cell>
           </ng-container>
-          <md-cell *cdkCellDef="let row" [fxFlex]="column.width" class="mat-column-{{column.type}}">
+          <md-cell *cdkCellDef="let row" [fxFlex]="column.width" [ngClass]="column.className">
             <ng-container *ngIf="!column.renderer">{{ row[column.name] }}</ng-container>
             <ng-template *ngIf="column.renderer" [ngTemplateOutlet]="column.renderer.templateref" [ngOutletContext]="{cellvalue: row[column.name]}"></ng-template>
           </md-cell>
