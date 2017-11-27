@@ -30,6 +30,7 @@ export class OTablePaginatorComponent implements OnInit {
     protected _pageIndex: number = 0;
     protected _pageSize: number = 10;
     protected _pageSizeOptions: Array<any>;
+    protected onLanguageChangeSubscribe: any;
 
 
     constructor(
@@ -41,6 +42,11 @@ export class OTablePaginatorComponent implements OnInit {
         if (this._pageSize <= 0) {
             this._pageSize = this._pageSizeOptions[0];
         }
+        this.onLanguageChangeSubscribe = this.translateService.onLanguageChanged.subscribe(
+            res => {
+                this._pageSizeOptions = [10, 25, 50, 100, this.translateService.get('TABLE.SHOW_ALL')];
+            }
+        );
         this._pageSizeOptions = [10, 25, 50, 100, this.translateService.get('TABLE.SHOW_ALL')];
     }
 
@@ -59,9 +65,6 @@ export class OTablePaginatorComponent implements OnInit {
     }
 
     get pageIndex(): number {
-      /*  if (+this._pageSize+(this._pageIndex+1) > this._pageLenght) {
-            this._pageIndex = 0;
-        }*/
         return this._pageIndex;
     }
 
@@ -97,6 +100,7 @@ export class OTableMdPaginatorIntl extends MdPaginatorIntl {
     nextPageLabel;
     previousPageLabel;
     translateService: OTranslateService;
+    protected onLanguageChangeSubscribe: any;
 
     constructor(protected injector: Injector) {
 
@@ -106,6 +110,15 @@ export class OTableMdPaginatorIntl extends MdPaginatorIntl {
         this.nextPageLabel = this.translateService.get('TABLE.PAGINATE.NEXT');
         this.previousPageLabel = this.translateService.get('TABLE.PAGINATE.PREVIOUS');
         this.getRangeLabel = this.getORangeLabel;
+
+        this.onLanguageChangeSubscribe = this.translateService.onLanguageChanged.subscribe(
+            res => {
+                this.itemsPerPageLabel = this.translateService.get('TABLE.PAGINATE.ITEMSPERPAGELABEL');
+                this.nextPageLabel = this.translateService.get('TABLE.PAGINATE.NEXT');
+                this.previousPageLabel = this.translateService.get('TABLE.PAGINATE.PREVIOUS');
+                this.getRangeLabel = this.getORangeLabel;
+            }
+        );
 
     }
 
@@ -127,7 +140,7 @@ export class OTableMdPaginatorIntl extends MdPaginatorIntl {
             endIndex = length;
         }
 
-        return `${startIndex + 1} - ${endIndex}  ${this.translateService.get('TABLE.PAGINATE.RANGE_LABELTABLE.PAGINATE.RANGE_LABEL')} ${length}`;
+        return `${startIndex + 1} - ${endIndex}  ${this.translateService.get('TABLE.PAGINATE.RANGE_LABEL')} ${length}`;
     }
 
 }
