@@ -4,13 +4,13 @@
 * **o-table-button**: adding '*icon-position*' input ([66f0acb](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/66f0acb))
 * **o-table**: adding public methods *'getValue'*, *'getRendererValue'*, *'getSqlTypes'* ([236b9b6](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/236b9b6))
 * **o-table**: excel exportation support ([8b8a4b0](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/8b8a4b09b08f4a3d3bc11523a7be212170aab85b))
-* **o-table**: adding styles to cell by type value *mat-column-string*,*mat-column-currency*, *mat-column-integer*, *mat-column-real*,*mat-column-boolean*,*.mat-column-date* ([90fc12f](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/90fc12f))
+* **o-table**: adding styles to cell by type value *o-column-string*,*o-column-currency*, *o-column-integer*, *o-column-real*,*o-column-boolean*,*.o-column-date* ([aaf11b2](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/aaf11b2))
 * **o-table-option**: new '*o-table-option*' component for adding options to '*o-table*' menu ([f48a591](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/f48a591))
 * **o-table, o-table-columns-filter**: new '*o-table-columns-filter*' component ([a0a3eed](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/a0a3eed)) ([21ad0b7](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/21ad0b7)) ([0d69818](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/0d69818)) ([d6c9969](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/d6c9969))
 
-* **o-table-paginator**: new '*o-table-paginator*' component ([23b4e4d](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/23b4e4d)) ([2213a0d](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/2213a0d)) ([a19fa4b](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/a19fa4b))
+* **o-table-paginator**: new '*o-table-paginator*' component ([23b4e4d](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/23b4e4d)) ([2213a0d](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/2213a0d)) ([a19fa4b](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/a19fa4b)) ([6c608cf](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/6c608cf)) ([68ae7c6](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/68ae7c6))
 
-* **o-table-column-aggregate ** *: new *o-table-column-aggregate* componente allows to display columns of totals. ([eb7c9d7](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/eb7c9d7)) ([6f466d7](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/6f466d7)) ([80b7f04](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/80b7f04))
+* **o-table-column-aggregate ** *: new *o-table-column-aggregate* componente allows to display columns of totals. ([eb7c9d7](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/eb7c9d7)) ([6f466d7](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/6f466d7)) ([80b7f04](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/80b7f04)) ([821e696](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/821e696))
 
 
 ### Bug Fixes
