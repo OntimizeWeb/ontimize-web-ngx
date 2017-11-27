@@ -18,6 +18,8 @@
 
 * **o-form**, **o-table**, **o-datatable**, **o-list**,**o-list-picker**,**o-combo**: fixing to show server messages in the client when the requested action fails in the components bug ([#59](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/59)) ([bceae37](https://github.com/OntimizeWeb/ontimize-web-ngx-datatable/commit/bceae37)) ([6ed6bda](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/6ed6bda))
 
+* **o-table**: fixing call *'query-method'* using a different query than the default bug ([#140](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/140)) ([e085e59] (https://github.com/OntimizeWeb/ontimize-web-ng2/commit/e085e59))
+
 ## 2.1.0-rc.1 (2017-11-15)
 
 **NOTE:** if you want to add a issue ([here](https://github.com/OntimizeWeb/ontimize-web-ngx/issues)) please try to follow our new [issue template](https://github.com/OntimizeWeb/ontimize-web-ngx/blob/master/ISSUES_TEMPLATE.md)
