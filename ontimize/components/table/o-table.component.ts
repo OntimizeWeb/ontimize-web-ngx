@@ -226,7 +226,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   @InputConverter()
   columnsGroupButton: boolean = true;
   @InputConverter()
-  pageable: boolean = true;
+  pageable: boolean = false;
   @InputConverter()
   columnsVisibilityButton: boolean = true;
   @InputConverter()
@@ -300,7 +300,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   ngAfterViewInit() {
-   
+
     this.initTableAfterViewInit();
     if (this._oTableOptions.filter) {
       this.initializeEventFilter();
