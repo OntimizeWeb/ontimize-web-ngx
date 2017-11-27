@@ -7,11 +7,9 @@
 * **o-table**: adding styles to cell by type value *o-column-string*,*o-column-currency*, *o-column-integer*, *o-column-real*,*o-column-boolean*,*.o-column-date* ([aaf11b2](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/aaf11b2))
 * **o-table-option**: new '*o-table-option*' component for adding options to '*o-table*' menu ([f48a591](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/f48a591))
 * **o-table, o-table-columns-filter**: new '*o-table-columns-filter*' component ([a0a3eed](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/a0a3eed)) ([21ad0b7](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/21ad0b7)) ([0d69818](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/0d69818)) ([d6c9969](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/d6c9969))
-
 * **o-table-paginator**: new '*o-table-paginator*' component ([23b4e4d](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/23b4e4d)) ([2213a0d](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/2213a0d)) ([a19fa4b](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/a19fa4b)) ([6c608cf](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/6c608cf)) ([68ae7c6](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/68ae7c6))
-
-* **o-table-column-aggregate ** *: new *o-table-column-aggregate* componente allows to display columns of totals. ([eb7c9d7](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/eb7c9d7)) ([6f466d7](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/6f466d7)) ([80b7f04](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/80b7f04)) ([821e696](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/821e696))
-
+* **o-table-column-aggregate**: new *o-table-column-aggregate* component allows to display columns of totals. ([eb7c9d7](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/eb7c9d7)) ([6f466d7](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/6f466d7)) ([80b7f04](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/80b7f04)) ([821e696](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/821e696))
+* **o-form-layout-manager**: new '*o-form-layout-manager*' component ([26a0e04](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/26a0e04))
 
 ### Bug Fixes
 * **o-translate-service**: fixing *'getBrowserLang'* bug ([#138](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/138)) ([4a5d2e7](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/4a5d2e7))
