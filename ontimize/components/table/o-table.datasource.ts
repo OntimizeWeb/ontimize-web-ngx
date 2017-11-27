@@ -10,7 +10,7 @@ import 'rxjs/add/operator/startWith';
 import 'rxjs/add/observable/merge';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/fromEvent';
-import { OTableAggregateComponent} from './extensions/footer/o-table-footer-components';
+import { OTableAggregateComponent } from './extensions/footer/o-table-footer-components';
 
 export class OTableDataSource extends DataSource<any> {
   dataTotalsChange = new BehaviorSubject<any[]>([]);
@@ -40,7 +40,7 @@ export class OTableDataSource extends DataSource<any> {
     super();
     this._database = table.daoTable;
     if (table.paginator) {
-      this._paginator = table.paginator.mdpaginator;
+      this._paginator = table.mdpaginator;
     }
     this._tableOptions = table.oTableOptions;
     this._sort = table.sort;
@@ -74,13 +74,14 @@ export class OTableDataSource extends DataSource<any> {
       data = this.getColumnValueFilterData(data);
       data = this.getQuickFilterData(data);
       data = this.getSortedData(data);
+      this.resultsLength = data.length;
       data = this.getPaginationData(data);
       this.renderedData = data;
       //if exist one o-table-column-aggregate then emit observable
       if (this.table.showTotals) {
         this.dataTotalsChange.next(this.renderedData);
       }
-      this.resultsLength = this.renderedData.length;
+      //this.resultsLength = this.renderedData.length;
       return this.renderedData;
     });
   }
@@ -98,9 +99,10 @@ export class OTableDataSource extends DataSource<any> {
   }
 
   getPaginationData(data: any[]): any[] {
-    if (!this._paginator) {
+    if (!this._paginator || isNaN(this._paginator.pageSize)) {
       return data;
     }
+
     const startIndex = isNaN(this._paginator.pageSize) ? 0 : this._paginator.pageIndex * this._paginator.pageSize;
     this._paginator.length = data.length;
     return data.splice(startIndex, this._paginator.pageSize);
@@ -267,7 +269,6 @@ export class OTableDataSource extends DataSource<any> {
 }
 
 
-
 export class OTableTotalDataSource extends DataSource<any> {
 
   private _tableOptions: OTableOptions;
@@ -299,6 +300,11 @@ export class OTableTotalDataSource extends DataSource<any> {
     var self = this;
     // let totalsResult=0;
     var obj = {};
+
+    if (typeof this._tableOptions === 'undefined') {
+      return new Array(obj);
+    }
+
     this._tableOptions.columns.map(function (column, i) {
       let totalValue: number = 0;
       if (column.aggregate) {

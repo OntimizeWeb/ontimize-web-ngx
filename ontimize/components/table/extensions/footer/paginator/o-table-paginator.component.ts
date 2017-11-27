@@ -3,16 +3,14 @@ import {
     OnInit,
     Inject,
     Injector,
-    ViewChild,
     Injectable,
-    forwardRef,
-    TemplateRef
+    forwardRef
 } from '@angular/core';
 
 import { OTranslateService } from '../../../../../services';
 import { OTableComponent } from '../../../o-table.component';
 
-import { MdPaginator, MdPaginatorIntl } from '@angular/material';
+import { MdPaginatorIntl } from '@angular/material';
 
 export const DEFAULT_PAGINATOR_TABLE = [
     // page-size [number]: Number of items to display on a page. By default set to 50.
@@ -27,40 +25,68 @@ export const DEFAULT_PAGINATOR_TABLE = [
     inputs: DEFAULT_PAGINATOR_TABLE
 })
 export class OTablePaginatorComponent implements OnInit {
-
     private translateService: OTranslateService;
-    public pageLenght: number = 0;
-    public pageIndex: number = 1;
-    public pageSize: number = 10;
-    public pageSizeOptions: Array<any>;
+    protected _pageLenght: number = 0;
+    protected _pageIndex: number = 0;
+    protected _pageSize: number = 10;
+    protected _pageSizeOptions: Array<any>;
 
-    @ViewChild('templateref', { read: TemplateRef }) public templateref: TemplateRef<any>;
-    @ViewChild(MdPaginator) mdpaginator: MdPaginator;
 
     constructor(
         protected injector: Injector,
         @Inject(forwardRef(() => OTableComponent)) protected table: OTableComponent
     ) {
         this.translateService = this.injector.get(OTranslateService);
-
+        this._pageIndex = 0;
+        if (this._pageSize <= 0) {
+            this._pageSize = this._pageSizeOptions[0];
+        }
+        this._pageSizeOptions = [10, 25, 50, 100, this.translateService.get('TABLE.SHOW_ALL')];
     }
-
 
     ngOnInit() {
-        //this.table.mdpaginator = this.mdpaginator;
-        this.pageSizeOptions = [10, 25, 50, 100, this.translateService.get('TABLE.SHOW_ALL')];
-        //this.pageLenght = this.table.daoTable.data.length;
-        if (this.pageSize <= 0) {
-            this.pageSize = this.pageSizeOptions[0];
-        }
-        this.table.rowQuery = this.pageSize;
-        this.table.paginationControls = true;
+        this.table.registerPagination(this);
     }
-    /*
-    ngAfterViewInit() {
-        console.log('set data source en el paginator');
-        this.table.setDatasource();
-    }*/
+
+    get pageLenght(): number {
+        return this.pageLenght;
+    }
+
+    set pageLenght(value: number) {
+        console.log(this._pageSize * this.pageIndex);
+        this._pageLenght = value;
+
+    }
+
+    get pageIndex(): number {
+      /*  if (+this._pageSize+(this._pageIndex+1) > this._pageLenght) {
+            this._pageIndex = 0;
+        }*/
+        return this._pageIndex;
+    }
+
+    set pageIndex(value: number) {
+        this._pageIndex = value;
+    }
+
+    get pageSize(): number {
+        return this._pageSize;
+    }
+
+    set pageSize(value: number) {
+        this._pageSize = value;
+    }
+
+    get pageSizeOptions(): Array<any> {
+        return this._pageSizeOptions;
+    }
+
+    set pageSizeOptions(value: Array<any>) {
+        this._pageSizeOptions = value;
+    }
+
+
+
 }
 
 
@@ -86,7 +112,7 @@ export class OTableMdPaginatorIntl extends MdPaginatorIntl {
 
     getORangeLabel(page: number, pageSize: number, length: number): string {
         if (!isNaN(pageSize) && (length === 0 || pageSize === 0)) {
-            return `0 de ${length}`;
+            return `0  ${this.translateService.get('TABLE.PAGINATE.RANGE_LABEL')} ${length}`;
         }
         length = Math.max(length, 0);
         let startIndex = page * pageSize;
@@ -101,7 +127,7 @@ export class OTableMdPaginatorIntl extends MdPaginatorIntl {
             endIndex = length;
         }
 
-        return `${startIndex + 1} - ${endIndex}  ${this.translateService.get('TABLE.PAGINATE.RANGE_LABEL')} ${length}`;
+        return `${startIndex + 1} - ${endIndex}  ${this.translateService.get('TABLE.PAGINATE.RANGE_LABELTABLE.PAGINATE.RANGE_LABEL')} ${length}`;
     }
 
 }

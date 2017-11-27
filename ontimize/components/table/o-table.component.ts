@@ -30,7 +30,7 @@ import { CdkTableModule } from '@angular/cdk/table';
 import { SelectionModel } from '@angular/cdk/collections';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
-import { MdDialog, MdSort, MdSortModule, MdTabGroup, MdTab, MdPaginatorModule, MdPaginatorIntl } from '@angular/material';
+import { MdDialog, MdSort, MdSortModule, MdTabGroup, MdTab, MdPaginatorModule, MdPaginatorIntl, MdPaginator } from '@angular/material';
 
 import {
   OTablePaginatorComponent,
@@ -200,8 +200,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       // Do nothing due to not always is contained on tab.
     }
   }
-
-  @ViewChild(OTablePaginatorComponent) paginator: OTablePaginatorComponent;
+  public paginator: OTablePaginatorComponent;
+  @ViewChild(MdPaginator) mdpaginator: MdPaginator;
   @ViewChild('filter') filter: ElementRef;
   @ViewChild(MdSort) sort: MdSort;
   @ViewChild('columnFilterOption') columnFilterOption: OTableOptionComponent;
@@ -300,13 +300,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   ngAfterViewInit() {
-    /*
-        if (!this.paginator && this.paginationControls) {
-          let factory = this.resolver.resolveComponentFactory(OTablePaginatorComponent);
-          let ref = this.container.createComponent(factory);
-          this.paginator = ref.instance;
-        }
-    */
+   
     this.initTableAfterViewInit();
     if (this._oTableOptions.filter) {
       this.initializeEventFilter();
@@ -369,7 +363,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     var dataToStore = {
       'sort-columns': this.sort.active + ':' + this.sort.direction,
       'filter': this.filter ? this.filter.nativeElement.value : '',
-      'query-rows': this.paginator ? this.paginator.mdpaginator.pageSize : ''
+      'query-rows': this.mdpaginator ? this.mdpaginator.pageSize : ''
     };
     if (this.oTableColumnsFilterComponent) {
       dataToStore['column-value-filters'] = this.dataSource.getColumnValueFilters();
@@ -377,6 +371,12 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
     return dataToStore;
   }
+
+  registerPagination(value: OTablePaginatorComponent) {
+    this.paginationControls = true;
+    this.paginator = value;
+  }
+
 
   /**
    * Store all columns and properties in var columnsArray
@@ -593,6 +593,10 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
     let queryMethodName = this.pageable ? this.paginatedQueryMethod : this.queryMethod;
     this.daoTable = new OTableDao(this.injector, this.service, this.entity, queryMethodName);
+
+    if (!this.paginator && this.paginationControls) {
+      this.paginator = new OTablePaginatorComponent(this.injector, this);
+    }
   }
 
   setDatasource() {
@@ -872,6 +876,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
         if (index === (this.daoTable.data.length - 1)) {
           self.finishQuerSubscription = true;
         }
+        return item;
       } else {
         return item;
       }
