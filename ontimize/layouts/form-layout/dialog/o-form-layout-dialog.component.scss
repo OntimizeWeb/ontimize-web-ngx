@@ -1,0 +1,34 @@
+
+.mat-dialog-custom-form-layout {
+  padding: 0 0 24px 0 !important;
+  .mat-dialog-content.form-layout-dialog-container {
+    margin: 0;
+    max-height: 85vh;
+  }
+
+  .o-form-layout-dialog {
+    o-form-toolbar .mat-toolbar {
+      padding: 0;
+      box-shadow: none;
+    }
+    .o-form {
+      .o-form-toolbar-floating {
+        position: relative;
+        top: 0px !important;
+        background: transparent;
+      }
+      form.inner-form {
+        position: relative;
+        top: 0px;
+        left: 0px;
+        right: 0px;
+      }
+    }
+  }
+
+  .mat-dialog-actions {
+    padding: 12px 24px;
+  }
+}
+
+

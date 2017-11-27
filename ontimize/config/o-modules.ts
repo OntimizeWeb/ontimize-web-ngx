@@ -58,7 +58,8 @@ import {
 } from '../components';
 
 import {
-  OAppLayoutModule
+  OAppLayoutModule,
+  OFormLayoutManagerModule
 } from '../layouts';
 
 import { OSharedModule } from '../shared';
@@ -115,6 +116,7 @@ export const INTERNAL_ONTIMIZE_MODULES_EXPORTED: any = [
   OAppSidenavMenuGroupModule,
   OAppSidenavModule,
   OAppLayoutModule,
+  OFormLayoutManagerModule,
   OUserInfoModule
 ];
 
@@ -184,6 +186,7 @@ export const INTERNAL_ONTIMIZE_MODULES: any = [
   OAppSidenavMenuGroupModule,
   OAppSidenavModule,
   OAppLayoutModule,
+  OFormLayoutManagerModule,
   OUserInfoModule
 ];
 

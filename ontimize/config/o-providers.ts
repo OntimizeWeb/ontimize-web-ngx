@@ -28,6 +28,8 @@ import {
   OModulesInfoService
 } from '../services';
 
+import { OFormLayoutManagerService } from '../services/o-form-layout-manager.service';
+
 export function appInitializerFactory(injector: Injector, config: Config, oTranslate: OTranslateService) {
   return () => new Promise<any>((resolve: any) => {
     const locationInitialized = injector.get(LOCATION_INITIALIZED, Promise.resolve(null));
@@ -252,5 +254,9 @@ export const ONTIMIZE_PROVIDERS = [
     provide: OModulesInfoService,
     useFactory: getOModulesInfoServiceProvider,
     deps: [Injector]
+  },
+  {
+    provide: OFormLayoutManagerService,
+    useClass: OFormLayoutManagerService
   }
 ];
