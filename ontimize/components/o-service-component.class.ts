@@ -1,24 +1,15 @@
-import {
-  Injector,
-  ElementRef,
-  NgZone,
-  HostListener
-} from '@angular/core';
-
+import { Injector, ElementRef, NgZone, HostListener } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 
+import { Util } from '../utils';
 import { InputConverter } from '../decorators';
 import { OntimizeService, AuthGuardService, OTranslateService, LocalStorageService, DialogService } from '../services';
-
 import { OFormComponent } from './form/o-form.component';
-
 import { OListInitializationOptions } from './list/o-list.component';
+import { OFormLayoutManagerComponent } from '../layouts/form-layout/o-form-layout-manager.component';
 // import { OTableInitializationOptions } from './table/o-table.component';
-
-import { Util } from '../utils';
 
 export interface ILocalStorageComponent {
   getDataToStore(): Object;
@@ -212,6 +203,9 @@ export class OServiceComponent implements ILocalStorageComponent {
   public elRef: ElementRef;
   protected form: OFormComponent;
 
+  protected onMainTabSelectedSubscription: any;
+  protected formLayoutManager: OFormLayoutManagerComponent;
+
   constructor(
     injector: Injector,
     elRef: ElementRef,
@@ -225,7 +219,6 @@ export class OServiceComponent implements ILocalStorageComponent {
     if (this.injector) {
       this.router = this.injector.get(Router);
       this.actRoute = this.injector.get(ActivatedRoute);
-
       this.authGuardService = this.injector.get(AuthGuardService);
       this.translateService = this.injector.get(OTranslateService);
       this.dialogService = this.injector.get(DialogService);
@@ -241,7 +234,11 @@ export class OServiceComponent implements ILocalStorageComponent {
           self.localStorageService.updateComponentStorage(self);
         }
       );
-
+      try {
+        this.formLayoutManager = this.injector.get(OFormLayoutManagerComponent);
+      } catch (e) {
+        // no parent form layout manager
+      }
     }
   }
 
@@ -357,6 +354,14 @@ export class OServiceComponent implements ILocalStorageComponent {
     }
   }
 
+  afterViewInit() {
+    if (this.formLayoutManager && this.formLayoutManager.isTabMode()) {
+      this.onMainTabSelectedSubscription = this.formLayoutManager.onMainTabSelected.subscribe(() => {
+        this.reloadData();
+      });
+    }
+  }
+
   destroy() {
     this.onLanguageChangeSubscribe.unsubscribe();
     if (this.onFormDataSubscribe) {
@@ -366,12 +371,15 @@ export class OServiceComponent implements ILocalStorageComponent {
       this.querySuscription.unsubscribe();
       this.loaderSuscription.unsubscribe();
     }
+    if (this.onMainTabSelectedSubscription) {
+      this.onMainTabSelectedSubscription.unsubscribe();
+    }
     this.localStorageService.updateComponentStorage(this);
   }
+
   ngOnDestroy() {
     //Called once, before the instance is destroyed.
     //Add 'implements OnDestroy' to the class.
-
   }
 
   /**
@@ -481,14 +489,13 @@ export class OServiceComponent implements ILocalStorageComponent {
   viewDetail(item: any): void {
     let route = this.getRouteOfSelectedRow(item, this.detailFormRoute);
     if (route.length > 0) {
-      this.router.navigate(route,
-        {
-          relativeTo: this.recursiveDetail ? this.actRoute.parent : this.actRoute,
-          queryParams: {
-            'isdetail': 'true'
-          }
+      const extras = {
+        relativeTo: this.recursiveDetail ? this.actRoute.parent : this.actRoute,
+        queryParams: {
+          'isdetail': 'true'
         }
-      );
+      };
+      this.router.navigate(route, extras);
     }
   }
 
@@ -510,6 +517,11 @@ export class OServiceComponent implements ILocalStorageComponent {
 
   getRouteOfSelectedRow(item: any, modeRoute: any) {
     let route = [];
+
+    // if (this.formLayoutManager) {
+    //   route = this.formLayoutManager.getRouteOfActiveItem();
+    // }
+
     // TODO: multiple keys
     let filter = undefined;
     if (typeof (item) === 'object') {

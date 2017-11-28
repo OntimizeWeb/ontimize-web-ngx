@@ -47,23 +47,11 @@ export class OTableFilterByColumnDataDialogComponent implements OnInit, AfterVie
   }
 
   ngOnInit() {
-    this.addCustomClass();
+    // TODO
   }
 
   ngAfterViewInit() {
     this.initializeFilterEvent();
-  }
-
-  addCustomClass() {
-    if (this.dialogRef) {
-      let dRef = (this.dialogRef as any);
-      if (dRef._overlayRef && dRef._overlayRef._pane && dRef._overlayRef._pane.children && dRef._overlayRef._pane.children.length >= 0) {
-        let el = dRef._overlayRef._pane.children[0];
-        if (el) {
-          el.classList.add('mat-dialog-custom');
-        }
-      }
-    }
   }
 
   get listData(): Array<ITableFilterByColumnDataInterface> {

@@ -6,13 +6,15 @@
   position: relative;
 }
 
-.mat-dialog-custom {
-  padding: 0 0 24px 0 !important;
-  .mat-dialog-content.dialog-list-container {
-    margin: 0;
-  }
-  .mat-dialog-actions {
-    padding: 12px 24px;
+.cdk-overlay-pane-custom {
+  .mat-dialog-container {
+    padding: 0 0 24px 0 !important;
+    .mat-dialog-content.dialog-list-container {
+      margin: 0;
+    }
+    .mat-dialog-actions {
+      padding: 12px 24px;
+    }
   }
 }
 

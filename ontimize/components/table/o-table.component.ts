@@ -300,7 +300,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   ngAfterViewInit() {
-
+    this.afterViewInit();
     this.initTableAfterViewInit();
     if (this._oTableOptions.filter) {
       this.initializeEventFilter();
@@ -329,9 +329,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   protected initTableAfterViewInit() {
     this.setDatasource();
-    this.showFilterByColumnIcon = !!this.state['o-table-option-columns-filter-active'];
+    this.showFilterByColumnIcon = this.getStoredColumnsFilters().length > 0;
     if (this.columnFilterOption) {
-      this.columnFilterOption.active = !!this.state['o-table-option-columns-filter-active'];
+      this.columnFilterOption.active = this.showFilterByColumnIcon;
     }
     let queryArguments = this.getQueryArguments({});
     if (this.staticData) {
@@ -367,7 +367,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     };
     if (this.oTableColumnsFilterComponent) {
       dataToStore['column-value-filters'] = this.dataSource.getColumnValueFilters();
-      dataToStore['o-table-option-columns-filter-active'] = this.dataSource.getColumnValueFilters();
     }
     return dataToStore;
   }
@@ -896,13 +895,15 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       this.selection.clear() :
       this.dataSource.renderedData.forEach(row => this.selection.select(row));
     this.selectedItems = this.selection.selected;
-    this.deleteButton = this.selectedItems.length > 0 && this.deleteButton;
   }
 
   selectedRow(row: any) {
     this.selection.toggle(row);
     this.selectedItems = this.selection.selected;
-    this.deleteButton = this.selectedItems.length > 0 && this.deleteButton;
+  }
+
+  get showDeleteButton(): boolean {
+    return this.deleteButton && this.selectedItems.length > 0;
   }
 
   getTrackByFunction(): Function {
@@ -1006,7 +1007,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
         columnAttr: column.attr,
         columnDataArray: columnDataArray
       },
-      disableClose: true
+      disableClose: true,
+      panelClass: 'cdk-overlay-pane-custom'
     });
     const self = this;
     dialogRef.afterClosed().subscribe(result => {

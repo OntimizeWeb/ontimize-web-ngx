@@ -20,7 +20,7 @@
     <md-list>
       <md-list-item fxFill *ngFor="let record of listData">
         <md-checkbox (change)="record.selected = $event.checked" [checked]="record.selected">
-          {{ record.value }}
+          {{ record.value || ('TABLE.FILTER_BY_COLUMN.EMPTY_VALUE' | oTranslate)}}
         </md-checkbox>
       </md-list-item>
     </md-list>
