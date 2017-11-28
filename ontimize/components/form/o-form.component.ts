@@ -13,7 +13,7 @@ import {
   CUSTOM_ELEMENTS_SCHEMA
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, ActivatedRoute, UrlSegment, UrlSegmentGroup } from '@angular/router';
+import { Router, ActivatedRoute, UrlSegment } from '@angular/router';
 import { FormGroup, FormControl } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
@@ -158,6 +158,7 @@ export class OFormComponent implements OnInit, OnDestroy {
   public static DEFAULT_DELETE_METHOD = 'delete';
 
   public static DEFAULT_LAYOUT_DIRECTION = 'column';
+  public static guardClassName = 'CanDeactivateFormGuard';
 
   /* inputs variables */
   @InputConverter()
@@ -268,7 +269,7 @@ export class OFormComponent implements OnInit, OnDestroy {
     protected elRef: ElementRef) {
 
     this.formCache = new OFormCacheClass(this);
-    this.formNavigation = new OFormNavigationClass(this.injector, this);
+    this.formNavigation = new OFormNavigationClass(this.injector, this, this.router, this.actRoute);
 
     this.dialogService = injector.get(DialogService);
     this.navigationService = injector.get(NavigationService);
@@ -496,7 +497,7 @@ export class OFormComponent implements OnInit, OnDestroy {
     let canDeactivateArray = (this.actRoute.routeConfig.canDeactivate || []);
     let previouslyAdded = false;
     for (let i = 0, len = canDeactivateArray.length; i < len; i++) {
-      previouslyAdded = (canDeactivateArray[i].name === 'CanDeactivateFormGuard');
+      previouslyAdded = (canDeactivateArray[i].name === OFormComponent.guardClassName);
       if (previouslyAdded) {
         break;
       }
@@ -512,7 +513,7 @@ export class OFormComponent implements OnInit, OnDestroy {
     if (this.deactivateGuard) {
       this.deactivateGuard.setForm(undefined);
       for (let i = this.actRoute.routeConfig.canDeactivate.length - 1; i >= 0; i--) {
-        if (this.actRoute.routeConfig.canDeactivate[i].name === 'CanDeactivateFormGuard') {
+        if (this.actRoute.routeConfig.canDeactivate[i].name === OFormComponent.guardClassName) {
           this.actRoute.routeConfig.canDeactivate.splice(i, 1);
           break;
         }
@@ -751,101 +752,15 @@ export class OFormComponent implements OnInit, OnDestroy {
   }
 
   _backAction() {
-    this.router.navigate(['../../'], { relativeTo: this.actRoute })
-      .catch(err => {
-        console.error(err.message);
-      });
+    this.formNavigation.navigateBack();
   }
 
   _closeDetailAction(options?: any) {
-    this.beforeCloseDetail.emit();
-    const fullUrlSegments = this.getFullUrlSegments();
-    const urlSegments = this.formNavigation.getUrlSegments();
-    const thisUrlSegments = urlSegments.slice(0);
-    // Copy current url segments array...
-    let urlArray = fullUrlSegments.length ? fullUrlSegments : thisUrlSegments;
-    //TODO do it better (maybe propagation nested level number?)
-    let nestedLevelN = this.getNestedLevelsNumber();
-    // Extract segments for proper navigation...
-    if (nestedLevelN > 3) {
-      if (this.isInUpdateMode()) {
-        urlArray.pop();
-      } else if (this.isInInitialMode() || this.isInInsertMode()) {
-        urlArray.pop();
-        urlArray.pop();
-      }
-    } else {
-      urlArray.pop();
-    }
-    // If we are in nested detail form we have to go up two levels
-    // home/:key/subhome/:key2
-    let urlText = '';
-    if (urlArray) {
-      urlArray.forEach((item, index) => {
-        urlText += item['path'];
-        if (index < urlArray.length - 1) {
-          urlText += '/';
-        }
-      });
-    }
-
-    let extras = {};
-    if (nestedLevelN > 3 || urlSegments.length > 1 && this.isDetailForm) {
-      extras['queryParams'] = Object.assign({}, this.formNavigation.getQueryParams(), { 'isdetail': 'true' });
-    }
-
-    this.router.navigate([urlText], extras).then(val => {
-      if (val && options && options.changeToolbarMode) {
-        this._formToolbar.setInitialMode();
-      }
-    }).catch(err => {
-      console.error(err.message);
-    });
-
+    this.formNavigation.closeDetailAction(options);
   }
 
   _stayInRecordAfterInsert(insertedKeys: Object) {
-    const urlSegments = this.formNavigation.getUrlSegments();
-    const fullUrlSegments = this.getFullUrlSegments();
-    // Copy current url segments array...
-    let urlArray = fullUrlSegments.length ? fullUrlSegments : urlSegments.slice(0);
-
-    let nestedLevelN = this.getNestedLevelsNumber();
-
-    // Extract segments for proper navigation...
-    if (nestedLevelN > 3) {
-      urlArray.pop();
-      urlArray.pop();
-    } else {
-      urlArray.pop();
-    }
-
-    let urlText = '';
-    if (urlArray) {
-      urlArray.forEach((item, index) => {
-        urlText += item['path'];
-        if (index < urlArray.length - 1) {
-          urlText += '/';
-        }
-      });
-    }
-
-    if (this.keysArray && insertedKeys) {
-      urlText += '/';
-      this.keysArray.forEach((current, index) => {
-        if (insertedKeys[current]) {
-          urlText += insertedKeys[current];
-          if (index < this.keysArray.length - 1) {
-            urlText += '/';
-          }
-        }
-      });
-    }
-
-    let extras = Object.assign({}, this.formNavigation.getQueryParams(), { 'isdetail': 'true' });
-    this.router.navigate([urlText], extras).catch(err => {
-      console.error(err.message);
-    });
+    this.formNavigation.stayInRecordAfterInsert(insertedKeys);
   }
 
   _reloadAction(useFilter: boolean = false) {
@@ -861,14 +776,7 @@ export class OFormComponent implements OnInit, OnDestroy {
    * Navigates to 'insert' mode
    */
   _goInsertMode(options?: any) {
-    let extras = { relativeTo: this.actRoute };
-    this.router.navigate(['../', 'new'], extras).then((val) => {
-      if (val && options && options.changeToolbarMode) {
-        this._formToolbar.setInsertMode();
-      }
-    }).catch(err => {
-      console.error(err.message);
-    });
+    this.formNavigation.goInsertMode(options);
   }
 
   /**
@@ -906,29 +814,7 @@ export class OFormComponent implements OnInit, OnDestroy {
    * Navigates to 'edit' mode
    */
   _goEditMode(options?: any) {
-
-    this.beforeGoEditMode.emit();
-
-    let url = '';
-    const urlParams = this.formNavigation.getUrlParams();
-    this.keysArray.map(key => {
-      if (urlParams[key]) {
-        url += urlParams[key];
-      }
-    });
-
-    let extras = { relativeTo: this.actRoute };
-    if (this.isDetailForm) {
-      extras['queryParams'] = { 'isdetail': 'true' };
-    }
-    extras['queryParams'] = Object.assign({}, this.formNavigation.getQueryParams(), extras['queryParams'] || {});
-    this.router.navigate(['../', url, 'edit'], extras).then((val) => {
-      if (val && options && options.changeToolbarMode) {
-        this._formToolbar.setEditMode();
-      }
-    }).catch(err => {
-      console.error(err.message);
-    });
+    this.formNavigation.goEditMode();
   }
 
   /**
@@ -1242,31 +1128,6 @@ export class OFormComponent implements OnInit, OnDestroy {
     return filter;
   }
 
-  protected getNestedLevelsNumber() {
-    let actRoute = this.actRoute;
-    let i = 0;
-    while (actRoute.parent) {
-      actRoute = actRoute.parent;
-      actRoute.url.subscribe(function (x) {
-        if (x && x.length) {
-          i++;
-        }
-      });
-    }
-    return i;
-  }
-
-  protected getFullUrlSegments() {
-    let fullUrlSegments = [];
-    if (this.router && this.router.url && this.router.url.length) {
-      const root: UrlSegmentGroup = this.router.parseUrl(this.router.url).root;
-      if (root && root.hasChildren() && root.children.primary) {
-        fullUrlSegments = root.children.primary.segments;
-      }
-    }
-    return fullUrlSegments;
-  }
-
   isInQueryMode(): boolean {
     return this.mode === OFormComponent.Mode().QUERY;
   }
@@ -1370,8 +1231,8 @@ export class OFormComponent implements OnInit, OnDestroy {
     });
   }
 
-  getActRoute(): ActivatedRoute {
-    return this.actRoute;
+  getFormToolbar(): OFormToolbarComponent {
+    return this._formToolbar;
   }
 }
 

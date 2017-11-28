@@ -1,6 +1,7 @@
 
 // import { IFormControlComponent } from '../../o-form-data-component.class';
 import { Injector, EventEmitter } from '@angular/core';
+import { UrlSegmentGroup, ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 
@@ -8,7 +9,6 @@ import { Util, SQLTypes } from '../../../utils';
 import { OFormComponent } from '../o-form.component';
 import { OFormLayoutManagerComponent } from '../../../layouts/form-layout/o-form-layout-manager.component';
 import { OFormLayoutDialogComponent } from '../../../layouts/form-layout/dialog/o-form-layout-dialog.component';
-
 
 export class OFormNavigationClass {
 
@@ -33,7 +33,9 @@ export class OFormNavigationClass {
 
   constructor(
     protected injector: Injector,
-    protected form: OFormComponent
+    protected form: OFormComponent,
+    protected router: Router,
+    protected actRoute: ActivatedRoute
   ) {
     try {
       this.formLayoutManager = this.injector.get(OFormLayoutManagerComponent);
@@ -90,7 +92,7 @@ export class OFormNavigationClass {
       this.parseQueryParams();
     } else {
       const self = this;
-      this.qParamSub = this.form.getActRoute().queryParams.subscribe(params => {
+      this.qParamSub = this.actRoute.queryParams.subscribe(params => {
         if (params) {
           self.queryParams = params;
           self.parseQueryParams();
@@ -101,7 +103,8 @@ export class OFormNavigationClass {
 
   private parseQueryParams() {
     let isDetail = this.queryParams['isdetail'];
-    this.form.isDetailForm = (isDetail === 'true');
+    // ensuring isdetail = false when using form layout manager
+    this.form.isDetailForm = this.formLayoutManager ? false : (isDetail === 'true');
   }
 
   subscribeToUrlParams() {
@@ -111,7 +114,7 @@ export class OFormNavigationClass {
       this.parseUrlParams();
     } else {
       const self = this;
-      this.urlParamSub = this.form.getActRoute().params.subscribe(params => {
+      this.urlParamSub = this.actRoute.params.subscribe(params => {
         self.urlParams = params;
         self.parseUrlParams();
       });
@@ -131,10 +134,11 @@ export class OFormNavigationClass {
 
   subscribeToUrl() {
     if (this.formLayoutManager) {
-      // TODO
+      const cacheData = this.formLayoutManager.getFormCacheData(this.index);
+      this.urlSegments = cacheData.urlSegments;
     } else {
       const self = this;
-      this.urlSub = this.form.getActRoute().url.subscribe(urlSegments => {
+      this.urlSub = this.actRoute.url.subscribe(urlSegments => {
         self.urlSegments = urlSegments;
       });
     }
@@ -196,7 +200,184 @@ export class OFormNavigationClass {
 
   updateNavigation() {
     if (this.formLayoutManager) {
-      this.formLayoutManager.updateNavigation(this.index);
+      this.formLayoutManager.updateNavigation(this.index, this.form.getDataValues());
     }
+  }
+
+  navigateBack() {
+    if (!this.formLayoutManager) {
+      const commands = ['../../'];
+      const extras = {
+        relativeTo: this.actRoute
+      };
+      this.router.navigate(commands, extras).catch(err => {
+        console.error(err.message);
+      });
+    }
+  }
+
+  closeDetailAction(options?: any) {
+    if (this.formLayoutManager) {
+      this.formLayoutManager.closeDetail(this.index);
+    } else {
+      this.form.beforeCloseDetail.emit();
+      const fullUrlSegments = this.getFullUrlSegments();
+      const urlSegments = this.getUrlSegments();
+      const thisUrlSegments = urlSegments.slice(0);
+      // Copy current url segments array...
+      let urlArray = fullUrlSegments.length ? fullUrlSegments : thisUrlSegments;
+      //TODO do it better (maybe propagation nested level number?)
+      let nestedLevelN = this.getNestedLevelsNumber();
+      // Extract segments for proper navigation...
+      if (nestedLevelN > 3) {
+        if (this.form.isInUpdateMode()) {
+          urlArray.pop();
+        } else if (this.form.isInInitialMode() || this.form.isInInsertMode()) {
+          urlArray.pop();
+          urlArray.pop();
+        }
+      } else {
+        urlArray.pop();
+      }
+      // If we are in nested detail form we have to go up two levels
+      // home/:key/subhome/:key2
+      let urlText = '';
+      if (urlArray) {
+        urlArray.forEach((item, index) => {
+          urlText += item['path'];
+          if (index < urlArray.length - 1) {
+            urlText += '/';
+          }
+        });
+      }
+
+      let extras = {};
+      if (nestedLevelN > 3 || urlSegments.length > 1 && this.form.isDetailForm) {
+        extras['queryParams'] = Object.assign({}, this.getQueryParams(), { 'isdetail': 'true' });
+      }
+
+      this.router.navigate([urlText], extras).then(val => {
+        if (val && options && options.changeToolbarMode) {
+          this.form.getFormToolbar().setInitialMode();
+        }
+      }).catch(err => {
+        console.error(err.message);
+      });
+    }
+  }
+
+  stayInRecordAfterInsert(insertedKeys: Object) {
+    if (this.formLayoutManager) {
+      this.form.setInitialMode();
+    } else {
+      const urlSegments = this.getUrlSegments();
+      const fullUrlSegments = this.getFullUrlSegments();
+      // Copy current url segments array...
+      let urlArray = fullUrlSegments.length ? fullUrlSegments : urlSegments.slice(0);
+
+      let nestedLevelN = this.getNestedLevelsNumber();
+
+      // Extract segments for proper navigation...
+      if (nestedLevelN > 3) {
+        urlArray.pop();
+        urlArray.pop();
+      } else {
+        urlArray.pop();
+      }
+
+      let urlText = '';
+      if (urlArray) {
+        urlArray.forEach((item, index) => {
+          urlText += item['path'];
+          if (index < urlArray.length - 1) {
+            urlText += '/';
+          }
+        });
+      }
+
+      if (this.form.keysArray && insertedKeys) {
+        urlText += '/';
+        this.form.keysArray.forEach((current, index) => {
+          if (insertedKeys[current]) {
+            urlText += insertedKeys[current];
+            if (index < this.form.keysArray.length - 1) {
+              urlText += '/';
+            }
+          }
+        });
+      }
+      let extras = Object.assign({}, this.getQueryParams(), { 'isdetail': 'true' });
+      this.router.navigate([urlText], extras).catch(err => {
+        console.error(err.message);
+      });
+    }
+  }
+
+  /**
+  * Navigates to 'insert' mode
+  */
+  goInsertMode(options?: any) {
+    let extras = { relativeTo: this.actRoute };
+    this.router.navigate(['../', 'new'], extras).then((val) => {
+      if (val && options && options.changeToolbarMode) {
+        this.form.getFormToolbar().setInsertMode();
+      }
+    }).catch(err => {
+      console.error(err.message);
+    });
+  }
+
+  /**
+   * Navigates to 'edit' mode
+   */
+  goEditMode(options?: any) {
+    this.form.beforeGoEditMode.emit();
+
+    let url = '';
+    const urlParams = this.getUrlParams();
+    this.form.keysArray.map(key => {
+      if (urlParams[key]) {
+        url += urlParams[key];
+      }
+    });
+
+    let extras = { relativeTo: this.actRoute };
+    if (this.form.isDetailForm) {
+      extras['queryParams'] = { 'isdetail': 'true' };
+    }
+    extras['queryParams'] = Object.assign({}, this.getQueryParams(), extras['queryParams'] || {});
+    this.router.navigate(['../', url, 'edit'], extras).then((val) => {
+      if (val && options && options.changeToolbarMode) {
+        this.form.getFormToolbar().setEditMode();
+      }
+    }).catch(err => {
+      console.error(err.message);
+    });
+  }
+
+  getNestedLevelsNumber() {
+    let actRoute = this.actRoute;
+    let i = 0;
+    while (actRoute.parent) {
+      actRoute = actRoute.parent;
+      actRoute.url.subscribe(function (x) {
+        if (x && x.length) {
+          i++;
+        }
+      });
+    }
+    return i;
+  }
+
+  getFullUrlSegments() {
+    let fullUrlSegments = [];
+    const router = this.router;
+    if (router && router.url && router.url.length) {
+      const root: UrlSegmentGroup = router.parseUrl(router.url).root;
+      if (root && root.hasChildren() && root.children.primary) {
+        fullUrlSegments = root.children.primary.segments;
+      }
+    }
+    return fullUrlSegments;
   }
 }
