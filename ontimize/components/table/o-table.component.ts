@@ -300,7 +300,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   ngAfterViewInit() {
-
+    this.afterViewInit();
     this.initTableAfterViewInit();
     if (this._oTableOptions.filter) {
       this.initializeEventFilter();
