@@ -385,7 +385,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   public registerColumn(column: any) {
     let colDef: OColumn = new OColumn();
     colDef.type = 'string';
-    colDef.className = 'o-colum-' + ( colDef.type) + ' ';
+    colDef.className = 'o-colum-' + (colDef.type) + ' ';
     colDef.orderable = true;
     colDef.searchable = true;
     colDef.width = '';
@@ -414,7 +414,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       }
       if (typeof column.type !== 'undefined') {
         colDef.type = column.type;
-        colDef.className = 'o-column-' + ( colDef.type) + ' ';
+        colDef.className = 'o-column-' + (colDef.type) + ' ';
       }
 
       if (typeof column.className !== 'undefined') {
@@ -624,42 +624,76 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       return;
     }
 
-    if (this.pendingQuery) {
-      let filter = {};
-      if ((this.dataParentKeys.length > 0) && (typeof (parentItem) !== 'undefined')) {
-        for (let k = 0; k < this.dataParentKeys.length; ++k) {
-          let parentKey = this.dataParentKeys[k];
-          if (parentItem.hasOwnProperty(parentKey['alias'])) {
-            let currentData = parentItem[parentKey['alias']];
-            if (currentData instanceof OFormValue) {
-              currentData = currentData.value;
+    let queryMethodName = this.pageable ? this.paginatedQueryMethod : this.queryMethod;
+    if (this.dataService && (queryMethodName in this.dataService) && this.entity) {
+      this.pendingQuery = false;
+      this.pendingQueryFilter = undefined;
+
+      if (this.filterForm && (typeof (parentItem) === 'undefined')) {
+        parentItem = {};
+        let formComponents = this.form.getComponents();
+        if ((this.dataParentKeys.length > 0) && (Object.keys(formComponents).length > 0)) {
+          for (let k = 0; k < this.dataParentKeys.length; ++k) {
+            let parentKey = this.dataParentKeys[k];
+            if (formComponents.hasOwnProperty(parentKey['alias'])) {
+              let currentData = formComponents[parentKey['alias']].getValue();
+              switch (typeof (currentData)) {
+                case 'string':
+                  if (currentData.trim().length > 0) {
+                    parentItem[parentKey['alias']] = currentData.trim();
+                  }
+                  break;
+                case 'number':
+                  if (!isNaN(currentData)) {
+                    parentItem[parentKey['alias']] = currentData;
+                  }
+                  break;
+              }
             }
-            filter[parentKey['name']] = currentData;
           }
         }
       }
 
-      let queryArguments = this.getQueryArguments(filter, ovrrArgs);
-      if (this.querySubscription) {
-        this.querySubscription.unsubscribe();
-      }
-      this.querySubscription = this.daoTable.getQuery(queryArguments).subscribe(res => {
-        let data = undefined;
-        let sqlTypes = undefined;
-        if (Util.isArray(res)) {
-          data = res;
-          sqlTypes = [];
-        } else if ((res.code === 0) && Util.isArray(res.data)) {
-          data = (res.data !== undefined) ? res.data : [];
-          sqlTypes = res.sqlTypes;
-        }
-        this.setData(data, sqlTypes);
-
-      }, err => {
-        this.showDialogError(err, 'MESSAGES.ERROR_QUERY');
-        this.pendingQuery = false;
+      if ((this.dataParentKeys.length > 0) && (typeof (parentItem) === 'undefined')) {
         this.setData([], []);
-      });
+      } else {
+        let filter = {};
+        if ((this.dataParentKeys.length > 0) && (typeof (parentItem) !== 'undefined')) {
+          for (let k = 0; k < this.dataParentKeys.length; ++k) {
+            let parentKey = this.dataParentKeys[k];
+            if (parentItem.hasOwnProperty(parentKey['alias'])) {
+              let currentData = parentItem[parentKey['alias']];
+              if (currentData instanceof OFormValue) {
+                currentData = currentData.value;
+              }
+              filter[parentKey['name']] = currentData;
+            }
+          }
+        }
+
+
+        let queryArguments = this.getQueryArguments(filter, ovrrArgs);
+        if (this.querySubscription) {
+          this.querySubscription.unsubscribe();
+        }
+        this.querySubscription = this.daoTable.getQuery(queryArguments).subscribe(res => {
+          let data = undefined;
+          let sqlTypes = undefined;
+          if (Util.isArray(res)) {
+            data = res;
+            sqlTypes = [];
+          } else if ((res.code === 0) && Util.isArray(res.data)) {
+            data = (res.data !== undefined) ? res.data : [];
+            sqlTypes = res.sqlTypes;
+          }
+          this.setData(data, sqlTypes);
+
+        }, err => {
+          this.showDialogError(err, 'MESSAGES.ERROR_QUERY');
+          //this.pendingQuery = false;
+          this.setData([], []);
+        });
+      }
     }
   }
 
@@ -824,8 +858,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   public reloadData() {
     this.finishQuerSubscription = false;
     this.pendingQuery = true;
-    let queryArguments = this.getQueryArguments({});
-    this.queryData(queryArguments);
+
+    this.queryData(this.parentItem);
   }
   handleClick(item: any) {
     ObservableWrapper.callEmit(this.onClick, item);
