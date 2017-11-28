@@ -102,4 +102,14 @@ export class NumberService {
     return formattedRealValue;
   }
 
+  public getPercentValue(value: any, grouping?: boolean, thousandSeparator?: string,
+    decimalSeparator?: string, decimalDigits?: number, locale?: string) {
+    let formattedPercentValue = value;
+    value = value * 100;
+
+    formattedPercentValue = this.getRealValue(value, grouping, thousandSeparator, decimalSeparator, decimalDigits)+' %';
+    return formattedPercentValue;
+
+  }
+
 }

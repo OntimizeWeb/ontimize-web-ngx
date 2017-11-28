@@ -6,11 +6,13 @@ import {
   OTableCellRendererImageComponent,
   OTableCellRendererIntegerComponent,
   OTableCellRendererRealComponent,
-  OTableCellRendererBooleanComponent
+  OTableCellRendererBooleanComponent,
+  OTableCellRendererPercentageComponent
 } from './cell-renderer/cell-renderer';
 
 import { OTableComponent } from '../o-table.component';
 import { Util } from '../../../util/util';
+
 
 export const DEFAULT_INPUTS_O_TABLE_COLUMN = [
 
@@ -144,6 +146,10 @@ export class OTableColumnComponent implements OnInit {
         case 'image':
           factory = this.resolver.resolveComponentFactory(OTableCellRendererImageComponent);
           break;
+        case 'percentage':
+          factory = this.resolver.resolveComponentFactory(OTableCellRendererPercentageComponent);
+          break;
+
       }
 
       if (factory) {
@@ -174,6 +180,7 @@ export class OTableColumnComponent implements OnInit {
             this.renderer.dataType = this.dataType;
             break;
           case 'real':
+          case 'percentage':
             this.renderer.decimalSeparator = this.decimalSeparator;
             this.renderer.decimalDigits = this.decimalDigits;
             this.renderer.grouping = this.grouping;

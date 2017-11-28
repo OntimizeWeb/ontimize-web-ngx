@@ -69,7 +69,8 @@ import {
   OTableCellRendererCurrencyComponent,
   OTableCellRendererImageComponent,
   OTableCellRendererIntegerComponent,
-  OTableCellRendererRealComponent
+  OTableCellRendererRealComponent,
+  OTableCellRendererPercentageComponent
 } from './column/cell-renderer/cell-renderer';
 
 export const DEFAULT_INPUTS_O_TABLE = [
@@ -1031,6 +1032,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     OTableCellRendererIntegerComponent,
     OTableCellRendererRealComponent,
     OTableCellRendererCurrencyComponent,
+    OTableCellRendererPercentageComponent,
     OTableExportDialogComponent,
     OTableVisibleColumnsDialogComponent,
     OTableFilterByColumnDataDialogComponent,
@@ -1061,6 +1063,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     OTableCellRendererIntegerComponent,
     OTableCellRendererRealComponent,
     OTableCellRendererCurrencyComponent,
+    OTableCellRendererPercentageComponent,
     OTablePaginatorComponent,
     OTableColumnAggregateComponent
   ],
@@ -1071,6 +1074,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     OTableCellRendererIntegerComponent,
     OTableCellRendererRealComponent,
     OTableCellRendererCurrencyComponent,
+    OTableCellRendererPercentageComponent,
     OTableExportDialogComponent,
     OTableVisibleColumnsDialogComponent,
     OTableFilterByColumnDataDialogComponent,
