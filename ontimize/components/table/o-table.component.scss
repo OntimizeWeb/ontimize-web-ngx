@@ -122,7 +122,7 @@ $_mat-checkbox-mark-stroke-size-small: 2 / 15 * $mat-checkbox-size-small !defaul
           .mat-sort-header-button {
             margin-left: auto;
             margin-right: auto;
-            max-width: calc(100% - 48px);
+            max-width: 100%;
             overflow: hidden;
             white-space: nowrap;
             text-overflow: ellipsis;
