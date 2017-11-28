@@ -972,7 +972,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
         columnAttr: column.attr,
         columnDataArray: columnDataArray
       },
-      disableClose: true
+      disableClose: true,
+      panelClass : 'cdk-overlay-pane-custom'
     });
     const self = this;
     dialogRef.afterClosed().subscribe(result => {
