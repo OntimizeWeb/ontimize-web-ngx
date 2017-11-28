@@ -10,13 +10,18 @@
 * **o-table-paginator**: new '*o-table-paginator*' component ([23b4e4d](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/23b4e4d)) ([2213a0d](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/2213a0d)) ([a19fa4b](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/a19fa4b)) ([6c608cf](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/6c608cf)) ([68ae7c6](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/68ae7c6))
 * **o-table-column-aggregate**: new *o-table-column-aggregate* component allows to display columns of totals. ([eb7c9d7](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/eb7c9d7)) ([6f466d7](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/6f466d7)) ([80b7f04](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/80b7f04)) ([821e696](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/821e696))
 * **o-form-layout-manager**: new '*o-form-layout-manager*' component ([26a0e04](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/26a0e04))  ([0be6b2c](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/0be6b2c))
+* **o-table-renderer-percentage** adding predefined cell renderers *'o-table-renderer-percentage'* ([0e48fdf](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/0e48fdf))
+
+   
 
 ### Bug Fixes
 * **o-translate-service**: fixing *'getBrowserLang'* bug ([#138](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/138)) ([4a5d2e7](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/4a5d2e7))
 
 * **o-form**, **o-table**, **o-datatable**, **o-list**,**o-list-picker**,**o-combo**: fixing to show server messages in the client when the requested action fails in the components bug ([#59](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/59)) ([bceae37](https://github.com/OntimizeWeb/ontimize-web-ngx-datatable/commit/bceae37)) ([6ed6bda](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/6ed6bda))
 
-* **o-table**: fixing call *'query-method'* using a different query than the default bug ([#140](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/140)) ([e085e59] (https://github.com/OntimizeWeb/ontimize-web-ng2/commit/e085e59))
+* **o-table**: fixing call *'query-method'* using a different query than the default bug ([#140](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/140)) ([e085e59] (https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e085e59))
+
+* **o-table**: fixing call *'queryData'* using parent-keys bug ([#143](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/143)) ([7fe79c6 ] (https://github.com/OntimizeWeb/ontimize-web-ng2/commit/7fe79c6 ))
 
 ## 2.1.0-rc.1 (2017-11-15)
 
