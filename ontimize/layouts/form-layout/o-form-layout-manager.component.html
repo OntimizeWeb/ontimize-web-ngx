@@ -1,13 +1,12 @@
-<md-tab-group #tabGroup fxFill *ngIf="isTabMode(); else elseBlock">
+<md-tab-group #tabGroup fxFill *ngIf="isTabMode(); else elseBlock" (selectChange)="onTabSelectChange()">
   <md-tab label="{{ 'LAYOUT_MANANGER.MAIN_TAB' | oTranslate }}">
-    HOLA1
-    <ng-content *ngIf="isTabMode();"></ng-content>
+    <ng-content *ngTemplateOutlet="elseBlock"></ng-content>
   </md-tab>
 
-  <md-tab *ngFor="let compData of detailComponentsData; let i = index">
+  <md-tab *ngFor="let tabData of tabsCache; let i = index">
     <ng-template mat-tab-label>
       <span class="tab-label">
-        {{ i | oTranslate }}
+        {{ tabData.label }}
       </span>
       <md-icon (click)="onCloseTab(i)">close</md-icon>
     </ng-template>
@@ -17,6 +16,5 @@
 </md-tab-group>
 
 <ng-template #elseBlock>
-  HOLA2
-  <ng-content *ngIf="isDialogMode()"></ng-content>
+  <ng-content></ng-content>
 </ng-template>

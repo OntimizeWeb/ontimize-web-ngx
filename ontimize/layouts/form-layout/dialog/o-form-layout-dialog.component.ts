@@ -17,6 +17,7 @@ export class OFormLayoutDialogComponent implements OnInit, AfterViewInit {
   formLayoutManager: OFormLayoutManagerComponent;
   queryParams: any;
   urlParams: Object;
+  urlSegments: any[];
 
   protected componentFactory: ComponentFactory<any>;
   mode: string = 'dialog';
@@ -34,6 +35,7 @@ export class OFormLayoutDialogComponent implements OnInit, AfterViewInit {
       this.componentFactory = this.componentFactoryResolver.resolveComponentFactory(component);
       this.urlParams = data.childRoute.params;
       this.queryParams = data.childRoute.queryParams;
+      this.urlSegments = data.childRoute.url;
     }
     if (data.layoutManagerComponent) {
       this.formLayoutManager = data.layoutManagerComponent;
@@ -41,7 +43,7 @@ export class OFormLayoutDialogComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-    this.addCustomClass();
+    // TODO
   }
 
   ngAfterViewInit() {
@@ -49,18 +51,6 @@ export class OFormLayoutDialogComponent implements OnInit, AfterViewInit {
       let viewContainerRef = this.contentDirective.viewContainerRef;
       viewContainerRef.clear();
       viewContainerRef.createComponent(this.componentFactory);
-    }
-  }
-
-  addCustomClass() {
-    if (this.dialogRef) {
-      let dRef = (this.dialogRef as any);
-      if (dRef._overlayRef && dRef._overlayRef._pane && dRef._overlayRef._pane.children && dRef._overlayRef._pane.children.length >= 0) {
-        let el = dRef._overlayRef._pane.children[0];
-        if (el) {
-          el.classList.add('mat-dialog-custom-form-layout');
-        }
-      }
     }
   }
 

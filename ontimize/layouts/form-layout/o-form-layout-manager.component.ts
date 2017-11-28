@@ -10,29 +10,40 @@ import {
   ViewChildren,
   QueryList,
   ViewChild,
-  AfterViewInit
+  AfterViewInit,
+  EventEmitter,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { RouterModule, Router, ActivatedRoute, ActivatedRouteSnapshot, Route } from '@angular/router';
 import { MdDialog, MdTabGroup, MdDialogRef } from '@angular/material';
 import { CommonModule } from '@angular/common';
 import { OSharedModule } from '../../shared';
+import { Util } from '../../util/util';
 
 import { OFormLayoutManagerService } from '../../services/o-form-layout-manager.service';
-
 import { CanActivateFormLayoutChildGuard } from './guards/o-form-layout-can-activate-child.guard';
 import { OFormLayoutDialogComponent } from './dialog/o-form-layout-dialog.component';
 import { OFormLayoutManagerContentDirective } from './directives/o-form-layout-manager-content.directive';
 
+
 export interface IDetailComponentData {
   urlParams: any;
   queryParams: any;
+  urlSegments: any;
   index: number;
+  component: any;
+  label: string;
 }
 
 export const DEFAULT_INPUTS_O_FORM_LAYOUT_MANAGER = [
-  'mode'
+  'mode',
+  'labelColumns: label-columns',
+  'separator'
 ];
-export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER: any[] = [];
+
+export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
+  'onMainTabSelected'
+];
 
 @Component({
   selector: 'o-form-layout-manager',
@@ -41,6 +52,7 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER: any[] = [];
   templateUrl: './o-form-layout-manager.component.html',
   styleUrls: ['./o-form-layout-manager.component.scss'],
   encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     '[class.o-form-layout-manager]': 'true'
   }
@@ -57,16 +69,20 @@ export class OFormLayoutManagerComponent implements OnInit, AfterViewInit, OnDes
   public static TAB_MODE = 'tab';
 
   mode: string;
-  detailComponentsData: any[] = [];
-  tabsCache: IDetailComponentData[] = [];
+  protected labelColumns: string;
+  protected separator: string = ' ';
 
+  protected labelColsArray: string[] = [];
+
+  tabsCache: IDetailComponentData[] = [];
   dialogRef: MdDialogRef<OFormLayoutDialogComponent>;
 
   protected oFormLayoutManagerService: OFormLayoutManagerService;
-
+  private _ignoreTabsDirectivesChange: boolean = false;
   @ViewChild('tabGroup') tabGroup: MdTabGroup;
   @ViewChildren(OFormLayoutManagerContentDirective) tabsDirectives: QueryList<OFormLayoutManagerContentDirective>;
 
+  onMainTabSelected: EventEmitter<any> = new EventEmitter<any>();
   constructor(
     protected injector: Injector,
     protected router: Router,
@@ -85,21 +101,41 @@ export class OFormLayoutManagerComponent implements OnInit, AfterViewInit, OnDes
     if (availableModeValues.indexOf(this.mode) === -1) {
       this.mode = OFormLayoutManagerComponent.DIALOG_MODE;
     }
+    this.labelColsArray = Util.parseArray(this.labelColumns);
     this.addActivateChildGuard();
   }
 
   ngAfterViewInit() {
     this.tabsDirectives.changes.subscribe(changes => {
-      const tabItem = this.tabsDirectives.last;
-      const tabData = this.detailComponentsData[this.detailComponentsData.length - 1];
-      if (tabData) {
-        this.createTabComponent(tabData.childRoute, tabItem);
+      if (this.tabsDirectives.length && !this._ignoreTabsDirectivesChange) {
+        const tabItem = this.tabsDirectives.last;
+        const tabData = this.tabsCache[tabItem.index];
+        if (tabData) {
+          this.createTabComponent(tabData, tabItem);
+        }
+      } else if (this._ignoreTabsDirectivesChange) {
+        this._ignoreTabsDirectivesChange = false;
       }
     });
   }
 
   ngOnDestroy() {
     this.destroyAactivateChildGuard();
+  }
+
+  onTabSelectChange() {
+    if (this.tabGroup.selectedIndex === 0) {
+      this.onMainTabSelected.emit();
+    }
+  }
+
+  protected getLabelFromUrlParams(urlParams: Object): string {
+    let label = '';
+    const keys = Object.keys(urlParams);
+    keys.forEach((param, i) => {
+      label += urlParams[param] + ((i < keys.length - 1) ? this.separator : '');
+    });
+    return label;
   }
 
   addActivateChildGuard() {
@@ -122,7 +158,6 @@ export class OFormLayoutManagerComponent implements OnInit, AfterViewInit, OnDes
 
   destroyAactivateChildGuard() {
     let routeConfig = this.getParentActRouteRoute();
-    // this.activateChildGuard.setFormLayoutManager(undefined);
     for (let i = (routeConfig.canActivateChild || []).length - 1; i >= 0; i--) {
       if (routeConfig.canActivateChild[i].name === OFormLayoutManagerComponent.guardClassName) {
         routeConfig.canActivateChild.splice(i, 1);
@@ -143,8 +178,8 @@ export class OFormLayoutManagerComponent implements OnInit, AfterViewInit, OnDes
   addDetailComponent(childRoute: ActivatedRouteSnapshot) {
     let addNewComp = true;
     const newCompParams = childRoute.params;
-    this.detailComponentsData.forEach(comp => {
-      const currParams = comp.childRoute.params || {};
+    this.tabsCache.forEach(comp => {
+      const currParams = comp.urlParams || {};
       Object.keys(currParams).forEach(key => {
         addNewComp = addNewComp && (currParams[key] !== newCompParams[key]);
       });
@@ -153,9 +188,15 @@ export class OFormLayoutManagerComponent implements OnInit, AfterViewInit, OnDes
       if (this.isDialogMode()) {
         this.openFormLayoutDialog(childRoute);
       } else if (this.isTabMode()) {
-        this.detailComponentsData.push({
-          childRoute: childRoute
-        });
+        const newDetailComp: IDetailComponentData = {
+          urlParams: childRoute.params,
+          queryParams: childRoute.queryParams,
+          urlSegments: childRoute.url,
+          component: childRoute.routeConfig.component,
+          index: this.tabsCache.length,
+          label: this.getLabelFromUrlParams(childRoute.params)
+        };
+        this.tabsCache.push(newDetailComp);
       }
     } else {
       this.reloadDetailComponent(childRoute);
@@ -166,8 +207,8 @@ export class OFormLayoutManagerComponent implements OnInit, AfterViewInit, OnDes
     if (this.isTabMode()) {
       let compIndex = -1;
       const compParams = childRoute.params;
-      this.detailComponentsData.forEach((comp, i) => {
-        const currParams = comp.childRoute.params || {};
+      this.tabsCache.forEach((comp, i) => {
+        const currParams = comp.urlParams || {};
         let sameParams = true;
         Object.keys(currParams).forEach(key => {
           sameParams = sameParams && (currParams[key] === compParams[key]);
@@ -176,30 +217,30 @@ export class OFormLayoutManagerComponent implements OnInit, AfterViewInit, OnDes
           compIndex = i;
         }
       });
-
       if (compIndex >= 0) {
         this.tabGroup.selectedIndex = (compIndex + 1);
       }
     }
   }
 
-  onCloseTab(index: number) {
-    this.detailComponentsData.splice(index, 1);
+  closeDetail(index?: number) {
+    if (this.isTabMode()) {
+      this.onCloseTab(index);
+    } else if (this.isDialogMode()) {
+      this.dialogRef.close();
+    }
   }
 
-  createTabComponent(activatedRouteSnapshot: ActivatedRouteSnapshot, content: OFormLayoutManagerContentDirective) {
-    const component = activatedRouteSnapshot.routeConfig.component;
-    const componentFactory = this.componentFactoryResolver.resolveComponentFactory(component);
+  onCloseTab(index: number) {
+    this._ignoreTabsDirectivesChange = true;
+    this.tabsCache.splice(index, 1);
+  }
 
+  createTabComponent(tabData: IDetailComponentData, content: OFormLayoutManagerContentDirective) {
+    const component = tabData.component;
+    const componentFactory = this.componentFactoryResolver.resolveComponentFactory(component);
     let viewContainerRef = content.viewContainerRef;
     viewContainerRef.clear();
-
-    const newDetailComp: IDetailComponentData = {
-      urlParams: activatedRouteSnapshot.params,
-      queryParams: activatedRouteSnapshot.queryParams,
-      index: content.index
-    };
-    this.tabsCache.push(newDetailComp);
     // this.tabGroup.selectedIndex = (tabItem.index + 1);
     viewContainerRef.createComponent(componentFactory);
   }
@@ -216,13 +257,15 @@ export class OFormLayoutManagerComponent implements OnInit, AfterViewInit, OnDes
   }
 
   openFormLayoutDialog(childRoute: ActivatedRouteSnapshot) {
-    this.dialogRef = this.dialog.open(OFormLayoutDialogComponent, {
+    const dialogConfig = {
+      panelClass: 'o-form-layout-dialog-overlay',
+      disableClose: true,
       data: {
         childRoute: childRoute,
         layoutManagerComponent: this
-      },
-      disableClose: true
-    });
+      }
+    };
+    this.dialogRef = this.dialog.open(OFormLayoutDialogComponent, dialogConfig);
     // const self = this;
     this.dialogRef.afterClosed().subscribe(result => {
       if (result) {
@@ -238,7 +281,10 @@ export class OFormLayoutManagerComponent implements OnInit, AfterViewInit, OnDes
       return {
         urlParams: this.dialogRef.componentInstance.urlParams,
         queryParams: this.dialogRef.componentInstance.queryParams,
-        index: -1
+        urlSegments: this.dialogRef.componentInstance.urlSegments,
+        label: this.getLabelFromUrlParams(this.dialogRef.componentInstance.urlParams),
+        index: -1,
+        component: undefined
       };
     }
     return undefined;
@@ -251,15 +297,24 @@ export class OFormLayoutManagerComponent implements OnInit, AfterViewInit, OnDes
     return undefined;
   }
 
-  updateNavigation(index: number) {
+  updateNavigation(index: number, data: Object) {
+    let label = '';
+    if (this.labelColsArray.length === 0 && data !== undefined) {
+      this.labelColsArray.forEach((col, idx) => {
+        label += data[col] + ((idx < this.labelColsArray.length - 1) ? this.separator : '');
+      });
+    }
     if (this.isTabMode()) {
       this.tabGroup.selectedIndex = (index + 1);
+      if (label.length) {
+        this.tabsCache[index].label = label;
+      }
     }
   }
 
   getRouteOfActiveItem(): any[] {
     let route = [];
-    if (this.isTabMode()) {
+    if (this.isTabMode() && this.tabsCache.length && this.tabGroup.selectedIndex > 0) {
       const urlParams = this.tabsCache[this.tabGroup.selectedIndex].urlParams || [];
       Object.keys(urlParams).forEach(key => {
         route.push(urlParams[key]);
