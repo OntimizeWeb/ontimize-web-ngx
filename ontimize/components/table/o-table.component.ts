@@ -30,7 +30,7 @@ import { CdkTableModule } from '@angular/cdk/table';
 import { SelectionModel } from '@angular/cdk/collections';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
-import { MdDialog, MdSort, MdSortModule, MdTabGroup, MdTab, MdPaginatorModule, MdPaginatorIntl, MdPaginator } from '@angular/material';
+import { MdDialog, MdSort, MdSortModule, MdTabGroup, MdTab, MdPaginatorModule, MdPaginatorIntl, MdPaginator, MdCheckboxChange } from '@angular/material';
 
 import {
   OTablePaginatorComponent,
@@ -877,7 +877,10 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   onShowsSelects(event?) {
     this._oTableOptions.selectColumn.visible = !this._oTableOptions.selectColumn.visible;
-
+    if (!this._oTableOptions.selectColumn.visible) {
+      this.selection.clear();
+      this.selectedItems = this.selection.selected;
+    }
     if (this._oTableOptions.visibleColumns && this._oTableOptions.selectColumn.visible && this._oTableOptions.visibleColumns[0] !== OTableComponent.NAME_COLUMN_SELECT) {
       this._oTableOptions.visibleColumns.unshift(OTableComponent.NAME_COLUMN_SELECT);
     } else if (this._oTableOptions.visibleColumns && !this._oTableOptions.selectColumn.visible && this._oTableOptions.visibleColumns[0] === OTableComponent.NAME_COLUMN_SELECT) {
@@ -891,10 +894,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     return numSelected === numRows;
   }
 
-  masterToggle() {
-    this.isAllSelected() ?
-      this.selection.clear() :
-      this.dataSource.renderedData.forEach(row => this.selection.select(row));
+  masterToggle(event: MdCheckboxChange) {
+    event.checked ? this.dataSource.renderedData.forEach(row => this.selection.select(row)) : this.selection.clear();
     this.selectedItems = this.selection.selected;
   }
 
