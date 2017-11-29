@@ -38,7 +38,7 @@ export class OTableButtonComponent implements OnInit {
 
   constructor(
     protected injector: Injector,
-    @Inject(forwardRef(() => OTableComponent)) protected table: OTableComponent
+    @Inject(forwardRef(() => OTableComponent)) protected _table: OTableComponent
   ) {
 
   }
@@ -63,5 +63,9 @@ export class OTableButtonComponent implements OnInit {
 
   isIconPositionLeft() {
     return this.iconPosition === OTableButtonComponent.ICON_POSITION_LEFT;
+  }
+
+  get table(){
+    return this._table;
   }
 }

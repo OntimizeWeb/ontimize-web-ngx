@@ -1,4 +1,4 @@
-import { Pipe, PipeTransform,Injector } from '@angular/core';
+import { Pipe, PipeTransform, Injector } from '@angular/core';
 
 
 export interface ICurrencyPipeArgument {
@@ -32,6 +32,6 @@ export class OCurrencyPipe implements PipeTransform {
     let currencySimbol = args.currencySimbol;
     let currencySymbolPosition = args.currencySymbolPosition;
 
-    return this.currencyService.getCurrencyValue(text,currencySimbol,currencySymbolPosition,grouping,thousandSeparator,decimalSeparator,decimalDigits)
+    return this.currencyService.getCurrencyValue(text, currencySimbol, currencySymbolPosition, grouping, thousandSeparator, decimalSeparator, decimalDigits);
   }
 }
