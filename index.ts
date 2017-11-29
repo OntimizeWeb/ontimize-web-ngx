@@ -20,13 +20,14 @@ export * from './ontimize/utils';
 export * from './ontimize/shared';
 export * from './ontimize/validators/o-validators';
 
-import { ODialogComponent } from './ontimize/components';
+import { ODialogComponent, OSnackBarComponent } from './ontimize/components';
 
 @NgModule({
   imports: INTERNAL_ONTIMIZE_MODULES,
   exports: INTERNAL_ONTIMIZE_MODULES_EXPORTED,
   entryComponents: [
-    ODialogComponent
+    ODialogComponent,
+    OSnackBarComponent
   ]
 })
 export class OntimizeWebModule {

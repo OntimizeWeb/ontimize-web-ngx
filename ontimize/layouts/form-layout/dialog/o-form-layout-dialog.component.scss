@@ -2,12 +2,20 @@
 .o-form-layout-dialog-overlay {
   width: 65%;
   height: 90%;
+
+  .mat-dialog-title {
+    margin: 10px 0;
+    padding-left: 24px;
+    text-align: center;
+  }
+
   .mat-dialog-container {
     padding: 0 0 24px 0 !important;
     overflow: hidden;
+
     .mat-dialog-content.form-layout-dialog-container {
       margin: 0;
-      max-height: 85vh;
+      max-height: calc(100% - 92px);
     }
 
     .o-form-layout-dialog {

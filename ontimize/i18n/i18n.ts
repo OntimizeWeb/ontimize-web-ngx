@@ -99,6 +99,8 @@ export var MAP = {
     'MESSAGES.CONFIRM_CANCEL': 'Are you sure you want to cancel without saving changes?',
     'MESSAGES.SAVING': 'Saving, please wait...',
     'MESSAGES.SAVED': 'Saved',
+    'MESSAGES.DELETED': 'Deleted',
+    'MESSAGES.INSERTED': 'Inserted',
     'MESSAGES.NO_RESULTS': 'No results were obtained.',
     'MESSAGES.ERROR_MISSING_LANG': 'Selected language bundle file not found',
     'MESSAGES.CONFIRM_DISCARD_FILTER_BY_COLUMN': 'Are you sure you want to discard all active columns filters?',
@@ -147,7 +149,9 @@ export var MAP = {
     'TABLE.SELECT.ROWS.0': ' ',
     'TABLE.SELECT.ROWS.1': '1 row selected',
     'TABLE.SHOW_ALL': 'All',
-    'TABLE.SELECT_DATE': 'Select date'
+    'TABLE.SELECT_DATE': 'Select date',
+    'LAYOUT_MANANGER.MAIN_TAB_LABEL': 'Home',
+    'LAYOUT_MANANGER.DIALOG_TITLE': 'Detail'
   },
 
   // Spanish
@@ -250,6 +254,8 @@ export var MAP = {
     'MESSAGES.CONFIRM_CANCEL': '¿Está seguro de que quiere cancelar sin guardar los cambios?',
     'MESSAGES.SAVING': 'Guardando, espere...',
     'MESSAGES.SAVED': 'Guardado',
+    'MESSAGES.DELETED': 'Borrado',
+    'MESSAGES.INSERTED': 'Insertado',
     'MESSAGES.NO_RESULTS': 'No se obtuvieron resultados.',
     'MESSAGES.ERROR_MISSING_LANG': 'No se ha encontrado el fichero de configuración del idioma seleccionado',
     'MESSAGES.CONFIRM_DISCARD_FILTER_BY_COLUMN': '¿Está seguro de que quiere descartar todos los filtros de columna activos?',
@@ -298,7 +304,9 @@ export var MAP = {
     'TABLE.SELECT.ROWS.0': ' ',
     'TABLE.SELECT.ROWS.1': '1 registro seleccionado',
     'TABLE.SHOW_ALL': 'Todo',
-    'TABLE.SELECT_DATE': 'Seleccionar fecha'
+    'TABLE.SELECT_DATE': 'Seleccionar fecha',
+    'LAYOUT_MANANGER.MAIN_TAB_LABEL': 'Inicio',
+    'LAYOUT_MANANGER.DIALOG_TITLE': 'Detalle'
   }
 
 };

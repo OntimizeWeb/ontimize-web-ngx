@@ -1,27 +1,26 @@
 ## 2.1.0-rc.2
 
 ### Features
-* **o-table-button**: adding '*icon-position*' input ([66f0acb](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/66f0acb))
-* **o-table**: adding public methods *'getValue'*, *'getRendererValue'*, *'getSqlTypes'* ([236b9b6](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/236b9b6))
+* **o-table-button**: adding '*icon-position*' input ([66f0acb](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/66f0acb))
+* **o-table**: adding public methods *'getValue'*, *'getRendererValue'*, *'getSqlTypes'* ([236b9b6](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/236b9b6))
 * **o-table**: excel exportation support ([8b8a4b0](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/8b8a4b09b08f4a3d3bc11523a7be212170aab85b))
-* **o-table**: adding styles to cell by type value *o-column-string*,*o-column-currency*, *o-column-integer*, *o-column-real*,*o-column-boolean*,*.o-column-date* ([aaf11b2](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/aaf11b2))
-* **o-table-option**: new '*o-table-option*' component for adding options to '*o-table*' menu ([f48a591](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/f48a591))
-* **o-table, o-table-columns-filter**: new '*o-table-columns-filter*' component ([a0a3eed](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/a0a3eed)) ([21ad0b7](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/21ad0b7)) ([0d69818](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/0d69818)) ([d6c9969](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/d6c9969))
-* **o-table-paginator**: new '*o-table-paginator*' component ([23b4e4d](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/23b4e4d)) ([2213a0d](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/2213a0d)) ([a19fa4b](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/a19fa4b)) ([6c608cf](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/6c608cf)) ([68ae7c6](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/68ae7c6))
-* **o-table-column-aggregate**: new *o-table-column-aggregate* component allows to display columns of totals. ([eb7c9d7](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/eb7c9d7)) ([6f466d7](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/6f466d7)) ([80b7f04](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/80b7f04)) ([821e696](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/821e696))
-* **o-form-layout-manager**: new '*o-form-layout-manager*' component ([26a0e04](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/26a0e04))  ([0be6b2c](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/0be6b2c))
-* **o-table-renderer-percentage** adding predefined cell renderers *'o-table-renderer-percentage'* ([0e48fdf](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/0e48fdf))
+* **o-table**: adding styles to cell by type value *o-column-string*,*o-column-currency*, *o-column-integer*, *o-column-real*,*o-column-boolean*,*.o-column-date* ([aaf11b2](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/aaf11b2))
+* **o-table-option**: new '*o-table-option*' component for adding options to '*o-table*' menu ([f48a591](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f48a591))
+* **o-table, o-table-columns-filter**: new '*o-table-columns-filter*' component ([a0a3eed](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a0a3eed)) ([21ad0b7](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/21ad0b7)) ([0d69818](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0d69818)) ([d6c9969](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d6c9969))
+* **o-table-paginator**: new '*o-table-paginator*' component ([23b4e4d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/23b4e4d)) ([2213a0d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2213a0d)) ([a19fa4b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a19fa4b)) ([6c608cf](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6c608cf)) ([68ae7c6](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/68ae7c6))
+* **o-table-column-aggregate**: new *o-table-column-aggregate* component allows to display columns of totals. ([eb7c9d7](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/eb7c9d7)) ([6f466d7](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6f466d7)) ([80b7f04](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/80b7f04)) ([821e696](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/821e696))
+* **o-form-layout-manager**: new '*o-form-layout-manager*' component ([26a0e04](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/26a0e04)) ([0be6b2c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0be6b2c)) ([e4871ee](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e4871ee))
+* **o-table-renderer-percentage** adding predefined cell renderers *'o-table-renderer-percentage'* ([0e48fdf](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0e48fdf))
+* **SnackBarService** added service for showing an angular material SnackBar component ([cbc4159](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/cbc415908907c8a5483e55997b78db02c8197948))
+* **OSnackBarComponent** added component in order to customize the snackbar component([f3eaa13](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f3eaa137dec4d02955194ea740febf9f27e90ea9))
 
-   
 
 ### Bug Fixes
-* **o-translate-service**: fixing *'getBrowserLang'* bug ([#138](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/138)) ([4a5d2e7](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/4a5d2e7))
-
-* **o-form**, **o-table**, **o-datatable**, **o-list**,**o-list-picker**,**o-combo**: fixing to show server messages in the client when the requested action fails in the components bug ([#59](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/59)) ([bceae37](https://github.com/OntimizeWeb/ontimize-web-ngx-datatable/commit/bceae37)) ([6ed6bda](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/6ed6bda))
-
-* **o-table**: fixing call *'query-method'* using a different query than the default bug ([#140](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/140)) ([e085e59] (https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e085e59))
-
-* **o-table**: fixing call *'queryData'* using parent-keys bug ([#143](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/143)) ([7fe79c6 ] (https://github.com/OntimizeWeb/ontimize-web-ng2/commit/7fe79c6 ))
+* **o-translate-service**: fixing *'getBrowserLang'* bug ([#138](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/138)) ([4a5d2e7](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4a5d2e7))
+* **o-form**, **o-table**, **o-datatable**, **o-list**,**o-list-picker**,**o-combo**: fixing to show server messages in the client when the requested action fails in the components bug ([#59](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/59)) ([bceae37](https://github.com/OntimizeWeb/ontimize-web-ngx-datatable/commit/bceae37)) ([6ed6bda](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6ed6bda))
+* **o-table**: fixing call *'query-method'* using a different query than the default bug ([#140](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/140)) ([e085e59] (https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e085e59))
+* **o-table**: fixing call *'queryData'* using parent-keys bug ([#143](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/143)) ([7fe79c6] (https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7fe79c6))
+* **oKeyboardListener**: fixing host listener bug ([a6ecc38] (https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a6ecc38gi))
 
 ## 2.1.0-rc.1 (2017-11-15)
 
@@ -61,20 +60,20 @@
 This component allows to sort and filter data. ([be6ffcb](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/be6ffcb)) ([8e8d71b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/8e8d71b)) ([055a685](https://github.com/OntimizeWeb/ontimize-web-ngx/commit055a685/)) ([522a5d1](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/522a5d1)) ([2a85f19](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2a85f19)) ([3d3706a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3d3706a)) ([5f177d5](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5f177d5)) ([66072b6](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/66072b6)) ([89fde1d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/89fde1d)) ([baeefc4](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/baeefc4))
 
 * **o-file-input**: new component. It allows to upload files to a Ontimize-JEE server ([d77b588](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d77b588)) ([552e4d9](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/552e4d9)) ([ee27960](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ee27960)) ([f666992](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f666992))
-* **o-form**: new '*editable-detail*' input (default value = '*true*'). When this input is true the default '*detail*' form mode allows the inner components edition ([488f997](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/488f997)).
-* **o-form**: new '*keys-sql-types*' input ([76f0e88](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/76f0e88))
-* **o-list**: new '*delete-button*' input (default value = '*true*') ([#133](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/133)) ([8185483](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/8185483))
-* **o-list**: new '*onInsertButtonClick*' output ([#134](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/134)) ([dd4a0e2](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/dd4a0e2))
+* **o-form**: new '*editable-detail*' input (default value = '*true*'). When this input is true the default '*detail*' form mode allows the inner components edition ([488f997](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/488f997)).
+* **o-form**: new '*keys-sql-types*' input ([76f0e88](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/76f0e88))
+* **o-list**: new '*delete-button*' input (default value = '*true*') ([#133](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/133)) ([8185483](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/8185483))
+* **o-list**: new '*onInsertButtonClick*' output ([#134](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/134)) ([dd4a0e2](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/dd4a0e2))
 
 
 ### BREAKING CHANGES
-* **o-table** and **o-list**: following inputs default values have changed ([0a356c9](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/0a356c9)):
+* **o-table** and **o-list**: following inputs default values have changed ([0a356c9](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0a356c9)):
   * '*detail-mode*': changed from '*none*' to '*click*'.
   * '*detail-button-in-row*': changed from '*true*' to '*false*'.
-* **OFormDataComponent**: this class now implements '*OnInit*' and '*onDestroy*' to forcing user to implement this methods at form components creation ([4c6c23b](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/4c6c23b)).
+* **OFormDataComponent**: this class now implements '*OnInit*' and '*onDestroy*' to forcing user to implement this methods at form components creation ([4c6c23b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4c6c23b)).
 
 ### Bug Fixes
-* **o-form**: fixing bug in keys values ([#132](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/132)) ([4b5fd5e](https://github.com/OntimizeWeb/ontimize-web-ng2/commit/4b5fd5e))
+* **o-form**: fixing bug in keys values ([#132](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/132)) ([4b5fd5e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4b5fd5e))
 
 
 ## 2.0.0 (2017-09-26)

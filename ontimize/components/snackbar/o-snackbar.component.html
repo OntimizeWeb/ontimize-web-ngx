@@ -1,0 +1,8 @@
+<div fxLayout="row" fxLayoutAlign="start center">
+  <md-icon *ngIf="icon && iconPosition==='left'">{{ icon }}</md-icon>
+  <span fxFlex class="o-snackbar-message">
+    {{ message | oTranslate }}
+  </span>
+  <md-icon *ngIf="icon && iconPosition==='right'">{{ icon }}</md-icon>
+  <button *ngIf="action" (click)="onAction($event)" class="mat-simple-snackbar-action">{{ action | oTranslate }}</button>
+</div>

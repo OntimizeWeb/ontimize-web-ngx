@@ -20,7 +20,7 @@ import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/observable/combineLatest';
 
 import { dataServiceFactory } from '../../services/data-service.provider';
-import { OntimizeService, DialogService, NavigationService } from '../../services';
+import { OntimizeService, DialogService, NavigationService, SnackBarService } from '../../services';
 import { InputConverter } from '../../decorators';
 import { IFormControlComponent, IFormDataTypeComponent } from '../o-form-data-component.class';
 import { IComponent } from '../o-component.class';
@@ -217,6 +217,7 @@ export class OFormComponent implements OnInit, OnDestroy {
 
   protected dialogService: DialogService;
   protected navigationService: NavigationService;
+  protected snackBarService: SnackBarService;
 
   protected _formToolbar: OFormToolbarComponent;
 
@@ -273,6 +274,7 @@ export class OFormComponent implements OnInit, OnDestroy {
 
     this.dialogService = injector.get(DialogService);
     this.navigationService = injector.get(NavigationService);
+    this.snackBarService = injector.get(SnackBarService);
     const self = this;
 
     this.reloadStream = Observable.combineLatest(
@@ -742,7 +744,7 @@ export class OFormComponent implements OnInit, OnDestroy {
         });
         self.formCache.initializeCache(self.formGroup.getRawValue());
         (self.formGroup.valueChanges as EventEmitter<any>).emit(self.formCache.getInitialDataCache());
-        self.formNavigation.updateNavigation();
+        self.formNavigation.updateNavigation(self.formGroup.getRawValue());
       }
     });
   }
@@ -973,6 +975,7 @@ export class OFormComponent implements OnInit, OnDestroy {
 
   protected postCorrectInsert(result: any) {
     console.log('[OFormComponent.postCorrectInsert]', result);
+    this.snackBarService.open('MESSAGES.INSERTED', null, null, 'check_circle');
   }
 
   protected postIncorrectInsert(result: any) {
@@ -1038,6 +1041,7 @@ export class OFormComponent implements OnInit, OnDestroy {
 
   protected postCorrectUpdate(result: any) {
     console.log('[OFormComponent.postCorrectUpdate]', result);
+    this.snackBarService.open('MESSAGES.SAVED', null, null, 'check_circle');
   }
 
   deleteData(filter): Observable<any> {
@@ -1066,6 +1070,7 @@ export class OFormComponent implements OnInit, OnDestroy {
 
   protected postCorrectDelete(result: any) {
     console.log('[OFormComponent.postCorrectDelete]', result);
+    this.snackBarService.open('MESSAGES.DELETED', null, null, 'check_circle');
   }
 
   toJSONData(data) {

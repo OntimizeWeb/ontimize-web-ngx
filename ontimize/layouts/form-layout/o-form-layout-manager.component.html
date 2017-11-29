@@ -1,19 +1,6 @@
-<md-tab-group #tabGroup fxFill *ngIf="isTabMode(); else elseBlock" (selectChange)="onTabSelectChange()">
-  <md-tab label="{{ 'LAYOUT_MANANGER.MAIN_TAB' | oTranslate }}">
-    <ng-content *ngTemplateOutlet="elseBlock"></ng-content>
-  </md-tab>
-
-  <md-tab *ngFor="let tabData of tabsCache; let i = index">
-    <ng-template mat-tab-label>
-      <span class="tab-label">
-        {{ tabData.label }}
-      </span>
-      <md-icon (click)="onCloseTab(i)">close</md-icon>
-    </ng-template>
-
-    <ng-template o-form-layout-manager-content [index]="i"></ng-template>
-  </md-tab>
-</md-tab-group>
+<o-form-layout-tabgroup #tabGroup [title]="title" *ngIf="isTabMode(); else elseBlock">
+  <ng-content *ngTemplateOutlet="elseBlock"></ng-content>
+</o-form-layout-tabgroup>
 
 <ng-template #elseBlock>
   <ng-content></ng-content>

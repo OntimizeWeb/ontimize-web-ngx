@@ -1,4 +1,4 @@
-import { Component, Inject, ViewEncapsulation, OnInit, AfterViewInit, ComponentFactoryResolver, ViewChild, ComponentFactory, Injector } from '@angular/core';
+import { Component, Inject, ViewEncapsulation, AfterViewInit, ComponentFactoryResolver, ViewChild, ComponentFactory, Injector } from '@angular/core';
 import { MdDialogRef, MD_DIALOG_DATA } from '@angular/material';
 import { OFormLayoutManagerContentDirective } from '../directives/o-form-layout-manager-content.directive';
 import { OFormLayoutManagerComponent } from '../../../layouts/form-layout/o-form-layout-manager.component';
@@ -12,15 +12,16 @@ import { OFormLayoutManagerComponent } from '../../../layouts/form-layout/o-form
     '[class.o-form-layout-dialog]': 'true'
   }
 })
-
-export class OFormLayoutDialogComponent implements OnInit, AfterViewInit {
+export class OFormLayoutDialogComponent implements AfterViewInit {
   formLayoutManager: OFormLayoutManagerComponent;
   queryParams: any;
   urlParams: Object;
   urlSegments: any[];
+  label: string;
+  title: string;
+  data: any;
 
   protected componentFactory: ComponentFactory<any>;
-  mode: string = 'dialog';
 
   @ViewChild(OFormLayoutManagerContentDirective) contentDirective: OFormLayoutManagerContentDirective;
 
@@ -30,20 +31,20 @@ export class OFormLayoutDialogComponent implements OnInit, AfterViewInit {
     protected componentFactoryResolver: ComponentFactoryResolver,
     @Inject(MD_DIALOG_DATA) data: any
   ) {
-    if (data.childRoute) {
-      const component = data.childRoute.routeConfig.component;
+    if (data.title) {
+      this.title = data.title;
+    }
+    if (data.data) {
+      this.data = data.data;
+      const component = data.data.component;
       this.componentFactory = this.componentFactoryResolver.resolveComponentFactory(component);
-      this.urlParams = data.childRoute.params;
-      this.queryParams = data.childRoute.queryParams;
-      this.urlSegments = data.childRoute.url;
+      this.urlParams = data.data.urlParams;
+      this.queryParams = data.data.queryParams;
+      this.urlSegments = data.data.urlSegments;
     }
     if (data.layoutManagerComponent) {
       this.formLayoutManager = data.layoutManagerComponent;
     }
-  }
-
-  ngOnInit() {
-    // TODO
   }
 
   ngAfterViewInit() {
@@ -52,6 +53,14 @@ export class OFormLayoutDialogComponent implements OnInit, AfterViewInit {
       viewContainerRef.clear();
       viewContainerRef.createComponent(this.componentFactory);
     }
+  }
+
+  setLabel(val: string) {
+    let label = val.length ? val : this.formLayoutManager.getLabelFromUrlParams(this.urlParams);
+    if (label && label.length) {
+      label = ': ' + label;
+    }
+    this.label = label;
   }
 
 }

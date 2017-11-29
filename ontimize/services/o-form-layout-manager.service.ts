@@ -1,6 +1,5 @@
 import { Injectable, Injector } from '@angular/core';
 import { Observable } from 'rxjs';
-// import { Subject } from 'rxjs/Subject';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { OFormLayoutManagerComponent } from '../layouts/form-layout/o-form-layout-manager.component';
 
@@ -9,7 +8,6 @@ export class OFormLayoutManagerService {
   private subject: BehaviorSubject<OFormLayoutManagerComponent>;
 
   constructor(protected injector: Injector) {
-    console.log('OFormLayoutManagerService');
   }
 
   setFormLayoutManager(comp: OFormLayoutManagerComponent) {

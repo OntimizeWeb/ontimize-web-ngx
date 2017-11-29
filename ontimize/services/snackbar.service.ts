@@ -1,7 +1,8 @@
 import { Injectable, Injector } from '@angular/core';
-import { MdSnackBar, MdSnackBarConfig } from '@angular/material';
+import { MdSnackBar, MdSnackBarRef } from '@angular/material';
+import { Observable } from 'rxjs/Observable';
 
-import { OTranslateService } from '../services';
+import { OSnackBarComponent, OSnackBarIconPosition } from '../components/snackbar/o-snackbar.component';
 
 @Injectable()
 export class SnackBarService {
@@ -9,22 +10,33 @@ export class SnackBarService {
   protected static DEFAULT_DURATION: number = 2000;
 
   protected mdSnackBar: MdSnackBar;
-
-  protected translateService: OTranslateService;
+  protected snackBarRef: MdSnackBarRef<OSnackBarComponent>;
 
   constructor(
     protected injector: Injector
   ) {
     this.mdSnackBar = this.injector.get(MdSnackBar);
-    this.translateService = this.injector.get(OTranslateService);
   }
 
-  public open(message: string, action?: string, milliseconds?: number): void {
-    message = this.translateService.get(message);
-    action = action ? this.translateService.get(action) : void 0;
-    let config: MdSnackBarConfig = {};
-    config.duration = milliseconds ? milliseconds : action ? null : SnackBarService.DEFAULT_DURATION;
-    this.mdSnackBar.open(message, action, config);
+  public open(message: string, action?: string, milliseconds?: number, icon?: string, iconPosition?: OSnackBarIconPosition): Promise<any> {
+    var self = this;
+    let observable: Observable<any> = Observable.create(
+      observer => {
+        self.snackBarRef = self.mdSnackBar.openFromComponent(OSnackBarComponent, {
+          duration: milliseconds ? milliseconds : SnackBarService.DEFAULT_DURATION
+        });
+        self.snackBarRef.onAction().subscribe((arg) => {
+          observer.next(arg);
+        });
+        self.snackBarRef.afterDismissed().subscribe(() => {
+          observer.complete();
+          self.snackBarRef = null;
+        });
+
+        self.snackBarRef.instance.open(message, action, icon, iconPosition);
+      }
+    );
+    return observable.toPromise();
   }
 
 }
