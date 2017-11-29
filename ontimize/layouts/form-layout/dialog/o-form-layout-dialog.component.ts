@@ -63,4 +63,7 @@ export class OFormLayoutDialogComponent implements AfterViewInit {
     this.label = label;
   }
 
+  closeDialog() {
+    this.dialogRef.close();
+  }
 }

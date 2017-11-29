@@ -1,5 +1,6 @@
 
 import { Subscription } from 'rxjs/Subscription';
+import { EventEmitter } from '@angular/core';
 import { IFormControlComponent } from '../../o-form-data-component.class';
 import { OFormComponent } from '../o-form.component';
 
@@ -13,6 +14,7 @@ export class OFormCacheClass {
   protected initializedCache: boolean = false;
 
   protected formCacheSubscription: Subscription;
+  onCacheEmptyStateChanges: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   constructor(protected form: OFormComponent) {
   }
@@ -33,10 +35,14 @@ export class OFormCacheClass {
 
   protected addChangeToStack(attr: string, comp: IFormControlComponent) {
     const currentValue = comp.getFormControl().value;
+    const wasEmpty = this.valueChangesStack.length === 0;
     this.valueChangesStack.push({
       attr: attr,
       value: currentValue
     });
+    if (wasEmpty) {
+      this.onCacheEmptyStateChanges.emit(false);
+    }
   }
 
   registerComponentCaching(attr: string, comp: IFormControlComponent) {
@@ -73,6 +79,7 @@ export class OFormCacheClass {
   initializeCache(val: any) {
     this.initialDataCache = val;
     this.valueChangesStack = [];
+    this.onCacheEmptyStateChanges.emit(true);
     this.initializedCache = true;
   }
 
@@ -153,6 +160,9 @@ export class OFormCacheClass {
           }
         }
       }
+    }
+    if (this.valueChangesStack.length === 0) {
+      this.onCacheEmptyStateChanges.emit(true);
     }
   }
 

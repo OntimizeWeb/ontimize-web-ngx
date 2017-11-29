@@ -1,5 +1,4 @@
 
-// import { IFormControlComponent } from '../../o-form-data-component.class';
 import { Injector, EventEmitter } from '@angular/core';
 import { UrlSegmentGroup, ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
@@ -9,6 +8,7 @@ import { Util, SQLTypes } from '../../../utils';
 import { OFormComponent } from '../o-form.component';
 import { OFormLayoutManagerComponent } from '../../../layouts/form-layout/o-form-layout-manager.component';
 import { OFormLayoutDialogComponent } from '../../../layouts/form-layout/dialog/o-form-layout-dialog.component';
+import { DialogService } from '../../../services';
 
 export class OFormNavigationClass {
 
@@ -16,6 +16,7 @@ export class OFormNavigationClass {
   formLayoutDialog: OFormLayoutDialogComponent;
   index: number;
 
+  protected dialogService: DialogService;
   protected qParamSub: Subscription;
   protected queryParams: any;
 
@@ -31,12 +32,17 @@ export class OFormNavigationClass {
 
   public navigationStream: EventEmitter<Object> = new EventEmitter<Object>();
 
+  protected onCloseTabSubscription: any;
+  protected cacheStateSubscription: Subscription;
+
   constructor(
     protected injector: Injector,
     protected form: OFormComponent,
     protected router: Router,
     protected actRoute: ActivatedRoute
   ) {
+    this.dialogService = injector.get(DialogService);
+
     try {
       this.formLayoutManager = this.injector.get(OFormLayoutManagerComponent);
     } catch (e) {
@@ -63,6 +69,14 @@ export class OFormNavigationClass {
         self.navigationStream.emit(true);
       }
     });
+
+    if (this.formLayoutManager && this.formLayoutManager.isTabMode()) {
+      this.onCloseTabSubscription = this.formLayoutManager.onCloseTab.subscribe((closeTabEmitter: EventEmitter<boolean>) => {
+        self.showConfirmDiscardChanges().then(res => {
+          closeTabEmitter.emit(res);
+        });
+      });
+    }
   }
 
   initialize() {
@@ -70,6 +84,7 @@ export class OFormNavigationClass {
       this.index = this.formLayoutManager.getLastTabIndex();
     }
   }
+
   destroy() {
     if (this.qParamSub) {
       this.qParamSub.unsubscribe();
@@ -144,6 +159,12 @@ export class OFormNavigationClass {
     }
   }
 
+  subscribeToCacheChanges(onCacheEmptyStateChanges: EventEmitter<boolean>) {
+    this.cacheStateSubscription = onCacheEmptyStateChanges.asObservable().subscribe(res => {
+      this.setModifiedState(!res);
+    });
+  }
+
   getCurrentKeysValues(): Object {
     let filter = {};
     if (this.urlParams) {
@@ -198,9 +219,15 @@ export class OFormNavigationClass {
     return this.urlParams;
   }
 
+  setModifiedState(modified: boolean) {
+    if (this.formLayoutManager) {
+      this.formLayoutManager.setModifiedState(modified, this.index);
+    }
+  }
+
   updateNavigation(formData: any) {
     if (this.formLayoutManager) {
-      this.formLayoutManager.updateNavigation(this.index, formData);
+      this.formLayoutManager.updateNavigation(formData, this.index);
     }
   }
 
@@ -379,5 +406,22 @@ export class OFormNavigationClass {
       }
     }
     return fullUrlSegments;
+  }
+
+  showConfirmDiscardChanges(): Promise<boolean> {
+    let subscription: Promise<boolean> = undefined;
+    if (this.form.isInitialStateChanged()) {
+      subscription = this.dialogService.confirm('CONFIRM', 'MESSAGES.FORM_CHANGES_WILL_BE_LOST');
+    }
+    if (subscription === undefined) {
+      let observable = Observable.create(observer => {
+        setTimeout(() => {
+          observer.next(true);
+          observer.complete();
+        }, 100);
+      });
+      subscription = observable.toPromise();
+    }
+    return subscription;
   }
 }

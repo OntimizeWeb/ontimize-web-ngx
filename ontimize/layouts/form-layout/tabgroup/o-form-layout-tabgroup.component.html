@@ -5,7 +5,7 @@
 
   <md-tab *ngFor="let tabData of data; let i = index">
     <ng-template mat-tab-label>
-      <span class="tab-label">
+      <span class="tab-label" [class.modified]="tabData.modified">
         {{ tabData.label }}
       </span>
       <md-icon (click)="onCloseTab(i)">close</md-icon>

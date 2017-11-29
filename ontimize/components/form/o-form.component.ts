@@ -29,7 +29,7 @@ import { OFormValue } from './OFormValue';
 import { Util, SQLTypes } from '../../utils';
 import { OSharedModule } from '../../shared';
 import { OFormCacheClass } from './cache/o-form.cache.class';
-import { CanDeactivateFormGuard } from './guards/o-form-can-deactivate.guard';
+import { CanDeactivateFormGuard, CanComponentDeactivate } from './guards/o-form-can-deactivate.guard';
 import { OFormNavigationClass } from './navigation/o-form.navigation.class';
 
 export const DEFAULT_INPUTS_O_FORM = [
@@ -136,7 +136,7 @@ export interface OFormInitializationOptions {
     '[class.fill]': 'layoutFill'
   }
 })
-export class OFormComponent implements OnInit, OnDestroy {
+export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate {
   public static BACK_ACTION: string = 'BACK';
   public static CLOSE_DETAIL_ACTION: string = 'CLOSE';
   public static RELOAD_ACTION: string = 'RELOAD';
@@ -442,21 +442,12 @@ export class OFormComponent implements OnInit, OnDestroy {
     }, 0);
   }
 
-  showConfirmDiscardChanges() {
-    let subscription = undefined;
-    if (this.isInitialStateChanged()) {
-      subscription = this.dialogService.confirm('CONFIRM', 'MESSAGES.FORM_CHANGES_WILL_BE_LOST');
-    }
-    if (subscription === undefined) {
-      let observable = Observable.create(observer => {
-        setTimeout(() => {
-          observer.next(true);
-          observer.complete();
-        }, 100);
-      });
-      subscription = observable.toPromise();
-    }
-    return subscription;
+  canDeactivate(): Observable<boolean> | Promise<boolean> | boolean {
+    return this.showConfirmDiscardChanges();
+  }
+
+  showConfirmDiscardChanges(): Promise<boolean> {
+    return this.formNavigation.showConfirmDiscardChanges();
   }
 
   executeToolbarAction(action: string, options?: any) {
@@ -559,6 +550,7 @@ export class OFormComponent implements OnInit, OnDestroy {
     this.formNavigation.subscribeToQueryParams();
     this.formNavigation.subscribeToUrlParams();
     this.formNavigation.subscribeToUrl();
+    this.formNavigation.subscribeToCacheChanges(this.formCache.onCacheEmptyStateChanges);
 
     if (this.navigationService) {
       this.navigationService.onVisibleChange(visible => {
@@ -1150,20 +1142,14 @@ export class OFormComponent implements OnInit, OnDestroy {
   }
 
   setQueryMode() {
-    // ensuring that editable detail is false
-    this.editableDetail = false;
     this.setFormMode(OFormComponent.Mode().QUERY);
   }
 
   setInsertMode() {
-    // ensuring that editable detail is false
-    this.editableDetail = false;
     this.setFormMode(OFormComponent.Mode().INSERT);
   }
 
   setUpdateMode() {
-    // ensuring that editable detail is false
-    this.editableDetail = false;
     this.setFormMode(OFormComponent.Mode().UPDATE);
   }
 
