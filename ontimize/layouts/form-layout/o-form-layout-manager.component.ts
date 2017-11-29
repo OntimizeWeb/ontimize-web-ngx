@@ -1,4 +1,4 @@
-import { Component, NgModule, ViewEncapsulation, OnInit, OnDestroy, Injector, ComponentFactoryResolver, ViewContainerRef, ViewChild, EventEmitter } from '@angular/core';
+import { Component, NgModule, ViewEncapsulation, OnInit, OnDestroy, Injector, ComponentFactoryResolver, ViewContainerRef, ViewChild, EventEmitter, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterModule, Router, ActivatedRoute, ActivatedRouteSnapshot, Route } from '@angular/router';
 import { MdDialog, MdDialogRef } from '@angular/material';
 import { CommonModule } from '@angular/common';
@@ -19,6 +19,7 @@ export interface IDetailComponentData {
   index: number;
   component: any;
   label: string;
+  modified: boolean;
 }
 
 export const DEFAULT_INPUTS_O_FORM_LAYOUT_MANAGER = [
@@ -29,7 +30,8 @@ export const DEFAULT_INPUTS_O_FORM_LAYOUT_MANAGER = [
 ];
 
 export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
-  'onMainTabSelected'
+  'onMainTabSelected',
+  'onCloseTab'
 ];
 
 @Component({
@@ -67,6 +69,8 @@ export class OFormLayoutManagerComponent implements OnInit, OnDestroy {
   dialogRef: MdDialogRef<OFormLayoutDialogComponent>;
 
   onMainTabSelected: EventEmitter<any> = new EventEmitter<any>();
+  onCloseTab: EventEmitter<EventEmitter<boolean>> = new EventEmitter<EventEmitter<boolean>>();
+
   constructor(
     protected injector: Injector,
     protected router: Router,
@@ -146,7 +150,8 @@ export class OFormLayoutManagerComponent implements OnInit, OnDestroy {
       urlSegments: childRoute.url,
       component: childRoute.routeConfig.component,
       index: -1,
-      label: ''
+      label: '',
+      modified: false
     };
     if (this.isTabMode()) {
       this.oTabGroup.addTab(newDetailComp);
@@ -209,7 +214,13 @@ export class OFormLayoutManagerComponent implements OnInit, OnDestroy {
     return undefined;
   }
 
-  updateNavigation(index: number, data: any) {
+  setModifiedState(modified: boolean, index: number) {
+    if (this.isTabMode()) {
+      this.oTabGroup.setModifiedState(modified, index);
+    }
+  }
+
+  updateNavigation(data: any, index: number) {
     let label = '';
     if (this.labelColsArray.length !== 0 && data !== undefined) {
       this.labelColsArray.forEach((col, idx) => {
@@ -253,6 +264,7 @@ export class OFormLayoutManagerComponent implements OnInit, OnDestroy {
   providers: [{
     provide: CanActivateFormLayoutChildGuard,
     useClass: CanActivateFormLayoutChildGuard
-  }]
+  }],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class OFormLayoutManagerModule { }

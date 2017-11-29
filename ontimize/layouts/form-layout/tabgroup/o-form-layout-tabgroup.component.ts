@@ -1,5 +1,6 @@
-import { Component, ViewEncapsulation, Injector, ComponentFactoryResolver, ViewContainerRef, ViewChildren, QueryList, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, ViewEncapsulation, Injector, ComponentFactoryResolver, ViewContainerRef, ViewChildren, QueryList, ViewChild, AfterViewInit, EventEmitter, OnDestroy } from '@angular/core';
 import { MdTabGroup } from '@angular/material';
+import { Subscription } from 'rxjs/Subscription';
 import { OFormLayoutManagerContentDirective } from '../directives/o-form-layout-manager-content.directive';
 import { IDetailComponentData, OFormLayoutManagerComponent } from '../o-form-layout-manager.component';
 
@@ -8,7 +9,8 @@ export const DEFAULT_INPUTS_O_FORM_LAYOUT_TABGROUP = [
 ];
 
 export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_TABGROUP = [
-  'onMainTabSelected'
+  'onMainTabSelected',
+  'onCloseTab'
 ];
 
 @Component({
@@ -22,20 +24,22 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_TABGROUP = [
     '[class.o-form-layout-tabgroup]': 'true'
   }
 })
-
-export class OFormLayoutTabGroupComponent implements AfterViewInit {
-
+export class OFormLayoutTabGroupComponent implements AfterViewInit, OnDestroy {
 
   public static DEFAULT_INPUTS_O_FORM_LAYOUT_TABGROUP = DEFAULT_INPUTS_O_FORM_LAYOUT_TABGROUP;
   public static DEFAULT_OUTPUTS_O_FORM_LAYOUT_TABGROUP = DEFAULT_OUTPUTS_O_FORM_LAYOUT_TABGROUP;
 
   protected formLayoutManager: OFormLayoutManagerComponent;
   data: IDetailComponentData[] = [];
+
   title: string;
 
   private _ignoreTabsDirectivesChange: boolean = false;
   @ViewChild('tabGroup') tabGroup: MdTabGroup;
   @ViewChildren(OFormLayoutManagerContentDirective) tabsDirectives: QueryList<OFormLayoutManagerContentDirective>;
+
+  protected closeTabSubscription: Subscription;
+  protected tabsDirectivesSubscription: Subscription;
 
   constructor(
     protected injector: Injector,
@@ -46,7 +50,7 @@ export class OFormLayoutTabGroupComponent implements AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.tabsDirectives.changes.subscribe(changes => {
+    this.tabsDirectivesSubscription = this.tabsDirectives.changes.subscribe(changes => {
       if (this.tabsDirectives.length && !this._ignoreTabsDirectivesChange) {
         const tabItem = this.tabsDirectives.last;
         const tabData = this.data[tabItem.index];
@@ -57,6 +61,15 @@ export class OFormLayoutTabGroupComponent implements AfterViewInit {
         this._ignoreTabsDirectivesChange = false;
       }
     });
+  }
+
+  ngOnDestroy() {
+    if (this.tabsDirectivesSubscription) {
+      this.tabsDirectivesSubscription.unsubscribe();
+    }
+    if (this.closeTabSubscription) {
+      this.closeTabSubscription.unsubscribe();
+    }
   }
 
   addTab(compData: IDetailComponentData) {
@@ -101,8 +114,17 @@ export class OFormLayoutTabGroupComponent implements AfterViewInit {
   }
 
   onCloseTab(index: number) {
-    this._ignoreTabsDirectivesChange = true;
-    this.data.splice(index, 1);
+    if (this.formLayoutManager) {
+      const onCloseTabAccepted: EventEmitter<any> = new EventEmitter<any>();
+      const self = this;
+      this.closeTabSubscription = onCloseTabAccepted.asObservable().subscribe(res => {
+        if (res) {
+          self._ignoreTabsDirectivesChange = true;
+          self.data.splice(index, 1);
+        }
+      });
+      this.formLayoutManager.onCloseTab.emit(onCloseTabAccepted);
+    }
   }
 
   createTabComponent(tabData: IDetailComponentData, content: OFormLayoutManagerContentDirective) {
@@ -130,6 +152,10 @@ export class OFormLayoutTabGroupComponent implements AfterViewInit {
       });
     }
     return route;
+  }
+
+  setModifiedState(modified: boolean, index: number) {
+    this.data[index].modified = modified;
   }
 
   updateNavigation(index: number, label: string) {

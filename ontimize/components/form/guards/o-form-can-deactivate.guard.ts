@@ -13,7 +13,7 @@ export class CanDeactivateFormGuard implements CanDeactivate<CanComponentDeactiv
 
   canDeactivate(component: CanComponentDeactivate) {
     if (this.oForm) {
-      return this.oForm.showConfirmDiscardChanges();
+      return this.oForm.canDeactivate();
     }
     return true;
   }
