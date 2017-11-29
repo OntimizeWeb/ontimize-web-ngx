@@ -84,9 +84,10 @@
         <md-progress-spinner mode="indeterminate" style="margin:0 auto;" *ngIf="daoTable.isLoadingResults"></md-progress-spinner>
       </div>
 
-      <md-paginator *ngIf="paginator" #mdpaginator  [length]="dataSource?.resultsLength" [pageIndex]="paginator.pageIndex"
-      [pageSize]="paginator.pageSize"
-      [pageSizeOptions]="paginator.pageSizeOptions"></md-paginator>
+       <!--TABLE PAGINATOR-->
+      <md-paginator *ngIf="paginator" #mdpaginator [length]="dataSource?.resultsLength" [pageIndex]="paginator.pageIndex" [pageSize]="paginator.pageSize"
+        [pageSizeOptions]="paginator.pageSizeOptions"></md-paginator>
+
     </div>
   </div>
 </div>

@@ -375,6 +375,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   registerPagination(value: OTablePaginatorComponent) {
     this.paginationControls = true;
     this.paginator = value;
+    this.paginator.pageSize = this.rowQuery || this.paginator.pageSize;
   }
 
 
@@ -600,6 +601,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
     if (!this.paginator && this.paginationControls) {
       this.paginator = new OTablePaginatorComponent(this.injector, this);
+      this.paginator.pageSize = this.rowQuery || this.paginator.pageSize;
     }
   }
 
