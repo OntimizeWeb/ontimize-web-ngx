@@ -149,7 +149,9 @@ export var MAP = {
     'TABLE.SELECT.ROWS.0': ' ',
     'TABLE.SELECT.ROWS.1': '1 row selected',
     'TABLE.SHOW_ALL': 'All',
-    'TABLE.SELECT_DATE': 'Select date'
+    'TABLE.SELECT_DATE': 'Select date',
+    'LAYOUT_MANANGER.MAIN_TAB_LABEL': 'Home',
+    'LAYOUT_MANANGER.DIALOG_TITLE': 'Detail'
   },
 
   // Spanish
@@ -302,7 +304,9 @@ export var MAP = {
     'TABLE.SELECT.ROWS.0': ' ',
     'TABLE.SELECT.ROWS.1': '1 registro seleccionado',
     'TABLE.SHOW_ALL': 'Todo',
-    'TABLE.SELECT_DATE': 'Seleccionar fecha'
+    'TABLE.SELECT_DATE': 'Seleccionar fecha',
+    'LAYOUT_MANANGER.MAIN_TAB_LABEL': 'Inicio',
+    'LAYOUT_MANANGER.DIALOG_TITLE': 'Detalle'
   }
 
 };

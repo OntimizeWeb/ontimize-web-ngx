@@ -198,9 +198,9 @@ export class OFormNavigationClass {
     return this.urlParams;
   }
 
-  updateNavigation() {
+  updateNavigation(formData: any) {
     if (this.formLayoutManager) {
-      this.formLayoutManager.updateNavigation(this.index, this.form.getDataValues());
+      this.formLayoutManager.updateNavigation(this.index, formData);
     }
   }
 

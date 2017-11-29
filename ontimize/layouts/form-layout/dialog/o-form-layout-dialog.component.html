@@ -1,8 +1,9 @@
+<span md-dialog-title>{{ (title || 'LAYOUT_MANANGER.DIALOG_TITLE') | oTranslate }}{{ label }}</span>
+
 <div md-dialog-content class="form-layout-dialog-container">
   <ng-template o-form-layout-manager-content></ng-template>
 </div>
+
 <md-dialog-actions align="end">
-  <!-- <button md-button class="mat-primary" [md-dialog-close]="false">{{ 'CANCEL' | oTranslate | uppercase}}</button>
-  <button md-button class="mat-primary" [md-dialog-close]="true">{{ 'ACCEPT' | oTranslate | uppercase }}</button> -->
   <button md-button class="mat-primary" md-dialog-close>{{ 'CLOSE' | oTranslate | uppercase }}</button>
 </md-dialog-actions>
