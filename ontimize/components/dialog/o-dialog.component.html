@@ -7,10 +7,10 @@
 </div>
 <md-dialog-actions align="end">
   <span fxFlex></span>
-  <button md-button class="mat-primary" (click)="onOkClick($event)">
-      <span>{{ okButtonText | oTranslate | uppercase }}</span>
-    </button>
   <button *ngIf="twoOptions" md-button class="mat-primary" md-dialog-close>
-      <span>{{ cancelButtonText | oTranslate | uppercase }}</span>
-    </button>
+    <span>{{ cancelButtonText | oTranslate | uppercase }}</span>
+  </button>
+  <button md-button class="mat-primary" (click)="onOkClick($event)">
+    <span>{{ okButtonText | oTranslate | uppercase }}</span>
+  </button>
 </md-dialog-actions>
