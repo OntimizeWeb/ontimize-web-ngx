@@ -93,7 +93,7 @@ export class OFileUploader {
           self._onSuccessItem(item, resp);
         } else {
           console.log('error');
-          self._onErrorItem(item, "Unknow error");
+          self._onErrorItem(item, 'Unknow error');
         }
       },
       err => self._onErrorItem(item, err),
