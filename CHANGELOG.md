@@ -18,9 +18,9 @@
 ### Bug Fixes
 * **o-translate-service**: fixing *'getBrowserLang'* bug ([#138](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/138)) ([4a5d2e7](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4a5d2e7))
 * **o-form**, **o-table**, **o-datatable**, **o-list**,**o-list-picker**,**o-combo**: fixing to show server messages in the client when the requested action fails in the components bug ([#59](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/59)) ([bceae37](https://github.com/OntimizeWeb/ontimize-web-ngx-datatable/commit/bceae37)) ([6ed6bda](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6ed6bda))
-* **o-table**: fixing call *'query-method'* using a different query than the default bug ([#140](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/140)) ([e085e59] (https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e085e59))
-* **o-table**: fixing call *'queryData'* using parent-keys bug ([#143](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/143)) ([7fe79c6] (https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7fe79c6))
-* **oKeyboardListener**: fixing host listener bug ([a6ecc38] (https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a6ecc38gi))
+* **o-table**: fixing call *'query-method'* using a different query than the default bug ([#140](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/140)) ([e085e59](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e085e59))
+* **o-table**: fixing call *'queryData'* using parent-keys bug ([#143](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/143)) ([7fe79c6](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7fe79c6))
+* **oKeyboardListener**: fixing host listener bug ([a6ecc38](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a6ecc38gi))
 
 ## 2.1.0-rc.1 (2017-11-15)
 
