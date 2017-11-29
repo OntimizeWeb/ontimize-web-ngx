@@ -2,7 +2,7 @@ import { Injectable, Injector } from '@angular/core';
 import { MdSnackBar, MdSnackBarRef } from '@angular/material';
 import { Observable } from 'rxjs/Observable';
 
-import { OSnackBarComponent, OSnackBarIconPosition } from '../components/snackbar/o-snackbar.component';
+import { OSnackBarComponent, OSnackBarConfig } from '../components/snackbar/o-snackbar.component';
 
 @Injectable()
 export class SnackBarService {
@@ -18,12 +18,12 @@ export class SnackBarService {
     this.mdSnackBar = this.injector.get(MdSnackBar);
   }
 
-  public open(message: string, action?: string, milliseconds?: number, icon?: string, iconPosition?: OSnackBarIconPosition): Promise<any> {
+  public open(message: string, config?: OSnackBarConfig): Promise<any> {
     var self = this;
     let observable: Observable<any> = Observable.create(
       observer => {
         self.snackBarRef = self.mdSnackBar.openFromComponent(OSnackBarComponent, {
-          duration: milliseconds ? milliseconds : SnackBarService.DEFAULT_DURATION
+          duration: config && config.milliseconds ? config.milliseconds : SnackBarService.DEFAULT_DURATION
         });
         self.snackBarRef.onAction().subscribe((arg) => {
           observer.next(arg);
@@ -33,7 +33,7 @@ export class SnackBarService {
           self.snackBarRef = null;
         });
 
-        self.snackBarRef.instance.open(message, action, icon, iconPosition);
+        self.snackBarRef.instance.open(message, config);
       }
     );
     return observable.toPromise();

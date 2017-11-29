@@ -5,7 +5,21 @@ import { MdButtonModule, MdIconModule, MdSnackBarModule, MdSnackBarRef } from '@
 import { OSharedModule } from '../../shared';
 import { OTranslateModule } from '../../pipes/o-translate.pipe';
 
-export type OSnackBarIconPosition = 'left' | 'right';
+export declare type OSnackBarIconPosition = 'left' | 'right';
+
+/**
+ * Configuration for showing a SnackBar with the SnackBar service.
+ */
+export declare class OSnackBarConfig {
+  /** Text shown in the action button. */
+  action?: string;
+  /** Time the SnackBar is shown. */
+  milliseconds?: number;
+  /** Material icon shown in the SnackBar. */
+  icon?: string;
+  /** Position where the icon is shown. Default left. */
+  iconPosition?: OSnackBarIconPosition;
+}
 
 @Component({
   selector: 'o-snackbar',
@@ -27,16 +41,18 @@ export class OSnackBarComponent {
     this.snackBarRef = this.injector.get(MdSnackBarRef);
   }
 
-  open(message: string, action?: string, icon?: string, iconPosition?: OSnackBarIconPosition): void {
+  open(message: string, config?: OSnackBarConfig): void {
     this.message = message;
-    if (action) {
-      this.action = action;
-    }
-    if (icon) {
-      this.icon = icon;
-    }
-    if (iconPosition) {
-      this.iconPosition = iconPosition;
+    if (config) {
+      if (config.action) {
+        this.action = config.action;
+      }
+      if (config.icon) {
+        this.icon = config.icon;
+      }
+      if (config.iconPosition) {
+        this.iconPosition = config.iconPosition;
+      }
     }
   }
 
