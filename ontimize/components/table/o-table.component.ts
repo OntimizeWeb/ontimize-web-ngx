@@ -757,7 +757,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       disableClose: true
     });
 
-    dialogRef.afterClosed().subscribe(result => result ? this.snackBarService.open('MESSAGES.SUCCESS_EXPORT_TABLE_DATA') : null);
+    dialogRef.afterClosed().subscribe(result => result ? this.snackBarService.open('MESSAGES.SUCCESS_EXPORT_TABLE_DATA', { icon: 'check_circle' }) : null);
   }
 
   onChangeColumnsVisibilityClicked() {
