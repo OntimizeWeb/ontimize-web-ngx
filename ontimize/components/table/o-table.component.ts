@@ -854,6 +854,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   public reloadData() {
+    this.selection.clear();
     this.finishQuerSubscription = false;
     this.pendingQuery = true;
 
