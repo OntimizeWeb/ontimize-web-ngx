@@ -7,6 +7,7 @@ import { Util } from '../utils';
 import { InputConverter } from '../decorators';
 import { OntimizeService, AuthGuardService, OTranslateService, LocalStorageService, DialogService } from '../services';
 import { OFormComponent } from './form/o-form.component';
+import { OFormValue } from './form/OFormValue';
 import { OListInitializationOptions } from './list/o-list.component';
 import { OFormLayoutManagerComponent } from '../layouts/form-layout/o-form-layout-manager.component';
 // import { OTableInitializationOptions } from './table/o-table.component';
@@ -125,6 +126,7 @@ export class OServiceComponent implements ILocalStorageComponent {
   public static DETAIL_MODE_CLICK = 'click';
   public static DETAIL_MODE_DBLCLICK = 'dblclick';
 
+  public static COLUMNS_ALIAS_SEPARATOR = ':';
 
   protected authGuardService: AuthGuardService;
   protected translateService: OTranslateService;
@@ -183,6 +185,7 @@ export class OServiceComponent implements ILocalStorageComponent {
   protected dataArray: Array<any> = [];
   protected parentItem: any;
   protected oattrFromEntity: boolean = false;
+  protected dataParentKeys: Array<Object>;
   /* end of parsed inputs variables */
 
   protected onLanguageChangeSubscribe: any;
@@ -286,19 +289,16 @@ export class OServiceComponent implements ILocalStorageComponent {
       this.title = this.translateService.get(this.title);
     }
 
-    this.authGuardService.getPermissions(this.router.url, this.oattr)
-      .then(
-      permissions => {
-        if (typeof (permissions) !== 'undefined') {
-          if (this.ovisible && permissions.visible === false) {
-            this.ovisible = false;
-          }
-          if (this.oenabled && permissions.enabled === false) {
-            this.oenabled = false;
-          }
+    this.authGuardService.getPermissions(this.router.url, this.oattr).then(permissions => {
+      if (typeof (permissions) !== 'undefined') {
+        if (this.ovisible && permissions.visible === false) {
+          this.ovisible = false;
+        }
+        if (this.oenabled && permissions.enabled === false) {
+          this.oenabled = false;
         }
       }
-      );
+    });
 
     this.keysArray = Util.parseArray(this.keys);
     this.colArray = Util.parseArray(this.columns);
@@ -352,6 +352,8 @@ export class OServiceComponent implements ILocalStorageComponent {
     if (!this.rowHeight || (OServiceComponent.AVAILABLE_ROW_HEIGHTS.indexOf(this.rowHeight) === -1)) {
       this.rowHeight = OServiceComponent.DEFAULT_ROW_HEIGHT;
     }
+
+    this.parseParentKeys();
   }
 
   afterViewInit() {
@@ -390,6 +392,28 @@ export class OServiceComponent implements ILocalStorageComponent {
   beforeunloadHandler(event) {
     if (this.localStorageService) {
       this.localStorageService.updateComponentStorage(this);
+    }
+  }
+
+  parseParentKeys() {
+    this.dataParentKeys = [];
+    if (this.parentKeys) {
+      let keys = Util.parseArray(this.parentKeys);
+      for (let i = 0; i < keys.length; ++i) {
+        let key = keys[i];
+        let keyDef = key.split(OServiceComponent.COLUMNS_ALIAS_SEPARATOR);
+        if (keyDef.length === 1) {
+          this.dataParentKeys.push({
+            'alias': keyDef[0],
+            'name': keyDef[0]
+          });
+        } else if (keyDef.length === 2) {
+          this.dataParentKeys.push({
+            'alias': keyDef[0],
+            'name': keyDef[1]
+          });
+        }
+      }
     }
   }
 
@@ -489,11 +513,15 @@ export class OServiceComponent implements ILocalStorageComponent {
   viewDetail(item: any): void {
     let route = this.getRouteOfSelectedRow(item, this.detailFormRoute);
     if (route.length > 0) {
+      const queryParams = {
+        'isdetail': 'true'
+      };
+      if (this.formLayoutManager) {
+        queryParams['ignore_can_deactivate'] = true;
+      }
       const extras = {
         relativeTo: this.recursiveDetail ? this.actRoute.parent : this.actRoute,
-        queryParams: {
-          'isdetail': 'true'
-        }
+        queryParams: queryParams
       };
       this.router.navigate(route, extras);
     }
@@ -513,6 +541,51 @@ export class OServiceComponent implements ILocalStorageComponent {
         }
       );
     }
+  }
+
+  insertDetail() {
+    let route = [];
+    if (this.detailFormRoute) {
+      route.push(this.detailFormRoute);
+    }
+    route.push('new');
+    // adding parent-keys info...
+    const encodedParentKeys = this.getEncodedParentKeys();
+    if (encodedParentKeys !== undefined) {
+      route.push({ 'pk': encodedParentKeys });
+    }
+    let extras = { relativeTo: this.actRoute };
+
+    if (this.formLayoutManager) {
+      extras['queryParams'] = {
+        'ignore_can_deactivate': true
+      };
+    }
+
+    this.router.navigate(route, extras).catch(err => {
+      console.error(err.message);
+    });
+  }
+
+  protected getEncodedParentKeys() {
+    let encoded = undefined;
+    if ((this.dataParentKeys.length > 0) && (typeof (this.parentItem) !== 'undefined')) {
+      let pKeys = {};
+      for (let k = 0; k < this.dataParentKeys.length; ++k) {
+        let parentKey = this.dataParentKeys[k];
+        if (this.parentItem.hasOwnProperty(parentKey['alias'])) {
+          let currentData = this.parentItem[parentKey['alias']];
+          if (currentData instanceof OFormValue) {
+            currentData = currentData.value;
+          }
+          pKeys[parentKey['name']] = currentData;
+        }
+      }
+      if (Object.keys(pKeys).length > 0) {
+        encoded = Util.encodeParentKeys(pKeys);
+      }
+    }
+    return encoded;
   }
 
   getRouteOfSelectedRow(item: any, modeRoute: any) {
