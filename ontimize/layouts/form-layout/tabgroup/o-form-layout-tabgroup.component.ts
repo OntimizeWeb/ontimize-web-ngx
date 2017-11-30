@@ -82,7 +82,6 @@ export class OFormLayoutTabGroupComponent implements AfterViewInit, OnDestroy {
       });
     });
     if (addNewComp) {
-      compData.index = this.data.length;
       this.data.push(compData);
     } else {
       this.reloadTab(compData);
@@ -113,17 +112,25 @@ export class OFormLayoutTabGroupComponent implements AfterViewInit, OnDestroy {
     }
   }
 
-  onCloseTab(index: number) {
+  onCloseTab(id: string) {
     if (this.formLayoutManager) {
       const onCloseTabAccepted: EventEmitter<any> = new EventEmitter<any>();
       const self = this;
       this.closeTabSubscription = onCloseTabAccepted.asObservable().subscribe(res => {
         if (res) {
           self._ignoreTabsDirectivesChange = true;
-          self.data.splice(index, 1);
+          for (let i = self.data.length - 1; i >= 0; i--) {
+            if (this.data[i].id === id) {
+              self.data.splice(i, 1);
+              break;
+            }
+          }
         }
       });
-      this.formLayoutManager.onCloseTab.emit(onCloseTabAccepted);
+      this.formLayoutManager.onCloseTab.emit({
+        onCloseTabAccepted: onCloseTabAccepted,
+        id: id
+      });
     }
   }
 
@@ -135,12 +142,12 @@ export class OFormLayoutTabGroupComponent implements AfterViewInit, OnDestroy {
     viewContainerRef.createComponent(componentFactory);
   }
 
-  getFormCacheData(formIndex: number): IDetailComponentData {
-    return this.data.filter(cacheItem => cacheItem.index === formIndex)[0];
+  getFormCacheData(idArg: string): IDetailComponentData {
+    return this.data.filter(cacheItem => cacheItem.id === idArg)[0];
   }
 
-  getLastTabIndex(): number {
-    return this.data.length > 0 ? this.data[this.data.length - 1].index : undefined;
+  getLastTabId(): string {
+    return this.data.length > 0 ? this.data[this.data.length - 1].id : undefined;
   }
 
   getRouteOfActiveItem(): any[] {
@@ -154,14 +161,28 @@ export class OFormLayoutTabGroupComponent implements AfterViewInit, OnDestroy {
     return route;
   }
 
-  setModifiedState(modified: boolean, index: number) {
-    this.data[index].modified = modified;
+  setModifiedState(modified: boolean, id: string) {
+    for (let i = 0, len = this.data.length; i < len; i++) {
+      if (this.data[i].id === id) {
+        this.data[i].modified = modified;
+        break;
+      }
+    }
   }
 
-  updateNavigation(index: number, label: string) {
-    this.tabGroup.selectedIndex = (index + 1);
-    label = label.length ? label : this.formLayoutManager.getLabelFromUrlParams(this.data[index].urlParams);
-    this.data[index].label = label;
+  updateNavigation(id: string, label: string) {
+    let index = undefined;
+    for (let i = 0, len = this.data.length; i < len; i++) {
+      if (this.data[i].id === id) {
+        index = i;
+        break;
+      }
+    }
+    if (index !== undefined) {
+      this.tabGroup.selectedIndex = (index + 1);
+      label = label.length ? label : this.formLayoutManager.getLabelFromUrlParams(this.data[index].urlParams);
+      this.data[index].label = label;
+    }
   }
 
 }

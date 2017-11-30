@@ -8,7 +8,7 @@
       <span class="tab-label" [class.modified]="tabData.modified">
         {{ tabData.label }}
       </span>
-      <md-icon (click)="onCloseTab(i)">close</md-icon>
+      <md-icon (click)="onCloseTab(tabData.id)">close</md-icon>
     </ng-template>
 
     <ng-template o-form-layout-manager-content [index]="i"></ng-template>
