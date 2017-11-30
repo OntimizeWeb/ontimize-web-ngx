@@ -39,9 +39,7 @@ export class OTablePaginatorComponent implements OnInit {
     ) {
         this.translateService = this.injector.get(OTranslateService);
         this._pageIndex = 0;
-        if (this._pageSize <= 0) {
-            this._pageSize = this._pageSizeOptions[0];
-        }
+
         this.onLanguageChangeSubscribe = this.translateService.onLanguageChanged.subscribe(
             res => {
                 this._pageSizeOptions = [10, 25, 50, 100, this.translateService.get('TABLE.SHOW_ALL')];
@@ -77,10 +75,23 @@ export class OTablePaginatorComponent implements OnInit {
     }
 
     set pageSize(value: number) {
-        this._pageSize = value;
+
+        if (value < 0) {
+            this._pageSize = this._pageSizeOptions[0];
+        } else {
+            this._pageSize = value;
+        }
+
+        let result: any[] = this.pageSizeOptions.filter(option => option === this._pageSize);
+        if (result.length === 0) {
+            this._pageSizeOptions.push(value);
+        }
+        this._pageSizeOptions.sort();
+
     }
 
     get pageSizeOptions(): Array<any> {
+
         return this._pageSizeOptions;
     }
 
@@ -88,6 +99,9 @@ export class OTablePaginatorComponent implements OnInit {
         this._pageSizeOptions = value;
     }
 
+    public initialize() {
+        this._pageIndex = 0;
+    }
 
 
 }

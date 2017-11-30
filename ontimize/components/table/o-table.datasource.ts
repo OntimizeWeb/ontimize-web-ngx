@@ -103,8 +103,11 @@ export class OTableDataSource extends DataSource<any> {
       return data;
     }
 
-    const startIndex = isNaN(this._paginator.pageSize) ? 0 : this._paginator.pageIndex * this._paginator.pageSize;
-    this._paginator.length = data.length;
+    let startIndex = isNaN(this._paginator.pageSize) ? 0 : this._paginator.pageIndex * this._paginator.pageSize;
+    if (data.length < startIndex) {
+      startIndex = 0;
+      this._paginator.pageIndex = 0;
+    }
     return data.splice(startIndex, this._paginator.pageSize);
   }
 
