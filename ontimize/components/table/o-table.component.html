@@ -85,7 +85,7 @@
       </div>
 
        <!--TABLE PAGINATOR-->
-      <md-paginator *ngIf="paginator" #mdpaginator [length]="dataSource?.resultsLength" [pageIndex]="paginator.pageIndex" [pageSize]="paginator.pageSize"
+      <md-paginator *ngIf="paginator" #mdpaginator [length]="dataSource?.resultsLength" [pageIndex]="paginator.pageIndex" [pageSize]="rowQueryCache || paginator.pageSize"
         [pageSizeOptions]="paginator.pageSizeOptions"></md-paginator>
 
     </div>

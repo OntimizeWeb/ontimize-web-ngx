@@ -293,12 +293,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   public showFilterByColumnIcon: boolean = false;
   public showTotals: boolean = false;
 
-  get rowQuery() {
-    return this.state['query-rows'] || this.queryRows;
-  }
-
-  set rowQuery(value) {
-    this.queryRows = value;
+  get rowQueryCache() {
+    return this.state['query-rows'];
   }
 
   ngOnInit() {
@@ -380,7 +376,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   registerPagination(value: OTablePaginatorComponent) {
     this.paginationControls = true;
     this.paginator = value;
-    this.paginator.pageSize = this.rowQuery || this.paginator.pageSize;
+    //this.paginator.pageSize = this.rowQuery || this.paginator.pageSize;
   }
 
 
@@ -606,7 +602,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
     if (!this.paginator && this.paginationControls) {
       this.paginator = new OTablePaginatorComponent(this.injector, this);
-      this.paginator.pageSize = this.rowQuery || this.paginator.pageSize;
+      this.paginator.pageSize = this.queryRows;
     }
   }
 
@@ -863,6 +859,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   public reloadData() {
+    this.selection.clear();
     this.finishQuerSubscription = false;
     this.pendingQuery = true;
 
