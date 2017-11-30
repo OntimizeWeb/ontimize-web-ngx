@@ -21,7 +21,7 @@ import { InputConverter } from '../../decorators';
 
 import { CommonModule } from '@angular/common';
 import { dataServiceFactory } from '../../services/data-service.provider';
-import { OntimizeService } from '../../services';
+import { OntimizeService, SnackBarService } from '../../services';
 import { OFormComponent } from '../form/o-form.component';
 import { OSharedModule } from '../../shared';
 import { OServiceComponent } from '../o-service-component.class';
@@ -187,6 +187,9 @@ export class OTableOptions {
 })
 
 export class OTableComponent extends OServiceComponent implements OnInit, OnDestroy, OnChanges {
+
+  protected snackBarService: SnackBarService;
+
   constructor(
     injector: Injector,
     elRef: ElementRef,
@@ -200,7 +203,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     } catch (error) {
       // Do nothing due to not always is contained on tab.
     }
+    this.snackBarService = this.injector.get(SnackBarService);
   }
+
   public paginator: OTablePaginatorComponent;
   @ViewChild(MdPaginator) mdpaginator: MdPaginator;
   @ViewChild('filter') filter: ElementRef;
@@ -752,7 +757,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       disableClose: true
     });
 
-    dialogRef.afterClosed().subscribe(result => result ? this.dialogService.info('INFO', 'MESSAGES.SUCCESS_EXPORT_TABLE_DATA') : null);
+    dialogRef.afterClosed().subscribe(result => result ? this.snackBarService.open('MESSAGES.SUCCESS_EXPORT_TABLE_DATA') : null);
   }
 
   onChangeColumnsVisibilityClicked() {
