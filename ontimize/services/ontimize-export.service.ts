@@ -11,6 +11,8 @@ export const DOWNLOAD_PATH_DEFAULT: string = EXPORT_PATH_DEFAULT + '/download';
 
 export class OExportExtension {
   public static Excel: string = 'xlsx';
+  public static HTML: string = 'html';
+  public static PDF: string = 'pdf';
 }
 
 @Injectable()
@@ -114,15 +116,29 @@ export class OntimizeExportService {
     let _innerObserver: any;
     let dataObservable = new Observable(observer => _innerObserver = observer).share();
 
+    let responseType: string;
+    if (OExportExtension.Excel === fileExtension) {
+      responseType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+    } else if (OExportExtension.HTML === fileExtension) {
+      responseType = 'text/html';
+    } else if (OExportExtension.PDF === fileExtension) {
+      responseType = 'application/pdf';
+    }
+
     this.http.get(url, {
       headers: headers,
       responseType: ResponseContentType.Blob
     })
-      .map(res => new Blob([res.blob()], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }))
+      .map(res => new Blob([res.blob()], { type: responseType }))
       .subscribe(resp => {
         let fileURL = URL.createObjectURL(resp);
-        window.open(fileURL, '_self');
+        // window.open(fileURL, '_self');
+        let a = document.createElement('a');
+        a.href = fileURL;
+        a.download = fileId + '.' + fileExtension;
+        a.click();
         _innerObserver.next(resp);
+        URL.revokeObjectURL(fileURL);
       }, error => _innerObserver.error(error),
       () => _innerObserver.complete());
 
