@@ -4,6 +4,7 @@
 * **o-table-button**: adding '*icon-position*' input ([66f0acb](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/66f0acb))
 * **o-table**: adding public methods *'getValue'*, *'getRendererValue'*, *'getSqlTypes'* ([236b9b6](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/236b9b6))
 * **o-table**: excel exportation support ([8b8a4b0](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/8b8a4b09b08f4a3d3bc11523a7be212170aab85b))
+* **o-table**: HTML and PDF exportation support ([5bbfc7f](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5bbfc7fe7b08061c696a504256f476e8ece37020))
 * **o-table**: adding styles to cell by type value *o-column-string*,*o-column-currency*, *o-column-integer*, *o-column-real*,*o-column-boolean*,*.o-column-date* ([aaf11b2](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/aaf11b2))
 * **o-table-option**: new '*o-table-option*' component for adding options to '*o-table*' menu ([f48a591](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f48a591))
 * **o-table, o-table-columns-filter**: new '*o-table-columns-filter*' component ([a0a3eed](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a0a3eed)) ([21ad0b7](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/21ad0b7)) ([0d69818](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0d69818)) ([d6c9969](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d6c9969))
