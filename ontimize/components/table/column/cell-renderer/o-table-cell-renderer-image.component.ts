@@ -28,7 +28,7 @@ export const DEFAULT_OUTPUTS_O_TABLE_CELL_RENDERER_IMAGE = [
     ...DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_IMAGE
   ]
 })
-export class OTableCellRendererImageComponent extends OBaseTableCellRenderer implements OnInit {
+export class OTableCellRendererImageComponent extends OBaseTableCellRenderer{
 
   public static DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_IMAGE = DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_IMAGE;
   public static DEFAULT_OUTPUTS_O_TABLE_CELL_RENDERER_IMAGE = DEFAULT_OUTPUTS_O_TABLE_CELL_RENDERER_IMAGE;
@@ -42,6 +42,7 @@ export class OTableCellRendererImageComponent extends OBaseTableCellRenderer imp
   constructor(protected injector: Injector) {
     super(injector);
     this.tableColumn.type = 'image';
+    this.initialize();
   }
 
   getSource(cellData: any) {
@@ -62,8 +63,4 @@ export class OTableCellRendererImageComponent extends OBaseTableCellRenderer imp
     return this._source;
   }
   
-  ngOnInit() {
-    this.initialize();
-  }
-
-}
+ }

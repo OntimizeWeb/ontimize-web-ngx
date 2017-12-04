@@ -43,6 +43,7 @@ export class OTableCellRendererBooleanComponent extends OBaseTableCellRenderer {
     super(injector);
     this.tableColumn.type = 'boolean';
     this.translateService = this.injector.get(OTranslateService);
+    this.initialize();
   }
 
   public hasCellDataTrueValue(cellData: any): boolean {
@@ -64,9 +65,7 @@ export class OTableCellRendererBooleanComponent extends OBaseTableCellRenderer {
     return comparisonValue;
   }
 
-  ngOnInit() {
-    this.initialize();
-  }
+
   public getCellData(cellData: any) {
     let type = this.hasCellDataTrueValue(cellData) ? this.trueValueType : this.falseValueType;
     let value = this.hasCellDataTrueValue(cellData) ? this.trueValue : this.falseValue;
