@@ -67,13 +67,87 @@ export class OTableExportDialogComponent implements OnInit {
     this.proccessExportData(exportData.data, exportData.sqlTypes);
     this.exportService.exportData(exportData, OExportExtension.Excel).subscribe(
       (resp) => {
-        self.exportService.downloadFile(resp.data[0]['xslxId'], OExportExtension.Excel).subscribe(
-          () => self.dialogRef.close(true),
-          downloadError => {
-            console.log(downloadError);
-            self.dialogRef.close(false);
-          }
-        );
+        if (resp.code === 0) {
+          self.exportService.downloadFile(resp.data[0]['xslxId'], OExportExtension.Excel).subscribe(
+            () => self.dialogRef.close(true),
+            downloadError => {
+              console.log(downloadError);
+              self.dialogRef.close(false);
+            }
+          );
+        } else {
+          self.dialogService.alert('ERROR', resp.message).then(() => self.dialogRef.close(false));
+        }
+      },
+      (err) => {
+        console.log(err);
+        if (err) {
+          self.dialogService.alert('ERROR', err).then(() => self.dialogRef.close(false));
+        } else {
+          self.dialogService.alert('ERROR', 'MESSAGES.ERROR_EXPORT_TABLE_DATA').then(() => self.dialogRef.close(false));
+        }
+      }
+    );
+  }
+
+  exportHTML(htmlButton: MdButton): void {
+    htmlButton.disabled = true;
+    let exportData = {
+      data: this.config.data,
+      columns: this.config.columns,
+      columnNames: this.config.columnNames,
+      sqlTypes: this.config.sqlTypes
+    };
+    let self = this;
+    this.proccessExportData(exportData.data, exportData.sqlTypes);
+    this.exportService.exportData(exportData, OExportExtension.HTML).subscribe(
+      (resp) => {
+        if (resp.code === 0) {
+          self.exportService.downloadFile(resp.data[0]['htmlId'], OExportExtension.HTML).subscribe(
+            () => self.dialogRef.close(true),
+            downloadError => {
+              console.log(downloadError);
+              self.dialogRef.close(false);
+            }
+          );
+        } else {
+          self.dialogService.alert('ERROR', resp.message).then(() => self.dialogRef.close(false));
+        }
+      },
+      (err) => {
+        console.log(err);
+        if (err) {
+          self.dialogService.alert('ERROR', err).then(() => self.dialogRef.close(false));
+        } else {
+          self.dialogService.alert('ERROR', 'MESSAGES.ERROR_EXPORT_TABLE_DATA').then(() => self.dialogRef.close(false));
+        }
+      }
+    );
+  }
+
+  exportPDF(pdfButton: MdButton): void {
+    pdfButton.disabled = true;
+    let exportData = {
+      data: this.config.data,
+      columns: this.config.columns,
+      columnNames: this.config.columnNames,
+      sqlTypes: this.config.sqlTypes
+    };
+    let self = this;
+    this.proccessExportData(exportData.data, exportData.sqlTypes);
+    this.exportService.exportData(exportData, OExportExtension.PDF).subscribe(
+      (resp) => {
+        if (resp.code === 0) {
+          self.exportService.downloadFile(resp.data[0]['pdfId'], OExportExtension.PDF).subscribe(
+            () => self.dialogRef.close(true),
+            downloadError => {
+              console.log(downloadError);
+              self.dialogRef.close(false);
+            }
+          );
+        } else {
+          self.dialogService.alert('ERROR', resp.message).then(() => self.dialogRef.close(false));
+        }
       },
       (err) => {
         console.log(err);

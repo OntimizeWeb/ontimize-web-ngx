@@ -16,7 +16,7 @@ export interface IDetailComponentData {
   urlParams: any;
   queryParams: any;
   urlSegments: any;
-  index: number;
+  id: string;
   component: any;
   label: string;
   modified: boolean;
@@ -69,7 +69,7 @@ export class OFormLayoutManagerComponent implements OnInit, OnDestroy {
   dialogRef: MdDialogRef<OFormLayoutDialogComponent>;
 
   onMainTabSelected: EventEmitter<any> = new EventEmitter<any>();
-  onCloseTab: EventEmitter<EventEmitter<boolean>> = new EventEmitter<EventEmitter<boolean>>();
+  onCloseTab: EventEmitter<any> = new EventEmitter<any>();
 
   constructor(
     protected injector: Injector,
@@ -149,7 +149,7 @@ export class OFormLayoutManagerComponent implements OnInit, OnDestroy {
       queryParams: childRoute.queryParams,
       urlSegments: childRoute.url,
       component: childRoute.routeConfig.component,
-      index: -1,
+      id: Math.random().toString(36),
       label: '',
       modified: false
     };
@@ -160,9 +160,9 @@ export class OFormLayoutManagerComponent implements OnInit, OnDestroy {
     }
   }
 
-  closeDetail(index?: number) {
+  closeDetail(id?: string) {
     if (this.isTabMode()) {
-      this.oTabGroup.onCloseTab(index);
+      this.oTabGroup.onCloseTab(id);
     } else if (this.isDialogMode()) {
       this.dialogRef.close();
     }
@@ -198,29 +198,29 @@ export class OFormLayoutManagerComponent implements OnInit, OnDestroy {
     });
   }
 
-  getFormCacheData(formIndex: number): IDetailComponentData {
+  getFormCacheData(formId: string): IDetailComponentData {
     if (this.isTabMode()) {
-      return this.oTabGroup.getFormCacheData(formIndex);
+      return this.oTabGroup.getFormCacheData(formId);
     } else if (this.isDialogMode()) {
       return this.dialogRef.componentInstance.data;
     }
     return undefined;
   }
 
-  getLastTabIndex(): number {
+  getLastTabId(): string {
     if (this.isTabMode()) {
-      return this.oTabGroup.getLastTabIndex();
+      return this.oTabGroup.getLastTabId();
     }
     return undefined;
   }
 
-  setModifiedState(modified: boolean, index: number) {
+  setModifiedState(modified: boolean, id: string) {
     if (this.isTabMode()) {
-      this.oTabGroup.setModifiedState(modified, index);
+      this.oTabGroup.setModifiedState(modified, id);
     }
   }
 
-  updateNavigation(data: any, index: number) {
+  updateNavigation(data: any, id: string) {
     let label = '';
     if (this.labelColsArray.length !== 0 && data !== undefined) {
       this.labelColsArray.forEach((col, idx) => {
@@ -231,7 +231,7 @@ export class OFormLayoutManagerComponent implements OnInit, OnDestroy {
     }
 
     if (this.isTabMode()) {
-      this.oTabGroup.updateNavigation(index, label);
+      this.oTabGroup.updateNavigation(id, label);
     } else if (this.isDialogMode()) {
       this.dialogRef.componentInstance.setLabel(label);
     }

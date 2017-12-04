@@ -21,7 +21,7 @@ import { InputConverter } from '../../decorators';
 
 import { CommonModule } from '@angular/common';
 import { dataServiceFactory } from '../../services/data-service.provider';
-import { OntimizeService } from '../../services';
+import { OntimizeService, SnackBarService } from '../../services';
 import { OFormComponent } from '../form/o-form.component';
 import { OSharedModule } from '../../shared';
 import { OServiceComponent } from '../o-service-component.class';
@@ -187,6 +187,9 @@ export class OTableOptions {
 })
 
 export class OTableComponent extends OServiceComponent implements OnInit, OnDestroy, OnChanges {
+
+  protected snackBarService: SnackBarService;
+
   constructor(
     injector: Injector,
     elRef: ElementRef,
@@ -200,23 +203,20 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     } catch (error) {
       // Do nothing due to not always is contained on tab.
     }
+    this.snackBarService = this.injector.get(SnackBarService);
   }
+
   public paginator: OTablePaginatorComponent;
   @ViewChild(MdPaginator) mdpaginator: MdPaginator;
   @ViewChild('filter') filter: ElementRef;
   @ViewChild(MdSort) sort: MdSort;
   @ViewChild('columnFilterOption') columnFilterOption: OTableOptionComponent;
 
-  //public mdpaginator: MdPaginator;
-  //@ViewChild('opaginator', { read: ViewContainerRef })
-  //container: ViewContainerRef;
-
   public static NAME_COLUMN_SELECT = 'select';
   public static TYPE_SEPARATOR = ':';
   public static VALUES_SEPARATOR = '=';
   public static TYPE_ASC_NAME = 'asc';
   public static TYPE_DESC_NAME = 'desc';
-  public static COLUMNS_ALIAS_SEPARATOR = ':';
 
   @InputConverter()
   selectAllCheckbox: boolean = false;
@@ -264,7 +264,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   public dataSource: OTableDataSource | null;
   protected visibleColumns: string;
   protected sortColumns: string;
-  protected dataParentKeys: Array<Object>;
 
   protected mdTabGroupContainer: MdTabGroup;
   protected mdTabContainer: MdTab;
@@ -491,26 +490,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
    * get/set parametres to component
    */
   initializeParams() {
-
-    this.dataParentKeys = [];
-    if (this.parentKeys) {
-      let keys = Util.parseArray(this.parentKeys);
-      for (let i = 0; i < keys.length; ++i) {
-        let key = keys[i];
-        let keyDef = key.split(OTableComponent.COLUMNS_ALIAS_SEPARATOR);
-        if (keyDef.length === 1) {
-          this.dataParentKeys.push({
-            'alias': keyDef[0],
-            'name': keyDef[0]
-          });
-        } else if (keyDef.length === 2) {
-          this.dataParentKeys.push({
-            'alias': keyDef[0],
-            'name': keyDef[1]
-          });
-        }
-      }
-    }
     //add column checkbox
     //1. create object ocolumn
     //2. not add visiblesColumns
@@ -748,7 +727,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       disableClose: true
     });
 
-    dialogRef.afterClosed().subscribe(result => result ? this.dialogService.info('INFO', 'MESSAGES.SUCCESS_EXPORT_TABLE_DATA') : null);
+    dialogRef.afterClosed().subscribe(result => result ? this.snackBarService.open('MESSAGES.SUCCESS_EXPORT_TABLE_DATA', { icon: 'check_circle' }) : null);
   }
 
   onChangeColumnsVisibilityClicked() {
@@ -773,79 +752,47 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   add() {
-    let route = [];
-    if (this.detailFormRoute) {
-      route.push(this.detailFormRoute);
-    }
-    route.push('new');
-    // adding parent-keys info...
-    if ((this.dataParentKeys.length > 0) && (typeof (this.parentItem) !== 'undefined')) {
-      let pKeys = {};
-      for (let k = 0; k < this.dataParentKeys.length; ++k) {
-        let parentKey = this.dataParentKeys[k];
-        if (this.parentItem.hasOwnProperty(parentKey['alias'])) {
-          let currentData = this.parentItem[parentKey['alias']];
-          if (currentData instanceof OFormValue) {
-            currentData = currentData.value;
-          }
-          pKeys[parentKey['name']] = currentData;
-        }
-      }
-      if (Object.keys(pKeys).length > 0) {
-        let encoded = Util.encodeParentKeys(pKeys);
-        route.push({ 'pk': encoded });
-      }
-    }
-    let extras = { relativeTo: this.actRoute };
-    this.router.navigate(
-      route,
-      extras
-    ).catch(err => {
-      console.error(err.message);
-    });
+    super.insertDetail();
   }
-
 
   public remove(clearSelectedItems: boolean = false) {
     if ((this.keysArray.length > 0) && (this.selectedItems.length > 0)) {
-      this.dialogService.confirm('CONFIRM', 'MESSAGES.CONFIRM_DELETE')
-        .then(
-        res => {
-          if (res === true) {
-            if (this.dataService && (this.deleteMethod in this.dataService) && this.entity && (this.keysArray.length > 0)) {
-              let filters = [];
-              this.selectedItems.map(item => {
-                let kv = {};
-                for (let k = 0; k < this.keysArray.length; ++k) {
-                  let key = this.keysArray[k];
-                  kv[key] = item[key];
-                }
-                filters.push(kv);
-              });
+      this.dialogService.confirm('CONFIRM', 'MESSAGES.CONFIRM_DELETE').then(res => {
+        if (res === true) {
+          if (this.dataService && (this.deleteMethod in this.dataService) && this.entity && (this.keysArray.length > 0)) {
+            let filters = [];
+            this.selectedItems.map(item => {
+              let kv = {};
+              for (let k = 0; k < this.keysArray.length; ++k) {
+                let key = this.keysArray[k];
+                kv[key] = item[key];
+              }
+              filters.push(kv);
+            });
 
-              this.daoTable.removeQuery(this.deleteMethod, filters).subscribe(
-                res => {
-                  console.log('[OTable.remove]: response', res);
-                  //ObservableWrapper.callEmit(this.onRowDeleted, this.selectedItems);
-                },
-                error => {
-                  this.showDialogError(error, 'MESSAGES.ERROR_DELETE');
-                  console.log('[OTable.remove]: error', error);
-                },
-                () => {
-                  console.log('[OTable.remove]: success');
-                  this.reloadData();
-                }
-              );
-            } else {
-              // remove local
-              this.deleteLocalItems();
-            }
-          } else if (clearSelectedItems) {
-            this.selectedItems = [];
+            this.daoTable.removeQuery(this.deleteMethod, filters).subscribe(
+              res => {
+                console.log('[OTable.remove]: response', res);
+                //ObservableWrapper.callEmit(this.onRowDeleted, this.selectedItems);
+              },
+              error => {
+                this.showDialogError(error, 'MESSAGES.ERROR_DELETE');
+                console.log('[OTable.remove]: error', error);
+              },
+              () => {
+                console.log('[OTable.remove]: success');
+                this.reloadData();
+              }
+            );
+          } else {
+            // remove local
+            this.deleteLocalItems();
           }
+        } else if (clearSelectedItems) {
+          this.selectedItems = [];
         }
-        );
+      }
+      );
     }
   }
 
@@ -860,6 +807,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
     this.queryData(this.parentItem);
   }
+
   handleClick(item: any) {
     ObservableWrapper.callEmit(this.onClick, item);
     if (this.oenabled && (this.detailMode === OServiceComponent.DETAIL_MODE_CLICK)) {

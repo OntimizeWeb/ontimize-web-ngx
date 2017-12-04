@@ -14,7 +14,7 @@ export class OFormNavigationClass {
 
   formLayoutManager: OFormLayoutManagerComponent;
   formLayoutDialog: OFormLayoutDialogComponent;
-  index: number;
+  id: string;
 
   protected dialogService: DialogService;
   protected qParamSub: Subscription;
@@ -32,7 +32,7 @@ export class OFormNavigationClass {
 
   public navigationStream: EventEmitter<Object> = new EventEmitter<Object>();
 
-  protected onCloseTabSubscription: any;
+  protected onCloseTabSubscription: Subscription;
   protected cacheStateSubscription: Subscription;
 
   constructor(
@@ -71,17 +71,20 @@ export class OFormNavigationClass {
     });
 
     if (this.formLayoutManager && this.formLayoutManager.isTabMode()) {
-      this.onCloseTabSubscription = this.formLayoutManager.onCloseTab.subscribe((closeTabEmitter: EventEmitter<boolean>) => {
-        self.showConfirmDiscardChanges().then(res => {
-          closeTabEmitter.emit(res);
-        });
+      this.onCloseTabSubscription = this.formLayoutManager.onCloseTab.subscribe((args: any) => {
+        if (args.id === self.id) {
+          const closeTabEmitter: EventEmitter<boolean> = args.onCloseTabAccepted;
+          self.showConfirmDiscardChanges().then(res => {
+            closeTabEmitter.emit(res);
+          });
+        }
       });
     }
   }
 
   initialize() {
     if (this.formLayoutManager) {
-      this.index = this.formLayoutManager.getLastTabIndex();
+      this.id = this.formLayoutManager.getLastTabId();
     }
   }
 
@@ -102,7 +105,7 @@ export class OFormNavigationClass {
 
   subscribeToQueryParams() {
     if (this.formLayoutManager) {
-      const cacheData = this.formLayoutManager.getFormCacheData(this.index);
+      const cacheData = this.formLayoutManager.getFormCacheData(this.id);
       this.queryParams = cacheData.queryParams || {};
       this.parseQueryParams();
     } else {
@@ -124,7 +127,7 @@ export class OFormNavigationClass {
 
   subscribeToUrlParams() {
     if (this.formLayoutManager) {
-      const cacheData = this.formLayoutManager.getFormCacheData(this.index);
+      const cacheData = this.formLayoutManager.getFormCacheData(this.id);
       this.urlParams = cacheData.urlParams;
       this.parseUrlParams();
     } else {
@@ -149,7 +152,7 @@ export class OFormNavigationClass {
 
   subscribeToUrl() {
     if (this.formLayoutManager) {
-      const cacheData = this.formLayoutManager.getFormCacheData(this.index);
+      const cacheData = this.formLayoutManager.getFormCacheData(this.id);
       this.urlSegments = cacheData.urlSegments;
     } else {
       const self = this;
@@ -221,13 +224,13 @@ export class OFormNavigationClass {
 
   setModifiedState(modified: boolean) {
     if (this.formLayoutManager) {
-      this.formLayoutManager.setModifiedState(modified, this.index);
+      this.formLayoutManager.setModifiedState(modified, this.id);
     }
   }
 
   updateNavigation(formData: any) {
     if (this.formLayoutManager) {
-      this.formLayoutManager.updateNavigation(formData, this.index);
+      this.formLayoutManager.updateNavigation(formData, this.id);
     }
   }
 
@@ -245,7 +248,7 @@ export class OFormNavigationClass {
 
   closeDetailAction(options?: any) {
     if (this.formLayoutManager) {
-      this.formLayoutManager.closeDetail(this.index);
+      this.formLayoutManager.closeDetail(this.id);
     } else {
       this.form.beforeCloseDetail.emit();
       const fullUrlSegments = this.getFullUrlSegments();

@@ -3,12 +3,13 @@
   width: 65%;
   height: 90%;
 
-  .mat-dialog-title {
-    width: 100%;
-    margin: 10px 0;
-    padding-left: 24px;
-    text-align: center;
-
+  .mat-toolbar {
+    .mat-dialog-title {
+      width: 100%;
+      margin: 10px 0;
+      padding-left: 24px;
+      text-align: center;
+    }
     .mat-icon {
       cursor: pointer;
     }
