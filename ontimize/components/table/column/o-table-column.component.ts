@@ -109,19 +109,18 @@ export class OTableColumnComponent implements OnInit {
   @InputConverter()
   protected asyncLoad: boolean = false;
 
-  protected table: OTableComponent;
-
   @ViewChild('container', { read: ViewContainerRef })
   container: ViewContainerRef;
 
   constructor(
-    @Inject(forwardRef(() => OTableComponent)) table: OTableComponent,
+    @Inject(forwardRef(() => OTableComponent)) public table: OTableComponent,
     private resolver: ComponentFactoryResolver,
     protected injector: Injector) {
     this.table = table;
   }
 
   public ngOnInit() {
+
     let factory: ComponentFactory<any>;
     this.orderable = Util.parseBoolean(this.orderable, true);
     this.searchable = Util.parseBoolean(this.searchable, true);
@@ -197,9 +196,13 @@ export class OTableColumnComponent implements OnInit {
       }
     }
     this.table.registerColumn(this);
+    //console.log('OTABLECOLUMN. on init', this.renderer);
   }
+
 
   public registerRenderer(renderer: any) {
     this.renderer = renderer;
   }
+
+
 }

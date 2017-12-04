@@ -1,6 +1,5 @@
-import { Component, Inject, forwardRef, Injector, TemplateRef, ViewChild } from '@angular/core';
+import { Component,  Injector, TemplateRef, ViewChild } from '@angular/core';
 import { OTableCellRendererIntegerComponent, DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_INTEGER } from './o-table-cell-renderer-integer.component';
-import { OTableColumnComponent } from '../o-table-column.component';
 
 import { NumberService } from '../../../../services';
 import {
@@ -31,8 +30,6 @@ export class OTableCellRendererRealComponent extends OTableCellRendererIntegerCo
 
   public static DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_REAL = DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_REAL;
 
-  protected tableColumn: OTableColumnComponent;
-
   protected decimalSeparator: string = '.';
   protected decimalDigits: number = 2;
   protected numberService: NumberService;
@@ -43,10 +40,8 @@ export class OTableCellRendererRealComponent extends OTableCellRendererIntegerCo
 
   @ViewChild('templateref', { read: TemplateRef }) public templateref: TemplateRef<any>;
 
-  constructor( @Inject(forwardRef(() => OTableColumnComponent)) tableColumn: OTableColumnComponent,
-    protected injector: Injector) {
-    super(tableColumn, injector);
-    this.tableColumn = this.injector.get(OTableColumnComponent);
+  constructor(protected injector: Injector) {
+    super(injector);
     this.tableColumn.type = 'real';
     this.numberService = this.injector.get(NumberService);
 
@@ -67,7 +62,7 @@ export class OTableCellRendererRealComponent extends OTableCellRendererIntegerCo
       grouping: this.grouping,
       thousandSeparator: this.thousandSeparator
     };
-    this.tableColumn.registerRenderer(this);
+    this.initialize();
   }
 
 

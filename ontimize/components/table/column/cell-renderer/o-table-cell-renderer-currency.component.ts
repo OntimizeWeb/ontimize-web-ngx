@@ -1,7 +1,6 @@
 
-import { Component, forwardRef, Inject, Injector, ViewChild, TemplateRef } from '@angular/core';
-import { OTableColumnComponent } from '../o-table-column.component';
-import { OTableCellRenderer } from './o-table-cell-renderer';
+import { Component,  Injector, ViewChild, TemplateRef } from '@angular/core';
+import { OBaseTableCellRenderer } from './o-base-table-cell-renderer.class';
 import {
   OTableCellRendererRealComponent
 } from './o-table-cell-renderer-real.component';
@@ -32,7 +31,7 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_CURRENCY = [
   ]
 })
 
-export class OTableCellRendererCurrencyComponent extends OTableCellRenderer {
+export class OTableCellRendererCurrencyComponent extends OBaseTableCellRenderer {
 
   public static DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_CURRENCY = DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_CURRENCY;
 
@@ -44,16 +43,13 @@ export class OTableCellRendererCurrencyComponent extends OTableCellRenderer {
   protected thousandSeparator: string = ',';
 
   protected currencyService: CurrencyService;
-  protected tableColumn: OTableColumnComponent;
 
   protected componentPipe: OCurrencyPipe;
   protected pipeArguments: ICurrencyPipeArgument;
   @ViewChild('templateref', { read: TemplateRef }) public templateref: TemplateRef<any>;
 
-  constructor( @Inject(forwardRef(() => OTableColumnComponent)) tableColumn: OTableColumnComponent,
-    protected injector: Injector) {
-    super();
-    this.tableColumn = this.injector.get(OTableColumnComponent);
+  constructor( protected injector: Injector) {
+    super(injector);
     this.tableColumn.type = 'currency';
     this.currencyService = this.injector.get(CurrencyService);
     this.setComponentPipe();
@@ -81,7 +77,6 @@ export class OTableCellRendererCurrencyComponent extends OTableCellRenderer {
       thousandSeparator: this.thousandSeparator
     };
 
-
-    this.tableColumn.registerRenderer(this);
-  }
+    this.initialize();
+ }
 }

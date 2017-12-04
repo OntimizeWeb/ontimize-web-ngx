@@ -61,12 +61,12 @@
           </ng-container>
           <md-cell *cdkCellDef="let row" [fxFlex]="column.width" [ngClass]="column.className">
             <ng-container *ngIf="!column.renderer">{{ row[column.name] }}</ng-container>
-            <ng-template *ngIf="column.renderer" [ngTemplateOutlet]="column.renderer.templateref" [ngOutletContext]="{cellvalue: row[column.name]}"></ng-template>
+            <ng-template *ngIf="column.renderer" [ngTemplateOutlet]="column.renderer.templateref" [ngOutletContext]="{cellvalue: row[column.name],rowvalue:row}"></ng-template>
           </md-cell>
         </ng-container>
 
         <md-header-row *cdkHeaderRowDef="oTableOptions.visibleColumns"></md-header-row>
-        <md-row *cdkRowDef="let row; columns: oTableOptions.visibleColumns;" (click)="handleClick(row)" (dblclick)="handleDoubleClick(row)">
+        <md-row *cdkRowDef="let row; columns: oTableOptions.visibleColumns;" (click)="handleClick(row)" (dblclick)="handleDoubleClick(row)" >
         </md-row>
       </md-table>
 

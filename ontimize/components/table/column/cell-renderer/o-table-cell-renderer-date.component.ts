@@ -1,7 +1,6 @@
-import { Component, Injector, Inject, forwardRef, ViewChild, TemplateRef } from '@angular/core';
+import { Component, Injector, ViewChild, TemplateRef } from '@angular/core';
 
-import { OTableColumnComponent } from '../o-table-column.component';
-import { OTableCellRenderer } from './o-table-cell-renderer';
+import { OBaseTableCellRenderer } from './o-base-table-cell-renderer.class';
 
 export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_DATE = [
   // format [string]: date format. See MomentJS (http://momentjs.com/).
@@ -19,7 +18,7 @@ import {
     ...DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_DATE
   ]
 })
-export class OTableCellRendererDateComponent extends OTableCellRenderer {
+export class OTableCellRendererDateComponent extends OBaseTableCellRenderer {
 
   public static DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_DATE = DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_DATE;
 
@@ -27,17 +26,12 @@ export class OTableCellRendererDateComponent extends OTableCellRenderer {
   protected pipeArguments: IMomentPipeArgument;
 
   protected format: string;
-  protected tableColumn: OTableColumnComponent;
 
   @ViewChild('templateref', { read: TemplateRef }) public templateref: TemplateRef<any>;
 
-  constructor( @Inject(forwardRef(() => OTableColumnComponent)) tableColumn: OTableColumnComponent,
-    protected injector: Injector) {
-    super();
-    this.tableColumn = this.injector.get(OTableColumnComponent);
+  constructor( protected injector: Injector) {
+    super(injector);
     this.tableColumn.type = 'date';
-    this.tableColumn.registerRenderer(this);
-
     this.setComponentPipe();
   }
 
@@ -53,7 +47,7 @@ export class OTableCellRendererDateComponent extends OTableCellRenderer {
       format:this.format
     };
 
-    this.tableColumn.registerRenderer(this);
+    this.initialize();
   }
 
 

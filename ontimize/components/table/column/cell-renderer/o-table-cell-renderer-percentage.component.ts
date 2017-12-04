@@ -1,14 +1,10 @@
-import { Component, Inject, forwardRef, Injector, TemplateRef, ViewChild } from '@angular/core';
+import { Component, Injector, TemplateRef, ViewChild, OnInit } from '@angular/core';
 import { DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_REAL, OTableCellRendererRealComponent } from './o-table-cell-renderer-real.component';
-import { OTableColumnComponent } from '../o-table-column.component';
-
 import { NumberService } from '../../../../services';
 import {
   OPercentPipe,
   IPercentPipeArgument
 } from '../../../../pipes';
-
-
 
 export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_PERCENTAGE = [
 
@@ -22,11 +18,9 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_PERCENTAGE = [
     ...DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_REAL
   ]
 })
-export class OTableCellRendererPercentageComponent extends OTableCellRendererRealComponent {
+export class OTableCellRendererPercentageComponent extends OTableCellRendererRealComponent implements OnInit {
 
   public static DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_REAL = DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_REAL;
-
-  protected tableColumn: OTableColumnComponent;
 
   protected decimalSeparator: string = '.';
   protected decimalDigits: number = 0;
@@ -38,10 +32,8 @@ export class OTableCellRendererPercentageComponent extends OTableCellRendererRea
 
   @ViewChild('templateref', { read: TemplateRef }) public templateref: TemplateRef<any>;
 
-  constructor( @Inject(forwardRef(() => OTableColumnComponent)) tableColumn: OTableColumnComponent,
-    protected injector: Injector) {
-    super(tableColumn, injector);
-    this.tableColumn = this.injector.get(OTableColumnComponent);
+  constructor(protected injector: Injector) {
+    super(injector);
     this.tableColumn.type = 'real';
     this.numberService = this.injector.get(NumberService);
 
@@ -62,7 +54,7 @@ export class OTableCellRendererPercentageComponent extends OTableCellRendererRea
       grouping: this.grouping,
       thousandSeparator: this.thousandSeparator
     };
-    this.tableColumn.registerRenderer(this);
+    this.initialize();
   }
 
 
