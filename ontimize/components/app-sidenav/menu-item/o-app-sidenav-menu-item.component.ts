@@ -1,28 +1,10 @@
-import {
-  // Optional,
-  // Inject,
-  // forwardRef,
-  Injector,
-  NgModule,
-  Component,
-  OnInit,
-  ViewEncapsulation
-} from '@angular/core';
+import { Injector, NgModule, Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
-import { InputConverter } from '../../decorators';
-import { OSharedModule } from '../../shared';
-import {
-  OTranslateService,
-  LoginService,
-  // AppMenuService,
-  MenuItem,
-  MenuItemAction,
-  MenuItemLocale
-} from '../../services';
-
-// import { OAppSidenavComponent } from './o-app-sidenav.component';
+import { InputConverter } from '../../../decorators';
+import { OSharedModule } from '../../../shared';
+import { OTranslateService, LoginService, MenuItemAction, MenuItemLocale, MenuRootItem } from '../../../services';
 
 export const DEFAULT_INPUTS_O_APP_SIDENAV_MENU_ITEM = [
   'menuItem : menu-item',
@@ -46,34 +28,20 @@ export class OAppSidenavMenuItemComponent implements OnInit {
 
   protected translateService: OTranslateService;
   protected loginService: LoginService;
-  // protected appMenuService: AppMenuService;
 
   @InputConverter()
   sidenavOpened: boolean = true;
-  public menuItem: MenuItem;
+  public menuItem: MenuRootItem;
   public menuItemType: string;
 
-  // private _menuItemType: string;
-
-  constructor(
-    protected injector: Injector
-    // @Optional() @Inject(forwardRef(() => OAppSidenavComponent)) protected oAppSidenavComponent: OAppSidenavComponent,
-  ) {
+  constructor(protected injector: Injector) {
     this.translateService = this.injector.get(OTranslateService);
     this.loginService = this.injector.get(LoginService);
     // this.appMenuService = this.injector.get(AppMenuService);
   }
 
-  // set menuItemType(val: string) {
-  //   this._menuItemType = val;
-  // }
-
-  // get menuItemType() {
-  //   return this._menuItemType;
-  // }
-
   ngOnInit() {
-    // this.menuItemType = this.appMenuService.getMenuItemType(this.menuItem);
+    // TODO
   }
 
   executeItemAction() {

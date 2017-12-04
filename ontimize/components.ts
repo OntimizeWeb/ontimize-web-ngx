@@ -48,7 +48,4 @@ export * from './components/o-service-component.class';
 
 export * from './components/user-info/o-user-info.component';
 export * from './components/app-header/o-app-header.component';
-export * from './components/app-sidenav/o-app-sidenav-image.component';
-export * from './components/app-sidenav/o-app-sidenav-menu-group.component';
-export * from './components/app-sidenav/o-app-sidenav-menu-item.component';
-export * from './components/app-sidenav/o-app-sidenav.component';
+export * from './components/app-sidenav/o-app-sidenav.components';

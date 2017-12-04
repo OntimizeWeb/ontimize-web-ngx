@@ -1,10 +1,9 @@
 import { ElementRef, Injector, NgModule, Component, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { OSharedModule } from '../../shared';
-import { AppMenuService, MenuGroup } from '../../services';
-import { InputConverter } from '../../decorators';
-// import { OAppSidenavComponent } from './o-app-sidenav.component';
-import { OAppSidenavMenuItemModule } from './o-app-sidenav-menu-item.component';
+import { OSharedModule } from '../../../shared';
+import { AppMenuService, MenuGroup } from '../../../services';
+import { InputConverter } from '../../../decorators';
+import { OAppSidenavMenuItemModule } from '../menu-item/o-app-sidenav-menu-item.component';
 
 export const DEFAULT_INPUTS_O_APP_SIDENAV_MENU_GROUP = [
   'menuGroup : menu-group',
@@ -36,14 +35,9 @@ export class OAppSidenavMenuGroupComponent {
   constructor(
     protected injector: Injector,
     protected elRef: ElementRef
-    //   // @Optional() @Inject(forwardRef(() => OAppSidenavComponent)) protected sidenavComp: OAppSidenavComponent,
   ) {
     this.appMenuService = this.injector.get(AppMenuService);
   }
-
-  // ngOnInit() {
-
-  // }
 
   onClick() {
     this.menuGroup.opened = !this.menuGroup.opened;

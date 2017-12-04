@@ -2,7 +2,7 @@
   <md-icon class="sidenav-toggle" (click)="toggleSidenav.emit()">menu</md-icon>
   <span fxLayout="row" fxLayoutAlign="center center" class="application-header-title">{{ headerTitle | oTranslate }}</span>
   <o-user-info></o-user-info>
-  <button class="menu-button" md-icon-button [mdMenuTriggerFor]="langMenu">
+  <!-- <button class="menu-button" md-icon-button [mdMenuTriggerFor]="langMenu">
     <span class="flag-icon {{ getFlagClass(getCurrentLang()) }}"></span>
   </button>
   <md-menu #langMenu="mdMenu" yPosition="below">
@@ -10,5 +10,5 @@
       <span class="flag-icon {{ getFlagClass(lang) }}"></span>
       <span>{{ 'LOCALE_' + lang | oTranslate }}</span>
     </button>
-  </md-menu>
+  </md-menu> -->
 </nav>

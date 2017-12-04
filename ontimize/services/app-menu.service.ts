@@ -5,13 +5,13 @@ import {
 
 import { AppConfig } from '../config/app-config';
 
-export type MenuRootItem = (MenuGroup | MenuItem | MenuItemRoute | MenuItemAction | MenuItemLocale | MenuItemLogout);
+export type MenuRootItem = (MenuGroup | MenuItem | MenuItemRoute | MenuItemAction | MenuItemLocale | MenuItemLogout | MenuItemUserInfo);
 
 export interface MenuGroup {
   id: string;
   name: string;
   icon?: string;
-  items: (MenuItem | MenuItemRoute | MenuItemAction | MenuItemLocale | MenuItemLogout)[];
+  items: (MenuItem | MenuItemRoute | MenuItemAction | MenuItemLocale | MenuItemLogout | MenuItemUserInfo)[];
   opened?: boolean;
 }
 
@@ -39,6 +39,10 @@ export interface MenuItemLogout extends MenuItem {
   confirm: string;
 }
 
+export interface MenuItemUserInfo extends MenuItem {
+  user: string;
+  avatar: string;
+}
 
 @Injectable()
 export class AppMenuService {
@@ -89,6 +93,9 @@ export class AppMenuService {
         break;
       case ((item as MenuItemLocale).locale !== undefined):
         type = 'locale';
+        break;
+      case ((item as MenuItemUserInfo).user !== undefined):
+        type = 'user-info';
         break;
       case ((item as MenuGroup).items !== undefined):
         type = 'group';
