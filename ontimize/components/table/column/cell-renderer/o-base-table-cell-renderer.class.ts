@@ -1,5 +1,6 @@
 import { PipeTransform, Injector } from '@angular/core';
 import { OTableColumnComponent } from '../o-table-column.component';
+import { OTableComponent } from '../../../../../index';
 
 export class OBaseTableCellRenderer {
 
@@ -14,16 +15,26 @@ export class OBaseTableCellRenderer {
   /**
    * @param value data to render integer
    */
-  getCellData(value: any) {
+  getCellData(cellvalue: any, rowvalue?: any) {
     let parsedValue: string;
-    if (this.componentPipe && typeof this.pipeArguments !== 'undefined' && value !== undefined) {
+    if (this.componentPipe && typeof this.pipeArguments !== 'undefined' && cellvalue !== undefined) {
 
-      parsedValue = this.componentPipe.transform(value, this.pipeArguments);
+      parsedValue = this.componentPipe.transform(cellvalue, this.pipeArguments);
+    } else {
+      parsedValue = cellvalue;
     }
     return parsedValue;
   }
 
   initialize() {
     this.tableColumn.registerRenderer(this);
+  }
+
+  get table(): OTableComponent {
+    return this.tableColumn.table;
+  }
+
+  get column(): string {
+    return this.tableColumn.attr;
   }
 }
