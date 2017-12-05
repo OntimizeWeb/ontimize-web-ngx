@@ -1,15 +1,9 @@
-import {
-  Injector,
-  NgModule,
-  Component,
-  OnInit,
-  ViewEncapsulation
-} from '@angular/core';
-import { MdSidenav, MdSidenavModule } from '@angular/material';
+import { Injector, NgModule, Component, OnInit, ViewEncapsulation, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Subscription } from 'rxjs/Subscription';
 
-import { OSharedModule } from '../../shared';
-// import { OAppSidenavComponent } from './o-app-sidenav.component';
+import { OSharedModule } from '../../../shared';
+import { OAppSidenavComponent } from '../o-app-sidenav.component';
 
 export const DEFAULT_INPUTS_O_APP_SIDENAV_IMAGE = [
   'openedSrc:  opened-src',
@@ -27,40 +21,45 @@ export const DEFAULT_OUTPUTS_O_APP_SIDENAV_IMAGE = [
   styleUrls: ['./o-app-sidenav-image.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
-export class OAppSidenavImageComponent implements OnInit {
+export class OAppSidenavImageComponent implements OnInit, OnDestroy {
 
   public static DEFAULT_INPUTS_O_APP_SIDENAV_IMAGE = DEFAULT_INPUTS_O_APP_SIDENAV_IMAGE;
   public static DEFAULT_OUTPUTS_O_APP_SIDENAV_IMAGE = DEFAULT_OUTPUTS_O_APP_SIDENAV_IMAGE;
 
-  // protected sidenavComp: OAppSidenavComponent;
-  protected sidenav: MdSidenav;
+  protected appSidenav: OAppSidenavComponent;
   protected openedSrc: string;
   protected closedSrc: string;
   private _src: string;
 
-  constructor(
-    protected injector: Injector
-  ) {
-    // this.sidenavComp = this.injector.get(OAppSidenavComponent);
-    // this.sidenav = this.sidenavComp ? this.sidenavComp.sidenav : undefined;
-    this.sidenav = this.injector.get(MdSidenav);
+  protected appSidenavToggleSubscription: Subscription;
 
+  constructor(protected injector: Injector) {
+    this.appSidenav = this.injector.get(OAppSidenavComponent);
   }
 
   ngOnInit() {
-    if (this.sidenav) {
-      let self = this;
-      this.sidenav.onOpen.subscribe(() => {
-        self.setOpenedImg();
-      });
-      this.sidenav.onClose.subscribe(() => {
-        self.setClosedImg();
-      });
-      if (this.sidenav.opened) {
+    if (this.appSidenav) {
+
+      if (this.appSidenav.sidenav.opened) {
         this.setOpenedImg();
       } else {
         this.setClosedImg();
       }
+
+      let self = this;
+      this.appSidenavToggleSubscription = this.appSidenav.onSidenavToggle.subscribe((opened) => {
+        if (opened) {
+          self.setOpenedImg();
+        } else {
+          self.setClosedImg();
+        }
+      });
+    }
+  }
+
+  ngOnDestroy() {
+    if (this.appSidenavToggleSubscription) {
+      this.appSidenavToggleSubscription.unsubscribe();
     }
   }
 
@@ -84,8 +83,7 @@ export class OAppSidenavImageComponent implements OnInit {
 @NgModule({
   imports: [
     CommonModule,
-    OSharedModule,
-    MdSidenavModule
+    OSharedModule
   ],
   declarations: [
     OAppSidenavImageComponent

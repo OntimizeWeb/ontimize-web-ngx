@@ -29,6 +29,14 @@
       </div>
     </a>
 
+    <div *ngIf="menuItemType === 'user-info'">
+      <div fxLayout="row" fxLayoutAlign="start center">
+        <div fxLayout="row" fxLayoutAlign="center center" class="user-info-avatar-wrapper">
+          <img [src]="menuItem.avatar" *ngIf="menuItem.avatar" />
+        </div>
+      </div>
+    </div>
+
     <div *ngIf="menuItemType === 'default'">
       <div fxLayout="row" fxLayoutAlign="start center">
         <md-icon *ngIf="menuItem.icon">{{ menuItem.icon }}</md-icon>

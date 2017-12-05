@@ -13,8 +13,8 @@
 * **o-form-layout-manager**: new '*o-form-layout-manager*' component ([26a0e04](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/26a0e04)) ([0be6b2c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0be6b2c)) ([e4871ee](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e4871ee)) ([7f31cbd](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7f31cbd)) ([ecd362a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ecd362a))
 * **o-table-renderer-percentage** adding predefined cell renderers *'o-table-renderer-percentage'* ([0e48fdf](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0e48fdf))
 * **SnackBarService** added service for showing an angular material SnackBar component ([cbc4159](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/cbc415908907c8a5483e55997b78db02c8197948))
-* **OSnackBarComponent** added component in order to customize the snackbar component([f3eaa13](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f3eaa137dec4d02955194ea740febf9f27e90ea9))
-
+* **OSnackBarComponent** added component in order to customize the snackbar component ([f3eaa13](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f3eaa137dec4d02955194ea740febf9f27e90ea9))
+* **o-app-layout**: adding '*show-header*' and '*compact*' inputs ([03d79fe](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/03d79fe))
 
 ### Bug Fixes
 * **o-translate-service**: fixing *'getBrowserLang'* bug ([#138](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/138)) ([4a5d2e7](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4a5d2e7))

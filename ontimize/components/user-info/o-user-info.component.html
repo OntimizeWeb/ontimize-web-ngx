@@ -1,10 +1,12 @@
 <div class="user-info-container" fxLayout="column" fxLayoutAlign="center" *ngIf="existsUserInfo">
-  <div class="user-info-wrapper" fxLayout="row" fxLayoutAlign="center center" [mdMenuTriggerFor]="menu">
+
+  <div class="user-info-wrapper" fxLayout="row" fxLayoutAlign="center center">
     <div fxLayout="row" fxLayoutAlign="center center" class="user-info-avatar-wrapper">
       <img [src]="avatar" *ngIf="avatar" />
     </div>
     <span class="user-info-username" *ngIf="username"> {{ username }}</span>
-    <md-icon>keyboard_arrow_down</md-icon>
+    <md-icon [mdMenuTriggerFor]="menu">keyboard_arrow_down</md-icon>
+    <o-language-selector></o-language-selector>
   </div>
   <md-menu #menu="mdMenu" yPosition="below">
     <button md-menu-item (click)="onSettingsClick()">
