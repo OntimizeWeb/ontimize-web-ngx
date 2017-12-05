@@ -49,3 +49,5 @@ export * from './components/o-service-component.class';
 export * from './components/user-info/o-user-info.component';
 export * from './components/app-header/o-app-header.component';
 export * from './components/app-sidenav/o-app-sidenav.components';
+
+export * from './components/language-selector/o-language-selector.component';

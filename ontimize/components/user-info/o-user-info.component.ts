@@ -1,27 +1,11 @@
-import {
-  Injector,
-  ElementRef,
-  Component,
-  OnDestroy,
-  NgModule,
-  ViewEncapsulation
-} from '@angular/core';
-
-import {
-  Router,
-  RouterModule
-} from '@angular/router';
-
+import { Injector, ElementRef, Component, OnDestroy, NgModule, ViewEncapsulation } from '@angular/core';
+import { Router, RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs/Subscription';
 import { OSharedModule } from '../../shared';
-import { CommonModule } from '@angular/common';
-
-import {
-  DialogService,
-  OUserInfoService,
-  UserInfo,
-  LoginService
-} from '../../services';
+import { DialogService, OUserInfoService, UserInfo, LoginService } from '../../services';
+import { OLanguageSelectorModule } from '../language-selector/o-language-selector.component';
+// import { AppConfig } from '../../config/app-config';
 
 export const DEFAULT_INPUTS_O_USER_INFO = [];
 
@@ -33,7 +17,10 @@ export const DEFAULT_OUTPUTS_O_USER_INFO = [];
   outputs: DEFAULT_OUTPUTS_O_USER_INFO,
   templateUrl: './o-user-info.component.html',
   styleUrls: ['./o-user-info.component.scss'],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  host: {
+    '[class.o-user-info]': 'true'
+  }
 })
 
 export class OUserInfoComponent implements OnDestroy {
@@ -47,12 +34,19 @@ export class OUserInfoComponent implements OnDestroy {
   userInfoSubscription: Subscription;
   protected userInfo: UserInfo;
 
+  // protected sidenavMode: boolean = false;
+  // appSidenav: any;
+  // protected translateService: OTranslateService;
+  // protected _config: AppConfig;
+  // protected availableLangs: string[];
+
   constructor(
     protected elRef: ElementRef,
     protected injector: Injector,
     private router: Router
   ) {
     this.dialogService = this.injector.get(DialogService);
+    // this.translateService = this.injector.get(OTranslateService);
     this.loginService = this.injector.get(LoginService);
     this.oUserInfoService = this.injector.get(OUserInfoService);
 
@@ -60,6 +54,9 @@ export class OUserInfoComponent implements OnDestroy {
     this.userInfoSubscription = this.oUserInfoService.getUserInfoObservable().subscribe(res => {
       this.userInfo = res;
     });
+
+    // this._config = this.injector.get(AppConfig);
+    // this.availableLangs = this._config.getConfiguration().applicationLocales;
   }
 
   ngOnDestroy() {
@@ -74,21 +71,41 @@ export class OUserInfoComponent implements OnDestroy {
     this.router.navigate(['main/settings']);
   }
 
-  get existsUserInfo() : boolean {
+  get existsUserInfo(): boolean {
     return this.userInfo !== undefined;
   }
-  get avatar() : string {
+
+  get avatar(): string {
     return this.userInfo ? this.userInfo.avatar : undefined;
   }
 
-  get username() : string {
+  get username(): string {
     return this.userInfo ? this.userInfo.username : undefined;
   }
+
+  // getFlagClass(lang: string) {
+  //   const flagName = (lang !== 'en') ? lang : 'gb';
+  //   return 'flag-icon-' + flagName;
+  // }
+
+  // getAvailableLangs(): string[] {
+  //   return this.availableLangs;
+  // }
+
+  // configureI18n(lang: any) {
+  //   if (this.translateService && this.translateService.getCurrentLang() !== lang) {
+  //     this.translateService.use(lang);
+  //   }
+  // }
+
+  // getCurrentLang(): string {
+  //   return this.translateService.getCurrentLang();
+  // }
 }
 
 @NgModule({
   declarations: [OUserInfoComponent],
-  imports: [OSharedModule, CommonModule, RouterModule],
-  exports: [OUserInfoComponent],
+  imports: [OSharedModule, CommonModule, OLanguageSelectorModule, RouterModule],
+  exports: [OUserInfoComponent]
 })
 export class OUserInfoModule { }
