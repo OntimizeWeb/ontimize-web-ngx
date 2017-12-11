@@ -3,8 +3,8 @@
 ### Features
 * **o-table-button**: adding '*icon-position*' input ([66f0acb](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/66f0acb))
 * **o-table**: adding public methods *'getValue'*, *'getRendererValue'*, *'getSqlTypes'* ([236b9b6](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/236b9b6))
-* **o-table**: excel exportation support ([8b8a4b0](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/8b8a4b09b08f4a3d3bc11523a7be212170aab85b))
-* **o-table**: HTML and PDF exportation support ([5bbfc7f](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5bbfc7fe7b08061c696a504256f476e8ece37020))
+* **o-table**: excel exportation support ([8b8a4b0](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/8b8a4b0))
+* **o-table**: HTML and PDF exportation support ([5bbfc7f](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5bbfc7f))
 * **o-table**: adding styles to cell by type value *o-column-string*,*o-column-currency*, *o-column-integer*, *o-column-real*,*o-column-boolean*,*.o-column-date* ([aaf11b2](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/aaf11b2))
 * **o-table-column**: adding posibility to customize cell renderes ([9569f00](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9569f00)) ([5badd8d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5badd8d)) ([443bf1c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/443bf1c))
 * **o-table-option**: new '*o-table-option*' component for adding options to '*o-table*' menu ([f48a591](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f48a591))
@@ -13,9 +13,14 @@
 * **o-table-column-aggregate**: new *o-table-column-aggregate* component allows to display columns of totals. ([eb7c9d7](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/eb7c9d7)) ([6f466d7](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6f466d7)) ([80b7f04](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/80b7f04)) ([821e696](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/821e696))
 * **o-form-layout-manager**: new '*o-form-layout-manager*' component ([26a0e04](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/26a0e04)) ([0be6b2c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0be6b2c)) ([e4871ee](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e4871ee)) ([7f31cbd](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7f31cbd)) ([ecd362a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ecd362a))
 * **o-table-renderer-percentage** adding predefined cell renderers *'o-table-renderer-percentage'* ([0e48fdf](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0e48fdf))
-* **SnackBarService** added service for showing an angular material SnackBar component ([cbc4159](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/cbc415908907c8a5483e55997b78db02c8197948))
-* **OSnackBarComponent** added component in order to customize the snackbar component ([f3eaa13](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f3eaa137dec4d02955194ea740febf9f27e90ea9))
-* **o-app-layout**: adding '*show-header*' and '*compact*' inputs ([03d79fe](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/03d79fe))
+* **SnackBarService** added service for showing an angular material SnackBar component ([cbc4159](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/cbc4159))
+* **OSnackBarComponent** added component in order to customize the snackbar component ([f3eaa13](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f3eaa13))
+* **o-language-selector**: new component for changing application locale listing all available languages. It  uses '*flag-icons*' library ([d7b0c25](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d7b0c25))
+* **o-app-layout**: adding the following inputs:
+  * '*sidenav-opened*', '*show-header*', '*show-user-info*', '*opened-sidenav-image*' and '*closed-sidenav-image*'
+ ([03d79fe](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/03d79fe)) ([ecc3404](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ecc3404))
+
+  This changes are propagated to inner components ('*o-app-sidenav*', '*o-app-sidenav-image*', '*o-app-sidenav-menu-group*' and '*o-app-sidenav-menu-item*')
 
 ### Bug Fixes
 * **o-translate-service**: fixing *'getBrowserLang'* bug ([#138](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/138)) ([4a5d2e7](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4a5d2e7))
