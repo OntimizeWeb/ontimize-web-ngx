@@ -5,18 +5,25 @@ import { RouterModule, Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 
 import { OSharedModule } from '../../shared';
+import { InputConverter } from '../../decorators';
+import { AppMenuService, MenuRootItem, MenuItemUserInfo, MenuGroup, OUserInfoService, UserInfo } from '../../services';
 import { OAppSidenavMenuItemModule } from './menu-item/o-app-sidenav-menu-item.component';
 import { OAppSidenavMenuGroupModule } from './menu-group/o-app-sidenav-menu-group.component';
-import { AppMenuService, MenuRootItem, MenuItemUserInfo, MenuGroup, OUserInfoService, UserInfo } from '../../services';
+import { OAppSidenavImageModule } from './image/o-app-sidenav-image.component';
 
 const SMALL_WIDTH_BREAKPOINT = 840;
 
 export const DEFAULT_INPUTS_O_APP_SIDENAV = [
-  'compact'
+  'opened',
+  'showUserInfo: show-user-info',
+  'showToggleButton: show-toggle-button',
+  'openedSidenavImg: opened-sidenav-image',
+  'closedSidenavImg: closed-sidenav-image'
 ];
 
 export const DEFAULT_OUTPUTS_O_APP_SIDENAV = [
-  'onSidenavToggle'
+  'onSidenavToggle',
+  'afterSidenavToggle'
 ];
 
 @Component({
@@ -40,11 +47,15 @@ export class OAppSidenavComponent implements OnInit, OnDestroy, AfterViewInit {
   protected appMenuService: AppMenuService;
   protected _menuRootArray: MenuRootItem[];
 
-  _compact: boolean = true;
-
-  protected imageSrc: string;
+  @InputConverter()
+  protected opened: boolean = true;
+  _showUserInfo: boolean = true;
+  _showToggleButton: boolean = true;
+  openedSidenavImg: string;
+  closedSidenavImg: string;
 
   onSidenavToggle: EventEmitter<boolean> = new EventEmitter<boolean>();
+  afterSidenavToggle: EventEmitter<boolean> = new EventEmitter<boolean>();
   protected oUserInfoService: OUserInfoService;
   protected userInfoSubscription: Subscription;
   protected userInfo: UserInfo;
@@ -68,7 +79,7 @@ export class OAppSidenavComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngAfterViewInit() {
     let menuRootsArray = this.appMenuService.getMenuRoots();
-    if (this.compact) {
+    if (this.showUserInfo) {
       this.userInfo = this.oUserInfoService.getUserInfo();
       this.userInfoSubscription = this.oUserInfoService.getUserInfoObservable().subscribe(res => {
         this.userInfo = res;
@@ -78,13 +89,14 @@ export class OAppSidenavComponent implements OnInit, OnDestroy, AfterViewInit {
         id: this.userInfo.username,
         name: this.userInfo.username,
         user: this.userInfo.username,
-        avatar: this.userInfo.avatar,
+        avatar: this.userInfo.avatar
       };
       let menuGroupUserInfo: MenuGroup = {
         id: 'user-info',
-        name: 'USER_INFO',
+        name: 'APP_LAYOUT.USER_PROFILE',
         items: [userInfoItem],
-        opened: true
+        opened: true,
+        icon: 'person_pin'
       };
       menuRootsArray.unshift(menuGroupUserInfo);
     }
@@ -104,6 +116,10 @@ export class OAppSidenavComponent implements OnInit, OnDestroy, AfterViewInit {
     return window.matchMedia(`(max-width: ${SMALL_WIDTH_BREAKPOINT}px)`).matches;
   }
 
+  isSidenavOpened(): boolean {
+    return this.opened && !this.isScreenSmall();
+  }
+
   get menuRootArray(): MenuRootItem[] {
     return this._menuRootArray;
   }
@@ -113,16 +129,28 @@ export class OAppSidenavComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   toggleSidenav() {
-    this.sidenav.toggle();
+    const self = this;
+    this.sidenav.toggle().then(() => {
+      self.afterSidenavToggle.emit(this.sidenav.opened);
+    });
+    this.opened = this.sidenav.opened;
     this.onSidenavToggle.emit(this.sidenav.opened);
   }
 
-  get compact(): boolean {
-    return this._compact;
+  get showUserInfo(): boolean {
+    return this._showUserInfo;
   }
 
-  set compact(arg: boolean) {
-    this._compact = arg;
+  set showUserInfo(arg: boolean) {
+    this._showUserInfo = arg;
+  }
+
+  get showToggleButton(): boolean {
+    return this._showToggleButton;
+  }
+
+  set showToggleButton(arg: boolean) {
+    this._showToggleButton = arg;
   }
 }
 
@@ -132,6 +160,7 @@ export class OAppSidenavComponent implements OnInit, OnDestroy, AfterViewInit {
     OSharedModule,
     OAppSidenavMenuItemModule,
     OAppSidenavMenuGroupModule,
+    OAppSidenavImageModule,
     RouterModule
   ],
   declarations: [

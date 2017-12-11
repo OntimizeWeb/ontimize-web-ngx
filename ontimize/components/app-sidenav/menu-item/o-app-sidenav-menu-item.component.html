@@ -1,20 +1,20 @@
 <ng-container *ngIf="sidenavOpened">
-  <li class="application-sidenav-menuitem application-sidenav-item">
-    <a md-button *ngIf="menuItemType === 'route'" [routerLink]="[ menuItem.route ]" routerLinkActive="application-sidenav-viewer-sidenav-item-selected">
+  <li class="application-sidenav-menuitem application-sidenav-item" [class.user-info]="isUserInfoItem()">
+    <a md-button *ngIf="isRouteItem()" [routerLink]="[ menuItem.route ]" routerLinkActive="application-sidenav-viewer-sidenav-item-selected">
       <div fxLayout="row" fxLayoutAlign="start center">
         <md-icon *ngIf="menuItem.icon">{{ menuItem.icon }}</md-icon>
         {{ menuItem.name | oTranslate }}
       </div>
     </a>
 
-    <a md-button *ngIf="menuItemType === 'action'" (click)="onClick()">
+    <a md-button *ngIf="isActionItem()" (click)="onClick()">
       <div fxLayout="row" fxLayoutAlign="start center">
         <md-icon *ngIf="menuItem.icon">{{ menuItem.icon }}</md-icon>
         {{ menuItem.name | oTranslate }}
       </div>
     </a>
 
-    <a md-button *ngIf="menuItemType === 'locale'" (click)="onClick()">
+    <a md-button *ngIf="isLocaleItem()" (click)="onClick()">
       <div fxLayout="row" fxLayoutAlign="space-between center">
         <md-icon *ngIf="menuItem.icon">{{ menuItem.icon }}</md-icon>
         {{ menuItem.name | oTranslate }}
@@ -22,22 +22,22 @@
       </div>
     </a>
 
-    <a md-button *ngIf="menuItemType === 'logout'" (click)="onClick()">
+    <a md-button *ngIf="isLogoutItem()" (click)="onClick()">
       <div fxLayout="row" fxLayoutAlign="start center">
         <md-icon *ngIf="menuItem.icon">{{ menuItem.icon }}</md-icon>
         {{ menuItem.name | oTranslate }}
       </div>
     </a>
 
-    <div *ngIf="menuItemType === 'user-info'">
-      <div fxLayout="row" fxLayoutAlign="start center">
-        <div fxLayout="row" fxLayoutAlign="center center" class="user-info-avatar-wrapper">
-          <img [src]="menuItem.avatar" *ngIf="menuItem.avatar" />
-        </div>
+    <div *ngIf="isUserInfoItem()" fxLayout="column" fxLayoutAlign="center center" class="user-info-menu-item">
+      <div class="user-info-image" fxFlexFill></div>
+      <div class="user-info-item" fxLayout="row" fxLayoutAlign="space-between center" fxFlexFill>
+        <div class="user-info-name">{{ menuItem.user }} </div>
+        <o-language-selector></o-language-selector>
       </div>
     </div>
 
-    <div *ngIf="menuItemType === 'default'">
+    <div *ngIf="isDefaultItem()">
       <div fxLayout="row" fxLayoutAlign="start center">
         <md-icon *ngIf="menuItem.icon">{{ menuItem.icon }}</md-icon>
         {{ menuItem.name | oTranslate }}

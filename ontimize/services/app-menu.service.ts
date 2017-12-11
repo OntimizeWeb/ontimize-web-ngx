@@ -5,13 +5,13 @@ import {
 
 import { AppConfig } from '../config/app-config';
 
-export type MenuRootItem = (MenuGroup | MenuItem | MenuItemRoute | MenuItemAction | MenuItemLocale | MenuItemLogout | MenuItemUserInfo);
+export type MenuRootItem = (MenuGroup | MenuItemRoute | MenuItemAction | MenuItemLocale | MenuItemLogout | MenuItemUserInfo);
 
 export interface MenuGroup {
   id: string;
   name: string;
   icon?: string;
-  items: (MenuItem | MenuItemRoute | MenuItemAction | MenuItemLocale | MenuItemLogout | MenuItemUserInfo)[];
+  items: (MenuItemRoute | MenuItemAction | MenuItemLocale | MenuItemLogout | MenuItemUserInfo)[];
   opened?: boolean;
 }
 

@@ -150,8 +150,10 @@ export var MAP = {
     'TABLE.SELECT.ROWS.1': '1 row selected',
     'TABLE.SHOW_ALL': 'All',
     'TABLE.SELECT_DATE': 'Select date',
+
     'LAYOUT_MANANGER.MAIN_TAB_LABEL': 'Home',
-    'LAYOUT_MANANGER.DIALOG_TITLE': 'Detail'
+    'LAYOUT_MANANGER.DIALOG_TITLE': 'Detail',
+    'APP_LAYOUT.USER_PROFILE' : 'My profile'
   },
 
   // Spanish
@@ -305,8 +307,10 @@ export var MAP = {
     'TABLE.SELECT.ROWS.1': '1 registro seleccionado',
     'TABLE.SHOW_ALL': 'Todo',
     'TABLE.SELECT_DATE': 'Seleccionar fecha',
+
     'LAYOUT_MANANGER.MAIN_TAB_LABEL': 'Inicio',
-    'LAYOUT_MANANGER.DIALOG_TITLE': 'Detalle'
+    'LAYOUT_MANANGER.DIALOG_TITLE': 'Detalle',
+    'APP_LAYOUT.USER_PROFILE' : 'Mi perfil'
   }
 
 };

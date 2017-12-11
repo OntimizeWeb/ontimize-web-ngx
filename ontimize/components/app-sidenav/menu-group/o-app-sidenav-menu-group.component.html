@@ -1,6 +1,6 @@
 <button md-button class="application-sidenav-item application-sidenav-menugroup" [class.active]="menuGroup.opened" fxLayout="column"
-  fxFill (click)="onClick()">
-  <div  fxLayout="row" fxLayoutAlign="start center" fxFill>
+  fxFill (click)="onClick()" [disabled]="disabled">
+  <div fxLayout="row" fxLayoutAlign="start center" fxFill>
     <md-icon *ngIf="menuGroup.icon">{{ menuGroup.icon }}</md-icon>
     <h3 *ngIf="sidenavOpened">{{ menuGroup.name | oTranslate }}</h3>
     <span *ngIf="sidenavOpened" class="example-fill-remaining-space"></span>

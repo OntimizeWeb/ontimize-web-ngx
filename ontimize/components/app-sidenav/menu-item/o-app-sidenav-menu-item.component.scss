@@ -1,0 +1,22 @@
+
+.user-info-menu-item {
+  cursor: default;
+
+  .user-info-image {
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    width: 100%;
+    height: 200px!important;
+  }
+
+  .user-info-item {
+    padding: 0px 8px 0 16px;
+  }
+
+  .user-info-name {
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+
+}
