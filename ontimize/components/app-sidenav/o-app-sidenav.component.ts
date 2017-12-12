@@ -78,13 +78,21 @@ export class OAppSidenavComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    let menuRootsArray = this.appMenuService.getMenuRoots();
     if (this.showUserInfo && this.showToggleButton) {
       this.userInfo = this.oUserInfoService.getUserInfo();
       this.userInfoSubscription = this.oUserInfoService.getUserInfoObservable().subscribe(res => {
         this.userInfo = res;
+        this.refreshMenuRoots();
       });
+    }
+    this.refreshMenuRoots();
+  }
 
+  protected refreshMenuRoots() {
+    let menuRootsArray = this.appMenuService.getMenuRoots();
+    let firstRoot = menuRootsArray[0];
+    let alreadyExistsUserInfo = firstRoot ? firstRoot.id === 'user-info' : false;
+    if (this.showUserInfo && this.userInfo && this.showToggleButton && !alreadyExistsUserInfo) {
       let userInfoItem: MenuItemUserInfo = {
         id: this.userInfo.username,
         name: this.userInfo.username,
