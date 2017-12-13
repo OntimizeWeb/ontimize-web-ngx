@@ -1,0 +1,8 @@
+<md-toolbar class="toolbar-breadcrumb">
+  <ng-template ngFor let-route let-i="index" [ngForOf]="breadcrumbs">
+    <a *ngIf="!route.terminal" class="breadcrumb-item" href="" [routerLink]="[route.url]" [queryParams]="route.urlQueryParams"
+      layout-padding>{{ route.displayText | uppercase | oTranslate }}</a>
+    <span *ngIf="route.terminal" class="breadcrumb-item active" layout-padding>{{ route.displayText | uppercase | oTranslate }}</span>
+    <md-icon *ngIf="!route.terminal">keyboard_arrow_right</md-icon>
+  </ng-template>
+</md-toolbar>

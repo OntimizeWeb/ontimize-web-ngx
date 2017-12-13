@@ -1,4 +1,5 @@
 @import './app-global-theme.scss';
+@import '../breadcrumb/o-breadcrumb-theme.scss';
 @import '../container/o-container-theme.scss';
 @import '../form/o-form-toolbar-theme.scss';
 @import '../input/input-theme.scss';
@@ -12,13 +13,13 @@
 @import '../input/listpicker/o-list-picker-theme.scss';
 @import '../app-header/o-app-header-theme.scss';
 @import '../app-sidenav/o-app-sidenav-theme.scss';
-
 @import '../../layouts/app-layout/o-app-layout-theme.scss';
 
 // Create a theme.
 @mixin o-material-theme($theme) {
-  @include app-global-theme($theme);
+   @include app-global-theme($theme);
   @include md-dialog-theme($theme);
+  @include o-breadcrumb-theme($theme);
   @include o-container-theme($theme);
   @include o-form-toolbar-theme($theme);
   @include input-theme($theme);
@@ -33,4 +34,3 @@
   @include o-app-sidenav-theme($theme);
   @include o-app-layout-theme($theme);
 }
-

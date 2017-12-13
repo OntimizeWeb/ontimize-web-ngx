@@ -1,20 +1,41 @@
-import {
-  Injectable, Injector,
-  EventEmitter
-} from '@angular/core';
-import { ObservableWrapper } from '../util/async';
+import { Injectable, Injector, EventEmitter } from '@angular/core';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/filter';
 
+import { ObservableWrapper } from '../util/async';
 
 @Injectable()
 export class NavigationService {
   public currentTitle: string = null;
   public visible: boolean = true;
 
+  protected router: Router;
+
+  private navigationEventsSource: ReplaySubject<ActivatedRoute> = new ReplaySubject<ActivatedRoute>(1);
+  public navigationEvents$: Observable<ActivatedRoute> = this.navigationEventsSource.asObservable();
+
   private _titleEmitter: EventEmitter<any> = new EventEmitter();
   private _visibleEmitter: EventEmitter<Boolean> = new EventEmitter<Boolean>();
   private _sidenavEmitter: EventEmitter<any> = new EventEmitter();
 
-  constructor(protected injector: Injector) {
+  constructor(
+    protected injector: Injector
+  ) {
+    this.router = this.injector.get(Router);
+    var self = this;
+    this.router.events
+      .filter(event => event instanceof NavigationEnd)
+      .map(() => this.router.routerState.root)
+      .map(route => {
+        while (route.firstChild) {
+          route = route.firstChild;
+        }
+        return route;
+      })
+      .filter(route => route.outlet === 'primary')
+      .subscribe((event: ActivatedRoute) => self.navigationEventsSource.next(event));
   }
 
   public setTitle(title: string): void {

@@ -3,6 +3,7 @@ export * from './components/bar-menu/o-bar-menu-group.component';
 export * from './components/bar-menu/o-bar-menu-item.component';
 export * from './components/bar-menu/o-locale-bar-menu-item.component';
 export * from './components/bar-menu/o-bar-menu-separator.component';
+export * from './components/breadcrumb/o-breadcrumb.component';
 export * from './components/button/o-button.component';
 export * from './components/checkbox/o-checkbox.component';
 export * from './components/combo/o-combo.component';
