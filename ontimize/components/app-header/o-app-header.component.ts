@@ -6,8 +6,10 @@ import { Subscription } from 'rxjs/Subscription';
 import { OSharedModule } from '../../shared';
 import { DialogService, OModulesInfoService } from '../../services';
 import { OUserInfoModule } from '../../components';
+import { InputConverter } from '../../decorators';
 
 export const DEFAULT_INPUTS_O_APP_HEADER = [
+  'showUserInfo: show-user-info'
 ];
 
 export const DEFAULT_OUTPUTS_O_APP_HEADER = [
@@ -35,6 +37,10 @@ export class OAppHeaderComponent implements OnDestroy {
   protected _headerTitle = '';
 
   protected modulesInfoSubscription: Subscription;
+
+  @InputConverter()
+  showUserInfo: boolean = true;
+
   public toggleSidenav = new EventEmitter<void>();
 
   constructor(

@@ -134,7 +134,10 @@ export const DEFAULT_INPUTS_O_TABLE = [
   'paginationControls : pagination-controls',
 
   //filter [string][yes|no|true|false]
-  'filterCaseSensitive: filter-case-sensitive'
+  'filterCaseSensitive: filter-case-sensitive',
+
+  //fix-header [string][yes|no|true|false]: fixed header and footer when the content is greather than its own height
+  'fixedHeader:fixed-header'
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE = [
@@ -182,7 +185,8 @@ export class OTableOptions {
   encapsulation: ViewEncapsulation.None,
   host: {
     '[class.o-table]': 'true',
-    '[class.ontimize-table]': 'true'
+    '[class.ontimize-table]': 'true',
+    '[class.o-table-fixed]': 'fixedHeader'
   }
 })
 
@@ -259,6 +263,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   @InputConverter()
   public paginationControls: boolean = true;
+
+ // @HostBinding('class.o-table-fixed') @Input() fixHeaderFooter: boolean = false;
+ @InputConverter() fixHeaderFooter: boolean = false;
 
   public daoTable: OTableDao | null;
   public dataSource: OTableDataSource | null;
