@@ -6,20 +6,28 @@ $_mat-checkbox-mark-stroke-size-small: 2 / 15 * $mat-checkbox-size-small !defaul
 
 .o-table {
   align-items: normal!important;
-
+  
+  .expandable-container{
+    height: 100%;
+    overflow-y: auto;
+  }
+  
   .o-table-container {
 
     .fill-remaining {
       flex: 1 1 auto;
     }
 
-    display: block;
+    //display: block;
     max-width: 100%;
     height: 100%;
 
-    overflow: hidden;
+    //overflow: hidden;
     position: relative;
     margin: 0 0.5%;
+
+    
+   
 
     .mat-column-select {
       min-height: inherit;
@@ -241,4 +249,35 @@ $_mat-checkbox-mark-stroke-size-small: 2 / 15 * $mat-checkbox-size-small !defaul
 
     }
   }
+
+  &.o-table-fixed{
+
+    .expandable-container{
+      flex-direction: column;
+    }
+
+    .o-table-container{
+      flex-direction: column;
+      height:100%;
+      display: flex;
+
+      #tableContent {
+        flex: 1 1 auto;
+        position: relative;
+        overflow-y: auto;
+      }
+      
+      .header-fixed, .mat-paginator,.toolbar{
+        flex: 0 0 auto;
+      
+      }
+  
+      
+    }
+   
+   
+
+
+  }
 }
+
