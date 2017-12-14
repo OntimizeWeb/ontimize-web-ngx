@@ -8,8 +8,8 @@ $_mat-checkbox-mark-stroke-size-small: 2 / 15 * $mat-checkbox-size-small !defaul
   align-items: normal!important;
   
   .expandable-container{
-    height: 100%;
     overflow-y: auto;
+    height: inherit;
   }
   
   .o-table-container {
