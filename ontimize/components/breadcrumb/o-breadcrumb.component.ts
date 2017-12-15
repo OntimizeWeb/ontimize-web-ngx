@@ -4,14 +4,7 @@ import { ActivatedRouteSnapshot, Router, RouterModule } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 
 import { OSharedModule } from '../../shared';
-import { NavigationService, OFormComponent, Util } from '../../../index';
-
-export class OBreadcrumb {
-  displayText: string;
-  terminal: boolean;
-  url: string;
-  // urlQueryParams: Object;
-}
+import { NavigationService, OFormComponent, ONavigationItem, Util } from '../../../index';
 
 export const DEFAULT_INPUTS_O_BREADCRUMB = [
   // form [OFormComponent]: Ontimize Web Form reference.
@@ -40,12 +33,13 @@ export class OBreadcrumbComponent implements AfterViewInit, OnDestroy, OnInit {
 
   public labelColumns: string;
   public separator: string = ' ';
-  public breadcrumbs: OBreadcrumb[];
+  public breadcrumbs: Array<ONavigationItem>;
 
   protected router: Router;
   protected _formRef: OFormComponent;
   protected labelColsArray: Array<string> = [];
   protected navigationService: NavigationService;
+  protected onFormDataLoadedSubscription: Subscription;
   protected navigationServiceSubscription: Subscription;
 
   constructor(
@@ -62,36 +56,20 @@ export class OBreadcrumbComponent implements AfterViewInit, OnDestroy, OnInit {
 
     if (this.navigationService && this.navigationService.navigationEvents$) {
       this.navigationServiceSubscription = this.navigationService.navigationEvents$
-        .subscribe(e => {
-          let route = self.router.routerState.root.snapshot;
-          let url = '';
-          // let urlQueryParams = {};
-          self.breadcrumbs = [];
-          while (route.firstChild !== null) {
-            route = route.firstChild;
-            if (route.routeConfig === null) { continue; }
-            if (!route.routeConfig.path) { continue; }
-            let displayText = '';
-            url += `/${route.url.map((s, i) => {
-              // urlQueryParams = route.queryParams;
-              return i === 0 ? displayText = s.path : null;
-            }).join('/')}`;
-            self.breadcrumbs.push({
-              displayText: displayText,
-              terminal: self.isTerminal(route),
-              url: url,
-              // urlQueryParams: urlQueryParams
-            });
-          }
-        });
+        .subscribe(e => self.breadcrumbs = e);
     }
   }
 
   ngAfterViewInit() {
-    if (this._formRef) {
-      this._formRef.formGroup.valueChanges.subscribe(
+    if (this._formRef && this.labelColsArray.length) {
+      let self = this;
+      this.onFormDataLoadedSubscription = this._formRef.onFormDataLoaded.subscribe(
         (value: any) => {
-          console.log(value);
+          if (self.breadcrumbs.length) {
+            let displayText = self.labelColsArray.map(element => value[element]).join(self.separator);
+            self.breadcrumbs[self.breadcrumbs.length - 1].displayText = displayText;
+            self.navigationService.setNavigationItems(self.breadcrumbs);
+          }
         }
       );
     }
@@ -102,13 +80,12 @@ export class OBreadcrumbComponent implements AfterViewInit, OnDestroy, OnInit {
   }
 
   ngOnDestroy() {
+    if (this.onFormDataLoadedSubscription) {
+      this.onFormDataLoadedSubscription.unsubscribe();
+    }
     if (this.navigationServiceSubscription) {
       this.navigationServiceSubscription.unsubscribe();
     }
-  }
-
-  protected onBreadcrumbChange(crumbs: OBreadcrumb[]) {
-    this.breadcrumbs = crumbs;
   }
 
 }
