@@ -14,6 +14,7 @@ export * from './components/snackbar/o-snackbar.component';
 export * from './components/form/o-form.component';
 export * from './components/form/o-form-toolbar.component';
 export * from './components/form/OFormValue';
+export * from './components/form/o-form-container.component';
 export * from './components/image/o-image.component';
 export * from './components/input/currency-input/o-currency-input.component';
 export * from './components/input/date-input/o-date-input.component';
