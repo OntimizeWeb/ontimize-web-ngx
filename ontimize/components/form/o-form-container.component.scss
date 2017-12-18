@@ -12,15 +12,27 @@
         right: 16px;
     }
     .o-form form.inner-form{
+        top:42px;
+    }
+    /*.o-form form.inner-form{
+        top:42px;
+    }*/
+    
+    o-form-toolbar:not(.o-form-toolbar-floating) + form.inner-form {
         top:112px;
     }
 
     o-form-toolbar {
-        padding:8px 16px;
+        padding:8px;
+      
 
         &.o-form-toolbar-floating{
+            padding:8px 16px;
             top:60px;
         }
+    }
+    o-form-toolbar:not(.o-form-toolbar-floating){
+        margin-top:50px;
     }
 }
 .o-form-container{
