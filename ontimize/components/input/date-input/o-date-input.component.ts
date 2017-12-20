@@ -1,23 +1,8 @@
-import {
-  Component,
-  Optional,
-  Inject,
-  ElementRef,
-  Injector,
-  forwardRef,
-  ViewChild,
-  NgModule,
-  EventEmitter
-} from '@angular/core';
+import { Component, Optional, Inject, ElementRef, Injector, forwardRef, ViewChild, NgModule, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ValidatorFn } from '@angular/forms/src/directives/validators';
-import {
-  MdDateFormats,
-  DateAdapter,
-  MdDatepicker,
-  MdDatepickerInput,
-  MD_DATE_FORMATS
-} from '@angular/material';
+import { MdDateFormats, DateAdapter, MdDatepicker, MdDatepickerInput, MD_DATE_FORMATS, MdDatepickerInputEvent } from '@angular/material';
+import { Subscription } from 'rxjs/Subscription';
 
 import { OSharedModule } from '../../../shared';
 import { OFormComponent } from '../../form/o-form.component';
@@ -29,10 +14,7 @@ import { MomentService } from '../../../services';
 import { MomentDateAdapter } from './adapter/moment.adapter';
 import * as moment from 'moment';
 
-import {
-  DEFAULT_INPUTS_O_TEXT_INPUT,
-  DEFAULT_OUTPUTS_O_TEXT_INPUT
-} from '../text-input/o-text-input.component';
+import { DEFAULT_INPUTS_O_TEXT_INPUT, DEFAULT_OUTPUTS_O_TEXT_INPUT } from '../text-input/o-text-input.component';
 
 export const DEFAULT_OUTPUTS_O_DATE_INPUT = [
   ...DEFAULT_OUTPUTS_O_TEXT_INPUT
@@ -85,6 +67,7 @@ export class ODateInputComponent extends OFormDataComponent {
 
   protected _oformat: string = 'L';
   protected olocale: string;
+  protected updateLocaleOnChange: boolean = false;
   protected oStartView: 'month' | 'year' = 'month';
   protected oMinDate: string;
   protected oMaxDate: string;
@@ -101,6 +84,8 @@ export class ODateInputComponent extends OFormDataComponent {
   onChange: EventEmitter<Object> = new EventEmitter<Object>();
   onFocus: EventEmitter<Object> = new EventEmitter<Object>();
   onBlur: EventEmitter<Object> = new EventEmitter<Object>();
+
+  protected onLanguageChangeSubscription: Subscription;
 
   constructor(
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
@@ -119,6 +104,7 @@ export class ODateInputComponent extends OFormDataComponent {
     this.initialize();
 
     if (!this.olocale) {
+      this.updateLocaleOnChange = true;
       this.olocale = this.momentSrv.getLocale();
     }
     this.momentDateAdapter.setLocale(this.olocale);
@@ -152,6 +138,12 @@ export class ODateInputComponent extends OFormDataComponent {
         this.maxDateString = momentD.format(this.oformat);
       }
     }
+    if (this.updateLocaleOnChange) {
+      this.onLanguageChangeSubscription = this.translateService.onLanguageChanged.subscribe(() => {
+        this.momentDateAdapter.setLocale(this.translateService.getCurrentLang());
+        this.setValue(this.getValueAsDate());
+      });
+    }
   }
 
   ngAfterViewInit() {
@@ -163,6 +155,9 @@ export class ODateInputComponent extends OFormDataComponent {
 
   ngOnDestroy() {
     super.ngOnDestroy();
+    if (this.onLanguageChangeSubscription) {
+      this.onLanguageChangeSubscription.unsubscribe();
+    }
   }
 
   set data(value: any) {
@@ -212,6 +207,13 @@ export class ODateInputComponent extends OFormDataComponent {
 
   onModelChange(event: any) {
     this.onChange.emit(event);
+  }
+
+  innerOnChange(event: MdDatepickerInputEvent<any>) {
+    if (!this.value) {
+      this.value = new OFormValue();
+    }
+    this.ensureOFormValue(event.value);
   }
 
   innerOnFocus(event: any) {
