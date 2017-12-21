@@ -19,6 +19,9 @@ export interface MenuItem {
   id: string;
   name: string;
   icon?: string;
+  image?: string;
+  component?: any;
+  'component-inputs'?: Object;
 }
 
 export interface MenuItemRoute extends MenuItem {
@@ -105,6 +108,10 @@ export class AppMenuService {
         break;
     }
     return type;
+  }
+
+  isMenuGroup(item: MenuRootItem): boolean {
+    return this.getMenuItemType(item) === 'group';
   }
 
   private getMenuItems(item: MenuRootItem): MenuItem[] {
