@@ -31,6 +31,7 @@ import { OSharedModule } from '../../shared';
 import { OFormCacheClass } from './cache/o-form.cache.class';
 import { CanDeactivateFormGuard, CanComponentDeactivate } from './guards/o-form-can-deactivate.guard';
 import { OFormNavigationClass } from './navigation/o-form.navigation.class';
+import { OFormContainerComponent } from './o-form-container.component';
 
 export const DEFAULT_INPUTS_O_FORM = [
   // show-header [boolean]: visibility of form toolbar. Default: yes.
@@ -239,6 +240,8 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   protected formCache: OFormCacheClass;
   protected formNavigation: OFormNavigationClass;
 
+  protected formContainer: OFormContainerComponent;
+
   public static Mode(): any {
     enum m {
       QUERY,
@@ -289,6 +292,13 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
         }
       }
     });
+
+    try {
+      this.formContainer = injector.get(OFormContainerComponent);
+      this.formContainer.setForm(this);
+    } catch (e) {
+      //
+    }
   }
 
   registerFormComponent(comp: any) {
