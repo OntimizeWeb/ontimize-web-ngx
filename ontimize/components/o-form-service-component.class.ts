@@ -1,6 +1,6 @@
 import { Injector, ElementRef } from '@angular/core';
 import { InputConverter } from '../decorators';
-import { OntimizeService } from '../services';
+import { OntimizeService, DialogService } from '../services';
 import { OFormComponent } from './form/o-form.component';
 import { OFormDataComponent } from './o-form-data-component.class';
 import { Util } from '../utils';
@@ -76,11 +76,14 @@ export class OFormServiceComponent extends OFormDataComponent {
   protected _pKeysEquiv = {};
   protected _formDataSubcribe;
   protected _currentIndex;
+   protected dialogService: DialogService;
 
   constructor(form: OFormComponent, elRef: ElementRef, injector: Injector) {
     super(form, elRef, injector);
     this.form = form;
     this.elRef = elRef;
+
+    this.dialogService = injector.get(DialogService);
   }
 
   initialize() {
@@ -186,8 +189,15 @@ export class OFormServiceComponent extends OFormDataComponent {
         }
       }, err => {
         console.log(err);
+        if (err && typeof err !=='object') {
+          this.dialogService.alert('ERROR', err);
+        } else {
+          this.dialogService.alert('ERROR', 'MESSAGES.ERROR_QUERY');
+        }
       });
   }
+
+
 
   getDataArray(): any[] {
     return this.dataArray;

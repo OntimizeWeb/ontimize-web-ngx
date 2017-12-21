@@ -1,20 +1,118 @@
-import {
-  Injectable, Injector,
-  EventEmitter
-} from '@angular/core';
-import { ObservableWrapper } from '../util/async';
+import { Injectable, Injector, EventEmitter } from '@angular/core';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/filter';
 
+import { ObservableWrapper } from '../util/async';
+import { LocalStorageService, ILocalStorageComponent } from '../../index';
+
+export class ONavigationItem {
+  constructor(value: Object) {
+    this.url = value['url'] ? value['url'] : '';
+    this.queryParams = value['queryParams'] ? value['queryParams'] : {};
+    this.text = value['text'] ? value['text'] : '';
+    this.displayText = value['displayText'] ? value['displayText'] : '';
+  }
+  url: string;
+  queryParams: Object;
+  text: string;
+  displayText: string;
+  terminal: boolean;
+}
 
 @Injectable()
-export class NavigationService {
+export class NavigationService implements ILocalStorageComponent {
+
+  public static NAVIGATION_STORAGE_KEY: string = 'nav_service';
+
   public currentTitle: string = null;
   public visible: boolean = true;
+
+  protected navigationItems: Array<ONavigationItem> = [];
+
+  protected router: Router;
+
+  protected localStorageService: LocalStorageService;
+
+  private navigationEventsSource: ReplaySubject<Array<ONavigationItem>> = new ReplaySubject<Array<ONavigationItem>>(1);
+  public navigationEvents$: Observable<Array<ONavigationItem>> = this.navigationEventsSource.asObservable();
 
   private _titleEmitter: EventEmitter<any> = new EventEmitter();
   private _visibleEmitter: EventEmitter<Boolean> = new EventEmitter<Boolean>();
   private _sidenavEmitter: EventEmitter<any> = new EventEmitter();
 
-  constructor(protected injector: Injector) {
+  constructor(
+    protected injector: Injector
+  ) {
+    this.router = this.injector.get(Router);
+    this.localStorageService = this.injector.get(LocalStorageService);
+  }
+
+  initialize(): void {
+    var self = this;
+    this.router.events
+      .filter(event => event instanceof NavigationEnd)
+      .map(() => this.router.routerState.root)
+      .map(route => {
+        while (route.firstChild) {
+          route = route.firstChild;
+        }
+        return route;
+      })
+      .filter(route => route.outlet === 'primary')
+      .subscribe((event: ActivatedRoute) => {
+        let route = self.router.routerState.root.snapshot;
+        let displayText = '';
+        let url = '';
+        let navigationItems: Array<ONavigationItem> = [];
+        while (route.firstChild !== null) {
+          route = route.firstChild;
+          if (route.routeConfig === null) { continue; }
+          if (!route.routeConfig.path) { continue; }
+          url += `/${route.url.map((s, i) => {
+            return i === 0 ? displayText = s.path : null;
+          }).filter(s => s !== null).join('/')}`;
+          navigationItems.push(new ONavigationItem({
+            url: url,
+            text: displayText
+          }));
+        }
+        navigationItems[navigationItems.length - 1].queryParams = route.queryParams;
+
+        self.setNavigationItems(navigationItems);
+      });
+  }
+
+  public setNavigationItems(navigationItems: Array<ONavigationItem>): void {
+    this.navigationItems = navigationItems;
+    this.storeNavigation();
+    this.navigationEventsSource.next(this.navigationItems);
+  }
+
+  public getDataToStore(): Object {
+    let localData = this.localStorageService.getComponentStorage(this, false);
+    if (localData) {
+      this.navigationItems.forEach((element, index) => {
+        let storedElem = localData[Object.keys(localData).find(index => element.url === localData[index]['url'])];
+        if (void 0 !== storedElem) {
+          element.queryParams = element.queryParams && !Object.keys(storedElem['queryParams']).length ? element.queryParams : storedElem['queryParams'] && Object.keys(storedElem['queryParams']).length ? storedElem['queryParams'] : {};
+          element.displayText = element.displayText ? element.displayText : storedElem['displayText'] ? storedElem['displayText'] : null;
+        }
+        element.terminal = index === this.navigationItems.length - 1;
+      });
+    }
+    return this.navigationItems;
+  }
+
+  public getComponentKey(): string {
+    return NavigationService.NAVIGATION_STORAGE_KEY;
+  }
+
+  protected storeNavigation(): void {
+    if (this.localStorageService) {
+      this.localStorageService.updateComponentStorage(this, false);
+    }
   }
 
   public setTitle(title: string): void {
@@ -135,6 +233,20 @@ export class NavigationService {
   //       });
   //     }
   //   }
+  // }
+
+  // protected addNavigationItem(breadcrumb: ONavigationItem): void {
+  //   if (!this.breadcrumbs.length) {
+  //     this.breadcrumbs.push(breadcrumb);
+  //   } else {
+  //     let index = this.breadcrumbs.indexOf(this.breadcrumbs.find(item => breadcrumb.url === item.url));
+  //     if (index !== -1) {
+  //       this.breadcrumbs.splice(index);
+  //     } else {
+  //       this.breadcrumbs.push(breadcrumb);
+  //     }
+  //   }
+  //   console.log(this.breadcrumbs);
   // }
 
 }

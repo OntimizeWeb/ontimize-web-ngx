@@ -1,28 +1,15 @@
-import {
-  Injector,
-  OnDestroy,
-  NgModule,
-  Component,
-  EventEmitter,
-  ElementRef,
-  ViewEncapsulation
-} from '@angular/core';
+import { Injector, OnDestroy, NgModule, Component, EventEmitter, ElementRef, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs/Subscription';
 
 import { OSharedModule } from '../../shared';
-import { AppConfig } from '../../config/app-config';
-import {
-  DialogService,
-  OTranslateService,
-  OModulesInfoService
-} from '../../services';
-
+import { DialogService, OModulesInfoService } from '../../services';
 import { OUserInfoModule } from '../../components';
-
+import { InputConverter } from '../../decorators';
 
 export const DEFAULT_INPUTS_O_APP_HEADER = [
+  'showUserInfo: show-user-info'
 ];
 
 export const DEFAULT_OUTPUTS_O_APP_HEADER = [
@@ -46,13 +33,14 @@ export class OAppHeaderComponent implements OnDestroy {
   public static DEFAULT_OUTPUTS_O_APP_HEADER = DEFAULT_OUTPUTS_O_APP_HEADER;
 
   protected dialogService: DialogService;
-  protected translateService: OTranslateService;
   protected modulesInfoService: OModulesInfoService;
-  protected _config: AppConfig;
-  protected availableLangs: string[];
   protected _headerTitle = '';
 
   protected modulesInfoSubscription: Subscription;
+
+  @InputConverter()
+  showUserInfo: boolean = true;
+
   public toggleSidenav = new EventEmitter<void>();
 
   constructor(
@@ -61,12 +49,8 @@ export class OAppHeaderComponent implements OnDestroy {
     protected elRef: ElementRef
   ) {
     this.dialogService = this.injector.get(DialogService);
-    this.translateService = this.injector.get(OTranslateService);
-    this._config = this.injector.get(AppConfig);
-    this.availableLangs = this._config.getConfiguration().applicationLocales;
     this.modulesInfoService = this.injector.get(OModulesInfoService);
 
-    // this.userInfo = this.modulesInfoService.();
     this.modulesInfoSubscription = this.modulesInfoService.getModuleChangeObservable().subscribe(res => {
       this.headerTitle = res.name;
     });
@@ -88,30 +72,11 @@ export class OAppHeaderComponent implements OnDestroy {
     );
   }
 
-  configureI18n(lang: any) {
-    if (this.translateService && this.translateService.getCurrentLang() !== lang) {
-      this.translateService.use(lang);
-    }
-  }
-
-  getFlagClass(lang: string) {
-    const flagName = (lang !== 'en') ? lang : 'gb';
-    return 'flag-icon-' + flagName;
-  }
-
-  getCurrentLang() : string {
-    return this.translateService.getCurrentLang();
-  }
-
-  getAvailableLangs() : string[] {
-    return this.availableLangs;
-  }
-
-  get headerTitle() : string {
+  get headerTitle(): string {
     return this._headerTitle;
   }
 
-  set headerTitle(value : string) {
+  set headerTitle(value: string) {
     this._headerTitle = value;
   }
 }

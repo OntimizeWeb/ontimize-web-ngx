@@ -6,11 +6,13 @@ import {
   OTableCellRendererImageComponent,
   OTableCellRendererIntegerComponent,
   OTableCellRendererRealComponent,
-  OTableCellRendererBooleanComponent
+  OTableCellRendererBooleanComponent,
+  OTableCellRendererPercentageComponent
 } from './cell-renderer/cell-renderer';
 
 import { OTableComponent } from '../o-table.component';
 import { Util } from '../../../util/util';
+
 
 export const DEFAULT_INPUTS_O_TABLE_COLUMN = [
 
@@ -76,7 +78,7 @@ export class OTableColumnComponent implements OnInit {
   public orderable: any;
   public searchable: any;
   public editable: any;
-  public width:string='';
+  public width: string = '';
 
   /*input renderer date */
   protected format: string;
@@ -107,19 +109,18 @@ export class OTableColumnComponent implements OnInit {
   @InputConverter()
   protected asyncLoad: boolean = false;
 
-  protected table: OTableComponent;
-
   @ViewChild('container', { read: ViewContainerRef })
   container: ViewContainerRef;
 
   constructor(
-    @Inject(forwardRef(() => OTableComponent)) table: OTableComponent,
+    @Inject(forwardRef(() => OTableComponent)) public table: OTableComponent,
     private resolver: ComponentFactoryResolver,
     protected injector: Injector) {
     this.table = table;
   }
 
   public ngOnInit() {
+
     let factory: ComponentFactory<any>;
     this.orderable = Util.parseBoolean(this.orderable, true);
     this.searchable = Util.parseBoolean(this.searchable, true);
@@ -144,6 +145,10 @@ export class OTableColumnComponent implements OnInit {
         case 'image':
           factory = this.resolver.resolveComponentFactory(OTableCellRendererImageComponent);
           break;
+        case 'percentage':
+          factory = this.resolver.resolveComponentFactory(OTableCellRendererPercentageComponent);
+          break;
+
       }
 
       if (factory) {
@@ -174,6 +179,7 @@ export class OTableColumnComponent implements OnInit {
             this.renderer.dataType = this.dataType;
             break;
           case 'real':
+          case 'percentage':
             this.renderer.decimalSeparator = this.decimalSeparator;
             this.renderer.decimalDigits = this.decimalDigits;
             this.renderer.grouping = this.grouping;
@@ -190,9 +196,13 @@ export class OTableColumnComponent implements OnInit {
       }
     }
     this.table.registerColumn(this);
+    //console.log('OTABLECOLUMN. on init', this.renderer);
   }
+
 
   public registerRenderer(renderer: any) {
     this.renderer = renderer;
   }
+
+
 }

@@ -1,27 +1,10 @@
-import {
-  Injector,
-  ElementRef,
-  Component,
-  OnDestroy,
-  NgModule,
-  ViewEncapsulation
-} from '@angular/core';
-
-import {
-  Router,
-  RouterModule
-} from '@angular/router';
-
+import { Injector, ElementRef, Component, OnDestroy, NgModule, ViewEncapsulation } from '@angular/core';
+import { Router, RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs/Subscription';
 import { OSharedModule } from '../../shared';
-import { CommonModule } from '@angular/common';
-
-import {
-  DialogService,
-  OUserInfoService,
-  UserInfo,
-  LoginService
-} from '../../services';
+import { DialogService, OUserInfoService, UserInfo, LoginService } from '../../services';
+import { OLanguageSelectorModule } from '../language-selector/o-language-selector.component';
 
 export const DEFAULT_INPUTS_O_USER_INFO = [];
 
@@ -33,7 +16,10 @@ export const DEFAULT_OUTPUTS_O_USER_INFO = [];
   outputs: DEFAULT_OUTPUTS_O_USER_INFO,
   templateUrl: './o-user-info.component.html',
   styleUrls: ['./o-user-info.component.scss'],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  host: {
+    '[class.o-user-info]': 'true'
+  }
 })
 
 export class OUserInfoComponent implements OnDestroy {
@@ -74,21 +60,22 @@ export class OUserInfoComponent implements OnDestroy {
     this.router.navigate(['main/settings']);
   }
 
-  get existsUserInfo() : boolean {
+  get existsUserInfo(): boolean {
     return this.userInfo !== undefined;
   }
-  get avatar() : string {
+
+  get avatar(): string {
     return this.userInfo ? this.userInfo.avatar : undefined;
   }
 
-  get username() : string {
+  get username(): string {
     return this.userInfo ? this.userInfo.username : undefined;
   }
 }
 
 @NgModule({
   declarations: [OUserInfoComponent],
-  imports: [OSharedModule, CommonModule, RouterModule],
-  exports: [OUserInfoComponent],
+  imports: [OSharedModule, CommonModule, OLanguageSelectorModule, RouterModule],
+  exports: [OUserInfoComponent]
 })
 export class OUserInfoModule { }

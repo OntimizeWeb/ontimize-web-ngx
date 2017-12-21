@@ -1,20 +1,21 @@
-import {
-  Component,
-  // OnInit,
-  NgModule,
-  ViewEncapsulation
-} from '@angular/core';
-
+import { Component, NgModule, ViewEncapsulation } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { OSharedModule } from '../../shared';
 import { CommonModule } from '@angular/common';
-import {
-  OAppSidenavModule,
-  OAppHeaderModule
-} from '../../components';
 
-export const DEFAULT_INPUTS_O_APP_LAYOUT : any[] = [];
-export const DEFAULT_OUTPUTS_O_APP_LAYOUT : any[] = [];
+import { OSharedModule } from '../../shared';
+import { InputConverter } from '../../decorators';
+import { OAppHeaderModule } from '../../components/app-header/o-app-header.component';
+import { OAppSidenavModule } from '../../components/app-sidenav/o-app-sidenav.component';
+
+export const DEFAULT_INPUTS_O_APP_LAYOUT = [
+  'sidenavOpened: sidenav-opened',
+  'showHeader: show-header',
+  'showUserInfo: show-user-info',
+  'openedSidenavImg: opened-sidenav-image',
+  'closedSidenavImg: closed-sidenav-image'
+];
+
+export const DEFAULT_OUTPUTS_O_APP_LAYOUT: any[] = [];
 
 @Component({
   selector: 'o-app-layout',
@@ -26,17 +27,18 @@ export const DEFAULT_OUTPUTS_O_APP_LAYOUT : any[] = [];
 })
 
 export class OAppLayoutComponent {
-  //  implements OnInit {
+  @InputConverter()
+  sidenavOpened: boolean = true;
+  @InputConverter()
+  showHeader: boolean = false;
+  @InputConverter()
+  showUserInfo: boolean = true;
+
+  openedSidenavImg: string;
+  closedSidenavImg: string;
 
   public static DEFAULT_INPUTS_O_APP_LAYOUT = DEFAULT_INPUTS_O_APP_LAYOUT;
   public static DEFAULT_OUTPUTS_O_APP_LAYOUT = DEFAULT_OUTPUTS_O_APP_LAYOUT;
-
-  // constructor() {
-  // }
-
-  // ngOnInit(): void {
-  // }
-
 }
 
 @NgModule({

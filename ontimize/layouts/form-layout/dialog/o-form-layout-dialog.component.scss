@@ -1,0 +1,47 @@
+
+.o-form-layout-dialog-overlay {
+  width: 65%;
+  height: 90%;
+
+  .mat-toolbar {
+    .mat-dialog-title {
+      width: 100%;
+      margin: 10px 0;
+      padding-left: 24px;
+      text-align: center;
+    }
+    .mat-icon {
+      cursor: pointer;
+    }
+  }
+
+  .mat-dialog-container {
+    padding: 0!important;
+    overflow: hidden;
+
+    .mat-dialog-content.form-layout-dialog-container {
+      margin: 0;
+      max-height: calc(100% - 52px);
+    }
+
+    .o-form-layout-dialog {
+      o-form-toolbar .mat-toolbar {
+        padding: 0;
+        box-shadow: none;
+      }
+      .o-form {
+        .o-form-toolbar-floating {
+          position: relative;
+          top: 0px !important;
+          background: transparent;
+        }
+        form.inner-form {
+          position: relative;
+          top: 0px;
+          left: 0px;
+          right: 0px;
+        }
+      }
+    }
+  }
+}

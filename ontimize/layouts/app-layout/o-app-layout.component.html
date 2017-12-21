@@ -1,7 +1,7 @@
-<o-app-sidenav #appSidenav>
-  <!--<ng-content select="o-app-sidenav-image, [o-app-sidenav-image], .o-app-sidenav-image, [.o-app-sidenav-image]"></ng-content>-->
-  <o-app-header (toggleSidenav)="appSidenav.sidenav.toggle()"></o-app-header>
-  <div class="application-layout-content-wrapper">
+<o-app-sidenav #appSidenav [opened]="sidenavOpened" [show-user-info]="showUserInfo" [show-toggle-button]="!showHeader" [opened-sidenav-image]="openedSidenavImg"
+  [closed-sidenav-image]="closedSidenavImg">
+  <o-app-header *ngIf="showHeader" [show-user-info]="showUserInfo" (toggleSidenav)="appSidenav.toggleSidenav()"></o-app-header>
+  <div class="application-layout-content-wrapper" [class.header-layout]="showHeader">
     <ng-content></ng-content>
   </div>
 </o-app-sidenav>

@@ -73,6 +73,11 @@ $transition-duration: 500ms;
         }
       }
 
+      .sidenav-toggle {
+        padding: 4px 12px 8px 12px;
+        cursor: pointer;
+      }
+
       .application-sidenav-menugroup {
         transition: background-color $transition-duration;
 
@@ -105,6 +110,17 @@ $transition-duration: 500ms;
 
         .application-sidenav-item {
 
+          &:not(.user-info) {
+            cursor: pointer;
+          }
+
+          &.user-info {
+            &:hover,
+            &:focus {
+              color: inherit;
+            }
+          }
+
           &.application-sidenav-menuitem a {
             width: $sidenav-closed-width;
             max-width: $sidenav-closed-width;
@@ -131,9 +147,19 @@ $transition-duration: 500ms;
           margin-left: auto;
         }
 
-        o-app-sidenav-image .application-sidenav-image-container .application-sidenav-image {
-          margin-left:auto;
-          margin-right: -10px;
+        .o-app-sidenav-image .application-sidenav-image-container {
+
+          padding: 0px;
+          align-items: end!important;
+          place-content: flex-end!important;
+
+          .application-sidenav-image {
+            margin-right: 8px;
+          }
+        }
+
+        .application-sidenav-menugroup:disabled {
+          cursor: default;
         }
       }
 

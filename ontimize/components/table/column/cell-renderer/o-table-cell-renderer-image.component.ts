@@ -1,8 +1,8 @@
-import { Component, Inject, forwardRef, Injector, TemplateRef, ViewChild } from '@angular/core';
+import { Component, Injector, TemplateRef, ViewChild } from '@angular/core';
 
 
-//import { InputConverter } from '../../../../decorators';
-import { OTableColumnComponent } from '../o-table-column.component';
+import { OBaseTableCellRenderer } from './o-base-table-cell-renderer.class';
+import { OnInit } from '@angular/core/src/metadata/lifecycle_hooks';
 
 export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_IMAGE = [
 
@@ -28,12 +28,10 @@ export const DEFAULT_OUTPUTS_O_TABLE_CELL_RENDERER_IMAGE = [
     ...DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_IMAGE
   ]
 })
-export class OTableCellRendererImageComponent {
+export class OTableCellRendererImageComponent extends OBaseTableCellRenderer{
 
   public static DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_IMAGE = DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_IMAGE;
   public static DEFAULT_OUTPUTS_O_TABLE_CELL_RENDERER_IMAGE = DEFAULT_OUTPUTS_O_TABLE_CELL_RENDERER_IMAGE;
-
-  protected tableColumn: OTableColumnComponent;
 
   public imageType: string;
   public emptyImage: string;
@@ -41,14 +39,11 @@ export class OTableCellRendererImageComponent {
 
   @ViewChild('templateref', { read: TemplateRef }) public templateref: TemplateRef<any>;
 
-  constructor( @Inject(forwardRef(() => OTableColumnComponent)) tableColumn: OTableColumnComponent,
-    protected injector: Injector) {
-
-    this.tableColumn = this.injector.get(OTableColumnComponent);
+  constructor(protected injector: Injector) {
+    super(injector);
     this.tableColumn.type = 'image';
-    this.tableColumn.registerRenderer(this);
+    this.initialize();
   }
-
 
   getSource(cellData: any) {
 
@@ -67,5 +62,5 @@ export class OTableCellRendererImageComponent {
     }
     return this._source;
   }
-
-}
+  
+ }

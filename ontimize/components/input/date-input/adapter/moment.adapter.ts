@@ -14,6 +14,8 @@ export class MomentDateAdapter extends DateAdapter<Date> {
   private localeData = moment.localeData();
 
   setLocale(locale: any): void {
+    super.setLocale(locale);
+    moment.locale(locale);
     this.localeData = moment.localeData(locale);
   }
 
@@ -54,8 +56,9 @@ export class MomentDateAdapter extends DateAdapter<Date> {
   }
 
   isValid(date: Date) {
-    if(date instanceof Date)
+    if (date instanceof Date) {
       return !isNaN(date.getTime());
+    }
     return false;
   }
 

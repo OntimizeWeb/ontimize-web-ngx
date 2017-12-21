@@ -86,7 +86,7 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
       this.refreshBtnEnabled = this.formActions.indexOf('R') !== -1;
       this.insertBtnEnabled = this.formActions.indexOf('I') !== -1;
       this.editBtnEnabled = this.formActions.indexOf('U') !== -1;
-      this.deleteBtnEnabled = this.formActions.indexOf('D') !== -1;
+      this.deleteBtnEnabled = !this.insertMode && this.formActions.indexOf('D') !== -1;
     }
     if (this._navigationService) {
       var self = this;

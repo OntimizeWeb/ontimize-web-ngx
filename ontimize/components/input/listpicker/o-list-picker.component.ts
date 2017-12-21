@@ -185,6 +185,12 @@ export class OListPickerComponent extends OFormServiceComponent implements OnIni
     let cfg: MdDialogConfig = {
       role: 'dialog',
       disableClose: false,
+      panelClass: 'cdk-overlay-pane-custom',
+      data: {
+        data: this.dataArray,
+        filter: this.filter,
+        visibleColumns: this.visibleColArray
+      }
     };
     if (this.dialogWidth !== undefined) {
       cfg.width = this.dialogWidth;
@@ -196,30 +202,11 @@ export class OListPickerComponent extends OFormServiceComponent implements OnIni
     this.dialogRef.afterClosed().subscribe(result => {
       this.onDialogClose(result);
     });
-    this.onDialogShow();
-    this.dialogRef.componentInstance.initialize({
-      data: this.dataArray,
-      filter: this.filter,
-      visibleColumns: this.visibleColArray
-    });
-  }
-
-  onDialogShow() {
-    if (this.dialogRef) {
-      let dRef = (this.dialogRef as any);
-      if (dRef._overlayRef && dRef._overlayRef._pane && dRef._overlayRef._pane.children && dRef._overlayRef._pane.children.length >= 0) {
-        let el = dRef._overlayRef._pane.children[0];
-        if (el) {
-          el.classList.add('mat-dialog-custom');
-        }
-      }
-    }
   }
 
   onDialogClose(evt: any) {
     this.dialogRef = null;
-    if (evt instanceof Object &&
-      typeof evt[this.valueColumn] !== 'undefined') {
+    if (evt instanceof Object && typeof evt[this.valueColumn] !== 'undefined') {
       var self = this;
       window.setTimeout(() => {
         self.setValue(evt[self.valueColumn]);

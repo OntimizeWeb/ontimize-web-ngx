@@ -12,8 +12,12 @@
     .application-sidenav-sidenav {
 
       background: mat-color($primary);
+
+      .sidenav-toggle {
+        color: mat-color($primary, default-contrast);
+      }
+
       .application-sidenav-item {
-        cursor: pointer;
         border-color: mat-color($primary, default-contrast, 0.12);
         color: mat-color($primary, default-contrast, 0.54);
 
@@ -26,8 +30,19 @@
         > a:focus,
         &:hover,
         &:focus {
-          // background: mat-color($primary, 700);
           color: mat-color($accent);
+        }
+
+        &.user-info,
+        &.user-info {
+          &:hover,
+          &:focus {
+            color: inherit;
+          }
+          color: inherit;
+          .user-info-menu-item .user-info-item {
+            background: mat-color($primary, default-contrast, 0.74);
+          }
         }
       }
 

@@ -1,9 +1,10 @@
 import {
   Component,
-  ViewEncapsulation
+  ViewEncapsulation,
+  Inject
 } from '@angular/core';
 
-import { MdDialogRef } from '@angular/material';
+import { MdDialogRef, MD_DIALOG_DATA } from '@angular/material';
 import { Util } from '../../../util/util';
 
 export const DEFAULT_INPUTS_O_LIST_PICKER = [
@@ -32,17 +33,18 @@ export class OListPickerDialogComponent {
   visibleColsArray: Array<string>;
   searchVal: string;
 
-  constructor(protected dialogRef: MdDialogRef<OListPickerDialogComponent>) { }
-
-  initialize(parameters: Object): any {
-    if (Util.isArray(parameters['data'])) {
-      this.data = parameters['data'];
+  constructor(
+    public dialogRef: MdDialogRef<OListPickerDialogComponent>,
+    @Inject(MD_DIALOG_DATA) data: any
+  ) {
+    if (data.data && Util.isArray(data.data)) {
+      this.data = data.data;
     }
-    if (Util.isArray(parameters['visibleColumns'])) {
-      this.visibleColsArray = parameters['visibleColumns'];
+    if (data.visibleColumns && Util.isArray(data.visibleColumns)) {
+      this.visibleColsArray = data.visibleColumns;
     }
-    if (typeof parameters['filter'] !== 'undefined') {
-      this.filter = parameters['filter'];
+    if (data.filter !== undefined) {
+      this.filter = data.filter;
     }
   }
 

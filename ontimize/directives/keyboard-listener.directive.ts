@@ -1,12 +1,8 @@
-import { Directive, Input, Output, EventEmitter, OnInit } from '@angular/core';
+import { Directive, Input, Output, EventEmitter, OnInit, HostListener } from '@angular/core';
 import { Util } from '../util/util';
 
 @Directive({
-  selector: '[oKeyboardListener]',
-  host: {
-    '(window:keyup)': 'keyUp($event)',
-    '(window:keydown)': 'keyDown($event)'
-  }
+  selector: '[oKeyboardListener]'
 })
 export class OKeyboardListenerDirective implements OnInit {
 
@@ -15,6 +11,23 @@ export class OKeyboardListenerDirective implements OnInit {
 
   protected keyboardNumberKeysArray: Array<number> = [];
   protected activeKeys: Object = {};
+
+  @HostListener('keydown', ['$event'])
+  keyDown(e: KeyboardEvent) {
+    const pressedCode = e.keyCode;
+    if (this.keyboardNumberKeysArray.indexOf(pressedCode) !== -1) {
+      this.activeKeys[pressedCode] = true;
+      this.checkNeededKeys(e);
+    }
+  }
+
+  @HostListener('keyup', ['$event'])
+  keyUp(e: KeyboardEvent) {
+    const pressedCode = e.keyCode;
+    if (this.keyboardNumberKeysArray.indexOf(pressedCode) !== -1) {
+      this.activeKeys[pressedCode] = false;
+    }
+  }
 
   ngOnInit(): void {
     this.parseKeyboardKeys();
@@ -31,21 +44,6 @@ export class OKeyboardListenerDirective implements OnInit {
     });
   }
 
-  keyDown(e: KeyboardEvent) {
-    const pressedCode = e.keyCode;
-    if (this.keyboardNumberKeysArray.indexOf(pressedCode) !== -1) {
-      this.activeKeys[pressedCode] = true;
-      this.checkNeededKeys(e);
-    }
-  }
-
-  keyUp(e: KeyboardEvent) {
-    const pressedCode = e.keyCode;
-    if (this.keyboardNumberKeysArray.indexOf(pressedCode) !== -1) {
-      this.activeKeys[pressedCode] = false;
-    }
-  }
-
   checkNeededKeys(e: KeyboardEvent) {
     let trigger = true;
     this.keyboardNumberKeysArray.forEach(key => {
@@ -54,7 +52,7 @@ export class OKeyboardListenerDirective implements OnInit {
     if (trigger) {
       e.preventDefault();
       e.stopPropagation();
-     // this.activeKeys = {};
+      // this.activeKeys = {};
       this.onKeysPressed.emit();
     }
   }

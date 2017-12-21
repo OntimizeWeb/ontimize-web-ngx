@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CanDeactivate } from '@angular/router';
+import { CanDeactivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { OFormComponent } from '../o-form.component';
 
@@ -11,9 +11,13 @@ export interface CanComponentDeactivate {
 export class CanDeactivateFormGuard implements CanDeactivate<CanComponentDeactivate> {
   oForm: OFormComponent;
 
-  canDeactivate(component: CanComponentDeactivate) {
+  canDeactivate(component: CanComponentDeactivate, curr: ActivatedRouteSnapshot, state: RouterStateSnapshot, future: RouterStateSnapshot) {
+    const futureQueryParams = future.root.queryParams;
+    if (futureQueryParams.hasOwnProperty('ignore_can_deactivate')) {
+      return true;
+    }
     if (this.oForm) {
-      return this.oForm.showConfirmDiscardChanges();
+      return this.oForm.canDeactivate();
     }
     return true;
   }

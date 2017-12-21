@@ -16,6 +16,9 @@
       background-color: mat-color($background, status-bar, 0.9);
       .mat-header-cell {
         color: mat-color($foreground, text);
+        .column-filter-icon.active {
+          color: mat-color($accent);
+        }
       }
     }
 
@@ -26,6 +29,17 @@
       }
       .mat-cell {
         color: mat-color($foreground, secondary-text);
+        &.o-column-currency,
+        &.o-column-integer,
+        &.o-column-real,
+        {
+          text-align: right
+        }
+        &.o-column-boolean,
+        &.o-column-date{
+          text-align: center
+        }
+
       }
     }
 
@@ -59,5 +73,17 @@
       }
     }
 
+    .mat-table.totals-table{
+      .mat-header-row {
+        display: none!important;
+      }
+      .mat-row{
+          font-weight: bold;
+          background-color: mat-color($background, status-bar, 0.9);
+      }
+     
+      
+    }
+      
   }
 }

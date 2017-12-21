@@ -1,6 +1,6 @@
-import { Component, Injector, Inject, forwardRef, ViewChild, TemplateRef } from '@angular/core';
-import { OTableColumnComponent } from '../o-table-column.component';
+import { Component, Injector, ViewChild, TemplateRef } from '@angular/core';
 import { OTranslateService } from '../../../../services/o-translate.service';
+import { OBaseTableCellRenderer } from './o-base-table-cell-renderer.class';
 
 
 export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_BOOLEAN = [
@@ -23,7 +23,7 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_BOOLEAN = [
     ...DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_BOOLEAN
   ]
 })
-export class OTableCellRendererBooleanComponent {
+export class OTableCellRendererBooleanComponent extends OBaseTableCellRenderer {
 
   public static DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_BOOLEAN = DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_BOOLEAN;
 
@@ -34,17 +34,16 @@ export class OTableCellRendererBooleanComponent {
 
   protected booleanType: string = 'boolean';
   protected translateService: OTranslateService;
-  protected tableColumn: OTableColumnComponent;
+
 
 
   @ViewChild('templateref', { read: TemplateRef }) public templateref: TemplateRef<any>;
 
-  constructor( @Inject(forwardRef(() => OTableColumnComponent)) tableColumn: OTableColumnComponent,
-    protected injector: Injector) {
-    this.tableColumn = this.injector.get(OTableColumnComponent);
+  constructor(protected injector: Injector) {
+    super(injector);
     this.tableColumn.type = 'boolean';
     this.translateService = this.injector.get(OTranslateService);
-    this.tableColumn.registerRenderer(this);
+    this.initialize();
   }
 
   public hasCellDataTrueValue(cellData: any): boolean {
@@ -65,6 +64,7 @@ export class OTableCellRendererBooleanComponent {
     }
     return comparisonValue;
   }
+
 
   public getCellData(cellData: any) {
     let type = this.hasCellDataTrueValue(cellData) ? this.trueValueType : this.falseValueType;

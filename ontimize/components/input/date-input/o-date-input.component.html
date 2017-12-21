@@ -6,7 +6,7 @@
             [placeholder]="placeHolder" [readonly]="isReadOnly"
             [ngModel]="getValueAsDate()" (ngModelChange)="onModelChange($event)"
             (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)"
-            [mdDatepickerFilter]="filterDate">
+            [mdDatepickerFilter]="filterDate" (dateChange)="innerOnChange($event)">
         <!--<md-datepicker-toggle [disabled]="isReadOnly" mdSuffix [for]="d"></md-datepicker-toggle>-->
         <span class="icon-btn" (click)="open()" mdSuffix><md-icon >today</md-icon></span>
         <md-datepicker #d [disabled]="isReadOnly"></md-datepicker>

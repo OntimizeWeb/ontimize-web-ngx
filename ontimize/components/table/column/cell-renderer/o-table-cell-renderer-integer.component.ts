@@ -1,7 +1,6 @@
-import { Component, ViewChild, TemplateRef, Injector, forwardRef, Inject } from '@angular/core';
-import { OTableColumnComponent } from '../o-table-column.component';
+import { Component, ViewChild, TemplateRef, Injector } from '@angular/core';
 import { InputConverter } from '../../../../decorators';
-import { OTableCellRenderer } from './o-table-cell-renderer';
+import { OBaseTableCellRenderer } from './o-base-table-cell-renderer.class';
 
 import {
   OIntegerPipe,
@@ -27,26 +26,21 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_INTEGER = [
 })
 
 
-export class OTableCellRendererIntegerComponent extends OTableCellRenderer {
+export class OTableCellRendererIntegerComponent extends OBaseTableCellRenderer {
 
   public static DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_INTEGER = DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_INTEGER;
 
   @InputConverter()
   protected grouping: boolean = true;
-  protected thousandSeparator: string =',';
-
-  protected tableColumn: OTableColumnComponent;
-
+  protected thousandSeparator: string = ',';
   protected componentPipe: OIntegerPipe;
   protected pipeArguments: IIntegerPipeArgument;
 
   @ViewChild('templateref', { read: TemplateRef }) public templateref: TemplateRef<any>;
 
-  constructor( @Inject(forwardRef(() => OTableColumnComponent)) tableColumn: OTableColumnComponent,
-    protected injector: Injector) {
-    super();
-    this.tableColumn = this.injector.get(OTableColumnComponent);
-    this.tableColumn.type ='integer';
+  constructor(protected injector: Injector) {
+    super(injector);
+    this.tableColumn.type = 'integer';
     this.setComponentPipe();
   }
 
@@ -59,8 +53,7 @@ export class OTableCellRendererIntegerComponent extends OTableCellRenderer {
       grouping: this.grouping,
       thousandSeparator: this.thousandSeparator
     };
-    this.tableColumn.registerRenderer(this);
-
+    this.initialize();
   }
 
 

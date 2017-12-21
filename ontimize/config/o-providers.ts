@@ -11,11 +11,13 @@ import {
   NavigationService,
   OntimizeService,
   OntimizeFileService,
+  OntimizeExportService,
   MomentService,
   NumberService,
   CurrencyService,
   OTranslateService,
   DialogService,
+  SnackBarService,
   AuthGuardService,
   authGuardServiceFactory,
   dataServiceFactory,
@@ -25,6 +27,8 @@ import {
   OUserInfoService,
   OModulesInfoService
 } from '../services';
+
+import { OFormLayoutManagerService } from '../services/o-form-layout-manager.service';
 
 export function appInitializerFactory(injector: Injector, config: Config, oTranslate: OTranslateService) {
   return () => new Promise<any>((resolve: any) => {
@@ -90,6 +94,10 @@ export function getOntimizeFileServiceProvider(injector: Injector) {
   return new OntimizeFileService(injector);
 }
 
+export function getOntimizeExportServiceProvider(injector: Injector) {
+  return new OntimizeExportService(injector);
+}
+
 export function getLoginServiceProvider(injector: Injector) {
   return new LoginService(injector);
 }
@@ -112,6 +120,10 @@ export function getNumberServiceProvider(injector: Injector) {
 
 export function getDialogServiceProvider(injector: Injector) {
   return new DialogService(injector);
+}
+
+export function getSnackBarServiceProvider(injector: Injector) {
+  return new SnackBarService(injector);
 }
 
 export function getTranslateServiceProvider(injector: Injector) {
@@ -163,6 +175,11 @@ export const ONTIMIZE_PROVIDERS = [
     useFactory: getOntimizeFileServiceProvider,
     deps: [Injector]
   },
+  {
+    provide: OntimizeExportService,
+    useFactory: getOntimizeExportServiceProvider,
+    deps: [Injector]
+  },
   // getLoginServiceProvider
   {
     provide: LoginService,
@@ -199,6 +216,12 @@ export const ONTIMIZE_PROVIDERS = [
     useFactory: getDialogServiceProvider,
     deps: [Injector]
   },
+  // getSnackbarServiceProvider
+  {
+    provide: SnackBarService,
+    useFactory: getSnackBarServiceProvider,
+    deps: [Injector]
+  },
   // getTranslateServiceProvider
   {
     provide: OTranslateService,
@@ -231,5 +254,9 @@ export const ONTIMIZE_PROVIDERS = [
     provide: OModulesInfoService,
     useFactory: getOModulesInfoServiceProvider,
     deps: [Injector]
+  },
+  {
+    provide: OFormLayoutManagerService,
+    useClass: OFormLayoutManagerService
   }
 ];

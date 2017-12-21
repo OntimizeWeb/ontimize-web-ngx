@@ -334,6 +334,11 @@ export class OListComponent extends OServiceComponent implements OnInit, IList, 
           console.log('[OList.queryData]: error', err);
           self.setDataArray([]);
           self.loaderSuscription.unsubscribe();
+          if (err && typeof err !=='object') {
+            this.dialogService.alert('ERROR', err);
+          } else {
+            this.dialogService.alert('ERROR', 'MESSAGES.ERROR_QUERY');
+          }
         });
     }
   }

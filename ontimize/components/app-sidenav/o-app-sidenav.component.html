@@ -1,15 +1,15 @@
 <md-sidenav-container class="application-sidenav-container" [class.opened]="sidenav.opened">
 
-  <md-sidenav #sidenav class="application-sidenav-sidenav" [opened]="!isScreenSmall()" [mode]="'side'"
-    [class.mat-drawer-opened]="sidenav.opened"
+  <md-sidenav #sidenav class="application-sidenav-sidenav" [opened]="isSidenavOpened()" [mode]="'side'" [class.mat-drawer-opened]="sidenav.opened"
     [class.mat-drawer-closed]="!sidenav.opened">
     <!--isScreenSmall() ? 'over' : 'side'-->
-    <ng-content select="o-app-sidenav-image, [o-app-sidenav-image], .o-app-sidenav-image, [.o-app-sidenav-image]"></ng-content>
-    <o-app-sidenav-image class="o-app-sidenav-image"
-      opened-src="./assets/images/sidenav-opened.png"
-      closed-src="./assets/images/sidenav-closed.png">
-    </o-app-sidenav-image>
 
+    <div fxLayout="row" fxLayoutAlign="end" *ngIf="showToggleButton" class="sidenav-toggle-container">
+      <md-icon class="sidenav-toggle" (click)="toggleSidenav()">menu</md-icon>
+    </div>
+
+    <o-app-sidenav-image [opened-src]="openedSidenavImg" [closed-src]="closedSidenavImg">
+    </o-app-sidenav-image>
 
     <nav *ngFor="let menuRootItem of menuRootArray">
 

@@ -1,15 +1,15 @@
-<div fxLayout="row"  fxLayoutAlign="space-between center" [formGroup]="getFormGroup()" [mdTooltip]="tooltip" [mdTooltipPosition]="tooltipPosition"
-    [mdTooltipShowDelay]="tooltipShowDelay">
-    <md-form-field #innerInputContainer fxFlexFill>
-        <input mdInput type="number" [attr.id]="getAttribute()" fxFill [formControlName]="getAttribute()" [placeholder]="placeHolder"
-            [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)" (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)"
-            [readonly]="isReadOnly" [min]="min" [max]="max" [step]="step">
-            
-            <span class="icon-btn" [class.mat-disabled]="isDisabled" mdSuffix>%</span>
-        <md-error *ngIf="hasError('required')">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</md-error>
-        <md-error *ngIf="hasError('min')">{{ 'FORM_VALIDATION.MIN_VALUE' | oTranslate }}: {{ getErrorValue('min', 'requiredMin') }}</md-error>
-        <md-error *ngIf="hasError('max')">{{ 'FORM_VALIDATION.MAX_VALUE' | oTranslate }}: {{ getErrorValue('max', 'requiredMax') }}</md-error>
-        <md-error *ngIf="hasError('pattern')">{{ 'FORM_VALIDATION.FORMAT' | oTranslate }}</md-error>
-    </md-form-field>
-    
+<div fxLayout="row" fxLayoutAlign="space-between center" [formGroup]="getFormGroup()" [mdTooltip]="tooltip" [mdTooltipPosition]="tooltipPosition"
+  [mdTooltipShowDelay]="tooltipShowDelay">
+  <md-form-field #innerInputContainer fxFlexFill>
+    <input mdInput type="number" [attr.id]="getAttribute()" fxFill [formControlName]="getAttribute()" [placeholder]="placeHolder"
+      [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)" (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)"
+      [readonly]="isReadOnly" [min]="min" [max]="max" [step]="step">
+
+    <span class="icon-btn" [class.mat-disabled]="isDisabled" mdSuffix>%</span>
+    <md-error *ngIf="hasError('required')">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</md-error>
+    <md-error *ngIf="hasError('min')">{{ 'FORM_VALIDATION.MIN_VALUE' | oTranslate }}: {{ getErrorValue('min', 'requiredMin') }}</md-error>
+    <md-error *ngIf="hasError('max')">{{ 'FORM_VALIDATION.MAX_VALUE' | oTranslate }}: {{ getErrorValue('max', 'requiredMax') }}</md-error>
+    <md-error *ngIf="hasError('pattern')">{{ 'FORM_VALIDATION.FORMAT' | oTranslate }}</md-error>
+  </md-form-field>
+
 </div>

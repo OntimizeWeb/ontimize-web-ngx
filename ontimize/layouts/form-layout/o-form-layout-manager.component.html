@@ -1,0 +1,7 @@
+<o-form-layout-tabgroup #tabGroup [title]="title" *ngIf="isTabMode(); else elseBlock">
+  <ng-content *ngTemplateOutlet="elseBlock"></ng-content>
+</o-form-layout-tabgroup>
+
+<ng-template #elseBlock>
+  <ng-content></ng-content>
+</ng-template>

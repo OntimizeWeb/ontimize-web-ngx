@@ -1,0 +1,33 @@
+<md-toolbar color="primary" class="mat-elevation-z5">
+  <span>{{ 'TABLE.BUTTONS.FILTER_BY_COLUMN' | oTranslate }} : {{ attr | oTranslate }}</span>
+</md-toolbar>
+
+<div md-dialog-content class="dialog-list-container">
+
+  <div fxLayout="column" fxFill class="content-wrapper">
+
+    <md-form-field fxFlexFill fxFlex class="vertical-padding-16">
+      <input mdInput #filter placeholder="{{'TABLE.FILTER' | oTranslate}}">
+      <span class="icon-btn" mdPrefix fxFlexLayout="flex-end">
+        <i class="material-icons">search</i>
+      </span>
+    </md-form-field>
+
+    <md-checkbox (change)="onSelectAllChange($event)" [checked]="areAllSelected()" [indeterminate]="isIndeterminate()">
+      {{ 'TABLE.FILTER_BY_COLUMN.CHECK_ALL' | oTranslate }}
+    </md-checkbox>
+
+    <md-list>
+      <md-list-item fxFill *ngFor="let record of listData">
+        <md-checkbox (change)="record.selected = $event.checked" [checked]="record.selected">
+          {{ record.value || ('TABLE.FILTER_BY_COLUMN.EMPTY_VALUE' | oTranslate)}}
+        </md-checkbox>
+      </md-list-item>
+    </md-list>
+
+  </div>
+</div>
+<md-dialog-actions align="end">
+  <button md-button class="mat-primary" [md-dialog-close]="false">{{ 'CANCEL' | oTranslate | uppercase}}</button>
+  <button md-button class="mat-primary" [md-dialog-close]="true">{{ 'ACCEPT' | oTranslate | uppercase }}</button>
+</md-dialog-actions>

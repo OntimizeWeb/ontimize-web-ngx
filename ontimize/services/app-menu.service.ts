@@ -5,13 +5,13 @@ import {
 
 import { AppConfig } from '../config/app-config';
 
-export type MenuRootItem = (MenuGroup | MenuItem | MenuItemRoute | MenuItemAction | MenuItemLocale | MenuItemLogout);
+export type MenuRootItem = (MenuGroup | MenuItemRoute | MenuItemAction | MenuItemLocale | MenuItemLogout | MenuItemUserInfo);
 
 export interface MenuGroup {
   id: string;
   name: string;
   icon?: string;
-  items: (MenuItem | MenuItemRoute | MenuItemAction | MenuItemLocale | MenuItemLogout)[];
+  items: (MenuItemRoute | MenuItemAction | MenuItemLocale | MenuItemLogout | MenuItemUserInfo)[];
   opened?: boolean;
 }
 
@@ -19,6 +19,9 @@ export interface MenuItem {
   id: string;
   name: string;
   icon?: string;
+  image?: string;
+  component?: any;
+  'component-inputs'?: Object;
 }
 
 export interface MenuItemRoute extends MenuItem {
@@ -39,6 +42,10 @@ export interface MenuItemLogout extends MenuItem {
   confirm: string;
 }
 
+export interface MenuItemUserInfo extends MenuItem {
+  user: string;
+  avatar: string;
+}
 
 @Injectable()
 export class AppMenuService {
@@ -90,6 +97,9 @@ export class AppMenuService {
       case ((item as MenuItemLocale).locale !== undefined):
         type = 'locale';
         break;
+      case ((item as MenuItemUserInfo).user !== undefined):
+        type = 'user-info';
+        break;
       case ((item as MenuGroup).items !== undefined):
         type = 'group';
         break;
@@ -98,6 +108,10 @@ export class AppMenuService {
         break;
     }
     return type;
+  }
+
+  isMenuGroup(item: MenuRootItem): boolean {
+    return this.getMenuItemType(item) === 'group';
   }
 
   private getMenuItems(item: MenuRootItem): MenuItem[] {

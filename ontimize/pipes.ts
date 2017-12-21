@@ -5,3 +5,4 @@ export * from './pipes/o-integer.pipe';
 export * from './pipes/o-real.pipe';
 export * from './pipes/o-moment.pipe';
 export * from './pipes/o-currency.pipe';
+export * from './pipes/o-percentage.pipe';

@@ -15,13 +15,16 @@ import {
   OBarMenuItemModule,
   OLocaleBarMenuItemModule,
   OBarMenuSeparatorModule,
+  OBreadcrumbModule,
   OButtonModule,
   OCheckboxModule,
   OComboModule,
   OColumnModule,
   ORowModule,
   ODialogModule,
+  OSnackBarModule,
   OFormModule,
+  OFormContainerModule,
   OImageModule,
   OCurrencyInputModule,
   ODateInputModule,
@@ -49,16 +52,13 @@ import {
   OSideMenuItemModule,
   OLocaleSideMenuItemModule,
   OSideMenuSeparatorModule,
-  OAppHeaderModule,
-  OAppSidenavImageModule,
-  OAppSidenavMenuItemModule,
-  OAppSidenavMenuGroupModule,
-  OAppSidenavModule,
-  OUserInfoModule
+  OUserInfoModule,
+  OLanguageSelectorModule
 } from '../components';
 
 import {
-  OAppLayoutModule
+  OAppLayoutModule,
+  OFormLayoutManagerModule
 } from '../layouts';
 
 import { OSharedModule } from '../shared';
@@ -75,13 +75,16 @@ export const INTERNAL_ONTIMIZE_MODULES_EXPORTED: any = [
   OBarMenuItemModule,
   OLocaleBarMenuItemModule,
   OBarMenuSeparatorModule,
+  OBreadcrumbModule,
   OButtonModule,
   OCheckboxModule,
   OComboModule,
   OColumnModule,
   ORowModule,
   ODialogModule,
+  OSnackBarModule,
   OFormModule,
+  OFormContainerModule,
   OImageModule,
   OCurrencyInputModule,
   ODateInputModule,
@@ -109,13 +112,10 @@ export const INTERNAL_ONTIMIZE_MODULES_EXPORTED: any = [
   OSideMenuItemModule,
   OLocaleSideMenuItemModule,
   OSideMenuSeparatorModule,
-  OAppHeaderModule,
-  OAppSidenavImageModule,
-  OAppSidenavMenuItemModule,
-  OAppSidenavMenuGroupModule,
-  OAppSidenavModule,
   OAppLayoutModule,
-  OUserInfoModule
+  OFormLayoutManagerModule,
+  OUserInfoModule,
+  OLanguageSelectorModule
 ];
 
 // AoT requires an exported function for factories
@@ -144,13 +144,16 @@ export const INTERNAL_ONTIMIZE_MODULES: any = [
   OBarMenuItemModule,
   OLocaleBarMenuItemModule,
   OBarMenuSeparatorModule,
+  OBreadcrumbModule,
   OButtonModule,
   OCheckboxModule,
   OComboModule,
   OColumnModule,
   ORowModule,
   ODialogModule,
+  OSnackBarModule,
   OFormModule,
+  OFormContainerModule,
   OImageModule,
   OCurrencyInputModule,
   ODateInputModule,
@@ -178,13 +181,10 @@ export const INTERNAL_ONTIMIZE_MODULES: any = [
   OSideMenuItemModule,
   OLocaleSideMenuItemModule,
   OSideMenuSeparatorModule,
-  OAppHeaderModule,
-  OAppSidenavImageModule,
-  OAppSidenavMenuItemModule,
-  OAppSidenavMenuGroupModule,
-  OAppSidenavModule,
   OAppLayoutModule,
-  OUserInfoModule
+  OFormLayoutManagerModule,
+  OUserInfoModule,
+  OLanguageSelectorModule
 ];
 
 @NgModule({

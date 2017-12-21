@@ -1,0 +1,54 @@
+.o-form-container-breadcrumb {
+  .o-breadcrumb {
+    position: fixed;
+    z-index: 100;
+    top:0;
+    padding-top:8px;
+    padding-left:16px;
+    padding-right:16px;
+    background: #eeeeee;
+
+    left: 0;
+    right: 16px;
+  }
+  .o-form form.inner-form{
+    top:42px;
+  }
+  /*.o-form form.inner-form{
+      top:42px;
+  }*/
+
+  o-form-toolbar:not(.o-form-toolbar-floating) + form.inner-form {
+      top: 112px;
+  }
+
+  o-form-toolbar {
+    padding:8px;
+
+    &.o-form-toolbar-floating{
+      padding:8px 16px;
+      top:60px;
+    }
+  }
+  o-form-toolbar:not(.o-form-toolbar-floating){
+    margin-top:50px;
+  }
+}
+
+.application-layout-content-wrapper {
+
+  // .o-form-container-breadcrumb {
+  //   .o-breadcrumb {
+  //   }
+  // }
+
+
+  .o-form-container o-form-toolbar.o-form-toolbar-floating {
+    top: 0px;
+  }
+  &.header-layout {
+    .o-form-container o-form-toolbar.o-form-toolbar-floating {
+      top: 56px;
+    }
+  }
+}

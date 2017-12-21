@@ -28,16 +28,22 @@ export class LocalStorageService {
     );
   }
 
-  getComponentStorage(comp: ILocalStorageComponent): Object {
+  getComponentStorage(comp: ILocalStorageComponent, useRouteOnKey: boolean = true): Object {
     var componentKey = comp.getComponentKey();
-    var completeKey = componentKey + '_' + this._router.url;
+    var completeKey = componentKey;
+    if (useRouteOnKey) {
+      completeKey += '_' + this._router.url;
+    }
     return this.getAppComponentData(completeKey) || {};
   }
 
-  updateComponentStorage(comp: ILocalStorageComponent) {
+  updateComponentStorage(comp: ILocalStorageComponent, useRouteOnKey: boolean = true) {
     var dataToStore = comp.getDataToStore();
     var componentKey = comp.getComponentKey();
-    var completeKey = componentKey + '_' + this._router.url;
+    var completeKey = componentKey;
+    if (useRouteOnKey) {
+      completeKey += '_' + this._router.url;
+    }
 
     let storedObject = this.getAppComponentData(completeKey) || {};
 
