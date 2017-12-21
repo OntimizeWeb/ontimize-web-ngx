@@ -1,4 +1,4 @@
-## 2.1.0-rc.2
+## 2.1.0-rc.2 (2017-12-21)
 
 ### Features
 * **o-table-button**: adding '*icon-position*' input ([66f0acb](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/66f0acb))
