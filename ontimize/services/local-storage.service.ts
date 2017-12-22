@@ -45,15 +45,18 @@ export class LocalStorageService {
       completeKey += '_' + this._router.url;
     }
 
-    let storedObject = this.getAppComponentData(completeKey) || {};
+    //let storedObject = this.getAppComponentData(completeKey) || {};
+    let storedObject = {};
 
     for (var prop in dataToStore) {
       if (dataToStore.hasOwnProperty(prop)) {
         storedObject[prop] = dataToStore[prop];
       }
     }
+
     this.updateAppComponentsStorage(completeKey, storedObject);
   }
+
 
   private getAppComponentData(key: string): Object {
     let componentData = undefined;

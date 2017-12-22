@@ -3,18 +3,8 @@
   <div class="mat-toolbar-tools" fxFill>
     <md-icon aria-label="Back" (click)="onCloseDetail()" *ngIf="isDetail">arrow_back</md-icon>
 
-    <button md-button (click)="onUndoLastChange()" [disabled]="isChangesStackEmpty" *ngIf="showUndoButton">
-      <md-icon>undo</md-icon>
-      <span *ngIf="showHeaderActionsText">{{ 'UNDO' | oTranslate }}</span>
-    </button>
-
-    <ng-container *ngIf="showNavigation">
-      <md-icon aria-label="First" (click)="first()" layout-padding>first_page</md-icon>
-      <md-icon aria-label="Previous" (click)="previous()" layout-padding>keyboard_arrow_left</md-icon>
-      <span>{{ numberOfRecords() }}</span>
-      <md-icon aria-label="Next" (click)="next()" layout-padding>keyboard_arrow_right</md-icon>
-      <md-icon aria-label="Last" (click)="last()" layout-padding>last_page</md-icon>
-    </ng-container>
+    <o-form-navigation #formNavigation *ngIf="showNavigation">
+    </o-form-navigation>
 
     <span *ngIf="getLabelHeaderAlign() === 'center' || getLabelHeaderAlign() === 'end'" class="fill-remaining"></span>
     <div *ngIf="labelHeader!=''" fxLayout="row" fxLayoutAlign="center center">
@@ -23,8 +13,14 @@
     <span *ngIf="getLabelHeaderAlign() === 'start' || getLabelHeaderAlign() === 'center'" class="fill-remaining"></span>
 
     <ng-content select="[o-custom-form-toolbar-buttons-wrapper]"></ng-content>
+    
+    <button md-button (click)="onUndoLastChange()" [disabled]="isChangesStackEmpty" *ngIf="showUndoButton">
+        <md-icon>undo</md-icon>
+        <span *ngIf="showHeaderActionsText">{{ 'UNDO' | oTranslate }}</span>
+    </button>
 
     <ng-container *ngIf="initialMode">
+     
       <button md-button (click)="onReload($event)" *ngIf="refreshBtnEnabled">
         <md-icon>autorenew</md-icon>
         <span *ngIf="showHeaderActionsText">{{ 'REFRESH' | oTranslate }}</span>

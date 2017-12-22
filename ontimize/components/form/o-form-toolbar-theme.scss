@@ -19,8 +19,14 @@
         color: mat-color($primary);
       }
 
+
       md-icon {
         color: mat-color($primary);
+      }
+      md-icon.mat-disabled{
+        color: mat-color($background, disabled-button);
+        cursor: initial;
+
       }
 
     }

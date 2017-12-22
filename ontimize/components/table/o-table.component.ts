@@ -73,6 +73,8 @@ import {
   OTableCellRendererPercentageComponent
 } from './column/cell-renderer/cell-renderer';
 
+import { OFormDataNavigation } from './../form/navigation/o-form.data.navigation.class';
+
 export const DEFAULT_INPUTS_O_TABLE = [
   ...OServiceComponent.DEFAULT_INPUTS_O_SERVICE_COMPONENT,
 
@@ -264,8 +266,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   @InputConverter()
   public paginationControls: boolean = true;
 
- // @HostBinding('class.o-table-fixed') @Input() fixHeaderFooter: boolean = false;
- @InputConverter() fixHeaderFooter: boolean = false;
+  // @HostBinding('class.o-table-fixed') @Input() fixHeaderFooter: boolean = false;
+  @InputConverter() fixHeaderFooter: boolean = false;
 
   public daoTable: OTableDao | null;
   public dataSource: OTableDataSource | null;
@@ -818,15 +820,39 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   handleClick(item: any) {
     ObservableWrapper.callEmit(this.onClick, item);
     if (this.oenabled && (this.detailMode === OServiceComponent.DETAIL_MODE_CLICK)) {
+      this.saveDataNavigationInLocalStorage();
       this.viewDetail(item);
     }
+  }
+
+  private saveDataNavigationInLocalStorage() {
+    //save data of the table in navigation-data in the localstorage
+    let navigationDataStorage = new OFormDataNavigation(this.injector);
+    navigationDataStorage.setDataToStore(this.getKeysValues());
   }
 
   handleDoubleClick(item: any) {
     ObservableWrapper.callEmit(this.onDoubleClick, item);
     if (this.oenabled && (this.detailMode === OServiceComponent.DETAIL_MODE_DBLCLICK)) {
+      this.saveDataNavigationInLocalStorage();
       this.viewDetail(item);
     }
+  }
+
+
+  protected getKeysValues(): any[] {
+    let data = this.getAllValues();
+    const _self = this;
+    return data.map(function (row, i, a) {
+      var obj = {};
+      _self.keysArray.map(function (key, i, a) {
+        if (row[key] !== undefined) {
+          obj[key] = row[key];
+        }
+      });
+
+      return obj;
+    });
   }
 
   onShowsSelects(event?) {
@@ -911,6 +937,10 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   getValue() {
     return this.dataSource.getCurrentData();
+  }
+
+  getAllValues() {
+    return this.dataSource.getCurrentAllData();
   }
 
   getRenderedValue() {

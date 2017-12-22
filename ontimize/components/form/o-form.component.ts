@@ -32,6 +32,7 @@ import { OFormCacheClass } from './cache/o-form.cache.class';
 import { CanDeactivateFormGuard, CanComponentDeactivate } from './guards/o-form-can-deactivate.guard';
 import { OFormNavigationClass } from './navigation/o-form.navigation.class';
 import { OFormContainerComponent } from './o-form-container.component';
+import { OFormLayoutManagerComponent } from '../../layouts';
 
 export const DEFAULT_INPUTS_O_FORM = [
   // show-header [boolean]: visibility of form toolbar. Default: yes.
@@ -101,7 +102,10 @@ export const DEFAULT_INPUTS_O_FORM = [
   'keysSqlTypes: keys-sql-types',
 
   // undo-button [string][yes|no|true|false]: Include undo button in form-toolbar. Default: true;
-  'undoButton: undo-button'
+  'undoButton: undo-button',
+   
+  //show-header-navigation [string][yes|no|true|false]: Include navigations buttons in form-toolbar. Default: true;
+  'showHeaderNavigation:show-header-navigation'
 ];
 
 export const DEFAULT_OUTPUTS_O_FORM = [
@@ -193,6 +197,9 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   protected keysSqlTypes: string;
   @InputConverter()
   undoButton: boolean = true;
+
+  @InputConverter()
+  showHeaderNavigation: boolean = true;
   /* end of inputs variables */
 
   /*parsed inputs variables */
@@ -1235,6 +1242,20 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   getFormToolbar(): OFormToolbarComponent {
     return this._formToolbar;
   }
+
+  getFormManager(): OFormLayoutManagerComponent {
+    return this.formNavigation.formLayoutManager;
+  }
+
+  getFormNavigation(): OFormNavigationClass {
+    return this.formNavigation;
+  }
+
+  setUrlParamsAndReload(val: Object) {
+    this.formNavigation.setUrlParams(val);
+    this._reloadAction(true);
+  }
+
 }
 
 @NgModule({
