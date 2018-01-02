@@ -1,0 +1,5 @@
+<div fxLayoutGap="30px" fxLayout="row" fxLayoutAlign="center center" fxFlexFill fxLayoutWrap>
+  <o-card-menu-item fxFlex="290px" *ngFor="let item of cardItems" button-text="GO_TO_MODULE" [route]="item.route" [title]="item.name"
+    [tooltip]="item.tooltip" [icon]="item.icon" [image]="item.image" [detail-component]="item.component" [detail-component-inputs]="item['component-inputs']">
+  </o-card-menu-item>
+</div>

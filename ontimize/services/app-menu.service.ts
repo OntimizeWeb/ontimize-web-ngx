@@ -18,6 +18,7 @@ export interface MenuGroup {
 export interface MenuItem {
   id: string;
   name: string;
+  tooltip?: string;
   icon?: string;
   image?: string;
   component?: any;
