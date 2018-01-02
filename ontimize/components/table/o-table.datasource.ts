@@ -74,6 +74,7 @@ export class OTableDataSource extends DataSource<any> {
       data = this.getColumnValueFilterData(data);
       data = this.getQuickFilterData(data);
       data = this.getSortedData(data);
+      this.filteredData = Object.assign([],data);
       this.resultsLength = data.length;
       data = this.getPaginationData(data);
       this.renderedData = data;
@@ -151,6 +152,10 @@ export class OTableDataSource extends DataSource<any> {
     return this.getData();
   }
 
+  getCurrentAllData(): any[] {
+    return this.getAllData();
+  }
+
   /**Return data of the visible columns of the table  rendering */
   getCurrentRendererData(): any[] {
     return this.getData(true);
@@ -171,6 +176,27 @@ export class OTableDataSource extends DataSource<any> {
       Object.keys(row).map(function (column, i, a) {
         self._tableOptions.columns.map(function (ocolumn: OColumn, i, a) {
           if (column === ocolumn.attr && ocolumn.visible) {
+            var key = column;
+            if (render && ocolumn.renderer && ocolumn.renderer.getCellData) {
+              obj[key] = ocolumn.renderer.getCellData(row[column]);
+            } else {
+              obj[key] = row[column];
+            }
+          }
+        });
+      });
+      return obj;
+    });
+  }
+  protected getAllData(render?: boolean) {
+    let self = this;
+
+    return this.filteredData.map(function (row, i, a) {
+      /** render each column*/
+      var obj = {};
+      Object.keys(row).map(function (column, i, a) {
+        self._tableOptions.columns.map(function (ocolumn: OColumn, i, a) {
+          if (column === ocolumn.attr) {
             var key = column;
             if (render && ocolumn.renderer && ocolumn.renderer.getCellData) {
               obj[key] = ocolumn.renderer.getCellData(row[column]);
@@ -362,7 +388,7 @@ export class OTableTotalDataSource extends DataSource<any> {
     let value = 0;
     if (data) {
       value = data.reduce(function (acumulator, currentValue, currentIndex) {
-        return acumulator + currentValue[column];
+        return acumulator + isNaN(currentValue[column])?0:currentValue[column];
       }, 0);
     }
     return value;
