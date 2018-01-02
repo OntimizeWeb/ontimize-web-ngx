@@ -1,3 +1,9 @@
+## 2.1.0-rc.3
+### Features
+* **o-card-menu-layout**: new '*o-card-menu-layout*' component ([1dbc1f8](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1dbc1f8))
+* **o-card-menu-item**: new '*o-card-menu-item*' component ([1dbc1f8](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1dbc1f8))
+
+
 ## 2.1.0-rc.2 (2017-12-21)
 
 ### Features
