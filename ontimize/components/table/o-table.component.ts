@@ -30,7 +30,7 @@ import { CdkTableModule } from '@angular/cdk/table';
 import { SelectionModel } from '@angular/cdk/collections';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
-import { MdDialog, MdSort, MdSortModule, MdTabGroup, MdTab, MdPaginatorModule, MdPaginatorIntl, MdPaginator, MdCheckboxChange } from '@angular/material';
+import { MdDialog, MdSort, MdTabGroup, MdTab, MdPaginatorIntl, MdPaginator, MdCheckboxChange } from '@angular/material';
 
 import {
   OTablePaginatorComponent,
@@ -193,6 +193,9 @@ export class OTableOptions {
 })
 
 export class OTableComponent extends OServiceComponent implements OnInit, OnDestroy, OnChanges {
+
+  public static DEFAULT_INPUTS_O_TABLE = DEFAULT_INPUTS_O_TABLE;
+  public static DEFAULT_OUTPUTS_O_TABLE = DEFAULT_OUTPUTS_O_TABLE;
 
   protected snackBarService: SnackBarService;
 
@@ -581,7 +584,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       });
     }
     let queryMethodName = this.pageable ? this.paginatedQueryMethod : this.queryMethod;
-    this.daoTable = new OTableDao(this.injector, this.service, this.entity, queryMethodName);
+    this.daoTable = new OTableDao(this.dataService, this.entity, queryMethodName);
 
     if (!this.paginator && this.paginationControls) {
       this.paginator = new OTablePaginatorComponent(this.injector, this);
@@ -1032,12 +1035,11 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     CommonModule,
     OSharedModule,
     CdkTableModule,
-    MdSortModule,
-    DragulaModule,
-    MdPaginatorModule
+    DragulaModule
   ],
   exports: [
     OTableComponent,
+    CdkTableModule,
     OTableButtonComponent,
     OTableOptionComponent,
     OTableColumnsFilterComponent,
