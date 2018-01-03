@@ -96,6 +96,7 @@ export class OCardMenuItemComponent implements OnInit, AfterViewInit, OnDestroy 
       this.translateServiceSubscription.unsubscribe();
     }
   }
+
   useImage(): boolean {
     return this.image !== undefined;
   }
@@ -124,8 +125,6 @@ export class OCardMenuItemComponent implements OnInit, AfterViewInit, OnDestroy 
   declarations: [OCardMenuItemComponent],
   imports: [OSharedModule, CommonModule],
   exports: [OCardMenuItemComponent]
-  // ,
-  // schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class OCardMenuItemModule {
 }

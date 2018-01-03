@@ -11,6 +11,7 @@
   .o-card-menu-item {
 
     background: mat-color($background, background);
+    border: 1px solid mat-color($primary, 0.17);
 
     .mat-button {
       color: mat-color($primary);
