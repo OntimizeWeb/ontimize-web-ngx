@@ -27,7 +27,7 @@ import { OSharedModule } from '../../shared';
 import { OServiceComponent } from '../o-service-component.class';
 import { CdkTableModule } from '@angular/cdk/table';
 
-import { SelectionModel } from '@angular/cdk/collections';
+import { SelectionModel, SelectionChange } from '@angular/cdk/collections';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { MdDialog, MdSort, MdTabGroup, MdTab, MdPaginatorIntl, MdPaginator, MdCheckboxChange } from '@angular/material';
@@ -144,13 +144,12 @@ export const DEFAULT_INPUTS_O_TABLE = [
 
 export const DEFAULT_OUTPUTS_O_TABLE = [
   'onClick',
-  'onDoubleClick'
-  // ,
-  // 'onRowSelected',
-  // 'onRowDeselected',
-  // 'onRowDeleted',
-  // 'onTableDataLoaded',
-  // 'onPaginatedTableDataLoaded'
+  'onDoubleClick',
+  'onRowSelected',
+  'onRowDeselected',
+  'onRowDeleted',
+  'onTableDataLoaded',
+  'onPaginatedTableDataLoaded'
 ];
 
 export class OColumn {
@@ -293,7 +292,14 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   public onClick: EventEmitter<any> = new EventEmitter();
   public onDoubleClick: EventEmitter<any> = new EventEmitter();
+  public onRowSelected: EventEmitter<any> = new EventEmitter();
+  public onRowDeselected: EventEmitter<any> = new EventEmitter();
+  public onRowDeleted: EventEmitter<any> = new EventEmitter();
+  public onTableDataLoaded: EventEmitter<any> = new EventEmitter();
+  public onPaginatedTableDataLoaded: EventEmitter<any> = new EventEmitter();
+
   protected selection = new SelectionModel<Element>(true, []);
+  protected selectionChangeSubscription: Subscription;
 
   oTableColumnsFilterComponent: OTableColumnsFilterComponent;
   public showFilterByColumnIcon: boolean = false;
@@ -333,6 +339,15 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
     // initialize params of the table
     this.initializeParams();
+
+    this.selectionChangeSubscription = this.selection.onChange.subscribe((selectionData: SelectionChange<any>) => {
+      if (selectionData && selectionData.added.length > 0) {
+        ObservableWrapper.callEmit(this.onRowSelected, selectionData.added);
+      }
+      if (selectionData && selectionData.removed.length > 0) {
+        ObservableWrapper.callEmit(this.onRowDeselected, selectionData.removed);
+      }
+    });
   }
 
   protected initTableAfterViewInit() {
@@ -353,6 +368,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     super.destroy();
     if (this.mdTabGroupChangeSubscription) {
       this.mdTabGroupChangeSubscription.unsubscribe();
+    }
+    if (this.selectionChangeSubscription) {
+      this.selectionChangeSubscription.unsubscribe();
     }
     if (this.querySubscription) {
       this.querySubscription.unsubscribe();
@@ -676,7 +694,10 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
             sqlTypes = res.sqlTypes;
           }
           this.setData(data, sqlTypes);
-
+          if (this.pageable) {
+            ObservableWrapper.callEmit(this.onPaginatedTableDataLoaded, data);
+          }
+          ObservableWrapper.callEmit(this.onTableDataLoaded, this.daoTable.data);
         }, err => {
           this.showDialogError(err, 'MESSAGES.ERROR_QUERY');
           //this.pendingQuery = false;
@@ -785,7 +806,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
             this.daoTable.removeQuery(this.deleteMethod, filters).subscribe(
               res => {
                 console.log('[OTable.remove]: response', res);
-                //ObservableWrapper.callEmit(this.onRowDeleted, this.selectedItems);
+                ObservableWrapper.callEmit(this.onRowDeleted, this.selectedItems);
               },
               error => {
                 this.showDialogError(error, 'MESSAGES.ERROR_DELETE');
