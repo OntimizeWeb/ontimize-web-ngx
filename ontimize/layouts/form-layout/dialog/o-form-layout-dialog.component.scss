@@ -32,8 +32,9 @@
       .o-form {
         .o-form-toolbar-floating {
           position: relative;
-          //top: 0px !important;
           background: transparent;
+          left:0;
+          right:0;
         }
         form.inner-form {
           position: relative;
