@@ -17,8 +17,7 @@ export interface IColumnValueFilter {
 
 @Component({
   selector: 'o-table-columns-filter',
-  templateUrl: './o-table-columns-filter.component.html',
-  styleUrls: ['./o-table-columns-filter.component.scss'],
+  template: ' ',
   inputs: DEFAULT_INPUTS_O_TABLE_COLUMN_FILTER,
   outputs: DEFAULT_OUTPUTS_O_TABLE_COLUMN_FILTER
 })
