@@ -30,7 +30,7 @@
   This changes are propagated to inner components ('*o-app-sidenav*', '*o-app-sidenav-image*', '*o-app-sidenav-menu-group*' and '*o-app-sidenav-menu-item*')
 * **o-table**: adding input *fixed-header*  ([a0601a6](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a0601a6))  ([a0601a6](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a0601a6)
 * **o-breadcrumb**: new breadcrumb component. It requires NavigationsService initialization on app start ([b5b60bd](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b5b60bd))
-* **o-form-container** : new form container *o-form-container*  ([3a394e3]) (https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3a394e3)) ([df81e2d]) (https://github.com/OntimizeWeb/ontimize-web-ngx/commit/df81e2d))
+* **o-form-container** : new form container *o-form-container*  ([3a394e3]) (https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3a394e3)) ([df81e2d]) (https://github.com/OntimizeWeb/ontimize-web-ngx/commit/df81e2d)) ([ab6fa09]) (https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ab6fa09)) ([7c3883e]) (https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7c3883e))
 
 ### Bug Fixes
 * **o-translate-service**: fixing *'getBrowserLang'* bug ([#138](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/138)) ([4a5d2e7](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4a5d2e7))

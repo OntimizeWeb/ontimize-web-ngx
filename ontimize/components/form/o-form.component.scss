@@ -7,13 +7,17 @@
   }
   position: relative;
 
-  .o-form-toolbar-floating {
-    position: fixed;
-    top: 0;
-    left: 0px;
-    right: 0px;
-    z-index: 100;
-    box-shadow: none;
+  o-form-toolbar {  
+    
+    &.o-form-toolbar-floating{
+      position:fixed;
+      box-shadow: none;
+      z-index: 100;
+      right: 24px;
+      left: 8px;
+
+    
+    }
   }
 
   .o-form-toolbar-floating-scrolled {
@@ -23,7 +27,7 @@
   form {
     &.inner-form {
       position: absolute;
-      top: 50px;
+      top: 58px;
       left: 0px;
       right: 0px;
 
