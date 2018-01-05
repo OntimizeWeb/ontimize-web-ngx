@@ -214,6 +214,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   public static VALUES_SEPARATOR = '=';
   public static TYPE_ASC_NAME = 'asc';
   public static TYPE_DESC_NAME = 'desc';
+  public static DEFAULT_INSERT_METHOD = 'insert';
+  public static DEFAULT_UPDATE_METHOD = 'update';
 
   @InputConverter()
   selectAllCheckbox: boolean = false;
@@ -256,6 +258,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   public daoTable: OTableDao | null;
   public dataSource: OTableDataSource | null;
+  protected insertMethod: string;
+  protected updateMethod: string;
   protected visibleColumns: string;
   protected sortColumns: string;
 
@@ -330,11 +334,10 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     if (this.columnFilterOption) {
       this.columnFilterOption.active = this.showFilterByColumnIcon;
     }
-    let queryArguments = this.getQueryArguments({});
     if (this.staticData) {
       this.daoTable.setDataArray(this.staticData);
     } else if (this.queryOnInit) {
-      this.queryData(queryArguments);
+      this.queryData(this.parentItem);
     }
   }
 
@@ -525,6 +528,13 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       this.columns.split(';').map(x => this.registerColumn(x));
     }
 
+    if (!this.insertMethod) {
+      this.insertMethod = OTableComponent.DEFAULT_INSERT_METHOD;
+    }
+    if (!this.updateMethod) {
+      this.updateMethod = OTableComponent.DEFAULT_UPDATE_METHOD;
+    }
+
     // Initializing quickFilter
     this._oTableOptions.filter = this.quickFilter;
     this._oTableOptions.filterCaseSensitive = this.filterCaseSensitive;
@@ -586,7 +596,13 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       });
     }
     let queryMethodName = this.pageable ? this.paginatedQueryMethod : this.queryMethod;
-    this.daoTable = new OTableDao(this.dataService, this.entity, queryMethodName);
+    const methods = {
+      query: queryMethodName,
+      update: this.updateMethod,
+      delete: this.deleteMethod,
+      insert: this.insertMethod
+    };
+    this.daoTable = new OTableDao(this.dataService, this.entity, methods);
 
     if (!this.paginator && this.paginationControls) {
       this.paginator = new OTablePaginatorComponent(this.injector, this);
@@ -787,20 +803,16 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
               filters.push(kv);
             });
 
-            this.daoTable.removeQuery(this.deleteMethod, filters).subscribe(
-              res => {
-                console.log('[OTable.remove]: response', res);
-                ObservableWrapper.callEmit(this.onRowDeleted, this.selectedItems);
-              },
-              error => {
-                this.showDialogError(error, 'MESSAGES.ERROR_DELETE');
-                console.log('[OTable.remove]: error', error);
-              },
-              () => {
-                console.log('[OTable.remove]: success');
-                this.reloadData();
-              }
-            );
+            this.daoTable.removeQuery(filters).subscribe(res => {
+              console.log('[OTable.remove]: response', res);
+              ObservableWrapper.callEmit(this.onRowDeleted, this.selectedItems);
+            }, error => {
+              this.showDialogError(error, 'MESSAGES.ERROR_DELETE');
+              console.log('[OTable.remove]: error', error);
+            }, () => {
+              console.log('[OTable.remove]: success');
+              this.reloadData();
+            });
           } else {
             // remove local
             this.deleteLocalItems();

@@ -11,7 +11,11 @@ export class OTableDao {
   get data(): any[] { return this.dataChange.value; }
   get sqlTypes(): Object { return this.sqlTypesChange.value; }
 
-  constructor(private dataService: any, private entity: string, private method: any) {
+  constructor(
+    private dataService: any,
+    private entity: string,
+    private methods: any) {
+
   }
 
   /**
@@ -19,12 +23,12 @@ export class OTableDao {
    */
   getQuery(queryArgs: any): Observable<any> {
     this.isLoadingResults = false;
-    return this.dataService[this.method].apply(this.dataService, queryArgs);
+    return this.dataService[this.methods.query].apply(this.dataService, queryArgs);
 
   }
 
-  removeQuery(deletedMethod: string, filters: any): Observable<any> {
-    return (Observable as any).from(filters).map(kv => this.dataService[deletedMethod](kv, this.entity)).mergeAll();
+  removeQuery(filters: any): Observable<any> {
+    return (Observable as any).from(filters).map(kv => this.dataService[this.methods.delete](kv, this.entity)).mergeAll();
   }
   /**
    * set data array and emit data has ben modified
