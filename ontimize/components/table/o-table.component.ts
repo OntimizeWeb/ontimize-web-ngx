@@ -1,18 +1,6 @@
 import {
-  Component,
-  OnInit,
-  OnDestroy,
-  OnChanges,
-  SimpleChange,
-  Inject,
-  Injector,
-  ElementRef,
-  forwardRef,
-  Optional,
-  NgModule,
-  ViewEncapsulation,
-  ViewChild,
-  EventEmitter
+  Component, OnInit, OnDestroy, OnChanges, SimpleChange, Inject, Injector, ElementRef, forwardRef,
+  Optional, NgModule, ViewEncapsulation, ViewChild, EventEmitter, ContentChildren, QueryList
 } from '@angular/core';
 
 import { DragulaModule } from 'ng2-dragula/ng2-dragula';
@@ -219,6 +207,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   @ViewChild('filter') filter: ElementRef;
   @ViewChild(MdSort) sort: MdSort;
   @ViewChild('columnFilterOption') columnFilterOption: OTableOptionComponent;
+  @ContentChildren(OTableOptionComponent) tableOptions: QueryList<OTableOptionComponent>;
 
   public static NAME_COLUMN_SELECT = 'select';
   public static TYPE_SEPARATOR = ':';
@@ -252,24 +241,18 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   @InputConverter()
   quickFilter: boolean = true;
-
   @InputConverter()
   filterCaseSensitive: boolean = false;
-
   @InputConverter()
   insertButton: boolean = true;
-
   @InputConverter()
   refreshButton: boolean = true;
-
   @InputConverter()
   deleteButton: boolean = true;
-
   @InputConverter()
-  public paginationControls: boolean = true;
-
-  // @HostBinding('class.o-table-fixed') @Input() fixHeaderFooter: boolean = false;
-  @InputConverter() fixHeaderFooter: boolean = false;
+  paginationControls: boolean = true;
+  @InputConverter()
+  fixHeaderFooter: boolean = false;
 
   public daoTable: OTableDao | null;
   public dataSource: OTableDataSource | null;
@@ -301,7 +284,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   protected selection = new SelectionModel<Element>(true, []);
   protected selectionChangeSubscription: Subscription;
 
-  oTableColumnsFilterComponent: OTableColumnsFilterComponent;
+  public oTableColumnsFilterComponent: OTableColumnsFilterComponent;
   public showFilterByColumnIcon: boolean = false;
   public showTotals: boolean = false;
 
@@ -339,15 +322,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
     // initialize params of the table
     this.initializeParams();
-
-    this.selectionChangeSubscription = this.selection.onChange.subscribe((selectionData: SelectionChange<any>) => {
-      if (selectionData && selectionData.added.length > 0) {
-        ObservableWrapper.callEmit(this.onRowSelected, selectionData.added);
-      }
-      if (selectionData && selectionData.removed.length > 0) {
-        ObservableWrapper.callEmit(this.onRowDeselected, selectionData.removed);
-      }
-    });
   }
 
   protected initTableAfterViewInit() {
@@ -528,6 +502,16 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     checkboxColumn.title = '';
     checkboxColumn.visible = false;
     this._oTableOptions.selectColumn = checkboxColumn;
+
+    // initializing row selection listener
+    this.selectionChangeSubscription = this.selection.onChange.subscribe((selectionData: SelectionChange<any>) => {
+      if (selectionData && selectionData.added.length > 0) {
+        ObservableWrapper.callEmit(this.onRowSelected, selectionData.added);
+      }
+      if (selectionData && selectionData.removed.length > 0) {
+        ObservableWrapper.callEmit(this.onRowDeselected, selectionData.removed);
+      }
+    });
 
     // if not declare visible-columns then visible-columns is all columns
     if (this.visibleColumns) {
@@ -1029,6 +1013,10 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     });
   }
 
+  get showTableMenuButton(): boolean {
+    const staticOpt = this.selectAllCheckbox || this.exportButton || this.columnsVisibilityButton || this.oTableColumnsFilterComponent !== undefined;
+    return staticOpt || this.tableOptions.length > 0;
+  }
 }
 
 @NgModule({
