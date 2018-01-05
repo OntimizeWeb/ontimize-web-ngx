@@ -173,7 +173,7 @@ export class OFormCacheClass {
   isInitialStateChanged(): boolean {
     let res = false;
     let initialKeys = Object.keys(this.initialDataCache);
-    let currentKeys = Object.keys(this.formDataCache);
+    let currentKeys = this.formDataCache ? Object.keys(this.formDataCache) : initialKeys;
     if (initialKeys.length !== currentKeys.length) {
       return true;
     }
