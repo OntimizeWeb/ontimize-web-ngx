@@ -97,9 +97,9 @@
 
       <md-header-row *cdkHeaderRowDef="[]" [style.display]="none"></md-header-row>
 
-      <md-row *cdkRowDef="let row; columns: oTableOptions.visibleColumns;" (click)="handleClick(row)" (dblclick)="handleDoubleClick(row)">
+      <md-row *cdkRowDef="let row; columns: oTableOptions.visibleColumns;" (click)="handleClick(row)" (dblclick)="handleDoubleClick(row)"
+        [oContextMenu]="tableContextMenu" [oContextMenuData]="row">
       </md-row>
-
 
     </md-table>
 
