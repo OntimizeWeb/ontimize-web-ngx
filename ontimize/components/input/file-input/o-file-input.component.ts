@@ -127,7 +127,7 @@ export class OFileInputComponent extends OFormDataComponent implements OnDestroy
   fileService: OntimizeFileService;
 
   @ViewChild('inputFile')
-  private inputFile: ElementRef;
+  inputFile: ElementRef;
 
   constructor(
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
