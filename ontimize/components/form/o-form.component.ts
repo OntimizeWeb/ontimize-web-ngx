@@ -104,7 +104,7 @@ export const DEFAULT_INPUTS_O_FORM = [
   // undo-button [string][yes|no|true|false]: Include undo button in form-toolbar. Default: true;
   'undoButton: undo-button',
    
-  //show-header-navigation [string][yes|no|true|false]: Include navigations buttons in form-toolbar. Default: true;
+  //show-header-navigation [string][yes|no|true|false]: Include navigations buttons in form-toolbar. Default: false;
   'showHeaderNavigation:show-header-navigation'
 ];
 
@@ -199,7 +199,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   undoButton: boolean = true;
 
   @InputConverter()
-  showHeaderNavigation: boolean = true;
+  showHeaderNavigation: boolean = false;
   /* end of inputs variables */
 
   /*parsed inputs variables */
