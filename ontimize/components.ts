@@ -9,6 +9,7 @@ export * from './components/checkbox/o-checkbox.component';
 export * from './components/combo/o-combo.component';
 export * from './components/container/column/o-column.component';
 export * from './components/container/row/o-row.component';
+export * from './components/contextmenu/o-context-menu.module';
 export * from './components/dialog/o-dialog.component';
 export * from './components/snackbar/o-snackbar.component';
 export * from './components/form/o-form.component';
