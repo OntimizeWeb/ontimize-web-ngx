@@ -3,7 +3,9 @@
 * **o-card-menu-layout**: new '*o-card-menu-layout*' component ([1dbc1f8](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1dbc1f8))
 * **o-card-menu-item**: new '*o-card-menu-item*' component ([1dbc1f8](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1dbc1f8))
 * **o-table** : adding '*onRowSelected*', '*onRowDeselected*', '*onRowDeleted*', '*onTableDataLoaded*' and '*onPaginatedTableDataLoaded*' outputs ([6982984](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6982984))
-
+* **o-context-menu**: new '*o-context-menu*' component and '*oContextMenu*' directive for attaching a context menu to DOM elements ([c838095](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c838095))
+* **o-table-context-menu**: new '*o-table-context-menu*' component for attaching a context menu to '*o-table*' rows ([5658b83](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5658b83))
+* **o-table-column-calculated**: adding posibility to add calculated columns ([5e4aacd](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5e4aacd))
 
 ## 2.1.0-rc.2 (2017-12-21)
 

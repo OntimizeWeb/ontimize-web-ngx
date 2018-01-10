@@ -50,7 +50,12 @@ export const DEFAULT_INPUTS_O_TABLE_COLUMN = [
   'breakWord:break-word',
 
   // async-load [no|yes|true|false]: asynchronous query. Default: no
-  'asyncLoad : async-load'
+  'asyncLoad : async-load',
+
+  ...OTableCellRendererBooleanComponent.DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_BOOLEAN,
+  ...OTableCellRendererCurrencyComponent.DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_CURRENCY, // includes Integer and Real
+  ...OTableCellRendererDateComponent.DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_DATE,
+  ...OTableCellRendererImageComponent.DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_IMAGE,
 ];
 
 
@@ -59,17 +64,16 @@ export const DEFAULT_INPUTS_O_TABLE_COLUMN = [
   templateUrl: './o-table-column.component.html',
   styleUrls: ['./o-table-column.component.scss'],
   inputs: [
-    ...DEFAULT_INPUTS_O_TABLE_COLUMN,
-    ...OTableCellRendererBooleanComponent.DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_BOOLEAN,
-    ...OTableCellRendererCurrencyComponent.DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_CURRENCY, // includes Integer and Real
-    ...OTableCellRendererDateComponent.DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_DATE,
-    ...OTableCellRendererImageComponent.DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_IMAGE,
+    ...DEFAULT_INPUTS_O_TABLE_COLUMN
   ],
+
   host: {
     '[class.columnBreakWord]': 'breakWord'
   }
 })
 export class OTableColumnComponent implements OnInit {
+
+  //public static DEFAULT_INPUTS_O_TABLE_COLUMN = DEFAULT_INPUTS_O_TABLE_COLUMN;
 
   public type: string;
   public renderer: any;
@@ -114,7 +118,7 @@ export class OTableColumnComponent implements OnInit {
 
   constructor(
     @Inject(forwardRef(() => OTableComponent)) public table: OTableComponent,
-    private resolver: ComponentFactoryResolver,
+    protected resolver: ComponentFactoryResolver,
     protected injector: Injector) {
     this.table = table;
   }
