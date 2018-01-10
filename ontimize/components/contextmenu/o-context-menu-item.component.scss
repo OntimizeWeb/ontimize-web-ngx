@@ -1,0 +1,24 @@
+.o-context-menu-item {
+  a {
+    text-decoration: none;
+    display: block;
+    padding: 3px 12px 3px 0;
+    clear: both;
+    line-height: 1.42857143;
+    color: #333333;
+    white-space: nowrap;
+  }
+
+  md-icon {
+    padding: 0 3px;
+  }
+}
+
+.o-context-menu-item.disabled a {
+  color: #BDBDBD;
+}
+
+.o-context-menu-item.active,
+.o-context-menu-item:hover:not(.disabled) {
+  background: #E0E0E0;
+}

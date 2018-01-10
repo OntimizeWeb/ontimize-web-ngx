@@ -1,0 +1,10 @@
+<ng-template #templateref>
+  <div class="o-context-menu-item" [class.disabled]="disabled" [class.active]="isActive && !disabled">
+    <a fxFlex href (click)="onClick($event)">
+      <div fxLayout="row" fxLayoutAlign="start center">
+        <md-icon>{{ icon }}</md-icon>
+        <span>{{ label | oTranslate }}</span>
+      </div>
+    </a>
+  </div>
+</ng-template>
