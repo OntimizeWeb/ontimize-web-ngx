@@ -1,4 +1,4 @@
-import { ComponentRef, ElementRef, Injectable, QueryList } from '@angular/core';
+import { ComponentRef, ElementRef, Injectable } from '@angular/core';
 import { Overlay, OverlayRef, ScrollStrategyOptions } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
 import { Subject } from 'rxjs/Subject';
@@ -16,7 +16,7 @@ export interface IOContextMenuClickEvent {
 }
 
 export interface IOContextMenuContext extends IOContextMenuClickEvent {
-  menuItems?: QueryList<OContextMenuItemComponent>;
+  menuItems?: OContextMenuItemComponent[];
 }
 
 @Injectable()
@@ -83,7 +83,7 @@ export class OContextMenuService {
   protected attachContextMenu(overlay: OverlayRef, context: IOContextMenuContext): void {
     const contextMenuContent: ComponentRef<OContextMenuContentComponent> = overlay.attach(new ComponentPortal(OContextMenuContentComponent));
     contextMenuContent.instance.overlay = overlay;
-    contextMenuContent.instance.menuItems = context.menuItems.toArray();
+    contextMenuContent.instance.menuItems = context.menuItems;
     contextMenuContent.instance.data = context.data;
 
     const subscriptions: Subscription = new Subscription();

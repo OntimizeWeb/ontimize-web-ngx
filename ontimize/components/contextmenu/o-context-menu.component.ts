@@ -1,4 +1,4 @@
-import { Component, ContentChildren, Injector, OnDestroy, OnInit, QueryList } from '@angular/core';
+import { Component, ContentChildren, Injector, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 
 import { OContextMenuService, IOContextMenuContext } from './o-context-menu.service';
@@ -10,7 +10,7 @@ import { OContextMenuItemComponent } from './o-context-menu-item.component';
 })
 export class OContextMenuComponent implements OnDestroy, OnInit {
 
-  @ContentChildren(OContextMenuItemComponent) public oContextMenuItems: QueryList<OContextMenuItemComponent>;
+  @ContentChildren(OContextMenuItemComponent) public oContextMenuItems: OContextMenuItemComponent[];
 
   public oContextMenuService: OContextMenuService;
   protected subscription: Subscription = new Subscription();
@@ -33,7 +33,11 @@ export class OContextMenuComponent implements OnDestroy, OnInit {
     if (params.contextMenu !== this) {
       return;
     }
-    params.menuItems = this.oContextMenuItems;
+    if (params.data) {
+      params.menuItems = this.oContextMenuItems.filter(menuItem => menuItem.visible instanceof Function ? menuItem.visible(params.data) : menuItem.visible);
+    } else {
+      params.menuItems = this.oContextMenuItems;
+    }
     this.oContextMenuService.openContextMenu(params);
   }
 
