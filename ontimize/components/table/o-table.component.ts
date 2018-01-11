@@ -25,7 +25,8 @@ import {
   OTableMdPaginatorIntl,
   OTableColumnAggregateComponent,
   OTableAggregateComponent,
-  OColumnAggregate
+  OColumnAggregate,
+  AggregateFunction
 } from './extensions/footer/o-table-footer-components';
 
 import { OTableDataSource } from './o-table.datasource';
@@ -37,10 +38,8 @@ import {
 } from './extensions/header/o-table-header-components';
 
 import { OTableColumnComponent } from './column/o-table-column.component';
-
 import { Util } from '../../util/util';
 import { ObservableWrapper } from '../../util/async';
-
 import { OFormValue } from '../form/OFormValue';
 
 import {
@@ -61,7 +60,17 @@ import {
   OTableCellRendererPercentageComponent
 } from './column/cell-renderer/cell-renderer';
 
+
+import {
+  OTableColumnCalculatedComponent,
+  OperatorFunction
+} from './column/calculated/o-table-column-calculated.component';
+
 import { OFormDataNavigation } from './../form/navigation/o-form.data.navigation.class';
+import { OTableContextMenuComponent } from './extensions/contextmenu/o-table-context-menu.component';
+import { OContextMenuComponent } from '../contextmenu/o-context-menu-components';
+import { OContextMenuModule } from '../contextmenu/o-context-menu.module';
+
 
 export const DEFAULT_INPUTS_O_TABLE = [
   ...OServiceComponent.DEFAULT_INPUTS_O_SERVICE_COMPONENT,
@@ -151,7 +160,8 @@ export class OColumn {
   visible: boolean;
   renderer: any;
   width: string;
-  aggregate: OColumnAggregate;
+  aggregate:  string | AggregateFunction;
+  calculate:  string | OperatorFunction;
 }
 
 export class OTableOptions {
@@ -208,6 +218,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   @ViewChild(MdSort) sort: MdSort;
   @ViewChild('columnFilterOption') columnFilterOption: OTableOptionComponent;
   @ContentChildren(OTableOptionComponent) tableOptions: QueryList<OTableOptionComponent>;
+
+  public tableContextMenu: OContextMenuComponent;
 
   public static NAME_COLUMN_SELECT = 'select';
   public static TYPE_SEPARATOR = ':';
@@ -380,6 +392,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     //this.paginator.pageSize = this.rowQuery || this.paginator.pageSize;
   }
 
+  registerContextMenu(value: OContextMenuComponent): void {
+    this.tableContextMenu = value;
+  }
 
   /**
    * Store all columns and properties in var columnsArray
@@ -424,6 +439,10 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
         colDef.className += column.class;
       }
 
+      if (typeof column.operation !== 'undefined' || typeof column.functionOperation !== 'undefined') {
+        colDef.calculate =  column.operation?column.operation:column.functionOperation;
+      }
+
     }
     colDef.visible = (this.visibleColumns.indexOf(colDef.attr) !== -1);
     if (column.asyncLoad) {
@@ -460,7 +479,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
     if (alreadyExisting.length === 1) {
       var replacingIndex = this._oTableOptions.columns.indexOf(alreadyExisting[0]);
-      this._oTableOptions.columns[replacingIndex].aggregate = column;
+      this._oTableOptions.columns[replacingIndex].aggregate = column.operator;
     }
 
   }
@@ -1050,13 +1069,16 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     OTableColumnsFilterComponent,
     OTablePaginatorComponent,
     OTableColumnAggregateComponent,
-    OTableAggregateComponent
+    OTableAggregateComponent,
+    OTableColumnCalculatedComponent,
+    OTableContextMenuComponent
   ],
   imports: [
     CommonModule,
     OSharedModule,
     CdkTableModule,
-    DragulaModule
+    DragulaModule,
+    OContextMenuModule
   ],
   exports: [
     OTableComponent,
@@ -1073,7 +1095,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     OTableCellRendererCurrencyComponent,
     OTableCellRendererPercentageComponent,
     OTablePaginatorComponent,
-    OTableColumnAggregateComponent
+    OTableColumnAggregateComponent,
+    OTableColumnCalculatedComponent,
+    OTableContextMenuComponent
   ],
   entryComponents: [
     OTableCellRendererDateComponent,
@@ -1086,7 +1110,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     OTableExportDialogComponent,
     OTableVisibleColumnsDialogComponent,
     OTableFilterByColumnDataDialogComponent,
-    OTableColumnAggregateComponent
+    OTableColumnAggregateComponent,
+    OTableContextMenuComponent
   ],
   providers: [{
     provide: MdPaginatorIntl,

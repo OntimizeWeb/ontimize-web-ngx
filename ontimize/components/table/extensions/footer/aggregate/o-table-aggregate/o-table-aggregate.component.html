@@ -9,7 +9,7 @@
                  <!-- <div class="title" *ngIf="column.aggregate && column.aggregate.title">-->
                      {{ row[column.name] }}
             </ng-container>
-            <ng-template *ngIf="column.renderer" [ngTemplateOutlet]="column.renderer.templateref" [ngOutletContext]="{cellvalue: row[column.name]}"></ng-template>
+            <ng-template *ngIf="column.renderer && column.aggregate" [ngTemplateOutlet]="column.renderer.templateref" [ngOutletContext]="{cellvalue: row[column.name]}"></ng-template>
         </md-cell>
     </ng-container>
 

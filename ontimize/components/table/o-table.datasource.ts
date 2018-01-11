@@ -13,6 +13,7 @@ import 'rxjs/add/observable/fromEvent';
 import { OTableAggregateComponent } from './extensions/footer/o-table-footer-components';
 
 export class OTableDataSource extends DataSource<any> {
+
   dataTotalsChange = new BehaviorSubject<any[]>([]);
   get data(): any[] { return this.dataTotalsChange.value; }
 
@@ -74,7 +75,8 @@ export class OTableDataSource extends DataSource<any> {
       data = this.getColumnValueFilterData(data);
       data = this.getQuickFilterData(data);
       data = this.getSortedData(data);
-      this.filteredData = Object.assign([],data);
+      data = this.getColumnCalculatedData(data);
+      this.filteredData = Object.assign([], data);
       this.resultsLength = data.length;
       data = this.getPaginationData(data);
       this.renderedData = data;
@@ -85,6 +87,44 @@ export class OTableDataSource extends DataSource<any> {
       //this.resultsLength = this.renderedData.length;
       return this.renderedData;
     });
+  }
+
+  /**
+   * Method that get value the columns calculated
+   * @param data data of the database
+   */
+  getColumnCalculatedData(data: any[]): any[] {
+    let self = this;
+
+    return data.map(function (row) {
+      self._tableOptions.columns.map(function (ocolumn: OColumn) {
+
+        if (ocolumn.visible && ocolumn.calculate) {
+          var key = ocolumn.attr;
+          let operator_calculated = ocolumn.calculate;
+          let value;
+          if (typeof operator_calculated === 'string') {
+            value = self.transformFormula(ocolumn.calculate, row);
+          } else {
+            if (typeof operator_calculated === 'function') {
+              value = operator_calculated(row);
+            }
+          }
+          row[key] = isNaN(value) ? 0 : value;
+        }
+      });
+      return row;
+    });
+  }
+
+  protected transformFormula(formula, row): string {
+    //1. replace columns by values of row
+    this._tableOptions.visibleColumns.map(function (column) {
+      formula = formula.replace(column, row[column]);
+    });
+    return (new Function('return ' + formula))();
+    //return eval(formula);
+    //return `${formula}`;
   }
 
   getQuickFilterData(data: any[]): any[] {
@@ -336,8 +376,10 @@ export class OTableTotalDataSource extends DataSource<any> {
 
     this._tableOptions.columns.map(function (column, i) {
       let totalValue: number = 0;
-      if (column.aggregate) {
+      if (column.aggregate && column.visible) {
         totalValue = self.calculateAggregate(data, column);
+      } else {
+        return '';
       }
       var key = column.attr;
       if (totalValue > 0) {
@@ -349,13 +391,13 @@ export class OTableTotalDataSource extends DataSource<any> {
       return obj;
     });
     return new Array(obj);
-    //return data[0];
+
   }
 
 
   calculateAggregate(data: any[], column: OColumn): any {
     let resultAggregate;
-    let operator = column.aggregate.operator;
+    let operator = column.aggregate;
     if (typeof operator === 'string') {
 
       switch (operator.toLowerCase()) {
@@ -387,9 +429,10 @@ export class OTableTotalDataSource extends DataSource<any> {
   sum(column, data): number {
     let value = 0;
     if (data) {
-      value = data.reduce(function (acumulator, currentValue, currentIndex) {
-        return acumulator + isNaN(currentValue[column])?0:currentValue[column];
-      }, 0);
+      value = data.reduce(function (acumulator, currentValue) {
+        console.log(acumulator, currentValue[column]);
+        return acumulator + (isNaN(currentValue[column]) ? 0 : currentValue[column]);
+      }, value);
     }
     return value;
   }
