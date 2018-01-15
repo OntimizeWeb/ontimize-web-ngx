@@ -22,7 +22,7 @@ import 'rxjs/add/observable/combineLatest';
 import { dataServiceFactory } from '../../services/data-service.provider';
 import { OntimizeService, DialogService, NavigationService, SnackBarService } from '../../services';
 import { InputConverter } from '../../decorators';
-import { IFormControlComponent, IFormDataTypeComponent } from '../o-form-data-component.class';
+import { IFormDataTypeComponent, IFormDataComponent } from '../o-form-data-component.class';
 import { IComponent } from '../o-component.class';
 import { OFormToolbarModule, OFormToolbarComponent } from './o-form-toolbar.component';
 import { OFormValue } from './OFormValue';
@@ -103,7 +103,7 @@ export const DEFAULT_INPUTS_O_FORM = [
 
   // undo-button [string][yes|no|true|false]: Include undo button in form-toolbar. Default: true;
   'undoButton: undo-button',
-   
+
   //show-header-navigation [string][yes|no|true|false]: Include navigations buttons in form-toolbar. Default: false;
   'showHeaderNavigation:show-header-navigation'
 ];
@@ -271,6 +271,8 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     }
   }
 
+  protected ignoreFormCacheKeys: Array<any> = [];
+
   constructor(
     protected router: Router,
     protected actRoute: ActivatedRoute,
@@ -313,9 +315,11 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
       let attr = comp.getAttribute();
       if (attr && attr.length > 0) {
         this._components[attr] = comp;
+        if (!comp.isAutomaticRegistering()) {
+          return;
+        }
         // Setting parent key values...
-        if (this.formParentKeysValues &&
-          this.formParentKeysValues[attr] !== undefined) {
+        if (this.formParentKeysValues && this.formParentKeysValues[attr] !== undefined) {
           let val = this.formParentKeysValues[attr];
           this._components[attr].setValue(val);
         }
@@ -347,14 +351,18 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     }
   }
 
-  registerFormControlComponent(comp: IFormControlComponent) {
+  registerFormControlComponent(comp: IFormDataComponent) {
     if (comp) {
       let attr = comp.getAttribute();
       if (attr && attr.length > 0) {
         let control: FormControl = comp.getControl();
         if (control) {
           this.formGroup.registerControl(attr, control);
-          this.formCache.registerComponentCaching(attr, comp);
+          if (comp.isAutomaticRegistering()) {
+            this.formCache.registerComponentCaching(attr, comp);
+          } else {
+            this.ignoreFormCacheKeys.push(comp.getAttribute());
+          }
         }
       }
     }
@@ -363,14 +371,14 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   unregisterFormComponent(comp: IComponent) {
     if (comp) {
       let attr = comp.getAttribute();
-      if (attr && attr.length > 0) {
+      if (attr && attr.length > 0 && this._components.hasOwnProperty(attr)) {
         delete this._components[attr];
       }
     }
   }
 
-  unregisterFormControlComponent(comp: IFormControlComponent) {
-    if (comp) {
+  unregisterFormControlComponent(comp: IFormDataComponent) {
+    if (comp && comp.isAutomaticRegistering()) {
       let control: FormControl = comp.getControl();
       let attr = comp.getAttribute();
       if (control && attr && attr.length > 0) {
@@ -396,7 +404,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     }
   }
 
-  public getComponents(): Object {
+  getComponents(): Object {
     return this._components;
   }
 
@@ -751,7 +759,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
         Object.keys(self.formGroup.controls).forEach(control => {
           self.formGroup.controls[control].markAsPristine();
         });
-        self.formCache.initializeCache(self.formGroup.getRawValue());
+        self.formCache.initializeCache(self.getRegisteredFieldsValues());
         (self.formGroup.valueChanges as EventEmitter<any>).emit(self.formCache.getInitialDataCache());
         self.formNavigation.updateNavigation(self.formGroup.getRawValue());
       }
@@ -929,14 +937,15 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     }
     // add only the fields contained into the form...
     Object.keys(this._components).map(item => {
-      if (attributes.indexOf(item) < 0) {
+      if (attributes.indexOf(item) < 0 && this._components[item].isAutomaticRegistering()) {
         attributes.push(item);
       }
     });
 
     // add fields stored into form cache...
-    if (this.formCache.getDataCache()) {
-      Object.keys(this.formCache.getDataCache()).map(item => {
+    const dataCache = this.formCache.getDataCache();
+    if (dataCache) {
+      Object.keys(dataCache).map(item => {
         if (item !== undefined && attributes.indexOf(item) === -1) {
           attributes.push(item);
         }
@@ -971,7 +980,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     if (this.formParentKeysValues) {
       Object.assign(attrValues, this.formParentKeysValues);
     }
-    return Object.assign(attrValues, this.formGroup.value);
+    return Object.assign(attrValues, this.getRegisteredFieldsValues());
   }
 
   getAttributesSQLTypes(): Object {
@@ -1038,7 +1047,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     let values = {};
     const self = this;
     Object.keys(this.formGroup.controls).forEach(function (item) {
-      if (self.formGroup.controls[item].dirty === true) {
+      if (self.ignoreFormCacheKeys.indexOf(item) === -1 && self.formGroup.controls[item].dirty === true) {
         values[item] = self.formGroup.value[item];
         if (values[item] === undefined) {
           values[item] = null;
@@ -1256,6 +1265,13 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     this._reloadAction(true);
   }
 
+  getRegisteredFieldsValues() {
+    let valueCopy = Object.assign({}, this.formGroup.getRawValue());
+    for (let i = 0, len = this.ignoreFormCacheKeys.length; i < len; i++) {
+      delete valueCopy[this.ignoreFormCacheKeys[i]];
+    }
+    return valueCopy;
+  }
 }
 
 @NgModule({

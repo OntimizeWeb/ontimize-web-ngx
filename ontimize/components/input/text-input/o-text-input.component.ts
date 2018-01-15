@@ -19,23 +19,12 @@ import { OSharedModule } from '../../../shared';
 import { InputConverter } from '../../../decorators';
 import { OFormComponent } from '../../form/o-form.component';
 import { OFormValue } from '../../form/OFormValue';
-import { OFormDataComponent } from '../../o-form-data-component.class';
+import { OFormDataComponent, DEFAULT_INPUTS_O_FORM_DATA_COMPONENT } from '../../o-form-data-component.class';
 
 export const DEFAULT_INPUTS_O_TEXT_INPUT = [
-  'oattr: attr',
-  'olabel: label',
-  'tooltip',
-  'tooltipPosition: tooltip-position',
-  'tooltipShowDelay: tooltip-show-delay',
-  'data',
-  'autoBinding: automatic-binding',
-  'oenabled: enabled',
-  'orequired: required',
+  ...DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,
   'minLength: min-length',
-  'maxLength: max-length',
-
-  // sqltype[string]: Data type according to Java standard. See SQLType ngClass. Default: 'OTHER'
-  'sqlType: sql-type'
+  'maxLength: max-length'
 ];
 
 export const DEFAULT_OUTPUTS_O_TEXT_INPUT = [
@@ -48,12 +37,8 @@ export const DEFAULT_OUTPUTS_O_TEXT_INPUT = [
   selector: 'o-text-input',
   templateUrl: './o-text-input.component.html',
   styleUrls: ['./o-text-input.component.scss'],
-  inputs: [
-    ...DEFAULT_INPUTS_O_TEXT_INPUT
-  ],
-  outputs: [
-    ...DEFAULT_OUTPUTS_O_TEXT_INPUT
-  ],
+  inputs: DEFAULT_INPUTS_O_TEXT_INPUT,
+  outputs: DEFAULT_OUTPUTS_O_TEXT_INPUT,
   encapsulation: ViewEncapsulation.None
 })
 
