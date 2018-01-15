@@ -9,7 +9,7 @@ export const DEFAULT_TABLE_CONTEXT_MENU_INPUTS = [
 
 @Component({
   selector: 'o-table-context-menu',
-  template: '',
+  template: ' ',
   inputs: DEFAULT_TABLE_CONTEXT_MENU_INPUTS
 })
 
