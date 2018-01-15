@@ -21,7 +21,7 @@ export class OTranslatePipe implements PipeTransform {
   }
 
   transform(text: string): string {
-    if (this.translateService) {
+    if (text !== undefined && this.translateService) {
       return this.translateService.get(text);
     }
     return text;
