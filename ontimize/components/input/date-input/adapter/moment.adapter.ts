@@ -12,11 +12,15 @@ for (let date = 1; date <= 31; date++) {
 export class MomentDateAdapter extends DateAdapter<Date> {
 
   private localeData = moment.localeData();
+  private formatData;
 
-  setLocale(locale: any): void {
+  setLocale(arg: any): void {
+    const locale = arg.locale;
     super.setLocale(locale);
     moment.locale(locale);
     this.localeData = moment.localeData(locale);
+
+    this.formatData = arg.format;
   }
 
   addCalendarYears(date: Date, years: number): Date {
@@ -167,8 +171,9 @@ export class MomentDateAdapter extends DateAdapter<Date> {
     //}
   }
 
-  format(date: Date, displayFormat: any): string {
+  format(date: Date, formatArg: any): string {
     if (this.isValid(date)) {
+      const displayFormat = this.formatData || formatArg;
       if (typeof displayFormat === 'string') {
         let momentDate = moment(date);
         return momentDate.format(displayFormat);
