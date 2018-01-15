@@ -6,6 +6,12 @@
 * **o-context-menu**: new '*o-context-menu*' component and '*oContextMenu*' directive for attaching a context menu to DOM elements ([c838095](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c838095)) ([559c0ae](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/559c0ae))
 * **o-table-context-menu**: new '*o-table-context-menu*' component for attaching a context menu to '*o-table*' rows ([5658b83](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5658b83))
 * **o-table-column-calculated**: adding posibility to add calculated columns ([5e4aacd](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5e4aacd)) ([d8479d6](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d8479d6))
+* **Components:** new '*automatic-registering*' input for specifying that a component will not be not registered on its parent form ([1205e57](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1205e57))
+* **o-form-data.component.class:** new '*DEFAULT_INPUTS_O_FORM_DATA_COMPONENT*' static variable ([1205e57](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1205e57))
+* **IFormDataComponent**: '*IFormDataComponent*' now extends '*IFormControlComponent*' ([1205e57](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1205e57))
+
+### BREAKING CHANGES
+* **OServiceComponent**: changing '*dataService*' visibility from protected to public ('*o-list*' and '*o-table*' components extends this class) ([5270cde](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5270cde))
 
 ## 2.1.0-rc.2 (2017-12-21)
 
