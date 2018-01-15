@@ -25,8 +25,7 @@ import {
   OTableMdPaginatorIntl,
   OTableColumnAggregateComponent,
   OTableAggregateComponent,
-  OColumnAggregate,
-  AggregateFunction
+  OColumnAggregate
 } from './extensions/footer/o-table-footer-components';
 
 import { OTableDataSource } from './o-table.datasource';
@@ -160,7 +159,7 @@ export class OColumn {
   visible: boolean;
   renderer: any;
   width: string;
-  aggregate:  string | AggregateFunction;
+  aggregate:  OColumnAggregate;
   calculate:  string | OperatorFunction;
 }
 
@@ -479,7 +478,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
     if (alreadyExisting.length === 1) {
       var replacingIndex = this._oTableOptions.columns.indexOf(alreadyExisting[0]);
-      this._oTableOptions.columns[replacingIndex].aggregate = column.operator;
+      this._oTableOptions.columns[replacingIndex].aggregate = column;
     }
 
   }

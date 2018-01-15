@@ -122,9 +122,16 @@ export class OTableDataSource extends DataSource<any> {
     this._tableOptions.visibleColumns.map(function (column) {
       formula = formula.replace(column, row[column]);
     });
-    return (new Function('return ' + formula))();
-    //return eval(formula);
-    //return `${formula}`;
+
+    let resultFormula = '';
+    //2. Transform formula
+    try {
+      resultFormula = (new Function('return ' + formula))();
+    } catch (e) {
+      console.log('Operation defined in the calculated column is incorrect ');
+    }
+    //3. Return result
+    return resultFormula;
   }
 
   getQuickFilterData(data: any[]): any[] {
@@ -397,7 +404,7 @@ export class OTableTotalDataSource extends DataSource<any> {
 
   calculateAggregate(data: any[], column: OColumn): any {
     let resultAggregate;
-    let operator = column.aggregate;
+    let operator = column.aggregate.operator;
     if (typeof operator === 'string') {
 
       switch (operator.toLowerCase()) {
@@ -430,7 +437,7 @@ export class OTableTotalDataSource extends DataSource<any> {
     let value = 0;
     if (data) {
       value = data.reduce(function (acumulator, currentValue) {
-        console.log(acumulator, currentValue[column]);
+        //console.log(acumulator, currentValue[column]);
         return acumulator + (isNaN(currentValue[column]) ? 0 : currentValue[column]);
       }, value);
     }
