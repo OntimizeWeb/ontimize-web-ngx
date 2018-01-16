@@ -62,7 +62,7 @@ export class OAppSidenavComponent implements OnInit, OnDestroy, AfterViewInit {
 
   constructor(
     protected injector: Injector,
-    private router: Router,
+    protected router: Router,
     protected elRef: ElementRef
   ) {
     this.appMenuService = this.injector.get(AppMenuService);
