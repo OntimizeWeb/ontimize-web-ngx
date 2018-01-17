@@ -9,6 +9,8 @@
 * **Components:** new '*automatic-registering*' input for specifying that a component will not be not registered on its parent form ([1205e57](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1205e57))
 * **o-form-data.component.class:** new '*DEFAULT_INPUTS_O_FORM_DATA_COMPONENT*' static variable ([1205e57](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1205e57))
 * **IFormDataComponent**: '*IFormDataComponent*' now extends '*IFormControlComponent*' ([1205e57](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1205e57))
+* **NavigationService**: '*NavigationService*' is now initialized on application initialization ([b63e372](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b63e372))
+
 
 ### BREAKING CHANGES
 * **OServiceComponent**: changing '*dataService*' visibility from protected to public ('*o-list*' and '*o-table*' components extends this class) ([5270cde](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5270cde))
