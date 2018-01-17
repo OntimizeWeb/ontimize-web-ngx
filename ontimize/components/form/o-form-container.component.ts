@@ -29,8 +29,8 @@ export const DEFAULT_INPUTS_O_FORM_CONTAINER = [
   inputs: DEFAULT_INPUTS_O_FORM_CONTAINER,
   encapsulation: ViewEncapsulation.None,
   host: {
-    '[class.o-form-container-breadcrumb]': 'breadcrumb',
-    '[class.o-form-container]': '!breadcrumb'
+    '[class.o-form-container]': 'true',
+    '[class.breadcrumb]': 'breadcrumb'
   }
 })
 

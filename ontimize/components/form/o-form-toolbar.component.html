@@ -13,14 +13,14 @@
     <span *ngIf="getLabelHeaderAlign() === 'start' || getLabelHeaderAlign() === 'center'" class="fill-remaining"></span>
 
     <ng-content select="[o-custom-form-toolbar-buttons-wrapper]"></ng-content>
-    
+
     <button md-button (click)="onUndoLastChange()" [disabled]="isChangesStackEmpty" *ngIf="showUndoButton">
         <md-icon>undo</md-icon>
         <span *ngIf="showHeaderActionsText">{{ 'UNDO' | oTranslate }}</span>
     </button>
 
     <ng-container *ngIf="initialMode">
-     
+
       <button md-button (click)="onReload($event)" *ngIf="refreshBtnEnabled">
         <md-icon>autorenew</md-icon>
         <span *ngIf="showHeaderActionsText">{{ 'REFRESH' | oTranslate }}</span>
@@ -44,7 +44,6 @@
     </ng-container>
 
     <ng-container *ngIf="editMode || insertMode">
-      <span class="fill-remaining"></span>
       <button md-button (click)="cancelOperation($event)">
         <md-icon>clear</md-icon>
         <span *ngIf="showHeaderActionsText">{{ 'CANCEL' | oTranslate }}</span>

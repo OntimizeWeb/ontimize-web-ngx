@@ -10,7 +10,8 @@ import {
   HostListener,
   ViewEncapsulation,
   ElementRef,
-  CUSTOM_ELEMENTS_SCHEMA
+  CUSTOM_ELEMENTS_SCHEMA,
+  ViewChild
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute, UrlSegment } from '@angular/router';
@@ -233,7 +234,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   protected _compSQLTypes: Object = {};
 
   formParentKeysValues: Object;
-  protected hasScrolled: boolean = false;
+  protected _hasScrolled: boolean = false;
 
   public onFormInitStream: EventEmitter<Object> = new EventEmitter<Object>();
   protected reloadStream: Observable<any>;
@@ -262,12 +263,25 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   @HostListener('window:scroll', ['$event'])
   track(event) {
     if (this.showHeader && event.currentTarget instanceof Window) {
-      let win: Window = event.currentTarget;
-      if (win.scrollY > 50) {
+      const toolbarElHeight = this._formToolbar.element.nativeElement.clientHeight;
+      const win: Window = event.currentTarget;
+      if (win.scrollY > toolbarElHeight) {
         this.hasScrolled = true;
       } else {
         this.hasScrolled = false;
       }
+    }
+  }
+
+  @ViewChild('innerForm') innerFormEl: ElementRef;
+
+  @HostListener('window:resize', ['$event'])
+  protected updateScrolledState(): void {
+    if (this.showHeader && this.innerFormEl) {
+      const totalHeight = this.elRef.nativeElement.clientHeight;
+      const formElHeight = this.innerFormEl.nativeElement.clientHeight;
+      const toolbarElHeight = this._formToolbar.element.nativeElement.clientHeight;
+      this.hasScrolled = (formElHeight + toolbarElHeight) > totalHeight;
     }
   }
 
@@ -641,6 +655,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     this.determinateFormMode();
     this.onFormInitStream.emit(true);
     this.formCache.initializeCache({});
+    this.updateScrolledState();
   }
 
   protected determinateFormMode() {
@@ -740,10 +755,10 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   }
 
   protected _updateFormData(newFormData: Object) {
+    const self = this;
     this.zone.run(() => {
       this.formData = newFormData;
       if (this._components) {
-        const self = this;
         Object.keys(this._components).forEach(key => {
           let comp = this._components[key];
           if (Util.isFormDataComponent(comp)) {
@@ -764,6 +779,9 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
         self.formNavigation.updateNavigation(self.formGroup.getRawValue());
       }
     });
+    setTimeout(() => {
+      self.updateScrolledState();
+    }, 250);
   }
 
   _emitData(data) {
@@ -1271,6 +1289,13 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
       delete valueCopy[this.ignoreFormCacheKeys[i]];
     }
     return valueCopy;
+  }
+
+  set hasScrolled(val: boolean) {
+    this._hasScrolled = val;
+  }
+  get hasScrolled(): boolean {
+    return this._hasScrolled;
   }
 }
 

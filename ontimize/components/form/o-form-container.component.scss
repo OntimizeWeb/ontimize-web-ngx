@@ -1,41 +1,45 @@
-.o-form-container-breadcrumb {
-  .o-breadcrumb {
-    position: fixed;
-    z-index: 100;
-    //top: 0;
-    //padding: 8px 0;
-    //padding-top:8px;
-   // padding-left:8px;
-    //padding-right:8px;
-    background: #eeeeee;
-    left: 8px;
-    right: 24px;
-    padding: 8px
-    //left: 0;
-    //right: 0px;
+
+
+.o-form-container {
+
+  &.breadcrumb {
+
+    .o-form.fill {
+       // breadcrumb height + 16
+      min-height: calc(100% - 66px);
+      height: calc(100% - 66px);
+    }
+
+    .o-breadcrumb {
+      position: fixed;
+      z-index: 100;
+      background: #eeeeee;
+      left: 16px;
+      right: 16px;
+    }
+
+    .o-form-container-content .o-form.fill {
+      // breadcrumb height + 8
+      margin-top: 58px;
+    }
   }
 
-  #outer-form-container .o-form.fill{
-    margin-top:60px;
-  }
- 
 }
-  
+
 .application-layout-content-wrapper {
 
-  o-form-container{
-    position: relative;;
-    //height:100%;
-    width:100%;
+  .o-form-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
     display: block;
-    //overflow:auto;
 
-    #outer-form-container{
-      position:absolute;
-      height:100%;
-      width:100%;
+    .o-form-container-content {
+      position: absolute;
+      height: 100%;
+      width: 100%;
     }
 
   }
-  
-  }
+
+}
