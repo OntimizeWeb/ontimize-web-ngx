@@ -1,7 +1,7 @@
 <div class="o-card-menu-item-content" (click)="onClick()" fxLayout="column" fxFlexFill fxLayoutAlign="space-between center"
   layout-padding>
 
-  <div class="o-card-menu-item-main" fxFlex="40" [fxLayout]="mainContainerLayout" fxLayoutAlign="space-between center">
+  <div class="o-card-menu-item-main" fxFlex="{{ showSecondaryContainer ? '40' : '80' }}" [fxLayout]="mainContainerLayout" fxLayoutAlign="space-between center">
     <div *ngIf="useImage() || useIcon()" fxFlex="80" fxLayout="column" fxLayoutAlign="center center" class="o-card-menu-item-image-container">
       <img *ngIf="useImage()" [src]="image" />
       <md-icon *ngIf="useIcon()" class="o-card-menu-item-icon" fxLayoutAlign="center center">{{ icon }}</md-icon>
@@ -16,10 +16,10 @@
 
   <button *ngIf="buttonText !== undefined" [disabled]="disabledButton" (click)="onButtonClick()" md-button>{{ buttonText | oTranslate | uppercase }}</button>
 
-  <div class="o-card-menu-item-secondary" fxFlex="50" [fxLayout]="secondaryContainerLayout" fxLayoutAlign="space-around center">
+  <div *ngIf="showSecondaryContainer" class="o-card-menu-item-secondary" fxFlex="50" [fxLayout]="secondaryContainerLayout"
+    fxLayoutAlign="space-around center">
     <ng-content select=".secondary-container"></ng-content>
     <ng-container #menuCardContent *ngIf="detailComponent">
     </ng-container>
   </div>
-
 </div>

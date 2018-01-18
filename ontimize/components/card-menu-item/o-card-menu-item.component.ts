@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation, ViewChild, ViewContainerRef, ComponentFactory, AfterViewInit, ComponentFactoryResolver, NgModule, ChangeDetectionStrategy, ChangeDetectorRef, OnDestroy, Injector } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, ViewChild, ViewContainerRef, ComponentFactory, AfterViewInit, ComponentFactoryResolver, NgModule, ChangeDetectionStrategy, ChangeDetectorRef, OnDestroy, Injector, QueryList, ContentChildren, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
@@ -32,7 +32,8 @@ export const DEFAULT_OUTPUTS_O_MENU_CARD = [
   encapsulation: ViewEncapsulation.None,
   host: {
     '[class.o-card-menu-item]': 'true',
-    '[class.mat-elevation-z1]': 'true'
+    '[class.mat-elevation-z1]': 'true',
+    '[class.compact]': '!showSecondaryContainer'
   },
   changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -54,18 +55,35 @@ export class OCardMenuItemComponent implements OnInit, AfterViewInit, OnDestroy 
   detailComponent: any;
   detailComponentInputs: Object;
 
+  // @ViewChild('menuCardContent', { read: ViewContainerRef })
+  // detailComponentContainer: ViewContainerRef;
+
+  protected _detailComponentContainer: ViewContainerRef;
+
   @ViewChild('menuCardContent', { read: ViewContainerRef })
-  detailComponentContainer: ViewContainerRef;
+  set detailComponentContainer(content: ViewContainerRef) {
+    this._detailComponentContainer = content;
+  }
+
+  get detailComponentContainer() : ViewContainerRef {
+    return this._detailComponentContainer;
+  }
 
   protected translateService: OTranslateService;
   protected translateServiceSubscription: Subscription;
 
+  @ContentChildren('.secondary-container')
+  secondaryContent: QueryList<any>;
+
+  protected _showSecondaryContainer: boolean = true;
+
   constructor(
-    private injector: Injector,
-    private router: Router,
-    private actRoute: ActivatedRoute,
-    private resolver: ComponentFactoryResolver,
-    private cd: ChangeDetectorRef
+    protected injector: Injector,
+    protected router: Router,
+    protected actRoute: ActivatedRoute,
+    protected resolver: ComponentFactoryResolver,
+    protected cd: ChangeDetectorRef,
+    protected elRef: ElementRef
   ) {
     this.translateService = this.injector.get(OTranslateService);
     this.translateServiceSubscription = this.translateService.onLanguageChanged.subscribe(() => {
@@ -87,8 +105,9 @@ export class OCardMenuItemComponent implements OnInit, AfterViewInit, OnDestroy 
           ref.instance[keys[i]] = this.detailComponentInputs[keys[i]];
         }
       }
-      this.cd.detectChanges();
     }
+    this.showSecondaryContainer = (this.detailComponentContainer && this.detailComponent) || this.secondaryContent.length > 0;
+    this.cd.detectChanges();
   }
 
   ngOnDestroy() {
@@ -116,6 +135,19 @@ export class OCardMenuItemComponent implements OnInit, AfterViewInit, OnDestroy 
   onClick() {
     if (this.buttonText === undefined) {
       this.onButtonClick();
+    }
+  }
+
+  get showSecondaryContainer(): boolean {
+    return this._showSecondaryContainer;
+  }
+
+  set showSecondaryContainer(val: boolean) {
+    this._showSecondaryContainer = val;
+    if (val) {
+      this.elRef.nativeElement.classList.remove('compact');
+    } else {
+      this.elRef.nativeElement.classList.add('compact');
     }
   }
 
