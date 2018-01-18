@@ -933,13 +933,13 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
       } else {
         self._updateFormData({});
         self.dialogService.alert('ERROR', 'MESSAGES.ERROR_QUERY');
-        console.log('error ');
+        console.log('ERROR: ' + resp.message);
       }
     }, err => {
       console.log(err);
       self._updateFormData({});
-      if (err) {
-        self.dialogService.alert('ERROR', err);
+      if (err && err.statusText) {
+        self.dialogService.alert('ERROR', err.statusText);
       } else {
         self.dialogService.alert('ERROR', 'MESSAGES.ERROR_QUERY');
       }
