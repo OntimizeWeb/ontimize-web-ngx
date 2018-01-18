@@ -20,6 +20,7 @@
     overflow: hidden;
 
     .mat-dialog-content.form-layout-dialog-container {
+      padding-top: 16px;
       margin: 0;
       max-height: calc(100% - 52px);
     }
@@ -27,7 +28,6 @@
     .o-form-layout-dialog {
       o-form-toolbar .mat-toolbar {
         padding: 0;
-        box-shadow: none;
       }
       .o-form {
         .o-form-toolbar-floating {
