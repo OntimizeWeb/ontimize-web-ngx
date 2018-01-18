@@ -14,21 +14,10 @@ import { OSharedModule } from '../../shared';
 import { CommonModule } from '@angular/common';
 import { OFormComponent } from '../form/o-form.component';
 import { OFormValue } from '../form/OFormValue';
-import { OFormDataComponent } from '../o-form-data-component.class';
-
+import { OFormDataComponent, DEFAULT_INPUTS_O_FORM_DATA_COMPONENT } from '../o-form-data-component.class';
 
 export const DEFAULT_INPUTS_O_CHECKBOX = [
-  'oattr: attr',
-  'olabel: label',
-  'tooltip',
-  'tooltipPosition: tooltip-position',
-  'tooltipShowDelay: tooltip-show-delay',
-  'data',
-  'autoBinding: automatic-binding',
-  'oenabled: enabled',
-  'orequired: required',
-  // sqltype[string]: Data type according to Java standard. See SQLType class. Default: 'OTHER'
-  'sqlType: sql-type'
+  ...DEFAULT_INPUTS_O_FORM_DATA_COMPONENT
 ];
 
 export const DEFAULT_OUTPUTS_O_CHECKBOX = [
@@ -37,12 +26,8 @@ export const DEFAULT_OUTPUTS_O_CHECKBOX = [
 
 @Component({
   selector: 'o-checkbox',
-  inputs: [
-    ...DEFAULT_INPUTS_O_CHECKBOX
-  ],
-  outputs: [
-    ...DEFAULT_OUTPUTS_O_CHECKBOX
-  ],
+  inputs: DEFAULT_INPUTS_O_CHECKBOX,
+  outputs: DEFAULT_OUTPUTS_O_CHECKBOX,
   templateUrl: './o-checkbox.component.html',
   styleUrls: ['./o-checkbox.component.scss'],
   encapsulation: ViewEncapsulation.None

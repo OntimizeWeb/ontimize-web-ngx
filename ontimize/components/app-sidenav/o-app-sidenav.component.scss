@@ -4,10 +4,18 @@ $sidenav-width: 240px;
 $sidenav-closed-width: 48px;
 //($sidenav-width - $sidenav-closed-width)
 $sidenav-diff: -191px;
-$header-height: 0px;
+$header-height: 56px;
 $transition-duration: 500ms;
 
 .o-app-sidenav {
+
+  &.header-layout {
+    .application-sidenav-container {
+      .mat-drawer.application-sidenav-sidenav {
+        box-shadow: 3px $header-height 6px rgba(0, 0, 0, .24);
+      }
+    }
+  }
 
   .example-fill-remaining-space {
     flex: 1 1 auto;
@@ -32,7 +40,7 @@ $transition-duration: 500ms;
     }
 
     .mat-drawer.application-sidenav-sidenav {
-      box-shadow: 3px $header-height 6px rgba(0, 0, 0, .24);
+      box-shadow: 3px 0 6px rgba(0, 0, 0, .24);
       padding-bottom: 72px;
       padding-top: 5px;
       width: $sidenav-width;

@@ -32,6 +32,7 @@ export const DEFAULT_INPUTS_O_HTML_INPUT = [
   'olabel: label',
   'data',
   'autoBinding: automatic-binding',
+  'autoRegistering: automatic-registering',
   'oenabled: enabled',
   'orequired: required',
   'minLength: min-length',
@@ -51,15 +52,11 @@ export const DEFAULT_OUTPUTS_O_HTML_INPUT = [
   selector: 'o-html-input',
   templateUrl: './o-html-input.component.html',
   styleUrls: ['./o-html-input.component.scss'],
-  inputs: [
-    ...DEFAULT_INPUTS_O_HTML_INPUT
-  ],
-  outputs: [
-    ...DEFAULT_OUTPUTS_O_HTML_INPUT
-  ],
+  inputs: DEFAULT_INPUTS_O_HTML_INPUT,
+  outputs: DEFAULT_OUTPUTS_O_HTML_INPUT,
   encapsulation: ViewEncapsulation.None
 })
-export class OHTMLInputComponent implements IComponent, IFormControlComponent, IFormDataTypeComponent, IFormDataComponent, OnInit {
+export class OHTMLInputComponent implements OnInit, IComponent, IFormDataComponent, IFormDataTypeComponent {
 
   public static DEFAULT_INPUTS_O_HTML_INPUT = DEFAULT_INPUTS_O_HTML_INPUT;
   public static DEFAULT_OUTPUTS_O_HTML_INPUT = DEFAULT_OUTPUTS_O_HTML_INPUT;
@@ -72,6 +69,8 @@ export class OHTMLInputComponent implements IComponent, IFormControlComponent, I
   orequired: boolean = true;
   @InputConverter()
   autoBinding: boolean = true;
+  @InputConverter()
+  autoRegistering: boolean = true;
   @InputConverter()
   minLength: number = -1;
   @InputConverter()
@@ -236,6 +235,10 @@ export class OHTMLInputComponent implements IComponent, IFormControlComponent, I
 
   isAutomaticBinding(): Boolean {
     return this.autoBinding;
+  }
+
+  isAutomaticRegistering(): Boolean {
+    return this.autoRegistering;
   }
 
   getValue(): any {

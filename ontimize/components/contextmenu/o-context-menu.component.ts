@@ -6,7 +6,7 @@ import { OContextMenuItemComponent } from './o-context-menu-item.component';
 
 @Component({
   selector: 'o-context-menu',
-  template: ''
+  template: ' '
 })
 export class OContextMenuComponent implements OnDestroy, OnInit {
 
@@ -38,7 +38,9 @@ export class OContextMenuComponent implements OnDestroy, OnInit {
     } else {
       params.menuItems = this.oContextMenuItems;
     }
-    this.oContextMenuService.openContextMenu(params);
+    if (params.menuItems.length > 0) {
+      this.oContextMenuService.openContextMenu(params);
+    }
   }
 
 }

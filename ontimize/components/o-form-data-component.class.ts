@@ -19,17 +19,35 @@ export interface IFormControlComponent extends IComponent {
   hasError(error: string): boolean;
 }
 
-export interface IFormDataComponent {
+export interface IFormDataComponent extends IFormControlComponent {
   data(value: any);
   isAutomaticBinding(): Boolean;
+  isAutomaticRegistering(): Boolean;
 }
 
-export class OFormDataComponent extends OBaseComponent implements IFormControlComponent, IFormDataTypeComponent,
-  IFormDataComponent, OnInit, OnDestroy {
+export const DEFAULT_INPUTS_O_FORM_DATA_COMPONENT = [
+  'oattr: attr',
+  'olabel: label',
+  'tooltip',
+  'tooltipPosition: tooltip-position',
+  'tooltipShowDelay: tooltip-show-delay',
+  'data',
+  'autoBinding: automatic-binding',
+  'autoRegistering: automatic-registering',
+  'oenabled: enabled',
+  'orequired: required',
+  // sqltype[string]: Data type according to Java standard. See SQLType ngClass. Default: 'OTHER'
+  'sqlType: sql-type'
+];
+
+export class OFormDataComponent extends OBaseComponent implements IFormDataComponent, IFormDataTypeComponent,
+  OnInit, OnDestroy {
   /* Inputs */
   protected sqlType: string;
   @InputConverter()
   autoBinding: boolean = true;
+  @InputConverter()
+  autoRegistering: boolean = true;
 
   /* Internal variables */
   protected value: OFormValue;
@@ -120,6 +138,10 @@ export class OFormDataComponent extends OBaseComponent implements IFormControlCo
 
   isAutomaticBinding(): Boolean {
     return this.autoBinding;
+  }
+
+  isAutomaticRegistering(): Boolean {
+    return this.autoRegistering;
   }
 
   getValue(): any {

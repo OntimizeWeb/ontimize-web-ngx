@@ -46,7 +46,7 @@ export class OBaseComponent implements IComponent {
   }
 
   get placeHolder(): string {
-    if (this.translateService) {
+    if (this._placeholder !== undefined && this._placeholder !== null && this.translateService) {
       return this.translateService.get(this._placeholder);
     }
     return this._placeholder;
@@ -57,7 +57,7 @@ export class OBaseComponent implements IComponent {
   }
 
   get tooltip(): string {
-    if (this.translateService) {
+    if (this._tooltip !== undefined && this._tooltip !== null && this.translateService) {
       return this.translateService.get(this._tooltip);
     }
     return this._tooltip;

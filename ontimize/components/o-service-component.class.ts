@@ -196,7 +196,7 @@ export class OServiceComponent implements ILocalStorageComponent {
   protected loaderSuscription: Subscription;
   protected querySuscription: Subscription;
   protected filterForm: boolean = false;
-  protected dataService: any;
+  dataService: any;
   protected state: any;
   protected selectedItems: Array<Object> = [];
 
@@ -227,16 +227,12 @@ export class OServiceComponent implements ILocalStorageComponent {
       this.dialogService = this.injector.get(DialogService);
       this.localStorageService = this.injector.get(LocalStorageService);
       let self = this;
-      this.onLanguageChangeSubscribe = this.translateService.onLanguageChanged.subscribe(
-        res => {
-          self.onLanguageChangeCallback(res);
-        }
-      );
-      this.onRouteChangeStorageSubscribe = this.localStorageService.onRouteChange.subscribe(
-        res => {
-          self.localStorageService.updateComponentStorage(self);
-        }
-      );
+      this.onLanguageChangeSubscribe = this.translateService.onLanguageChanged.subscribe(res => {
+        self.onLanguageChangeCallback(res);
+      });
+      this.onRouteChangeStorageSubscribe = this.localStorageService.onRouteChange.subscribe(res => {
+        self.localStorageService.updateComponentStorage(self);
+      });
       try {
         this.formLayoutManager = this.injector.get(OFormLayoutManagerComponent);
       } catch (e) {
@@ -270,7 +266,7 @@ export class OServiceComponent implements ILocalStorageComponent {
   }
 
   onLanguageChangeCallback(res: any) {
-    console.log('onLanguageChangeCallback');
+    // console.log('onLanguageChangeCallback');
   }
 
   getKeys() {

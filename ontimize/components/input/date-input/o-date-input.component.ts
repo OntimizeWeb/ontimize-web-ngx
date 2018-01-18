@@ -49,10 +49,10 @@ export let O_DATE_INPUT_DEFAULT_FORMATS: MdDateFormats = {
   inputs: [
     ...DEFAULT_INPUTS_O_DATE_INPUT
   ],
-  providers: [{
-    provide: MD_DATE_FORMATS,
-    useValue: O_DATE_INPUT_DEFAULT_FORMATS
-  }]
+  providers: [
+    { provide: DateAdapter, useClass: MomentDateAdapter },
+    { provide: MD_DATE_FORMATS, useValue: O_DATE_INPUT_DEFAULT_FORMATS }
+  ]
 })
 
 export class ODateInputComponent extends OFormDataComponent {
@@ -107,7 +107,13 @@ export class ODateInputComponent extends OFormDataComponent {
       this.updateLocaleOnChange = true;
       this.olocale = this.momentSrv.getLocale();
     }
-    this.momentDateAdapter.setLocale(this.olocale);
+
+    if (this.oformat) {
+      this.mdDateFormats.display.dateInput = this.oformat;
+      this.mdDateFormats.parse.dateInput = this.oformat;
+    }
+
+    this.momentDateAdapter.setLocale({ locale: this.olocale, format: this.oformat });
 
     if (this.oStartView) {
       this.datepicker.startView = this.oStartView;
@@ -138,18 +144,12 @@ export class ODateInputComponent extends OFormDataComponent {
         this.maxDateString = momentD.format(this.oformat);
       }
     }
+
     if (this.updateLocaleOnChange) {
       this.onLanguageChangeSubscription = this.translateService.onLanguageChanged.subscribe(() => {
         this.momentDateAdapter.setLocale(this.translateService.getCurrentLang());
         this.setValue(this.getValueAsDate());
       });
-    }
-  }
-
-  ngAfterViewInit() {
-    if (this.oformat) {
-      this.mdDateFormats.display.dateInput = this.oformat;
-      this.mdDateFormats.parse.dateInput = this.oformat;
     }
   }
 

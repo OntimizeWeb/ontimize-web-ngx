@@ -1,8 +1,7 @@
 <ng-host oKeyboardListener keyboardKeys="17;90" (onKeysPressed)="undoKeyboardPressed()">
   <div fxFlex="grow">
     <o-form-toolbar *ngIf="showHeader" [label-header]="labelheader" [label-header-align]="labelHeaderAlign" [header-actions]="headeractions"
-      [show-header-navigation] ="showHeaderNavigation"
-      [show-header-actions-text]="showHeaderActionsText" [class.o-form-toolbar-floating]="headerMode === 'floating'" 
+      [show-header-navigation]="showHeaderNavigation" [show-header-actions-text]="showHeaderActionsText" [class.o-form-toolbar-floating]="headerMode === 'floating'"
       [class.o-form-toolbar-floating-scrolled]="hasScrolled">
 
       <div o-custom-form-toolbar-buttons-wrapper fxLayout="row" fxLayoutAlign="end center">
@@ -10,8 +9,8 @@
       </div>
     </o-form-toolbar>
 
-    <form #innerForm [formGroup]="formGroup" class="inner-form" [class.form-no-toolbar]="!showHeader" fxLayout="column"
-      autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+    <form #innerForm [formGroup]="formGroup" class="inner-form" [class.form-no-toolbar]="!showHeader"
+      fxLayout="column" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
       <div fxFlex="100" *ngIf="loading" class="progress-bar-container">
         <md-progress-bar mode="indeterminate"></md-progress-bar>
       </div>
