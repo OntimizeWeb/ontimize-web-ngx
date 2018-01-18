@@ -36,7 +36,7 @@ export class OUserInfoComponent implements OnDestroy {
   constructor(
     protected elRef: ElementRef,
     protected injector: Injector,
-    private router: Router
+    protected router: Router
   ) {
     this.dialogService = this.injector.get(DialogService);
     this.loginService = this.injector.get(LoginService);

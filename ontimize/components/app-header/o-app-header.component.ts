@@ -44,7 +44,7 @@ export class OAppHeaderComponent implements OnDestroy {
   public toggleSidenav = new EventEmitter<void>();
 
   constructor(
-    private router: Router,
+    protected router: Router,
     protected injector: Injector,
     protected elRef: ElementRef
   ) {

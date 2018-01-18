@@ -30,9 +30,9 @@ import {
   MdAutocompleteModule,
   DateAdapter,
   MdNativeDateModule,
-  MdTableModule
-
-  // ,
+  MdTableModule,
+  MdPaginatorModule,
+  MdSortModule
   // PlatformModule,
   // StyleModule,
   // OverlayModule,
@@ -71,8 +71,9 @@ const MATERIAL_MODULES = [
   MdToolbarModule,
   MdTooltipModule,
   MdNativeDateModule,
-  MdTableModule
-  // ,
+  MdTableModule,
+  MdPaginatorModule,
+  MdSortModule
   // OverlayModule,
   // PortalModule,
   // RtlModule,

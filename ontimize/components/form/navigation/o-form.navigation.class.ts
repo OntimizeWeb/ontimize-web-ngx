@@ -82,6 +82,7 @@ export class OFormNavigationClass {
     }
   }
 
+
   initialize() {
     if (this.formLayoutManager) {
       this.id = this.formLayoutManager.getLastTabId();
@@ -216,6 +217,10 @@ export class OFormNavigationClass {
 
   getQueryParams() {
     return this.queryParams;
+  }
+
+  setUrlParams(val: Object) {
+    this.urlParams = val;
   }
 
   getUrlParams() {

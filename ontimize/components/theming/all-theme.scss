@@ -14,10 +14,11 @@
 @import '../app-header/o-app-header-theme.scss';
 @import '../app-sidenav/o-app-sidenav-theme.scss';
 @import '../../layouts/app-layout/o-app-layout-theme.scss';
+@import '../card-menu-item/o-card-menu-item.component.theme.scss';
 
 // Create a theme.
 @mixin o-material-theme($theme) {
-   @include app-global-theme($theme);
+  @include app-global-theme($theme);
   @include md-dialog-theme($theme);
   @include o-breadcrumb-theme($theme);
   @include o-container-theme($theme);
@@ -33,4 +34,5 @@
   @include o-app-header-theme($theme);
   @include o-app-sidenav-theme($theme);
   @include o-app-layout-theme($theme);
+  @include o-card-menu-item-theme($theme);
 }

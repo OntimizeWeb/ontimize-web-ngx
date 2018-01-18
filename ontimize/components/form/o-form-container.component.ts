@@ -12,6 +12,7 @@ import { CommonModule } from '@angular/common';
 import { OBreadcrumbComponent } from '../../components';
 import { InputConverter } from '../../decorators';
 import { OFormComponent } from './o-form.component';
+import { OFormLayoutManagerComponent } from '../../layouts';
 
 
 export const DEFAULT_INPUTS_O_FORM_CONTAINER = [
@@ -28,8 +29,8 @@ export const DEFAULT_INPUTS_O_FORM_CONTAINER = [
   inputs: DEFAULT_INPUTS_O_FORM_CONTAINER,
   encapsulation: ViewEncapsulation.None,
   host: {
-    '[class.o-form-container-breadcrumb]': 'breadcrumb',
-    '[class.o-form-container]': '!breadcrumb'
+    '[class.o-form-container]': 'true',
+    '[class.breadcrumb]': 'breadcrumb'
   }
 })
 
@@ -43,24 +44,24 @@ export class OFormContainerComponent {
   public breadcrumbSeparator: string = ' ';
 
   protected form: OFormComponent;
+  protected formMananger: OFormLayoutManagerComponent;
 
   constructor(private resolver: ComponentFactoryResolver) {
   }
 
-  ngOnInit() {
-    //
-  }
-
   ngAfterViewInit() {
+    this.breadcrumb = this.breadcrumb && this.form && !this.formMananger;
     this.createBreadcrumb();
   }
 
   setForm(form: OFormComponent) {
     this.form = form;
+    this.formMananger = form.getFormManager();
   }
 
+
   createBreadcrumb() {
-    if (this.breadcrumb && this.form) {
+    if (this.breadcrumb) {
       const factory = this.resolver.resolveComponentFactory(OBreadcrumbComponent);
       const ref = this.breadContainer.createComponent(factory);
       ref.instance._formRef = this.form;

@@ -1,0 +1,9 @@
+.o-menu-layout {
+  .o-card-menu-item {
+    height: 45%;
+    margin: 16px 0;
+    &.compact{
+      height: 30%;
+    }
+  }
+}

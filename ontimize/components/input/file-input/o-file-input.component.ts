@@ -79,12 +79,8 @@ export const DEFAULT_OUTPUTS_O_FILE_INPUT = [
   selector: 'o-file-input',
   templateUrl: './o-file-input.component.html',
   styleUrls: ['./o-file-input.component.scss'],
-  inputs: [
-    ...DEFAULT_INPUTS_O_FILE_INPUT
-  ],
-  outputs: [
-    ...DEFAULT_OUTPUTS_O_FILE_INPUT
-  ]
+  inputs: DEFAULT_INPUTS_O_FILE_INPUT,
+  outputs: DEFAULT_OUTPUTS_O_FILE_INPUT
 })
 export class OFileInputComponent extends OFormDataComponent implements OnDestroy, OnInit {
 
@@ -98,6 +94,7 @@ export class OFileInputComponent extends OFormDataComponent implements OnDestroy
   protected entity: string;
   protected serviceType: string;
   autoBinding: boolean = false;
+  autoRegistering: boolean = false;
   @InputConverter()
   showInfo: boolean = false;
   @InputConverter()
@@ -127,7 +124,7 @@ export class OFileInputComponent extends OFormDataComponent implements OnDestroy
   fileService: OntimizeFileService;
 
   @ViewChild('inputFile')
-  private inputFile: ElementRef;
+  inputFile: ElementRef;
 
   constructor(
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,

@@ -20,26 +20,15 @@ import { InputConverter } from '../../decorators';
 import { OFormComponent } from '../form/o-form.component';
 import { OFormValue } from '../form/OFormValue';
 
-import { OFormDataComponent } from '../o-form-data-component.class';
+import { OFormDataComponent, DEFAULT_INPUTS_O_FORM_DATA_COMPONENT } from '../o-form-data-component.class';
 
 export const DEFAULT_INPUTS_O_IMAGE = [
-  'oattr: attr',
-  'olabel: label',
-  'tooltip',
-  'tooltipPosition: tooltip-position',
-  'tooltipShowDelay: tooltip-show-delay',
-  'data',
-  'autoBinding: automatic-binding',
-  'oenabled: enabled',
-  'orequired: required',
+  ...DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,
   'emptyimage: empty-image',
   // empty-icon [string]: material icon. Default: photo.
   'emptyicon: empty-icon',
   // show-controls [yes|no true|false]: Shows or hides selection controls. Default: true.
-  'showControls: show-controls',
-
-  // sqltype[string]: Data type according to Java standard. See SQLType class. Default: 'OTHER'
-  'sqlType: sql-type'
+  'showControls: show-controls'
 ];
 
 export const DEFAULT_OUTPUTS_O_IMAGE = [
@@ -50,12 +39,8 @@ export const DEFAULT_OUTPUTS_O_IMAGE = [
   selector: 'o-image',
   templateUrl: './o-image.component.html',
   styleUrls: ['./o-image.component.scss'],
-  inputs: [
-    ...DEFAULT_INPUTS_O_IMAGE
-  ],
-  outputs: [
-    ...DEFAULT_OUTPUTS_O_IMAGE
-  ],
+  inputs: DEFAULT_INPUTS_O_IMAGE,
+  outputs: DEFAULT_OUTPUTS_O_IMAGE,
   encapsulation: ViewEncapsulation.None
 })
 export class OImageComponent extends OFormDataComponent {

@@ -6,11 +6,10 @@ import {
   Injector,
   forwardRef,
   ElementRef,
-  NgZone,
   NgModule,
   ViewEncapsulation
 } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs/Subscription';
 
@@ -19,12 +18,15 @@ import { InputConverter } from '../../decorators';
 import { Util } from '../../util/util';
 import { DialogService, NavigationService } from '../../services';
 import { OSharedModule } from '../../shared';
+import { OFormNavigationComponent } from './navigation/o-form-navigation.component';
 
 export const DEFAULT_INPUTS_O_FORM_TOOLBAR = [
   'labelHeader: label-header',
   'labelHeaderAlign: label-header-align',
   'headeractions: header-actions',
-  'showHeaderActionsText: show-header-actions-text'
+  'showHeaderActionsText: show-header-actions-text',
+  //show-header-navigation [string][yes|no|true|false]: Include navigations buttons in form-toolbar. Default: true;
+  'showHeaderNavigation:show-header-navigation'
 ];
 
 @Component({
@@ -45,6 +47,7 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
   labelHeader: string = '';
   headeractions: string = '';
   labelHeaderAlign: string = 'center';
+
   @InputConverter()
   showHeaderActionsText: boolean = true;
 
@@ -59,7 +62,6 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
   protected insertBtnEnabled: boolean = false;
   protected editBtnEnabled: boolean = false;
   protected deleteBtnEnabled: boolean = false;
-  protected navigationEnabled: boolean = false;
   protected saveBtnEnabled: boolean = false;
 
   protected _existsChangesToSave: boolean = false;
@@ -69,15 +71,17 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
 
   protected formCacheSubscription: Subscription;
 
+  @InputConverter()
+  showHeaderNavigation: boolean = true;
+
   constructor( @Inject(forwardRef(() => OFormComponent)) private _form: OFormComponent,
     public element: ElementRef,
-    private _router: Router,
-    private _actRoute: ActivatedRoute,
-    private zone: NgZone,
     protected injector: Injector) {
     _form.registerToolbar(this);
     this._dialogService = this.injector.get(DialogService);
     this._navigationService = this.injector.get(NavigationService);
+
+
   }
 
   ngOnInit() {
@@ -225,55 +229,8 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
     );
   }
 
-  next() {
-    //TODO
-    // let total = this._form.navigationData.length;
-    // let index = this._form.currentIndex + 1;
-    // if (total > index) {
-    //   this._form.move(index);
-    // } else {
-    //   console.log('form-toolbar->next(): total > index');
-    // }
-  }
-
-  previous() {
-    //TODO
-    // let index = this._form.currentIndex - 1;
-    // if (index >= 0) {
-    //   this._form.move(index);
-    // } else {
-    //   console.log('form-toolbar->next(): index < 0');
-    // }
-  }
-
-  first() {
-    //TODO
-    // this._form.move(0);
-  }
-
-  last() {
-    //TODO
-    // let index = this._form.navigationData.length - 1;
-    // this._form.move(index);
-  }
-
-  numberOfRecords() {
-    if (this.navigationEnabled) {
-      let total = this._form.navigationData.length;
-      let index = this._form.currentIndex + 1;
-      if (total === 0 || total === 1) {
-        return '';
-      }
-      return index + ' / ' + total;
-    }
-    return '';
-  }
-
   get showNavigation(): boolean {
-    if (this.navigationEnabled) {
-      return this._form.navigationData.length >= 1;
-    }
-    return false;
+    return this.showHeaderNavigation && !(this._form.getFormManager() && this._form.getFormManager().isTabMode());
   }
 
   getLabelHeaderAlign(): string {
@@ -294,9 +251,9 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
 }
 
 @NgModule({
-  declarations: [OFormToolbarComponent],
+  declarations: [OFormToolbarComponent, OFormNavigationComponent],
   imports: [OSharedModule, CommonModule],
-  exports: [OFormToolbarComponent]
+  exports: [OFormToolbarComponent, OFormNavigationComponent]
 })
 export class OFormToolbarModule {
 }

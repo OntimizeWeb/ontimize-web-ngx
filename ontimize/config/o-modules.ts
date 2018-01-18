@@ -20,6 +20,7 @@ import {
   OCheckboxModule,
   OComboModule,
   OColumnModule,
+  OContextMenuModule,
   ORowModule,
   ODialogModule,
   OSnackBarModule,
@@ -53,12 +54,14 @@ import {
   OLocaleSideMenuItemModule,
   OSideMenuSeparatorModule,
   OUserInfoModule,
-  OLanguageSelectorModule
+  OLanguageSelectorModule,
+  OCardMenuItemModule
 } from '../components';
 
 import {
   OAppLayoutModule,
-  OFormLayoutManagerModule
+  OFormLayoutManagerModule,
+  OCardMenuLayoutModule
 } from '../layouts';
 
 import { OSharedModule } from '../shared';
@@ -80,6 +83,7 @@ export const INTERNAL_ONTIMIZE_MODULES_EXPORTED: any = [
   OCheckboxModule,
   OComboModule,
   OColumnModule,
+  OContextMenuModule,
   ORowModule,
   ODialogModule,
   OSnackBarModule,
@@ -115,7 +119,9 @@ export const INTERNAL_ONTIMIZE_MODULES_EXPORTED: any = [
   OAppLayoutModule,
   OFormLayoutManagerModule,
   OUserInfoModule,
-  OLanguageSelectorModule
+  OLanguageSelectorModule,
+  OCardMenuItemModule,
+  OCardMenuLayoutModule
 ];
 
 // AoT requires an exported function for factories
@@ -149,6 +155,7 @@ export const INTERNAL_ONTIMIZE_MODULES: any = [
   OCheckboxModule,
   OComboModule,
   OColumnModule,
+  OContextMenuModule,
   ORowModule,
   ODialogModule,
   OSnackBarModule,
@@ -184,7 +191,9 @@ export const INTERNAL_ONTIMIZE_MODULES: any = [
   OAppLayoutModule,
   OFormLayoutManagerModule,
   OUserInfoModule,
-  OLanguageSelectorModule
+  OLanguageSelectorModule,
+  OCardMenuItemModule,
+  OCardMenuLayoutModule
 ];
 
 @NgModule({

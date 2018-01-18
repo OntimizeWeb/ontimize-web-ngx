@@ -2,21 +2,12 @@ import { Injector, ElementRef } from '@angular/core';
 import { InputConverter } from '../decorators';
 import { OntimizeService, DialogService } from '../services';
 import { OFormComponent } from './form/o-form.component';
-import { OFormDataComponent } from './o-form-data-component.class';
+import { OFormDataComponent, DEFAULT_INPUTS_O_FORM_DATA_COMPONENT } from './o-form-data-component.class';
 import { Util } from '../utils';
 import { Subscription } from 'rxjs/Subscription';
 
 export const DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT = [
-  'oattr: attr',
-  'olabel: label',
-  'tooltip',
-  'tooltipPosition: tooltip-position',
-  'tooltipShowDelay: tooltip-show-delay',
-  //data [any] : sets selected value of the combo
-  'data',
-  'autoBinding: automatic-binding',
-  'oenabled: enabled',
-  'orequired: required',
+  ...DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,
   //static-data [Array<any>] : way to populate with static data. Default: no value.
   'staticData: static-data',
 
@@ -37,9 +28,6 @@ export const DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT = [
 
   'queryOnInit: query-on-init',
   'queryOnBind: query-on-bind',
-
-  // sqltype[string]: Data type according to Java standard. See SQLType class. Default: 'OTHER'
-  'sqlType: sql-type',
 
   'serviceType : service-type'
 ];
@@ -76,7 +64,7 @@ export class OFormServiceComponent extends OFormDataComponent {
   protected _pKeysEquiv = {};
   protected _formDataSubcribe;
   protected _currentIndex;
-   protected dialogService: DialogService;
+  protected dialogService: DialogService;
 
   constructor(form: OFormComponent, elRef: ElementRef, injector: Injector) {
     super(form, elRef, injector);
@@ -189,7 +177,7 @@ export class OFormServiceComponent extends OFormDataComponent {
         }
       }, err => {
         console.log(err);
-        if (err && typeof err !=='object') {
+        if (err && typeof err !== 'object') {
           this.dialogService.alert('ERROR', err);
         } else {
           this.dialogService.alert('ERROR', 'MESSAGES.ERROR_QUERY');

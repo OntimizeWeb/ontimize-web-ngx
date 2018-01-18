@@ -1,4 +1,10 @@
 .o-form {
+  overflow: auto;
+
+  ng-host {
+    height: 100%;
+  }
+
   &.fill {
     margin: 0;
     width: 100%;
@@ -7,23 +13,24 @@
   }
   position: relative;
 
-  .o-form-toolbar-floating {
-    position: fixed;
-    top: 0;
-    left: 0px;
-    right: 0px;
-    z-index: 100;
-    box-shadow: none;
-  }
+  o-form-toolbar {
+    &.o-form-toolbar-floating{
+      position: fixed;
+      box-shadow: none;
+      z-index: 100;
+      right: 8px;
+      left: 8px;
 
-  .o-form-toolbar-floating-scrolled {
-    box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 2px 1px -1px rgba(0, 0, 0, 0.12);
+      &.o-form-toolbar-floating-scrolled {
+        right: 26px;
+      }
+    }
   }
 
   form {
     &.inner-form {
       position: absolute;
-      top: 50px;
+      top: 58px;
       left: 0px;
       right: 0px;
 

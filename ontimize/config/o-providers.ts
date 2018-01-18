@@ -54,6 +54,8 @@ export function appInitializerFactory(injector: Injector, config: Config, oTrans
 
       oTranslate.setAppLang(userLang).subscribe(resolve, resolve, resolve);
     });
+
+    injector.get(NavigationService).initialize();
   });
 }
 

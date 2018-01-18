@@ -48,19 +48,21 @@ export class OTableCellRendererBooleanComponent extends OBaseTableCellRenderer {
 
   public hasCellDataTrueValue(cellData: any): boolean {
     let comparisonValue: boolean = undefined;
-    switch (this.booleanType) {
-      case 'string':
-        const stringVal = cellData.toString().toLowerCase();
-        comparisonValue = (stringVal === 'true' || stringVal === 'yes');
-        break;
-      case 'number':
-        comparisonValue = (cellData === 1);
-        break;
-      case 'boolean':
-      default:
-        // boolean comparision as default value of dataType
-        comparisonValue = (cellData === true);
-        break;
+    if (typeof cellData !== 'undefined') {
+      switch (this.booleanType) {
+        case 'string':
+          const stringVal = cellData.toString().toLowerCase();
+          comparisonValue = (stringVal === 'true' || stringVal === 'yes');
+          break;
+        case 'number':
+          comparisonValue = (cellData === 1);
+          break;
+        case 'boolean':
+        default:
+          // boolean comparision as default value of dataType
+          comparisonValue = (cellData === true);
+          break;
+      }
     }
     return comparisonValue;
   }

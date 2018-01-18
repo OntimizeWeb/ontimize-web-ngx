@@ -1,9 +1,5 @@
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { Util } from '../../util/util';
-import { Injector } from '@angular/core';
-import { OntimizeService } from '../../services';
-
 
 export class OTableDao {
 
@@ -14,26 +10,12 @@ export class OTableDao {
   sqlTypesChange = new BehaviorSubject<Object>({});
   get data(): any[] { return this.dataChange.value; }
   get sqlTypes(): Object { return this.sqlTypesChange.value; }
-  dataService: any;
 
-  constructor(private injector: Injector, private service: string, private entity: string, private method: any) {
-    this.configureService();
-  }
+  constructor(
+    private dataService: any,
+    private entity: string,
+    private methods: any) {
 
-  /**
-  * Method what its configure  call service
-  */
-  configureService() {
-
-    this.dataService = this.injector.get(OntimizeService);
-
-    if (Util.isDataService(this.service)) {
-      let serviceCfg = this.dataService.getDefaultServiceConfiguration(this.service);
-      if (this.entity) {
-        serviceCfg['entity'] = this.entity;
-      }
-      this.dataService.configureService(serviceCfg);
-    }
   }
 
   /**
@@ -41,13 +23,12 @@ export class OTableDao {
    */
   getQuery(queryArgs: any): Observable<any> {
     this.isLoadingResults = false;
-    return this.dataService[this.method].apply(this.dataService, queryArgs);
+    return this.dataService[this.methods.query].apply(this.dataService, queryArgs);
 
   }
-  removeQuery(deletedMethod: string, filters: any): Observable<any> {
 
-    return (Observable as any).from(filters).map(kv => this.dataService[deletedMethod](kv, this.entity)).mergeAll();
-
+  removeQuery(filters: any): Observable<any> {
+    return (Observable as any).from(filters).map(kv => this.dataService[this.methods.delete](kv, this.entity)).mergeAll();
   }
   /**
    * set data array and emit data has ben modified
@@ -57,7 +38,6 @@ export class OTableDao {
     this.dataChange.next(data);
     this.isLoadingResults = true;
     return Observable.of(data);
-
   }
 
   setAsincronColumn(value: Array<any>, rowData: any) {
@@ -69,7 +49,6 @@ export class OTableDao {
         break;
       }
     }
-
     if (index !== null) {
       Object.assign(this.data[index], value);
     }

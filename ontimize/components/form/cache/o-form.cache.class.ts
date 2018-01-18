@@ -1,7 +1,7 @@
 
 import { Subscription } from 'rxjs/Subscription';
 import { EventEmitter } from '@angular/core';
-import { IFormControlComponent } from '../../o-form-data-component.class';
+import { IFormControlComponent, IFormDataComponent } from '../../o-form-data-component.class';
 import { OFormComponent } from '../o-form.component';
 
 export class OFormCacheClass {
@@ -29,7 +29,7 @@ export class OFormCacheClass {
         // initialize cache
         self.formDataCache = {};
       }
-      Object.assign(self.formDataCache, value);
+      Object.assign(self.formDataCache, self.form.getRegisteredFieldsValues());
     });
   }
 
@@ -45,7 +45,7 @@ export class OFormCacheClass {
     }
   }
 
-  registerComponentCaching(attr: string, comp: IFormControlComponent) {
+  registerComponentCaching(attr: string, comp: IFormDataComponent) {
     const self = this;
     this._componentsSubscritpions[attr] = comp.getFormControl().valueChanges.subscribe(value => {
       // this._componentsSubscritpions[attr] = comp.onChange.subscribe(value => {
@@ -173,7 +173,7 @@ export class OFormCacheClass {
   isInitialStateChanged(): boolean {
     let res = false;
     let initialKeys = Object.keys(this.initialDataCache);
-    let currentKeys = Object.keys(this.formDataCache);
+    let currentKeys = this.formDataCache ? Object.keys(this.formDataCache) : initialKeys;
     if (initialKeys.length !== currentKeys.length) {
       return true;
     }
