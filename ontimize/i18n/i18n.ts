@@ -153,7 +153,9 @@ export var MAP = {
 
     'LAYOUT_MANANGER.MAIN_TAB_LABEL': 'Home',
     'LAYOUT_MANANGER.DIALOG_TITLE': 'Detail',
-    'APP_LAYOUT.USER_PROFILE' : 'My profile'
+    'APP_LAYOUT.USER_PROFILE': 'My profile',
+
+    'CARD_MENU_LAYOUT.BUTTON_TEXT': 'View list'
   },
 
   // Spanish
@@ -310,7 +312,9 @@ export var MAP = {
 
     'LAYOUT_MANANGER.MAIN_TAB_LABEL': 'Inicio',
     'LAYOUT_MANANGER.DIALOG_TITLE': 'Detalle',
-    'APP_LAYOUT.USER_PROFILE' : 'Mi perfil'
+    'APP_LAYOUT.USER_PROFILE': 'Mi perfil',
+
+    'CARD_MENU_LAYOUT.BUTTON_TEXT': 'Acceder'
   }
 
 };
