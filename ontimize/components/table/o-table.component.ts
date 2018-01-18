@@ -159,8 +159,8 @@ export class OColumn {
   visible: boolean;
   renderer: any;
   width: string;
-  aggregate:  OColumnAggregate;
-  calculate:  string | OperatorFunction;
+  aggregate: OColumnAggregate;
+  calculate: string | OperatorFunction;
 }
 
 export class OTableOptions {
@@ -439,7 +439,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       }
 
       if (typeof column.operation !== 'undefined' || typeof column.functionOperation !== 'undefined') {
-        colDef.calculate =  column.operation?column.operation:column.functionOperation;
+        colDef.calculate = column.operation ? column.operation : column.functionOperation;
       }
 
     }
@@ -725,7 +725,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
   }
 
-  private setData(data: any, sqlTypes: any) {
+  protected setData(data: any, sqlTypes: any) {
     this.daoTable.sqlTypesChange.next(sqlTypes);
     this.daoTable.dataChange.next(data);
     this.daoTable.isLoadingResults = true;
