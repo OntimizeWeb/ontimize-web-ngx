@@ -1080,6 +1080,11 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     const staticOpt = this.selectAllCheckbox || this.exportButton || this.columnsVisibilityButton || this.oTableColumnsFilterComponent !== undefined;
     return staticOpt || this.tableOptions.length > 0;
   }
+
+  clearSelection() {
+    this.selection.clear();
+    this.selectedItems = this.selection.selected;
+  }
 }
 
 @NgModule({
