@@ -8,7 +8,7 @@
         <ng-content select="o-table-button"></ng-content>
       </div>
       <span class="fill-remaining"></span>
-      <div *ngIf="oTableOptions.filter" class="quickFilter" fxLayout="row">
+      <div *ngIf="quickFilter" class="quickFilter" fxLayout="row">
         <md-form-field floatPlaceholder="never">
           <input mdInput #filter placeholder="{{'TABLE.FILTER' | oTranslate}}">
           <span class="icon-btn" mdPrefix fxFlexLayout="flex-end">
