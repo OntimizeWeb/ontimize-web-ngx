@@ -106,7 +106,7 @@ export const DEFAULT_INPUTS_O_FORM = [
   'undoButton: undo-button',
 
   //show-header-navigation [string][yes|no|true|false]: Include navigations buttons in form-toolbar. Default: false;
-  'showHeaderNavigation:show-header-navigation'
+  'showHeaderNavigation: show-header-navigation'
 ];
 
 export const DEFAULT_OUTPUTS_O_FORM = [
@@ -1204,18 +1204,16 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   registerDynamicFormComponent(dynamicForm) {
     const self = this;
     if (dynamicForm) {
-      this.dynamicFormSubscription = dynamicForm.render.subscribe(
-        res => {
-          if (res) {
-            self._reloadAction(true);
-          }
+      this.dynamicFormSubscription = dynamicForm.render.subscribe(res => {
+        if (res) {
+          self._reloadAction(true);
         }
-      );
+      });
     }
   }
 
   unregisterDynamicFormComponent(dynamicForm) {
-    if (dynamicForm) {
+    if (dynamicForm && this.dynamicFormSubscription) {
       this.dynamicFormSubscription.unsubscribe();
     }
   }
@@ -1276,6 +1274,18 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
 
   getFormNavigation(): OFormNavigationClass {
     return this.formNavigation;
+  }
+
+  getFormCache(): OFormCacheClass {
+    return this.formCache;
+  }
+
+  getUrlParam(arg: string) {
+    return this.getFormNavigation().getUrlParams()[arg];
+  }
+
+  getUrlParams() {
+    return this.getFormNavigation().getUrlParams();
   }
 
   setUrlParamsAndReload(val: Object) {
