@@ -33,11 +33,7 @@ export class OContextMenuComponent implements OnDestroy, OnInit {
     if (params.contextMenu !== this) {
       return;
     }
-    if (params.data) {
-      params.menuItems = this.oContextMenuItems.filter(menuItem => menuItem.visible instanceof Function ? menuItem.visible(params.data) : menuItem.visible);
-    } else {
-      params.menuItems = this.oContextMenuItems;
-    }
+    params.menuItems = this.oContextMenuItems;
     if (params.menuItems.length > 0) {
       this.oContextMenuService.openContextMenu(params);
     }
