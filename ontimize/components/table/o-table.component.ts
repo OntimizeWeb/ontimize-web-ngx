@@ -198,7 +198,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   constructor(
     injector: Injector,
     elRef: ElementRef,
-    private dialog: MdDialog,
+    protected dialog: MdDialog,
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent
   ) {
     super(injector, elRef, form);
