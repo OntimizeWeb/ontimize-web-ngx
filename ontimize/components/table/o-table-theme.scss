@@ -22,6 +22,10 @@
       }
     }
 
+    .spinner-container {
+      background-color: mat-color($background, background);
+    }
+
     .mat-row {
       &:hover {
         cursor: pointer;
@@ -81,9 +85,9 @@
           font-weight: bold;
           background-color: mat-color($background, status-bar, 0.9);
       }
-     
-      
+
+
     }
-      
+
   }
 }

@@ -422,7 +422,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
    * Store all columns and properties in var columnsArray
    * @param column
    */
-  public registerColumn(column: any) {
+  registerColumn(column: any) {
     let colDef: OColumn = new OColumn();
     colDef.type = 'string';
     colDef.className = 'o-colum-' + (colDef.type) + ' ';
@@ -492,7 +492,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   }
 
-  public registerColumnAggregate(column: OColumnAggregate) {
+  registerColumnAggregate(column: OColumnAggregate) {
 
     this.showTotals = true;
     var alreadyExisting = this._oTableOptions.columns.filter(function (existingColumn) {
@@ -762,7 +762,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   protected setData(data: any, sqlTypes: any) {
     this.daoTable.sqlTypesChange.next(sqlTypes);
     this.daoTable.dataChange.next(data);
-    this.daoTable.isLoadingResults = true;
+    this.daoTable.isLoadingResults = false;
   }
 
   showDialogError(error: string, errorOptional?: string) {
@@ -840,7 +840,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     super.insertDetail();
   }
 
-  public remove(clearSelectedItems: boolean = false) {
+  remove(clearSelectedItems: boolean = false) {
     if ((this.keysArray.length > 0) && (this.selectedItems.length > 0)) {
       this.dialogService.confirm('CONFIRM', 'MESSAGES.CONFIRM_DELETE').then(res => {
         if (res === true) {
@@ -877,11 +877,11 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
   }
 
-  public refresh() {
+  refresh() {
     this.reloadData();
   }
 
-  public reloadData() {
+  reloadData() {
     this.selection.clear();
     this.finishQuerSubscription = false;
     this.pendingQuery = true;
@@ -889,7 +889,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     this.queryData(this.parentItem);
   }
 
-  handleClick(item: any) {
+  handleClick(item: any, $event?) {
     ObservableWrapper.callEmit(this.onClick, item);
     if (this.oenabled && (this.detailMode === OServiceComponent.DETAIL_MODE_CLICK)) {
       this.saveDataNavigationInLocalStorage();
@@ -903,7 +903,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     navigationDataStorage.setDataToStore(this.getKeysValues());
   }
 
-  handleDoubleClick(item: any) {
+  handleDoubleClick(item: any, $event?) {
     ObservableWrapper.callEmit(this.onDoubleClick, item);
     if (this.oenabled && (this.detailMode === OServiceComponent.DETAIL_MODE_DBLCLICK)) {
       this.saveDataNavigationInLocalStorage();

@@ -3,9 +3,9 @@
     <div class="toolbar" fxLayout="row" fxLayoutAlign="space-between center">
       <div class="buttons">
         <o-table-button *ngIf="insertButton" (onClick)="add()" label="TABLE.BUTTONS.ADD" icon="add"> </o-table-button>
-        <o-table-button *ngIf="showDeleteButton" (onClick)="remove()" label="TABLE.BUTTONS.DELETE" icon="delete"></o-table-button>
         <o-table-button *ngIf="refreshButton" (onClick)="reloadData()" label="TABLE.BUTTONS.REFRESH" icon="autorenew"> </o-table-button>
         <ng-content select="o-table-button"></ng-content>
+        <o-table-button *ngIf="showDeleteButton" (onClick)="remove()" label="TABLE.BUTTONS.DELETE" icon="delete"></o-table-button>
       </div>
       <span class="fill-remaining"></span>
       <div *ngIf="quickFilter" class="quickFilter" fxLayout="row">
@@ -97,7 +97,7 @@
 
       <md-header-row *cdkHeaderRowDef="[]" style.display="none"></md-header-row>
 
-      <md-row *cdkRowDef="let row; columns: oTableOptions.visibleColumns;" (click)="handleClick(row)" (dblclick)="handleDoubleClick(row)"
+      <md-row *cdkRowDef="let row; columns: oTableOptions.visibleColumns;" (click)="handleClick(row, $event)" (dblclick)="handleDoubleClick(row, $event)"
         [oContextMenu]="tableContextMenu" [oContextMenuData]="row">
       </md-row>
 
@@ -113,7 +113,7 @@
     <o-table-aggregate [o-table-options]="oTableOptions" [datasource]="dataSource" *ngIf="showTotals"> </o-table-aggregate>
 
     <!--LOADING-->
-    <div *ngIf="!daoTable.isLoadingResults">
+    <div *ngIf="daoTable.isLoadingResults" class="spinner-container">
       <md-progress-spinner mode="indeterminate" style="margin:0 auto;" *ngIf="daoTable.isLoadingResults"></md-progress-spinner>
     </div>
 
