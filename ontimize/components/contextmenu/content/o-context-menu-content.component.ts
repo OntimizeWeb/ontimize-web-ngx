@@ -2,6 +2,7 @@ import { AfterViewInit, Component, ContentChildren, EventEmitter, HostListener, 
 import { OverlayRef } from '@angular/cdk/overlay';
 import { Subscription } from 'rxjs/Subscription';
 import { ActiveDescendantKeyManager } from '@angular/cdk/a11y';
+import { trigger, state, style, transition, animate, query, group } from '@angular/animations';
 
 import { OContextMenuItemComponent } from '../item/o-context-menu-item.component';
 
@@ -16,13 +17,31 @@ export const DEFAULT_CONTEXT_MENU_CONTENT_OUTPUTS = [
   'close'
 ];
 
+export const EXPANSION_PANEL_ANIMATION_TIMING = '225ms cubic-bezier(0.4,0.0,0.2,1)';
+
 @Component({
   selector: 'o-context-menu-content',
   templateUrl: 'o-context-menu-content.component.html',
   styleUrls: ['o-context-menu-content.component.scss'],
   inputs: DEFAULT_CONTEXT_MENU_CONTENT_INPUTS,
   outputs: DEFAULT_CONTEXT_MENU_CONTENT_OUTPUTS,
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  host: {
+    '[class.o-context-menu-content]': 'true'
+  },
+  animations: [
+    trigger('contentExpansion', [
+      state('collapsed', style({ height: '0px' })),
+      state('expanded', style({ height: '*' })),
+      transition('collapsed=> expanded', group([
+        query('.o-context-menu-item', [
+            style({ opacity: 0 }),
+            animate(EXPANSION_PANEL_ANIMATION_TIMING)
+        ]),
+        animate(EXPANSION_PANEL_ANIMATION_TIMING)
+    ]))
+    ])
+  ]
 })
 export class OContextMenuContentComponent implements AfterViewInit, OnDestroy, OnInit {
 
@@ -32,6 +51,7 @@ export class OContextMenuContentComponent implements AfterViewInit, OnDestroy, O
   public execute: EventEmitter<{ event: Event, data: any, menuItem: OContextMenuItemComponent }> = new EventEmitter();
   public close: EventEmitter<void> = new EventEmitter<void>();
 
+  protected _contentExpansion = 'collapsed';
   @ContentChildren(OContextMenuItemComponent) public oContextMenuItems: QueryList<OContextMenuItemComponent>;
 
   protected subscription: Subscription = new Subscription();
@@ -43,6 +63,10 @@ export class OContextMenuContentComponent implements AfterViewInit, OnDestroy, O
 
   ngAfterViewInit() {
     this.overlay.updatePosition();
+    const self = this;
+    setTimeout(() => {
+      self.contentExpansion = 'expanded';
+    }, 0);
   }
 
   ngOnInit() {
@@ -61,6 +85,14 @@ export class OContextMenuContentComponent implements AfterViewInit, OnDestroy, O
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
+  }
+
+  get contentExpansion(): string {
+    return this._contentExpansion;
+  }
+
+  set contentExpansion(val: string) {
+    this._contentExpansion = val;
   }
 
   @HostListener('document:click', ['$event'])

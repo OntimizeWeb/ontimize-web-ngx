@@ -6,7 +6,7 @@
   $background: map-get($theme, background);
   $foreground: map-get($theme, foreground);
 
-  .o-context-menu-content.dropdown-menu {
+  .o-context-menu-content .dropdown-menu {
     background-color: mat-color($background, dialog);
   }
 

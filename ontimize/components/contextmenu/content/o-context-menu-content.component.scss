@@ -18,17 +18,20 @@
   box-sizing: border-box;
 }
 
-.o-context-menu-content.dropdown-menu {
-  position: absolute;
-  top: 100%;
-  left: 0;
+.o-context-menu-content .dropdown-menu {
   z-index: 1000;
-  float: left;
   min-width: 160px;
-  padding: 8px 0;
   font-size: 14px;
   border: 1px solid #cccccc;
   border: 1px solid rgba(0,0,0,0.15);
   border-radius: 3px;
+
+  > div:first-child {
+    padding-top: 8px;
+  }
+
+  > div:last-child {
+    padding-bottom: 8px;
+  }
 }
 
