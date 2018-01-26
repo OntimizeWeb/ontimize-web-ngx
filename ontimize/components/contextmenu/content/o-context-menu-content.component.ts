@@ -1,9 +1,9 @@
-import { AfterViewInit, Component, ContentChildren, EventEmitter, HostListener, Injector, OnDestroy, OnInit, QueryList } from '@angular/core';
+import { AfterViewInit, Component, ContentChildren, EventEmitter, HostListener, Injector, OnDestroy, OnInit, QueryList, ViewEncapsulation } from '@angular/core';
 import { OverlayRef } from '@angular/cdk/overlay';
-
-import { OContextMenuItemComponent } from './o-context-menu-item.component';
 import { Subscription } from 'rxjs/Subscription';
 import { ActiveDescendantKeyManager } from '@angular/cdk/a11y';
+
+import { OContextMenuItemComponent } from '../item/o-context-menu-item.component';
 
 export const DEFAULT_CONTEXT_MENU_CONTENT_INPUTS = [
   'menuItems',
@@ -21,7 +21,8 @@ export const DEFAULT_CONTEXT_MENU_CONTENT_OUTPUTS = [
   templateUrl: 'o-context-menu-content.component.html',
   styleUrls: ['o-context-menu-content.component.scss'],
   inputs: DEFAULT_CONTEXT_MENU_CONTENT_INPUTS,
-  outputs: DEFAULT_CONTEXT_MENU_CONTENT_OUTPUTS
+  outputs: DEFAULT_CONTEXT_MENU_CONTENT_OUTPUTS,
+  encapsulation: ViewEncapsulation.None
 })
 export class OContextMenuContentComponent implements AfterViewInit, OnDestroy, OnInit {
 

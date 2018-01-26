@@ -1,0 +1,22 @@
+.o-context-menu-item {
+
+  &.disabled a {
+    color: #BDBDBD;
+  }
+
+  &.active,
+  &:hover:not(.disabled) {
+    background: #E0E0E0;
+  }
+
+  a {
+    text-decoration: none;
+    display: block;
+    padding: 4px;
+    white-space: nowrap;
+  }
+
+  md-icon {
+    padding: 0 20px;
+  }
+}

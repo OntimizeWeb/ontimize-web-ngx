@@ -1,12 +1,18 @@
-import { Component, ContentChildren, Injector, OnDestroy, OnInit } from '@angular/core';
+import { Component, ContentChildren, Injector, OnDestroy, OnInit, EventEmitter } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 
+import { ObservableWrapper } from '../../utils';
 import { OContextMenuService, IOContextMenuContext } from './o-context-menu.service';
-import { OContextMenuItemComponent } from './o-context-menu-item.component';
+import { OContextMenuItemComponent } from './item/o-context-menu-item.component';
+
+export const DEFAULT_OUTPUTS_O_CONTEXT_MENU = [
+  'onShow'
+];
 
 @Component({
   selector: 'o-context-menu',
-  template: ' '
+  template: ' ',
+  outputs : DEFAULT_OUTPUTS_O_CONTEXT_MENU
 })
 export class OContextMenuComponent implements OnDestroy, OnInit {
 
@@ -14,6 +20,8 @@ export class OContextMenuComponent implements OnDestroy, OnInit {
 
   public oContextMenuService: OContextMenuService;
   protected subscription: Subscription = new Subscription();
+
+  public onShow: EventEmitter<any> = new EventEmitter();
 
   constructor(
     protected injector: Injector
@@ -30,6 +38,7 @@ export class OContextMenuComponent implements OnDestroy, OnInit {
   }
 
   showContextMenu(params: IOContextMenuContext): void {
+    ObservableWrapper.callEmit(this.onShow, params);
     if (params.contextMenu !== this) {
       return;
     }
