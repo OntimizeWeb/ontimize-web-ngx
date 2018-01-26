@@ -69,6 +69,7 @@ import { OFormDataNavigation } from './../form/navigation/o-form.data.navigation
 import { OTableContextMenuComponent } from './extensions/contextmenu/o-table-context-menu.component';
 import { OContextMenuComponent } from '../contextmenu/o-context-menu-components';
 import { OContextMenuModule } from '../contextmenu/o-context-menu.module';
+import { IOContextMenuContext } from '../contextmenu/o-context-menu.service';
 
 
 export const DEFAULT_INPUTS_O_TABLE = [
@@ -416,6 +417,14 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   registerContextMenu(value: OContextMenuComponent): void {
     this.tableContextMenu = value;
+    const self = this;
+    this.tableContextMenu.onShow.subscribe((params: IOContextMenuContext) => {
+      if (params.data && !self.selection.isSelected(params.data)) {
+        self.selection.clear();
+        self.selection.select(params.data);
+        self.selectedItems = [params.data];
+      }
+    });
   }
 
   /**
@@ -656,7 +665,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     if (this.daoTable) {
       this.dataSource.resultsLength = this.daoTable.data.length;
     }
-
   }
 
   protected getParentItemFromForm(parentItem) {
