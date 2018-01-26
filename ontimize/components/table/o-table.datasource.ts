@@ -17,10 +17,10 @@ export class OTableDataSource extends DataSource<any> {
   dataTotalsChange = new BehaviorSubject<any[]>([]);
   get data(): any[] { return this.dataTotalsChange.value; }
 
-  private _database: OTableDao;
-  private _paginator: MdPaginator;
-  private _tableOptions: OTableOptions;
-  private _sort: MdSort;
+  protected _database: OTableDao;
+  protected _paginator: MdPaginator;
+  protected _tableOptions: OTableOptions;
+  protected _sort: MdSort;
 
   protected _quickFilterChange = new BehaviorSubject('');
   protected _columnValueFilterChange = new BehaviorSubject('');
@@ -150,7 +150,6 @@ export class OTableDataSource extends DataSource<any> {
     if (!this._paginator || isNaN(this._paginator.pageSize)) {
       return data;
     }
-
     let startIndex = isNaN(this._paginator.pageSize) ? 0 : this._paginator.pageIndex * this._paginator.pageSize;
     if (data.length < startIndex) {
       startIndex = 0;
@@ -158,7 +157,6 @@ export class OTableDataSource extends DataSource<any> {
     }
     return data.splice(startIndex, this._paginator.pageSize);
   }
-
 
   disconnect() {
     // TODO
@@ -182,16 +180,17 @@ export class OTableDataSource extends DataSource<any> {
     this._sort.sortables.forEach((value, key) => {
       this._sort.deregister(value);
     });
-    return data.sort((a, b) => {
-      let propertyA: number | string = '';
-      let propertyB: number | string = '';
-      [propertyA, propertyB] = [a[this._sort.active], b[this._sort.active]];
+    return data.sort(this.sortFunction.bind(this));
+  }
 
-      let valueA = typeof propertyA === 'undefined' ? '' : propertyA === '' ? propertyA : isNaN(+propertyA) ? propertyA.toString().trim().toLowerCase() : +propertyA;
-      let valueB = typeof propertyB === 'undefined' ? '' : propertyB === '' ? propertyB : isNaN(+propertyB) ? propertyB.toString().trim().toLowerCase() : +propertyB;
-      return (valueA <= valueB ? -1 : 1) * (this._sort.direction === 'asc' ? 1 : -1);
-    });
+  protected sortFunction(a: any, b: any) {
+    let propertyA: number | string = '';
+    let propertyB: number | string = '';
+    [propertyA, propertyB] = [a[this._sort.active], b[this._sort.active]];
 
+    let valueA = typeof propertyA === 'undefined' ? '' : propertyA === '' ? propertyA : isNaN(+propertyA) ? propertyA.toString().trim().toLowerCase() : +propertyA;
+    let valueB = typeof propertyB === 'undefined' ? '' : propertyB === '' ? propertyB : isNaN(+propertyB) ? propertyB.toString().trim().toLowerCase() : +propertyB;
+    return (valueA <= valueB ? -1 : 1) * (this._sort.direction === 'asc' ? 1 : -1);
   }
 
   /**Return data of the visible columns of the table  without rendering */
@@ -235,9 +234,9 @@ export class OTableDataSource extends DataSource<any> {
       return obj;
     });
   }
+
   protected getAllData(render?: boolean) {
     let self = this;
-
     return this.filteredData.map(function (row, i, a) {
       /** render each column*/
       var obj = {};
@@ -341,9 +340,7 @@ export class OTableDataSource extends DataSource<any> {
     });
     return data;
   }
-
 }
-
 
 export class OTableTotalDataSource extends DataSource<any> {
 
@@ -357,7 +354,6 @@ export class OTableTotalDataSource extends DataSource<any> {
 
   /** Connect function called by the table to retrieve one stream containing the data to render. */
   connect(): Observable<any[]> {
-
     let displayDataChanges: any[];
     if (this._datasourceData) {
       displayDataChanges = [
@@ -368,13 +364,11 @@ export class OTableTotalDataSource extends DataSource<any> {
       let data = this._datasourceData.data;
       data = this.getTotals(data);
       return data;
-
     });
   }
 
   getTotals(data: any[]): any[] {
     var self = this;
-    // let totalsResult=0;
     var obj = {};
 
     if (typeof this._tableOptions === 'undefined') {
@@ -394,19 +388,15 @@ export class OTableTotalDataSource extends DataSource<any> {
       } else {
         obj[key] = '';
       }
-
       return obj;
     });
     return new Array(obj);
-
   }
-
 
   calculateAggregate(data: any[], column: OColumn): any {
     let resultAggregate;
     let operator = column.aggregate.operator;
     if (typeof operator === 'string') {
-
       switch (operator.toLowerCase()) {
         case 'count':
           resultAggregate = this.count(column.attr, data);
@@ -462,10 +452,12 @@ export class OTableTotalDataSource extends DataSource<any> {
     const tempMin = data.map(x => x[column]);
     return Math.min(...tempMin);
   }
+
   max(column, data): number {
     const tempMin = data.map(x => x[column]);
     return Math.max(...tempMin);
   }
+
   disconnect() {
     // TODO
   }
