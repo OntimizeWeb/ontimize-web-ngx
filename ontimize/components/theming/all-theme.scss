@@ -15,6 +15,7 @@
 @import '../app-sidenav/o-app-sidenav-theme.scss';
 @import '../../layouts/app-layout/o-app-layout-theme.scss';
 @import '../card-menu-item/o-card-menu-item.component.theme.scss';
+@import '../contextmenu/o-context-menu-theme.scss';
 
 // Create a theme.
 @mixin o-material-theme($theme) {
@@ -35,4 +36,5 @@
   @include o-app-sidenav-theme($theme);
   @include o-app-layout-theme($theme);
   @include o-card-menu-item-theme($theme);
+  @include o-context-menu-theme($theme);
 }
