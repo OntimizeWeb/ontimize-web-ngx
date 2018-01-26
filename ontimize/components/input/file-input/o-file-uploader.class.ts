@@ -53,9 +53,17 @@ export class OFileUploader {
   }
 
   public upload(): void {
-    this.files.map((item: OFileItem) => item.prepareToUpload());
+    this.files.map((item: OFileItem) => {
+      if (!item.isUploaded) {
+        item.prepareToUpload();
+      }
+    });
     if (this.splitUpload) {
-      this.files.map((item: OFileItem) => this.uploadItem(item));
+      this.files.map((item: OFileItem) => {
+        if (!item.isUploaded) {
+          this.uploadItem(item);
+        }
+      });
     } else {
       this.uploadItems(this.files);
     }
@@ -122,17 +130,16 @@ export class OFileUploader {
     }
 
     var self = this;
-    this._uploadSuscription = this.service.upload(items, this.entity, this.data).subscribe(
-      resp => {
-        if (resp.loaded && resp.total) {
-          let progress = Math.round(resp.loaded * 100 / resp.total);
-          self._onProgressAll(progress);
-        } else if (resp.code === 0) {
-          self._onSuccessAll(resp);
-        } else {
-          console.log('error');
-        }
-      },
+    this._uploadSuscription = this.service.upload(items, this.entity, this.data).subscribe(resp => {
+      if (resp.loaded && resp.total) {
+        let progress = Math.round(resp.loaded * 100 / resp.total);
+        self._onProgressAll(progress);
+      } else if (resp.code === 0) {
+        self._onSuccessAll(resp);
+      } else {
+        console.log('error');
+      }
+    },
       err => self._onErrorAll(err),
       () => self._onCompleteAll()
     );
