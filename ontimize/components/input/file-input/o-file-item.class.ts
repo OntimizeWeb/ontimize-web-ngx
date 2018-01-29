@@ -149,4 +149,8 @@ export class OFileItem {
     return {};
   }
 
+  get pendingUpload(): boolean {
+    return !this.isUploaded && !this.isUploading && !this.isCancel;
+   }
+
 }

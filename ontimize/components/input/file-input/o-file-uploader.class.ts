@@ -45,22 +45,24 @@ export class OFileUploader {
   removeFile(value: any): void {
     let index = this.getIndexOfItem(value);
     let item = this.files[index];
-    if (item.isUploading) {
-      item.cancel();
+    if (item) {
+      if (item.isUploading) {
+        item.cancel();
+      }
+      this.files.splice(index, 1);
+      this.progress = this._getTotalProgress();
     }
-    this.files.splice(index, 1);
-    this.progress = this._getTotalProgress();
   }
 
   public upload(): void {
     this.files.map((item: OFileItem) => {
-      if (!item.isUploaded) {
+      if (item.pendingUpload) {
         item.prepareToUpload();
       }
     });
     if (this.splitUpload) {
       this.files.map((item: OFileItem) => {
-        if (!item.isUploaded) {
+        if (item.pendingUpload) {
           this.uploadItem(item);
         }
       });
