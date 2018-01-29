@@ -104,8 +104,7 @@
     </md-table>
 
     <!--TABLE EMPTY-->
-    <div class="mat-row o-table-no-results" [style.display]="dataSource.resultsLength > 0 ? 'none' : ''" *ngIf="daoTable.isLoadingResults"
-      fxLayoutAlign="center center">
+    <div class="mat-row o-table-no-results" *ngIf="dataSource !== undefined && dataSource.resultsLength === 0" fxLayoutAlign="center center">
       {{'TABLE.EMPTY' | oTranslate}}
     </div>
 
