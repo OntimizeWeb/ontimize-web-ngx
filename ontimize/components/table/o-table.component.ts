@@ -338,6 +338,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     if (this._oTableOptions.filter) {
       this.initializeEventFilter();
     }
+    if (this.elRef) {
+      this.elRef.nativeElement.removeAttribute('title');
+    }
   }
 
   ngOnChanges(changes: { [propName: string]: SimpleChange }) {
