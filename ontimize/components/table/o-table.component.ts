@@ -437,7 +437,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   registerColumn(column: any) {
     let colDef: OColumn = new OColumn();
     colDef.type = 'string';
-    colDef.className = 'o-colum-' + (colDef.type) + ' ';
+    colDef.className = 'o-column-' + (colDef.type) + ' ';
     colDef.orderable = true;
     colDef.searchable = true;
     colDef.width = '';
@@ -468,15 +468,12 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
         colDef.type = column.type;
         colDef.className = 'o-column-' + (colDef.type) + ' ';
       }
-
-      if (typeof column.className !== 'undefined') {
-        colDef.className += column.class;
+      if (typeof column.class !== 'undefined') {
+        colDef.className = (typeof column.className !== 'undefined') ? (column.className + ' ' + column.class) : column.class;
       }
-
       if (typeof column.operation !== 'undefined' || typeof column.functionOperation !== 'undefined') {
         colDef.calculate = column.operation ? column.operation : column.functionOperation;
       }
-
     }
     colDef.visible = (this.visibleColumns.indexOf(colDef.attr) !== -1);
     if (column.asyncLoad) {
@@ -753,8 +750,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
         if (Util.isArray(res)) {
           data = res;
           sqlTypes = [];
-        } else if ((res.code === 0) && Util.isArray(res.data)) {
-          data = (res.data !== undefined) ? res.data : [];
+        } else if (res.code === 0) {
+          const arrData = (res.data !== undefined) ? res.data : [];
+          data = Util.isArray(arrData) ? arrData : [];
           sqlTypes = res.sqlTypes;
         }
         this.setData(data, sqlTypes);
