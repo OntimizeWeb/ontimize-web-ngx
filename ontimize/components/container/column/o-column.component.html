@@ -2,7 +2,7 @@
 	<div *ngIf="hasTitle()" fxLayout="row" class="o-container-title-item container-title">
 		<span layout-padding>{{ titleLabel }}</span>
 	</div>
-	<div id="innerCol" class="o-container-content-item" fxLayoutAlign="{{ layoutAlign }}" fxLayout="column">
+	<div id="innerCol" class="o-container-content-item" fxLayoutAlign="{{ layoutAlign }}" fxLayout="column" [class.fillLayout]="layoutFill">
 		<ng-content></ng-content>
 	</div>
 </div>

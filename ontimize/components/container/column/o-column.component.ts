@@ -4,11 +4,12 @@ import {
   NgModule,
   ViewEncapsulation
 } from '@angular/core';
-
+import { InputConverter } from '../../../decorators';
 import { OFormComponent } from '../../form/o-form.component';
 import { OTranslateService } from '../../../services';
 import { OSharedModule } from '../../../shared';
 import { CommonModule } from '@angular/common';
+
 export const DEFAULT_INPUTS_O_COLUMN = [
   'oattr: attr',
   'titleLabel: title-label',
@@ -40,6 +41,8 @@ export class OColumnComponent implements OnInit {
   protected defaultLayoutAlign: string = 'start start';
   protected _layoutAlign: string;
   protected translateService: OTranslateService;
+  @InputConverter()
+  layoutFill: boolean = false;
 
   constructor(
     @Optional() @Inject(forwardRef(() => OFormComponent)) protected form: OFormComponent,
@@ -120,6 +123,14 @@ export class OColumnComponent implements OnInit {
       // Take only first, nested element does not matter.
       if (this.hasTitle()) {
         element.classList.add('container-content');
+      }
+      if (this.layoutFill) {
+        let titleDiv = this.elRef.nativeElement.querySelectorAll('.container-title');
+        let titleH = 0;
+        if (titleDiv.length) {
+          titleH = titleDiv[0].offsetHeight;
+        }
+        element.style.height = (this.elRef.nativeElement.clientHeight - titleH) + 'px';
       }
     }
   }
