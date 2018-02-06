@@ -266,7 +266,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     return this._quickFilter;
   }
 
-  protected _filterCaseSensitive: boolean = true;
+  protected _filterCaseSensitive: boolean = false;
   @InputConverter()
   set filterCaseSensitive(value: boolean) {
     this._filterCaseSensitive = value;
