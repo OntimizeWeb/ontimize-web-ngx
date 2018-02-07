@@ -26,8 +26,13 @@ export class OTableDao {
   }
 
   removeQuery(filters: any): Observable<any> {
-    return (Observable as any).from(filters).map(kv => this.dataService[this.methods.delete](kv, this.entity)).mergeAll();
+    return Observable.merge(filters.map((kv => this.dataService[this.methods.delete](kv, this.entity))));
   }
+
+  insertQuery(av: Object, sqlTypes?: Object): Observable<any> {
+    return this.dataService[this.methods.insert](av, this.entity, sqlTypes);
+  }
+
   /**
    * set data array and emit data has ben modified
    * @param data
