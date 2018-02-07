@@ -1,13 +1,19 @@
 ## 2.1.0-rc.4
+
+### BREAKING CHANGES
+* **o-table**: '*filter-case-sensitive*' input default value is now 'false'.
+* **o-table**: removing input '*insert-table*' ([4907594](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4907594))
+
 ### Features
 * **o-form**: new '*getUrlParams*' method. Shortcut for '*getFormNavigation().getUrlParams()*' ([32f5613](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/32f5613))
 * **o-form**: new '*getUrlParam*' method. Shortcut for '*getFormNavigation().getUrlParams()[arg]*' ([32f5613](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/32f5613))
 * **o-form**: new '*getFormCache*' method ([32f5613](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/32f5613))
 * **o-table**: changing '*dialog*' property visibility to protected ([68dfda1](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/68dfda1))
 * **o-table**: new '*clearSelection*' method ([0a37f5d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0a37f5d))
+* **o-table-insertable-row**: adding new inner table component for using insertable rows  ([4907594](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4907594))
 
-### BREAKING CHANGES
-* **o-table**: '*filter-case-sensitive*' input default value is now 'false'.
+### Bug Fixes
+* **o-table-dao**: fixing methods bus ([5093bc0](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5093bc0))
 
 ## 2.1.0-rc.3
 ### Features
