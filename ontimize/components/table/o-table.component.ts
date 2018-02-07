@@ -33,7 +33,9 @@ import { OTableDao } from './o-table.dao';
 import {
   OTableButtonComponent,
   OTableOptionComponent,
-  OTableColumnsFilterComponent
+  OTableColumnsFilterComponent,
+  OTableInsertableRowComponent,
+  OTableEditableRowComponent
 } from './extensions/header/o-table-header-components';
 
 import { OTableColumnComponent } from './column/o-table-column.component';
@@ -114,8 +116,6 @@ export const DEFAULT_INPUTS_O_TABLE = [
   // export-button [no|yes]: show export button. Default: yes.
   'exportButton: export-button',
 
-  // insert-table [no|yes]: fix a row at the bottom that allows to insert new records. Default: no.
-  'insertTable: insert-table',
 
   // edition-mode [inline || empty]: edition mode opened. Default none
   'editionMode: edition-mode',
@@ -324,6 +324,10 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   protected quickFilterObservable: Subscription;
 
+  public oTableInsertableRowComponent: OTableInsertableRowComponent;
+  public showFirstInsertableRow: boolean = false;
+  public showLastInsertableRow: boolean = false;
+
   get rowQueryCache() {
     return this.state['query-rows'];
   }
@@ -502,7 +506,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   registerColumnAggregate(column: OColumnAggregate) {
-
     this.showTotals = true;
     var alreadyExisting = this._oTableOptions.columns.filter(function (existingColumn) {
       return existingColumn.name === column.attr;
@@ -1094,6 +1097,12 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     this.selection.clear();
     this.selectedItems = this.selection.selected;
   }
+
+  setOTableInsertableRow(tableInsertableRow: OTableInsertableRowComponent) {
+    this.oTableInsertableRowComponent = tableInsertableRow;
+    this.showFirstInsertableRow = this.oTableInsertableRowComponent.isFirstRow();
+    this.showLastInsertableRow = !this.showFirstInsertableRow;
+  }
 }
 
 @NgModule({
@@ -1117,7 +1126,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     OTableColumnAggregateComponent,
     OTableAggregateComponent,
     OTableColumnCalculatedComponent,
-    OTableContextMenuComponent
+    OTableContextMenuComponent,
+    OTableInsertableRowComponent,
+    OTableEditableRowComponent
   ],
   imports: [
     CommonModule,
@@ -1143,7 +1154,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     OTablePaginatorComponent,
     OTableColumnAggregateComponent,
     OTableColumnCalculatedComponent,
-    OTableContextMenuComponent
+    OTableContextMenuComponent,
+    OTableInsertableRowComponent,
+    OTableEditableRowComponent
   ],
   entryComponents: [
     OTableCellRendererDateComponent,
