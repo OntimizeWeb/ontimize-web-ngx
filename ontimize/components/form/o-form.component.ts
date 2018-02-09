@@ -1206,9 +1206,23 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     if (dynamicForm) {
       this.dynamicFormSubscription = dynamicForm.render.subscribe(res => {
         if (res) {
+          self.refreshComponentsEditableState();
           self._reloadAction(true);
         }
       });
+    }
+  }
+
+  protected refreshComponentsEditableState() {
+    switch (this.mode) {
+      case OFormComponent.Mode().INITIAL:
+        this._setComponentsEditable(this.isEditableDetail());
+        break;
+      case OFormComponent.Mode().INSERT:
+      case OFormComponent.Mode().UPDATE:
+        this._setComponentsEditable(true);
+      default:
+        break;
     }
   }
 
