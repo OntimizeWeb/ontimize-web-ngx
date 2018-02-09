@@ -7,6 +7,9 @@
         <ng-content select="o-table-button"></ng-content>
         <o-table-button *ngIf="showDeleteButton" (onClick)="remove()" label="TABLE.BUTTONS.DELETE" icon="delete"></o-table-button>
       </div>
+      <div *ngIf="showTitle" class="table-title">
+        {{ title | oTranslate }}
+      </div>
       <span class="fill-remaining"></span>
       <div *ngIf="quickFilter" class="quickFilter" fxLayout="row">
         <md-form-field floatPlaceholder="never">

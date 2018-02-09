@@ -14,6 +14,11 @@ $_mat-checkbox-mark-stroke-size-small: 2 / 15 * $mat-checkbox-size-small !defaul
 
   .o-table-container {
 
+    .table-title {
+      font-size: 18px;
+      font-weight: 400;
+    }
+
     .fill-remaining {
       flex: 1 1 auto;
     }

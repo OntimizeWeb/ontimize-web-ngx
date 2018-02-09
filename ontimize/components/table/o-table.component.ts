@@ -96,7 +96,7 @@ export const DEFAULT_INPUTS_O_TABLE = [
   'sortColumns: sort-columns',
 
   // quick-filter [no|yes]: show quick filter. Default: yes.
-  'quickFilter: quick-filter',
+  'quickFilterPvt: quick-filter',
 
   // delete-button [no|yes]: show delete button. Default: yes.
   'deleteButton: delete-button',
@@ -116,7 +116,6 @@ export const DEFAULT_INPUTS_O_TABLE = [
   // export-button [no|yes]: show export button. Default: yes.
   'exportButton: export-button',
 
-
   // edition-mode [inline || empty]: edition mode opened. Default none
   'editionMode: edition-mode',
 
@@ -127,16 +126,18 @@ export const DEFAULT_INPUTS_O_TABLE = [
   'selectAllCheckbox: select-all-checkbox',
 
   // pagination mode [string][yes|no|true|false]
-  'singlePageMode : single-page-mode',
+  'singlePageMode: single-page-mode',
 
   // pagination-controls [string][yes|no|true|false]
-  'paginationControls : pagination-controls',
+  'paginationControls: pagination-controls',
 
   //filter [string][yes|no|true|false]
-  'filterCaseSensitive: filter-case-sensitive',
+  'filterCaseSensitivePvt: filter-case-sensitive',
 
   //fix-header [string][yes|no|true|false]: fixed header and footer when the content is greather than its own height
-  'fixedHeader:fixed-header'
+  'fixedHeader: fixed-header',
+
+  'showTitle: show-title'
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE = [
@@ -253,27 +254,27 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     this._oTableOptions = value;
   }
 
-  protected _quickFilter: boolean = true;
   @InputConverter()
+  protected quickFilterPvt: boolean = true;
   set quickFilter(value: boolean) {
-    this._quickFilter = value;
-    this._oTableOptions.filter = this._quickFilter;
-    if (this._quickFilter) {
+    this.quickFilterPvt = value;
+    this._oTableOptions.filter = this.quickFilterPvt;
+    if (this.quickFilterPvt) {
       this.initializeEventFilter();
     }
   }
   get quickFilter(): boolean {
-    return this._quickFilter;
+    return this.quickFilterPvt;
   }
 
-  protected _filterCaseSensitive: boolean = false;
   @InputConverter()
+  protected filterCaseSensitivePvt: boolean = false;
   set filterCaseSensitive(value: boolean) {
-    this._filterCaseSensitive = value;
-    this._oTableOptions.filterCaseSensitive = this._filterCaseSensitive;
+    this.filterCaseSensitivePvt = value;
+    this._oTableOptions.filterCaseSensitive = this.filterCaseSensitivePvt;
   }
   get filterCaseSensitive(): boolean {
-    return this._filterCaseSensitive;
+    return this.filterCaseSensitivePvt;
   }
   @InputConverter()
   insertButton: boolean = true;
@@ -284,7 +285,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   @InputConverter()
   paginationControls: boolean = true;
   @InputConverter()
-  fixHeaderFooter: boolean = false;
+  fixedHeader: boolean = false;
+  @InputConverter()
+  showTitle: boolean = false;
 
   public daoTable: OTableDao | null;
   public dataSource: OTableDataSource | null;
