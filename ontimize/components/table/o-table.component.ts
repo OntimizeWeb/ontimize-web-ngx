@@ -33,7 +33,9 @@ import { OTableDao } from './o-table.dao';
 import {
   OTableButtonComponent,
   OTableOptionComponent,
-  OTableColumnsFilterComponent
+  OTableColumnsFilterComponent,
+  OTableInsertableRowComponent,
+  OTableEditableRowComponent
 } from './extensions/header/o-table-header-components';
 
 import { OTableColumnComponent } from './column/o-table-column.component';
@@ -114,8 +116,6 @@ export const DEFAULT_INPUTS_O_TABLE = [
   // export-button [no|yes]: show export button. Default: yes.
   'exportButton: export-button',
 
-  // insert-table [no|yes]: fix a row at the bottom that allows to insert new records. Default: no.
-  'insertTable: insert-table',
 
   // edition-mode [inline || empty]: edition mode opened. Default none
   'editionMode: edition-mode',
@@ -266,7 +266,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     return this._quickFilter;
   }
 
-  protected _filterCaseSensitive: boolean = true;
+  protected _filterCaseSensitive: boolean = false;
   @InputConverter()
   set filterCaseSensitive(value: boolean) {
     this._filterCaseSensitive = value;
@@ -324,6 +324,10 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   protected quickFilterObservable: Subscription;
 
+  public oTableInsertableRowComponent: OTableInsertableRowComponent;
+  public showFirstInsertableRow: boolean = false;
+  public showLastInsertableRow: boolean = false;
+
   get rowQueryCache() {
     return this.state['query-rows'];
   }
@@ -337,6 +341,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     this.initTableAfterViewInit();
     if (this._oTableOptions.filter) {
       this.initializeEventFilter();
+    }
+    if (this.elRef) {
+      this.elRef.nativeElement.removeAttribute('title');
     }
   }
 
@@ -434,7 +441,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   registerColumn(column: any) {
     let colDef: OColumn = new OColumn();
     colDef.type = 'string';
-    colDef.className = 'o-colum-' + (colDef.type) + ' ';
+    colDef.className = 'o-column-' + (colDef.type) + ' ';
     colDef.orderable = true;
     colDef.searchable = true;
     colDef.width = '';
@@ -465,15 +472,12 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
         colDef.type = column.type;
         colDef.className = 'o-column-' + (colDef.type) + ' ';
       }
-
-      if (typeof column.className !== 'undefined') {
-        colDef.className += column.class;
+      if (typeof column.class !== 'undefined') {
+        colDef.className = (typeof column.className !== 'undefined') ? (column.className + ' ' + column.class) : column.class;
       }
-
       if (typeof column.operation !== 'undefined' || typeof column.functionOperation !== 'undefined') {
         colDef.calculate = column.operation ? column.operation : column.functionOperation;
       }
-
     }
     colDef.visible = (this.visibleColumns.indexOf(colDef.attr) !== -1);
     if (column.asyncLoad) {
@@ -502,7 +506,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   registerColumnAggregate(column: OColumnAggregate) {
-
     this.showTotals = true;
     var alreadyExisting = this._oTableOptions.columns.filter(function (existingColumn) {
       return existingColumn.name === column.attr;
@@ -750,8 +753,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
         if (Util.isArray(res)) {
           data = res;
           sqlTypes = [];
-        } else if ((res.code === 0) && Util.isArray(res.data)) {
-          data = (res.data !== undefined) ? res.data : [];
+        } else if (res.code === 0) {
+          const arrData = (res.data !== undefined) ? res.data : [];
+          data = Util.isArray(arrData) ? arrData : [];
           sqlTypes = res.sqlTypes;
         }
         this.setData(data, sqlTypes);
@@ -1093,6 +1097,12 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     this.selection.clear();
     this.selectedItems = this.selection.selected;
   }
+
+  setOTableInsertableRow(tableInsertableRow: OTableInsertableRowComponent) {
+    this.oTableInsertableRowComponent = tableInsertableRow;
+    this.showFirstInsertableRow = this.oTableInsertableRowComponent.isFirstRow();
+    this.showLastInsertableRow = !this.showFirstInsertableRow;
+  }
 }
 
 @NgModule({
@@ -1116,7 +1126,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     OTableColumnAggregateComponent,
     OTableAggregateComponent,
     OTableColumnCalculatedComponent,
-    OTableContextMenuComponent
+    OTableContextMenuComponent,
+    OTableInsertableRowComponent,
+    OTableEditableRowComponent
   ],
   imports: [
     CommonModule,
@@ -1142,7 +1154,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     OTablePaginatorComponent,
     OTableColumnAggregateComponent,
     OTableColumnCalculatedComponent,
-    OTableContextMenuComponent
+    OTableContextMenuComponent,
+    OTableInsertableRowComponent,
+    OTableEditableRowComponent
   ],
   entryComponents: [
     OTableCellRendererDateComponent,

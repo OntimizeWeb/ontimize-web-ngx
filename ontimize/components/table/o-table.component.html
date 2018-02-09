@@ -63,6 +63,10 @@
 
     </md-table>
 
+    <!-- TABLE EDITABLE ROW -->
+    <o-table-editable-row [datasource]="dataSource" *ngIf="showFirstInsertableRow">
+    </o-table-editable-row>
+
     <md-table #table [trackBy]="getTrackByFunction()" [dataSource]="dataSource" mdSort [class]="rowHeight" id="tableContent">
       <!--Checkbox Column -->
       <ng-container [cdkColumnDef]="oTableOptions.selectColumn.name" *ngIf="oTableOptions.selectColumn.visible">
@@ -104,13 +108,16 @@
     </md-table>
 
     <!--TABLE EMPTY-->
-    <div class="mat-row o-table-no-results" [style.display]="dataSource.resultsLength > 0 ? 'none' : ''" *ngIf="daoTable.isLoadingResults"
-      fxLayoutAlign="center center">
+    <div class="mat-row o-table-no-results" *ngIf="dataSource !== undefined && dataSource.resultsLength === 0" fxLayoutAlign="center center">
       {{'TABLE.EMPTY' | oTranslate}}
     </div>
 
     <!--TABLE AGGREGATE-->
     <o-table-aggregate [o-table-options]="oTableOptions" [datasource]="dataSource" *ngIf="showTotals"> </o-table-aggregate>
+
+    <!-- TABLE EDITABLE ROW -->
+    <o-table-editable-row [datasource]="dataSource" *ngIf="showLastInsertableRow">
+    </o-table-editable-row>
 
     <!--LOADING-->
     <div *ngIf="daoTable.isLoadingResults" class="spinner-container">

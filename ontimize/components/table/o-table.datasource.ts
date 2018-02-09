@@ -2,15 +2,16 @@ import { Observable } from 'rxjs/Observable';
 import { DataSource } from '@angular/cdk/collections';
 import { OTableDao } from './o-table.dao';
 import { OTableOptions, OColumn, OTableComponent } from './o-table.component';
-import { ITableFilterByColumnDataInterface } from './extensions/dialog/o-table-dialog-components';
-import { IColumnValueFilter } from './extensions/header/o-table-header-components';
 import { MdSort, MdPaginator } from '@angular/material';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import 'rxjs/add/operator/startWith';
 import 'rxjs/add/observable/merge';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/fromEvent';
+
+import { ITableFilterByColumnDataInterface } from './extensions/dialog/o-table-dialog-components';
 import { OTableAggregateComponent } from './extensions/footer/o-table-footer-components';
+import { IColumnValueFilter, OTableEditableRowComponent } from './extensions/header/o-table-header-components';
 
 export class OTableDataSource extends DataSource<any> {
 
@@ -456,6 +457,41 @@ export class OTableTotalDataSource extends DataSource<any> {
   max(column, data): number {
     const tempMin = data.map(x => x[column]);
     return Math.max(...tempMin);
+  }
+
+  disconnect() {
+    // TODO
+  }
+}
+
+export class OTableEditableRowDataSource extends DataSource<any> {
+
+  protected _tableOptions: OTableOptions;
+  protected _datasourceData: OTableDataSource;
+
+  constructor(protected editableRowTable: OTableEditableRowComponent) {
+    super();
+    this._tableOptions = editableRowTable.oTableOptions;
+    this._datasourceData = editableRowTable.tableDataSource;
+  }
+
+  /** Connect function called by the table to retrieve one stream containing the data to render. */
+  connect(): Observable<any[]> {
+    let displayDataChanges: any[];
+    if (this._datasourceData) {
+      displayDataChanges = [
+        this._datasourceData.dataTotalsChange
+      ];
+    }
+
+    let emptyData = {};
+    this._tableOptions.visibleColumns.forEach(col => {
+      emptyData[col] = '';
+    });
+
+    return Observable.merge(...displayDataChanges).map(() => {
+      return [emptyData];
+    });
   }
 
   disconnect() {
