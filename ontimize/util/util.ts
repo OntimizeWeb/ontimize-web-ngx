@@ -139,7 +139,7 @@ export class Util {
    * Compare is equal two objects
    * @param a Object 1
    * @param b Object 2
-   * 
+   *
    */
   static isEquivalent(a, b) {
     // Create arrays of property names
@@ -157,7 +157,7 @@ export class Util {
 
       // If values of same property are not equal,
       // objects are not equivalent
-      if (a[propName] != b[propName]) {
+      if (a[propName] !== b[propName]) {
         return false;
       }
     }
