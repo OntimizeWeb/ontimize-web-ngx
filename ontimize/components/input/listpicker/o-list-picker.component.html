@@ -7,7 +7,7 @@
         <input mdInput type="text" [attr.id]="'desc_' + getAttribute()" [id]="'desc_' + getAttribute()"
             [placeholder]="placeHolder" [value]="getDescriptionValue()"
             (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)"
-            [readonly]="isReadOnly" [disabled]="isDisabled">
+            [readonly]="isReadOnly" [disabled]="isDisabled" [required]="isRequired">
             <md-icon [class.mat-disabled]="isDisabled" mdSuffix>search</md-icon>
             <md-icon [class.mat-disabled]="isDisabled" (click)="onClickClear($event)" mdSuffix>clear</md-icon>
         <md-hint *ngIf="hasError('required')">

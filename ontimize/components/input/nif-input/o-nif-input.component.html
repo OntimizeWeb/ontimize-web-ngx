@@ -3,7 +3,7 @@
     <md-form-field #innerInputContainer fxFlexFill>
         <input mdInput type="text" [attr.id]="getAttribute()" [id]="getAttribute()" [formControlName]="getAttribute()"
             [placeholder]="placeHolder" [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)" (focus)="innerOnFocus($event)"
-            (blur)="innerOnBlur($event)" [readonly]="isReadOnly">
+            (blur)="innerOnBlur($event)" [readonly]="isReadOnly" [required]="isRequired">
             <md-icon mdSuffix [class.mat-disabled]="isDisabled">perm_identity</md-icon>
         <md-error *ngIf="hasError('required')">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</md-error>
         <md-error *ngIf="hasError('invalidNIF')">{{ 'FORM_VALIDATION.NIF_FORMAT' | oTranslate}}</md-error>
