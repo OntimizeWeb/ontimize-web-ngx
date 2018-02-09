@@ -1,5 +1,4 @@
 .o-context-menu-item {
-
   &.disabled a {
     color: #BDBDBD;
   }
@@ -17,6 +16,10 @@
   }
 
   md-icon {
-    padding: 0 20px;
+    padding: 0 12px;
+  }
+
+  span {
+    padding-right: 12px;
   }
 }
