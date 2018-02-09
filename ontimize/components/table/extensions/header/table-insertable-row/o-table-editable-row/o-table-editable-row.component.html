@@ -1,12 +1,12 @@
-<!-- class="totals-table" -->
-<md-table [dataSource]="editableDatasource">
+<md-table [dataSource]="editableDatasource" class="editable-row-table">
   <ng-container *ngFor="let column of oTableOptions.columns" [cdkColumnDef]="column.name">
     <md-header-cell *cdkHeaderCellDef style="display: none;"> </md-header-cell>
 
     <md-cell *cdkCellDef="let row" [fxFlex]="column.width" [ngClass]="column.className">
       <ng-container *ngIf="isColumnInsertable(column)">
-        <md-form-field class="insertable-form-field">
-          <input mdInput type="text" [formControl]="getControl(column)">
+        <md-form-field class="insertable-form-field" [hideRequiredMarker]="false" floatPlaceholder="never">
+          <input mdInput type="text" placeholder="{{ column.attr | oTranslate }}" [id]="column.attr" [formControl]="getControl(column)"
+            [required]="isColumnRequired(column)">
           <md-error *ngIf="columnHasError(column, 'required')">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</md-error>
         </md-form-field>
       </ng-container>

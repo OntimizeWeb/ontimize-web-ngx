@@ -16,6 +16,7 @@
 @import '../../layouts/app-layout/o-app-layout-theme.scss';
 @import '../card-menu-item/o-card-menu-item.component.theme.scss';
 @import '../contextmenu/o-context-menu-theme.scss';
+@import '../table/extensions/header/table-insertable-row/o-table-editable-row/o-table-editable-row.theme.scss';
 
 // Create a theme.
 @mixin o-material-theme($theme) {
@@ -37,4 +38,5 @@
   @include o-app-layout-theme($theme);
   @include o-card-menu-item-theme($theme);
   @include o-context-menu-theme($theme);
+  @include o-table-editable-row-theme($theme);
 }

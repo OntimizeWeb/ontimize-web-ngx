@@ -1,4 +1,4 @@
-import { Component, Injector, Inject, forwardRef, ViewEncapsulation } from '@angular/core';
+import { Component, Injector, Inject, forwardRef, ViewEncapsulation, ElementRef } from '@angular/core';
 import { FormControl, ValidatorFn, Validators } from '@angular/forms';
 import { ObservableWrapper } from '../../../../../../utils';
 import { SnackBarService } from '../../../../../../services';
@@ -35,6 +35,7 @@ export class OTableEditableRowComponent {
 
   constructor(
     protected injector: Injector,
+    protected elRef: ElementRef,
     @Inject(forwardRef(() => OTableComponent)) protected table: OTableComponent
   ) {
     this.snackBarService = this.injector.get(SnackBarService);
@@ -97,10 +98,14 @@ export class OTableEditableRowComponent {
 
   resolveValidators(column: OColumn): ValidatorFn[] {
     let validators: ValidatorFn[] = [];
-    if (this._insertableRowTable.isColumnRequired(column)) {
+    if (this.isColumnRequired(column)) {
       validators.push(Validators.required);
     }
     return validators;
+  }
+
+  isColumnRequired(column: OColumn): boolean {
+    return this._insertableRowTable.isColumnRequired(column);
   }
 
   columnHasError(column: OColumn, error: string): boolean {
@@ -117,7 +122,7 @@ export class OTableEditableRowComponent {
     });
 
     if (!valid) {
-      this.table.showDialogError('MESSAGES.FORM_VALIDATION_ERROR');
+      this.table.showDialogError('TABLE.ROW_VALIDATION_ERROR');
       return;
     }
 
@@ -150,9 +155,14 @@ export class OTableEditableRowComponent {
   }
 
   protected cleanFields() {
-    Object.keys(this.controls).forEach((controlKey) => {
-      const control : FormControl = this.controls[controlKey];
+    const controlKeys = Object.keys(this.controls);
+    controlKeys.forEach((controlKey) => {
+      const control: FormControl = this.controls[controlKey];
       control.reset();
     });
+    let firstInputEl = this.elRef.nativeElement.querySelector('input#' + controlKeys[0]);
+    if (firstInputEl) {
+      firstInputEl.focus();
+    }
   }
 }
