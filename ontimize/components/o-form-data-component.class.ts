@@ -228,4 +228,13 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     return true;
   }
 
+  set disabled(value: boolean) {
+    this._disabled = value;
+    if (this._fControl && value) {
+      this._fControl.disable();
+    } else if (this._fControl) {
+      this._fControl.enable();
+    }
+  }
+
 }
