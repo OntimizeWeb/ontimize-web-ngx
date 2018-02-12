@@ -96,6 +96,9 @@ export const DEFAULT_INPUTS_O_FORM = [
   // layout-direction [string][column|row]: Default: column
   'layoutDirection: layout-direction',
 
+  // fxLayoutAlign value
+  'layoutAlign: layout-align',
+
   // editable-detail [string][yes|no|true|false]: Default: true;
   'editableDetail: editable-detail',
 
@@ -193,6 +196,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   @InputConverter()
   layoutFill: boolean = true;
   protected _layoutDirection: string = OFormComponent.DEFAULT_LAYOUT_DIRECTION;
+  protected _layoutAlign: string;
   @InputConverter()
   protected editableDetail: boolean = true;
   protected keysSqlTypes: string;
@@ -1254,6 +1258,14 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   set layoutDirection(val: string) {
     const parsedVal = (val || '').toLowerCase();
     this._layoutDirection = ['row', 'column'].indexOf(parsedVal) !== -1 ? parsedVal : OFormComponent.DEFAULT_LAYOUT_DIRECTION;
+  }
+
+  get layoutAlign(): string {
+    return this._layoutAlign;
+  }
+
+  set layoutAlign(val: string) {
+    this._layoutAlign = val;
   }
 
   isEditableDetail() {
