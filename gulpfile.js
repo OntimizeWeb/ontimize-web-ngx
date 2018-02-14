@@ -31,8 +31,17 @@ const THEMES_STYLES_CONF = {
 };
 
 gulp.task('themes.styles', ['concat.themes.scss'], function () {
+  var matchCount = 0;
   gulp.src([THEMES_STYLES_CONF.DIST_TMP_FILENAME])
-    .pipe(replace(THEMES_STYLES_CONF.MATERIAL_IMPORT, ''))
+    // .pipe(replace(THEMES_STYLES_CONF.MATERIAL_IMPORT, ''))
+    .pipe(replace(THEMES_STYLES_CONF.MATERIAL_IMPORT, function (match) {
+      matchCount++
+      if (matchCount === 1) {
+        return match;
+      } else {
+        return '';
+      }
+    }))
     .pipe(gulp.dest(THEMES_STYLES_CONF.DIST));
 });
 

@@ -1,3 +1,5 @@
+@import 'node_modules/@angular/material/theming';
+
 @import './app-global-theme.scss';
 @import '../breadcrumb/o-breadcrumb-theme.scss';
 @import '../container/o-container-theme.scss';
@@ -20,6 +22,8 @@
 
 // Create a theme.
 @mixin o-material-theme($theme) {
+  @include mat-core();
+  @include angular-material-theme($theme);
   @include app-global-theme($theme);
   @include md-dialog-theme($theme);
   @include o-breadcrumb-theme($theme);
