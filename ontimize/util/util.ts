@@ -55,11 +55,15 @@ export class Util {
     return false;
   }
 
-  static parseArray(value: string): string[] {
+  static parseArray(value: string, excludeRepeated: boolean = false): string[] {
+    let result = [];
     if (value) {
-      return value.split(';');
+      result = value.split(';');
     }
-    return [];
+    if (excludeRepeated && result.length > 0) {
+      result = Array.from(new Set(result));
+    }
+    return result;
   }
 
   /**
@@ -67,11 +71,11 @@ export class Util {
    * @param  {Array<string>} pKeysArray Array of strings. Accepted format: key | key:alias
    * @returns Object
    */
-  static parseParentKeysEquivalences(pKeysArray: Array<string>): Object {
+  static parseParentKeysEquivalences(pKeysArray: Array<string>, separator: string = ':'): Object {
     let equivalences = {};
     if (pKeysArray && pKeysArray.length > 0) {
       pKeysArray.forEach(item => {
-        let aux = item.split(':');
+        let aux = item.split(separator);
         if (aux && aux.length === 2) {
           equivalences[aux[0]] = aux[1];
         } else if (aux && aux.length === 1) {
