@@ -45,11 +45,11 @@ export class OTableInsertableRowComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.columnsArray = Util.parseArray(this.columns);
+    this.columnsArray = Util.parseArray(this.columns, true);
     if (this.columnsArray.length === 0) {
       this.columnsArray = this.table.oTableOptions.visibleColumns;
     }
-    this.requiredColumnsArray = Util.parseArray(this.requiredColumns);
+    this.requiredColumnsArray = Util.parseArray(this.requiredColumns, true);
     if (OTableInsertableRowComponent.AVAILABLE_ROW_POSITIONS.indexOf((this.position || '').toLowerCase()) === -1) {
       this.position = OTableInsertableRowComponent.DEFAULT_ROW_POSITION;
     }

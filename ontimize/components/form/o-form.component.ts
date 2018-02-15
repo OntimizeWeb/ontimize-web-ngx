@@ -566,8 +566,8 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     if (this.headeractions === 'all') {
       this.headeractions = 'R;I;U;D';
     }
-    this.keysArray = Util.parseArray(this.keys);
-    this.colsArray = Util.parseArray(this.columns);
+    this.keysArray = Util.parseArray(this.keys, true);
+    this.colsArray = Util.parseArray(this.columns, true);
     let pkArray = Util.parseArray(this.parentKeys);
     this._pKeysEquiv = Util.parseParentKeysEquivalences(pkArray);
     this.keysSqlTypesArray = Util.parseArray(this.keysSqlTypes);

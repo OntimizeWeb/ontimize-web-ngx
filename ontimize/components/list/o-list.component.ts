@@ -181,7 +181,7 @@ export class OListComponent extends OServiceComponent implements OnInit, IList, 
     }
 
     if (this.quickFilterColumns) {
-      this.quickFilterColArray = Util.parseArray(this.quickFilterColumns);
+      this.quickFilterColArray = Util.parseArray(this.quickFilterColumns, true);
     } else {
       this.quickFilterColArray = this.colArray;
     }

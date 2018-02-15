@@ -42,7 +42,7 @@ export class OTableColumnsFilterComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.columnsArray = Util.parseArray(this.columns);
+    this.columnsArray = Util.parseArray(this.columns, true);
     if (this.columnsArray.length === 0) {
       this.columnsArray = this.table.oTableOptions.visibleColumns;
     }
