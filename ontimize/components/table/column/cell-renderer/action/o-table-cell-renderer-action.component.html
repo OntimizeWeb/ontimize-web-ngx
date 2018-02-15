@@ -1,0 +1,7 @@
+<ng-template #templateref let-cellvalue="cellvalue" let-rowvalue="rowvalue">
+    <span class="action-cell-renderer">
+        <md-icon (click)="innerOnClick($event, rowvalue)">
+            {{ icon }}
+        </md-icon>
+    </span>
+</ng-template>

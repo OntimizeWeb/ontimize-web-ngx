@@ -35,12 +35,12 @@
         color: mat-color($foreground, secondary-text);
         &.o-column-currency,
         &.o-column-integer,
-        &.o-column-real,
-        {
+        &.o-column-real {
           text-align: right
         }
+        &.o-column-action,
         &.o-column-boolean,
-        &.o-column-date{
+        &.o-column-date {
           text-align: center
         }
 

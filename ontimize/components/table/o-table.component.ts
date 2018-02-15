@@ -41,7 +41,6 @@ import {
 import { OTableColumnComponent } from './column/o-table-column.component';
 import { Util } from '../../util/util';
 import { ObservableWrapper } from '../../util/async';
-import { OFormValue } from '../form/OFormValue';
 
 import {
   OTableExportConfiguration,
@@ -51,16 +50,7 @@ import {
   ITableFilterByColumnDataInterface
 } from './extensions/dialog/o-table-dialog-components';
 
-import {
-  OTableCellRendererDateComponent,
-  OTableCellRendererBooleanComponent,
-  OTableCellRendererCurrencyComponent,
-  OTableCellRendererImageComponent,
-  OTableCellRendererIntegerComponent,
-  OTableCellRendererRealComponent,
-  OTableCellRendererPercentageComponent
-} from './column/cell-renderer/cell-renderer';
-
+import { O_TABLE_CELL_RENDERERS, OTableCellRendererImageComponent } from './column/cell-renderer/cell-renderer';
 
 import {
   OTableColumnCalculatedComponent,
@@ -305,6 +295,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   protected pendingQueryFilter = undefined;
 
   protected setStaticData: boolean = false;
+  protected avoidQueryColumns: Array<any> = [];
   protected asyncLoadColumns: Array<any> = [];
   protected asyncLoadSubscriptions: Object = {};
 
@@ -484,8 +475,11 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       }
     }
     colDef.visible = (this.visibleColumns.indexOf(colDef.attr) !== -1);
-    if (column.asyncLoad) {
-      this.asyncLoadColumns.push(column.attr);
+    if (column && (column.asyncLoad || column.type === 'action')) {
+      this.avoidQueryColumns.push(column.attr);
+      if (column.asyncLoad) {
+        this.asyncLoadColumns.push(column.attr);
+      }
     }
     //find column definition by name
     if (typeof (column.attr) !== 'undefined') {
@@ -763,7 +757,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   getAttributesValuesToQuery(): Object {
     let columns = [];
     this.colArray.forEach(col => {
-      if (this.asyncLoadColumns.indexOf(col) === -1) {
+      if (this.avoidQueryColumns.indexOf(col) === -1) {
         columns.push(col);
       }
     });
@@ -1084,13 +1078,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   declarations: [
     OTableComponent,
     OTableColumnComponent,
-    OTableCellRendererDateComponent,
-    OTableCellRendererBooleanComponent,
-    OTableCellRendererImageComponent,
-    OTableCellRendererIntegerComponent,
-    OTableCellRendererRealComponent,
-    OTableCellRendererCurrencyComponent,
-    OTableCellRendererPercentageComponent,
+    ...O_TABLE_CELL_RENDERERS,
     OTableExportDialogComponent,
     OTableVisibleColumnsDialogComponent,
     OTableFilterByColumnDataDialogComponent,
@@ -1119,13 +1107,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     OTableOptionComponent,
     OTableColumnsFilterComponent,
     OTableColumnComponent,
-    OTableCellRendererDateComponent,
-    OTableCellRendererBooleanComponent,
-    OTableCellRendererImageComponent,
-    OTableCellRendererIntegerComponent,
-    OTableCellRendererRealComponent,
-    OTableCellRendererCurrencyComponent,
-    OTableCellRendererPercentageComponent,
+    ...O_TABLE_CELL_RENDERERS,
     OTablePaginatorComponent,
     OTableColumnAggregateComponent,
     OTableColumnCalculatedComponent,
@@ -1134,13 +1116,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     OTableEditableRowComponent
   ],
   entryComponents: [
-    OTableCellRendererDateComponent,
-    OTableCellRendererBooleanComponent,
-    OTableCellRendererImageComponent,
-    OTableCellRendererIntegerComponent,
-    OTableCellRendererRealComponent,
-    OTableCellRendererCurrencyComponent,
-    OTableCellRendererPercentageComponent,
+    ...O_TABLE_CELL_RENDERERS,
     OTableExportDialogComponent,
     OTableVisibleColumnsDialogComponent,
     OTableFilterByColumnDataDialogComponent,

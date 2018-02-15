@@ -7,7 +7,8 @@ import {
   OTableCellRendererIntegerComponent,
   OTableCellRendererRealComponent,
   OTableCellRendererBooleanComponent,
-  OTableCellRendererPercentageComponent
+  OTableCellRendererPercentageComponent,
+  OTableCellRendererActionComponent
 } from './cell-renderer/cell-renderer';
 
 import { OTableComponent } from '../o-table.component';
@@ -56,6 +57,7 @@ export const DEFAULT_INPUTS_O_TABLE_COLUMN = [
   ...OTableCellRendererCurrencyComponent.DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_CURRENCY, // includes Integer and Real
   ...OTableCellRendererDateComponent.DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_DATE,
   ...OTableCellRendererImageComponent.DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_IMAGE,
+  ...OTableCellRendererActionComponent.DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_ACTION
 ];
 
 
@@ -63,17 +65,25 @@ export const DEFAULT_INPUTS_O_TABLE_COLUMN = [
   selector: 'o-table-column',
   templateUrl: './o-table-column.component.html',
   styleUrls: ['./o-table-column.component.scss'],
-  inputs: [
-    ...DEFAULT_INPUTS_O_TABLE_COLUMN
-  ],
-
+  inputs: DEFAULT_INPUTS_O_TABLE_COLUMN,
   host: {
     '[class.columnBreakWord]': 'breakWord'
   }
 })
 export class OTableColumnComponent implements OnInit {
 
-  //public static DEFAULT_INPUTS_O_TABLE_COLUMN = DEFAULT_INPUTS_O_TABLE_COLUMN;
+  public static DEFAULT_INPUTS_O_TABLE_COLUMN = DEFAULT_INPUTS_O_TABLE_COLUMN;
+
+  protected renderersMapping = {
+    'action': OTableCellRendererActionComponent,
+    'boolean': OTableCellRendererBooleanComponent,
+    'currency': OTableCellRendererCurrencyComponent,
+    'date': OTableCellRendererDateComponent,
+    'image': OTableCellRendererImageComponent,
+    'integer': OTableCellRendererIntegerComponent,
+    'percentage': OTableCellRendererPercentageComponent,
+    'real': OTableCellRendererRealComponent
+  };
 
   public type: string;
   public renderer: any;
@@ -108,6 +118,10 @@ export class OTableColumnComponent implements OnInit {
   protected avatar: string;
   protected emptyImage: string;
 
+  /*input renderer action */
+  protected icon: string;
+  protected action: string;
+
   @InputConverter()
   protected breakWord: boolean = false;
   @InputConverter()
@@ -130,83 +144,59 @@ export class OTableColumnComponent implements OnInit {
     this.searchable = Util.parseBoolean(this.searchable, true);
     this.grouping = Util.parseBoolean(this.grouping, true);
     if (typeof (this.renderer) === 'undefined') {
-      switch (this.type) {
-        case 'currency':
-          factory = this.resolver.resolveComponentFactory(OTableCellRendererCurrencyComponent);
-          break;
-        case 'date':
-          factory = this.resolver.resolveComponentFactory(OTableCellRendererDateComponent);
-          break;
-        case 'integer':
-          factory = this.resolver.resolveComponentFactory(OTableCellRendererIntegerComponent);
-          break;
-        case 'boolean':
-          factory = this.resolver.resolveComponentFactory(OTableCellRendererBooleanComponent);
-          break;
-        case 'real':
-          factory = this.resolver.resolveComponentFactory(OTableCellRendererRealComponent);
-          break;
-        case 'image':
-          factory = this.resolver.resolveComponentFactory(OTableCellRendererImageComponent);
-          break;
-        case 'percentage':
-          factory = this.resolver.resolveComponentFactory(OTableCellRendererPercentageComponent);
-          break;
-
-      }
-
-      if (factory) {
-        let ref = this.container.createComponent(factory);
-        this.renderer = ref.instance;
-        switch (this.type) {
-          case 'currency':
-            this.renderer.currencySymbol = this.currencySymbol;
-            this.renderer.currencySymbolPosition = this.currencySymbolPosition;
-            this.renderer.decimalSeparator = this.decimalSeparator;
-            this.renderer.decimalDigits = this.decimalDigits;
-            this.renderer.grouping = this.grouping;
-            this.renderer.thousandSeparator = this.thousandSeparator;
-
-            break;
-          case 'date':
-            this.renderer.format = this.format;
-            break;
-          case 'integer':
-            this.renderer.grouping = this.grouping;
-            this.renderer.thousandSeparator = this.thousandSeparator;
-            break;
-          case 'boolean':
-            this.renderer.trueValueType = this.trueValueType;
-            this.renderer.trueValue = this.trueValue;
-            this.renderer.falseValueType = this.falseValueType;
-            this.renderer.falseValue = this.falseValue;
-            this.renderer.dataType = this.dataType;
-            break;
-          case 'real':
-          case 'percentage':
-            this.renderer.decimalSeparator = this.decimalSeparator;
-            this.renderer.decimalDigits = this.decimalDigits;
-            this.renderer.grouping = this.grouping;
-            this.renderer.thousandSeparator = this.thousandSeparator;
-
-            break;
-          case 'image':
-            this.renderer.imageType = this.imageType;
-            this.renderer.avatar = this.avatar;
-            this.renderer.emptyImage = this.emptyImage;
-            break;
+      const componentRef = this.renderersMapping[this.type];
+      if (componentRef !== undefined) {
+        factory = this.resolver.resolveComponentFactory(componentRef);
+        if (factory) {
+          let ref = this.container.createComponent(factory);
+          this.renderer = ref.instance;
+          switch (this.type) {
+            case 'currency':
+              this.renderer.currencySymbol = this.currencySymbol;
+              this.renderer.currencySymbolPosition = this.currencySymbolPosition;
+              this.renderer.decimalSeparator = this.decimalSeparator;
+              this.renderer.decimalDigits = this.decimalDigits;
+              this.renderer.grouping = this.grouping;
+              this.renderer.thousandSeparator = this.thousandSeparator;
+              break;
+            case 'date':
+              this.renderer.format = this.format;
+              break;
+            case 'integer':
+              this.renderer.grouping = this.grouping;
+              this.renderer.thousandSeparator = this.thousandSeparator;
+              break;
+            case 'boolean':
+              this.renderer.trueValueType = this.trueValueType;
+              this.renderer.trueValue = this.trueValue;
+              this.renderer.falseValueType = this.falseValueType;
+              this.renderer.falseValue = this.falseValue;
+              this.renderer.dataType = this.dataType;
+              break;
+            case 'real':
+            case 'percentage':
+              this.renderer.decimalSeparator = this.decimalSeparator;
+              this.renderer.decimalDigits = this.decimalDigits;
+              this.renderer.grouping = this.grouping;
+              this.renderer.thousandSeparator = this.thousandSeparator;
+              break;
+            case 'image':
+              this.renderer.imageType = this.imageType;
+              this.renderer.avatar = this.avatar;
+              this.renderer.emptyImage = this.emptyImage;
+              break;
+            case 'action':
+              this.renderer.icon = this.icon;
+              this.renderer.action = this.action;
+              break;
+          }
         }
-
       }
     }
     this.table.registerColumn(this);
-    //console.log('OTABLECOLUMN. on init', this.renderer);
   }
-
 
   public registerRenderer(renderer: any) {
     this.renderer = renderer;
   }
-
-
 }
