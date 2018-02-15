@@ -35,7 +35,7 @@ export class OBaseComponent implements IComponent {
 
   initialize() {
     this._disabled = !this.oenabled;
-    this._placeholder = this.olabel ? this.olabel : this.oattr;
+    this._placeholder = (this.olabel !== undefined) ? this.olabel : this.oattr;
   }
 
   getAttribute(): string {
