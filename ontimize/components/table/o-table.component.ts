@@ -72,6 +72,7 @@ import { OTableContextMenuComponent } from './extensions/contextmenu/o-table-con
 import { OContextMenuComponent } from '../contextmenu/o-context-menu-components';
 import { OContextMenuModule } from '../contextmenu/o-context-menu.module';
 import { IOContextMenuContext } from '../contextmenu/o-context-menu.service';
+import { ServiceUtils } from '../service.utils';
 
 
 export const DEFAULT_INPUTS_O_TABLE = [
@@ -673,51 +674,22 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
   }
 
-  protected getParentItemFromForm(parentItem) {
-    let result = parentItem;
-    if (this.filterForm && (typeof (parentItem) === 'undefined')) {
-      result = {};
-      let formComponents = this.form.getComponents();
-      if ((this.dataParentKeys.length > 0) && (Object.keys(formComponents).length > 0)) {
-        for (let k = 0; k < this.dataParentKeys.length; ++k) {
-          let parentKey = this.dataParentKeys[k];
-          if (formComponents.hasOwnProperty(parentKey['alias'])) {
-            let currentData = formComponents[parentKey['alias']].getValue();
-            switch (typeof (currentData)) {
-              case 'string':
-                if (currentData.trim().length > 0) {
-                  result[parentKey['alias']] = currentData.trim();
-                }
-                break;
-              case 'number':
-                if (!isNaN(currentData)) {
-                  result[parentKey['alias']] = currentData;
-                }
-                break;
-            }
-          }
-        }
-      }
-    }
-    return result;
-  }
-
-  protected getFilterUsingParentKeys(parentItem) {
-    let filter = {};
-    if ((this.dataParentKeys.length > 0) && (typeof (parentItem) !== 'undefined')) {
-      for (let k = 0; k < this.dataParentKeys.length; ++k) {
-        let parentKey = this.dataParentKeys[k];
-        if (parentItem.hasOwnProperty(parentKey['alias'])) {
-          let currentData = parentItem[parentKey['alias']];
-          if (currentData instanceof OFormValue) {
-            currentData = currentData.value;
-          }
-          filter[parentKey['name']] = currentData;
-        }
-      }
-    }
-    return filter;
-  }
+  // protected getFilterUsingParentKeys(parentItem) {
+  //   let filter = {};
+  //   if ((this.dataParentKeys.length > 0) && (typeof (parentItem) !== 'undefined')) {
+  //     for (let k = 0; k < this.dataParentKeys.length; ++k) {
+  //       let parentKey = this.dataParentKeys[k];
+  //       if (parentItem.hasOwnProperty(parentKey['alias'])) {
+  //         let currentData = parentItem[parentKey['alias']];
+  //         if (currentData instanceof OFormValue) {
+  //           currentData = currentData.value;
+  //         }
+  //         filter[parentKey['name']] = currentData;
+  //       }
+  //     }
+  //   }
+  //   return filter;
+  // }
   /**
    * This method manages the call to the service
    * @param parentItem it is defined if its called from a form
@@ -739,14 +711,14 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     this.pendingQuery = false;
     this.pendingQueryFilter = undefined;
 
-    parentItem = this.getParentItemFromForm(parentItem);
+    parentItem = ServiceUtils.getParentItemFromForm(parentItem, this._pKeysEquiv, this.form);
 
-    if ((this.dataParentKeys.length > 0) && (typeof (parentItem) === 'undefined')) {
+    if ((Object.keys(this._pKeysEquiv).length > 0) && parentItem === undefined) {
       this.setData([], []);
     } else {
-      let filter = this.getFilterUsingParentKeys(parentItem);
+      // let filter = this.getFilterUsingParentKeys(parentItem); // ???
 
-      let queryArguments = this.getQueryArguments(filter, ovrrArgs);
+      let queryArguments = this.getQueryArguments(parentItem, ovrrArgs);
       if (this.querySubscription) {
         this.querySubscription.unsubscribe();
       }
