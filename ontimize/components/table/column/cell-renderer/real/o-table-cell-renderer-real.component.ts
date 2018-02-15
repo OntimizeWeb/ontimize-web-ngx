@@ -1,11 +1,7 @@
-import { Component,  Injector, TemplateRef, ViewChild } from '@angular/core';
-import { OTableCellRendererIntegerComponent, DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_INTEGER } from './o-table-cell-renderer-integer.component';
-
-import { NumberService } from '../../../../services';
-import {
-  ORealPipe,
-  IRealPipeArgument
-} from '../../../../pipes';
+import { Component, Injector, TemplateRef, ViewChild } from '@angular/core';
+import { OTableCellRendererIntegerComponent, DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_INTEGER } from '../integer/o-table-cell-renderer-integer.component';
+import { NumberService } from '../../../../../services';
+import { ORealPipe, IRealPipeArgument } from '../../../../../pipes';
 
 export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_REAL = [
 

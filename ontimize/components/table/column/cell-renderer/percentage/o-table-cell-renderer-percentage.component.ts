@@ -1,13 +1,9 @@
 import { Component, Injector, TemplateRef, ViewChild, OnInit } from '@angular/core';
-import { DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_REAL, OTableCellRendererRealComponent } from './o-table-cell-renderer-real.component';
-import { NumberService } from '../../../../services';
-import {
-  OPercentPipe,
-  IPercentPipeArgument
-} from '../../../../pipes';
+import { DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_REAL, OTableCellRendererRealComponent } from '../real/o-table-cell-renderer-real.component';
+import { NumberService } from '../../../../../services';
+import { OPercentPipe, IPercentPipeArgument } from '../../../../../pipes';
 
 export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_PERCENTAGE = [
-
   ...DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_REAL
 ];
 

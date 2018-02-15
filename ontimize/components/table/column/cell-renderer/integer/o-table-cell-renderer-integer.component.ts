@@ -1,15 +1,9 @@
 import { Component, ViewChild, TemplateRef, Injector } from '@angular/core';
-import { InputConverter } from '../../../../decorators';
-import { OBaseTableCellRenderer } from './o-base-table-cell-renderer.class';
-
-import {
-  OIntegerPipe,
-  IIntegerPipeArgument
-} from '../../../../pipes';
-
+import { InputConverter } from '../../../../../decorators';
+import { OIntegerPipe, IIntegerPipeArgument } from '../../../../../pipes';
+import { OBaseTableCellRenderer } from '../o-base-table-cell-renderer.class';
 
 export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_INTEGER = [
-
   // grouping [no|yes]: grouping thousands. Default: yes.
   'grouping',
   // thousand-separator [string]: thousands separator when grouping. Default: comma (,).
