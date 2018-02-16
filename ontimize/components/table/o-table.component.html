@@ -19,8 +19,7 @@
           </span>
         </md-form-field>
       </div>
-      <ng-container *ngIf="showTableMenuButton">
-        <button md-icon-button class="o-table-menu-button" [mdMenuTriggerFor]="menu">
+        <button *ngIf="showTableMenuButton" md-icon-button class="o-table-menu-button" [mdMenuTriggerFor]="menu">
           <md-icon>more_vert</md-icon>
         </button>
         <md-menu #menu="mdMenu" x-position="before" class="o-table-menu">
@@ -34,7 +33,6 @@
           </o-table-option>
           <ng-content select="o-table-option"></ng-content>
         </md-menu>
-      </ng-container>
     </div>
 
     <md-table #table class="header-fixed" mdSort [class]="rowHeight">
