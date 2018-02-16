@@ -18,7 +18,7 @@ import { CdkTableModule } from '@angular/cdk/table';
 import { SelectionModel, SelectionChange } from '@angular/cdk/collections';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
-import { MdDialog, MdSort, MdTabGroup, MdTab, MdPaginatorIntl, MdPaginator, MdCheckboxChange } from '@angular/material';
+import { MdDialog, MdSort, MdTabGroup, MdTab, MdPaginatorIntl, MdPaginator, MdCheckboxChange, MdMenu } from '@angular/material';
 
 import {
   OTablePaginatorComponent,
@@ -210,6 +210,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   @ViewChild(MdSort) sort: MdSort;
   @ViewChild('columnFilterOption') columnFilterOption: OTableOptionComponent;
   @ContentChildren(OTableOptionComponent) tableOptions: QueryList<OTableOptionComponent>;
+  @ViewChild('menu') mdMenu: MdMenu;
 
   public tableContextMenu: OContextMenuComponent;
 
@@ -668,22 +669,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
   }
 
-  // protected getFilterUsingParentKeys(parentItem) {
-  //   let filter = {};
-  //   if ((this.dataParentKeys.length > 0) && (typeof (parentItem) !== 'undefined')) {
-  //     for (let k = 0; k < this.dataParentKeys.length; ++k) {
-  //       let parentKey = this.dataParentKeys[k];
-  //       if (parentItem.hasOwnProperty(parentKey['alias'])) {
-  //         let currentData = parentItem[parentKey['alias']];
-  //         if (currentData instanceof OFormValue) {
-  //           currentData = currentData.value;
-  //         }
-  //         filter[parentKey['name']] = currentData;
-  //       }
-  //     }
-  //   }
-  //   return filter;
-  // }
+
   /**
    * This method manages the call to the service
    * @param parentItem it is defined if its called from a form
@@ -710,9 +696,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     if ((Object.keys(this._pKeysEquiv).length > 0) && parentItem === undefined) {
       this.setData([], []);
     } else {
-      // let filter = this.getFilterUsingParentKeys(parentItem); // ???
+      let filter = ServiceUtils.getFilterUsingParentKeys(parentItem, this._pKeysEquiv);
 
-      let queryArguments = this.getQueryArguments(parentItem, ovrrArgs);
+      let queryArguments = this.getQueryArguments(filter, ovrrArgs);
       if (this.querySubscription) {
         this.querySubscription.unsubscribe();
       }

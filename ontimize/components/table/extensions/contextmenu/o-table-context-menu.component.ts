@@ -1,6 +1,6 @@
 import { Component, forwardRef, Inject, Injector, OnInit } from '@angular/core';
 
-import { OTableComponent } from '../../o-table-components';
+import { OTableComponent } from '../../o-table.component';
 import { OContextMenuComponent } from '../../../contextmenu/o-context-menu.component';
 
 export const DEFAULT_TABLE_CONTEXT_MENU_INPUTS = [

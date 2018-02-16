@@ -1,4 +1,5 @@
 import { OFormComponent } from './form/o-form.component';
+import { OFormValue } from "../components";
 
 export class ServiceUtils {
 
@@ -32,5 +33,25 @@ export class ServiceUtils {
       }
     }
     return result;
+  }
+
+
+  static getFilterUsingParentKeys(parentItem: any, parentKeysObject: Object) {
+    let filter = {};
+    const parentKeys = Object.keys(parentKeysObject || {});
+
+    if ((parentKeys.length > 0) && (typeof (parentItem) !== 'undefined')) {
+      for (let k = 0; k < parentKeys.length; ++k) {
+        let parentKey = parentKeys[k];
+        if (parentItem.hasOwnProperty(parentKey)) {
+          let currentData = parentItem[parentKey];
+          if (currentData instanceof OFormValue) {
+            currentData = currentData.value;
+          }
+          filter[parentKeysObject[parentKey]] = currentData;
+        }
+      }
+    }
+    return filter;
   }
 }
