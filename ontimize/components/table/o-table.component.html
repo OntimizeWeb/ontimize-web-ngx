@@ -64,6 +64,11 @@
 
     </md-table>
 
+    <!--TABLE EMPTY-->
+    <div class="mat-row o-table-no-results" *ngIf="dataSource !== undefined && dataSource.resultsLength === 0" fxLayoutAlign="center center">
+      {{'TABLE.EMPTY' | oTranslate}}
+    </div>
+
     <!-- TABLE EDITABLE ROW -->
     <o-table-editable-row [datasource]="dataSource" *ngIf="showFirstInsertableRow">
     </o-table-editable-row>
@@ -107,11 +112,6 @@
       </md-row>
 
     </md-table>
-
-    <!--TABLE EMPTY-->
-    <div class="mat-row o-table-no-results" *ngIf="dataSource !== undefined && dataSource.resultsLength === 0" fxLayoutAlign="center center">
-      {{'TABLE.EMPTY' | oTranslate}}
-    </div>
 
     <!--TABLE AGGREGATE-->
     <o-table-aggregate [o-table-options]="oTableOptions" [datasource]="dataSource" *ngIf="showTotals"> </o-table-aggregate>
