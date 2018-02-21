@@ -53,6 +53,7 @@ gulp.task('concat.themes.scss', (callback) => {
 
 
 const FILES = [
+  'theme.scss',
   'CHANGELOG.md',
   'LICENSE',
   'README.md',
