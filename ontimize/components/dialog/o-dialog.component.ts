@@ -13,7 +13,10 @@ import { OTranslateModule } from '../../pipes/o-translate.pipe';
   selector: 'o-dialog',
   templateUrl: './o-dialog.component.html',
   styleUrls: ['./o-dialog.component.scss'],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  host: {
+    '[class.o-dialog]' : 'true'
+  }
 })
 export class ODialogComponent {
 
