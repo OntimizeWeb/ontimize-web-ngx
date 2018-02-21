@@ -13,13 +13,21 @@
 * **o-table-insertable-row**: adding new inner table component for using insertable rows ([4907594](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4907594)) ([2a8ceee](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2a8ceee))
 * **o-table**: adding '*show-title*' input ([cae0868](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/cae0868))
 * **o-form**: new '*layout-align*' input ([bcd2a42](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/bcd2a42))
-
+* **util**: '*parseArray*' methods allows to discard repeated elements ([a924ad2](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a924ad2))
+* **OFormServiceComponent**: adding '*query-method*' input ([7bd62e4](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7bd62e4))
+* **OFormServiceComponent**: adding '*query-on-event*' input ([7bd62e4](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7bd62e4))
+* **o-table-cell-renderer-action**: new '*o-table*' column renderer ([3e3a924](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3e3a924))
+* **styles**: adding '*theme.scss*' file so user wont need to import 'node_modules/ontimize-web-ngx/ontimize/components/theming/all-theme.scss' and will only have to import 'node_modules/ontimize-web-ngx/theme.scss' ([408f863](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/408f863))
+([4b02d0f](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4b02d0f))
+* **o-material-theme**: '*o-material-theme*' now initializes angular material theme and typography configuration. It also receives user custom typography as second parameter ([06baef2](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/06baef2)) ([40c6777](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/40c6777))
 
 ### Bug Fixes
 * **o-table-dao**: fixing methods bugs ([5093bc0](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5093bc0))
 * **input components**: adding '*required*' attribute to HTML input elements. Now required input components have an asterisk in their placeholder ([dd6d910](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/dd6d910))
 * **o-table**: fixing inputs bugs ([cae0868](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/cae0868))
 * **o-form**: changing disabled status bug ([fd8dbb4](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/fd8dbb4))
+* **o-component.class**: fixing empty '*label*' input bug ([6e212aa](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6e212aa))
+* **o-combo**: fixing bugs when value changes ([b3a0073](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b3a0073))
 
 ## 2.1.0-rc.3
 ### Features
