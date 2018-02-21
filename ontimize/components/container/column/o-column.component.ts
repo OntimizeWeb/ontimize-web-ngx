@@ -1,9 +1,4 @@
-import {
-  Component, Inject, Injector, forwardRef,
-  ElementRef, OnInit, Optional,
-  NgModule,
-  ViewEncapsulation
-} from '@angular/core';
+import { Component, Inject, Injector, forwardRef, ElementRef, OnInit, Optional, NgModule, ViewEncapsulation, AfterViewInit } from '@angular/core';
 import { InputConverter } from '../../../decorators';
 import { OFormComponent } from '../../form/o-form.component';
 import { OTranslateService } from '../../../services';
@@ -30,7 +25,7 @@ export const DEFAULT_INPUTS_O_COLUMN = [
     '[class.o-column]': 'true'
   }
 })
-export class OColumnComponent implements OnInit {
+export class OColumnComponent implements OnInit, AfterViewInit {
 
   public static DEFAULT_INPUTS_O_COLUMN = DEFAULT_INPUTS_O_COLUMN;
 
@@ -56,6 +51,25 @@ export class OColumnComponent implements OnInit {
     if (this.layoutAlign === undefined) {
       this.propagateLayoutAligmentToDOM();
     }
+  }
+
+  ngAfterViewInit() {
+    this.propagateLayoutFillToDOM();
+  }
+
+  propagateLayoutFillToDOM() {
+    // let innerCol = this.elRef.nativeElement.querySelectorAll('div#innerCol');
+    // if (innerCol.length) {
+    //   let element = innerCol[0];
+    //   if (this.layoutFill) {
+    //     let titleDiv = this.elRef.nativeElement.querySelectorAll('.container-title');
+    //     let titleH = 0;
+    //     if (titleDiv.length) {
+    //       titleH = titleDiv[0].offsetHeight;
+    //     }
+    //     element.style.height = (this.elRef.nativeElement.clientHeight - titleH) + 'px';
+    //   }
+    // }
   }
 
   getAttribute() {
@@ -123,14 +137,6 @@ export class OColumnComponent implements OnInit {
       // Take only first, nested element does not matter.
       if (this.hasTitle()) {
         element.classList.add('container-content');
-      }
-      if (this.layoutFill) {
-        let titleDiv = this.elRef.nativeElement.querySelectorAll('.container-title');
-        let titleH = 0;
-        if (titleDiv.length) {
-          titleH = titleDiv[0].offsetHeight;
-        }
-        element.style.height = (this.elRef.nativeElement.clientHeight - titleH) + 'px';
       }
     }
   }
