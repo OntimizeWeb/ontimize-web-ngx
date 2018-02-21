@@ -79,7 +79,7 @@ export class OComboComponent extends OFormServiceComponent implements OnInit {
   ensureOFormValue(value: any) {
     if (value instanceof OFormValue) {
       this.value = new OFormValue(value.value);
-    } else if ((value !== undefined || value !== null)  && !(value instanceof OFormValue)) {
+    } else if ((value !== undefined || value !== null) && !(value instanceof OFormValue)) {
       this.value = new OFormValue(value);
     } else if ((value === undefined || value === null) && this.nullSelection) {
       this.value = new OFormValue(undefined);
@@ -159,26 +159,13 @@ export class OComboComponent extends OFormServiceComponent implements OnInit {
   }
 
   innerOnChange(event: any) {
-    /*
-    * It is neccessary to modify this.value to advice ngControl
-    */
-    if (event && event.length > 0 && this.dataArray && this.dataArray.length > 0) {
-      //event is always a string...
-      var self = this;
-      this.dataArray.forEach((item, index) => {
-        if (item.hasOwnProperty(self.valueColumn)) {
-          let val = item[self.valueColumn];
-          val = val ? val.toString() : '';
-          if (val === event) {
-            const value = this.parseByValueColumnType(val);
-            self.setValueOnChange(value);
-          }
-        }
-      });
-    } else if (event === null && this.nullSelection) {
+    if (((event === undefined || event === null) || (typeof event === 'string' && event.length === 0)) && this.nullSelection) {
       this.setValueOnChange(undefined);
-    } else if (typeof event === 'string' && event.length === 0 && this.nullSelection) {
-      this.setValueOnChange(undefined);
+    } else if (this.dataArray) {
+      const record = this.dataArray.find(item => item[this.valueColumn] === event);
+      if (record) {
+        this.setValueOnChange(record[this.valueColumn]);
+      }
     }
   }
 
