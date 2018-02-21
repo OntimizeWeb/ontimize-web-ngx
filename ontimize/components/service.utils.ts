@@ -1,5 +1,5 @@
 import { OFormComponent } from './form/o-form.component';
-import { OFormValue } from "../components";
+import { OFormValue } from '../components';
 
 export class ServiceUtils {
 
