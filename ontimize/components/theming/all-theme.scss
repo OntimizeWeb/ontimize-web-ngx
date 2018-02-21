@@ -21,10 +21,16 @@
 @import '../table/extensions/header/table-insertable-row/o-table-editable-row/o-table-editable-row.theme.scss';
 
 // Create a theme.
-@mixin o-material-theme($theme) {
+@mixin o-material-theme($theme, $typography: null) {
   @include mat-core();
   @include angular-material-theme($theme);
-  @include app-global-theme($theme);
+
+  @if $typography == null {
+    $typography: mat-typography-config();
+  }
+  @include angular-material-typography($typography);
+
+  @include app-global-theme($theme, $typography);
   @include md-dialog-theme($theme);
   @include o-breadcrumb-theme($theme);
   @include o-container-theme($theme);
