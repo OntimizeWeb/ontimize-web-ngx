@@ -1,4 +1,4 @@
-## 2.1.0-rc.4
+## 2.1.0-rc.3b (2017-2-22)
 
 ### BREAKING CHANGES
 * **o-table**: '*filter-case-sensitive*' input default value is now 'false'.
@@ -30,7 +30,7 @@
 * **o-component.class**: fixing empty '*label*' input bug ([6e212aa](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6e212aa))
 * **o-combo**: fixing bugs when value changes ([b3a0073](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b3a0073))
 
-## 2.1.0-rc.3
+## 2.1.0-rc.3 (2017-1-18)
 ### Features
 * **o-card-menu-layout**: new '*o-card-menu-layout*' component ([1dbc1f8](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1dbc1f8))
 * **o-card-menu-item**: new '*o-card-menu-item*' component ([1dbc1f8](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1dbc1f8))
