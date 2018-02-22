@@ -577,7 +577,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
 
     if (this.columns) {
-      this.columns.split(';').map(x => this.registerColumn(x));
+      this.colArray.map(x => this.registerColumn(x));
     }
 
     if (!this.insertMethod) {
