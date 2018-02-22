@@ -19,20 +19,20 @@
           </span>
         </md-form-field>
       </div>
-      <button *ngIf="showTableMenuButton" md-icon-button class="o-table-menu-button" [mdMenuTriggerFor]="menu">
-        <md-icon>more_vert</md-icon>
-      </button>
-      <md-menu #menu="mdMenu" x-position="before" class="o-table-menu">
-        <o-table-option *ngIf="selectAllCheckbox" (onClick)="onShowsSelects($event)" label="TABLE.BUTTONS.SELECT" show-active-icon="true">
-        </o-table-option>
-        <o-table-option *ngIf="exportButton" (onClick)="onExportButtonClicked()" label="TABLE.BUTTONS.EXPORT"> </o-table-option>
-        <o-table-option *ngIf="columnsVisibilityButton" (onClick)="onChangeColumnsVisibilityClicked()" label="TABLE.BUTTONS.COLVIS">
-        </o-table-option>
-        <o-table-option *ngIf="oTableColumnsFilterComponent !== undefined" #columnFilterOption (onClick)="onFilterByColumnClicked()"
-          label="TABLE.BUTTONS.FILTER_BY_COLUMN" show-active-icon="true">
-        </o-table-option>
-        <ng-content select="o-table-option"></ng-content>
-      </md-menu>
+        <button *ngIf="showTableMenuButton" md-icon-button class="o-table-menu-button" [mdMenuTriggerFor]="menu">
+          <md-icon>more_vert</md-icon>
+        </button>
+        <md-menu #menu="mdMenu" x-position="before" class="o-table-menu">
+          <o-table-option *ngIf="selectAllCheckbox" (onClick)="onShowsSelects($event)" label="TABLE.BUTTONS.SELECT" show-active-icon="true">
+          </o-table-option>
+          <o-table-option *ngIf="exportButton" (onClick)="onExportButtonClicked()" label="TABLE.BUTTONS.EXPORT"> </o-table-option>
+          <o-table-option *ngIf="columnsVisibilityButton" (onClick)="onChangeColumnsVisibilityClicked()" label="TABLE.BUTTONS.COLVIS">
+          </o-table-option>
+          <o-table-option *ngIf="oTableColumnsFilterComponent !== undefined" #columnFilterOption (onClick)="onFilterByColumnClicked()"
+            label="TABLE.BUTTONS.FILTER_BY_COLUMN" show-active-icon="true">
+          </o-table-option>
+          <ng-content select="o-table-option"></ng-content>
+        </md-menu>
     </div>
 
     <md-table #table class="header-fixed" mdSort [class]="rowHeight">
@@ -108,7 +108,7 @@
       <md-header-row *cdkHeaderRowDef="[]" style.display="none"></md-header-row>
 
       <md-row *cdkRowDef="let row; columns: oTableOptions.visibleColumns;" (click)="handleClick(row, $event)" (dblclick)="handleDoubleClick(row, $event)"
-        [oContextMenu]="tableContextMenu" [oContextMenuData]="row" [class.selected]="selection.isSelected(row)">
+        [oContextMenu]="tableContextMenu" [oContextMenuData]="row">
       </md-row>
 
     </md-table>
