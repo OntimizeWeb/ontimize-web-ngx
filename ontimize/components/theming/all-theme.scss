@@ -22,13 +22,8 @@
 
 // Create a theme.
 @mixin o-material-theme($theme, $typography: null) {
-  @include mat-core();
+  @include mat-core($typography);
   @include angular-material-theme($theme);
-
-  @if $typography == null {
-    $typography: mat-typography-config();
-  }
-  @include angular-material-typography($typography);
 
   @include app-global-theme($theme, $typography);
   @include md-dialog-theme($theme);
