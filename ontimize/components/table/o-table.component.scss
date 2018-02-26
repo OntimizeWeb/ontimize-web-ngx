@@ -276,18 +276,18 @@ $_mat-checkbox-mark-stroke-size-small: 2 / 15 * $mat-checkbox-size-small !defaul
     }
   }
 
-  &.o-table-fixed{
+  &.o-table-fixed {
 
-    .expandable-container{
+    .expandable-container {
       flex-direction: column;
     }
 
-    .o-table-container{
+    .o-table-container {
       flex-direction: column;
       height:100%;
       display: flex;
 
-      #tableContent {
+      .mat-table {
         flex: 1 1 auto;
         position: relative;
         overflow-y: auto;
