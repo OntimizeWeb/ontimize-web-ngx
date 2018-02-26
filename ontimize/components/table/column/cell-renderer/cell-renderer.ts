@@ -6,8 +6,8 @@ export * from './image/o-table-cell-renderer-image.component';
 export * from './integer/o-table-cell-renderer-integer.component';
 export * from './percentage/o-table-cell-renderer-percentage.component';
 export * from './real/o-table-cell-renderer-real.component';
+export * from './service/o-table-cell-renderer-service.component';
 
-//export * from './o-table-cell-renderer.component';
 export * from './o-base-table-cell-renderer.class';
 
 import { OTableCellRendererActionComponent } from './action/o-table-cell-renderer-action.component';
@@ -18,6 +18,7 @@ import { OTableCellRendererImageComponent } from './image/o-table-cell-renderer-
 import { OTableCellRendererIntegerComponent } from './integer/o-table-cell-renderer-integer.component';
 import { OTableCellRendererPercentageComponent } from './percentage/o-table-cell-renderer-percentage.component';
 import { OTableCellRendererRealComponent } from './real/o-table-cell-renderer-real.component';
+import { OTableCellRendererServiceComponent } from './service/o-table-cell-renderer-service.component';
 
 export const O_TABLE_CELL_RENDERERS = [
   OTableCellRendererActionComponent,
@@ -27,5 +28,6 @@ export const O_TABLE_CELL_RENDERERS = [
   OTableCellRendererIntegerComponent,
   OTableCellRendererRealComponent,
   OTableCellRendererCurrencyComponent,
-  OTableCellRendererPercentageComponent
+  OTableCellRendererPercentageComponent,
+  OTableCellRendererServiceComponent
 ];
