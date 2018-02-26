@@ -18,7 +18,7 @@ import { CdkTableModule } from '@angular/cdk/table';
 import { SelectionModel, SelectionChange } from '@angular/cdk/collections';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
-import { MdDialog, MdSort, MdTabGroup, MdTab, MdPaginatorIntl, MdPaginator, MdCheckboxChange, MdMenu } from '@angular/material';
+import { MdDialog, MdSort, MdTabGroup, MdTab, MdPaginatorIntl, MdPaginator, MdCheckboxChange, MdMenu, MdCell } from '@angular/material';
 
 import {
   OTablePaginatorComponent,
@@ -51,6 +51,7 @@ import {
 } from './extensions/dialog/o-table-dialog-components';
 
 import { O_TABLE_CELL_RENDERERS, OTableCellRendererImageComponent } from './column/cell-renderer/cell-renderer';
+import { O_TABLE_CELL_EDITORS } from './column/cell-editor/cell-editor';
 
 import {
   OTableColumnCalculatedComponent,
@@ -107,7 +108,7 @@ export const DEFAULT_INPUTS_O_TABLE = [
   // export-button [no|yes]: show export button. Default: yes.
   'exportButton: export-button',
 
-  // edition-mode [inline || empty]: edition mode opened. Default none
+  // edition-mode [none | inline | click | dblclick]: edition mode. Default none
   'editionMode: edition-mode',
 
   // show-table-buttons-text [string][yes|no|true|false]: show text of header buttons
@@ -151,6 +152,8 @@ export class OColumn {
   searchable: boolean;
   visible: boolean;
   renderer: any;
+  editor: any;
+  editing: boolean;
   width: string;
   aggregate: OColumnAggregate;
   calculate: string | OperatorFunction;
@@ -280,6 +283,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   fixedHeader: boolean = false;
   @InputConverter()
   showTitle: boolean = false;
+
+  protected editionMode: 'none' | 'inline' | 'click' | 'doubleclick' = 'none';
 
   public daoTable: OTableDao | null;
   public dataSource: OTableDataSource | null;
@@ -463,6 +468,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       }
       if (typeof column.renderer !== 'undefined') {
         colDef.renderer = column.renderer;
+      }
+      if (typeof column.editor !== 'undefined') {
+        colDef.editor = column.editor;
       }
       if (typeof column.type !== 'undefined') {
         colDef.type = column.type;
@@ -878,6 +886,30 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
   }
 
+  handleCellClick(column: OColumn, cell: MdCell, $event?) {
+    if (this.oenabled
+      && (column.editor && !column.editing)
+      && (this.detailMode !== OServiceComponent.DETAIL_MODE_CLICK)
+      && (this.editionMode === OServiceComponent.DETAIL_MODE_CLICK)) {
+      column.editing = true;
+      console.log(cell);
+
+    }
+  }
+
+  handleCellDoubleClick(column: OColumn, $event?) {
+    if (this.oenabled && (this.detailMode !== OServiceComponent.DETAIL_MODE_DBLCLICK)
+      && (this.editionMode === OServiceComponent.DETAIL_MODE_DBLCLICK)) {
+      console.log(column);
+    }
+  }
+
+  handleCellBlur(column: OColumn, $event?) {
+    if (this.oenabled && (column.editor && column.editing)) {
+      column.editing = false;
+    }
+  }
+
   protected getKeysValues(): any[] {
     let data = this.getAllValues();
     const _self = this;
@@ -1065,6 +1097,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     OTableComponent,
     OTableColumnComponent,
     ...O_TABLE_CELL_RENDERERS,
+    ...O_TABLE_CELL_EDITORS,
     OTableExportDialogComponent,
     OTableVisibleColumnsDialogComponent,
     OTableFilterByColumnDataDialogComponent,
@@ -1094,6 +1127,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     OTableColumnsFilterComponent,
     OTableColumnComponent,
     ...O_TABLE_CELL_RENDERERS,
+    ...O_TABLE_CELL_EDITORS,
     OTablePaginatorComponent,
     OTableColumnAggregateComponent,
     OTableColumnCalculatedComponent,
@@ -1103,6 +1137,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   ],
   entryComponents: [
     ...O_TABLE_CELL_RENDERERS,
+    ...O_TABLE_CELL_EDITORS,
     OTableExportDialogComponent,
     OTableVisibleColumnsDialogComponent,
     OTableFilterByColumnDataDialogComponent,

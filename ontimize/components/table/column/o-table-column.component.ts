@@ -1,4 +1,5 @@
 import { Component, OnInit, Injector, forwardRef, Inject, ComponentFactoryResolver, ComponentFactory, ViewChild, ViewContainerRef } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 import { InputConverter } from '../../../decorators';
 import {
   OTableCellRendererDateComponent,
@@ -14,6 +15,9 @@ import {
 import { OTableComponent } from '../o-table.component';
 import { Util } from '../../../util/util';
 
+import {
+  OTableCellEditorTextComponent
+} from './cell-editor/cell-editor';
 
 export const DEFAULT_INPUTS_O_TABLE_COLUMN = [
 
@@ -57,15 +61,21 @@ export const DEFAULT_INPUTS_O_TABLE_COLUMN = [
   ...OTableCellRendererCurrencyComponent.DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_CURRENCY, // includes Integer and Real
   ...OTableCellRendererDateComponent.DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_DATE,
   ...OTableCellRendererImageComponent.DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_IMAGE,
-  ...OTableCellRendererActionComponent.DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_ACTION
+  ...OTableCellRendererActionComponent.DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_ACTION,
+
+  ...OTableCellEditorTextComponent.DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_TEXT
 ];
 
+// export const DEFAULT_OUTPUTS_O_TABLE_COLUMN = [
+//   ...OTableCellEditorTextComponent.DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_TEXT
+// ];
 
 @Component({
   selector: 'o-table-column',
   templateUrl: './o-table-column.component.html',
   styleUrls: ['./o-table-column.component.scss'],
   inputs: DEFAULT_INPUTS_O_TABLE_COLUMN,
+  // outputs: DEFAULT_OUTPUTS_O_TABLE_COLUMN,
   host: {
     '[class.columnBreakWord]': 'breakWord'
   }
@@ -73,6 +83,7 @@ export const DEFAULT_INPUTS_O_TABLE_COLUMN = [
 export class OTableColumnComponent implements OnInit {
 
   public static DEFAULT_INPUTS_O_TABLE_COLUMN = DEFAULT_INPUTS_O_TABLE_COLUMN;
+  // public static DEFAULT_OUTPUTS_O_TABLE_COLUMN = DEFAULT_OUTPUTS_O_TABLE_COLUMN;
 
   protected renderersMapping = {
     'action': OTableCellRendererActionComponent,
@@ -85,13 +96,23 @@ export class OTableColumnComponent implements OnInit {
     'real': OTableCellRendererRealComponent
   };
 
-  public type: string;
+  protected editorsMapping = {
+    'text': OTableCellEditorTextComponent
+  };
+
+
   public renderer: any;
+  public editor: any;
+
+  public type: string;
   public attr: string;
   public title: string;
-  public orderable: any;
-  public searchable: any;
-  public editable: any;
+  @InputConverter()
+  public orderable: boolean = true;
+  @InputConverter()
+  public searchable: boolean = true;
+  @InputConverter()
+  public editable: boolean = false;
   public width: string = '';
 
   /*input renderer date */
@@ -122,6 +143,13 @@ export class OTableColumnComponent implements OnInit {
   protected icon: string;
   protected action: string;
 
+  /*input editor text */
+  @InputConverter()
+  protected orequired: boolean = false;
+
+  // /* output editor text */
+  // onEditionEnd: EventEmitter<Object>;
+
   @InputConverter()
   protected breakWord: boolean = false;
   @InputConverter()
@@ -129,6 +157,8 @@ export class OTableColumnComponent implements OnInit {
 
   @ViewChild('container', { read: ViewContainerRef })
   container: ViewContainerRef;
+
+  formGroup: FormGroup = new FormGroup({});
 
   constructor(
     @Inject(forwardRef(() => OTableComponent)) public table: OTableComponent,
@@ -138,15 +168,17 @@ export class OTableColumnComponent implements OnInit {
   }
 
   public ngOnInit() {
-
-    let factory: ComponentFactory<any>;
-    this.orderable = Util.parseBoolean(this.orderable, true);
-    this.searchable = Util.parseBoolean(this.searchable, true);
     this.grouping = Util.parseBoolean(this.grouping, true);
-    if (typeof (this.renderer) === 'undefined') {
+    this.createRenderer();
+    this.createEditor();
+    this.table.registerColumn(this);
+  }
+
+  protected createRenderer() {
+    if (typeof (this.renderer) === 'undefined' && this.type !== undefined) {
       const componentRef = this.renderersMapping[this.type];
       if (componentRef !== undefined) {
-        factory = this.resolver.resolveComponentFactory(componentRef);
+        let factory: ComponentFactory<any> = this.resolver.resolveComponentFactory(componentRef);
         if (factory) {
           let ref = this.container.createComponent(factory);
           this.renderer = ref.instance;
@@ -193,10 +225,44 @@ export class OTableColumnComponent implements OnInit {
         }
       }
     }
-    this.table.registerColumn(this);
+  }
+
+  protected createEditor() {
+    if (typeof (this.editor) === 'undefined' && this.editable) {
+      const componentRef = this.editorsMapping[this.type] || this.editorsMapping['text'];
+      if (componentRef !== undefined) {
+        let factory: ComponentFactory<any> = this.resolver.resolveComponentFactory(componentRef);
+        if (factory) {
+          let ref = this.container.createComponent(factory);
+          this.editor = ref.instance;
+          switch (this.type) {
+            case 'currency':
+              break;
+            case 'date':
+              break;
+            case 'integer':
+              break;
+            case 'boolean':
+              break;
+            case 'real':
+            case 'percentage':
+              break;
+            case 'image':
+              break;
+            default:
+              this.editor.orequired = this.orequired;
+              break;
+          }
+        }
+      }
+    }
   }
 
   public registerRenderer(renderer: any) {
     this.renderer = renderer;
+  }
+
+  public registerEditor(editor: any) {
+    this.editor = editor;
   }
 }

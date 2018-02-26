@@ -1,0 +1,9 @@
+<ng-template #templateref let-cellvalue="cellvalue" let-rowvalue="rowvalue">
+  <div [formGroup]="tableColumn.formGroup">
+    <md-form-field floatPlaceholder="never">
+      <input #input mdInput placeholder="{{ tableColumn.attr | oTranslate }}" [formControl]="getControl()" [required]="orequired"
+        (blur)="innerOnBlur($event)">
+      <md-error *ngIf="hasError('required')">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</md-error>
+    </md-form-field>
+  </div>
+</ng-template>

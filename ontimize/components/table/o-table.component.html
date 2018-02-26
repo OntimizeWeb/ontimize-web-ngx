@@ -19,20 +19,20 @@
           </span>
         </md-form-field>
       </div>
-        <button *ngIf="showTableMenuButton" md-icon-button class="o-table-menu-button" [mdMenuTriggerFor]="menu">
-          <md-icon>more_vert</md-icon>
-        </button>
-        <md-menu #menu="mdMenu" x-position="before" class="o-table-menu">
-          <o-table-option *ngIf="selectAllCheckbox" (onClick)="onShowsSelects($event)" label="TABLE.BUTTONS.SELECT" show-active-icon="true">
-          </o-table-option>
-          <o-table-option *ngIf="exportButton" (onClick)="onExportButtonClicked()" label="TABLE.BUTTONS.EXPORT"> </o-table-option>
-          <o-table-option *ngIf="columnsVisibilityButton" (onClick)="onChangeColumnsVisibilityClicked()" label="TABLE.BUTTONS.COLVIS">
-          </o-table-option>
-          <o-table-option *ngIf="oTableColumnsFilterComponent !== undefined" #columnFilterOption (onClick)="onFilterByColumnClicked()"
-            label="TABLE.BUTTONS.FILTER_BY_COLUMN" show-active-icon="true">
-          </o-table-option>
-          <ng-content select="o-table-option"></ng-content>
-        </md-menu>
+      <button *ngIf="showTableMenuButton" md-icon-button class="o-table-menu-button" [mdMenuTriggerFor]="menu">
+        <md-icon>more_vert</md-icon>
+      </button>
+      <md-menu #menu="mdMenu" x-position="before" class="o-table-menu">
+        <o-table-option *ngIf="selectAllCheckbox" (onClick)="onShowsSelects($event)" label="TABLE.BUTTONS.SELECT" show-active-icon="true">
+        </o-table-option>
+        <o-table-option *ngIf="exportButton" (onClick)="onExportButtonClicked()" label="TABLE.BUTTONS.EXPORT"> </o-table-option>
+        <o-table-option *ngIf="columnsVisibilityButton" (onClick)="onChangeColumnsVisibilityClicked()" label="TABLE.BUTTONS.COLVIS">
+        </o-table-option>
+        <o-table-option *ngIf="oTableColumnsFilterComponent !== undefined" #columnFilterOption (onClick)="onFilterByColumnClicked()"
+          label="TABLE.BUTTONS.FILTER_BY_COLUMN" show-active-icon="true">
+        </o-table-option>
+        <ng-content select="o-table-option"></ng-content>
+      </md-menu>
     </div>
 
     <md-table #table class="header-fixed" mdSort [class]="rowHeight">
@@ -73,7 +73,7 @@
     <o-table-editable-row [datasource]="dataSource" *ngIf="showFirstInsertableRow">
     </o-table-editable-row>
 
-    <md-table #table [trackBy]="getTrackByFunction()" [dataSource]="dataSource" mdSort [class]="rowHeight" id="tableContent">
+    <md-table #table [trackBy]="getTrackByFunction()" [dataSource]="dataSource" mdSort [class]="rowHeight">
       <!--Checkbox Column -->
       <ng-container [cdkColumnDef]="oTableOptions.selectColumn.name" *ngIf="oTableOptions.selectColumn.visible">
         <md-header-cell *cdkHeaderCellDef>
@@ -99,9 +99,16 @@
             {{ column.title | oTranslate }}
           </md-header-cell>
         </ng-container>
-        <md-cell *cdkCellDef="let row" [fxFlex]="column.width" [ngClass]="column.className">
-          <ng-container *ngIf="!column.renderer">{{ row[column.name] }}</ng-container>
-          <ng-template *ngIf="column.renderer" [ngTemplateOutlet]="column.renderer.templateref" [ngOutletContext]="{cellvalue: row[column.name],rowvalue:row}"></ng-template>
+        <md-cell *cdkCellDef="let row" #cell [fxFlex]="column.width" [ngClass]="column.className" (click)="handleCellClick(column, cell, $event)"
+          (dblclick)="handleCellDoubleClick(column, $event)">
+
+          <ng-container *ngIf="!column.renderer && !column.editing">{{ row[column.name] }}</ng-container>
+          <ng-template *ngIf="column.renderer && !column.editing" [ngTemplateOutlet]="column.renderer.templateref" [ngOutletContext]="{ cellvalue: row[column.name], rowvalue:row }"></ng-template>
+
+          <ng-template *ngIf="column.editor && column.editing && selection.isSelected(row)"
+            [ngTemplateOutlet]="column.editor.templateref" [ngOutletContext]="{ cellvalue: row[column.name], rowvalue:row }">
+          </ng-template>
+
         </md-cell>
       </ng-container>
 
