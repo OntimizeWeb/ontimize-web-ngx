@@ -73,7 +73,7 @@
     <o-table-editable-row [datasource]="dataSource" *ngIf="showFirstInsertableRow">
     </o-table-editable-row>
 
-    <md-table #table [trackBy]="getTrackByFunction()" [dataSource]="dataSource" mdSort [class]="rowHeight">
+    <md-table #table [trackBy]="getTrackByFunction()" [dataSource]="dataSource" mdSort [class]="rowHeight" [class.content-table]="true">
       <!--Checkbox Column -->
       <ng-container [cdkColumnDef]="oTableOptions.selectColumn.name" *ngIf="oTableOptions.selectColumn.visible">
         <md-header-cell *cdkHeaderCellDef>
@@ -99,14 +99,17 @@
             {{ column.title | oTranslate }}
           </md-header-cell>
         </ng-container>
-        <md-cell *cdkCellDef="let row" #cell [fxFlex]="column.width" [ngClass]="column.className" (click)="handleCellClick(column, cell, $event)"
-          (dblclick)="handleCellDoubleClick(column, $event)">
+        <md-cell *cdkCellDef="let row" #cell [fxFlex]="column.width" [ngClass]="column.className" (click)="handleCellClick(column, row, $event)"
+          (dblclick)="handleCellDoubleClick(column, row, $event)">
 
-          <ng-container *ngIf="!column.renderer && !column.editing">{{ row[column.name] }}</ng-container>
-          <ng-template *ngIf="column.renderer && !column.editing" [ngTemplateOutlet]="column.renderer.templateref" [ngOutletContext]="{ cellvalue: row[column.name], rowvalue:row }"></ng-template>
+          <ng-container *ngIf="usePlainRender(column, row)">
+            {{ row[column.name] }}
+          </ng-container>
 
-          <ng-template *ngIf="column.editor && column.editing && selection.isSelected(row)"
-            [ngTemplateOutlet]="column.editor.templateref" [ngOutletContext]="{ cellvalue: row[column.name], rowvalue:row }">
+          <ng-template *ngIf="useCellRenderer(column)" [ngTemplateOutlet]="column.renderer.templateref" [ngOutletContext]="{ cellvalue: row[column.name], rowvalue:row }">
+          </ng-template>
+
+          <ng-template *ngIf="useCellEditor(column, row)" [ngTemplateOutlet]="column.editor.templateref" [ngOutletContext]="{ cellvalue: row[column.name], rowvalue:row }">
           </ng-template>
 
         </md-cell>
@@ -115,7 +118,7 @@
       <md-header-row *cdkHeaderRowDef="[]" style.display="none"></md-header-row>
 
       <md-row *cdkRowDef="let row; columns: oTableOptions.visibleColumns;" (click)="handleClick(row, $event)" (dblclick)="handleDoubleClick(row, $event)"
-        [oContextMenu]="tableContextMenu" [oContextMenuData]="row">
+        [oContextMenu]="tableContextMenu" [oContextMenuData]="row" [class.selected]="isSelected(row)">
       </md-row>
 
     </md-table>

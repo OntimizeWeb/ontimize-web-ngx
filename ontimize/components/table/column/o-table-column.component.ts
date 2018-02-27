@@ -1,5 +1,4 @@
-import { Component, OnInit, Injector, forwardRef, Inject, ComponentFactoryResolver, ComponentFactory, ViewChild, ViewContainerRef } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { Component, OnInit, Injector, forwardRef, Inject, ComponentFactoryResolver, ComponentFactory, ViewChild, ViewContainerRef, EventEmitter } from '@angular/core';
 import { InputConverter } from '../../../decorators';
 import {
   OTableCellRendererDateComponent,
@@ -66,16 +65,16 @@ export const DEFAULT_INPUTS_O_TABLE_COLUMN = [
   ...OTableCellEditorTextComponent.DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_TEXT
 ];
 
-// export const DEFAULT_OUTPUTS_O_TABLE_COLUMN = [
-//   ...OTableCellEditorTextComponent.DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_TEXT
-// ];
+export const DEFAULT_OUTPUTS_O_TABLE_COLUMN = [
+  ...OTableCellEditorTextComponent.DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_TEXT
+];
 
 @Component({
   selector: 'o-table-column',
   templateUrl: './o-table-column.component.html',
   styleUrls: ['./o-table-column.component.scss'],
   inputs: DEFAULT_INPUTS_O_TABLE_COLUMN,
-  // outputs: DEFAULT_OUTPUTS_O_TABLE_COLUMN,
+  outputs: DEFAULT_OUTPUTS_O_TABLE_COLUMN,
   host: {
     '[class.columnBreakWord]': 'breakWord'
   }
@@ -147,8 +146,10 @@ export class OTableColumnComponent implements OnInit {
   @InputConverter()
   protected orequired: boolean = false;
 
-  // /* output editor text */
-  // onEditionEnd: EventEmitter<Object>;
+  /* output cell editor */
+  editionStarted: EventEmitter<Object> = new EventEmitter<Object>();
+  editionCancelled: EventEmitter<Object> = new EventEmitter<Object>();
+  editionCommitted: EventEmitter<Object> = new EventEmitter<Object>();
 
   @InputConverter()
   protected breakWord: boolean = false;
@@ -157,8 +158,6 @@ export class OTableColumnComponent implements OnInit {
 
   @ViewChild('container', { read: ViewContainerRef })
   container: ViewContainerRef;
-
-  formGroup: FormGroup = new FormGroup({});
 
   constructor(
     @Inject(forwardRef(() => OTableComponent)) public table: OTableComponent,
@@ -253,6 +252,9 @@ export class OTableColumnComponent implements OnInit {
               this.editor.orequired = this.orequired;
               break;
           }
+          this.editor.editionStarted = this.editionStarted;
+          this.editor.editionCancelled = this.editionCancelled;
+          this.editor.editionCommitted = this.editionCommitted;
         }
       }
     }

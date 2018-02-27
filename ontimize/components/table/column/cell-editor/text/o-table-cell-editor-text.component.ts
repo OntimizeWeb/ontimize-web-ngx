@@ -28,8 +28,5 @@ export class OTableCellEditorTextComponent extends OBaseTableCellEditor {
     this.initialize();
   }
 
-  innerOnBlur(event: any) {
-    super.onBlur(event);
 
-  }
 }

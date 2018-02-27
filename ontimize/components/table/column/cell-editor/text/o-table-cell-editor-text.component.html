@@ -1,8 +1,11 @@
 <ng-template #templateref let-cellvalue="cellvalue" let-rowvalue="rowvalue">
-  <div [formGroup]="tableColumn.formGroup">
+  <div [formGroup]="formGroup" oKeyboardListener keyboardKeys="27" (onKeysPressed)="onEscClicked()">
     <md-form-field floatPlaceholder="never">
-      <input #input mdInput placeholder="{{ tableColumn.attr | oTranslate }}" [formControl]="getControl()" [required]="orequired"
-        (blur)="innerOnBlur($event)">
+
+      <input #input mdInput type="text" [ngModel]="getCellData()"
+      [formControl]="formControl" [required]="orequired"
+      (blur)="onBlur($event)" (focus)="onFocus($event)" >
+
       <md-error *ngIf="hasError('required')">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</md-error>
     </md-form-field>
   </div>

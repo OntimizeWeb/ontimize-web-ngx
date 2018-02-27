@@ -252,6 +252,10 @@ export class OServiceComponent implements ILocalStorageComponent {
     return this.selectedItems;
   }
 
+  clearSelection() {
+    this.selectedItems = [];
+  }
+
   getAttribute(): string {
     return this.oattr;
   }
@@ -605,8 +609,9 @@ export class OServiceComponent implements ILocalStorageComponent {
   }
 
   protected deleteLocalItems() {
-    for (let i = 0; i < this.selectedItems.length; ++i) {
-      let selectedItem = this.selectedItems[i];
+    let selectedItems = this.getSelectedItems();
+    for (let i = 0; i < selectedItems.length; ++i) {
+      let selectedItem = selectedItems[i];
       let selectedItemKv = {};
       for (let k = 0; k < this.keysArray.length; ++k) {
         let key = this.keysArray[k];
@@ -631,7 +636,7 @@ export class OServiceComponent implements ILocalStorageComponent {
         }
       }
     }
-    this.selectedItems = [];
+    this.clearSelection();
   }
 
   reinitialize(options: OListInitializationOptions /*| OTableInitializationOptions*/) {

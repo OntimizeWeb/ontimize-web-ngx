@@ -173,6 +173,23 @@ $_mat-checkbox-mark-stroke-size-small: 2 / 15 * $mat-checkbox-size-small !defaul
         box-sizing: border-box;
         transition: background-color .2s;
 
+        /* iOS Safari */
+        -webkit-touch-callout: none;
+        /* Safari */
+        -webkit-user-select: none;
+        /* Konqueror HTML */
+        -khtml-user-select: none;
+        /* Firefox */
+        -moz-user-select: none;
+        /* Internet Explorer/Edge */
+        -ms-user-select: none;
+        /* Non-prefixed version, currently supported by Chrome and Opera */
+        user-select: none;
+
+        &.selected {
+          background: #E0E0E0;
+        }
+
         &:last-child {
           border-bottom: none;
         }
