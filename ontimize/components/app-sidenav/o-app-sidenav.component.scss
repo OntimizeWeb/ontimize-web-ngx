@@ -182,6 +182,7 @@ $transition-duration: 500ms;
 
         .application-sidenav-menugroup {
           padding: ($sidenav-spacing-unit * 2);
+          transition: padding 0s $transition-duration;
           .application-sidenav-menugroup-arrow {
             position: absolute;
             right: ($sidenav-spacing-unit * 2);
@@ -195,6 +196,7 @@ $transition-duration: 500ms;
             + .application-sidenav-menugroup-items-container {
               ul li > a {
                 padding-left: ($sidenav-spacing-unit * 4);
+                transition: padding 0s;
               }
             }
           }
