@@ -1,9 +1,8 @@
 <ng-template #templateref let-cellvalue="cellvalue" let-rowvalue="rowvalue">
   <div [formGroup]="formGroup" oKeyboardListener keyboardKeys="27" (onKeysPressed)="onEscClicked()">
     <md-form-field floatPlaceholder="never">
-
-      <input #input mdInput type="number" [ngModel]="getCellData()" [formControl]="formControl" [required]="orequired" (blur)="onBlur($event)"
-        (focus)="onFocus($event)" [min]="min" [max]="max" [step]="step">
+      <input #input mdInput type="number" [formControl]="formControl" [required]="orequired" (blur)="commitEdition()" [min]="min"
+        [max]="max" [step]="step">
 
       <md-error *ngIf="hasError('required')">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</md-error>
       <md-error *ngIf="hasError('min')">{{ 'FORM_VALIDATION.MIN_VALUE' | oTranslate }}: {{ getErrorValue('min', 'requiredMin') }}</md-error>

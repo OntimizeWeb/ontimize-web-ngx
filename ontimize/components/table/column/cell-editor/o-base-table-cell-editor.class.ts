@@ -22,7 +22,7 @@ export class OBaseTableCellEditor {
 
   tableColumn: OTableColumnComponent;
 
-  rowData: any;
+  protected _rowData: any;
 
   formControl: FormControl;
   formGroup: FormGroup = new FormGroup({});
@@ -53,24 +53,26 @@ export class OBaseTableCellEditor {
   }
 
   getCellData(): any {
-    return this.rowData[this.tableColumn.attr];
+    return this._rowData[this.tableColumn.attr];
   }
 
-  onFocus(event: any) {
-    this.editionStarted.emit(this.rowData);
+  startEdtion(data: any) {
+    this.formGroup.reset();
+    this.rowData = data;
+    this.editionStarted.emit(this._rowData);
   }
 
-  protected stopEditing(saveChanges: boolean = false) {
+  endEdition(saveChanges) {
     const oColumn = this.tableColumn.table.oTableOptions.columns.find(item => item.name === this.tableColumn.attr);
     if (oColumn) {
-      this.table.updateCellData(oColumn, this.rowData, saveChanges);
+      this.table.updateCellData(oColumn, this._rowData, saveChanges);
     }
   }
 
-  onBlur(event: any) {
-    this.rowData[this.tableColumn.attr] = this.formControl.value;
-    this.stopEditing(true);
-    this.editionCommitted.emit(this.rowData);
+  commitEdition() {
+    this._rowData[this.tableColumn.attr] = this.formControl.value;
+    this.endEdition(true);
+    this.editionCommitted.emit(this._rowData);
   }
 
   get table(): OTableComponent {
@@ -79,6 +81,15 @@ export class OBaseTableCellEditor {
 
   get column(): string {
     return this.tableColumn.attr;
+  }
+
+  get rowData(): any {
+    return this._rowData;
+  }
+
+  set rowData(arg: any) {
+    this._rowData = arg;
+    this.formControl.setValue(this.getCellData());
   }
 
   resolveValidators(): ValidatorFn[] {
@@ -98,7 +109,7 @@ export class OBaseTableCellEditor {
   }
 
   onEscClicked() {
-    this.stopEditing();
-    this.editionCancelled.emit(this.rowData);
+    this.endEdition(false);
+    this.editionCancelled.emit(this._rowData);
   }
 }

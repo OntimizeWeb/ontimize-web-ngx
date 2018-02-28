@@ -1004,8 +1004,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     });
     rowData[column.attr] = row[column.attr];
     this.editingRow = row;
-    column.editor.formGroup.reset();
-    column.editor.rowData = rowData;
+    column.editor.startEdtion(rowData);
     column.editing = true;
   }
 

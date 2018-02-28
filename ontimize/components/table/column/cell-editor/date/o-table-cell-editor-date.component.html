@@ -1,9 +1,8 @@
 <ng-template #templateref let-cellvalue="cellvalue" let-rowvalue="rowvalue">
   <div [formGroup]="formGroup" oKeyboardListener keyboardKeys="27" (onKeysPressed)="onEscClicked()">
     <md-form-field floatPlaceholder="never">
-
-      <input #input mdInput [ngModel]="getCellDataAsDate()" [formControl]="formControl" [required]="orequired" (blur)="onBlur($event)"
-        (focus)="onFocus($event)" [mdDatepicker]="d" [mdDatepickerFilter]="filterDate" (dateChange)="onDateChange($event)"
+      <input #input mdInput [formControl]="formControl" [required]="orequired" (blur)="commitEdition()"
+        [mdDatepicker]="d" [mdDatepickerFilter]="filterDate" (dateChange)="onDateChange($event)"
         [min]="oMinDate" [max]="oMaxDate">
 
       <md-datepicker #d

@@ -107,8 +107,8 @@ export class OTableCellEditorDateComponent extends OBaseTableCellEditor implemen
     }
   }
 
-  getCellDataAsDate(): any {
-    let value = this.getCellData();
+  getCellData(): any {
+    let value = super.getCellData();
     if (typeof value !== 'undefined') {
       if (typeof value === 'number') {
         let dateObj = new Date(value);
@@ -118,18 +118,14 @@ export class OTableCellEditorDateComponent extends OBaseTableCellEditor implemen
     return value;
   }
 
-  getCellData(): any {
-    return this.rowData[this.tableColumn.attr];
-  }
-
-  onBlur(event: any) {
+  commitEdition() {
     if (!this.datepicker.opened) {
-      super.onBlur(event);
+      super.commitEdition();
     }
   }
 
   onDateChange(event: MdDatepickerInputEvent<any>) {
-    super.onBlur(event);
+    super.commitEdition();
   }
 
   openDatepicker(d: MdDatepicker<Date>) {
