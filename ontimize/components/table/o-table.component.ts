@@ -134,8 +134,8 @@ export const DEFAULT_INPUTS_O_TABLE = [
 
   'showTitle: show-title',
 
-  // // selection-mode [none | simple | multiple ]: selection mode. Default multiple
-  // 'selectionMode: selection-mode',
+  // selection-mode [none | simple | multiple ]: selection mode. Default multiple
+  'selectionMode: selection-mode'
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE = [
@@ -290,8 +290,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   fixedHeader: boolean = false;
   @InputConverter()
   showTitle: boolean = false;
-
   protected editionMode: 'none' | 'inline' | 'click' | 'doubleclick' = 'none';
+  protected selectionMode: 'none' | 'single' | 'multiple' = 'multiple';
 
   public daoTable: OTableDao | null;
   public dataSource: OTableDataSource | null;
@@ -339,6 +339,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   protected clickTimer;
   protected clickDelay = 200;
   protected clickPrevent = false;
+  protected editingCell: any;
+  protected editingRow: any;
 
   get rowQueryCache() {
     return this.state['query-rows'];
@@ -867,7 +869,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   reloadData() {
-    this.selection.clear();
+    this.clearSelection();
     this.finishQuerSubscription = false;
     this.pendingQuery = true;
 
@@ -894,21 +896,18 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       this.viewDetail(item);
       return;
     }
-    if ($event.ctrlKey || $event.metaKey) {
+    if (this.isSelectionModeMultiple() && ($event.ctrlKey || $event.metaKey)) {
       // TODO: test $event.metaKey on MAC
       this.selectedRow(item);
       ObservableWrapper.callEmit(this.onClick, item);
-    } else if ($event.shiftKey) {
+    } else if (this.isSelectionModeMultiple() && $event.shiftKey) {
       this.handleMultipleSelection(item);
-    } else {
+    } else if (!this.isSelectionModeNone()) {
       const selectedItems = this.getSelectedItems();
       if (this.isSelected(item) && selectedItems.length === 1 && this.editionEnabled) {
         return;
       } else {
-        this.selection.clear();
-        this._oTableOptions.columns.forEach(item => {
-          item.editing = false;
-        });
+        this.clearSelectionAndEditing();
       }
       this.selectedRow(item);
       ObservableWrapper.callEmit(this.onClick, item);
@@ -921,7 +920,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       let last = this.dataSource.renderedData.indexOf(item);
       let indexFrom = Math.min(first, last);
       let indexTo = Math.max(first, last);
-      this.selection.clear();
+      this.clearSelection();
       this.dataSource.renderedData.slice(indexFrom, indexTo + 1).forEach(e => this.selectedRow(e));
       ObservableWrapper.callEmit(this.onClick, this.selection.selected);
     }
@@ -956,29 +955,36 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     if (!tableContent) {
       return;
     }
-    if (tableContent && !tableContent.contains(event.target) && this.selection && this.selection.selected.length) {
+
+    if (tableContent && !tableContent.contains(event.target)
+      && (!this.editingCell || !this.editingCell.contains(event.target))
+      && this.selection && this.selection.selected.length) {
       this.clearSelection();
     }
   }
 
-  handleCellBlur(column: OColumn, $event?) {
-    if (this.oenabled && (column.editor && column.editing)) {
-      column.editing = false;
-    }
-  }
-
   handleCellClick(column: OColumn, row: any, event?) {
-    if (this.oenabled && (column.editor && !column.editing)
+    if (this.oenabled && column.editor
       && (this.detailMode !== OServiceComponent.DETAIL_MODE_CLICK)
       && (this.editionMode === OServiceComponent.DETAIL_MODE_CLICK)) {
+
+      if (event && column.editing && this.editingCell === event.currentTarget) {
+        event.stopPropagation();
+        event.preventDefault();
+      }
       this.activateColumnEdition(column, row, event);
     }
   }
 
   handleCellDoubleClick(column: OColumn, row: any, event?) {
-    if (this.oenabled && (column.editor && !column.editing)
+    if (this.oenabled && column.editor
       && (this.detailMode !== OServiceComponent.DETAIL_MODE_DBLCLICK)
       && (this.editionMode === OServiceComponent.DETAIL_MODE_DBLCLICK)) {
+
+      if (event && column.editing && this.editingCell === event.currentTarget) {
+        event.stopPropagation();
+        event.preventDefault();
+      }
       this.activateColumnEdition(column, row, event);
     }
   }
@@ -988,19 +994,28 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       event.stopPropagation();
       event.preventDefault();
     }
-    this.selection.clear();
-    this._oTableOptions.columns.forEach(item => {
-      item.editing = false;
-    });
+
+    this.clearSelectionAndEditing();
     this.selectedRow(row);
+    this.editingCell = event.currentTarget;
     let rowData = {};
     this.keysArray.forEach((key) => {
       rowData[key] = row[key];
     });
     rowData[column.attr] = row[column.attr];
-    column.editor.rowData = rowData;
+    this.editingRow = row;
     column.editor.formGroup.reset();
+    column.editor.rowData = rowData;
     column.editing = true;
+  }
+
+  updateCellData(column: OColumn, data: any, saveChanges: boolean) {
+    column.editing = false;
+    this.editingCell = undefined;
+    if (saveChanges) {
+      Object.assign(this.editingRow, data);
+    }
+    this.editingRow = undefined;
   }
 
   protected getKeysValues(): any[] {
@@ -1021,7 +1036,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   onShowsSelects(event?) {
     this._oTableOptions.selectColumn.visible = !this._oTableOptions.selectColumn.visible;
     if (!this._oTableOptions.selectColumn.visible) {
-      this.selection.clear();
+      this.clearSelection();
     }
     if (this._oTableOptions.visibleColumns && this._oTableOptions.selectColumn.visible && this._oTableOptions.visibleColumns[0] !== OTableComponent.NAME_COLUMN_SELECT) {
       this._oTableOptions.visibleColumns.unshift(OTableComponent.NAME_COLUMN_SELECT);
@@ -1036,8 +1051,15 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     return numSelected === numRows;
   }
 
-  masterToggle(event: MdCheckboxChange, checkbox: any) {
-    event.checked ? this.dataSource.renderedData.forEach(row => this.selection.select(row)) : this.selection.clear();
+  masterToggle(event: MdCheckboxChange) {
+    event.checked ? this.dataSource.renderedData.forEach(row => this.selection.select(row)) : this.clearSelection();
+  }
+
+  selectionCheckboxToggle(event: MdCheckboxChange, row: any) {
+    if (this.isSelectionModeSingle()) {
+      this.clearSelection();
+    }
+    this.selectedRow(row);
   }
 
   selectedRow(row: any) {
@@ -1180,6 +1202,13 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     this.showLastInsertableRow = !this.showFirstInsertableRow;
   }
 
+  clearSelectionAndEditing() {
+    this.selection.clear();
+    this._oTableOptions.columns.forEach(item => {
+      item.editing = false;
+    });
+  }
+
   clearSelection() {
     this.selection.clear();
   }
@@ -1192,12 +1221,24 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     return !column.renderer && (!column.editor || (!column.editing || !this.selection.isSelected(row)));
   }
 
-  useCellRenderer(column: OColumn): boolean {
-    return column.renderer && !column.editing;
+  useCellRenderer(column: OColumn, row: any): boolean {
+    return column.renderer && (!column.editing || column.editing && !this.selection.isSelected(row));
   }
 
   useCellEditor(column: OColumn, row: any): boolean {
     return column.editor && column.editing && this.selection.isSelected(row);
+  }
+
+  isSelectionModeMultiple(): boolean {
+    return this.selectionMode === 'multiple';
+  }
+
+  isSelectionModeSingle(): boolean {
+    return this.selectionMode === 'single';
+  }
+
+  isSelectionModeNone(): boolean {
+    return this.selectionMode === 'none';
   }
 }
 
@@ -1206,12 +1247,12 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     OTableComponent,
     OTableColumnComponent,
     OTableColumnCalculatedComponent,
+    OTableContextMenuComponent,
     ...O_TABLE_CELL_RENDERERS,
     ...O_TABLE_CELL_EDITORS,
     ...O_TABLE_DIALOGS,
     ...O_TABLE_HEADER_COMPONENTS,
-    ...O_TABLE_FOOTER_COMPONENTS,
-    OTableContextMenuComponent
+    ...O_TABLE_FOOTER_COMPONENTS
   ],
   imports: [
     CommonModule,
@@ -1222,21 +1263,21 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   ],
   exports: [
     OTableComponent,
-    CdkTableModule,
-    ...O_TABLE_HEADER_COMPONENTS,
     OTableColumnComponent,
+    CdkTableModule,
+    OTableColumnCalculatedComponent,
+    OTableContextMenuComponent,
+    ...O_TABLE_HEADER_COMPONENTS,
     ...O_TABLE_CELL_RENDERERS,
     ...O_TABLE_CELL_EDITORS,
-    OTableColumnCalculatedComponent,
-    ...O_TABLE_FOOTER_COMPONENTS,
-    OTableContextMenuComponent
+    ...O_TABLE_FOOTER_COMPONENTS
   ],
   entryComponents: [
+    OTableColumnAggregateComponent,
+    OTableContextMenuComponent,
     ...O_TABLE_CELL_RENDERERS,
     ...O_TABLE_CELL_EDITORS,
-    ...O_TABLE_DIALOGS,
-    OTableColumnAggregateComponent,
-    OTableContextMenuComponent
+    ...O_TABLE_DIALOGS
   ],
   providers: [{
     provide: MdPaginatorIntl,

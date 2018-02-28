@@ -15,8 +15,15 @@ import { OTableComponent } from '../o-table.component';
 import { Util } from '../../../util/util';
 
 import {
-  OTableCellEditorTextComponent
+  OTableCellEditorTextComponent,
+  OTableCellEditorBooleanComponent,
+  OTableCellEditorDateComponent,
+  OTableCellEditorIntegerComponent,
+  OTableCellEditorRealComponent
 } from './cell-editor/cell-editor';
+
+import { DateFilterFunction } from '../../../components/input/date-input/o-date-input.component';
+
 
 export const DEFAULT_INPUTS_O_TABLE_COLUMN = [
 
@@ -62,6 +69,9 @@ export const DEFAULT_INPUTS_O_TABLE_COLUMN = [
   ...OTableCellRendererImageComponent.DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_IMAGE,
   ...OTableCellRendererActionComponent.DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_ACTION,
 
+  ...OTableCellEditorBooleanComponent.DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_BOOLEAN,
+  ...OTableCellEditorDateComponent.DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_DATE,
+  ...OTableCellEditorRealComponent.DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_REAL, // includes Integer
   ...OTableCellEditorTextComponent.DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_TEXT
 ];
 
@@ -96,6 +106,10 @@ export class OTableColumnComponent implements OnInit {
   };
 
   protected editorsMapping = {
+    'boolean': OTableCellEditorBooleanComponent,
+    'date': OTableCellEditorDateComponent,
+    'integer': OTableCellEditorIntegerComponent,
+    'real': OTableCellEditorRealComponent,
     'text': OTableCellEditorTextComponent
   };
 
@@ -142,9 +156,27 @@ export class OTableColumnComponent implements OnInit {
   protected icon: string;
   protected action: string;
 
-  /*input editor text */
+  /*input editor */
   @InputConverter()
   protected orequired: boolean = false;
+
+  /*input editor date */
+  protected locale: string;
+  protected oStartView: 'month' | 'year' = 'month';
+  protected oMinDate: string;
+  protected oMaxDate: string;
+  @InputConverter()
+  protected oTouchUi: boolean = false;
+  protected oStartAt: string;
+  protected filterDate: DateFilterFunction;
+
+  /*input editor integer */
+  @InputConverter()
+  min: number;
+  @InputConverter()
+  max: number;
+  @InputConverter()
+  step: number;
 
   /* output cell editor */
   editionStarted: EventEmitter<Object> = new EventEmitter<Object>();
@@ -238,20 +270,31 @@ export class OTableColumnComponent implements OnInit {
             case 'currency':
               break;
             case 'date':
-              break;
-            case 'integer':
+              this.editor.format = this.format;
+              this.editor.locale = this.locale;
+              this.editor.oStartView = this.oStartView;
+              this.editor.oMinDate = this.oMinDate;
+              this.editor.oMaxDate = this.oMaxDate;
+              this.editor.oTouchUi = this.oTouchUi;
+              this.editor.oStartAt = this.oStartAt;
+              this.editor.filterDate = this.filterDate;
               break;
             case 'boolean':
               break;
+            case 'integer':
+              this.editor.min = this.min;
+              this.editor.max = this.max;
+              this.editor.step = this.step;
             case 'real':
             case 'percentage':
               break;
             case 'image':
               break;
             default:
-              this.editor.orequired = this.orequired;
               break;
+
           }
+          this.editor.orequired = this.orequired;
           this.editor.editionStarted = this.editionStarted;
           this.editor.editionCancelled = this.editionCancelled;
           this.editor.editionCommitted = this.editionCommitted;

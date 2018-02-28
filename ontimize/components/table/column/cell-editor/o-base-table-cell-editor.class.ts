@@ -60,16 +60,16 @@ export class OBaseTableCellEditor {
     this.editionStarted.emit(this.rowData);
   }
 
-  protected stopEditing() {
+  protected stopEditing(saveChanges: boolean = false) {
     const oColumn = this.tableColumn.table.oTableOptions.columns.find(item => item.name === this.tableColumn.attr);
     if (oColumn) {
-      oColumn.editing = false;
+      this.table.updateCellData(oColumn, this.rowData, saveChanges);
     }
   }
 
   onBlur(event: any) {
-    this.stopEditing();
     this.rowData[this.tableColumn.attr] = this.formControl.value;
+    this.stopEditing(true);
     this.editionCommitted.emit(this.rowData);
   }
 

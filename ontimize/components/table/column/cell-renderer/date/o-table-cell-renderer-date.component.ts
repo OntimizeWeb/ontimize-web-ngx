@@ -29,7 +29,7 @@ export class OTableCellRendererDateComponent extends OBaseTableCellRenderer {
 
   @ViewChild('templateref', { read: TemplateRef }) public templateref: TemplateRef<any>;
 
-  constructor( protected injector: Injector) {
+  constructor(protected injector: Injector) {
     super(injector);
     this.tableColumn.type = 'date';
     this.setComponentPipe();
@@ -44,7 +44,7 @@ export class OTableCellRendererDateComponent extends OBaseTableCellRenderer {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
     //Add 'implements OnInit' to the class.
     this.pipeArguments = {
-      format:this.format
+      format: this.format
     };
 
     this.initialize();

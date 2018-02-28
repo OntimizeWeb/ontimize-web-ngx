@@ -1,0 +1,26 @@
+<ng-template #templateref let-cellvalue="cellvalue" let-rowvalue="rowvalue">
+  <div [formGroup]="formGroup" oKeyboardListener keyboardKeys="27" (onKeysPressed)="onEscClicked()">
+    <md-form-field floatPlaceholder="never">
+
+      <input #input mdInput [ngModel]="getCellDataAsDate()" [formControl]="formControl" [required]="orequired" (blur)="onBlur($event)"
+        (focus)="onFocus($event)" [mdDatepicker]="d" [mdDatepickerFilter]="filterDate" (dateChange)="onDateChange($event)"
+        [min]="oMinDate" [max]="oMaxDate">
+
+      <md-datepicker #d
+        [startView]="oStartView"
+        [startAt]="oStartAt"
+        [touchUi]="oTouchUi">
+      </md-datepicker>
+
+      <span class="icon-btn" (click)="openDatepicker(d)" mdSuffix>
+        <md-icon>today</md-icon>
+      </span>
+
+      <md-error *ngIf="hasError('required')">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</md-error>
+      <md-error *ngIf="hasError('mdDatepickerParse')">{{ 'FORM_VALIDATION.DATE_PARSE' | oTranslate }} {{ format }}</md-error>
+      <md-error *ngIf="hasError('mdDatepickerFilter')">{{ 'FORM_VALIDATION.DATE_FILTER' | oTranslate }}</md-error>
+      <md-error *ngIf="hasError('mdDatepickerMin')">{{ 'FORM_VALIDATION.DATE_MIN' | oTranslate }} {{ minDateString }}</md-error>
+      <md-error *ngIf="hasError('mdDatepickerMax')">{{ 'FORM_VALIDATION.DATE_MAX' | oTranslate }} {{ maxDateString }}</md-error>
+    </md-form-field>
+  </div>
+</ng-template>

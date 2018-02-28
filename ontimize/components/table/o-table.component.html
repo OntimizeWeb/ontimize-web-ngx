@@ -39,7 +39,7 @@
       <!--Checkbox Column -->
       <ng-container [cdkColumnDef]="oTableOptions.selectColumn.name" *ngIf="oTableOptions.selectColumn.visible">
         <md-header-cell *cdkHeaderCellDef>
-          <md-checkbox (change)="masterToggle($event)" [checked]="isAllSelected()" [indeterminate]="selection.hasValue() && !isAllSelected()"></md-checkbox>
+          <md-checkbox (click)="$event.stopPropagation()" (change)="masterToggle($event)" [checked]="isAllSelected()" [indeterminate]="selection.hasValue() && !isAllSelected()"></md-checkbox>
         </md-header-cell>
       </ng-container>
 
@@ -77,10 +77,10 @@
       <!--Checkbox Column -->
       <ng-container [cdkColumnDef]="oTableOptions.selectColumn.name" *ngIf="oTableOptions.selectColumn.visible">
         <md-header-cell *cdkHeaderCellDef>
-          <md-checkbox (change)="masterToggle($event)" [checked]="isAllSelected()" [indeterminate]="selection.hasValue() && !isAllSelected()"></md-checkbox>
+          <md-checkbox (click)="$event.stopPropagation()" (change)="masterToggle($event)" [checked]="isAllSelected()" [indeterminate]="selection.hasValue() && !isAllSelected()"></md-checkbox>
         </md-header-cell>
         <md-cell *cdkCellDef="let row">
-          <md-checkbox name="id[]" (click)="$event.stopPropagation()" (change)="$event ? selectedRow(row) : null" [checked]="selection.isSelected(row)">
+          <md-checkbox name="id[]" (click)="$event.stopPropagation()" (change)="selectionCheckboxToggle($event, row)" [checked]="selection.isSelected(row)">
           </md-checkbox>
         </md-cell>
       </ng-container>
@@ -106,7 +106,7 @@
             {{ row[column.name] }}
           </ng-container>
 
-          <ng-template *ngIf="useCellRenderer(column)" [ngTemplateOutlet]="column.renderer.templateref" [ngOutletContext]="{ cellvalue: row[column.name], rowvalue:row }">
+          <ng-template *ngIf="useCellRenderer(column, row)" [ngTemplateOutlet]="column.renderer.templateref" [ngOutletContext]="{ cellvalue: row[column.name], rowvalue:row }">
           </ng-template>
 
           <ng-template *ngIf="useCellEditor(column, row)" [ngTemplateOutlet]="column.editor.templateref" [ngOutletContext]="{ cellvalue: row[column.name], rowvalue:row }">
@@ -118,7 +118,7 @@
       <md-header-row *cdkHeaderRowDef="[]" style.display="none"></md-header-row>
 
       <md-row *cdkRowDef="let row; columns: oTableOptions.visibleColumns;" (click)="handleClick(row, $event)" (dblclick)="handleDoubleClick(row, $event)"
-        [oContextMenu]="tableContextMenu" [oContextMenuData]="row" [class.selected]="isSelected(row)">
+        [oContextMenu]="tableContextMenu" [oContextMenuData]="row" [class.selected]="!isSelectionModeNone() && isSelected(row)">
       </md-row>
 
     </md-table>
