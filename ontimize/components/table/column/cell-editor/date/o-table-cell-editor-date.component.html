@@ -1,14 +1,10 @@
 <ng-template #templateref let-cellvalue="cellvalue" let-rowvalue="rowvalue">
-  <div [formGroup]="formGroup" oKeyboardListener keyboardKeys="27" (onKeysPressed)="onEscClicked()">
+  <div [formGroup]="formGroup">
     <md-form-field floatPlaceholder="never">
-      <input #input mdInput [formControl]="formControl" [required]="orequired" (blur)="commitEdition()"
-        [mdDatepicker]="d" [mdDatepickerFilter]="filterDate" (dateChange)="onDateChange($event)"
-        [min]="oMinDate" [max]="oMaxDate">
+      <input #input mdInput [formControl]="formControl" [required]="orequired" [mdDatepicker]="d" [mdDatepickerFilter]="filterDate"
+        (dateChange)="onDateChange($event)" [min]="oMinDate" [max]="oMaxDate">
 
-      <md-datepicker #d
-        [startView]="oStartView"
-        [startAt]="oStartAt"
-        [touchUi]="oTouchUi">
+      <md-datepicker #d [startView]="oStartView" [startAt]="oStartAt" [touchUi]="oTouchUi">
       </md-datepicker>
 
       <span class="icon-btn" (click)="openDatepicker(d)" mdSuffix>

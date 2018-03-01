@@ -1,11 +1,12 @@
-import { Injector, EventEmitter } from '@angular/core';
+import { Injector, EventEmitter, OnInit, HostListener } from '@angular/core';
 import { FormControl, ValidatorFn, Validators, FormGroup } from '@angular/forms';
 
 import { InputConverter } from '../../../../decorators';
 import { OTableComponent } from '../../o-table.component';
 import { OTableColumnComponent } from '../o-table-column.component';
 
-export class OBaseTableCellEditor {
+export class OBaseTableCellEditor implements OnInit {
+
 
   public static DEFAULT_INPUTS_O_TABLE_CELL_EDITOR = [
     'orequired: required'
@@ -31,9 +32,21 @@ export class OBaseTableCellEditor {
   editionCancelled: EventEmitter<Object> = new EventEmitter<Object>();
   editionCommitted: EventEmitter<Object> = new EventEmitter<Object>();
 
+  @HostListener('document:keyup', ['$event']) onKeyupHandler(event: KeyboardEvent) {
+    const oColumn = this.tableColumn.table.oTableOptions.columns.find(item => item.name === this.tableColumn.attr);
+    if (!oColumn.editing) {
+      return;
+    }
+    if (event.keyCode === 27) {
+      this.onEscClicked();
+    } else if (event.keyCode === 13 || event.keyCode === 9) {
+      this.commitEdition();
+    }
+  }
+  inputRef: any;
+
   constructor(protected injector: Injector) {
     this.tableColumn = this.injector.get(OTableColumnComponent);
-    this.createFormControl();
   }
 
   createFormControl() {
@@ -46,6 +59,10 @@ export class OBaseTableCellEditor {
       this.formControl = new FormControl(cfg, validators);
       this.formGroup.addControl('cell-editor', this.formControl);
     }
+  }
+
+  ngOnInit(): void {
+    this.createFormControl();
   }
 
   initialize() {
@@ -70,9 +87,11 @@ export class OBaseTableCellEditor {
   }
 
   commitEdition() {
-    this._rowData[this.tableColumn.attr] = this.formControl.value;
-    this.endEdition(true);
-    this.editionCommitted.emit(this._rowData);
+    if (!this.formControl.invalid) {
+      this._rowData[this.tableColumn.attr] = this.formControl.value;
+      this.endEdition(true);
+      this.editionCommitted.emit(this._rowData);
+    }
   }
 
   get table(): OTableComponent {
@@ -89,7 +108,13 @@ export class OBaseTableCellEditor {
 
   set rowData(arg: any) {
     this._rowData = arg;
-    this.formControl.setValue(this.getCellData());
+    const cellData = this.getCellData();
+    this.formControl.setValue(cellData);
+    this.formControl.markAsTouched();
+
+    if (this.inputRef) {
+      this.inputRef.nativeElement.setSelectionRange(0, String(cellData).length);
+    }
   }
 
   resolveValidators(): ValidatorFn[] {

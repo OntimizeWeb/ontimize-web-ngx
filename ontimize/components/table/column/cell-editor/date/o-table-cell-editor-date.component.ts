@@ -1,4 +1,4 @@
-import { Component, Injector, ViewChild, TemplateRef, OnInit, Inject } from '@angular/core';
+import { Component, Injector, ViewChild, TemplateRef, OnInit, Inject, ElementRef } from '@angular/core';
 import { MdDateFormats, DateAdapter, MdDatepicker, MD_DATE_FORMATS, MdDatepickerInputEvent } from '@angular/material';
 import * as moment from 'moment';
 
@@ -42,6 +42,7 @@ export class OTableCellEditorDateComponent extends OBaseTableCellEditor implemen
   public static DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_DATE = DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_DATE;
 
   @ViewChild('templateref', { read: TemplateRef }) public templateref: TemplateRef<any>;
+  @ViewChild('input') inputRef: ElementRef;
 
   protected format: string = 'L';
   protected locale: string;
@@ -73,6 +74,7 @@ export class OTableCellEditorDateComponent extends OBaseTableCellEditor implemen
   }
 
   ngOnInit(): void {
+    super.ngOnInit();
     if (!this.locale) {
       this.locale = this.momentSrv.getLocale();
     }
@@ -82,9 +84,7 @@ export class OTableCellEditorDateComponent extends OBaseTableCellEditor implemen
     }
 
     this.momentDateAdapter.setLocale({ locale: this.locale, format: this.format });
-    if (!this.startAt) {
-      this.oStartAt = new Date();
-    } else {
+    if (this.startAt) {
       this.oStartAt = new Date(this.startAt);
     }
 
@@ -104,6 +104,13 @@ export class OTableCellEditorDateComponent extends OBaseTableCellEditor implemen
         this.oMaxDate = date;
         this.maxDateString = momentD.format(this.format);
       }
+    }
+  }
+
+  startEdtion(data: any) {
+    super.startEdtion(data);
+    if (!this.startAt) {
+      this.oStartAt = this.getCellData();
     }
   }
 

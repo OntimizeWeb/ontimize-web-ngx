@@ -1,4 +1,6 @@
 import { Component, Injector, ViewChild, TemplateRef } from '@angular/core';
+import { FormControl, ValidatorFn } from '@angular/forms';
+
 import { InputConverter } from '../../../../../decorators';
 import { OBaseTableCellEditor } from '../o-base-table-cell-editor.class';
 
@@ -7,10 +9,6 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_INTEGER = [
   'min',
   'max',
   'step'
-  // ,
-  // 'grouping',
-  // 'thousandSeparator : thousand-separator',
-  // 'olocale : locale'
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_INTEGER = [
@@ -36,16 +34,49 @@ export class OTableCellEditorIntegerComponent extends OBaseTableCellEditor {
   @InputConverter()
   max: number;
   @InputConverter()
-  step: number;
-  // @InputConverter()
-  // protected grouping: boolean = false;
-  // protected thousandSeparator: string;
-  // protected olocale: string;
+  step: number = 1;
 
   constructor(protected injector: Injector) {
     super(injector);
     this.initialize();
   }
 
+  getCellData() {
+    let cellData = super.getCellData();
+    let intValue = parseInt(cellData);
+    return isNaN(intValue) ? undefined : intValue;
+  }
 
+  resolveValidators(): ValidatorFn[] {
+    let validators: ValidatorFn[] = super.resolveValidators();
+    if (typeof (this.min) !== 'undefined') {
+      validators.push(this.minValidator.bind(this));
+    }
+    if (typeof (this.max) !== 'undefined') {
+      validators.push(this.maxValidator.bind(this));
+    }
+    return validators;
+  }
+
+  protected minValidator(control: FormControl) {
+    if ((typeof (control.value) === 'number') && (control.value < this.min)) {
+      return {
+        'min': {
+          'requiredMin': this.min
+        }
+      };
+    }
+    return {};
+  }
+
+  protected maxValidator(control: FormControl) {
+    if ((typeof (control.value) === 'number') && (this.max < control.value)) {
+      return {
+        'max': {
+          'requiredMax': this.max
+        }
+      };
+    }
+    return {};
+  }
 }

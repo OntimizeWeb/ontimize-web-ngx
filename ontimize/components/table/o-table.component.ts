@@ -111,9 +111,6 @@ export const DEFAULT_INPUTS_O_TABLE = [
   // export-button [no|yes]: show export button. Default: yes.
   'exportButton: export-button',
 
-  // edition-mode [none | inline | click | dblclick]: edition mode. Default none
-  'editionMode: edition-mode',
-
   // show-table-buttons-text [string][yes|no|true|false]: show text of header buttons
   'showTableButtonsText: show-table-buttons-text',
 
@@ -133,6 +130,9 @@ export const DEFAULT_INPUTS_O_TABLE = [
   'fixedHeader: fixed-header',
 
   'showTitle: show-title',
+
+  // edition-mode [none | inline | click | dblclick]: edition mode. Default none
+  'editionMode: edition-mode',
 
   // selection-mode [none | simple | multiple ]: selection mode. Default multiple
   'selectionMode: selection-mode'
@@ -947,6 +947,11 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   handleDOMClick(event) {
+    const editingColumn = this.oTableOptions.columns.filter(item => item.editing);
+    if (editingColumn && editingColumn.length > 0) {
+      return;
+    }
+
     const overlayContainer = document.body.getElementsByClassName('cdk-overlay-container')[0];
     if (overlayContainer && overlayContainer.contains(event.target)) {
       return;
@@ -971,8 +976,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       if (event && column.editing && this.editingCell === event.currentTarget) {
         event.stopPropagation();
         event.preventDefault();
+      } else {
+        this.activateColumnEdition(column, row, event);
       }
-      this.activateColumnEdition(column, row, event);
     }
   }
 
@@ -984,8 +990,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       if (event && column.editing && this.editingCell === event.currentTarget) {
         event.stopPropagation();
         event.preventDefault();
+      } else {
+        this.activateColumnEdition(column, row, event);
       }
-      this.activateColumnEdition(column, row, event);
     }
   }
 

@@ -110,6 +110,8 @@ export class OTableColumnComponent implements OnInit {
     'date': OTableCellEditorDateComponent,
     'integer': OTableCellEditorIntegerComponent,
     'real': OTableCellEditorRealComponent,
+    'percentage': OTableCellEditorRealComponent,
+    'currency': OTableCellEditorRealComponent,
     'text': OTableCellEditorTextComponent
   };
 
@@ -177,6 +179,10 @@ export class OTableColumnComponent implements OnInit {
   max: number;
   @InputConverter()
   step: number;
+
+  /*input editor boolean */
+  @InputConverter()
+  indeterminateOnNull: boolean = false;
 
   /* output cell editor */
   editionStarted: EventEmitter<Object> = new EventEmitter<Object>();
@@ -267,8 +273,7 @@ export class OTableColumnComponent implements OnInit {
           let ref = this.container.createComponent(factory);
           this.editor = ref.instance;
           switch (this.type) {
-            case 'currency':
-              break;
+
             case 'date':
               this.editor.format = this.format;
               this.editor.locale = this.locale;
@@ -280,13 +285,18 @@ export class OTableColumnComponent implements OnInit {
               this.editor.filterDate = this.filterDate;
               break;
             case 'boolean':
+              this.editor.indeterminateOnNull = this.indeterminateOnNull;
               break;
             case 'integer':
               this.editor.min = this.min;
               this.editor.max = this.max;
               this.editor.step = this.step;
-            case 'real':
             case 'percentage':
+            case 'currency':
+            case 'real':
+              this.editor.min = this.min;
+              this.editor.max = this.max;
+              this.editor.step = this.step;
               break;
             case 'image':
               break;

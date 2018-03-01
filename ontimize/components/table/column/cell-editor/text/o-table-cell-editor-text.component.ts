@@ -1,4 +1,4 @@
-import { Component, Injector, ViewChild, TemplateRef } from '@angular/core';
+import { Component, Injector, ViewChild, TemplateRef, ElementRef } from '@angular/core';
 import { OBaseTableCellEditor } from '../o-base-table-cell-editor.class';
 
 export const DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_TEXT = [
@@ -22,6 +22,7 @@ export class OTableCellEditorTextComponent extends OBaseTableCellEditor {
   public static DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_TEXT = DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_TEXT;
 
   @ViewChild('templateref', { read: TemplateRef }) public templateref: TemplateRef<any>;
+  @ViewChild('input') inputRef: ElementRef;
 
   constructor(protected injector: Injector) {
     super(injector);

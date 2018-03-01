@@ -1,6 +1,6 @@
 <ng-template #templateref let-cellvalue="cellvalue" let-rowvalue="rowvalue">
-  <div class="o-table-cell-editor-boolean" [formGroup]="formGroup" oKeyboardListener keyboardKeys="27" (onKeysPressed)="onEscClicked()">
-    <md-checkbox (click)="$event.stopPropagation()" (change)="onChangeCheckbox()" [indeterminate]="indeterminate" [formControl]="formControl">
+  <div class="o-table-cell-editor-boolean" [formGroup]="formGroup">
+    <md-checkbox (click)="$event.stopPropagation()" (change)="onChange()" [indeterminate]="indeterminate" [formControl]="formControl">
     </md-checkbox>
   </div>
 </ng-template>

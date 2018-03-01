@@ -1,7 +1,7 @@
 <ng-template #templateref let-cellvalue="cellvalue" let-rowvalue="rowvalue">
-  <div [formGroup]="formGroup" oKeyboardListener keyboardKeys="27" (onKeysPressed)="onEscClicked()">
+  <div [formGroup]="formGroup">
     <md-form-field floatPlaceholder="never">
-      <input #input mdInput type="text" [formControl]="formControl" [required]="orequired" (blur)="commitEdition()">
+      <input #input mdInput type="text" [formControl]="formControl" [required]="orequired">
 
       <md-error *ngIf="hasError('required')">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</md-error>
     </md-form-field>
