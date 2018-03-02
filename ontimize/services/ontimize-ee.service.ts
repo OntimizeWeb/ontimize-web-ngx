@@ -69,16 +69,16 @@ export class OntimizeEEService implements IAuthService, IDataService {
 
   public startsession(user: string, password: string) {
 
-    var url = this.urlBase + this._startSessionPath;
+    const url = this.urlBase + this._startSessionPath;
 
-    var headers: Headers = new Headers();
+    const headers: Headers = new Headers();
     let authorization = 'Basic ' + btoa(user + ':' + password);
     headers.append('Authorization', authorization);
-    var options = new RequestOptions({
+    const options = new RequestOptions({
       headers: headers
     });
 
-    var body = JSON.stringify({});
+    const body = JSON.stringify({});
 
     let _startSessionObserver: any;
     let startSessionObservable = new Observable(observer =>
@@ -125,26 +125,26 @@ export class OntimizeEEService implements IAuthService, IDataService {
     av = (this.isNullOrUndef(av)) ? this.av : av;
     sqltypes = (this.isNullOrUndef(sqltypes)) ? this.sqltypes : sqltypes;
 
-    var url = this._urlBase + this.path + '/' + entity + '/search';
+    const url = this._urlBase + this.path + '/' + entity + '/search';
 
-    var headers: Headers = new Headers();
+    const headers: Headers = new Headers();
     headers.append('Access-Control-Allow-Origin', '*');
     headers.append('Content-Type', 'application/json;charset=UTF-8');
 
     let authorizationToken = 'Bearer ' + this._sessionid;
     headers.append('Authorization', authorizationToken);
 
-    var body = JSON.stringify({
+    const body = JSON.stringify({
       filter: kv,
       columns: av,
       sqltypes: sqltypes
     });
 
     let _innerObserver: any;
-    let dataObservable = new Observable(observer =>
+    const dataObservable = new Observable(observer =>
       _innerObserver = observer).share();
 
-    var self = this;
+    const self = this;
     this.http
       .post(url, body, { headers: headers })
       .map(response => response.json())
@@ -174,88 +174,81 @@ export class OntimizeEEService implements IAuthService, IDataService {
   public advancedQuery(kv?: Object, av?: Array<string>, entity?: string, sqltypes?: Object,
     offset?: number, pagesize?: number, orderby?: Array<Object>): Observable<any> {
 
-    // entity = (this.isNullOrUndef(entity)) ? this.entity : entity;
-
     //TODO improve this -> merge between global conf and specific params of method calling
-    /*TODO implements paginable services....
     kv = (this.isNullOrUndef(kv)) ? this.kv : kv;
     av = (this.isNullOrUndef(av)) ? this.av : av;
     sqltypes = (this.isNullOrUndef(sqltypes)) ? this.sqltypes : sqltypes;
-    if (offset) {
-      this.offset = offset;
-    }
-    if (pagesize) {
-      this.pagesize = pagesize;
-    }
-    if (orderby) {
-      this.orderby = orderby;
-    }
 
-    var url = this._urlBase + '/advancedquery';
+    orderby = (this.isNullOrUndef(orderby)) ? this.orderby : orderby;
+    // if (!this.isNullOrUndef(offset)) {
+    //   this.offset = offset;
+    // }
+    // if (!this.isNullOrUndef(pagesize)) {
+    //   this.pagesize = pagesize;
+    // }
+    const url = this._urlBase + this.path + '/' + entity + '/advancedsearch';
 
-    var headers: Headers = new Headers();
+    const headers: Headers = new Headers();
     headers.append('Access-Control-Allow-Origin', '*');
     headers.append('Content-Type', 'application/json;charset=UTF-8');
 
-    var params = JSON.stringify({
-      sessionid: this._sessionid,
-      type: 1,
-      entity: entity,
-      kv: kv,
-      av: av,
+    const authorizationToken = 'Bearer ' + this._sessionid;
+    headers.append('Authorization', authorizationToken);
+
+    const params = JSON.stringify({
+      filter: kv,
+      columns: av,
       sqltypes: sqltypes,
-      offset: this.offset,
-      pageSize: this.pagesize,
-      orderBy: this.orderby
+      offset: offset,
+      pageSize: pagesize,
+      orderBy: orderby
     });
 
-    var self = this;
-    this._http
+    let _innerObserver: any;
+    const dataObservable = new Observable(observer => _innerObserver = observer).share();
+
+    const self = this;
+    this.http
       .post(url, params, { headers: headers })
       .map(response => response.json())
       .subscribe(resp => {
         if (resp && resp.code === 3) {
           self.redirectLogin(true);
         } else if (resp.code === 1) {
-          this._innerObserver.error(resp.message);
+          _innerObserver.error(resp.message);
         } else if (resp.code === 0) {
-          self._dataStore = resp;
-          self._innerObserver.next(self._dataStore);
+          _innerObserver.next(resp);
         } else {
           //Unknow state -> error
-          this._innerObserver.error('Service unavailable');
+          _innerObserver.error('Service unavailable');
         }
-      }, error => this._innerObserver.error(error),
-      () => this._innerObserver.complete());
-      */
-    let _innerObserver: any;
-    let dataObservable = new Observable(observer =>
-      _innerObserver = observer).share();
+      }, error => _innerObserver.error(error),
+      () => _innerObserver.complete());
 
     return dataObservable;
   }
 
   public insert(av: Object = {}, entity: string, sqltypes?: Object): Observable<any> {
 
-    var url = this._urlBase + this.path + '/' + entity;
+    const url = this._urlBase + this.path + '/' + entity;
 
-    var headers: Headers = new Headers();
+    const headers: Headers = new Headers();
     headers.append('Access-Control-Allow-Origin', '*');
     headers.append('Content-Type', 'application/json;charset=UTF-8');
 
     let authorizationToken = 'Bearer ' + this._sessionid;
     headers.append('Authorization', authorizationToken);
 
-    var body = JSON.stringify({
+    const body = JSON.stringify({
       data: av,
       sqltypes: sqltypes
     });
 
     let _innerObserver: any;
-    let dataObservable = new Observable(observer =>
+    const dataObservable = new Observable(observer =>
       _innerObserver = observer).share();
 
-    var self = this;
+    const self = this;
     this.http
       .post(url, body, { headers: headers })
       .map(response => response.json())
@@ -284,26 +277,26 @@ export class OntimizeEEService implements IAuthService, IDataService {
 
   public update(kv: Object = {}, av: Object = {}, entity?: string, sqltypes?: Object): Observable<any> {
 
-    var url = this._urlBase + this.path + '/' + entity;
+    const url = this._urlBase + this.path + '/' + entity;
 
-    var headers: Headers = new Headers();
+    const headers: Headers = new Headers();
     headers.append('Access-Control-Allow-Origin', '*');
     headers.append('Content-Type', 'application/json;charset=UTF-8');
 
     let authorizationToken = 'Bearer ' + this._sessionid;
     headers.append('Authorization', authorizationToken);
 
-    var body = JSON.stringify({
+    const body = JSON.stringify({
       filter: kv,
       data: av,
       sqltypes: sqltypes
     });
 
     let _innerObserver: any;
-    let dataObservable = new Observable(observer =>
+    const dataObservable = new Observable(observer =>
       _innerObserver = observer).share();
 
-    var self = this;
+    const self = this;
     this.http
       .put(url, body, { headers: headers })
       .map(response => response.json())
@@ -332,16 +325,16 @@ export class OntimizeEEService implements IAuthService, IDataService {
 
   public delete(kv: Object = {}, entity?: string, sqltypes?: Object): Observable<any> {
 
-    var url = this._urlBase + this.path + '/' + entity;
+    const url = this._urlBase + this.path + '/' + entity;
 
-    var headers: Headers = new Headers();
+    const headers: Headers = new Headers();
     headers.append('Access-Control-Allow-Origin', '*');
     headers.append('Content-Type', 'application/json;charset=UTF-8');
 
     let authorizationToken = 'Bearer ' + this._sessionid;
     headers.append('Authorization', authorizationToken);
 
-    var body = JSON.stringify({
+    const body = JSON.stringify({
       filter: kv,
       sqltypes: sqltypes
     });
@@ -353,10 +346,10 @@ export class OntimizeEEService implements IAuthService, IDataService {
     });
 
     let _innerObserver: any;
-    let dataObservable = new Observable(observer =>
+    const dataObservable = new Observable(observer =>
       _innerObserver = observer).share();
 
-    var self = this;
+    const self = this;
     this.http
       .request(url, options)
       .map(response => response.json())

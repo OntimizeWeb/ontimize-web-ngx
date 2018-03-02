@@ -62,7 +62,7 @@ export class OTableDataSource extends DataSource<any> {
       displayDataChanges.push(this._quickFilterChange);
     }
 
-    if (this._paginator) {
+    if (this._paginator && !this.table.pageable) {
       displayDataChanges.push(this._paginator.page);
     }
 
@@ -78,8 +78,14 @@ export class OTableDataSource extends DataSource<any> {
       data = this.getSortedData(data);
       data = this.getColumnCalculatedData(data);
       this.filteredData = Object.assign([], data);
-      this.resultsLength = data.length;
-      data = this.getPaginationData(data);
+
+      if (this.table.pageable) {
+        const totalRecordsNumber = this.table.getTotalRecordsNumber();
+        this.resultsLength = totalRecordsNumber !== undefined ? totalRecordsNumber : data.length;
+      } else {
+        this.resultsLength = data.length;
+        data = this.getPaginationData(data);
+      }
       this.renderedData = data;
       //if exist one o-table-column-aggregate then emit observable
       if (this.table.showTotals) {

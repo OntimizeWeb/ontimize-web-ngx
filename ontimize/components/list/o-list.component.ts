@@ -192,8 +192,8 @@ export class OListComponent extends OServiceComponent implements OnInit, IList, 
       initialQueryLength = this.state.queryRecordOffset;
     }
     this.state.queryRecordOffset = 0;
-    if (!this.state.hasOwnProperty('queryTotalRecordNumber')) {
-      this.state.queryTotalRecordNumber = 0;
+    if (!this.state.hasOwnProperty('totalQueryRecordsNumber')) {
+      this.state.totalQueryRecordsNumber = 0;
     }
     if (this.queryOnInit) {
       let queryArgs = {
@@ -489,7 +489,7 @@ export class OListComponent extends OServiceComponent implements OnInit, IList, 
   }
 
   onScroll($event: Event): void {
-    let pendingRegistries = this.dataResponseArray.length < this.state.queryTotalRecordNumber;
+    let pendingRegistries = this.dataResponseArray.length < this.state.totalQueryRecordsNumber;
     if (!this.loading && pendingRegistries) {
       let element = $event.srcElement as any;
       if (element.offsetHeight + element.scrollTop + 5 >= element.scrollHeight) {

@@ -18,7 +18,7 @@ import { CdkTableModule } from '@angular/cdk/table';
 import { SelectionModel, SelectionChange } from '@angular/cdk/collections';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
-import { MdDialog, MdSort, MdTabGroup, MdTab, MdPaginatorIntl, MdPaginator, MdCheckboxChange, MdMenu } from '@angular/material';
+import { MdDialog, MdSort, MdTabGroup, MdTab, MdPaginatorIntl, MdPaginator, MdCheckboxChange, MdMenu, PageEvent } from '@angular/material';
 
 import {
   O_TABLE_FOOTER_COMPONENTS,
@@ -116,9 +116,6 @@ export const DEFAULT_INPUTS_O_TABLE = [
 
   // select-all-checkbox [string][yes|no|true|false]:
   'selectAllCheckbox: select-all-checkbox',
-
-  // pagination mode [string][yes|no|true|false]
-  'singlePageMode: single-page-mode',
 
   // pagination-controls [string][yes|no|true|false]
   'paginationControls: pagination-controls',
@@ -241,7 +238,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   @InputConverter()
   columnsGroupButton: boolean = true;
   @InputConverter()
-  pageable: boolean = false;
+  pageable: boolean = true;
   @InputConverter()
   columnsVisibilityButton: boolean = true;
   @InputConverter()
@@ -342,6 +339,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   protected editingCell: any;
   protected editingRow: any;
 
+  protected sortColArray: Array<any> = [];
+  protected currentPage: number = 0;
+
   get rowQueryCache() {
     return this.state['query-rows'];
   }
@@ -420,10 +420,12 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
    */
   getDataToStore() {
     var dataToStore = {
-      'sort-columns': this.sort.active + ':' + this.sort.direction,
       'filter': this.filter ? this.filter.nativeElement.value : '',
       'query-rows': this.mdpaginator ? this.mdpaginator.pageSize : ''
     };
+    if (this.sortColArray.length > 0 && this.sort.active !== undefined) {
+      dataToStore['sort-columns'] = this.sort.active + ':' + this.sort.direction;
+    }
     if (this.oTableColumnsFilterComponent) {
       dataToStore['column-value-filters'] = this.dataSource.getColumnValueFilters();
     }
@@ -565,6 +567,44 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     });
   }
 
+  parseSortColumns() {
+    this.sortColArray = [];
+    let sortColumnsParam = this.state['sort-columns'] || this.sortColumns;
+    if (sortColumnsParam) {
+      let cols = Util.parseArray(sortColumnsParam);
+      cols.forEach((col) => {
+        let colDef = col.split(OTableComponent.TYPE_SEPARATOR);
+        if (colDef.length > 0) {
+          let colName = colDef[0];
+          let oCol = this._oTableOptions.columns.find((item) => item.name === colName);
+          if (oCol !== undefined) {
+            const colSort = colDef[1] || OTableComponent.TYPE_ASC_NAME;
+            let ascendingSort;
+            switch (colSort) {
+              case OTableComponent.TYPE_ASC_NAME:
+                ascendingSort = true;
+                break;
+              case OTableComponent.TYPE_DESC_NAME:
+                ascendingSort = false;
+                break;
+            }
+            this.sortColArray.push({
+              column: colName,
+              ascendent: ascendingSort
+            });
+          }
+        }
+      });
+
+      //set values of sort-columns to mdsort
+      if ((typeof (this._oTableOptions.columns) !== 'undefined') && (this.sortColArray.length > 0)) {
+        let temp = this.sortColArray[0];
+        this.sort.active = temp.column;
+        this.sort.direction = temp.ascendent ? 'asc' : 'desc';
+      }
+    }
+  }
+
   /**
    * get/set parametres to component
    */
@@ -611,40 +651,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     this._oTableOptions.filter = this.quickFilter;
     this._oTableOptions.filterCaseSensitive = this.filterCaseSensitive;
 
-    //parse input sort-columns
-    let sortColumnsArray = [];
-    let sortColumnsParam = this.state['sort-columns'] || this.sortColumns;
-    if (sortColumnsParam) {
-      let cols = Util.parseArray(sortColumnsParam);
-      for (let i = 0; i < cols.length; ++i) {
-        let col = cols[i];
-        let colDef = col.split(OTableComponent.TYPE_SEPARATOR);
-        if (colDef.length > 0) {
-          let colName = colDef[0];
-          for (let colIndex = 0; colIndex < this._oTableOptions.columns.length; ++colIndex) {
-            if (colName === this._oTableOptions.columns[colIndex].name) {
-              let sortDirection = OTableComponent.TYPE_ASC_NAME;
-              if (colDef.length > 1) {
-                sortDirection = colDef[1].toLowerCase();
-                switch (sortDirection) {
-                  case OTableComponent.TYPE_DESC_NAME:
-                    sortDirection = OTableComponent.TYPE_DESC_NAME;
-                    break;
-                }
-              }
-              sortColumnsArray.push([colName, sortDirection]);
-            }
-          }
-        }
-      }
-
-      //set values of sort-columns to mdsort
-      if ((typeof (this._oTableOptions.columns) !== 'undefined') && (sortColumnsArray.length > 0)) {
-        let temp = sortColumnsArray[0];
-        this.sort.active = temp[0];
-        this.sort.direction = temp[1].toLowerCase();
-      }
-    }
+    this.parseSortColumns();
 
     if (this.mdTabGroupContainer && this.mdTabContainer) {
       /*
@@ -732,6 +739,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
           const arrData = (res.data !== undefined) ? res.data : [];
           data = Util.isArray(arrData) ? arrData : [];
           sqlTypes = res.sqlTypes;
+          if (this.pageable) {
+            this.updatePaginationInfo(res);
+          }
         }
         this.setData(data, sqlTypes);
         if (this.pageable) {
@@ -744,6 +754,10 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
         this.setData([], []);
       });
     }
+  }
+
+  updatePaginationInfo(queryRes: any) {
+    super.updatePaginationInfo(queryRes);
   }
 
   protected setData(data: any, sqlTypes: any) {
@@ -773,6 +787,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   getQueryArguments(filter: Object, ovrrArgs?: any): Array<any> {
     let queryArguments = super.getQueryArguments(filter, ovrrArgs);
     queryArguments[1] = this.getAttributesValuesToQuery();
+    queryArguments[6] = this.sortColArray;
     return queryArguments;
   }
 
@@ -873,7 +888,14 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     this.finishQuerSubscription = false;
     this.pendingQuery = true;
 
-    this.queryData(this.parentItem);
+    let queryArgs;
+    if (this.pageable) {
+      queryArgs = {
+        offset: this.currentPage * this.queryRows,
+        length: this.queryRows
+      };
+    }
+    this.queryData(this.parentItem, queryArgs);
   }
 
   handleClick(item: any, $event?) {
@@ -1106,7 +1128,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     for (let i = 0; i < this.asyncLoadColumns.length; i++) {
       av.push(this.asyncLoadColumns[i]);
     }
-    const columnQueryArgs = [kv, av, this.entity];
+    const columnQueryArgs = [kv, av, this.entity, undefined, undefined, undefined, undefined];
     let queryMethodName = this.pageable ? this.paginatedQueryMethod : this.queryMethod;
     if (this.dataService && (queryMethodName in this.dataService) && this.entity) {
       //const self = this;
@@ -1245,6 +1267,33 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   isSelectionModeNone(): boolean {
     return this.selectionMode === 'none';
+  }
+
+  onChangePage(evt: PageEvent) {
+    if (!this.pageable) {
+      return;
+    }
+    const goingForward = evt.pageIndex > this.currentPage;
+    const tableState = this.state;
+
+    let newStartRecord;
+    let queryLength;
+
+    if (goingForward) {
+      newStartRecord = Math.max(tableState.queryRecordOffset, (evt.pageIndex * evt.pageSize));
+      let newEndRecord = Math.min(newStartRecord + this.queryRows, tableState.totalQueryRecordsNumber);
+      queryLength = Math.min(this.queryRows, newEndRecord - newStartRecord);
+    } else {
+      newStartRecord = (evt.pageIndex * evt.pageSize);
+      queryLength = this.queryRows;
+    }
+    this.currentPage = evt.pageIndex;
+    const queryArgs = {
+      offset: newStartRecord,
+      length: queryLength
+    };
+    this.finishQuerSubscription = false;
+    this.queryData(this.parentItem, queryArgs);
   }
 }
 

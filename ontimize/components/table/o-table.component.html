@@ -1,6 +1,6 @@
 <div class="expandable-container" [style.display]="isVisible()? '' : 'none'">
   <div class="o-table-container">
-    <div class="toolbar" fxLayout="row" fxLayoutAlign="space-between center">
+    <div #tableToolbar class="toolbar" fxLayout="row" fxLayoutAlign="space-between center">
       <div class="buttons">
         <o-table-button *ngIf="insertButton" (onClick)="add()" label="TABLE.BUTTONS.ADD" icon="add"> </o-table-button>
         <o-table-button *ngIf="refreshButton" (onClick)="reloadData()" label="TABLE.BUTTONS.REFRESH" icon="autorenew"> </o-table-button>
@@ -35,7 +35,7 @@
       </md-menu>
     </div>
 
-    <md-table #table class="header-fixed" mdSort [class]="rowHeight">
+    <md-table #tableHeader class="header-fixed" mdSort [class]="rowHeight">
       <!--Checkbox Column -->
       <ng-container [cdkColumnDef]="oTableOptions.selectColumn.name" *ngIf="oTableOptions.selectColumn.visible">
         <md-header-cell *cdkHeaderCellDef>
@@ -69,7 +69,7 @@
       {{'TABLE.EMPTY' | oTranslate}}
     </div>
 
-    <!-- TABLE EDITABLE ROW -->
+    <!-- TABLE EDITABLE ROW position: first -->
     <o-table-editable-row [datasource]="dataSource" *ngIf="showFirstInsertableRow">
     </o-table-editable-row>
 
@@ -126,7 +126,7 @@
     <!--TABLE AGGREGATE-->
     <o-table-aggregate [o-table-options]="oTableOptions" [datasource]="dataSource" *ngIf="showTotals"> </o-table-aggregate>
 
-    <!-- TABLE EDITABLE ROW -->
+    <!-- TABLE EDITABLE ROW position: last -->
     <o-table-editable-row [datasource]="dataSource" *ngIf="showLastInsertableRow">
     </o-table-editable-row>
 
@@ -137,7 +137,7 @@
 
     <!--TABLE PAGINATOR-->
     <md-paginator *ngIf="paginator" #mdpaginator [length]="dataSource?.resultsLength" [pageIndex]="paginator.pageIndex" [pageSize]="rowQueryCache || paginator.pageSize"
-      [pageSizeOptions]="paginator.pageSizeOptions"></md-paginator>
+      [pageSizeOptions]="paginator.pageSizeOptions" (page)="onChangePage($event)"></md-paginator>
 
   </div>
 </div>

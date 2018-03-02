@@ -604,8 +604,12 @@ export class OServiceComponent implements ILocalStorageComponent {
       this.state.queryRecordOffset = resultEndIndex;
     }
     if (queryRes.totalQueryRecordsNumber !== undefined) {
-      this.state.queryTotalRecordNumber = queryRes.totalQueryRecordsNumber;
+      this.state.totalQueryRecordsNumber = queryRes.totalQueryRecordsNumber;
     }
+  }
+
+  getTotalRecordsNumber() {
+    return (this.state && this.state.totalQueryRecordsNumber !== undefined) ? this.state.totalQueryRecordsNumber : undefined;
   }
 
   protected deleteLocalItems() {
