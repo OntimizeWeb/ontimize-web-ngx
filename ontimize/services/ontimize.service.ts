@@ -74,23 +74,9 @@ export class OntimizeService implements IAuthService, IDataService {
 
   public startsession(user: string, password: string): Observable<any> {
 
-    var url = this._urlBase + this._startSessionPath + '?user=' + user + '&password=' + password;
-
-    /* TODO
-     var headers: Headers = new Headers();
-        headers.append('Access-Control-Allow-Origin', '*');
-      var params = JSON.stringify({});
-
-        var options = new RequestOptions({
-          url: url,
-          method: RequestMethod.Get,
-          search: params,
-          headers: headers,
-          body: params
-        });*/
-
+    const url = this._urlBase + this._startSessionPath + '?user=' + user + '&password=' + password;
     let _startSessionObserver: any;
-    let startSessionObservable = new Observable(observer =>
+    const startSessionObservable = new Observable(observer =>
       _startSessionObserver = observer).share();
 
     this.http
@@ -111,10 +97,10 @@ export class OntimizeService implements IAuthService, IDataService {
 
   public endsession(user: string, sessionId: number): Observable<any> {
 
-    var url = this._urlBase + '/endsession?user=' + user + '&sessionid=' + sessionId;
+    const url = this._urlBase + '/endsession?user=' + user + '&sessionid=' + sessionId;
 
     let _closeSessionObserver: any;
-    let closeSessionObservable = new Observable(observer =>
+    const closeSessionObservable = new Observable(observer =>
       _closeSessionObserver = observer).share();
 
     this.http
@@ -129,9 +115,9 @@ export class OntimizeService implements IAuthService, IDataService {
 
   public hassession(user: string, sessionId: number): Observable<any> {
 
-    var url = this._urlBase + '/hassession?user=' + user + '&sessionid=' + sessionId;
+    const url = this._urlBase + '/hassession?user=' + user + '&sessionid=' + sessionId;
     let _innerObserver: any;
-    let dataObservable = new Observable(observer =>
+    const dataObservable = new Observable(observer =>
       _innerObserver = observer).share();
 
     this.http
@@ -151,13 +137,13 @@ export class OntimizeService implements IAuthService, IDataService {
     av = (this.isNullOrUndef(av)) ? this.av : av;
     sqltypes = (this.isNullOrUndef(sqltypes)) ? this.sqltypes : sqltypes;
 
-    var url = this._urlBase + '/query';
+    const url = this._urlBase + '/query';
 
-    var headers: Headers = new Headers();
+    const headers: Headers = new Headers();
     headers.append('Access-Control-Allow-Origin', '*');
     headers.append('Content-Type', 'application/json;charset=UTF-8');
 
-    var params = JSON.stringify({
+    const params = JSON.stringify({
       user: this._user,
       sessionid: this._sessionid,
       type: 1,
@@ -167,9 +153,9 @@ export class OntimizeService implements IAuthService, IDataService {
       sqltypes: sqltypes
     });
 
-    var self = this;
+    const self = this;
     let _innerObserver: any;
-    let dataObservable = new Observable(observer =>
+    const dataObservable = new Observable(observer =>
       _innerObserver = observer).share();
 
     this.http
@@ -210,13 +196,13 @@ export class OntimizeService implements IAuthService, IDataService {
       this.orderby = orderby;
     }
 
-    var url = this._urlBase + '/advancedquery';
+    const url = this._urlBase + '/advancedquery';
 
-    var headers: Headers = new Headers();
+    const headers: Headers = new Headers();
     headers.append('Access-Control-Allow-Origin', '*');
     headers.append('Content-Type', 'application/json;charset=UTF-8');
 
-    var params = JSON.stringify({
+    const params = JSON.stringify({
       user: this._user,
       sessionid: this._sessionid,
       type: 1,
@@ -229,9 +215,9 @@ export class OntimizeService implements IAuthService, IDataService {
       orderBy: this.orderby
     });
 
-    var self = this;
+    const self = this;
     let _innerObserver: any;
-    let dataObservable = new Observable(observer => _innerObserver = observer).share();
+    const dataObservable = new Observable(observer => _innerObserver = observer).share();
 
     this.http
       .post(url, params, { headers: headers })
@@ -259,13 +245,13 @@ export class OntimizeService implements IAuthService, IDataService {
     av = (this.isNullOrUndef(av)) ? this.av : av;
     sqltypes = (this.isNullOrUndef(sqltypes)) ? this.sqltypes : sqltypes;
 
-    var url = this._urlBase + '/insert';
+    const url = this._urlBase + '/insert';
 
-    var headers: Headers = new Headers();
+    const headers: Headers = new Headers();
     headers.append('Access-Control-Allow-Origin', '*');
     headers.append('Content-Type', 'application/json;charset=UTF-8');
 
-    var params = JSON.stringify({
+    const params = JSON.stringify({
       user: this._user,
       sessionid: this._sessionid,
       entity: entity,
@@ -273,9 +259,9 @@ export class OntimizeService implements IAuthService, IDataService {
       sqltypes: sqltypes
     });
 
-    var self = this;
+    const self = this;
     let _innerObserver: any;
-    let dataObservable = new Observable(observer =>
+    const dataObservable = new Observable(observer =>
       _innerObserver = observer).share();
 
     this.http
@@ -305,13 +291,13 @@ export class OntimizeService implements IAuthService, IDataService {
     av = (this.isNullOrUndef(av)) ? this.av : av;
     sqltypes = (this.isNullOrUndef(sqltypes)) ? this.sqltypes : sqltypes;
 
-    var url = this._urlBase + '/update';
+    const url = this._urlBase + '/update';
 
-    var headers: Headers = new Headers();
+    const headers: Headers = new Headers();
     headers.append('Access-Control-Allow-Origin', '*');
     headers.append('Content-Type', 'application/json;charset=UTF-8');
 
-    var params = JSON.stringify({
+    const params = JSON.stringify({
       user: this._user,
       sessionid: this._sessionid,
       entity: entity,
@@ -320,9 +306,9 @@ export class OntimizeService implements IAuthService, IDataService {
       sqltypes: sqltypes
     });
 
-    var self = this;
+    const self = this;
     let _innerObserver: any;
-    let dataObservable = new Observable(observer =>
+    const dataObservable = new Observable(observer =>
       _innerObserver = observer).share();
 
     this.http
@@ -351,13 +337,13 @@ export class OntimizeService implements IAuthService, IDataService {
     kv = (this.isNullOrUndef(kv)) ? this.kv : kv;
     sqltypes = (this.isNullOrUndef(sqltypes)) ? this.sqltypes : sqltypes;
 
-    var url = this._urlBase + '/delete';
+    const url = this._urlBase + '/delete';
 
-    var headers: Headers = new Headers();
+    const headers: Headers = new Headers();
     headers.append('Access-Control-Allow-Origin', '*');
     headers.append('Content-Type', 'application/json;charset=UTF-8');
 
-    var params = JSON.stringify({
+    const params = JSON.stringify({
       user: this._user,
       sessionid: this._sessionid,
       entity: entity,
@@ -365,9 +351,9 @@ export class OntimizeService implements IAuthService, IDataService {
       sqltypes: sqltypes
     });
 
-    var self = this;
+    const self = this;
     let _innerObserver: any;
-    let dataObservable = new Observable(observer =>
+    const dataObservable = new Observable(observer =>
       _innerObserver = observer).share();
 
     this.http
