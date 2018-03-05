@@ -33,7 +33,7 @@ export class OBaseTableCellEditor implements OnInit {
   editionCommitted: EventEmitter<Object> = new EventEmitter<Object>();
 
   @HostListener('document:keyup', ['$event']) onKeyupHandler(event: KeyboardEvent) {
-    const oColumn = this.tableColumn.table.oTableOptions.columns.find(item => item.name === this.tableColumn.attr);
+    const oColumn = this.table.getOColumn(this.tableColumn.attr);
     if (!oColumn.editing) {
       return;
     }
@@ -80,7 +80,7 @@ export class OBaseTableCellEditor implements OnInit {
   }
 
   endEdition(saveChanges) {
-    const oColumn = this.tableColumn.table.oTableOptions.columns.find(item => item.name === this.tableColumn.attr);
+    const oColumn = this.table.getOColumn(this.tableColumn.attr);
     if (oColumn) {
       this.table.updateCellData(oColumn, this._rowData, saveChanges);
     }
