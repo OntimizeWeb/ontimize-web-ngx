@@ -50,7 +50,6 @@ export class OTablePaginatorComponent implements OnInit {
   set pageLenght(value: number) {
     console.log(this._pageSize * this.pageIndex);
     this._pageLenght = value;
-
   }
 
   get pageIndex(): number {
@@ -66,7 +65,6 @@ export class OTablePaginatorComponent implements OnInit {
   }
 
   set pageSize(value: number) {
-
     if (value < 0) {
       this._pageSize = this._pageSizeOptions[0];
     } else {
@@ -78,11 +76,9 @@ export class OTablePaginatorComponent implements OnInit {
       this._pageSizeOptions.push(value);
     }
     this._pageSizeOptions.sort();
-
   }
 
   get pageSizeOptions(): Array<any> {
-
     return this._pageSizeOptions;
   }
 
@@ -94,7 +90,9 @@ export class OTablePaginatorComponent implements OnInit {
     this._pageIndex = 0;
   }
 
-
+  public isShowingAllRows(selectedLength): boolean {
+    return this._pageSizeOptions.indexOf(selectedLength) === (this._pageSizeOptions.length - 1);
+  }
 }
 
 

@@ -54,16 +54,19 @@ export class OTableDataSource extends DataSource<any> {
   /** Connect function called by the table to retrieve one stream containing the data to render. */
   connect(): Observable<any[]> {
     let displayDataChanges: any[] = [
-      this._database.dataChange,
-      this._sort.mdSortChange
+      this._database.dataChange
     ];
 
-    if (this._tableOptions.filter) {
-      displayDataChanges.push(this._quickFilterChange);
-    }
+    if (!this.table.pageable) {
+      displayDataChanges.push(this._sort.mdSortChange);
 
-    if (this._paginator && !this.table.pageable) {
-      displayDataChanges.push(this._paginator.page);
+      if (this._tableOptions.filter) {
+        displayDataChanges.push(this._quickFilterChange);
+      }
+
+      if (this._paginator) {
+        displayDataChanges.push(this._paginator.page);
+      }
     }
 
     if (this.table.oTableColumnsFilterComponent) {
@@ -74,8 +77,11 @@ export class OTableDataSource extends DataSource<any> {
       let data = this._database.data;
 
       data = this.getColumnValueFilterData(data);
-      data = this.getQuickFilterData(data);
-      data = this.getSortedData(data);
+
+      if (!this.table.pageable) {
+        data = this.getQuickFilterData(data);
+        data = this.getSortedData(data);
+      }
       data = this.getColumnCalculatedData(data);
       this.filteredData = Object.assign([], data);
 

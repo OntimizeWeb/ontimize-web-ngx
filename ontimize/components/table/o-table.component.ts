@@ -1,5 +1,5 @@
 import {
-  Component, OnInit, OnDestroy, OnChanges, SimpleChange, Inject, Injector, ElementRef, forwardRef,
+  Component, OnInit, OnDestroy, Inject, Injector, ElementRef, forwardRef,
   Optional, NgModule, ViewEncapsulation, ViewChild, EventEmitter, ContentChildren, QueryList
 } from '@angular/core';
 
@@ -16,9 +16,8 @@ import { OServiceComponent } from '../o-service-component.class';
 import { CdkTableModule } from '@angular/cdk/table';
 
 import { SelectionModel, SelectionChange } from '@angular/cdk/collections';
-import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
-import { MdDialog, MdSort, MdTabGroup, MdTab, MdPaginatorIntl, MdPaginator, MdCheckboxChange, MdMenu, PageEvent } from '@angular/material';
+import { MdDialog, MdSort, MdTabGroup, MdTab, MdPaginatorIntl, MdPaginator, MdCheckboxChange, MdMenu, PageEvent, Sort } from '@angular/material';
 
 import {
   O_TABLE_FOOTER_COMPONENTS,
@@ -34,7 +33,8 @@ import {
   O_TABLE_HEADER_COMPONENTS,
   OTableOptionComponent,
   OTableColumnsFilterComponent,
-  OTableInsertableRowComponent
+  OTableInsertableRowComponent,
+  OTableQuickfilterComponent
 } from './extensions/header/o-table-header-components';
 
 import { OTableColumnComponent } from './column/o-table-column.component';
@@ -68,6 +68,7 @@ import { OContextMenuComponent } from '../contextmenu/o-context-menu-components'
 import { OContextMenuModule } from '../contextmenu/o-context-menu.module';
 import { IOContextMenuContext } from '../contextmenu/o-context-menu.service';
 import { ServiceUtils } from '../service.utils';
+import { FilterExpressionUtils } from '../filter-expression.utils';
 
 export const DEFAULT_INPUTS_O_TABLE = [
   ...OServiceComponent.DEFAULT_INPUTS_O_SERVICE_COMPONENT,
@@ -188,7 +189,7 @@ export class OTableOptions {
   }
 })
 
-export class OTableComponent extends OServiceComponent implements OnInit, OnDestroy, OnChanges {
+export class OTableComponent extends OServiceComponent implements OnInit, OnDestroy {
 
   public static DEFAULT_INPUTS_O_TABLE = DEFAULT_INPUTS_O_TABLE;
   public static DEFAULT_OUTPUTS_O_TABLE = DEFAULT_OUTPUTS_O_TABLE;
@@ -213,7 +214,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   public paginator: OTablePaginatorComponent;
   @ViewChild(MdPaginator) mdpaginator: MdPaginator;
-  @ViewChild('filter') filter: ElementRef;
   @ViewChild(MdSort) sort: MdSort;
   @ViewChild('columnFilterOption') columnFilterOption: OTableOptionComponent;
   @ContentChildren(OTableOptionComponent) tableOptions: QueryList<OTableOptionComponent>;
@@ -258,9 +258,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   set quickFilter(value: boolean) {
     this.quickFilterPvt = value;
     this._oTableOptions.filter = this.quickFilterPvt;
-    if (this.quickFilterPvt) {
-      this.initializeEventFilter();
-    }
   }
   get quickFilter(): boolean {
     return this.quickFilterPvt;
@@ -327,8 +324,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   public showFilterByColumnIcon: boolean = false;
   public showTotals: boolean = false;
 
-  protected quickFilterObservable: Subscription;
-
   public oTableInsertableRowComponent: OTableInsertableRowComponent;
   public showFirstInsertableRow: boolean = false;
   public showLastInsertableRow: boolean = false;
@@ -341,10 +336,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   protected sortColArray: Array<any> = [];
   protected currentPage: number = 0;
+  public oTableQuickFilterComponent: OTableQuickfilterComponent;
 
-  get rowQueryCache() {
-    return this.state['query-rows'];
-  }
+  protected sortSubscription: Subscription;
 
   ngOnInit() {
     this.initialize();
@@ -353,16 +347,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   ngAfterViewInit() {
     this.afterViewInit();
     this.initTableAfterViewInit();
-    if (this._oTableOptions.filter) {
-      this.initializeEventFilter();
-    }
     if (this.elRef) {
       this.elRef.nativeElement.removeAttribute('title');
     }
-  }
-
-  ngOnChanges(changes: { [propName: string]: SimpleChange }) {
-    // TODO
   }
 
   ngOnDestroy() {
@@ -383,6 +370,20 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   protected initTableAfterViewInit() {
     this.setDatasource();
+
+    if (this.pageable) {
+      this.sortSubscription = this.sort.mdSortChange.subscribe((sort: Sort) => {
+        this.sortColArray = [];
+        if (sort.direction !== '') {
+          this.sortColArray.push({
+            column: sort.active,
+            ascendent: sort.direction === OTableComponent.TYPE_ASC_NAME
+          });
+        }
+        this.reloadData();
+      });
+    }
+
     this.showFilterByColumnIcon = this.getStoredColumnsFilters().length > 0;
     if (this.columnFilterOption) {
       this.columnFilterOption.active = this.showFilterByColumnIcon;
@@ -405,14 +406,14 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     if (this.querySubscription) {
       this.querySubscription.unsubscribe();
     }
+    if (this.sortSubscription) {
+      this.sortSubscription.unsubscribe();
+    }
     Object.keys(this.asyncLoadSubscriptions).forEach(idx => {
       if (this.asyncLoadSubscriptions[idx]) {
         this.asyncLoadSubscriptions[idx].unsubscribe();
       }
     });
-    if (this.quickFilterObservable) {
-      this.quickFilterObservable.unsubscribe();
-    }
   }
 
   /**
@@ -420,7 +421,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
    */
   getDataToStore() {
     var dataToStore = {
-      'filter': this.filter ? this.filter.nativeElement.value : '',
+      'filter': this.oTableQuickFilterComponent ? this.oTableQuickFilterComponent.value : '',
       'query-rows': this.mdpaginator ? this.mdpaginator.pageSize : ''
     };
     if (this.sortColArray.length > 0 && this.sort.active !== undefined) {
@@ -430,6 +431,11 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       dataToStore['column-value-filters'] = this.dataSource.getColumnValueFilters();
     }
     return dataToStore;
+  }
+
+  registerQuickFilter(arg: OTableQuickfilterComponent) {
+    this.oTableQuickFilterComponent = arg;
+    this.oTableQuickFilterComponent.value = this.state.filter;
   }
 
   registerPagination(value: OTablePaginatorComponent) {
@@ -539,34 +545,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   }
 
-
-  /**
-   * initialize event to filtering the columns, when change value then filter the data
-   */
-  initializeEventFilter() {
-    setTimeout(() => {
-      if (this.filter && !this.quickFilterObservable) {
-        this.quickFilterObservable = Observable.fromEvent(this.filter.nativeElement, 'keyup')
-          .debounceTime(150)
-          .distinctUntilChanged()
-          .subscribe(() => {
-            const filterValue = this.filter.nativeElement.value;
-            if (!this.dataSource || this.dataSource.quickFilter === filterValue) {
-              return;
-            }
-            this.dataSource.quickFilter = filterValue;
-          });
-
-        //if exists filter value in storage then filter result table
-        let filterValue = this.state.filter || this.filter.nativeElement.value;
-        this.filter.nativeElement.value = filterValue;
-        if (this.dataSource && filterValue && filterValue.length) {
-          this.dataSource.quickFilter = filterValue;
-        }
-      }
-    });
-  }
-
   parseSortColumns() {
     this.sortColArray = [];
     let sortColumnsParam = this.state['sort-columns'] || this.sortColumns;
@@ -576,21 +554,12 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
         let colDef = col.split(OTableComponent.TYPE_SEPARATOR);
         if (colDef.length > 0) {
           let colName = colDef[0];
-          let oCol = this._oTableOptions.columns.find((item) => item.name === colName);
+          let oCol = this.getOColumn(colName);
           if (oCol !== undefined) {
             const colSort = colDef[1] || OTableComponent.TYPE_ASC_NAME;
-            let ascendingSort;
-            switch (colSort) {
-              case OTableComponent.TYPE_ASC_NAME:
-                ascendingSort = true;
-                break;
-              case OTableComponent.TYPE_DESC_NAME:
-                ascendingSort = false;
-                break;
-            }
             this.sortColArray.push({
               column: colName,
-              ascendent: ascendingSort
+              ascendent: colSort === OTableComponent.TYPE_ASC_NAME
             });
           }
         }
@@ -647,6 +616,10 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       this.updateMethod = OTableComponent.DEFAULT_UPDATE_METHOD;
     }
 
+    if (this.state['query-rows'] !== undefined) {
+      this.queryRows = this.state['query-rows'];
+    }
+
     // Initializing quickFilter
     this._oTableOptions.filter = this.quickFilter;
     this._oTableOptions.filterCaseSensitive = this.filterCaseSensitive;
@@ -696,7 +669,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
   }
 
-
   /**
    * This method manages the call to the service
    * @param parentItem it is defined if its called from a form
@@ -724,6 +696,13 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       this.setData([], []);
     } else {
       let filter = ServiceUtils.getFilterUsingParentKeys(parentItem, this._pKeysEquiv);
+
+      let quickFilterExpr = this.oTableQuickFilterComponent ? this.oTableQuickFilterComponent.filterExpression : undefined;
+      if (quickFilterExpr) {
+        const parentItemExpr = FilterExpressionUtils.buildExpressionFromFilter(filter);
+        const filterExpr = FilterExpressionUtils.buildComplexExpression(parentItemExpr, quickFilterExpr, FilterExpressionUtils.OP_AND);
+        filter[FilterExpressionUtils.FILTER_EXPRESSION_KEY] = filterExpr;
+      }
 
       let queryArguments = this.getQueryArguments(filter, ovrrArgs);
       if (this.querySubscription) {
@@ -787,6 +766,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   getQueryArguments(filter: Object, ovrrArgs?: any): Array<any> {
     let queryArguments = super.getQueryArguments(filter, ovrrArgs);
     queryArguments[1] = this.getAttributesValuesToQuery();
+    queryArguments[5] = this.paginator.isShowingAllRows(queryArguments[5]) ? this.state.totalQueryRecordsNumber : queryArguments[5];
     queryArguments[6] = this.sortColArray;
     return queryArguments;
   }
@@ -881,6 +861,20 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   refresh() {
     this.reloadData();
+  }
+
+  reloadDataIgnoringPagination(val: any) {
+    if (this.pageable) {
+      this.clearSelection();
+      this.finishQuerSubscription = false;
+      this.pendingQuery = true;
+
+      let queryArgs = {
+        offset: 0,
+        length: this.queryRows
+      };
+      this.queryData(this.parentItem, queryArgs);
+    }
   }
 
   reloadData() {
@@ -1273,27 +1267,38 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     if (!this.pageable) {
       return;
     }
-    const goingForward = evt.pageIndex > this.currentPage;
     const tableState = this.state;
+
+    const goingBack = evt.pageIndex < this.currentPage;
+    this.currentPage = evt.pageIndex;
+    const pageSize = this.paginator.isShowingAllRows(evt.pageSize) ? tableState.totalQueryRecordsNumber : evt.pageSize;
+
+    const oldQueryRows = this.queryRows;
+    const changingPageSize = (oldQueryRows !== pageSize);
+    this.queryRows = pageSize;
 
     let newStartRecord;
     let queryLength;
 
-    if (goingForward) {
-      newStartRecord = Math.max(tableState.queryRecordOffset, (evt.pageIndex * evt.pageSize));
+    if (goingBack || changingPageSize) {
+      newStartRecord = (this.currentPage * this.queryRows);
+      queryLength = this.queryRows;
+    } else {
+      newStartRecord = Math.max(tableState.queryRecordOffset, (this.currentPage * this.queryRows));
       let newEndRecord = Math.min(newStartRecord + this.queryRows, tableState.totalQueryRecordsNumber);
       queryLength = Math.min(this.queryRows, newEndRecord - newStartRecord);
-    } else {
-      newStartRecord = (evt.pageIndex * evt.pageSize);
-      queryLength = this.queryRows;
     }
-    this.currentPage = evt.pageIndex;
+
     const queryArgs = {
       offset: newStartRecord,
       length: queryLength
     };
     this.finishQuerSubscription = false;
     this.queryData(this.parentItem, queryArgs);
+  }
+
+  getOColumn(attr: string): OColumn {
+    return this._oTableOptions.columns.find(item => item.name === attr);
   }
 }
 
