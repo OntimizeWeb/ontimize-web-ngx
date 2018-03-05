@@ -1,9 +1,8 @@
 import { Component, OnInit, Inject, forwardRef, EventEmitter, Injector, ViewEncapsulation, ViewChild, ElementRef, OnDestroy, AfterViewInit } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
-import { LocalStorageService } from '../../../../../services';
-import { ILocalStorageComponent } from '../../../../o-service-component.class';
 import { OTableComponent } from '../../../o-table.component';
+import { IFilterExpression, FilterExpressionUtils } from '../../../../filter-expression.utils';
 
 export const DEFAULT_INPUTS_O_TABLE_QUICKFILTER = [
 ];
@@ -24,44 +23,44 @@ export const DEFAULT_OUTPUTS_O_TABLE_QUICKFILTER = [
   }
 })
 
-export class OTableQuickfilterComponent implements OnInit, AfterViewInit, OnDestroy, ILocalStorageComponent {
+export class OTableQuickfilterComponent implements OnInit, AfterViewInit, OnDestroy {
   public static DEFAULT_INPUTS_O_TABLE_QUICKFILTER = DEFAULT_INPUTS_O_TABLE_QUICKFILTER;
   public static DEFAULT_OUTPUTS_O_TABLE_QUICKFILTER = DEFAULT_OUTPUTS_O_TABLE_QUICKFILTER;
 
-  protected localStorageService: LocalStorageService;
-  protected state: any;
   @ViewChild('filter') filter: ElementRef;
-
-
   protected quickFilterObservable: Subscription;
 
+  public value: string;
   public onChange: EventEmitter<Object> = new EventEmitter<Object>();
 
   constructor(
     protected injector: Injector,
     @Inject(forwardRef(() => OTableComponent)) protected table: OTableComponent
   ) {
-    this.localStorageService = this.injector.get(LocalStorageService);
   }
 
   public ngOnInit() {
-    this.state = this.localStorageService.getComponentStorage(this);
-    // this.table.registerHeaderButton(this);
+    this.table.registerQuickFilter(this);
   }
 
   ngAfterViewInit() {
     this.initializeEventFilter();
   }
 
-
-  getDataToStore(): Object {
-    return {
-      'filter': this.filter ? this.filter.nativeElement.value : ''
-    };
-  }
-
-  getComponentKey(): string {
-    return this.table.getComponentKey();
+  get filterExpression(): IFilterExpression {
+    let result: IFilterExpression = undefined;
+    if (this.value && this.value.length > 0) {
+      const self = this;
+      let queryCols = [];
+      this.table.oTableOptions.visibleColumns.forEach(col => {
+        const oCol = self.table.getOColumn(col);
+        if (oCol && !oCol.renderer) {
+          queryCols.push(col);
+        }
+      });
+      result = FilterExpressionUtils.buildArrayExpressionLike(queryCols, this.value);
+    }
+    return result;
   }
 
   initializeEventFilter() {
@@ -70,18 +69,16 @@ export class OTableQuickfilterComponent implements OnInit, AfterViewInit, OnDest
         this.quickFilterObservable = Observable.fromEvent(this.filter.nativeElement, 'keyup')
           .debounceTime(150).distinctUntilChanged().subscribe(() => {
             const filterValue = this.filter.nativeElement.value;
-            if (!this.table.dataSource || this.table.dataSource.quickFilter === filterValue) {
+            if (!this.table.dataSource || this.value === filterValue) {
               return;
             }
-            if (!this.table.pageable) {
-              this.table.dataSource.quickFilter = filterValue;
-            } else {
-              this.onChange.emit('%' + filterValue + '%');
-            }
+            this.value = filterValue;
+            this.table.dataSource.quickFilter = this.value;
+            this.onChange.emit(this.value);
           });
 
-        //if exists filter value in storage then filter result table
-        let filterValue = this.state.filter || this.filter.nativeElement.value;
+        // if exists filter value in storage then filter result table
+        let filterValue = this.value || this.filter.nativeElement.value;
         this.filter.nativeElement.value = filterValue;
         if (this.table.dataSource && filterValue && filterValue.length) {
           this.table.dataSource.quickFilter = filterValue;

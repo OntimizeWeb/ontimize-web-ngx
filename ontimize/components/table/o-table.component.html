@@ -11,14 +11,7 @@
         {{ title | oTranslate }}
       </div>
       <span class="fill-remaining"></span>
-      <div *ngIf="quickFilter" class="quickFilter" fxLayout="row">
-        <md-form-field floatPlaceholder="never">
-          <input mdInput #filter placeholder="{{'TABLE.FILTER' | oTranslate}}">
-          <span class="icon-btn" mdPrefix fxFlexLayout="flex-end">
-            <i class="material-icons">search</i>
-          </span>
-        </md-form-field>
-      </div>
+      <o-table-quickfilter *ngIf="quickFilter" (onChange)="reloadDataIgnoringPagination($event)" ></o-table-quickfilter>
       <button *ngIf="showTableMenuButton" md-icon-button class="o-table-menu-button" [mdMenuTriggerFor]="menu">
         <md-icon>more_vert</md-icon>
       </button>
@@ -136,8 +129,12 @@
     </div>
 
     <!--TABLE PAGINATOR-->
-    <md-paginator *ngIf="paginator" #mdpaginator [length]="dataSource?.resultsLength" [pageIndex]="paginator.pageIndex" [pageSize]="rowQueryCache || paginator.pageSize"
-      [pageSizeOptions]="paginator.pageSizeOptions" (page)="onChangePage($event)"></md-paginator>
+    <md-paginator *ngIf="paginator" #mdpaginator
+      [length]="dataSource?.resultsLength"
+      [pageIndex]="paginator.pageIndex"
+      [pageSize]="queryRows"
+      [pageSizeOptions]="paginator.pageSizeOptions"
+      (page)="onChangePage($event)"></md-paginator>
 
   </div>
 </div>
