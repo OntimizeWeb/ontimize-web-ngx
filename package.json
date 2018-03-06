@@ -28,7 +28,7 @@
     "aot": "npm run init-common && npm run aot:compile && npm run end-common"
   },
   "dependencies": {
-    "moment": "2.18.1",
+    "moment": "2.19.3",
     "ng2-dragula": "1.5.0"
   },
   "peerDependencies": {
