@@ -519,13 +519,11 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
     //find column definition by name
     if (typeof (column.attr) !== 'undefined') {
-      var alreadyExisting = this._oTableOptions.columns.filter(function (existingColumn) {
-        return existingColumn.name === column.attr;
-      });
-      if (alreadyExisting.length === 1) {
-        var replacingIndex = this._oTableOptions.columns.indexOf(alreadyExisting[0]);
+      const alreadyExisting = this.getOColumn(column.attr);
+      if (alreadyExisting !== undefined) {
+        var replacingIndex = this._oTableOptions.columns.indexOf(alreadyExisting);
         this._oTableOptions.columns[replacingIndex] = colDef;
-      } else if (alreadyExisting.length === 0) {
+      } else {
         this._oTableOptions.columns.push(colDef);
       }
     } else {
@@ -541,12 +539,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   registerColumnAggregate(column: OColumnAggregate) {
     this.showTotals = true;
-    var alreadyExisting = this._oTableOptions.columns.filter(function (existingColumn) {
-      return existingColumn.name === column.attr;
-    });
-
-    if (alreadyExisting.length === 1) {
-      var replacingIndex = this._oTableOptions.columns.indexOf(alreadyExisting[0]);
+    const alreadyExisting = this.getOColumn(column.attr);
+    if (alreadyExisting !== undefined) {
+      var replacingIndex = this._oTableOptions.columns.indexOf(alreadyExisting);
       this._oTableOptions.columns[replacingIndex].aggregate = column;
     }
 
@@ -611,7 +606,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     this.visibleColArray = Util.parseArray(this.visibleColumns, true);
     this._oTableOptions.visibleColumns = this.visibleColArray;
 
-    if (this.columns) {
+    if (this.colArray.length) {
       this.colArray.map(x => this.registerColumn(x));
     }
 
