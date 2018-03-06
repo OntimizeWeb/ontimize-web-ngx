@@ -63,6 +63,7 @@ export class OTableDao {
 
   set isLoadingResults(val: boolean) {
     if (val) {
+      this.cleanTimer();
       this.loadingTimer = setTimeout(() => {
         this._isLoadingResults = val;
       }, 500);
