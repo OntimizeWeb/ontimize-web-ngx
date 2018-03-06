@@ -4,6 +4,7 @@
 * **o-table**: '*filter-case-sensitive*' input default value is now 'false'.
 * **o-table**: removing input '*insert-table*' ([4907594](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4907594))
 * **o-table**: '*pageable*' input default value is now 'true'.
+* **moment**: updating momentjs dependency to version 2.19.3.
 
 ### Features
 * **o-form**: new '*getUrlParams*' method. Shortcut for '*getFormNavigation().getUrlParams()*' ([32f5613](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/32f5613))
@@ -30,8 +31,8 @@
 * **o-table**: adding remote pagination  ([3e10752](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3e10752)) ([18f576d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/18f576d))
 * **ontimize-ee**: adding remote pagination '*advancedQuery*' method ([3e10752](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3e10752))
 * **FilterExpressionUtils**: adding utility class for building filtering queries parameters ([8aacf96](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/8aacf96))
-
-
+* **o-table**: adding '*quick-filter-function*' input for allowing user to override default quick filter value passed to the service ([e1ad25a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e1ad25a))
+  * Adding '*QuickFilterFunction*' type ('*type QuickFilterFunction = (filter: string) => IFilterExpression | Object;*')
 
 ### Bug Fixes
 * **o-table-dao**: fixing methods bugs ([5093bc0](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5093bc0))
