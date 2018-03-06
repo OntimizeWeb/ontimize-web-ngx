@@ -48,8 +48,8 @@ export class OTableQuickfilterComponent implements OnInit, AfterViewInit, OnDest
   }
 
   get filterExpression(): IFilterExpression {
-    let result: IFilterExpression = undefined;
-    if (this.value && this.value.length > 0) {
+    let result: IFilterExpression = this.getUserFilter();
+    if (result === undefined && this.value && this.value.length > 0) {
       const self = this;
       let queryCols = [];
       this.table.oTableOptions.visibleColumns.forEach(col => {
@@ -63,28 +63,40 @@ export class OTableQuickfilterComponent implements OnInit, AfterViewInit, OnDest
     return result;
   }
 
-  initializeEventFilter() {
-    setTimeout(() => {
-      if (this.filter && !this.quickFilterObservable) {
-        this.quickFilterObservable = Observable.fromEvent(this.filter.nativeElement, 'keyup')
-          .debounceTime(150).distinctUntilChanged().subscribe(() => {
-            const filterValue = this.filter.nativeElement.value;
-            if (!this.table.dataSource || this.value === filterValue) {
-              return;
-            }
-            this.value = filterValue;
-            this.table.dataSource.quickFilter = this.value;
-            this.onChange.emit(this.value);
-          });
+  getUserFilter() {
+    let result: IFilterExpression = undefined;
+    if (this.table.quickFilterCallback instanceof Function) {
+      let userFilter = this.table.quickFilterCallback(this.value);
 
-        // if exists filter value in storage then filter result table
-        let filterValue = this.value || this.filter.nativeElement.value;
-        this.filter.nativeElement.value = filterValue;
-        if (this.table.dataSource && filterValue && filterValue.length) {
-          this.table.dataSource.quickFilter = filterValue;
-        }
+      if (userFilter !== undefined && FilterExpressionUtils.instanceofFilterExpression(userFilter)) {
+        result = (userFilter as IFilterExpression);
+      } else if (userFilter !== undefined) {
+        result = FilterExpressionUtils.buildExpressionFromObject(userFilter);
       }
-    });
+    }
+    return result;
+  }
+
+  initializeEventFilter() {
+    if (this.filter && !this.quickFilterObservable) {
+      this.quickFilterObservable = Observable.fromEvent(this.filter.nativeElement, 'keyup')
+        .debounceTime(150).distinctUntilChanged().subscribe(() => {
+          const filterValue = this.filter.nativeElement.value;
+          if (!this.table.dataSource || this.value === filterValue) {
+            return;
+          }
+          this.value = filterValue;
+          this.table.dataSource.quickFilter = this.value;
+          this.onChange.emit(this.value);
+        });
+
+      // if exists filter value in storage then filter result table
+      let filterValue = this.value || this.filter.nativeElement.value;
+      this.filter.nativeElement.value = filterValue;
+      if (this.table.dataSource && filterValue && filterValue.length) {
+        this.table.dataSource.quickFilter = filterValue;
+      }
+    }
   }
 
   ngOnDestroy(): void {

@@ -68,7 +68,7 @@ import { OContextMenuComponent } from '../contextmenu/o-context-menu-components'
 import { OContextMenuModule } from '../contextmenu/o-context-menu.module';
 import { IOContextMenuContext } from '../contextmenu/o-context-menu.service';
 import { ServiceUtils } from '../service.utils';
-import { FilterExpressionUtils } from '../filter-expression.utils';
+import { FilterExpressionUtils, IFilterExpression } from '../filter-expression.utils';
 
 export const DEFAULT_INPUTS_O_TABLE = [
   ...OServiceComponent.DEFAULT_INPUTS_O_SERVICE_COMPONENT,
@@ -90,6 +90,8 @@ export const DEFAULT_INPUTS_O_TABLE = [
 
   // quick-filter [no|yes]: show quick filter. Default: yes.
   'quickFilterPvt: quick-filter',
+
+  'quickFilterCallback: quick-filter-function',
 
   // delete-button [no|yes]: show delete button. Default: yes.
   'deleteButton: delete-button',
@@ -167,6 +169,8 @@ export class OTableOptions {
   filter: boolean = true;
   filterCaseSensitive: boolean = false;
 }
+
+export type QuickFilterFunction = (filter: string) => IFilterExpression | Object;
 
 @Component({
   selector: 'o-table',
@@ -336,6 +340,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   public oTableQuickFilterComponent: OTableQuickfilterComponent;
 
   protected sortSubscription: Subscription;
+  quickFilterCallback: QuickFilterFunction;
 
   ngOnInit() {
     this.initialize();
@@ -694,9 +699,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     } else {
       let filter = ServiceUtils.getFilterUsingParentKeys(parentItem, this._pKeysEquiv);
 
-      let quickFilterExpr = this.oTableQuickFilterComponent ? this.oTableQuickFilterComponent.filterExpression : undefined;
+      let quickFilterExpr = (this.pageable && this.oTableQuickFilterComponent) ? this.oTableQuickFilterComponent.filterExpression : undefined;
       if (quickFilterExpr) {
-        const parentItemExpr = FilterExpressionUtils.buildExpressionFromFilter(filter);
+        const parentItemExpr = FilterExpressionUtils.buildExpressionFromObject(filter);
         const filterExpr = FilterExpressionUtils.buildComplexExpression(parentItemExpr, quickFilterExpr, FilterExpressionUtils.OP_AND);
         filter[FilterExpressionUtils.FILTER_EXPRESSION_KEY] = filterExpr;
       }

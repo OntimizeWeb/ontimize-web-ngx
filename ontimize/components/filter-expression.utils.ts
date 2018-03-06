@@ -20,6 +20,10 @@ export class FilterExpressionUtils {
   static OP_MORE = '>';
   static OP_MORE_EQUAL = '>=';
 
+  static instanceofFilterExpression(arg: any): boolean {
+    return arg.hasOwnProperty('lop') && arg.hasOwnProperty('op');
+  }
+
   static buildComplexExpression(expr1: IFilterExpression, expr2: IFilterExpression, op: string): IFilterExpression {
     if (expr1.lop === undefined && expr1.op === undefined) {
       return expr2;
@@ -187,7 +191,7 @@ export class FilterExpressionUtils {
     return filterExpr;
   }
 
-  static buildExpressionFromFilter(filter: any) {
+  static buildExpressionFromObject(filter: any) {
     const self = this;
     let result = {
       lop: undefined,
