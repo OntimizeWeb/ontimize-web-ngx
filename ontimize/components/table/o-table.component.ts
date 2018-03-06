@@ -85,9 +85,6 @@ export const DEFAULT_INPUTS_O_TABLE = [
   // editable-columns [string]: columns that can be edited directly over the table, separated by ';'. Default: no value.
   'editableColumns: editable-columns',
 
-  // edit-on-focus [no|yes]: edit cell of an editable column when gaining the focus. Default: yes.
-  'editOnFocus: edit-on-focus',
-
   // sort-columns [string]: initial sorting, with the format column:[ASC|DESC], separated by ';'. Default: no value.
   'sortColumns: sort-columns',
 
@@ -103,11 +100,11 @@ export const DEFAULT_INPUTS_O_TABLE = [
   // columns-visibility-button [no|yes]: show columns visibility button. Default: yes.
   'columnsVisibilityButton: columns-visibility-button',
 
-  // columns-resize-button [no|yes]: show columns resize button. Default: yes.
-  'columnsResizeButton: columns-resize-button',
+  // // columns-resize-button [no|yes]: show columns resize button. Default: yes.
+  // 'columnsResizeButton: columns-resize-button',
 
-  // columns-group-button [no|yes]: show columns group button. Default: yes.
-  'columnsGroupButton: columns-group-button',
+  // // columns-group-button [no|yes]: show columns group button. Default: yes.
+  // 'columnsGroupButton: columns-group-button',
 
   // export-button [no|yes]: show export button. Default: yes.
   'exportButton: export-button',
@@ -233,10 +230,10 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   selectAllCheckbox: boolean = false;
   @InputConverter()
   exportButton: boolean = true;
-  @InputConverter()
-  columnsResizeButton: boolean = true;
-  @InputConverter()
-  columnsGroupButton: boolean = true;
+  // @InputConverter()
+  // columnsResizeButton: boolean = true;
+  // @InputConverter()
+  // columnsGroupButton: boolean = true;
   @InputConverter()
   pageable: boolean = true;
   @InputConverter()
