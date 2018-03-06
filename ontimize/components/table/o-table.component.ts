@@ -863,7 +863,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     this.reloadData();
   }
 
-  reloadDataIgnoringPagination(val: any) {
+  reloadPaginatedDataFromStart(val: any) {
     if (this.pageable) {
       this.clearSelection();
       this.finishQuerySubscription = false;
