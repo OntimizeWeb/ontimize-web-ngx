@@ -295,6 +295,11 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   protected visibleColumns: string;
   protected sortColumns: string;
 
+  /*parsed inputs variables */
+  protected visibleColArray: Array<string> = [];
+
+  /*end of parsed inputs variables */
+
   protected mdTabGroupContainer: MdTabGroup;
   protected mdTabContainer: MdTab;
   protected mdTabGroupChangeSubscription: Subscription;
@@ -505,7 +510,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
         colDef.calculate = column.operation ? column.operation : column.functionOperation;
       }
     }
-    colDef.visible = (this.visibleColumns.indexOf(colDef.attr) !== -1);
+    colDef.visible = (this.visibleColArray.indexOf(colDef.attr) !== -1);
     if (column && (column.asyncLoad || column.type === 'action')) {
       this.avoidQueryColumns.push(column.attr);
       if (column.asyncLoad) {
@@ -600,12 +605,11 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     });
 
     // if not declare visible-columns then visible-columns is all columns
-    if (this.visibleColumns) {
-      this.visibleColumns.split(';').map(x => this._oTableOptions.visibleColumns.push(x));
-    } else {
+    if (!this.visibleColumns) {
       this.visibleColumns = this.columns;
-      this.columns.split(';').map(x => this._oTableOptions.visibleColumns.push(x));
     }
+    this.visibleColArray = Util.parseArray(this.visibleColumns, true);
+    this._oTableOptions.visibleColumns = this.visibleColArray;
 
     if (this.columns) {
       this.colArray.map(x => this.registerColumn(x));
@@ -802,7 +806,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   onChangeColumnsVisibilityClicked() {
     let dialogRef = this.dialog.open(OTableVisibleColumnsDialogComponent, {
       data: {
-        columnArray: Util.parseArray(this.visibleColumns),
+        columnArray: this.visibleColArray,
         columnsData: this._oTableOptions.columns
       },
       disableClose: true
@@ -1102,8 +1106,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     const self = this;
 
     return (index: number, item: any) => {
-      let intersection = self.asyncLoadColumns.filter(c => self.visibleColumns.indexOf(c) !== -1);
-      if (self.asyncLoadColumns.length && !this.finishQuerySubscription && intersection.length > 0) {
+      let intersection = self.asyncLoadColumns.filter(c => self._oTableOptions.visibleColumns.indexOf(c) !== -1);
+      if (self.asyncLoadColumns.length && intersection.length > 0 && !this.finishQuerySubscription) {
         self.queryRowAsyncData(index, item);
         if (index === (this.daoTable.data.length - 1)) {
           self.finishQuerySubscription = true;
@@ -1122,7 +1126,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       kv[key] = rowData[key];
     }
     // repeating checking of visible column
-    let av = this.asyncLoadColumns.filter(c => this.visibleColumns.indexOf(c) !== -1);
+    let av = this.asyncLoadColumns.filter(c => this._oTableOptions.visibleColumns.indexOf(c) !== -1);
     if (av.length === 0) {
       //skipping query if there are not visible asyncron columns
       return;
