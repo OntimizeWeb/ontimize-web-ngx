@@ -307,7 +307,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   protected asyncLoadSubscriptions: Object = {};
 
   protected querySubscription: Subscription;
-  protected finishQuerSubscription: boolean = false;
+  protected finishQuerySubscription: boolean = false;
 
   public onClick: EventEmitter<any> = new EventEmitter();
   public onDoubleClick: EventEmitter<any> = new EventEmitter();
@@ -866,7 +866,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   reloadDataIgnoringPagination(val: any) {
     if (this.pageable) {
       this.clearSelection();
-      this.finishQuerSubscription = false;
+      this.finishQuerySubscription = false;
       this.pendingQuery = true;
 
       let queryArgs = {
@@ -879,7 +879,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   reloadData() {
     this.clearSelection();
-    this.finishQuerSubscription = false;
+    this.finishQuerySubscription = false;
     this.pendingQuery = true;
 
     let queryArgs;
@@ -1100,10 +1100,11 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     const self = this;
 
     return (index: number, item: any) => {
-      if (self.asyncLoadColumns.length && !this.finishQuerSubscription) {
+      let intersection = self.asyncLoadColumns.filter(c => self.visibleColumns.indexOf(c) !== -1);
+      if (self.asyncLoadColumns.length && !this.finishQuerySubscription && intersection.length > 0) {
         self.queryRowAsyncData(index, item);
         if (index === (this.daoTable.data.length - 1)) {
-          self.finishQuerSubscription = true;
+          self.finishQuerySubscription = true;
         }
         return item;
       } else {
@@ -1118,9 +1119,11 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       let key = this.keysArray[k];
       kv[key] = rowData[key];
     }
-    let av = [];
-    for (let i = 0; i < this.asyncLoadColumns.length; i++) {
-      av.push(this.asyncLoadColumns[i]);
+    // repeating checking of visible column
+    let av = this.asyncLoadColumns.filter(c => this.visibleColumns.indexOf(c) !== -1);
+    if (av.length === 0) {
+      //skipping query if there are not visible asyncron columns
+      return;
     }
     const columnQueryArgs = [kv, av, this.entity, undefined, undefined, undefined, undefined];
     let queryMethodName = this.pageable ? this.paginatedQueryMethod : this.queryMethod;
@@ -1293,7 +1296,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       offset: newStartRecord,
       length: queryLength
     };
-    this.finishQuerSubscription = false;
+    this.finishQuerySubscription = false;
     this.queryData(this.parentItem, queryArgs);
   }
 
