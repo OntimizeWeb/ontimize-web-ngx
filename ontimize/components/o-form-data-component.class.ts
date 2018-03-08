@@ -1,13 +1,11 @@
 import { Injector, ElementRef, OnInit, OnDestroy } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ValidatorFn } from '@angular/forms/src/directives/validators';
+import { FormControl, FormGroup, Validators, ValidatorFn } from '@angular/forms';
 
-import { OBaseComponent, IComponent } from './o-component.class';
 import { InputConverter } from '../decorators';
+import { SQLTypes } from '../utils';
+import { OBaseComponent, IComponent } from './o-component.class';
 import { OFormComponent } from './form/o-form.component';
 import { OFormValue } from './form/OFormValue';
-import { SQLTypes } from '../utils';
-
 
 export interface IFormDataTypeComponent extends IComponent {
   getSQLType(): number;
@@ -235,6 +233,10 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     } else if (this._fControl) {
       this._fControl.enable();
     }
+  }
+
+  get elementRef(): ElementRef {
+    return this.elRef;
   }
 
 }
