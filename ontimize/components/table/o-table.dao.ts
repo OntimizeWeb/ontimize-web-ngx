@@ -2,7 +2,9 @@ import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 export class OTableDao {
-  private loadingTimer;
+  usingStaticData: boolean = false;
+
+  protected loadingTimer;
   protected _isLoadingResults: boolean = false;
 
   /** Stream that emits whenever the data has been modified. */
@@ -26,11 +28,18 @@ export class OTableDao {
   }
 
   removeQuery(filters: any): Observable<any> {
-    return Observable.merge(filters.map((kv => this.dataService[this.methods.delete](kv, this.entity))));
+    if (!this.usingStaticData) {
+      return Observable.merge(filters.map((kv => this.dataService[this.methods.delete](kv, this.entity))));
+    }
   }
 
   insertQuery(av: Object, sqlTypes?: Object): Observable<any> {
-    return this.dataService[this.methods.insert](av, this.entity, sqlTypes);
+    if (this.usingStaticData) {
+      this.data.push(av);
+      return Observable.of(this.data);
+    } else {
+      return this.dataService[this.methods.insert](av, this.entity, sqlTypes);
+    }
   }
 
   /**

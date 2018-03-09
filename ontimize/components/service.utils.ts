@@ -35,7 +35,6 @@ export class ServiceUtils {
     return result;
   }
 
-
   static getFilterUsingParentKeys(parentItem: any, parentKeysObject: Object) {
     let filter = {};
     const parentKeys = Object.keys(parentKeysObject || {});
@@ -53,5 +52,20 @@ export class ServiceUtils {
       }
     }
     return filter;
+  }
+
+  static getArrayProperties(array: any[], properties: any[]): any[] {
+    const result = array.map(item => {
+      return ServiceUtils.getObjectProperties(item, properties);
+    });
+    return result;
+  }
+
+  static getObjectProperties(object: any, properties: any[]): any {
+    let objectProperties = {};
+    properties.forEach(key => {
+      objectProperties[key] = object[key];
+    });
+    return objectProperties;
   }
 }
