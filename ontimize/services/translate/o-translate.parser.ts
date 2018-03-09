@@ -11,7 +11,8 @@ export class OTranslateParser extends TranslateDefaultParser {
       return expr;
     }
     return expr.replace(this.templateMatcher, (substring: string, index: string) => {
-      return !isNaN(parseInt(index)) && Util.isDefined(params[index]) ? params[index] : substring;
+      const argValue = Util.isDefined(params[index]) ? params[index] : '';
+      return !isNaN(parseInt(index)) ? argValue : substring;
     });
   }
 }
