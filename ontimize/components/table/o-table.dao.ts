@@ -28,9 +28,7 @@ export class OTableDao {
   }
 
   removeQuery(filters: any): Observable<any> {
-    if (!this.usingStaticData) {
-      return Observable.merge(filters.map((kv => this.dataService[this.methods.delete](kv, this.entity))));
-    }
+    return Observable.merge(filters.map((kv => this.dataService[this.methods.delete](kv, this.entity))));
   }
 
   insertQuery(av: Object, sqlTypes?: Object): Observable<any> {
