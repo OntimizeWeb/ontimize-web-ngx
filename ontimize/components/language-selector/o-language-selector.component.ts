@@ -3,9 +3,10 @@ import { CommonModule } from '@angular/common';
 import { OSharedModule } from '../../shared';
 import { OTranslateService } from '../../services';
 import { AppConfig } from '../../config/app-config';
-
+import { InputConverter } from '../../decorators';
 
 export const DEFAULT_INPUTS_O_LANGUAGE_SELECTOR = [
+  'useFlagIcons: use-flag-icons'
 ];
 
 export const DEFAULT_OUTPUTS_LANGUAGE_SELECTOR = [
@@ -29,25 +30,20 @@ export class OLanguageSelectorComponent {
   public static DEFAULT_INPUTS_O_LANGUAGE_SELECTOR = DEFAULT_INPUTS_O_LANGUAGE_SELECTOR;
   public static DEFAULT_OUTPUTS_LANGUAGE_SELECTOR = DEFAULT_OUTPUTS_LANGUAGE_SELECTOR;
 
+  @InputConverter()
+  useFlagIcons: boolean = false;
+
   onChange: EventEmitter<Object> = new EventEmitter<Object>();
 
   protected translateService: OTranslateService;
-  protected _config: AppConfig;
+  protected appConfig: AppConfig;
   protected availableLangs: string[];
 
   constructor(protected injector: Injector) {
     this.translateService = this.injector.get(OTranslateService);
-    this._config = this.injector.get(AppConfig);
-    this.availableLangs = this._config.getConfiguration().applicationLocales;
+    this.appConfig = this.injector.get(AppConfig);
+    this.availableLangs = this.appConfig.getConfiguration().applicationLocales;
   }
-
-  // ngOnInit(): void {
-
-  // }
-
-  // ngOnDestroy() {
-
-  // }
 
   getFlagClass(lang: string) {
     const flagName = (lang !== 'en') ? lang : 'gb';
@@ -67,9 +63,7 @@ export class OLanguageSelectorComponent {
   getCurrentLang(): string {
     return this.translateService.getCurrentLang();
   }
-
 }
-
 
 @NgModule({
   declarations: [OLanguageSelectorComponent],

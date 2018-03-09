@@ -9,7 +9,8 @@ import { OUserInfoModule } from '../../components';
 import { InputConverter } from '../../decorators';
 
 export const DEFAULT_INPUTS_O_APP_HEADER = [
-  'showUserInfo: show-user-info'
+  'showUserInfo: show-user-info',
+  'useFlagIcons: use-flag-icons'
 ];
 
 export const DEFAULT_OUTPUTS_O_APP_HEADER = [
@@ -40,6 +41,8 @@ export class OAppHeaderComponent implements OnDestroy {
 
   @InputConverter()
   showUserInfo: boolean = true;
+  @InputConverter()
+  useFlagIcons: boolean = false;
 
   public toggleSidenav = new EventEmitter<void>();
 

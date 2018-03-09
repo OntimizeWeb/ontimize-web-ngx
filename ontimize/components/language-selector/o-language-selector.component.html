@@ -1,9 +1,14 @@
-<button class="menu-button" md-icon-button [mdMenuTriggerFor]="langMenu">
-    <span class="flag-icon {{ getFlagClass(getCurrentLang()) }}"></span>
+<button *ngIf="useFlagIcons" class="menu-button" md-icon-button [mdMenuTriggerFor]="langMenu">
+  <span class="flag-icon {{ getFlagClass(getCurrentLang()) }}"></span>
 </button>
+
+<button *ngIf="!useFlagIcons" class="menu-button" md-button [mdMenuTriggerFor]="langMenu">
+  <span>{{ 'LOCALE_' + getCurrentLang() | oTranslate }}</span>
+</button>
+
 <md-menu #langMenu="mdMenu" yPosition="below">
-    <button md-menu-item *ngFor="let lang of getAvailableLangs()" (click)="configureI18n(lang)">
-        <span class="flag-icon {{ getFlagClass(lang) }}"></span>
-        <span>{{ 'LOCALE_' + lang | oTranslate }}</span>
-    </button>
+  <button md-menu-item *ngFor="let lang of getAvailableLangs()" (click)="configureI18n(lang)">
+    <span *ngIf="useFlagIcons" class="flag-icon {{ getFlagClass(lang) }}"></span>
+    <span>{{ 'LOCALE_' + lang | oTranslate }}</span>
+  </button>
 </md-menu>

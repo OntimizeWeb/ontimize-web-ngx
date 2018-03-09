@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs/Subscription';
 
 import { InputConverter } from '../../../decorators';
 import { OSharedModule } from '../../../shared';
+import { OAppLayoutComponent } from '../../../layouts';
 import { OTranslateService, LoginService, MenuItemAction, MenuItemLocale, MenuRootItem, MenuItemUserInfo } from '../../../services';
 import { OLanguageSelectorModule } from '../../language-selector/o-language-selector.component';
 import { OAppSidenavComponent } from '../o-app-sidenav.component';
@@ -39,6 +40,7 @@ export class OAppSidenavMenuItemComponent implements OnInit, AfterViewInit, OnDe
   public menuItem: MenuRootItem;
   public menuItemType: string;
   protected appSidenavToggleSubscription: Subscription;
+  protected oAppLayoutComponent: OAppLayoutComponent;
 
   constructor(
     protected injector: Injector,
@@ -47,6 +49,7 @@ export class OAppSidenavMenuItemComponent implements OnInit, AfterViewInit, OnDe
     this.translateService = this.injector.get(OTranslateService);
     this.loginService = this.injector.get(LoginService);
     this.sidenav = this.injector.get(OAppSidenavComponent);
+    this.oAppLayoutComponent = this.injector.get(OAppLayoutComponent);
   }
 
   ngOnInit() {
@@ -145,6 +148,10 @@ export class OAppSidenavMenuItemComponent implements OnInit, AfterViewInit, OnDe
 
   isDefaultItem(): boolean {
     return this.menuItemType === 'default';
+  }
+
+  get useFlagIcons(): boolean {
+    return this.oAppLayoutComponent && this.oAppLayoutComponent.useFlagIcons;
   }
 }
 

@@ -5,7 +5,7 @@ export var MAP = {
   'en': {
     'LANGUAGE': 'Language',
     'LOCALE_en': 'English',
-    'LOCALE_es': 'Spanish',
+    'LOCALE_es': 'Español',
     'USERNAME': 'Username',
     'PASSWORD': 'Password',
     'LOGIN': 'Login',
