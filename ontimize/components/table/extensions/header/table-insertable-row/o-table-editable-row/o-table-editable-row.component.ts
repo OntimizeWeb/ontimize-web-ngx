@@ -1,9 +1,11 @@
-import { Component, Injector, Inject, forwardRef, ViewEncapsulation, ElementRef } from '@angular/core';
+import { Component, Injector, Inject, forwardRef, ViewEncapsulation, ElementRef, ChangeDetectionStrategy, ComponentFactoryResolver, ViewChild, ViewContainerRef } from '@angular/core';
 import { FormControl, ValidatorFn, Validators } from '@angular/forms';
 import { ObservableWrapper } from '../../../../../../utils';
 import { SnackBarService } from '../../../../../../services';
 import { OTableEditableRowDataSource, OTableDataSource } from '../../../../o-table.datasource';
 import { OTableComponent, OTableOptions, OColumn } from '../../../../o-table.component';
+import { OTableColumnComponent } from '../../../../column/o-table-column.component';
+import { OBaseTableCellEditor } from '../../../../column/cell-editor/o-base-table-cell-editor.class';
 import { OTableInsertableRowComponent } from '../o-table-insertable-row.component';
 
 export const DEFAULT_INPUTS_O_TABLE_EDITABLE_ROW = [
@@ -19,10 +21,17 @@ export const DEFAULT_INPUTS_O_TABLE_EDITABLE_ROW = [
   host: {
     '[class.o-table-editable-row]': 'true',
     '(document:keyup)': 'handleKeyboardEvent($event)'
-  }
+  },
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [
+    OTableColumnComponent
+  ]
 })
 
 export class OTableEditableRowComponent {
+
+  @ViewChild('container', { read: ViewContainerRef })
+  container: ViewContainerRef;
 
   protected _tableDataSource: OTableDataSource;
 
@@ -30,15 +39,22 @@ export class OTableEditableRowComponent {
   protected _insertableRowTable: OTableInsertableRowComponent;
 
   protected controls: any = {};
+  columnEditors: any = {};
 
   protected snackBarService: SnackBarService;
+
+  rowData: any = {};
+
+  protected table: OTableComponent;
 
   constructor(
     protected injector: Injector,
     protected elRef: ElementRef,
-    @Inject(forwardRef(() => OTableComponent)) protected table: OTableComponent
+    protected resolver: ComponentFactoryResolver,
+    @Inject(forwardRef(() => OTableColumnComponent)) protected tableColumn: OTableColumnComponent
   ) {
     this.snackBarService = this.injector.get(SnackBarService);
+    this.table = this.tableColumn.table;
   }
 
   handleKeyboardEvent(event: KeyboardEvent) {
@@ -47,9 +63,9 @@ export class OTableEditableRowComponent {
       return;
     }
     let anyTouched = false;
+    // columns with no editor defined
     Object.keys(this.controls).forEach((controlKey) => {
-      const control = this.controls[controlKey];
-      anyTouched = control.touched || anyTouched;
+      anyTouched = this.controls[controlKey].touched || anyTouched;
     });
     if (anyTouched) {
       this.insertRecord();
@@ -73,6 +89,7 @@ export class OTableEditableRowComponent {
     if (value !== undefined) {
       this.editableDatasource = new OTableEditableRowDataSource(this);
       this.insertableRowTable = this.table.oTableInsertableRowComponent;
+      this.initializeEditors();
     }
   }
 
@@ -113,22 +130,26 @@ export class OTableEditableRowComponent {
     return control && control.touched && control.hasError(error);
   }
 
-  insertRecord() {
+  protected validateFields(): boolean {
     let valid = true;
+    // columns with no editor defined
     Object.keys(this.controls).forEach((controlKey) => {
       const control = this.controls[controlKey];
       control.markAsTouched();
       valid = valid && control.valid;
     });
+    return valid;
+  }
 
-    if (!valid) {
+  insertRecord() {
+    const self = this;
+    if (!this.validateFields()) {
       this.table.showDialogError('TABLE.ROW_VALIDATION_ERROR');
       return;
     }
 
-    const self = this;
     let values = this.getAttributesValuesToInsert();
-    this.table.daoTable.insertQuery(values).subscribe(res => {
+    this.table.insertRecord(values).subscribe(res => {
       self.onInsertSuccess(res);
     }, error => {
       console.log('[OTableEditableRow.insertRecord]: error', error);
@@ -139,9 +160,10 @@ export class OTableEditableRowComponent {
   protected getAttributesValuesToInsert(): Object {
     let attrValues = {};
     // let filter = this.table.getFilterUsingParentKeys(this.table.parentItem);
+
+    // columns with no editor defined
     Object.keys(this.controls).forEach((controlKey) => {
-      const control = this.controls[controlKey];
-      attrValues[controlKey] = control.value;
+      attrValues[controlKey] = this.controls[controlKey].value;
     });
     return attrValues;
   }
@@ -151,18 +173,44 @@ export class OTableEditableRowComponent {
     ObservableWrapper.callEmit(this.insertableRowTable.onPostInsertRecord, res);
     this.snackBarService.open('MESSAGES.INSERTED', { icon: 'check_circle' });
     this.cleanFields();
-    this.table.reloadData();
+
+    if (this.table.daoTable.usingStaticData) {
+      this.table.setDataArray(res);
+    } else {
+      this.table.reloadData();
+    }
   }
 
   protected cleanFields() {
+    // columns with no editor defined
     const controlKeys = Object.keys(this.controls);
     controlKeys.forEach((controlKey) => {
-      const control: FormControl = this.controls[controlKey];
-      control.reset();
+      this.controls[controlKey].reset();
     });
     let firstInputEl = this.elRef.nativeElement.querySelector('input#' + controlKeys[0]);
     if (firstInputEl) {
-      firstInputEl.focus();
+      setTimeout(() => {
+        firstInputEl.focus();
+      });
     }
+  }
+
+  useCellEditor(column: OColumn): boolean {
+    return this._insertableRowTable.isColumnInsertable(column) && column.editor !== undefined;
+  }
+
+  initializeEditors(): void {
+    const self = this;
+    this.table.oTableOptions.columns.forEach(col => {
+      if (self.useCellEditor(col)) {
+        const editor: OBaseTableCellEditor = this.tableColumn.buildCellEditor(col.type, this.resolver, this.container, {});
+        this.columnEditors[col.attr] = editor;
+
+        editor.orequired = this.isColumnRequired(col);
+        editor.formControl = this.getControl(col);
+        editor.controlArgs = { silent: true };
+        editor.startEdtion(self.rowData);
+      }
+    });
   }
 }

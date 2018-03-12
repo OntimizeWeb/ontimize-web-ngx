@@ -1031,7 +1031,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   updateCellData(column: OColumn, data: any, saveChanges: boolean) {
     column.editing = false;
     this.editingCell = undefined;
-    if (saveChanges) {
+    if (saveChanges && this.editingRow !== undefined) {
       Object.assign(this.editingRow, data);
     }
     this.editingRow = undefined;

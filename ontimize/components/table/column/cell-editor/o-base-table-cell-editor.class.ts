@@ -19,13 +19,15 @@ export class OBaseTableCellEditor implements OnInit {
   ];
 
   @InputConverter()
-  protected orequired: boolean = false;
+  orequired: boolean = false;
 
   tableColumn: OTableColumnComponent;
 
   protected _rowData: any;
 
   formControl: FormControl;
+  controlArgs: any;
+
   formGroup: FormGroup = new FormGroup({});
 
   editionStarted: EventEmitter<Object> = new EventEmitter<Object>();
@@ -57,7 +59,7 @@ export class OBaseTableCellEditor implements OnInit {
         disabled: false
       };
       this.formControl = new FormControl(cfg, validators);
-      this.formGroup.addControl('cell-editor', this.formControl);
+      this.formGroup.addControl(Math.random().toString(36), this.formControl);
     }
   }
 
@@ -76,7 +78,9 @@ export class OBaseTableCellEditor implements OnInit {
   startEdtion(data: any) {
     this.formGroup.reset();
     this.rowData = data;
-    this.editionStarted.emit(this._rowData);
+    if (!this.isSilentControl()) {
+      this.editionStarted.emit(this._rowData);
+    }
   }
 
   endEdition(saveChanges) {
@@ -89,8 +93,10 @@ export class OBaseTableCellEditor implements OnInit {
   commitEdition() {
     if (!this.formControl.invalid) {
       this._rowData[this.tableColumn.attr] = this.formControl.value;
-      this.endEdition(true);
-      this.editionCommitted.emit(this._rowData);
+      if (!this.isSilentControl()) {
+        this.endEdition(true);
+        this.editionCommitted.emit(this._rowData);
+      }
     }
   }
 
@@ -134,7 +140,13 @@ export class OBaseTableCellEditor implements OnInit {
   }
 
   onEscClicked() {
-    this.endEdition(false);
-    this.editionCancelled.emit(this._rowData);
+    if (!this.isSilentControl()) {
+      this.endEdition(false);
+      this.editionCancelled.emit(this._rowData);
+    }
+  }
+
+  protected isSilentControl(): boolean {
+    return this.controlArgs !== undefined && this.controlArgs.silent;
   }
 }
