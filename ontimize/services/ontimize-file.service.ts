@@ -132,12 +132,4 @@ export class OntimizeFileService {
       queryParams: { 'isdetail': 'true' }
     });
   }
-
-  protected isNullOrUndef(arg: any): boolean {
-    if (arg === null || arg === undefined) {
-      return true;
-    }
-    return false;
-  }
-
 }

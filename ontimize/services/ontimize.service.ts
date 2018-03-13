@@ -6,12 +6,9 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/share';
 
 import { LoginService } from '../services';
-import {
-  AppConfig,
-  Config
-} from '../config/app-config';
-
-import { IAuthService, IDataService } from '../util/util';
+import { AppConfig, Config } from '../config/app-config';
+import { IAuthService, IDataService, Util } from '../util/util';
+import { OntimizeServiceResponseParser } from './parser/o-service-response.parser';
 
 @Injectable()
 export class OntimizeService implements IAuthService, IDataService {
@@ -33,11 +30,13 @@ export class OntimizeService implements IAuthService, IDataService {
   protected _appConfig: Config;
   protected _config: AppConfig;
   protected _startSessionPath: string;
+  protected responseParser: OntimizeServiceResponseParser;
 
   constructor(protected injector: Injector) {
     this.http = this.injector.get(Http);
     this._config = this.injector.get(AppConfig);
     this._appConfig = this._config.getConfiguration();
+    this.responseParser = this.injector.get(OntimizeServiceResponseParser);
   }
 
   public getDefaultServiceConfiguration(serviceName?: string): Object {
@@ -117,8 +116,7 @@ export class OntimizeService implements IAuthService, IDataService {
 
     const url = this._urlBase + '/hassession?user=' + user + '&sessionid=' + sessionId;
     let _innerObserver: any;
-    const dataObservable = new Observable(observer =>
-      _innerObserver = observer).share();
+    const dataObservable = new Observable(observer => _innerObserver = observer).share();
 
     this.http
       .get(url)
@@ -130,20 +128,18 @@ export class OntimizeService implements IAuthService, IDataService {
   }
 
   public query(kv?: Object, av?: Array<string>, entity?: string, sqltypes?: Object): Observable<any> {
-    entity = (this.isNullOrUndef(entity)) ? this.entity : entity;
+    entity = (Util.isDefined(entity)) ? entity : this.entity;
 
     //TODO improve this -> merge between global conf and specific params of method calling
-    kv = (this.isNullOrUndef(kv)) ? this.kv : kv;
-    av = (this.isNullOrUndef(av)) ? this.av : av;
-    sqltypes = (this.isNullOrUndef(sqltypes)) ? this.sqltypes : sqltypes;
+    kv = (Util.isDefined(kv)) ? kv : this.kv;
+    av = (Util.isDefined(av)) ? av : this.av;
+    sqltypes = (Util.isDefined(sqltypes)) ? sqltypes : this.sqltypes;
 
     const url = this._urlBase + '/query';
 
-    const headers: Headers = new Headers();
-    headers.append('Access-Control-Allow-Origin', '*');
-    headers.append('Content-Type', 'application/json;charset=UTF-8');
+    const headers: Headers = this.buildHeaders();
 
-    const params = JSON.stringify({
+    const body = JSON.stringify({
       user: this._user,
       sessionid: this._sessionid,
       type: 1,
@@ -155,24 +151,16 @@ export class OntimizeService implements IAuthService, IDataService {
 
     const self = this;
     let _innerObserver: any;
-    const dataObservable = new Observable(observer =>
-      _innerObserver = observer).share();
+    const dataObservable = new Observable(observer => _innerObserver = observer).share();
 
     this.http
-      .post(url, params, { headers: headers })
+      .post(url, body, { headers: headers })
       .map(response => response.json())
       .subscribe(resp => {
-        if (resp && resp.code === 3) {
-          self.redirectLogin(true);
-        } else if (resp.code === 1) {
-          _innerObserver.error(resp.message);
-        } else if (resp.code === 0) {
-          _innerObserver.next(resp);
-        } else {
-          //Unknow state -> error
-          _innerObserver.error('Service unavailable');
-        }
-      }, error => _innerObserver.error(error),
+        self.responseParser.parseSuccessfulResponse(resp, _innerObserver, this);
+      }, error => {
+        self.responseParser.parseUnsuccessfulResponse(error, _innerObserver, this);
+      },
       () => _innerObserver.complete());
 
     return dataObservable;
@@ -180,29 +168,29 @@ export class OntimizeService implements IAuthService, IDataService {
 
   public advancedQuery(kv?: Object, av?: Array<string>, entity?: string, sqltypes?: Object,
     offset?: number, pagesize?: number, orderby?: Array<Object>): Observable<any> {
-    entity = (this.isNullOrUndef(entity)) ? this.entity : entity;
 
+    entity = (Util.isDefined(entity)) ? entity : this.entity;
     //TODO improve this -> merge between global conf and specific params of method calling
-    kv = (this.isNullOrUndef(kv)) ? this.kv : kv;
-    av = (this.isNullOrUndef(av)) ? this.av : av;
-    sqltypes = (this.isNullOrUndef(sqltypes)) ? this.sqltypes : sqltypes;
-    if (!this.isNullOrUndef(offset)) {
-      this.offset = offset;
-    }
-    if (!this.isNullOrUndef(pagesize)) {
-      this.pagesize = pagesize;
-    }
-    if (!this.isNullOrUndef(orderby)) {
-      this.orderby = orderby;
-    }
+    kv = (Util.isDefined(kv)) ? kv : this.kv;
+    av = (Util.isDefined(av)) ? av : this.av;
+    sqltypes = (Util.isDefined(sqltypes)) ? sqltypes : this.sqltypes;
+    orderby = (Util.isDefined(orderby)) ? orderby : this.orderby;
+
+    // if (Util.isDefined(offset)) {
+    //   this.offset = offset;
+    // }
+    // if (Util.isDefined(pagesize)) {
+    //   this.pagesize = pagesize;
+    // }
+    // if (Util.isDefined(orderby)) {
+    //   this.orderby = orderby;
+    // }
 
     const url = this._urlBase + '/advancedquery';
 
-    const headers: Headers = new Headers();
-    headers.append('Access-Control-Allow-Origin', '*');
-    headers.append('Content-Type', 'application/json;charset=UTF-8');
+    const headers: Headers = this.buildHeaders();
 
-    const params = JSON.stringify({
+    const body = JSON.stringify({
       user: this._user,
       sessionid: this._sessionid,
       type: 1,
@@ -220,38 +208,29 @@ export class OntimizeService implements IAuthService, IDataService {
     const dataObservable = new Observable(observer => _innerObserver = observer).share();
 
     this.http
-      .post(url, params, { headers: headers })
+      .post(url, body, { headers: headers })
       .map(response => response.json())
       .subscribe(resp => {
-        if (resp && resp.code === 3) {
-          self.redirectLogin(true);
-        } else if (resp.code === 1) {
-          _innerObserver.error(resp.message);
-        } else if (resp.code === 0) {
-          _innerObserver.next(resp);
-        } else {
-          //Unknow state -> error
-          _innerObserver.error('Service unavailable');
-        }
-      }, error => _innerObserver.error(error),
+        self.responseParser.parseSuccessfulResponse(resp, _innerObserver, this);
+      }, error => {
+        self.responseParser.parseUnsuccessfulResponse(error, _innerObserver, this);
+      },
       () => _innerObserver.complete());
 
     return dataObservable;
   }
 
   public insert(av: Object = {}, entity?: string, sqltypes?: Object): Observable<any> {
-    entity = (this.isNullOrUndef(entity)) ? this.entity : entity;
 
-    av = (this.isNullOrUndef(av)) ? this.av : av;
-    sqltypes = (this.isNullOrUndef(sqltypes)) ? this.sqltypes : sqltypes;
+    entity = (Util.isDefined(entity)) ? entity : this.entity;
+    av = (Util.isDefined(av)) ? av : this.av;
+    sqltypes = (Util.isDefined(sqltypes)) ? sqltypes : this.sqltypes;
 
     const url = this._urlBase + '/insert';
 
-    const headers: Headers = new Headers();
-    headers.append('Access-Control-Allow-Origin', '*');
-    headers.append('Content-Type', 'application/json;charset=UTF-8');
+    const headers: Headers = this.buildHeaders();
 
-    const params = JSON.stringify({
+    const body = JSON.stringify({
       user: this._user,
       sessionid: this._sessionid,
       entity: entity,
@@ -261,43 +240,32 @@ export class OntimizeService implements IAuthService, IDataService {
 
     const self = this;
     let _innerObserver: any;
-    const dataObservable = new Observable(observer =>
-      _innerObserver = observer).share();
+    const dataObservable = new Observable(observer => _innerObserver = observer).share();
 
     this.http
-      .post(url, params, { headers: headers })
+      .post(url, body, { headers: headers })
       .map(response => response.json())
       .subscribe(resp => {
-        if (resp.code === 3) {
-          self.redirectLogin(true);
-        } else if (resp.code === 1) {
-          _innerObserver.error(resp.message);
-        } else if (resp.code === 0) {
-          _innerObserver.next(resp);
-        } else {
-          //Unknow state -> error
-          _innerObserver.error('Service unavailable');
-        }
-      }, error => _innerObserver.error(error),
+        self.responseParser.parseSuccessfulResponse(resp, _innerObserver, this);
+      }, error => {
+        self.responseParser.parseUnsuccessfulResponse(error, _innerObserver, this);
+      },
       () => _innerObserver.complete());
 
     return dataObservable;
   }
 
   public update(kv: Object = {}, av: Object = {}, entity?: string, sqltypes?: Object): Observable<any> {
-    entity = (this.isNullOrUndef(entity)) ? this.entity : entity;
-
-    kv = (this.isNullOrUndef(kv)) ? this.kv : kv;
-    av = (this.isNullOrUndef(av)) ? this.av : av;
-    sqltypes = (this.isNullOrUndef(sqltypes)) ? this.sqltypes : sqltypes;
+    entity = (Util.isDefined(entity)) ? entity : this.entity;
+    kv = (Util.isDefined(kv)) ? kv : this.kv;
+    av = (Util.isDefined(av)) ? av : this.av;
+    sqltypes = (Util.isDefined(sqltypes)) ? sqltypes : this.sqltypes;
 
     const url = this._urlBase + '/update';
 
-    const headers: Headers = new Headers();
-    headers.append('Access-Control-Allow-Origin', '*');
-    headers.append('Content-Type', 'application/json;charset=UTF-8');
+    const headers: Headers = this.buildHeaders();
 
-    const params = JSON.stringify({
+    const body = JSON.stringify({
       user: this._user,
       sessionid: this._sessionid,
       entity: entity,
@@ -308,42 +276,31 @@ export class OntimizeService implements IAuthService, IDataService {
 
     const self = this;
     let _innerObserver: any;
-    const dataObservable = new Observable(observer =>
-      _innerObserver = observer).share();
+    const dataObservable = new Observable(observer => _innerObserver = observer).share();
 
     this.http
-      .post(url, params, { headers: headers })
+      .post(url, body, { headers: headers })
       .map(response => response.json())
       .subscribe(resp => {
-        if (resp && resp.code === 3) {
-          self.redirectLogin(true);
-        } else if (resp.code === 1) {
-          _innerObserver.error(resp.message);
-        } else if (resp.code === 0) {
-          _innerObserver.next(resp);
-        } else {
-          //Unknow state -> error
-          _innerObserver.error('Service unavailable');
-        }
-      }, error => _innerObserver.error(error),
+        self.responseParser.parseSuccessfulResponse(resp, _innerObserver, this);
+      }, error => {
+        self.responseParser.parseUnsuccessfulResponse(error, _innerObserver, this);
+      },
       () => _innerObserver.complete());
 
     return dataObservable;
   }
 
   public delete(kv: Object = {}, entity?: string, sqltypes?: Object): Observable<any> {
-    entity = (this.isNullOrUndef(entity)) ? this.entity : entity;
-
-    kv = (this.isNullOrUndef(kv)) ? this.kv : kv;
-    sqltypes = (this.isNullOrUndef(sqltypes)) ? this.sqltypes : sqltypes;
+    entity = (Util.isDefined(entity)) ? entity : this.entity;
+    kv = (Util.isDefined(kv)) ? kv : this.kv;
+    sqltypes = (Util.isDefined(sqltypes)) ? sqltypes : this.sqltypes;
 
     const url = this._urlBase + '/delete';
 
-    const headers: Headers = new Headers();
-    headers.append('Access-Control-Allow-Origin', '*');
-    headers.append('Content-Type', 'application/json;charset=UTF-8');
+    const headers: Headers = this.buildHeaders();
 
-    const params = JSON.stringify({
+    const body = JSON.stringify({
       user: this._user,
       sessionid: this._sessionid,
       entity: entity,
@@ -353,41 +310,32 @@ export class OntimizeService implements IAuthService, IDataService {
 
     const self = this;
     let _innerObserver: any;
-    const dataObservable = new Observable(observer =>
-      _innerObserver = observer).share();
+    const dataObservable = new Observable(observer => _innerObserver = observer).share();
 
     this.http
-      .post(url, params, { headers: headers })
+      .post(url, body, { headers: headers })
       .map(response => response.json())
       .subscribe(resp => {
-        if (resp && resp.code === 3) {
-          self.redirectLogin(true);
-        } else if (resp.code === 1) {
-          _innerObserver.error(resp.message);
-        } else if (resp.code === 0) {
-          _innerObserver.next(resp);
-        } else {
-          //Unknow state -> error
-          _innerObserver.error('Service unavailable');
-        }
-      }, error => _innerObserver.error(error),
+        self.responseParser.parseSuccessfulResponse(resp, _innerObserver, this);
+      }, error => {
+        self.responseParser.parseUnsuccessfulResponse(error, _innerObserver, this);
+      },
       () => _innerObserver.complete());
 
     return dataObservable;
   }
 
-  protected redirectLogin(sessionExpired: boolean = false) {
+  redirectLogin(sessionExpired: boolean = false) {
     let router = this.injector.get(Router);
     router.navigate(['/login'], {
       queryParams: { 'isdetail': 'true' }
     });
   }
 
-  protected isNullOrUndef(arg: any): boolean {
-    if (arg === null || arg === undefined) {
-      return true;
-    }
-    return false;
+  protected buildHeaders(): Headers {
+    const headers: Headers = new Headers();
+    headers.append('Access-Control-Allow-Origin', '*');
+    headers.append('Content-Type', 'application/json;charset=UTF-8');
+    return headers;
   }
-
 }

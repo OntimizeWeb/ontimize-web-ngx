@@ -27,3 +27,5 @@ export * from './services/o-modules-info.service';
 export * from './services/md-date-formats.factory';
 export * from './services/translate/o-translate-http-loader';
 export * from './services/translate/o-translate.parser';
+
+export * from './services/parser/o-service-response.parser';

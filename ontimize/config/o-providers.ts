@@ -25,7 +25,8 @@ import {
   appConfigFactory,
   AppMenuService,
   OUserInfoService,
-  OModulesInfoService
+  OModulesInfoService,
+  OntimizeServiceResponseParser
 } from '../services';
 
 import { OFormLayoutManagerService } from '../services/o-form-layout-manager.service';
@@ -148,6 +149,10 @@ export function getOModulesInfoServiceProvider(injector: Injector) {
   return new OModulesInfoService(injector);
 }
 
+export function getOntimizeServiceResponseParser(injector: Injector) {
+  return new OntimizeServiceResponseParser(injector);
+}
+
 export const ONTIMIZE_PROVIDERS = [
   //Standard
   MdIconRegistry,
@@ -170,6 +175,11 @@ export const ONTIMIZE_PROVIDERS = [
   {
     provide: OntimizeService,
     useFactory: dataServiceFactory,
+    deps: [Injector]
+  },
+  {
+    provide: OntimizeServiceResponseParser,
+    useFactory: getOntimizeServiceResponseParser,
     deps: [Injector]
   },
   {
