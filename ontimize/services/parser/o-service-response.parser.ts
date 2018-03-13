@@ -23,7 +23,7 @@ export class OntimizeServiceResponseParser {
   }
 
   parseUnsuccessfulResponse(error, subscriber: Subscriber<any>, service: IAuthService) {
-    if (error.status === 401 || error.status === 0 || !error.ok) {
+    if (error.status !== 500 && (error.status === 401 || error.status === 0 || !error.ok)) {
       service.redirectLogin(true);
     } else {
       subscriber.error(error);

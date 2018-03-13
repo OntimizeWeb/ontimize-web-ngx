@@ -78,9 +78,8 @@ export class LoginService implements ILoginService {
   }
 
   login(user: string, password: string): Observable<any> {
-
     this._user = user;
-    var self = this;
+    const self = this;
     let observable = new Observable(observer => {
       this.retrieveAuthService().then((service) => {
         service.startsession(user, password)
@@ -93,7 +92,6 @@ export class LoginService implements ILoginService {
             observer.error(error);
           });
       });
-
     });
     return observable;
   }
@@ -113,22 +111,23 @@ export class LoginService implements ILoginService {
 
   logout(): Observable<any> {
     ObservableWrapper.callEmit(this.onLogout, null);
-    var self = this;
-    let observable = new Observable(observer => {
-      let sessionInfo = this.getSessionInfo();
-      this.retrieveAuthService().then((service) => {
-        service.endsession(sessionInfo.user, sessionInfo.id)
-          .subscribe(resp => {
-            self.onLogoutSuccess(resp);
-            observer.next();
-            observer.complete();
-          }, error => {
-            self.onLoginError(error);
-            observer.error(error);
-          });
+    const self = this;
+
+    let innerObserver: any;
+    const dataObservable = new Observable(observer => innerObserver = observer).share();
+    let sessionInfo = this.getSessionInfo();
+
+    this.retrieveAuthService().then((service) => {
+      service.endsession(sessionInfo.user, sessionInfo.id).subscribe(resp => {
+        self.onLogoutSuccess(resp);
+        innerObserver.next();
+        innerObserver.complete();
+      }, error => {
+        self.onLogoutError(error);
+        innerObserver.error(error);
       });
     });
-    return observable;
+    return dataObservable;
   }
 
   onLogoutSuccess(sessionId: number) {

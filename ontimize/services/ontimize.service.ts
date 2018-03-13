@@ -107,7 +107,13 @@ export class OntimizeService implements IAuthService, IDataService {
       .map((res: any) => res.json())
       .subscribe(resp => {
         _closeSessionObserver.next(resp);
-      }, error => _closeSessionObserver.error(error));
+      }, error => {
+        if (error.status === 401 || error.status === 0 || !error.ok) {
+          _closeSessionObserver.next(0);
+        } else {
+          _closeSessionObserver.error(error);
+        }
+      });
 
     return closeSessionObservable;
   }
@@ -175,16 +181,8 @@ export class OntimizeService implements IAuthService, IDataService {
     av = (Util.isDefined(av)) ? av : this.av;
     sqltypes = (Util.isDefined(sqltypes)) ? sqltypes : this.sqltypes;
     orderby = (Util.isDefined(orderby)) ? orderby : this.orderby;
-
-    // if (Util.isDefined(offset)) {
-    //   this.offset = offset;
-    // }
-    // if (Util.isDefined(pagesize)) {
-    //   this.pagesize = pagesize;
-    // }
-    // if (Util.isDefined(orderby)) {
-    //   this.orderby = orderby;
-    // }
+    offset = (Util.isDefined(offset)) ? offset : this.offset;
+    pagesize = (Util.isDefined(pagesize)) ? pagesize : this.pagesize;
 
     const url = this._urlBase + '/advancedquery';
 
@@ -198,9 +196,9 @@ export class OntimizeService implements IAuthService, IDataService {
       kv: kv,
       av: av,
       sqltypes: sqltypes,
-      offset: this.offset,
-      pageSize: this.pagesize,
-      orderBy: this.orderby
+      offset: offset,
+      pageSize: pagesize,
+      orderBy: orderby
     });
 
     const self = this;

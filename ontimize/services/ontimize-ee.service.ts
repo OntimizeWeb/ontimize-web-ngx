@@ -151,12 +151,9 @@ export class OntimizeEEService implements IAuthService, IDataService {
     sqltypes = (Util.isDefined(sqltypes)) ? sqltypes : this.sqltypes;
     orderby = (Util.isDefined(orderby)) ? orderby : this.orderby;
 
-    // if (Util.isDefined(offset)) {
-    //   this.offset = offset;
-    // }
-    // if (Util.isDefined(pagesize)) {
-    //   this.pagesize = pagesize;
-    // }
+    offset = (Util.isDefined(offset)) ? offset : this.offset;
+    pagesize = (Util.isDefined(pagesize)) ? pagesize : this.pagesize;
+
     const url = this._urlBase + this.path + '/' + entity + '/advancedsearch';
 
     const headers: Headers = this.buildHeaders();
