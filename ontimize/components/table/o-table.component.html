@@ -11,7 +11,7 @@
         {{ title | oTranslate }}
       </div>
       <span class="fill-remaining"></span>
-      <o-table-quickfilter *ngIf="quickFilter" (onChange)="reloadPaginatedDataFromStart($event)" ></o-table-quickfilter>
+      <o-table-quickfilter *ngIf="quickFilter" (onChange)="reloadPaginatedDataFromStart($event)"></o-table-quickfilter>
       <button *ngIf="showTableMenuButton" md-icon-button class="o-table-menu-button" [mdMenuTriggerFor]="menu">
         <md-icon>more_vert</md-icon>
       </button>
@@ -58,8 +58,12 @@
     </md-table>
 
     <!--TABLE EMPTY-->
-    <div class="mat-row o-table-no-results" *ngIf="dataSource !== undefined && dataSource.resultsLength === 0" fxLayoutAlign="center center">
+    <div class="mat-row o-table-no-results {{ rowHeight }}" *ngIf="dataSource !== undefined && dataSource.resultsLength === 0"
+      fxLayoutAlign="center center">
       {{'TABLE.EMPTY' | oTranslate}}
+      <ng-container *ngIf="quickFilter && oTableQuickFilterComponent && oTableQuickFilterComponent.value.length > 0">
+        {{ 'TABLE.EMPTY_USING_FILTER' | oTranslate : { values: [oTableQuickFilterComponent.value] } }}
+      </ng-container>
     </div>
 
     <!-- TABLE EDITABLE ROW position: first -->
@@ -129,12 +133,8 @@
     </div>
 
     <!--TABLE PAGINATOR-->
-    <md-paginator *ngIf="paginator" #mdpaginator
-      [length]="dataSource?.resultsLength"
-      [pageIndex]="paginator.pageIndex"
-      [pageSize]="queryRows"
-      [pageSizeOptions]="paginator.pageSizeOptions"
-      (page)="onChangePage($event)"></md-paginator>
+    <md-paginator *ngIf="paginator" #mdpaginator [length]="dataSource?.resultsLength" [pageIndex]="paginator.pageIndex" [pageSize]="queryRows"
+      [pageSizeOptions]="paginator.pageSizeOptions" (page)="onChangePage($event)"></md-paginator>
 
   </div>
 </div>
