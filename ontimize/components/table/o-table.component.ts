@@ -173,6 +173,11 @@ export class OTableOptions {
 
 export type QuickFilterFunction = (filter: string) => IFilterExpression | Object;
 
+export interface ISQLOrder {
+  columnName: string;
+  ascendent: boolean;
+}
+
 @Component({
   selector: 'o-table',
   templateUrl: './o-table.component.html',
@@ -341,7 +346,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   protected editingCell: any;
   protected editingRow: any;
 
-  protected sortColArray: Array<any> = [];
+  protected sortColArray: Array<ISQLOrder> = [];
   protected currentPage: number = 0;
   public oTableQuickFilterComponent: OTableQuickfilterComponent;
 
@@ -384,7 +389,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
         this.sortColArray = [];
         if (sort.direction !== '') {
           this.sortColArray.push({
-            column: sort.active,
+            columnName: sort.active,
             ascendent: sort.direction === OTableComponent.TYPE_ASC_NAME
           });
         }
@@ -560,7 +565,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
           if (oCol !== undefined) {
             const colSort = colDef[1] || OTableComponent.TYPE_ASC_NAME;
             this.sortColArray.push({
-              column: colName,
+              columnName: colName,
               ascendent: colSort === OTableComponent.TYPE_ASC_NAME
             });
           }
@@ -570,7 +575,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       //set values of sort-columns to mdsort
       if ((typeof (this._oTableOptions.columns) !== 'undefined') && (this.sortColArray.length > 0)) {
         let temp = this.sortColArray[0];
-        this.sort.active = temp.column;
+        this.sort.active = temp.columnName;
         this.sort.direction = temp.ascendent ? 'asc' : 'desc';
       }
     }
