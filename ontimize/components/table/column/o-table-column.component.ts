@@ -264,51 +264,60 @@ export class OTableColumnComponent implements OnInit {
     }
   }
 
+  buildCellEditor(type: string, resolver: ComponentFactoryResolver, container: ViewContainerRef, propsOrigin: any) {
+    let editor = undefined;
+    const componentRef = this.editorsMapping[type] || this.editorsMapping['text'];
+    if (componentRef === undefined) {
+      return editor;
+    }
+    let factory: ComponentFactory<any> = resolver.resolveComponentFactory(componentRef);
+    if (factory) {
+      let ref = container.createComponent(factory);
+      editor = ref.instance;
+      if (propsOrigin !== undefined) {
+        switch (type) {
+          case 'date':
+            editor.format = propsOrigin.format;
+            editor.locale = propsOrigin.locale;
+            editor.oStartView = propsOrigin.oStartView;
+            editor.oMinDate = propsOrigin.oMinDate;
+            editor.oMaxDate = propsOrigin.oMaxDate;
+            editor.oTouchUi = propsOrigin.oTouchUi;
+            editor.oStartAt = propsOrigin.oStartAt;
+            editor.filterDate = propsOrigin.filterDate;
+            break;
+          case 'boolean':
+            editor.indeterminateOnNull = propsOrigin.indeterminateOnNull;
+            break;
+          case 'integer':
+            editor.min = propsOrigin.min;
+            editor.max = propsOrigin.max;
+            editor.step = propsOrigin.step;
+          case 'percentage':
+          case 'currency':
+          case 'real':
+            editor.min = propsOrigin.min;
+            editor.max = propsOrigin.max;
+            editor.step = propsOrigin.step;
+            break;
+          case 'image':
+            break;
+          default:
+            break;
+        }
+      }
+    }
+    return editor;
+  }
+
   protected createEditor() {
     if (typeof (this.editor) === 'undefined' && this.editable) {
-      const componentRef = this.editorsMapping[this.type] || this.editorsMapping['text'];
-      if (componentRef !== undefined) {
-        let factory: ComponentFactory<any> = this.resolver.resolveComponentFactory(componentRef);
-        if (factory) {
-          let ref = this.container.createComponent(factory);
-          this.editor = ref.instance;
-          switch (this.type) {
-
-            case 'date':
-              this.editor.format = this.format;
-              this.editor.locale = this.locale;
-              this.editor.oStartView = this.oStartView;
-              this.editor.oMinDate = this.oMinDate;
-              this.editor.oMaxDate = this.oMaxDate;
-              this.editor.oTouchUi = this.oTouchUi;
-              this.editor.oStartAt = this.oStartAt;
-              this.editor.filterDate = this.filterDate;
-              break;
-            case 'boolean':
-              this.editor.indeterminateOnNull = this.indeterminateOnNull;
-              break;
-            case 'integer':
-              this.editor.min = this.min;
-              this.editor.max = this.max;
-              this.editor.step = this.step;
-            case 'percentage':
-            case 'currency':
-            case 'real':
-              this.editor.min = this.min;
-              this.editor.max = this.max;
-              this.editor.step = this.step;
-              break;
-            case 'image':
-              break;
-            default:
-              break;
-
-          }
-          this.editor.orequired = this.orequired;
-          this.editor.editionStarted = this.editionStarted;
-          this.editor.editionCancelled = this.editionCancelled;
-          this.editor.editionCommitted = this.editionCommitted;
-        }
+      this.editor = this.buildCellEditor(this.type, this.resolver, this.container, this);
+      if (this.editor) {
+        this.editor.orequired = this.orequired;
+        this.editor.editionStarted = this.editionStarted;
+        this.editor.editionCancelled = this.editionCancelled;
+        this.editor.editionCommitted = this.editionCommitted;
       }
     }
   }

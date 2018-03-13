@@ -150,7 +150,7 @@ export var MAP = {
     'TABLE.SELECT.ROWS.1': '1 row selected',
     'TABLE.SHOW_ALL': 'All',
     'TABLE.SELECT_DATE': 'Select date',
-    'TABLE.ROW_VALIDATION_ERROR' : 'Row are not valid!',
+    'TABLE.ROW_VALIDATION_ERROR' : 'Row data is not valid!',
 
     'LAYOUT_MANANGER.MAIN_TAB_LABEL': 'Home',
     'LAYOUT_MANANGER.DIALOG_TITLE': 'Detail',

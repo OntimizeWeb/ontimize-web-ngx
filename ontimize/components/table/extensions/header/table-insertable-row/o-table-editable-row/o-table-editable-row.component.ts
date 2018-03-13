@@ -203,13 +203,14 @@ export class OTableEditableRowComponent {
     const self = this;
     this.table.oTableOptions.columns.forEach(col => {
       if (self.useCellEditor(col)) {
-        const editor: OBaseTableCellEditor = this.tableColumn.buildCellEditor(col.type, this.resolver, this.container, {});
+        const editor: OBaseTableCellEditor = this.tableColumn.buildCellEditor(col.type, this.resolver, this.container, col.editor);
         this.columnEditors[col.attr] = editor;
 
         editor.orequired = this.isColumnRequired(col);
         editor.formControl = this.getControl(col);
         editor.controlArgs = { silent: true };
         editor.startEdtion(self.rowData);
+        editor.formControl.markAsUntouched();
       }
     });
   }

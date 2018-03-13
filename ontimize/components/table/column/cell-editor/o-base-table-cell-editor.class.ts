@@ -36,7 +36,7 @@ export class OBaseTableCellEditor implements OnInit {
 
   @HostListener('document:keyup', ['$event']) onKeyupHandler(event: KeyboardEvent) {
     const oColumn = this.table.getOColumn(this.tableColumn.attr);
-    if (!oColumn.editing) {
+    if (!oColumn || !oColumn.editing) {
       return;
     }
     if (event.keyCode === 27) {

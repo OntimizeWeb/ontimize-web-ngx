@@ -1,5 +1,5 @@
 import { Component, Injector, ViewChild, TemplateRef } from '@angular/core';
-import { OTranslateService } from '../../../../../services/o-translate.service';
+import { OTranslateService } from '../../../../../services';
 import { OBaseTableCellRenderer } from '../o-base-table-cell-renderer.class';
 
 
