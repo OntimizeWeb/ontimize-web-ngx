@@ -17,52 +17,57 @@
     * OFormNavigationComponent
     * OFormDataNavigation
     * OFormNavigationClass
+  * New '*getFormCache*' method ([32f5613](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/32f5613))
 
-* **o-form**: new '*getFormCache*' method ([32f5613](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/32f5613))
-* **o-table**: changing '*dialog*' property visibility to protected ([68dfda1](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/68dfda1))
-* **o-table**: new '*clearSelection*' method ([0a37f5d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0a37f5d))
-* **o-table-insertable-row**: adding new inner table component for using insertable rows ([4907594](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4907594)) ([2a8ceee](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2a8ceee))
-  * Using configured cell editors for the edition of each column ([6abe426](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6abe426))
-* **o-table**: adding '*show-title*' input ([cae0868](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/cae0868))
-* **util**: '*parseArray*' methods allows to discard repeated elements ([a924ad2](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a924ad2))
-* **OFormServiceComponent**: adding '*query-method*' input ([7bd62e4](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7bd62e4))
-* **OFormServiceComponent**: adding '*query-on-event*' input ([7bd62e4](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7bd62e4))
-* **o-table-cell-renderer-action**: new '*o-table*' column renderer ([3e3a924](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3e3a924))
+* **o-table**
+  * Changing '*dialog*' property visibility to protected ([68dfda1](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/68dfda1))
+  * New '*clearSelection*' method ([0a37f5d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0a37f5d))
+  * Adding '*show-title*' input ([cae0868](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/cae0868))
+  * Adding cell editors ([04f43ae](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/04f43ae)) ([acc4238](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/acc4238)) ([efad08a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/efad08a))
+    * Adding more editors types ([ba71737](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ba71737)) ([1bc7f8e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1bc7f8e)) ([75bc0f8](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/75bc0f8)) ([5b6d9d0](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5b6d9d0))
+  * Updating selection mode using click + ctrl | shift ([acc4238](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/acc4238))
+  * Adding '*selection-mode*' input (none|simple|multiple)
+  * Adding remote pagination  ([3e10752](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3e10752)) ([18f576d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/18f576d))
+  * Adding '*quick-filter-function*' input for allowing user to override default quick filter value passed to the service ([e1ad25a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e1ad25a))
+    * Adding '*QuickFilterFunction*' type ('*type QuickFilterFunction = (filter: string) => IFilterExpression | Object;*')
+  * **o-table-insertable-row**: adding new inner table component for using insertable rows ([4907594](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4907594)) ([2a8ceee](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2a8ceee))
+    * Using configured cell editors for the edition of each column ([6abe426](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6abe426)) ([5b6d9d0](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5b6d9d0))
+  * **o-table-renderer-service** adding predefined cell renderer *'o-table-renderer-service'* ([f1685b5](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f1685b5))
+  * **o-table-cell-renderer-action**: new '*o-table*' column renderer ([3e3a924](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3e3a924))
+
+* **Util**
+  * '*parseArray*' methods allows to discard repeated elements ([a924ad2](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a924ad2))
+  * Adding '*equals*' and '*isDefined*' methods ([1c5aa00](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1c5aa00))
+
+* **OFormServiceComponent**
+  * Adding '*query-method*' input ([7bd62e4](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7bd62e4))
+  * Adding '*query-on-event*' input ([7bd62e4](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7bd62e4))
+
 * **styles**: adding '*theme.scss*' file so user wont need to import 'node_modules/ontimize-web-ngx/ontimize/components/theming/all-theme.scss' and will only have to import 'node_modules/ontimize-web-ngx/theme.scss' ([408f863](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/408f863))
 ([4b02d0f](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4b02d0f))
 * **o-material-theme**: '*o-material-theme*' now initializes angular material theme and typography configuration. It also receives user custom typography as second parameter ([06baef2](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/06baef2)) ([40c6777](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/40c6777))
-* **o-table-renderer-service** adding predefined cell renderer *'o-table-renderer-service'* ([f1685b5](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f1685b5))
-* **o-table**: adding cell editors
-  ([04f43ae](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/04f43ae)) ([acc4238](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/acc4238)) ([efad08a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/efad08a))
-  * Adding more editors types ([ba71737](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ba71737)) ([1bc7f8e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1bc7f8e)) ([75bc0f8](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/75bc0f8))
-* **o-table**: updating selection mode using click + ctrl | shift ([acc4238](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/acc4238))
-* **o-table**: adding '*selection-mode*' input (none|simple|multiple)
-* **o-table**: adding remote pagination  ([3e10752](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3e10752)) ([18f576d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/18f576d))
 * **ontimize-ee**: adding remote pagination '*advancedQuery*' method ([3e10752](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3e10752))
 * **FilterExpressionUtils**: adding utility class for building filtering queries parameters ([8aacf96](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/8aacf96))
-* **o-table**: adding '*quick-filter-function*' input for allowing user to override default quick filter value passed to the service ([e1ad25a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e1ad25a))
-  * Adding '*QuickFilterFunction*' type ('*type QuickFilterFunction = (filter: string) => IFilterExpression | Object;*')
-* **Util**: adding '*equals*' and '*isDefined*' methods ([1c5aa00](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1c5aa00))
 * **AppConfig**: adding properties for allowing remote bundle location:
-* **oTranslate**: allowing to retrieve remote bundle configuration. Using the '*bundle*' property in the application '*Config*' object ([86ecd4f](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/86ecd4f))
-* **oTranslate**: allowing to pass parameters to '*oTranslate*' pipe, following the new '*ITranslatePipeArgument*' interface ([b7744da](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b7744da)) ([43edbe4](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/43edbe4)) ([8e5d890](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/8e5d890))
-  * Having the following entry in the bundle file:
-  ```
-    ...
-    "EXAMPLE": "Example bundle text: {0}, {1}",
-    ...
-  ```
-  * User can add in the html file:
-  ```
-    {{ 'EXAMPLE' | oTranslate : { values: ['foo', 'bar'] }}}
-  ```
-  * And get the following result:
-  ```
-    'Example bundle text: foo, bar'
-  ```
+* **oTranslate**
+  * Allowing to retrieve remote bundle configuration. Using the '*bundle*' property in the application '*Config*' object ([86ecd4f](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/86ecd4f))
+  * Allowing to pass parameters to '*oTranslate*' pipe, following the new '*ITranslatePipeArgument*' interface ([b7744da](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b7744da)) ([43edbe4](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/43edbe4)) ([8e5d890](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/8e5d890))
+    * Having the following entry in the bundle file:
+    ```
+      ...
+      "EXAMPLE": "Example bundle text: {0}, {1}",
+      ...
+    ```
+    * User can add in the html file:
+    ```
+      {{ 'EXAMPLE' | oTranslate : { values: ['foo', 'bar'] }}}
+    ```
+    * And get the following result:
+    ```
+      'Example bundle text: foo, bar'
+    ```
 * **OFormDataComponent**: adding '*elementRef*' getter ([159e57d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/159e57d))
 * **o-language-selector**: adding '*use-flag-icons*' input (default false). Also added in '*o-app-layout*', '*o-app-header*' and '*o-user-info*' (for propagation) ([9c143e9](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9c143e9))
-
 * **OntimizeServiceResponseParser**: adding default parser for the Ontimize server responses ([1c2e420](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1c2e420))
 
 
