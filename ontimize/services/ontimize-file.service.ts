@@ -5,6 +5,7 @@ import { Observable } from 'rxjs/Observable';
 
 import { LoginService } from '../services';
 import { AppConfig, Config } from '../config/app-config';
+import { Util } from '../utils';
 
 @Injectable()
 export class OntimizeFileService {
@@ -131,5 +132,9 @@ export class OntimizeFileService {
     router.navigate(['/login'], {
       queryParams: { 'isdetail': 'true' }
     });
+  }
+
+  isNullOrUndef(value: any): boolean {
+    return !Util.isDefined(value);
   }
 }

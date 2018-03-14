@@ -288,4 +288,7 @@ export class OntimizeEEService implements IAuthService, IDataService {
     return headers;
   }
 
+  isNullOrUndef(value: any): boolean {
+    return !Util.isDefined(value);
+  }
 }

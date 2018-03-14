@@ -336,4 +336,8 @@ export class OntimizeService implements IAuthService, IDataService {
     headers.append('Content-Type', 'application/json;charset=UTF-8');
     return headers;
   }
+
+  isNullOrUndef(value: any): boolean {
+    return !Util.isDefined(value);
+  }
 }

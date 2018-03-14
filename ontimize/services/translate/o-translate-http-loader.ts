@@ -76,7 +76,10 @@ export class OTranslateHttpLoader extends TranslateHttpLoader {
       }
       innerObserver.next(response);
     },
-      error => innerObserver.next(error),
+      error => {
+        console.log('Remote Bundle service is not available');
+        innerObserver.next(error);
+      },
       () => innerObserver.complete()
     );
 
