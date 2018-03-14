@@ -1,13 +1,15 @@
 import { Component, Inject, forwardRef, OnInit, Injector, EventEmitter } from '@angular/core';
 import { OTableComponent, OColumn } from '../../../o-table.component';
 import { Util } from '../../../../../utils';
+import { InputConverter } from '../../../../../decorators';
 
 export const DEFAULT_INPUTS_O_TABLE_INSERTABLE_ROW = [
   // columns [string]: columns that can be inserted, separated by ';'. Default: all visible columns.
   'columns',
   'requiredColumns : required-columns',
   // position [first |last ] default: last
-  'position'
+  'position',
+  'showPlaceHolder: show-placeholder'
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE_INSERTABLE_ROW = [
@@ -37,6 +39,9 @@ export class OTableInsertableRowComponent implements OnInit {
   onPostInsertRecord: EventEmitter<any> = new EventEmitter();
 
   protected position: string = OTableInsertableRowComponent.DEFAULT_ROW_POSITION;
+
+  @InputConverter()
+  showPlaceHolder: boolean = false;
 
   constructor(
     protected injector: Injector,

@@ -1,15 +1,16 @@
 import { Injector, EventEmitter, OnInit, HostListener } from '@angular/core';
 import { FormControl, ValidatorFn, Validators, FormGroup } from '@angular/forms';
-
+import { OTranslateService } from '../../../../services';
 import { InputConverter } from '../../../../decorators';
 import { OTableComponent } from '../../o-table.component';
 import { OTableColumnComponent } from '../o-table-column.component';
 
+
 export class OBaseTableCellEditor implements OnInit {
 
-
   public static DEFAULT_INPUTS_O_TABLE_CELL_EDITOR = [
-    'orequired: required'
+    'orequired: required',
+    'showPlaceHolder: show-placeholder'
   ];
 
   public static DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR = [
@@ -18,8 +19,12 @@ export class OBaseTableCellEditor implements OnInit {
     'editionCommitted'
   ];
 
+  protected translateService: OTranslateService;
+
   @InputConverter()
   orequired: boolean = false;
+  @InputConverter()
+  showPlaceHolder: boolean = false;
 
   tableColumn: OTableColumnComponent;
 
@@ -49,6 +54,7 @@ export class OBaseTableCellEditor implements OnInit {
 
   constructor(protected injector: Injector) {
     this.tableColumn = this.injector.get(OTableColumnComponent);
+    this.translateService = this.injector.get(OTranslateService);
   }
 
   createFormControl() {
@@ -104,10 +110,6 @@ export class OBaseTableCellEditor implements OnInit {
     return this.tableColumn.table;
   }
 
-  get column(): string {
-    return this.tableColumn.attr;
-  }
-
   get rowData(): any {
     return this._rowData;
   }
@@ -148,5 +150,9 @@ export class OBaseTableCellEditor implements OnInit {
 
   protected isSilentControl(): boolean {
     return this.controlArgs !== undefined && this.controlArgs.silent;
+  }
+
+  getPlaceholder(): string {
+    return this.showPlaceHolder ? this.translateService.get(this.tableColumn.attr) : undefined;
   }
 }

@@ -161,6 +161,8 @@ export class OTableColumnComponent implements OnInit {
   /*input editor */
   @InputConverter()
   protected orequired: boolean = false;
+  @InputConverter()
+  showPlaceHolder: boolean = false;
 
   /*input editor date */
   protected locale: string;
@@ -315,6 +317,7 @@ export class OTableColumnComponent implements OnInit {
       this.editor = this.buildCellEditor(this.type, this.resolver, this.container, this);
       if (this.editor) {
         this.editor.orequired = this.orequired;
+        this.editor.showPlaceHolder = this.showPlaceHolder;
         this.editor.editionStarted = this.editionStarted;
         this.editor.editionCancelled = this.editionCancelled;
         this.editor.editionCommitted = this.editionCommitted;

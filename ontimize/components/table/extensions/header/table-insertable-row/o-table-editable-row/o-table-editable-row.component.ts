@@ -1,7 +1,7 @@
 import { Component, Injector, Inject, forwardRef, ViewEncapsulation, ElementRef, ChangeDetectionStrategy, ComponentFactoryResolver, ViewChild, ViewContainerRef } from '@angular/core';
 import { FormControl, ValidatorFn, Validators } from '@angular/forms';
 import { ObservableWrapper } from '../../../../../../utils';
-import { SnackBarService } from '../../../../../../services';
+import { SnackBarService, OTranslateService } from '../../../../../../services';
 import { OTableEditableRowDataSource, OTableDataSource } from '../../../../o-table.datasource';
 import { OTableComponent, OTableOptions, OColumn } from '../../../../o-table.component';
 import { OTableColumnComponent } from '../../../../column/o-table-column.component';
@@ -29,6 +29,7 @@ export const DEFAULT_INPUTS_O_TABLE_EDITABLE_ROW = [
 })
 
 export class OTableEditableRowComponent {
+  protected translateService: OTranslateService;
 
   @ViewChild('container', { read: ViewContainerRef })
   container: ViewContainerRef;
@@ -55,6 +56,7 @@ export class OTableEditableRowComponent {
   ) {
     this.snackBarService = this.injector.get(SnackBarService);
     this.table = this.tableColumn.table;
+    this.translateService = this.injector.get(OTranslateService);
   }
 
   handleKeyboardEvent(event: KeyboardEvent) {
@@ -205,7 +207,8 @@ export class OTableEditableRowComponent {
       if (self.useCellEditor(col)) {
         const editor: OBaseTableCellEditor = this.tableColumn.buildCellEditor(col.type, this.resolver, this.container, col.editor);
         this.columnEditors[col.attr] = editor;
-
+        editor.showPlaceHolder = this._insertableRowTable.showPlaceHolder || editor.showPlaceHolder;
+        editor.tableColumn = col.editor.tableColumn;
         editor.orequired = this.isColumnRequired(col);
         editor.formControl = this.getControl(col);
         editor.controlArgs = { silent: true };
@@ -213,5 +216,11 @@ export class OTableEditableRowComponent {
         editor.formControl.markAsUntouched();
       }
     });
+  }
+
+  getPlaceholder(column: OColumn): string {
+    const cellEditor = this.columnEditors[column.attr];
+    const showPlaceHolder = cellEditor ? cellEditor.showPlaceHolder : (this._insertableRowTable.showPlaceHolder || column.definition.showPlaceHolder);
+    return showPlaceHolder ? this.translateService.get(column.attr) : undefined;
   }
 }
