@@ -4,7 +4,7 @@ import { OTranslateService } from '../../../../services';
 import { InputConverter } from '../../../../decorators';
 import { OTableComponent } from '../../o-table.component';
 import { OTableColumnComponent } from '../o-table-column.component';
-
+import { Util } from '../../../../utils';
 
 export class OBaseTableCellEditor implements OnInit {
 
@@ -134,7 +134,27 @@ export class OBaseTableCellEditor implements OnInit {
   }
 
   hasError(error: string): boolean {
-    return this.formControl && this.formControl.touched && this.formControl.hasError(error);
+    return this.formControl && this.formControl.touched && this.hasErrorExclusive(error);
+  }
+
+  hasErrorExclusive(error: string): boolean {
+    let hasError = false;
+    const errorsOrder = ['mdDatepickerMax', 'mdDatepickerMin', 'mdDatepickerFilter', 'mdDatepickerParse', 'required'];
+    const errors = this.formControl.errors;
+    if (Util.isDefined(errors)) {
+      if (Object.keys(errors).length === 1) {
+        return errors.hasOwnProperty('required');
+      } else {
+        for (let i = 0, len = errorsOrder.length; i < len; i++) {
+          hasError = errors.hasOwnProperty(errorsOrder[i]);
+          if (hasError) {
+            hasError = (errorsOrder[i] === error);
+            break;
+          }
+        }
+      }
+    }
+    return hasError;
   }
 
   getErrorValue(error: string, prop: string): string {

@@ -1,5 +1,5 @@
 <ng-template #templateref let-cellvalue="cellvalue" let-rowvalue="rowvalue">
-  <div [formGroup]="formGroup">
+  <div [formGroup]="formGroup" class="o-table-cell-editor-date">
     <md-form-field floatPlaceholder="never">
       <input #input mdInput [placeholder]="getPlaceholder()" [formControl]="formControl" [required]="orequired" [mdDatepicker]="d"
         [mdDatepickerFilter]="filterDate" (dateChange)="onDateChange($event)" [min]="oMinDate" [max]="oMaxDate">

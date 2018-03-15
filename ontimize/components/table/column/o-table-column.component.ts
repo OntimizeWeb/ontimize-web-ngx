@@ -147,7 +147,7 @@ export class OTableColumnComponent implements OnInit {
   protected trueValue: string;
   protected falseValueType: string;
   protected falseValue: string;
-  protected dataType: string = 'boolean';
+  protected booleanType: string = 'boolean';
 
   /*input image */
   protected imageType: string;
@@ -242,7 +242,7 @@ export class OTableColumnComponent implements OnInit {
               this.renderer.trueValue = this.trueValue;
               this.renderer.falseValueType = this.falseValueType;
               this.renderer.falseValue = this.falseValue;
-              this.renderer.dataType = this.dataType;
+              this.renderer.booleanType = this.booleanType;
               break;
             case 'real':
             case 'percentage':
@@ -290,17 +290,20 @@ export class OTableColumnComponent implements OnInit {
             break;
           case 'boolean':
             editor.indeterminateOnNull = propsOrigin.indeterminateOnNull;
+            editor.trueValue = propsOrigin.trueValue;
+            editor.falseValue = propsOrigin.falseValue;
+            editor.booleanType = propsOrigin.booleanType;
             break;
           case 'integer':
             editor.min = propsOrigin.min;
             editor.max = propsOrigin.max;
-            editor.step = propsOrigin.step;
+            editor.step = Util.isDefined(propsOrigin.step) ? propsOrigin.step : editor.step;
           case 'percentage':
           case 'currency':
           case 'real':
             editor.min = propsOrigin.min;
             editor.max = propsOrigin.max;
-            editor.step = propsOrigin.step;
+            editor.step = Util.isDefined(propsOrigin.step) ? propsOrigin.step : editor.step;
             break;
           case 'image':
             break;
