@@ -2,25 +2,26 @@ import { Observable } from 'rxjs/Observable';
 import { DataSource } from '@angular/cdk/collections';
 import { OTableDao } from './o-table.dao';
 import { OTableOptions, OColumn, OTableComponent } from './o-table.component';
-import { ITableFilterByColumnDataInterface } from './extensions/dialog/o-table-dialog-components';
-import { IColumnValueFilter } from './extensions/header/o-table-header-components';
 import { MdSort, MdPaginator } from '@angular/material';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import 'rxjs/add/operator/startWith';
 import 'rxjs/add/observable/merge';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/fromEvent';
+
+import { ITableFilterByColumnDataInterface } from './extensions/dialog/o-table-dialog-components';
 import { OTableAggregateComponent } from './extensions/footer/o-table-footer-components';
+import { IColumnValueFilter, OTableEditableRowComponent } from './extensions/header/o-table-header-components';
 
 export class OTableDataSource extends DataSource<any> {
 
   dataTotalsChange = new BehaviorSubject<any[]>([]);
   get data(): any[] { return this.dataTotalsChange.value; }
 
-  private _database: OTableDao;
-  private _paginator: MdPaginator;
-  private _tableOptions: OTableOptions;
-  private _sort: MdSort;
+  protected _database: OTableDao;
+  protected _paginator: MdPaginator;
+  protected _tableOptions: OTableOptions;
+  protected _sort: MdSort;
 
   protected _quickFilterChange = new BehaviorSubject('');
   protected _columnValueFilterChange = new BehaviorSubject('');
@@ -53,16 +54,19 @@ export class OTableDataSource extends DataSource<any> {
   /** Connect function called by the table to retrieve one stream containing the data to render. */
   connect(): Observable<any[]> {
     let displayDataChanges: any[] = [
-      this._database.dataChange,
-      this._sort.mdSortChange
+      this._database.dataChange
     ];
 
-    if (this._tableOptions.filter) {
-      displayDataChanges.push(this._quickFilterChange);
-    }
+    if (!this.table.pageable) {
+      displayDataChanges.push(this._sort.mdSortChange);
 
-    if (this._paginator) {
-      displayDataChanges.push(this._paginator.page);
+      if (this._tableOptions.filter) {
+        displayDataChanges.push(this._quickFilterChange);
+      }
+
+      if (this._paginator) {
+        displayDataChanges.push(this._paginator.page);
+      }
     }
 
     if (this.table.oTableColumnsFilterComponent) {
@@ -73,12 +77,21 @@ export class OTableDataSource extends DataSource<any> {
       let data = this._database.data;
 
       data = this.getColumnValueFilterData(data);
-      data = this.getQuickFilterData(data);
-      data = this.getSortedData(data);
+
+      if (!this.table.pageable) {
+        data = this.getQuickFilterData(data);
+        data = this.getSortedData(data);
+      }
       data = this.getColumnCalculatedData(data);
       this.filteredData = Object.assign([], data);
-      this.resultsLength = data.length;
-      data = this.getPaginationData(data);
+
+      if (this.table.pageable) {
+        const totalRecordsNumber = this.table.getTotalRecordsNumber();
+        this.resultsLength = totalRecordsNumber !== undefined ? totalRecordsNumber : data.length;
+      } else {
+        this.resultsLength = data.length;
+        data = this.getPaginationData(data);
+      }
       this.renderedData = data;
       //if exist one o-table-column-aggregate then emit observable
       if (this.table.showTotals) {
@@ -150,7 +163,6 @@ export class OTableDataSource extends DataSource<any> {
     if (!this._paginator || isNaN(this._paginator.pageSize)) {
       return data;
     }
-
     let startIndex = isNaN(this._paginator.pageSize) ? 0 : this._paginator.pageIndex * this._paginator.pageSize;
     if (data.length < startIndex) {
       startIndex = 0;
@@ -158,7 +170,6 @@ export class OTableDataSource extends DataSource<any> {
     }
     return data.splice(startIndex, this._paginator.pageSize);
   }
-
 
   disconnect() {
     // TODO
@@ -182,16 +193,17 @@ export class OTableDataSource extends DataSource<any> {
     this._sort.sortables.forEach((value, key) => {
       this._sort.deregister(value);
     });
-    return data.sort((a, b) => {
-      let propertyA: number | string = '';
-      let propertyB: number | string = '';
-      [propertyA, propertyB] = [a[this._sort.active], b[this._sort.active]];
+    return data.sort(this.sortFunction.bind(this));
+  }
 
-      let valueA = typeof propertyA === 'undefined' ? '' : propertyA === '' ? propertyA : isNaN(+propertyA) ? propertyA.toString().trim().toLowerCase() : +propertyA;
-      let valueB = typeof propertyB === 'undefined' ? '' : propertyB === '' ? propertyB : isNaN(+propertyB) ? propertyB.toString().trim().toLowerCase() : +propertyB;
-      return (valueA <= valueB ? -1 : 1) * (this._sort.direction === 'asc' ? 1 : -1);
-    });
+  protected sortFunction(a: any, b: any) {
+    let propertyA: number | string = '';
+    let propertyB: number | string = '';
+    [propertyA, propertyB] = [a[this._sort.active], b[this._sort.active]];
 
+    let valueA = typeof propertyA === 'undefined' ? '' : propertyA === '' ? propertyA : isNaN(+propertyA) ? propertyA.toString().trim().toLowerCase() : +propertyA;
+    let valueB = typeof propertyB === 'undefined' ? '' : propertyB === '' ? propertyB : isNaN(+propertyB) ? propertyB.toString().trim().toLowerCase() : +propertyB;
+    return (valueA <= valueB ? -1 : 1) * (this._sort.direction === 'asc' ? 1 : -1);
   }
 
   /**Return data of the visible columns of the table  without rendering */
@@ -235,9 +247,9 @@ export class OTableDataSource extends DataSource<any> {
       return obj;
     });
   }
+
   protected getAllData(render?: boolean) {
     let self = this;
-
     return this.filteredData.map(function (row, i, a) {
       /** render each column*/
       var obj = {};
@@ -341,9 +353,7 @@ export class OTableDataSource extends DataSource<any> {
     });
     return data;
   }
-
 }
-
 
 export class OTableTotalDataSource extends DataSource<any> {
 
@@ -357,7 +367,6 @@ export class OTableTotalDataSource extends DataSource<any> {
 
   /** Connect function called by the table to retrieve one stream containing the data to render. */
   connect(): Observable<any[]> {
-
     let displayDataChanges: any[];
     if (this._datasourceData) {
       displayDataChanges = [
@@ -368,13 +377,11 @@ export class OTableTotalDataSource extends DataSource<any> {
       let data = this._datasourceData.data;
       data = this.getTotals(data);
       return data;
-
     });
   }
 
   getTotals(data: any[]): any[] {
     var self = this;
-    // let totalsResult=0;
     var obj = {};
 
     if (typeof this._tableOptions === 'undefined') {
@@ -394,19 +401,15 @@ export class OTableTotalDataSource extends DataSource<any> {
       } else {
         obj[key] = '';
       }
-
       return obj;
     });
     return new Array(obj);
-
   }
-
 
   calculateAggregate(data: any[], column: OColumn): any {
     let resultAggregate;
     let operator = column.aggregate.operator;
     if (typeof operator === 'string') {
-
       switch (operator.toLowerCase()) {
         case 'count':
           resultAggregate = this.count(column.attr, data);
@@ -462,10 +465,47 @@ export class OTableTotalDataSource extends DataSource<any> {
     const tempMin = data.map(x => x[column]);
     return Math.min(...tempMin);
   }
+
   max(column, data): number {
     const tempMin = data.map(x => x[column]);
     return Math.max(...tempMin);
   }
+
+  disconnect() {
+    // TODO
+  }
+}
+
+export class OTableEditableRowDataSource extends DataSource<any> {
+
+  protected _tableOptions: OTableOptions;
+  protected _datasourceData: OTableDataSource;
+
+  constructor(protected editableRowTable: OTableEditableRowComponent) {
+    super();
+    this._tableOptions = editableRowTable.oTableOptions;
+    this._datasourceData = editableRowTable.tableDataSource;
+  }
+
+  /** Connect function called by the table to retrieve one stream containing the data to render. */
+  connect(): Observable<any[]> {
+    let displayDataChanges: any[];
+    if (this._datasourceData) {
+      displayDataChanges = [
+        this._datasourceData.dataTotalsChange
+      ];
+    }
+
+    let emptyData = {};
+    this._tableOptions.visibleColumns.forEach(col => {
+      emptyData[col] = '';
+    });
+
+    return Observable.merge(...displayDataChanges).map(() => {
+      return [emptyData];
+    });
+  }
+
   disconnect() {
     // TODO
   }

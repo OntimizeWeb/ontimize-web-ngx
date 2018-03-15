@@ -1,5 +1,5 @@
 import { Injector } from '@angular/core';
-import { InputConverter } from '../decorators';
+import { InputConverter, BooleanConverter } from '../decorators';
 import { OTranslateService } from '../services';
 
 export interface IComponent {
@@ -10,8 +10,7 @@ export class OBaseComponent implements IComponent {
   /* Inputs */
   protected oattr: string;
   protected olabel: string;
-  @InputConverter()
-  protected oenabled: boolean = true;
+  protected _oenabled: boolean = true;
   @InputConverter()
   protected orequired: boolean = false;
 
@@ -35,7 +34,7 @@ export class OBaseComponent implements IComponent {
 
   initialize() {
     this._disabled = !this.oenabled;
-    this._placeholder = this.olabel ? this.olabel : this.oattr;
+    this._placeholder = (this.olabel !== undefined) ? this.olabel : this.oattr;
   }
 
   getAttribute(): string {
@@ -114,4 +113,13 @@ export class OBaseComponent implements IComponent {
     }, 0);
   }
 
+  get oenabled(): any {
+    return this._oenabled;
+  }
+
+  set oenabled(value: any) {
+    const parsedValue = BooleanConverter(value);
+    this._oenabled = parsedValue;
+    this.disabled = !parsedValue;
+  }
 }

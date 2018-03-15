@@ -1,7 +1,7 @@
-import { Component, EventEmitter, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, EventEmitter, OnInit, TemplateRef, ViewChild, ViewEncapsulation } from '@angular/core';
 import { Highlightable } from '@angular/cdk/a11y';
 
-import { Util } from '../../util/util';
+import { Util } from '../../../util/util';
 
 export const DEFAULT_CONTEXT_MENU_ITEM_INPUTS = [
   'icon',
@@ -20,7 +20,8 @@ export const DEFAULT_CONTEXT_MENU_ITEM_OUTPUTS = [
   templateUrl: 'o-context-menu-item.component.html',
   styleUrls: ['o-context-menu-item.component.scss'],
   inputs: DEFAULT_CONTEXT_MENU_ITEM_INPUTS,
-  outputs: DEFAULT_CONTEXT_MENU_ITEM_OUTPUTS
+  outputs: DEFAULT_CONTEXT_MENU_ITEM_OUTPUTS,
+  encapsulation: ViewEncapsulation.None
 })
 export class OContextMenuItemComponent implements Highlightable, OnInit {
 

@@ -5,8 +5,8 @@ import { Subject } from 'rxjs/Subject';
 import { Subscription } from 'rxjs/Subscription';
 
 import { OContextMenuComponent } from './o-context-menu.component';
-import { OContextMenuContentComponent } from './o-context-menu-content.component';
-import { OContextMenuItemComponent } from './o-context-menu-item.component';
+import { OContextMenuContentComponent } from './content/o-context-menu-content.component';
+import { OContextMenuItemComponent } from './item/o-context-menu-item.component';
 
 export interface IOContextMenuClickEvent {
   anchorElement?: ElementRef;

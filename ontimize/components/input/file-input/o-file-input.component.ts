@@ -227,6 +227,7 @@ export class OFileInputComponent extends OFormDataComponent implements OnDestroy
     }
     window.setTimeout(() => {
       this.setValue(value !== '' ? value : undefined);
+      this.inputFile.nativeElement.value = '';
       if (this._fControl) {
         this._fControl.markAsTouched();
       }

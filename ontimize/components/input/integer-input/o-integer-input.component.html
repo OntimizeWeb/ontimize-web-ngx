@@ -2,7 +2,7 @@
     <md-form-field #innerInputContainer fxFlexFill>
         <input mdInput type="number" [attr.id]="getAttribute()" [id]="getAttribute()" [formControlName]="getAttribute()"
             [placeholder]="placeHolder" [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)" (focus)="innerOnFocus($event)"
-            (blur)="innerOnBlur($event)" [readonly]="isReadOnly" [min]="min" [max]="max" [step]="step">
+            (blur)="innerOnBlur($event)" [readonly]="isReadOnly" [min]="min" [max]="max" [step]="step" [required]="isRequired">
         <md-error *ngIf="hasError('required')">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</md-error>
         <md-error *ngIf="hasError('min')">{{ 'FORM_VALIDATION.MIN_VALUE' | oTranslate }}: {{ getErrorValue('min', 'requiredMin') }}</md-error>
         <md-error *ngIf="hasError('max')">{{ 'FORM_VALIDATION.MAX_VALUE' | oTranslate }}: {{ getErrorValue('max', 'requiredMax') }}</md-error>

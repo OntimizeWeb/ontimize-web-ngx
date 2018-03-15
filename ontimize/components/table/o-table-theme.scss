@@ -22,6 +22,10 @@
       }
     }
 
+    .spinner-container {
+      background-color: mat-color($background, background);
+    }
+
     .mat-row {
       &:hover {
         cursor: pointer;
@@ -31,12 +35,12 @@
         color: mat-color($foreground, secondary-text);
         &.o-column-currency,
         &.o-column-integer,
-        &.o-column-real,
-        {
+        &.o-column-real {
           text-align: right
         }
+        &.o-column-action,
         &.o-column-boolean,
-        &.o-column-date{
+        &.o-column-date {
           text-align: center
         }
 
@@ -73,17 +77,24 @@
       }
     }
 
-    .mat-table.totals-table{
-      .mat-header-row {
-        display: none!important;
+    .mat-table {
+      &.editable-row-table {
+        .mat-row {
+          background-color: mat-color($background, status-bar, 0.9);
+        }
       }
-      .mat-row{
+      &.totals-table{
+        .mat-header-row {
+          display: none!important;
+        }
+        .mat-row {
           font-weight: bold;
           background-color: mat-color($background, status-bar, 0.9);
+        }
       }
-     
-      
+
+
     }
-      
+
   }
 }

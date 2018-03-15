@@ -1,8 +1,5 @@
 import { Component, Injector, TemplateRef, ViewChild } from '@angular/core';
-
-
-import { OBaseTableCellRenderer } from './o-base-table-cell-renderer.class';
-import { OnInit } from '@angular/core/src/metadata/lifecycle_hooks';
+import { OBaseTableCellRenderer } from '../o-base-table-cell-renderer.class';
 
 export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_IMAGE = [
 
@@ -28,7 +25,7 @@ export const DEFAULT_OUTPUTS_O_TABLE_CELL_RENDERER_IMAGE = [
     ...DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_IMAGE
   ]
 })
-export class OTableCellRendererImageComponent extends OBaseTableCellRenderer{
+export class OTableCellRendererImageComponent extends OBaseTableCellRenderer {
 
   public static DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_IMAGE = DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_IMAGE;
   public static DEFAULT_OUTPUTS_O_TABLE_CELL_RENDERER_IMAGE = DEFAULT_OUTPUTS_O_TABLE_CELL_RENDERER_IMAGE;
@@ -62,5 +59,5 @@ export class OTableCellRendererImageComponent extends OBaseTableCellRenderer{
     }
     return this._source;
   }
-  
- }
+
+}

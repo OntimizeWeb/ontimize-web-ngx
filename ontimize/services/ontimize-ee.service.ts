@@ -6,13 +6,9 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/share';
 
 import { LoginService } from '../services';
-
-import {
-  AppConfig,
-  Config
-} from '../config/app-config';
-
-import { IAuthService, IDataService } from '../util/util';
+import { AppConfig, Config } from '../config/app-config';
+import { IAuthService, IDataService, Util } from '../util/util';
+import { OntimizeServiceResponseParser } from './parser/o-service-response.parser';
 
 @Injectable()
 export class OntimizeEEService implements IAuthService, IDataService {
@@ -32,11 +28,13 @@ export class OntimizeEEService implements IAuthService, IDataService {
   protected _appConfig: Config;
   protected _config: AppConfig;
   protected _startSessionPath: string;
+  protected responseParser: OntimizeServiceResponseParser;
 
   constructor(protected injector: Injector) {
     this.http = this.injector.get(Http);
     this._config = this.injector.get(AppConfig);
     this._appConfig = this._config.getConfiguration();
+    this.responseParser = this.injector.get(OntimizeServiceResponseParser);
   }
 
   public getDefaultServiceConfiguration(serviceName?: string) {
@@ -69,20 +67,18 @@ export class OntimizeEEService implements IAuthService, IDataService {
 
   public startsession(user: string, password: string) {
 
-    var url = this.urlBase + this._startSessionPath;
-
-    var headers: Headers = new Headers();
-    let authorization = 'Basic ' + btoa(user + ':' + password);
+    const url = this.urlBase + this._startSessionPath;
+    const headers: Headers = new Headers();
+    const authorization = 'Basic ' + btoa(user + ':' + password);
     headers.append('Authorization', authorization);
-    var options = new RequestOptions({
+    const options = new RequestOptions({
       headers: headers
     });
 
-    var body = JSON.stringify({});
+    const body = JSON.stringify({});
 
     let _startSessionObserver: any;
-    let startSessionObservable = new Observable(observer =>
-      _startSessionObserver = observer).share();
+    const startSessionObservable = new Observable(observer => _startSessionObserver = observer).share();
 
     this.http
       .post(url, body, options)
@@ -94,16 +90,13 @@ export class OntimizeEEService implements IAuthService, IDataService {
           // Invalid sessionId...
           _startSessionObserver.error('Invalid user or password');
         }
-
       }, error => _startSessionObserver.error(error));
-
     return startSessionObservable;
   }
 
   public endsession(user: string, sessionId: any): Observable<any> {
     let _closeSessionObserver: any;
-    let closeSessionObservable = new Observable(observer =>
-      _closeSessionObserver = observer).share();
+    const closeSessionObservable = new Observable(observer => _closeSessionObserver = observer).share();
     setTimeout(() => {
       _closeSessionObserver.next(0);
     }, 0);
@@ -112,59 +105,37 @@ export class OntimizeEEService implements IAuthService, IDataService {
 
   public hassession(user: string, sessionId: any): Observable<any> {
     let _observer: any;
-    let observable = new Observable(observer =>
-      _observer = observer).share();
-
+    const observable = new Observable(observer => _observer = observer).share();
     return observable;
   }
 
   public query(kv?: Object, av?: Array<string>, entity?: string, sqltypes?: Object): Observable<any> {
-
     //TODO improve this -> merge between global conf and specific params of method calling
-    kv = (this.isNullOrUndef(kv)) ? this.kv : kv;
-    av = (this.isNullOrUndef(av)) ? this.av : av;
-    sqltypes = (this.isNullOrUndef(sqltypes)) ? this.sqltypes : sqltypes;
+    kv = (Util.isDefined(kv)) ? kv : this.kv;
+    av = (Util.isDefined(av)) ? av : this.av;
+    sqltypes = (Util.isDefined(sqltypes)) ? sqltypes : this.sqltypes;
 
-    var url = this._urlBase + this.path + '/' + entity + '/search';
+    const url = this._urlBase + this.path + '/' + entity + '/search';
 
-    var headers: Headers = new Headers();
-    headers.append('Access-Control-Allow-Origin', '*');
-    headers.append('Content-Type', 'application/json;charset=UTF-8');
+    const headers: Headers = this.buildHeaders();
 
-    let authorizationToken = 'Bearer ' + this._sessionid;
-    headers.append('Authorization', authorizationToken);
-
-    var body = JSON.stringify({
+    const body = JSON.stringify({
       filter: kv,
       columns: av,
       sqltypes: sqltypes
     });
 
     let _innerObserver: any;
-    let dataObservable = new Observable(observer =>
-      _innerObserver = observer).share();
+    const dataObservable = new Observable(observer => _innerObserver = observer).share();
 
-    var self = this;
+    const self = this;
     this.http
       .post(url, body, { headers: headers })
       .map(response => response.json())
       .subscribe(resp => {
-        if (resp && resp.code === 3) {
-          self.redirectLogin(true);
-        } else if (resp.code === 1) {
-          _innerObserver.error(resp.message);
-        } else if (resp.code === 0) {
-          _innerObserver.next(resp);
-        } else {
-          //Unknow state -> error
-          _innerObserver.error('Service unavailable');
-        }
+        self.responseParser.parseSuccessfulResponse(resp, _innerObserver, this);
       }, error => {
-        if (error.status === 401) {
-          self.redirectLogin(true);
-        } else {
-          _innerObserver.error(error);
-        }
+        self.responseParser.parseUnsuccessfulResponse(error, _innerObserver, this);
       },
       () => _innerObserver.complete());
 
@@ -174,156 +145,94 @@ export class OntimizeEEService implements IAuthService, IDataService {
   public advancedQuery(kv?: Object, av?: Array<string>, entity?: string, sqltypes?: Object,
     offset?: number, pagesize?: number, orderby?: Array<Object>): Observable<any> {
 
-    // entity = (this.isNullOrUndef(entity)) ? this.entity : entity;
-
     //TODO improve this -> merge between global conf and specific params of method calling
-    /*TODO implements paginable services....
-    kv = (this.isNullOrUndef(kv)) ? this.kv : kv;
-    av = (this.isNullOrUndef(av)) ? this.av : av;
-    sqltypes = (this.isNullOrUndef(sqltypes)) ? this.sqltypes : sqltypes;
-    if (offset) {
-      this.offset = offset;
-    }
-    if (pagesize) {
-      this.pagesize = pagesize;
-    }
-    if (orderby) {
-      this.orderby = orderby;
-    }
+    kv = (Util.isDefined(kv)) ? kv : this.kv;
+    av = (Util.isDefined(av)) ? av : this.av;
+    sqltypes = (Util.isDefined(sqltypes)) ? sqltypes : this.sqltypes;
+    orderby = (Util.isDefined(orderby)) ? orderby : this.orderby;
 
-    var url = this._urlBase + '/advancedquery';
+    offset = (Util.isDefined(offset)) ? offset : this.offset;
+    pagesize = (Util.isDefined(pagesize)) ? pagesize : this.pagesize;
 
-    var headers: Headers = new Headers();
-    headers.append('Access-Control-Allow-Origin', '*');
-    headers.append('Content-Type', 'application/json;charset=UTF-8');
+    const url = this._urlBase + this.path + '/' + entity + '/advancedsearch';
 
-    var params = JSON.stringify({
-      sessionid: this._sessionid,
-      type: 1,
-      entity: entity,
-      kv: kv,
-      av: av,
+    const headers: Headers = this.buildHeaders();
+
+    const body = JSON.stringify({
+      filter: kv,
+      columns: av,
       sqltypes: sqltypes,
-      offset: this.offset,
-      pageSize: this.pagesize,
-      orderBy: this.orderby
+      offset: offset,
+      pageSize: pagesize,
+      orderBy: orderby
     });
 
-    var self = this;
-    this._http
-      .post(url, params, { headers: headers })
+    let _innerObserver: any;
+    const dataObservable = new Observable(observer => _innerObserver = observer).share();
+
+    const self = this;
+    this.http
+      .post(url, body, { headers: headers })
       .map(response => response.json())
       .subscribe(resp => {
-        if (resp && resp.code === 3) {
-          self.redirectLogin(true);
-        } else if (resp.code === 1) {
-          this._innerObserver.error(resp.message);
-        } else if (resp.code === 0) {
-          self._dataStore = resp;
-          self._innerObserver.next(self._dataStore);
-        } else {
-          //Unknow state -> error
-          this._innerObserver.error('Service unavailable');
-        }
-      }, error => this._innerObserver.error(error),
-      () => this._innerObserver.complete());
-      */
-    let _innerObserver: any;
-    let dataObservable = new Observable(observer =>
-      _innerObserver = observer).share();
-
+        self.responseParser.parseSuccessfulResponse(resp, _innerObserver, this);
+      }, error => {
+        self.responseParser.parseUnsuccessfulResponse(error, _innerObserver, this);
+      },
+      () => _innerObserver.complete());
     return dataObservable;
   }
 
   public insert(av: Object = {}, entity: string, sqltypes?: Object): Observable<any> {
 
-    var url = this._urlBase + this.path + '/' + entity;
+    const url = this._urlBase + this.path + '/' + entity;
 
-    var headers: Headers = new Headers();
-    headers.append('Access-Control-Allow-Origin', '*');
-    headers.append('Content-Type', 'application/json;charset=UTF-8');
+    const headers: Headers = this.buildHeaders();
 
-    let authorizationToken = 'Bearer ' + this._sessionid;
-    headers.append('Authorization', authorizationToken);
-
-    var body = JSON.stringify({
+    const body = JSON.stringify({
       data: av,
       sqltypes: sqltypes
     });
 
     let _innerObserver: any;
-    let dataObservable = new Observable(observer =>
-      _innerObserver = observer).share();
+    const dataObservable = new Observable(observer => _innerObserver = observer).share();
 
-    var self = this;
+    const self = this;
     this.http
       .post(url, body, { headers: headers })
       .map(response => response.json())
       .subscribe(resp => {
-        if (resp.code === 3) {
-          self.redirectLogin(true);
-        } else if (resp.code === 1) {
-          _innerObserver.error(resp.message);
-        } else if (resp.code === 0) {
-          _innerObserver.next(resp);
-        } else {
-          //Unknow state -> error
-          _innerObserver.error('Service unavailable');
-        }
+        self.responseParser.parseSuccessfulResponse(resp, _innerObserver, this);
       }, error => {
-        if (error.status === 401) {
-          self.redirectLogin(true);
-        } else {
-          _innerObserver.error(error);
-        }
+        self.responseParser.parseUnsuccessfulResponse(error, _innerObserver, this);
       },
       () => _innerObserver.complete());
-
     return dataObservable;
   }
 
   public update(kv: Object = {}, av: Object = {}, entity?: string, sqltypes?: Object): Observable<any> {
 
-    var url = this._urlBase + this.path + '/' + entity;
+    const url = this._urlBase + this.path + '/' + entity;
 
-    var headers: Headers = new Headers();
-    headers.append('Access-Control-Allow-Origin', '*');
-    headers.append('Content-Type', 'application/json;charset=UTF-8');
+    const headers: Headers = this.buildHeaders();
 
-    let authorizationToken = 'Bearer ' + this._sessionid;
-    headers.append('Authorization', authorizationToken);
-
-    var body = JSON.stringify({
+    const body = JSON.stringify({
       filter: kv,
       data: av,
       sqltypes: sqltypes
     });
 
     let _innerObserver: any;
-    let dataObservable = new Observable(observer =>
-      _innerObserver = observer).share();
+    const dataObservable = new Observable(observer => _innerObserver = observer).share();
 
-    var self = this;
+    const self = this;
     this.http
       .put(url, body, { headers: headers })
       .map(response => response.json())
       .subscribe(resp => {
-        if (resp && resp.code === 3) {
-          self.redirectLogin(true);
-        } else if (resp.code === 1) {
-          _innerObserver.error(resp.message);
-        } else if (resp.code === 0) {
-          _innerObserver.next(resp);
-        } else {
-          //Unknow state -> error
-          _innerObserver.error('Service unavailable');
-        }
+        self.responseParser.parseSuccessfulResponse(resp, _innerObserver, this);
       }, error => {
-        if (error.status === 401) {
-          self.redirectLogin(true);
-        } else {
-          _innerObserver.error(error);
-        }
+        self.responseParser.parseUnsuccessfulResponse(error, _innerObserver, this);
       },
       () => _innerObserver.complete());
 
@@ -332,67 +241,54 @@ export class OntimizeEEService implements IAuthService, IDataService {
 
   public delete(kv: Object = {}, entity?: string, sqltypes?: Object): Observable<any> {
 
-    var url = this._urlBase + this.path + '/' + entity;
+    const url = this._urlBase + this.path + '/' + entity;
 
-    var headers: Headers = new Headers();
-    headers.append('Access-Control-Allow-Origin', '*');
-    headers.append('Content-Type', 'application/json;charset=UTF-8');
+    const headers: Headers = this.buildHeaders();
 
-    let authorizationToken = 'Bearer ' + this._sessionid;
-    headers.append('Authorization', authorizationToken);
-
-    var body = JSON.stringify({
+    const body = JSON.stringify({
       filter: kv,
       sqltypes: sqltypes
     });
 
-    let options = new RequestOptions({
+    const options = new RequestOptions({
       method: RequestMethod.Delete,
       headers: headers,
       body: body
     });
 
     let _innerObserver: any;
-    let dataObservable = new Observable(observer =>
-      _innerObserver = observer).share();
+    const dataObservable = new Observable(observer => _innerObserver = observer).share();
 
-    var self = this;
+    const self = this;
     this.http
       .request(url, options)
       .map(response => response.json())
       .subscribe(resp => {
-        if (resp && resp.code === 3) {
-          self.redirectLogin(true);
-        } else if (resp.code === 1) {
-          _innerObserver.error(resp.message);
-        } else if (resp.code === 0) {
-          _innerObserver.next(resp);
-        } else {
-          //Unknow state -> error
-          _innerObserver.error('Service unavailable');
-        }
+        self.responseParser.parseSuccessfulResponse(resp, _innerObserver, this);
       }, error => {
-        if (error.status === 401) {
-          self.redirectLogin(true);
-        } else {
-          _innerObserver.error(error);
-        }
+        self.responseParser.parseUnsuccessfulResponse(error, _innerObserver, this);
       },
       () => _innerObserver.complete());
-
     return dataObservable;
   }
 
-  protected redirectLogin(sessionExpired: boolean = false) {
+  redirectLogin(sessionExpired: boolean = false) {
     let router = this.injector.get(Router);
     router.navigate(['/login', { 'session-expired': sessionExpired }]);
   }
 
-  protected isNullOrUndef(arg: any): boolean {
-    if (arg === null || arg === undefined) {
-      return true;
-    }
-    return false;
+  protected buildHeaders(): Headers {
+    const headers: Headers = new Headers();
+    headers.append('Access-Control-Allow-Origin', '*');
+    headers.append('Content-Type', 'application/json;charset=UTF-8');
+
+    const authorizationToken = 'Bearer ' + this._sessionid;
+    headers.append('Authorization', authorizationToken);
+
+    return headers;
   }
 
+  isNullOrUndef(value: any): boolean {
+    return !Util.isDefined(value);
+  }
 }

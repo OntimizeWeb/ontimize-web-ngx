@@ -1,4 +1,86 @@
-## 2.1.0-rc.3
+## 2.1.0 (2018-03-15)
+
+### BREAKING CHANGES
+* **o-table**: '*filter-case-sensitive*' input default value is now 'false'.
+* **o-table**: removing input '*insert-table*' ([4907594](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4907594))
+* **o-table**: '*pageable*' input default value is now 'true'.
+* **moment**: updating momentjs dependency to version 2.19.3 ([50c80bb](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/50c80bb))
+* **IAuthService**: updating interface adding '*redirectLogin*' optional function definition ([9641f12](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9641f12))
+
+### Features
+* **o-form**
+  * New '*getUrlParams*' method. Shortcut for '*getFormNavigation().getUrlParams()*' ([32f5613](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/32f5613))
+  * New '*getUrlParam*' method. Shortcut for '*getFormNavigation().getUrlParams()[arg]*' ([32f5613](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/32f5613))
+  * New '*layout-align*' input ([bcd2a42](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/bcd2a42))
+  * Exporting inner form components and classes ([#148](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/148)) ([32cd7f9](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/32cd7f9))
+    * OFormCacheClass
+    * OFormNavigationComponent
+    * OFormDataNavigation
+    * OFormNavigationClass
+  * New '*getFormCache*' method ([32f5613](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/32f5613))
+
+* **o-table**
+  * Changing '*dialog*' property visibility to protected ([68dfda1](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/68dfda1))
+  * New '*clearSelection*' method ([0a37f5d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0a37f5d))
+  * Adding '*show-title*' input ([cae0868](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/cae0868))
+  * Adding cell editors ([04f43ae](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/04f43ae)) ([acc4238](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/acc4238)) ([efad08a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/efad08a))
+    * Adding more editors types ([ba71737](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ba71737)) ([1bc7f8e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1bc7f8e)) ([75bc0f8](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/75bc0f8)) ([5b6d9d0](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5b6d9d0)) ([66332c1](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/66332c1))  ([ff38a7e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ff38a7e))
+  * Updating selection mode using click + ctrl | shift ([acc4238](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/acc4238))
+  * Adding '*selection-mode*' input (none|simple|multiple)
+  * Adding remote pagination  ([3e10752](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3e10752)) ([18f576d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/18f576d))
+  * Adding '*quick-filter-function*' input for allowing user to override default quick filter value passed to the service ([e1ad25a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e1ad25a))
+    * Adding '*QuickFilterFunction*' type ('*type QuickFilterFunction = (filter: string) => IFilterExpression | Object;*')
+  * **o-table-insertable-row**: adding new inner table component for using insertable rows ([4907594](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4907594)) ([2a8ceee](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2a8ceee))
+    * Using configured cell editors for the edition of each column ([6abe426](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6abe426)) ([5b6d9d0](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5b6d9d0))
+  * **o-table-renderer-service** adding predefined cell renderer *'o-table-renderer-service'* ([f1685b5](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f1685b5))
+  * **o-table-cell-renderer-action**: new '*o-table*' column renderer ([3e3a924](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3e3a924))
+
+* **Util**
+  * '*parseArray*' methods allows to discard repeated elements ([a924ad2](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a924ad2))
+  * Adding '*equals*' and '*isDefined*' methods ([1c5aa00](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1c5aa00))
+
+* **OFormServiceComponent**
+  * Adding '*query-method*' input ([7bd62e4](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7bd62e4))
+  * Adding '*query-on-event*' input ([7bd62e4](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7bd62e4))
+
+* **styles**: adding '*theme.scss*' file so user wont need to import 'node_modules/ontimize-web-ngx/ontimize/components/theming/all-theme.scss' and will only have to import 'node_modules/ontimize-web-ngx/theme.scss' ([408f863](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/408f863))
+([4b02d0f](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4b02d0f))
+* **o-material-theme**: '*o-material-theme*' now initializes angular material theme and typography configuration. It also receives user custom typography as second parameter ([06baef2](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/06baef2)) ([40c6777](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/40c6777))
+* **ontimize-ee**: adding remote pagination '*advancedQuery*' method ([3e10752](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3e10752))
+* **FilterExpressionUtils**: adding utility class for building filtering queries parameters ([8aacf96](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/8aacf96))
+* **AppConfig**: adding properties for allowing remote bundle location:
+* **oTranslate**
+  * Allowing to retrieve remote bundle configuration. Using the '*bundle*' property in the application '*Config*' object ([86ecd4f](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/86ecd4f))
+  * Allowing to pass parameters to '*oTranslate*' pipe, following the new '*ITranslatePipeArgument*' interface ([b7744da](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b7744da)) ([43edbe4](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/43edbe4)) ([8e5d890](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/8e5d890))
+    * Having the following entry in the bundle file:
+    ```
+      ...
+      "EXAMPLE": "Example bundle text: {0}, {1}",
+      ...
+    ```
+    * User can add in the html file:
+    ```
+      {{ 'EXAMPLE' | oTranslate : { values: ['foo', 'bar'] }}}
+    ```
+    * And get the following result:
+    ```
+      'Example bundle text: foo, bar'
+    ```
+* **OFormDataComponent**: adding '*elementRef*' getter ([159e57d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/159e57d))
+* **o-language-selector**: adding '*use-flag-icons*' input (default false). Also added in '*o-app-layout*', '*o-app-header*' and '*o-user-info*' (for propagation) ([9c143e9](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9c143e9))
+* **OntimizeServiceResponseParser**: adding default parser for the Ontimize server responses ([1c2e420](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1c2e420))
+
+
+### Bug Fixes
+* **o-table-dao**: fixing methods bugs ([5093bc0](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5093bc0))
+* **input components**: adding '*required*' attribute to HTML input elements. Now required input components have an asterisk in their placeholder ([dd6d910](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/dd6d910))
+* **o-table**: fixing inputs bugs ([cae0868](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/cae0868))
+* **o-table**: fixing error when columns parameter has duplicated column names ([be151a8](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/be151a8))
+* **o-form**: changing disabled status bug ([fd8dbb4](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/fd8dbb4))
+* **o-component.class**: fixing empty '*label*' input bug ([6e212aa](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6e212aa))
+* **o-combo**: fixing bugs when value changes ([b3a0073](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b3a0073))
+
+## 2.1.0-rc.3 (2018-01-18)
 ### Features
 * **o-card-menu-layout**: new '*o-card-menu-layout*' component ([1dbc1f8](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1dbc1f8))
 * **o-card-menu-item**: new '*o-card-menu-item*' component ([1dbc1f8](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1dbc1f8))
@@ -6,11 +88,11 @@
 * **o-context-menu**: new '*o-context-menu*' component and '*oContextMenu*' directive for attaching a context menu to DOM elements ([c838095](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c838095)) ([559c0ae](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/559c0ae))
 * **o-table-context-menu**: new '*o-table-context-menu*' component for attaching a context menu to '*o-table*' rows ([5658b83](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5658b83))
 * **o-table-column-calculated**: adding posibility to add calculated columns ([5e4aacd](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5e4aacd)) ([d8479d6](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d8479d6))
-* **Components:** new '*automatic-registering*' input for specifying that a component will not be not registered on its parent form ([1205e57](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1205e57))
-* **o-form-data.component.class:** new '*DEFAULT_INPUTS_O_FORM_DATA_COMPONENT*' static variable ([1205e57](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1205e57))
+* **Components**: new '*automatic-registering*' input for specifying that a component will not be not registered on its parent form ([1205e57](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1205e57))
+* **o-form-data.component.class**: new '*DEFAULT_INPUTS_O_FORM_DATA_COMPONENT*' static variable ([1205e57](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1205e57))
 * **IFormDataComponent**: '*IFormDataComponent*' now extends '*IFormControlComponent*' ([1205e57](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1205e57))
 * **NavigationService**: '*NavigationService*' is now initialized on application initialization ([b63e372](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b63e372))
-
+* **o-form**: adding '*show-header-navigation*' input (default false) for including navigations buttons in the toolbar ([#39](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/39))
 
 ### BREAKING CHANGES
 * **OServiceComponent**: changing '*dataService*' visibility from protected to public ('*o-list*' and '*o-table*' components extends this class) ([5270cde](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5270cde))
@@ -39,8 +121,8 @@
 
   This changes are propagated to inner components ('*o-app-sidenav*', '*o-app-sidenav-image*', '*o-app-sidenav-menu-group*' and '*o-app-sidenav-menu-item*')
 * **o-table**: adding input *fixed-header*  ([a0601a6](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a0601a6))  ([a0601a6](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a0601a6)
-* **o-breadcrumb**: new breadcrumb component. It requires NavigationsService initialization on app start ([b5b60bd](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b5b60bd))
-* **o-form-container** : new form container *o-form-container*  ([3a394e3]) (https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3a394e3)) ([df81e2d]) (https://github.com/OntimizeWeb/ontimize-web-ngx/commit/df81e2d)) ([ab6fa09]) (https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ab6fa09)) ([7c3883e]) (https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7c3883e))
+* **o-breadcrumb**: new breadcrumb component. It requires NavigationsService initialization on app start ([#36](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/36)) ([b5b60bd](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b5b60bd))
+* **o-form-container** : new form container *o-form-container*  ([3a394e3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3a394e3)) ([df81e2d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/df81e2d)) ([ab6fa09](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ab6fa09)) ([7c3883e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7c3883e))
 
 ### Bug Fixes
 * **o-translate-service**: fixing *'getBrowserLang'* bug ([#138](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/138)) ([4a5d2e7](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4a5d2e7))
@@ -88,7 +170,7 @@
 * **o-table**: new component o-table, provider new simple table  using angular-material [table](https://material.angular.io/components/table/overview)
 This component allows to sort and filter data. ([be6ffcb](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/be6ffcb)) ([8e8d71b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/8e8d71b)) ([055a685](https://github.com/OntimizeWeb/ontimize-web-ngx/commit055a685/)) ([522a5d1](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/522a5d1)) ([2a85f19](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2a85f19)) ([3d3706a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3d3706a)) ([5f177d5](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5f177d5)) ([66072b6](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/66072b6)) ([89fde1d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/89fde1d)) ([baeefc4](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/baeefc4))
 
-* **o-file-input**: new component. It allows to upload files to a Ontimize-JEE server ([d77b588](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d77b588)) ([552e4d9](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/552e4d9)) ([ee27960](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ee27960)) ([f666992](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f666992))
+* **o-file-input**: new component. It allows to upload files to a Ontimize-JEE server ([#42](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/42)) ([d77b588](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d77b588)) ([552e4d9](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/552e4d9)) ([ee27960](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ee27960)) ([f666992](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f666992))
 * **o-form**: new '*editable-detail*' input (default value = '*true*'). When this input is true the default '*detail*' form mode allows the inner components edition ([488f997](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/488f997)).
 * **o-form**: new '*keys-sql-types*' input ([76f0e88](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/76f0e88))
 * **o-list**: new '*delete-button*' input (default value = '*true*') ([#133](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/133)) ([8185483](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/8185483))

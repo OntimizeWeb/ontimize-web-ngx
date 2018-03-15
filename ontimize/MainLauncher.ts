@@ -16,10 +16,9 @@ export function ontimizeBootstrap(appModule: any, config?: any): Promise<NgModul
 
 export function ontimizePostBootstrap(ngModuleRef: NgModuleRef<any>): NgModuleRef<any> {
   // Hiding loader...
-  let loader = document.getElementById('loader-wrapper');
+  let loader: HTMLElement = document.getElementById('loader-wrapper');
   if (loader) {
-    loader.remove();
-    // loader.classList.add('loaded');
+    loader.parentNode.removeChild(loader);
   }
   return ngModuleRef;
 }

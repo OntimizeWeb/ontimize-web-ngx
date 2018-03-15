@@ -12,7 +12,7 @@ export * from './services/currency.service';
 export * from './services/number.service';
 export * from './services/dialog.service';
 export * from './services/snackbar.service';
-export * from './services/o-translate.service';
+export * from './services/translate/o-translate.service';
 export * from './services/data-service.provider';
 export * from './services/auth-guard.service';
 export * from './services/auth-guard.provider';
@@ -25,3 +25,7 @@ export * from './services/o-user-info.service';
 export * from './services/o-modules-info.service';
 
 export * from './services/md-date-formats.factory';
+export * from './services/translate/o-translate-http-loader';
+export * from './services/translate/o-translate.parser';
+
+export * from './services/parser/o-service-response.parser';

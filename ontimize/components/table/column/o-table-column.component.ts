@@ -1,4 +1,4 @@
-import { Component, OnInit, Injector, forwardRef, Inject, ComponentFactoryResolver, ComponentFactory, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, OnInit, Injector, forwardRef, Inject, ComponentFactoryResolver, ComponentFactory, ViewChild, ViewContainerRef, EventEmitter } from '@angular/core';
 import { InputConverter } from '../../../decorators';
 import {
   OTableCellRendererDateComponent,
@@ -7,11 +7,22 @@ import {
   OTableCellRendererIntegerComponent,
   OTableCellRendererRealComponent,
   OTableCellRendererBooleanComponent,
-  OTableCellRendererPercentageComponent
+  OTableCellRendererPercentageComponent,
+  OTableCellRendererActionComponent
 } from './cell-renderer/cell-renderer';
 
 import { OTableComponent } from '../o-table.component';
 import { Util } from '../../../util/util';
+
+import {
+  OTableCellEditorTextComponent,
+  OTableCellEditorBooleanComponent,
+  OTableCellEditorDateComponent,
+  OTableCellEditorIntegerComponent,
+  OTableCellEditorRealComponent
+} from './cell-editor/cell-editor';
+
+import { DateFilterFunction } from '../../../components/input/date-input/o-date-input.component';
 
 
 export const DEFAULT_INPUTS_O_TABLE_COLUMN = [
@@ -56,32 +67,67 @@ export const DEFAULT_INPUTS_O_TABLE_COLUMN = [
   ...OTableCellRendererCurrencyComponent.DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_CURRENCY, // includes Integer and Real
   ...OTableCellRendererDateComponent.DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_DATE,
   ...OTableCellRendererImageComponent.DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_IMAGE,
+  ...OTableCellRendererActionComponent.DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_ACTION,
+
+  ...OTableCellEditorBooleanComponent.DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_BOOLEAN,
+  ...OTableCellEditorDateComponent.DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_DATE,
+  ...OTableCellEditorRealComponent.DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_REAL, // includes Integer
+  ...OTableCellEditorTextComponent.DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_TEXT
 ];
 
+export const DEFAULT_OUTPUTS_O_TABLE_COLUMN = [
+  ...OTableCellEditorTextComponent.DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_TEXT
+];
 
 @Component({
   selector: 'o-table-column',
   templateUrl: './o-table-column.component.html',
   styleUrls: ['./o-table-column.component.scss'],
-  inputs: [
-    ...DEFAULT_INPUTS_O_TABLE_COLUMN
-  ],
-
+  inputs: DEFAULT_INPUTS_O_TABLE_COLUMN,
+  outputs: DEFAULT_OUTPUTS_O_TABLE_COLUMN,
   host: {
     '[class.columnBreakWord]': 'breakWord'
   }
 })
 export class OTableColumnComponent implements OnInit {
 
-  //public static DEFAULT_INPUTS_O_TABLE_COLUMN = DEFAULT_INPUTS_O_TABLE_COLUMN;
+  public static DEFAULT_INPUTS_O_TABLE_COLUMN = DEFAULT_INPUTS_O_TABLE_COLUMN;
+  // public static DEFAULT_OUTPUTS_O_TABLE_COLUMN = DEFAULT_OUTPUTS_O_TABLE_COLUMN;
+
+  protected renderersMapping = {
+    'action': OTableCellRendererActionComponent,
+    'boolean': OTableCellRendererBooleanComponent,
+    'currency': OTableCellRendererCurrencyComponent,
+    'date': OTableCellRendererDateComponent,
+    'image': OTableCellRendererImageComponent,
+    'integer': OTableCellRendererIntegerComponent,
+    'percentage': OTableCellRendererPercentageComponent,
+    'real': OTableCellRendererRealComponent
+  };
+
+  protected editorsMapping = {
+    'boolean': OTableCellEditorBooleanComponent,
+    'date': OTableCellEditorDateComponent,
+    'integer': OTableCellEditorIntegerComponent,
+    'real': OTableCellEditorRealComponent,
+    'percentage': OTableCellEditorRealComponent,
+    'currency': OTableCellEditorRealComponent,
+    'text': OTableCellEditorTextComponent
+  };
+
+
+  public renderer: any;
+  public editor: any;
 
   public type: string;
-  public renderer: any;
   public attr: string;
   public title: string;
-  public orderable: any;
-  public searchable: any;
-  public editable: any;
+  @InputConverter()
+  public orderable: boolean = true;
+  @InputConverter()
+  public searchable: boolean = true;
+  @InputConverter()
+  public editable: boolean = false;
   public width: string = '';
 
   /*input renderer date */
@@ -101,12 +147,50 @@ export class OTableColumnComponent implements OnInit {
   protected trueValue: string;
   protected falseValueType: string;
   protected falseValue: string;
-  protected dataType: string = 'boolean';
+  protected booleanType: string = 'boolean';
 
   /*input image */
   protected imageType: string;
   protected avatar: string;
   protected emptyImage: string;
+
+  /*input renderer action */
+  protected icon: string;
+  protected action: string;
+
+  /*input editor */
+  @InputConverter()
+  protected orequired: boolean = false;
+  @InputConverter()
+  showPlaceHolder: boolean = false;
+  olabel: string;
+
+  /*input editor date */
+  protected locale: string;
+  protected oStartView: 'month' | 'year' = 'month';
+  protected oMinDate: string;
+  protected oMaxDate: string;
+  @InputConverter()
+  protected oTouchUi: boolean = false;
+  protected oStartAt: string;
+  protected filterDate: DateFilterFunction;
+
+  /*input editor integer */
+  @InputConverter()
+  min: number;
+  @InputConverter()
+  max: number;
+  @InputConverter()
+  step: number;
+
+  /*input editor boolean */
+  @InputConverter()
+  indeterminateOnNull: boolean = false;
+
+  /* output cell editor */
+  editionStarted: EventEmitter<Object> = new EventEmitter<Object>();
+  editionCancelled: EventEmitter<Object> = new EventEmitter<Object>();
+  editionCommitted: EventEmitter<Object> = new EventEmitter<Object>();
 
   @InputConverter()
   protected breakWord: boolean = false;
@@ -124,89 +208,133 @@ export class OTableColumnComponent implements OnInit {
   }
 
   public ngOnInit() {
-
-    let factory: ComponentFactory<any>;
-    this.orderable = Util.parseBoolean(this.orderable, true);
-    this.searchable = Util.parseBoolean(this.searchable, true);
     this.grouping = Util.parseBoolean(this.grouping, true);
-    if (typeof (this.renderer) === 'undefined') {
-      switch (this.type) {
-        case 'currency':
-          factory = this.resolver.resolveComponentFactory(OTableCellRendererCurrencyComponent);
-          break;
-        case 'date':
-          factory = this.resolver.resolveComponentFactory(OTableCellRendererDateComponent);
-          break;
-        case 'integer':
-          factory = this.resolver.resolveComponentFactory(OTableCellRendererIntegerComponent);
-          break;
-        case 'boolean':
-          factory = this.resolver.resolveComponentFactory(OTableCellRendererBooleanComponent);
-          break;
-        case 'real':
-          factory = this.resolver.resolveComponentFactory(OTableCellRendererRealComponent);
-          break;
-        case 'image':
-          factory = this.resolver.resolveComponentFactory(OTableCellRendererImageComponent);
-          break;
-        case 'percentage':
-          factory = this.resolver.resolveComponentFactory(OTableCellRendererPercentageComponent);
-          break;
-
-      }
-
-      if (factory) {
-        let ref = this.container.createComponent(factory);
-        this.renderer = ref.instance;
-        switch (this.type) {
-          case 'currency':
-            this.renderer.currencySymbol = this.currencySymbol;
-            this.renderer.currencySymbolPosition = this.currencySymbolPosition;
-            this.renderer.decimalSeparator = this.decimalSeparator;
-            this.renderer.decimalDigits = this.decimalDigits;
-            this.renderer.grouping = this.grouping;
-            this.renderer.thousandSeparator = this.thousandSeparator;
-
-            break;
-          case 'date':
-            this.renderer.format = this.format;
-            break;
-          case 'integer':
-            this.renderer.grouping = this.grouping;
-            this.renderer.thousandSeparator = this.thousandSeparator;
-            break;
-          case 'boolean':
-            this.renderer.trueValueType = this.trueValueType;
-            this.renderer.trueValue = this.trueValue;
-            this.renderer.falseValueType = this.falseValueType;
-            this.renderer.falseValue = this.falseValue;
-            this.renderer.dataType = this.dataType;
-            break;
-          case 'real':
-          case 'percentage':
-            this.renderer.decimalSeparator = this.decimalSeparator;
-            this.renderer.decimalDigits = this.decimalDigits;
-            this.renderer.grouping = this.grouping;
-            this.renderer.thousandSeparator = this.thousandSeparator;
-
-            break;
-          case 'image':
-            this.renderer.imageType = this.imageType;
-            this.renderer.avatar = this.avatar;
-            this.renderer.emptyImage = this.emptyImage;
-            break;
-        }
-
-      }
-    }
+    this.createRenderer();
+    this.createEditor();
     this.table.registerColumn(this);
-    //console.log('OTABLECOLUMN. on init', this.renderer);
   }
 
+  protected createRenderer() {
+    if (typeof (this.renderer) === 'undefined' && this.type !== undefined) {
+      const componentRef = this.renderersMapping[this.type];
+      if (componentRef !== undefined) {
+        let factory: ComponentFactory<any> = this.resolver.resolveComponentFactory(componentRef);
+        if (factory) {
+          let ref = this.container.createComponent(factory);
+          this.renderer = ref.instance;
+          switch (this.type) {
+            case 'currency':
+              this.renderer.currencySymbol = this.currencySymbol;
+              this.renderer.currencySymbolPosition = this.currencySymbolPosition;
+              this.renderer.decimalSeparator = this.decimalSeparator;
+              this.renderer.decimalDigits = this.decimalDigits;
+              this.renderer.grouping = this.grouping;
+              this.renderer.thousandSeparator = this.thousandSeparator;
+              break;
+            case 'date':
+              this.renderer.format = this.format;
+              break;
+            case 'integer':
+              this.renderer.grouping = this.grouping;
+              this.renderer.thousandSeparator = this.thousandSeparator;
+              break;
+            case 'boolean':
+              this.renderer.trueValueType = this.trueValueType;
+              this.renderer.trueValue = this.trueValue;
+              this.renderer.falseValueType = this.falseValueType;
+              this.renderer.falseValue = this.falseValue;
+              this.renderer.booleanType = this.booleanType;
+              break;
+            case 'real':
+            case 'percentage':
+              this.renderer.decimalSeparator = this.decimalSeparator;
+              this.renderer.decimalDigits = this.decimalDigits;
+              this.renderer.grouping = this.grouping;
+              this.renderer.thousandSeparator = this.thousandSeparator;
+              break;
+            case 'image':
+              this.renderer.imageType = this.imageType;
+              this.renderer.avatar = this.avatar;
+              this.renderer.emptyImage = this.emptyImage;
+              break;
+            case 'action':
+              this.renderer.icon = this.icon;
+              this.renderer.action = this.action;
+              break;
+          }
+        }
+      }
+    }
+  }
+
+  buildCellEditor(type: string, resolver: ComponentFactoryResolver, container: ViewContainerRef, propsOrigin: any) {
+    let editor = undefined;
+    const componentRef = this.editorsMapping[type] || this.editorsMapping['text'];
+    if (componentRef === undefined) {
+      return editor;
+    }
+    let factory: ComponentFactory<any> = resolver.resolveComponentFactory(componentRef);
+    if (factory) {
+      let ref = container.createComponent(factory);
+      editor = ref.instance;
+      if (propsOrigin !== undefined) {
+        switch (type) {
+          case 'date':
+            editor.format = propsOrigin.format;
+            editor.locale = propsOrigin.locale;
+            editor.oStartView = propsOrigin.oStartView;
+            editor.oMinDate = propsOrigin.oMinDate;
+            editor.oMaxDate = propsOrigin.oMaxDate;
+            editor.oTouchUi = propsOrigin.oTouchUi;
+            editor.oStartAt = propsOrigin.oStartAt;
+            editor.filterDate = propsOrigin.filterDate;
+            break;
+          case 'boolean':
+            editor.indeterminateOnNull = propsOrigin.indeterminateOnNull;
+            editor.trueValue = propsOrigin.trueValue;
+            editor.falseValue = propsOrigin.falseValue;
+            editor.booleanType = propsOrigin.booleanType;
+            break;
+          case 'integer':
+            editor.min = propsOrigin.min;
+            editor.max = propsOrigin.max;
+            editor.step = Util.isDefined(propsOrigin.step) ? propsOrigin.step : editor.step;
+          case 'percentage':
+          case 'currency':
+          case 'real':
+            editor.min = propsOrigin.min;
+            editor.max = propsOrigin.max;
+            editor.step = Util.isDefined(propsOrigin.step) ? propsOrigin.step : editor.step;
+            break;
+          case 'image':
+            break;
+          default:
+            break;
+        }
+        editor.olabel = propsOrigin.olabel;
+      }
+    }
+    return editor;
+  }
+
+  protected createEditor() {
+    if (typeof (this.editor) === 'undefined' && this.editable) {
+      this.editor = this.buildCellEditor(this.type, this.resolver, this.container, this);
+      if (this.editor) {
+        this.editor.orequired = this.orequired;
+        this.editor.showPlaceHolder = this.showPlaceHolder;
+        this.editor.editionStarted = this.editionStarted;
+        this.editor.editionCancelled = this.editionCancelled;
+        this.editor.editionCommitted = this.editionCommitted;
+      }
+    }
+  }
 
   public registerRenderer(renderer: any) {
     this.renderer = renderer;
   }
 
-
+  public registerEditor(editor: any) {
+    this.editor = editor;
+  }
 }

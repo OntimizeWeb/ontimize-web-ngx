@@ -1,12 +1,6 @@
 import { InjectionToken } from '@angular/core';
 import { MenuRootItem } from '../services';
-
-export function isObject(val) {
-  const valType = typeof val;
-  return valType === 'object';
-}
-
-const isArray = Array.isArray;
+import { Util } from '../utils';
 
 let DEFAULT_LOCAL_STORAGE_KEY = 'ontimize-web-uuid';
 let DEFAULT_CONFIG: Config = {
@@ -19,6 +13,13 @@ export const APP_CONFIG = new InjectionToken<Config>('app.config');
 export interface Config {
   // apiEndpoint [string]: The base path of the URL used by app services.
   apiEndpoint?: string;
+
+  bundle?: {
+    // endpoint [string]: The base path of the URL used by bundle service.
+    endpoint?: string;
+    // path [string]: The path of the URL to remote bundle method.
+    path?: string;
+  };
 
   // startSessionPath [string]: The path of the URL to startsession method.
   startSessionPath?: string;
@@ -57,7 +58,7 @@ export class AppConfig {
   private _config: any;
 
   constructor(config?) {
-    this._config = (config && isObject(config) && !isArray(config)) ? config : {};
+    this._config = (config && Util.isObject(config) && !Array.isArray(config)) ? config : {};
   }
 
   public getConfiguration(): Config {
@@ -71,5 +72,23 @@ export class AppConfig {
   public getMenuConfiguration(): MenuRootItem[] {
     return this._config['appMenuConfiguration'] || [];
   }
+
+  public useRemoteBundle(): boolean {
+    return Util.isDefined(this._config.bundle);
+  }
+
+  public getBundleEndpoint(): string {
+    let result = undefined;
+    let existsBundleConf = (Util.isDefined(this._config.bundle));
+
+    if (existsBundleConf && Util.isDefined(this._config.bundle.endpoint)) {
+      result = this._config.bundle.endpoint;
+    } else if (existsBundleConf && Util.isDefined(this._config.bundle.path)) {
+      result = this._config.apiEndpoint + '/' + this._config.bundle.path;
+    }
+    return result;
+  }
+
+
 }
 

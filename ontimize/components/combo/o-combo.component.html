@@ -1,7 +1,8 @@
 <div [formGroup]="getFormGroup()" class="mat-combo-container custom-error" [mdTooltip]="tooltip" [mdTooltipPosition]="tooltipPosition"
     [mdTooltipShowDelay]="tooltipShowDelay">
     <md-select #selectModel [class.visible]="!isReadOnly" [class.hidden]="isReadOnly" class="mat-combo" [attr.id]="getAttribute()"
-        [id]="getAttribute()" fxFill [formControlName]="getAttribute()" [placeholder]="placeHolder" [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)">
+        [id]="getAttribute()" fxFill [formControlName]="getAttribute()" [placeholder]="placeHolder"
+        [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)" [required]="isRequired">
         <md-option *ngIf="hasNullSelection()"></md-option>
         <md-option *ngFor="let item of getDataArray(); let rowIndex = index" [value]="getValueColumn(item)">
             {{ getOptionDescriptionValue(item) }}
@@ -16,7 +17,7 @@
             [class.ng-untouched]="getFormControl() && getFormControl().untouched" [class.ng-touched]="getFormControl() && getFormControl().touched"
             [class.ng-dirty]="getFormControl() && getFormControl().dirty" [class.ng-pristine]="getFormControl() && getFormControl().pristine"
             [class.ng-invalid]="getFormControl() && !getFormControl().valid" [class.ng-valid]="getFormControl() && getFormControl().valid"
-            [placeholder]="placeHolder" [value]="getDescriptionValue()" [readonly]="isReadOnly" [disabled]="isDisabled">
+            [placeholder]="placeHolder" [value]="getDescriptionValue()" [readonly]="isReadOnly" [disabled]="isDisabled" [required]="isRequired">
         <md-hint *ngIf="hasError('required')">
             <span>{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</span>
         </md-hint>

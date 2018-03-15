@@ -1,12 +1,11 @@
 import { HttpModule } from '@angular/http';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
-import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { TranslateModule, TranslateLoader, TranslateParser } from '@ngx-translate/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Injector, NgModule, APP_INITIALIZER } from '@angular/core';
 import { appInitializerFactory } from './o-providers';
-import { OTranslateService } from '../services';
+import { OTranslateService, OTranslateHttpLoader } from '../services';
 import { APP_CONFIG } from '../config/app-config';
 
 import {
@@ -65,6 +64,7 @@ import {
 } from '../layouts';
 
 import { OSharedModule } from '../shared';
+import { OTranslateParser } from '../services/translate/o-translate.parser';
 
 export const INTERNAL_ONTIMIZE_MODULES_EXPORTED: any = [
   // Standard modules
@@ -125,8 +125,12 @@ export const INTERNAL_ONTIMIZE_MODULES_EXPORTED: any = [
 ];
 
 // AoT requires an exported function for factories
-export function HttpLoaderFactory(http: HttpClient) {
-  return new TranslateHttpLoader(http, OTranslateService.ASSETS_PATH, OTranslateService.ASSETS_EXTENSION);
+export function OHttpLoaderFactory(http: HttpClient, injector: Injector) {
+  return new OTranslateHttpLoader(http, OTranslateService.ASSETS_PATH, OTranslateService.ASSETS_EXTENSION, injector);
+}
+
+export function OTranslateParserFactory() {
+  return new OTranslateParser();
 }
 
 export const INTERNAL_ONTIMIZE_MODULES: any = [
@@ -137,8 +141,12 @@ export const INTERNAL_ONTIMIZE_MODULES: any = [
   TranslateModule.forRoot({
     loader: {
       provide: TranslateLoader,
-      useFactory: HttpLoaderFactory,
-      deps: [HttpClient]
+      useFactory: OHttpLoaderFactory,
+      deps: [HttpClient, Injector]
+    },
+    parser: {
+      provide: TranslateParser,
+      useFactory: OTranslateParserFactory
     }
   }),
 

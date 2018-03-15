@@ -5,6 +5,7 @@ import { OFormComponent } from './form/o-form.component';
 import { OFormDataComponent, DEFAULT_INPUTS_O_FORM_DATA_COMPONENT } from './o-form-data-component.class';
 import { Util } from '../utils';
 import { Subscription } from 'rxjs/Subscription';
+import { ServiceUtils } from './service.utils';
 
 export const DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT = [
   ...DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,
@@ -28,12 +29,17 @@ export const DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT = [
 
   'queryOnInit: query-on-init',
   'queryOnBind: query-on-bind',
+  'queryOnEvent: query-on-event',
+
+  // query-method [string]: name of the service method to perform queries. Default: query.
+  'queryMethod: query-method',
 
   'serviceType : service-type'
 ];
 
 export class OFormServiceComponent extends OFormDataComponent {
 
+  public static DEFAULT_QUERY_METHOD = 'query';
   public static DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT = DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT;
 
   /* Inputs */
@@ -51,6 +57,8 @@ export class OFormServiceComponent extends OFormDataComponent {
   protected queryOnInit: boolean = true;
   @InputConverter()
   protected queryOnBind: boolean = false;
+  protected queryOnEvent: any;
+  protected queryMethod: string;
   protected serviceType: string;
 
   /* Internal variables */
@@ -66,6 +74,8 @@ export class OFormServiceComponent extends OFormDataComponent {
   protected _currentIndex;
   protected dialogService: DialogService;
 
+  protected queryOnEventSubscription: Subscription;
+
   constructor(form: OFormComponent, elRef: ElementRef, injector: Injector) {
     super(form, elRef, injector);
     this.form = form;
@@ -78,9 +88,9 @@ export class OFormServiceComponent extends OFormDataComponent {
     super.initialize();
 
     this.cacheQueried = false;
-    this.colArray = Util.parseArray(this.columns);
+    this.colArray = Util.parseArray(this.columns, true);
 
-    this.visibleColArray = Util.parseArray(this.visibleColumns);
+    this.visibleColArray = Util.parseArray(this.visibleColumns, true);
     if (Util.isArrayEmpty(this.visibleColArray)) {
       //It is necessary to assing value to visibleColumns to propagate the parameter.
       this.visibleColumns = this.columns;
@@ -95,11 +105,15 @@ export class OFormServiceComponent extends OFormDataComponent {
     let pkArray = Util.parseArray(this.parentKeys);
     this._pKeysEquiv = Util.parseParentKeysEquivalences(pkArray);
 
+    if (!this.queryMethod) {
+      this.queryMethod = OFormServiceComponent.DEFAULT_QUERY_METHOD;
+    }
+
     if (this.form) {
-      var self = this;
+      const self = this;
       if (self.queryOnBind) {
         this._formDataSubcribe = this.form.onFormDataLoaded.subscribe(data => {
-          self.onFormDataBind(data);
+          self.queryData();
         });
       }
     }
@@ -111,12 +125,23 @@ export class OFormServiceComponent extends OFormDataComponent {
     } else {
       this.configureService();
     }
+
+    if (this.queryOnEvent !== undefined && this.queryOnEvent.subscribe !== undefined) {
+      const self = this;
+      this.queryOnEventSubscription = this.queryOnEvent.subscribe((value) => {
+        self.queryData();
+      });
+    }
+
   }
 
   destroy() {
     super.destroy();
     if (this._formDataSubcribe) {
       this._formDataSubcribe.unsubscribe();
+    }
+    if (this.queryOnEventSubscription) {
+      this.queryOnEventSubscription.unsubscribe();
     }
   }
 
@@ -141,34 +166,26 @@ export class OFormServiceComponent extends OFormDataComponent {
     }
   }
 
-  onFormDataBind(bindedData: Object) {
-    let filter = {};
-    let keys = Object.keys(this._pKeysEquiv);
-    if (keys && keys.length > 0 && bindedData) {
-      keys.forEach(item => {
-        let value = bindedData[item];
-        if (value) {
-          filter[this._pKeysEquiv[item]] = value;
-        }
-      });
-    }
-    this.queryData(filter);
-  }
 
-  queryData(filter: Object = {}, columns?: Array<any>) {
+  queryData(parentItem: any = undefined, columns?: Array<any>) {
     var self = this;
     if (columns === undefined || columns === null) {
       columns = this.colArray;
     }
-    if (this.dataService === undefined) {
-      console.warn('No service configured! aborting query');
+
+    if (!this.dataService || !(this.queryMethod in this.dataService) || !this.entity) {
+      console.warn('Service not properly configured! aborting query');
       return;
     }
-    if (this.querySuscription) {
-      this.querySuscription.unsubscribe();
-    }
-    this.querySuscription = this.dataService.query(filter, columns, this.entity)
-      .subscribe(resp => {
+    parentItem = ServiceUtils.getParentItemFromForm(parentItem, this._pKeysEquiv, this.form);
+
+    if ((Object.keys(this._pKeysEquiv).length > 0) && parentItem === undefined) {
+      this.setDataArray([]);
+    } else {
+      if (this.querySuscription) {
+        this.querySuscription.unsubscribe();
+      }
+      this.querySuscription = this.dataService[this.queryMethod](parentItem, columns, this.entity).subscribe(resp => {
         if (resp.code === 0) {
           self.cacheQueried = true;
           self.setDataArray(resp.data);
@@ -183,9 +200,8 @@ export class OFormServiceComponent extends OFormDataComponent {
           this.dialogService.alert('ERROR', 'MESSAGES.ERROR_QUERY');
         }
       });
+    }
   }
-
-
 
   getDataArray(): any[] {
     return this.dataArray;

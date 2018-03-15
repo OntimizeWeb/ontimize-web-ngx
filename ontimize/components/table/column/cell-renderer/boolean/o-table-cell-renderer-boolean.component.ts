@@ -1,7 +1,7 @@
 import { Component, Injector, ViewChild, TemplateRef } from '@angular/core';
-import { OTranslateService } from '../../../../services/o-translate.service';
-import { OBaseTableCellRenderer } from './o-base-table-cell-renderer.class';
-
+import { OTranslateService } from '../../../../../services';
+import { Util } from '../../../../../utils';
+import { OBaseTableCellRenderer } from '../o-base-table-cell-renderer.class';
 
 export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_BOOLEAN = [
   // true-value-type [string|number|icon|image]: type of value if true. Default: no value.
@@ -35,8 +35,6 @@ export class OTableCellRendererBooleanComponent extends OBaseTableCellRenderer {
   protected booleanType: string = 'boolean';
   protected translateService: OTranslateService;
 
-
-
   @ViewChild('templateref', { read: TemplateRef }) public templateref: TemplateRef<any>;
 
   constructor(protected injector: Injector) {
@@ -51,8 +49,7 @@ export class OTableCellRendererBooleanComponent extends OBaseTableCellRenderer {
     if (typeof cellData !== 'undefined') {
       switch (this.booleanType) {
         case 'string':
-          const stringVal = cellData.toString().toLowerCase();
-          comparisonValue = (stringVal === 'true' || stringVal === 'yes');
+          comparisonValue = Util.parseBoolean(cellData, false);
           break;
         case 'number':
           comparisonValue = (cellData === 1);

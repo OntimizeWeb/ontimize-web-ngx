@@ -34,6 +34,7 @@ import { OListItemDirective } from './list-item/o-list-item.directive';
 
 import { OServiceComponent } from '../o-service-component.class';
 import { Observable } from 'rxjs/Observable';
+import { ServiceUtils } from '../service.utils';
 
 export interface IList {
   registerListItemDirective(item: OListItemDirective): void;
@@ -181,7 +182,7 @@ export class OListComponent extends OServiceComponent implements OnInit, IList, 
     }
 
     if (this.quickFilterColumns) {
-      this.quickFilterColArray = Util.parseArray(this.quickFilterColumns);
+      this.quickFilterColArray = Util.parseArray(this.quickFilterColumns, true);
     } else {
       this.quickFilterColArray = this.colArray;
     }
@@ -192,8 +193,8 @@ export class OListComponent extends OServiceComponent implements OnInit, IList, 
       initialQueryLength = this.state.queryRecordOffset;
     }
     this.state.queryRecordOffset = 0;
-    if (!this.state.hasOwnProperty('queryTotalRecordNumber')) {
-      this.state.queryTotalRecordNumber = 0;
+    if (!this.state.hasOwnProperty('totalQueryRecordsNumber')) {
+      this.state.totalQueryRecordsNumber = 0;
     }
     if (this.queryOnInit) {
       let queryArgs = {
@@ -334,7 +335,7 @@ export class OListComponent extends OServiceComponent implements OnInit, IList, 
           console.log('[OList.queryData]: error', err);
           self.setDataArray([]);
           self.loaderSuscription.unsubscribe();
-          if (err && typeof err !=='object') {
+          if (err && typeof err !== 'object') {
             this.dialogService.alert('ERROR', err);
           } else {
             this.dialogService.alert('ERROR', 'MESSAGES.ERROR_QUERY');
@@ -489,7 +490,7 @@ export class OListComponent extends OServiceComponent implements OnInit, IList, 
   }
 
   onScroll($event: Event): void {
-    let pendingRegistries = this.dataResponseArray.length < this.state.queryTotalRecordNumber;
+    let pendingRegistries = this.dataResponseArray.length < this.state.totalQueryRecordsNumber;
     if (!this.loading && pendingRegistries) {
       let element = $event.srcElement as any;
       if (element.offsetHeight + element.scrollTop + 5 >= element.scrollHeight) {
@@ -507,15 +508,8 @@ export class OListComponent extends OServiceComponent implements OnInit, IList, 
       res => {
         if (res === true) {
           if (this.dataService && (this.deleteMethod in this.dataService) && this.entity && (this.keysArray.length > 0)) {
-            let filters = [];
-            this.selectedItems.map(item => {
-              let kv = {};
-              for (let k = 0; k < this.keysArray.length; ++k) {
-                let key = this.keysArray[k];
-                kv[key] = item[key];
-              }
-              filters.push(kv);
-            });
+            let filters = ServiceUtils.getArrayProperties(this.selectedItems, this.keysArray);
+
 
             let observable = (Observable as any).from(filters)
               .map(kv => this.dataService[this.deleteMethod](kv, this.entity)).mergeAll();

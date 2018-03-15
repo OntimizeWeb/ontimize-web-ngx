@@ -3,10 +3,13 @@ import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs/Subscription';
 import { OSharedModule } from '../../shared';
+import { InputConverter } from '../../decorators';
 import { DialogService, OUserInfoService, UserInfo, LoginService } from '../../services';
 import { OLanguageSelectorModule } from '../language-selector/o-language-selector.component';
 
-export const DEFAULT_INPUTS_O_USER_INFO = [];
+export const DEFAULT_INPUTS_O_USER_INFO = [
+  'useFlagIcons: use-flag-icons'
+];
 
 export const DEFAULT_OUTPUTS_O_USER_INFO = [];
 
@@ -23,6 +26,7 @@ export const DEFAULT_OUTPUTS_O_USER_INFO = [];
 })
 
 export class OUserInfoComponent implements OnDestroy {
+
   public static DEFAULT_INPUTS_O_USER_INFO = DEFAULT_INPUTS_O_USER_INFO;
   public static DEFAULT_OUTPUTS_O_USER_INFO = DEFAULT_OUTPUTS_O_USER_INFO;
 
@@ -32,6 +36,9 @@ export class OUserInfoComponent implements OnDestroy {
 
   userInfoSubscription: Subscription;
   protected userInfo: UserInfo;
+
+  @InputConverter()
+  useFlagIcons: boolean = false;
 
   constructor(
     protected elRef: ElementRef,

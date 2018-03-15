@@ -96,6 +96,9 @@ export const DEFAULT_INPUTS_O_FORM = [
   // layout-direction [string][column|row]: Default: column
   'layoutDirection: layout-direction',
 
+  // fxLayoutAlign value
+  'layoutAlign: layout-align',
+
   // editable-detail [string][yes|no|true|false]: Default: true;
   'editableDetail: editable-detail',
 
@@ -106,7 +109,7 @@ export const DEFAULT_INPUTS_O_FORM = [
   'undoButton: undo-button',
 
   //show-header-navigation [string][yes|no|true|false]: Include navigations buttons in form-toolbar. Default: false;
-  'showHeaderNavigation:show-header-navigation'
+  'showHeaderNavigation: show-header-navigation'
 ];
 
 export const DEFAULT_OUTPUTS_O_FORM = [
@@ -193,6 +196,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   @InputConverter()
   layoutFill: boolean = true;
   protected _layoutDirection: string = OFormComponent.DEFAULT_LAYOUT_DIRECTION;
+  protected _layoutAlign: string;
   @InputConverter()
   protected editableDetail: boolean = true;
   protected keysSqlTypes: string;
@@ -562,8 +566,8 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     if (this.headeractions === 'all') {
       this.headeractions = 'R;I;U;D';
     }
-    this.keysArray = Util.parseArray(this.keys);
-    this.colsArray = Util.parseArray(this.columns);
+    this.keysArray = Util.parseArray(this.keys, true);
+    this.colsArray = Util.parseArray(this.columns, true);
     let pkArray = Util.parseArray(this.parentKeys);
     this._pKeysEquiv = Util.parseParentKeysEquivalences(pkArray);
     this.keysSqlTypesArray = Util.parseArray(this.keysSqlTypes);
@@ -1204,18 +1208,30 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   registerDynamicFormComponent(dynamicForm) {
     const self = this;
     if (dynamicForm) {
-      this.dynamicFormSubscription = dynamicForm.render.subscribe(
-        res => {
-          if (res) {
-            self._reloadAction(true);
-          }
+      this.dynamicFormSubscription = dynamicForm.render.subscribe(res => {
+        if (res) {
+          self.refreshComponentsEditableState();
+          self._reloadAction(true);
         }
-      );
+      });
+    }
+  }
+
+  protected refreshComponentsEditableState() {
+    switch (this.mode) {
+      case OFormComponent.Mode().INITIAL:
+        this._setComponentsEditable(this.isEditableDetail());
+        break;
+      case OFormComponent.Mode().INSERT:
+      case OFormComponent.Mode().UPDATE:
+        this._setComponentsEditable(true);
+      default:
+        break;
     }
   }
 
   unregisterDynamicFormComponent(dynamicForm) {
-    if (dynamicForm) {
+    if (dynamicForm && this.dynamicFormSubscription) {
       this.dynamicFormSubscription.unsubscribe();
     }
   }
@@ -1242,6 +1258,14 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   set layoutDirection(val: string) {
     const parsedVal = (val || '').toLowerCase();
     this._layoutDirection = ['row', 'column'].indexOf(parsedVal) !== -1 ? parsedVal : OFormComponent.DEFAULT_LAYOUT_DIRECTION;
+  }
+
+  get layoutAlign(): string {
+    return this._layoutAlign;
+  }
+
+  set layoutAlign(val: string) {
+    this._layoutAlign = val;
   }
 
   isEditableDetail() {
@@ -1276,6 +1300,18 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
 
   getFormNavigation(): OFormNavigationClass {
     return this.formNavigation;
+  }
+
+  getFormCache(): OFormCacheClass {
+    return this.formCache;
+  }
+
+  getUrlParam(arg: string) {
+    return this.getFormNavigation().getUrlParams()[arg];
+  }
+
+  getUrlParams() {
+    return this.getFormNavigation().getUrlParams();
   }
 
   setUrlParamsAndReload(val: Object) {

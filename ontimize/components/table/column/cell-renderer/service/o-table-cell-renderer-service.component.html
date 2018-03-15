@@ -1,0 +1,6 @@
+<ng-template #templateref let-cellvalue="cellvalue" let-rowvalue="rowvalue">
+  <div fxLayoutAlign="space-around center">
+    {{ getDescriptionValue(cellvalue, rowvalue) }}
+    {{ responseMap[cellvalue] }}
+  </div>
+</ng-template>

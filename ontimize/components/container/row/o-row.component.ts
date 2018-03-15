@@ -1,14 +1,10 @@
-import {
-  Component, Inject, Injector, forwardRef,
-  ElementRef, OnInit, Optional,
-  NgModule,
-  ViewEncapsulation
-} from '@angular/core';
-
+import { Component, Inject, Injector, forwardRef, ElementRef, OnInit, Optional, NgModule, ViewEncapsulation, AfterViewInit } from '@angular/core';
+import { InputConverter } from '../../../decorators';
 import { OFormComponent } from '../../form/o-form.component';
 import { OTranslateService } from '../../../services';
 import { OSharedModule } from '../../../shared';
 import { CommonModule } from '@angular/common';
+
 export const DEFAULT_INPUTS_O_ROW = [
   'oattr: attr',
   'titleLabel: title-label',
@@ -29,7 +25,7 @@ export const DEFAULT_INPUTS_O_ROW = [
     '[class.o-row]': 'true'
   }
 })
-export class ORowComponent implements OnInit {
+export class ORowComponent implements OnInit, AfterViewInit {
 
   public static DEFAULT_INPUTS_O_ROW = DEFAULT_INPUTS_O_ROW;
 
@@ -40,6 +36,8 @@ export class ORowComponent implements OnInit {
   protected defaultLayoutAlign: string = 'start start';
   protected _layoutAlign: string;
   protected translateService: OTranslateService;
+  @InputConverter()
+  layoutFill: boolean = false;
 
   constructor(
     @Optional() @Inject(forwardRef(() => OFormComponent)) protected form: OFormComponent,
@@ -53,6 +51,25 @@ export class ORowComponent implements OnInit {
     if (this.layoutAlign === undefined) {
       this.propagateLayoutAligmentToDOM();
     }
+  }
+
+  ngAfterViewInit() {
+    this.propagateLayoutFillToDom();
+  }
+
+  propagateLayoutFillToDom() {
+    // let innerRow = this.elRef.nativeElement.querySelectorAll('div#innerRow');
+    // if (innerRow.length) {
+    //   let element = innerRow[0];
+    //   if (this.layoutFill) {
+    //     let titleDiv = this.elRef.nativeElement.querySelectorAll('.container-title');
+    //     let titleH = 0;
+    //     if (titleDiv.length) {
+    //       titleH = titleDiv[0].offsetHeight;
+    //     }
+    //     element.style.height = (this.elRef.nativeElement.clientHeight - titleH) + 'px';
+    //   }
+    // }
   }
 
   getAttribute() {

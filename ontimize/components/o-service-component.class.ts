@@ -185,7 +185,6 @@ export class OServiceComponent implements ILocalStorageComponent {
   protected dataArray: Array<any> = [];
   protected parentItem: any;
   protected oattrFromEntity: boolean = false;
-  protected dataParentKeys: Array<Object>;
   /* end of parsed inputs variables */
 
   protected onLanguageChangeSubscribe: any;
@@ -253,6 +252,10 @@ export class OServiceComponent implements ILocalStorageComponent {
     return this.selectedItems;
   }
 
+  clearSelection() {
+    this.selectedItems = [];
+  }
+
   getAttribute(): string {
     return this.oattr;
   }
@@ -297,9 +300,9 @@ export class OServiceComponent implements ILocalStorageComponent {
     });
 
     this.keysArray = Util.parseArray(this.keys);
-    this.colArray = Util.parseArray(this.columns);
+    this.colArray = Util.parseArray(this.columns, true);
     let pkArray = Util.parseArray(this.parentKeys);
-    this._pKeysEquiv = Util.parseParentKeysEquivalences(pkArray);
+    this._pKeysEquiv = Util.parseParentKeysEquivalences(pkArray, OServiceComponent.COLUMNS_ALIAS_SEPARATOR);
 
     //TODO: get default values from ICrudConstants
     if (!this.queryMethod) {
@@ -348,8 +351,6 @@ export class OServiceComponent implements ILocalStorageComponent {
     if (!this.rowHeight || (OServiceComponent.AVAILABLE_ROW_HEIGHTS.indexOf(this.rowHeight) === -1)) {
       this.rowHeight = OServiceComponent.DEFAULT_ROW_HEIGHT;
     }
-
-    this.parseParentKeys();
   }
 
   afterViewInit() {
@@ -391,27 +392,6 @@ export class OServiceComponent implements ILocalStorageComponent {
     }
   }
 
-  parseParentKeys() {
-    this.dataParentKeys = [];
-    if (this.parentKeys) {
-      let keys = Util.parseArray(this.parentKeys);
-      for (let i = 0; i < keys.length; ++i) {
-        let key = keys[i];
-        let keyDef = key.split(OServiceComponent.COLUMNS_ALIAS_SEPARATOR);
-        if (keyDef.length === 1) {
-          this.dataParentKeys.push({
-            'alias': keyDef[0],
-            'name': keyDef[0]
-          });
-        } else if (keyDef.length === 2) {
-          this.dataParentKeys.push({
-            'alias': keyDef[0],
-            'name': keyDef[1]
-          });
-        }
-      }
-    }
-  }
 
   configureService() {
     let loadingService: any = OntimizeService;
@@ -564,19 +544,19 @@ export class OServiceComponent implements ILocalStorageComponent {
   }
 
   protected getEncodedParentKeys() {
+    const parentKeys = Object.keys(this._pKeysEquiv);
     let encoded = undefined;
-    if ((this.dataParentKeys.length > 0) && (typeof (this.parentItem) !== 'undefined')) {
+    if ((parentKeys.length > 0) && (typeof (this.parentItem) !== 'undefined')) {
       let pKeys = {};
-      for (let k = 0; k < this.dataParentKeys.length; ++k) {
-        let parentKey = this.dataParentKeys[k];
-        if (this.parentItem.hasOwnProperty(parentKey['alias'])) {
-          let currentData = this.parentItem[parentKey['alias']];
+      parentKeys.forEach(parentKey => {
+        if (this.parentItem.hasOwnProperty(parentKey)) {
+          let currentData = this.parentItem[parentKey];
           if (currentData instanceof OFormValue) {
             currentData = currentData.value;
           }
-          pKeys[parentKey['name']] = currentData;
+          pKeys[this._pKeysEquiv[parentKey]] = currentData;
         }
-      }
+      });
       if (Object.keys(pKeys).length > 0) {
         encoded = Util.encodeParentKeys(pKeys);
       }
@@ -624,13 +604,18 @@ export class OServiceComponent implements ILocalStorageComponent {
       this.state.queryRecordOffset = resultEndIndex;
     }
     if (queryRes.totalQueryRecordsNumber !== undefined) {
-      this.state.queryTotalRecordNumber = queryRes.totalQueryRecordsNumber;
+      this.state.totalQueryRecordsNumber = queryRes.totalQueryRecordsNumber;
     }
   }
 
+  getTotalRecordsNumber() {
+    return (this.state && this.state.totalQueryRecordsNumber !== undefined) ? this.state.totalQueryRecordsNumber : undefined;
+  }
+
   protected deleteLocalItems() {
-    for (let i = 0; i < this.selectedItems.length; ++i) {
-      let selectedItem = this.selectedItems[i];
+    let selectedItems = this.getSelectedItems();
+    for (let i = 0; i < selectedItems.length; ++i) {
+      let selectedItem = selectedItems[i];
       let selectedItemKv = {};
       for (let k = 0; k < this.keysArray.length; ++k) {
         let key = this.keysArray[k];
@@ -655,7 +640,7 @@ export class OServiceComponent implements ILocalStorageComponent {
         }
       }
     }
-    this.selectedItems = [];
+    this.clearSelection();
   }
 
   reinitialize(options: OListInitializationOptions /*| OTableInitializationOptions*/) {

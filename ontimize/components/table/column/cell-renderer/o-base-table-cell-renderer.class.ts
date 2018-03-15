@@ -1,6 +1,6 @@
 import { PipeTransform, Injector } from '@angular/core';
 import { OTableColumnComponent } from '../o-table-column.component';
-import { OTableComponent } from '../../../../../index';
+import { OTableComponent } from '../../o-table.component';
 
 export class OBaseTableCellRenderer {
 

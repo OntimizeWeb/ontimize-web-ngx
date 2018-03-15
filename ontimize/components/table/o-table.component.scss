@@ -6,13 +6,18 @@ $_mat-checkbox-mark-stroke-size-small: 2 / 15 * $mat-checkbox-size-small !defaul
 
 .o-table {
   align-items: normal!important;
-  
+
   .expandable-container{
     overflow-y: auto;
-    height: inherit;
+    height: 100%;
   }
-  
+
   .o-table-container {
+
+    .table-title {
+      font-size: 18px;
+      font-weight: 400;
+    }
 
     .fill-remaining {
       flex: 1 1 auto;
@@ -26,14 +31,46 @@ $_mat-checkbox-mark-stroke-size-small: 2 / 15 * $mat-checkbox-size-small !defaul
     position: relative;
     margin: 0 0.5%;
 
-    
-   
-
     .mat-column-select {
       min-height: inherit;
       max-width: 20px;
       display: flex;
       align-items: center;
+    }
+
+    .spinner-container {
+      position: absolute;
+      top: 0px;
+      left: 0px;
+      right: 0px;
+      bottom: 0px;
+      z-index: 500;
+
+      visibility: visible;
+      opacity: 1;
+
+          -moz-transition: opacity 0.25s linear;
+      -webkit-transition: opacity 0.25s linear;
+              transition: opacity 0.25s linear;
+
+      .mat-progress-spinner {
+        height: 100%;
+      }
+      path {
+        stroke-width: 3px !important;
+      }
+    }
+
+    .o-table-no-results {
+      &.small {
+        min-height: 32px;
+      }
+      &.medium {
+        min-height: 36px;
+      }
+      &.large {
+        min-height: 48px;
+      }
     }
     .mat-table {
 
@@ -121,11 +158,11 @@ $_mat-checkbox-mark-stroke-size-small: 2 / 15 * $mat-checkbox-size-small !defaul
             cursor: default;
           }
 
-          &:not(.mat-sort-header-sorted) {
-            .mat-sort-header-button {
-              padding-right: 16px;
-            }
-          }
+          // &:not(.mat-sort-header-sorted) {
+          //   .mat-sort-header-button {
+          //     padding-right: 16px;
+          //   }
+          // }
 
           .mat-sort-header-button {
             margin-left: auto;
@@ -146,6 +183,23 @@ $_mat-checkbox-mark-stroke-size-small: 2 / 15 * $mat-checkbox-size-small !defaul
       .mat-row {
         box-sizing: border-box;
         transition: background-color .2s;
+
+        /* iOS Safari */
+        -webkit-touch-callout: none;
+        /* Safari */
+        -webkit-user-select: none;
+        /* Konqueror HTML */
+        -khtml-user-select: none;
+        /* Firefox */
+        -moz-user-select: none;
+        /* Internet Explorer/Edge */
+        -ms-user-select: none;
+        /* Non-prefixed version, currently supported by Chrome and Opera */
+        user-select: none;
+
+        &.selected {
+          background: #E0E0E0;
+        }
 
         &:last-child {
           border-bottom: none;
@@ -232,13 +286,6 @@ $_mat-checkbox-mark-stroke-size-small: 2 / 15 * $mat-checkbox-size-small !defaul
       }
     }
 
-    .quickFilter {
-      padding-right: 75px;
-      .mat-form-field-flex {
-        align-items: flex-end;
-      }
-    }
-
     .toolbar {
       margin: 4px 0px;
       height: 40px;
@@ -250,32 +297,32 @@ $_mat-checkbox-mark-stroke-size-small: 2 / 15 * $mat-checkbox-size-small !defaul
     }
   }
 
-  &.o-table-fixed{
+  &.o-table-fixed {
 
-    .expandable-container{
+    .expandable-container {
       flex-direction: column;
     }
 
-    .o-table-container{
+    .o-table-container {
       flex-direction: column;
       height:100%;
       display: flex;
 
-      #tableContent {
+      .mat-table {
         flex: 1 1 auto;
         position: relative;
         overflow-y: auto;
       }
-      
+
       .header-fixed, .mat-paginator,.toolbar{
         flex: 0 0 auto;
-      
+
       }
-  
-      
+
+
     }
-   
-   
+
+
 
 
   }

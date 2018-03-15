@@ -5,7 +5,7 @@ export var MAP = {
   'en': {
     'LANGUAGE': 'Language',
     'LOCALE_en': 'English',
-    'LOCALE_es': 'Spanish',
+    'LOCALE_es': 'Español',
     'USERNAME': 'Username',
     'PASSWORD': 'Password',
     'LOGIN': 'Login',
@@ -110,6 +110,7 @@ export var MAP = {
     'TABLE.FILTER_BY_COLUMN.EMPTY_VALUE': '(empty value)',
     'TABLE.FILTER': 'Filter',
     'TABLE.EMPTY': 'No results found',
+    'TABLE.EMPTY_USING_FILTER': ' using filter "{0}"',
     'TABLE.INFO': '_START_ - _END_ of _TOTAL_',
     'TABLE.INFO_EMPTY': '0 - 0 of 0',
     'TABLE.INFO_FILTERED': '(filtered from _MAX_ total entries)',
@@ -150,6 +151,7 @@ export var MAP = {
     'TABLE.SELECT.ROWS.1': '1 row selected',
     'TABLE.SHOW_ALL': 'All',
     'TABLE.SELECT_DATE': 'Select date',
+    'TABLE.ROW_VALIDATION_ERROR' : 'Row data is not valid!',
 
     'LAYOUT_MANANGER.MAIN_TAB_LABEL': 'Home',
     'LAYOUT_MANANGER.DIALOG_TITLE': 'Detail',
@@ -269,6 +271,7 @@ export var MAP = {
     'TABLE.FILTER_BY_COLUMN.EMPTY_VALUE': '(valor vacío)',
     'TABLE.FILTER': 'Filtrar',
     'TABLE.EMPTY': 'No se han obtenido resultados',
+    'TABLE.EMPTY_USING_FILTER': ' usando el filtro "{0}"',
     'TABLE.INFO': '_START_ - _END_ de _TOTAL_',
     'TABLE.INFO_EMPTY': '0 - 0 de 0',
     'TABLE.INFO_FILTERED': '(filtrados de un total de _MAX_ registros)',
@@ -309,6 +312,7 @@ export var MAP = {
     'TABLE.SELECT.ROWS.1': '1 registro seleccionado',
     'TABLE.SHOW_ALL': 'Todo',
     'TABLE.SELECT_DATE': 'Seleccionar fecha',
+    'TABLE.ROW_VALIDATION_ERROR' : 'La fila contiene campos con valores no válidos',
 
     'LAYOUT_MANANGER.MAIN_TAB_LABEL': 'Inicio',
     'LAYOUT_MANANGER.DIALOG_TITLE': 'Detalle',

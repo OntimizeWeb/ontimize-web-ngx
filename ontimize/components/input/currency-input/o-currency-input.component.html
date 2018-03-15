@@ -4,7 +4,7 @@
     <md-form-field #innerInputContainer fxFill>
         <input mdInput type="number" [attr.id]="getAttribute()" [formControlName]="getAttribute()" [placeholder]="placeHolder" [ngModel]="getValue()"
             (ngModelChange)="innerOnChange($event)" (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)" [readonly]="isReadOnly"
-            [min]="min" [max]="max" [step]="step">
+            [min]="min" [max]="max" [step]="step" [required]="isRequired">
         <span *ngIf="currencySymbol !== 'none' && currencySymbolPosition === 'right' " mdSuffix [class.mat-disabled]="isDisabled"
             class="icon-btn">{{ currency_symbols[currencySymbol] }}</span>
         <md-error *ngIf="hasError('required')">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</md-error>

@@ -1,6 +1,6 @@
 import { Component, Injector, ViewChild, TemplateRef } from '@angular/core';
 
-import { OBaseTableCellRenderer } from './o-base-table-cell-renderer.class';
+import { OBaseTableCellRenderer } from '../o-base-table-cell-renderer.class';
 
 export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_DATE = [
   // format [string]: date format. See MomentJS (http://momentjs.com/).
@@ -9,7 +9,7 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_DATE = [
 import {
   OMomentPipe,
   IMomentPipeArgument
-} from '../../../../pipes';
+} from '../../../../../pipes';
 
 @Component({
   selector: 'o-table-cell-renderer-date',
@@ -29,7 +29,7 @@ export class OTableCellRendererDateComponent extends OBaseTableCellRenderer {
 
   @ViewChild('templateref', { read: TemplateRef }) public templateref: TemplateRef<any>;
 
-  constructor( protected injector: Injector) {
+  constructor(protected injector: Injector) {
     super(injector);
     this.tableColumn.type = 'date';
     this.setComponentPipe();
@@ -44,7 +44,7 @@ export class OTableCellRendererDateComponent extends OBaseTableCellRenderer {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
     //Add 'implements OnInit' to the class.
     this.pipeArguments = {
-      format:this.format
+      format: this.format
     };
 
     this.initialize();
