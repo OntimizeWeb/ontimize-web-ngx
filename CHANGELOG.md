@@ -1,4 +1,4 @@
-## 2.1.0-rc.4
+## 2.1.0 (2018-03-15)
 
 ### BREAKING CHANGES
 * **o-table**: '*filter-case-sensitive*' input default value is now 'false'.
@@ -24,7 +24,7 @@
   * New '*clearSelection*' method ([0a37f5d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0a37f5d))
   * Adding '*show-title*' input ([cae0868](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/cae0868))
   * Adding cell editors ([04f43ae](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/04f43ae)) ([acc4238](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/acc4238)) ([efad08a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/efad08a))
-    * Adding more editors types ([ba71737](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ba71737)) ([1bc7f8e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1bc7f8e)) ([75bc0f8](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/75bc0f8)) ([5b6d9d0](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5b6d9d0))
+    * Adding more editors types ([ba71737](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ba71737)) ([1bc7f8e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1bc7f8e)) ([75bc0f8](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/75bc0f8)) ([5b6d9d0](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5b6d9d0)) ([66332c1](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/66332c1))  ([ff38a7e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ff38a7e))
   * Updating selection mode using click + ctrl | shift ([acc4238](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/acc4238))
   * Adding '*selection-mode*' input (none|simple|multiple)
   * Adding remote pagination  ([3e10752](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3e10752)) ([18f576d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/18f576d))
@@ -80,7 +80,7 @@
 * **o-component.class**: fixing empty '*label*' input bug ([6e212aa](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6e212aa))
 * **o-combo**: fixing bugs when value changes ([b3a0073](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b3a0073))
 
-## 2.1.0-rc.3
+## 2.1.0-rc.3 (2018-01-18)
 ### Features
 * **o-card-menu-layout**: new '*o-card-menu-layout*' component ([1dbc1f8](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1dbc1f8))
 * **o-card-menu-item**: new '*o-card-menu-item*' component ([1dbc1f8](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1dbc1f8))
