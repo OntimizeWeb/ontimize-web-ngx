@@ -10,7 +10,8 @@ export class OBaseTableCellEditor implements OnInit {
 
   public static DEFAULT_INPUTS_O_TABLE_CELL_EDITOR = [
     'orequired: required',
-    'showPlaceHolder: show-placeholder'
+    'showPlaceHolder: show-placeholder',
+    'olabel: label'
   ];
 
   public static DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR = [
@@ -25,6 +26,7 @@ export class OBaseTableCellEditor implements OnInit {
   orequired: boolean = false;
   @InputConverter()
   showPlaceHolder: boolean = false;
+  olabel: string;
 
   tableColumn: OTableColumnComponent;
 
@@ -39,7 +41,18 @@ export class OBaseTableCellEditor implements OnInit {
   editionCancelled: EventEmitter<Object> = new EventEmitter<Object>();
   editionCommitted: EventEmitter<Object> = new EventEmitter<Object>();
 
-  @HostListener('document:keyup', ['$event']) onKeyupHandler(event: KeyboardEvent) {
+  @HostListener('document:keyup', ['$event'])
+  onDocumentKeyup(event: KeyboardEvent) {
+    this.handleKeyup(event);
+  }
+  inputRef: any;
+
+  constructor(protected injector: Injector) {
+    this.tableColumn = this.injector.get(OTableColumnComponent);
+    this.translateService = this.injector.get(OTranslateService);
+  }
+
+  protected handleKeyup(event: KeyboardEvent) {
     const oColumn = this.table.getOColumn(this.tableColumn.attr);
     if (!oColumn || !oColumn.editing) {
       return;
@@ -49,12 +62,6 @@ export class OBaseTableCellEditor implements OnInit {
     } else if (event.keyCode === 13 || event.keyCode === 9) {
       this.commitEdition();
     }
-  }
-  inputRef: any;
-
-  constructor(protected injector: Injector) {
-    this.tableColumn = this.injector.get(OTableColumnComponent);
-    this.translateService = this.injector.get(OTranslateService);
   }
 
   createFormControl() {
@@ -143,7 +150,7 @@ export class OBaseTableCellEditor implements OnInit {
     const errors = this.formControl.errors;
     if (Util.isDefined(errors)) {
       if (Object.keys(errors).length === 1) {
-        return errors.hasOwnProperty('required');
+        return errors.hasOwnProperty(error);
       } else {
         for (let i = 0, len = errorsOrder.length; i < len; i++) {
           hasError = errors.hasOwnProperty(errorsOrder[i]);
@@ -173,6 +180,6 @@ export class OBaseTableCellEditor implements OnInit {
   }
 
   getPlaceholder(): string {
-    return this.showPlaceHolder ? this.translateService.get(this.tableColumn.attr) : undefined;
+    return this.showPlaceHolder ? this.translateService.get(this.olabel || this.tableColumn.attr) : undefined;
   }
 }

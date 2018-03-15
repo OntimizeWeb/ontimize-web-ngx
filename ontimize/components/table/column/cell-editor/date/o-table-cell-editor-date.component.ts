@@ -1,4 +1,4 @@
-import { Component, Injector, ViewChild, TemplateRef, OnInit, Inject, ElementRef } from '@angular/core';
+import { Component, Injector, ViewChild, TemplateRef, OnInit, Inject, ElementRef, ViewEncapsulation } from '@angular/core';
 import { MdDateFormats, DateAdapter, MdDatepicker, MD_DATE_FORMATS, MdDatepickerInputEvent } from '@angular/material';
 import * as moment from 'moment';
 
@@ -31,6 +31,7 @@ export const DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_DATE = [
   styleUrls: ['./o-table-cell-editor-date.component.scss'],
   inputs: DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_DATE,
   outputs: DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_DATE,
+  encapsulation: ViewEncapsulation.None,
   providers: [
     { provide: DateAdapter, useClass: MomentDateAdapter },
     { provide: MD_DATE_FORMATS, useValue: O_DATE_INPUT_DEFAULT_FORMATS }
@@ -105,6 +106,18 @@ export class OTableCellEditorDateComponent extends OBaseTableCellEditor implemen
         this.oMaxDate = date;
         this.maxDateString = momentD.format(this.format);
       }
+    }
+  }
+
+  protected handleKeyup(event: KeyboardEvent) {
+    const oColumn = this.table.getOColumn(this.tableColumn.attr);
+    if (!oColumn) {
+      return;
+    }
+    if (!oColumn.editing && this.datepicker && this.datepicker.opened) {
+      this.datepicker.close();
+    } else {
+      super.handleKeyup(event);
     }
   }
 

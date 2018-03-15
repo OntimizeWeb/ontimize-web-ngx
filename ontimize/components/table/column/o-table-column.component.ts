@@ -163,6 +163,7 @@ export class OTableColumnComponent implements OnInit {
   protected orequired: boolean = false;
   @InputConverter()
   showPlaceHolder: boolean = false;
+  olabel: string;
 
   /*input editor date */
   protected locale: string;
@@ -310,6 +311,7 @@ export class OTableColumnComponent implements OnInit {
           default:
             break;
         }
+        editor.olabel = propsOrigin.olabel;
       }
     }
     return editor;
