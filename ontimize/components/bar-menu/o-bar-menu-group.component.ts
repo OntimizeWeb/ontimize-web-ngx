@@ -31,9 +31,7 @@ export const DEFAULT_INPUTS_O_BAR_MENU_GROUP = [
   selector: 'o-bar-menu-group',
   templateUrl: './o-bar-menu-group.component.html',
   styleUrls: ['./o-bar-menu-group.component.scss'],
-  inputs: [
-    ...DEFAULT_INPUTS_O_BAR_MENU_GROUP
-  ],
+  inputs: DEFAULT_INPUTS_O_BAR_MENU_GROUP,
   encapsulation: ViewEncapsulation.None
 })
 export class OBarMenuGroupComponent implements OnInit {

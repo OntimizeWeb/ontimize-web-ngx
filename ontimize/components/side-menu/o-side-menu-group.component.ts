@@ -1,12 +1,11 @@
 import { Component, Inject, forwardRef, NgModule, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { OSideMenuModule, OSideMenuComponent } from './o-side-menu.component';
 import { OSharedModule } from '../../shared';
+import { OSideMenuModule, OSideMenuComponent } from './o-side-menu.component';
 
 export const DEFAULT_INPUTS_O_SIDE_MENU_GROUP = [
   // title [string]: menu group title. Default: no value.
   'title',
-
   // icon [string]: material icon. Default: no value.
   'icon'
 ];
@@ -15,9 +14,7 @@ export const DEFAULT_INPUTS_O_SIDE_MENU_GROUP = [
   selector: 'o-side-menu-group',
   templateUrl: './o-side-menu-group.component.html',
   styleUrls: ['./o-side-menu-group.component.scss'],
-  inputs: [
-    ...DEFAULT_INPUTS_O_SIDE_MENU_GROUP
-  ],
+  inputs: DEFAULT_INPUTS_O_SIDE_MENU_GROUP,
   encapsulation: ViewEncapsulation.None
 })
 export class OSideMenuGroupComponent {

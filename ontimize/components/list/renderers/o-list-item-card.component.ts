@@ -9,12 +9,10 @@ import {
   Optional,
   NgModule
 } from '@angular/core';
-
 import { CommonModule } from '@angular/common';
-
+import { OSharedModule } from '../../../shared';
 import { OListItemComponent } from '../list-item/o-list-item.component';
 import { OListItemCardRenderer } from './o-list-item-card-renderer.class';
-import { OSharedModule } from '../../../shared';
 
 export const DEFAULT_INPUTS_O_LIST_ITEM_CARD = [
   ...OListItemCardRenderer.DEFAULT_INPUTS_O_CARD_RENDERER
@@ -28,12 +26,8 @@ export const DEFAULT_OUTPUTS_O_LIST_ITEM_CARD = [
   selector: 'o-list-item-card',
   templateUrl: './o-list-item-card.component.html',
   styleUrls: ['./o-list-item-card.component.scss'],
-  inputs: [
-    ...DEFAULT_INPUTS_O_LIST_ITEM_CARD
-  ],
-  outputs: [
-    ...DEFAULT_OUTPUTS_O_LIST_ITEM_CARD
-  ],
+  inputs: DEFAULT_INPUTS_O_LIST_ITEM_CARD,
+  outputs: DEFAULT_OUTPUTS_O_LIST_ITEM_CARD,
   encapsulation: ViewEncapsulation.None,
   host: {
     'layout-padding': '',
@@ -41,7 +35,6 @@ export const DEFAULT_OUTPUTS_O_LIST_ITEM_CARD = [
     '[class.o-list-item-card]': 'true'
   }
 })
-
 export class OListItemCardComponent extends OListItemCardRenderer {
 
   constructor(

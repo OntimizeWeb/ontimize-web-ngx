@@ -43,12 +43,8 @@ export let O_DATE_INPUT_DEFAULT_FORMATS: MatDateFormats = {
   selector: 'o-date-input',
   templateUrl: './o-date-input.component.html',
   styles: ['./o-date-input.component.scss'],
-  outputs: [
-    ...DEFAULT_OUTPUTS_O_DATE_INPUT
-  ],
-  inputs: [
-    ...DEFAULT_INPUTS_O_DATE_INPUT
-  ],
+  outputs: DEFAULT_OUTPUTS_O_DATE_INPUT,
+  inputs: DEFAULT_INPUTS_O_DATE_INPUT,
   providers: [
     { provide: DateAdapter, useClass: MomentDateAdapter },
     { provide: MAT_DATE_FORMATS, useValue: O_DATE_INPUT_DEFAULT_FORMATS }

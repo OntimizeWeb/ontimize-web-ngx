@@ -17,9 +17,7 @@ export const DEFAULT_INPUTS_O_COLUMN = [
   selector: 'o-column',
   templateUrl: './o-column.component.html',
   styleUrls: ['./o-column.component.scss'],
-  inputs: [
-    ...DEFAULT_INPUTS_O_COLUMN
-  ],
+  inputs: DEFAULT_INPUTS_O_COLUMN,
   encapsulation: ViewEncapsulation.None,
   host: {
     '[class.o-column]': 'true'

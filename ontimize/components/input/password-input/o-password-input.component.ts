@@ -9,7 +9,9 @@ import { CommonModule } from '@angular/common';
 import { OSharedModule } from '../../../shared';
 import { OFormComponent } from '../../form/o-form.component';
 import {
-  OTextInputModule, OTextInputComponent, DEFAULT_INPUTS_O_TEXT_INPUT,
+  OTextInputModule,
+  OTextInputComponent,
+  DEFAULT_INPUTS_O_TEXT_INPUT,
   DEFAULT_OUTPUTS_O_TEXT_INPUT
 } from '../text-input/o-text-input.component';
 
@@ -25,12 +27,8 @@ export const DEFAULT_OUTPUTS_O_PASSWORD_INPUT = [
   selector: 'o-password-input',
   templateUrl: './o-password-input.component.html',
   styleUrls: ['./o-password-input.component.scss'],
-  inputs: [
-    ...DEFAULT_INPUTS_O_PASSWORD_INPUT
-  ],
-  outputs: [
-    ...DEFAULT_OUTPUTS_O_PASSWORD_INPUT
-  ],
+  inputs: DEFAULT_INPUTS_O_PASSWORD_INPUT,
+  outputs: DEFAULT_OUTPUTS_O_PASSWORD_INPUT,
   encapsulation: ViewEncapsulation.None
 })
 export class OPasswordInputComponent extends OTextInputComponent implements OnInit {

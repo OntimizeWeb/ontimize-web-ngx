@@ -26,12 +26,8 @@ export const DEFAULT_OUTPUTS_O_EMAIL_INPUT = [
   selector: 'o-email-input',
   templateUrl: './o-email-input.component.html',
   styleUrls: ['./o-email-input.component.scss'],
-  inputs: [
-    ...DEFAULT_INPUTS_O_EMAIL_INPUT
-  ],
-  outputs: [
-    ...DEFAULT_OUTPUTS_O_EMAIL_INPUT
-  ],
+  inputs: DEFAULT_INPUTS_O_EMAIL_INPUT,
+  outputs: DEFAULT_OUTPUTS_O_EMAIL_INPUT,
   encapsulation: ViewEncapsulation.None
 })
 export class OEmailInputComponent extends OTextInputComponent implements OnInit {

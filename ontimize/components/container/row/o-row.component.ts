@@ -17,9 +17,7 @@ export const DEFAULT_INPUTS_O_ROW = [
   selector: 'o-row',
   templateUrl: './o-row.component.html',
   styleUrls: ['./o-row.component.scss'],
-  inputs: [
-    ...DEFAULT_INPUTS_O_ROW
-  ],
+  inputs: DEFAULT_INPUTS_O_ROW,
   encapsulation: ViewEncapsulation.None,
   host: {
     '[class.o-row]': 'true'

@@ -17,9 +17,7 @@ export const DEFAULT_INPUTS_O_BUTTON = [
 
 @Component({
   selector: 'o-button',
-  inputs: [
-    ...DEFAULT_INPUTS_O_BUTTON
-  ],
+  inputs: DEFAULT_INPUTS_O_BUTTON,
   templateUrl: './o-button.component.html',
   styleUrls: ['./o-button.component.scss'],
   encapsulation: ViewEncapsulation.None

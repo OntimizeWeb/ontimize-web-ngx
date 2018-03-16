@@ -1,9 +1,9 @@
 
 import { Component, Injector, ViewChild, TemplateRef } from '@angular/core';
-import { OBaseTableCellRenderer } from '../o-base-table-cell-renderer.class';
-import { OTableCellRendererRealComponent } from '../real/o-table-cell-renderer-real.component';
 import { OCurrencyPipe, ICurrencyPipeArgument } from '../../../../../pipes';
 import { CurrencyService } from '../../../../../services';
+import { OBaseTableCellRenderer } from '../o-base-table-cell-renderer.class';
+import { OTableCellRendererRealComponent } from '../real/o-table-cell-renderer-real.component';
 
 export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_CURRENCY = [
   ...OTableCellRendererRealComponent.DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_REAL,
@@ -19,9 +19,7 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_CURRENCY = [
 @Component({
   selector: 'o-table-cell-renderer-currency',
   templateUrl: './o-table-cell-renderer-currency.component.html',
-  inputs: [
-    ...DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_CURRENCY
-  ]
+  inputs: DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_CURRENCY
 })
 
 export class OTableCellRendererCurrencyComponent extends OBaseTableCellRenderer {

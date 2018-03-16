@@ -16,25 +16,25 @@ import {
   ViewEncapsulation,
   EventEmitter
 } from '@angular/core';
-import { RouterModule } from '@angular/router';
-import { ObservableWrapper } from '../../util/async';
-
-import { MatCheckbox } from '@angular/material';
-import { OSharedModule } from '../../shared';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { MatCheckbox } from '@angular/material';
+import { Observable } from 'rxjs/Observable';
+
+import { ObservableWrapper } from '../../util/async';
+import { Util } from '../../util/util';
+import { OSharedModule } from '../../shared';
 import { OntimizeService } from '../../services';
 import { dataServiceFactory } from '../../services/data-service.provider';
-import { OSearchInputModule, OSearchInputComponent } from '../search-input/o-search-input.component';
-import { OListItemModule } from './list-item/o-list-item.component';
-import { OFormComponent } from '../form/o-form.component';
 import { InputConverter } from '../../decorators';
-import { Util } from '../../util/util';
+import { OSearchInputModule, OSearchInputComponent } from '../search-input/o-search-input.component';
+import { OFormComponent } from '../form/o-form.component';
+import { OServiceComponent } from '../o-service-component.class';
+import { ServiceUtils } from '../service.utils';
+
+import { OListItemModule } from './list-item/o-list-item.component';
 import { OListItemComponent } from './list-item/o-list-item.component';
 import { OListItemDirective } from './list-item/o-list-item.directive';
-
-import { OServiceComponent } from '../o-service-component.class';
-import { Observable } from 'rxjs/Observable';
-import { ServiceUtils } from '../service.utils';
 
 export interface IList {
   registerListItemDirective(item: OListItemDirective): void;
@@ -84,12 +84,8 @@ export interface OListInitializationOptions {
   providers: [
     { provide: OntimizeService, useFactory: dataServiceFactory, deps: [Injector] }
   ],
-  inputs: [
-    ...DEFAULT_INPUTS_O_LIST
-  ],
-  outputs: [
-    ...DEFAULT_OUTPUTS_O_LIST
-  ],
+  inputs: DEFAULT_INPUTS_O_LIST,
+  outputs: DEFAULT_OUTPUTS_O_LIST,
   templateUrl: './o-list.component.html',
   styleUrls: ['./o-list.component.scss'],
   encapsulation: ViewEncapsulation.None

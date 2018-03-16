@@ -19,9 +19,7 @@ export class OColumnCalculated {
 @Component({
   selector: 'o-table-column-calculated',
   templateUrl: './o-table-column-calculated.component.html',
-  inputs: [
-    ...DEFAULT_INPUTS_O_TABLE_COLUMN_CALCULATED,
-  ],
+  inputs: DEFAULT_INPUTS_O_TABLE_COLUMN_CALCULATED,
   providers: [
     {
       provide: OTableColumnComponent,
@@ -43,7 +41,6 @@ export class OTableColumnCalculatedComponent extends OTableColumnComponent {
   set functionAggregate(val: OperatorFunction) {
     this._functionAggregate = val;
   }
-
 
   constructor(
     @Inject(forwardRef(() => OTableComponent)) public table: OTableComponent,

@@ -16,9 +16,7 @@ export const DEFAULT_INPUTS_O_BAR_MENU = [
   selector: 'o-bar-menu',
   templateUrl: './o-bar-menu.component.html',
   styleUrls: ['./o-bar-menu.component.scss'],
-  inputs: [
-    ...DEFAULT_INPUTS_O_BAR_MENU
-  ],
+  inputs: DEFAULT_INPUTS_O_BAR_MENU,
   encapsulation: ViewEncapsulation.None
 })
 export class OBarMenuComponent {

@@ -37,9 +37,7 @@ export const DEFAULT_INPUTS_O_BAR_MENU_ITEM = [
   selector: 'o-bar-menu-item',
   templateUrl: './o-bar-menu-item.component.html',
   styleUrls: ['./o-bar-menu-item.component.scss'],
-  inputs: [
-    ...DEFAULT_INPUTS_O_BAR_MENU_ITEM
-  ],
+  inputs: DEFAULT_INPUTS_O_BAR_MENU_ITEM,
   encapsulation: ViewEncapsulation.None
 })
 export class OBarMenuItemComponent implements OnInit {
@@ -103,7 +101,7 @@ export class OBarMenuItemComponent implements OnInit {
     return this._itemTitle;
   }
 
-  set itemTitle(val : string) {
+  set itemTitle(val: string) {
     this._itemTitle = val;
   }
 
@@ -111,7 +109,7 @@ export class OBarMenuItemComponent implements OnInit {
     return this._tooltip;
   }
 
-  set tooltip(val : string) {
+  set tooltip(val: string) {
     this._tooltip = val;
   }
 
@@ -119,7 +117,7 @@ export class OBarMenuItemComponent implements OnInit {
     return this._icon;
   }
 
-  set icon(val : string) {
+  set icon(val: string) {
     this._icon = val;
   }
 
@@ -127,7 +125,7 @@ export class OBarMenuItemComponent implements OnInit {
     return this._route;
   }
 
-  set route(val : string) {
+  set route(val: string) {
     this._route = val;
   }
 
@@ -135,7 +133,7 @@ export class OBarMenuItemComponent implements OnInit {
     return this._action;
   }
 
-  set action(val : Function) {
+  set action(val: Function) {
     this._action = val;
   }
 
@@ -143,7 +141,7 @@ export class OBarMenuItemComponent implements OnInit {
     return this._restricted;
   }
 
-  set restricted(val : boolean) {
+  set restricted(val: boolean) {
     this._restricted = val;
   }
 
@@ -151,7 +149,7 @@ export class OBarMenuItemComponent implements OnInit {
     return this._isHovered;
   }
 
-  set isHovered(val : boolean) {
+  set isHovered(val: boolean) {
     this._isHovered = val;
   }
 

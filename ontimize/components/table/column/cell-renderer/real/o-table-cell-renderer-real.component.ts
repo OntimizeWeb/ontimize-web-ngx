@@ -1,26 +1,20 @@
 import { Component, Injector, TemplateRef, ViewChild } from '@angular/core';
-import { OTableCellRendererIntegerComponent, DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_INTEGER } from '../integer/o-table-cell-renderer-integer.component';
 import { NumberService } from '../../../../../services';
 import { ORealPipe, IRealPipeArgument } from '../../../../../pipes';
+import { OTableCellRendererIntegerComponent, DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_INTEGER } from '../integer/o-table-cell-renderer-integer.component';
 
 export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_REAL = [
-
   ...DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_INTEGER,
-
   // decimal-separator [string]: decimal separator. Default: dot (.).
   'decimalSeparator: decimal-separator',
-
   // decimal-digits [number]: number of decimal digits. Default: 2.
   'decimalDigits: decimal-digits'
-
 ];
 
 @Component({
   selector: 'o-table-cell-renderer-real',
   templateUrl: './o-table-cell-renderer-real.component.html',
-  inputs: [
-    ...DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_REAL
-  ]
+  inputs: DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_REAL
 })
 export class OTableCellRendererRealComponent extends OTableCellRendererIntegerComponent {
 
@@ -60,6 +54,5 @@ export class OTableCellRendererRealComponent extends OTableCellRendererIntegerCo
     };
     this.initialize();
   }
-
 
 }

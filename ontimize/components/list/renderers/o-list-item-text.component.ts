@@ -9,12 +9,10 @@ import {
   Optional,
   NgModule
 } from '@angular/core';
-
 import { CommonModule } from '@angular/common';
-
+import { OSharedModule } from '../../../shared';
 import { OListItemComponent } from '../list-item/o-list-item.component';
 import { OListItemTextRenderer } from './o-list-item-text-renderer.class';
-import { OSharedModule } from '../../../shared';
 
 export const DEFAULT_INPUTS_O_LIST_ITEM_TEXT = [
   ...OListItemTextRenderer.DEFAULT_INPUTS_O_TEXT_RENDERER,
@@ -29,18 +27,13 @@ export const DEFAULT_OUTPUTS_O_LIST_ITEM_TEXT = [
   selector: 'o-list-item-text',
   templateUrl: './o-list-item-text.component.html',
   styleUrls: ['./o-list-item-text.component.scss'],
-  inputs: [
-    ...DEFAULT_INPUTS_O_LIST_ITEM_TEXT
-  ],
-  outputs: [
-    ...DEFAULT_OUTPUTS_O_LIST_ITEM_TEXT
-  ],
+  inputs: DEFAULT_INPUTS_O_LIST_ITEM_TEXT,
+  outputs: DEFAULT_OUTPUTS_O_LIST_ITEM_TEXT,
   encapsulation: ViewEncapsulation.None,
   host: {
     '[class.o-custom-list-item]': 'true'
   }
 })
-
 export class OListItemTextComponent extends OListItemTextRenderer {
 
   public ICON_POSITION_LEFT = 'left';

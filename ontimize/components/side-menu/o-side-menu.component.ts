@@ -14,9 +14,7 @@ export const DEFAULT_INPUTS_O_SIDE_MENU = [
   selector: 'o-side-menu',
   templateUrl: './o-side-menu.component.html',
   styleUrls: ['./o-side-menu.component.scss'],
-  inputs: [
-    ...DEFAULT_INPUTS_O_SIDE_MENU
-  ],
+  inputs: DEFAULT_INPUTS_O_SIDE_MENU,
   encapsulation: ViewEncapsulation.None
 })
 export class OSideMenuComponent {

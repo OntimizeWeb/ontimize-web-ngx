@@ -4,18 +4,20 @@ import { Util } from '../../../../../utils';
 import { OntimizeService, dataServiceFactory, DialogService } from '../../../../../services';
 import { OBaseTableCellRenderer } from '../o-base-table-cell-renderer.class';
 
+export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_SERVICE = [
+  'entity',
+  'service',
+  'columns',
+  'valueColumn: value-column',
+  'parentKeys: parent-keys',
+  'queryMethod: query-method',
+  'serviceType : service-type'
+];
+
 @Component({
   selector: 'o-table-cell-renderer-service',
   templateUrl: './o-table-cell-renderer-service.component.html',
-  inputs: [
-    'entity',
-    'service',
-    'columns',
-    'valueColumn: value-column',
-    'parentKeys: parent-keys',
-    'queryMethod: query-method',
-    'serviceType : service-type'
-  ],
+  inputs: DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_SERVICE,
   providers: [
     { provide: OntimizeService, useFactory: dataServiceFactory, deps: [Injector] }
   ]
@@ -23,6 +25,7 @@ import { OBaseTableCellRenderer } from '../o-base-table-cell-renderer.class';
 
 export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer implements OnInit {
 
+  public static DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_SERVICE = DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_SERVICE;
   public static DEFAULT_QUERY_METHOD = 'query';
 
   @ViewChild('templateref', { read: TemplateRef }) public templateref: TemplateRef<any>;

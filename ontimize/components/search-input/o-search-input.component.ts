@@ -19,12 +19,8 @@ export const DEFAULT_OUTPUTS_O_SEARCH_INPUT = [
   selector: 'o-search-input',
   templateUrl: './o-search-input.component.html',
   styleUrls: ['./o-search-input.component.scss'],
-  inputs: [
-    ...DEFAULT_INPUTS_O_SEARCH_INPUT
-  ],
-  outputs: [
-    ...DEFAULT_OUTPUTS_O_SEARCH_INPUT
-  ],
+  inputs: DEFAULT_INPUTS_O_SEARCH_INPUT,
+  outputs: DEFAULT_OUTPUTS_O_SEARCH_INPUT,
   encapsulation: ViewEncapsulation.None
 })
 export class OSearchInputComponent implements OnInit {

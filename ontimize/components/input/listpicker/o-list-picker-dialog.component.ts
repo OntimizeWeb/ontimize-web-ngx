@@ -12,9 +12,7 @@ export const DEFAULT_INPUTS_O_LIST_PICKER = [
   selector: 'o-list-picker-dialog',
   templateUrl: './o-list-picker-dialog.component.html',
   styleUrls: ['./o-list-picker.component.scss'],
-  inputs: [
-    ...DEFAULT_INPUTS_O_LIST_PICKER
-  ],
+  inputs: DEFAULT_INPUTS_O_LIST_PICKER,
   encapsulation: ViewEncapsulation.None,
   host: {
     '[class.o-list-picker-dialog]': 'true'

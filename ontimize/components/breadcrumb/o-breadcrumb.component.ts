@@ -21,9 +21,7 @@ export const DEFAULT_INPUTS_O_BREADCRUMB = [
   selector: 'o-breadcrumb',
   templateUrl: 'o-breadcrumb.component.html',
   styleUrls: ['o-breadcrumb.component.scss'],
-  inputs: [
-    ...DEFAULT_INPUTS_O_BREADCRUMB
-  ],
+  inputs: DEFAULT_INPUTS_O_BREADCRUMB,
   encapsulation: ViewEncapsulation.None,
   host: {
     '[class.o-breadcrumb]': 'true'

@@ -7,13 +7,10 @@ import { OSideMenuModule, OSideMenuComponent } from './o-side-menu.component';
 export const DEFAULT_INPUTS_O_SIDE_MENU_ITEM = [
   // title [string]: menu item title. Default: no value.
   'title',
-
   // icon [string]: material icon. Default: no value.
   'icon',
-
   // route [string]: name of the state to navigate. Default: no value.
   'route',
-
   // action [function]: function to execute. Default: no value.
   'action'
 ];
@@ -22,9 +19,7 @@ export const DEFAULT_INPUTS_O_SIDE_MENU_ITEM = [
   selector: 'o-side-menu-item',
   templateUrl: './o-side-menu-item.component.html',
   styleUrls: ['./o-side-menu-item.component.scss'],
-  inputs: [
-    ...DEFAULT_INPUTS_O_SIDE_MENU_ITEM
-  ],
+  inputs: DEFAULT_INPUTS_O_SIDE_MENU_ITEM,
   encapsulation: ViewEncapsulation.None
 })
 export class OSideMenuItemComponent implements OnInit {

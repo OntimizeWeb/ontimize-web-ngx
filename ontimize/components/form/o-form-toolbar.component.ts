@@ -33,9 +33,7 @@ export const DEFAULT_INPUTS_O_FORM_TOOLBAR = [
   selector: 'o-form-toolbar',
   templateUrl: './o-form-toolbar.component.html',
   styleUrls: ['./o-form-toolbar.component.scss'],
-  inputs: [
-    ...DEFAULT_INPUTS_O_FORM_TOOLBAR
-  ],
+  inputs: DEFAULT_INPUTS_O_FORM_TOOLBAR,
   encapsulation: ViewEncapsulation.None
 })
 
