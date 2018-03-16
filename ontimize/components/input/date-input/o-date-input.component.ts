@@ -1,7 +1,8 @@
 import { Component, Optional, Inject, ElementRef, Injector, forwardRef, ViewChild, NgModule, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ValidatorFn } from '@angular/forms/src/directives/validators';
-import { MatDateFormats, DateAdapter, MatDatepicker, MatDatepickerInput, MAT_DATE_FORMATS, MatDatepickerInputEvent } from '@angular/material';
+import { MatDateFormats, DateAdapter, MatDatepicker, MatDatepickerInput, MAT_DATE_FORMATS, MatDatepickerInputEvent, MAT_DATE_LOCALE } from '@angular/material';
+import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { Subscription } from 'rxjs/Subscription';
 
 import { OSharedModule } from '../../../shared';
@@ -11,7 +12,6 @@ import { OFormDataComponent } from '../../o-form-data-component.class';
 import { InputConverter } from '../../../decorators';
 import { MomentService } from '../../../services';
 
-import { MomentDateAdapter } from './adapter/moment.adapter';
 import * as moment from 'moment';
 
 import { DEFAULT_INPUTS_O_TEXT_INPUT, DEFAULT_OUTPUTS_O_TEXT_INPUT } from '../text-input/o-text-input.component';
@@ -46,7 +46,7 @@ export let O_DATE_INPUT_DEFAULT_FORMATS: MatDateFormats = {
   outputs: DEFAULT_OUTPUTS_O_DATE_INPUT,
   inputs: DEFAULT_INPUTS_O_DATE_INPUT,
   providers: [
-    { provide: DateAdapter, useClass: MomentDateAdapter },
+    { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
     { provide: MAT_DATE_FORMATS, useValue: O_DATE_INPUT_DEFAULT_FORMATS }
   ]
 })
@@ -108,8 +108,7 @@ export class ODateInputComponent extends OFormDataComponent {
       this.matDateFormats.display.dateInput = this.oformat;
       this.matDateFormats.parse.dateInput = this.oformat;
     }
-
-    this.momentDateAdapter.setLocale({ locale: this.olocale, format: this.oformat });
+    this.momentDateAdapter.setLocale(this.olocale);
 
     if (this.oStartView) {
       this.datepicker.startView = this.oStartView;

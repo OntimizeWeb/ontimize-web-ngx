@@ -1,21 +1,22 @@
-<div fxLayout="row"  fxLayoutAlign="space-between center" [formGroup]="getFormGroup()" [matTooltip]="tooltip" [matTooltipPosition]="tooltipPosition"
-    [matTooltipShowDelay]="tooltipShowDelay">
-    <mat-form-field #innerInputContainer fxFlexFill>
-        <input matInput #matInputRef [matDatepicker]="d"
-            [attr.id]="getAttribute()" [id]="getAttribute()" [formControlName]="getAttribute()"
-            [placeholder]="placeHolder" [readonly]="isReadOnly"
-            [ngModel]="getValueAsDate()" (ngModelChange)="onModelChange($event)"
-            (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)"
-            [matDatepickerFilter]="filterDate" (dateChange)="innerOnChange($event)" [required]="isRequired">
-        <!--<mat-datepicker-toggle [disabled]="isReadOnly" matSuffix [for]="d"></mat-datepicker-toggle>-->
-        <span class="icon-btn" (click)="open()" matSuffix><mat-icon >today</mat-icon></span>
-        <mat-datepicker #d [disabled]="isReadOnly"></mat-datepicker>
+<div fxLayout="row" fxLayoutAlign="space-between center" [formGroup]="getFormGroup()" [matTooltip]="tooltip" [matTooltipPosition]="tooltipPosition"
+  [matTooltipShowDelay]="tooltipShowDelay">
+  <mat-form-field fxFlexFill>
+    <input matInput #matInputRef [matDatepicker]="d" [attr.id]="getAttribute()" [id]="getAttribute()" [formControlName]="getAttribute()"
+      [placeholder]="placeHolder" [readonly]="isReadOnly" [ngModel]="getValueAsDate()" (ngModelChange)="onModelChange($event)"
+      (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)" [matDatepickerFilter]="filterDate" (dateChange)="innerOnChange($event)"
+      [required]="isRequired">
 
-        <mat-error *ngIf="hasError('required')">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</mat-error>
-        <mat-error *ngIf="hasError('matDatepickerParse')">{{ 'FORM_VALIDATION.DATE_PARSE' | oTranslate }} {{ oformat }}</mat-error>
-        <mat-error *ngIf="hasError('matDatepickerFilter')">{{ 'FORM_VALIDATION.DATE_FILTER' | oTranslate }}</mat-error>
-        <mat-error *ngIf="hasError('matDatepickerMin')">{{ 'FORM_VALIDATION.DATE_MIN' | oTranslate }} {{ minDateString }}</mat-error>
-        <mat-error *ngIf="hasError('matDatepickerMax')">{{ 'FORM_VALIDATION.DATE_MAX' | oTranslate }} {{ maxDateString }}</mat-error>
-    </mat-form-field>
+    <mat-datepicker-toggle matSuffix [disabled]="isReadOnly || isDisabled" [for]="d">
+      <mat-icon matDatepickerToggleIcon>today</mat-icon>
+    </mat-datepicker-toggle>
+
+    <mat-datepicker #d [disabled]="isReadOnly"></mat-datepicker>
+
+    <mat-error *ngIf="hasError('required')">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</mat-error>
+    <mat-error *ngIf="hasError('matDatepickerParse')">{{ 'FORM_VALIDATION.DATE_PARSE' | oTranslate }} {{ oformat }}</mat-error>
+    <mat-error *ngIf="hasError('matDatepickerFilter')">{{ 'FORM_VALIDATION.DATE_FILTER' | oTranslate }}</mat-error>
+    <mat-error *ngIf="hasError('matDatepickerMin')">{{ 'FORM_VALIDATION.DATE_MIN' | oTranslate }} {{ minDateString }}</mat-error>
+    <mat-error *ngIf="hasError('matDatepickerMax')">{{ 'FORM_VALIDATION.DATE_MAX' | oTranslate }} {{ maxDateString }}</mat-error>
+  </mat-form-field>
 
 </div>

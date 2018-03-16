@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MomentDateAdapter } from '../../components/input/date-input/adapter/moment.adapter';
 import {
   MatButtonToggleModule,
   MatButtonModule,
@@ -32,7 +31,8 @@ import {
   MatNativeDateModule,
   MatTableModule,
   MatPaginatorModule,
-  MatSortModule
+  MatSortModule,
+  MAT_DATE_LOCALE
   // PlatformModule,
   // StyleModule,
   // OverlayModule,
@@ -42,6 +42,8 @@ import {
   // MatCommonModule,
   // ObserveContentModule
 } from '@angular/material';
+
+import { MomentDateAdapter } from '@angular/material-moment-adapter';
 
 const MATERIAL_MODULES = [
   MatAutocompleteModule,
@@ -84,12 +86,11 @@ const MATERIAL_MODULES = [
   // ObserveContentModule
 ];
 
-
 @NgModule({
   imports: [CommonModule],
   exports: MATERIAL_MODULES,
   providers: [
-    { provide: DateAdapter, useClass: MomentDateAdapter }
+    { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] }
   ]
 })
 export class OCustomMaterialModule { }
