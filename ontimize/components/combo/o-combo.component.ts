@@ -32,12 +32,8 @@ export const DEFAULT_OUTPUTS_O_COMBO = [
   providers: [
     { provide: OntimizeService, useFactory: dataServiceFactory, deps: [Injector] }
   ],
-  inputs: [
-    ...DEFAULT_INPUTS_O_COMBO
-  ],
-  outputs: [
-    ...DEFAULT_OUTPUTS_O_COMBO
-  ],
+  inputs: DEFAULT_INPUTS_O_COMBO,
+  outputs: DEFAULT_OUTPUTS_O_COMBO,
   templateUrl: './o-combo.component.html',
   styleUrls: ['./o-combo.component.scss'],
   encapsulation: ViewEncapsulation.None

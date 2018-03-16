@@ -1,26 +1,23 @@
-<div [formGroup]="getFormGroup()" class="mat-combo-container custom-error" [matTooltip]="tooltip" [matTooltipPosition]="tooltipPosition"
-    [matTooltipShowDelay]="tooltipShowDelay">
-    <mat-select #selectModel [class.visible]="!isReadOnly" [class.hidden]="isReadOnly" class="mat-combo" [attr.id]="getAttribute()"
-        [id]="getAttribute()" fxFill [formControlName]="getAttribute()" [placeholder]="placeHolder"
-        [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)" [required]="isRequired">
-        <mat-option *ngIf="hasNullSelection()"></mat-option>
-        <mat-option *ngFor="let item of getDataArray(); let rowIndex = index" [value]="getValueColumn(item)">
-            {{ getOptionDescriptionValue(item) }}
-        </mat-option>
-    </mat-select>
-    <mat-hint *ngIf="hasError('required')">
-        <span>{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</span>
-    </mat-hint>
+<div [formGroup]="getFormGroup()" [matTooltip]="tooltip" [matTooltipPosition]="tooltipPosition" [matTooltipShowDelay]="tooltipShowDelay">
 
-    <mat-form-field #innerInputContainer [class.visible]="isReadOnly" [class.hidden]="!isReadOnly" fxFlex fxFill>
-        <input matInput class="mat-input" type="text" [attr.id]="'fake_' + getAttribute()" [id]="'fake_' + getAttribute()" fxFill
-            [class.ng-untouched]="getFormControl() && getFormControl().untouched" [class.ng-touched]="getFormControl() && getFormControl().touched"
-            [class.ng-dirty]="getFormControl() && getFormControl().dirty" [class.ng-pristine]="getFormControl() && getFormControl().pristine"
-            [class.ng-invalid]="getFormControl() && !getFormControl().valid" [class.ng-valid]="getFormControl() && getFormControl().valid"
-            [placeholder]="placeHolder" [value]="getDescriptionValue()" [readonly]="isReadOnly" [disabled]="isDisabled" [required]="isRequired">
-        <mat-hint *ngIf="hasError('required')">
-            <span>{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</span>
-        </mat-hint>
-    </mat-form-field>
+  <mat-form-field fxFlexFill [class.visible]="!isReadOnly" [class.hidden]="isReadOnly">
+    <mat-select #selectModel [attr.id]="getAttribute()" [id]="getAttribute()" fxFill [formControlName]="getAttribute()" [placeholder]="placeHolder"
+      [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)" [required]="isRequired">
+      <mat-option *ngIf="hasNullSelection()"></mat-option>
+      <mat-option *ngFor="let item of getDataArray(); let rowIndex = index" [value]="getValueColumn(item)">
+        {{ getOptionDescriptionValue(item) }}
+      </mat-option>
+    </mat-select>
+    <mat-error *ngIf="hasError('required')">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</mat-error>
+  </mat-form-field>
+
+  <mat-form-field #innerInputContainer [class.visible]="isReadOnly" [class.hidden]="!isReadOnly" fxFlex fxFill>
+    <input matInput class="mat-input" type="text" [attr.id]="'fake_' + getAttribute()" [id]="'fake_' + getAttribute()" fxFill
+      [class.ng-untouched]="getFormControl() && getFormControl().untouched" [class.ng-touched]="getFormControl() && getFormControl().touched"
+      [class.ng-dirty]="getFormControl() && getFormControl().dirty" [class.ng-pristine]="getFormControl() && getFormControl().pristine"
+      [class.ng-invalid]="getFormControl() && !getFormControl().valid" [class.ng-valid]="getFormControl() && getFormControl().valid"
+      [placeholder]="placeHolder" [value]="getDescriptionValue()" [readonly]="isReadOnly" [disabled]="isDisabled" [required]="isRequired">
+    <mat-error *ngIf="hasError('required')">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</mat-error>
+  </mat-form-field>
 
 </div>
