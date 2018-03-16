@@ -1,30 +1,30 @@
 <ng-container *ngIf="sidenavOpened">
   <li class="application-sidenav-menuitem application-sidenav-item" [class.user-info]="isUserInfoItem()">
-    <a md-button *ngIf="isRouteItem()" [routerLink]="[ menuItem.route ]" routerLinkActive="application-sidenav-viewer-sidenav-item-selected">
+    <a mat-button *ngIf="isRouteItem()" [routerLink]="[ menuItem.route ]" routerLinkActive="application-sidenav-viewer-sidenav-item-selected">
       <div fxLayout="row" fxLayoutAlign="start center">
-        <md-icon *ngIf="menuItem.icon">{{ menuItem.icon }}</md-icon>
+        <mat-icon *ngIf="menuItem.icon">{{ menuItem.icon }}</mat-icon>
         {{ menuItem.name | oTranslate }}
       </div>
     </a>
 
-    <a md-button *ngIf="isActionItem()" (click)="onClick()">
+    <a mat-button *ngIf="isActionItem()" (click)="onClick()">
       <div fxLayout="row" fxLayoutAlign="start center">
-        <md-icon *ngIf="menuItem.icon">{{ menuItem.icon }}</md-icon>
+        <mat-icon *ngIf="menuItem.icon">{{ menuItem.icon }}</mat-icon>
         {{ menuItem.name | oTranslate }}
       </div>
     </a>
 
-    <a md-button *ngIf="isLocaleItem()" (click)="onClick()">
+    <a mat-button *ngIf="isLocaleItem()" (click)="onClick()">
       <div fxLayout="row" fxLayoutAlign="space-between center">
-        <md-icon *ngIf="menuItem.icon">{{ menuItem.icon }}</md-icon>
+        <mat-icon *ngIf="menuItem.icon">{{ menuItem.icon }}</mat-icon>
         {{ menuItem.name | oTranslate }}
-        <md-icon *ngIf="isConfiguredLang()" class="configured-lang">check_circle</md-icon>
+        <mat-icon *ngIf="isConfiguredLang()" class="configured-lang">check_circle</mat-icon>
       </div>
     </a>
 
-    <a md-button *ngIf="isLogoutItem()" (click)="onClick()">
+    <a mat-button *ngIf="isLogoutItem()" (click)="onClick()">
       <div fxLayout="row" fxLayoutAlign="start center">
-        <md-icon *ngIf="menuItem.icon">{{ menuItem.icon }}</md-icon>
+        <mat-icon *ngIf="menuItem.icon">{{ menuItem.icon }}</mat-icon>
         {{ menuItem.name | oTranslate }}
       </div>
     </a>
@@ -39,7 +39,7 @@
 
     <div *ngIf="isDefaultItem()">
       <div fxLayout="row" fxLayoutAlign="start center">
-        <md-icon *ngIf="menuItem.icon">{{ menuItem.icon }}</md-icon>
+        <mat-icon *ngIf="menuItem.icon">{{ menuItem.icon }}</mat-icon>
         {{ menuItem.name | oTranslate }}
       </div>
     </div>
@@ -49,20 +49,20 @@
 <ng-container *ngIf="!sidenavOpened">
   <li class="application-sidenav-menuitem application-sidenav-item" [ngSwitch]="menuItemType">
 
-    <a md-button *ngSwitchCase="'route'" [routerLink]="[ menuItem.route ]" routerLinkActive="application-sidenav-viewer-sidenav-item-selected">
-      <md-icon *ngIf="menuItem.icon">{{ menuItem.icon }}</md-icon>
+    <a mat-button *ngSwitchCase="'route'" [routerLink]="[ menuItem.route ]" routerLinkActive="application-sidenav-viewer-sidenav-item-selected">
+      <mat-icon *ngIf="menuItem.icon">{{ menuItem.icon }}</mat-icon>
     </a>
 
-    <a md-button *ngSwitchCase="'action'" (click)="onClick()">
-      <md-icon *ngIf="menuItem.icon">{{ menuItem.icon }}</md-icon>
+    <a mat-button *ngSwitchCase="'action'" (click)="onClick()">
+      <mat-icon *ngIf="menuItem.icon">{{ menuItem.icon }}</mat-icon>
     </a>
 
-    <a md-button *ngSwitchCase="'locale'" fxLayout="row" fxLayoutAlign="space-between center" (click)="onClick()">
-      <md-icon *ngIf="menuItem.icon">{{ menuItem.icon }}</md-icon>
+    <a mat-button *ngSwitchCase="'locale'" fxLayout="row" fxLayoutAlign="space-between center" (click)="onClick()">
+      <mat-icon *ngIf="menuItem.icon">{{ menuItem.icon }}</mat-icon>
     </a>
 
     <div *ngSwitchDefault>
-      <md-icon *ngIf="menuItem.icon">{{ menuItem.icon }}</md-icon>
+      <mat-icon *ngIf="menuItem.icon">{{ menuItem.icon }}</mat-icon>
     </div>
   </li>
 </ng-container>

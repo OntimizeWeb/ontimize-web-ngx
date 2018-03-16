@@ -1,5 +1,5 @@
 import { Component, Inject, OnDestroy } from '@angular/core';
-import { MdDialogRef, MD_DIALOG_DATA } from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
 import { DragulaService } from 'ng2-dragula/ng2-dragula';
 
@@ -21,8 +21,8 @@ export class OTableVisibleColumnsDialogComponent implements OnDestroy {
 
   constructor(
     private dragulaService: DragulaService,
-    public dialogRef: MdDialogRef<OTableVisibleColumnsDialogComponent>,
-    @Inject(MD_DIALOG_DATA) data: any
+    public dialogRef: MatDialogRef<OTableVisibleColumnsDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) data: any
   ) {
     this.dragulaService.setOptions(O_TABLE_VCD_DRAGULA_BAG_NAME, {});
 

@@ -34,7 +34,7 @@
 
   .custom-error {
 
-    .input-model.ng-invalid.ng-touched + md-form-field {
+    .input-model.ng-invalid.ng-touched + mat-form-field {
 
       .mat-input-placeholder,
       .mat-placeholder-required {
@@ -48,8 +48,8 @@
     }
 
 
-    .input-model.ng-invalid.ng-touched + md-form-field,
-    md-form-field.ng-invalid.ng-touched  {
+    .input-model.ng-invalid.ng-touched + mat-form-field,
+    mat-form-field.ng-invalid.ng-touched  {
       .mat-input-wrapper {
         .mat-input-underline {
           border-top-color: mat-color($warn);

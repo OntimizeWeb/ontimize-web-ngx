@@ -1,7 +1,7 @@
 import { Component, Optional, Inject, ElementRef, Injector, forwardRef, ViewChild, NgModule, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ValidatorFn } from '@angular/forms/src/directives/validators';
-import { MdDateFormats, DateAdapter, MdDatepicker, MdDatepickerInput, MD_DATE_FORMATS, MdDatepickerInputEvent } from '@angular/material';
+import { MatDateFormats, DateAdapter, MatDatepicker, MatDatepickerInput, MAT_DATE_FORMATS, MatDatepickerInputEvent } from '@angular/material';
 import { Subscription } from 'rxjs/Subscription';
 
 import { OSharedModule } from '../../../shared';
@@ -34,7 +34,7 @@ export const DEFAULT_INPUTS_O_DATE_INPUT = [
 
 export type DateFilterFunction = (date: Date) => boolean;
 
-export let O_DATE_INPUT_DEFAULT_FORMATS: MdDateFormats = {
+export let O_DATE_INPUT_DEFAULT_FORMATS: MatDateFormats = {
   parse: { dateInput: 'L' },
   display: { dateInput: 'L', monthYearLabel: 'Y', dateA11yLabel: 'LL', monthYearA11yLabel: 'MMMM Y' }
 };
@@ -51,17 +51,17 @@ export let O_DATE_INPUT_DEFAULT_FORMATS: MdDateFormats = {
   ],
   providers: [
     { provide: DateAdapter, useClass: MomentDateAdapter },
-    { provide: MD_DATE_FORMATS, useValue: O_DATE_INPUT_DEFAULT_FORMATS }
+    { provide: MAT_DATE_FORMATS, useValue: O_DATE_INPUT_DEFAULT_FORMATS }
   ]
 })
 
 export class ODateInputComponent extends OFormDataComponent {
 
-  @ViewChild(MdDatepicker)
-  datepicker: MdDatepicker<Date>;
+  @ViewChild(MatDatepicker)
+  datepicker: MatDatepicker<Date>;
 
-  @ViewChild(MdDatepickerInput)
-  datepickerInput: MdDatepickerInput<Date>;
+  @ViewChild(MatDatepickerInput)
+  datepickerInput: MatDatepickerInput<Date>;
 
   private momentDateAdapter: DateAdapter<MomentDateAdapter>;
 
@@ -89,7 +89,7 @@ export class ODateInputComponent extends OFormDataComponent {
 
   constructor(
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
-    @Inject(MD_DATE_FORMATS) protected mdDateFormats: MdDateFormats,
+    @Inject(MAT_DATE_FORMATS) protected matDateFormats: MatDateFormats,
     dateAdapter: DateAdapter<MomentDateAdapter>,
     elRef: ElementRef,
     injector: Injector
@@ -109,8 +109,8 @@ export class ODateInputComponent extends OFormDataComponent {
     }
 
     if (this.oformat) {
-      this.mdDateFormats.display.dateInput = this.oformat;
-      this.mdDateFormats.parse.dateInput = this.oformat;
+      this.matDateFormats.display.dateInput = this.oformat;
+      this.matDateFormats.parse.dateInput = this.oformat;
     }
 
     this.momentDateAdapter.setLocale({ locale: this.olocale, format: this.oformat });
@@ -209,7 +209,7 @@ export class ODateInputComponent extends OFormDataComponent {
     this.onChange.emit(event);
   }
 
-  innerOnChange(event: MdDatepickerInputEvent<any>) {
+  innerOnChange(event: MatDatepickerInputEvent<any>) {
     if (!this.value) {
       this.value = new OFormValue();
     }

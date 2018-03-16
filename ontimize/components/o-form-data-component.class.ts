@@ -170,7 +170,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
 
     /*
     * Temporary code
-    * I do not understand the reason why MdInput is not removing 'mat-empty' clase despite of the fact that
+    * I do not understand the reason why MatInput is not removing 'mat-empty' clase despite of the fact that
     * the input element of the description is binding value attribute
     */
     let placeHolderLbl = this.elRef.nativeElement.querySelectorAll('label.mat-input-placeholder');

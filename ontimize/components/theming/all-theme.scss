@@ -7,7 +7,7 @@
 @import '../input/input-theme.scss';
 @import '../input/date-input/o-date-input-theme.scss';
 @import '../combo/o-combo-theme.scss';
-@import '../dialog/md-dialog-theme.scss';
+@import '../dialog/mat-dialog-theme.scss';
 @import '../dialog/o-dialog-theme.scss';
 @import '../table/o-table-theme.scss';
 @import '../material/ckeditor/ckeditor-theme.scss';
@@ -26,7 +26,7 @@
   @include angular-material-theme($theme);
 
   @include app-global-theme($theme, $typography);
-  @include md-dialog-theme($theme);
+  @include mat-dialog-theme($theme);
   @include o-breadcrumb-theme($theme);
   @include o-container-theme($theme);
   @include o-form-toolbar-theme($theme);

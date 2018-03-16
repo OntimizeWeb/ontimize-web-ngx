@@ -153,7 +153,7 @@ $_mat-checkbox-mark-stroke-size-small: 2 / 15 * $mat-checkbox-size-small !defaul
             margin-right: 8px;
             margin-bottom: 4px;
           }
-          &:not([md-sort-header]) {
+          &:not([mat-sort-header]) {
             text-align:center;
             cursor: default;
           }

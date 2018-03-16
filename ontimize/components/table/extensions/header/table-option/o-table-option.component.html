@@ -1,5 +1,5 @@
-<button (click)="innerOnClick()" md-menu-item fxLayout="row" fxLayoutAlign="start center">
-  <md-icon *ngIf="showActiveOptionIcon()"> done </md-icon>
+<button (click)="innerOnClick()" mat-menu-item fxLayout="row" fxLayoutAlign="start center">
+  <mat-icon *ngIf="showActiveOptionIcon()"> done </mat-icon>
   {{ olabel | oTranslate }}
-  <md-icon *ngIf="icon"> {{ icon }}</md-icon>
+  <mat-icon *ngIf="icon"> {{ icon }}</mat-icon>
 </button>

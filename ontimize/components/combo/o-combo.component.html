@@ -1,26 +1,26 @@
-<div [formGroup]="getFormGroup()" class="mat-combo-container custom-error" [mdTooltip]="tooltip" [mdTooltipPosition]="tooltipPosition"
-    [mdTooltipShowDelay]="tooltipShowDelay">
-    <md-select #selectModel [class.visible]="!isReadOnly" [class.hidden]="isReadOnly" class="mat-combo" [attr.id]="getAttribute()"
+<div [formGroup]="getFormGroup()" class="mat-combo-container custom-error" [matTooltip]="tooltip" [matTooltipPosition]="tooltipPosition"
+    [matTooltipShowDelay]="tooltipShowDelay">
+    <mat-select #selectModel [class.visible]="!isReadOnly" [class.hidden]="isReadOnly" class="mat-combo" [attr.id]="getAttribute()"
         [id]="getAttribute()" fxFill [formControlName]="getAttribute()" [placeholder]="placeHolder"
         [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)" [required]="isRequired">
-        <md-option *ngIf="hasNullSelection()"></md-option>
-        <md-option *ngFor="let item of getDataArray(); let rowIndex = index" [value]="getValueColumn(item)">
+        <mat-option *ngIf="hasNullSelection()"></mat-option>
+        <mat-option *ngFor="let item of getDataArray(); let rowIndex = index" [value]="getValueColumn(item)">
             {{ getOptionDescriptionValue(item) }}
-        </md-option>
-    </md-select>
-    <md-hint *ngIf="hasError('required')">
+        </mat-option>
+    </mat-select>
+    <mat-hint *ngIf="hasError('required')">
         <span>{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</span>
-    </md-hint>
+    </mat-hint>
 
-    <md-form-field #innerInputContainer [class.visible]="isReadOnly" [class.hidden]="!isReadOnly" fxFlex fxFill>
-        <input mdInput class="mat-input" type="text" [attr.id]="'fake_' + getAttribute()" [id]="'fake_' + getAttribute()" fxFill
+    <mat-form-field #innerInputContainer [class.visible]="isReadOnly" [class.hidden]="!isReadOnly" fxFlex fxFill>
+        <input matInput class="mat-input" type="text" [attr.id]="'fake_' + getAttribute()" [id]="'fake_' + getAttribute()" fxFill
             [class.ng-untouched]="getFormControl() && getFormControl().untouched" [class.ng-touched]="getFormControl() && getFormControl().touched"
             [class.ng-dirty]="getFormControl() && getFormControl().dirty" [class.ng-pristine]="getFormControl() && getFormControl().pristine"
             [class.ng-invalid]="getFormControl() && !getFormControl().valid" [class.ng-valid]="getFormControl() && getFormControl().valid"
             [placeholder]="placeHolder" [value]="getDescriptionValue()" [readonly]="isReadOnly" [disabled]="isDisabled" [required]="isRequired">
-        <md-hint *ngIf="hasError('required')">
+        <mat-hint *ngIf="hasError('required')">
             <span>{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</span>
-        </md-hint>
-    </md-form-field>
+        </mat-hint>
+    </mat-form-field>
 
 </div>

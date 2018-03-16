@@ -15,12 +15,7 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import {
-  MdInput,
-  MdDialog,
-  MdDialogRef,
-  MdDialogConfig
-} from '@angular/material';
+import { MatInput, MatDialog, MatDialogRef, MatDialogConfig } from '@angular/material';
 
 import { dataServiceFactory } from '../../../services/data-service.provider';
 import { OntimizeService } from '../../../services';
@@ -77,11 +72,11 @@ export class OListPickerComponent extends OFormServiceComponent implements OnIni
   protected dialogHeight: string;
   /* End inputs */
 
-  protected ng2Dialog: MdDialog;
-  protected dialogRef: MdDialogRef<OListPickerDialogComponent>;
+  protected ng2Dialog: MatDialog;
+  protected dialogRef: MatDialogRef<OListPickerDialogComponent>;
 
   @ViewChild('inputModel')
-  protected inputModel: MdInput;
+  protected inputModel: MatInput;
 
   onChange: EventEmitter<Object> = new EventEmitter<Object>();
   onFocus: EventEmitter<Object> = new EventEmitter<Object>();
@@ -92,7 +87,7 @@ export class OListPickerComponent extends OFormServiceComponent implements OnIni
     elRef: ElementRef,
     injector: Injector) {
     super(form, elRef, injector);
-    this.ng2Dialog = this.injector.get(MdDialog);
+    this.ng2Dialog = this.injector.get(MatDialog);
   }
 
   ngOnInit(): any {
@@ -146,7 +141,7 @@ export class OListPickerComponent extends OFormServiceComponent implements OnIni
     }
     /*
     * Temporary code
-    * I do not understand the reason why MdInput is not removing 'mat-empty' clase despite of the fact that
+    * I do not understand the reason why MatInput is not removing 'mat-empty' clase despite of the fact that
     * the input element of the description is binding value attribute
     */
     let placeHolderLbl = this.elRef.nativeElement.querySelectorAll('label.mat-input-placeholder');
@@ -182,7 +177,7 @@ export class OListPickerComponent extends OFormServiceComponent implements OnIni
   }
 
   protected openDialog() {
-    let cfg: MdDialogConfig = {
+    let cfg: MatDialogConfig = {
       role: 'dialog',
       disableClose: false,
       panelClass: 'cdk-overlay-pane-custom',
@@ -233,22 +228,10 @@ export class OListPickerComponent extends OFormServiceComponent implements OnIni
 }
 
 @NgModule({
-  declarations: [
-    OListPickerDialogComponent,
-    OListPickerComponent
-  ],
-  imports: [
-    OSharedModule,
-    CommonModule,
-    ODialogModule,
-    OSearchInputModule
-  ],
-  exports: [
-    OListPickerComponent
-  ],
-  entryComponents: [
-    OListPickerDialogComponent
-  ]
+  declarations: [OListPickerDialogComponent, OListPickerComponent],
+  imports: [OSharedModule, CommonModule, ODialogModule, OSearchInputModule],
+  exports: [OListPickerComponent],
+  entryComponents: [OListPickerDialogComponent]
 })
 export class OListPickerModule {
 }

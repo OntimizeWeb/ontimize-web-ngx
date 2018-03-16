@@ -1,21 +1,21 @@
 <ng-template #templateref let-cellvalue="cellvalue" let-rowvalue="rowvalue">
   <div [formGroup]="formGroup" class="o-table-cell-editor-date">
-    <md-form-field floatPlaceholder="never">
-      <input #input mdInput [placeholder]="getPlaceholder()" [formControl]="formControl" [required]="orequired" [mdDatepicker]="d"
-        [mdDatepickerFilter]="filterDate" (dateChange)="onDateChange($event)" [min]="oMinDate" [max]="oMaxDate">
+    <mat-form-field floatPlaceholder="never">
+      <input #input matInput [placeholder]="getPlaceholder()" [formControl]="formControl" [required]="orequired" [matDatepicker]="d"
+        [matDatepickerFilter]="filterDate" (dateChange)="onDateChange($event)" [min]="oMinDate" [max]="oMaxDate">
 
-      <md-datepicker #d [startView]="oStartView" [startAt]="oStartAt" [touchUi]="oTouchUi">
-      </md-datepicker>
+      <mat-datepicker #d [startView]="oStartView" [startAt]="oStartAt" [touchUi]="oTouchUi">
+      </mat-datepicker>
 
-      <span class="icon-btn" (click)="openDatepicker(d)" mdSuffix>
-        <md-icon>today</md-icon>
+      <span class="icon-btn" (click)="openDatepicker(d)" matSuffix>
+        <mat-icon>today</mat-icon>
       </span>
 
-      <md-error *ngIf="hasError('required')">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</md-error>
-      <md-error *ngIf="hasError('mdDatepickerParse')">{{ 'FORM_VALIDATION.DATE_PARSE' | oTranslate }} {{ format }}</md-error>
-      <md-error *ngIf="hasError('mdDatepickerFilter')">{{ 'FORM_VALIDATION.DATE_FILTER' | oTranslate }}</md-error>
-      <md-error *ngIf="hasError('mdDatepickerMin')">{{ 'FORM_VALIDATION.DATE_MIN' | oTranslate }} {{ minDateString }}</md-error>
-      <md-error *ngIf="hasError('mdDatepickerMax')">{{ 'FORM_VALIDATION.DATE_MAX' | oTranslate }} {{ maxDateString }}</md-error>
-    </md-form-field>
+      <mat-error *ngIf="hasError('required')">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</mat-error>
+      <mat-error *ngIf="hasError('matDatepickerParse')">{{ 'FORM_VALIDATION.DATE_PARSE' | oTranslate }} {{ format }}</mat-error>
+      <mat-error *ngIf="hasError('matDatepickerFilter')">{{ 'FORM_VALIDATION.DATE_FILTER' | oTranslate }}</mat-error>
+      <mat-error *ngIf="hasError('matDatepickerMin')">{{ 'FORM_VALIDATION.DATE_MIN' | oTranslate }} {{ minDateString }}</mat-error>
+      <mat-error *ngIf="hasError('matDatepickerMax')">{{ 'FORM_VALIDATION.DATE_MAX' | oTranslate }} {{ maxDateString }}</mat-error>
+    </mat-form-field>
   </div>
 </ng-template>

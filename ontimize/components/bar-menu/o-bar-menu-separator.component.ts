@@ -1,12 +1,7 @@
-import {
-  Component, Inject, forwardRef,
-  NgModule,
-  ViewEncapsulation
-} from '@angular/core';
+import { Component, Inject, forwardRef, NgModule, ViewEncapsulation } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { OBarMenuModule, OBarMenuComponent } from './o-bar-menu.component';
 import { OSharedModule } from '../../shared';
-import { CommonModule } from '@angular/common';
-
 
 @Component({
   selector: 'o-bar-menu-separator',
@@ -26,7 +21,7 @@ export class OBarMenuSeparatorComponent {
 @NgModule({
   declarations: [OBarMenuSeparatorComponent],
   imports: [OSharedModule, CommonModule, OBarMenuModule],
-  exports: [OBarMenuSeparatorComponent],
+  exports: [OBarMenuSeparatorComponent]
 })
 export class OBarMenuSeparatorModule {
 }

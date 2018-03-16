@@ -68,16 +68,8 @@ export class OAppSidenavMenuGroupComponent implements AfterViewInit, OnDestroy {
 }
 
 @NgModule({
-  imports: [
-    CommonModule,
-    OSharedModule,
-    OAppSidenavMenuItemModule
-  ],
-  declarations: [
-    OAppSidenavMenuGroupComponent
-  ],
+  imports: [CommonModule, OSharedModule, OAppSidenavMenuItemModule],
+  declarations: [OAppSidenavMenuGroupComponent],
   exports: [OAppSidenavMenuGroupComponent]
 })
 export class OAppSidenavMenuGroupModule { }
-
-

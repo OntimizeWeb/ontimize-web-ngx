@@ -1,9 +1,9 @@
 import { Component, Inject, Injector, forwardRef, ElementRef, OnInit, Optional, NgModule, ViewEncapsulation, AfterViewInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { InputConverter } from '../../../decorators';
 import { OFormComponent } from '../../form/o-form.component';
 import { OTranslateService } from '../../../services';
 import { OSharedModule } from '../../../shared';
-import { CommonModule } from '@angular/common';
 
 export const DEFAULT_INPUTS_O_COLUMN = [
   'oattr: attr',
@@ -161,14 +161,12 @@ export class OColumnComponent implements OnInit, AfterViewInit {
       });
     }
   }
-
-
 }
 
 @NgModule({
   declarations: [OColumnComponent],
   imports: [OSharedModule, CommonModule],
-  exports: [OColumnComponent],
+  exports: [OColumnComponent]
 })
 export class OColumnModule {
 }

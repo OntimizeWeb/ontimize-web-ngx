@@ -58,7 +58,7 @@ export class OEmailInputComponent extends OTextInputComponent implements OnInit 
 @NgModule({
   declarations: [OEmailInputComponent],
   imports: [OSharedModule, CommonModule, OTextInputModule],
-  exports: [OEmailInputComponent, OTextInputModule],
+  exports: [OEmailInputComponent, OTextInputModule]
 })
 export class OEmailInputModule {
 }

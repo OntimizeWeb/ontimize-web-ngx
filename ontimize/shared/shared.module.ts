@@ -17,9 +17,7 @@ import { OCustomMaterialModule } from './material/custom.material.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 
 @NgModule({
-  imports: [
-    FlexLayoutModule
-  ],
+  imports: [FlexLayoutModule],
   declarations: [
     ColumnsFilterPipe,
     OrderByPipe,

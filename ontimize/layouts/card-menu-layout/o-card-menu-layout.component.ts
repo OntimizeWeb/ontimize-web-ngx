@@ -5,7 +5,6 @@ import { OTranslateService, AppMenuService, MenuRootItem, MenuGroup } from '../.
 import { OSharedModule } from '../../shared/shared.module';
 import { OCardMenuItemModule } from '../../components/card-menu-item/o-card-menu-item.component';
 
-
 export const DEFAULT_INPUTS_O_MENU_LAYOUT = [
   'parentMenuId : parent-menu-id'
 ];

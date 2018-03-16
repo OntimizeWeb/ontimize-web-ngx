@@ -1,5 +1,5 @@
 import { Component, Inject, Injector, OnInit } from '@angular/core';
-import { MdDialogRef, MD_DIALOG_DATA, MdButton } from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA, MatButton } from '@angular/material';
 
 import { DialogService, OExportExtension, OntimizeExportService, OTranslateService } from '../../../../../services';
 import { SQLTypes, Util } from '../../../../../utils';
@@ -24,9 +24,9 @@ export class OTableExportDialogComponent implements OnInit {
   protected translateService: OTranslateService;
 
   constructor(
-    public dialogRef: MdDialogRef<OTableExportDialogComponent>,
+    public dialogRef: MatDialogRef<OTableExportDialogComponent>,
     protected injector: Injector,
-    @Inject(MD_DIALOG_DATA) protected config: OTableExportConfiguration
+    @Inject(MAT_DIALOG_DATA) protected config: OTableExportConfiguration
   ) {
     this.dialogService = injector.get(DialogService);
     this.translateService = this.injector.get(OTranslateService);
@@ -55,7 +55,7 @@ export class OTableExportDialogComponent implements OnInit {
     }
   }
 
-  exportExcel(excelButton: MdButton): void {
+  exportExcel(excelButton: MatButton): void {
     excelButton.disabled = true;
     let exportData = {
       data: this.config.data,
@@ -90,7 +90,7 @@ export class OTableExportDialogComponent implements OnInit {
     );
   }
 
-  exportHTML(htmlButton: MdButton): void {
+  exportHTML(htmlButton: MatButton): void {
     htmlButton.disabled = true;
     let exportData = {
       data: this.config.data,
@@ -125,7 +125,7 @@ export class OTableExportDialogComponent implements OnInit {
     );
   }
 
-  exportPDF(pdfButton: MdButton): void {
+  exportPDF(pdfButton: MatButton): void {
     pdfButton.disabled = true;
     let exportData = {
       data: this.config.data,

@@ -50,7 +50,7 @@ export class OPasswordInputComponent extends OTextInputComponent implements OnIn
 @NgModule({
   declarations: [OPasswordInputComponent],
   imports: [OSharedModule, CommonModule, OTextInputModule],
-  exports: [OPasswordInputComponent, OTextInputModule],
+  exports: [OPasswordInputComponent, OTextInputModule]
 })
 export class OPasswordInputModule {
 }

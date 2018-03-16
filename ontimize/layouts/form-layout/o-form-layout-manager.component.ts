@@ -1,6 +1,6 @@
 import { Component, NgModule, ViewEncapsulation, OnInit, OnDestroy, Injector, ComponentFactoryResolver, ViewContainerRef, ViewChild, EventEmitter, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterModule, Router, ActivatedRoute, ActivatedRouteSnapshot, Route } from '@angular/router';
-import { MdDialog, MdDialogRef } from '@angular/material';
+import { MatDialog, MatDialogRef } from '@angular/material';
 import { CommonModule } from '@angular/common';
 
 import { OSharedModule } from '../../shared';
@@ -66,7 +66,7 @@ export class OFormLayoutManagerComponent implements OnInit, OnDestroy {
   protected oFormLayoutManagerService: OFormLayoutManagerService;
 
   @ViewChild('tabGroup') oTabGroup: OFormLayoutTabGroupComponent;
-  dialogRef: MdDialogRef<OFormLayoutDialogComponent>;
+  dialogRef: MatDialogRef<OFormLayoutDialogComponent>;
 
   onMainTabSelected: EventEmitter<any> = new EventEmitter<any>();
   onCloseTab: EventEmitter<any> = new EventEmitter<any>();
@@ -77,7 +77,7 @@ export class OFormLayoutManagerComponent implements OnInit, OnDestroy {
     protected actRoute: ActivatedRoute,
     protected componentFactoryResolver: ComponentFactoryResolver,
     protected location: ViewContainerRef,
-    protected dialog: MdDialog
+    protected dialog: MatDialog
   ) {
     this.oFormLayoutManagerService = this.injector.get(OFormLayoutManagerService);
     this.oFormLayoutManagerService.setFormLayoutManager(this);
@@ -248,11 +248,7 @@ export class OFormLayoutManagerComponent implements OnInit, OnDestroy {
 }
 
 @NgModule({
-  imports: [
-    CommonModule,
-    OSharedModule,
-    RouterModule
-  ],
+  imports: [CommonModule, OSharedModule, RouterModule],
   declarations: [
     OFormLayoutManagerComponent,
     OFormLayoutTabGroupComponent,

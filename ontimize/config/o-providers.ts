@@ -1,7 +1,7 @@
 import { Injector } from '@angular/core';
 import { LOCATION_INITIALIZED } from '@angular/common';
 import { BaseRequestOptions, XHRBackend } from '@angular/http';
-import { MdIconRegistry } from '@angular/material';
+import { MatIconRegistry } from '@angular/material';
 import { Events } from '../util/events';
 import { OHttp } from '../util/http/OHttp';
 import { AppConfig, Config } from '../config/app-config';
@@ -155,7 +155,7 @@ export function getOntimizeServiceResponseParser(injector: Injector) {
 
 export const ONTIMIZE_PROVIDERS = [
   //Standard
-  MdIconRegistry,
+  MatIconRegistry,
 
   { provide: Events, useValue: getEvents },
 

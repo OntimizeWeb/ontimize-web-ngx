@@ -85,14 +85,8 @@ export class OAppHeaderComponent implements OnDestroy {
 }
 
 @NgModule({
-  imports: [
-    CommonModule,
-    OSharedModule,
-    OUserInfoModule
-  ],
-  declarations: [
-    OAppHeaderComponent
-  ],
+  imports: [CommonModule, OSharedModule, OUserInfoModule],
+  declarations: [OAppHeaderComponent],
   exports: [OAppHeaderComponent]
 })
 export class OAppHeaderModule { }

@@ -1,17 +1,10 @@
-import {
-  Component,
-  forwardRef,
-  Inject,
-  Injector,
-  ViewEncapsulation
-} from '@angular/core';
-
-import { OFormComponent } from '../o-form.component';
-import { OFormDataNavigation } from './o-form.data.navigation.class';
+import { Component, forwardRef, Inject, Injector, ViewEncapsulation } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { OFormNavigationClass } from './o-form.navigation.class';
 import { Util } from '../../../util/util';
 import { OFormLayoutManagerComponent } from '../../../layouts';
+import { OFormComponent } from '../o-form.component';
+import { OFormDataNavigation } from './o-form.data.navigation.class';
+import { OFormNavigationClass } from './o-form.navigation.class';
 
 @Component({
   selector: 'o-form-navigation',

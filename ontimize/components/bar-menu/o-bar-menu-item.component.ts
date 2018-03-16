@@ -154,13 +154,19 @@ export class OBarMenuItemComponent implements OnInit {
   set isHovered(val : boolean) {
     this._isHovered = val;
   }
+
+  callAction() {
+    if (this.action !== undefined) {
+      this.action();
+    }
+  }
 }
 
 
 @NgModule({
   declarations: [OBarMenuItemComponent],
   imports: [OSharedModule, CommonModule, RouterModule, OBarMenuModule],
-  exports: [OBarMenuItemComponent],
+  exports: [OBarMenuItemComponent]
 })
 export class OBarMenuItemModule {
 }

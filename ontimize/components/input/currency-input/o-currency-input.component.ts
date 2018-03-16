@@ -78,7 +78,7 @@ export class OCurrencyInputComponent extends ORealInputComponent implements OnIn
 @NgModule({
   declarations: [OCurrencyInputComponent],
   imports: [OSharedModule, CommonModule, ORealInputModule],
-  exports: [OCurrencyInputComponent, ORealInputModule],
+  exports: [OCurrencyInputComponent, ORealInputModule]
 })
 export class OCurrencyInputModule {
 }

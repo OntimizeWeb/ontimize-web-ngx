@@ -13,7 +13,7 @@ import {
 import { CommonModule } from '@angular/common';
 import { Validators } from '@angular/forms';
 import { ValidatorFn } from '@angular/forms/src/directives/validators';
-import { MdInput } from '@angular/material';
+import { MatInput } from '@angular/material';
 
 import { OSharedModule } from '../../../shared';
 import { InputConverter } from '../../../decorators';
@@ -56,8 +56,8 @@ export class OTextInputComponent extends OFormDataComponent {
   onFocus: EventEmitter<Object> = new EventEmitter<Object>();
   onBlur: EventEmitter<Object> = new EventEmitter<Object>();
 
-  @ViewChild('mdInputRef')
-  protected mdInputRef: MdInput;
+  @ViewChild('matInputRef')
+  protected matInputRef: MatInput;
 
   constructor(
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,

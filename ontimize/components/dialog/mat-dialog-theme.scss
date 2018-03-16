@@ -1,6 +1,6 @@
 @import 'node_modules/@angular/material/theming';
 
-@mixin md-dialog-theme($theme) {
+@mixin mat-dialog-theme($theme) {
   $background: map-get($theme, background);
   $foreground: map-get($theme, foreground);
 
@@ -8,7 +8,7 @@
     background-color: mat-color($background, dialog);
 
     &.mat-content-overflow {
-      .mat-actions, md-dialog-actions {
+      .mat-actions, mat-dialog-actions {
         border-top-color: mat-color($foreground, divider);
       }
     }

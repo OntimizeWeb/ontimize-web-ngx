@@ -1,20 +1,20 @@
-<button *ngIf="isFloating()" md-fab class="mat-fab">
+<button *ngIf="isFloating()" mat-fab class="mat-fab">
   <img src="{{ image }}" class="o-button-image" *ngIf="image!=undefined"/>
-  <i md-icon class="material-icons o-button-icon" *ngIf="icon!=undefined" style="vertical-align:middle">{{icon}}</i>
+  <i mat-icon class="material-icons o-button-icon" *ngIf="icon!=undefined" style="vertical-align:middle">{{icon}}</i>
   <br *ngIf="iconposition==='top'" />
   <span *ngIf="olabel!=undefined" class="o-button-text">{{ olabel | oTranslate }}</span>
 </button>
 
-<button *ngIf="isRaised()" md-raised-button class="mat-raised-button" [class.mat-icon-button]="needsIconButtonClass">
+<button *ngIf="isRaised()" mat-raised-button class="mat-raised-button" [class.mat-icon-button]="needsIconButtonClass">
   <img src="{{ image }}" class="o-button-image" *ngIf="image!=undefined"/>
-  <i md-icon class="material-icons o-button-icon" *ngIf="icon!=undefined" style="vertical-align:middle">{{icon}}</i>
+  <i mat-icon class="material-icons o-button-icon" *ngIf="icon!=undefined" style="vertical-align:middle">{{icon}}</i>
   <br *ngIf="iconposition==='top'" />
   <span *ngIf="olabel!==undefined" class="o-button-text">{{ olabel  | oTranslate }}</span>
 </button>
 
-<button *ngIf="isFlat()" md-button class="mat-button" [class.mat-icon-button]="needsIconButtonClass">
+<button *ngIf="isFlat()" mat-button class="mat-button" [class.mat-icon-button]="needsIconButtonClass">
   <img src="{{ image }}" class="o-button-image" *ngIf="image!=undefined"/>
-  <i md-icon class="material-icons o-button-icon" *ngIf="icon!=undefined" style="vertical-align:middle">{{icon}}</i>
+  <i mat-icon class="material-icons o-button-icon" *ngIf="icon!=undefined" style="vertical-align:middle">{{icon}}</i>
   <br *ngIf="iconposition==='top'" />
   <span *ngIf="olabel!=undefined" class="o-button-text">{{ olabel | oTranslate }}</span>
 </button>

@@ -1,13 +1,9 @@
-import {
-  Component,
-  NgModule,
-  ViewEncapsulation
-} from '@angular/core';
+import { Component, NgModule, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
-import { MdCheckboxModule, MdButtonModule, MdIconModule, MdDialogModule, MdDialogRef } from '@angular/material';
-import { ODialogConfig } from './o-dialog.config';
+import { MatDialogRef } from '@angular/material';
 import { OTranslateModule } from '../../pipes/o-translate.pipe';
+import { OSharedModule } from '../../shared';
+import { ODialogConfig } from './o-dialog.config';
 
 @Component({
   selector: 'o-dialog',
@@ -15,7 +11,7 @@ import { OTranslateModule } from '../../pipes/o-translate.pipe';
   styleUrls: ['./o-dialog.component.scss'],
   encapsulation: ViewEncapsulation.None,
   host: {
-    '[class.o-dialog]' : 'true'
+    '[class.o-dialog]': 'true'
   }
 })
 export class ODialogComponent {
@@ -33,7 +29,7 @@ export class ODialogComponent {
   protected _alertType: string;
 
   constructor(
-    public dialogRef: MdDialogRef<ODialogComponent>) {
+    public dialogRef: MatDialogRef<ODialogComponent>) {
   }
 
   onOkClick(evt: any) {
@@ -115,78 +111,76 @@ export class ODialogComponent {
     return this.alertType === 'error';
   }
 
-  get title() : string {
+  get title(): string {
     return this._title;
   }
 
-  set title(val : string)  {
+  set title(val: string) {
     this._title = val;
   }
 
-  get message() : string {
+  get message(): string {
     return this._message;
   }
 
-  set message(val : string)  {
+  set message(val: string) {
     this._message = val;
   }
 
-  get okButtonText() : string {
+  get okButtonText(): string {
     return this._okButtonText;
   }
 
-  set okButtonText(val : string)  {
+  set okButtonText(val: string) {
     this._okButtonText = val;
   }
 
-  get cancelButtonText() : string {
+  get cancelButtonText(): string {
     return this._cancelButtonText;
   }
 
-  set cancelButtonText(val : string)  {
+  set cancelButtonText(val: string) {
     this._cancelButtonText = val;
   }
 
-  get icon() : string {
+  get icon(): string {
     return this._icon;
   }
 
-  set icon(val : string)  {
+  set icon(val: string) {
     this._icon = val;
   }
 
-  get alertType() : string {
+  get alertType(): string {
     return this._alertType;
   }
 
-  set alertType(val : string)  {
+  set alertType(val: string) {
     this._alertType = val;
   }
 
 
-  get twoOptions() : boolean {
+  get twoOptions(): boolean {
     return this._twoOptions;
   }
 
-  set twoOptions(val : boolean)  {
+  set twoOptions(val: boolean) {
     this._twoOptions = val;
   }
 
-  get useIcon() : boolean {
+  get useIcon(): boolean {
     return this._useIcon;
   }
 
-  set useIcon(val : boolean)  {
+  set useIcon(val: boolean) {
     this._useIcon = val;
   }
-
 }
-
 
 @NgModule({
   declarations: [ODialogComponent],
-  imports: [CommonModule, MdButtonModule, MdIconModule, MdDialogModule, MdCheckboxModule, OTranslateModule],
-  exports: [ODialogComponent, CommonModule, MdButtonModule, MdDialogModule],
+  imports: [CommonModule, OSharedModule, OTranslateModule],
+  exports: [ODialogComponent, CommonModule]
 })
 export class ODialogModule {
 }

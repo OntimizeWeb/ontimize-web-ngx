@@ -1,7 +1,7 @@
 .toolbar-form-header{
   min-height: 50px;
 
-  md-toolbar-row {
+  mat-toolbar-row {
     height: 50px;
   }
 
@@ -30,7 +30,7 @@
       padding: 0px 6px;
     }
 
-    md-icon {
+    mat-icon {
       cursor: pointer;
       vertical-align: middle;
     }

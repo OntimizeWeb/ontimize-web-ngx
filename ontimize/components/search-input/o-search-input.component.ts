@@ -1,16 +1,11 @@
-import {
-  Component, OnInit, EventEmitter, Injector,
-  NgModule,
-  ViewEncapsulation
-} from '@angular/core';
-import { FormGroup, FormControl} from '@angular/forms';
-
+import { Component, OnInit, EventEmitter, Injector, NgModule, ViewEncapsulation } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormGroup, FormControl } from '@angular/forms';
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/distinctUntilChanged';
 
 import { OTranslateService } from '../../services';
 import { OSharedModule } from '../../shared';
-import { CommonModule } from '@angular/common';
 
 export const DEFAULT_INPUTS_O_SEARCH_INPUT = [
   'placeholder'
@@ -92,7 +87,7 @@ export class OSearchInputComponent implements OnInit {
 @NgModule({
   declarations: [OSearchInputComponent],
   imports: [OSharedModule, CommonModule],
-  exports: [OSearchInputComponent],
+  exports: [OSearchInputComponent]
 })
 export class OSearchInputModule {
 }

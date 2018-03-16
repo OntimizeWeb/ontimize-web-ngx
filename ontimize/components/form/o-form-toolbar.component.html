@@ -1,7 +1,7 @@
-<md-toolbar class="toolbar-form-header">
+<mat-toolbar class="toolbar-form-header">
 
   <div class="mat-toolbar-tools" fxFill>
-    <md-icon aria-label="Back" (click)="onCloseDetail()" *ngIf="isDetail">arrow_back</md-icon>
+    <mat-icon aria-label="Back" (click)="onCloseDetail()" *ngIf="isDetail">arrow_back</mat-icon>
 
     <o-form-navigation #formNavigation *ngIf="showNavigation">
     </o-form-navigation>
@@ -14,45 +14,45 @@
 
     <ng-content select="[o-custom-form-toolbar-buttons-wrapper]"></ng-content>
 
-    <button md-button (click)="onUndoLastChange()" [disabled]="isChangesStackEmpty" *ngIf="showUndoButton">
-        <md-icon>undo</md-icon>
+    <button mat-button (click)="onUndoLastChange()" [disabled]="isChangesStackEmpty" *ngIf="showUndoButton">
+        <mat-icon>undo</mat-icon>
         <span *ngIf="showHeaderActionsText">{{ 'UNDO' | oTranslate }}</span>
     </button>
 
     <ng-container *ngIf="initialMode">
 
-      <button md-button (click)="onReload($event)" *ngIf="refreshBtnEnabled">
-        <md-icon>autorenew</md-icon>
+      <button mat-button (click)="onReload($event)" *ngIf="refreshBtnEnabled">
+        <mat-icon>autorenew</mat-icon>
         <span *ngIf="showHeaderActionsText">{{ 'REFRESH' | oTranslate }}</span>
       </button>
-      <button md-button (click)="onInsert($event)" *ngIf="insertBtnEnabled">
-        <md-icon>add</md-icon>
+      <button mat-button (click)="onInsert($event)" *ngIf="insertBtnEnabled">
+        <mat-icon>add</mat-icon>
         <span *ngIf="showHeaderActionsText">{{ 'ADD' | oTranslate }}</span>
       </button>
-      <button md-button (click)="onEdit($event)" *ngIf="editBtnEnabled">
-        <md-icon>mode_edit</md-icon>
+      <button mat-button (click)="onEdit($event)" *ngIf="editBtnEnabled">
+        <mat-icon>mode_edit</mat-icon>
         <span *ngIf="showHeaderActionsText">{{ 'EDIT' | oTranslate }}</span>
       </button>
-      <button md-button (click)="onDelete($event)" *ngIf="deleteBtnEnabled">
-        <md-icon>delete</md-icon>
+      <button mat-button (click)="onDelete($event)" *ngIf="deleteBtnEnabled">
+        <mat-icon>delete</mat-icon>
         <span *ngIf="showHeaderActionsText">{{ 'DELETE' | oTranslate }}</span>
       </button>
-      <button md-button (click)="onSave($event)" [disabled]="!existsChangesToSave" *ngIf="saveBtnEnabled">
-        <md-icon>save</md-icon>
+      <button mat-button (click)="onSave($event)" [disabled]="!existsChangesToSave" *ngIf="saveBtnEnabled">
+        <mat-icon>save</mat-icon>
         <span *ngIf="showHeaderActionsText">{{ 'SAVE' | oTranslate }}</span>
       </button>
     </ng-container>
 
     <ng-container *ngIf="editMode || insertMode">
-      <button md-button (click)="cancelOperation($event)">
-        <md-icon>clear</md-icon>
+      <button mat-button (click)="cancelOperation($event)">
+        <mat-icon>clear</mat-icon>
         <span *ngIf="showHeaderActionsText">{{ 'CANCEL' | oTranslate }}</span>
       </button>
-      <button md-button color="primary" (click)="acceptOperation($event)">
-        <md-icon>done</md-icon>
+      <button mat-button color="primary" (click)="acceptOperation($event)">
+        <mat-icon>done</mat-icon>
         <span *ngIf="showHeaderActionsText">{{ 'OK' | oTranslate }}</span>
       </button>
     </ng-container>
   </div>
 
-</md-toolbar>
+</mat-toolbar>

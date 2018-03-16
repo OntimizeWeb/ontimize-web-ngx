@@ -65,26 +65,21 @@ export class OListItemTextComponent extends OListItemTextRenderer {
   }
 
   ngAfterViewInit() {
-    this.modifyMdListItemElement();
+    this.modifyMatListItemElement();
   }
 
-  get iconPosition() : string {
+  get iconPosition(): string {
     return this._iconPosition;
   }
 
-  set iconPosition(val : string) {
+  set iconPosition(val: string) {
     this._iconPosition = val;
   }
 }
 
 @NgModule({
   declarations: [OListItemTextComponent],
-  imports: [
-    CommonModule,
-    OSharedModule
-  ],
+  imports: [CommonModule, OSharedModule],
   exports: [OListItemTextComponent]
 })
-
-export class OListItemTextModule {
-}
+export class OListItemTextModule { }

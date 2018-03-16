@@ -1,10 +1,5 @@
-import {
-  Component,
-  ViewEncapsulation,
-  Inject
-} from '@angular/core';
-
-import { MdDialogRef, MD_DIALOG_DATA } from '@angular/material';
+import { Component, ViewEncapsulation, Inject } from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { Util } from '../../../util/util';
 
 export const DEFAULT_INPUTS_O_LIST_PICKER = [
@@ -34,8 +29,8 @@ export class OListPickerDialogComponent {
   searchVal: string;
 
   constructor(
-    public dialogRef: MdDialogRef<OListPickerDialogComponent>,
-    @Inject(MD_DIALOG_DATA) data: any
+    public dialogRef: MatDialogRef<OListPickerDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) data: any
   ) {
     if (data.data && Util.isArray(data.data)) {
       this.data = data.data;

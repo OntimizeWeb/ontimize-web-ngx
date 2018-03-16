@@ -1,6 +1,6 @@
 import { Injector, NgModule, Component, OnInit, ViewEncapsulation, ViewChild, ElementRef, EventEmitter, AfterViewInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MdSidenav } from '@angular/material';
+import { MatSidenav } from '@angular/material';
 import { RouterModule, Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 
@@ -41,7 +41,7 @@ export class OAppSidenavComponent implements OnInit, OnDestroy, AfterViewInit {
   public static DEFAULT_INPUTS_O_APP_LAYOUT = DEFAULT_INPUTS_O_APP_SIDENAV;
   public static DEFAULT_OUTPUTS_O_APP_LAYOUT = DEFAULT_OUTPUTS_O_APP_SIDENAV;
 
-  @ViewChild(MdSidenav) sidenav: MdSidenav;
+  @ViewChild(MatSidenav) sidenav: MatSidenav;
 
   protected routerSubscription: Subscription;
   protected appMenuService: AppMenuService;
@@ -171,9 +171,7 @@ export class OAppSidenavComponent implements OnInit, OnDestroy, AfterViewInit {
     OAppSidenavImageModule,
     RouterModule
   ],
-  declarations: [
-    OAppSidenavComponent
-  ],
+  declarations: [OAppSidenavComponent],
   exports: [OAppSidenavComponent]
 })
 export class OAppSidenavModule { }

@@ -15,7 +15,7 @@ import {
   NgModule
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MdLine, MdListAvatarCssMatStyler, MdListItem } from '@angular/material';
+import { MatLine, MatListAvatarCssMatStyler, MatListItem } from '@angular/material';
 import { OListComponent } from '../o-list.component';
 import { OSharedModule } from '../../../shared';
 
@@ -36,15 +36,15 @@ export class OListItemComponent implements AfterContentInit {
 
   _hasFocus: boolean = false;
 
-  @ContentChildren(MdLine) _lines: QueryList<MdLine>;
+  @ContentChildren(MatLine) _lines: QueryList<MatLine>;
 
-  @ViewChild('innerListItem') _innerListItem: MdListItem;
+  @ViewChild('innerListItem') _innerListItem: MatListItem;
 
-  @ContentChild(MdListAvatarCssMatStyler)
-  set _hasAvatar(avatar: MdListAvatarCssMatStyler) {
-    let mdListItemNativeEl = this.elRef.nativeElement.getElementsByTagName('mat-list-item');
-    if (mdListItemNativeEl && mdListItemNativeEl.length === 1) {
-      this._renderer.setElementClass(mdListItemNativeEl[0], 'mat-list-avatar', (avatar !== null && avatar !== undefined));
+  @ContentChild(MatListAvatarCssMatStyler)
+  set _hasAvatar(avatar: MatListAvatarCssMatStyler) {
+    let listItemNativeEl = this.elRef.nativeElement.getElementsByTagName('mat-list-item');
+    if (listItemNativeEl && listItemNativeEl.length === 1) {
+      this._renderer.setElementClass(listItemNativeEl[0], 'mat-list-avatar', (avatar !== null && avatar !== undefined));
     }
   }
 
@@ -57,14 +57,14 @@ export class OListItemComponent implements AfterContentInit {
   }
 
   ngAfterContentInit() {
-    var mdLinesRef = this._lines;
+    var matLinesRef = this._lines;
     var ngAfterContentInitOriginal = this._innerListItem.ngAfterContentInit;
     this._innerListItem.ngAfterContentInit = function () {
       let emptyDiv = this._element.nativeElement.querySelector('.mat-list-text:empty');
       if (emptyDiv) {
         emptyDiv.remove();
       }
-      this._lines = mdLinesRef;
+      this._lines = matLinesRef;
       ngAfterContentInitOriginal.apply(this);
     };
   }
@@ -122,7 +122,7 @@ export class OListItemComponent implements AfterContentInit {
 @NgModule({
   declarations: [OListItemComponent],
   imports: [OSharedModule, CommonModule],
-  exports: [OListItemComponent],
+  exports: [OListItemComponent]
 })
 export class OListItemModule {
 }

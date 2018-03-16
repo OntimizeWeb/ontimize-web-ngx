@@ -73,7 +73,7 @@ export class OListItemCardImageComponent extends OListItemCardRenderer {
   }
 
   ngAfterViewInit() {
-    this.modifyMdListItemElement();
+    this.modifyMatListItemElement();
   }
 
   onActionIconClick(event: any) {
@@ -84,7 +84,7 @@ export class OListItemCardImageComponent extends OListItemCardRenderer {
     return this._content;
   }
 
-  set content(val : string) {
+  set content(val: string) {
     this._content = val;
   }
 
@@ -92,7 +92,7 @@ export class OListItemCardImageComponent extends OListItemCardRenderer {
     return this._avatar;
   }
 
-  set avatar(val : string) {
+  set avatar(val: string) {
     this._avatar = val;
   }
 
@@ -100,7 +100,7 @@ export class OListItemCardImageComponent extends OListItemCardRenderer {
     return this._icon;
   }
 
-  set icon(val : string) {
+  set icon(val: string) {
     this._icon = val;
   }
 
@@ -108,7 +108,7 @@ export class OListItemCardImageComponent extends OListItemCardRenderer {
     return this._collapsible;
   }
 
-  set collapsible(val : boolean) {
+  set collapsible(val: boolean) {
     this._collapsible = val;
   }
 
@@ -116,17 +116,14 @@ export class OListItemCardImageComponent extends OListItemCardRenderer {
     return this._collapsed;
   }
 
-  set collapsed(val : boolean) {
+  set collapsed(val: boolean) {
     this._collapsed = val;
   }
 }
 
 @NgModule({
   declarations: [OListItemCardImageComponent],
-  imports: [
-    OSharedModule,
-    CommonModule
-  ],
+  imports: [OSharedModule, CommonModule],
   exports: [OListItemCardImageComponent]
 })
 export class OListItemCardImageModule {

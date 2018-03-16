@@ -11,6 +11,13 @@ for (let date = 1; date <= 31; date++) {
 
 export class MomentDateAdapter extends DateAdapter<Date> {
 
+  toIso8601(date: Date): string {
+    throw new Error('Method not implemented.');
+  }
+  invalid(): Date {
+    throw new Error('Method not implemented.');
+  }
+
   private localeData = moment.localeData();
   private formatData;
 

@@ -1,12 +1,7 @@
-import {
-  Component, Inject, forwardRef,
-  NgModule,
-  ViewEncapsulation
-} from '@angular/core';
-
-import { OSideMenuModule, OSideMenuComponent } from './o-side-menu.component';
-import { OSharedModule } from '../../shared';
+import { Component, Inject, forwardRef, NgModule, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { OSharedModule } from '../../shared';
+import { OSideMenuModule, OSideMenuComponent } from './o-side-menu.component';
 
 @Component({
   selector: 'o-side-menu-separator',

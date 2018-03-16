@@ -42,23 +42,23 @@ export class OListItemTextRenderer {
   ) {
   }
 
-  modifyMdListItemElement() {
+  modifyMatListItemElement() {
     if (this.elRef.nativeElement && this.elRef.nativeElement.parentElement) {
-      let mdListItem = this.elRef.nativeElement.parentElement.parentElement;
-      if (mdListItem && mdListItem.nodeName === 'MD-LIST-ITEM') {
-        let mdLines = 3;
+      let listItem = this.elRef.nativeElement.parentElement.parentElement;
+      if (listItem && listItem.nodeName === 'MD-LIST-ITEM') {
+        let linesNo = 3;
         if (this.title === undefined) {
-          mdLines--;
+          linesNo--;
         }
         if (this.primaryText === undefined) {
-          mdLines--;
+          linesNo--;
         }
         if (this.secondaryText === undefined) {
-          mdLines--;
+          linesNo--;
         }
-        this.has3Lines = (mdLines === 3);
-        mdListItem.classList.add('mat-' + mdLines + '-line');
-        mdListItem.querySelector('.mat-list-text').remove();
+        this.has3Lines = (linesNo === 3);
+        listItem.classList.add('mat-' + linesNo + '-line');
+        listItem.querySelector('.mat-list-text').remove();
       }
     }
   }
@@ -71,7 +71,7 @@ export class OListItemTextRenderer {
     return this._title;
   }
 
-  set title(val : string) {
+  set title(val: string) {
     this._title = val;
   }
 
@@ -79,7 +79,7 @@ export class OListItemTextRenderer {
     return this._primaryText;
   }
 
-  set primaryText(val : string) {
+  set primaryText(val: string) {
     this._primaryText = val;
   }
 
@@ -87,15 +87,15 @@ export class OListItemTextRenderer {
     return this._secondaryText;
   }
 
-  set secondaryText(val : string) {
-    this._secondaryText= val;
+  set secondaryText(val: string) {
+    this._secondaryText = val;
   }
 
   get icon(): string {
     return this._icon;
   }
 
-  set icon(val : string) {
+  set icon(val: string) {
     this._icon = val;
   }
 }

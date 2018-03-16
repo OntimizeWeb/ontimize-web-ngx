@@ -1,7 +1,7 @@
 <ng-container *ngIf="showNavigation()">
-  <md-icon aria-label="First" (click)="first()" layout-padding [class.mat-disabled]="isFirst()"> first_page</md-icon>
-  <md-icon aria-label="Previous" (click)="previous()" layout-padding [class.mat-disabled]="isFirst()">keyboard_arrow_left</md-icon>
+  <mat-icon aria-label="First" (click)="first()" layout-padding [class.mat-disabled]="isFirst()"> first_page</mat-icon>
+  <mat-icon aria-label="Previous" (click)="previous()" layout-padding [class.mat-disabled]="isFirst()">keyboard_arrow_left</mat-icon>
   <span>{{ numberOfRecords() }}</span>
-  <md-icon aria-label="Next" (click)="next()" layout-padding [class.mat-disabled]="isLast()">keyboard_arrow_right</md-icon>
-  <md-icon aria-label="Last" (click)="last()" layout-padding [class.mat-disabled]="isLast()">last_page</md-icon>
+  <mat-icon aria-label="Next" (click)="next()" layout-padding [class.mat-disabled]="isLast()">keyboard_arrow_right</mat-icon>
+  <mat-icon aria-label="Last" (click)="last()" layout-padding [class.mat-disabled]="isLast()">last_page</mat-icon>
 </ng-container>

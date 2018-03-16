@@ -1,18 +1,9 @@
-import {
-  Component,
-  ViewChild,
-  Injector,
-  NgModule,
-  ViewEncapsulation
-} from '@angular/core';
-
-import {
-  MdSidenav
-} from '@angular/material';
+import { Component, ViewChild, Injector, NgModule, ViewEncapsulation } from '@angular/core';
+import { MatSidenav } from '@angular/material';
+import { CommonModule } from '@angular/common';
 
 import { AuthGuardService } from '../../services';
 import { OSharedModule } from '../../shared';
-import { CommonModule } from '@angular/common';
 
 export const DEFAULT_INPUTS_O_SIDE_MENU = [
   // title [string]: menu title. Default: no value.
@@ -38,7 +29,7 @@ export class OSideMenuComponent {
   protected _opened: boolean;
 
   @ViewChild('sidenav')
-  protected sidenav: MdSidenav;
+  protected sidenav: MatSidenav;
 
   constructor(protected injector: Injector) {
     this.opened = false;
@@ -53,7 +44,7 @@ export class OSideMenuComponent {
     });
   }
 
-  getAuthGuardService() : AuthGuardService {
+  getAuthGuardService(): AuthGuardService {
     return this.authGuardService;
   }
 
@@ -61,7 +52,7 @@ export class OSideMenuComponent {
     return this._title;
   }
 
-  set title(val : string) {
+  set title(val: string) {
     this._title = val;
   }
 
@@ -69,22 +60,15 @@ export class OSideMenuComponent {
     return this._opened;
   }
 
-  set opened(val : boolean) {
+  set opened(val: boolean) {
     this._opened = val;
   }
 }
 
 @NgModule({
-  declarations: [
-    OSideMenuComponent
-  ],
-  imports: [
-    OSharedModule,
-    CommonModule
-  ],
-  exports: [
-    OSideMenuComponent
-  ]
+  declarations: [OSideMenuComponent],
+  imports: [OSharedModule, CommonModule],
+  exports: [OSideMenuComponent]
 })
 export class OSideMenuModule {
 }

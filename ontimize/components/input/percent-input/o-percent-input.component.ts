@@ -66,7 +66,7 @@ export class OPercentInputComponent extends ORealInputComponent implements OnIni
 @NgModule({
   declarations: [OPercentInputComponent],
   imports: [OSharedModule, CommonModule, ORealInputModule],
-  exports: [OPercentInputComponent, ORealInputModule],
+  exports: [OPercentInputComponent, ORealInputModule]
 })
 export class OPercentInputModule {
 }

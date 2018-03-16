@@ -1,10 +1,10 @@
-<md-toolbar color="primary">
+<mat-toolbar color="primary">
   <nav>
-    <md-icon class="mat-24 menu-icon toggle" (click)="input.checked = !input.checked">menu</md-icon>
+    <mat-icon class="mat-24 menu-icon toggle" (click)="input.checked = !input.checked">menu</mat-icon>
     <label [attr.for]="id" class="toggle title-label">{{ menuTitle | oTranslate }}</label>
     <input #input [attr.id]="id" type="checkbox" />
     <div class="fake-ul mat-primary menu">
       <ng-content></ng-content>
     </div>
   </nav>
-</md-toolbar>
+</mat-toolbar>

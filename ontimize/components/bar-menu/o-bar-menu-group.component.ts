@@ -10,7 +10,6 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 
-import { MdIconModule } from '@angular/material';
 import { OBarMenuModule, OBarMenuComponent } from './o-bar-menu.component';
 import { OTranslateService } from '../../services';
 
@@ -85,7 +84,7 @@ export class OBarMenuGroupComponent implements OnInit {
     return this._groupTitle;
   }
 
-  set groupTitle(val : string) {
+  set groupTitle(val: string) {
     this._groupTitle = val;
   }
 
@@ -93,7 +92,7 @@ export class OBarMenuGroupComponent implements OnInit {
     return this._tooltip;
   }
 
-  set tooltip(val : string) {
+  set tooltip(val: string) {
     this._tooltip = val;
   }
 
@@ -101,7 +100,7 @@ export class OBarMenuGroupComponent implements OnInit {
     return this._icon;
   }
 
-  set icon(val : string) {
+  set icon(val: string) {
     this._icon = val;
   }
 
@@ -109,7 +108,7 @@ export class OBarMenuGroupComponent implements OnInit {
     return this._id;
   }
 
-  set id(val : string) {
+  set id(val: string) {
     this._id = val;
   }
 
@@ -117,15 +116,15 @@ export class OBarMenuGroupComponent implements OnInit {
     return this._isHovered;
   }
 
-  set isHovered(val : boolean) {
+  set isHovered(val: boolean) {
     this._isHovered = val;
   }
 }
 
 @NgModule({
   declarations: [OBarMenuGroupComponent],
-  imports: [OSharedModule, CommonModule, MdIconModule, OBarMenuModule],
-  exports: [OBarMenuGroupComponent],
+  imports: [OSharedModule, CommonModule, OBarMenuModule],
+  exports: [OBarMenuGroupComponent]
 })
 export class OBarMenuGroupModule {
 }

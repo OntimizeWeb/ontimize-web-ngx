@@ -5,7 +5,7 @@ import {
 import { CommonModule } from '@angular/common';
 import { CdkTableModule } from '@angular/cdk/table';
 import { SelectionModel, SelectionChange } from '@angular/cdk/collections';
-import { MdDialog, MdSort, MdTabGroup, MdTab, MdPaginatorIntl, MdPaginator, MdCheckboxChange, MdMenu, PageEvent, Sort } from '@angular/material';
+import { MatDialog, MatSort, MatTabGroup, MatTab, MatPaginatorIntl, MatPaginator, MatCheckboxChange, MatMenu, PageEvent, Sort } from '@angular/material';
 
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
@@ -22,7 +22,7 @@ import { OServiceComponent } from '../o-service-component.class';
 import {
   O_TABLE_FOOTER_COMPONENTS,
   OTablePaginatorComponent,
-  OTableMdPaginatorIntl,
+  OTableMatPaginatorIntl,
   OTableColumnAggregateComponent,
   OColumnAggregate
 } from './extensions/footer/o-table-footer-components';
@@ -206,13 +206,13 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   constructor(
     injector: Injector,
     elRef: ElementRef,
-    protected dialog: MdDialog,
+    protected dialog: MatDialog,
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent
   ) {
     super(injector, elRef, form);
     try {
-      this.mdTabGroupContainer = this.injector.get(MdTabGroup);
-      this.mdTabContainer = this.injector.get(MdTab);
+      this.tabGroupContainer = this.injector.get(MatTabGroup);
+      this.tabContainer = this.injector.get(MatTab);
     } catch (error) {
       // Do nothing due to not always is contained on tab.
     }
@@ -220,11 +220,11 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   public paginator: OTablePaginatorComponent;
-  @ViewChild(MdPaginator) mdpaginator: MdPaginator;
-  @ViewChild(MdSort) sort: MdSort;
+  @ViewChild(MatPaginator) matpaginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
   @ViewChild('columnFilterOption') columnFilterOption: OTableOptionComponent;
   @ContentChildren(OTableOptionComponent) tableOptions: QueryList<OTableOptionComponent>;
-  @ViewChild('menu') mdMenu: MdMenu;
+  @ViewChild('menu') matMenu: MatMenu;
 
   public tableContextMenu: OContextMenuComponent;
 
@@ -306,9 +306,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   /*end of parsed inputs variables */
 
-  protected mdTabGroupContainer: MdTabGroup;
-  protected mdTabContainer: MdTab;
-  protected mdTabGroupChangeSubscription: Subscription;
+  protected tabGroupContainer: MatTabGroup;
+  protected tabContainer: MatTab;
+  protected tabGroupChangeSubscription: Subscription;
 
   protected pendingQuery: boolean = true;
   protected pendingQueryFilter = undefined;
@@ -385,7 +385,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     this.setDatasource();
 
     if (this.pageable) {
-      this.sortSubscription = this.sort.mdSortChange.subscribe((sort: Sort) => {
+      this.sortSubscription = this.sort.sortChange.subscribe((sort: Sort) => {
         this.sortColArray = [];
         if (sort.direction !== '') {
           this.sortColArray.push({
@@ -408,8 +408,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   destroy() {
     super.destroy();
-    if (this.mdTabGroupChangeSubscription) {
-      this.mdTabGroupChangeSubscription.unsubscribe();
+    if (this.tabGroupChangeSubscription) {
+      this.tabGroupChangeSubscription.unsubscribe();
     }
     if (this.selectionChangeSubscription) {
       this.selectionChangeSubscription.unsubscribe();
@@ -433,7 +433,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   getDataToStore() {
     var dataToStore = {
       'filter': this.oTableQuickFilterComponent ? this.oTableQuickFilterComponent.value : '',
-      'query-rows': this.mdpaginator ? this.mdpaginator.pageSize : ''
+      'query-rows': this.matpaginator ? this.matpaginator.pageSize : ''
     };
     if (this.sortColArray.length > 0 && this.sort.active !== undefined) {
       dataToStore['sort-columns'] = this.sort.active + ':' + this.sort.direction;
@@ -572,7 +572,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
         }
       });
 
-      //set values of sort-columns to mdsort
+      //set values of sort-columns to matsort
       if ((typeof (this._oTableOptions.columns) !== 'undefined') && (this.sortColArray.length > 0)) {
         let temp = this.sortColArray[0];
         this.sort.active = temp.columnName;
@@ -632,18 +632,18 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
     this.parseSortColumns();
 
-    if (this.mdTabGroupContainer && this.mdTabContainer) {
+    if (this.tabGroupContainer && this.tabContainer) {
       /*
       * When table is contained into tab component, it is necessary to init
       * table component when attached to DOM.
       */
       var self = this;
-      this.mdTabGroupChangeSubscription = this.mdTabGroupContainer.selectChange.subscribe((evt) => {
+      this.tabGroupChangeSubscription = this.tabGroupContainer.selectedTabChange.subscribe((evt) => {
         var interval = setInterval(function () { timerCallback(evt.tab); }, 100);
-        function timerCallback(tab: MdTab) {
+        function timerCallback(tab: MatTab) {
           if (tab && tab.content.isAttached) {
             clearInterval(interval);
-            if (tab === self.mdTabContainer) {
+            if (tab === self.tabContainer) {
               if (self.pendingQuery) {
                 self.queryData(self.pendingQueryFilter);
               }
@@ -686,7 +686,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
    */
   queryData(parentItem: any = undefined, ovrrArgs?: any) {
     //if exit tab and not is active then waiting call queryData
-    if (this.mdTabContainer && !this.mdTabContainer.isActive) {
+    if (this.tabContainer && !this.tabContainer.isActive) {
       this.pendingQuery = true;
       this.pendingQueryFilter = parentItem;
       return;
@@ -832,8 +832,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     });
   }
 
-  onMdTableContentChanged() {
-    console.log('onMdTableContentChanged');
+  onMatTableContentChanged() {
+    console.log('onMatTableContentChanged');
   }
 
   add() {
@@ -1075,11 +1075,11 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     return numSelected === numRows;
   }
 
-  masterToggle(event: MdCheckboxChange) {
+  masterToggle(event: MatCheckboxChange) {
     event.checked ? this.dataSource.renderedData.forEach(row => this.selection.select(row)) : this.clearSelection();
   }
 
-  selectionCheckboxToggle(event: MdCheckboxChange, row: any) {
+  selectionCheckboxToggle(event: MatCheckboxChange, row: any) {
     if (this.isSelectionModeSingle()) {
       this.clearSelection();
     }
@@ -1375,8 +1375,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     ...O_TABLE_DIALOGS
   ],
   providers: [{
-    provide: MdPaginatorIntl,
-    useClass: OTableMdPaginatorIntl
+    provide: MatPaginatorIntl,
+    useClass: OTableMatPaginatorIntl
   }]
 })
 export class OTableModule {

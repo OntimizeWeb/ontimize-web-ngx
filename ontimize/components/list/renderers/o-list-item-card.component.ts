@@ -54,16 +54,13 @@ export class OListItemCardComponent extends OListItemCardRenderer {
   }
 
   ngAfterViewInit() {
-    this.modifyMdListItemElement();
+    this.modifyMatListItemElement();
   }
 }
 
 @NgModule({
   declarations: [OListItemCardComponent],
-  imports: [
-    OSharedModule,
-    CommonModule
-  ],
+  imports: [OSharedModule, CommonModule],
   exports: [OListItemCardComponent]
 })
 export class OListItemCardModule {

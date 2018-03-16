@@ -6,21 +6,12 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ValidatorFn } from '@angular/forms/src/directives/validators';
-
+import { FormControl, FormGroup, Validators, ValidatorFn } from '@angular/forms';
 import { MdCKEditorModule, CKEditor } from '../../material/ckeditor/ckeditor.component';
-import { MdTabGroup, MdTab } from '@angular/material';
+import { MatTabGroup, MatTab } from '@angular/material';
 import { OSharedModule } from '../../../shared';
-
-import {
-  IFormDataComponent,
-  IFormControlComponent,
-  IFormDataTypeComponent
-} from '../../o-form-data-component.class';
-
+import { IFormDataComponent, IFormDataTypeComponent } from '../../o-form-data-component.class';
 import { IComponent } from '../../o-component.class';
-
 import { InputConverter } from '../../../decorators';
 import { OFormComponent } from '../../form/o-form.component';
 import { OFormValue } from '../../form/OFormValue';
@@ -95,8 +86,8 @@ export class OHTMLInputComponent implements OnInit, IComponent, IFormDataCompone
 
   constructor(
     @Inject(forwardRef(() => OFormComponent)) protected form: OFormComponent,
-    @Optional() @Inject(forwardRef(() => MdTabGroup)) protected tabGroup: MdTabGroup,
-    @Optional() @Inject(forwardRef(() => MdTab)) protected tab: MdTab,
+    @Optional() @Inject(forwardRef(() => MatTabGroup)) protected tabGroup: MatTabGroup,
+    @Optional() @Inject(forwardRef(() => MatTab)) protected tab: MatTab,
     protected elRef: ElementRef,
     protected ngZone: NgZone,
     protected cd: ChangeDetectorRef,
@@ -127,7 +118,7 @@ export class OHTMLInputComponent implements OnInit, IComponent, IFormDataCompone
     }
 
     if (this.tabGroup) {
-      this.tabGroup.selectChange.subscribe((evt: any) => {
+      this.tabGroup.selectedTabChange.subscribe((evt: any) => {
         self.destroyCKEditor();
         if (self.isInActiveTab()) {
           self.ckEditor.initializeCkEditor(self.getValue());
@@ -146,6 +137,10 @@ export class OHTMLInputComponent implements OnInit, IComponent, IFormDataCompone
 
   hasError(error: string): boolean {
     return !this.isReadOnly && this._fControl.touched && this._fControl.hasError(error);
+  }
+
+  getErrorValue(error: string, prop: string): string {
+    return this._fControl.hasError(error) ? this._fControl.getError(error)[prop] || '' : '';
   }
 
   isInActiveTab(): boolean {
@@ -325,7 +320,7 @@ export class OHTMLInputComponent implements OnInit, IComponent, IFormDataCompone
 
   /*
   * When ckEditor is inside a TabGroup it is necessary to destroy the component before
-  * Angular detaches md-tab-content from DOM
+  * Angular detaches mat-tab-content from DOM
   */
   destroyCKEditor() {
     if (this.ckEditor) {
@@ -338,7 +333,7 @@ export class OHTMLInputComponent implements OnInit, IComponent, IFormDataCompone
 @NgModule({
   declarations: [OHTMLInputComponent],
   imports: [OSharedModule, CommonModule, MdCKEditorModule],
-  exports: [OHTMLInputComponent],
+  exports: [OHTMLInputComponent]
 })
 export class OHTMLInputModule {
 }

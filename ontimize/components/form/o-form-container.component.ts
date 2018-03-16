@@ -1,19 +1,11 @@
-import {
-  Component,
-  ViewEncapsulation,
-  ViewContainerRef,
-  ViewChild,
-  ComponentFactoryResolver,
-  NgModule
-} from '@angular/core';
-import { OSharedModule } from '../../shared';
+import { Component, ViewEncapsulation, ViewContainerRef, ViewChild, ComponentFactoryResolver, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
+import { OSharedModule } from '../../shared';
 import { OBreadcrumbComponent } from '../../components';
 import { InputConverter } from '../../decorators';
-import { OFormComponent } from './o-form.component';
 import { OFormLayoutManagerComponent } from '../../layouts';
-
+import { OFormComponent } from './o-form.component';
 
 export const DEFAULT_INPUTS_O_FORM_CONTAINER = [
   // breadcrumb [boolean]: show breadscrum of the form. Default: yes.

@@ -9,10 +9,10 @@ import { EventEmitter } from '@angular/core';
 import { ObservableWrapper } from '../../../util/async';
 import { IList } from '../o-list.component';
 
-import { MdListItem } from '@angular/material';
+import { MatListItem } from '@angular/material';
 
 @Directive({
-  selector: 'md-list-item[o-list-item]',
+  selector: 'mat-list-item[o-list-item]',
   exportAs: 'olistitem',
   host: {
     '(click)': 'onItemClicked($event)',
@@ -30,7 +30,7 @@ export class OListItemDirective implements OnInit, OnDestroy {
   @Input('o-list-item')
   modelData: Object;
 
-  @ContentChild(MdListItem, { read: ViewContainerRef }) other;
+  @ContentChild(MatListItem, { read: ViewContainerRef }) other;
 
   @Input('selectable')
   selectable: boolean = false;

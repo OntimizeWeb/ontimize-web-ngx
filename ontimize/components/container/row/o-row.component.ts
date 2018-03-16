@@ -1,9 +1,9 @@
 import { Component, Inject, Injector, forwardRef, ElementRef, OnInit, Optional, NgModule, ViewEncapsulation, AfterViewInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { InputConverter } from '../../../decorators';
 import { OFormComponent } from '../../form/o-form.component';
 import { OTranslateService } from '../../../services';
 import { OSharedModule } from '../../../shared';
-import { CommonModule } from '@angular/common';
 
 export const DEFAULT_INPUTS_O_ROW = [
   'oattr: attr',
@@ -161,14 +161,12 @@ export class ORowComponent implements OnInit, AfterViewInit {
       });
     }
   }
-
-
 }
 
 @NgModule({
   declarations: [ORowComponent],
   imports: [OSharedModule, CommonModule],
-  exports: [ORowComponent],
+  exports: [ORowComponent]
 })
 export class ORowModule {
 }

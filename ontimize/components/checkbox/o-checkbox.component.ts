@@ -9,9 +9,9 @@ import {
   NgModule,
   ViewEncapsulation
 } from '@angular/core';
-
-import { OSharedModule } from '../../shared';
 import { CommonModule } from '@angular/common';
+import { OSharedModule } from '../../shared';
+
 import { OFormComponent } from '../form/o-form.component';
 import { OFormValue } from '../form/OFormValue';
 import { OFormDataComponent, DEFAULT_INPUTS_O_FORM_DATA_COMPONENT } from '../o-form-data-component.class';
@@ -101,11 +101,10 @@ export class OCheckboxComponent extends OFormDataComponent {
 
 }
 
-
 @NgModule({
   declarations: [OCheckboxComponent],
   imports: [OSharedModule, CommonModule],
-  exports: [OCheckboxComponent],
+  exports: [OCheckboxComponent]
 })
 export class OCheckboxModule {
 }

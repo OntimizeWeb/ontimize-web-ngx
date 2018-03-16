@@ -5,19 +5,17 @@ import {
   NgModule,
   ViewEncapsulation
 } from '@angular/core';
-
-import { MdSelect, MdOption } from '@angular/material';
+import { CommonModule } from '@angular/common';
+import { MatSelect, MatOption } from '@angular/material';
 
 import { dataServiceFactory } from '../../services/data-service.provider';
 import { OntimizeService } from '../../services';
 import { OSharedModule } from '../../shared';
-import { CommonModule } from '@angular/common';
+
 import { InputConverter } from '../../decorators';
 import { OFormComponent } from '../form/o-form.component';
 import { OFormValue } from '../form/OFormValue';
-
 import { OFormServiceComponent } from '../o-form-service-component.class';
-
 
 export const DEFAULT_INPUTS_O_COMBO = [
   ...OFormServiceComponent.DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT,
@@ -60,7 +58,7 @@ export class OComboComponent extends OFormServiceComponent implements OnInit {
   protected inputModel: ElementRef;
 
   @ViewChild('selectModel')
-  protected selectModel: MdSelect;
+  protected selectModel: MatSelect;
 
   public onChange: EventEmitter<Object> = new EventEmitter<Object>();
 
@@ -120,7 +118,7 @@ export class OComboComponent extends OFormServiceComponent implements OnInit {
       if (this.selectModel.selected) {
         descTxt = (this.selectModel.selected as any).viewValue;
       } else if (this.selectModel.options) {
-        let option: MdOption = this.selectModel.options.toArray()[this._currentIndex];
+        let option: MatOption = this.selectModel.options.toArray()[this._currentIndex];
         if (option) {
           option.select();
           descTxt = option.viewValue;
@@ -130,7 +128,7 @@ export class OComboComponent extends OFormServiceComponent implements OnInit {
     }
     /*
     * Temporary code
-    * I do not understand the reason why MdInput is not removing 'mat-empty' clase despite of the fact that
+    * I do not understand the reason why MatInput is not removing 'mat-empty' clase despite of the fact that
     * the input element of the description is binding value attribute
     */
     let placeHolderLbl = this.elRef.nativeElement.querySelectorAll('label.mat-input-placeholder');

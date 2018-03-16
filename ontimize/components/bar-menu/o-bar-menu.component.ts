@@ -1,14 +1,8 @@
-import {
-  Component, Injector,
-  NgModule,
-  ElementRef,
-  ViewEncapsulation
-} from '@angular/core';
-
+import { Component, Injector, NgModule, ElementRef, ViewEncapsulation } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { AuthGuardService } from '../../services';
 import { OTranslateService } from '../../services';
 import { OSharedModule } from '../../shared';
-import { CommonModule } from '@angular/common';
 
 export const DEFAULT_INPUTS_O_BAR_MENU = [
   // title [string]: menu title. Default: no value.
@@ -80,7 +74,7 @@ export class OBarMenuComponent {
     }
   }
 
-  getAuthGuardService() : AuthGuardService {
+  getAuthGuardService(): AuthGuardService {
     return this.authGuardService;
   }
 
@@ -88,7 +82,7 @@ export class OBarMenuComponent {
     return this._menuTitle;
   }
 
-  set menuTitle(val : string) {
+  set menuTitle(val: string) {
     this._menuTitle = val;
   }
 
@@ -96,7 +90,7 @@ export class OBarMenuComponent {
     return this._tooltip;
   }
 
-  set tooltip(val : string) {
+  set tooltip(val: string) {
     this._tooltip = val;
   }
 
@@ -104,7 +98,7 @@ export class OBarMenuComponent {
     return this._id;
   }
 
-  set id(val : string) {
+  set id(val: string) {
     this._id = val;
   }
 }

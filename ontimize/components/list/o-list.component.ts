@@ -19,7 +19,7 @@ import {
 import { RouterModule } from '@angular/router';
 import { ObservableWrapper } from '../../util/async';
 
-import { MdCheckbox } from '@angular/material';
+import { MatCheckbox } from '@angular/material';
 import { OSharedModule } from '../../shared';
 import { CommonModule } from '@angular/common';
 import { OntimizeService } from '../../services';
@@ -551,7 +551,7 @@ export class OListComponent extends OServiceComponent implements OnInit, IList, 
   declarations: [OListComponent],
   imports: [OSharedModule, CommonModule, OListItemModule, OSearchInputModule, RouterModule],
   exports: [OListComponent],
-  entryComponents: [MdCheckbox]
+  entryComponents: [MatCheckbox]
 })
 export class OListModule {
 }

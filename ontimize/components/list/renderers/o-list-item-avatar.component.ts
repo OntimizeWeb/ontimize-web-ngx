@@ -68,7 +68,7 @@ export class OListItemAvatarComponent extends OListItemTextRenderer implements O
   }
 
   ngAfterViewInit() {
-    this.modifyMdListItemElement();
+    this.modifyMatListItemElement();
   }
 
   ngOnInit() {
@@ -100,12 +100,7 @@ export class OListItemAvatarComponent extends OListItemTextRenderer implements O
 
 @NgModule({
   declarations: [OListItemAvatarComponent],
-  imports: [
-    OSharedModule,
-    CommonModule
-  ],
+  imports: [OSharedModule, CommonModule],
   exports: [OListItemAvatarComponent]
 })
-export class OListItemAvatarModule {
-
-}
+export class OListItemAvatarModule { }

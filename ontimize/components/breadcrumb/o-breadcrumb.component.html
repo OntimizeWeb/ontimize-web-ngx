@@ -1,7 +1,7 @@
-<md-toolbar class="toolbar-breadcrumb">
+<mat-toolbar class="toolbar-breadcrumb">
   <ng-template ngFor let-route let-i="index" [ngForOf]="breadcrumbs">
     <a *ngIf="!route.terminal" class="breadcrumb-item" href="" [routerLink]="[route.url]" [queryParams]="route.queryParams" layout-padding>{{ route.displayText ? route.displayText : route.text | uppercase | oTranslate }}</a>
     <span *ngIf="route.terminal" class="breadcrumb-item active" layout-padding>{{ route.displayText ? route.displayText : route.text | uppercase | oTranslate }}</span>
-    <md-icon *ngIf="!route.terminal">keyboard_arrow_right</md-icon>
+    <mat-icon *ngIf="!route.terminal">keyboard_arrow_right</mat-icon>
   </ng-template>
-</md-toolbar>
+</mat-toolbar>

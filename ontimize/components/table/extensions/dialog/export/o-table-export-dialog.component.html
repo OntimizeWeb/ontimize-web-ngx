@@ -1,9 +1,9 @@
-<span md-dialog-title>{{ 'TABLE.BUTTONS.EXPORT' | oTranslate }}</span>
+<span mat-dialog-title>{{ 'TABLE.BUTTONS.EXPORT' | oTranslate }}</span>
 
-<md-dialog-content>
-  <span md-subheader>Seleccione el formato al que desea exportar la información de la tabla.</span>
+<mat-dialog-content>
+  <span mat-subheader>Seleccione el formato al que desea exportar la información de la tabla.</span>
   <div fxLayout="row" fxLayoutAlign="space-around center" layout-padding>
-    <button #excelButton md-raised-button (click)="exportExcel(excelButton)">
+    <button #excelButton mat-raised-button (click)="exportExcel(excelButton)">
       <div fxLayout="column">
         <svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="48px" height="48px" viewBox="0 0 512.000000 512.000000" style="padding: 6px 6px 0 6px;"
           preserveAspectRatio="xMidYMid meet">
@@ -17,7 +17,7 @@
         <span>Excel</span>
       </div>
     </button>
-    <button #htmlButton md-raised-button (click)="exportHTML(htmlButton)">
+    <button #htmlButton mat-raised-button (click)="exportHTML(htmlButton)">
       <div fxLayout="column">
         <svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="48px" height="48px" viewBox="0 0 512.000000 512.000000" style="padding: 6px 6px 0 6px;"
           preserveAspectRatio="xMidYMid meet">
@@ -33,7 +33,7 @@
         <span>HTML</span>
       </div>
     </button>
-    <button #pdfButton md-raised-button (click)="exportPDF(pdfButton)">
+    <button #pdfButton mat-raised-button (click)="exportPDF(pdfButton)">
       <div fxLayout="column">
         <svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="48px" height="48px" viewBox="0 0 512.000000 512.000000" style="padding: 6px 6px 0 6px;"
           preserveAspectRatio="xMidYMid meet">
@@ -50,8 +50,8 @@
       </div>
     </button>
   </div>
-</md-dialog-content>
+</mat-dialog-content>
 
-<md-dialog-actions fxLayoutAlign="end center">
-  <button md-button [md-dialog-close]="false">{{ 'CANCEL' | oTranslate }}</button>
-</md-dialog-actions>
+<mat-dialog-actions fxLayoutAlign="end center">
+  <button mat-button [mat-dialog-close]="false">{{ 'CANCEL' | oTranslate }}</button>
+</mat-dialog-actions>

@@ -12,10 +12,10 @@
       </div>
       <span class="fill-remaining"></span>
       <o-table-quickfilter *ngIf="quickFilter" (onChange)="reloadPaginatedDataFromStart($event)"></o-table-quickfilter>
-      <button *ngIf="showTableMenuButton" md-icon-button class="o-table-menu-button" [mdMenuTriggerFor]="menu">
-        <md-icon>more_vert</md-icon>
+      <button *ngIf="showTableMenuButton" mat-icon-button class="o-table-menu-button" [matMenuTriggerFor]="menu">
+        <mat-icon>more_vert</mat-icon>
       </button>
-      <md-menu #menu="mdMenu" x-position="before" class="o-table-menu">
+      <mat-menu #menu="matMenu" x-position="before" class="o-table-menu">
         <o-table-option *ngIf="selectAllCheckbox" (onClick)="onShowsSelects($event)" label="TABLE.BUTTONS.SELECT" show-active-icon="true">
         </o-table-option>
         <o-table-option *ngIf="exportButton" (onClick)="onExportButtonClicked()" label="TABLE.BUTTONS.EXPORT"> </o-table-option>
@@ -25,37 +25,37 @@
           label="TABLE.BUTTONS.FILTER_BY_COLUMN" show-active-icon="true">
         </o-table-option>
         <ng-content select="o-table-option"></ng-content>
-      </md-menu>
+      </mat-menu>
     </div>
 
-    <md-table #tableHeader class="header-fixed" mdSort [class]="rowHeight">
+    <mat-table #tableHeader class="header-fixed" matSort [class]="rowHeight">
       <!--Checkbox Column -->
       <ng-container [cdkColumnDef]="oTableOptions.selectColumn.name" *ngIf="oTableOptions.selectColumn.visible">
-        <md-header-cell *cdkHeaderCellDef>
-          <md-checkbox (click)="$event.stopPropagation()" (change)="masterToggle($event)" [checked]="isAllSelected()" [indeterminate]="selection.hasValue() && !isAllSelected()"></md-checkbox>
-        </md-header-cell>
+        <mat-header-cell *cdkHeaderCellDef>
+          <mat-checkbox (click)="$event.stopPropagation()" (change)="masterToggle($event)" [checked]="isAllSelected()" [indeterminate]="selection.hasValue() && !isAllSelected()"></mat-checkbox>
+        </mat-header-cell>
       </ng-container>
 
       <!-- Generic column definition -->
       <ng-container *ngFor="let column of oTableOptions.columns" [cdkColumnDef]="column.name">
         <ng-container *ngIf="column.orderable">
-          <md-header-cell *cdkHeaderCellDef md-sort-header [fxFlex]="column.width">
-            <md-icon *ngIf="isColumnFilterable(column)" class="column-filter-icon" [class.active]="isColumnFilterActive(column)" (click)="openColumnFilterDialog(column, $event)">filter_list</md-icon>
+          <mat-header-cell *cdkHeaderCellDef mat-sort-header [fxFlex]="column.width">
+            <mat-icon *ngIf="isColumnFilterable(column)" class="column-filter-icon" [class.active]="isColumnFilterActive(column)" (click)="openColumnFilterDialog(column, $event)">filter_list</mat-icon>
             {{ column.title | oTranslate }}
-          </md-header-cell>
+          </mat-header-cell>
         </ng-container>
         <ng-container *ngIf="!column.orderable">
-          <md-header-cell *cdkHeaderCellDef [fxFlex]="column.width">
-            <md-icon *ngIf="isColumnFilterable(column)" class="column-filter-icon" [class.active]="isColumnFilterActive(column)" (click)="openColumnFilterDialog(column, $event)">filter_list</md-icon>
+          <mat-header-cell *cdkHeaderCellDef [fxFlex]="column.width">
+            <mat-icon *ngIf="isColumnFilterable(column)" class="column-filter-icon" [class.active]="isColumnFilterActive(column)" (click)="openColumnFilterDialog(column, $event)">filter_list</mat-icon>
             {{ column.title | oTranslate }}
-          </md-header-cell>
+          </mat-header-cell>
         </ng-container>
       </ng-container>
 
-      <md-header-row *cdkHeaderRowDef="oTableOptions.visibleColumns"></md-header-row>
+      <mat-header-row *cdkHeaderRowDef="oTableOptions.visibleColumns"></mat-header-row>
 
 
-    </md-table>
+    </mat-table>
 
     <!--TABLE EMPTY-->
     <div class="mat-row o-table-no-results {{ rowHeight }}" *ngIf="dataSource !== undefined && dataSource.resultsLength === 0"
@@ -70,55 +70,55 @@
     <o-table-editable-row [datasource]="dataSource" *ngIf="showFirstInsertableRow">
     </o-table-editable-row>
 
-    <md-table #table [trackBy]="getTrackByFunction()" [dataSource]="dataSource" mdSort [class]="rowHeight" [class.content-table]="true">
+    <mat-table #table [trackBy]="getTrackByFunction()" [dataSource]="dataSource" matSort [class]="rowHeight" [class.content-table]="true">
       <!--Checkbox Column -->
       <ng-container [cdkColumnDef]="oTableOptions.selectColumn.name" *ngIf="oTableOptions.selectColumn.visible">
-        <md-header-cell *cdkHeaderCellDef>
-          <md-checkbox (click)="$event.stopPropagation()" (change)="masterToggle($event)" [checked]="isAllSelected()" [indeterminate]="selection.hasValue() && !isAllSelected()"></md-checkbox>
-        </md-header-cell>
-        <md-cell *cdkCellDef="let row">
-          <md-checkbox name="id[]" (click)="$event.stopPropagation()" (change)="selectionCheckboxToggle($event, row)" [checked]="selection.isSelected(row)">
-          </md-checkbox>
-        </md-cell>
+        <mat-header-cell *cdkHeaderCellDef>
+          <mat-checkbox (click)="$event.stopPropagation()" (change)="masterToggle($event)" [checked]="isAllSelected()" [indeterminate]="selection.hasValue() && !isAllSelected()"></mat-checkbox>
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let row">
+          <mat-checkbox name="id[]" (click)="$event.stopPropagation()" (change)="selectionCheckboxToggle($event, row)" [checked]="selection.isSelected(row)">
+          </mat-checkbox>
+        </mat-cell>
       </ng-container>
 
       <!-- Generic column definition -->
       <ng-container *ngFor="let column of oTableOptions.columns" [cdkColumnDef]="column.name">
         <ng-container *ngIf="column.orderable">
-          <md-header-cell *cdkHeaderCellDef md-sort-header [fxFlex]="column.width">
-            <md-icon *ngIf="isColumnFilterable(column)" class="column-filter-icon" [class.active]="isColumnFilterActive(column)" (click)="openColumnFilterDialog(column, $event)">filter_list</md-icon>
+          <mat-header-cell *cdkHeaderCellDef mat-sort-header [fxFlex]="column.width">
+            <mat-icon *ngIf="isColumnFilterable(column)" class="column-filter-icon" [class.active]="isColumnFilterActive(column)" (click)="openColumnFilterDialog(column, $event)">filter_list</mat-icon>
             {{ column.title | oTranslate }}
-          </md-header-cell>
+          </mat-header-cell>
         </ng-container>
         <ng-container *ngIf="!column.orderable">
-          <md-header-cell *cdkHeaderCellDef [fxFlex]="column.width">
-            <md-icon *ngIf="isColumnFilterable(column)" class="column-filter-icon" [class.active]="isColumnFilterActive(column)" (click)="openColumnFilterDialog(column, $event)">filter_list</md-icon>
+          <mat-header-cell *cdkHeaderCellDef [fxFlex]="column.width">
+            <mat-icon *ngIf="isColumnFilterable(column)" class="column-filter-icon" [class.active]="isColumnFilterActive(column)" (click)="openColumnFilterDialog(column, $event)">filter_list</mat-icon>
             {{ column.title | oTranslate }}
-          </md-header-cell>
+          </mat-header-cell>
         </ng-container>
-        <md-cell *cdkCellDef="let row" #cell [fxFlex]="column.width" [ngClass]="column.className" (click)="handleCellClick(column, row, $event)"
+        <mat-cell *cdkCellDef="let row" #cell [fxFlex]="column.width" [ngClass]="column.className" (click)="handleCellClick(column, row, $event)"
           (dblclick)="handleCellDoubleClick(column, row, $event)">
 
           <ng-container *ngIf="usePlainRender(column, row)">
             {{ row[column.name] }}
           </ng-container>
 
-          <ng-template *ngIf="useCellRenderer(column, row)" [ngTemplateOutlet]="column.renderer.templateref" [ngOutletContext]="{ cellvalue: row[column.name], rowvalue:row }">
+          <ng-template *ngIf="useCellRenderer(column, row)" [ngTemplateOutlet]="column.renderer.templateref" [ngTemplateOutletContext]="{ cellvalue: row[column.name], rowvalue:row }">
           </ng-template>
 
-          <ng-template *ngIf="useCellEditor(column, row)" [ngTemplateOutlet]="column.editor.templateref" [ngOutletContext]="{ cellvalue: row[column.name], rowvalue:row }">
+          <ng-template *ngIf="useCellEditor(column, row)" [ngTemplateOutlet]="column.editor.templateref" [ngTemplateOutletContext]="{ cellvalue: row[column.name], rowvalue:row }">
           </ng-template>
 
-        </md-cell>
+        </mat-cell>
       </ng-container>
 
-      <md-header-row *cdkHeaderRowDef="[]" style.display="none"></md-header-row>
+      <mat-header-row *cdkHeaderRowDef="[]" style.display="none"></mat-header-row>
 
-      <md-row *cdkRowDef="let row; columns: oTableOptions.visibleColumns;" (click)="handleClick(row, $event)" (dblclick)="handleDoubleClick(row, $event)"
+      <mat-row *cdkRowDef="let row; columns: oTableOptions.visibleColumns;" (click)="handleClick(row, $event)" (dblclick)="handleDoubleClick(row, $event)"
         [oContextMenu]="tableContextMenu" [oContextMenuData]="row" [class.selected]="!isSelectionModeNone() && isSelected(row)">
-      </md-row>
+      </mat-row>
 
-    </md-table>
+    </mat-table>
 
     <!--TABLE AGGREGATE-->
     <o-table-aggregate [o-table-options]="oTableOptions" [datasource]="dataSource" *ngIf="showTotals"> </o-table-aggregate>
@@ -129,12 +129,12 @@
 
     <!--LOADING-->
     <div *ngIf="daoTable.isLoadingResults" class="spinner-container">
-      <md-progress-spinner mode="indeterminate" style="margin:0 auto;" *ngIf="daoTable.isLoadingResults"></md-progress-spinner>
+      <mat-progress-spinner mode="indeterminate" style="margin:0 auto;" *ngIf="daoTable.isLoadingResults"></mat-progress-spinner>
     </div>
 
     <!--TABLE PAGINATOR-->
-    <md-paginator *ngIf="paginator" #mdpaginator [length]="dataSource?.resultsLength" [pageIndex]="paginator.pageIndex" [pageSize]="queryRows"
-      [pageSizeOptions]="paginator.pageSizeOptions" (page)="onChangePage($event)"></md-paginator>
+    <mat-paginator *ngIf="paginator" #matpaginator [length]="dataSource?.resultsLength" [pageIndex]="paginator.pageIndex" [pageSize]="queryRows"
+      [pageSizeOptions]="paginator.pageSizeOptions" (page)="onChangePage($event)"></mat-paginator>
 
   </div>
 </div>

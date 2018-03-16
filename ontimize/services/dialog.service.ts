@@ -1,5 +1,5 @@
 import { Injectable, Injector } from '@angular/core';
-import { MdDialog, MdDialogConfig, MdDialogRef } from '@angular/material';
+import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/toPromise';
 import { ODialogComponent, ODialogConfig } from '../components';
@@ -7,11 +7,11 @@ import { ODialogComponent, ODialogConfig } from '../components';
 @Injectable()
 export class DialogService {
 
-  protected ng2Dialog: MdDialog;
-  protected dialogRef: MdDialogRef<ODialogComponent>;
+  protected ng2Dialog: MatDialog;
+  protected dialogRef: MatDialogRef<ODialogComponent>;
 
   constructor(protected injector: Injector) {
-    this.ng2Dialog = this.injector.get(MdDialog);
+    this.ng2Dialog = this.injector.get(MatDialog);
   }
 
   public get dialog(): ODialogComponent {
@@ -77,7 +77,7 @@ export class DialogService {
   }
 
   protected openDialog(observer) {
-    let cfg: MdDialogConfig = {
+    let cfg: MatDialogConfig = {
       role: 'alertdialog',
       disableClose: true
     };

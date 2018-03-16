@@ -1,22 +1,22 @@
-<md-list-item #innerListItem>
+<mat-list-item #innerListItem>
   <div class="o-list-row-action" *ngIf="_list && _list.selectable">
-    <md-checkbox [checked]="isSelected" (change)="onCheckboxChange($event)">
-    </md-checkbox>
+    <mat-checkbox [checked]="isSelected" (change)="onCheckboxChange($event)">
+    </mat-checkbox>
   </div>
   <ng-content select="[o-list-item-avatar],
     [mdListAvatar], [mdListIcon],
     [matListAvatar], [matListIcon]">
   </ng-content>
   <div class="mat-list-text">
-    <ng-content select="[mdLine], [matLine]"></ng-content>
+    <ng-content select="[matLine], [matLine]"></ng-content>
   </div>
   <ng-content></ng-content>
   <div fxLayout="row" class="row-buttons-container">
     <div class="o-list-row-action o-list-item-icon" *ngIf="_list && _list.editButtonInRow" (click)="onEditIconClicked($event)">
-      <md-icon class="material-icons">{{ _list.editButtonInRowIcon }}</md-icon>
+      <mat-icon class="material-icons">{{ _list.editButtonInRowIcon }}</mat-icon>
     </div>
     <div class="o-list-row-action o-list-item-icon" *ngIf="_list && _list.detailButtonInRow" (click)="onDetailIconClicked($event)">
-      <md-icon class="material-icons">{{ _list.detailButtonInRowIcon }}</md-icon>
+      <mat-icon class="material-icons">{{ _list.detailButtonInRowIcon }}</mat-icon>
     </div>
   </div>
-</md-list-item>
+</mat-list-item>

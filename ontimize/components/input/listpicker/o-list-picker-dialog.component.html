@@ -1,9 +1,9 @@
-<md-toolbar color="primary" class="mat-elevation-z5" *ngIf="filter">
+<mat-toolbar color="primary" class="mat-elevation-z5" *ngIf="filter">
   <o-search-input class="list-picker-search" (onSearch)="searchVal=$event"></o-search-input>
-</md-toolbar>
-<div md-dialog-content class="dialog-list-container">
-  <md-list>
-    <md-list-item class="mat-1-line" (click)="onClickListItem($event, item)" fxFill
+</mat-toolbar>
+<div mat-dialog-content class="dialog-list-container">
+  <mat-list>
+    <mat-list-item class="mat-1-line" (click)="onClickListItem($event, item)" fxFill
       *ngFor="let item of data | columnsfilter: {filtervalue: searchVal, filtercolumns: visibleColsArray }">
       <div fxLayout="column" fxFill>
         <div fxLayout="row" fxFill>
@@ -11,14 +11,14 @@
             <p class="mat-list-item-text"> {{item[col]}} </p>
           </div>
         </div>
-        <md-divider></md-divider>
+        <mat-divider></mat-divider>
       </div>
-    </md-list-item>
-  </md-list>
+    </mat-list-item>
+  </mat-list>
 </div>
-<md-dialog-actions align="end">
+<mat-dialog-actions align="end">
     <span fxFlex></span>
-    <button md-button class="mat-primary" md-dialog-close>
+    <button mat-button class="mat-primary" mat-dialog-close>
       <span>{{ 'CANCEL' | oTranslate | uppercase }}</span>
     </button>
-</md-dialog-actions>
+</mat-dialog-actions>

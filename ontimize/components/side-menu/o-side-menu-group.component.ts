@@ -1,14 +1,7 @@
-import {
-  Component,
-  Inject,
-  forwardRef,
-  NgModule,
-  ViewEncapsulation
-} from '@angular/core';
-
+import { Component, Inject, forwardRef, NgModule, ViewEncapsulation } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { OSideMenuModule, OSideMenuComponent } from './o-side-menu.component';
 import { OSharedModule } from '../../shared';
-import { CommonModule } from '@angular/common';
 
 export const DEFAULT_INPUTS_O_SIDE_MENU_GROUP = [
   // title [string]: menu group title. Default: no value.
@@ -43,8 +36,8 @@ export class OSideMenuGroupComponent {
 
 @NgModule({
   declarations: [OSideMenuGroupComponent],
-  imports: [OSharedModule, CommonModule,OSideMenuModule],
-  exports: [OSideMenuGroupComponent],
+  imports: [OSharedModule, CommonModule, OSideMenuModule],
+  exports: [OSideMenuGroupComponent]
 })
 export class OSideMenuGroupModule {
 }

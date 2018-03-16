@@ -1,16 +1,8 @@
-import {
-  Component,
-  OnInit,
-  Inject,
-  forwardRef,
-  NgModule,
-  ViewEncapsulation
-} from '@angular/core';
-import { RouterModule } from '@angular/router';
-
-import { OSideMenuModule, OSideMenuComponent } from './o-side-menu.component';
-import { OSharedModule } from '../../shared';
+import { Component, OnInit, Inject, forwardRef, NgModule, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { OSharedModule } from '../../shared';
+import { OSideMenuModule, OSideMenuComponent } from './o-side-menu.component';
 
 export const DEFAULT_INPUTS_O_SIDE_MENU_ITEM = [
   // title [string]: menu item title. Default: no value.
@@ -66,7 +58,7 @@ export class OSideMenuItemComponent implements OnInit {
     return this._title;
   }
 
-  set title(val : string) {
+  set title(val: string) {
     this._title = val;
   }
 
@@ -74,7 +66,7 @@ export class OSideMenuItemComponent implements OnInit {
     return this._icon;
   }
 
-  set icon(val : string) {
+  set icon(val: string) {
     this._icon = val;
   }
 
@@ -82,7 +74,7 @@ export class OSideMenuItemComponent implements OnInit {
     return this._route;
   }
 
-  set route(val : string) {
+  set route(val: string) {
     this._route = val;
   }
 
@@ -90,7 +82,7 @@ export class OSideMenuItemComponent implements OnInit {
     return this._action;
   }
 
-  set action(val : Function) {
+  set action(val: Function) {
     this._action = val;
   }
 
@@ -98,7 +90,7 @@ export class OSideMenuItemComponent implements OnInit {
     return this._restricted;
   }
 
-  set restricted(val : boolean) {
+  set restricted(val: boolean) {
     this._restricted = val;
   }
 }

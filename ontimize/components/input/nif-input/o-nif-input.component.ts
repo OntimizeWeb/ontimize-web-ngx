@@ -58,7 +58,7 @@ export class ONIFInputComponent extends OTextInputComponent implements OnInit {
 @NgModule({
   declarations: [ONIFInputComponent],
   imports: [OSharedModule, CommonModule, OTextInputModule],
-  exports: [ONIFInputComponent, OTextInputModule],
+  exports: [ONIFInputComponent, OTextInputModule]
 })
 export class ONIFInputModule {
 }
