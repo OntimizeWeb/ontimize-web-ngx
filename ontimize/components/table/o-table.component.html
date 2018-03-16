@@ -28,7 +28,7 @@
       </mat-menu>
     </div>
 
-    <mat-table #tableHeader class="header-fixed" matSort [class]="rowHeight">
+    <mat-table #tableHeader matSort [class]="rowHeight" class="header-fixed" [class.mat-table]="true">
       <!--Checkbox Column -->
       <ng-container [cdkColumnDef]="oTableOptions.selectColumn.name" *ngIf="oTableOptions.selectColumn.visible">
         <mat-header-cell *cdkHeaderCellDef>
@@ -70,7 +70,8 @@
     <o-table-editable-row [datasource]="dataSource" *ngIf="showFirstInsertableRow">
     </o-table-editable-row>
 
-    <mat-table #table [trackBy]="getTrackByFunction()" [dataSource]="dataSource" matSort [class]="rowHeight" [class.content-table]="true">
+    <mat-table #table [trackBy]="getTrackByFunction()" [dataSource]="dataSource" matSort [class]="rowHeight" [class.content-table]="true"
+      [class.mat-table]="true">
       <!--Checkbox Column -->
       <ng-container [cdkColumnDef]="oTableOptions.selectColumn.name" *ngIf="oTableOptions.selectColumn.visible">
         <mat-header-cell *cdkHeaderCellDef>

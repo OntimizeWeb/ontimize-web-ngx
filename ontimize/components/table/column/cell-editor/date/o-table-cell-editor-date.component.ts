@@ -85,7 +85,7 @@ export class OTableCellEditorDateComponent extends OBaseTableCellEditor implemen
       this.matDateFormats.parse.dateInput = this.format;
     }
 
-    this.momentDateAdapter.setLocale({ locale: this.locale, format: this.format });
+    this.momentDateAdapter.setLocale(this.locale);
     if (this.startAt) {
       this.oStartAt = new Date(this.startAt);
     }
