@@ -31,41 +31,6 @@
   input[type="week"]:disabled {
       color: mat-color($foreground, disabled-text);
   }
-
-  .custom-error {
-
-    .input-model.ng-invalid.ng-touched + mat-form-field {
-
-      .mat-input-placeholder,
-      .mat-placeholder-required {
-        color: mat-color($warn);
-      }
-      .mat-input-underline .mat-input-ripple {
-        visibility: visible;
-        transform: scaleX(1);
-        transition: transform ($swift-ease-in-duration/2) linear,background-color $swift-ease-in-duration $swift-ease-in-timing-function;
-      }
-    }
-
-
-    .input-model.ng-invalid.ng-touched + mat-form-field,
-    mat-form-field.ng-invalid.ng-touched  {
-      .mat-input-wrapper {
-        .mat-input-underline {
-          border-top-color: mat-color($warn);
-          .mat-input-ripple {
-            background-color: mat-color($warn);
-          }
-        }
-        .mat-input-placeholder.mat-focused {
-          color: mat-color($warn);
-        }
-        .mat-hint {
-          color: mat-color($warn);
-        }
-      }
-    }
-  }
 }
 
 

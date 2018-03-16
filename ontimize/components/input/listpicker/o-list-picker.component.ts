@@ -75,8 +75,8 @@ export class OListPickerComponent extends OFormServiceComponent implements OnIni
   protected ng2Dialog: MatDialog;
   protected dialogRef: MatDialogRef<OListPickerDialogComponent>;
 
-  @ViewChild('inputModel')
-  protected inputModel: MatInput;
+  // @ViewChild('inputModel')
+  // protected inputModel: MatInput;
 
   onChange: EventEmitter<Object> = new EventEmitter<Object>();
   onFocus: EventEmitter<Object> = new EventEmitter<Object>();
