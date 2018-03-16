@@ -1,7 +1,7 @@
 <div fxLayout="row" fxLayoutAlign="space-between center" [formGroup]="getFormGroup()" (click)="onClickListpicker($event)"
   [matTooltip]="tooltip" [matTooltipPosition]="tooltipPosition" [matTooltipShowDelay]="tooltipShowDelay" class="o-list-picker-content">
 
-  <mat-form-field #innerInputContainer fxFlexFill>
+  <mat-form-field fxFlexFill>
     <input matInput type="text" [id]="getAttribute()" [placeholder]="placeHolder" [formControlName]="getAttribute()" [ngModel]="getValue()"
       (ngModelChange)="innerOnChange($event)" [value]="getDescriptionValue()" (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)"
       [readonly]="isReadOnly" [disabled]="isDisabled" [required]="isRequired">

@@ -11,7 +11,7 @@
     <mat-error *ngIf="hasError('required')">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</mat-error>
   </mat-form-field>
 
-  <mat-form-field #innerInputContainer [class.visible]="isReadOnly" [class.hidden]="!isReadOnly" fxFlex fxFill>
+  <mat-form-field [class.visible]="isReadOnly" [class.hidden]="!isReadOnly" fxFlex fxFill>
     <input matInput class="mat-input" type="text" [attr.id]="'fake_' + getAttribute()" [id]="'fake_' + getAttribute()" fxFill
       [class.ng-untouched]="getFormControl() && getFormControl().untouched" [class.ng-touched]="getFormControl() && getFormControl().touched"
       [class.ng-dirty]="getFormControl() && getFormControl().dirty" [class.ng-pristine]="getFormControl() && getFormControl().pristine"

@@ -1,9 +1,10 @@
 <div fxFlexFill [formGroup]="getFormGroup()" [matTooltip]="tooltip" [matTooltipPosition]="tooltipPosition" [matTooltipShowDelay]="tooltipShowDelay">
-    <mat-form-field #innerInputContainer fxFlexFill>
-        <textarea matInput class="mat-textarea" type="text" [attr.id]="getAttribute()" [id]="getAttribute()" [formControlName]="getAttribute()"
-            [placeholder]="placeHolder" [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)" (focus)="innerOnFocus($event)"
-            (blur)="innerOnBlur($event)" [readonly]="isReadOnly" [class.no-resize]="!isResizable()" [rows]="rows" [cols]="columns" [required]="isRequired">
+  <mat-form-field fxFlexFill>
+    <textarea matInput class="mat-textarea" type="text" [attr.id]="getAttribute()" [id]="getAttribute()" [formControlName]="getAttribute()"
+      [placeholder]="placeHolder" [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)" (focus)="innerOnFocus($event)"
+      (blur)="innerOnBlur($event)" [readonly]="isReadOnly" [class.no-resize]="!isResizable()" [rows]="rows" [cols]="columns"
+      [required]="isRequired">
             <mat-error *ngIf="hasError('required')">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</mat-error>
         </textarea>
-    </mat-form-field>
+  </mat-form-field>
 </div>
