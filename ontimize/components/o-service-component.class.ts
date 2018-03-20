@@ -159,7 +159,7 @@ export class OServiceComponent implements ILocalStorageComponent {
   @InputConverter()
   protected queryOnBind: boolean = true;
   @InputConverter()
-  protected pageable: boolean = false;
+  pageable: boolean = false;
   protected columns: string;
   protected keys: string;
   protected parentKeys: string;
