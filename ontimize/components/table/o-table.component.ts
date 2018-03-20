@@ -245,8 +245,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   // @InputConverter()
   // columnsGroupButton: boolean = true;
   @InputConverter()
-  pageable: boolean = true;
-  @InputConverter()
   columnsVisibilityButton: boolean = true;
   @InputConverter()
   showTableButtonsText: boolean = true;
