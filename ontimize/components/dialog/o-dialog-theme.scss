@@ -1,7 +1,8 @@
 @import 'node_modules/@angular/material/theming';
 
 @mixin o-dialog-theme($theme) {
-
+  $background: map-get($theme, background);
+  $foreground: map-get($theme, foreground);
   $info: mat-palette($mat-light-blue);
   $warn: mat-palette($mat-amber);
   $error: mat-palette($mat-red);
@@ -18,6 +19,15 @@
     }
   }
 
+  .mat-dialog {
+    background-color: mat-color($background, dialog);
+
+    &.mat-content-overflow {
+      .mat-actions, mat-dialog-actions {
+        border-top-color: mat-color($foreground, divider);
+      }
+    }
+  }
 }
 
 
