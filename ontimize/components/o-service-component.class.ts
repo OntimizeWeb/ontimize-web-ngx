@@ -105,7 +105,13 @@ export const DEFAULT_INPUTS_O_SERVICE_COMPONENT = [
   // row-height [small | medium | large]
   'rowHeight : row-height',
 
-  'serviceType : service-type'
+  'serviceType : service-type',
+
+  // insert-form-route [string]: route of insert form. Default:
+  'insertFormRoute: insert-form-route',
+
+  // recursive-insert [no|yes]: do not append insert keys when navigate (overwrite current). Default: no.
+  'recursiveInsert: recursive-insert',
 ];
 
 export class OServiceComponent implements ILocalStorageComponent {
@@ -153,7 +159,7 @@ export class OServiceComponent implements ILocalStorageComponent {
   @InputConverter()
   protected queryOnBind: boolean = true;
   @InputConverter()
-  protected pageable: boolean = false;
+  pageable: boolean = false;
   protected columns: string;
   protected keys: string;
   protected parentKeys: string;
@@ -176,6 +182,9 @@ export class OServiceComponent implements ILocalStorageComponent {
   insertButton: boolean;
   rowHeight: string;
   protected serviceType: string;
+  protected insertFormRoute: string;
+  @InputConverter()
+  protected recursiveInsert: boolean = false;
   /* end of inputs variables */
 
   /*parsed inputs variables */
@@ -521,23 +530,21 @@ export class OServiceComponent implements ILocalStorageComponent {
 
   insertDetail() {
     let route = [];
-    if (this.detailFormRoute) {
-      route.push(this.detailFormRoute);
-    }
-    route.push('new');
+    let insertRoute = this.insertFormRoute !== undefined ? this.insertFormRoute : 'new';
+    route.push(insertRoute);
     // adding parent-keys info...
     const encodedParentKeys = this.getEncodedParentKeys();
     if (encodedParentKeys !== undefined) {
       route.push({ 'pk': encodedParentKeys });
     }
-    let extras = { relativeTo: this.actRoute };
-
+    let extras = {
+      relativeTo: this.recursiveInsert ? this.actRoute.parent : this.actRoute,
+    };
     if (this.formLayoutManager) {
       extras['queryParams'] = {
         'ignore_can_deactivate': true
       };
     }
-
     this.router.navigate(route, extras).catch(err => {
       console.error(err.message);
     });
@@ -580,7 +587,7 @@ export class OServiceComponent implements ILocalStorageComponent {
       }
     }
     if (typeof (filter) !== 'undefined') {
-      if (modeRoute) {
+      if (modeRoute !== undefined) {
         route.push(modeRoute);
       }
       route.push(filter);
