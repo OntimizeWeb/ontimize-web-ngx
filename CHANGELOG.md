@@ -1,3 +1,10 @@
+## 2.1.1 (2018-03-20)
+### BREAKING CHANGES
+* **o-table**: '*pageable*' input default value is now 'false' (inherited from '*OServiceComponent*') ([f0836da](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f0836da))
+
+### Features
+* **OServiceComponent**: adding '*insert-form-route*' and '*recursive-insert*' inputs to manage the insertion routes ([3ed2cb6]](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3ed2cb6]))
+
 ## 2.1.0 (2018-03-15)
 
 ### BREAKING CHANGES
