@@ -49,15 +49,18 @@ $_mat-checkbox-mark-stroke-size-small: 2 / 15 * $mat-checkbox-size-small !defaul
       visibility: visible;
       opacity: 1;
 
-          -moz-transition: opacity 0.25s linear;
+      -moz-transition: opacity 0.25s linear;
       -webkit-transition: opacity 0.25s linear;
-              transition: opacity 0.25s linear;
+      transition: opacity 0.25s linear;
 
       .mat-progress-spinner {
         height: 100%;
-      }
-      path {
-        stroke-width: 3px !important;
+        left: calc(50% - 50px);
+        top: calc(50% - 50px);
+
+        circle {
+          stroke-width: 3px !important;
+        }
       }
     }
 

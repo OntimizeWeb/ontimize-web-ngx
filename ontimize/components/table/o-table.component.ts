@@ -360,9 +360,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   ngAfterViewInit() {
     this.afterViewInit();
     this.initTableAfterViewInit();
-    if (this.elRef) {
-      this.elRef.nativeElement.removeAttribute('title');
-    }
   }
 
   ngOnDestroy() {
@@ -382,6 +379,10 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   protected initTableAfterViewInit() {
+    if (this.elRef) {
+      this.elRef.nativeElement.removeAttribute('title');
+    }
+
     this.setDatasource();
 
     if (this.pageable) {
@@ -400,6 +401,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     this.showFilterByColumnIcon = this.getStoredColumnsFilters().length > 0;
     if (this.columnFilterOption) {
       this.columnFilterOption.active = this.showFilterByColumnIcon;
+    }
+    if (this.oTableQuickFilterComponent) {
+      this.oTableQuickFilterComponent.setValue(this.state.filter);
     }
     if (this.queryOnInit) {
       this.queryData(this.parentItem);
@@ -446,7 +450,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   registerQuickFilter(arg: OTableQuickfilterComponent) {
     this.oTableQuickFilterComponent = arg;
-    this.oTableQuickFilterComponent.value = this.state.filter;
+    this.oTableQuickFilterComponent.setValue(this.state.filter);
   }
 
   registerPagination(value: OTablePaginatorComponent) {

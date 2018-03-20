@@ -31,7 +31,7 @@ export class OTableDataSource extends DataSource<any> {
   renderedData: any[] = [];
   resultsLength: number = 0;
 
-  get quickFilter(): string { return this._quickFilterChange.value; }
+  get quickFilter(): string { return this._quickFilterChange.value || ''; }
   set quickFilter(filter: string) {
     this._quickFilterChange.next(filter);
   }
