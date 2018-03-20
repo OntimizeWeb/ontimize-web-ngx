@@ -34,7 +34,10 @@ export const DEFAULT_INPUTS_O_FORM_TOOLBAR = [
   templateUrl: './o-form-toolbar.component.html',
   styleUrls: ['./o-form-toolbar.component.scss'],
   inputs: DEFAULT_INPUTS_O_FORM_TOOLBAR,
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  host: {
+    '[class.o-form-toolbar]': 'true'
+  }
 })
 
 export class OFormToolbarComponent implements OnInit, OnDestroy {
