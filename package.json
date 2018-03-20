@@ -25,7 +25,8 @@
     "webpack:dev": "npm run init-common && webpack --config config/webpack.dev.js --progress && npm run end-common",
     "webpack:prod": "npm run init-common && webpack --config config/webpack.prod.js --progress && npm run end-common",
     "aot:compile": "node_modules/.bin/ngc -p tsconfig.aot.json",
-    "aot": "npm run init-common && npm run aot:compile && npm run end-common"
+    "aot": "npm run init-common && npm run aot:compile && npm run end-common",
+    "pack": "npm run aot && cd dist && npm pack && cd .."
   },
   "dependencies": {
     "moment": "2.19.3",
@@ -54,7 +55,9 @@
     "core-js": "2.5.1",
     "rxjs": "5.5.6",
     "zone.js": "0.8.18",
-    "reflect-metadata": "0.1.12"
+    "reflect-metadata": "0.1.12",
+    "typescript": "2.4.2",
+    "webpack": "3.11.0"
   },
   "devDependencies": {
     "@angular/animations": "5.2.9",
@@ -136,6 +139,8 @@
     "tslint-loader": "3.5.3",
     "typedoc": "^0.5.10",
     "webpack-dll-bundles-plugin": "^1.0.0-beta.5",
-    "zone.js": "0.8.18"
+    "zone.js": "0.8.18",
+    "typescript": "2.4.2",
+    "webpack": "3.11.0"
   }
 }

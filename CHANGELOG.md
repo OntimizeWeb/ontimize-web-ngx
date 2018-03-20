@@ -1,3 +1,34 @@
+## 3.0.0-rc.0
+
+### PEER-DEPENDENCY UPDATES ###
+* **Updated**:  @angular@5.2.9
+* **Updated**:  @angular/cli@1.7.3
+* **Updated**:  @angular/material@5.2.4"
+* **Updated**:  @angular/cdk@5.2.4"
+* **Updated**:  @angular/flex-layout@5.0.0-beta.13
+* **Updated**:  @ngx-translate/core@9.1.1
+* **Updated**:  @ngx-translate/http-loader@2.0.1
+* **Updated**:  core-js@2.5.1
+* **Updated**:  rxjs@5.5.6
+* **Updated**:  zone.js@0.8.18
+* **Updated**:  reflect-metadata@0.1.12
+* **New**:      @angular/material-moment-adapter@5.2.4
+* **New**:      webpack@2.4.2
+* **New**:      webpack@3.11.0
+
+### BREAKING CHANGES
+
+Angular update ([be5d6d7](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/be5d6d7))
+
+### Features
+* **o-combo**: `mat-select` is now used inside `mat-form-field`. This makes all of the existing form-field features available with `mat-select`, including hints, errors, prefixes, and suffixes. This also ensures that `mat-select` and `matInput` have a consistent presentation ([9c2acbb](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9c2acbb))
+* **o-list-picker**: improving performance ([64820b8](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/64820b8))
+* **MomentDateAdapter**: Using angular material '*MomentDateAdapter*' (changes should be transparent to user) ([f424199](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f424199))
+* **OntimizeWebModule**: adding '*schemas: [CUSTOM_ELEMENTS_SCHEMA]*' to exported '*OntimizeWebModule*' ([12d452d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/12d452d))
+
+
+### Bug Fixes
+
 ## 2.1.0 (2018-03-15)
 
 ### BREAKING CHANGES
