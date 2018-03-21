@@ -4,7 +4,7 @@
   <mat-form-field fxFlexFill>
     <input matInput type="text" [id]="getAttribute()" [placeholder]="placeHolder" [formControlName]="getAttribute()" [ngModel]="getValue()"
       (ngModelChange)="innerOnChange($event)" [value]="getDescriptionValue()" (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)"
-      [readonly]="isReadOnly" [disabled]="isDisabled" [required]="isRequired">
+      [readonly]="isReadOnly" [required]="isRequired">
 
     <mat-icon [class.mat-disabled]="isDisabled" matSuffix>search</mat-icon>
     <mat-icon [class.mat-disabled]="isDisabled" (click)="onClickClear($event)" matSuffix>clear</mat-icon>

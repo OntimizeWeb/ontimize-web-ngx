@@ -16,7 +16,7 @@
       [class.ng-untouched]="getFormControl() && getFormControl().untouched" [class.ng-touched]="getFormControl() && getFormControl().touched"
       [class.ng-dirty]="getFormControl() && getFormControl().dirty" [class.ng-pristine]="getFormControl() && getFormControl().pristine"
       [class.ng-invalid]="getFormControl() && !getFormControl().valid" [class.ng-valid]="getFormControl() && getFormControl().valid"
-      [placeholder]="placeHolder" [value]="getDescriptionValue()" [readonly]="isReadOnly" [disabled]="isDisabled" [required]="isRequired">
+      [placeholder]="placeHolder" [value]="getDescriptionValue()" [readonly]="isReadOnly" [required]="isRequired">
     <mat-error *ngIf="hasError('required')">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</mat-error>
   </mat-form-field>
 
