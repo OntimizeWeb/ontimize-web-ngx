@@ -27,7 +27,8 @@
         <mat-icon mat-list-icon>insert_drive_file</mat-icon>
         <span mat-line>{{ file.name }}</span>
         <div fxLayout="row" fxLayoutAlign="space-between center">
-          <mat-progress-spinner *ngIf="splitUpload && file.isUploading" color="accent" mode="determinate" [value]="file.progress" class="uploading"></mat-progress-spinner>
+          <mat-progress-spinner *ngIf="splitUpload && file.isUploading" color="accent" mode="determinate" [value]="file.progress" class="uploading"
+            diameter="3" strokeWidth="3"></mat-progress-spinner>
           <mat-icon *ngIf="splitUpload && file.isUploaded && file.isSuccess" class="uploaded">check_circle</mat-icon>
           <mat-icon *ngIf="splitUpload && file.isUploaded && file.isError" class="error">error</mat-icon>
         </div>
