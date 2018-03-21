@@ -1,5 +1,5 @@
 <div class="expandable-container" [style.display]="isVisible()? '' : 'none'">
-  <div class="o-table-container">
+  <div class="o-table-container" [class.tab-container]="tabGroupChangeSubscription !== undefined">
     <div #tableToolbar class="toolbar" fxLayout="row" fxLayoutAlign="space-between center">
       <div class="buttons">
         <o-table-button *ngIf="insertButton" (onClick)="add()" label="TABLE.BUTTONS.ADD" icon="add"> </o-table-button>
@@ -39,7 +39,8 @@
       <!-- Generic column definition -->
       <ng-container *ngFor="let column of oTableOptions.columns" [cdkColumnDef]="column.name">
         <ng-container *ngIf="column.orderable">
-          <mat-header-cell *cdkHeaderCellDef mat-sort-header [fxFlex]="column.width">
+          <mat-header-cell *cdkHeaderCellDef mat-sort-header [fxFlex]="column.width" [class.active-sort]="isColumnSortActive(column)"
+            [class.desc]="isColumnDescSortActive(column)">
             <mat-icon *ngIf="isColumnFilterable(column)" class="column-filter-icon" [class.active]="isColumnFilterActive(column)" (click)="openColumnFilterDialog(column, $event)">filter_list</mat-icon>
             {{ column.title | oTranslate }}
           </mat-header-cell>
@@ -130,7 +131,7 @@
 
     <!--LOADING-->
     <div *ngIf="daoTable.isLoadingResults" class="spinner-container">
-      <mat-progress-spinner mode="indeterminate" *ngIf="daoTable.isLoadingResults"></mat-progress-spinner>
+      <mat-progress-spinner mode="indeterminate" *ngIf="daoTable.isLoadingResults" strokeWidth="3"></mat-progress-spinner>
     </div>
 
     <!--TABLE PAGINATOR-->

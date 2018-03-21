@@ -149,14 +149,18 @@ export class OTableDataSource extends DataSource<any> {
 
   getQuickFilterData(data: any[]): any[] {
     let filterData = this.quickFilter;
-    return data.filter((item: any) => {
-      let searchStr = this.getStringSearchable(item);
-      if (!this._tableOptions.filterCaseSensitive) {
-        searchStr = searchStr.toLowerCase();
-        filterData = filterData.toLowerCase();
-      }
-      return searchStr.indexOf(filterData) !== -1;
-    });
+    if (filterData !== undefined && filterData.length > 0) {
+      return data.filter((item: any) => {
+        let searchStr = this.getStringSearchable(item);
+        if (!this._tableOptions.filterCaseSensitive) {
+          searchStr = searchStr.toLowerCase();
+          filterData = filterData.toLowerCase();
+        }
+        return searchStr.indexOf(filterData) !== -1;
+      });
+    } else {
+      return data;
+    }
   }
 
   getPaginationData(data: any[]): any[] {
