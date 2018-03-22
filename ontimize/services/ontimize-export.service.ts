@@ -1,6 +1,6 @@
 import { Injectable, Injector } from '@angular/core';
 import { Router } from '@angular/router';
-import { Http, Headers, ResponseContentType } from '@angular/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 
 import { LoginService } from '../services';
@@ -24,14 +24,14 @@ export class OntimizeExportService {
   public exportPath: string = EXPORT_PATH_DEFAULT;
   public downloadPath: string = DOWNLOAD_PATH_DEFAULT;
 
-  protected http: Http;
+  protected httpClient: HttpClient;
   protected _sessionid: string;
   protected _urlBase: string;
   protected _appConfig: Config;
   protected _config: AppConfig;
 
   constructor(protected injector: Injector) {
-    this.http = this.injector.get(Http);
+    this.httpClient = this.injector.get(HttpClient);
     this._config = this.injector.get(AppConfig);
     this._appConfig = this._config.getConfiguration();
   }
@@ -68,54 +68,42 @@ export class OntimizeExportService {
   }
 
   public exportData(data: any, format: string): Observable<any> {
-    var url = this._urlBase + this.exportPath + '/' + format;
-
-    var headers: Headers = new Headers();
-    headers.append('Access-Control-Allow-Origin', '*');
-    headers.append('Content-Type', 'application/json;charset=UTF-8');
-
-    let authorizationToken = 'Bearer ' + this._sessionid;
-    headers.append('Authorization', authorizationToken);
-
-    var body = JSON.stringify(data);
-
+    const url = this._urlBase + this.exportPath + '/' + format;
+    const options = {
+      headers: new HttpHeaders({
+        'Access-Control-Allow-Origin': '*',
+        'Content-Type': 'application/json;charset=UTF-8',
+        'Authorization': 'Bearer ' + this._sessionid
+      })
+    };
+    const body = JSON.stringify(data);
     let _innerObserver: any;
-    let dataObservable = new Observable(observer => _innerObserver = observer).share();
+    const dataObservable = new Observable(observer => _innerObserver = observer).share();
 
-    var self = this;
+    const self = this;
     // TODO: try multipart
-    this.http
-      .post(url, body, { headers: headers })
-      .map(response => response.json())
-      .subscribe(resp => {
-        if (resp && resp.code === 3) {
-          self.redirectLogin(true);
-        } else if (resp.code === 1) {
-          _innerObserver.error(resp.message);
-        } else if (resp.code === 0) {
-          _innerObserver.next(resp);
-        } else {
-          // Unknow state -> error
-          _innerObserver.error('Service unavailable');
-        }
-      }, error => _innerObserver.error(error),
+    this.httpClient.post(url, body, options).subscribe((resp: any) => {
+      if (resp && resp.code === 3) {
+        self.redirectLogin(true);
+      } else if (resp.code === 1) {
+        _innerObserver.error(resp.message);
+      } else if (resp.code === 0) {
+        _innerObserver.next(resp);
+      } else {
+        // Unknow state -> error
+        _innerObserver.error('Service unavailable');
+      }
+    }, error => _innerObserver.error(error),
       () => _innerObserver.complete());
 
     return dataObservable;
   }
 
   public downloadFile(fileId: string, fileExtension: string): Observable<any> {
-    var url = this._urlBase + this.downloadPath + '/' + fileExtension + '/' + fileId;
-
-    var headers: Headers = new Headers();
-    headers.append('Access-Control-Allow-Origin', '*');
-
-    let authorizationToken = 'Bearer ' + this._sessionid;
-    headers.append('Authorization', authorizationToken);
+    const url = this._urlBase + this.downloadPath + '/' + fileExtension + '/' + fileId;
 
     let _innerObserver: any;
-    let dataObservable = new Observable(observer => _innerObserver = observer).share();
-
+    const dataObservable = new Observable(observer => _innerObserver = observer).share();
     let responseType: string;
     if (OExportExtension.Excel === fileExtension) {
       responseType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
@@ -124,22 +112,26 @@ export class OntimizeExportService {
     } else if (OExportExtension.PDF === fileExtension) {
       responseType = 'application/pdf';
     }
-
-    this.http.get(url, {
-      headers: headers,
-      responseType: ResponseContentType.Blob
-    })
-      .map(res => new Blob([res.blob()], { type: responseType }))
-      .subscribe(resp => {
-        let fileURL = URL.createObjectURL(resp);
-        // window.open(fileURL, '_self');
-        let a = document.createElement('a');
-        a.href = fileURL;
-        a.download = fileId + '.' + fileExtension;
-        a.click();
-        _innerObserver.next(resp);
-        URL.revokeObjectURL(fileURL);
-      }, error => _innerObserver.error(error),
+    const options: any = {
+      headers: new HttpHeaders({
+        'Access-Control-Allow-Origin': '*',
+        'Authorization': 'Bearer ' + this._sessionid
+      }),
+      'observe': 'response',
+      'responseType': 'blob'
+    };
+    // .map((res: any) => new Blob([res.blob()], { type: responseType }))
+    this.httpClient.get(url, options).subscribe((resp: any) => {
+      let fileData = resp.body;
+      let fileURL = URL.createObjectURL(fileData);
+      // window.open(fileURL, '_self');
+      let a = document.createElement('a');
+      a.href = fileURL;
+      a.download = fileId + '.' + fileExtension;
+      a.click();
+      _innerObserver.next(fileData);
+      URL.revokeObjectURL(fileURL);
+    }, error => _innerObserver.error(error),
       () => _innerObserver.complete());
 
     return dataObservable;

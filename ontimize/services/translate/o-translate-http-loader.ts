@@ -2,6 +2,7 @@ import { Injector } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/combineLatest';
 import { AppConfig } from '../../config/app-config';
 
 export class OTranslateHttpLoader extends TranslateHttpLoader {
@@ -12,15 +13,15 @@ export class OTranslateHttpLoader extends TranslateHttpLoader {
   static BUNDLE_VALUE = 'value';
 
   constructor(
-    http: HttpClient,
+    httpClient: HttpClient,
     prefix: string = '/assets/i18n/',
     suffix: string = '.json',
     protected injector: Injector
   ) {
 
-    super(http, prefix, suffix);
+    super(httpClient, prefix, suffix);
 
-    this.httpClient = http;
+    this.httpClient = httpClient;
     this.appConfig = this.injector.get(AppConfig);
   }
 

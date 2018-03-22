@@ -1,6 +1,6 @@
 import { Injector, Injectable } from '@angular/core';
 import { EventEmitter } from '@angular/core';
-import { Http } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import { Subscriber } from 'rxjs/Subscriber';
 import { TranslateService } from '@ngx-translate/core';
@@ -20,7 +20,7 @@ export class OTranslateService {
 
   protected ngxTranslateService: TranslateService;
   protected momentService: MomentService;
-  protected http: Http;
+  protected httpClient: HttpClient;
 
   protected notFoundLang: Array<String> = [];
   // protected _config: Config;
@@ -31,10 +31,8 @@ export class OTranslateService {
   constructor(protected injector: Injector) {
     this.ngxTranslateService = this.injector.get(TranslateService);
     this.momentService = this.injector.get(MomentService);
-    this.http = this.injector.get(Http);
+    this.httpClient = this.injector.get(HttpClient);
     this.appConfig = this.injector.get(AppConfig);
-    // this._config = this.injector.get(AppConfig).getConfiguration();
-
   }
 
   protected checkExistingLangFile(lang: string): Promise<any> {
@@ -44,7 +42,7 @@ export class OTranslateService {
         resolve(true);
         return;
       }
-      self.http.get(OTranslateService.ASSETS_PATH + lang + OTranslateService.ASSETS_EXTENSION)
+      self.httpClient.get(OTranslateService.ASSETS_PATH + lang + OTranslateService.ASSETS_EXTENSION)
         .subscribe(function () {
           if (self.existingLangFiles.indexOf(lang) === -1) {
             self.existingLangFiles.push(lang);

@@ -1,18 +1,14 @@
 import { Injector } from '@angular/core';
-import { Http } from '@angular/http';
-
+import { AppConfig, Config } from '../config/app-config';
 import { OntimizeEEService } from './ontimize-ee.service';
 import { OntimizeService } from './ontimize.service';
-import { AppConfig, Config } from '../config/app-config';
 
 export class DataServiceFactory {
 
   protected config: Config;
-  protected http: Http;
 
   constructor(protected injector: Injector) {
     this.config = this.injector.get(AppConfig).getConfiguration();
-    this.http = this.injector.get(Http);
   }
 
   public factory(): any {
@@ -21,8 +17,6 @@ export class DataServiceFactory {
     } else if ('OntimizeEE' === this.config.serviceType) {
       return new OntimizeEEService(this.injector);
     } else {
-      //  let newInstace =(this.config.servicetype as any).prototype;
-      //  return newInstace.constructor.apply(newInstace, new Array(this.http));
       let newInstance = Object.create((this.config.serviceType as any).prototype);
       this.config.serviceType.apply(newInstance, new Array(this.injector));
       return newInstance;
