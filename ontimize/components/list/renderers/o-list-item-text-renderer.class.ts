@@ -45,7 +45,7 @@ export class OListItemTextRenderer {
   modifyMatListItemElement() {
     if (this.elRef.nativeElement && this.elRef.nativeElement.parentElement) {
       let listItem = this.elRef.nativeElement.parentElement.parentElement;
-      if (listItem && listItem.nodeName === 'MD-LIST-ITEM') {
+      if (listItem && listItem.nodeName === 'MAT-LIST-ITEM') {
         let linesNo = 3;
         if (this.title === undefined) {
           linesNo--;
