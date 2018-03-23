@@ -1,9 +1,9 @@
 <div fxLayout="row" fxLayoutAlign="space-between center" [formGroup]="getFormGroup()" [matTooltip]="tooltip" [matTooltipPosition]="tooltipPosition"
     [matTooltipShowDelay]="tooltipShowDelay">
     <mat-form-field fxFlexFill>
-        <input matInput type="email" [attr.id]="getAttribute()" [formControlName]="getAttribute()" [placeholder]="placeHolder"
-            [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)" (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)"
-            [readonly]="isReadOnly" [required]="isRequired">
+        <input matInput type="email" [attr.id]="getAttribute()" [formControlName]="getAttribute()" [placeholder]="placeHolder" [ngModel]="getValue()"
+            (ngModelChange)="innerOnChange($event)" (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)" [readonly]="isReadOnly"
+            [required]="isRequired">
         <mat-icon matSuffix [class.mat-disabled]="isDisabled">mail_outline</mat-icon>
         <mat-error *ngIf="hasError('required')">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</mat-error>
         <mat-error *ngIf="hasError('minlength')">{{ 'FORM_VALIDATION.MIN_LENGTH' | oTranslate }}: {{ getErrorValue('minlength', 'requiredLength') }}</mat-error>
