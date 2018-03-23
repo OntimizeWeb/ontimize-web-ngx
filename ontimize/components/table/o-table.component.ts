@@ -1383,6 +1383,10 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     let found = this.sortColArray.find(sortC => sortC.columnName === column.attr && !sortC.ascendent);
     return found !== undefined;
   }
+
+  hasTabGroupChangeSubscription(): boolean {
+    return this.tabGroupChangeSubscription !== undefined;
+  }
 }
 
 @NgModule({

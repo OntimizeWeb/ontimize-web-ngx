@@ -1,5 +1,5 @@
 <div class="expandable-container" [style.display]="isVisible()? '' : 'none'">
-  <div class="o-table-container" [class.tab-container]="tabGroupChangeSubscription !== undefined">
+  <div class="o-table-container" [class.tab-container]="hasTabGroupChangeSubscription()">
     <div #tableToolbar class="toolbar" fxLayout="row" fxLayoutAlign="space-between center">
       <div class="buttons">
         <o-table-button *ngIf="insertButton" (onClick)="add()" label="TABLE.BUTTONS.ADD" icon="add"> </o-table-button>
