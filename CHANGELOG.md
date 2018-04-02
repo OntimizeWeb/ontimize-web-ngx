@@ -1,3 +1,8 @@
+## 2.1.2
+### Bug Fixes
+* **o-combo**: Fixing styling bugs ([98c8b99](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/98c8b99))
+* **o-form-navigation**: Fixing navigation bugs ([835afcf](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/835afcf))
+
 ## 2.1.1 (2018-03-20)
 ### BREAKING CHANGES
 * **o-table**: '*pageable*' input default value is now 'false' (inherited from '*OServiceComponent*') ([f0836da](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f0836da))
