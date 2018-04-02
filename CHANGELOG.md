@@ -2,6 +2,8 @@
 ### Bug Fixes
 * **o-combo**: Fixing styling bugs ([98c8b99](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/98c8b99))
 * **o-form-navigation**: Fixing navigation bugs ([835afcf](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/835afcf))
+* **o-table-cell-editor-boolean**: Fixing value parsing bug ([#154](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/154)) ([8fd96ea](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/8fd96ea))
+
 
 ## 2.1.1 (2018-03-20)
 ### BREAKING CHANGES
