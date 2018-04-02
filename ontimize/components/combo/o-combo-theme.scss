@@ -1,5 +1,20 @@
 @import 'node_modules/@angular/material/theming';
 
+// Applies a floating placeholder above the form field control itself.
+@mixin _mat-form-field-placeholder-floating($font-scale, $infix-padding, $infix-margin-top) {
+  // We use perspective to fix the text blurriness as described here:
+  // http://www.useragentman.com/blog/2014/05/04/fixing-typography-inside-of-2-d-css-transforms/
+  // This results in a small jitter after the label floats on Firefox, which the
+  // translateZ fixes.
+  transform: translateY(-$infix-margin-top - $infix-padding) scale($font-scale) perspective(100px)
+            translateZ(0.001px)!important;
+  // The tricks above used to smooth out the animation on chrome and firefox actually make things
+  // worse on IE, so we don't include them in the IE version.
+  -ms-transform: translateY(-$infix-margin-top - $infix-padding) scale($font-scale)!important;
+
+  width: 100% / $font-scale!important;
+}
+
 @mixin o-combo-theme($theme) {
   $foreground: map-get($theme, foreground);
   $warn: map-get($theme, warn);
@@ -12,21 +27,6 @@
   .mat-select:focus:not(.mat-select-disabled).mat-warn .mat-select-underline,
   .mat-select-invalid .mat-select-underline {
       background-color: mat-color($warn)!important;
-  }
-
-  // Applies a floating placeholder above the form field control itself.
-  @mixin _mat-form-field-placeholder-floating($font-scale, $infix-padding, $infix-margin-top) {
-    // We use perspective to fix the text blurriness as described here:
-    // http://www.useragentman.com/blog/2014/05/04/fixing-typography-inside-of-2-d-css-transforms/
-    // This results in a small jitter after the label floats on Firefox, which the
-    // translateZ fixes.
-    transform: translateY(-$infix-margin-top - $infix-padding) scale($font-scale) perspective(100px)
-              translateZ(0.001px)!important;
-    // The tricks above used to smooth out the animation on chrome and firefox actually make things
-    // worse on IE, so we don't include them in the IE version.
-    -ms-transform: translateY(-$infix-margin-top - $infix-padding) scale($font-scale)!important;
-
-    width: 100% / $font-scale!important;
   }
 
   $config: mat-typography-config();
@@ -61,7 +61,3 @@
   }
 
 }
-
-
-
-
