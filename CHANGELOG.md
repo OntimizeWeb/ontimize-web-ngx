@@ -1,4 +1,9 @@
-## 2.1.2
+## 2.1.2 (2018-04-03)
+### PEER-DEPENDENCY UPDATES ###
+* **Updated**:  core-js@2.5.3
+* **Updated**:  rxjs@5.5.6
+* **Updated**:  zone.js@0.8.20
+
 ### Bug Fixes
 * **o-combo**: Fixing styling bugs ([98c8b99](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/98c8b99))
 * **o-form-navigation**: Fixing navigation bugs ([835afcf](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/835afcf))
