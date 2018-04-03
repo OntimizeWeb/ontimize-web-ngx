@@ -162,7 +162,12 @@ export class Util {
 
       // If values of same property are not equal,
       // objects are not equivalent
-      if (a[propName] !== b[propName]) {
+      let bValue = b[propName];
+      if (typeof a[propName] === 'number') {
+        let intB = parseInt(bValue);
+        bValue = isNaN(intB) ? bValue : intB;
+      }
+      if (a[propName] !== bValue) {
         return false;
       }
     }

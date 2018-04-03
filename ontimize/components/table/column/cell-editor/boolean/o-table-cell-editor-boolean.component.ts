@@ -60,19 +60,36 @@ export class OTableCellEditorBooleanComponent extends OBaseTableCellEditor {
     return cellData;
   }
 
-  protected parseValueByType(val: any): any {
-    let result = val;
+  private OTCEBC_parseValueFromString(val: string): boolean {
+    return Util.parseBoolean(val, false);
+  }
+
+  private OTCEBC_parseValueFromNumber(val: string | number): number {
+    const value = typeof val === 'number' ? val : parseInt(val);
+    return (value === 1) ? 1 : 0;
+  }
+
+  private OTCEBC_parseValueFromBoolean(val: any): boolean {
+    return (val === true);
+  }
+
+  protected parseValueByType(val: any): boolean | number {
+    let result;
+    // check if booleanType exists or the switch will break
+    if (!this.booleanType) {
+      result = this.OTCEBC_parseValueFromBoolean(val);
+    }
     switch (this.booleanType) {
       case 'string':
-        result = Util.parseBoolean(val, false);
+        result = this.OTCEBC_parseValueFromString(val);
         break;
       case 'number':
-        result = (val === 1);
+        result = this.OTCEBC_parseValueFromNumber(val);
         break;
       case 'boolean':
       default:
         // boolean comparision as default value of dataType
-        result = (val === true);
+        result = this.OTCEBC_parseValueFromBoolean(val);
         break;
     }
     return result;
