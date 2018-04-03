@@ -1,17 +1,11 @@
-import {
-  Component,
-  forwardRef,
-  Inject,
-  Injector,
-  ViewEncapsulation
-} from '@angular/core';
+import { Component, forwardRef, Inject, Injector, ViewEncapsulation } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
 
+import { OFormLayoutManagerComponent } from '../../../layouts';
+import { Util } from '../../../util/util';
 import { OFormComponent } from '../o-form.component';
 import { OFormDataNavigation } from './o-form.data.navigation.class';
-import { Router, ActivatedRoute } from '@angular/router';
 import { OFormNavigationClass } from './o-form.navigation.class';
-import { Util } from '../../../util/util';
-import { OFormLayoutManagerComponent } from '../../../layouts';
 
 @Component({
   selector: 'o-form-navigation',
@@ -19,11 +13,10 @@ import { OFormLayoutManagerComponent } from '../../../layouts';
   styleUrls: ['./o-form-navigation.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-
 export class OFormNavigationComponent {
 
   public navigationData: Array<any> = [];
-  public currentIndex = 0;
+  private _currentIndex = 0;
 
   protected formNavigation: OFormNavigationClass;
 
@@ -32,21 +25,20 @@ export class OFormNavigationComponent {
     private router: Router,
     private actRoute: ActivatedRoute,
   ) {
-
     this.formNavigation = this._form.getFormNavigation();
     this.navigationData = new OFormDataNavigation(this.injector).getComponentStorage();
     this.currentIndex = this.getCurrentIndex();
   }
 
-
   getCurrentIndex(): number {
     let index: number = 0;
     const currentItem = this.formNavigation.getUrlParams();
-    for (let item of this.navigationData) {
+    for (let i = 0, len = this.navigationData.length; i < len; i++) {
+      const item = this.navigationData[i];
       if (Util.isEquivalent(item, currentItem)) {
-        return index;
+        index = i;
+        break;
       }
-      index++;
     }
     return index;
   }
@@ -78,21 +70,13 @@ export class OFormNavigationComponent {
     let index = this.navigationData.length - 1;
     this.move(index);
   }
+
   isFirst() {
     return this.currentIndex === 0;
   }
 
   isLast() {
     return this.currentIndex === (this.navigationData.length - 1);
-  }
-
-  numberOfRecords() {
-    let total = this.navigationData.length;
-    let index = this.currentIndex + 1;
-    if (total === 0 || total === 1) {
-      return '';
-    }
-    return index + ' / ' + total;
   }
 
   move(index: number) {
@@ -109,6 +93,7 @@ export class OFormNavigationComponent {
       }
     });
   }
+
   private moveWithoutManager(index: number) {
     let route = this.getRouteOfSelectedRow(this.navigationData[index]);
     if (route.length > 0) {
@@ -148,6 +133,14 @@ export class OFormNavigationComponent {
 
   showNavigation() {
     return this.navigationData.length > 1;
+  }
+
+  set currentIndex(arg: number) {
+    this._currentIndex = arg;
+  }
+
+  get currentIndex(): number {
+    return this._currentIndex;
   }
 
 }
