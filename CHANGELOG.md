@@ -17,8 +17,9 @@
 * **New**:      webpack@3.11.0
 
 ### BREAKING CHANGES
+* **Angular and Angular Material**: updating versions ([be5d6d7](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/be5d6d7))
+* **Services**: all services now are using '*HTTPClient*' instad of '*HTTP*' ([184b5df](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/184b5df))
 
-Angular update ([be5d6d7](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/be5d6d7))
 
 ### Features
 * **o-combo**: `mat-select` is now used inside `mat-form-field`. This makes all of the existing form-field features available with `mat-select`, including hints, errors, prefixes, and suffixes. This also ensures that `mat-select` and `matInput` have a consistent presentation ([9c2acbb](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9c2acbb))
