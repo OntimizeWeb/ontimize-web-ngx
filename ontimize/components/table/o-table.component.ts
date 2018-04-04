@@ -111,21 +111,22 @@ export const DEFAULT_INPUTS_O_TABLE = [
   // export-button [no|yes]: show export button. Default: yes.
   'exportButton: export-button',
 
-  // show-table-buttons-text [string][yes|no|true|false]: show text of header buttons
+  // show-table-buttons-text [yes|no|true|false]: show text of header buttons. Default: yes.
   'showTableButtonsText: show-table-buttons-text',
 
-  // select-all-checkbox [string][yes|no|true|false]:
+  // select-all-checkbox [yes|no|true|false]: show selection check boxes. Default: no.
   'selectAllCheckbox: select-all-checkbox',
 
-  // pagination-controls [string][yes|no|true|false]
+  // pagination-controls [yes|no|true|false]: show pagination controls. Default: yes.
   'paginationControls: pagination-controls',
 
-  //filter [string][yes|no|true|false]
+  // filter [yes|no|true|false]: filter si case sensitive. Default: no.
   'filterCaseSensitivePvt: filter-case-sensitive',
 
-  //fix-header [string][yes|no|true|false]: fixed header and footer when the content is greather than its own height
+  // fix-header [yes|no|true|false]: fixed header and footer when the content is greather than its own height. Default: no.
   'fixedHeader: fixed-header',
 
+  // show-title [yes|no|true|false]: show the table title. Default: no.
   'showTitle: show-title',
 
   // edition-mode [none | inline | click | dblclick]: edition mode. Default none
