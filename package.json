@@ -17,7 +17,6 @@
   "scripts": {
     "preinstall": "npm config set package-lock false",
     "rimraf": "rimraf",
-    "test": "karma start",
     "clean": "rimraf dist tmp",
     "init-common": "npm run clean && gulp inline-templates",
     "styles": "node-sass dist/ontimize.scss dist/ontimize.scss --output-style compressed",
@@ -55,8 +54,7 @@
     "rxjs": "5.5.6",
     "zone.js": "0.8.18",
     "reflect-metadata": "0.1.12",
-    "typescript": "2.4.2",
-    "webpack": "3.11.0"
+    "typescript": "2.4.2"
   },
   "devDependencies": {
     "@angular/animations": "5.2.9",
@@ -90,7 +88,6 @@
     "gulp-cssimport": "6.0.0",
     "gulp-inline-ng2-template": "4.1.0",
     "gulp-replace": "0.6.1",
-    "html-minifier": "3.5.3",
     "ngc-webpack": "4.1.2",
     "node-sass": "4.7.2",
     "optimize-js-plugin": "0.0.4",
@@ -100,6 +97,6 @@
     "zone.js": "0.8.18",
     "typescript": "2.4.2",
     "webpack": "3.11.0",
-    "webpack-merge " : "3.0.0"
+    "webpack-merge": "3.0.0"
   }
 }
