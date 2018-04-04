@@ -293,7 +293,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   protected tabGroupContainer: MatTabGroup;
   protected tabContainer: MatTab;
-  protected tabGroupChangeSubscription: Subscription;
+  tabGroupChangeSubscription: Subscription;
 
   protected pendingQuery: boolean = true;
   protected pendingQueryFilter = undefined;
