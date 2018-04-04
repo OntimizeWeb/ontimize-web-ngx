@@ -3,6 +3,7 @@ import { MatDialogRef, MAT_DIALOG_DATA, MatButton } from '@angular/material';
 
 import { DialogService, OExportExtension, OntimizeExportService, OTranslateService } from '../../../../../services';
 import { SQLTypes, Util } from '../../../../../utils';
+import { HttpErrorResponse } from '@angular/common/http';
 
 export class OTableExportConfiguration {
   data: any[];
@@ -79,14 +80,7 @@ export class OTableExportDialogComponent implements OnInit {
           self.dialogService.alert('ERROR', resp.message).then(() => self.dialogRef.close(false));
         }
       },
-      (err) => {
-        console.log(err);
-        if (err) {
-          self.dialogService.alert('ERROR', err).then(() => self.dialogRef.close(false));
-        } else {
-          self.dialogService.alert('ERROR', 'MESSAGES.ERROR_EXPORT_TABLE_DATA').then(() => self.dialogRef.close(false));
-        }
-      }
+      (err) => self.handleError(err)
     );
   }
 
@@ -114,14 +108,7 @@ export class OTableExportDialogComponent implements OnInit {
           self.dialogService.alert('ERROR', resp.message).then(() => self.dialogRef.close(false));
         }
       },
-      (err) => {
-        console.log(err);
-        if (err) {
-          self.dialogService.alert('ERROR', err).then(() => self.dialogRef.close(false));
-        } else {
-          self.dialogService.alert('ERROR', 'MESSAGES.ERROR_EXPORT_TABLE_DATA').then(() => self.dialogRef.close(false));
-        }
-      }
+      (err) => self.handleError(err)
     );
   }
 
@@ -149,14 +136,7 @@ export class OTableExportDialogComponent implements OnInit {
           self.dialogService.alert('ERROR', resp.message).then(() => self.dialogRef.close(false));
         }
       },
-      (err) => {
-        console.log(err);
-        if (err) {
-          self.dialogService.alert('ERROR', err).then(() => self.dialogRef.close(false));
-        } else {
-          self.dialogService.alert('ERROR', 'MESSAGES.ERROR_EXPORT_TABLE_DATA').then(() => self.dialogRef.close(false));
-        }
-      }
+      (err) => self.handleError(err)
     );
   }
 
@@ -173,6 +153,16 @@ export class OTableExportDialogComponent implements OnInit {
         });
       }
     });
+  }
+
+  protected handleError(err): void {
+    console.log(err);
+    const self = this;
+    if (err instanceof HttpErrorResponse) {
+      this.dialogService.alert('ERROR', err.message).then(() => self.dialogRef.close(false));
+    } else {
+      this.dialogService.alert('ERROR', 'MESSAGES.ERROR_EXPORT_TABLE_DATA').then(() => self.dialogRef.close(false));
+    }
   }
 
 }
