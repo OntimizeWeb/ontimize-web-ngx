@@ -372,12 +372,31 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
    * Method what initialize vars and configuration
    */
   initialize(): any {
-    super.initialize();
-    // get previous position
-    this.state = this.localStorageService.getComponentStorage(this);
-
-    // initialize params of the table
+    // Initialize params of the table
     this.initializeParams();
+
+    // Add column checkbox
+    // 1. create object ocolumn
+    // 2. not add visiblesColumns
+    let checkboxColumn = new OColumn();
+    checkboxColumn.name = OTableComponent.NAME_COLUMN_SELECT;
+    checkboxColumn.title = '';
+    checkboxColumn.visible = false;
+    this._oTableOptions.selectColumn = checkboxColumn;
+
+    // Initializing row selection listener
+    this.selectionChangeSubscription = this.selection.onChange.subscribe((selectionData: SelectionChange<any>) => {
+      if (selectionData && selectionData.added.length > 0) {
+        ObservableWrapper.callEmit(this.onRowSelected, selectionData.added);
+      }
+      if (selectionData && selectionData.removed.length > 0) {
+        ObservableWrapper.callEmit(this.onRowDeselected, selectionData.removed);
+      }
+    });
+
+    if (this.form) {
+      this.setFormComponent(this.form);
+    }
   }
 
   protected initTableAfterViewInit() {
@@ -580,29 +599,74 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   /**
-   * get/set parametres to component
+   * Get/Set parametres to component
    */
-  initializeParams() {
-    //add column checkbox
-    //1. create object ocolumn
-    //2. not add visiblesColumns
-    let checkboxColumn = new OColumn();
-    checkboxColumn.name = OTableComponent.NAME_COLUMN_SELECT;
-    checkboxColumn.title = '';
-    checkboxColumn.visible = false;
-    this._oTableOptions.selectColumn = checkboxColumn;
+  initializeParams(): void {
+    // Get previous status
+    this.state = this.localStorageService.getComponentStorage(this);
 
-    // initializing row selection listener
-    this.selectionChangeSubscription = this.selection.onChange.subscribe((selectionData: SelectionChange<any>) => {
-      if (selectionData && selectionData.added.length > 0) {
-        ObservableWrapper.callEmit(this.onRowSelected, selectionData.added);
+    // Initialize table layout parameters
+    if (typeof (this.oattr) === 'undefined') {
+      if (typeof (this.entity) !== 'undefined') {
+        this.oattr = this.entity.replace('.', '_');
+        this.oattrFromEntity = true;
       }
-      if (selectionData && selectionData.removed.length > 0) {
-        ObservableWrapper.callEmit(this.onRowDeselected, selectionData.removed);
-      }
-    });
+    }
 
-    // if not declare visible-columns then visible-columns is all columns
+    if (typeof (this.title) !== 'undefined') {
+      this.title = this.translateService.get(this.title);
+    }
+
+    if (!this.detailButtonInRowIcon) {
+      this.detailButtonInRowIcon = OServiceComponent.DEFAULT_DETAIL_ICON;
+    }
+
+    if (!this.editButtonInRowIcon) {
+      this.editButtonInRowIcon = OServiceComponent.DEFAULT_EDIT_ICON;
+    }
+
+    if (this.detailButtonInRow || this.editButtonInRow) {
+      this.detailMode = OServiceComponent.DETAIL_MODE_NONE;
+    }
+
+    this.rowHeight = this.rowHeight ? this.rowHeight.toLowerCase() : this.rowHeight;
+    if (!this.rowHeight || (OServiceComponent.AVAILABLE_ROW_HEIGHTS.indexOf(this.rowHeight) === -1)) {
+      this.rowHeight = OServiceComponent.DEFAULT_ROW_HEIGHT;
+    }
+
+    // Initialize table data parameters
+    this.keysArray = Util.parseArray(this.keys);
+    this.colArray = Util.parseArray(this.columns, true);
+    let pkArray = Util.parseArray(this.parentKeys);
+    this._pKeysEquiv = Util.parseParentKeysEquivalences(pkArray, OServiceComponent.COLUMNS_ALIAS_SEPARATOR);
+
+    // TODO: get default values from ICrudConstants
+    if (!this.queryMethod) {
+      this.queryMethod = OServiceComponent.DEFAULT_QUERY_METHOD;
+    }
+
+    if (!this.paginatedQueryMethod) {
+      this.paginatedQueryMethod = OServiceComponent.DEFAULT_PAGINATED_QUERY_METHOD;
+    }
+
+    if (!this.insertMethod) {
+      this.insertMethod = OTableComponent.DEFAULT_INSERT_METHOD;
+    }
+
+    if (!this.updateMethod) {
+      this.updateMethod = OTableComponent.DEFAULT_UPDATE_METHOD;
+    }
+    if (!this.deleteMethod) {
+      this.deleteMethod = OServiceComponent.DEFAULT_DELETE_METHOD;
+    }
+
+    if (this.queryRows) {
+      this.queryRows = parseInt(this.queryRows);
+    } else {
+      this.queryRows = OServiceComponent.DEFAULT_QUERY_ROWS;
+    }
+
+    // If visible-columns is not present then visible-columns is all columns
     if (!this.visibleColumns) {
       this.visibleColumns = this.columns;
     }
@@ -613,27 +677,13 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       this.colArray.map(x => this.registerColumn(x));
     }
 
-    if (!this.insertMethod) {
-      this.insertMethod = OTableComponent.DEFAULT_INSERT_METHOD;
-    }
-    if (!this.updateMethod) {
-      this.updateMethod = OTableComponent.DEFAULT_UPDATE_METHOD;
-    }
-
     if (this.state['query-rows'] !== undefined) {
       this.queryRows = this.state['query-rows'];
     }
 
-    // Initializing quickFilter
-    this._oTableOptions.filter = this.quickFilter;
-    this._oTableOptions.filterCaseSensitive = this.filterCaseSensitive;
-
     this.parseSortColumns();
 
-    if (this.tabGroupContainer && this.tabContainer) {
-      this.registerTabListener();
-    }
-
+    // Configure data service
     let queryMethodName = this.pageable ? this.paginatedQueryMethod : this.queryMethod;
     const methods = {
       query: queryMethodName,
@@ -641,16 +691,41 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       delete: this.deleteMethod,
       insert: this.insertMethod
     };
-    this.daoTable = new OTableDao(this.dataService, this.entity, methods);
 
     if (this.staticData) {
+      this.queryOnBind = false;
+      this.queryOnInit = false;
+      this.daoTable = new OTableDao(undefined, this.entity, methods);
       this.setDataArray(this.staticData);
+    } else {
+      this.configureService();
+      this.daoTable = new OTableDao(this.dataService, this.entity, methods);
     }
 
+    // Initialize quickFilter
+    this._oTableOptions.filter = this.quickFilter;
+    this._oTableOptions.filterCaseSensitive = this.filterCaseSensitive;
+
+    // Initialize paginator
     if (!this.paginator && this.paginationControls) {
       this.paginator = new OTablePaginatorComponent(this.injector, this);
       this.paginator.pageSize = this.queryRows;
     }
+
+    if (this.tabGroupContainer && this.tabContainer) {
+      this.registerTabListener();
+    }
+
+    this.authGuardService.getPermissions(this.router.url, this.oattr).then(permissions => {
+      if (typeof (permissions) !== 'undefined') {
+        if (this.ovisible && permissions.visible === false) {
+          this.ovisible = false;
+        }
+        if (this.oenabled && permissions.enabled === false) {
+          this.oenabled = false;
+        }
+      }
+    });
   }
 
   registerTabListener() {
