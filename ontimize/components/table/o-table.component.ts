@@ -6,10 +6,10 @@ import { CommonModule } from '@angular/common';
 import { CdkTableModule } from '@angular/cdk/table';
 import { SelectionModel, SelectionChange } from '@angular/cdk/collections';
 import { MatDialog, MatSort, MatTabGroup, MatTab, MatPaginatorIntl, MatPaginator, MatCheckboxChange, MatMenu, PageEvent, Sort, MatSortHeader } from '@angular/material';
+import { DndModule } from 'ng2-dnd';
 
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
-import { DragulaModule } from 'ng2-dragula/ng2-dragula';
 
 import { InputConverter } from '../../decorators';
 
@@ -1406,7 +1406,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     CommonModule,
     OSharedModule,
     CdkTableModule,
-    DragulaModule,
+    DndModule.forRoot(),
     OContextMenuModule
   ],
   exports: [

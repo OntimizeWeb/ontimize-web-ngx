@@ -1,8 +1,9 @@
 <span mat-dialog-title>{{ 'TABLE.BUTTONS.COLVIS' | oTranslate }}</span>
 
-<mat-dialog-content class="o-table-vcd-content">
-  <mat-list [dragula]="'o-table-vcd-list'" [dragulaModel]="columns">
-    <mat-list-item *ngFor="let column of columns" (click)="onClickColumn(column)" class="o-table-vcd-listitem">
+<mat-dialog-content>
+  <mat-list dnd-sortable-container [sortableData]="columns">
+    <mat-list-item *ngFor="let column of columns; let x = index" (click)="onClickColumn(column)"
+      dnd-sortable [sortableIndex]="x" [dragData]="column" [dragEnabled]="true">
       <mat-icon mat-list-icon>drag_handle</mat-icon>
       <span mat-line>{{ column.name }}</span>
       <mat-icon *ngIf="column.visible">visibility</mat-icon>
