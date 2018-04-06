@@ -1,7 +1,7 @@
 import { Component, Injector, ViewChild, TemplateRef, OnInit, Inject, ElementRef, ViewEncapsulation } from '@angular/core';
 import { MatDateFormats, DateAdapter, MatDatepicker, MAT_DATE_FORMATS, MatDatepickerInputEvent, MAT_DATE_LOCALE } from '@angular/material';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
-import * as moment from 'moment';
+import moment from 'moment';
 
 import { InputConverter } from '../../../../../decorators';
 import { MomentService } from '../../../../../services';

@@ -12,7 +12,7 @@ import { OFormDataComponent } from '../../o-form-data-component.class';
 import { InputConverter } from '../../../decorators';
 import { MomentService } from '../../../services';
 
-import * as moment from 'moment';
+import moment from 'moment';
 
 import { DEFAULT_INPUTS_O_TEXT_INPUT, DEFAULT_OUTPUTS_O_TEXT_INPUT } from '../text-input/o-text-input.component';
 

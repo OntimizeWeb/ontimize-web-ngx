@@ -1,4 +1,4 @@
-import * as moment from 'moment';
+import moment from 'moment';
 
 import { Injector } from '@angular/core';
 import { AppConfig, Config } from '../config/app-config';
