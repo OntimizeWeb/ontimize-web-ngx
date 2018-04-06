@@ -711,7 +711,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
 
   /**
    * Sets form operation mode.
-   * @param  {Mode} mode The mode to be established
+   * @param mode The mode to be established
    */
   setFormMode(mode: number) {
     switch (mode) {

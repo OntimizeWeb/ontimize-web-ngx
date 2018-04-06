@@ -65,7 +65,7 @@ export class OTableButtonComponent implements OnInit {
     return this.iconPosition === OTableButtonComponent.ICON_POSITION_LEFT;
   }
 
-  get table(){
+  get table() {
     return this._table;
   }
 }

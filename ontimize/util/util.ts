@@ -69,7 +69,7 @@ export class Util {
 
   /**
    * Returns an object with parent keys equivalences.
-   * @param  {Array<string>} pKeysArray Array of strings. Accepted format: key | key:alias
+   * @param  pKeysArray Array of strings. Accepted format: key | key:alias
    * @returns Object
    */
   static parseParentKeysEquivalences(pKeysArray: Array<string>, separator: string = ':'): Object {
@@ -116,7 +116,7 @@ export class Util {
 
   /**
    * Checks wether specified service as argument implements 'IDataService' interface
-   * @param  {any} arg The service instance for checking.
+   * @param arg The service instance for checking.
    * @returns boolean
    */
   static isDataService(arg: any): arg is IDataService {
@@ -129,7 +129,7 @@ export class Util {
 
   /**
    * Checks wether specified component as argument implements 'IFormDataComponent' interface
-   * @param  {any} arg The component instance for checking.
+   * @param arg The component instance for checking.
    * @returns boolean
    */
   static isFormDataComponent(arg: any): arg is IFormDataComponent {

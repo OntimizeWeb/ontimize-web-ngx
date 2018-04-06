@@ -10,7 +10,7 @@ export declare type OSnackBarIconPosition = 'left' | 'right';
 /**
  * Configuration for showing a SnackBar with the SnackBar service.
  */
-export declare class OSnackBarConfig {
+export class OSnackBarConfig {
   /** Text shown in the action button. */
   action?: string;
   /** Time the SnackBar is shown. */
