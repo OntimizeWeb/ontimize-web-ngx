@@ -1,4 +1,4 @@
-import { Component, Inject, ViewEncapsulation, AfterViewInit, ComponentFactoryResolver, ViewChild, ComponentFactory, Injector } from '@angular/core';
+import { Component, Inject, ViewEncapsulation, AfterViewInit, ComponentFactoryResolver, ViewChild, ComponentFactory, Injector, HostListener } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { OFormLayoutManagerContentDirective } from '../directives/o-form-layout-manager-content.directive';
 import { OFormLayoutManagerComponent } from '../../../layouts/form-layout/o-form-layout-manager.component';
@@ -45,6 +45,11 @@ export class OFormLayoutDialogComponent implements AfterViewInit {
     if (data.layoutManagerComponent) {
       this.formLayoutManager = data.layoutManagerComponent;
     }
+  }
+
+  @HostListener('window:keyup.esc')
+  onEscKeyUp() {
+    this.closeDialog();
   }
 
   ngAfterViewInit() {
