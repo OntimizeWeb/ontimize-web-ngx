@@ -152,14 +152,12 @@ export class OComboComponent extends OFormServiceComponent implements OnInit {
     return '';
   }
 
-  innerOnChange(event: any) {
+  innerOnChange(event: any): void {
     if (((event === undefined || event === null) || (typeof event === 'string' && event.length === 0)) && this.nullSelection) {
-      this.setValueOnChange(undefined);
-    } else if (this.dataArray) {
-      const record = this.dataArray.find(item => item[this.valueColumn] === event);
-      if (record) {
-        this.setValueOnChange(record[this.valueColumn]);
-      }
+      this.setValueOnChange(null);
+    } else {
+      // This emits the combo value, the record data may not be available.
+      this.setValueOnChange(event);
     }
   }
 
@@ -213,6 +211,15 @@ export class OComboComponent extends OFormServiceComponent implements OnInit {
       }
     }
     return selected;
+  }
+
+  setValue(val: any): void {
+    if (this.dataArray) {
+      const record = this.dataArray.find(item => item[this.valueColumn] === val);
+      if (record) {
+        super.setValue(val);
+      }
+    }
   }
 
 }

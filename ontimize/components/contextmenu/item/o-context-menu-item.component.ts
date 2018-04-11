@@ -32,8 +32,8 @@ export class OContextMenuItemComponent implements Highlightable, OnInit {
   public icon: string;
   public data: any;
   public label: string;
-  public enabled: boolean | ((item) => boolean) = true;
-  public visible: boolean | ((item) => boolean) = true;
+  public enabled: boolean | ((item: boolean) => boolean) = true;
+  public visible: boolean | ((item: boolean) => boolean) = true;
   public execute: EventEmitter<{ event: Event, data: any }> = new EventEmitter();
 
   @ViewChild('templateref', { read: TemplateRef }) public templateref: TemplateRef<any>;

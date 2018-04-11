@@ -2,8 +2,8 @@
 
   <mat-form-field fxFlexFill [class.visible]="!isReadOnly" [class.hidden]="isReadOnly">
     <mat-select #selectModel [attr.id]="getAttribute()" [id]="getAttribute()" fxFill [formControlName]="getAttribute()" [placeholder]="placeHolder"
-      [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)" [required]="isRequired">
-      <mat-option *ngIf="hasNullSelection()"></mat-option>
+      [ngModel]="value?.value" (ngModelChange)="innerOnChange($event)" [required]="isRequired">
+      <mat-option *ngIf="hasNullSelection()" [value]="null"></mat-option>
       <mat-option *ngFor="let item of getDataArray(); let rowIndex = index" [value]="getValueColumn(item)">
         {{ getOptionDescriptionValue(item) }}
       </mat-option>
