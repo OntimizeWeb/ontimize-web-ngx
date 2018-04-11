@@ -10,11 +10,11 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { OSharedModule } from '../../shared';
+import { OSharedModule } from '../../../shared';
 
-import { OFormComponent } from '../form/o-form.component';
-import { OFormValue } from '../form/OFormValue';
-import { OFormDataComponent, DEFAULT_INPUTS_O_FORM_DATA_COMPONENT } from '../o-form-data-component.class';
+import { OFormComponent } from '../../form/o-form.component';
+import { OFormValue } from '../../form/OFormValue';
+import { OFormDataComponent, DEFAULT_INPUTS_O_FORM_DATA_COMPONENT } from '../../o-form-data-component.class';
 
 export const DEFAULT_INPUTS_O_CHECKBOX = [
   ...DEFAULT_INPUTS_O_FORM_DATA_COMPONENT

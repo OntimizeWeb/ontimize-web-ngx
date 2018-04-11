@@ -1,3 +1,5 @@
+export * from './checkbox/o-checkbox.component';
+export * from './combo/o-combo.component';
 export * from './currency-input/o-currency-input.component';
 export * from './date-input/o-date-input.component';
 export * from './email-input/o-email-input.component';

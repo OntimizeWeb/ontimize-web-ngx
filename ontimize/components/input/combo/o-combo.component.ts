@@ -1,21 +1,26 @@
 import {
-  Component, ElementRef, EventEmitter,
-  forwardRef, Inject, Injector,
-  OnInit, ViewChild, Optional,
+  Component,
+  ElementRef,
+  EventEmitter,
+  forwardRef,
+  Inject,
+  Injector,
+  OnInit,
+  ViewChild,
+  Optional,
   NgModule,
   ViewEncapsulation
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatSelect, MatOption } from '@angular/material';
 
-import { dataServiceFactory } from '../../services/data-service.provider';
-import { OntimizeService } from '../../services';
-import { OSharedModule } from '../../shared';
+import { OntimizeService, dataServiceFactory } from '../../../services';
+import { OSharedModule } from '../../../shared';
 
-import { InputConverter } from '../../decorators';
-import { OFormComponent } from '../form/o-form.component';
-import { OFormValue } from '../form/OFormValue';
-import { OFormServiceComponent } from '../o-form-service-component.class';
+import { InputConverter } from '../../../decorators';
+import { OFormComponent } from '../../form/o-form.component';
+import { OFormValue } from '../../form/OFormValue';
+import { OFormServiceComponent } from '../../o-form-service-component.class';
 
 export const DEFAULT_INPUTS_O_COMBO = [
   ...OFormServiceComponent.DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT,
