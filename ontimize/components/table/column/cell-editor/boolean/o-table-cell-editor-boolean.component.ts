@@ -53,7 +53,7 @@ export class OTableCellEditorBooleanComponent extends OBaseTableCellEditor {
 
   getCellData() {
     let cellData = super.getCellData();
-    this.indeterminate = this.indeterminateOnNull && (cellData === undefined);
+    this.indeterminate = this.indeterminateOnNull && !Util.isDefined(cellData);
     if (!this.indeterminate) {
       cellData = this.parseValueByType(cellData);
     }
