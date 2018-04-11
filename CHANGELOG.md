@@ -1,5 +1,10 @@
 ## 3.0.0-rc.0
 
+### DEPENDENCY UPDATES ###
+* **Removed**:  dragula@^3.7.2
+* **Removed**:  ng2-dragula@1.3.1
+* **Added**  :  ng2-dnd@5.0.2
+
 ### PEER-DEPENDENCY UPDATES ###
 * **Updated**:  @angular@5.2.9
 * **Updated**:  @angular/cli@1.7.3
@@ -8,9 +13,9 @@
 * **Updated**:  @angular/flex-layout@5.0.0-beta.13
 * **Updated**:  @ngx-translate/core@9.1.1
 * **Updated**:  @ngx-translate/http-loader@2.0.1
-* **Updated**:  core-js@2.5.1
+* **Updated**:  core-js@2.5.3
 * **Updated**:  rxjs@5.5.6
-* **Updated**:  zone.js@0.8.18
+* **Updated**:  zone.js@0.8.20
 * **Updated**:  reflect-metadata@0.1.12
 * **New**:      @angular/material-moment-adapter@5.2.4
 * **New**:      webpack@2.4.2
@@ -19,7 +24,7 @@
 ### BREAKING CHANGES
 * **Angular and Angular Material**: updating versions ([be5d6d7](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/be5d6d7))
 * **Services**: all services now are using '*HTTPClient*' instad of '*HTTP*' ([184b5df](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/184b5df))
-
+* **o-table-visible-columns-dialog**: drag and drop library changed from '*dragula*' to '*ng2-dnd*' ([0e054f4](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0e054f4))
 
 ### Features
 * **o-combo**: `mat-select` is now used inside `mat-form-field`. This makes all of the existing form-field features available with `mat-select`, including hints, errors, prefixes, and suffixes. This also ensures that `mat-select` and `matInput` have a consistent presentation ([9c2acbb](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9c2acbb))
