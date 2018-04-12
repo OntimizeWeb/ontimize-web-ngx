@@ -14,6 +14,9 @@ import { OContextMenuItemComponent } from './item/o-context-menu-item.component'
   entryComponents: [OContextMenuContentComponent, OContextMenuComponent],
   exports: [CommonModule, OContextMenuDirective, OContextMenuContentComponent, OContextMenuComponent, OContextMenuItemComponent],
   declarations: [OContextMenuDirective, OContextMenuContentComponent, OContextMenuComponent, OContextMenuItemComponent],
-  providers: [OContextMenuService]
+  providers: [{
+    provide: OContextMenuService,
+    useClass: OContextMenuService
+  }]
 })
 export class OContextMenuModule { }
