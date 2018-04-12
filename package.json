@@ -15,17 +15,11 @@
   "module": "./index.js",
   "typings": "./index.d.ts",
   "scripts": {
-    "build": "node build.js",
     "preinstall": "npm config set package-lock false",
     "rimraf": "rimraf",
     "clean": "rimraf dist tmp",
-    "init-common": "npm run clean && gulp inline-templates",
-    "styles": "node-sass dist/ontimize.scss dist/ontimize.scss --output-style compressed",
-    "end-common": "gulp copy-files && gulp ontimize.styles && npm run styles",
-    "webpack:dev": "npm run init-common && webpack --config config/webpack.dev.js --progress && npm run end-common",
-    "webpack:prod": "npm run init-common && webpack --config config/webpack.prod.js --progress && npm run end-common",
-    "aot:compile": "node_modules/.bin/ngc -p tsconfig.aot.json",
-    "aot": "npm run init-common && npm run aot:compile && npm run end-common"
+    "build": "node build.js",
+    "pack": "npm run build && cd dist && npm pack && cd .."
   },
   "dependencies": {
     "moment": "2.19.3",
