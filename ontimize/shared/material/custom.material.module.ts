@@ -35,7 +35,6 @@ import {
   MAT_DATE_LOCALE
   // PlatformModule,
   // StyleModule,
-  // OverlayModule,
   // PortalModule,
   // RtlModule,
   // A11yModule,
@@ -44,6 +43,7 @@ import {
 } from '@angular/material';
 
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
+import { OverlayModule } from '@angular/cdk/overlay';
 
 const MATERIAL_MODULES = [
   MatAutocompleteModule,
@@ -75,7 +75,8 @@ const MATERIAL_MODULES = [
   MatNativeDateModule,
   MatTableModule,
   MatPaginatorModule,
-  MatSortModule
+  MatSortModule,
+  OverlayModule
   // OverlayModule,
   // PortalModule,
   // RtlModule,
@@ -90,7 +91,11 @@ const MATERIAL_MODULES = [
   imports: [CommonModule],
   exports: MATERIAL_MODULES,
   providers: [
-    { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] }
+    {
+      provide: DateAdapter,
+      useClass: MomentDateAdapter,
+      deps: [MAT_DATE_LOCALE]
+    }
   ]
 })
 export class OCustomMaterialModule { }
