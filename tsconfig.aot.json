@@ -1,5 +1,5 @@
 {
-  "extends": "./tsconfig.ngc.json",
+  "extends": "./tsconfig.json",
   "compilerOptions": {
     "skipLibCheck": false,
     "suppressImplicitAnyIndexErrors": true,
@@ -8,10 +8,24 @@
     "lib": [
       "dom",
       "es6"
-    ]
+    ],
+    "allowSyntheticDefaultImports": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "inlineSources": true,
+    "outDir": "dist",
+    "rootDir": "./tmp"
   },
+  "exclude": [
+    "tmp/public_api.ts",
+    "node_modules",
+    "dist"
+  ],
+  "include": [
+    "tmp/**/*.ts"
+  ],
   "angularCompilerOptions": {
-    "genDir": "dist",
+    "outDir": "dist",
     "debug": false,
     "skipTemplateCodegen": true,
     "skipMetadataEmit": false,
