@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import { Subscriber } from 'rxjs/Subscriber';
 import { TranslateService } from '@ngx-translate/core';
-import { MomentService, DialogService } from '../../services';
+import { MomentService, SnackBarService } from '../../services';
 import * as CORE_TRANSLATIONS from '../../i18n/i18n';
 import { ObservableWrapper } from '../../util/async';
 import { AppConfig } from '../../config/app-config';
@@ -23,7 +23,6 @@ export class OTranslateService {
   protected httpClient: HttpClient;
 
   protected notFoundLang: Array<String> = [];
-  // protected _config: Config;
   protected appConfig: AppConfig;
 
   protected existingLangFiles: Array<String> = [];
@@ -42,41 +41,51 @@ export class OTranslateService {
         resolve(true);
         return;
       }
-      self.httpClient.get(OTranslateService.ASSETS_PATH + lang + OTranslateService.ASSETS_EXTENSION)
-        .subscribe(function () {
-          if (self.existingLangFiles.indexOf(lang) === -1) {
-            self.existingLangFiles.push(lang);
-          }
-          // I18N File loaded successfully
-          resolve(true);
-        }, function () {
-          // I18N File failed to load
-          if (self.notFoundLang.indexOf(lang) === -1) {
-            self.notFoundLang.push(lang);
-          }
-          resolve(false);
-        });
+      let localeAssetsPath = (this.ngxTranslateService.currentLoader as any).prefix;
+      let localeAssetsExtension = (this.ngxTranslateService.currentLoader as any).suffix;
+      self.httpClient.get(localeAssetsPath + lang + localeAssetsExtension).subscribe(function () {
+        if (self.existingLangFiles.indexOf(lang) === -1) {
+          self.existingLangFiles.push(lang);
+        }
+        // I18N File loaded successfully
+        resolve(true);
+      }, function () {
+        // I18N File failed to load
+        if (self.notFoundLang.indexOf(lang) === -1) {
+          self.notFoundLang.push(lang);
+        }
+        resolve(false);
+      });
     });
   }
 
   public setDefaultLang(lang: string): void {
+    this.ngxTranslateService.defaultLang = lang;
     this.checkExistingLangFile(lang).then((exists) => {
-      if (exists) {
-        // this.ngxTranslateService.setDefaultLang(lang);
-        this.ngxTranslateService.defaultLang = lang;
+      if (!exists) {
+        console.error('Default language(' + lang + ') has no bundle file defined');
       }
     });
   }
 
   public get(text: string, values: any[] = []): string {
-    let textTranslated = text;
+    let textTranslated = undefined;
     try {
       let bundle = this.ngxTranslateService.get(text, values);
       if (bundle && bundle['value']) {
         textTranslated = bundle['value'];
       }
+      textTranslated = textTranslated === text ? undefined : textTranslated;
     } catch (e) {
-      textTranslated = text;
+      textTranslated = undefined;
+    }
+    if (!textTranslated) {
+      let bundle = CORE_TRANSLATIONS.MAP[this.ngxTranslateService.currentLang] || CORE_TRANSLATIONS.MAP[this.DEFAULT_LANG];
+      if (bundle && bundle[text]) {
+        textTranslated = bundle[text];
+      } else {
+        textTranslated = text;
+      }
     }
     return textTranslated;
   }
@@ -89,16 +98,19 @@ export class OTranslateService {
   }
 
   public use(lang: string, observer?: Subscriber<any>): void {
-    if (lang === undefined /*|| this.notFoundLang.indexOf(lang) !== -1*/) {
+    if (lang === undefined) {
       let newLang = lang || this.DEFAULT_LANG;
       //setting lang for initializING moment and other components
       this.propagateLang(newLang, {}, observer);
     } else {
       this.checkExistingLangFile(lang).then((exists) => {
         let newLang = lang;
-        if (!exists && !this.appConfig.useRemoteBundle()) {
+        if (!exists) {
           newLang = this.ngxTranslateService.getDefaultLang();
-          this.injector.get(DialogService).alert('ERROR', CORE_TRANSLATIONS.MAP[newLang || this.DEFAULT_LANG]['MESSAGES.ERROR_MISSING_LANG']);
+          const msg = CORE_TRANSLATIONS.MAP[newLang || this.DEFAULT_LANG]['MESSAGES.ERROR_MISSING_LANG'];
+          this.injector.get(SnackBarService).open(msg, {
+            milliseconds: 2500
+          });
         }
         this.ngxTranslateService.use(newLang).subscribe(
           res => {

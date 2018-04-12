@@ -1,9 +1,9 @@
 <mat-table [dataSource]="editableDatasource" class="editable-row-table">
   <span #container> </span>
-  <ng-container *ngFor="let column of oTableOptions.columns" [cdkColumnDef]="column.name">
-    <mat-header-cell *cdkHeaderCellDef style="display: none;"> </mat-header-cell>
+  <ng-container *ngFor="let column of oTableOptions.columns" [matColumnDef]="column.name">
+    <mat-header-cell *matHeaderCellDef style="display: none;"> </mat-header-cell>
 
-    <mat-cell *cdkCellDef="let row" [fxFlex]="column.width" [ngClass]="column.className">
+    <mat-cell *matCellDef="let row" [fxFlex]="column.width" [ngClass]="column.className">
       <ng-container *ngIf="isColumnInsertable(column) && !useCellEditor(column)">
         <mat-form-field class="insertable-form-field" [hideRequiredMarker]="false" floatPlaceholder="never">
           <input matInput type="text" [placeholder]="getPlaceholder(column)" [id]="column.attr" [formControl]="getControl(column)" [required]="isColumnRequired(column)">
@@ -19,8 +19,8 @@
   </ng-container>
 
 
-  <mat-header-row *cdkHeaderRowDef="[]" style.display="none"></mat-header-row>
-  <mat-row *cdkRowDef="let row; columns: oTableOptions.visibleColumns;">
+  <mat-header-row *matHeaderRowDef="[]" style.display="none"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: oTableOptions.visibleColumns;">
 
   </mat-row>
 </mat-table>

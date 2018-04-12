@@ -33,6 +33,17 @@ export interface Config {
   // locale [string][en|es]: Language of the application. By default 'en'
   locale?: string;
 
+  // locale [string]: Location of application translation assets. Default 'assets/i18n/'
+  assets?: {
+    i18n?: {
+      path?: string;
+      extension?: string;
+    }
+    css?: string;
+    images?: string;
+    js?: string;
+  };
+
   applicationLocales?: string[];
 
   // serviceType [ undefined | '' | class ]: The service type used (Ontimize REST standart, Ontimize REST JEE or custom implementation) in the whole application. By default 'undefined', that is, Ontimize REST standard service.
@@ -55,7 +66,7 @@ export interface Config {
 }
 
 export class AppConfig {
-  private _config: any;
+  private _config: Config;
 
   constructor(config?) {
     this._config = (config && Util.isObject(config) && !Array.isArray(config)) ? config : {};
@@ -65,7 +76,7 @@ export class AppConfig {
     return Object.assign(DEFAULT_CONFIG, this._config);
   }
 
-  public getServiceConfiguration(): Config {
+  public getServiceConfiguration(): any {
     return this._config['servicesConfiguration'] || {};
   }
 
@@ -89,6 +100,32 @@ export class AppConfig {
     return result;
   }
 
+  public getI18nAssetsConfiguration(): any {
+    if (Util.isDefined(this._config.assets) && Util.isDefined(this._config.assets.i18n)) {
+      return this._config.assets.i18n;
+    }
+    return undefined;
+  }
 
+  public getCssAssetsConfiguration(): any {
+    if (Util.isDefined(this._config.assets) && Util.isDefined(this._config.assets.css)) {
+      return this._config.assets.css;
+    }
+    return undefined;
+  }
+
+  public getImagesAssetsConfiguration(): any {
+    if (Util.isDefined(this._config.assets) && Util.isDefined(this._config.assets.images)) {
+      return this._config.assets.images;
+    }
+    return undefined;
+  }
+
+  public getJsAssetsConfiguration(): any {
+    if (Util.isDefined(this._config.assets) && Util.isDefined(this._config.assets.js)) {
+      return this._config.assets.js;
+    }
+    return undefined;
+  }
 }
 
