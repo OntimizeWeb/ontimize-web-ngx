@@ -27,6 +27,7 @@
     "skipTemplateCodegen": true,
     "skipMetadataEmit": false,
     "strictMetadataEmit": true,
-    "preserveWhitespaces" : false
+    "preserveWhitespaces" : false,
+    "strictInjectionParameters" : true
   }
 }

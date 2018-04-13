@@ -51,14 +51,14 @@ shell.echo(chalk.green(`Rollup package completed`));
 
 shell.echo(`Produce ESM5 version`);
 shell.exec(`ngc -p tsconfig.build.json --target es5 -d false --outDir ${OUT_DIR_ESM5} --importHelpers true --sourceMap`);
-if (shell.exec(`rollup -c rollup.es.config.js -i ${OUT_DIR_ESM5}/${PACKAGE}.js -o ${ESM5_DIR}/${PACKAGE}.js`).code !== 0) {
+if (shell.exec(`rollup -c rollup.es.config.js -i ${OUT_DIR_ESM5}/${PACKAGE}.js -o ${ESM5_DIR}/${PACKAGE}.es5.js`).code !== 0) {
   shell.echo(chalk.red(`Error: ESM5 version failed`));
   shell.exit(1);
 }
 shell.echo(chalk.green(`Produce ESM5 version completed`));
 
 shell.echo(`Run Rollup conversion on package`);
-if (shell.exec(`rollup -c rollup.config.js -i ${ESM5_DIR}/${PACKAGE}.js -o ${BUNDLES_DIR}/${PACKAGE}.umd.js`).code !== 0) {
+if (shell.exec(`rollup -c rollup.config.js -i ${ESM5_DIR}/${PACKAGE}.es5.js -o ${BUNDLES_DIR}/${PACKAGE}.umd.js`).code !== 0) {
   shell.echo(chalk.red(`Error: Rollup conversion failed`));
   shell.exit(1);
 }
@@ -75,10 +75,10 @@ shell.echo(chalk.green(`Bundling completed`));
 
 shell.rm(`-Rf`, `${NPM_DIR}/package`);
 shell.rm(`-Rf`, `${NPM_DIR}/node_modules`);
-shell.rm(`-Rf`, `${NPM_DIR}/*.js`);
-shell.rm(`-Rf`, `${NPM_DIR}/*.js.map`);
-shell.rm(`-Rf`, `${NPM_DIR}/ontimize/**/*.js`);
-shell.rm(`-Rf`, `${NPM_DIR}/ontimize/**/*.js.map`);
+// shell.rm(`-Rf`, `${NPM_DIR}/*.js`);
+// shell.rm(`-Rf`, `${NPM_DIR}/*.js.map`);
+// shell.rm(`-Rf`, `${NPM_DIR}/ontimize/**/*.js`);
+// shell.rm(`-Rf`, `${NPM_DIR}/ontimize/**/*.js.map`);
 
 /* end-common */
 shell.echo(`Start copy-files`);
