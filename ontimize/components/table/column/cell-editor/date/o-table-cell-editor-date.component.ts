@@ -46,7 +46,7 @@ export class OTableCellEditorDateComponent extends OBaseTableCellEditor implemen
   @ViewChild('templateref', { read: TemplateRef }) public templateref: TemplateRef<any>;
   @ViewChild('input') inputRef: ElementRef;
 
-  protected format: string = 'L';
+  format: string = 'L';
   protected locale: string;
   oStartView: 'month' | 'year' = 'month';
   protected min: string;

@@ -530,7 +530,7 @@ export class OListComponent extends OServiceComponent implements OnInit, IList, 
       });
   }
 
-  protected add() {
+  add() {
     this.onInsertButtonClick.emit();
     let route = this.getRouteOfSelectedRow(undefined, 'new');
     if (route.length > 0) {
@@ -540,6 +540,10 @@ export class OListComponent extends OServiceComponent implements OnInit, IList, 
         }
       );
     }
+  }
+
+  hasTitle(): boolean {
+    return this.title !== undefined;
   }
 }
 

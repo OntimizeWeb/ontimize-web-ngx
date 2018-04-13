@@ -280,7 +280,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   @ViewChild('innerForm') innerFormEl: ElementRef;
 
   @HostListener('window:resize', ['$event'])
-  protected updateScrolledState(): void {
+  updateScrolledState(): void {
     if (this.showHeader && this.innerFormEl) {
       const totalHeight = this.elRef.nativeElement.clientHeight;
       const formElHeight = this.innerFormEl.nativeElement.clientHeight;

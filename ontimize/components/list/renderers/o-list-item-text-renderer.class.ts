@@ -32,7 +32,7 @@ export class OListItemTextRenderer {
   onIconClick: EventEmitter<Object> = new EventEmitter<Object>();
   /* end of inputs variables */
 
-  private has3Lines: boolean = true;
+  has3Lines: boolean = true;
 
   constructor(
     public elRef: ElementRef,

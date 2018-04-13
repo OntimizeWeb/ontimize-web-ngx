@@ -14,10 +14,10 @@
         <mat-icon>delete</mat-icon>
       </button>
       <span class="fill-remaining"></span>
-      <div *ngIf="title" fxLayout="row" fxLayoutAlign="center center">
+      <div *ngIf="hasTitle()" fxLayout="row" fxLayoutAlign="center center">
         <span>{{ title | oTranslate }}</span>
       </div>
-      <span *ngIf="title" class="fill-remaining"></span>
+      <span *ngIf="hasTitle()" class="fill-remaining"></span>
 
       <o-search-input *ngIf="quickFilter" placeholder=""></o-search-input>
     </div>

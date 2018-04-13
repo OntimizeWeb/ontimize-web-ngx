@@ -111,7 +111,7 @@ export const DEFAULT_INPUTS_O_SERVICE_COMPONENT = [
   'insertFormRoute: insert-form-route',
 
   // recursive-insert [no|yes]: do not append insert keys when navigate (overwrite current). Default: no.
-  'recursiveInsert: recursive-insert',
+  'recursiveInsert: recursive-insert'
 ];
 
 export class OServiceComponent implements ILocalStorageComponent {
@@ -141,7 +141,7 @@ export class OServiceComponent implements ILocalStorageComponent {
 
   /* inputs variables */
   protected oattr: string;
-  protected title: string;
+  title: string;
   protected cssclass: string;
   @InputConverter()
   protected ovisible: boolean = true;
@@ -170,14 +170,14 @@ export class OServiceComponent implements ILocalStorageComponent {
   protected recursiveDetail: boolean = false;
   @InputConverter()
   detailButtonInRow: boolean = false;
-  protected detailButtonInRowIcon: string;
+  detailButtonInRowIcon: string;
   protected editFormRoute: string;
   @InputConverter()
   protected recursiveEdit: boolean = false;
   @InputConverter()
   editButtonInRow: boolean = false;
-  protected editButtonInRowIcon: string;
-  protected queryRows: any;
+  editButtonInRowIcon: string;
+  queryRows: any;
   @InputConverter()
   insertButton: boolean;
   rowHeight: string;
@@ -205,7 +205,7 @@ export class OServiceComponent implements ILocalStorageComponent {
   protected querySuscription: Subscription;
   protected filterForm: boolean = false;
   dataService: any;
-  protected state: any;
+  state: any;
   protected selectedItems: Array<Object> = [];
 
   protected router: Router;

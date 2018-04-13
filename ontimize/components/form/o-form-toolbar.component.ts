@@ -59,11 +59,11 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
   public insertMode: boolean = false;
   public initialMode: boolean = true;
 
-  protected refreshBtnEnabled: boolean = false;
-  protected insertBtnEnabled: boolean = false;
-  protected editBtnEnabled: boolean = false;
-  protected deleteBtnEnabled: boolean = false;
-  protected saveBtnEnabled: boolean = false;
+  refreshBtnEnabled: boolean = false;
+  insertBtnEnabled: boolean = false;
+  editBtnEnabled: boolean = false;
+  deleteBtnEnabled: boolean = false;
+  saveBtnEnabled: boolean = false;
 
   protected _existsChangesToSave: boolean = false;
 

@@ -30,11 +30,11 @@ export class OButtonComponent implements OnInit {
   protected static DEFAULT_TYPE = 'RAISED';
 
   protected oattr: string;
-  protected olabel: string;
+  olabel: string;
   protected otype: string;
-  protected icon: string;
-  protected iconPosition: string; // left (default), top, TODO: right, bottom?
-  protected image: string;
+  icon: string;
+  iconPosition: string; // left (default), top, TODO: right, bottom?
+  image: string;
 
   constructor() {
     this.otype = OButtonComponent.DEFAULT_TYPE;

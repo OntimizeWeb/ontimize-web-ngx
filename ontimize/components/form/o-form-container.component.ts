@@ -31,7 +31,7 @@ export class OFormContainerComponent {
   @ViewChild('breadcrumb', { read: ViewContainerRef }) breadContainer;
 
   @InputConverter()
-  protected breadcrumb: boolean = false;
+  breadcrumb: boolean = false;
   public breadcrumbLabelColumns: string;
   public breadcrumbSeparator: string = ' ';
 

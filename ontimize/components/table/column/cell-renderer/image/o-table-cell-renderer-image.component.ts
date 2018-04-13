@@ -27,7 +27,7 @@ export class OTableCellRendererImageComponent extends OBaseTableCellRenderer {
   public imageType: string;
   public emptyImage: string;
   protected _source: string;
-
+  avatar: string;
   @ViewChild('templateref', { read: TemplateRef }) public templateref: TemplateRef<any>;
 
   constructor(protected injector: Injector) {

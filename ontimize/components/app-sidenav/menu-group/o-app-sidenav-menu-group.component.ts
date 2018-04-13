@@ -28,7 +28,7 @@ export class OAppSidenavMenuGroupComponent implements AfterViewInit, OnDestroy {
   public static DEFAULT_INPUTS_O_APP_SIDENAV_MENU_GROUP = DEFAULT_INPUTS_O_APP_SIDENAV_MENU_GROUP;
   public static DEFAULT_OUTPUTS_O_APP_SIDENAV_MENU_GROUP = DEFAULT_OUTPUTS_O_APP_SIDENAV_MENU_GROUP;
 
-  protected appMenuService: AppMenuService;
+  appMenuService: AppMenuService;
   protected sidenav: OAppSidenavComponent;
   protected sidenavSubscription: Subscription;
 

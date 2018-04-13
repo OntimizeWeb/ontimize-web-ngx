@@ -55,6 +55,8 @@ export class OComboComponent extends OFormServiceComponent implements OnInit {
   protected nullSelection: boolean = true;
   /* End inputs*/
 
+  value: OFormValue;
+
   @ViewChild('inputModel')
   protected inputModel: ElementRef;
 

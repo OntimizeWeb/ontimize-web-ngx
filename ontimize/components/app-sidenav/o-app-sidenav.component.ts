@@ -44,7 +44,7 @@ export class OAppSidenavComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild(MatSidenav) sidenav: MatSidenav;
 
   protected routerSubscription: Subscription;
-  protected appMenuService: AppMenuService;
+  appMenuService: AppMenuService;
   protected _menuRootArray: MenuRootItem[];
 
   @InputConverter()
