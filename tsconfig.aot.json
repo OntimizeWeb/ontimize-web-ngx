@@ -9,11 +9,8 @@
       "dom",
       "es6"
     ],
-    "allowSyntheticDefaultImports": true,
     "noUnusedLocals": false,
-    "noUnusedParameters": false,
     "inlineSources": true,
-    "outDir": "dist",
     "rootDir": "./tmp"
   },
   "exclude": [
@@ -29,6 +26,7 @@
     "debug": false,
     "skipTemplateCodegen": true,
     "skipMetadataEmit": false,
-    "strictMetadataEmit": true
+    "strictMetadataEmit": true,
+    "preserveWhitespaces" : false
   }
 }

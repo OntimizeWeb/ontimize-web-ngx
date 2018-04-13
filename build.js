@@ -10,6 +10,7 @@ const ESM2015_DIR = `${NPM_DIR}/esm2015`;
 const ESM5_DIR = `${NPM_DIR}/esm5`;
 const BUNDLES_DIR = `${NPM_DIR}/bundles`;
 const OUT_DIR_ESM5 = `${NPM_DIR}/package/esm5`;
+const OUT_DIR_AOT = `${NPM_DIR}/ontimize`;
 
 shell.echo(`Start building...`);
 
@@ -25,7 +26,6 @@ shell.mkdir(`-p`, `./${BUNDLES_DIR}`);
 shell.echo(`Start TSLint`);
 shell.exec(`tslint -p tslint.json -t stylish ontimize/**/*.ts`);
 shell.echo(chalk.green(`TSLint completed`));
-
 
 /* Inline templates: init-common */
 shell.echo(`Start inline templates parsing`);
@@ -75,10 +75,10 @@ shell.echo(chalk.green(`Bundling completed`));
 
 shell.rm(`-Rf`, `${NPM_DIR}/package`);
 shell.rm(`-Rf`, `${NPM_DIR}/node_modules`);
-// shell.rm(`-Rf`, `${NPM_DIR}/*.js`);
-// shell.rm(`-Rf`, `${NPM_DIR}/*.js.map`);
-// shell.rm(`-Rf`, `${NPM_DIR}/ontimize/**/*.js`);
-// shell.rm(`-Rf`, `${NPM_DIR}/ontimize/**/*.js.map`);
+shell.rm(`-Rf`, `${NPM_DIR}/*.js`);
+shell.rm(`-Rf`, `${NPM_DIR}/*.js.map`);
+shell.rm(`-Rf`, `${NPM_DIR}/ontimize/**/*.js`);
+shell.rm(`-Rf`, `${NPM_DIR}/ontimize/**/*.js.map`);
 
 /* end-common */
 shell.echo(`Start copy-files`);
@@ -91,5 +91,4 @@ shell.exec(`node-sass dist/ontimize.scss dist/ontimize.scss --output-style compr
 shell.echo(chalk.green(`Styles completed`));
 
 // // shell.sed('-i', `"private": true,`, `"private": false,`, `./${NPM_DIR}/package.json`);
-
 shell.echo(chalk.green(`End building`));
