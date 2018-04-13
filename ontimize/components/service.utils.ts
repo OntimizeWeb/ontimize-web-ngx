@@ -47,7 +47,7 @@ export class ServiceUtils {
           if (currentData instanceof OFormValue) {
             currentData = currentData.value;
           }
-          filter[parentKeysObject[parentKey]] = currentData;
+          filter[parentKey] = currentData;
         }
       }
     }
