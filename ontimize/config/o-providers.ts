@@ -30,6 +30,7 @@ import {
 } from '../services';
 
 import { OFormLayoutManagerService } from '../services/o-form-layout-manager.service';
+import { OContextMenuService } from '../components/contextmenu/o-context-menu.service';
 
 export function appInitializerFactory(injector: Injector, config: Config, oTranslate: OTranslateService) {
   return () => new Promise<any>((resolve: any) => {
@@ -270,5 +271,8 @@ export const ONTIMIZE_PROVIDERS = [
   {
     provide: OFormLayoutManagerService,
     useClass: OFormLayoutManagerService
+  }, {
+    provide: OContextMenuService,
+    useClass: OContextMenuService
   }
 ];
