@@ -3,7 +3,7 @@ export * from './combo/o-combo.component';
 export * from './currency-input/o-currency-input.component';
 export * from './date-input/o-date-input.component';
 export * from './email-input/o-email-input.component';
-export * from './file-input/o-file-input.component';
+export * from './file-input/o-file-input.components';
 export * from './html-input/o-html-input.component';
 export * from './integer-input/o-integer-input.component';
 export * from './listpicker/o-list-picker.component';
