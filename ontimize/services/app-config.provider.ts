@@ -1,11 +1,6 @@
 import { Injector } from '@angular/core';
 
-import {
-  Config,
-  AppConfig,
-  APP_CONFIG
-} from '../config/app-config';
-
+import { Config, AppConfig, APP_CONFIG } from '../config/app-config';
 export class AppConfigFactory {
   config: Config;
   constructor(protected injector: Injector) {
