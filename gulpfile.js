@@ -11,7 +11,7 @@ const ONTIMIZE_SCSS_CONF = {
   DIST: './dist'
 };
 
-gulp.task('ontimize.styles', ['themes.styles'], (callback) => {
+gulp.task('styles', ['themes.styles'], (callback) => {
   return gulp.src(ONTIMIZE_SCSS_CONF.SRC)
     .pipe(cssimport(THEMES_STYLES_CONF.OPTIONS))
     .pipe(gulp.dest(ONTIMIZE_SCSS_CONF.DIST));
