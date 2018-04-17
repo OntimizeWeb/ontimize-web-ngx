@@ -1,4 +1,4 @@
-import { Injector } from '@angular/core';
+import { Injector, Provider } from '@angular/core';
 import { LOCATION_INITIALIZED } from '@angular/common';
 import { BaseRequestOptions, XHRBackend } from '@angular/http';
 import { MatIconRegistry } from '@angular/material';
@@ -154,7 +154,7 @@ export function getOntimizeServiceResponseParser(injector: Injector) {
   return new OntimizeServiceResponseParser(injector);
 }
 
-export const ONTIMIZE_PROVIDERS = [
+export const ONTIMIZE_PROVIDERS: Provider[] = [
   //Standard
   MatIconRegistry,
 
