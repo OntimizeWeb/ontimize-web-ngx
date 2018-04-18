@@ -1,3 +1,15 @@
+## 2.1.3 (2018-18-04)
+### Features
+* **o-list-picker**
+  * New '*query-rows*' input ([8b1e4ef](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/8b1e4ef))
+  * Rendering list picker dialog when scrolling ([8b1e4ef](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/8b1e4ef))
+  * Allowing to pre-filter content using input text
+  * This features only work statically (component query retrieves all records)
+
+### Bug Fixes
+* **o-table**: Fixing bug when using parent-keys ([ae64e93](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ae64e93))
+* **o-list-picker**: Improving performance ([8b1e4ef](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/8b1e4ef))
+
 ## 2.1.2 (2018-04-03)
 ### PEER-DEPENDENCY UPDATES ###
 * **Updated**:  core-js@2.5.3
