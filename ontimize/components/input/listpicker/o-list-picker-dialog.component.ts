@@ -1,7 +1,7 @@
 import { Component, ViewEncapsulation, Inject, Injector, ViewChild, AfterViewInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { Util } from '../../../util/util';
-import { OSearchInputComponent } from '../../search-input/o-search-input.component';
+import { OSearchInputComponent } from '../../input/search-input/o-search-input.component';
 
 export const DEFAULT_INPUTS_O_LIST_PICKER = [
   'data',

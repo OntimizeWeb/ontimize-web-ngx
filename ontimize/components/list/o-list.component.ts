@@ -27,7 +27,7 @@ import { OSharedModule } from '../../shared';
 import { OntimizeService } from '../../services';
 import { dataServiceFactory } from '../../services/data-service.provider';
 import { InputConverter } from '../../decorators';
-import { OSearchInputModule, OSearchInputComponent } from '../search-input/o-search-input.component';
+import { OSearchInputModule, OSearchInputComponent } from '../input/search-input/o-search-input.component';
 import { OFormComponent } from '../form/o-form.component';
 import { OServiceComponent } from '../o-service-component.class';
 import { ServiceUtils } from '../service.utils';
