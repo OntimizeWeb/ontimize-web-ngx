@@ -48,6 +48,17 @@ export const CONFIG: Config = {
 * **o-combo**: Fixing change event emission ([a648c8b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a648c8b)) Closes [#152](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/152)
 * **o-form**: Fixing close dialog on ESC key event ([f789a64](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f789a64))
 
+## 2.1.3 (2018-18-04)
+### Features
+* **o-list-picker**
+  * New '*query-rows*' input ([8b1e4ef](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/8b1e4ef))
+  * Rendering list picker dialog when scrolling ([8b1e4ef](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/8b1e4ef))
+  * Allowing to pre-filter content using input text
+  * This features only work statically (component query retrieves all records)
+
+### Bug Fixes
+* **o-table**: Fixing bug when using parent-keys ([ae64e93](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ae64e93))
+* **o-list-picker**: Improving performance ([8b1e4ef](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/8b1e4ef))
 
 ## 2.1.2 (2018-04-03)
 ### PEER-DEPENDENCY UPDATES ###

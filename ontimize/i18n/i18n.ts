@@ -49,6 +49,9 @@ export var MAP = {
     'SETTINGS': 'Settings',
     'FORM': 'Form',
     'LIST': 'List',
+    'LIST.EMPTY': 'No results found',
+    'LIST.EMPTY_USING_FILTER': ' using filter "{0}"',
+
     'TABLE': 'Table',
     'DETAIL': 'Detail',
     'EXPORT': 'Export',
@@ -210,6 +213,9 @@ export var MAP = {
     'FEATURES': 'Características',
     'FORM': 'Formulario',
     'LIST': 'Lista',
+    'LIST.EMPTY': 'No se han obtenido resultados',
+    'LIST.EMPTY_USING_FILTER': ' usando el filtro "{0}"',
+
     'TABLE': 'Tabla',
     'DETAIL': 'Detalle',
     'EXPORT': 'Exportar',

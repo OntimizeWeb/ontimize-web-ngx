@@ -10,10 +10,11 @@ import {
   SimpleChange,
   Optional,
   NgModule,
-  ViewEncapsulation
+  ViewEncapsulation,
+  ViewChild
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatDialog, MatDialogRef, MatDialogConfig } from '@angular/material';
+import { MatInput, MatDialog, MatDialogRef, MatDialogConfig } from '@angular/material';
 
 import { dataServiceFactory } from '../../../services/data-service.provider';
 import { OntimizeService } from '../../../services';
@@ -32,7 +33,8 @@ export const DEFAULT_INPUTS_O_LIST_PICKER = [
   ...OFormServiceComponent.DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT,
   'filter',
   'dialogWidth : dialog-width',
-  'dialogHeight : dialog-height'
+  'dialogHeight : dialog-height',
+  'queryRows: query-rows'
 ];
 
 export const DEFAULT_OUTPUTS_O_LIST_PICKER = [
@@ -54,6 +56,7 @@ export const DEFAULT_OUTPUTS_O_LIST_PICKER = [
 })
 export class OListPickerComponent extends OFormServiceComponent implements OnInit, OnChanges {
 
+
   public static DEFAULT_INPUTS_O_LIST_PICKER = DEFAULT_INPUTS_O_LIST_PICKER;
   public static DEFAULT_OUTPUTS_O_LIST_PICKER = DEFAULT_OUTPUTS_O_LIST_PICKER;
 
@@ -61,25 +64,32 @@ export class OListPickerComponent extends OFormServiceComponent implements OnIni
   @InputConverter()
   protected filter: boolean = true;
   protected dialogWidth: string;
-  protected dialogHeight: string;
+  protected dialogHeight: string = '55%';
+  @InputConverter()
+  protected queryRows: number;
   /* End inputs */
 
-  protected ng2Dialog: MatDialog;
+  protected matDialog: MatDialog;
   protected dialogRef: MatDialogRef<OListPickerDialogComponent>;
 
-  // @ViewChild('inputModel')
-  // protected inputModel: MatInput;
+  @ViewChild('inputModel') protected inputModel: MatInput;
+  @ViewChild('visibleInput') protected visibleInput: ElementRef;
+  protected visibleInputValue: any;
 
   onChange: EventEmitter<Object> = new EventEmitter<Object>();
   onFocus: EventEmitter<Object> = new EventEmitter<Object>();
   onBlur: EventEmitter<Object> = new EventEmitter<Object>();
+
+  protected blurTimer;
+  protected blurDelay = 200;
+  protected blurPrevent = false;
 
   constructor(
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
     elRef: ElementRef,
     injector: Injector) {
     super(form, elRef, injector);
-    this.ng2Dialog = this.injector.get(MatDialog);
+    this.matDialog = this.injector.get(MatDialog);
   }
 
   ngOnInit(): any {
@@ -121,8 +131,8 @@ export class OListPickerComponent extends OFormServiceComponent implements OnIni
     let descTxt = '';
     if (this.descriptionColArray && this._currentIndex !== undefined) {
       var self = this;
-      this.descriptionColArray.forEach((item, index) => {
-        let txt = self.dataArray[self._currentIndex][item];
+      this.descriptionColArray.forEach((descCol, index) => {
+        let txt = self.dataArray[self._currentIndex][descCol];
         if (txt) {
           descTxt += txt;
         }
@@ -156,13 +166,23 @@ export class OListPickerComponent extends OFormServiceComponent implements OnIni
   }
 
   onClickClear(e: Event): void {
+    e.preventDefault();
     e.stopPropagation();
     if (!this._isReadOnly && !this.isDisabled) {
+      clearTimeout(this.blurTimer);
+      this.blurPrevent = true;
       this.setValue(undefined);
     }
   }
 
+  setValue(value: any) {
+    super.setValue(value);
+    this.visibleInput.nativeElement.value = '';
+  }
+
   onClickListpicker(e: Event): void {
+    e.preventDefault();
+    e.stopPropagation();
     if (!this._isReadOnly && !this.isDisabled) {
       this.openDialog();
     }
@@ -172,11 +192,13 @@ export class OListPickerComponent extends OFormServiceComponent implements OnIni
     let cfg: MatDialogConfig = {
       role: 'dialog',
       disableClose: false,
-      panelClass: 'cdk-overlay-pane-custom',
+      panelClass: 'cdk-overlay-list-picker',
       data: {
-        data: this.dataArray,
+        data: this.getDialogDataArray(this.dataArray),
         filter: this.filter,
-        visibleColumns: this.visibleColArray
+        searchVal: this.visibleInputValue,
+        visibleColumns: this.visibleColArray,
+        queryRows: this.queryRows
       }
     };
     if (this.dialogWidth !== undefined) {
@@ -185,10 +207,30 @@ export class OListPickerComponent extends OFormServiceComponent implements OnIni
     if (this.dialogHeight !== undefined) {
       cfg.height = this.dialogHeight;
     }
-    this.dialogRef = this.ng2Dialog.open(OListPickerDialogComponent, cfg);
+    this.dialogRef = this.matDialog.open(OListPickerDialogComponent, cfg);
+
     this.dialogRef.afterClosed().subscribe(result => {
       this.onDialogClose(result);
     });
+  }
+
+  protected getDialogDataArray(dataArray: Array<any>): Array<any> {
+    let result: Array<any> = [];
+    const self = this;
+    dataArray.forEach((item, itemIndex) => {
+      let element = '';
+      self.visibleColArray.forEach((visibleCol, index) => {
+        element += item[visibleCol];
+        if ((index + 1) < self.visibleColArray.length) {
+          element += self.separator;
+        }
+      });
+      let newItem = Object.assign({}, item);
+      newItem['_parsedVisibleColumnText'] = element;
+      newItem['_parsedIndex'] = itemIndex;
+      result.push(newItem);
+    });
+    return result;
   }
 
   onDialogClose(evt: any) {
@@ -212,9 +254,29 @@ export class OListPickerComponent extends OFormServiceComponent implements OnIni
 
   innerOnBlur(evt: any) {
     if (!this.isReadOnly && !this.isDisabled) {
-      this._fControl.markAsTouched();
-      this.onBlur.emit(event);
+      const self = this;
+      this.blurTimer = setTimeout(() => {
+        if (!self.blurPrevent) {
+          self._fControl.markAsTouched();
+          self.onBlur.emit(event);
+          // if (evt.target.value !== this.visibleInputValue) {
+          self.openDialog();
+          // }
+        }
+        self.blurPrevent = false;
+      }, this.blurDelay);
     }
+  }
+
+  onVisibleInputChange(event: any) {
+    this.visibleInputValue = event.target.value;
+  }
+
+  onKeydownEnter(val: any) {
+    clearTimeout(this.blurTimer);
+    this.blurPrevent = true;
+    this.visibleInputValue = val;
+    this.openDialog();
   }
 
 }

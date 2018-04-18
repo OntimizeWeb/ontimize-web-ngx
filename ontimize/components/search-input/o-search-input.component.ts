@@ -1,6 +1,11 @@
-import { Component, OnInit, EventEmitter, Injector, NgModule, ViewEncapsulation } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {
+  Component, OnInit, EventEmitter, Injector,
+  NgModule,
+  ViewEncapsulation
+} from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/distinctUntilChanged';
 
@@ -34,7 +39,6 @@ export class OSearchInputComponent implements OnInit {
 
   protected formGroup: FormGroup;
   protected term: FormControl;
-  protected value: string = '';
 
   protected translateService: OTranslateService;
 
@@ -61,7 +65,11 @@ export class OSearchInputComponent implements OnInit {
   }
 
   getValue(): string {
-    return this.value;
+    return this.term.value;
+  }
+
+  getFormControl(): FormControl {
+    return this.term;
   }
 
   get placeHolder(): string {
