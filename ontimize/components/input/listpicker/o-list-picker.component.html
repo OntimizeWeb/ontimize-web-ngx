@@ -1,15 +1,14 @@
-<div fxLayout="row" fxLayoutAlign="space-between center" [formGroup]="getFormGroup()" (click)="onClickListpicker($event)"
-    [mdTooltip]="tooltip" [mdTooltipPosition]="tooltipPosition" [mdTooltipShowDelay]="tooltipShowDelay" class="custom-error o-list-picker-content">
-    <input mdInput #inputModel class="input-model" type="text" [attr.id]="getAttribute()" [id]="getAttribute()"
-        [formControlName]="getAttribute()" [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)">
+<div fxLayout="row" fxLayoutAlign="space-between center" [formGroup]="getFormGroup()" [mdTooltip]="tooltip" [mdTooltipPosition]="tooltipPosition"
+    [mdTooltipShowDelay]="tooltipShowDelay" class="custom-error o-list-picker-content">
+    <input mdInput #inputModel class="input-model" type="text" [attr.id]="getAttribute()" [id]="getAttribute()" [formControlName]="getAttribute()"
+        [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)">
 
     <md-form-field #innerInputContainer fxFlexFill>
-        <input mdInput type="text" [attr.id]="'desc_' + getAttribute()" [id]="'desc_' + getAttribute()"
-            [placeholder]="placeHolder" [value]="getDescriptionValue()"
-            (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)"
-            [readonly]="isReadOnly" [disabled]="isDisabled" [required]="isRequired">
-            <md-icon [class.mat-disabled]="isDisabled" mdSuffix>search</md-icon>
-            <md-icon [class.mat-disabled]="isDisabled" (click)="onClickClear($event)" mdSuffix>clear</md-icon>
+        <input mdInput type="text" [attr.id]="'desc_' + getAttribute()" [id]="'desc_' + getAttribute()" [placeholder]="placeHolder"
+            [value]="getDescriptionValue()" (input)="onVisibleInputChange($event)" (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)"
+            [readonly]="isReadOnly" [disabled]="isDisabled" [required]="isRequired" #visibleInput (keydown.enter)="onKeydownEnter(visibleInput.value)">
+        <md-icon [class.mat-disabled]="isDisabled" (click)="onClickListpicker($event)" mdSuffix>search</md-icon>
+        <md-icon [class.mat-disabled]="isDisabled" (click)="onClickClear($event)" mdSuffix>clear</md-icon>
         <md-hint *ngIf="hasError('required')">
             <span>{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</span>
         </md-hint>
