@@ -8,23 +8,38 @@
   }
 }
 
-.dialog-list-container {
-  md-list {
-    margin: 12px 0;
-    md-list-item {
-      cursor: pointer;
+.cdk-overlay-list-picker {
+  .mat-dialog-container {
+    padding: 0;
+  }
+  .mat-dialog-actions {
+    padding: 12px 24px;
+  }
+}
+
+.o-list-picker-dialog  {
+  md-toolbar {
+    &.mat-toolbar .mat-toolbar-row {
+      padding-top: 8px;
+      box-sizing: content-box;
+    }
+    o-search-input,
+    o-search-input md-form-field {
+      width: 100%;
+    }
+  }
+
+  .dialog-list-container {
+    /*133 = 72 (toolbar) + 61 (dialog buttons)*/
+    max-height: calc(100% - 133px);
+    min-height: calc(100% - 133px);
+    margin: 0px;
+
+    md-list {
+      margin: 12px 0;
+      md-list-item {
+        cursor: pointer;
+      }
     }
   }
 }
-
-.o-list-picker-dialog  md-toolbar {
-  &.mat-toolbar .mat-toolbar-row {
-    padding-top: 8px;
-    box-sizing: content-box;
-  }
-  o-search-input,
-  o-search-input md-form-field {
-    width: 100%;
-  }
-}
-

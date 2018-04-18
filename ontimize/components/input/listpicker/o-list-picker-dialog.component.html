@@ -1,15 +1,19 @@
 <md-toolbar color="primary" class="mat-elevation-z5" *ngIf="filter">
-  <o-search-input class="list-picker-search" (onSearch)="searchVal=$event"></o-search-input>
+  <o-search-input #searchInput class="list-picker-search" (onSearch)="onFilterList($event)"></o-search-input>
 </md-toolbar>
-<div md-dialog-content class="dialog-list-container">
+<div md-dialog-content class="dialog-list-container" (scroll)="onScroll($event)">
   <md-list>
-    <md-list-item class="mat-1-line" (click)="onClickListItem($event, item)" fxFill
-      *ngFor="let item of data | columnsfilter: {filtervalue: searchVal, filtercolumns: visibleColsArray }">
+    <!--EMPTY LIST -->
+    <md-list-item class="mat-1-line" fxFill *ngIf="visibleData.length === 0">
+      {{'LIST.EMPTY' | oTranslate}}
+      <ng-container *ngIf="filter && searchInput && searchInput.getValue().length > 0">
+        {{ 'LIST.EMPTY_USING_FILTER' | oTranslate : { values: [searchInput.getValue()] } }}
+      </ng-container>
+    </md-list-item>
+    <md-list-item class="mat-1-line" (click)="onClickListItem($event, item)" fxFill *ngFor="let item of visibleData; trackBy: trackByFn">
       <div fxLayout="column" fxFill>
         <div fxLayout="row" fxFill>
-          <div #colWrapper *ngFor="let col of visibleColsArray" class="clip-text" fxFlex="auto">
-            <p class="mat-list-item-text"> {{item[col]}} </p>
-          </div>
+          <p class="mat-list-item-text"> {{ item['_parsedVisibleColumnText'] }} </p>
         </div>
         <md-divider></md-divider>
       </div>
@@ -17,8 +21,8 @@
   </md-list>
 </div>
 <md-dialog-actions align="end">
-    <span fxFlex></span>
-    <button md-button class="mat-primary" md-dialog-close>
-      <span>{{ 'CANCEL' | oTranslate | uppercase }}</span>
-    </button>
+  <span fxFlex></span>
+  <button md-button class="mat-primary" md-dialog-close>
+    <span>{{ 'CANCEL' | oTranslate | uppercase }}</span>
+  </button>
 </md-dialog-actions>
