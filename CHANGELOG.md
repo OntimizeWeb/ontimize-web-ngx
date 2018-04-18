@@ -50,11 +50,10 @@ export const CONFIG: Config = {
 
 ## 2.1.3 (2018-18-04)
 ### Features
-* **o-list-picker**
-  * New '*query-rows*' input ([8b1e4ef](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/8b1e4ef))
-  * Rendering list picker dialog when scrolling ([8b1e4ef](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/8b1e4ef))
-  * Allowing to pre-filter content using input text
-  * This features only work statically (component query retrieves all records)
+* **o-list-picker**:
+  * There is a new '*query-rows*' (number) input. This input indicates how many elements are initially rendered in the list picker dialog. When the dialog scroll hits bottom a new set of elements are rendered ([8b1e4ef](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/8b1e4ef))
+    * NOTE: This feature only works with the data retrieved by the list picker. It does not filter the data remotely.
+  * Allowing to pre-filter content using the component input text before opening the dialog.
 
 ### Bug Fixes
 * **o-table**: Fixing bug when using parent-keys ([ae64e93](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ae64e93))
