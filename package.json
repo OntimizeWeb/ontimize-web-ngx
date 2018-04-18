@@ -18,10 +18,7 @@
   "typings": "./index.d.ts",
   "scripts": {
     "preinstall": "npm config set package-lock false",
-    "rimraf": "rimraf",
-    "clean": "rimraf dist tmp",
-    "build2": "ontimize-web-ngx-library build --package ontimize-web-ngx",
-    "build": "node build.js"
+    "build": "o-ngx-lib-builder build --package ontimize-web-ngx --ng-library ng.ontimizeWeb"
   },
   "dependencies": {
     "moment": "2.19.3",
@@ -54,6 +51,7 @@
     "webpack": "3.11.0"
   },
   "devDependencies": {
+    "ontimize-web-ngx-library-tools": "file:C:\\workspace\\github\\TOOLS\\ontimize-web-ngx-library-tools\\ontimize-web-ngx-library-tools-1.0.0.tgz",
     "@angular/animations": "5.2.10",
     "@angular/cdk": "5.2.4",
     "@angular/common": "5.2.10",
@@ -94,14 +92,6 @@
     "typescript": "2.4.2",
     "webpack": "3.11.0",
     "tslint": "5.8.0",
-    "chalk": "2.3.0",
-    "shelljs": "0.7.8",
-    "codelyzer": "4.0.2",
-    "rollup": "0.50.0",
-    "rollup-plugin-commonjs": "9.1.0",
-    "rollup-plugin-license": "0.6.0",
-    "rollup-plugin-node-resolve": "3.0.0",
-    "rollup-plugin-sourcemaps": "0.4.2",
-    "uglify-js": "3.1.6"
+    "codelyzer": "4.0.2"
   }
 }
