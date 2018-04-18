@@ -3,14 +3,14 @@ import {
   NgModule,
   ViewEncapsulation
 } from '@angular/core';
-import { FormGroup, FormControl} from '@angular/forms';
+import { FormGroup, FormControl } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/distinctUntilChanged';
 
 import { OTranslateService } from '../../services';
 import { OSharedModule } from '../../shared';
-import { CommonModule } from '@angular/common';
 
 export const DEFAULT_INPUTS_O_SEARCH_INPUT = [
   'placeholder'
@@ -24,12 +24,8 @@ export const DEFAULT_OUTPUTS_O_SEARCH_INPUT = [
   selector: 'o-search-input',
   templateUrl: './o-search-input.component.html',
   styleUrls: ['./o-search-input.component.scss'],
-  inputs: [
-    ...DEFAULT_INPUTS_O_SEARCH_INPUT
-  ],
-  outputs: [
-    ...DEFAULT_OUTPUTS_O_SEARCH_INPUT
-  ],
+  inputs: DEFAULT_INPUTS_O_SEARCH_INPUT,
+  outputs: DEFAULT_OUTPUTS_O_SEARCH_INPUT,
   encapsulation: ViewEncapsulation.None
 })
 export class OSearchInputComponent implements OnInit {
@@ -43,7 +39,6 @@ export class OSearchInputComponent implements OnInit {
 
   protected formGroup: FormGroup;
   protected term: FormControl;
-  protected value: string = '';
 
   protected translateService: OTranslateService;
 
@@ -70,7 +65,11 @@ export class OSearchInputComponent implements OnInit {
   }
 
   getValue(): string {
-    return this.value;
+    return this.term.value;
+  }
+
+  getFormControl(): FormControl {
+    return this.term;
   }
 
   get placeHolder(): string {
