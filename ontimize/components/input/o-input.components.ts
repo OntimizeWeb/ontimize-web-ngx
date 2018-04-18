@@ -11,5 +11,6 @@ export * from './nif-input/o-nif-input.component';
 export * from './password-input/o-password-input.component';
 export * from './percent-input/o-percent-input.component';
 export * from './real-input/o-real-input.component';
+export * from './search-input/o-search-input.component';
 export * from './text-input/o-text-input.component';
 export * from './textarea-input/o-textarea-input.component';

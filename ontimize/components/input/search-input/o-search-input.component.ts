@@ -1,16 +1,12 @@
-import {
-  Component, OnInit, EventEmitter, Injector,
-  NgModule,
-  ViewEncapsulation
-} from '@angular/core';
+import { Component, OnInit, EventEmitter, Injector, NgModule, ViewEncapsulation } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/distinctUntilChanged';
 
-import { OTranslateService } from '../../services';
-import { OSharedModule } from '../../shared';
+import { OTranslateService } from '../../../services';
+import { OSharedModule } from '../../../shared';
 
 export const DEFAULT_INPUTS_O_SEARCH_INPUT = [
   'placeholder'
