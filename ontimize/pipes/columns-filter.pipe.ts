@@ -1,4 +1,4 @@
-import { Pipe, PipeTransform  } from '@angular/core';
+import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
   name: 'columnsfilter'
@@ -17,7 +17,7 @@ export class ColumnsFilterPipe implements PipeTransform {
     this.filterValue = args['filtervalue'] ? args['filtervalue'] : '';
     this.filterColumns = args['filtercolumns'];
 
-    if (!this.filterColumns) {
+    if (!this.filterColumns || !this.filterValue || this.filterValue.length === 0) {
       return value;
     }
 
@@ -26,27 +26,25 @@ export class ColumnsFilterPipe implements PipeTransform {
     }
 
     let that = this;
-    return value.filter(
-      (item) => {
-        for (let i = 0; i < that.filterColumns.length; i++) {
-          let colName = that.filterColumns[i];
-          if (this._isBlank(colName)) {
+    return value.filter((item) => {
+      for (let i = 0; i < that.filterColumns.length; i++) {
+        let colName = that.filterColumns[i];
+        if (this._isBlank(colName)) {
+          continue;
+        }
+        let origValue = item[colName];
+        if (origValue) {
+          origValue = origValue.toString();
+          if (this._isBlank(origValue)) {
             continue;
           }
-          let origValue = item[colName];
-          if (origValue) {
-            origValue = origValue.toString();
-            if (this._isBlank(origValue)) {
-              continue;
-            }
 
-            if (origValue.toUpperCase().indexOf(that.filterValue.toUpperCase()) > -1) {
-              return item;
-            }
+          if (origValue.toUpperCase().indexOf(that.filterValue.toUpperCase()) > -1) {
+            return item;
           }
         }
       }
-    );
+    });
   }
 
   _isBlank(value: string): boolean {
