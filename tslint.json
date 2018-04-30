@@ -17,7 +17,7 @@
     "no-eval": true,
     "no-trailing-whitespace": true,
     "no-unused-expression": true,
-    "no-unused-variable": true,
+    "no-unused-variable": false,
     "no-use-before-declare": true,
     "one-line": [
       true,
@@ -33,10 +33,6 @@
     "semicolon": [
       true,
       "always"
-    ],
-    "comma-dangle": [
-      true,
-      "never"
     ],
     "trailing-comma": [
       true

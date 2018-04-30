@@ -16,18 +16,10 @@ import {
   Inject
 } from '@angular/core';
 
-import {
-  NG_VALUE_ACCESSOR,
-  ControlValueAccessor
-} from '@angular/forms';
-
+import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import {
-  MdPlaceholder,
-  MdHint
-} from '@angular/material';
+import { MatPlaceholder, MatHint } from '@angular/material';
 import { Observable } from 'rxjs/Observable';
-
 import { InputConverter } from '../../../decorators';
 import { OHTMLInputComponent } from '../../input/html-input/o-html-input.component';
 import { OSharedModule } from '../../../shared';
@@ -76,8 +68,8 @@ export class CKEditor implements ControlValueAccessor {
   /**
    * Content directives.
    */
-  @ContentChild(MdPlaceholder) _placeholderChild: MdPlaceholder;
-  @ContentChildren(MdHint) _hintChildren: QueryList<MdHint>;
+  @ContentChild(MatPlaceholder) _placeholderChild: MatPlaceholder;
+  @ContentChildren(MatHint) _hintChildren: QueryList<MatHint>;
 
   /** Readonly properties. */
   get focused() { return this._focused; }
@@ -103,7 +95,7 @@ export class CKEditor implements ControlValueAccessor {
     return this._focusEmitter.asObservable();
   }
 
-  get isDisabled() : boolean {
+  get isDisabled(): boolean {
     return this.disabled;
   }
 
@@ -340,7 +332,7 @@ export class CKEditor implements ControlValueAccessor {
 @NgModule({
   declarations: [CKEditor],
   imports: [OSharedModule, CommonModule],
-  exports: [CKEditor],
+  exports: [CKEditor]
 })
 export class MdCKEditorModule {
 }

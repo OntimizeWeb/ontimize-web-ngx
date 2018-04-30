@@ -10,12 +10,11 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common';
 
 import { OTranslateService } from '../../services';
-
 import { OBarMenuModule, OBarMenuComponent } from './o-bar-menu.component';
 import { OSharedModule } from '../../shared';
-import { CommonModule } from '@angular/common';
 
 export const DEFAULT_INPUTS_O_LOCALE_BAR_MENU_ITEM = [
   // title [string]: menu item title. Default: no value.
@@ -35,9 +34,7 @@ export const DEFAULT_INPUTS_O_LOCALE_BAR_MENU_ITEM = [
   selector: 'o-locale-bar-menu-item',
   templateUrl: './o-locale-bar-menu-item.component.html',
   styleUrls: ['./o-locale-bar-menu-item.component.scss'],
-  inputs: [
-    ...DEFAULT_INPUTS_O_LOCALE_BAR_MENU_ITEM
-  ],
+  inputs: DEFAULT_INPUTS_O_LOCALE_BAR_MENU_ITEM,
   encapsulation: ViewEncapsulation.None
 })
 export class OLocaleBarMenuItemComponent implements OnInit {
@@ -104,7 +101,7 @@ export class OLocaleBarMenuItemComponent implements OnInit {
     return this._title;
   }
 
-  set title(val : string) {
+  set title(val: string) {
     this._title = val;
   }
 
@@ -112,7 +109,7 @@ export class OLocaleBarMenuItemComponent implements OnInit {
     return this._tooltip;
   }
 
-  set tooltip(val : string) {
+  set tooltip(val: string) {
     this._tooltip = val;
   }
 
@@ -120,7 +117,7 @@ export class OLocaleBarMenuItemComponent implements OnInit {
     return this._icon;
   }
 
-  set icon(val : string) {
+  set icon(val: string) {
     this._icon = val;
   }
 
@@ -128,7 +125,7 @@ export class OLocaleBarMenuItemComponent implements OnInit {
     return this._locale;
   }
 
-  set locale(val : string) {
+  set locale(val: string) {
     this._locale = val;
   }
 
@@ -136,7 +133,7 @@ export class OLocaleBarMenuItemComponent implements OnInit {
     return this._isHovered;
   }
 
-  set isHovered(val : boolean) {
+  set isHovered(val: boolean) {
     this._isHovered = val;
   }
 }
@@ -144,7 +141,7 @@ export class OLocaleBarMenuItemComponent implements OnInit {
 @NgModule({
   declarations: [OLocaleBarMenuItemComponent],
   imports: [OSharedModule, CommonModule, RouterModule, OBarMenuModule],
-  exports: [OLocaleBarMenuItemComponent],
+  exports: [OLocaleBarMenuItemComponent]
 })
 export class OLocaleBarMenuItemModule {
 }

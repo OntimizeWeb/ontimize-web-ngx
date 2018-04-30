@@ -1,10 +1,10 @@
 import { Component, Injector, ViewChild, TemplateRef, OnInit, Inject, ElementRef, ViewEncapsulation } from '@angular/core';
-import { MdDateFormats, DateAdapter, MdDatepicker, MD_DATE_FORMATS, MdDatepickerInputEvent } from '@angular/material';
-import * as moment from 'moment';
+import { MatDateFormats, DateAdapter, MatDatepicker, MAT_DATE_FORMATS, MatDatepickerInputEvent, MAT_DATE_LOCALE } from '@angular/material';
+import { MomentDateAdapter } from '@angular/material-moment-adapter';
+import moment from 'moment';
 
 import { InputConverter } from '../../../../../decorators';
 import { MomentService } from '../../../../../services';
-import { MomentDateAdapter } from '../../../../input/date-input/adapter/moment.adapter';
 import { O_DATE_INPUT_DEFAULT_FORMATS, DateFilterFunction } from '../../../../input/date-input/o-date-input.component';
 
 import { OBaseTableCellEditor } from '../o-base-table-cell-editor.class';
@@ -33,8 +33,8 @@ export const DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_DATE = [
   outputs: DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_DATE,
   encapsulation: ViewEncapsulation.None,
   providers: [
-    { provide: DateAdapter, useClass: MomentDateAdapter },
-    { provide: MD_DATE_FORMATS, useValue: O_DATE_INPUT_DEFAULT_FORMATS }
+    { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
+    { provide: MAT_DATE_FORMATS, useValue: O_DATE_INPUT_DEFAULT_FORMATS }
   ]
 })
 
@@ -46,7 +46,7 @@ export class OTableCellEditorDateComponent extends OBaseTableCellEditor implemen
   @ViewChild('templateref', { read: TemplateRef }) public templateref: TemplateRef<any>;
   @ViewChild('input') inputRef: ElementRef;
 
-  protected format: string = 'L';
+  format: string = 'L';
   protected locale: string;
   oStartView: 'month' | 'year' = 'month';
   protected min: string;
@@ -64,10 +64,10 @@ export class OTableCellEditorDateComponent extends OBaseTableCellEditor implemen
   minDateString: string;
   maxDateString: string;
 
-  protected datepicker: MdDatepicker<Date>;
+  protected datepicker: MatDatepicker<Date>;
   constructor(
     protected injector: Injector,
-    @Inject(MD_DATE_FORMATS) protected mdDateFormats: MdDateFormats,
+    @Inject(MAT_DATE_FORMATS) protected matDateFormats: MatDateFormats,
     protected momentDateAdapter: DateAdapter<MomentDateAdapter>
   ) {
     super(injector);
@@ -81,11 +81,11 @@ export class OTableCellEditorDateComponent extends OBaseTableCellEditor implemen
       this.locale = this.momentSrv.getLocale();
     }
     if (this.format) {
-      this.mdDateFormats.display.dateInput = this.format;
-      this.mdDateFormats.parse.dateInput = this.format;
+      this.matDateFormats.display.dateInput = this.format;
+      this.matDateFormats.parse.dateInput = this.format;
     }
 
-    this.momentDateAdapter.setLocale({ locale: this.locale, format: this.format });
+    this.momentDateAdapter.setLocale(this.locale);
     if (this.startAt) {
       this.oStartAt = new Date(this.startAt);
     }
@@ -145,11 +145,11 @@ export class OTableCellEditorDateComponent extends OBaseTableCellEditor implemen
     }
   }
 
-  onDateChange(event: MdDatepickerInputEvent<any>) {
+  onDateChange(event: MatDatepickerInputEvent<any>) {
     super.commitEdition();
   }
 
-  openDatepicker(d: MdDatepicker<Date>) {
+  openDatepicker(d: MatDatepicker<Date>) {
     this.datepicker = d;
     d.open();
   }

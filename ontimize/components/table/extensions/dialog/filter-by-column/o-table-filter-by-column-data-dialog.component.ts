@@ -1,5 +1,5 @@
 import { Component, Inject, ViewEncapsulation, ViewChild, ElementRef, OnInit, AfterViewInit } from '@angular/core';
-import { MdDialogRef, MD_DIALOG_DATA, MdCheckboxChange } from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA, MatCheckboxChange } from '@angular/material';
 import { Observable } from 'rxjs/Observable';
 import { IColumnValueFilter } from '../../header/o-table-header-components';
 
@@ -26,8 +26,8 @@ export class OTableFilterByColumnDataDialogComponent implements OnInit, AfterVie
   @ViewChild('filter') filter: ElementRef;
 
   constructor(
-    public dialogRef: MdDialogRef<OTableFilterByColumnDataDialogComponent>,
-    @Inject(MD_DIALOG_DATA) data: any
+    public dialogRef: MatDialogRef<OTableFilterByColumnDataDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) data: any
   ) {
 
     if (data.columnAttr) {
@@ -98,7 +98,7 @@ export class OTableFilterByColumnDataDialogComponent implements OnInit, AfterVie
     return this.selectedValues.length > 0 && this.selectedValues.length !== this.columnData.length;
   }
 
-  onSelectAllChange(event: MdCheckboxChange) {
+  onSelectAllChange(event: MatCheckboxChange) {
     this.columnData.forEach((item: ITableFilterByColumnDataInterface) => {
       item.selected = event.checked;
     });

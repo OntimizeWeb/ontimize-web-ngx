@@ -1,16 +1,16 @@
-<md-toolbar color="primary">
-  <div md-ripple layout-padding fxLayout="row" fxLayoutAlign="space-between stretch" class="o-side-menu-icon-open" (click)="showSidenav()">
-    <md-icon class="mat-24">menu</md-icon>
+<mat-toolbar color="primary">
+  <div mat-ripple layout-padding fxLayout="row" fxLayoutAlign="space-between stretch" class="o-side-menu-icon-open" (click)="showSidenav()">
+    <mat-icon class="mat-24">menu</mat-icon>
   </div>
-</md-toolbar>
+</mat-toolbar>
 
-<md-sidenav-container [class.menu-opened]="opened">
-  <md-sidenav #sidenav>
+<mat-sidenav-container [class.menu-opened]="opened">
+  <mat-sidenav #sidenav>
     <h3>
       <span>{{ title | oTranslate }}</span>
     </h3>
-    <md-nav-list>
+    <mat-nav-list>
       <ng-content></ng-content>
-    </md-nav-list>
-  </md-sidenav>
-</md-sidenav-container>
+    </mat-nav-list>
+  </mat-sidenav>
+</mat-sidenav-container>

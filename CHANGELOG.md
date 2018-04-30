@@ -1,3 +1,53 @@
+## 3.0.0-rc.0  (2018-04-30)
+
+### DEPENDENCY UPDATES ###
+* **Removed**:  dragula@^3.7.2
+* **Removed**:  ng2-dragula@1.3.1
+* **Added**  :  ng2-dnd@5.0.2
+
+### PEER-DEPENDENCY UPDATES ###
+* **Updated**:  @angular@5.2.10
+* **Updated**:  @angular/cli@1.7.3
+* **Updated**:  @angular/material@5.2.4"
+* **Updated**:  @angular/cdk@5.2.4"
+* **Updated**:  @angular/flex-layout@5.0.0-beta.13
+* **Updated**:  @ngx-translate/core@9.1.1
+* **Updated**:  @ngx-translate/http-loader@2.0.1
+* **Updated**:  core-js@2.5.3
+* **Updated**:  rxjs@5.5.6
+* **Updated**:  zone.js@0.8.20
+* **Updated**:  reflect-metadata@0.1.12
+* **New**:      @angular/material-moment-adapter@5.2.4
+* **New**:      typescript@2.4.2
+* **New**:      webpack@3.11.0
+
+### BREAKING CHANGES
+* **Angular and Angular Material**: updating versions ([be5d6d7](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/be5d6d7))
+* **Services**: all services now are using '*HTTPClient*' instead of '*HTTP*' ([184b5df](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/184b5df))
+* **o-table-visible-columns-dialog**: drag and drop library changed from '*dragula*' to '*ng2-dnd*' ([0e054f4](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0e054f4))
+
+### Features
+* **o-combo**: `mat-select` is now used inside `mat-form-field`. This makes all of the existing form-field features available with `mat-select`, including hints, errors, prefixes, and suffixes. This also ensures that `mat-select` and `matInput` have a consistent presentation ([9c2acbb](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9c2acbb))
+* **o-list-picker**: improving performance ([64820b8](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/64820b8))
+* **MomentDateAdapter**: Using angular material '*MomentDateAdapter*' (changes should be transparent to user) ([f424199](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f424199))
+* **OntimizeWebModule**: adding '*schemas: [CUSTOM_ELEMENTS_SCHEMA]*' to exported '*OntimizeWebModule*' ([12d452d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/12d452d))
+* **app.config**: adding '*assets*' property for configuring application assets locations (only available for i18n files) ([894f592](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/894f592))
+```
+export const CONFIG: Config = {
+  ...
+  assets: {
+    i18n: {
+      path: string; //path of i18n files folder
+      extension: string; //extension of locale files
+    }
+  };
+  ...
+```
+
+### Bug Fixes
+* **o-combo**: Fixing change event emission ([a648c8b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a648c8b)) Closes [#152](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/152)
+* **o-form**: Fixing close dialog on ESC key event ([f789a64](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f789a64))
+
 ## 2.1.3 (2018-18-04)
 ### Features
 * **o-list-picker**:

@@ -33,10 +33,11 @@ export const DEFAULT_INPUTS_O_FORM_TOOLBAR = [
   selector: 'o-form-toolbar',
   templateUrl: './o-form-toolbar.component.html',
   styleUrls: ['./o-form-toolbar.component.scss'],
-  inputs: [
-    ...DEFAULT_INPUTS_O_FORM_TOOLBAR
-  ],
-  encapsulation: ViewEncapsulation.None
+  inputs: DEFAULT_INPUTS_O_FORM_TOOLBAR,
+  encapsulation: ViewEncapsulation.None,
+  host: {
+    '[class.o-form-toolbar]': 'true'
+  }
 })
 
 export class OFormToolbarComponent implements OnInit, OnDestroy {
@@ -58,11 +59,11 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
   public insertMode: boolean = false;
   public initialMode: boolean = true;
 
-  protected refreshBtnEnabled: boolean = false;
-  protected insertBtnEnabled: boolean = false;
-  protected editBtnEnabled: boolean = false;
-  protected deleteBtnEnabled: boolean = false;
-  protected saveBtnEnabled: boolean = false;
+  refreshBtnEnabled: boolean = false;
+  insertBtnEnabled: boolean = false;
+  editBtnEnabled: boolean = false;
+  deleteBtnEnabled: boolean = false;
+  saveBtnEnabled: boolean = false;
 
   protected _existsChangesToSave: boolean = false;
 

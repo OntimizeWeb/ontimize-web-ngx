@@ -27,12 +27,8 @@ export const DEFAULT_OUTPUTS_O_CURRENCY_INPUT = [
   selector: 'o-currency-input',
   templateUrl: './o-currency-input.component.html',
   styleUrls: ['./o-currency-input.component.scss'],
-  inputs: [
-    ...DEFAULT_INPUTS_O_CURRENCY_INPUT
-  ],
-  outputs: [
-    ...DEFAULT_OUTPUTS_O_CURRENCY_INPUT
-  ],
+  inputs: DEFAULT_INPUTS_O_CURRENCY_INPUT,
+  outputs: DEFAULT_OUTPUTS_O_CURRENCY_INPUT,
   encapsulation: ViewEncapsulation.None
 })
 export class OCurrencyInputComponent extends ORealInputComponent implements OnInit {
@@ -78,7 +74,7 @@ export class OCurrencyInputComponent extends ORealInputComponent implements OnIn
 @NgModule({
   declarations: [OCurrencyInputComponent],
   imports: [OSharedModule, CommonModule, ORealInputModule],
-  exports: [OCurrencyInputComponent, ORealInputModule],
+  exports: [OCurrencyInputComponent, ORealInputModule]
 })
 export class OCurrencyInputModule {
 }

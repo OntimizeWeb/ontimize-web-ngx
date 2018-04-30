@@ -1,12 +1,8 @@
-<ng-host oKeyboardListener keyboardKeys="27" (onKeysPressed)="closeDialog()">
+<mat-toolbar color="primary" class="mat-elevation-z1">
+  <span mat-dialog-title> {{ (title || 'LAYOUT_MANANGER.DIALOG_TITLE') | oTranslate }}{{ label }} </span>
+  <mat-icon (click)="closeDialog()">close</mat-icon>
+</mat-toolbar>
 
-  <md-toolbar color="primary" class="mat-elevation-z1">
-    <span md-dialog-title> {{ (title || 'LAYOUT_MANANGER.DIALOG_TITLE') | oTranslate }}{{ label }} </span>
-    <md-icon (click)="closeDialog()">close</md-icon>
-  </md-toolbar>
-
-  <div md-dialog-content class="form-layout-dialog-container">
-    <ng-template o-form-layout-manager-content></ng-template>
-  </div>
-
-</ng-host>
+<div mat-dialog-content class="form-layout-dialog-container">
+  <ng-template o-form-layout-manager-content></ng-template>
+</div>

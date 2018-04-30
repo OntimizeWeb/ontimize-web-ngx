@@ -1,5 +1,5 @@
 import { Injectable, Injector } from '@angular/core';
-import { MdSnackBar, MdSnackBarRef } from '@angular/material';
+import { MatSnackBar, MatSnackBarRef } from '@angular/material';
 import { Observable } from 'rxjs/Observable';
 
 import { OSnackBarComponent, OSnackBarConfig } from '../components/snackbar/o-snackbar.component';
@@ -9,20 +9,20 @@ export class SnackBarService {
 
   protected static DEFAULT_DURATION: number = 2000;
 
-  protected mdSnackBar: MdSnackBar;
-  protected snackBarRef: MdSnackBarRef<OSnackBarComponent>;
+  protected matSnackBar: MatSnackBar;
+  protected snackBarRef: MatSnackBarRef<OSnackBarComponent>;
 
   constructor(
     protected injector: Injector
   ) {
-    this.mdSnackBar = this.injector.get(MdSnackBar);
+    this.matSnackBar = this.injector.get(MatSnackBar);
   }
 
   public open(message: string, config?: OSnackBarConfig): Promise<any> {
     var self = this;
     let observable: Observable<any> = Observable.create(
       observer => {
-        self.snackBarRef = self.mdSnackBar.openFromComponent(OSnackBarComponent, {
+        self.snackBarRef = self.matSnackBar.openFromComponent(OSnackBarComponent, {
           duration: config && config.milliseconds ? config.milliseconds : SnackBarService.DEFAULT_DURATION
         });
         self.snackBarRef.onAction().subscribe((arg) => {

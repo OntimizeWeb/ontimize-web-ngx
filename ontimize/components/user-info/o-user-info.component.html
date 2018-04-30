@@ -5,18 +5,18 @@
         <img [src]="avatar" *ngIf="avatar" />
       </div>
       <span class="user-info-username" *ngIf="username"> {{ username }}</span>
-      <md-icon [mdMenuTriggerFor]="menu">keyboard_arrow_down</md-icon>
+      <mat-icon [matMenuTriggerFor]="menu">keyboard_arrow_down</mat-icon>
     </div>
-    <md-menu #menu="mdMenu" yPosition="below">
-      <button md-menu-item (click)="onSettingsClick()">
-        <md-icon>settings</md-icon>
+    <mat-menu #menu="matMenu" yPosition="below">
+      <button mat-menu-item (click)="onSettingsClick()">
+        <mat-icon>settings</mat-icon>
         <span>{{ 'SETTINGS' | oTranslate }}</span>
       </button>
-      <button md-menu-item (click)="onLogoutClick()">
-        <md-icon>power_settings_new</md-icon>
+      <button mat-menu-item (click)="onLogoutClick()">
+        <mat-icon>power_settings_new</mat-icon>
         <span>{{ 'LOGOUT' | oTranslate }}</span>
       </button>
-    </md-menu>
+    </mat-menu>
   </ng-container>
   <o-language-selector [use-flag-icons]="useFlagIcons"></o-language-selector>
 </div>

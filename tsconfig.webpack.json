@@ -1,8 +1,0 @@
-{
-  "extends": "./tsconfig.ngc.json",
-  "compilerOptions": {
-    "inlineSourceMap": false,
-    "inlineSources": false,
-    "sourceMap": true
-  }
-}

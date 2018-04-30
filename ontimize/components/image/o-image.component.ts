@@ -10,16 +10,14 @@ import {
   NgModule,
   ViewEncapsulation
 } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { DomSanitizer } from '@angular/platform-browser';
-
-import { MdInput } from '@angular/material';
+import { MatInput } from '@angular/material';
 
 import { OSharedModule } from '../../shared';
-import { CommonModule } from '@angular/common';
 import { InputConverter } from '../../decorators';
 import { OFormComponent } from '../form/o-form.component';
 import { OFormValue } from '../form/OFormValue';
-
 import { OFormDataComponent, DEFAULT_INPUTS_O_FORM_DATA_COMPONENT } from '../o-form-data-component.class';
 
 export const DEFAULT_INPUTS_O_IMAGE = [
@@ -56,7 +54,7 @@ export class OImageComponent extends OFormDataComponent {
   onChange: EventEmitter<Object> = new EventEmitter<Object>();
 
   @ViewChild('inputControl')
-  protected inputControl: MdInput;
+  protected inputControl: MatInput;
   @ViewChild('titleLabel')
   protected titleLabel: ElementRef;
 

@@ -1,16 +1,16 @@
-<md-tab-group #tabGroup fxFill (selectChange)="onTabSelectChange()">
-  <md-tab label="{{ (title || 'LAYOUT_MANANGER.MAIN_TAB_LABEL') | oTranslate }}">
+<mat-tab-group #tabGroup fxFill (selectedTabChange)="onTabSelectChange()">
+  <mat-tab label="{{ (title || 'LAYOUT_MANANGER.MAIN_TAB_LABEL') | oTranslate }}">
     <ng-content></ng-content>
-  </md-tab>
+  </mat-tab>
 
-  <md-tab *ngFor="let tabData of data; let i = index">
+  <mat-tab *ngFor="let tabData of data; let i = index">
     <ng-template mat-tab-label>
       <span class="tab-label" [class.modified]="tabData.modified">
         {{ tabData.label }}
       </span>
-      <md-icon (click)="onCloseTab(tabData.id)">close</md-icon>
+      <mat-icon (click)="onCloseTab(tabData.id)">close</mat-icon>
     </ng-template>
 
     <ng-template o-form-layout-manager-content [index]="i"></ng-template>
-  </md-tab>
-</md-tab-group>
+  </mat-tab>
+</mat-tab-group>

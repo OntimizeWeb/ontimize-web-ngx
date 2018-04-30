@@ -1,7 +1,7 @@
 import { Component, ViewEncapsulation, Inject, Injector, ViewChild, AfterViewInit } from '@angular/core';
-import { MdDialogRef, MD_DIALOG_DATA } from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { Util } from '../../../util/util';
-import { OSearchInputComponent } from '../../search-input/o-search-input.component';
+import { OSearchInputComponent } from '../../input/search-input/o-search-input.component';
 
 export const DEFAULT_INPUTS_O_LIST_PICKER = [
   'data',
@@ -13,9 +13,7 @@ export const DEFAULT_INPUTS_O_LIST_PICKER = [
   selector: 'o-list-picker-dialog',
   templateUrl: './o-list-picker-dialog.component.html',
   styleUrls: ['./o-list-picker.component.scss'],
-  inputs: [
-    ...DEFAULT_INPUTS_O_LIST_PICKER
-  ],
+  inputs: DEFAULT_INPUTS_O_LIST_PICKER,
   encapsulation: ViewEncapsulation.None,
   host: {
     '[class.o-list-picker-dialog]': 'true'
@@ -36,9 +34,9 @@ export class OListPickerDialogComponent implements AfterViewInit {
   @ViewChild('searchInput') searchInput: OSearchInputComponent;
 
   constructor(
-    public dialogRef: MdDialogRef<OListPickerDialogComponent>,
+    public dialogRef: MatDialogRef<OListPickerDialogComponent>,
     protected injector: Injector,
-    @Inject(MD_DIALOG_DATA) data: any
+    @Inject(MAT_DIALOG_DATA) data: any
   ) {
     if (data.data && Util.isArray(data.data)) {
       this.data = data.data;
@@ -72,7 +70,7 @@ export class OListPickerDialogComponent implements AfterViewInit {
 
   trackByFn(index: number, item: any) {
     return index;
-  };
+  }
 
   onScroll(event: any): void {
     if (event && event.target && this.visibleData.length < this.data.length) {

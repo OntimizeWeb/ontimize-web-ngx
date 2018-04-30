@@ -18,7 +18,6 @@ export class AuthGuardService implements CanActivate, IProfileService {
   public static PROFILE_ROUTE_PROPERTY = 'route';
   public static PROFILE_COMPONENTS_PROPERTY = 'components';
 
-  protected injector: Injector;
   protected router: Router;
   protected loginService: LoginService;
   protected oUserInfoService: OUserInfoService;
@@ -33,8 +32,7 @@ export class AuthGuardService implements CanActivate, IProfileService {
   protected profileObservable: Observable<any>;
 
 
-  constructor(private inj: Injector) {
-    this.injector = inj;
+  constructor(protected injector: Injector) {
 
     this.user = undefined;
     this.profile = undefined;

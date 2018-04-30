@@ -1,9 +1,7 @@
 import { Component, OnInit, Inject, Injector, Injectable, forwardRef } from '@angular/core';
-
+import { MatPaginatorIntl } from '@angular/material';
 import { OTranslateService } from '../../../../../services';
 import { OTableComponent } from '../../../o-table.component';
-
-import { MdPaginatorIntl } from '@angular/material';
 
 export const DEFAULT_PAGINATOR_TABLE = [
   // page-size [number]: Number of items to display on a page. By default set to 50.
@@ -97,7 +95,7 @@ export class OTablePaginatorComponent implements OnInit {
 
 
 @Injectable()
-export class OTableMdPaginatorIntl extends MdPaginatorIntl {
+export class OTableMatPaginatorIntl extends MatPaginatorIntl {
 
   itemsPerPageLabel;
   nextPageLabel;

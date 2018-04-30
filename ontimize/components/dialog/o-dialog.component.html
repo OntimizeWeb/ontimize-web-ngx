@@ -1,16 +1,16 @@
-<h1 *ngIf="title && title.length > 0" md-dialog-title>{{ title | oTranslate }}</h1>
-<div md-dialog-content>
+<h1 *ngIf="title && title.length > 0" mat-dialog-title>{{ title | oTranslate }}</h1>
+<div mat-dialog-content>
   <div fxLayout="row" class="alert-content" [class.alert-content-icon]="useIcon" fxLayoutAlign="space-between center">
-    <md-icon *ngIf="useIcon" class="alert-icon" [class.info]="isInfo" [class.warn]="isWarn" [class.error]="isError">{{ icon }}</md-icon>
+    <mat-icon *ngIf="useIcon" class="alert-icon" [class.info]="isInfo" [class.warn]="isWarn" [class.error]="isError">{{ icon }}</mat-icon>
     <span>{{ message | oTranslate }}</span>
   </div>
 </div>
-<md-dialog-actions align="end">
+<mat-dialog-actions align="end">
   <span fxFlex></span>
-  <button *ngIf="twoOptions" md-button class="mat-primary" md-dialog-close>
+  <button *ngIf="twoOptions" mat-button class="mat-primary" mat-dialog-close>
     <span>{{ cancelButtonText | oTranslate | uppercase }}</span>
   </button>
-  <button md-button class="mat-primary" (click)="onOkClick($event)">
+  <button mat-button class="mat-primary" (click)="onOkClick($event)">
     <span>{{ okButtonText | oTranslate | uppercase }}</span>
   </button>
-</md-dialog-actions>
+</mat-dialog-actions>

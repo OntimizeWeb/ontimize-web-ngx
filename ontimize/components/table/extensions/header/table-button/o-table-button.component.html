@@ -1,5 +1,5 @@
-<button md-button (click)="innerOnClick()" [class.hidden-action-text]="!table.showTableButtonsText">
-  <md-icon *ngIf="isIconPositionLeft()"> {{ icon }}</md-icon>
+<button mat-button (click)="innerOnClick()" [class.hidden-action-text]="!table.showTableButtonsText">
+  <mat-icon *ngIf="isIconPositionLeft()"> {{ icon }}</mat-icon>
   <span *ngIf="table.showTableButtonsText">{{ olabel | oTranslate }}</span>
-  <md-icon *ngIf="!isIconPositionLeft()"> {{ icon }}</md-icon>
+  <mat-icon *ngIf="!isIconPositionLeft()"> {{ icon }}</mat-icon>
 </button>

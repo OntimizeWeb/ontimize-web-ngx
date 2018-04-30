@@ -193,7 +193,7 @@ export class OTableColumnComponent implements OnInit {
   editionCommitted: EventEmitter<Object> = new EventEmitter<Object>();
 
   @InputConverter()
-  protected breakWord: boolean = false;
+  breakWord: boolean = false;
   @InputConverter()
   protected asyncLoad: boolean = false;
 

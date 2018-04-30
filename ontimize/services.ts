@@ -24,7 +24,7 @@ export * from './services/app-menu.service';
 export * from './services/o-user-info.service';
 export * from './services/o-modules-info.service';
 
-export * from './services/md-date-formats.factory';
+export * from './services/mat-date-formats.factory';
 export * from './services/translate/o-translate-http-loader';
 export * from './services/translate/o-translate.parser';
 

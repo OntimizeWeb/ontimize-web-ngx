@@ -49,15 +49,14 @@ $_mat-checkbox-mark-stroke-size-small: 2 / 15 * $mat-checkbox-size-small !defaul
       visibility: visible;
       opacity: 1;
 
-          -moz-transition: opacity 0.25s linear;
+      -moz-transition: opacity 0.25s linear;
       -webkit-transition: opacity 0.25s linear;
-              transition: opacity 0.25s linear;
+      transition: opacity 0.25s linear;
 
       .mat-progress-spinner {
         height: 100%;
-      }
-      path {
-        stroke-width: 3px !important;
+        left: calc(50% - 50px);
+        top: calc(50% - 50px);
       }
     }
 
@@ -72,6 +71,7 @@ $_mat-checkbox-mark-stroke-size-small: 2 / 15 * $mat-checkbox-size-small !defaul
         min-height: 48px;
       }
     }
+
     .mat-table {
 
       &.small {
@@ -153,7 +153,7 @@ $_mat-checkbox-mark-stroke-size-small: 2 / 15 * $mat-checkbox-size-small !defaul
             margin-right: 8px;
             margin-bottom: 4px;
           }
-          &:not([md-sort-header]) {
+          &:not([mat-sort-header]) {
             text-align:center;
             cursor: default;
           }
@@ -242,10 +242,6 @@ $_mat-checkbox-mark-stroke-size-small: 2 / 15 * $mat-checkbox-size-small !defaul
 
     &.disabled {
 
-      // .dt-buttons {
-      //   display: none;
-      // }
-
       thead {
         tr {
           &::before {
@@ -318,13 +314,36 @@ $_mat-checkbox-mark-stroke-size-small: 2 / 15 * $mat-checkbox-size-small !defaul
         flex: 0 0 auto;
 
       }
-
-
     }
 
+  }
+  /* Workaround for bug when a table is inside a tab */
+  .o-table-container.tab-container {
 
+    .active-sort {
+      .mat-sort-header-arrow {
+        opacity: 1!important;
+        transform: translateY(0px)!important;
+      }
+      &.desc {
+        .mat-sort-header-indicator {
+          transform: translateY(10px);
+        }
+        .mat-sort-header-pointer-left {
+          transform: rotate(45deg);
+        }
+        .mat-sort-header-pointer-right {
+          transform: rotate(-45deg);
+        }
+      }
+    }
 
-
+    .mat-sort-header-pointer-left {
+      transform: rotate(-45deg);
+    }
+    .mat-sort-header-pointer-right {
+      transform: rotate(45deg);
+    }
   }
 }
 

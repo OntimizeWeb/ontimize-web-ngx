@@ -1,5 +1,5 @@
 import { Component, ViewEncapsulation, Injector, ComponentFactoryResolver, ViewContainerRef, ViewChildren, QueryList, ViewChild, AfterViewInit, EventEmitter, OnDestroy } from '@angular/core';
-import { MdTabGroup } from '@angular/material';
+import { MatTabGroup } from '@angular/material';
 import { Subscription } from 'rxjs/Subscription';
 import { OFormLayoutManagerContentDirective } from '../directives/o-form-layout-manager-content.directive';
 import { IDetailComponentData, OFormLayoutManagerComponent } from '../o-form-layout-manager.component';
@@ -35,7 +35,7 @@ export class OFormLayoutTabGroupComponent implements AfterViewInit, OnDestroy {
   title: string;
 
   private _ignoreTabsDirectivesChange: boolean = false;
-  @ViewChild('tabGroup') tabGroup: MdTabGroup;
+  @ViewChild('tabGroup') tabGroup: MatTabGroup;
   @ViewChildren(OFormLayoutManagerContentDirective) tabsDirectives: QueryList<OFormLayoutManagerContentDirective>;
 
   protected closeTabSubscription: Subscription;

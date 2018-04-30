@@ -1,9 +1,8 @@
 <ng-template #templateref let-cellvalue="cellvalue" let-rowvalue="rowvalue">
   <div [formGroup]="formGroup">
-    <md-form-field floatPlaceholder="never">
-      <input #input mdInput type="text" [placeholder]="getPlaceholder()" [formControl]="formControl" [required]="orequired">
-
-      <md-error *ngIf="hasError('required')">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</md-error>
-    </md-form-field>
+    <mat-form-field floatPlaceholder="never">
+      <input #input matInput type="text" [placeholder]="getPlaceholder()" [formControl]="formControl" [required]="orequired">
+      <mat-error *ngIf="hasError('required')">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</mat-error>
+    </mat-form-field>
   </div>
 </ng-template>

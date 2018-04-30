@@ -1,9 +1,8 @@
-.o-table-vcd-content {
-  md-list-item {
+.o-table-visible-columns-dialog {
+  mat-list-item {
     cursor: pointer;
-  }
-
-  .o-table-vcd-listitem.gu-transit {
-    background: #EBEBEB;
+    &.dnd-sortable-drag {
+      background: #EBEBEB;
+    }
   }
 }

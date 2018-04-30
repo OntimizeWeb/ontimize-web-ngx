@@ -2,6 +2,7 @@
 import { Injector, EventEmitter } from '@angular/core';
 import { UrlSegmentGroup, ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/combineLatest';
 import { Subscription } from 'rxjs/Subscription';
 
 import { Util, SQLTypes } from '../../../utils';

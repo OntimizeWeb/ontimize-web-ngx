@@ -146,7 +146,7 @@ export class OBaseTableCellEditor implements OnInit {
 
   hasErrorExclusive(error: string): boolean {
     let hasError = false;
-    const errorsOrder = ['mdDatepickerMax', 'mdDatepickerMin', 'mdDatepickerFilter', 'mdDatepickerParse', 'required'];
+    const errorsOrder = ['matDatepickerMax', 'matDatepickerMin', 'matDatepickerFilter', 'matDatepickerParse', 'required'];
     const errors = this.formControl.errors;
     if (Util.isDefined(errors)) {
       if (Object.keys(errors).length === 1) {

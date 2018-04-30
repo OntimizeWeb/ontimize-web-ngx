@@ -15,11 +15,11 @@
 
   o-form-toolbar {
     &.o-form-toolbar-floating{
-      position: fixed;
+      position: relative;
       box-shadow: none;
       z-index: 100;
       right: 8px;
-      left: 8px;
+      left: 0px;
 
       &.o-form-toolbar-floating-scrolled {
         right: 26px;

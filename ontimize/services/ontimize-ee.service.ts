@@ -1,5 +1,5 @@
 import { Injector, Injectable } from '@angular/core';
-import { Http, Headers, RequestOptions, RequestMethod } from '@angular/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
@@ -22,7 +22,7 @@ export class OntimizeEEService implements IAuthService, IDataService {
   public orderby: Array<Object> = [];
   public totalsize: number = -1;
 
-  protected http: Http;
+  protected httpClient: HttpClient;
   protected _sessionid: string;
   protected _urlBase: string;
   protected _appConfig: Config;
@@ -31,7 +31,7 @@ export class OntimizeEEService implements IAuthService, IDataService {
   protected responseParser: OntimizeServiceResponseParser;
 
   constructor(protected injector: Injector) {
-    this.http = this.injector.get(Http);
+    this.httpClient = this.injector.get(HttpClient);
     this._config = this.injector.get(AppConfig);
     this._appConfig = this._config.getConfiguration();
     this.responseParser = this.injector.get(OntimizeServiceResponseParser);
@@ -66,31 +66,24 @@ export class OntimizeEEService implements IAuthService, IDataService {
   }
 
   public startsession(user: string, password: string) {
-
     const url = this.urlBase + this._startSessionPath;
-    const headers: Headers = new Headers();
-    const authorization = 'Basic ' + btoa(user + ':' + password);
-    headers.append('Authorization', authorization);
-    const options = new RequestOptions({
-      headers: headers
-    });
-
-    const body = JSON.stringify({});
-
+    const options: any = {
+      headers: new HttpHeaders({
+        'Authorization': 'Basic ' + btoa(user + ':' + password)
+      }),
+      'observe': 'response'
+    };
     let _startSessionObserver: any;
     const startSessionObservable = new Observable(observer => _startSessionObserver = observer).share();
 
-    this.http
-      .post(url, body, options)
-      .map((res: any) => res.headers.get('X-Auth-Token'))
-      .subscribe(resp => {
-        if (resp !== undefined) {
-          _startSessionObserver.next(resp);
-        } else {
-          // Invalid sessionId...
-          _startSessionObserver.error('Invalid user or password');
-        }
-      }, error => _startSessionObserver.error(error));
+    this.httpClient.post(url, null, options).subscribe((resp: any) => {
+      if (Util.isDefined(resp) && Util.isDefined(resp.headers) && Util.isDefined(resp.headers.get('X-Auth-Token'))) {
+        _startSessionObserver.next(resp.headers.get('X-Auth-Token'));
+      } else {
+        // Invalid sessionId...
+        _startSessionObserver.error('Invalid user or password');
+      }
+    }, error => _startSessionObserver.error(error));
     return startSessionObservable;
   }
 
@@ -116,27 +109,23 @@ export class OntimizeEEService implements IAuthService, IDataService {
     sqltypes = (Util.isDefined(sqltypes)) ? sqltypes : this.sqltypes;
 
     const url = this._urlBase + this.path + '/' + entity + '/search';
-
-    const headers: Headers = this.buildHeaders();
-
+    const options = {
+      headers: this.buildHeaders()
+    };
     const body = JSON.stringify({
       filter: kv,
       columns: av,
       sqltypes: sqltypes
     });
-
     let _innerObserver: any;
     const dataObservable = new Observable(observer => _innerObserver = observer).share();
 
     const self = this;
-    this.http
-      .post(url, body, { headers: headers })
-      .map(response => response.json())
-      .subscribe(resp => {
-        self.responseParser.parseSuccessfulResponse(resp, _innerObserver, this);
-      }, error => {
-        self.responseParser.parseUnsuccessfulResponse(error, _innerObserver, this);
-      },
+    this.httpClient.post(url, body, options).subscribe(resp => {
+      self.responseParser.parseSuccessfulResponse(resp, _innerObserver, this);
+    }, error => {
+      self.responseParser.parseUnsuccessfulResponse(error, _innerObserver, this);
+    },
       () => _innerObserver.complete());
 
     return dataObservable;
@@ -155,9 +144,9 @@ export class OntimizeEEService implements IAuthService, IDataService {
     pagesize = (Util.isDefined(pagesize)) ? pagesize : this.pagesize;
 
     const url = this._urlBase + this.path + '/' + entity + '/advancedsearch';
-
-    const headers: Headers = this.buildHeaders();
-
+    const options = {
+      headers: this.buildHeaders()
+    };
     const body = JSON.stringify({
       filter: kv,
       columns: av,
@@ -171,24 +160,20 @@ export class OntimizeEEService implements IAuthService, IDataService {
     const dataObservable = new Observable(observer => _innerObserver = observer).share();
 
     const self = this;
-    this.http
-      .post(url, body, { headers: headers })
-      .map(response => response.json())
-      .subscribe(resp => {
-        self.responseParser.parseSuccessfulResponse(resp, _innerObserver, this);
-      }, error => {
-        self.responseParser.parseUnsuccessfulResponse(error, _innerObserver, this);
-      },
+    this.httpClient.post(url, body, options).subscribe(resp => {
+      self.responseParser.parseSuccessfulResponse(resp, _innerObserver, this);
+    }, error => {
+      self.responseParser.parseUnsuccessfulResponse(error, _innerObserver, this);
+    },
       () => _innerObserver.complete());
     return dataObservable;
   }
 
   public insert(av: Object = {}, entity: string, sqltypes?: Object): Observable<any> {
-
     const url = this._urlBase + this.path + '/' + entity;
-
-    const headers: Headers = this.buildHeaders();
-
+    const options = {
+      headers: this.buildHeaders()
+    };
     const body = JSON.stringify({
       data: av,
       sqltypes: sqltypes
@@ -198,24 +183,20 @@ export class OntimizeEEService implements IAuthService, IDataService {
     const dataObservable = new Observable(observer => _innerObserver = observer).share();
 
     const self = this;
-    this.http
-      .post(url, body, { headers: headers })
-      .map(response => response.json())
-      .subscribe(resp => {
-        self.responseParser.parseSuccessfulResponse(resp, _innerObserver, this);
-      }, error => {
-        self.responseParser.parseUnsuccessfulResponse(error, _innerObserver, this);
-      },
+    this.httpClient.post(url, body, options).subscribe(resp => {
+      self.responseParser.parseSuccessfulResponse(resp, _innerObserver, this);
+    }, error => {
+      self.responseParser.parseUnsuccessfulResponse(error, _innerObserver, this);
+    },
       () => _innerObserver.complete());
     return dataObservable;
   }
 
   public update(kv: Object = {}, av: Object = {}, entity?: string, sqltypes?: Object): Observable<any> {
-
     const url = this._urlBase + this.path + '/' + entity;
-
-    const headers: Headers = this.buildHeaders();
-
+    const options = {
+      headers: this.buildHeaders()
+    };
     const body = JSON.stringify({
       filter: kv,
       data: av,
@@ -224,50 +205,34 @@ export class OntimizeEEService implements IAuthService, IDataService {
 
     let _innerObserver: any;
     const dataObservable = new Observable(observer => _innerObserver = observer).share();
-
     const self = this;
-    this.http
-      .put(url, body, { headers: headers })
-      .map(response => response.json())
-      .subscribe(resp => {
-        self.responseParser.parseSuccessfulResponse(resp, _innerObserver, this);
-      }, error => {
-        self.responseParser.parseUnsuccessfulResponse(error, _innerObserver, this);
-      },
+    this.httpClient.put(url, body, options).subscribe(resp => {
+      self.responseParser.parseSuccessfulResponse(resp, _innerObserver, this);
+    }, error => {
+      self.responseParser.parseUnsuccessfulResponse(error, _innerObserver, this);
+    },
       () => _innerObserver.complete());
-
     return dataObservable;
   }
 
   public delete(kv: Object = {}, entity?: string, sqltypes?: Object): Observable<any> {
-
     const url = this._urlBase + this.path + '/' + entity;
-
-    const headers: Headers = this.buildHeaders();
-
-    const body = JSON.stringify({
-      filter: kv,
-      sqltypes: sqltypes
-    });
-
-    const options = new RequestOptions({
-      method: RequestMethod.Delete,
+    const headers: HttpHeaders = this.buildHeaders();
+    const options: any = {
       headers: headers,
-      body: body
-    });
-
+      params: {
+        filter: kv,
+        sqltypes: sqltypes
+      }
+    };
     let _innerObserver: any;
     const dataObservable = new Observable(observer => _innerObserver = observer).share();
-
     const self = this;
-    this.http
-      .request(url, options)
-      .map(response => response.json())
-      .subscribe(resp => {
-        self.responseParser.parseSuccessfulResponse(resp, _innerObserver, this);
-      }, error => {
-        self.responseParser.parseUnsuccessfulResponse(error, _innerObserver, this);
-      },
+    this.httpClient.delete(url, options).subscribe(resp => {
+      self.responseParser.parseSuccessfulResponse(resp, _innerObserver, this);
+    }, error => {
+      self.responseParser.parseUnsuccessfulResponse(error, _innerObserver, this);
+    },
       () => _innerObserver.complete());
     return dataObservable;
   }
@@ -277,15 +242,12 @@ export class OntimizeEEService implements IAuthService, IDataService {
     router.navigate(['/login', { 'session-expired': sessionExpired }]);
   }
 
-  protected buildHeaders(): Headers {
-    const headers: Headers = new Headers();
-    headers.append('Access-Control-Allow-Origin', '*');
-    headers.append('Content-Type', 'application/json;charset=UTF-8');
-
-    const authorizationToken = 'Bearer ' + this._sessionid;
-    headers.append('Authorization', authorizationToken);
-
-    return headers;
+  protected buildHeaders(): HttpHeaders {
+    return new HttpHeaders({
+      'Access-Control-Allow-Origin': '*',
+      'Content-Type': 'application/json;charset=UTF-8',
+      'Authorization': 'Bearer ' + this._sessionid
+    });
   }
 
   isNullOrUndef(value: any): boolean {

@@ -1,19 +1,9 @@
-import {
-  Component,
-  Inject,
-  Injector,
-  forwardRef,
-  ElementRef,
-  OnInit,
-  NgModule,
-  ViewEncapsulation
-} from '@angular/core';
+import { Component, Inject, Injector, forwardRef, ElementRef, OnInit, NgModule, ViewEncapsulation } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { OTranslateService } from '../../services';
-
-import { OSideMenuModule, OSideMenuComponent } from './o-side-menu.component';
 import { OSharedModule } from '../../shared';
-import { CommonModule } from '@angular/common';
+import { OSideMenuModule, OSideMenuComponent } from './o-side-menu.component';
 
 export const DEFAULT_INPUTS_O_LOCALE_SIDE_MENU_ITEM = [
   // title [string]: menu item title. Default: no value.
@@ -33,9 +23,7 @@ export const DEFAULT_INPUTS_O_LOCALE_SIDE_MENU_ITEM = [
   selector: 'o-locale-side-menu-item',
   templateUrl: './o-locale-side-menu-item.component.html',
   styleUrls: ['./o-locale-side-menu-item.component.scss'],
-  inputs: [
-    ...DEFAULT_INPUTS_O_LOCALE_SIDE_MENU_ITEM
-  ],
+  inputs: DEFAULT_INPUTS_O_LOCALE_SIDE_MENU_ITEM,
   encapsulation: ViewEncapsulation.None
 })
 export class OLocaleSideMenuItemComponent implements OnInit {
@@ -85,7 +73,7 @@ export class OLocaleSideMenuItemComponent implements OnInit {
 @NgModule({
   declarations: [OLocaleSideMenuItemComponent],
   imports: [OSharedModule, CommonModule, RouterModule, OSideMenuModule],
-  exports: [OLocaleSideMenuItemComponent],
+  exports: [OLocaleSideMenuItemComponent]
 })
 export class OLocaleSideMenuItemModule {
 }

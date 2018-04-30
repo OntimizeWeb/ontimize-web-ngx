@@ -280,7 +280,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   @ViewChild('innerForm') innerFormEl: ElementRef;
 
   @HostListener('window:resize', ['$event'])
-  protected updateScrolledState(): void {
+  updateScrolledState(): void {
     if (this.showHeader && this.innerFormEl) {
       const totalHeight = this.elRef.nativeElement.clientHeight;
       const formElHeight = this.innerFormEl.nativeElement.clientHeight;
@@ -711,7 +711,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
 
   /**
    * Sets form operation mode.
-   * @param  {Mode} mode The mode to be established
+   * @param mode The mode to be established
    */
   setFormMode(mode: number) {
     switch (mode) {
@@ -745,8 +745,11 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   }
 
   _setData(data) {
-    if (Util.isArray(data) && data.length === 1) {
-      let currentData = data[0];
+    if (Util.isArray(data)) {
+      if (data.lenght > 1) {
+        console.warn('[OFormComponent] Form data has more than a single record. Storing empty data');
+      }
+      let currentData = data.length === 1 ? data[0] : {};
       this._updateFormData(this.toFormValueData(currentData));
       this._emitData(currentData);
     } else if (Util.isObject(data)) {

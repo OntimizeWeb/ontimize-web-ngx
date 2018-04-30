@@ -1,11 +1,12 @@
+.mat-list .mat-list-item.o-card-item,
 .mat-list .mat-list-item.o-card-item .mat-list-item-content {
   height: auto;
 }
 
 .o-list-item-card {
-  md-card,
-  md-card-actions,
-  md-card-title-group {
+  mat-card,
+  mat-card-actions,
+  mat-card-title-group {
     width: 100%;
   }
 }

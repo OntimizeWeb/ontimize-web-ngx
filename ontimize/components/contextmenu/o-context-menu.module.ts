@@ -13,7 +13,6 @@ import { OContextMenuItemComponent } from './item/o-context-menu-item.component'
   imports: [CommonModule, OSharedModule],
   entryComponents: [OContextMenuContentComponent, OContextMenuComponent],
   exports: [CommonModule, OContextMenuDirective, OContextMenuContentComponent, OContextMenuComponent, OContextMenuItemComponent],
-  declarations: [OContextMenuDirective, OContextMenuContentComponent, OContextMenuComponent, OContextMenuItemComponent],
-  providers: [OContextMenuService]
+  declarations: [OContextMenuDirective, OContextMenuContentComponent, OContextMenuComponent, OContextMenuItemComponent]
 })
 export class OContextMenuModule { }

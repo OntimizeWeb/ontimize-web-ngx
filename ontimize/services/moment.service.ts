@@ -1,8 +1,7 @@
-import * as moment from 'moment';
+import moment from 'moment';
 
 import { Injector } from '@angular/core';
 import { AppConfig, Config } from '../config/app-config';
-import { loadLocale } from './moment-locales/locales';
 
 export class MomentService {
 
@@ -20,7 +19,6 @@ export class MomentService {
 
   load(locale: string) {
     this._locale = locale;
-    loadLocale(this._locale);
   }
 
   parseDate(value: any, format?: string, locale?: string): any {

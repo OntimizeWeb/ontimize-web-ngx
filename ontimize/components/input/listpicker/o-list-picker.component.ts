@@ -8,13 +8,13 @@ import {
   OnInit,
   OnChanges,
   SimpleChange,
-  ViewChild,
   Optional,
   NgModule,
-  ViewEncapsulation
+  ViewEncapsulation,
+  ViewChild
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MdInput, MdDialog, MdDialogRef, MdDialogConfig } from '@angular/material';
+import { MatInput, MatDialog, MatDialogRef, MatDialogConfig } from '@angular/material';
 
 import { dataServiceFactory } from '../../../services/data-service.provider';
 import { OntimizeService } from '../../../services';
@@ -22,7 +22,7 @@ import { OSharedModule } from '../../../shared';
 import { InputConverter } from '../../../decorators';
 
 import { OFormComponent } from '../../form/o-form.component';
-import { OSearchInputModule } from '../../search-input/o-search-input.component';
+import { OSearchInputModule } from '../../input/search-input/o-search-input.component';
 import { OFormValue } from '../../form/OFormValue';
 import { ODialogModule } from '../../dialog/o-dialog.component';
 import { OFormServiceComponent } from '../../o-form-service-component.class';
@@ -69,10 +69,10 @@ export class OListPickerComponent extends OFormServiceComponent implements OnIni
   protected queryRows: number;
   /* End inputs */
 
-  protected mdDialog: MdDialog;
-  protected dialogRef: MdDialogRef<OListPickerDialogComponent>;
+  protected matDialog: MatDialog;
+  protected dialogRef: MatDialogRef<OListPickerDialogComponent>;
 
-  @ViewChild('inputModel') protected inputModel: MdInput;
+  @ViewChild('inputModel') protected inputModel: MatInput;
   @ViewChild('visibleInput') protected visibleInput: ElementRef;
   protected visibleInputValue: any;
 
@@ -89,7 +89,7 @@ export class OListPickerComponent extends OFormServiceComponent implements OnIni
     elRef: ElementRef,
     injector: Injector) {
     super(form, elRef, injector);
-    this.mdDialog = this.injector.get(MdDialog);
+    this.matDialog = this.injector.get(MatDialog);
   }
 
   ngOnInit(): any {
@@ -143,7 +143,7 @@ export class OListPickerComponent extends OFormServiceComponent implements OnIni
     }
     /*
     * Temporary code
-    * I do not understand the reason why MdInput is not removing 'mat-empty' clase despite of the fact that
+    * I do not understand the reason why MatInput is not removing 'mat-empty' clase despite of the fact that
     * the input element of the description is binding value attribute
     */
     let placeHolderLbl = this.elRef.nativeElement.querySelectorAll('label.mat-input-placeholder');
@@ -189,7 +189,7 @@ export class OListPickerComponent extends OFormServiceComponent implements OnIni
   }
 
   protected openDialog() {
-    let cfg: MdDialogConfig = {
+    let cfg: MatDialogConfig = {
       role: 'dialog',
       disableClose: false,
       panelClass: 'cdk-overlay-list-picker',
@@ -207,7 +207,7 @@ export class OListPickerComponent extends OFormServiceComponent implements OnIni
     if (this.dialogHeight !== undefined) {
       cfg.height = this.dialogHeight;
     }
-    this.dialogRef = this.mdDialog.open(OListPickerDialogComponent, cfg);
+    this.dialogRef = this.matDialog.open(OListPickerDialogComponent, cfg);
 
     this.dialogRef.afterClosed().subscribe(result => {
       this.onDialogClose(result);
@@ -282,22 +282,10 @@ export class OListPickerComponent extends OFormServiceComponent implements OnIni
 }
 
 @NgModule({
-  declarations: [
-    OListPickerDialogComponent,
-    OListPickerComponent
-  ],
-  imports: [
-    OSharedModule,
-    CommonModule,
-    ODialogModule,
-    OSearchInputModule
-  ],
-  exports: [
-    OListPickerComponent
-  ],
-  entryComponents: [
-    OListPickerDialogComponent
-  ]
+  declarations: [OListPickerDialogComponent, OListPickerComponent],
+  imports: [OSharedModule, CommonModule, ODialogModule, OSearchInputModule],
+  exports: [OListPickerComponent],
+  entryComponents: [OListPickerDialogComponent]
 })
 export class OListPickerModule {
 }

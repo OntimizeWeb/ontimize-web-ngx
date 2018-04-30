@@ -1,28 +1,26 @@
-<md-table [dataSource]="editableDatasource" class="editable-row-table">
+<mat-table [dataSource]="editableDatasource" class="editable-row-table">
   <span #container> </span>
-  <ng-container *ngFor="let column of oTableOptions.columns" [cdkColumnDef]="column.name">
-    <md-header-cell *cdkHeaderCellDef style="display: none;"> </md-header-cell>
+  <ng-container *ngFor="let column of oTableOptions.columns" [matColumnDef]="column.name">
+    <mat-header-cell *matHeaderCellDef style="display: none;"> </mat-header-cell>
 
-    <md-cell *cdkCellDef="let row" [fxFlex]="column.width" [ngClass]="column.className">
+    <mat-cell *matCellDef="let row" [fxFlex]="column.width" [ngClass]="column.className">
       <ng-container *ngIf="isColumnInsertable(column) && !useCellEditor(column)">
-        <md-form-field class="insertable-form-field" [hideRequiredMarker]="false" floatPlaceholder="never">
-          <input mdInput type="text" [placeholder]="getPlaceholder(column)" [id]="column.attr" [formControl]="getControl(column)"
-            [required]="isColumnRequired(column)">
-          <md-error *ngIf="columnHasError(column, 'required')">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</md-error>
-        </md-form-field>
+        <mat-form-field class="insertable-form-field" [hideRequiredMarker]="false" floatPlaceholder="never">
+          <input matInput type="text" [placeholder]="getPlaceholder(column)" [id]="column.attr" [formControl]="getControl(column)" [required]="isColumnRequired(column)">
+          <mat-error *ngIf="columnHasError(column, 'required')">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</mat-error>
+        </mat-form-field>
       </ng-container>
-
 
       <ng-container *ngIf="isColumnInsertable(column) && useCellEditor(column)">
-        <ng-template [ngTemplateOutlet]="columnEditors[column.attr].templateref" [ngOutletContext]="{ rowvalue: rowData }">
+        <ng-template [ngTemplateOutlet]="columnEditors[column.attr].templateref" [ngTemplateOutletContext]="{ rowvalue: rowData }">
         </ng-template>
       </ng-container>
-    </md-cell>
+    </mat-cell>
   </ng-container>
 
 
-  <md-header-row *cdkHeaderRowDef="[]" style.display="none"></md-header-row>
-  <md-row *cdkRowDef="let row; columns: oTableOptions.visibleColumns;">
+  <mat-header-row *matHeaderRowDef="[]" style.display="none"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: oTableOptions.visibleColumns;">
 
-  </md-row>
-</md-table>
+  </mat-row>
+</mat-table>

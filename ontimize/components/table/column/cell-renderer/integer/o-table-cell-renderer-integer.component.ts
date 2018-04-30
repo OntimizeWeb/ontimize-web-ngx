@@ -8,18 +8,13 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_INTEGER = [
   'grouping',
   // thousand-separator [string]: thousands separator when grouping. Default: comma (,).
   'thousandSeparator: thousand-separator'
-
 ];
 
 @Component({
   selector: 'o-table-cell-renderer-integer',
   templateUrl: './o-table-cell-renderer-integer.component.html',
-  inputs: [
-    ...DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_INTEGER
-  ]
+  inputs: DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_INTEGER
 })
-
-
 export class OTableCellRendererIntegerComponent extends OBaseTableCellRenderer {
 
   public static DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_INTEGER = DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_INTEGER;

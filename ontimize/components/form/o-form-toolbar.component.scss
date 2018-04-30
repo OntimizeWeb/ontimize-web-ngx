@@ -1,42 +1,43 @@
-.toolbar-form-header{
-  min-height: 50px;
+.o-form-toolbar {
+  .toolbar-form-header {
+    min-height: 50px;
+    max-height: 50px;
 
-  md-toolbar-row {
-    height: 50px;
+    mat-toolbar-row {
+      height: 50px;
+    }
+
+    .mat-toolbar-tools {
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: -ms-flexbox;
+      display: flex;
+      box-sizing: border-box;
+      -webkit-box-orient: horizontal;
+      -webkit-box-direction: normal;
+      -webkit-flex-direction: row;
+      -ms-flex-direction: row;
+      flex-direction: row;
+      -webkit-box-align: center;
+      -webkit-align-items: center;
+      -ms-flex-align: center;
+      align-items: center;
+
+      .fill-remaining {
+        flex: 1 1 auto;
+      }
+
+      button {
+        min-width: 100px;
+        padding: 0px 6px;
+      }
+
+      mat-icon {
+        cursor: pointer;
+        vertical-align: middle;
+      }
+
+    }
   }
-
-  .mat-toolbar-tools {
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: -ms-flexbox;
-    display: flex;
-    box-sizing: border-box;
-    -webkit-box-orient: horizontal;
-    -webkit-box-direction: normal;
-    -webkit-flex-direction: row;
-    -ms-flex-direction: row;
-    flex-direction: row;
-    -webkit-box-align: center;
-    -webkit-align-items: center;
-    -ms-flex-align: center;
-    align-items: center;
-
-    .fill-remaining {
-      flex: 1 1 auto;
-    }
-
-    button {
-      min-width: 100px;
-      padding: 0px 6px;
-    }
-
-    md-icon {
-      cursor: pointer;
-      vertical-align: middle;
-    }
-
-  }
-
 
 }
-

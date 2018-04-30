@@ -1,0 +1,8 @@
+<div fxFill [formGroup]="getFormGroup()" class="relative" [matTooltip]="tooltip" [matTooltipPosition]="tooltipPosition" [matTooltipShowDelay]="tooltipShowDelay">
+    <mat-checkbox [attr.id]="getAttribute()" [id]="getAttribute()" fxFill [formControlName]="getAttribute()" #innerInput [checked]="isChecked()"
+        [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)">
+        {{ placeHolder }}
+        <mat-error *ngIf="hasError('required')">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</mat-error>
+    </mat-checkbox>
+    <div *ngIf="isReadOnly" fxFill class="read-only-blocker" (click)="onClickBlocker($event)"></div>
+</div>

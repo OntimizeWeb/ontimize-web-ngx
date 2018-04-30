@@ -1,7 +1,4 @@
-import {
-  Injectable, Injector,
-  EventEmitter
-} from '@angular/core';
+import { Injectable, Injector, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { ObservableWrapper } from '../util/async';
@@ -80,20 +77,21 @@ export class LoginService implements ILoginService {
   login(user: string, password: string): Observable<any> {
     this._user = user;
     const self = this;
-    let observable = new Observable(observer => {
-      this.retrieveAuthService().then((service) => {
-        service.startsession(user, password)
-          .subscribe(resp => {
-            self.onLoginSuccess(resp);
-            observer.next();
-            observer.complete();
-          }, error => {
-            self.onLoginError(error);
-            observer.error(error);
-          });
-      });
+    let innerObserver: any;
+    const dataObservable = new Observable(observer => innerObserver = observer).share();
+
+    this.retrieveAuthService().then((service) => {
+      service.startsession(user, password)
+        .subscribe(resp => {
+          self.onLoginSuccess(resp);
+          innerObserver.next();
+          innerObserver.complete();
+        }, error => {
+          self.onLoginError(error);
+          innerObserver.error(error);
+        });
     });
-    return observable;
+    return dataObservable;
   }
   onLoginSuccess(sessionId: number) {
     // save user and sessionid into local storage

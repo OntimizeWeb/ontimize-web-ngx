@@ -1,28 +1,28 @@
-<md-toolbar color="primary" class="mat-elevation-z5" *ngIf="filter">
+<mat-toolbar color="primary" class="mat-elevation-z5" *ngIf="filter">
   <o-search-input #searchInput class="list-picker-search" (onSearch)="onFilterList($event)"></o-search-input>
-</md-toolbar>
-<div md-dialog-content class="dialog-list-container" (scroll)="onScroll($event)">
-  <md-list>
+</mat-toolbar>
+<div mat-dialog-content class="dialog-list-container" (scroll)="onScroll($event)">
+  <mat-list>
     <!--EMPTY LIST -->
-    <md-list-item class="mat-1-line" fxFill *ngIf="visibleData.length === 0">
+    <mat-list-item class="mat-1-line" fxFill *ngIf="visibleData.length === 0">
       {{'LIST.EMPTY' | oTranslate}}
       <ng-container *ngIf="filter && searchInput && searchInput.getValue().length > 0">
         {{ 'LIST.EMPTY_USING_FILTER' | oTranslate : { values: [searchInput.getValue()] } }}
       </ng-container>
-    </md-list-item>
-    <md-list-item class="mat-1-line" (click)="onClickListItem($event, item)" fxFill *ngFor="let item of visibleData; trackBy: trackByFn">
+    </mat-list-item>
+    <mat-list-item class="mat-1-line" (click)="onClickListItem($event, item)" fxFill *ngFor="let item of visibleData; trackBy: trackByFn">
       <div fxLayout="column" fxFill>
         <div fxLayout="row" fxFill>
           <p class="mat-list-item-text"> {{ item['_parsedVisibleColumnText'] }} </p>
         </div>
-        <md-divider></md-divider>
+        <mat-divider></mat-divider>
       </div>
-    </md-list-item>
-  </md-list>
+    </mat-list-item>
+  </mat-list>
 </div>
-<md-dialog-actions align="end">
+<mat-dialog-actions align="end">
   <span fxFlex></span>
-  <button md-button class="mat-primary" md-dialog-close>
+  <button mat-button class="mat-primary" mat-dialog-close>
     <span>{{ 'CANCEL' | oTranslate | uppercase }}</span>
   </button>
-</md-dialog-actions>
+</mat-dialog-actions>

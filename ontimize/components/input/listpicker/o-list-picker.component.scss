@@ -1,9 +1,6 @@
 .o-list-picker-content {
-  .input-model {
-    display: none !important;
-  }
 
-  md-icon {
+  mat-icon {
     cursor: pointer;
   }
 }
@@ -18,13 +15,13 @@
 }
 
 .o-list-picker-dialog  {
-  md-toolbar {
+  mat-toolbar {
     &.mat-toolbar .mat-toolbar-row {
       padding-top: 8px;
       box-sizing: content-box;
     }
     o-search-input,
-    o-search-input md-form-field {
+    o-search-input mat-form-field {
       width: 100%;
     }
   }
@@ -35,9 +32,9 @@
     min-height: calc(100% - 133px);
     margin: 0px;
 
-    md-list {
+    mat-list {
       margin: 12px 0;
-      md-list-item {
+      mat-list-item {
         cursor: pointer;
       }
     }

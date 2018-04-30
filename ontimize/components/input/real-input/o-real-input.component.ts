@@ -9,12 +9,11 @@ import {
   NgModule,
   ViewEncapsulation
 } from '@angular/core';
-
 import { CommonModule } from '@angular/common';
-import { Validators } from '@angular/forms';
-import { ValidatorFn } from '@angular/forms/src/directives/validators';
+import { Validators, ValidatorFn } from '@angular/forms';
 
 import { OSharedModule } from '../../../shared';
+import { ORealPipe, IRealPipeArgument } from '../../../pipes';
 import { OFormComponent } from '../../form/o-form.component';
 import { InputConverter } from '../../../decorators';
 import {
@@ -23,11 +22,6 @@ import {
   DEFAULT_INPUTS_O_INTEGER_INPUT,
   DEFAULT_OUTPUTS_O_INTEGER_INPUT
 } from '../integer-input/o-integer-input.component';
-
-import {
-  ORealPipe,
-  IRealPipeArgument
-} from '../../../pipes';
 
 export const DEFAULT_INPUTS_O_REAL_INPUT = [
   ...DEFAULT_INPUTS_O_INTEGER_INPUT,
@@ -45,12 +39,8 @@ export const DEFAULT_OUTPUTS_O_REAL_INPUT = [
   selector: 'o-real-input',
   templateUrl: './o-real-input.component.html',
   styleUrls: ['./o-real-input.component.scss'],
-  inputs: [
-    ...DEFAULT_INPUTS_O_REAL_INPUT
-  ],
-  outputs: [
-    ...DEFAULT_OUTPUTS_O_REAL_INPUT
-  ],
+  inputs: DEFAULT_INPUTS_O_REAL_INPUT,
+  outputs: DEFAULT_OUTPUTS_O_REAL_INPUT,
   encapsulation: ViewEncapsulation.None
 })
 export class ORealInputComponent extends OIntegerInputComponent implements OnInit {
@@ -114,7 +104,7 @@ export class ORealInputComponent extends OIntegerInputComponent implements OnIni
 @NgModule({
   declarations: [ORealInputComponent],
   imports: [OSharedModule, CommonModule, OIntegerInputModule],
-  exports: [ORealInputComponent, OIntegerInputModule],
+  exports: [ORealInputComponent, OIntegerInputModule]
 })
 export class ORealInputModule {
 }

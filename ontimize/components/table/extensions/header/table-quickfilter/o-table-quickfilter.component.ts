@@ -85,8 +85,7 @@ export class OTableQuickfilterComponent implements OnInit, AfterViewInit, OnDest
           if (!this.table.dataSource || this.value === filterValue) {
             return;
           }
-          this.value = filterValue;
-          this.table.dataSource.quickFilter = this.value;
+          this.setValue(filterValue);
           this.onChange.emit(this.value);
         });
 
@@ -102,6 +101,13 @@ export class OTableQuickfilterComponent implements OnInit, AfterViewInit, OnDest
   ngOnDestroy(): void {
     if (this.quickFilterObservable) {
       this.quickFilterObservable.unsubscribe();
+    }
+  }
+
+  setValue(value: any) {
+    this.value = value;
+    if (this.table && this.table.dataSource) {
+      this.table.dataSource.quickFilter = this.value;
     }
   }
 }

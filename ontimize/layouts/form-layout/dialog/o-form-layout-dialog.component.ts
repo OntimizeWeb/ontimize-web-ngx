@@ -1,5 +1,5 @@
 import { Component, Inject, ViewEncapsulation, AfterViewInit, ComponentFactoryResolver, ViewChild, ComponentFactory, Injector } from '@angular/core';
-import { MdDialogRef, MD_DIALOG_DATA } from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { OFormLayoutManagerContentDirective } from '../directives/o-form-layout-manager-content.directive';
 import { OFormLayoutManagerComponent } from '../../../layouts/form-layout/o-form-layout-manager.component';
 
@@ -26,10 +26,10 @@ export class OFormLayoutDialogComponent implements AfterViewInit {
   @ViewChild(OFormLayoutManagerContentDirective) contentDirective: OFormLayoutManagerContentDirective;
 
   constructor(
-    public dialogRef: MdDialogRef<OFormLayoutDialogComponent>,
+    public dialogRef: MatDialogRef<OFormLayoutDialogComponent>,
     protected injector: Injector,
     protected componentFactoryResolver: ComponentFactoryResolver,
-    @Inject(MD_DIALOG_DATA) data: any
+    @Inject(MAT_DIALOG_DATA) data: any
   ) {
     if (data.title) {
       this.title = data.title;

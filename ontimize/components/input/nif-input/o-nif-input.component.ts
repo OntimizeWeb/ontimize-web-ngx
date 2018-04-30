@@ -7,12 +7,14 @@ import {
 import { CommonModule } from '@angular/common';
 import { ValidatorFn } from '@angular/forms/src/directives/validators';
 import { OSharedModule } from '../../../shared';
+import { OValidators } from '../../../validators/o-validators';
 import { OFormComponent } from '../../form/o-form.component';
 import {
-  OTextInputModule, OTextInputComponent, DEFAULT_INPUTS_O_TEXT_INPUT,
+  OTextInputModule,
+  OTextInputComponent,
+  DEFAULT_INPUTS_O_TEXT_INPUT,
   DEFAULT_OUTPUTS_O_TEXT_INPUT
 } from '../text-input/o-text-input.component';
-import { OValidators } from '../../../validators/o-validators';
 
 export const DEFAULT_INPUTS_O_NIF_INPUT = [
   ...DEFAULT_INPUTS_O_TEXT_INPUT
@@ -26,12 +28,8 @@ export const DEFAULT_OUTPUTS_O_NIF_INPUT = [
   selector: 'o-nif-input',
   templateUrl: './o-nif-input.component.html',
   styleUrls: ['./o-nif-input.component.scss'],
-  inputs: [
-    ...DEFAULT_INPUTS_O_NIF_INPUT
-  ],
-  outputs: [
-    ...DEFAULT_OUTPUTS_O_NIF_INPUT
-  ],
+  inputs: DEFAULT_INPUTS_O_NIF_INPUT,
+  outputs: DEFAULT_OUTPUTS_O_NIF_INPUT,
   encapsulation: ViewEncapsulation.None
 })
 export class ONIFInputComponent extends OTextInputComponent implements OnInit {
@@ -58,7 +56,7 @@ export class ONIFInputComponent extends OTextInputComponent implements OnInit {
 @NgModule({
   declarations: [ONIFInputComponent],
   imports: [OSharedModule, CommonModule, OTextInputModule],
-  exports: [ONIFInputComponent, OTextInputModule],
+  exports: [ONIFInputComponent, OTextInputModule]
 })
 export class ONIFInputModule {
 }

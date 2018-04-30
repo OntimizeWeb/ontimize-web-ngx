@@ -1,7 +1,7 @@
-import { Injector } from '@angular/core';
+import { Injector, Provider } from '@angular/core';
 import { LOCATION_INITIALIZED } from '@angular/common';
 import { BaseRequestOptions, XHRBackend } from '@angular/http';
-import { MdIconRegistry } from '@angular/material';
+import { MatIconRegistry } from '@angular/material';
 import { Events } from '../util/events';
 import { OHttp } from '../util/http/OHttp';
 import { AppConfig, Config } from '../config/app-config';
@@ -30,6 +30,7 @@ import {
 } from '../services';
 
 import { OFormLayoutManagerService } from '../services/o-form-layout-manager.service';
+import { OContextMenuService } from '../components/contextmenu/o-context-menu.service';
 
 export function appInitializerFactory(injector: Injector, config: Config, oTranslate: OTranslateService) {
   return () => new Promise<any>((resolve: any) => {
@@ -153,9 +154,9 @@ export function getOntimizeServiceResponseParser(injector: Injector) {
   return new OntimizeServiceResponseParser(injector);
 }
 
-export const ONTIMIZE_PROVIDERS = [
+export const ONTIMIZE_PROVIDERS: Provider[] = [
   //Standard
-  MdIconRegistry,
+  MatIconRegistry,
 
   { provide: Events, useValue: getEvents },
 
@@ -270,5 +271,8 @@ export const ONTIMIZE_PROVIDERS = [
   {
     provide: OFormLayoutManagerService,
     useClass: OFormLayoutManagerService
+  }, {
+    provide: OContextMenuService,
+    useClass: OContextMenuService
   }
 ];

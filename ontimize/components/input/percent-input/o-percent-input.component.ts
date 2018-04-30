@@ -5,13 +5,15 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { InputConverter } from '../../../decorators';
 import { OSharedModule } from '../../../shared';
 import { OFormComponent } from '../../form/o-form.component';
 import {
-  ORealInputModule, ORealInputComponent,
-  DEFAULT_INPUTS_O_REAL_INPUT, DEFAULT_OUTPUTS_O_REAL_INPUT
+  ORealInputModule,
+  ORealInputComponent,
+  DEFAULT_INPUTS_O_REAL_INPUT,
+  DEFAULT_OUTPUTS_O_REAL_INPUT
 } from '../real-input/o-real-input.component';
-import { InputConverter } from '../../../decorators';
 
 export const DEFAULT_INPUTS_O_PERCENT_INPUT = [
   ...DEFAULT_INPUTS_O_REAL_INPUT
@@ -25,12 +27,8 @@ export const DEFAULT_OUTPUTS_O_PERCENT_INPUT = [
   selector: 'o-percent-input',
   templateUrl: './o-percent-input.component.html',
   styleUrls: ['./o-percent-input.component.scss'],
-  inputs: [
-    ...DEFAULT_INPUTS_O_PERCENT_INPUT
-  ],
-  outputs: [
-    ...DEFAULT_OUTPUTS_O_PERCENT_INPUT
-  ],
+  inputs: DEFAULT_INPUTS_O_PERCENT_INPUT,
+  outputs: DEFAULT_OUTPUTS_O_PERCENT_INPUT,
   encapsulation: ViewEncapsulation.None
 })
 export class OPercentInputComponent extends ORealInputComponent implements OnInit {
@@ -66,7 +64,7 @@ export class OPercentInputComponent extends ORealInputComponent implements OnIni
 @NgModule({
   declarations: [OPercentInputComponent],
   imports: [OSharedModule, CommonModule, ORealInputModule],
-  exports: [OPercentInputComponent, ORealInputModule],
+  exports: [OPercentInputComponent, ORealInputModule]
 })
 export class OPercentInputModule {
 }

@@ -1,6 +1,6 @@
 import { Component, Injector, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MdButtonModule, MdIconModule, MdSnackBarModule, MdSnackBarRef } from '@angular/material';
+import { MatSnackBarRef } from '@angular/material';
 
 import { OSharedModule } from '../../shared';
 import { OTranslateModule } from '../../pipes/o-translate.pipe';
@@ -10,7 +10,7 @@ export declare type OSnackBarIconPosition = 'left' | 'right';
 /**
  * Configuration for showing a SnackBar with the SnackBar service.
  */
-export declare class OSnackBarConfig {
+export class OSnackBarConfig {
   /** Text shown in the action button. */
   action?: string;
   /** Time the SnackBar is shown. */
@@ -33,12 +33,12 @@ export class OSnackBarComponent {
   icon: string;
   iconPosition: OSnackBarIconPosition = 'left';
 
-  protected snackBarRef: MdSnackBarRef<OSnackBarComponent>;
+  protected snackBarRef: MatSnackBarRef<OSnackBarComponent>;
 
   constructor(
     protected injector: Injector
   ) {
-    this.snackBarRef = this.injector.get(MdSnackBarRef);
+    this.snackBarRef = this.injector.get(MatSnackBarRef);
   }
 
   open(message: string, config?: OSnackBarConfig): void {
@@ -64,8 +64,8 @@ export class OSnackBarComponent {
 
 @NgModule({
   declarations: [OSnackBarComponent],
-  imports: [CommonModule, MdButtonModule, MdIconModule, MdSnackBarModule, OSharedModule, OTranslateModule],
-  exports: [OSnackBarComponent, CommonModule, MdButtonModule, MdSnackBarModule],
+  imports: [CommonModule, OSharedModule, OTranslateModule],
+  exports: [OSnackBarComponent, CommonModule]
 })
 export class OSnackBarModule {
 }

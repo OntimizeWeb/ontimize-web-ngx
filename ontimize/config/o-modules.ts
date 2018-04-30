@@ -6,7 +6,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Injector, NgModule, APP_INITIALIZER } from '@angular/core';
 import { appInitializerFactory } from './o-providers';
 import { OTranslateService, OTranslateHttpLoader } from '../services';
-import { APP_CONFIG } from '../config/app-config';
+import { APP_CONFIG, AppConfig } from '../config/app-config';
 
 import {
   OBarMenuModule,
@@ -65,6 +65,7 @@ import {
 
 import { OSharedModule } from '../shared';
 import { OTranslateParser } from '../services/translate/o-translate.parser';
+import { Util } from '../utils';
 
 export const INTERNAL_ONTIMIZE_MODULES_EXPORTED: any = [
   // Standard modules
@@ -125,8 +126,19 @@ export const INTERNAL_ONTIMIZE_MODULES_EXPORTED: any = [
 ];
 
 // AoT requires an exported function for factories
-export function OHttpLoaderFactory(http: HttpClient, injector: Injector) {
-  return new OTranslateHttpLoader(http, OTranslateService.ASSETS_PATH, OTranslateService.ASSETS_EXTENSION, injector);
+export function OHttpLoaderFactory(http: HttpClient, injector: Injector, appConfig: AppConfig) {
+  let i18nConf = appConfig.getI18nAssetsConfiguration();
+  let i18nPath = undefined;
+  let i18nExtension = undefined;
+  if (Util.isDefined(i18nConf)) {
+    if (Util.isDefined(i18nConf.path)) {
+      i18nPath = i18nConf.path;
+    }
+    if (Util.isDefined(i18nConf.extension)) {
+      i18nExtension = i18nConf.extension;
+    }
+  }
+  return new OTranslateHttpLoader(http, i18nPath, i18nExtension, injector);
 }
 
 export function OTranslateParserFactory() {
@@ -142,7 +154,7 @@ export const INTERNAL_ONTIMIZE_MODULES: any = [
     loader: {
       provide: TranslateLoader,
       useFactory: OHttpLoaderFactory,
-      deps: [HttpClient, Injector]
+      deps: [HttpClient, Injector, AppConfig]
     },
     parser: {
       provide: TranslateParser,

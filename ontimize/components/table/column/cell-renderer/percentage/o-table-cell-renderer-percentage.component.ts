@@ -1,7 +1,7 @@
 import { Component, Injector, TemplateRef, ViewChild, OnInit } from '@angular/core';
-import { DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_REAL, OTableCellRendererRealComponent } from '../real/o-table-cell-renderer-real.component';
 import { NumberService } from '../../../../../services';
 import { OPercentPipe, IPercentPipeArgument } from '../../../../../pipes';
+import { DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_REAL, OTableCellRendererRealComponent } from '../real/o-table-cell-renderer-real.component';
 
 export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_PERCENTAGE = [
   ...DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_REAL
@@ -10,9 +10,7 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_PERCENTAGE = [
 @Component({
   selector: 'o-table-cell-renderer-percentage',
   templateUrl: './o-table-cell-renderer-percentage.component.html',
-  inputs: [
-    ...DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_REAL
-  ]
+  inputs: DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_REAL
 })
 export class OTableCellRendererPercentageComponent extends OTableCellRendererRealComponent implements OnInit {
 
@@ -52,6 +50,5 @@ export class OTableCellRendererPercentageComponent extends OTableCellRendererRea
     };
     this.initialize();
   }
-
 
 }

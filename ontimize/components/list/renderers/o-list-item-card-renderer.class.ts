@@ -44,12 +44,11 @@ export class OListItemCardRenderer {
   ) {
   }
 
-
-  modifyMdListItemElement() {
+  modifyMatListItemElement() {
     if (this.elRef.nativeElement && this.elRef.nativeElement.parentElement) {
-      let mdListItem = this.elRef.nativeElement.parentElement.parentElement;
-      mdListItem.querySelector('.mat-list-text').remove();
-      mdListItem.classList.add('o-card-item');
+      let matListItem = this.elRef.nativeElement.parentElement.parentElement;
+      matListItem.querySelector('.mat-list-text').remove();
+      matListItem.classList.add('o-card-item');
     }
   }
 
@@ -69,7 +68,7 @@ export class OListItemCardRenderer {
     return this._title;
   }
 
-  set title(val : string) {
+  set title(val: string) {
     this._title = val;
   }
 
@@ -77,7 +76,7 @@ export class OListItemCardRenderer {
     return this._subtitle;
   }
 
-  set subtitle(val : string) {
+  set subtitle(val: string) {
     this._subtitle = val;
   }
 
@@ -85,15 +84,15 @@ export class OListItemCardRenderer {
     return this._image;
   }
 
-  set image(val : string) {
-    this._image= val;
+  set image(val: string) {
+    this._image = val;
   }
 
   get action1Text(): string {
     return this._action1Text;
   }
 
-  set action1Text(val : string) {
+  set action1Text(val: string) {
     this._action1Text = val;
   }
 
@@ -101,7 +100,7 @@ export class OListItemCardRenderer {
     return this._action2Text;
   }
 
-  set action2Text(val : string) {
+  set action2Text(val: string) {
     this._action2Text = val;
   }
 }

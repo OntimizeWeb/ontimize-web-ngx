@@ -45,16 +45,8 @@ export class OAppLayoutComponent {
 }
 
 @NgModule({
-  imports: [
-    CommonModule,
-    OSharedModule,
-    RouterModule,
-    OAppSidenavModule,
-    OAppHeaderModule
-  ],
-  declarations: [
-    OAppLayoutComponent
-  ],
+  imports: [CommonModule, OSharedModule, RouterModule, OAppSidenavModule, OAppHeaderModule],
+  declarations: [OAppLayoutComponent],
   exports: [OAppLayoutComponent]
 })
 export class OAppLayoutModule { }

@@ -1,15 +1,15 @@
 import {
   Component, OnInit, OnDestroy, Inject, Injector, ElementRef, forwardRef,
-  Optional, NgModule, ViewEncapsulation, ViewChild, EventEmitter, ContentChildren, QueryList
+  Optional, NgModule, ViewEncapsulation, ViewChild, EventEmitter, ContentChildren, QueryList, ViewChildren
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CdkTableModule } from '@angular/cdk/table';
 import { SelectionModel, SelectionChange } from '@angular/cdk/collections';
-import { MdDialog, MdSort, MdTabGroup, MdTab, MdPaginatorIntl, MdPaginator, MdCheckboxChange, MdMenu, PageEvent, Sort } from '@angular/material';
+import { MatDialog, MatSort, MatTabGroup, MatTab, MatPaginatorIntl, MatPaginator, MatCheckboxChange, MatMenu, PageEvent, Sort, MatSortHeader } from '@angular/material';
+import { DndModule } from 'ng2-dnd';
 
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
-import { DragulaModule } from 'ng2-dragula/ng2-dragula';
 
 import { InputConverter } from '../../decorators';
 
@@ -22,7 +22,7 @@ import { OServiceComponent } from '../o-service-component.class';
 import {
   O_TABLE_FOOTER_COMPONENTS,
   OTablePaginatorComponent,
-  OTableMdPaginatorIntl,
+  OTableMatPaginatorIntl,
   OTableColumnAggregateComponent,
   OColumnAggregate
 } from './extensions/footer/o-table-footer-components';
@@ -111,21 +111,22 @@ export const DEFAULT_INPUTS_O_TABLE = [
   // export-button [no|yes]: show export button. Default: yes.
   'exportButton: export-button',
 
-  // show-table-buttons-text [string][yes|no|true|false]: show text of header buttons
+  // show-table-buttons-text [yes|no|true|false]: show text of header buttons. Default: yes.
   'showTableButtonsText: show-table-buttons-text',
 
-  // select-all-checkbox [string][yes|no|true|false]:
+  // select-all-checkbox [yes|no|true|false]: show selection check boxes. Default: no.
   'selectAllCheckbox: select-all-checkbox',
 
-  // pagination-controls [string][yes|no|true|false]
+  // pagination-controls [yes|no|true|false]: show pagination controls. Default: yes.
   'paginationControls: pagination-controls',
 
-  //filter [string][yes|no|true|false]
+  // filter [yes|no|true|false]: filter si case sensitive. Default: no.
   'filterCaseSensitivePvt: filter-case-sensitive',
 
-  //fix-header [string][yes|no|true|false]: fixed header and footer when the content is greather than its own height
+  // fix-header [yes|no|true|false]: fixed header and footer when the content is greather than its own height. Default: no.
   'fixedHeader: fixed-header',
 
+  // show-title [yes|no|true|false]: show the table title. Default: no.
   'showTitle: show-title',
 
   // edition-mode [none | inline | click | dblclick]: edition mode. Default none
@@ -203,28 +204,15 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   protected snackBarService: SnackBarService;
 
-  constructor(
-    injector: Injector,
-    elRef: ElementRef,
-    protected dialog: MdDialog,
-    @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent
-  ) {
-    super(injector, elRef, form);
-    try {
-      this.mdTabGroupContainer = this.injector.get(MdTabGroup);
-      this.mdTabContainer = this.injector.get(MdTab);
-    } catch (error) {
-      // Do nothing due to not always is contained on tab.
-    }
-    this.snackBarService = this.injector.get(SnackBarService);
-  }
-
   public paginator: OTablePaginatorComponent;
-  @ViewChild(MdPaginator) mdpaginator: MdPaginator;
-  @ViewChild(MdSort) sort: MdSort;
+  @ViewChild(MatPaginator) matpaginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
   @ViewChild('columnFilterOption') columnFilterOption: OTableOptionComponent;
   @ContentChildren(OTableOptionComponent) tableOptions: QueryList<OTableOptionComponent>;
-  @ViewChild('menu') mdMenu: MdMenu;
+  @ViewChild('menu') matMenu: MatMenu;
+
+  // only for insideTabBugWorkaround
+  @ViewChildren(MatSortHeader) protected sortHeaders: QueryList<MatSortHeader>;
 
   public tableContextMenu: OContextMenuComponent;
 
@@ -304,9 +292,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   /*end of parsed inputs variables */
 
-  protected mdTabGroupContainer: MdTabGroup;
-  protected mdTabContainer: MdTab;
-  protected mdTabGroupChangeSubscription: Subscription;
+  protected tabGroupContainer: MatTabGroup;
+  protected tabContainer: MatTab;
+  tabGroupChangeSubscription: Subscription;
 
   protected pendingQuery: boolean = true;
   protected pendingQueryFilter = undefined;
@@ -327,7 +315,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   public onTableDataLoaded: EventEmitter<any> = new EventEmitter();
   public onPaginatedTableDataLoaded: EventEmitter<any> = new EventEmitter();
 
-  protected selection = new SelectionModel<Element>(true, []);
+  selection = new SelectionModel<Element>(true, []);
   protected selectionChangeSubscription: Subscription;
 
   public oTableColumnsFilterComponent: OTableColumnsFilterComponent;
@@ -351,6 +339,22 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   protected sortSubscription: Subscription;
   quickFilterCallback: QuickFilterFunction;
 
+  constructor(
+    injector: Injector,
+    elRef: ElementRef,
+    protected dialog: MatDialog,
+    @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent
+  ) {
+    super(injector, elRef, form);
+    try {
+      this.tabGroupContainer = this.injector.get(MatTabGroup);
+      this.tabContainer = this.injector.get(MatTab);
+    } catch (error) {
+      // Do nothing due to not always is contained on tab.
+    }
+    this.snackBarService = this.injector.get(SnackBarService);
+  }
+
   ngOnInit() {
     this.initialize();
   }
@@ -358,9 +362,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   ngAfterViewInit() {
     this.afterViewInit();
     this.initTableAfterViewInit();
-    if (this.elRef) {
-      this.elRef.nativeElement.removeAttribute('title');
-    }
   }
 
   ngOnDestroy() {
@@ -371,33 +372,48 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
    * Method what initialize vars and configuration
    */
   initialize(): any {
-    super.initialize();
-    // get previous position
-    this.state = this.localStorageService.getComponentStorage(this);
-
-    // initialize params of the table
+    // Initialize params of the table
     this.initializeParams();
+
+    // Add column checkbox
+    // 1. create object ocolumn
+    // 2. not add visiblesColumns
+    let checkboxColumn = new OColumn();
+    checkboxColumn.name = OTableComponent.NAME_COLUMN_SELECT;
+    checkboxColumn.title = '';
+    checkboxColumn.visible = false;
+    this._oTableOptions.selectColumn = checkboxColumn;
+
+    // Initializing row selection listener
+    this.selectionChangeSubscription = this.selection.onChange.subscribe((selectionData: SelectionChange<any>) => {
+      if (selectionData && selectionData.added.length > 0) {
+        ObservableWrapper.callEmit(this.onRowSelected, selectionData.added);
+      }
+      if (selectionData && selectionData.removed.length > 0) {
+        ObservableWrapper.callEmit(this.onRowDeselected, selectionData.removed);
+      }
+    });
+
+    if (this.form) {
+      this.setFormComponent(this.form);
+    }
   }
 
   protected initTableAfterViewInit() {
+    if (this.elRef) {
+      this.elRef.nativeElement.removeAttribute('title');
+    }
+
     this.setDatasource();
 
-    if (this.pageable) {
-      this.sortSubscription = this.sort.mdSortChange.subscribe((sort: Sort) => {
-        this.sortColArray = [];
-        if (sort.direction !== '') {
-          this.sortColArray.push({
-            columnName: sort.active,
-            ascendent: sort.direction === OTableComponent.TYPE_ASC_NAME
-          });
-        }
-        this.reloadData();
-      });
-    }
+    this.registerSortListener();
 
     this.showFilterByColumnIcon = this.getStoredColumnsFilters().length > 0;
     if (this.columnFilterOption) {
       this.columnFilterOption.active = this.showFilterByColumnIcon;
+    }
+    if (this.oTableQuickFilterComponent) {
+      this.oTableQuickFilterComponent.setValue(this.state.filter);
     }
     if (this.queryOnInit) {
       this.queryData(this.parentItem);
@@ -406,8 +422,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   destroy() {
     super.destroy();
-    if (this.mdTabGroupChangeSubscription) {
-      this.mdTabGroupChangeSubscription.unsubscribe();
+    if (this.tabGroupChangeSubscription) {
+      this.tabGroupChangeSubscription.unsubscribe();
     }
     if (this.selectionChangeSubscription) {
       this.selectionChangeSubscription.unsubscribe();
@@ -429,9 +445,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
    * Method update store localstorage, call of the ILocalStorage
    */
   getDataToStore() {
-    var dataToStore = {
+    let dataToStore = {
       'filter': this.oTableQuickFilterComponent ? this.oTableQuickFilterComponent.value : '',
-      'query-rows': this.mdpaginator ? this.mdpaginator.pageSize : ''
+      'query-rows': this.matpaginator ? this.matpaginator.pageSize : ''
     };
     if (this.sortColArray.length > 0 && this.sort.active !== undefined) {
       dataToStore['sort-columns'] = this.sort.active + ':' + this.sort.direction;
@@ -444,7 +460,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   registerQuickFilter(arg: OTableQuickfilterComponent) {
     this.oTableQuickFilterComponent = arg;
-    this.oTableQuickFilterComponent.value = this.state.filter;
+    this.oTableQuickFilterComponent.setValue(this.state.filter);
   }
 
   registerPagination(value: OTablePaginatorComponent) {
@@ -524,7 +540,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     if (typeof (column.attr) !== 'undefined') {
       const alreadyExisting = this.getOColumn(column.attr);
       if (alreadyExisting !== undefined) {
-        var replacingIndex = this._oTableOptions.columns.indexOf(alreadyExisting);
+        const replacingIndex = this._oTableOptions.columns.indexOf(alreadyExisting);
         this._oTableOptions.columns[replacingIndex] = colDef;
       } else {
         this._oTableOptions.columns.push(colDef);
@@ -544,7 +560,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     this.showTotals = true;
     const alreadyExisting = this.getOColumn(column.attr);
     if (alreadyExisting !== undefined) {
-      var replacingIndex = this._oTableOptions.columns.indexOf(alreadyExisting);
+      const replacingIndex = this._oTableOptions.columns.indexOf(alreadyExisting);
       this._oTableOptions.columns[replacingIndex].aggregate = column;
     }
 
@@ -569,40 +585,88 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
           }
         }
       });
+      this.setMatSort();
+    }
+  }
 
-      //set values of sort-columns to mdsort
-      if ((typeof (this._oTableOptions.columns) !== 'undefined') && (this.sortColArray.length > 0)) {
-        let temp = this.sortColArray[0];
-        this.sort.active = temp.columnName;
-        this.sort.direction = temp.ascendent ? 'asc' : 'desc';
-      }
+  setMatSort() {
+    //set values of sort-columns to matsort
+    if ((typeof (this._oTableOptions.columns) !== 'undefined') && (this.sortColArray.length > 0)) {
+      let temp = this.sortColArray[0];
+      this.sort.active = temp.columnName;
+      this.sort.direction = temp.ascendent ? 'asc' : 'desc';
     }
   }
 
   /**
-   * get/set parametres to component
+   * Get/Set parametres to component
    */
-  initializeParams() {
-    //add column checkbox
-    //1. create object ocolumn
-    //2. not add visiblesColumns
-    let checkboxColumn = new OColumn();
-    checkboxColumn.name = OTableComponent.NAME_COLUMN_SELECT;
-    checkboxColumn.title = '';
-    checkboxColumn.visible = false;
-    this._oTableOptions.selectColumn = checkboxColumn;
+  initializeParams(): void {
+    // Get previous status
+    this.state = this.localStorageService.getComponentStorage(this);
 
-    // initializing row selection listener
-    this.selectionChangeSubscription = this.selection.onChange.subscribe((selectionData: SelectionChange<any>) => {
-      if (selectionData && selectionData.added.length > 0) {
-        ObservableWrapper.callEmit(this.onRowSelected, selectionData.added);
+    // Initialize table layout parameters
+    if (typeof (this.oattr) === 'undefined') {
+      if (typeof (this.entity) !== 'undefined') {
+        this.oattr = this.entity.replace('.', '_');
+        this.oattrFromEntity = true;
       }
-      if (selectionData && selectionData.removed.length > 0) {
-        ObservableWrapper.callEmit(this.onRowDeselected, selectionData.removed);
-      }
-    });
+    }
 
-    // if not declare visible-columns then visible-columns is all columns
+    if (typeof (this.title) !== 'undefined') {
+      this.title = this.translateService.get(this.title);
+    }
+
+    if (!this.detailButtonInRowIcon) {
+      this.detailButtonInRowIcon = OServiceComponent.DEFAULT_DETAIL_ICON;
+    }
+
+    if (!this.editButtonInRowIcon) {
+      this.editButtonInRowIcon = OServiceComponent.DEFAULT_EDIT_ICON;
+    }
+
+    if (this.detailButtonInRow || this.editButtonInRow) {
+      this.detailMode = OServiceComponent.DETAIL_MODE_NONE;
+    }
+
+    this.rowHeight = this.rowHeight ? this.rowHeight.toLowerCase() : this.rowHeight;
+    if (!this.rowHeight || (OServiceComponent.AVAILABLE_ROW_HEIGHTS.indexOf(this.rowHeight) === -1)) {
+      this.rowHeight = OServiceComponent.DEFAULT_ROW_HEIGHT;
+    }
+
+    // Initialize table data parameters
+    this.keysArray = Util.parseArray(this.keys);
+    this.colArray = Util.parseArray(this.columns, true);
+    let pkArray = Util.parseArray(this.parentKeys);
+    this._pKeysEquiv = Util.parseParentKeysEquivalences(pkArray, OServiceComponent.COLUMNS_ALIAS_SEPARATOR);
+
+    // TODO: get default values from ICrudConstants
+    if (!this.queryMethod) {
+      this.queryMethod = OServiceComponent.DEFAULT_QUERY_METHOD;
+    }
+
+    if (!this.paginatedQueryMethod) {
+      this.paginatedQueryMethod = OServiceComponent.DEFAULT_PAGINATED_QUERY_METHOD;
+    }
+
+    if (!this.insertMethod) {
+      this.insertMethod = OTableComponent.DEFAULT_INSERT_METHOD;
+    }
+
+    if (!this.updateMethod) {
+      this.updateMethod = OTableComponent.DEFAULT_UPDATE_METHOD;
+    }
+    if (!this.deleteMethod) {
+      this.deleteMethod = OServiceComponent.DEFAULT_DELETE_METHOD;
+    }
+
+    if (this.queryRows) {
+      this.queryRows = parseInt(this.queryRows);
+    } else {
+      this.queryRows = OServiceComponent.DEFAULT_QUERY_ROWS;
+    }
+
+    // If visible-columns is not present then visible-columns is all columns
     if (!this.visibleColumns) {
       this.visibleColumns = this.columns;
     }
@@ -613,44 +677,13 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       this.colArray.map(x => this.registerColumn(x));
     }
 
-    if (!this.insertMethod) {
-      this.insertMethod = OTableComponent.DEFAULT_INSERT_METHOD;
-    }
-    if (!this.updateMethod) {
-      this.updateMethod = OTableComponent.DEFAULT_UPDATE_METHOD;
-    }
-
     if (this.state['query-rows'] !== undefined) {
       this.queryRows = this.state['query-rows'];
     }
 
-    // Initializing quickFilter
-    this._oTableOptions.filter = this.quickFilter;
-    this._oTableOptions.filterCaseSensitive = this.filterCaseSensitive;
-
     this.parseSortColumns();
 
-    if (this.mdTabGroupContainer && this.mdTabContainer) {
-      /*
-      * When table is contained into tab component, it is necessary to init
-      * table component when attached to DOM.
-      */
-      var self = this;
-      this.mdTabGroupChangeSubscription = this.mdTabGroupContainer.selectChange.subscribe((evt) => {
-        var interval = setInterval(function () { timerCallback(evt.tab); }, 100);
-        function timerCallback(tab: MdTab) {
-          if (tab && tab.content.isAttached) {
-            clearInterval(interval);
-            if (tab === self.mdTabContainer) {
-              if (self.pendingQuery) {
-                self.queryData(self.pendingQueryFilter);
-              }
-            }
-          }
-        }
-
-      });
-    }
+    // Configure data service
     let queryMethodName = this.pageable ? this.paginatedQueryMethod : this.queryMethod;
     const methods = {
       query: queryMethodName,
@@ -658,16 +691,99 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       delete: this.deleteMethod,
       insert: this.insertMethod
     };
-    this.daoTable = new OTableDao(this.dataService, this.entity, methods);
 
     if (this.staticData) {
+      this.queryOnBind = false;
+      this.queryOnInit = false;
+      this.daoTable = new OTableDao(undefined, this.entity, methods);
       this.setDataArray(this.staticData);
+    } else {
+      this.configureService();
+      this.daoTable = new OTableDao(this.dataService, this.entity, methods);
     }
 
+    // Initialize quickFilter
+    this._oTableOptions.filter = this.quickFilter;
+    this._oTableOptions.filterCaseSensitive = this.filterCaseSensitive;
+
+    // Initialize paginator
     if (!this.paginator && this.paginationControls) {
       this.paginator = new OTablePaginatorComponent(this.injector, this);
       this.paginator.pageSize = this.queryRows;
     }
+
+    if (this.tabGroupContainer && this.tabContainer) {
+      this.registerTabListener();
+    }
+
+    this.authGuardService.getPermissions(this.router.url, this.oattr).then(permissions => {
+      if (typeof (permissions) !== 'undefined') {
+        if (this.ovisible && permissions.visible === false) {
+          this.ovisible = false;
+        }
+        if (this.oenabled && permissions.enabled === false) {
+          this.oenabled = false;
+        }
+      }
+    });
+  }
+
+  registerTabListener() {
+    // When table is contained into tab component, it is necessary to init
+    // table component when attached to DOM.
+    const self = this;
+    this.tabGroupChangeSubscription = this.tabGroupContainer.selectedTabChange.subscribe((evt) => {
+      const interval = setInterval(function () { timerCallback(evt.tab); }, 100);
+      function timerCallback(tab: MatTab) {
+        if (tab && tab.content.isAttached) {
+          clearInterval(interval);
+          if (tab === self.tabContainer) {
+            self.insideTabBugWorkaround();
+
+            if (self.tabGroupChangeSubscription) {
+              self.tabGroupChangeSubscription.unsubscribe();
+            }
+            if (self.pendingQuery) {
+              self.queryData(self.pendingQueryFilter);
+            }
+          }
+        }
+      }
+    });
+  }
+
+  protected insideTabBugWorkaround() {
+    const active = this.sort.active;
+    this.sort.active = '';
+    this.sortHeaders.forEach(sortH => {
+      if (sortH.id !== active) {
+        sortH._viewState.toState = 'active';
+        sortH._intl.changes.next();
+      } else {
+        sortH._setAnimationTransitionState({
+          fromState: this.sort.direction,
+          toState: 'active'
+        });
+        sortH._showIndicatorHint = false;
+      }
+    });
+    this.setMatSort();
+  }
+
+  registerSortListener() {
+    const self = this;
+    this.sortSubscription = this.sort.sortChange.subscribe((sort: Sort) => {
+      self.sortColArray = [];
+      if (sort.direction !== '') {
+        self.sortColArray.push({
+          columnName: sort.active,
+          ascendent: sort.direction === OTableComponent.TYPE_ASC_NAME
+        });
+      }
+      if (self.pageable) {
+        self.reloadData();
+      }
+    });
   }
 
   setDatasource() {
@@ -684,7 +800,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
    */
   queryData(parentItem: any = undefined, ovrrArgs?: any) {
     //if exit tab and not is active then waiting call queryData
-    if (this.mdTabContainer && !this.mdTabContainer.isActive) {
+    if (this.tabContainer && !this.tabContainer.isActive) {
       this.pendingQuery = true;
       this.pendingQueryFilter = parentItem;
       return;
@@ -830,8 +946,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     });
   }
 
-  onMdTableContentChanged() {
-    console.log('onMdTableContentChanged');
+  onMatTableContentChanged() {
+    console.log('onMatTableContentChanged');
   }
 
   add() {
@@ -1044,7 +1160,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     let data = this.getAllValues();
     const _self = this;
     return data.map(function (row, i, a) {
-      var obj = {};
+      let obj = {};
       _self.keysArray.map(function (key, i, a) {
         if (row[key] !== undefined) {
           obj[key] = row[key];
@@ -1073,11 +1189,11 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     return numSelected === numRows;
   }
 
-  masterToggle(event: MdCheckboxChange) {
+  masterToggle(event: MatCheckboxChange) {
     event.checked ? this.dataSource.renderedData.forEach(row => this.selection.select(row)) : this.clearSelection();
   }
 
-  selectionCheckboxToggle(event: MdCheckboxChange, row: any) {
+  selectionCheckboxToggle(event: MatCheckboxChange, row: any) {
     if (this.isSelectionModeSingle()) {
       this.clearSelection();
     }
@@ -1333,6 +1449,20 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     this.clearSelection();
     this.setDataArray(dataArray);
   }
+
+  isColumnSortActive(column: OColumn): boolean {
+    let found = this.sortColArray.find(sortC => sortC.columnName === column.attr);
+    return found !== undefined;
+  }
+
+  isColumnDescSortActive(column: OColumn): boolean {
+    let found = this.sortColArray.find(sortC => sortC.columnName === column.attr && !sortC.ascendent);
+    return found !== undefined;
+  }
+
+  hasTabGroupChangeSubscription(): boolean {
+    return this.tabGroupChangeSubscription !== undefined;
+  }
 }
 
 @NgModule({
@@ -1351,7 +1481,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     CommonModule,
     OSharedModule,
     CdkTableModule,
-    DragulaModule,
+    DndModule.forRoot(),
     OContextMenuModule
   ],
   exports: [
@@ -1373,8 +1503,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     ...O_TABLE_DIALOGS
   ],
   providers: [{
-    provide: MdPaginatorIntl,
-    useClass: OTableMdPaginatorIntl
+    provide: MatPaginatorIntl,
+    useClass: OTableMatPaginatorIntl
   }]
 })
 export class OTableModule {

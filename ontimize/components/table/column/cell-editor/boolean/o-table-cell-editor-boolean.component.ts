@@ -1,5 +1,5 @@
 import { Component, Injector, ViewChild, TemplateRef, ViewEncapsulation } from '@angular/core';
-import { MdCheckboxChange } from '@angular/material';
+import { MatCheckboxChange } from '@angular/material';
 import { Util } from '../../../../../utils';
 import { InputConverter } from '../../../../../decorators';
 import { OBaseTableCellEditor } from '../o-base-table-cell-editor.class';
@@ -53,7 +53,7 @@ export class OTableCellEditorBooleanComponent extends OBaseTableCellEditor {
 
   getCellData() {
     let cellData = super.getCellData();
-    this.indeterminate = this.indeterminateOnNull && (cellData === undefined);
+    this.indeterminate = this.indeterminateOnNull && !Util.isDefined(cellData);
     if (!this.indeterminate) {
       cellData = this.parseValueByType(cellData);
     }
@@ -95,7 +95,7 @@ export class OTableCellEditorBooleanComponent extends OBaseTableCellEditor {
     return result;
   }
 
-  onChange(arg: MdCheckboxChange) {
+  onChange(arg: MatCheckboxChange) {
     this.formControl.setValue(arg.checked ? this.trueValue : this.falseValue, { emitEvent: false });
     this.commitEdition();
   }

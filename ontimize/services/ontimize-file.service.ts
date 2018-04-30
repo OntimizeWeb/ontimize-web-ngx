@@ -57,19 +57,17 @@ export class OntimizeFileService {
    * @param entity the entity
    */
   public upload(files: any[], entity: string, data?: Object): Observable<any> {
-    var url = this._urlBase + this.path + '/' + entity;
+    const url = this._urlBase + this.path + '/' + entity;
 
-    let authorizationToken = 'Bearer ' + this._sessionid;
-    let headers: HttpHeaders = new HttpHeaders({
+    const headers: HttpHeaders = new HttpHeaders({
       'Access-Control-Allow-Origin': '*',
-      'Authorization': authorizationToken
+      'Authorization': 'Bearer ' + this._sessionid
     });
 
     let _innerObserver: any;
-    let dataObservable = new Observable(observer => _innerObserver = observer).share();
+    const dataObservable = new Observable(observer => _innerObserver = observer).share();
 
-    let toUpload: any;
-    toUpload = new FormData();
+    let toUpload: any = new FormData();
     files.forEach(item => {
       item.prepareToUpload();
       item.isUploading = true;
@@ -85,43 +83,41 @@ export class OntimizeFileService {
       reportProgress: true
     });
 
-    var self = this;
-    this.httpClient
-      .request(request)
-      .subscribe(resp => {
-        if (HttpEventType.UploadProgress === resp.type) {
-          // Upload progress event received
-          let progressData = {
-            loaded: resp.loaded,
-            total: resp.total
-          };
-          _innerObserver.next(progressData);
-        } else if (HttpEventType.Response === resp.type) {
-          // Full response received
-          if (resp.body) {
-            if (resp.body['code'] === 3) {
-              self.redirectLogin(true);
-            } else if (resp.body['code'] === 1) {
-              _innerObserver.error(resp.body['message']);
-            } else if (resp.body['code'] === 0) {
-              // RESPONSE
-              _innerObserver.next(resp.body);
-            } else {
-              // Unknow state -> error
-              _innerObserver.error('Service unavailable');
-            }
-          } else {
+    const self = this;
+    this.httpClient.request(request).subscribe(resp => {
+      if (HttpEventType.UploadProgress === resp.type) {
+        // Upload progress event received
+        let progressData = {
+          loaded: resp.loaded,
+          total: resp.total
+        };
+        _innerObserver.next(progressData);
+      } else if (HttpEventType.Response === resp.type) {
+        // Full response received
+        if (resp.body) {
+          if (resp.body['code'] === 3) {
+            self.redirectLogin(true);
+          } else if (resp.body['code'] === 1) {
+            _innerObserver.error(resp.body['message']);
+          } else if (resp.body['code'] === 0) {
+            // RESPONSE
             _innerObserver.next(resp.body);
+          } else {
+            // Unknow state -> error
+            _innerObserver.error('Service unavailable');
           }
-        }
-      }, error => {
-        console.log(error);
-        if (error.status === 401) {
-          self.redirectLogin(true);
         } else {
-          _innerObserver.error(error);
+          _innerObserver.next(resp.body);
         }
-      },
+      }
+    }, error => {
+      console.log(error);
+      if (error.status === 401) {
+        self.redirectLogin(true);
+      } else {
+        _innerObserver.error(error);
+      }
+    },
       () => _innerObserver.complete());
 
     return dataObservable;

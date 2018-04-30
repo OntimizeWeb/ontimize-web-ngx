@@ -47,12 +47,8 @@ export const DEFAULT_OUTPUTS_O_INTEGER_INPUT = [
   selector: 'o-integer-input',
   templateUrl: './o-integer-input.component.html',
   styleUrls: ['./o-integer-input.component.scss'],
-  inputs: [
-    ...DEFAULT_INPUTS_O_INTEGER_INPUT
-  ],
-  outputs: [
-    ...DEFAULT_OUTPUTS_O_INTEGER_INPUT
-  ],
+  inputs: DEFAULT_INPUTS_O_INTEGER_INPUT,
+  outputs: DEFAULT_OUTPUTS_O_INTEGER_INPUT,
   encapsulation: ViewEncapsulation.None
 })
 
@@ -270,7 +266,7 @@ export class OIntegerInputComponent extends OTextInputComponent implements OnIni
 @NgModule({
   declarations: [OIntegerInputComponent],
   imports: [OSharedModule, CommonModule, OTextInputModule],
-  exports: [OIntegerInputComponent, OTextInputModule],
+  exports: [OIntegerInputComponent, OTextInputModule]
 })
 export class OIntegerInputModule {
 }

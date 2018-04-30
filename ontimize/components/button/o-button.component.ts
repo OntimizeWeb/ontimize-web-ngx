@@ -1,11 +1,4 @@
-import {
-  Component,
-  OnInit,
-  NgModule,
-  ViewEncapsulation
-} from '@angular/core';
-// import { MdIconModule, MdButtonModule } from '@angular/material';
-
+import { Component, OnInit, NgModule, ViewEncapsulation } from '@angular/core';
 import { OSharedModule } from '../../shared';
 import { CommonModule } from '@angular/common';
 
@@ -24,9 +17,7 @@ export const DEFAULT_INPUTS_O_BUTTON = [
 
 @Component({
   selector: 'o-button',
-  inputs: [
-    ...DEFAULT_INPUTS_O_BUTTON
-  ],
+  inputs: DEFAULT_INPUTS_O_BUTTON,
   templateUrl: './o-button.component.html',
   styleUrls: ['./o-button.component.scss'],
   encapsulation: ViewEncapsulation.None
@@ -39,11 +30,11 @@ export class OButtonComponent implements OnInit {
   protected static DEFAULT_TYPE = 'RAISED';
 
   protected oattr: string;
-  protected olabel: string;
+  olabel: string;
   protected otype: string;
-  protected icon: string;
-  protected iconPosition: string; // left (default), top, TODO: right, bottom?
-  protected image: string;
+  icon: string;
+  iconPosition: string; // left (default), top, TODO: right, bottom?
+  image: string;
 
   constructor() {
     this.otype = OButtonComponent.DEFAULT_TYPE;
@@ -59,15 +50,15 @@ export class OButtonComponent implements OnInit {
     return this.icon !== undefined && (this.olabel === undefined || this.olabel === '');
   }
 
-  isFloating() : boolean {
+  isFloating(): boolean {
     return this.otype === 'FLOATING';
   }
 
-  isRaised() : boolean {
+  isRaised(): boolean {
     return ((this.otype === 'RAISED') || !this.otype);
   }
 
-  isFlat() : boolean {
+  isFlat(): boolean {
     return this.otype === 'FLAT';
   }
 }

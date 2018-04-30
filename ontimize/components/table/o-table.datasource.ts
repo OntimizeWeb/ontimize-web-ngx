@@ -2,7 +2,7 @@ import { Observable } from 'rxjs/Observable';
 import { DataSource } from '@angular/cdk/collections';
 import { OTableDao } from './o-table.dao';
 import { OTableOptions, OColumn, OTableComponent } from './o-table.component';
-import { MdSort, MdPaginator } from '@angular/material';
+import { MatSort, MatPaginator } from '@angular/material';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import 'rxjs/add/operator/startWith';
 import 'rxjs/add/observable/merge';
@@ -19,19 +19,19 @@ export class OTableDataSource extends DataSource<any> {
   get data(): any[] { return this.dataTotalsChange.value; }
 
   protected _database: OTableDao;
-  protected _paginator: MdPaginator;
+  protected _paginator: MatPaginator;
   protected _tableOptions: OTableOptions;
-  protected _sort: MdSort;
+  protected _sort: MatSort;
 
   protected _quickFilterChange = new BehaviorSubject('');
   protected _columnValueFilterChange = new BehaviorSubject('');
 
   protected filteredData: any[] = [];
-  protected paginator: MdPaginator;
+  protected paginator: MatPaginator;
   renderedData: any[] = [];
   resultsLength: number = 0;
 
-  get quickFilter(): string { return this._quickFilterChange.value; }
+  get quickFilter(): string { return this._quickFilterChange.value || ''; }
   set quickFilter(filter: string) {
     this._quickFilterChange.next(filter);
   }
@@ -42,7 +42,7 @@ export class OTableDataSource extends DataSource<any> {
     super();
     this._database = table.daoTable;
     if (table.paginator) {
-      this._paginator = table.mdpaginator;
+      this._paginator = table.matpaginator;
     }
     this._tableOptions = table.oTableOptions;
     this._sort = table.sort;
@@ -58,7 +58,7 @@ export class OTableDataSource extends DataSource<any> {
     ];
 
     if (!this.table.pageable) {
-      displayDataChanges.push(this._sort.mdSortChange);
+      displayDataChanges.push(this._sort.sortChange);
 
       if (this._tableOptions.filter) {
         displayDataChanges.push(this._quickFilterChange);
@@ -149,14 +149,18 @@ export class OTableDataSource extends DataSource<any> {
 
   getQuickFilterData(data: any[]): any[] {
     let filterData = this.quickFilter;
-    return data.filter((item: any) => {
-      let searchStr = this.getStringSearchable(item);
-      if (!this._tableOptions.filterCaseSensitive) {
-        searchStr = searchStr.toLowerCase();
-        filterData = filterData.toLowerCase();
-      }
-      return searchStr.indexOf(filterData) !== -1;
-    });
+    if (filterData !== undefined && filterData.length > 0) {
+      return data.filter((item: any) => {
+        let searchStr = this.getStringSearchable(item);
+        if (!this._tableOptions.filterCaseSensitive) {
+          searchStr = searchStr.toLowerCase();
+          filterData = filterData.toLowerCase();
+        }
+        return searchStr.indexOf(filterData) !== -1;
+      });
+    } else {
+      return data;
+    }
   }
 
   getPaginationData(data: any[]): any[] {

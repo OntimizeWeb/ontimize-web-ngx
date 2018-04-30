@@ -2,6 +2,8 @@ import { Injector } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/combineLatest';
+import { OTranslateService } from './o-translate.service';
 import { AppConfig } from '../../config/app-config';
 
 export class OTranslateHttpLoader extends TranslateHttpLoader {
@@ -12,16 +14,22 @@ export class OTranslateHttpLoader extends TranslateHttpLoader {
   static BUNDLE_VALUE = 'value';
 
   constructor(
-    http: HttpClient,
-    prefix: string = '/assets/i18n/',
-    suffix: string = '.json',
+    httpClient: HttpClient,
+    prefix: string = OTranslateService.ASSETS_PATH,
+    suffix: string = OTranslateService.ASSETS_EXTENSION,
     protected injector: Injector
   ) {
-
-    super(http, prefix, suffix);
-
-    this.httpClient = http;
+    super(httpClient, prefix, suffix);
     this.appConfig = this.injector.get(AppConfig);
+    this.httpClient = httpClient;
+  }
+
+  getAssetsPath(): string {
+    return this.prefix;
+  }
+
+  getAssetsExtension(): string {
+    return this.suffix;
   }
 
   getLocalTranslation(lang: string): Observable<any> {

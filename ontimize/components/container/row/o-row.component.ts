@@ -1,9 +1,9 @@
 import { Component, Inject, Injector, forwardRef, ElementRef, OnInit, Optional, NgModule, ViewEncapsulation, AfterViewInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { InputConverter } from '../../../decorators';
 import { OFormComponent } from '../../form/o-form.component';
 import { OTranslateService } from '../../../services';
 import { OSharedModule } from '../../../shared';
-import { CommonModule } from '@angular/common';
 
 export const DEFAULT_INPUTS_O_ROW = [
   'oattr: attr',
@@ -17,9 +17,7 @@ export const DEFAULT_INPUTS_O_ROW = [
   selector: 'o-row',
   templateUrl: './o-row.component.html',
   styleUrls: ['./o-row.component.scss'],
-  inputs: [
-    ...DEFAULT_INPUTS_O_ROW
-  ],
+  inputs: DEFAULT_INPUTS_O_ROW,
   encapsulation: ViewEncapsulation.None,
   host: {
     '[class.o-row]': 'true'
@@ -161,14 +159,12 @@ export class ORowComponent implements OnInit, AfterViewInit {
       });
     }
   }
-
-
 }
 
 @NgModule({
   declarations: [ORowComponent],
   imports: [OSharedModule, CommonModule],
-  exports: [ORowComponent],
+  exports: [ORowComponent]
 })
 export class ORowModule {
 }

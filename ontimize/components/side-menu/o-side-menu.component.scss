@@ -4,7 +4,7 @@ o-side-menu {
     cursor: pointer;
   }
 
-  md-sidenav-container.menu-opened {
+  mat-sidenav-container.menu-opened {
     position: fixed;
     top: 0;
     left: 0;
@@ -13,7 +13,7 @@ o-side-menu {
     z-index: 1001;
   }
 
-  md-nav-list {
+  mat-nav-list {
     &.mat-nav-list{
       padding-top: 0px;
     }
@@ -26,19 +26,19 @@ o-side-menu {
   }
 
   @media all and (min-width : 768px) {
-    md-sidenav {
+    mat-sidenav {
       width: 250px;
     }
   }
 
   @media all and (max-width : 767px) {
-    md-sidenav {
+    mat-sidenav {
       width: 250px;
     }
   }
 
   @media all and (max-width : 330px) {
-    md-sidenav {
+    mat-sidenav {
       width: 96%;
     }
   }

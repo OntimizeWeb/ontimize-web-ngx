@@ -14,12 +14,11 @@
     "noUnusedLocals": true,
     "pretty": true,
     "stripInternal": true,
-    // "sourceMap": false,
-    // "inlineSourceMap": false,
-    // "inlineSources": false,
     "outDir": "dist",
     "noUnusedParameters": false,
+    "allowSyntheticDefaultImports": true,
     "types": [
+      "moment",
       "hammerjs",
       "node"
     ],
