@@ -52,7 +52,7 @@
     "webpack": "3.11.0"
   },
   "devDependencies": {
-    "ontimize-web-ngx-library-tools": "file:C:\\workspace\\github\\TOOLS\\ontimize-web-ngx-library-tools\\ontimize-web-ngx-library-tools-1.0.0.tgz",
+    "ontimize-web-ngx-library-tools": "1.0.0",
     "@angular/animations": "5.2.10",
     "@angular/cdk": "5.2.4",
     "@angular/common": "5.2.10",
