@@ -1,4 +1,4 @@
-## 3.0.0-rc.0
+## 3.0.0-rc.0  (2018-04-30)
 
 ### DEPENDENCY UPDATES ###
 * **Removed**:  dragula@^3.7.2
