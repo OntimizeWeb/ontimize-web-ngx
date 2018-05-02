@@ -21,7 +21,7 @@ export const DEFAULT_INPUTS_O_SERVICE_COMPONENT = [
   // attr [string]: list identifier. It is mandatory if data are provided through the data attribute. Default: entity (if set).
   'oattr: attr',
 
-  'title',
+  '_title: title',
 
   'cssClass: css-class',
 
@@ -142,6 +142,7 @@ export class OServiceComponent implements ILocalStorageComponent {
   /* inputs variables */
   protected oattr: string;
   title: string;
+  protected _title: string;
   protected cssclass: string;
   @InputConverter()
   protected ovisible: boolean = true;
@@ -278,7 +279,9 @@ export class OServiceComponent implements ILocalStorageComponent {
   }
 
   onLanguageChangeCallback(res: any) {
-    // console.log('onLanguageChangeCallback');
+    if (typeof (this.title) !== 'undefined') {
+      this.title = this.translateService.get(this._title);
+    }
   }
 
   getKeys() {
@@ -294,7 +297,7 @@ export class OServiceComponent implements ILocalStorageComponent {
     }
 
     if (typeof (this.title) !== 'undefined') {
-      this.title = this.translateService.get(this.title);
+      this.title = this.translateService.get(this._title);
     }
 
     this.authGuardService.getPermissions(this.router.url, this.oattr).then(permissions => {
