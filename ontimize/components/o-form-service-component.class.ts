@@ -166,7 +166,6 @@ export class OFormServiceComponent extends OFormDataComponent {
     }
   }
 
-
   queryData(parentItem: any = undefined, columns?: Array<any>) {
     var self = this;
     if (columns === undefined || columns === null) {
@@ -238,6 +237,7 @@ export class OFormServiceComponent extends OFormDataComponent {
       }
     }
   }
+
   protected parseByValueColumnType(val: any) {
     let value = val;
     if (this.valueColumnType === 'int') {
@@ -254,4 +254,12 @@ export class OFormServiceComponent extends OFormDataComponent {
     super.setValue(value);
   }
 
+  getSelectedRecord() {
+    let result = undefined;
+    const selectedValue = this.getValue();
+    if (Util.isDefined(selectedValue)) {
+      result = this.getDataArray().find(item => item[this.valueColumn] === selectedValue);
+    }
+    return result;
+  }
 }
