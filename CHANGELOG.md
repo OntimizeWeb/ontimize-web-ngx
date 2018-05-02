@@ -3,13 +3,12 @@
 ### Features
 * **OFormServiceComponent**: ('*o-combo*' and '*o-list-picker*' extends this class) adding '*getSelectedRecord*' method for getting the selected value associated data. This is a object including all the properties definied in the '*columns*' input ([e513805](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e513805)) ([#162](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/162))
 * **OServiceComponent**: ('*o-list*' and '*o-table*' extends this class) double click mode (used in '*detail-mode*' and '*edition-mode' input) allows '*dblclick*' and '*doubleclick*' values.
-* **Codes**: Creating '*codes*' util class for general variables and types definitions ([9e20235](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9e20235))
+* **Codes**: Creating '*codes*' util class for general variables and types definitions ([9e20235](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9e20235)) ([d2f2060](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d2f2060))
 
 
 ### BREAKING CHANGES
 * **o-table**: Removing the option for showing all table records in the paginator ([f448bfa](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f448bfa))
 * **o-table**: Removing (unused) '*editable-columns*' input.
-
 
 
 ## 3.0.0-rc.0 (2018-04-30)
