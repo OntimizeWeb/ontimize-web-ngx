@@ -35,3 +35,4 @@ export * from './components/user-info/o-user-info.component';
 
 export * from './components/language-selector/o-language-selector.component';
 export * from './components/card-menu-item/o-card-menu-item.component';
+export * from './components/tree/o-tree.components';

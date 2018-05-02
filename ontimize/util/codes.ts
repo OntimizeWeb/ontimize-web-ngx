@@ -23,6 +23,7 @@ export class Codes {
   public static SELECTION_MODE_SINGLE = 'single';
   public static SELECTION_MODE_MULTIPLE = 'multiple';
 
+  public static HYPHEN_SEPARATOR = '-';
   public static COLUMNS_ALIAS_SEPARATOR = ':';
   public static TYPE_SEPARATOR = ':';
   public static VALUES_SEPARATOR = '=';
@@ -30,6 +31,9 @@ export class Codes {
   public static DESC_SORT = 'desc';
 
   public static TYPE_INT = 'int';
+
+  public static ROUTE_SEPARATOR = '/';
+  public static ROUTE_VARIABLE_CHAR = ':';
 
   static isDoubleClickMode(value: string): boolean {
     return Codes.DETAIL_MODE_DBLCLICK_VALUES.indexOf(value) !== -1;
