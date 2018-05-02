@@ -34,7 +34,8 @@ import {
   OTableOptionComponent,
   OTableColumnsFilterComponent,
   OTableInsertableRowComponent,
-  OTableQuickfilterComponent
+  OTableQuickfilterComponent,
+  OTableEditableRowComponent
 } from './extensions/header/o-table-header-components';
 
 import { OTableColumnComponent } from './column/o-table-column.component';
@@ -210,6 +211,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   @ViewChild('columnFilterOption') columnFilterOption: OTableOptionComponent;
   @ContentChildren(OTableOptionComponent) tableOptions: QueryList<OTableOptionComponent>;
   @ViewChild('menu') matMenu: MatMenu;
+  @ViewChild(OTableEditableRowComponent) oTableEditableRow: OTableEditableRowComponent;
 
   // only for insideTabBugWorkaround
   @ViewChildren(MatSortHeader) protected sortHeaders: QueryList<MatSortHeader>;
@@ -1180,6 +1182,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       this._oTableOptions.visibleColumns.unshift(OTableComponent.NAME_COLUMN_SELECT);
     } else if (this._oTableOptions.visibleColumns && !this._oTableOptions.selectColumn.visible && this._oTableOptions.visibleColumns[0] === OTableComponent.NAME_COLUMN_SELECT) {
       this._oTableOptions.visibleColumns.shift();
+    }
+    if (this.oTableInsertableRowComponent !== undefined && this.oTableEditableRow) {
+      this.oTableEditableRow.cd.detectChanges();
     }
   }
 

@@ -1,12 +1,22 @@
 <mat-table [dataSource]="editableDatasource" class="editable-row-table">
   <span #container> </span>
+
+  <!--Checkbox Column -->
+  <ng-container [matColumnDef]="oTableOptions.selectColumn.name" *ngIf="oTableOptions.selectColumn.visible">
+    <mat-header-cell *matHeaderCellDef>
+    </mat-header-cell>
+    <mat-cell *matCellDef="let row">
+    </mat-cell>
+  </ng-container>
+
   <ng-container *ngFor="let column of oTableOptions.columns" [matColumnDef]="column.name">
     <mat-header-cell *matHeaderCellDef style="display: none;"> </mat-header-cell>
 
     <mat-cell *matCellDef="let row" [fxFlex]="column.width" [ngClass]="column.className">
       <ng-container *ngIf="isColumnInsertable(column) && !useCellEditor(column)">
         <mat-form-field class="insertable-form-field" [hideRequiredMarker]="false" floatPlaceholder="never">
-          <input matInput type="text" [placeholder]="getPlaceholder(column)" [id]="column.attr" [formControl]="getControl(column)" [required]="isColumnRequired(column)">
+          <input matInput type="text" [placeholder]="getPlaceholder(column)" [id]="column.attr" [formControl]="getControl(column)"
+            [required]="isColumnRequired(column)">
           <mat-error *ngIf="columnHasError(column, 'required')">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</mat-error>
         </mat-form-field>
       </ng-container>

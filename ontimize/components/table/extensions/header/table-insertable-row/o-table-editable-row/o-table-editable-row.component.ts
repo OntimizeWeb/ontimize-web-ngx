@@ -1,4 +1,4 @@
-import { Component, Injector, Inject, forwardRef, ViewEncapsulation, ElementRef, ChangeDetectionStrategy, ComponentFactoryResolver, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, Injector, Inject, forwardRef, ViewEncapsulation, ElementRef, ChangeDetectionStrategy, ComponentFactoryResolver, ViewChild, ViewContainerRef, ChangeDetectorRef } from '@angular/core';
 import { FormControl, ValidatorFn, Validators } from '@angular/forms';
 import { ObservableWrapper } from '../../../../../../utils';
 import { SnackBarService, OTranslateService } from '../../../../../../services';
@@ -52,6 +52,7 @@ export class OTableEditableRowComponent {
     protected injector: Injector,
     protected elRef: ElementRef,
     protected resolver: ComponentFactoryResolver,
+    public cd: ChangeDetectorRef,
     @Inject(forwardRef(() => OTableColumnComponent)) protected tableColumn: OTableColumnComponent
   ) {
     this.snackBarService = this.injector.get(SnackBarService);
