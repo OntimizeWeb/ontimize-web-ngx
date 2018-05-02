@@ -6,6 +6,7 @@ import { OFormDataComponent, DEFAULT_INPUTS_O_FORM_DATA_COMPONENT } from './o-fo
 import { Util } from '../utils';
 import { Subscription } from 'rxjs/Subscription';
 import { ServiceUtils } from './service.utils';
+import { QUERY_METHOD, TYPE_INT } from '../util/codes';
 
 export const DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT = [
   ...DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,
@@ -39,7 +40,6 @@ export const DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT = [
 
 export class OFormServiceComponent extends OFormDataComponent {
 
-  public static DEFAULT_QUERY_METHOD = 'query';
   public static DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT = DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT;
 
   /* Inputs */
@@ -48,7 +48,7 @@ export class OFormServiceComponent extends OFormDataComponent {
   protected service: string;
   protected columns: string;
   protected valueColumn: string;
-  protected valueColumnType: string = 'int';
+  protected valueColumnType: string = TYPE_INT;
   protected parentKeys: string;
   protected visibleColumns: string;
   protected descriptionColumns: string;
@@ -106,7 +106,7 @@ export class OFormServiceComponent extends OFormDataComponent {
     this._pKeysEquiv = Util.parseParentKeysEquivalences(pkArray);
 
     if (!this.queryMethod) {
-      this.queryMethod = OFormServiceComponent.DEFAULT_QUERY_METHOD;
+      this.queryMethod = QUERY_METHOD;
     }
 
     if (this.form) {
@@ -240,7 +240,7 @@ export class OFormServiceComponent extends OFormDataComponent {
 
   protected parseByValueColumnType(val: any) {
     let value = val;
-    if (this.valueColumnType === 'int') {
+    if (this.valueColumnType === TYPE_INT) {
       const parsed = parseInt(value);
       if (!isNaN(parsed)) {
         value = parsed;

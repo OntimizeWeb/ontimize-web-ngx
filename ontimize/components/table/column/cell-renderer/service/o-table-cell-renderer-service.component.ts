@@ -3,6 +3,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { Util } from '../../../../../utils';
 import { OntimizeService, dataServiceFactory, DialogService } from '../../../../../services';
 import { OBaseTableCellRenderer } from '../o-base-table-cell-renderer.class';
+import { QUERY_METHOD } from '../../../../../util/codes';
 
 export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_SERVICE = [
   'entity',
@@ -26,7 +27,6 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_SERVICE = [
 export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer implements OnInit {
 
   public static DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_SERVICE = DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_SERVICE;
-  public static DEFAULT_QUERY_METHOD = 'query';
 
   @ViewChild('templateref', { read: TemplateRef }) public templateref: TemplateRef<any>;
 
@@ -63,7 +63,7 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
     let pkArray = Util.parseArray(this.parentKeys);
     this._pKeysEquiv = Util.parseParentKeysEquivalences(pkArray);
     if (!this.queryMethod) {
-      this.queryMethod = OTableCellRendererServiceComponent.DEFAULT_QUERY_METHOD;
+      this.queryMethod = QUERY_METHOD;
     }
     this.configureService();
   }

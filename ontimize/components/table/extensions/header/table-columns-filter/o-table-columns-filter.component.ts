@@ -1,6 +1,7 @@
 import { Component, Inject, forwardRef, OnInit, Injector } from '@angular/core';
 import { OTableComponent, OColumn } from '../../../o-table.component';
 import { Util } from '../../../../../utils';
+import { TYPE_SEPARATOR } from '../../../../../util/codes';
 
 export const DEFAULT_INPUTS_O_TABLE_COLUMN_FILTER = [
   // columns [string]: columns that might be filtered, separated by ';'. Default: all visible columns.
@@ -26,7 +27,6 @@ export class OTableColumnsFilterComponent implements OnInit {
 
   public static DEFAULT_INPUTS_O_TABLE_COLUMN_FILTER = DEFAULT_INPUTS_O_TABLE_COLUMN_FILTER;
   public static DEFAULT_OUTPUTS_O_TABLE_COLUMN_FILTER = DEFAULT_OUTPUTS_O_TABLE_COLUMN_FILTER;
-  public static COMPARISON_TYPE_SEPARATOR = ':';
 
   public static DEFAULT_COMPARISON_TYPE = 'VIEW';
   public static MODEL_COMPARISON_TYPE = 'MODEL';
@@ -48,7 +48,7 @@ export class OTableColumnsFilterComponent implements OnInit {
     }
     const self = this;
     this.columnsArray.map((colData, i, arr) => {
-      let colDef = colData.split(OTableColumnsFilterComponent.COMPARISON_TYPE_SEPARATOR);
+      let colDef = colData.split(TYPE_SEPARATOR);
       let colName = colDef[0];
       let compType = (colDef[1] || '').toUpperCase();
       if ([OTableColumnsFilterComponent.DEFAULT_COMPARISON_TYPE, OTableColumnsFilterComponent.MODEL_COMPARISON_TYPE].indexOf(compType) === -1) {
