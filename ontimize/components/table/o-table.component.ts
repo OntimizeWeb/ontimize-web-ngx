@@ -84,7 +84,7 @@ export const DEFAULT_INPUTS_O_TABLE = [
   'visibleColumns: visible-columns',
 
   // editable-columns [string]: columns that can be edited directly over the table, separated by ';'. Default: no value.
-  'editableColumns: editable-columns',
+  // 'editableColumns: editable-columns',
 
   // sort-columns [string]: initial sorting, with the format column:[ASC|DESC], separated by ';'. Default: no value.
   'sortColumns: sort-columns',
