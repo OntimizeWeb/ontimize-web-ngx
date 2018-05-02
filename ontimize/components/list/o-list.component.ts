@@ -22,7 +22,7 @@ import { MatCheckbox } from '@angular/material';
 import { Observable } from 'rxjs/Observable';
 
 import { ObservableWrapper } from '../../util/async';
-import { Util } from '../../util/util';
+import { Util, Codes } from '../../utils';
 import { OSharedModule } from '../../shared';
 import { OntimizeService } from '../../services';
 import { dataServiceFactory } from '../../services/data-service.provider';
@@ -251,12 +251,12 @@ export class OListComponent extends OServiceComponent implements OnInit, IList, 
   registerListItemDirective(item: OListItemDirective) {
     if (item) {
       var self = this;
-      if (this.detailMode === OServiceComponent.DETAIL_MODE_CLICK) {
+      if (this.detailMode === Codes.DETAIL_MODE_CLICK) {
         item.onClick(directiveItem => {
           self.onItemDetailClick(directiveItem);
         });
       }
-      if (this.detailMode === OServiceComponent.DETAIL_MODE_DBLCLICK) {
+      if (Codes.isDoubleClickMode(this.detailMode)) {
         item.onDblClick(directiveItem => {
           self.onItemDetailDblClick(directiveItem);
         });
@@ -265,14 +265,14 @@ export class OListComponent extends OServiceComponent implements OnInit, IList, 
   }
 
   onItemDetailClick(item: OListItemDirective | OListItemComponent) {
-    if (this.oenabled && this.detailMode === OServiceComponent.DETAIL_MODE_CLICK) {
+    if (this.oenabled && this.detailMode === Codes.DETAIL_MODE_CLICK) {
       this.viewDetail(item.getItemData());
       ObservableWrapper.callEmit(this.mdClick, item);
     }
   }
 
   onItemDetailDblClick(item: OListItemDirective | OListItemComponent) {
-    if (this.oenabled && this.detailMode === OServiceComponent.DETAIL_MODE_DBLCLICK) {
+    if (this.oenabled && Codes.isDoubleClickMode(this.detailMode)) {
       this.viewDetail(item.getItemData());
       ObservableWrapper.callEmit(this.mdDblClick, item);
     }

@@ -1,32 +1,41 @@
-export declare const QUERY_METHOD = 'query';
-export declare const PAGINATED_QUERY_METHOD = 'advancedQuery';
-export declare const DELETE_METHOD = 'delete';
-export declare const INSERT_METHOD = 'insert';
-export declare const UPDATE_METHOD = 'update';
 
-export declare const DEFAULT_QUERY_ROWS = 10;
+export class Codes {
 
-export declare const DETAIL_ICON = 'chevron_right';
-export declare const EDIT_ICON = 'mode_edit';
+  public static PAGINATED_QUERY_METHOD = 'advancedQuery';
+  public static DELETE_METHOD = 'delete';
+  public static INSERT_METHOD = 'insert';
+  public static UPDATE_METHOD = 'update';
+  public static QUERY_METHOD = 'query';
 
-export declare const DEFAULT_ROW_HEIGHT = 'medium';
-export const AVAILABLE_ROW_HEIGHTS_VALUES = ['small', 'medium', 'large'];
+  public static DEFAULT_QUERY_ROWS = 10;
 
-export declare const DETAIL_MODE_NONE = 'none';
-export declare const DETAIL_MODE_CLICK = 'click';
-export const DETAIL_MODE_DBLCLICK_VALUES = ['dblclick', 'doubleclick'];
+  public static DETAIL_ICON = 'chevron_right';
+  public static EDIT_ICON = 'mode_edit';
 
-export declare const SELECTION_MODE_NONE = 'none';
-export declare const SELECTION_MODE_SINGLE = 'single';
-export declare const SELECTION_MODE_MULTIPLE = 'multiple';
+  public static DEFAULT_ROW_HEIGHT = 'medium';
+  public static AVAILABLE_ROW_HEIGHTS_VALUES = ['small', 'medium', 'large'];
 
-export declare const COLUMNS_ALIAS_SEPARATOR = ':';
-export declare const TYPE_SEPARATOR = ':';
-export declare const VALUES_SEPARATOR = '=';
-export declare const ASC_SORT = 'asc';
-export declare const DESC_SORT = 'desc';
+  public static DETAIL_MODE_NONE = 'none';
+  public static DETAIL_MODE_CLICK = 'click';
+  public static DETAIL_MODE_DBLCLICK_VALUES = ['dblclick', 'doubleclick'];
 
-export declare const TYPE_INT = 'int';
+  public static SELECTION_MODE_NONE = 'none';
+  public static SELECTION_MODE_SINGLE = 'single';
+  public static SELECTION_MODE_MULTIPLE = 'multiple';
 
-export declare type SelectionModeType = 'none' | 'single' | 'multiple';
-export declare type ClickModeType = 'none' | 'click' | 'dblclick' | 'doubleclick';
+  public static COLUMNS_ALIAS_SEPARATOR = ':';
+  public static TYPE_SEPARATOR = ':';
+  public static VALUES_SEPARATOR = '=';
+  public static ASC_SORT = 'asc';
+  public static DESC_SORT = 'desc';
+
+  public static TYPE_INT = 'int';
+
+  static isDoubleClickMode(value: string): boolean {
+    return Codes.DETAIL_MODE_DBLCLICK_VALUES.indexOf(value) !== -1;
+  }
+
+  static isValidRowHeight(value: string): boolean {
+    return Codes.AVAILABLE_ROW_HEIGHTS_VALUES.indexOf(value) === -1;
+  }
+}

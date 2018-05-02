@@ -27,19 +27,13 @@ import { IFormDataTypeComponent, IFormDataComponent } from '../o-form-data-compo
 import { IComponent } from '../o-component.class';
 import { OFormToolbarModule, OFormToolbarComponent } from './o-form-toolbar.component';
 import { OFormValue } from './OFormValue';
-import { Util, SQLTypes } from '../../utils';
+import { Util, SQLTypes, Codes } from '../../utils';
 import { OSharedModule } from '../../shared';
 import { OFormCacheClass } from './cache/o-form.cache.class';
 import { CanDeactivateFormGuard, CanComponentDeactivate } from './guards/o-form-can-deactivate.guard';
 import { OFormNavigationClass } from './navigation/o-form.navigation.class';
 import { OFormContainerComponent } from './o-form-container.component';
 import { OFormLayoutManagerComponent } from '../../layouts';
-import {
-  UPDATE_METHOD,
-  DELETE_METHOD,
-  INSERT_METHOD,
-  QUERY_METHOD
-} from '../../util/codes';
 
 export const DEFAULT_INPUTS_O_FORM = [
   // show-header [boolean]: visibility of form toolbar. Default: yes.
@@ -167,8 +161,6 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   public static UNDO_LAST_CHANGE_ACTION: string = 'UNDO_LAST_CHANGE';
 
   public static PARENT_KEYS_KEY = 'pk';
-
-
 
   public static DEFAULT_LAYOUT_DIRECTION = 'column';
   public static guardClassName = 'CanDeactivateFormGuard';
@@ -577,19 +569,19 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     this.keysSqlTypesArray = Util.parseArray(this.keysSqlTypes);
 
     if (!this.queryMethod) {
-      this.queryMethod = QUERY_METHOD;
+      this.queryMethod = Codes.QUERY_METHOD;
     }
 
     if (!this.insertMethod) {
-      this.insertMethod = INSERT_METHOD;
+      this.insertMethod = Codes.INSERT_METHOD;
     }
 
     if (!this.updateMethod) {
-      this.updateMethod = UPDATE_METHOD;
+      this.updateMethod = Codes.UPDATE_METHOD;
     }
 
     if (!this.deleteMethod) {
-      this.deleteMethod = DELETE_METHOD;
+      this.deleteMethod = Codes.DELETE_METHOD;
     }
 
     this.configureService();
