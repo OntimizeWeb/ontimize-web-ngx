@@ -28,7 +28,7 @@
       </mat-menu>
     </div>
 
-    <mat-table #tableHeader matSort [class]="rowHeight" class="header-fixed" [class.mat-table]="true">
+    <mat-table #tableHeader matSort [class]="rowHeight" [class.header-fixed]="fixedHeader" [class.mat-table]="true">
       <!--Checkbox Column -->
       <ng-container [matColumnDef]="oTableOptions.selectColumn.name" *ngIf="oTableOptions.selectColumn.visible">
         <mat-header-cell *matHeaderCellDef>
@@ -55,7 +55,6 @@
 
       <mat-header-row *matHeaderRowDef="oTableOptions.visibleColumns"></mat-header-row>
 
-
     </mat-table>
 
     <!--TABLE EMPTY-->
@@ -68,8 +67,7 @@
     </div>
 
     <!-- TABLE EDITABLE ROW position: first -->
-    <o-table-editable-row [datasource]="dataSource" *ngIf="showFirstInsertableRow">
-    </o-table-editable-row>
+    <o-table-editable-row [datasource]="dataSource" *ngIf="showFirstInsertableRow"></o-table-editable-row>
 
     <mat-table #table [trackBy]="getTrackByFunction()" [dataSource]="dataSource" matSort [class]="rowHeight" [class.content-table]="true"
       [class.mat-table]="true">
@@ -126,8 +124,7 @@
     <o-table-aggregate [o-table-options]="oTableOptions" [datasource]="dataSource" *ngIf="showTotals"> </o-table-aggregate>
 
     <!-- TABLE EDITABLE ROW position: last -->
-    <o-table-editable-row [datasource]="dataSource" *ngIf="showLastInsertableRow">
-    </o-table-editable-row>
+    <o-table-editable-row [datasource]="dataSource" *ngIf="showLastInsertableRow"></o-table-editable-row>
 
     <!--LOADING-->
     <div *ngIf="daoTable.isLoadingResults" class="spinner-container">

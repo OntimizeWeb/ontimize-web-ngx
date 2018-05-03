@@ -1,4 +1,6 @@
-import { Component, OnInit, Injector, forwardRef, Inject, ComponentFactoryResolver, ComponentFactory, ViewChild, ViewContainerRef, EventEmitter } from '@angular/core';
+import { Component, OnDestroy, OnInit, Injector, forwardRef, Inject, ComponentFactoryResolver, ComponentFactory, ViewChild, ViewContainerRef, EventEmitter } from '@angular/core';
+import { Subscription } from 'rxjs';
+
 import { InputConverter } from '../../../decorators';
 import {
   OTableCellRendererDateComponent,
@@ -23,7 +25,6 @@ import {
 } from './cell-editor/cell-editor';
 
 import { DateFilterFunction } from '../../../components/input/date-input/o-date-input.component';
-
 
 export const DEFAULT_INPUTS_O_TABLE_COLUMN = [
 
@@ -89,7 +90,7 @@ export const DEFAULT_OUTPUTS_O_TABLE_COLUMN = [
     '[class.columnBreakWord]': 'breakWord'
   }
 })
-export class OTableColumnComponent implements OnInit {
+export class OTableColumnComponent implements OnDestroy, OnInit {
 
   public static DEFAULT_INPUTS_O_TABLE_COLUMN = DEFAULT_INPUTS_O_TABLE_COLUMN;
   // public static DEFAULT_OUTPUTS_O_TABLE_COLUMN = DEFAULT_OUTPUTS_O_TABLE_COLUMN;
@@ -200,10 +201,13 @@ export class OTableColumnComponent implements OnInit {
   @ViewChild('container', { read: ViewContainerRef })
   container: ViewContainerRef;
 
+  private subscriptions = new Subscription();
+
   constructor(
     @Inject(forwardRef(() => OTableComponent)) public table: OTableComponent,
     protected resolver: ComponentFactoryResolver,
-    protected injector: Injector) {
+    protected injector: Injector
+  ) {
     this.table = table;
   }
 
@@ -212,6 +216,12 @@ export class OTableColumnComponent implements OnInit {
     this.createRenderer();
     this.createEditor();
     this.table.registerColumn(this);
+
+    this.subscriptions.add(this.table.onReinitialize.subscribe(() => this.table.registerColumn(this)));
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
   }
 
   protected createRenderer() {
@@ -337,4 +347,5 @@ export class OTableColumnComponent implements OnInit {
   public registerEditor(editor: any) {
     this.editor = editor;
   }
+
 }

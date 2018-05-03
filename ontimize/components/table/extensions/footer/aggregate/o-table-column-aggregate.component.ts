@@ -1,4 +1,6 @@
-import { Component, OnInit, forwardRef, Inject, Injector } from '@angular/core';
+import { Component, OnDestroy, OnInit, forwardRef, Inject, Injector } from '@angular/core';
+import { Subscription } from 'rxjs';
+
 import { OTableComponent } from '../../../o-table.component';
 
 export class OColumnAggregate {
@@ -29,13 +31,16 @@ export const DEFAULT_TABLE_COLUMN_AGGREGATE = [
   inputs: DEFAULT_TABLE_COLUMN_AGGREGATE
 
 })
-export class OTableColumnAggregateComponent implements OnInit {
+export class OTableColumnAggregateComponent implements OnDestroy, OnInit {
+
   public attr: string;
   public aggregate: string;
   public table: OTableComponent;
   public title: string = '';
   protected _aggregateFunction: AggregateFunction;
   public static DEFAULT_AGGREGATE = 'SUM';
+
+  protected subscription: Subscription = new Subscription();
 
   constructor(
     @Inject(forwardRef(() => OTableComponent)) table: OTableComponent,
@@ -72,5 +77,12 @@ export class OTableColumnAggregateComponent implements OnInit {
 
     ocolumnaggregate.operator = this.aggregate ? this.aggregate : (this.functionAggregate ? this.functionAggregate : OTableColumnAggregateComponent.DEFAULT_AGGREGATE);
     this.table.registerColumnAggregate(ocolumnaggregate);
+
+    this.subscription.add(this.table.onReinitialize.subscribe(() => this.table.registerColumnAggregate(ocolumnaggregate)));
   }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
+  }
+
 }

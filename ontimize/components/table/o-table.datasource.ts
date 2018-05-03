@@ -93,11 +93,10 @@ export class OTableDataSource extends DataSource<any> {
         data = this.getPaginationData(data);
       }
       this.renderedData = data;
-      //if exist one o-table-column-aggregate then emit observable
+      // if exist one o-table-column-aggregate then emit observable
       if (this.table.showTotals) {
         this.dataTotalsChange.next(this.renderedData);
       }
-      //this.resultsLength = this.renderedData.length;
       return this.renderedData;
     });
   }
@@ -131,19 +130,19 @@ export class OTableDataSource extends DataSource<any> {
   }
 
   protected transformFormula(formula, row): string {
-    //1. replace columns by values of row
+    // 1. replace columns by values of row
     this._tableOptions.visibleColumns.map(function (column) {
       formula = formula.replace(column, row[column]);
     });
 
     let resultFormula = '';
-    //2. Transform formula
+    // 2. Transform formula
     try {
       resultFormula = (new Function('return ' + formula))();
     } catch (e) {
       console.log('Operation defined in the calculated column is incorrect ');
     }
-    //3. Return result
+    // 3. Return result
     return resultFormula;
   }
 
@@ -210,7 +209,7 @@ export class OTableDataSource extends DataSource<any> {
     return (valueA <= valueB ? -1 : 1) * (this._sort.direction === 'asc' ? 1 : -1);
   }
 
-  /**Return data of the visible columns of the table  without rendering */
+  /** Return data of the visible columns of the table  without rendering */
   getCurrentData(): any[] {
     return this.getData();
   }
@@ -219,13 +218,12 @@ export class OTableDataSource extends DataSource<any> {
     return this.getAllData();
   }
 
-  /**Return data of the visible columns of the table  rendering */
+  /** Return data of the visible columns of the table  rendering */
   getCurrentRendererData(): any[] {
     return this.getData(true);
-
   }
 
-  /**Return sql types of the current data */
+  /** Return sql types of the current data */
   get sqlTypes(): any {
     return this._database.sqlTypes;
   }
@@ -272,8 +270,8 @@ export class OTableDataSource extends DataSource<any> {
       return obj;
     });
   }
-  public getColumnData(ocolumn: string) {
 
+  public getColumnData(ocolumn: string) {
     return this.renderedData.map(function (row, i, a) {
       /** render each column*/
       var obj = {};
@@ -357,6 +355,7 @@ export class OTableDataSource extends DataSource<any> {
     });
     return data;
   }
+
 }
 
 export class OTableTotalDataSource extends DataSource<any> {
@@ -444,7 +443,6 @@ export class OTableTotalDataSource extends DataSource<any> {
     let value = 0;
     if (data) {
       value = data.reduce(function (acumulator, currentValue) {
-        //console.log(acumulator, currentValue[column]);
         return acumulator + (isNaN(currentValue[column]) ? 0 : currentValue[column]);
       }, value);
     }
@@ -478,6 +476,7 @@ export class OTableTotalDataSource extends DataSource<any> {
   disconnect() {
     // TODO
   }
+
 }
 
 export class OTableEditableRowDataSource extends DataSource<any> {
@@ -513,4 +512,5 @@ export class OTableEditableRowDataSource extends DataSource<any> {
   disconnect() {
     // TODO
   }
+
 }
