@@ -21,21 +21,33 @@ import { DialogService, LocalStorageService } from '../../services';
 import { FilterExpressionUtils } from '../filter-expression.utils';
 import { ServiceUtils } from '../service.utils';
 import { OFormComponent } from '../form/o-form.component';
-
+import { OSearchInputModule } from '../input/search-input/o-search-input.component';
 import { OTreeClass } from './o-tree.class';
 import { OTreeNodeComponent } from './node/o-tree-node.component';
 
 export const DEFAULT_INPUTS_O_TREE = [
   ...OTreeClass.DEFAULT_INPUTS_O_TREE_CLASS,
-  'controls'
+
+  'oTitle: title',
+
+  'controls',
+
+  // 'static',
+
+  // 'rightMenu: right-menu',
+
+  'refreshButton: refresh-button',
+
+  // quick-filter [no|yes]: show quick filter. Default: yes.
+  'quickFilter: quick-filter'
 ];
 
 export const DEFAULT_OUTPUTS_O_TREE = [
   'onNodeSelected',
-  'onNodeMoved',
-  'onNodeCreated',
-  'onNodeRemoved',
-  'onNodeRenamed',
+  // 'onNodeMoved',
+  // 'onNodeCreated',
+  // 'onNodeRemoved',
+  // 'onNodeRenamed',
   'onNodeExpanded',
   'onNodeCollapsed'
 ];
@@ -57,16 +69,27 @@ export class OTreeComponent extends OTreeClass implements OnInit, AfterViewInit,
   static DEFAULT_OUTPUTS_O_TREE = DEFAULT_OUTPUTS_O_TREE;
   static DEFAULT_ROOT_ROUTE = 'home';
 
+  /* inputs variables */
   @InputConverter()
   controls: boolean = true;
+  // @InputConverter()
+  static: boolean = true;
+  // @InputConverter()
+  rightMenu: boolean = false;
+  @InputConverter()
+  refreshButton: boolean = true;
+  @InputConverter()
+  quickFilter: boolean = true;
+  /* end of variables */
 
+  oTitle: string;
   protected state: any;
 
   onNodeSelected: EventEmitter<any> = new EventEmitter();
-  onNodeMoved: EventEmitter<any> = new EventEmitter();
-  onNodeCreated: EventEmitter<any> = new EventEmitter();
-  onNodeRemoved: EventEmitter<any> = new EventEmitter();
-  onNodeRenamed: EventEmitter<any> = new EventEmitter();
+  // onNodeMoved: EventEmitter<any> = new EventEmitter();
+  // onNodeCreated: EventEmitter<any> = new EventEmitter();
+  // onNodeRemoved: EventEmitter<any> = new EventEmitter();
+  // onNodeRenamed: EventEmitter<any> = new EventEmitter();
   onNodeExpanded: EventEmitter<any> = new EventEmitter();
   onNodeCollapsed: EventEmitter<any> = new EventEmitter();
 
@@ -202,7 +225,7 @@ export class OTreeComponent extends OTreeClass implements OnInit, AfterViewInit,
     });
 
     this.tree = {
-      value: this.translateService.get(this.title),
+      value: this.translateService.get(this.rootTitle),
       id: 0,
       children: childrenArray,
       settings: {
@@ -220,7 +243,7 @@ export class OTreeComponent extends OTreeClass implements OnInit, AfterViewInit,
     };
   }
 
-  reloadTree() {
+  reloadData() {
     // if (this.unstructuredData) {
     //   this.static = true;
     //   this.rightMenu = false;
@@ -423,7 +446,9 @@ export class OTreeComponent extends OTreeClass implements OnInit, AfterViewInit,
     return subscription;
   }
 
-
+  hasTitle(): boolean {
+    return this.oTitle !== undefined;
+  }
 }
 
 @NgModule({
@@ -434,6 +459,7 @@ export class OTreeComponent extends OTreeClass implements OnInit, AfterViewInit,
   imports: [
     OSharedModule,
     CommonModule,
+    OSearchInputModule,
     TreeModule
   ],
   exports: [

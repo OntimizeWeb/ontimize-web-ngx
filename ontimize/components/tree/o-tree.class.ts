@@ -18,8 +18,6 @@ import { OTreeNodeComponent } from './node/o-tree-node.component';
 const DEFAULT_INPUTS_O_TREE_CLASS = [
   'oattr: attr',
 
-  'title',
-
   // service [string]: JEE service path. Default: no value.
   'service',
 
@@ -60,15 +58,11 @@ const DEFAULT_INPUTS_O_TREE_CLASS = [
 
   'showRoot: show-root',
 
-  'refreshButton: refresh-button',
-
-  'static',
-
-  'rightMenu: right-menu',
+  'rootTitle: root-title',
 
   'recursive',
 
-  'recursiveLeves: recursive-levels',
+  'recursiveLevels: recursive-levels',
 
   'translate',
 
@@ -80,7 +74,6 @@ export class OTreeClass {
 
   /* inputs variables */
   protected oattr: string;
-  protected title: string;
   protected service: string;
   protected serviceType: string;
   protected entity: string;
@@ -99,12 +92,7 @@ export class OTreeClass {
   protected staticData: Array<any>;
   @InputConverter()
   showRoot: boolean = true;
-  @InputConverter()
-  refreshButton: boolean = true;
-  @InputConverter()
-  static: boolean = true;
-  @InputConverter()
-  rightMenu: boolean = false;
+  protected rootTitle: string;
   @InputConverter()
   recursive: boolean = false;
   @InputConverter()
@@ -143,10 +131,6 @@ export class OTreeClass {
         this.oattr = this.entity.replace('.', '_');
         this.oattrFromEntity = true;
       }
-    }
-
-    if (typeof (this.title) !== 'undefined') {
-      this.title = this.translateService.get(this.title);
     }
 
     this.keysArray = Util.parseArray(this.keys);
@@ -233,7 +217,7 @@ export class OTreeClass {
       let treeNode = {
         data: itemdata,
         route: this.route,
-        value: this.translateService.get(childNode.title),
+        value: this.translateService.get(childNode.rootTitle),
         id: childNode.oattr,
         loadChildren: (childNodeCallback) => {
           let queryMethodName = childNode.queryMethod;
