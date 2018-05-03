@@ -179,6 +179,16 @@ export interface ISQLOrder {
   ascendent: boolean;
 }
 
+export interface OTableInitializationOptions {
+  entity?: string;
+  service?: string;
+  columns?: string;
+  visibleColumns?: string;
+  keys?: string;
+  sortColumns?: string;
+  parentKeys?: string;
+}
+
 @Component({
   selector: 'o-table',
   templateUrl: './o-table.component.html',
@@ -196,7 +206,6 @@ export interface ISQLOrder {
     '(document:click)': 'handleDOMClick($event)'
   }
 })
-
 export class OTableComponent extends OServiceComponent implements OnInit, OnDestroy {
 
   public static DEFAULT_INPUTS_O_TABLE = DEFAULT_INPUTS_O_TABLE;
@@ -232,7 +241,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   @InputConverter()
   showTableButtonsText: boolean = true;
 
-  protected _oTableOptions: OTableOptions = new OTableOptions();
+  protected _oTableOptions: OTableOptions;
 
   get oTableOptions(): OTableOptions {
     return this._oTableOptions;
@@ -308,6 +317,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   public onRowDeleted: EventEmitter<any> = new EventEmitter();
   public onTableDataLoaded: EventEmitter<any> = new EventEmitter();
   public onPaginatedTableDataLoaded: EventEmitter<any> = new EventEmitter();
+  public onReinitialize: EventEmitter<any> = new EventEmitter();
 
   selection = new SelectionModel<Element>(true, []);
   protected selectionChangeSubscription: Subscription;
@@ -366,6 +376,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
    * Method what initialize vars and configuration
    */
   initialize(): any {
+    // Initialize table options
+    this._oTableOptions = new OTableOptions();
+
     // Initialize params of the table
     this.initializeParams();
 
@@ -391,6 +404,38 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     if (this.form) {
       this.setFormComponent(this.form);
     }
+  }
+
+  reinitialize(options: OTableInitializationOptions): void {
+    if (options) {
+      let clonedOpts = Object.assign({}, options);
+      if (clonedOpts.hasOwnProperty('entity')) {
+        this.entity = clonedOpts.entity;
+      }
+      if (clonedOpts.hasOwnProperty('service')) {
+        this.service = clonedOpts.service;
+      }
+      if (clonedOpts.hasOwnProperty('columns')) {
+        this.columns = clonedOpts.columns;
+      }
+      if (clonedOpts.hasOwnProperty('visibleColumns')) {
+        this.visibleColumns = clonedOpts.visibleColumns;
+      }
+      if (clonedOpts.hasOwnProperty('keys')) {
+        this.keys = clonedOpts.keys;
+      }
+      if (clonedOpts.hasOwnProperty('sortColumns')) {
+        this.sortColumns = clonedOpts.sortColumns;
+      }
+      if (clonedOpts.hasOwnProperty('parentKeys')) {
+        this.parentKeys = clonedOpts.parentKeys;
+      }
+    }
+
+    this.destroy();
+    this.initialize();
+    this.initTableAfterViewInit();
+    this.onReinitialize.emit(null);
   }
 
   protected initTableAfterViewInit() {
@@ -1466,6 +1511,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   hasTabGroupChangeSubscription(): boolean {
     return this.tabGroupChangeSubscription !== undefined;
   }
+
 }
 
 @NgModule({

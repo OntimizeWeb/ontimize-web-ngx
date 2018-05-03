@@ -1,4 +1,4 @@
-import { Component, NgModule, ViewEncapsulation, OnInit, OnDestroy, Injector, ComponentFactoryResolver, ViewContainerRef, ViewChild, EventEmitter, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, NgModule, ViewEncapsulation, OnInit, OnDestroy, Injector, ComponentFactoryResolver, ViewContainerRef, ViewChild, EventEmitter, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterModule, Router, ActivatedRoute, ActivatedRouteSnapshot, Route } from '@angular/router';
 import { MatDialog, MatDialogRef } from '@angular/material';
 import { CommonModule } from '@angular/common';
@@ -45,8 +45,7 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
     '[class.o-form-layout-manager]': 'true'
   }
 })
-
-export class OFormLayoutManagerComponent implements OnInit, OnDestroy {
+export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDestroy {
 
   public static guardClassName = 'CanActivateFormLayoutChildGuard';
 
@@ -77,7 +76,8 @@ export class OFormLayoutManagerComponent implements OnInit, OnDestroy {
     protected actRoute: ActivatedRoute,
     protected componentFactoryResolver: ComponentFactoryResolver,
     protected location: ViewContainerRef,
-    protected dialog: MatDialog
+    protected dialog: MatDialog,
+    protected elRef: ElementRef
   ) {
     this.oFormLayoutManagerService = this.injector.get(OFormLayoutManagerService);
     this.oFormLayoutManagerService.setFormLayoutManager(this);
@@ -91,6 +91,12 @@ export class OFormLayoutManagerComponent implements OnInit, OnDestroy {
     }
     this.labelColsArray = Util.parseArray(this.labelColumns);
     this.addActivateChildGuard();
+  }
+
+  ngAfterViewInit(): void {
+    if (this.elRef) {
+      this.elRef.nativeElement.removeAttribute('title');
+    }
   }
 
   ngOnDestroy() {

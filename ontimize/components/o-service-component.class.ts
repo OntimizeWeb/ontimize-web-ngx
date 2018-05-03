@@ -10,7 +10,7 @@ import { OFormComponent } from './form/o-form.component';
 import { OFormValue } from './form/OFormValue';
 import { OListInitializationOptions } from './list/o-list.component';
 import { OFormLayoutManagerComponent } from '../layouts/form-layout/o-form-layout-manager.component';
-// import { OTableInitializationOptions } from './table/o-table.component';
+import { OTableInitializationOptions } from './table/o-table.component';
 
 export interface ILocalStorageComponent {
   getDataToStore(): Object;
@@ -388,7 +388,6 @@ export class OServiceComponent implements ILocalStorageComponent {
     }
   }
 
-
   configureService() {
     let loadingService: any = OntimizeService;
     if (this.serviceType) {
@@ -637,7 +636,7 @@ export class OServiceComponent implements ILocalStorageComponent {
     this.clearSelection();
   }
 
-  reinitialize(options: OListInitializationOptions /*| OTableInitializationOptions*/) {
+  reinitialize(options: OListInitializationOptions | OTableInitializationOptions) {
     if (options && Object.keys(options).length) {
       let clonedOpts = Object.assign({}, options);
       if (clonedOpts.hasOwnProperty('entity')) {
@@ -656,4 +655,5 @@ export class OServiceComponent implements ILocalStorageComponent {
       this.initialize();
     }
   }
+
 }
