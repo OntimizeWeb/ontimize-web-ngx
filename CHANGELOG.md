@@ -6,7 +6,7 @@
 * **OFormServiceComponent**: ('*o-combo*' and '*o-list-picker*' extends this class) adding '*getSelectedRecord*' method for getting the selected value associated data. This is a object including all the properties definied in the '*columns*' input ([e513805](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e513805)) ([#162](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/162))
 * **OServiceComponent**: ('*o-list*' and '*o-table*' extends this class) double click mode (used in '*detail-mode*' and '*edition-mode' input) allows '*dblclick*' and '*doubleclick*' values.
 * **Codes**: Creating '*codes*' util class for general variables and types definitions ([9e20235](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9e20235)) ([d2f2060](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d2f2060))
-* **o-tree**: new '*o-tree*' component ([6b1e524](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6b1e524))
+* **o-tree**: new '*o-tree*' component ([6b1e524](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6b1e524)) ([7d55935](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7d55935)) ([9a63807](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9a63807))
 * **o-table**: '*reinitialize*' method added ([fbf4828](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/fbf4828)), closes [#149](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/149)
 
 ### BREAKING CHANGES
