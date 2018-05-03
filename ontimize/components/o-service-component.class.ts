@@ -3,7 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 
-import { Util } from '../utils';
+import { Util, Codes } from '../utils';
 import { InputConverter } from '../decorators';
 import { OntimizeService, AuthGuardService, OTranslateService, LocalStorageService, DialogService } from '../services';
 import { OFormComponent } from './form/o-form.component';
@@ -118,22 +118,6 @@ export class OServiceComponent implements ILocalStorageComponent {
 
   public static DEFAULT_INPUTS_O_SERVICE_COMPONENT = DEFAULT_INPUTS_O_SERVICE_COMPONENT;
 
-  public static DEFAULT_QUERY_METHOD = 'query';
-  public static DEFAULT_PAGINATED_QUERY_METHOD = 'advancedQuery';
-  public static DEFAULT_DELETE_METHOD = 'delete';
-  public static DEFAULT_QUERY_ROWS = 10;
-  public static DEFAULT_DETAIL_ICON = 'chevron_right';
-  public static DEFAULT_EDIT_ICON = 'mode_edit';
-  public static DEFAULT_ROW_HEIGHT = 'medium';
-  public static AVAILABLE_ROW_HEIGHTS = ['small', 'medium', 'large'];
-
-  public static DEFAULT_DETAIL_MODE = 'click';
-  public static DETAIL_MODE_NONE = 'none';
-  public static DETAIL_MODE_CLICK = 'click';
-  public static DETAIL_MODE_DBLCLICK = 'dblclick';
-
-  public static COLUMNS_ALIAS_SEPARATOR = ':';
-
   protected authGuardService: AuthGuardService;
   protected translateService: OTranslateService;
   protected localStorageService: LocalStorageService;
@@ -226,7 +210,7 @@ export class OServiceComponent implements ILocalStorageComponent {
     this.injector = injector;
     this.elRef = elRef;
     this.form = form;
-    this.detailMode = OServiceComponent.DEFAULT_DETAIL_MODE;
+    this.detailMode = Codes.DETAIL_MODE_CLICK;
 
     if (this.injector) {
       this.router = this.injector.get(Router);
@@ -314,37 +298,37 @@ export class OServiceComponent implements ILocalStorageComponent {
     this.keysArray = Util.parseArray(this.keys);
     this.colArray = Util.parseArray(this.columns, true);
     let pkArray = Util.parseArray(this.parentKeys);
-    this._pKeysEquiv = Util.parseParentKeysEquivalences(pkArray, OServiceComponent.COLUMNS_ALIAS_SEPARATOR);
+    this._pKeysEquiv = Util.parseParentKeysEquivalences(pkArray, Codes.COLUMNS_ALIAS_SEPARATOR);
 
     //TODO: get default values from ICrudConstants
     if (!this.queryMethod) {
-      this.queryMethod = OServiceComponent.DEFAULT_QUERY_METHOD;
+      this.queryMethod = Codes.QUERY_METHOD;
     }
 
     if (!this.paginatedQueryMethod) {
-      this.paginatedQueryMethod = OServiceComponent.DEFAULT_PAGINATED_QUERY_METHOD;
+      this.paginatedQueryMethod = Codes.PAGINATED_QUERY_METHOD;
     }
 
     if (!this.deleteMethod) {
-      this.deleteMethod = OServiceComponent.DEFAULT_DELETE_METHOD;
+      this.deleteMethod = Codes.DELETE_METHOD;
     }
 
     if (this.queryRows) {
       this.queryRows = parseInt(this.queryRows);
     } else {
-      this.queryRows = OServiceComponent.DEFAULT_QUERY_ROWS;
+      this.queryRows = Codes.DEFAULT_QUERY_ROWS;
     }
 
     if (!this.detailButtonInRowIcon) {
-      this.detailButtonInRowIcon = OServiceComponent.DEFAULT_DETAIL_ICON;
+      this.detailButtonInRowIcon = Codes.DETAIL_ICON;
     }
 
     if (!this.editButtonInRowIcon) {
-      this.editButtonInRowIcon = OServiceComponent.DEFAULT_EDIT_ICON;
+      this.editButtonInRowIcon = Codes.EDIT_ICON;
     }
 
     if (this.detailButtonInRow || this.editButtonInRow) {
-      this.detailMode = OServiceComponent.DETAIL_MODE_NONE;
+      this.detailMode = Codes.DETAIL_MODE_NONE;
     }
 
     if (this.staticData) {
@@ -360,8 +344,8 @@ export class OServiceComponent implements ILocalStorageComponent {
     }
 
     this.rowHeight = this.rowHeight ? this.rowHeight.toLowerCase() : this.rowHeight;
-    if (!this.rowHeight || (OServiceComponent.AVAILABLE_ROW_HEIGHTS.indexOf(this.rowHeight) === -1)) {
-      this.rowHeight = OServiceComponent.DEFAULT_ROW_HEIGHT;
+    if (!this.rowHeight || !Codes.isValidRowHeight(this.rowHeight)) {
+      this.rowHeight = Codes.DEFAULT_ROW_HEIGHT;
     }
   }
 

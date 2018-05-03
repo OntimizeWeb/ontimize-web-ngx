@@ -17,8 +17,8 @@ import { dataServiceFactory } from '../../services/data-service.provider';
 import { OntimizeService, SnackBarService } from '../../services';
 import { OFormComponent } from '../form/o-form.component';
 import { OSharedModule } from '../../shared';
-import { OServiceComponent } from '../o-service-component.class';
 
+import { OServiceComponent } from '../o-service-component.class';
 import {
   O_TABLE_FOOTER_COMPONENTS,
   OTablePaginatorComponent,
@@ -39,8 +39,7 @@ import {
 } from './extensions/header/o-table-header-components';
 
 import { OTableColumnComponent } from './column/o-table-column.component';
-import { Util } from '../../util/util';
-import { ObservableWrapper } from '../../util/async';
+import { Util, Codes, ObservableWrapper } from '../../utils';
 
 import {
   O_TABLE_DIALOGS,
@@ -84,7 +83,7 @@ export const DEFAULT_INPUTS_O_TABLE = [
   'visibleColumns: visible-columns',
 
   // editable-columns [string]: columns that can be edited directly over the table, separated by ';'. Default: no value.
-  'editableColumns: editable-columns',
+  // 'editableColumns: editable-columns',
 
   // sort-columns [string]: initial sorting, with the format column:[ASC|DESC], separated by ';'. Default: no value.
   'sortColumns: sort-columns',
@@ -212,6 +211,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   public static DEFAULT_INPUTS_O_TABLE = DEFAULT_INPUTS_O_TABLE;
   public static DEFAULT_OUTPUTS_O_TABLE = DEFAULT_OUTPUTS_O_TABLE;
 
+  public static NAME_COLUMN_SELECT = 'select';
+
   protected snackBarService: SnackBarService;
 
   public paginator: OTablePaginatorComponent;
@@ -226,14 +227,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   @ViewChildren(MatSortHeader) protected sortHeaders: QueryList<MatSortHeader>;
 
   public tableContextMenu: OContextMenuComponent;
-
-  public static NAME_COLUMN_SELECT = 'select';
-  public static TYPE_SEPARATOR = ':';
-  public static VALUES_SEPARATOR = '=';
-  public static TYPE_ASC_NAME = 'asc';
-  public static TYPE_DESC_NAME = 'desc';
-  public static DEFAULT_INSERT_METHOD = 'insert';
-  public static DEFAULT_UPDATE_METHOD = 'update';
 
   @InputConverter()
   selectAllCheckbox: boolean = false;
@@ -288,8 +281,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   fixedHeader: boolean = false;
   @InputConverter()
   showTitle: boolean = false;
-  protected editionMode: 'none' | 'inline' | 'click' | 'doubleclick' = 'none';
-  protected selectionMode: 'none' | 'single' | 'multiple' = 'multiple';
+  protected editionMode: string = Codes.DETAIL_MODE_NONE;
+  protected selectionMode: string = Codes.SELECTION_MODE_MULTIPLE;
 
   public daoTable: OTableDao | null;
   public dataSource: OTableDataSource | null;
@@ -300,7 +293,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   /*parsed inputs variables */
   protected visibleColArray: Array<string> = [];
-
   /*end of parsed inputs variables */
 
   protected tabGroupContainer: MatTabGroup;
@@ -595,12 +587,19 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     } else {
       this._oTableOptions.columns.push(colDef);
     }
-    /*
-    if(this.staticData && this.setStaticData){
-      this.setDatasource();
-      this.daoTable.setDataArray(this.staticData);
-    }*/
+    this.refreshEditionModeWarn();
+  }
 
+  protected refreshEditionModeWarn() {
+    if (this.editionMode !== Codes.DETAIL_MODE_NONE) {
+      return;
+    }
+    const editableColumns = this.oTableOptions.columns.filter(col => {
+      return Util.isDefined(col.editor);
+    });
+    if (editableColumns.length > 0) {
+      console.warn('Using a column with a editor but there is no edition-mode defined');
+    }
   }
 
   registerColumnAggregate(column: OColumnAggregate) {
@@ -618,15 +617,15 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     if (sortColumnsParam) {
       let cols = Util.parseArray(sortColumnsParam);
       cols.forEach((col) => {
-        let colDef = col.split(OTableComponent.TYPE_SEPARATOR);
+        let colDef = col.split(Codes.TYPE_SEPARATOR);
         if (colDef.length > 0) {
           let colName = colDef[0];
           let oCol = this.getOColumn(colName);
           if (oCol !== undefined) {
-            const colSort = colDef[1] || OTableComponent.TYPE_ASC_NAME;
+            const colSort = colDef[1] || Codes.ASC_SORT;
             this.sortColArray.push({
               columnName: colName,
-              ascendent: colSort === OTableComponent.TYPE_ASC_NAME
+              ascendent: colSort === Codes.ASC_SORT
             });
           }
         }
@@ -664,52 +663,52 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
 
     if (!this.detailButtonInRowIcon) {
-      this.detailButtonInRowIcon = OServiceComponent.DEFAULT_DETAIL_ICON;
+      this.detailButtonInRowIcon = Codes.DETAIL_ICON;
     }
 
     if (!this.editButtonInRowIcon) {
-      this.editButtonInRowIcon = OServiceComponent.DEFAULT_EDIT_ICON;
+      this.editButtonInRowIcon = Codes.EDIT_ICON;
     }
 
     if (this.detailButtonInRow || this.editButtonInRow) {
-      this.detailMode = OServiceComponent.DETAIL_MODE_NONE;
+      this.detailMode = Codes.DETAIL_MODE_NONE;
     }
 
     this.rowHeight = this.rowHeight ? this.rowHeight.toLowerCase() : this.rowHeight;
-    if (!this.rowHeight || (OServiceComponent.AVAILABLE_ROW_HEIGHTS.indexOf(this.rowHeight) === -1)) {
-      this.rowHeight = OServiceComponent.DEFAULT_ROW_HEIGHT;
+    if (!this.rowHeight || !Codes.isValidRowHeight(this.rowHeight)) {
+      this.rowHeight = Codes.DEFAULT_ROW_HEIGHT;
     }
 
     // Initialize table data parameters
     this.keysArray = Util.parseArray(this.keys);
     this.colArray = Util.parseArray(this.columns, true);
     let pkArray = Util.parseArray(this.parentKeys);
-    this._pKeysEquiv = Util.parseParentKeysEquivalences(pkArray, OServiceComponent.COLUMNS_ALIAS_SEPARATOR);
+    this._pKeysEquiv = Util.parseParentKeysEquivalences(pkArray, Codes.COLUMNS_ALIAS_SEPARATOR);
 
     // TODO: get default values from ICrudConstants
     if (!this.queryMethod) {
-      this.queryMethod = OServiceComponent.DEFAULT_QUERY_METHOD;
+      this.queryMethod = Codes.QUERY_METHOD;
     }
 
     if (!this.paginatedQueryMethod) {
-      this.paginatedQueryMethod = OServiceComponent.DEFAULT_PAGINATED_QUERY_METHOD;
+      this.paginatedQueryMethod = Codes.PAGINATED_QUERY_METHOD;
     }
 
     if (!this.insertMethod) {
-      this.insertMethod = OTableComponent.DEFAULT_INSERT_METHOD;
+      this.insertMethod = Codes.INSERT_METHOD;
     }
 
     if (!this.updateMethod) {
-      this.updateMethod = OTableComponent.DEFAULT_UPDATE_METHOD;
+      this.updateMethod = Codes.UPDATE_METHOD;
     }
     if (!this.deleteMethod) {
-      this.deleteMethod = OServiceComponent.DEFAULT_DELETE_METHOD;
+      this.deleteMethod = Codes.DELETE_METHOD;
     }
 
     if (this.queryRows) {
       this.queryRows = parseInt(this.queryRows);
     } else {
-      this.queryRows = OServiceComponent.DEFAULT_QUERY_ROWS;
+      this.queryRows = Codes.DEFAULT_QUERY_ROWS;
     }
 
     // If visible-columns is not present then visible-columns is all columns
@@ -823,7 +822,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       if (sort.direction !== '') {
         self.sortColArray.push({
           columnName: sort.active,
-          ascendent: sort.direction === OTableComponent.TYPE_ASC_NAME
+          ascendent: sort.direction === Codes.ASC_SORT
         });
       }
       if (self.pageable) {
@@ -1075,7 +1074,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     if (!this.oenabled) {
       return;
     }
-    if ((this.detailMode === OServiceComponent.DETAIL_MODE_CLICK)) {
+    if ((this.detailMode === Codes.DETAIL_MODE_CLICK)) {
       ObservableWrapper.callEmit(this.onClick, item);
       this.saveDataNavigationInLocalStorage();
       this.viewDetail(item);
@@ -1121,7 +1120,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     clearTimeout(this.clickTimer);
     this.clickPrevent = true;
     ObservableWrapper.callEmit(this.onDoubleClick, item);
-    if (this.oenabled && (this.detailMode === OServiceComponent.DETAIL_MODE_DBLCLICK)) {
+    if (this.oenabled && Codes.isDoubleClickMode(this.detailMode)) {
       this.saveDataNavigationInLocalStorage();
       this.viewDetail(item);
     }
@@ -1155,8 +1154,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   handleCellClick(column: OColumn, row: any, event?) {
     if (this.oenabled && column.editor
-      && (this.detailMode !== OServiceComponent.DETAIL_MODE_CLICK)
-      && (this.editionMode === OServiceComponent.DETAIL_MODE_CLICK)) {
+      && (this.detailMode !== Codes.DETAIL_MODE_CLICK)
+      && (this.editionMode === Codes.DETAIL_MODE_CLICK)) {
 
       this.activateColumnEdition(column, row, event);
     }
@@ -1164,8 +1163,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   handleCellDoubleClick(column: OColumn, row: any, event?) {
     if (this.oenabled && column.editor
-      && (this.detailMode !== OServiceComponent.DETAIL_MODE_DBLCLICK)
-      && (this.editionMode === OServiceComponent.DETAIL_MODE_DBLCLICK)) {
+      && (!Codes.isDoubleClickMode(this.detailMode))
+      && (Codes.isDoubleClickMode(this.editionMode))) {
 
       this.activateColumnEdition(column, row, event);
     }

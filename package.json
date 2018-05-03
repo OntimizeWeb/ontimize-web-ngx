@@ -23,7 +23,8 @@
   },
   "dependencies": {
     "ng2-dnd": "5.0.2",
-    "moment": "2.22.1"
+    "moment": "2.22.1",
+    "ng2-tree": "2.0.0-rc.11"
   },
   "peerDependencies": {
     "@angular/flex-layout": "5.0.0-beta.13",

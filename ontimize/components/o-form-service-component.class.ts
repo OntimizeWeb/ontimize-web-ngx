@@ -3,7 +3,7 @@ import { InputConverter } from '../decorators';
 import { OntimizeService, DialogService } from '../services';
 import { OFormComponent } from './form/o-form.component';
 import { OFormDataComponent, DEFAULT_INPUTS_O_FORM_DATA_COMPONENT } from './o-form-data-component.class';
-import { Util } from '../utils';
+import { Util, Codes } from '../utils';
 import { Subscription } from 'rxjs/Subscription';
 import { ServiceUtils } from './service.utils';
 
@@ -39,7 +39,6 @@ export const DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT = [
 
 export class OFormServiceComponent extends OFormDataComponent {
 
-  public static DEFAULT_QUERY_METHOD = 'query';
   public static DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT = DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT;
 
   /* Inputs */
@@ -48,7 +47,7 @@ export class OFormServiceComponent extends OFormDataComponent {
   protected service: string;
   protected columns: string;
   protected valueColumn: string;
-  protected valueColumnType: string = 'int';
+  protected valueColumnType: string = Codes.TYPE_INT;
   protected parentKeys: string;
   protected visibleColumns: string;
   protected descriptionColumns: string;
@@ -106,7 +105,7 @@ export class OFormServiceComponent extends OFormDataComponent {
     this._pKeysEquiv = Util.parseParentKeysEquivalences(pkArray);
 
     if (!this.queryMethod) {
-      this.queryMethod = OFormServiceComponent.DEFAULT_QUERY_METHOD;
+      this.queryMethod = Codes.QUERY_METHOD;
     }
 
     if (this.form) {
@@ -165,7 +164,6 @@ export class OFormServiceComponent extends OFormDataComponent {
       console.error(e);
     }
   }
-
 
   queryData(parentItem: any = undefined, columns?: Array<any>) {
     var self = this;
@@ -238,9 +236,10 @@ export class OFormServiceComponent extends OFormDataComponent {
       }
     }
   }
+
   protected parseByValueColumnType(val: any) {
     let value = val;
-    if (this.valueColumnType === 'int') {
+    if (this.valueColumnType === Codes.TYPE_INT) {
       const parsed = parseInt(value);
       if (!isNaN(parsed)) {
         value = parsed;
@@ -254,4 +253,12 @@ export class OFormServiceComponent extends OFormDataComponent {
     super.setValue(value);
   }
 
+  getSelectedRecord() {
+    let result = undefined;
+    const selectedValue = this.getValue();
+    if (Util.isDefined(selectedValue)) {
+      result = this.getDataArray().find(item => item[this.valueColumn] === selectedValue);
+    }
+    return result;
+  }
 }

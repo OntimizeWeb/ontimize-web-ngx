@@ -27,7 +27,7 @@ import { IFormDataTypeComponent, IFormDataComponent } from '../o-form-data-compo
 import { IComponent } from '../o-component.class';
 import { OFormToolbarModule, OFormToolbarComponent } from './o-form-toolbar.component';
 import { OFormValue } from './OFormValue';
-import { Util, SQLTypes } from '../../utils';
+import { Util, SQLTypes, Codes } from '../../utils';
 import { OSharedModule } from '../../shared';
 import { OFormCacheClass } from './cache/o-form.cache.class';
 import { CanDeactivateFormGuard, CanComponentDeactivate } from './guards/o-form-can-deactivate.guard';
@@ -146,6 +146,10 @@ export interface OFormInitializationOptions {
   }
 })
 export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate {
+
+  public static DEFAULT_INPUTS_O_FORM = DEFAULT_INPUTS_O_FORM;
+  public static DEFAULT_OUTPUTS_O_FORM = DEFAULT_OUTPUTS_O_FORM;
+
   public static BACK_ACTION: string = 'BACK';
   public static CLOSE_DETAIL_ACTION: string = 'CLOSE';
   public static RELOAD_ACTION: string = 'RELOAD';
@@ -157,14 +161,6 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   public static UNDO_LAST_CHANGE_ACTION: string = 'UNDO_LAST_CHANGE';
 
   public static PARENT_KEYS_KEY = 'pk';
-
-  public static DEFAULT_INPUTS_O_FORM = DEFAULT_INPUTS_O_FORM;
-  public static DEFAULT_OUTPUTS_O_FORM = DEFAULT_OUTPUTS_O_FORM;
-
-  public static DEFAULT_QUERY_METHOD = 'query';
-  public static DEFAULT_INSERT_METHOD = 'insert';
-  public static DEFAULT_UPDATE_METHOD = 'update';
-  public static DEFAULT_DELETE_METHOD = 'delete';
 
   public static DEFAULT_LAYOUT_DIRECTION = 'column';
   public static guardClassName = 'CanDeactivateFormGuard';
@@ -573,19 +569,19 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     this.keysSqlTypesArray = Util.parseArray(this.keysSqlTypes);
 
     if (!this.queryMethod) {
-      this.queryMethod = OFormComponent.DEFAULT_QUERY_METHOD;
+      this.queryMethod = Codes.QUERY_METHOD;
     }
 
     if (!this.insertMethod) {
-      this.insertMethod = OFormComponent.DEFAULT_INSERT_METHOD;
+      this.insertMethod = Codes.INSERT_METHOD;
     }
 
     if (!this.updateMethod) {
-      this.updateMethod = OFormComponent.DEFAULT_UPDATE_METHOD;
+      this.updateMethod = Codes.UPDATE_METHOD;
     }
 
     if (!this.deleteMethod) {
-      this.deleteMethod = OFormComponent.DEFAULT_DELETE_METHOD;
+      this.deleteMethod = Codes.DELETE_METHOD;
     }
 
     this.configureService();
