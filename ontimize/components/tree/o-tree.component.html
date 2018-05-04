@@ -29,7 +29,8 @@
       (nodeRemoved)="nodeRemoved($event)"
       (nodeRenamed)="nodeRenamed($event)"
       (nodeExpanded)="nodeExpanded($event)"
-      (nodeCollapsed)="nodeCollapsed($event)">
+      (nodeCollapsed)="nodeCollapsed($event)"
+      (loadNextLevel)="nextLevelLoaded($event)">
     </tree>
     <div class="spinner-container" fxFlex="100" *ngIf="loading" fxLayoutAlign="center center">
       <mat-progress-spinner mode="indeterminate" strokeWidth="3">

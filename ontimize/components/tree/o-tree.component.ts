@@ -1,7 +1,6 @@
 import {
   Component, OnInit, ViewEncapsulation, NgModule, Injector, ElementRef, Optional, Inject,
   forwardRef, OnDestroy, ViewChild, AfterViewInit, EventEmitter, HostListener, NgZone
-  // , ContentChildren
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -9,15 +8,17 @@ import {
   TreeModule, TreeModel, Ng2TreeSettings, TreeComponent, Tree,
   NodeSelectedEvent, NodeCollapsedEvent, NodeExpandedEvent, NodeMovedEvent, NodeCreatedEvent,
   NodeRemovedEvent, NodeRenamedEvent
+  // , TreeController
   // , RenamableNode
 } from 'ng2-tree';
+import { LoadNextLevelEvent } from 'ng2-tree/src/tree.events';
+
 // import { Subscription } from 'rxjs/Subscription';
 import { Observable } from 'rxjs/Observable';
-// import { TreeController } from 'ng2-tree/src/tree-controller';
 import { InputConverter } from '../../decorators';
 import { OSharedModule } from '../../shared';
 import { Util, Codes } from '../../utils';
-import { DialogService, LocalStorageService } from '../../services';
+import { DialogService, LocalStorageService, OntimizeService, dataServiceFactory } from '../../services';
 import { FilterExpressionUtils } from '../filter-expression.utils';
 import { ServiceUtils } from '../service.utils';
 import { OFormComponent } from '../form/o-form.component';
@@ -49,13 +50,17 @@ export const DEFAULT_OUTPUTS_O_TREE = [
   // 'onNodeRemoved',
   // 'onNodeRenamed',
   'onNodeExpanded',
-  'onNodeCollapsed'
+  'onNodeCollapsed',
+  'onLoadNextLevel'
 ];
 
 @Component({
   selector: 'o-tree',
   templateUrl: './o-tree.component.html',
   styleUrls: ['./o-tree.component.scss'],
+  providers: [
+    { provide: OntimizeService, useFactory: dataServiceFactory, deps: [Injector] }
+  ],
   inputs: DEFAULT_INPUTS_O_TREE,
   outputs: DEFAULT_OUTPUTS_O_TREE,
   encapsulation: ViewEncapsulation.None,
@@ -92,6 +97,7 @@ export class OTreeComponent extends OTreeClass implements OnInit, AfterViewInit,
   // onNodeRenamed: EventEmitter<any> = new EventEmitter();
   onNodeExpanded: EventEmitter<any> = new EventEmitter();
   onNodeCollapsed: EventEmitter<any> = new EventEmitter();
+  onLoadNextLevel: EventEmitter<any> = new EventEmitter();
 
   @ViewChild('treeComponent') treeComponent: TreeComponent;
   tree: TreeModel;
@@ -256,25 +262,35 @@ export class OTreeComponent extends OTreeClass implements OnInit, AfterViewInit,
   }
 
   onSearch(textValue: string) {
-    // let textFilter = textValue;
-    // if (textFilter && textFilter.length > 0) {
-    //   textFilter = '*' + textFilter + '*';
-    //   if (this.dataService) { // uses dataservice to query data
-    //     let nodeDescriptionFilter = {};
-    //     if (this.nodeDescription) {
-    //       nodeDescriptionFilter[this.nodeDescription] = textFilter;
-    //     }
-    //     this.queryData(nodeDescriptionFilter);
-    //   } else {
-    //     // if ( && tree.children.length > 0)
-    //   }
+    let textFilter = textValue;
+    if (textFilter && textFilter.length > 0) {
+      //   textFilter = '*' + textFilter + '*';
+      //   if (this.dataService) { // uses dataservice to query data
+      //     let nodeDescriptionFilter = {};
+      //     if (this.nodeDescription) {
+      //       nodeDescriptionFilter[this.nodeDescription] = textFilter;
+      //     }
+      //     this.queryData(nodeDescriptionFilter);
+      //   } else {
+      //     // if ( && tree.children.length > 0)
+      //   }
 
-    //   // this.treeComponent.getController().expand();
-    //   // for (var i = 0; i < tree.children.length; i++) {
-    //   //     tree.children[i].loadChildren('');
-    //   //     this.treeComponent.getControllerByNodeId(tree.children[i].id).expand();
-    //   // }
-    // }
+      //   // this.treeComponent.getController().expand();
+      // this.tree.children.forEach(child => {
+      //   const controller: TreeController = this.treeComponent.getControllerByNodeId(child.id);
+      //   if (controller.isExpanded) {
+
+      //   } else {
+
+      //   }
+
+      // });
+
+      // for (var i = 0; i < tree.children.length; i++) {
+      // tree.children[i].loadChi ldren('');
+      //     this.treeComponent.getControllerByNodeId(tree.children[i].id).expand();
+      // }
+    }
   }
 
   nodeSelected(event: NodeSelectedEvent) {
@@ -412,6 +428,12 @@ export class OTreeComponent extends OTreeClass implements OnInit, AfterViewInit,
     }
   }
 
+  nextLevelLoaded(event: LoadNextLevelEvent) {
+    if (event && event.node && event.node.id) {
+      const node: Tree = event.node;
+      this.onLoadNextLevel.emit(node);
+    }
+  }
 
   executeNodeActionById(id: number | string, action: string) {
     const treeController = this.treeComponent.getControllerByNodeId(id);
