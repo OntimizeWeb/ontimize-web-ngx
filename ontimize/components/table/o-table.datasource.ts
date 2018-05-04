@@ -4,6 +4,7 @@ import { OTableDao } from './o-table.dao';
 import { OTableOptions, OColumn, OTableComponent } from './o-table.component';
 import { MatSort, MatPaginator } from '@angular/material';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/startWith';
 import 'rxjs/add/observable/merge';
 import 'rxjs/add/operator/map';
@@ -11,7 +12,7 @@ import 'rxjs/add/observable/fromEvent';
 
 import { ITableFilterByColumnDataInterface } from './extensions/dialog/o-table-dialog-components';
 import { OTableAggregateComponent } from './extensions/footer/o-table-footer-components';
-import { IColumnValueFilter, OTableEditableRowComponent } from './extensions/header/o-table-header-components';
+import { IColumnValueFilter, OTableEditableRowComponent, ColumnValueFilterOperator } from './extensions/header/o-table-header-components';
 
 export class OTableDataSource extends DataSource<any> {
 
@@ -24,7 +25,7 @@ export class OTableDataSource extends DataSource<any> {
   protected _sort: MatSort;
 
   protected _quickFilterChange = new BehaviorSubject('');
-  protected _columnValueFilterChange = new BehaviorSubject('');
+  protected _columnValueFilterChange = new Subject();
 
   protected filteredData: any[] = [];
   protected paginator: MatPaginator;
@@ -322,7 +323,7 @@ export class OTableDataSource extends DataSource<any> {
 
   clearColumnFilters() {
     this.columnValueFilters = [];
-    this._columnValueFilterChange.next('');
+    this._columnValueFilterChange.next();
   }
 
   addColumnFilter(filter: IColumnValueFilter) {
@@ -331,26 +332,43 @@ export class OTableDataSource extends DataSource<any> {
       const idx = this.columnValueFilters.indexOf(existingFilter);
       this.columnValueFilters.splice(idx, 1);
     }
-    if (filter.values.length) {
+
+    if (
+      (ColumnValueFilterOperator.IN === filter.operator && filter.values.length > 0) ||
+      (ColumnValueFilterOperator.EQUAL === filter.operator && filter.values) ||
+      (ColumnValueFilterOperator.BETWEEN === filter.operator && filter.values.length === 2) ||
+      ((ColumnValueFilterOperator.LESS_EQUAL === filter.operator || ColumnValueFilterOperator.MORE_EQUAL === filter.operator) && filter.values)
+    ) {
       this.columnValueFilters.push(filter);
     }
-    if (existingFilter || filter.values.length) {
-      this._columnValueFilterChange.next('');
-    }
+
+    this._columnValueFilterChange.next();
   }
 
   getColumnValueFilterData(data: any[]): any[] {
     this.columnValueFilters.forEach(filter => {
-      let filterColumnAttr = filter.attr;
-      let filterValues = filter.values;
-      let filterColumn = this.table.oTableOptions.columns.filter(col => {
-        return col.attr === filterColumnAttr;
-      })[0];
-      if (filterColumn) {
-        data = data.filter((item: any) => {
-          var compareTo = this.table.oTableColumnsFilterComponent.getColumnComparisonValue(filterColumn, item[filterColumnAttr]);
-          return (filterValues.indexOf(compareTo) !== -1);
-        });
+      switch (filter.operator) {
+        case ColumnValueFilterOperator.IN:
+          let filterColumn = this.table.oTableOptions.columns.filter(col => col.attr === filter.attr)[0];
+          if (filterColumn) {
+            data = data.filter((item: any) => {
+              var compareTo = this.table.oTableColumnsFilterComponent.getColumnComparisonValue(filterColumn, item[filter.attr]);
+              return (filter.values.indexOf(compareTo) !== -1);
+            });
+          }
+          break;
+        case ColumnValueFilterOperator.EQUAL:
+          data = data.filter(item => new RegExp('^' + filter.values.split('*').join('.*') + '$').test(item[filter.attr]));
+          break;
+        case ColumnValueFilterOperator.BETWEEN:
+          data = data.filter(item => item[filter.attr] >= filter.values[0] && item[filter.attr] <= filter.values[1]);
+          break;
+        case ColumnValueFilterOperator.MORE_EQUAL:
+          data = data.filter(item => item[filter.attr] >= filter.values);
+          break;
+        case ColumnValueFilterOperator.LESS_EQUAL:
+          data = data.filter(item => item[filter.attr] <= filter.values);
+          break;
       }
     });
     return data;

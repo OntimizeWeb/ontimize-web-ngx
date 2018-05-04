@@ -1,6 +1,38 @@
 .o-filter-by-column-dialog {
+  .mat-divider {
+    margin: 6px 0;
+  }
+
+  .content-wrapper:not(:first-child) {
+    padding-left: 12px;
+  }
+
+  .content-wrapper:not(:last-child) {
+    padding-right: 12px;
+  }
+
   .content-wrapper {
     max-height: 430px;
     min-height: 430px;
+    min-width: 200px;
+
+    .select-all-checkbox {
+      padding-bottom: 6px;
+    }
+
+    mat-list.select-values-list {
+      padding-top: 0;
+      overflow-y: auto;
+      overflow-x: hidden;
+
+      mat-list-item {
+        height: 30px;
+      }
+    }
+
+    .column-filter-title {
+      margin: 0;
+      padding-top: 12px;
+    }
   }
 }

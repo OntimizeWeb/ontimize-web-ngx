@@ -2,32 +2,66 @@
   <span>{{ 'TABLE.BUTTONS.FILTER_BY_COLUMN' | oTranslate }} : {{ attr | oTranslate }}</span>
 </mat-toolbar>
 
-<div mat-dialog-content class="dialog-list-container">
+<div mat-dialog-content fxLayout="row" fxLayoutAlign="space-between stretch" class="dialog-list-container">
 
-  <div fxLayout="column" fxFill class="content-wrapper">
-
-    <mat-form-field fxFlexFill fxFlex class="vertical-padding-16">
-      <input matInput #filter placeholder="{{'TABLE.FILTER' | oTranslate}}">
+  <div fxFlex="40" fxLayout="column" class="content-wrapper">
+    <span mat-dialog-title class="column-filter-title">{{ 'TABLE.FILTER_BY_COLUMN.BY_VALUE' | oTranslate }}</span>
+    <mat-form-field>
+      <input matInput #filter placeholder="{{ 'TABLE.FILTER' | oTranslate }}">
       <span class="icon-btn" matPrefix fxFlexLayout="flex-end">
         <i class="material-icons">search</i>
       </span>
     </mat-form-field>
-
-    <mat-checkbox (change)="onSelectAllChange($event)" [checked]="areAllSelected()" [indeterminate]="isIndeterminate()">
+    <mat-checkbox (change)="onSelectAllChange($event)" [checked]="areAllSelected()" [indeterminate]="isIndeterminate()" class="select-all-checkbox">
       {{ 'TABLE.FILTER_BY_COLUMN.CHECK_ALL' | oTranslate }}
     </mat-checkbox>
-
-    <mat-list>
-      <mat-list-item fxFill *ngFor="let record of listData">
+    <mat-list fxFlex fxLayout="column" class="select-values-list">
+      <mat-list-item fxFlex *ngFor="let record of listData">
         <mat-checkbox (change)="record.selected = $event.checked" [checked]="record.selected">
-          {{ record.value || ('TABLE.FILTER_BY_COLUMN.EMPTY_VALUE' | oTranslate)}}
+          {{ record.value || ('TABLE.FILTER_BY_COLUMN.EMPTY_VALUE' | oTranslate) }}
         </mat-checkbox>
       </mat-list-item>
     </mat-list>
-
   </div>
+
+  <mat-divider [vertical]="true"></mat-divider>
+
+  <div fxFlex="60" fxLayout="column" class="content-wrapper">
+    <span mat-dialog-title class="column-filter-title">{{ 'TABLE.FILTER_BY_COLUMN.CUSTOM_FILTER' | oTranslate }}</span>
+    <div *ngIf="isTextType()">
+      <mat-form-field fxFlex>
+        <input matInput #filterText [formControl]="fcText" placeholder="{{ 'TABLE.FILTER' | oTranslate }}">
+      </mat-form-field>
+    </div>
+    <div *ngIf="isNumericType()" fxLayout="row" fxLayoutAlign="space-between center">
+      <mat-form-field fxFlex="45">
+        <input matInput [formControl]="fcFrom" placeholder="{{ 'TABLE.FILTER_BY_COLUMN.FROM' | oTranslate }}">
+      </mat-form-field>
+      <mat-form-field fxFlex="45">
+        <input matInput [formControl]="fcTo" placeholder="{{ 'TABLE.FILTER_BY_COLUMN.TO' | oTranslate }}">
+      </mat-form-field>
+    </div>
+    <div *ngIf="isDateType()" fxLayout="row" fxLayoutAlign="space-between center">
+      <mat-form-field fxFlex="45">
+        <input matInput [matDatepicker]="datepickerFrom" [max]="fcTo.value" [formControl]="fcFrom" placeholder="{{ 'TABLE.FILTER_BY_COLUMN.FROM' | oTranslate }}">
+        <mat-datepicker-toggle matSuffix [for]="datepickerFrom">
+          <mat-icon matDatepickerToggleIcon>today</mat-icon>
+        </mat-datepicker-toggle>
+        <mat-datepicker #datepickerFrom></mat-datepicker>
+      </mat-form-field>
+      <mat-form-field fxFlex="45">
+        <input matInput [matDatepicker]="datepickerTo" [min]="fcFrom.value" [formControl]="fcTo" placeholder="{{ 'TABLE.FILTER_BY_COLUMN.TO' | oTranslate }}">
+        <mat-datepicker-toggle matSuffix [for]="datepickerTo">
+          <mat-icon matDatepickerToggleIcon>today</mat-icon>
+        </mat-datepicker-toggle>
+        <mat-datepicker #datepickerTo></mat-datepicker>
+      </mat-form-field>
+    </div>
+  </div>
+
 </div>
+
 <mat-dialog-actions align="end">
-  <button mat-button class="mat-primary" [mat-dialog-close]="false">{{ 'CANCEL' | oTranslate | uppercase}}</button>
+  <button mat-button class="mat-primary" [mat-dialog-close]="false">{{ 'CANCEL' | oTranslate | uppercase }}</button>
   <button mat-button class="mat-primary" [mat-dialog-close]="true">{{ 'ACCEPT' | oTranslate | uppercase }}</button>
 </mat-dialog-actions>
