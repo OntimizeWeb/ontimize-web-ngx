@@ -20,7 +20,7 @@ import { OSharedModule } from '../../../shared';
 import { InputConverter } from '../../../decorators';
 import { OFormComponent } from '../../form/o-form.component';
 import { OFormValue } from '../../form/OFormValue';
-import { OFormServiceComponent } from '../../o-form-service-component.class';
+import { OFormServiceComponent } from '../o-form-service-component.class';
 
 export const DEFAULT_INPUTS_O_COMBO = [
   ...OFormServiceComponent.DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT,

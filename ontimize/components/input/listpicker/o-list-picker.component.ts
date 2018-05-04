@@ -25,7 +25,7 @@ import { OFormComponent } from '../../form/o-form.component';
 import { OSearchInputModule } from '../../input/search-input/o-search-input.component';
 import { OFormValue } from '../../form/OFormValue';
 import { ODialogModule } from '../../dialog/o-dialog.component';
-import { OFormServiceComponent } from '../../o-form-service-component.class';
+import { OFormServiceComponent } from '../o-form-service-component.class';
 
 import { OListPickerDialogComponent } from './o-list-picker-dialog.component';
 

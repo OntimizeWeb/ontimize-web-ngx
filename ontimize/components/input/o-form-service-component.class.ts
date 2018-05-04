@@ -1,11 +1,12 @@
 import { Injector, ElementRef } from '@angular/core';
-import { InputConverter } from '../decorators';
-import { OntimizeService, DialogService } from '../services';
-import { OFormComponent } from './form/o-form.component';
-import { OFormDataComponent, DEFAULT_INPUTS_O_FORM_DATA_COMPONENT } from './o-form-data-component.class';
-import { Util, Codes } from '../utils';
 import { Subscription } from 'rxjs/Subscription';
-import { ServiceUtils } from './service.utils';
+import { InputConverter } from '../../decorators';
+import { OntimizeService, DialogService } from '../../services';
+import { Util, Codes } from '../../utils';
+
+import { OFormComponent } from '../form/o-form.component';
+import { OFormDataComponent, DEFAULT_INPUTS_O_FORM_DATA_COMPONENT } from '../o-form-data-component.class';
+import { ServiceUtils } from '../service.utils';
 
 export const DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT = [
   ...DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,
