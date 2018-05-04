@@ -228,11 +228,11 @@ export class OHTMLInputComponent implements OnInit, IComponent, IFormDataCompone
     this.ensureOFormValue(value);
   }
 
-  isAutomaticBinding(): Boolean {
+  isAutomaticBinding(): boolean {
     return this.autoBinding;
   }
 
-  isAutomaticRegistering(): Boolean {
+  isAutomaticRegistering(): boolean {
     return this.autoRegistering;
   }
 

@@ -6,7 +6,7 @@ import 'rxjs/add/operator/filter';
 
 import { Codes } from '../utils';
 import { ObservableWrapper } from '../util/async';
-import { LocalStorageService, ILocalStorageComponent } from '../../index';
+import { ILocalStorageComponent, LocalStorageService } from './local-storage.service';
 
 export class ONavigationItem {
   constructor(value: Object) {
@@ -40,7 +40,7 @@ export class NavigationService implements ILocalStorageComponent {
   public navigationEvents$: Observable<Array<ONavigationItem>> = this.navigationEventsSource.asObservable();
 
   private _titleEmitter: EventEmitter<any> = new EventEmitter();
-  private _visibleEmitter: EventEmitter<Boolean> = new EventEmitter<Boolean>();
+  private _visibleEmitter: EventEmitter<boolean> = new EventEmitter<boolean>();
   private _sidenavEmitter: EventEmitter<any> = new EventEmitter();
 
   constructor(

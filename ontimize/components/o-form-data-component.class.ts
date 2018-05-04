@@ -19,8 +19,8 @@ export interface IFormControlComponent extends IComponent {
 
 export interface IFormDataComponent extends IFormControlComponent {
   data(value: any);
-  isAutomaticBinding(): Boolean;
-  isAutomaticRegistering(): Boolean;
+  isAutomaticBinding(): boolean;
+  isAutomaticRegistering(): boolean;
 }
 
 export const DEFAULT_INPUTS_O_FORM_DATA_COMPONENT = [
@@ -134,11 +134,11 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     }
   }
 
-  isAutomaticBinding(): Boolean {
+  isAutomaticBinding(): boolean {
     return this.autoBinding;
   }
 
-  isAutomaticRegistering(): Boolean {
+  isAutomaticRegistering(): boolean {
     return this.autoRegistering;
   }
 
