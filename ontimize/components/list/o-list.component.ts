@@ -279,64 +279,63 @@ export class OListComponent extends OServiceComponent implements OnInit, IList, 
   }
 
   queryData(filter: Object = {}, ovrrArgs?: any) {
-    if (this.querySuscription) {
-      this.querySuscription.unsubscribe();
-      this.loaderSuscription.unsubscribe();
+    if (this.querySubscription) {
+      this.querySubscription.unsubscribe();
+      this.loaderSubscription.unsubscribe();
     }
     let queryMethodName = this.pageable ? this.paginatedQueryMethod : this.queryMethod;
     if (this.dataService && (queryMethodName in this.dataService) && this.entity) {
 
       this.setParentKeyValues(filter);
 
-      this.loaderSuscription = this.load();
+      this.loaderSubscription = this.load();
 
       let queryArguments = this.getQueryArguments(filter, ovrrArgs);
-      var self = this;
-      this.querySuscription = this.dataService[queryMethodName].apply(this.dataService, queryArguments)
-        .subscribe(res => {
-          let data = undefined;
-          if (Util.isArray(res)) {
-            data = res;
-          } else if ((res.code === 0) && Util.isArray(res.data)) {
-            data = res.data;
-            if (this.pageable) {
-              this.updatePaginationInfo(res);
-            }
+      const self = this;
+      this.querySubscription = this.dataService[queryMethodName].apply(this.dataService, queryArguments).subscribe(res => {
+        let data = undefined;
+        if (Util.isArray(res)) {
+          data = res;
+        } else if ((res.code === 0) && Util.isArray(res.data)) {
+          data = res.data;
+          if (this.pageable) {
+            this.updatePaginationInfo(res);
           }
-          // set list data
-          if (Util.isArray(data)) {
-            let respDataArray = data;
-            if (self.pageable && !(ovrrArgs && ovrrArgs['replace'])) {
-              respDataArray = (self.dataResponseArray || []).concat(data);
-            }
-
-            let selectedIndexes = self.state.selectedIndexes || [];
-            for (let i = 0; i < selectedIndexes.length; i++) {
-              if (selectedIndexes[i] < self.dataResponseArray.length) {
-                self.selectedItems.push(self.dataResponseArray[selectedIndexes[i]]);
-              }
-            }
-            self.dataResponseArray = respDataArray;
-            self.filterData(self.state.filterValue);
-          } else {
-            self.setDataArray([]);
+        }
+        // set list data
+        if (Util.isArray(data)) {
+          let respDataArray = data;
+          if (self.pageable && !(ovrrArgs && ovrrArgs['replace'])) {
+            respDataArray = (self.dataResponseArray || []).concat(data);
           }
 
-          self.loaderSuscription.unsubscribe();
-          if (self.pageable) {
-            ObservableWrapper.callEmit(self.onPaginatedListDataLoaded, data);
+          let selectedIndexes = self.state.selectedIndexes || [];
+          for (let i = 0; i < selectedIndexes.length; i++) {
+            if (selectedIndexes[i] < self.dataResponseArray.length) {
+              self.selectedItems.push(self.dataResponseArray[selectedIndexes[i]]);
+            }
           }
-          ObservableWrapper.callEmit(self.onListDataLoaded, self.dataResponseArray);
-        }, err => {
-          console.log('[OList.queryData]: error', err);
+          self.dataResponseArray = respDataArray;
+          self.filterData(self.state.filterValue);
+        } else {
           self.setDataArray([]);
-          self.loaderSuscription.unsubscribe();
-          if (err && typeof err !== 'object') {
-            this.dialogService.alert('ERROR', err);
-          } else {
-            this.dialogService.alert('ERROR', 'MESSAGES.ERROR_QUERY');
-          }
-        });
+        }
+
+        self.loaderSubscription.unsubscribe();
+        if (self.pageable) {
+          ObservableWrapper.callEmit(self.onPaginatedListDataLoaded, data);
+        }
+        ObservableWrapper.callEmit(self.onListDataLoaded, self.dataResponseArray);
+      }, err => {
+        console.log('[OList.queryData]: error', err);
+        self.setDataArray([]);
+        self.loaderSubscription.unsubscribe();
+        if (err && typeof err !== 'object') {
+          this.dialogService.alert('ERROR', err);
+        } else {
+          this.dialogService.alert('ERROR', 'MESSAGES.ERROR_QUERY');
+        }
+      });
     }
   }
 

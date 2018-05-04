@@ -28,7 +28,7 @@ export * from './components/table/o-table-components';
 
 export * from './components/o-component.class';
 export * from './components/o-form-data-component.class';
-// export * from './components/o-service-base-component.class';
+export * from './components/o-service-base-component.class';
 export * from './components/o-service-component.class';
 
 export * from './components/user-info/o-user-info.component';

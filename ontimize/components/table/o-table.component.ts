@@ -73,12 +73,6 @@ import { FilterExpressionUtils, IFilterExpression } from '../filter-expression.u
 export const DEFAULT_INPUTS_O_TABLE = [
   ...OServiceComponent.DEFAULT_INPUTS_O_SERVICE_COMPONENT,
 
-  // insert-method [string]: name of the service method to perform inserts. Default: insert.
-  'insertMethod: insert-method',
-
-  // update-method [string]: name of the service method to perform updates. Default: update.
-  'updateMethod: update-method',
-
   // visible-columns [string]: visible columns, separated by ';'. Default: no value.
   'visibleColumns: visible-columns',
 
@@ -286,8 +280,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   public daoTable: OTableDao | null;
   public dataSource: OTableDataSource | null;
-  protected insertMethod: string = Codes.INSERT_METHOD;
-  protected updateMethod: string = Codes.UPDATE_METHOD;
   protected visibleColumns: string;
   protected sortColumns: string;
 
@@ -814,58 +806,21 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       this.pendingQueryFilter = parentItem;
       return;
     }
-
-    let queryMethodName = this.pageable ? this.paginatedQueryMethod : this.queryMethod;
-    if (!this.dataService || !(queryMethodName in this.dataService) || !this.entity) {
-      return;
-    }
-
     this.pendingQuery = false;
     this.pendingQueryFilter = undefined;
+    super.queryData(parentItem, ovrrArgs);
+  }
 
-    parentItem = ServiceUtils.getParentItemFromForm(parentItem, this._pKeysEquiv, this.form);
-
-    if ((Object.keys(this._pKeysEquiv).length > 0) && parentItem === undefined) {
-      this.setData([], []);
-    } else {
-      let filter = ServiceUtils.getFilterUsingParentKeys(parentItem, this._pKeysEquiv);
-
-      let quickFilterExpr = (this.pageable && this.oTableQuickFilterComponent) ? this.oTableQuickFilterComponent.filterExpression : undefined;
-      if (quickFilterExpr) {
-        const parentItemExpr = FilterExpressionUtils.buildExpressionFromObject(filter);
-        const filterExpr = FilterExpressionUtils.buildComplexExpression(parentItemExpr, quickFilterExpr, FilterExpressionUtils.OP_AND);
-        filter[FilterExpressionUtils.FILTER_EXPRESSION_KEY] = filterExpr;
-      }
-
-      let queryArguments = this.getQueryArguments(filter, ovrrArgs);
-      if (this.querySubscription) {
-        this.querySubscription.unsubscribe();
-      }
-      this.querySubscription = this.daoTable.getQuery(queryArguments).subscribe(res => {
-        let data = undefined;
-        let sqlTypes = undefined;
-        if (Util.isArray(res)) {
-          data = res;
-          sqlTypes = [];
-        } else if (res.code === 0) {
-          const arrData = (res.data !== undefined) ? res.data : [];
-          data = Util.isArray(arrData) ? arrData : [];
-          sqlTypes = res.sqlTypes;
-          if (this.pageable) {
-            this.updatePaginationInfo(res);
-          }
-        }
-        this.setData(data, sqlTypes);
-        if (this.pageable) {
-          ObservableWrapper.callEmit(this.onPaginatedTableDataLoaded, data);
-        }
-        ObservableWrapper.callEmit(this.onTableDataLoaded, this.daoTable.data);
-      }, err => {
-        this.showDialogError(err, 'MESSAGES.ERROR_QUERY');
-        //this.pendingQuery = false;
-        this.setData([], []);
-      });
+  getComponentFilter(existingFilter: any = {}): any {
+    let filter = existingFilter;
+    let quickFilterExpr = (this.pageable && this.oTableQuickFilterComponent) ? this.oTableQuickFilterComponent.filterExpression : undefined;
+    if (quickFilterExpr) {
+      const parentItemExpr = FilterExpressionUtils.buildExpressionFromObject(filter);
+      const filterExpr = FilterExpressionUtils.buildComplexExpression(parentItemExpr, quickFilterExpr, FilterExpressionUtils.OP_AND);
+      filter = {};
+      filter[FilterExpressionUtils.FILTER_EXPRESSION_KEY] = filterExpr;
     }
+    return filter;
   }
 
   updatePaginationInfo(queryRes: any) {
@@ -876,6 +831,10 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     this.daoTable.sqlTypesChange.next(sqlTypes);
     this.daoTable.dataChange.next(data);
     this.daoTable.isLoadingResults = false;
+    if (this.pageable) {
+      ObservableWrapper.callEmit(this.onPaginatedTableDataLoaded, data);
+    }
+    ObservableWrapper.callEmit(this.onTableDataLoaded, this.daoTable.data);
   }
 
   showDialogError(error: string, errorOptional?: string) {

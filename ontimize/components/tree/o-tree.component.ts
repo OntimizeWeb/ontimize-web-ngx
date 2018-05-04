@@ -1,6 +1,6 @@
 import {
   Component, OnInit, ViewEncapsulation, NgModule, Injector, ElementRef, Optional, Inject,
-  forwardRef, OnDestroy, ViewChild, AfterViewInit, EventEmitter, HostListener, NgZone
+  forwardRef, OnDestroy, ViewChild, AfterViewInit, EventEmitter, HostListener
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -8,19 +8,15 @@ import {
   TreeModule, TreeModel, Ng2TreeSettings, TreeComponent, Tree,
   NodeSelectedEvent, NodeCollapsedEvent, NodeExpandedEvent, NodeMovedEvent, NodeCreatedEvent,
   NodeRemovedEvent, NodeRenamedEvent
-  // , TreeController
-  // , RenamableNode
 } from 'ng2-tree';
 import { LoadNextLevelEvent } from 'ng2-tree/src/tree.events';
 
-// import { Subscription } from 'rxjs/Subscription';
-import { Observable } from 'rxjs/Observable';
+
 import { InputConverter } from '../../decorators';
 import { OSharedModule } from '../../shared';
 import { Util, Codes } from '../../utils';
 import { DialogService, LocalStorageService, OntimizeService, dataServiceFactory } from '../../services';
 import { FilterExpressionUtils } from '../filter-expression.utils';
-import { ServiceUtils } from '../service.utils';
 import { OFormComponent } from '../form/o-form.component';
 import { OSearchInputModule } from '../input/search-input/o-search-input.component';
 import { OTreeClass } from './o-tree.class';
@@ -168,62 +164,27 @@ export class OTreeComponent extends OTreeClass implements OnInit, AfterViewInit,
     if (this.staticData) {
       this.queryOnBind = false;
       this.queryOnInit = false;
-      this.setTree(this.staticData);
+      this.setData(this.staticData);
     }
   }
 
   registerTreeNode(oTreeNode: OTreeNodeComponent) {
-    // usar querylist
     this.treeNodes.push(oTreeNode);
   }
 
-  queryData(parentItem: any = undefined, ovrrArgs?: any) {
-    // let queryMethodName = this.pageable ? this.paginatedQueryMethod : this.queryMethod;
-    let queryMethodName = this.queryMethod;
-    if (!this.dataService || !(queryMethodName in this.dataService) || !this.entity) {
-      return;
+  getComponentFilter(existingFilter: any = {}): any {
+    let filter = existingFilter;
+    if (this.recursive && this.parentColumn !== undefined) {
+      const parentItemExpr = FilterExpressionUtils.buildExpressionFromObject(filter);
+      const parentNotNullExpr = FilterExpressionUtils.buildExpressionIsNull(this.parentColumn);
+      const filterExpr = FilterExpressionUtils.buildComplexExpression(parentItemExpr, parentNotNullExpr, FilterExpressionUtils.OP_AND);
+      filter = {};
+      filter[FilterExpressionUtils.FILTER_EXPRESSION_KEY] = filterExpr;
     }
-    parentItem = ServiceUtils.getParentItemFromForm(parentItem, this._pKeysEquiv, this.form);
-
-    if ((Object.keys(this._pKeysEquiv).length > 0) && parentItem === undefined) {
-      this.setTree([]);
-    } else {
-      let filter = ServiceUtils.getFilterUsingParentKeys(parentItem, this._pKeysEquiv);
-      if (this.recursive && this.parentColumn !== undefined) {
-        const parentItemExpr = FilterExpressionUtils.buildExpressionFromObject(filter);
-        const parentNotNullExpr = FilterExpressionUtils.buildExpressionIsNull(this.parentColumn);
-        const filterExpr = FilterExpressionUtils.buildComplexExpression(parentItemExpr, parentNotNullExpr, FilterExpressionUtils.OP_AND);
-        filter[FilterExpressionUtils.FILTER_EXPRESSION_KEY] = filterExpr;
-      }
-      let queryArguments = [filter, this.colArray, this.entity];
-      if (this.querySubscription) {
-        this.querySubscription.unsubscribe();
-        this.loaderSubscription.unsubscribe();
-      }
-      this.loaderSubscription = this.load();
-      const self = this;
-      this.querySubscription = this.dataService[queryMethodName].apply(this.dataService, queryArguments).subscribe(res => {
-        let data = undefined;
-        if (Util.isArray(res)) {
-          data = res;
-        } else if ((res.code === 0) && Util.isArray(res.data)) {
-          data = res.data;
-        }
-        self.setTree(data);
-        self.loaderSubscription.unsubscribe();
-      }, err => {
-        self.setTree([]);
-        self.loaderSubscription.unsubscribe();
-        if (err && typeof err !== 'object') {
-          self.dialogService.alert('ERROR', err);
-        } else {
-          self.dialogService.alert('ERROR', 'MESSAGES.ERROR_QUERY');
-        }
-      });
-    }
+    return filter;
   }
 
-  protected setTree(treeArray: any[]) {
+  protected setData(treeArray: any[], sqlTypes?: any) {
     let childrenArray: TreeModel[] = [];
 
     treeArray.forEach(el => {
@@ -442,30 +403,6 @@ export class OTreeComponent extends OTreeClass implements OnInit, AfterViewInit,
     } else {
       console.log('There isn`t a controller for a node with id - ' + id);
     }
-  }
-
-  load(): any {
-    var self = this;
-    var zone = this.injector.get(NgZone);
-    var loadObservable = new Observable(observer => {
-      var timer = window.setTimeout(() => {
-        observer.next(true);
-      }, 250);
-
-      return () => {
-        window.clearTimeout(timer);
-        zone.run(() => {
-          self.loading = false;
-        });
-      };
-
-    });
-    var subscription = loadObservable.subscribe(val => {
-      zone.run(() => {
-        self.loading = val as boolean;
-      });
-    });
-    return subscription;
   }
 
   hasTitle(): boolean {
