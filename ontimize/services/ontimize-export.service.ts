@@ -5,6 +5,7 @@ import { Observable } from 'rxjs/Observable';
 
 import { LoginService } from '../services';
 import { AppConfig, Config } from '../config/app-config';
+import { Codes } from '../utils';
 
 export const EXPORT_PATH_DEFAULT: string = '/export';
 export const DOWNLOAD_PATH_DEFAULT: string = EXPORT_PATH_DEFAULT + '/download';
@@ -44,7 +45,7 @@ export class OntimizeExportService {
     if (serviceName && configuration.hasOwnProperty(serviceName)) {
       servConfig = configuration[serviceName];
     }
-    servConfig['session'] = loginService.getSessionInfo();
+    servConfig[Codes.SESSION_KEY] = loginService.getSessionInfo();
     return servConfig;
   }
 
@@ -139,9 +140,9 @@ export class OntimizeExportService {
 
   protected redirectLogin(sessionExpired: boolean = false): void {
     let router = this.injector.get(Router);
-    router.navigate(['/login'], {
-      queryParams: { 'isdetail': 'true' }
-    });
+    let arg = {};
+    arg[Codes.QUERY_PARAMS] = Codes.getIsDetailObject();
+    router.navigate([Codes.LOGIN_ROUTE], arg);
   }
 
 }

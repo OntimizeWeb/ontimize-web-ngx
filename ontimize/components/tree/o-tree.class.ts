@@ -126,11 +126,9 @@ export class OTreeClass {
   }
 
   initialize() {
-    if (typeof (this.oattr) === 'undefined') {
-      if (typeof (this.entity) !== 'undefined') {
-        this.oattr = this.entity.replace('.', '_');
-        this.oattrFromEntity = true;
-      }
+    if (!Util.isDefined(this.oattr) && Util.isDefined(this.entity)) {
+      this.oattr = this.entity.replace('.', '_');
+      this.oattrFromEntity = true;
     }
 
     this.keysArray = Util.parseArray(this.keys);

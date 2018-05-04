@@ -4,13 +4,14 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/filter';
 
+import { Codes } from '../utils';
 import { ObservableWrapper } from '../util/async';
 import { LocalStorageService, ILocalStorageComponent } from '../../index';
 
 export class ONavigationItem {
   constructor(value: Object) {
     this.url = value['url'] ? value['url'] : '';
-    this.queryParams = value['queryParams'] ? value['queryParams'] : {};
+    this.queryParams = value[Codes.QUERY_PARAMS] ? value[Codes.QUERY_PARAMS] : {};
     this.text = value['text'] ? value['text'] : '';
     this.displayText = value['displayText'] ? value['displayText'] : '';
   }
@@ -96,7 +97,7 @@ export class NavigationService implements ILocalStorageComponent {
       this.navigationItems.forEach((element, index) => {
         let storedElem = localData[Object.keys(localData).find(index => element.url === localData[index]['url'])];
         if (void 0 !== storedElem) {
-          element.queryParams = element.queryParams && !Object.keys(storedElem['queryParams']).length ? element.queryParams : storedElem['queryParams'] && Object.keys(storedElem['queryParams']).length ? storedElem['queryParams'] : {};
+          element.queryParams = element.queryParams && !Object.keys(storedElem[Codes.QUERY_PARAMS]).length ? element.queryParams : storedElem[Codes.QUERY_PARAMS] && Object.keys(storedElem[Codes.QUERY_PARAMS]).length ? storedElem[Codes.QUERY_PARAMS] : {};
           element.displayText = element.displayText ? element.displayText : storedElem['displayText'] ? storedElem['displayText'] : null;
         }
         element.terminal = index === this.navigationItems.length - 1;

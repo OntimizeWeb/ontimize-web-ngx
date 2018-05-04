@@ -51,13 +51,13 @@ export class OFormServiceComponent extends OFormDataComponent {
   protected parentKeys: string;
   protected visibleColumns: string;
   protected descriptionColumns: string;
-  protected separator: string;
+  protected separator: string = Codes.SPACE_SEPARATOR;
   @InputConverter()
   protected queryOnInit: boolean = true;
   @InputConverter()
   protected queryOnBind: boolean = false;
   protected queryOnEvent: any;
-  protected queryMethod: string;
+  protected queryMethod: string = Codes.QUERY_METHOD;
   protected serviceType: string;
 
   /* Internal variables */
@@ -103,10 +103,6 @@ export class OFormServiceComponent extends OFormDataComponent {
 
     let pkArray = Util.parseArray(this.parentKeys);
     this._pKeysEquiv = Util.parseParentKeysEquivalences(pkArray);
-
-    if (!this.queryMethod) {
-      this.queryMethod = Codes.QUERY_METHOD;
-    }
 
     if (this.form) {
       const self = this;

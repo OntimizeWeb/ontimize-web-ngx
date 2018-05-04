@@ -24,6 +24,7 @@ export class Codes {
   public static SELECTION_MODE_MULTIPLE = 'multiple';
 
   public static HYPHEN_SEPARATOR = '-';
+  public static SPACE_SEPARATOR = ' ';
   public static COLUMNS_ALIAS_SEPARATOR = ':';
   public static TYPE_SEPARATOR = ':';
   public static VALUES_SEPARATOR = '=';
@@ -35,11 +36,28 @@ export class Codes {
   public static ROUTE_SEPARATOR = '/';
   public static ROUTE_VARIABLE_CHAR = ':';
 
+  public static PARENT_KEYS_KEY = 'pk';
+  public static QUERY_PARAMS = 'queryParams';
+  public static IS_DETAIL = 'isdetail';
+
+  public static SESSION_KEY = 'session';
+  public static SESSION_EXPIRED_KEY = 'session-expired';
+
+  public static LOGIN_ROUTE = '/login';
+
+  public static IGNORE_CAN_DEACTIVATE = 'ignore_can_deactivate';
+
   static isDoubleClickMode(value: string): boolean {
     return Codes.DETAIL_MODE_DBLCLICK_VALUES.indexOf(value) !== -1;
   }
 
   static isValidRowHeight(value: string): boolean {
     return Codes.AVAILABLE_ROW_HEIGHTS_VALUES.indexOf(value) === -1;
+  }
+
+  static getIsDetailObject(): any {
+    let res = {};
+    res[Codes.IS_DETAIL] = 'true';
+    return res;
   }
 }

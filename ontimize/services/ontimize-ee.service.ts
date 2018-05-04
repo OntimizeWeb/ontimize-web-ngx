@@ -7,7 +7,7 @@ import 'rxjs/add/operator/share';
 
 import { LoginService } from '../services';
 import { AppConfig, Config } from '../config/app-config';
-import { IAuthService, IDataService, Util } from '../util/util';
+import { IAuthService, IDataService, Util, Codes } from '../utils';
 import { OntimizeServiceResponseParser } from './parser/o-service-response.parser';
 
 @Injectable()
@@ -45,7 +45,7 @@ export class OntimizeEEService implements IAuthService, IDataService {
     if (serviceName && configuration.hasOwnProperty(serviceName)) {
       servConfig = configuration[serviceName];
     }
-    servConfig['session'] = loginService.getSessionInfo();
+    servConfig[Codes.SESSION_KEY] = loginService.getSessionInfo();
     return servConfig;
   }
 
@@ -239,7 +239,9 @@ export class OntimizeEEService implements IAuthService, IDataService {
 
   redirectLogin(sessionExpired: boolean = false) {
     let router = this.injector.get(Router);
-    router.navigate(['/login', { 'session-expired': sessionExpired }]);
+    let arg = {};
+    arg[Codes.SESSION_EXPIRED_KEY] = sessionExpired;
+    router.navigate([Codes.LOGIN_ROUTE, arg]);
   }
 
   protected buildHeaders(): HttpHeaders {

@@ -286,8 +286,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   public daoTable: OTableDao | null;
   public dataSource: OTableDataSource | null;
-  protected insertMethod: string;
-  protected updateMethod: string;
+  protected insertMethod: string = Codes.INSERT_METHOD;
+  protected updateMethod: string = Codes.UPDATE_METHOD;
   protected visibleColumns: string;
   protected sortColumns: string;
 
@@ -651,23 +651,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     this.state = this.localStorageService.getComponentStorage(this);
 
     // Initialize table layout parameters
-    if (typeof (this.oattr) === 'undefined') {
-      if (typeof (this.entity) !== 'undefined') {
-        this.oattr = this.entity.replace('.', '_');
-        this.oattrFromEntity = true;
-      }
-    }
-
-    if (typeof (this.title) !== 'undefined') {
-      this.title = this.translateService.get(this.title);
-    }
-
-    if (!this.detailButtonInRowIcon) {
-      this.detailButtonInRowIcon = Codes.DETAIL_ICON;
-    }
-
-    if (!this.editButtonInRowIcon) {
-      this.editButtonInRowIcon = Codes.EDIT_ICON;
+    if (!Util.isDefined(this.oattr) && Util.isDefined(this.entity)) {
+      this.oattr = this.entity.replace('.', '_');
+      this.oattrFromEntity = true;
     }
 
     if (this.detailButtonInRow || this.editButtonInRow) {
@@ -675,7 +661,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
 
     this.rowHeight = this.rowHeight ? this.rowHeight.toLowerCase() : this.rowHeight;
-    if (!this.rowHeight || !Codes.isValidRowHeight(this.rowHeight)) {
+    if (!Codes.isValidRowHeight(this.rowHeight)) {
       this.rowHeight = Codes.DEFAULT_ROW_HEIGHT;
     }
 
@@ -685,30 +671,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     let pkArray = Util.parseArray(this.parentKeys);
     this._pKeysEquiv = Util.parseParentKeysEquivalences(pkArray, Codes.COLUMNS_ALIAS_SEPARATOR);
 
-    // TODO: get default values from ICrudConstants
-    if (!this.queryMethod) {
-      this.queryMethod = Codes.QUERY_METHOD;
-    }
-
-    if (!this.paginatedQueryMethod) {
-      this.paginatedQueryMethod = Codes.PAGINATED_QUERY_METHOD;
-    }
-
-    if (!this.insertMethod) {
-      this.insertMethod = Codes.INSERT_METHOD;
-    }
-
-    if (!this.updateMethod) {
-      this.updateMethod = Codes.UPDATE_METHOD;
-    }
-    if (!this.deleteMethod) {
-      this.deleteMethod = Codes.DELETE_METHOD;
-    }
-
     if (this.queryRows) {
       this.queryRows = parseInt(this.queryRows);
-    } else {
-      this.queryRows = Codes.DEFAULT_QUERY_ROWS;
     }
 
     // If visible-columns is not present then visible-columns is all columns
@@ -762,7 +726,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
 
     this.authGuardService.getPermissions(this.router.url, this.oattr).then(permissions => {
-      if (typeof (permissions) !== 'undefined') {
+      if (Util.isDefined(permissions)) {
         if (this.ovisible && permissions.visible === false) {
           this.ovisible = false;
         }

@@ -70,7 +70,7 @@ export class AuthGuardService implements CanActivate, IProfileService {
       let serviceCfg: Object = this.ontimizeService.getDefaultServiceConfiguration(this.service);
       if (this.entity) {
         serviceCfg['entity'] = this.entity;
-        //serviceCfg['session'] = this.loginService.getSessionInfo();
+        //serviceCfg[Codes.SESSION_KEY] = this.loginService.getSessionInfo();
       }
       this.ontimizeService.configureService(serviceCfg);
     }
@@ -81,7 +81,7 @@ export class AuthGuardService implements CanActivate, IProfileService {
     if (!isLoggedIn) {
       this.profile = undefined;
       this.router.navigate([LoginService.LOGIN_ROUTE]);
-    } else if ((typeof (this.entity) !== 'undefined') && (typeof (this.keyColumn) !== 'undefined') &&
+    } else if ((Util.isDefined(this.entity)) && (typeof (this.keyColumn) !== 'undefined') &&
       (typeof (this.valueColumn) !== 'undefined')) {
       if ((typeof (this.profile) === 'undefined') || (this.user !== this.loginService.user)) {
         this.user = undefined;
@@ -147,7 +147,7 @@ export class AuthGuardService implements CanActivate, IProfileService {
   public isRestricted(route: string): Promise<boolean> {
     return new Promise(
       (resolve: any, reject: any) => {
-        if ((typeof (this.entity) !== 'undefined') && (typeof (this.keyColumn) !== 'undefined') &&
+        if ((Util.isDefined(this.entity)) && (typeof (this.keyColumn) !== 'undefined') &&
           (typeof (this.valueColumn) !== 'undefined') && (typeof (this.profile) === 'undefined')) {
           this.profileObservable
             .subscribe(
@@ -183,7 +183,7 @@ export class AuthGuardService implements CanActivate, IProfileService {
   public getPermissions(route: string, attr: string): Promise<any> {
     return new Promise(
       (resolve: any, reject: any) => {
-        if ((typeof (this.entity) !== 'undefined') && (typeof (this.keyColumn) !== 'undefined') &&
+        if ((Util.isDefined(this.entity)) && (typeof (this.keyColumn) !== 'undefined') &&
           (typeof (this.valueColumn) !== 'undefined') && (typeof (this.profile) === 'undefined')) {
           this.profileObservable
             .subscribe(

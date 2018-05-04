@@ -1,8 +1,7 @@
 import { Injectable, Injector, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
-import { ObservableWrapper } from '../util/async';
-import { IAuthService } from '../util/util';
+import { Codes, IAuthService, ObservableWrapper } from '../utils';
 import { OntimizeService, DialogService } from '../services';
 import { AppConfig, Config } from '../config/app-config';
 
@@ -54,9 +53,8 @@ export class LoginService implements ILoginService {
 
   configureOntimizeAuthService(config: Object): void {
     this.ontService = this.injector.get(OntimizeService);
-    var servConf = {
-      'session': this.getSessionInfo()
-    };
+    let servConf = {};
+    servConf[Codes.SESSION_KEY] = this.getSessionInfo();
     this.ontService.configureService(servConf);
   }
 
@@ -168,7 +166,7 @@ export class LoginService implements ILoginService {
       } else {
         stored = {};
       }
-      stored['session'] = sessionInfo;
+      stored[Codes.SESSION_KEY] = sessionInfo;
       localStorage.setItem(this._localStorageKey, JSON.stringify(stored));
     }
   }
@@ -179,25 +177,23 @@ export class LoginService implements ILoginService {
       return undefined;
     }
     let stored = JSON.parse(info);
-    return stored['session'];
+    return stored[Codes.SESSION_KEY];
   }
 
   public logoutAndRedirect() {
     this.logout().subscribe(() => {
-      this.router.navigate(['/login', {
-        'session-expired': false
-      }]);
+      let arg = {};
+      arg[Codes.SESSION_EXPIRED_KEY] = false;
+      this.router.navigate([Codes.LOGIN_ROUTE, arg]);
     });
   }
 
   public logoutWithConfirmationAndRedirect() {
-    this.dialogService.confirm('CONFIRM', 'MESSAGES.CONFIRM_LOGOUT').then(
-      res => {
-        if (res === true) {
-          this.logoutAndRedirect();
-        }
+    this.dialogService.confirm('CONFIRM', 'MESSAGES.CONFIRM_LOGOUT').then(res => {
+      if (res) {
+        this.logoutAndRedirect();
       }
-    );
+    });
   }
 
 }

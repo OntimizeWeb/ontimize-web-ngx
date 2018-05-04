@@ -136,9 +136,9 @@ export class OServiceComponent implements ILocalStorageComponent {
   protected controls: boolean = true;
   protected service: string;
   protected entity: string;
-  protected queryMethod: string;
-  protected paginatedQueryMethod: string;
-  protected deleteMethod: string;
+  protected queryMethod: string = Codes.QUERY_METHOD;
+  protected paginatedQueryMethod: string = Codes.PAGINATED_QUERY_METHOD;
+  protected deleteMethod: string = Codes.DELETE_METHOD;
   @InputConverter()
   protected queryOnInit: boolean = true;
   @InputConverter()
@@ -155,17 +155,17 @@ export class OServiceComponent implements ILocalStorageComponent {
   protected recursiveDetail: boolean = false;
   @InputConverter()
   detailButtonInRow: boolean = false;
-  detailButtonInRowIcon: string;
+  detailButtonInRowIcon: string = Codes.DETAIL_ICON;
   protected editFormRoute: string;
   @InputConverter()
   protected recursiveEdit: boolean = false;
   @InputConverter()
   editButtonInRow: boolean = false;
-  editButtonInRowIcon: string;
-  queryRows: any;
+  editButtonInRowIcon: string = Codes.EDIT_ICON;
+  queryRows: any = Codes.DEFAULT_QUERY_ROWS;
   @InputConverter()
   insertButton: boolean;
-  rowHeight: string;
+  rowHeight: string = Codes.DEFAULT_ROW_HEIGHT;
   protected serviceType: string;
   protected insertFormRoute: string;
   @InputConverter()
@@ -273,19 +273,17 @@ export class OServiceComponent implements ILocalStorageComponent {
   }
 
   initialize(): void {
-    if (typeof (this.oattr) === 'undefined') {
-      if (typeof (this.entity) !== 'undefined') {
-        this.oattr = this.entity.replace('.', '_');
-        this.oattrFromEntity = true;
-      }
+    if (!Util.isDefined(this.oattr) && Util.isDefined(this.entity)) {
+      this.oattr = this.entity.replace('.', '_');
+      this.oattrFromEntity = true;
     }
 
-    if (typeof (this.title) !== 'undefined') {
+    if (Util.isDefined(this._title)) {
       this.title = this.translateService.get(this._title);
     }
 
     this.authGuardService.getPermissions(this.router.url, this.oattr).then(permissions => {
-      if (typeof (permissions) !== 'undefined') {
+      if (Util.isDefined(permissions)) {
         if (this.ovisible && permissions.visible === false) {
           this.ovisible = false;
         }
@@ -300,31 +298,8 @@ export class OServiceComponent implements ILocalStorageComponent {
     let pkArray = Util.parseArray(this.parentKeys);
     this._pKeysEquiv = Util.parseParentKeysEquivalences(pkArray, Codes.COLUMNS_ALIAS_SEPARATOR);
 
-    //TODO: get default values from ICrudConstants
-    if (!this.queryMethod) {
-      this.queryMethod = Codes.QUERY_METHOD;
-    }
-
-    if (!this.paginatedQueryMethod) {
-      this.paginatedQueryMethod = Codes.PAGINATED_QUERY_METHOD;
-    }
-
-    if (!this.deleteMethod) {
-      this.deleteMethod = Codes.DELETE_METHOD;
-    }
-
     if (this.queryRows) {
       this.queryRows = parseInt(this.queryRows);
-    } else {
-      this.queryRows = Codes.DEFAULT_QUERY_ROWS;
-    }
-
-    if (!this.detailButtonInRowIcon) {
-      this.detailButtonInRowIcon = Codes.DETAIL_ICON;
-    }
-
-    if (!this.editButtonInRowIcon) {
-      this.editButtonInRowIcon = Codes.EDIT_ICON;
     }
 
     if (this.detailButtonInRow || this.editButtonInRow) {
@@ -344,7 +319,7 @@ export class OServiceComponent implements ILocalStorageComponent {
     }
 
     this.rowHeight = this.rowHeight ? this.rowHeight.toLowerCase() : this.rowHeight;
-    if (!this.rowHeight || !Codes.isValidRowHeight(this.rowHeight)) {
+    if (!Codes.isValidRowHeight(this.rowHeight)) {
       this.rowHeight = Codes.DEFAULT_ROW_HEIGHT;
     }
   }
@@ -484,16 +459,14 @@ export class OServiceComponent implements ILocalStorageComponent {
   viewDetail(item: any): void {
     let route = this.getRouteOfSelectedRow(item, this.detailFormRoute);
     if (route.length > 0) {
-      const queryParams = {
-        'isdetail': 'true'
-      };
+      let qParams = Codes.getIsDetailObject();
       if (this.formLayoutManager) {
-        queryParams['ignore_can_deactivate'] = true;
+        qParams[Codes.IGNORE_CAN_DEACTIVATE] = true;
       }
-      const extras = {
+      let extras = {
         relativeTo: this.recursiveDetail ? this.actRoute.parent : this.actRoute,
-        queryParams: queryParams
       };
+      extras[Codes.QUERY_PARAMS] = qParams;
       this.router.navigate(route, extras);
     }
   }
@@ -502,15 +475,11 @@ export class OServiceComponent implements ILocalStorageComponent {
     let route = this.getRouteOfSelectedRow(item, this.editFormRoute);
     if (route.length > 0) {
       route.push('edit');
-      this.router.navigate(
-        route,
-        {
-          relativeTo: this.recursiveEdit ? this.actRoute.parent : this.actRoute,
-          queryParams: {
-            'isdetail': 'true'
-          }
-        }
-      );
+      let extras = {
+        relativeTo: this.recursiveEdit ? this.actRoute.parent : this.actRoute
+      };
+      extras[Codes.QUERY_PARAMS] = Codes.getIsDetailObject();
+      this.router.navigate(route, extras);
     }
   }
 
@@ -521,16 +490,19 @@ export class OServiceComponent implements ILocalStorageComponent {
     // adding parent-keys info...
     const encodedParentKeys = this.getEncodedParentKeys();
     if (encodedParentKeys !== undefined) {
-      route.push({ 'pk': encodedParentKeys });
+      let routeObj = {};
+      routeObj[Codes.PARENT_KEYS_KEY] = encodedParentKeys;
+      route.push(routeObj);
     }
     let extras = {
       relativeTo: this.recursiveInsert ? this.actRoute.parent : this.actRoute,
     };
     if (this.formLayoutManager) {
-      extras['queryParams'] = {
-        'ignore_can_deactivate': true
-      };
+      const cDeactivate = {};
+      cDeactivate[Codes.IGNORE_CAN_DEACTIVATE] = true;
+      extras[Codes.QUERY_PARAMS] = cDeactivate;
     }
+
     this.router.navigate(route, extras).catch(err => {
       console.error(err.message);
     });

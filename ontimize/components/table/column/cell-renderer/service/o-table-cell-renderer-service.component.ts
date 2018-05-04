@@ -36,7 +36,7 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
   protected columns: string;
   protected valueColumn: string;
   protected parentKeys: string;
-  protected queryMethod: string;
+  protected queryMethod: string = Codes.QUERY_METHOD;
   protected serviceType: string;
 
   /* Internal variables */
@@ -62,9 +62,6 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
     this.colArray = Util.parseArray(this.columns, true);
     let pkArray = Util.parseArray(this.parentKeys);
     this._pKeysEquiv = Util.parseParentKeysEquivalences(pkArray);
-    if (!this.queryMethod) {
-      this.queryMethod = Codes.QUERY_METHOD;
-    }
     this.configureService();
   }
 

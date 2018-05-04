@@ -160,8 +160,6 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   public static DELETE_ACTION: string = 'DELETE';
   public static UNDO_LAST_CHANGE_ACTION: string = 'UNDO_LAST_CHANGE';
 
-  public static PARENT_KEYS_KEY = 'pk';
-
   public static DEFAULT_LAYOUT_DIRECTION = 'column';
   public static guardClassName = 'CanDeactivateFormGuard';
 
@@ -185,10 +183,10 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   @InputConverter()
   protected queryOnInit: boolean = true;
   protected parentKeys: string;
-  protected queryMethod: string;
-  protected insertMethod: string;
-  protected updateMethod: string;
-  protected deleteMethod: string;
+  protected queryMethod: string = Codes.QUERY_METHOD;
+  protected insertMethod: string = Codes.INSERT_METHOD;
+  protected updateMethod: string = Codes.UPDATE_METHOD;
+  protected deleteMethod: string = Codes.DELETE_METHOD;
   @InputConverter()
   layoutFill: boolean = true;
   protected _layoutDirection: string = OFormComponent.DEFAULT_LAYOUT_DIRECTION;
@@ -567,22 +565,6 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     let pkArray = Util.parseArray(this.parentKeys);
     this._pKeysEquiv = Util.parseParentKeysEquivalences(pkArray);
     this.keysSqlTypesArray = Util.parseArray(this.keysSqlTypes);
-
-    if (!this.queryMethod) {
-      this.queryMethod = Codes.QUERY_METHOD;
-    }
-
-    if (!this.insertMethod) {
-      this.insertMethod = Codes.INSERT_METHOD;
-    }
-
-    if (!this.updateMethod) {
-      this.updateMethod = Codes.UPDATE_METHOD;
-    }
-
-    if (!this.deleteMethod) {
-      this.deleteMethod = Codes.DELETE_METHOD;
-    }
 
     this.configureService();
 

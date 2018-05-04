@@ -1,8 +1,5 @@
-import {
-  Injector,
-  Injectable
-} from '@angular/core';
-
+import { Injector, Injectable } from '@angular/core';
+import { Codes } from '../utils';
 import { AppConfig } from '../config/app-config';
 
 export type MenuRootItem = (MenuGroup | MenuItemRoute | MenuItemAction | MenuItemLocale | MenuItemLogout | MenuItemUserInfo);
@@ -86,7 +83,7 @@ export class AppMenuService {
   getMenuItemType(item: MenuRootItem): string {
     let type: string;
     switch (true) {
-      case ((item as MenuItemLogout).route === '/login'):
+      case ((item as MenuItemLogout).route === Codes.LOGIN_ROUTE):
         type = 'logout';
         break;
       case ((item as MenuItemRoute).route !== undefined):

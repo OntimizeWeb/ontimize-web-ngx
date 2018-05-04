@@ -7,12 +7,11 @@ import 'rxjs/add/operator/share';
 
 import { LoginService } from '../services';
 import { AppConfig, Config } from '../config/app-config';
-import { IAuthService, IDataService, Util } from '../util/util';
+import { IAuthService, IDataService, Util, Codes } from '../utils';
 import { OntimizeServiceResponseParser } from './parser/o-service-response.parser';
 
 @Injectable()
 export class OntimizeService implements IAuthService, IDataService {
-
 
   public entity: string = '';
   public kv: Object = {};
@@ -47,7 +46,7 @@ export class OntimizeService implements IAuthService, IDataService {
     if (serviceName && configuration.hasOwnProperty(serviceName)) {
       servConfig = configuration[serviceName];
     }
-    servConfig['session'] = loginService.getSessionInfo();
+    servConfig[Codes.SESSION_KEY] = loginService.getSessionInfo();
     return servConfig;
   }
 
@@ -291,9 +290,9 @@ export class OntimizeService implements IAuthService, IDataService {
 
   redirectLogin(sessionExpired: boolean = false) {
     let router = this.injector.get(Router);
-    router.navigate(['/login'], {
-      queryParams: { 'isdetail': 'true' }
-    });
+    let arg = {};
+    arg[Codes.QUERY_PARAMS] = Codes.getIsDetailObject();
+    router.navigate([Codes.LOGIN_ROUTE], arg);
   }
 
   protected buildHeaders(): HttpHeaders {
