@@ -232,11 +232,11 @@ export class OTreeClass {
 
       children.push(treeNode);
     });
-    callback(children);
-  }
-
-  protected setTree(treeArray: any[]) {
-    //
+    if (this.treeNodes.length === 1 && !this.treeNodes[0].showRoot) {
+      children[0].loadChildren(callback);
+    } else {
+      callback(children);
+    }
   }
 
   protected doChildQuery(queryMethodName: string, queryArguments: any[], callback: any) {
