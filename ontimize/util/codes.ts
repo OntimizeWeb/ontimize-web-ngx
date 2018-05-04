@@ -44,6 +44,7 @@ export class Codes {
   public static SESSION_EXPIRED_KEY = 'session-expired';
 
   public static LOGIN_ROUTE = '/login';
+  public static DEFAULT_EDIT_ROUTE = 'edit';
 
   public static IGNORE_CAN_DEACTIVATE = 'ignore_can_deactivate';
 

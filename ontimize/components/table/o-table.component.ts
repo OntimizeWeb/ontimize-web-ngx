@@ -67,7 +67,7 @@ import { OTableContextMenuComponent } from './extensions/contextmenu/o-table-con
 import { OContextMenuComponent } from '../contextmenu/o-context-menu-components';
 import { OContextMenuModule } from '../contextmenu/o-context-menu.module';
 import { IOContextMenuContext } from '../contextmenu/o-context-menu.service';
-import { ServiceUtils } from '../service.utils';
+import { ServiceUtils, ISQLOrder } from '../service.utils';
 import { FilterExpressionUtils, IFilterExpression } from '../filter-expression.utils';
 
 export const DEFAULT_INPUTS_O_TABLE = [
@@ -167,11 +167,6 @@ export class OTableOptions {
 }
 
 export type QuickFilterFunction = (filter: string) => IFilterExpression | Object;
-
-export interface ISQLOrder {
-  columnName: string;
-  ascendent: boolean;
-}
 
 export interface OTableInitializationOptions {
   entity?: string;
@@ -604,26 +599,17 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   parseSortColumns() {
-    this.sortColArray = [];
     let sortColumnsParam = this.state['sort-columns'] || this.sortColumns;
-    if (sortColumnsParam) {
-      let cols = Util.parseArray(sortColumnsParam);
-      cols.forEach((col) => {
-        let colDef = col.split(Codes.TYPE_SEPARATOR);
-        if (colDef.length > 0) {
-          let colName = colDef[0];
-          let oCol = this.getOColumn(colName);
-          if (oCol !== undefined) {
-            const colSort = colDef[1] || Codes.ASC_SORT;
-            this.sortColArray.push({
-              columnName: colName,
-              ascendent: colSort === Codes.ASC_SORT
-            });
-          }
-        }
-      });
-      this.setMatSort();
+    this.sortColArray = ServiceUtils.parseSortColumns(sortColumnsParam);
+    // ensuring column existence
+    for (let i = this.sortColArray.length - 1; i >= 0; i--) {
+      const colName = this.sortColArray[i].columnName;
+      const oCol = this.getOColumn(colName);
+      if (!Util.isDefined(oCol)) {
+        this.sortColArray.splice(i, 1);
+      }
     }
+    this.setMatSort();
   }
 
   setMatSort() {

@@ -4,8 +4,7 @@ import { TreeModel } from 'ng2-tree';
 
 import { InputConverter } from '../../decorators';
 import { Util, Codes } from '../../utils';
-import { ServiceUtils } from '../service.utils';
-import { ISQLOrder } from '../table/o-table.component';
+import { ServiceUtils, ISQLOrder } from '../service.utils';
 import { DEFAULT_INPUTS_O_SERVICE_BASE_COMPONENT, OServiceBaseComponent } from '../o-service-base-component.class';
 import { OTreeNodeComponent } from './node/o-tree-node.component';
 
@@ -68,26 +67,8 @@ export class OTreeClass extends OServiceBaseComponent {
   initialize() {
     super.initialize();
 
-    this.parseSortColumns();
+    this.sortColArray = ServiceUtils.parseSortColumns(this.sortColumns);
     this.descriptionColArray = Util.parseArray(this.descriptionColumns, true);
-  }
-
-  protected parseSortColumns() {
-    this.sortColArray = [];
-    if (this.sortColumns) {
-      let cols = Util.parseArray(this.sortColumns);
-      cols.forEach((col) => {
-        let colDef = col.split(Codes.TYPE_SEPARATOR);
-        if (colDef.length > 0) {
-          let colName = colDef[0];
-          const colSort = colDef[1] || Codes.ASC_SORT;
-          this.sortColArray.push({
-            columnName: colName,
-            ascendent: colSort === Codes.ASC_SORT
-          });
-        }
-      });
-    }
   }
 
   destroy() {

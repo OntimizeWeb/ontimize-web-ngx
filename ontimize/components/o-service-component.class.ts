@@ -211,7 +211,7 @@ export class OServiceComponent extends OServiceBaseComponent {
   editDetail(item: any) {
     let route = this.getRouteOfSelectedRow(item, this.editFormRoute);
     if (route.length > 0) {
-      route.push('edit');
+      route.push(Codes.DEFAULT_EDIT_ROUTE);
       let extras = {
         relativeTo: this.recursiveEdit ? this.actRoute.parent : this.actRoute
       };

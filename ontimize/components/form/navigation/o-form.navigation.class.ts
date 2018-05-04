@@ -382,7 +382,7 @@ export class OFormNavigationClass {
       extras[Codes.QUERY_PARAMS] = Codes.getIsDetailObject();
     }
     extras[Codes.QUERY_PARAMS] = Object.assign({}, this.getQueryParams(), extras[Codes.QUERY_PARAMS] || {});
-    this.router.navigate(['../', url, 'edit'], extras).then((val) => {
+    this.router.navigate(['../', url, Codes.DEFAULT_EDIT_ROUTE], extras).then((val) => {
       if (val && options && options.changeToolbarMode) {
         this.form.getFormToolbar().setEditMode();
       }

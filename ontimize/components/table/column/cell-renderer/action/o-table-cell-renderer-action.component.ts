@@ -1,7 +1,6 @@
 import { Component, Injector, ViewChild, TemplateRef, EventEmitter } from '@angular/core';
 import { OBaseTableCellRenderer } from '../o-base-table-cell-renderer.class';
 
-
 export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_ACTION = [
   'icon',
   'action'
@@ -52,7 +51,7 @@ export class OTableCellRendererActionComponent extends OBaseTableCellRenderer {
     //     case 'detail':
     //       this.tableColumn.viewDetail(rowData);
     //       break;
-    //     case 'edit':
+    //     case Codes.DEFAULT_EDIT_ROUTE:
     //       this.tableColumn.editDetail(rowData);
     //       break;
     //     default:

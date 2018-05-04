@@ -1,5 +1,11 @@
 import { OFormComponent } from './form/o-form.component';
-import { OFormValue } from '../components';
+import { OFormValue } from '../components/form/OFormValue';
+import { Codes, Util } from '../utils';
+
+export interface ISQLOrder {
+  columnName: string;
+  ascendent: boolean;
+}
 
 export class ServiceUtils {
 
@@ -68,4 +74,24 @@ export class ServiceUtils {
     });
     return objectProperties;
   }
+
+  static parseSortColumns(sortColumns: string): Array<ISQLOrder> {
+    let sortColArray = [];
+    if (sortColumns) {
+      let cols = Util.parseArray(sortColumns);
+      cols.forEach((col) => {
+        let colDef = col.split(Codes.TYPE_SEPARATOR);
+        if (colDef.length > 0) {
+          let colName = colDef[0];
+          const colSort = colDef[1] || Codes.ASC_SORT;
+          sortColArray.push({
+            columnName: colName,
+            ascendent: colSort === Codes.ASC_SORT
+          });
+        }
+      });
+    }
+    return sortColArray;
+  }
+
 }

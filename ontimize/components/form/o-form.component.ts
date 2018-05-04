@@ -662,7 +662,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     if (_path === 'new') {
       this.setInsertMode();
       return;
-    } else if (_path === 'edit') {
+    } else if (_path === Codes.DEFAULT_EDIT_ROUTE) {
       this.setUpdateMode();
     } else {
       this.setInitialMode();
