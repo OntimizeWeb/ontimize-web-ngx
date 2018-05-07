@@ -7,7 +7,7 @@ import { OSharedModule } from '../../shared';
 import { DialogService, OModulesInfoService } from '../../services';
 import { OUserInfoModule } from '../../components';
 import { InputConverter } from '../../decorators';
-import { Codes } from '../../utils';
+import { ServiceUtils } from '../../utils';
 
 export const DEFAULT_INPUTS_O_APP_HEADER = [
   'showUserInfo: show-user-info',
@@ -67,12 +67,9 @@ export class OAppHeaderComponent implements OnDestroy {
   onLogoutClick() {
     this.dialogService.confirm('CONFIRM', 'MESSAGES.CONFIRM_LOGOUT').then(res => {
       if (res) {
-        let arg = {};
-        arg[Codes.SESSION_EXPIRED_KEY] = true;
-        this.router.navigate([Codes.LOGIN_ROUTE, arg]);
+        ServiceUtils.redirectLogin(this.router, false);
       }
-    }
-    );
+    });
   }
 
   get headerTitle(): string {

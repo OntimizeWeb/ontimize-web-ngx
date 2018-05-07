@@ -5,7 +5,7 @@ import { Observable } from 'rxjs/Observable';
 
 import { LoginService } from '../services';
 import { AppConfig, Config } from '../config/app-config';
-import { Util, Codes } from '../utils';
+import { Util, Codes, ServiceUtils } from '../utils';
 
 @Injectable()
 export class OntimizeFileService {
@@ -125,9 +125,7 @@ export class OntimizeFileService {
 
   protected redirectLogin(sessionExpired: boolean = false) {
     let router = this.injector.get(Router);
-    let arg = {};
-    arg[Codes.QUERY_PARAMS] = Codes.getIsDetailObject();
-    router.navigate([Codes.LOGIN_ROUTE], arg);
+    ServiceUtils.redirectLogin(router, sessionExpired);
   }
 
   isNullOrUndef(value: any): boolean {

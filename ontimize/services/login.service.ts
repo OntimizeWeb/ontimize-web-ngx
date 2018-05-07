@@ -1,7 +1,7 @@
 import { Injectable, Injector, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
-import { Codes, IAuthService, ObservableWrapper } from '../utils';
+import { Codes, IAuthService, ObservableWrapper, ServiceUtils } from '../utils';
 import { OntimizeService, DialogService } from '../services';
 import { AppConfig, Config } from '../config/app-config';
 
@@ -19,9 +19,6 @@ export interface ILoginService {
 
 @Injectable()
 export class LoginService implements ILoginService {
-
-  public static LOGIN_ROUTE = 'login';
-
   public onLogin: EventEmitter<any> = new EventEmitter();
   public onLogout: EventEmitter<any> = new EventEmitter();
 
@@ -182,9 +179,7 @@ export class LoginService implements ILoginService {
 
   public logoutAndRedirect() {
     this.logout().subscribe(() => {
-      let arg = {};
-      arg[Codes.SESSION_EXPIRED_KEY] = false;
-      this.router.navigate([Codes.LOGIN_ROUTE, arg]);
+      ServiceUtils.redirectLogin(this.router, false);
     });
   }
 

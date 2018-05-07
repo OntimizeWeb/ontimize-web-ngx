@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { OFormComponent } from './form/o-form.component';
 import { OFormValue } from '../components/form/OFormValue';
 import { Codes, Util } from '../utils';
@@ -92,6 +93,14 @@ export class ServiceUtils {
       });
     }
     return sortColArray;
+  }
+
+  static redirectLogin(router: Router, sessionExpired: boolean = false) {
+    let arg = {};
+    arg[Codes.SESSION_EXPIRED_KEY] = sessionExpired;
+    let extras = {};
+    extras[Codes.QUERY_PARAMS] = arg;
+    router.navigate([Codes.LOGIN_ROUTE], extras);
   }
 
 }

@@ -45,17 +45,18 @@ export class AuthGuardService implements CanActivate, IProfileService {
     this.entity = undefined;
     this.keyColumn = undefined;
     this.valueColumn = undefined;
-    if (typeof (this.config.authGuard) !== 'undefined') {
-      if (typeof (this.config.authGuard.entity) !== 'undefined') {
+
+    if (Util.isDefined(this.config.authGuard)) {
+      if (Util.isDefined(this.config.authGuard.entity)) {
         this.entity = this.config.authGuard.entity;
       }
-      if (typeof (this.config.authGuard.keyColumn) !== 'undefined') {
+      if (Util.isDefined(this.config.authGuard.keyColumn)) {
         this.keyColumn = this.config.authGuard.keyColumn;
       }
-      if (typeof (this.config.authGuard.valueColumn) !== 'undefined') {
+      if (Util.isDefined(this.config.authGuard.valueColumn)) {
         this.valueColumn = this.config.authGuard.valueColumn;
       }
-      if (typeof (this.config.authGuard.service) !== 'undefined') {
+      if (Util.isDefined(this.config.authGuard.service)) {
         this.service = this.config.authGuard.service;
       }
     }
@@ -80,22 +81,20 @@ export class AuthGuardService implements CanActivate, IProfileService {
     let isLoggedIn = this.loginService.isLoggedIn();
     if (!isLoggedIn) {
       this.profile = undefined;
-      this.router.navigate([LoginService.LOGIN_ROUTE]);
-    } else if ((Util.isDefined(this.entity)) && (typeof (this.keyColumn) !== 'undefined') &&
-      (typeof (this.valueColumn) !== 'undefined')) {
-      if ((typeof (this.profile) === 'undefined') || (this.user !== this.loginService.user)) {
+      this.router.navigate([Codes.LOGIN_ROUTE]);
+    } else if (Util.isDefined(this.entity) && Util.isDefined(this.keyColumn) && Util.isDefined(this.valueColumn)) {
+      if (!Util.isDefined(this.profile) || (this.user !== this.loginService.user)) {
         this.user = undefined;
         this.profile = undefined;
         this.profileObservable = new Observable(observer => {
           // get user profile from service
-
           this.configureService();
           let filter: Object = {};
           filter[this.keyColumn] = this.loginService.user;
           this.ontimizeService.query(filter, [this.valueColumn], this.entity).subscribe((res: any) => {
             this.user = this.loginService.user;
-            if ((res.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) && (typeof (res.data) !== 'undefined') && (res.data.length === 1) &&
-              (typeof (res.data[0]) === 'object')) {
+            if ((res.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) && Util.isDefined(res.data) && (res.data.length === 1) &&
+              Util.isObject(res.data[0])) {
               this.profile = res.data[0].hasOwnProperty(this.valueColumn) ? JSON.parse(res.data[0][this.valueColumn]) : {};
             } else {
               //TODO JEE?
@@ -109,22 +108,18 @@ export class AuthGuardService implements CanActivate, IProfileService {
             }
           );
         }).share();
-        this.profileObservable
-          .subscribe(
-          res => {
-            let restricted = this._isRestricted(state.url);
-            if (restricted) {
-              this.router.navigate([LoginService.LOGIN_ROUTE]);
-            }
-            return restricted;
-          },
-          err => {
-            this.router.navigate([LoginService.LOGIN_ROUTE]);
-            return false;
+        this.profileObservable.subscribe(res => {
+          let restricted = this._isRestricted(state.url);
+          if (restricted) {
+            this.router.navigate([Codes.LOGIN_ROUTE]);
           }
-          );
+          return restricted;
+        }, err => {
+          this.router.navigate([Codes.LOGIN_ROUTE]);
+          return false;
+        });
       } else if (this._isRestricted(state.url)) {
-        this.router.navigate([LoginService.LOGIN_ROUTE]);
+        this.router.navigate([Codes.LOGIN_ROUTE]);
       }
     }
     if (isLoggedIn) {
@@ -143,29 +138,23 @@ export class AuthGuardService implements CanActivate, IProfileService {
   }
 
   public isRestricted(route: string): Promise<boolean> {
-    return new Promise(
-      (resolve: any, reject: any) => {
-        if ((Util.isDefined(this.entity)) && (typeof (this.keyColumn) !== 'undefined') &&
-          (typeof (this.valueColumn) !== 'undefined') && (typeof (this.profile) === 'undefined')) {
-          this.profileObservable
-            .subscribe(
-            res => {
-              resolve(this._isRestricted(route));
-            },
-            err => {
-              reject(false);
-            }
-            );
-        } else {
+    return new Promise((resolve: any, reject: any) => {
+      if ((Util.isDefined(this.entity)) && (typeof (this.keyColumn) !== 'undefined') &&
+        (typeof (this.valueColumn) !== 'undefined') && (typeof (this.profile) === 'undefined')) {
+        this.profileObservable.subscribe(res => {
           resolve(this._isRestricted(route));
-        }
+        }, err => {
+          reject(false);
+        });
+      } else {
+        resolve(this._isRestricted(route));
       }
-    );
+    });
   }
 
   protected _isRestricted(route: string): boolean {
     let restricted = false;
-    if (typeof (this.profile) !== 'undefined' && typeof (this.profile[AuthGuardService.PROFILE_ROUTE_PROPERTY]) !== 'undefined') {
+    if (Util.isDefined(this.profile) && Util.isDefined(this.profile[AuthGuardService.PROFILE_ROUTE_PROPERTY])) {
       for (let routePrefix in this.profile[AuthGuardService.PROFILE_ROUTE_PROPERTY]) {
         if (this.profile[AuthGuardService.PROFILE_ROUTE_PROPERTY].hasOwnProperty(routePrefix)) {
           if (route.startsWith(routePrefix) && this.profile[AuthGuardService.PROFILE_ROUTE_PROPERTY][routePrefix] === false) {
@@ -179,31 +168,24 @@ export class AuthGuardService implements CanActivate, IProfileService {
   }
 
   public getPermissions(route: string, attr: string): Promise<any> {
-    return new Promise(
-      (resolve: any, reject: any) => {
-        if ((Util.isDefined(this.entity)) && (typeof (this.keyColumn) !== 'undefined') &&
-          (typeof (this.valueColumn) !== 'undefined') && (typeof (this.profile) === 'undefined')) {
-          this.profileObservable
-            .subscribe(
-            res => {
-              resolve(this._getPermissions(route, attr));
-            },
-            err => {
-              reject(undefined);
-            }
-            );
-        } else {
+    return new Promise((resolve: any, reject: any) => {
+      if (Util.isDefined(this.entity) && Util.isDefined(this.keyColumn) && Util.isDefined(this.valueColumn) && !Util.isDefined(this.profile)) {
+        this.profileObservable.subscribe(res => {
           resolve(this._getPermissions(route, attr));
-        }
+        }, err => {
+          reject(undefined);
+        });
+      } else {
+        resolve(this._getPermissions(route, attr));
       }
-    );
+    });
   }
 
   protected _getPermissions(route: string, attr: string): any {
     let permissions = undefined;
-    if (typeof (this.profile) !== 'undefined' && typeof (this.profile[AuthGuardService.PROFILE_COMPONENTS_PROPERTY]) !== 'undefined' &&
-      typeof (this.profile[AuthGuardService.PROFILE_COMPONENTS_PROPERTY][route]) !== 'undefined' &&
-      typeof (this.profile[AuthGuardService.PROFILE_COMPONENTS_PROPERTY][route][attr]) !== 'undefined') {
+    if (Util.isDefined(this.profile) && Util.isDefined(this.profile[AuthGuardService.PROFILE_COMPONENTS_PROPERTY]) &&
+      Util.isDefined(this.profile[AuthGuardService.PROFILE_COMPONENTS_PROPERTY][route]) &&
+      Util.isDefined(this.profile[AuthGuardService.PROFILE_COMPONENTS_PROPERTY][route][attr])) {
       permissions = this.profile[AuthGuardService.PROFILE_COMPONENTS_PROPERTY][route][attr];
     }
     return permissions;

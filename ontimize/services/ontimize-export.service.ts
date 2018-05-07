@@ -5,7 +5,7 @@ import { Observable } from 'rxjs/Observable';
 
 import { LoginService } from '../services';
 import { AppConfig, Config } from '../config/app-config';
-import { Codes } from '../utils';
+import { Codes, ServiceUtils } from '../utils';
 
 export const EXPORT_PATH_DEFAULT: string = '/export';
 export const DOWNLOAD_PATH_DEFAULT: string = EXPORT_PATH_DEFAULT + '/download';
@@ -140,9 +140,7 @@ export class OntimizeExportService {
 
   protected redirectLogin(sessionExpired: boolean = false): void {
     let router = this.injector.get(Router);
-    let arg = {};
-    arg[Codes.QUERY_PARAMS] = Codes.getIsDetailObject();
-    router.navigate([Codes.LOGIN_ROUTE], arg);
+    ServiceUtils.redirectLogin(router, sessionExpired);
   }
 
 }
