@@ -1,4 +1,3 @@
-
 export class Codes {
 
   public static PAGINATED_QUERY_METHOD = 'advancedQuery';
@@ -47,6 +46,10 @@ export class Codes {
   public static DEFAULT_EDIT_ROUTE = 'edit';
 
   public static IGNORE_CAN_DEACTIVATE = 'ignore_can_deactivate';
+
+  public static ONTIMIZE_SUCCESSFUL_CODE = 0;
+  public static ONTIMIZE_FAILED_CODE = 1;
+  public static ONTIMIZE_UNAUTHORIZED_CODE = 3;
 
   static isDoubleClickMode(value: string): boolean {
     return Codes.DETAIL_MODE_DBLCLICK_VALUES.indexOf(value) !== -1;

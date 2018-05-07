@@ -181,7 +181,7 @@ export class OFormServiceComponent extends OFormDataComponent {
         this.querySuscription.unsubscribe();
       }
       this.querySuscription = this.dataService[this.queryMethod](parentItem, columns, this.entity).subscribe(resp => {
-        if (resp.code === 0) {
+        if (resp.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) {
           self.cacheQueried = true;
           self.setDataArray(resp.data);
         } else {
@@ -189,7 +189,7 @@ export class OFormServiceComponent extends OFormDataComponent {
         }
       }, err => {
         console.log(err);
-        if (err && typeof err !== 'object') {
+        if (err && !Util.isObject(err)) {
           this.dialogService.alert('ERROR', err);
         } else {
           this.dialogService.alert('ERROR', 'MESSAGES.ERROR_QUERY');
@@ -217,7 +217,7 @@ export class OFormServiceComponent extends OFormDataComponent {
   syncDataIndex() {
     this._currentIndex = undefined;
     if (this.value && this.value.value && this.dataArray) {
-      let self = this;
+      const self = this;
       this.dataArray.forEach((item, index) => {
         if (item[self.valueColumn] === this.value.value) {
           self._currentIndex = index;

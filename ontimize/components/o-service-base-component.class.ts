@@ -280,8 +280,9 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
         if (Util.isArray(res)) {
           data = res;
           sqlTypes = [];
-        } else if ((res.code === 0) && Util.isArray(res.data)) {
-          data = res.data;
+        } else if ((res.code === Codes.ONTIMIZE_SUCCESSFUL_CODE)) {
+          const arrData = (res.data !== undefined) ? res.data : [];
+          data = Util.isArray(arrData) ? arrData : [];
           sqlTypes = res.sqlTypes;
           if (this.pageable) {
             this.updatePaginationInfo(res);

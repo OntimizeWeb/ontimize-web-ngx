@@ -513,7 +513,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     colDef.searchable = true;
     colDef.width = '';
 
-    if (typeof (column.attr) === 'undefined') {
+    if (!Util.isDefined(column.attr)) {
       // column without 'attr' should contain only renderers that do not depend on cell data, but row data (e.g. actions)
       colDef.name = column;
       colDef.attr = column;
@@ -527,24 +527,24 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       if (column.width !== '') {
         colDef.width = column.width;
       }
-      if (typeof column.orderable !== 'undefined') {
+      if (Util.isDefined(column.orderable)) {
         colDef.orderable = column.orderable;
       }
-      if (typeof column.searchable !== 'undefined') {
+      if (Util.isDefined(column.searchable)) {
         colDef.searchable = column.searchable;
       }
-      if (typeof column.renderer !== 'undefined') {
+      if (Util.isDefined(column.renderer)) {
         colDef.renderer = column.renderer;
       }
-      if (typeof column.editor !== 'undefined') {
+      if (Util.isDefined(column.editor)) {
         colDef.editor = column.editor;
       }
-      if (typeof column.type !== 'undefined') {
+      if (Util.isDefined(column.type)) {
         colDef.type = column.type;
         colDef.className = 'o-column-' + (colDef.type) + ' ';
       }
-      if (typeof column.class !== 'undefined') {
-        colDef.className = (typeof column.className !== 'undefined') ? (column.className + ' ' + column.class) : column.class;
+      if (Util.isDefined(column.class)) {
+        colDef.className = Util.isDefined(column.className) ? (column.className + ' ' + column.class) : column.class;
       }
       if (typeof column.operation !== 'undefined' || typeof column.functionOperation !== 'undefined') {
         colDef.calculate = column.operation ? column.operation : column.functionOperation;
@@ -558,7 +558,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       }
     }
     //find column definition by name
-    if (typeof (column.attr) !== 'undefined') {
+    if (Util.isDefined(column.attr)) {
       const alreadyExisting = this.getOColumn(column.attr);
       if (alreadyExisting !== undefined) {
         const replacingIndex = this._oTableOptions.columns.indexOf(alreadyExisting);
@@ -609,10 +609,11 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   setMatSort() {
     //set values of sort-columns to matsort
-    if ((typeof (this._oTableOptions.columns) !== 'undefined') && (this.sortColArray.length > 0)) {
-      let temp = this.sortColArray[0];
+    if (Util.isDefined(this._oTableOptions.columns) && (this.sortColArray.length > 0)) {
+      const temp = this.sortColArray[0];
       this.sort.active = temp.columnName;
-      this.sort.direction = temp.ascendent ? 'asc' : 'desc';
+      const sortDirection: any = temp.ascendent ? Codes.ASC_SORT : Codes.DESC_SORT;
+      this.sort.direction = sortDirection;
     }
   }
 
@@ -773,7 +774,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   showDialogError(error: string, errorOptional?: string) {
-    if (error && typeof error !== 'object') {
+    if (Util.isDefined(error) && !Util.isObject(error)) {
       this.dialogService.alert('ERROR', error);
     } else {
       this.dialogService.alert('ERROR', errorOptional);
@@ -1036,7 +1037,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     if (event && column.editing && this.editingCell === event.currentTarget) {
       return;
     }
-
     this.clearSelectionAndEditing();
     this.selectedRow(row);
     this.editingCell = event.currentTarget;
@@ -1151,7 +1151,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
         this.asyncLoadSubscriptions[rowIndex].unsubscribe();
       }
       this.asyncLoadSubscriptions[rowIndex] = this.dataService[queryMethodName].apply(this.dataService, columnQueryArgs).subscribe(res => {
-        if (res.code === 0) {
+        if (res.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) {
           let data = undefined;
           if (Util.isArray(res.data) && res.data.length === 1) {
             data = res.data[0];
@@ -1274,15 +1274,15 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   isSelectionModeMultiple(): boolean {
-    return this.selectionMode === 'multiple';
+    return this.selectionMode === Codes.SELECTION_MODE_MULTIPLE;
   }
 
   isSelectionModeSingle(): boolean {
-    return this.selectionMode === 'single';
+    return this.selectionMode === Codes.SELECTION_MODE_SINGLE;
   }
 
   isSelectionModeNone(): boolean {
-    return this.selectionMode === 'none';
+    return this.selectionMode === Codes.SELECTION_MODE_NONE;
   }
 
   onChangePage(evt: PageEvent) {

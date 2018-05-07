@@ -295,7 +295,7 @@ export class OListComponent extends OServiceComponent implements OnInit, IList, 
         let data = undefined;
         if (Util.isArray(res)) {
           data = res;
-        } else if ((res.code === 0) && Util.isArray(res.data)) {
+        } else if ((res.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) && Util.isArray(res.data)) {
           data = res.data;
           if (this.pageable) {
             this.updatePaginationInfo(res);

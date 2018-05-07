@@ -90,7 +90,7 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
       // }
       const filter = this.getFilterUsingParentKeys(parentItem, this._pKeysEquiv);
       this.querySubscription = this.dataService[this.queryMethod](filter, this.colArray, this.entity).subscribe(resp => {
-        if (resp.code === 0) {
+        if (resp.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) {
           self.responseMap[cellvalue] = resp.data[0][this.valueColumn];
         } else {
           console.log('error');

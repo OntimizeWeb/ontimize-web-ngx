@@ -84,11 +84,11 @@ export class OntimizeExportService {
     const self = this;
     // TODO: try multipart
     this.httpClient.post(url, body, options).subscribe((resp: any) => {
-      if (resp && resp.code === 3) {
+      if (resp && resp.code === Codes.ONTIMIZE_UNAUTHORIZED_CODE) {
         self.redirectLogin(true);
-      } else if (resp.code === 1) {
+      } else if (resp.code === Codes.ONTIMIZE_FAILED_CODE) {
         _innerObserver.error(resp.message);
-      } else if (resp.code === 0) {
+      } else if (resp.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) {
         _innerObserver.next(resp);
       } else {
         // Unknow state -> error

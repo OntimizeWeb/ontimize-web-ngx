@@ -183,7 +183,7 @@ export class NavigationService implements ILocalStorageComponent {
   // protected queryByIndex(index: number) {
   //   var self = this;
   //   this._query(index).subscribe(resp => {
-  //     if (resp.code === 0) {
+  //     if (resp.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) {
   //       let currentData = resp.data[0];
   //       self._updateFormData(self.toFormValueData(currentData));
   //       self._emitData(currentData);

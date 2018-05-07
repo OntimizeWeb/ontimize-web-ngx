@@ -4,7 +4,7 @@ import { Observable } from 'rxjs/Observable';
 
 import { OntimizeService, LoginService, OUserInfoService } from '../services';
 import { AppConfig, Config } from '../config/app-config';
-import { Util } from '../util/util';
+import { Util, Codes } from '../utils';
 import { dataServiceFactory } from './data-service.provider';
 
 export interface IProfileService {
@@ -92,24 +92,22 @@ export class AuthGuardService implements CanActivate, IProfileService {
           this.configureService();
           let filter: Object = {};
           filter[this.keyColumn] = this.loginService.user;
-          this.ontimizeService.query(filter, [this.valueColumn], this.entity)
-            .subscribe(
-            (res: any) => {
-              this.user = this.loginService.user;
-              if ((res.code === 0) && (typeof (res.data) !== 'undefined') && (res.data.length === 1) &&
-                (typeof (res.data[0]) === 'object')) {
-                this.profile = res.data[0].hasOwnProperty(this.valueColumn) ? JSON.parse(res.data[0][this.valueColumn]) : {};
-              } else {
-                //TODO JEE?
-              }
-              observer.next();
-              observer.complete();
-            },
+          this.ontimizeService.query(filter, [this.valueColumn], this.entity).subscribe((res: any) => {
+            this.user = this.loginService.user;
+            if ((res.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) && (typeof (res.data) !== 'undefined') && (res.data.length === 1) &&
+              (typeof (res.data[0]) === 'object')) {
+              this.profile = res.data[0].hasOwnProperty(this.valueColumn) ? JSON.parse(res.data[0][this.valueColumn]) : {};
+            } else {
+              //TODO JEE?
+            }
+            observer.next();
+            observer.complete();
+          },
             (err: any) => {
               console.log('[AuthGuardService.canActivate]: error', err);
               observer.error(err);
             }
-            );
+          );
         }).share();
         this.profileObservable
           .subscribe(

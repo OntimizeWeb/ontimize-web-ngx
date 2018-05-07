@@ -1,6 +1,7 @@
 import { Subscription } from 'rxjs/Subscription';
 
 import { OntimizeFileService } from '../../../services';
+import { Codes } from '../../../utils';
 import { OFileItem } from './o-file-item.class';
 
 export class OFileUploader {
@@ -99,7 +100,7 @@ export class OFileUploader {
         if (resp.loaded && resp.total) {
           let progress = Math.round(resp.loaded * 100 / resp.total);
           self._onProgressItem(item, progress);
-        } else if (resp.code === 0) {
+        } else if (resp.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) {
           self._onSuccessItem(item, resp);
         } else {
           console.log('error');
@@ -136,7 +137,7 @@ export class OFileUploader {
       if (resp.loaded && resp.total) {
         let progress = Math.round(resp.loaded * 100 / resp.total);
         self._onProgressAll(progress);
-      } else if (resp.code === 0) {
+      } else if (resp.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) {
         self._onSuccessAll(resp);
       } else {
         console.log('error');

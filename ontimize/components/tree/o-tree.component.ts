@@ -298,7 +298,7 @@ export class OTreeComponent extends OTreeClass implements OnInit, AfterViewInit,
     // data[this.parentColumn] = e.node.parent.id;
     // if (this.service && this.entity) {
     //   this.dataService.update(nodeToUpdate, data, this.entity).subscribe(resp => {
-    //     if (resp && resp.code === 0) {
+    //     if (resp && resp.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) {
     //       this.dialogService.info('INFO', e.node.value + ' ha sido trasladado de ' + e.previousParent.value + ' a ' + e.node.parent.value);
     //     } else {
     //       this.dialogService.error('ERROR', 'Ha ocurrido un error a trasladar ' + e.node.value)
@@ -413,8 +413,8 @@ export class OTreeComponent extends OTreeClass implements OnInit, AfterViewInit,
     OTreeNodeComponent
   ],
   imports: [
-    OSharedModule,
     CommonModule,
+    OSharedModule,
     OSearchInputModule,
     TreeModule
   ],
