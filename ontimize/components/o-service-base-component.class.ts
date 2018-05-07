@@ -56,7 +56,9 @@ export const DEFAULT_INPUTS_O_SERVICE_BASE_COMPONENT = [
   'updateMethod: update-method',
 
   // delete-method [string]: name of the service method to perform deletions. Default: delete.
-  'deleteMethod: delete-method'
+  'deleteMethod: delete-method',
+
+  'storeState: store-state'
 ];
 
 export class OServiceBaseComponent implements ILocalStorageComponent {
@@ -88,6 +90,8 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
   insertMethod: string = Codes.INSERT_METHOD;
   updateMethod: string = Codes.UPDATE_METHOD;
   deleteMethod: string = Codes.DELETE_METHOD;
+  @InputConverter()
+  storeState: boolean = true;
   /* end of inputs variables */
 
   /*parsed inputs variables */
@@ -106,7 +110,7 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
   protected loaderSubscription: Subscription;
   protected querySubscription: Subscription;
   protected dataService: any;
-  protected state: any;
+  protected state: any = {};
   loading: boolean = false;
 
   protected form: OFormComponent;
@@ -117,12 +121,8 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
     this.translateService = this.injector.get(OTranslateService);
     this.dialogService = this.injector.get(DialogService);
     this.localStorageService = this.injector.get(LocalStorageService);
-    const self = this;
     this.onLanguageChangeSubscribe = this.translateService.onLanguageChanged.subscribe(res => {
-      self.onLanguageChangeCallback(res);
-    });
-    this.onRouteChangeStorageSubscribe = this.localStorageService.onRouteChange.subscribe(res => {
-      self.localStorageService.updateComponentStorage(self);
+      this.onLanguageChangeCallback(res);
     });
     try {
       this.form = this.injector.get(OFormComponent);
@@ -141,11 +141,17 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
     let pkArray = Util.parseArray(this.parentKeys);
     this._pKeysEquiv = Util.parseParentKeysEquivalences(pkArray, Codes.COLUMNS_ALIAS_SEPARATOR);
 
-    // Get previous status
-    this.state = this.localStorageService.getComponentStorage(this);
+    if (this.storeState) {
+      this.onRouteChangeStorageSubscribe = this.localStorageService.onRouteChange.subscribe(res => {
+        this.updateStateStorage();
+      });
 
-    if (Util.isDefined(this.state['query-rows'])) {
-      this.queryRows = this.state['query-rows'];
+      // Get previous status
+      this.state = this.localStorageService.getComponentStorage(this);
+
+      if (Util.isDefined(this.state['query-rows'])) {
+        this.queryRows = this.state['query-rows'];
+      }
     }
 
     if (this.staticData) {
@@ -177,12 +183,16 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
     if (this.loaderSubscription) {
       this.loaderSubscription.unsubscribe();
     }
-    this.localStorageService.updateComponentStorage(this);
+    this.updateStateStorage();
   }
 
   @HostListener('window:beforeunload', ['$event'])
   beforeunloadHandler(event) {
-    if (this.localStorageService) {
+    this.updateStateStorage();
+  }
+
+  protected updateStateStorage() {
+    if (this.localStorageService && this.storeState) {
       this.localStorageService.updateComponentStorage(this);
     }
   }

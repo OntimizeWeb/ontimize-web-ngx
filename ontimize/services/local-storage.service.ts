@@ -5,6 +5,7 @@ import { ObservableWrapper } from '../util/async';
 import { AppConfig, Config } from '../config/app-config';
 
 export interface ILocalStorageComponent {
+  storeState?: boolean;
   getDataToStore(): Object;
   getComponentKey(): string;
 }
