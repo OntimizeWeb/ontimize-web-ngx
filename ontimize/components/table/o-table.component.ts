@@ -846,6 +846,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       if (result) {
         this._oTableOptions.visibleColumns = dialogRef.componentInstance.getVisibleColumns();
         this._oTableOptions.columns = dialogRef.componentInstance.getColumnsData();
+        if (this.oTableEditableRow) {
+          this.oTableEditableRow.cd.detectChanges();
+        }
       }
     });
   }
