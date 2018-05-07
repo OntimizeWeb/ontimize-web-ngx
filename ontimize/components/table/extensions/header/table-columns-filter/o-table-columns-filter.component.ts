@@ -10,9 +10,12 @@ export const DEFAULT_INPUTS_O_TABLE_COLUMN_FILTER = [
 export const DEFAULT_OUTPUTS_O_TABLE_COLUMN_FILTER = [
 ];
 
+export enum ColumnValueFilterOperator { IN, LESS_EQUAL, MORE_EQUAL, BETWEEN, EQUAL }
+
 export interface IColumnValueFilter {
   attr: string;
-  values: any[];
+  operator: ColumnValueFilterOperator;
+  values: any;
 }
 
 @Component({
