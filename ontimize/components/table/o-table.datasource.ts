@@ -358,7 +358,7 @@ export class OTableDataSource extends DataSource<any> {
           }
           break;
         case ColumnValueFilterOperator.EQUAL:
-          data = data.filter(item => new RegExp('^' + filter.values.split('*').join('.*') + '$').test(item[filter.attr]));
+          data = data.filter(item => new RegExp('^' + filter.values.toLowerCase().split('*').join('.*') + '$').test(item[filter.attr].toLowerCase()));
           break;
         case ColumnValueFilterOperator.BETWEEN:
           data = data.filter(item => item[filter.attr] >= filter.values[0] && item[filter.attr] <= filter.values[1]);
