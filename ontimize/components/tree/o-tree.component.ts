@@ -158,14 +158,11 @@ export class OTreeComponent extends OTreeClass implements OnInit, AfterViewInit,
 
   initialize(): void {
     super.initialize();
+  }
 
-    this.state = this.localStorageService.getComponentStorage(this);
-
-    if (this.staticData) {
-      this.queryOnBind = false;
-      this.queryOnInit = false;
-      this.setData(this.staticData);
-    }
+  setDataArray(data: any): void {
+    super.setDataArray(data);
+    this.setData(this.dataArray);
   }
 
   registerTreeNode(oTreeNode: OTreeNodeComponent) {

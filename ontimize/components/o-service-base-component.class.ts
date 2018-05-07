@@ -141,8 +141,11 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
     let pkArray = Util.parseArray(this.parentKeys);
     this._pKeysEquiv = Util.parseParentKeysEquivalences(pkArray, Codes.COLUMNS_ALIAS_SEPARATOR);
 
-    if (this.form) {
-      this.setFormComponent(this.form);
+    // Get previous status
+    this.state = this.localStorageService.getComponentStorage(this);
+
+    if (Util.isDefined(this.state['query-rows'])) {
+      this.queryRows = this.state['query-rows'];
     }
 
     if (this.staticData) {
@@ -152,6 +155,11 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
     } else {
       this.configureService();
     }
+
+    if (this.form && Util.isDefined(this.dataService)) {
+      this.setFormComponent(this.form);
+    }
+
   }
 
   afterViewInit() {
@@ -165,6 +173,8 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
     }
     if (this.querySubscription) {
       this.querySubscription.unsubscribe();
+    }
+    if (this.loaderSubscription) {
       this.loaderSubscription.unsubscribe();
     }
     this.localStorageService.updateComponentStorage(this);
@@ -233,13 +243,12 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
 
   setFormComponent(form: OFormComponent) {
     var self = this;
-    this.onFormDataSubscribe = this.form.onFormDataLoaded.subscribe(data => {
-      self.parentItem = data;
-      if (self.queryOnBind) {
+    if (self.queryOnBind) {
+      this.onFormDataSubscribe = this.form.onFormDataLoaded.subscribe(data => {
+        self.parentItem = data;
         self.queryData(data);
-      }
-    });
-
+      });
+    }
     let dataValues = this.form.getDataValues();
     if (Util.isDefined(dataValues) && Object.keys(dataValues).length > 0) {
       self.parentItem = dataValues;

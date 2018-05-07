@@ -366,6 +366,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     // Initialize table options
     this._oTableOptions = new OTableOptions();
 
+    super.initialize();
+
     // Initialize params of the table
     this.initializeParams();
 
@@ -387,10 +389,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
         ObservableWrapper.callEmit(this.onRowDeselected, selectionData.removed);
       }
     });
-
-    if (this.form) {
-      this.setFormComponent(this.form);
-    }
   }
 
   reinitialize(options: OTableInitializationOptions): void {
@@ -453,9 +451,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
     if (this.selectionChangeSubscription) {
       this.selectionChangeSubscription.unsubscribe();
-    }
-    if (this.querySubscription) {
-      this.querySubscription.unsubscribe();
     }
     if (this.sortSubscription) {
       this.sortSubscription.unsubscribe();
@@ -621,38 +616,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
   }
 
-  /**
-   * Get/Set parametres to component
-   */
   initializeParams(): void {
-    // Get previous status
-    this.state = this.localStorageService.getComponentStorage(this);
-
-    // Initialize table layout parameters
-    if (!Util.isDefined(this.oattr) && Util.isDefined(this.entity)) {
-      this.oattr = this.entity.replace('.', '_');
-      this.oattrFromEntity = true;
-    }
-
-    if (this.detailButtonInRow || this.editButtonInRow) {
-      this.detailMode = Codes.DETAIL_MODE_NONE;
-    }
-
-    this.rowHeight = this.rowHeight ? this.rowHeight.toLowerCase() : this.rowHeight;
-    if (!Codes.isValidRowHeight(this.rowHeight)) {
-      this.rowHeight = Codes.DEFAULT_ROW_HEIGHT;
-    }
-
-    // Initialize table data parameters
-    this.keysArray = Util.parseArray(this.keys);
-    this.colArray = Util.parseArray(this.columns, true);
-    let pkArray = Util.parseArray(this.parentKeys);
-    this._pKeysEquiv = Util.parseParentKeysEquivalences(pkArray, Codes.COLUMNS_ALIAS_SEPARATOR);
-
-    if (this.queryRows) {
-      this.queryRows = parseInt(this.queryRows);
-    }
-
     // If visible-columns is not present then visible-columns is all columns
     if (!this.visibleColumns) {
       this.visibleColumns = this.columns;
@@ -664,13 +628,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       this.colArray.map(x => this.registerColumn(x));
     }
 
-    if (this.state['query-rows'] !== undefined) {
-      this.queryRows = this.state['query-rows'];
-    }
-
     this.parseSortColumns();
 
-    // Configure data service
+    // Configure dao methods
     let queryMethodName = this.pageable ? this.paginatedQueryMethod : this.queryMethod;
     const methods = {
       query: queryMethodName,
@@ -702,17 +662,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     if (this.tabGroupContainer && this.tabContainer) {
       this.registerTabListener();
     }
-
-    this.authGuardService.getPermissions(this.router.url, this.oattr).then(permissions => {
-      if (Util.isDefined(permissions)) {
-        if (this.ovisible && permissions.visible === false) {
-          this.ovisible = false;
-        }
-        if (this.oenabled && permissions.enabled === false) {
-          this.oenabled = false;
-        }
-      }
-    });
   }
 
   registerTabListener() {

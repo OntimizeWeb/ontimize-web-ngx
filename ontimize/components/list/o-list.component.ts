@@ -183,7 +183,6 @@ export class OListComponent extends OServiceComponent implements OnInit, IList, 
       this.quickFilterColArray = this.colArray;
     }
 
-    this.state = this.localStorageService.getComponentStorage(this);
     let initialQueryLength = undefined;
     if (this.state.hasOwnProperty('queryRecordOffset')) {
       initialQueryLength = this.state.queryRecordOffset;
