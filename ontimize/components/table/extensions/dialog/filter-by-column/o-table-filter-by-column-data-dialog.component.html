@@ -12,16 +12,17 @@
         <i class="material-icons">search</i>
       </span>
     </mat-form-field>
-    <mat-checkbox (change)="onSelectAllChange($event)" [checked]="areAllSelected()" [indeterminate]="isIndeterminate()" class="select-all-checkbox">
+    <mat-checkbox (change)="onSelectAllChange($event)" [checked]="areAllSelected()" [indeterminate]="isIndeterminate()" [disabled]="!listData"
+      class="select-all-checkbox">
       {{ 'TABLE.FILTER_BY_COLUMN.CHECK_ALL' | oTranslate }}
     </mat-checkbox>
-    <mat-list fxFlex fxLayout="column" class="select-values-list">
-      <mat-list-item fxFlex *ngFor="let record of listData">
-        <mat-checkbox (change)="record.selected = $event.checked" [checked]="record.selected">
-          {{ record.value || ('TABLE.FILTER_BY_COLUMN.EMPTY_VALUE' | oTranslate) }}
-        </mat-checkbox>
-      </mat-list-item>
-    </mat-list>
+    <span *ngIf="!listData" class="column-filter-empty-list">{{ 'TABLE.FILTER_BY_COLUMN.LIST_EMPTY_FILTER' | oTranslate }}</span>
+    <span *ngIf="listData?.length === 0" class="column-filter-empty-list">{{ 'TABLE.FILTER_BY_COLUMN.LIST_EMPTY' | oTranslate }}</span>
+    <mat-selection-list *ngIf="preloadValues || listData" #filterValueList fxFlex fxLayout="column" class="select-values-list">
+      <mat-list-option *ngFor="let record of listData" checkboxPosition="before" [selected]="record.selected" [value]="record.value">
+        {{ record.value || ('TABLE.FILTER_BY_COLUMN.EMPTY_VALUE' | oTranslate) }}
+      </mat-list-option>
+    </mat-selection-list>
   </div>
 
   <mat-divider [vertical]="true"></mat-divider>

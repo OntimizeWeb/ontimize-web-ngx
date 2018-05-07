@@ -1221,7 +1221,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
         previousFilter: this.dataSource.getColumnValueFilterByAttr(column.attr),
         columnAttr: column.attr,
         columnDataArray: columnDataArray,
-        columnType: column.type
+        columnType: column.type,
+        preloadValues: this.oTableColumnsFilterComponent.preloadValues
       },
       disableClose: true,
       panelClass: 'cdk-overlay-pane-custom'

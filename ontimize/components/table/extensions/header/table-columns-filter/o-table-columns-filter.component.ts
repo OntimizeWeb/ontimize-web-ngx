@@ -1,10 +1,14 @@
 import { Component, Inject, forwardRef, OnInit, Injector } from '@angular/core';
 import { OTableComponent, OColumn } from '../../../o-table.component';
 import { Util, Codes } from '../../../../../utils';
+import { InputConverter } from '../../../../../decorators';
 
 export const DEFAULT_INPUTS_O_TABLE_COLUMN_FILTER = [
   // columns [string]: columns that might be filtered, separated by ';'. Default: all visible columns.
-  'columns'
+  'columns',
+
+  // preloadValues [true|false|yes|no]: indicates whether or not to show the list values when the filter dialog is opened. Default: true.
+  'preloadValues: preload-values'
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE_COLUMN_FILTER = [
@@ -34,14 +38,15 @@ export class OTableColumnsFilterComponent implements OnInit {
   public static MODEL_COMPARISON_TYPE = 'MODEL';
 
   columns: string;
+  @InputConverter()
+  preloadValues: boolean = true;
   protected columnsArray: Array<string> = [];
   protected columnsComparisonProperty: Object = {};
 
   constructor(
     protected injector: Injector,
     @Inject(forwardRef(() => OTableComponent)) protected table: OTableComponent
-  ) {
-  }
+  ) { }
 
   ngOnInit() {
     this.columnsArray = Util.parseArray(this.columns, true);
@@ -73,4 +78,5 @@ export class OTableColumnsFilterComponent implements OnInit {
       return column.renderer ? column.renderer.getCellData(val) : val;
     }
   }
+
 }

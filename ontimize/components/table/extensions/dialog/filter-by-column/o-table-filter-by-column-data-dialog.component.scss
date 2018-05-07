@@ -14,25 +14,35 @@
   .content-wrapper {
     max-height: 430px;
     min-height: 430px;
-    min-width: 200px;
+    min-width: 250px;
 
     .select-all-checkbox {
       padding-bottom: 6px;
     }
 
-    mat-list.select-values-list {
+    .select-values-list {
       padding-top: 0;
       overflow-y: auto;
       overflow-x: hidden;
 
-      mat-list-item {
+      .mat-list-item {
         height: 30px;
+
+        .mat-list-text {
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
       }
     }
 
     .column-filter-title {
       margin: 0;
       padding-top: 12px;
+    }
+
+    .column-filter-empty-list {
+      text-align: center;
     }
   }
 }

@@ -1,18 +1,18 @@
-import { Observable } from 'rxjs/Observable';
 import { DataSource } from '@angular/cdk/collections';
-import { OTableDao } from './o-table.dao';
-import { OTableOptions, OColumn, OTableComponent } from './o-table.component';
 import { MatSort, MatPaginator } from '@angular/material';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Subject } from 'rxjs/Subject';
-import 'rxjs/add/operator/startWith';
-import 'rxjs/add/observable/merge';
+import { Observable } from 'rxjs/Observable';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import 'rxjs/add/operator/map';
+import 'rxjs/add/observable/merge';
 import 'rxjs/add/observable/fromEvent';
 
+import { Util } from '../../util/util';
+import { OTableDao } from './o-table.dao';
+import { OColumn, OTableComponent, OTableOptions } from './o-table.component';
 import { ITableFilterByColumnDataInterface } from './extensions/dialog/o-table-dialog-components';
 import { OTableAggregateComponent } from './extensions/footer/o-table-footer-components';
-import { IColumnValueFilter, OTableEditableRowComponent, ColumnValueFilterOperator } from './extensions/header/o-table-header-components';
+import { ColumnValueFilterOperator, IColumnValueFilter, OTableEditableRowComponent } from './extensions/header/o-table-header-components';
 
 export class OTableDataSource extends DataSource<any> {
 
@@ -358,7 +358,7 @@ export class OTableDataSource extends DataSource<any> {
           }
           break;
         case ColumnValueFilterOperator.EQUAL:
-          data = data.filter(item => new RegExp('^' + filter.values.toLowerCase().split('*').join('.*') + '$').test(item[filter.attr].toLowerCase()));
+          data = data.filter(item => new RegExp('^' + Util.normalizeString(filter.values).split('*').join('.*') + '$').test(Util.normalizeString(item[filter.attr])));
           break;
         case ColumnValueFilterOperator.BETWEEN:
           data = data.filter(item => item[filter.attr] >= filter.values[0] && item[filter.attr] <= filter.values[1]);
