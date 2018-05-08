@@ -11,16 +11,23 @@
   * using '*show-root*' input in '*o-tree-node*' (only valid if node has no siblings, otherwise its always true) ([5d3be91](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5d3be91)), closes [#160](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/160)
 * **o-service-base-component.class**: new '*OServiceBaseComponent*' parent class for components using Ontimize services ('*o-list*', '*o-table*' and '*o-tree*')([70271b7](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/70271b7))
   * new '*store-state*' input ([35a523c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/35a523c)) ([#166](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/166))
-
+* **o-table-column**: new '*addEditor*' static method that user '*must*' use in new cell editors constructor definitions ([f942c20](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f942c20))
 
 ### Bug Fixes
 * **o-table**:
   * '*reinitialize*' method added ([fbf4828](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/fbf4828)), closes [#149](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/149)
   * fixing column change order bug ([4e23e3a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4e23e3a)) ([#168](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/168))
+  * columns visibility dialog bug ([ffef427](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ffef427)) ([#170](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/170))
+  * fixing bug in custom cell editors creation ([f942c20](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f942c20)) ([#167](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/167))
 
 ### BREAKING CHANGES
-* **o-table**: Removing the option for showing all table records in the paginator ([f448bfa](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f448bfa))
-* **o-table**: Removing (unused) '*editable-columns*' input.
+* **o-table**:
+  * removing the option for showing all table records in the paginator ([f448bfa](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f448bfa))
+  * removing (unused) '*editable-columns*' input
+  * editors and renderers ([f942c20](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f942c20)):
+    * '*initialize*' method is now deprecated (user can still invoke it but it will do nothing)
+    * every new editor or renderer that uses '*ngOnInit*' method *must* init its implementation invoking '*super.ngOnInit()*'
+    * cell editors typo fixed: method '*startEdtion*' is now '*startEdition*'
 
 
 ## 3.0.0-rc.0 (2018-04-30)
