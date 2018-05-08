@@ -1,9 +1,10 @@
 import { AfterViewInit, Component, ElementRef, Inject, ViewChild, ViewEncapsulation } from '@angular/core';
-import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE, MatCheckboxChange, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE, MatCheckboxChange, MatDialogRef, MAT_DIALOG_DATA, MatSelectionList } from '@angular/material';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { FormControl } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
 
+import { Util } from '../../../../../util/util';
 import { ColumnValueFilterOperator, IColumnValueFilter } from '../../header/o-table-header-components';
 import { O_DATE_INPUT_DEFAULT_FORMATS } from '../../../../input/date-input/o-date-input.component';
 
@@ -29,15 +30,17 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
 
   attr: string;
   type: string;
+  preloadValues: boolean = true;
 
   fcText = new FormControl();
   fcFrom = new FormControl();
   fcTo = new FormControl();
 
   protected columnData: Array<ITableFilterByColumnDataInterface> = [];
-  protected _listData: Array<ITableFilterByColumnDataInterface> = [];
+  protected _listData: Array<ITableFilterByColumnDataInterface>;
 
   @ViewChild('filter') filter: ElementRef;
+  @ViewChild('filterValueList') filterValueList: MatSelectionList;
 
   constructor(
     public dialogRef: MatDialogRef<OTableFilterByColumnDataDialogComponent>,
@@ -57,9 +60,14 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
     if (data.previousFilter) {
       previousFilter = data.previousFilter;
     }
+    if (data.hasOwnProperty('preloadValues')) {
+      this.preloadValues = data.preloadValues;
+    }
     if (data.columnDataArray && Array.isArray(data.columnDataArray)) {
       this.columnData = this.getDistinctValues(data.columnDataArray, previousFilter);
-      this.listData = this.columnData.slice();
+      if (this.preloadValues || previousFilter.operator === ColumnValueFilterOperator.IN) {
+        this.listData = this.columnData.slice();
+      }
     }
   }
 
@@ -81,8 +89,8 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
       Observable.fromEvent(this.filter.nativeElement, 'keyup')
         .debounceTime(150).distinctUntilChanged().subscribe(() => {
           let filterValue: string = self.filter.nativeElement.value;
-          filterValue = filterValue.toLowerCase();
-          self.listData = self.columnData.filter(item => (item.value.toLowerCase().indexOf(filterValue) !== -1));
+          filterValue = Util.normalizeString(filterValue);
+          self.listData = self.columnData.filter(item => (Util.normalizeString(item.value).indexOf(filterValue) !== -1));
         });
     }
   }
@@ -135,7 +143,7 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
   }
 
   get selectedValues(): Array<ITableFilterByColumnDataInterface> {
-    return this.columnData.filter(item => item.selected);
+    return this.filterValueList ? this.filterValueList.selectedOptions.selected : [];
   }
 
   areAllSelected(): boolean {
@@ -147,9 +155,11 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
   }
 
   onSelectAllChange(event: MatCheckboxChange) {
-    this.columnData.forEach((item: ITableFilterByColumnDataInterface) => {
-      item.selected = event.checked;
-    });
+    if (event.checked) {
+      this.filterValueList.selectAll();
+    } else {
+      this.filterValueList.deselectAll();
+    }
   }
 
   getColumnValuesFilter(): IColumnValueFilter {

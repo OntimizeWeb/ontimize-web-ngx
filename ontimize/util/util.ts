@@ -228,4 +228,15 @@ export class Util {
     return typeof value !== 'undefined' && value !== null;
   }
 
+  /**
+   * Returns the provided string in lowercase and without accent marks.
+   * @param value the text to normalize
+   */
+  static normalizeString(value: string): string {
+    if (value && value.length) {
+      return value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+    }
+    return '';
+  }
+
 }
