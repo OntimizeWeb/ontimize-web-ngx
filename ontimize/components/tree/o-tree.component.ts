@@ -1,6 +1,6 @@
 import {
   Component, OnInit, ViewEncapsulation, NgModule, Injector, ElementRef, Optional, Inject,
-  forwardRef, OnDestroy, ViewChild, AfterViewInit, EventEmitter, HostListener
+  forwardRef, OnDestroy, ViewChild, AfterViewInit, EventEmitter
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -118,13 +118,6 @@ export class OTreeComponent extends OTreeClass implements OnInit, AfterViewInit,
     this.actRoute = this.injector.get(ActivatedRoute);
   }
 
-  @HostListener('window:beforeunload', ['$event'])
-  beforeunloadHandler(event) {
-    if (this.localStorageService) {
-      this.localStorageService.updateComponentStorage(this);
-    }
-  }
-
   getComponentKey(): string {
     return 'OTreeComponent_' + this.oattr;
   }
@@ -150,10 +143,6 @@ export class OTreeComponent extends OTreeClass implements OnInit, AfterViewInit,
 
   ngOnDestroy() {
     this.destroy();
-
-    if (this.localStorageService) {
-      this.localStorageService.updateComponentStorage(this);
-    }
   }
 
   initialize(): void {
@@ -420,7 +409,8 @@ export class OTreeComponent extends OTreeClass implements OnInit, AfterViewInit,
   ],
   exports: [
     OTreeComponent,
-    OTreeNodeComponent
+    OTreeNodeComponent,
+    TreeModule
   ]
 })
 export class OTreeModule {
