@@ -71,7 +71,6 @@ export class OTableCellEditorDateComponent extends OBaseTableCellEditor implemen
     protected momentDateAdapter: DateAdapter<MomentDateAdapter>
   ) {
     super(injector);
-    this.initialize();
     this.momentSrv = this.injector.get(MomentService);
   }
 
@@ -121,8 +120,8 @@ export class OTableCellEditorDateComponent extends OBaseTableCellEditor implemen
     }
   }
 
-  startEdtion(data: any) {
-    super.startEdtion(data);
+  startEdition(data: any) {
+    super.startEdition(data);
     if (!this.startAt) {
       this.oStartAt = this.getCellData();
     }

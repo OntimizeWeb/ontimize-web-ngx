@@ -46,13 +46,13 @@ export class OTableCellRendererRealComponent extends OTableCellRendererIntegerCo
   }
 
   ngOnInit() {
+    super.ngOnInit();
     this.pipeArguments = {
       decimalDigits: this.decimalDigits,
       decimalSeparator: this.decimalSeparator,
       grouping: this.grouping,
       thousandSeparator: this.thousandSeparator
     };
-    this.initialize();
   }
 
 }

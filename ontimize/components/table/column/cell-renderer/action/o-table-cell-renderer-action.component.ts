@@ -33,7 +33,6 @@ export class OTableCellRendererActionComponent extends OBaseTableCellRenderer {
     this.tableColumn.type = 'action';
     this.tableColumn.orderable = false;
     this.tableColumn.searchable = false;
-    this.initialize();
   }
 
   getCellData(value: any) {

@@ -33,7 +33,6 @@ export class OTableCellRendererImageComponent extends OBaseTableCellRenderer {
   constructor(protected injector: Injector) {
     super(injector);
     this.tableColumn.type = 'image';
-    this.initialize();
   }
 
   getSource(cellData: any) {

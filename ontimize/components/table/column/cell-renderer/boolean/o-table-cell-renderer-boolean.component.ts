@@ -39,7 +39,6 @@ export class OTableCellRendererBooleanComponent extends OBaseTableCellRenderer {
     super(injector);
     this.tableColumn.type = 'boolean';
     this.translateService = this.injector.get(OTranslateService);
-    this.initialize();
   }
 
   public hasCellDataTrueValue(cellData: any): boolean {

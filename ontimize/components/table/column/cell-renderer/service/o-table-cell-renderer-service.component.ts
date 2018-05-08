@@ -55,10 +55,10 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
   constructor(protected injector: Injector) {
     super(injector);
     this.dialogService = injector.get(DialogService);
-    this.initialize();
   }
 
   ngOnInit() {
+    super.ngOnInit();
     this.colArray = Util.parseArray(this.columns, true);
     let pkArray = Util.parseArray(this.parentKeys);
     this._pKeysEquiv = Util.parseParentKeysEquivalences(pkArray);

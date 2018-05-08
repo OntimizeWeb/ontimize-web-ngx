@@ -1049,7 +1049,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     });
     rowData[column.attr] = row[column.attr];
     this.editingRow = row;
-    column.editor.startEdtion(rowData);
+    column.editor.startEdition(rowData);
     column.editing = true;
   }
 

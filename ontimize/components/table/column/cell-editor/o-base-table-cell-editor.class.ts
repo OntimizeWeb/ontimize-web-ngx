@@ -47,9 +47,22 @@ export class OBaseTableCellEditor implements OnInit {
   }
   inputRef: any;
 
+  protected type: string;
+  registerInColumn: boolean = true;
+
   constructor(protected injector: Injector) {
     this.tableColumn = this.injector.get(OTableColumnComponent);
     this.translateService = this.injector.get(OTranslateService);
+  }
+
+  ngOnInit(): void {
+    this.createFormControl();
+    this.registerEditor();
+  }
+
+  /** @deprecated */
+  initialize() {
+    //
   }
 
   protected handleKeyup(event: KeyboardEvent) {
@@ -76,19 +89,20 @@ export class OBaseTableCellEditor implements OnInit {
     }
   }
 
-  ngOnInit(): void {
-    this.createFormControl();
-  }
-
-  initialize() {
-    this.tableColumn.registerEditor(this);
+  registerEditor() {
+    if (this.registerInColumn) {
+      this.tableColumn.registerEditor(this);
+      if (!Util.isDefined(this.type) && Util.isDefined(this.tableColumn.type)) {
+        this.type = this.tableColumn.type;
+      }
+    }
   }
 
   getCellData(): any {
     return this._rowData[this.tableColumn.attr];
   }
 
-  startEdtion(data: any) {
+  startEdition(data: any) {
     this.formGroup.reset();
     this.rowData = data;
     if (!this.isSilentControl()) {
@@ -127,7 +141,7 @@ export class OBaseTableCellEditor implements OnInit {
     this.formControl.setValue(cellData);
     this.formControl.markAsTouched();
 
-    if (this.inputRef) {
+    if (this.inputRef && this.inputRef.nativeElement.type === 'text') {
       this.inputRef.nativeElement.setSelectionRange(0, String(cellData).length);
     }
   }

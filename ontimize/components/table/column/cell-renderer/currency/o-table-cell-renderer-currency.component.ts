@@ -51,6 +51,7 @@ export class OTableCellRendererCurrencyComponent extends OBaseTableCellRenderer 
     this.componentPipe = new OCurrencyPipe(this.injector);
   }
   ngOnInit() {
+    super.ngOnInit();
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
     //Add 'implements OnInit' to the class.
     if (typeof this.currencySymbol === 'undefined') {
@@ -67,7 +68,5 @@ export class OTableCellRendererCurrencyComponent extends OBaseTableCellRenderer 
       grouping: this.grouping,
       thousandSeparator: this.thousandSeparator
     };
-
-    this.initialize();
   }
 }
