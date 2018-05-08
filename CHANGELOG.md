@@ -19,8 +19,8 @@
 * **o-table**:
   * '*reinitialize*' method added ([fbf4828](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/fbf4828)), closes [#149](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/149)
   * fixing column change order bug ([4e23e3a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4e23e3a)) ([#168](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/168))
-  * columns visibility dialog bug ([ffef427](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ffef427)) ([#170](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/170))
   * fixing bug in custom cell editors creation ([f942c20](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f942c20)) ([#167](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/167))
+  * fixing translation bugs ([ffef427](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ffef427)) ([b3de673](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b3de673)) ([#170](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/170))
 
 ### BREAKING CHANGES
 * **o-table**:
