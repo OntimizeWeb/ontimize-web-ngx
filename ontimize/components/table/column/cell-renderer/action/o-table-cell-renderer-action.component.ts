@@ -35,6 +35,14 @@ export class OTableCellRendererActionComponent extends OBaseTableCellRenderer {
     this.tableColumn.searchable = false;
   }
 
+  ngOnInit() {
+    super.ngOnInit();
+    if (this.table) {
+      const oCol = this.table.getOColumn(this.tableColumn.attr);
+      oCol.title = undefined;
+    }
+  }
+
   getCellData(value: any) {
     return value;
   }

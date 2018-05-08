@@ -523,7 +523,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       // columns with 'attr' are linked to service data
       colDef.attr = column.attr;
       colDef.name = column.attr;
-      colDef.title = column.title;
+      colDef.title = Util.isDefined(column.title) ? column.title : column.attr;
       if (column.width !== '') {
         colDef.width = column.width;
       }
@@ -1222,9 +1222,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     let dialogRef = this.dialog.open(OTableFilterByColumnDataDialogComponent, {
       data: {
         previousFilter: this.dataSource.getColumnValueFilterByAttr(column.attr),
-        columnAttr: column.attr,
+        column: column,
         columnDataArray: columnDataArray,
-        columnType: column.type,
         preloadValues: this.oTableColumnsFilterComponent.preloadValues
       },
       disableClose: true,

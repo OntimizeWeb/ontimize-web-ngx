@@ -194,6 +194,8 @@ export class OBaseTableCellEditor implements OnInit {
   }
 
   getPlaceholder(): string {
-    return this.showPlaceHolder ? this.translateService.get(this.olabel || this.tableColumn.attr) : undefined;
+    return this.showPlaceHolder ?
+      this.translateService.get(this.olabel || (this.tableColumn.title || this.tableColumn.attr)) :
+      undefined;
   }
 }

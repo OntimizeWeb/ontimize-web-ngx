@@ -5,8 +5,9 @@ import { FormControl } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
 
 import { Util } from '../../../../../util/util';
-import { ColumnValueFilterOperator, IColumnValueFilter } from '../../header/o-table-header-components';
 import { O_DATE_INPUT_DEFAULT_FORMATS } from '../../../../input/date-input/o-date-input.component';
+import { OColumn } from '../../../o-table.component';
+import { ColumnValueFilterOperator, IColumnValueFilter } from '../../header/o-table-header-components';
 
 export interface ITableFilterByColumnDataInterface {
   value: any;
@@ -28,8 +29,7 @@ export interface ITableFilterByColumnDataInterface {
 })
 export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
 
-  attr: string;
-  type: string;
+  column: OColumn;
   preloadValues: boolean = true;
   isCustomFiter: boolean = false;
 
@@ -47,11 +47,8 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
     public dialogRef: MatDialogRef<OTableFilterByColumnDataDialogComponent>,
     @Inject(MAT_DIALOG_DATA) data: any
   ) {
-    if (data.columnAttr) {
-      this.attr = data.columnAttr;
-    }
-    if (data.columnType) {
-      this.type = data.columnType;
+    if (data.column) {
+      this.column = data.column;
     }
     let previousFilter: IColumnValueFilter = {
       attr: undefined,
@@ -177,7 +174,7 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
 
   getColumnValuesFilter(): IColumnValueFilter {
     let filter = {
-      attr: this.attr,
+      attr: this.column.attr,
       operator: undefined,
       values: undefined
     };
@@ -216,11 +213,11 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
   }
 
   isNumericType(): boolean {
-    return ['integer', 'real', 'currency'].indexOf(this.type) !== -1;
+    return ['integer', 'real', 'currency'].indexOf(this.column.type) !== -1;
   }
 
   isDateType(): boolean {
-    return 'date' === this.type;
+    return 'date' === this.column.type;
   }
 
   protected getTypedValue(control: FormControl): any {
