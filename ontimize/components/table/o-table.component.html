@@ -97,7 +97,7 @@
           </mat-header-cell>
         </ng-container>
         <mat-cell *matCellDef="let row" #cell [fxFlex]="column.width" [ngClass]="column.className" (click)="handleCellClick(column, row, $event)"
-          (dblclick)="handleCellDoubleClick(column, row, $event)">
+          (dblclick)="handleCellDoubleClick(column, row, $event)" [class.empty-cell]="row[column.name] === undefined">
 
           <ng-container *ngIf="usePlainRender(column, row)">
             {{ row[column.name] }}
