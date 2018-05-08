@@ -23,10 +23,11 @@ export class OTableVisibleColumnsDialogComponent {
     @Inject(MAT_DIALOG_DATA) data: any
   ) {
     if (data.columnArray && Array.isArray(data.columnArray) && data.columnsData && Array.isArray(data.columnsData)) {
-      data.columnsData.forEach((colData: OColumn) => {
-        let column = Object.assign(new OColumn(), colData);
-        this.originalColumns.push(column);
-        if (data.columnArray.includes(colData.attr)) {
+      data.columnArray.forEach(colAttr => {
+        const oColData = data.columnsData.find((oCol: OColumn) => oCol.attr === colAttr);
+        if (oColData) {
+          let column = Object.assign(new OColumn(), oColData);
+          this.originalColumns.push(column);
           this.columns.push(column);
         }
       });
