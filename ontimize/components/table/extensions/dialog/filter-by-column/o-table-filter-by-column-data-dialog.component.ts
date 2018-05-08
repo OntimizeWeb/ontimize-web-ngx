@@ -31,6 +31,7 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
   attr: string;
   type: string;
   preloadValues: boolean = true;
+  isCustomFiter: boolean = false;
 
   fcText = new FormControl();
   fcFrom = new FormControl();
@@ -59,6 +60,18 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
     };
     if (data.previousFilter) {
       previousFilter = data.previousFilter;
+      switch (previousFilter.operator) {
+        case ColumnValueFilterOperator.LESS_EQUAL:
+        case ColumnValueFilterOperator.MORE_EQUAL:
+        case ColumnValueFilterOperator.BETWEEN:
+        case ColumnValueFilterOperator.EQUAL:
+          this.isCustomFiter = true;
+          break;
+        case ColumnValueFilterOperator.IN:
+        default:
+          this.isCustomFiter = false;
+          break;
+      }
     }
     if (data.hasOwnProperty('preloadValues')) {
       this.preloadValues = data.preloadValues;
@@ -168,27 +181,31 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
       operator: undefined,
       values: undefined
     };
-    if (this.selectedValues.length) {
-      filter.operator = ColumnValueFilterOperator.IN;
-      filter.values = this.selectedValues.map((item) => item.value);
-    }
-    if (this.fcText.value) {
-      filter.operator = ColumnValueFilterOperator.EQUAL;
-      filter.values = this.getTypedValue(this.fcText);
-    }
-    if (this.fcFrom.value && this.fcTo.value) {
-      filter.operator = ColumnValueFilterOperator.BETWEEN;
-      let fromValue = this.getTypedValue(this.fcFrom);
-      let toValue = this.getTypedValue(this.fcTo);
-      filter.values = fromValue <= toValue ? [fromValue, toValue] : [toValue, fromValue];
-    } else {
-      if (this.fcFrom.value) {
-        filter.operator = ColumnValueFilterOperator.MORE_EQUAL;
-        filter.values = this.getTypedValue(this.fcFrom);
+
+    if (!this.isCustomFiter) {
+      if (this.selectedValues.length) {
+        filter.operator = ColumnValueFilterOperator.IN;
+        filter.values = this.selectedValues.map((item) => item.value);
       }
-      if (this.fcTo.value) {
-        filter.operator = ColumnValueFilterOperator.LESS_EQUAL;
-        filter.values = this.getTypedValue(this.fcTo);
+    } else {
+      if (this.fcText.value) {
+        filter.operator = ColumnValueFilterOperator.EQUAL;
+        filter.values = this.getTypedValue(this.fcText);
+      }
+      if (this.fcFrom.value && this.fcTo.value) {
+        filter.operator = ColumnValueFilterOperator.BETWEEN;
+        let fromValue = this.getTypedValue(this.fcFrom);
+        let toValue = this.getTypedValue(this.fcTo);
+        filter.values = fromValue <= toValue ? [fromValue, toValue] : [toValue, fromValue];
+      } else {
+        if (this.fcFrom.value) {
+          filter.operator = ColumnValueFilterOperator.MORE_EQUAL;
+          filter.values = this.getTypedValue(this.fcFrom);
+        }
+        if (this.fcTo.value) {
+          filter.operator = ColumnValueFilterOperator.LESS_EQUAL;
+          filter.values = this.getTypedValue(this.fcTo);
+        }
       }
     }
     return filter;
