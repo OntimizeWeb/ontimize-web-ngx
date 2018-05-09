@@ -447,7 +447,19 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       this.columnFilterOption.active = this.showFilterByColumnIcon;
     }
     if (this.oTableQuickFilterComponent) {
-      this.oTableQuickFilterComponent.setValue(this.state.filter);
+      this.oTableQuickFilterComponent.setValue(this.state['filter']);
+      const storedColumnsData = this.state['oColumns'] || [];
+      storedColumnsData.forEach((oColData: any) => {
+        const oCol = this.getOColumn(oColData.attr);
+        if (oCol) {
+          if (oColData.hasOwnProperty('searchable')) {
+            oCol.searchable = oColData.searchable;
+          }
+          if (oColData.hasOwnProperty('searching')) {
+            oCol.searching = oColData.searching;
+          }
+        }
+      });
     }
     if (this.queryOnInit) {
       this.queryData(this.parentItem);
@@ -486,12 +498,23 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     if (this.oTableColumnsFilterComponent) {
       dataToStore['column-value-filters'] = this.dataSource.getColumnValueFilters();
     }
+    dataToStore['filter-case-sensitive'] = this.oTableOptions.filterCaseSensitive;
+    let oColumnsData = [];
+    this.oTableOptions.columns.forEach((oCol: OColumn) => {
+      let colData = {
+        attr: oCol.attr
+      };
+      colData['searchable'] = oCol.searchable;
+      colData['searching'] = oCol.searching;
+      oColumnsData.push(colData);
+    });
+    dataToStore['oColumns'] = oColumnsData;
     return dataToStore;
   }
 
   registerQuickFilter(arg: OTableQuickfilterComponent) {
     this.oTableQuickFilterComponent = arg;
-    this.oTableQuickFilterComponent.setValue(this.state.filter);
+    this.oTableQuickFilterComponent.setValue(this.state['filter']);
   }
 
   registerPagination(value: OTablePaginatorComponent) {
@@ -663,7 +686,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
     // Initialize quickFilter
     this._oTableOptions.filter = this.quickFilter;
-    this._oTableOptions.filterCaseSensitive = this.filterCaseSensitive;
+    this.filterCaseSensitive = this.state.hasOwnProperty('filter-case-sensitive') ? this.state['filter-case-sensitive'] : this.filterCaseSensitive;
 
     // Initialize paginator
     if (!this.paginator && this.paginationControls) {
@@ -1335,7 +1358,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   getOColumn(attr: string): OColumn {
-    return this._oTableOptions.columns.find(item => item.name === attr);
+    return this._oTableOptions ? this._oTableOptions.columns.find(item => item.name === attr) : undefined;
   }
 
   insertRecord(recordData: any): Observable<any> {
