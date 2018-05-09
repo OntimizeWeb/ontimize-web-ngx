@@ -33,6 +33,16 @@ export class OTableCellRendererImageComponent extends OBaseTableCellRenderer {
   constructor(protected injector: Injector) {
     super(injector);
     this.tableColumn.type = 'image';
+    this.tableColumn.orderable = false;
+    this.tableColumn.searchable = false;
+  }
+
+  ngOnInit() {
+    super.ngOnInit();
+    if (this.table) {
+      const oCol = this.table.getOColumn(this.tableColumn.attr);
+      oCol.title = undefined;
+    }
   }
 
   getSource(cellData: any) {
