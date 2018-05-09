@@ -147,7 +147,8 @@ export class OColumn {
   type: string;
   className: string;
   orderable: boolean;
-  searchable: boolean;
+  _searchable: boolean;
+  searching: boolean;
   visible: boolean;
   renderer: any;
   editor: any;
@@ -156,6 +157,15 @@ export class OColumn {
   aggregate: OColumnAggregate;
   calculate: string | OperatorFunction;
   definition: OTableColumnComponent;
+
+  set searchable(val: boolean) {
+    this._searchable = val;
+    this.searching = val;
+  }
+
+  get searchable(): boolean {
+    return this._searchable;
+  }
 }
 
 export class OTableOptions {
@@ -511,6 +521,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     colDef.className = 'o-column-' + (colDef.type) + ' ';
     colDef.orderable = true;
     colDef.searchable = true;
+    colDef.searching = true;
     colDef.width = '';
 
     if (!Util.isDefined(column.attr)) {
@@ -844,7 +855,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this._oTableOptions.visibleColumns = dialogRef.componentInstance.getVisibleColumns();
+        this.visibleColArray = dialogRef.componentInstance.getVisibleColumns();
+        this._oTableOptions.visibleColumns = this.visibleColArray;
         this._oTableOptions.columns = dialogRef.componentInstance.getColumnsData();
         if (this.oTableEditableRow) {
           this.oTableEditableRow.cd.detectChanges();

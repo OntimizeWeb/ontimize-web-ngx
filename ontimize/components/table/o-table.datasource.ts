@@ -180,13 +180,13 @@ export class OTableDataSource extends DataSource<any> {
   }
 
   protected getStringSearchable(item) {
-    return this._tableOptions.columns.map(function (v: OColumn, i, a) {
-      if (typeof v.searchable !== 'undefined' && v.searchable && typeof v.visible !== 'undefined' && v.visible) {
-        if (v.renderer && v.renderer.getCellData) {
-          return v.renderer.getCellData(item[v.name]);
-        } else {
-          return item[v.name];
+    return this._tableOptions.columns.map((oCol: OColumn) => {
+      if (oCol.searching && oCol.visible) {
+        let filterValue = item[oCol.attr];
+        if (oCol.renderer && oCol.renderer.getCellData) {
+          filterValue = oCol.renderer.getCellData(filterValue);
         }
+        return filterValue;
       }
     }).join(' ');
   }

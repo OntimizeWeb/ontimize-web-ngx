@@ -1,7 +1,9 @@
 import { Component, OnInit, Inject, forwardRef, EventEmitter, Injector, ViewEncapsulation, ViewChild, ElementRef, OnDestroy, AfterViewInit } from '@angular/core';
+import { MatCheckboxChange, MatMenu } from '@angular/material';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
-import { OTableComponent } from '../../../o-table.component';
+import { Util } from '../../../../../utils';
+import { OTableComponent, OColumn, OTableOptions } from '../../../o-table.component';
 import { IFilterExpression, FilterExpressionUtils } from '../../../../filter-expression.utils';
 
 export const DEFAULT_INPUTS_O_TABLE_QUICKFILTER = [
@@ -28,10 +30,11 @@ export class OTableQuickfilterComponent implements OnInit, AfterViewInit, OnDest
   public static DEFAULT_OUTPUTS_O_TABLE_QUICKFILTER = DEFAULT_OUTPUTS_O_TABLE_QUICKFILTER;
 
   @ViewChild('filter') filter: ElementRef;
+  @ViewChild('menu') matMenu: MatMenu;
   protected quickFilterObservable: Subscription;
 
-  public value: string;
-  public onChange: EventEmitter<Object> = new EventEmitter<Object>();
+  value: string;
+  onChange: EventEmitter<Object> = new EventEmitter<Object>();
 
   constructor(
     protected injector: Injector,
@@ -41,6 +44,8 @@ export class OTableQuickfilterComponent implements OnInit, AfterViewInit, OnDest
 
   public ngOnInit() {
     this.table.registerQuickFilter(this);
+    // workaround because 'x-position="before"' was not working in the template
+    this.matMenu.xPosition = 'before';
   }
 
   ngAfterViewInit() {
@@ -49,13 +54,11 @@ export class OTableQuickfilterComponent implements OnInit, AfterViewInit, OnDest
 
   get filterExpression(): IFilterExpression {
     let result: IFilterExpression = this.getUserFilter();
-    if (result === undefined && this.value && this.value.length > 0) {
-      const self = this;
+    if (!Util.isDefined(result) && Util.isDefined(this.value) && this.value.length > 0) {
       let queryCols = [];
-      this.table.oTableOptions.visibleColumns.forEach(col => {
-        const oCol = self.table.getOColumn(col);
-        if (oCol && !oCol.renderer) {
-          queryCols.push(col);
+      this.oTableOptions.columns.map((oCol: OColumn) => {
+        if (oCol.searching && oCol.visible && !oCol.renderer) {
+          queryCols.push(oCol.attr);
         }
       });
       result = FilterExpressionUtils.buildArrayExpressionLike(queryCols, this.value);
@@ -67,10 +70,9 @@ export class OTableQuickfilterComponent implements OnInit, AfterViewInit, OnDest
     let result: IFilterExpression = undefined;
     if (this.table.quickFilterCallback instanceof Function) {
       let userFilter = this.table.quickFilterCallback(this.value);
-
-      if (userFilter !== undefined && FilterExpressionUtils.instanceofFilterExpression(userFilter)) {
+      if (Util.isDefined(userFilter) && FilterExpressionUtils.instanceofFilterExpression(userFilter)) {
         result = (userFilter as IFilterExpression);
-      } else if (userFilter !== undefined) {
+      } else if (Util.isDefined(userFilter)) {
         result = FilterExpressionUtils.buildExpressionFromObject(userFilter);
       }
     }
@@ -109,5 +111,28 @@ export class OTableQuickfilterComponent implements OnInit, AfterViewInit, OnDest
     if (this.table && this.table.dataSource) {
       this.table.dataSource.quickFilter = this.value;
     }
+  }
+
+  get oTableOptions(): OTableOptions {
+    return this.table.oTableOptions;
+  }
+
+  get quickFilterColumns(): Array<OColumn> {
+    return this.table.oTableOptions.columns.filter((oCol) => {
+      return oCol.searchable && oCol.visible && !Util.isDefined(oCol.renderer);
+    });
+  }
+
+  onMenuClosed() {
+    this.setValue(this.value);
+    this.onChange.emit(this.value);
+  }
+
+  isChecked(column: OColumn): boolean {
+    return column.searching;
+  }
+
+  onCheckboxChange(column: OColumn, event: MatCheckboxChange) {
+    column.searching = event.checked;
   }
 }

@@ -122,10 +122,8 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
   public type: string;
   public attr: string;
   public title: string;
-  @InputConverter()
-  public orderable: boolean = true;
-  @InputConverter()
-  public searchable: boolean = true;
+  protected _orderable: boolean = true;
+  protected _searchable: boolean = true;
   @InputConverter()
   public editable: boolean = false;
   public width: string = '';
@@ -212,9 +210,7 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
 
   ngOnInit() {
     this.grouping = Util.parseBoolean(this.grouping, true);
-
     this.table.registerColumn(this);
-
     this.subscriptions.add(this.table.onReinitialize.subscribe(() => this.table.registerColumn(this)));
   }
 
@@ -368,4 +364,27 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
     }
   }
 
+  set orderable(val: any) {
+    this._orderable = typeof val === 'boolean' ? val : Util.parseBoolean(val, true);
+    const oCol = this.table.getOColumn(this.attr);
+    if (oCol) {
+      oCol.orderable = this._orderable;
+    }
+  }
+
+  get orderable(): any {
+    return this._orderable;
+  }
+
+  set searchable(val: any) {
+    this._searchable = typeof val === 'boolean' ? val : Util.parseBoolean(val, true);
+    const oCol = this.table.getOColumn(this.attr);
+    if (oCol) {
+      oCol.searchable = this._searchable;
+    }
+  }
+
+  get searchable(): any {
+    return this._searchable;
+  }
 }
