@@ -6,7 +6,7 @@
     </span>
     <mat-menu #menu="matMenu" class="o-table-quickfilter-menu">
       <div fxLayout="column" class="checkbox-container">
-        <mat-checkbox *ngIf="!this.table.pageable" (click)="$event.stopPropagation()" [checked]="oTableOptions.filterCaseSensitive"
+        <mat-checkbox *ngIf="showCaseSensitiveCheckbox()" (click)="$event.stopPropagation()" [checked]="oTableOptions.filterCaseSensitive"
           (change)="oTableOptions.filterCaseSensitive = $event.checked">
           {{ 'TABLE.FILTER.CASE_SENSITIVE' | oTranslate}}
         </mat-checkbox>

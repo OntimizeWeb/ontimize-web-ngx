@@ -135,4 +135,9 @@ export class OTableQuickfilterComponent implements OnInit, AfterViewInit, OnDest
   onCheckboxChange(column: OColumn, event: MatCheckboxChange) {
     column.searching = event.checked;
   }
+
+  showCaseSensitiveCheckbox(): boolean {
+    return !this.table.pageable;
+  }
+
 }
