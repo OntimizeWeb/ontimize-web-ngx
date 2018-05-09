@@ -1,7 +1,8 @@
 import { Component, Inject, ViewEncapsulation } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { OColumn } from '../../../o-table.component';
 import { DragDropService } from 'ng2-dnd';
+import { Util } from '../../../../../utils';
+import { OColumn } from '../../../o-table.component';
 
 @Component({
   selector: 'o-table-visible-columns-dialog',
@@ -22,13 +23,16 @@ export class OTableVisibleColumnsDialogComponent {
     public dialogRef: MatDialogRef<OTableVisibleColumnsDialogComponent>,
     @Inject(MAT_DIALOG_DATA) data: any
   ) {
-    if (data.columnArray && Array.isArray(data.columnArray) && data.columnsData && Array.isArray(data.columnsData)) {
+    if (Util.isArray(data.columnArray) && Util.isArray(data.columnsData)) {
+      // cloning columnsData
+      data.columnsData.forEach((colData: OColumn) => {
+        let column = Object.assign(new OColumn(), colData);
+        this.originalColumns.push(column);
+      });
       data.columnArray.forEach(colAttr => {
-        const oColData = data.columnsData.find((oCol: OColumn) => oCol.attr === colAttr);
+        const oColData = this.originalColumns.find((oCol: OColumn) => oCol.attr === colAttr);
         if (oColData) {
-          let column = Object.assign(new OColumn(), oColData);
-          this.originalColumns.push(column);
-          this.columns.push(column);
+          this.columns.push(oColData);
         }
       });
     }
