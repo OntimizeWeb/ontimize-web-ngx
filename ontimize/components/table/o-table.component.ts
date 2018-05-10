@@ -1409,6 +1409,10 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     return this.tabGroupChangeSubscription !== undefined;
   }
 
+  isEmpty(value: any): boolean {
+    return !Util.isDefined(value) || ((typeof value === 'string') && !value);
+  }
+
 }
 
 @NgModule({
