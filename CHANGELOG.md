@@ -1,3 +1,8 @@
+## 2.1.4
+### Bug Fixes
+* **o-list-picker**: fixing component bugs ([132bc4c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/132bc4c))
+* **o-form**: fixing dynamicform registration bugs ([d84fcbd]](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d84fcbd]))
+
 ## 2.1.3 (2018-18-04)
 ### Features
 * **o-list-picker**:
