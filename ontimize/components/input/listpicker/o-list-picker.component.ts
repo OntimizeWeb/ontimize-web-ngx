@@ -196,7 +196,7 @@ export class OListPickerComponent extends OFormServiceComponent implements OnIni
       data: {
         data: this.getDialogDataArray(this.dataArray),
         filter: this.filter,
-        searchVal: this.visibleInputValue,
+        searchVal: this.visibleInputValue || this.visibleInput.nativeElement.value,
         visibleColumns: this.visibleColArray,
         queryRows: this.queryRows
       }
@@ -235,12 +235,13 @@ export class OListPickerComponent extends OFormServiceComponent implements OnIni
 
   onDialogClose(evt: any) {
     this.dialogRef = null;
+    this.visibleInputValue = undefined;
     if (evt instanceof Object && typeof evt[this.valueColumn] !== 'undefined') {
       var self = this;
       window.setTimeout(() => {
         self.setValue(evt[self.valueColumn]);
         if (self._fControl) {
-          this._fControl.markAsTouched();
+          self._fControl.markAsTouched();
         }
       }, 0);
     }
@@ -259,9 +260,15 @@ export class OListPickerComponent extends OFormServiceComponent implements OnIni
         if (!self.blurPrevent) {
           self._fControl.markAsTouched();
           self.onBlur.emit(event);
-          // if (evt.target.value !== this.visibleInputValue) {
-          self.openDialog();
-          // }
+          if (self.visibleInputValue !== undefined && self.visibleInputValue.length > 0) {
+            self.openDialog();
+          } else if (self.visibleInputValue !== undefined) {
+            self.setValue(undefined);
+            self.visibleInputValue = undefined;
+          } else {
+            self._fControl.markAsTouched();
+            self.onBlur.emit(event);
+          }
         }
         self.blurPrevent = false;
       }, this.blurDelay);
@@ -278,7 +285,6 @@ export class OListPickerComponent extends OFormServiceComponent implements OnIni
     this.visibleInputValue = val;
     this.openDialog();
   }
-
 }
 
 @NgModule({
