@@ -1211,7 +1211,24 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
       this.dynamicFormSubscription = dynamicForm.render.subscribe(res => {
         if (res) {
           self.refreshComponentsEditableState();
-          self._reloadAction(true);
+          if (!self.isInInsertMode() && self.queryOnInit) {
+            self._reloadAction(true);
+          }
+          if (this.formParentKeysValues) {
+            Object.keys(this._components).forEach(key => {
+              const comp = this._components[key];
+              const attr = comp.getAttribute();
+              if (Util.isFormDataComponent(comp)) {
+                try {
+                  if (comp.isAutomaticBinding() && this.formParentKeysValues.hasOwnProperty(attr)) {
+                    comp.data = this.formParentKeysValues[attr];
+                  }
+                } catch (error) {
+                  console.error(error);
+                }
+              }
+            });
+          }
         }
       });
     }
