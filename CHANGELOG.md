@@ -83,6 +83,10 @@ export const CONFIG: Config = {
 ### Bug Fixes
 * **o-combo**: Fixing change event emission ([a648c8b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a648c8b)) Closes [#152](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/152)
 * **o-form**: Fixing close dialog on ESC key event ([f789a64](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f789a64))
+## 2.1.4
+### Bug Fixes
+* **o-list-picker**: fixing component bugs ([132bc4c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/132bc4c))
+* **o-form**: fixing dynamicform registration bugs ([d84fcbd]](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d84fcbd]))
 
 ## 2.1.3 (2018-18-04)
 ### Features
