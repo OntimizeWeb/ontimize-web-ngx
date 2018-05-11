@@ -184,6 +184,7 @@ export class OListPickerComponent extends OFormServiceComponent implements OnIni
     e.preventDefault();
     e.stopPropagation();
     if (!this._isReadOnly && !this.isDisabled) {
+      clearTimeout(this.blurTimer);
       this.openDialog();
     }
   }
