@@ -45,7 +45,7 @@ export class OAppSidenavComponent implements OnInit, OnDestroy, AfterViewInit {
 
   protected routerSubscription: Subscription;
   appMenuService: AppMenuService;
-  protected _menuRootArray: MenuRootItem[];
+  protected _menuRootArray: MenuRootItem[] = [];
 
   @InputConverter()
   protected opened: boolean = true;
@@ -66,6 +66,7 @@ export class OAppSidenavComponent implements OnInit, OnDestroy, AfterViewInit {
     protected elRef: ElementRef
   ) {
     this.appMenuService = this.injector.get(AppMenuService);
+    this.menuRootArray = this.appMenuService.getMenuRoots();
     this.oUserInfoService = this.injector.get(OUserInfoService);
   }
 
@@ -89,8 +90,7 @@ export class OAppSidenavComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   protected refreshMenuRoots() {
-    let menuRootsArray = this.appMenuService.getMenuRoots();
-    let firstRoot = menuRootsArray[0];
+    let firstRoot = this.menuRootArray[0];
     let alreadyExistsUserInfo = firstRoot ? firstRoot.id === 'user-info' : false;
     if (this.showUserInfo && this.userInfo && this.showToggleButton && !alreadyExistsUserInfo) {
       let userInfoItem: MenuItemUserInfo = {
@@ -106,9 +106,8 @@ export class OAppSidenavComponent implements OnInit, OnDestroy, AfterViewInit {
         opened: true,
         icon: 'person_pin'
       };
-      menuRootsArray.unshift(menuGroupUserInfo);
+      this.menuRootArray.unshift(menuGroupUserInfo);
     }
-    this.menuRootArray = menuRootsArray;
   }
 
   ngOnDestroy() {
