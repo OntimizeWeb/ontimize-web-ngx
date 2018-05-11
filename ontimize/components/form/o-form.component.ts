@@ -325,6 +325,11 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   registerFormComponent(comp: any) {
     if (comp) {
       let attr = comp.getAttribute();
+      if (this._components.hasOwnProperty(attr)) {
+        comp.repeatedAttr = true;
+        console.error('There is already a ' + attr + ' component registered in the form');
+        return;
+      }
       if (attr && attr.length > 0) {
         this._components[attr] = comp;
         if (!comp.isAutomaticRegistering()) {
@@ -353,6 +358,9 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   }
 
   registerSQLTypeFormComponent(comp: IFormDataTypeComponent) {
+    if ((comp as any).repeatedAttr) {
+      return;
+    }
     if (comp) {
       let type = comp.getSQLType();
       let attr = comp.getAttribute();
@@ -364,6 +372,9 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   }
 
   registerFormControlComponent(comp: IFormDataComponent) {
+    if ((comp as any).repeatedAttr) {
+      return;
+    }
     if (comp) {
       let attr = comp.getAttribute();
       if (attr && attr.length > 0) {
