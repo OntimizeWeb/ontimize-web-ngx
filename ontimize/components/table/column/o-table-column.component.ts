@@ -25,6 +25,7 @@ import {
 } from './cell-editor/cell-editor';
 
 import { DateFilterFunction } from '../../../components/input/date-input/o-date-input.component';
+import { SQLTypes } from '../../../util/sqltypes';
 
 export const DEFAULT_INPUTS_O_TABLE_COLUMN = [
 
@@ -59,10 +60,13 @@ export const DEFAULT_INPUTS_O_TABLE_COLUMN = [
   'class',
 
   // break-word [no|yes|true|false]: content column can show in multiple lines if it not catch in the cell. Default: no and if content of the cell overflow.
-  'breakWord:break-word',
+  'breakWord: break-word',
 
   // async-load [no|yes|true|false]: asynchronous query. Default: no
   'asyncLoad : async-load',
+
+  // sqltype[string]: Data type according to Java standard. See SQLType ngClass. Default: 'OTHER'
+  'sqlType: sql-type',
 
   ...OTableCellRendererBooleanComponent.DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_BOOLEAN,
   ...OTableCellRendererCurrencyComponent.DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_CURRENCY, // includes Integer and Real
@@ -122,6 +126,9 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
   public type: string;
   public attr: string;
   public title: string;
+  public sqlType: string;
+  protected _SQLType: number;
+  protected _defaultSQLTypeKey: string = 'OTHER';
   protected _orderable: boolean = true;
   protected _searchable: boolean = true;
   @InputConverter()
@@ -387,4 +394,29 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
   get searchable(): any {
     return this._searchable;
   }
+
+  getSQLType(): number {
+    if (!(this.sqlType && this.sqlType.length > 0)) {
+      switch (this.type) {
+        case 'date':
+          this.sqlType = 'TIMESTAMP';
+          break;
+        case 'integer':
+          this.sqlType = 'INTEGER';
+          break;
+        case 'boolean':
+          this.sqlType = 'BOOLEAN';
+          break;
+        case 'real':
+        case 'percentage':
+        case 'currency':
+          this.sqlType = 'DOUBLE';
+          break;
+      }
+    }
+    let sqlt = this.sqlType && this.sqlType.length > 0 ? this.sqlType : this._defaultSQLTypeKey;
+    this._SQLType = SQLTypes.getSQLTypeValue(sqlt);
+    return this._SQLType;
+  }
+
 }
