@@ -15,7 +15,7 @@
   * new '*addEditor*' static method that user '*must*' use in new cell editors constructor definitions ([f942c20](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f942c20))
   * new '*tooltip*' input (default="no") for showing the cell value as tooltip ([e334539]](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e334539]))
 * **o-table-columns-filter**: added '*preload-values*' attribute ([a52b5cd](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a52b5cd))
-* **o-table**: allowing to live edit the quick filter columns ([2be977e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2be977e)) ([23a73d4](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/23a73d4))
+* **o-table**: allowing to live edit the quick filter columns ([2be977e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2be977e)) ([23a73d4](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/23a73d4)) ([08447e3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/08447e3))
 
 ### Bug Fixes
 * **o-table**:
@@ -25,6 +25,8 @@
   * fixing translation bugs ([ffef427](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ffef427)) ([b3de673](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b3de673)) ([#170](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/170))
   * empty cell edition bug ([e51783d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e51783d)) ([#164](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/164))
 * **o-app-sidenav**: initialization bug fixed ([d150cb2](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d150cb2)) [#165](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/165))
+* **OServiceBaseComponent**: adding '*ngOnChanges*' method ([f93a1d0](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f93a1d0)) [#174](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/174))
+
 
 ### BREAKING CHANGES
 * **o-table**:
