@@ -160,6 +160,7 @@ export class OColumn {
   aggregate: OColumnAggregate;
   calculate: string | OperatorFunction;
   definition: OTableColumnComponent;
+  hasTooltip: boolean;
 
   set searchable(val: boolean) {
     this._searchable = val;
@@ -588,6 +589,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       }
       if (typeof column.operation !== 'undefined' || typeof column.functionOperation !== 'undefined') {
         colDef.calculate = column.operation ? column.operation : column.functionOperation;
+      }
+      if (Util.isDefined(column.tooltip)) {
+        colDef.hasTooltip = column.tooltip;
       }
     }
     colDef.visible = (this.visibleColArray.indexOf(colDef.attr) !== -1);
@@ -1102,7 +1106,11 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   handleDOMClick(event) {
-    const editingColumn = this.oTableOptions.columns.filter(item => item.editing);
+    if (this._oTableOptions.selectColumn.visible) {
+      return;
+    }
+
+    const editingColumn = this._oTableOptions.columns.filter(item => item.editing);
     if (editingColumn && editingColumn.length > 0) {
       return;
     }
@@ -1111,6 +1119,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     if (overlayContainer && overlayContainer.contains(event.target)) {
       return;
     }
+
     const tableContent = this.elRef.nativeElement.querySelector('.o-table-container');
     if (!tableContent) {
       return;

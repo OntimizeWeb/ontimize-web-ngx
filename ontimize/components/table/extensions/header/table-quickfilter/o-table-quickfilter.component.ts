@@ -140,4 +140,17 @@ export class OTableQuickfilterComponent implements OnInit, AfterViewInit, OnDest
     return !this.table.pageable;
   }
 
+  areAllColumnsChecked(): boolean {
+    let result: boolean = true;
+    this.quickFilterColumns.forEach((col: OColumn) => {
+      result = result && col.searching;
+    });
+    return result;
+  }
+
+  onSelectAllChange(event: MatCheckboxChange) {
+    this.quickFilterColumns.forEach((col: OColumn) => {
+      col.searching = event.checked;
+    });
+  }
 }
