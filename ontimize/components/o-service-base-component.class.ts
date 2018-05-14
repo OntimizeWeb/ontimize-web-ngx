@@ -1,4 +1,4 @@
-import { Injector, NgZone, HostListener } from '@angular/core';
+import { Injector, NgZone, HostListener, SimpleChange } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 
@@ -184,6 +184,12 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
       this.loaderSubscription.unsubscribe();
     }
     this.updateStateStorage();
+  }
+
+  ngOnChanges(changes: { [propName: string]: SimpleChange }) {
+    if (Util.isDefined(changes['staticData'])) {
+      this.setDataArray(changes['staticData'].currentValue);
+    }
   }
 
   @HostListener('window:beforeunload', ['$event'])
