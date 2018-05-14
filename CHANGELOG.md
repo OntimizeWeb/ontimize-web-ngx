@@ -11,7 +11,9 @@
   * using '*show-root*' input in '*o-tree-node*' (only valid if node has no siblings, otherwise its always true) ([5d3be91](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5d3be91)), closes [#160](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/160)
 * **o-service-base-component.class**: new '*OServiceBaseComponent*' parent class for components using Ontimize services ('*o-list*', '*o-table*' and '*o-tree*')([70271b7](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/70271b7))
   * new '*store-state*' input ([35a523c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/35a523c)) ([#166](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/166))
-* **o-table-column**: new '*addEditor*' static method that user '*must*' use in new cell editors constructor definitions ([f942c20](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f942c20))
+* **o-table-column**:
+  * new '*addEditor*' static method that user '*must*' use in new cell editors constructor definitions ([f942c20](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f942c20))
+  * new '*tooltip*' input (default="no") for showing the cell value as tooltip ([e334539]](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e334539]))
 * **o-table-columns-filter**: added '*preload-values*' attribute ([a52b5cd](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a52b5cd))
 * **o-table**: allowing to live edit the quick filter columns ([2be977e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2be977e)) ([23a73d4](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/23a73d4))
 
