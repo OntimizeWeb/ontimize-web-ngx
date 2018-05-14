@@ -1032,7 +1032,11 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   handleDOMClick(event) {
-    const editingColumn = this.oTableOptions.columns.filter(item => item.editing);
+    if (this._oTableOptions.selectColumn.visible) {
+      return;
+    }
+
+    const editingColumn = this._oTableOptions.columns.filter(item => item.editing);
     if (editingColumn && editingColumn.length > 0) {
       return;
     }
@@ -1041,6 +1045,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     if (overlayContainer && overlayContainer.contains(event.target)) {
       return;
     }
+
     const tableContent = this.elRef.nativeElement.querySelector('.o-table-container');
     if (!tableContent) {
       return;
