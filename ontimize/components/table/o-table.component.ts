@@ -816,6 +816,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
                 besIn.forEach(be => {
                   beIn = FilterExpressionUtils.buildComplexExpression(beIn, be, FilterExpressionUtils.OP_OR);
                 });
+                beColumnFilters.push(beIn);
               }
               break;
             case ColumnValueFilterOperator.BETWEEN:
