@@ -157,6 +157,7 @@ export class OColumn {
   aggregate: OColumnAggregate;
   calculate: string | OperatorFunction;
   definition: OTableColumnComponent;
+  hasTooltip: boolean;
 
   set searchable(val: boolean) {
     this._searchable = val;
@@ -582,6 +583,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       }
       if (typeof column.operation !== 'undefined' || typeof column.functionOperation !== 'undefined') {
         colDef.calculate = column.operation ? column.operation : column.functionOperation;
+      }
+      if (Util.isDefined(column.tooltip)) {
+        colDef.hasTooltip = column.tooltip;
       }
     }
     colDef.visible = (this.visibleColArray.indexOf(colDef.attr) !== -1);

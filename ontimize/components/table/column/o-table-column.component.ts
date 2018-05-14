@@ -64,6 +64,8 @@ export const DEFAULT_INPUTS_O_TABLE_COLUMN = [
   // async-load [no|yes|true|false]: asynchronous query. Default: no
   'asyncLoad : async-load',
 
+  'tooltip',
+
   ...OTableCellRendererBooleanComponent.DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_BOOLEAN,
   ...OTableCellRendererCurrencyComponent.DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_CURRENCY, // includes Integer and Real
   ...OTableCellRendererDateComponent.DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_DATE,
@@ -127,7 +129,8 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
   @InputConverter()
   public editable: boolean = false;
   public width: string = '';
-
+  @InputConverter()
+  public tooltip: boolean = false;
   /*input renderer date */
   protected format: string;
   /*input renderer integer */
