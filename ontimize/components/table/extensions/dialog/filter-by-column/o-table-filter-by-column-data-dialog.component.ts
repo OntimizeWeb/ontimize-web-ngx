@@ -75,9 +75,7 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
     }
     if (data.columnDataArray && Array.isArray(data.columnDataArray)) {
       this.columnData = this.getDistinctValues(data.columnDataArray, previousFilter);
-      if (this.preloadValues || previousFilter.operator === ColumnValueFilterOperator.IN) {
-        this.listData = this.columnData.slice();
-      }
+      this.initializeDataList(previousFilter);
     }
   }
 
@@ -91,6 +89,12 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
 
   set listData(arg: Array<ITableFilterByColumnDataInterface>) {
     this._listData = arg;
+  }
+
+  initializeDataList(filter?: IColumnValueFilter): void {
+    if (this.preloadValues || (filter && filter.operator === ColumnValueFilterOperator.IN)) {
+      this.listData = this.columnData.slice();
+    }
   }
 
   initializeFilterEvent() {
@@ -206,6 +210,17 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
       }
     }
     return filter;
+  }
+
+  onSlideChange(e: Event): void {
+    this.isCustomFiter = !this.isCustomFiter;
+    if (!this.isCustomFiter) {
+      this.initializeDataList();
+      const self = this;
+      setTimeout(() => {
+        self.initializeFilterEvent();
+      }, 0);
+    }
   }
 
   isTextType(): boolean {

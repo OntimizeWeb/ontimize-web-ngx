@@ -35,7 +35,9 @@ import {
   OTableColumnsFilterComponent,
   OTableInsertableRowComponent,
   OTableQuickfilterComponent,
-  OTableEditableRowComponent
+  OTableEditableRowComponent,
+  IColumnValueFilter,
+  ColumnValueFilterOperator
 } from './extensions/header/o-table-header-components';
 
 import { OTableColumnComponent } from './column/o-table-column.component';
@@ -145,6 +147,7 @@ export class OColumn {
   name: string;
   title: string;
   type: string;
+  sqlType: number;
   className: string;
   orderable: boolean;
   _searchable: boolean;
@@ -577,6 +580,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
         colDef.type = column.type;
         colDef.className = 'o-column-' + (colDef.type) + ' ';
       }
+      if (Util.isDefined(column.getSQLType)) {
+        colDef.sqlType = column.getSQLType();
+      }
       if (Util.isDefined(column.class)) {
         colDef.className = Util.isDefined(column.className) ? (column.className + ' ' + column.class) : column.class;
       }
@@ -591,7 +597,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
         this.asyncLoadColumns.push(column.attr);
       }
     }
-    //find column definition by name
+    // Find column definition by name
     if (Util.isDefined(column.attr)) {
       const alreadyExisting = this.getOColumn(column.attr);
       if (alreadyExisting !== undefined) {
@@ -770,7 +776,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
    * @param ovrrArgs
    */
   queryData(parentItem: any = undefined, ovrrArgs?: any) {
-    //if exit tab and not is active then waiting call queryData
+    // If tab exists and is not active then wait for queryData
     if (this.tabContainer && !this.tabContainer.isActive) {
       this.pendingQuery = true;
       this.pendingQueryFilter = parentItem;
@@ -783,12 +789,64 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   getComponentFilter(existingFilter: any = {}): any {
     let filter = existingFilter;
-    let quickFilterExpr = (this.pageable && this.oTableQuickFilterComponent) ? this.oTableQuickFilterComponent.filterExpression : undefined;
-    if (quickFilterExpr) {
-      const parentItemExpr = FilterExpressionUtils.buildExpressionFromObject(filter);
-      const filterExpr = FilterExpressionUtils.buildComplexExpression(parentItemExpr, quickFilterExpr, FilterExpressionUtils.OP_AND);
-      filter = {};
-      filter[FilterExpressionUtils.FILTER_EXPRESSION_KEY] = filterExpr;
+    if (this.pageable) {
+      // Apply quick filter
+      let quickFilterExpr = this.oTableQuickFilterComponent ? this.oTableQuickFilterComponent.filterExpression : undefined;
+      if (quickFilterExpr) {
+        const parentItemExpr = FilterExpressionUtils.buildExpressionFromObject(filter);
+        const filterExpr = FilterExpressionUtils.buildComplexExpression(parentItemExpr, quickFilterExpr, FilterExpressionUtils.OP_AND);
+        filter = {};
+        filter[FilterExpressionUtils.FILTER_EXPRESSION_KEY] = filterExpr;
+      }
+      // Apply column filters
+      let columnFilters: IColumnValueFilter[] = this.dataSource.getColumnValueFilters();
+      let beColumnFilters: Array<IFilterExpression> = [];
+      columnFilters.forEach(colFilter => {
+        // Prepare basic expressions
+        if (Util.isDefined(colFilter.operator)) {
+          switch (colFilter.operator) {
+            case ColumnValueFilterOperator.IN:
+              if (Util.isArray(colFilter.values)) {
+                let besIn: Array<IFilterExpression> = colFilter.values.map(value => FilterExpressionUtils.buildExpressionEquals(colFilter.attr, value));
+                let beIn: IFilterExpression = besIn.pop();
+                besIn.forEach(be => {
+                  beIn = FilterExpressionUtils.buildComplexExpression(beIn, be, FilterExpressionUtils.OP_OR);
+                });
+              }
+              break;
+            case ColumnValueFilterOperator.BETWEEN:
+              if (Util.isArray(colFilter.values) && colFilter.values.length === 2) {
+                let beFrom = FilterExpressionUtils.buildExpressionLessEqual(colFilter.attr, colFilter.values[0]);
+                let beTo = FilterExpressionUtils.buildExpressionMoreEqual(colFilter.attr, colFilter.values[1]);
+                beColumnFilters.push(FilterExpressionUtils.buildComplexExpression(beFrom, beTo, FilterExpressionUtils.OP_AND));
+              }
+              break;
+            case ColumnValueFilterOperator.EQUAL:
+              beColumnFilters.push(FilterExpressionUtils.buildExpressionLike(colFilter.attr, colFilter.values));
+              break;
+            case ColumnValueFilterOperator.LESS_EQUAL:
+              beColumnFilters.push(FilterExpressionUtils.buildExpressionLessEqual(colFilter.attr, colFilter.values));
+              break;
+            case ColumnValueFilterOperator.MORE_EQUAL:
+              beColumnFilters.push(FilterExpressionUtils.buildExpressionMoreEqual(colFilter.attr, colFilter.values));
+              break;
+          }
+        }
+      });
+      // Build complete column filters basic expression
+      let beColFilter: IFilterExpression = beColumnFilters.pop();
+      beColumnFilters.forEach(be => {
+        beColFilter = FilterExpressionUtils.buildComplexExpression(beColFilter, be, FilterExpressionUtils.OP_AND);
+      });
+
+      // Add column filters basic expression to current filter
+      if (beColFilter) {
+        if (!Util.isDefined(filter[FilterExpressionUtils.FILTER_EXPRESSION_KEY])) {
+          filter[FilterExpressionUtils.FILTER_EXPRESSION_KEY] = beColFilter;
+        } else {
+          filter[FilterExpressionUtils.FILTER_EXPRESSION_KEY] = FilterExpressionUtils.buildComplexExpression(filter[FilterExpressionUtils.FILTER_EXPRESSION_KEY], beColFilter, FilterExpressionUtils.OP_AND);
+        }
+      }
     }
     return filter;
   }
@@ -828,11 +886,27 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   getQueryArguments(filter: Object, ovrrArgs?: any): Array<any> {
     let queryArguments = super.getQueryArguments(filter, ovrrArgs);
     queryArguments[1] = this.getAttributesValuesToQuery();
+    queryArguments[3] = this.getSqlTypesForFilter(queryArguments[1]);
     if (this.pageable) {
       queryArguments[5] = this.paginator.isShowingAllRows(queryArguments[5]) ? this.state.totalQueryRecordsNumber : queryArguments[5];
       queryArguments[6] = this.sortColArray;
     }
     return queryArguments;
+  }
+
+  getSqlTypesForFilter(filter): Object {
+    let allSqlTypes = {};
+    this._oTableOptions.columns.forEach(col => allSqlTypes[col.attr] = col.sqlType);
+    Object.assign(allSqlTypes, this.getSqlTypes());
+
+    let filterCols = Util.getValuesFromObject(filter);
+    let sqlTypes = {};
+    Object.keys(allSqlTypes).forEach(key => {
+      if (filterCols.indexOf(key) !== -1) {
+        sqlTypes[key] = allSqlTypes[key];
+      }
+    });
+    return sqlTypes;
   }
 
   onExportButtonClicked() {
@@ -928,7 +1002,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     this.reloadData();
   }
 
-  reloadPaginatedDataFromStart(val: any) {
+  reloadPaginatedDataFromStart() {
     if (this.pageable) {
       this.clearSelection();
       this.finishQuerySubscription = false;
@@ -1269,6 +1343,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       if (result) {
         let columnValueFilter = dialogRef.componentInstance.getColumnValuesFilter();
         self.dataSource.addColumnFilter(columnValueFilter);
+        self.reloadPaginatedDataFromStart();
       }
     });
   }

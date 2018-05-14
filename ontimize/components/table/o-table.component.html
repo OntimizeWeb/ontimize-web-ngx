@@ -11,7 +11,7 @@
         {{ title | oTranslate }}
       </div>
       <span class="fill-remaining"></span>
-      <o-table-quickfilter *ngIf="quickFilter" (onChange)="reloadPaginatedDataFromStart($event)"></o-table-quickfilter>
+      <o-table-quickfilter *ngIf="quickFilter" (onChange)="reloadPaginatedDataFromStart()"></o-table-quickfilter>
       <button *ngIf="showTableMenuButton" mat-icon-button class="o-table-menu-button" [matMenuTriggerFor]="menu">
         <mat-icon>more_vert</mat-icon>
       </button>

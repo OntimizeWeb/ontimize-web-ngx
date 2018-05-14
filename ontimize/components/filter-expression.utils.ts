@@ -112,9 +112,9 @@ export class FilterExpressionUtils {
     return expr;
   }
 
-  static buildExpressionLike(col: string, val: any): IFilterExpression {
+  static buildExpressionLike(col: string, val: string): IFilterExpression {
     if (val !== undefined) {
-      val = '%' + val + '%';
+      val = val.replace(new RegExp('\\*', 'g'), '%');
     }
     let expr: IFilterExpression = {
       lop: col,

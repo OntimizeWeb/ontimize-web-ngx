@@ -289,7 +289,7 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
         let sqlTypes = undefined;
         if (Util.isArray(res)) {
           data = res;
-          sqlTypes = [];
+          sqlTypes = {};
         } else if ((res.code === Codes.ONTIMIZE_SUCCESSFUL_CODE)) {
           const arrData = (res.data !== undefined) ? res.data : [];
           data = Util.isArray(arrData) ? arrData : [];

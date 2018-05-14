@@ -77,9 +77,8 @@ export class OTableDataSource extends DataSource<any> {
     return Observable.merge(...displayDataChanges).map(() => {
       let data = this._database.data;
 
-      data = this.getColumnValueFilterData(data);
-
       if (!this.table.pageable) {
+        data = this.getColumnValueFilterData(data);
         data = this.getQuickFilterData(data);
         data = this.getSortedData(data);
       }
@@ -94,7 +93,7 @@ export class OTableDataSource extends DataSource<any> {
         data = this.getPaginationData(data);
       }
       this.renderedData = data;
-      // if exist one o-table-column-aggregate then emit observable
+      // If a o-table-column-aggregate exists then emit observable
       if (this.table.showTotals) {
         this.dataTotalsChange.next(this.renderedData);
       }
@@ -342,7 +341,10 @@ export class OTableDataSource extends DataSource<any> {
       this.columnValueFilters.push(filter);
     }
 
-    this._columnValueFilterChange.next();
+    // If the table is paginated, filter will be applied on remote query
+    if (!this.table.pageable) {
+      this._columnValueFilterChange.next();
+    }
   }
 
   getColumnValueFilterData(data: any[]): any[] {
