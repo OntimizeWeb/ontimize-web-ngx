@@ -1,12 +1,12 @@
-import { Injector, NgModule, Component, OnInit, ViewEncapsulation, ElementRef, AfterViewInit, OnDestroy } from '@angular/core';
+import { Injector, NgModule, Component, ViewEncapsulation, ElementRef, AfterViewInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 
 import { InputConverter } from '../../../decorators';
 import { OSharedModule } from '../../../shared';
 import { OAppLayoutComponent } from '../../../layouts';
-import { OTranslateService, LoginService, MenuItemAction, MenuItemLocale, MenuRootItem, MenuItemUserInfo } from '../../../services';
+import { OTranslateService, LoginService, MenuItemAction, MenuItemLocale, MenuRootItem, MenuItemUserInfo, MenuItemRoute } from '../../../services';
 import { OLanguageSelectorModule } from '../../language-selector/o-language-selector.component';
 import { OAppSidenavComponent } from '../o-app-sidenav.component';
 
@@ -24,16 +24,16 @@ export const DEFAULT_OUTPUTS_O_APP_SIDENAV_MENU_ITEM = [];
   outputs: DEFAULT_OUTPUTS_O_APP_SIDENAV_MENU_ITEM,
   templateUrl: './o-app-sidenav-menu-item.component.html',
   styleUrls: ['./o-app-sidenav-menu-item.component.scss'],
-  encapsulation: ViewEncapsulation.None,
+  encapsulation: ViewEncapsulation.None
 })
-export class OAppSidenavMenuItemComponent implements OnInit, AfterViewInit, OnDestroy {
-
+export class OAppSidenavMenuItemComponent implements AfterViewInit, OnDestroy {
   public static DEFAULT_INPUTS_O_APP_SIDENAV_MENU_ITEM = DEFAULT_INPUTS_O_APP_SIDENAV_MENU_ITEM;
   public static DEFAULT_OUTPUTS_O_APP_SIDENAV_MENU_ITEM = DEFAULT_OUTPUTS_O_APP_SIDENAV_MENU_ITEM;
 
   protected translateService: OTranslateService;
   protected loginService: LoginService;
   protected sidenav: OAppSidenavComponent;
+  protected router: Router;
 
   @InputConverter()
   sidenavOpened: boolean = true;
@@ -50,10 +50,7 @@ export class OAppSidenavMenuItemComponent implements OnInit, AfterViewInit, OnDe
     this.loginService = this.injector.get(LoginService);
     this.sidenav = this.injector.get(OAppSidenavComponent);
     this.oAppLayoutComponent = this.injector.get(OAppLayoutComponent);
-  }
-
-  ngOnInit() {
-    // TODO
+    this.router = this.injector.get(Router);
   }
 
   ngAfterViewInit() {
@@ -110,6 +107,13 @@ export class OAppSidenavMenuItemComponent implements OnInit, AfterViewInit, OnDe
     this.loginService.logoutWithConfirmationAndRedirect();
   }
 
+  navigate() {
+    const route = (this.menuItem as MenuItemRoute).route;
+    if (this.router.url !== route) {
+      this.router.navigate([route]);
+    }
+  }
+
   onClick() {
     switch (this.menuItemType) {
       case 'action':
@@ -120,6 +124,9 @@ export class OAppSidenavMenuItemComponent implements OnInit, AfterViewInit, OnDe
         break;
       case 'logout':
         this.logout();
+        break;
+      case 'route':
+        this.navigate();
         break;
       default:
         break;
@@ -152,6 +159,11 @@ export class OAppSidenavMenuItemComponent implements OnInit, AfterViewInit, OnDe
 
   get useFlagIcons(): boolean {
     return this.oAppLayoutComponent && this.oAppLayoutComponent.useFlagIcons;
+  }
+
+  isActiveItem(): boolean {
+    const route = (this.menuItem as MenuItemRoute).route;
+    return this.router.url === route || this.router.url.startsWith(route + '/');
   }
 }
 
