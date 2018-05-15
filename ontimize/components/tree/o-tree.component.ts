@@ -1,29 +1,43 @@
-import {
-  Component, OnInit, ViewEncapsulation, NgModule, Injector, ElementRef, Optional, Inject,
-  forwardRef, OnDestroy, ViewChild, AfterViewInit, EventEmitter
-} from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, NgModule, Injector, ElementRef, Optional, Inject, forwardRef, OnDestroy, ViewChild, AfterViewInit, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, ActivatedRoute } from '@angular/router';
-import {
-  TreeModule, TreeModel, Ng2TreeSettings, TreeComponent, Tree,
-  NodeSelectedEvent, NodeCollapsedEvent, NodeExpandedEvent, NodeMovedEvent, NodeCreatedEvent,
-  NodeRemovedEvent, NodeRenamedEvent
-} from 'ng2-tree';
+import { Router, ActivatedRoute, RouterModule } from '@angular/router';
+import { TreeModule, TreeModel, Ng2TreeSettings, TreeComponent, Tree, NodeSelectedEvent, NodeCollapsedEvent, NodeExpandedEvent, NodeMovedEvent, NodeCreatedEvent, NodeRemovedEvent, NodeRenamedEvent } from 'ng2-tree';
 import { LoadNextLevelEvent } from 'ng2-tree/src/tree.events';
-
-
 import { InputConverter } from '../../decorators';
+import { LocalStorageService, DialogService } from '../../services';
+import { Util, Codes, ISQLOrder } from '../../utils';
 import { OSharedModule } from '../../shared';
-import { Util, Codes } from '../../utils';
-import { DialogService, LocalStorageService, OntimizeService, dataServiceFactory } from '../../services';
+
+import { ServiceUtils } from '../service.utils';
 import { FilterExpressionUtils } from '../filter-expression.utils';
 import { OFormComponent } from '../form/o-form.component';
-import { OSearchInputModule } from '../input/search-input/o-search-input.component';
-import { OTreeClass } from './o-tree.class';
-import { OTreeNodeComponent } from './node/o-tree-node.component';
+import { OSearchInputModule } from '../input/input.components';
+import { OServiceBaseComponent } from '../o-service-base-component.class';
+import { OTreeNodeComponent, OTreeNodeModule } from './o-tree-node.component';
 
 export const DEFAULT_INPUTS_O_TREE = [
-  ...OTreeClass.DEFAULT_INPUTS_O_TREE_CLASS,
+  ...OServiceBaseComponent.DEFAULT_INPUTS_O_SERVICE_BASE_COMPONENT,
+
+  // sort-columns [string]: initial sorting, with the format column:[ASC|DESC], separated by ';'. Default: no value.
+  'sortColumns: sort-columns',
+
+  'descriptionColumns: description-columns',
+
+  'separator',
+
+  'parentColumn: parent-column',
+
+  'showRoot: show-root',
+
+  'rootTitle: root-title',
+
+  'recursive',
+
+  'recursiveLevels: recursive-levels',
+
+  'translate',
+
+  'route',
 
   'oTitle: title',
 
@@ -41,10 +55,10 @@ export const DEFAULT_INPUTS_O_TREE = [
 
 export const DEFAULT_OUTPUTS_O_TREE = [
   'onNodeSelected',
-  // 'onNodeMoved',
-  // 'onNodeCreated',
-  // 'onNodeRemoved',
-  // 'onNodeRenamed',
+  'onNodeMoved',
+  'onNodeCreated',
+  'onNodeRemoved',
+  'onNodeRenamed',
   'onNodeExpanded',
   'onNodeCollapsed',
   'onLoadNextLevel'
@@ -54,9 +68,6 @@ export const DEFAULT_OUTPUTS_O_TREE = [
   selector: 'o-tree',
   templateUrl: './o-tree.component.html',
   styleUrls: ['./o-tree.component.scss'],
-  providers: [
-    { provide: OntimizeService, useFactory: dataServiceFactory, deps: [Injector] }
-  ],
   inputs: DEFAULT_INPUTS_O_TREE,
   outputs: DEFAULT_OUTPUTS_O_TREE,
   encapsulation: ViewEncapsulation.None,
@@ -64,13 +75,26 @@ export const DEFAULT_OUTPUTS_O_TREE = [
     '[class.o-tree]': 'tree'
   }
 })
-export class OTreeComponent extends OTreeClass implements OnInit, AfterViewInit, OnDestroy {
-
+export class OTreeComponent extends OServiceBaseComponent implements OnInit, AfterViewInit, OnDestroy {
   static DEFAULT_INPUTS_O_TREE = DEFAULT_INPUTS_O_TREE;
   static DEFAULT_OUTPUTS_O_TREE = DEFAULT_OUTPUTS_O_TREE;
   static DEFAULT_ROOT_ROUTE = 'home';
 
   /* inputs variables */
+  protected sortColumns: string;
+  protected descriptionColumns: string;
+  protected separator: string = Codes.HYPHEN_SEPARATOR;
+  protected parentColumn: string;
+  @InputConverter()
+  showRoot: boolean = true;
+  protected rootTitle: string;
+  @InputConverter()
+  recursive: boolean = false;
+  @InputConverter()
+  recursiveLevels: number = 1;
+  @InputConverter()
+  translate: boolean = false;
+  protected route: string;
   @InputConverter()
   controls: boolean = true;
   // @InputConverter()
@@ -83,8 +107,13 @@ export class OTreeComponent extends OTreeClass implements OnInit, AfterViewInit,
   quickFilter: boolean = true;
   /* end of variables */
 
+  /* parsed input variables */
+  protected sortColArray: Array<ISQLOrder> = [];
+  protected descriptionColArray: Array<string> = [];
+
   oTitle: string;
   protected state: any;
+  treeNodes: OTreeNodeComponent[] = [];
 
   onNodeSelected: EventEmitter<any> = new EventEmitter();
   // onNodeMoved: EventEmitter<any> = new EventEmitter();
@@ -108,12 +137,9 @@ export class OTreeComponent extends OTreeClass implements OnInit, AfterViewInit,
   constructor(
     injector: Injector,
     protected elRef: ElementRef,
-    @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent
+    @Optional() @Inject(forwardRef(() => OFormComponent)) protected form: OFormComponent
   ) {
     super(injector);
-    this.form = form;
-    this.localStorageService = this.injector.get(LocalStorageService);
-    this.dialogService = this.injector.get(DialogService);
     this.router = this.injector.get(Router);
     this.actRoute = this.injector.get(ActivatedRoute);
   }
@@ -142,11 +168,13 @@ export class OTreeComponent extends OTreeClass implements OnInit, AfterViewInit,
   }
 
   ngOnDestroy() {
-    this.destroy();
+    super.destroy();
   }
 
   initialize(): void {
     super.initialize();
+    this.sortColArray = ServiceUtils.parseSortColumns(this.sortColumns);
+    this.descriptionColArray = Util.parseArray(this.descriptionColumns, true);
   }
 
   setDataArray(data: any): void {
@@ -168,6 +196,101 @@ export class OTreeComponent extends OTreeClass implements OnInit, AfterViewInit,
       filter[FilterExpressionUtils.FILTER_EXPRESSION_KEY] = filterExpr;
     }
     return filter;
+  }
+  getRecursiveChildren(id: any, callback) {
+    // let queryMethodName = this.pageable ? this.paginatedQueryMethod : this.queryMethod;
+    let queryMethodName = this.queryMethod;
+    if (!this.dataService || !(queryMethodName in this.dataService) || !this.entity) {
+      return;
+    }
+    let parentItem = ServiceUtils.getParentItemFromForm(this.parentItem, this._pKeysEquiv, this.form);
+    let filter = (parentItem !== undefined) ? parentItem : {};
+    filter[this.parentColumn] = id;
+
+    let queryArguments = [filter, this.colArray, this.entity];
+    this.doChildQuery(queryMethodName, queryArguments, callback);
+  }
+
+  getTreeNodesChildren(itemdata: any, callback) {
+    let children = [];
+    this.treeNodes.forEach((childNode: OTreeNodeComponent) => {
+      let treeNode = {
+        data: itemdata,
+        route: this.route,
+        value: this.translateService.get(childNode.rootTitle),
+        id: childNode.oattr,
+        loadChildren: (childNodeCallback) => {
+          let queryMethodName = childNode.queryMethod;
+          if (!childNode.dataService || !(queryMethodName in childNode.dataService) || !childNode.entity) {
+            return;
+          }
+          let filter = ServiceUtils.getFilterUsingParentKeys(itemdata, childNode._pKeysEquiv);
+          let queryArguments = [filter, childNode.colArray, childNode.entity];
+          childNode.doChildQuery(queryMethodName, queryArguments, childNodeCallback);
+        }
+      };
+
+      children.push(treeNode);
+    });
+    if (this.treeNodes.length === 1 && !this.treeNodes[0].showRoot) {
+      children[0].loadChildren(callback);
+    } else {
+      callback(children);
+    }
+  }
+
+  protected doChildQuery(queryMethodName: string, queryArguments: any[], callback: any) {
+    this.dataService[queryMethodName].apply(this.dataService, queryArguments).subscribe(resp => {
+      let children = [];
+      if (resp && resp.data && resp.data.length > 0) {
+        for (let i = 0, len = resp.data.length; i < len; i++) {
+          let child = this.mapTreeNode(resp.data[i]);
+          children.push(child);
+        }
+      }
+      callback(children);
+    });
+  }
+
+  protected mapTreeNode(itemdata: any = {}): TreeModel {
+    let treeNode = {
+      data: itemdata,
+      value: this.getNodeDescription(itemdata),
+      id: this.getNodeId(itemdata),
+      route: this.route
+    };
+    if (this.recursive) {
+      treeNode['loadChildren'] = (callback) => this.getRecursiveChildren(itemdata[this.keysArray[0]], callback);
+    } else if (this.treeNodes.length > 0) {
+      treeNode['loadChildren'] = (callback) => this.getTreeNodesChildren(itemdata, callback);
+    }
+    return treeNode;
+  }
+
+  protected getNodeId(item: any = {}) {
+    let id = '';
+    this.keysArray.forEach(key => {
+      id += item[key];
+    });
+    return id;
+  }
+
+  protected getNodeDescription(item: any = {}) {
+    let descTxt = '';
+    const self = this;
+    this.descriptionColArray.forEach((col, index) => {
+      let txt = item[col];
+      if (txt) {
+        if (self.translate && self.translateService) {
+          txt = self.translateService.get(txt);
+        }
+        descTxt += txt;
+      }
+      if (index < self.descriptionColArray.length - 1) {
+        descTxt += self.separator;
+      }
+    });
+    return descTxt;
   }
 
   protected setData(treeArray: any[], sqlTypes?: any) {
@@ -397,21 +520,15 @@ export class OTreeComponent extends OTreeClass implements OnInit, AfterViewInit,
 }
 
 @NgModule({
-  declarations: [
-    OTreeComponent,
-    OTreeNodeComponent
-  ],
+  declarations: [OTreeComponent],
   imports: [
-    CommonModule,
     OSharedModule,
     OSearchInputModule,
-    TreeModule
+    CommonModule,
+    TreeModule,
+    RouterModule
   ],
-  exports: [
-    OTreeComponent,
-    OTreeNodeComponent,
-    TreeModule
-  ]
+  exports: [OTreeComponent]
 })
 export class OTreeModule {
 }

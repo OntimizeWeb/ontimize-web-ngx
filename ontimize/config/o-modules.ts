@@ -47,6 +47,8 @@ import {
   OListItemCardImageModule,
   OSearchInputModule,
   OTableModule,
+  OTreeModule,
+  OTreeNodeModule,
   OSideMenuModule,
   OSideMenuGroupModule,
   OSideMenuItemModule,
@@ -54,8 +56,7 @@ import {
   OSideMenuSeparatorModule,
   OUserInfoModule,
   OLanguageSelectorModule,
-  OCardMenuItemModule,
-  OTreeModule
+  OCardMenuItemModule
 } from '../components';
 
 import {
@@ -113,6 +114,8 @@ export const INTERNAL_ONTIMIZE_MODULES_EXPORTED: any = [
   OListItemCardImageModule,
   OSearchInputModule,
   OTableModule,
+  OTreeModule,
+  OTreeNodeModule,
   OSideMenuModule,
   OSideMenuGroupModule,
   OSideMenuItemModule,
@@ -123,8 +126,7 @@ export const INTERNAL_ONTIMIZE_MODULES_EXPORTED: any = [
   OUserInfoModule,
   OLanguageSelectorModule,
   OCardMenuItemModule,
-  OCardMenuLayoutModule,
-  OTreeModule
+  OCardMenuLayoutModule
 ];
 
 // AoT requires an exported function for factories
@@ -205,6 +207,8 @@ export const INTERNAL_ONTIMIZE_MODULES: any = [
   OListItemCardImageModule,
   OSearchInputModule,
   OTableModule,
+  OTreeModule,
+  OTreeNodeModule,
   OSideMenuModule,
   OSideMenuGroupModule,
   OSideMenuItemModule,
@@ -215,8 +219,7 @@ export const INTERNAL_ONTIMIZE_MODULES: any = [
   OUserInfoModule,
   OLanguageSelectorModule,
   OCardMenuItemModule,
-  OCardMenuLayoutModule,
-  OTreeModule
+  OCardMenuLayoutModule
 ];
 
 @NgModule({

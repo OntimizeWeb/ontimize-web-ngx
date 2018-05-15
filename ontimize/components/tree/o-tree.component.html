@@ -1,36 +1,30 @@
 <div fxLayout="column" class="tree-container" fxFlex [class.has-controls]="controls">
   <mat-toolbar *ngIf="controls" class="toolbar" fxLayoutAlign="space-between center">
     <div fxLayout="row" fxFill fxLayoutAlign="start center">
-      <button type="button" *ngIf="refreshButton" mat-icon-button aria-label="Refresh" (click)="reloadData()" matTooltip="{{'TREE.RELOAD' | oTranslate}}">
-        <mat-icon>autorenew</mat-icon>
-      </button>
+      <!-- mat-tooltip="{{'TREE.RELOAD' | oTranslate}}" -->
+      <span class="icon-btn" *ngIf="refreshButton" (click)="reloadTree()">
+        <i class="material-icons">refresh</i>
+      </span>
       <span class="fill-remaining"></span>
-      <div *ngIf="hasTitle()" fxLayout="row" fxLayoutAlign="center center">
-        <span>{{ oTitle | oTranslate }}</span>
-      </div>
-      <span *ngIf="hasTitle()" class="fill-remaining"></span>
-      <!-- <button *ngIf="insertButton" mat-icon-button aria-label="Add" matTooltip="{{'ADDNEWNODE' | oTranslate}}" (click)="add()">
-          <mat-icon>add</mat-icon>
+      <!-- <div *ngIf="title" fxLayout="row" fxLayoutAlign="center center">
+              <span>{{ title | oTranslate }}</span>
+          </div> -->
+      <!-- <button *ngIf="insertButton" md-icon-button aria-label="Add" md-tooltip="{{'ADDNEWNODE' | oTranslate}}" (click)="add()">
+          <md-icon>add</md-icon>
       </button> -->
-      <!-- <button *ngIf="editButton" mat-icon-button aria-label="Edit" matTooltip="{{'EDITTREE' | oTranslate}}" (click)="edit()">
-              <mat-icon>wrap_text</mat-icon>
+      <!-- <button *ngIf="editButton" md-icon-button aria-label="Edit" md-tooltip="{{'EDITTREE' | oTranslate}}" (click)="edit()">
+              <md-icon>wrap_text</md-icon>
           </button> -->
-      <!-- <button mat-icon-button aria-label="ExpandAll/CollapseAll" (click)="expandCollapseTree()">
-          <mat-icon>expand_{{isExpanded ? 'less' : 'more'}}</mat-icon>
+      <!-- <button md-icon-button aria-label="ExpandAll/CollapseAll" (click)="expandCollapseTree()">
+          <md-icon>expand_{{isExpanded ? 'less' : 'more'}}</md-icon>
       </button> -->
-      <o-search-input *ngIf="quickFilter" class="o-search-input" placeholder="TREE.SEARCH" (onSearch)="onSearch($event)"></o-search-input>
+      <!-- <o-search-input class="o-search-input" placeholder="TREE.SEARCH" (onSearch)="onSearch($event)"></o-search-input> -->
     </div>
   </mat-toolbar>
   <div class="tree-content" [class.recursive-tree]="recursive">
-    <tree #treeComponent *ngIf="!loading" [tree]="tree" [settings]="settings"
-      (nodeSelected)="nodeSelected($event)"
-      (nodeMoved)="nodeMoved($event)"
-      (nodeCreated)="nodeCreated($event)"
-      (nodeRemoved)="nodeRemoved($event)"
-      (nodeRenamed)="nodeRenamed($event)"
-      (nodeExpanded)="nodeExpanded($event)"
-      (nodeCollapsed)="nodeCollapsed($event)"
-      (loadNextLevel)="nextLevelLoaded($event)">
+    <tree #treeComponent *ngIf="!loading" [tree]="tree" [settings]="settings" (nodeSelected)="nodeSelected($event)" (nodeMoved)="nodeMoved($event)"
+      (nodeCreated)="nodeCreated($event)" (nodeRemoved)="nodeRemoved($event)" (nodeRenamed)="nodeRenamed($event)" (nodeExpanded)="nodeExpanded($event)"
+      (nodeCollapsed)="nodeCollapsed($event)">
     </tree>
     <div class="spinner-container" fxFlex="100" *ngIf="loading" fxLayoutAlign="center center">
       <mat-progress-spinner mode="indeterminate" strokeWidth="3">
