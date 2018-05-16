@@ -71,6 +71,7 @@ import { OContextMenuModule } from '../contextmenu/o-context-menu.module';
 import { IOContextMenuContext } from '../contextmenu/o-context-menu.service';
 import { ServiceUtils, ISQLOrder } from '../service.utils';
 import { FilterExpressionUtils, IFilterExpression } from '../filter-expression.utils';
+import { OColumnTooltip } from './column/o-table-column.component';
 
 export const DEFAULT_INPUTS_O_TABLE = [
   ...OServiceComponent.DEFAULT_INPUTS_O_SERVICE_COMPONENT,
@@ -160,7 +161,7 @@ export class OColumn {
   aggregate: OColumnAggregate;
   calculate: string | OperatorFunction;
   definition: OTableColumnComponent;
-  hasTooltip: boolean;
+  tooltip: OColumnTooltip;
 
   set searchable(val: boolean) {
     this._searchable = val;
@@ -169,6 +170,28 @@ export class OColumn {
 
   get searchable(): boolean {
     return this._searchable;
+  }
+
+  hasTooltip(): boolean {
+    return Util.isDefined(this.tooltip);
+  }
+
+  getTooltip(rowData: any): any {
+    if (!this.hasTooltip()) {
+      return undefined;
+    }
+    let tooltip = rowData[this.name];
+    if (Util.isDefined(this.tooltip.function)) {
+      try {
+        tooltip = this.tooltip.function(rowData);
+      } catch (e) {
+        console.warn('o-table-column tooltip-function didnt worked');
+      }
+    }
+    if (Util.isDefined(this.tooltip.value)) {
+      tooltip = this.tooltip.value;
+    }
+    return tooltip;
   }
 }
 
@@ -591,8 +614,12 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
         colDef.calculate = column.operation ? column.operation : column.functionOperation;
       }
       if (Util.isDefined(column.tooltip)) {
-        colDef.hasTooltip = column.tooltip;
+        colDef.tooltip = {
+          value: column.tooltipValue,
+          function: column.tooltipFunction
+        };
       }
+
     }
     colDef.visible = (this.visibleColArray.indexOf(colDef.attr) !== -1);
     if (column && (column.asyncLoad || column.type === 'action')) {

@@ -97,8 +97,8 @@
           </mat-header-cell>
         </ng-container>
         <mat-cell *matCellDef="let row" #cell [fxFlex]="column.width" [ngClass]="column.className" (click)="handleCellClick(column, row, $event)"
-          (dblclick)="handleCellDoubleClick(column, row, $event)" [class.empty-cell]="isEmpty(row[column.name])" [matTooltipDisabled]="!column.hasTooltip"
-          [matTooltip]="row[column.name]" matTooltipPosition="left" matTooltipShowDelay="750" matTooltipClass="o-table-cell-tooltip">
+          (dblclick)="handleCellDoubleClick(column, row, $event)" [class.empty-cell]="isEmpty(row[column.name])" [matTooltipDisabled]="!column.hasTooltip()"
+          [matTooltip]="column.getTooltip(row)" matTooltipPosition="below" matTooltipShowDelay="750" matTooltipClass="o-table-cell-tooltip">
 
           <ng-container *ngIf="usePlainRender(column, row)">
             {{ row[column.name] }}

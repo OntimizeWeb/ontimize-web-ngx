@@ -18,10 +18,6 @@ $_mat-checkbox-mark-stroke-size-small: 2 / 15 * $mat-checkbox-size-small !defaul
       font-weight: 400;
     }
 
-    .fill-remaining {
-      flex: 1 1 auto;
-    }
-
     // display: block;
     max-width: 100%;
     height: 100%;
@@ -372,5 +368,8 @@ $_mat-checkbox-mark-stroke-size-small: 2 / 15 * $mat-checkbox-size-small !defaul
 
 .mat-tooltip.o-table-cell-tooltip {
   position: absolute;
-  bottom: -24px;
+  top: -12px;
+  word-wrap: break-word;
+  max-height: 64px;
+  overflow: hidden;
 }

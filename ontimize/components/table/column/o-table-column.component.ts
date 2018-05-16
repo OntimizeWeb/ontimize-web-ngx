@@ -27,6 +27,11 @@ import {
 import { DateFilterFunction } from '../../../components/input/date-input/o-date-input.component';
 import { SQLTypes } from '../../../util/sqltypes';
 
+export interface OColumnTooltip {
+  value?: string;
+  function?: Function;
+}
+
 export const DEFAULT_INPUTS_O_TABLE_COLUMN = [
 
   // attr [string]: column name.
@@ -69,6 +74,10 @@ export const DEFAULT_INPUTS_O_TABLE_COLUMN = [
   'sqlType: sql-type',
 
   'tooltip',
+
+  'tooltipValue: tooltip-value',
+
+  'tooltipFunction: tooltip-function',
 
   ...OTableCellRendererBooleanComponent.DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_BOOLEAN,
   ...OTableCellRendererCurrencyComponent.DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_CURRENCY, // includes Integer and Real
@@ -138,6 +147,8 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
   public width: string = '';
   @InputConverter()
   public tooltip: boolean = false;
+  tooltipValue: string;
+  tooltipFunction: Function;
   /*input renderer date */
   protected format: string;
   /*input renderer integer */
