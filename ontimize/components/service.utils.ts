@@ -13,14 +13,17 @@ export class ServiceUtils {
   static getParentItemFromForm(parentItem: any, parentKeysObject: Object, form: OFormComponent) {
     let result = parentItem;
     const parentKeys = Object.keys(parentKeysObject || {});
-    const formComponents = form ? form.getComponents() : {};
+    const formDataProperties = Object.keys(form ? form.getDataValues() : {});
 
-    if (parentKeys && parentKeys.length > 0 && parentItem === undefined && (Object.keys(formComponents).length > 0)) {
+    if (parentKeys && parentKeys.length > 0 && parentItem === undefined && formDataProperties.length > 0) {
       let partialResult = {};
       parentKeys.forEach(key => {
         const formFieldAttr = parentKeysObject[key];
-        if (formComponents.hasOwnProperty(formFieldAttr)) {
-          let currentData = formComponents[formFieldAttr].getValue();
+        if (formDataProperties.indexOf(formFieldAttr) !== -1) {
+          let currentData = form.getDataValue(formFieldAttr);
+          if (currentData instanceof OFormValue) {
+            currentData = currentData.value;
+          }
           switch (typeof (currentData)) {
             case 'string':
               if (currentData.trim().length > 0) {
