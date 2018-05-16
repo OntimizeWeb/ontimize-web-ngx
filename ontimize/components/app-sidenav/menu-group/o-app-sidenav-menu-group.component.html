@@ -10,8 +10,10 @@
 
 <div class="application-sidenav-menugroup-items-container">
   <ul class="application-sidenav-menugroup-ul">
-    <o-app-sidenav-menu-item *ngFor="let menuItem of menuGroup.items" [sidenav-opened]="sidenavOpened" [menu-item]="menuItem"
-      [menu-item-type]="appMenuService.getMenuItemType(menuItem)">
-    </o-app-sidenav-menu-item>
+    <ng-container *ngFor="let menuItem of menuGroup.items">
+      <o-app-sidenav-menu-item *ngIf="menuItem['show-in-app-sidenav'] !== false" [sidenav-opened]="sidenavOpened" [menu-item]="menuItem"
+        [menu-item-type]="appMenuService.getMenuItemType(menuItem)">
+      </o-app-sidenav-menu-item>
+    </ng-container>
   </ul>
 </div>

@@ -14,7 +14,7 @@
     <nav *ngFor="let menuRootItem of menuRootArray">
 
       <ul *ngIf="appMenuService.getMenuItemType(menuRootItem) !== 'group'">
-        <o-app-sidenav-menu-item [menu-item]="menuRootItem" [menu-item-type]="appMenuService.getMenuItemType(menuRootItem)" [sidenav-opened]="sidenav.opened">
+        <o-app-sidenav-menu-item *ngIf="menuRootItem['show-in-app-sidenav'] !== false" [menu-item]="menuRootItem" [menu-item-type]="appMenuService.getMenuItemType(menuRootItem)" [sidenav-opened]="sidenav.opened">
         </o-app-sidenav-menu-item>
       </ul>
 
