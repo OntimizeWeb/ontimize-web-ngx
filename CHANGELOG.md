@@ -19,7 +19,9 @@
   * new '*sql-type*' attribute. Indicates the sql type for the data represented in that column ([64efcbc](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/64efcbc))
 * **o-table-columns-filter**: added '*preload-values*' attribute ([a52b5cd](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a52b5cd))
 * **o-table**: allowing to live edit the quick filter columns ([2be977e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2be977e)) ([23a73d4](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/23a73d4)) ([08447e3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/08447e3))
-* **o-card-menu-item**: new '*show-in-card-menu*' input (default=true) in '*MenuItem*' ([374c408](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/374c408))
+* **MenuItem**:
+  * new '*show-in-card-menu*' input (default=true) indicating whether or not to show its correspondent '*o-card-menu-item*' ([374c408](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/374c408))
+  * new '*show-in-app-sidenav*' input (default=true) indicating whether or not to show its correspondent '*o-pp-sidenav-menu-item*' ([dbb7f9a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/dbb7f9a))
 
 ### Bug Fixes
 * **o-table**:
