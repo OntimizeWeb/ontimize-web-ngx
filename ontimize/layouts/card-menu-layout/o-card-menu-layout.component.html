@@ -1,5 +1,7 @@
 <div fxLayout="row wrap" fxLayoutAlign="space-around center" fxFlexFill>
-  <o-card-menu-item fxFlex="290px" *ngFor="let item of cardItems" button-text="CARD_MENU_LAYOUT.BUTTON_TEXT" [route]="item.route" [title]="item.name"
-    [tooltip]="item.tooltip" [icon]="item.icon" [image]="item.image" [detail-component]="item.component" [detail-component-inputs]="item['component-inputs']">
-  </o-card-menu-item>
+  <ng-container *ngFor="let item of cardItems">
+    <o-card-menu-item *ngIf="item['show-in-card-menu'] !== false" fxFlex="290px" button-text="CARD_MENU_LAYOUT.BUTTON_TEXT" [route]="item.route" [title]="item.name" [tooltip]="item.tooltip"
+      [icon]="item.icon" [image]="item.image" [detail-component]="item.component" [detail-component-inputs]="item['component-inputs']">
+    </o-card-menu-item>
+  </ng-container>
 </div>

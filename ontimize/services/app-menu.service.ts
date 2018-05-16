@@ -20,6 +20,7 @@ export interface MenuItem {
   image?: string;
   component?: any;
   'component-inputs'?: Object;
+  'show-in-card-menu'?: boolean;
 }
 
 export interface MenuItemRoute extends MenuItem {
