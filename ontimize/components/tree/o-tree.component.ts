@@ -13,7 +13,7 @@ import { FilterExpressionUtils } from '../filter-expression.utils';
 import { OFormComponent } from '../form/o-form.component';
 import { OSearchInputModule } from '../input/input.components';
 import { OServiceBaseComponent } from '../o-service-base-component.class';
-import { OTreeNodeComponent, OTreeNodeModule } from './o-tree-node.component';
+import { OTreeNodeComponent } from './o-tree-node.component';
 
 export const DEFAULT_INPUTS_O_TREE = [
   ...OServiceBaseComponent.DEFAULT_INPUTS_O_SERVICE_BASE_COMPONENT,
@@ -104,7 +104,7 @@ export class OTreeComponent extends OServiceBaseComponent implements OnInit, Aft
   @InputConverter()
   refreshButton: boolean = true;
   @InputConverter()
-  quickFilter: boolean = true;
+  quickFilter: boolean = false;
   /* end of variables */
 
   /* parsed input variables */
@@ -516,6 +516,10 @@ export class OTreeComponent extends OServiceBaseComponent implements OnInit, Aft
 
   hasTitle(): boolean {
     return this.oTitle !== undefined;
+  }
+
+  useQuickFilter(): boolean {
+    return this.quickFilter && !this.recursive && this.treeNodes.length === 0;
   }
 }
 

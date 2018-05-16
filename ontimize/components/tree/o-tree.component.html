@@ -2,7 +2,7 @@
   <mat-toolbar *ngIf="controls" class="toolbar" fxLayoutAlign="space-between center">
     <div fxLayout="row" fxFill fxLayoutAlign="start center">
       <!-- mat-tooltip="{{'TREE.RELOAD' | oTranslate}}" -->
-      <span class="icon-btn" *ngIf="refreshButton" (click)="reloadTree()">
+      <span class="icon-btn" *ngIf="refreshButton" (click)="reloadData()">
         <i class="material-icons">refresh</i>
       </span>
       <span class="fill-remaining"></span>
@@ -18,7 +18,7 @@
       <!-- <button md-icon-button aria-label="ExpandAll/CollapseAll" (click)="expandCollapseTree()">
           <md-icon>expand_{{isExpanded ? 'less' : 'more'}}</md-icon>
       </button> -->
-      <!-- <o-search-input class="o-search-input" placeholder="TREE.SEARCH" (onSearch)="onSearch($event)"></o-search-input> -->
+      <o-search-input *ngIf="useQuickFilter()" class="o-search-input" (onSearch)="onSearch($event)"></o-search-input>
     </div>
   </mat-toolbar>
   <div class="tree-content" [class.recursive-tree]="recursive">

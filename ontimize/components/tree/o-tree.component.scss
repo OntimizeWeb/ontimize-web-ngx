@@ -19,11 +19,35 @@
 
     tree-internal {
       ul {
-        padding: 3px 0 3px 12px;
+        padding: 0 0 4px 12px;
+      }
+
+      li {
+        padding: 0;
+        margin: 0;
+        list-style: none;
+        cursor: default;
+
+        div {
+          display: inline-block;
+          box-sizing: border-box;
+        }
+      }
+
+      ul.rootless {
+        padding: 0;
+      }
+
+      div.rootless {
+        display: none !important;
       }
 
       .tree {
+        box-sizing: border-box;
+
         .node-value {
+          display: inline-block;
+
           &:after {
             display: none;
             height: 0;
@@ -35,20 +59,61 @@
         }
 
         .value-container {
-          // &.selected {
-          //   // background: blue;
-          // }
           + tree-internal > .tree {
             padding-top: 6px;
           }
         }
+
+        .folding {
+          width: 20px;
+          display: inline-block;
+          line-height: 1px;
+          padding: 0 5px;
+          font-weight: bold;
+
+          &.node-leaf {
+            width: 0;
+            padding: 0 8px;
+          }
+
+          // // not used ?
+          // &.node-empty {
+          //     color: #212121;
+          //     text-align: center;
+          //     font-size: .89em;
+          //     &:before {
+          //       content: '\25B6';
+          //       color: #757575;
+          //     }
+          //   }
+        }
+
+        // // not available yet
+        // .node-left-menu {
+        //   display: inline-block;
+        //   height: 100%;
+        //   width: auto;
+
+        //   span:before {
+        //     content: '\2026';
+        //     color: #757575;
+        //   }
+        // }
       }
+
+      //  // dragable styles (not available yet)
+      // .over-drop-target {
+      //   border: 4px solid #757575;
+      //   transition: padding .2s ease-out;
+      //   padding: 5px;
+      //   border-radius: 5%;
+      // }
     }
 
     .material-icons {
       &.collapsed-node:before,
       &.expanded-node:before {
-        vertical-align: middle;
+        vertical-align: sub;
         font-size: 18px;
         cursor: pointer;
       }
@@ -62,4 +127,52 @@
       }
     }
   }
+  // left-menu styles (currently this option is not available)
+  // .node-menu {
+  //   position: relative;
+  //   width: 150px;
+  // .node-menu-content {
+  //   width: 100%;
+  //   padding: 5px;
+  //   position: absolute;
+  //   border: 1px solid #bdbdbd;
+  //   border-radius: 5%;
+  //   box-shadow: 0 0 5px #bdbdbd;
+  //   background-color: #eee;
+  //   color: #212121;
+  //   z-index: 999;
+  //   li.node-menu-item {
+  //     list-style: none;
+  //     padding: 3px;
+  //   }
+  //   .node-menu-item {
+  //     &:hover {
+  //       border-radius: 5%;
+  //       opacity: unset;
+  //       cursor: pointer;
+  //       background-color: #bdbdbd;
+  //       transition: background-color .2s ease-out;
+  //     }
+  //     .node-menu-item-icon {
+  //       display: inline-block;
+  //
+  //       &.new-tag:before {
+  //         content: '\25CF';
+  //       }
+  //       &.new-folder:before {
+  //         content: '\25B6';
+  //       }
+  //       &.rename:before {
+  //         content: '\270E';
+  //       }
+  //       &.remove:before {
+  //         content: '\2716';
+  //       }
+  //     }
+  //     .node-menu-item-value {
+  //       margin-left: 5px;
+  //     }
+  //   }
+  // }
+  // }
 }
