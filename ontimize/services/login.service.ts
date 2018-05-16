@@ -174,7 +174,7 @@ export class LoginService implements ILoginService {
       return undefined;
     }
     let stored = JSON.parse(info);
-    return stored[Codes.SESSION_KEY];
+    return stored[Codes.SESSION_KEY] || {};
   }
 
   public logoutAndRedirect() {
