@@ -3,7 +3,7 @@
   <div fxLayout="row" fxLayoutAlign="start center" fxFill>
     <mat-icon *ngIf="menuGroup.icon">{{ menuGroup.icon }}</mat-icon>
     <h3 *ngIf="sidenavOpened">{{ menuGroup.name | oTranslate }}</h3>
-    <span *ngIf="sidenavOpened" class="example-fill-remaining-space"></span>
+    <span *ngIf="sidenavOpened" class="fill-remaining"></span>
     <mat-icon *ngIf="sidenavOpened" class="application-sidenav-menugroup-arrow">keyboard_arrow_right</mat-icon>
   </div>
 </button>
