@@ -35,17 +35,19 @@ export const DEFAULT_INPUTS_O_FORM_DATA_COMPONENT = [
   'oenabled: enabled',
   'orequired: required',
   // sqltype[string]: Data type according to Java standard. See SQLType ngClass. Default: 'OTHER'
-  'sqlType: sql-type'
+  'sqlType: sql-type',
+  'width'
 ];
 
 export class OFormDataComponent extends OBaseComponent implements IFormDataComponent, IFormDataTypeComponent,
   OnInit, OnDestroy {
   /* Inputs */
-  protected sqlType: string;
+  sqlType: string;
   @InputConverter()
   autoBinding: boolean = true;
   @InputConverter()
   autoRegistering: boolean = true;
+  width: string;
 
   /* Internal variables */
   protected value: OFormValue;
@@ -239,4 +241,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     return this.elRef;
   }
 
+  get hasCustomWidth(): boolean {
+    return this.width !== undefined;
+  }
 }

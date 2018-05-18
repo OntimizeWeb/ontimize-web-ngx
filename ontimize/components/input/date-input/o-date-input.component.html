@@ -1,6 +1,6 @@
-<div fxLayout="row" fxLayoutAlign="space-between center" [formGroup]="getFormGroup()" [matTooltip]="tooltip" [matTooltipPosition]="tooltipPosition"
-  [matTooltipShowDelay]="tooltipShowDelay">
-  <mat-form-field fxFlexFill>
+<div [style.width]="width" fxLayout="row" fxLayoutAlign="space-between center" [formGroup]="getFormGroup()" [matTooltip]="tooltip"
+  [matTooltipPosition]="tooltipPosition" [matTooltipShowDelay]="tooltipShowDelay">
+  <mat-form-field [class.custom-width]="hasCustomWidth" fxFlexFill>
     <input matInput #matInputRef [matDatepicker]="d" [attr.id]="getAttribute()" [id]="getAttribute()" [formControlName]="getAttribute()"
       [placeholder]="placeHolder" [readonly]="isReadOnly" [ngModel]="getValueAsDate()" (ngModelChange)="onModelChange($event)"
       (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)" [matDatepickerFilter]="filterDate" (dateChange)="innerOnChange($event)"

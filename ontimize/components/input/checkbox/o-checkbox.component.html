@@ -1,4 +1,5 @@
-<div fxFill [formGroup]="getFormGroup()" class="relative" [matTooltip]="tooltip" [matTooltipPosition]="tooltipPosition" [matTooltipShowDelay]="tooltipShowDelay">
+<div [style.width]="width" [class.custom-width]="hasCustomWidth" [formGroup]="getFormGroup()" class="relative" [matTooltip]="tooltip" [matTooltipPosition]="tooltipPosition"
+    [matTooltipShowDelay]="tooltipShowDelay">
     <mat-checkbox [attr.id]="getAttribute()" [id]="getAttribute()" fxFill [formControlName]="getAttribute()" #innerInput [checked]="isChecked()"
         [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)">
         {{ placeHolder }}

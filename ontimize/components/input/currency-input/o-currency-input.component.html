@@ -1,8 +1,8 @@
-<div fxLayout="row" fxLayoutAlign="space-between center" [formGroup]="getFormGroup()" [matTooltip]="tooltip" [matTooltipPosition]="tooltipPosition"
-  [matTooltipShowDelay]="tooltipShowDelay">
+<div [style.width]="width" fxLayout="row" fxLayoutAlign="space-between center" [formGroup]="getFormGroup()" [matTooltip]="tooltip"
+  [matTooltipPosition]="tooltipPosition" [matTooltipShowDelay]="tooltipShowDelay">
   <span *ngIf="currencySymbol !== 'none' && currencySymbolPosition === 'left'" matSuffix [class.mat-disabled]="isDisabled"
     class="icon-btn">{{ currency_symbols[currencySymbol] }}</span>
-  <mat-form-field fxFill>
+  <mat-form-field [class.custom-width]="hasCustomWidth" fxFill>
     <input matInput type="number" [attr.id]="getAttribute()" [formControlName]="getAttribute()" [placeholder]="placeHolder" [ngModel]="getValue()"
       (ngModelChange)="innerOnChange($event)" (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)" [readonly]="isReadOnly"
       [min]="min" [max]="max" [step]="step" [required]="isRequired">

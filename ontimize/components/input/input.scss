@@ -1,6 +1,6 @@
-
-span.icon-btn{
+span.icon-btn {
   cursor: pointer;
+
   i {
     padding-top: 4px;
   }
@@ -8,4 +8,8 @@ span.icon-btn{
   &.mat-disabled {
     cursor: default;
   }
+}
+
+.mat-form-field.custom-width .mat-form-field-infix {
+  width: auto;
 }

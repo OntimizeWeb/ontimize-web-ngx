@@ -35,6 +35,7 @@ export const DEFAULT_INPUTS_O_FILE_INPUT = [
   'service',
   'entity',
   'serviceType : service-type',
+  'width',
 
   // accept-file-type [string]: file types allowed on the file input, separated by ';'. Default: no value.
   // file_extension, audio/*, video/*, image/*, media_type. See https://www.w3schools.com/tags/att_input_accept.asp
