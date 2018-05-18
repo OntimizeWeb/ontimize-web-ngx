@@ -1,9 +1,12 @@
-import { PipeTransform, Injector, OnInit } from '@angular/core';
+import { Injector, OnInit, PipeTransform, TemplateRef } from '@angular/core';
+
 import { Util } from '../../../../utils';
 import { OTableComponent } from '../../o-table.component';
 import { OTableColumnComponent } from '../o-table-column.component';
 
 export class OBaseTableCellRenderer implements OnInit {
+
+  public templateref: TemplateRef<any>;
 
   protected pipeArguments: any;
   protected componentPipe: PipeTransform;
@@ -36,7 +39,6 @@ export class OBaseTableCellRenderer implements OnInit {
   getCellData(cellvalue: any, rowvalue?: any) {
     let parsedValue: string;
     if (this.componentPipe && typeof this.pipeArguments !== 'undefined' && cellvalue !== undefined) {
-
       parsedValue = this.componentPipe.transform(cellvalue, this.pipeArguments);
     } else {
       parsedValue = cellvalue;
@@ -51,4 +53,5 @@ export class OBaseTableCellRenderer implements OnInit {
   get column(): string {
     return this.tableColumn.attr;
   }
+
 }
