@@ -18,8 +18,11 @@
       <span *ngIf="!listData" class="column-filter-empty-list">{{ 'TABLE.FILTER_BY_COLUMN.LIST_EMPTY_FILTER' | oTranslate }}</span>
       <span *ngIf="listData?.length === 0" class="column-filter-empty-list">{{ 'TABLE.FILTER_BY_COLUMN.LIST_EMPTY' | oTranslate }}</span>
       <mat-selection-list *ngIf="preloadValues || listData" #filterValueList fxFlex fxLayout="column" class="select-values-list">
-        <mat-list-option *ngFor="let record of listData" checkboxPosition="before" [selected]="record.selected" [value]="record.value">
-          {{ record.value || ('TABLE.FILTER_BY_COLUMN.EMPTY_VALUE' | oTranslate) }}
+        <mat-list-option *ngFor="let record of listData; let i = index" checkboxPosition="before" [selected]="record.selected" [value]="record.value">
+          <ng-container *ngIf="!column.renderer">
+            {{ record.value || ('TABLE.FILTER_BY_COLUMN.EMPTY_VALUE' | oTranslate) }}
+          </ng-container>
+          <ng-template *ngIf="column.renderer" [ngTemplateOutlet]="column.renderer.templateref" [ngTemplateOutletContext]="{ cellvalue: record.value, rowvalue: getRowValue(i) }"></ng-template>
         </mat-list-option>
       </mat-selection-list>
     </div>

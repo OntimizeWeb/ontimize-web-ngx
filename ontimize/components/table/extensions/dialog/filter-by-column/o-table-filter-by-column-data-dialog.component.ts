@@ -38,6 +38,7 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
   fcTo = new FormControl();
 
   protected columnData: Array<ITableFilterByColumnDataInterface> = [];
+  protected tableData: Array<any> = [];
   protected _listData: Array<ITableFilterByColumnDataInterface>;
 
   @ViewChild('filter') filter: ElementRef;
@@ -57,24 +58,14 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
     };
     if (data.previousFilter) {
       previousFilter = data.previousFilter;
-      switch (previousFilter.operator) {
-        case ColumnValueFilterOperator.LESS_EQUAL:
-        case ColumnValueFilterOperator.MORE_EQUAL:
-        case ColumnValueFilterOperator.BETWEEN:
-        case ColumnValueFilterOperator.EQUAL:
-          this.isCustomFiter = true;
-          break;
-        case ColumnValueFilterOperator.IN:
-        default:
-          this.isCustomFiter = false;
-          break;
-      }
+      this.isCustomFiter = [ColumnValueFilterOperator.LESS_EQUAL, ColumnValueFilterOperator.MORE_EQUAL, ColumnValueFilterOperator.BETWEEN, ColumnValueFilterOperator.EQUAL].indexOf(previousFilter.operator) !== -1;
     }
     if (data.hasOwnProperty('preloadValues')) {
       this.preloadValues = data.preloadValues;
     }
-    if (data.columnDataArray && Array.isArray(data.columnDataArray)) {
-      this.columnData = this.getDistinctValues(data.columnDataArray, previousFilter);
+    if (data.tableData && Array.isArray(data.tableData)) {
+      this.getDistinctValues(data.tableData, previousFilter);
+      this.initializeCustomFilterValues(previousFilter);
       this.initializeDataList(previousFilter);
     }
   }
@@ -104,25 +95,16 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
         .debounceTime(150).distinctUntilChanged().subscribe(() => {
           let filterValue: string = self.filter.nativeElement.value;
           filterValue = Util.normalizeString(filterValue);
-          self.listData = self.columnData.filter(item => (Util.normalizeString(item.value).indexOf(filterValue) !== -1));
+          if (filterValue.indexOf('*') !== -1) {
+            self.listData = self.columnData.filter(item => new RegExp('^' + Util.normalizeString(filterValue).split('*').join('.*') + '$').test(Util.normalizeString(item.value)));
+          } else {
+            self.listData = self.columnData.filter(item => (Util.normalizeString(item.value).indexOf(filterValue) !== -1));
+          }
         });
     }
   }
 
-  getDistinctValues(data: Array<ITableFilterByColumnDataInterface>, filter: IColumnValueFilter): Array<ITableFilterByColumnDataInterface> {
-    let result: Array<ITableFilterByColumnDataInterface> = [];
-    const distinctValues = Array.from(new Set(data.map(item => item.value)));
-    distinctValues.forEach(item => {
-      result.push({
-        value: item,
-        selected: filter.operator === ColumnValueFilterOperator.IN && (filter.values || []).indexOf(item) !== -1
-      });
-    });
-    this.setCustomFilterValues(filter);
-    return result;
-  }
-
-  setCustomFilterValues(filter: IColumnValueFilter): void {
+  initializeCustomFilterValues(filter: IColumnValueFilter): void {
     if (filter.operator !== ColumnValueFilterOperator.IN) {
       if (ColumnValueFilterOperator.EQUAL === filter.operator) {
         if (this.isTextType()) {
@@ -174,6 +156,19 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
     } else {
       this.filterValueList.deselectAll();
     }
+  }
+
+  getDistinctValues(data: Array<any>, filter: IColumnValueFilter): void {
+    let colValues: any[] = data.map(elem => elem[this.column.attr]);
+    colValues.forEach((value, i) => {
+      if (this.columnData.indexOf(value) === -1) {
+        this.columnData.push({
+          value: value,
+          selected: filter.operator === ColumnValueFilterOperator.IN && (filter.values || []).indexOf(value) !== -1
+        });
+        this.tableData.push(data[i]);
+      }
+    });
   }
 
   getColumnValuesFilter(): IColumnValueFilter {
@@ -233,6 +228,10 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
 
   isDateType(): boolean {
     return 'date' === this.column.type;
+  }
+
+  getRowValue(i: number): any {
+    return this.tableData[i];
   }
 
   protected getTypedValue(control: FormControl): any {

@@ -48,11 +48,11 @@ import {
   OTableExportConfiguration,
   OTableExportDialogComponent,
   OTableVisibleColumnsDialogComponent,
-  OTableFilterByColumnDataDialogComponent,
-  ITableFilterByColumnDataInterface
+  OTableFilterByColumnDataDialogComponent
 } from './extensions/dialog/o-table-dialog-components';
 
 import {
+  OBaseTableCellRenderer,
   O_TABLE_CELL_RENDERERS,
   OTableCellRendererImageComponent
 } from './column/cell-renderer/cell-renderer';
@@ -154,7 +154,7 @@ export class OColumn {
   _searchable: boolean;
   searching: boolean;
   visible: boolean;
-  renderer: any;
+  renderer: OBaseTableCellRenderer;
   editor: any;
   editing: boolean;
   width: string;
@@ -193,6 +193,7 @@ export class OColumn {
     }
     return tooltip;
   }
+
 }
 
 export class OTableOptions {
@@ -547,7 +548,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   registerPagination(value: OTablePaginatorComponent) {
     this.paginationControls = true;
     this.paginator = value;
-    //this.paginator.pageSize = this.rowQuery || this.paginator.pageSize;
   }
 
   registerContextMenu(value: OContextMenuComponent): void {
@@ -1114,7 +1114,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   private saveDataNavigationInLocalStorage() {
-    //save data of the table in navigation-data in the localstorage
+    // Save data of the table in navigation-data in the localstorage
     let navigationDataStorage = new OFormDataNavigation(this.injector);
     navigationDataStorage.setDataToStore(this.getKeysValues());
   }
@@ -1286,16 +1286,15 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   queryRowAsyncData(rowIndex: number, rowData: any) {
     let kv = ServiceUtils.getObjectProperties(rowData, this.keysArray);
-    // repeating checking of visible column
+    // Repeating checking of visible column
     let av = this.asyncLoadColumns.filter(c => this._oTableOptions.visibleColumns.indexOf(c) !== -1);
     if (av.length === 0) {
-      //skipping query if there are not visible asyncron columns
+      // Skipping query if there are not visible asyncron columns
       return;
     }
     const columnQueryArgs = [kv, av, this.entity, undefined, undefined, undefined, undefined];
     let queryMethodName = this.pageable ? this.paginatedQueryMethod : this.queryMethod;
     if (this.dataService && (queryMethodName in this.dataService) && this.entity) {
-      //const self = this;
       if (this.asyncLoadSubscriptions[rowIndex]) {
         this.asyncLoadSubscriptions[rowIndex].unsubscribe();
       }
@@ -1364,12 +1363,11 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   openColumnFilterDialog(column: OColumn, event: Event) {
     event.stopPropagation();
     event.preventDefault();
-    const columnDataArray: ITableFilterByColumnDataInterface[] = this.dataSource.getColumnDataToFilter(column, this);
     let dialogRef = this.dialog.open(OTableFilterByColumnDataDialogComponent, {
       data: {
         previousFilter: this.dataSource.getColumnValueFilterByAttr(column.attr),
         column: column,
-        columnDataArray: columnDataArray,
+        tableData: this.dataSource.getTableData(),
         preloadValues: this.oTableColumnsFilterComponent.preloadValues
       },
       disableClose: true,

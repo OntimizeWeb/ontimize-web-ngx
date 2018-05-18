@@ -10,7 +10,6 @@ import 'rxjs/add/observable/fromEvent';
 import { Util } from '../../util/util';
 import { OTableDao } from './o-table.dao';
 import { OColumn, OTableComponent, OTableOptions } from './o-table.component';
-import { ITableFilterByColumnDataInterface } from './extensions/dialog/o-table-dialog-components';
 import { OTableAggregateComponent } from './extensions/footer/o-table-footer-components';
 import { ColumnValueFilterOperator, IColumnValueFilter, OTableEditableRowComponent } from './extensions/header/o-table-header-components';
 
@@ -52,7 +51,9 @@ export class OTableDataSource extends DataSource<any> {
     }
   }
 
-  /** Connect function called by the table to retrieve one stream containing the data to render. */
+  /**
+   * Connect function called by the table to retrieve one stream containing the data to render.
+   */
   connect(): Observable<any[]> {
     let displayDataChanges: any[] = [
       this._database.dataChange
@@ -209,6 +210,13 @@ export class OTableDataSource extends DataSource<any> {
     return (valueA <= valueB ? -1 : 1) * (this._sort.direction === 'asc' ? 1 : -1);
   }
 
+  /**
+   * Returns the data the table stores. No filters are applied.
+   */
+  getTableData(): any[] {
+    return this._database.data;
+  }
+
   /** Return data of the visible columns of the table  without rendering */
   getCurrentData(): any[] {
     return this.getData();
@@ -293,21 +301,6 @@ export class OTableDataSource extends DataSource<any> {
     });
   }
 
-  getColumnDataToFilter(column: OColumn, table: OTableComponent): ITableFilterByColumnDataInterface[] {
-    const tableColumnsFilter = table.oTableColumnsFilterComponent;
-    const attr = column.attr;
-    let rowArray: ITableFilterByColumnDataInterface[] = [];
-    // TODO multiple filters
-    this._database.data.map((row, i, a) => {
-      let value = tableColumnsFilter.getColumnComparisonValue(column, row[attr]);
-      rowArray.push({
-        value: value,
-        selected: false
-      });
-    });
-    return rowArray;
-  }
-
   isColumnValueFilterActive(): boolean {
     return this.columnValueFilters.length !== 0;
   }
@@ -354,13 +347,16 @@ export class OTableDataSource extends DataSource<any> {
           let filterColumn = this.table.oTableOptions.columns.filter(col => col.attr === filter.attr)[0];
           if (filterColumn) {
             data = data.filter((item: any) => {
-              var compareTo = this.table.oTableColumnsFilterComponent.getColumnComparisonValue(filterColumn, item[filter.attr]);
-              return (filter.values.indexOf(compareTo) !== -1);
+              return (filter.values.indexOf(item[filter.attr]) !== -1);
             });
           }
           break;
         case ColumnValueFilterOperator.EQUAL:
-          data = data.filter(item => new RegExp('^' + Util.normalizeString(filter.values).split('*').join('.*') + '$').test(Util.normalizeString(item[filter.attr])));
+          if (filter.values.indexOf('*') !== -1) {
+            data = data.filter(item => new RegExp('^' + Util.normalizeString(filter.values).split('*').join('.*') + '$').test(Util.normalizeString(item[filter.attr])));
+          } else {
+            data = data.filter(item => (Util.normalizeString(item[filter.attr]).indexOf(Util.normalizeString(filter.values)) !== -1));
+          }
           break;
         case ColumnValueFilterOperator.BETWEEN:
           data = data.filter(item => item[filter.attr] >= filter.values[0] && item[filter.attr] <= filter.values[1]);
