@@ -118,7 +118,7 @@ export const DEFAULT_INPUTS_O_TABLE = [
   'paginationControls: pagination-controls',
 
   // filter [yes|no|true|false]: filter si case sensitive. Default: no.
-  'filterCaseSensitivePvt: filter-case-sensitive',
+  'filterCaseSensitive: filter-case-sensitive',
 
   // fix-header [yes|no|true|false]: fixed header and footer when the content is greather than its own height. Default: no.
   'fixedHeader: fixed-header',
@@ -268,7 +268,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   @InputConverter()
   showTableButtonsText: boolean = true;
 
-  protected _oTableOptions: OTableOptions;
+  protected _oTableOptions: OTableOptions = new OTableOptions();
 
   get oTableOptions(): OTableOptions {
     return this._oTableOptions;
@@ -287,8 +287,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     return this.quickFilterPvt;
   }
 
-  @InputConverter()
   protected filterCaseSensitivePvt: boolean = false;
+  @InputConverter()
   set filterCaseSensitive(value: boolean) {
     this.filterCaseSensitivePvt = value;
     this._oTableOptions.filterCaseSensitive = this.filterCaseSensitivePvt;
@@ -401,9 +401,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
    * Method what initialize vars and configuration
    */
   initialize(): any {
-    // Initialize table options
-    this._oTableOptions = new OTableOptions();
-
     super.initialize();
 
     // Initialize params of the table
