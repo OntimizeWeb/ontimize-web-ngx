@@ -13,17 +13,28 @@ export class ServiceUtils {
   static getParentItemFromForm(parentItem: any, parentKeysObject: Object, form: OFormComponent) {
     let result = parentItem;
     const parentKeys = Object.keys(parentKeysObject || {});
-    const formDataProperties = Object.keys(form ? form.getDataValues() : {});
+    const existParentKeys = parentKeys && parentKeys.length > 0;
 
-    if (parentKeys && parentKeys.length > 0 && parentItem === undefined && formDataProperties.length > 0) {
+    const formComponents = form ? form.getComponents() : {};
+    const existsComponents = Object.keys(formComponents).length > 0;
+
+    const formDataProperties = Object.keys(form ? form.getDataValues() : {});
+    const existsProperties = formDataProperties.length > 0;
+
+    if (existParentKeys && parentItem === undefined && (existsComponents || existsProperties)) {
       let partialResult = {};
       parentKeys.forEach(key => {
         const formFieldAttr = parentKeysObject[key];
-        if (formDataProperties.indexOf(formFieldAttr) !== -1) {
-          let currentData = form.getDataValue(formFieldAttr);
+        let currentData;
+        if (formComponents.hasOwnProperty(formFieldAttr)) {
+          currentData = formComponents[formFieldAttr].getValue();
+        } else if (formDataProperties.indexOf(formFieldAttr) !== -1) {
+          currentData = form.getDataValue(formFieldAttr);
           if (currentData instanceof OFormValue) {
             currentData = currentData.value;
           }
+        }
+        if (Util.isDefined(currentData)) {
           switch (typeof (currentData)) {
             case 'string':
               if (currentData.trim().length > 0) {
