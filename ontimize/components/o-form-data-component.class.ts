@@ -3,6 +3,16 @@ import { FormControl, FormGroup, Validators, ValidatorFn } from '@angular/forms'
 
 import { InputConverter } from '../decorators';
 import { SQLTypes } from '../utils';
+import {
+  ONIFInputComponent,
+  OCurrencyInputComponent,
+  ODateInputComponent,
+  OEmailInputComponent,
+  OListPickerComponent,
+  OPasswordInputComponent,
+  OPercentInputComponent
+} from '../components';
+
 import { OBaseComponent, IComponent } from './o-component.class';
 import { OFormComponent } from './form/o-form.component';
 import { OFormValue, IFormValueOptions } from './form/OFormValue';
@@ -41,6 +51,8 @@ export const DEFAULT_INPUTS_O_FORM_DATA_COMPONENT = [
 
 export class OFormDataComponent extends OBaseComponent implements IFormDataComponent, IFormDataTypeComponent,
   OnInit, OnDestroy {
+
+  static STANDARD_FORM_FIELD_WIDTH = '180px';
   /* Inputs */
   sqlType: string;
   @InputConverter()
@@ -94,11 +106,26 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
 
   initialize() {
     super.initialize();
+    this.initializeWidth();
     if (this.form) {
       this.registerFormListeners();
       this._isReadOnly = this.form.isInInitialMode() ? true : false;
     } else {
       this._isReadOnly = this._disabled;
+    }
+  }
+
+  initializeWidth() {
+    switch (true) {
+      case this instanceof OCurrencyInputComponent:
+      case this instanceof ODateInputComponent:
+      case this instanceof OEmailInputComponent:
+      case this instanceof OListPickerComponent:
+      case this instanceof ONIFInputComponent:
+      case this instanceof OPasswordInputComponent:
+      case this instanceof OPercentInputComponent:
+        this.width = OFormDataComponent.STANDARD_FORM_FIELD_WIDTH;
+        break;
     }
   }
 
