@@ -7,6 +7,7 @@ import { Util, Codes } from '../../utils';
 import { OFormComponent } from '../form/o-form.component';
 import { OFormDataComponent, DEFAULT_INPUTS_O_FORM_DATA_COMPONENT } from '../o-form-data-component.class';
 import { ServiceUtils } from '../service.utils';
+import { IFormValueOptions } from '../form/OFormValue';
 
 export const DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT = [
   ...DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,
@@ -245,9 +246,9 @@ export class OFormServiceComponent extends OFormDataComponent {
     return value;
   }
 
-  setValue(val: any) {
+  setValue(val: any, options?: IFormValueOptions) {
     const value = this.parseByValueColumnType(val);
-    super.setValue(value);
+    super.setValue(value, options);
   }
 
   getSelectedRecord() {

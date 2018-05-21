@@ -14,7 +14,7 @@ import { IFormDataComponent, IFormDataTypeComponent } from '../../o-form-data-co
 import { IComponent } from '../../o-component.class';
 import { InputConverter } from '../../../decorators';
 import { OFormComponent } from '../../form/o-form.component';
-import { OFormValue } from '../../form/OFormValue';
+import { OFormValue, IFormValueOptions } from '../../form/OFormValue';
 import { OTranslateService } from '../../../services';
 import { SQLTypes } from '../../../utils';
 
@@ -245,10 +245,14 @@ export class OHTMLInputComponent implements OnInit, IComponent, IFormDataCompone
     return '';
   }
 
-  setValue(val: any) {
+  setValue(val: any, options?: IFormValueOptions) {
     var self = this;
     window.setTimeout(() => {
       self.ensureOFormValue(val);
+      if (self._fControl) {
+        self._fControl.setValue(val, options);
+        self._fControl.markAsDirty();
+      }
     }, 0);
   }
 

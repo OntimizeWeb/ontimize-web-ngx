@@ -19,7 +19,7 @@ import { OSharedModule } from '../../../shared';
 
 import { InputConverter } from '../../../decorators';
 import { OFormComponent } from '../../form/o-form.component';
-import { OFormValue } from '../../form/OFormValue';
+import { OFormValue, IFormValueOptions } from '../../form/OFormValue';
 import { OFormServiceComponent } from '../o-form-service-component.class';
 
 export const DEFAULT_INPUTS_O_COMBO = [
@@ -220,11 +220,11 @@ export class OComboComponent extends OFormServiceComponent implements OnInit {
     return selected;
   }
 
-  setValue(val: any): void {
+  setValue(val: any, options?: IFormValueOptions): void {
     if (this.dataArray) {
       const record = this.dataArray.find(item => item[this.valueColumn] === val);
       if (record) {
-        super.setValue(val);
+        super.setValue(val, options);
       }
     }
   }

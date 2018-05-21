@@ -23,7 +23,7 @@ import { InputConverter } from '../../../decorators';
 
 import { OFormComponent } from '../../form/o-form.component';
 import { OSearchInputModule } from '../../input/search-input/o-search-input.component';
-import { OFormValue } from '../../form/OFormValue';
+import { OFormValue, IFormValueOptions } from '../../form/OFormValue';
 import { ODialogModule } from '../../dialog/o-dialog.component';
 import { OFormServiceComponent } from '../o-form-service-component.class';
 
@@ -175,8 +175,8 @@ export class OListPickerComponent extends OFormServiceComponent implements OnIni
     }
   }
 
-  setValue(value: any) {
-    super.setValue(value);
+  setValue(value: any, options?: IFormValueOptions) {
+    super.setValue(value, options);
     this.visibleInput.nativeElement.value = '';
   }
 

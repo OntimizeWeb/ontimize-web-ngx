@@ -5,7 +5,7 @@ import { InputConverter } from '../decorators';
 import { SQLTypes } from '../utils';
 import { OBaseComponent, IComponent } from './o-component.class';
 import { OFormComponent } from './form/o-form.component';
-import { OFormValue } from './form/OFormValue';
+import { OFormValue, IFormValueOptions } from './form/OFormValue';
 
 export interface IFormDataTypeComponent extends IComponent {
   getSQLType(): number;
@@ -153,10 +153,10 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     return this.defaultValue;
   }
 
-  setValue(val: any) {
+  setValue(val: any, options?: IFormValueOptions) {
     this.ensureOFormValue(val);
     if (this._fControl) {
-      this._fControl.setValue(val);
+      this._fControl.setValue(val, options);
       this._fControl.markAsDirty();
     }
   }
