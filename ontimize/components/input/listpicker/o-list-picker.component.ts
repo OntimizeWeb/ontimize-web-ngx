@@ -168,7 +168,7 @@ export class OListPickerComponent extends OFormServiceComponent implements OnIni
   onClickClear(e: Event): void {
     e.preventDefault();
     e.stopPropagation();
-    if (!this._isReadOnly && !this.isDisabled) {
+    if (!this.isReadOnly && !this.isDisabled) {
       clearTimeout(this.blurTimer);
       this.blurPrevent = true;
       this.setValue(undefined);
@@ -183,7 +183,7 @@ export class OListPickerComponent extends OFormServiceComponent implements OnIni
   onClickListpicker(e: Event): void {
     e.preventDefault();
     e.stopPropagation();
-    if (!this._isReadOnly && !this.isDisabled) {
+    if (!this.isReadOnly && !this.isDisabled) {
       clearTimeout(this.blurTimer);
       this.openDialog();
     }

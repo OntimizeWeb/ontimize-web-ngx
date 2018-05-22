@@ -46,7 +46,8 @@ export const DEFAULT_INPUTS_O_FORM_DATA_COMPONENT = [
   'orequired: required',
   // sqltype[string]: Data type according to Java standard. See SQLType ngClass. Default: 'OTHER'
   'sqlType: sql-type',
-  'width'
+  'width',
+  'readOnly: read-only'
 ];
 
 export class OFormDataComponent extends OBaseComponent implements IFormDataComponent, IFormDataTypeComponent,
@@ -109,9 +110,9 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     this.initializeWidth();
     if (this.form) {
       this.registerFormListeners();
-      this._isReadOnly = this.form.isInInitialMode() ? true : false;
+      this.isReadOnly = this.form.isInInitialMode() ? true : false;
     } else {
-      this._isReadOnly = this._disabled;
+      this.isReadOnly = this._disabled;
     }
   }
 

@@ -184,7 +184,7 @@ export class OImageComponent extends OFormDataComponent {
 
   onClickClear(e: Event): void {
     e.stopPropagation();
-    if (!this._isReadOnly && !this.isDisabled) {
+    if (!this.isReadOnly && !this.isDisabled) {
       this.setValue(undefined);
       if (this.titleLabel) {
         this.titleLabel.nativeElement.textContent = '';

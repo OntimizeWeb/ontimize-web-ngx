@@ -248,7 +248,7 @@ export class OFileInputComponent extends OFormDataComponent implements OnDestroy
   }
 
   clearData() {
-    if (!this._isReadOnly && !this.isDisabled) {
+    if (!this.isReadOnly && !this.isDisabled) {
       this.uploader.clear();
       let value = this.uploader.files.map(file => file.name).join(', ');
       this.setValue(value);

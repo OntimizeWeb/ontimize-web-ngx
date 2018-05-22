@@ -685,16 +685,11 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
    * */
 
   _setComponentsEditable(state: boolean) {
-    const self = this;
-    //  window.setTimeout(() => {
-    let comps: any = self.getComponents();
-    if (comps) {
-      let keys = Object.keys(comps);
-      keys.forEach(element => {
-        comps[element].isReadOnly = !state;
-      });
-    }
-    // },100);
+    let components: any = this.getComponents();
+    Object.keys(components).forEach(compKey => {
+      const component = components[compKey];
+        component.isReadOnly = !state;
+    });
   }
 
 
