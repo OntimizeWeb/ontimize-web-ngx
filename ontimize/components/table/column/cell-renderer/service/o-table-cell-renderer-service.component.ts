@@ -86,10 +86,12 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
       //   this.querySubscription.unsubscribe();
       // }
       const filter = this.getFilterUsingParentKeys(parentItem, this._pKeysEquiv);
+      if (!filter[this.column]) {
+        filter[this.column] = cellvalue;
+      }
       this.querySubscription = this.dataService[this.queryMethod](filter, this.colArray, this.entity).subscribe(resp => {
         if (resp.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) {
-          let elem = resp.data.find(e => e[self.column] === cellvalue);
-          self.responseMap[cellvalue] = elem ? elem[self.valueColumn] : null;
+          self.responseMap[cellvalue] = resp.data[0][self.valueColumn];
         } else {
           console.log('error');
         }
