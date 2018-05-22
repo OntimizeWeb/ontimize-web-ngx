@@ -27,21 +27,17 @@
 </ng-container>
 
 <ng-container *ngIf="!sidenavOpened">
-  <li class="application-sidenav-menuitem application-sidenav-item" [ngSwitch]="menuItemType">
+  <li class="application-sidenav-menuitem application-sidenav-item">
 
-    <a mat-button *ngSwitchCase="'route'" [routerLink]="[ menuItem.route ]" routerLinkActive="application-sidenav-viewer-sidenav-item-selected">
+    <a mat-button *ngIf="isRouteItem() || isActionItem()" (click)="onClick()" [class.application-sidenav-viewer-sidenav-item-selected]="isActiveItem()">
       <mat-icon *ngIf="menuItem.icon">{{ menuItem.icon }}</mat-icon>
     </a>
 
-    <a mat-button *ngSwitchCase="'action'" (click)="onClick()">
+    <a mat-button *ngIf="isLocaleItem()" fxLayout="row" fxLayoutAlign="space-between center" (click)="onClick()">
       <mat-icon *ngIf="menuItem.icon">{{ menuItem.icon }}</mat-icon>
     </a>
 
-    <a mat-button *ngSwitchCase="'locale'" fxLayout="row" fxLayoutAlign="space-between center" (click)="onClick()">
-      <mat-icon *ngIf="menuItem.icon">{{ menuItem.icon }}</mat-icon>
-    </a>
-
-    <div *ngSwitchDefault>
+    <div *ngIf="!isRouteItem() && !isActionItem() && !isLocaleItem()">
       <mat-icon *ngIf="menuItem.icon">{{ menuItem.icon }}</mat-icon>
     </div>
   </li>

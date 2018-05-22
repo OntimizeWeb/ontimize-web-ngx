@@ -1,5 +1,6 @@
 import { ElementRef, Injector, NgModule, Component, ViewEncapsulation, OnDestroy, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { trigger, state, style, transition, animate } from '@angular/animations';
 import { Subscription } from 'rxjs/Subscription';
 
 import { OSharedModule } from '../../../shared';
@@ -21,7 +22,15 @@ export const DEFAULT_OUTPUTS_O_APP_SIDENAV_MENU_GROUP = [];
   outputs: DEFAULT_OUTPUTS_O_APP_SIDENAV_MENU_GROUP,
   templateUrl: './o-app-sidenav-menu-group.component.html',
   styleUrls: ['./o-app-sidenav-menu-group.component.scss'],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  animations: [
+    trigger('contentExpansion', [
+      state('collapsed', style({ height: '0px' })),
+      state('expanded', style({ height: '*' })),
+      transition('collapsed => expanded', animate('500ms ease-in')),
+      transition('expanded => collapsed', animate('500ms ease-out'))
+    ])
+  ]
 })
 export class OAppSidenavMenuGroupComponent implements AfterViewInit, OnDestroy {
 
@@ -38,6 +47,7 @@ export class OAppSidenavMenuGroupComponent implements AfterViewInit, OnDestroy {
   sidenavOpened: boolean = true;
 
   disabled: boolean = false;
+  protected _contentExpansion = 'collapsed';
 
   constructor(
     protected injector: Injector,
@@ -49,6 +59,7 @@ export class OAppSidenavMenuGroupComponent implements AfterViewInit, OnDestroy {
 
   onClick() {
     this.menuGroup.opened = !this.menuGroup.opened;
+    this.contentExpansion = this.menuGroup.opened ? 'expanded' : 'collapsed';
   }
 
   ngAfterViewInit() {
@@ -64,6 +75,14 @@ export class OAppSidenavMenuGroupComponent implements AfterViewInit, OnDestroy {
     if (this.sidenavSubscription) {
       this.sidenavSubscription.unsubscribe();
     }
+  }
+
+  get contentExpansion(): string {
+    return this._contentExpansion;
+  }
+
+  set contentExpansion(val: string) {
+    this._contentExpansion = val;
   }
 }
 

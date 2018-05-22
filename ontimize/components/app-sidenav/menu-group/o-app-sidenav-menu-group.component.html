@@ -9,7 +9,7 @@
 </button>
 
 <div class="application-sidenav-menugroup-items-container">
-  <ul class="application-sidenav-menugroup-ul">
+  <ul [@contentExpansion]="contentExpansion" class="application-sidenav-menugroup-ul">
     <ng-container *ngFor="let menuItem of menuGroup.items">
       <o-app-sidenav-menu-item *ngIf="menuItem['show-in-app-sidenav'] !== false" [sidenav-opened]="sidenavOpened" [menu-item]="menuItem"
         [menu-item-type]="appMenuService.getMenuItemType(menuItem)">
