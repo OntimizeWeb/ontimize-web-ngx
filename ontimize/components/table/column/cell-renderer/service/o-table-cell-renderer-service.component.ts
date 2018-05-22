@@ -1,9 +1,10 @@
 import { Component, Injector, ViewChild, TemplateRef, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs/Subscription';
-import { Util, Codes } from '../../../../../utils';
-import { OntimizeService, dataServiceFactory, DialogService } from '../../../../../services';
-import { OBaseTableCellRenderer } from '../o-base-table-cell-renderer.class';
 
+import { Subscription } from 'rxjs/Subscription';
+
+import { Util, Codes } from '../../../../../utils';
+import { OntimizeService, DialogService } from '../../../../../services';
+import { OBaseTableCellRenderer } from '../o-base-table-cell-renderer.class';
 
 export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_SERVICE = [
   'entity',
@@ -18,12 +19,8 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_SERVICE = [
 @Component({
   selector: 'o-table-cell-renderer-service',
   templateUrl: './o-table-cell-renderer-service.component.html',
-  inputs: DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_SERVICE,
-  providers: [
-    { provide: OntimizeService, useFactory: dataServiceFactory, deps: [Injector] }
-  ]
+  inputs: DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_SERVICE
 })
-
 export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer implements OnInit {
 
   public static DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_SERVICE = DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_SERVICE;
@@ -91,7 +88,8 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
       const filter = this.getFilterUsingParentKeys(parentItem, this._pKeysEquiv);
       this.querySubscription = this.dataService[this.queryMethod](filter, this.colArray, this.entity).subscribe(resp => {
         if (resp.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) {
-          self.responseMap[cellvalue] = resp.data[0][this.valueColumn];
+          let elem = resp.data.find(e => e[self.column] === cellvalue);
+          self.responseMap[cellvalue] = elem ? elem[self.valueColumn] : null;
         } else {
           console.log('error');
         }
@@ -130,7 +128,7 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
     try {
       this.dataService = this.injector.get(loadingService);
       if (Util.isDataService(this.dataService)) {
-        let serviceCfg = this.dataService.getDefaultServiceConfiguration();
+        let serviceCfg = this.dataService.getDefaultServiceConfiguration(this.service);
         if (this.entity) {
           serviceCfg['entity'] = this.entity;
         }
@@ -140,6 +138,5 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
       console.error(e);
     }
   }
+
 }
-
-
