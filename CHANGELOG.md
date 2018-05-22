@@ -33,6 +33,7 @@
   * fixing bug in custom cell editors creation ([f942c20](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f942c20)) ([#167](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/167))
   * fixing translation bugs ([ffef427](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ffef427)) ([b3de673](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b3de673)) ([#170](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/170))
   * empty cell edition bug ([e51783d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e51783d)) ([#164](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/164))
+* **o-table-cell-renderer-service**: fix undefined service provider ([a00a112](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a00a112)). Closes [#172](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/172)
 * **o-app-sidenav**: initialization bug fixed ([d150cb2](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d150cb2)) ([#165](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/165))
 * **OServiceBaseComponent**: adding '*ngOnChanges*' method ([f93a1d0](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f93a1d0)) ([#174](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/174))
 
