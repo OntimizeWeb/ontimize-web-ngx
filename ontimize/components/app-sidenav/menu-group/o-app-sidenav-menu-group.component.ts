@@ -27,8 +27,8 @@ export const DEFAULT_OUTPUTS_O_APP_SIDENAV_MENU_GROUP = [];
     trigger('contentExpansion', [
       state('collapsed', style({ height: '0px' })),
       state('expanded', style({ height: '*' })),
-      transition('collapsed => expanded', animate('500ms ease-in')),
-      transition('expanded => collapsed', animate('500ms ease-out'))
+      transition('collapsed => expanded', animate('200ms ease-in')),
+      transition('expanded => collapsed', animate('200ms ease-out'))
     ])
   ]
 })
