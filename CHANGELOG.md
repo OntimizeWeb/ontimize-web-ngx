@@ -21,6 +21,10 @@
 * **MenuItem**:
   * new '*show-in-card-menu*' input (default=true) indicating whether or not to show its correspondent '*o-card-menu-item*' ([374c408](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/374c408))
   * new '*show-in-app-sidenav*' input (default=true) indicating whether or not to show its correspondent '*o-pp-sidenav-menu-item*' ([dbb7f9a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/dbb7f9a))
+* **OFormDataComponent**:
+  * new '*width*' input in form inner components ([88d28cb](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/88d28cb))
+  * new optional '*options*' parameter in '*setValue*' method. This parameter must implement the new '*IFormValueOptions*' interface (same as angular FormControl '*setValue*' method '*options*' parameter, watch [here](https://angular.io/api/forms/FormControl#setValue)) ([e1a0e18](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e1a0e18))
+  * new '*read-only*' input in form inner components ([015c037](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/015c037))
 
 ### Bug Fixes
 * **o-table**:
@@ -31,7 +35,6 @@
   * empty cell edition bug ([e51783d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e51783d)) ([#164](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/164))
 * **o-app-sidenav**: initialization bug fixed ([d150cb2](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d150cb2)) ([#165](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/165))
 * **OServiceBaseComponent**: adding '*ngOnChanges*' method ([f93a1d0](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f93a1d0)) ([#174](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/174))
-* **OFormDataComponent**: new '*width*' input in form inner components ([88d28cb](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/88d28cb))
 
 ### BREAKING CHANGES
 * **o-table**:
