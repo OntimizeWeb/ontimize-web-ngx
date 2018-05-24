@@ -372,4 +372,6 @@ $_mat-checkbox-mark-stroke-size-small: 2 / 15 * $mat-checkbox-size-small !defaul
   word-wrap: break-word;
   max-height: 64px;
   overflow: hidden;
+  min-width: 140px;
+  text-align: center;
 }
