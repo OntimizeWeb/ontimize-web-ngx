@@ -251,6 +251,11 @@ export class OFormServiceComponent extends OFormDataComponent {
     super.setValue(value, options);
   }
 
+  setData(val: any) {
+    const value = this.parseByValueColumnType(val);
+    super.setData(value);
+  }
+
   getSelectedRecord() {
     let result = undefined;
     const selectedValue = this.getValue();
