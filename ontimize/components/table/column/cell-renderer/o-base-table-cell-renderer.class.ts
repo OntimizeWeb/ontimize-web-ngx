@@ -54,4 +54,8 @@ export class OBaseTableCellRenderer implements OnInit {
     return this.tableColumn.attr;
   }
 
+  getTooltip(cellValue: any, rowValue: any) {
+    return this.getCellData(cellValue, rowValue);
+  }
+
 }

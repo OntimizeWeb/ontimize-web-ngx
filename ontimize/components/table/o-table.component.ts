@@ -180,16 +180,17 @@ export class OColumn {
     if (!this.hasTooltip()) {
       return undefined;
     }
-    let tooltip = rowData[this.name];
-    if (Util.isDefined(this.tooltip.function)) {
+    let tooltip;
+    if (Util.isDefined(this.tooltip.value)) {
+      tooltip = this.tooltip.value;
+    } else if (Util.isDefined(this.tooltip.function)) {
       try {
         tooltip = this.tooltip.function(rowData);
       } catch (e) {
         console.warn('o-table-column tooltip-function didnt worked');
       }
-    }
-    if (Util.isDefined(this.tooltip.value)) {
-      tooltip = this.tooltip.value;
+    } else {
+      tooltip = Util.isDefined(this.renderer) ? this.renderer.getTooltip(rowData[this.name], rowData) : rowData[this.name];
     }
     return tooltip;
   }
@@ -610,7 +611,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       if (typeof column.operation !== 'undefined' || typeof column.functionOperation !== 'undefined') {
         colDef.calculate = column.operation ? column.operation : column.functionOperation;
       }
-      if (Util.isDefined(column.tooltip)) {
+      if (Util.isDefined(column.tooltip) && column.tooltip) {
         colDef.tooltip = {
           value: column.tooltipValue,
           function: column.tooltipFunction
