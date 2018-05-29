@@ -98,11 +98,11 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   }
 
   hasError(error: string): boolean {
-    return !this.isReadOnly && this._fControl.touched && this._fControl.hasError(error);
+    return !this.isReadOnly && this._fControl && this._fControl.touched && this._fControl.hasError(error);
   }
 
   getErrorValue(error: string, prop: string): string {
-    return this._fControl.hasError(error) ? this._fControl.getError(error)[prop] || '' : '';
+    return this._fControl && this._fControl.hasError(error) ? this._fControl.getError(error)[prop] || '' : '';
   }
 
   initialize() {
