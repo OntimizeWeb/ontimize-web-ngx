@@ -162,6 +162,9 @@ export class OAppSidenavMenuItemComponent implements AfterViewInit, OnDestroy {
   }
 
   isActiveItem(): boolean {
+    if (!this.isRouteItem()) {
+      return false;
+    }
     const route = (this.menuItem as MenuItemRoute).route;
     return this.router.url === route || this.router.url.startsWith(route + '/');
   }

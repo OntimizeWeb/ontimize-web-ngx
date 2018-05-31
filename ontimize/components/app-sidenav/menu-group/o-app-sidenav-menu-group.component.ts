@@ -67,6 +67,10 @@ export class OAppSidenavMenuGroupComponent implements AfterViewInit, OnDestroy {
       const self = this;
       this.sidenavSubscription = this.sidenav.onSidenavToggle.subscribe((opened) => {
         self.disabled = !opened;
+        if (!opened) {
+          self.menuGroup.opened = opened;
+          self.contentExpansion = self.menuGroup.opened ? 'expanded' : 'collapsed';
+        }
       });
     }
     this.contentExpansion = this.menuGroup.opened ? 'expanded' : 'collapsed';

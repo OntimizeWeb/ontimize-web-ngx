@@ -35,7 +35,7 @@ $transition-duration: 500ms;
 
     .mat-drawer.application-sidenav-sidenav {
       box-shadow: 3px 0 6px rgba(0, 0, 0, .24);
-      padding-bottom: 72px;
+      padding-bottom: 36px;
       padding-top: 5px;
       width: $sidenav-width;
       bottom: 0;
@@ -143,11 +143,12 @@ $transition-duration: 500ms;
         .o-app-sidenav-image .application-sidenav-image-container {
 
           padding: 0;
-          align-items: end!important;
-          place-content: flex-end!important;
+          text-align: end;
+          max-height: 48px;
 
           .application-sidenav-image {
-            margin-right: 8px;
+            max-height: 48px;
+            margin: 8px 8px 0 0;
           }
         }
 
