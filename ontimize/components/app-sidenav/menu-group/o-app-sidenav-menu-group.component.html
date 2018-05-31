@@ -1,10 +1,15 @@
 <button mat-button class="application-sidenav-item application-sidenav-menugroup" [class.active]="menuGroup.opened" fxLayout="column"
   fxFill (click)="onClick()" [disabled]="disabled">
   <div fxLayout="row" fxLayoutAlign="start center" fxFill>
-    <mat-icon *ngIf="menuGroup.icon">{{ menuGroup.icon }}</mat-icon>
-    <h3 *ngIf="sidenavOpened">{{ menuGroup.name | oTranslate }}</h3>
-    <span *ngIf="sidenavOpened" class="fill-remaining"></span>
-    <mat-icon *ngIf="sidenavOpened" class="application-sidenav-menugroup-arrow">keyboard_arrow_right</mat-icon>
+    <ng-container *ngIf="sidenavOpened">
+      <mat-icon *ngIf="menuGroup.icon">{{ menuGroup.icon }}</mat-icon>
+      <h3>{{ menuGroup.name | oTranslate }}</h3>
+      <span class="fill-remaining"></span>
+      <mat-icon class="application-sidenav-menugroup-arrow">keyboard_arrow_right</mat-icon>
+    </ng-container>
+    <ng-container *ngIf="!sidenavOpened">
+      <mat-icon matTooltip="{{ menuGroup.name | oTranslate }}" matTooltipPosition="right" *ngIf="menuGroup.icon">{{ menuGroup.icon }}</mat-icon>
+    </ng-container>
   </div>
 </button>
 

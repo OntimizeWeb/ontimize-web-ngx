@@ -69,6 +69,7 @@ export class OAppSidenavMenuGroupComponent implements AfterViewInit, OnDestroy {
         self.disabled = !opened;
       });
     }
+    this.contentExpansion = this.menuGroup.opened ? 'expanded' : 'collapsed';
   }
 
   ngOnDestroy() {
