@@ -29,15 +29,17 @@
 <ng-container *ngIf="!sidenavOpened">
   <li class="application-sidenav-menuitem application-sidenav-item">
 
-    <a mat-button *ngIf="isRouteItem() || isActionItem()" (click)="onClick()" [class.application-sidenav-viewer-sidenav-item-selected]="isActiveItem()">
+    <a matTooltip="{{ menuItem.name | oTranslate }}" matTooltipPosition="right" mat-button *ngIf="isRouteItem() || isActionItem()"
+      (click)="onClick()" [class.application-sidenav-viewer-sidenav-item-selected]="isActiveItem()">
       <mat-icon *ngIf="menuItem.icon">{{ menuItem.icon }}</mat-icon>
     </a>
 
-    <a mat-button *ngIf="isLocaleItem()" fxLayout="row" fxLayoutAlign="space-between center" (click)="onClick()">
+    <a matTooltip="{{ menuItem.name | oTranslate }}" matTooltipPosition="right" mat-button *ngIf="isLocaleItem()" fxLayout="row"
+      fxLayoutAlign="space-between center" (click)="onClick()">
       <mat-icon *ngIf="menuItem.icon">{{ menuItem.icon }}</mat-icon>
     </a>
 
-    <div *ngIf="!isRouteItem() && !isActionItem() && !isLocaleItem()">
+    <div matTooltip="{{ menuItem.name | oTranslate }}" matTooltipPosition="right" *ngIf="!isRouteItem() && !isActionItem() && !isLocaleItem()">
       <mat-icon *ngIf="menuItem.icon">{{ menuItem.icon }}</mat-icon>
     </div>
   </li>
