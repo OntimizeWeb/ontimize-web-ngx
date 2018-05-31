@@ -39,7 +39,7 @@
       <mat-icon *ngIf="menuItem.icon">{{ menuItem.icon }}</mat-icon>
     </a>
 
-    <div matTooltip="{{ menuItem.name | oTranslate }}" matTooltipPosition="right" *ngIf="!isRouteItem() && !isActionItem() && !isLocaleItem()">
+    <div matTooltip="{{ menuItem.name | oTranslate }}" (click)="onClick()" matTooltipPosition="right" *ngIf="!isRouteItem() && !isActionItem() && !isLocaleItem()">
       <mat-icon *ngIf="menuItem.icon">{{ menuItem.icon }}</mat-icon>
     </div>
   </li>
