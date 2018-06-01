@@ -117,16 +117,18 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   }
 
   initializeWidth() {
-    switch (true) {
-      case this instanceof OCurrencyInputComponent:
-      case this instanceof ODateInputComponent:
-      case this instanceof OEmailInputComponent:
-      case this instanceof OListPickerComponent:
-      case this instanceof ONIFInputComponent:
-      case this instanceof OPasswordInputComponent:
-      case this instanceof OPercentInputComponent:
-        this.width = OFormDataComponent.STANDARD_FORM_FIELD_WIDTH;
-        break;
+    if (!this.width || !(this.width.length > 0)) {
+      switch (true) {
+        case this instanceof OCurrencyInputComponent:
+        case this instanceof ODateInputComponent:
+        case this instanceof OEmailInputComponent:
+        case this instanceof OListPickerComponent:
+        case this instanceof ONIFInputComponent:
+        case this instanceof OPasswordInputComponent:
+        case this instanceof OPercentInputComponent:
+          this.width = OFormDataComponent.STANDARD_FORM_FIELD_WIDTH;
+          break;
+      }
     }
   }
 
