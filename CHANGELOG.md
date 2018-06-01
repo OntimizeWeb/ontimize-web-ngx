@@ -6,10 +6,7 @@
 * **OFormServiceComponent**: ('*o-combo*' and '*o-list-picker*' extends this class) adding '*getSelectedRecord*' method for getting the selected value associated data. This is a object including all the properties definied in the '*columns*' input ([e513805](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e513805)) ([#162](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/162))
 * **OServiceComponent**: ('*o-list*' and '*o-table*' extends this class) double click mode (used in '*detail-mode*' and '*edition-mode' input) allows '*dblclick*' and '*doubleclick*' values.
 * **Codes**: Creating '*codes*' util class for general variables and types definitions ([9e20235](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9e20235)) ([d2f2060](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d2f2060))
-* **o-tree**:
-  * new '*o-tree*' component ([6b1e524](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6b1e524)) ([7d55935](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7d55935)) ([9a63807](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9a63807)) ([d4e2762](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d4e2762)) ([ff90d0f](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ff90d0f)) ([9238bd6](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9238bd6))
-  * using '*show-root*' input in '*o-tree-node*' (only valid if node has no siblings, otherwise its always true) ([5d3be91](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5d3be91)), closes [#160](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/160)
-* **o-service-base-component.class**: new '*OServiceBaseComponent*' parent class for components using Ontimize services ('*o-list*', '*o-table*' and '*o-tree*')([70271b7](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/70271b7))
+* **o-service-base-component.class**: new '*OServiceBaseComponent*' parent class for components using Ontimize services ('*o-list*' and '*o-table*')([70271b7](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/70271b7))
   * new '*store-state*' input ([35a523c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/35a523c)) ([#166](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/166))
 * **o-table-column**:
   * new '*addEditor*' static method that user '*must*' use in new cell editors constructor definitions ([f942c20](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f942c20))
@@ -50,6 +47,8 @@
     * every new editor or renderer that uses '*ngOnInit*' method *must* init its implementation invoking '*super.ngOnInit()*'
     * cell editors typo fixed: method '*startEdtion*' is now '*startEdition*'
 
+
+**Note**: There is a new '*o-tree*' component, all its information will be available at [ontimize-web-ngx-tree](https://github.com/OntimizeWeb/ontimize-web-ngx-tree)
 
 ## 3.0.0-rc.0 (2018-04-30)
 
