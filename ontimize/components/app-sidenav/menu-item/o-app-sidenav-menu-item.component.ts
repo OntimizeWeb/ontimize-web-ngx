@@ -1,8 +1,8 @@
-import { Injector, NgModule, Component, ViewEncapsulation, ElementRef, AfterViewInit, OnDestroy } from '@angular/core';
+import { Injector, NgModule, Component, ViewEncapsulation, ElementRef, AfterViewInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
-
+import { Util } from '../../../utils';
 import { InputConverter } from '../../../decorators';
 import { OSharedModule } from '../../../shared';
 import { OAppLayoutComponent } from '../../../layouts';
@@ -24,7 +24,8 @@ export const DEFAULT_OUTPUTS_O_APP_SIDENAV_MENU_ITEM = [];
   outputs: DEFAULT_OUTPUTS_O_APP_SIDENAV_MENU_ITEM,
   templateUrl: './o-app-sidenav-menu-item.component.html',
   styleUrls: ['./o-app-sidenav-menu-item.component.scss'],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class OAppSidenavMenuItemComponent implements AfterViewInit, OnDestroy {
   public static DEFAULT_INPUTS_O_APP_SIDENAV_MENU_ITEM = DEFAULT_INPUTS_O_APP_SIDENAV_MENU_ITEM;
@@ -44,7 +45,8 @@ export class OAppSidenavMenuItemComponent implements AfterViewInit, OnDestroy {
 
   constructor(
     protected injector: Injector,
-    protected elRef: ElementRef
+    protected elRef: ElementRef,
+    protected cd: ChangeDetectorRef
   ) {
     this.translateService = this.injector.get(OTranslateService);
     this.loginService = this.injector.get(LoginService);
@@ -167,6 +169,14 @@ export class OAppSidenavMenuItemComponent implements AfterViewInit, OnDestroy {
     }
     const route = (this.menuItem as MenuItemRoute).route;
     return this.router.url === route || this.router.url.startsWith(route + '/');
+  }
+
+  get tooltip(): string {
+    let result = this.translateService.get(this.menuItem.name);
+    if (Util.isDefined(this.menuItem.tooltip)) {
+      result += ': ' + this.translateService.get(this.menuItem.tooltip);
+    }
+    return result;
   }
 }
 
