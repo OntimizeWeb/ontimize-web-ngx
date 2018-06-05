@@ -1,4 +1,4 @@
-import { Injector, NgModule, Component, OnInit, ViewEncapsulation, OnDestroy } from '@angular/core';
+import { Injector, NgModule, Component, OnInit, ViewEncapsulation, OnDestroy, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs/Subscription';
 import { OSharedModule } from '../../../shared';
@@ -21,7 +21,8 @@ export const DEFAULT_OUTPUTS_O_APP_SIDENAV_IMAGE = [
   encapsulation: ViewEncapsulation.None,
   host: {
     '[class.o-app-sidenav-image]': 'true'
-  }
+  },
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class OAppSidenavImageComponent implements OnInit, OnDestroy {
 
@@ -33,36 +34,45 @@ export class OAppSidenavImageComponent implements OnInit, OnDestroy {
   protected closedSrc: string;
   private _src: string;
 
-  protected sidenavSubscription: Subscription;
+  protected sidenavOpenSubs: Subscription;
+  protected sidenavCloseSubs: Subscription;
 
   constructor(
-    protected injector: Injector
+    protected injector: Injector,
+    protected cd: ChangeDetectorRef
   ) {
     this.sidenav = this.injector.get(OAppSidenavComponent);
   }
 
   ngOnInit() {
     if (this.sidenav) {
-      let self = this;
-      this.sidenavSubscription = this.sidenav.onSidenavToggle.subscribe((opened) => {
-        if (opened) {
-          self.setOpenedImg();
-        } else {
-          self.setClosedImg();
-        }
+      const self = this;
+      this.sidenavOpenSubs = this.sidenav.sidenav.openedStart.subscribe((opened) => {
+        self.updateImage();
       });
-      if (this.sidenav.sidenav.opened) {
-        this.setOpenedImg();
-      } else {
-        this.setClosedImg();
-      }
+      this.sidenavCloseSubs = this.sidenav.sidenav.closedStart.subscribe((opened) => {
+        self.updateImage();
+      });
     }
+    this.updateImage();
   }
 
   ngOnDestroy() {
-    if (this.sidenavSubscription) {
-      this.sidenavSubscription.unsubscribe();
+    if (this.sidenavOpenSubs) {
+      this.sidenavOpenSubs.unsubscribe();
     }
+    if (this.sidenavCloseSubs) {
+      this.sidenavCloseSubs.unsubscribe();
+    }
+  }
+
+  updateImage() {
+    if (this.sidenav && this.sidenav.sidenav.opened) {
+      this.setOpenedImg();
+    } else {
+      this.setClosedImg();
+    }
+    this.cd.detectChanges();
   }
 
   set src(val: string) {

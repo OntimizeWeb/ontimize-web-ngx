@@ -63,27 +63,32 @@ export class OAppSidenavMenuGroupComponent implements AfterViewInit, OnDestroy {
 
   onClick() {
     this.menuGroup.opened = !this.menuGroup.opened;
-    this.contentExpansion = this.menuGroup.opened ? 'expanded' : 'collapsed';
+    this.updateContentExpansion();
   }
 
   ngAfterViewInit() {
     if (this.menuGroup.id === 'user-info') {
       const self = this;
-      this.sidenavSubscription = this.sidenav.onSidenavToggle.subscribe((opened) => {
+      this.sidenavSubscription = this.sidenav.sidenav.openedChange.subscribe((opened) => {
         self.disabled = !opened;
-        if (!opened) {
-          self.menuGroup.opened = opened;
-          self.contentExpansion = self.menuGroup.opened ? 'expanded' : 'collapsed';
-        }
+        self.updateContentExpansion();
       });
     }
-    this.contentExpansion = this.menuGroup.opened ? 'expanded' : 'collapsed';
+    this.updateContentExpansion();
   }
 
   ngOnDestroy() {
     if (this.sidenavSubscription) {
       this.sidenavSubscription.unsubscribe();
     }
+  }
+
+  updateContentExpansion() {
+    let isOpened = this.menuGroup && this.menuGroup.opened;
+    if (this.menuGroup.id === 'user-info') {
+      isOpened = (this.sidenav && this.sidenav.sidenav.opened) && isOpened;
+    }
+    this.contentExpansion = isOpened ? 'expanded' : 'collapsed';
   }
 
   get contentExpansion(): string {

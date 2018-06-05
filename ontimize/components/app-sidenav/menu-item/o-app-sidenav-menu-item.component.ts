@@ -56,9 +56,9 @@ export class OAppSidenavMenuItemComponent implements AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit() {
-    this.setUserInfoImage();
     if (this.isUserInfoItem()) {
-      this.appSidenavToggleSubscription = this.sidenav.afterSidenavToggle.subscribe((opened) => {
+      this.setUserInfoImage();
+      this.appSidenavToggleSubscription = this.sidenav.sidenav.openedChange.subscribe((opened) => {
         if (opened) {
           this.setUserInfoImage();
         }
@@ -73,13 +73,12 @@ export class OAppSidenavMenuItemComponent implements AfterViewInit, OnDestroy {
   }
 
   protected setUserInfoImage() {
-    if (this.isUserInfoItem()) {
-      let imgEl = this.elRef.nativeElement.getElementsByClassName('user-info-image')[0];
-      if (imgEl !== undefined) {
-        const item = this.menuItem as MenuItemUserInfo;
-        imgEl.setAttribute('style', 'background-image: url(\'' + item.avatar + '\')');
-      }
+    let imgEl = this.elRef.nativeElement.getElementsByClassName('user-info-image')[0];
+    if (imgEl !== undefined) {
+      const item = this.menuItem as MenuItemUserInfo;
+      imgEl.setAttribute('style', 'background-image: url(\'' + item.avatar + '\')');
     }
+    this.cd.detectChanges();
   }
 
   executeItemAction() {

@@ -15,7 +15,7 @@ export const DEFAULT_INPUTS_O_APP_HEADER = [
 ];
 
 export const DEFAULT_OUTPUTS_O_APP_HEADER = [
-  'toggleSidenav'
+  'onSidenavToggle'
 ];
 
 @Component({
@@ -45,7 +45,7 @@ export class OAppHeaderComponent implements OnDestroy {
   @InputConverter()
   useFlagIcons: boolean = false;
 
-  public toggleSidenav = new EventEmitter<void>();
+  public onSidenavToggle = new EventEmitter<void>();
 
   constructor(
     protected router: Router,

@@ -5,6 +5,12 @@
   }
 }
 
+.mat-drawer-opened {
+  .o-app-sidenav-image .application-sidenav-image-container {
+    text-align: center;
+  }
+}
+
 .o-app-sidenav-image {
   .application-sidenav-image-container {
     max-height: 75px;
