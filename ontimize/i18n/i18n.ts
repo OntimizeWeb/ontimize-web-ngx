@@ -109,6 +109,7 @@ export var MAP = {
     'MESSAGES.CONFIRM_DISCARD_FILTER_BY_COLUMN': 'Are you sure you want to discard all active columns filters?',
     'MESSAGES.ERROR_EXPORT_TABLE_DATA': 'Failed to export table data.',
     'MESSAGES.SUCCESS_EXPORT_TABLE_DATA': 'Table data exported successfully.',
+    'INPUT.COMBO.MESSAGE_TRIGGER':' (+{0} others)',
     'TABLE.FILTER_BY_COLUMN.CHECK_ALL': 'Select all',
     'TABLE.FILTER_BY_COLUMN.EMPTY_VALUE': '(empty value)',
     'TABLE.FILTER_BY_COLUMN.HINT_STAR': 'Use * to search for any character string',

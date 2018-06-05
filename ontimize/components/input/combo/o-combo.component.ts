@@ -1,31 +1,24 @@
-import {
-  Component,
-  ElementRef,
-  EventEmitter,
-  forwardRef,
-  Inject,
-  Injector,
-  OnInit,
-  ViewChild,
-  Optional,
-  NgModule,
-  ViewEncapsulation
-} from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatSelect, MatOption } from '@angular/material';
-
-import { OntimizeService, dataServiceFactory } from '../../../services';
-import { OSharedModule } from '../../../shared';
-
-import { InputConverter } from '../../../decorators';
+import { Component, ElementRef, EventEmitter, Inject, Injector, NgModule, OnInit, Optional, ViewChild, ViewEncapsulation, forwardRef } from '@angular/core';
+import { MatOption, MatSelect, MatSelectChange } from '@angular/material';
+import { InputConverter } from '../../../decorators/input-converter';
+import { dataServiceFactory } from '../../../services/data-service.provider';
+import { OntimizeService } from '../../../services/ontimize.service';
+import { OSharedModule } from '../../../shared/shared.module';
+import { Codes } from '../../../util/codes';
+import { Util } from '../../../util/util';
+import { IFormValueOptions, OFormValue } from '../../form/OFormValue';
 import { OFormComponent } from '../../form/o-form.component';
-import { OFormValue, IFormValueOptions } from '../../form/OFormValue';
 import { OFormServiceComponent } from '../o-form-service-component.class';
+
+
 
 export const DEFAULT_INPUTS_O_COMBO = [
   ...OFormServiceComponent.DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT,
   'translate',
-  'nullSelection: null-selection'
+  'multiple',
+  'nullSelection: null-selection',
+  'multipleTriggerLabel: multiple-trigger-label'
 ];
 
 export const DEFAULT_OUTPUTS_O_COMBO = [
@@ -53,6 +46,10 @@ export class OComboComponent extends OFormServiceComponent implements OnInit {
   protected translate: boolean = false;
   @InputConverter()
   protected nullSelection: boolean = true;
+  @InputConverter()
+  protected multiple: boolean;
+  @InputConverter()
+  protected multipleTriggerLabel: boolean = false;
   /* End inputs*/
 
   value: OFormValue;
@@ -74,7 +71,24 @@ export class OComboComponent extends OFormServiceComponent implements OnInit {
   }
 
   ngOnInit() {
+    super.initialize();
     this.initialize();
+  }
+
+  ngAfterViewInit(): void {
+    if (this.queryOnInit) {
+      this.queryData();
+    } else if (this.queryOnBind) {
+      //TODO do it better. When changing tabs it is necessary to invoke new query
+      this.syncDataIndex();
+    }
+  }
+
+  initialize() {
+    if (this.multiple) {
+      this.nullSelection = false;
+      this.defaultValue = [];
+    }
   }
 
   ensureOFormValue(value: any) {
@@ -94,15 +108,6 @@ export class OComboComponent extends OFormServiceComponent implements OnInit {
     this.destroy();
   }
 
-  ngAfterViewInit(): void {
-    if (this.queryOnInit) {
-      this.queryData();
-    } else if (this.queryOnBind) {
-      //TODO do it better. When changing tabs it is necessary to invoke new query
-      this.syncDataIndex();
-    }
-  }
-
   hasNullSelection(): boolean {
     return this.nullSelection;
   }
@@ -115,11 +120,24 @@ export class OComboComponent extends OFormServiceComponent implements OnInit {
     }
   }
 
+
   getDescriptionValue() {
     let descTxt = '';
     if (this._currentIndex !== undefined && this.selectModel) {
       if (this.selectModel.selected) {
-        descTxt = (this.selectModel.selected as any).viewValue;
+        if (this.selectModel.selected instanceof Array) {
+          if (this.multipleTriggerLabel && this.selectModel.selected.length > 1) {
+            descTxt = this.getFirstSelectedValue();
+            descTxt += this.translateService.get('INPUT.COMBO.MESSAGE_TRIGGER', [this.selectModel.selected.length - 1]);
+          } else {
+            this.selectModel.selected.forEach(function (item) {
+              if (descTxt !== '') descTxt += ', '
+              descTxt += item.viewValue;
+            });
+          }
+        } else {
+          descTxt = (this.selectModel.selected as any).viewValue;
+        }
       } else if (this.selectModel.options) {
         let option: MatOption = this.selectModel.options.toArray()[this._currentIndex];
         if (option) {
@@ -145,35 +163,63 @@ export class OComboComponent extends OFormServiceComponent implements OnInit {
     return descTxt;
   }
 
+
   getValue() {
     if (this.value instanceof OFormValue) {
       if (this.value.value !== undefined) {
         return this.value.value;
-      } else if (this.value.value === undefined && this.nullSelection) {
-        return null;
+      } else if (this.value.value === undefined) {
+        return this.getEmptyValue();
       }
-    }
-    if (this.nullSelection) {
-      return null;
     }
     return '';
   }
 
-  innerOnChange(event: any): void {
-    if (((event === undefined || event === null) || (typeof event === 'string' && event.length === 0)) && this.nullSelection) {
-      this.setValueOnChange(null);
-    } else {
-      // This emits the combo value, the record data may not be available.
-      this.setValueOnChange(event);
+
+  getEmptyValue() {
+    if (this.multiple) {
+      return [];
+    }
+    else {
+      if (this.nullSelection) {
+        return null;
+      } else {
+        return '';
+      }
     }
   }
 
-  setValueOnChange(value: any) {
-    this.ensureOFormValue(value);
+  getMultiple(): boolean {
+    return this.multiple;
+
+  }
+  protected parseByValueColumnType(val: any) {
+    if (!Util.isDefined(this.multiple)) {
+      return val;
+    }
+    let valueArr: any[] = this.multiple ? val : [val];
+    if (this.valueColumnType === Codes.TYPE_INT) {
+      valueArr.forEach((item, index) => {
+        const parsed = parseInt(item);
+        if (!isNaN(parsed)) {
+          valueArr[index] = parsed;
+        }
+      });
+
+    }
+    return this.multiple ? valueArr : valueArr[0];
+  }
+
+  onSelectionChange(event: MatSelectChange): void {
+    this.innerOnChange(event.value);
+  }
+
+  innerOnChange(event: any) {
+    this.ensureOFormValue(event);
     if (this._fControl && this._fControl.touched) {
       this._fControl.markAsDirty();
     }
-    this.onChange.emit(value);
+    this.onChange.emit(event);
   }
 
   getOptionDescriptionValue(item: any = {}) {
@@ -222,13 +268,29 @@ export class OComboComponent extends OFormServiceComponent implements OnInit {
 
   setValue(val: any, options?: IFormValueOptions): void {
     if (this.dataArray) {
-      const record = this.dataArray.find(item => item[this.valueColumn] === val);
-      if (record) {
+      if (this.multiple && val) {
         super.setValue(val, options);
+      } else {
+        const record = this.dataArray.find(item => item[this.valueColumn] === val);
+        if (record) {
+          super.setValue(val, options);
+        }
       }
     }
   }
 
+
+  getSelectedItems(): any[] {
+    return this.getValue();
+  }
+
+  setSelectedItems(values: any[]) {
+    this.setValue(values);
+  }
+
+  getFirstSelectedValue() {
+    return this.selectModel.selected[0].viewValue;
+  }
 }
 
 @NgModule({
