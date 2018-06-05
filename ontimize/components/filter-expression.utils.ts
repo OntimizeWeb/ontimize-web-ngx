@@ -4,13 +4,27 @@ export interface IExpression {
   rop?: string | IExpression;
 }
 
+export interface IBasicExpression {
+  '@basic_expression': IExpression;
+}
+
+export interface IFilterExpression {
+  '@filter_expression': IExpression;
+}
+
 /**
- * Utility class for creating filter expressions.
+ * Utility class for creating basic and filter expressions.
  */
 export class FilterExpressionUtils {
 
+  /**
+   * The basic expresion key.
+   */
   static BASIC_EXPRESSION_KEY = '@basic_expression';
 
+  /**
+   * The filter expresion key.
+   */
   static FILTER_EXPRESSION_KEY = '@filter_expression';
 
   /**
@@ -80,7 +94,7 @@ export class FilterExpressionUtils {
    */
   static instanceofBasicExpression(arg: any): boolean {
     return arg.hasOwnProperty(FilterExpressionUtils.BASIC_EXPRESSION_KEY)
-      && FilterExpressionUtils.instanceofFilterExpression(arg[FilterExpressionUtils.BASIC_EXPRESSION_KEY]);
+      && FilterExpressionUtils.instanceofExpression(arg[FilterExpressionUtils.BASIC_EXPRESSION_KEY]);
   }
 
   /**
@@ -88,13 +102,13 @@ export class FilterExpressionUtils {
    * @param exp the filter expression.
    * @returns the basic expression.
    */
-  static buildBasicExpression(exp: IExpression): BasicExpression {
+  static buildBasicExpression(exp: IExpression): IBasicExpression {
     if (exp) {
-      if (!FilterExpressionUtils.instanceofFilterExpression(exp)) {
+      if (!FilterExpressionUtils.instanceofExpression(exp)) {
         console.error('The expression provided is not an instance of \'IExpression\'');
       }
-      let be: BasicExpression = {
-        [FilterExpressionUtils.BASIC_EXPRESSION_KEY]: exp
+      let be: IBasicExpression = {
+        '@basic_expression': exp
       };
       return be;
     }
@@ -102,11 +116,39 @@ export class FilterExpressionUtils {
   }
 
   /**
-   * Evaluates if an expresion is instance of `FilterExpression`.
+   * Evaluates if an expresion is instance of `IFilterExpression`.
    * @param arg the expression to evaluate.
-   * @returns `true` if the provided expression is an instance of `FilterExpression`, `false` otherwise.
+   * @returns `true` if the provided expression type is `IFilterExpression`, `false` otherwise.
    */
   static instanceofFilterExpression(arg: any): boolean {
+    return arg.hasOwnProperty(FilterExpressionUtils.FILTER_EXPRESSION_KEY)
+      && FilterExpressionUtils.instanceofExpression(arg[FilterExpressionUtils.FILTER_EXPRESSION_KEY]);
+  }
+
+  /**
+   * Builds a `IFilterExpression` from the filter expression (`IExpression`) provided.
+   * @param exp the filter expression.
+   * @returns the filter expression.
+   */
+  static buildFilterExpression(exp: IExpression): IFilterExpression {
+    if (exp) {
+      if (!FilterExpressionUtils.instanceofExpression(exp)) {
+        console.error('The expression provided is not an instance of \'IExpression\'');
+      }
+      let be: IFilterExpression = {
+        '@filter_expression': exp
+      };
+      return be;
+    }
+    return undefined;
+  }
+
+  /**
+   * Evaluates if an expresion is instance of `IExpression`.
+   * @param arg the expression to evaluate.
+   * @returns `true` if the provided expression is an instance of `IExpression`, `false` otherwise.
+   */
+  static instanceofExpression(arg: any): boolean {
     return arg.hasOwnProperty('lop') && arg.hasOwnProperty('op');
   }
 
@@ -263,7 +305,6 @@ export class FilterExpressionUtils {
     colNames.forEach((col) => {
       result = self.stackExpressionLikeOR(col, val, result);
     });
-    // result[FilterExpressionUtils.FILTER_EXPRESSION_KEY] = result;
     return result;
   }
 
