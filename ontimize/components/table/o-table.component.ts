@@ -70,7 +70,7 @@ import { OContextMenuComponent } from '../contextmenu/o-context-menu-components'
 import { OContextMenuModule } from '../contextmenu/o-context-menu.module';
 import { IOContextMenuContext } from '../contextmenu/o-context-menu.service';
 import { ServiceUtils, ISQLOrder } from '../service.utils';
-import { FilterExpressionUtils, IFilterExpression } from '../filter-expression.utils';
+import { FilterExpressionUtils, IExpression } from '../filter-expression.utils';
 import { OColumnTooltip } from './column/o-table-column.component';
 
 export const DEFAULT_INPUTS_O_TABLE = [
@@ -205,7 +205,7 @@ export class OTableOptions {
   filterCaseSensitive: boolean = false;
 }
 
-export type QuickFilterFunction = (filter: string) => IFilterExpression | Object;
+export type QuickFilterFunction = (filter: string) => IExpression | Object;
 
 export interface OTableInitializationOptions {
   entity?: string;
@@ -829,15 +829,15 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       }
       // Apply column filters
       let columnFilters: IColumnValueFilter[] = this.dataSource.getColumnValueFilters();
-      let beColumnFilters: Array<IFilterExpression> = [];
+      let beColumnFilters: Array<IExpression> = [];
       columnFilters.forEach(colFilter => {
         // Prepare basic expressions
         if (Util.isDefined(colFilter.operator)) {
           switch (colFilter.operator) {
             case ColumnValueFilterOperator.IN:
               if (Util.isArray(colFilter.values)) {
-                let besIn: Array<IFilterExpression> = colFilter.values.map(value => FilterExpressionUtils.buildExpressionEquals(colFilter.attr, value));
-                let beIn: IFilterExpression = besIn.pop();
+                let besIn: Array<IExpression> = colFilter.values.map(value => FilterExpressionUtils.buildExpressionEquals(colFilter.attr, value));
+                let beIn: IExpression = besIn.pop();
                 besIn.forEach(be => {
                   beIn = FilterExpressionUtils.buildComplexExpression(beIn, be, FilterExpressionUtils.OP_OR);
                 });
@@ -864,7 +864,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
         }
       });
       // Build complete column filters basic expression
-      let beColFilter: IFilterExpression = beColumnFilters.pop();
+      let beColFilter: IExpression = beColumnFilters.pop();
       beColumnFilters.forEach(be => {
         beColFilter = FilterExpressionUtils.buildComplexExpression(beColFilter, be, FilterExpressionUtils.OP_AND);
       });
