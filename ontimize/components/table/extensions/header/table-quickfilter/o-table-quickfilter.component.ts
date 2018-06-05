@@ -70,7 +70,7 @@ export class OTableQuickfilterComponent implements OnInit, AfterViewInit, OnDest
     let result: IExpression = undefined;
     if (this.table.quickFilterCallback instanceof Function) {
       let userFilter = this.table.quickFilterCallback(this.value);
-      if (Util.isDefined(userFilter) && FilterExpressionUtils.instanceofFilterExpression(userFilter)) {
+      if (Util.isDefined(userFilter) && FilterExpressionUtils.instanceofExpression(userFilter)) {
         result = (userFilter as IExpression);
       } else if (Util.isDefined(userFilter)) {
         result = FilterExpressionUtils.buildExpressionFromObject(userFilter);
