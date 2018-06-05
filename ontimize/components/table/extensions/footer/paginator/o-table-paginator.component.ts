@@ -14,7 +14,7 @@ export const DEFAULT_PAGINATOR_TABLE = [
   inputs: DEFAULT_PAGINATOR_TABLE
 })
 export class OTablePaginatorComponent implements OnInit {
-  private translateService: OTranslateService;
+
   protected _pageLenght: number = 0;
   protected _pageIndex: number = 0;
   protected _pageSize: number = 10;
@@ -26,7 +26,6 @@ export class OTablePaginatorComponent implements OnInit {
     protected injector: Injector,
     @Inject(forwardRef(() => OTableComponent)) protected table: OTableComponent
   ) {
-    this.translateService = this.injector.get(OTranslateService);
     this._pageIndex = 0;
     this._pageSizeOptions = [10, 25, 50, 100];
   }

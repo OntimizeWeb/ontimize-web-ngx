@@ -10,6 +10,7 @@ export interface MenuGroup {
   icon?: string;
   items: (MenuItemRoute | MenuItemAction | MenuItemLocale | MenuItemLogout | MenuItemUserInfo)[];
   opened?: boolean;
+  tooltip?: string;
 }
 
 export interface MenuItem {

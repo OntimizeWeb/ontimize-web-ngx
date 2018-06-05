@@ -105,14 +105,14 @@ export class OntimizeExportService {
 
     let _innerObserver: any;
     const dataObservable = new Observable(observer => _innerObserver = observer).share();
-    let responseType: string;
-    if (OExportExtension.Excel === fileExtension) {
-      responseType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
-    } else if (OExportExtension.HTML === fileExtension) {
-      responseType = 'text/html';
-    } else if (OExportExtension.PDF === fileExtension) {
-      responseType = 'application/pdf';
-    }
+    // let responseType: string;
+    // if (OExportExtension.Excel === fileExtension) {
+    //   responseType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+    // } else if (OExportExtension.HTML === fileExtension) {
+    //   responseType = 'text/html';
+    // } else if (OExportExtension.PDF === fileExtension) {
+    //   responseType = 'application/pdf';
+    // }
     const options: any = {
       headers: new HttpHeaders({
         'Access-Control-Allow-Origin': '*',

@@ -6,10 +6,7 @@
 * **OFormServiceComponent**: ('*o-combo*' and '*o-list-picker*' extends this class) adding '*getSelectedRecord*' method for getting the selected value associated data. This is a object including all the properties definied in the '*columns*' input ([e513805](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e513805)) ([#162](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/162))
 * **OServiceComponent**: ('*o-list*' and '*o-table*' extends this class) double click mode (used in '*detail-mode*' and '*edition-mode' input) allows '*dblclick*' and '*doubleclick*' values.
 * **Codes**: Creating '*codes*' util class for general variables and types definitions ([9e20235](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9e20235)) ([d2f2060](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d2f2060))
-* **o-tree**:
-  * new '*o-tree*' component ([6b1e524](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6b1e524)) ([7d55935](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7d55935)) ([9a63807](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9a63807)) ([d4e2762](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d4e2762)) ([ff90d0f](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ff90d0f)) ([9238bd6](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9238bd6))
-  * using '*show-root*' input in '*o-tree-node*' (only valid if node has no siblings, otherwise its always true) ([5d3be91](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5d3be91)), closes [#160](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/160)
-* **o-service-base-component.class**: new '*OServiceBaseComponent*' parent class for components using Ontimize services ('*o-list*', '*o-table*' and '*o-tree*')([70271b7](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/70271b7))
+* **o-service-base-component.class**: new '*OServiceBaseComponent*' parent class for components using Ontimize services ('*o-list*' and '*o-table*')([70271b7](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/70271b7))
   * new '*store-state*' input ([35a523c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/35a523c)) ([#166](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/166))
 * **o-table-column**:
   * new '*addEditor*' static method that user '*must*' use in new cell editors constructor definitions ([f942c20](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f942c20))
@@ -20,9 +17,9 @@
 * **o-table**: allowing to live edit the quick filter columns ([2be977e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2be977e)) ([23a73d4](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/23a73d4)) ([08447e3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/08447e3))
 * **MenuItem**:
   * new '*show-in-card-menu*' input (default=true) indicating whether or not to show its correspondent '*o-card-menu-item*' ([374c408](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/374c408))
-  * new '*show-in-app-sidenav*' input (default=true) indicating whether or not to show its correspondent '*o-pp-sidenav-menu-item*' ([dbb7f9a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/dbb7f9a))
+  * new '*show-in-app-sidenav*' input (default=true) indicating whether or not to show its correspondent '*o-app-sidenav-menu-item*' ([dbb7f9a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/dbb7f9a))
 * **OFormDataComponent**:
-  * new '*width*' input in form inner components ([88d28cb](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/88d28cb))
+  * new '*width*' input in form inner components ([88d28cb](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/88d28cb)) ([d7b8307](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d7b8307))
   * new optional '*options*' parameter in '*setValue*' method. This parameter must implement the new '*IFormValueOptions*' interface (same as angular FormControl '*setValue*' method '*options*' parameter, watch [here](https://angular.io/api/forms/FormControl#setValue)) ([e1a0e18](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e1a0e18))
   * new '*read-only*' input in form inner components ([015c037](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/015c037))
 
@@ -33,10 +30,13 @@
   * fixing bug in custom cell editors creation ([f942c20](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f942c20)) ([#167](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/167))
   * fixing translation bugs ([ffef427](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ffef427)) ([b3de673](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b3de673)) ([#170](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/170))
   * empty cell edition bug ([e51783d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e51783d)) ([#164](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/164))
+  * paginator bug fixed (deleting '*show all*' records option) ([f448bfa](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f448bfa)) [#179](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/179)
 * **o-table-cell-renderer-service**: fix undefined service provider ([a00a112](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a00a112)). Closes [#172](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/172)
 * **o-app-sidenav**:
   * initialization bug fixed ([d150cb2](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d150cb2)) ([#165](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/165))
   * initialization bug fixed ([eddfec3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/eddfec3)) ([#176](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/176))
+  * tooltip bug fixed ([35f0877](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/35f0877)), closes [#177](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/177)
+  * general bugs fixed ([20a3539](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/20a3539)), closes [#178](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/178)
 * **OServiceBaseComponent**: adding '*ngOnChanges*' method ([f93a1d0](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f93a1d0)) ([#174](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/174))
 * **OFormServiceComponent**: '*setData*' method bug fixed ([1aa9e17](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1aa9e17)) ([#173](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/173))
 
@@ -50,6 +50,8 @@
     * every new editor or renderer that uses '*ngOnInit*' method *must* init its implementation invoking '*super.ngOnInit()*'
     * cell editors typo fixed: method '*startEdtion*' is now '*startEdition*'
 
+
+**Note**: There is a new '*o-tree*' component, all its information will be available at [ontimize-web-ngx-tree](https://github.com/OntimizeWeb/ontimize-web-ngx-tree)
 
 ## 3.0.0-rc.0 (2018-04-30)
 

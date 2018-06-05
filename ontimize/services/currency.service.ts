@@ -1,5 +1,4 @@
 import { Injector } from '@angular/core';
-import { AppConfig, Config } from '../config/app-config';
 import { NumberService } from './number.service';
 
 export class CurrencyService {
@@ -12,10 +11,7 @@ export class CurrencyService {
   protected _symbol: string;
   protected _symbolPosition: string;
 
-  private _config: Config;
-
   constructor(protected injector: Injector) {
-    this._config = this.injector.get(AppConfig).getConfiguration();
     this._numberService = this.injector.get(NumberService);
     //TODO: initialize from config
     this._symbol = CurrencyService.DEFAULT_CURRENCY_SYMBOL;

@@ -25,8 +25,8 @@ export * from './components/side-menu/o-side-menu-item.component';
 export * from './components/side-menu/o-locale-side-menu-item.component';
 export * from './components/side-menu/o-side-menu-separator.component';
 export * from './components/table/table-components';
-export * from './components/tree/tree-components';
 
+export * from './components/filter-expression.utils';
 export * from './components/o-component.class';
 export * from './components/o-form-data-component.class';
 export * from './components/o-service-base-component.class';

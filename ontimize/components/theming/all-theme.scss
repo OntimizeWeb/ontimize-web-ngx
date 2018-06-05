@@ -17,7 +17,6 @@
 @import '../card-menu-item/o-card-menu-item.component.theme.scss';
 @import '../contextmenu/o-context-menu-theme.scss';
 @import '../table/extensions/header/table-insertable-row/o-table-editable-row/o-table-editable-row.theme.scss';
-@import '../tree/o-tree-theme.scss';
 
 // Create a theme.
 @mixin o-material-theme($theme, $typography: null) {
@@ -41,5 +40,4 @@
   @include o-card-menu-item-theme($theme);
   @include o-context-menu-theme($theme);
   @include o-table-editable-row-theme($theme);
-  @include o-tree-theme($theme);
 }

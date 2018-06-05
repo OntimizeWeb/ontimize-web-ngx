@@ -1,8 +1,4 @@
-import {
-  Directive, ElementRef, OnInit, OnDestroy,
-  Input, HostListener, Renderer,
-  ViewContainerRef, ComponentFactoryResolver, ContentChild
-} from '@angular/core';
+import { ContentChild, Directive, ElementRef, Input, HostListener, OnDestroy, OnInit, Renderer, ViewContainerRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { EventEmitter } from '@angular/core';
 
@@ -37,11 +33,8 @@ export class OListItemDirective implements OnInit, OnDestroy {
 
   constructor(public _el: ElementRef,
     private renderer: Renderer,
-    public actRoute: ActivatedRoute,
-    private containerRef: ViewContainerRef,
-    private componentFactoryResolver: ComponentFactoryResolver
-  ) {
-  }
+    public actRoute: ActivatedRoute
+  ) { }
 
   ngOnInit() {
     this.subcription = this.actRoute
