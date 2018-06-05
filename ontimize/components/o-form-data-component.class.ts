@@ -117,6 +117,10 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   }
 
   initializeWidth() {
+    if (this.elRef.nativeElement.getAttributeNames().indexOf('fxflex') !== -1) {
+      return;
+    }
+
     if (!this.width || !(this.width.length > 0)) {
       switch (true) {
         case this instanceof OCurrencyInputComponent:
