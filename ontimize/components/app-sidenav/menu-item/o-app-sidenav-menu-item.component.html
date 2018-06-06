@@ -28,7 +28,7 @@
 
 <ng-container *ngIf="!sidenavOpened">
   <li class="application-sidenav-menuitem application-sidenav-item">
-    <a matTooltip="{{ menuItem.name | oTranslate }}" matTooltipPosition="right" mat-button (click)="onClick()" [class.application-sidenav-viewer-sidenav-item-selected]="isActiveItem()">
+    <a [matTooltip]="tooltip" matTooltipClass="menuitem-tooltip" matTooltipPosition="right" mat-button (click)="onClick()" [class.application-sidenav-viewer-sidenav-item-selected]="isActiveItem()">
       <mat-icon *ngIf="menuItem.icon">{{ menuItem.icon }}</mat-icon>
     </a>
   </li>

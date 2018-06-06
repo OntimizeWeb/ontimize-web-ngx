@@ -197,7 +197,7 @@ export class OListPickerComponent extends OFormServiceComponent implements OnIni
       data: {
         data: this.getDialogDataArray(this.dataArray),
         filter: this.filter,
-        searchVal: this.visibleInputValue || this.visibleInput.nativeElement.value,
+        searchVal: this.visibleInputValue,
         visibleColumns: this.visibleColArray,
         queryRows: this.queryRows
       }

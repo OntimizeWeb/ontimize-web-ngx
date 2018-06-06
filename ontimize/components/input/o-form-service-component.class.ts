@@ -1,13 +1,13 @@
-import { Injector, ElementRef } from '@angular/core';
+import { ElementRef, Injector } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 import { InputConverter } from '../../decorators';
-import { OntimizeService, DialogService } from '../../services';
-import { Util, Codes } from '../../utils';
-
-import { OFormComponent } from '../form/o-form.component';
-import { OFormDataComponent, DEFAULT_INPUTS_O_FORM_DATA_COMPONENT } from '../o-form-data-component.class';
-import { ServiceUtils } from '../service.utils';
+import { DialogService, OntimizeService } from '../../services';
+import { Codes, Util } from '../../utils';
 import { IFormValueOptions } from '../form/OFormValue';
+import { OFormComponent } from '../form/o-form.component';
+import { DEFAULT_INPUTS_O_FORM_DATA_COMPONENT, OFormDataComponent } from '../o-form-data-component.class';
+import { ServiceUtils } from '../service.utils';
+
 
 export const DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT = [
   ...DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,
@@ -220,6 +220,18 @@ export class OFormServiceComponent extends OFormDataComponent {
     if (this.value && this.value.value && this.dataArray) {
       const self = this;
       this.dataArray.forEach((item, index) => {
+        if (this.value.value instanceof Array) {
+          this._currentIndex = [];
+
+          this.value.value.forEach((itemValue, indexValue) => {
+            if (item[self.valueColumn] === itemValue) {
+              this._currentIndex[this._currentIndex.length] = indexValue;
+            }
+
+          });
+        }else if (item[self.valueColumn] === this.value.value) {
+            self._currentIndex = index;
+          }
         if (item[self.valueColumn] === this.value.value) {
           self._currentIndex = index;
         }
@@ -237,6 +249,7 @@ export class OFormServiceComponent extends OFormDataComponent {
 
   protected parseByValueColumnType(val: any) {
     let value = val;
+
     if (this.valueColumnType === Codes.TYPE_INT) {
       const parsed = parseInt(value);
       if (!isNaN(parsed)) {

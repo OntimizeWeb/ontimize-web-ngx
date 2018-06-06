@@ -2,7 +2,6 @@
 
   <mat-sidenav #sidenav class="application-sidenav-sidenav o-scroll" [opened]="isSidenavOpened()" [mode]="'side'" [class.mat-drawer-opened]="sidenav.opened"
     [class.mat-drawer-closed]="!sidenav.opened">
-    <!--isScreenSmall() ? 'over' : 'side'-->
 
     <div fxLayout="row" fxLayoutAlign="end" *ngIf="showToggleButton" class="sidenav-toggle-container">
       <mat-icon class="sidenav-toggle" (click)="toggleSidenav()">menu</mat-icon>

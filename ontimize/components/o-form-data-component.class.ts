@@ -17,6 +17,11 @@ import { OBaseComponent, IComponent } from './o-component.class';
 import { OFormComponent } from './form/o-form.component';
 import { OFormValue, IFormValueOptions } from './form/OFormValue';
 
+export interface IMultipleSelection extends IComponent {
+  getSelectedItems(): Array<any>;
+  setSelectedItems(values: Array<any>);
+}
+
 export interface IFormDataTypeComponent extends IComponent {
   getSQLType(): number;
 }
@@ -110,13 +115,17 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     this.initializeWidth();
     if (this.form) {
       this.registerFormListeners();
-      this.isReadOnly = this.form.isInInitialMode() ? true : false;
+      this.isReadOnly = this.form.isInInitialMode();
     } else {
       this.isReadOnly = this._disabled;
     }
   }
 
   initializeWidth() {
+    if (this.elRef.nativeElement.getAttributeNames().indexOf('fxflex') !== -1) {
+      return;
+    }
+
     if (!this.width || !(this.width.length > 0)) {
       switch (true) {
         case this instanceof OCurrencyInputComponent:
