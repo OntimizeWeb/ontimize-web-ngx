@@ -72,7 +72,6 @@ import { IOContextMenuContext } from '../contextmenu/o-context-menu.service';
 import { ServiceUtils, ISQLOrder } from '../service.utils';
 import { FilterExpressionUtils, IExpression } from '../filter-expression.utils';
 import { OColumnTooltip } from './column/o-table-column.component';
-import { OFilterBuilderComponent } from '../../components';
 
 export const DEFAULT_INPUTS_O_TABLE = [
   ...OServiceComponent.DEFAULT_INPUTS_O_SERVICE_COMPONENT,
@@ -131,10 +130,7 @@ export const DEFAULT_INPUTS_O_TABLE = [
   'editionMode: edition-mode',
 
   // selection-mode [none | simple | multiple ]: selection mode. Default multiple
-  'selectionMode: selection-mode',
-
-  // filter-builder [OFilterBuilderComponent]: 'OFilterBuilderComponent' reference
-  'filterBuilder: filter-builder'
+  'selectionMode: selection-mode'
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE = [
@@ -259,7 +255,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   @ViewChildren(MatSortHeader) protected sortHeaders: QueryList<MatSortHeader>;
 
   public tableContextMenu: OContextMenuComponent;
-  public filterBuilder: OFilterBuilderComponent;
 
   @InputConverter()
   selectAllCheckbox: boolean = false;

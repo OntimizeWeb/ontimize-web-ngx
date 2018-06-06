@@ -85,6 +85,10 @@ export class OFilterBuilderComponent implements AfterViewInit, OnDestroy, OnInit
         });
       });
     }
+
+    if (Util.isDefined(this.targetCmp)) {
+      this.targetCmp.setFilterBuilder(this);
+    }
   }
 
   initializeListeners(): void {
