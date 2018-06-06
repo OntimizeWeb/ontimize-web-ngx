@@ -72,6 +72,7 @@ import { IOContextMenuContext } from '../contextmenu/o-context-menu.service';
 import { ServiceUtils, ISQLOrder } from '../service.utils';
 import { FilterExpressionUtils, IExpression } from '../filter-expression.utils';
 import { OColumnTooltip } from './column/o-table-column.component';
+import { OFilterBuilderComponent } from '../../components';
 
 export const DEFAULT_INPUTS_O_TABLE = [
   ...OServiceComponent.DEFAULT_INPUTS_O_SERVICE_COMPONENT,
@@ -130,7 +131,10 @@ export const DEFAULT_INPUTS_O_TABLE = [
   'editionMode: edition-mode',
 
   // selection-mode [none | simple | multiple ]: selection mode. Default multiple
-  'selectionMode: selection-mode'
+  'selectionMode: selection-mode',
+
+  // filter-builder [OFilterBuilderComponent]: 'OFilterBuilderComponent' reference
+  'filterBuilder: filter-builder'
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE = [
@@ -255,6 +259,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   @ViewChildren(MatSortHeader) protected sortHeaders: QueryList<MatSortHeader>;
 
   public tableContextMenu: OContextMenuComponent;
+  public filterBuilder: OFilterBuilderComponent;
 
   @InputConverter()
   selectAllCheckbox: boolean = false;
@@ -878,6 +883,19 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
         }
       }
     }
+
+    // Add filter from o-filter-builder component
+    if (Util.isDefined(this.filterBuilder)) {
+      let fbFilter = this.filterBuilder.getExpression();
+      if (Util.isDefined(fbFilter)) {
+        if (!Util.isDefined(filter[FilterExpressionUtils.BASIC_EXPRESSION_KEY])) {
+          filter[FilterExpressionUtils.BASIC_EXPRESSION_KEY] = fbFilter;
+        } else {
+          filter[FilterExpressionUtils.BASIC_EXPRESSION_KEY] = FilterExpressionUtils.buildComplexExpression(filter[FilterExpressionUtils.BASIC_EXPRESSION_KEY], fbFilter, FilterExpressionUtils.OP_AND);
+        }
+      }
+    }
+
     return filter;
   }
 
