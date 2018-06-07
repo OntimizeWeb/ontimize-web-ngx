@@ -250,7 +250,7 @@ export class OListPickerComponent extends OFormServiceComponent implements OnIni
 
   innerOnFocus(evt: any) {
     if (!this.isReadOnly && !this.isDisabled) {
-      this.onFocus.emit(event);
+      this.onFocus.emit(evt);
     }
   }
 
@@ -260,7 +260,7 @@ export class OListPickerComponent extends OFormServiceComponent implements OnIni
       this.blurTimer = setTimeout(() => {
         if (!self.blurPrevent) {
           self._fControl.markAsTouched();
-          self.onBlur.emit(event);
+          self.onBlur.emit(evt);
           if (self.visibleInputValue !== undefined && self.visibleInputValue.length > 0) {
             self.openDialog();
           } else if (self.visibleInputValue !== undefined) {
@@ -268,7 +268,7 @@ export class OListPickerComponent extends OFormServiceComponent implements OnIni
             self.visibleInputValue = undefined;
           } else {
             self._fControl.markAsTouched();
-            self.onBlur.emit(event);
+            self.onBlur.emit(evt);
           }
         }
         self.blurPrevent = false;
