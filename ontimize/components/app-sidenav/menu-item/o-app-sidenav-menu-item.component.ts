@@ -28,6 +28,7 @@ export const DEFAULT_OUTPUTS_O_APP_SIDENAV_MENU_ITEM = [];
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class OAppSidenavMenuItemComponent implements AfterViewInit, OnDestroy {
+
   public static DEFAULT_INPUTS_O_APP_SIDENAV_MENU_ITEM = DEFAULT_INPUTS_O_APP_SIDENAV_MENU_ITEM;
   public static DEFAULT_OUTPUTS_O_APP_SIDENAV_MENU_ITEM = DEFAULT_OUTPUTS_O_APP_SIDENAV_MENU_ITEM;
 
@@ -41,6 +42,7 @@ export class OAppSidenavMenuItemComponent implements AfterViewInit, OnDestroy {
   public menuItem: MenuRootItem;
   public menuItemType: string;
   protected appSidenavToggleSubscription: Subscription;
+  protected routerSubscription: Subscription;
   protected oAppLayoutComponent: OAppLayoutComponent;
 
   constructor(
@@ -53,6 +55,9 @@ export class OAppSidenavMenuItemComponent implements AfterViewInit, OnDestroy {
     this.sidenav = this.injector.get(OAppSidenavComponent);
     this.oAppLayoutComponent = this.injector.get(OAppLayoutComponent);
     this.router = this.injector.get(Router);
+    this.routerSubscription = this.router.events.subscribe(() => {
+      this.cd.detectChanges();
+    });
   }
 
   ngAfterViewInit() {
@@ -69,6 +74,9 @@ export class OAppSidenavMenuItemComponent implements AfterViewInit, OnDestroy {
   ngOnDestroy() {
     if (this.appSidenavToggleSubscription) {
       this.appSidenavToggleSubscription.unsubscribe();
+    }
+    if (this.routerSubscription) {
+      this.routerSubscription.unsubscribe();
     }
   }
 
