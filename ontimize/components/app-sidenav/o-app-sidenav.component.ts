@@ -61,6 +61,7 @@ export class OAppSidenavComponent implements OnInit, OnDestroy, AfterViewInit {
   protected userInfo: UserInfo;
 
   protected mediaWatch: Subscription;
+  protected manuallyClosed: boolean = false;
 
   constructor(
     protected injector: Injector,
@@ -82,9 +83,7 @@ export class OAppSidenavComponent implements OnInit, OnDestroy, AfterViewInit {
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
-    if (this.isScreenSmall()) {
-      this.sidenav.close();
-    } else {
+    if (!this.manuallyClosed && !this.isScreenSmall()) {
       this.sidenav.open();
     }
   }
@@ -139,7 +138,7 @@ export class OAppSidenavComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   isScreenSmall(): boolean {
-    return this.media.isActive('lt-sm');
+    return !this.manuallyClosed && this.media.isActive('lt-sm');
   }
 
   isSidenavOpened(): boolean {
@@ -162,6 +161,7 @@ export class OAppSidenavComponent implements OnInit, OnDestroy, AfterViewInit {
     });
     this.cd.detectChanges();
     this.opened = this.sidenav.opened;
+    this.manuallyClosed = !this.opened;
     this.onSidenavToggle.emit(this.sidenav.opened);
   }
 
