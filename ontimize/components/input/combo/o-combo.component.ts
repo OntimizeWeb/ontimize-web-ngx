@@ -268,7 +268,9 @@ export class OComboComponent extends OFormServiceComponent implements OnInit {
 
   setValue(val: any, options?: IFormValueOptions): void {
     if (this.dataArray) {
-      if (this.multiple && val) {
+      if (!Util.isDefined(val) && this.nullSelection) {
+        super.setValue(val, options);
+      } else if (this.multiple && val) {
         super.setValue(val, options);
       } else {
         const record = this.dataArray.find(item => item[this.valueColumn] === val);
