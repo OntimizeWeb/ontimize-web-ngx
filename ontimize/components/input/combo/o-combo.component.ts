@@ -11,8 +11,6 @@ import { IFormValueOptions, OFormValue } from '../../form/OFormValue';
 import { OFormComponent } from '../../form/o-form.component';
 import { OFormServiceComponent } from '../o-form-service-component.class';
 
-
-
 export const DEFAULT_INPUTS_O_COMBO = [
   ...OFormServiceComponent.DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT,
   'translate',
@@ -120,7 +118,6 @@ export class OComboComponent extends OFormServiceComponent implements OnInit {
     }
   }
 
-
   getDescriptionValue() {
     let descTxt = '';
     if (this._currentIndex !== undefined && this.selectModel) {
@@ -131,7 +128,9 @@ export class OComboComponent extends OFormServiceComponent implements OnInit {
             descTxt += this.translateService.get('INPUT.COMBO.MESSAGE_TRIGGER', [this.selectModel.selected.length - 1]);
           } else {
             this.selectModel.selected.forEach(function (item) {
-              if (descTxt !== '') descTxt += ', '
+              if (descTxt !== '') {
+                descTxt += this.separator;
+              }
               descTxt += item.viewValue;
             });
           }
@@ -175,12 +174,10 @@ export class OComboComponent extends OFormServiceComponent implements OnInit {
     return '';
   }
 
-
   getEmptyValue() {
     if (this.multiple) {
       return [];
-    }
-    else {
+    } else {
       if (this.nullSelection) {
         return null;
       } else {
@@ -191,8 +188,8 @@ export class OComboComponent extends OFormServiceComponent implements OnInit {
 
   getMultiple(): boolean {
     return this.multiple;
-
   }
+
   protected parseByValueColumnType(val: any) {
     if (!Util.isDefined(this.multiple)) {
       return val;
@@ -205,7 +202,6 @@ export class OComboComponent extends OFormServiceComponent implements OnInit {
           valueArr[index] = parsed;
         }
       });
-
     }
     return this.multiple ? valueArr : valueArr[0];
   }
@@ -280,7 +276,6 @@ export class OComboComponent extends OFormServiceComponent implements OnInit {
       }
     }
   }
-
 
   getSelectedItems(): any[] {
     return this.getValue();
