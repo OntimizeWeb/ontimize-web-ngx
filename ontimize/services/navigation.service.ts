@@ -79,8 +79,9 @@ export class NavigationService implements ILocalStorageComponent {
             text: displayText
           }));
         }
-        navigationItems[navigationItems.length - 1].queryParams = route ? route.queryParams : {};
-
+        if (navigationItems.length > 0) {
+          navigationItems[navigationItems.length - 1].queryParams = route ? route.queryParams : {};
+        }
         self.setNavigationItems(navigationItems);
       });
   }
