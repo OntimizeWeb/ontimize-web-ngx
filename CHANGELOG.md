@@ -26,6 +26,7 @@
 * New component **o-filter-builder** that allows building complex expressions using form components for filtering the `o-table` data. ([3874f70](https://github.com/OntimizeWeb/ontimize-web-ngx/tree/3874f70))
 * New directive **oFilterBuilderQuery** used with the `o-filter-builder` component for triggering the filter action. ([3874f70](https://github.com/OntimizeWeb/ontimize-web-ngx/tree/3874f70))
 * New directive **oFilterBuilderClear** used with the `o-filter-builderp` component for clearing the form components involved in the filtering. ([3874f70](https://github.com/OntimizeWeb/ontimize-web-ngx/tree/3874f70))
+* **ontimize-ee.service**, **ontimize.service**: new '*parseSuccessfulResponse*' and '*parseUnsuccessfulResponse*' methods ([6ab33d8](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6ab33d8))
 
 ### Bug Fixes
 * **o-table**:
@@ -44,7 +45,9 @@
   * opened state bug fixed ([23635d3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/23635d3)), closes [#180](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/180)
 * **OServiceBaseComponent**: adding '*ngOnChanges*' method ([f93a1d0](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f93a1d0)) ([#174](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/174))
 * **OFormServiceComponent**: '*setData*' method bug fixed ([1aa9e17](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1aa9e17)) ([#173](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/173))
-
+* **ontimize-ee.service**: delete method bug fixed ([bea5277](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/bea5277)) ([#183](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/183))
+* **o-email-input**: validation bug fixed ([1a5be2a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1a5be2a)) ([#184](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/184))
+* **o-image**: new default '*BASE64*' '*sqlType*' ([26a1e5c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/26a1e5c)) ([#186](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/186))
 
 ### BREAKING CHANGES
 * **o-table**:
