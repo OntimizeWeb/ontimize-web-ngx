@@ -33,7 +33,7 @@ export class OSnackBarComponent {
   icon: string;
   iconPosition: OSnackBarIconPosition = 'left';
 
-  protected snackBarRef: MatSnackBarRef<OSnackBarComponent>;
+  protected snackBarRef: MatSnackBarRef<{}>;
 
   constructor(
     protected injector: Injector
