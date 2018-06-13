@@ -4,4 +4,5 @@ export * from './util/events';
 export * from './util/sqltypes';
 export * from './util/util';
 export * from './components/service.utils';
+export * from './components/filter-expression.utils';
 export * from './util/codes';

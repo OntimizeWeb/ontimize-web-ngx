@@ -1,16 +1,16 @@
-import { Injector, ElementRef } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ElementRef, Injector } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 
-import { Util, Codes } from '../utils';
+import { Codes, Util } from '../utils';
 import { InputConverter } from '../decorators';
 import { AuthGuardService } from '../services';
-import { OFormLayoutManagerComponent } from '../layouts/form-layout/o-form-layout-manager.component';
-
-import { OFormComponent } from './form/o-form.component';
 import { OFormValue } from './form/OFormValue';
+import { OFilterBuilderComponent } from '../components';
+import { OFormComponent } from './form/o-form.component';
 import { OListInitializationOptions } from './list/o-list.component';
 import { OTableInitializationOptions } from './table/o-table.component';
-import { OServiceBaseComponent, DEFAULT_INPUTS_O_SERVICE_BASE_COMPONENT } from './o-service-base-component.class';
+import { OFormLayoutManagerComponent } from '../layouts/form-layout/o-form-layout-manager.component';
+import { DEFAULT_INPUTS_O_SERVICE_BASE_COMPONENT, OServiceBaseComponent } from './o-service-base-component.class';
 
 export const DEFAULT_INPUTS_O_SERVICE_COMPONENT = [
   ...DEFAULT_INPUTS_O_SERVICE_BASE_COMPONENT,
@@ -112,6 +112,8 @@ export class OServiceComponent extends OServiceBaseComponent {
 
   protected onMainTabSelectedSubscription: any;
   protected formLayoutManager: OFormLayoutManagerComponent;
+
+  public filterBuilder: OFilterBuilderComponent;
 
   constructor(
     injector: Injector,
@@ -339,6 +341,14 @@ export class OServiceComponent extends OServiceBaseComponent {
       this.destroy();
       this.initialize();
     }
+  }
+
+  /**
+   * Sets the `o-filter-builder` component that this component will use to filter its data.
+   * @param filterBuilder the `o-filter-builder` component.
+   */
+  setFilterBuilder(filterBuilder: OFilterBuilderComponent): void {
+    this.filterBuilder = filterBuilder;
   }
 
 }

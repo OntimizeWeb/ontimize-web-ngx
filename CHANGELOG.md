@@ -22,7 +22,10 @@
   * new '*width*' input in form inner components ([88d28cb](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/88d28cb)) ([d7b8307](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d7b8307))
   * new optional '*options*' parameter in '*setValue*' method. This parameter must implement the new '*IFormValueOptions*' interface (same as angular FormControl '*setValue*' method '*options*' parameter, watch [here](https://angular.io/api/forms/FormControl#setValue)) ([e1a0e18](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e1a0e18))
   * new '*read-only*' input in form inner components ([015c037](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/015c037))
-* **o-combo**: new  '*multiple*' and '*multiple-trigger-label*' inputs that allow multiple selection ([9c6eed3f](https://github.com/OntimizeWeb/ontimize-web-ngx/tree/9c6eed3fd509cf7e7a4262936ceb9d617fe8a1a3))
+* **o-combo**: new  '*multiple*' and '*multiple-trigger-label*' inputs that allow multiple selection ([9c6eed3f] (https://github.com/OntimizeWeb/ontimize-web-ngx/tree/9c6eed3fd509cf7e7a4262936ceb9d617fe8a1a3))
+* New component **o-filter-builder** that allows building complex expressions using form components for filtering the `o-table` data. ([3874f70](https://github.com/OntimizeWeb/ontimize-web-ngx/tree/3874f70))
+* New directive **oFilterBuilderQuery** used with the `o-filter-builder` component for triggering the filter action. ([3874f70](https://github.com/OntimizeWeb/ontimize-web-ngx/tree/3874f70))
+* New directive **oFilterBuilderClear** used with the `o-filter-builderp` component for clearing the form components involved in the filtering. ([3874f70](https://github.com/OntimizeWeb/ontimize-web-ngx/tree/3874f70))
 
 ### Bug Fixes
 * **o-table**:
@@ -38,6 +41,7 @@
   * initialization bug fixed ([eddfec3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/eddfec3)) ([#176](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/176))
   * tooltip bug fixed ([35f0877](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/35f0877)), closes [#177](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/177)
   * general bugs fixed ([20a3539](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/20a3539)), closes [#178](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/178)
+  * opened state bug fixed ([23635d3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/23635d3)), closes [#180](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/180)
 * **OServiceBaseComponent**: adding '*ngOnChanges*' method ([f93a1d0](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f93a1d0)) ([#174](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/174))
 * **OFormServiceComponent**: '*setData*' method bug fixed ([1aa9e17](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1aa9e17)) ([#173](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/173))
 

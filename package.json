@@ -19,7 +19,8 @@
   "scripts": {
     "preinstall": "npm config set package-lock false",
     "clean": "o-ngx-lib-builder clean",
-    "build": "npm run clean && o-ngx-lib-builder build --package ontimize-web-ngx --ng-library ng.ontimizeWeb"
+    "build": "npm run clean && o-ngx-lib-builder build --package ontimize-web-ngx --ng-library ng.ontimizeWeb",
+    "pack": "npm run build && cd dist && npm pack"
   },
   "dependencies": {
     "ng2-dnd": "5.0.2",

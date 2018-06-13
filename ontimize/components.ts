@@ -10,6 +10,7 @@ export * from './components/container/row/o-row.component';
 export * from './components/contextmenu/o-context-menu.module';
 export * from './components/dialog/o-dialog.component';
 export * from './components/snackbar/o-snackbar.component';
+export * from './components/filter-builder/o-filter-builder-components';
 export * from './components/form/form-components';
 export * from './components/image/o-image.component';
 export * from './components/input/input.components';

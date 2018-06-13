@@ -4,7 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { Util } from '../../../../../utils';
 import { OTableComponent, OColumn, OTableOptions } from '../../../o-table.component';
-import { IFilterExpression, FilterExpressionUtils } from '../../../../filter-expression.utils';
+import { IExpression, FilterExpressionUtils } from '../../../../filter-expression.utils';
 
 export const DEFAULT_INPUTS_O_TABLE_QUICKFILTER = [
 ];
@@ -52,8 +52,8 @@ export class OTableQuickfilterComponent implements OnInit, AfterViewInit, OnDest
     this.initializeEventFilter();
   }
 
-  get filterExpression(): IFilterExpression {
-    let result: IFilterExpression = this.getUserFilter();
+  get filterExpression(): IExpression {
+    let result: IExpression = this.getUserFilter();
     if (!Util.isDefined(result) && Util.isDefined(this.value) && this.value.length > 0) {
       let queryCols = [];
       this.oTableOptions.columns.map((oCol: OColumn) => {
@@ -67,11 +67,11 @@ export class OTableQuickfilterComponent implements OnInit, AfterViewInit, OnDest
   }
 
   getUserFilter() {
-    let result: IFilterExpression = undefined;
+    let result: IExpression = undefined;
     if (this.table.quickFilterCallback instanceof Function) {
       let userFilter = this.table.quickFilterCallback(this.value);
-      if (Util.isDefined(userFilter) && FilterExpressionUtils.instanceofFilterExpression(userFilter)) {
-        result = (userFilter as IFilterExpression);
+      if (Util.isDefined(userFilter) && FilterExpressionUtils.instanceofExpression(userFilter)) {
+        result = (userFilter as IExpression);
       } else if (Util.isDefined(userFilter)) {
         result = FilterExpressionUtils.buildExpressionFromObject(userFilter);
       }

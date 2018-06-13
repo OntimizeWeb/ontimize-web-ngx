@@ -122,12 +122,10 @@ export class OntimizeEEService implements IAuthService, IDataService {
 
     const self = this;
     this.httpClient.post(url, body, options).subscribe(resp => {
-      self.responseParser.parseSuccessfulResponse(resp, _innerObserver, this);
+      self.parseSuccessfulResponse(resp, _innerObserver);
     }, error => {
-      self.responseParser.parseUnsuccessfulResponse(error, _innerObserver, this);
-    },
-      () => _innerObserver.complete());
-
+      self.parseUnsuccessfulResponse(error, _innerObserver);
+    }, () => _innerObserver.complete());
     return dataObservable;
   }
 
@@ -161,11 +159,10 @@ export class OntimizeEEService implements IAuthService, IDataService {
 
     const self = this;
     this.httpClient.post(url, body, options).subscribe(resp => {
-      self.responseParser.parseSuccessfulResponse(resp, _innerObserver, this);
+      self.parseSuccessfulResponse(resp, _innerObserver);
     }, error => {
-      self.responseParser.parseUnsuccessfulResponse(error, _innerObserver, this);
-    },
-      () => _innerObserver.complete());
+      self.parseUnsuccessfulResponse(error, _innerObserver);
+    }, () => _innerObserver.complete());
     return dataObservable;
   }
 
@@ -184,11 +181,10 @@ export class OntimizeEEService implements IAuthService, IDataService {
 
     const self = this;
     this.httpClient.post(url, body, options).subscribe(resp => {
-      self.responseParser.parseSuccessfulResponse(resp, _innerObserver, this);
+      self.parseSuccessfulResponse(resp, _innerObserver);
     }, error => {
-      self.responseParser.parseUnsuccessfulResponse(error, _innerObserver, this);
-    },
-      () => _innerObserver.complete());
+      self.parseUnsuccessfulResponse(error, _innerObserver);
+    }, () => _innerObserver.complete());
     return dataObservable;
   }
 
@@ -207,11 +203,10 @@ export class OntimizeEEService implements IAuthService, IDataService {
     const dataObservable = new Observable(observer => _innerObserver = observer).share();
     const self = this;
     this.httpClient.put(url, body, options).subscribe(resp => {
-      self.responseParser.parseSuccessfulResponse(resp, _innerObserver, this);
+      self.parseSuccessfulResponse(resp, _innerObserver);
     }, error => {
-      self.responseParser.parseUnsuccessfulResponse(error, _innerObserver, this);
-    },
-      () => _innerObserver.complete());
+      self.parseUnsuccessfulResponse(error, _innerObserver);
+    }, () => _innerObserver.complete());
     return dataObservable;
   }
 
@@ -220,20 +215,19 @@ export class OntimizeEEService implements IAuthService, IDataService {
     const headers: HttpHeaders = this.buildHeaders();
     const options: any = {
       headers: headers,
-      params: {
+      body: JSON.stringify({
         filter: kv,
         sqltypes: sqltypes
-      }
+      })
     };
     let _innerObserver: any;
     const dataObservable = new Observable(observer => _innerObserver = observer).share();
     const self = this;
     this.httpClient.delete(url, options).subscribe(resp => {
-      self.responseParser.parseSuccessfulResponse(resp, _innerObserver, this);
+      self.parseSuccessfulResponse(resp, _innerObserver);
     }, error => {
-      self.responseParser.parseUnsuccessfulResponse(error, _innerObserver, this);
-    },
-      () => _innerObserver.complete());
+      self.parseUnsuccessfulResponse(error, _innerObserver);
+    }, () => _innerObserver.complete());
     return dataObservable;
   }
 
@@ -252,5 +246,13 @@ export class OntimizeEEService implements IAuthService, IDataService {
 
   isNullOrUndef(value: any): boolean {
     return !Util.isDefined(value);
+  }
+
+  protected parseSuccessfulResponse(resp: any, _innerObserver: any) {
+    this.responseParser.parseSuccessfulResponse(resp, _innerObserver, this);
+  }
+
+  protected parseUnsuccessfulResponse(error: any, _innerObserver: any) {
+    this.responseParser.parseUnsuccessfulResponse(error, _innerObserver, this);
   }
 }
