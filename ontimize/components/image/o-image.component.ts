@@ -17,7 +17,7 @@ import { MatInput } from '@angular/material';
 import { OSharedModule } from '../../shared';
 import { InputConverter } from '../../decorators';
 import { OFormComponent } from '../form/o-form.component';
-import { OFormValue, IFormValueOptions } from '../form/OFormValue';
+import { OFormValue } from '../form/OFormValue';
 import { OFormDataComponent, DEFAULT_INPUTS_O_FORM_DATA_COMPONENT } from '../o-form-data-component.class';
 
 export const DEFAULT_INPUTS_O_IMAGE = [
