@@ -17,7 +17,7 @@ import { MatInput } from '@angular/material';
 import { OSharedModule } from '../../shared';
 import { InputConverter } from '../../decorators';
 import { OFormComponent } from '../form/o-form.component';
-import { OFormValue } from '../form/OFormValue';
+import { OFormValue, IFormValueOptions } from '../form/OFormValue';
 import { OFormDataComponent, DEFAULT_INPUTS_O_FORM_DATA_COMPONENT } from '../o-form-data-component.class';
 
 export const DEFAULT_INPUTS_O_IMAGE = [
@@ -55,6 +55,8 @@ export class OImageComponent extends OFormDataComponent {
 
   @ViewChild('inputControl')
   protected inputControl: MatInput;
+  @ViewChild('input')
+  protected fileInput: ElementRef;
   @ViewChild('titleLabel')
   protected titleLabel: ElementRef;
 
@@ -70,7 +72,7 @@ export class OImageComponent extends OFormDataComponent {
     super(form, elRef, injector);
     this._domSanitizer = this.injector.get(DomSanitizer);
     this.defaultValue = '';
-    this._defaultSQLTypeKey = 'BLOB';
+    this._defaultSQLTypeKey = 'BASE64';
   }
 
   ngOnInit() {
@@ -186,6 +188,7 @@ export class OImageComponent extends OFormDataComponent {
     e.stopPropagation();
     if (!this.isReadOnly && !this.isDisabled) {
       this.setValue(undefined);
+      this.fileInput.nativeElement.valueOf = undefined;
       if (this.titleLabel) {
         this.titleLabel.nativeElement.textContent = '';
       }

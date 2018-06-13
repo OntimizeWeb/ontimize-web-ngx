@@ -267,6 +267,8 @@ export class SQLTypes {
    */
   public static NCLOB = 2011;
 
+  public static BASE64 = 6464;
+
   /**
    * The constant in the Java programming language, sometimes referred to
    * as a type code, that identifies the generic SQL type <code>XML</code>.
@@ -386,6 +388,9 @@ export class SQLTypes {
         break;
       case 'SQLXML':
         value = SQLTypes.SQLXML;
+        break;
+      case 'BASE64':
+        value = SQLTypes.BASE64;
         break;
       default:
         value = SQLTypes.OTHER;
