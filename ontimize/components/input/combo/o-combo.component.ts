@@ -45,9 +45,9 @@ export class OComboComponent extends OFormServiceComponent implements OnInit {
   @InputConverter()
   protected nullSelection: boolean = true;
   @InputConverter()
-  protected multiple: boolean;
+  multiple: boolean;
   @InputConverter()
-  protected multipleTriggerLabel: boolean = false;
+  multipleTriggerLabel: boolean = false;
   /* End inputs*/
 
   value: OFormValue;
