@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, forwardRef, Inject, Injector, NgModule, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, forwardRef, Inject, Injector, NgModule, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
 
@@ -27,6 +27,14 @@ export const DEFAULT_INPUTS_O_FILTER_BUILDER = [
   'queryOnChangeDelay: query-on-change-delay'
 ];
 
+export const DEFAULT_OUTPUTS_O_FILTER_BUILDER = [
+  // Event triggered when the filter action is executed.
+  'onFilter',
+
+  // Event triggered when the clear action is excuted.
+  'onClear'
+];
+
 export interface IFilterBuilderCmpTarget {
   formComponentAttr: string;
   targetAttr: string;
@@ -35,16 +43,20 @@ export interface IFilterBuilderCmpTarget {
 @Component({
   selector: 'o-filter-builder',
   templateUrl: './o-filter-builder.component.html',
-  inputs: DEFAULT_INPUTS_O_FILTER_BUILDER
+  inputs: DEFAULT_INPUTS_O_FILTER_BUILDER,
+  outputs: DEFAULT_OUTPUTS_O_FILTER_BUILDER
 })
 /**
  * The OFilterBuilderComponent.
  */
 export class OFilterBuilderComponent implements AfterViewInit, OnDestroy, OnInit {
 
-  protected filters: string;
-  protected targetCmp: OServiceComponent;
-  protected expressionBuilder: (values: Array<{ attr, value }>) => IExpression;
+  public onFilter: EventEmitter<any> = new EventEmitter<any>();
+  public onClear: EventEmitter<any> = new EventEmitter<any>();
+
+  public filters: string;
+  public targetCmp: OServiceComponent;
+  public expressionBuilder: (values: Array<{ attr, value }>) => IExpression;
   @InputConverter()
   public queryOnChange: boolean = false;
   @InputConverter()
@@ -105,7 +117,8 @@ export class OFilterBuilderComponent implements AfterViewInit, OnDestroy, OnInit
   }
 
   /**
-   * Returns a 'IExpression' object with the filter.
+   * Returns an `IExpression` object with the filter.
+   * @returns the `IExpression` object with the filter.
    */
   getExpression(): IExpression {
     // Prepare form filter values [... { attr, value }]
@@ -137,25 +150,45 @@ export class OFilterBuilderComponent implements AfterViewInit, OnDestroy, OnInit
   }
 
   /**
-   * Returns a 'IBasicExpression' object with the filter.
+   * Returns an `IBasicExpression` object with the filter.
+   * @returns the `IBasicExpression` object with the filter.
    */
   getBasicExpression(): IBasicExpression {
     return FilterExpressionUtils.buildBasicExpression(this.getExpression());
   }
 
+  /**
+   * Returns the filter builder target component.
+   * @returns the target component.
+   */
   getTargetComponent(): OServiceComponent {
     return this.targetCmp;
   }
 
   /**
-   * Returns an array with the attributes of the filterable components
+   * Trigger the `reloadData` method from the target component.
    */
-  getFilterAttrs(): Array<string> {
-    return this.filterComponents.map((elem: IFilterBuilderCmpTarget) => elem.formComponentAttr);
-  }
-
   triggerReload(): void {
     this.getTargetComponent().reloadData();
+    this.onFilter.emit();
+  }
+
+  /**
+   * Clear the form components used for the filter.
+   */
+  clearFilter(): void {
+    let formComponents = this.form.getComponents();
+    this.getFilterAttrs().forEach((attr: string) => {
+      formComponents[attr].setValue(void 0);
+    });
+    this.onClear.emit();
+  }
+
+  /**
+   * Returns an array with the attributes of the filterable components
+   */
+  protected getFilterAttrs(): Array<string> {
+    return this.filterComponents.map((elem: IFilterBuilderCmpTarget) => elem.formComponentAttr);
   }
 
 }

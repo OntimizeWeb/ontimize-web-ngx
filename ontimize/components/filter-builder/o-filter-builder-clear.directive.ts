@@ -26,10 +26,7 @@ export class OFilterBuilderClearDirective {
 
   onClick(): void {
     if (this._filterBuilder) {
-      let formComponents = this._filterBuilder.form.getComponents();
-      this._filterBuilder.getFilterAttrs().forEach((attr: string) => {
-        formComponents[attr].setValue(void 0);
-      });
+      this._filterBuilder.clearFilter();
     }
   }
 
