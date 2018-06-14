@@ -119,6 +119,7 @@ export class OListPickerComponent extends OFormServiceComponent implements OnIni
   }
 
   ngAfterViewInit(): void {
+    super.ngAfterViewInit();
     if (this.queryOnInit) {
       this.queryData();
     } else if (this.queryOnBind) {

@@ -1,9 +1,11 @@
 .o-list-picker-content {
   .input-model {
-    display:none !important;
+    display: none !important;
   }
+
   mat-icon {
     cursor: pointer;
+
     &.mat-disabled {
       cursor: default;
     }
@@ -14,16 +16,18 @@
   .mat-dialog-container {
     padding: 0;
   }
+
   .mat-dialog-actions {
     padding: 12px 24px;
   }
 }
 
-.o-list-picker-dialog  {
+.o-list-picker-dialog {
   mat-toolbar {
     &.mat-toolbar {
       padding-top: 16px;
     }
+
     o-search-input,
     o-search-input mat-form-field {
       width: 100%;
@@ -31,13 +35,20 @@
   }
 
   .dialog-list-container {
+
+    max-height: calc(100% - 60px);
+    min-height: calc(100% - 60px);
+
     /*133 = 72 (toolbar) + 61 (dialog buttons)*/
-    max-height: calc(100% - 133px);
-    min-height: calc(100% - 133px);
-    margin: 0px;
+    &.has-filter {
+      max-height: calc(100% - 133px);
+      min-height: calc(100% - 133px);
+    }
+    margin: 0;
 
     mat-list {
       margin: 12px 0;
+
       mat-list-item {
         cursor: pointer;
       }

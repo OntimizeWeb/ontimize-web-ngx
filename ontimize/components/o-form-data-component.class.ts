@@ -1,17 +1,9 @@
-import { Injector, ElementRef, OnInit, OnDestroy } from '@angular/core';
+import { Injector, ElementRef, OnInit, OnDestroy, QueryList, ViewChildren, AfterViewInit, HostBinding } from '@angular/core';
 import { FormControl, FormGroup, Validators, ValidatorFn } from '@angular/forms';
+import { MatSuffix } from '@angular/material';
 
 import { InputConverter } from '../decorators';
 import { SQLTypes } from '../utils';
-import {
-  ONIFInputComponent,
-  OCurrencyInputComponent,
-  ODateInputComponent,
-  OEmailInputComponent,
-  OListPickerComponent,
-  OPasswordInputComponent,
-  OPercentInputComponent
-} from '../components';
 
 import { OBaseComponent, IComponent } from './o-component.class';
 import { OFormComponent } from './form/o-form.component';
@@ -57,9 +49,8 @@ export const DEFAULT_INPUTS_O_FORM_DATA_COMPONENT = [
 ];
 
 export class OFormDataComponent extends OBaseComponent implements IFormDataComponent, IFormDataTypeComponent,
-  OnInit, OnDestroy {
+  OnInit, AfterViewInit, OnDestroy {
 
-  static STANDARD_FORM_FIELD_WIDTH = '180px';
   /* Inputs */
   sqlType: string;
   @InputConverter()
@@ -70,6 +61,11 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   @InputConverter()
   showClear: boolean = true;
 
+  @HostBinding('style.width')
+  get hostWidth() {
+    return this.width;
+  }
+
   /* Internal variables */
   protected value: OFormValue;
   protected defaultValue: any = void 0;
@@ -78,6 +74,10 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   protected _fControl: FormControl;
   protected elRef: ElementRef;
   protected form: OFormComponent;
+
+  @ViewChildren(MatSuffix)
+  protected _matSuffixList: QueryList<MatSuffix>;
+  matSuffixClass;
 
   constructor(
     form: OFormComponent,
@@ -91,6 +91,15 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
 
   ngOnInit() {
     this.initialize();
+  }
+
+  ngAfterViewInit(): void {
+    if (this._matSuffixList) {
+      this.setSuffixClass(this._matSuffixList.length);
+      this._matSuffixList.changes.subscribe(() => {
+        this.setSuffixClass(this._matSuffixList.length);
+      });
+    }
   }
 
   ngOnDestroy() {
@@ -115,7 +124,6 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
 
   initialize() {
     super.initialize();
-    this.initializeWidth();
     if (this.form) {
       this.registerFormListeners();
       this.isReadOnly = this.form.isInInitialMode();
@@ -124,22 +132,18 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     }
   }
 
-  initializeWidth() {
-    if (this.elRef.nativeElement.getAttributeNames().indexOf('fxflex') !== -1) {
-      return;
-    }
-
-    if (!this.width || !(this.width.length > 0)) {
-      switch (true) {
-        case this instanceof OCurrencyInputComponent:
-        case this instanceof ODateInputComponent:
-        case this instanceof OEmailInputComponent:
-        case this instanceof OListPickerComponent:
-        case this instanceof ONIFInputComponent:
-        case this instanceof OPasswordInputComponent:
-        case this instanceof OPercentInputComponent:
-          this.width = OFormDataComponent.STANDARD_FORM_FIELD_WIDTH;
-          break;
+  protected setSuffixClass(count: number) {
+    const iconFieldEl = this.elRef.nativeElement.getElementsByClassName('icon-field');
+    if (iconFieldEl.length === 1) {
+      let classList = iconFieldEl[0].classList;
+      classList.forEach(className => {
+        if (className.startsWith('icon-field-')) {
+          classList.remove(className);
+        }
+      });
+      if (count > 0) {
+        let matSuffixClass = `icon-field-${count}-suffix`;
+        iconFieldEl[0].classList.add(matSuffixClass);
       }
     }
   }

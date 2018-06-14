@@ -1,7 +1,7 @@
 <mat-toolbar color="primary" class="mat-elevation-z5" *ngIf="filter">
   <o-search-input #searchInput class="list-picker-search" (onSearch)="onFilterList($event)"></o-search-input>
 </mat-toolbar>
-<div mat-dialog-content class="dialog-list-container" (scroll)="onScroll($event)">
+<div mat-dialog-content class="dialog-list-container" [class.has-filter]="filter" (scroll)="onScroll($event)">
   <mat-list>
     <!--EMPTY LIST -->
     <mat-list-item class="mat-1-line" fxFill *ngIf="visibleData.length === 0">

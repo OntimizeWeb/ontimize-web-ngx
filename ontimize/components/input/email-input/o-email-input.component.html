@@ -1,6 +1,6 @@
-<div [style.width]="width" fxLayout="row" fxLayoutAlign="space-between center" [formGroup]="getFormGroup()" [matTooltip]="tooltip"
+<div fxLayout="row" fxLayoutAlign="space-between center" [formGroup]="getFormGroup()" [matTooltip]="tooltip"
     [matTooltipPosition]="tooltipPosition" [matTooltipShowDelay]="tooltipShowDelay">
-    <mat-form-field [class.custom-width]="hasCustomWidth" fxFlexFill>
+    <mat-form-field [class.custom-width]="hasCustomWidth" class="icon-field" fxFlexFill>
         <input matInput type="email" [attr.id]="getAttribute()" [formControlName]="getAttribute()" [placeholder]="placeHolder" [ngModel]="getValue()"
             (ngModelChange)="innerOnChange($event)" (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)" [readonly]="isReadOnly"
             [required]="isRequired">

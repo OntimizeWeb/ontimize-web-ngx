@@ -1,14 +1,21 @@
-<div [style.width]="width" fxLayout="row" fxLayoutAlign="space-between center" [formGroup]="getFormGroup()" [matTooltip]="tooltip"
-  [matTooltipPosition]="tooltipPosition" [matTooltipShowDelay]="tooltipShowDelay" class="custom-error o-list-picker-content">
+<div fxLayout="row" fxLayoutAlign="space-between center" [formGroup]="getFormGroup()" [matTooltip]="tooltip" [matTooltipPosition]="tooltipPosition"
+  [matTooltipShowDelay]="tooltipShowDelay" class="custom-error o-list-picker-content">
   <input #inputModel class="input-model" type="text" [attr.id]="getAttribute()" [id]="getAttribute()" [formControlName]="getAttribute()"
     [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)">
 
-  <mat-form-field [class.custom-width]="hasCustomWidth" #innerInputContainer fxFlexFill>
+  <mat-form-field [class.custom-width]="hasCustomWidth" class="icon-field" #innerInputContainer fxFlexFill>
     <input matInput type="text" [attr.id]="'desc_' + getAttribute()" [id]="'desc_' + getAttribute()" [placeholder]="placeHolder"
       [value]="getDescriptionValue()" (input)="onVisibleInputChange($event)" (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)"
-      [readonly]="isReadOnly" [required]="isRequired" [formControlName]="getAttribute()" #visibleInput (keydown.enter)="onKeydownEnter(visibleInput.value)">
-    <mat-icon [class.mat-disabled]="isDisabled" (click)="onClickListpicker($event)" matSuffix>search</mat-icon>
-    <mat-icon [class.mat-disabled]="isDisabled" (click)="onClickClear($event)" matSuffix>clear</mat-icon>
+      [readonly]="isReadOnly" [formControlName]="getAttribute()" [required]="isRequired" #visibleInput (keydown.enter)="onKeydownEnter(visibleInput.value)">
+
+    <button mat-button [disabled]="isDisabled" matSuffix mat-icon-button (click)="onClickListpicker($event)">
+      <mat-icon>search</mat-icon>
+    </button>
+
+    <button mat-button [disabled]="isDisabled" matSuffix mat-icon-button (click)="onClickClear($event)">
+      <mat-icon>clear</mat-icon>
+    </button>
+
     <mat-error *ngIf="hasError('required')">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</mat-error>
   </mat-form-field>
 </div>
