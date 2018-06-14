@@ -222,20 +222,6 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     } else {
       this.value = new OFormValue(this.defaultValue);
     }
-
-    /*
-    * Temporary code
-    * I do not understand the reason why MatInput is not removing 'mat-empty' clase despite of the fact that
-    * the input element of the description is binding value attribute
-    */
-    let placeHolderLbl = this.elRef.nativeElement.querySelectorAll('label.mat-input-placeholder');
-    if (placeHolderLbl.length) {
-      // Take only first, nested element does not matter.
-      let element = placeHolderLbl[0];
-      if (!this.isEmpty()) {
-        element.classList.remove('mat-empty');
-      }
-    }
   }
 
   getControl(): FormControl {
