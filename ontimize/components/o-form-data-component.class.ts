@@ -52,7 +52,8 @@ export const DEFAULT_INPUTS_O_FORM_DATA_COMPONENT = [
   // sqltype[string]: Data type according to Java standard. See SQLType ngClass. Default: 'OTHER'
   'sqlType: sql-type',
   'width',
-  'readOnly: read-only'
+  'readOnly: read-only',
+  'showClear: show-clear'
 ];
 
 export class OFormDataComponent extends OBaseComponent implements IFormDataComponent, IFormDataTypeComponent,
@@ -66,10 +67,12 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   @InputConverter()
   autoRegistering: boolean = true;
   width: string;
+  @InputConverter()
+  showClear: boolean = true;
 
   /* Internal variables */
   protected value: OFormValue;
-  protected defaultValue: any = undefined;
+  protected defaultValue: any = void 0;
   protected _SQLType: number = SQLTypes.OTHER;
   protected _defaultSQLTypeKey: string = 'OTHER';
   protected _fControl: FormControl;
@@ -198,6 +201,13 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
       this._fControl.setValue(val, options);
       this._fControl.markAsDirty();
     }
+  }
+
+  /**
+   * Clears the component value.
+   */
+  clearValue(): void {
+    this.setValue(void 0);
   }
 
   ensureOFormValue(value: any) {
