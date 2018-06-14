@@ -27,6 +27,7 @@
 * New directive **oFilterBuilderQuery** used with the `o-filter-builder` component for triggering the filter action. ([3874f70](https://github.com/OntimizeWeb/ontimize-web-ngx/tree/3874f70))
 * New directive **oFilterBuilderClear** used with the `o-filter-builderp` component for clearing the form components involved in the filtering. ([3874f70](https://github.com/OntimizeWeb/ontimize-web-ngx/tree/3874f70))
 * **ontimize-ee.service**, **ontimize.service**: new '*parseSuccessfulResponse*' and '*parseUnsuccessfulResponse*' methods ([6ab33d8](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6ab33d8))
+* **Inputs**: Added `clearValue` method to all input form components. ([ae92af5](https://github.com/OntimizeWeb/ontimize-web-ngx/tree/ae92af5))
 
 ### Bug Fixes
 * **o-table**:
