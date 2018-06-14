@@ -238,25 +238,13 @@ export class OFileInputComponent extends OFormDataComponent implements OnDestroy
 
   onClickClear(e: Event) {
     e.stopPropagation();
-    this.clearData();
+    this.clearValue();
   }
 
   onClickUpload(e: Event) {
     e.stopPropagation();
     if (this.isValid) {
       this.upload();
-    }
-  }
-
-  clearData() {
-    if (!this.isReadOnly && !this.isDisabled) {
-      this.uploader.clear();
-      let value = this.uploader.files.map(file => file.name).join(', ');
-      this.setValue(value);
-      this.inputFile.nativeElement.value = '';
-      if (this._fControl) {
-        this._fControl.markAsTouched();
-      }
     }
   }
 
