@@ -127,7 +127,7 @@ export class OComboComponent extends OFormServiceComponent implements OnInit {
             descTxt = this.getFirstSelectedValue();
             descTxt += this.translateService.get('INPUT.COMBO.MESSAGE_TRIGGER', [this.selectModel.selected.length - 1]);
           } else {
-            this.selectModel.selected.forEach(function (item) {
+            this.selectModel.selected.forEach((item) => {
               if (descTxt !== '') {
                 descTxt += this.separator;
               }
