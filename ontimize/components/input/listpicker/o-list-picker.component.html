@@ -6,7 +6,7 @@
   <mat-form-field [class.custom-width]="hasCustomWidth" #innerInputContainer fxFlexFill>
     <input matInput type="text" [attr.id]="'desc_' + getAttribute()" [id]="'desc_' + getAttribute()" [placeholder]="placeHolder"
       [value]="getDescriptionValue()" (input)="onVisibleInputChange($event)" (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)"
-      [readonly]="isReadOnly" [disabled]="isDisabled" [required]="isRequired" #visibleInput (keydown.enter)="onKeydownEnter(visibleInput.value)">
+      [readonly]="isReadOnly" [required]="isRequired" [formControlName]="getAttribute()" #visibleInput (keydown.enter)="onKeydownEnter(visibleInput.value)">
     <mat-icon [class.mat-disabled]="isDisabled" (click)="onClickListpicker($event)" matSuffix>search</mat-icon>
     <mat-icon [class.mat-disabled]="isDisabled" (click)="onClickClear($event)" matSuffix>clear</mat-icon>
     <mat-error *ngIf="hasError('required')">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</mat-error>
