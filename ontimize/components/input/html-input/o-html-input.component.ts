@@ -182,6 +182,12 @@ export class OHTMLInputComponent extends OFormDataComponent implements OnInit, I
     return false;
   }
 
+  clearValue(): void {
+    super.clearValue();
+    this.ckEditor.instance.updateElement();
+    this.ckEditor.instance.setData('');
+  }
+
   /*
   * When ckEditor is inside a TabGroup it is necessary to destroy the component before
   * Angular detaches mat-tab-content from DOM
