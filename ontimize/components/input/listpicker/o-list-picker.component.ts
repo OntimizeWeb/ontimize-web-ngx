@@ -1,33 +1,17 @@
-import {
-  Component,
-  ElementRef,
-  EventEmitter,
-  forwardRef,
-  Inject,
-  Injector,
-  OnInit,
-  OnChanges,
-  SimpleChange,
-  Optional,
-  NgModule,
-  ViewEncapsulation,
-  ViewChild
-} from '@angular/core';
+import { Component, ElementRef, EventEmitter, forwardRef, Inject, Injector, OnInit, OnChanges, Optional, NgModule, SimpleChange, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatInput, MatDialog, MatDialogRef, MatDialogConfig } from '@angular/material';
+import { MatDialog, MatInput, MatDialogConfig, MatDialogRef } from '@angular/material';
 
-import { dataServiceFactory } from '../../../services/data-service.provider';
-import { OntimizeService } from '../../../services';
 import { OSharedModule } from '../../../shared';
+import { OntimizeService } from '../../../services';
 import { InputConverter } from '../../../decorators';
-
 import { OFormComponent } from '../../form/o-form.component';
-import { OSearchInputModule } from '../../input/search-input/o-search-input.component';
-import { OFormValue, IFormValueOptions } from '../../form/OFormValue';
 import { ODialogModule } from '../../dialog/o-dialog.component';
+import { IFormValueOptions, OFormValue } from '../../form/OFormValue';
 import { OFormServiceComponent } from '../o-form-service-component.class';
-
+import { dataServiceFactory } from '../../../services/data-service.provider';
 import { OListPickerDialogComponent } from './o-list-picker-dialog.component';
+import { OSearchInputModule } from '../../input/search-input/o-search-input.component';
 
 export const DEFAULT_INPUTS_O_LIST_PICKER = [
   ...OFormServiceComponent.DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT,
@@ -51,11 +35,9 @@ export const DEFAULT_OUTPUTS_O_LIST_PICKER = [
     { provide: OntimizeService, useFactory: dataServiceFactory, deps: [Injector] }
   ],
   inputs: DEFAULT_INPUTS_O_LIST_PICKER,
-  outputs: DEFAULT_OUTPUTS_O_LIST_PICKER,
-  encapsulation: ViewEncapsulation.None
+  outputs: DEFAULT_OUTPUTS_O_LIST_PICKER
 })
 export class OListPickerComponent extends OFormServiceComponent implements OnInit, OnChanges {
-
 
   public static DEFAULT_INPUTS_O_LIST_PICKER = DEFAULT_INPUTS_O_LIST_PICKER;
   public static DEFAULT_OUTPUTS_O_LIST_PICKER = DEFAULT_OUTPUTS_O_LIST_PICKER;
@@ -141,19 +123,6 @@ export class OListPickerComponent extends OFormServiceComponent implements OnIni
           descTxt += self.separator;
         }
       });
-    }
-    /*
-    * Temporary code
-    * I do not understand the reason why MatInput is not removing 'mat-empty' clase despite of the fact that
-    * the input element of the description is binding value attribute
-    */
-    let placeHolderLbl = this.elRef.nativeElement.querySelectorAll('label.mat-input-placeholder');
-    if (placeHolderLbl.length) {
-      // Take only first, nested element does not matter.
-      let element = placeHolderLbl[0];
-      if (descTxt && descTxt.length > 0) {
-        element.classList.remove('mat-empty');
-      }
     }
     return descTxt;
   }
