@@ -1,19 +1,18 @@
-import { Component, Optional, Inject, ElementRef, Injector, forwardRef, ViewChild, NgModule, EventEmitter } from '@angular/core';
+import { Component, ElementRef, EventEmitter, forwardRef, Inject, Injector, NgModule, Optional, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ValidatorFn } from '@angular/forms/src/directives/validators';
-import { MatDateFormats, DateAdapter, MatDatepicker, MatDatepickerInput, MAT_DATE_FORMATS, MatDatepickerInputEvent, MAT_DATE_LOCALE } from '@angular/material';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE, MatDateFormats, MatDatepicker, MatDatepickerInput, MatDatepickerInputEvent } from '@angular/material';
 import { Subscription } from 'rxjs/Subscription';
-
-import { OSharedModule } from '../../../shared';
-import { OFormComponent } from '../../form/o-form.component';
-import { OFormValue } from '../../form/OFormValue';
-import { OFormDataComponent } from '../../o-form-data-component.class';
-import { InputConverter } from '../../../decorators';
-import { MomentService } from '../../../services';
 
 import moment from 'moment';
 
+import { OSharedModule } from '../../../shared';
+import { MomentService } from '../../../services';
+import { OFormValue } from '../../form/OFormValue';
+import { InputConverter } from '../../../decorators';
+import { OFormComponent } from '../../form/o-form.component';
+import { OFormDataComponent } from '../../o-form-data-component.class';
 import { DEFAULT_INPUTS_O_TEXT_INPUT, DEFAULT_OUTPUTS_O_TEXT_INPUT } from '../text-input/o-text-input.component';
 
 export const DEFAULT_OUTPUTS_O_DATE_INPUT = [
@@ -50,8 +49,10 @@ export let O_DATE_INPUT_DEFAULT_FORMATS: MatDateFormats = {
     { provide: MAT_DATE_FORMATS, useValue: O_DATE_INPUT_DEFAULT_FORMATS }
   ]
 })
-
 export class ODateInputComponent extends OFormDataComponent {
+
+  @ViewChild('matInputRef')
+  private matInputRef: ElementRef;
 
   @ViewChild(MatDatepicker)
   datepicker: MatDatepicker<Date>;
@@ -187,6 +188,10 @@ export class ODateInputComponent extends OFormDataComponent {
       return timestampValue;
     }
     return undefined;
+  }
+
+  get showClearButton(): boolean {
+    return this.showClear && !this.isReadOnly && !this.isDisabled && this.matInputRef.nativeElement.value;
   }
 
   resolveValidators(): ValidatorFn[] {
