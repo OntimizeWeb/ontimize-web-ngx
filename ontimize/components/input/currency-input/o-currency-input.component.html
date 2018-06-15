@@ -6,7 +6,7 @@
     <input matInput type="number" [attr.id]="getAttribute()" [formControlName]="getAttribute()" [placeholder]="placeHolder" [ngModel]="getValue()"
       (ngModelChange)="innerOnChange($event)" (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)" [readonly]="isReadOnly"
       [min]="min" [max]="max" [step]="step" [required]="isRequired">
-    <button *ngIf="showClear && getValue()" matSuffix mat-icon-button (click)="clearValue()">
+    <button *ngIf="showClearButton" matSuffix mat-icon-button (click)="clearValue()">
       <mat-icon>close</mat-icon>
     </button>
     <span *ngIf="currencySymbol !== 'none' && currencySymbolPosition === 'right' " matSuffix [class.mat-disabled]="isDisabled"

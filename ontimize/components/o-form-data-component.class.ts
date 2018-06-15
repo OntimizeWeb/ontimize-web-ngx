@@ -214,6 +214,10 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     this.setValue(void 0);
   }
 
+  get showClearButton(): boolean {
+    return this.showClear && !this.isReadOnly && !this.isDisabled && this.getValue();
+  }
+
   ensureOFormValue(value: any) {
     if (value instanceof OFormValue) {
       this.value = new OFormValue(value.value);
