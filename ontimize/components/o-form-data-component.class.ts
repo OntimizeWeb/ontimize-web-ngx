@@ -59,7 +59,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   autoRegistering: boolean = true;
   width: string;
   @InputConverter()
-  showClear: boolean = true;
+  showClear: boolean = false;
 
   @HostBinding('style.width')
   get hostWidth() {

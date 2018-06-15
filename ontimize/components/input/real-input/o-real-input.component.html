@@ -3,6 +3,9 @@
     <input matInput type="number" [attr.id]="getAttribute()" [id]="getAttribute()" [formControlName]="getAttribute()" [placeholder]="placeHolder"
       [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)" (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)"
       [readonly]="isReadOnly" [min]="min" [max]="max" [step]="step" [required]="isRequired">
+    <button *ngIf="showClear && getValue()" matSuffix mat-icon-button (click)="clearValue()">
+      <mat-icon>close</mat-icon>
+    </button>
     <mat-error *ngIf="hasError('required')">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</mat-error>
     <mat-error *ngIf="hasError('min')">{{ 'FORM_VALIDATION.MIN_VALUE' | oTranslate }}: {{ getErrorValue('min', 'requiredMin') }}</mat-error>
     <mat-error *ngIf="hasError('max')">{{ 'FORM_VALIDATION.MAX_VALUE' | oTranslate }}: {{ getErrorValue('max', 'requiredMax') }}</mat-error>
