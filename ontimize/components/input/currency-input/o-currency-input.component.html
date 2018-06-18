@@ -1,7 +1,7 @@
 <div fxLayout="row" fxLayoutAlign="space-between center" [formGroup]="getFormGroup()" [matTooltip]="tooltip" [matTooltipPosition]="tooltipPosition"
   [matTooltipShowDelay]="tooltipShowDelay">
-  <span *ngIf="currencySymbol !== 'none' && currencySymbolPosition === 'left'" matSuffix [class.mat-disabled]="isDisabled"
-    class="icon-btn">{{ currency_symbols[currencySymbol] }}</span>
+  <div *ngIf="currencySymbol !== 'none' && currencySymbolPosition === 'left'" matSuffix [class.mat-disabled]="isDisabled"
+    class="icon-btn">{{ currency_symbols[currencySymbol] }}</div>
   <mat-form-field [class.custom-width]="hasCustomWidth" class="icon-field" fxFill>
     <input matInput type="number" [attr.id]="getAttribute()" [formControlName]="getAttribute()" [placeholder]="placeHolder" [ngModel]="getValue()"
       (ngModelChange)="innerOnChange($event)" (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)" [readonly]="isReadOnly"
@@ -9,8 +9,8 @@
     <button *ngIf="showClearButton" matSuffix mat-icon-button (click)="clearValue()">
       <mat-icon>close</mat-icon>
     </button>
-    <span *ngIf="currencySymbol !== 'none' && currencySymbolPosition === 'right' " matSuffix [class.mat-disabled]="isDisabled"
-      class="icon-btn">{{ currency_symbols[currencySymbol] }}</span>
+    <div *ngIf="currencySymbol !== 'none' && currencySymbolPosition === 'right' " matSuffix [class.mat-disabled]="isDisabled"
+      class="icon-btn">{{ currency_symbols[currencySymbol] }}</div>
     <mat-error *ngIf="hasError('required')">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</mat-error>
     <mat-error *ngIf="hasError('min')">{{ 'FORM_VALIDATION.MIN_VALUE' | oTranslate }}: {{ getErrorValue('min', 'requiredMin') }}</mat-error>
     <mat-error *ngIf="hasError('max')">{{ 'FORM_VALIDATION.MAX_VALUE' | oTranslate }}: {{ getErrorValue('max', 'requiredMax') }}</mat-error>
