@@ -1,15 +1,16 @@
+import { Component, ElementRef, EventEmitter, forwardRef, Inject, Injector, NgModule, OnInit, Optional, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, EventEmitter, Inject, Injector, NgModule, OnInit, Optional, ViewChild, ViewEncapsulation, forwardRef } from '@angular/core';
 import { MatOption, MatSelect, MatSelectChange } from '@angular/material';
-import { InputConverter } from '../../../decorators/input-converter';
-import { dataServiceFactory } from '../../../services/data-service.provider';
-import { OntimizeService } from '../../../services/ontimize.service';
-import { OSharedModule } from '../../../shared/shared.module';
-import { Codes } from '../../../util/codes';
+
 import { Util } from '../../../util/util';
-import { IFormValueOptions, OFormValue } from '../../form/OFormValue';
+import { Codes } from '../../../util/codes';
 import { OFormComponent } from '../../form/o-form.component';
+import { OSharedModule } from '../../../shared/shared.module';
+import { InputConverter } from '../../../decorators/input-converter';
+import { OntimizeService } from '../../../services/ontimize.service';
+import { IFormValueOptions, OFormValue } from '../../form/OFormValue';
 import { OFormServiceComponent } from '../o-form-service-component.class';
+import { dataServiceFactory } from '../../../services/data-service.provider';
 
 export const DEFAULT_INPUTS_O_COMBO = [
   ...OFormServiceComponent.DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT,
@@ -31,8 +32,7 @@ export const DEFAULT_OUTPUTS_O_COMBO = [
   inputs: DEFAULT_INPUTS_O_COMBO,
   outputs: DEFAULT_OUTPUTS_O_COMBO,
   templateUrl: './o-combo.component.html',
-  styleUrls: ['./o-combo.component.scss'],
-  encapsulation: ViewEncapsulation.None
+  styleUrls: ['./o-combo.component.scss']
 })
 export class OComboComponent extends OFormServiceComponent implements OnInit {
 
@@ -146,22 +146,8 @@ export class OComboComponent extends OFormServiceComponent implements OnInit {
       }
 
     }
-    /*
-    * Temporary code
-    * I do not understand the reason why MatInput is not removing 'mat-empty' clase despite of the fact that
-    * the input element of the description is binding value attribute
-    */
-    let placeHolderLbl = this.elRef.nativeElement.querySelectorAll('label.mat-input-placeholder');
-    if (placeHolderLbl.length) {
-      // Take only first, nested element does not matter.
-      let element = placeHolderLbl[0];
-      if (descTxt && descTxt.length > 0) {
-        element.classList.remove('mat-empty');
-      }
-    }
     return descTxt;
   }
-
 
   getValue() {
     if (this.value instanceof OFormValue) {
