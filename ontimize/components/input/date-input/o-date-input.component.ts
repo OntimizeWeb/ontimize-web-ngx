@@ -191,7 +191,7 @@ export class ODateInputComponent extends OFormDataComponent {
   }
 
   get showClearButton(): boolean {
-    return this.showClear && !this.isReadOnly && !this.isDisabled && this.matInputRef.nativeElement.value;
+    return this.clearButton && !this.isReadOnly && !this.isDisabled && this.matInputRef.nativeElement.value;
   }
 
   resolveValidators(): ValidatorFn[] {

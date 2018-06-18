@@ -45,7 +45,7 @@ export const DEFAULT_INPUTS_O_FORM_DATA_COMPONENT = [
   'sqlType: sql-type',
   'width',
   'readOnly: read-only',
-  'showClear: show-clear'
+  'clearButton: clear-button'
 ];
 
 export class OFormDataComponent extends OBaseComponent implements IFormDataComponent, IFormDataTypeComponent,
@@ -59,7 +59,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   autoRegistering: boolean = true;
   width: string;
   @InputConverter()
-  showClear: boolean = false;
+  clearButton: boolean = false;
 
   @HostBinding('style.width')
   get hostWidth() {
@@ -215,7 +215,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   }
 
   get showClearButton(): boolean {
-    return this.showClear && !this.isReadOnly && !this.isDisabled && this.getValue();
+    return this.clearButton && !this.isReadOnly && !this.isDisabled && this.getValue();
   }
 
   ensureOFormValue(value: any) {
