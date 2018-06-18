@@ -1,6 +1,6 @@
-span.icon-btn {
+div.icon-btn {
   cursor: default;
-  vertical-align: sub;
+  display: inline-block;
 
   i {
     padding-top: 4px;
@@ -19,15 +19,14 @@ span.icon-btn {
       cursor: default;
       text-align: center;
 
+      .icon-btn,
       .mat-icon {
-        font-size: 100%;
-        line-height: 1;
         vertical-align: middle;
         width: 24px;
       }
 
-      > .mat-icon,
-      span.icon-btn {
+      .icon-btn,
+      > .mat-icon {
         font-size: 125%;
       }
     }
