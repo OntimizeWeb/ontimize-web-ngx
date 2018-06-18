@@ -163,12 +163,17 @@ export class OFormServiceComponent extends OFormDataComponent {
     }
   }
 
-  queryData(parentItem: any = undefined, columns?: Array<any>) {
-    var self = this;
-    if (columns === undefined || columns === null) {
-      columns = this.colArray;
+  getAttributesValuesToQuery(columns?: Array<any>) {
+    let result = Util.isDefined(columns) ? columns : this.colArray;
+    if (result.indexOf(this.valueColumn) === -1) {
+      result.push(this.valueColumn);
     }
+    return result;
+  }
 
+
+  queryData(parentItem: any = undefined, columns?: Array<any>) {
+    const self = this;
     if (!this.dataService || !(this.queryMethod in this.dataService) || !this.entity) {
       console.warn('Service not properly configured! aborting query');
       return;
@@ -181,7 +186,8 @@ export class OFormServiceComponent extends OFormDataComponent {
       if (this.querySuscription) {
         this.querySuscription.unsubscribe();
       }
-      this.querySuscription = this.dataService[this.queryMethod](parentItem, columns, this.entity).subscribe(resp => {
+      const queryCols = this.getAttributesValuesToQuery();
+      this.querySuscription = this.dataService[this.queryMethod](parentItem, queryCols, this.entity).subscribe(resp => {
         if (resp.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) {
           self.cacheQueried = true;
           self.setDataArray(resp.data);
@@ -229,9 +235,9 @@ export class OFormServiceComponent extends OFormDataComponent {
             }
 
           });
-        }else if (item[self.valueColumn] === this.value.value) {
-            self._currentIndex = index;
-          }
+        } else if (item[self.valueColumn] === this.value.value) {
+          self._currentIndex = index;
+        }
         if (item[self.valueColumn] === this.value.value) {
           self._currentIndex = index;
         }

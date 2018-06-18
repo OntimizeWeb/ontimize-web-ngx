@@ -346,9 +346,20 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
     return subscription;
   }
 
+  getAttributesValuesToQuery(): Array<string> {
+    let result = this.colArray;
+    this.keysArray.forEach(key => {
+      if (result.indexOf(key) === -1) {
+        result.push(key);
+      }
+    });
+    return result;
+  }
+
   getQueryArguments(filter: Object, ovrrArgs?: any): Array<any> {
-    let compFilter = this.getComponentFilter(filter);
-    let queryArguments = [compFilter, this.colArray, this.entity];
+    const compFilter = this.getComponentFilter(filter);
+    const queryCols = this.getAttributesValuesToQuery();
+    let queryArguments = [compFilter, queryCols, this.entity];
     if (this.pageable) {
       let queryOffset = (ovrrArgs && ovrrArgs.hasOwnProperty('offset')) ? ovrrArgs.offset : this.state.queryRecordOffset;
       let queryRowsN = (ovrrArgs && ovrrArgs.hasOwnProperty('length')) ? ovrrArgs.length : this.queryRows;

@@ -916,19 +916,21 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
   }
 
-  getAttributesValuesToQuery(): Object {
-    let columns = [];
-    this.colArray.forEach(col => {
-      if (this.avoidQueryColumns.indexOf(col) === -1) {
-        columns.push(col);
+  getAttributesValuesToQuery(): Array<string> {
+    let columns = super.getAttributesValuesToQuery();
+    if (this.avoidQueryColumns.length > 0) {
+      for (let i = columns.length - 1; i >= 0; i--) {
+        const col = columns[i];
+        if (this.avoidQueryColumns.indexOf(col) !== -1) {
+          columns.splice(i, 1);
+        }
       }
-    });
+    }
     return columns;
   }
 
   getQueryArguments(filter: Object, ovrrArgs?: any): Array<any> {
     let queryArguments = super.getQueryArguments(filter, ovrrArgs);
-    queryArguments[1] = this.getAttributesValuesToQuery();
     queryArguments[3] = this.getSqlTypesForFilter(queryArguments[1]);
     if (this.pageable) {
       queryArguments[5] = this.paginator.isShowingAllRows(queryArguments[5]) ? this.state.totalQueryRecordsNumber : queryArguments[5];
