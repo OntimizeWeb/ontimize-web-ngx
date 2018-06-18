@@ -1,13 +1,19 @@
 <div fxLayout="column" fxLayoutAlign="center center" class="input-image relative" [formGroup]="getFormGroup()" [matTooltip]="tooltip"
   [matTooltipPosition]="tooltipPosition" [matTooltipShowDelay]="tooltipShowDelay">
-  <div fxLayout="row" fxFill fxLayoutAlign="end center" class="input-image-container" layout-padding>
+  <mat-form-field class="input-image-container" fxFill>
     <input matInput #inputControl [formControlName]="getAttribute()" type="text" [attr.id]="getAttribute()" [id]="getAttribute()"
       [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)" class="mat-input input-control">
-    <input [hidden]="!hasControls()" class="mat-primary" #input type="file" (change)="fileChange(input)" class="input-file" />
+    <input [hidden]="!hasControls()" class="mat-primary" #input type="file" (change)="fileChange(input)" class="input-file" fxFill
+    />
     <label *ngIf="hasControls()" #titleLabel (click)="input.click()">{{ 'CHOOSE_FILE' | oTranslate }}</label>
-    <span *ngIf="hasControls()" class="icon-btn" [class.mat-disabled]="isDisabled" (click)="input.click()"><i class="material-icons">search</i></span>
-    <span *ngIf="hasControls()" class="icon-btn" [class.mat-disabled]="isDisabled" (click)="onClickClear($event)"><i class="material-icons">clear</i></span>
-  </div>
+    <button mat-button *ngIf="hasControls()" [disabled]="isDisabled" matSuffix mat-icon-button (click)="input.click()">
+      <mat-icon>search</mat-icon>
+    </button>
+    <button mat-button *ngIf="hasControls()" [disabled]="isDisabled" matSuffix mat-icon-button (click)="onClickClear($event)">
+      <mat-icon>clear</mat-icon>
+    </button>
+    <mat-error *ngIf="hasError('required')">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</mat-error>
+  </mat-form-field>
   <div fxLayout="row" class="input-image-preview" fxLayoutAlign="center center">
     <img *ngIf="!(isEmpty())" [src]="getSrcValue()" alt="" (click)="input.click()" />
     <mat-icon class="empty-icon" [class.mat-disabled]="isDisabled" aria-label="empty image" *ngIf="useEmptyIcon()" (click)="input.click()">{{ emptyicon }}</mat-icon>
