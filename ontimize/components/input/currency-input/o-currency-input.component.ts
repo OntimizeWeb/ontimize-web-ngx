@@ -1,17 +1,8 @@
-import {
-  Component, Inject, Injector, forwardRef, ElementRef, OnInit,
-  Optional,
-  NgModule,
-  ViewEncapsulation
-} from '@angular/core';
+import { Component, NgModule, OnInit, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ValidatorFn } from '@angular/forms/src/directives/validators';
+
 import { OSharedModule } from '../../../shared';
-import { OFormComponent } from '../../form/o-form.component';
-import {
-  ORealInputModule, ORealInputComponent,
-  DEFAULT_INPUTS_O_REAL_INPUT, DEFAULT_OUTPUTS_O_REAL_INPUT
-} from '../real-input/o-real-input.component';
+import { DEFAULT_INPUTS_O_REAL_INPUT, DEFAULT_OUTPUTS_O_REAL_INPUT, ORealInputModule, ORealInputComponent } from '../real-input/o-real-input.component';
 
 export const DEFAULT_INPUTS_O_CURRENCY_INPUT = [
   ...DEFAULT_INPUTS_O_REAL_INPUT,
@@ -57,24 +48,11 @@ export class OCurrencyInputComponent extends ORealInputComponent implements OnIn
   currencySymbol: string = 'EUR';
   currencySymbolPosition: string = 'right';
 
-  constructor(
-    @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
-    elRef: ElementRef,
-    injector: Injector) {
-    super(form, elRef, injector);
-  }
-
-  resolveValidators(): ValidatorFn[] {
-    let validators: ValidatorFn[] = super.resolveValidators();
-    return validators;
-  }
-
 }
 
 @NgModule({
   declarations: [OCurrencyInputComponent],
-  imports: [OSharedModule, CommonModule, ORealInputModule],
+  imports: [CommonModule, OSharedModule, ORealInputModule],
   exports: [OCurrencyInputComponent, ORealInputModule]
 })
-export class OCurrencyInputModule {
-}
+export class OCurrencyInputModule { }

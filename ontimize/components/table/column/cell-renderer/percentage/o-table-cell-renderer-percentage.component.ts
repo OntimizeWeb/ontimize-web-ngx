@@ -1,6 +1,7 @@
-import { Component, Injector, TemplateRef, ViewChild, OnInit } from '@angular/core';
+import { Component, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
+
 import { NumberService } from '../../../../../services';
-import { OPercentPipe, IPercentPipeArgument } from '../../../../../pipes';
+import { IPercentPipeArgument, OPercentPipe } from '../../../../../pipes';
 import { DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_REAL, OTableCellRendererRealComponent } from '../real/o-table-cell-renderer-real.component';
 
 export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_PERCENTAGE = [
@@ -23,7 +24,6 @@ export class OTableCellRendererPercentageComponent extends OTableCellRendererRea
   protected componentPipe: OPercentPipe;
   protected pipeArguments: IPercentPipeArgument;
 
-
   @ViewChild('templateref', { read: TemplateRef }) public templateref: TemplateRef<any>;
 
   constructor(protected injector: Injector) {
@@ -32,7 +32,7 @@ export class OTableCellRendererPercentageComponent extends OTableCellRendererRea
     this.numberService = this.injector.get(NumberService);
 
     if (typeof (this.decimalDigits) === 'undefined') {
-      this.decimalDigits = this.numberService.decimalDigits;
+      this.decimalDigits = this.numberService.minDecimalDigits;
     }
     this.setComponentPipe();
   }
@@ -44,7 +44,8 @@ export class OTableCellRendererPercentageComponent extends OTableCellRendererRea
   ngOnInit() {
     super.ngOnInit();
     this.pipeArguments = {
-      decimalDigits: this.decimalDigits,
+      minDecimalDigits: this.decimalDigits,
+      maxDecimalDigits: this.decimalDigits,
       decimalSeparator: this.decimalSeparator,
       grouping: this.grouping,
       thousandSeparator: this.thousandSeparator
