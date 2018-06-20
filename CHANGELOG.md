@@ -61,6 +61,7 @@
     * every new editor or renderer that uses '*ngOnInit*' method *must* init its implementation invoking '*super.ngOnInit()*'
     * cell editors typo fixed: method '*startEdtion*' is now '*startEdition*'
 * **o-file-input**: method `clearData` is no longer available. Use `clearValue` instead. ([7000acc](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7000acc))
+* **o-real-input**, **o-currency-input**, **o-percentage-input**: attribute `decimal-digits` has been removed. ([f321543](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f321543))
 
 **Note**: There is a new '*o-tree*' component, all its information will be available at [ontimize-web-ngx-tree](https://github.com/OntimizeWeb/ontimize-web-ngx-tree)
 
