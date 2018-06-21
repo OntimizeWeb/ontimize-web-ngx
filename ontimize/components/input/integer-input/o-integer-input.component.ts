@@ -1,4 +1,4 @@
-import { Component, ElementRef, forwardRef, Inject, Injector, NgModule, OnInit, Optional, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, forwardRef, Inject, Injector, NgModule, OnInit, Optional, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl } from '@angular/forms';
 import { ValidatorFn } from '@angular/forms/src/directives/validators';
@@ -33,7 +33,7 @@ export const DEFAULT_OUTPUTS_O_INTEGER_INPUT = [
   outputs: DEFAULT_OUTPUTS_O_INTEGER_INPUT,
   encapsulation: ViewEncapsulation.None
 })
-export class OIntegerInputComponent extends OTextInputComponent implements OnInit {
+export class OIntegerInputComponent extends OTextInputComponent implements AfterViewInit, OnInit {
 
   public static DEFAULT_INPUTS_O_INTEGER_INPUT = DEFAULT_INPUTS_O_INTEGER_INPUT;
   public static DEFAULT_OUTPUTS_O_INTEGER_INPUT = DEFAULT_OUTPUTS_O_INTEGER_INPUT;
@@ -78,6 +78,11 @@ export class OIntegerInputComponent extends OTextInputComponent implements OnIni
     if (this.step === undefined) {
       this.step = 1;
     }
+  }
+
+  ngAfterViewInit(): void {
+    super.ngAfterViewInit();
+    this.setPipeValue();
   }
 
   innerOnChange(event: any) {
