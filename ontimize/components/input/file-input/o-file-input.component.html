@@ -1,6 +1,7 @@
 <div fxLayout="row" fxLayoutAlign="space-between center" [formGroup]="getFormGroup()" [matTooltip]="tooltip" [matTooltipPosition]="tooltipPosition"
   [matTooltipShowDelay]="tooltipShowDelay">
-  <mat-form-field [class.custom-width]="hasCustomWidth" [class.icon-field]="showClearButton || getValue()" (click)="isDisabled || isReadOnly ? null : inputFile.click()">
+  <mat-form-field [class.custom-width]="hasCustomWidth" class="icon-field" (click)="isDisabled || isReadOnly ? null : inputFile.click()"
+    fxFill>
     <input #inputShowValue matInput type="text" [attr.id]="getAttribute()" [id]="getAttribute()" [formControlName]="getAttribute()"
       [placeholder]="placeHolder" [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)" [required]="isRequired" readonly>
     <button *ngIf="showClearButton" matSuffix mat-icon-button (click)="onClickClear($event)">

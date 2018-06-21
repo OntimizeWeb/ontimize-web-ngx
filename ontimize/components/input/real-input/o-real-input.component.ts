@@ -1,34 +1,19 @@
-import {
-  Component,
-  Inject,
-  Injector,
-  forwardRef,
-  ElementRef,
-  OnInit,
-  Optional,
-  NgModule,
-  ViewEncapsulation
-} from '@angular/core';
+import { Component, NgModule, OnInit, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Validators, ValidatorFn } from '@angular/forms';
+import { FormControl, ValidatorFn } from '@angular/forms';
 
+import { Util } from '../../../util/util';
 import { OSharedModule } from '../../../shared';
-import { ORealPipe, IRealPipeArgument } from '../../../pipes';
-import { OFormComponent } from '../../form/o-form.component';
+import { OFormValue } from '../../form/OFormValue';
 import { InputConverter } from '../../../decorators';
-import {
-  OIntegerInputModule,
-  OIntegerInputComponent,
-  DEFAULT_INPUTS_O_INTEGER_INPUT,
-  DEFAULT_OUTPUTS_O_INTEGER_INPUT
-} from '../integer-input/o-integer-input.component';
+import { ORealPipe, IRealPipeArgument } from '../../../pipes';
+import { DEFAULT_INPUTS_O_INTEGER_INPUT, DEFAULT_OUTPUTS_O_INTEGER_INPUT, OIntegerInputComponent, OIntegerInputModule } from '../integer-input/o-integer-input.component';
 
 export const DEFAULT_INPUTS_O_REAL_INPUT = [
   ...DEFAULT_INPUTS_O_INTEGER_INPUT,
   'minDecimalDigits: min-decimal-digits',
   'maxDecimalDigits: max-decimal-digits',
-  'decimalSeparator : decimal-separator',
-  'decimalDigits : decimal-digits'
+  'decimalSeparator : decimal-separator'
 ];
 
 export const DEFAULT_OUTPUTS_O_REAL_INPUT = [
@@ -49,16 +34,13 @@ export class ORealInputComponent extends OIntegerInputComponent implements OnIni
   public static DEFAULT_OUTPUTS_O_REAL_INPUT = DEFAULT_OUTPUTS_O_REAL_INPUT;
 
   @InputConverter()
-  minDecimalDigits: number = 2;//TODO pending
+  minDecimalDigits: number = 2;
 
   @InputConverter()
-  maxDecimalDigits: number = 2;//TODO pending
+  maxDecimalDigits: number = 2;
 
   @InputConverter()
-  step: number;
-
-  @InputConverter()
-  decimalDigits: number;
+  step: number = 0.01;
 
   @InputConverter()
   grouping: boolean = true;
@@ -66,45 +48,84 @@ export class ORealInputComponent extends OIntegerInputComponent implements OnIni
   protected decimalSeparator: string;
   protected pipeArguments: IRealPipeArgument;
 
-  constructor(
-    @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
-    elRef: ElementRef,
-    injector: Injector) {
-    super(form, elRef, injector);
-  }
-
   setComponentPipe() {
     this.componentPipe = new ORealPipe(this.injector);
   }
 
   ngOnInit() {
     if (this.step === undefined) {
-      this.step = 1 / Math.pow(10, this.decimalDigits);
+      this.step = 1 / Math.pow(10, this.maxDecimalDigits);
     }
 
     super.ngOnInit();
     this.pipeArguments.decimalSeparator = this.decimalSeparator;
-    this.pipeArguments.decimalDigits = this.decimalDigits;
+    this.pipeArguments.minDecimalDigits = this.minDecimalDigits;
+    this.pipeArguments.maxDecimalDigits = this.maxDecimalDigits;
+  }
 
-    if (this.decimalDigits === undefined) {
-      this.decimalDigits = 2;
+  innerOnChange(event: any) {
+    if (!this.value) {
+      this.value = new OFormValue();
     }
+    this.ensureOFormValue(event);
+    this.onChange.emit(event);
   }
 
   resolveValidators(): ValidatorFn[] {
     let validators: ValidatorFn[] = super.resolveValidators();
-    // Inject pattern validator for formatting value
-    let pattern = '[-+]?[0-9]+(\.[0-9]{' + this.minDecimalDigits + ',' + this.maxDecimalDigits + '})?';
-    validators.push(Validators.pattern(pattern));
+
+    if (typeof (this.minDecimalDigits) !== 'undefined') {
+      validators.push(this.minDecimalDigitsValidator.bind(this));
+    }
+
+    if (typeof (this.maxDecimalDigits) !== 'undefined') {
+      validators.push(this.maxDecimalDigitsValidator.bind(this));
+    }
+
     return validators;
+  }
+
+  protected minDecimalDigitsValidator(control: FormControl) {
+    let ctrlValue: string = control.value;
+    if (typeof control.value === 'number') {
+      ctrlValue = ctrlValue.toString();
+    }
+    if (ctrlValue && ctrlValue.length) {
+      let valArray = ctrlValue.split(this.decimalSeparator ? this.decimalSeparator : '.');
+      if (Util.isDefined(this.minDecimalDigits) && (this.minDecimalDigits > 0) && Util.isDefined(valArray[1]) && (valArray[1].length < this.minDecimalDigits)) {
+        return {
+          minDecimaldigits: {
+            requiredMinDecimaldigits: this.minDecimalDigits
+          }
+        };
+      }
+    }
+    return {};
+  }
+
+  protected maxDecimalDigitsValidator(control: FormControl) {
+    let ctrlValue: string = control.value;
+    if (typeof control.value === 'number') {
+      ctrlValue = ctrlValue.toString();
+    }
+    if (ctrlValue && ctrlValue.length) {
+      let valArray = ctrlValue.split(this.decimalSeparator ? this.decimalSeparator : '.');
+      if (Util.isDefined(this.maxDecimalDigits) && (this.maxDecimalDigits > 0) && Util.isDefined(valArray[1]) && (valArray[1].length > this.maxDecimalDigits)) {
+        return {
+          maxDecimaldigits: {
+            requiredMaxDecimaldigits: this.maxDecimalDigits
+          }
+        };
+      }
+    }
+    return {};
   }
 
 }
 
 @NgModule({
   declarations: [ORealInputComponent],
-  imports: [OSharedModule, CommonModule, OIntegerInputModule],
-  exports: [ORealInputComponent, OIntegerInputModule]
+  imports: [CommonModule, OSharedModule, OIntegerInputModule],
+  exports: [OIntegerInputModule, ORealInputComponent]
 })
-export class ORealInputModule {
-}
+export class ORealInputModule { }

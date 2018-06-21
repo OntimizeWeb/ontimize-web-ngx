@@ -1,19 +1,9 @@
-import {
-  Component, Inject, Injector, forwardRef, ElementRef, OnInit,
-  Optional,
-  NgModule,
-  ViewEncapsulation
-} from '@angular/core';
+import { Component, NgModule, OnInit, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { InputConverter } from '../../../decorators';
+
 import { OSharedModule } from '../../../shared';
-import { OFormComponent } from '../../form/o-form.component';
-import {
-  ORealInputModule,
-  ORealInputComponent,
-  DEFAULT_INPUTS_O_REAL_INPUT,
-  DEFAULT_OUTPUTS_O_REAL_INPUT
-} from '../real-input/o-real-input.component';
+import { InputConverter } from '../../../decorators';
+import { DEFAULT_INPUTS_O_REAL_INPUT, DEFAULT_OUTPUTS_O_REAL_INPUT, ORealInputComponent, ORealInputModule } from '../real-input/o-real-input.component';
 
 export const DEFAULT_INPUTS_O_PERCENT_INPUT = [
   ...DEFAULT_INPUTS_O_REAL_INPUT
@@ -39,16 +29,6 @@ export class OPercentInputComponent extends ORealInputComponent implements OnIni
   @InputConverter()
   grouping: boolean = true;
 
-  @InputConverter()
-  decimalDigits: number = 2;
-
-  constructor(
-    @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
-    elRef: ElementRef,
-    injector: Injector) {
-    super(form, elRef, injector);
-  }
-
   public ngOnInit() {
     if (typeof (this.min) === 'undefined') {
       this.min = 0;
@@ -63,8 +43,7 @@ export class OPercentInputComponent extends ORealInputComponent implements OnIni
 
 @NgModule({
   declarations: [OPercentInputComponent],
-  imports: [OSharedModule, CommonModule, ORealInputModule],
+  imports: [CommonModule, OSharedModule, ORealInputModule],
   exports: [OPercentInputComponent, ORealInputModule]
 })
-export class OPercentInputModule {
-}
+export class OPercentInputModule { }

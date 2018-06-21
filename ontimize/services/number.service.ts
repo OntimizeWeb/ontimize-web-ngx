@@ -1,4 +1,6 @@
 import { Injector } from '@angular/core';
+
+import { Util } from '../util/util';
 import { AppConfig, Config } from '../config/app-config';
 
 export class NumberService {
@@ -6,14 +8,16 @@ export class NumberService {
   public static DEFAULT_DECIMAL_DIGITS = 2;
 
   protected _grouping: boolean;
-  protected _decimalDigits: number;
+  protected _minDecimalDigits: number;
+  protected _maxDecimalDigits: number;
   protected _locale: string;
   private _config: Config;
 
   constructor(protected injector: Injector) {
     this._config = this.injector.get(AppConfig).getConfiguration();
     //TODO: initialize from config
-    this._decimalDigits = NumberService.DEFAULT_DECIMAL_DIGITS;
+    this._minDecimalDigits = NumberService.DEFAULT_DECIMAL_DIGITS;
+    this._maxDecimalDigits = NumberService.DEFAULT_DECIMAL_DIGITS;
 
     this._grouping = true;
     this._locale = this._config.locale;
@@ -27,12 +31,20 @@ export class NumberService {
     this._grouping = value;
   }
 
-  public get decimalDigits(): number {
-    return this._decimalDigits;
+  public get minDecimalDigits(): number {
+    return this._minDecimalDigits;
   }
 
-  public set decimalDigits(value: number) {
-    this._decimalDigits = value;
+  public set minDecimalDigits(value: number) {
+    this._minDecimalDigits = value;
+  }
+
+  public get maxDecimalDigits(): number {
+    return this._maxDecimalDigits;
+  }
+
+  public set maxDecimalDigits(value: number) {
+    this._maxDecimalDigits = value;
   }
 
   public get locale(): string {
@@ -44,50 +56,54 @@ export class NumberService {
   }
 
   public getIntegerValue(value: any, grouping?: boolean, thousandSeparator?: string, locale?: string) {
-    if (typeof grouping === 'undefined' || !grouping || typeof value === 'undefined') {
+    if (!Util.isDefined(value) && !Util.isDefined(grouping) || !grouping) {
       return value;
     }
-    let formattedIntValue = value;
-    if (typeof (locale) !== 'undefined') {
-      formattedIntValue = new Intl.NumberFormat(locale).format(value);
-    } else if (typeof (thousandSeparator) === 'undefined') {
-      formattedIntValue = new Intl.NumberFormat(this._locale).format(value);
+    // Ensure value is an integer
+    let intValue: any = parseInt(value, 10);
+    if (isNaN(intValue)) {
+      return void 0;
+    }
+    // Format value
+    let formattedIntValue = intValue;
+    if (Util.isDefined(locale)) {
+      formattedIntValue = new Intl.NumberFormat(locale).format(intValue);
+    } else if (!Util.isDefined(thousandSeparator)) {
+      formattedIntValue = new Intl.NumberFormat(this._locale).format(intValue);
     } else {
-      let intValue = parseInt(value, 10);
-      if (isNaN(intValue)) {
-        intValue = 0;
-      }
       formattedIntValue = String(intValue).toString().replace(/\B(?=(\d{3})+(?!\d))/g, thousandSeparator);
     }
     return formattedIntValue;
   }
 
-  public getRealValue(value: any, grouping?: boolean, thousandSeparator?: string,
-    decimalSeparator?: string, decimalDigits?: number, locale?: string) {
-    if (typeof grouping === 'undefined' || !grouping || typeof value === 'undefined') {
+  public getRealValue(value: any, grouping?: boolean, thousandSeparator?: string, decimalSeparator?: string, minDecimalDigits?: number, maxDecimalDigits?: number, locale?: string) {
+    if (!Util.isDefined(value) && !Util.isDefined(grouping) || !grouping) {
       return value;
     }
-    if (typeof (decimalDigits) === 'undefined') {
-      decimalDigits = this._decimalDigits;
+    if (!Util.isDefined(minDecimalDigits)) {
+      minDecimalDigits = this._minDecimalDigits;
+    }
+    if (!Util.isDefined(maxDecimalDigits)) {
+      maxDecimalDigits = this._maxDecimalDigits;
     }
 
     let formattedRealValue = value;
     let formatterArgs = {
-      minimumFractionDigits: decimalDigits,
-      maximumFractionDigits: decimalDigits
+      minimumFractionDigits: minDecimalDigits,
+      maximumFractionDigits: maxDecimalDigits
     };
 
-    if (typeof (locale) !== 'undefined') {
+    if (Util.isDefined(locale)) {
       formattedRealValue = new Intl.NumberFormat(locale, formatterArgs).format(value);
-    } else if (typeof (thousandSeparator) === 'undefined' || typeof (decimalSeparator) === 'undefined') {
+    } else if (!Util.isDefined(thousandSeparator) || !Util.isDefined(decimalSeparator)) {
       formattedRealValue = new Intl.NumberFormat(this._locale, formatterArgs).format(value);
     } else {
       let realValue = parseFloat(value);
       if (isNaN(realValue)) {
-        realValue = 0;
+        realValue = void 0;
       }
       formattedRealValue = String(realValue);
-      let tmpStr = realValue.toFixed(decimalDigits);
+      let tmpStr = realValue.toFixed(maxDecimalDigits);
       tmpStr = tmpStr.replace('.', decimalSeparator);
       if (grouping) {
         let parts = tmpStr.split(decimalSeparator);
@@ -102,14 +118,12 @@ export class NumberService {
     return formattedRealValue;
   }
 
-  public getPercentValue(value: any, grouping?: boolean, thousandSeparator?: string,
-    decimalSeparator?: string, decimalDigits?: number, locale?: string) {
+  public getPercentValue(value: any, grouping?: boolean, thousandSeparator?: string, decimalSeparator?: string, minDecimalDigits?: number, maxDecimalDigits?: number, locale?: string) {
     let formattedPercentValue = value;
     value = value * 100;
 
-    formattedPercentValue = this.getRealValue(value, grouping, thousandSeparator, decimalSeparator, decimalDigits)+' %';
+    formattedPercentValue = this.getRealValue(value, grouping, thousandSeparator, decimalSeparator, minDecimalDigits, maxDecimalDigits) + ' %';
     return formattedPercentValue;
-
   }
 
 }
