@@ -90,13 +90,15 @@ export class ORealInputComponent extends OIntegerInputComponent implements OnIni
     if (typeof control.value === 'number') {
       ctrlValue = ctrlValue.toString();
     }
-    let valArray = ctrlValue.split(this.decimalSeparator ? this.decimalSeparator : '.');
-    if (Util.isDefined(this.minDecimalDigits) && (this.minDecimalDigits > 0) && Util.isDefined(valArray[1]) && (valArray[1].length < this.minDecimalDigits)) {
-      return {
-        minDecimaldigits: {
-          requiredMinDecimaldigits: this.minDecimalDigits
-        }
-      };
+    if (ctrlValue && ctrlValue.length) {
+      let valArray = ctrlValue.split(this.decimalSeparator ? this.decimalSeparator : '.');
+      if (Util.isDefined(this.minDecimalDigits) && (this.minDecimalDigits > 0) && Util.isDefined(valArray[1]) && (valArray[1].length < this.minDecimalDigits)) {
+        return {
+          minDecimaldigits: {
+            requiredMinDecimaldigits: this.minDecimalDigits
+          }
+        };
+      }
     }
     return {};
   }
@@ -106,13 +108,15 @@ export class ORealInputComponent extends OIntegerInputComponent implements OnIni
     if (typeof control.value === 'number') {
       ctrlValue = ctrlValue.toString();
     }
-    let valArray = ctrlValue.split(this.decimalSeparator ? this.decimalSeparator : '.');
-    if (Util.isDefined(this.maxDecimalDigits) && (this.maxDecimalDigits > 0) && Util.isDefined(valArray[1]) && (valArray[1].length > this.maxDecimalDigits)) {
-      return {
-        maxDecimaldigits: {
-          requiredMaxDecimaldigits: this.maxDecimalDigits
-        }
-      };
+    if (ctrlValue && ctrlValue.length) {
+      let valArray = ctrlValue.split(this.decimalSeparator ? this.decimalSeparator : '.');
+      if (Util.isDefined(this.maxDecimalDigits) && (this.maxDecimalDigits > 0) && Util.isDefined(valArray[1]) && (valArray[1].length > this.maxDecimalDigits)) {
+        return {
+          maxDecimaldigits: {
+            requiredMaxDecimaldigits: this.maxDecimalDigits
+          }
+        };
+      }
     }
     return {};
   }
