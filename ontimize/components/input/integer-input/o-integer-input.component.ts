@@ -38,6 +38,8 @@ export class OIntegerInputComponent extends OTextInputComponent implements After
   public static DEFAULT_INPUTS_O_INTEGER_INPUT = DEFAULT_INPUTS_O_INTEGER_INPUT;
   public static DEFAULT_OUTPUTS_O_INTEGER_INPUT = DEFAULT_OUTPUTS_O_INTEGER_INPUT;
 
+  inputType: string = 'number';
+
   @InputConverter()
   min: number;
   @InputConverter()
@@ -59,6 +61,12 @@ export class OIntegerInputComponent extends OTextInputComponent implements After
     injector: Injector
   ) {
     super(form, elRef, injector);
+
+    // Firefox workaround
+    if (navigator.userAgent.toLowerCase().indexOf('firefox') > -1) {
+      this.inputType = 'text';
+    }
+
     this.setComponentPipe();
   }
 
@@ -148,7 +156,10 @@ export class OIntegerInputComponent extends OTextInputComponent implements After
   setNumberDOMValue(val: any) {
     const inputElement = this.getInputEl();
     if (Util.isDefined(inputElement)) {
-      inputElement.type = 'number';
+      // Firefox workaround
+      if (navigator.userAgent.toLowerCase().indexOf('firefox') === -1) {
+        inputElement.type = 'number';
+      }
       inputElement.value = (val !== undefined) ? val : '';
     }
   }
@@ -156,7 +167,10 @@ export class OIntegerInputComponent extends OTextInputComponent implements After
   setTextDOMValue(val: any) {
     let inputElement = this.getInputEl();
     if (Util.isDefined(inputElement)) {
-      inputElement.type = 'text';
+      // Firefox workaround
+      if (navigator.userAgent.toLowerCase().indexOf('firefox') === -1) {
+        inputElement.type = 'text';
+      }
       inputElement.value = (val !== undefined) ? val : '';
     }
   }

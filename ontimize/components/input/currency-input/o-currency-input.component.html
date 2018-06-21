@@ -2,9 +2,9 @@
   [matTooltipShowDelay]="tooltipShowDelay">
   <div *ngIf="currencySymbol !== 'none' && currencySymbolPosition === 'left'" matSuffix [class.mat-disabled]="isDisabled" class="icon-btn">{{ currency_symbols[currencySymbol] }}</div>
   <mat-form-field [class.custom-width]="hasCustomWidth" class="icon-field" fxFill>
-    <input matInput type="number" [attr.id]="getAttribute()" [formControlName]="getAttribute()" [placeholder]="placeHolder" [ngModel]="getValue()"
-      (change)="innerOnChange($event.target.value)" (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)" [readonly]="isReadOnly"
-      [min]="min" [max]="max" [step]="step" [required]="isRequired">
+    <input matInput [type]="inputType" [attr.id]="getAttribute()" [formControlName]="getAttribute()" [placeholder]="placeHolder"
+      [ngModel]="getValue()" (change)="innerOnChange($event.target.value)" (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)"
+      [readonly]="isReadOnly" [min]="min" [max]="max" [step]="step" [required]="isRequired">
     <button *ngIf="showClearButton" matSuffix mat-icon-button (click)="clearValue()">
       <mat-icon>close</mat-icon>
     </button>
