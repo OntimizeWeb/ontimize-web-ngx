@@ -1,6 +1,6 @@
 import {
   Component, OnInit, OnDestroy, Inject, Injector, ElementRef, forwardRef,
-  Optional, NgModule, ViewEncapsulation, ViewChild, EventEmitter, ContentChildren, QueryList, ViewChildren
+  Optional, NgModule, ViewEncapsulation, ViewChild, EventEmitter, ContentChildren, QueryList, ViewChildren, HostListener
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CdkTableModule } from '@angular/cdk/table';
@@ -72,6 +72,7 @@ import { IOContextMenuContext } from '../contextmenu/o-context-menu.service';
 import { ServiceUtils, ISQLOrder } from '../service.utils';
 import { FilterExpressionUtils, IExpression } from '../filter-expression.utils';
 import { OColumnTooltip } from './column/o-table-column.component';
+import { OTableRow } from './extensions/row/o-table-row.component';
 
 export const DEFAULT_INPUTS_O_TABLE = [
   ...OServiceComponent.DEFAULT_INPUTS_O_SERVICE_COMPONENT,
@@ -130,7 +131,9 @@ export const DEFAULT_INPUTS_O_TABLE = [
   'editionMode: edition-mode',
 
   // selection-mode [none | simple | multiple ]: selection mode. Default multiple
-  'selectionMode: selection-mode'
+  'selectionMode: selection-mode',
+
+  'horizontalScroll: horizontal-scroll'
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE = [
@@ -158,6 +161,7 @@ export class OColumn {
   editor: any;
   editing: boolean;
   width: string;
+  minWidth: string;
   aggregate: OColumnAggregate;
   calculate: string | OperatorFunction;
   definition: OTableColumnComponent;
@@ -195,6 +199,12 @@ export class OColumn {
     return tooltip;
   }
 
+  getMinWidth() {
+    if (Util.isDefined(this.width)) {
+      return this.width;
+    }
+    return this.minWidth;
+  }
 }
 
 export class OTableOptions {
@@ -311,6 +321,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   showTitle: boolean = false;
   protected editionMode: string = Codes.DETAIL_MODE_NONE;
   protected selectionMode: string = Codes.SELECTION_MODE_MULTIPLE;
+  @InputConverter()
+  horizontalScroll: boolean = false;
 
   public daoTable: OTableDao | null;
   public dataSource: OTableDataSource | null;
@@ -368,6 +380,28 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   protected sortSubscription: Subscription;
   quickFilterCallback: QuickFilterFunction;
+
+  @ViewChild('tableBody')
+  protected tableBodyEl: ElementRef;
+  protected horizontalScrolled: boolean;
+  public onUpdateScrolledState: EventEmitter<any> = new EventEmitter();
+  public rowWidth;
+
+  @HostListener('window:resize', ['$event'])
+  updateScrolledState(): void {
+    if (this.horizontalScroll) {
+      const self = this;
+      setTimeout(() => {
+        const bodyWidth = self.tableBodyEl.nativeElement.clientWidth;
+        const scrollWidth = self.tableBodyEl.nativeElement.scrollWidth;
+        const previousState = self.horizontalScrolled;
+        self.horizontalScrolled = scrollWidth > bodyWidth;
+        if (previousState !== self.horizontalScrolled) {
+          self.onUpdateScrolledState.emit(self.horizontalScrolled);
+        }
+      }, 0);
+    }
+  }
 
   constructor(
     injector: Injector,
@@ -570,7 +604,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     colDef.orderable = true;
     colDef.searchable = true;
     colDef.searching = true;
-    colDef.width = '';
 
     if (!Util.isDefined(column.attr)) {
       // column without 'attr' should contain only renderers that do not depend on cell data, but row data (e.g. actions)
@@ -583,8 +616,11 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       colDef.attr = column.attr;
       colDef.name = column.attr;
       colDef.title = Util.isDefined(column.title) ? column.title : column.attr;
-      if (column.width !== '') {
+      if (Util.isDefined(column.width)) {
         colDef.width = column.width;
+      }
+      if (Util.isDefined(column.minWidth)) {
+        colDef.minWidth = column.minWidth;
       }
       if (Util.isDefined(column.orderable)) {
         colDef.orderable = column.orderable;
@@ -902,6 +938,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     this.daoTable.sqlTypesChange.next(sqlTypes);
     this.daoTable.dataChange.next(data);
     this.daoTable.isLoadingResults = false;
+    this.updateScrolledState();
     if (this.pageable) {
       ObservableWrapper.callEmit(this.onPaginatedTableDataLoaded, data);
     }
@@ -1544,6 +1581,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     OTableColumnComponent,
     OTableColumnCalculatedComponent,
     OTableContextMenuComponent,
+    OTableRow,
     ...O_TABLE_CELL_RENDERERS,
     ...O_TABLE_CELL_EDITORS,
     ...O_TABLE_DIALOGS,
@@ -1563,6 +1601,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     CdkTableModule,
     OTableColumnCalculatedComponent,
     OTableContextMenuComponent,
+    OTableRow,
     ...O_TABLE_HEADER_COMPONENTS,
     ...O_TABLE_CELL_RENDERERS,
     ...O_TABLE_CELL_EDITORS,

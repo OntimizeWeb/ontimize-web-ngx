@@ -62,6 +62,8 @@ export const DEFAULT_INPUTS_O_TABLE_COLUMN = [
 
   'width',
 
+  'minWidth: min-width',
+
   'class',
 
   // break-word [no|yes|true|false]: content column can show in multiple lines if it not catch in the cell. Default: no and if content of the cell overflow.
@@ -144,7 +146,8 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
   protected _searchable: boolean = true;
   @InputConverter()
   public editable: boolean = false;
-  public width: string = '';
+  public width: string;
+  public minWidth: string;
   @InputConverter()
   public tooltip: boolean = false;
   tooltipValue: string;
