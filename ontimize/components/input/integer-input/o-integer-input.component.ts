@@ -45,7 +45,7 @@ export class OIntegerInputComponent extends OTextInputComponent implements After
   @InputConverter()
   max: number;
   @InputConverter()
-  step: number;
+  step: number = 1;
 
   @InputConverter()
   protected grouping: boolean = false;
@@ -68,6 +68,11 @@ export class OIntegerInputComponent extends OTextInputComponent implements After
     }
 
     this.setComponentPipe();
+  }
+
+  initialize(): void {
+    super.initialize();
+    this.initializeStep();
   }
 
   setComponentPipe() {
@@ -206,6 +211,13 @@ export class OIntegerInputComponent extends OTextInputComponent implements After
       };
     }
     return {};
+  }
+
+  protected initializeStep(): void {
+    if (this.step <= 0) {
+      this.step = 1;
+      console.warn('`step` attribute must be greater than zero');
+    }
   }
 
 }

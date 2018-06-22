@@ -53,10 +53,6 @@ export class ORealInputComponent extends OIntegerInputComponent implements OnIni
   }
 
   ngOnInit() {
-    if (this.step === undefined) {
-      this.step = 1 / Math.pow(10, this.maxDecimalDigits);
-    }
-
     super.ngOnInit();
     this.pipeArguments.decimalSeparator = this.decimalSeparator;
     this.pipeArguments.minDecimalDigits = this.minDecimalDigits;
@@ -119,6 +115,13 @@ export class ORealInputComponent extends OIntegerInputComponent implements OnIni
       }
     }
     return {};
+  }
+
+  protected initializeStep(): void {
+    if (this.step <= 0) {
+      this.step = 1 / Math.pow(10, this.maxDecimalDigits);
+      console.warn('`step` attribute must be greater than zero');
+    }
   }
 
 }
