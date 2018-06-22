@@ -1,8 +1,9 @@
-import { Component, NgModule, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, NgModule, OnInit, ViewEncapsulation, Optional, Inject, forwardRef, ElementRef, Injector } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
 import { OSharedModule } from '../../../shared';
 import { InputConverter } from '../../../decorators';
+import { IconRegistryService } from '../../../services';
+import { OFormComponent } from '../../form/o-form.component';
 import { DEFAULT_INPUTS_O_REAL_INPUT, DEFAULT_OUTPUTS_O_REAL_INPUT, ORealInputComponent, ORealInputModule } from '../real-input/o-real-input.component';
 
 export const DEFAULT_INPUTS_O_PERCENT_INPUT = [
@@ -29,6 +30,18 @@ export class OPercentInputComponent extends ORealInputComponent implements OnIni
   @InputConverter()
   grouping: boolean = true;
 
+  protected iconRegistryService: IconRegistryService;
+  existsIcon: boolean = false;
+
+  constructor(
+    @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
+    elRef: ElementRef,
+    injector: Injector
+  ) {
+    super(form, elRef, injector);
+    this.iconRegistryService = injector.get(IconRegistryService);
+  }
+
   public ngOnInit() {
     if (typeof (this.min) === 'undefined') {
       this.min = 0;
@@ -37,8 +50,11 @@ export class OPercentInputComponent extends ORealInputComponent implements OnIni
       this.max = 100;
     }
     super.ngOnInit();
-  }
 
+    this.iconRegistryService.existsIcon('PERCENT').subscribe(res => {
+      this.existsIcon = res;
+    });
+  }
 }
 
 @NgModule({

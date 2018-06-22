@@ -1,7 +1,8 @@
-import { Component, NgModule, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, NgModule, OnInit, ViewEncapsulation, Optional, Inject, forwardRef, ElementRef, Injector } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
+import { IconRegistryService } from '../../../services';
 import { OSharedModule } from '../../../shared';
+import { OFormComponent } from '../../form/o-form.component';
 import { DEFAULT_INPUTS_O_REAL_INPUT, DEFAULT_OUTPUTS_O_REAL_INPUT, ORealInputModule, ORealInputComponent } from '../real-input/o-real-input.component';
 
 export const DEFAULT_INPUTS_O_CURRENCY_INPUT = [
@@ -45,9 +46,43 @@ export class OCurrencyInputComponent extends ORealInputComponent implements OnIn
     'VND': '₫', // Vietnamese Dong
   };
 
+  static currency_icons = ['USD', 'EUR', 'GBP', 'ILS', 'INR', 'JPY', 'KRW', 'BTC'];
+
   currencySymbol: string = 'EUR';
   currencySymbolPosition: string = 'right';
 
+  protected iconRegistryService: IconRegistryService;
+  protected existsIcon: boolean = false;
+
+  constructor(
+    @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
+    elRef: ElementRef,
+    injector: Injector
+  ) {
+    super(form, elRef, injector);
+    this.iconRegistryService = injector.get(IconRegistryService);
+  }
+
+  ngOnInit() {
+    super.ngOnInit();
+    if (OCurrencyInputComponent.currency_icons.indexOf(this.currencySymbol) !== -1) {
+      this.iconRegistryService.existsIcon(this.currencySymbol).subscribe(res => {
+        this.existsIcon = res;
+      });
+    }
+  }
+
+  protected existsOntimizeIcon() {
+    return OCurrencyInputComponent.currency_icons.indexOf(this.currencySymbol) !== -1 && this.existsIcon;
+  }
+
+  useIcon(position: string): boolean {
+    return this.existsOntimizeIcon() && this.currencySymbolPosition === position;
+  }
+
+  useSymbol(position: string): boolean {
+    return !this.existsOntimizeIcon() && this.currency_symbols.hasOwnProperty(this.currencySymbol) && this.currencySymbolPosition === position;
+  }
 }
 
 @NgModule({

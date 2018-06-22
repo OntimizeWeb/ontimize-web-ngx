@@ -7,7 +7,10 @@
     <button *ngIf="showClearButton" matSuffix mat-icon-button (click)="clearValue()">
       <mat-icon>close</mat-icon>
     </button>
-    <div class="icon-btn" [class.mat-disabled]="isDisabled" matSuffix>%</div>
+
+    <div *ngIf="!existsIcon" class="icon-btn" [class.mat-disabled]="isDisabled" matSuffix>%</div>
+    <mat-icon *ngIf="existsIcon" svgIcon="ontimize:PERCENT" matSuffix class="svg-icon" [class.mat-disabled]="isDisabled"></mat-icon>
+
     <mat-error *ngIf="hasError('required')">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</mat-error>
     <mat-error *ngIf="hasError('min')">{{ 'FORM_VALIDATION.MIN_VALUE' | oTranslate }}: {{ getErrorValue('min', 'requiredMin') }}</mat-error>
     <mat-error *ngIf="hasError('max')">{{ 'FORM_VALIDATION.MAX_VALUE' | oTranslate }}: {{ getErrorValue('max', 'requiredMax') }}</mat-error>

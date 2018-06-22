@@ -1,6 +1,9 @@
 <div fxLayout="row" fxLayoutAlign="space-between center" [formGroup]="getFormGroup()" [matTooltip]="tooltip" [matTooltipPosition]="tooltipPosition"
   [matTooltipShowDelay]="tooltipShowDelay">
-  <div *ngIf="currencySymbol !== 'none' && currencySymbolPosition === 'left'" matSuffix [class.mat-disabled]="isDisabled" class="icon-btn">{{ currency_symbols[currencySymbol] }}</div>
+
+  <div *ngIf="useSymbol('left')" matSuffix class="icon-btn" [class.mat-disabled]="isDisabled">{{ currency_symbols[currencySymbol] }}</div>
+  <mat-icon *ngIf="useIcon('left')" svgIcon="ontimize:{{currencySymbol}}" matSuffix class="svg-icon" [class.mat-disabled]="isDisabled"></mat-icon>
+
   <mat-form-field [class.custom-width]="hasCustomWidth" class="icon-field" fxFill>
     <input matInput [type]="inputType" [attr.id]="getAttribute()" [formControlName]="getAttribute()" [placeholder]="placeHolder"
       [ngModel]="getValue()" (change)="innerOnChange($event.target.value)" (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)"
@@ -8,8 +11,10 @@
     <button *ngIf="showClearButton" matSuffix mat-icon-button (click)="clearValue()">
       <mat-icon>close</mat-icon>
     </button>
-    <div *ngIf="currencySymbol !== 'none' && currencySymbolPosition === 'right' " matSuffix [class.mat-disabled]="isDisabled"
-      class="icon-btn">{{ currency_symbols[currencySymbol] }}</div>
+
+    <div *ngIf="useSymbol('right')" matSuffix class="icon-btn" [class.mat-disabled]="isDisabled">{{ currency_symbols[currencySymbol] }}</div>
+    <mat-icon *ngIf="useIcon('right')" svgIcon="ontimize:{{currencySymbol}}" matSuffix class="svg-icon" [class.mat-disabled]="isDisabled"></mat-icon>
+
     <mat-error *ngIf="hasError('required')">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</mat-error>
     <mat-error *ngIf="hasError('min')">{{ 'FORM_VALIDATION.MIN_VALUE' | oTranslate }}: {{ getErrorValue('min', 'requiredMin') }}</mat-error>
     <mat-error *ngIf="hasError('max')">{{ 'FORM_VALIDATION.MAX_VALUE' | oTranslate }}: {{ getErrorValue('max', 'requiredMax') }}</mat-error>
