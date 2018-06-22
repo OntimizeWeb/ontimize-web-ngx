@@ -169,7 +169,11 @@ export class OFilterBuilderComponent implements AfterViewInit, OnDestroy, OnInit
    * Trigger the `reloadData` method from the target component.
    */
   triggerReload(): void {
-    this.getTargetComponent().reloadData();
+    if (this.targetCmp.pageable) {
+      this.targetCmp.reloadPaginatedDataFromStart();
+    } else {
+      this.targetCmp.reloadData();
+    }
     this.onFilter.emit();
   }
 
