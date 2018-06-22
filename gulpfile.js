@@ -61,10 +61,13 @@ const FILES = [
   'dist'
 ];
 
-gulp.task('copy-files', (callback) => {
+gulp.task('copy-files', ['copy.assets'], (callback) => {
   copyfiles(FILES, true, callback);
 });
 
+gulp.task('copy.assets', (callback) => {
+  copyfiles(['assets/**', 'dist'], callback);
+});
 /**
  * Inline templates configuration.
  * @see  https://github.com/ludohenin/gulp-inline-ng2-template

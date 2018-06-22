@@ -29,3 +29,4 @@ export * from './services/translate/o-translate-http-loader';
 export * from './services/translate/o-translate.parser';
 
 export * from './services/parser/o-service-response.parser';
+export * from './services/icon-registry.service';
