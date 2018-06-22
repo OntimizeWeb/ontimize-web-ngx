@@ -6,7 +6,8 @@ export const DEFAULT_INPUTS_O_TABLE_OPTION = [
   'icon',
   // show-active-icon [string][yes|no|true|false]: show icon when option is active. Default :no.
   'showActiveIcon : show-active-icon',
-  'olabel: label'
+  'olabel: label',
+  'active'
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE_OPTION = [
@@ -37,7 +38,7 @@ export class OTableOptionComponent {
   olabel: string;
   @InputConverter()
   showActiveIcon: boolean = false;
-
+  @InputConverter()
   active: boolean = false;
 
   constructor(
