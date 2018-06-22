@@ -383,7 +383,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   @ViewChild('tableBody')
   protected tableBodyEl: ElementRef;
-  protected horizontalScrolled: boolean;
+  horizontalScrolled: boolean;
   public onUpdateScrolledState: EventEmitter<any> = new EventEmitter();
   public rowWidth;
 
