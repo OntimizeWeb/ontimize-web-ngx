@@ -9,12 +9,12 @@
       </div>
     </o-form-toolbar>
 
-    <form #innerForm [formGroup]="formGroup" class="inner-form" [class.form-no-toolbar]="!showHeader"
-      fxLayout="column" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+    <form #innerForm [formGroup]="formGroup" class="inner-form" [class.form-no-toolbar]="!showHeader" fxLayout="column" autocomplete="off"
+      autocorrect="off" autocapitalize="off" spellcheck="false">
       <div fxFlex="100" *ngIf="loading" class="progress-bar-container">
         <mat-progress-bar mode="indeterminate"></mat-progress-bar>
       </div>
-      <div layout-padding [class.force-display-block]="layoutDirection === 'column'" [fxLayout]="layoutDirection" [fxLayoutAlign]="layoutAlign" class="o-form-content-wrapper">
+      <div layout-padding [fxLayout]="layoutDirection" [fxLayoutAlign]="layoutAlign" class="o-form-content-wrapper">
         <ng-content></ng-content>
       </div>
     </form>
