@@ -70,13 +70,6 @@ $_mat-checkbox-mark-stroke-size-small: 2 / 15 * $mat-checkbox-size-small !defaul
     position: relative;
     margin: 0 .5%;
 
-    .mat-column-select {
-      min-height: inherit;
-      max-width: 20px;
-      display: flex;
-      align-items: center;
-    }
-
     .spinner-container {
       position: absolute;
       top: 0;
@@ -295,6 +288,15 @@ $_mat-checkbox-mark-stroke-size-small: 2 / 15 * $mat-checkbox-size-small !defaul
         white-space: nowrap;
         text-overflow: ellipsis;
         box-sizing: border-box;
+
+        &.mat-column-select {
+          max-width: 18px;
+          min-width: 18px;
+          width: 18px;
+          padding: 0 4px;
+          box-sizing: content-box;
+          overflow: initial;
+        }
       }
     }
 

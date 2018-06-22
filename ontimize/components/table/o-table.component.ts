@@ -441,15 +441,18 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     // Initialize params of the table
     this.initializeParams();
 
+    this.initializeCheckboxColumn();
+  }
+
+  protected initializeCheckboxColumn() {
     // Add column checkbox
     // 1. create object ocolumn
     // 2. not add visiblesColumns
     let checkboxColumn = new OColumn();
     checkboxColumn.name = OTableComponent.NAME_COLUMN_SELECT;
     checkboxColumn.title = '';
-    checkboxColumn.visible = false;
+    checkboxColumn.visible = !!this.state['select-column-visible'];
     this._oTableOptions.selectColumn = checkboxColumn;
-
     // Initializing row selection listener
     this.selectionChangeSubscription = this.selection.onChange.subscribe((selectionData: SelectionChange<any>) => {
       if (selectionData && selectionData.added.length > 0) {
@@ -459,6 +462,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
         ObservableWrapper.callEmit(this.onRowDeselected, selectionData.removed);
       }
     });
+    this.updateSelectionColumnState();
   }
 
   reinitialize(options: OTableInitializationOptions): void {
@@ -558,9 +562,11 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     if (this.oTableColumnsFilterComponent) {
       dataToStore['column-value-filters'] = this.dataSource.getColumnValueFilters();
     }
-    dataToStore['filter-case-sensitive'] = this.oTableOptions.filterCaseSensitive;
+    const tableOptions = this.oTableOptions;
+    dataToStore['filter-case-sensitive'] = tableOptions.filterCaseSensitive;
+    dataToStore['select-column-visible'] = tableOptions.selectColumn.visible;
     let oColumnsData = [];
-    this.oTableOptions.columns.forEach((oCol: OColumn) => {
+    tableOptions.columns.forEach((oCol: OColumn) => {
       let colData = {
         attr: oCol.attr
       };
@@ -1273,8 +1279,12 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     });
   }
 
-  onShowsSelects(event?) {
+  onShowsSelects(event?: any) {
     this._oTableOptions.selectColumn.visible = !this._oTableOptions.selectColumn.visible;
+    this.updateSelectionColumnState();
+  }
+
+  protected updateSelectionColumnState() {
     if (!this._oTableOptions.selectColumn.visible) {
       this.clearSelection();
     }
@@ -1290,8 +1300,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   isAllSelected() {
     const numSelected = this.selection.selected.length;
-    const numRows = this.dataSource.renderedData.length;
-    return numSelected === numRows;
+    const numRows = this.dataSource ?  this.dataSource.renderedData.length : undefined;
+    return numSelected > 0 && numSelected === numRows;
   }
 
   masterToggle(event: MatCheckboxChange) {
