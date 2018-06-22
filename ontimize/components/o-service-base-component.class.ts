@@ -322,6 +322,13 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
     console.log('reloadData');
   }
 
+  /**
+   * Reloads the component data and restarts the pagination.
+   */
+  reloadPaginatedDataFromStart(): void {
+    this.reloadData();
+  }
+
   load(): any {
     var self = this;
     var zone = this.injector.get(NgZone);

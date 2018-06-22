@@ -1096,6 +1096,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       this.finishQuerySubscription = false;
       this.pendingQuery = true;
 
+      // Initialize page index
+      this.matpaginator.pageIndex = 0;
+
       let queryArgs = {
         offset: 0,
         length: this.queryRows
@@ -1300,7 +1303,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   isAllSelected() {
     const numSelected = this.selection.selected.length;
-    const numRows = this.dataSource ?  this.dataSource.renderedData.length : undefined;
+    const numRows = this.dataSource ? this.dataSource.renderedData.length : undefined;
     return numSelected > 0 && numSelected === numRows;
   }
 
