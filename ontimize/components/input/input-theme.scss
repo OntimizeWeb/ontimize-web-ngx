@@ -3,14 +3,18 @@
   $foreground: map-get($theme, foreground);
   $warn: map-get($theme, warn);
 
-  .mat-input-prefix.mat-form-field-prefix .mat-icon.material-icons,
-  .mat-input-suffix.mat-form-field-suffix .mat-icon.material-icons,
-  div.icon-btn,
-  span.icon-btn {
-    color: mat-color($foreground, icon);
+  .mat-form-field {
+    &:not(.mat-form-field-disabled) {
+      .icon-btn,
+      .mat-icon,
+      .read-only .mat-icon,
+      .svg-icon {
+        color: mat-color($foreground, icon);
+      }
+    }
 
-    &.mat-disabled {
-      color: mat-color($foreground, disabled-text);
+    .mat-disabled {
+      color: mat-color($foreground, disabled-button);
     }
   }
 

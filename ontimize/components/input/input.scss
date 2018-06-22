@@ -8,6 +8,10 @@ div.icon-btn {
 }
 
 .mat-form-field {
+  input:read-only {
+    cursor: default;
+  }
+
   &.custom-width .mat-form-field-infix {
     width: auto;
   }
@@ -31,6 +35,11 @@ div.icon-btn {
       .mat-icon-button {
         width: 24px;
         height: 24px;
+      }
+
+      .svg-icon > svg {
+        padding: 3px 0;
+        box-sizing: border-box;
       }
 
     }

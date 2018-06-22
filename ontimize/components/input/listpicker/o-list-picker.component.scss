@@ -3,12 +3,8 @@
     display: none !important;
   }
 
-  mat-icon {
-    cursor: pointer;
-
-    &.mat-disabled {
-      cursor: default;
-    }
+  .mat-button.mat-disabled {
+    cursor: default;
   }
 }
 
