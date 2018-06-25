@@ -29,14 +29,7 @@ export class OCurrencyInputComponent extends ORealInputComponent implements OnIn
   public static DEFAULT_OUTPUTS_O_CURRENCY_INPUT = DEFAULT_OUTPUTS_O_CURRENCY_INPUT;
 
   currency_symbols = {
-    'USD': '$', // US Dollar
-    'EUR': '€', // Euro
     'CRC': '₡', // Costa Rican Colón
-    'GBP': '£', // British Pound Sterling
-    'ILS': '₪', // Israeli New Sheqel
-    'INR': '₹', // Indian Rupee
-    'JPY': '¥', // Japanese Yen
-    'KRW': '₩', // South Korean Won
     'NGN': '₦', // Nigerian Naira
     'PHP': '₱', // Philippine Peso
     'PLN': 'zł', // Polish Zloty
@@ -63,17 +56,8 @@ export class OCurrencyInputComponent extends ORealInputComponent implements OnIn
     this.iconRegistryService = injector.get(IconRegistryService);
   }
 
-  ngOnInit() {
-    super.ngOnInit();
-    if (OCurrencyInputComponent.currency_icons.indexOf(this.currencySymbol) !== -1) {
-      this.iconRegistryService.existsIcon(this.currencySymbol).subscribe(res => {
-        this.existsIcon = res;
-      });
-    }
-  }
-
   protected existsOntimizeIcon() {
-    return OCurrencyInputComponent.currency_icons.indexOf(this.currencySymbol) !== -1 && this.existsIcon;
+    return OCurrencyInputComponent.currency_icons.indexOf(this.currencySymbol) !== -1;
   }
 
   useIcon(position: string): boolean {

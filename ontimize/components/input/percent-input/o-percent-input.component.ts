@@ -30,16 +30,12 @@ export class OPercentInputComponent extends ORealInputComponent implements OnIni
   @InputConverter()
   grouping: boolean = true;
 
-  protected iconRegistryService: IconRegistryService;
-  existsIcon: boolean = false;
-
   constructor(
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
     elRef: ElementRef,
     injector: Injector
   ) {
     super(form, elRef, injector);
-    this.iconRegistryService = injector.get(IconRegistryService);
   }
 
   public ngOnInit() {
@@ -50,10 +46,6 @@ export class OPercentInputComponent extends ORealInputComponent implements OnIni
       this.max = 100;
     }
     super.ngOnInit();
-
-    this.iconRegistryService.existsIcon('PERCENT').subscribe(res => {
-      this.existsIcon = res;
-    });
   }
 }
 
