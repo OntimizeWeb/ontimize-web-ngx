@@ -33,6 +33,7 @@
 * **Inputs**:
   * Added `clearValue` method to all input form components. ([ae92af5](https://github.com/OntimizeWeb/ontimize-web-ngx/tree/ae92af5))
   * Added `show-clear` attribute to all input form component. ([9d274b0](https://github.com/OntimizeWeb/ontimize-web-ngx/tree/9d274b0))
+* **o-table-option**: new '*active*' input ([186c1cf](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/186c1cf))
 
 ### Bug Fixes
 * **o-table**:
@@ -42,6 +43,7 @@
   * fixing translation bugs ([ffef427](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ffef427)) ([b3de673](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b3de673)) ([#170](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/170))
   * empty cell edition bug ([e51783d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e51783d)) ([#164](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/164))
   * paginator bug fixed (deleting '*show all*' records option) ([f448bfa](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f448bfa)) [#179](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/179)
+  * storing selection column state ([](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/)) [#189](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/189)
 * **o-table-cell-renderer-service**: fix undefined service provider ([a00a112](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a00a112)). Closes [#172](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/172)
 * **o-app-sidenav**:
   * initialization bug fixed ([d150cb2](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d150cb2)) ([#165](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/165))
