@@ -31,8 +31,8 @@ div.icon-btn {
       }
 
       .icon-btn,
-      .mat-icon,
-      .mat-icon-button {
+      .mat-icon-button,
+      .mat-icon:not([svgicon]) {
         width: 24px;
         height: 24px;
       }
