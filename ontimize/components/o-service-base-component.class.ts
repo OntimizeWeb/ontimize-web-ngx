@@ -58,7 +58,10 @@ export const DEFAULT_INPUTS_O_SERVICE_BASE_COMPONENT = [
   // delete-method [string]: name of the service method to perform deletions. Default: delete.
   'deleteMethod: delete-method',
 
-  'storeState: store-state'
+  'storeState: store-state',
+
+  // query-with-null-parent-keys [string][yes|no|true|false]: Indicates whether or not to trigger query method when parent-keys filter is null. Default: false
+  'queryWithNullParentKeys: query-with-null-parent-keys'
 ];
 
 export class OServiceBaseComponent implements ILocalStorageComponent {
@@ -92,9 +95,11 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
   deleteMethod: string = Codes.DELETE_METHOD;
   @InputConverter()
   storeState: boolean = true;
+  @InputConverter()
+  queryWithNullParentKeys: boolean = false;
   /* end of inputs variables */
 
-  /*parsed inputs variables */
+  /* parsed inputs variables */
   protected colArray: Array<string> = [];
   protected keysArray: Array<string> = [];
   protected _pKeysEquiv = {};
@@ -279,7 +284,7 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
     }
     parentItem = ServiceUtils.getParentItemFromForm(parentItem, this._pKeysEquiv, this.form);
 
-    if ((Object.keys(this._pKeysEquiv).length > 0) && parentItem === undefined) {
+    if (((Object.keys(this._pKeysEquiv).length > 0) && parentItem === undefined) && !this.queryWithNullParentKeys) {
       this.setData([], []);
     } else {
       let filter = ServiceUtils.getFilterUsingParentKeys(parentItem, this._pKeysEquiv);
