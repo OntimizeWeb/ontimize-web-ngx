@@ -4,7 +4,7 @@
     [class.mat-drawer-closed]="!sidenav.opened">
 
     <div fxLayout="row" fxLayoutAlign="end" *ngIf="showToggleButton" class="sidenav-toggle-container">
-      <mat-icon class="sidenav-toggle" (click)="toggleSidenav()">menu</mat-icon>
+      <mat-icon class="sidenav-toggle" (click)="toggleSidenav()" svgIcon="ontimize:menu">menu</mat-icon>
     </div>
 
     <o-app-sidenav-image [opened-src]="openedSidenavImg" [closed-src]="closedSidenavImg">
@@ -13,7 +13,8 @@
     <nav *ngFor="let menuRootItem of menuRootArray">
 
       <ul *ngIf="appMenuService.getMenuItemType(menuRootItem) !== 'group'">
-        <o-app-sidenav-menu-item *ngIf="menuRootItem['show-in-app-sidenav'] !== false" [menu-item]="menuRootItem" [menu-item-type]="appMenuService.getMenuItemType(menuRootItem)" [sidenav-opened]="sidenav.opened">
+        <o-app-sidenav-menu-item *ngIf="menuRootItem['show-in-app-sidenav'] !== false" [menu-item]="menuRootItem" [menu-item-type]="appMenuService.getMenuItemType(menuRootItem)"
+          [sidenav-opened]="sidenav.opened">
         </o-app-sidenav-menu-item>
       </ul>
 

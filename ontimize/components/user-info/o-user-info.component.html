@@ -5,15 +5,15 @@
         <img [src]="avatar" *ngIf="avatar" />
       </div>
       <span class="user-info-username" *ngIf="username"> {{ username }}</span>
-      <mat-icon [matMenuTriggerFor]="menu">keyboard_arrow_down</mat-icon>
+      <mat-icon [matMenuTriggerFor]="menu" svgIcon="ontimize:keyboard_arrow_down"></mat-icon>
     </div>
     <mat-menu #menu="matMenu" yPosition="below">
       <button mat-menu-item (click)="onSettingsClick()">
-        <mat-icon>settings</mat-icon>
+        <mat-icon svgIcon="ontimize:settings"></mat-icon>
         <span>{{ 'SETTINGS' | oTranslate }}</span>
       </button>
       <button mat-menu-item (click)="onLogoutClick()">
-        <mat-icon>power_settings_new</mat-icon>
+        <mat-icon svgIcon="ontimize:power_settings_new"></mat-icon>
         <span>{{ 'LOGOUT' | oTranslate }}</span>
       </button>
     </mat-menu>

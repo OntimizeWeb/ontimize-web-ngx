@@ -9,7 +9,7 @@
 
     <div class="o-card-menu-item-title" fxFlex="20" fxLayout="column" fxLayoutAlign="center center" *ngIf="title !== undefined">{{ title | oTranslate }}</div>
 
-    <mat-icon class="o-card-menu-item-info" matTooltip="{{ tooltip | oTranslate }}" *ngIf="tooltip">info_outline</mat-icon>
+    <mat-icon class="o-card-menu-item-info" matTooltip="{{ tooltip | oTranslate }}" *ngIf="tooltip" svgIcon="ontimize:info_outline"></mat-icon>
 
     <ng-content select=".main-container"></ng-content>
   </div>

@@ -1,16 +1,16 @@
 <div fxLayout="column" fxLayoutAlign="center center" class="input-image relative" [formGroup]="getFormGroup()" [matTooltip]="tooltip"
   [matTooltipPosition]="tooltipPosition" [matTooltipShowDelay]="tooltipShowDelay">
-  <mat-form-field class="input-image-container" fxFill>
+  <mat-form-field class="input-image-container icon-field" fxFill>
     <input matInput #inputControl [formControlName]="getAttribute()" type="text" [attr.id]="getAttribute()" [id]="getAttribute()"
       [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)" class="mat-input input-control">
     <input [hidden]="!hasControls()" class="mat-primary" #input type="file" (change)="fileChange(input)" class="input-file" fxFill
     />
     <label *ngIf="hasControls()" #titleLabel (click)="input.click()">{{ 'CHOOSE_FILE' | oTranslate }}</label>
     <button mat-button *ngIf="hasControls()" [disabled]="isDisabled" matSuffix mat-icon-button (click)="input.click()">
-      <mat-icon>search</mat-icon>
+      <mat-icon svgIcon="ontimize:search"></mat-icon>
     </button>
     <button mat-button *ngIf="hasControls()" [disabled]="isDisabled" matSuffix mat-icon-button (click)="onClickClear($event)">
-      <mat-icon>clear</mat-icon>
+      <mat-icon svgIcon="ontimize:clear"></mat-icon>
     </button>
     <mat-error *ngIf="hasError('required')">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</mat-error>
   </mat-form-field>

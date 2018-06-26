@@ -9,7 +9,7 @@
       [ngModel]="getValue()" (change)="innerOnChange($event.target.value)" (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)"
       [readonly]="isReadOnly" [min]="min" [max]="max" [step]="step" [required]="isRequired">
     <button *ngIf="showClearButton" matSuffix mat-icon-button (click)="clearValue()">
-      <mat-icon>close</mat-icon>
+      <mat-icon svgIcon="ontimize:close"></mat-icon>
     </button>
 
     <div *ngIf="useSymbol('right')" matSuffix class="icon-btn" [class.mat-disabled]="isDisabled">{{ currency_symbols[currencySymbol] }}</div>

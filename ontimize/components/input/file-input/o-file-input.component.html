@@ -5,7 +5,7 @@
     <input #inputShowValue matInput type="text" [attr.id]="getAttribute()" [id]="getAttribute()" [formControlName]="getAttribute()"
       [placeholder]="placeHolder" [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)" [required]="isRequired" readonly>
     <button *ngIf="showClearButton" matSuffix mat-icon-button (click)="onClickClear($event)">
-      <mat-icon>close</mat-icon>
+      <mat-icon svgIcon="ontimize:close"></mat-icon>
     </button>
     <button *ngIf="getValue()" [disabled]="!isValid || uploader.isUploading" matSuffix mat-icon-button (click)="onClickUpload($event)">
       <mat-icon>file_upload</mat-icon>
@@ -26,8 +26,8 @@
         <div fxLayout="row" fxLayoutAlign="space-between center">
           <mat-progress-spinner *ngIf="splitUpload && file.isUploading" color="accent" mode="determinate" [value]="file.progress" class="uploading"
             diameter="3" strokeWidth="3"></mat-progress-spinner>
-          <mat-icon *ngIf="splitUpload && file.isUploaded && file.isSuccess" class="uploaded">check_circle</mat-icon>
-          <mat-icon *ngIf="splitUpload && file.isUploaded && file.isError" class="error">error</mat-icon>
+          <mat-icon *ngIf="splitUpload && file.isUploaded && file.isSuccess" class="uploaded" svgIcon="ontimize:check_circle"></mat-icon>
+          <mat-icon *ngIf="splitUpload && file.isUploaded && file.isError" class="error" svgIcon="ontimize:error_outline"></mat-icon>
         </div>
       </mat-list-item>
     </mat-list>

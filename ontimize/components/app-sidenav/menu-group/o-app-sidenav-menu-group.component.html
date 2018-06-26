@@ -5,7 +5,7 @@
       <mat-icon *ngIf="menuGroup.icon">{{ menuGroup.icon }}</mat-icon>
       <h3>{{ menuGroup.name | oTranslate }}</h3>
       <span class="fill-remaining"></span>
-      <mat-icon class="application-sidenav-menugroup-arrow">keyboard_arrow_right</mat-icon>
+      <mat-icon class="application-sidenav-menugroup-arrow" svgIcon="ontimize:keyboard_arrow_right"></mat-icon>
     </ng-container>
     <ng-container *ngIf="!sidenavOpened">
       <mat-icon [matTooltip]="tooltip" matTooltipClass="menugroup-tooltip" matTooltipPosition="right" *ngIf="menuGroup.icon">{{ menuGroup.icon }}</mat-icon>

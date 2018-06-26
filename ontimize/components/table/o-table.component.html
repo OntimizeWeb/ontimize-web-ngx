@@ -13,10 +13,11 @@
       <span class="fill-remaining"></span>
       <o-table-quickfilter *ngIf="quickFilter" (onChange)="reloadPaginatedDataFromStart()"></o-table-quickfilter>
       <button *ngIf="showTableMenuButton" mat-icon-button class="o-table-menu-button" [matMenuTriggerFor]="menu">
-        <mat-icon>more_vert</mat-icon>
+        <mat-icon svgIcon="ontimize:more_vert"></mat-icon>
       </button>
       <mat-menu #menu="matMenu" x-position="before" class="o-table-menu">
-        <o-table-option *ngIf="selectAllCheckbox" [active]="!!state['select-column-visible']" (onClick)="onShowsSelects($event)" label="TABLE.BUTTONS.SELECT" show-active-icon="true">
+        <o-table-option *ngIf="selectAllCheckbox" [active]="!!state['select-column-visible']" (onClick)="onShowsSelects($event)"
+          label="TABLE.BUTTONS.SELECT" show-active-icon="true">
         </o-table-option>
         <o-table-option *ngIf="exportButton" (onClick)="onExportButtonClicked()" label="TABLE.BUTTONS.EXPORT"> </o-table-option>
         <o-table-option *ngIf="columnsVisibilityButton" (onClick)="onChangeColumnsVisibilityClicked()" label="TABLE.BUTTONS.COLVIS">
@@ -43,13 +44,15 @@
           <ng-container *ngIf="column.orderable">
             <mat-header-cell *matHeaderCellDef mat-sort-header [fxFlex]="column.width" [style.min-width]="column.getMinWidth()" [class.active-sort]="isColumnSortActive(column)"
               [class.desc]="isColumnDescSortActive(column)">
-              <mat-icon *ngIf="isColumnFilterable(column)" class="column-filter-icon" [class.active]="isColumnFilterActive(column)" (click)="openColumnFilterDialog(column, $event)">filter_list</mat-icon>
+              <mat-icon *ngIf="isColumnFilterable(column)" class="column-filter-icon" [class.active]="isColumnFilterActive(column)" (click)="openColumnFilterDialog(column, $event)"
+                svgIcon="ontimize:filter_list"></mat-icon>
               {{ column.title | oTranslate }}
             </mat-header-cell>
           </ng-container>
           <ng-container *ngIf="!column.orderable">
             <mat-header-cell *matHeaderCellDef [fxFlex]="column.width" [style.min-width]="column.getMinWidth()">
-              <mat-icon *ngIf="isColumnFilterable(column)" class="column-filter-icon" [class.active]="isColumnFilterActive(column)" (click)="openColumnFilterDialog(column, $event)">filter_list</mat-icon>
+              <mat-icon *ngIf="isColumnFilterable(column)" class="column-filter-icon" [class.active]="isColumnFilterActive(column)" (click)="openColumnFilterDialog(column, $event)"
+                svgIcon="ontimize:filter_list"></mat-icon>
               {{ column.title | oTranslate }}
             </mat-header-cell>
           </ng-container>
@@ -88,13 +91,15 @@
         <ng-container *ngFor="let column of oTableOptions.columns" [matColumnDef]="column.name">
           <ng-container *ngIf="column.orderable">
             <mat-header-cell *matHeaderCellDef mat-sort-header [fxFlex]="column.width" [style.min-width]="column.getMinWidth()">
-              <mat-icon *ngIf="isColumnFilterable(column)" class="column-filter-icon" [class.active]="isColumnFilterActive(column)" (click)="openColumnFilterDialog(column, $event)">filter_list</mat-icon>
+              <mat-icon *ngIf="isColumnFilterable(column)" class="column-filter-icon" [class.active]="isColumnFilterActive(column)" (click)="openColumnFilterDialog(column, $event)"
+                svgIcon="ontimize:filter_list"></mat-icon>
               {{ column.title | oTranslate }}
             </mat-header-cell>
           </ng-container>
           <ng-container *ngIf="!column.orderable">
             <mat-header-cell *matHeaderCellDef [fxFlex]="column.width" [style.min-width]="column.getMinWidth()">
-              <mat-icon *ngIf="isColumnFilterable(column)" class="column-filter-icon" [class.active]="isColumnFilterActive(column)" (click)="openColumnFilterDialog(column, $event)">filter_list</mat-icon>
+              <mat-icon *ngIf="isColumnFilterable(column)" class="column-filter-icon" [class.active]="isColumnFilterActive(column)" (click)="openColumnFilterDialog(column, $event)"
+                svgIcon="ontimize:filter_list"></mat-icon>
               {{ column.title | oTranslate }}
             </mat-header-cell>
           </ng-container>

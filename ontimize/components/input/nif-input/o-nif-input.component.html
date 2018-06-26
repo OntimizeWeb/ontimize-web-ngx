@@ -5,9 +5,9 @@
       [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)" (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)"
       [readonly]="isReadOnly" [required]="isRequired">
     <button *ngIf="showClearButton" matSuffix mat-icon-button (click)="clearValue()">
-      <mat-icon>close</mat-icon>
+      <mat-icon svgIcon="ontimize:close"></mat-icon>
     </button>
-    <mat-icon matSuffix [class.mat-disabled]="isDisabled">perm_identity</mat-icon>
+    <mat-icon matSuffix [class.mat-disabled]="isDisabled" svgIcon="ontimize:perm_identity"></mat-icon>
     <mat-error *ngIf="hasError('required')">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</mat-error>
     <mat-error *ngIf="hasError('invalidNIF')">{{ 'FORM_VALIDATION.NIF_FORMAT' | oTranslate}}</mat-error>
     <mat-error *ngIf="hasError('invalidNIFLetter')">{{ 'FORM_VALIDATION.DNI_LETTER' | oTranslate}}</mat-error>

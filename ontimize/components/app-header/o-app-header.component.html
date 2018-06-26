@@ -1,5 +1,5 @@
 <nav class="application-header">
-  <mat-icon class="sidenav-toggle" (click)="onSidenavToggle.emit()">menu</mat-icon>
+  <mat-icon class="sidenav-toggle" (click)="onSidenavToggle.emit()" svgIcon="ontimize:menu"></mat-icon>
   <span fxLayout="row" fxLayoutAlign="center center" class="application-header-title">{{ headerTitle | oTranslate }}</span>
   <o-user-info *ngIf="showUserInfo" [use-flag-icons]="useFlagIcons"></o-user-info>
 </nav>

@@ -8,10 +8,10 @@
   <mat-toolbar class="toolbar-filter-list" [class.dense]="odense" *ngIf="hasControls()">
     <div class="mat-toolbar-tools" fxLayout="row" fxFill fxLayoutAlign="start center">
       <button type="button" mat-icon-button aria-label="Refresh" (click)="reloadData()" *ngIf="refreshButton">
-        <mat-icon>autorenew</mat-icon>
+        <mat-icon svgIcon="ontimize:autorenew"></mat-icon>
       </button>
       <button type="button" mat-icon-button aria-label="Delete" (click)="remove()" *ngIf="getSelectedItems().length && deleteButton">
-        <mat-icon>delete</mat-icon>
+        <mat-icon svgIcon="ontimize:delete"></mat-icon>
       </button>
       <span class="fill-remaining"></span>
       <div *ngIf="hasTitle()" fxLayout="row" fxLayoutAlign="center center">
@@ -32,10 +32,10 @@
       <ng-content></ng-content>
     </mat-list>
     <button *ngIf="insertButton && odense" mat-mini-fab (click)="add()" class="add-button">
-      <mat-icon>add</mat-icon>
+      <mat-icon svgIcon="ontimize:add"></mat-icon>
     </button>
     <button *ngIf="insertButton && !odense" mat-fab (click)="add()" class="add-button">
-      <mat-icon>add</mat-icon>
+      <mat-icon svgIcon="ontimize:add"></mat-icon>
     </button>
   </div>
 </div>

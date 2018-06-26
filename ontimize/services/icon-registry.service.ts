@@ -6,8 +6,9 @@ import { Observer } from 'rxjs/Observer';
 
 @Injectable()
 export class IconRegistryService {
+  public static ONTIMIZE_ICON_SET_PATH = 'assets/svg/ontimize-icon-set.svg';
   public static ONTIMIZE_NAMESPACE = 'ontimize';
-  protected matIconRegistry: MatIconRegistry;
+  protected matIconRegistry: any;
   protected domSanitizer: DomSanitizer;
 
   constructor(
@@ -16,7 +17,7 @@ export class IconRegistryService {
     this.matIconRegistry = injector.get(MatIconRegistry);
     this.domSanitizer = injector.get(DomSanitizer);
     this.matIconRegistry.addSvgIconSetInNamespace(IconRegistryService.ONTIMIZE_NAMESPACE,
-      this.domSanitizer.bypassSecurityTrustResourceUrl('assets/svg/ontimize-icon-set.svg'));
+      this.domSanitizer.bypassSecurityTrustResourceUrl(IconRegistryService.ONTIMIZE_ICON_SET_PATH));
   }
 
   addSvgIcon(iconName: string, url: SafeResourceUrl) {

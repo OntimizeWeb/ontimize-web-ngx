@@ -7,7 +7,7 @@
     <mat-slide-toggle #customFilterSlide [checked]="isCustomFiter" (change)="onSlideChange($event)">{{ 'TABLE.FILTER_BY_COLUMN.CUSTOM_FILTER' | oTranslate }}</mat-slide-toggle>
     <div fxFlex *ngIf="!customFilterSlide.checked" fxLayout="column">
       <mat-form-field class="hinted">
-        <mat-icon matPrefix>search</mat-icon>
+        <mat-icon matPrefix svgIcon="ontimize:search"></mat-icon>
         <input matInput #filter placeholder="{{ 'TABLE.FILTER' | oTranslate }}">
         <mat-hint>{{ 'TABLE.FILTER_BY_COLUMN.HINT_STAR' | oTranslate }}</mat-hint>
       </mat-form-field>
