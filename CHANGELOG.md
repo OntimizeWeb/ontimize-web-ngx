@@ -8,6 +8,7 @@
 * **Codes**: Creating '*codes*' util class for general variables and types definitions ([9e20235](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9e20235)) ([d2f2060](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d2f2060))
 * **o-service-base-component.class**: new '*OServiceBaseComponent*' parent class for components using Ontimize services ('*o-list*' and '*o-table*')([70271b7](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/70271b7))
   * new '*store-state*' input ([35a523c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/35a523c)) ([#166](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/166))
+  * new `query-with-null-parent-keys` attribute ([8ad7f8e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/8ad7f8e))
 * **o-table-column**:
   * new '*addEditor*' static method that user '*must*' use in new cell editors constructor definitions ([f942c20](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f942c20))
   * new '*tooltip*' input (default="no") for showing the cell value as tooltip ([e334539](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e334539]))
