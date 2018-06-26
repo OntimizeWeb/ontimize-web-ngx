@@ -11,7 +11,7 @@ import { OFormComponent, OFormDataComponent, OServiceComponent } from '../../com
 import { FilterExpressionUtils, IExpression, IBasicExpression } from '../filter-expression.utils';
 
 export const DEFAULT_INPUTS_O_FILTER_BUILDER = [
-  // filters: [string] List of pairs of form component attributes and target component colums (componentAttr1:targetColumn1;componentAttr2:targetColumn2;...). Separated by ';'.
+  // filters: [string] List of pairs of form component attributes and target component colums (targetColumn1:componentAttr1;targetColumn2:componentAttr2;...). Separated by ';'.
   'filters',
 
   // target [`OServiceComponent` instance]: Component whose data will be filtered.
@@ -92,8 +92,8 @@ export class OFilterBuilderComponent implements AfterViewInit, OnDestroy, OnInit
       filterArray.map(filter => {
         let filterElms = filter.split(Codes.COLUMNS_ALIAS_SEPARATOR);
         this.filterComponents.push({
-          formComponentAttr: filterElms[0],
-          targetAttr: filterElms[1] ? filterElms[1] : filterElms[0]
+          targetAttr: filterElms[0],
+          formComponentAttr: filterElms[1] ? filterElms[1] : filterElms[0]
         });
       });
     }
