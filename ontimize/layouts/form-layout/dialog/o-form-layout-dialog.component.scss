@@ -20,12 +20,14 @@
     overflow: hidden;
 
     .mat-dialog-content.form-layout-dialog-container {
+      display: block;
       padding-top: 16px;
       margin: 0;
-      max-height: calc(100% - 52px);
+      max-height: calc(100% - 78px);
     }
 
     .o-form-layout-dialog {
+      
       o-form-toolbar .mat-toolbar {
         padding: 0;
       }
@@ -33,14 +35,10 @@
         .o-form-toolbar-floating {
           position: relative;
           background: transparent;
-          left:0;
-          right:0;
         }
         form.inner-form {
           position: relative;
-          top: 0px;
-          left: 0px;
-          right: 0px;
+          margin-top:0px;
         }
       }
     }

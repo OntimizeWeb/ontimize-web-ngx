@@ -9,7 +9,7 @@
       </div>
     </o-form-toolbar>
 
-    <form #innerForm [formGroup]="formGroup" class="inner-form" [class.form-no-toolbar]="!showHeader" fxLayout="column" autocomplete="off"
+    <form #innerForm [formGroup]="formGroup" class="inner-form" [class.form-no-toolbar]="!showHeader" autocomplete="off"
       autocorrect="off" autocapitalize="off" spellcheck="false">
       <div fxFlex="100" *ngIf="loading" class="progress-bar-container">
         <mat-progress-bar mode="indeterminate"></mat-progress-bar>

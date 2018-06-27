@@ -1,31 +1,4 @@
 
-
-.o-form-container {
-
-  &.breadcrumb {
-
-    .o-form.fill {
-       // breadcrumb height + 16
-      min-height: calc(100% - 66px);
-      height: calc(100% - 66px);
-    }
-
-    .o-breadcrumb {
-      position: absolute;
-      z-index: 100;
-      background: #eeeeee;
-      left: 8px;
-      right: 16px;
-    }
-
-    .o-form-container-content .o-form.fill {
-      // breadcrumb height + 8
-      margin-top: 58px;
-    }
-  }
-
-}
-
 .application-layout-content-wrapper {
 
   .o-form-container {
@@ -35,11 +8,12 @@
     display: block;
 
     .o-form-container-content {
-      position: absolute;
-      height: 100%;
-      width: 100%;
+      display: flex;
+      flex: auto;
+      flex-direction: column;
+      max-height: 100%;
     }
-
+   
   }
 
 }
