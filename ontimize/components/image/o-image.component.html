@@ -6,10 +6,10 @@
     <input [hidden]="!hasControls()" class="mat-primary" #input type="file" (change)="fileChange(input)" class="input-file" fxFill
     />
     <label *ngIf="hasControls()" #titleLabel (click)="input.click()">{{ 'CHOOSE_FILE' | oTranslate }}</label>
-    <button mat-button *ngIf="hasControls()" [disabled]="isDisabled" matSuffix mat-icon-button (click)="input.click()">
+    <button *ngIf="hasControls()" [disabled]="isDisabled" matSuffix mat-icon-button (click)="input.click()">
       <mat-icon svgIcon="ontimize:search"></mat-icon>
     </button>
-    <button mat-button *ngIf="hasControls()" [disabled]="isDisabled" matSuffix mat-icon-button (click)="onClickClear($event)">
+    <button *ngIf="hasControls()" [disabled]="isDisabled" matSuffix mat-icon-button (click)="onClickClear($event)">
       <mat-icon svgIcon="ontimize:clear"></mat-icon>
     </button>
     <mat-error *ngIf="hasError('required')">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</mat-error>
