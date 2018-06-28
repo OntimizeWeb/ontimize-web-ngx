@@ -1,13 +1,11 @@
 import { Injector, Provider } from '@angular/core';
 import { LOCATION_INITIALIZED } from '@angular/common';
 import { BaseRequestOptions, XHRBackend } from '@angular/http';
-import { MatIconRegistry } from '@angular/material';
 import { Events } from '../util/events';
 import { OHttp } from '../util/http/OHttp';
 import { AppConfig, Config } from '../config/app-config';
 
 import {
-  IconRegistryService,
   LoginService,
   NavigationService,
   OntimizeService,
@@ -57,7 +55,6 @@ export function appInitializerFactory(injector: Injector, config: Config, oTrans
 
       oTranslate.setAppLang(userLang).subscribe(resolve, resolve, resolve);
     });
-    injector.get(IconRegistryService);
     injector.get(NavigationService).initialize();
   });
 }
@@ -154,13 +151,7 @@ export function getOntimizeServiceResponseParser(injector: Injector) {
   return new OntimizeServiceResponseParser(injector);
 }
 
-export function getIconRegistryServiceProvider(injector: Injector) {
-  return new IconRegistryService(injector);
-}
-
 export const ONTIMIZE_PROVIDERS: Provider[] = [
-  //Standard
-  MatIconRegistry,
 
   { provide: Events, useValue: getEvents },
 
@@ -279,10 +270,5 @@ export const ONTIMIZE_PROVIDERS: Provider[] = [
   {
     provide: OContextMenuService,
     useClass: OContextMenuService
-  },
-  {
-    provide: IconRegistryService,
-    useFactory: getIconRegistryServiceProvider,
-    deps: [Injector]
-  },
+  }
 ];
