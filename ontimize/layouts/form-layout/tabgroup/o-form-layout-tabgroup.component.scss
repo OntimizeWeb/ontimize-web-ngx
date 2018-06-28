@@ -27,16 +27,5 @@
     .mat-tab-body-wrapper {
       height: 100%;
     }
-
-    o-form-toolbar {
-      &.o-form-toolbar-floating {
-        padding: 0;
-        top: 0px!important;
-        .mat-toolbar {
-          box-shadow: none;
-          border-radius: 0;
-        }
-      }
-    }
   }
 }

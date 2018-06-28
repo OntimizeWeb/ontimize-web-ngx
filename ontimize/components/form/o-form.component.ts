@@ -1,39 +1,38 @@
-import {
+import { CommonModule } from '@angular/common';
+import { 
+  ChangeDetectorRef, 
   Component,
-  OnInit,
-  OnDestroy,
+  CUSTOM_ELEMENTS_SCHEMA,
+  ElementRef,
   EventEmitter,
   Injector,
-  NgZone,
-  ChangeDetectorRef,
   NgModule,
-  HostListener,
-  ViewEncapsulation,
-  ElementRef,
-  CUSTOM_ELEMENTS_SCHEMA,
-  ViewChild
-} from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { Router, ActivatedRoute, UrlSegment } from '@angular/router';
-import { FormGroup, FormControl } from '@angular/forms';
+  NgZone, 
+  OnDestroy, 
+  OnInit, 
+  ViewChild, 
+  ViewEncapsulation
+ } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
+import { ActivatedRoute, Router, UrlSegment } from '@angular/router';
+import 'rxjs/add/observable/combineLatest';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
-import 'rxjs/add/observable/combineLatest';
-
-import { dataServiceFactory } from '../../services/data-service.provider';
-import { OntimizeService, DialogService, NavigationService, SnackBarService } from '../../services';
 import { InputConverter } from '../../decorators';
-import { IFormDataTypeComponent, IFormDataComponent } from '../o-form-data-component.class';
-import { IComponent } from '../o-component.class';
-import { OFormToolbarModule, OFormToolbarComponent } from './o-form-toolbar.component';
-import { OFormValue } from './OFormValue';
-import { Util, SQLTypes, Codes } from '../../utils';
+import { OFormLayoutManagerComponent } from '../../layouts';
+import { DialogService, NavigationService, OntimizeService, SnackBarService } from '../../services';
+import { dataServiceFactory } from '../../services/data-service.provider';
 import { OSharedModule } from '../../shared';
+import { Codes, SQLTypes, Util } from '../../utils';
+import { IComponent } from '../o-component.class';
+import { IFormDataComponent, IFormDataTypeComponent } from '../o-form-data-component.class';
 import { OFormCacheClass } from './cache/o-form.cache.class';
-import { CanDeactivateFormGuard, CanComponentDeactivate } from './guards/o-form-can-deactivate.guard';
+import { CanComponentDeactivate, CanDeactivateFormGuard } from './guards/o-form-can-deactivate.guard';
 import { OFormNavigationClass } from './navigation/o-form.navigation.class';
 import { OFormContainerComponent } from './o-form-container.component';
-import { OFormLayoutManagerComponent } from '../../layouts';
+import { OFormToolbarComponent, OFormToolbarModule } from './o-form-toolbar.component';
+import { OFormValue } from './OFormValue';
+
 
 export const DEFAULT_INPUTS_O_FORM = [
   // show-header [boolean]: visibility of form toolbar. Default: yes.
@@ -232,8 +231,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   protected _compSQLTypes: Object = {};
 
   formParentKeysValues: Object;
-  protected _hasScrolled: boolean = false;
-
+ 
   public onFormInitStream: EventEmitter<Object> = new EventEmitter<Object>();
   protected reloadStream: Observable<any>;
   protected reloadStreamSubscription: Subscription;
@@ -258,30 +256,8 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     return m;
   }
 
-  @HostListener('window:scroll', ['$event'])
-  track(event) {
-    if (this.showHeader && event.currentTarget instanceof Window) {
-      const toolbarElHeight = this._formToolbar.element.nativeElement.clientHeight;
-      const win: Window = event.currentTarget;
-      if (win.scrollY > toolbarElHeight) {
-        this.hasScrolled = true;
-      } else {
-        this.hasScrolled = false;
-      }
-    }
-  }
 
   @ViewChild('innerForm') innerFormEl: ElementRef;
-
-  @HostListener('window:resize', ['$event'])
-  updateScrolledState(): void {
-    if (this.showHeader && this.innerFormEl) {
-      const totalHeight = this.elRef.nativeElement.clientHeight;
-      const formElHeight = this.innerFormEl.nativeElement.clientHeight;
-      const toolbarElHeight = this._formToolbar.element.nativeElement.clientHeight;
-      this.hasScrolled = (formElHeight + toolbarElHeight) > totalHeight;
-    }
-  }
 
   protected ignoreFormCacheKeys: Array<any> = [];
 
@@ -648,7 +624,6 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     this.determinateFormMode();
     this.onFormInitStream.emit(true);
     this.formCache.initializeCache({});
-    this.updateScrolledState();
   }
 
   protected determinateFormMode() {
@@ -770,11 +745,10 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
         self.formNavigation.updateNavigation(self.formGroup.getRawValue());
       }
     });
-    setTimeout(() => {
-      self.updateScrolledState();
-    }, 250);
+   
   }
 
+  
   _emitData(data) {
     this.onFormDataLoaded.emit(data);
   }
@@ -1007,30 +981,38 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
 
   protected postIncorrectInsert(result: any) {
     console.log('[OFormComponent.postIncorrectInsert]', result);
-    if (result && typeof result !== 'object') {
-      this.dialogService.alert('ERROR', result);
-    } else {
-      this.dialogService.alert('ERROR', 'MESSAGES.ERROR_INSERT');
-    }
+    this.showError('insert',result);
   }
 
   protected postIncorrectDelete(result: any) {
     console.log('[OFormComponent.postIncorrectDelete]', result);
-    if (result && typeof result !== 'object') {
-      this.dialogService.alert('ERROR', result);
-    } else {
-      this.dialogService.alert('ERROR', 'MESSAGES.ERROR_DELETE');
-    }
+    this.showError('delete',result);
   }
 
   protected postIncorrectUpdate(result: any) {
     console.log('[OFormComponent.postIncorrectUpdate]', result);
+    this.showError('update',result);
+  }
+  
+  private showError(operation:string, result: any) {
     if (result && typeof result !== 'object') {
       this.dialogService.alert('ERROR', result);
-    } else {
-      this.dialogService.alert('ERROR', 'MESSAGES.ERROR_UPDATE');
+    }
+    else {
+      let message = 'MESSAGES.ERROR_DELETE';
+      switch(operation){
+        case 'update':
+          message = 'MESSAGES.ERROR_UPDATE';
+          break;
+        case 'insert':
+          message = 'MESSAGES.ERROR_INSERT';
+          break;
+      }
+      this.dialogService.alert('ERROR', message);
     }
   }
+
+  
 
   updateData(filter, values, sqlTypes?: Object): Observable<any> {
     const self = this;
@@ -1272,6 +1254,14 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     this._layoutAlign = val;
   }
 
+  get showFloatingToolbar():boolean{
+    return this.showHeader && this.headerMode === 'floating'
+  }
+
+  get showNotFloatingToolbar():boolean{
+    return this.showHeader && this.headerMode !== 'floating'
+  }
+
   isEditableDetail() {
     return this.editableDetail;
   }
@@ -1331,12 +1321,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     return valueCopy;
   }
 
-  set hasScrolled(val: boolean) {
-    this._hasScrolled = val;
-  }
-  get hasScrolled(): boolean {
-    return this._hasScrolled;
-  }
+  
 }
 
 @NgModule({

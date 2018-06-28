@@ -1,37 +1,24 @@
 .o-form {
+  display: flex;
+  flex: auto;
+  flex-direction: column;
+  max-height: 100%;
 
-  ng-host {
-    height: 100%;
+  .scrolling {
+    display: flex;
+    flex: auto;
+    overflow-y: auto;
+    flex-direction: column;
   }
-
-  o-form-toolbar {
-    &.o-form-toolbar-floating {
-      position: absolute;
-      box-shadow: none;
-      z-index: 100;
-      right: 0px;
-      left: 0;
-    }
-      &.o-form-toolbar-floating-scrolled {
-      //  right: 26px;
-      }
-    }
   
-
-  /*TOOLBAR FLOATING*/
-  o-form-toolbar {
-    &.o-form-toolbar-floating ~ .inner-form {
-      position: relative;
-      margin-top: 58px;
-      height: calc(100% - 58px);
-      overflow: auto;
-    }
-  }
 
   form {
     &.inner-form {
-      position: relative;
-      display: block;
+      display: flex;
+      flex: auto;
+      flex-direction: column;
+      max-height: 100%;
+
       .progress-bar-container {
         padding: 8px 8px 0;
       }
