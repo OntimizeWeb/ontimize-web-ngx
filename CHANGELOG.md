@@ -79,7 +79,8 @@
 ]
 ...
 ```
-* removing *o-form-toolbar-floating* and *o-form-toolbar-floating-scrolled* class. New styles were applied *o-form-toolbar*, it is necessary to review the classes related to it ([5f8c96b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5f8c96b))
+* removing the classes *o-form-toolbar-floating* and *o-form-toolbar-floating-scrolled*. New styles were applied *o-form-toolbar*, it is necessary to review the classes related to it ([5f8c96b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5f8c96b))
+
 **Note**: There is a new '*o-tree*' component, all its information will be available at [ontimize-web-ngx-tree](https://github.com/OntimizeWeb/ontimize-web-ngx-tree)
 
 ## 3.0.0-rc.0 (2018-04-30)
