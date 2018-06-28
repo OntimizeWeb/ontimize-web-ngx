@@ -1,31 +1,33 @@
-import { Injectable, Injector } from '@angular/core';
+import { Injectable, Optional, Inject } from '@angular/core';
 import { MatIconRegistry } from '@angular/material';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { HttpClient } from '@angular/common/http';
+import { DOCUMENT } from '@angular/common';
 import { Observable } from 'rxjs/Observable';
 import { Observer } from 'rxjs/Observer';
 
 @Injectable()
-export class IconRegistryService {
+export class OntimizeMatIconRegistry extends MatIconRegistry {
+
   public static ONTIMIZE_ICON_SET_PATH = 'assets/svg/ontimize-icon-set.svg';
   public static ONTIMIZE_NAMESPACE = 'ontimize';
-  protected matIconRegistry: any;
-  protected domSanitizer: DomSanitizer;
 
   constructor(
-    protected injector: Injector
+    http: HttpClient,
+    sanitizer: DomSanitizer,
+    @Optional() @Inject(DOCUMENT) document
   ) {
-    this.matIconRegistry = injector.get(MatIconRegistry);
-    this.domSanitizer = injector.get(DomSanitizer);
-    this.matIconRegistry.addSvgIconSetInNamespace(IconRegistryService.ONTIMIZE_NAMESPACE,
-      this.domSanitizer.bypassSecurityTrustResourceUrl(IconRegistryService.ONTIMIZE_ICON_SET_PATH));
+    super(http, sanitizer, document);
+    this.addSvgIconSetInNamespace(OntimizeMatIconRegistry.ONTIMIZE_NAMESPACE,
+      sanitizer.bypassSecurityTrustResourceUrl(OntimizeMatIconRegistry.ONTIMIZE_ICON_SET_PATH));
   }
 
-  addSvgIcon(iconName: string, url: SafeResourceUrl) {
-    this.matIconRegistry.addSvgIconInNamespace(IconRegistryService.ONTIMIZE_NAMESPACE, iconName, url);
+  addSvgIcon(iconName: string, url: SafeResourceUrl): this {
+    return this.addSvgIconInNamespace(OntimizeMatIconRegistry.ONTIMIZE_NAMESPACE, iconName, url);
   }
 
   getSVGElement(iconName: string): Observable<SVGElement> {
-    return this.matIconRegistry.getNamedSvgIcon(iconName, IconRegistryService.ONTIMIZE_NAMESPACE);
+    return this.getNamedSvgIcon(iconName, OntimizeMatIconRegistry.ONTIMIZE_NAMESPACE);
   }
 
   existsIcon(iconName: string): Observable<boolean> {
@@ -39,3 +41,22 @@ export class IconRegistryService {
     });
   }
 }
+
+// export function ONTIMIZE_ICON_REGISTRY_PROVIDER_FACTORY(
+//   parentRegistry: OntimizeMatIconRegistry,
+//   httpClient: HttpClient,
+//   sanitizer: DomSanitizer,
+//   document?: any) {
+//   return parentRegistry || new OntimizeMatIconRegistry(httpClient, sanitizer, document);
+// }
+
+// export const ONTIMIZE_ICON_REGISTRY_PROVIDER = {
+//   provide: OntimizeMatIconRegistry,
+//   deps: [
+//     [new Optional(), new SkipSelf(), OntimizeMatIconRegistry],
+//     [new Optional(), HttpClient],
+//     DomSanitizer,
+//     [new Optional(), DOCUMENT as InjectionToken<any>]
+//   ],
+//   useFactory: ONTIMIZE_ICON_REGISTRY_PROVIDER_FACTORY
+// };

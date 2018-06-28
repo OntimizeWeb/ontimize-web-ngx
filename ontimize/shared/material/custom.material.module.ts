@@ -32,18 +32,19 @@ import {
   MatTableModule,
   MatPaginatorModule,
   MatSortModule,
-  MAT_DATE_LOCALE
+  MAT_DATE_LOCALE,
+  MatIconRegistry
   // PlatformModule,
   // StyleModule,
   // PortalModule,
   // RtlModule,
   // A11yModule,
-  // MatCommonModule,
   // ObserveContentModule
 } from '@angular/material';
 
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { OverlayModule } from '@angular/cdk/overlay';
+import { OntimizeMatIconRegistry } from '../../services/icon-registry.service';
 
 const MATERIAL_MODULES = [
   MatAutocompleteModule,
@@ -90,12 +91,13 @@ const MATERIAL_MODULES = [
 @NgModule({
   imports: [CommonModule],
   exports: MATERIAL_MODULES,
-  providers: [
-    {
-      provide: DateAdapter,
-      useClass: MomentDateAdapter,
-      deps: [MAT_DATE_LOCALE]
-    }
-  ]
+  providers: [{
+    provide: DateAdapter,
+    useClass: MomentDateAdapter,
+    deps: [MAT_DATE_LOCALE]
+  }, {
+    provide: MatIconRegistry,
+    useClass: OntimizeMatIconRegistry
+  }]
 })
 export class OCustomMaterialModule { }
