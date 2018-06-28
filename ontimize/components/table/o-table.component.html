@@ -2,10 +2,10 @@
   <div class="o-table-container" [class.tab-container]="hasTabGroupChangeSubscription()">
     <div #tableToolbar class="toolbar" fxLayout="row" fxLayoutAlign="space-between center">
       <div class="buttons">
-        <o-table-button *ngIf="insertButton" (onClick)="add()" label="TABLE.BUTTONS.ADD" icon="add"> </o-table-button>
-        <o-table-button *ngIf="refreshButton" (onClick)="reloadData()" label="TABLE.BUTTONS.REFRESH" icon="autorenew"> </o-table-button>
+        <o-table-button *ngIf="insertButton" (onClick)="add()" label="TABLE.BUTTONS.ADD" svg-icon="ontimize:add"> </o-table-button>
+        <o-table-button *ngIf="refreshButton" (onClick)="reloadData()" label="TABLE.BUTTONS.REFRESH" svg-icon="ontimize:autorenew"> </o-table-button>
         <ng-content select="o-table-button"></ng-content>
-        <o-table-button *ngIf="showDeleteButton" (onClick)="remove()" label="TABLE.BUTTONS.DELETE" icon="delete"></o-table-button>
+        <o-table-button *ngIf="showDeleteButton" (onClick)="remove()" label="TABLE.BUTTONS.DELETE" svg-icon="ontimize:delete"></o-table-button>
       </div>
       <div *ngIf="showTitle" class="table-title">
         {{ title | oTranslate }}

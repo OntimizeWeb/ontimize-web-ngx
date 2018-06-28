@@ -1,8 +1,10 @@
 import { Component, OnInit, Inject, forwardRef, EventEmitter, Injector, ViewEncapsulation } from '@angular/core';
+import { Util } from '../../../../../utils';
 import { OTableComponent } from '../../../o-table.component';
 
 export const DEFAULT_INPUTS_O_TABLE_BUTTON = [
   'icon',
+  'svgIcon: svg-icon',
   'iconPosition : icon-position',
   'olabel: label'
 ];
@@ -33,6 +35,7 @@ export class OTableButtonComponent implements OnInit {
   public onClick: EventEmitter<Object> = new EventEmitter<Object>();
 
   public icon: string;
+  public svgIcon: string;
   public olabel: string;
   public iconPosition: string;
 
@@ -44,7 +47,7 @@ export class OTableButtonComponent implements OnInit {
   }
 
   public ngOnInit() {
-    if (typeof this.icon === 'undefined') {
+    if (!Util.isDefined(this.icon) && !Util.isDefined(this.svgIcon)) {
       this.icon = 'priority_high';
     }
     const availablePos = [OTableButtonComponent.ICON_POSITION_LEFT, OTableButtonComponent.ICON_POSITION_RIGHT];
@@ -54,7 +57,6 @@ export class OTableButtonComponent implements OnInit {
     if (availablePos.indexOf(this.iconPosition) === -1) {
       this.iconPosition = OTableButtonComponent.ICON_POSITION_LEFT;
     }
-    // this.table.registerHeaderButton(this);
   }
 
   innerOnClick() {
