@@ -1,6 +1,4 @@
 ## 3.0.0-rc.1
-### Dependencies
-* **New**: ng2-tree@2.0.0-rc.11
 
 ### Features
 * **OFormServiceComponent**: ('*o-combo*' and '*o-list-picker*' extends this class) adding '*getSelectedRecord*' method for getting the selected value associated data. This is a object including all the properties definied in the '*columns*' input ([e513805](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e513805)) ([#162](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/162))
@@ -35,6 +33,8 @@
   * Added `clearValue` method to all input form components. ([ae92af5](https://github.com/OntimizeWeb/ontimize-web-ngx/tree/ae92af5))
   * Added `show-clear` attribute to all input form component. ([9d274b0](https://github.com/OntimizeWeb/ontimize-web-ngx/tree/9d274b0))
 * **o-table-option**: new '*active*' input ([186c1cf](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/186c1cf))
+* **o-table-button**: adding '*svg-icon*' input ([bed3613](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/bed3613))
+* **icons**: new '*ontimize-icon-set.svg*' file that stores svg icons noew used in '*OntimizeWeb*' components.
 
 ### Bug Fixes
 * **o-table**:
@@ -69,6 +69,16 @@
 * **o-file-input**: method `clearData` is no longer available. Use `clearValue` instead. ([7000acc](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7000acc))
 * **o-real-input**, **o-currency-input**, **o-percentage-input**: attribute `decimal-digits` has been removed. ([f321543](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f321543))
 * **oReal**: real pipe (`ORealPipe`) arguments (`IRealPipeArgument`) has changed. Attribute `decimalDigits` is no longer available, use attributes `minDecimalDigits` and `maxDecimalDigits` instead. ([f321543](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f321543))
+* **.angular-cli.json**: in all your applications using '*OntimizeWeb*' you *MUST* add the following line in the '*.angular-cli.json*' file, otherwise all the '*ontimizeWeb*' component icons will not be loaded.
+```json
+...
+"assets": [
+...
+  { "glob": "**/*", "input": "../node_modules/ontimize-web-ngx/assets/", "output": "./assets/" },
+...
+]
+...
+```
 
 **Note**: There is a new '*o-tree*' component, all its information will be available at [ontimize-web-ngx-tree](https://github.com/OntimizeWeb/ontimize-web-ngx-tree)
 
@@ -121,12 +131,10 @@ export const CONFIG: Config = {
 ### Bug Fixes
 * **o-combo**: Fixing change event emission ([a648c8b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a648c8b)) Closes [#152](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/152)
 * **o-form**: Fixing close dialog on ESC key event ([f789a64](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f789a64))
-## 2.1.4
-### Bug Fixes
 * **o-list-picker**: fixing component bugs ([132bc4c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/132bc4c))
 * **o-form**: fixing dynamicform registration bugs ([d84fcbd]](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d84fcbd]))
 
-## 2.1.3 (2018-18-04)
+## 2.1.3 (2018-04-18)
 ### Features
 * **o-list-picker**:
   * There is a new '*query-rows*' (number) input. This input indicates how many elements are initially rendered in the list picker dialog. When the dialog scroll hits bottom a new set of elements are rendered ([8b1e4ef](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/8b1e4ef))
