@@ -8,11 +8,11 @@
       [value]="getDescriptionValue()" (input)="onVisibleInputChange($event)" (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)"
       [readonly]="isReadOnly" [formControlName]="getAttribute()" [required]="isRequired" #visibleInput (keydown.enter)="onKeydownEnter(visibleInput.value)">
 
-    <button mat-button [disabled]="isReadOnly || isDisabled" [class.read-only]="isReadOnly" matSuffix mat-icon-button (click)="onClickListpicker($event)">
+    <button [disabled]="isReadOnly || isDisabled" [class.read-only]="isReadOnly" matSuffix mat-icon-button (click)="onClickListpicker($event)">
       <mat-icon svgIcon="ontimize:search"></mat-icon>
     </button>
 
-    <button mat-button [disabled]="isReadOnly || isDisabled" [class.read-only]="isReadOnly" matSuffix mat-icon-button (click)="onClickClear($event)">
+    <button [disabled]="isReadOnly || isDisabled" [class.read-only]="isReadOnly" matSuffix mat-icon-button (click)="onClickClear($event)">
       <mat-icon svgIcon="ontimize:clear"></mat-icon>
     </button>
 

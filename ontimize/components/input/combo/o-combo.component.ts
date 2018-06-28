@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, forwardRef, Inject, Injector, NgModule, OnInit, Optional, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, forwardRef, Inject, Injector, NgModule, Optional, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatOption, MatSelect, MatSelectChange } from '@angular/material';
 
@@ -34,7 +34,7 @@ export const DEFAULT_OUTPUTS_O_COMBO = [
   templateUrl: './o-combo.component.html',
   styleUrls: ['./o-combo.component.scss']
 })
-export class OComboComponent extends OFormServiceComponent implements OnInit {
+export class OComboComponent extends OFormServiceComponent {
 
   public static DEFAULT_INPUTS_O_COMBO = DEFAULT_INPUTS_O_COMBO;
   public static DEFAULT_OUTPUTS_O_COMBO = DEFAULT_OUTPUTS_O_COMBO;
@@ -63,14 +63,10 @@ export class OComboComponent extends OFormServiceComponent implements OnInit {
   constructor(
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
     elRef: ElementRef,
-    injector: Injector) {
+    injector: Injector
+  ) {
     super(form, elRef, injector);
     this.defaultValue = '';
-  }
-
-  ngOnInit() {
-    super.initialize();
-    this.initialize();
   }
 
   ngAfterViewInit(): void {
@@ -83,6 +79,7 @@ export class OComboComponent extends OFormServiceComponent implements OnInit {
   }
 
   initialize() {
+    super.initialize();
     if (this.multiple) {
       this.nullSelection = false;
       this.defaultValue = [];
@@ -144,7 +141,6 @@ export class OComboComponent extends OFormServiceComponent implements OnInit {
           descTxt = option.viewValue;
         }
       }
-
     }
     return descTxt;
   }
@@ -169,6 +165,14 @@ export class OComboComponent extends OFormServiceComponent implements OnInit {
       } else {
         return '';
       }
+    }
+  }
+
+  clearValue(): void {
+    if (this.multiple) {
+      this.setValue(this.defaultValue);
+    } else {
+      super.clearValue();
     }
   }
 
@@ -282,6 +286,7 @@ export class OComboComponent extends OFormServiceComponent implements OnInit {
   getFirstSelectedValue() {
     return this.selectModel.selected[0].viewValue;
   }
+
 }
 
 @NgModule({
@@ -289,5 +294,4 @@ export class OComboComponent extends OFormServiceComponent implements OnInit {
   imports: [OSharedModule, CommonModule],
   exports: [OComboComponent]
 })
-export class OComboModule {
-}
+export class OComboModule { }
