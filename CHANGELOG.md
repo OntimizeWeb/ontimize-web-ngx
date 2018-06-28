@@ -69,7 +69,7 @@
 * **o-file-input**: method `clearData` is no longer available. Use `clearValue` instead. ([7000acc](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7000acc))
 * **o-real-input**, **o-currency-input**, **o-percentage-input**: attribute `decimal-digits` has been removed. ([f321543](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f321543))
 * **oReal**: real pipe (`ORealPipe`) arguments (`IRealPipeArgument`) has changed. Attribute `decimalDigits` is no longer available, use attributes `minDecimalDigits` and `maxDecimalDigits` instead. ([f321543](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f321543))
-* **.angular-cli.json**: in all your applications using '*OntimizeWeb*' you *MUST* add the following line in the '*.angular-cli.json*' file, otherwise all the '*ontimizeWeb*' component icons will not be loaded.
+* **.angular-cli.json**: in all your applications using *OntimizeWeb* you **MUST** add the following line in the '*.angular-cli.json*' file, otherwise all the components icons will not be loaded.
 ```json
 ...
 "assets": [
