@@ -1,6 +1,4 @@
-
 .application-layout-content-wrapper {
-
   .o-form-container {
     position: relative;
     width: 100%;
@@ -12,8 +10,13 @@
       flex: auto;
       flex-direction: column;
       max-height: 100%;
+
+      > .o-breadcrumb {
+        padding-left: 8px;
+        padding-right: 8px;
+      }
     }
-   
+
   }
 
 }
