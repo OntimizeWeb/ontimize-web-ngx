@@ -355,14 +355,19 @@ $_mat-checkbox-mark-stroke-size-small: 2 / 15 * $mat-checkbox-size-small !defaul
   }
 
   &.o-table-fixed {
+    max-height: 100%;
+    height: 100%;
+
+    &[layout-padding] {
+      max-height: calc(100% - 16px);
+    }
+
     .expandable-container {
-      flex-direction: column;
+      max-height: 100%;
+      height: 100%;
     }
 
     .o-table-container {
-      flex-direction: column;
-      height: 100%;
-      display: flex;
 
       .mat-table {
         flex: 1 1 auto;

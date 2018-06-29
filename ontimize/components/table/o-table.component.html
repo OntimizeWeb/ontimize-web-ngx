@@ -1,9 +1,10 @@
 <div class="expandable-container" [style.display]="isVisible()? '' : 'none'">
-  <div class="o-table-container" [class.tab-container]="hasTabGroupChangeSubscription()">
+  <div class="o-table-container" fxLayout="column" fxLayoutAlign="start stretch" [class.tab-container]="hasTabGroupChangeSubscription()">
     <div #tableToolbar class="toolbar" fxLayout="row" fxLayoutAlign="space-between center">
       <div class="buttons">
         <o-table-button *ngIf="insertButton" (onClick)="add()" label="TABLE.BUTTONS.ADD" svg-icon="ontimize:add"> </o-table-button>
-        <o-table-button *ngIf="refreshButton" (onClick)="reloadData()" label="TABLE.BUTTONS.REFRESH" svg-icon="ontimize:autorenew"> </o-table-button>
+        <o-table-button *ngIf="refreshButton" (onClick)="reloadData()" label="TABLE.BUTTONS.REFRESH" svg-icon="ontimize:autorenew">
+        </o-table-button>
         <ng-content select="o-table-button"></ng-content>
         <o-table-button *ngIf="showDeleteButton" (onClick)="remove()" label="TABLE.BUTTONS.DELETE" svg-icon="ontimize:delete"></o-table-button>
       </div>
@@ -29,7 +30,8 @@
       </mat-menu>
     </div>
 
-    <div #tableBody class="o-table-body o-scroll" [class.horizontal-scroll]="horizontalScroll" [class.scrolled]="horizontalScrolled">
+    <div #tableBody fxLayout="column" fxLayoutAlign="start stretch" class="o-table-body o-scroll" [class.horizontal-scroll]="horizontalScroll"
+      [class.scrolled]="horizontalScrolled">
 
       <mat-table #tableHeader matSort [class]="rowHeight" [class.header-fixed]="fixedHeader" [class.mat-table]="true">
         <!--Checkbox Column -->
