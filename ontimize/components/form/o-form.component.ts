@@ -1,16 +1,16 @@
 import { CommonModule } from '@angular/common';
-import { 
-  ChangeDetectorRef, 
+import {
+  ChangeDetectorRef,
   Component,
   CUSTOM_ELEMENTS_SCHEMA,
   ElementRef,
   EventEmitter,
   Injector,
   NgModule,
-  NgZone, 
-  OnDestroy, 
-  OnInit, 
-  ViewChild, 
+  NgZone,
+  OnDestroy,
+  OnInit,
+  ViewChild,
   ViewEncapsulation
  } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
@@ -231,7 +231,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   protected _compSQLTypes: Object = {};
 
   formParentKeysValues: Object;
- 
+
   public onFormInitStream: EventEmitter<Object> = new EventEmitter<Object>();
   protected reloadStream: Observable<any>;
   protected reloadStreamSubscription: Subscription;
@@ -745,10 +745,10 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
         self.formNavigation.updateNavigation(self.formGroup.getRawValue());
       }
     });
-   
+
   }
 
-  
+
   _emitData(data) {
     this.onFormDataLoaded.emit(data);
   }
@@ -993,7 +993,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     console.log('[OFormComponent.postIncorrectUpdate]', result);
     this.showError('update',result);
   }
-  
+
   private showError(operation:string, result: any) {
     if (result && typeof result !== 'object') {
       this.dialogService.alert('ERROR', result);
@@ -1012,7 +1012,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     }
   }
 
-  
+
 
   updateData(filter, values, sqlTypes?: Object): Observable<any> {
     const self = this;
@@ -1183,18 +1183,15 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
           if (!self.isInInsertMode() && self.queryOnInit) {
             self._reloadAction(true);
           }
-          if (this.formParentKeysValues) {
-            Object.keys(this._components).forEach(key => {
-              const comp = this._components[key];
-              const attr = comp.getAttribute();
-              if (Util.isFormDataComponent(comp)) {
-                try {
-                  if (comp.isAutomaticBinding() && this.formParentKeysValues.hasOwnProperty(attr)) {
-                    comp.data = this.formParentKeysValues[attr];
-                  }
-                } catch (error) {
-                  console.error(error);
-                }
+          if (self.formParentKeysValues) {
+            Object.keys(self.formParentKeysValues).forEach(parentKey => {
+              const value = self.formParentKeysValues[parentKey];
+              const comp = self._components[parentKey];
+              if (Util.isFormDataComponent(comp) && comp.isAutomaticBinding()) {
+                (comp as any).setValue(value, {
+                  emitModelToViewChange: false,
+                  emitEvent: false
+                });
               }
             });
           }
@@ -1321,7 +1318,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     return valueCopy;
   }
 
-  
+
 }
 
 @NgModule({
