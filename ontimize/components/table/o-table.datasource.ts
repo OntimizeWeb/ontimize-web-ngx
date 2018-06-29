@@ -1,17 +1,17 @@
 import { DataSource } from '@angular/cdk/collections';
-import { MatSort, MatPaginator } from '@angular/material';
-import { Subject } from 'rxjs/Subject';
-import { Observable } from 'rxjs/Observable';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/observable/merge';
+import { MatPaginator, MatSort } from '@angular/material';
 import 'rxjs/add/observable/fromEvent';
-
+import 'rxjs/add/observable/merge';
+import 'rxjs/add/operator/map';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
 import { Util } from '../../util/util';
-import { OTableDao } from './o-table.dao';
-import { OColumn, OTableComponent, OTableOptions } from './o-table.component';
 import { OTableAggregateComponent } from './extensions/footer/o-table-footer-components';
 import { ColumnValueFilterOperator, IColumnValueFilter, OTableEditableRowComponent } from './extensions/header/o-table-header-components';
+import { OColumn, OTableComponent, OTableOptions } from './o-table.component';
+import { OTableDao } from './o-table.dao';
+
 
 export class OTableDataSource extends DataSource<any> {
 
@@ -77,13 +77,18 @@ export class OTableDataSource extends DataSource<any> {
 
     return Observable.merge(...displayDataChanges).map(() => {
       let data = this._database.data;
-
+      /*
+        it is necessary to first calculate the calculated columns and 
+        then filter and sort the data
+      */
+      data = this.getColumnCalculatedData(data);
+  
       if (!this.table.pageable) {
         data = this.getColumnValueFilterData(data);
         data = this.getQuickFilterData(data);
         data = this.getSortedData(data);
       }
-      data = this.getColumnCalculatedData(data);
+    
       this.filteredData = Object.assign([], data);
 
       if (this.table.pageable) {
@@ -184,7 +189,7 @@ export class OTableDataSource extends DataSource<any> {
       if (oCol.searching && oCol.visible) {
         let filterValue = item[oCol.attr];
         if (oCol.renderer && oCol.renderer.getCellData) {
-          filterValue = oCol.renderer.getCellData(filterValue);
+          filterValue = oCol.renderer.getCellData(filterValue,item);
         }
         return filterValue;
       }
@@ -247,7 +252,7 @@ export class OTableDataSource extends DataSource<any> {
           if (column === ocolumn.attr && ocolumn.visible) {
             var key = column;
             if (render && ocolumn.renderer && ocolumn.renderer.getCellData) {
-              obj[key] = ocolumn.renderer.getCellData(row[column]);
+              obj[key] = ocolumn.renderer.getCellData(row[column],row);
             } else {
               obj[key] = row[column];
             }
@@ -268,7 +273,7 @@ export class OTableDataSource extends DataSource<any> {
           if (column === ocolumn.attr) {
             var key = column;
             if (render && ocolumn.renderer && ocolumn.renderer.getCellData) {
-              obj[key] = ocolumn.renderer.getCellData(row[column]);
+              obj[key] = ocolumn.renderer.getCellData(row[column],row);
             } else {
               obj[key] = row[column];
             }
