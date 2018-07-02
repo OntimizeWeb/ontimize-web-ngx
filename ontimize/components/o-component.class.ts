@@ -1,6 +1,7 @@
 import { Injector } from '@angular/core';
 import { InputConverter, BooleanConverter } from '../decorators';
 import { OTranslateService } from '../services';
+import { Util } from '../utils';
 
 export interface IComponent {
   getAttribute(): string;
@@ -11,6 +12,7 @@ export class OBaseComponent implements IComponent {
   protected oattr: string;
   protected olabel: string;
   protected _oenabled: boolean = true;
+  protected _readOnly: boolean;
   @InputConverter()
   protected orequired: boolean = false;
 
@@ -87,11 +89,25 @@ export class OBaseComponent implements IComponent {
   }
 
   set isReadOnly(value: boolean) {
+    // only modifiyng read only state if the component has not its own read-only input
+    if (Util.isDefined(this.readOnly)) {
+      return;
+    }
     if (this._disabled) {
       this._isReadOnly = false;
       return;
     }
     this._isReadOnly = value;
+  }
+
+  get readOnly(): any {
+    return this._readOnly;
+  }
+
+  set readOnly(value: any) {
+    const parsedValue = BooleanConverter(value);
+    this._readOnly = parsedValue;
+    this._isReadOnly = parsedValue;
   }
 
   get isDisabled(): boolean {

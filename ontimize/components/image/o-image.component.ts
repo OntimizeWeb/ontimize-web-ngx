@@ -55,6 +55,8 @@ export class OImageComponent extends OFormDataComponent {
 
   @ViewChild('inputControl')
   protected inputControl: MatInput;
+  @ViewChild('input')
+  protected fileInput: ElementRef;
   @ViewChild('titleLabel')
   protected titleLabel: ElementRef;
 
@@ -70,7 +72,7 @@ export class OImageComponent extends OFormDataComponent {
     super(form, elRef, injector);
     this._domSanitizer = this.injector.get(DomSanitizer);
     this.defaultValue = '';
-    this._defaultSQLTypeKey = 'BLOB';
+    this._defaultSQLTypeKey = 'BASE64';
   }
 
   ngOnInit() {
@@ -184,8 +186,9 @@ export class OImageComponent extends OFormDataComponent {
 
   onClickClear(e: Event): void {
     e.stopPropagation();
-    if (!this._isReadOnly && !this.isDisabled) {
+    if (!this.isReadOnly && !this.isDisabled) {
       this.setValue(undefined);
+      this.fileInput.nativeElement.valueOf = undefined;
       if (this.titleLabel) {
         this.titleLabel.nativeElement.textContent = '';
       }

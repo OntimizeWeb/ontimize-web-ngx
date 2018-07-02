@@ -1,19 +1,40 @@
+import { Router } from '@angular/router';
 import { OFormComponent } from './form/o-form.component';
-import { OFormValue } from '../components';
+import { OFormValue } from '../components/form/OFormValue';
+import { Codes, Util } from '../utils';
+
+export interface ISQLOrder {
+  columnName: string;
+  ascendent: boolean;
+}
 
 export class ServiceUtils {
 
   static getParentItemFromForm(parentItem: any, parentKeysObject: Object, form: OFormComponent) {
     let result = parentItem;
     const parentKeys = Object.keys(parentKeysObject || {});
-    const formComponents = form ? form.getComponents() : {};
+    const existParentKeys = parentKeys && parentKeys.length > 0;
 
-    if (parentKeys && parentKeys.length > 0 && parentItem === undefined && (Object.keys(formComponents).length > 0)) {
+    const formComponents = form ? form.getComponents() : {};
+    const existsComponents = Object.keys(formComponents).length > 0;
+
+    const formDataProperties = Object.keys(form ? form.getDataValues() : {});
+    const existsProperties = formDataProperties.length > 0;
+
+    if (existParentKeys && parentItem === undefined && (existsComponents || existsProperties)) {
       let partialResult = {};
       parentKeys.forEach(key => {
         const formFieldAttr = parentKeysObject[key];
+        let currentData;
         if (formComponents.hasOwnProperty(formFieldAttr)) {
-          let currentData = formComponents[formFieldAttr].getValue();
+          currentData = formComponents[formFieldAttr].getValue();
+        } else if (formDataProperties.indexOf(formFieldAttr) !== -1) {
+          currentData = form.getDataValue(formFieldAttr);
+          if (currentData instanceof OFormValue) {
+            currentData = currentData.value;
+          }
+        }
+        if (Util.isDefined(currentData)) {
           switch (typeof (currentData)) {
             case 'string':
               if (currentData.trim().length > 0) {
@@ -68,4 +89,32 @@ export class ServiceUtils {
     });
     return objectProperties;
   }
+
+  static parseSortColumns(sortColumns: string): Array<ISQLOrder> {
+    let sortColArray = [];
+    if (sortColumns) {
+      let cols = Util.parseArray(sortColumns);
+      cols.forEach((col) => {
+        let colDef = col.split(Codes.TYPE_SEPARATOR);
+        if (colDef.length > 0) {
+          let colName = colDef[0];
+          const colSort = colDef[1] || Codes.ASC_SORT;
+          sortColArray.push({
+            columnName: colName,
+            ascendent: colSort === Codes.ASC_SORT
+          });
+        }
+      });
+    }
+    return sortColArray;
+  }
+
+  static redirectLogin(router: Router, sessionExpired: boolean = false) {
+    let arg = {};
+    arg[Codes.SESSION_EXPIRED_KEY] = sessionExpired;
+    let extras = {};
+    extras[Codes.QUERY_PARAMS] = arg;
+    router.navigate([Codes.LOGIN_ROUTE], extras);
+  }
+
 }

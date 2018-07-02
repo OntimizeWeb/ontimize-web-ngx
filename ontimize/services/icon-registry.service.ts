@@ -1,0 +1,62 @@
+import { Injectable, Optional, Inject } from '@angular/core';
+import { MatIconRegistry } from '@angular/material';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { HttpClient } from '@angular/common/http';
+import { DOCUMENT } from '@angular/common';
+import { Observable } from 'rxjs/Observable';
+import { Observer } from 'rxjs/Observer';
+
+@Injectable()
+export class OntimizeMatIconRegistry extends MatIconRegistry {
+
+  public static ONTIMIZE_ICON_SET_PATH = 'assets/svg/ontimize-icon-set.svg';
+  public static ONTIMIZE_NAMESPACE = 'ontimize';
+
+  constructor(
+    http: HttpClient,
+    sanitizer: DomSanitizer,
+    @Optional() @Inject(DOCUMENT) document
+  ) {
+    super(http, sanitizer, document);
+    this.addSvgIconSetInNamespace(OntimizeMatIconRegistry.ONTIMIZE_NAMESPACE,
+      sanitizer.bypassSecurityTrustResourceUrl(OntimizeMatIconRegistry.ONTIMIZE_ICON_SET_PATH));
+  }
+
+  addSvgIcon(iconName: string, url: SafeResourceUrl): this {
+    return this.addSvgIconInNamespace(OntimizeMatIconRegistry.ONTIMIZE_NAMESPACE, iconName, url);
+  }
+
+  getSVGElement(iconName: string): Observable<SVGElement> {
+    return this.getNamedSvgIcon(iconName, OntimizeMatIconRegistry.ONTIMIZE_NAMESPACE);
+  }
+
+  existsIcon(iconName: string): Observable<boolean> {
+    const self = this;
+    return new Observable<boolean>((observer: Observer<boolean>) => {
+      self.getSVGElement(iconName).subscribe((value: SVGElement) => {
+        observer.next(true);
+      }, error => {
+        observer.next(false);
+      }, () => observer.complete());
+    });
+  }
+}
+
+// export function ONTIMIZE_ICON_REGISTRY_PROVIDER_FACTORY(
+//   parentRegistry: OntimizeMatIconRegistry,
+//   httpClient: HttpClient,
+//   sanitizer: DomSanitizer,
+//   document?: any) {
+//   return parentRegistry || new OntimizeMatIconRegistry(httpClient, sanitizer, document);
+// }
+
+// export const ONTIMIZE_ICON_REGISTRY_PROVIDER = {
+//   provide: OntimizeMatIconRegistry,
+//   deps: [
+//     [new Optional(), new SkipSelf(), OntimizeMatIconRegistry],
+//     [new Optional(), HttpClient],
+//     DomSanitizer,
+//     [new Optional(), DOCUMENT as InjectionToken<any>]
+//   ],
+//   useFactory: ONTIMIZE_ICON_REGISTRY_PROVIDER_FACTORY
+// };

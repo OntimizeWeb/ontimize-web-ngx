@@ -5,53 +5,85 @@ $mat-checkbox-size-small: 16px !default;
 $_mat-checkbox-mark-stroke-size-small: 2 / 15 * $mat-checkbox-size-small !default;
 
 .o-table {
-  align-items: normal!important;
+  .horizontal-scroll {
+    .mat-cell,
+    .mat-header-cell {
+      min-width: 150px;
+    }
+  }
 
-  .expandable-container{
+  .mat-cell,
+  .mat-header-cell {
+    min-width: 90px;
+  }
+}
+
+.o-table {
+  .expandable-container {
     overflow-y: auto;
     height: 100%;
   }
 
   .o-table-container {
+    .mat-cell.flex-0 {
+      flex: 0 !important;
+    }
+
+    .o-table-body.horizontal-scroll {
+      overflow-x: auto;
+      padding-bottom: 16px;
+
+      .mat-table {
+        overflow: hidden;
+
+        &:not(.content-table) {
+          min-width: fit-content;
+        }
+      }
+
+      &.scrolled {
+        .mat-table.content-table {
+          min-width: fit-content;
+        }
+
+        .mat-cell,
+        .mat-header-cell {
+          flex: 0!important;
+        }
+      }
+
+      &::-webkit-scrollbar {
+        height: 16px;
+      }
+    }
 
     .table-title {
       font-size: 18px;
       font-weight: 400;
     }
 
-    .fill-remaining {
-      flex: 1 1 auto;
-    }
-
-    //display: block;
+    // display: block;
     max-width: 100%;
     height: 100%;
 
-    //overflow: hidden;
+    overflow: hidden;
     position: relative;
-    margin: 0 0.5%;
-
-    .mat-column-select {
-      min-height: inherit;
-      max-width: 20px;
-      display: flex;
-      align-items: center;
-    }
+    margin: 0 .5%;
 
     .spinner-container {
       position: absolute;
-      top: 0px;
-      left: 0px;
-      right: 0px;
-      bottom: 0px;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
       z-index: 500;
 
       visibility: visible;
       opacity: 1;
 
-      -moz-transition: opacity 0.25s linear;
-      -webkit-transition: opacity 0.25s linear;
-      transition: opacity 0.25s linear;
+      -moz-transition: opacity .25s linear;
+      -webkit-transition: opacity .25s linear;
+      transition: opacity .25s linear;
 
       .mat-progress-spinner {
         height: 100%;
@@ -64,25 +96,28 @@ $_mat-checkbox-mark-stroke-size-small: 2 / 15 * $mat-checkbox-size-small !defaul
       &.small {
         min-height: 32px;
       }
+
       &.medium {
         min-height: 36px;
       }
+
       &.large {
         min-height: 48px;
       }
     }
 
     .mat-table {
-
       &.small {
         .mat-header-row {
           min-height: 32px;
           max-height: 32px;
           line-height: 32px;
         }
+
         .mat-row {
           min-height: 28px;
           max-height: 28px;
+
           .mat-cell {
             .image-avatar {
               width: 22px;
@@ -90,12 +125,15 @@ $_mat-checkbox-mark-stroke-size-small: 2 / 15 * $mat-checkbox-size-small !defaul
             }
           }
         }
+
         .mat-checkbox-inner-container {
           height: $mat-checkbox-size-small;
           width: $mat-checkbox-size-small;
+
           .mat-checkbox-checkmark-path {
             width: $_mat-checkbox-mark-stroke-size-small;
           }
+
           .mat-checkbox-mixedmark {
             height: floor($_mat-checkbox-mark-stroke-size-small);
           }
@@ -108,9 +146,11 @@ $_mat-checkbox-mark-stroke-size-small: 2 / 15 * $mat-checkbox-size-small !defaul
           max-height: 40px;
           line-height: 40px;
         }
+
         .mat-row {
           min-height: 36px;
           max-height: 36px;
+
           .mat-cell {
             .image-avatar {
               width: 28px;
@@ -118,12 +158,15 @@ $_mat-checkbox-mark-stroke-size-small: 2 / 15 * $mat-checkbox-size-small !defaul
             }
           }
         }
+
         .mat-checkbox-inner-container {
           height: $mat-checkbox-size-medium;
           width: $mat-checkbox-size-medium;
+
           .mat-checkbox-checkmark-path {
             width: $_mat-checkbox-mark-stroke-size-medim;
           }
+
           .mat-checkbox-mixedmark {
             height: floor($_mat-checkbox-mark-stroke-size-medim);
           }
@@ -136,6 +179,7 @@ $_mat-checkbox-mark-stroke-size-small: 2 / 15 * $mat-checkbox-size-small !defaul
           max-height: 52px;
           line-height: 52px;
         }
+
         .mat-row {
           min-height: 48px;
           max-height: 48px;
@@ -148,13 +192,14 @@ $_mat-checkbox-mark-stroke-size-small: 2 / 15 * $mat-checkbox-size-small !defaul
         .mat-header-cell {
           .column-filter-icon {
             font-size: 20px;
-            width: 16px;
-            height: 16px;
+            width: 20px;
+            height: 20px;
             margin-right: 8px;
-            margin-bottom: 4px;
+            line-height: 1;
           }
+
           &:not([mat-sort-header]) {
-            text-align:center;
+            text-align: center;
             cursor: default;
           }
 
@@ -173,7 +218,7 @@ $_mat-checkbox-mark-stroke-size-small: 2 / 15 * $mat-checkbox-size-small !defaul
             text-overflow: ellipsis;
           }
 
-          .mat-sort-header-arrow  {
+          .mat-sort-header-arrow {
             margin-top: auto;
             margin-bottom: auto;
           }
@@ -206,14 +251,19 @@ $_mat-checkbox-mark-stroke-size-small: 2 / 15 * $mat-checkbox-size-small !defaul
         }
 
         .mat-cell {
+          &.empty-cell {
+            min-height: 16px;
+          }
+
           .image-avatar {
-            width:34px;
+            width: 34px;
             height: 34px;
             margin: 1px auto;
             overflow: hidden;
             border-radius: 50%;
             position: relative;
             z-index: 1;
+
             img {
               position: absolute;
               top: 50%;
@@ -237,11 +287,20 @@ $_mat-checkbox-mark-stroke-size-small: 2 / 15 * $mat-checkbox-size-small !defaul
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
+        box-sizing: border-box;
+
+        &.mat-column-select {
+          max-width: 18px;
+          min-width: 18px;
+          width: 18px;
+          padding: 0 4px;
+          box-sizing: content-box;
+          overflow: initial;
+        }
       }
     }
 
     &.disabled {
-
       thead {
         tr {
           &::before {
@@ -255,9 +314,11 @@ $_mat-checkbox-mark-stroke-size-small: 2 / 15 * $mat-checkbox-size-small !defaul
           &:not(.group)::before {
             display: none;
           }
+
           &.selected::before {
             display: none;
           }
+
           td {
             &.focus {
               outline: none;
@@ -283,7 +344,7 @@ $_mat-checkbox-mark-stroke-size-small: 2 / 15 * $mat-checkbox-size-small !defaul
     }
 
     .toolbar {
-      margin: 4px 0px;
+      margin: 4px 0;
       height: 40px;
 
       .buttons {
@@ -294,44 +355,54 @@ $_mat-checkbox-mark-stroke-size-small: 2 / 15 * $mat-checkbox-size-small !defaul
   }
 
   &.o-table-fixed {
+    max-height: 100%;
+    height: 100%;
+
+    &[layout-padding] {
+      max-height: calc(100% - 16px);
+    }
 
     .expandable-container {
-      flex-direction: column;
+      max-height: 100%;
+      height: 100%;
     }
 
     .o-table-container {
-      flex-direction: column;
-      height:100%;
-      display: flex;
 
       .mat-table {
         flex: 1 1 auto;
         position: relative;
+      }
+
+      .mat-table:not(.header-fixed) {
         overflow-y: auto;
       }
 
-      .header-fixed, .mat-paginator,.toolbar{
+      .header-fixed,
+      .mat-paginator,
+      .toolbar {
         flex: 0 0 auto;
-
       }
     }
 
   }
   /* Workaround for bug when a table is inside a tab */
   .o-table-container.tab-container {
-
     .active-sort {
       .mat-sort-header-arrow {
-        opacity: 1!important;
-        transform: translateY(0px)!important;
+        opacity: 1 !important;
+        transform: translateY(0px) !important;
       }
+
       &.desc {
         .mat-sort-header-indicator {
           transform: translateY(10px);
         }
+
         .mat-sort-header-pointer-left {
           transform: rotate(45deg);
         }
+
         .mat-sort-header-pointer-right {
           transform: rotate(-45deg);
         }
@@ -341,9 +412,19 @@ $_mat-checkbox-mark-stroke-size-small: 2 / 15 * $mat-checkbox-size-small !defaul
     .mat-sort-header-pointer-left {
       transform: rotate(-45deg);
     }
+
     .mat-sort-header-pointer-right {
       transform: rotate(45deg);
     }
   }
 }
 
+.mat-tooltip.o-table-cell-tooltip {
+  position: absolute;
+  top: -12px;
+  word-wrap: break-word;
+  max-height: 64px;
+  overflow: hidden;
+  min-width: 140px;
+  text-align: center;
+}

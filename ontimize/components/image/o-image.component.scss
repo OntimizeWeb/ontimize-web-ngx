@@ -1,12 +1,10 @@
-
 .input-image {
-
   .input-image-preview {
     z-index: 1;
     width: 150px;
     height: 150px;
 
-    img{
+    img {
       max-height: 100%;
       max-width: 100%;
     }
@@ -28,16 +26,11 @@
   }
 
   .input-image-container {
-    z-index: 1;
-
     .input-file {
-      outline: none;
-      width: 0.1px;
-      height: 0.1px;
       opacity: 0;
+      outline: none;
       overflow: hidden;
       position: absolute;
-      z-index: -1;
     }
 
     .input-file + label {
@@ -55,7 +48,7 @@
       width: 100%;
     }
 
-/*
+    /*
     .input-file:focus + label,
     .input-file + label:hover {
       background-color: mat-color($mat-primary);
@@ -68,10 +61,10 @@
   display: none !important;
 }
 
-.read-only-blocker{
+.read-only-blocker {
   z-index: 2;
   position: absolute;
-  top: 0px;
-  left: 0px;
-  right: 0px;
+  top: 0;
+  left: 0;
+  right: 0;
 }

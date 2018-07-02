@@ -1,7 +1,9 @@
 import { Component, Injector, ViewChild, TemplateRef, OnInit } from '@angular/core';
+
 import { Subscription } from 'rxjs/Subscription';
-import { Util } from '../../../../../utils';
-import { OntimizeService, dataServiceFactory, DialogService } from '../../../../../services';
+
+import { Util, Codes } from '../../../../../utils';
+import { OntimizeService, DialogService } from '../../../../../services';
 import { OBaseTableCellRenderer } from '../o-base-table-cell-renderer.class';
 
 export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_SERVICE = [
@@ -17,16 +19,11 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_SERVICE = [
 @Component({
   selector: 'o-table-cell-renderer-service',
   templateUrl: './o-table-cell-renderer-service.component.html',
-  inputs: DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_SERVICE,
-  providers: [
-    { provide: OntimizeService, useFactory: dataServiceFactory, deps: [Injector] }
-  ]
+  inputs: DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_SERVICE
 })
-
 export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer implements OnInit {
 
   public static DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_SERVICE = DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_SERVICE;
-  public static DEFAULT_QUERY_METHOD = 'query';
 
   @ViewChild('templateref', { read: TemplateRef }) public templateref: TemplateRef<any>;
 
@@ -36,7 +33,7 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
   protected columns: string;
   protected valueColumn: string;
   protected parentKeys: string;
-  protected queryMethod: string;
+  protected queryMethod: string = Codes.QUERY_METHOD;
   protected serviceType: string;
 
   /* Internal variables */
@@ -55,16 +52,13 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
   constructor(protected injector: Injector) {
     super(injector);
     this.dialogService = injector.get(DialogService);
-    this.initialize();
   }
 
   ngOnInit() {
+    super.ngOnInit();
     this.colArray = Util.parseArray(this.columns, true);
     let pkArray = Util.parseArray(this.parentKeys);
     this._pKeysEquiv = Util.parseParentKeysEquivalences(pkArray);
-    if (!this.queryMethod) {
-      this.queryMethod = OTableCellRendererServiceComponent.DEFAULT_QUERY_METHOD;
-    }
     this.configureService();
   }
 
@@ -92,9 +86,12 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
       //   this.querySubscription.unsubscribe();
       // }
       const filter = this.getFilterUsingParentKeys(parentItem, this._pKeysEquiv);
+      if (!filter[this.column]) {
+        filter[this.column] = cellvalue;
+      }
       this.querySubscription = this.dataService[this.queryMethod](filter, this.colArray, this.entity).subscribe(resp => {
-        if (resp.code === 0) {
-          self.responseMap[cellvalue] = resp.data[0][this.valueColumn];
+        if (resp.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) {
+          self.responseMap[cellvalue] = resp.data[0][self.valueColumn];
         } else {
           console.log('error');
         }
@@ -133,7 +130,7 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
     try {
       this.dataService = this.injector.get(loadingService);
       if (Util.isDataService(this.dataService)) {
-        let serviceCfg = this.dataService.getDefaultServiceConfiguration();
+        let serviceCfg = this.dataService.getDefaultServiceConfiguration(this.service);
         if (this.entity) {
           serviceCfg['entity'] = this.entity;
         }
@@ -143,6 +140,5 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
       console.error(e);
     }
   }
+
 }
-
-

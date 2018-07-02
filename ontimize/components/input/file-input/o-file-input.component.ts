@@ -35,6 +35,9 @@ export const DEFAULT_INPUTS_O_FILE_INPUT = [
   'service',
   'entity',
   'serviceType : service-type',
+  'width',
+  'readOnly: read-only',
+  'clearButton: clear-button',
 
   // accept-file-type [string]: file types allowed on the file input, separated by ';'. Default: no value.
   // file_extension, audio/*, video/*, image/*, media_type. See https://www.w3schools.com/tags/att_input_accept.asp
@@ -236,25 +239,18 @@ export class OFileInputComponent extends OFormDataComponent implements OnDestroy
 
   onClickClear(e: Event) {
     e.stopPropagation();
-    this.clearData();
+    this.clearValue();
+  }
+
+  clearValue(): void {
+    super.clearValue();
+    this.uploader.clear();
   }
 
   onClickUpload(e: Event) {
     e.stopPropagation();
     if (this.isValid) {
       this.upload();
-    }
-  }
-
-  clearData() {
-    if (!this._isReadOnly && !this.isDisabled) {
-      this.uploader.clear();
-      let value = this.uploader.files.map(file => file.name).join(', ');
-      this.setValue(value);
-      this.inputFile.nativeElement.value = '';
-      if (this._fControl) {
-        this._fControl.markAsTouched();
-      }
     }
   }
 

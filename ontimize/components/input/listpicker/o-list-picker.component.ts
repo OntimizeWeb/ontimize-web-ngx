@@ -1,33 +1,17 @@
-import {
-  Component,
-  ElementRef,
-  EventEmitter,
-  forwardRef,
-  Inject,
-  Injector,
-  OnInit,
-  OnChanges,
-  SimpleChange,
-  Optional,
-  NgModule,
-  ViewEncapsulation,
-  ViewChild
-} from '@angular/core';
+import { Component, ElementRef, EventEmitter, forwardRef, Inject, Injector, OnInit, OnChanges, Optional, NgModule, SimpleChange, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatInput, MatDialog, MatDialogRef, MatDialogConfig } from '@angular/material';
+import { MatDialog, MatInput, MatDialogConfig, MatDialogRef } from '@angular/material';
 
-import { dataServiceFactory } from '../../../services/data-service.provider';
-import { OntimizeService } from '../../../services';
 import { OSharedModule } from '../../../shared';
+import { OntimizeService } from '../../../services';
 import { InputConverter } from '../../../decorators';
-
 import { OFormComponent } from '../../form/o-form.component';
-import { OSearchInputModule } from '../../input/search-input/o-search-input.component';
-import { OFormValue } from '../../form/OFormValue';
 import { ODialogModule } from '../../dialog/o-dialog.component';
-import { OFormServiceComponent } from '../../o-form-service-component.class';
-
+import { IFormValueOptions, OFormValue } from '../../form/OFormValue';
+import { OFormServiceComponent } from '../o-form-service-component.class';
+import { dataServiceFactory } from '../../../services/data-service.provider';
 import { OListPickerDialogComponent } from './o-list-picker-dialog.component';
+import { OSearchInputModule } from '../../input/search-input/o-search-input.component';
 
 export const DEFAULT_INPUTS_O_LIST_PICKER = [
   ...OFormServiceComponent.DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT,
@@ -51,11 +35,9 @@ export const DEFAULT_OUTPUTS_O_LIST_PICKER = [
     { provide: OntimizeService, useFactory: dataServiceFactory, deps: [Injector] }
   ],
   inputs: DEFAULT_INPUTS_O_LIST_PICKER,
-  outputs: DEFAULT_OUTPUTS_O_LIST_PICKER,
-  encapsulation: ViewEncapsulation.None
+  outputs: DEFAULT_OUTPUTS_O_LIST_PICKER
 })
 export class OListPickerComponent extends OFormServiceComponent implements OnInit, OnChanges {
-
 
   public static DEFAULT_INPUTS_O_LIST_PICKER = DEFAULT_INPUTS_O_LIST_PICKER;
   public static DEFAULT_OUTPUTS_O_LIST_PICKER = DEFAULT_OUTPUTS_O_LIST_PICKER;
@@ -119,6 +101,7 @@ export class OListPickerComponent extends OFormServiceComponent implements OnIni
   }
 
   ngAfterViewInit(): void {
+    super.ngAfterViewInit();
     if (this.queryOnInit) {
       this.queryData();
     } else if (this.queryOnBind) {
@@ -141,19 +124,6 @@ export class OListPickerComponent extends OFormServiceComponent implements OnIni
         }
       });
     }
-    /*
-    * Temporary code
-    * I do not understand the reason why MatInput is not removing 'mat-empty' clase despite of the fact that
-    * the input element of the description is binding value attribute
-    */
-    let placeHolderLbl = this.elRef.nativeElement.querySelectorAll('label.mat-input-placeholder');
-    if (placeHolderLbl.length) {
-      // Take only first, nested element does not matter.
-      let element = placeHolderLbl[0];
-      if (descTxt && descTxt.length > 0) {
-        element.classList.remove('mat-empty');
-      }
-    }
     return descTxt;
   }
 
@@ -168,22 +138,23 @@ export class OListPickerComponent extends OFormServiceComponent implements OnIni
   onClickClear(e: Event): void {
     e.preventDefault();
     e.stopPropagation();
-    if (!this._isReadOnly && !this.isDisabled) {
+    if (!this.isReadOnly && !this.isDisabled) {
       clearTimeout(this.blurTimer);
       this.blurPrevent = true;
       this.setValue(undefined);
     }
   }
 
-  setValue(value: any) {
-    super.setValue(value);
+  setValue(value: any, options?: IFormValueOptions) {
+    super.setValue(value, options);
     this.visibleInput.nativeElement.value = '';
   }
 
   onClickListpicker(e: Event): void {
     e.preventDefault();
     e.stopPropagation();
-    if (!this._isReadOnly && !this.isDisabled) {
+    if (!this.isReadOnly && !this.isDisabled) {
+      clearTimeout(this.blurTimer);
       this.openDialog();
     }
   }
@@ -235,12 +206,13 @@ export class OListPickerComponent extends OFormServiceComponent implements OnIni
 
   onDialogClose(evt: any) {
     this.dialogRef = null;
+    this.visibleInputValue = undefined;
     if (evt instanceof Object && typeof evt[this.valueColumn] !== 'undefined') {
       var self = this;
       window.setTimeout(() => {
         self.setValue(evt[self.valueColumn]);
         if (self._fControl) {
-          this._fControl.markAsTouched();
+          self._fControl.markAsTouched();
         }
       }, 0);
     }
@@ -248,7 +220,7 @@ export class OListPickerComponent extends OFormServiceComponent implements OnIni
 
   innerOnFocus(evt: any) {
     if (!this.isReadOnly && !this.isDisabled) {
-      this.onFocus.emit(event);
+      this.onFocus.emit(evt);
     }
   }
 
@@ -258,10 +230,16 @@ export class OListPickerComponent extends OFormServiceComponent implements OnIni
       this.blurTimer = setTimeout(() => {
         if (!self.blurPrevent) {
           self._fControl.markAsTouched();
-          self.onBlur.emit(event);
-          // if (evt.target.value !== this.visibleInputValue) {
-          self.openDialog();
-          // }
+          self.onBlur.emit(evt);
+          if (self.visibleInputValue !== undefined && self.visibleInputValue.length > 0) {
+            self.openDialog();
+          } else if (self.visibleInputValue !== undefined) {
+            self.setValue(undefined);
+            self.visibleInputValue = undefined;
+          } else {
+            self._fControl.markAsTouched();
+            self.onBlur.emit(evt);
+          }
         }
         self.blurPrevent = false;
       }, this.blurDelay);
@@ -278,7 +256,6 @@ export class OListPickerComponent extends OFormServiceComponent implements OnIni
     this.visibleInputValue = val;
     this.openDialog();
   }
-
 }
 
 @NgModule({

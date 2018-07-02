@@ -8,7 +8,6 @@ $header-height: 56px;
 $transition-duration: 500ms;
 
 .o-app-sidenav {
-
   &.header-layout {
     .application-sidenav-container {
       .mat-drawer.application-sidenav-sidenav {
@@ -17,18 +16,13 @@ $transition-duration: 500ms;
     }
   }
 
-  .example-fill-remaining-space {
-    flex: 1 1 auto;
-  }
-
   .application-sidenav-container {
     width: 100%;
     height: 100%;
 
-
     &:not(.opened) {
       .mat-drawer-content {
-        margin-right: $sidenav-closed-width!important;
+        margin-right: $sidenav-closed-width !important;
         transform: translate3d($sidenav-closed-width, 0px, 0px)!important;
       }
     }
@@ -41,7 +35,7 @@ $transition-duration: 500ms;
 
     .mat-drawer.application-sidenav-sidenav {
       box-shadow: 3px 0 6px rgba(0, 0, 0, .24);
-      padding-bottom: 72px;
+      padding-bottom: 36px;
       padding-top: 5px;
       width: $sidenav-width;
       bottom: 0;
@@ -82,7 +76,7 @@ $transition-duration: 500ms;
       }
 
       .sidenav-toggle {
-        padding: 4px 12px 8px 12px;
+        padding: 4px 12px 8px;
         cursor: pointer;
       }
 
@@ -90,10 +84,7 @@ $transition-duration: 500ms;
         transition: background-color $transition-duration;
 
         &.active + .application-sidenav-menugroup-items-container {
-          ul {
-            margin-top: 0px;
-          }
-          o-app-sidenav-menu-item:last-child li{
+          o-app-sidenav-menu-item:last-child li {
             border-color: transparent;
           }
         }
@@ -101,10 +92,6 @@ $transition-duration: 500ms;
 
       .application-sidenav-menugroup-items-container {
         overflow: hidden;
-        ul {
-          transition: margin-top $transition-duration;
-          margin-top: -100%;
-        }
       }
 
       &.mat-drawer-closing {
@@ -117,14 +104,13 @@ $transition-duration: 500ms;
         text-align: center;
 
         .application-sidenav-item {
-
           &:not(.user-info) {
             cursor: pointer;
           }
 
           &.user-info {
-            &:hover,
-            &:focus {
+            &:focus,
+            &:hover {
               color: inherit;
             }
           }
@@ -139,8 +125,7 @@ $transition-duration: 500ms;
           }
 
           &.application-sidenav-menugroup {
-            padding: $sidenav-spacing-unit;
-            padding-left: $sidenav-spacing-unit * 1.5;
+            padding: $sidenav-spacing-unit $sidenav-spacing-unit $sidenav-spacing-unit $sidenav-spacing-unit * 1.5;
             height: $sidenav-closed-width;
 
             -webkit-box-pack: center!important;
@@ -157,12 +142,13 @@ $transition-duration: 500ms;
 
         .o-app-sidenav-image .application-sidenav-image-container {
 
-          padding: 0px;
-          align-items: end!important;
-          place-content: flex-end!important;
+          padding: 0;
+          text-align: end;
+          max-height: 48px;
 
           .application-sidenav-image {
-            margin-right: 8px;
+            max-height: 48px;
+            margin: 8px 8px 0 0;
           }
         }
 
@@ -171,18 +157,16 @@ $transition-duration: 500ms;
         }
       }
 
-      &.mat-drawer-opening,
-      &.mat-drawer-closing,
-      &.mat-drawer-opened {
-
+      &:not(.mat-drawer-closed) {
         .application-sidenav-item {
-          border-bottom-width: 0px;
+          border-bottom-width: 0;
           border-bottom-style: solid;
         }
 
         .application-sidenav-menugroup {
           padding: ($sidenav-spacing-unit * 2);
-          transition: padding 0s $transition-duration;
+          transition: padding $transition-duration 0s;
+
           .application-sidenav-menugroup-arrow {
             position: absolute;
             right: ($sidenav-spacing-unit * 2);
@@ -193,10 +177,10 @@ $transition-duration: 500ms;
             .application-sidenav-menugroup-arrow {
               transform: rotate(90deg);
             }
+
             + .application-sidenav-menugroup-items-container {
               ul li > a {
                 padding-left: ($sidenav-spacing-unit * 4);
-                transition: padding 0s;
               }
             }
           }

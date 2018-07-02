@@ -1,22 +1,24 @@
 <div class="expandable-container" [style.display]="isVisible()? '' : 'none'">
-  <div class="o-table-container" [class.tab-container]="hasTabGroupChangeSubscription()">
+  <div class="o-table-container" fxLayout="column" fxLayoutAlign="start stretch" [class.tab-container]="hasTabGroupChangeSubscription()">
     <div #tableToolbar class="toolbar" fxLayout="row" fxLayoutAlign="space-between center">
       <div class="buttons">
-        <o-table-button *ngIf="insertButton" (onClick)="add()" label="TABLE.BUTTONS.ADD" icon="add"> </o-table-button>
-        <o-table-button *ngIf="refreshButton" (onClick)="reloadData()" label="TABLE.BUTTONS.REFRESH" icon="autorenew"> </o-table-button>
+        <o-table-button *ngIf="insertButton" (onClick)="add()" label="TABLE.BUTTONS.ADD" svg-icon="ontimize:add"> </o-table-button>
+        <o-table-button *ngIf="refreshButton" (onClick)="reloadData()" label="TABLE.BUTTONS.REFRESH" svg-icon="ontimize:autorenew">
+        </o-table-button>
         <ng-content select="o-table-button"></ng-content>
-        <o-table-button *ngIf="showDeleteButton" (onClick)="remove()" label="TABLE.BUTTONS.DELETE" icon="delete"></o-table-button>
+        <o-table-button *ngIf="showDeleteButton" (onClick)="remove()" label="TABLE.BUTTONS.DELETE" svg-icon="ontimize:delete"></o-table-button>
       </div>
       <div *ngIf="showTitle" class="table-title">
         {{ title | oTranslate }}
       </div>
       <span class="fill-remaining"></span>
-      <o-table-quickfilter *ngIf="quickFilter" (onChange)="reloadPaginatedDataFromStart($event)"></o-table-quickfilter>
+      <o-table-quickfilter *ngIf="quickFilter" (onChange)="reloadPaginatedDataFromStart()"></o-table-quickfilter>
       <button *ngIf="showTableMenuButton" mat-icon-button class="o-table-menu-button" [matMenuTriggerFor]="menu">
-        <mat-icon>more_vert</mat-icon>
+        <mat-icon svgIcon="ontimize:more_vert"></mat-icon>
       </button>
       <mat-menu #menu="matMenu" x-position="before" class="o-table-menu">
-        <o-table-option *ngIf="selectAllCheckbox" (onClick)="onShowsSelects($event)" label="TABLE.BUTTONS.SELECT" show-active-icon="true">
+        <o-table-option *ngIf="selectAllCheckbox" [active]="!!state['select-column-visible']" (onClick)="onShowsSelects($event)"
+          label="TABLE.BUTTONS.SELECT" show-active-icon="true">
         </o-table-option>
         <o-table-option *ngIf="exportButton" (onClick)="onExportButtonClicked()" label="TABLE.BUTTONS.EXPORT"> </o-table-option>
         <o-table-option *ngIf="columnsVisibilityButton" (onClick)="onChangeColumnsVisibilityClicked()" label="TABLE.BUTTONS.COLVIS">
@@ -28,110 +30,118 @@
       </mat-menu>
     </div>
 
-    <mat-table #tableHeader matSort [class]="rowHeight" class="header-fixed" [class.mat-table]="true">
-      <!--Checkbox Column -->
-      <ng-container [matColumnDef]="oTableOptions.selectColumn.name" *ngIf="oTableOptions.selectColumn.visible">
-        <mat-header-cell *matHeaderCellDef>
-          <mat-checkbox (click)="$event.stopPropagation()" (change)="masterToggle($event)" [checked]="isAllSelected()" [indeterminate]="selection.hasValue() && !isAllSelected()"></mat-checkbox>
-        </mat-header-cell>
-      </ng-container>
+    <div #tableBody fxLayout="column" fxLayoutAlign="start stretch" class="o-table-body o-scroll" [class.horizontal-scroll]="horizontalScroll"
+      [class.scrolled]="horizontalScrolled">
 
-      <!-- Generic column definition -->
-      <ng-container *ngFor="let column of oTableOptions.columns" [matColumnDef]="column.name">
-        <ng-container *ngIf="column.orderable">
-          <mat-header-cell *matHeaderCellDef mat-sort-header [fxFlex]="column.width" [class.active-sort]="isColumnSortActive(column)"
-            [class.desc]="isColumnDescSortActive(column)">
-            <mat-icon *ngIf="isColumnFilterable(column)" class="column-filter-icon" [class.active]="isColumnFilterActive(column)" (click)="openColumnFilterDialog(column, $event)">filter_list</mat-icon>
-            {{ column.title | oTranslate }}
+      <mat-table #tableHeader matSort [class]="rowHeight" [class.header-fixed]="fixedHeader" [class.mat-table]="true">
+        <!--Checkbox Column -->
+        <ng-container [matColumnDef]="oTableOptions.selectColumn.name" *ngIf="oTableOptions.selectColumn.visible">
+          <mat-header-cell *matHeaderCellDef>
+            <mat-checkbox (click)="$event.stopPropagation()" (change)="masterToggle($event)" [checked]="isAllSelected()" [indeterminate]="selection.hasValue() && !isAllSelected()"></mat-checkbox>
           </mat-header-cell>
         </ng-container>
-        <ng-container *ngIf="!column.orderable">
-          <mat-header-cell *matHeaderCellDef [fxFlex]="column.width">
-            <mat-icon *ngIf="isColumnFilterable(column)" class="column-filter-icon" [class.active]="isColumnFilterActive(column)" (click)="openColumnFilterDialog(column, $event)">filter_list</mat-icon>
-            {{ column.title | oTranslate }}
-          </mat-header-cell>
+
+        <!-- Generic column definition -->
+        <ng-container *ngFor="let column of oTableOptions.columns" [matColumnDef]="column.name">
+          <ng-container *ngIf="column.orderable">
+            <mat-header-cell *matHeaderCellDef mat-sort-header [fxFlex]="column.width" [style.min-width]="column.getMinWidth()" [class.active-sort]="isColumnSortActive(column)"
+              [class.desc]="isColumnDescSortActive(column)">
+              <mat-icon *ngIf="isColumnFilterable(column)" class="column-filter-icon" [class.active]="isColumnFilterActive(column)" (click)="openColumnFilterDialog(column, $event)"
+                svgIcon="ontimize:filter_list"></mat-icon>
+              {{ column.title | oTranslate }}
+            </mat-header-cell>
+          </ng-container>
+          <ng-container *ngIf="!column.orderable">
+            <mat-header-cell *matHeaderCellDef [fxFlex]="column.width" [style.min-width]="column.getMinWidth()">
+              <mat-icon *ngIf="isColumnFilterable(column)" class="column-filter-icon" [class.active]="isColumnFilterActive(column)" (click)="openColumnFilterDialog(column, $event)"
+                svgIcon="ontimize:filter_list"></mat-icon>
+              {{ column.title | oTranslate }}
+            </mat-header-cell>
+          </ng-container>
         </ng-container>
-      </ng-container>
 
-      <mat-header-row *matHeaderRowDef="oTableOptions.visibleColumns"></mat-header-row>
+        <mat-header-row *matHeaderRowDef="oTableOptions.visibleColumns"></mat-header-row>
 
+      </mat-table>
 
-    </mat-table>
-
-    <!--TABLE EMPTY-->
-    <div class="mat-row o-table-no-results {{ rowHeight }}" *ngIf="dataSource !== undefined && dataSource.resultsLength === 0"
-      fxLayoutAlign="center center">
-      {{'TABLE.EMPTY' | oTranslate}}
-      <ng-container *ngIf="quickFilter && oTableQuickFilterComponent && oTableQuickFilterComponent.value && oTableQuickFilterComponent.value.length > 0">
-        {{ 'TABLE.EMPTY_USING_FILTER' | oTranslate : { values: [oTableQuickFilterComponent.value] } }}
-      </ng-container>
-    </div>
-
-    <!-- TABLE EDITABLE ROW position: first -->
-    <o-table-editable-row [datasource]="dataSource" *ngIf="showFirstInsertableRow">
-    </o-table-editable-row>
-
-    <mat-table #table [trackBy]="getTrackByFunction()" [dataSource]="dataSource" matSort [class]="rowHeight" [class.content-table]="true"
-      [class.mat-table]="true">
-      <!--Checkbox Column -->
-      <ng-container [matColumnDef]="oTableOptions.selectColumn.name" *ngIf="oTableOptions.selectColumn.visible">
-        <mat-header-cell *matHeaderCellDef>
-          <mat-checkbox (click)="$event.stopPropagation()" (change)="masterToggle($event)" [checked]="isAllSelected()" [indeterminate]="selection.hasValue() && !isAllSelected()"></mat-checkbox>
-        </mat-header-cell>
-        <mat-cell *matCellDef="let row">
-          <mat-checkbox name="id[]" (click)="$event.stopPropagation()" (change)="selectionCheckboxToggle($event, row)" [checked]="selection.isSelected(row)">
-          </mat-checkbox>
-        </mat-cell>
-      </ng-container>
-
-      <!-- Generic column definition -->
-      <ng-container *ngFor="let column of oTableOptions.columns" [matColumnDef]="column.name">
-        <ng-container *ngIf="column.orderable">
-          <mat-header-cell *matHeaderCellDef mat-sort-header [fxFlex]="column.width">
-            <mat-icon *ngIf="isColumnFilterable(column)" class="column-filter-icon" [class.active]="isColumnFilterActive(column)" (click)="openColumnFilterDialog(column, $event)">filter_list</mat-icon>
-            {{ column.title | oTranslate }}
-          </mat-header-cell>
+      <!--TABLE EMPTY-->
+      <div class="mat-row o-table-no-results {{ rowHeight }}" *ngIf="dataSource !== undefined && dataSource.resultsLength === 0"
+        fxLayoutAlign="center center">
+        {{'TABLE.EMPTY' | oTranslate}}
+        <ng-container *ngIf="quickFilter && oTableQuickFilterComponent && oTableQuickFilterComponent.value && oTableQuickFilterComponent.value.length > 0">
+          {{ 'TABLE.EMPTY_USING_FILTER' | oTranslate : { values: [oTableQuickFilterComponent.value] } }}
         </ng-container>
-        <ng-container *ngIf="!column.orderable">
-          <mat-header-cell *matHeaderCellDef [fxFlex]="column.width">
-            <mat-icon *ngIf="isColumnFilterable(column)" class="column-filter-icon" [class.active]="isColumnFilterActive(column)" (click)="openColumnFilterDialog(column, $event)">filter_list</mat-icon>
-            {{ column.title | oTranslate }}
-          </mat-header-cell>
-        </ng-container>
-        <mat-cell *matCellDef="let row" #cell [fxFlex]="column.width" [ngClass]="column.className" (click)="handleCellClick(column, row, $event)"
-          (dblclick)="handleCellDoubleClick(column, row, $event)">
+      </div>
 
-          <ng-container *ngIf="usePlainRender(column, row)">
-            {{ row[column.name] }}
+      <!-- TABLE EDITABLE ROW position: first -->
+      <o-table-editable-row [datasource]="dataSource" *ngIf="showFirstInsertableRow"></o-table-editable-row>
+
+      <mat-table #table [trackBy]="getTrackByFunction()" [dataSource]="dataSource" matSort [class]="rowHeight" [class.content-table]="true"
+        [class.mat-table]="true">
+        <!--Checkbox Column -->
+        <ng-container [matColumnDef]="oTableOptions.selectColumn.name" *ngIf="oTableOptions.selectColumn.visible">
+          <mat-header-cell *matHeaderCellDef>
+            <mat-checkbox (click)="$event.stopPropagation()" (change)="masterToggle($event)" [checked]="isAllSelected()" [indeterminate]="selection.hasValue() && !isAllSelected()"></mat-checkbox>
+          </mat-header-cell>
+          <mat-cell *matCellDef="let row">
+            <mat-checkbox name="id[]" (click)="$event.stopPropagation()" (change)="selectionCheckboxToggle($event, row)" [checked]="selection.isSelected(row)">
+            </mat-checkbox>
+          </mat-cell>
+        </ng-container>
+
+        <!-- Generic column definition -->
+        <ng-container *ngFor="let column of oTableOptions.columns" [matColumnDef]="column.name">
+          <ng-container *ngIf="column.orderable">
+            <mat-header-cell *matHeaderCellDef mat-sort-header [fxFlex]="column.width" [style.min-width]="column.getMinWidth()">
+              <mat-icon *ngIf="isColumnFilterable(column)" class="column-filter-icon" [class.active]="isColumnFilterActive(column)" (click)="openColumnFilterDialog(column, $event)"
+                svgIcon="ontimize:filter_list"></mat-icon>
+              {{ column.title | oTranslate }}
+            </mat-header-cell>
+          </ng-container>
+          <ng-container *ngIf="!column.orderable">
+            <mat-header-cell *matHeaderCellDef [fxFlex]="column.width" [style.min-width]="column.getMinWidth()">
+              <mat-icon *ngIf="isColumnFilterable(column)" class="column-filter-icon" [class.active]="isColumnFilterActive(column)" (click)="openColumnFilterDialog(column, $event)"
+                svgIcon="ontimize:filter_list"></mat-icon>
+              {{ column.title | oTranslate }}
+            </mat-header-cell>
           </ng-container>
 
-          <ng-template *ngIf="useCellRenderer(column, row)" [ngTemplateOutlet]="column.renderer.templateref" [ngTemplateOutletContext]="{ cellvalue: row[column.name], rowvalue:row }">
-          </ng-template>
+          <mat-cell *matCellDef="let row" #cell [fxFlex]="column.width" [style.min-width]="column.getMinWidth()" [ngClass]="column.className"
+            (click)="handleCellClick(column, row, $event)" (dblclick)="handleCellDoubleClick(column, row, $event)" [class.empty-cell]="isEmpty(row[column.name])"
+            [matTooltipDisabled]="!column.hasTooltip()" [matTooltip]="column.getTooltip(row)" matTooltipPosition="below" matTooltipShowDelay="750"
+            matTooltipClass="o-table-cell-tooltip">
 
-          <ng-template *ngIf="useCellEditor(column, row)" [ngTemplateOutlet]="column.editor.templateref" [ngTemplateOutletContext]="{ cellvalue: row[column.name], rowvalue:row }">
-          </ng-template>
+            <ng-container *ngIf="usePlainRender(column, row)">
+              {{ row[column.name] }}
+            </ng-container>
 
-        </mat-cell>
-      </ng-container>
+            <ng-template *ngIf="useCellRenderer(column, row)" [ngTemplateOutlet]="column.renderer.templateref" [ngTemplateOutletContext]="{ cellvalue: row[column.name], rowvalue:row }">
+            </ng-template>
 
-      <mat-header-row *matHeaderRowDef="[]" style.display="none"></mat-header-row>
+            <ng-template *ngIf="useCellEditor(column, row)" [ngTemplateOutlet]="column.editor.templateref" [ngTemplateOutletContext]="{ cellvalue: row[column.name], rowvalue:row }">
+            </ng-template>
 
-      <mat-row *matRowDef="let row; columns: oTableOptions.visibleColumns;" (click)="handleClick(row, $event)" (dblclick)="handleDoubleClick(row, $event)"
-        [oContextMenu]="tableContextMenu" [oContextMenuData]="row" [class.selected]="!isSelectionModeNone() && isSelected(row)">
-      </mat-row>
+          </mat-cell>
+        </ng-container>
 
-    </mat-table>
+        <mat-header-row *matHeaderRowDef="[]" style.display="none"></mat-header-row>
 
-    <!--TABLE AGGREGATE-->
-    <o-table-aggregate [o-table-options]="oTableOptions" [datasource]="dataSource" *ngIf="showTotals"> </o-table-aggregate>
+        <o-table-row *matRowDef="let row; columns: oTableOptions.visibleColumns;" (click)="handleClick(row, $event)" (dblclick)="handleDoubleClick(row, $event)"
+          [oContextMenu]="tableContextMenu" [oContextMenuData]="row" [class.selected]="!isSelectionModeNone() && isSelected(row)">
+        </o-table-row>
 
-    <!-- TABLE EDITABLE ROW position: last -->
-    <o-table-editable-row [datasource]="dataSource" *ngIf="showLastInsertableRow">
-    </o-table-editable-row>
+      </mat-table>
 
-    <!--LOADING-->
-    <div *ngIf="daoTable.isLoadingResults" class="spinner-container">
-      <mat-progress-spinner mode="indeterminate" *ngIf="daoTable.isLoadingResults" strokeWidth="3"></mat-progress-spinner>
+      <!--TABLE AGGREGATE-->
+      <o-table-aggregate [o-table-options]="oTableOptions" [datasource]="dataSource" *ngIf="showTotals"> </o-table-aggregate>
+
+      <!-- TABLE EDITABLE ROW position: last -->
+      <o-table-editable-row [datasource]="dataSource" *ngIf="showLastInsertableRow"></o-table-editable-row>
+
+      <!--LOADING-->
+      <div *ngIf="daoTable.isLoadingResults" class="spinner-container">
+        <mat-progress-spinner mode="indeterminate" *ngIf="daoTable.isLoadingResults" strokeWidth="3"></mat-progress-spinner>
+      </div>
     </div>
 
     <!--TABLE PAGINATOR-->

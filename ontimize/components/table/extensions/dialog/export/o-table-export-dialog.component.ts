@@ -2,7 +2,7 @@ import { Component, Inject, Injector, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA, MatButton } from '@angular/material';
 
 import { DialogService, OExportExtension, OntimizeExportService, OTranslateService } from '../../../../../services';
-import { SQLTypes, Util } from '../../../../../utils';
+import { SQLTypes, Util, Codes } from '../../../../../utils';
 import { HttpErrorResponse } from '@angular/common/http';
 
 export class OTableExportConfiguration {
@@ -66,20 +66,19 @@ export class OTableExportDialogComponent implements OnInit {
     };
     let self = this;
     this.proccessExportData(exportData.data, exportData.sqlTypes);
-    this.exportService.exportData(exportData, OExportExtension.Excel).subscribe(
-      (resp) => {
-        if (resp.code === 0) {
-          self.exportService.downloadFile(resp.data[0]['xslxId'], OExportExtension.Excel).subscribe(
-            () => self.dialogRef.close(true),
-            downloadError => {
-              console.log(downloadError);
-              self.dialogRef.close(false);
-            }
-          );
-        } else {
-          self.dialogService.alert('ERROR', resp.message).then(() => self.dialogRef.close(false));
-        }
-      },
+    this.exportService.exportData(exportData, OExportExtension.Excel).subscribe((resp) => {
+      if (resp.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) {
+        self.exportService.downloadFile(resp.data[0]['xslxId'], OExportExtension.Excel).subscribe(
+          () => self.dialogRef.close(true),
+          downloadError => {
+            console.log(downloadError);
+            self.dialogRef.close(false);
+          }
+        );
+      } else {
+        self.dialogService.alert('ERROR', resp.message).then(() => self.dialogRef.close(false));
+      }
+    },
       (err) => self.handleError(err)
     );
   }
@@ -96,7 +95,7 @@ export class OTableExportDialogComponent implements OnInit {
     this.proccessExportData(exportData.data, exportData.sqlTypes);
     this.exportService.exportData(exportData, OExportExtension.HTML).subscribe(
       (resp) => {
-        if (resp.code === 0) {
+        if (resp.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) {
           self.exportService.downloadFile(resp.data[0]['htmlId'], OExportExtension.HTML).subscribe(
             () => self.dialogRef.close(true),
             downloadError => {
@@ -124,7 +123,7 @@ export class OTableExportDialogComponent implements OnInit {
     this.proccessExportData(exportData.data, exportData.sqlTypes);
     this.exportService.exportData(exportData, OExportExtension.PDF).subscribe(
       (resp) => {
-        if (resp.code === 0) {
+        if (resp.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) {
           self.exportService.downloadFile(resp.data[0]['pdfId'], OExportExtension.PDF).subscribe(
             () => self.dialogRef.close(true),
             downloadError => {

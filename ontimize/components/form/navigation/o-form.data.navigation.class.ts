@@ -1,5 +1,4 @@
-import { ILocalStorageComponent } from '../../../components/o-service-component.class';
-import { LocalStorageService } from '../../../services';
+import { LocalStorageService, ILocalStorageComponent } from '../../../services';
 
 export class OFormDataNavigation implements ILocalStorageComponent {
   protected state: any = [];
@@ -14,6 +13,7 @@ export class OFormDataNavigation implements ILocalStorageComponent {
       self.localStorageService.updateComponentStorage(self, false);
     });
   }
+
   getComponentKey(): string {
     return 'navigation-data';
   }

@@ -1,31 +1,23 @@
-import {
-  Component,
-  ElementRef,
-  EventEmitter,
-  forwardRef,
-  Inject,
-  Injector,
-  OnInit,
-  ViewChild,
-  Optional,
-  NgModule,
-  ViewEncapsulation
-} from '@angular/core';
+import { Component, ElementRef, EventEmitter, forwardRef, Inject, Injector, NgModule, Optional, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatSelect, MatOption } from '@angular/material';
+import { MatOption, MatSelect, MatSelectChange } from '@angular/material';
 
-import { OntimizeService, dataServiceFactory } from '../../../services';
-import { OSharedModule } from '../../../shared';
-
-import { InputConverter } from '../../../decorators';
+import { Util } from '../../../util/util';
+import { Codes } from '../../../util/codes';
 import { OFormComponent } from '../../form/o-form.component';
-import { OFormValue } from '../../form/OFormValue';
-import { OFormServiceComponent } from '../../o-form-service-component.class';
+import { OSharedModule } from '../../../shared/shared.module';
+import { InputConverter } from '../../../decorators/input-converter';
+import { OntimizeService } from '../../../services/ontimize.service';
+import { IFormValueOptions, OFormValue } from '../../form/OFormValue';
+import { OFormServiceComponent } from '../o-form-service-component.class';
+import { dataServiceFactory } from '../../../services/data-service.provider';
 
 export const DEFAULT_INPUTS_O_COMBO = [
   ...OFormServiceComponent.DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT,
   'translate',
-  'nullSelection: null-selection'
+  'multiple',
+  'nullSelection: null-selection',
+  'multipleTriggerLabel: multiple-trigger-label'
 ];
 
 export const DEFAULT_OUTPUTS_O_COMBO = [
@@ -40,10 +32,9 @@ export const DEFAULT_OUTPUTS_O_COMBO = [
   inputs: DEFAULT_INPUTS_O_COMBO,
   outputs: DEFAULT_OUTPUTS_O_COMBO,
   templateUrl: './o-combo.component.html',
-  styleUrls: ['./o-combo.component.scss'],
-  encapsulation: ViewEncapsulation.None
+  styleUrls: ['./o-combo.component.scss']
 })
-export class OComboComponent extends OFormServiceComponent implements OnInit {
+export class OComboComponent extends OFormServiceComponent {
 
   public static DEFAULT_INPUTS_O_COMBO = DEFAULT_INPUTS_O_COMBO;
   public static DEFAULT_OUTPUTS_O_COMBO = DEFAULT_OUTPUTS_O_COMBO;
@@ -53,6 +44,10 @@ export class OComboComponent extends OFormServiceComponent implements OnInit {
   protected translate: boolean = false;
   @InputConverter()
   protected nullSelection: boolean = true;
+  @InputConverter()
+  multiple: boolean;
+  @InputConverter()
+  multipleTriggerLabel: boolean = false;
   /* End inputs*/
 
   value: OFormValue;
@@ -68,13 +63,27 @@ export class OComboComponent extends OFormServiceComponent implements OnInit {
   constructor(
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
     elRef: ElementRef,
-    injector: Injector) {
+    injector: Injector
+  ) {
     super(form, elRef, injector);
     this.defaultValue = '';
   }
 
-  ngOnInit() {
-    this.initialize();
+  ngAfterViewInit(): void {
+    if (this.queryOnInit) {
+      this.queryData();
+    } else if (this.queryOnBind) {
+      //TODO do it better. When changing tabs it is necessary to invoke new query
+      this.syncDataIndex();
+    }
+  }
+
+  initialize() {
+    super.initialize();
+    if (this.multiple) {
+      this.nullSelection = false;
+      this.defaultValue = [];
+    }
   }
 
   ensureOFormValue(value: any) {
@@ -94,15 +103,6 @@ export class OComboComponent extends OFormServiceComponent implements OnInit {
     this.destroy();
   }
 
-  ngAfterViewInit(): void {
-    if (this.queryOnInit) {
-      this.queryData();
-    } else if (this.queryOnBind) {
-      //TODO do it better. When changing tabs it is necessary to invoke new query
-      this.syncDataIndex();
-    }
-  }
-
   hasNullSelection(): boolean {
     return this.nullSelection;
   }
@@ -119,27 +119,27 @@ export class OComboComponent extends OFormServiceComponent implements OnInit {
     let descTxt = '';
     if (this._currentIndex !== undefined && this.selectModel) {
       if (this.selectModel.selected) {
-        descTxt = (this.selectModel.selected as any).viewValue;
+        if (this.selectModel.selected instanceof Array) {
+          if (this.multipleTriggerLabel && this.selectModel.selected.length > 1) {
+            descTxt = this.getFirstSelectedValue();
+            descTxt += this.translateService.get('INPUT.COMBO.MESSAGE_TRIGGER', [this.selectModel.selected.length - 1]);
+          } else {
+            this.selectModel.selected.forEach((item) => {
+              if (descTxt !== '') {
+                descTxt += this.separator;
+              }
+              descTxt += item.viewValue;
+            });
+          }
+        } else {
+          descTxt = (this.selectModel.selected as any).viewValue;
+        }
       } else if (this.selectModel.options) {
         let option: MatOption = this.selectModel.options.toArray()[this._currentIndex];
         if (option) {
           option.select();
           descTxt = option.viewValue;
         }
-      }
-
-    }
-    /*
-    * Temporary code
-    * I do not understand the reason why MatInput is not removing 'mat-empty' clase despite of the fact that
-    * the input element of the description is binding value attribute
-    */
-    let placeHolderLbl = this.elRef.nativeElement.querySelectorAll('label.mat-input-placeholder');
-    if (placeHolderLbl.length) {
-      // Take only first, nested element does not matter.
-      let element = placeHolderLbl[0];
-      if (descTxt && descTxt.length > 0) {
-        element.classList.remove('mat-empty');
       }
     }
     return descTxt;
@@ -149,31 +149,63 @@ export class OComboComponent extends OFormServiceComponent implements OnInit {
     if (this.value instanceof OFormValue) {
       if (this.value.value !== undefined) {
         return this.value.value;
-      } else if (this.value.value === undefined && this.nullSelection) {
-        return null;
+      } else if (this.value.value === undefined) {
+        return this.getEmptyValue();
       }
-    }
-    if (this.nullSelection) {
-      return null;
     }
     return '';
   }
 
-  innerOnChange(event: any): void {
-    if (((event === undefined || event === null) || (typeof event === 'string' && event.length === 0)) && this.nullSelection) {
-      this.setValueOnChange(null);
+  getEmptyValue() {
+    if (this.multiple) {
+      return [];
     } else {
-      // This emits the combo value, the record data may not be available.
-      this.setValueOnChange(event);
+      if (this.nullSelection) {
+        return null;
+      } else {
+        return '';
+      }
     }
   }
 
-  setValueOnChange(value: any) {
-    this.ensureOFormValue(value);
+  clearValue(): void {
+    if (this.multiple) {
+      this.setValue(this.defaultValue);
+    } else {
+      super.clearValue();
+    }
+  }
+
+  getMultiple(): boolean {
+    return this.multiple;
+  }
+
+  protected parseByValueColumnType(val: any) {
+    if (!Util.isDefined(this.multiple)) {
+      return val;
+    }
+    let valueArr: any[] = this.multiple ? val : [val];
+    if (this.valueColumnType === Codes.TYPE_INT) {
+      valueArr.forEach((item, index) => {
+        const parsed = parseInt(item);
+        if (!isNaN(parsed)) {
+          valueArr[index] = parsed;
+        }
+      });
+    }
+    return this.multiple ? valueArr : valueArr[0];
+  }
+
+  onSelectionChange(event: MatSelectChange): void {
+    this.innerOnChange(event.value);
+  }
+
+  innerOnChange(event: any) {
+    this.ensureOFormValue(event);
     if (this._fControl && this._fControl.touched) {
       this._fControl.markAsDirty();
     }
-    this.onChange.emit(value);
+    this.onChange.emit(event);
   }
 
   getOptionDescriptionValue(item: any = {}) {
@@ -220,13 +252,39 @@ export class OComboComponent extends OFormServiceComponent implements OnInit {
     return selected;
   }
 
-  setValue(val: any): void {
+  setValue(val: any, options?: IFormValueOptions): void {
     if (this.dataArray) {
-      const record = this.dataArray.find(item => item[this.valueColumn] === val);
-      if (record) {
-        super.setValue(val);
+      if (!this.multiple) {
+        if (!Util.isDefined(val)) {
+          if (this.nullSelection) {
+            super.setValue(val, options);
+          } else {
+            console.warn('`o-combo` with attr ' + this.oattr + ' cannot be cleared. `null-selection` attribute is false.');
+          }
+        } else {
+          const record = this.dataArray.find(item => item[this.valueColumn] === val);
+          if (record) {
+            super.setValue(val, options);
+          }
+        }
+      } else {
+        if (Util.isDefined(val)) {
+          super.setValue(val, options);
+        }
       }
     }
+  }
+
+  getSelectedItems(): any[] {
+    return this.getValue();
+  }
+
+  setSelectedItems(values: any[]) {
+    this.setValue(values);
+  }
+
+  getFirstSelectedValue() {
+    return this.selectModel.selected[0].viewValue;
   }
 
 }
@@ -236,5 +294,4 @@ export class OComboComponent extends OFormServiceComponent implements OnInit {
   imports: [OSharedModule, CommonModule],
   exports: [OComboComponent]
 })
-export class OComboModule {
-}
+export class OComboModule { }

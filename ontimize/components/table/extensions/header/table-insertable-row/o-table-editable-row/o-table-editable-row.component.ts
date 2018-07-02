@@ -1,6 +1,6 @@
-import { Component, Injector, Inject, forwardRef, ViewEncapsulation, ElementRef, ChangeDetectionStrategy, ComponentFactoryResolver, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, Injector, Inject, forwardRef, ViewEncapsulation, ElementRef, ChangeDetectionStrategy, ComponentFactoryResolver, ViewChild, ViewContainerRef, ChangeDetectorRef } from '@angular/core';
 import { FormControl, ValidatorFn, Validators } from '@angular/forms';
-import { ObservableWrapper } from '../../../../../../utils';
+import { ObservableWrapper, Util } from '../../../../../../utils';
 import { SnackBarService, OTranslateService } from '../../../../../../services';
 import { OTableEditableRowDataSource, OTableDataSource } from '../../../../o-table.datasource';
 import { OTableComponent, OTableOptions, OColumn } from '../../../../o-table.component';
@@ -52,6 +52,7 @@ export class OTableEditableRowComponent {
     protected injector: Injector,
     protected elRef: ElementRef,
     protected resolver: ComponentFactoryResolver,
+    public cd: ChangeDetectorRef,
     @Inject(forwardRef(() => OTableColumnComponent)) protected tableColumn: OTableColumnComponent
   ) {
     this.snackBarService = this.injector.get(SnackBarService);
@@ -198,21 +199,23 @@ export class OTableEditableRowComponent {
   }
 
   useCellEditor(column: OColumn): boolean {
-    return this._insertableRowTable.isColumnInsertable(column) && column.editor !== undefined;
+    return this._insertableRowTable.isColumnInsertable(column) && Util.isDefined(column.editor);
   }
 
   initializeEditors(): void {
     const self = this;
     this.table.oTableOptions.columns.forEach(col => {
       if (self.useCellEditor(col)) {
-        const editor: OBaseTableCellEditor = this.tableColumn.buildCellEditor(col.type, this.resolver, this.container, col.editor);
+        const columnEditorType = col.editor.type || col.type;
+        const editor: OBaseTableCellEditor = this.tableColumn.buildCellEditor(columnEditorType, this.resolver, this.container, col.editor);
         this.columnEditors[col.attr] = editor;
+        editor.registerInColumn = false;
         editor.showPlaceHolder = this._insertableRowTable.showPlaceHolder || editor.showPlaceHolder;
         editor.tableColumn = col.editor.tableColumn;
         editor.orequired = this.isColumnRequired(col);
         editor.formControl = this.getControl(col);
         editor.controlArgs = { silent: true };
-        editor.startEdtion(self.rowData);
+        editor.startEdition(self.rowData);
         editor.formControl.markAsUntouched();
       }
     });
@@ -221,6 +224,6 @@ export class OTableEditableRowComponent {
   getPlaceholder(column: OColumn): string {
     const cellEditor = this.columnEditors[column.attr];
     const showPlaceHolder = cellEditor ? cellEditor.showPlaceHolder : (this._insertableRowTable.showPlaceHolder || column.definition.showPlaceHolder);
-    return showPlaceHolder ? this.translateService.get(column.attr) : undefined;
+    return showPlaceHolder ? this.translateService.get(column.title) : undefined;
   }
 }

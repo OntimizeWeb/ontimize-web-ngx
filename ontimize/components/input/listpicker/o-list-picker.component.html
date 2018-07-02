@@ -1,16 +1,21 @@
 <div fxLayout="row" fxLayoutAlign="space-between center" [formGroup]="getFormGroup()" [matTooltip]="tooltip" [matTooltipPosition]="tooltipPosition"
-    [matTooltipShowDelay]="tooltipShowDelay" class="custom-error o-list-picker-content">
-    <input matInput #inputModel class="input-model" type="text" [attr.id]="getAttribute()" [id]="getAttribute()" [formControlName]="getAttribute()"
-        [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)">
+  [matTooltipShowDelay]="tooltipShowDelay" class="custom-error o-list-picker-content">
+  <input #inputModel class="input-model" type="text" [attr.id]="getAttribute()" [id]="getAttribute()" [formControlName]="getAttribute()"
+    [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)">
 
-    <mat-form-field #innerInputContainer fxFlexFill>
-        <input matInput type="text" [attr.id]="'desc_' + getAttribute()" [id]="'desc_' + getAttribute()" [placeholder]="placeHolder"
-            [value]="getDescriptionValue()" (input)="onVisibleInputChange($event)" (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)"
-            [readonly]="isReadOnly" [disabled]="isDisabled" [required]="isRequired" #visibleInput (keydown.enter)="onKeydownEnter(visibleInput.value)">
-        <mat-icon [class.mat-disabled]="isDisabled" (click)="onClickListpicker($event)" matSuffix>search</mat-icon>
-        <mat-icon [class.mat-disabled]="isDisabled" (click)="onClickClear($event)" matSuffix>clear</mat-icon>
-        <mat-hint *ngIf="hasError('required')">
-            <span>{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</span>
-        </mat-hint>
-    </mat-form-field>
+  <mat-form-field [class.custom-width]="hasCustomWidth" class="icon-field" #innerInputContainer fxFlexFill>
+    <input matInput type="text" [attr.id]="'desc_' + getAttribute()" [id]="'desc_' + getAttribute()" [placeholder]="placeHolder"
+      [value]="getDescriptionValue()" (input)="onVisibleInputChange($event)" (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)"
+      [readonly]="isReadOnly" [formControlName]="getAttribute()" [required]="isRequired" #visibleInput (keydown.enter)="onKeydownEnter(visibleInput.value)">
+
+    <button [disabled]="isReadOnly || isDisabled" [class.read-only]="isReadOnly" matSuffix mat-icon-button (click)="onClickListpicker($event)">
+      <mat-icon svgIcon="ontimize:search"></mat-icon>
+    </button>
+
+    <button [disabled]="isReadOnly || isDisabled" [class.read-only]="isReadOnly" matSuffix mat-icon-button (click)="onClickClear($event)">
+      <mat-icon svgIcon="ontimize:clear"></mat-icon>
+    </button>
+
+    <mat-error *ngIf="hasError('required')">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</mat-error>
+  </mat-form-field>
 </div>

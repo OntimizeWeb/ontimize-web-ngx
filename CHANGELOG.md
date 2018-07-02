@@ -1,4 +1,89 @@
-## 3.0.0-rc.0  (2018-04-30)
+## 3.0.0-rc.1 (2018-07-02)
+
+### Features
+* **OFormServiceComponent**: ('*o-combo*' and '*o-list-picker*' extends this class) adding '*getSelectedRecord*' method for getting the selected value associated data. This is a object including all the properties definied in the '*columns*' input ([e513805](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e513805)) ([#162](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/162))
+* **OServiceComponent**: ('*o-list*' and '*o-table*' extends this class) double click mode (used in '*detail-mode*' and '*edition-mode' input) allows '*dblclick*' and '*doubleclick*' values.
+* **Codes**: Creating '*codes*' util class for general variables and types definitions ([9e20235](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9e20235)) ([d2f2060](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d2f2060))
+* **o-service-base-component.class**: new '*OServiceBaseComponent*' parent class for components using Ontimize services ('*o-list*' and '*o-table*')([70271b7](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/70271b7))
+  * new '*store-state*' input ([35a523c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/35a523c)) ([#166](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/166))
+  * new `query-with-null-parent-keys` attribute ([8ad7f8e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/8ad7f8e))
+* **o-table-column**:
+  * new '*addEditor*' static method that user '*must*' use in new cell editors constructor definitions ([f942c20](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f942c20))
+  * new '*tooltip*' input (default="no") for showing the cell value as tooltip ([e334539](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e334539]))
+    * new '*tooltip-value*' and '*tooltip-function*' inputs ([ddfa6a5](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ddfa6a5]))
+  * new '*sql-type*' attribute. Indicates the sql type for the data represented in that column ([64efcbc](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/64efcbc))
+  * new '*min-width*' input ([1d0c63d]](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1d0c63d]))
+* **o-table-columns-filter**: added '*preload-values*' attribute ([a52b5cd](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a52b5cd))
+* **o-table**:
+  * allowing to live edit the quick filter columns ([2be977e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2be977e)) ([23a73d4](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/23a73d4)) ([08447e3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/08447e3))
+  * new '*horizonta-scroll*' input ([1d0c63d]](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1d0c63d]))
+* **MenuItem**:
+  * new '*show-in-card-menu*' input (default=true) indicating whether or not to show its correspondent '*o-card-menu-item*' ([374c408](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/374c408))
+  * new '*show-in-app-sidenav*' input (default=true) indicating whether or not to show its correspondent '*o-app-sidenav-menu-item*' ([dbb7f9a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/dbb7f9a))
+* **OFormDataComponent**:
+  * new '*width*' input in form inner components ([88d28cb](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/88d28cb)) ([d7b8307](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d7b8307))
+  * new optional '*options*' parameter in '*setValue*' method. This parameter must implement the new '*IFormValueOptions*' interface (same as angular FormControl '*setValue*' method '*options*' parameter, watch [here](https://angular.io/api/forms/FormControl#setValue)) ([e1a0e18](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e1a0e18))
+  * new '*read-only*' input in form inner components ([015c037](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/015c037))
+* **o-combo**: new  '*multiple*' and '*multiple-trigger-label*' inputs that allow multiple selection ([9c6eed3f] (https://github.com/OntimizeWeb/ontimize-web-ngx/tree/9c6eed3fd509cf7e7a4262936ceb9d617fe8a1a3))
+* New component **o-filter-builder** that allows building complex expressions using form components for filtering the `o-table` data. ([3874f70](https://github.com/OntimizeWeb/ontimize-web-ngx/tree/3874f70))
+* New directive **oFilterBuilderQuery** used with the `o-filter-builder` component for triggering the filter action. ([3874f70](https://github.com/OntimizeWeb/ontimize-web-ngx/tree/3874f70))
+* New directive **oFilterBuilderClear** used with the `o-filter-builderp` component for clearing the form components involved in the filtering. ([3874f70](https://github.com/OntimizeWeb/ontimize-web-ngx/tree/3874f70))
+* **ontimize-ee.service**, **ontimize.service**: new '*parseSuccessfulResponse*' and '*parseUnsuccessfulResponse*' methods ([6ab33d8](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6ab33d8))
+* **Inputs**:
+  * Added `clearValue` method to all input form components. ([ae92af5](https://github.com/OntimizeWeb/ontimize-web-ngx/tree/ae92af5))
+  * Added `show-clear` attribute to all input form component. ([9d274b0](https://github.com/OntimizeWeb/ontimize-web-ngx/tree/9d274b0))
+* **o-table-option**: new '*active*' input ([186c1cf](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/186c1cf))
+* **o-table-button**: adding '*svg-icon*' input ([bed3613](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/bed3613))
+* **icons**: new '*ontimize-icon-set.svg*' file that stores svg icons noew used in '*OntimizeWeb*' components.
+
+### Bug Fixes
+* **o-table**:
+  * '*reinitialize*' method added ([fbf4828](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/fbf4828)), closes [#149](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/149)
+  * fixing column change order bug ([4e23e3a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4e23e3a)) ([#168](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/168))
+  * fixing bug in custom cell editors creation ([f942c20](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f942c20)) ([#167](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/167))
+  * fixing translation bugs ([ffef427](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ffef427)) ([b3de673](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b3de673)) ([#170](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/170))
+  * empty cell edition bug ([e51783d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e51783d)) ([#164](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/164))
+  * paginator bug fixed (deleting '*show all*' records option) ([f448bfa](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f448bfa)) [#179](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/179)
+  * storing selection column state ([](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/)) [#189](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/189)
+* **o-table-cell-renderer-service**: fix undefined service provider ([a00a112](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a00a112)). Closes [#172](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/172)
+* **o-app-sidenav**:
+  * initialization bug fixed ([d150cb2](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d150cb2)) ([#165](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/165))
+  * initialization bug fixed ([eddfec3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/eddfec3)) ([#176](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/176))
+  * tooltip bug fixed ([35f0877](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/35f0877)), closes [#177](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/177)
+  * general bugs fixed ([20a3539](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/20a3539)), closes [#178](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/178)
+  * opened state bug fixed ([23635d3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/23635d3)), closes [#180](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/180)
+* **OServiceBaseComponent**: adding '*ngOnChanges*' method ([f93a1d0](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f93a1d0)) ([#174](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/174))
+* **OFormServiceComponent**: '*setData*' method bug fixed ([1aa9e17](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1aa9e17)) ([#173](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/173))
+* **ontimize-ee.service**: delete method bug fixed ([bea5277](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/bea5277)) ([#183](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/183))
+* **o-email-input**: validation bug fixed ([1a5be2a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1a5be2a)) ([#184](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/184))
+* **o-image**: new default '*BASE64*' '*sqlType*' ([26a1e5c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/26a1e5c)) ([#186](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/186))
+
+### BREAKING CHANGES
+* **o-table**:
+  * removing the option for showing all table records in the paginator ([f448bfa](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f448bfa))
+  * removing (unused) '*editable-columns*' input
+  * editors and renderers ([f942c20](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f942c20)):
+    * '*initialize*' method is now deprecated (user can still invoke it but it will do nothing)
+    * every new editor or renderer that uses '*ngOnInit*' method *must* init its implementation invoking '*super.ngOnInit()*'
+    * cell editors typo fixed: method '*startEdtion*' is now '*startEdition*'
+* **o-file-input**: method `clearData` is no longer available. Use `clearValue` instead. ([7000acc](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7000acc))
+* **o-real-input**, **o-currency-input**, **o-percentage-input**: attribute `decimal-digits` has been removed. ([f321543](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f321543))
+* **oReal**: real pipe (`ORealPipe`) arguments (`IRealPipeArgument`) has changed. Attribute `decimalDigits` is no longer available, use attributes `minDecimalDigits` and `maxDecimalDigits` instead. ([f321543](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f321543))
+* **.angular-cli.json**: in all your applications using *OntimizeWeb* you **MUST** add the following line in the '*.angular-cli.json*' file, otherwise all the components icons will not be loaded.
+```json
+...
+"assets": [
+...
+  { "glob": "**/*", "input": "../node_modules/ontimize-web-ngx/assets/", "output": "./assets/" },
+...
+]
+...
+```
+* removing the classes *o-form-toolbar-floating* and *o-form-toolbar-floating-scrolled*. New styles were applied *o-form-toolbar*, it is necessary to review the classes related to it ([5f8c96b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5f8c96b))
+
+**Note**: There is a new '*o-tree*' component, all its information will be available at [ontimize-web-ngx-tree](https://github.com/OntimizeWeb/ontimize-web-ngx-tree)
+
+## 3.0.0-rc.0 (2018-04-30)
 
 ### DEPENDENCY UPDATES ###
 * **Removed**:  dragula@^3.7.2
@@ -47,8 +132,10 @@ export const CONFIG: Config = {
 ### Bug Fixes
 * **o-combo**: Fixing change event emission ([a648c8b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a648c8b)) Closes [#152](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/152)
 * **o-form**: Fixing close dialog on ESC key event ([f789a64](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f789a64))
+* **o-list-picker**: fixing component bugs ([132bc4c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/132bc4c))
+* **o-form**: fixing dynamicform registration bugs ([d84fcbd]](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d84fcbd]))
 
-## 2.1.3 (2018-18-04)
+## 2.1.3 (2018-04-18)
 ### Features
 * **o-list-picker**:
   * There is a new '*query-rows*' (number) input. This input indicates how many elements are initially rendered in the list picker dialog. When the dialog scroll hits bottom a new set of elements are rendered ([8b1e4ef](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/8b1e4ef))

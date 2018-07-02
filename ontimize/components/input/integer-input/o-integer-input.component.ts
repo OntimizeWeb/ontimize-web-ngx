@@ -1,33 +1,15 @@
-import {
-  Component,
-  Inject,
-  Injector,
-  forwardRef,
-  ElementRef,
-  OnInit,
-  Optional,
-  NgModule,
-  ViewEncapsulation,
-  Renderer
-} from '@angular/core';
+import { AfterViewInit, Component, ElementRef, forwardRef, Inject, Injector, NgModule, OnInit, Optional, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl } from '@angular/forms';
 import { ValidatorFn } from '@angular/forms/src/directives/validators';
+
+import { Util } from '../../../util/util';
 import { OSharedModule } from '../../../shared';
-import { OFormComponent } from '../../form/o-form.component';
 import { OFormValue } from '../../form/OFormValue';
 import { InputConverter } from '../../../decorators';
-import {
-  OTextInputModule,
-  OTextInputComponent,
-  DEFAULT_INPUTS_O_TEXT_INPUT,
-  DEFAULT_OUTPUTS_O_TEXT_INPUT
-} from '../text-input/o-text-input.component';
-
-import {
-  OIntegerPipe,
-  IIntegerPipeArgument
-} from '../../../pipes';
+import { OFormComponent } from '../../form/o-form.component';
+import { IIntegerPipeArgument, OIntegerPipe } from '../../../pipes';
+import { DEFAULT_INPUTS_O_TEXT_INPUT, DEFAULT_OUTPUTS_O_TEXT_INPUT, OTextInputComponent, OTextInputModule, } from '../text-input/o-text-input.component';
 
 export const DEFAULT_INPUTS_O_INTEGER_INPUT = [
   ...DEFAULT_INPUTS_O_TEXT_INPUT,
@@ -51,18 +33,19 @@ export const DEFAULT_OUTPUTS_O_INTEGER_INPUT = [
   outputs: DEFAULT_OUTPUTS_O_INTEGER_INPUT,
   encapsulation: ViewEncapsulation.None
 })
-
-export class OIntegerInputComponent extends OTextInputComponent implements OnInit {
+export class OIntegerInputComponent extends OTextInputComponent implements AfterViewInit, OnInit {
 
   public static DEFAULT_INPUTS_O_INTEGER_INPUT = DEFAULT_INPUTS_O_INTEGER_INPUT;
   public static DEFAULT_OUTPUTS_O_INTEGER_INPUT = DEFAULT_OUTPUTS_O_INTEGER_INPUT;
+
+  inputType: string = 'number';
 
   @InputConverter()
   min: number;
   @InputConverter()
   max: number;
   @InputConverter()
-  step: number;
+  step: number = 1;
 
   @InputConverter()
   protected grouping: boolean = false;
@@ -71,11 +54,6 @@ export class OIntegerInputComponent extends OTextInputComponent implements OnIni
 
   protected componentPipe: OIntegerPipe;
   protected pipeArguments: IIntegerPipeArgument;
-  protected focused: boolean = false;
-  protected renderer: Renderer;
-  protected inputWidth;
-  protected avoidBlur: boolean = false;
-  protected changeTimeout: any;
 
   constructor(
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
@@ -83,8 +61,18 @@ export class OIntegerInputComponent extends OTextInputComponent implements OnIni
     injector: Injector
   ) {
     super(form, elRef, injector);
-    this.renderer = this.injector.get(Renderer);
+
+    // Firefox workaround
+    if (navigator.userAgent.toLowerCase().indexOf('firefox') > -1) {
+      this.inputType = 'text';
+    }
+
     this.setComponentPipe();
+  }
+
+  initialize(): void {
+    super.initialize();
+    this.initializeStep();
   }
 
   setComponentPipe() {
@@ -105,57 +93,27 @@ export class OIntegerInputComponent extends OTextInputComponent implements OnIni
     }
   }
 
-  getControl(): FormControl {
-    let control: FormControl = super.getControl();
-    if (control) {
-      control.statusChanges.debounceTime(100).subscribe(values => {
-        if (!this.focused) {
-          this.setPipeValue();
-        }
-      });
-    }
-    return control;
+  ngAfterViewInit(): void {
+    super.ngAfterViewInit();
+    this.setPipeValue();
   }
 
   innerOnChange(event: any) {
-    if (!this.value) {
-      this.value = new OFormValue();
+    // Ensure integer value
+    if (Util.isDefined(event)) {
+      event = parseInt(event, 10);
     }
-    if (this.focused) {
-      let parsedValue = this.componentPipe.transform(this.value.value, this.pipeArguments);
-      this.value.value = parsedValue;
-    }
-    this.ensureOFormValue(event);
-    this.onChange.emit(event);
-    this.registerInactivityCallback();
-  }
-
-  registerInactivityCallback() {
-    if (this.changeTimeout) {
-      clearInterval(this.changeTimeout);
-    }
-    const self = this;
-    function timerCallback() {
-      self.avoidBlur = false;
-      self.innerOnBlur();
-    }
-    this.changeTimeout = setTimeout(function () {
-      timerCallback();
-    }, 1000);
+    super.innerOnChange(event);
   }
 
   innerOnFocus(event: any) {
-    event.stopPropagation();
     event.preventDefault();
-    this.avoidBlur = true;
-    this.focused = true;
+    event.stopPropagation();
     if (this.isReadOnly) {
       return;
     }
     this.setNumberDOMValue(this.getValue());
-    if (!this.isReadOnly && !this.isDisabled) {
-      this.onFocus.emit(event);
-    }
+    super.innerOnFocus(event);
   }
 
   innerOnBlur(event?: any) {
@@ -163,22 +121,15 @@ export class OIntegerInputComponent extends OTextInputComponent implements OnIni
       event.stopPropagation();
       event.preventDefault();
     }
-    if (this.avoidBlur) {
-      this.registerInactivityCallback();
-      return;
-    }
-    this.focused = false;
     if (this.isReadOnly) {
       return;
     }
     this.setPipeValue();
-    let formControl = this.getControl();
+    let formControl: FormControl = this.getControl();
     if (formControl) {
       formControl.updateValueAndValidity();
     }
-    if (!this.isReadOnly && !this.isDisabled) {
-      this.onBlur.emit(event);
-    }
+    super.innerOnBlur(event);
   }
 
   setPipeValue() {
@@ -209,20 +160,22 @@ export class OIntegerInputComponent extends OTextInputComponent implements OnIni
 
   setNumberDOMValue(val: any) {
     const inputElement = this.getInputEl();
-    if (inputElement !== undefined) {
-      if (!this.inputWidth) {
-        this.inputWidth = inputElement.parentElement.parentElement.clientWidth;
+    if (Util.isDefined(inputElement)) {
+      // Firefox workaround
+      if (navigator.userAgent.toLowerCase().indexOf('firefox') === -1) {
+        inputElement.type = 'number';
       }
-      this.renderer.setElementStyle(this.elRef.nativeElement, 'width', (this.inputWidth + 'px'));
-      inputElement.type = 'number';
       inputElement.value = (val !== undefined) ? val : '';
     }
   }
 
   setTextDOMValue(val: any) {
-    const inputElement = this.getInputEl();
-    if (inputElement !== undefined) {
-      inputElement.type = 'text';
+    let inputElement = this.getInputEl();
+    if (Util.isDefined(inputElement)) {
+      // Firefox workaround
+      if (navigator.userAgent.toLowerCase().indexOf('firefox') === -1) {
+        inputElement.type = 'text';
+      }
       inputElement.value = (val !== undefined) ? val : '';
     }
   }
@@ -260,13 +213,18 @@ export class OIntegerInputComponent extends OTextInputComponent implements OnIni
     return {};
   }
 
-}
+  protected initializeStep(): void {
+    if (this.step <= 0) {
+      this.step = 1;
+      console.warn('`step` attribute must be greater than zero');
+    }
+  }
 
+}
 
 @NgModule({
   declarations: [OIntegerInputComponent],
-  imports: [OSharedModule, CommonModule, OTextInputModule],
+  imports: [CommonModule, OSharedModule, OTextInputModule],
   exports: [OIntegerInputComponent, OTextInputModule]
 })
-export class OIntegerInputModule {
-}
+export class OIntegerInputModule { }

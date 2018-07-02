@@ -1,4 +1,6 @@
-import { Component, OnInit, Injector, forwardRef, Inject, ComponentFactoryResolver, ComponentFactory, ViewChild, ViewContainerRef, EventEmitter } from '@angular/core';
+import { Component, OnDestroy, OnInit, Injector, forwardRef, Inject, ComponentFactoryResolver, ComponentFactory, ViewChild, ViewContainerRef, EventEmitter, AfterViewInit } from '@angular/core';
+import { Subscription } from 'rxjs';
+
 import { InputConverter } from '../../../decorators';
 import {
   OTableCellRendererDateComponent,
@@ -23,7 +25,12 @@ import {
 } from './cell-editor/cell-editor';
 
 import { DateFilterFunction } from '../../../components/input/date-input/o-date-input.component';
+import { SQLTypes } from '../../../util/sqltypes';
 
+export interface OColumnTooltip {
+  value?: string;
+  function?: Function;
+}
 
 export const DEFAULT_INPUTS_O_TABLE_COLUMN = [
 
@@ -55,13 +62,24 @@ export const DEFAULT_INPUTS_O_TABLE_COLUMN = [
 
   'width',
 
+  'minWidth: min-width',
+
   'class',
 
   // break-word [no|yes|true|false]: content column can show in multiple lines if it not catch in the cell. Default: no and if content of the cell overflow.
-  'breakWord:break-word',
+  'breakWord: break-word',
 
   // async-load [no|yes|true|false]: asynchronous query. Default: no
   'asyncLoad : async-load',
+
+  // sqltype[string]: Data type according to Java standard. See SQLType ngClass. Default: 'OTHER'
+  'sqlType: sql-type',
+
+  'tooltip',
+
+  'tooltipValue: tooltip-value',
+
+  'tooltipFunction: tooltip-function',
 
   ...OTableCellRendererBooleanComponent.DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_BOOLEAN,
   ...OTableCellRendererCurrencyComponent.DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_CURRENCY, // includes Integer and Real
@@ -89,12 +107,12 @@ export const DEFAULT_OUTPUTS_O_TABLE_COLUMN = [
     '[class.columnBreakWord]': 'breakWord'
   }
 })
-export class OTableColumnComponent implements OnInit {
+export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
 
   public static DEFAULT_INPUTS_O_TABLE_COLUMN = DEFAULT_INPUTS_O_TABLE_COLUMN;
-  // public static DEFAULT_OUTPUTS_O_TABLE_COLUMN = DEFAULT_OUTPUTS_O_TABLE_COLUMN;
+  public static DEFAULT_OUTPUTS_O_TABLE_COLUMN = DEFAULT_OUTPUTS_O_TABLE_COLUMN;
 
-  protected renderersMapping = {
+  protected static renderersMapping = {
     'action': OTableCellRendererActionComponent,
     'boolean': OTableCellRendererBooleanComponent,
     'currency': OTableCellRendererCurrencyComponent,
@@ -105,7 +123,7 @@ export class OTableColumnComponent implements OnInit {
     'real': OTableCellRendererRealComponent
   };
 
-  protected editorsMapping = {
+  protected static editorsMapping = {
     'boolean': OTableCellEditorBooleanComponent,
     'date': OTableCellEditorDateComponent,
     'integer': OTableCellEditorIntegerComponent,
@@ -115,21 +133,25 @@ export class OTableColumnComponent implements OnInit {
     'text': OTableCellEditorTextComponent
   };
 
-
   public renderer: any;
   public editor: any;
 
   public type: string;
   public attr: string;
   public title: string;
-  @InputConverter()
-  public orderable: boolean = true;
-  @InputConverter()
-  public searchable: boolean = true;
+  public sqlType: string;
+  protected _SQLType: number;
+  protected _defaultSQLTypeKey: string = 'OTHER';
+  protected _orderable: boolean = true;
+  protected _searchable: boolean = true;
   @InputConverter()
   public editable: boolean = false;
-  public width: string = '';
-
+  public width: string;
+  public minWidth: string;
+  @InputConverter()
+  public tooltip: boolean = false;
+  tooltipValue: string;
+  tooltipFunction: Function;
   /*input renderer date */
   protected format: string;
   /*input renderer integer */
@@ -200,68 +222,80 @@ export class OTableColumnComponent implements OnInit {
   @ViewChild('container', { read: ViewContainerRef })
   container: ViewContainerRef;
 
+  private subscriptions = new Subscription();
+
   constructor(
     @Inject(forwardRef(() => OTableComponent)) public table: OTableComponent,
     protected resolver: ComponentFactoryResolver,
-    protected injector: Injector) {
+    protected injector: Injector
+  ) {
     this.table = table;
   }
 
-  public ngOnInit() {
+  ngOnInit() {
     this.grouping = Util.parseBoolean(this.grouping, true);
+    this.table.registerColumn(this);
+    this.subscriptions.add(this.table.onReinitialize.subscribe(() => this.table.registerColumn(this)));
+  }
+
+  ngAfterViewInit(): void {
     this.createRenderer();
     this.createEditor();
-    this.table.registerColumn(this);
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
   }
 
   protected createRenderer() {
-    if (typeof (this.renderer) === 'undefined' && this.type !== undefined) {
-      const componentRef = this.renderersMapping[this.type];
+    if (!Util.isDefined(this.renderer) && Util.isDefined(this.type)) {
+      const componentRef = OTableColumnComponent.renderersMapping[this.type];
       if (componentRef !== undefined) {
         let factory: ComponentFactory<any> = this.resolver.resolveComponentFactory(componentRef);
         if (factory) {
           let ref = this.container.createComponent(factory);
-          this.renderer = ref.instance;
+          let newRenderer = ref.instance;
           switch (this.type) {
             case 'currency':
-              this.renderer.currencySymbol = this.currencySymbol;
-              this.renderer.currencySymbolPosition = this.currencySymbolPosition;
-              this.renderer.decimalSeparator = this.decimalSeparator;
-              this.renderer.decimalDigits = this.decimalDigits;
-              this.renderer.grouping = this.grouping;
-              this.renderer.thousandSeparator = this.thousandSeparator;
+              newRenderer.currencySymbol = this.currencySymbol;
+              newRenderer.currencySymbolPosition = this.currencySymbolPosition;
+              newRenderer.decimalSeparator = this.decimalSeparator;
+              newRenderer.decimalDigits = this.decimalDigits;
+              newRenderer.grouping = this.grouping;
+              newRenderer.thousandSeparator = this.thousandSeparator;
               break;
             case 'date':
-              this.renderer.format = this.format;
+              newRenderer.format = this.format;
               break;
             case 'integer':
-              this.renderer.grouping = this.grouping;
-              this.renderer.thousandSeparator = this.thousandSeparator;
+              newRenderer.grouping = this.grouping;
+              newRenderer.thousandSeparator = this.thousandSeparator;
               break;
             case 'boolean':
-              this.renderer.trueValueType = this.trueValueType;
-              this.renderer.trueValue = this.trueValue;
-              this.renderer.falseValueType = this.falseValueType;
-              this.renderer.falseValue = this.falseValue;
-              this.renderer.booleanType = this.booleanType;
+              newRenderer.trueValueType = this.trueValueType;
+              newRenderer.trueValue = this.trueValue;
+              newRenderer.falseValueType = this.falseValueType;
+              newRenderer.falseValue = this.falseValue;
+              newRenderer.booleanType = this.booleanType;
               break;
             case 'real':
             case 'percentage':
-              this.renderer.decimalSeparator = this.decimalSeparator;
-              this.renderer.decimalDigits = this.decimalDigits;
-              this.renderer.grouping = this.grouping;
-              this.renderer.thousandSeparator = this.thousandSeparator;
+              newRenderer.decimalSeparator = this.decimalSeparator;
+              newRenderer.decimalDigits = this.decimalDigits;
+              newRenderer.grouping = this.grouping;
+              newRenderer.thousandSeparator = this.thousandSeparator;
               break;
             case 'image':
-              this.renderer.imageType = this.imageType;
-              this.renderer.avatar = this.avatar;
-              this.renderer.emptyImage = this.emptyImage;
+              newRenderer.imageType = this.imageType;
+              newRenderer.avatar = this.avatar;
+              newRenderer.emptyImage = this.emptyImage;
               break;
             case 'action':
-              this.renderer.icon = this.icon;
-              this.renderer.action = this.action;
+              newRenderer.icon = this.icon;
+              newRenderer.action = this.action;
               break;
           }
+          this.registerRenderer(newRenderer);
         }
       }
     }
@@ -269,7 +303,7 @@ export class OTableColumnComponent implements OnInit {
 
   buildCellEditor(type: string, resolver: ComponentFactoryResolver, container: ViewContainerRef, propsOrigin: any) {
     let editor = undefined;
-    const componentRef = this.editorsMapping[type] || this.editorsMapping['text'];
+    const componentRef = OTableColumnComponent.editorsMapping[type] || OTableColumnComponent.editorsMapping['text'];
     if (componentRef === undefined) {
       return editor;
     }
@@ -312,29 +346,94 @@ export class OTableColumnComponent implements OnInit {
             break;
         }
         editor.olabel = propsOrigin.olabel;
+        editor.type = propsOrigin.type;
       }
     }
     return editor;
   }
 
   protected createEditor() {
-    if (typeof (this.editor) === 'undefined' && this.editable) {
-      this.editor = this.buildCellEditor(this.type, this.resolver, this.container, this);
-      if (this.editor) {
-        this.editor.orequired = this.orequired;
-        this.editor.showPlaceHolder = this.showPlaceHolder;
-        this.editor.editionStarted = this.editionStarted;
-        this.editor.editionCancelled = this.editionCancelled;
-        this.editor.editionCommitted = this.editionCommitted;
+    if (!Util.isDefined(this.editor) && this.editable) {
+      let newEditor = this.buildCellEditor(this.type, this.resolver, this.container, this);
+      if (newEditor) {
+        newEditor.orequired = this.orequired;
+        newEditor.showPlaceHolder = this.showPlaceHolder;
+        newEditor.editionStarted = this.editionStarted;
+        newEditor.editionCancelled = this.editionCancelled;
+        newEditor.editionCommitted = this.editionCommitted;
+        this.registerEditor(newEditor);
       }
     }
   }
 
   public registerRenderer(renderer: any) {
     this.renderer = renderer;
+    const oCol = this.table.getOColumn(this.attr);
+    if (oCol !== undefined) {
+      oCol.renderer = this.renderer;
+    }
   }
 
   public registerEditor(editor: any) {
     this.editor = editor;
+    const oCol = this.table.getOColumn(this.attr);
+    if (oCol !== undefined) {
+      oCol.editor = this.editor;
+    }
   }
+
+  static addEditor(type: string, editorClassReference: any) {
+    if (!OTableColumnComponent.editorsMapping.hasOwnProperty(type) && Util.isDefined(editorClassReference)) {
+      OTableColumnComponent.editorsMapping[type] = editorClassReference;
+    }
+  }
+
+  set orderable(val: any) {
+    this._orderable = typeof val === 'boolean' ? val : Util.parseBoolean(val, true);
+    const oCol = this.table.getOColumn(this.attr);
+    if (oCol) {
+      oCol.orderable = this._orderable;
+    }
+  }
+
+  get orderable(): any {
+    return this._orderable;
+  }
+
+  set searchable(val: any) {
+    this._searchable = typeof val === 'boolean' ? val : Util.parseBoolean(val, true);
+    const oCol = this.table.getOColumn(this.attr);
+    if (oCol) {
+      oCol.searchable = this._searchable;
+    }
+  }
+
+  get searchable(): any {
+    return this._searchable;
+  }
+
+  getSQLType(): number {
+    if (!(this.sqlType && this.sqlType.length > 0)) {
+      switch (this.type) {
+        case 'date':
+          this.sqlType = 'TIMESTAMP';
+          break;
+        case 'integer':
+          this.sqlType = 'INTEGER';
+          break;
+        case 'boolean':
+          this.sqlType = 'BOOLEAN';
+          break;
+        case 'real':
+        case 'percentage':
+        case 'currency':
+          this.sqlType = 'DOUBLE';
+          break;
+      }
+    }
+    let sqlt = this.sqlType && this.sqlType.length > 0 ? this.sqlType : this._defaultSQLTypeKey;
+    this._SQLType = SQLTypes.getSQLTypeValue(sqlt);
+    return this._SQLType;
+  }
+
 }

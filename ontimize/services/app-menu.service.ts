@@ -1,8 +1,5 @@
-import {
-  Injector,
-  Injectable
-} from '@angular/core';
-
+import { Injector, Injectable } from '@angular/core';
+import { Codes } from '../utils';
 import { AppConfig } from '../config/app-config';
 
 export type MenuRootItem = (MenuGroup | MenuItemRoute | MenuItemAction | MenuItemLocale | MenuItemLogout | MenuItemUserInfo);
@@ -13,6 +10,7 @@ export interface MenuGroup {
   icon?: string;
   items: (MenuItemRoute | MenuItemAction | MenuItemLocale | MenuItemLogout | MenuItemUserInfo)[];
   opened?: boolean;
+  tooltip?: string;
 }
 
 export interface MenuItem {
@@ -23,6 +21,8 @@ export interface MenuItem {
   image?: string;
   component?: any;
   'component-inputs'?: Object;
+  'show-in-card-menu'?: boolean;
+  'show-in-app-sidenav'?: boolean;
 }
 
 export interface MenuItemRoute extends MenuItem {
@@ -86,7 +86,7 @@ export class AppMenuService {
   getMenuItemType(item: MenuRootItem): string {
     let type: string;
     switch (true) {
-      case ((item as MenuItemLogout).route === '/login'):
+      case ((item as MenuItemLogout).route === Codes.LOGIN_ROUTE):
         type = 'logout';
         break;
       case ((item as MenuItemRoute).route !== undefined):

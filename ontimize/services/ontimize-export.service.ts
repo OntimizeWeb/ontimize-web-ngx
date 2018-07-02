@@ -5,6 +5,7 @@ import { Observable } from 'rxjs/Observable';
 
 import { LoginService } from '../services';
 import { AppConfig, Config } from '../config/app-config';
+import { Codes, ServiceUtils } from '../utils';
 
 export const EXPORT_PATH_DEFAULT: string = '/export';
 export const DOWNLOAD_PATH_DEFAULT: string = EXPORT_PATH_DEFAULT + '/download';
@@ -44,7 +45,7 @@ export class OntimizeExportService {
     if (serviceName && configuration.hasOwnProperty(serviceName)) {
       servConfig = configuration[serviceName];
     }
-    servConfig['session'] = loginService.getSessionInfo();
+    servConfig[Codes.SESSION_KEY] = loginService.getSessionInfo();
     return servConfig;
   }
 
@@ -83,11 +84,11 @@ export class OntimizeExportService {
     const self = this;
     // TODO: try multipart
     this.httpClient.post(url, body, options).subscribe((resp: any) => {
-      if (resp && resp.code === 3) {
+      if (resp && resp.code === Codes.ONTIMIZE_UNAUTHORIZED_CODE) {
         self.redirectLogin(true);
-      } else if (resp.code === 1) {
+      } else if (resp.code === Codes.ONTIMIZE_FAILED_CODE) {
         _innerObserver.error(resp.message);
-      } else if (resp.code === 0) {
+      } else if (resp.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) {
         _innerObserver.next(resp);
       } else {
         // Unknow state -> error
@@ -104,14 +105,14 @@ export class OntimizeExportService {
 
     let _innerObserver: any;
     const dataObservable = new Observable(observer => _innerObserver = observer).share();
-    let responseType: string;
-    if (OExportExtension.Excel === fileExtension) {
-      responseType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
-    } else if (OExportExtension.HTML === fileExtension) {
-      responseType = 'text/html';
-    } else if (OExportExtension.PDF === fileExtension) {
-      responseType = 'application/pdf';
-    }
+    // let responseType: string;
+    // if (OExportExtension.Excel === fileExtension) {
+    //   responseType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+    // } else if (OExportExtension.HTML === fileExtension) {
+    //   responseType = 'text/html';
+    // } else if (OExportExtension.PDF === fileExtension) {
+    //   responseType = 'application/pdf';
+    // }
     const options: any = {
       headers: new HttpHeaders({
         'Access-Control-Allow-Origin': '*',
@@ -139,9 +140,7 @@ export class OntimizeExportService {
 
   protected redirectLogin(sessionExpired: boolean = false): void {
     let router = this.injector.get(Router);
-    router.navigate(['/login'], {
-      queryParams: { 'isdetail': 'true' }
-    });
+    ServiceUtils.redirectLogin(router, sessionExpired);
   }
 
 }

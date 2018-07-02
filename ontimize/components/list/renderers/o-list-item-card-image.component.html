@@ -33,8 +33,8 @@
 
     <div class="collapse-button-container">
       <button mat-icon-button *ngIf="collapsible" (click)="collapsed = !collapsed" class="collapse-button">
-        <mat-icon *ngIf="collapsed">keyboard_arrow_down</mat-icon>
-        <mat-icon *ngIf="!collapsed">keyboard_arrow_up</mat-icon>
+        <mat-icon *ngIf="collapsed" svgIcon="ontimize:keyboard_arrow_down"></mat-icon>
+        <mat-icon *ngIf="!collapsed" svgIcon="ontimize:keyboard_arrow_up"></mat-icon>
       </button>
     </div>
   </mat-card-actions>

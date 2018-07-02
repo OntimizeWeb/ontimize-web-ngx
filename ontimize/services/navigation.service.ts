@@ -4,13 +4,14 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/filter';
 
+import { Codes } from '../utils';
 import { ObservableWrapper } from '../util/async';
-import { LocalStorageService, ILocalStorageComponent } from '../../index';
+import { ILocalStorageComponent, LocalStorageService } from './local-storage.service';
 
 export class ONavigationItem {
   constructor(value: Object) {
     this.url = value['url'] ? value['url'] : '';
-    this.queryParams = value['queryParams'] ? value['queryParams'] : {};
+    this.queryParams = value[Codes.QUERY_PARAMS] ? value[Codes.QUERY_PARAMS] : {};
     this.text = value['text'] ? value['text'] : '';
     this.displayText = value['displayText'] ? value['displayText'] : '';
   }
@@ -39,7 +40,7 @@ export class NavigationService implements ILocalStorageComponent {
   public navigationEvents$: Observable<Array<ONavigationItem>> = this.navigationEventsSource.asObservable();
 
   private _titleEmitter: EventEmitter<any> = new EventEmitter();
-  private _visibleEmitter: EventEmitter<Boolean> = new EventEmitter<Boolean>();
+  private _visibleEmitter: EventEmitter<boolean> = new EventEmitter<boolean>();
   private _sidenavEmitter: EventEmitter<any> = new EventEmitter();
 
   constructor(
@@ -78,8 +79,9 @@ export class NavigationService implements ILocalStorageComponent {
             text: displayText
           }));
         }
-        navigationItems[navigationItems.length - 1].queryParams = route.queryParams;
-
+        if (navigationItems.length > 0) {
+          navigationItems[navigationItems.length - 1].queryParams = route ? route.queryParams : {};
+        }
         self.setNavigationItems(navigationItems);
       });
   }
@@ -96,7 +98,7 @@ export class NavigationService implements ILocalStorageComponent {
       this.navigationItems.forEach((element, index) => {
         let storedElem = localData[Object.keys(localData).find(index => element.url === localData[index]['url'])];
         if (void 0 !== storedElem) {
-          element.queryParams = element.queryParams && !Object.keys(storedElem['queryParams']).length ? element.queryParams : storedElem['queryParams'] && Object.keys(storedElem['queryParams']).length ? storedElem['queryParams'] : {};
+          element.queryParams = element.queryParams && !Object.keys(storedElem[Codes.QUERY_PARAMS]).length ? element.queryParams : storedElem[Codes.QUERY_PARAMS] && Object.keys(storedElem[Codes.QUERY_PARAMS]).length ? storedElem[Codes.QUERY_PARAMS] : {};
           element.displayText = element.displayText ? element.displayText : storedElem['displayText'] ? storedElem['displayText'] : null;
         }
         element.terminal = index === this.navigationItems.length - 1;
@@ -182,7 +184,7 @@ export class NavigationService implements ILocalStorageComponent {
   // protected queryByIndex(index: number) {
   //   var self = this;
   //   this._query(index).subscribe(resp => {
-  //     if (resp.code === 0) {
+  //     if (resp.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) {
   //       let currentData = resp.data[0];
   //       self._updateFormData(self.toFormValueData(currentData));
   //       self._emitData(currentData);

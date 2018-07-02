@@ -2,5 +2,39 @@
   .content-wrapper {
     max-height: 430px;
     min-height: 430px;
+    min-width: 250px;
+
+    .mat-form-field.hinted {
+      margin-bottom: 12px;
+    }
+
+    .select-all-checkbox {
+      padding-bottom: 6px;
+    }
+
+    .select-values-list {
+      padding-top: 0;
+      overflow-y: auto;
+      overflow-x: hidden;
+      outline: none;
+
+      .mat-list-item {
+        height: 30px;
+
+        .mat-list-text {
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+      }
+    }
+
+    .mat-slide-toggle {
+      margin: 12px 0;
+    }
+
+    .column-filter-empty-list {
+      text-align: center;
+    }
   }
 }

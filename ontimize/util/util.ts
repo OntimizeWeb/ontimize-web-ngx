@@ -228,4 +228,38 @@ export class Util {
     return typeof value !== 'undefined' && value !== null;
   }
 
+  /**
+   * Returns the provided string in lowercase and without accent marks.
+   * @param value the text to normalize
+   */
+  static normalizeString(value: string): string {
+    if (value && value.length) {
+      return value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+    }
+    return '';
+  }
+
+  /**
+   * Returns the provided array flattend.
+   * @param array the array to flat
+   */
+  static flatten(array: Array<any>): Array<any> {
+    return [].concat(...array);
+  }
+
+  /**
+   * Returns a list with all the values from the provided object.
+   * @param obj the object
+   */
+  static getValuesFromObject(obj: Object = {}): Array<any> {
+    let array: Array<any> = [];
+    Object.keys(obj).map(key => {
+      if (typeof obj[key] === 'object') {
+        array.push(Util.getValuesFromObject(obj[key]));
+      }
+      array.push(obj[key]);
+    });
+    return Util.flatten(array);
+  }
+
 }

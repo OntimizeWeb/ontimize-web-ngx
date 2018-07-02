@@ -1,4 +1,5 @@
 import { Pipe, PipeTransform, Injector } from '@angular/core';
+
 import { OIntegerPipe } from './o-integer.pipe';
 
 export interface IRealPipeArgument {
@@ -6,7 +7,8 @@ export interface IRealPipeArgument {
   thousandSeparator?: string;
   locale?: string;
   decimalSeparator?: string;
-  decimalDigits?: number;
+  minDecimalDigits?: number;
+  maxDecimalDigits?: number;
 }
 
 @Pipe({
@@ -23,8 +25,10 @@ export class ORealPipe extends OIntegerPipe implements PipeTransform {
     let thousandSeparator = args.thousandSeparator;
     let locale = args.locale;
     let decimalSeparator = args.decimalSeparator;
-    let decimalDigits = args.decimalDigits;
+    let minDecimalDigits = args.minDecimalDigits;
+    let maxDecimalDigits = args.maxDecimalDigits;
 
-    return this.numberService.getRealValue(text, grouping, thousandSeparator, decimalSeparator, decimalDigits, locale);
+    return this.numberService.getRealValue(text, grouping, thousandSeparator, decimalSeparator, minDecimalDigits, maxDecimalDigits, locale);
   }
+
 }

@@ -1,11 +1,13 @@
-import { Injector, ElementRef } from '@angular/core';
-import { InputConverter } from '../decorators';
-import { OntimizeService, DialogService } from '../services';
-import { OFormComponent } from './form/o-form.component';
-import { OFormDataComponent, DEFAULT_INPUTS_O_FORM_DATA_COMPONENT } from './o-form-data-component.class';
-import { Util } from '../utils';
+import { ElementRef, Injector } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
-import { ServiceUtils } from './service.utils';
+import { InputConverter } from '../../decorators';
+import { DialogService, OntimizeService } from '../../services';
+import { Codes, Util } from '../../utils';
+import { IFormValueOptions } from '../form/OFormValue';
+import { OFormComponent } from '../form/o-form.component';
+import { DEFAULT_INPUTS_O_FORM_DATA_COMPONENT, OFormDataComponent } from '../o-form-data-component.class';
+import { ServiceUtils } from '../service.utils';
+
 
 export const DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT = [
   ...DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,
@@ -39,7 +41,6 @@ export const DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT = [
 
 export class OFormServiceComponent extends OFormDataComponent {
 
-  public static DEFAULT_QUERY_METHOD = 'query';
   public static DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT = DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT;
 
   /* Inputs */
@@ -48,17 +49,17 @@ export class OFormServiceComponent extends OFormDataComponent {
   protected service: string;
   protected columns: string;
   protected valueColumn: string;
-  protected valueColumnType: string = 'int';
+  protected valueColumnType: string = Codes.TYPE_INT;
   protected parentKeys: string;
   protected visibleColumns: string;
   protected descriptionColumns: string;
-  protected separator: string;
+  protected separator: string = Codes.SPACE_SEPARATOR;
   @InputConverter()
   protected queryOnInit: boolean = true;
   @InputConverter()
   protected queryOnBind: boolean = false;
   protected queryOnEvent: any;
-  protected queryMethod: string;
+  protected queryMethod: string = Codes.QUERY_METHOD;
   protected serviceType: string;
 
   /* Internal variables */
@@ -104,10 +105,6 @@ export class OFormServiceComponent extends OFormDataComponent {
 
     let pkArray = Util.parseArray(this.parentKeys);
     this._pKeysEquiv = Util.parseParentKeysEquivalences(pkArray);
-
-    if (!this.queryMethod) {
-      this.queryMethod = OFormServiceComponent.DEFAULT_QUERY_METHOD;
-    }
 
     if (this.form) {
       const self = this;
@@ -166,13 +163,17 @@ export class OFormServiceComponent extends OFormDataComponent {
     }
   }
 
+  getAttributesValuesToQuery(columns?: Array<any>) {
+    let result = Util.isDefined(columns) ? columns : this.colArray;
+    if (result.indexOf(this.valueColumn) === -1) {
+      result.push(this.valueColumn);
+    }
+    return result;
+  }
+
 
   queryData(parentItem: any = undefined, columns?: Array<any>) {
-    var self = this;
-    if (columns === undefined || columns === null) {
-      columns = this.colArray;
-    }
-
+    const self = this;
     if (!this.dataService || !(this.queryMethod in this.dataService) || !this.entity) {
       console.warn('Service not properly configured! aborting query');
       return;
@@ -185,8 +186,9 @@ export class OFormServiceComponent extends OFormDataComponent {
       if (this.querySuscription) {
         this.querySuscription.unsubscribe();
       }
-      this.querySuscription = this.dataService[this.queryMethod](parentItem, columns, this.entity).subscribe(resp => {
-        if (resp.code === 0) {
+      const queryCols = this.getAttributesValuesToQuery();
+      this.querySuscription = this.dataService[this.queryMethod](parentItem, queryCols, this.entity).subscribe(resp => {
+        if (resp.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) {
           self.cacheQueried = true;
           self.setDataArray(resp.data);
         } else {
@@ -194,7 +196,7 @@ export class OFormServiceComponent extends OFormDataComponent {
         }
       }, err => {
         console.log(err);
-        if (err && typeof err !== 'object') {
+        if (err && !Util.isObject(err)) {
           this.dialogService.alert('ERROR', err);
         } else {
           this.dialogService.alert('ERROR', 'MESSAGES.ERROR_QUERY');
@@ -222,8 +224,20 @@ export class OFormServiceComponent extends OFormDataComponent {
   syncDataIndex() {
     this._currentIndex = undefined;
     if (this.value && this.value.value && this.dataArray) {
-      let self = this;
+      const self = this;
       this.dataArray.forEach((item, index) => {
+        if (this.value.value instanceof Array) {
+          this._currentIndex = [];
+
+          this.value.value.forEach((itemValue, indexValue) => {
+            if (item[self.valueColumn] === itemValue) {
+              this._currentIndex[this._currentIndex.length] = indexValue;
+            }
+
+          });
+        } else if (item[self.valueColumn] === this.value.value) {
+          self._currentIndex = index;
+        }
         if (item[self.valueColumn] === this.value.value) {
           self._currentIndex = index;
         }
@@ -238,9 +252,11 @@ export class OFormServiceComponent extends OFormDataComponent {
       }
     }
   }
+
   protected parseByValueColumnType(val: any) {
     let value = val;
-    if (this.valueColumnType === 'int') {
+
+    if (this.valueColumnType === Codes.TYPE_INT) {
       const parsed = parseInt(value);
       if (!isNaN(parsed)) {
         value = parsed;
@@ -249,9 +265,22 @@ export class OFormServiceComponent extends OFormDataComponent {
     return value;
   }
 
-  setValue(val: any) {
+  setValue(val: any, options?: IFormValueOptions) {
     const value = this.parseByValueColumnType(val);
-    super.setValue(value);
+    super.setValue(value, options);
   }
 
+  setData(val: any) {
+    const value = this.parseByValueColumnType(val);
+    super.setData(value);
+  }
+
+  getSelectedRecord() {
+    let result = undefined;
+    const selectedValue = this.getValue();
+    if (Util.isDefined(selectedValue)) {
+      result = this.getDataArray().find(item => item[this.valueColumn] === selectedValue);
+    }
+    return result;
+  }
 }

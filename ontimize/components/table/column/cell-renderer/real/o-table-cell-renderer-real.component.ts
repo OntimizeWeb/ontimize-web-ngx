@@ -1,7 +1,8 @@
 import { Component, Injector, TemplateRef, ViewChild } from '@angular/core';
+
 import { NumberService } from '../../../../../services';
-import { ORealPipe, IRealPipeArgument } from '../../../../../pipes';
-import { OTableCellRendererIntegerComponent, DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_INTEGER } from '../integer/o-table-cell-renderer-integer.component';
+import { IRealPipeArgument, ORealPipe } from '../../../../../pipes';
+import { DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_INTEGER, OTableCellRendererIntegerComponent } from '../integer/o-table-cell-renderer-integer.component';
 
 export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_REAL = [
   ...DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_INTEGER,
@@ -27,7 +28,6 @@ export class OTableCellRendererRealComponent extends OTableCellRendererIntegerCo
   protected componentPipe: ORealPipe;
   protected pipeArguments: IRealPipeArgument;
 
-
   @ViewChild('templateref', { read: TemplateRef }) public templateref: TemplateRef<any>;
 
   constructor(protected injector: Injector) {
@@ -36,7 +36,7 @@ export class OTableCellRendererRealComponent extends OTableCellRendererIntegerCo
     this.numberService = this.injector.get(NumberService);
 
     if (typeof (this.decimalDigits) === 'undefined') {
-      this.decimalDigits = this.numberService.decimalDigits;
+      this.decimalDigits = this.numberService.minDecimalDigits;
     }
     this.setComponentPipe();
   }
@@ -46,13 +46,14 @@ export class OTableCellRendererRealComponent extends OTableCellRendererIntegerCo
   }
 
   ngOnInit() {
+    super.ngOnInit();
     this.pipeArguments = {
-      decimalDigits: this.decimalDigits,
+      minDecimalDigits: this.decimalDigits,
+      maxDecimalDigits: this.decimalDigits,
       decimalSeparator: this.decimalSeparator,
       grouping: this.grouping,
       thousandSeparator: this.thousandSeparator
     };
-    this.initialize();
   }
 
 }

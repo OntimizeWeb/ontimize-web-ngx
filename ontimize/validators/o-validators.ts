@@ -1,8 +1,6 @@
-import {FormControl} from '@angular/forms';
+import { FormControl } from '@angular/forms';
 
-
-// const EMAIL_REGEXP = /^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i;
-const EMAIL_REGEXP = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
+const EMAIL_REGEXP = /[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?/;
 
 //NIF Regular Expressions
 const DNI_PATTERN = '^(([0-9]{8})([-]?)([a-zA-Z]{1}))$';
@@ -11,7 +9,6 @@ const DNI_CHECK = 'TRWAGMYFPDXBNJZSQVHLCKET';
 const NUMBERS = '0123456789';
 
 export class OValidators {
-
 
   /**
    * Email validator
@@ -26,7 +23,7 @@ export class OValidators {
   /**
    * NIF validator
    */
-  static nifValidator(control: FormControl) :any {
+  static nifValidator(control: FormControl): any {
 
     let newValue = control.value;
     let regExp = new RegExp(DNI_PATTERN + '|' + NIE_PATTERN);
@@ -59,9 +56,6 @@ export class OValidators {
         }
       }
     }
-
   }
-
-
 
 }

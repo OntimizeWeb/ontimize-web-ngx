@@ -1,15 +1,14 @@
-import { Component, NgModule, ViewEncapsulation, OnInit, OnDestroy, Injector, ComponentFactoryResolver, ViewContainerRef, ViewChild, EventEmitter, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { RouterModule, Router, ActivatedRoute, ActivatedRouteSnapshot, Route } from '@angular/router';
+import { AfterViewInit, Component, ComponentFactoryResolver, CUSTOM_ELEMENTS_SCHEMA, ElementRef, EventEmitter, Injector, NgModule, OnInit, OnDestroy, ViewContainerRef, ViewChild } from '@angular/core';
+import { ActivatedRoute, ActivatedRouteSnapshot, Route, Router, RouterModule } from '@angular/router';
 import { MatDialog, MatDialogRef } from '@angular/material';
 import { CommonModule } from '@angular/common';
 
-import { OSharedModule } from '../../shared';
 import { Util } from '../../util/util';
-
-import { OFormLayoutManagerService } from '../../services/o-form-layout-manager.service';
-import { CanActivateFormLayoutChildGuard } from './guards/o-form-layout-can-activate-child.guard';
-import { OFormLayoutTabGroupComponent } from './tabgroup/o-form-layout-tabgroup.component';
+import { OSharedModule } from '../../shared';
 import { OFormLayoutDialogComponent } from './dialog/o-form-layout-dialog.component';
+import { OFormLayoutManagerService } from '../../services/o-form-layout-manager.service';
+import { OFormLayoutTabGroupComponent } from './tabgroup/o-form-layout-tabgroup.component';
+import { CanActivateFormLayoutChildGuard } from './guards/o-form-layout-can-activate-child.guard';
 import { OFormLayoutManagerContentDirective } from './directives/o-form-layout-manager-content.directive';
 
 export interface IDetailComponentData {
@@ -39,14 +38,11 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
   inputs: DEFAULT_INPUTS_O_FORM_LAYOUT_MANAGER,
   outputs: DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER,
   templateUrl: './o-form-layout-manager.component.html',
-  styleUrls: ['./o-form-layout-manager.component.scss'],
-  encapsulation: ViewEncapsulation.None,
   host: {
     '[class.o-form-layout-manager]': 'true'
   }
 })
-
-export class OFormLayoutManagerComponent implements OnInit, OnDestroy {
+export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDestroy {
 
   public static guardClassName = 'CanActivateFormLayoutChildGuard';
 
@@ -77,7 +73,8 @@ export class OFormLayoutManagerComponent implements OnInit, OnDestroy {
     protected actRoute: ActivatedRoute,
     protected componentFactoryResolver: ComponentFactoryResolver,
     protected location: ViewContainerRef,
-    protected dialog: MatDialog
+    protected dialog: MatDialog,
+    protected elRef: ElementRef
   ) {
     this.oFormLayoutManagerService = this.injector.get(OFormLayoutManagerService);
     this.oFormLayoutManagerService.setFormLayoutManager(this);
@@ -91,6 +88,12 @@ export class OFormLayoutManagerComponent implements OnInit, OnDestroy {
     }
     this.labelColsArray = Util.parseArray(this.labelColumns);
     this.addActivateChildGuard();
+  }
+
+  ngAfterViewInit(): void {
+    if (this.elRef) {
+      this.elRef.nativeElement.removeAttribute('title');
+    }
   }
 
   ngOnDestroy() {

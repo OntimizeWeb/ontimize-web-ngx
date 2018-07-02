@@ -1,7 +1,8 @@
-import { Injector, NgModule, Component, OnInit, ViewEncapsulation, ViewChild, ElementRef, EventEmitter, AfterViewInit, OnDestroy } from '@angular/core';
+import { Injector, NgModule, Component, OnInit, ViewEncapsulation, ViewChild, ElementRef, EventEmitter, AfterViewInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatSidenav } from '@angular/material';
 import { RouterModule, Router } from '@angular/router';
+import { ObservableMedia, MediaChange } from '@angular/flex-layout';
 import { Subscription } from 'rxjs/Subscription';
 
 import { OSharedModule } from '../../shared';
@@ -10,8 +11,6 @@ import { AppMenuService, MenuRootItem, MenuItemUserInfo, MenuGroup, OUserInfoSer
 import { OAppSidenavMenuItemModule } from './menu-item/o-app-sidenav-menu-item.component';
 import { OAppSidenavMenuGroupModule } from './menu-group/o-app-sidenav-menu-group.component';
 import { OAppSidenavImageModule } from './image/o-app-sidenav-image.component';
-
-const SMALL_WIDTH_BREAKPOINT = 840;
 
 export const DEFAULT_INPUTS_O_APP_SIDENAV = [
   'opened',
@@ -35,7 +34,8 @@ export const DEFAULT_OUTPUTS_O_APP_SIDENAV = [
   encapsulation: ViewEncapsulation.None,
   host: {
     '[class.o-app-sidenav]': 'true'
-  }
+  },
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class OAppSidenavComponent implements OnInit, OnDestroy, AfterViewInit {
   public static DEFAULT_INPUTS_O_APP_LAYOUT = DEFAULT_INPUTS_O_APP_SIDENAV;
@@ -45,7 +45,7 @@ export class OAppSidenavComponent implements OnInit, OnDestroy, AfterViewInit {
 
   protected routerSubscription: Subscription;
   appMenuService: AppMenuService;
-  protected _menuRootArray: MenuRootItem[];
+  protected _menuRootArray: MenuRootItem[] = [];
 
   @InputConverter()
   protected opened: boolean = true;
@@ -60,13 +60,32 @@ export class OAppSidenavComponent implements OnInit, OnDestroy, AfterViewInit {
   protected userInfoSubscription: Subscription;
   protected userInfo: UserInfo;
 
+  protected mediaWatch: Subscription;
+  protected manuallyClosed: boolean = false;
+
   constructor(
     protected injector: Injector,
     protected router: Router,
-    protected elRef: ElementRef
+    protected elRef: ElementRef,
+    protected cd: ChangeDetectorRef,
+    protected media: ObservableMedia
   ) {
     this.appMenuService = this.injector.get(AppMenuService);
+    this.menuRootArray = this.appMenuService.getMenuRoots();
     this.oUserInfoService = this.injector.get(OUserInfoService);
+    const self = this;
+    this.mediaWatch = this.media.subscribe((change: MediaChange) => {
+      if (self.isScreenSmall() && self.sidenav) {
+        self.sidenav.close();
+      }
+    });
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    if (!this.manuallyClosed && !this.isScreenSmall()) {
+      this.sidenav.open();
+    }
   }
 
   ngOnInit() {
@@ -89,8 +108,7 @@ export class OAppSidenavComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   protected refreshMenuRoots() {
-    let menuRootsArray = this.appMenuService.getMenuRoots();
-    let firstRoot = menuRootsArray[0];
+    let firstRoot = this.menuRootArray[0];
     let alreadyExistsUserInfo = firstRoot ? firstRoot.id === 'user-info' : false;
     if (this.showUserInfo && this.userInfo && this.showToggleButton && !alreadyExistsUserInfo) {
       let userInfoItem: MenuItemUserInfo = {
@@ -106,9 +124,8 @@ export class OAppSidenavComponent implements OnInit, OnDestroy, AfterViewInit {
         opened: true,
         icon: 'person_pin'
       };
-      menuRootsArray.unshift(menuGroupUserInfo);
+      this.menuRootArray.unshift(menuGroupUserInfo);
     }
-    this.menuRootArray = menuRootsArray;
   }
 
   ngOnDestroy() {
@@ -121,7 +138,7 @@ export class OAppSidenavComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   isScreenSmall(): boolean {
-    return window.matchMedia(`(max-width: ${SMALL_WIDTH_BREAKPOINT}px)`).matches;
+    return !this.manuallyClosed && this.media.isActive('lt-sm');
   }
 
   isSidenavOpened(): boolean {
@@ -137,11 +154,14 @@ export class OAppSidenavComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   toggleSidenav() {
+    const promise = this.sidenav.opened ? this.sidenav.close() : this.sidenav.open();
     const self = this;
-    this.sidenav.toggle().then(() => {
-      self.afterSidenavToggle.emit(this.sidenav.opened);
+    promise.then(() => {
+      self.afterSidenavToggle.emit(self.sidenav.opened);
     });
+    this.cd.detectChanges();
     this.opened = this.sidenav.opened;
+    this.manuallyClosed = !this.opened;
     this.onSidenavToggle.emit(this.sidenav.opened);
   }
 

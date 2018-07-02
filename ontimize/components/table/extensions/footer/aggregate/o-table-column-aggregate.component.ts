@@ -1,77 +1,88 @@
-import { Component, OnInit, forwardRef, Inject, Injector } from '@angular/core';
+import { Component, OnDestroy, OnInit, forwardRef, Inject, Injector } from '@angular/core';
+import { Subscription } from 'rxjs';
+
 import { OTableComponent } from '../../../o-table.component';
 
-
-
 export class OColumnAggregate {
-    title: string;
-    attr: string;
-    operator: string | AggregateFunction;
+  title: string;
+  attr: string;
+  operator: string | AggregateFunction;
 }
 
 export type AggregateFunction = (value: any[]) => number;
 
 export const DEFAULT_TABLE_COLUMN_AGGREGATE = [
-    // attr [string]: column name.
-    'attr: attr',
+  // attr [string]: column name.
+  'attr',
 
-    // title [string]: Title for the header total column
-    'title: title',
+  // title [string]: Title for the header total column
+  'title',
 
-    //aggregate [sum | count | avg | min |max]
-    'aggregate:aggregate',
+  //aggregate [sum | count | avg | min |max]
+  'aggregate',
 
-    //function-aggregate [ (value: any[]) => number] Function that calculates a value on the values of the column 'attr'
-    'functionAggregate:function-aggregate'
+  //function-aggregate [ (value: any[]) => number] Function that calculates a value on the values of the column 'attr'
+  'functionAggregate: function-aggregate'
 ];
 
 @Component({
-    selector: 'o-table-column-aggregate',
-    templateUrl: './o-table-column-aggregate.component.html',
-    inputs: DEFAULT_TABLE_COLUMN_AGGREGATE
+  selector: 'o-table-column-aggregate',
+  templateUrl: './o-table-column-aggregate.component.html',
+  inputs: DEFAULT_TABLE_COLUMN_AGGREGATE
 
 })
-export class OTableColumnAggregateComponent implements OnInit {
-    public attr: string;
-    public aggregate: string;
-    public table: OTableComponent;
-    public title: string = '';
-    protected _aggregateFunction: AggregateFunction;
-    public static DEFAULT_AGGREGATE = 'SUM';
+export class OTableColumnAggregateComponent implements OnDestroy, OnInit {
 
-    constructor(
-        @Inject(forwardRef(() => OTableComponent)) table: OTableComponent,
-        protected injector: Injector) {
-        this.table = table;
+  public attr: string;
+  public aggregate: string;
+  public table: OTableComponent;
+  public title: string = '';
+  protected _aggregateFunction: AggregateFunction;
+  public static DEFAULT_AGGREGATE = 'SUM';
+
+  protected subscription: Subscription = new Subscription();
+
+  constructor(
+    @Inject(forwardRef(() => OTableComponent)) table: OTableComponent,
+    protected injector: Injector) {
+    this.table = table;
+  }
+
+  get functionAggregate(): AggregateFunction {
+    return this._aggregateFunction;
+  }
+
+  set functionAggregate(val: AggregateFunction) {
+    this._aggregateFunction = val;
+  }
+
+  getColumnData(attr) {
+    let columnData = [];
+    if (this.table.dataSource) {
+      columnData = this.table.dataSource.getColumnData(attr);
+    }
+    return columnData;
+  }
+
+  ngOnInit() {
+    if (!this.attr) {
+      return;
     }
 
-    get functionAggregate(): AggregateFunction {
-        return this._aggregateFunction;
+    let ocolumnaggregate: OColumnAggregate = new OColumnAggregate();
+    ocolumnaggregate.attr = this.attr;
+    if (this.title) {
+      ocolumnaggregate.title = this.title;
     }
 
-    set functionAggregate(val: AggregateFunction) {
-        this._aggregateFunction = val;
-    }
-    getColumnData(attr) {
-        let columnData = [];
-        if (this.table.dataSource) {
-            columnData = this.table.dataSource.getColumnData(attr);
-        }
-        return columnData;
-    }
+    ocolumnaggregate.operator = this.aggregate ? this.aggregate : (this.functionAggregate ? this.functionAggregate : OTableColumnAggregateComponent.DEFAULT_AGGREGATE);
+    this.table.registerColumnAggregate(ocolumnaggregate);
 
-    ngOnInit() {
-        if (!this.attr) {
-            return;
-        }
+    this.subscription.add(this.table.onReinitialize.subscribe(() => this.table.registerColumnAggregate(ocolumnaggregate)));
+  }
 
-        let ocolumnaggregate: OColumnAggregate = new OColumnAggregate();
-        ocolumnaggregate.attr = this.attr;
-        if (this.title) {
-            ocolumnaggregate.title = this.title;
-        }
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
+  }
 
-        ocolumnaggregate.operator = this.aggregate ? this.aggregate : (this.functionAggregate ? this.functionAggregate : OTableColumnAggregateComponent.DEFAULT_AGGREGATE);
-        this.table.registerColumnAggregate(ocolumnaggregate);
-    }
 }

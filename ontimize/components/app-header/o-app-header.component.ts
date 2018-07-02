@@ -7,6 +7,7 @@ import { OSharedModule } from '../../shared';
 import { DialogService, OModulesInfoService } from '../../services';
 import { OUserInfoModule } from '../../components';
 import { InputConverter } from '../../decorators';
+import { ServiceUtils } from '../../utils';
 
 export const DEFAULT_INPUTS_O_APP_HEADER = [
   'showUserInfo: show-user-info',
@@ -14,7 +15,7 @@ export const DEFAULT_INPUTS_O_APP_HEADER = [
 ];
 
 export const DEFAULT_OUTPUTS_O_APP_HEADER = [
-  'toggleSidenav'
+  'onSidenavToggle'
 ];
 
 @Component({
@@ -44,7 +45,7 @@ export class OAppHeaderComponent implements OnDestroy {
   @InputConverter()
   useFlagIcons: boolean = false;
 
-  public toggleSidenav = new EventEmitter<void>();
+  public onSidenavToggle = new EventEmitter<void>();
 
   constructor(
     protected router: Router,
@@ -64,15 +65,11 @@ export class OAppHeaderComponent implements OnDestroy {
   }
 
   onLogoutClick() {
-    this.dialogService.confirm('CONFIRM', 'MESSAGES.CONFIRM_LOGOUT').then(
-      res => {
-        if (res === true) {
-          this.router.navigate(['/login', {
-            'session-expired': true
-          }]);
-        }
+    this.dialogService.confirm('CONFIRM', 'MESSAGES.CONFIRM_LOGOUT').then(res => {
+      if (res) {
+        ServiceUtils.redirectLogin(this.router, false);
       }
-    );
+    });
   }
 
   get headerTitle(): string {

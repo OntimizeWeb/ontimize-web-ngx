@@ -1,4 +1,7 @@
 .o-form-toolbar {
+  flex:none;
+  display: block;
+  
   .toolbar-form-header {
     min-height: 50px;
     max-height: 50px;
@@ -23,13 +26,9 @@
       -ms-flex-align: center;
       align-items: center;
 
-      .fill-remaining {
-        flex: 1 1 auto;
-      }
-
       button {
         min-width: 100px;
-        padding: 0px 6px;
+        padding: 0 6px;
       }
 
       mat-icon {

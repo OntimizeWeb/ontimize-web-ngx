@@ -1,17 +1,7 @@
-import {
-  Component, Inject, Injector, forwardRef, ElementRef, OnInit,
-  Optional,
-  NgModule,
-  ViewEncapsulation
-} from '@angular/core';
+import { Component, NgModule, OnInit, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ValidatorFn } from '@angular/forms/src/directives/validators';
 import { OSharedModule } from '../../../shared';
-import { OFormComponent } from '../../form/o-form.component';
-import {
-  ORealInputModule, ORealInputComponent,
-  DEFAULT_INPUTS_O_REAL_INPUT, DEFAULT_OUTPUTS_O_REAL_INPUT
-} from '../real-input/o-real-input.component';
+import { DEFAULT_INPUTS_O_REAL_INPUT, DEFAULT_OUTPUTS_O_REAL_INPUT, ORealInputModule, ORealInputComponent } from '../real-input/o-real-input.component';
 
 export const DEFAULT_INPUTS_O_CURRENCY_INPUT = [
   ...DEFAULT_INPUTS_O_REAL_INPUT,
@@ -37,14 +27,7 @@ export class OCurrencyInputComponent extends ORealInputComponent implements OnIn
   public static DEFAULT_OUTPUTS_O_CURRENCY_INPUT = DEFAULT_OUTPUTS_O_CURRENCY_INPUT;
 
   currency_symbols = {
-    'USD': '$', // US Dollar
-    'EUR': '€', // Euro
     'CRC': '₡', // Costa Rican Colón
-    'GBP': '£', // British Pound Sterling
-    'ILS': '₪', // Israeli New Sheqel
-    'INR': '₹', // Indian Rupee
-    'JPY': '¥', // Japanese Yen
-    'KRW': '₩', // South Korean Won
     'NGN': '₦', // Nigerian Naira
     'PHP': '₱', // Philippine Peso
     'PLN': 'zł', // Polish Zloty
@@ -54,27 +37,27 @@ export class OCurrencyInputComponent extends ORealInputComponent implements OnIn
     'VND': '₫', // Vietnamese Dong
   };
 
+  static currency_icons = ['USD', 'EUR', 'GBP', 'ILS', 'INR', 'JPY', 'KRW', 'BTC'];
+
   currencySymbol: string = 'EUR';
   currencySymbolPosition: string = 'right';
 
-  constructor(
-    @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
-    elRef: ElementRef,
-    injector: Injector) {
-    super(form, elRef, injector);
+  protected existsOntimizeIcon() {
+    return OCurrencyInputComponent.currency_icons.indexOf(this.currencySymbol) !== -1;
   }
 
-  resolveValidators(): ValidatorFn[] {
-    let validators: ValidatorFn[] = super.resolveValidators();
-    return validators;
+  useIcon(position: string): boolean {
+    return this.existsOntimizeIcon() && this.currencySymbolPosition === position;
   }
 
+  useSymbol(position: string): boolean {
+    return this.currency_symbols.hasOwnProperty(this.currencySymbol) && this.currencySymbolPosition === position;
+  }
 }
 
 @NgModule({
   declarations: [OCurrencyInputComponent],
-  imports: [OSharedModule, CommonModule, ORealInputModule],
+  imports: [CommonModule, OSharedModule, ORealInputModule],
   exports: [OCurrencyInputComponent, ORealInputModule]
 })
-export class OCurrencyInputModule {
-}
+export class OCurrencyInputModule { }

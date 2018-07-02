@@ -1,6 +1,13 @@
 .sidenav-toggle-container + .o-app-sidenav-image {
   .application-sidenav-image-container {
     padding-top: 0px;
+    text-align: center;
+  }
+}
+
+.mat-drawer-opened {
+  .o-app-sidenav-image .application-sidenav-image-container {
+    text-align: center;
   }
 }
 

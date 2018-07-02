@@ -38,7 +38,6 @@ export class OTableCellEditorIntegerComponent extends OBaseTableCellEditor {
 
   constructor(protected injector: Injector) {
     super(injector);
-    this.initialize();
   }
 
   getCellData() {

@@ -5,7 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/combineLatest';
 import { Subscription } from 'rxjs/Subscription';
 
-import { Util, SQLTypes } from '../../../utils';
+import { Util, SQLTypes, Codes } from '../../../utils';
 import { OFormComponent } from '../o-form.component';
 import { OFormLayoutManagerComponent } from '../../../layouts/form-layout/o-form-layout-manager.component';
 import { OFormLayoutDialogComponent } from '../../../layouts/form-layout/dialog/o-form-layout-dialog.component';
@@ -122,7 +122,7 @@ export class OFormNavigationClass {
   }
 
   private parseQueryParams() {
-    let isDetail = this.queryParams['isdetail'];
+    let isDetail = this.queryParams[Codes.IS_DETAIL];
     // ensuring isdetail = false when using form layout manager
     this.form.isDetailForm = this.formLayoutManager ? false : (isDetail === 'true');
   }
@@ -142,8 +142,8 @@ export class OFormNavigationClass {
   }
 
   private parseUrlParams() {
-    if (this.urlParams[OFormComponent.PARENT_KEYS_KEY] !== undefined) {
-      this.form.formParentKeysValues = Util.decodeParentKeys(this.urlParams[OFormComponent.PARENT_KEYS_KEY]);
+    if (this.urlParams[Codes.PARENT_KEYS_KEY] !== undefined) {
+      this.form.formParentKeysValues = Util.decodeParentKeys(this.urlParams[Codes.PARENT_KEYS_KEY]);
     }
     //TODO Obtain 'datatype' of each key contained into urlParams for
     // for building correctly query filter!!!!
@@ -289,7 +289,7 @@ export class OFormNavigationClass {
 
       let extras = {};
       if (nestedLevelN > 3 || urlSegments.length > 1 && this.form.isDetailForm) {
-        extras['queryParams'] = Object.assign({}, this.getQueryParams(), { 'isdetail': 'true' });
+        extras[Codes.QUERY_PARAMS] = Object.assign({}, this.getQueryParams(), Codes.getIsDetailObject());
       }
 
       this.router.navigate([urlText], extras).then(val => {
@@ -342,7 +342,7 @@ export class OFormNavigationClass {
           }
         });
       }
-      let extras = Object.assign({}, this.getQueryParams(), { 'isdetail': 'true' });
+      let extras = Object.assign({}, this.getQueryParams(), Codes.getIsDetailObject());
       this.router.navigate([urlText], extras).catch(err => {
         console.error(err.message);
       });
@@ -379,10 +379,10 @@ export class OFormNavigationClass {
 
     let extras = { relativeTo: this.actRoute };
     if (this.form.isDetailForm) {
-      extras['queryParams'] = { 'isdetail': 'true' };
+      extras[Codes.QUERY_PARAMS] = Codes.getIsDetailObject();
     }
-    extras['queryParams'] = Object.assign({}, this.getQueryParams(), extras['queryParams'] || {});
-    this.router.navigate(['../', url, 'edit'], extras).then((val) => {
+    extras[Codes.QUERY_PARAMS] = Object.assign({}, this.getQueryParams(), extras[Codes.QUERY_PARAMS] || {});
+    this.router.navigate(['../', url, Codes.DEFAULT_EDIT_ROUTE], extras).then((val) => {
       if (val && options && options.changeToolbarMode) {
         this.form.getFormToolbar().setEditMode();
       }

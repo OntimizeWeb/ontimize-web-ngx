@@ -20,6 +20,7 @@
         width: 16px;
         font-size: 16px;
         padding-left: 4px;
+        vertical-align: middle;
       }
     }
 
@@ -28,14 +29,12 @@
     }
 
     o-form-toolbar {
-      &.o-form-toolbar-floating {
-        padding: 0;
-        top: 0px!important;
+      padding: 0;
+      top: 0px!important;
         .mat-toolbar {
           box-shadow: none;
           border-radius: 0;
-        }
-      }
+          }
     }
   }
 }

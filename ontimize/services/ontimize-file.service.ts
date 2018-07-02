@@ -5,7 +5,7 @@ import { Observable } from 'rxjs/Observable';
 
 import { LoginService } from '../services';
 import { AppConfig, Config } from '../config/app-config';
-import { Util } from '../utils';
+import { Util, Codes, ServiceUtils } from '../utils';
 
 @Injectable()
 export class OntimizeFileService {
@@ -32,7 +32,7 @@ export class OntimizeFileService {
     if (serviceName && configuration.hasOwnProperty(serviceName)) {
       servConfig = configuration[serviceName];
     }
-    servConfig['session'] = loginService.getSessionInfo();
+    servConfig[Codes.SESSION_KEY] = loginService.getSessionInfo();
     return servConfig;
   }
 
@@ -125,9 +125,7 @@ export class OntimizeFileService {
 
   protected redirectLogin(sessionExpired: boolean = false) {
     let router = this.injector.get(Router);
-    router.navigate(['/login'], {
-      queryParams: { 'isdetail': 'true' }
-    });
+    ServiceUtils.redirectLogin(router, sessionExpired);
   }
 
   isNullOrUndef(value: any): boolean {

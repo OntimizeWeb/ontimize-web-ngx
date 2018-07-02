@@ -30,7 +30,10 @@ export const DEFAULT_OUTPUTS_O_CHECKBOX = [
   outputs: DEFAULT_OUTPUTS_O_CHECKBOX,
   templateUrl: './o-checkbox.component.html',
   styleUrls: ['./o-checkbox.component.scss'],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  host: {
+    '[class.o-checkbox]': 'true'
+  }
 })
 
 export class OCheckboxComponent extends OFormDataComponent {

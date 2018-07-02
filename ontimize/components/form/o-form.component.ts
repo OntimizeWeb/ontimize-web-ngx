@@ -1,39 +1,38 @@
+import { CommonModule } from '@angular/common';
 import {
+  ChangeDetectorRef,
   Component,
-  OnInit,
-  OnDestroy,
+  CUSTOM_ELEMENTS_SCHEMA,
+  ElementRef,
   EventEmitter,
   Injector,
-  NgZone,
-  ChangeDetectorRef,
   NgModule,
-  HostListener,
-  ViewEncapsulation,
-  ElementRef,
-  CUSTOM_ELEMENTS_SCHEMA,
-  ViewChild
-} from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { Router, ActivatedRoute, UrlSegment } from '@angular/router';
-import { FormGroup, FormControl } from '@angular/forms';
+  NgZone,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+  ViewEncapsulation
+ } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
+import { ActivatedRoute, Router, UrlSegment } from '@angular/router';
+import 'rxjs/add/observable/combineLatest';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
-import 'rxjs/add/observable/combineLatest';
-
-import { dataServiceFactory } from '../../services/data-service.provider';
-import { OntimizeService, DialogService, NavigationService, SnackBarService } from '../../services';
 import { InputConverter } from '../../decorators';
-import { IFormDataTypeComponent, IFormDataComponent } from '../o-form-data-component.class';
-import { IComponent } from '../o-component.class';
-import { OFormToolbarModule, OFormToolbarComponent } from './o-form-toolbar.component';
-import { OFormValue } from './OFormValue';
-import { Util, SQLTypes } from '../../utils';
+import { OFormLayoutManagerComponent } from '../../layouts';
+import { DialogService, NavigationService, OntimizeService, SnackBarService } from '../../services';
+import { dataServiceFactory } from '../../services/data-service.provider';
 import { OSharedModule } from '../../shared';
+import { Codes, SQLTypes, Util } from '../../utils';
+import { IComponent } from '../o-component.class';
+import { IFormDataComponent, IFormDataTypeComponent } from '../o-form-data-component.class';
 import { OFormCacheClass } from './cache/o-form.cache.class';
-import { CanDeactivateFormGuard, CanComponentDeactivate } from './guards/o-form-can-deactivate.guard';
+import { CanComponentDeactivate, CanDeactivateFormGuard } from './guards/o-form-can-deactivate.guard';
 import { OFormNavigationClass } from './navigation/o-form.navigation.class';
 import { OFormContainerComponent } from './o-form-container.component';
-import { OFormLayoutManagerComponent } from '../../layouts';
+import { OFormToolbarComponent, OFormToolbarModule } from './o-form-toolbar.component';
+import { OFormValue } from './OFormValue';
+
 
 export const DEFAULT_INPUTS_O_FORM = [
   // show-header [boolean]: visibility of form toolbar. Default: yes.
@@ -146,6 +145,10 @@ export interface OFormInitializationOptions {
   }
 })
 export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate {
+
+  public static DEFAULT_INPUTS_O_FORM = DEFAULT_INPUTS_O_FORM;
+  public static DEFAULT_OUTPUTS_O_FORM = DEFAULT_OUTPUTS_O_FORM;
+
   public static BACK_ACTION: string = 'BACK';
   public static CLOSE_DETAIL_ACTION: string = 'CLOSE';
   public static RELOAD_ACTION: string = 'RELOAD';
@@ -155,16 +158,6 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   public static GO_INSERT_ACTION: string = 'GO_INSERT';
   public static DELETE_ACTION: string = 'DELETE';
   public static UNDO_LAST_CHANGE_ACTION: string = 'UNDO_LAST_CHANGE';
-
-  public static PARENT_KEYS_KEY = 'pk';
-
-  public static DEFAULT_INPUTS_O_FORM = DEFAULT_INPUTS_O_FORM;
-  public static DEFAULT_OUTPUTS_O_FORM = DEFAULT_OUTPUTS_O_FORM;
-
-  public static DEFAULT_QUERY_METHOD = 'query';
-  public static DEFAULT_INSERT_METHOD = 'insert';
-  public static DEFAULT_UPDATE_METHOD = 'update';
-  public static DEFAULT_DELETE_METHOD = 'delete';
 
   public static DEFAULT_LAYOUT_DIRECTION = 'column';
   public static guardClassName = 'CanDeactivateFormGuard';
@@ -189,10 +182,10 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   @InputConverter()
   protected queryOnInit: boolean = true;
   protected parentKeys: string;
-  protected queryMethod: string;
-  protected insertMethod: string;
-  protected updateMethod: string;
-  protected deleteMethod: string;
+  protected queryMethod: string = Codes.QUERY_METHOD;
+  protected insertMethod: string = Codes.INSERT_METHOD;
+  protected updateMethod: string = Codes.UPDATE_METHOD;
+  protected deleteMethod: string = Codes.DELETE_METHOD;
   @InputConverter()
   layoutFill: boolean = true;
   protected _layoutDirection: string = OFormComponent.DEFAULT_LAYOUT_DIRECTION;
@@ -238,7 +231,6 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   protected _compSQLTypes: Object = {};
 
   formParentKeysValues: Object;
-  protected _hasScrolled: boolean = false;
 
   public onFormInitStream: EventEmitter<Object> = new EventEmitter<Object>();
   protected reloadStream: Observable<any>;
@@ -264,30 +256,8 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     return m;
   }
 
-  @HostListener('window:scroll', ['$event'])
-  track(event) {
-    if (this.showHeader && event.currentTarget instanceof Window) {
-      const toolbarElHeight = this._formToolbar.element.nativeElement.clientHeight;
-      const win: Window = event.currentTarget;
-      if (win.scrollY > toolbarElHeight) {
-        this.hasScrolled = true;
-      } else {
-        this.hasScrolled = false;
-      }
-    }
-  }
 
   @ViewChild('innerForm') innerFormEl: ElementRef;
-
-  @HostListener('window:resize', ['$event'])
-  updateScrolledState(): void {
-    if (this.showHeader && this.innerFormEl) {
-      const totalHeight = this.elRef.nativeElement.clientHeight;
-      const formElHeight = this.innerFormEl.nativeElement.clientHeight;
-      const toolbarElHeight = this._formToolbar.element.nativeElement.clientHeight;
-      this.hasScrolled = (formElHeight + toolbarElHeight) > totalHeight;
-    }
-  }
 
   protected ignoreFormCacheKeys: Array<any> = [];
 
@@ -331,6 +301,11 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   registerFormComponent(comp: any) {
     if (comp) {
       let attr = comp.getAttribute();
+      if (this._components.hasOwnProperty(attr)) {
+        comp.repeatedAttr = true;
+        console.error('There is already a component registered in the form with the attr: ' + attr );
+        return;
+      }
       if (attr && attr.length > 0) {
         this._components[attr] = comp;
         if (!comp.isAutomaticRegistering()) {
@@ -359,6 +334,9 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   }
 
   registerSQLTypeFormComponent(comp: IFormDataTypeComponent) {
+    if ((comp as any).repeatedAttr) {
+      return;
+    }
     if (comp) {
       let type = comp.getSQLType();
       let attr = comp.getAttribute();
@@ -370,6 +348,9 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   }
 
   registerFormControlComponent(comp: IFormDataComponent) {
+    if ((comp as any).repeatedAttr) {
+      return;
+    }
     if (comp) {
       let attr = comp.getAttribute();
       if (attr && attr.length > 0) {
@@ -572,22 +553,6 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     this._pKeysEquiv = Util.parseParentKeysEquivalences(pkArray);
     this.keysSqlTypesArray = Util.parseArray(this.keysSqlTypes);
 
-    if (!this.queryMethod) {
-      this.queryMethod = OFormComponent.DEFAULT_QUERY_METHOD;
-    }
-
-    if (!this.insertMethod) {
-      this.insertMethod = OFormComponent.DEFAULT_INSERT_METHOD;
-    }
-
-    if (!this.updateMethod) {
-      this.updateMethod = OFormComponent.DEFAULT_UPDATE_METHOD;
-    }
-
-    if (!this.deleteMethod) {
-      this.deleteMethod = OFormComponent.DEFAULT_DELETE_METHOD;
-    }
-
     this.configureService();
 
     this.formNavigation.subscribeToQueryParams();
@@ -659,7 +624,6 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     this.determinateFormMode();
     this.onFormInitStream.emit(true);
     this.formCache.initializeCache({});
-    this.updateScrolledState();
   }
 
   protected determinateFormMode() {
@@ -684,7 +648,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     if (_path === 'new') {
       this.setInsertMode();
       return;
-    } else if (_path === 'edit') {
+    } else if (_path === Codes.DEFAULT_EDIT_ROUTE) {
       this.setUpdateMode();
     } else {
       this.setInitialMode();
@@ -696,16 +660,11 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
    * */
 
   _setComponentsEditable(state: boolean) {
-    const self = this;
-    //  window.setTimeout(() => {
-    let comps: any = self.getComponents();
-    if (comps) {
-      let keys = Object.keys(comps);
-      keys.forEach(element => {
-        comps[element].isReadOnly = !state;
-      });
-    }
-    // },100);
+    let components: any = this.getComponents();
+    Object.keys(components).forEach(compKey => {
+      const component = components[compKey];
+        component.isReadOnly = !state;
+    });
   }
 
 
@@ -786,10 +745,9 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
         self.formNavigation.updateNavigation(self.formGroup.getRawValue());
       }
     });
-    setTimeout(() => {
-      self.updateScrolledState();
-    }, 250);
+
   }
+
 
   _emitData(data) {
     this.onFormDataLoaded.emit(data);
@@ -935,7 +893,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     let sqlTypes = this.getAttributesSQLTypes();
     this.querySubscription = this.dataService[this.queryMethod](filter, av, this.entity, sqlTypes).subscribe(resp => {
       self.loaderSubscription.unsubscribe();
-      if (resp.code === 0) {
+      if (resp.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) {
         self._setData(resp.data);
       } else {
         self._updateFormData({});
@@ -986,7 +944,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     let observable = new Observable(observer => {
       this.dataService[this.insertMethod](values, this.entity, sqlTypes).subscribe(resp => {
         loader.unsubscribe();
-        if (resp.code === 0) {
+        if (resp.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) {
           observer.next(resp.data);
           observer.complete();
         } else {
@@ -1023,28 +981,33 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
 
   protected postIncorrectInsert(result: any) {
     console.log('[OFormComponent.postIncorrectInsert]', result);
-    if (result && typeof result !== 'object') {
-      this.dialogService.alert('ERROR', result);
-    } else {
-      this.dialogService.alert('ERROR', 'MESSAGES.ERROR_INSERT');
-    }
+    this.showError('insert',result);
   }
 
   protected postIncorrectDelete(result: any) {
     console.log('[OFormComponent.postIncorrectDelete]', result);
-    if (result && typeof result !== 'object') {
-      this.dialogService.alert('ERROR', result);
-    } else {
-      this.dialogService.alert('ERROR', 'MESSAGES.ERROR_DELETE');
-    }
+    this.showError('delete',result);
   }
 
   protected postIncorrectUpdate(result: any) {
     console.log('[OFormComponent.postIncorrectUpdate]', result);
+    this.showError('update',result);
+  }
+
+  private showError(operation:string, result: any) {
     if (result && typeof result !== 'object') {
       this.dialogService.alert('ERROR', result);
     } else {
-      this.dialogService.alert('ERROR', 'MESSAGES.ERROR_UPDATE');
+      let message = 'MESSAGES.ERROR_DELETE';
+      switch(operation) {
+        case 'update':
+          message = 'MESSAGES.ERROR_UPDATE';
+          break;
+        case 'insert':
+          message = 'MESSAGES.ERROR_INSERT';
+          break;
+      }
+      this.dialogService.alert('ERROR', message);
     }
   }
 
@@ -1054,7 +1017,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     let observable = new Observable(observer => {
       this.dataService[this.updateMethod](filter, values, this.entity, sqlTypes).subscribe(resp => {
         loader.unsubscribe();
-        if (resp.code === 0) {
+        if (resp.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) {
           observer.next(resp.data);
           observer.complete();
         } else {
@@ -1093,7 +1056,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     let observable = new Observable(observer => {
       this.dataService[this.deleteMethod](filter, this.entity).subscribe(resp => {
         loader.unsubscribe();
-        if (resp.code === 0) {
+        if (resp.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) {
           self.formCache.setCacheSnapshot();
           self.postCorrectDelete(resp);
           observer.next(resp.data);
@@ -1214,7 +1177,21 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
       this.dynamicFormSubscription = dynamicForm.render.subscribe(res => {
         if (res) {
           self.refreshComponentsEditableState();
-          self._reloadAction(true);
+          if (!self.isInInsertMode() && self.queryOnInit) {
+            self._reloadAction(true);
+          }
+          if (self.formParentKeysValues) {
+            Object.keys(self.formParentKeysValues).forEach(parentKey => {
+              const value = self.formParentKeysValues[parentKey];
+              const comp = self._components[parentKey];
+              if (Util.isFormDataComponent(comp) && comp.isAutomaticBinding()) {
+                (comp as any).setValue(value, {
+                  emitModelToViewChange: false,
+                  emitEvent: false
+                });
+              }
+            });
+          }
         }
       });
     }
@@ -1269,6 +1246,14 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
 
   set layoutAlign(val: string) {
     this._layoutAlign = val;
+  }
+
+  get showFloatingToolbar(): boolean {
+    return this.showHeader && this.headerMode === 'floating';
+  }
+
+  get showNotFloatingToolbar(): boolean {
+    return this.showHeader && this.headerMode !== 'floating';
   }
 
   isEditableDetail() {
@@ -1330,12 +1315,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     return valueCopy;
   }
 
-  set hasScrolled(val: boolean) {
-    this._hasScrolled = val;
-  }
-  get hasScrolled(): boolean {
-    return this._hasScrolled;
-  }
+
 }
 
 @NgModule({

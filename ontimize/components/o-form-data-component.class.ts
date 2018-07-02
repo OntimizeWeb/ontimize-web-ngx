@@ -1,11 +1,18 @@
-import { Injector, ElementRef, OnInit, OnDestroy } from '@angular/core';
+import { Injector, ElementRef, OnInit, OnDestroy, QueryList, ViewChildren, AfterViewInit, HostBinding } from '@angular/core';
 import { FormControl, FormGroup, Validators, ValidatorFn } from '@angular/forms';
+import { MatSuffix } from '@angular/material';
 
 import { InputConverter } from '../decorators';
 import { SQLTypes } from '../utils';
+
 import { OBaseComponent, IComponent } from './o-component.class';
 import { OFormComponent } from './form/o-form.component';
-import { OFormValue } from './form/OFormValue';
+import { OFormValue, IFormValueOptions } from './form/OFormValue';
+
+export interface IMultipleSelection extends IComponent {
+  getSelectedItems(): Array<any>;
+  setSelectedItems(values: Array<any>);
+}
 
 export interface IFormDataTypeComponent extends IComponent {
   getSQLType(): number;
@@ -19,8 +26,8 @@ export interface IFormControlComponent extends IComponent {
 
 export interface IFormDataComponent extends IFormControlComponent {
   data(value: any);
-  isAutomaticBinding(): Boolean;
-  isAutomaticRegistering(): Boolean;
+  isAutomaticBinding(): boolean;
+  isAutomaticRegistering(): boolean;
 }
 
 export const DEFAULT_INPUTS_O_FORM_DATA_COMPONENT = [
@@ -35,26 +42,42 @@ export const DEFAULT_INPUTS_O_FORM_DATA_COMPONENT = [
   'oenabled: enabled',
   'orequired: required',
   // sqltype[string]: Data type according to Java standard. See SQLType ngClass. Default: 'OTHER'
-  'sqlType: sql-type'
+  'sqlType: sql-type',
+  'width',
+  'readOnly: read-only',
+  'clearButton: clear-button'
 ];
 
 export class OFormDataComponent extends OBaseComponent implements IFormDataComponent, IFormDataTypeComponent,
-  OnInit, OnDestroy {
+  OnInit, AfterViewInit, OnDestroy {
+
   /* Inputs */
-  protected sqlType: string;
+  sqlType: string;
   @InputConverter()
   autoBinding: boolean = true;
   @InputConverter()
   autoRegistering: boolean = true;
+  width: string;
+  @InputConverter()
+  clearButton: boolean = false;
+
+  @HostBinding('style.width')
+  get hostWidth() {
+    return this.width;
+  }
 
   /* Internal variables */
   protected value: OFormValue;
-  protected defaultValue: any = undefined;
+  protected defaultValue: any = void 0;
   protected _SQLType: number = SQLTypes.OTHER;
   protected _defaultSQLTypeKey: string = 'OTHER';
   protected _fControl: FormControl;
   protected elRef: ElementRef;
   protected form: OFormComponent;
+
+  @ViewChildren(MatSuffix)
+  protected _matSuffixList: QueryList<MatSuffix>;
+  matSuffixClass;
 
   constructor(
     form: OFormComponent,
@@ -70,6 +93,15 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     this.initialize();
   }
 
+  ngAfterViewInit(): void {
+    if (this._matSuffixList) {
+      this.setSuffixClass(this._matSuffixList.length);
+      this._matSuffixList.changes.subscribe(() => {
+        this.setSuffixClass(this._matSuffixList.length);
+      });
+    }
+  }
+
   ngOnDestroy() {
     this.destroy();
   }
@@ -83,20 +115,36 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   }
 
   hasError(error: string): boolean {
-    return !this.isReadOnly && this._fControl.touched && this._fControl.hasError(error);
+    return !this.isReadOnly && this._fControl && this._fControl.touched && this._fControl.hasError(error);
   }
 
   getErrorValue(error: string, prop: string): string {
-    return this._fControl.hasError(error) ? this._fControl.getError(error)[prop] || '' : '';
+    return this._fControl && this._fControl.hasError(error) ? this._fControl.getError(error)[prop] || '' : '';
   }
 
   initialize() {
     super.initialize();
     if (this.form) {
       this.registerFormListeners();
-      this._isReadOnly = this.form.isInInitialMode() ? true : false;
+      this.isReadOnly = this.form.isInInitialMode();
     } else {
-      this._isReadOnly = this._disabled;
+      this.isReadOnly = this._disabled;
+    }
+  }
+
+  protected setSuffixClass(count: number) {
+    const iconFieldEl = this.elRef.nativeElement.getElementsByClassName('icon-field');
+    if (iconFieldEl.length === 1) {
+      let classList = iconFieldEl[0].classList;
+      classList.forEach(className => {
+        if (className.startsWith('icon-field-')) {
+          classList.remove(className);
+        }
+      });
+      if (count > 0) {
+        let matSuffixClass = `icon-field-${count}-suffix`;
+        iconFieldEl[0].classList.add(matSuffixClass);
+      }
     }
   }
 
@@ -134,11 +182,11 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     }
   }
 
-  isAutomaticBinding(): Boolean {
+  isAutomaticBinding(): boolean {
     return this.autoBinding;
   }
 
-  isAutomaticRegistering(): Boolean {
+  isAutomaticRegistering(): boolean {
     return this.autoRegistering;
   }
 
@@ -151,12 +199,23 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     return this.defaultValue;
   }
 
-  setValue(val: any) {
+  setValue(val: any, options?: IFormValueOptions) {
     this.ensureOFormValue(val);
     if (this._fControl) {
-      this._fControl.setValue(val);
+      this._fControl.setValue(val, options);
       this._fControl.markAsDirty();
     }
+  }
+
+  /**
+   * Clears the component value.
+   */
+  clearValue(): void {
+    this.setValue(void 0);
+  }
+
+  get showClearButton(): boolean {
+    return this.clearButton && !this.isReadOnly && !this.isDisabled && this.getValue();
   }
 
   ensureOFormValue(value: any) {
@@ -166,20 +225,6 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
       this.value = new OFormValue(value);
     } else {
       this.value = new OFormValue(this.defaultValue);
-    }
-
-    /*
-    * Temporary code
-    * I do not understand the reason why MatInput is not removing 'mat-empty' clase despite of the fact that
-    * the input element of the description is binding value attribute
-    */
-    let placeHolderLbl = this.elRef.nativeElement.querySelectorAll('label.mat-input-placeholder');
-    if (placeHolderLbl.length) {
-      // Take only first, nested element does not matter.
-      let element = placeHolderLbl[0];
-      if (!this.isEmpty()) {
-        element.classList.remove('mat-empty');
-      }
     }
   }
 
@@ -239,4 +284,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     return this.elRef;
   }
 
+  get hasCustomWidth(): boolean {
+    return this.width !== undefined;
+  }
 }

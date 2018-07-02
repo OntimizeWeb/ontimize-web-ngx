@@ -1,6 +1,23 @@
 export class OFormValue {
   value: any;
-  constructor(value ?: any) {
+  constructor(value?: any) {
     this.value = value;
   }
 }
+
+export interface IFormValueOptions {
+  // If onlySelf is true, this change will only affect the validation of this FormControl and not its parent component. This defaults to false.
+  onlySelf?: boolean;
+  // If emitEvent is true, this change will cause a valueChanges event on the FormControl to be emitted. This defaults to true (as it falls through to updateValueAndValidity).
+  emitEvent?: boolean;
+  // If emitModelToViewChange is true, the view will be notified about the new value via an onChange event. This is the default behavior if emitModelToViewChange is not specified.
+  emitModelToViewChange?: boolean;
+  // If emitViewToModelChange is true, an ngModelChange event will be fired to update the model. This is the default behavior if emitViewToModelChange is not specified.
+  emitViewToModelChange?: boolean;
+}
+
+
+
+
+
+

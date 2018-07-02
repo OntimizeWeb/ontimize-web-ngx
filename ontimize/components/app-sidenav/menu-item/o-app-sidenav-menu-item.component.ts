@@ -1,12 +1,12 @@
-import { Injector, NgModule, Component, OnInit, ViewEncapsulation, ElementRef, AfterViewInit, OnDestroy } from '@angular/core';
+import { Injector, NgModule, Component, ViewEncapsulation, ElementRef, AfterViewInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
-
+import { Util } from '../../../utils';
 import { InputConverter } from '../../../decorators';
 import { OSharedModule } from '../../../shared';
 import { OAppLayoutComponent } from '../../../layouts';
-import { OTranslateService, LoginService, MenuItemAction, MenuItemLocale, MenuRootItem, MenuItemUserInfo } from '../../../services';
+import { OTranslateService, LoginService, MenuItemAction, MenuItemLocale, MenuRootItem, MenuItemUserInfo, MenuItemRoute } from '../../../services';
 import { OLanguageSelectorModule } from '../../language-selector/o-language-selector.component';
 import { OAppSidenavComponent } from '../o-app-sidenav.component';
 
@@ -25,8 +25,9 @@ export const DEFAULT_OUTPUTS_O_APP_SIDENAV_MENU_ITEM = [];
   templateUrl: './o-app-sidenav-menu-item.component.html',
   styleUrls: ['./o-app-sidenav-menu-item.component.scss'],
   encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class OAppSidenavMenuItemComponent implements OnInit, AfterViewInit, OnDestroy {
+export class OAppSidenavMenuItemComponent implements AfterViewInit, OnDestroy {
 
   public static DEFAULT_INPUTS_O_APP_SIDENAV_MENU_ITEM = DEFAULT_INPUTS_O_APP_SIDENAV_MENU_ITEM;
   public static DEFAULT_OUTPUTS_O_APP_SIDENAV_MENU_ITEM = DEFAULT_OUTPUTS_O_APP_SIDENAV_MENU_ITEM;
@@ -34,32 +35,35 @@ export class OAppSidenavMenuItemComponent implements OnInit, AfterViewInit, OnDe
   protected translateService: OTranslateService;
   protected loginService: LoginService;
   protected sidenav: OAppSidenavComponent;
+  protected router: Router;
 
   @InputConverter()
   sidenavOpened: boolean = true;
   public menuItem: MenuRootItem;
   public menuItemType: string;
   protected appSidenavToggleSubscription: Subscription;
+  protected routerSubscription: Subscription;
   protected oAppLayoutComponent: OAppLayoutComponent;
 
   constructor(
     protected injector: Injector,
-    protected elRef: ElementRef
+    protected elRef: ElementRef,
+    protected cd: ChangeDetectorRef
   ) {
     this.translateService = this.injector.get(OTranslateService);
     this.loginService = this.injector.get(LoginService);
     this.sidenav = this.injector.get(OAppSidenavComponent);
     this.oAppLayoutComponent = this.injector.get(OAppLayoutComponent);
-  }
-
-  ngOnInit() {
-    // TODO
+    this.router = this.injector.get(Router);
+    this.routerSubscription = this.router.events.subscribe(() => {
+      this.cd.detectChanges();
+    });
   }
 
   ngAfterViewInit() {
-    this.setUserInfoImage();
     if (this.isUserInfoItem()) {
-      this.appSidenavToggleSubscription = this.sidenav.afterSidenavToggle.subscribe((opened) => {
+      this.setUserInfoImage();
+      this.appSidenavToggleSubscription = this.sidenav.sidenav.openedChange.subscribe((opened) => {
         if (opened) {
           this.setUserInfoImage();
         }
@@ -71,16 +75,18 @@ export class OAppSidenavMenuItemComponent implements OnInit, AfterViewInit, OnDe
     if (this.appSidenavToggleSubscription) {
       this.appSidenavToggleSubscription.unsubscribe();
     }
+    if (this.routerSubscription) {
+      this.routerSubscription.unsubscribe();
+    }
   }
 
   protected setUserInfoImage() {
-    if (this.isUserInfoItem()) {
-      let imgEl = this.elRef.nativeElement.getElementsByClassName('user-info-image')[0];
-      if (imgEl !== undefined) {
-        const item = this.menuItem as MenuItemUserInfo;
-        imgEl.setAttribute('style', 'background-image: url(\'' + item.avatar + '\')');
-      }
+    let imgEl = this.elRef.nativeElement.getElementsByClassName('user-info-image')[0];
+    if (imgEl !== undefined) {
+      const item = this.menuItem as MenuItemUserInfo;
+      imgEl.setAttribute('style', 'background-image: url(\'' + item.avatar + '\')');
     }
+    this.cd.detectChanges();
   }
 
   executeItemAction() {
@@ -110,6 +116,13 @@ export class OAppSidenavMenuItemComponent implements OnInit, AfterViewInit, OnDe
     this.loginService.logoutWithConfirmationAndRedirect();
   }
 
+  navigate() {
+    const route = (this.menuItem as MenuItemRoute).route;
+    if (this.router.url !== route) {
+      this.router.navigate([route]);
+    }
+  }
+
   onClick() {
     switch (this.menuItemType) {
       case 'action':
@@ -120,6 +133,9 @@ export class OAppSidenavMenuItemComponent implements OnInit, AfterViewInit, OnDe
         break;
       case 'logout':
         this.logout();
+        break;
+      case 'route':
+        this.navigate();
         break;
       default:
         break;
@@ -152,6 +168,22 @@ export class OAppSidenavMenuItemComponent implements OnInit, AfterViewInit, OnDe
 
   get useFlagIcons(): boolean {
     return this.oAppLayoutComponent && this.oAppLayoutComponent.useFlagIcons;
+  }
+
+  isActiveItem(): boolean {
+    if (!this.isRouteItem()) {
+      return false;
+    }
+    const route = (this.menuItem as MenuItemRoute).route;
+    return this.router.url === route || this.router.url.startsWith(route + '/');
+  }
+
+  get tooltip(): string {
+    let result = this.translateService.get(this.menuItem.name);
+    if (Util.isDefined(this.menuItem.tooltip)) {
+      result += ': ' + this.translateService.get(this.menuItem.tooltip);
+    }
+    return result;
   }
 }
 

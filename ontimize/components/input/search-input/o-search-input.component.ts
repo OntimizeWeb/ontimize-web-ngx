@@ -9,7 +9,8 @@ import { OTranslateService } from '../../../services';
 import { OSharedModule } from '../../../shared';
 
 export const DEFAULT_INPUTS_O_SEARCH_INPUT = [
-  'placeholder'
+  'placeholder',
+  'width'
 ];
 
 export const DEFAULT_OUTPUTS_O_SEARCH_INPUT = [
@@ -29,7 +30,8 @@ export class OSearchInputComponent implements OnInit {
   public static DEFAULT_INPUTS_O_SEARCH_INPUT = DEFAULT_INPUTS_O_SEARCH_INPUT;
   public static DEFAULT_OUTPUTS_O_SEARCH_INPUT = DEFAULT_OUTPUTS_O_SEARCH_INPUT;
 
-  protected placeholder: string = 'SEARCH';
+  placeholder: string = 'SEARCH';
+  width: string;
 
   onSearch: EventEmitter<any> = new EventEmitter<any>();
 
@@ -80,6 +82,10 @@ export class OSearchInputComponent implements OnInit {
     window.setTimeout(() => {
       self.placeholder = value;
     }, 0);
+  }
+
+  get hasCustomWidth(): boolean {
+    return this.width !== undefined;
   }
 
 }

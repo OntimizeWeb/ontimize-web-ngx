@@ -36,10 +36,9 @@ export class OTableCellRendererDateComponent extends OBaseTableCellRenderer {
   ngOnInit() {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
     //Add 'implements OnInit' to the class.
+    super.ngOnInit();
     this.pipeArguments = {
       format: this.format
     };
-
-    this.initialize();
   }
 }

@@ -1,4 +1,13 @@
 <mat-table [dataSource]="dataSourceTotals" class="totals-table">
+
+  <!--Checkbox Column -->
+  <ng-container [matColumnDef]="oTableOptions.selectColumn.name" *ngIf="oTableOptions.selectColumn.visible">
+    <mat-header-cell *matHeaderCellDef>
+    </mat-header-cell>
+    <mat-cell *matCellDef="let row">
+    </mat-cell>
+  </ng-container>
+
   <ng-container *ngFor="let column of oTableOptions.columns" [matColumnDef]="column.name">
     <mat-header-cell *matHeaderCellDef [fxFlex]="column.width" style="display: none;">
       <!--{{ column.aggregate.title | oTranslate }}-->
@@ -13,7 +22,6 @@
       <ng-template *ngIf="column.renderer && column.aggregate" [ngTemplateOutlet]="column.renderer.templateref" [ngTemplateOutletContext]="{cellvalue: row[column.name]}"></ng-template>
     </mat-cell>
   </ng-container>
-
 
   <mat-header-row *matHeaderRowDef="[]" style.display="none"></mat-header-row>
   <mat-row *matRowDef="let row; columns: oTableOptions.visibleColumns;">

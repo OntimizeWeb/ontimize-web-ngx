@@ -3,8 +3,9 @@ import { HttpClient } from '@angular/common/http';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/combineLatest';
-import { OTranslateService } from './o-translate.service';
 import { AppConfig } from '../../config/app-config';
+import { Codes } from '../../utils';
+import { OTranslateService } from './o-translate.service';
 
 export class OTranslateHttpLoader extends TranslateHttpLoader {
   protected appConfig: AppConfig;
@@ -79,7 +80,7 @@ export class OTranslateHttpLoader extends TranslateHttpLoader {
 
     this.httpClient.get(url).subscribe((resp: any) => {
       let response = {};
-      if (resp.code === 0) {
+      if (resp.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) {
         response = this.parseBundleResponse(resp.data);
       }
       innerObserver.next(response);

@@ -2,12 +2,12 @@
 
 <mat-dialog-content>
   <mat-list dnd-sortable-container [sortableData]="columns">
-    <mat-list-item *ngFor="let column of columns; let x = index" (click)="onClickColumn(column)"
-      dnd-sortable [sortableIndex]="x" [dragData]="column" [dragEnabled]="true">
-      <mat-icon mat-list-icon>drag_handle</mat-icon>
-      <span mat-line>{{ column.name }}</span>
-      <mat-icon *ngIf="column.visible">visibility</mat-icon>
-      <mat-icon *ngIf="!column.visible">visibility_off</mat-icon>
+    <mat-list-item *ngFor="let column of columns; let x = index" (click)="onClickColumn(column)" dnd-sortable [sortableIndex]="x"
+      [dragData]="column" [dragEnabled]="true">
+      <mat-icon mat-list-icon svgIcon="ontimize:drag_handle"></mat-icon>
+      <span mat-line>{{ (column.title || column.attr) | oTranslate }}</span>
+      <mat-icon layout-padding *ngIf="column.visible" svgIcon="ontimize:visibility"></mat-icon>
+      <mat-icon layout-padding *ngIf="!column.visible" svgIcon="ontimize:visibility_off"></mat-icon>
     </mat-list-item>
   </mat-list>
 </mat-dialog-content>

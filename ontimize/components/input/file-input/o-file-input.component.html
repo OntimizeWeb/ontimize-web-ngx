@@ -1,18 +1,15 @@
-<div [formGroup]="getFormGroup()" [matTooltip]="tooltip" [matTooltipPosition]="tooltipPosition" [matTooltipShowDelay]="tooltipShowDelay">
-  <mat-form-field (click)="isDisabled || isReadOnly ? null : inputFile.click()" fxFlexFill>
-    <div fxLayout="row">
-      <input #inputShowValue matInput type="text" [attr.id]="getAttribute()" [id]="getAttribute()" [formControlName]="getAttribute()"
-        [placeholder]="placeHolder" [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)" readonly>
-      <div matSuffix *ngIf="getValue()" (click)="$event.stopPropagation()" fxLayout="row" fxLayoutAlign="space-between center"
-        class="o-file-input-buttons">
-        <button mat-icon-button (click)="onClickClear($event)">
-          <mat-icon aria-label="Clear">clear</mat-icon>
-        </button>
-        <button mat-icon-button [disabled]="!isValid || uploader.isUploading" (click)="onClickUpload($event)">
-          <mat-icon aria-label="Upload">file_upload</mat-icon>
-        </button>
-      </div>
-    </div>
+<div fxLayout="row" fxLayoutAlign="space-between center" [formGroup]="getFormGroup()" [matTooltip]="tooltip" [matTooltipPosition]="tooltipPosition"
+  [matTooltipShowDelay]="tooltipShowDelay">
+  <mat-form-field [class.custom-width]="hasCustomWidth" class="icon-field" (click)="isDisabled || isReadOnly ? null : inputFile.click()"
+    fxFill>
+    <input #inputShowValue matInput type="text" [attr.id]="getAttribute()" [id]="getAttribute()" [formControlName]="getAttribute()"
+      [placeholder]="placeHolder" [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)" [required]="isRequired" readonly>
+    <button *ngIf="showClearButton" matSuffix mat-icon-button (click)="onClickClear($event)">
+      <mat-icon svgIcon="ontimize:close"></mat-icon>
+    </button>
+    <button *ngIf="getValue()" [disabled]="!isValid || uploader.isUploading" matSuffix mat-icon-button (click)="onClickUpload($event)">
+      <mat-icon>file_upload</mat-icon>
+    </button>
     <mat-error *ngIf="hasError('required')">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</mat-error>
     <mat-error *ngIf="hasError('fileType')">{{ 'FORM_VALIDATION.FILE_TYPE' | oTranslate}} ({{ getErrorValue('fileType', 'allowedFileTypes') }})</mat-error>
     <mat-error *ngIf="hasError('fileSize')">{{ 'FORM_VALIDATION.FILE_MAXSIZE' | oTranslate }}: {{ getErrorValue('fileSize', 'maxFileSize') }} bytes</mat-error>
@@ -29,8 +26,8 @@
         <div fxLayout="row" fxLayoutAlign="space-between center">
           <mat-progress-spinner *ngIf="splitUpload && file.isUploading" color="accent" mode="determinate" [value]="file.progress" class="uploading"
             diameter="3" strokeWidth="3"></mat-progress-spinner>
-          <mat-icon *ngIf="splitUpload && file.isUploaded && file.isSuccess" class="uploaded">check_circle</mat-icon>
-          <mat-icon *ngIf="splitUpload && file.isUploaded && file.isError" class="error">error</mat-icon>
+          <mat-icon *ngIf="splitUpload && file.isUploaded && file.isSuccess" class="uploaded" svgIcon="ontimize:check_circle"></mat-icon>
+          <mat-icon *ngIf="splitUpload && file.isUploaded && file.isError" class="error" svgIcon="ontimize:error_outline"></mat-icon>
         </div>
       </mat-list-item>
     </mat-list>

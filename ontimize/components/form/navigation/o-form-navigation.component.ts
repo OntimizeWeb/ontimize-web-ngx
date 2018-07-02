@@ -2,7 +2,7 @@ import { Component, forwardRef, Inject, Injector, ViewEncapsulation } from '@ang
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { OFormLayoutManagerComponent } from '../../../layouts';
-import { Util } from '../../../util/util';
+import { Util, Codes } from '../../../utils';
 import { OFormComponent } from '../o-form.component';
 import { OFormDataNavigation } from './o-form.data.navigation.class';
 import { OFormNavigationClass } from './o-form.navigation.class';
@@ -97,15 +97,12 @@ export class OFormNavigationComponent {
   private moveWithoutManager(index: number) {
     let route = this.getRouteOfSelectedRow(this.navigationData[index]);
     if (route.length > 0) {
-      let extras;
       this.currentIndex = index;
-      const queryParams = {
-        'isdetail': 'true'
+      const qParams = Codes.getIsDetailObject();
+      let extras = {
+        relativeTo: this.actRoute.parent
       };
-      extras = {
-        relativeTo: this.actRoute.parent,
-        queryParams: queryParams
-      };
+      extras[Codes.QUERY_PARAMS] = qParams;
       this.router.navigate(route, extras);
     }
   }

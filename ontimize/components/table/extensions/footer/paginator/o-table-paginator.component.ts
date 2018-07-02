@@ -14,7 +14,7 @@ export const DEFAULT_PAGINATOR_TABLE = [
   inputs: DEFAULT_PAGINATOR_TABLE
 })
 export class OTablePaginatorComponent implements OnInit {
-  private translateService: OTranslateService;
+
   protected _pageLenght: number = 0;
   protected _pageIndex: number = 0;
   protected _pageSize: number = 10;
@@ -26,15 +26,8 @@ export class OTablePaginatorComponent implements OnInit {
     protected injector: Injector,
     @Inject(forwardRef(() => OTableComponent)) protected table: OTableComponent
   ) {
-    this.translateService = this.injector.get(OTranslateService);
     this._pageIndex = 0;
-
-    this.onLanguageChangeSubscribe = this.translateService.onLanguageChanged.subscribe(
-      res => {
-        this._pageSizeOptions = [10, 25, 50, 100, this.translateService.get('TABLE.SHOW_ALL')];
-      }
-    );
-    this._pageSizeOptions = [10, 25, 50, 100, this.translateService.get('TABLE.SHOW_ALL')];
+    this._pageSizeOptions = [10, 25, 50, 100];
   }
 
   ngOnInit() {
@@ -46,7 +39,6 @@ export class OTablePaginatorComponent implements OnInit {
   }
 
   set pageLenght(value: number) {
-    console.log(this._pageSize * this.pageIndex);
     this._pageLenght = value;
   }
 
@@ -73,7 +65,6 @@ export class OTablePaginatorComponent implements OnInit {
     if (result.length === 0) {
       this._pageSizeOptions.push(value);
     }
-    this._pageSizeOptions.sort();
   }
 
   get pageSizeOptions(): Array<any> {

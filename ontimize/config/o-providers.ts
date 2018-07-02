@@ -1,7 +1,6 @@
 import { Injector, Provider } from '@angular/core';
 import { LOCATION_INITIALIZED } from '@angular/common';
 import { BaseRequestOptions, XHRBackend } from '@angular/http';
-import { MatIconRegistry } from '@angular/material';
 import { Events } from '../util/events';
 import { OHttp } from '../util/http/OHttp';
 import { AppConfig, Config } from '../config/app-config';
@@ -56,7 +55,6 @@ export function appInitializerFactory(injector: Injector, config: Config, oTrans
 
       oTranslate.setAppLang(userLang).subscribe(resolve, resolve, resolve);
     });
-
     injector.get(NavigationService).initialize();
   });
 }
@@ -88,7 +86,6 @@ export function bindEvents(window: Window) {
 export function getEvents() {
   return bindEvents(window);
 }
-
 
 export function getOntimizeServiceProvider(backend: XHRBackend, defaultOptions: BaseRequestOptions) {
   return new OHttp(backend, defaultOptions);
@@ -155,8 +152,6 @@ export function getOntimizeServiceResponseParser(injector: Injector) {
 }
 
 export const ONTIMIZE_PROVIDERS: Provider[] = [
-  //Standard
-  MatIconRegistry,
 
   { provide: Events, useValue: getEvents },
 
@@ -271,7 +266,8 @@ export const ONTIMIZE_PROVIDERS: Provider[] = [
   {
     provide: OFormLayoutManagerService,
     useClass: OFormLayoutManagerService
-  }, {
+  },
+  {
     provide: OContextMenuService,
     useClass: OContextMenuService
   }

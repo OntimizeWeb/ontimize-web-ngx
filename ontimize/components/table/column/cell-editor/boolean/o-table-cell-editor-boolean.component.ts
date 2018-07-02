@@ -48,7 +48,6 @@ export class OTableCellEditorBooleanComponent extends OBaseTableCellEditor {
 
   constructor(protected injector: Injector) {
     super(injector);
-    this.initialize();
   }
 
   getCellData() {

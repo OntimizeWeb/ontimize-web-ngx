@@ -1,11 +1,70 @@
+div.icon-btn {
+  cursor: default;
+  display: inline-block;
 
-span.icon-btn{
-  cursor: pointer;
   i {
     padding-top: 4px;
   }
+}
 
-  &.mat-disabled {
+.mat-form-field {
+  input:read-only {
     cursor: default;
   }
+
+  &.custom-width .mat-form-field-infix {
+    width: auto;
+  }
+
+  &.icon-field {
+    height: 24px;
+
+    .mat-form-field-suffix {
+      cursor: default;
+      text-align: center;
+
+      .icon-btn,
+      .mat-icon {
+        vertical-align: middle;
+        font-size: 20px;
+        line-height: 24px;
+      }
+
+      .icon-btn,
+      .mat-icon-button,
+      .mat-icon:not([svgicon]) {
+        width: 24px;
+        height: 24px;
+      }
+
+      .svg-icon > svg {
+        padding: 3px 0;
+        box-sizing: border-box;
+      }
+
+    }
+  }
 }
+@mixin mat-form-field-with-icon() {
+  $suffix-size: 24;
+  @for $i from 1 through 4 {
+    $width: ($i * $suffix-size) * 1px;
+
+    .mat-form-field.icon-field {
+      &.icon-field-#{$i}-suffix {
+        .mat-form-field-suffix {
+          width: $width;
+        }
+      }
+
+      &:not(.custom-width) {
+        &.icon-field-#{$i}-suffix {
+          .mat-form-field-infix {
+            width: calc(180px - #{$width});
+          }
+        }
+      }
+    }
+  }
+}
+@include mat-form-field-with-icon();

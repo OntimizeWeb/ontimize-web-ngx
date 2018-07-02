@@ -1,19 +1,23 @@
 @import 'node_modules/@angular/material/theming';
-
 @mixin input-theme($theme) {
   $foreground: map-get($theme, foreground);
   $warn: map-get($theme, warn);
 
-  span.icon-btn,
-  .mat-input-suffix.mat-form-field-suffix .mat-icon.material-icons {
-    color: mat-color($foreground, icon);
+  .mat-form-field {
+    &:not(.mat-form-field-disabled) {
+      .icon-btn,
+      .mat-icon,
+      .read-only .mat-icon,
+      .svg-icon {
+        color: mat-color($foreground, icon);
+      }
+    }
 
-    &.mat-disabled {
-      color: mat-color($foreground, disabled-text);
+    .mat-disabled {
+      color: mat-color($foreground, disabled-button);
     }
   }
 
-  textarea:disabled,
   input:not([type]):disabled,
   input[type="color"]:disabled,
   input[type="date"]:disabled,
@@ -21,17 +25,15 @@
   input[type="datetime-local"]:disabled,
   input[type="email"]:disabled,
   input[type="month"]:disabled,
-  input[type="password"]:disabled,
   input[type="number"]:disabled,
+  input[type="password"]:disabled,
   input[type="search"]:disabled,
   input[type="tel"]:disabled,
   input[type="text"]:disabled,
   input[type="time"]:disabled,
   input[type="url"]:disabled,
-  input[type="week"]:disabled {
-      color: mat-color($foreground, disabled-text);
+  input[type="week"]:disabled,
+  textarea:disabled {
+    color: mat-color($foreground, disabled-text);
   }
 }
-
-
-
