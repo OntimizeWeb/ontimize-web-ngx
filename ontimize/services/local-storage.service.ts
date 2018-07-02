@@ -85,7 +85,7 @@ export class LocalStorageService {
     return componentData;
   }
 
-  private updateAppComponentsStorage(componentKey: string, componentData: Object) {
+  updateAppComponentsStorage(componentKey: string, componentData: Object) {
     let componentDataB64: Object = undefined;
     try {
       componentDataB64 = btoa(JSON.stringify(componentData));

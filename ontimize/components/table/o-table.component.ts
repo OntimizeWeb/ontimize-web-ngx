@@ -1174,8 +1174,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   private saveDataNavigationInLocalStorage() {
     // Save data of the table in navigation-data in the localstorage
-    let navigationDataStorage = new OFormDataNavigation(this.injector);
-    navigationDataStorage.setDataToStore(this.getKeysValues());
+    OFormDataNavigation.storeNavigationData(this.injector, this.getKeysValues())
   }
 
   handleDoubleClick(item: any, event?) {
