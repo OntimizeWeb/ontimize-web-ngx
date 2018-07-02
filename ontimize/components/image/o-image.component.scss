@@ -1,11 +1,9 @@
 .input-image {
   .input-image-preview {
     z-index: 1;
-    width: 150px;
-    height: 150px;
+    margin: 10px;
 
     img {
-      max-height: 100%;
       max-width: 100%;
     }
 
