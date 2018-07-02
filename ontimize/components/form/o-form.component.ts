@@ -997,10 +997,9 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   private showError(operation:string, result: any) {
     if (result && typeof result !== 'object') {
       this.dialogService.alert('ERROR', result);
-    }
-    else {
+    } else {
       let message = 'MESSAGES.ERROR_DELETE';
-      switch(operation){
+      switch(operation) {
         case 'update':
           message = 'MESSAGES.ERROR_UPDATE';
           break;
@@ -1011,8 +1010,6 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
       this.dialogService.alert('ERROR', message);
     }
   }
-
-
 
   updateData(filter, values, sqlTypes?: Object): Observable<any> {
     const self = this;
@@ -1251,12 +1248,12 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     this._layoutAlign = val;
   }
 
-  get showFloatingToolbar():boolean{
-    return this.showHeader && this.headerMode === 'floating'
+  get showFloatingToolbar(): boolean {
+    return this.showHeader && this.headerMode === 'floating';
   }
 
-  get showNotFloatingToolbar():boolean{
-    return this.showHeader && this.headerMode !== 'floating'
+  get showNotFloatingToolbar(): boolean {
+    return this.showHeader && this.headerMode !== 'floating';
   }
 
   isEditableDetail() {
