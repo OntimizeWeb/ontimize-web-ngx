@@ -12,7 +12,7 @@ import {
   OnInit,
   ViewChild,
   ViewEncapsulation
- } from '@angular/core';
+} from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router, UrlSegment } from '@angular/router';
 import 'rxjs/add/observable/combineLatest';
@@ -303,7 +303,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
       let attr = comp.getAttribute();
       if (this._components.hasOwnProperty(attr)) {
         comp.repeatedAttr = true;
-        console.error('There is already a component registered in the form with the attr: ' + attr );
+        console.error('There is already a component registered in the form with the attr: ' + attr);
         return;
       }
       if (attr && attr.length > 0) {
@@ -522,7 +522,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     if (!previouslyAdded) {
       canDeactivateArray.push(this.deactivateGuard.constructor);
       this.actRoute.routeConfig.canDeactivate = canDeactivateArray;
-      this.router.resetConfig(this.router.config);
+      // this.router.resetConfig(this.router.config);
     }
   }
 
@@ -535,8 +535,15 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
           break;
         }
       }
-      this.router.resetConfig(this.router.config);
+      if (this.actRoute.routeConfig.canDeactivate.length === 0) {
+        delete this.actRoute.routeConfig.canDeactivate;
     }
+      // this.router.resetConfig(this.router.config);
+    }
+  }
+
+  hasDeactivateGuard() {
+    return Util.isDefined(this.deactivateGuard);
   }
 
   /**
@@ -663,7 +670,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     let components: any = this.getComponents();
     Object.keys(components).forEach(compKey => {
       const component = components[compKey];
-        component.isReadOnly = !state;
+      component.isReadOnly = !state;
     });
   }
 
@@ -981,25 +988,25 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
 
   protected postIncorrectInsert(result: any) {
     console.log('[OFormComponent.postIncorrectInsert]', result);
-    this.showError('insert',result);
+    this.showError('insert', result);
   }
 
   protected postIncorrectDelete(result: any) {
     console.log('[OFormComponent.postIncorrectDelete]', result);
-    this.showError('delete',result);
+    this.showError('delete', result);
   }
 
   protected postIncorrectUpdate(result: any) {
     console.log('[OFormComponent.postIncorrectUpdate]', result);
-    this.showError('update',result);
+    this.showError('update', result);
   }
 
-  private showError(operation:string, result: any) {
+  private showError(operation: string, result: any) {
     if (result && typeof result !== 'object') {
       this.dialogService.alert('ERROR', result);
     } else {
       let message = 'MESSAGES.ERROR_DELETE';
-      switch(operation) {
+      switch (operation) {
         case 'update':
           message = 'MESSAGES.ERROR_UPDATE';
           break;

@@ -423,11 +423,9 @@ export class OFormNavigationClass {
       subscription = this.dialogService.confirm('CONFIRM', 'MESSAGES.FORM_CHANGES_WILL_BE_LOST');
     }
     if (subscription === undefined) {
-      let observable = Observable.create(observer => {
-        setTimeout(() => {
-          observer.next(true);
-          observer.complete();
-        }, 100);
+      const observable = Observable.create(observer => {
+        observer.next(true);
+        observer.complete();
       });
       subscription = observable.toPromise();
     }
