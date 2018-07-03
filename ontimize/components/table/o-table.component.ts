@@ -723,8 +723,12 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     // Initialize quickFilter
     this._oTableOptions.filter = this.quickFilter;
 
-    if (!this.pageable && this.state.hasOwnProperty('currentPage')) {
+    if (this.state.hasOwnProperty('currentPage')) {
       this.currentPage = this.state['currentPage'];
+    }
+
+    if (this.pageable) {
+      this.state.queryRecordOffset = (this.currentPage === 0) ? 0 : Math.max(0, (this.state.queryRecordOffset - this.queryRows));
     }
 
     // Initialize paginator

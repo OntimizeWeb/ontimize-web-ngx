@@ -22,7 +22,10 @@ export class OTableStorage {
       dataToStore['sort-columns'] = this.table.sort.active + ':' + this.table.sort.direction;
     }
     if (this.table.oTableColumnsFilterComponent) {
-      dataToStore['column-value-filters'] = this.table.dataSource.getColumnValueFilters();
+      const columnValueFilters = this.table.dataSource.getColumnValueFilters();
+      if (columnValueFilters.length > 0) {
+        dataToStore['column-value-filters'] = this.table.dataSource.getColumnValueFilters();
+      }
     }
     dataToStore['select-column-visible'] = this.table.oTableOptions.selectColumn.visible;
     Object.assign(dataToStore, this.getColumnsQuickFilterConf());
@@ -54,16 +57,15 @@ export class OTableStorage {
 
   protected getPageState(): any {
     let result = {};
-    if (this.table.pageable) {
-      const state = this.table.getState();
-      result = {
-        totalQueryRecordsNumber: state.totalQueryRecordsNumber,
-        queryRecordOffset: state.queryRecordOffset
-      };
-    } else if (this.table.currentPage > 0) {
+    if (this.table.currentPage > 0) {
       result = {
         currentPage: this.table.currentPage
       };
+    }
+    if (this.table.pageable) {
+      const state = this.table.getState();
+      result['totalQueryRecordsNumber'] = state.totalQueryRecordsNumber;
+      result['queryRecordOffset'] = state.queryRecordOffset;
     }
     return result;
   }
