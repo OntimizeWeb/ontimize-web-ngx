@@ -2,7 +2,7 @@
 
 <mat-dialog-content>
   <span mat-subheader>{{ 'TABLE.DIALOG.LOAD_FILTER' | oTranslate }}</span>
-  <mat-selection-list #filterList>
+  <mat-selection-list #filterList class="o-table-load-filter-dialog-list">
     <mat-list-option checkboxPosition="before" *ngFor="let filter of filters" [value]="filter.name">
       <span matLine>{{ filter.name }}</span>
       <span matLine>{{ filter.description }}</span>
