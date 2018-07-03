@@ -21,7 +21,7 @@ import { OSharedModule } from '../../shared';
 import { OServiceComponent } from '../o-service-component.class';
 import {
   O_TABLE_FOOTER_COMPONENTS,
-  OTablePaginatorComponent,
+  OTablePaginator,
   OTableMatPaginatorIntl,
   OTableColumnAggregateComponent,
   OColumnAggregate
@@ -254,7 +254,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   protected snackBarService: SnackBarService;
 
-  public paginator: OTablePaginatorComponent;
+  public paginator: OTablePaginator;
   @ViewChild(MatPaginator) matpaginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild('columnFilterOption') columnFilterOption: OTableOptionComponent;
@@ -506,10 +506,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       this.elRef.nativeElement.removeAttribute('title');
     }
 
-    if (this.matpaginator && !this.pageable) {
-      this.matpaginator.pageIndex = this.currentPage;
-    }
-
     this.setDatasource();
 
     this.registerSortListener();
@@ -549,11 +545,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   registerQuickFilter(arg: OTableQuickfilterComponent) {
     this.oTableQuickFilterComponent = arg;
     // this.oTableQuickFilterComponent.setValue(this.state['filter']);
-  }
-
-  registerPagination(value: OTablePaginatorComponent) {
-    this.paginationControls = true;
-    this.paginator = value;
   }
 
   registerContextMenu(value: OContextMenuComponent): void {
@@ -738,9 +729,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
     // Initialize paginator
     if (!this.paginator && this.paginationControls) {
-      this.paginator = new OTablePaginatorComponent(this.injector, this);
-      this.paginator.pageSize = this.queryRows;
-      this.paginator.pageIndex = this.currentPage;
+      this.paginator = new OTablePaginator(this.injector, this);
     }
 
     if (this.tabGroupContainer && this.tabContainer) {
@@ -956,7 +945,11 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   getSqlTypesForFilter(filter): Object {
     let allSqlTypes = {};
-    this._oTableOptions.columns.forEach(col => allSqlTypes[col.attr] = col.sqlType);
+    this._oTableOptions.columns.forEach((col: OColumn) => {
+      if (col.sqlType) {
+        allSqlTypes[col.attr] = col.sqlType;
+      }
+    });
     Object.assign(allSqlTypes, this.getSqlTypes());
 
     let filterCols = Util.getValuesFromObject(filter);
@@ -1069,7 +1062,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       this.pendingQuery = true;
 
       // Initialize page index
-      this.matpaginator.pageIndex = 0;
+      this.paginator.pageIndex = 0;
 
       let queryArgs = {
         offset: 0,

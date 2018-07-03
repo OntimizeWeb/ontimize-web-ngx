@@ -1,26 +1,15 @@
-import { Component, OnInit, Inject, Injector, Injectable, forwardRef } from '@angular/core';
-import { MatPaginatorIntl } from '@angular/material';
+import { Inject, Injector, Injectable, forwardRef } from '@angular/core';
+import { MatPaginatorIntl, MatPaginator } from '@angular/material';
 import { OTranslateService } from '../../../../../services';
 import { OTableComponent } from '../../../o-table.component';
 
-export const DEFAULT_PAGINATOR_TABLE = [
-  // page-size [number]: Number of items to display on a page. By default set to 50.
-  'pageSize: page-size'
-];
-
-@Component({
-  selector: 'o-table-paginator',
-  template: ' ',
-  inputs: DEFAULT_PAGINATOR_TABLE
-})
-export class OTablePaginatorComponent implements OnInit {
+export class OTablePaginator {
 
   protected _pageLenght: number = 0;
   protected _pageIndex: number = 0;
   protected _pageSize: number = 10;
   protected _pageSizeOptions: Array<any>;
-  protected onLanguageChangeSubscribe: any;
-
+  protected matpaginator: MatPaginator;
 
   constructor(
     protected injector: Injector,
@@ -28,10 +17,10 @@ export class OTablePaginatorComponent implements OnInit {
   ) {
     this._pageIndex = 0;
     this._pageSizeOptions = [10, 25, 50, 100];
-  }
+    this.matpaginator = this.table.matpaginator;
 
-  ngOnInit() {
-    this.table.registerPagination(this);
+    this.pageSize = this.table.queryRows;
+    this.pageIndex = this.table.currentPage;
   }
 
   get pageLenght(): number {
@@ -48,6 +37,9 @@ export class OTablePaginatorComponent implements OnInit {
 
   set pageIndex(value: number) {
     this._pageIndex = value;
+    if (this.matpaginator && !this.table.pageable) {
+      this.matpaginator.pageIndex = this._pageIndex;
+    }
   }
 
   get pageSize(): number {
@@ -84,7 +76,6 @@ export class OTablePaginatorComponent implements OnInit {
   }
 }
 
-
 @Injectable()
 export class OTableMatPaginatorIntl extends MatPaginatorIntl {
 
@@ -95,7 +86,6 @@ export class OTableMatPaginatorIntl extends MatPaginatorIntl {
   protected onLanguageChangeSubscribe: any;
 
   constructor(protected injector: Injector) {
-
     super();
     this.translateService = this.injector.get(OTranslateService);
     this.itemsPerPageLabel = this.translateService.get('TABLE.PAGINATE.ITEMSPERPAGELABEL');
@@ -103,17 +93,13 @@ export class OTableMatPaginatorIntl extends MatPaginatorIntl {
     this.previousPageLabel = this.translateService.get('TABLE.PAGINATE.PREVIOUS');
     this.getRangeLabel = this.getORangeLabel;
 
-    this.onLanguageChangeSubscribe = this.translateService.onLanguageChanged.subscribe(
-      res => {
-        this.itemsPerPageLabel = this.translateService.get('TABLE.PAGINATE.ITEMSPERPAGELABEL');
-        this.nextPageLabel = this.translateService.get('TABLE.PAGINATE.NEXT');
-        this.previousPageLabel = this.translateService.get('TABLE.PAGINATE.PREVIOUS');
-        this.getRangeLabel = this.getORangeLabel;
-      }
-    );
-
+    this.onLanguageChangeSubscribe = this.translateService.onLanguageChanged.subscribe(res => {
+      this.itemsPerPageLabel = this.translateService.get('TABLE.PAGINATE.ITEMSPERPAGELABEL');
+      this.nextPageLabel = this.translateService.get('TABLE.PAGINATE.NEXT');
+      this.previousPageLabel = this.translateService.get('TABLE.PAGINATE.PREVIOUS');
+      this.getRangeLabel = this.getORangeLabel;
+    });
   }
-
 
   getORangeLabel(page: number, pageSize: number, length: number): string {
     if (!isNaN(pageSize) && (length === 0 || pageSize === 0)) {
