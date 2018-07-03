@@ -119,6 +119,7 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
   loading: boolean = false;
 
   protected form: OFormComponent;
+  protected alreadyStored: boolean = false;
 
   constructor(
     protected injector: Injector
@@ -203,7 +204,8 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
   }
 
   protected updateStateStorage() {
-    if (this.localStorageService && this.storeState) {
+    if (this.localStorageService && this.storeState && !this.alreadyStored) {
+      this.alreadyStored = true;
       this.localStorageService.updateComponentStorage(this);
     }
   }
