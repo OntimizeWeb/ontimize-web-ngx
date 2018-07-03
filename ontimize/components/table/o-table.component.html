@@ -34,6 +34,7 @@
     <mat-menu #filterMenu="matMenu">
       <button mat-menu-item (click)="onStoreFilterClicked()">{{ 'TABLE.BUTTONS.FILTER_SAVE' | oTranslate }}</button>
       <button mat-menu-item (click)="onLoadFilterClicked()">{{ 'TABLE.BUTTONS.FILTER_LOAD' | oTranslate }}</button>
+      <button mat-menu-item (click)="onClearFilterClicked()">{{ 'TABLE.BUTTONS.FILTER_CLEAR' | oTranslate }}</button>
     </mat-menu>
 
     <div #tableBody fxLayout="column" fxLayoutAlign="start stretch" class="o-table-body o-scroll" [class.horizontal-scroll]="horizontalScroll"

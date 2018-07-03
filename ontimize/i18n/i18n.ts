@@ -156,6 +156,7 @@ export var MAP = {
     'TABLE.BUTTONS.FILTER': 'Filter',
     'TABLE.BUTTONS.FILTER_SAVE': 'Save filter',
     'TABLE.BUTTONS.FILTER_LOAD': 'Load filter',
+    'TABLE.BUTTONS.FILTER_CLEAR': 'Clear filter',
     'TABLE.BUTTONS.REFRESH': 'Refresh',
     'TABLE.BUTTONS.DELETE': 'Delete',
     'TABLE.BUTTONS.ADD': 'New',
@@ -172,6 +173,7 @@ export var MAP = {
     'TABLE.DIALOG.FILTER_NAME': 'Name',
     'TABLE.DIALOG.FILTER_DESCRIPTION': 'Description',
     'TABLE.DIALOG.LOAD_FILTER': 'Select a filter to apply to the table',
+    'TABLE.DIALOG.CONFIRM_CLEAR_FILTER': 'This acction will clear every filter on the table. re you sure you want to continue?',
 
     'LAYOUT_MANANGER.MAIN_TAB_LABEL': 'Home',
     'LAYOUT_MANANGER.DIALOG_TITLE': 'Detail',
@@ -336,6 +338,7 @@ export var MAP = {
     'TABLE.BUTTONS.FILTER': 'Filtrar',
     'TABLE.BUTTONS.FILTER_SAVE': 'Guardar filtro',
     'TABLE.BUTTONS.FILTER_LOAD': 'Carger filtro',
+    'TABLE.BUTTONS.FILTER_CLEAR': 'Limpiar filtro',
     'TABLE.BUTTONS.REFRESH': 'Refrescar',
     'TABLE.BUTTONS.DELETE': 'Eliminar',
     'TABLE.BUTTONS.ADD': 'Nuevo',
@@ -352,6 +355,7 @@ export var MAP = {
     'TABLE.DIALOG.FILTER_NAME': 'Nombre',
     'TABLE.DIALOG.FILTER_DESCRIPTION': 'Descripción',
     'TABLE.DIALOG.LOAD_FILTER': 'Seleccione un filtro para aplicar a la tabla',
+    'TABLE.DIALOG.CONFIRM_CLEAR_FILTER': 'Esta acción limpiará todos los filtros aplicados a la tabla. ¿Desea continuar?',
 
     'LAYOUT_MANANGER.MAIN_TAB_LABEL': 'Inicio',
     'LAYOUT_MANANGER.DIALOG_TITLE': 'Detalle',

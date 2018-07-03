@@ -1424,6 +1424,19 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     });
   }
 
+  onClearFilterClicked(): void {
+    this.dialogService.confirm('CONFIRM', 'TABLE.DIALOG.CONFIRM_CLEAR_FILTER').then(result => {
+      if (result) {
+        this.clearFilters();
+      }
+    });
+  }
+
+  clearFilters(): void {
+    this.dataSource.clearColumnFilters();
+    this.oTableQuickFilterComponent.setValue(void 0);
+  }
+
   isColumnFilterable(column: OColumn): boolean {
     return this.showFilterByColumnIcon &&
       (this.oTableColumnsFilterComponent && this.oTableColumnsFilterComponent.isColumnFilterable(column.attr));
