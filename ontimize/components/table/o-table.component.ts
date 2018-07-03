@@ -21,7 +21,7 @@ import { OSharedModule } from '../../shared';
 import { OServiceComponent } from '../o-service-component.class';
 import {
   O_TABLE_FOOTER_COMPONENTS,
-  OTablePaginator,
+  OTablePaginatorComponent,
   OTableMatPaginatorIntl,
   OTableColumnAggregateComponent,
   OColumnAggregate
@@ -256,7 +256,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   protected snackBarService: SnackBarService;
 
-  public paginator: OTablePaginator;
+  public paginator: OTablePaginatorComponent;
   @ViewChild(MatPaginator) matpaginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild('columnFilterOption') columnFilterOption: OTableOptionComponent;
@@ -549,6 +549,11 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     // this.oTableQuickFilterComponent.setValue(this.state['filter']);
   }
 
+  registerPagination(value: OTablePaginatorComponent) {
+    this.paginationControls = true;
+    this.paginator = value;
+  }
+
   registerContextMenu(value: OContextMenuComponent): void {
     this.tableContextMenu = value;
     const self = this;
@@ -725,13 +730,17 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     // Initialize quickFilter
     this._oTableOptions.filter = this.quickFilter;
 
-    if (!this.pageable && this.state.hasOwnProperty('currentPage')) {
+    if (this.state.hasOwnProperty('currentPage')) {
       this.currentPage = this.state['currentPage'];
+    }
+
+    if (this.pageable) {
+      this.state.queryRecordOffset = (this.currentPage === 0) ? 0 : Math.max(0, (this.state.queryRecordOffset - this.queryRows));
     }
 
     // Initialize paginator
     if (!this.paginator && this.paginationControls) {
-      this.paginator = new OTablePaginator(this.injector, this);
+      this.paginator = new OTablePaginatorComponent(this.injector, this);
     }
 
     if (this.tabGroupContainer && this.tabContainer) {

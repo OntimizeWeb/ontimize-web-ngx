@@ -1,9 +1,19 @@
-import { Inject, Injector, Injectable, forwardRef } from '@angular/core';
+import { Component, OnInit, Inject, Injector, Injectable, forwardRef } from '@angular/core';
 import { MatPaginatorIntl, MatPaginator } from '@angular/material';
 import { OTranslateService } from '../../../../../services';
 import { OTableComponent } from '../../../o-table.component';
 
-export class OTablePaginator {
+export const DEFAULT_PAGINATOR_TABLE = [
+  // page-size [number]: Number of items to display on a page. By default set to 50.
+  'pageSize: page-size'
+];
+
+@Component({
+  selector: 'o-table-paginator',
+  template: ' ',
+  inputs: DEFAULT_PAGINATOR_TABLE
+})
+export class OTablePaginatorComponent implements OnInit {
 
   protected _pageLenght: number = 0;
   protected _pageIndex: number = 0;
@@ -21,6 +31,10 @@ export class OTablePaginator {
 
     this.pageSize = this.table.queryRows;
     this.pageIndex = this.table.currentPage;
+  }
+
+  ngOnInit() {
+    this.table.registerPagination(this);
   }
 
   get pageLenght(): number {

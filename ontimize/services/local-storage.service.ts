@@ -96,7 +96,9 @@ export class LocalStorageService {
       let appStoredData = localStorage.getItem(this._config['uuid']);
       if (!appStoredData) {
         let newAppData: Object = {};
-        newAppData[LocalStorageService.COMPONENTS_STORAGE_KEY] = { componentKey: componentDataB64 };
+        let componentData = {};
+        componentData[componentKey] = componentDataB64;
+        newAppData[LocalStorageService.COMPONENTS_STORAGE_KEY] = componentData;
         localStorage.setItem(this._config['uuid'], JSON.stringify(newAppData));
       } else {
         let appData = {};
