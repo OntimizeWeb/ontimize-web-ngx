@@ -173,7 +173,7 @@ export var MAP = {
     'TABLE.DIALOG.FILTER_NAME': 'Name',
     'TABLE.DIALOG.FILTER_DESCRIPTION': 'Description',
     'TABLE.DIALOG.LOAD_FILTER': 'Select a filter to apply to the table',
-    'TABLE.DIALOG.CONFIRM_CLEAR_FILTER': 'This acction will clear every filter on the table. re you sure you want to continue?',
+    'TABLE.DIALOG.CONFIRM_CLEAR_FILTER': 'This acction will clear every filter on the table. Are you sure you want to continue?',
 
     'LAYOUT_MANANGER.MAIN_TAB_LABEL': 'Home',
     'LAYOUT_MANANGER.DIALOG_TITLE': 'Detail',
