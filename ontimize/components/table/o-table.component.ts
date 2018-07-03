@@ -47,9 +47,10 @@ import {
   O_TABLE_DIALOGS,
   OTableExportConfiguration,
   OTableExportDialogComponent,
+  OTableLoadFilterDialogComponent,
   OTableStoreFilterDialogComponent,
   OTableVisibleColumnsDialogComponent,
-  OTableFilterByColumnDataDialogComponent
+  OTableFilterByColumnDataDialogComponent,
 } from './extensions/dialog/o-table-dialog-components';
 
 import {
@@ -1387,6 +1388,25 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.oTableStorage.storeFilter(dialogRef.componentInstance.getFilterAttributes());
+      }
+    });
+  }
+
+  onLoadFilterClicked(): void {
+    let dialogRef = this.dialog.open(OTableLoadFilterDialogComponent, {
+      // TODO: is this fine? typos?
+      data: this.oTableStorage.getStoredFilters(),
+      width: '30vw',
+      disableClose: true
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        let selectedFilter: string = dialogRef.componentInstance.getSelectedFilterName();
+        if (selectedFilter) {
+          console.log(this.oTableStorage.getStoredFilter(selectedFilter));
+          // TODO: apply filter
+        }
       }
     });
   }

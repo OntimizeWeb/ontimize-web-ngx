@@ -155,6 +155,7 @@ export var MAP = {
     'TABLE.BUTTONS.RESIZE_COLUMNS': 'Resize columns',
     'TABLE.BUTTONS.FILTER': 'Filter',
     'TABLE.BUTTONS.FILTER_SAVE': 'Save filter',
+    'TABLE.BUTTONS.FILTER_LOAD': 'Load filter',
     'TABLE.BUTTONS.REFRESH': 'Refresh',
     'TABLE.BUTTONS.DELETE': 'Delete',
     'TABLE.BUTTONS.ADD': 'New',
@@ -170,6 +171,7 @@ export var MAP = {
     'TABLE.DIALOG.SAVE_FILTER': 'Select a name for the filter.',
     'TABLE.DIALOG.FILTER_NAME': 'Name',
     'TABLE.DIALOG.FILTER_DESCRIPTION': 'Description',
+    'TABLE.DIALOG.LOAD_FILTER': 'Select a filter to apply to the table',
 
     'LAYOUT_MANANGER.MAIN_TAB_LABEL': 'Home',
     'LAYOUT_MANANGER.DIALOG_TITLE': 'Detail',
@@ -333,6 +335,7 @@ export var MAP = {
     'TABLE.BUTTONS.RESIZE_COLUMNS': 'Cambiar tamaño de columnas',
     'TABLE.BUTTONS.FILTER': 'Filtrar',
     'TABLE.BUTTONS.FILTER_SAVE': 'Guardar filtro',
+    'TABLE.BUTTONS.FILTER_LOAD': 'Carger filtro',
     'TABLE.BUTTONS.REFRESH': 'Refrescar',
     'TABLE.BUTTONS.DELETE': 'Eliminar',
     'TABLE.BUTTONS.ADD': 'Nuevo',
@@ -348,6 +351,7 @@ export var MAP = {
     'TABLE.DIALOG.SAVE_FILTER': 'Seleccione un nombre para el filtro.',
     'TABLE.DIALOG.FILTER_NAME': 'Nombre',
     'TABLE.DIALOG.FILTER_DESCRIPTION': 'Descripción',
+    'TABLE.DIALOG.LOAD_FILTER': 'Seleccione un filtro para aplicar a la tabla',
 
     'LAYOUT_MANANGER.MAIN_TAB_LABEL': 'Inicio',
     'LAYOUT_MANANGER.DIALOG_TITLE': 'Detalle',
