@@ -73,6 +73,7 @@ import { ServiceUtils, ISQLOrder } from '../service.utils';
 import { FilterExpressionUtils, IExpression } from '../filter-expression.utils';
 import { OColumnTooltip } from './column/o-table-column.component';
 import { OTableRow } from './extensions/row/o-table-row.component';
+import { OTableStorage } from './extensions/o-table-storage.class';
 
 export const DEFAULT_INPUTS_O_TABLE = [
   ...OServiceComponent.DEFAULT_INPUTS_O_SERVICE_COMPONENT,
@@ -331,6 +332,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   /*parsed inputs variables */
   protected visibleColArray: Array<string> = [];
+  public sortColArray: Array<ISQLOrder> = [];
   /*end of parsed inputs variables */
 
   protected tabGroupContainer: MatTabGroup;
@@ -374,8 +376,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   protected editingCell: any;
   protected editingRow: any;
 
-  protected sortColArray: Array<ISQLOrder> = [];
-  protected currentPage: number = 0;
+  public currentPage: number = 0;
   public oTableQuickFilterComponent: OTableQuickfilterComponent;
 
   protected sortSubscription: Subscription;
@@ -386,6 +387,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   horizontalScrolled: boolean;
   public onUpdateScrolledState: EventEmitter<any> = new EventEmitter();
   public rowWidth;
+
+  protected oTableStorage: OTableStorage;
 
   @HostListener('window:resize', ['$event'])
   updateScrolledState(): void {
@@ -417,6 +420,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       // Do nothing due to not always is contained on tab.
     }
     this.snackBarService = this.injector.get(SnackBarService);
+    this.oTableStorage = new OTableStorage(this);
   }
 
   ngOnInit() {
@@ -502,29 +506,16 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       this.elRef.nativeElement.removeAttribute('title');
     }
 
+    if (this.matpaginator && !this.pageable) {
+      this.matpaginator.pageIndex = this.currentPage;
+    }
+
     this.setDatasource();
 
     this.registerSortListener();
 
-    this.showFilterByColumnIcon = this.getStoredColumnsFilters().length > 0;
-    if (this.columnFilterOption) {
-      this.columnFilterOption.active = this.showFilterByColumnIcon;
-    }
-    if (this.oTableQuickFilterComponent) {
-      this.oTableQuickFilterComponent.setValue(this.state['filter']);
-      const storedColumnsData = this.state['oColumns'] || [];
-      storedColumnsData.forEach((oColData: any) => {
-        const oCol = this.getOColumn(oColData.attr);
-        if (oCol) {
-          if (oColData.hasOwnProperty('searchable')) {
-            oCol.searchable = oColData.searchable;
-          }
-          if (oColData.hasOwnProperty('searching')) {
-            oCol.searching = oColData.searching;
-          }
-        }
-      });
-    }
+    this.setQuickFilterConfiguration(this.state);
+
     if (this.queryOnInit) {
       this.queryData(this.parentItem);
     }
@@ -552,35 +543,12 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
    * Method update store localstorage, call of the ILocalStorage
    */
   getDataToStore() {
-    let dataToStore = {
-      'filter': this.oTableQuickFilterComponent ? this.oTableQuickFilterComponent.value : '',
-      'query-rows': this.matpaginator ? this.matpaginator.pageSize : ''
-    };
-    if (this.sortColArray.length > 0 && this.sort.active !== undefined) {
-      dataToStore['sort-columns'] = this.sort.active + ':' + this.sort.direction;
-    }
-    if (this.oTableColumnsFilterComponent) {
-      dataToStore['column-value-filters'] = this.dataSource.getColumnValueFilters();
-    }
-    const tableOptions = this.oTableOptions;
-    dataToStore['filter-case-sensitive'] = tableOptions.filterCaseSensitive;
-    dataToStore['select-column-visible'] = tableOptions.selectColumn.visible;
-    let oColumnsData = [];
-    tableOptions.columns.forEach((oCol: OColumn) => {
-      let colData = {
-        attr: oCol.attr
-      };
-      colData['searchable'] = oCol.searchable;
-      colData['searching'] = oCol.searching;
-      oColumnsData.push(colData);
-    });
-    dataToStore['oColumns'] = oColumnsData;
-    return dataToStore;
+    return this.oTableStorage.getDataToStore();
   }
 
   registerQuickFilter(arg: OTableQuickfilterComponent) {
     this.oTableQuickFilterComponent = arg;
-    this.oTableQuickFilterComponent.setValue(this.state['filter']);
+    // this.oTableQuickFilterComponent.setValue(this.state['filter']);
   }
 
   registerPagination(value: OTablePaginatorComponent) {
@@ -763,12 +731,16 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
     // Initialize quickFilter
     this._oTableOptions.filter = this.quickFilter;
-    this.filterCaseSensitive = this.state.hasOwnProperty('filter-case-sensitive') ? this.state['filter-case-sensitive'] : this.filterCaseSensitive;
+
+    if (!this.pageable && this.state.hasOwnProperty('currentPage')) {
+      this.currentPage = this.state['currentPage'];
+    }
 
     // Initialize paginator
     if (!this.paginator && this.paginationControls) {
       this.paginator = new OTablePaginatorComponent(this.injector, this);
       this.paginator.pageSize = this.queryRows;
+      this.paginator.pageIndex = this.currentPage;
     }
 
     if (this.tabGroupContainer && this.tabContainer) {
@@ -1174,7 +1146,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   private saveDataNavigationInLocalStorage() {
     // Save data of the table in navigation-data in the localstorage
-    OFormDataNavigation.storeNavigationData(this.injector, this.getKeysValues())
+    OFormDataNavigation.storeNavigationData(this.injector, this.getKeysValues());
   }
 
   handleDoubleClick(item: any, event?) {
@@ -1395,7 +1367,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   getStoredColumnsFilters() {
-    return this.state['column-value-filters'] || [];
+    return this.oTableStorage.getStoredColumnsFilters();
   }
 
   onFilterByColumnClicked() {
@@ -1497,6 +1469,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   onChangePage(evt: PageEvent) {
     if (!this.pageable) {
+      this.currentPage = evt.pageIndex;
       return;
     }
     const tableState = this.state;
@@ -1585,6 +1558,29 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     return !Util.isDefined(value) || ((typeof value === 'string') && !value);
   }
 
+  protected setQuickFilterConfiguration(conf: any) {
+    this.filterCaseSensitive = conf.hasOwnProperty('filter-case-sensitive') ? conf['filter-case-sensitive'] : this.filterCaseSensitive;
+
+    this.showFilterByColumnIcon = this.oTableStorage.getStoredColumnsFilters(conf).length > 0;
+    if (this.columnFilterOption) {
+      this.columnFilterOption.active = this.showFilterByColumnIcon;
+    }
+    if (this.oTableQuickFilterComponent) {
+      this.oTableQuickFilterComponent.setValue(conf['filter']);
+      const storedColumnsData = conf['oColumns'] || [];
+      storedColumnsData.forEach((oColData: any) => {
+        const oCol = this.getOColumn(oColData.attr);
+        if (oCol) {
+          if (oColData.hasOwnProperty('searchable')) {
+            oCol.searchable = oColData.searchable;
+          }
+          if (oColData.hasOwnProperty('searching')) {
+            oCol.searching = oColData.searching;
+          }
+        }
+      });
+    }
+  }
 }
 
 @NgModule({
