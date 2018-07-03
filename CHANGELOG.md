@@ -79,6 +79,7 @@
 ]
 ...
 ```
+* **IMPORTANT**: if you are using '*ontimize-web-ngx-tools*' library for generating your app production version you **MUST** update it to '*ontimize-web-ngx-tools@1.0.6*' (or superior).
 * removing the classes *o-form-toolbar-floating* and *o-form-toolbar-floating-scrolled*. New styles were applied *o-form-toolbar*, it is necessary to review the classes related to it ([5f8c96b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5f8c96b))
 
 **Note**: There is a new '*o-tree*' component, all its information will be available at [ontimize-web-ngx-tree](https://github.com/OntimizeWeb/ontimize-web-ngx-tree)
