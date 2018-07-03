@@ -1,11 +1,13 @@
 import { Component, OnInit, Inject, Injector, Injectable, forwardRef } from '@angular/core';
 import { MatPaginatorIntl, MatPaginator } from '@angular/material';
 import { OTranslateService } from '../../../../../services';
+import { InputConverter } from '../../../../../decorators';
 import { OTableComponent } from '../../../o-table.component';
 
 export const DEFAULT_PAGINATOR_TABLE = [
   // page-size [number]: Number of items to display on a page. By default set to 50.
-  'pageSize: page-size'
+  'pageSize: page-size',
+  'showFirstLastButtons: show-first-last-buttons'
 ];
 
 @Component({
@@ -21,6 +23,9 @@ export class OTablePaginatorComponent implements OnInit {
   protected _pageSizeOptions: Array<any>;
   protected matpaginator: MatPaginator;
 
+  @InputConverter()
+  showFirstLastButtons: boolean = true;
+
   constructor(
     protected injector: Injector,
     @Inject(forwardRef(() => OTableComponent)) protected table: OTableComponent
@@ -31,6 +36,7 @@ export class OTablePaginatorComponent implements OnInit {
 
     this.pageSize = this.table.queryRows;
     this.pageIndex = this.table.currentPage;
+    this.showFirstLastButtons = this.table.showPaginatorFirstLastButtons;
   }
 
   ngOnInit() {

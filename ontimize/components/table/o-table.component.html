@@ -151,7 +151,7 @@
 
     <!--TABLE PAGINATOR-->
     <mat-paginator *ngIf="paginator" #matpaginator [length]="dataSource?.resultsLength" [pageIndex]="paginator.pageIndex" [pageSize]="queryRows"
-      [pageSizeOptions]="paginator.pageSizeOptions" (page)="onChangePage($event)"></mat-paginator>
+      [pageSizeOptions]="paginator.pageSizeOptions" (page)="onChangePage($event)" [showFirstLastButtons]="paginator.showFirstLastButtons"></mat-paginator>
 
   </div>
 </div>

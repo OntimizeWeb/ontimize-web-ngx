@@ -135,7 +135,9 @@ export const DEFAULT_INPUTS_O_TABLE = [
   // selection-mode [none | simple | multiple ]: selection mode. Default multiple
   'selectionMode: selection-mode',
 
-  'horizontalScroll: horizontal-scroll'
+  'horizontalScroll: horizontal-scroll',
+
+  'showPaginatorFirstLastButtons: show-paginator-first-last-buttons'
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE = [
@@ -325,6 +327,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   protected selectionMode: string = Codes.SELECTION_MODE_MULTIPLE;
   @InputConverter()
   horizontalScroll: boolean = false;
+  @InputConverter()
+  showPaginatorFirstLastButtons: boolean = true;
 
   public daoTable: OTableDao | null;
   public dataSource: OTableDataSource | null;
