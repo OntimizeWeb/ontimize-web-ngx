@@ -47,6 +47,7 @@ import {
   O_TABLE_DIALOGS,
   OTableExportConfiguration,
   OTableExportDialogComponent,
+  OTableStoreFilterDialogComponent,
   OTableVisibleColumnsDialogComponent,
   OTableFilterByColumnDataDialogComponent
 } from './extensions/dialog/o-table-dialog-components';
@@ -1379,6 +1380,19 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     } else {
       this.showFilterByColumnIcon = !this.showFilterByColumnIcon;
     }
+  }
+
+  onStoreFilterClicked(): void {
+    let dialogRef = this.dialog.open(OTableStoreFilterDialogComponent, {
+      width: '30vw',
+      disableClose: true
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.oTableStorage.storeFilter(dialogRef.componentInstance.getFilterAttributes());
+      }
+    });
   }
 
   isColumnFilterable(column: OColumn): boolean {
