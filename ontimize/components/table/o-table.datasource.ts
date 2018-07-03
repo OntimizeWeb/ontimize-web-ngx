@@ -12,9 +12,7 @@ import { ColumnValueFilterOperator, IColumnValueFilter, OTableEditableRowCompone
 import { OColumn, OTableComponent, OTableOptions } from './o-table.component';
 import { OTableDao } from './o-table.dao';
 
-
 export class OTableDataSource extends DataSource<any> {
-
   dataTotalsChange = new BehaviorSubject<any[]>([]);
   get data(): any[] { return this.dataTotalsChange.value; }
 
@@ -27,7 +25,6 @@ export class OTableDataSource extends DataSource<any> {
   protected _columnValueFilterChange = new Subject();
 
   protected filteredData: any[] = [];
-  protected paginator: MatPaginator;
   renderedData: any[] = [];
   resultsLength: number = 0;
 
