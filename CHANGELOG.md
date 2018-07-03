@@ -1,4 +1,8 @@
 ## 3.0.0-rc.2
+### Features
+* **o-table**: new '*show-paginator-first-last-buttons*' input ([1c23563](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1c23563))
+* **o-table-paginator**: new '*show-first-last-buttons*' input ([1c23563](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1c23563))
+
 ### Bug Fixes
 * **o-form**: fixing navigation bugs ([344e369](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/344e369)) ([f06362e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f06362e)) ([cc475b0](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/cc475b0))
 
