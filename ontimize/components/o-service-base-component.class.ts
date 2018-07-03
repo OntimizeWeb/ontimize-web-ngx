@@ -401,4 +401,8 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
   protected setData(data: any, sqlTypes?: any) {
     //
   }
+
+  getState(): any {
+    return this.state;
+  }
 }

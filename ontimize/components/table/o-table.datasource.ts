@@ -173,7 +173,7 @@ export class OTableDataSource extends DataSource<any> {
       return data;
     }
     let startIndex = isNaN(this._paginator.pageSize) ? 0 : this._paginator.pageIndex * this._paginator.pageSize;
-    if (data.length < startIndex) {
+    if (data.length > 0 && data.length < startIndex) {
       startIndex = 0;
       this._paginator.pageIndex = 0;
     }
@@ -189,7 +189,7 @@ export class OTableDataSource extends DataSource<any> {
       if (oCol.searching && oCol.visible) {
         let filterValue = item[oCol.attr];
         if (oCol.renderer && oCol.renderer.getCellData) {
-          filterValue = oCol.renderer.getCellData(filterValue,item);
+          filterValue = oCol.renderer.getCellData(filterValue, item);
         }
         return filterValue;
       }
@@ -252,7 +252,7 @@ export class OTableDataSource extends DataSource<any> {
           if (column === ocolumn.attr && ocolumn.visible) {
             var key = column;
             if (render && ocolumn.renderer && ocolumn.renderer.getCellData) {
-              obj[key] = ocolumn.renderer.getCellData(row[column],row);
+              obj[key] = ocolumn.renderer.getCellData(row[column], row);
             } else {
               obj[key] = row[column];
             }
@@ -273,7 +273,7 @@ export class OTableDataSource extends DataSource<any> {
           if (column === ocolumn.attr) {
             var key = column;
             if (render && ocolumn.renderer && ocolumn.renderer.getCellData) {
-              obj[key] = ocolumn.renderer.getCellData(row[column],row);
+              obj[key] = ocolumn.renderer.getCellData(row[column], row);
             } else {
               obj[key] = row[column];
             }
