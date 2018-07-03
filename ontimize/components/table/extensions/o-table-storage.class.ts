@@ -7,6 +7,7 @@ export interface ITableFiltersStatus {
 }
 
 export class OTableStorage {
+
   constructor(
     protected table: OTableComponent
   ) { }
@@ -68,7 +69,7 @@ export class OTableStorage {
     return result;
   }
 
-  protected getStoredFilters() {
+  public getStoredFilters() {
     return this.table.getState()['user-stored-filters'] || [];
   }
 
