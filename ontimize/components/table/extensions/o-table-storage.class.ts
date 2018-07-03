@@ -77,6 +77,15 @@ export class OTableStorage {
     return storedFilters.find((item: ITableFiltersStatus) => item.name === filterName);
   }
 
+  deleteStoredFilter(filterName: string) {
+    const storedFilters = this.table.getState()['user-stored-filters'] || [];
+    let index = storedFilters.findIndex((item: ITableFiltersStatus) => item.name === filterName);
+    if (index >= 0) {
+      storedFilters.splice(index, 1);
+      this.table.getState()['user-stored-filters'] = storedFilters;
+    }
+  }
+
   storeFilters(filterArgs: ITableFiltersStatus) {
     let result = {};
     if (this.table.oTableColumnsFilterComponent) {
