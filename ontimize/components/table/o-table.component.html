@@ -26,9 +26,14 @@
         <o-table-option *ngIf="oTableColumnsFilterComponent !== undefined" #columnFilterOption (onClick)="onFilterByColumnClicked()"
           label="TABLE.BUTTONS.FILTER_BY_COLUMN" show-active-icon="true">
         </o-table-option>
+        <button mat-menu-item [matMenuTriggerFor]="filterMenu">{{ 'TABLE.BUTTONS.FILTER' | oTranslate }}</button>
         <ng-content select="o-table-option"></ng-content>
       </mat-menu>
     </div>
+
+    <mat-menu #filterMenu="matMenu">
+      <button mat-menu-item (click)="onStoreFilterClicked()">{{ 'TABLE.BUTTONS.FILTER_SAVE' | oTranslate }}</button>
+    </mat-menu>
 
     <div #tableBody fxLayout="column" fxLayoutAlign="start stretch" class="o-table-body o-scroll" [class.horizontal-scroll]="horizontalScroll"
       [class.scrolled]="horizontalScrolled">

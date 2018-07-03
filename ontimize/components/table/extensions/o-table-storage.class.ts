@@ -1,17 +1,15 @@
-import { OTableComponent, OColumn } from '../o-table.component';
+import { OColumn, OTableComponent } from '../o-table.component';
 
 export interface ITableFiltersStatus {
   name: string;
-  description: string;
+  description?: string;
   filter?: any;
 }
 
 export class OTableStorage {
   constructor(
     protected table: OTableComponent
-  ) {
-
-  }
+  ) { }
 
   getDataToStore() {
     let dataToStore = {
@@ -86,7 +84,7 @@ export class OTableStorage {
     }
   }
 
-  storeFilters(filterArgs: ITableFiltersStatus) {
+  storeFilter(filterArgs: ITableFiltersStatus) {
     let result = {};
     if (this.table.oTableColumnsFilterComponent) {
       const valueFiltersArr = this.table.dataSource.getColumnValueFilters();
@@ -107,4 +105,5 @@ export class OTableStorage {
     let stateObj = arg || this.table.getState();
     return stateObj['column-value-filters'] || [];
   }
+
 }
