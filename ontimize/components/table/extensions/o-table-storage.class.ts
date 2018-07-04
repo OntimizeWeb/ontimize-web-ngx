@@ -7,6 +7,8 @@ export interface ITableFiltersStatus {
 }
 
 export class OTableStorage {
+  public static STORED_FILTER_KEY = 'stored-filter';
+  public static USER_STORED_FILTERS_KEY = 'user-stored-filters';
 
   constructor(
     protected table: OTableComponent
@@ -32,7 +34,7 @@ export class OTableStorage {
 
     const storedFiltersArr = this.getStoredFilters();
     if (storedFiltersArr.length > 0) {
-      dataToStore['user-stored-filters'] = storedFiltersArr;
+      dataToStore[OTableStorage.USER_STORED_FILTERS_KEY] = storedFiltersArr;
     }
     return dataToStore;
   }
@@ -69,39 +71,48 @@ export class OTableStorage {
     return result;
   }
 
-  public getStoredFilters() {
-    return this.table.getState()['user-stored-filters'] || [];
+  setStoredFilters(filters: Array<ITableFiltersStatus>) {
+    return this.table.getState()[OTableStorage.USER_STORED_FILTERS_KEY] = filters;
+  }
+
+  getStoredFilters() {
+    return this.table.getState()[OTableStorage.USER_STORED_FILTERS_KEY] || [];
   }
 
   getStoredFilter(filterName: string) {
-    const storedFilters = this.table.getState()['user-stored-filters'] || [];
+    const storedFilters = this.table.getState()[OTableStorage.USER_STORED_FILTERS_KEY] || [];
     return storedFilters.find((item: ITableFiltersStatus) => item.name === filterName);
   }
 
+  getStoredFilterConf(filterName: string) {
+    const storedFilter = this.getStoredFilter(filterName);
+    return (storedFilter || {})[OTableStorage.STORED_FILTER_KEY];
+  }
+
   deleteStoredFilter(filterName: string) {
-    const storedFilters = this.table.getState()['user-stored-filters'] || [];
+    const storedFilters = this.table.getState()[OTableStorage.USER_STORED_FILTERS_KEY] || [];
     let index = storedFilters.findIndex((item: ITableFiltersStatus) => item.name === filterName);
     if (index >= 0) {
       storedFilters.splice(index, 1);
-      this.table.getState()['user-stored-filters'] = storedFilters;
+      this.table.getState()[OTableStorage.USER_STORED_FILTERS_KEY] = storedFilters;
     }
   }
 
   storeFilter(filterArgs: ITableFiltersStatus) {
-    let result = {};
+    let storedFilter = {};
     if (this.table.oTableColumnsFilterComponent) {
       const valueFiltersArr = this.table.dataSource.getColumnValueFilters();
       if (valueFiltersArr.length > 0) {
-        result['column-value-filters'] = valueFiltersArr;
+        storedFilter['column-value-filters'] = valueFiltersArr;
       }
     }
-    result['filter'] = {};
-    Object.assign(result['filter'], this.getColumnsQuickFilterConf());
+    Object.assign(storedFilter, this.getColumnsQuickFilterConf());
+    let result = {};
+    result[OTableStorage.STORED_FILTER_KEY] = storedFilter;
     Object.assign(result, filterArgs);
-
     let existingFilters = this.getStoredFilters();
     existingFilters.push(result);
-    this.table.getState()['user-stored-filters'] = existingFilters;
+    this.table.getState()[OTableStorage.USER_STORED_FILTERS_KEY] = existingFilters;
   }
 
   getStoredColumnsFilters(arg?: any) {

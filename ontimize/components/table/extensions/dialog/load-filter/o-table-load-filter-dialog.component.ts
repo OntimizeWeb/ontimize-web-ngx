@@ -14,6 +14,7 @@ export class OTableLoadFilterDialogComponent implements OnInit {
   @ViewChild(MatSelectionList) filterList: MatSelectionList;
 
   filters: Array<ITableFiltersStatus> = [];
+  private anyFilterDeleted: boolean = false;
 
   constructor(
     public dialogRef: MatDialogRef<OTableLoadFilterDialogComponent>,
@@ -27,7 +28,10 @@ export class OTableLoadFilterDialogComponent implements OnInit {
   }
 
   loadFilters(filters: Array<ITableFiltersStatus>): void {
-    this.filters = filters;
+    this.filters = [];
+    filters.forEach((filter: ITableFiltersStatus) => {
+      this.filters.push(filter);
+    });
   }
 
   getSelectedFilterName(): string {
@@ -35,4 +39,15 @@ export class OTableLoadFilterDialogComponent implements OnInit {
     return selected.length ? selected[0].value : void 0;
   }
 
+  removeFilter(index: number) {
+    this.anyFilterDeleted = true;
+    this.filters.splice(index, 1);
+  }
+
+  onDialogClose(val: boolean) {
+    this.dialogRef.close({
+      updateSelectedFilter: val,
+      updateStoredFilters: this.anyFilterDeleted
+    });
+  }
 }

@@ -43,9 +43,6 @@ export class OTableDataSource extends DataSource<any> {
     }
     this._tableOptions = table.oTableOptions;
     this._sort = table.sort;
-    if (this.table.oTableColumnsFilterComponent) {
-      this.initializeColumnsFilters();
-    }
   }
 
   /**
@@ -296,9 +293,9 @@ export class OTableDataSource extends DataSource<any> {
     });
   }
 
-  initializeColumnsFilters() {
-    const storedFilters = this.table.getStoredColumnsFilters();
-    storedFilters.forEach(filter => {
+  initializeColumnsFilters(filters: IColumnValueFilter[]) {
+    this.columnValueFilters = [];
+    filters.forEach(filter => {
       this.columnValueFilters.push(filter);
     });
   }

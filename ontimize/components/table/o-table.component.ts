@@ -75,7 +75,7 @@ import { ServiceUtils, ISQLOrder } from '../service.utils';
 import { FilterExpressionUtils, IExpression } from '../filter-expression.utils';
 import { OColumnTooltip } from './column/o-table-column.component';
 import { OTableRow } from './extensions/row/o-table-row.component';
-import { OTableStorage } from './extensions/o-table-storage.class';
+import { OTableStorage, ITableFiltersStatus } from './extensions/o-table-storage.class';
 
 export const DEFAULT_INPUTS_O_TABLE = [
   ...OServiceComponent.DEFAULT_INPUTS_O_SERVICE_COMPONENT,
@@ -516,7 +516,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
     this.registerSortListener();
 
-    this.setQuickFilterConfiguration(this.state);
+    this.setFiltersConfiguration(this.state);
 
     if (this.queryOnInit) {
       this.queryData(this.parentItem);
@@ -1412,14 +1412,21 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       width: '30vw',
       disableClose: true
     });
-
+    const self = this;
     dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        let selectedFilter: string = dialogRef.componentInstance.getSelectedFilterName();
-        if (selectedFilter) {
-          console.log(this.oTableStorage.getStoredFilter(selectedFilter));
-          // TODO: apply filter
+      if (result.updateSelectedFilter) {
+        let selectedFilterName: string = dialogRef.componentInstance.getSelectedFilterName();
+        if (selectedFilterName) {
+          const storedFilter = self.oTableStorage.getStoredFilterConf(selectedFilterName);
+          if (storedFilter) {
+            self.setFiltersConfiguration(storedFilter);
+            self.reloadPaginatedDataFromStart();
+          }
         }
+      }
+      if (result.updateStoredFilters) {
+        const filters: Array<ITableFiltersStatus> = dialogRef.componentInstance.filters;
+        self.oTableStorage.setStoredFilters(filters);
       }
     });
   }
@@ -1434,7 +1441,14 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   clearFilters(): void {
     this.dataSource.clearColumnFilters();
-    this.oTableQuickFilterComponent.setValue(void 0);
+    this.showFilterByColumnIcon = false;
+    if (this.columnFilterOption) {
+      this.columnFilterOption.active = this.showFilterByColumnIcon;
+    }
+    if (this.oTableQuickFilterComponent) {
+      this.oTableQuickFilterComponent.setValue(void 0);
+    }
+    this.reloadPaginatedDataFromStart();
   }
 
   isColumnFilterable(column: OColumn): boolean {
@@ -1611,13 +1625,19 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     return !Util.isDefined(value) || ((typeof value === 'string') && !value);
   }
 
-  protected setQuickFilterConfiguration(conf: any) {
+  protected setFiltersConfiguration(conf: any) {
     this.filterCaseSensitive = conf.hasOwnProperty('filter-case-sensitive') ? conf['filter-case-sensitive'] : this.filterCaseSensitive;
 
-    this.showFilterByColumnIcon = this.oTableStorage.getStoredColumnsFilters(conf).length > 0;
+    const storedColumnFilters = this.oTableStorage.getStoredColumnsFilters(conf);
+    this.showFilterByColumnIcon = storedColumnFilters.length > 0;
     if (this.columnFilterOption) {
       this.columnFilterOption.active = this.showFilterByColumnIcon;
     }
+
+    if (this.oTableColumnsFilterComponent) {
+      this.dataSource.initializeColumnsFilters(storedColumnFilters);
+    }
+
     if (this.oTableQuickFilterComponent) {
       this.oTableQuickFilterComponent.setValue(conf['filter']);
       const storedColumnsData = conf['oColumns'] || [];
