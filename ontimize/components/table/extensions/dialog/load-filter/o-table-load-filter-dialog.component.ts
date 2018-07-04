@@ -1,8 +1,9 @@
-import { Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Inject, Injector, OnInit, ViewChild } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef, MatListOption, MatSelectionList } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
 
 import { ITableFiltersStatus } from '../../o-table-storage.class';
+import { DialogService } from '../../../../../services/dialog.service';
 
 @Component({
   selector: 'o-table-load-filter-dialog',
@@ -14,13 +15,18 @@ export class OTableLoadFilterDialogComponent implements OnInit {
   @ViewChild(MatSelectionList) filterList: MatSelectionList;
 
   filters: Array<ITableFiltersStatus> = [];
-  private anyFilterDeleted: boolean = false;
+
+  onDelete: EventEmitter<string> = new EventEmitter();
+
+  protected dialogService: DialogService;
 
   constructor(
     public dialogRef: MatDialogRef<OTableLoadFilterDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) data: Array<ITableFiltersStatus>
+    @Inject(MAT_DIALOG_DATA) data: Array<ITableFiltersStatus>,
+    protected injector: Injector
   ) {
     this.loadFilters(data);
+    this.dialogService = this.injector.get(DialogService);
   }
 
   ngOnInit(): void {
@@ -28,10 +34,7 @@ export class OTableLoadFilterDialogComponent implements OnInit {
   }
 
   loadFilters(filters: Array<ITableFiltersStatus>): void {
-    this.filters = [];
-    filters.forEach((filter: ITableFiltersStatus) => {
-      this.filters.push(filter);
-    });
+    this.filters = filters;
   }
 
   getSelectedFilterName(): string {
@@ -39,15 +42,12 @@ export class OTableLoadFilterDialogComponent implements OnInit {
     return selected.length ? selected[0].value : void 0;
   }
 
-  removeFilter(index: number) {
-    this.anyFilterDeleted = true;
-    this.filters.splice(index, 1);
-  }
-
-  onDialogClose(val: boolean) {
-    this.dialogRef.close({
-      updateSelectedFilter: val,
-      updateStoredFilters: this.anyFilterDeleted
+  removeFilter(filterName: string): void {
+    this.dialogService.confirm('CONFIRM', 'TABLE.DIALOG.CONFIRM_REMOVE_FILTER').then(result => {
+      if (result) {
+        this.onDelete.emit(filterName);
+      }
     });
   }
+
 }

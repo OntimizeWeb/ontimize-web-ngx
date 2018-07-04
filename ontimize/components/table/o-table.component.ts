@@ -1394,6 +1394,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   onStoreFilterClicked(): void {
     let dialogRef = this.dialog.open(OTableStoreFilterDialogComponent, {
+      data: this.oTableStorage.getStoredFilters().map(filter => filter.name),
       width: '30vw',
       disableClose: true
     });
@@ -1407,26 +1408,22 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   onLoadFilterClicked(): void {
     let dialogRef = this.dialog.open(OTableLoadFilterDialogComponent, {
-      // TODO: is this fine? typos?
       data: this.oTableStorage.getStoredFilters(),
       width: '30vw',
       disableClose: true
     });
-    const self = this;
+
+    dialogRef.componentInstance.onDelete.subscribe(filterName => this.oTableStorage.deleteStoredFilter(filterName));
     dialogRef.afterClosed().subscribe(result => {
-      if (result.updateSelectedFilter) {
+      if (result) {
         let selectedFilterName: string = dialogRef.componentInstance.getSelectedFilterName();
         if (selectedFilterName) {
-          const storedFilter = self.oTableStorage.getStoredFilterConf(selectedFilterName);
+          let storedFilter = this.oTableStorage.getStoredFilterConf(selectedFilterName);
           if (storedFilter) {
-            self.setFiltersConfiguration(storedFilter);
-            self.reloadPaginatedDataFromStart();
+            this.setFiltersConfiguration(storedFilter);
+            this.reloadPaginatedDataFromStart();
           }
         }
-      }
-      if (result.updateStoredFilters) {
-        const filters: Array<ITableFiltersStatus> = dialogRef.componentInstance.filters;
-        self.oTableStorage.setStoredFilters(filters);
       }
     });
   }
