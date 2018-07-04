@@ -1,0 +1,24 @@
+<span mat-dialog-title>{{ 'TABLE.BUTTONS.APPLY_CONFIGURATION' | oTranslate }}</span>
+
+<mat-dialog-content>
+  <span mat-subheader>{{ 'TABLE.DIALOG.APPLY_CONFIGURATION' | oTranslate }}</span>
+  <mat-selection-list #configurationList class="o-table-apply-configuration-dialog-list">
+    <mat-list-option checkboxPosition="before" *ngFor="let configuration of configurations; let i = index" [value]="configuration.name">
+      <span matLine>{{ configuration.name }}</span>
+      <span matLine>{{ configuration.description }}</span>
+    </mat-list-option>
+    <mat-list-item *ngIf="configurations.length===0">
+      <span>{{ 'TABLE.DIALOG.EMPTY_CONFIGURATIONS_LIST' | oTranslate }}</span>
+    </mat-list-item>
+  </mat-selection-list>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button type="button" mat-raised-button [disabled]="configurationList.selectedOptions.selected.length!==1" (click)="removeConfiguration(configurationList.selectedOptions.selected[0].value)">
+    <mat-icon svgIcon="ontimize:delete"></mat-icon>
+    <span>{{ 'DELETE' | oTranslate }}</span>
+  </button>
+  <span fxFlex></span>
+  <button mat-button class="mat-primary" [mat-dialog-close]="false">{{ 'CANCEL' | oTranslate }}</button>
+  <button mat-button class="mat-primary" [mat-dialog-close]="true" [disabled]="configurationList.selectedOptions.selected.length!==1">{{ 'OK' | oTranslate }}</button>
+</mat-dialog-actions>

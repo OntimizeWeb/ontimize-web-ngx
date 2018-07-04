@@ -23,18 +23,25 @@
         <o-table-option *ngIf="exportButton" (onClick)="onExportButtonClicked()" label="TABLE.BUTTONS.EXPORT"> </o-table-option>
         <o-table-option *ngIf="columnsVisibilityButton" (onClick)="onChangeColumnsVisibilityClicked()" label="TABLE.BUTTONS.COLVIS">
         </o-table-option>
-        <o-table-option *ngIf="oTableColumnsFilterComponent !== undefined" #columnFilterOption (onClick)="onFilterByColumnClicked()"
-          label="TABLE.BUTTONS.FILTER_BY_COLUMN" show-active-icon="true">
-        </o-table-option>
+
         <button mat-menu-item [matMenuTriggerFor]="filterMenu">{{ 'TABLE.BUTTONS.FILTER' | oTranslate }}</button>
+        <button mat-menu-item [matMenuTriggerFor]="configurationMenu">{{ 'TABLE.BUTTONS.CONFIGURATION' | oTranslate }}</button>
         <ng-content select="o-table-option"></ng-content>
       </mat-menu>
     </div>
 
     <mat-menu #filterMenu="matMenu">
+      <o-table-option *ngIf="oTableColumnsFilterComponent !== undefined" #columnFilterOption (onClick)="onFilterByColumnClicked()"
+        label="TABLE.BUTTONS.FILTER_BY_COLUMN" show-active-icon="true">
+      </o-table-option>
       <button mat-menu-item (click)="onStoreFilterClicked()">{{ 'TABLE.BUTTONS.FILTER_SAVE' | oTranslate }}</button>
       <button mat-menu-item (click)="onLoadFilterClicked()">{{ 'TABLE.BUTTONS.FILTER_LOAD' | oTranslate }}</button>
       <button mat-menu-item (click)="onClearFilterClicked()">{{ 'TABLE.BUTTONS.FILTER_CLEAR' | oTranslate }}</button>
+    </mat-menu>
+
+    <mat-menu #configurationMenu="matMenu">
+      <button mat-menu-item (click)="onStoreConfigurationClicked()">{{ 'TABLE.BUTTONS.SAVE_CONFIGURATION' | oTranslate }}</button>
+      <button mat-menu-item (click)="onApplyConfigurationClicked()">{{ 'TABLE.BUTTONS.APPLY_CONFIGURATION' | oTranslate }}</button>
     </mat-menu>
 
     <div #tableBody fxLayout="column" fxLayoutAlign="start stretch" class="o-table-body o-scroll" [class.horizontal-scroll]="horizontalScroll"

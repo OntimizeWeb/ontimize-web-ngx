@@ -6,9 +6,17 @@ export interface ITableFiltersStatus {
   filter?: any;
 }
 
+export interface ITableConfiguration {
+  name: string;
+  description?: string;
+}
+
 export class OTableStorage {
   public static STORED_FILTER_KEY = 'stored-filter';
   public static USER_STORED_FILTERS_KEY = 'user-stored-filters';
+
+  public static STORED_CONFIGURATION_KEY = 'stored-configuration';
+  public static STORED_CONFIGURATIONS_KEY = 'user-stored-configurations';
 
   constructor(
     protected table: OTableComponent
@@ -16,40 +24,96 @@ export class OTableStorage {
 
   getDataToStore() {
     let dataToStore = {
-      'filter': this.table.oTableQuickFilterComponent ? this.table.oTableQuickFilterComponent.value : '',
-      'query-rows': this.table.matpaginator ? this.table.matpaginator.pageSize : ''
+      'filter': this.table.oTableQuickFilterComponent ? this.table.oTableQuickFilterComponent.value : ''
     };
-    if (this.table.sortColArray.length > 0 && this.table.sort.active !== undefined) {
-      dataToStore['sort-columns'] = this.table.sort.active + ':' + this.table.sort.direction;
-    }
-    if (this.table.oTableColumnsFilterComponent) {
-      const columnValueFilters = this.table.dataSource.getColumnValueFilters();
-      if (columnValueFilters.length > 0) {
-        dataToStore['column-value-filters'] = this.table.dataSource.getColumnValueFilters();
-      }
-    }
     dataToStore['select-column-visible'] = this.table.oTableOptions.selectColumn.visible;
-    Object.assign(dataToStore, this.getColumnsQuickFilterConf());
-    Object.assign(dataToStore, this.getPageState());
+
+    const properties = ['sort', 'columns-filter', 'quick-filter', 'page'];
+    Object.assign(dataToStore, this.getTablePropertiesToStore(properties));
 
     const storedFiltersArr = this.getStoredFilters();
     if (storedFiltersArr.length > 0) {
       dataToStore[OTableStorage.USER_STORED_FILTERS_KEY] = storedFiltersArr;
     }
+    const storedConfigurationsArr = this.getStoredConfigurations();
+    if (storedConfigurationsArr.length > 0) {
+      dataToStore[OTableStorage.STORED_CONFIGURATIONS_KEY] = storedConfigurationsArr;
+    }
     return dataToStore;
   }
 
-  protected getColumnsQuickFilterConf() {
+  getTablePropertiesToStore(properties: string[]) {
+    let result = {};
+    properties.forEach(prop => {
+      Object.assign(result, this.getTablePropertyToStore(prop));
+    });
+    return result;
+  }
+
+  getTablePropertyToStore(property: string) {
+    let result = {};
+    switch (property) {
+      case 'sort':
+        result = this.getSortState();
+        break;
+      case 'columns-display':
+        result = this.getColumnsDisplayState();
+        break;
+      case 'quick-filter':
+        result = this.getColumnsQuickFilterState();
+        break;
+      case 'columns-filter':
+        result = this.getColumnFiltersState();
+        break;
+      case 'page':
+        result = this.getPageState();
+        break;
+    }
+    return result;
+  }
+
+  protected getSortState() {
+    let result = {};
+    if (this.table.sortColArray.length > 0 && this.table.sort.active !== undefined) {
+      result['sort-columns'] = this.table.sort.active + ':' + this.table.sort.direction;
+    }
+    return result;
+  }
+
+  protected getColumnFiltersState() {
+    let result = {};
+    if (this.table.oTableColumnsFilterComponent) {
+      const columnValueFilters = this.table.dataSource.getColumnValueFilters();
+      if (columnValueFilters.length > 0) {
+        result['column-value-filters'] = columnValueFilters;
+      }
+    }
+    return result;
+  }
+
+  protected getColumnsDisplayState() {
+    let result = {};
+    let oColumnsData = [];
+    this.table.oTableOptions.columns.forEach((oCol: OColumn) => {
+      oColumnsData.push({
+        attr: oCol.attr,
+        visible: oCol.visible
+      });
+    });
+    result['oColumns-display'] = oColumnsData;
+    return result;
+  }
+
+  protected getColumnsQuickFilterState() {
     let result = {};
     const tableOptions = this.table.oTableOptions;
     let oColumnsData = [];
     tableOptions.columns.forEach((oCol: OColumn) => {
-      let colData = {
-        attr: oCol.attr
-      };
-      colData['searchable'] = oCol.searchable;
-      colData['searching'] = oCol.searching;
-      oColumnsData.push(colData);
+      oColumnsData.push({
+        attr: oCol.attr,
+        searchable: oCol.searchable,
+        searching: oCol.searching
+      });
     });
     result['oColumns'] = oColumnsData;
     result['filter-case-sensitive'] = tableOptions.filterCaseSensitive;
@@ -57,11 +121,11 @@ export class OTableStorage {
   }
 
   protected getPageState(): any {
-    let result = {};
+    let result: any = {
+      'query-rows': this.table.matpaginator ? this.table.matpaginator.pageSize : ''
+    };
     if (this.table.currentPage > 0) {
-      result = {
-        currentPage: this.table.currentPage
-      };
+      result['currentPage'] = this.table.currentPage;
     }
     if (this.table.pageable) {
       const state = this.table.getState();
@@ -99,15 +163,11 @@ export class OTableStorage {
   }
 
   storeFilter(filterArgs: ITableFiltersStatus) {
-    let storedFilter = {};
-    if (this.table.oTableColumnsFilterComponent) {
-      const valueFiltersArr = this.table.dataSource.getColumnValueFilters();
-      if (valueFiltersArr.length > 0) {
-        storedFilter['column-value-filters'] = valueFiltersArr;
-      }
-    }
-    Object.assign(storedFilter, this.getColumnsQuickFilterConf());
     let result = {};
+    let storedFilter = {};
+    Object.assign(storedFilter, this.getColumnFiltersState());
+    Object.assign(storedFilter, this.getColumnsQuickFilterState());
+
     result[OTableStorage.STORED_FILTER_KEY] = storedFilter;
     Object.assign(result, filterArgs);
     let existingFilters = this.getStoredFilters();
@@ -118,6 +178,31 @@ export class OTableStorage {
   getStoredColumnsFilters(arg?: any) {
     let stateObj = arg || this.table.getState();
     return stateObj['column-value-filters'] || [];
+  }
+
+  getStoredConfigurations() {
+    return this.table.getState()[OTableStorage.STORED_CONFIGURATIONS_KEY] || [];
+  }
+
+  storeConfiguration(configurationAgs: ITableConfiguration, tableProperties: any[]) {
+    let result = {};
+    let storedConfiguration = this.getTablePropertiesToStore(tableProperties);
+
+    result[OTableStorage.STORED_CONFIGURATION_KEY] = storedConfiguration;
+    Object.assign(result, configurationAgs);
+
+    let existingConfigurations = this.getStoredConfigurations();
+    existingConfigurations.push(result);
+    this.table.getState()[OTableStorage.STORED_CONFIGURATIONS_KEY] = existingConfigurations;
+  }
+
+  deleteStoredConfiguration(configurationName: string) {
+    const storedConfigurations = this.getStoredConfigurations();
+    let index = storedConfigurations.findIndex((item: ITableConfiguration) => item.name === configurationName);
+    if (index >= 0) {
+      storedConfigurations.splice(index, 1);
+      this.table.getState()[OTableStorage.STORED_CONFIGURATIONS_KEY] = storedConfigurations;
+    }
   }
 
 }

@@ -51,6 +51,8 @@ import {
   OTableStoreFilterDialogComponent,
   OTableVisibleColumnsDialogComponent,
   OTableFilterByColumnDataDialogComponent,
+  OTableStoreConfigurationDialogComponent,
+  OTableApplyConfigurationDialogComponent
 } from './extensions/dialog/o-table-dialog-components';
 
 import {
@@ -75,7 +77,7 @@ import { ServiceUtils, ISQLOrder } from '../service.utils';
 import { FilterExpressionUtils, IExpression } from '../filter-expression.utils';
 import { OColumnTooltip } from './column/o-table-column.component';
 import { OTableRow } from './extensions/row/o-table-row.component';
-import { OTableStorage, ITableFiltersStatus } from './extensions/o-table-storage.class';
+import { OTableStorage } from './extensions/o-table-storage.class';
 
 export const DEFAULT_INPUTS_O_TABLE = [
   ...OServiceComponent.DEFAULT_INPUTS_O_SERVICE_COMPONENT,
@@ -1650,6 +1652,42 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
         }
       });
     }
+  }
+
+  onStoreConfigurationClicked(): void {
+    let dialogRef = this.dialog.open(OTableStoreConfigurationDialogComponent, {
+      width: '30vw',
+      disableClose: true
+    });
+    const self = this;
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        const configurationData = dialogRef.componentInstance.getConfigurationAttributes();
+        const tableProperties = dialogRef.componentInstance.getSelectedTableProperties();
+        self.oTableStorage.storeConfiguration(configurationData, tableProperties);
+      }
+    });
+  }
+
+  onApplyConfigurationClicked(): void {
+    let dialogRef = this.dialog.open(OTableApplyConfigurationDialogComponent, {
+      data: this.oTableStorage.getStoredConfigurations(),
+      width: '30vw',
+      disableClose: true
+    });
+    dialogRef.componentInstance.onDelete.subscribe(configurationName => this.oTableStorage.deleteStoredConfiguration(configurationName));
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        let selectedConfigurationName: string = dialogRef.componentInstance.getSelectedConfigurationName();
+        // if (selectedConfigurationName) {
+        //   let storedConfiguration = this.oTableStorage.getStoredConfigurationConf(selectedConfigurationName);
+        //   if (storedConfiguration) {
+        //     // this.setFiltersConfiguration(storedFilter);
+        //     // this.reloadPaginatedDataFromStart();
+        //   }
+        // }
+      }
+    });
   }
 }
 
