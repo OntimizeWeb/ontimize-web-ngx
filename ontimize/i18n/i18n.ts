@@ -163,6 +163,9 @@ export var MAP = {
     'TABLE.BUTTONS.SELECT': 'Select...',
     'TABLE.BUTTONS.FILTER_BY_COLUMN': 'Filter by column',
     'TABLE.BUTTONS.SAVE_FILTER': 'Save filter',
+    'TABLE.BUTTONS.CONFIGURATION': 'Configuration',
+    'TABLE.BUTTONS.SAVE_CONFIGURATION': 'Save',
+    'TABLE.BUTTONS.APPLY_CONFIGURATION': 'Apply',
     'TABLE.SELECT.ROWS._': '%d selected rows',
     'TABLE.SELECT.ROWS.0': ' ',
     'TABLE.SELECT.ROWS.1': '1 row selected',
@@ -174,11 +177,14 @@ export var MAP = {
     'TABLE.DIALOG.FILTER_DESCRIPTION': 'Description',
     'TABLE.DIALOG.LOAD_FILTER': 'Select a filter to apply to the table',
     'TABLE.DIALOG.CONFIRM_CLEAR_FILTER': 'This acction will clear every filter on the table. Are you sure you want to continue?',
-
+    'TABLE.DIALOG.SAVE_CONFIGURATION': 'Enter a name and description for the configuration',
+    'TABLE.DIALOG.CONFIGURATION_NAME': 'Name',
+    'TABLE.DIALOG.CONFIGURATION_DESCRIPTION': 'Description',
+    'TABLE.DIALOG.APPLY_CONFIGURATION': 'Select a configuration to apply to the table',
+    'TABLE.DIALOG.CONFIGURATION_PROPERTIES': '',
     'LAYOUT_MANANGER.MAIN_TAB_LABEL': 'Home',
     'LAYOUT_MANANGER.DIALOG_TITLE': 'Detail',
     'APP_LAYOUT.USER_PROFILE': 'My profile',
-
     'CARD_MENU_LAYOUT.BUTTON_TEXT': 'View list'
   },
 
@@ -345,6 +351,9 @@ export var MAP = {
     'TABLE.BUTTONS.SELECT': 'Seleccionar...',
     'TABLE.BUTTONS.FILTER_BY_COLUMN': 'Filtrado por columnas',
     'TABLE.BUTTONS.SAVE_FILTER': 'Guardar filtro',
+    'TABLE.BUTTONS.CONFIGURATION': 'Configuración',
+    'TABLE.BUTTONS.SAVE_CONFIGURATION': 'Guardar',
+    'TABLE.BUTTONS.APPLY_CONFIGURATION': 'Aplicar',
     'TABLE.SELECT.ROWS._': '%d registros seleccionados',
     'TABLE.SELECT.ROWS.0': ' ',
     'TABLE.SELECT.ROWS.1': '1 registro seleccionado',
@@ -356,11 +365,14 @@ export var MAP = {
     'TABLE.DIALOG.FILTER_DESCRIPTION': 'Descripción',
     'TABLE.DIALOG.LOAD_FILTER': 'Seleccione un filtro para aplicar a la tabla',
     'TABLE.DIALOG.CONFIRM_CLEAR_FILTER': 'Esta acción limpiará todos los filtros aplicados a la tabla. ¿Desea continuar?',
-
+    'TABLE.DIALOG.SAVE_CONFIGURATION': 'Introduzca un nombre y una descripción para la configuración',
+    'TABLE.DIALOG.CONFIGURATION_NAME': 'Nombre',
+    'TABLE.DIALOG.CONFIGURATION_DESCRIPTION': 'Descripción',
+    'TABLE.DIALOG.APPLY_CONFIGURATION': 'Seleccione una configuración para aplicar a la tabla',
+    'TABLE.DIALOG.CONFIGURATION_PROPERTIES': '',
     'LAYOUT_MANANGER.MAIN_TAB_LABEL': 'Inicio',
     'LAYOUT_MANANGER.DIALOG_TITLE': 'Detalle',
     'APP_LAYOUT.USER_PROFILE': 'Mi perfil',
-
     'CARD_MENU_LAYOUT.BUTTON_TEXT': 'Acceder'
   }
 
