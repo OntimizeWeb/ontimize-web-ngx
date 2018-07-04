@@ -144,13 +144,11 @@ export class OTableStorage {
   }
 
   getStoredFilter(filterName: string) {
-    const storedFilters = this.table.getState()[OTableStorage.USER_STORED_FILTERS_KEY] || [];
-    return storedFilters.find((item: ITableFiltersStatus) => item.name === filterName);
+    return this.getStoredFilters().find((item: ITableFiltersStatus) => item.name === filterName);
   }
 
   getStoredFilterConf(filterName: string) {
-    const storedFilter = this.getStoredFilter(filterName);
-    return (storedFilter || {})[OTableStorage.STORED_FILTER_KEY];
+    return (this.getStoredFilter(filterName) || {})[OTableStorage.STORED_FILTER_KEY];
   }
 
   deleteStoredFilter(filterName: string) {
@@ -182,6 +180,14 @@ export class OTableStorage {
 
   getStoredConfigurations() {
     return this.table.getState()[OTableStorage.STORED_CONFIGURATIONS_KEY] || [];
+  }
+
+  getStoredConfiguration(configurationName: string) {
+    return this.getStoredConfigurations().find((item: ITableConfiguration) => item.name === configurationName);
+  }
+
+  getStoredConfigurationConf(filterName: string) {
+    return (this.getStoredConfiguration(filterName) || {})[OTableStorage.STORED_CONFIGURATION_KEY];
   }
 
   storeConfiguration(configurationAgs: ITableConfiguration, tableProperties: any[]) {

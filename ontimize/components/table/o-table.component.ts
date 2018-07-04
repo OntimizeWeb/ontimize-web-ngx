@@ -1679,13 +1679,14 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         let selectedConfigurationName: string = dialogRef.componentInstance.getSelectedConfigurationName();
-        // if (selectedConfigurationName) {
-        //   let storedConfiguration = this.oTableStorage.getStoredConfigurationConf(selectedConfigurationName);
-        //   if (storedConfiguration) {
-        //     // this.setFiltersConfiguration(storedFilter);
-        //     // this.reloadPaginatedDataFromStart();
-        //   }
-        // }
+        if (selectedConfigurationName) {
+          let storedConfiguration = this.oTableStorage.getStoredConfigurationConf(selectedConfigurationName);
+          if (storedConfiguration) {
+            console.log(storedConfiguration);
+            // this.setFiltersConfiguration(storedFilter);
+            // this.reloadPaginatedDataFromStart();
+          }
+        }
       }
     });
   }

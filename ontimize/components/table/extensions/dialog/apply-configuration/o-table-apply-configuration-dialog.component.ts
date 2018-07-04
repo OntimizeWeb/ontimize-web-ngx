@@ -2,6 +2,8 @@ import { Component, Inject, Injector, EventEmitter, ViewChild, } from '@angular/
 import { MatDialogRef, MAT_DIALOG_DATA, MatListOption, MatSelectionList } from '@angular/material';
 import { DialogService } from '../../../../../services';
 
+import { ITableConfiguration } from '../../o-table-storage.class';
+
 @Component({
   selector: 'o-table-apply-configuration-dialog',
   templateUrl: './o-table-apply-configuration-dialog.component.html',
@@ -11,7 +13,7 @@ export class OTableApplyConfigurationDialogComponent {
 
   @ViewChild(MatSelectionList) configurationList: MatSelectionList;
 
-  configurations: Array<any> = [];
+  configurations: Array<ITableConfiguration> = [];
 
   onDelete: EventEmitter<string> = new EventEmitter();
 
@@ -19,20 +21,15 @@ export class OTableApplyConfigurationDialogComponent {
 
   constructor(
     public dialogRef: MatDialogRef<OTableApplyConfigurationDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) data: Array<any>,
+    @Inject(MAT_DIALOG_DATA) data: Array<ITableConfiguration>,
     protected injector: Injector
   ) {
-    if (data) {
-      this.loadConfigurations(data);
-    }
+    this.loadConfigurations(data);
     this.dialogService = this.injector.get(DialogService);
   }
 
-  loadConfigurations(configurations: Array<any>): void {
-    this.configurations = [];
-    configurations.forEach((configuration: any) => {
-      this.configurations.push(configuration);
-    });
+  loadConfigurations(configurations: Array<ITableConfiguration>): void {
+    this.configurations = configurations;
   }
 
   removeConfiguration(configurationName: string): void {
@@ -47,4 +44,5 @@ export class OTableApplyConfigurationDialogComponent {
     let selected: MatListOption[] = this.configurationList.selectedOptions.selected;
     return selected.length ? selected[0].value : void 0;
   }
+
 }
