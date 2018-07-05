@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject, Injector, Injectable, forwardRef } from '@angular/core';
-import { MatPaginatorIntl, MatPaginator } from '@angular/material';
+import { MatPaginatorIntl } from '@angular/material';
 import { OTranslateService } from '../../../../../services';
 import { InputConverter } from '../../../../../decorators';
 import { OTableComponent } from '../../../o-table.component';
@@ -21,7 +21,6 @@ export class OTablePaginatorComponent implements OnInit {
   protected _pageIndex: number = 0;
   protected _pageSize: number = 10;
   protected _pageSizeOptions: Array<any>;
-  protected matpaginator: MatPaginator;
 
   @InputConverter()
   showFirstLastButtons: boolean = true;
@@ -32,8 +31,6 @@ export class OTablePaginatorComponent implements OnInit {
   ) {
     this._pageIndex = 0;
     this._pageSizeOptions = [10, 25, 50, 100];
-    this.matpaginator = this.table.matpaginator;
-
     this.pageSize = this.table.queryRows;
     this.pageIndex = this.table.currentPage;
     this.showFirstLastButtons = this.table.showPaginatorFirstLastButtons;
@@ -57,8 +54,8 @@ export class OTablePaginatorComponent implements OnInit {
 
   set pageIndex(value: number) {
     this._pageIndex = value;
-    if (this.matpaginator && !this.table.pageable) {
-      this.matpaginator.pageIndex = this._pageIndex;
+    if (this.table.matpaginator) {
+      this.table.matpaginator.pageIndex = this._pageIndex;
     }
   }
 
