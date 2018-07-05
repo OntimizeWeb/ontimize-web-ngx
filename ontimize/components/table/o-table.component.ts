@@ -1703,16 +1703,44 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       width: '30vw',
       disableClose: true
     });
+    const self = this;
     dialogRef.componentInstance.onDelete.subscribe(configurationName => this.oTableStorage.deleteStoredConfiguration(configurationName));
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         let selectedConfigurationName: string = dialogRef.componentInstance.getSelectedConfigurationName();
         if (selectedConfigurationName) {
-          let storedConfiguration = this.oTableStorage.getStoredConfigurationConf(selectedConfigurationName);
+          let storedConfiguration = self.oTableStorage.getStoredConfiguration(selectedConfigurationName);
           if (storedConfiguration) {
             console.log(storedConfiguration);
-            // this.setFiltersConfiguration(storedFilter);
-            // this.reloadPaginatedDataFromStart();
+            const properties = storedConfiguration[OTableStorage.STORED_PROPERTIES_KEY] || [];
+            const conf = storedConfiguration[OTableStorage.STORED_CONFIGURATION_KEY];
+
+            properties.forEach(property => {
+              switch (property) {
+                case 'sort':
+                  self.state['sort-columns'] = conf['sort-columns'];
+                  self.parseSortColumns();
+                  break;
+                case 'columns-display':
+                  self.state['oColumns-display'] = conf['oColumns-display'];
+                  self.parseVisibleColumns();
+                  break;
+                case 'quick-filter':
+                case 'columns-filter':
+                  self.setFiltersConfiguration(conf);
+                  break;
+                case 'page':
+                  self.state['currentPage'] = conf['currentPage'];
+                  if (self.pageable) {
+                    self.state['totalQueryRecordsNumber'] = conf['totalQueryRecordsNumber'];
+                    self.state['queryRecordOffset'] = conf['queryRecordOffset'];
+                  }
+                  self.queryRows = conf['query-rows'];
+                  self.parseCurrentPage();
+                  break;
+              }
+            });
+            self.reloadPaginatedDataFromStart();
           }
         }
       }

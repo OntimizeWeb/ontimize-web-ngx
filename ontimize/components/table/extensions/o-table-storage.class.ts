@@ -16,6 +16,7 @@ export class OTableStorage {
   public static USER_STORED_FILTERS_KEY = 'user-stored-filters';
 
   public static STORED_CONFIGURATION_KEY = 'stored-configuration';
+  public static STORED_PROPERTIES_KEY = 'stored-properties';
   public static STORED_CONFIGURATIONS_KEY = 'user-stored-configurations';
 
   constructor(
@@ -28,7 +29,7 @@ export class OTableStorage {
     };
     dataToStore['select-column-visible'] = this.table.oTableOptions.selectColumn.visible;
 
-    const properties = ['sort', 'columns-filter', 'quick-filter', 'page'];
+    const properties = ['sort', 'columns-display', 'columns-filter', 'quick-filter', 'page'];
     Object.assign(dataToStore, this.getTablePropertiesToStore(properties));
 
     const storedFiltersArr = this.getStoredFilters();
@@ -128,7 +129,7 @@ export class OTableStorage {
       result['currentPage'] = this.table.currentPage;
     }
     if (this.table.pageable) {
-      const state = this.table.getState();
+      const state = this.table.state;
       result['totalQueryRecordsNumber'] = state.totalQueryRecordsNumber;
       result['queryRecordOffset'] = state.queryRecordOffset;
     }
@@ -136,11 +137,11 @@ export class OTableStorage {
   }
 
   setStoredFilters(filters: Array<ITableFiltersStatus>) {
-    return this.table.getState()[OTableStorage.USER_STORED_FILTERS_KEY] = filters;
+    return this.table.state[OTableStorage.USER_STORED_FILTERS_KEY] = filters;
   }
 
   getStoredFilters() {
-    return this.table.getState()[OTableStorage.USER_STORED_FILTERS_KEY] || [];
+    return this.table.state[OTableStorage.USER_STORED_FILTERS_KEY] || [];
   }
 
   getStoredFilter(filterName: string) {
@@ -152,11 +153,11 @@ export class OTableStorage {
   }
 
   deleteStoredFilter(filterName: string) {
-    const storedFilters = this.table.getState()[OTableStorage.USER_STORED_FILTERS_KEY] || [];
+    const storedFilters = this.table.state[OTableStorage.USER_STORED_FILTERS_KEY] || [];
     let index = storedFilters.findIndex((item: ITableFiltersStatus) => item.name === filterName);
     if (index >= 0) {
       storedFilters.splice(index, 1);
-      this.table.getState()[OTableStorage.USER_STORED_FILTERS_KEY] = storedFilters;
+      this.table.state[OTableStorage.USER_STORED_FILTERS_KEY] = storedFilters;
     }
   }
 
@@ -170,24 +171,20 @@ export class OTableStorage {
     Object.assign(result, filterArgs);
     let existingFilters = this.getStoredFilters();
     existingFilters.push(result);
-    this.table.getState()[OTableStorage.USER_STORED_FILTERS_KEY] = existingFilters;
+    this.table.state[OTableStorage.USER_STORED_FILTERS_KEY] = existingFilters;
   }
 
   getStoredColumnsFilters(arg?: any) {
-    let stateObj = arg || this.table.getState();
+    let stateObj = arg || this.table.state;
     return stateObj['column-value-filters'] || [];
   }
 
   getStoredConfigurations() {
-    return this.table.getState()[OTableStorage.STORED_CONFIGURATIONS_KEY] || [];
+    return this.table.state[OTableStorage.STORED_CONFIGURATIONS_KEY] || [];
   }
 
   getStoredConfiguration(configurationName: string) {
     return this.getStoredConfigurations().find((item: ITableConfiguration) => item.name === configurationName);
-  }
-
-  getStoredConfigurationConf(filterName: string) {
-    return (this.getStoredConfiguration(filterName) || {})[OTableStorage.STORED_CONFIGURATION_KEY];
   }
 
   storeConfiguration(configurationAgs: ITableConfiguration, tableProperties: any[]) {
@@ -196,10 +193,10 @@ export class OTableStorage {
 
     result[OTableStorage.STORED_CONFIGURATION_KEY] = storedConfiguration;
     Object.assign(result, configurationAgs);
-
+    result[OTableStorage.STORED_PROPERTIES_KEY] = tableProperties;
     let existingConfigurations = this.getStoredConfigurations();
     existingConfigurations.push(result);
-    this.table.getState()[OTableStorage.STORED_CONFIGURATIONS_KEY] = existingConfigurations;
+    this.table.state[OTableStorage.STORED_CONFIGURATIONS_KEY] = existingConfigurations;
   }
 
   deleteStoredConfiguration(configurationName: string) {
@@ -207,7 +204,7 @@ export class OTableStorage {
     let index = storedConfigurations.findIndex((item: ITableConfiguration) => item.name === configurationName);
     if (index >= 0) {
       storedConfigurations.splice(index, 1);
-      this.table.getState()[OTableStorage.STORED_CONFIGURATIONS_KEY] = storedConfigurations;
+      this.table.state[OTableStorage.STORED_CONFIGURATIONS_KEY] = storedConfigurations;
     }
   }
 

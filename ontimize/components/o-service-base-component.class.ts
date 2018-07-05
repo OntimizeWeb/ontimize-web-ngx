@@ -115,7 +115,7 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
   protected loaderSubscription: Subscription;
   protected querySubscription: Subscription;
   protected dataService: any;
-  protected state: any = {};
+  protected _state: any = {};
   loading: boolean = false;
 
   protected form: OFormComponent;
@@ -404,7 +404,11 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
     //
   }
 
-  getState(): any {
-    return this.state;
+  get state(): any {
+    return this._state;
+  }
+
+  set state(arg: any) {
+    this._state = arg;
   }
 }
