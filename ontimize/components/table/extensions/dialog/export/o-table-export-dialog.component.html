@@ -1,24 +1,24 @@
 <span mat-dialog-title>{{ 'TABLE.BUTTONS.EXPORT' | oTranslate }}</span>
 
 <mat-dialog-content>
-  <span mat-subheader>Seleccione el formato al que desea exportar la información de la tabla.</span>
+  <span mat-subheader>{{ 'TABLE.DIALOG.EXPORT.DESCRIPTION' | oTranslate }}</span>
   <div fxLayout="row" fxLayoutAlign="space-around center" layout-padding>
     <button #excelButton mat-raised-button (click)="exportExcel(excelButton)">
       <div fxLayout="column" fxLayoutAlign="center center">
         <mat-icon svgIcon="ontimize:EXCEL"></mat-icon>
-        <span>Excel</span>
+        <span>{{ 'TABLE.BUTTONS.EXCEL' | oTranslate }}</span>
       </div>
     </button>
     <button #htmlButton mat-raised-button (click)="exportHTML(htmlButton)">
       <div fxLayout="column" fxLayoutAlign="center center">
         <mat-icon svgIcon="ontimize:HTML"></mat-icon>
-        <span>HTML</span>
+        <span>{{ 'TABLE.BUTTONS.HTML' | oTranslate }}</span>
       </div>
     </button>
     <button #pdfButton mat-raised-button (click)="exportPDF(pdfButton)">
       <div fxLayout="column" fxLayoutAlign="center center">
         <mat-icon svgIcon="ontimize:PDF"></mat-icon>
-        <span>PDF</span>
+        <span>{{ 'TABLE.BUTTONS.PDF' | oTranslate }}</span>
       </div>
     </button>
   </div>
