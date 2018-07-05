@@ -217,9 +217,20 @@ export class OColumn {
 export class OTableOptions {
   selectColumn: OColumn = new OColumn();
   columns: Array<OColumn> = [];
-  visibleColumns: Array<any> = [];
+  _visibleColumns: Array<any> = [];
   filter: boolean = true;
   filterCaseSensitive: boolean = false;
+
+  get visibleColumns(): Array<any> {
+    return this._visibleColumns;
+  }
+
+  set visibleColumns(arg: Array<any>) {
+    this._visibleColumns = arg;
+    this.columns.forEach((oCol: OColumn) => {
+      oCol.visible = this._visibleColumns.indexOf(oCol.attr) !== -1;
+    });
+  }
 }
 
 export type QuickFilterFunction = (filter: string) => IExpression | Object;
@@ -339,7 +350,19 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   protected sortColumns: string;
 
   /*parsed inputs variables */
-  protected visibleColArray: Array<string> = [];
+  protected _visibleColArray: Array<string> = [];
+
+  get visibleColArray(): Array<any> {
+    return this._visibleColArray;
+  }
+
+  set visibleColArray(arg: Array<any>) {
+    this._visibleColArray = arg;
+    if (this._oTableOptions) {
+      this._oTableOptions.visibleColumns = this.visibleColArray;
+    }
+  }
+
   public sortColArray: Array<ISQLOrder> = [];
   /*end of parsed inputs variables */
 
@@ -633,7 +656,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       }
 
     }
-    colDef.visible = (this.visibleColArray.indexOf(colDef.attr) !== -1);
+    colDef.visible = (this._visibleColArray.indexOf(colDef.attr) !== -1);
     if (column && (column.asyncLoad || column.type === 'action')) {
       this.avoidQueryColumns.push(column.attr);
       if (column.asyncLoad) {
@@ -676,6 +699,17 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
   }
 
+  parseVisibleColumns() {
+    if (this.state.hasOwnProperty('oColumns-display')) {
+      this.visibleColArray = this.state['oColumns-display'].filter(item => item.visible).map(item => item.attr);
+    } else {
+      this.visibleColArray = Util.parseArray(this.visibleColumns, true);
+    }
+    if (this.oTableEditableRow) {
+      this.oTableEditableRow.cd.detectChanges();
+    }
+  }
+
   parseSortColumns() {
     let sortColumnsParam = this.state['sort-columns'] || this.sortColumns;
     this.sortColArray = ServiceUtils.parseSortColumns(sortColumnsParam);
@@ -700,13 +734,22 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
   }
 
+  parseCurrentPage() {
+    if (this.state.hasOwnProperty('currentPage')) {
+      this.currentPage = this.state['currentPage'];
+    }
+    if (this.pageable) {
+      this.state.queryRecordOffset = (this.currentPage === 0) ? 0 : Math.max(0, (this.state.queryRecordOffset - this.queryRows));
+    }
+  }
+
   initializeParams(): void {
     // If visible-columns is not present then visible-columns is all columns
     if (!this.visibleColumns) {
       this.visibleColumns = this.columns;
     }
-    this.visibleColArray = Util.parseArray(this.visibleColumns, true);
-    this._oTableOptions.visibleColumns = this.visibleColArray;
+
+    this.parseVisibleColumns();
 
     if (this.colArray.length) {
       this.colArray.map(x => this.registerColumn(x));
@@ -736,13 +779,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     // Initialize quickFilter
     this._oTableOptions.filter = this.quickFilter;
 
-    if (this.state.hasOwnProperty('currentPage')) {
-      this.currentPage = this.state['currentPage'];
-    }
-
-    if (this.pageable) {
-      this.state.queryRecordOffset = (this.currentPage === 0) ? 0 : Math.max(0, (this.state.queryRecordOffset - this.queryRows));
-    }
+    this.parseCurrentPage();
 
     // Initialize paginator
     if (!this.paginator && this.paginationControls) {
@@ -1006,15 +1043,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   onChangeColumnsVisibilityClicked() {
-    let columnsArray = this.visibleColArray;
-    this._oTableOptions.columns.forEach(col => {
-      if (col.definition !== undefined && columnsArray.indexOf(col.attr) === -1) {
-        columnsArray.push(col.attr);
-      }
-    });
     let dialogRef = this.dialog.open(OTableVisibleColumnsDialogComponent, {
       data: {
-        columnArray: columnsArray,
+        originalVisibleColumns: Util.parseArray(this.visibleColumns, true),
         columnsData: this._oTableOptions.columns
       },
       disableClose: true
@@ -1023,11 +1054,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.visibleColArray = dialogRef.componentInstance.getVisibleColumns();
-        this._oTableOptions.visibleColumns = this.visibleColArray;
-        this._oTableOptions.columns = dialogRef.componentInstance.getColumnsData();
-        if (this.oTableEditableRow) {
-          this.oTableEditableRow.cd.detectChanges();
-        }
+        let columnsOrder = dialogRef.componentInstance.getColumnsOrder();
+        this._oTableOptions.columns.sort((a: OColumn, b: OColumn) => columnsOrder.indexOf(a.attr) - columnsOrder.indexOf(b.attr));
       }
     });
   }

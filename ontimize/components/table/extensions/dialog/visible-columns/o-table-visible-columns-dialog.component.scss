@@ -1,8 +1,16 @@
 .o-table-visible-columns-dialog {
   mat-list-item {
     cursor: pointer;
+
     &.dnd-sortable-drag {
       background: #EBEBEB;
+    }
+  }
+
+  .mat-icon[svgicon="ontimize:visibility"],
+  .mat-icon[svgicon="ontimize:visibility_off"] {
+    svg {
+      width: 125%;
     }
   }
 }
