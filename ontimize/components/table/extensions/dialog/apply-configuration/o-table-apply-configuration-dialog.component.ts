@@ -19,6 +19,8 @@ export class OTableApplyConfigurationDialogComponent {
 
   protected dialogService: DialogService;
 
+  default_configuration = 'OTableApplyConfigurationDialogComponent-default';
+
   constructor(
     public dialogRef: MatDialogRef<OTableApplyConfigurationDialogComponent>,
     @Inject(MAT_DIALOG_DATA) data: Array<ITableConfiguration>,
@@ -40,8 +42,14 @@ export class OTableApplyConfigurationDialogComponent {
     });
   }
 
+  isDefaultConfigurationSelected(): boolean {
+    const selected: MatListOption[] = this.configurationList.selectedOptions.selected;
+    const selectedValue = selected.length ? selected[0].value : void 0;
+    return selectedValue === this.default_configuration;
+  }
+
   getSelectedConfigurationName(): string {
-    let selected: MatListOption[] = this.configurationList.selectedOptions.selected;
+    const selected: MatListOption[] = this.configurationList.selectedOptions.selected;
     return selected.length ? selected[0].value : void 0;
   }
 
