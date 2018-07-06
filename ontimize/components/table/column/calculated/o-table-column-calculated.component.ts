@@ -7,7 +7,7 @@ export const DEFAULT_INPUTS_O_TABLE_COLUMN_CALCULATED = [
   // operation [string]: operation .
   'operation',
   // operation-function [funtion]: callback title. Default: no value.
-  'functionOperation:operation-function'
+  'functionOperation: operation-function'
 ];
 
 export type OperatorFunction = (value: any[]) => number;
@@ -30,17 +30,8 @@ export class OColumnCalculated {
 
 export class OTableColumnCalculatedComponent extends OTableColumnComponent {
 
-  public operation: string = '';
-
-  protected _functionAggregate: OperatorFunction;
-
-  get functionAggregate(): OperatorFunction {
-    return this._functionAggregate;
-  }
-
-  set functionAggregate(val: OperatorFunction) {
-    this._functionAggregate = val;
-  }
+  public operation: string;
+  public functionOperation: OperatorFunction;
 
   constructor(
     @Inject(forwardRef(() => OTableComponent)) public table: OTableComponent,

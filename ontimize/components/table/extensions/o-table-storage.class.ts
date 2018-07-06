@@ -27,7 +27,6 @@ export class OTableStorage {
     let dataToStore = {
       'filter': this.table.oTableQuickFilterComponent ? this.table.oTableQuickFilterComponent.value : ''
     };
-    dataToStore['select-column-visible'] = this.table.oTableOptions.selectColumn.visible;
 
     const properties = ['sort', 'columns-display', 'columns-filter', 'quick-filter', 'page'];
     Object.assign(dataToStore, this.getTablePropertiesToStore(properties));
@@ -73,6 +72,13 @@ export class OTableStorage {
     return result;
   }
 
+  reset() {
+    let state = {};
+    state[OTableStorage.USER_STORED_FILTERS_KEY] = this.table.state[OTableStorage.USER_STORED_FILTERS_KEY];
+    state[OTableStorage.STORED_CONFIGURATIONS_KEY] = this.table.state[OTableStorage.STORED_CONFIGURATIONS_KEY];
+    this.table.state = state;
+  }
+
   protected getSortState() {
     let result = {};
     if (this.table.sortColArray.length > 0 && this.table.sort.active !== undefined) {
@@ -102,6 +108,7 @@ export class OTableStorage {
       });
     });
     result['oColumns-display'] = oColumnsData;
+    result['select-column-visible'] = this.table.oTableOptions.selectColumn.visible;
     return result;
   }
 
@@ -125,10 +132,10 @@ export class OTableStorage {
     let result: any = {
       'query-rows': this.table.matpaginator ? this.table.matpaginator.pageSize : ''
     };
-    if (this.table.currentPage > 0) {
+    if (this.table.currentPage > 0 && this.table.storePaginationState) {
       result['currentPage'] = this.table.currentPage;
     }
-    if (this.table.pageable) {
+    if (this.table.pageable && this.table.storePaginationState) {
       const state = this.table.state;
       result['totalQueryRecordsNumber'] = state.totalQueryRecordsNumber;
       result['queryRecordOffset'] = state.queryRecordOffset;
@@ -189,7 +196,9 @@ export class OTableStorage {
 
   storeConfiguration(configurationAgs: ITableConfiguration, tableProperties: any[]) {
     let result = {};
+    this.table.storePaginationState = true;
     let storedConfiguration = this.getTablePropertiesToStore(tableProperties);
+    this.table.storePaginationState = false;
 
     result[OTableStorage.STORED_CONFIGURATION_KEY] = storedConfiguration;
     Object.assign(result, configurationAgs);
