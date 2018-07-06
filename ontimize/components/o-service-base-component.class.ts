@@ -89,7 +89,8 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
   staticData: Array<any>;
   queryMethod: string = Codes.QUERY_METHOD;
   paginatedQueryMethod: string = Codes.PAGINATED_QUERY_METHOD;
-  queryRows: any = Codes.DEFAULT_QUERY_ROWS;
+  @InputConverter()
+  queryRows: number = Codes.DEFAULT_QUERY_ROWS;
   insertMethod: string = Codes.INSERT_METHOD;
   updateMethod: string = Codes.UPDATE_METHOD;
   deleteMethod: string = Codes.DELETE_METHOD;
@@ -189,7 +190,6 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
     if (this.loaderSubscription) {
       this.loaderSubscription.unsubscribe();
     }
-    this.updateStateStorage();
   }
 
   ngOnChanges(changes: { [propName: string]: SimpleChange }) {
