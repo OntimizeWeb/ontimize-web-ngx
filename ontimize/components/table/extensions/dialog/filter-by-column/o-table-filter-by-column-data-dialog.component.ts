@@ -161,7 +161,7 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
   getDistinctValues(data: Array<any>, filter: IColumnValueFilter): void {
     let colValues: any[] = data.map(elem => elem[this.column.attr]);
     colValues.forEach((value, i) => {
-      if (this.columnData.indexOf(value) === -1) {
+      if (this.columnData.find(item => item.value === value) === undefined) {
         this.columnData.push({
           value: value,
           selected: filter.operator === ColumnValueFilterOperator.IN && (filter.values || []).indexOf(value) !== -1

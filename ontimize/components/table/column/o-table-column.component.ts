@@ -148,6 +148,7 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
   public editable: boolean = false;
   public width: string;
   public minWidth: string;
+  public class: string;
   @InputConverter()
   public tooltip: boolean = false;
   tooltipValue: string;
@@ -217,7 +218,7 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
   @InputConverter()
   breakWord: boolean = false;
   @InputConverter()
-  protected asyncLoad: boolean = false;
+  asyncLoad: boolean = false;
 
   @ViewChild('container', { read: ViewContainerRef })
   container: ViewContainerRef;
