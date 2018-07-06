@@ -1,8 +1,10 @@
-import { Component, OnInit, ViewEncapsulation, AfterViewInit, NgModule, Injector, ChangeDetectionStrategy, ChangeDetectorRef, OnDestroy } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Injector, NgModule, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs/Subscription';
-import { OTranslateService, AppMenuService, MenuRootItem, MenuGroup } from '../../services';
+
 import { OSharedModule } from '../../shared/shared.module';
+import { AppMenuService, OTranslateService } from '../../services';
+import { MenuGroup, MenuRootItem } from '../../services/app-menu.service';
 import { OCardMenuItemModule } from '../../components/card-menu-item/o-card-menu-item.component';
 
 export const DEFAULT_INPUTS_O_MENU_LAYOUT = [
@@ -24,7 +26,7 @@ export const DEFAULT_OUTPUTS_O_MENU_LAYOUT = [
   },
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class OCardMenuLayoutComponent implements OnInit, AfterViewInit, OnDestroy {
+export class OCardMenuLayoutComponent implements AfterViewInit, OnDestroy {
 
   public static DEFAULT_INPUTS_O_MENU_LAYOUT = DEFAULT_INPUTS_O_MENU_LAYOUT;
   public static DEFAULT_OUTPUTS_O_MENU_LAYOUT = DEFAULT_OUTPUTS_O_MENU_LAYOUT;
@@ -34,7 +36,6 @@ export class OCardMenuLayoutComponent implements OnInit, AfterViewInit, OnDestro
   protected appMenuService: AppMenuService;
   protected menuRoots: MenuRootItem[];
   protected cardItemsArray: MenuRootItem[];
-
   protected parentMenuId: string;
 
   constructor(
@@ -48,10 +49,6 @@ export class OCardMenuLayoutComponent implements OnInit, AfterViewInit, OnDestro
     this.translateServiceSubscription = this.translateService.onLanguageChanged.subscribe(() => {
       this.cd.detectChanges();
     });
-  }
-
-  ngOnInit() {
-    //
   }
 
   ngAfterViewInit() {
@@ -73,7 +70,6 @@ export class OCardMenuLayoutComponent implements OnInit, AfterViewInit, OnDestro
     }
 
     this.cardItems = cardItemsAux;
-
   }
 
   get cardItems(): MenuRootItem[] {
@@ -85,7 +81,7 @@ export class OCardMenuLayoutComponent implements OnInit, AfterViewInit, OnDestro
     this.cd.detectChanges();
   }
 
-  private getItemsFilteredByParentId(array: MenuRootItem[]): MenuRootItem[] {
+  protected getItemsFilteredByParentId(array: MenuRootItem[]): MenuRootItem[] {
     let result: MenuRootItem[] = undefined;
     const groups = array.filter((item) => this.appMenuService.isMenuGroup(item));
 
@@ -100,12 +96,12 @@ export class OCardMenuLayoutComponent implements OnInit, AfterViewInit, OnDestro
     }
     return result;
   }
+
 }
 
 @NgModule({
   declarations: [OCardMenuLayoutComponent],
-  imports: [OSharedModule, CommonModule, OCardMenuItemModule],
+  imports: [CommonModule, OCardMenuItemModule, OSharedModule],
   exports: [OCardMenuLayoutComponent]
 })
-export class OCardMenuLayoutModule {
-}
+export class OCardMenuLayoutModule { }
