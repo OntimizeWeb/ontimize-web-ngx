@@ -31,6 +31,7 @@ export interface MenuItemRoute extends MenuItem {
 
 export interface MenuItemAction extends MenuItem {
   confirm?: string;
+  confirmText?: string;
   action(): any;
 }
 
@@ -121,4 +122,5 @@ export class AppMenuService {
     }
     return [item];
   }
+
 }
