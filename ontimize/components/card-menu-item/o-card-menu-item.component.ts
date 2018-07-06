@@ -1,10 +1,11 @@
-import { Component, OnInit, ViewEncapsulation, ViewChild, ViewContainerRef, ComponentFactory, AfterViewInit, ComponentFactoryResolver, NgModule, ChangeDetectionStrategy, ChangeDetectorRef, OnDestroy, Injector, QueryList, ContentChildren, ElementRef } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ComponentFactory, ComponentFactoryResolver, ContentChildren, ElementRef, Injector, NgModule, OnDestroy, QueryList, ViewChild, ViewContainerRef, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
+
+import { OSharedModule } from '../../shared';
 import { InputConverter } from '../../decorators';
 import { OTranslateService } from '../../services';
-import { OSharedModule } from '../../shared';
 
 export const DEFAULT_INPUTS_O_MENU_CARD = [
   'title',
@@ -17,11 +18,11 @@ export const DEFAULT_INPUTS_O_MENU_CARD = [
   'secondaryContainerLayout : secondary-container-layout',
   'route',
   'detailComponent : detail-component',
-  'detailComponentInputs : detail-component-inputs'
+  'detailComponentInputs : detail-component-inputs',
+  'action'
 ];
 
-export const DEFAULT_OUTPUTS_O_MENU_CARD = [
-];
+export const DEFAULT_OUTPUTS_O_MENU_CARD = [];
 
 @Component({
   selector: 'o-card-menu-item',
@@ -37,7 +38,7 @@ export const DEFAULT_OUTPUTS_O_MENU_CARD = [
   },
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class OCardMenuItemComponent implements OnInit, AfterViewInit, OnDestroy {
+export class OCardMenuItemComponent implements AfterViewInit, OnDestroy {
 
   public static DEFAULT_INPUTS_O_MENU_CARD = DEFAULT_INPUTS_O_MENU_CARD;
   public static DEFAULT_OUTPUTS_O_MENU_CARD = DEFAULT_OUTPUTS_O_MENU_CARD;
@@ -52,11 +53,9 @@ export class OCardMenuItemComponent implements OnInit, AfterViewInit, OnDestroy 
   mainContainerLayout = 'column';
   secondaryContainerLayout = 'column';
   route: string;
+  action: () => void;
   detailComponent: any;
   detailComponentInputs: Object;
-
-  // @ViewChild('menuCardContent', { read: ViewContainerRef })
-  // detailComponentContainer: ViewContainerRef;
 
   protected _detailComponentContainer: ViewContainerRef;
 
@@ -65,7 +64,7 @@ export class OCardMenuItemComponent implements OnInit, AfterViewInit, OnDestroy 
     this._detailComponentContainer = content;
   }
 
-  get detailComponentContainer() : ViewContainerRef {
+  get detailComponentContainer(): ViewContainerRef {
     return this._detailComponentContainer;
   }
 
@@ -89,10 +88,6 @@ export class OCardMenuItemComponent implements OnInit, AfterViewInit, OnDestroy 
     this.translateServiceSubscription = this.translateService.onLanguageChanged.subscribe(() => {
       this.cd.detectChanges();
     });
-  }
-
-  ngOnInit() {
-    //
   }
 
   ngAfterViewInit() {
@@ -129,6 +124,8 @@ export class OCardMenuItemComponent implements OnInit, AfterViewInit, OnDestroy 
       this.router.navigate([this.route], {
         relativeTo: this.actRoute
       });
+    } else if (this.action) {
+      this.action();
     }
   }
 
@@ -155,8 +152,7 @@ export class OCardMenuItemComponent implements OnInit, AfterViewInit, OnDestroy 
 
 @NgModule({
   declarations: [OCardMenuItemComponent],
-  imports: [OSharedModule, CommonModule],
+  imports: [CommonModule, OSharedModule],
   exports: [OCardMenuItemComponent]
 })
-export class OCardMenuItemModule {
-}
+export class OCardMenuItemModule { }

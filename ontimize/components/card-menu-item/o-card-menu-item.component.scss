@@ -4,7 +4,7 @@
   .o-card-menu-item-main,
   .o-card-menu-item-secondary {
     width: 100%;
-    padding: 12px 0 12px 0;
+    padding: 12px 0;
   }
 
   .o-card-menu-item-image-container {
@@ -22,8 +22,8 @@
     }
   }
 
-  .o-card-menu-item-title,
-  .mat-button {
+  .mat-button,
+  .o-card-menu-item-title {
     font-weight: 600;
   }
 
@@ -37,15 +37,15 @@
     position: relative;
   }
 
-  .o-card-menu-item-title,
-  .o-card-menu-item-icon {
+  .o-card-menu-item-icon,
+  .o-card-menu-item-title {
     cursor: default;
   }
 
   .o-card-menu-item-info {
     cursor: default;
     position: absolute;
-    top: 0px;
-    right: 0px;
+    top: 0;
+    right: 0;
   }
 }
