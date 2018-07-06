@@ -2,6 +2,8 @@
 ### Features
 * **o-table**: new '*show-paginator-first-last-buttons*' input ([1c23563](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1c23563))
 * **o-table-paginator**: new '*show-first-last-buttons*' input ([1c23563](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1c23563))
+* **o-card-menu-layout**: now it is allowed include custom `o-card-menu-item` component on this component ([2209ecd](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2209ecd))
+* **o-card-menu-item**: new `action` attribute ([0aa9a33](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0aa9a33))
 
 ### Bug Fixes
 * **o-form**: fixing navigation bugs ([344e369](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/344e369)) ([f06362e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f06362e)) ([cc475b0](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/cc475b0))
