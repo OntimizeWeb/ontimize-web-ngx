@@ -2,10 +2,10 @@
 
 <span mat-subheader>{{ 'TABLE.DIALOG.LOAD_FILTER' | oTranslate }}</span>
 <mat-dialog-content>
-  <mat-selection-list #filterList class="o-table-load-filter-dialog-list">
+  <mat-selection-list #filterList dense class="o-table-load-filter-dialog-list">
     <mat-list-option *ngFor="let filter of filters " [value]="filter.name" checkboxPosition="before" disableRipple="yes">
-      <span matLine>{{ filter.name }}</span>
-      <span matLine>{{ filter.description }}</span>
+      <h4 matLine class="o-table-load-filter-dialog-list-title">{{ filter.name }}</h4>
+      <p matLine>{{ filter.description }}</p>
     </mat-list-option>
     <mat-list-item *ngIf="filters.length===0">
       <span>{{ 'TABLE.DIALOG.EMPTY_FILTER_LIST' | oTranslate }}</span>

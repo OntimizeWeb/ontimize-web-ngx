@@ -1,13 +1,7 @@
 .o-table-load-filter-dialog-list.mat-selection-list {
   outline: none;
 
-  // Override material mat-list-item height
-  .mat-list .mat-list-item.mat-2-line,
-  .mat-list .mat-list-option.mat-2-line,
-  .mat-nav-list .mat-list-item.mat-2-line,
-  .mat-nav-list .mat-list-option.mat-2-line,
-  .mat-selection-list .mat-list-item.mat-2-line,
-  .mat-selection-list .mat-list-option.mat-2-line {
-    height: 60px;
+  .o-table-load-filter-dialog-list-title {
+    font-size: 1.2em;
   }
 }
