@@ -1,24 +1,26 @@
+import { CommonModule } from '@angular/common';
 import {
   Component,
-  Inject,
-  Injector,
-  forwardRef,
   ElementRef,
   EventEmitter,
+  forwardRef,
+  HostBinding,
+  Inject,
+  Injector,
+  NgModule,
   Optional,
   ViewChild,
-  NgModule,
   ViewEncapsulation
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { DomSanitizer } from '@angular/platform-browser';
+import { FormGroup } from '@angular/forms';
 import { MatInput } from '@angular/material';
-
-import { OSharedModule } from '../../shared';
+import { DomSanitizer } from '@angular/platform-browser';
 import { InputConverter } from '../../decorators';
+import { OSharedModule } from '../../shared';
 import { OFormComponent } from '../form/o-form.component';
 import { OFormValue } from '../form/OFormValue';
-import { OFormDataComponent, DEFAULT_INPUTS_O_FORM_DATA_COMPONENT } from '../o-form-data-component.class';
+import { DEFAULT_INPUTS_O_FORM_DATA_COMPONENT, OFormDataComponent } from '../o-form-data-component.class';
+
 
 export const DEFAULT_INPUTS_O_IMAGE = [
   ...DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,
@@ -26,7 +28,11 @@ export const DEFAULT_INPUTS_O_IMAGE = [
   // empty-icon [string]: material icon. Default: photo.
   'emptyicon: empty-icon',
   // show-controls [yes|no true|false]: Shows or hides selection controls. Default: true.
-  'showControls: show-controls'
+  'showControls: show-controls',
+  //height [% | px]: Set the height of the image. 
+  'height',
+  // auto-fit [yes|no true|false]: Adjusts the image to the content or not. Default: true.
+  'autoFit:auto-fit'
 ];
 
 export const DEFAULT_OUTPUTS_O_IMAGE = [
@@ -48,22 +54,24 @@ export class OImageComponent extends OFormDataComponent {
 
   emptyimage: string;
   emptyicon: string;
-  @InputConverter()
-  protected showControls: boolean = true;
-
+  height: string;
+  
   onChange: EventEmitter<Object> = new EventEmitter<Object>();
 
+  @InputConverter()
+  protected showControls: boolean = true;
+  @InputConverter()
+  protected autoFit: boolean = true;
   @ViewChild('inputControl')
   protected inputControl: MatInput;
   @ViewChild('input')
   protected fileInput: ElementRef;
   @ViewChild('titleLabel')
   protected titleLabel: ElementRef;
-
   protected _useEmptyIcon: boolean = true;
   protected _useEmptyImage: boolean = false;
-
   protected _domSanitizer: DomSanitizer;
+
 
   constructor(
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
@@ -208,6 +216,21 @@ export class OImageComponent extends OFormDataComponent {
 
   useEmptyImage(): boolean {
     return this._useEmptyImage && this.isEmpty();
+  }
+
+
+  getFormGroup(): FormGroup {
+    let formGroup: FormGroup = super.getFormGroup();
+    if (!formGroup) {
+      formGroup = new FormGroup({});
+      formGroup.addControl(this.getAttribute(), this.getControl());
+    }
+    return formGroup;
+  }
+
+  @HostBinding('style.height')
+  get hostHeight() {
+    return this.height;
   }
 }
 
