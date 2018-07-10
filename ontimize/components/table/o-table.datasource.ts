@@ -309,9 +309,11 @@ export class OTableDataSource extends DataSource<any> {
     return this.columnValueFilters.filter(item => item.attr === attr)[0];
   }
 
-  clearColumnFilters() {
+  clearColumnFilters(trigger: boolean = true) {
     this.columnValueFilters = [];
-    this._columnValueFilterChange.next();
+    if (trigger) {
+      this._columnValueFilterChange.next();
+    }
   }
 
   addColumnFilter(filter: IColumnValueFilter) {

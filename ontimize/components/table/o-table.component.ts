@@ -428,7 +428,18 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   protected editingCell: any;
   protected editingRow: any;
 
-  public currentPage: number = 0;
+  protected _currentPage: number = 0;
+  set currentPage(val: number) {
+    this._currentPage = val;
+    if (this.paginator) {
+      this.paginator.pageIndex = val;
+    }
+  }
+
+  get currentPage(): number {
+    return this._currentPage;
+  }
+
   public oTableQuickFilterComponent: OTableQuickfilterComponent;
 
   protected sortSubscription: Subscription;
@@ -501,6 +512,29 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
     // Initialize params of the table
     this.initializeParams();
+
+    this.initializeDao();
+  }
+
+  protected initializeDao() {
+    // Configure dao methods
+    let queryMethodName = this.pageable ? this.paginatedQueryMethod : this.queryMethod;
+    const methods = {
+      query: queryMethodName,
+      update: this.updateMethod,
+      delete: this.deleteMethod,
+      insert: this.insertMethod
+    };
+
+    if (this.staticData) {
+      this.queryOnBind = false;
+      this.queryOnInit = false;
+      this.daoTable = new OTableDao(undefined, this.entity, methods);
+      this.setDataArray(this.staticData);
+    } else {
+      this.configureService();
+      this.daoTable = new OTableDao(this.dataService, this.entity, methods);
+    }
   }
 
   protected initializeCheckboxColumn() {
@@ -789,25 +823,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
 
     this.parseSortColumns();
-
-    // Configure dao methods
-    let queryMethodName = this.pageable ? this.paginatedQueryMethod : this.queryMethod;
-    const methods = {
-      query: queryMethodName,
-      update: this.updateMethod,
-      delete: this.deleteMethod,
-      insert: this.insertMethod
-    };
-
-    if (this.staticData) {
-      this.queryOnBind = false;
-      this.queryOnInit = false;
-      this.daoTable = new OTableDao(undefined, this.entity, methods);
-      this.setDataArray(this.staticData);
-    } else {
-      this.configureService();
-      this.daoTable = new OTableDao(this.dataService, this.entity, methods);
-    }
 
     // Initialize quickFilter
     this._oTableOptions.filter = this.quickFilter;
@@ -1133,18 +1148,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   reloadPaginatedDataFromStart() {
     if (this.pageable) {
-      this.clearSelection();
-      this.finishQuerySubscription = false;
-      this.pendingQuery = true;
-
       // Initialize page index
-      this.paginator.pageIndex = 0;
-
-      let queryArgs = {
-        offset: 0,
-        length: this.queryRows
-      };
-      this.queryData(this.parentItem, queryArgs);
+      this.currentPage = 0;
+      this.reloadData();
     }
   }
 
@@ -1494,12 +1500,13 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     this.dialogService.confirm('CONFIRM', 'TABLE.DIALOG.CONFIRM_CLEAR_FILTER').then(result => {
       if (result) {
         this.clearFilters();
+        this.reloadPaginatedDataFromStart();
       }
     });
   }
 
-  clearFilters(): void {
-    this.dataSource.clearColumnFilters();
+  clearFilters(triggerDatasourceUpdate: boolean = true): void {
+    this.dataSource.clearColumnFilters(triggerDatasourceUpdate);
     this.showFilterByColumnIcon = false;
     if (this.columnFilterOption) {
       this.columnFilterOption.active = this.showFilterByColumnIcon;
@@ -1507,7 +1514,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     if (this.oTableQuickFilterComponent) {
       this.oTableQuickFilterComponent.setValue(void 0);
     }
-    this.reloadPaginatedDataFromStart();
   }
 
   isColumnFilterable(column: OColumn): boolean {
@@ -1752,8 +1758,10 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   protected applyDefaultConfiguration() {
     this.oTableStorage.reset();
     this.initializeParams();
-    this.clearFilters();
+    this.insideTabBugWorkaround();
     this.onReinitialize.emit(null);
+    this.clearFilters(false);
+    this.reloadData();
   }
 
   protected applyConfiguration(configurationName: string) {
@@ -1779,16 +1787,16 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
             break;
           case 'page':
             this.state['currentPage'] = conf['currentPage'];
+            this.currentPage = conf['currentPage'];
             if (this.pageable) {
               this.state['totalQueryRecordsNumber'] = conf['totalQueryRecordsNumber'];
               this.state['queryRecordOffset'] = conf['queryRecordOffset'];
             }
             this.queryRows = conf['query-rows'];
-            this.parseCurrentPage();
             break;
         }
       });
-      this.reloadPaginatedDataFromStart();
+      this.reloadData();
     }
   }
 }

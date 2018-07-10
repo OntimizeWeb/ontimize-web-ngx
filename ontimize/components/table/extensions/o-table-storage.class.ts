@@ -76,6 +76,9 @@ export class OTableStorage {
     let state = {};
     state[OTableStorage.USER_STORED_FILTERS_KEY] = this.table.state[OTableStorage.USER_STORED_FILTERS_KEY];
     state[OTableStorage.STORED_CONFIGURATIONS_KEY] = this.table.state[OTableStorage.STORED_CONFIGURATIONS_KEY];
+    if (this.table.pageable) {
+      state['totalQueryRecordsNumber'] = this.table.state.totalQueryRecordsNumber;
+    }
     this.table.state = state;
   }
 
