@@ -3,6 +3,9 @@ import { CommonModule } from '@angular/common';
 import { OSharedModule } from '../../shared';
 import { OSideMenuModule, OSideMenuComponent } from './o-side-menu.component';
 
+/**
+ * @deprecated This component will be removed in following versions
+ */
 @Component({
   selector: 'o-side-menu-separator',
   templateUrl: './o-side-menu-separator.component.html',

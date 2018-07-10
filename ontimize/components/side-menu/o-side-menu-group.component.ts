@@ -10,6 +10,9 @@ export const DEFAULT_INPUTS_O_SIDE_MENU_GROUP = [
   'icon'
 ];
 
+/**
+ * @deprecated This component will be removed in following versions
+ */
 @Component({
   selector: 'o-side-menu-group',
   templateUrl: './o-side-menu-group.component.html',
