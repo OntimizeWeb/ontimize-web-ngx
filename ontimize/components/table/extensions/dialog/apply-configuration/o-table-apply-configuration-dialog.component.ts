@@ -1,5 +1,6 @@
-import { Component, Inject, Injector, EventEmitter, ViewChild, } from '@angular/core';
+import { Component, Inject, Injector, EventEmitter, ViewChild, OnInit, } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA, MatListOption, MatSelectionList } from '@angular/material';
+import { SelectionModel } from '@angular/cdk/collections';
 import { DialogService } from '../../../../../services';
 
 import { ITableConfiguration } from '../../o-table-storage.class';
@@ -9,7 +10,7 @@ import { ITableConfiguration } from '../../o-table-storage.class';
   templateUrl: './o-table-apply-configuration-dialog.component.html',
   styleUrls: ['./o-table-apply-configuration-dialog.component.scss']
 })
-export class OTableApplyConfigurationDialogComponent {
+export class OTableApplyConfigurationDialogComponent implements OnInit {
 
   @ViewChild(MatSelectionList) configurationList: MatSelectionList;
 
@@ -28,6 +29,10 @@ export class OTableApplyConfigurationDialogComponent {
   ) {
     this.loadConfigurations(data);
     this.dialogService = this.injector.get(DialogService);
+  }
+
+  ngOnInit(): void {
+    this.configurationList.selectedOptions = new SelectionModel<MatListOption>(false);
   }
 
   loadConfigurations(configurations: Array<ITableConfiguration>): void {
