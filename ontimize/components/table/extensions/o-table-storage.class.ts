@@ -79,6 +79,7 @@ export class OTableStorage {
     if (this.table.pageable) {
       state['totalQueryRecordsNumber'] = this.table.state.totalQueryRecordsNumber;
     }
+    state['currentPage'] = 0;
     this.table.state = state;
   }
 
