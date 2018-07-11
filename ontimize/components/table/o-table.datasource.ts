@@ -70,7 +70,7 @@ export class OTableDataSource extends DataSource<any> {
     }
 
     return Observable.merge(...displayDataChanges).map(() => {
-      let data = this._database.data;
+      let data =  Object.assign([], this._database.data);
       /*
         it is necessary to first calculate the calculated columns and
         then filter and sort the data
