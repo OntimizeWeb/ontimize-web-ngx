@@ -1,4 +1,4 @@
-import { Component, ViewChild, } from '@angular/core';
+import { Component, ViewChild, AfterViewInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MatListOption, MatSelectionList } from '@angular/material';
 
@@ -9,7 +9,7 @@ import { MatDialogRef, MatListOption, MatSelectionList } from '@angular/material
   templateUrl: './o-table-store-configuration-dialog.component.html',
   styleUrls: ['./o-table-store-configuration-dialog.component.scss']
 })
-export class OTableStoreConfigurationDialogComponent {
+export class OTableStoreConfigurationDialogComponent implements AfterViewInit {
 
   @ViewChild('propertiesList')
   propertiesList: MatSelectionList;
@@ -41,6 +41,18 @@ export class OTableStoreConfigurationDialogComponent {
   constructor(
     public dialogRef: MatDialogRef<OTableStoreConfigurationDialogComponent>
   ) { }
+
+  ngAfterViewInit(): void {
+    this.propertiesList.selectAll();
+  }
+
+  areAllSelected(): boolean {
+    return this.propertiesList && this.propertiesList.options && this.propertiesList.options.length === this.propertiesList.selectedOptions.selected.length;
+  }
+
+  onSelectAllClicked(selectAll: boolean) {
+    selectAll ? this.propertiesList.selectAll() : this.propertiesList.deselectAll();
+  }
 
   getConfigurationAttributes(): any {
     return this.formGroup.value;

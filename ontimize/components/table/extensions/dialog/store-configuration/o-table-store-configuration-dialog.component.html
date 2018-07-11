@@ -14,6 +14,9 @@
 
     <span mat-subheader>{{ 'TABLE.DIALOG.CONFIGURATION_PROPERTIES' | oTranslate }}</span>
     <mat-selection-list #propertiesList dense class="o-table-SAVE-configuration-dialog-list">
+      <mat-list-option checkboxPosition="before" [selected]="areAllSelected()" #selectAllOption (click)="onSelectAllClicked(selectAllOption.selected)">
+        <span matLine>{{ 'SELECT_ALL' | oTranslate }}</span>
+      </mat-list-option>
       <mat-list-option checkboxPosition="before" *ngFor="let property of properties; let i = index" [value]="property.property">
         <span matLine>{{ property.name | oTranslate }}</span>
       </mat-list-option>
