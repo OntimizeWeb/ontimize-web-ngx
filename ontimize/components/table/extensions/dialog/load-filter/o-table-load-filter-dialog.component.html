@@ -16,7 +16,7 @@
 <mat-dialog-actions align="end">
   <button type="button" mat-raised-button [disabled]="filterList.selectedOptions.selected.length!==1" (click)="removeFilter(filterList.selectedOptions.selected[0].value)">
     <mat-icon svgIcon="ontimize:delete"></mat-icon>
-    <span>{{ 'DELETE' | oTranslate }}</span>
+    <span>{{ 'DELETE' | oTranslate | uppercase }}</span>
   </button>
   <span fxFlex></span>
   <button mat-button class="mat-primary" [mat-dialog-close]="false">{{ 'CANCEL' | oTranslate | uppercase }}</button>
