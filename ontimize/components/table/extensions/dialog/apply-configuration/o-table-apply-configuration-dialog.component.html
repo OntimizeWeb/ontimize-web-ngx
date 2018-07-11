@@ -21,6 +21,6 @@
     <span>{{ 'DELETE' | oTranslate }}</span>
   </button>
   <span fxFlex></span>
-  <button mat-button class="mat-primary" [mat-dialog-close]="false">{{ 'CANCEL' | oTranslate }}</button>
-  <button mat-button class="mat-primary" [mat-dialog-close]="true" [disabled]="configurationList.selectedOptions.selected.length!==1">{{ 'OK' | oTranslate }}</button>
+  <button mat-button class="mat-primary" [mat-dialog-close]="false">{{ 'CANCEL' | oTranslate | uppercase }}</button>
+  <button mat-button class="mat-primary" [mat-dialog-close]="true" [disabled]="configurationList.selectedOptions.selected.length!==1">{{ 'OK' | oTranslate | uppercase }}</button>
 </mat-dialog-actions>
