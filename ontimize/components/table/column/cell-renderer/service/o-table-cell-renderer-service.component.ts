@@ -1,10 +1,10 @@
-import { Component, Injector, ViewChild, TemplateRef, OnInit } from '@angular/core';
-
+import { Component, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 
 import { Util, Codes } from '../../../../../utils';
-import { OntimizeService, DialogService } from '../../../../../services';
+import { DialogService, OntimizeService } from '../../../../../services';
 import { OBaseTableCellRenderer } from '../o-base-table-cell-renderer.class';
+import { dataServiceFactory } from '../../../../../services/data-service.provider';
 
 export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_SERVICE = [
   'entity',
@@ -19,7 +19,11 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_SERVICE = [
 @Component({
   selector: 'o-table-cell-renderer-service',
   templateUrl: './o-table-cell-renderer-service.component.html',
-  inputs: DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_SERVICE
+  inputs: DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_SERVICE,
+  providers: [
+    // Service renderer must have its own service instance in order to avoid overriding table service configuration
+    { provide: OntimizeService, useFactory: dataServiceFactory, deps: [Injector] }
+  ]
 })
 export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer implements OnInit {
 
