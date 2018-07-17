@@ -96,6 +96,7 @@ export const DEFAULT_INPUTS_O_TABLE_COLUMN = [
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE_COLUMN = [
+  ...OTableCellRendererActionComponent.DEFAULT_OUTPUTS_O_TABLE_CELL_RENDERER_ACTION,
   ...OTableCellEditorTextComponent.DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_TEXT
 ];
 
@@ -222,6 +223,9 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
   @InputConverter()
   indeterminateOnNull: boolean = false;
 
+  /* output cell renderer action */
+  onClick: EventEmitter<Object> = new EventEmitter<Object>();
+
   /* output cell editor */
   editionStarted: EventEmitter<Object> = new EventEmitter<Object>();
   editionCancelled: EventEmitter<Object> = new EventEmitter<Object>();
@@ -306,6 +310,7 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
             case 'action':
               newRenderer.icon = this.icon;
               newRenderer.action = this.action;
+              newRenderer.onClick = this.onClick;
               break;
             case 'service':
               newRenderer.entity = this.entity;
