@@ -83,31 +83,27 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
       return;
     }
 
-    if ((Object.keys(this._pKeysEquiv).length > 0) && parentItem === undefined) {
-      // this.setDataArray([]);
+    const filter = this.getFilterUsingParentKeys(parentItem, this._pKeysEquiv);
+    let tableColAlias = Object.keys(this._pKeysEquiv).find(key => this._pKeysEquiv[key] === this.column);
+    if (Util.isDefined(tableColAlias) && !filter[tableColAlias]) {
+      filter[tableColAlias] = cellvalue;
     } else {
-      // if (this.querySubscription) {
-      //   this.querySubscription.unsubscribe();
-      // }
-      const filter = this.getFilterUsingParentKeys(parentItem, this._pKeysEquiv);
-      if (!filter[this.column]) {
-        filter[this.column] = cellvalue;
-      }
-      this.querySubscription = this.dataService[this.queryMethod](filter, this.colArray, this.entity).subscribe(resp => {
-        if (resp.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) {
-          self.responseMap[cellvalue] = resp.data[0][self.valueColumn];
-        } else {
-          console.log('error');
-        }
-      }, err => {
-        console.log(err);
-        if (err && typeof err !== 'object') {
-          this.dialogService.alert('ERROR', err);
-        } else {
-          this.dialogService.alert('ERROR', 'MESSAGES.ERROR_QUERY');
-        }
-      });
+      filter[this.column] = cellvalue;
     }
+    this.querySubscription = this.dataService[this.queryMethod](filter, this.colArray, this.entity).subscribe(resp => {
+      if (resp.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) {
+        self.responseMap[cellvalue] = resp.data[0][self.valueColumn];
+      } else {
+        console.log('error');
+      }
+    }, err => {
+      console.log(err);
+      if (err && typeof err !== 'object') {
+        this.dialogService.alert('ERROR', err);
+      } else {
+        this.dialogService.alert('ERROR', 'MESSAGES.ERROR_QUERY');
+      }
+    });
   }
 
   getFilterUsingParentKeys(parentItem: any, parentKeysObject: Object) {
