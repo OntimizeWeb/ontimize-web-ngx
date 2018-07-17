@@ -1,7 +1,13 @@
-import { Component, OnDestroy, OnInit, Injector, forwardRef, Inject, ComponentFactoryResolver, ComponentFactory, ViewChild, ViewContainerRef, EventEmitter, AfterViewInit } from '@angular/core';
+import { AfterViewInit, Component, ComponentFactory, ComponentFactoryResolver, EventEmitter, forwardRef, Inject, Injector, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { Subscription } from 'rxjs';
 
+import { Util } from '../../../util/util';
+import { Codes } from '../../../util/codes';
+import { SQLTypes } from '../../../util/sqltypes';
 import { InputConverter } from '../../../decorators';
+import { OTableComponent } from '../o-table.component';
+import { DateFilterFunction } from '../../../components/input/date-input/o-date-input.component';
+
 import {
   OTableCellRendererDateComponent,
   OTableCellRendererCurrencyComponent,
@@ -10,11 +16,9 @@ import {
   OTableCellRendererRealComponent,
   OTableCellRendererBooleanComponent,
   OTableCellRendererPercentageComponent,
-  OTableCellRendererActionComponent
+  OTableCellRendererActionComponent,
+  OTableCellRendererServiceComponent
 } from './cell-renderer/cell-renderer';
-
-import { OTableComponent } from '../o-table.component';
-import { Util } from '../../../util/util';
 
 import {
   OTableCellEditorTextComponent,
@@ -23,9 +27,6 @@ import {
   OTableCellEditorIntegerComponent,
   OTableCellEditorRealComponent
 } from './cell-editor/cell-editor';
-
-import { DateFilterFunction } from '../../../components/input/date-input/o-date-input.component';
-import { SQLTypes } from '../../../util/sqltypes';
 
 export interface OColumnTooltip {
   value?: string;
@@ -86,6 +87,7 @@ export const DEFAULT_INPUTS_O_TABLE_COLUMN = [
   ...OTableCellRendererDateComponent.DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_DATE,
   ...OTableCellRendererImageComponent.DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_IMAGE,
   ...OTableCellRendererActionComponent.DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_ACTION,
+  ...OTableCellRendererServiceComponent.DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_SERVICE,
 
   ...OTableCellEditorBooleanComponent.DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_BOOLEAN,
   ...OTableCellEditorDateComponent.DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_DATE,
@@ -120,7 +122,8 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
     'image': OTableCellRendererImageComponent,
     'integer': OTableCellRendererIntegerComponent,
     'percentage': OTableCellRendererPercentageComponent,
-    'real': OTableCellRendererRealComponent
+    'real': OTableCellRendererRealComponent,
+    'service': OTableCellRendererServiceComponent
   };
 
   protected static editorsMapping = {
@@ -153,42 +156,51 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
   public tooltip: boolean = false;
   tooltipValue: string;
   tooltipFunction: Function;
-  /*input renderer date */
+  /* input renderer date */
   protected format: string;
-  /*input renderer integer */
+  /* input renderer integer */
   protected grouping: any = true;
   protected thousandSeparator: string = ',';
-  /*input renderer real */
+  /* input renderer real */
   protected decimalSeparator: string = '.';
   protected decimalDigits: number = 2;
-  /*input renderer currency */
+  /* input renderer currency */
   protected currencySymbol: string;
   protected currencySymbolPosition: string;
 
-  /*input renderer boolean */
+  /* input renderer boolean */
   protected trueValueType: string;
   protected trueValue: string;
   protected falseValueType: string;
   protected falseValue: string;
   protected booleanType: string = 'boolean';
 
-  /*input image */
+  /* input image */
   protected imageType: string;
   protected avatar: string;
   protected emptyImage: string;
 
-  /*input renderer action */
+  /* input renderer action */
   protected icon: string;
   protected action: string;
 
-  /*input editor */
+  /* input renderer service */
+  protected entity: string;
+  protected service: string;
+  protected columns: string;
+  protected valueColumn: string;
+  protected parentKeys: string;
+  protected queryMethod: string = Codes.QUERY_METHOD;
+  protected serviceType: string;
+
+  /* input editor */
   @InputConverter()
   protected orequired: boolean = false;
   @InputConverter()
   showPlaceHolder: boolean = false;
   olabel: string;
 
-  /*input editor date */
+  /* input editor date */
   protected locale: string;
   protected oStartView: 'month' | 'year' = 'month';
   protected oMinDate: string;
@@ -198,7 +210,7 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
   protected oStartAt: string;
   protected filterDate: DateFilterFunction;
 
-  /*input editor integer */
+  /* input editor integer */
   @InputConverter()
   min: number;
   @InputConverter()
@@ -206,7 +218,7 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
   @InputConverter()
   step: number;
 
-  /*input editor boolean */
+  /* input editor boolean */
   @InputConverter()
   indeterminateOnNull: boolean = false;
 
@@ -295,6 +307,14 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
               newRenderer.icon = this.icon;
               newRenderer.action = this.action;
               break;
+            case 'service':
+              newRenderer.entity = this.entity;
+              newRenderer.service = this.service;
+              newRenderer.columns = this.columns;
+              newRenderer.valueColumn = this.valueColumn;
+              newRenderer.parentKeys = this.parentKeys;
+              newRenderer.queryMethod = this.queryMethod;
+              newRenderer.serviceType = this.serviceType;
           }
           this.registerRenderer(newRenderer);
         }
