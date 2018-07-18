@@ -73,6 +73,7 @@ export class OTablePaginatorComponent implements OnInit {
     let result: any[] = this.pageSizeOptions.filter(option => option === this._pageSize);
     if (result.length === 0) {
       this._pageSizeOptions.push(value);
+      this._pageSizeOptions.sort((i: number, j: number) => i - j);
     }
   }
 
@@ -89,7 +90,9 @@ export class OTablePaginatorComponent implements OnInit {
   }
 
   public isShowingAllRows(selectedLength): boolean {
-    return this._pageSizeOptions.indexOf(selectedLength) === (this._pageSizeOptions.length - 1);
+    // return this._pageSizeOptions.indexOf(selectedLength) === (this._pageSizeOptions.length - 1);
+    // temporal while not having an option for showing all records in paginated tables
+    return false;
   }
 }
 
