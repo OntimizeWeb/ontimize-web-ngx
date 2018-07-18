@@ -595,6 +595,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       this.elRef.nativeElement.removeAttribute('title');
     }
 
+    this.parseVisibleColumns();
+
     this.setDatasource();
 
     this.registerSortListener();
@@ -762,7 +764,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   parseVisibleColumns() {
     if (this.state.hasOwnProperty('oColumns-display')) {
-      this.visibleColArray = this.state['oColumns-display'].filter(item => item.visible).map(item => item.attr);
+      // filtering columns that might be in state storage but not in the actual table definition
+      let stateCols = this.state['oColumns-display'].filter(item => this._oTableOptions.columns.find(col => col.attr === item.attr) !== undefined);
+      this.visibleColArray = stateCols.filter(item => item.visible).map(item => item.attr);
     } else {
       this.visibleColArray = Util.parseArray(this.visibleColumns, true);
     }
@@ -806,8 +810,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     if (!this.visibleColumns) {
       this.visibleColumns = this.columns;
     }
-
-    this.parseVisibleColumns();
 
     if (this.colArray.length) {
       this.colArray.map((x: string) => this.registerDefaultColumn(x));
@@ -1758,6 +1760,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   protected applyDefaultConfiguration() {
     this.oTableStorage.reset();
     this.initializeParams();
+    this.parseVisibleColumns();
     this.insideTabBugWorkaround();
     this.onReinitialize.emit(null);
     this.clearFilters(false);
