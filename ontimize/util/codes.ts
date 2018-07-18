@@ -44,12 +44,16 @@ export class Codes {
 
   public static LOGIN_ROUTE = '/login';
   public static DEFAULT_EDIT_ROUTE = 'edit';
+  public static DEFAULT_DETAIL_ROUTE = 'detail';
 
   public static IGNORE_CAN_DEACTIVATE = 'ignore_can_deactivate';
 
   public static ONTIMIZE_SUCCESSFUL_CODE = 0;
   public static ONTIMIZE_FAILED_CODE = 1;
   public static ONTIMIZE_UNAUTHORIZED_CODE = 3;
+
+  public static ICON_POSITION_LEFT = 'left';
+  public static ICON_POSITION_RIGHT = 'right';
 
   static isDoubleClickMode(value: string): boolean {
     return Codes.DETAIL_MODE_DBLCLICK_VALUES.indexOf(value) !== -1;

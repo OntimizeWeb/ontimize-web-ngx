@@ -184,6 +184,8 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
   /* input renderer action */
   protected icon: string;
   protected action: string;
+  protected text: string;
+  protected iconPosition: string;
 
   /* input renderer service */
   protected entity: string;
@@ -310,6 +312,8 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
             case 'action':
               newRenderer.icon = this.icon;
               newRenderer.action = this.action;
+              newRenderer.text = this.text;
+              newRenderer.iconPosition = this.iconPosition;
               newRenderer.onClick = this.onClick;
               break;
             case 'service':

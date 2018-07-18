@@ -1,11 +1,11 @@
 import { Component, OnInit, Inject, forwardRef, EventEmitter, Injector, ViewEncapsulation } from '@angular/core';
-import { Util } from '../../../../../utils';
+import { Util, Codes } from '../../../../../utils';
 import { OTableComponent } from '../../../o-table.component';
 
 export const DEFAULT_INPUTS_O_TABLE_BUTTON = [
   'icon',
   'svgIcon: svg-icon',
-  'iconPosition : icon-position',
+  'iconPosition: icon-position',
   'olabel: label'
 ];
 
@@ -29,8 +29,6 @@ export class OTableButtonComponent implements OnInit {
 
   public static DEFAULT_INPUTS_O_TABLE_BUTTON = DEFAULT_INPUTS_O_TABLE_BUTTON;
   public static DEFAULT_OUTPUTS_O_TABLE_BUTTON = DEFAULT_OUTPUTS_O_TABLE_BUTTON;
-  public static ICON_POSITION_LEFT = 'left';
-  public static ICON_POSITION_RIGHT = 'right';
 
   public onClick: EventEmitter<Object> = new EventEmitter<Object>();
 
@@ -50,13 +48,7 @@ export class OTableButtonComponent implements OnInit {
     if (!Util.isDefined(this.icon) && !Util.isDefined(this.svgIcon)) {
       this.icon = 'priority_high';
     }
-    const availablePos = [OTableButtonComponent.ICON_POSITION_LEFT, OTableButtonComponent.ICON_POSITION_RIGHT];
-    if (this.iconPosition) {
-      this.iconPosition = this.iconPosition.toLowerCase();
-    }
-    if (availablePos.indexOf(this.iconPosition) === -1) {
-      this.iconPosition = OTableButtonComponent.ICON_POSITION_LEFT;
-    }
+    this.iconPosition = Util.parseIconPosition(this.iconPosition);
   }
 
   innerOnClick() {
@@ -64,7 +56,7 @@ export class OTableButtonComponent implements OnInit {
   }
 
   isIconPositionLeft() {
-    return this.iconPosition === OTableButtonComponent.ICON_POSITION_LEFT;
+    return this.iconPosition === Codes.ICON_POSITION_LEFT;
   }
 
   get table() {

@@ -2,6 +2,7 @@ import { Base64 } from './base64';
 import { Observable } from 'rxjs/Observable';
 import { IFormDataComponent } from '../components/o-form-data-component.class';
 import { SessionInfo } from '../services/login.service';
+import { Codes } from './codes';
 
 export interface IDataService {
   getDefaultServiceConfiguration(serviceName?: string): Object;
@@ -43,7 +44,6 @@ export class Util {
   static isArray(val: any): boolean {
     return val instanceof Array;
   }
-
 
   static parseBoolean(value: string, defaultValue?: boolean): boolean {
     if ((typeof value === 'string') && (value.toUpperCase() === 'TRUE' || value.toUpperCase() === 'YES')) {
@@ -262,4 +262,15 @@ export class Util {
     return Util.flatten(array);
   }
 
+  static parseIconPosition(value: string, defaultValue?: string): string {
+    let result = defaultValue || Codes.ICON_POSITION_LEFT;
+    const availablePositions = [Codes.ICON_POSITION_LEFT, Codes.ICON_POSITION_RIGHT];
+    if (value && value.length) {
+      result = value.toLowerCase();
+    }
+    if (availablePositions.indexOf(result) === -1) {
+      result = defaultValue || Codes.ICON_POSITION_LEFT;
+    }
+    return result;
+  }
 }
