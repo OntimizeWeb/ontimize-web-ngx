@@ -1,9 +1,12 @@
 import { Component, Injector, ViewChild, TemplateRef, EventEmitter } from '@angular/core';
+import { Util, Codes } from '../../../../../utils';
 import { OBaseTableCellRenderer } from '../o-base-table-cell-renderer.class';
 
 export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_ACTION = [
   'icon',
-  'action'
+  'action',
+  'text',
+  'iconPosition: icon-position'
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE_CELL_RENDERER_ACTION = [
@@ -13,6 +16,7 @@ export const DEFAULT_OUTPUTS_O_TABLE_CELL_RENDERER_ACTION = [
 @Component({
   selector: 'o-table-cell-renderer-action',
   templateUrl: './o-table-cell-renderer-action.component.html',
+  styleUrls: ['./o-table-cell-renderer-action.component.scss'],
   inputs: DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_ACTION,
   outputs: DEFAULT_OUTPUTS_O_TABLE_CELL_RENDERER_ACTION
 })
@@ -25,6 +29,8 @@ export class OTableCellRendererActionComponent extends OBaseTableCellRenderer {
   onClick: EventEmitter<Object> = new EventEmitter<Object>();
   action: string;
   _icon: string;
+  text: string;
+  iconPosition: string;
 
   @ViewChild('templateref', { read: TemplateRef }) public templateref: TemplateRef<any>;
 
@@ -41,6 +47,7 @@ export class OTableCellRendererActionComponent extends OBaseTableCellRenderer {
       const oCol = this.table.getOColumn(this.tableColumn.attr);
       oCol.title = undefined;
     }
+    this.iconPosition = Util.parseIconPosition(this.iconPosition);
   }
 
   getCellData(value: any) {
@@ -52,19 +59,20 @@ export class OTableCellRendererActionComponent extends OBaseTableCellRenderer {
       event.stopPropagation();
       event.preventDefault();
     }
-    this.onClick.emit(rowData);
-    // if (typeof (this.action) !== 'undefined') {
-    //   switch (this.action.toLowerCase()) {
-    //     case 'detail':
-    //       this.tableColumn.viewDetail(rowData);
-    //       break;
-    //     case Codes.DEFAULT_EDIT_ROUTE:
-    //       this.tableColumn.editDetail(rowData);
-    //       break;
-    //     default:
-    //       break;
-    //   }
-    // }
+    if (Util.isDefined(this.action)) {
+      switch (this.action.toLowerCase()) {
+        case Codes.DEFAULT_DETAIL_ROUTE:
+          this.table.viewDetail(rowData);
+          break;
+        case Codes.DEFAULT_EDIT_ROUTE:
+          this.table.editDetail(rowData);
+          break;
+        default:
+          break;
+      }
+    } else {
+      this.onClick.emit(rowData);
+    }
   }
 
   get icon(): string {
@@ -73,5 +81,13 @@ export class OTableCellRendererActionComponent extends OBaseTableCellRenderer {
 
   set icon(arg: string) {
     this._icon = arg;
+  }
+
+  isIconPositionLeft() {
+    return Util.isDefined(this.icon) && this.iconPosition === Codes.ICON_POSITION_LEFT;
+  }
+
+  isIconPositionRight() {
+    return Util.isDefined(this.icon) && this.iconPosition === Codes.ICON_POSITION_RIGHT;
   }
 }
