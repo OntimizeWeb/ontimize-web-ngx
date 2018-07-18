@@ -1,4 +1,4 @@
-<mat-tab-group #tabGroup fxFill (selectedTabChange)="onTabSelectChange()">
+<mat-tab-group #tabGroup oTabGroup="ontimize" fxFill (selectedTabChange)="onTabSelectChange()">
   <mat-tab label="{{ (title || 'LAYOUT_MANANGER.MAIN_TAB_LABEL') | oTranslate }}">
     <ng-content></ng-content>
   </mat-tab>
