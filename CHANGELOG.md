@@ -7,6 +7,7 @@
 * **o-image**; new `auto-fit` and `height` attributes ([a7bd081](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a7bd081))
 * **o-table-cell-renderer-action**: new '*text*', '*icon-position*' and '*action*' inputs ([afc1cd6](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/afc1cd6))
 * **OntimizeMatIconRegistry**: new '*addOntimizeSvgIcon*' method ([79953f5](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/79953f5))
+* New **oTabGroup** directive: applies styles to angular material `mat-tab-group` component ([0a04ce3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0a04ce3))
 
 ### Bug Fixes
 * **o-form**: fixing navigation bugs ([344e369](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/344e369)) ([f06362e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f06362e)) ([cc475b0](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/cc475b0))
