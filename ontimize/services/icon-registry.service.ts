@@ -12,18 +12,22 @@ export class OntimizeMatIconRegistry extends MatIconRegistry {
   public static ONTIMIZE_ICON_SET_PATH = 'assets/svg/ontimize-icon-set.svg';
   public static ONTIMIZE_NAMESPACE = 'ontimize';
 
+  protected domSanitizer: DomSanitizer;
+
   constructor(
     http: HttpClient,
     sanitizer: DomSanitizer,
     @Optional() @Inject(DOCUMENT) document
   ) {
     super(http, sanitizer, document);
+    this.domSanitizer = sanitizer;
     this.addSvgIconSetInNamespace(OntimizeMatIconRegistry.ONTIMIZE_NAMESPACE,
-      sanitizer.bypassSecurityTrustResourceUrl(OntimizeMatIconRegistry.ONTIMIZE_ICON_SET_PATH));
+      this.domSanitizer.bypassSecurityTrustResourceUrl(OntimizeMatIconRegistry.ONTIMIZE_ICON_SET_PATH));
   }
 
-  addSvgIcon(iconName: string, url: SafeResourceUrl): this {
-    return this.addSvgIconInNamespace(OntimizeMatIconRegistry.ONTIMIZE_NAMESPACE, iconName, url);
+  addOntimizeSvgIcon(iconName: string, url: string): this {
+    return this.addSvgIconInNamespace(OntimizeMatIconRegistry.ONTIMIZE_NAMESPACE, iconName,
+      this.domSanitizer.bypassSecurityTrustResourceUrl(url));
   }
 
   getSVGElement(iconName: string): Observable<SVGElement> {
