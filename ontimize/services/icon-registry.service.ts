@@ -1,6 +1,6 @@
 import { Injectable, Optional, Inject } from '@angular/core';
 import { MatIconRegistry } from '@angular/material';
-import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { DomSanitizer } from '@angular/platform-browser';
 import { HttpClient } from '@angular/common/http';
 import { DOCUMENT } from '@angular/common';
 import { Observable } from 'rxjs/Observable';
