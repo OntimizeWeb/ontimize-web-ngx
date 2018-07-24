@@ -1,3 +1,20 @@
+## 3.0.0-rc.2
+### Features
+* **o-table**: new '*show-paginator-first-last-buttons*' input ([1c23563](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1c23563))
+* **o-table-paginator**: new '*show-first-last-buttons*' input ([1c23563](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1c23563))
+* **o-card-menu-layout**: now it is allowed include custom `o-card-menu-item` component on this component ([2209ecd](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2209ecd))
+* **o-card-menu-item**: new `action` attribute ([0aa9a33](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0aa9a33))
+* **o-image**; new `auto-fit` and `height` attributes ([a7bd081](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a7bd081))
+* **o-table-cell-renderer-action**: new '*text*', '*icon-position*' and '*action*' inputs ([afc1cd6](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/afc1cd6))
+* **OntimizeMatIconRegistry**: new '*addOntimizeSvgIcon*' method ([79953f5](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/79953f5))
+* New **oTabGroup** directive: applies styles to angular material `mat-tab-group` component ([0a04ce3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0a04ce3))
+
+### Bug Fixes
+* **o-form**: fixing navigation bugs ([344e369](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/344e369)) ([f06362e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f06362e)) ([cc475b0](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/cc475b0))
+
+### BREAKING CHANGES
+* **o-side-menu**: the side menu component has been deprecated and will be removed in following versions.
+
 ## 3.0.0-rc.1 (2018-07-02)
 
 ### Features

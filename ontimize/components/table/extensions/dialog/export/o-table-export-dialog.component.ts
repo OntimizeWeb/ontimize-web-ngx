@@ -16,7 +16,10 @@ export class OTableExportConfiguration {
 @Component({
   selector: 'o-table-export-dialog',
   templateUrl: 'o-table-export-dialog.component.html',
-  styleUrls: ['o-table-export-dialog.component.scss']
+  styleUrls: ['o-table-export-dialog.component.scss'],
+  host: {
+    'class': 'o-table-export-dialog'
+  }
 })
 export class OTableExportDialogComponent implements OnInit {
 

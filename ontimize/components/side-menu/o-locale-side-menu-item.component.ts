@@ -19,6 +19,9 @@ export const DEFAULT_INPUTS_O_LOCALE_SIDE_MENU_ITEM = [
   'locale'
 ];
 
+/**
+ * @deprecated This component will be removed in following versions
+ */
 @Component({
   selector: 'o-locale-side-menu-item',
   templateUrl: './o-locale-side-menu-item.component.html',

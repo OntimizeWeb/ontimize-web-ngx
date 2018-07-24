@@ -99,20 +99,19 @@ export class NumberService {
       formattedRealValue = new Intl.NumberFormat(this._locale, formatterArgs).format(value);
     } else {
       let realValue = parseFloat(value);
-      if (isNaN(realValue)) {
-        realValue = void 0;
-      }
-      formattedRealValue = String(realValue);
-      let tmpStr = realValue.toFixed(maxDecimalDigits);
-      tmpStr = tmpStr.replace('.', decimalSeparator);
-      if (grouping) {
-        let parts = tmpStr.split(decimalSeparator);
-        if (parts.length > 0) {
-          parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, thousandSeparator);
-          formattedRealValue = parts.join(decimalSeparator);
+      if (!isNaN(realValue)) {
+        formattedRealValue = String(realValue);
+        let tmpStr = realValue.toFixed(maxDecimalDigits);
+        tmpStr = tmpStr.replace('.', decimalSeparator);
+        if (grouping) {
+          let parts = tmpStr.split(decimalSeparator);
+          if (parts.length > 0) {
+            parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, thousandSeparator);
+            formattedRealValue = parts.join(decimalSeparator);
+          }
+        } else {
+          formattedRealValue = tmpStr;
         }
-      } else {
-        formattedRealValue = tmpStr;
       }
     }
     return formattedRealValue;

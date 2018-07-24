@@ -1,4 +1,4 @@
-import { Component, forwardRef, Inject, Injector, ViewEncapsulation } from '@angular/core';
+import { Component, forwardRef, Inject, Injector, ViewEncapsulation, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { OFormLayoutManagerComponent } from '../../../layouts';
@@ -13,11 +13,12 @@ import { OFormNavigationClass } from './o-form.navigation.class';
   styleUrls: ['./o-form-navigation.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class OFormNavigationComponent {
+export class OFormNavigationComponent implements OnDestroy {
 
   public navigationData: Array<any> = [];
   private _currentIndex = 0;
 
+  protected formDataNavigation: OFormDataNavigation;
   protected formNavigation: OFormNavigationClass;
 
   constructor(protected injector: Injector,
@@ -26,8 +27,13 @@ export class OFormNavigationComponent {
     private actRoute: ActivatedRoute,
   ) {
     this.formNavigation = this._form.getFormNavigation();
-    this.navigationData = new OFormDataNavigation(this.injector).getComponentStorage();
+    this.formDataNavigation = new OFormDataNavigation(this.injector);
+    this.navigationData = this.formDataNavigation.getComponentStorage();
     this.currentIndex = this.getCurrentIndex();
+  }
+
+  ngOnDestroy(): void {
+    this.formDataNavigation.destroy();
   }
 
   getCurrentIndex(): number {
@@ -80,30 +86,38 @@ export class OFormNavigationComponent {
   }
 
   move(index: number) {
-    this._form.showConfirmDiscardChanges().then(res => {
-      if (res === true) {
-        const formLayoutManager: OFormLayoutManagerComponent = this._form.getFormManager();
-        this.currentIndex = index;
-        if (formLayoutManager && formLayoutManager.isDialogMode()) {
-          this.moveInDialogManager(formLayoutManager, index);
-
-        } else {
-          this.moveWithoutManager(index);
+    if (this._form.hasDeactivateGuard()) {
+      // when form already has its own deactivate guard, it will control the changes discard
+      this.moveWithoutManager(index);
+    } else {
+      this._form.showConfirmDiscardChanges().then(res => {
+        if (res === true) {
+          const formLayoutManager: OFormLayoutManagerComponent = this._form.getFormManager();
+          this.currentIndex = index;
+          if (formLayoutManager && formLayoutManager.isDialogMode()) {
+            this.moveInDialogManager(formLayoutManager, index);
+          } else {
+            this.moveWithoutManager(index);
+          }
         }
-      }
-    });
+      });
+    }
   }
 
   private moveWithoutManager(index: number) {
     let route = this.getRouteOfSelectedRow(this.navigationData[index]);
     if (route.length > 0) {
-      this.currentIndex = index;
       const qParams = Codes.getIsDetailObject();
       let extras = {
         relativeTo: this.actRoute.parent
       };
       extras[Codes.QUERY_PARAMS] = qParams;
-      this.router.navigate(route, extras);
+      const self = this;
+      this.router.navigate(route, extras).then((navigationDone: boolean) => {
+        if (navigationDone) {
+          self.currentIndex = index;
+        }
+      });
     }
   }
 

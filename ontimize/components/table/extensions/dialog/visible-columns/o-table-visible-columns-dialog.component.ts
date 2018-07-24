@@ -16,38 +16,31 @@ import { OColumn } from '../../../o-table.component';
 })
 export class OTableVisibleColumnsDialogComponent {
 
-  columns: Array<OColumn> = [];
-  protected originalColumns: Array<OColumn> = [];
+  columns: Array<any> = [];
 
   constructor(
     public dialogRef: MatDialogRef<OTableVisibleColumnsDialogComponent>,
     @Inject(MAT_DIALOG_DATA) data: any
   ) {
-    if (Util.isArray(data.columnArray) && Util.isArray(data.columnsData)) {
-      // cloning columnsData
-      data.columnsData.forEach((colData: OColumn) => {
-        let column = Object.assign(new OColumn(), colData);
-        this.originalColumns.push(column);
-      });
-      data.columnArray.forEach(colAttr => {
-        const oColData = this.originalColumns.find((oCol: OColumn) => oCol.attr === colAttr);
-        if (oColData) {
-          this.columns.push(oColData);
-        }
+    if (Util.isArray(data.columnsData) && Util.isArray(data.originalVisibleColumns)) {
+      let originalCols = data.originalVisibleColumns;
+      data.columnsData.forEach((oCol: OColumn) => {
+        this.columns.push({
+          attr: oCol.attr,
+          title: oCol.title,
+          visible: oCol.visible,
+          showInList: (oCol.definition !== undefined || oCol.visible || originalCols.indexOf(oCol.attr) !== -1)
+        });
       });
     }
   }
 
   getVisibleColumns(): Array<string> {
-    return this.columns.filter(col => col.visible).map(col => col.name);
+    return this.columns.filter(col => col.visible).map(col => col.attr);
   }
 
-  getColumnsData(): Array<OColumn> {
-    this.originalColumns.forEach(column => {
-      Object.assign(column, this.columns.find(c => column.attr === c.attr));
-    });
-    this.originalColumns.sort((a, b) => this.columns.indexOf(a) - this.columns.indexOf(b));
-    return this.originalColumns;
+  getColumnsOrder(): Array<string> {
+    return this.columns.map(col => col.attr);
   }
 
   onClickColumn(col: OColumn): void {

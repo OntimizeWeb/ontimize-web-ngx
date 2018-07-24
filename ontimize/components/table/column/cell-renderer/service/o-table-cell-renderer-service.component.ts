@@ -1,10 +1,10 @@
-import { Component, Injector, ViewChild, TemplateRef, OnInit } from '@angular/core';
-
+import { Component, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 
 import { Util, Codes } from '../../../../../utils';
-import { OntimizeService, DialogService } from '../../../../../services';
+import { DialogService, OntimizeService } from '../../../../../services';
 import { OBaseTableCellRenderer } from '../o-base-table-cell-renderer.class';
+import { dataServiceFactory } from '../../../../../services/data-service.provider';
 
 export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_SERVICE = [
   'entity',
@@ -19,7 +19,11 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_SERVICE = [
 @Component({
   selector: 'o-table-cell-renderer-service',
   templateUrl: './o-table-cell-renderer-service.component.html',
-  inputs: DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_SERVICE
+  inputs: DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_SERVICE,
+  providers: [
+    // Service renderer must have its own service instance in order to avoid overriding table service configuration
+    { provide: OntimizeService, useFactory: dataServiceFactory, deps: [Injector] }
+  ]
 })
 export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer implements OnInit {
 
@@ -79,31 +83,27 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
       return;
     }
 
-    if ((Object.keys(this._pKeysEquiv).length > 0) && parentItem === undefined) {
-      // this.setDataArray([]);
+    const filter = this.getFilterUsingParentKeys(parentItem, this._pKeysEquiv);
+    let tableColAlias = Object.keys(this._pKeysEquiv).find(key => this._pKeysEquiv[key] === this.column);
+    if (Util.isDefined(tableColAlias) && !filter[tableColAlias]) {
+      filter[tableColAlias] = cellvalue;
     } else {
-      // if (this.querySubscription) {
-      //   this.querySubscription.unsubscribe();
-      // }
-      const filter = this.getFilterUsingParentKeys(parentItem, this._pKeysEquiv);
-      if (!filter[this.column]) {
-        filter[this.column] = cellvalue;
-      }
-      this.querySubscription = this.dataService[this.queryMethod](filter, this.colArray, this.entity).subscribe(resp => {
-        if (resp.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) {
-          self.responseMap[cellvalue] = resp.data[0][self.valueColumn];
-        } else {
-          console.log('error');
-        }
-      }, err => {
-        console.log(err);
-        if (err && typeof err !== 'object') {
-          this.dialogService.alert('ERROR', err);
-        } else {
-          this.dialogService.alert('ERROR', 'MESSAGES.ERROR_QUERY');
-        }
-      });
+      filter[this.column] = cellvalue;
     }
+    this.querySubscription = this.dataService[this.queryMethod](filter, this.colArray, this.entity).subscribe(resp => {
+      if (resp.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) {
+        self.responseMap[cellvalue] = resp.data[0][self.valueColumn];
+      } else {
+        console.log('error');
+      }
+    }, err => {
+      console.log(err);
+      if (err && typeof err !== 'object') {
+        this.dialogService.alert('ERROR', err);
+      } else {
+        this.dialogService.alert('ERROR', 'MESSAGES.ERROR_QUERY');
+      }
+    });
   }
 
   getFilterUsingParentKeys(parentItem: any, parentKeysObject: Object) {

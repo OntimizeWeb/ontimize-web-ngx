@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ComponentFactoryResolver, CUSTOM_ELEMENTS_SCHEMA, ElementRef, EventEmitter, Injector, NgModule, OnInit, OnDestroy, ViewContainerRef, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, CUSTOM_ELEMENTS_SCHEMA, ElementRef, EventEmitter, Injector, NgModule, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { ActivatedRoute, ActivatedRouteSnapshot, Route, Router, RouterModule } from '@angular/router';
 import { MatDialog, MatDialogRef } from '@angular/material';
 import { CommonModule } from '@angular/common';
@@ -71,8 +71,6 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
     protected injector: Injector,
     protected router: Router,
     protected actRoute: ActivatedRoute,
-    protected componentFactoryResolver: ComponentFactoryResolver,
-    protected location: ViewContainerRef,
     protected dialog: MatDialog,
     protected elRef: ElementRef
   ) {
@@ -123,7 +121,7 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
     if (!previouslyAdded) {
       canActivateChildArray.push(CanActivateFormLayoutChildGuard);
       routeConfig.canActivateChild = canActivateChildArray;
-      this.router.resetConfig(this.router.config);
+      // this.router.resetConfig(this.router.config);
     }
   }
 
@@ -135,7 +133,7 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
         break;
       }
     }
-    this.router.resetConfig(this.router.config);
+    // this.router.resetConfig(this.router.config);
   }
 
   isDialogMode(): boolean {

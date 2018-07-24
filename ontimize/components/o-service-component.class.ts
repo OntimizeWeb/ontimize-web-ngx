@@ -274,20 +274,20 @@ export class OServiceComponent extends OServiceBaseComponent {
     // if (this.formLayoutManager) {
     //   route = this.formLayoutManager.getRouteOfActiveItem();
     // }
-
-    // TODO: multiple keys
-    let filter = undefined;
-    if (typeof (item) === 'object') {
-      for (let k = 0; k < this.keysArray.length; ++k) {
-        let key = this.keysArray[k];
-        filter = item[key];
-      }
+    let filterArr = [];
+    if (Util.isObject(item)) {
+      this.keysArray.forEach(key => {
+        if (Util.isDefined(item[key])) {
+          filterArr.push(item[key]);
+        }
+      });
     }
-    if (typeof (filter) !== 'undefined') {
+
+    if (filterArr.length > 0) {
       if (modeRoute !== undefined) {
         route.push(modeRoute);
       }
-      route.push(filter);
+      route.push(...filterArr);
     }
     return route;
   }

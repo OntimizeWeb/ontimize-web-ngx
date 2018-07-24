@@ -1,6 +1,5 @@
 .o-form-layout-tabgroup {
   .mat-tab-group {
-
     .mat-tab-label {
       span.tab-label {
         width: 100%;
@@ -8,33 +7,37 @@
         text-overflow: ellipsis;
         white-space: nowrap;
         overflow: hidden;
+
         &.modified {
           font-weight: 700;
+
           &:after {
             content: '*';
           }
         }
       }
+
       .mat-icon {
         height: 16px;
         width: 16px;
         font-size: 16px;
-        padding-left: 4px;
+        padding-left: 6px;
         vertical-align: middle;
       }
     }
 
     .mat-tab-body-wrapper {
-      height: 100%;
+      flex: 1 1 auto;
     }
 
     o-form-toolbar {
       padding: 0;
       top: 0px!important;
-        .mat-toolbar {
-          box-shadow: none;
-          border-radius: 0;
-          }
+
+      .mat-toolbar {
+        box-shadow: none;
+        border-radius: 0;
+      }
     }
   }
 }

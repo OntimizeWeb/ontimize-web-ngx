@@ -1,5 +1,5 @@
 <button (click)="innerOnClick()" mat-menu-item fxLayout="row" fxLayoutAlign="start center">
-  <mat-icon *ngIf="showActiveOptionIcon()" svgIcon="ontimize:done"></mat-icon>
+  <mat-icon *ngIf="showActiveOptionIcon()" svgIcon="ontimize:done" fxLayout></mat-icon>
   {{ olabel | oTranslate }}
   <mat-icon *ngIf="icon"> {{ icon }}</mat-icon>
 </button>

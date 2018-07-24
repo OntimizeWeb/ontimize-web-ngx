@@ -1,23 +1,24 @@
 import { Injectable, Injector } from '@angular/core';
 import { Subscriber } from 'rxjs/Subscriber';
-import { IAuthService, Codes } from '../../utils';
+
+import { Codes, IAuthService } from '../../utils';
 
 @Injectable()
 export class OntimizeServiceResponseParser {
+
   constructor(
     protected injector: Injector
-  ) {
-  }
+  ) { }
 
   parseSuccessfulResponse(resp, subscriber: Subscriber<any>, service: IAuthService) {
     if (resp && resp.code === Codes.ONTIMIZE_UNAUTHORIZED_CODE) {
       service.redirectLogin(true);
-    } else if (resp.code === Codes.ONTIMIZE_FAILED_CODE) {
+    } else if (resp && resp.code === Codes.ONTIMIZE_FAILED_CODE) {
       subscriber.error(resp.message);
-    } else if (resp.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) {
+    } else if (resp && resp.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) {
       subscriber.next(resp);
     } else {
-      //Unknow state -> error
+      // Unknow state -> error
       subscriber.error('Service unavailable');
     }
   }

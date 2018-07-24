@@ -1,29 +1,23 @@
-import { Component, ElementRef, EventEmitter, Injector, OnInit, ViewChild, NgModule } from '@angular/core';
+import { AfterViewInit, animate, ChangeDetectorRef, Component, ElementRef, EventEmitter, Injector, NgModule, state, style, transition, trigger, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormControl, ValidatorFn, Validators } from '@angular/forms';
-import { CKEditor, MdCKEditorModule } from '../../material/ckeditor/ckeditor.component';
-import { MatTabGroup, MatTab } from '@angular/material';
-import { OSharedModule } from '../../../shared';
-import { IFormDataComponent, IFormDataTypeComponent, OFormDataComponent } from '../../o-form-data-component.class';
-import { IComponent } from '../../o-component.class';
-import { InputConverter } from '../../../decorators';
-import { OFormComponent } from '../../form/o-form.component';
-import { OFormValue } from '../../form/OFormValue';
-import { OTranslateService } from '../../../services';
-import { SQLTypes } from '../../../utils';
+import { ValidatorFn, Validators } from '@angular/forms';
+import { MatTab, MatTabGroup } from '@angular/material';
+
+import { OSharedModule } from '../../../shared/shared.module';
+import { InputConverter } from '../../../decorators/input-converter';
+import { OFormDataComponent } from '../../o-form-data-component.class';
+import { OFormComponent, OFormValue } from '../../form/form-components';
+import { CKEditorComponent, CKEditorModule } from '../../material/ckeditor/ck-editor.component';
 
 export const DEFAULT_INPUTS_O_HTML_INPUT = [
   'oattr: attr',
-  'olabel: label',
   'data',
   'autoBinding: automatic-binding',
   'autoRegistering: automatic-registering',
-  'oenabled: enabled',
   'orequired: required',
   'minLength: min-length',
   'maxLength: max-length',
-
-  // sqltype[string]: Data type according to Java standard. See SQLType class. Default: 'OTHER'
+  'readOnly: read-only',
   'sqlType: sql-type'
 ];
 
@@ -38,50 +32,40 @@ export const DEFAULT_OUTPUTS_O_HTML_INPUT = [
   templateUrl: './o-html-input.component.html',
   styleUrls: ['./o-html-input.component.scss'],
   inputs: DEFAULT_INPUTS_O_HTML_INPUT,
-  outputs: DEFAULT_OUTPUTS_O_HTML_INPUT
+  outputs: DEFAULT_OUTPUTS_O_HTML_INPUT,
+  animations: [
+    trigger('transitionMessages', [
+      state('enter', style({ opacity: 1, transform: 'translateY(0%)' })),
+      transition('void => enter', [
+        style({ opacity: 0, transform: 'translateY(-100%)' }),
+        animate('300ms cubic-bezier(0.55, 0, 0.55, 0.2)'),
+      ]),
+    ])
+  ]
 })
-export class OHTMLInputComponent extends OFormDataComponent implements OnInit, IComponent, IFormDataComponent, IFormDataTypeComponent {
+export class HTMLInputComponent extends OFormDataComponent implements AfterViewInit {
 
   public static DEFAULT_INPUTS_O_HTML_INPUT = DEFAULT_INPUTS_O_HTML_INPUT;
   public static DEFAULT_OUTPUTS_O_HTML_INPUT = DEFAULT_OUTPUTS_O_HTML_INPUT;
 
-  oattr: string;
-  olabel: string;
-  @InputConverter()
-  oenabled: boolean = true;
-  @InputConverter()
-  orequired: boolean = true;
-  @InputConverter()
-  autoBinding: boolean = true;
-  @InputConverter()
-  autoRegistering: boolean = true;
   @InputConverter()
   minLength: number = -1;
   @InputConverter()
   maxLength: number = -1;
-  sqlType: string;
 
   onChange: EventEmitter<Object> = new EventEmitter<Object>();
   onFocus: EventEmitter<Object> = new EventEmitter<Object>();
   onBlur: EventEmitter<Object> = new EventEmitter<Object>();
 
-  @ViewChild('ckEditor') ckEditor: CKEditor;
-
-  protected value: OFormValue;
-  protected translateService: OTranslateService;
-  protected _SQLType: number = SQLTypes.OTHER;
-
-  protected _fControl: FormControl;
-
-  protected _disabled: boolean;
-  protected _isReadOnly: boolean;
-  protected _placeholder: string;
-  protected _tooltip: string;
-  protected _tooltipPosition: string = 'below';
-  protected _tooltipShowDelay: number = 500;
+  @ViewChild('ckEditor') ckEditor: CKEditorComponent;
 
   protected tabGroupContainer: MatTabGroup;
   protected tabContainer: MatTab;
+
+  /** State of the mat-hint and mat-error animations. */
+  _subscriptAnimationState: string = '';
+
+  protected _changeDetectorRef: ChangeDetectorRef;
 
   constructor(
     form: OFormComponent,
@@ -91,6 +75,7 @@ export class OHTMLInputComponent extends OFormDataComponent implements OnInit, I
     super(form, elRef, injector);
     this.form = form;
     this.elRef = elRef;
+    this._changeDetectorRef = this.injector.get(ChangeDetectorRef);
     try {
       this.tabGroupContainer = this.injector.get(MatTabGroup);
       this.tabContainer = this.injector.get(MatTab);
@@ -115,10 +100,24 @@ export class OHTMLInputComponent extends OFormDataComponent implements OnInit, I
       this.tabGroupContainer.selectedTabChange.subscribe((evt: any) => {
         self.destroyCKEditor();
         if (self.isInActiveTab()) {
-          self.ckEditor.initializeCkEditor(self.getValue());
+          self.ckEditor.initCKEditor(self.oattr);
         }
       });
     }
+  }
+
+  ngAfterViewInit() {
+    super.ngAfterViewInit();
+    // Avoid animations on load.
+    this._subscriptAnimationState = 'enter';
+    this._changeDetectorRef.detectChanges();
+  }
+
+
+  hasError(error: string): boolean {
+    let result = super.hasError(error);
+    this._subscriptAnimationState = result ? 'enter' : 'void';
+    return result;
   }
 
   isInActiveTab(): boolean {
@@ -130,14 +129,6 @@ export class OHTMLInputComponent extends OFormDataComponent implements OnInit, I
           result = (self.tabGroupContainer.selectedIndex === index);
         }
       });
-    }
-    return result;
-  }
-
-  isLoaded(): boolean {
-    var result = true;
-    if (this.tabGroupContainer && this.tabContainer) {
-      result = this.isInActiveTab();
     }
     return result;
   }
@@ -175,35 +166,27 @@ export class OHTMLInputComponent extends OFormDataComponent implements OnInit, I
     }
   }
 
-  get isValid() {
-    if (this._fControl) {
-      return this._fControl.valid;
-    }
-    return false;
-  }
-
   clearValue(): void {
     super.clearValue();
     this.ckEditor.instance.updateElement();
     this.ckEditor.instance.setData('');
   }
 
-  /*
-  * When ckEditor is inside a TabGroup it is necessary to destroy the component before
-  * Angular detaches mat-tab-content from DOM
-  */
   destroyCKEditor() {
     if (this.ckEditor) {
       this.ckEditor.destroyCKEditor();
     }
   }
 
+  getCKEditor(): any {
+    return this.ckEditor.instance;
+  }
+
 }
 
 @NgModule({
-  declarations: [OHTMLInputComponent],
-  imports: [OSharedModule, CommonModule, MdCKEditorModule],
-  exports: [OHTMLInputComponent]
+  declarations: [HTMLInputComponent],
+  imports: [OSharedModule, CommonModule, CKEditorModule],
+  exports: [HTMLInputComponent]
 })
-export class OHTMLInputModule {
-}
+export class OHTMLInputModule { }

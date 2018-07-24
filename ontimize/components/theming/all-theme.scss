@@ -1,5 +1,4 @@
 @import 'node_modules/@angular/material/theming';
-
 @import './app-global-theme.scss';
 @import '../breadcrumb/o-breadcrumb-theme.scss';
 @import '../container/o-container-theme.scss';
@@ -8,7 +7,6 @@
 @import '../input/date-input/o-date-input-theme.scss';
 @import '../dialog/o-dialog-theme.scss';
 @import '../table/o-table-theme.scss';
-@import '../material/ckeditor/ckeditor-theme.scss';
 @import '../list/o-list-theme.scss';
 @import '../input/listpicker/o-list-picker-theme.scss';
 @import '../app-header/o-app-header-theme.scss';
@@ -22,7 +20,6 @@
 @mixin o-material-theme($theme, $typography: null) {
   @include mat-core($typography);
   @include angular-material-theme($theme);
-
   @include app-global-theme($theme, $typography);
   @include o-breadcrumb-theme($theme);
   @include o-container-theme($theme);
@@ -31,7 +28,6 @@
   @include o-date-input-theme($theme);
   @include o-dialog-theme($theme);
   @include o-table-theme($theme);
-  @include ckeditor-theme($theme);
   @include o-list-theme($theme);
   @include o-list-picker-theme($theme);
   @include o-app-header-theme($theme);

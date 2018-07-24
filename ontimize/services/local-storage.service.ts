@@ -85,7 +85,7 @@ export class LocalStorageService {
     return componentData;
   }
 
-  private updateAppComponentsStorage(componentKey: string, componentData: Object) {
+  updateAppComponentsStorage(componentKey: string, componentData: Object) {
     let componentDataB64: Object = undefined;
     try {
       componentDataB64 = btoa(JSON.stringify(componentData));
@@ -96,7 +96,9 @@ export class LocalStorageService {
       let appStoredData = localStorage.getItem(this._config['uuid']);
       if (!appStoredData) {
         let newAppData: Object = {};
-        newAppData[LocalStorageService.COMPONENTS_STORAGE_KEY] = { componentKey: componentDataB64 };
+        let componentData = {};
+        componentData[componentKey] = componentDataB64;
+        newAppData[LocalStorageService.COMPONENTS_STORAGE_KEY] = componentData;
         localStorage.setItem(this._config['uuid'], JSON.stringify(newAppData));
       } else {
         let appData = {};

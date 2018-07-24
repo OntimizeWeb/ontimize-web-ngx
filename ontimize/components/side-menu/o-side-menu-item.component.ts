@@ -15,6 +15,9 @@ export const DEFAULT_INPUTS_O_SIDE_MENU_ITEM = [
   'action'
 ];
 
+/**
+ * @deprecated This component will be removed in following versions
+ */
 @Component({
   selector: 'o-side-menu-item',
   templateUrl: './o-side-menu-item.component.html',

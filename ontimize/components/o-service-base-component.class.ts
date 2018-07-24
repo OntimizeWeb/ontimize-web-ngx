@@ -89,7 +89,8 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
   staticData: Array<any>;
   queryMethod: string = Codes.QUERY_METHOD;
   paginatedQueryMethod: string = Codes.PAGINATED_QUERY_METHOD;
-  queryRows: any = Codes.DEFAULT_QUERY_ROWS;
+  @InputConverter()
+  queryRows: number = Codes.DEFAULT_QUERY_ROWS;
   insertMethod: string = Codes.INSERT_METHOD;
   updateMethod: string = Codes.UPDATE_METHOD;
   deleteMethod: string = Codes.DELETE_METHOD;
@@ -115,10 +116,11 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
   protected loaderSubscription: Subscription;
   protected querySubscription: Subscription;
   protected dataService: any;
-  protected state: any = {};
+  protected _state: any = {};
   loading: boolean = false;
 
   protected form: OFormComponent;
+  protected alreadyStored: boolean = false;
 
   constructor(
     protected injector: Injector
@@ -188,7 +190,6 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
     if (this.loaderSubscription) {
       this.loaderSubscription.unsubscribe();
     }
-    this.updateStateStorage();
   }
 
   ngOnChanges(changes: { [propName: string]: SimpleChange }) {
@@ -203,7 +204,8 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
   }
 
   protected updateStateStorage() {
-    if (this.localStorageService && this.storeState) {
+    if (this.localStorageService && this.storeState && !this.alreadyStored) {
+      this.alreadyStored = true;
       this.localStorageService.updateComponentStorage(this);
     }
   }
@@ -400,5 +402,13 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
 
   protected setData(data: any, sqlTypes?: any) {
     //
+  }
+
+  get state(): any {
+    return this._state;
+  }
+
+  set state(arg: any) {
+    this._state = arg;
   }
 }

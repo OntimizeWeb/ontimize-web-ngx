@@ -10,6 +10,9 @@ export const DEFAULT_INPUTS_O_SIDE_MENU = [
   'title'
 ];
 
+/**
+ * @deprecated This component will be removed in following versions
+ */
 @Component({
   selector: 'o-side-menu',
   templateUrl: './o-side-menu.component.html',

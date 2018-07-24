@@ -12,9 +12,7 @@ import { ColumnValueFilterOperator, IColumnValueFilter, OTableEditableRowCompone
 import { OColumn, OTableComponent, OTableOptions } from './o-table.component';
 import { OTableDao } from './o-table.dao';
 
-
 export class OTableDataSource extends DataSource<any> {
-
   dataTotalsChange = new BehaviorSubject<any[]>([]);
   get data(): any[] { return this.dataTotalsChange.value; }
 
@@ -27,7 +25,6 @@ export class OTableDataSource extends DataSource<any> {
   protected _columnValueFilterChange = new Subject();
 
   protected filteredData: any[] = [];
-  protected paginator: MatPaginator;
   renderedData: any[] = [];
   resultsLength: number = 0;
 
@@ -46,9 +43,6 @@ export class OTableDataSource extends DataSource<any> {
     }
     this._tableOptions = table.oTableOptions;
     this._sort = table.sort;
-    if (this.table.oTableColumnsFilterComponent) {
-      this.initializeColumnsFilters();
-    }
   }
 
   /**
@@ -76,12 +70,14 @@ export class OTableDataSource extends DataSource<any> {
     }
 
     return Observable.merge(...displayDataChanges).map(() => {
-      let data = this._database.data;
+      let data =  Object.assign([], this._database.data);
       /*
         it is necessary to first calculate the calculated columns and
         then filter and sort the data
       */
-      data = this.getColumnCalculatedData(data);
+      if (this.existsAnyCalculatedColumn()) {
+        data = this.getColumnCalculatedData(data);
+      }
 
       if (!this.table.pageable) {
         data = this.getColumnValueFilterData(data);
@@ -112,32 +108,27 @@ export class OTableDataSource extends DataSource<any> {
    * @param data data of the database
    */
   getColumnCalculatedData(data: any[]): any[] {
-    let self = this;
-
-    return data.map(function (row) {
-      self._tableOptions.columns.map(function (ocolumn: OColumn) {
-
-        if (ocolumn.visible && ocolumn.calculate) {
-          var key = ocolumn.attr;
-          let operator_calculated = ocolumn.calculate;
-          let value;
-          if (typeof operator_calculated === 'string') {
-            value = self.transformFormula(ocolumn.calculate, row);
-          } else {
-            if (typeof operator_calculated === 'function') {
-              value = operator_calculated(row);
-            }
-          }
-          row[key] = isNaN(value) ? 0 : value;
+    const self = this;
+    const calculatedCols = this._tableOptions.columns.filter((oCol: OColumn) => oCol.visible && oCol.calculate !== undefined);
+    return data.map((row: any) => {
+      calculatedCols.map((oColumn: OColumn) => {
+        let value;
+        if (typeof oColumn.calculate === 'string') {
+          value = self.transformFormula(oColumn.calculate, row);
+        } else if (typeof oColumn.calculate === 'function') {
+          value = oColumn.calculate(row);
         }
+        row[oColumn.attr] = isNaN(value) ? 0 : value;
       });
       return row;
     });
   }
 
-  protected transformFormula(formula, row): string {
+  protected transformFormula(formulaArg, row): string {
+    let formula = formulaArg;
     // 1. replace columns by values of row
-    this._tableOptions.visibleColumns.map(function (column) {
+    const columnsAttr = this._tableOptions.columns.map((oCol: OColumn) => oCol.attr);
+    columnsAttr.map((column: string) => {
       formula = formula.replace(column, row[column]);
     });
 
@@ -173,7 +164,7 @@ export class OTableDataSource extends DataSource<any> {
       return data;
     }
     let startIndex = isNaN(this._paginator.pageSize) ? 0 : this._paginator.pageIndex * this._paginator.pageSize;
-    if (data.length < startIndex) {
+    if (data.length > 0 && data.length < startIndex) {
       startIndex = 0;
       this._paginator.pageIndex = 0;
     }
@@ -189,7 +180,7 @@ export class OTableDataSource extends DataSource<any> {
       if (oCol.searching && oCol.visible) {
         let filterValue = item[oCol.attr];
         if (oCol.renderer && oCol.renderer.getCellData) {
-          filterValue = oCol.renderer.getCellData(filterValue,item);
+          filterValue = oCol.renderer.getCellData(filterValue, item);
         }
         return filterValue;
       }
@@ -252,7 +243,7 @@ export class OTableDataSource extends DataSource<any> {
           if (column === ocolumn.attr && ocolumn.visible) {
             var key = column;
             if (render && ocolumn.renderer && ocolumn.renderer.getCellData) {
-              obj[key] = ocolumn.renderer.getCellData(row[column],row);
+              obj[key] = ocolumn.renderer.getCellData(row[column], row);
             } else {
               obj[key] = row[column];
             }
@@ -273,7 +264,7 @@ export class OTableDataSource extends DataSource<any> {
           if (column === ocolumn.attr) {
             var key = column;
             if (render && ocolumn.renderer && ocolumn.renderer.getCellData) {
-              obj[key] = ocolumn.renderer.getCellData(row[column],row);
+              obj[key] = ocolumn.renderer.getCellData(row[column], row);
             } else {
               obj[key] = row[column];
             }
@@ -299,9 +290,9 @@ export class OTableDataSource extends DataSource<any> {
     });
   }
 
-  initializeColumnsFilters() {
-    const storedFilters = this.table.getStoredColumnsFilters();
-    storedFilters.forEach(filter => {
+  initializeColumnsFilters(filters: IColumnValueFilter[]) {
+    this.columnValueFilters = [];
+    filters.forEach(filter => {
       this.columnValueFilters.push(filter);
     });
   }
@@ -318,9 +309,11 @@ export class OTableDataSource extends DataSource<any> {
     return this.columnValueFilters.filter(item => item.attr === attr)[0];
   }
 
-  clearColumnFilters() {
+  clearColumnFilters(trigger: boolean = true) {
     this.columnValueFilters = [];
-    this._columnValueFilterChange.next();
+    if (trigger) {
+      this._columnValueFilterChange.next();
+    }
   }
 
   addColumnFilter(filter: IColumnValueFilter) {
@@ -377,6 +370,9 @@ export class OTableDataSource extends DataSource<any> {
     return data;
   }
 
+  protected existsAnyCalculatedColumn(): boolean {
+    return this._tableOptions.columns.find((oCol: OColumn) => oCol.calculate !== undefined) !== undefined;
+  }
 }
 
 export class OTableTotalDataSource extends DataSource<any> {

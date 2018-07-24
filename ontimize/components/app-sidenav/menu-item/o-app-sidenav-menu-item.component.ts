@@ -1,14 +1,16 @@
-import { Injector, NgModule, Component, ViewEncapsulation, ElementRef, AfterViewInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Injector, NgModule, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule, Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
+
 import { Util } from '../../../utils';
-import { InputConverter } from '../../../decorators';
 import { OSharedModule } from '../../../shared';
+import { InputConverter } from '../../../decorators';
 import { OAppLayoutComponent } from '../../../layouts';
-import { OTranslateService, LoginService, MenuItemAction, MenuItemLocale, MenuRootItem, MenuItemUserInfo, MenuItemRoute } from '../../../services';
-import { OLanguageSelectorModule } from '../../language-selector/o-language-selector.component';
 import { OAppSidenavComponent } from '../o-app-sidenav.component';
+import { DialogService, LoginService, OTranslateService } from '../../../services';
+import { OLanguageSelectorModule } from '../../language-selector/o-language-selector.component';
+import { MenuItemAction, MenuItemLocale, MenuItemLogout, MenuItemRoute, MenuItemUserInfo, MenuRootItem } from '../../../services/app-menu.service';
 
 export const DEFAULT_INPUTS_O_APP_SIDENAV_MENU_ITEM = [
   'menuItem : menu-item',
@@ -34,6 +36,7 @@ export class OAppSidenavMenuItemComponent implements AfterViewInit, OnDestroy {
 
   protected translateService: OTranslateService;
   protected loginService: LoginService;
+  protected dialogService: DialogService;
   protected sidenav: OAppSidenavComponent;
   protected router: Router;
 
@@ -52,6 +55,7 @@ export class OAppSidenavMenuItemComponent implements AfterViewInit, OnDestroy {
   ) {
     this.translateService = this.injector.get(OTranslateService);
     this.loginService = this.injector.get(LoginService);
+    this.dialogService = this.injector.get(DialogService);
     this.sidenav = this.injector.get(OAppSidenavComponent);
     this.oAppLayoutComponent = this.injector.get(OAppLayoutComponent);
     this.router = this.injector.get(Router);
@@ -91,7 +95,11 @@ export class OAppSidenavMenuItemComponent implements AfterViewInit, OnDestroy {
 
   executeItemAction() {
     const actionItem = (this.menuItem as MenuItemAction);
-    actionItem.action();
+    if (Util.parseBoolean(actionItem.confirm, false)) {
+      this.dialogService.confirm('CONFIRM', actionItem.confirmText || 'MESSAGES.CONFIRM_ACTION').then(result => result ? actionItem.action() : null);
+    } else {
+      actionItem.action();
+    }
   }
 
   configureI18n() {
@@ -113,7 +121,12 @@ export class OAppSidenavMenuItemComponent implements AfterViewInit, OnDestroy {
   }
 
   logout() {
-    this.loginService.logoutWithConfirmationAndRedirect();
+    const menuItem = (this.menuItem as MenuItemLogout);
+    if (Util.parseBoolean(menuItem.confirm, true)) {
+      this.loginService.logoutWithConfirmationAndRedirect();
+    } else {
+      this.loginService.logoutAndRedirect();
+    }
   }
 
   navigate() {
@@ -185,10 +198,11 @@ export class OAppSidenavMenuItemComponent implements AfterViewInit, OnDestroy {
     }
     return result;
   }
+
 }
 
 @NgModule({
-  imports: [CommonModule, OSharedModule, OLanguageSelectorModule, RouterModule],
+  imports: [CommonModule, OLanguageSelectorModule, OSharedModule, RouterModule],
   declarations: [OAppSidenavMenuItemComponent],
   exports: [OAppSidenavMenuItemComponent]
 })
