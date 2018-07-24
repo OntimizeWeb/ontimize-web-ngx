@@ -1,38 +1,24 @@
+import { ChangeDetectorRef, Component, CUSTOM_ELEMENTS_SCHEMA, ElementRef, EventEmitter, Injector, NgModule, NgZone, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-  ChangeDetectorRef,
-  Component,
-  CUSTOM_ELEMENTS_SCHEMA,
-  ElementRef,
-  EventEmitter,
-  Injector,
-  NgModule,
-  NgZone,
-  OnDestroy,
-  OnInit,
-  ViewChild,
-  ViewEncapsulation
-} from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router, UrlSegment } from '@angular/router';
 import 'rxjs/add/observable/combineLatest';
-import { Observable } from 'rxjs/Observable';
-import { Subscription } from 'rxjs/Subscription';
-import { InputConverter } from '../../decorators';
-import { OFormLayoutManagerComponent } from '../../layouts';
-import { DialogService, NavigationService, OntimizeService, SnackBarService } from '../../services';
-import { dataServiceFactory } from '../../services/data-service.provider';
-import { OSharedModule } from '../../shared';
-import { Codes, SQLTypes, Util } from '../../utils';
-import { IComponent } from '../o-component.class';
-import { IFormDataComponent, IFormDataTypeComponent } from '../o-form-data-component.class';
-import { OFormCacheClass } from './cache/o-form.cache.class';
-import { CanComponentDeactivate, CanDeactivateFormGuard } from './guards/o-form-can-deactivate.guard';
-import { OFormNavigationClass } from './navigation/o-form.navigation.class';
-import { OFormContainerComponent } from './o-form-container.component';
-import { OFormToolbarComponent, OFormToolbarModule } from './o-form-toolbar.component';
-import { OFormValue } from './OFormValue';
+import { Observable, Subscription } from 'rxjs';
 
+import { OFormValue } from './OFormValue';
+import { OSharedModule } from '../../shared';
+import { InputConverter } from '../../decorators';
+import { IComponent } from '../o-component.class';
+import { Codes, SQLTypes, Util } from '../../utils';
+import { OFormLayoutManagerComponent } from '../../layouts';
+import { OFormCacheClass } from './cache/o-form.cache.class';
+import { OFormContainerComponent } from './o-form-container.component';
+import { dataServiceFactory } from '../../services/data-service.provider';
+import { OFormNavigationClass } from './navigation/o-form.navigation.class';
+import { OFormToolbarComponent, OFormToolbarModule } from './o-form-toolbar.component';
+import { IFormDataComponent, IFormDataTypeComponent } from '../o-form-data-component.class';
+import { DialogService, NavigationService, OntimizeService, SnackBarService } from '../../services';
+import { CanComponentDeactivate, CanDeactivateFormGuard } from './guards/o-form-can-deactivate.guard';
 
 export const DEFAULT_INPUTS_O_FORM = [
   // show-header [boolean]: visibility of form toolbar. Default: yes.
@@ -255,7 +241,6 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     }
     return m;
   }
-
 
   @ViewChild('innerForm') innerFormEl: ElementRef;
 
@@ -529,15 +514,17 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   destroyDeactivateGuard() {
     if (this.deactivateGuard) {
       this.deactivateGuard.setForm(undefined);
-      for (let i = this.actRoute.routeConfig.canDeactivate.length - 1; i >= 0; i--) {
-        if (this.actRoute.routeConfig.canDeactivate[i].name === OFormComponent.guardClassName) {
-          this.actRoute.routeConfig.canDeactivate.splice(i, 1);
-          break;
+      if (Util.isDefined(this.actRoute.routeConfig.canDeactivate)) {
+        for (let i = this.actRoute.routeConfig.canDeactivate.length - 1; i >= 0; i--) {
+          if (this.actRoute.routeConfig.canDeactivate[i].name === OFormComponent.guardClassName) {
+            this.actRoute.routeConfig.canDeactivate.splice(i, 1);
+            break;
+          }
+        }
+        if (this.actRoute.routeConfig.canDeactivate.length === 0) {
+          delete this.actRoute.routeConfig.canDeactivate;
         }
       }
-      if (this.actRoute.routeConfig.canDeactivate.length === 0) {
-        delete this.actRoute.routeConfig.canDeactivate;
-    }
       // this.router.resetConfig(this.router.config);
     }
   }
@@ -547,8 +534,9 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   }
 
   /**
-  * Angular methods
-  */
+   * Angular methods
+   */
+
   initialize() {
     const self = this;
     if (this.headeractions === 'all') {
@@ -664,7 +652,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
 
   /**
    * Inner methods
-   * */
+   */
 
   _setComponentsEditable(state: boolean) {
     let components: any = this.getComponents();
@@ -752,9 +740,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
         self.formNavigation.updateNavigation(self.formGroup.getRawValue());
       }
     });
-
   }
-
 
   _emitData(data) {
     this.onFormDataLoaded.emit(data);
@@ -792,7 +778,6 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
    * Performs insert action.
    */
   _insertAction() {
-
     Object.keys(this.formGroup.controls).forEach((control) => {
       this.formGroup.controls[control].markAsTouched();
     });
@@ -830,7 +815,6 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
    * Performs 'edit' action
     */
   _editAction() {
-
     Object.keys(this.formGroup.controls).forEach(
       (control) => {
         this.formGroup.controls[control].markAsTouched();
@@ -1111,13 +1095,8 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     return undefined;
   }
 
-  protected objectToFormValueData(data: Object): Object {
+  protected objectToFormValueData(data: Object = {}): Object {
     let valueData = {};
-
-    if (!data) {
-      data = {};
-    }
-
     Object.keys(data).forEach(function (item) {
       valueData[item] = new OFormValue(data[item]);
     });
@@ -1322,15 +1301,13 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     return valueCopy;
   }
 
-
 }
 
 @NgModule({
   declarations: [OFormComponent],
-  imports: [OSharedModule, CommonModule, OFormToolbarModule],
+  imports: [CommonModule, OFormToolbarModule, OSharedModule],
   exports: [OFormComponent, OFormToolbarModule],
   providers: [{ provide: CanDeactivateFormGuard, useClass: CanDeactivateFormGuard }],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
-export class OFormModule {
-}
+export class OFormModule { }
