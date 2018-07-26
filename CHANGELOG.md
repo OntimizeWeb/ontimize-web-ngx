@@ -1,6 +1,7 @@
 ## 3.0.1
 ### Bug Fixes
 * **o-form-layout-manager**: fixed error when there is a `o-form` inside the form layout manager ([5aca0cc](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5aca0cc))
+* **OHTMLInputComponent**: fixed component class name ([4f4948c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4f4948c)) fixes [#196](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/196)
 
 ## 3.0.0 (2018-07-24)
 ### Features
