@@ -1,6 +1,7 @@
 ## 3.0.1
 ### Bug Fixes
 * **o-form-layout-manager**: fixed error when there is a `o-form` inside the form layout manager ([5aca0cc](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5aca0cc))
+* **o-table**: `registerColumn` method allows to receive a string argument again ([#197](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/197)) ([d0ac4b8](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d0ac4b8))
 
 ## 3.0.0 (2018-07-24)
 ### Features
