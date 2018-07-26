@@ -43,7 +43,7 @@ export const DEFAULT_OUTPUTS_O_HTML_INPUT = [
     ])
   ]
 })
-export class HTMLInputComponent extends OFormDataComponent implements AfterViewInit {
+export class OHTMLInputComponent extends OFormDataComponent implements AfterViewInit {
 
   public static DEFAULT_INPUTS_O_HTML_INPUT = DEFAULT_INPUTS_O_HTML_INPUT;
   public static DEFAULT_OUTPUTS_O_HTML_INPUT = DEFAULT_OUTPUTS_O_HTML_INPUT;
@@ -185,8 +185,8 @@ export class HTMLInputComponent extends OFormDataComponent implements AfterViewI
 }
 
 @NgModule({
-  declarations: [HTMLInputComponent],
+  declarations: [OHTMLInputComponent],
   imports: [OSharedModule, CommonModule, CKEditorModule],
-  exports: [HTMLInputComponent]
+  exports: [OHTMLInputComponent]
 })
 export class OHTMLInputModule { }
