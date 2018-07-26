@@ -13,7 +13,8 @@
 * **o-form**: fixing navigation bugs ([344e369](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/344e369)) ([f06362e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f06362e)) ([cc475b0](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/cc475b0))
 
 ### BREAKING CHANGES
-* **o-side-menu**: the side menu component has been deprecated and will be removed in following versions.
+* **o-side-menu**: the side menu component has been deprecated and will be removed in next versions.
+* **o-table**: '*registerColumn*' method only accepts '*OTableColumnComponent | OTableColumnCalculatedComponent*' argument, for registering a column using only its attr user must use the '*registerDefaultColumn*' method. This will be rolled back in the next version and allow to receive any argument in the '*registerColumn*' method.
 > **OHTMLInputComponent**: the html input component class name has changed to `HTMLInputComponent`. This will be rolled back in the next version.
 
 ## 3.0.0-rc.1 (2018-07-02)
