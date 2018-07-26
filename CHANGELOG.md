@@ -1,4 +1,4 @@
-## 3.0.0
+## 3.0.0 (2018-07-24)
 ### Features
 * **o-table**: new '*show-paginator-first-last-buttons*' input ([1c23563](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1c23563))
 * **o-table-paginator**: new '*show-first-last-buttons*' input ([1c23563](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1c23563))
@@ -14,6 +14,7 @@
 
 ### BREAKING CHANGES
 * **o-side-menu**: the side menu component has been deprecated and will be removed in following versions.
+> **OHTMLInputComponent**: the html input component class name has changed to `HTMLInputComponent`. This will be rolled back in the following version.
 
 ## 3.0.0-rc.1 (2018-07-02)
 
