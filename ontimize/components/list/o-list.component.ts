@@ -277,10 +277,10 @@ export class OListComponent extends OServiceComponent implements OnInit, IList, 
     }
   }
 
-  protected setData(data: any, sqlTypes: any) {
+  protected setData(data: any, sqlTypes?: any, replace?: boolean) {
     if (Util.isArray(data)) {
       let respDataArray = data;
-      if (this.pageable) {
+      if (this.pageable && !replace) {
         respDataArray = (this.dataResponseArray || []).concat(data);
       }
 

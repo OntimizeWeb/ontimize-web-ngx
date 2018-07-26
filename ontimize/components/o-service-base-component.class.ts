@@ -311,7 +311,7 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
             this.updatePaginationInfo(res);
           }
         }
-        self.setData(data, sqlTypes);
+        self.setData(data, sqlTypes, (ovrrArgs && ovrrArgs['replace']));
         self.loaderSubscription.unsubscribe();
       }, err => {
         self.setData([], []);
@@ -400,7 +400,7 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
     return existingFilter;
   }
 
-  protected setData(data: any, sqlTypes?: any) {
+  protected setData(data: any, sqlTypes?: any, replace?: boolean) {
     //
   }
 
