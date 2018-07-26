@@ -491,7 +491,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     if (this.isInInitialMode() && !this.isEditableDetail()) {
       return;
     }
-    if (!this.actRoute.routeConfig) {
+    if (!this.actRoute || !this.actRoute.routeConfig) {
       return;
     }
     this.deactivateGuard = this.injector.get(CanDeactivateFormGuard);
@@ -512,20 +512,23 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   }
 
   destroyDeactivateGuard() {
-    if (this.deactivateGuard) {
+    try {
+      if (!this.deactivateGuard || !this.actRoute || !this.actRoute.routeConfig || !this.actRoute.routeConfig.canDeactivate) {
+        return;
+      }
       this.deactivateGuard.setForm(undefined);
-      if (Util.isDefined(this.actRoute.routeConfig.canDeactivate)) {
-        for (let i = this.actRoute.routeConfig.canDeactivate.length - 1; i >= 0; i--) {
-          if (this.actRoute.routeConfig.canDeactivate[i].name === OFormComponent.guardClassName) {
-            this.actRoute.routeConfig.canDeactivate.splice(i, 1);
-            break;
-          }
-        }
-        if (this.actRoute.routeConfig.canDeactivate.length === 0) {
-          delete this.actRoute.routeConfig.canDeactivate;
+      for (let i = this.actRoute.routeConfig.canDeactivate.length - 1; i >= 0; i--) {
+        if (this.actRoute.routeConfig.canDeactivate[i].name === OFormComponent.guardClassName) {
+          this.actRoute.routeConfig.canDeactivate.splice(i, 1);
+          break;
         }
       }
+      if (this.actRoute.routeConfig.canDeactivate.length === 0) {
+        delete this.actRoute.routeConfig.canDeactivate;
+      }
       // this.router.resetConfig(this.router.config);
+    } catch (e) {
+      //
     }
   }
 

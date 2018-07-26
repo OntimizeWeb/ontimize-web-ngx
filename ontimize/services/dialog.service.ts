@@ -8,7 +8,7 @@ import { ODialogComponent, ODialogConfig } from '../components';
 export class DialogService {
 
   protected ng2Dialog: MatDialog;
-  protected dialogRef: MatDialogRef<ODialogComponent>;
+  dialogRef: MatDialogRef<ODialogComponent>;
 
   constructor(protected injector: Injector) {
     this.ng2Dialog = this.injector.get(MatDialog);

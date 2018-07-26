@@ -2,7 +2,7 @@
 
 Ontimize Web is web application framework that provides to you an environment for solving the problematic situation of building aplications that require a browser-based user interface. Ontimize Web allows developing data management applications quickly and agile.
 
-Ontimize Web is based on the new [4.x version of Angular](https://angular.io/), and comes with many significant performance, usability, and feature improvements.
+Ontimize Web is based on the [5.x version of Angular](https://v5.angular.io/docs), and comes with many significant performance, usability, and feature improvements.
 
 
 ### Try Ontimize Web

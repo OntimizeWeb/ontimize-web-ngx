@@ -1,10 +1,13 @@
 ## 3.0.1
 ### Features
-* **o-list-item**: list item directive now can be attached to `mat-list-item` and `mat-card` components.
+* **o-list-item**: list item directive now can be attached to `mat-list-item` and `mat-card` components ([e256100](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e256100)).
+* **DialogService**: changing '*dialogRef*' property visibility to public ([#193](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/193)) ([f797b56](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f797b56))
 
 ### Bug Fixes
 * **o-form-layout-manager**: fixed error when there is a `o-form` inside the form layout manager ([5aca0cc](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5aca0cc))
+* **o-table**: `registerColumn` method allows to receive a string argument again ([#197](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/197)) ([d0ac4b8](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d0ac4b8))
 * **OHTMLInputComponent**: fixed component class name ([4f4948c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4f4948c)) fixes [#196](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/196)
+* **o-form**: fixing `destroyDeactivateGuard` method bug ([#198](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/198)) ([261091a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/261091a))
 
 ## 3.0.0 (2018-07-24)
 ### Features
@@ -21,7 +24,9 @@
 * **o-form**: fixing navigation bugs ([344e369](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/344e369)) ([f06362e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f06362e)) ([cc475b0](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/cc475b0))
 
 ### BREAKING CHANGES
-* **o-side-menu**: the side menu component has been deprecated and will be removed in following versions.
+* **o-side-menu**: the side menu component has been deprecated and will be removed in next versions.
+* **o-table**: '*registerColumn*' method only accepts '*OTableColumnComponent | OTableColumnCalculatedComponent*' argument, for registering a column using only its attr user must use the '*registerDefaultColumn*' method. This will be rolled back in the next version and allow to receive any argument in the '*registerColumn*' method.
+> **OHTMLInputComponent**: the html input component class name has changed to `HTMLInputComponent`. This will be rolled back in the next version.
 
 ## 3.0.0-rc.1 (2018-07-02)
 
