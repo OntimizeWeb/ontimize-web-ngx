@@ -277,75 +277,30 @@ export class OListComponent extends OServiceComponent implements OnInit, IList, 
     }
   }
 
-  queryData(filter: Object = {}, ovrrArgs?: any) {
-    if (this.querySubscription) {
-      this.querySubscription.unsubscribe();
-      this.loaderSubscription.unsubscribe();
-    }
-    let queryMethodName = this.pageable ? this.paginatedQueryMethod : this.queryMethod;
-    if (this.dataService && (queryMethodName in this.dataService) && this.entity) {
+  protected setData(data: any, sqlTypes: any) {
+    if (Util.isArray(data)) {
+      let respDataArray = data;
+      if (this.pageable) {
+        respDataArray = (this.dataResponseArray || []).concat(data);
+      }
 
-      this.setParentKeyValues(filter);
-
-      this.loaderSubscription = this.load();
-
-      let queryArguments = this.getQueryArguments(filter, ovrrArgs);
-      const self = this;
-      this.querySubscription = this.dataService[queryMethodName].apply(this.dataService, queryArguments).subscribe(res => {
-        let data = undefined;
-        if (Util.isArray(res)) {
-          data = res;
-        } else if ((res.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) && Util.isArray(res.data)) {
-          data = res.data;
-          if (this.pageable) {
-            this.updatePaginationInfo(res);
-          }
-        }
-        // set list data
-        if (Util.isArray(data)) {
-          let respDataArray = data;
-          if (self.pageable && !(ovrrArgs && ovrrArgs['replace'])) {
-            respDataArray = (self.dataResponseArray || []).concat(data);
-          }
-
-          let selectedIndexes = self.state.selectedIndexes || [];
-          for (let i = 0; i < selectedIndexes.length; i++) {
-            if (selectedIndexes[i] < self.dataResponseArray.length) {
-              self.selectedItems.push(self.dataResponseArray[selectedIndexes[i]]);
-            }
-          }
-          self.dataResponseArray = respDataArray;
-          self.filterData(self.state.filterValue);
-        } else {
-          self.setDataArray([]);
-        }
-
-        self.loaderSubscription.unsubscribe();
-        if (self.pageable) {
-          ObservableWrapper.callEmit(self.onPaginatedListDataLoaded, data);
-        }
-        ObservableWrapper.callEmit(self.onListDataLoaded, self.dataResponseArray);
-      }, err => {
-        console.log('[OList.queryData]: error', err);
-        self.setDataArray([]);
-        self.loaderSubscription.unsubscribe();
-        if (err && typeof err !== 'object') {
-          this.dialogService.alert('ERROR', err);
-        } else {
-          this.dialogService.alert('ERROR', 'MESSAGES.ERROR_QUERY');
-        }
-      });
-    }
-  }
-
-  setParentKeyValues(filter: Object) {
-    if (this._pKeysEquiv && this.parentItem) {
-      for (let key in this._pKeysEquiv) {
-        if (this.parentItem.hasOwnProperty(key)) {
-          filter[this._pKeysEquiv[key]] = this.parentItem[key];
+      let selectedIndexes = this.state.selectedIndexes || [];
+      for (let i = 0; i < selectedIndexes.length; i++) {
+        if (selectedIndexes[i] < this.dataResponseArray.length) {
+          this.selectedItems.push(this.dataResponseArray[selectedIndexes[i]]);
         }
       }
+      this.dataResponseArray = respDataArray;
+      this.filterData(this.state.filterValue);
+    } else {
+      this.setDataArray([]);
     }
+
+    this.loaderSubscription.unsubscribe();
+    if (this.pageable) {
+      ObservableWrapper.callEmit(this.onPaginatedListDataLoaded, data);
+    }
+    ObservableWrapper.callEmit(this.onListDataLoaded, this.dataResponseArray);
   }
 
   /**
