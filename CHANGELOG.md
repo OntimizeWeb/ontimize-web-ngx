@@ -14,7 +14,7 @@
 
 ### BREAKING CHANGES
 * **o-side-menu**: the side menu component has been deprecated and will be removed in following versions.
-> **OHTMLInputComponent**: the html input component class name has changed to `HTMLInputComponent`. This will be rolled back in the following version.
+> **OHTMLInputComponent**: the html input component class name has changed to `HTMLInputComponent`. This will be rolled back in the next version.
 
 ## 3.0.0-rc.1 (2018-07-02)
 
