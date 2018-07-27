@@ -26,6 +26,10 @@
   position: relative;
   flex-direction: column;
 
+  .o-list-content {
+    height: calc(100% - 64px); // total height - toolbar height
+  }
+
   mat-toolbar.dense {
     min-height: 48px;
 

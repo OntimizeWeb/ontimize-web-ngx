@@ -453,15 +453,17 @@ export class OListComponent extends OServiceComponent implements OnInit, IList, 
   }
 
   onScroll(e: Event): void {
-    let pendingRegistries = this.dataResponseArray.length < this.state.totalQueryRecordsNumber;
-    if (!this.loading && pendingRegistries) {
-      let element = e.srcElement as any;
-      if (element.offsetHeight + element.scrollTop + 5 >= element.scrollHeight) {
-        let queryArgs = {
-          offset: this.state.queryRecordOffset,
-          length: this.queryRows
-        };
-        this.queryData(this.parentItem, queryArgs);
+    if (this.pageable) {
+      let pendingRegistries = this.dataResponseArray.length < this.state.totalQueryRecordsNumber;
+      if (!this.loading && pendingRegistries) {
+        let element = e.target as any;
+        if (element.offsetHeight + element.scrollTop + 5 >= element.scrollHeight) {
+          let queryArgs = {
+            offset: this.state.queryRecordOffset,
+            length: this.queryRows
+          };
+          this.queryData(this.parentItem, queryArgs);
+        }
       }
     }
   }
