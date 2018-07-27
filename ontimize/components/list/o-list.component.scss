@@ -23,8 +23,6 @@
 }
 
 .o-list-container {
-  height: 100%;
-  display: flex;
   position: relative;
   flex-direction: column;
 
@@ -67,6 +65,7 @@
     bottom: 0;
     left: 0;
     right: 0;
+    z-index: 500;
 
     &:not(.pageable-loading) {
       top: 0;
@@ -76,10 +75,6 @@
     &.pageable-loading {
       background: rgba(255,255,255,0.5);
     }
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 500;
 
     path {
       stroke-width: 5px!important;
