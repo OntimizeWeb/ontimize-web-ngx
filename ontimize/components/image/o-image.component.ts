@@ -21,7 +21,6 @@ import { OFormComponent } from '../form/o-form.component';
 import { OFormValue } from '../form/OFormValue';
 import { DEFAULT_INPUTS_O_FORM_DATA_COMPONENT, OFormDataComponent } from '../o-form-data-component.class';
 
-
 export const DEFAULT_INPUTS_O_IMAGE = [
   ...DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,
   'emptyimage: empty-image',
@@ -29,10 +28,10 @@ export const DEFAULT_INPUTS_O_IMAGE = [
   'emptyicon: empty-icon',
   // show-controls [yes|no true|false]: Shows or hides selection controls. Default: true.
   'showControls: show-controls',
-  //height [% | px]: Set the height of the image. 
+  //height [% | px]: Set the height of the image.
   'height',
   // auto-fit [yes|no true|false]: Adjusts the image to the content or not. Default: true.
-  'autoFit:auto-fit'
+  'autoFit: auto-fit'
 ];
 
 export const DEFAULT_OUTPUTS_O_IMAGE = [
@@ -55,13 +54,13 @@ export class OImageComponent extends OFormDataComponent {
   emptyimage: string;
   emptyicon: string;
   height: string;
-  
+
   onChange: EventEmitter<Object> = new EventEmitter<Object>();
 
   @InputConverter()
   protected showControls: boolean = true;
   @InputConverter()
-  protected autoFit: boolean = true;
+  autoFit: boolean = true;
   @ViewChild('inputControl')
   protected inputControl: MatInput;
   @ViewChild('input')
@@ -217,7 +216,6 @@ export class OImageComponent extends OFormDataComponent {
   useEmptyImage(): boolean {
     return this._useEmptyImage && this.isEmpty();
   }
-
 
   getFormGroup(): FormGroup {
     let formGroup: FormGroup = super.getFormGroup();

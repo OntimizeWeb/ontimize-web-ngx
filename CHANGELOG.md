@@ -1,3 +1,14 @@
+## 3.0.1 (2018-07-27)
+### Features
+* **o-list-item**: list item directive now can be attached to `mat-list-item` and `mat-card` components ([e256100](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e256100)).
+* **DialogService**: changing '*dialogRef*' property visibility to public ([#193](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/193)) ([f797b56](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f797b56))
+
+### Bug Fixes
+* **o-form-layout-manager**: fixed error when there is a `o-form` inside the form layout manager ([5aca0cc](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5aca0cc))
+* **o-table**: `registerColumn` method allows to receive a string argument again ([#197](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/197)) ([d0ac4b8](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d0ac4b8))
+* **OHTMLInputComponent**: fixed component class name ([4f4948c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4f4948c)) fixes [#196](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/196)
+* **o-form**: fixing `destroyDeactivateGuard` method bug ([#198](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/198)) ([261091a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/261091a))
+
 ## 3.0.0 (2018-07-24)
 ### Features
 * **o-table**: new '*show-paginator-first-last-buttons*' input ([1c23563](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1c23563))

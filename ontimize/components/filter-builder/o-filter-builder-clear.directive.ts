@@ -9,8 +9,9 @@ import { OFilterBuilderComponent } from './o-filter-builder-components';
     '_filterBuilder: oFilterBuilderClear'
   ],
   host: {
-    '(click)': 'onClick()'
-  }
+    '(click)': 'onClick($event)'
+  },
+  exportAs: 'oFilterBuilderClear'
 })
 export class OFilterBuilderClearDirective {
 
@@ -24,7 +25,7 @@ export class OFilterBuilderClearDirective {
     }
   }
 
-  onClick(): void {
+  onClick(e?: Event): void {
     if (this._filterBuilder) {
       this._filterBuilder.clearFilter();
     }

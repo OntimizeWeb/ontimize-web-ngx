@@ -9,8 +9,9 @@ import { OFilterBuilderComponent } from './o-filter-builder-components';
     '_filterBuilder: oFilterBuilderQuery'
   ],
   host: {
-    '(click)': 'onClick()'
-  }
+    '(click)': 'onClick($event)'
+  },
+  exportAs: 'oFilterBuilderQuery'
 })
 export class OFilterBuilderQueryDirective {
 
@@ -24,7 +25,7 @@ export class OFilterBuilderQueryDirective {
     }
   }
 
-  onClick(): void {
+  onClick(e?: Event): void {
     if (this._filterBuilder) {
       this._filterBuilder.triggerReload();
     }

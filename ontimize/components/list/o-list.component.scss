@@ -1,33 +1,36 @@
-::-webkit-input-placeholder { /* WebKit, Blink, Edge */
-    color: #8E0C39;
-}
+/* WebKit, Blink, Edge */
+::-webkit-input-placeholder {
 
-:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
-   color: #8E0C39;
-   opacity: 1;
+  color: #8E0C39;
 }
-
-::-moz-placeholder { /* Mozilla Firefox 19+ */
-   color: #8E0C39;
-   opacity: 1;
+/* Mozilla Firefox 4 to 18 */
+:-moz-placeholder {
+  color: #8E0C39;
+  opacity: 1;
 }
-
-:-ms-input-placeholder { /* Internet Explorer 10-11 */
-   color: #8E0C39;
+/* Mozilla Firefox 19+ */
+::-moz-placeholder {
+  color: #8E0C39;
+  opacity: 1;
 }
-
-:placeholder-shown { /* Standard (https://drafts.scsswg.org/selectors-4/#placeholder) */
+/* Internet Explorer 10-11 */
+:-ms-input-placeholder {
+  color: #8E0C39;
+}
+/* Standard (https://drafts.scsswg.org/selectors-4/#placeholder) */
+:placeholder-shown {
   color: #8E0C39;
 }
 
 .o-list-container {
   position: relative;
-  display: flex;
   flex-direction: column;
 
+  .o-list-content {
+    height: calc(100% - 64px); // total height - toolbar height
+  }
 
   mat-toolbar.dense {
-
     min-height: 48px;
 
     mat-toolbar-row {
@@ -35,15 +38,14 @@
     }
   }
 
-
   .o-search {
     position: relative;
     height: 30px;
 
     > .mat-icon {
       position: absolute;
-      top: 0.15em;
-      left: 0.3em;
+      top: .15em;
+      left: .3em;
       color: #8E0C39;
     }
   }
@@ -63,19 +65,23 @@
 
   .spinner-container {
     position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 500;
+
     &:not(.pageable-loading) {
-      top: 0px;
+      top: 0;
       background: rgba(255,255,255, 1);
     }
+
     &.pageable-loading {
-      background:rgba(255,255,255,0.5);
+      background: rgba(255,255,255,0.5);
     }
-    left: 0px;
-    right: 0px;
-    bottom: 0px;
-    z-index: 500;
+
     path {
-        stroke-width: 5px!important;
+      stroke-width: 5px!important;
     }
   }
 
@@ -87,10 +93,12 @@
     }
 
     .o-custom-list-item {
-      max-width:100%;
+      max-width: 100%;
       width: 100%;
+
       .o-list-item-icon {
         cursor: pointer;
+
         &.top {
           position: absolute;
           top: 0;
@@ -105,8 +113,9 @@
         -moz-box-sizing: border-box;
         -webkit-box-sizing: border-box;
         box-sizing: border-box;
+
         .mat-list-item {
-          padding-right: 0px;
+          padding-right: 0;
         }
       }
     }
@@ -124,7 +133,7 @@
     }
 
     &:not(.selectable):not(.o-list-1-detail-buttons):not(.o-list-2-detail-buttons) .mat-list-text {
-      padding-right: 0px;
+      padding-right: 0;
     }
 
     &.selectable.o-list-1-detail-buttons .mat-list-item-content {

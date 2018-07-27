@@ -1,14 +1,26 @@
 {
   "name": "ontimize-web-ngx",
   "homepage": "https://github.com/OntimizeWeb/ontimize-web-ngx#readme",
-  "version": "3.0.0",
-  "description": "Ontimize Web framework with Angular 2",
+  "version": "3.0.1",
+  "description": "Ontimize Web framework using Angular 5",
   "bugs": "https://github.com/OntimizeWeb/ontimize-web-ngx/issues",
   "author": "Imatia S.L.",
   "repository": {
     "type": "git",
     "url": "git@github.com:OntimizeWeb/ontimize-web-ngx.git"
   },
+  "keywords": [
+    "angular",
+    "angular5",
+    "angular 5",
+    "framework",
+    "web framework",
+    "material",
+    "angular material",
+    "material components",
+    "ontimize-web-ngx",
+    "ontimizeWeb"
+  ],
   "license": "Apache-2.0",
   "readmeFilename": "README.md",
   "main": "./bundles/ontimize-web-ngx.umd.js",

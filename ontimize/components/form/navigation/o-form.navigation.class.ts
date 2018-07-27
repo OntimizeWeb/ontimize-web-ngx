@@ -1,15 +1,13 @@
-
-import { Injector, EventEmitter } from '@angular/core';
-import { UrlSegmentGroup, ActivatedRoute, Router } from '@angular/router';
-import { Observable } from 'rxjs/Observable';
+import { EventEmitter, Injector } from '@angular/core';
+import { ActivatedRoute, Router, UrlSegmentGroup } from '@angular/router';
+import { Observable, Subscription } from 'rxjs';
 import 'rxjs/add/operator/combineLatest';
-import { Subscription } from 'rxjs/Subscription';
 
-import { Util, SQLTypes, Codes } from '../../../utils';
+import { DialogService } from '../../../services';
 import { OFormComponent } from '../o-form.component';
+import { Codes, SQLTypes, Util } from '../../../utils';
 import { OFormLayoutManagerComponent } from '../../../layouts/form-layout/o-form-layout-manager.component';
 import { OFormLayoutDialogComponent } from '../../../layouts/form-layout/dialog/o-form-layout-dialog.component';
-import { DialogService } from '../../../services';
 
 export class OFormNavigationClass {
 
@@ -83,7 +81,6 @@ export class OFormNavigationClass {
     }
   }
 
-
   initialize() {
     if (this.formLayoutManager) {
       this.id = this.formLayoutManager.getLastTabId();
@@ -108,8 +105,10 @@ export class OFormNavigationClass {
   subscribeToQueryParams() {
     if (this.formLayoutManager) {
       const cacheData = this.formLayoutManager.getFormCacheData(this.id);
-      this.queryParams = cacheData.queryParams || {};
-      this.parseQueryParams();
+      if (Util.isDefined(cacheData)) {
+        this.queryParams = cacheData.queryParams || {};
+        this.parseQueryParams();
+      }
     } else {
       const self = this;
       this.qParamSub = this.actRoute.queryParams.subscribe(params => {
@@ -130,8 +129,10 @@ export class OFormNavigationClass {
   subscribeToUrlParams() {
     if (this.formLayoutManager) {
       const cacheData = this.formLayoutManager.getFormCacheData(this.id);
-      this.urlParams = cacheData.urlParams;
-      this.parseUrlParams();
+      if (Util.isDefined(cacheData)) {
+        this.urlParams = cacheData.urlParams;
+        this.parseUrlParams();
+      }
     } else {
       const self = this;
       this.urlParamSub = this.actRoute.params.subscribe(params => {
@@ -155,7 +156,9 @@ export class OFormNavigationClass {
   subscribeToUrl() {
     if (this.formLayoutManager) {
       const cacheData = this.formLayoutManager.getFormCacheData(this.id);
-      this.urlSegments = cacheData.urlSegments;
+      if (Util.isDefined(cacheData)) {
+        this.urlSegments = cacheData.urlSegments;
+      }
     } else {
       const self = this;
       this.urlSub = this.actRoute.url.subscribe(urlSegments => {
@@ -431,4 +434,5 @@ export class OFormNavigationClass {
     }
     return subscription;
   }
+
 }

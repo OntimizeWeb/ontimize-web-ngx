@@ -1,40 +1,23 @@
-import {
-  Component,
-  OnChanges,
-  SimpleChange,
-  OnInit,
-  Inject,
-  Injector,
-  AfterContentInit,
-  ContentChildren,
-  ViewChild,
-  QueryList,
-  Optional,
-  forwardRef,
-  ElementRef,
-  NgModule,
-  ViewEncapsulation,
-  EventEmitter
-} from '@angular/core';
+import { AfterContentInit, Component, ContentChildren, ElementRef, EventEmitter, forwardRef, Inject, Injector, NgModule, OnChanges, OnInit, Optional, QueryList, SimpleChange, ViewChild, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MatCheckbox } from '@angular/material';
 import { Observable } from 'rxjs/Observable';
 
-import { ObservableWrapper } from '../../util/async';
 import { Util, Codes } from '../../utils';
 import { OSharedModule } from '../../shared';
-import { OntimizeService } from '../../services';
-import { dataServiceFactory } from '../../services/data-service.provider';
-import { InputConverter } from '../../decorators';
-import { OSearchInputModule, OSearchInputComponent } from '../input/search-input/o-search-input.component';
-import { OFormComponent } from '../form/o-form.component';
-import { OServiceComponent } from '../o-service-component.class';
 import { ServiceUtils } from '../service.utils';
-
+import { OntimizeService } from '../../services';
+import { InputConverter } from '../../decorators';
+import { ObservableWrapper } from '../../util/async';
+import { OFormComponent } from '../form/o-form.component';
+import { OFormDataNavigation } from '../form/form-components';
+import { OServiceComponent } from '../o-service-component.class';
 import { OListItemModule } from './list-item/o-list-item.component';
 import { OListItemComponent } from './list-item/o-list-item.component';
 import { OListItemDirective } from './list-item/o-list-item.directive';
+import { dataServiceFactory } from '../../services/data-service.provider';
+import { OSearchInputComponent, OSearchInputModule } from '../input/search-input/o-search-input.component';
 
 export interface IList {
   registerListItemDirective(item: OListItemDirective): void;
@@ -122,12 +105,12 @@ export class OListComponent extends OServiceComponent implements OnInit, IList, 
   public mdClick: EventEmitter<any> = new EventEmitter();
   public mdDblClick: EventEmitter<any> = new EventEmitter();
   public onInsertButtonClick: EventEmitter<any> = new EventEmitter();
-
   public onListDataLoaded: EventEmitter<any> = new EventEmitter();
   public onPaginatedListDataLoaded: EventEmitter<any> = new EventEmitter();
-  protected quickFilterColArray: string[];
 
+  protected quickFilterColArray: string[];
   protected dataResponseArray: Array<any> = [];
+  protected storePaginationState: boolean = false;
 
   constructor(
     injector: Injector,
@@ -196,7 +179,7 @@ export class OListComponent extends OServiceComponent implements OnInit, IList, 
         offset: 0,
         length: initialQueryLength || this.queryRows
       };
-      this.queryData({}, queryArgs);
+      this.queryData(this.parentItem, queryArgs);
     }
   }
 
@@ -265,6 +248,7 @@ export class OListComponent extends OServiceComponent implements OnInit, IList, 
 
   onItemDetailClick(item: OListItemDirective | OListItemComponent) {
     if (this.oenabled && this.detailMode === Codes.DETAIL_MODE_CLICK) {
+      this.saveDataNavigationInLocalStorage();
       this.viewDetail(item.getItemData());
       ObservableWrapper.callEmit(this.mdClick, item);
     }
@@ -272,80 +256,65 @@ export class OListComponent extends OServiceComponent implements OnInit, IList, 
 
   onItemDetailDblClick(item: OListItemDirective | OListItemComponent) {
     if (this.oenabled && Codes.isDoubleClickMode(this.detailMode)) {
+      this.saveDataNavigationInLocalStorage();
       this.viewDetail(item.getItemData());
       ObservableWrapper.callEmit(this.mdDblClick, item);
     }
   }
 
-  queryData(filter: Object = {}, ovrrArgs?: any) {
-    if (this.querySubscription) {
-      this.querySubscription.unsubscribe();
-      this.loaderSubscription.unsubscribe();
-    }
-    let queryMethodName = this.pageable ? this.paginatedQueryMethod : this.queryMethod;
-    if (this.dataService && (queryMethodName in this.dataService) && this.entity) {
-
-      this.setParentKeyValues(filter);
-
-      this.loaderSubscription = this.load();
-
-      let queryArguments = this.getQueryArguments(filter, ovrrArgs);
-      const self = this;
-      this.querySubscription = this.dataService[queryMethodName].apply(this.dataService, queryArguments).subscribe(res => {
-        let data = undefined;
-        if (Util.isArray(res)) {
-          data = res;
-        } else if ((res.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) && Util.isArray(res.data)) {
-          data = res.data;
-          if (this.pageable) {
-            this.updatePaginationInfo(res);
-          }
-        }
-        // set list data
-        if (Util.isArray(data)) {
-          let respDataArray = data;
-          if (self.pageable && !(ovrrArgs && ovrrArgs['replace'])) {
-            respDataArray = (self.dataResponseArray || []).concat(data);
-          }
-
-          let selectedIndexes = self.state.selectedIndexes || [];
-          for (let i = 0; i < selectedIndexes.length; i++) {
-            if (selectedIndexes[i] < self.dataResponseArray.length) {
-              self.selectedItems.push(self.dataResponseArray[selectedIndexes[i]]);
-            }
-          }
-          self.dataResponseArray = respDataArray;
-          self.filterData(self.state.filterValue);
-        } else {
-          self.setDataArray([]);
-        }
-
-        self.loaderSubscription.unsubscribe();
-        if (self.pageable) {
-          ObservableWrapper.callEmit(self.onPaginatedListDataLoaded, data);
-        }
-        ObservableWrapper.callEmit(self.onListDataLoaded, self.dataResponseArray);
-      }, err => {
-        console.log('[OList.queryData]: error', err);
-        self.setDataArray([]);
-        self.loaderSubscription.unsubscribe();
-        if (err && typeof err !== 'object') {
-          this.dialogService.alert('ERROR', err);
-        } else {
-          this.dialogService.alert('ERROR', 'MESSAGES.ERROR_QUERY');
-        }
-      });
-    }
+  protected saveDataNavigationInLocalStorage(): void {
+    // Save data of the list in navigation-data in the localstorage
+    OFormDataNavigation.storeNavigationData(this.injector, this.getKeysValues());
+    this.storePaginationState = true;
   }
 
-  setParentKeyValues(filter: Object) {
-    if (this._pKeysEquiv && this.parentItem) {
-      for (let key in this._pKeysEquiv) {
-        if (this.parentItem.hasOwnProperty(key)) {
-          filter[this._pKeysEquiv[key]] = this.parentItem[key];
+  protected getKeysValues(): any[] {
+    let data = this.dataArray;
+    const _self = this;
+    return data.map(function (row, i, a) {
+      let obj = {};
+      _self.keysArray.map(function (key, i, a) {
+        if (row[key] !== undefined) {
+          obj[key] = row[key];
+        }
+      });
+
+      return obj;
+    });
+  }
+
+  getDataToStore(): Object {
+    let dataToStore = super.getDataToStore();
+    if (!this.storePaginationState) {
+      delete dataToStore['queryRecordOffset'];
+    }
+    return dataToStore;
+  }
+
+  protected setData(data: any, sqlTypes?: any, replace?: boolean) {
+    if (Util.isArray(data)) {
+      let respDataArray = data;
+      if (this.pageable && !replace) {
+        respDataArray = (this.dataResponseArray || []).concat(data);
+      }
+
+      let selectedIndexes = this.state.selectedIndexes || [];
+      for (let i = 0; i < selectedIndexes.length; i++) {
+        if (selectedIndexes[i] < this.dataResponseArray.length) {
+          this.selectedItems.push(this.dataResponseArray[selectedIndexes[i]]);
         }
       }
+      this.dataResponseArray = respDataArray;
+      this.filterData(this.state.filterValue);
+    } else {
+      this.setDataArray([]);
     }
+
+    this.loaderSubscription.unsubscribe();
+    if (this.pageable) {
+      ObservableWrapper.callEmit(this.onPaginatedListDataLoaded, data);
+    }
+    ObservableWrapper.callEmit(this.onListDataLoaded, this.dataResponseArray);
   }
 
   /**
@@ -483,16 +452,18 @@ export class OListComponent extends OServiceComponent implements OnInit, IList, 
     this.state.selectedIndexes = selectedIndexes;
   }
 
-  onScroll($event: Event): void {
-    let pendingRegistries = this.dataResponseArray.length < this.state.totalQueryRecordsNumber;
-    if (!this.loading && pendingRegistries) {
-      let element = $event.srcElement as any;
-      if (element.offsetHeight + element.scrollTop + 5 >= element.scrollHeight) {
-        let queryArgs = {
-          offset: this.state.queryRecordOffset,
-          length: this.queryRows
-        };
-        this.queryData({}, queryArgs);
+  onScroll(e: Event): void {
+    if (this.pageable) {
+      let pendingRegistries = this.dataResponseArray.length < this.state.totalQueryRecordsNumber;
+      if (!this.loading && pendingRegistries) {
+        let element = e.target as any;
+        if (element.offsetHeight + element.scrollTop + 5 >= element.scrollHeight) {
+          let queryArgs = {
+            offset: this.state.queryRecordOffset,
+            length: this.queryRows
+          };
+          this.queryData(this.parentItem, queryArgs);
+        }
       }
     }
   }
@@ -532,24 +503,21 @@ export class OListComponent extends OServiceComponent implements OnInit, IList, 
     this.onInsertButtonClick.emit();
     let route = this.getRouteOfSelectedRow(undefined, 'new');
     if (route.length > 0) {
-      this.router.navigate(route,
-        {
-          relativeTo: this.actRoute,
-        }
-      );
+      this.saveDataNavigationInLocalStorage();
+      this.router.navigate(route, { relativeTo: this.actRoute });
     }
   }
 
   hasTitle(): boolean {
     return this.title !== undefined;
   }
+
 }
 
 @NgModule({
   declarations: [OListComponent],
-  imports: [OSharedModule, CommonModule, OListItemModule, OSearchInputModule, RouterModule],
+  imports: [CommonModule, OListItemModule, OSearchInputModule, OSharedModule, RouterModule],
   exports: [OListComponent],
   entryComponents: [MatCheckbox]
 })
-export class OListModule {
-}
+export class OListModule { }

@@ -1,4 +1,10 @@
 .o-list-item {
+  display: flex;
+
+  .mat-list-item {
+    width: 100%;
+  }
+
   .row-buttons-container {
     .o-list-row-action {
       height: 24px;
@@ -12,6 +18,7 @@
   .mat-checkbox-inner-container {
     margin: 0;
   }
+
   &[dense] .o-list-item {
     .o-list-row-action {
       .mat-checkbox-inner-container {

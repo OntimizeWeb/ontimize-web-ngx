@@ -668,7 +668,12 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
    * Store all columns and properties in var columnsArray
    * @param column
    */
-  registerColumn(column: OTableColumnComponent | OTableColumnCalculatedComponent) {
+  registerColumn(column: OTableColumnComponent | OTableColumnCalculatedComponent | any) {
+    if (typeof column === 'string') {
+      this.registerDefaultColumn(column);
+      return;
+    }
+
     const columnDef = this.getOColumn(column.attr);
     if (Util.isDefined(columnDef) && Util.isDefined(columnDef.definition)) {
       // a o-table-column definition trying to replace an already existing o-table-column definition
@@ -812,7 +817,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
 
     if (this.colArray.length) {
-      this.colArray.map((x: string) => this.registerDefaultColumn(x));
+      this.colArray.map((x: string) => this.registerColumn(x));
 
       let columnsOrder = [];
       if (this.state.hasOwnProperty('oColumns-display')) {

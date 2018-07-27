@@ -191,7 +191,6 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
       }
     };
     this.dialogRef = this.dialog.open(OFormLayoutDialogComponent, dialogConfig);
-    // const self = this;
     this.dialogRef.afterClosed().subscribe(result => {
       if (result) {
         // TODO
@@ -200,16 +199,16 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
   }
 
   getFormCacheData(formId: string): IDetailComponentData {
-    if (this.isTabMode()) {
+    if (this.isTabMode() && Util.isDefined(this.oTabGroup)) {
       return this.oTabGroup.getFormCacheData(formId);
-    } else if (this.isDialogMode()) {
+    } else if (this.isDialogMode() && Util.isDefined(this.dialogRef)) {
       return this.dialogRef.componentInstance.data;
     }
     return undefined;
   }
 
   getLastTabId(): string {
-    if (this.isTabMode()) {
+    if (this.isTabMode() && Util.isDefined(this.oTabGroup)) {
       return this.oTabGroup.getLastTabId();
     }
     return undefined;
@@ -251,9 +250,9 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
 @NgModule({
   imports: [CommonModule, OSharedModule, RouterModule],
   declarations: [
+    OFormLayoutDialogComponent,
     OFormLayoutManagerComponent,
     OFormLayoutTabGroupComponent,
-    OFormLayoutDialogComponent,
     OFormLayoutManagerContentDirective
   ],
   exports: [OFormLayoutManagerComponent],
