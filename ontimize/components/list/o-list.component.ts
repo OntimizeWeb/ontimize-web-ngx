@@ -1,40 +1,23 @@
-import {
-  Component,
-  OnChanges,
-  SimpleChange,
-  OnInit,
-  Inject,
-  Injector,
-  AfterContentInit,
-  ContentChildren,
-  ViewChild,
-  QueryList,
-  Optional,
-  forwardRef,
-  ElementRef,
-  NgModule,
-  ViewEncapsulation,
-  EventEmitter
-} from '@angular/core';
+import { AfterContentInit, Component, ContentChildren, ElementRef, EventEmitter, forwardRef, Inject, Injector, NgModule, OnChanges, OnInit, Optional, QueryList, SimpleChange, ViewChild, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MatCheckbox } from '@angular/material';
 import { Observable } from 'rxjs/Observable';
 
-import { ObservableWrapper } from '../../util/async';
 import { Util, Codes } from '../../utils';
 import { OSharedModule } from '../../shared';
-import { OntimizeService } from '../../services';
-import { dataServiceFactory } from '../../services/data-service.provider';
-import { InputConverter } from '../../decorators';
-import { OSearchInputModule, OSearchInputComponent } from '../input/search-input/o-search-input.component';
-import { OFormComponent } from '../form/o-form.component';
-import { OServiceComponent } from '../o-service-component.class';
 import { ServiceUtils } from '../service.utils';
-
+import { OntimizeService } from '../../services';
+import { InputConverter } from '../../decorators';
+import { ObservableWrapper } from '../../util/async';
+import { OFormComponent } from '../form/o-form.component';
+import { OFormDataNavigation } from '../form/form-components';
+import { OServiceComponent } from '../o-service-component.class';
 import { OListItemModule } from './list-item/o-list-item.component';
 import { OListItemComponent } from './list-item/o-list-item.component';
 import { OListItemDirective } from './list-item/o-list-item.directive';
+import { dataServiceFactory } from '../../services/data-service.provider';
+import { OSearchInputComponent, OSearchInputModule } from '../input/search-input/o-search-input.component';
 
 export interface IList {
   registerListItemDirective(item: OListItemDirective): void;
@@ -122,12 +105,12 @@ export class OListComponent extends OServiceComponent implements OnInit, IList, 
   public mdClick: EventEmitter<any> = new EventEmitter();
   public mdDblClick: EventEmitter<any> = new EventEmitter();
   public onInsertButtonClick: EventEmitter<any> = new EventEmitter();
-
   public onListDataLoaded: EventEmitter<any> = new EventEmitter();
   public onPaginatedListDataLoaded: EventEmitter<any> = new EventEmitter();
-  protected quickFilterColArray: string[];
 
+  protected quickFilterColArray: string[];
   protected dataResponseArray: Array<any> = [];
+  protected storePaginationState: boolean = false;
 
   constructor(
     injector: Injector,
@@ -196,7 +179,7 @@ export class OListComponent extends OServiceComponent implements OnInit, IList, 
         offset: 0,
         length: initialQueryLength || this.queryRows
       };
-      this.queryData({}, queryArgs);
+      this.queryData(this.parentItem, queryArgs);
     }
   }
 
@@ -265,6 +248,7 @@ export class OListComponent extends OServiceComponent implements OnInit, IList, 
 
   onItemDetailClick(item: OListItemDirective | OListItemComponent) {
     if (this.oenabled && this.detailMode === Codes.DETAIL_MODE_CLICK) {
+      this.saveDataNavigationInLocalStorage();
       this.viewDetail(item.getItemData());
       ObservableWrapper.callEmit(this.mdClick, item);
     }
@@ -272,9 +256,39 @@ export class OListComponent extends OServiceComponent implements OnInit, IList, 
 
   onItemDetailDblClick(item: OListItemDirective | OListItemComponent) {
     if (this.oenabled && Codes.isDoubleClickMode(this.detailMode)) {
+      this.saveDataNavigationInLocalStorage();
       this.viewDetail(item.getItemData());
       ObservableWrapper.callEmit(this.mdDblClick, item);
     }
+  }
+
+  protected saveDataNavigationInLocalStorage(): void {
+    // Save data of the list in navigation-data in the localstorage
+    OFormDataNavigation.storeNavigationData(this.injector, this.getKeysValues());
+    this.storePaginationState = true;
+  }
+
+  protected getKeysValues(): any[] {
+    let data = this.dataArray;
+    const _self = this;
+    return data.map(function (row, i, a) {
+      let obj = {};
+      _self.keysArray.map(function (key, i, a) {
+        if (row[key] !== undefined) {
+          obj[key] = row[key];
+        }
+      });
+
+      return obj;
+    });
+  }
+
+  getDataToStore(): Object {
+    let dataToStore = super.getDataToStore();
+    if (!this.storePaginationState) {
+      delete dataToStore['queryRecordOffset'];
+    }
+    return dataToStore;
   }
 
   protected setData(data: any, sqlTypes?: any, replace?: boolean) {
@@ -487,24 +501,21 @@ export class OListComponent extends OServiceComponent implements OnInit, IList, 
     this.onInsertButtonClick.emit();
     let route = this.getRouteOfSelectedRow(undefined, 'new');
     if (route.length > 0) {
-      this.router.navigate(route,
-        {
-          relativeTo: this.actRoute,
-        }
-      );
+      this.saveDataNavigationInLocalStorage();
+      this.router.navigate(route, { relativeTo: this.actRoute });
     }
   }
 
   hasTitle(): boolean {
     return this.title !== undefined;
   }
+
 }
 
 @NgModule({
   declarations: [OListComponent],
-  imports: [OSharedModule, CommonModule, OListItemModule, OSearchInputModule, RouterModule],
+  imports: [CommonModule, OListItemModule, OSearchInputModule, OSharedModule, RouterModule],
   exports: [OListComponent],
   entryComponents: [MatCheckbox]
 })
-export class OListModule {
-}
+export class OListModule { }
