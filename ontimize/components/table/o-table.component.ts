@@ -1395,15 +1395,21 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     const self = this;
 
     return (index: number, item: any) => {
-      let intersection = self.asyncLoadColumns.filter(c => self._oTableOptions.visibleColumns.indexOf(c) !== -1);
-      if (self.asyncLoadColumns.length && intersection.length > 0 && !this.finishQuerySubscription) {
+      let itemId = '';
+      const keysLenght = self.keysArray.length;
+      self.keysArray.forEach((key: string, idx: number) => {
+        let suffix = idx < (keysLenght - 1) ? ';' : '';
+        itemId += item[key] + suffix;
+      });
+      let asyncAndVisible = self.asyncLoadColumns.filter(c => self._oTableOptions.visibleColumns.indexOf(c) !== -1);
+      if (self.asyncLoadColumns.length && asyncAndVisible.length > 0 && !self.finishQuerySubscription) {
         self.queryRowAsyncData(index, item);
-        if (index === (this.daoTable.data.length - 1)) {
+        if (index === (self.paginator.pageSize - 1)) {
           self.finishQuerySubscription = true;
         }
-        return item;
+        return itemId;
       } else {
-        return item;
+        return itemId;
       }
     };
   }
@@ -1614,6 +1620,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   onChangePage(evt: PageEvent) {
+    this.finishQuerySubscription = false;
     if (!this.pageable) {
       this.currentPage = evt.pageIndex;
       return;
