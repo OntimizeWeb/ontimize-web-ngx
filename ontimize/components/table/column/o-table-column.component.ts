@@ -41,6 +41,9 @@ export const DEFAULT_INPUTS_O_TABLE_COLUMN = [
   // title [string]: column title. Default: no value.
   'title',
 
+  // title [start-center-end]: column title alignment. Default: center.
+  'titleAlign: title-align',
+
   // orderable [no|yes]: column can be sorted. Default: yes.
   'orderable',
 
@@ -143,6 +146,7 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
   public type: string;
   public attr: string;
   public title: string;
+  public titleAlign: string = Codes.DEFAULT_COLUMN_TITLE_ALIGN;
   public sqlType: string;
   protected _SQLType: number;
   protected _defaultSQLTypeKey: string = 'OTHER';
@@ -253,6 +257,7 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
 
   ngOnInit() {
     this.grouping = Util.parseBoolean(this.grouping, true);
+    this.titleAlign = this.parseTitleAlign();
     this.table.registerColumn(this);
     this.subscriptions.add(this.table.onReinitialize.subscribe(() => this.table.registerColumn(this)));
   }
@@ -264,6 +269,11 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
 
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
+  }
+
+  parseTitleAlign(): string {
+    let align = (this.titleAlign || '').toLowerCase();
+    return Codes.AVAILABLE_COLUMN_TITLE_ALIGNS.indexOf(align) !== -1 ? align : Codes.DEFAULT_COLUMN_TITLE_ALIGN;
   }
 
   protected createRenderer() {

@@ -223,6 +223,13 @@ export class OColumn {
     }
     return this.minWidth;
   }
+
+  getTitleAlignClass() {
+    if (Util.isDefined(this.definition)) {
+      return this.definition.titleAlign;
+    }
+    return Codes.DEFAULT_COLUMN_TITLE_ALIGN;
+  }
 }
 
 export class OTableOptions {

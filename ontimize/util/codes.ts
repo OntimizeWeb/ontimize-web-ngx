@@ -55,6 +55,9 @@ export class Codes {
   public static ICON_POSITION_LEFT = 'left';
   public static ICON_POSITION_RIGHT = 'right';
 
+  public static DEFAULT_COLUMN_TITLE_ALIGN = 'center';
+  public static AVAILABLE_COLUMN_TITLE_ALIGNS = ['start', 'center', 'end'];
+
   static isDoubleClickMode(value: string): boolean {
     return Codes.DETAIL_MODE_DBLCLICK_VALUES.indexOf(value) !== -1;
   }
