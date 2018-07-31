@@ -1,15 +1,12 @@
-import { Injector, ElementRef, Component, OnDestroy, NgModule, ViewEncapsulation } from '@angular/core';
+import { Component, ElementRef, Injector, NgModule, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs/Subscription';
-import { OSharedModule } from '../../shared';
-import { InputConverter } from '../../decorators';
-import { DialogService, OUserInfoService, UserInfo, LoginService } from '../../services';
-import { OLanguageSelectorModule } from '../language-selector/o-language-selector.component';
 
-export const DEFAULT_INPUTS_O_USER_INFO = [
-  'useFlagIcons: use-flag-icons'
-];
+import { OSharedModule } from '../../shared';
+import { DialogService, LoginService, OUserInfoService, UserInfo } from '../../services';
+
+export const DEFAULT_INPUTS_O_USER_INFO = [];
 
 export const DEFAULT_OUTPUTS_O_USER_INFO = [];
 
@@ -24,7 +21,6 @@ export const DEFAULT_OUTPUTS_O_USER_INFO = [];
     '[class.o-user-info]': 'true'
   }
 })
-
 export class OUserInfoComponent implements OnDestroy {
 
   public static DEFAULT_INPUTS_O_USER_INFO = DEFAULT_INPUTS_O_USER_INFO;
@@ -36,9 +32,6 @@ export class OUserInfoComponent implements OnDestroy {
 
   userInfoSubscription: Subscription;
   protected userInfo: UserInfo;
-
-  @InputConverter()
-  useFlagIcons: boolean = false;
 
   constructor(
     protected elRef: ElementRef,
@@ -78,11 +71,12 @@ export class OUserInfoComponent implements OnDestroy {
   get username(): string {
     return this.userInfo ? this.userInfo.username : undefined;
   }
+
 }
 
 @NgModule({
   declarations: [OUserInfoComponent],
-  imports: [OSharedModule, CommonModule, OLanguageSelectorModule, RouterModule],
+  imports: [CommonModule, OSharedModule, RouterModule],
   exports: [OUserInfoComponent]
 })
 export class OUserInfoModule { }
