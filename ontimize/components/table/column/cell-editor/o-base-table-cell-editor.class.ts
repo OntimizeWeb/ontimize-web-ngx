@@ -1,17 +1,19 @@
 import { Injector, EventEmitter, OnInit, HostListener } from '@angular/core';
 import { FormControl, ValidatorFn, Validators, FormGroup } from '@angular/forms';
-import { OTranslateService } from '../../../../services';
+import { OTranslateService, SnackBarService } from '../../../../services';
 import { InputConverter } from '../../../../decorators';
 import { OTableComponent } from '../../o-table.component';
 import { OTableColumnComponent } from '../o-table-column.component';
-import { Util } from '../../../../utils';
+import { Util, ObservableWrapper } from '../../../../utils';
 
 export class OBaseTableCellEditor implements OnInit {
 
   public static DEFAULT_INPUTS_O_TABLE_CELL_EDITOR = [
     'orequired: required',
     'showPlaceHolder: show-placeholder',
-    'olabel: label'
+    'olabel: label',
+    'updateRecordOnEdit: update-record-on-edit',
+    'showToastOnEdit: show-toast-on-edit'
   ];
 
   public static DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR = [
@@ -27,6 +29,10 @@ export class OBaseTableCellEditor implements OnInit {
   @InputConverter()
   showPlaceHolder: boolean = false;
   olabel: string;
+  @InputConverter()
+  updateRecordOnEdit: boolean = true;
+  @InputConverter()
+  showToastOnEdit: boolean = false;
 
   tableColumn: OTableColumnComponent;
 
@@ -41,6 +47,8 @@ export class OBaseTableCellEditor implements OnInit {
   editionCancelled: EventEmitter<Object> = new EventEmitter<Object>();
   editionCommitted: EventEmitter<Object> = new EventEmitter<Object>();
 
+  onPostUpdateRecord: EventEmitter<Object> = new EventEmitter<Object>();
+
   @HostListener('document:keyup', ['$event'])
   onDocumentKeyup(event: KeyboardEvent) {
     this.handleKeyup(event);
@@ -50,7 +58,10 @@ export class OBaseTableCellEditor implements OnInit {
   protected type: string;
   registerInColumn: boolean = true;
 
+  protected snackBarService: SnackBarService;
+
   constructor(protected injector: Injector) {
+    this.snackBarService = this.injector.get(SnackBarService);
     this.tableColumn = this.injector.get(OTableColumnComponent);
     this.translateService = this.injector.get(OTranslateService);
   }
@@ -113,7 +124,15 @@ export class OBaseTableCellEditor implements OnInit {
   endEdition(saveChanges) {
     const oColumn = this.table.getOColumn(this.tableColumn.attr);
     if (oColumn) {
-      this.table.updateCellData(oColumn, this._rowData, saveChanges);
+      const self = this;
+      const updateObserver = this.table.updateCellData(oColumn, this._rowData, saveChanges);
+      if (updateObserver) {
+        updateObserver.subscribe(res => {
+          self.onUpdateSuccess(res);
+        }, error => {
+          self.table.showDialogError(error, 'MESSAGES.ERROR_UPDATE');
+        });
+      }
     }
   }
 
@@ -197,5 +216,12 @@ export class OBaseTableCellEditor implements OnInit {
     return this.showPlaceHolder ?
       this.translateService.get(this.olabel || (this.tableColumn.title || this.tableColumn.attr)) :
       undefined;
+  }
+
+  protected onUpdateSuccess(res: any) {
+    ObservableWrapper.callEmit(this.onPostUpdateRecord, res);
+    if (this.showToastOnEdit) {
+      this.snackBarService.open('MESSAGES.INSERTED', { icon: 'check_circle' });
+    }
   }
 }
