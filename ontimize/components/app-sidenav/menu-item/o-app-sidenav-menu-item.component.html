@@ -1,7 +1,7 @@
 <ng-container *ngIf="sidenavOpened">
-  <li class="application-sidenav-menuitem application-sidenav-item" [class.user-info]="isUserInfoItem()">
+  <li class="o-app-sidenav-menuitem o-app-sidenav-item" [class.user-info]="isUserInfoItem()">
 
-    <a mat-button *ngIf="!isUserInfoItem() && !isLocaleItem()" (click)="onClick()" [class.application-sidenav-viewer-sidenav-item-selected]="isActiveItem()">
+    <a mat-button *ngIf="!isUserInfoItem() && !isLocaleItem()" (click)="onClick()" [class.o-app-sidenav-viewer-sidenav-item-selected]="isActiveItem()">
       <div fxLayout="row" fxLayoutAlign="start center">
         <mat-icon *ngIf="menuItem.icon">{{ menuItem.icon }}</mat-icon>
         {{ menuItem.name | oTranslate }}
@@ -27,8 +27,8 @@
 </ng-container>
 
 <ng-container *ngIf="!sidenavOpened">
-  <li class="application-sidenav-menuitem application-sidenav-item">
-    <a [matTooltip]="tooltip" matTooltipClass="menuitem-tooltip" matTooltipPosition="right" mat-button (click)="onClick()" [class.application-sidenav-viewer-sidenav-item-selected]="isActiveItem()">
+  <li class="o-app-sidenav-menuitem o-app-sidenav-item">
+    <a [matTooltip]="tooltip" matTooltipClass="menuitem-tooltip" matTooltipPosition="right" mat-button (click)="onClick()" [class.o-app-sidenav-viewer-sidenav-item-selected]="isActiveItem()">
       <mat-icon *ngIf="menuItem.icon">{{ menuItem.icon }}</mat-icon>
     </a>
   </li>

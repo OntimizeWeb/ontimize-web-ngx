@@ -4,6 +4,10 @@
 * **DialogService**: changing '*dialogRef*' property visibility to public ([#193](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/193)) ([f797b56](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f797b56))
 * **o-table-column**: new `title-align` input ([1d261e1](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1d261e1))
 
+### BREAKING CHANGES
+* **o-app-layout**: all internal css classes starting with `application-sidenav` has changed to `o-app-sidenav`.
+* **o-app-header**: all internal css classes starting with `application-header` has changed to `o-app-header`.
+
 ### Bug Fixes
 * **o-form-layout-manager**: fixed error when there is a `o-form` inside the form layout manager ([5aca0cc](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5aca0cc))
 * **o-table**: `registerColumn` method allows to receive a string argument again ([#197](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/197)) ([d0ac4b8](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d0ac4b8))
