@@ -113,11 +113,11 @@ $transition-duration: 500ms;
         text-align: center;
 
         .o-app-sidenav-item {
-          &:not(.user-info) {
+          &:not(.o-user-info) {
             cursor: pointer;
           }
 
-          &.user-info {
+          &.o-user-info {
             &:focus,
             &:hover {
               color: inherit;

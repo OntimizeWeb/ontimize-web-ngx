@@ -1,5 +1,5 @@
 <ng-container *ngIf="sidenavOpened">
-  <li class="o-app-sidenav-menuitem o-app-sidenav-item" [class.user-info]="isUserInfoItem()">
+  <li class="o-app-sidenav-menuitem o-app-sidenav-item" [class.o-user-info]="isUserInfoItem()">
 
     <a mat-button *ngIf="!isUserInfoItem() && !isLocaleItem()" (click)="onClick()" [class.o-app-sidenav-viewer-sidenav-item-selected]="isActiveItem()">
       <div fxLayout="row" fxLayoutAlign="start center">
@@ -16,10 +16,10 @@
       </div>
     </a>
 
-    <div *ngIf="isUserInfoItem()" fxLayout="column" fxLayoutAlign="center center" class="user-info-menu-item">
-      <div class="user-info-image" fxFlexFill></div>
-      <div class="user-info-item" fxLayout="row" fxLayoutAlign="space-between center" fxFlexFill>
-        <div class="user-info-name">{{ menuItem.user }} </div>
+    <div *ngIf="isUserInfoItem()" fxLayout="column" fxLayoutAlign="center center" class="o-user-info-menu-item">
+      <div class="o-user-info-image" fxFlexFill></div>
+      <div class="o-user-info-item" fxLayout="row" fxLayoutAlign="space-between center" fxFlexFill>
+        <div class="o-user-info-name">{{ menuItem.user }} </div>
         <o-language-selector [use-flag-icons]="useFlagIcons"></o-language-selector>
       </div>
     </div>

@@ -85,7 +85,7 @@ export class OAppSidenavMenuItemComponent implements AfterViewInit, OnDestroy {
   }
 
   protected setUserInfoImage() {
-    let imgEl = this.elRef.nativeElement.getElementsByClassName('user-info-image')[0];
+    let imgEl = this.elRef.nativeElement.getElementsByClassName('o-user-info-image')[0];
     if (imgEl !== undefined) {
       const item = this.menuItem as MenuItemUserInfo;
       imgEl.setAttribute('style', 'background-image: url(\'' + item.avatar + '\')');

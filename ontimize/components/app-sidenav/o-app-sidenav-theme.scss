@@ -30,15 +30,15 @@
           color: mat-color($accent);
         }
 
-        &.user-info,
-        &.user-info {
+        &.o-user-info,
+        &.o-user-info {
           &:focus,
           &:hover {
             color: inherit;
           }
           color: inherit;
 
-          .user-info-menu-item .user-info-item {
+          .o-user-info-menu-item .o-user-info-item {
             background: mat-color($primary, default-contrast, 0.74);
           }
         }

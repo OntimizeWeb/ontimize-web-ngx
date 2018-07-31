@@ -1,11 +1,10 @@
 .o-user-info {
-
-  .user-info-container {
+  .o-user-info-container {
     cursor: pointer;
     height: 100%;
   }
 
-  .user-info-avatar-wrapper {
+  .o-user-info-avatar-wrapper {
     width: 30px;
     height: 30px;
     overflow: hidden;
@@ -16,7 +15,8 @@
       height: auto;
     }
   }
-  .user-info-username {
+
+  .o-user-info-username {
     padding-left: 6px;
   }
 
