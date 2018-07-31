@@ -10,6 +10,11 @@
   * updating cell data in server ([360bfd0](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/360bfd0))
   * new `updateRecordOnEdit` and `showToastOnEdit` inputs and `onPostUpdateRecord` output added to all cell editors ('*OBaseTableCellEditor*' class) ([360bfd0](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/360bfd0))
 * **o-table**: new `updateRecord` method ([a528120](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a528120))
+* **o-app-layout**: added modes `desktop` and `mobile` to app layout component [7617175](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7617175))
+
+### BREAKING CHANGES
+* **o-app-layout**: all internal css classes starting with `application-sidenav` has changed to `o-app-sidenav`.
+* **o-app-header**: all internal css classes starting with `application-header` has changed to `o-app-header`.
 
 ### Bug Fixes
 * **o-form-layout-manager**: fixed error when there is a `o-form` inside the form layout manager ([5aca0cc](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5aca0cc))

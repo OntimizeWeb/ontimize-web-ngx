@@ -1,23 +1,26 @@
-import { Injector, NgModule, Component, OnInit, ViewEncapsulation, ViewChild, ElementRef, EventEmitter, AfterViewInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, HostListener } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, ChangeDetectionStrategy, Component, ElementRef, EventEmitter, HostListener, Injector, NgModule, OnDestroy, OnInit, ViewEncapsulation, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatSidenav } from '@angular/material';
-import { RouterModule, Router } from '@angular/router';
-import { ObservableMedia, MediaChange } from '@angular/flex-layout';
+import { Router, RouterModule } from '@angular/router';
+import { MediaChange, ObservableMedia } from '@angular/flex-layout';
 import { Subscription } from 'rxjs/Subscription';
 
+import { Util } from '../../util/util';
 import { OSharedModule } from '../../shared';
 import { InputConverter } from '../../decorators';
-import { AppMenuService, MenuRootItem, MenuItemUserInfo, MenuGroup, OUserInfoService, UserInfo } from '../../services';
+import { OAppSidenavImageModule } from './image/o-app-sidenav-image.component';
+import { OAppLayoutComponent } from '../../layouts/app-layout/o-app-layout.component';
 import { OAppSidenavMenuItemModule } from './menu-item/o-app-sidenav-menu-item.component';
 import { OAppSidenavMenuGroupModule } from './menu-group/o-app-sidenav-menu-group.component';
-import { OAppSidenavImageModule } from './image/o-app-sidenav-image.component';
+import { AppMenuService, MenuRootItem, MenuItemUserInfo, MenuGroup, OUserInfoService, UserInfo } from '../../services';
 
 export const DEFAULT_INPUTS_O_APP_SIDENAV = [
   'opened',
   'showUserInfo: show-user-info',
   'showToggleButton: show-toggle-button',
   'openedSidenavImg: opened-sidenav-image',
-  'closedSidenavImg: closed-sidenav-image'
+  'closedSidenavImg: closed-sidenav-image',
+  'layoutMode: layout-mode'
 ];
 
 export const DEFAULT_OUTPUTS_O_APP_SIDENAV = [
@@ -38,6 +41,7 @@ export const DEFAULT_OUTPUTS_O_APP_SIDENAV = [
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class OAppSidenavComponent implements OnInit, OnDestroy, AfterViewInit {
+
   public static DEFAULT_INPUTS_O_APP_LAYOUT = DEFAULT_INPUTS_O_APP_SIDENAV;
   public static DEFAULT_OUTPUTS_O_APP_LAYOUT = DEFAULT_OUTPUTS_O_APP_SIDENAV;
 
@@ -46,6 +50,17 @@ export class OAppSidenavComponent implements OnInit, OnDestroy, AfterViewInit {
   protected routerSubscription: Subscription;
   appMenuService: AppMenuService;
   protected _menuRootArray: MenuRootItem[] = [];
+
+  get layoutMode(): string {
+    return OAppLayoutComponent.Modes[this._layoutMode];
+  }
+  set layoutMode(val: string) {
+    let m = OAppLayoutComponent.Modes.find(e => e === val);
+    if (Util.isDefined(m)) {
+      this._layoutMode = m;
+    }
+  }
+  protected _layoutMode: string = OAppLayoutComponent.defaultMode;
 
   @InputConverter()
   protected opened: boolean = true;

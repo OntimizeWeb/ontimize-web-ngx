@@ -6,11 +6,12 @@
   $foreground: map-get($theme, foreground);
 
   .o-app-header {
-    .application-header {
+    .o-app-header {
       .sidenav-toggle {
         color: mat-color($primary, default-contrast);
         background: mat-color($primary);
       }
+
       .menu-button {
         background: transparent;
       }
