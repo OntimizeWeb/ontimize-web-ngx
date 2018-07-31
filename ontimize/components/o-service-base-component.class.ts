@@ -360,6 +360,23 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
     return subscription;
   }
 
+  /**
+   * Extracting the given record keys
+   * @param item record object
+   * @returns object containing item object properties contained in keysArray
+   */
+  extractKeysFromRecord(item: any): Object {
+    let result = {};
+    if (Util.isObject(item)) {
+      this.keysArray.forEach(key => {
+        if (Util.isDefined(item[key])) {
+          result[key] = item[key];
+        }
+      });
+    }
+    return result;
+  }
+
   getAttributesValuesToQuery(): Array<string> {
     let result = this.colArray;
     this.keysArray.forEach(key => {
@@ -398,6 +415,10 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
 
   getComponentFilter(existingFilter: any = {}): any {
     return existingFilter;
+  }
+
+  getSqlTypes() {
+    return {};
   }
 
   protected setData(data: any, sqlTypes?: any, replace?: boolean) {
