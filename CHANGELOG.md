@@ -4,10 +4,15 @@
 * **DialogService**: changing '*dialogRef*' property visibility to public ([#193](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/193)) ([f797b56](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f797b56))
 * **o-table-column**: new `title-align` input ([1d261e1](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1d261e1))
 * **o-app-layout**: added modes `desktop` and `mobile` to app layout component [7617175](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7617175))
+* **o-app-layout**: new input `show-language-selector` [c06bc24](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c06bc24))
+* **o-app-header**: new input `show-language-selector` [c06bc24](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c06bc24))
 
 ### BREAKING CHANGES
-* **o-app-layout**: all internal css classes starting with `application-sidenav` has changed to `o-app-sidenav`.
-* **o-app-header**: all internal css classes starting with `application-header` has changed to `o-app-header`.
+* **o-app-layout**: Interncal css classes changes:
+  * All internal css classes starting with `application-sidenav` has changed to `o-app-sidenav`.
+  * All internal css classes starting with `application-header` has changed to `o-app-header`.
+  * All internal css classes starting with `user-info` has changed to `o-user-info`.
+* **o-user-info**: removed input `use-flag-icons`. This component doesn't contain the language selector anymore.
 
 ### Bug Fixes
 * **o-form-layout-manager**: fixed error when there is a `o-form` inside the form layout manager ([5aca0cc](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5aca0cc))
