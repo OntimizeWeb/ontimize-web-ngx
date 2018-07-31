@@ -1326,6 +1326,13 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       Object.assign(this.editingRow, data);
     }
     this.editingRow = undefined;
+    if (column.editor.updateRecordOnEdit) {
+      let toUpdate = {};
+      toUpdate[column.attr] = data[column.attr];
+      const kv = this.extractKeysFromRecord(data);
+      return this.updateRecord(kv, toUpdate);
+    }
+    return undefined;
   }
 
   protected getKeysValues(): any[] {
@@ -1659,8 +1666,29 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     return this._oTableOptions ? this._oTableOptions.columns.find(item => item.name === attr) : undefined;
   }
 
-  insertRecord(recordData: any): Observable<any> {
-    return this.daoTable.insertQuery(recordData);
+  insertRecord(recordData: any, sqlTypes?: Object): Observable<any> {
+    if (!Util.isDefined(sqlTypes)) {
+      let allSqlTypes = this.getSqlTypes();
+      let sqlTypes = {};
+      Object.keys(recordData).forEach(key => {
+        sqlTypes[key] = allSqlTypes[key];
+      });
+    }
+    return this.daoTable.insertQuery(recordData, sqlTypes);
+  }
+
+  updateRecord(filter: any, updateData: any, sqlTypes?: Object): Observable<any> {
+    if (!Util.isDefined(sqlTypes)) {
+      let allSqlTypes = this.getSqlTypes();
+      let sqlTypes = {};
+      Object.keys(filter).forEach(key => {
+        sqlTypes[key] = allSqlTypes[key];
+      });
+      Object.keys(updateData).forEach(key => {
+        sqlTypes[key] = allSqlTypes[key];
+      });
+    }
+    return this.daoTable.updateQuery(filter, updateData, sqlTypes);
   }
 
   getDataArray() {
