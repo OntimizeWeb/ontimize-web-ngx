@@ -41,6 +41,14 @@ export class OTableDao {
     }
   }
 
+  updateQuery(kv: Object, av: Object, sqlTypes?: Object): Observable<any> {
+    if (this.usingStaticData) {
+      return Observable.of(this.data);
+    } else {
+      return this.dataService[this.methods.update](kv, av, this.entity, sqlTypes);
+    }
+  }
+
   /**
    * set data array and emit data has ben modified
    * @param data

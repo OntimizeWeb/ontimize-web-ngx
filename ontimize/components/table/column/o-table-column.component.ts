@@ -206,6 +206,10 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
   @InputConverter()
   showPlaceHolder: boolean = false;
   olabel: string;
+  @InputConverter()
+  updateRecordOnEdit: boolean = true;
+  @InputConverter()
+  showToastOnEdit: boolean = false;
 
   /* input editor date */
   protected locale: string;
@@ -236,6 +240,7 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
   editionStarted: EventEmitter<Object> = new EventEmitter<Object>();
   editionCancelled: EventEmitter<Object> = new EventEmitter<Object>();
   editionCommitted: EventEmitter<Object> = new EventEmitter<Object>();
+  onPostUpdateRecord: EventEmitter<Object> = new EventEmitter<Object>();
 
   @InputConverter()
   breakWord: boolean = false;
@@ -398,9 +403,12 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
       if (newEditor) {
         newEditor.orequired = this.orequired;
         newEditor.showPlaceHolder = this.showPlaceHolder;
+        newEditor.updateRecordOnEdit = this.updateRecordOnEdit;
+        newEditor.showToastOnEdit = this.showToastOnEdit;
         newEditor.editionStarted = this.editionStarted;
         newEditor.editionCancelled = this.editionCancelled;
         newEditor.editionCommitted = this.editionCommitted;
+        newEditor.onPostUpdateRecord = this.onPostUpdateRecord;
         this.registerEditor(newEditor);
       }
     }

@@ -1,8 +1,13 @@
-## 3.0.1 (2018-07-27)
+## 3.0.2
 ### Features
-* **o-list-item**: list item directive now can be attached to `mat-list-item` and `mat-card` components ([e256100](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e256100)).
-* **DialogService**: changing '*dialogRef*' property visibility to public ([#193](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/193)) ([f797b56](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f797b56))
 * **o-table-column**: new `title-align` input ([1d261e1](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1d261e1))
+* **ontimize-ee.service**, **ontimize.service**: new response parsers methods (separately by each CRUD method) ([c8c9e6f](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c8c9e6f))
+* **o-table-dao**: new `updateQuery` method ([ad4f7ea](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ad4f7ea))
+* **o-service-base-component.class**: new '*OServiceBaseComponent*' `extractKeysFromRecord` and `getSqlTypes` methods ([0aa24c9](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0aa24c9))
+* **o-table cell editors**:
+  * updating cell data in server ([360bfd0](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/360bfd0))
+  * new `updateRecordOnEdit` and `showToastOnEdit` inputs and `onPostUpdateRecord` output added to all cell editors ('*OBaseTableCellEditor*' class) ([360bfd0](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/360bfd0))
+* **o-table**: new `updateRecord` method ([a528120](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a528120))
 * **o-app-layout**: added modes `desktop` and `mobile` to app layout component [7617175](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7617175))
 * **o-app-layout**: new input `show-language-selector` [c06bc24](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c06bc24))
 * **o-app-header**: new input `show-language-selector` [c06bc24](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c06bc24))
@@ -13,6 +18,11 @@
   * All internal css classes starting with `application-header` has changed to `o-app-header`.
   * All internal css classes starting with `user-info` has changed to `o-user-info`.
 * **o-user-info**: removed input `use-flag-icons`. This component doesn't contain the language selector anymore.
+
+## 3.0.1 (2018-07-27)
+### Features
+* **o-list-item**: list item directive now can be attached to `mat-list-item` and `mat-card` components ([e256100](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e256100)).
+* **DialogService**: changing '*dialogRef*' property visibility to public ([#193](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/193)) ([f797b56](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f797b56))
 
 ### Bug Fixes
 * **o-form-layout-manager**: fixed error when there is a `o-form` inside the form layout manager ([5aca0cc](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5aca0cc))
