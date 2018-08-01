@@ -1857,10 +1857,12 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   getTitleAlignClass(oCol: OColumn) {
-    if (!this.autoAlignTitles || (Util.isDefined(oCol.definition) && Util.isDefined(oCol.definition.titleAlign))) {
+    let align;
+    let hasTitleAlign = Util.isDefined(oCol.definition) && Util.isDefined(oCol.definition.titleAlign);
+    let autoAlign = this.autoAlignTitles || (hasTitleAlign && oCol.definition.titleAlign === Codes.COLUMN_TITLE_ALIGN_AUTO);
+    if (!autoAlign) {
       return oCol.getTitleAlignClass();
     }
-    let align;
     switch (oCol.type) {
       case 'image':
       case 'date':
