@@ -11,10 +11,15 @@
   * new `updateRecord` method ([a528120](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a528120))
   * new `auto-align-titles` input ([1714a25](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1714a25))
 * **o-app-layout**: added modes `desktop` and `mobile` to app layout component [7617175](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7617175))
+* **o-app-layout**: new input `show-language-selector` [c06bc24](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c06bc24))
+* **o-app-header**: new input `show-language-selector` [c06bc24](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c06bc24))
 
 ### BREAKING CHANGES
-* **o-app-layout**: all internal css classes starting with `application-sidenav` has changed to `o-app-sidenav`.
-* **o-app-header**: all internal css classes starting with `application-header` has changed to `o-app-header`.
+* **o-app-layout**: Interncal css classes changes:
+  * All internal css classes starting with `application-sidenav` has changed to `o-app-sidenav`.
+  * All internal css classes starting with `application-header` has changed to `o-app-header`.
+  * All internal css classes starting with `user-info` has changed to `o-user-info`.
+* **o-user-info**: removed input `use-flag-icons`. This component doesn't contain the language selector anymore.
 
 ## 3.0.1 (2018-07-27)
 ### Features

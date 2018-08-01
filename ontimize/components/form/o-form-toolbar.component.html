@@ -36,7 +36,7 @@
         <mat-icon svgIcon="ontimize:delete"></mat-icon>
         <span *ngIf="showHeaderActionsText">{{ 'DELETE' | oTranslate }}</span>
       </button>
-      <button mat-button (click)="onSave($event)" [disabled]="!existsChangesToSave" *ngIf="saveBtnEnabled">
+      <button mat-button (click)="onSave($event)" [disabled]="!existsChangesToSave" *ngIf="isSaveBtnEnabled">
         <mat-icon svgIcon="ontimize:save"></mat-icon>
         <span *ngIf="showHeaderActionsText">{{ 'SAVE' | oTranslate }}</span>
       </button>

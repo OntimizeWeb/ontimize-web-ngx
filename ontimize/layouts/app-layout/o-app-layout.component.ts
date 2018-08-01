@@ -13,6 +13,7 @@ export const DEFAULT_INPUTS_O_APP_LAYOUT = [
   'sidenavOpened: sidenav-opened',
   'showHeader: show-header',
   'showUserInfo: show-user-info',
+  'showLanguageSelector: show-language-selector',
   'useFlagIcons: use-flag-icons',
   'openedSidenavImg: opened-sidenav-image',
   'closedSidenavImg: closed-sidenav-image'
@@ -39,6 +40,8 @@ export class OAppLayoutComponent {
   showHeader: boolean = false;
   @InputConverter()
   showUserInfo: boolean = true;
+  @InputConverter()
+  showLanguageSelector: boolean = true;
   @InputConverter()
   useFlagIcons: boolean = false;
 

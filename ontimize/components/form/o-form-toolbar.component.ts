@@ -75,7 +75,7 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
   @InputConverter()
   showHeaderNavigation: boolean = true;
 
-  constructor( @Inject(forwardRef(() => OFormComponent)) private _form: OFormComponent,
+  constructor(@Inject(forwardRef(() => OFormComponent)) private _form: OFormComponent,
     public element: ElementRef,
     protected injector: Injector) {
     _form.registerToolbar(this);
@@ -249,6 +249,11 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
   onUndoLastChange() {
     this._form.executeToolbarAction(OFormComponent.UNDO_LAST_CHANGE_ACTION);
   }
+
+  isSaveBtnEnabled(): boolean {
+    return this.saveBtnEnabled;
+  }
+
 }
 
 @NgModule({
