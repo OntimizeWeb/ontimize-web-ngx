@@ -58,9 +58,7 @@
         <!-- Generic column definition -->
         <ng-container *ngFor="let column of oTableOptions.columns" [matColumnDef]="column.name">
           <ng-container *ngIf="column.orderable">
-
-
-            <mat-header-cell *matHeaderCellDef mat-sort-header [fxFlex]="column.width" [style.min-width]="column.getMinWidth()" [ngClass]="column.getTitleAlignClass()"
+            <mat-header-cell *matHeaderCellDef mat-sort-header [fxFlex]="column.width" [style.min-width]="column.getMinWidth()" [ngClass]="getTitleAlignClass(column)"
               [class.active-sort]="isColumnSortActive(column)" [class.desc]="isColumnDescSortActive(column)">
               <mat-icon *ngIf="isColumnFilterable(column)" class="column-filter-icon" [class.active]="isColumnFilterActive(column)" (click)="openColumnFilterDialog(column, $event)"
                 svgIcon="ontimize:filter_list"></mat-icon>
@@ -68,7 +66,7 @@
             </mat-header-cell>
           </ng-container>
           <ng-container *ngIf="!column.orderable">
-            <mat-header-cell *matHeaderCellDef [fxFlex]="column.width" [style.min-width]="column.getMinWidth()" [ngClass]="column.getTitleAlignClass()">
+            <mat-header-cell *matHeaderCellDef [fxFlex]="column.width" [style.min-width]="column.getMinWidth()" [ngClass]="getTitleAlignClass(column)">
               <mat-icon *ngIf="isColumnFilterable(column)" class="column-filter-icon" [class.active]="isColumnFilterActive(column)" (click)="openColumnFilterDialog(column, $event)"
                 svgIcon="ontimize:filter_list"></mat-icon>
               {{ column.title | oTranslate }}
@@ -108,14 +106,14 @@
         <!-- Generic column definition -->
         <ng-container *ngFor="let column of oTableOptions.columns" [matColumnDef]="column.name">
           <ng-container *ngIf="column.orderable">
-            <mat-header-cell *matHeaderCellDef mat-sort-header [fxFlex]="column.width" [style.min-width]="column.getMinWidth()" [ngClass]="column.getTitleAlignClass()">
+            <mat-header-cell *matHeaderCellDef mat-sort-header [fxFlex]="column.width" [style.min-width]="column.getMinWidth()" [ngClass]="getTitleAlignClass(column)">
               <mat-icon *ngIf="isColumnFilterable(column)" class="column-filter-icon" [class.active]="isColumnFilterActive(column)" (click)="openColumnFilterDialog(column, $event)"
                 svgIcon="ontimize:filter_list"></mat-icon>
               {{ column.title | oTranslate }}
             </mat-header-cell>
           </ng-container>
           <ng-container *ngIf="!column.orderable">
-            <mat-header-cell *matHeaderCellDef [fxFlex]="column.width" [style.min-width]="column.getMinWidth()" [ngClass]="column.getTitleAlignClass()">
+            <mat-header-cell *matHeaderCellDef [fxFlex]="column.width" [style.min-width]="column.getMinWidth()" [ngClass]="getTitleAlignClass(column)">
               <mat-icon *ngIf="isColumnFilterable(column)" class="column-filter-icon" [class.active]="isColumnFilterActive(column)" (click)="openColumnFilterDialog(column, $event)"
                 svgIcon="ontimize:filter_list"></mat-icon>
               {{ column.title | oTranslate }}

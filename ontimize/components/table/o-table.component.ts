@@ -140,7 +140,9 @@ export const DEFAULT_INPUTS_O_TABLE = [
 
   'horizontalScroll: horizontal-scroll',
 
-  'showPaginatorFirstLastButtons: show-paginator-first-last-buttons'
+  'showPaginatorFirstLastButtons: show-paginator-first-last-buttons',
+
+  'autoAlignTitles: auto-align-titles'
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE = [
@@ -226,9 +228,10 @@ export class OColumn {
 
   getTitleAlignClass() {
     if (Util.isDefined(this.definition)) {
-      return this.definition.titleAlign;
+      return this.definition.titleAlign || Codes.COLUMN_TITLE_ALIGN_CENTER;
     }
-    return Codes.DEFAULT_COLUMN_TITLE_ALIGN;
+    // default title align
+    return Codes.COLUMN_TITLE_ALIGN_CENTER;
   }
 }
 
@@ -368,6 +371,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   horizontalScroll: boolean = false;
   @InputConverter()
   showPaginatorFirstLastButtons: boolean = true;
+  @InputConverter()
+  autoAlignTitles: boolean = false;
 
   public daoTable: OTableDao | null;
   public dataSource: OTableDataSource | null;
@@ -1848,6 +1853,32 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       });
       this.reloadData();
     }
+  }
+
+  getTitleAlignClass(oCol: OColumn) {
+    if (!this.autoAlignTitles || (Util.isDefined(oCol.definition) && Util.isDefined(oCol.definition.titleAlign))) {
+      return oCol.getTitleAlignClass();
+    }
+    let align;
+    switch (oCol.type) {
+      case 'image':
+      case 'date':
+      case 'action':
+      case 'boolean':
+        align = Codes.COLUMN_TITLE_ALIGN_CENTER;
+        break;
+      case 'currency':
+      case 'integer':
+      case 'real':
+      case 'percentage':
+        align = Codes.COLUMN_TITLE_ALIGN_END;
+        break;
+      case 'service':
+      default:
+        align = Codes.COLUMN_TITLE_ALIGN_START;
+        break;
+    }
+    return align;
   }
 }
 

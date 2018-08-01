@@ -146,7 +146,7 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
   public type: string;
   public attr: string;
   public title: string;
-  public titleAlign: string = Codes.DEFAULT_COLUMN_TITLE_ALIGN;
+  public titleAlign: string;
   public sqlType: string;
   protected _SQLType: number;
   protected _defaultSQLTypeKey: string = 'OTHER';
@@ -278,7 +278,7 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
 
   parseTitleAlign(): string {
     let align = (this.titleAlign || '').toLowerCase();
-    return Codes.AVAILABLE_COLUMN_TITLE_ALIGNS.indexOf(align) !== -1 ? align : Codes.DEFAULT_COLUMN_TITLE_ALIGN;
+    return Codes.AVAILABLE_COLUMN_TITLE_ALIGNS.indexOf(align) !== -1 ? align : undefined;
   }
 
   protected createRenderer() {

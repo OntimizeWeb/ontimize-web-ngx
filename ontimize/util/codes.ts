@@ -55,8 +55,10 @@ export class Codes {
   public static ICON_POSITION_LEFT = 'left';
   public static ICON_POSITION_RIGHT = 'right';
 
-  public static DEFAULT_COLUMN_TITLE_ALIGN = 'center';
-  public static AVAILABLE_COLUMN_TITLE_ALIGNS = ['start', 'center', 'end'];
+  public static COLUMN_TITLE_ALIGN_START = 'start';
+  public static COLUMN_TITLE_ALIGN_CENTER = 'center';
+  public static COLUMN_TITLE_ALIGN_END = 'end';
+  public static AVAILABLE_COLUMN_TITLE_ALIGNS = [Codes.COLUMN_TITLE_ALIGN_START, Codes.COLUMN_TITLE_ALIGN_CENTER, Codes.COLUMN_TITLE_ALIGN_END];
 
   static isDoubleClickMode(value: string): boolean {
     return Codes.DETAIL_MODE_DBLCLICK_VALUES.indexOf(value) !== -1;
