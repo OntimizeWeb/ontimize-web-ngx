@@ -7,7 +7,9 @@
 * **o-table cell editors**:
   * updating cell data in server ([360bfd0](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/360bfd0))
   * new `updateRecordOnEdit` and `showToastOnEdit` inputs and `onPostUpdateRecord` output added to all cell editors ('*OBaseTableCellEditor*' class) ([360bfd0](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/360bfd0))
-* **o-table**: new `updateRecord` method ([a528120](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a528120))
+* **o-table**:
+  * new `updateRecord` method ([a528120](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a528120))
+  * new `auto-align-titles` input ([1714a25](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1714a25))
 * **o-app-layout**: added modes `desktop` and `mobile` to app layout component [7617175](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7617175))
 
 ### BREAKING CHANGES
