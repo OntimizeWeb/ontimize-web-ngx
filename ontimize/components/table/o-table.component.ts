@@ -1813,6 +1813,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     this.oTableStorage.reset();
     this.initializeParams();
     this.parseVisibleColumns();
+    this._oTableOptions.columns.sort((a: OColumn, b: OColumn) => this.visibleColArray.indexOf(a.attr) - this.visibleColArray.indexOf(b.attr));
     this.insideTabBugWorkaround();
     this.onReinitialize.emit(null);
     this.clearFilters(false);
