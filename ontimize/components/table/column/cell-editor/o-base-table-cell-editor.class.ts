@@ -19,7 +19,8 @@ export class OBaseTableCellEditor implements OnInit {
   public static DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR = [
     'editionStarted',
     'editionCancelled',
-    'editionCommitted'
+    'editionCommitted',
+    'onPostUpdateRecord'
   ];
 
   protected translateService: OTranslateService;
