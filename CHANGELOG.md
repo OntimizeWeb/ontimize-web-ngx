@@ -10,9 +10,12 @@
 * **o-table**:
   * new `updateRecord` method ([a528120](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a528120))
   * new `auto-align-titles` input ([1714a25](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1714a25))
-* **o-app-layout**: added modes `desktop` and `mobile` to app layout component [7617175](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7617175))
-* **o-app-layout**: new input `show-language-selector` [c06bc24](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c06bc24))
+* **o-app-layout**:
+  * New input `mode` for selecting performance mode `desktop` or `mobile` ([7617175](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7617175))
+  * New input `sidenav-mode` for selecting the [material sidenav mode](https://material.angular.io/components/sidenav/overview#changing-the-sidenav-39-s-behavior) ([c9a787d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c9a787d))
+  * New input `show-language-selector` ([c06bc24](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c06bc24))
 * **o-app-header**: new input `show-language-selector` [c06bc24](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c06bc24))
+
 
 ### BREAKING CHANGES
 * **o-app-layout**: Interncal css classes changes:
