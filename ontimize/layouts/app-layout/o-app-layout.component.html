@@ -1,5 +1,5 @@
-<o-app-sidenav #appSidenav [opened]="sidenavOpened" [show-user-info]="showUserInfo" [show-toggle-button]="!showHeader" [opened-sidenav-image]="openedSidenavImg"
-  [closed-sidenav-image]="closedSidenavImg" [layout-mode]="_mode" [class.header-layout]="showHeader">
+<o-app-sidenav #appSidenav [sidenav-mode]="_sidenavMode" [opened]="sidenavOpened" [show-user-info]="showUserInfo" [show-toggle-button]="!showHeader"
+  [opened-sidenav-image]="openedSidenavImg" [closed-sidenav-image]="closedSidenavImg" [layout-mode]="_mode" [class.header-layout]="showHeader">
   <o-app-header *ngIf="showHeader" [show-user-info]="showUserInfo" [show-language-selector]="showLanguageSelector" [use-flag-icons]="useFlagIcons"
     (onSidenavToggle)="appSidenav.toggleSidenav()"></o-app-header>
   <div class="application-layout-content-wrapper" [class.header-layout]="showHeader">
