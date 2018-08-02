@@ -151,6 +151,11 @@
     &.selectable[dense].o-list-2-detail-buttons .mat-list-item-content {
       padding-right: 80px;
     }
+
+    .o-list-item.mat-card,
+    .o-list-item.mat-list-item {
+      margin: 6px 0;
+    }
   }
 
   .add-button {
