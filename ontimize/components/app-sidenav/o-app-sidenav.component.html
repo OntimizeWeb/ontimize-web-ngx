@@ -1,25 +1,25 @@
-<mat-sidenav-container class="o-app-sidenav-container" [class.opened]="sidenav.opened" [class.o-app-sidenav-mode-desktop]="_layoutMode==='desktop'"
-  [class.o-app-sidenav-mode-mobile]="_layoutMode!=='desktop'">
+<mat-sidenav-container class="o-app-sidenav-container" [class.opened]="sidenav.opened" [class.o-app-sidenav-mode-desktop]="(_layoutMode || 'desktop') === 'desktop'"
+  [class.o-app-sidenav-mode-mobile]="(_layoutMode || 'desktop')!=='desktop'">
 
-  <mat-sidenav #sidenav class="o-app-sidenav-sidenav o-scroll" [opened]="isSidenavOpened()" [mode]="'side'" [class.mat-drawer-opened]="sidenav.opened"
-    [class.mat-drawer-closed]="!sidenav.opened">
+  <mat-sidenav #sidenav class="o-app-sidenav-sidenav o-scroll" [opened]="isSidenavOpened()" [mode]="(_sidenavMode || ((_layoutMode || 'desktop') === 'desktop' ? 'side' : 'over'))"
+    [class.mat-drawer-opened]="sidenav.opened" [class.mat-drawer-closed]="!sidenav.opened">
 
     <div fxLayout="row" fxLayoutAlign="end" *ngIf="showToggleButton" class="sidenav-toggle-container">
       <mat-icon class="sidenav-toggle" (click)="toggleSidenav()" svgIcon="ontimize:menu">menu</mat-icon>
     </div>
 
-    <o-app-sidenav-image [opened-src]="openedSidenavImg" [closed-src]="closedSidenavImg">
-    </o-app-sidenav-image>
+    <o-app-sidenav-image [opened-src]="openedSidenavImg" [closed-src]="closedSidenavImg"> </o-app-sidenav-image>
 
     <nav *ngFor="let menuRootItem of menuRootArray">
 
       <ul *ngIf="appMenuService.getMenuItemType(menuRootItem) !== 'group'">
         <o-app-sidenav-menu-item *ngIf="menuRootItem['show-in-app-sidenav'] !== false" [menu-item]="menuRootItem" [menu-item-type]="appMenuService.getMenuItemType(menuRootItem)"
-          [sidenav-opened]="sidenav.opened">
+          [sidenav-opened]="sidenav.opened" (onClick)="onMenuItemClick($event)">
         </o-app-sidenav-menu-item>
       </ul>
 
-      <o-app-sidenav-menu-group [menu-group]="menuRootItem" [sidenav-opened]="sidenav.opened" *ngIf="appMenuService.getMenuItemType(menuRootItem) === 'group'">
+      <o-app-sidenav-menu-group [menu-group]="menuRootItem" [sidenav-opened]="sidenav.opened" *ngIf="appMenuService.getMenuItemType(menuRootItem) === 'group'"
+        (onItemClick)="onMenuItemClick($event)">
       </o-app-sidenav-menu-group>
     </nav>
   </mat-sidenav>

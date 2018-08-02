@@ -4,8 +4,8 @@ export var MAP = {
 
   'en': {
     'LANGUAGE': 'Language',
-    'LOCALE_en': 'English',
-    'LOCALE_es': 'Español',
+    'LOCALE_en': 'EN',
+    'LOCALE_es': 'ES',
     'USERNAME': 'Username',
     'PASSWORD': 'Password',
     'LOGIN': 'Login',
@@ -204,8 +204,8 @@ export var MAP = {
 
   'es': {
     'LANGUAGE': 'Idioma',
-    'LOCALE_en': 'Inglés',
-    'LOCALE_es': 'Español',
+    'LOCALE_en': 'EN',
+    'LOCALE_es': 'ES',
     'USERNAME': 'Usuario',
     'PASSWORD': 'Contraseña',
     'LOGIN': 'Entrar',

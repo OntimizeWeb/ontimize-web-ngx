@@ -10,8 +10,9 @@ import { OAppSidenavModule } from '../../components/app-sidenav/o-app-sidenav.co
 
 export const DEFAULT_INPUTS_O_APP_LAYOUT = [
   'mode',
+  'sidenavMode: sidenav-mode',
   'sidenavOpened: sidenav-opened',
-  'showHeader: show-header',
+  '_showHeader: show-header',
   'showUserInfo: show-user-info',
   'showLanguageSelector: show-language-selector',
   'useFlagIcons: use-flag-icons',
@@ -20,6 +21,9 @@ export const DEFAULT_INPUTS_O_APP_LAYOUT = [
 ];
 
 export const DEFAULT_OUTPUTS_O_APP_LAYOUT: any[] = [];
+
+export type OAppLayoutMode = 'mobile' | 'desktop';
+export type OSidenavMode = 'over' | 'push' | 'side';
 
 @Component({
   selector: 'o-app-layout',
@@ -31,13 +35,11 @@ export const DEFAULT_OUTPUTS_O_APP_LAYOUT: any[] = [];
 })
 export class OAppLayoutComponent {
 
-  public static defaultMode: string = 'desktop';
-  public static Modes: string[] = ['mobile', 'desktop'];
+  public static OAppLayoutModes: OAppLayoutMode[] = ['mobile', 'desktop'];
+  public static OSidenavModes: OSidenavMode[] = ['over', 'push', 'side'];
 
   @InputConverter()
   sidenavOpened: boolean = true;
-  @InputConverter()
-  showHeader: boolean = false;
   @InputConverter()
   showUserInfo: boolean = true;
   @InputConverter()
@@ -45,18 +47,43 @@ export class OAppLayoutComponent {
   @InputConverter()
   useFlagIcons: boolean = false;
 
-  get mode(): string {
-    return OAppLayoutComponent.Modes[this._mode];
+  get showHeader(): boolean {
+    return this._showHeader;
   }
-  set mode(val: string) {
-    let m = OAppLayoutComponent.Modes.find(e => e === val);
+  set showHeader(val: boolean) {
+    this._showHeader = val;
+  }
+  @InputConverter()
+  protected _showHeader: boolean;
+
+  get mode(): OAppLayoutMode {
+    return OAppLayoutComponent.OAppLayoutModes[this._mode];
+  }
+  set mode(val: OAppLayoutMode) {
+    let m = OAppLayoutComponent.OAppLayoutModes.find(e => e === val);
     if (Util.isDefined(m)) {
       this._mode = m;
+      if (this._mode === 'mobile' && !Util.isDefined(this.showHeader)) {
+        this.showHeader = true;
+      }
     } else {
       console.error('Invalid `o-app-layout` mode (' + val + ')');
     }
   }
-  protected _mode: string = OAppLayoutComponent.defaultMode;
+  protected _mode: OAppLayoutMode;
+
+  get sidenavMode(): OSidenavMode {
+    return OAppLayoutComponent.OSidenavModes[this._sidenavMode];
+  }
+  set sidenavMode(val: OSidenavMode) {
+    let m = OAppLayoutComponent.OSidenavModes.find(e => e === val);
+    if (Util.isDefined(m)) {
+      this._sidenavMode = m;
+    } else {
+      console.error('Invalid `o-app-layout` sidenav-mode (' + val + ')');
+    }
+  }
+  protected _sidenavMode: OSidenavMode;
 
   openedSidenavImg: string;
   closedSidenavImg: string;

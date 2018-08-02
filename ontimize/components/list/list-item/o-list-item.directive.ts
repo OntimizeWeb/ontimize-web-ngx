@@ -10,6 +10,7 @@ import { ObservableWrapper } from '../../../util/async';
   selector: 'mat-list-item[o-list-item], mat-card[o-list-item]',
   exportAs: 'olistitem',
   host: {
+    '[class.o-list-item]': 'true',
     '(click)': 'onItemClicked($event)',
     '(dblclick)': 'onItemDblClicked($event)'
   }

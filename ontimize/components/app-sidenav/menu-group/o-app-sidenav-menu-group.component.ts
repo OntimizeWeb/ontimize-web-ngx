@@ -1,20 +1,23 @@
-import { ElementRef, Injector, NgModule, Component, ViewEncapsulation, OnDestroy, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Injector, NgModule, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { Subscription } from 'rxjs/Subscription';
+
 import { Util } from '../../../utils';
 import { OSharedModule } from '../../../shared';
-import { AppMenuService, MenuGroup, OTranslateService } from '../../../services';
 import { InputConverter } from '../../../decorators';
-import { OAppSidenavMenuItemModule } from '../menu-item/o-app-sidenav-menu-item.component';
 import { OAppSidenavComponent } from '../o-app-sidenav.component';
+import { AppMenuService, MenuGroup, OTranslateService } from '../../../services';
+import { OAppSidenavMenuItemModule } from '../menu-item/o-app-sidenav-menu-item.component';
 
 export const DEFAULT_INPUTS_O_APP_SIDENAV_MENU_GROUP = [
   'menuGroup : menu-group',
   'sidenavOpened : sidenav-opened'
 ];
 
-export const DEFAULT_OUTPUTS_O_APP_SIDENAV_MENU_GROUP = [];
+export const DEFAULT_OUTPUTS_O_APP_SIDENAV_MENU_GROUP = [
+  'onItemClick'
+];
 
 @Component({
   selector: 'o-app-sidenav-menu-group',
@@ -34,8 +37,11 @@ export const DEFAULT_OUTPUTS_O_APP_SIDENAV_MENU_GROUP = [];
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class OAppSidenavMenuGroupComponent implements AfterViewInit, OnDestroy {
+
   public static DEFAULT_INPUTS_O_APP_SIDENAV_MENU_GROUP = DEFAULT_INPUTS_O_APP_SIDENAV_MENU_GROUP;
   public static DEFAULT_OUTPUTS_O_APP_SIDENAV_MENU_GROUP = DEFAULT_OUTPUTS_O_APP_SIDENAV_MENU_GROUP;
+
+  public onItemClick: EventEmitter<any> = new EventEmitter<any>();
 
   protected translateService: OTranslateService;
 
@@ -107,10 +113,15 @@ export class OAppSidenavMenuGroupComponent implements AfterViewInit, OnDestroy {
     }
     return result;
   }
+
+  onMenuItemClick(e: Event): void {
+    this.onItemClick.emit(e);
+  }
+
 }
 
 @NgModule({
-  imports: [CommonModule, OSharedModule, OAppSidenavMenuItemModule],
+  imports: [CommonModule, OAppSidenavMenuItemModule, OSharedModule],
   declarations: [OAppSidenavMenuGroupComponent],
   exports: [OAppSidenavMenuGroupComponent]
 })

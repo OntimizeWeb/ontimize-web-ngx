@@ -26,37 +26,21 @@
   position: relative;
   flex-direction: column;
 
+  .mat-toolbar.dense {
+    height: 48px;
+  }
+
   .o-list-content {
-    height: calc(100% - 64px); // total height - toolbar height
-  }
+    height: 100%;
 
-  mat-toolbar.dense {
-    min-height: 48px;
-
-    mat-toolbar-row {
-      height: 48px;
+    &.o-list-content-toolbar {
+      height: calc(100% - 64px); // total height - toolbar height
     }
-  }
 
-  .o-search {
-    position: relative;
-    height: 30px;
-
-    > .mat-icon {
-      position: absolute;
-      top: .15em;
-      left: .3em;
-      color: #8E0C39;
+    &.o-list-content-toolbar-dense {
+      height: calc(100% - 48px); // total height - toolbar height
     }
-  }
 
-  .o-search-input {
-    height: 25px;
-    width: 80%;
-    font-size: 15px;
-    border: 1px solid #8E0C39;
-    border-radius: 20px;
-    padding-left: 30px;
   }
 
   .o-list-title {
@@ -150,6 +134,11 @@
 
     &.selectable[dense].o-list-2-detail-buttons .mat-list-item-content {
       padding-right: 80px;
+    }
+
+    .o-list-item.mat-card,
+    .o-list-item.mat-list-item {
+      margin: 6px 0;
     }
   }
 
