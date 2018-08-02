@@ -1,6 +1,5 @@
 import { Component, ElementRef, EventEmitter, forwardRef, Inject, Injector, NgModule, Optional, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ValidatorFn } from '@angular/forms/src/directives/validators';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE, MatDateFormats, MatDatepicker, MatDatepickerInput, MatDatepickerInputEvent } from '@angular/material';
 import { Subscription } from 'rxjs/Subscription';
@@ -192,11 +191,6 @@ export class ODateInputComponent extends OFormDataComponent {
 
   get showClearButton(): boolean {
     return this.clearButton && !this.isReadOnly && !this.isDisabled && this.matInputRef.nativeElement.value;
-  }
-
-  resolveValidators(): ValidatorFn[] {
-    let validators: ValidatorFn[] = super.resolveValidators();
-    return validators;
   }
 
   open() {

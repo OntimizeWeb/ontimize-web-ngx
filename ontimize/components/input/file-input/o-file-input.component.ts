@@ -13,7 +13,7 @@ import {
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { ValidatorFn } from '@angular/forms/src/directives/validators';
+import { ValidatorFn, ValidationErrors } from '@angular/forms';
 
 import { OSharedModule } from '../../../shared';
 import { InputConverter } from '../../../decorators';
@@ -275,7 +275,7 @@ export class OFileInputComponent extends OFormDataComponent implements OnDestroy
     }
   }
 
-  protected filetypeValidator(control: FormControl) {
+  protected filetypeValidator(control: FormControl): ValidationErrors {
     if (control.value && control.value.length > 0 && this.acceptFileType) {
       let regex: RegExp = new RegExp(this.acceptFileType.replace(';', '|'));
       if (!this.files.every(file => file.type.match(regex) !== null || file.name.substr(file.name.lastIndexOf('.')).match(regex) !== null)) {
@@ -289,7 +289,7 @@ export class OFileInputComponent extends OFormDataComponent implements OnDestroy
     return {};
   }
 
-  protected maxFileSizeValidator(control: FormControl) {
+  protected maxFileSizeValidator(control: FormControl): ValidationErrors {
     if (control.value && control.value.length > 0 && this.maxFileSize) {
       if (!this.files.every(file => file.size < this.maxFileSize)) {
         return {
@@ -302,7 +302,7 @@ export class OFileInputComponent extends OFormDataComponent implements OnDestroy
     return {};
   }
 
-  protected maxFilesValidator(control: FormControl) {
+  protected maxFilesValidator(control: FormControl): ValidationErrors {
     if (control.value && control.value.length > 0 && this.multiple && this.maxFiles !== -1) {
       if (this.maxFiles < this.files.length) {
         return {
