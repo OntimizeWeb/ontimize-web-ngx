@@ -1,4 +1,4 @@
-import { FormControl } from '@angular/forms';
+import { FormControl, ValidationErrors } from '@angular/forms';
 
 const EMAIL_REGEXP = /[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?/;
 
@@ -13,7 +13,7 @@ export class OValidators {
   /**
    * Email validator
    */
-  static emailValidator(control: FormControl) {
+  static emailValidator(control: FormControl): ValidationErrors {
     if (control.value && control.value.length > 0 && !EMAIL_REGEXP.test(control.value)) {
       return { 'invalidEmailAddress': true };
     }
@@ -23,8 +23,7 @@ export class OValidators {
   /**
    * NIF validator
    */
-  static nifValidator(control: FormControl): any {
-
+  static nifValidator(control: FormControl): ValidationErrors {
     let newValue = control.value;
     let regExp = new RegExp(DNI_PATTERN + '|' + NIE_PATTERN);
 
@@ -56,6 +55,7 @@ export class OValidators {
         }
       }
     }
+    return undefined;
   }
 
 }
