@@ -254,12 +254,27 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
     return this.saveBtnEnabled;
   }
 
+  isRefreshBtnEnabled(): boolean {
+    return this.refreshBtnEnabled;
+  }
+
+  isInsertBtnEnabled(): boolean {
+    return this.insertBtnEnabled;
+  }
+
+  isEditBtnEnabled(): boolean {
+    return this.editBtnEnabled;
+  }
+
+  isDeleteBtnEnabled(): boolean {
+    return this.deleteBtnEnabled;
+  }
+
 }
 
 @NgModule({
-  declarations: [OFormToolbarComponent, OFormNavigationComponent],
-  imports: [OSharedModule, CommonModule],
-  exports: [OFormToolbarComponent, OFormNavigationComponent]
+  declarations: [OFormNavigationComponent, OFormToolbarComponent],
+  imports: [CommonModule, OSharedModule],
+  exports: [OFormNavigationComponent, OFormToolbarComponent]
 })
-export class OFormToolbarModule {
-}
+export class OFormToolbarModule { }

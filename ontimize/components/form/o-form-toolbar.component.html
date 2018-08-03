@@ -20,19 +20,19 @@
     </button>
 
     <ng-container *ngIf="initialMode">
-      <button mat-button (click)="onReload($event)" *ngIf="refreshBtnEnabled">
+      <button mat-button (click)="onReload($event)" *ngIf="isRefreshBtnEnabled">
         <mat-icon svgIcon="ontimize:autorenew"></mat-icon>
         <span *ngIf="showHeaderActionsText">{{ 'REFRESH' | oTranslate }}</span>
       </button>
-      <button mat-button (click)="onInsert($event)" *ngIf="insertBtnEnabled">
+      <button mat-button (click)="onInsert($event)" *ngIf="isInsertBtnEnabled">
         <mat-icon svgIcon="ontimize:add"></mat-icon>
         <span *ngIf="showHeaderActionsText">{{ 'ADD' | oTranslate }}</span>
       </button>
-      <button mat-button (click)="onEdit($event)" *ngIf="editBtnEnabled">
+      <button mat-button (click)="onEdit($event)" *ngIf="isEditBtnEnabled">
         <mat-icon svgIcon="ontimize:edit"></mat-icon>
         <span *ngIf="showHeaderActionsText">{{ 'EDIT' | oTranslate }}</span>
       </button>
-      <button mat-button (click)="onDelete($event)" *ngIf="deleteBtnEnabled">
+      <button mat-button (click)="onDelete($event)" *ngIf="isDeleteBtnEnabled">
         <mat-icon svgIcon="ontimize:delete"></mat-icon>
         <span *ngIf="showHeaderActionsText">{{ 'DELETE' | oTranslate }}</span>
       </button>
