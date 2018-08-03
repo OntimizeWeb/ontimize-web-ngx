@@ -18,11 +18,15 @@
 * New **o-validator** component that allows to add a custom validator to a `OFormDataComponent`. ([4e2f841](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4e2f841))
   * New inner **o-error** inner component for defining the error text of the possible validator errors ([4e2f841](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4e2f841))
 * **OFormDataComponent**:
- * new `validators` input ([#100](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/100)) ([4e2f841](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4e2f841))
- * support for using `o-validators` and `o-error` inner components ([#100](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/100)) ([a2e6bbe](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a2e6bbe))
+  * new `validators` input ([#100](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/100)) ([4e2f841](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4e2f841))
+  * support for using `o-validators` and `o-error` inner components ([#100](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/100)) ([a2e6bbe](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a2e6bbe))
+* **o-list**: new outputs added: `onItemDeleted`, `onListDataLoaded`, `onPaginatedListDataLoade` ([2f71849](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2f71849)).
 
 ### Bug Fixes
-* **o-table**: fixed error attribute `controls` does not show/hide the table tool bar [2632658](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2632658).
+* **o-table**: fixed error attribute `controls` does not show/hide the table tool bar ([2632658](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2632658)).
+* **o-list**: multiple errors fixed:
+  * Navigate to insert form when clicking the insert button ([2f71849](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2f71849)).
+  * Delete selected list items ([2f71849](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2f71849)).
 
 ### BREAKING CHANGES
 * **o-app-layout**: Interncal css classes changes:
