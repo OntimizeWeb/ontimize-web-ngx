@@ -1,9 +1,9 @@
-import { Injector, ElementRef, OnInit, OnDestroy, QueryList, ViewChildren, AfterViewInit, HostBinding, ContentChildren } from '@angular/core';
+import { Injector, ElementRef, OnInit, OnDestroy, QueryList, ViewChildren, AfterViewInit, HostBinding, ContentChildren, OnChanges, SimpleChange } from '@angular/core';
 import { FormControl, FormGroup, Validators, ValidatorFn } from '@angular/forms';
 import { MatSuffix } from '@angular/material';
 
 import { InputConverter } from '../decorators';
-import { SQLTypes } from '../utils';
+import { SQLTypes, Util } from '../utils';
 import { OBaseComponent, IComponent } from './o-component.class';
 import { OFormComponent } from './form/o-form.component';
 import { OFormValue, IFormValueOptions } from './form/OFormValue';
@@ -55,7 +55,7 @@ export const DEFAULT_INPUTS_O_FORM_DATA_COMPONENT = [
 ];
 
 export class OFormDataComponent extends OBaseComponent implements IFormDataComponent, IFormDataTypeComponent,
-  OnInit, AfterViewInit, OnDestroy {
+  OnInit, AfterViewInit, OnDestroy, OnChanges {
 
   /* Inputs */
   sqlType: string;
@@ -105,21 +105,32 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   }
 
   ngAfterViewInit(): void {
+    const self = this;
     if (this._matSuffixList) {
-      const self = this;
       this.setSuffixClass(this._matSuffixList.length);
       this._matSuffixList.changes.subscribe(() => {
         self.setSuffixClass(self._matSuffixList.length);
       });
     }
 
-    if (this.validatorChildren && this.validatorChildren.length) {
-      this.updateValidators();
+    if (this.validatorChildren) {
+      this.validatorChildren.changes.subscribe(() => {
+        self.updateValidators();
+      });
+      if (this.validatorChildren.length > 0) {
+        this.updateValidators();
+      }
     }
   }
 
   ngOnDestroy() {
     this.destroy();
+  }
+
+  ngOnChanges(changes: { [propName: string]: SimpleChange }) {
+    if (Util.isDefined(changes['angularValidatorsFn'])) {
+      this.updateValidators();
+    }
   }
 
   getFormGroup(): FormGroup {
@@ -199,6 +210,9 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
         emitModelToViewChange: false,
         emitEvent: false
       });
+      if (this._fControl.invalid) {
+        this._fControl.markAsTouched();
+      }
     }
   }
 
@@ -308,8 +322,12 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   }
 
   protected updateValidators() {
+    if (!this._fControl) {
+      return;
+    }
     const self = this;
     this._fControl.clearValidators();
+    this.errorsData = [];
     let validators = this.resolveValidators();
     this.validatorChildren.forEach((oValidator: OValidatorComponent) => {
       let validatorFunction: ValidatorFn = oValidator.getValidatorFn();

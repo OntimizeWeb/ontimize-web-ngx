@@ -78,7 +78,8 @@ export class OListPickerComponent extends OFormServiceComponent implements OnIni
     this.initialize();
   }
 
-  public ngOnChanges(changes: { [propName: string]: SimpleChange }) {
+  ngOnChanges(changes: { [propName: string]: SimpleChange }) {
+    super.ngOnChanges(changes);
     if (typeof (changes['staticData']) !== 'undefined') {
       this.cacheQueried = true;
       this.setDataArray(changes['staticData'].currentValue);
