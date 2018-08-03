@@ -2,7 +2,7 @@ import { AfterContentInit, Component, ContentChildren, ElementRef, EventEmitter,
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MatCheckbox } from '@angular/material';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
 import { Util, Codes } from '../../utils';
 import { OSharedModule } from '../../shared';
@@ -45,11 +45,16 @@ export const DEFAULT_INPUTS_O_LIST = [
   'odense : dense',
 
   // delete-button [no|yes]: show delete button when user select items. Default: yes.
-  'deleteButton: delete-button',
+  'deleteButton: delete-button'
 ];
 
 export const DEFAULT_OUTPUTS_O_LIST = [
-  'onInsertButtonClick'
+  'onClick',
+  'onDoubleClick',
+  'onInsertButtonClick',
+  'onItemDeleted',
+  'onListDataLoaded',
+  'onPaginatedListDataLoaded'
 ];
 
 export interface OListInitializationOptions {
@@ -101,9 +106,10 @@ export class OListComponent extends OServiceComponent implements OnInit, IList, 
   @ViewChild(OSearchInputComponent)
   searchInputComponent: OSearchInputComponent;
 
-  public mdClick: EventEmitter<any> = new EventEmitter();
-  public mdDblClick: EventEmitter<any> = new EventEmitter();
+  public onClick: EventEmitter<any> = new EventEmitter();
+  public onDoubleClick: EventEmitter<any> = new EventEmitter();
   public onInsertButtonClick: EventEmitter<any> = new EventEmitter();
+  public onItemDeleted: EventEmitter<any> = new EventEmitter();
   public onListDataLoaded: EventEmitter<any> = new EventEmitter();
   public onPaginatedListDataLoaded: EventEmitter<any> = new EventEmitter();
 
@@ -133,7 +139,7 @@ export class OListComponent extends OServiceComponent implements OnInit, IList, 
   }
 
   public onListItemClicked(onNext: (item: OListItemDirective) => void): Object {
-    return ObservableWrapper.subscribe(this.mdClick, onNext);
+    return ObservableWrapper.subscribe(this.onClick, onNext);
   }
 
   ngOnInit(): void {
@@ -249,7 +255,7 @@ export class OListComponent extends OServiceComponent implements OnInit, IList, 
     if (this.oenabled && this.detailMode === Codes.DETAIL_MODE_CLICK) {
       this.saveDataNavigationInLocalStorage();
       this.viewDetail(item.getItemData());
-      ObservableWrapper.callEmit(this.mdClick, item);
+      ObservableWrapper.callEmit(this.onClick, item);
     }
   }
 
@@ -257,7 +263,7 @@ export class OListComponent extends OServiceComponent implements OnInit, IList, 
     if (this.oenabled && Codes.isDoubleClickMode(this.detailMode)) {
       this.saveDataNavigationInLocalStorage();
       this.viewDetail(item.getItemData());
-      ObservableWrapper.callEmit(this.mdDblClick, item);
+      ObservableWrapper.callEmit(this.onDoubleClick, item);
     }
   }
 
@@ -473,38 +479,32 @@ export class OListComponent extends OServiceComponent implements OnInit, IList, 
         if (res === true) {
           if (this.dataService && (this.deleteMethod in this.dataService) && this.entity && (this.keysArray.length > 0)) {
             let filters = ServiceUtils.getArrayProperties(this.selectedItems, this.keysArray);
-
-
-            let observable = (Observable as any).from(filters)
-              .map(kv => this.dataService[this.deleteMethod](kv, this.entity)).mergeAll();
-            observable.subscribe(
-              res => {
-                console.log('[OList.remove]: response', res);
-              },
-              error => {
-                this.dialogService.alert('ERROR', 'MESSAGES.ERROR_DELETE');
-                console.log('[OList.remove]: error', error);
-              },
-              () => {
-                this.queryData(this.parentItem);
-              }
-            );
+            Observable.merge(filters.map((kv => this.dataService[this.deleteMethod](kv, this.entity)))).subscribe(obs => obs.subscribe(res => {
+              console.log('[OList.remove]: response', res);
+              ObservableWrapper.callEmit(this.onItemDeleted, this.selectedItems);
+            }, error => {
+              this.dialogService.alert('ERROR', 'MESSAGES.ERROR_DELETE');
+              console.log('[OList.remove]: error', error);
+            }, () => {
+              console.log('[OList.remove]: success');
+              this.reloadData();
+            }));
           } else {
             this.deleteLocalItems();
           }
         } else if (clearSelectedItems) {
-          this.selectedItems = [];
+          this.clearSelection();
         }
       });
   }
 
-  add() {
-    this.onInsertButtonClick.emit();
-    let route = this.getRouteOfSelectedRow(undefined, 'new');
-    if (route.length > 0) {
-      this.saveDataNavigationInLocalStorage();
-      this.router.navigate(route, { relativeTo: this.actRoute });
-    }
+  clearSelection() {
+    this.selectedItems = [];
+  }
+
+  add(e?: Event) {
+    this.onInsertButtonClick.emit(e);
+    super.insertDetail();
   }
 
   hasTitle(): boolean {

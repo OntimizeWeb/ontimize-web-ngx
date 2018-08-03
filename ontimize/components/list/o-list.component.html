@@ -26,10 +26,10 @@
       </mat-list-item>
       <ng-content></ng-content>
     </mat-list>
-    <button *ngIf="insertButton && odense" mat-mini-fab (click)="add()" class="add-button">
+    <button *ngIf="insertButton && odense" mat-mini-fab (click)="add($event)" class="add-button">
       <mat-icon svgIcon="ontimize:add"></mat-icon>
     </button>
-    <button *ngIf="insertButton && !odense" mat-fab (click)="add()" class="add-button">
+    <button *ngIf="insertButton && !odense" mat-fab (click)="add($event)" class="add-button">
       <mat-icon svgIcon="ontimize:add"></mat-icon>
     </button>
   </div>
