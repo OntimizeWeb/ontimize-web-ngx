@@ -8,10 +8,9 @@
         <ng-content select="o-table-button"></ng-content>
         <o-table-button *ngIf="showDeleteButton" (onClick)="remove()" label="TABLE.BUTTONS.DELETE" svg-icon="ontimize:delete"></o-table-button>
       </div>
-      <div *ngIf="showTitle" class="table-title">
-        {{ title | oTranslate }}
+      <div fxLayout fxFlex>
+        <span *ngIf="showTitle" class="table-title" fxFlex>{{ title | oTranslate }}</span>
       </div>
-      <span class="fill-remaining"></span>
       <o-table-quickfilter *ngIf="quickFilter" (onChange)="reloadPaginatedDataFromStart()"></o-table-quickfilter>
       <button *ngIf="showTableMenuButton" mat-icon-button class="o-table-menu-button" [matMenuTriggerFor]="menu">
         <mat-icon svgIcon="ontimize:more_vert"></mat-icon>

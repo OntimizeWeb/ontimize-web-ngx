@@ -3,10 +3,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { Codes, Util } from '../utils';
 import { InputConverter } from '../decorators';
-import { AuthGuardService } from '../services';
 import { OFormValue } from './form/OFormValue';
 import { OFilterBuilderComponent } from '../components';
 import { OFormComponent } from './form/o-form.component';
+import { AuthGuardService, OTranslateService } from '../services';
 import { OListInitializationOptions } from './list/o-list.component';
 import { OTableInitializationOptions } from './table/o-table.component';
 import { OFormLayoutManagerComponent } from '../layouts/form-layout/o-form-layout-manager.component';
@@ -73,9 +73,19 @@ export class OServiceComponent extends OServiceBaseComponent {
   public static DEFAULT_INPUTS_O_SERVICE_COMPONENT = DEFAULT_INPUTS_O_SERVICE_COMPONENT;
 
   protected authGuardService: AuthGuardService;
+  protected translateService: OTranslateService;
 
   /* inputs variables */
-  title: string;
+  // title: string;
+  set title(val: string) {
+    this._title = val;
+  }
+  get title() {
+    if (Util.isDefined(this._title)) {
+      return this.translateService.get(this._title);
+    }
+    return this._title;
+  }
   protected _title: string;
   protected cssclass: string;
   @InputConverter()
@@ -124,6 +134,7 @@ export class OServiceComponent extends OServiceBaseComponent {
     this.router = this.injector.get(Router);
     this.actRoute = this.injector.get(ActivatedRoute);
     this.authGuardService = this.injector.get(AuthGuardService);
+    this.translateService = this.injector.get(OTranslateService);
     try {
       this.formLayoutManager = this.injector.get(OFormLayoutManagerComponent);
     } catch (e) {
@@ -133,9 +144,6 @@ export class OServiceComponent extends OServiceBaseComponent {
 
   initialize(): void {
     super.initialize();
-    if (Util.isDefined(this._title)) {
-      this.title = this.translateService.get(this._title);
-    }
     this.authGuardService.getPermissions(this.router.url, this.oattr).then(permissions => {
       if (Util.isDefined(permissions)) {
         if (this.ovisible && permissions.visible === false) {
@@ -187,12 +195,6 @@ export class OServiceComponent extends OServiceBaseComponent {
 
   clearSelection() {
     this.selectedItems = [];
-  }
-
-  onLanguageChangeCallback(res: any) {
-    if (typeof (this._title) !== 'undefined') {
-      this.title = this.translateService.get(this._title);
-    }
   }
 
   viewDetail(item: any): void {
