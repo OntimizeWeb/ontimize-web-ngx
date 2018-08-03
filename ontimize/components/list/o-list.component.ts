@@ -49,7 +49,6 @@ export const DEFAULT_INPUTS_O_LIST = [
 ];
 
 export const DEFAULT_OUTPUTS_O_LIST = [
-  'onChange',
   'onInsertButtonClick'
 ];
 
