@@ -21,6 +21,9 @@
  * new `validators` input ([4e2f841](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4e2f841))
  * support for using `o-validators` and `o-error` inner components ([a2e6bbe](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a2e6bbe))
 
+### Bug Fixes
+* **o-table**: fixed error attribute `controls` does not show/hide the table tool bar [2632658](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2632658).
+
 ### BREAKING CHANGES
 * **o-app-layout**: Interncal css classes changes:
   * All internal css classes starting with `application-sidenav` has changed to `o-app-sidenav`.
