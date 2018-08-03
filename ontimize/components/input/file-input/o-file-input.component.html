@@ -14,6 +14,7 @@
     <mat-error *ngIf="hasError('fileType')">{{ 'FORM_VALIDATION.FILE_TYPE' | oTranslate}} ({{ getErrorValue('fileType', 'allowedFileTypes') }})</mat-error>
     <mat-error *ngIf="hasError('fileSize')">{{ 'FORM_VALIDATION.FILE_MAXSIZE' | oTranslate }}: {{ getErrorValue('fileSize', 'maxFileSize') }} bytes</mat-error>
     <mat-error *ngIf="hasError('numFile')">{{ 'FORM_VALIDATION.FILE_MAXNUM' | oTranslate }}: {{ getErrorValue('numFile', 'maxFiles') }}</mat-error>
+    <mat-error *ngFor="let oError of getActiveOErrors()"> {{ oError.text | oTranslate }} </mat-error>
   </mat-form-field>
   <input #inputFile type="file" id="{{getAttribute()+'-file-input'}}" [attr.accept]="acceptFileType ? acceptFileType.replace(';',',') : null"
     (change)="fileSelected($event)" hidden="true" [attr.multiple]="multiple ? '' : null">

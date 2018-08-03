@@ -11,5 +11,6 @@
     <mat-error *ngIf="hasError('required')">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</mat-error>
     <mat-error *ngIf="hasError('invalidNIF')">{{ 'FORM_VALIDATION.NIF_FORMAT' | oTranslate}}</mat-error>
     <mat-error *ngIf="hasError('invalidNIFLetter')">{{ 'FORM_VALIDATION.DNI_LETTER' | oTranslate}}</mat-error>
+    <mat-error *ngFor="let oError of getActiveOErrors()"> {{ oError.text | oTranslate }} </mat-error>
   </mat-form-field>
 </div>

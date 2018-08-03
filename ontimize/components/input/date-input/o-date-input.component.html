@@ -17,5 +17,6 @@
     <mat-error *ngIf="hasError('matDatepickerFilter')">{{ 'FORM_VALIDATION.DATE_FILTER' | oTranslate }}</mat-error>
     <mat-error *ngIf="hasError('matDatepickerMin')">{{ 'FORM_VALIDATION.DATE_MIN' | oTranslate }} {{ minDateString }}</mat-error>
     <mat-error *ngIf="hasError('matDatepickerMax')">{{ 'FORM_VALIDATION.DATE_MAX' | oTranslate }} {{ maxDateString }}</mat-error>
+    <mat-error *ngFor="let oError of getActiveOErrors()"> {{ oError.text | oTranslate }} </mat-error>
   </mat-form-field>
 </div>

@@ -9,7 +9,6 @@ import { OSharedModule } from '../../../shared';
 import { InputConverter } from '../../../decorators';
 import { OFormComponent } from '../../form/o-form.component';
 import {
-  OTextInputModule,
   OTextInputComponent,
   DEFAULT_INPUTS_O_TEXT_INPUT,
   DEFAULT_OUTPUTS_O_TEXT_INPUT
@@ -62,8 +61,8 @@ export class OTextareaInputComponent extends OTextInputComponent {
 
 @NgModule({
   declarations: [OTextareaInputComponent],
-  imports: [OSharedModule, CommonModule, OTextInputModule],
-  exports: [OTextareaInputComponent, OTextInputModule]
+  imports: [OSharedModule, CommonModule],
+  exports: [OTextareaInputComponent]
 })
 export class OTextareaInputModule {
 }
