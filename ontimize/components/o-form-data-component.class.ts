@@ -1,13 +1,13 @@
-import { Injector, ElementRef, OnInit, OnDestroy, QueryList, ViewChildren, AfterViewInit, HostBinding } from '@angular/core';
+import { Injector, ElementRef, OnInit, OnDestroy, QueryList, ViewChildren, AfterViewInit, HostBinding, ContentChildren } from '@angular/core';
 import { FormControl, FormGroup, Validators, ValidatorFn } from '@angular/forms';
 import { MatSuffix } from '@angular/material';
 
 import { InputConverter } from '../decorators';
 import { SQLTypes } from '../utils';
-
 import { OBaseComponent, IComponent } from './o-component.class';
 import { OFormComponent } from './form/o-form.component';
 import { OFormValue, IFormValueOptions } from './form/OFormValue';
+import { OValidatorComponent } from './input/validation/o-validator.component';
 
 export interface IMultipleSelection extends IComponent {
   getSelectedItems(): Array<any>;
@@ -30,6 +30,11 @@ export interface IFormDataComponent extends IFormControlComponent {
   isAutomaticRegistering(): boolean;
 }
 
+export interface IErrorData {
+  name: string;
+  text: string;
+}
+
 export const DEFAULT_INPUTS_O_FORM_DATA_COMPONENT = [
   'oattr: attr',
   'olabel: label',
@@ -45,7 +50,8 @@ export const DEFAULT_INPUTS_O_FORM_DATA_COMPONENT = [
   'sqlType: sql-type',
   'width',
   'readOnly: read-only',
-  'clearButton: clear-button'
+  'clearButton: clear-button',
+  'angularValidatorsFn: validators'
 ];
 
 export class OFormDataComponent extends OBaseComponent implements IFormDataComponent, IFormDataTypeComponent,
@@ -60,6 +66,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   width: string;
   @InputConverter()
   clearButton: boolean = false;
+  angularValidatorsFn: ValidatorFn[] = [];
 
   @HostBinding('style.width')
   get hostWidth() {
@@ -79,6 +86,10 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   protected _matSuffixList: QueryList<MatSuffix>;
   matSuffixClass;
 
+  protected errorsData: IErrorData[] = [];
+  @ContentChildren(OValidatorComponent)
+  protected validatorChildren: QueryList<OValidatorComponent>;
+
   constructor(
     form: OFormComponent,
     elRef: ElementRef,
@@ -95,10 +106,15 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
 
   ngAfterViewInit(): void {
     if (this._matSuffixList) {
+      const self = this;
       this.setSuffixClass(this._matSuffixList.length);
       this._matSuffixList.changes.subscribe(() => {
-        this.setSuffixClass(this._matSuffixList.length);
+        self.setSuffixClass(self._matSuffixList.length);
       });
+    }
+
+    if (this.validatorChildren && this.validatorChildren.length) {
+      this.updateValidators();
     }
   }
 
@@ -120,6 +136,10 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
 
   getErrorValue(error: string, prop: string): string {
     return this._fControl && this._fControl.hasError(error) ? this._fControl.getError(error)[prop] || '' : '';
+  }
+
+  getActiveOErrors(): IErrorData[] {
+    return this.errorsData.filter((item: IErrorData) => this.hasError(item.name));
   }
 
   initialize() {
@@ -241,8 +261,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   }
 
   resolveValidators(): ValidatorFn[] {
-    let validators: ValidatorFn[] = [];
-
+    let validators: ValidatorFn[] = this.angularValidatorsFn;
     if (this.orequired) {
       validators.push(Validators.required);
     }
@@ -286,5 +305,20 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
 
   get hasCustomWidth(): boolean {
     return this.width !== undefined;
+  }
+
+  protected updateValidators() {
+    const self = this;
+    this._fControl.clearValidators();
+    let validators = this.resolveValidators();
+    this.validatorChildren.forEach((oValidator: OValidatorComponent) => {
+      let validatorFunction: ValidatorFn = oValidator.getValidatorFn();
+      if (validatorFunction) {
+        validators.push(validatorFunction);
+      }
+      let errorsData: IErrorData[] = oValidator.getErrorsData();
+      self.errorsData.push(...errorsData);
+    });
+    this._fControl.setValidators(validators);
   }
 }
