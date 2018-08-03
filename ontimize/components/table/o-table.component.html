@@ -1,6 +1,6 @@
 <div class="expandable-container" [style.display]="isVisible()? '' : 'none'">
   <div class="o-table-container" fxLayout="column" fxLayoutAlign="start stretch" [class.tab-container]="hasTabGroupChangeSubscription()">
-    <div #tableToolbar class="toolbar" fxLayout="row" fxLayoutAlign="space-between center">
+    <div #tableToolbar *ngIf="hasControls()" class="toolbar" fxLayout="row" fxLayoutAlign="space-between center">
       <div class="buttons">
         <o-table-button *ngIf="insertButton" (onClick)="add()" label="TABLE.BUTTONS.ADD" svg-icon="ontimize:add"> </o-table-button>
         <o-table-button *ngIf="refreshButton" (onClick)="reloadData()" label="TABLE.BUTTONS.REFRESH" svg-icon="ontimize:autorenew">
