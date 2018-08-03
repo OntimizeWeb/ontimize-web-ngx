@@ -210,6 +210,9 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
         emitModelToViewChange: false,
         emitEvent: false
       });
+      if (this._fControl.invalid) {
+        this._fControl.markAsTouched();
+      }
     }
   }
 
