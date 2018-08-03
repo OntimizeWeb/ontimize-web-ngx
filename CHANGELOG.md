@@ -14,8 +14,12 @@
   * New input `mode` for selecting performance mode `desktop` or `mobile` ([7617175](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7617175))
   * New input `sidenav-mode` for selecting the [material sidenav mode](https://material.angular.io/components/sidenav/overview#changing-the-sidenav-39-s-behavior) ([c9a787d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c9a787d))
   * New input `show-language-selector` ([c06bc24](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c06bc24))
-* **o-app-header**: new input `show-language-selector` [c06bc24](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c06bc24))
-
+* **o-app-header**: new input `show-language-selector` ([c06bc24](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c06bc24))
+* New **o-validator** component that allows to add a custom validator to a `OFormDataComponent`. ([4e2f841](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4e2f841))
+  * New inner **o-error** inner component for defining the error text of the possible validator errors ([4e2f841](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4e2f841))
+* **OFormDataComponent**:
+ * new `validators` input ([4e2f841](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4e2f841))
+ * support for using `o-validators` and `o-error` inner components ([a2e6bbe](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a2e6bbe))
 
 ### BREAKING CHANGES
 * **o-app-layout**: Interncal css classes changes:
