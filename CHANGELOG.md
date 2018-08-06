@@ -21,6 +21,7 @@
   * new `validators` input ([#100](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/100)) ([4e2f841](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4e2f841))
   * support for using `o-validators` and `o-error` inner components ([#100](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/100)) ([a2e6bbe](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a2e6bbe))
 * **o-list**: new outputs added: `onItemDeleted`, `onListDataLoaded`, `onPaginatedListDataLoade` ([2f71849](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2f71849)).
+* **o-list-item-card**: new input `show-image` ([ed89b6b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ed89b6b)).
 
 ### Bug Fixes
 * **o-table, o-list, o-tree**: fixed error when querying data with parent keys and no defined values for some of those parent keys ([0548c8e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0548c8e)).
