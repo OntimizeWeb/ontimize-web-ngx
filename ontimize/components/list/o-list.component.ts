@@ -474,14 +474,15 @@ export class OListComponent extends OServiceComponent implements OnInit, IList, 
   }
 
   remove(clearSelectedItems: boolean = false) {
-    this.dialogService.confirm('CONFIRM', 'MESSAGES.CONFIRM_DELETE').then(
-      res => {
+    let selectedItems = this.getSelectedItems();
+    if (selectedItems.length > 0) {
+      this.dialogService.confirm('CONFIRM', 'MESSAGES.CONFIRM_DELETE').then(res => {
         if (res === true) {
           if (this.dataService && (this.deleteMethod in this.dataService) && this.entity && (this.keysArray.length > 0)) {
-            let filters = ServiceUtils.getArrayProperties(this.selectedItems, this.keysArray);
+            let filters = ServiceUtils.getArrayProperties(selectedItems, this.keysArray);
             Observable.merge(filters.map((kv => this.dataService[this.deleteMethod](kv, this.entity)))).subscribe(obs => obs.subscribe(res => {
               console.log('[OList.remove]: response', res);
-              ObservableWrapper.callEmit(this.onItemDeleted, this.selectedItems);
+              ObservableWrapper.callEmit(this.onItemDeleted, selectedItems);
             }, error => {
               this.dialogService.alert('ERROR', 'MESSAGES.ERROR_DELETE');
               console.log('[OList.remove]: error', error);
@@ -496,6 +497,7 @@ export class OListComponent extends OServiceComponent implements OnInit, IList, 
           this.clearSelection();
         }
       });
+    }
   }
 
   clearSelection() {

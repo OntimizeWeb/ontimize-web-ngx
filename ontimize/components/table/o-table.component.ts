@@ -1134,14 +1134,15 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   remove(clearSelectedItems: boolean = false) {
-    if ((this.keysArray.length > 0) && !this.selection.isEmpty()) {
+    let selectedItems = this.getSelectedItems();
+    if (selectedItems.length > 0) {
       this.dialogService.confirm('CONFIRM', 'MESSAGES.CONFIRM_DELETE').then(res => {
         if (res === true) {
-          if (this.dataService && (this.deleteMethod in this.dataService) && this.entity) {
-            let filters = ServiceUtils.getArrayProperties(this.selection.selected, this.keysArray);
+          if (this.dataService && (this.deleteMethod in this.dataService) && this.entity && (this.keysArray.length > 0)) {
+            let filters = ServiceUtils.getArrayProperties(selectedItems, this.keysArray);
             this.daoTable.removeQuery(filters).subscribe(res => {
               console.log('[OTable.remove]: response', res);
-              ObservableWrapper.callEmit(this.onRowDeleted, this.selection.selected);
+              ObservableWrapper.callEmit(this.onRowDeleted, selectedItems);
             }, error => {
               this.showDialogError(error, 'MESSAGES.ERROR_DELETE');
               console.log('[OTable.remove]: error', error);
@@ -1150,14 +1151,12 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
               this.reloadData();
             });
           } else {
-            // remove local
             this.deleteLocalItems();
           }
         } else if (clearSelectedItems) {
           this.clearSelection();
         }
-      }
-      );
+      });
     }
   }
 
