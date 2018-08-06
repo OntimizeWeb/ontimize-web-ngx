@@ -25,7 +25,9 @@
 
 ### Bug Fixes
 * **o-table, o-list, o-tree**: fixed error when querying data with parent keys and no defined values for some of those parent keys ([0548c8e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0548c8e)).
-* **o-table**: fixed error attribute `controls` does not show/hide the table tool bar ([2632658](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2632658)).
+* **o-table**:
+  * fixed error attribute `controls` does not show/hide the table tool bar ([2632658](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2632658)).
+  * fixed remove method ([3870b4f](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3870b4f)).
 * **o-list**: multiple errors fixed:
   * Navigate to insert form when clicking the insert button ([2f71849](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2f71849)).
   * Delete selected list items ([2f71849](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2f71849)).
