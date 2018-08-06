@@ -1134,12 +1134,11 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   remove(clearSelectedItems: boolean = false) {
-    let selectedItems = this.getSelectedItems();
-    if ((this.keysArray.length > 0) && (selectedItems.length > 0)) {
+    if ((this.keysArray.length > 0) && !this.selection.isEmpty()) {
       this.dialogService.confirm('CONFIRM', 'MESSAGES.CONFIRM_DELETE').then(res => {
         if (res === true) {
-          if (this.dataService && (this.deleteMethod in this.dataService) && this.entity && (this.keysArray.length > 0)) {
-            let filters = ServiceUtils.getArrayProperties(selectedItems, this.keysArray);
+          if (this.dataService && (this.deleteMethod in this.dataService) && this.entity) {
+            let filters = ServiceUtils.getArrayProperties(this.selection.selected, this.keysArray);
             this.daoTable.removeQuery(filters).subscribe(res => {
               console.log('[OTable.remove]: response', res);
               ObservableWrapper.callEmit(this.onRowDeleted, this.selection.selected);
@@ -1151,12 +1150,14 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
               this.reloadData();
             });
           } else {
+            // remove local
             this.deleteLocalItems();
           }
         } else if (clearSelectedItems) {
           this.clearSelection();
         }
-      });
+      }
+      );
     }
   }
 
@@ -1858,7 +1859,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   getTitleAlignClass(oCol: OColumn) {
     let align;
     let hasTitleAlign = Util.isDefined(oCol.definition) && Util.isDefined(oCol.definition.titleAlign);
-    let autoAlign = this.autoAlignTitles || (hasTitleAlign && oCol.definition.titleAlign === Codes.COLUMN_TITLE_ALIGN_AUTO);
+    let autoAlign = (this.autoAlignTitles && !hasTitleAlign) || (hasTitleAlign && oCol.definition.titleAlign === Codes.COLUMN_TITLE_ALIGN_AUTO);
     if (!autoAlign) {
       return oCol.getTitleAlignClass();
     }

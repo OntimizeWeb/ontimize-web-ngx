@@ -474,13 +474,12 @@ export class OListComponent extends OServiceComponent implements OnInit, IList, 
   }
 
   remove(clearSelectedItems: boolean = false) {
-    let selectedItems = this.getSelectedItems();
-    if (selectedItems.length > 0) {
-      this.dialogService.confirm('CONFIRM', 'MESSAGES.CONFIRM_DELETE').then(res => {
+    this.dialogService.confirm('CONFIRM', 'MESSAGES.CONFIRM_DELETE').then(
+      res => {
         if (res === true) {
           if (this.dataService && (this.deleteMethod in this.dataService) && this.entity && (this.keysArray.length > 0)) {
-            let filters = ServiceUtils.getArrayProperties(selectedItems, this.keysArray);
-            Observable.merge(...filters.map((kv => this.dataService[this.deleteMethod](kv, this.entity)))).subscribe(res => {
+            let filters = ServiceUtils.getArrayProperties(this.selectedItems, this.keysArray);
+            Observable.merge(filters.map((kv => this.dataService[this.deleteMethod](kv, this.entity)))).subscribe(obs => obs.subscribe(res => {
               console.log('[OList.remove]: response', res);
               ObservableWrapper.callEmit(this.onItemDeleted, this.selectedItems);
             }, error => {
@@ -489,7 +488,7 @@ export class OListComponent extends OServiceComponent implements OnInit, IList, 
             }, () => {
               console.log('[OList.remove]: success');
               this.reloadData();
-            });
+            }));
           } else {
             this.deleteLocalItems();
           }
@@ -497,7 +496,6 @@ export class OListComponent extends OServiceComponent implements OnInit, IList, 
           this.clearSelection();
         }
       });
-    }
   }
 
   clearSelection() {
