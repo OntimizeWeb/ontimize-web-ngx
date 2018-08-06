@@ -275,7 +275,8 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
     }
     parentItem = ServiceUtils.getParentItemFromForm(parentItem, this._pKeysEquiv, this.form);
 
-    if (((Object.keys(this._pKeysEquiv).length > 0) && parentItem === undefined) && !this.queryWithNullParentKeys) {
+    // if (((Object.keys(this._pKeysEquiv).length > 0) && parentItem === undefined) && !this.queryWithNullParentKeys) {
+    if (!this.checkQueryReadyParentKeys(parentItem) && !this.queryWithNullParentKeys) {
       this.setData([], []);
     } else {
       let filter = ServiceUtils.getFilterUsingParentKeys(parentItem, this._pKeysEquiv);
@@ -312,6 +313,15 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
         }
       });
     }
+  }
+
+  protected checkQueryReadyParentKeys(parentItem): boolean {
+    let pkKeys = Object.keys(this._pKeysEquiv);
+    if ((pkKeys.length > 0) && Util.isDefined(parentItem)) {
+      let piKeys = Object.keys(parentItem);
+      return pkKeys.every(a => piKeys.indexOf(a) !== -1);
+    }
+    return true;
   }
 
   reloadData() {
