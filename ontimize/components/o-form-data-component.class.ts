@@ -1,7 +1,7 @@
 import { Injector, ElementRef, OnInit, OnDestroy, QueryList, ViewChildren, AfterViewInit, HostBinding, ContentChildren, OnChanges, SimpleChange } from '@angular/core';
 import { FormControl, FormGroup, Validators, ValidatorFn } from '@angular/forms';
 import { MatSuffix } from '@angular/material';
-
+import { Subscription } from 'rxjs/Subscription';
 import { InputConverter } from '../decorators';
 import { SQLTypes, Util } from '../utils';
 import { OBaseComponent, IComponent } from './o-component.class';
@@ -82,11 +82,13 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   protected elRef: ElementRef;
   protected form: OFormComponent;
 
+  protected matSuffixSubscription: Subscription;
   @ViewChildren(MatSuffix)
   protected _matSuffixList: QueryList<MatSuffix>;
   matSuffixClass;
 
   protected errorsData: IErrorData[] = [];
+  protected validatorsSubscription: Subscription;
   @ContentChildren(OValidatorComponent)
   protected validatorChildren: QueryList<OValidatorComponent>;
 
@@ -108,13 +110,13 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     const self = this;
     if (this._matSuffixList) {
       this.setSuffixClass(this._matSuffixList.length);
-      this._matSuffixList.changes.subscribe(() => {
+      this.matSuffixSubscription = this._matSuffixList.changes.subscribe(() => {
         self.setSuffixClass(self._matSuffixList.length);
       });
     }
 
     if (this.validatorChildren) {
-      this.validatorChildren.changes.subscribe(() => {
+      this.validatorsSubscription = this.validatorChildren.changes.subscribe(() => {
         self.updateValidators();
       });
       if (this.validatorChildren.length > 0) {
@@ -181,6 +183,12 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
 
   destroy() {
     this.unregisterFormListeners();
+    if (this.matSuffixSubscription) {
+      this.matSuffixSubscription.unsubscribe();
+    }
+    if (this.validatorsSubscription) {
+      this.validatorsSubscription.unsubscribe();
+    }
   }
 
   registerFormListeners() {
