@@ -1,8 +1,8 @@
 <div [formGroup]="getFormGroup()" [matTooltip]="tooltip" [matTooltipPosition]="tooltipPosition" [matTooltipShowDelay]="tooltipShowDelay">
   <mat-form-field [class.custom-width]="hasCustomWidth" [class.icon-field]="showClearButton" fxFlexFill>
-    <input matInput [type]="inputType" [attr.id]="getAttribute()" [id]="getAttribute()" [formControlName]="getAttribute()" [placeholder]="placeHolder"
-      [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)" (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)"
-      [readonly]="isReadOnly" [min]="min" [max]="max" [step]="step" [required]="isRequired">
+    <input matInput [type]="inputType" [id]="getAttribute()" [formControlName]="getAttribute()" [placeholder]="placeHolder" [ngModel]="getValue()"
+      (ngModelChange)="innerOnChange($event)" (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)" [readonly]="isReadOnly"
+      [min]="min" [max]="max" [step]="step" [required]="isRequired">
     <button *ngIf="showClearButton" matSuffix mat-icon-button (click)="clearValue()">
       <mat-icon svgIcon="ontimize:close"></mat-icon>
     </button>

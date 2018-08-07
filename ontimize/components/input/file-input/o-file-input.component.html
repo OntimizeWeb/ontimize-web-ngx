@@ -2,8 +2,8 @@
   [matTooltipShowDelay]="tooltipShowDelay">
   <mat-form-field [class.custom-width]="hasCustomWidth" class="icon-field" (click)="isDisabled || isReadOnly ? null : inputFile.click()"
     fxFill>
-    <input #inputShowValue matInput type="text" [attr.id]="getAttribute()" [id]="getAttribute()" [formControlName]="getAttribute()"
-      [placeholder]="placeHolder" [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)" [required]="isRequired" readonly>
+    <input #inputShowValue matInput type="text" [id]="getAttribute()" [formControlName]="getAttribute()" [placeholder]="placeHolder"
+      [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)" [required]="isRequired" readonly>
     <button *ngIf="showClearButton" matSuffix mat-icon-button (click)="onClickClear($event)">
       <mat-icon svgIcon="ontimize:close"></mat-icon>
     </button>
