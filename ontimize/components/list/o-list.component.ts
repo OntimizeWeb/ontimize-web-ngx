@@ -500,10 +500,6 @@ export class OListComponent extends OServiceComponent implements OnInit, IList, 
     }
   }
 
-  clearSelection() {
-    this.selectedItems = [];
-  }
-
   add(e?: Event) {
     this.onInsertButtonClick.emit(e);
     super.insertDetail();

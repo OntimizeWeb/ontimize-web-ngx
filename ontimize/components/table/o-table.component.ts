@@ -1,6 +1,6 @@
 import {
   Component, OnInit, OnDestroy, Inject, Injector, ElementRef, forwardRef,
-  Optional, NgModule, ViewEncapsulation, ViewChild, EventEmitter, ContentChildren, QueryList, ViewChildren, HostListener
+  Optional, NgModule, ViewEncapsulation, ViewChild, EventEmitter, ContentChildren, QueryList, ViewChildren, HostListener,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CdkTableModule } from '@angular/cdk/table';
@@ -17,7 +17,7 @@ import { dataServiceFactory } from '../../services/data-service.provider';
 import { OntimizeService, SnackBarService } from '../../services';
 import { OFormComponent } from '../form/o-form.component';
 import { OSharedModule } from '../../shared';
-
+import { ObserversModule } from '@angular/cdk/observers';
 import { OServiceComponent } from '../o-service-component.class';
 import {
   O_TABLE_FOOTER_COMPONENTS,
@@ -296,6 +296,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   public static DEFAULT_OUTPUTS_O_TABLE = DEFAULT_OUTPUTS_O_TABLE;
 
   public static NAME_COLUMN_SELECT = 'select';
+  public loadingScroll = false;
+  protected _loadingSorting = false;
 
   protected snackBarService: SnackBarService;
 
@@ -466,6 +468,10 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   protected oTableStorage: OTableStorage;
   storePaginationState: boolean = false;
 
+  /* In the case the table havent paginationControl and pageable, the table has pagination virtual*/
+  pageScrollVirtual = 1;
+  public static LIMIT_SCROLLVIRTUAL = 50;
+
   @HostListener('window:resize', ['$event'])
   updateScrolledState(): void {
     if (this.horizontalScroll) {
@@ -630,7 +636,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
     if (this.sortSubscription) {
       this.sortSubscription.unsubscribe();
-    }
+    }  
     Object.keys(this.asyncLoadSubscriptions).forEach(idx => {
       if (this.asyncLoadSubscriptions[idx]) {
         this.asyncLoadSubscriptions[idx].unsubscribe();
@@ -910,6 +916,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       }
       if (self.pageable) {
         self.reloadData();
+      } else {
+        self.loadingSorting = true;
+
       }
     });
   }
@@ -918,9 +927,21 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     this.dataSource = new OTableDataSource(this);
     if (this.daoTable) {
       this.dataSource.resultsLength = this.daoTable.data.length;
+
     }
   }
 
+  set loadingSorting(value: boolean) {
+      this._loadingSorting = value;
+  }
+  get loadingSorting(): boolean {
+    return this._loadingSorting;
+  }
+
+  showScroll(): boolean {
+    
+    return this.loading || this.loadingSorting || this.loadingScroll;
+  }
   /**
    * This method manages the call to the service
    * @param parentItem it is defined if its called from a form
@@ -1037,6 +1058,10 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     } else {
       this.dialogService.alert('ERROR', errorOptional);
     }
+  }
+  projectContentChanged() {
+    this.loadingSorting = false;
+    this.loadingScroll = false; 
   }
 
   getAttributesValuesToQuery(): Array<string> {
@@ -1176,7 +1201,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     this.clearSelection();
     this.finishQuerySubscription = false;
     this.pendingQuery = true;
-
+    //this.pageScrollVirtual = 1;
     let queryArgs;
     if (this.pageable) {
       queryArgs = {
@@ -1406,16 +1431,22 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     const self = this;
 
     return (index: number, item: any) => {
+      if (self.hasScrollableContainer() && index < (self.pageScrollVirtual - 1) * OTableComponent.LIMIT_SCROLLVIRTUAL) {
+        return null;
+      }
+
       let itemId = '';
       const keysLenght = self.keysArray.length;
       self.keysArray.forEach((key: string, idx: number) => {
         let suffix = idx < (keysLenght - 1) ? ';' : '';
         itemId += item[key] + suffix;
       });
+
+
       let asyncAndVisible = self.asyncLoadColumns.filter(c => self._oTableOptions.visibleColumns.indexOf(c) !== -1);
       if (self.asyncLoadColumns.length && asyncAndVisible.length > 0 && !self.finishQuerySubscription) {
         self.queryRowAsyncData(index, item);
-        if (index === (self.paginator.pageSize - 1)) {
+        if (self.paginator && index === (self.paginator.pageSize - 1)) {
           self.finishQuerySubscription = true;
         }
         return itemId;
@@ -1882,6 +1913,39 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
     return align;
   }
+
+  onTableScroll(e) {
+    const tableViewHeight = e.target.offsetHeight // viewport: ~500px
+    const tableScrollHeight = e.target.scrollHeight // length of all table
+    const scrollLocation = e.target.scrollTop; // how far user scrolled
+
+    // If the user has scrolled within 200px of the bottom, add more data
+    const buffer = 100;
+    const limit_SCROLLVIRTUAL = tableScrollHeight - tableViewHeight - buffer;
+    if (scrollLocation > limit_SCROLLVIRTUAL) {
+      this.getDataScrollable();
+    }
+  }
+
+
+  getDataScrollable(): any {
+    const pageVirtualBefore = this.pageScrollVirtual;
+    const pageVirtualEnd = Math.ceil(this.dataSource.resultsLength / OTableComponent.LIMIT_SCROLLVIRTUAL);
+
+    if (pageVirtualEnd != this.pageScrollVirtual) {
+      this.pageScrollVirtual++;
+    }
+
+    //throw event change scroll
+    if (pageVirtualBefore !== this.pageScrollVirtual) {
+      this.loadingScroll = true;
+      this.dataSource.loadDataScrollable = this.pageScrollVirtual;
+    }
+  }
+
+  hasScrollableContainer(): boolean {
+    return this.dataSource && !this.paginationControls && !this.pageable;
+  }
 }
 
 @NgModule({
@@ -1902,7 +1966,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     OSharedModule,
     CdkTableModule,
     DndModule.forRoot(),
-    OContextMenuModule
+    OContextMenuModule,
+    ObserversModule
   ],
   exports: [
     OTableComponent,
