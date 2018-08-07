@@ -52,27 +52,31 @@ export class OAppSidenavComponent implements OnInit, OnDestroy, AfterViewInit {
   appMenuService: AppMenuService;
   protected _menuRootArray: MenuRootItem[] = [];
 
+  protected _layoutMode: OAppLayoutMode;
+
   get layoutMode(): OAppLayoutMode {
-    return OAppLayoutComponent.OAppLayoutModes[this._layoutMode];
+    return this._layoutMode;
   }
+
   set layoutMode(val: OAppLayoutMode) {
     let m = OAppLayoutComponent.OAppLayoutModes.find(e => e === val);
     if (Util.isDefined(m)) {
       this._layoutMode = m;
     }
   }
-  protected _layoutMode: OAppLayoutMode;
+
+  protected _sidenavMode: OSidenavMode;
 
   get sidenavMode(): OSidenavMode {
-    return OAppLayoutComponent.OSidenavModes[this._sidenavMode];
+    return this._sidenavMode;
   }
+
   set sidenavMode(val: OSidenavMode) {
     let m = OAppLayoutComponent.OSidenavModes.find(e => e === val);
     if (Util.isDefined(m)) {
       this._sidenavMode = m;
     }
   }
-  protected _sidenavMode: OSidenavMode;
 
   @InputConverter()
   protected opened: boolean = true;
