@@ -1,6 +1,6 @@
 <div class="expandable-container" [style.display]="isVisible()? '' : 'none'"  [class.o-scrollable-container]="hasScrollableContainer()"  (scroll)="onTableScroll($event)">
   <div class="o-table-container" fxLayout="column" fxLayoutAlign="start stretch" [class.tab-container]="hasTabGroupChangeSubscription()">
-    <div #tableToolbar class="toolbar" fxLayout="row" fxLayoutAlign="space-between center">
+    <div #tableToolbar *ngIf="hasControls()" class="toolbar" fxLayout="row" fxLayoutAlign="space-between center">
       <div class="buttons">
         <o-table-button *ngIf="insertButton" (onClick)="add()" label="TABLE.BUTTONS.ADD" svg-icon="ontimize:add"> </o-table-button>
         <o-table-button *ngIf="refreshButton" (onClick)="reloadData()" label="TABLE.BUTTONS.REFRESH" svg-icon="ontimize:autorenew">
@@ -8,10 +8,9 @@
         <ng-content select="o-table-button"></ng-content>
         <o-table-button *ngIf="showDeleteButton" (onClick)="remove()" label="TABLE.BUTTONS.DELETE" svg-icon="ontimize:delete"></o-table-button>
       </div>
-      <div *ngIf="showTitle" class="table-title">
-        {{ title | oTranslate }}
+      <div fxLayout fxFlex>
+        <span *ngIf="showTitle" class="table-title" fxFlex>{{ title | oTranslate }}</span>
       </div>
-      <span class="fill-remaining"></span>
       <o-table-quickfilter *ngIf="quickFilter" (onChange)="reloadPaginatedDataFromStart()"></o-table-quickfilter>
       <button *ngIf="showTableMenuButton" mat-icon-button class="o-table-menu-button" [matMenuTriggerFor]="menu">
         <mat-icon svgIcon="ontimize:more_vert"></mat-icon>

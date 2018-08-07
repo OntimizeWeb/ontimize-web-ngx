@@ -18,6 +18,7 @@
       </mat-option>
     </mat-select>
     <mat-error *ngIf="hasError('required')">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</mat-error>
+    <mat-error *ngFor="let oError of getActiveOErrors()"> {{ oError.text | oTranslate }} </mat-error>
   </mat-form-field>
 
   <mat-form-field [class.custom-width]="hasCustomWidth" [class.visible]="isReadOnly" [class.hidden]="!isReadOnly" fxFlex fxFill>
@@ -27,6 +28,7 @@
       [class.ng-invalid]="getFormControl() && !getFormControl().valid" [class.ng-valid]="getFormControl() && getFormControl().valid"
       [placeholder]="placeHolder" [value]="getDescriptionValue()" [readonly]="isReadOnly" [required]="isRequired">
     <mat-error *ngIf="hasError('required')">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</mat-error>
+    <mat-error *ngFor="let oError of getActiveOErrors()"> {{ oError.text | oTranslate }} </mat-error>
   </mat-form-field>
 
 </div>

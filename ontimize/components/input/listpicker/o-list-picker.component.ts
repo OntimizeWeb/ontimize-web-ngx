@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, forwardRef, Inject, Injector, OnInit, OnChanges, Optional, NgModule, SimpleChange, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, forwardRef, Inject, Injector, OnInit, OnChanges, Optional, NgModule, SimpleChange, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatDialog, MatInput, MatDialogConfig, MatDialogRef } from '@angular/material';
 
@@ -37,7 +37,7 @@ export const DEFAULT_OUTPUTS_O_LIST_PICKER = [
   inputs: DEFAULT_INPUTS_O_LIST_PICKER,
   outputs: DEFAULT_OUTPUTS_O_LIST_PICKER
 })
-export class OListPickerComponent extends OFormServiceComponent implements OnInit, OnChanges {
+export class OListPickerComponent extends OFormServiceComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges {
 
   public static DEFAULT_INPUTS_O_LIST_PICKER = DEFAULT_INPUTS_O_LIST_PICKER;
   public static DEFAULT_OUTPUTS_O_LIST_PICKER = DEFAULT_OUTPUTS_O_LIST_PICKER;
@@ -78,7 +78,8 @@ export class OListPickerComponent extends OFormServiceComponent implements OnIni
     this.initialize();
   }
 
-  public ngOnChanges(changes: { [propName: string]: SimpleChange }) {
+  ngOnChanges(changes: { [propName: string]: SimpleChange }) {
+    super.ngOnChanges(changes);
     if (typeof (changes['staticData']) !== 'undefined') {
       this.cacheQueried = true;
       this.setDataArray(changes['staticData'].currentValue);

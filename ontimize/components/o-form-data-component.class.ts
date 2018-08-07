@@ -1,13 +1,13 @@
-import { Injector, ElementRef, OnInit, OnDestroy, QueryList, ViewChildren, AfterViewInit, HostBinding } from '@angular/core';
+import { Injector, ElementRef, OnInit, OnDestroy, QueryList, ViewChildren, AfterViewInit, HostBinding, ContentChildren, OnChanges, SimpleChange } from '@angular/core';
 import { FormControl, FormGroup, Validators, ValidatorFn } from '@angular/forms';
 import { MatSuffix } from '@angular/material';
-
+import { Subscription } from 'rxjs/Subscription';
 import { InputConverter } from '../decorators';
-import { SQLTypes } from '../utils';
-
+import { SQLTypes, Util } from '../utils';
 import { OBaseComponent, IComponent } from './o-component.class';
 import { OFormComponent } from './form/o-form.component';
 import { OFormValue, IFormValueOptions } from './form/OFormValue';
+import { OValidatorComponent } from './input/validation/o-validator.component';
 
 export interface IMultipleSelection extends IComponent {
   getSelectedItems(): Array<any>;
@@ -30,6 +30,11 @@ export interface IFormDataComponent extends IFormControlComponent {
   isAutomaticRegistering(): boolean;
 }
 
+export interface IErrorData {
+  name: string;
+  text: string;
+}
+
 export const DEFAULT_INPUTS_O_FORM_DATA_COMPONENT = [
   'oattr: attr',
   'olabel: label',
@@ -45,11 +50,12 @@ export const DEFAULT_INPUTS_O_FORM_DATA_COMPONENT = [
   'sqlType: sql-type',
   'width',
   'readOnly: read-only',
-  'clearButton: clear-button'
+  'clearButton: clear-button',
+  'angularValidatorsFn: validators'
 ];
 
 export class OFormDataComponent extends OBaseComponent implements IFormDataComponent, IFormDataTypeComponent,
-  OnInit, AfterViewInit, OnDestroy {
+  OnInit, AfterViewInit, OnDestroy, OnChanges {
 
   /* Inputs */
   sqlType: string;
@@ -60,6 +66,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   width: string;
   @InputConverter()
   clearButton: boolean = false;
+  angularValidatorsFn: ValidatorFn[] = [];
 
   @HostBinding('style.width')
   get hostWidth() {
@@ -75,9 +82,15 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   protected elRef: ElementRef;
   protected form: OFormComponent;
 
+  protected matSuffixSubscription: Subscription;
   @ViewChildren(MatSuffix)
   protected _matSuffixList: QueryList<MatSuffix>;
   matSuffixClass;
+
+  protected errorsData: IErrorData[] = [];
+  protected validatorsSubscription: Subscription;
+  @ContentChildren(OValidatorComponent)
+  protected validatorChildren: QueryList<OValidatorComponent>;
 
   constructor(
     form: OFormComponent,
@@ -94,16 +107,32 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   }
 
   ngAfterViewInit(): void {
+    const self = this;
     if (this._matSuffixList) {
       this.setSuffixClass(this._matSuffixList.length);
-      this._matSuffixList.changes.subscribe(() => {
-        this.setSuffixClass(this._matSuffixList.length);
+      this.matSuffixSubscription = this._matSuffixList.changes.subscribe(() => {
+        self.setSuffixClass(self._matSuffixList.length);
       });
+    }
+
+    if (this.validatorChildren) {
+      this.validatorsSubscription = this.validatorChildren.changes.subscribe(() => {
+        self.updateValidators();
+      });
+      if (this.validatorChildren.length > 0) {
+        this.updateValidators();
+      }
     }
   }
 
   ngOnDestroy() {
     this.destroy();
+  }
+
+  ngOnChanges(changes: { [propName: string]: SimpleChange }) {
+    if (Util.isDefined(changes['angularValidatorsFn'])) {
+      this.updateValidators();
+    }
   }
 
   getFormGroup(): FormGroup {
@@ -120,6 +149,10 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
 
   getErrorValue(error: string, prop: string): string {
     return this._fControl && this._fControl.hasError(error) ? this._fControl.getError(error)[prop] || '' : '';
+  }
+
+  getActiveOErrors(): IErrorData[] {
+    return this.errorsData.filter((item: IErrorData) => this.hasError(item.name));
   }
 
   initialize() {
@@ -150,6 +183,12 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
 
   destroy() {
     this.unregisterFormListeners();
+    if (this.matSuffixSubscription) {
+      this.matSuffixSubscription.unsubscribe();
+    }
+    if (this.validatorsSubscription) {
+      this.validatorsSubscription.unsubscribe();
+    }
   }
 
   registerFormListeners() {
@@ -179,6 +218,9 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
         emitModelToViewChange: false,
         emitEvent: false
       });
+      if (this._fControl.invalid) {
+        this._fControl.markAsTouched();
+      }
     }
   }
 
@@ -241,8 +283,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   }
 
   resolveValidators(): ValidatorFn[] {
-    let validators: ValidatorFn[] = [];
-
+    let validators: ValidatorFn[] = this.angularValidatorsFn;
     if (this.orequired) {
       validators.push(Validators.required);
     }
@@ -286,5 +327,24 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
 
   get hasCustomWidth(): boolean {
     return this.width !== undefined;
+  }
+
+  protected updateValidators() {
+    if (!this._fControl) {
+      return;
+    }
+    const self = this;
+    this._fControl.clearValidators();
+    this.errorsData = [];
+    let validators = this.resolveValidators();
+    this.validatorChildren.forEach((oValidator: OValidatorComponent) => {
+      let validatorFunction: ValidatorFn = oValidator.getValidatorFn();
+      if (validatorFunction) {
+        validators.push(validatorFunction);
+      }
+      let errorsData: IErrorData[] = oValidator.getErrorsData();
+      self.errorsData.push(...errorsData);
+    });
+    this._fControl.setValidators(validators);
   }
 }

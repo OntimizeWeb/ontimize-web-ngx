@@ -4,6 +4,7 @@
     [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)">
     {{ placeHolder }}
     <mat-error *ngIf="hasError('required')">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</mat-error>
+    <mat-error *ngFor="let oError of getActiveOErrors()"> {{ oError.text | oTranslate }} </mat-error>
   </mat-checkbox>
   <div *ngIf="isReadOnly" (click)="onClickBlocker($event)" class="read-only-blocker" fxFill></div>
 </div>

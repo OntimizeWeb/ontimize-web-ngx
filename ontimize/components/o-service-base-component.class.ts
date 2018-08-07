@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs/Subscription';
 
 import { Util, Codes } from '../utils';
 import { InputConverter } from '../decorators';
-import { OntimizeService, OTranslateService, LocalStorageService, DialogService, ILocalStorageComponent } from '../services';
+import { OntimizeService, LocalStorageService, DialogService, ILocalStorageComponent } from '../services';
 import { OFormComponent } from './form/o-form.component';
 import { ServiceUtils } from './service.utils';
 
@@ -68,7 +68,6 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
 
   public static DEFAULT_INPUTS_O_SERVICE_BASE_COMPONENT = DEFAULT_INPUTS_O_SERVICE_BASE_COMPONENT;
 
-  protected translateService: OTranslateService;
   protected localStorageService: LocalStorageService;
   protected dialogService: DialogService;
 
@@ -109,7 +108,6 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
   protected oattrFromEntity: boolean = false;
   /* end of parsed inputs variables */
 
-  protected onLanguageChangeSubscribe: any;
   protected onRouteChangeStorageSubscribe: any;
   protected onFormDataSubscribe: any;
 
@@ -125,12 +123,8 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
   constructor(
     protected injector: Injector
   ) {
-    this.translateService = this.injector.get(OTranslateService);
     this.dialogService = this.injector.get(DialogService);
     this.localStorageService = this.injector.get(LocalStorageService);
-    this.onLanguageChangeSubscribe = this.translateService.onLanguageChanged.subscribe(res => {
-      this.onLanguageChangeCallback(res);
-    });
     try {
       this.form = this.injector.get(OFormComponent);
     } catch (e) {
@@ -180,7 +174,6 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
   }
 
   destroy() {
-    this.onLanguageChangeSubscribe.unsubscribe();
     if (this.onFormDataSubscribe) {
       this.onFormDataSubscribe.unsubscribe();
     }
@@ -220,10 +213,6 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
 
   getDataToStore(): Object {
     return this.state;
-  }
-
-  onLanguageChangeCallback(res: any) {
-    //
   }
 
   getKeys() {
@@ -286,7 +275,8 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
     }
     parentItem = ServiceUtils.getParentItemFromForm(parentItem, this._pKeysEquiv, this.form);
 
-    if (((Object.keys(this._pKeysEquiv).length > 0) && parentItem === undefined) && !this.queryWithNullParentKeys) {
+    // if (((Object.keys(this._pKeysEquiv).length > 0) && parentItem === undefined) && !this.queryWithNullParentKeys) {
+    if (!this.checkQueryReadyParentKeys(parentItem) && !this.queryWithNullParentKeys) {
       this.setData([], []);
     } else {
       let filter = ServiceUtils.getFilterUsingParentKeys(parentItem, this._pKeysEquiv);
@@ -323,6 +313,15 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
         }
       });
     }
+  }
+
+  protected checkQueryReadyParentKeys(parentItem): boolean {
+    let pkKeys = Object.keys(this._pKeysEquiv);
+    if ((pkKeys.length > 0) && Util.isDefined(parentItem)) {
+      let piKeys = Object.keys(parentItem);
+      return pkKeys.every(a => piKeys.indexOf(a) !== -1);
+    }
+    return true;
   }
 
   reloadData() {

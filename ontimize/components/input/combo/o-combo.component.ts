@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, forwardRef, Inject, Injector, NgModule, Optional, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, forwardRef, Inject, Injector, NgModule, Optional, ViewChild, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatOption, MatSelect, MatSelectChange } from '@angular/material';
 
@@ -34,7 +34,7 @@ export const DEFAULT_OUTPUTS_O_COMBO = [
   templateUrl: './o-combo.component.html',
   styleUrls: ['./o-combo.component.scss']
 })
-export class OComboComponent extends OFormServiceComponent {
+export class OComboComponent extends OFormServiceComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public static DEFAULT_INPUTS_O_COMBO = DEFAULT_INPUTS_O_COMBO;
   public static DEFAULT_OUTPUTS_O_COMBO = DEFAULT_OUTPUTS_O_COMBO;
@@ -70,6 +70,7 @@ export class OComboComponent extends OFormServiceComponent {
   }
 
   ngAfterViewInit(): void {
+    super.ngAfterViewInit();
     if (this.queryOnInit) {
       this.queryData();
     } else if (this.queryOnBind) {
