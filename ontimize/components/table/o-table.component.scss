@@ -53,11 +53,15 @@ $_mat-checkbox-mark-stroke-size-small: 2 / 15 * $mat-checkbox-size-small !defaul
 }
 
 .o-table {
+  height: 100%;
+  max-height: 100%;
+
   .expandable-container {
     overflow-y: auto;
     height: 100%;
   }
 
+  
   .o-table-container {
     .mat-cell.flex-0 {
       flex: 0 !important;
@@ -125,6 +129,12 @@ $_mat-checkbox-mark-stroke-size-small: 2 / 15 * $mat-checkbox-size-small !defaul
         top: calc(50% - 50px);
       }
     }
+
+    .spinner-container-scrollable{
+      position: relative; 
+
+    }
+    
 
     .o-table-no-results {
       &.small {

@@ -1,4 +1,4 @@
-<div class="expandable-container" [style.display]="isVisible()? '' : 'none'">
+<div class="expandable-container" [style.display]="isVisible()? '' : 'none'"  [class.o-scrollable-container]="hasScrollableContainer()"  (scroll)="onTableScroll($event)">
   <div class="o-table-container" fxLayout="column" fxLayoutAlign="start stretch" [class.tab-container]="hasTabGroupChangeSubscription()">
     <div #tableToolbar class="toolbar" fxLayout="row" fxLayoutAlign="space-between center">
       <div class="buttons">
@@ -44,10 +44,11 @@
       <button mat-menu-item (click)="onApplyConfigurationClicked()">{{ 'TABLE.BUTTONS.APPLY_CONFIGURATION' | oTranslate }}</button>
     </mat-menu>
 
+  
     <div #tableBody fxLayout="column" fxLayoutAlign="start stretch" class="o-table-body o-scroll" [class.horizontal-scroll]="horizontalScroll"
       [class.scrolled]="horizontalScrolled">
 
-      <mat-table #tableHeader matSort [class]="rowHeight" [class.header-fixed]="fixedHeader" [class.mat-table]="true">
+      <mat-table #tableHeader matSort [class]="rowHeight" [class.header-fixed]="fixedHeader" [class.mat-table]="true" (scroll)="onTableScroll($event)">
         <!--Checkbox Column -->
         <ng-container [matColumnDef]="oTableOptions.selectColumn.name" *ngIf="oTableOptions.selectColumn.visible">
           <mat-header-cell *matHeaderCellDef>
@@ -77,7 +78,7 @@
         <mat-header-row *matHeaderRowDef="oTableOptions.visibleColumns"></mat-header-row>
 
       </mat-table>
-
+ 
       <!--TABLE EMPTY-->
       <div class="mat-row o-table-no-results {{ rowHeight }}" *ngIf="dataSource !== undefined && dataSource.resultsLength === 0"
         fxLayoutAlign="center center">
@@ -91,7 +92,8 @@
       <o-table-editable-row [datasource]="dataSource" *ngIf="showFirstInsertableRow"></o-table-editable-row>
 
       <mat-table #table [trackBy]="getTrackByFunction()" [dataSource]="dataSource" matSort [class]="rowHeight" [class.content-table]="true"
-        [class.mat-table]="true">
+        [class.mat-table]="true" (cdkObserveContent)="projectContentChanged()">
+        
         <!--Checkbox Column -->
         <ng-container [matColumnDef]="oTableOptions.selectColumn.name" *ngIf="oTableOptions.selectColumn.visible">
           <mat-header-cell *matHeaderCellDef>
@@ -153,14 +155,22 @@
       <o-table-editable-row [datasource]="dataSource" *ngIf="showLastInsertableRow"></o-table-editable-row>
 
       <!--LOADING-->
-      <div *ngIf="daoTable.isLoadingResults" class="spinner-container">
-        <mat-progress-spinner mode="indeterminate" *ngIf="daoTable.isLoadingResults" strokeWidth="3"></mat-progress-spinner>
+      <!--<div *ngIf="loadingSortingChange | async" class="spinner-container" >
+          <mat-progress-spinner mode="indeterminate"  strokeWidth="3"></mat-progress-spinner>
+        </div>
+      <div *ngIf="loadedSorting" class="spinner-container" >
+            <mat-progress-spinner mode="indeterminate"  strokeWidth="3"></mat-progress-spinner>
+       </div>-->
+
+      <div *ngIf="showScroll()" class="spinner-container" [class.spinner-container-scrollable]="loadingScroll">
+        <mat-progress-spinner mode="indeterminate"  strokeWidth="3"></mat-progress-spinner>
       </div>
+      
+     
     </div>
 
     <!--TABLE PAGINATOR-->
     <mat-paginator *ngIf="paginator" #matpaginator [length]="dataSource?.resultsLength" [pageIndex]="paginator.pageIndex" [pageSize]="queryRows"
       [pageSizeOptions]="paginator.pageSizeOptions" (page)="onChangePage($event)" [showFirstLastButtons]="paginator.showFirstLastButtons"></mat-paginator>
-
   </div>
 </div>
