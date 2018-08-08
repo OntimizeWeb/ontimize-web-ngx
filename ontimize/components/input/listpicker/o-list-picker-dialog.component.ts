@@ -1,5 +1,6 @@
-import { Component, ViewEncapsulation, Inject, Injector, ViewChild, AfterViewInit } from '@angular/core';
+import { AfterViewInit, Component, Inject, Injector, ViewChild, ViewEncapsulation } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+
 import { Util } from '../../../util/util';
 import { OSearchInputComponent } from '../../input/search-input/o-search-input.component';
 
@@ -12,7 +13,7 @@ export const DEFAULT_INPUTS_O_LIST_PICKER = [
 @Component({
   selector: 'o-list-picker-dialog',
   templateUrl: './o-list-picker-dialog.component.html',
-  styleUrls: ['./o-list-picker.component.scss'],
+  styleUrls: ['./o-list-picker-dialog.component.scss'],
   inputs: DEFAULT_INPUTS_O_LIST_PICKER,
   encapsulation: ViewEncapsulation.None,
   host: {
@@ -20,6 +21,7 @@ export const DEFAULT_INPUTS_O_LIST_PICKER = [
   }
 })
 export class OListPickerDialogComponent implements AfterViewInit {
+
   protected data: Array<any> = [];
   protected visibleColsArray: Array<string>;
 
@@ -153,6 +155,5 @@ export class OListPickerDialogComponent implements AfterViewInit {
   private _isBlank(value: string): boolean {
     return !Util.isDefined(value) || value.length === 0;
   }
+
 }
-
-

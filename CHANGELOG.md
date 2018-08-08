@@ -37,6 +37,10 @@
   * All internal css classes starting with `application-sidenav` has changed to `o-app-sidenav`.
   * All internal css classes starting with `application-header` has changed to `o-app-header`.
   * All internal css classes starting with `user-info` has changed to `o-user-info`.
+* **o-list-picker-dialog**: Internal css classes changes:
+  * Internal css class `dialog-list-container` has been removed, use `mat-dialog-content` instead.
+  * Internal css class `list-picker-search` has changed to `o-list-picker-search`.
+  * Internal css class ´has-filter´ has changed to `o-list-picker-has-filter`.
 * **o-user-info**: removed input `use-flag-icons`. This component doesn't contain the language selector anymore.
 
 ## 3.0.1 (2018-07-27)

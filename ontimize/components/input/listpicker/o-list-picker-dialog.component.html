@@ -1,28 +1,22 @@
-<mat-toolbar color="primary" class="mat-elevation-z5" *ngIf="filter">
-  <o-search-input #searchInput class="list-picker-search" (onSearch)="onFilterList($event)"></o-search-input>
+<mat-toolbar #toolbar color="primary" class="mat-elevation-z5" *ngIf="filter">
+  <o-search-input #searchInput (onSearch)="onFilterList($event)" class="o-list-picker-search"></o-search-input>
 </mat-toolbar>
-<div mat-dialog-content class="dialog-list-container" [class.has-filter]="filter" (scroll)="onScroll($event)">
+<div mat-dialog-content (scroll)="onScroll($event)" [class.o-list-picker-has-filter]="filter">
   <mat-list>
-    <!--EMPTY LIST -->
-    <mat-list-item class="mat-1-line" fxFill *ngIf="visibleData.length === 0">
+    <mat-list-item *ngIf="visibleData.length === 0">
       {{'LIST.EMPTY' | oTranslate}}
       <ng-container *ngIf="filter && searchInput && searchInput.getValue().length > 0">
         {{ 'LIST.EMPTY_USING_FILTER' | oTranslate : { values: [searchInput.getValue()] } }}
       </ng-container>
     </mat-list-item>
-    <mat-list-item class="mat-1-line" (click)="onClickListItem($event, item)" fxFill *ngFor="let item of visibleData; trackBy: trackByFn">
-      <div fxLayout="column" fxFill>
-        <div fxLayout="row" fxFill>
-          <p class="mat-list-item-text"> {{ item['_parsedVisibleColumnText'] }} </p>
-        </div>
-        <mat-divider></mat-divider>
-      </div>
+    <mat-list-item (click)="onClickListItem($event, item)" *ngFor="let item of visibleData; trackBy: trackByFn">
+      <span>{{ item['_parsedVisibleColumnText'] }}</span>
+      <mat-divider></mat-divider>
     </mat-list-item>
   </mat-list>
 </div>
 <mat-dialog-actions align="end">
-  <span fxFlex></span>
-  <button mat-button class="mat-primary" mat-dialog-close>
+  <button mat-button mat-dialog-close>
     <span>{{ 'CANCEL' | oTranslate | uppercase }}</span>
   </button>
 </mat-dialog-actions>
