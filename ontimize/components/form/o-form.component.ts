@@ -325,7 +325,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     if (comp) {
       let type = comp.getSQLType();
       let attr = comp.getAttribute();
-      if (type !== SQLTypes.OTHER && attr && attr.length > 0) {
+      if (type !== SQLTypes.OTHER && attr && attr.length > 0 && this.ignoreFormCacheKeys.indexOf(attr) === -1) {
         // Right now just store values different of 'OTHER'
         this._compSQLTypes[attr] = type;
       }
