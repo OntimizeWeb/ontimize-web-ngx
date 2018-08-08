@@ -1,18 +1,16 @@
 <div fxLayout="row" fxLayoutAlign="space-between center" [formGroup]="getFormGroup()" [matTooltip]="tooltip" [matTooltipPosition]="tooltipPosition"
   [matTooltipShowDelay]="tooltipShowDelay">
 
-  <mat-form-field  fxFlexFill (mousedown)="onMouseDown($event)">
-    <input matInput [ngxTimepicker]="picker" [id]="getAttribute()"  [placeholder]="placeHolder" [formControlName]="getAttribute()"
-      [readonly]="isReadOnly" [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)" [required]="isRequired"  [disabled]="isDisabled"
-      (click)="onKeyDown($event)"
-      >
+  <mat-form-field fxFlexFill (mousedown)="onMouseDown($event)">
+    <input matInput [ngxTimepicker]="picker" [id]="getAttribute()" [placeholder]="placeHolder" [formControlName]="getAttribute()"
+      [readonly]="isReadOnly" [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)" [required]="isRequired" (click)="onKeyDown($event)">
 
-    <ngx-material-timepicker #picker ></ngx-material-timepicker>
+    <ngx-material-timepicker #picker></ngx-material-timepicker>
     <button *ngIf="showClearButton" matSuffix mat-icon-button (click)="clearValue()">
-        <mat-icon svgIcon="ontimize:close"></mat-icon>
+      <mat-icon svgIcon="ontimize:close"></mat-icon>
     </button>
-    <button matSuffix mat-icon-button (click)="onOpen()" [disabled]="isDisabledButton">
-        <mat-icon svgIcon="ontimize:clock"></mat-icon>
+    <button matSuffix mat-icon-button (click)="onOpen()" [disabled]="isReadOnly || isDisabled">
+      <mat-icon svgIcon="ontimize:clock "></mat-icon>
     </button>
   </mat-form-field>
 </div>

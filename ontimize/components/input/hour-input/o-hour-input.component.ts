@@ -1,59 +1,77 @@
-import { Component, NgModule, Optional, Inject, ElementRef, Injector, forwardRef, ViewChild, EventEmitter, ViewEncapsulation, HostListener} from '@angular/core';
-import { OFormDataComponent } from '../../o-form-data-component.class';
-import { OSharedModule } from '../../../shared';
+import { Component, NgModule, Optional, Inject, ElementRef, Injector, forwardRef, ViewChild, EventEmitter, ViewEncapsulation, HostListener, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
+import { OFormDataComponent, DEFAULT_INPUTS_O_FORM_DATA_COMPONENT } from '../../o-form-data-component.class';
 import { CommonModule } from '@angular/common';
+import { ValidatorFn } from '@angular/forms';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
-import { OFormComponent, } from '../../form/form-components';
-import { DEFAULT_OUTPUTS_O_TEXT_INPUT, DEFAULT_INPUTS_O_TEXT_INPUT } from '../input.components';
-
-import { OFormValue } from '../../form/OFormValue';
 import moment from 'moment';
-import { ValidatorFn} from '@angular/forms';
+import { OSharedModule } from '../../../shared';
 import { OValidators } from '../../../validators/o-validators';
+import { OFormComponent } from '../../form/form-components';
+import { OFormValue } from '../../form/OFormValue';
 
-export const DEFAULT_OUTPUTS_O_HOUR = [
-  ...DEFAULT_OUTPUTS_O_TEXT_INPUT,
-  'onChange'
+export const DEFAULT_INPUTS_O_HOUR_INPUT = [
+  ...DEFAULT_INPUTS_O_FORM_DATA_COMPONENT
 ];
 
-export const DEFAULT_INPUTS_O_HOUR = [
-  ...DEFAULT_INPUTS_O_TEXT_INPUT
+export const DEFAULT_OUTPUTS_O_HOUR_INPUT = [
+  'onChange',
+  'onFocus',
+  'onBlur'
 ];
 
 @Component({
   selector: 'o-hour-input',
   templateUrl: './o-hour-input.component.html',
   styleUrls: ['./o-hour-input.component.scss'],
-  encapsulation:ViewEncapsulation.None,
-  outputs: DEFAULT_OUTPUTS_O_HOUR,
-  inputs: DEFAULT_INPUTS_O_HOUR,
+  encapsulation: ViewEncapsulation.None,
+  outputs: DEFAULT_OUTPUTS_O_HOUR_INPUT,
+  inputs: DEFAULT_INPUTS_O_HOUR_INPUT,
   host: {
     '[class.o-hour-input]': 'true'
   }
 })
 
-export class OHourInputComponent extends OFormDataComponent {
+export class OHourInputComponent extends OFormDataComponent implements OnInit, AfterViewInit, OnDestroy {
+
+  public static DEFAULT_INPUTS_O_HOUR_INPUT = DEFAULT_INPUTS_O_HOUR_INPUT;
+  public static DEFAULT_OUTPUTS_O_HOUR_INPUT = DEFAULT_OUTPUTS_O_HOUR_INPUT;
+
   constructor(
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
     elRef: ElementRef,
-    injector: Injector) {
+    injector: Injector
+  ) {
     super(form, elRef, injector);
-
   }
 
-
-  @HostListener('click', ['$event']) 
+  @HostListener('click', ['$event'])
   onClick(e) {
-    
-      e.preventDefault();
-      e.stopPropagation();
-    
+    e.preventDefault();
+    e.stopPropagation();
   }
 
   onChange: EventEmitter<Object> = new EventEmitter<Object>();
+  onFocus: EventEmitter<Object> = new EventEmitter<Object>();
+  onBlur: EventEmitter<Object> = new EventEmitter<Object>();
 
   @ViewChild('picker')
   private picker: any;
+
+  ngOnInit() {
+    super.ngOnInit();
+  }
+
+  ngAfterViewInit() {
+    super.ngAfterViewInit();
+  }
+
+  ngOnDestroy() {
+    super.ngOnDestroy();
+  }
+
+  setData(value: any) {
+    super.setData(value);
+  }
 
   onMouseDown(event) {
     console.log(this.getAttribute());
@@ -62,19 +80,19 @@ export class OHourInputComponent extends OFormDataComponent {
       event.preventDefault();
       event.stopPropagation();
     }
-
   }
 
-  onKeyDown(event){
+  onKeyDown(event) {
     console.log(event);
     if (this.isDisabled || this.isReadOnly) {
       event.preventDefault();
       event.stopPropagation();
     }
   }
+
   onOpen($event) {
-    if(!this.isReadOnly && !this.isDisabled){
-     this.picker.open()
+    if (!this.isReadOnly && !this.isDisabled) {
+      this.picker.open();
     }
   }
 
@@ -86,25 +104,16 @@ export class OHourInputComponent extends OFormDataComponent {
     this.onChange.emit(event);
   }
 
-  isDisabledButton(){
-    return this.isReadOnly && this.isDisabled
+  getValueAsTimeStamp() {
+    return moment('01/01/1970 ' + this.getValue(), 'MM/DD/YYYY hh:mm A').unix();
   }
 
-  getValueAsTimeStamp(){
-    return moment('01/01/1970 ' +this.getValue(),'MM/DD/YYYY hh:mm A').unix();
-  }
-  
   resolveValidators(): ValidatorFn[] {
     let validators: ValidatorFn[] = super.resolveValidators();
-    //validators.push(OValidators.hourValidator);
+    validators.push(OValidators.hourValidator);
     return validators;
-    
   }
-
-
-  
 }
-
 
 @NgModule({
   declarations: [OHourInputComponent],
