@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, forwardRef, Inject, Injector, NgModule, Optional, ViewChild, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
+import { Component, ElementRef, EventEmitter, forwardRef, Inject, Injector, NgModule, Optional, ViewChild, OnInit, AfterViewInit, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatOption, MatSelect, MatSelectChange } from '@angular/material';
 
@@ -32,7 +32,11 @@ export const DEFAULT_OUTPUTS_O_COMBO = [
   inputs: DEFAULT_INPUTS_O_COMBO,
   outputs: DEFAULT_OUTPUTS_O_COMBO,
   templateUrl: './o-combo.component.html',
-  styleUrls: ['./o-combo.component.scss']
+  styleUrls: ['./o-combo.component.scss'],
+  encapsulation: ViewEncapsulation.None,
+  host: {
+    '[class.o-combo]': 'true'
+  }
 })
 export class OComboComponent extends OFormServiceComponent implements OnInit, AfterViewInit, OnDestroy {
 
@@ -114,36 +118,13 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
       // first position is for null selection that it is not included into dataArray
       this._currentIndex += 1;
     }
-  }
-
-  getDescriptionValue() {
-    let descTxt = '';
-    if (this._currentIndex !== undefined && this.selectModel) {
-      if (this.selectModel.selected) {
-        if (this.selectModel.selected instanceof Array) {
-          if (this.multipleTriggerLabel && this.selectModel.selected.length > 1) {
-            descTxt = this.getFirstSelectedValue();
-            descTxt += this.translateService.get('INPUT.COMBO.MESSAGE_TRIGGER', [this.selectModel.selected.length - 1]);
-          } else {
-            this.selectModel.selected.forEach((item) => {
-              if (descTxt !== '') {
-                descTxt += this.separator;
-              }
-              descTxt += item.viewValue;
-            });
-          }
-        } else {
-          descTxt = (this.selectModel.selected as any).viewValue;
-        }
-      } else if (this.selectModel.options) {
-        let option: MatOption = this.selectModel.options.toArray()[this._currentIndex];
-        if (option) {
-          option.select();
-          descTxt = option.viewValue;
-        }
+    if (this.selectModel && this.selectModel.options) {
+      const self = this;
+      let option = this.selectModel.options.find((item: MatOption) => item.value === self.getValue());
+      if (option) {
+        option.select();
       }
     }
-    return descTxt;
   }
 
   getValue() {
@@ -288,6 +269,15 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
     return this.selectModel.selected[0].viewValue;
   }
 
+  protected setIsReadOnly(value: boolean) {
+    super.setIsReadOnly(value);
+    let disabled = Util.isDefined(this.readOnly) ? this.readOnly : value;
+    if (this._fControl && disabled) {
+      this._fControl.disable();
+    } else if (this._fControl) {
+      this._fControl.enable();
+    }
+  }
 }
 
 @NgModule({

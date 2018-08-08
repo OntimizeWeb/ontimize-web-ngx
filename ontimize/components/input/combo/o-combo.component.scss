@@ -1,7 +1,9 @@
-.hidden {
-  display: none !important;
-}
+.o-combo {
+  .read-only .mat-select-arrow-wrapper {
+    visibility: hidden;
+  }
 
-.visible {
-  display: inline-block;
+  .read-only .mat-form-field-underline {
+    background-image: none;
+  }
 }
