@@ -58,7 +58,8 @@ import {
   OUserInfoModule,
   OLanguageSelectorModule,
   OCardMenuItemModule,
-  OHourInputModule
+  OHourInputModule,
+  OTimeInputModule
 } from '../components';
 
 import {
@@ -130,7 +131,8 @@ export const INTERNAL_ONTIMIZE_MODULES_EXPORTED: any = [
   OLanguageSelectorModule,
   OCardMenuItemModule,
   OCardMenuLayoutModule,
-  OHourInputModule
+  OHourInputModule,
+  OTimeInputModule
 ];
 
 // AoT requires an exported function for factories
@@ -225,7 +227,8 @@ export const INTERNAL_ONTIMIZE_MODULES: any = [
   OLanguageSelectorModule,
   OCardMenuItemModule,
   OCardMenuLayoutModule,
-  OHourInputModule
+  OHourInputModule,
+  OTimeInputModule
 ];
 
 @NgModule({

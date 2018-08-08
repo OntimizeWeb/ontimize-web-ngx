@@ -1,0 +1,22 @@
+<div [formGroup]="getFormGroup()" [matTooltip]="tooltip" [matTooltipPosition]="tooltipPosition" [matTooltipShowDelay]="tooltipShowDelay">
+  <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="8px">
+    <o-date-input #dateInput fxFlex attr="dateInput" [read-only]="readOnly" [enabled]="oenabled" [required]="orequired" [label]="placeHolder"
+      clear-button="no" automatic-registering="no" automatic-binding="no" (onChange)="onChangeInnerComp($event)" (onFocus)="onFocusInnerComp($event)"
+      (onBlur)="onBlurInnerComp($event)">
+    </o-date-input>
+
+    <span class="separator">&ndash;</span>
+
+    <o-hour-input #hourInput fxFlex attr="hourInput" [read-only]="readOnly" [enabled]="oenabled" [required]="orequired" clear-button="no"
+      automatic-registering="no" automatic-binding="no" (onChange)="onChangeInnerComp($event)" (onFocus)="onFocusInnerComp($event)"
+      (onBlur)="onBlurInnerComp($event)">
+    </o-hour-input>
+  </div>
+
+  <button *ngIf="showClearButton" matSuffix mat-icon-button (click)="clearValue()">
+    <mat-icon svgIcon="ontimize:close"></mat-icon>
+  </button>
+  <!-- <mat-error *ngIf="hasError('required')">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</mat-error> -->
+  <!-- <mat-error *ngFor="let oError of getActiveOErrors()"> {{ oError.text | oTranslate }} </mat-error> -->
+
+</div>
