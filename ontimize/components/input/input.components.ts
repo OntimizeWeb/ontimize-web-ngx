@@ -17,3 +17,4 @@ export * from './textarea-input/o-textarea-input.component';
 export * from './validation/o-error.component';
 export * from './validation/o-validator.component';
 export * from './o-form-service-component.class';
+export * from './hour-input/o-hour-input.component';

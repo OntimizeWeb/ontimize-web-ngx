@@ -7,8 +7,20 @@ const DNI_PATTERN = '^(([0-9]{8})([-]?)([a-zA-Z]{1}))$';
 const NIE_PATTERN = '^(([x-zX-Z]{1})([-]?)([0-9]{7})([-]?)([a-zA-Z]{1}))$';
 const DNI_CHECK = 'TRWAGMYFPDXBNJZSQVHLCKET';
 const NUMBERS = '0123456789';
+const HOUR_PATTERN = "([01]?[0-9]|2[0-3]):[0-5][0-9] ['am'|'pm'|'AM'|'PM']";
 
 export class OValidators {
+
+   /**
+   * Hour validator
+   */
+  static hourValidator(control: FormControl): ValidationErrors {
+    let regExp = new RegExp(HOUR_PATTERN);
+    if ( !regExp.test(control.value)) {
+      return { 'invalidHour': true };
+    }
+    return {};
+  }
 
   /**
    * Email validator
