@@ -214,7 +214,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   setData(value: any) {
     this.ensureOFormValue(value);
     if (this._fControl) {
-      this._fControl.setValue(value.value, {
+      this._fControl.setValue(this.value.value, {
         emitModelToViewChange: false,
         emitEvent: false
       });
