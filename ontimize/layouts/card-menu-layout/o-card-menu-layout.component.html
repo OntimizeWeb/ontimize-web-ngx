@@ -1,4 +1,5 @@
-<div fxLayout="row wrap" fxLayoutAlign="space-evenly center" fxLayoutGap="25px" fxFill>
+<div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutAlign.lt-md="space-evenly center" [class.o-card-menu-layout-bigscreen]="!isSmallScreen"
+  [class.o-card-menu-layout-smallscreen]="isSmallScreen">
   <ng-container *ngFor="let item of cardItems">
     <o-card-menu-item *ngIf="item['show-in-card-menu'] !== false" button-text="CARD_MENU_LAYOUT.BUTTON_TEXT" [route]="item.route"
       [title]="item.name" [tooltip]="item.tooltip" [icon]="item.icon" [image]="item.image" [detail-component]="item.component"
