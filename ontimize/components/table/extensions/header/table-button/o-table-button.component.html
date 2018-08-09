@@ -1,7 +1,19 @@
-<button mat-button (click)="innerOnClick()" [class.hidden-action-text]="!table.showTableButtonsText">
-  <mat-icon *ngIf="isIconPositionLeft() && svgIcon !== undefined" [svgIcon]="svgIcon"></mat-icon>
-  <mat-icon *ngIf="isIconPositionLeft() && svgIcon === undefined">{{ icon }}</mat-icon>
-  <span *ngIf="table.showTableButtonsText">{{ olabel | oTranslate }}</span>
-  <mat-icon *ngIf="!isIconPositionLeft() && svgIcon !== undefined" [svgIcon]="svgIcon"></mat-icon>
-  <mat-icon *ngIf="!isIconPositionLeft() && svgIcon === undefined">{{ icon }}</mat-icon>
-</button>
+<ng-container *ngIf="table.showTableButtonsText">
+  <button mat-button (click)="innerOnClick()">
+    <mat-icon *ngIf="isIconPositionLeft() && svgIcon !== undefined" [svgIcon]="svgIcon"></mat-icon>
+    <mat-icon *ngIf="isIconPositionLeft() && svgIcon === undefined">{{ icon }}</mat-icon>
+    <span *ngIf="table.showTableButtonsText">{{ olabel | oTranslate }}</span>
+    <mat-icon *ngIf="!isIconPositionLeft() && svgIcon !== undefined" [svgIcon]="svgIcon"></mat-icon>
+    <mat-icon *ngIf="!isIconPositionLeft() && svgIcon === undefined">{{ icon }}</mat-icon>
+  </button>
+</ng-container>
+
+<ng-container *ngIf="!table.showTableButtonsText">
+  <button mat-icon-button (click)="innerOnClick()">
+    <mat-icon *ngIf="isIconPositionLeft() && svgIcon !== undefined" [svgIcon]="svgIcon"></mat-icon>
+    <mat-icon *ngIf="isIconPositionLeft() && svgIcon === undefined">{{ icon }}</mat-icon>
+    <span *ngIf="table.showTableButtonsText">{{ olabel | oTranslate }}</span>
+    <mat-icon *ngIf="!isIconPositionLeft() && svgIcon !== undefined" [svgIcon]="svgIcon"></mat-icon>
+    <mat-icon *ngIf="!isIconPositionLeft() && svgIcon === undefined">{{ icon }}</mat-icon>
+  </button>
+</ng-container>

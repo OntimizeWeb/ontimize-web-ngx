@@ -5,19 +5,13 @@
   font-size: 14px;
   display: inline-block;
   margin: 0;
-  padding:0;
-  min-width:auto;
+  padding: 0;
+  min-width: auto;
   border-radius: 0;
   height: 40px;
-  &.hidden-action-text {
-    width: 40px;
-  }
+  padding: 0 8px;
 
-  &:not(.hidden-action-text) {
-    padding: 0 8px;
-  }
-
-  &.hidden-action-text:not(.disabled):hover {
+  &:not(.disabled):hover {
     .mat-button-focus-overlay {
       background-color: transparent;
     }
@@ -28,4 +22,3 @@
   }
 
 }
-

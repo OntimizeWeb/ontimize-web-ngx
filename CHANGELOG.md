@@ -36,15 +36,17 @@
 * **o-combo**: state bugs fixed ([#202](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/202)) ([db1de6f](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/db1de6f))
 
 ### BREAKING CHANGES
-* **o-app-layout**: Interncal css classes changes:
-  * All internal css classes starting with `application-sidenav` has changed to `o-app-sidenav`.
-  * All internal css classes starting with `application-header` has changed to `o-app-header`.
-  * All internal css classes starting with `user-info` has changed to `o-user-info`.
-* **o-list-picker-dialog**: Internal css classes changes:
-  * Internal css class `dialog-list-container` has been removed, use `mat-dialog-content` instead.
-  * Internal css class `list-picker-search` has changed to `o-list-picker-search`.
-  * Internal css class ´has-filter´ has changed to `o-list-picker-has-filter`.
 * **o-user-info**: removed input `use-flag-icons`. This component doesn't contain the language selector anymore.
+* Changes in CSS classes naming:
+  * **o-app-layout**: Internal CSS classes changes:
+    * All internal CSS classes starting with `application-sidenav` has changed to `o-app-sidenav`.
+    * All internal CSS classes starting with `application-header` has changed to `o-app-header`.
+    * All internal CSS classes starting with `user-info` has changed to `o-user-info`.
+  * **o-list-picker-dialog**: Internal CSS classes changes:
+    * Internal CSS class `dialog-list-container` has been removed, use `mat-dialog-content` instead.
+    * Internal CSS class `list-picker-search` has changed to `o-list-picker-search`.
+    * Internal CSS class ´has-filter´ has changed to `o-list-picker-has-filter`.
+  * **o-table**: Internal CSS class `hidden-action-text` has been removed.
 
 ## 3.0.1 (2018-07-27)
 ### Features
