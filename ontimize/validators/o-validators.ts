@@ -7,32 +7,32 @@ const DNI_PATTERN = '^(([0-9]{8})([-]?)([a-zA-Z]{1}))$';
 const NIE_PATTERN = '^(([x-zX-Z]{1})([-]?)([0-9]{7})([-]?)([a-zA-Z]{1}))$';
 const DNI_CHECK = 'TRWAGMYFPDXBNJZSQVHLCKET';
 const NUMBERS = '0123456789';
-const TWELVE_HOUR_FORMAT_PATTERN = "(([01]?[0-9]):([0-5][0-9]) ([AaPp][Mm]))";
-const TWENTY_FOUR_HOUR_FORMAT_PATTERN = "([01]?[0-9]|2[0-3]):[0-5][0-9]";
+const TWELVE_HOUR_FORMAT_PATTERN = '(([01]?[0-9]):([0-5][0-9]) ([AaPp][Mm]))';
+const TWENTY_FOUR_HOUR_FORMAT_PATTERN = '([01]?[0-9]|2[0-3]):[0-5][0-9]';
 
 export class OValidators {
 
-   /**
-   * Hour validator hh:mm am/pm format
-   */
+  /**
+  * Hour validator hh:mm am/pm format
+  */
   static twelveHourFormatValidator(control: FormControl): ValidationErrors {
-    
-    let regExp =  new RegExp(TWELVE_HOUR_FORMAT_PATTERN);
-    
-    if ( !regExp.test(control.value)) {
+
+    let regExp = new RegExp(TWELVE_HOUR_FORMAT_PATTERN);
+
+    if (!regExp.test(control.value)) {
       return { 'invalidFormatHour': true };
     }
     return {};
   }
 
-   /**
-   * Hour validator HH:mm format
-   */
+  /**
+  * Hour validator HH:mm format
+  */
   static twentyHourFormatValidator(control: FormControl): ValidationErrors {
-    
+
     let regExp = new RegExp(TWENTY_FOUR_HOUR_FORMAT_PATTERN);
-    
-    if ( !regExp.test(control.value)) {
+
+    if (!regExp.test(control.value)) {
       return { 'invalidFormatHour': true };
     }
     return {};
