@@ -9,6 +9,7 @@
 * **o-table**:
   * new `updateRecord` method ([a528120](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a528120))
   * new `auto-align-titles` input ([1714a25](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1714a25))
+  * supports **infinite scroll** when `pagination-controls=no` and `pageable = 'no'` ([9fc3afa]) (https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9fc3afa))
 * **o-table-column**: new `title-align` input ([1d261e1](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1d261e1))
 * **o-app-layout**:
   * New input `mode` for selecting performance mode `desktop` or `mobile` ([7617175](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7617175))
@@ -34,6 +35,8 @@
   * Navigate to insert form when clicking the insert button ([2f71849](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2f71849)).
   * Delete selected list items ([2f71849](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2f71849)).
 * **o-combo**: state bugs fixed ([#202](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/202)) ([db1de6f](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/db1de6f))
+* **o-form-data-components**: components state bugs fixed ([#203](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/203)) ([f986d12](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f986d12))
+
 
 ### BREAKING CHANGES
 * **o-user-info**: removed input `use-flag-icons`. This component doesn't contain the language selector anymore.

@@ -12,22 +12,23 @@ import { ColumnValueFilterOperator, IColumnValueFilter, OTableEditableRowCompone
 import { OColumn, OTableComponent, OTableOptions } from './o-table.component';
 import { OTableDao } from './o-table.dao';
 
-export const SCROLLVIRTUAL ='scroll'
+export const SCROLLVIRTUAL = 'scroll';
+
 export interface ITableOScrollEvent {
   type: string;
   data: number;
 }
-export class OTableScrollEvent implements ITableOScrollEvent{
-  public data:number;
-  public type:string;
-  
-  constructor(data: number) { 
+
+export class OTableScrollEvent implements ITableOScrollEvent {
+  public data: number;
+  public type: string;
+
+  constructor(data: number) {
     this.data = data;
     this.type = SCROLLVIRTUAL;
   }
-
-
 }
+
 export class OTableDataSource extends DataSource<any> {
   dataTotalsChange = new BehaviorSubject<any[]>([]);
   get data(): any[] { return this.dataTotalsChange.value; }
@@ -87,7 +88,7 @@ export class OTableDataSource extends DataSource<any> {
       if (this._paginator) {
         displayDataChanges.push(this._paginator.page);
       } else {
-        displayDataChanges.push(this._loadDataScrollableChange)
+        displayDataChanges.push(this._loadDataScrollableChange);
       }
     }
 
@@ -95,15 +96,13 @@ export class OTableDataSource extends DataSource<any> {
       displayDataChanges.push(this._columnValueFilterChange);
     }
 
-
-
-    return Observable.merge(...displayDataChanges).map((x:any) => {
+    return Observable.merge(...displayDataChanges).map((x: any) => {
       let data = Object.assign([], this._database.data);
       /*
         it is necessary to first calculate the calculated columns and
         then filter and sort the data
       */
-      if ( x instanceof OTableScrollEvent) {
+      if (x instanceof OTableScrollEvent) {
         this.renderedData = data.slice(0, (x.data * OTableComponent.LIMIT_SCROLLVIRTUAL) - 1);
       } else {
         if (this.existsAnyCalculatedColumn()) {
@@ -234,7 +233,7 @@ export class OTableDataSource extends DataSource<any> {
     this._sort.sortables.forEach((value, key) => {
       this._sort.deregister(value);
     });
-    
+
     return data.sort(this.sortFunction.bind(this));
   }
 

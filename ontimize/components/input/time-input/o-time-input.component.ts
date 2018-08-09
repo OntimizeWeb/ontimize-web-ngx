@@ -64,10 +64,6 @@ export class OTimeInputComponent extends OFormDataComponent implements OnInit, A
     const self = this;
     this.formGroup.valueChanges.subscribe(value => {
       self.updateComponentValue();
-      // if (Util.isDefined(value['dateInput'])) {
-      // }
-      // if (Util.isDefined(value['hourInput'])) {
-      // }
     });
   }
 
@@ -79,8 +75,7 @@ export class OTimeInputComponent extends OFormDataComponent implements OnInit, A
     let values = this.formGroup.getRawValue();
     try {
       const dateVal = moment(values['dateInput']).startOf('day').valueOf();
-      const hourMoment = moment(values['hourInput']);
-      const hourVal = hourMoment.valueOf() - hourMoment.startOf('day').valueOf();
+      const hourVal = this.hourInput.getValueAsTimeStamp() || 0;
       timeValue = dateVal + hourVal;
     } catch (e) {
       //
@@ -100,12 +95,12 @@ export class OTimeInputComponent extends OFormDataComponent implements OnInit, A
   ngAfterViewInit() {
     super.ngAfterViewInit();
     if (this.dateInput && this.dateInput.getFormControl()) {
-      this.formGroup.addControl('dateInput', this.dateInput.getFormControl());
+      this.formGroup.registerControl('dateInput', this.dateInput.getFormControl());
     }
     if (this.hourInput) {
       this.hourInput.placeHolder = undefined;
       if (this.hourInput.getFormControl()) {
-        this.formGroup.addControl('hourInput', this.hourInput.getFormControl());
+        this.formGroup.registerControl('hourInput', this.hourInput.getFormControl());
       }
     }
   }
@@ -147,33 +142,11 @@ export class OTimeInputComponent extends OFormDataComponent implements OnInit, A
     }
 
     if (this.hourInput) {
-      this.hourInput.setValue(hourValue, {
+      this.hourInput.setTimestampValue(hourValue, {
         emitModelToViewChange: false,
         emitEvent: false
       });
     }
-  }
-
-  onChangeInnerComp(event: any) {
-    // if (!this.value) {
-    //   this.value = new OFormValue();
-    // }
-    // let timeValue;
-    // let values = this.formGroup.getRawValue();
-    // try {
-    //   const dateVal = moment(values['dateInput']).startOf('day').valueOf();
-    //   const hourMoment = moment(values['hourInput']);
-    //   const hourVal = hourMoment.valueOf() - hourMoment.startOf('day').valueOf();
-    //   timeValue = dateVal + hourVal;
-    // } catch (e) {
-    //   //
-    // }
-    // // if (this._fControl) {
-    // //   this._fControl.setValue(timeValue);
-    // //   this._fControl.markAsDirty();
-    // // }
-    // this.ensureOFormValue(timeValue);
-    // this.onChange.emit(timeValue);
   }
 
   onFocusInnerComp(event: any) {

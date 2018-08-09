@@ -202,7 +202,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   onFormModeChange: EventEmitter<Object> = new EventEmitter<Object>();
 
   public loading: boolean = false;
-  public formData: Object = {};/* Array<any> = [];*/
+  public formData: Object = {};
   public navigationData: Array<any> = [];
   public currentIndex = 0;
   public mode: number = OFormComponent.Mode().INITIAL;
@@ -244,7 +244,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
 
   @ViewChild('innerForm') innerFormEl: ElementRef;
 
-  protected ignoreFormCacheKeys: Array<any> = [];
+  ignoreFormCacheKeys: Array<any> = [];
 
   constructor(
     protected router: Router,
@@ -299,9 +299,11 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
         // Setting parent key values...
         if (this.formParentKeysValues && this.formParentKeysValues[attr] !== undefined) {
           let val = this.formParentKeysValues[attr];
-          this._components[attr].setValue(val);
+          this._components[attr].setValue(val, {
+            emitModelToViewChange: false,
+            emitEvent: false
+          });
         }
-
         /*
         * TODO. Check it!!!
         * En un formulario con tabs, cuando se cambia de uno a otro, se destruyen las vistas
@@ -311,8 +313,11 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
         * para que sólo sea cuando se registra de nuevo ;) )
         */
         const cachedValue = this.formCache.getCachedValue(attr);
-        if (cachedValue && this.getDataValues() && this._components.hasOwnProperty(attr)) {
-          this._components[attr].setValue(cachedValue);
+        if (Util.isDefined(cachedValue) && this.getDataValues() && this._components.hasOwnProperty(attr)) {
+          this._components[attr].setValue(cachedValue, {
+            emitModelToViewChange: false,
+            emitEvent: false
+          });
         }
       }
     }
@@ -738,7 +743,12 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
         Object.keys(self.formGroup.controls).forEach(control => {
           self.formGroup.controls[control].markAsPristine();
         });
-        self.formCache.initializeCache(self.getRegisteredFieldsValues());
+
+        let initialCache = {};
+        Object.keys(self.formData).map((key: string) => {
+          initialCache[key] = self.formData[key].value;
+        });
+        self.formCache.initializeCache(initialCache);
         (self.formGroup.valueChanges as EventEmitter<any>).emit(self.formCache.getInitialDataCache());
         self.formNavigation.updateNavigation(self.formGroup.getRawValue());
       }

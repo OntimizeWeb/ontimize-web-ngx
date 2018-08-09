@@ -78,7 +78,6 @@ export class OImageComponent extends OFormDataComponent {
     injector: Injector) {
     super(form, elRef, injector);
     this._domSanitizer = this.injector.get(DomSanitizer);
-    this.defaultValue = '';
     this._defaultSQLTypeKey = 'BASE64';
   }
 
@@ -106,8 +105,6 @@ export class OImageComponent extends OFormDataComponent {
       if (val.value && val.value['bytes'] !== undefined) {
         this.value = new OFormValue(val.value.bytes);
         return;
-      } else if (val.value === undefined) {
-        val.value = '';
       }
       this.value = new OFormValue(val.value);
     } else if (val && !(val instanceof OFormValue)) {
@@ -119,7 +116,7 @@ export class OImageComponent extends OFormDataComponent {
       }
       this.value = new OFormValue(val);
     } else {
-      this.value = new OFormValue('');
+      this.value = new OFormValue(undefined);
     }
   }
 
