@@ -159,7 +159,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     super.initialize();
     if (this.form) {
       this.registerFormListeners();
-      this.isReadOnly = this.form.isInInitialMode();
+      this.isReadOnly = !(this.form.isInUpdateMode() || this.form.isInInsertMode() || this.form.isEditableDetail());
     } else {
       this.isReadOnly = this._disabled;
     }

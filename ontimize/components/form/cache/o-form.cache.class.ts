@@ -29,7 +29,12 @@ export class OFormCacheClass {
         // initialize cache
         self.formDataCache = {};
       }
-      Object.assign(self.formDataCache, self.form.getRegisteredFieldsValues());
+      let cacheData = Object.assign({}, self.form.getRegisteredFieldsValues());
+      cacheData = Object.assign(cacheData, value);
+      self.form.ignoreFormCacheKeys.forEach(key => {
+        delete cacheData[key];
+      });
+      Object.assign(self.formDataCache, cacheData);
     });
   }
 
@@ -173,14 +178,24 @@ export class OFormCacheClass {
   isInitialStateChanged(): boolean {
     let res = false;
     let initialKeys = Object.keys(this.initialDataCache);
-    let currentKeys = this.formDataCache ? Object.keys(this.formDataCache) : initialKeys;
+    let currentKeys = initialKeys;
+    let currentCache = this.formDataCache;
+    if (this.formDataCache) {
+      currentCache = Object.assign({}, this.formDataCache);
+      Object.keys(currentCache).forEach(key => {
+        if (currentCache[key] === undefined) {
+          delete currentCache[key];
+        }
+      });
+      currentKeys = Object.keys(currentCache);
+    }
     if (initialKeys.length !== currentKeys.length) {
       return true;
     }
     for (let i = 0, leni = initialKeys.length; i < leni; i++) {
       let key = initialKeys[i];
       // TODO be careful with types comparisions
-      res = (this.initialDataCache[key] !== this.formDataCache[key]);
+      res = (this.initialDataCache[key] !== currentCache[key]);
       if (res) {
         break;
       }
