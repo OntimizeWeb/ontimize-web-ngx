@@ -636,7 +636,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
     if (this.sortSubscription) {
       this.sortSubscription.unsubscribe();
-    }  
+    }
     Object.keys(this.asyncLoadSubscriptions).forEach(idx => {
       if (this.asyncLoadSubscriptions[idx]) {
         this.asyncLoadSubscriptions[idx].unsubscribe();
@@ -932,14 +932,14 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   set loadingSorting(value: boolean) {
-      this._loadingSorting = value;
+    this._loadingSorting = value;
   }
   get loadingSorting(): boolean {
     return this._loadingSorting;
   }
 
   showScroll(): boolean {
-    
+
     return this.loading || this.loadingSorting || this.loadingScroll;
   }
   /**
@@ -1022,19 +1022,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       }
     }
 
-    // Add filter from o-filter-builder component
-    if (Util.isDefined(this.filterBuilder)) {
-      let fbFilter = this.filterBuilder.getExpression();
-      if (Util.isDefined(fbFilter)) {
-        if (!Util.isDefined(filter[FilterExpressionUtils.BASIC_EXPRESSION_KEY])) {
-          filter[FilterExpressionUtils.BASIC_EXPRESSION_KEY] = fbFilter;
-        } else {
-          filter[FilterExpressionUtils.BASIC_EXPRESSION_KEY] = FilterExpressionUtils.buildComplexExpression(filter[FilterExpressionUtils.BASIC_EXPRESSION_KEY], fbFilter, FilterExpressionUtils.OP_AND);
-        }
-      }
-    }
-
-    return filter;
+    return super.getComponentFilter(filter);
   }
 
   updatePaginationInfo(queryRes: any) {
@@ -1061,7 +1049,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
   projectContentChanged() {
     this.loadingSorting = false;
-    this.loadingScroll = false; 
+    this.loadingScroll = false;
   }
 
   getAttributesValuesToQuery(): Array<string> {
@@ -1915,8 +1903,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   onTableScroll(e) {
-    const tableViewHeight = e.target.offsetHeight // viewport: ~500px
-    const tableScrollHeight = e.target.scrollHeight // length of all table
+    const tableViewHeight = e.target.offsetHeight; // viewport: ~500px
+    const tableScrollHeight = e.target.scrollHeight; // length of all table
     const scrollLocation = e.target.scrollTop; // how far user scrolled
 
     // If the user has scrolled within 200px of the bottom, add more data
@@ -1927,16 +1915,15 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
   }
 
-
   getDataScrollable(): any {
     const pageVirtualBefore = this.pageScrollVirtual;
     const pageVirtualEnd = Math.ceil(this.dataSource.resultsLength / OTableComponent.LIMIT_SCROLLVIRTUAL);
 
-    if (pageVirtualEnd != this.pageScrollVirtual) {
+    if (pageVirtualEnd !== this.pageScrollVirtual) {
       this.pageScrollVirtual++;
     }
 
-    //throw event change scroll
+    // throw event change scroll
     if (pageVirtualBefore !== this.pageScrollVirtual) {
       this.loadingScroll = true;
       this.dataSource.loadDataScrollable = this.pageScrollVirtual;
@@ -1946,6 +1933,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   hasScrollableContainer(): boolean {
     return this.dataSource && !this.paginationControls && !this.pageable;
   }
+
 }
 
 @NgModule({

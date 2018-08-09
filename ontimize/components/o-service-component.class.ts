@@ -6,6 +6,7 @@ import { InputConverter } from '../decorators';
 import { OFormValue } from './form/OFormValue';
 import { OFilterBuilderComponent } from '../components';
 import { OFormComponent } from './form/o-form.component';
+import { FilterExpressionUtils } from './filter-expression.utils';
 import { AuthGuardService, OTranslateService } from '../services';
 import { OListInitializationOptions } from './list/o-list.component';
 import { OTableInitializationOptions } from './table/o-table.component';
@@ -351,6 +352,24 @@ export class OServiceComponent extends OServiceBaseComponent {
    */
   setFilterBuilder(filterBuilder: OFilterBuilderComponent): void {
     this.filterBuilder = filterBuilder;
+  }
+
+  getComponentFilter(existingFilter: any = {}): any {
+    let filter = super.getComponentFilter(existingFilter);
+
+    // Add filter from o-filter-builder component
+    if (Util.isDefined(this.filterBuilder)) {
+      let fbFilter = this.filterBuilder.getExpression();
+      if (Util.isDefined(fbFilter)) {
+        if (!Util.isDefined(filter[FilterExpressionUtils.BASIC_EXPRESSION_KEY])) {
+          filter[FilterExpressionUtils.BASIC_EXPRESSION_KEY] = fbFilter;
+        } else {
+          filter[FilterExpressionUtils.BASIC_EXPRESSION_KEY] = FilterExpressionUtils.buildComplexExpression(filter[FilterExpressionUtils.BASIC_EXPRESSION_KEY], fbFilter, FilterExpressionUtils.OP_AND);
+        }
+      }
+    }
+
+    return filter;
   }
 
 }
