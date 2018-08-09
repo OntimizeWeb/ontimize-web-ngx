@@ -131,7 +131,7 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
     } else {
       validators.push(OValidators.twelveHourFormatValidator);
     }
-    console.log(validators);
+
     return validators;
   }
 
