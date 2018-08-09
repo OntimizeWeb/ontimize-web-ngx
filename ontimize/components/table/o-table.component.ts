@@ -636,7 +636,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
     if (this.sortSubscription) {
       this.sortSubscription.unsubscribe();
-    }  
+    }
     Object.keys(this.asyncLoadSubscriptions).forEach(idx => {
       if (this.asyncLoadSubscriptions[idx]) {
         this.asyncLoadSubscriptions[idx].unsubscribe();
@@ -932,14 +932,14 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   set loadingSorting(value: boolean) {
-      this._loadingSorting = value;
+    this._loadingSorting = value;
   }
   get loadingSorting(): boolean {
     return this._loadingSorting;
   }
 
   showScroll(): boolean {
-    
+
     return this.loading || this.loadingSorting || this.loadingScroll;
   }
   /**
@@ -1061,7 +1061,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
   projectContentChanged() {
     this.loadingSorting = false;
-    this.loadingScroll = false; 
+    this.loadingScroll = false;
   }
 
   getAttributesValuesToQuery(): Array<string> {
@@ -1915,8 +1915,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   onTableScroll(e) {
-    const tableViewHeight = e.target.offsetHeight // viewport: ~500px
-    const tableScrollHeight = e.target.scrollHeight // length of all table
+    const tableViewHeight = e.target.offsetHeight; // viewport: ~500px
+    const tableScrollHeight = e.target.scrollHeight; // length of all table
     const scrollLocation = e.target.scrollTop; // how far user scrolled
 
     // If the user has scrolled within 200px of the bottom, add more data
@@ -1932,7 +1932,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     const pageVirtualBefore = this.pageScrollVirtual;
     const pageVirtualEnd = Math.ceil(this.dataSource.resultsLength / OTableComponent.LIMIT_SCROLLVIRTUAL);
 
-    if (pageVirtualEnd != this.pageScrollVirtual) {
+    if (pageVirtualEnd !== this.pageScrollVirtual) {
       this.pageScrollVirtual++;
     }
 
