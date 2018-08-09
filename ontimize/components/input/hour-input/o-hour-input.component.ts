@@ -1,4 +1,4 @@
-import { Component, NgModule, Optional, Inject, ElementRef, Injector, forwardRef, ViewChild, EventEmitter, ViewEncapsulation, HostListener, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
+import { Component, NgModule, Optional, Inject, ElementRef, Injector, forwardRef, ViewChild, EventEmitter, ViewEncapsulation, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
 import { OFormDataComponent, DEFAULT_INPUTS_O_FORM_DATA_COMPONENT } from '../../o-form-data-component.class';
 import { CommonModule } from '@angular/common';
 import { ValidatorFn } from '@angular/forms';
@@ -8,9 +8,17 @@ import { OSharedModule } from '../../../shared';
 import { OValidators } from '../../../validators/o-validators';
 import { OFormComponent } from '../../form/form-components';
 import { OFormValue } from '../../form/OFormValue';
+import { InputConverter } from '../../../decorators/input-converter';
+
+const HourFormat = {
+  TWELVE: 'hh:mm a',
+  TWENTY_FOUR: 'HH:mm',
+};
+const TWENTY_FOUR_HOUR_FORMAT = 24;
 
 export const DEFAULT_INPUTS_O_HOUR_INPUT = [
-  ...DEFAULT_INPUTS_O_FORM_DATA_COMPONENT
+  ...DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,
+  'format',
 ];
 
 export const DEFAULT_OUTPUTS_O_HOUR_INPUT = [
@@ -44,12 +52,6 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
     super(form, elRef, injector);
   }
 
-  @HostListener('click', ['$event'])
-  onClick(e) {
-    e.preventDefault();
-    e.stopPropagation();
-  }
-
   onChange: EventEmitter<Object> = new EventEmitter<Object>();
   onFocus: EventEmitter<Object> = new EventEmitter<Object>();
   onBlur: EventEmitter<Object> = new EventEmitter<Object>();
@@ -57,12 +59,29 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
   @ViewChild('picker')
   private picker: any;
 
+  @InputConverter()
+  format: number = TWENTY_FOUR_HOUR_FORMAT;
+
+  formatString = HourFormat.TWENTY_FOUR;
+
+  private openPopup = false;
+
   ngOnInit() {
     super.ngOnInit();
+    this.formatString = (this.format === TWENTY_FOUR_HOUR_FORMAT ? HourFormat.TWENTY_FOUR : HourFormat.TWELVE);
   }
 
   ngAfterViewInit() {
     super.ngAfterViewInit();
+
+    const originalPickerOpen = this.picker.open.bind(this.picker);
+    const self = this;
+    this.picker.open = function (e) {
+      if (!self.isReadOnly && !self.isDisabled && self.openPopup) {
+        self.openPopup = false;
+        originalPickerOpen();
+      }
+    }
   }
 
   ngOnDestroy() {
@@ -73,27 +92,10 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
     super.setData(value);
   }
 
-  onMouseDown(event) {
-    console.log(this.getAttribute());
-    console.log(this.getValueAsTimeStamp());
-    if (this.isDisabled || this.isReadOnly) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
-  }
 
-  onKeyDown(event) {
-    console.log(event);
-    if (this.isDisabled || this.isReadOnly) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
-  }
-
-  onOpen($event) {
-    if (!this.isReadOnly && !this.isDisabled) {
-      this.picker.open();
-    }
+  onOpen(event) {
+    this.openPopup = true;
+    this.picker.open();
   }
 
   innerOnChange(event: any) {
@@ -104,15 +106,35 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
     this.onChange.emit(event);
   }
 
+  innerOnFocus(event: any) {
+    if (!this.isReadOnly && !this.isDisabled) {
+      this.onFocus.emit(event);
+    }
+  }
+
+  innerOnBlur(event: any) {
+    if (!this.isReadOnly && !this.isDisabled) {
+      this.onBlur.emit(event);
+    }
+  }
+
   getValueAsTimeStamp() {
-    return moment('01/01/1970 ' + this.getValue(), 'MM/DD/YYYY hh:mm A').unix();
+    const formatMoment = 'MM/DD/YYYY ' + this.formatString;
+    return moment('01/01/1970 ' + this.getValue(), formatMoment).unix();
   }
 
   resolveValidators(): ValidatorFn[] {
     let validators: ValidatorFn[] = super.resolveValidators();
-    validators.push(OValidators.hourValidator);
+
+    if (this.format === TWENTY_FOUR_HOUR_FORMAT) {
+      validators.push(OValidators.twentyHourFormatValidator);
+    } else {
+      validators.push(OValidators.twelveHourFormatValidator);
+    }
+    console.log(validators);
     return validators;
   }
+
 }
 
 @NgModule({
