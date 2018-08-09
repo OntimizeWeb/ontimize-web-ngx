@@ -35,6 +35,8 @@
   * Navigate to insert form when clicking the insert button ([2f71849](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2f71849)).
   * Delete selected list items ([2f71849](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2f71849)).
 * **o-combo**: state bugs fixed ([#202](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/202)) ([db1de6f](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/db1de6f))
+* **o-form-data-components**: components state bugs fixed ([#203](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/203)) ([f986d12](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f986d12))
+
 
 ### BREAKING CHANGES
 * **o-app-layout**: Interncal css classes changes:
