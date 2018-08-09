@@ -47,6 +47,7 @@
     * Internal CSS class `list-picker-search` has changed to `o-list-picker-search`.
     * Internal CSS class ´has-filter´ has changed to `o-list-picker-has-filter`.
   * **o-table**: Internal CSS class `hidden-action-text` has been removed.
+  * **o-form-toolbar**: Internal CSS class `toolbar-form-header` has changed to `o-form-toolbar-header`.
 
 ## 3.0.1 (2018-07-27)
 ### Features

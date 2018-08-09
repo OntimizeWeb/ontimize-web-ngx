@@ -1,10 +1,11 @@
 .o-form-toolbar {
-  flex:none;
+  flex: none;
   display: block;
-  
-  .toolbar-form-header {
+
+  .o-form-toolbar-header {
     min-height: 50px;
     max-height: 50px;
+    padding: 0 16px 0 0;
 
     mat-toolbar-row {
       height: 50px;
@@ -27,16 +28,12 @@
       align-items: center;
 
       button {
-        min-width: 100px;
         padding: 0 6px;
-      }
 
-      mat-icon {
-        cursor: pointer;
-        vertical-align: middle;
+        .mat-button {
+          min-width: 100px;
+        }
       }
-
     }
   }
-
 }
