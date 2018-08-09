@@ -4,10 +4,11 @@ import { CommonModule } from '@angular/common';
 import { ValidatorFn } from '@angular/forms';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import moment from 'moment';
+import { Util } from '../../../utils';
 import { OSharedModule } from '../../../shared';
 import { OValidators } from '../../../validators/o-validators';
 import { OFormComponent } from '../../form/form-components';
-import { OFormValue } from '../../form/OFormValue';
+import { OFormValue, IFormValueOptions } from '../../form/OFormValue';
 import { InputConverter } from '../../../decorators/input-converter';
 
 const HourFormat = {
@@ -81,7 +82,7 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
         self.openPopup = false;
         originalPickerOpen();
       }
-    }
+    };
   }
 
   ngOnDestroy() {
@@ -119,8 +120,18 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
   }
 
   getValueAsTimeStamp() {
-    const formatMoment = 'MM/DD/YYYY ' + this.formatString;
-    return moment('01/01/1970 ' + this.getValue(), formatMoment).unix();
+    // var formatMoment = 'MM/DD/YYYY ' + this.formatString;
+    var momentV = moment('01/01/1970 ' + this.getValue());
+    return momentV.add(1, 'hour').valueOf();
+  }
+
+  setTimestampValue(value: any, options?: IFormValueOptions) {
+    let parsedValue;
+    const momentV = Util.isDefined(value) ? moment(value) : value;
+    if (momentV && momentV.isValid()) {
+      parsedValue = momentV.utcOffset(0).format(this.formatString);
+    }
+    this.setValue(parsedValue, options);
   }
 
   resolveValidators(): ValidatorFn[] {
