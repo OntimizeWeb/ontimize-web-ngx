@@ -93,10 +93,28 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
     super.setData(value);
   }
 
-
   onOpen(event) {
     this.openPopup = true;
-    this.picker.open();
+    if (this.picker) {
+      var momentV = moment(this.getValueAsTimeStamp());
+      if (this.picker.timepickerService && momentV.isValid()) {
+        momentV = momentV.utcOffset(0);
+        let hour = momentV.get('hour');
+        hour = hour > 12 ? hour - 12 : hour;
+        const minutes = momentV.get('minutes');
+
+        this.picker.timepickerService.hour = {
+          time: hour,
+          angle: hour * 30
+        };
+        this.picker.timepickerService.minute = {
+          time: minutes,
+          angle: minutes * 6
+        };
+        this.picker.timepickerService.period = this.format === TWENTY_FOUR_HOUR_FORMAT ? 'PM' : 'AM';
+      }
+      this.picker.open();
+    }
   }
 
   innerOnChange(event: any) {
