@@ -18,8 +18,6 @@ export const DEFAULT_INPUTS_O_SERVICE_COMPONENT = [
 
   '_title: title',
 
-  'cssClass: css-class',
-
   // visible [no|yes]: visibility. Default: yes.
   'ovisible: visible',
 
@@ -88,7 +86,6 @@ export class OServiceComponent extends OServiceBaseComponent {
     return this._title;
   }
   protected _title: string;
-  protected cssclass: string;
   @InputConverter()
   protected ovisible: boolean = true;
   @InputConverter()
