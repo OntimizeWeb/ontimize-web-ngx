@@ -1903,15 +1903,17 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   onTableScroll(e) {
-    const tableViewHeight = e.target.offsetHeight; // viewport: ~500px
-    const tableScrollHeight = e.target.scrollHeight; // length of all table
-    const scrollLocation = e.target.scrollTop; // how far user scrolled
+    if (this.hasScrollableContainer()){
+      const tableViewHeight = e.target.offsetHeight; // viewport: ~500px
+      const tableScrollHeight = e.target.scrollHeight; // length of all table
+      const scrollLocation = e.target.scrollTop; // how far user scrolled
 
-    // If the user has scrolled within 200px of the bottom, add more data
-    const buffer = 100;
-    const limit_SCROLLVIRTUAL = tableScrollHeight - tableViewHeight - buffer;
-    if (scrollLocation > limit_SCROLLVIRTUAL) {
-      this.getDataScrollable();
+      // If the user has scrolled within 200px of the bottom, add more data
+      const buffer = 100;
+      const limit_SCROLLVIRTUAL = tableScrollHeight - tableViewHeight - buffer;
+      if (scrollLocation > limit_SCROLLVIRTUAL) {
+        this.getDataScrollable();
+      }
     }
   }
 

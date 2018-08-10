@@ -47,7 +47,7 @@
     <div #tableBody fxLayout="column" fxLayoutAlign="start stretch" class="o-table-body o-scroll" [class.horizontal-scroll]="horizontalScroll"
       [class.scrolled]="horizontalScrolled">
 
-      <mat-table #tableHeader matSort [class]="rowHeight" [class.header-fixed]="fixedHeader" [class.mat-table]="true" (scroll)="onTableScroll($event)">
+      <mat-table #tableHeader matSort [class]="rowHeight" [class.header-fixed]="fixedHeader" [class.mat-table]="true">
         <!--Checkbox Column -->
         <ng-container [matColumnDef]="oTableOptions.selectColumn.name" *ngIf="oTableOptions.selectColumn.visible">
           <mat-header-cell *matHeaderCellDef>
@@ -91,7 +91,7 @@
       <o-table-editable-row [datasource]="dataSource" *ngIf="showFirstInsertableRow"></o-table-editable-row>
 
       <mat-table #table [trackBy]="getTrackByFunction()" [dataSource]="dataSource" matSort [class]="rowHeight" [class.content-table]="true"
-        [class.mat-table]="true" (cdkObserveContent)="projectContentChanged()">
+        [class.mat-table]="true" (cdkObserveContent)="projectContentChanged()" (scroll)="onTableScroll($event)">
         
         <!--Checkbox Column -->
         <ng-container [matColumnDef]="oTableOptions.selectColumn.name" *ngIf="oTableOptions.selectColumn.visible">
