@@ -120,7 +120,10 @@ export class OFormCacheClass {
 
   protected setFormControlValue(attr: string, val: any) {
     this.blockCaching = true;
-    this.form.formGroup.get(attr).setValue(val);
+    let formControl = this.form.formGroup.get(attr);
+    if (formControl) {
+      formControl.setValue(val);
+    }
     this.blockCaching = false;
   }
 
