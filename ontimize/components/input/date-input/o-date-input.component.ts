@@ -1,7 +1,8 @@
-import { Component, ElementRef, EventEmitter, forwardRef, Inject, Injector, NgModule, Optional, ViewChild } from '@angular/core';
+import { AfterViewChecked, Component, ElementRef, EventEmitter, forwardRef, Inject, Injector, NgModule, OnDestroy, OnInit, Optional, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE, MatDateFormats, MatDatepicker, MatDatepickerInput, MatDatepickerInputEvent } from '@angular/material';
+import { MediaChange, ObservableMedia } from '@angular/flex-layout';
 import { Subscription } from 'rxjs/Subscription';
 
 import moment from 'moment';
@@ -13,6 +14,7 @@ import { InputConverter } from '../../../decorators';
 import { OFormComponent } from '../../form/o-form.component';
 import { OFormDataComponent } from '../../o-form-data-component.class';
 import { DEFAULT_INPUTS_O_TEXT_INPUT, DEFAULT_OUTPUTS_O_TEXT_INPUT } from '../text-input/o-text-input.component';
+import { Util } from '../../../util/util';
 
 export const DEFAULT_OUTPUTS_O_DATE_INPUT = [
   ...DEFAULT_OUTPUTS_O_TEXT_INPUT
@@ -48,7 +50,7 @@ export let O_DATE_INPUT_DEFAULT_FORMATS: MatDateFormats = {
     { provide: MAT_DATE_FORMATS, useValue: O_DATE_INPUT_DEFAULT_FORMATS }
   ]
 })
-export class ODateInputComponent extends OFormDataComponent {
+export class ODateInputComponent extends OFormDataComponent implements AfterViewChecked, OnDestroy, OnInit {
 
   @ViewChild('matInputRef')
   private matInputRef: ElementRef;
@@ -68,7 +70,7 @@ export class ODateInputComponent extends OFormDataComponent {
   protected oMinDate: string;
   protected oMaxDate: string;
   @InputConverter()
-  protected oTouchUi: boolean = false;
+  protected oTouchUi: boolean;
   protected oStartAt: string;
   protected _filterDate: DateFilterFunction;
 
@@ -76,11 +78,13 @@ export class ODateInputComponent extends OFormDataComponent {
   protected _maxDateString: string;
 
   private momentSrv: MomentService;
+  protected media: ObservableMedia;
 
   onChange: EventEmitter<Object> = new EventEmitter<Object>();
   onFocus: EventEmitter<Object> = new EventEmitter<Object>();
   onBlur: EventEmitter<Object> = new EventEmitter<Object>();
 
+  protected mediaSubscription: Subscription;
   protected onLanguageChangeSubscription: Subscription;
 
   constructor(
@@ -94,6 +98,7 @@ export class ODateInputComponent extends OFormDataComponent {
     this.momentDateAdapter = dateAdapter;
     this._defaultSQLTypeKey = 'DATE';
     this.momentSrv = this.injector.get(MomentService);
+    this.media = this.injector.get(ObservableMedia);
   }
 
   ngOnInit() {
@@ -112,10 +117,6 @@ export class ODateInputComponent extends OFormDataComponent {
 
     if (this.oStartView) {
       this.datepicker.startView = this.oStartView;
-    }
-
-    if (this.oTouchUi) {
-      this.datepicker.touchUi = this.oTouchUi;
     }
 
     if (this.oStartAt) {
@@ -148,8 +149,22 @@ export class ODateInputComponent extends OFormDataComponent {
     }
   }
 
+  ngAfterViewChecked(): void {
+    this.mediaSubscription = this.media.subscribe((change: MediaChange) => {
+      if (['xs', 'sm'].indexOf(change.mqAlias) !== -1) {
+        this.touchUi = Util.isDefined(this.oTouchUi) ? this.oTouchUi : true;
+      }
+      if (['md', 'lg', 'xl'].indexOf(change.mqAlias) !== -1) {
+        this.touchUi = Util.isDefined(this.oTouchUi) ? this.oTouchUi : false;
+      }
+    });
+  }
+
   ngOnDestroy() {
     super.ngOnDestroy();
+    if (this.mediaSubscription) {
+      this.mediaSubscription.unsubscribe();
+    }
     if (this.onLanguageChangeSubscription) {
       this.onLanguageChangeSubscription.unsubscribe();
     }
@@ -253,6 +268,16 @@ export class ODateInputComponent extends OFormDataComponent {
   set maxDateString(val: string) {
     this._maxDateString = val;
   }
+
+  get touchUi(): boolean {
+    return this.oTouchUi || false;
+  }
+
+  set touchUi(val: boolean) {
+    this.oTouchUi = val;
+    this.datepicker.touchUi = this.touchUi;
+  }
+
 }
 
 @NgModule({
@@ -260,6 +285,4 @@ export class ODateInputComponent extends OFormDataComponent {
   imports: [CommonModule, OSharedModule],
   exports: [ODateInputComponent]
 })
-
-export class ODateInputModule {
-}
+export class ODateInputModule { }
