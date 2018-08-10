@@ -25,6 +25,7 @@
   * new outputs added: `onItemDeleted`, `onListDataLoaded`, `onPaginatedListDataLoade` ([2f71849](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2f71849))
   * added suppor for using the `o-filter-builder` component ([1736a2a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1736a2a))
 * **o-list-item-card**: new input `show-image` ([ed89b6b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ed89b6b))
+* **o-checkbox**: new attributes `boolean-type`, `true-value` and `false-value` ([0d6d0dd](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0d6d0dd)) closes [#187](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/187)
 * New **o-hour-input** component ([8212f85](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/8212f85))
 * New **o-time-input** component ([49fe9c2](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/49fe9c2))
 
