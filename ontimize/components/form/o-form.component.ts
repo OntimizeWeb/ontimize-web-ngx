@@ -286,16 +286,19 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   registerFormComponent(comp: any) {
     if (comp) {
       let attr = comp.getAttribute();
-      if (this._components.hasOwnProperty(attr)) {
-        comp.repeatedAttr = true;
-        console.error('There is already a component registered in the form with the attr: ' + attr);
-        return;
-      }
       if (attr && attr.length > 0) {
-        this._components[attr] = comp;
+
         if (!comp.isAutomaticRegistering()) {
           return;
         }
+
+        if (this._components.hasOwnProperty(attr)) {
+          comp.repeatedAttr = true;
+          console.error('There is already a component registered in the form with the attr: ' + attr);
+          return;
+        }
+
+        this._components[attr] = comp;
         // Setting parent key values...
         if (this.formParentKeysValues && this.formParentKeysValues[attr] !== undefined) {
           let val = this.formParentKeysValues[attr];
