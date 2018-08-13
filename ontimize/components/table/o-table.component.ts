@@ -939,9 +939,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   showScroll(): boolean {
-
     return this.loading || this.loadingSorting || this.loadingScroll;
   }
+
   /**
    * This method manages the call to the service
    * @param parentItem it is defined if its called from a form
@@ -1903,7 +1903,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   onTableScroll(e) {
-    if (this.hasScrollableContainer()){
+    if (this.hasScrollableContainer()) {
       const tableViewHeight = e.target.offsetHeight; // viewport: ~500px
       const tableScrollHeight = e.target.scrollHeight; // length of all table
       const scrollLocation = e.target.scrollTop; // how far user scrolled
@@ -1983,5 +1983,4 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     useClass: OTableMatPaginatorIntl
   }]
 })
-export class OTableModule {
-}
+export class OTableModule { }
