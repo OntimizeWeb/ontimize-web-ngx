@@ -42,6 +42,10 @@
 
 
 ### BREAKING CHANGES
+* **o-list**:
+  * The method `onReload` has been removed as it was deprecated in v1.2.0.
+  * The method `registerSearchInput` has been renamed to `registerQuickFilter`.
+  * The public attribute `searchInputComponent` has been renamed to `quickFilterComponent`.
 * **o-user-info**: removed input `use-flag-icons`. This component doesn't contain the language selector anymore.
 * Changes in CSS classes naming:
   * **o-app-layout**: Internal CSS classes changes:
