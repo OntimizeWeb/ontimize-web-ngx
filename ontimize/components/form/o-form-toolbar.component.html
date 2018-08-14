@@ -5,8 +5,7 @@
       <mat-icon svgIcon="ontimize:arrow_back"></mat-icon>
     </button>
 
-    <o-form-navigation #formNavigation *ngIf="showNavigation">
-    </o-form-navigation>
+    <o-form-navigation #formNavigation *ngIf="showNavigation" fxLayout="row" fxLayoutAlign="space-between center"></o-form-navigation>
 
     <span *ngIf="getLabelHeaderAlign() === 'center' || getLabelHeaderAlign() === 'end'" class="fill-remaining"></span>
     <div *ngIf="labelHeader!=''" fxLayout="row" fxLayoutAlign="center center">
