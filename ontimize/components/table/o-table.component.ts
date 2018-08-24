@@ -938,7 +938,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     return this._loadingSorting;
   }
 
-  showScroll(): boolean {
+  showLoading(): boolean {
     return this.loading || this.loadingSorting || this.loadingScroll;
   }
 

@@ -154,14 +154,8 @@
       <o-table-editable-row [datasource]="dataSource" *ngIf="showLastInsertableRow"></o-table-editable-row>
 
       <!--LOADING-->
-      <!--<div *ngIf="loadingSortingChange | async" class="spinner-container" >
-          <mat-progress-spinner mode="indeterminate"  strokeWidth="3"></mat-progress-spinner>
-        </div>
-      <div *ngIf="loadedSorting" class="spinner-container" >
-            <mat-progress-spinner mode="indeterminate"  strokeWidth="3"></mat-progress-spinner>
-       </div>-->
-
-      <div *ngIf="showScroll()" class="spinner-container" [class.spinner-container-scrollable]="loadingScroll">
+     
+      <div *ngIf="showLoading()" class="spinner-container" [class.spinner-container-scrollable]="loadingScroll">
         <mat-progress-spinner mode="indeterminate"  strokeWidth="3"></mat-progress-spinner>
       </div>
       
