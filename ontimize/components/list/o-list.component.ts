@@ -245,14 +245,14 @@ export class OListComponent extends OServiceComponent implements AfterContentIni
 
   protected setListItemsData() {
     var self = this;
-    this.listItemComponents.forEach(function (element: OListItemComponent, index) {
+    this.listItemComponents.forEach((element: OListItemComponent, index) => {
       element.setItemData(self.dataResponseArray[index]);
     });
   }
 
   protected setListItemDirectivesData() {
     var self = this;
-    this.listItemDirectives.forEach(function (element: OListItemDirective, index) {
+    this.listItemDirectives.forEach((element: OListItemDirective, index) => {
       element.setItemData(self.dataResponseArray[index]);
       element.setListComponent(self);
       self.registerListItemDirective(element);
@@ -287,15 +287,14 @@ export class OListComponent extends OServiceComponent implements AfterContentIni
 
   protected getKeysValues(): any[] {
     let data = this.dataArray;
-    const _self = this;
-    return data.map(function (row, i, a) {
+    const self = this;
+    return data.map((row) => {
       let obj = {};
-      _self.keysArray.map(function (key, i, a) {
+      self.keysArray.map((key) => {
         if (row[key] !== undefined) {
           obj[key] = row[key];
         }
       });
-
       return obj;
     });
   }

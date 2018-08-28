@@ -1,23 +1,9 @@
-import {
-  Component,
-  Inject,
-  Injector,
-  forwardRef,
-  ViewEncapsulation,
-  ContentChildren,
-  ContentChild,
-  QueryList,
-  ElementRef,
-  Renderer,
-  AfterContentInit,
-  Optional,
-  ViewChild,
-  NgModule
-} from '@angular/core';
+import { AfterContentInit, Component, ElementRef, forwardRef, Inject, Injector, ContentChild, ContentChildren, NgModule, Optional, QueryList, Renderer, ViewChild, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatLine, MatListAvatarCssMatStyler, MatListItem } from '@angular/material';
-import { OListComponent } from '../o-list.component';
+
 import { OSharedModule } from '../../../shared';
+import { OListComponent } from '../o-list.component';
 
 @Component({
   selector: 'o-list-item',
@@ -28,13 +14,10 @@ import { OSharedModule } from '../../../shared';
     '[class.o-list-item]': 'true'
   }
 })
-
 export class OListItemComponent implements AfterContentInit {
 
   modelData: Object;
   protected _isSelected: boolean = false;
-
-  _hasFocus: boolean = false;
 
   @ContentChildren(MatLine) _lines: QueryList<MatLine>;
 
@@ -53,8 +36,7 @@ export class OListItemComponent implements AfterContentInit {
     protected _renderer: Renderer,
     protected _injector: Injector,
     @Optional() @Inject(forwardRef(() => OListComponent)) public _list: OListComponent
-  ) {
-  }
+  ) { }
 
   ngAfterContentInit() {
     var matLinesRef = this._lines;
@@ -108,21 +90,19 @@ export class OListItemComponent implements AfterContentInit {
     }
   }
 
-
-
-  get isSelected() : boolean {
+  get isSelected(): boolean {
     return this._isSelected;
   }
 
-  set isSelected(val : boolean) {
+  set isSelected(val: boolean) {
     this._isSelected = val;
   }
+
 }
 
 @NgModule({
   declarations: [OListItemComponent],
-  imports: [OSharedModule, CommonModule],
+  imports: [CommonModule, OSharedModule],
   exports: [OListItemComponent]
 })
-export class OListItemModule {
-}
+export class OListItemModule { }
