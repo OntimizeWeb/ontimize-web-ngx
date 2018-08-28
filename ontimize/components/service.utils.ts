@@ -1,7 +1,15 @@
 import { Router } from '@angular/router';
+
+import { Codes, Util } from '../utils';
 import { OFormComponent } from './form/o-form.component';
 import { OFormValue } from '../components/form/OFormValue';
-import { Codes, Util } from '../utils';
+
+export type OQueryDataArgs = {
+  replace?: boolean; // Used in the list component for replacing data in setValue method when reloadData method is called
+  sqltypes?: Object;
+  offset?: number;
+  length?: number;
+};
 
 export interface ISQLOrder {
   columnName: string;
@@ -10,10 +18,9 @@ export interface ISQLOrder {
 
 export class ServiceUtils {
 
-  static getParentItemFromForm(parentItem: any, parentKeysObject: Object, form: OFormComponent) {
-    let result = parentItem;
+  static getParentKeysFromForm(parentKeysObject: Object, form: OFormComponent) {
+    let result = {};
     const parentKeys = Object.keys(parentKeysObject || {});
-    const existParentKeys = parentKeys && parentKeys.length > 0;
 
     const formComponents = form ? form.getComponents() : {};
     const existsComponents = Object.keys(formComponents).length > 0;
@@ -21,8 +28,7 @@ export class ServiceUtils {
     const formDataProperties = Object.keys(form ? form.getDataValues() : {});
     const existsProperties = formDataProperties.length > 0;
 
-    if (existParentKeys && parentItem === undefined && (existsComponents || existsProperties)) {
-      let partialResult = {};
+    if (existsComponents || existsProperties) {
       parentKeys.forEach(key => {
         const formFieldAttr = parentKeysObject[key];
         let currentData;
@@ -38,20 +44,17 @@ export class ServiceUtils {
           switch (typeof (currentData)) {
             case 'string':
               if (currentData.trim().length > 0) {
-                partialResult[key] = currentData.trim();
+                result[key] = currentData.trim();
               }
               break;
             case 'number':
               if (!isNaN(currentData)) {
-                partialResult[key] = currentData;
+                result[key] = currentData;
               }
               break;
           }
         }
       });
-      if (Object.keys(partialResult).length > 0) {
-        result = partialResult;
-      }
     }
     return result;
   }

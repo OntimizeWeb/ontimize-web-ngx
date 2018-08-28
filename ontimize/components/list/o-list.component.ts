@@ -6,12 +6,12 @@ import { Observable } from 'rxjs';
 
 import { Util, Codes } from '../../utils';
 import { OSharedModule } from '../../shared';
-import { ServiceUtils } from '../service.utils';
 import { OntimizeService } from '../../services';
 import { InputConverter } from '../../decorators';
 import { ObservableWrapper } from '../../util/async';
 import { OFormComponent } from '../form/o-form.component';
 import { OFormDataNavigation } from '../form/form-components';
+import { OQueryDataArgs, ServiceUtils } from '../service.utils';
 import { OServiceComponent } from '../o-service-component.class';
 import { FilterExpressionUtils } from '../filter-expression.utils';
 import { OListItemModule } from './list-item/o-list-item.component';
@@ -201,11 +201,11 @@ export class OListComponent extends OServiceComponent implements AfterContentIni
       this.state.totalQueryRecordsNumber = 0;
     }
     if (this.queryOnInit) {
-      let queryArgs = {
+      let queryArgs: OQueryDataArgs = {
         offset: 0,
         length: initialQueryLength || this.queryRows
       };
-      this.queryData(this.parentItem, queryArgs);
+      this.queryData(void 0, queryArgs);
     }
   }
 
@@ -338,7 +338,7 @@ export class OListComponent extends OServiceComponent implements AfterContentIni
   }
 
   reloadData() {
-    let queryArgs = {};
+    let queryArgs: OQueryDataArgs = {};
     if (this.pageable) {
       this.state.queryRecordOffset = 0;
       queryArgs = {
@@ -350,7 +350,7 @@ export class OListComponent extends OServiceComponent implements AfterContentIni
       this.selectedItems = [];
       this.state.selectedIndexes = [];
     }
-    this.queryData(this.parentItem, queryArgs);
+    this.queryData(void 0, queryArgs);
   }
 
   configureFilterValue(value: string) {
@@ -375,12 +375,12 @@ export class OListComponent extends OServiceComponent implements AfterContentIni
       this.state.filterValue = value;
     }
     if (this.pageable) {
-      let queryArgs = {
+      let queryArgs: OQueryDataArgs = {
         offset: 0,
         length: this.queryRows,
         replace: true
       };
-      this.queryData(this.parentItem, queryArgs);
+      this.queryData(void 0, queryArgs);
     } else if (value && value.length > 0 && this.dataResponseArray && this.dataResponseArray.length > 0) {
       var self = this;
       let filteredData = this.dataResponseArray.filter(item => {
@@ -452,11 +452,11 @@ export class OListComponent extends OServiceComponent implements AfterContentIni
       if (!this.loading && pendingRegistries) {
         let element = e.target as any;
         if (element.offsetHeight + element.scrollTop + 5 >= element.scrollHeight) {
-          let queryArgs = {
+          let queryArgs: OQueryDataArgs = {
             offset: this.state.queryRecordOffset,
             length: this.queryRows
           };
-          this.queryData(this.parentItem, queryArgs);
+          this.queryData(void 0, queryArgs);
         }
       }
     }

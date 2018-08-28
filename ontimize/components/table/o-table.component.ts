@@ -1,34 +1,34 @@
-import {
-  Component, OnInit, OnDestroy, Inject, Injector, ElementRef, forwardRef,
-  Optional, NgModule, ViewEncapsulation, ViewChild, EventEmitter, ContentChildren, QueryList, ViewChildren, HostListener,
-} from '@angular/core';
+import { Component, ContentChildren, ElementRef, EventEmitter, forwardRef, HostListener, Inject, Injector, NgModule, OnDestroy, OnInit, Optional, QueryList, ViewChild, ViewChildren, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CdkTableModule } from '@angular/cdk/table';
+import { ObserversModule } from '@angular/cdk/observers';
 import { SelectionModel, SelectionChange } from '@angular/cdk/collections';
 import { MatDialog, MatSort, MatTabGroup, MatTab, MatPaginatorIntl, MatPaginator, MatCheckboxChange, MatMenu, PageEvent, Sort, MatSortHeader } from '@angular/material';
 import { DndModule } from 'ng2-dnd';
+import { Observable, Subscription } from 'rxjs';
 
-import { Observable } from 'rxjs/Observable';
-import { Subscription } from 'rxjs/Subscription';
-
-import { InputConverter } from '../../decorators';
-
-import { dataServiceFactory } from '../../services/data-service.provider';
-import { OntimizeService, SnackBarService } from '../../services';
-import { OFormComponent } from '../form/o-form.component';
 import { OSharedModule } from '../../shared';
-import { ObserversModule } from '@angular/cdk/observers';
-import { OServiceComponent } from '../o-service-component.class';
-import {
-  O_TABLE_FOOTER_COMPONENTS,
-  OTablePaginatorComponent,
-  OTableMatPaginatorIntl,
-  OTableColumnAggregateComponent,
-  OColumnAggregate
-} from './extensions/footer/o-table-footer-components';
-
-import { OTableDataSource } from './o-table.datasource';
 import { OTableDao } from './o-table.dao';
+import { InputConverter } from '../../decorators';
+import { OTableDataSource } from './o-table.datasource';
+import { OFormComponent } from '../form/o-form.component';
+import { Codes, ObservableWrapper, Util } from '../../utils';
+import { OServiceComponent } from '../o-service-component.class';
+import { OntimizeService, SnackBarService } from '../../services';
+import { OTableRow } from './extensions/row/o-table-row.component';
+import { OColumnTooltip } from './column/o-table-column.component';
+import { OTableStorage } from './extensions/o-table-storage.class';
+import { dataServiceFactory } from '../../services/data-service.provider';
+import { OTableColumnComponent } from './column/o-table-column.component';
+import { OContextMenuModule } from '../contextmenu/o-context-menu.module';
+import { ISQLOrder, OQueryDataArgs, ServiceUtils } from '../service.utils';
+import { IOContextMenuContext } from '../contextmenu/o-context-menu.service';
+import { FilterExpressionUtils, IExpression } from '../filter-expression.utils';
+import { OContextMenuComponent } from '../contextmenu/o-context-menu-components';
+import { OFormDataNavigation } from './../form/navigation/o-form.data.navigation.class';
+import { OTableContextMenuComponent } from './extensions/contextmenu/o-table-context-menu.component';
+import { OperatorFunction, OTableColumnCalculatedComponent } from './column/calculated/o-table-column-calculated.component';
+
 import {
   O_TABLE_HEADER_COMPONENTS,
   OTableOptionComponent,
@@ -40,8 +40,13 @@ import {
   ColumnValueFilterOperator
 } from './extensions/header/o-table-header-components';
 
-import { OTableColumnComponent } from './column/o-table-column.component';
-import { Util, Codes, ObservableWrapper } from '../../utils';
+import {
+  O_TABLE_FOOTER_COMPONENTS,
+  OColumnAggregate,
+  OTableColumnAggregateComponent,
+  OTableMatPaginatorIntl,
+  OTablePaginatorComponent
+} from './extensions/footer/o-table-footer-components';
 
 import {
   O_TABLE_DIALOGS,
@@ -56,28 +61,12 @@ import {
 } from './extensions/dialog/o-table-dialog-components';
 
 import {
-  OBaseTableCellRenderer,
   O_TABLE_CELL_RENDERERS,
+  OBaseTableCellRenderer,
   OTableCellRendererImageComponent
 } from './column/cell-renderer/cell-renderer';
 
 import { O_TABLE_CELL_EDITORS } from './column/cell-editor/cell-editor';
-
-import {
-  OTableColumnCalculatedComponent,
-  OperatorFunction
-} from './column/calculated/o-table-column-calculated.component';
-
-import { OFormDataNavigation } from './../form/navigation/o-form.data.navigation.class';
-import { OTableContextMenuComponent } from './extensions/contextmenu/o-table-context-menu.component';
-import { OContextMenuComponent } from '../contextmenu/o-context-menu-components';
-import { OContextMenuModule } from '../contextmenu/o-context-menu.module';
-import { IOContextMenuContext } from '../contextmenu/o-context-menu.service';
-import { ServiceUtils, ISQLOrder } from '../service.utils';
-import { FilterExpressionUtils, IExpression } from '../filter-expression.utils';
-import { OColumnTooltip } from './column/o-table-column.component';
-import { OTableRow } from './extensions/row/o-table-row.component';
-import { OTableStorage } from './extensions/o-table-storage.class';
 
 export const DEFAULT_INPUTS_O_TABLE = [
   ...OServiceComponent.DEFAULT_INPUTS_O_SERVICE_COMPONENT,
@@ -614,15 +603,12 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
 
     this.parseVisibleColumns();
-
     this.setDatasource();
-
     this.registerSortListener();
-
     this.setFiltersConfiguration(this.state);
 
     if (this.queryOnInit) {
-      this.queryData(this.parentItem);
+      this.queryData();
     }
   }
 
@@ -682,6 +668,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     colDef.setDefaultProperties();
     this.pushOColumnDefinition(colDef);
   }
+
   /**
    * Store all columns and properties in var columnsArray
    * @param column
@@ -863,17 +850,14 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   registerTabListener() {
-    // When table is contained into tab component, it is necessary to init
-    // table component when attached to DOM.
+    // When table is contained into tab component, it is necessary to init table component when attached to DOM.
     const self = this;
     this.tabGroupChangeSubscription = this.tabGroupContainer.selectedTabChange.subscribe((evt) => {
-      const interval = setInterval(function () { timerCallback(evt.tab); }, 100);
-      function timerCallback(tab: MatTab) {
+      let timerCallback = (tab: MatTab) => {
         if (tab && tab.content.isAttached) {
           clearInterval(interval);
           if (tab === self.tabContainer) {
             self.insideTabBugWorkaround();
-
             if (self.tabGroupChangeSubscription) {
               self.tabGroupChangeSubscription.unsubscribe();
             }
@@ -882,7 +866,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
             }
           }
         }
-      }
+      };
+      const interval = setInterval(timerCallback(evt.tab), 100);
     });
   }
 
@@ -944,19 +929,19 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   /**
    * This method manages the call to the service
-   * @param parentItem it is defined if its called from a form
+   * @param filter
    * @param ovrrArgs
    */
-  queryData(parentItem: any = undefined, ovrrArgs?: any) {
+  queryData(filter: any = undefined, ovrrArgs?: OQueryDataArgs) {
     // If tab exists and is not active then wait for queryData
     if (this.tabContainer && !this.tabContainer.isActive) {
       this.pendingQuery = true;
-      this.pendingQueryFilter = parentItem;
+      this.pendingQueryFilter = filter;
       return;
     }
     this.pendingQuery = false;
     this.pendingQueryFilter = undefined;
-    super.queryData(parentItem, ovrrArgs);
+    super.queryData(filter, ovrrArgs);
   }
 
   getComponentFilter(existingFilter: any = {}): any {
@@ -1065,7 +1050,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     return columns;
   }
 
-  getQueryArguments(filter: Object, ovrrArgs?: any): Array<any> {
+  getQueryArguments(filter: Object, ovrrArgs?: OQueryDataArgs): Array<any> {
     let queryArguments = super.getQueryArguments(filter, ovrrArgs);
     queryArguments[3] = this.getSqlTypesForFilter(queryArguments[1]);
     if (this.pageable) {
@@ -1190,14 +1175,14 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     this.finishQuerySubscription = false;
     this.pendingQuery = true;
     //this.pageScrollVirtual = 1;
-    let queryArgs;
+    let queryArgs: OQueryDataArgs;
     if (this.pageable) {
       queryArgs = {
         offset: this.currentPage * this.queryRows,
         length: this.queryRows
       };
     }
-    this.queryData(this.parentItem, queryArgs);
+    this.queryData(void 0, queryArgs);
   }
 
   handleClick(item: any, $event?) {
@@ -1355,9 +1340,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   protected getKeysValues(): any[] {
     let data = this.getAllValues();
     const _self = this;
-    return data.map(function (row, i, a) {
+    return data.map((row) => {
       let obj = {};
-      _self.keysArray.map(function (key, i, a) {
+      _self.keysArray.map((key) => {
         if (row[key] !== undefined) {
           obj[key] = row[key];
         }
@@ -1677,12 +1662,12 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       queryLength = Math.min(this.queryRows, newEndRecord - newStartRecord);
     }
 
-    const queryArgs = {
+    const queryArgs: OQueryDataArgs = {
       offset: newStartRecord,
       length: queryLength
     };
     this.finishQuerySubscription = false;
-    this.queryData(this.parentItem, queryArgs);
+    this.queryData(void 0, queryArgs);
   }
 
   getOColumn(attr: string): OColumn {

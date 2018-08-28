@@ -43,6 +43,8 @@
 
 
 ### BREAKING CHANGES
+* **ServiceUtils**: method `getParentItemFromForm` has been removed. Use `getParentKeysFromForm` instead.
+* **OServiceBaseComponent**: method `checkQueryReadyParentKeys` has been renamed to `filterContainsAllParentKeys`.
 * **o-list**:
   * The method `onReload` has been removed as it was deprecated in v1.2.0.
   * The method `registerSearchInput` has been renamed to `registerQuickFilter`.

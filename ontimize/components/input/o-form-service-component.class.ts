@@ -1,13 +1,13 @@
 import { ElementRef, Injector } from '@angular/core';
-import { Subscription } from 'rxjs/Subscription';
-import { InputConverter } from '../../decorators';
-import { DialogService, OntimizeService } from '../../services';
+import { Subscription } from 'rxjs';
+
 import { Codes, Util } from '../../utils';
+import { ServiceUtils } from '../service.utils';
+import { InputConverter } from '../../decorators';
 import { IFormValueOptions } from '../form/OFormValue';
 import { OFormComponent } from '../form/o-form.component';
+import { DialogService, OntimizeService } from '../../services';
 import { DEFAULT_INPUTS_O_FORM_DATA_COMPONENT, OFormDataComponent } from '../o-form-data-component.class';
-import { ServiceUtils } from '../service.utils';
-
 
 export const DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT = [
   ...DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,
@@ -77,11 +77,14 @@ export class OFormServiceComponent extends OFormDataComponent {
 
   protected queryOnEventSubscription: Subscription;
 
-  constructor(form: OFormComponent, elRef: ElementRef, injector: Injector) {
+  constructor(
+    form: OFormComponent,
+    elRef: ElementRef,
+    injector: Injector
+  ) {
     super(form, elRef, injector);
     this.form = form;
     this.elRef = elRef;
-
     this.dialogService = injector.get(DialogService);
   }
 
@@ -129,7 +132,6 @@ export class OFormServiceComponent extends OFormDataComponent {
         self.queryData();
       });
     }
-
   }
 
   destroy() {
@@ -171,23 +173,22 @@ export class OFormServiceComponent extends OFormDataComponent {
     return result;
   }
 
-
-  queryData(parentItem: any = undefined, columns?: Array<any>) {
+  queryData(filter: any = undefined) {
     const self = this;
     if (!this.dataService || !(this.queryMethod in this.dataService) || !this.entity) {
       console.warn('Service not properly configured! aborting query');
       return;
     }
-    parentItem = ServiceUtils.getParentItemFromForm(parentItem, this._pKeysEquiv, this.form);
+    filter = ServiceUtils.getParentKeysFromForm(this._pKeysEquiv, this.form);
 
-    if ((Object.keys(this._pKeysEquiv).length > 0) && parentItem === undefined) {
+    if ((Object.keys(this._pKeysEquiv).length > 0) && filter === undefined) {
       this.setDataArray([]);
     } else {
       if (this.querySuscription) {
         this.querySuscription.unsubscribe();
       }
       const queryCols = this.getAttributesValuesToQuery();
-      this.querySuscription = this.dataService[this.queryMethod](parentItem, queryCols, this.entity).subscribe(resp => {
+      this.querySuscription = this.dataService[this.queryMethod](filter, queryCols, this.entity).subscribe(resp => {
         if (resp.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) {
           self.cacheQueried = true;
           self.setDataArray(resp.data);
@@ -283,4 +284,5 @@ export class OFormServiceComponent extends OFormDataComponent {
     }
     return result;
   }
+
 }
