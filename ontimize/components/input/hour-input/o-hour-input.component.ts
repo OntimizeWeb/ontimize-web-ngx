@@ -1,5 +1,5 @@
 import { Component, NgModule, Optional, Inject, ElementRef, Injector, forwardRef, ViewChild, EventEmitter, ViewEncapsulation, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
-import { OFormDataComponent, DEFAULT_INPUTS_O_FORM_DATA_COMPONENT } from '../../o-form-data-component.class';
+import { OFormDataComponent, DEFAULT_INPUTS_O_FORM_DATA_COMPONENT, DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT } from '../../o-form-data-component.class';
 import { CommonModule } from '@angular/common';
 import { ValidatorFn } from '@angular/forms';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
@@ -24,7 +24,7 @@ export const DEFAULT_INPUTS_O_HOUR_INPUT = [
 ];
 
 export const DEFAULT_OUTPUTS_O_HOUR_INPUT = [
-  'onChange',
+  ...DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT,
   'onFocus',
   'onBlur'
 ];
@@ -54,7 +54,6 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
     super(form, elRef, injector);
   }
 
-  onChange: EventEmitter<Object> = new EventEmitter<Object>();
   onFocus: EventEmitter<Object> = new EventEmitter<Object>();
   onBlur: EventEmitter<Object> = new EventEmitter<Object>();
 
