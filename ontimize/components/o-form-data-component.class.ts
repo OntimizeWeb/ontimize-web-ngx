@@ -246,6 +246,9 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     if (this._fControl) {
       this._fControl.setValue(val, options);
       this._fControl.markAsDirty();
+      if (this._fControl.invalid) {
+        this._fControl.markAsTouched();
+      }
     }
   }
 
