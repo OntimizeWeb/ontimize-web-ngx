@@ -1124,7 +1124,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     return this.formNavigation.getCurrentKeysValues();
   }
 
-  protected getKeysValues() {
+  getKeysValues() {
     let filter = {};
     let currentRecord = this.formData;
     if (!this.keysArray) {
