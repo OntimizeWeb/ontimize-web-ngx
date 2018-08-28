@@ -16,10 +16,8 @@ export class OValidators {
   * Hour validator hh:mm am/pm format
   */
   static twelveHourFormatValidator(control: FormControl): ValidationErrors {
-
     let regExp = new RegExp(TWELVE_HOUR_FORMAT_PATTERN);
-
-    if (!regExp.test(control.value)) {
+    if (control.value && !regExp.test(control.value)) {
       return { 'invalidFormatHour': true };
     }
     return {};
@@ -29,10 +27,8 @@ export class OValidators {
   * Hour validator HH:mm format
   */
   static twentyHourFormatValidator(control: FormControl): ValidationErrors {
-
     let regExp = new RegExp(TWENTY_FOUR_HOUR_FORMAT_PATTERN);
-
-    if (!regExp.test(control.value)) {
+    if (control.value && !regExp.test(control.value)) {
       return { 'invalidFormatHour': true };
     }
     return {};

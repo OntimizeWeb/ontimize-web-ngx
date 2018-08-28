@@ -49,7 +49,6 @@ export class OTimeInputComponent extends OFormDataComponent implements OnInit, A
   protected formGroupSubscription: Subscription;
   protected formControlSubscription: Subscription;
 
-
   @ViewChild('dateInput')
   protected dateInput: ODateInputComponent;
 
@@ -116,7 +115,34 @@ export class OTimeInputComponent extends OFormDataComponent implements OnInit, A
   }
 
   ngAfterViewInit() {
+    this.modifyFormControls();
     super.ngAfterViewInit();
+    this.registerFormControls();
+    this.setInnerComponentsData();
+  }
+
+  protected modifyFormControls() {
+    if (this.dateInput) {
+      const self = this;
+      this.dateInput.getFormGroup = () => {
+        return self.formGroup;
+      };
+    }
+
+    if (this.hourInput) {
+      const self = this;
+      this.hourInput.getFormGroup = () => {
+        return self.formGroup;
+      };
+    }
+
+    if (this.form) {
+      this.form.formGroup.removeControl('dateInput');
+      this.form.formGroup.removeControl('hourInput');
+    }
+  }
+
+  protected registerFormControls() {
     if (this.dateInput && this.dateInput.getFormControl()) {
       this.formGroup.registerControl('dateInput', this.dateInput.getFormControl());
     }
@@ -126,10 +152,6 @@ export class OTimeInputComponent extends OFormDataComponent implements OnInit, A
         this.formGroup.registerControl('hourInput', this.hourInput.getFormControl());
       }
     }
-  }
-
-  getFormGroup(): FormGroup {
-    return this.formGroup;
   }
 
   getControl(): FormControl {
@@ -159,11 +181,25 @@ export class OTimeInputComponent extends OFormDataComponent implements OnInit, A
         emitModelToViewChange: false,
         emitEvent: false
       });
-      // if (this._fControl.invalid) {
-      //   this._fControl.markAsTouched();
-      // }
       this.setInnerComponentsData();
     }
+  }
+
+  setValue(val: any, options?: IFormValueOptions) {
+    super.setValue(val, options);
+    this.setInnerComponentsData();
+  }
+
+  clearValue(): void {
+    this.blockGroupValueChanges = true;
+    this.setValue(void 0);
+    if (this.dateInput) {
+      this.dateInput.clearValue();
+    }
+    if (this.hourInput) {
+      this.hourInput.clearValue();
+    }
+    this.blockGroupValueChanges = false;
   }
 
   protected setInnerComponentsData(options?: IFormValueOptions) {
@@ -183,7 +219,6 @@ export class OTimeInputComponent extends OFormDataComponent implements OnInit, A
     if (this.dateInput) {
       this.dateInput.setValue(dateValue, options);
     }
-
     if (this.hourInput) {
       this.hourInput.setTimestampValue(hourValue, options);
     }

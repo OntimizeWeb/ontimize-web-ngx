@@ -15,6 +15,7 @@ const HourFormat = {
   TWELVE: 'hh:mm a',
   TWENTY_FOUR: 'HH:mm',
 };
+
 const TWENTY_FOUR_HOUR_FORMAT = 24;
 
 export const DEFAULT_INPUTS_O_HOUR_INPUT = [
@@ -96,7 +97,7 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
   onOpen(event) {
     this.openPopup = true;
     if (this.picker) {
-      var momentV = moment(this.getValueAsTimeStamp());
+      let momentV = moment(this.getValueAsTimeStamp());
       if (this.picker.timepickerService && momentV.isValid()) {
         momentV = momentV.utcOffset(0);
         let hour = momentV.get('hour');
@@ -138,8 +139,8 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
   }
 
   getValueAsTimeStamp() {
-    // var formatMoment = 'MM/DD/YYYY ' + this.formatString;
-    var momentV = moment('01/01/1970 ' + this.getValue());
+    const formatMoment = 'MM/DD/YYYY ' + this.formatString;
+    const momentV = moment('01/01/1970 ' + this.getValue(), formatMoment);
     return momentV.add(1, 'hour').valueOf();
   }
 
