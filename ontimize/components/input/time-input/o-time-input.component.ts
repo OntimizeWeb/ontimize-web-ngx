@@ -8,7 +8,7 @@ import { Util } from '../../../utils';
 import { OSharedModule } from '../../../shared';
 import { OFormComponent } from '../../form/o-form.component';
 import { OFormValue, IFormValueOptions } from '../../form/OFormValue';
-import { OFormDataComponent, DEFAULT_INPUTS_O_FORM_DATA_COMPONENT } from '../../o-form-data-component.class';
+import { OFormDataComponent, DEFAULT_INPUTS_O_FORM_DATA_COMPONENT, DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT } from '../../o-form-data-component.class';
 
 import { ODateInputModule, ODateInputComponent } from '../date-input/o-date-input.component';
 import { OHourInputModule, OHourInputComponent } from '../hour-input/o-hour-input.component';
@@ -18,7 +18,7 @@ export const DEFAULT_INPUTS_O_TIME_INPUT = [
 ];
 
 export const DEFAULT_OUTPUTS_O_TIME_INPUT = [
-  'onChange',
+  ...DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT,
   'onFocus',
   'onBlur'
 ];
@@ -41,7 +41,6 @@ export class OTimeInputComponent extends OFormDataComponent implements OnInit, A
   public static DEFAULT_INPUTS_O_TIME_INPUT = DEFAULT_INPUTS_O_TIME_INPUT;
   public static DEFAULT_OUTPUTS_O_TIME_INPUT = DEFAULT_OUTPUTS_O_TIME_INPUT;
 
-  onChange: EventEmitter<Object> = new EventEmitter<Object>();
   onFocus: EventEmitter<Object> = new EventEmitter<Object>();
   onBlur: EventEmitter<Object> = new EventEmitter<Object>();
 

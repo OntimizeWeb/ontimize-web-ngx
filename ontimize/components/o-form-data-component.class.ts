@@ -1,4 +1,4 @@
-import { Injector, ElementRef, OnInit, OnDestroy, QueryList, ViewChildren, AfterViewInit, HostBinding, ContentChildren, OnChanges, SimpleChange } from '@angular/core';
+import { Injector, ElementRef, OnInit, OnDestroy, QueryList, ViewChildren, AfterViewInit, HostBinding, ContentChildren, OnChanges, SimpleChange, EventEmitter } from '@angular/core';
 import { FormControl, FormGroup, Validators, ValidatorFn } from '@angular/forms';
 import { MatSuffix } from '@angular/material';
 import { Subscription } from 'rxjs/Subscription';
@@ -54,6 +54,10 @@ export const DEFAULT_INPUTS_O_FORM_DATA_COMPONENT = [
   'angularValidatorsFn: validators'
 ];
 
+export const DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT = [
+  'onChange'
+];
+
 export class OFormDataComponent extends OBaseComponent implements IFormDataComponent, IFormDataTypeComponent,
   OnInit, AfterViewInit, OnDestroy, OnChanges {
 
@@ -67,6 +71,9 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   @InputConverter()
   clearButton: boolean = false;
   angularValidatorsFn: ValidatorFn[] = [];
+
+  /* Outputs */
+  onChange: EventEmitter<Object> = new EventEmitter<Object>();
 
   @HostBinding('style.width')
   get hostWidth() {

@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import {
   Component,
   ElementRef,
-  EventEmitter,
   forwardRef,
   HostBinding,
   Inject,
@@ -19,7 +18,7 @@ import { InputConverter } from '../../decorators';
 import { OSharedModule } from '../../shared';
 import { OFormComponent } from '../form/o-form.component';
 import { OFormValue } from '../form/OFormValue';
-import { DEFAULT_INPUTS_O_FORM_DATA_COMPONENT, OFormDataComponent } from '../o-form-data-component.class';
+import { DEFAULT_INPUTS_O_FORM_DATA_COMPONENT, OFormDataComponent, DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT } from '../o-form-data-component.class';
 
 export const DEFAULT_INPUTS_O_IMAGE = [
   ...DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,
@@ -35,7 +34,7 @@ export const DEFAULT_INPUTS_O_IMAGE = [
 ];
 
 export const DEFAULT_OUTPUTS_O_IMAGE = [
-  'onChange'
+  ...DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT
 ];
 
 @Component({
@@ -55,8 +54,6 @@ export class OImageComponent extends OFormDataComponent {
   emptyicon: string;
   height: string;
 
-  onChange: EventEmitter<Object> = new EventEmitter<Object>();
-
   @InputConverter()
   protected showControls: boolean = true;
   @InputConverter()
@@ -70,7 +67,6 @@ export class OImageComponent extends OFormDataComponent {
   protected _useEmptyIcon: boolean = true;
   protected _useEmptyImage: boolean = false;
   protected _domSanitizer: DomSanitizer;
-
 
   constructor(
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,

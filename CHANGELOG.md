@@ -21,6 +21,7 @@
 * **OFormDataComponent**:
   * new `validators` input ([#100](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/100)) ([4e2f841](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4e2f841))
   * support for using `o-validators` and `o-error` inner components ([#100](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/100)) ([a2e6bbe](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a2e6bbe))
+  * new exported static `DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT` array containing default ouputs. Also declaring default `onChange` EventEmitter ([3a999c8](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3a999c8))
 * **o-list**:
   * new outputs added: `onItemDeleted`, `onListDataLoaded`, `onPaginatedListDataLoade` ([2f71849](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2f71849))
   * added suppor for using the `o-filter-builder` component ([1736a2a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1736a2a))

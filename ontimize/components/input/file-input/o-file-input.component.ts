@@ -108,7 +108,6 @@ export class OFileInputComponent extends OFormDataComponent implements OnDestroy
   splitUpload: boolean = true;
 
   /* Outputs */
-  onChange: EventEmitter<any> = new EventEmitter<any>();
   onBeforeUpload: EventEmitter<any> = new EventEmitter<any>();
   onBeforeUploadFile: EventEmitter<any> = new EventEmitter<any>();
   onProgress: EventEmitter<any> = new EventEmitter<any>();

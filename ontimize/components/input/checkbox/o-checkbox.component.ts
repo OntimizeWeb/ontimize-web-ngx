@@ -1,11 +1,11 @@
-import { Component, ElementRef, EventEmitter, forwardRef, Inject, Injector, NgModule, Optional, ViewEncapsulation } from '@angular/core';
+import { Component, ElementRef, forwardRef, Inject, Injector, NgModule, Optional, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { Util } from '../../../util/util';
 import { OSharedModule } from '../../../shared';
 import { OFormValue } from '../../form/OFormValue';
 import { OFormComponent } from '../../form/o-form.component';
-import { OFormDataComponent, DEFAULT_INPUTS_O_FORM_DATA_COMPONENT } from '../../o-form-data-component.class';
+import { OFormDataComponent, DEFAULT_INPUTS_O_FORM_DATA_COMPONENT, DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT } from '../../o-form-data-component.class';
 
 export const DEFAULT_INPUTS_O_CHECKBOX = [
   // true-value: true value. Default: true.
@@ -18,7 +18,7 @@ export const DEFAULT_INPUTS_O_CHECKBOX = [
 ];
 
 export const DEFAULT_OUTPUTS_O_CHECKBOX = [
-  'onChange'
+  ...DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT
 ];
 
 @Component({
@@ -40,8 +40,6 @@ export class OCheckboxComponent extends OFormDataComponent {
   trueValue: number | boolean | string = true;
   falseValue: number | boolean | string = false;
   booleanType: 'number' | 'boolean' | 'string' = 'boolean';
-
-  onChange: EventEmitter<Object> = new EventEmitter<Object>();
 
   constructor(
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,

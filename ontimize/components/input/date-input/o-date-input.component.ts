@@ -80,7 +80,6 @@ export class ODateInputComponent extends OFormDataComponent implements AfterView
   private momentSrv: MomentService;
   protected media: ObservableMedia;
 
-  onChange: EventEmitter<Object> = new EventEmitter<Object>();
   onFocus: EventEmitter<Object> = new EventEmitter<Object>();
   onBlur: EventEmitter<Object> = new EventEmitter<Object>();
 
