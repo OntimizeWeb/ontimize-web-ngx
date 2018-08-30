@@ -250,23 +250,23 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
     this._form.executeToolbarAction(OFormComponent.UNDO_LAST_CHANGE_ACTION);
   }
 
-  isSaveBtnEnabled(): boolean {
+  get isSaveBtnEnabled(): boolean {
     return this.saveBtnEnabled;
   }
 
-  isRefreshBtnEnabled(): boolean {
+  get isRefreshBtnEnabled(): boolean {
     return this.refreshBtnEnabled;
   }
 
-  isInsertBtnEnabled(): boolean {
+  get isInsertBtnEnabled(): boolean {
     return this.insertBtnEnabled;
   }
 
-  isEditBtnEnabled(): boolean {
+  get isEditBtnEnabled(): boolean {
     return this.editBtnEnabled;
   }
 
-  isDeleteBtnEnabled(): boolean {
+  get isDeleteBtnEnabled(): boolean {
     return this.deleteBtnEnabled;
   }
 
