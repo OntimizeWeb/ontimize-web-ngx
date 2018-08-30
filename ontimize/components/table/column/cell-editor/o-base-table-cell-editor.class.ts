@@ -35,7 +35,9 @@ export class OBaseTableCellEditor implements OnInit {
   @InputConverter()
   showToastOnEdit: boolean = false;
 
-  tableColumn: OTableColumnComponent;
+  protected _tableColumnAttr: string;
+  protected _tableColumn: OTableColumnComponent;
+  protected _table: OTableComponent;
 
   protected _rowData: any;
 
@@ -78,7 +80,7 @@ export class OBaseTableCellEditor implements OnInit {
   }
 
   protected handleKeyup(event: KeyboardEvent) {
-    const oColumn = this.table.getOColumn(this.tableColumn.attr);
+    const oColumn = this.table.getOColumn(this._tableColumnAttr);
     if (!oColumn || !oColumn.editing) {
       return;
     }
@@ -111,7 +113,7 @@ export class OBaseTableCellEditor implements OnInit {
   }
 
   getCellData(): any {
-    return this._rowData[this.tableColumn.attr];
+    return this._rowData[this._tableColumnAttr];
   }
 
   startEdition(data: any) {
@@ -123,7 +125,7 @@ export class OBaseTableCellEditor implements OnInit {
   }
 
   endEdition(saveChanges) {
-    const oColumn = this.table.getOColumn(this.tableColumn.attr);
+    const oColumn = this.table.getOColumn(this._tableColumnAttr);
     if (oColumn) {
       const self = this;
       const updateObserver = this.table.updateCellData(oColumn, this._rowData, saveChanges);
@@ -139,7 +141,7 @@ export class OBaseTableCellEditor implements OnInit {
 
   commitEdition() {
     if (!this.formControl.invalid) {
-      this._rowData[this.tableColumn.attr] = this.formControl.value;
+      this._rowData[this._tableColumnAttr] = this.formControl.value;
       if (!this.isSilentControl()) {
         this.endEdition(true);
         this.editionCommitted.emit(this._rowData);
@@ -147,8 +149,28 @@ export class OBaseTableCellEditor implements OnInit {
     }
   }
 
+  get tableColumn(): OTableColumnComponent {
+    return this._tableColumn;
+  }
+
+  set tableColumn(arg: OTableColumnComponent) {
+    this._tableColumn = arg;
+    if (arg) {
+      this._table = arg.table;
+      this.tableColumnAttr = arg.attr;
+    }
+  }
+
+  set tableColumnAttr(arg: string) {
+    this._tableColumnAttr = arg;
+  }
+
+  set table(arg: OTableComponent) {
+    this._table = arg;
+  }
+
   get table(): OTableComponent {
-    return this.tableColumn.table;
+    return this._table;
   }
 
   get rowData(): any {
@@ -215,7 +237,7 @@ export class OBaseTableCellEditor implements OnInit {
 
   getPlaceholder(): string {
     return this.showPlaceHolder ?
-      this.translateService.get(this.olabel || (this.tableColumn.title || this.tableColumn.attr)) :
+      this.translateService.get(this.olabel || this.tableColumn ? (this.tableColumn.title || this.tableColumnAttr) : this.tableColumnAttr) :
       undefined;
   }
 
