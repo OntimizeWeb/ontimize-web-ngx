@@ -103,7 +103,6 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
   protected keysArray: Array<string> = [];
   protected _pKeysEquiv = {};
   protected dataArray: Array<any> = [];
-  protected parentItem: any;
   protected oattrFromEntity: boolean = false;
   /* end of parsed inputs variables */
 
@@ -259,13 +258,11 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
     var self = this;
     if (self.queryOnBind) {
       this.onFormDataSubscribe = this.form.onFormDataLoaded.subscribe(data => {
-        self.parentItem = data;
         self.queryData();
       });
     }
     let dataValues = this.form.getDataValues();
     if (Util.isDefined(dataValues) && Object.keys(dataValues).length > 0) {
-      self.parentItem = dataValues;
       self.queryData();
     }
   }
@@ -434,4 +431,7 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
     this._state = arg;
   }
 
+  getParentKeysValues() {
+    return ServiceUtils.getParentKeysFromForm(this._pKeysEquiv, this.form);
+  }
 }
