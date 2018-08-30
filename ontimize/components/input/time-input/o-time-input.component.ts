@@ -1,20 +1,31 @@
 import { Component, Inject, Injector, forwardRef, ElementRef, EventEmitter, Optional, NgModule, ViewEncapsulation, ViewChild, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormGroup, ValidatorFn, FormControl } from '@angular/forms';
+import { FormGroup, FormControl } from '@angular/forms';
 import { Subscription } from 'rxjs/Subscription';
 import moment from 'moment';
 
 import { Util } from '../../../utils';
 import { OSharedModule } from '../../../shared';
+import { InputConverter } from '../../../decorators';
 import { OFormComponent } from '../../form/o-form.component';
 import { OFormValue, IFormValueOptions } from '../../form/OFormValue';
 import { OFormDataComponent, DEFAULT_INPUTS_O_FORM_DATA_COMPONENT, DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT } from '../../o-form-data-component.class';
 
-import { ODateInputModule, ODateInputComponent } from '../date-input/o-date-input.component';
+import { ODateInputModule, ODateInputComponent, DateFilterFunction } from '../date-input/o-date-input.component';
 import { OHourInputModule, OHourInputComponent } from '../hour-input/o-hour-input.component';
 
 export const DEFAULT_INPUTS_O_TIME_INPUT = [
-  ...DEFAULT_INPUTS_O_FORM_DATA_COMPONENT
+  ...DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,
+  'oDateFormat: date-format',
+  'oDateLocale: date-locale',
+  'oDateStartView: date-start-view',
+  'oDateMinDate: date-min',
+  'oDateMaxDate: date-max',
+  'oDateTouchUi: date-touch-ui',
+  'oDateStartAt: date-start-at',
+  'oDateFilterDate: date-filter-date',
+
+  'oHourFormat: hour-format',
 ];
 
 export const DEFAULT_OUTPUTS_O_TIME_INPUT = [
@@ -36,6 +47,20 @@ export const DEFAULT_OUTPUTS_O_TIME_INPUT = [
 })
 
 export class OTimeInputComponent extends OFormDataComponent implements OnInit, AfterViewInit, OnDestroy {
+
+  /* inputs */
+  oDateFormat: string = 'L';
+  oDateLocale: any;
+  oDateStartView: 'month' | 'year' = 'month';
+  oDateMinDate: any;
+  oDateMaxDate: any;
+  @InputConverter()
+  oDateTouchUi: boolean;
+  oDateStartAt: any;
+  oDateFilterDate: DateFilterFunction;
+
+  oHourFormat: number = 24;
+
   protected blockGroupValueChanges: boolean;
 
   public static DEFAULT_INPUTS_O_TIME_INPUT = DEFAULT_INPUTS_O_TIME_INPUT;
@@ -204,7 +229,7 @@ export class OTimeInputComponent extends OFormDataComponent implements OnInit, A
   protected setInnerComponentsData(options?: IFormValueOptions) {
     let dateValue;
     let hourValue;
-    if (Util.isDefined(this.value.value)) {
+    if (Util.isDefined(this.value) && Util.isDefined(this.value.value)) {
       const momentD = moment(this.value.value);
       if (momentD.isValid()) {
         dateValue = momentD.clone().startOf('day').valueOf();
@@ -233,11 +258,6 @@ export class OTimeInputComponent extends OFormDataComponent implements OnInit, A
     if (!this.isReadOnly && !this.isDisabled) {
       this.onBlur.emit(event);
     }
-  }
-
-  resolveValidators(): ValidatorFn[] {
-    let validators: ValidatorFn[] = super.resolveValidators();
-    return validators;
   }
 }
 
