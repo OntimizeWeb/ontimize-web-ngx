@@ -1,13 +1,13 @@
 import { AfterViewChecked, Component, ElementRef, EventEmitter, forwardRef, Inject, Injector, NgModule, OnDestroy, OnInit, Optional, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
-import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE, MatDateFormats, MatDatepicker, MatDatepickerInput, MatDatepickerInputEvent } from '@angular/material';
+import { DateAdapter, MAT_DATE_LOCALE, MatDatepicker, MatDatepickerInput, MatDatepickerInputEvent } from '@angular/material';
 import { MediaChange, ObservableMedia } from '@angular/flex-layout';
 import { Subscription } from 'rxjs/Subscription';
 
 import moment from 'moment';
 
-import { OSharedModule } from '../../../shared';
+import { OSharedModule, OntimizeMomentDateAdapter } from '../../../shared';
 import { MomentService } from '../../../services';
 import { OFormValue } from '../../form/OFormValue';
 import { InputConverter } from '../../../decorators';
@@ -34,11 +34,6 @@ export const DEFAULT_INPUTS_O_DATE_INPUT = [
 
 export type DateFilterFunction = (date: Date) => boolean;
 
-export let O_DATE_INPUT_DEFAULT_FORMATS: MatDateFormats = {
-  parse: { dateInput: 'L' },
-  display: { dateInput: 'L', monthYearLabel: 'Y', dateA11yLabel: 'LL', monthYearA11yLabel: 'MMMM Y' }
-};
-
 @Component({
   selector: 'o-date-input',
   templateUrl: './o-date-input.component.html',
@@ -46,8 +41,7 @@ export let O_DATE_INPUT_DEFAULT_FORMATS: MatDateFormats = {
   outputs: DEFAULT_OUTPUTS_O_DATE_INPUT,
   inputs: DEFAULT_INPUTS_O_DATE_INPUT,
   providers: [
-    { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
-    { provide: MAT_DATE_FORMATS, useValue: O_DATE_INPUT_DEFAULT_FORMATS }
+    { provide: DateAdapter, useClass: OntimizeMomentDateAdapter, deps: [MAT_DATE_LOCALE] }
   ]
 })
 export class ODateInputComponent extends OFormDataComponent implements AfterViewChecked, OnDestroy, OnInit {
@@ -88,8 +82,7 @@ export class ODateInputComponent extends OFormDataComponent implements AfterView
 
   constructor(
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
-    @Inject(MAT_DATE_FORMATS) protected matDateFormats: MatDateFormats,
-    dateAdapter: DateAdapter<MomentDateAdapter>,
+    dateAdapter: DateAdapter<OntimizeMomentDateAdapter>,
     elRef: ElementRef,
     injector: Injector
   ) {
@@ -109,9 +102,9 @@ export class ODateInputComponent extends OFormDataComponent implements AfterView
     }
 
     if (this.oformat) {
-      this.matDateFormats.display.dateInput = this.oformat;
-      this.matDateFormats.parse.dateInput = this.oformat;
+      (this.momentDateAdapter as any).oFormat = this.oformat;
     }
+
     this.momentDateAdapter.setLocale(this.olocale);
 
     if (this.oStartView) {

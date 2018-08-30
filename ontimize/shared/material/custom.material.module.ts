@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, Injectable, Optional, Inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   MatButtonToggleModule,
@@ -28,12 +28,12 @@ import {
   MatDialogModule,
   MatAutocompleteModule,
   DateAdapter,
-  MatNativeDateModule,
   MatTableModule,
   MatPaginatorModule,
   MatSortModule,
   MAT_DATE_LOCALE,
-  MatIconRegistry
+  MatIconRegistry,
+  MAT_DATE_FORMATS
   // PlatformModule,
   // StyleModule,
   // PortalModule,
@@ -42,9 +42,10 @@ import {
   // ObserveContentModule
 } from '@angular/material';
 
-import { MomentDateAdapter } from '@angular/material-moment-adapter';
+import { MatMomentDateModule, MomentDateAdapter } from '@angular/material-moment-adapter';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { OntimizeMatIconRegistry } from '../../services/icon-registry.service';
+import { dateFormatFactory } from '../../services/mat-date-formats.factory';
 
 const MATERIAL_MODULES = [
   MatAutocompleteModule,
@@ -73,7 +74,7 @@ const MATERIAL_MODULES = [
   MatTabsModule,
   MatToolbarModule,
   MatTooltipModule,
-  MatNativeDateModule,
+  MatMomentDateModule,
   MatTableModule,
   MatPaginatorModule,
   MatSortModule,
@@ -88,13 +89,34 @@ const MATERIAL_MODULES = [
   // ObserveContentModule
 ];
 
+@Injectable()
+export class OntimizeMomentDateAdapter extends MomentDateAdapter {
+
+  oFormat: string;
+
+  constructor( @Optional() @Inject(MAT_DATE_LOCALE) dateLocale: string) {
+    super(dateLocale);
+  }
+
+  format(date: any, displayFormat: string): string {
+    return super.format(date, this.oFormat || displayFormat);
+  }
+
+  parse(value: any, parseFormat: string | string[]): any | null {
+    return super.parse(value, this.oFormat || parseFormat);
+  }
+}
+
 @NgModule({
   imports: [CommonModule],
   exports: MATERIAL_MODULES,
   providers: [{
     provide: DateAdapter,
-    useClass: MomentDateAdapter,
+    useClass: OntimizeMomentDateAdapter,
     deps: [MAT_DATE_LOCALE]
+  }, {
+    provide: MAT_DATE_FORMATS,
+    useFactory: dateFormatFactory
   }, {
     provide: MatIconRegistry,
     useClass: OntimizeMatIconRegistry

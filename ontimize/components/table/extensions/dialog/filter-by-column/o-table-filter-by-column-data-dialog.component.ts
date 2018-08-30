@@ -1,11 +1,9 @@
 import { AfterViewInit, Component, ElementRef, Inject, ViewChild, ViewEncapsulation } from '@angular/core';
-import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE, MatCheckboxChange, MatDialogRef, MAT_DIALOG_DATA, MatSelectionList } from '@angular/material';
-import { MomentDateAdapter } from '@angular/material-moment-adapter';
+import { MatCheckboxChange, MatDialogRef, MAT_DIALOG_DATA, MatSelectionList } from '@angular/material';
 import { FormControl } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
 
 import { Util } from '../../../../../util/util';
-import { O_DATE_INPUT_DEFAULT_FORMATS } from '../../../../input/date-input/o-date-input.component';
 import { OColumn } from '../../../o-table.component';
 import { ColumnValueFilterOperator, IColumnValueFilter } from '../../header/o-table-header-components';
 
@@ -19,10 +17,6 @@ export interface ITableFilterByColumnDataInterface {
   templateUrl: 'o-table-filter-by-column-data-dialog.component.html',
   styleUrls: ['o-table-filter-by-column-data-dialog.component.scss'],
   encapsulation: ViewEncapsulation.None,
-  providers: [
-    { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
-    { provide: MAT_DATE_FORMATS, useValue: O_DATE_INPUT_DEFAULT_FORMATS }
-  ],
   host: {
     '[class.o-filter-by-column-dialog]': 'true'
   }
