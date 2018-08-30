@@ -162,9 +162,9 @@ export class OTableEditableRowComponent {
 
   protected getAttributesValuesToInsert(): Object {
     let attrValues = {};
-    // let filter = this.table.getFilterUsingParentKeys(this.table.parentItem);
-
-    // columns with no editor defined
+    if (this.insertableRowTable.includeParentKeys) {
+      attrValues = this.table.getParentKeysValues();
+    }
     Object.keys(this.controls).forEach((controlKey) => {
       attrValues[controlKey] = this.controls[controlKey].value;
     });

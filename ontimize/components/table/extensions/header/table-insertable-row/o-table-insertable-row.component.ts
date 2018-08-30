@@ -9,7 +9,8 @@ export const DEFAULT_INPUTS_O_TABLE_INSERTABLE_ROW = [
   'requiredColumns : required-columns',
   // position [first |last ] default: last
   'position',
-  'showPlaceHolder: show-placeholder'
+  'showPlaceHolder: show-placeholder',
+  'includeParentKeys: include-parent-keys'
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE_INSERTABLE_ROW = [
@@ -42,6 +43,8 @@ export class OTableInsertableRowComponent implements OnInit {
 
   @InputConverter()
   showPlaceHolder: boolean = false;
+  @InputConverter()
+  includeParentKeys: boolean = true;
 
   constructor(
     protected injector: Injector,
