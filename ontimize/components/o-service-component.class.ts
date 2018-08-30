@@ -3,7 +3,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { Codes, Util } from '../utils';
 import { InputConverter } from '../decorators';
-import { OFormValue } from './form/OFormValue';
 import { OFilterBuilderComponent } from '../components';
 import { OFormComponent } from './form/o-form.component';
 import { FilterExpressionUtils } from './filter-expression.utils';
@@ -248,19 +247,9 @@ export class OServiceComponent extends OServiceBaseComponent {
   }
 
   protected getEncodedParentKeys() {
-    const parentKeys = Object.keys(this._pKeysEquiv);
     let encoded = undefined;
-    if ((parentKeys.length > 0) && Util.isDefined(this.parentItem)) {
-      let pKeys = {};
-      parentKeys.forEach(parentKey => {
-        if (this.parentItem.hasOwnProperty(parentKey)) {
-          let currentData = this.parentItem[parentKey];
-          if (currentData instanceof OFormValue) {
-            currentData = currentData.value;
-          }
-          pKeys[this._pKeysEquiv[parentKey]] = currentData;
-        }
-      });
+    if (Object.keys(this._pKeysEquiv).length > 0) {
+      let pKeys = this.getParentKeysValues();
       if (Object.keys(pKeys).length > 0) {
         encoded = Util.encodeParentKeys(pKeys);
       }
