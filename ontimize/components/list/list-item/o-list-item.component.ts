@@ -2,6 +2,7 @@ import { AfterContentInit, Component, ElementRef, forwardRef, Inject, Injector, 
 import { CommonModule } from '@angular/common';
 import { MatLine, MatListAvatarCssMatStyler, MatListItem } from '@angular/material';
 
+import { Util } from '../../../util/util';
 import { OSharedModule } from '../../../shared';
 import { OListComponent } from '../o-list.component';
 
@@ -64,10 +65,16 @@ export class OListItemComponent implements AfterContentInit {
   }
 
   onDetailIconClicked(e?: Event) {
+    if (Util.isDefined(e)) {
+      e.stopPropagation();
+    }
     this._list.viewDetail(this.modelData);
   }
 
   onEditIconClicked(e?: Event) {
+    if (Util.isDefined(e)) {
+      e.stopPropagation();
+    }
     this._list.editDetail(this.modelData);
   }
 

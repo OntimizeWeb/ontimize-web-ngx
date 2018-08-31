@@ -1,5 +1,6 @@
 import { ElementRef, EventEmitter, Injector, Renderer } from '@angular/core';
 
+import { Util } from '../../../util/util';
 import { OListItemComponent } from '../list-item/o-list-item.component';
 
 export const DEFAULT_INPUTS_O_TEXT_RENDERER = [
@@ -53,7 +54,10 @@ export class OListItemTextRenderer {
     }
   }
 
-  onActionIconClick(event: any) {
+  onActionIconClick(e?: Event) {
+    if (Util.isDefined(e)) {
+      e.stopPropagation();
+    }
     this.onIconClick.emit(event);
   }
 

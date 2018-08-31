@@ -1,16 +1,7 @@
-import {
-  Component,
-  Inject,
-  Injector,
-  forwardRef,
-  ViewEncapsulation,
-  ElementRef,
-  Renderer,
-  Optional,
-  NgModule,
-  EventEmitter
-} from '@angular/core';
+import { Component, ElementRef, EventEmitter, forwardRef, Inject, Injector, NgModule, Optional, Renderer, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
+
+import { Util } from '../../../util/util';
 import { OSharedModule } from '../../../shared';
 import { InputConverter } from '../../../decorators';
 import { OListItemComponent } from '../list-item/o-list-item.component';
@@ -48,7 +39,6 @@ export const DEFAULT_OUTPUTS_O_LIST_ITEM_CARD_IMAGE = [
     '[class.o-list-item-card-image]': 'true'
   }
 })
-
 export class OListItemCardImageComponent extends OListItemCardRenderer {
 
   protected _content: string;
@@ -74,7 +64,10 @@ export class OListItemCardImageComponent extends OListItemCardRenderer {
     this.modifyMatListItemElement();
   }
 
-  onActionIconClick(event: any) {
+  onActionIconClick(e?: Event) {
+    if (Util.isDefined(e)) {
+      e.stopPropagation();
+    }
     this.onIconClick.emit(event);
   }
 
@@ -117,12 +110,12 @@ export class OListItemCardImageComponent extends OListItemCardRenderer {
   set collapsed(val: boolean) {
     this._collapsed = val;
   }
+
 }
 
 @NgModule({
   declarations: [OListItemCardImageComponent],
-  imports: [OSharedModule, CommonModule],
+  imports: [CommonModule, OSharedModule],
   exports: [OListItemCardImageComponent]
 })
-export class OListItemCardImageModule {
-}
+export class OListItemCardImageModule { }
