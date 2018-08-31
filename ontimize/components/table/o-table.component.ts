@@ -103,8 +103,8 @@ export const DEFAULT_INPUTS_O_TABLE = [
   // export-button [no|yes]: show export button. Default: yes.
   'exportButton: export-button',
 
-  // show-table-buttons-text [yes|no|true|false]: show text of header buttons. Default: yes.
-  'showTableButtonsText: show-table-buttons-text',
+  // show-buttons-text [yes|no|true|false]: show text of header buttons. Default: yes.
+  'showButtonsText: show-buttons-text',
 
   // select-all-checkbox [yes|no|true|false]: show selection check boxes. Default: no.
   'selectAllCheckbox: select-all-checkbox',
@@ -314,7 +314,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   @InputConverter()
   columnsVisibilityButton: boolean = true;
   @InputConverter()
-  showTableButtonsText: boolean = true;
+  showButtonsText: boolean = true;
 
   protected _oTableOptions: OTableOptions = new OTableOptions();
 
