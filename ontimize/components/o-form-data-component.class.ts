@@ -225,7 +225,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
         emitModelToViewChange: false,
         emitEvent: false
       });
-      if (this._fControl.invalid) {
+      if (this._fControl.invalid && !this.form.isInInsertMode()) {
         this._fControl.markAsTouched();
       }
     }
@@ -253,7 +253,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     if (this._fControl) {
       this._fControl.setValue(val, options);
       this._fControl.markAsDirty();
-      if (this._fControl.invalid) {
+      if (this._fControl.invalid && !this.form.isInInsertMode()) {
         this._fControl.markAsTouched();
       }
     }
