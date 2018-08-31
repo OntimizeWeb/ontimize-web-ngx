@@ -273,12 +273,10 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
       return;
     }
     let filterParentKeys = ServiceUtils.getParentKeysFromForm(this._pKeysEquiv, this.form);
-
     if (!this.filterContainsAllParentKeys(filterParentKeys) && !this.queryWithNullParentKeys) {
       this.setData([], []);
     } else {
-      let pkFilter = ServiceUtils.getFilterUsingParentKeys(filterParentKeys, this._pKeysEquiv);
-      filter = Object.assign(filter || {}, pkFilter);
+      filter = Object.assign(filter || {}, filterParentKeys);
       let queryArguments = this.getQueryArguments(filter, ovrrArgs);
       if (this.querySubscription) {
         this.querySubscription.unsubscribe();
