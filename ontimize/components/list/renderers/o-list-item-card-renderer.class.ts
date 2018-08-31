@@ -1,5 +1,6 @@
 import { ElementRef, EventEmitter, Injector, Renderer } from '@angular/core';
 
+import { Util } from '../../../util/util';
 import { OListItemComponent } from '../list-item/o-list-item.component';
 
 export const DEFAULT_INPUTS_O_CARD_RENDERER = [
@@ -48,11 +49,17 @@ export class OListItemCardRenderer {
     }
   }
 
-  onAction1ButtonClick(event: any) {
+  onAction1ButtonClick(e?: Event) {
+    if (Util.isDefined(e)) {
+      e.stopPropagation();
+    }
     this.onAction1Click.emit(event);
   }
 
-  onAction2ButtonClick(event: any) {
+  onAction2ButtonClick(e?: Event) {
+    if (Util.isDefined(e)) {
+      e.stopPropagation();
+    }
     this.onAction2Click.emit(event);
   }
 

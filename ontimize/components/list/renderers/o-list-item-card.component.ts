@@ -1,15 +1,6 @@
-import {
-  Component,
-  Inject,
-  Injector,
-  forwardRef,
-  ViewEncapsulation,
-  ElementRef,
-  Renderer,
-  Optional,
-  NgModule
-} from '@angular/core';
+import { Component, ElementRef, forwardRef, Inject, Injector, NgModule, Optional, Renderer, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
+
 import { OSharedModule } from '../../../shared';
 import { OListItemComponent } from '../list-item/o-list-item.component';
 import { OListItemCardRenderer } from './o-list-item-card-renderer.class';
@@ -30,7 +21,6 @@ export const DEFAULT_OUTPUTS_O_LIST_ITEM_CARD = [
   outputs: DEFAULT_OUTPUTS_O_LIST_ITEM_CARD,
   encapsulation: ViewEncapsulation.None,
   host: {
-    'layout-padding': '',
     '[class.o-custom-list-item]': 'true',
     '[class.o-list-item-card]': 'true'
   }
@@ -49,12 +39,12 @@ export class OListItemCardComponent extends OListItemCardRenderer {
   ngAfterViewInit() {
     this.modifyMatListItemElement();
   }
+
 }
 
 @NgModule({
   declarations: [OListItemCardComponent],
-  imports: [OSharedModule, CommonModule],
+  imports: [CommonModule, OSharedModule],
   exports: [OListItemCardComponent]
 })
-export class OListItemCardModule {
-}
+export class OListItemCardModule { }
