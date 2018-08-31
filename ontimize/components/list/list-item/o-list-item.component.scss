@@ -3,10 +3,12 @@
 
   .mat-list-item {
     width: 100%;
-  }
 
-  .row-buttons-container {
-    .o-list-row-action {
+    .o-list-item-selection-check {
+      padding-right: 16px;
+    }
+
+    .row-buttons-container .o-list-row-action {
       height: 24px;
       text-align: center;
       cursor: pointer;
@@ -14,18 +16,7 @@
   }
 }
 
-.mat-list {
-  .mat-checkbox-inner-container {
-    margin: 0;
-  }
-
-  &[dense] .o-list-item {
-    .o-list-row-action {
-      .mat-checkbox-inner-container {
-        height: 16px;
-        width: 16px;
-        margin: 0;
-      }
-    }
-  }
+.mat-list[dense] .o-list-item .o-list-row-action .mat-checkbox-inner-container {
+  height: 16px;
+  width: 16px;
 }
