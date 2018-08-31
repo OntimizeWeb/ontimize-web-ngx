@@ -114,7 +114,7 @@ export class OAppSidenavComponent implements OnInit, OnDestroy, AfterViewInit {
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
-    if (!this.manuallyClosed && !this.isScreenSmall()) {
+    if (!this.manuallyClosed && !this.isScreenSmall() && !this.isMobileMode()) {
       this.sidenav.open();
     }
   }
