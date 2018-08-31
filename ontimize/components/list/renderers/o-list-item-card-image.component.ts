@@ -34,7 +34,6 @@ export const DEFAULT_OUTPUTS_O_LIST_ITEM_CARD_IMAGE = [
   ],
   encapsulation: ViewEncapsulation.None,
   host: {
-    'layout-padding': '',
     '[class.o-custom-list-item]': 'true',
     '[class.o-list-item-card-image]': 'true'
   }
