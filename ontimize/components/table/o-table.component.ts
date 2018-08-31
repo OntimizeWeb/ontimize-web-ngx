@@ -140,8 +140,8 @@ export const DEFAULT_OUTPUTS_O_TABLE = [
   'onRowSelected',
   'onRowDeselected',
   'onRowDeleted',
-  'onTableDataLoaded',
-  'onPaginatedTableDataLoaded'
+  'onDataLoaded',
+  'onPaginatedDataLoaded'
 ];
 
 export class OColumn {
@@ -410,8 +410,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   public onRowSelected: EventEmitter<any> = new EventEmitter();
   public onRowDeselected: EventEmitter<any> = new EventEmitter();
   public onRowDeleted: EventEmitter<any> = new EventEmitter();
-  public onTableDataLoaded: EventEmitter<any> = new EventEmitter();
-  public onPaginatedTableDataLoaded: EventEmitter<any> = new EventEmitter();
+  public onDataLoaded: EventEmitter<any> = new EventEmitter();
+  public onPaginatedDataLoaded: EventEmitter<any> = new EventEmitter();
   public onReinitialize: EventEmitter<any> = new EventEmitter();
 
   selection = new SelectionModel<Element>(true, []);
@@ -1020,9 +1020,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     this.daoTable.isLoadingResults = false;
     this.updateScrolledState();
     if (this.pageable) {
-      ObservableWrapper.callEmit(this.onPaginatedTableDataLoaded, data);
+      ObservableWrapper.callEmit(this.onPaginatedDataLoaded, data);
     }
-    ObservableWrapper.callEmit(this.onTableDataLoaded, this.daoTable.data);
+    ObservableWrapper.callEmit(this.onDataLoaded, this.daoTable.data);
   }
 
   showDialogError(error: string, errorOptional?: string) {
