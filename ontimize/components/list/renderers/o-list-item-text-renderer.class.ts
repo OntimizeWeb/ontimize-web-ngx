@@ -1,9 +1,4 @@
-import {
-  Injector,
-  ElementRef,
-  Renderer,
-  EventEmitter
-} from '@angular/core';
+import { ElementRef, EventEmitter, Injector, Renderer } from '@angular/core';
 
 import { OListItemComponent } from '../list-item/o-list-item.component';
 
@@ -30,17 +25,13 @@ export class OListItemTextRenderer {
   protected _icon: string;
 
   onIconClick: EventEmitter<Object> = new EventEmitter<Object>();
-  /* end of inputs variables */
-
-  has3Lines: boolean = true;
 
   constructor(
     public elRef: ElementRef,
     protected _renderer: Renderer,
     protected _injector: Injector,
     protected _listItem: OListItemComponent
-  ) {
-  }
+  ) { }
 
   modifyMatListItemElement() {
     if (this.elRef.nativeElement && this.elRef.nativeElement.parentElement) {
@@ -56,7 +47,6 @@ export class OListItemTextRenderer {
         if (this.secondaryText === undefined) {
           linesNo--;
         }
-        this.has3Lines = (linesNo === 3);
         listItem.classList.add('mat-' + linesNo + '-line');
         listItem.querySelector('.mat-list-text').remove();
       }
@@ -98,4 +88,5 @@ export class OListItemTextRenderer {
   set icon(val: string) {
     this._icon = val;
   }
+
 }

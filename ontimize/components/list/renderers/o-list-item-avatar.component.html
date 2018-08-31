@@ -5,5 +5,7 @@
     <h4 *ngIf="primaryText !== undefined" matLine class="primary-text">{{ primaryText }}</h4>
     <p *ngIf="secondaryText !== undefined" matLine class="secondary-text">{{ secondaryText }}</p>
   </div>
-  <mat-icon *ngIf="icon !== undefined" [class.top]="has3Lines" class="material-icons o-list-item-icon" (click)="onActionIconClick($event)">{{ icon }}</mat-icon>
+  <mat-icon *ngIf="icon !== undefined" class="material-icons o-list-item-icon" (click)="onActionIconClick($event)">{{ icon
+    }}
+  </mat-icon>
 </div>
