@@ -98,7 +98,7 @@ export const DEFAULT_INPUTS_O_FORM = [
 ];
 
 export const DEFAULT_OUTPUTS_O_FORM = [
-  'onFormDataLoaded',
+  'onDataLoaded',
   'beforeCloseDetail',
   'beforeGoEditMode',
   'onFormModeChange'
@@ -196,7 +196,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   /* end of parsed inputs variables */
 
   formGroup: FormGroup;
-  onFormDataLoaded: EventEmitter<Object> = new EventEmitter<Object>();
+  onDataLoaded: EventEmitter<Object> = new EventEmitter<Object>();
   beforeCloseDetail: EventEmitter<any> = new EventEmitter<any>();
   beforeGoEditMode: EventEmitter<any> = new EventEmitter<any>();
   onFormModeChange: EventEmitter<Object> = new EventEmitter<Object>();
@@ -759,7 +759,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   }
 
   _emitData(data) {
-    this.onFormDataLoaded.emit(data);
+    this.onDataLoaded.emit(data);
   }
 
   _backAction() {

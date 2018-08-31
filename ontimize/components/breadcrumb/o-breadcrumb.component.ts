@@ -37,7 +37,7 @@ export class OBreadcrumbComponent implements AfterViewInit, OnDestroy, OnInit {
   protected _formRef: OFormComponent;
   protected labelColsArray: Array<string> = [];
   protected navigationService: NavigationService;
-  protected onFormDataLoadedSubscription: Subscription;
+  protected onDataLoadedSubscription: Subscription;
   protected navigationServiceSubscription: Subscription;
 
   constructor(
@@ -61,7 +61,7 @@ export class OBreadcrumbComponent implements AfterViewInit, OnDestroy, OnInit {
   ngAfterViewInit() {
     if (this._formRef && this.labelColsArray.length) {
       let self = this;
-      this.onFormDataLoadedSubscription = this._formRef.onFormDataLoaded.subscribe(
+      this.onDataLoadedSubscription = this._formRef.onDataLoaded.subscribe(
         (value: any) => {
           if (self.breadcrumbs.length) {
             let displayText = self.labelColsArray.map(element => value[element]).join(self.separator);
@@ -78,8 +78,8 @@ export class OBreadcrumbComponent implements AfterViewInit, OnDestroy, OnInit {
   }
 
   ngOnDestroy() {
-    if (this.onFormDataLoadedSubscription) {
-      this.onFormDataLoadedSubscription.unsubscribe();
+    if (this.onDataLoadedSubscription) {
+      this.onDataLoadedSubscription.unsubscribe();
     }
     if (this.navigationServiceSubscription) {
       this.navigationServiceSubscription.unsubscribe();

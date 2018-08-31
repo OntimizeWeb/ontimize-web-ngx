@@ -257,7 +257,7 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
 
     var self = this;
     if (self.queryOnBind) {
-      this.onFormDataSubscribe = this.form.onFormDataLoaded.subscribe(data => {
+      this.onFormDataSubscribe = this.form.onDataLoaded.subscribe(data => {
         self.queryData();
       });
     }

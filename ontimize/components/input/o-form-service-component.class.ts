@@ -112,7 +112,7 @@ export class OFormServiceComponent extends OFormDataComponent {
     if (this.form) {
       const self = this;
       if (self.queryOnBind) {
-        this._formDataSubcribe = this.form.onFormDataLoaded.subscribe(data => {
+        this._formDataSubcribe = this.form.onDataLoaded.subscribe(data => {
           self.queryData();
         });
       }
