@@ -4,7 +4,7 @@ import { RouterModule } from '@angular/router';
 import { MatCheckbox } from '@angular/material';
 import { Observable } from 'rxjs';
 
-import { Util, Codes } from '../../utils';
+import { Codes, Util } from '../../utils';
 import { OSharedModule } from '../../shared';
 import { OntimizeService } from '../../services';
 import { InputConverter } from '../../decorators';
@@ -92,6 +92,7 @@ export class OListComponent extends OServiceComponent implements AfterContentIni
     return this._quickFilter;
   }
   set quickFilter(val: boolean) {
+    val = Util.parseBoolean(String(val));
     this._quickFilter = val;
     if (val) {
       setTimeout(() => this.registerQuickFilter(this.searchInputComponent), 0);
