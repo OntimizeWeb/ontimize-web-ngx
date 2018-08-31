@@ -55,8 +55,8 @@ export const DEFAULT_OUTPUTS_O_LIST = [
   'onDoubleClick',
   'onInsertButtonClick',
   'onItemDeleted',
-  'onListDataLoaded',
-  'onPaginatedListDataLoaded'
+  'onDataLoaded',
+  'onPaginatedDataLoaded'
 ];
 
 export interface OListInitializationOptions {
@@ -124,8 +124,8 @@ export class OListComponent extends OServiceComponent implements AfterContentIni
   public onDoubleClick: EventEmitter<any> = new EventEmitter();
   public onInsertButtonClick: EventEmitter<any> = new EventEmitter();
   public onItemDeleted: EventEmitter<any> = new EventEmitter();
-  public onListDataLoaded: EventEmitter<any> = new EventEmitter();
-  public onPaginatedListDataLoaded: EventEmitter<any> = new EventEmitter();
+  public onDataLoaded: EventEmitter<any> = new EventEmitter();
+  public onPaginatedDataLoaded: EventEmitter<any> = new EventEmitter();
 
   protected quickFilterColArray: string[];
   protected dataResponseArray: Array<any> = [];
@@ -335,9 +335,9 @@ export class OListComponent extends OServiceComponent implements AfterContentIni
 
     this.loaderSubscription.unsubscribe();
     if (this.pageable) {
-      ObservableWrapper.callEmit(this.onPaginatedListDataLoaded, data);
+      ObservableWrapper.callEmit(this.onPaginatedDataLoaded, data);
     }
-    ObservableWrapper.callEmit(this.onListDataLoaded, this.dataResponseArray);
+    ObservableWrapper.callEmit(this.onDataLoaded, this.dataResponseArray);
   }
 
   reloadData() {
