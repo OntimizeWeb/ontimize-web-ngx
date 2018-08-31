@@ -25,6 +25,7 @@ export interface IList {
   getKeys(): Array<string>;
   setSelected(item: Object);
   isItemSelected(item: Object);
+  detailMode: string;
 }
 
 export const DEFAULT_INPUTS_O_LIST = [
@@ -232,8 +233,8 @@ export class OListComponent extends OServiceComponent implements AfterContentIni
         });
       }
       if (Codes.isDoubleClickMode(this.detailMode)) {
-        item.onDblClick(directiveItem => {
-          self.onItemDetailDblClick(directiveItem);
+        item.onDoubleClick(directiveItem => {
+          self.onItemDetailDoubleClick(directiveItem);
         });
       }
     }
@@ -266,16 +267,18 @@ export class OListComponent extends OServiceComponent implements AfterContentIni
   public onItemDetailClick(item: OListItemDirective | OListItemComponent) {
     if (this.oenabled && this.detailMode === Codes.DETAIL_MODE_CLICK) {
       this.saveDataNavigationInLocalStorage();
-      this.viewDetail(item.getItemData());
-      ObservableWrapper.callEmit(this.onClick, item);
+      let data = item.getItemData();
+      this.viewDetail(data);
+      ObservableWrapper.callEmit(this.onClick, data);
     }
   }
 
-  public onItemDetailDblClick(item: OListItemDirective | OListItemComponent) {
+  public onItemDetailDoubleClick(item: OListItemDirective | OListItemComponent) {
     if (this.oenabled && Codes.isDoubleClickMode(this.detailMode)) {
       this.saveDataNavigationInLocalStorage();
-      this.viewDetail(item.getItemData());
-      ObservableWrapper.callEmit(this.onDoubleClick, item);
+      let data = item.getItemData();
+      this.viewDetail(data);
+      ObservableWrapper.callEmit(this.onDoubleClick, data);
     }
   }
 

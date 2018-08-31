@@ -1,24 +1,24 @@
-import { ContentChild, Directive, ElementRef, Input, HostListener, OnDestroy, OnInit, Renderer, ViewContainerRef } from '@angular/core';
+import { Directive, ElementRef, Input, HostListener, OnDestroy, OnInit, Renderer } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { EventEmitter } from '@angular/core';
-import { MatListItem } from '@angular/material';
 
 import { IList } from '../o-list.component';
+import { Codes } from '../../../util/codes';
 import { ObservableWrapper } from '../../../util/async';
 
 @Directive({
-  selector: 'mat-list-item[o-list-item], mat-card[o-list-item]',
+  selector: 'o-list-item, mat-list-item[o-list-item], mat-card[o-list-item]',
   exportAs: 'olistitem',
   host: {
     '[class.o-list-item]': 'true',
     '(click)': 'onItemClicked($event)',
-    '(dblclick)': 'onItemDblClicked($event)'
+    '(dblclick)': 'onItemDoubleClicked($event)'
   }
 })
 export class OListItemDirective implements OnInit, OnDestroy {
 
   mdClick: EventEmitter<any> = new EventEmitter();
-  mdDblClick: EventEmitter<any> = new EventEmitter();
+  mdDoubleClick: EventEmitter<any> = new EventEmitter();
 
   protected subcription: any;
   protected _list: IList;
@@ -29,11 +29,9 @@ export class OListItemDirective implements OnInit, OnDestroy {
   @Input('selectable')
   selectable: boolean = false;
 
-  @ContentChild(MatListItem, { read: ViewContainerRef }) other;
-
   @HostListener('mouseenter')
   onMouseEnter() {
-    if (!this.selectable) {
+    if (!this.selectable && this._list.detailMode !== Codes.DETAIL_MODE_NONE) {
       this.renderer.setElementStyle(this._el.nativeElement, 'cursor', 'pointer');
     }
   }
@@ -80,17 +78,24 @@ export class OListItemDirective implements OnInit, OnDestroy {
     }
   }
 
-  onItemClicked(evt?) {
+  onItemClicked(e?: Event) {
     if (!this.selectable) {
-      var self = this;
-      window.setTimeout(() => {
-        ObservableWrapper.callEmit(self.mdClick, self);
-      }, 250);
+      ObservableWrapper.callEmit(this.mdClick, this);
     }
   }
 
   public onClick(onNext: (item: OListItemDirective) => void): Object {
     return ObservableWrapper.subscribe(this.mdClick, onNext);
+  }
+
+  onItemDoubleClicked(e?: Event) {
+    if (!this.selectable) {
+      ObservableWrapper.callEmit(this.mdDoubleClick, this);
+    }
+  }
+
+  public onDoubleClick(onNext: (item: OListItemDirective) => void): Object {
+    return ObservableWrapper.subscribe(this.mdDoubleClick, onNext);
   }
 
   public isSelected() {
@@ -99,19 +104,6 @@ export class OListItemDirective implements OnInit, OnDestroy {
 
   public onSelect() {
     this._list.setSelected(this.modelData);
-  }
-
-  onItemDblClicked(evt) {
-    if (!this.selectable) {
-      var self = this;
-      window.setTimeout(() => {
-        ObservableWrapper.callEmit(self.mdDblClick, self);
-      }, 250);
-    }
-  }
-
-  public onDblClick(onNext: (item: OListItemDirective) => void): Object {
-    return ObservableWrapper.subscribe(this.mdDblClick, onNext);
   }
 
   setListComponent(list: IList) {

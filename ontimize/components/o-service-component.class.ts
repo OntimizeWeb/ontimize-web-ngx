@@ -91,7 +91,7 @@ export class OServiceComponent extends OServiceBaseComponent {
   protected oenabled: boolean = true;
   @InputConverter()
   protected controls: boolean = true;
-  protected detailMode: string = Codes.DETAIL_MODE_CLICK;
+  public detailMode: string = Codes.DETAIL_MODE_CLICK;
   protected detailFormRoute: string;
   @InputConverter()
   protected recursiveDetail: boolean = false;

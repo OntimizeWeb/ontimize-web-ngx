@@ -51,23 +51,23 @@ export class OListItemComponent implements AfterContentInit {
     };
   }
 
-  onItemClick(evt) {
+  onClick(e?: Event) {
     if (!this._list.detailButtonInRow) {
       this._list.onItemDetailClick(this);
     }
   }
 
-  onItemDblClick(evt) {
+  onDoubleClick(e?: Event) {
     if (!this._list.detailButtonInRow) {
-      this._list.onItemDetailDblClick(this);
+      this._list.onItemDetailDoubleClick(this);
     }
   }
 
-  onDetailIconClicked(evt) {
+  onDetailIconClicked(e?: Event) {
     this._list.viewDetail(this.modelData);
   }
 
-  onEditIconClicked(evt) {
+  onEditIconClicked(e?: Event) {
     this._list.editDetail(this.modelData);
   }
 
