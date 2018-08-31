@@ -93,7 +93,7 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
     super.setData(value);
   }
 
-  onOpen(event) {
+  onOpen(e?: Event) {
     this.openPopup = true;
     if (this.picker) {
       let momentV = moment(this.getValueAsTimeStamp());

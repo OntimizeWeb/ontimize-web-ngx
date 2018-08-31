@@ -10,7 +10,7 @@
     <button *ngIf="showClearButton" matSuffix mat-icon-button (click)="clearValue()">
       <mat-icon svgIcon="ontimize:close"></mat-icon>
     </button>
-    <button matSuffix mat-icon-button (click)="onOpen()" [disabled]="isReadOnly || isDisabled">
+    <button matSuffix mat-icon-button (click)="onOpen($event)" [disabled]="isReadOnly || isDisabled">
       <mat-icon svgIcon="ontimize:clock "></mat-icon>
     </button>
     <mat-error *ngIf="hasError('required')">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }} </mat-error>
