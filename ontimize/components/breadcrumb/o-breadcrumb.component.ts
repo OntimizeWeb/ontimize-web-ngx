@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRouteSnapshot, Router, RouterModule } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 
+import { Codes } from '../../utils';
 import { OSharedModule } from '../../shared';
 import { NavigationService, OFormComponent, ONavigationItem, Util } from '../../../index';
 
@@ -40,6 +41,8 @@ export class OBreadcrumbComponent implements AfterViewInit, OnDestroy, OnInit {
   protected onDataLoadedSubscription: Subscription;
   protected navigationServiceSubscription: Subscription;
 
+  protected loaded: boolean = false;
+
   constructor(
     protected injector: Injector
   ) {
@@ -48,29 +51,32 @@ export class OBreadcrumbComponent implements AfterViewInit, OnDestroy, OnInit {
   }
 
   ngOnInit() {
-    let self = this;
+    const self = this;
 
     this.labelColsArray = Util.parseArray(this.labelColumns);
 
     if (this.navigationService && this.navigationService.navigationEvents$) {
-      this.navigationServiceSubscription = this.navigationService.navigationEvents$
-        .subscribe(e => self.breadcrumbs = e);
+      this.navigationServiceSubscription = this.navigationService.navigationEvents$.subscribe(e => {
+        self.breadcrumbs = e;
+      });
     }
   }
 
   ngAfterViewInit() {
     if (this._formRef && this.labelColsArray.length) {
       let self = this;
-      this.onDataLoadedSubscription = this._formRef.onDataLoaded.subscribe(
-        (value: any) => {
-          if (self.breadcrumbs.length) {
-            let displayText = self.labelColsArray.map(element => value[element]).join(self.separator);
-            self.breadcrumbs[self.breadcrumbs.length - 1].displayText = displayText;
-            self.navigationService.setNavigationItems(self.breadcrumbs);
-          }
+      this.onDataLoadedSubscription = this._formRef.onDataLoaded.subscribe((value: any) => {
+        if (self.breadcrumbs.length) {
+          let displayText = self.labelColsArray.map(element => value[element]).join(self.separator);
+          self.breadcrumbs[self.breadcrumbs.length - 1].displayText = displayText;
+          self.loaded = true;
         }
-      );
+      });
     }
+  }
+
+  showBreadcrumbItem(condition: boolean) {
+    return this.loaded && condition;
   }
 
   protected isTerminal(route: ActivatedRouteSnapshot) {
@@ -84,6 +90,14 @@ export class OBreadcrumbComponent implements AfterViewInit, OnDestroy, OnInit {
     if (this.navigationServiceSubscription) {
       this.navigationServiceSubscription.unsubscribe();
     }
+  }
+
+  onRouteClick(route) {
+    let extras = {};
+    if (route.queryParams) {
+      extras[Codes.QUERY_PARAMS] = route.queryParams;
+    }
+    this.router.navigate([route.url], extras);
   }
 
 }
