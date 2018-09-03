@@ -6,7 +6,7 @@ import { InputConverter } from '../decorators';
 import { OFilterBuilderComponent } from '../components';
 import { OFormComponent } from './form/o-form.component';
 import { FilterExpressionUtils } from './filter-expression.utils';
-import { AuthGuardService, OTranslateService } from '../services';
+import { AuthGuardService, OTranslateService, NavigationService } from '../services';
 import { OListInitializationOptions } from './list/o-list.component';
 import { OTableInitializationOptions } from './table/o-table.component';
 import { OFormLayoutManagerComponent } from '../layouts/form-layout/o-form-layout-manager.component';
@@ -72,6 +72,7 @@ export class OServiceComponent extends OServiceBaseComponent {
 
   protected authGuardService: AuthGuardService;
   protected translateService: OTranslateService;
+  protected navigationService: NavigationService;
 
   /* inputs variables */
   // title: string;
@@ -132,6 +133,7 @@ export class OServiceComponent extends OServiceBaseComponent {
     this.actRoute = this.injector.get(ActivatedRoute);
     this.authGuardService = this.injector.get(AuthGuardService);
     this.translateService = this.injector.get(OTranslateService);
+    this.navigationService = this.injector.get(NavigationService);
     try {
       this.formLayoutManager = this.injector.get(OFormLayoutManagerComponent);
     } catch (e) {
@@ -205,6 +207,7 @@ export class OServiceComponent extends OServiceBaseComponent {
         relativeTo: this.recursiveDetail ? this.actRoute.parent : this.actRoute,
       };
       extras[Codes.QUERY_PARAMS] = qParams;
+      this.storeNavigationFormRoutes('detailFormRoute');
       this.router.navigate(route, extras);
     }
   }
@@ -217,17 +220,18 @@ export class OServiceComponent extends OServiceBaseComponent {
         relativeTo: this.recursiveEdit ? this.actRoute.parent : this.actRoute
       };
       extras[Codes.QUERY_PARAMS] = Codes.getIsDetailObject();
+      this.storeNavigationFormRoutes('editFormRoute');
       this.router.navigate(route, extras);
     }
   }
 
   insertDetail() {
     let route = [];
-    let insertRoute = this.insertFormRoute !== undefined ? this.insertFormRoute : 'new';
+    let insertRoute = Util.isDefined(this.insertFormRoute) ? this.insertFormRoute : Codes.DEFAULT_INSERT_ROUTE;
     route.push(insertRoute);
     // adding parent-keys info...
     const encodedParentKeys = this.getEncodedParentKeys();
-    if (encodedParentKeys !== undefined) {
+    if (Util.isDefined(encodedParentKeys)) {
       let routeObj = {};
       routeObj[Codes.PARENT_KEYS_KEY] = encodedParentKeys;
       route.push(routeObj);
@@ -240,10 +244,8 @@ export class OServiceComponent extends OServiceBaseComponent {
       cDeactivate[Codes.IGNORE_CAN_DEACTIVATE] = true;
       extras[Codes.QUERY_PARAMS] = cDeactivate;
     }
-
-    this.router.navigate(route, extras).catch(err => {
-      console.error(err.message);
-    });
+    this.storeNavigationFormRoutes('insertFormRoute');
+    this.router.navigate(route, extras);
   }
 
   protected getEncodedParentKeys() {
@@ -273,7 +275,7 @@ export class OServiceComponent extends OServiceBaseComponent {
     }
 
     if (filterArr.length > 0) {
-      if (modeRoute !== undefined) {
+      if (Util.isDefined(modeRoute)) {
         route.push(modeRoute);
       }
       route.push(...filterArr);
@@ -358,4 +360,11 @@ export class OServiceComponent extends OServiceBaseComponent {
     return filter;
   }
 
+  protected storeNavigationFormRoutes(activeFormMode: string) {
+    this.navigationService.storeFormRoutes({
+      detailFormRoute: this.detailFormRoute,
+      editFormRoute: this.editFormRoute,
+      insertFormRoute: Util.isDefined(this.insertFormRoute) ? this.insertFormRoute : Codes.DEFAULT_INSERT_ROUTE
+    }, activeFormMode);
+  }
 }

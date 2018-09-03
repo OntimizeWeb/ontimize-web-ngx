@@ -1,25 +1,61 @@
 import { Injectable, Injector, EventEmitter } from '@angular/core';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router, ActivatedRouteSnapshot, UrlSegment } from '@angular/router';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/filter';
 
-import { Codes } from '../utils';
+import { Codes, Util } from '../utils';
 import { ObservableWrapper } from '../util/async';
 import { ILocalStorageComponent, LocalStorageService } from './local-storage.service';
 
 export class ONavigationItem {
-  constructor(value: Object) {
-    this.url = value['url'] ? value['url'] : '';
-    this.queryParams = value[Codes.QUERY_PARAMS] ? value[Codes.QUERY_PARAMS] : {};
-    this.text = value['text'] ? value['text'] : '';
-    this.displayText = value['displayText'] ? value['displayText'] : '';
-  }
+
   url: string;
   queryParams: Object;
   text: string;
   displayText: string;
   terminal: boolean;
+  formRoutes: any;
+  activeFormMode: string;
+
+  constructor(value: Object) {
+    this.url = value['url'] ? value['url'] : '';
+    this.queryParams = value[Codes.QUERY_PARAMS] ? value[Codes.QUERY_PARAMS] : {};
+    this.text = value['text'] ? value['text'] : '';
+    this.displayText = value['displayText'] ? value['displayText'] : '';
+    this.formRoutes = value['formRoutes'];
+    this.activeFormMode = value['activeFormMode'];
+  }
+
+  getActiveModePath(): string {
+    let result;
+    if (Util.isDefined(this.activeFormMode)) {
+      result = (this.formRoutes || {})[this.activeFormMode] || '';
+    }
+    return result;
+  }
+
+  findAndMergeNavigationItem(storageData: any[] = []) {
+    const storedItem: ONavigationItem = storageData.find(element => { return element.url === this.url; });
+    if (storedItem) {
+      this[Codes.QUERY_PARAMS] = storedItem[Codes.QUERY_PARAMS];
+      this.displayText = storedItem.displayText;
+      this.formRoutes = storedItem.formRoutes;
+      this.activeFormMode = storedItem.activeFormMode;
+    }
+  }
+
+  getInsertFormRoute(): string {
+    return this.formRoutes ? (this.formRoutes.insertFormRoute || Codes.DEFAULT_INSERT_ROUTE) : Codes.DEFAULT_INSERT_ROUTE;
+  }
+
+  getEditFormRoute(): string {
+    return this.formRoutes ? (this.formRoutes.editFormRoute || Codes.DEFAULT_EDIT_ROUTE) : Codes.DEFAULT_INSERT_ROUTE;
+  }
+
+  getDetailFormRoute(): string {
+    return this.formRoutes ? this.formRoutes.detailFormRoute : undefined;
+  }
 }
 
 @Injectable()
@@ -51,59 +87,64 @@ export class NavigationService implements ILocalStorageComponent {
   }
 
   initialize(): void {
-    var self = this;
-    this.router.events
-      .filter(event => event instanceof NavigationEnd)
-      .map(() => this.router.routerState.root)
-      .map(route => {
-        while (route.firstChild) {
-          route = route.firstChild;
-        }
-        return route;
-      })
-      .filter(route => route.outlet === 'primary')
-      .subscribe((event: ActivatedRoute) => {
-        let route = self.router.routerState.root.snapshot;
-        let displayText = '';
-        let url = '';
-        let navigationItems: Array<ONavigationItem> = [];
-        while (route.firstChild !== null) {
-          route = route.firstChild;
-          if (route.routeConfig === null) { continue; }
-          if (!route.routeConfig.path) { continue; }
-          url += `/${route.url.map((s, i) => {
-            return i === 0 ? displayText = s.path : null;
-          }).filter(s => s !== null).join('/')}`;
-          navigationItems.push(new ONavigationItem({
-            url: url,
-            text: displayText
-          }));
-        }
-        if (navigationItems.length > 0) {
-          navigationItems[navigationItems.length - 1].queryParams = route ? route.queryParams : {};
-        }
-        self.setNavigationItems(navigationItems);
-      });
+    const self = this;
+    const navEndEvents = this.router.events.filter(event => event instanceof NavigationEnd);
+    navEndEvents.map(() => this.router.routerState.root).map(route => {
+      while (route.firstChild) {
+        route = route.firstChild;
+      }
+      return route;
+    }).filter(route => route.outlet === 'primary').subscribe(self.parseNavigationItems.bind(self));
   }
 
-  public setNavigationItems(navigationItems: Array<ONavigationItem>): void {
+  protected parseNavigationItems(event: ActivatedRoute) {
+    let storageData: any = this.getStoredData();
+    let route: ActivatedRouteSnapshot = this.router.routerState.root.snapshot;
+
+    let url = '';
+    let navigationItems: Array<ONavigationItem> = [];
+    while (route.firstChild !== null) {
+      let text = '';
+      route = route.firstChild;
+      if (!route || !route.url || route.routeConfig === null || !route.routeConfig.path) {
+        continue;
+      }
+      const navData: ONavigationItem = navigationItems[navigationItems.length - 1];
+      let modePath = navData ? navData.getActiveModePath() : undefined;
+      let modePathArr = [];
+      if (modePath && modePath.length > 0) {
+        url += url.length > 0 ? ('/' + modePath) : modePath;
+        modePathArr = modePath.split('/');
+      }
+      for (let i = 0, len = route.url.length; i < len; i++) {
+        const s: UrlSegment = route.url[i];
+        if (modePathArr.indexOf(s.path) === -1) {
+          text += text.length > 0 ? ('/' + s.path) : s.path;
+          url += url.length > 0 ? ('/' + s.path) : s.path;
+          break;
+        }
+      }
+      const navigationItem = new ONavigationItem({
+        url: url,
+        queryParams: route.queryParams,
+        text: text
+      });
+      navigationItem.findAndMergeNavigationItem(storageData);
+      navigationItems.push(navigationItem);
+    }
+    if (navigationItems.length > 1) {
+      navigationItems[navigationItems.length - 1].terminal = true;
+    }
+    this.setNavigationItems(navigationItems);
+  }
+
+  public setNavigationItems(navigationItems: Array<ONavigationItem>) {
     this.navigationItems = navigationItems;
     this.storeNavigation();
     this.navigationEventsSource.next(this.navigationItems);
   }
 
   public getDataToStore(): Object {
-    let localData = this.localStorageService.getComponentStorage(this, false);
-    if (localData) {
-      this.navigationItems.forEach((element, index) => {
-        let storedElem = localData[Object.keys(localData).find(index => element.url === localData[index]['url'])];
-        if (void 0 !== storedElem) {
-          element.queryParams = element.queryParams && !Object.keys(storedElem[Codes.QUERY_PARAMS]).length ? element.queryParams : storedElem[Codes.QUERY_PARAMS] && Object.keys(storedElem[Codes.QUERY_PARAMS]).length ? storedElem[Codes.QUERY_PARAMS] : {};
-          element.displayText = element.displayText ? element.displayText : storedElem['displayText'] ? storedElem['displayText'] : null;
-        }
-        element.terminal = index === this.navigationItems.length - 1;
-      });
-    }
     return this.navigationItems;
   }
 
@@ -166,6 +207,35 @@ export class NavigationService implements ILocalStorageComponent {
     ObservableWrapper.callEmit(this._sidenavEmitter, 'close');
   }
 
+  storeFormRoutes(routes: any, activeMode: string) {
+    if (this.navigationItems.length > 0) {
+      this.navigationItems[this.navigationItems.length - 1].formRoutes = routes;
+      this.navigationItems[this.navigationItems.length - 1].activeFormMode = activeMode;
+      this.storeNavigation();
+    }
+  }
+
+  protected getStoredData(): any[] {
+    let storageData: any = this.localStorageService.getComponentStorage(this, false);
+    let result = [];
+    Object.keys(storageData).forEach(key => result.push(storageData[key]));
+    return result.length ? result : undefined;
+  }
+
+  getPreviousRouteData(): ONavigationItem {
+    let result;
+    const lastItem: any = (this.navigationItems[this.navigationItems.length - 1] || {});
+    if (lastItem.activeFormMode === 'editFormRoute') {
+      lastItem.activeFormMode = undefined;
+      return lastItem;
+    }
+    if (this.navigationItems.length >= 2) {
+      result = {};
+      const navData = this.navigationItems[this.navigationItems.length - 2];
+      result = navData;
+    }
+    return result;
+  }
   //* Provisional
   // protected move(index) {
   //   this.queryByIndex(index);

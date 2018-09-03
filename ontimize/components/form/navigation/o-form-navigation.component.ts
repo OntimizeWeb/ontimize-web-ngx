@@ -11,7 +11,10 @@ import { OFormNavigationClass } from './o-form.navigation.class';
   selector: 'o-form-navigation',
   templateUrl: './o-form-navigation.component.html',
   styleUrls: ['./o-form-navigation.component.scss'],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  host: {
+    '[class.o-form-navigation]': 'true'
+  }
 })
 export class OFormNavigationComponent implements OnDestroy {
 
