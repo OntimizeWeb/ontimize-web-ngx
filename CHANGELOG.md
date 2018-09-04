@@ -12,7 +12,9 @@
   * new `updateRecord` method ([a528120](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a528120))
   * new `auto-align-titles` input ([1714a25](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1714a25))
   * supports **infinite scroll** when `pagination-controls=no` and `pageable = 'no'` ([9fc3afa]) (https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9fc3afa))
-* **o-table-column**: new `title-align` input ([1d261e1](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1d261e1))
+* **o-table-column**:
+  * new `title-align` input ([1d261e1](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1d261e1))
+  * new `multiline` input ([d5957fe](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d5957fe))
 * **o-list**: Now, both `o-list-item` component and `o-list-item` directive make the list items go to item detail when click on them by default. Use the `detail-mode` attribute to configure this ([1cb22d3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1cb22d3) [ee2eecb](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ee2eecb) [60848fe](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/60848fe))
 * **o-app-layout**:
   * New input `mode` for selecting performance mode `desktop` or `mobile` ([7617175](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7617175))
@@ -70,7 +72,7 @@
   * **o-list-picker-dialog**: Internal CSS classes changes:
     * Internal CSS class `dialog-list-container` has been removed, use `mat-dialog-content` instead.
     * Internal CSS class `list-picker-search` has changed to `o-list-picker-search`.
-    * Internal CSS class ´has-filter´ has changed to `o-list-picker-has-filter`.
+    * Internal CSS class `has-filter` has changed to `o-list-picker-has-filter`.
   * **o-table**: Internal CSS class `hidden-action-text` has been removed.
   * **o-form-toolbar**: Internal CSS class `toolbar-form-header` has changed to `o-form-toolbar-header`.
 
