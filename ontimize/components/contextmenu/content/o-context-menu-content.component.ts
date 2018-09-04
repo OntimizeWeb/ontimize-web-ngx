@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, ContentChildren, EventEmitter, HostListener, Injector, OnDestroy, OnInit, QueryList, ViewEncapsulation } from '@angular/core';
 import { OverlayRef } from '@angular/cdk/overlay';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 import { ActiveDescendantKeyManager } from '@angular/cdk/a11y';
 import { trigger, state, style, transition, animate, query, group } from '@angular/animations';
 

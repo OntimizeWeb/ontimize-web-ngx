@@ -1,7 +1,7 @@
 import { Injectable, Injector } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
 import { LoginService } from '../services';
 import { AppConfig, Config } from '../config/app-config';

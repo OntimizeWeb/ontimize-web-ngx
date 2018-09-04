@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, ElementRef, Inject, ViewChild, ViewEncapsulation } from '@angular/core';
 import { MatCheckboxChange, MatDialogRef, MAT_DIALOG_DATA, MatSelectionList } from '@angular/material';
 import { FormControl } from '@angular/forms';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
 import { Util } from '../../../../../util/util';
 import { OColumn } from '../../../o-table.component';

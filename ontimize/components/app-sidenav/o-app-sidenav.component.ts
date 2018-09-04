@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { MatSidenav } from '@angular/material';
 import { Router, RouterModule } from '@angular/router';
 import { MediaChange, ObservableMedia } from '@angular/flex-layout';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 
 import { Util } from '../../util/util';
 import { OSharedModule } from '../../shared';

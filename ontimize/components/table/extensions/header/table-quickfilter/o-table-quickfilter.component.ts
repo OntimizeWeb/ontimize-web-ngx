@@ -1,7 +1,6 @@
 import { Component, OnInit, Inject, forwardRef, EventEmitter, Injector, ViewEncapsulation, ViewChild, ElementRef, OnDestroy, AfterViewInit } from '@angular/core';
 import { MatCheckboxChange, MatMenu } from '@angular/material';
-import { Observable } from 'rxjs/Observable';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription, Observable } from 'rxjs';
 import { Util } from '../../../../../utils';
 import { OTableComponent, OColumn, OTableOptions } from '../../../o-table.component';
 import { IExpression, FilterExpressionUtils } from '../../../../filter-expression.utils';

@@ -1,6 +1,6 @@
 <ng-template #templateref let-cellvalue="cellvalue" let-rowvalue="rowvalue">
   <div [formGroup]="formGroup">
-    <mat-form-field floatPlaceholder="never">
+    <mat-form-field floatLabel="never">
       <input #input matInput type="text" [placeholder]="getPlaceholder()" [formControl]="formControl" [required]="orequired">
       <mat-error *ngIf="hasError('required')">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</mat-error>
     </mat-form-field>

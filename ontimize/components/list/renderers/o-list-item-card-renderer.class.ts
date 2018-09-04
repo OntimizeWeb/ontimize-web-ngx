@@ -1,4 +1,4 @@
-import { ElementRef, EventEmitter, Injector, Renderer } from '@angular/core';
+import { ElementRef, EventEmitter, Injector, Renderer2 } from '@angular/core';
 
 import { Util } from '../../../util/util';
 import { OListItemComponent } from '../list-item/o-list-item.component';
@@ -36,7 +36,7 @@ export class OListItemCardRenderer {
 
   constructor(
     public elRef: ElementRef,
-    protected _renderer: Renderer,
+    protected _renderer: Renderer2,
     protected _injector: Injector,
     protected _listItem: OListItemComponent
   ) { }

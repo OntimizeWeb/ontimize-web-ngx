@@ -11,7 +11,7 @@ import {
 } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 
 import { OFormComponent } from './o-form.component';
 import { InputConverter } from '../../decorators';

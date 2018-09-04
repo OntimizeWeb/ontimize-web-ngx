@@ -1,8 +1,7 @@
 import { Injector, Injectable } from '@angular/core';
 import { EventEmitter } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
-import { Subscriber } from 'rxjs/Subscriber';
+import { Subscriber, Observable } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
 import { MomentService, SnackBarService } from '../../services';
 import * as CORE_TRANSLATIONS from '../../i18n/i18n';

@@ -1,4 +1,4 @@
-import { Directive, ElementRef, Input, HostListener, OnDestroy, OnInit, Renderer } from '@angular/core';
+import { Directive, ElementRef, Input, HostListener, OnDestroy, OnInit, Renderer2 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { EventEmitter } from '@angular/core';
 
@@ -32,13 +32,13 @@ export class OListItemDirective implements OnInit, OnDestroy {
   @HostListener('mouseenter')
   onMouseEnter() {
     if (!this.selectable && this._list.detailMode !== Codes.DETAIL_MODE_NONE) {
-      this.renderer.setElementStyle(this._el.nativeElement, 'cursor', 'pointer');
+      this.renderer.setStyle(this._el.nativeElement, 'cursor', 'pointer');
     }
   }
 
   constructor(
     public _el: ElementRef,
-    private renderer: Renderer,
+    private renderer: Renderer2,
     public actRoute: ActivatedRoute
   ) { }
 

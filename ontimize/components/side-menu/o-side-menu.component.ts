@@ -40,7 +40,7 @@ export class OSideMenuComponent {
   public showSidenav() {
     this.opened = true;
     this.sidenav.open();
-    this.sidenav.onClose.subscribe(res => {
+    this.sidenav.closedStart.subscribe(res => {
       this.opened = false;
     });
   }

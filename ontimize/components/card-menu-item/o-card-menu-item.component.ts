@@ -1,7 +1,7 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ComponentFactory, ComponentFactoryResolver, ContentChildren, ElementRef, Injector, NgModule, OnDestroy, QueryList, ViewChild, ViewContainerRef, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 
 import { OSharedModule } from '../../shared';
 import { InputConverter } from '../../decorators';

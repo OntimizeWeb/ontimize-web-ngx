@@ -1,4 +1,4 @@
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 
 import { OntimizeFileService } from '../../../services';
 import { Codes } from '../../../utils';

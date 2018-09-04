@@ -1,7 +1,7 @@
 import { AfterViewInit, AfterViewChecked, ChangeDetectionStrategy, ChangeDetectorRef, Component, Injector, NgModule, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MediaChange, ObservableMedia } from '@angular/flex-layout';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 
 import { OSharedModule } from '../../shared/shared.module';
 import { AppMenuService, OTranslateService } from '../../services';

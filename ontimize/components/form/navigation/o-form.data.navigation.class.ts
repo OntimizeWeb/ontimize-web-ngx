@@ -1,5 +1,5 @@
 import { Injector } from '@angular/core';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 import { LocalStorageService, ILocalStorageComponent } from '../../../services';
 
 export class OFormDataNavigation implements ILocalStorageComponent {

@@ -46,6 +46,7 @@ import { MatMomentDateModule, MomentDateAdapter } from '@angular/material-moment
 import { OverlayModule } from '@angular/cdk/overlay';
 import { OntimizeMatIconRegistry } from '../../services/icon-registry.service';
 import { dateFormatFactory } from '../../services/mat-date-formats.factory';
+import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 
 const MATERIAL_MODULES = [
   MatAutocompleteModule,
@@ -94,7 +95,7 @@ export class OntimizeMomentDateAdapter extends MomentDateAdapter {
 
   oFormat: string;
 
-  constructor( @Optional() @Inject(MAT_DATE_LOCALE) dateLocale: string) {
+  constructor(@Optional() @Inject(MAT_DATE_LOCALE) dateLocale: string) {
     super(dateLocale);
   }
 
@@ -108,7 +109,10 @@ export class OntimizeMomentDateAdapter extends MomentDateAdapter {
 }
 
 @NgModule({
-  imports: [CommonModule],
+  imports: [
+    CommonModule,
+    NgxMaterialTimepickerModule //.forRoot()
+  ],
   exports: MATERIAL_MODULES,
   providers: [{
     provide: DateAdapter,

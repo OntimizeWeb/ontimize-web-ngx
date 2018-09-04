@@ -1,6 +1,6 @@
 import { Component, ViewEncapsulation, Injector, ComponentFactoryResolver, ViewContainerRef, ViewChildren, QueryList, ViewChild, AfterViewInit, EventEmitter, OnDestroy } from '@angular/core';
 import { MatTabGroup } from '@angular/material';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 import { OFormLayoutManagerContentDirective } from '../directives/o-form-layout-manager-content.directive';
 import { IDetailComponentData, OFormLayoutManagerComponent } from '../o-form-layout-manager.component';
 

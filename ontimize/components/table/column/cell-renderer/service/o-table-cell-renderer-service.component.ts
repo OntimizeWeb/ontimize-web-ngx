@@ -1,5 +1,5 @@
 import { Component, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 
 import { Util, Codes } from '../../../../../utils';
 import { DialogService, OntimizeService } from '../../../../../services';

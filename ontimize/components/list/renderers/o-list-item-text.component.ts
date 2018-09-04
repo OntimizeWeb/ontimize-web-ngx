@@ -5,7 +5,7 @@ import {
   forwardRef,
   ViewEncapsulation,
   ElementRef,
-  Renderer,
+  Renderer2,
   Optional,
   NgModule
 } from '@angular/core';
@@ -43,7 +43,7 @@ export class OListItemTextComponent extends OListItemTextRenderer {
 
   constructor(
     elRef: ElementRef,
-    _renderer: Renderer,
+    _renderer: Renderer2,
     _injector: Injector,
     @Optional() @Inject(forwardRef(() => OListItemComponent)) protected _listItem: OListItemComponent
   ) {

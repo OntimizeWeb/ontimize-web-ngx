@@ -1,4 +1,4 @@
-import { AfterContentInit, Component, ElementRef, forwardRef, Inject, Injector, ContentChild, ContentChildren, NgModule, Optional, QueryList, Renderer, ViewChild, ViewEncapsulation } from '@angular/core';
+import { AfterContentInit, Component, ElementRef, forwardRef, Inject, Injector, ContentChild, ContentChildren, NgModule, Optional, QueryList, Renderer2, ViewChild, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatLine, MatListAvatarCssMatStyler, MatListItem } from '@angular/material';
 
@@ -28,13 +28,17 @@ export class OListItemComponent implements AfterContentInit {
   set _hasAvatar(avatar: MatListAvatarCssMatStyler) {
     let listItemNativeEl = this.elRef.nativeElement.getElementsByTagName('mat-list-item');
     if (listItemNativeEl && listItemNativeEl.length === 1) {
-      this._renderer.setElementClass(listItemNativeEl[0], 'mat-list-avatar', (avatar !== null && avatar !== undefined));
+      if ((avatar !== null && avatar !== undefined)) {
+        this._renderer.addClass(listItemNativeEl[0], 'mat-list-avatar');
+      } else {
+        this._renderer.removeClass(listItemNativeEl[0], 'mat-list-avatar');
+      }
     }
   }
 
   constructor(
     public elRef: ElementRef,
-    protected _renderer: Renderer,
+    protected _renderer: Renderer2,
     protected _injector: Injector,
     @Optional() @Inject(forwardRef(() => OListComponent)) public _list: OListComponent
   ) { }

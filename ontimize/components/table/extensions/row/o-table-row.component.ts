@@ -1,7 +1,7 @@
-import { Component, ChangeDetectionStrategy, ViewEncapsulation, AfterViewInit, forwardRef, Inject, ElementRef, OnDestroy, Renderer } from '@angular/core';
+import { Component, ChangeDetectionStrategy, ViewEncapsulation, AfterViewInit, forwardRef, Inject, ElementRef, OnDestroy, Renderer2 } from '@angular/core';
 import { MatRow } from '@angular/material';
 import { CDK_ROW_TEMPLATE } from '@angular/cdk/table';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 import { OTableComponent } from '../../o-table.component';
 
 @Component({
@@ -21,7 +21,7 @@ export class OTableRow extends MatRow implements AfterViewInit, OnDestroy {
   constructor(
     @Inject(forwardRef(() => OTableComponent)) public table: OTableComponent,
     protected elementRef: ElementRef,
-    protected renderer: Renderer
+    protected renderer: Renderer2
   ) {
     super();
   }
@@ -76,7 +76,7 @@ export class OTableRow extends MatRow implements AfterViewInit, OnDestroy {
 
   setRowWidth(value: number) {
     const widthValue = value !== undefined ? value + 'px' : 'auto';
-    this.renderer.setElementStyle(this.elementRef.nativeElement, 'width', widthValue);
+    this.renderer.setStyle(this.elementRef.nativeElement, 'width', widthValue);
     this.table.rowWidth = value;
   }
 

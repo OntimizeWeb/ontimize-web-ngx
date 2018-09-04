@@ -1,6 +1,6 @@
-import { Injector, Injectable, ReflectiveInjector } from '@angular/core';
+import { Injector, Injectable } from '@angular/core';
 import { CanActivate, Router, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
 import { OntimizeService, LoginService, OUserInfoService } from '../services';
 import { AppConfig, Config } from '../config/app-config';
@@ -63,7 +63,7 @@ export class AuthGuardService implements CanActivate, IProfileService {
   }
 
   configureService() {
-    let localInjector = ReflectiveInjector.resolveAndCreate([{ provide: OntimizeService, useFactory: dataServiceFactory, deps: [Injector] }], this.injector);
+    let localInjector = Injector.create([{ provide: OntimizeService, useFactory: dataServiceFactory, deps: [Injector] }], this.injector);
 
     this.ontimizeService = localInjector.get(OntimizeService);
 

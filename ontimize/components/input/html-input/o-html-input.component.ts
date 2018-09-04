@@ -1,4 +1,5 @@
-import { AfterViewInit, animate, ChangeDetectorRef, Component, ElementRef, EventEmitter, Injector, NgModule, state, style, transition, trigger, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, Injector, NgModule, ViewChild } from '@angular/core';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 import { CommonModule } from '@angular/common';
 import { ValidatorFn, Validators } from '@angular/forms';
 import { MatTab, MatTabGroup } from '@angular/material';

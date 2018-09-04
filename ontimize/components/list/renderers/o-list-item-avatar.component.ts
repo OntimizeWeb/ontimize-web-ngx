@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, forwardRef, Inject, Injector, NgModule, OnInit, Optional, Renderer, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, forwardRef, Inject, Injector, NgModule, OnInit, Optional, Renderer2, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
@@ -39,7 +39,7 @@ export class OListItemAvatarComponent extends OListItemTextRenderer implements A
 
   constructor(
     elRef: ElementRef,
-    _renderer: Renderer,
+    _renderer: Renderer2,
     _injector: Injector,
     @Optional() @Inject(forwardRef(() => OListItemComponent)) protected _listItem: OListItemComponent,
     public sanitizer: DomSanitizer

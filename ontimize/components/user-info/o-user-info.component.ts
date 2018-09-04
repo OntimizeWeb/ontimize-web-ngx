@@ -1,7 +1,7 @@
 import { Component, ElementRef, Injector, NgModule, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 
 import { OSharedModule } from '../../shared';
 import { DialogService, LoginService, OUserInfoService, UserInfo } from '../../services';

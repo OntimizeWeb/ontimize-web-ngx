@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_LOCALE, MatDatepicker, MatDatepickerInput, MatDatepickerInputEvent } from '@angular/material';
 import { MediaChange, ObservableMedia } from '@angular/flex-layout';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 
 import moment from 'moment';
 

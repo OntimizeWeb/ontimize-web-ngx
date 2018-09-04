@@ -2,7 +2,6 @@ import { Component, NgModule, Optional, Inject, ElementRef, Injector, forwardRef
 import { OFormDataComponent, DEFAULT_INPUTS_O_FORM_DATA_COMPONENT, DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT } from '../../o-form-data-component.class';
 import { CommonModule } from '@angular/common';
 import { ValidatorFn } from '@angular/forms';
-import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import moment from 'moment';
 import { Util } from '../../../utils';
 import { OSharedModule } from '../../../shared';
@@ -168,7 +167,7 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
 
 @NgModule({
   declarations: [OHourInputComponent],
-  imports: [OSharedModule, CommonModule, NgxMaterialTimepickerModule.forRoot()],
+  imports: [OSharedModule, CommonModule],
   exports: [OHourInputComponent]
 })
 export class OHourInputModule { }

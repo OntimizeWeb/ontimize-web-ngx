@@ -1,7 +1,7 @@
 import { Injector } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import 'rxjs/add/operator/combineLatest';
 import { AppConfig } from '../../config/app-config';
 import { Codes } from '../../utils';

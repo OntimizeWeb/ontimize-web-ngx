@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, Injector, NgModule, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRouteSnapshot, Router, RouterModule } from '@angular/router';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 
 import { Codes } from '../../utils';
 import { OSharedModule } from '../../shared';

@@ -3,8 +3,7 @@ import { MatIconRegistry } from '@angular/material';
 import { DomSanitizer } from '@angular/platform-browser';
 import { HttpClient } from '@angular/common/http';
 import { DOCUMENT } from '@angular/common';
-import { Observable } from 'rxjs/Observable';
-import { Observer } from 'rxjs/Observer';
+import { Observer, Observable } from 'rxjs';
 
 @Injectable()
 export class OntimizeMatIconRegistry extends MatIconRegistry {

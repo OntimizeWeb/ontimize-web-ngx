@@ -1,5 +1,5 @@
 import { Component, ContentChildren, Injector, OnDestroy, OnInit, EventEmitter } from '@angular/core';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 
 import { ObservableWrapper } from '../../utils';
 import { OContextMenuService, IOContextMenuContext } from './o-context-menu.service';

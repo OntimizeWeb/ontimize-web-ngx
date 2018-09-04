@@ -1,6 +1,6 @@
 import { Injectable, Injector, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { Codes, IAuthService, ObservableWrapper, ServiceUtils } from '../utils';
 import { OntimizeService, DialogService } from '../services';
 import { AppConfig, Config } from '../config/app-config';

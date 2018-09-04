@@ -1,8 +1,7 @@
 import { ComponentRef, ElementRef, Injectable } from '@angular/core';
 import { Overlay, OverlayRef, ScrollStrategyOptions } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
-import { Subject } from 'rxjs/Subject';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription, Subject } from 'rxjs';
 
 import { OContextMenuComponent } from './o-context-menu.component';
 import { OContextMenuContentComponent } from './content/o-context-menu-content.component';

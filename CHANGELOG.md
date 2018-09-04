@@ -1,3 +1,22 @@
+## 4.0.0-rc.0
+
+### PEER-DEPENDENCY UPDATES ###
+* **Updated**:  @angular@6.1.6
+* **Updated**:  @angular/material@6.4.7
+* **Updated**:  @angular/cdk@6.4.7
+* **Updated**:  @angular/flex-layout@6.0.0-beta.18
+* **Updated**:  @ngx-translate/core@10.0.2
+* **Updated**:  @ngx-translate/http-loader@3.0.1
+* **Updated**:  ngx-material-timepicker@2.5.4
+* **Updated**:  typescript@2.9.2
+* **Updated**:  rxjs@6.3.1
+* **Updated**:  zone.js@0.8.26
+* **Updated**:  core-js@2.5.7
+* **NOTE**: you must update your ([node version to 8 or later](https://www.hostingadvice.com/how-to/update-node-js-latest-version/))
+
+
+### BREAKING CHANGES
+* **Angular and Angular Material**: updating versions ([be5d6d7](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/be5d6d7))
 ## 3.0.2
 ### Features
 * **ontimize-ee.service**, **ontimize.service**: new response parsers methods (separately by each CRUD method) ([c8c9e6f](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c8c9e6f))

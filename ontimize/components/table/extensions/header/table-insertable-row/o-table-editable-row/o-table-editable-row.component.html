@@ -14,7 +14,7 @@
 
     <mat-cell *matCellDef="let row" [fxFlex]="column.width" [ngClass]="column.className">
       <ng-container *ngIf="isColumnInsertable(column) && !useCellEditor(column)">
-        <mat-form-field class="insertable-form-field" [hideRequiredMarker]="false" floatPlaceholder="never">
+        <mat-form-field class="insertable-form-field" [hideRequiredMarker]="false" floatLabel="never">
           <input matInput type="text" [placeholder]="getPlaceholder(column)" [id]="column.attr" [formControl]="getControl(column)"
             [required]="isColumnRequired(column)">
           <mat-error *ngIf="columnHasError(column, 'required')">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</mat-error>

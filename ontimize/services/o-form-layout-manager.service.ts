@@ -1,6 +1,5 @@
 import { Injectable, Injector } from '@angular/core';
-import { Observable } from 'rxjs';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { OFormLayoutManagerComponent } from '../layouts/form-layout/o-form-layout-manager.component';
 
 @Injectable()

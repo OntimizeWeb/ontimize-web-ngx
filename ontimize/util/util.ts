@@ -1,5 +1,5 @@
 import { Base64 } from './base64';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { IFormDataComponent } from '../components/o-form-data-component.class';
 import { SessionInfo } from '../services/login.service';
 import { Codes } from './codes';

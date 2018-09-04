@@ -1,4 +1,4 @@
-import { Component, ElementRef, forwardRef, Inject, Injector, NgModule, Optional, Renderer, ViewEncapsulation } from '@angular/core';
+import { Component, ElementRef, forwardRef, Inject, Injector, NgModule, Optional, Renderer2, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { OSharedModule } from '../../../shared';
@@ -29,7 +29,7 @@ export class OListItemCardComponent extends OListItemCardRenderer {
 
   constructor(
     elRef: ElementRef,
-    _renderer: Renderer,
+    _renderer: Renderer2,
     _injector: Injector,
     @Optional() @Inject(forwardRef(() => OListItemComponent)) _listItem: OListItemComponent
   ) {

@@ -1,7 +1,6 @@
 import { Injectable, Injector, EventEmitter } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router, ActivatedRouteSnapshot, UrlSegment } from '@angular/router';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { Observable } from 'rxjs/Observable';
+import { Observable, ReplaySubject } from 'rxjs';
 import 'rxjs/add/operator/filter';
 
 import { Codes, Util } from '../utils';

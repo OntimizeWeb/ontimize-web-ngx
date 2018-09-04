@@ -1,7 +1,6 @@
 import { EventEmitter, Injector } from '@angular/core';
 import { ActivatedRoute, Router, UrlSegmentGroup } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
-import 'rxjs/add/operator/combineLatest';
 
 import { DialogService, NavigationService, ONavigationItem } from '../../../services';
 import { OFormComponent } from '../o-form.component';

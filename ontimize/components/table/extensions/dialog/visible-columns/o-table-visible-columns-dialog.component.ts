@@ -1,6 +1,7 @@
 import { Component, Inject, ViewEncapsulation } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { DragDropService } from 'ng2-dnd';
+import { DragDropService } from '@beyerleinf/ngx-dnd';
+
 import { Util } from '../../../../../utils';
 import { OColumn } from '../../../o-table.component';
 
