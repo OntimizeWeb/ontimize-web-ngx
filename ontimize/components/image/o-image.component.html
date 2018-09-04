@@ -8,7 +8,7 @@
       <input class="mat-primary" #input type="file" (change)="fileChange(input)" class="input-file" fxFill />
       <label #titleLabel (click)="input.click()">{{ 'CHOOSE_FILE' | oTranslate }}</label>
       <button [disabled]="isDisabled" matSuffix mat-icon-button (click)="input.click()">
-        <mat-icon svgIcon="ontimize:search"></mat-icon>
+        <mat-icon svgIcon="ontimize:folder_open"></mat-icon>
       </button>
       <button [disabled]="isDisabled" matSuffix mat-icon-button (click)="onClickClear($event)">
         <mat-icon svgIcon="ontimize:clear"></mat-icon>
@@ -18,10 +18,9 @@
   </div>
   <div class="image-container" fxLayoutAlign="center">
     <img *ngIf="!(isEmpty())" [src]="getSrcValue()" alt="" (click)="input.click()" />
-    <mat-icon class="empty-icon" [class.mat-disabled]="isDisabled" aria-label="empty image" *ngIf="useEmptyIcon()" (click)="input.click()">{{ emptyicon }}</mat-icon>
+    <mat-icon class="empty-icon" [class.mat-disabled]="isDisabled" aria-label="empty image" *ngIf="useEmptyIcon()" (click)="input.click()">{{
+      emptyicon }}</mat-icon>
     <img [src]="getSrcValue()" alt="empty image" *ngIf="useEmptyImage()" (click)="input.click()" />
   </div>
-
   <div *ngIf="isReadOnly" fxFill class="read-only-blocker" (click)="onClickBlocker($event)"></div>
-
 </div>
