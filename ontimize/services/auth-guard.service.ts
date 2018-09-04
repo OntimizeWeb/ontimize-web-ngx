@@ -1,6 +1,7 @@
 import { Injector, Injectable } from '@angular/core';
 import { CanActivate, Router, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { Observable } from 'rxjs';
+import { share } from 'rxjs/operators';
 
 import { OntimizeService, LoginService, OUserInfoService } from '../services';
 import { AppConfig, Config } from '../config/app-config';
@@ -107,7 +108,7 @@ export class AuthGuardService implements CanActivate, IProfileService {
               observer.error(err);
             }
           );
-        }).share();
+        }).pipe(share());
         this.profileObservable.subscribe(res => {
           let restricted = this._isRestricted(state.url);
           if (restricted) {

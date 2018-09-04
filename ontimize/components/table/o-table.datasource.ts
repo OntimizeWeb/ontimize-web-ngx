@@ -1,9 +1,7 @@
 import { DataSource } from '@angular/cdk/collections';
 import { MatPaginator, MatSort } from '@angular/material';
-import 'rxjs/add/observable/fromEvent';
-import 'rxjs/add/observable/merge';
-import 'rxjs/add/operator/map';
-import { Subject, BehaviorSubject, Observable} from 'rxjs';
+import { Subject, BehaviorSubject, Observable, merge } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { Util } from '../../util/util';
 import { OTableAggregateComponent } from './extensions/footer/o-table-footer-components';
 import { ColumnValueFilterOperator, IColumnValueFilter, OTableEditableRowComponent } from './extensions/header/o-table-header-components';
@@ -94,7 +92,7 @@ export class OTableDataSource extends DataSource<any> {
       displayDataChanges.push(this._columnValueFilterChange);
     }
 
-    return Observable.merge(...displayDataChanges).map((x: any) => {
+    return merge(...displayDataChanges).pipe(map((x: any) => {
       let data = Object.assign([], this._database.data);
       /*
         it is necessary to first calculate the calculated columns and
@@ -136,7 +134,7 @@ export class OTableDataSource extends DataSource<any> {
         }
       }
       return this.renderedData;
-    });
+    }));
 
 
   }
@@ -432,11 +430,11 @@ export class OTableTotalDataSource extends DataSource<any> {
         this._datasourceData.dataTotalsChange
       ];
     }
-    return Observable.merge(...displayDataChanges).map(() => {
+    return merge(...displayDataChanges).pipe(map(() => {
       let data = this._datasourceData.data;
       data = this.getTotals(data);
       return data;
-    });
+    }));
   }
 
   getTotals(data: any[]): any[] {
@@ -560,9 +558,9 @@ export class OTableEditableRowDataSource extends DataSource<any> {
       emptyData[col] = '';
     });
 
-    return Observable.merge(...displayDataChanges).map(() => {
+    return merge(...displayDataChanges).pipe(map(() => {
       return [emptyData];
-    });
+    }));
   }
 
   disconnect() {

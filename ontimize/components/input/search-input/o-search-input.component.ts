@@ -1,8 +1,7 @@
 import { Component, EventEmitter, Injector, NgModule, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import 'rxjs/add/operator/debounceTime';
-import 'rxjs/add/operator/distinctUntilChanged';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 import { OTranslateService } from '../../../services';
 import { OSharedModule } from '../../../shared';
@@ -52,8 +51,8 @@ export class OSearchInputComponent implements OnInit {
     this.formGroup.addControl('term', this.term);
 
     this.term.valueChanges
-      .debounceTime(400)
-      .distinctUntilChanged()
+      .pipe(debounceTime(400))
+      .pipe(distinctUntilChanged())
       .subscribe(term => {
         this.onSearch.emit(term);
       });

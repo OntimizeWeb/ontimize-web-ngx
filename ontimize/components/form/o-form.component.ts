@@ -2,8 +2,7 @@ import { ChangeDetectorRef, Component, CUSTOM_ELEMENTS_SCHEMA, ElementRef, Event
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router, UrlSegment } from '@angular/router';
-import 'rxjs/add/observable/combineLatest';
-import { Observable, Subscription } from 'rxjs';
+import { Observable, Subscription, combineLatest } from 'rxjs';
 
 import { OFormValue } from './OFormValue';
 import { OSharedModule } from '../../shared';
@@ -262,7 +261,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     this.snackBarService = injector.get(SnackBarService);
     const self = this;
 
-    this.reloadStream = Observable.combineLatest(
+    this.reloadStream = combineLatest(
       self.onFormInitStream.asObservable(),
       self.formNavigation.navigationStream.asObservable()
     );

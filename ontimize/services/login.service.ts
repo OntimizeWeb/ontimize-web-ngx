@@ -1,6 +1,8 @@
 import { Injectable, Injector, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
+import { share } from 'rxjs/operators';
+
 import { Codes, IAuthService, ObservableWrapper, ServiceUtils } from '../utils';
 import { OntimizeService, DialogService } from '../services';
 import { AppConfig, Config } from '../config/app-config';
@@ -73,7 +75,7 @@ export class LoginService implements ILoginService {
     this._user = user;
     const self = this;
     let innerObserver: any;
-    const dataObservable = new Observable(observer => innerObserver = observer).share();
+    const dataObservable = new Observable(observer => innerObserver = observer).pipe(share());
 
     this.retrieveAuthService().then((service) => {
       service.startsession(user, password)
@@ -107,7 +109,7 @@ export class LoginService implements ILoginService {
     const self = this;
 
     let innerObserver: any;
-    const dataObservable = new Observable(observer => innerObserver = observer).share();
+    const dataObservable = new Observable(observer => innerObserver = observer).pipe(share());
     let sessionInfo = this.getSessionInfo();
 
     this.retrieveAuthService().then((service) => {

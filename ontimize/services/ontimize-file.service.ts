@@ -2,6 +2,7 @@ import { Injector, Injectable } from '@angular/core';
 import { HttpClient, HttpEventType, HttpHeaders, HttpRequest } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
+import { share } from 'rxjs/operators';
 
 import { LoginService } from '../services';
 import { AppConfig, Config } from '../config/app-config';
@@ -65,7 +66,7 @@ export class OntimizeFileService {
     });
 
     let _innerObserver: any;
-    const dataObservable = new Observable(observer => _innerObserver = observer).share();
+    const dataObservable = new Observable(observer => _innerObserver = observer).pipe(share());
 
     let toUpload: any = new FormData();
     files.forEach(item => {

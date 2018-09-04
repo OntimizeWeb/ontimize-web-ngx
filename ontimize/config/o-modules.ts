@@ -4,6 +4,9 @@ import { TranslateModule, TranslateLoader, TranslateParser } from '@ngx-translat
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Injector, NgModule, APP_INITIALIZER } from '@angular/core';
+import { DndModule } from '@beyerleinf/ngx-dnd';
+import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
+
 import { appInitializerFactory } from './o-providers';
 import { OTranslateService, OTranslateHttpLoader } from '../services';
 import { APP_CONFIG, AppConfig } from '../config/app-config';
@@ -171,6 +174,9 @@ export const INTERNAL_ONTIMIZE_MODULES: any = [
       useFactory: OTranslateParserFactory
     }
   }),
+
+  DndModule.forRoot(),
+  NgxMaterialTimepickerModule.forRoot(),
 
   OSharedModule,
 

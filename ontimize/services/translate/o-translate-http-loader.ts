@@ -1,8 +1,9 @@
 import { Injector } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { Observable } from 'rxjs';
-import 'rxjs/add/operator/combineLatest';
+import { Observable, combineLatest } from 'rxjs';
+import { share } from 'rxjs/operators';
+
 import { AppConfig } from '../../config/app-config';
 import { Codes } from '../../utils';
 import { OTranslateService } from './o-translate.service';
@@ -35,7 +36,7 @@ export class OTranslateHttpLoader extends TranslateHttpLoader {
 
   getLocalTranslation(lang: string): Observable<any> {
     let innerObserver: any;
-    const dataObservable = new Observable(observer => innerObserver = observer).share();
+    const dataObservable = new Observable(observer => innerObserver = observer).pipe(share());
     super.getTranslation(lang)
       .subscribe((res) => {
         innerObserver.next(res);
@@ -43,7 +44,7 @@ export class OTranslateHttpLoader extends TranslateHttpLoader {
       }, error => {
         innerObserver.next(undefined);
       },
-      () => innerObserver.complete());
+        () => innerObserver.complete());
     return dataObservable;
   }
 
@@ -57,22 +58,21 @@ export class OTranslateHttpLoader extends TranslateHttpLoader {
     }
 
     let innerObserver: any;
-    const dataObservable = new Observable(observer => innerObserver = observer).share();
+    const dataObservable = new Observable(observer => innerObserver = observer).pipe(share());
 
-    Observable.combineLatest(...translationOrigins)
-      .subscribe((res: any[]) => {
-        const staticBundle = res[0] || {};
-        const remoteBundle = res[1] || {};
-        const allBundles = Object.assign(staticBundle, remoteBundle);
-        innerObserver.next(allBundles);
-      });
+    combineLatest(...translationOrigins).subscribe((res: any[]) => {
+      const staticBundle = res[0] || {};
+      const remoteBundle = res[1] || {};
+      const allBundles = Object.assign(staticBundle, remoteBundle);
+      innerObserver.next(allBundles);
+    });
     return dataObservable;
   }
 
   getRemoteBundle(lang: string): Observable<any> {
     const bundleEndpoint = this.appConfig.getBundleEndpoint();
     let innerObserver: any;
-    let dataObservable = new Observable(observer => innerObserver = observer).share();
+    let dataObservable = new Observable(observer => innerObserver = observer).pipe(share());
     if (!bundleEndpoint) {
       innerObserver.next([]);
     }

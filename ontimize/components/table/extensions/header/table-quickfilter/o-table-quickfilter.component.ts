@@ -1,6 +1,8 @@
 import { Component, OnInit, Inject, forwardRef, EventEmitter, Injector, ViewEncapsulation, ViewChild, ElementRef, OnDestroy, AfterViewInit } from '@angular/core';
 import { MatCheckboxChange, MatMenu } from '@angular/material';
-import { Subscription, Observable } from 'rxjs';
+import { Subscription, fromEvent } from 'rxjs';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+
 import { Util } from '../../../../../utils';
 import { OTableComponent, OColumn, OTableOptions } from '../../../o-table.component';
 import { IExpression, FilterExpressionUtils } from '../../../../filter-expression.utils';
@@ -80,8 +82,10 @@ export class OTableQuickfilterComponent implements OnInit, AfterViewInit, OnDest
 
   initializeEventFilter() {
     if (this.filter && !this.quickFilterObservable) {
-      this.quickFilterObservable = Observable.fromEvent(this.filter.nativeElement, 'keyup')
-        .debounceTime(150).distinctUntilChanged().subscribe(() => {
+      this.quickFilterObservable = fromEvent(this.filter.nativeElement, 'keyup')
+        .pipe(debounceTime(150))
+        .pipe(distinctUntilChanged())
+        .subscribe(() => {
           const filterValue = this.filter.nativeElement.value;
           if (!this.table.dataSource || this.value === filterValue) {
             return;

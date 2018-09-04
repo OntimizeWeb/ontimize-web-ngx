@@ -2,8 +2,7 @@ import { Injector, Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/share';
+import { share } from 'rxjs/operators';
 
 import { LoginService } from '../services';
 import { AppConfig, Config } from '../config/app-config';
@@ -83,7 +82,7 @@ export class OntimizeService implements IAuthService, IDataService {
         }
       }, error => _startSessionObserver.error(error));
     });
-    return dataObservable.share();
+    return dataObservable.pipe(share());
   }
 
   public endsession(user: string, sessionId: number): Observable<any> {
@@ -100,17 +99,17 @@ export class OntimizeService implements IAuthService, IDataService {
         }
       });
     });
-    return dataObservable.share();
+    return dataObservable.pipe(share());
   }
 
   public hassession(user: string, sessionId: number): Observable<any> {
     const url = this._urlBase + '/hassession?user=' + user + '&sessionid=' + sessionId;
     let _innerObserver: any;
-    const dataObservable: Observable<any> = new Observable(observer => _innerObserver = observer).share();
+    const dataObservable: Observable<any> = new Observable(observer => _innerObserver = observer).pipe(share());
     this.httpClient.get(url).subscribe(resp => {
       _innerObserver.next(resp);
     }, error => _innerObserver.error(error));
-    return dataObservable.share();
+    return dataObservable.pipe(share());
   }
 
   public query(kv?: Object, av?: Array<string>, entity?: string, sqltypes?: Object): Observable<any> {
@@ -141,7 +140,7 @@ export class OntimizeService implements IAuthService, IDataService {
         self.parseUnsuccessfulQueryResponse(error, _innerObserver);
       }, () => _innerObserver.complete());
     });
-    return dataObservable.share();
+    return dataObservable.pipe(share());
   }
 
   public advancedQuery(kv?: Object, av?: Array<string>, entity?: string, sqltypes?: Object,
@@ -180,7 +179,7 @@ export class OntimizeService implements IAuthService, IDataService {
         self.parseUnsuccessfulAdvancedQueryResponse(error, _innerObserver);
       }, () => _innerObserver.complete());
     });
-    return dataObservable.share();
+    return dataObservable.pipe(share());
   }
 
   public insert(av: Object = {}, entity?: string, sqltypes?: Object): Observable<any> {
@@ -207,7 +206,7 @@ export class OntimizeService implements IAuthService, IDataService {
         self.parseUnsuccessfulInsertResponse(error, _innerObserver);
       }, () => _innerObserver.complete());
     });
-    return dataObservable.share();
+    return dataObservable.pipe(share());
   }
 
   public update(kv: Object = {}, av: Object = {}, entity?: string, sqltypes?: Object): Observable<any> {
@@ -236,7 +235,7 @@ export class OntimizeService implements IAuthService, IDataService {
         self.parseUnsuccessfulUpdateResponse(error, _innerObserver);
       }, () => _innerObserver.complete());
     });
-    return dataObservable.share();
+    return dataObservable.pipe(share());
   }
 
   public delete(kv: Object = {}, entity?: string, sqltypes?: Object): Observable<any> {
@@ -263,7 +262,7 @@ export class OntimizeService implements IAuthService, IDataService {
         self.parseUnsuccessfulDeleteResponse(error, _innerObserver);
       }, () => _innerObserver.complete());
     });
-    return dataObservable.share();
+    return dataObservable.pipe(share());
   }
 
   redirectLogin(sessionExpired: boolean = false) {

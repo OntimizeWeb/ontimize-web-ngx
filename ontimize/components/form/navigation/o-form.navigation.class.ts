@@ -1,6 +1,6 @@
 import { EventEmitter, Injector } from '@angular/core';
 import { ActivatedRoute, Router, UrlSegmentGroup } from '@angular/router';
-import { Observable, Subscription } from 'rxjs';
+import { Observable, Subscription, combineLatest } from 'rxjs';
 
 import { DialogService, NavigationService, ONavigationItem } from '../../../services';
 import { OFormComponent } from '../o-form.component';
@@ -61,7 +61,7 @@ export class OFormNavigationClass {
     }
 
     const self = this;
-    this.combinedNavigationStream = Observable.combineLatest(
+    this.combinedNavigationStream = combineLatest(
       self.onUrlParamChangedStream.asObservable()
     );
 

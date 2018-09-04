@@ -2,7 +2,7 @@ import { AfterContentInit, AfterViewInit, Component, ContentChildren, ElementRef
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MatCheckbox } from '@angular/material';
-import { Observable } from 'rxjs';
+import { merge } from 'rxjs';
 
 import { Codes, Util } from '../../utils';
 import { OSharedModule } from '../../shared';
@@ -473,7 +473,7 @@ export class OListComponent extends OServiceComponent implements AfterContentIni
         if (res === true) {
           if (this.dataService && (this.deleteMethod in this.dataService) && this.entity && (this.keysArray.length > 0)) {
             let filters = ServiceUtils.getArrayProperties(selectedItems, this.keysArray);
-            Observable.merge(filters.map((kv => this.dataService[this.deleteMethod](kv, this.entity)))).subscribe(obs => obs.subscribe(res => {
+            merge(filters.map((kv => this.dataService[this.deleteMethod](kv, this.entity)))).subscribe(obs => obs.subscribe(res => {
               console.log('[OList.remove]: response', res);
               ObservableWrapper.callEmit(this.onItemDeleted, selectedItems);
             }, error => {
