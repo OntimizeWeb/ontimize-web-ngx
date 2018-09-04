@@ -6,6 +6,9 @@
         (ngModelChange)="innerOnChange($event)" class="mat-input input-control">
       <input #input type="file" [disabled]="isDisabled" (change)="fileChange(input)" class="input-file" fxFill />
       <label #titleLabel (click)="input.click()">{{ 'CHOOSE_FILE' | oTranslate }}</label>
+      <button *ngIf="fullScreenButton" [disabled]="isDisabled" matSuffix mat-icon-button (click)="openFullScreen($event)">
+        <mat-icon svgIcon="ontimize:fullscreen"></mat-icon>
+      </button>
       <button [disabled]="isDisabled" matSuffix mat-icon-button (click)="input.click()">
         <mat-icon svgIcon="ontimize:folder_open"></mat-icon>
       </button>

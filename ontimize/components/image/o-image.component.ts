@@ -1,24 +1,16 @@
+import { Component, ElementRef, forwardRef, HostBinding, Inject, Injector, NgModule, Optional, ViewChild, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-  Component,
-  ElementRef,
-  forwardRef,
-  HostBinding,
-  Inject,
-  Injector,
-  NgModule,
-  Optional,
-  ViewChild,
-  ViewEncapsulation
-} from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { MatInput } from '@angular/material';
 import { DomSanitizer } from '@angular/platform-browser';
-import { InputConverter } from '../../decorators';
+import { MatDialog, MatInput } from '@angular/material';
+
+import { Util } from '../../util/util';
 import { OSharedModule } from '../../shared';
-import { OFormComponent } from '../form/o-form.component';
 import { OFormValue } from '../form/OFormValue';
-import { DEFAULT_INPUTS_O_FORM_DATA_COMPONENT, OFormDataComponent, DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT } from '../o-form-data-component.class';
+import { InputConverter } from '../../decorators';
+import { OFormComponent } from '../form/o-form.component';
+import { OFullScreenDialogComponent } from './fullscreen/fullscreen-dialog.component';
+import { DEFAULT_INPUTS_O_FORM_DATA_COMPONENT, DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT, OFormDataComponent } from '../o-form-data-component.class';
 
 export const DEFAULT_INPUTS_O_IMAGE = [
   ...DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,
@@ -30,7 +22,8 @@ export const DEFAULT_INPUTS_O_IMAGE = [
   //height [% | px]: Set the height of the image.
   'height',
   // auto-fit [yes|no true|false]: Adjusts the image to the content or not. Default: true.
-  'autoFit: auto-fit'
+  'autoFit: auto-fit',
+  'fullScreenButton: full-screen-button'
 ];
 
 export const DEFAULT_OUTPUTS_O_IMAGE = [
@@ -58,6 +51,14 @@ export class OImageComponent extends OFormDataComponent {
   protected showControls: boolean = true;
   @InputConverter()
   autoFit: boolean = true;
+  set fullScreenButton(val: boolean) {
+    val = Util.parseBoolean(String(val));
+    this._fullScreenButton = val;
+  }
+  get fullScreenButton(): boolean {
+    return this._fullScreenButton;
+  }
+  protected _fullScreenButton = false;
   @ViewChild('inputControl')
   protected inputControl: MatInput;
   @ViewChild('input')
@@ -67,14 +68,17 @@ export class OImageComponent extends OFormDataComponent {
   protected _useEmptyIcon: boolean = true;
   protected _useEmptyImage: boolean = false;
   protected _domSanitizer: DomSanitizer;
+  protected dialog: MatDialog;
 
   constructor(
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
     elRef: ElementRef,
-    injector: Injector) {
+    injector: Injector
+  ) {
     super(form, elRef, injector);
     this._domSanitizer = this.injector.get(DomSanitizer);
     this._defaultSQLTypeKey = 'BASE64';
+    this.dialog = this.injector.get(MatDialog);
   }
 
   ngOnInit() {
@@ -161,7 +165,6 @@ export class OImageComponent extends OFormDataComponent {
         } else {
           src = 'data:image/png;base64,' + this.value.value.bytes;
         }
-
         return this._domSanitizer.bypassSecurityTrustUrl(src);
       } else if (typeof this.value.value === 'string' &&
         this.value.value.length > 300) {
@@ -171,7 +174,6 @@ export class OImageComponent extends OFormDataComponent {
         } else {
           src = 'data:image/png;base64,' + this.value.value;
         }
-
         return this._domSanitizer.bypassSecurityTrustUrl(src);
       }
       return this.value.value ? this.value.value : this.emptyimage;
@@ -223,12 +225,24 @@ export class OImageComponent extends OFormDataComponent {
   get hostHeight() {
     return this.height;
   }
+
+  openFullScreen(e?: Event): void {
+    this.dialog.open(OFullScreenDialogComponent, {
+      width: '90%',
+      height: '90%',
+      role: 'dialog',
+      disableClose: false,
+      panelClass: 'o-image-fullscreen-dialog-cdk-overlay',
+      data: this.getSrcValue()
+    });
+  }
+
 }
 
 @NgModule({
-  declarations: [OImageComponent],
-  imports: [OSharedModule, CommonModule],
-  exports: [OImageComponent]
+  declarations: [OImageComponent, OFullScreenDialogComponent],
+  imports: [CommonModule, OSharedModule],
+  exports: [OImageComponent, OFullScreenDialogComponent],
+  entryComponents: [OFullScreenDialogComponent]
 })
-export class OImageModule {
-}
+export class OImageModule { }
