@@ -85,6 +85,8 @@ export const DEFAULT_INPUTS_O_TABLE_COLUMN = [
 
   'tooltipFunction: tooltip-function',
 
+  'multiline',
+
   ...OTableCellRendererBooleanComponent.DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_BOOLEAN,
   ...OTableCellRendererCurrencyComponent.DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_CURRENCY, // includes Integer and Real
   ...OTableCellRendererDateComponent.DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_DATE,
@@ -161,6 +163,14 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
   public tooltip: boolean = false;
   tooltipValue: string;
   tooltipFunction: Function;
+  set multiline(val: boolean) {
+    val = Util.parseBoolean(String(val));
+    this._multiline = val;
+  }
+  get multiline(): boolean {
+    return this._multiline;
+  }
+  protected _multiline: boolean = false;
   /* input renderer date */
   protected format: string;
   /* input renderer integer */
