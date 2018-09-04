@@ -606,6 +606,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     this.setDatasource();
     this.registerSortListener();
     this.setFiltersConfiguration(this.state);
+    this.addDefaultRowButtons();
 
     if (this.queryOnInit) {
       this.queryData();
@@ -1610,8 +1611,38 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     return this.selection.selected;
   }
 
+  useDetailButton(column: OColumn): boolean {
+    return column.type === 'editButtonInRow' || column.type === 'detailButtonInRow';
+  }
+
+  onDetailButtonClick(column: OColumn, row: any, event: any) {
+    event.preventDefault();
+    event.stopPropagation();
+    switch (column.type) {
+      case 'editButtonInRow':
+        this.editDetail(row);
+        break;
+      case 'detailButtonInRow':
+        this.viewDetail(row);
+        break;
+    }
+  }
+
+  getDetailButtonIcon(column: OColumn) {
+    let result = '';
+    switch (column.type) {
+      case 'editButtonInRow':
+        result = this.editButtonInRowIcon;
+        break;
+      case 'detailButtonInRow':
+        result = this.detailButtonInRowIcon;
+        break;
+    }
+    return result;
+  }
+
   usePlainRender(column: OColumn, row: any): boolean {
-    return !column.renderer && (!column.editor || (!column.editing || !this.selection.isSelected(row)));
+    return !this.useDetailButton(column) && !column.renderer && (!column.editor || (!column.editing || !this.selection.isSelected(row)));
   }
 
   useCellRenderer(column: OColumn, row: any): boolean {
@@ -1921,6 +1952,28 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     return this.dataSource && !this.paginationControls && !this.pageable;
   }
 
+  protected addDefaultRowButtons() {
+    if (this.editButtonInRow) {
+      this.addButtonInRow('editButtonInRow');
+    }
+    if (this.detailButtonInRow) {
+      this.addButtonInRow('detailButtonInRow');
+    }
+  }
+
+  protected addButtonInRow(name: string) {
+    let colDef: OColumn = new OColumn();
+    colDef.attr = name;
+    colDef.setDefaultProperties();
+    colDef.type = name;
+    colDef.visible = true;
+    colDef.searchable = false;
+    colDef.orderable = false;
+    colDef.title = undefined;
+    colDef.width = '48px';
+    this.pushOColumnDefinition(colDef);
+    this._oTableOptions.visibleColumns.push(name);
+  }
 }
 
 @NgModule({
