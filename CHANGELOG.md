@@ -39,6 +39,7 @@
 * **o-table**:
   * fixed error attribute `controls` does not show/hide the table tool bar ([2632658](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2632658)).
   * fixed remove method ([3870b4f](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3870b4f)).
+  * fixed bugs related with `detail-button-in-row` and `edit-button-in-row` inputs ([1cbd261](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1cbd261)).
 * **o-list**: multiple errors fixed:
   * Navigate to insert form when clicking the insert button ([2f71849](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2f71849)).
   * Delete selected list items ([2f71849](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2f71849)).
