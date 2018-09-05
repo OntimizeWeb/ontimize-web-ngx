@@ -61,10 +61,10 @@ export class OTableCellRendererActionComponent extends OBaseTableCellRenderer {
     }
     if (Util.isDefined(this.action)) {
       switch (this.action.toLowerCase()) {
-        case Codes.DEFAULT_DETAIL_ROUTE:
+        case 'detail':
           this.table.viewDetail(rowData);
           break;
-        case Codes.DEFAULT_EDIT_ROUTE:
+        case 'edit':
           this.table.editDetail(rowData);
           break;
         default:

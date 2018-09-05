@@ -1,5 +1,5 @@
 import { EventEmitter, Injector } from '@angular/core';
-import { ActivatedRoute, Router, UrlSegmentGroup } from '@angular/router';
+import { ActivatedRoute, Router, UrlSegmentGroup, NavigationExtras } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import 'rxjs/add/operator/combineLatest';
 
@@ -248,11 +248,11 @@ export class OFormNavigationClass {
 
   navigateBack() {
     if (!this.formLayoutManager && this.navigationService) {
-      const previosRouteData: ONavigationItem = this.navigationService.getPreviousRouteData();
-      if (previosRouteData) {
+      const navData: ONavigationItem = this.navigationService.getPreviousRouteData();
+      if (navData) {
         let extras = {};
-        extras[Codes.QUERY_PARAMS] = previosRouteData.queryParams;
-        this.router.navigate([previosRouteData.url], extras);
+        extras[Codes.QUERY_PARAMS] = navData.queryParams;
+        this.router.navigate([navData.url], extras);
       }
     }
   }
@@ -262,11 +262,11 @@ export class OFormNavigationClass {
       this.formLayoutManager.closeDetail(this.id);
     } else if (this.navigationService) {
       this.form.beforeCloseDetail.emit();
-      const previosRouteData: ONavigationItem = this.navigationService.getPreviousRouteData();
-      if (previosRouteData) {
-        let extras = {};
-        extras[Codes.QUERY_PARAMS] = previosRouteData.queryParams;
-        this.router.navigate([previosRouteData.url], extras).then(val => {
+      const navData: ONavigationItem = this.navigationService.getPreviousRouteData();
+      if (navData) {
+        let extras: NavigationExtras = {};
+        extras[Codes.QUERY_PARAMS] = navData.queryParams;
+        this.router.navigate([navData.url], extras).then(val => {
           if (val && options && options.changeToolbarMode) {
             this.form.getFormToolbar().setInitialMode();
           }
@@ -278,28 +278,28 @@ export class OFormNavigationClass {
   stayInRecordAfterInsert(insertedKeys: Object) {
     if (this.formLayoutManager) {
       this.form.setInitialMode();
-    } else if (this.navigationService) {
-      const previosRouteData: ONavigationItem = this.navigationService.getPreviousRouteData();
-      if (previosRouteData) {
-        let urlText = previosRouteData.url;
-        if (this.form.keysArray && insertedKeys) {
-          const detailRoute = previosRouteData.getDetailFormRoute();
-          if (Util.isDefined(detailRoute)) {
-            urlText += '/' + detailRoute;
-          }
-          urlText += '/';
-          this.form.keysArray.forEach((current, index) => {
-            if (insertedKeys[current]) {
-              urlText += insertedKeys[current];
-              if (index < this.form.keysArray.length - 1) {
-                urlText += '/';
-              }
-            }
-          });
+    } else if (this.navigationService && this.form.keysArray && insertedKeys) {
+      let route = [];
+      let extras: NavigationExtras = Object.assign({}, this.getQueryParams(), Codes.getIsDetailObject());
+      let params: any[] = [];
+      this.form.keysArray.forEach((current, index) => {
+        if (insertedKeys[current]) {
+          params.push(insertedKeys[current]);
         }
-        let extras = Object.assign({}, this.getQueryParams(), Codes.getIsDetailObject());
-        this.router.navigate([urlText], extras);
+      });
+      const navData: ONavigationItem = this.navigationService.getPreviousRouteData();
+      if (navData) {
+        route.push(navData.url);
+        const detailRoute = navData.getDetailFormRoute();
+        if (Util.isDefined(detailRoute)) {
+          route.push(detailRoute);
+        }
+        route.push(...params);
+      } else {
+        extras.relativeTo = this.actRoute;
+        route = ['../', ...params];
       }
+      this.router.navigate(route, extras);
     }
   }
 
@@ -308,20 +308,26 @@ export class OFormNavigationClass {
   */
   goInsertMode(options?: any) {
     if (this.navigationService) {
-      const previosRouteData: ONavigationItem = this.navigationService.getPreviousRouteData();
-      if (previosRouteData) {
-        let extras = { relativeTo: this.actRoute };
-
-        const insertRoute = previosRouteData.getInsertFormRoute();
-        const urlText = '../' + insertRoute;
-
-        this.storeNavigationFormRoutes('insertFormRoute');
-        this.router.navigate([urlText], extras).then((val) => {
-          if (val && options && options.changeToolbarMode) {
-            this.form.getFormToolbar().setInsertMode();
-          }
-        });
+      let route = [];
+      let extras: NavigationExtras = {};
+      const navData: ONavigationItem = this.navigationService.getPreviousRouteData();
+      if (navData) {
+        route.push(navData.url);
+        const detailRoute = navData.getDetailFormRoute();
+        if (Util.isDefined(detailRoute)) {
+          route.push(detailRoute);
+        }
+        route.push(navData.getInsertFormRoute());
+      } else {
+        extras.relativeTo = this.actRoute;
+        route = ['../' + Codes.DEFAULT_INSERT_ROUTE];
       }
+      this.storeNavigationFormRoutes('insertFormRoute');
+      this.router.navigate(route, extras).then((val) => {
+        if (val && options && options.changeToolbarMode) {
+          this.form.getFormToolbar().setInsertMode();
+        }
+      });
     }
   }
 
@@ -330,37 +336,46 @@ export class OFormNavigationClass {
    */
   goEditMode(options?: any) {
     if (this.navigationService) {
-      const previosRouteData: ONavigationItem = this.navigationService.getPreviousRouteData();
-      if (previosRouteData) {
-        this.form.beforeGoEditMode.emit();
-
-        // const urlTextArr = [];
-        // const editRoute = previosRouteData.getInsertFormRoute();
-
-        let url = '';
-        const urlParams = this.getUrlParams();
-        this.form.keysArray.map(key => {
-          if (urlParams[key]) {
-            url += urlParams[key];
-          }
-        });
-
-        let extras = { relativeTo: this.actRoute };
-        if (this.form.isDetailForm) {
-          extras[Codes.QUERY_PARAMS] = Codes.getIsDetailObject();
-        }
-        extras[Codes.QUERY_PARAMS] = Object.assign({}, this.getQueryParams(), extras[Codes.QUERY_PARAMS] || {});
-
-        this.storeNavigationFormRoutes('editFormRoute');
-        this.router.navigate(['../', url, Codes.DEFAULT_EDIT_ROUTE], extras).then((val) => {
-          if (val && options && options.changeToolbarMode) {
-            this.form.getFormToolbar().setEditMode();
-          }
-        });
+      let route = [];
+      let extras: NavigationExtras = {};
+      if (this.form.isDetailForm) {
+        extras[Codes.QUERY_PARAMS] = Codes.getIsDetailObject();
       }
+      extras[Codes.QUERY_PARAMS] = Object.assign({}, this.getQueryParams(), extras[Codes.QUERY_PARAMS] || {});
+
+      let params: any[] = [];
+      const urlParams = this.getUrlParams();
+      this.form.keysArray.map(key => {
+        if (urlParams[key]) {
+          params.push(urlParams[key]);
+        }
+      });
+      const navData: ONavigationItem = this.navigationService.getPreviousRouteData();
+      if (Util.isDefined(navData)) {
+        route.push(navData.url);
+        const detailRoute = navData.getDetailFormRoute();
+        if (Util.isDefined(detailRoute)) {
+          route.push(detailRoute);
+        }
+        route.push(...params);
+        route.push(navData.getEditFormRoute());
+      } else {
+        extras.relativeTo = this.actRoute;
+        route = ['../', ...params, Codes.DEFAULT_EDIT_ROUTE];
+      }
+      this.storeNavigationFormRoutes('editFormRoute');
+      this.form.beforeGoEditMode.emit();
+      this.router.navigate(route, extras).then((val) => {
+        if (val && options && options.changeToolbarMode) {
+          this.form.getFormToolbar().setEditMode();
+        }
+      });
     }
   }
 
+  /**
+  * @deprecated
+  */
   getNestedLevelsNumber() {
     let actRoute = this.actRoute;
     let i = 0;
@@ -375,6 +390,9 @@ export class OFormNavigationClass {
     return i;
   }
 
+  /**
+  * @deprecated
+  */
   getFullUrlSegments() {
     let fullUrlSegments = [];
     const router = this.router;

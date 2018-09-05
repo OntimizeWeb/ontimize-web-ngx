@@ -197,7 +197,7 @@ export class OServiceComponent extends OServiceBaseComponent {
   }
 
   viewDetail(item: any): void {
-    let route = this.getRouteOfSelectedRow(item, this.detailFormRoute);
+    let route = this.getItemModeRoute(item, 'detailFormRoute');
     if (route.length > 0) {
       let qParams = Codes.getIsDetailObject();
       if (this.formLayoutManager) {
@@ -207,26 +207,28 @@ export class OServiceComponent extends OServiceBaseComponent {
         relativeTo: this.recursiveDetail ? this.actRoute.parent : this.actRoute,
       };
       extras[Codes.QUERY_PARAMS] = qParams;
-      this.storeNavigationFormRoutes('detailFormRoute');
       this.router.navigate(route, extras);
     }
   }
 
   editDetail(item: any) {
-    let route = this.getRouteOfSelectedRow(item, this.editFormRoute);
+    let route = this.getItemModeRoute(item, 'editFormRoute');
     if (route.length > 0) {
-      route.push(Codes.DEFAULT_EDIT_ROUTE);
       let extras = {
         relativeTo: this.recursiveEdit ? this.actRoute.parent : this.actRoute
       };
       extras[Codes.QUERY_PARAMS] = Codes.getIsDetailObject();
-      this.storeNavigationFormRoutes('editFormRoute');
       this.router.navigate(route, extras);
     }
   }
 
   insertDetail() {
     let route = [];
+
+    if (Util.isDefined(this.detailFormRoute)) {
+      route.push(this.detailFormRoute);
+    }
+
     let insertRoute = Util.isDefined(this.insertFormRoute) ? this.insertFormRoute : Codes.DEFAULT_INSERT_ROUTE;
     route.push(insertRoute);
     // adding parent-keys info...
@@ -259,26 +261,33 @@ export class OServiceComponent extends OServiceBaseComponent {
     return encoded;
   }
 
-  getRouteOfSelectedRow(item: any, modeRoute: any) {
-    let route = [];
+  getItemModeRoute(item: any, modeRoute: string): any[] {
+    let result = this.getRouteOfSelectedRow(item);
+    if (result.length > 0) {
+      if (Util.isDefined(this.detailFormRoute)) {
+        result.unshift(this.detailFormRoute);
+      }
+      if (modeRoute === 'editFormRoute') {
+        result.push(this.editFormRoute || Codes.DEFAULT_EDIT_ROUTE);
+      }
+    }
+    if (result.length) {
+      this.storeNavigationFormRoutes(modeRoute);
+    }
+    return result;
+  }
 
+  getRouteOfSelectedRow(item: any): any[] {
+    let route = [];
     // if (this.formLayoutManager) {
     //   route = this.formLayoutManager.getRouteOfActiveItem();
     // }
-    let filterArr = [];
     if (Util.isObject(item)) {
       this.keysArray.forEach(key => {
         if (Util.isDefined(item[key])) {
-          filterArr.push(item[key]);
+          route.push(item[key]);
         }
       });
-    }
-
-    if (filterArr.length > 0) {
-      if (Util.isDefined(modeRoute)) {
-        route.push(modeRoute);
-      }
-      route.push(...filterArr);
     }
     return route;
   }
