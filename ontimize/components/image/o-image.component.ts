@@ -2,7 +2,7 @@ import { Component, ElementRef, forwardRef, HostBinding, Inject, Injector, NgMod
 import { CommonModule } from '@angular/common';
 import { FormGroup } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
-import { MatDialog, MatInput } from '@angular/material';
+import { MatDialog } from '@angular/material';
 
 import { Util } from '../../util/util';
 import { OSharedModule } from '../../shared';
@@ -45,10 +45,9 @@ export class OImageComponent extends OFormDataComponent {
 
   emptyimage: string;
   emptyicon: string;
-  height: string;
-
   @InputConverter()
   protected showControls: boolean = true;
+  height: string;
   @InputConverter()
   autoFit: boolean = true;
   set fullScreenButton(val: boolean) {
@@ -59,8 +58,7 @@ export class OImageComponent extends OFormDataComponent {
     return this._fullScreenButton;
   }
   protected _fullScreenButton = false;
-  @ViewChild('inputControl')
-  protected inputControl: MatInput;
+
   @ViewChild('input')
   protected fileInput: ElementRef;
   @ViewChild('titleLabel')
@@ -235,6 +233,12 @@ export class OImageComponent extends OFormDataComponent {
       panelClass: 'o-image-fullscreen-dialog-cdk-overlay',
       data: this.getSrcValue()
     });
+  }
+
+  openFileSelector(e?: Event): void {
+    if (Util.isDefined(this.fileInput)) {
+      this.fileInput.nativeElement.click();
+    }
   }
 
 }
