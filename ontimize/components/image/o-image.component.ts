@@ -188,7 +188,7 @@ export class OImageComponent extends OFormDataComponent {
     e.stopPropagation();
     if (!this.isReadOnly && !this.isDisabled) {
       this.setValue(undefined);
-      this.fileInput.nativeElement.valueOf = undefined;
+      this.fileInput.nativeElement.value = '';
       if (this.titleLabel) {
         this.titleLabel.nativeElement.textContent = '';
       }
