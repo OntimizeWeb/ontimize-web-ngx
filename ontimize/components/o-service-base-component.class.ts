@@ -280,6 +280,8 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
       let queryArguments = this.getQueryArguments(filter, ovrrArgs);
       if (this.querySubscription) {
         this.querySubscription.unsubscribe();
+      }
+      if (this.loaderSubscription) {
         this.loaderSubscription.unsubscribe();
       }
       this.loaderSubscription = this.load();

@@ -333,8 +333,9 @@ export class OListComponent extends OServiceComponent implements AfterContentIni
     } else {
       this.setDataArray([]);
     }
-
-    this.loaderSubscription.unsubscribe();
+    if (this.loaderSubscription) {
+      this.loaderSubscription.unsubscribe();
+    }
     if (this.pageable) {
       ObservableWrapper.callEmit(this.onPaginatedDataLoaded, data);
     }
