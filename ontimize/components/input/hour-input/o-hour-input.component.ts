@@ -21,6 +21,7 @@ const TWENTY_FOUR_HOUR_FORMAT = 24;
 export const DEFAULT_INPUTS_O_HOUR_INPUT = [
   ...DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,
   'format',
+  'textInputEnabled: text-input-enabled'
 ];
 
 export const DEFAULT_OUTPUTS_O_HOUR_INPUT = [
@@ -62,6 +63,8 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
 
   @InputConverter()
   format: number = TWENTY_FOUR_HOUR_FORMAT;
+  @InputConverter()
+  textInputEnabled: boolean = true;
 
   formatString = HourFormat.TWENTY_FOUR;
 
@@ -162,6 +165,12 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
     }
 
     return validators;
+  }
+
+  onClickInput(e: Event): void {
+    if (!this.textInputEnabled) {
+      this.onOpen(e);
+    }
   }
 
 }
