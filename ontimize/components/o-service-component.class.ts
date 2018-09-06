@@ -186,6 +186,10 @@ export class OServiceComponent extends OServiceBaseComponent {
     return this.controls;
   }
 
+  hasTitle(): boolean {
+    return this.title !== undefined;
+  }
+  
   getSelectedItems(): any[] {
     return this.selectedItems;
   }
