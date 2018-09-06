@@ -61,11 +61,11 @@ export class OTimeInputComponent extends OFormDataComponent implements OnInit, A
   oDateStartAt: any;
   oDateFilterDate: DateFilterFunction;
   @InputConverter()
-  oDateTextInputEnabled: boolean;
+  oDateTextInputEnabled: boolean = true;
 
   oHourFormat: number = 24;
   @InputConverter()
-  oHourTextInputEnabled: boolean;
+  oHourTextInputEnabled: boolean = true;
 
   protected blockGroupValueChanges: boolean;
 
