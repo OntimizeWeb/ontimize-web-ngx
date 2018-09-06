@@ -312,7 +312,7 @@ export class OFormNavigationClass {
       let route = [];
       let extras: NavigationExtras = {};
       const navData: ONavigationItem = this.navigationService.getPreviousRouteData();
-      if (navData) {
+      if (!this.formLayoutManager && navData) {
         route.push(navData.url);
         const detailRoute = navData.getDetailFormRoute();
         if (Util.isDefined(detailRoute)) {
