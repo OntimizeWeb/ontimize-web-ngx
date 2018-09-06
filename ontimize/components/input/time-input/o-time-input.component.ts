@@ -24,8 +24,10 @@ export const DEFAULT_INPUTS_O_TIME_INPUT = [
   'oDateTouchUi: date-touch-ui',
   'oDateStartAt: date-start-at',
   'oDateFilterDate: date-filter-date',
+  'oDateTextInputEnabled: date-text-input-enabled',
 
   'oHourFormat: hour-format',
+  'oHourTextInputEnabled: hour-text-input-enabled'
 ];
 
 export const DEFAULT_OUTPUTS_O_TIME_INPUT = [
@@ -58,8 +60,12 @@ export class OTimeInputComponent extends OFormDataComponent implements OnInit, A
   oDateTouchUi: boolean;
   oDateStartAt: any;
   oDateFilterDate: DateFilterFunction;
+  @InputConverter()
+  oDateTextInputEnabled: boolean;
 
   oHourFormat: number = 24;
+  @InputConverter()
+  oHourTextInputEnabled: boolean;
 
   protected blockGroupValueChanges: boolean;
 

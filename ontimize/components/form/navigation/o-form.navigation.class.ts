@@ -206,14 +206,15 @@ export class OFormNavigationClass {
   }
 
   getFilterFromUrlParams() {
-    let filter = {};
-    const urlParams = this.getUrlParams();
-    if (urlParams) {
-      for (let key in urlParams) {
-        if (urlParams.hasOwnProperty(key)) {
-          filter[key] = urlParams[key];
+    let filter = Object.assign({}, this.getUrlParams() || {});
+    const urlParamsKeys = Object.keys(filter || {});
+    if (urlParamsKeys.length > 0) {
+      urlParamsKeys.forEach(key => {
+        if (key === Codes.PARENT_KEYS_KEY) {
+          delete filter[key];
+          Object.assign(filter, this.form.formParentKeysValues);
         }
-      }
+      });
     }
     return filter;
   }
