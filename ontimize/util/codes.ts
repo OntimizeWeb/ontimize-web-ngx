@@ -44,7 +44,7 @@ export class Codes {
 
   public static LOGIN_ROUTE = '/login';
   public static DEFAULT_EDIT_ROUTE = 'edit';
-  public static DEFAULT_DETAIL_ROUTE = 'detail';
+  public static DEFAULT_DETAIL_ROUTE = undefined;
   public static DEFAULT_INSERT_ROUTE = 'new';
 
   public static IGNORE_CAN_DEACTIVATE = 'ignore_can_deactivate';

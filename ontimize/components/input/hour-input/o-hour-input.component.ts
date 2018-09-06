@@ -14,7 +14,7 @@ import { InputConverter } from '../../../decorators/input-converter';
 
 const HourFormat = {
   TWELVE: 'hh:mm a',
-  TWENTY_FOUR: 'HH:mm',
+  TWENTY_FOUR: 'HH:mm a',
 };
 
 const TWENTY_FOUR_HOUR_FORMAT = 24;
@@ -22,6 +22,7 @@ const TWENTY_FOUR_HOUR_FORMAT = 24;
 export const DEFAULT_INPUTS_O_HOUR_INPUT = [
   ...DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,
   'format',
+  'textInputEnabled: text-input-enabled'
 ];
 
 export const DEFAULT_OUTPUTS_O_HOUR_INPUT = [
@@ -63,6 +64,8 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
 
   @InputConverter()
   format: number = TWENTY_FOUR_HOUR_FORMAT;
+  @InputConverter()
+  textInputEnabled: boolean = true;
 
   formatString = HourFormat.TWENTY_FOUR;
 
@@ -94,25 +97,31 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
     super.setData(value);
   }
 
-  onOpen(e?: Event) {
+  open(e?: Event) {
     this.openPopup = true;
     if (this.picker) {
       let momentV = moment(this.getValueAsTimeStamp());
       if (this.picker.timepickerService && momentV.isValid()) {
         momentV = momentV.utcOffset(0);
         let hour = momentV.get('hour');
-        hour = hour > 12 ? hour - 12 : hour;
         const minutes = momentV.get('minutes');
-
+        let timePeriod = 'AM';
+        if (hour === 0) {
+          hour = 12;
+        } else if (hour > 12) {
+          timePeriod = 'PM';
+          hour -= 12;
+        }
+        this.picker.changeTimeUnit(0);
         this.picker.timepickerService.hour = {
           time: hour,
           angle: hour * 30
         };
         this.picker.timepickerService.minute = {
-          time: minutes,
-          angle: minutes * 6
+          time: minutes === 0 ? '00' : minutes,
+          angle: minutes === 0 ? 360 : minutes * 6
         };
-        this.picker.timepickerService.period = this.format === TWENTY_FOUR_HOUR_FORMAT ? 'PM' : 'AM';
+        this.picker.timepickerService.period = timePeriod;
       }
       this.picker.open();
     }
@@ -144,6 +153,11 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
     return momentV.add(1, 'hour').valueOf();
   }
 
+  getValueAsString() {
+    const value = this.getValue();
+    return Util.isDefined(value) ? value.toLowerCase() : null;
+  }
+
   setTimestampValue(value: any, options?: IFormValueOptions) {
     let parsedValue;
     const momentV = Util.isDefined(value) ? moment(value) : value;
@@ -155,14 +169,18 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
 
   resolveValidators(): ValidatorFn[] {
     let validators: ValidatorFn[] = super.resolveValidators();
-
     if (this.format === TWENTY_FOUR_HOUR_FORMAT) {
       validators.push(OValidators.twentyHourFormatValidator);
     } else {
       validators.push(OValidators.twelveHourFormatValidator);
     }
-
     return validators;
+  }
+
+  onClickInput(e: Event): void {
+    if (!this.textInputEnabled) {
+      this.open(e);
+    }
   }
 
 }

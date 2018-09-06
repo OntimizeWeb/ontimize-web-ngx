@@ -164,6 +164,7 @@ export class OColumn {
   calculate: string | OperatorFunction;
   definition: OTableColumnComponent;
   tooltip: OColumnTooltip;
+  multiline: boolean;
 
   setDefaultProperties() {
     this.type = 'string';
@@ -174,6 +175,7 @@ export class OColumn {
     // column without 'attr' should contain only renderers that do not depend on cell data, but row data (e.g. actions)
     this.name = this.attr;
     this.title = this.attr;
+    this.multiline = false;
   }
 
   set searchable(val: boolean) {
@@ -222,6 +224,7 @@ export class OColumn {
     // default title align
     return Codes.COLUMN_TITLE_ALIGN_CENTER;
   }
+
 }
 
 export class OTableOptions {
@@ -690,6 +693,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     colDef.setDefaultProperties();
     colDef.title = Util.isDefined(column.title) ? column.title : column.attr;
     colDef.definition = column;
+    colDef.multiline = column.multiline;
 
     if (Util.isDefined(column.width)) {
       colDef.width = column.width;

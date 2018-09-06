@@ -29,7 +29,8 @@ export const DEFAULT_INPUTS_O_DATE_INPUT = [
   'oMaxDate: max',
   'oTouchUi: touch-ui',
   'oStartAt: start-at',
-  'filterDate: filter-date'
+  'filterDate: filter-date',
+  'textInputEnabled: text-input-enabled'
 ];
 
 export type DateFilterFunction = (date: Date) => boolean;
@@ -67,6 +68,8 @@ export class ODateInputComponent extends OFormDataComponent implements AfterView
   protected oTouchUi: boolean;
   protected oStartAt: string;
   protected _filterDate: DateFilterFunction;
+  @InputConverter()
+  textInputEnabled: boolean = true;
 
   protected _minDateString: string;
   protected _maxDateString: string;
@@ -226,6 +229,12 @@ export class ODateInputComponent extends OFormDataComponent implements AfterView
   innerOnBlur(event: any) {
     if (!this.isReadOnly && !this.isDisabled) {
       this.onBlur.emit(event);
+    }
+  }
+
+  onClickInput(e: Event): void {
+    if (!this.textInputEnabled) {
+      this.open();
     }
   }
 
