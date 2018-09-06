@@ -6,7 +6,7 @@ import { InputConverter } from '../decorators';
 import { OFilterBuilderComponent } from '../components';
 import { OFormComponent } from './form/o-form.component';
 import { FilterExpressionUtils } from './filter-expression.utils';
-import { AuthGuardService, OTranslateService } from '../services';
+import { AuthGuardService, OTranslateService, NavigationService } from '../services';
 import { OListInitializationOptions } from './list/o-list.component';
 import { OTableInitializationOptions } from './table/o-table.component';
 import { OFormLayoutManagerComponent } from '../layouts/form-layout/o-form-layout-manager.component';
@@ -72,6 +72,7 @@ export class OServiceComponent extends OServiceBaseComponent {
 
   protected authGuardService: AuthGuardService;
   protected translateService: OTranslateService;
+  protected navigationService: NavigationService;
 
   /* inputs variables */
   // title: string;
@@ -132,6 +133,7 @@ export class OServiceComponent extends OServiceBaseComponent {
     this.actRoute = this.injector.get(ActivatedRoute);
     this.authGuardService = this.injector.get(AuthGuardService);
     this.translateService = this.injector.get(OTranslateService);
+    this.navigationService = this.injector.get(NavigationService);
     try {
       this.formLayoutManager = this.injector.get(OFormLayoutManagerComponent);
     } catch (e) {
@@ -199,7 +201,7 @@ export class OServiceComponent extends OServiceBaseComponent {
   }
 
   viewDetail(item: any): void {
-    let route = this.getRouteOfSelectedRow(item, this.detailFormRoute);
+    let route = this.getItemModeRoute(item, 'detailFormRoute');
     if (route.length > 0) {
       let qParams = Codes.getIsDetailObject();
       if (this.formLayoutManager) {
@@ -214,9 +216,8 @@ export class OServiceComponent extends OServiceBaseComponent {
   }
 
   editDetail(item: any) {
-    let route = this.getRouteOfSelectedRow(item, this.editFormRoute);
+    let route = this.getItemModeRoute(item, 'editFormRoute');
     if (route.length > 0) {
-      route.push(Codes.DEFAULT_EDIT_ROUTE);
       let extras = {
         relativeTo: this.recursiveEdit ? this.actRoute.parent : this.actRoute
       };
@@ -227,11 +228,16 @@ export class OServiceComponent extends OServiceBaseComponent {
 
   insertDetail() {
     let route = [];
-    let insertRoute = this.insertFormRoute !== undefined ? this.insertFormRoute : 'new';
+
+    if (Util.isDefined(this.detailFormRoute)) {
+      route.push(this.detailFormRoute);
+    }
+
+    let insertRoute = Util.isDefined(this.insertFormRoute) ? this.insertFormRoute : Codes.DEFAULT_INSERT_ROUTE;
     route.push(insertRoute);
     // adding parent-keys info...
     const encodedParentKeys = this.getEncodedParentKeys();
-    if (encodedParentKeys !== undefined) {
+    if (Util.isDefined(encodedParentKeys)) {
       let routeObj = {};
       routeObj[Codes.PARENT_KEYS_KEY] = encodedParentKeys;
       route.push(routeObj);
@@ -244,10 +250,8 @@ export class OServiceComponent extends OServiceBaseComponent {
       cDeactivate[Codes.IGNORE_CAN_DEACTIVATE] = true;
       extras[Codes.QUERY_PARAMS] = cDeactivate;
     }
-
-    this.router.navigate(route, extras).catch(err => {
-      console.error(err.message);
-    });
+    this.storeNavigationFormRoutes('insertFormRoute');
+    this.router.navigate(route, extras);
   }
 
   protected getEncodedParentKeys() {
@@ -261,26 +265,33 @@ export class OServiceComponent extends OServiceBaseComponent {
     return encoded;
   }
 
-  getRouteOfSelectedRow(item: any, modeRoute: any) {
-    let route = [];
+  getItemModeRoute(item: any, modeRoute: string): any[] {
+    let result = this.getRouteOfSelectedRow(item);
+    if (result.length > 0) {
+      if (Util.isDefined(this.detailFormRoute)) {
+        result.unshift(this.detailFormRoute);
+      }
+      if (modeRoute === 'editFormRoute') {
+        result.push(this.editFormRoute || Codes.DEFAULT_EDIT_ROUTE);
+      }
+    }
+    if (result.length) {
+      this.storeNavigationFormRoutes(modeRoute);
+    }
+    return result;
+  }
 
+  getRouteOfSelectedRow(item: any): any[] {
+    let route = [];
     // if (this.formLayoutManager) {
     //   route = this.formLayoutManager.getRouteOfActiveItem();
     // }
-    let filterArr = [];
     if (Util.isObject(item)) {
       this.keysArray.forEach(key => {
         if (Util.isDefined(item[key])) {
-          filterArr.push(item[key]);
+          route.push(item[key]);
         }
       });
-    }
-
-    if (filterArr.length > 0) {
-      if (modeRoute !== undefined) {
-        route.push(modeRoute);
-      }
-      route.push(...filterArr);
     }
     return route;
   }
@@ -362,4 +373,11 @@ export class OServiceComponent extends OServiceBaseComponent {
     return filter;
   }
 
+  protected storeNavigationFormRoutes(activeFormMode: string) {
+    this.navigationService.storeFormRoutes({
+      detailFormRoute: this.detailFormRoute,
+      editFormRoute: this.editFormRoute,
+      insertFormRoute: Util.isDefined(this.insertFormRoute) ? this.insertFormRoute : Codes.DEFAULT_INSERT_ROUTE
+    }, activeFormMode);
+  }
 }

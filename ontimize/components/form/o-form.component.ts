@@ -17,7 +17,7 @@ import { dataServiceFactory } from '../../services/data-service.provider';
 import { OFormNavigationClass } from './navigation/o-form.navigation.class';
 import { OFormToolbarComponent, OFormToolbarModule } from './o-form-toolbar.component';
 import { IFormDataComponent, IFormDataTypeComponent } from '../o-form-data-component.class';
-import { DialogService, NavigationService, OntimizeService, SnackBarService } from '../../services';
+import { DialogService, NavigationService, OntimizeService, SnackBarService, ONavigationItem } from '../../services';
 import { CanComponentDeactivate, CanDeactivateFormGuard } from './guards/o-form-can-deactivate.guard';
 
 export const DEFAULT_INPUTS_O_FORM = [
@@ -651,10 +651,10 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
 
   protected determinateModeFromUrlSegment(segment: UrlSegment) {
     const _path = segment ? segment['path'] : '';
-    if (_path === 'new') {
+    if (this.isInsertModePath(_path)) {
       this.setInsertMode();
       return;
-    } else if (_path === Codes.DEFAULT_EDIT_ROUTE) {
+    } else if (this.isUpdateModePath(_path)) {
       this.setUpdateMode();
     } else {
       this.setInitialMode();
@@ -1318,6 +1318,15 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     return valueCopy;
   }
 
+  protected isInsertModePath(path: string): boolean {
+    const navData: ONavigationItem = this.navigationService.getPreviousRouteData();
+    return Util.isDefined(navData) && path === navData.getInsertFormRoute();
+  }
+
+  protected isUpdateModePath(path: string): boolean {
+    const navData: ONavigationItem = this.navigationService.getPreviousRouteData();
+    return Util.isDefined(navData) && path === navData.getEditFormRoute();
+  }
 }
 
 @NgModule({

@@ -1,6 +1,6 @@
-import { Component, ElementRef, EventEmitter, forwardRef, Inject, Injector, OnInit, OnChanges, Optional, NgModule, SimpleChange, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, forwardRef, Inject, Injector, OnDestroy, OnInit, OnChanges, Optional, NgModule, SimpleChange, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatDialog, MatInput, MatDialogConfig, MatDialogRef } from '@angular/material';
+import { MatDialog, MatDialogConfig, MatDialogRef, MatInput } from '@angular/material';
 
 import { OSharedModule } from '../../../shared';
 import { OntimizeService } from '../../../services';
@@ -18,7 +18,8 @@ export const DEFAULT_INPUTS_O_LIST_PICKER = [
   'filter',
   'dialogWidth : dialog-width',
   'dialogHeight : dialog-height',
-  'queryRows: query-rows'
+  'queryRows: query-rows',
+  'textInputEnabled: text-input-enabled'
 ];
 
 export const DEFAULT_OUTPUTS_O_LIST_PICKER = [
@@ -37,7 +38,7 @@ export const DEFAULT_OUTPUTS_O_LIST_PICKER = [
   inputs: DEFAULT_INPUTS_O_LIST_PICKER,
   outputs: DEFAULT_OUTPUTS_O_LIST_PICKER
 })
-export class OListPickerComponent extends OFormServiceComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges {
+export class OListPickerComponent extends OFormServiceComponent implements AfterViewInit, OnChanges, OnDestroy, OnInit {
 
   public static DEFAULT_INPUTS_O_LIST_PICKER = DEFAULT_INPUTS_O_LIST_PICKER;
   public static DEFAULT_OUTPUTS_O_LIST_PICKER = DEFAULT_OUTPUTS_O_LIST_PICKER;
@@ -49,6 +50,8 @@ export class OListPickerComponent extends OFormServiceComponent implements OnIni
   protected dialogHeight: string = '55%';
   @InputConverter()
   protected queryRows: number;
+  @InputConverter()
+  textInputEnabled: boolean = true;
   /* End inputs */
 
   protected matDialog: MatDialog;
@@ -106,7 +109,7 @@ export class OListPickerComponent extends OFormServiceComponent implements OnIni
     if (this.queryOnInit) {
       this.queryData();
     } else if (this.queryOnBind) {
-      //TODO do it better. When changing tabs it is necessary to invoke new query
+      // TODO do it better. When changing tabs it is necessary to invoke new query
       this.syncDataIndex();
     }
   }
@@ -149,6 +152,12 @@ export class OListPickerComponent extends OFormServiceComponent implements OnIni
   setValue(value: any, options?: IFormValueOptions) {
     super.setValue(value, options);
     this.visibleInput.nativeElement.value = '';
+  }
+
+  onClickInput(e: Event): void {
+    if (!this.textInputEnabled) {
+      this.onClickListpicker(e);
+    }
   }
 
   onClickListpicker(e: Event): void {

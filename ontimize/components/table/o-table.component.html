@@ -1,4 +1,5 @@
-<div class="expandable-container" [style.display]="isVisible()? '' : 'none'"  [class.o-scrollable-container]="hasScrollableContainer()"  (scroll)="onTableScroll($event)">
+<div class="expandable-container" [style.display]="isVisible()? '' : 'none'" [class.o-scrollable-container]="hasScrollableContainer()"
+  (scroll)="onTableScroll($event)">
   <div class="o-table-container" fxLayout="column" fxLayoutAlign="start stretch" [class.tab-container]="hasTabGroupChangeSubscription()">
     <div #tableToolbar *ngIf="hasControls()" class="toolbar" fxLayout="row" fxLayoutAlign="space-between center">
       <div class="buttons" fxLayout>
@@ -43,7 +44,7 @@
       <button mat-menu-item (click)="onApplyConfigurationClicked()">{{ 'TABLE.BUTTONS.APPLY_CONFIGURATION' | oTranslate }}</button>
     </mat-menu>
 
-  
+
     <div #tableBody fxLayout="column" fxLayoutAlign="start stretch" class="o-table-body o-scroll" [class.horizontal-scroll]="horizontalScroll"
       [class.scrolled]="horizontalScrolled">
 
@@ -77,7 +78,7 @@
         <mat-header-row *matHeaderRowDef="oTableOptions.visibleColumns"></mat-header-row>
 
       </mat-table>
- 
+
       <!--TABLE EMPTY-->
       <div class="mat-row o-table-no-results {{ rowHeight }}" *ngIf="dataSource !== undefined && dataSource.resultsLength === 0"
         fxLayoutAlign="center center">
@@ -92,7 +93,7 @@
 
       <mat-table #table [trackBy]="getTrackByFunction()" [dataSource]="dataSource" matSort [class]="rowHeight" [class.content-table]="true"
         [class.mat-table]="true" (cdkObserveContent)="projectContentChanged()" (scroll)="onTableScroll($event)">
-        
+
         <!--Checkbox Column -->
         <ng-container [matColumnDef]="oTableOptions.selectColumn.name" *ngIf="oTableOptions.selectColumn.visible">
           <mat-header-cell *matHeaderCellDef>
@@ -124,7 +125,7 @@
           <mat-cell *matCellDef="let row" #cell [fxFlex]="column.width" [style.min-width]="column.getMinWidth()" [ngClass]="column.className"
             (click)="handleCellClick(column, row, $event)" (dblclick)="handleCellDoubleClick(column, row, $event)" [class.empty-cell]="isEmpty(row[column.name])"
             [matTooltipDisabled]="!column.hasTooltip()" [matTooltip]="column.getTooltip(row)" matTooltipPosition="below" matTooltipShowDelay="750"
-            matTooltipClass="o-table-cell-tooltip">
+            matTooltipClass="o-table-cell-tooltip" [class.o-mat-cell-multiline]="column.multiline">
 
             <ng-container *ngIf="usePlainRender(column, row)">
               {{ row[column.name] }}
@@ -135,6 +136,12 @@
 
             <ng-template *ngIf="useCellEditor(column, row)" [ngTemplateOutlet]="column.editor.templateref" [ngTemplateOutletContext]="{ cellvalue: row[column.name], rowvalue:row }">
             </ng-template>
+
+            <ng-container *ngIf="useDetailButton(column)">
+              <div fxLayoutAlign="center center" class="action-cell-renderer" (click)="onDetailButtonClick(column, row, $event)">
+                <mat-icon>{{ getDetailButtonIcon(column) }}</mat-icon>
+              </div>
+            </ng-container>
 
           </mat-cell>
         </ng-container>
@@ -154,12 +161,12 @@
       <o-table-editable-row [datasource]="dataSource" *ngIf="showLastInsertableRow"></o-table-editable-row>
 
       <!--LOADING-->
-     
+
       <div *ngIf="showLoading()" class="spinner-container" [class.spinner-container-scrollable]="loadingScroll">
-        <mat-progress-spinner mode="indeterminate"  strokeWidth="3"></mat-progress-spinner>
+        <mat-progress-spinner mode="indeterminate" strokeWidth="3"></mat-progress-spinner>
       </div>
-      
-     
+
+
     </div>
 
     <!--TABLE PAGINATOR-->

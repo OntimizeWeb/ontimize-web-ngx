@@ -164,6 +164,7 @@ export class OColumn {
   calculate: string | OperatorFunction;
   definition: OTableColumnComponent;
   tooltip: OColumnTooltip;
+  multiline: boolean;
 
   setDefaultProperties() {
     this.type = 'string';
@@ -174,6 +175,7 @@ export class OColumn {
     // column without 'attr' should contain only renderers that do not depend on cell data, but row data (e.g. actions)
     this.name = this.attr;
     this.title = this.attr;
+    this.multiline = false;
   }
 
   set searchable(val: boolean) {
@@ -222,6 +224,7 @@ export class OColumn {
     // default title align
     return Codes.COLUMN_TITLE_ALIGN_CENTER;
   }
+
 }
 
 export class OTableOptions {
@@ -606,6 +609,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     this.setDatasource();
     this.registerSortListener();
     this.setFiltersConfiguration(this.state);
+    this.addDefaultRowButtons();
 
     if (this.queryOnInit) {
       this.queryData();
@@ -689,6 +693,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     colDef.setDefaultProperties();
     colDef.title = Util.isDefined(column.title) ? column.title : column.attr;
     colDef.definition = column;
+    colDef.multiline = column.multiline;
 
     if (Util.isDefined(column.width)) {
       colDef.width = column.width;
@@ -1610,8 +1615,38 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     return this.selection.selected;
   }
 
+  useDetailButton(column: OColumn): boolean {
+    return column.type === 'editButtonInRow' || column.type === 'detailButtonInRow';
+  }
+
+  onDetailButtonClick(column: OColumn, row: any, event: any) {
+    event.preventDefault();
+    event.stopPropagation();
+    switch (column.type) {
+      case 'editButtonInRow':
+        this.editDetail(row);
+        break;
+      case 'detailButtonInRow':
+        this.viewDetail(row);
+        break;
+    }
+  }
+
+  getDetailButtonIcon(column: OColumn) {
+    let result = '';
+    switch (column.type) {
+      case 'editButtonInRow':
+        result = this.editButtonInRowIcon;
+        break;
+      case 'detailButtonInRow':
+        result = this.detailButtonInRowIcon;
+        break;
+    }
+    return result;
+  }
+
   usePlainRender(column: OColumn, row: any): boolean {
-    return !column.renderer && (!column.editor || (!column.editing || !this.selection.isSelected(row)));
+    return !this.useDetailButton(column) && !column.renderer && (!column.editor || (!column.editing || !this.selection.isSelected(row)));
   }
 
   useCellRenderer(column: OColumn, row: any): boolean {
@@ -1921,6 +1956,28 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     return this.dataSource && !this.paginationControls && !this.pageable;
   }
 
+  protected addDefaultRowButtons() {
+    if (this.editButtonInRow) {
+      this.addButtonInRow('editButtonInRow');
+    }
+    if (this.detailButtonInRow) {
+      this.addButtonInRow('detailButtonInRow');
+    }
+  }
+
+  protected addButtonInRow(name: string) {
+    let colDef: OColumn = new OColumn();
+    colDef.attr = name;
+    colDef.setDefaultProperties();
+    colDef.type = name;
+    colDef.visible = true;
+    colDef.searchable = false;
+    colDef.orderable = false;
+    colDef.title = undefined;
+    colDef.width = '48px';
+    this.pushOColumnDefinition(colDef);
+    this._oTableOptions.visibleColumns.push(name);
+  }
 }
 
 @NgModule({
