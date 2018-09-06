@@ -320,6 +320,9 @@ $_mat-checkbox-mark-stroke-size-small: 2 / 15 * $mat-checkbox-size-small !defaul
         box-sizing: border-box;
 
         &.o-mat-cell-multiline {
+          &:not(.mat-header-cell) {
+            padding: 6px 12px;
+          }
           overflow: initial;
           white-space: normal;
           text-overflow: unset;

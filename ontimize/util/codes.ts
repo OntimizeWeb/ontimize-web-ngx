@@ -68,7 +68,7 @@ export class Codes {
   }
 
   static isValidRowHeight(value: string): boolean {
-    return Codes.AVAILABLE_ROW_HEIGHTS_VALUES.indexOf(value) === -1;
+    return Codes.AVAILABLE_ROW_HEIGHTS_VALUES.indexOf(value) !== -1;
   }
 
   static getIsDetailObject(): any {
