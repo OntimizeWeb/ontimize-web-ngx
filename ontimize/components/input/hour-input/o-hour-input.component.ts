@@ -154,7 +154,7 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
 
   getValueAsString() {
     const value = this.getValue();
-    return Util.isDefined(value) ? value.toUpperCase() : null;
+    return Util.isDefined(value) ? value.toLowerCase() : null;
   }
 
   setTimestampValue(value: any, options?: IFormValueOptions) {
