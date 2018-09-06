@@ -269,7 +269,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
 
     this.reloadStreamSubscription = this.reloadStream.subscribe(valArr => {
       if (Util.isArray(valArr) && valArr.length === 2) {
-        if (self.queryOnInit && valArr[0] === true && valArr[1] === true) {
+        if (!self.isInInsertMode() && self.queryOnInit && valArr[0] === true && valArr[1] === true) {
           self._reloadAction(true);
         }
       }
@@ -421,7 +421,8 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
 
   getDataValue(attr: string) {
     if (this.isInInsertMode()) {
-      let val = this.formGroup.value[attr];
+      let urlParams = this.formNavigation.getFilterFromUrlParams();
+      let val = this.formGroup.value[attr] || urlParams[attr];
       return new OFormValue(val);
     } else if (this.isInInitialMode() && !this.isEditableDetail()) {
       let data = this.formData;
@@ -884,8 +885,12 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   */
 
   queryData(filter) {
-    if (this.dataService === undefined) {
-      console.warn('No service configured! aborting query');
+    if (!Util.isDefined(this.dataService)) {
+      console.warn('OFormComponent: no service configured! aborting query');
+      return;
+    }
+    if (!Util.isDefined(filter) || Object.keys(filter).length === 0) {
+      console.warn('OFormComponent: no filter configured! aborting query');
       return;
     }
     if (this.querySubscription) {
