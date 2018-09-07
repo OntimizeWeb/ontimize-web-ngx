@@ -91,8 +91,8 @@
       <!-- TABLE EDITABLE ROW position: first -->
       <o-table-editable-row [datasource]="dataSource" *ngIf="showFirstInsertableRow"></o-table-editable-row>
 
-      <mat-table #table [trackBy]="getTrackByFunction()" [dataSource]="dataSource" matSort [class]="rowHeight" [class.content-table]="true"
-        [class.mat-table]="true" (cdkObserveContent)="projectContentChanged()" (scroll)="onTableScroll($event)">
+      <mat-table #table [trackBy]="getTrackByFunction()" [dataSource]="dataSource" matSort [class]="hasMultilineColumn ? '' : rowHeight"
+        [class.content-table]="true" [class.mat-table]="true" (cdkObserveContent)="projectContentChanged()" (scroll)="onTableScroll($event)">
 
         <!--Checkbox Column -->
         <ng-container [matColumnDef]="oTableOptions.selectColumn.name" *ngIf="oTableOptions.selectColumn.visible">
