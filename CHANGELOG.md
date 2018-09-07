@@ -5,6 +5,7 @@
 * **o-service-base-component.class**:
   * new '*OServiceBaseComponent*' `extractKeysFromRecord` and `getSqlTypes` methods ([0aa24c9](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0aa24c9))
   * new '*OServiceBaseComponent*' `getParentKeysValues` method ([e94aa61](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e94aa61))
+* **o-form-service-component.class**, **o-combo**, **o-listpicker**: new `query-with-null-parent-keys` attribute ([7e93930](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7e93930))
 * **o-table cell editors**:
   * updating cell data in server ([360bfd0](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/360bfd0))
   * new `updateRecordOnEdit` and `showToastOnEdit` inputs and `onPostUpdateRecord` output added to all cell editors ('*OBaseTableCellEditor*' class) ([360bfd0](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/360bfd0))
