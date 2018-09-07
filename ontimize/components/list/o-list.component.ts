@@ -498,9 +498,7 @@ export class OListComponent extends OServiceComponent implements AfterContentIni
     super.insertDetail();
   }
 
-  hasTitle(): boolean {
-    return this.title !== undefined;
-  }
+
 
   getComponentFilter(existingFilter: any = {}): any {
     let filter = existingFilter;
