@@ -1982,6 +1982,11 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     this.pushOColumnDefinition(colDef);
     this._oTableOptions.visibleColumns.push(name);
   }
+
+  get hasMultilineColumn(): boolean {
+    return this.oTableOptions.columns.some((c: OColumn) => c.multiline);
+  }
+
 }
 
 @NgModule({
