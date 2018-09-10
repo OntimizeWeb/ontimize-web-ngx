@@ -22,7 +22,7 @@
   <div fxLayout="column" class="o-list-content" [class.o-list-content-toolbar]="hasControls() && !odense"
     [class.o-list-content-toolbar-dense]="hasControls() && odense">
     <mat-list [attr.dense]="odense || undefined" (scroll)="onScroll($event)" [class.selectable]="selectable"
-      [class.o-list-item-has-buttons]="editButtonInRow || detailButtonInRow">
+      [class.o-list-item-has-buttons]="insertButton && (editButtonInRow || detailButtonInRow)">
       <mat-list-item *ngIf="!getDataArray().length" fxLayout="row" fxLayoutAlign="center center" style="cursor: default;">
         <h3 matLine>{{ 'TABLE.EMPTY' | oTranslate }}</h3>
       </mat-list-item>
