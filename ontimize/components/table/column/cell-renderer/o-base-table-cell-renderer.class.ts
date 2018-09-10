@@ -4,7 +4,8 @@ import { Util } from '../../../../utils';
 import { OTableComponent } from '../../o-table.component';
 import { OTableColumnComponent } from '../o-table-column.component';
 
-export class OBaseTableCellRenderer implements OnInit {
+export class OBaseTableCellRenderer {
+
 
   public templateref: TemplateRef<any>;
 
@@ -16,17 +17,17 @@ export class OBaseTableCellRenderer implements OnInit {
   constructor(protected injector: Injector) {
     this.tableColumn = this.injector.get(OTableColumnComponent);
   }
-
-  ngOnInit(): void {
+  
+  ngAfterContentInit(): void {
     this.registerRenderer();
   }
-
   registerRenderer() {
     this.tableColumn.registerRenderer(this);
     if (!Util.isDefined(this.type) && Util.isDefined(this.tableColumn.type)) {
       this.type = this.tableColumn.type;
     }
   }
+ 
 
   /** @deprecated */
   initialize() {

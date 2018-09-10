@@ -60,7 +60,6 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
   }
 
   ngOnInit() {
-    super.ngOnInit();
     this.colArray = Util.parseArray(this.columns, true);
     let pkArray = Util.parseArray(this.parentKeys);
     this._pKeysEquiv = Util.parseParentKeysEquivalences(pkArray);
