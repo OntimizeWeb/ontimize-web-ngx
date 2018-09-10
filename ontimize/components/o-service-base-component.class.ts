@@ -180,6 +180,9 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
     if (this.loaderSubscription) {
       this.loaderSubscription.unsubscribe();
     }
+    if (this.onRouteChangeStorageSubscribe) {
+      this.onRouteChangeStorageSubscribe.unsubscribe();
+    }
   }
 
   ngOnChanges(changes: { [propName: string]: SimpleChange }) {
