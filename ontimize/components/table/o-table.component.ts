@@ -383,7 +383,11 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   set visibleColArray(arg: Array<any>) {
     this._visibleColArray = arg;
     if (this._oTableOptions) {
-      this._oTableOptions.visibleColumns = this.visibleColArray;
+      const containsSelectionCol = this._oTableOptions.visibleColumns.indexOf(OTableComponent.NAME_COLUMN_SELECT) !== -1;
+      if (containsSelectionCol) {
+        this._visibleColArray.unshift(OTableComponent.NAME_COLUMN_SELECT);
+      }
+      this._oTableOptions.visibleColumns = this._visibleColArray;
     }
     if (this.oTableEditableRow) {
       this.oTableEditableRow.cd.detectChanges();

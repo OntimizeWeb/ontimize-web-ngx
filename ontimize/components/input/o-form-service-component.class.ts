@@ -36,7 +36,10 @@ export const DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT = [
   // query-method [string]: name of the service method to perform queries. Default: query.
   'queryMethod: query-method',
 
-  'serviceType : service-type'
+  'serviceType : service-type',
+
+  // query-with-null-parent-keys [string][yes|no|true|false]: Indicates whether or not to trigger query method when parent-keys filter is null. Default: false
+  'queryWithNullParentKeys: query-with-null-parent-keys'
 ];
 
 export class OFormServiceComponent extends OFormDataComponent {
@@ -61,6 +64,8 @@ export class OFormServiceComponent extends OFormDataComponent {
   protected queryOnEvent: any;
   protected queryMethod: string = Codes.QUERY_METHOD;
   protected serviceType: string;
+  @InputConverter()
+  queryWithNullParentKeys: boolean = false;
 
   /* Internal variables */
   protected dataArray: any[] = [];
@@ -129,7 +134,9 @@ export class OFormServiceComponent extends OFormDataComponent {
     if (this.queryOnEvent !== undefined && this.queryOnEvent.subscribe !== undefined) {
       const self = this;
       this.queryOnEventSubscription = this.queryOnEvent.subscribe((value) => {
-        self.queryData();
+        if (Util.isDefined(value) || this.queryWithNullParentKeys) {
+          self.queryData();
+        }
       });
     }
   }
