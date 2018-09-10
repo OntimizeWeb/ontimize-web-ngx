@@ -201,7 +201,11 @@ export class OServiceComponent extends OServiceBaseComponent {
     if (route.length > 0) {
       let qParams = Codes.getIsDetailObject();
       if (this.formLayoutManager) {
-        qParams[Codes.IGNORE_CAN_DEACTIVATE] = true;
+        if (this.formLayoutManager.isMainComponent(this)) {
+          qParams[Codes.IGNORE_CAN_DEACTIVATE] = true;
+        } else {
+          qParams[Codes.IGNORE_FORM_LAYOUT_MANAGER] = true;
+        }
       }
       let extras = {
         relativeTo: this.recursiveDetail ? this.actRoute.parent : this.actRoute,
@@ -273,15 +277,18 @@ export class OServiceComponent extends OServiceBaseComponent {
     }
     if (result.length) {
       this.storeNavigationFormRoutes(modeRoute);
+      if (this.formLayoutManager && !this.formLayoutManager.isMainComponent(this)) {
+        var activeRoute = this.formLayoutManager.getRouteOfActiveItem();
+        if (activeRoute && activeRoute.length > 0) {
+          result.unshift(activeRoute.join('/'));
+        }
+      }
     }
     return result;
   }
 
   getRouteOfSelectedRow(item: any): any[] {
     let route = [];
-    // if (this.formLayoutManager) {
-    //   route = this.formLayoutManager.getRouteOfActiveItem();
-    // }
     if (Util.isObject(item)) {
       this.keysArray.forEach(key => {
         if (Util.isDefined(item[key])) {
