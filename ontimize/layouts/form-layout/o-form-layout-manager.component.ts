@@ -1,31 +1,38 @@
-import { AfterViewInit, Component, CUSTOM_ELEMENTS_SCHEMA, ElementRef, EventEmitter, Injector, NgModule, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, CUSTOM_ELEMENTS_SCHEMA, ElementRef, EventEmitter, Injector, NgModule, OnInit, OnDestroy, ViewChild, ContentChildren, QueryList, HostListener } from '@angular/core';
 import { ActivatedRoute, ActivatedRouteSnapshot, Route, Router, RouterModule } from '@angular/router';
 import { MatDialog, MatDialogRef } from '@angular/material';
 import { CommonModule } from '@angular/common';
 
-import { Util } from '../../util/util';
+import { InputConverter } from '../../decorators';
 import { OSharedModule } from '../../shared';
-import { OFormLayoutDialogComponent } from './dialog/o-form-layout-dialog.component';
+import { Util } from '../../utils';
 import { OFormLayoutManagerService } from '../../services/o-form-layout-manager.service';
+import { ILocalStorageComponent, LocalStorageService } from '../../services/local-storage.service';
+import { OTableComponent } from '../../components/table/o-table.component';
+import { OListComponent } from '../../components/list/o-list.component';
+import { OServiceComponent } from '../../components/o-service-component.class';
+import { OFormLayoutDialogComponent } from './dialog/o-form-layout-dialog.component';
 import { OFormLayoutTabGroupComponent } from './tabgroup/o-form-layout-tabgroup.component';
 import { CanActivateFormLayoutChildGuard } from './guards/o-form-layout-can-activate-child.guard';
 import { OFormLayoutManagerContentDirective } from './directives/o-form-layout-manager-content.directive';
 
 export interface IDetailComponentData {
-  urlParams: any;
+  params: any;
   queryParams: any;
   urlSegments: any;
   id: string;
   component: any;
   label: string;
   modified: boolean;
+  url: string;
 }
 
 export const DEFAULT_INPUTS_O_FORM_LAYOUT_MANAGER = [
   'mode',
   'labelColumns: label-columns',
   'separator',
-  'title'
+  'title',
+  'storeState: store-state'
 ];
 
 export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
@@ -42,7 +49,7 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
     '[class.o-form-layout-manager]': 'true'
   }
 })
-export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDestroy {
+export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDestroy, ILocalStorageComponent {
 
   public static guardClassName = 'CanActivateFormLayoutChildGuard';
 
@@ -53,19 +60,31 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
   public static TAB_MODE = 'tab';
 
   mode: string;
-  protected labelColumns: string;
-  protected separator: string = ' ';
+  labelColumns: string;
+  separator: string = ' ';
   title: string;
+  @InputConverter()
+  storeState: boolean = true;
 
   protected labelColsArray: string[] = [];
 
   protected oFormLayoutManagerService: OFormLayoutManagerService;
+  protected localStorageService: LocalStorageService;
+  protected onRouteChangeStorageSubscribe: any;
 
   @ViewChild('tabGroup') oTabGroup: OFormLayoutTabGroupComponent;
   dialogRef: MatDialogRef<OFormLayoutDialogComponent>;
 
   onMainTabSelected: EventEmitter<any> = new EventEmitter<any>();
   onCloseTab: EventEmitter<any> = new EventEmitter<any>();
+
+  @ContentChildren(OTableComponent, { descendants: true })
+  protected tableComponents: QueryList<OTableComponent>;
+
+  @ContentChildren(OListComponent, { descendants: true })
+  protected listComponents: QueryList<OListComponent>;
+
+  protected isGuardActivated: boolean = true;
 
   constructor(
     protected injector: Injector,
@@ -76,6 +95,7 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
   ) {
     this.oFormLayoutManagerService = this.injector.get(OFormLayoutManagerService);
     this.oFormLayoutManagerService.setFormLayoutManager(this);
+    this.localStorageService = this.injector.get(LocalStorageService);
   }
 
   ngOnInit() {
@@ -92,10 +112,38 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
     if (this.elRef) {
       this.elRef.nativeElement.removeAttribute('title');
     }
+    if (this.storeState && this.isTabMode() && Util.isDefined(this.oTabGroup)) {
+      var state = this.localStorageService.getComponentStorage(this, false);
+      this.oTabGroup.initializeComponentState(state);
+    }
   }
 
   ngOnDestroy() {
     this.destroyAactivateChildGuard();
+    this.updateStateStorage();
+  }
+
+  getComponentKey(): string {
+    return 'form-layout-manager';
+  }
+
+  getDataToStore(): Object {
+    // only storing in tab mode
+    if (this.isTabMode() && Util.isDefined(this.oTabGroup)) {
+      return this.oTabGroup.getDataToStore();
+    }
+    return {};
+  }
+
+  @HostListener('window:beforeunload', ['$event'])
+  beforeunloadHandler(event) {
+    this.updateStateStorage();
+  }
+
+  protected updateStateStorage() {
+    if (this.localStorageService && this.isTabMode() && this.storeState) {
+      this.localStorageService.updateComponentStorage(this, false);
+    }
   }
 
   getLabelFromUrlParams(urlParams: Object): string {
@@ -121,7 +169,6 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
     if (!previouslyAdded) {
       canActivateChildArray.push(CanActivateFormLayoutChildGuard);
       routeConfig.canActivateChild = canActivateChildArray;
-      // this.router.resetConfig(this.router.config);
     }
   }
 
@@ -133,7 +180,6 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
         break;
       }
     }
-    // this.router.resetConfig(this.router.config);
   }
 
   isDialogMode(): boolean {
@@ -144,12 +190,13 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
     return this.mode === OFormLayoutManagerComponent.TAB_MODE;
   }
 
-  addDetailComponent(childRoute: ActivatedRouteSnapshot) {
+  addDetailComponent(childRoute: ActivatedRouteSnapshot, url: string) {
     const newDetailComp: IDetailComponentData = {
-      urlParams: childRoute.params,
+      params: childRoute.params,
       queryParams: childRoute.queryParams,
       urlSegments: childRoute.url,
       component: childRoute.routeConfig.component,
+      url: url,
       id: Math.random().toString(36),
       label: '',
       modified: false
@@ -245,6 +292,29 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
     return route;
   }
 
+  isMainComponent(comp: OServiceComponent): boolean {
+    const table = this.tableComponents.find((tableComp) => tableComp === comp);
+    if (Util.isDefined(table)) {
+      return true;
+    }
+    const list = this.listComponents.find((listComp) => listComp === comp);
+    if (Util.isDefined(list)) {
+      return true;
+    }
+    return false;
+  }
+
+  deactivateGuard() {
+    this.isGuardActivated = false;
+  }
+
+  activateGuard() {
+    this.isGuardActivated = true;
+  }
+
+  ignoreCanDeactivate(): boolean {
+    return !this.isGuardActivated;
+  }
 }
 
 @NgModule({

@@ -1,4 +1,4 @@
-<mat-tab-group #tabGroup oTabGroup="ontimize" fxFill (selectedTabChange)="onTabSelectChange()">
+<mat-tab-group #tabGroup oTabGroup="ontimize" fxFill [(selectedIndex)]="selectedTabIndex" (selectedTabChange)="onTabSelectChange($event)">
   <mat-tab label="{{ (title || 'LAYOUT_MANANGER.MAIN_TAB_LABEL') | oTranslate }}">
     <ng-content></ng-content>
   </mat-tab>
@@ -14,3 +14,6 @@
     <ng-template o-form-layout-manager-content [index]="i"></ng-template>
   </mat-tab>
 </mat-tab-group>
+<div *ngIf="showLoading" class="spinner-container">
+  <mat-progress-spinner mode="indeterminate" strokeWidth="3"></mat-progress-spinner>
+</div>

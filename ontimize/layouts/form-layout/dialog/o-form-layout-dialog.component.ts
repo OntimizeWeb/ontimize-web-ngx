@@ -15,7 +15,7 @@ import { OFormLayoutManagerComponent } from '../../../layouts/form-layout/o-form
 export class OFormLayoutDialogComponent implements AfterViewInit {
   formLayoutManager: OFormLayoutManagerComponent;
   queryParams: any;
-  urlParams: Object;
+  params: Object;
   urlSegments: any[];
   label: string;
   title: string;
@@ -38,7 +38,7 @@ export class OFormLayoutDialogComponent implements AfterViewInit {
       this.data = data.data;
       const component = data.data.component;
       this.componentFactory = this.componentFactoryResolver.resolveComponentFactory(component);
-      this.urlParams = data.data.urlParams;
+      this.params = data.data.params;
       this.queryParams = data.data.queryParams;
       this.urlSegments = data.data.urlSegments;
     }
@@ -56,7 +56,7 @@ export class OFormLayoutDialogComponent implements AfterViewInit {
   }
 
   setLabel(val: string) {
-    let label = val.length ? val : this.formLayoutManager.getLabelFromUrlParams(this.urlParams);
+    let label = val.length ? val : this.formLayoutManager.getLabelFromUrlParams(this.params);
     if (label && label.length) {
       label = ': ' + label;
     }

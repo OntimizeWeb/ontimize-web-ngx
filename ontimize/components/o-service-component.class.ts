@@ -191,7 +191,7 @@ export class OServiceComponent extends OServiceBaseComponent {
   hasTitle(): boolean {
     return this.title !== undefined;
   }
-  
+
   getSelectedItems(): any[] {
     return this.selectedItems;
   }
@@ -204,13 +204,13 @@ export class OServiceComponent extends OServiceBaseComponent {
     let route = this.getItemModeRoute(item, 'detailFormRoute');
     if (route.length > 0) {
       let qParams = Codes.getIsDetailObject();
-      if (this.formLayoutManager) {
-        if (this.formLayoutManager.isMainComponent(this)) {
-          qParams[Codes.IGNORE_CAN_DEACTIVATE] = true;
-        } else {
-          qParams[Codes.IGNORE_FORM_LAYOUT_MANAGER] = true;
-        }
+
+      if (this.formLayoutManager && this.formLayoutManager.isMainComponent(this)) {
+        qParams[Codes.IGNORE_CAN_DEACTIVATE] = true;
+      } else if (this.formLayoutManager) {
+        this.formLayoutManager.deactivateGuard();
       }
+
       let extras = {
         relativeTo: this.recursiveDetail ? this.actRoute.parent : this.actRoute,
       };
@@ -225,7 +225,15 @@ export class OServiceComponent extends OServiceBaseComponent {
       let extras = {
         relativeTo: this.recursiveEdit ? this.actRoute.parent : this.actRoute
       };
-      extras[Codes.QUERY_PARAMS] = Codes.getIsDetailObject();
+      let qParams = Codes.getIsDetailObject();
+
+      if (this.formLayoutManager && this.formLayoutManager.isMainComponent(this)) {
+        extras[Codes.IGNORE_CAN_DEACTIVATE] = true;
+      } else if (this.formLayoutManager) {
+        this.formLayoutManager.deactivateGuard();
+      }
+
+      extras[Codes.QUERY_PARAMS] = qParams;
       this.router.navigate(route, extras);
     }
   }

@@ -6,7 +6,7 @@ import 'rxjs/add/operator/combineLatest';
 import { DialogService, NavigationService, ONavigationItem } from '../../../services';
 import { OFormComponent } from '../o-form.component';
 import { Codes, SQLTypes, Util } from '../../../utils';
-import { OFormLayoutManagerComponent } from '../../../layouts/form-layout/o-form-layout-manager.component';
+import { OFormLayoutManagerComponent, IDetailComponentData } from '../../../layouts/form-layout/o-form-layout-manager.component';
 import { OFormLayoutDialogComponent } from '../../../layouts/form-layout/dialog/o-form-layout-dialog.component';
 
 export class OFormNavigationClass {
@@ -107,7 +107,7 @@ export class OFormNavigationClass {
 
   subscribeToQueryParams() {
     if (this.formLayoutManager) {
-      const cacheData = this.formLayoutManager.getFormCacheData(this.id);
+      const cacheData: IDetailComponentData = this.formLayoutManager.getFormCacheData(this.id);
       if (Util.isDefined(cacheData)) {
         this.queryParams = cacheData.queryParams || {};
         this.parseQueryParams();
@@ -131,9 +131,9 @@ export class OFormNavigationClass {
 
   subscribeToUrlParams() {
     if (this.formLayoutManager) {
-      const cacheData = this.formLayoutManager.getFormCacheData(this.id);
+      const cacheData: IDetailComponentData = this.formLayoutManager.getFormCacheData(this.id);
       if (Util.isDefined(cacheData)) {
-        this.urlParams = cacheData.urlParams;
+        this.urlParams = cacheData.params;
         this.parseUrlParams();
       }
     } else {
@@ -158,7 +158,7 @@ export class OFormNavigationClass {
 
   subscribeToUrl() {
     if (this.formLayoutManager) {
-      const cacheData = this.formLayoutManager.getFormCacheData(this.id);
+      const cacheData: IDetailComponentData = this.formLayoutManager.getFormCacheData(this.id);
       if (Util.isDefined(cacheData)) {
         this.urlSegments = cacheData.urlSegments;
       }
