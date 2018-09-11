@@ -22,7 +22,6 @@ export interface MenuItem {
   component?: any;
   'component-inputs'?: Object;
   'show-in-card-menu'?: boolean;
-  'show-in-app-sidenav'?: boolean;
 }
 
 export interface MenuItemRoute extends MenuItem {
