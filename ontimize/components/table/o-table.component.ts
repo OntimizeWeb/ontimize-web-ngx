@@ -870,7 +870,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
             if (self.tabGroupChangeSubscription) {
               self.tabGroupChangeSubscription.unsubscribe();
             }
-            if (self.pendingQuery) {
+            if (self.pendingQuery && self.queryOnInit) {
               self.queryData(self.pendingQueryFilter);
             }
           }
