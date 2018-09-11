@@ -70,9 +70,6 @@ export const DEFAULT_INPUTS_O_TABLE_COLUMN = [
 
   'class',
 
-  // break-word [no|yes|true|false]: content column can show in multiple lines if it not catch in the cell. Default: no and if content of the cell overflow.
-  'breakWord: break-word',
-
   // async-load [no|yes|true|false]: asynchronous query. Default: no
   'asyncLoad : async-load',
 
@@ -110,10 +107,7 @@ export const DEFAULT_OUTPUTS_O_TABLE_COLUMN = [
   templateUrl: './o-table-column.component.html',
   styleUrls: ['./o-table-column.component.scss'],
   inputs: DEFAULT_INPUTS_O_TABLE_COLUMN,
-  outputs: DEFAULT_OUTPUTS_O_TABLE_COLUMN,
-  host: {
-    '[class.columnBreakWord]': 'breakWord'
-  }
+  outputs: DEFAULT_OUTPUTS_O_TABLE_COLUMN
 })
 export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
 
@@ -252,8 +246,6 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
   editionCommitted: EventEmitter<Object> = new EventEmitter<Object>();
   onPostUpdateRecord: EventEmitter<Object> = new EventEmitter<Object>();
 
-  @InputConverter()
-  breakWord: boolean = false;
   @InputConverter()
   asyncLoad: boolean = false;
 
