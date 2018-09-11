@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { Component, ContentChildren, ElementRef, EventEmitter, forwardRef, Inject, Injector, NgModule, OnChanges, OnDestroy, OnInit, Optional, QueryList, ViewChild, ViewChildren, Input } from "@angular/core";
+import { Component, ContentChildren, ElementRef, EventEmitter, forwardRef, Inject, Injector, NgModule, OnChanges, OnDestroy, OnInit, Optional, QueryList, ViewChild, ViewChildren } from "@angular/core";
 import { MediaChange, ObservableMedia } from '@angular/flex-layout';
 import { RouterModule } from "@angular/router";
 import { Subscription } from "rxjs/Subscription";
