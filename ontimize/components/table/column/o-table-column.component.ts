@@ -68,8 +68,6 @@ export const DEFAULT_INPUTS_O_TABLE_COLUMN = [
 
   'minWidth: min-width',
 
-  'class',
-
   // async-load [no|yes|true|false]: asynchronous query. Default: no
   'asyncLoad : async-load',
 
@@ -152,7 +150,6 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
   public editable: boolean = false;
   public width: string;
   public minWidth: string;
-  public class: string;
   @InputConverter()
   public tooltip: boolean = false;
   tooltipValue: string;
