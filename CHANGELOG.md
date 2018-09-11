@@ -64,6 +64,7 @@
   * The attribute `show-table-buttons-text` has been renamed to `show-buttons-text`.
   * The output `onTableDataLoaded` has been renamed to `onDataLoaded`.
   * The output `onPaginatedTableDataLoaded` has been renamed to `onPaginatedDataLoaded`.
+  * The attribute `break-word` (breakWord) has been removed. Use `multiline` instead.
 * **o-form**: Output `onFormDataLoaded` has been renamed to `onDataLoaded`.
 * **o-user-info**: removed input `use-flag-icons`. This component doesn't contain the language selector anymore.
 * Changes in CSS classes naming:
