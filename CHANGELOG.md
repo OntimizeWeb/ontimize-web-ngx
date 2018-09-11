@@ -39,6 +39,9 @@
 * **o-image**: new `full-screen-button` input ([78bff44](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/78bff44))
 * **o-list-picker**: new `text-input-enabled` input ([f903f27](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f903f27)) Closes [#181](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/181)
 * **o-date-input**: new `text-input-enabled` input ([edb65ef](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/edb65ef))
+* **o-form-layout-manager**:
+  * new `store-state` input for allowing localStorage state storing (only in tab mode) ([1c0afc1](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1c0afc1)) ([de562f6](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/de562f6))
+  * allowing inner components navigation
 
 ### Bug Fixes
 * **o-table, o-list, o-tree**: fixed error when querying data with parent keys and no defined values for some of those parent keys ([0548c8e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0548c8e)).
