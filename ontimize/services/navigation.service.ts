@@ -8,15 +8,22 @@ import { Codes, Util } from '../utils';
 import { ObservableWrapper } from '../util/async';
 import { ILocalStorageComponent, LocalStorageService } from './local-storage.service';
 
-export class ONavigationItem {
+export type ONavigationRoutes = {
+  mainFormLayoutManagerComponent?: boolean;
+  detailFormRoute: string;
+  editFormRoute: string;
+  insertFormRoute: string;
+};
 
+export class ONavigationItem {
   url: string;
   queryParams: Object;
   text: string;
   displayText: string;
   terminal: boolean;
-  formRoutes: any;
   activeFormMode: string;
+  formRoutes: ONavigationRoutes;
+  formLayoutRoutes: ONavigationRoutes;
 
   constructor(value: Object) {
     this.url = value['url'] ? value['url'] : '';
@@ -41,20 +48,40 @@ export class ONavigationItem {
       this[Codes.QUERY_PARAMS] = storedItem[Codes.QUERY_PARAMS];
       this.displayText = storedItem.displayText;
       this.formRoutes = storedItem.formRoutes;
+      this.formLayoutRoutes = storedItem.formLayoutRoutes;
       this.activeFormMode = storedItem.activeFormMode;
     }
   }
 
   getInsertFormRoute(): string {
-    return this.formRoutes ? (this.formRoutes.insertFormRoute || Codes.DEFAULT_INSERT_ROUTE) : Codes.DEFAULT_INSERT_ROUTE;
+    const routes = this.formRoutes;
+    return routes ? (routes.insertFormRoute || Codes.DEFAULT_INSERT_ROUTE) : Codes.DEFAULT_INSERT_ROUTE;
   }
 
   getEditFormRoute(): string {
-    return this.formRoutes ? (this.formRoutes.editFormRoute || Codes.DEFAULT_EDIT_ROUTE) : Codes.DEFAULT_EDIT_ROUTE;
+    const routes = this.formRoutes;
+    return routes ? (routes.editFormRoute || Codes.DEFAULT_EDIT_ROUTE) : Codes.DEFAULT_EDIT_ROUTE;
   }
 
   getDetailFormRoute(): string {
-    return this.formRoutes ? (this.formRoutes.detailFormRoute || Codes.DEFAULT_DETAIL_ROUTE) : Codes.DEFAULT_DETAIL_ROUTE;
+    const routes = this.formRoutes;
+    return routes ? (routes.detailFormRoute || Codes.DEFAULT_DETAIL_ROUTE) : Codes.DEFAULT_DETAIL_ROUTE;
+  }
+
+  isMainFormLayoutManagerComponent(): boolean {
+    return Util.isDefined(this.formLayoutRoutes);
+  }
+
+  getFormRoutes(): ONavigationRoutes {
+    return this.formRoutes;
+  }
+
+  setFormRoutes(arg: ONavigationRoutes) {
+    if (arg && arg.mainFormLayoutManagerComponent) {
+      this.formLayoutRoutes = arg;
+    } else {
+      this.formRoutes = arg;
+    }
   }
 }
 
@@ -104,11 +131,11 @@ export class NavigationService implements ILocalStorageComponent {
     let url = '';
     let navigationItems: Array<ONavigationItem> = [];
     while (Util.isDefined(route.firstChild)) {
-      let text = '';
       route = route.firstChild;
       if (!route || !route.url || route.routeConfig === null || !route.routeConfig.path) {
         continue;
       }
+      let text = '';
       let modePathArr = [];
       const navData: ONavigationItem = navigationItems[navigationItems.length - 1];
       let modePath = navData ? navData.getActiveModePath() : undefined;
@@ -131,10 +158,16 @@ export class NavigationService implements ILocalStorageComponent {
       if (modePath && modePath.length > 0 && (activeMode === 'editFormRoute') || (activeMode === 'insertFormRoute')) {
         url += url.length > 0 ? ('/' + modePath) : modePath;
       }
+      let formRoutes = undefined;
+      if (navData && navData.formLayoutRoutes) {
+        formRoutes = Object.assign({}, navData.formLayoutRoutes);
+      }
       const navigationItem = new ONavigationItem({
         url: url,
         queryParams: route.queryParams,
-        text: text
+        text: text,
+        formRoutes: formRoutes,
+        activeFormMode: formRoutes ? (navData && navData.activeFormMode) : undefined
       });
       navigationItem.findAndMergeNavigationItem(storageData);
       navigationItems.push(navigationItem);
@@ -214,9 +247,9 @@ export class NavigationService implements ILocalStorageComponent {
     ObservableWrapper.callEmit(this._sidenavEmitter, 'close');
   }
 
-  storeFormRoutes(routes: any, activeMode: string) {
+  storeFormRoutes(routes: ONavigationRoutes, activeMode: string) {
     if (this.navigationItems.length > 0) {
-      this.navigationItems[this.navigationItems.length - 1].formRoutes = routes;
+      this.navigationItems[this.navigationItems.length - 1].setFormRoutes(routes);
       this.navigationItems[this.navigationItems.length - 1].activeFormMode = activeMode;
       this.storeNavigation();
     }
@@ -230,9 +263,16 @@ export class NavigationService implements ILocalStorageComponent {
   }
 
   getPreviousRouteData(): ONavigationItem {
-    let result;
-    if (this.navigationItems.length >= 2) {
-      result = this.navigationItems[this.navigationItems.length - 2];
+    let result: ONavigationItem;
+    const len = this.navigationItems.length;
+    if (len >= 2) {
+      result = this.navigationItems[len - 2];
+      if (result && result.formRoutes && result.formRoutes.mainFormLayoutManagerComponent && this.navigationItems[len - 3]) {
+        const parent = this.navigationItems[len - 3];
+        if (parent.isMainFormLayoutManagerComponent()) {
+          result = parent;
+        }
+      }
     }
     return result;
   }

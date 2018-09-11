@@ -25,7 +25,6 @@ export class CanActivateFormLayoutChildGuard implements CanActivateChild {
   canActivateChild(childRoute: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     if (this.oFormLayoutManager) {
       if (this.oFormLayoutManager.ignoreCanDeactivate()) {
-        this.oFormLayoutManager.activateGuard();
         return true;
       }
       this.oFormLayoutManager.addDetailComponent(childRoute, state.url.substring(0, state.url.indexOf('?')));

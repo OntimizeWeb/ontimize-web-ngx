@@ -75,8 +75,13 @@ export class OBreadcrumbComponent implements AfterViewInit, OnDestroy, OnInit {
     }
   }
 
-  showBreadcrumbItem(condition: boolean) {
+  showBreadcrumbItem(condition: boolean): boolean {
     return this.loaded && condition;
+  }
+
+  isNotInsideFormLayoutManager(item: ONavigationItem, index: number): boolean {
+    const previousItem: ONavigationItem = this.breadcrumbs[index - 1];
+    return (previousItem && previousItem.isMainFormLayoutManagerComponent());
   }
 
   protected isTerminal(route: ActivatedRouteSnapshot) {

@@ -200,70 +200,53 @@ export class OServiceComponent extends OServiceBaseComponent {
     this.selectedItems = [];
   }
 
+  protected navigateToDetail(route: any[], qParams: any, relativeTo: ActivatedRoute) {
+    let extras = {
+      relativeTo: relativeTo
+    };
+    let reactivateGuard = false;
+    if (this.formLayoutManager && this.formLayoutManager.isMainComponent(this)) {
+      qParams[Codes.IGNORE_CAN_DEACTIVATE] = true;
+    } else if (this.formLayoutManager) {
+      reactivateGuard = true;
+      this.formLayoutManager.deactivateGuard();
+    }
+    extras[Codes.QUERY_PARAMS] = qParams;
+    const navigatePromise: Promise<boolean> = this.router.navigate(route, extras);
+    if (reactivateGuard) {
+      const self = this;
+      navigatePromise.then(() => {
+        self.formLayoutManager.activateGuard();
+      });
+    }
+  }
+
+  insertDetail() {
+    let route = this.getInsertRoute();
+    if (route.length > 0) {
+      this.storeNavigationFormRoutes('insertFormRoute');
+      const relativeTo = this.recursiveInsert ? this.actRoute.parent : this.actRoute;
+      let qParams = {};
+      this.navigateToDetail(route, qParams, relativeTo);
+    }
+  }
+
   viewDetail(item: any): void {
     let route = this.getItemModeRoute(item, 'detailFormRoute');
     if (route.length > 0) {
       let qParams = Codes.getIsDetailObject();
-
-      if (this.formLayoutManager && this.formLayoutManager.isMainComponent(this)) {
-        qParams[Codes.IGNORE_CAN_DEACTIVATE] = true;
-      } else if (this.formLayoutManager) {
-        this.formLayoutManager.deactivateGuard();
-      }
-
-      let extras = {
-        relativeTo: this.recursiveDetail ? this.actRoute.parent : this.actRoute,
-      };
-      extras[Codes.QUERY_PARAMS] = qParams;
-      this.router.navigate(route, extras);
+      const relativeTo = this.recursiveDetail ? this.actRoute.parent : this.actRoute;
+      this.navigateToDetail(route, qParams, relativeTo);
     }
   }
 
   editDetail(item: any) {
     let route = this.getItemModeRoute(item, 'editFormRoute');
     if (route.length > 0) {
-      let extras = {
-        relativeTo: this.recursiveEdit ? this.actRoute.parent : this.actRoute
-      };
       let qParams = Codes.getIsDetailObject();
-
-      if (this.formLayoutManager && this.formLayoutManager.isMainComponent(this)) {
-        extras[Codes.IGNORE_CAN_DEACTIVATE] = true;
-      } else if (this.formLayoutManager) {
-        this.formLayoutManager.deactivateGuard();
-      }
-
-      extras[Codes.QUERY_PARAMS] = qParams;
-      this.router.navigate(route, extras);
+      const relativeTo = this.recursiveEdit ? this.actRoute.parent : this.actRoute;
+      this.navigateToDetail(route, qParams, relativeTo);
     }
-  }
-
-  insertDetail() {
-    let route = [];
-
-    if (Util.isDefined(this.detailFormRoute)) {
-      route.push(this.detailFormRoute);
-    }
-
-    let insertRoute = Util.isDefined(this.insertFormRoute) ? this.insertFormRoute : Codes.DEFAULT_INSERT_ROUTE;
-    route.push(insertRoute);
-    // adding parent-keys info...
-    const encodedParentKeys = this.getEncodedParentKeys();
-    if (Util.isDefined(encodedParentKeys)) {
-      let routeObj = {};
-      routeObj[Codes.PARENT_KEYS_KEY] = encodedParentKeys;
-      route.push(routeObj);
-    }
-    let extras = {
-      relativeTo: this.recursiveInsert ? this.actRoute.parent : this.actRoute,
-    };
-    if (this.formLayoutManager) {
-      const cDeactivate = {};
-      cDeactivate[Codes.IGNORE_CAN_DEACTIVATE] = true;
-      extras[Codes.QUERY_PARAMS] = cDeactivate;
-    }
-    this.storeNavigationFormRoutes('insertFormRoute');
-    this.router.navigate(route, extras);
   }
 
   protected getEncodedParentKeys() {
@@ -275,6 +258,23 @@ export class OServiceComponent extends OServiceBaseComponent {
       }
     }
     return encoded;
+  }
+
+  getInsertRoute(): any[] {
+    let route = [];
+    if (Util.isDefined(this.detailFormRoute)) {
+      route.push(this.detailFormRoute);
+    }
+    let insertRoute = Util.isDefined(this.insertFormRoute) ? this.insertFormRoute : Codes.DEFAULT_INSERT_ROUTE;
+    route.push(insertRoute);
+    // adding parent-keys info...
+    const encodedParentKeys = this.getEncodedParentKeys();
+    if (Util.isDefined(encodedParentKeys)) {
+      let routeObj = {};
+      routeObj[Codes.PARENT_KEYS_KEY] = encodedParentKeys;
+      route.push(routeObj);
+    }
+    return route;
   }
 
   getItemModeRoute(item: any, modeRoute: string): any[] {
@@ -389,7 +389,9 @@ export class OServiceComponent extends OServiceBaseComponent {
   }
 
   protected storeNavigationFormRoutes(activeFormMode: string) {
+    const mainFormLayoutComp = this.formLayoutManager ? Util.isDefined(this.formLayoutManager.isMainComponent(this)) : undefined;
     this.navigationService.storeFormRoutes({
+      mainFormLayoutManagerComponent: mainFormLayoutComp,
       detailFormRoute: this.detailFormRoute,
       editFormRoute: this.editFormRoute,
       insertFormRoute: Util.isDefined(this.insertFormRoute) ? this.insertFormRoute : Codes.DEFAULT_INSERT_ROUTE
