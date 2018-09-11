@@ -41,8 +41,7 @@ export class OTableCellRendererActionComponent extends OBaseTableCellRenderer {
     this.tableColumn.searchable = false;
   }
 
-  ngOnInit() {
-    super.ngOnInit();
+  ngOnInit() { 
     if (this.table) {
       const oCol = this.table.getOColumn(this.tableColumn.attr);
       oCol.title = undefined;
@@ -50,6 +49,7 @@ export class OTableCellRendererActionComponent extends OBaseTableCellRenderer {
     this.iconPosition = Util.parseIconPosition(this.iconPosition);
   }
 
+ 
   getCellData(value: any) {
     return value;
   }

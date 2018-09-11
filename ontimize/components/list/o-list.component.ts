@@ -170,11 +170,6 @@ export class OListComponent extends OServiceComponent implements AfterContentIni
     this.destroy();
   }
 
-  destroy() {
-    super.destroy();
-    this.onRouteChangeStorageSubscribe.unsubscribe();
-  }
-
   public ngOnChanges(changes: { [propName: string]: SimpleChange }) {
     if (typeof (changes['staticData']) !== 'undefined') {
       this.dataResponseArray = changes['staticData'].currentValue;

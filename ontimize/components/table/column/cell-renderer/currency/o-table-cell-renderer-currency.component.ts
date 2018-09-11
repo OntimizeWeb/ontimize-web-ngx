@@ -50,8 +50,8 @@ export class OTableCellRendererCurrencyComponent extends OBaseTableCellRenderer 
   setComponentPipe() {
     this.componentPipe = new OCurrencyPipe(this.injector);
   }
+  
   ngOnInit() {
-    super.ngOnInit();
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
     //Add 'implements OnInit' to the class.
     if (typeof this.currencySymbol === 'undefined') {

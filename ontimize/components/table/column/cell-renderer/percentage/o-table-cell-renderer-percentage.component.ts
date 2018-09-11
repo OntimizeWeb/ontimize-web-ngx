@@ -42,7 +42,6 @@ export class OTableCellRendererPercentageComponent extends OTableCellRendererRea
   }
 
   ngOnInit() {
-    super.ngOnInit();
     this.pipeArguments = {
       minDecimalDigits: this.decimalDigits,
       maxDecimalDigits: this.decimalDigits,

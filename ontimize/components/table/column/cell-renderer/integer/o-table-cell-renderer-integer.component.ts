@@ -38,11 +38,14 @@ export class OTableCellRendererIntegerComponent extends OBaseTableCellRenderer {
   }
 
   ngOnInit() {
-    super.ngOnInit();
     this.pipeArguments = {
       grouping: this.grouping,
       thousandSeparator: this.thousandSeparator
     };
+  }
+
+  ngAfterContentInit(){
+    super.ngAfterContentInit();
   }
 
 
