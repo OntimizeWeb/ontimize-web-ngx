@@ -280,9 +280,9 @@ export class OServiceComponent extends OServiceBaseComponent {
   getItemModeRoute(item: any, modeRoute: string): any[] {
     let result = this.getRouteOfSelectedRow(item);
     if (result.length > 0) {
-      if (Util.isDefined(this.detailFormRoute)) {
-        result.unshift(this.detailFormRoute);
-      }
+      // if (Util.isDefined(this.detailFormRoute)) {
+      //   result.unshift(this.detailFormRoute);
+      // }
       if (modeRoute === 'editFormRoute') {
         result.push(this.editFormRoute || Codes.DEFAULT_EDIT_ROUTE);
       }
@@ -302,6 +302,14 @@ export class OServiceComponent extends OServiceBaseComponent {
   getRouteOfSelectedRow(item: any): any[] {
     let route = [];
     if (Util.isObject(item)) {
+      Object.keys(this._pKeysEquiv).forEach(key => {
+        if (Util.isDefined(item[key])) {
+          route.push(item[key]);
+        }
+      });
+      if (Util.isDefined(this.detailFormRoute)) {
+        route.push(this.detailFormRoute);
+      }
       this.keysArray.forEach(key => {
         if (Util.isDefined(item[key])) {
           route.push(item[key]);

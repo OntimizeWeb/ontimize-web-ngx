@@ -1,20 +1,19 @@
-import { CommonModule } from "@angular/common";
-import { Component, ContentChildren, ElementRef, EventEmitter, forwardRef, Inject, Injector, NgModule, OnChanges, OnDestroy, OnInit, Optional, QueryList, ViewChild, ViewChildren } from "@angular/core";
+import { CommonModule } from '@angular/common';
+import { Component, ContentChildren, ElementRef, EventEmitter, forwardRef, Inject, Injector, NgModule, OnChanges, OnDestroy, OnInit, Optional, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { MediaChange, ObservableMedia } from '@angular/flex-layout';
-import { RouterModule } from "@angular/router";
-import { Subscription } from "rxjs/Subscription";
-import { OFormDataNavigation, OSearchInputComponent, OSearchInputModule } from "../../components";
-import { InputConverter } from "../../decorators";
+import { RouterModule } from '@angular/router';
+import { Subscription } from 'rxjs/Subscription';
+import { OFormDataNavigation, OSearchInputComponent, OSearchInputModule } from '../../components';
+import { InputConverter } from '../../decorators';
 import { OntimizeService } from '../../services';
 import { dataServiceFactory } from '../../services/data-service.provider';
 import { OSharedModule } from '../../shared';
-import { Codes, ObservableWrapper, Util } from "../../utils";
+import { Codes, ObservableWrapper, Util } from '../../utils';
 import { OFormComponent } from '../form/form-components';
 import { OServiceComponent } from '../o-service-component.class';
-import { OQueryDataArgs } from "../service.utils";
-import { OGridItemComponent, OGridItemModule } from "./grid-item/o-grid-item.component";
-import { OGridItemDirective } from "./grid-item/o-grid-item.directive";
-
+import { OQueryDataArgs } from '../service.utils';
+import { OGridItemComponent, OGridItemModule } from './grid-item/o-grid-item.component';
+import { OGridItemDirective } from './grid-item/o-grid-item.directive';
 
 export const DEFAULT_INPUTS_O_GRID = [
   ...OServiceComponent.DEFAULT_INPUTS_O_SERVICE_COMPONENT,
@@ -36,7 +35,6 @@ export const DEFAULT_INPUTS_O_GRID = [
   'quickFilter: quick-filter',
   //  grid-item-height[string]: Set internal representation of row height from the user-provided value.. Default: 1:1.
   'gridItemHeight: grid-item-height'
-
 ];
 
 export const DEFAULT_OUTPUTS_O_GRID = [
@@ -62,8 +60,8 @@ const PAGE_SIZE = 32;
     '[class.o-grid]': 'true'
   }
 })
-
 export class OGridComponent extends OServiceComponent implements OnDestroy, OnInit, OnChanges {
+
   constructor(
     injector: Injector,
     elRef: ElementRef,
@@ -73,15 +71,10 @@ export class OGridComponent extends OServiceComponent implements OnDestroy, OnIn
     this.subscription.add(this.injector.get(ObservableMedia));
   }
 
-
-
-
   /**inputs */
-
   get oCols() {
     return this._oCols || this.oColsDefault;
   }
-
   set oCols(value: number) {
     this._oCols = value;
   }
@@ -89,7 +82,6 @@ export class OGridComponent extends OServiceComponent implements OnDestroy, OnIn
   get pageSize() {
     return this.oPageSize || this._oPageSize;
   }
-
   set pageSize(value: number) {
     this.oPageSize = value;
     this.renderData();
@@ -101,12 +93,9 @@ export class OGridComponent extends OServiceComponent implements OnDestroy, OnIn
   @InputConverter()
   showSort: boolean = false;
 
-
   get quickFilter(): boolean {
     return this._quickFilter;
   }
-
-  @InputConverter()
   set quickFilter(val: boolean) {
     val = Util.parseBoolean(String(val));
     this._quickFilter = val;
@@ -115,17 +104,15 @@ export class OGridComponent extends OServiceComponent implements OnDestroy, OnIn
     }
   }
 
-  public gridItemHeight = "1:1"
+  public gridItemHeight = '1:1';
   public sortColumn: string;
+
   /*Events*/
   public onClick: EventEmitter<any> = new EventEmitter();
   public onDoubleClick: EventEmitter<any> = new EventEmitter();
   public onDataLoaded: EventEmitter<any> = new EventEmitter();
 
   public dataResponseArray: Array<any> = [];
-
-
-
 
   @ViewChild(OSearchInputComponent)
   protected searchInputComponent: OSearchInputComponent;
@@ -140,7 +127,6 @@ export class OGridComponent extends OServiceComponent implements OnDestroy, OnIn
   set gridItems(value: OGridItemComponent[]) {
     this._gridItems = value;
   }
-
   get gridItems(): OGridItemComponent[] {
     return this._gridItems;
   }
@@ -158,8 +144,6 @@ export class OGridComponent extends OServiceComponent implements OnDestroy, OnIn
   private _pageSizeOptions = PAGE_SIZE_OPTIONS;
   private oPageSize;
   private sortableColumns;
-
-
 
   ngOnInit(): void {
     this.initialize();
@@ -188,7 +172,7 @@ export class OGridComponent extends OServiceComponent implements OnDestroy, OnIn
     this.subscription.add(this.inputGridItems.changes.subscribe((queryChanges) => {
       this.gridItems = queryChanges._results;
     }));
-  };
+  }
 
   ngAfterViewInit() {
     if (Util.isDefined(this.searchInputComponent)) {
@@ -215,12 +199,9 @@ export class OGridComponent extends OServiceComponent implements OnDestroy, OnIn
       }));
   }
 
-
   protected setGridItemDirectivesData() {
     var self = this;
-
     this.gridItemDirectives.changes.subscribe(() => {
-      
       this.gridItemDirectives.toArray().forEach((element: OGridItemDirective, index) => {
         element.setItemData(self.dataResponseArray[index]);
         element.setGridComponent(self);
@@ -229,13 +210,10 @@ export class OGridComponent extends OServiceComponent implements OnDestroy, OnIn
     });
   }
 
-
-
   reloadData() {
     let queryArgs: OQueryDataArgs = {};
     this.queryData(void 0, queryArgs);
   }
-
 
   registerQuickFilter(input: OSearchInputComponent) {
     this.quickFilterComponent = input;
@@ -248,9 +226,9 @@ export class OGridComponent extends OServiceComponent implements OnDestroy, OnIn
   }
 
   /**
- * Filters data locally
- * @param value the filtering value
- */
+   * Filters data locally
+   * @param value the filtering value
+   */
   filterData(value: string): any[] {
     let data = [];
     if (this.state) {
@@ -273,10 +251,8 @@ export class OGridComponent extends OServiceComponent implements OnDestroy, OnIn
       data = filteredData;
     } else {
       data = this.dataResponseArray;
-
     }
     return data;
-
   }
 
   renderData() {
@@ -286,9 +262,8 @@ export class OGridComponent extends OServiceComponent implements OnDestroy, OnIn
     }
     data = this.sortedData(data);
     data = Object.assign([], data);
-    data = this.paginatedData(data)
+    data = this.paginatedData(data);
     this.setDataArray(data);
-
   }
 
   protected setData(data: any, sqlTypes?: any, replace?: boolean) {
@@ -297,7 +272,6 @@ export class OGridComponent extends OServiceComponent implements OnDestroy, OnIn
       if (this.pageable && !replace) {
         respDataArray = (this.dataResponseArray || []).concat(data);
       }
-
       let selectedIndexes = this.state.selectedIndexes || [];
       for (let i = 0; i < selectedIndexes.length; i++) {
         if (selectedIndexes[i] < this.dataResponseArray.length) {
@@ -313,21 +287,23 @@ export class OGridComponent extends OServiceComponent implements OnDestroy, OnIn
     } else {
       this.setDataArray([]);
     }
-
     this.loaderSubscription.unsubscribe();
-
     ObservableWrapper.callEmit(this.onDataLoaded, this.dataResponseArray);
   }
 
-
-  /** Returns a sorted copy of the database data. */
+  /**
+   * Returns a sorted copy of the database data
+   * @param data the data
+   */
   protected sortedData(data: any[]): any[] {
     if (!this.sortColumn) { return data; }
     return data.sort(this.sortFunction.bind(this));
-
   }
 
-  /** Returns a sorted copy of the database data. */
+  /**
+   * Returns a sorted copy of the database paginated data
+   * @param data the data
+   */
   protected paginatedData(data: any[]): any[] {
     let dataPaginated = data;
     return dataPaginated.splice(0, this.pageSize);
@@ -364,15 +340,13 @@ export class OGridComponent extends OServiceComponent implements OnDestroy, OnIn
     this._pageSizeOptions = value;
   }
 
-
   get sortColumnsArray(): Array<string> {
     let columns = this.columns.split(SEPARATOR_COLUMNS);
     if (this.sortableColumns) {
-      return this.sortableColumns.split(SEPARATOR_COLUMNS)
+      return this.sortableColumns.split(SEPARATOR_COLUMNS);
     }
     return columns;
   }
-
 
   registerGridItem(item: OGridItemDirective) {
     if (item) {
@@ -389,8 +363,6 @@ export class OGridComponent extends OServiceComponent implements OnDestroy, OnIn
       }
     }
   }
-
-
 
   public onItemDetailClick(item: OGridItemDirective) {
     if (this.oenabled && this.detailMode === Codes.DETAIL_MODE_CLICK) {
@@ -409,8 +381,9 @@ export class OGridComponent extends OServiceComponent implements OnDestroy, OnIn
   }
 
   public showButtonNext() {
-    return this.dataArray.length < this.dataResponseArray.length
+    return this.dataArray.length < this.dataResponseArray.length;
   }
+
   protected saveDataNavigationInLocalStorage(): void {
     // Save data of the list in navigation-data in the localstorage
     OFormDataNavigation.storeNavigationData(this.injector, this.getKeysValues());
@@ -430,7 +403,6 @@ export class OGridComponent extends OServiceComponent implements OnDestroy, OnIn
     });
   }
 
-
   ngOnDestroy() {
     if (this.subscription) {
       this.subscription.unsubscribe();
@@ -446,6 +418,7 @@ export class OGridComponent extends OServiceComponent implements OnDestroy, OnIn
   nextData() {
     this.dataArray = this.dataArray.concat(this.dataResponseArray.slice(this.dataArray.length - 1, (this.dataArray.length + this.pageSize)));
   }
+
 }
 
 @NgModule({
