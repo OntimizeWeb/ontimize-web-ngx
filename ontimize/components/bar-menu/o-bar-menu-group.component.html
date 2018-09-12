@@ -1,7 +1,10 @@
 <div class="fake-li mat-primary" [class.fake-li-hover]="isHovered">
-  <mat-icon *ngIf="icon !== undefined" class="o-bar-menu-group-icon mat-24">{{ icon }}</mat-icon>
-  <label [attr.for]="id" class="toggle">{{ groupTitle | oTranslate }}</label>
-  <a class="o-bar-menu-group-title" >{{ groupTitle | oTranslate }}</a>
+
+  <label [attr.for]="id" class="toggle">
+    <mat-icon *ngIf="icon !== undefined" class="o-bar-menu-group-icon mat-24">{{ icon }}</mat-icon>
+    {{ groupTitle | oTranslate }}
+  </label>
+  <a class="o-bar-menu-group-title">{{ groupTitle | oTranslate }}</a>
   <input [attr.id]="id" type="checkbox" />
   <div class="fake-ul mat-primary mat-elevation-z4">
     <ng-content></ng-content>

@@ -3,13 +3,20 @@ import { CommonModule } from '@angular/common';
 import { AuthGuardService } from '../../services';
 import { OTranslateService } from '../../services';
 import { OSharedModule } from '../../shared';
+import { InputConverter } from '../../decorators/input-converter';
+import { AppMenuService, MenuRootItem } from '../../services/app-menu.service';
+import { OBarMenuItemModule } from './o-bar-menu-item.component';
+import { OBarMenuGroupModule } from './o-bar-menu-group.component';
+
 
 export const DEFAULT_INPUTS_O_BAR_MENU = [
   // title [string]: menu title. Default: no value.
   'menuTitle: title',
 
   // tooltip [string]: menu tooltip. Default: 'title' value.
-  'tooltip'
+  'tooltip',
+  // auto-menu [boolean]: If the component automatically creates or not a panel page based on the application menu configuration. Default: no.
+  'autoMenu:auto-menu'
 ];
 
 @Component({
@@ -17,14 +24,21 @@ export const DEFAULT_INPUTS_O_BAR_MENU = [
   templateUrl: './o-bar-menu.component.html',
   styleUrls: ['./o-bar-menu.component.scss'],
   inputs: DEFAULT_INPUTS_O_BAR_MENU,
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  host: {
+    '[class.o-bar-menu]': 'true'
+  }
+  
 })
 export class OBarMenuComponent {
 
   public static DEFAULT_INPUTS_O_BAR_MENU = DEFAULT_INPUTS_O_BAR_MENU;
-
+  @InputConverter()
+  autoMenu: boolean = true;
   protected authGuardService: AuthGuardService;
   protected translateService: OTranslateService;
+  private appMenuService: AppMenuService;
+  private menuRoots: MenuRootItem[];
 
   protected _menuTitle: string;
   protected _tooltip: string;
@@ -36,7 +50,10 @@ export class OBarMenuComponent {
     this.id = 'm_' + String((new Date()).getTime() + Math.random());
     this.authGuardService = this.injector.get(AuthGuardService);
     this.translateService = this.injector.get(OTranslateService);
+    this.appMenuService = this.injector.get(AppMenuService);
+    this.menuRoots = this.appMenuService.getMenuRoots();
   }
+
 
   public ngOnInit() {
 
@@ -49,6 +66,7 @@ export class OBarMenuComponent {
       });
       this.setDOMTitle();
     }
+    
   }
 
   setDOMTitle() {
@@ -76,6 +94,18 @@ export class OBarMenuComponent {
     return this.authGuardService;
   }
 
+  getValueOfAttr(menu: Object, attr: string) {
+    let valAttr = '';
+    if (menu.hasOwnProperty(attr)) {
+      valAttr = menu[attr];
+    }
+    return valAttr;
+  }
+
+  isMenuGroup(item:any):boolean{
+    return this.appMenuService.getMenuItemType(item) === 'group'
+  }
+
   get menuTitle(): string {
     return this._menuTitle;
   }
@@ -99,11 +129,17 @@ export class OBarMenuComponent {
   set id(val: string) {
     this._id = val;
   }
+
+  get barMenuItems():MenuRootItem[]{
+    return this.menuRoots;
+  }
+
+  
 }
 
 @NgModule({
   declarations: [OBarMenuComponent],
-  imports: [OSharedModule, CommonModule],
+  imports: [OSharedModule, CommonModule,OBarMenuItemModule, OBarMenuGroupModule, OBarMenuItemModule],
   exports: [OBarMenuComponent]
 })
 export class OBarMenuModule {

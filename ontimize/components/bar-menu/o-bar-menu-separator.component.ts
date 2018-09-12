@@ -1,7 +1,8 @@
-import { Component, Inject, forwardRef, NgModule, ViewEncapsulation } from '@angular/core';
+import { Component, ViewEncapsulation, NgModule } from '@angular/core';
+import { OSharedModule } from '../../shared/shared.module';
 import { CommonModule } from '@angular/common';
-import { OBarMenuModule, OBarMenuComponent } from './o-bar-menu.component';
-import { OSharedModule } from '../../shared';
+import { OBarMenuModule } from './o-bar-menu.component';
+
 
 @Component({
   selector: 'o-bar-menu-separator',
@@ -10,14 +11,8 @@ import { OSharedModule } from '../../shared';
   encapsulation: ViewEncapsulation.None
 })
 export class OBarMenuSeparatorComponent {
-
-  protected menu: OBarMenuComponent;
-
-  constructor( @Inject(forwardRef(() => OBarMenuComponent)) menu: OBarMenuComponent) {
-    this.menu = menu;
-  }
+  constructor() { }
 }
-
 @NgModule({
   declarations: [OBarMenuSeparatorComponent],
   imports: [OSharedModule, CommonModule, OBarMenuModule],
