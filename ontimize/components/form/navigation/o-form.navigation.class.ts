@@ -408,7 +408,7 @@ export class OFormNavigationClass {
 
   showConfirmDiscardChanges(): Promise<boolean> {
     let subscription: Promise<boolean> = undefined;
-    if (this.form.isInitialStateChanged()) {
+    if (this.form.isInitialStateChanged() && !this.form.isInInsertMode()) {
       subscription = this.dialogService.confirm('CONFIRM', 'MESSAGES.FORM_CHANGES_WILL_BE_LOST');
     }
     if (subscription === undefined) {
