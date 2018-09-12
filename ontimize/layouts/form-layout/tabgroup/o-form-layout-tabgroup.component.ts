@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation, Injector, ComponentFactoryResolver, ViewContainerRef, ViewChildren, QueryList, ViewChild, AfterViewInit, EventEmitter, OnDestroy } from '@angular/core';
+import { Component, ViewEncapsulation, Injector, ComponentFactoryResolver, ViewContainerRef, ViewChildren, QueryList, ViewChild, AfterViewInit, EventEmitter, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { MatTabGroup, MatTabChangeEvent } from '@angular/material';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
@@ -50,7 +50,8 @@ export class OFormLayoutTabGroupComponent implements AfterViewInit, OnDestroy {
   constructor(
     protected injector: Injector,
     protected componentFactoryResolver: ComponentFactoryResolver,
-    protected location: ViewContainerRef
+    protected location: ViewContainerRef,
+    private cd: ChangeDetectorRef
   ) {
     this.formLayoutManager = this.injector.get(OFormLayoutManagerComponent);
     this.router = this.injector.get(Router);
@@ -279,8 +280,10 @@ export class OFormLayoutTabGroupComponent implements AfterViewInit, OnDestroy {
     if (Util.isDefined(arg)) {
       this.showLoading = true;
     } else {
+      const self = this;
       setTimeout(() => {
-        this.showLoading = false;
+        self.showLoading = false;
+        self.cd.detectChanges();
       }, 1000);
     }
   }

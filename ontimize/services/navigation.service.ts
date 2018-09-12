@@ -135,29 +135,21 @@ export class NavigationService implements ILocalStorageComponent {
       if (!route || !route.url || route.routeConfig === null || !route.routeConfig.path) {
         continue;
       }
-      let text = '';
-      let modePathArr = [];
       const navData: ONavigationItem = navigationItems[navigationItems.length - 1];
-      let modePath = navData ? navData.getActiveModePath() : undefined;
-      if (modePath && modePath.length > 0) {
-        modePathArr = modePath.split('/');
-        const detailRoute = navData.getDetailFormRoute();
-        if (Util.isDefined(detailRoute)) {
-          url += url.length > 0 ? ('/' + detailRoute) : detailRoute;
+      const parsedRoute: any = this.parseRoute(url, route.url, navData);
+      url = parsedRoute.url;
+
+      if (storageData.length > 1 && parsedRoute.routeArr.length > 0) {
+        const lastStored: any = storageData[storageData.length - 1];
+        if (lastStored.url === url) {
+          const newItem = new ONavigationItem(lastStored);
+          navigationItems.push(newItem);
+          const parsed: any = this.parseRoute(url, parsedRoute.routeArr, newItem);
+          url = parsed.url;
+          parsedRoute.text = parsed.text;
         }
       }
-      for (let i = 0, len = route.url.length; i < len; i++) {
-        const s: UrlSegment = route.url[i];
-        if (modePathArr.indexOf(s.path) === -1) {
-          text += text.length > 0 ? ('/' + s.path) : s.path;
-          url += url.length > 0 ? ('/' + s.path) : s.path;
-          break;
-        }
-      }
-      let activeMode = navData ? navData.activeFormMode : undefined;
-      if (modePath && modePath.length > 0 && (activeMode === 'editFormRoute') || (activeMode === 'insertFormRoute')) {
-        url += url.length > 0 ? ('/' + modePath) : modePath;
-      }
+
       let formRoutes = undefined;
       if (navData && navData.formLayoutRoutes) {
         formRoutes = Object.assign({}, navData.formLayoutRoutes);
@@ -165,7 +157,7 @@ export class NavigationService implements ILocalStorageComponent {
       const navigationItem = new ONavigationItem({
         url: url,
         queryParams: route.queryParams,
-        text: text,
+        text: parsedRoute.text,
         formRoutes: formRoutes,
         activeFormMode: formRoutes ? (navData && navData.activeFormMode) : undefined
       });
@@ -176,6 +168,39 @@ export class NavigationService implements ILocalStorageComponent {
       navigationItems[navigationItems.length - 1].terminal = true;
     }
     this.setNavigationItems(navigationItems);
+  }
+
+
+  protected parseRoute(url: string, routeSegments: UrlSegment[], navData: ONavigationItem): any {
+    let text = '';
+    let modePathArr = [];
+    let modePath = navData ? navData.getActiveModePath() : undefined;
+    if (modePath && modePath.length > 0) {
+      modePathArr = modePath.split('/');
+      const detailRoute = navData.getDetailFormRoute();
+      if (Util.isDefined(detailRoute)) {
+        url += url.length > 0 ? ('/' + detailRoute) : detailRoute;
+      }
+    }
+    let routeArr = [];
+    for (let i = 0, len = routeSegments.length; i < len; i++) {
+      const s: UrlSegment = routeSegments[i];
+      if (modePathArr.indexOf(s.path) === -1 && text.length === 0) {
+        text = text.length > 0 ? ('/' + s.path) : s.path;
+        url += url.length > 0 ? ('/' + s.path) : s.path;
+      } else {
+        routeArr.push(s);
+      }
+    }
+    let activeMode = navData ? navData.activeFormMode : undefined;
+    if (modePath && modePath.length > 0 && (activeMode === 'editFormRoute') || (activeMode === 'insertFormRoute')) {
+      url += url.length > 0 ? ('/' + modePath) : modePath;
+    }
+    return {
+      url: url,
+      text: text,
+      routeArr: routeArr
+    };
   }
 
   public setNavigationItems(navigationItems: Array<ONavigationItem>) {
@@ -259,10 +284,10 @@ export class NavigationService implements ILocalStorageComponent {
     let storageData: any = this.localStorageService.getComponentStorage(this, false);
     let result = [];
     Object.keys(storageData).forEach(key => result.push(storageData[key]));
-    return result.length ? result : undefined;
+    return result;
   }
 
-  getPreviousRouteData(): ONavigationItem {
+  getPreviousRouteData(pop: boolean = false): ONavigationItem {
     let result: ONavigationItem;
     const len = this.navigationItems.length;
     if (len >= 2) {
@@ -273,6 +298,10 @@ export class NavigationService implements ILocalStorageComponent {
           result = parent;
         }
       }
+    }
+    if (pop) {
+      this.navigationItems.pop();
+      this.storeNavigation();
     }
     return result;
   }
