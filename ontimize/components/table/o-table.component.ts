@@ -647,7 +647,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   registerQuickFilter(arg: OTableQuickfilterComponent) {
     this.oTableQuickFilterComponent = arg;
-    // this.oTableQuickFilterComponent.setValue(this.state['filter']);
+    this.oTableQuickFilterComponent.setValue(this.state['filter'], false);
   }
 
   registerPagination(value: OTablePaginatorComponent) {
