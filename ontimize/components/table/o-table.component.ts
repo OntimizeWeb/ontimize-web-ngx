@@ -401,7 +401,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   protected tabContainer: MatTab;
   tabGroupChangeSubscription: Subscription;
 
-  protected pendingQuery: boolean = true;
+  protected pendingQuery: boolean = false;
   protected pendingQueryFilter = undefined;
 
   protected setStaticData: boolean = false;
@@ -870,7 +870,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
             if (self.tabGroupChangeSubscription) {
               self.tabGroupChangeSubscription.unsubscribe();
             }
-            if (self.pendingQuery && self.queryOnInit) {
+            if (self.pendingQuery) {
               self.queryData(self.pendingQueryFilter);
             }
           }
