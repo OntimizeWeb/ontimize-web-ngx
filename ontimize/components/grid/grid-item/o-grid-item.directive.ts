@@ -2,6 +2,7 @@ import { Directive, ElementRef, EventEmitter, HostListener, Renderer } from '@an
 import { Codes, ObservableWrapper } from '../../../utils';
 import { OGridComponent } from '../o-grid.component';
 
+
 @Directive({
   selector: 'mat-grid-tile',
   host: {
@@ -16,11 +17,12 @@ export class OGridItemDirective {
   modelData: Object;
 
   protected grid: OGridComponent;
+ 
 
   @HostListener('mouseenter')
   onMouseEnter() {
     if (this.grid.detailMode !== Codes.DETAIL_MODE_NONE) {
-      this.renderer.setElementStyle(this._el.nativeElement, 'cursor', 'pointer');
+    this.renderer.setElementStyle(this._el.nativeElement, 'cursor', 'pointer');
     }
   }
 
@@ -28,6 +30,7 @@ export class OGridItemDirective {
     public _el: ElementRef,
     private renderer: Renderer
   ) { }
+
 
   public onClick(onNext: (item: OGridItemDirective) => void): Object {
     return ObservableWrapper.subscribe(this.mdClick, onNext);
@@ -39,10 +42,10 @@ export class OGridItemDirective {
 
   onItemClicked(e?: Event) {
     ObservableWrapper.callEmit(this.mdClick, this);
-
+    
   }
   onItemDoubleClicked(e?: Event) {
-    ObservableWrapper.callEmit(this.mdDoubleClick, this);
+      ObservableWrapper.callEmit(this.mdDoubleClick, this);
   }
 
   setItemData(data) {

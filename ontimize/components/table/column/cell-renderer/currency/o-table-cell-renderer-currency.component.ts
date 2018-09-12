@@ -1,8 +1,7 @@
 
-import { Component, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
-
+import { Component, Injector, ViewChild, TemplateRef } from '@angular/core';
+import { OCurrencyPipe, ICurrencyPipeArgument } from '../../../../../pipes';
 import { CurrencyService } from '../../../../../services';
-import { ICurrencyPipeArgument, OCurrencyPipe } from '../../../../../pipes';
 import { OBaseTableCellRenderer } from '../o-base-table-cell-renderer.class';
 import { OTableCellRendererRealComponent } from '../real/o-table-cell-renderer-real.component';
 
@@ -14,6 +13,7 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_CURRENCY = [
 
   // currency-symbol-position [left|right]: position of the currency symbol. Default: left.
   'currencySymbolPosition: currency-symbol-position'
+
 ];
 
 @Component({
@@ -21,7 +21,8 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_CURRENCY = [
   templateUrl: './o-table-cell-renderer-currency.component.html',
   inputs: DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_CURRENCY
 })
-export class OTableCellRendererCurrencyComponent extends OBaseTableCellRenderer implements OnInit {
+
+export class OTableCellRendererCurrencyComponent extends OBaseTableCellRenderer {
 
   public static DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_CURRENCY = DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_CURRENCY;
 
@@ -31,7 +32,9 @@ export class OTableCellRendererCurrencyComponent extends OBaseTableCellRenderer 
   protected decimalDigits: number = 2;
   protected grouping: boolean = true;
   protected thousandSeparator: string = ',';
+
   protected currencyService: CurrencyService;
+
   protected componentPipe: OCurrencyPipe;
   protected pipeArguments: ICurrencyPipeArgument;
   @ViewChild('templateref', { read: TemplateRef }) public templateref: TemplateRef<any>;
@@ -43,11 +46,14 @@ export class OTableCellRendererCurrencyComponent extends OBaseTableCellRenderer 
     this.setComponentPipe();
   }
 
+
   setComponentPipe() {
     this.componentPipe = new OCurrencyPipe(this.injector);
   }
-
+  
   ngOnInit() {
+    //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
+    //Add 'implements OnInit' to the class.
     if (typeof this.currencySymbol === 'undefined') {
       this.currencySymbol = this.currencyService.symbol;
     }
@@ -63,5 +69,4 @@ export class OTableCellRendererCurrencyComponent extends OBaseTableCellRenderer 
       thousandSeparator: this.thousandSeparator
     };
   }
-
 }

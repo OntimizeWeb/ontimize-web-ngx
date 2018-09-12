@@ -1,7 +1,6 @@
-import { Component, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
-
+import { Component, ViewChild, TemplateRef, Injector } from '@angular/core';
 import { InputConverter } from '../../../../../decorators';
-import { IIntegerPipeArgument, OIntegerPipe } from '../../../../../pipes';
+import { OIntegerPipe, IIntegerPipeArgument } from '../../../../../pipes';
 import { OBaseTableCellRenderer } from '../o-base-table-cell-renderer.class';
 
 export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_INTEGER = [
@@ -16,7 +15,7 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_INTEGER = [
   templateUrl: './o-table-cell-renderer-integer.component.html',
   inputs: DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_INTEGER
 })
-export class OTableCellRendererIntegerComponent extends OBaseTableCellRenderer implements OnInit {
+export class OTableCellRendererIntegerComponent extends OBaseTableCellRenderer {
 
   public static DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_INTEGER = DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_INTEGER;
 
@@ -45,8 +44,9 @@ export class OTableCellRendererIntegerComponent extends OBaseTableCellRenderer i
     };
   }
 
-  ngAfterContentInit() {
+  ngAfterContentInit(){
     super.ngAfterContentInit();
   }
+
 
 }

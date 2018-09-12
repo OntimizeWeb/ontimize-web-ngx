@@ -1,10 +1,11 @@
-import { Injector, PipeTransform, TemplateRef } from '@angular/core';
+import { Injector, OnInit, PipeTransform, TemplateRef } from '@angular/core';
 
 import { Util } from '../../../../utils';
 import { OTableComponent } from '../../o-table.component';
 import { OTableColumnComponent } from '../o-table-column.component';
 
 export class OBaseTableCellRenderer {
+
 
   public templateref: TemplateRef<any>;
 
@@ -16,23 +17,26 @@ export class OBaseTableCellRenderer {
   constructor(protected injector: Injector) {
     this.tableColumn = this.injector.get(OTableColumnComponent);
   }
-
+  
   ngAfterContentInit(): void {
     this.registerRenderer();
   }
-
   registerRenderer() {
     this.tableColumn.registerRenderer(this);
     if (!Util.isDefined(this.type) && Util.isDefined(this.tableColumn.type)) {
       this.type = this.tableColumn.type;
     }
   }
+ 
+
+  /** @deprecated */
+  initialize() {
+    //
+  }
 
   /**
-   * Returns the value displayed in the table cell
-   * @param cellvalue the table cell value
-   * @param rowvalue the table row value
-   */
+ * @param value data to render integer
+ */
   getCellData(cellvalue: any, rowvalue?: any) {
     let parsedValue: string;
     if (this.componentPipe && typeof this.pipeArguments !== 'undefined' && cellvalue !== undefined) {

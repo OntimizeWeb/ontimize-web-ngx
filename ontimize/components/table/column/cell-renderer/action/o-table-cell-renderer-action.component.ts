@@ -1,6 +1,5 @@
-import { Component, EventEmitter, Injector, TemplateRef, ViewChild } from '@angular/core';
-
-import { Codes, Util } from '../../../../../utils';
+import { Component, Injector, ViewChild, TemplateRef, EventEmitter } from '@angular/core';
+import { Util, Codes } from '../../../../../utils';
 import { OBaseTableCellRenderer } from '../o-base-table-cell-renderer.class';
 
 export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_ACTION = [
@@ -21,6 +20,7 @@ export const DEFAULT_OUTPUTS_O_TABLE_CELL_RENDERER_ACTION = [
   inputs: DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_ACTION,
   outputs: DEFAULT_OUTPUTS_O_TABLE_CELL_RENDERER_ACTION
 })
+
 export class OTableCellRendererActionComponent extends OBaseTableCellRenderer {
 
   public static DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_ACTION = DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_ACTION;
@@ -41,7 +41,7 @@ export class OTableCellRendererActionComponent extends OBaseTableCellRenderer {
     this.tableColumn.searchable = false;
   }
 
-  ngOnInit() {
+  ngOnInit() { 
     if (this.table) {
       const oCol = this.table.getOColumn(this.tableColumn.attr);
       oCol.title = undefined;
@@ -49,6 +49,7 @@ export class OTableCellRendererActionComponent extends OBaseTableCellRenderer {
     this.iconPosition = Util.parseIconPosition(this.iconPosition);
   }
 
+ 
   getCellData(value: any) {
     return value;
   }
@@ -89,5 +90,4 @@ export class OTableCellRendererActionComponent extends OBaseTableCellRenderer {
   isIconPositionRight() {
     return Util.isDefined(this.icon) && this.iconPosition === Codes.ICON_POSITION_RIGHT;
   }
-
 }

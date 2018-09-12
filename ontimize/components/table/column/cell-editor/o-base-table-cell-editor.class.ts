@@ -1,11 +1,10 @@
 import { Injector, EventEmitter, OnInit, HostListener } from '@angular/core';
 import { FormControl, ValidatorFn, Validators, FormGroup } from '@angular/forms';
-
+import { OTranslateService, SnackBarService } from '../../../../services';
 import { InputConverter } from '../../../../decorators';
 import { OTableComponent } from '../../o-table.component';
-import { ObservableWrapper, Util } from '../../../../utils';
 import { OTableColumnComponent } from '../o-table-column.component';
-import { OTranslateService, SnackBarService } from '../../../../services';
+import { Util, ObservableWrapper } from '../../../../utils';
 
 export class OBaseTableCellEditor implements OnInit {
 
@@ -73,6 +72,11 @@ export class OBaseTableCellEditor implements OnInit {
   ngOnInit(): void {
     this.createFormControl();
     this.registerEditor();
+  }
+
+  /** @deprecated */
+  initialize() {
+    //
   }
 
   protected handleKeyup(event: KeyboardEvent) {
@@ -243,5 +247,4 @@ export class OBaseTableCellEditor implements OnInit {
       this.snackBarService.open('MESSAGES.INSERTED', { icon: 'check_circle' });
     }
   }
-
 }
