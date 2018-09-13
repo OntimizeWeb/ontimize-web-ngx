@@ -41,7 +41,7 @@ export class OBreadcrumbComponent implements AfterViewInit, OnDestroy, OnInit {
   protected onDataLoadedSubscription: Subscription;
   protected navigationServiceSubscription: Subscription;
 
-  protected loaded: boolean = false;
+  protected _displayTextloaded: boolean = false;
 
   constructor(
     protected injector: Injector
@@ -57,6 +57,8 @@ export class OBreadcrumbComponent implements AfterViewInit, OnDestroy, OnInit {
 
     if (this.navigationService && this.navigationService.navigationEvents$) {
       this.navigationServiceSubscription = this.navigationService.navigationEvents$.subscribe(e => {
+        // setting loaded to false if the breadcrumb is inside a form (and later it will find its displayText)
+        self.displayTextloaded = !(self._formRef && self.labelColsArray.length);
         self.breadcrumbs = e;
       });
     }
@@ -69,14 +71,14 @@ export class OBreadcrumbComponent implements AfterViewInit, OnDestroy, OnInit {
         if (self.breadcrumbs.length) {
           let displayText = self.labelColsArray.map(element => value[element]).join(self.separator);
           self.breadcrumbs[self.breadcrumbs.length - 1].displayText = displayText;
-          self.loaded = true;
+          self.displayTextloaded = true;
         }
       });
     }
   }
 
-  showBreadcrumbItem(condition: boolean): boolean {
-    return this.loaded && condition;
+  showBreadcrumbItem(item: ONavigationItem): boolean {
+    return this.displayTextloaded && item.terminal;
   }
 
   isNotInsideFormLayoutManager(item: ONavigationItem, index: number): boolean {
@@ -105,6 +107,13 @@ export class OBreadcrumbComponent implements AfterViewInit, OnDestroy, OnInit {
     this.router.navigate([route.url], extras);
   }
 
+  get displayTextloaded(): boolean {
+    return this._displayTextloaded;
+  }
+
+  set displayTextloaded(arg: boolean) {
+    this._displayTextloaded = arg;
+  }
 }
 
 @NgModule({
