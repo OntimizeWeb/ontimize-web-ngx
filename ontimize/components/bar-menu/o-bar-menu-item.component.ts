@@ -11,7 +11,7 @@ import {
 } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { OBarMenuModule, OBarMenuComponent } from './o-bar-menu.component';
+import {  OBarMenuComponent } from './o-bar-menu.component';
 import { OTranslateService } from '../../services';
 import { OSharedModule } from '../../shared';
 import { CommonModule } from '@angular/common';
@@ -38,7 +38,10 @@ export const DEFAULT_INPUTS_O_BAR_MENU_ITEM = [
   templateUrl: './o-bar-menu-item.component.html',
   styleUrls: ['./o-bar-menu-item.component.scss'],
   inputs: DEFAULT_INPUTS_O_BAR_MENU_ITEM,
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  host: {
+    '[class.o-bar-menu-item]': 'true'
+  }
 })
 export class OBarMenuItemComponent implements OnInit {
 
@@ -163,7 +166,7 @@ export class OBarMenuItemComponent implements OnInit {
 
 @NgModule({
   declarations: [OBarMenuItemComponent],
-  imports: [OSharedModule, CommonModule, RouterModule, OBarMenuModule],
+  imports: [OSharedModule, CommonModule, RouterModule],
   exports: [OBarMenuItemComponent]
 })
 export class OBarMenuItemModule {

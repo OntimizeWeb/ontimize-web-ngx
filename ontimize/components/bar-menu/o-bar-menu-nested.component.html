@@ -1,0 +1,12 @@
+<ng-container *ngFor="let item of items">
+  <!--menu-group-->
+  <o-bar-menu-group *ngIf="isMenuGroup(item)" [title]="getValueOfAttr(item, 'name')" [tooltip]="getValueOfAttr(item, 'tooltip')"
+    [icon]="getValueOfAttr(item,'icon')">
+    <o-bar-menu-nested [items]=" item.items"> </o-bar-menu-nested>
+  </o-bar-menu-group>
+  <!--menu-item-->
+  <o-bar-menu-item *ngIf="!isMenuGroup(item)" [title]="getValueOfAttr(item,'name')" [tooltip]="getValueOfAttr(item, 'tooltip') "
+    [icon]="getValueOfAttr(item, 'icon') " [route]="getValueOfAttr(item, 'route') ">
+  </o-bar-menu-item>
+</ng-container>
+
