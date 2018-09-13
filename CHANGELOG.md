@@ -1,4 +1,4 @@
-## 3.0.2
+## 3.0.2 (2018-09-13)
 ### Features
 * **ontimize-ee.service**, **ontimize.service**: new response parsers methods (separately by each CRUD method) ([c8c9e6f](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c8c9e6f))
 * **o-table-dao**: new `updateQuery` method ([ad4f7ea](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ad4f7ea))
@@ -83,6 +83,7 @@
     * Internal CSS class `has-filter` has changed to `o-list-picker-has-filter`.
   * **o-table**: Internal CSS class `hidden-action-text` has been removed.
   * **o-form-toolbar**: Internal CSS class `toolbar-form-header` has changed to `o-form-toolbar-header`.
+* **OFormDataNavigation**: This internal class has been removed. You dont have to make any change unless you were overriding its use in the **o-form-navigation** component.
 
 ## 3.0.1 (2018-07-27)
 ### Features
