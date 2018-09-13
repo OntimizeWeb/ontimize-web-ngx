@@ -4,5 +4,4 @@ export * from './OFormValue';
 export * from './o-form-container.component';
 export * from './cache/o-form.cache.class';
 export * from './navigation/o-form-navigation.component';
-export * from './navigation/o-form.data.navigation.class';
 export * from './navigation/o-form.navigation.class';

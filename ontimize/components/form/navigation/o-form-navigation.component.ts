@@ -4,7 +4,6 @@ import { ONavigationItem, NavigationService } from '../../../services/navigation
 import { OFormLayoutManagerComponent } from '../../../layouts';
 import { Util, Codes } from '../../../utils';
 import { OFormComponent } from '../o-form.component';
-import { OFormDataNavigation } from './o-form.data.navigation.class';
 import { OFormNavigationClass } from './o-form.navigation.class';
 
 @Component({
@@ -21,7 +20,6 @@ export class OFormNavigationComponent implements OnDestroy {
   public navigationData: Array<any> = [];
   private _currentIndex = 0;
 
-  protected formDataNavigation: OFormDataNavigation;
   protected formNavigation: OFormNavigationClass;
   protected navigationService: NavigationService;
 
@@ -31,14 +29,16 @@ export class OFormNavigationComponent implements OnDestroy {
     private actRoute: ActivatedRoute
   ) {
     this.formNavigation = this._form.getFormNavigation();
-    this.formDataNavigation = new OFormDataNavigation(this.injector);
     this.navigationService = this.injector.get(NavigationService);
-    this.navigationData = this.formDataNavigation.getComponentStorage();
+    const navData = this.navigationService.getPreviousRouteData();
+    if (Util.isDefined(navData) && navData.keysValues) {
+      this.navigationData = navData.keysValues;
+    }
     this.currentIndex = this.getCurrentIndex();
   }
 
   ngOnDestroy(): void {
-    this.formDataNavigation.destroy();
+    //
   }
 
   getCurrentIndex(): number {
