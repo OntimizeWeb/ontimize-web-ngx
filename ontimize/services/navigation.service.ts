@@ -33,6 +33,7 @@ export class ONavigationItem {
     this.displayText = value['displayText'] ? value['displayText'] : '';
     this.formRoutes = value['formRoutes'];
     this.activeFormMode = value['activeFormMode'];
+    this.keysValues = value['keysValues'];
   }
 
   getActiveModePath(): string {
@@ -141,14 +142,17 @@ export class NavigationService implements ILocalStorageComponent {
       const parsedRoute: any = this.parseRoute(url, route.url, navData);
       url = parsedRoute.url;
 
-      if (storageData.length > 1 && parsedRoute.routeArr.length > 1) {
+      if (storageData.length > 1 && parsedRoute.routeArr.length > 0) {
         const lastStored: any = storageData[storageData.length - 1];
         if (lastStored.url === url) {
           const newItem = new ONavigationItem(lastStored);
-          navigationItems.push(newItem);
-          const parsed: any = this.parseRoute(url, parsedRoute.routeArr, newItem);
-          url = parsed.url;
-          parsedRoute.text = parsed.text;
+          const newItemActivePath = newItem.getActiveModePath();
+          if (!newItemActivePath || parsedRoute.routeArr.length > newItemActivePath.split('/').length) {
+            navigationItems.push(newItem);
+            const parsed: any = this.parseRoute(url, parsedRoute.routeArr, newItem);
+            url = parsed.url;
+            parsedRoute.text = parsed.text;
+          }
         }
       }
 
@@ -290,7 +294,7 @@ export class NavigationService implements ILocalStorageComponent {
     return result;
   }
 
-  getPreviousRouteData(pop: boolean = false): ONavigationItem {
+  getPreviousRouteData(): ONavigationItem {
     let result: ONavigationItem;
     const len = this.navigationItems.length;
     if (len >= 2) {
@@ -302,16 +306,17 @@ export class NavigationService implements ILocalStorageComponent {
         }
       }
     }
-    if (pop) {
-      this.navigationItems.pop();
-      this.storeNavigation();
-    }
     return result;
+  }
+
+  removeLastItem() {
+    this.navigationItems.pop();
+    this.storeNavigation();
   }
 
   getLastItem(): ONavigationItem {
     let result;
-    if (this.navigationItems.length >= 1) {
+    if (this.navigationItems.length > 0) {
       result = this.navigationItems[this.navigationItems.length - 1];
     }
     return result;
