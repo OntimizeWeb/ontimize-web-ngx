@@ -11,7 +11,6 @@ import { OBarMenuModule } from './o-bar-menu.component';
   encapsulation: ViewEncapsulation.None
 })
 export class OBarMenuSeparatorComponent {
-  constructor() { }
 }
 @NgModule({
   declarations: [OBarMenuSeparatorComponent],

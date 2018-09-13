@@ -6,19 +6,7 @@
     <div class="fake-ul mat-primary menu">
       <ng-content *ngIf="!autoMenu"></ng-content>
       <ng-container *ngIf="autoMenu">
-        <ng-container *ngFor="let menuGroup of barMenuItems">
-           <!--menu-group-->
-          <o-bar-menu-group *ngIf="isMenuGroup(menuGroup)" [title]="getValueOfAttr(menuGroup, 'name')" [tooltip]="getValueOfAttr(menuGroup, 'tooltip')"
-            [icon]="getValueOfAttr(menuGroup,'icon')" >
-            <o-bar-menu-item *ngFor="let menuItem of menuGroup.items" [title]="getValueOfAttr(menuItem,'name')" [tooltip]="getValueOfAttr(menuItem,'tooltip')"
-              [icon]="getValueOfAttr(menuItem,'icon')" [route]="getValueOfAttr(menuItem, 'route')">
-            </o-bar-menu-item>
-          </o-bar-menu-group>
-          <!--menu-item-->
-          <o-bar-menu-item *ngIf="!isMenuGroup(menuGroup)" [title]="getValueOfAttr(menuGroup,'name')" [tooltip]="getValueOfAttr(menuGroup, 'tooltip') "
-            [icon]="getValueOfAttr(menuGroup, 'icon') " [route]="getValueOfAttr(menuGroup, 'route') ">
-          </o-bar-menu-item>
-        </ng-container>
+        <o-bar-menu-nested [items]="menuItems"> </o-bar-menu-nested>
       </ng-container>
     </div>
   </nav>

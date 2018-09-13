@@ -7,6 +7,7 @@ import { InputConverter } from '../../decorators/input-converter';
 import { AppMenuService, MenuRootItem } from '../../services/app-menu.service';
 import { OBarMenuItemModule } from './o-bar-menu-item.component';
 import { OBarMenuGroupModule } from './o-bar-menu-group.component';
+import { OBarMenumNestedComponent } from './o-bar-menu-nested.component';
 
 
 export const DEFAULT_INPUTS_O_BAR_MENU = [
@@ -28,7 +29,6 @@ export const DEFAULT_INPUTS_O_BAR_MENU = [
   host: {
     '[class.o-bar-menu]': 'true'
   }
-  
 })
 export class OBarMenuComponent {
 
@@ -66,7 +66,7 @@ export class OBarMenuComponent {
       });
       this.setDOMTitle();
     }
-    
+
   }
 
   setDOMTitle() {
@@ -94,18 +94,6 @@ export class OBarMenuComponent {
     return this.authGuardService;
   }
 
-  getValueOfAttr(menu: Object, attr: string) {
-    let valAttr = '';
-    if (menu.hasOwnProperty(attr)) {
-      valAttr = menu[attr];
-    }
-    return valAttr;
-  }
-
-  isMenuGroup(item:any):boolean{
-    return this.appMenuService.getMenuItemType(item) === 'group'
-  }
-
   get menuTitle(): string {
     return this._menuTitle;
   }
@@ -130,16 +118,16 @@ export class OBarMenuComponent {
     this._id = val;
   }
 
-  get barMenuItems():MenuRootItem[]{
+  get menuItems(): MenuRootItem[] {
     return this.menuRoots;
   }
 
-  
+
 }
 
 @NgModule({
-  declarations: [OBarMenuComponent],
-  imports: [OSharedModule, CommonModule,OBarMenuItemModule, OBarMenuGroupModule, OBarMenuItemModule],
+  declarations: [OBarMenuComponent, OBarMenumNestedComponent],
+  imports: [OSharedModule, CommonModule, OBarMenuItemModule, OBarMenuGroupModule, OBarMenuItemModule],
   exports: [OBarMenuComponent]
 })
 export class OBarMenuModule {

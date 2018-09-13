@@ -2,13 +2,13 @@ import { Injector, Injectable } from '@angular/core';
 import { Codes } from '../utils';
 import { AppConfig } from '../config/app-config';
 
-export type MenuRootItem = (MenuGroup | MenuItemRoute | MenuItemAction | MenuItemLocale | MenuItemLogout | MenuItemUserInfo);
+export type MenuRootItem = (MenuGroup | MenuItemRoute | MenuItemAction | MenuItemLocale | MenuItemLogout | MenuItemUserInfo | MenuItem);
 
 export interface MenuGroup {
   id: string;
   name: string;
   icon?: string;
-  items: (MenuItemRoute | MenuItemAction | MenuItemLocale | MenuItemLogout | MenuItemUserInfo)[];
+  items: (MenuItemRoute | MenuItemAction | MenuItemLocale | MenuItemLogout | MenuItemUserInfo | MenuGroup | MenuItem)[];
   opened?: boolean;
   tooltip?: string;
 }
