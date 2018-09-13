@@ -3,7 +3,7 @@ import { Component, ContentChildren, ElementRef, EventEmitter, forwardRef, Injec
 import { MediaChange, ObservableMedia } from '@angular/flex-layout';
 import { RouterModule } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
-import { OFormDataNavigation, OSearchInputComponent, OSearchInputModule } from '../../components';
+import { OSearchInputComponent, OSearchInputModule } from '../../components';
 import { InputConverter } from '../../decorators';
 import { OntimizeService } from '../../services';
 import { dataServiceFactory } from '../../services/data-service.provider';
@@ -349,7 +349,7 @@ export class OGridComponent extends OServiceComponent implements OnDestroy, OnIn
   get sortColumnsArray(): Array<string> {
     let columns = this.columns.split(SEPARATOR_COLUMNS);
     if (this.sortableColumns) {
-      return this.sortableColumns.split(SEPARATOR_COLUMNS)
+      return this.sortableColumns.split(SEPARATOR_COLUMNS);
     }
     return columns;
   }
@@ -388,25 +388,6 @@ export class OGridComponent extends OServiceComponent implements OnDestroy, OnIn
 
   public showButtonNext() {
     return this.dataArray.length < this.dataResponseArray.length;
-  }
-
-  protected saveDataNavigationInLocalStorage(): void {
-    // Save data of the list in navigation-data in the localstorage
-    OFormDataNavigation.storeNavigationData(this.injector, this.getKeysValues());
-  }
-
-  protected getKeysValues(): any[] {
-    let data = this.dataArray;
-    const self = this;
-    return data.map((row) => {
-      let obj = {};
-      self.keysArray.map((key) => {
-        if (row[key] !== undefined) {
-          obj[key] = row[key];
-        }
-      });
-      return obj;
-    });
   }
 
   ngOnDestroy() {

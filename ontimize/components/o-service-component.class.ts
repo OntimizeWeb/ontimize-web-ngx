@@ -288,7 +288,7 @@ export class OServiceComponent extends OServiceBaseComponent {
       }
     }
     if (result.length) {
-      this.storeNavigationFormRoutes(modeRoute);
+      this.storeNavigationFormRoutes(modeRoute, this.getKeysValues());
       if (this.formLayoutManager && !this.formLayoutManager.isMainComponent(this)) {
         var activeRoute = this.formLayoutManager.getRouteOfActiveItem();
         if (activeRoute && activeRoute.length > 0) {
@@ -388,13 +388,31 @@ export class OServiceComponent extends OServiceBaseComponent {
     return filter;
   }
 
-  protected storeNavigationFormRoutes(activeFormMode: string) {
+  protected storeNavigationFormRoutes(activeFormMode: string, keysValues: any = undefined) {
     const mainFormLayoutComp = this.formLayoutManager ? Util.isDefined(this.formLayoutManager.isMainComponent(this)) : undefined;
     this.navigationService.storeFormRoutes({
       mainFormLayoutManagerComponent: mainFormLayoutComp,
       detailFormRoute: this.detailFormRoute,
       editFormRoute: this.editFormRoute,
       insertFormRoute: Util.isDefined(this.insertFormRoute) ? this.insertFormRoute : Codes.DEFAULT_INSERT_ROUTE
-    }, activeFormMode);
+    }, activeFormMode, keysValues);
+  }
+
+  protected saveDataNavigationInLocalStorage(): void {
+    // Save data of the list in navigation-data in the localstorage
+  }
+
+  protected getKeysValues(): any[] {
+    let data = this.dataArray;
+    const self = this;
+    return data.map((row) => {
+      let obj = {};
+      self.keysArray.map((key) => {
+        if (row[key] !== undefined) {
+          obj[key] = row[key];
+        }
+      });
+      return obj;
+    });
   }
 }

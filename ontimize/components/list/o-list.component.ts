@@ -10,7 +10,6 @@ import { OntimizeService } from '../../services';
 import { InputConverter } from '../../decorators';
 import { ObservableWrapper } from '../../util/async';
 import { OFormComponent } from '../form/o-form.component';
-import { OFormDataNavigation } from '../form/form-components';
 import { OQueryDataArgs, ServiceUtils } from '../service.utils';
 import { OServiceComponent } from '../o-service-component.class';
 import { FilterExpressionUtils } from '../filter-expression.utils';
@@ -279,23 +278,8 @@ export class OListComponent extends OServiceComponent implements AfterContentIni
   }
 
   protected saveDataNavigationInLocalStorage(): void {
-    // Save data of the list in navigation-data in the localstorage
-    OFormDataNavigation.storeNavigationData(this.injector, this.getKeysValues());
+    super.saveDataNavigationInLocalStorage();
     this.storePaginationState = true;
-  }
-
-  protected getKeysValues(): any[] {
-    let data = this.dataArray;
-    const self = this;
-    return data.map((row) => {
-      let obj = {};
-      self.keysArray.map((key) => {
-        if (row[key] !== undefined) {
-          obj[key] = row[key];
-        }
-      });
-      return obj;
-    });
   }
 
   getDataToStore(): Object {

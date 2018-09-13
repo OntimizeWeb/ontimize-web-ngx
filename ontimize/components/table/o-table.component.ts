@@ -25,7 +25,6 @@ import { ISQLOrder, OQueryDataArgs, ServiceUtils } from '../service.utils';
 import { IOContextMenuContext } from '../contextmenu/o-context-menu.service';
 import { FilterExpressionUtils, IExpression } from '../filter-expression.utils';
 import { OContextMenuComponent } from '../contextmenu/o-context-menu-components';
-import { OFormDataNavigation } from './../form/navigation/o-form.data.navigation.class';
 import { OTableContextMenuComponent } from './extensions/contextmenu/o-table-context-menu.component';
 import { OperatorFunction, OTableColumnCalculatedComponent } from './column/calculated/o-table-column-calculated.component';
 
@@ -1244,9 +1243,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
   }
 
-  private saveDataNavigationInLocalStorage() {
-    // Save data of the table in navigation-data in the localstorage
-    OFormDataNavigation.storeNavigationData(this.injector, this.getKeysValues());
+  protected saveDataNavigationInLocalStorage() {
+    super.saveDataNavigationInLocalStorage();
     this.storePaginationState = true;
   }
 
