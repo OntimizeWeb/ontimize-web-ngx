@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRouteSnapshot, Router, RouterModule } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 
+import { Codes } from '../../utils';
 import { OSharedModule } from '../../shared';
 import { NavigationService, OFormComponent, ONavigationItem, Util } from '../../../index';
 
@@ -37,8 +38,10 @@ export class OBreadcrumbComponent implements AfterViewInit, OnDestroy, OnInit {
   protected _formRef: OFormComponent;
   protected labelColsArray: Array<string> = [];
   protected navigationService: NavigationService;
-  protected onFormDataLoadedSubscription: Subscription;
+  protected onDataLoadedSubscription: Subscription;
   protected navigationServiceSubscription: Subscription;
+
+  protected _displayTextloaded: boolean = false;
 
   constructor(
     protected injector: Injector
@@ -48,29 +51,39 @@ export class OBreadcrumbComponent implements AfterViewInit, OnDestroy, OnInit {
   }
 
   ngOnInit() {
-    let self = this;
+    const self = this;
 
     this.labelColsArray = Util.parseArray(this.labelColumns);
 
     if (this.navigationService && this.navigationService.navigationEvents$) {
-      this.navigationServiceSubscription = this.navigationService.navigationEvents$
-        .subscribe(e => self.breadcrumbs = e);
+      this.navigationServiceSubscription = this.navigationService.navigationEvents$.subscribe(e => {
+        // setting loaded to false if the breadcrumb is inside a form (and later it will find its displayText)
+        self.displayTextloaded = !(self._formRef && self.labelColsArray.length);
+        self.breadcrumbs = e;
+      });
     }
   }
 
   ngAfterViewInit() {
     if (this._formRef && this.labelColsArray.length) {
       let self = this;
-      this.onFormDataLoadedSubscription = this._formRef.onFormDataLoaded.subscribe(
-        (value: any) => {
-          if (self.breadcrumbs.length) {
-            let displayText = self.labelColsArray.map(element => value[element]).join(self.separator);
-            self.breadcrumbs[self.breadcrumbs.length - 1].displayText = displayText;
-            self.navigationService.setNavigationItems(self.breadcrumbs);
-          }
+      this.onDataLoadedSubscription = this._formRef.onDataLoaded.subscribe((value: any) => {
+        if (self.breadcrumbs.length) {
+          let displayText = self.labelColsArray.map(element => value[element]).join(self.separator);
+          self.breadcrumbs[self.breadcrumbs.length - 1].displayText = displayText;
+          self.displayTextloaded = true;
         }
-      );
+      });
     }
+  }
+
+  showBreadcrumbItem(item: ONavigationItem): boolean {
+    return this.displayTextloaded && item.terminal;
+  }
+
+  isNotInsideFormLayoutManager(item: ONavigationItem, index: number): boolean {
+    const previousItem: ONavigationItem = this.breadcrumbs[index - 1];
+    return (previousItem && previousItem.isMainFormLayoutManagerComponent());
   }
 
   protected isTerminal(route: ActivatedRouteSnapshot) {
@@ -78,14 +91,29 @@ export class OBreadcrumbComponent implements AfterViewInit, OnDestroy, OnInit {
   }
 
   ngOnDestroy() {
-    if (this.onFormDataLoadedSubscription) {
-      this.onFormDataLoadedSubscription.unsubscribe();
+    if (this.onDataLoadedSubscription) {
+      this.onDataLoadedSubscription.unsubscribe();
     }
     if (this.navigationServiceSubscription) {
       this.navigationServiceSubscription.unsubscribe();
     }
   }
 
+  onRouteClick(route) {
+    let extras = {};
+    if (route.queryParams) {
+      extras[Codes.QUERY_PARAMS] = route.queryParams;
+    }
+    this.router.navigate([route.url], extras);
+  }
+
+  get displayTextloaded(): boolean {
+    return this._displayTextloaded;
+  }
+
+  set displayTextloaded(arg: boolean) {
+    this._displayTextloaded = arg;
+  }
 }
 
 @NgModule({

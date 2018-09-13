@@ -1,10 +1,6 @@
-import {
-  Injector,
-  ElementRef,
-  Renderer,
-  EventEmitter
-} from '@angular/core';
+import { ElementRef, EventEmitter, Injector, Renderer } from '@angular/core';
 
+import { Util } from '../../../util/util';
 import { OListItemComponent } from '../list-item/o-list-item.component';
 
 export const DEFAULT_INPUTS_O_TEXT_RENDERER = [
@@ -30,17 +26,13 @@ export class OListItemTextRenderer {
   protected _icon: string;
 
   onIconClick: EventEmitter<Object> = new EventEmitter<Object>();
-  /* end of inputs variables */
-
-  has3Lines: boolean = true;
 
   constructor(
     public elRef: ElementRef,
     protected _renderer: Renderer,
     protected _injector: Injector,
     protected _listItem: OListItemComponent
-  ) {
-  }
+  ) { }
 
   modifyMatListItemElement() {
     if (this.elRef.nativeElement && this.elRef.nativeElement.parentElement) {
@@ -56,14 +48,16 @@ export class OListItemTextRenderer {
         if (this.secondaryText === undefined) {
           linesNo--;
         }
-        this.has3Lines = (linesNo === 3);
         listItem.classList.add('mat-' + linesNo + '-line');
         listItem.querySelector('.mat-list-text').remove();
       }
     }
   }
 
-  onActionIconClick(event: any) {
+  onActionIconClick(e?: Event) {
+    if (Util.isDefined(e)) {
+      e.stopPropagation();
+    }
     this.onIconClick.emit(event);
   }
 
@@ -98,4 +92,5 @@ export class OListItemTextRenderer {
   set icon(val: string) {
     this._icon = val;
   }
+
 }

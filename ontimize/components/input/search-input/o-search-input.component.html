@@ -1,10 +1,8 @@
-<form #innerForm [formGroup]="getFormGroup()" fxFill>
-  <div fxLayout="row" fxLayoutAlign="space-between center" fxFill fxLayoutAlign="space-between center">
-    <span class="icon-btn">
-      <mat-icon svgIcon="ontimize:search"></mat-icon>
-    </span>
+<form [formGroup]="getFormGroup()">
+  <div fxLayout="row" fxLayoutAlign="space-between center">
+    <mat-icon svgIcon="ontimize:search"></mat-icon>
     <mat-form-field [class.custom-width]="hasCustomWidth">
-      <input matInput class="mat-input" #term type="search" id="term" fxFill [placeholder]="placeHolder" formControlName="term">
+      <input #term matInput id="term" type="search" [placeholder]="placeHolder" formControlName="term">
     </mat-form-field>
   </div>
 </form>

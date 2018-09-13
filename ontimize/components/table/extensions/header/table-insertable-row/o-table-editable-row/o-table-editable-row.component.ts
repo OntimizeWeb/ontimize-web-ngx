@@ -162,9 +162,9 @@ export class OTableEditableRowComponent {
 
   protected getAttributesValuesToInsert(): Object {
     let attrValues = {};
-    // let filter = this.table.getFilterUsingParentKeys(this.table.parentItem);
-
-    // columns with no editor defined
+    if (this.insertableRowTable.includeParentKeys) {
+      attrValues = this.table.getParentKeysValues();
+    }
     Object.keys(this.controls).forEach((controlKey) => {
       attrValues[controlKey] = this.controls[controlKey].value;
     });
@@ -199,19 +199,21 @@ export class OTableEditableRowComponent {
   }
 
   useCellEditor(column: OColumn): boolean {
-    return this._insertableRowTable.isColumnInsertable(column) && Util.isDefined(column.editor);
+    return this._insertableRowTable.isColumnInsertable(column) && Util.isDefined(this.columnEditors[column.attr]);
   }
 
   initializeEditors(): void {
     const self = this;
     this.table.oTableOptions.columns.forEach(col => {
-      if (self.useCellEditor(col)) {
-        const columnEditorType = col.editor.type || col.type;
+      if (self._insertableRowTable.isColumnInsertable(col)) {
+        const columnEditorType = col.editor ? col.editor.type : col.type;
         const editor: OBaseTableCellEditor = this.tableColumn.buildCellEditor(columnEditorType, this.resolver, this.container, col.editor);
         this.columnEditors[col.attr] = editor;
         editor.registerInColumn = false;
         editor.showPlaceHolder = this._insertableRowTable.showPlaceHolder || editor.showPlaceHolder;
-        editor.tableColumn = col.editor.tableColumn;
+        editor.table = self.table;
+        editor.tableColumnAttr = col.attr;
+        editor.tableColumn = col.editor ? col.editor.tableColumn : col.definition;
         editor.orequired = this.isColumnRequired(col);
         editor.formControl = this.getControl(col);
         editor.controlArgs = { silent: true };

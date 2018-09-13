@@ -1,12 +1,13 @@
 <div fxLayout="row" fxLayoutAlign="space-between center" [formGroup]="getFormGroup()" [matTooltip]="tooltip" [matTooltipPosition]="tooltipPosition"
   [matTooltipShowDelay]="tooltipShowDelay" class="custom-error o-list-picker-content">
-  <input #inputModel class="input-model" type="text" [attr.id]="getAttribute()" [id]="getAttribute()" [formControlName]="getAttribute()"
-    [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)">
+  <input #inputModel class="input-model" type="text" [id]="getAttribute()" [formControlName]="getAttribute()" [ngModel]="getValue()"
+    (ngModelChange)="innerOnChange($event)">
 
   <mat-form-field [class.custom-width]="hasCustomWidth" class="icon-field" #innerInputContainer fxFlexFill>
-    <input matInput type="text" [attr.id]="'desc_' + getAttribute()" [id]="'desc_' + getAttribute()" [placeholder]="placeHolder"
+    <input #visibleInput matInput type="text" [attr.id]="'desc_' + getAttribute()" [id]="'desc_' + getAttribute()" [placeholder]="placeHolder"
       [value]="getDescriptionValue()" (input)="onVisibleInputChange($event)" (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)"
-      [readonly]="isReadOnly" [formControlName]="getAttribute()" [required]="isRequired" #visibleInput (keydown.enter)="onKeydownEnter(visibleInput.value)">
+      [readonly]="isReadOnly || !textInputEnabled" [formControlName]="getAttribute()" [required]="isRequired" (keydown.enter)="onKeydownEnter(visibleInput.value)"
+      (click)="onClickInput($event)">
 
     <button [disabled]="isReadOnly || isDisabled" [class.read-only]="isReadOnly" matSuffix mat-icon-button (click)="onClickListpicker($event)">
       <mat-icon svgIcon="ontimize:search"></mat-icon>
@@ -17,5 +18,6 @@
     </button>
 
     <mat-error *ngIf="hasError('required')">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</mat-error>
+    <mat-error *ngFor="let oError of getActiveOErrors()"> {{ oError.text | oTranslate }} </mat-error>
   </mat-form-field>
 </div>

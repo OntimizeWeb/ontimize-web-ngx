@@ -1,5 +1,6 @@
-import { Component, Injector, ViewChild, TemplateRef, EventEmitter } from '@angular/core';
-import { Util, Codes } from '../../../../../utils';
+import { Component, EventEmitter, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
+
+import { Codes, Util } from '../../../../../utils';
 import { OBaseTableCellRenderer } from '../o-base-table-cell-renderer.class';
 
 export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_ACTION = [
@@ -20,8 +21,7 @@ export const DEFAULT_OUTPUTS_O_TABLE_CELL_RENDERER_ACTION = [
   inputs: DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_ACTION,
   outputs: DEFAULT_OUTPUTS_O_TABLE_CELL_RENDERER_ACTION
 })
-
-export class OTableCellRendererActionComponent extends OBaseTableCellRenderer {
+export class OTableCellRendererActionComponent extends OBaseTableCellRenderer implements OnInit {
 
   public static DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_ACTION = DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_ACTION;
   public static DEFAULT_OUTPUTS_O_TABLE_CELL_RENDERER_ACTION = DEFAULT_OUTPUTS_O_TABLE_CELL_RENDERER_ACTION;
@@ -42,7 +42,6 @@ export class OTableCellRendererActionComponent extends OBaseTableCellRenderer {
   }
 
   ngOnInit() {
-    super.ngOnInit();
     if (this.table) {
       const oCol = this.table.getOColumn(this.tableColumn.attr);
       oCol.title = undefined;
@@ -61,10 +60,10 @@ export class OTableCellRendererActionComponent extends OBaseTableCellRenderer {
     }
     if (Util.isDefined(this.action)) {
       switch (this.action.toLowerCase()) {
-        case Codes.DEFAULT_DETAIL_ROUTE:
+        case 'detail':
           this.table.viewDetail(rowData);
           break;
-        case Codes.DEFAULT_EDIT_ROUTE:
+        case 'edit':
           this.table.editDetail(rowData);
           break;
         default:
@@ -90,4 +89,5 @@ export class OTableCellRendererActionComponent extends OBaseTableCellRenderer {
   isIconPositionRight() {
     return Util.isDefined(this.icon) && this.iconPosition === Codes.ICON_POSITION_RIGHT;
   }
+
 }

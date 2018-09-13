@@ -1,6 +1,6 @@
 import { Component, NgModule, OnInit, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormControl, ValidatorFn } from '@angular/forms';
+import { FormControl, ValidatorFn, ValidationErrors } from '@angular/forms';
 
 import { Util } from '../../../util/util';
 import { OSharedModule } from '../../../shared';
@@ -81,7 +81,7 @@ export class ORealInputComponent extends OIntegerInputComponent implements OnIni
     return validators;
   }
 
-  protected minDecimalDigitsValidator(control: FormControl) {
+  protected minDecimalDigitsValidator(control: FormControl): ValidationErrors {
     let ctrlValue: string = control.value;
     if (typeof control.value === 'number') {
       ctrlValue = ctrlValue.toString();
@@ -99,7 +99,7 @@ export class ORealInputComponent extends OIntegerInputComponent implements OnIni
     return {};
   }
 
-  protected maxDecimalDigitsValidator(control: FormControl) {
+  protected maxDecimalDigitsValidator(control: FormControl): ValidationErrors {
     let ctrlValue: string = control.value;
     if (typeof control.value === 'number') {
       ctrlValue = ctrlValue.toString();

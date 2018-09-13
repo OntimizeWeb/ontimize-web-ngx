@@ -47,7 +47,7 @@ export class OBaseComponent implements IComponent {
   }
 
   get placeHolder(): string {
-    if (this._placeholder !== undefined && this._placeholder !== null && this.translateService) {
+    if (Util.isDefined(this._placeholder) && this.translateService) {
       return this.translateService.get(this._placeholder);
     }
     return this._placeholder;
@@ -58,7 +58,7 @@ export class OBaseComponent implements IComponent {
   }
 
   get tooltip(): string {
-    if (this._tooltip !== undefined && this._tooltip !== null && this.translateService) {
+    if (Util.isDefined(this._tooltip) && this.translateService) {
       return this.translateService.get(this._tooltip);
     }
     return this._tooltip;
@@ -89,6 +89,10 @@ export class OBaseComponent implements IComponent {
   }
 
   set isReadOnly(value: boolean) {
+    this.setIsReadOnly(value);
+  }
+
+  protected setIsReadOnly(value: boolean) {
     // only modifiyng read only state if the component has not its own read-only input
     if (Util.isDefined(this.readOnly)) {
       return;

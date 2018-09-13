@@ -1,28 +1,17 @@
-import { Injector } from '@angular/core';
 import { MatDateFormats } from '@angular/material';
 
-export let MOMENT_DATE_DEFAULT_FORMATS: MatDateFormats = {
-  parse: { dateInput: 'L' },
-  display: { dateInput: 'L', monthYearLabel: 'Y', dateA11yLabel: 'LL', monthYearA11yLabel: 'MMMM Y' }
-};
+export class OntimizeMatDateFormats {
 
-export class MomentDateFormats {
-  constructor(protected formats?: MatDateFormats) {
-  }
-  getFormats(): MatDateFormats {
-    return this.formats;
-  }
-}
+  protected DEFAULT_DATE_FORMATS: MatDateFormats = {
+    parse: { dateInput: 'L' },
+    display: { dateInput: 'L', monthYearLabel: 'Y', dateA11yLabel: 'LL', monthYearA11yLabel: 'MMMM Y' }
+  };
 
-export class MatDateFormatsFactory {
-  defaultFormats: MatDateFormats = MOMENT_DATE_DEFAULT_FORMATS;
-  constructor(protected injector: Injector) {
-  }
   public factory(): any {
-    return new MomentDateFormats(this.defaultFormats).getFormats();
+    return this.DEFAULT_DATE_FORMATS;
   }
 }
 
-export function matDateFormatsFactory(injector: Injector) {
-  return new MatDateFormatsFactory(injector).factory();
+export function dateFormatFactory() {
+  return new OntimizeMatDateFormats().factory();
 }

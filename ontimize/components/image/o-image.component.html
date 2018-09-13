@@ -1,15 +1,16 @@
 <div class="container-image relative" fxLayoutAlign="center center" [formGroup]="getFormGroup()" [matTooltip]="tooltip" [matTooltipPosition]="tooltipPosition"
-  [matTooltipShowDelay]="tooltipShowDelay" fxLayout="column"  [ngClass]="{'auto-fit-image':autoFit}">
-
+  [matTooltipShowDelay]="tooltipShowDelay" fxLayout="column" [ngClass]="{'auto-fit-image':autoFit}">
   <div class="input-image-container">
     <mat-form-field fxFill class="input-image icon-field" *ngIf="hasControls()">
-      <input matInput #inputControl [formControlName]="getAttribute()" type="text" [attr.id]="getAttribute()" [id]="getAttribute()"
-        [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)" class="mat-input input-control">
-      <input class="mat-primary" #input type="file" (change)="fileChange(input)" class="input-file" fxFill
-      />
+      <input matInput #inputControl [formControlName]="getAttribute()" type="text" [id]="getAttribute()" [ngModel]="getValue()"
+        (ngModelChange)="innerOnChange($event)" class="mat-input input-control" />
+      <input #input type="file" [disabled]="isDisabled" (change)="fileChange(input)" class="input-file" fxFill />
       <label #titleLabel (click)="input.click()">{{ 'CHOOSE_FILE' | oTranslate }}</label>
+      <button *ngIf="fullScreenButton" [disabled]="isDisabled" matSuffix mat-icon-button (click)="openFullScreen($event)">
+        <mat-icon svgIcon="ontimize:fullscreen"></mat-icon>
+      </button>
       <button [disabled]="isDisabled" matSuffix mat-icon-button (click)="input.click()">
-        <mat-icon svgIcon="ontimize:search"></mat-icon>
+        <mat-icon svgIcon="ontimize:folder_open"></mat-icon>
       </button>
       <button [disabled]="isDisabled" matSuffix mat-icon-button (click)="onClickClear($event)">
         <mat-icon svgIcon="ontimize:clear"></mat-icon>
@@ -18,11 +19,10 @@
     </mat-form-field>
   </div>
   <div class="image-container" fxLayoutAlign="center">
-    <img *ngIf="!(isEmpty())" [src]="getSrcValue()" alt="" (click)="input.click()" />
-    <mat-icon class="empty-icon" [class.mat-disabled]="isDisabled" aria-label="empty image" *ngIf="useEmptyIcon()" (click)="input.click()">{{ emptyicon }}</mat-icon>
-    <img [src]="getSrcValue()" alt="empty image" *ngIf="useEmptyImage()" (click)="input.click()" />
+    <img *ngIf="!(isEmpty())" [src]="getSrcValue()" alt="" (click)="openFileSelector()" />
+    <mat-icon class="empty-icon" [class.mat-disabled]="isDisabled" aria-label="empty image" *ngIf="useEmptyIcon()" (click)="openFileSelector()">{{
+      emptyicon }}</mat-icon>
+    <img [src]="getSrcValue()" alt="empty image" *ngIf="useEmptyImage()" (click)="openFileSelector()" />
   </div>
-
   <div *ngIf="isReadOnly" fxFill class="read-only-blocker" (click)="onClickBlocker($event)"></div>
-
 </div>

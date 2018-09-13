@@ -1,13 +1,14 @@
 <div [formGroup]="getFormGroup()" class="mat-input-container mat-form-field" fxFill>
   <div class="mat-input-wrapper mat-form-field-wrapper">
-    <ck-editor #ckEditor [attr.id]="getAttribute()" [id]="getAttribute()" [formControlName]="getAttribute()" [ngModel]="getValue()"
-      (ngModelChange)="innerOnChange($event)" (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)" [required]="isRequired"
-      [readonly]="isReadOnly" class="mat-input-flex mat-form-field-flex" fxFill></ck-editor>
+    <ck-editor #ckEditor [id]="getAttribute()" [formControlName]="getAttribute()" [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)"
+      (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)" [required]="isRequired" [readonly]="isReadOnly" class="mat-input-flex mat-form-field-flex"
+      fxFill></ck-editor>
     <div class="mat-input-subscript-wrapper mat-form-field-subscript-wrapper">
       <div class="ng-trigger ng-trigger-transitionMessages" [@transitionMessages]="_subscriptAnimationState">
         <mat-error *ngIf="hasError('required')">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</mat-error>
         <mat-error *ngIf="hasError('minlength')">{{ 'FORM_VALIDATION.MIN_LENGTH' | oTranslate }}: {{ getErrorValue('minlength', 'requiredLength') }}</mat-error>
         <mat-error *ngIf="hasError('maxlength')">{{ 'FORM_VALIDATION.MAX_LENGTH' | oTranslate }}: {{ getErrorValue('maxlength', 'requiredLength') }}</mat-error>
+        <mat-error *ngFor="let oError of getActiveOErrors()"> {{ oError.text | oTranslate }} </mat-error>
       </div>
     </div>
   </div>

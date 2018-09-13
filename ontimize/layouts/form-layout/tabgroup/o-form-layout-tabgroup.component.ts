@@ -1,6 +1,8 @@
-import { Component, ViewEncapsulation, Injector, ComponentFactoryResolver, ViewContainerRef, ViewChildren, QueryList, ViewChild, AfterViewInit, EventEmitter, OnDestroy } from '@angular/core';
-import { MatTabGroup } from '@angular/material';
+import { Component, ViewEncapsulation, Injector, ComponentFactoryResolver, ViewContainerRef, ViewChildren, QueryList, ViewChild, AfterViewInit, EventEmitter, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { MatTabGroup, MatTabChangeEvent } from '@angular/material';
+import { Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
+import { Util, Codes } from '../../../utils';
 import { OFormLayoutManagerContentDirective } from '../directives/o-form-layout-manager-content.directive';
 import { IDetailComponentData, OFormLayoutManagerComponent } from '../o-form-layout-manager.component';
 
@@ -31,22 +33,28 @@ export class OFormLayoutTabGroupComponent implements AfterViewInit, OnDestroy {
 
   protected formLayoutManager: OFormLayoutManagerComponent;
   data: IDetailComponentData[] = [];
-
+  selectedTabIndex: number | null;
   title: string;
+  protected _state: any;
 
   private _ignoreTabsDirectivesChange: boolean = false;
   @ViewChild('tabGroup') tabGroup: MatTabGroup;
   @ViewChildren(OFormLayoutManagerContentDirective) tabsDirectives: QueryList<OFormLayoutManagerContentDirective>;
 
+  protected updatedDataOnTable: boolean = false;
   protected closeTabSubscription: Subscription;
   protected tabsDirectivesSubscription: Subscription;
+  protected router: Router;
+  protected loading: boolean = false;
 
   constructor(
     protected injector: Injector,
     protected componentFactoryResolver: ComponentFactoryResolver,
-    protected location: ViewContainerRef
+    protected location: ViewContainerRef,
+    private cd: ChangeDetectorRef
   ) {
     this.formLayoutManager = this.injector.get(OFormLayoutManagerComponent);
+    this.router = this.injector.get(Router);
   }
 
   ngAfterViewInit() {
@@ -74,9 +82,9 @@ export class OFormLayoutTabGroupComponent implements AfterViewInit, OnDestroy {
 
   addTab(compData: IDetailComponentData) {
     let addNewComp = true;
-    const newCompParams = compData.urlParams;
+    const newCompParams = compData.params;
     this.data.forEach(comp => {
-      const currParams = comp.urlParams || {};
+      const currParams = comp.params || {};
       Object.keys(currParams).forEach(key => {
         addNewComp = addNewComp && (currParams[key] !== newCompParams[key]);
       });
@@ -90,9 +98,9 @@ export class OFormLayoutTabGroupComponent implements AfterViewInit, OnDestroy {
 
   reloadTab(compData: IDetailComponentData) {
     let compIndex = -1;
-    const compParams = compData.urlParams;
+    const compParams = compData.params;
     this.data.forEach((comp, i) => {
-      const currParams = comp.urlParams || {};
+      const currParams = comp.params || {};
       let sameParams = true;
       Object.keys(currParams).forEach(key => {
         sameParams = sameParams && (currParams[key] === compParams[key]);
@@ -106,9 +114,20 @@ export class OFormLayoutTabGroupComponent implements AfterViewInit, OnDestroy {
     }
   }
 
-  onTabSelectChange() {
-    if (this.formLayoutManager && this.tabGroup.selectedIndex === 0) {
+  onTabSelectChange(arg: MatTabChangeEvent) {
+    if (this.formLayoutManager && this.tabGroup.selectedIndex === 0 && this.updatedDataOnTable) {
       this.formLayoutManager.onMainTabSelected.emit();
+      this.updatedDataOnTable = false;
+    }
+    if (Util.isDefined(this.state) && Util.isDefined(this.state.tabsData)) {
+      if (this.state.tabsData.length > 1) {
+        if ((arg.index === this.state.tabsData.length) && Util.isDefined(this.state.selectedIndex)) {
+          this.selectedTabIndex = this.state.selectedIndex;
+          this.state = undefined;
+        }
+      } else {
+        this.state = undefined;
+      }
     }
   }
 
@@ -153,7 +172,7 @@ export class OFormLayoutTabGroupComponent implements AfterViewInit, OnDestroy {
   getRouteOfActiveItem(): any[] {
     let route = [];
     if (this.data.length && this.tabGroup.selectedIndex > 0) {
-      const urlParams = this.data[this.tabGroup.selectedIndex - 1].urlParams || [];
+      const urlParams = this.data[this.tabGroup.selectedIndex - 1].params || [];
       Object.keys(urlParams).forEach(key => {
         route.push(urlParams[key]);
       });
@@ -168,6 +187,8 @@ export class OFormLayoutTabGroupComponent implements AfterViewInit, OnDestroy {
         break;
       }
     }
+    //when modified state of a tab, we must reload thedata of table
+    this.updatedDataOnTable = true;
   }
 
   updateNavigation(id: string, label: string) {
@@ -180,9 +201,94 @@ export class OFormLayoutTabGroupComponent implements AfterViewInit, OnDestroy {
     }
     if (index !== undefined) {
       this.tabGroup.selectedIndex = (index + 1);
-      label = label.length ? label : this.formLayoutManager.getLabelFromUrlParams(this.data[index].urlParams);
+      label = label.length ? label : this.formLayoutManager.getLabelFromUrlParams(this.data[index].params);
       this.data[index].label = label;
     }
   }
 
+  getDataToStore(): Object {
+    let tabsData = [];
+    this.data.map((data: IDetailComponentData) => {
+      tabsData.push({
+        params: data.params,
+        queryParams: data.queryParams,
+        urlSegments: data.urlSegments,
+        url: data.url
+      });
+    });
+    return {
+      tabsData: tabsData,
+      selectedIndex: this.tabGroup.selectedIndex
+    };
+  }
+
+  initializeComponentState(state: any) {
+    if (Util.isDefined(state) && Util.isDefined(state.tabsData) && Util.isDefined(state.tabsData[0])) {
+      this.state = state;
+      let extras = {};
+      extras[Codes.QUERY_PARAMS] = state.tabsData[0].queryParams;
+      const self = this;
+      this.router.navigate([state.tabsData[0].url], extras).then(val => {
+        if (self.data[0]) {
+          setTimeout(() => {
+            self.createTabsFromState();
+          }, 0);
+        }
+      });
+    }
+  }
+
+  protected createTabsFromState() {
+    const self = this;
+    const tabComponent = self.data[0].component;
+    let newTabs = [];
+    this.state.tabsData.forEach((tabData: any, index: number) => {
+      if (tabComponent && index > 0) {
+        newTabs.push(self.createDetailComponent(tabComponent, tabData));
+      }
+    });
+    if (newTabs.length > 0) {
+      this.data.push(...newTabs);
+    }
+  }
+
+  protected createDetailComponent(component: any, paramsObj: any) {
+    const newDetailComp: IDetailComponentData = {
+      params: paramsObj.params,
+      queryParams: paramsObj.queryParams,
+      urlSegments: paramsObj.urlSegments,
+      component: component,
+      url: paramsObj.url,
+      id: Math.random().toString(36),
+      label: '',
+      modified: false
+    };
+    // this.addTab(newDetailComp);
+    return newDetailComp;
+  }
+
+  get showLoading(): boolean {
+    return this.loading;
+  }
+
+  set showLoading(arg: boolean) {
+    this.loading = arg;
+  }
+
+  set state(arg: any) {
+    this._state = arg;
+    if (Util.isDefined(arg)) {
+      this.showLoading = true;
+    } else {
+      const self = this;
+      setTimeout(() => {
+        self.showLoading = false;
+        self.cd.detectChanges();
+      }, 1000);
+    }
+  }
+
+  get state(): any {
+    return this._state;
+  }
 }

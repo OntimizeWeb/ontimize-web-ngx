@@ -1,7 +1,9 @@
 @import 'node_modules/@angular/material/theming';
 @mixin input-theme($theme) {
+  $is-dark-theme: map-get($theme, is-dark);
   $foreground: map-get($theme, foreground);
   $warn: map-get($theme, warn);
+  $underline-color: mat-color($foreground, divider, if($is-dark-theme, 0.7, 0.42));
 
   .mat-form-field {
     &:not(.mat-form-field-disabled) {
@@ -15,6 +17,16 @@
 
     .mat-disabled {
       color: mat-color($foreground, disabled-button);
+    }
+
+    &.read-only {
+      .mat-select-disabled .mat-select-value {
+        color: inherit;
+      }
+
+      .mat-form-field-underline {
+        background-color: $underline-color;
+      }
     }
   }
 

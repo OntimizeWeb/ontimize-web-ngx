@@ -14,4 +14,8 @@ export * from './real-input/o-real-input.component';
 export * from './search-input/o-search-input.component';
 export * from './text-input/o-text-input.component';
 export * from './textarea-input/o-textarea-input.component';
+export * from './validation/o-error.component';
+export * from './validation/o-validator.component';
 export * from './o-form-service-component.class';
+export * from './hour-input/o-hour-input.component';
+export * from './time-input/o-time-input.component';

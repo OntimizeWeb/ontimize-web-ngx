@@ -17,7 +17,6 @@ export const DEFAULT_PAGINATOR_TABLE = [
 })
 export class OTablePaginatorComponent implements OnInit {
 
-  protected _pageLenght: number = 0;
   protected _pageIndex: number = 0;
   protected _pageSize: number = 10;
   protected _pageSizeOptions: Array<any>;
@@ -41,11 +40,11 @@ export class OTablePaginatorComponent implements OnInit {
   }
 
   get pageLenght(): number {
-    return this.pageLenght;
+    return this._pageSize;
   }
 
   set pageLenght(value: number) {
-    this._pageLenght = value;
+    this._pageSize = value;
   }
 
   get pageIndex(): number {

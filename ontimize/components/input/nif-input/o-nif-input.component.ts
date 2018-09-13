@@ -5,7 +5,7 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ValidatorFn } from '@angular/forms/src/directives/validators';
+import { ValidatorFn } from '@angular/forms';
 import { OSharedModule } from '../../../shared';
 import { OValidators } from '../../../validators/o-validators';
 import { OFormComponent } from '../../form/o-form.component';

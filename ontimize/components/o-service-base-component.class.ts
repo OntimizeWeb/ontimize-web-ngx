@@ -1,12 +1,11 @@
-import { Injector, NgZone, HostListener, SimpleChange } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import { Subscription } from 'rxjs/Subscription';
+import { HostListener, Injector, NgZone, SimpleChange } from '@angular/core';
+import { Observable, Subscription } from 'rxjs';
 
 import { Util, Codes } from '../utils';
 import { InputConverter } from '../decorators';
-import { OntimizeService, OTranslateService, LocalStorageService, DialogService, ILocalStorageComponent } from '../services';
 import { OFormComponent } from './form/o-form.component';
-import { ServiceUtils } from './service.utils';
+import { OQueryDataArgs, ServiceUtils } from './service.utils';
+import { DialogService, ILocalStorageComponent, LocalStorageService, OntimizeService } from '../services';
 
 export const DEFAULT_INPUTS_O_SERVICE_BASE_COMPONENT = [
   // attr [string]: list identifier. It is mandatory if data are provided through the data attribute. Default: entity (if set).
@@ -68,7 +67,6 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
 
   public static DEFAULT_INPUTS_O_SERVICE_BASE_COMPONENT = DEFAULT_INPUTS_O_SERVICE_BASE_COMPONENT;
 
-  protected translateService: OTranslateService;
   protected localStorageService: LocalStorageService;
   protected dialogService: DialogService;
 
@@ -105,11 +103,9 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
   protected keysArray: Array<string> = [];
   protected _pKeysEquiv = {};
   protected dataArray: Array<any> = [];
-  protected parentItem: any;
   protected oattrFromEntity: boolean = false;
   /* end of parsed inputs variables */
 
-  protected onLanguageChangeSubscribe: any;
   protected onRouteChangeStorageSubscribe: any;
   protected onFormDataSubscribe: any;
 
@@ -125,12 +121,8 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
   constructor(
     protected injector: Injector
   ) {
-    this.translateService = this.injector.get(OTranslateService);
     this.dialogService = this.injector.get(DialogService);
     this.localStorageService = this.injector.get(LocalStorageService);
-    this.onLanguageChangeSubscribe = this.translateService.onLanguageChanged.subscribe(res => {
-      this.onLanguageChangeCallback(res);
-    });
     try {
       this.form = this.injector.get(OFormComponent);
     } catch (e) {
@@ -172,7 +164,6 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
     if (this.form && Util.isDefined(this.dataService)) {
       this.setFormComponent(this.form);
     }
-
   }
 
   afterViewInit() {
@@ -180,7 +171,6 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
   }
 
   destroy() {
-    this.onLanguageChangeSubscribe.unsubscribe();
     if (this.onFormDataSubscribe) {
       this.onFormDataSubscribe.unsubscribe();
     }
@@ -189,6 +179,9 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
     }
     if (this.loaderSubscription) {
       this.loaderSubscription.unsubscribe();
+    }
+    if (this.onRouteChangeStorageSubscribe) {
+      this.onRouteChangeStorageSubscribe.unsubscribe();
     }
   }
 
@@ -220,10 +213,6 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
 
   getDataToStore(): Object {
     return this.state;
-  }
-
-  onLanguageChangeCallback(res: any) {
-    //
   }
 
   getKeys() {
@@ -265,34 +254,37 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
   }
 
   setFormComponent(form: OFormComponent) {
+    if (!Util.isDefined(this.form)) {
+      this.form = form;
+    }
+
     var self = this;
     if (self.queryOnBind) {
-      this.onFormDataSubscribe = this.form.onFormDataLoaded.subscribe(data => {
-        self.parentItem = data;
-        self.queryData(data);
+      this.onFormDataSubscribe = this.form.onDataLoaded.subscribe(data => {
+        self.queryData();
       });
     }
     let dataValues = this.form.getDataValues();
     if (Util.isDefined(dataValues) && Object.keys(dataValues).length > 0) {
-      self.parentItem = dataValues;
-      self.queryData(dataValues);
+      self.queryData();
     }
   }
 
-  queryData(parentItem: any = undefined, ovrrArgs?: any) {
+  queryData(filter: any = undefined, ovrrArgs?: OQueryDataArgs) {
     let queryMethodName = this.pageable ? this.paginatedQueryMethod : this.queryMethod;
     if (!this.dataService || !(queryMethodName in this.dataService) || !this.entity) {
       return;
     }
-    parentItem = ServiceUtils.getParentItemFromForm(parentItem, this._pKeysEquiv, this.form);
-
-    if (((Object.keys(this._pKeysEquiv).length > 0) && parentItem === undefined) && !this.queryWithNullParentKeys) {
+    let filterParentKeys = ServiceUtils.getParentKeysFromForm(this._pKeysEquiv, this.form);
+    if (!this.filterContainsAllParentKeys(filterParentKeys) && !this.queryWithNullParentKeys) {
       this.setData([], []);
     } else {
-      let filter = ServiceUtils.getFilterUsingParentKeys(parentItem, this._pKeysEquiv);
+      filter = Object.assign(filter || {}, filterParentKeys);
       let queryArguments = this.getQueryArguments(filter, ovrrArgs);
       if (this.querySubscription) {
         this.querySubscription.unsubscribe();
+      }
+      if (this.loaderSubscription) {
         this.loaderSubscription.unsubscribe();
       }
       this.loaderSubscription = this.load();
@@ -311,7 +303,7 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
             this.updatePaginationInfo(res);
           }
         }
-        self.setData(data, sqlTypes, (ovrrArgs && ovrrArgs['replace']));
+        self.setData(data, sqlTypes, (ovrrArgs && ovrrArgs.replace));
         self.loaderSubscription.unsubscribe();
       }, err => {
         self.setData([], []);
@@ -323,6 +315,15 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
         }
       });
     }
+  }
+
+  protected filterContainsAllParentKeys(parentKeysFilter): boolean {
+    let pkKeys = Object.keys(this._pKeysEquiv);
+    if ((pkKeys.length > 0) && Util.isDefined(parentKeysFilter)) {
+      let parentKeysFilterKeys = Object.keys(parentKeysFilter);
+      return pkKeys.every(a => parentKeysFilterKeys.indexOf(a) !== -1);
+    }
+    return true;
   }
 
   reloadData() {
@@ -360,6 +361,23 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
     return subscription;
   }
 
+  /**
+   * Extracting the given record keys
+   * @param item record object
+   * @returns object containing item object properties contained in keysArray
+   */
+  extractKeysFromRecord(item: any): Object {
+    let result = {};
+    if (Util.isObject(item)) {
+      this.keysArray.forEach(key => {
+        if (Util.isDefined(item[key])) {
+          result[key] = item[key];
+        }
+      });
+    }
+    return result;
+  }
+
   getAttributesValuesToQuery(): Array<string> {
     let result = this.colArray;
     this.keysArray.forEach(key => {
@@ -370,14 +388,14 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
     return result;
   }
 
-  getQueryArguments(filter: Object, ovrrArgs?: any): Array<any> {
+  getQueryArguments(filter: Object, ovrrArgs?: OQueryDataArgs): Array<any> {
     const compFilter = this.getComponentFilter(filter);
     const queryCols = this.getAttributesValuesToQuery();
-    let queryArguments = [compFilter, queryCols, this.entity];
+    let queryArguments = [compFilter, queryCols, this.entity, Util.isDefined(ovrrArgs) ? ovrrArgs.sqltypes : undefined];
     if (this.pageable) {
       let queryOffset = (ovrrArgs && ovrrArgs.hasOwnProperty('offset')) ? ovrrArgs.offset : this.state.queryRecordOffset;
       let queryRowsN = (ovrrArgs && ovrrArgs.hasOwnProperty('length')) ? ovrrArgs.length : this.queryRows;
-      queryArguments = queryArguments.concat([undefined, queryOffset, queryRowsN, undefined]);
+      queryArguments = queryArguments.concat([queryOffset, queryRowsN, undefined]);
     }
     return queryArguments;
   }
@@ -400,6 +418,10 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
     return existingFilter;
   }
 
+  getSqlTypes() {
+    return {};
+  }
+
   protected setData(data: any, sqlTypes?: any, replace?: boolean) {
     //
   }
@@ -410,5 +432,9 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
 
   set state(arg: any) {
     this._state = arg;
+  }
+
+  getParentKeysValues() {
+    return ServiceUtils.getParentKeysFromForm(this._pKeysEquiv, this.form);
   }
 }

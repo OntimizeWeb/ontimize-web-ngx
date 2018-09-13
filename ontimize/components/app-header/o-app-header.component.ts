@@ -1,16 +1,18 @@
-import { Injector, OnDestroy, NgModule, Component, EventEmitter, ElementRef, ViewEncapsulation } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Injector, NgModule, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs/Subscription';
 
-import { OSharedModule } from '../../shared';
-import { DialogService, OModulesInfoService } from '../../services';
-import { OUserInfoModule } from '../../components';
-import { InputConverter } from '../../decorators';
 import { ServiceUtils } from '../../utils';
+import { OSharedModule } from '../../shared';
+import { InputConverter } from '../../decorators';
+import { OUserInfoModule } from '../../components';
+import { DialogService, OModulesInfoService } from '../../services';
+import { OLanguageSelectorModule } from '../language-selector/o-language-selector.component';
 
 export const DEFAULT_INPUTS_O_APP_HEADER = [
   'showUserInfo: show-user-info',
+  'showLanguageSelector: show-language-selector',
   'useFlagIcons: use-flag-icons'
 ];
 
@@ -42,6 +44,8 @@ export class OAppHeaderComponent implements OnDestroy {
 
   @InputConverter()
   showUserInfo: boolean = true;
+  @InputConverter()
+  showLanguageSelector: boolean = true;
   @InputConverter()
   useFlagIcons: boolean = false;
 
@@ -79,10 +83,11 @@ export class OAppHeaderComponent implements OnDestroy {
   set headerTitle(value: string) {
     this._headerTitle = value;
   }
+
 }
 
 @NgModule({
-  imports: [CommonModule, OSharedModule, OUserInfoModule],
+  imports: [CommonModule, OLanguageSelectorModule, OUserInfoModule, OSharedModule],
   declarations: [OAppHeaderComponent],
   exports: [OAppHeaderComponent]
 })

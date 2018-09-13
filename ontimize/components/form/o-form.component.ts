@@ -17,7 +17,7 @@ import { dataServiceFactory } from '../../services/data-service.provider';
 import { OFormNavigationClass } from './navigation/o-form.navigation.class';
 import { OFormToolbarComponent, OFormToolbarModule } from './o-form-toolbar.component';
 import { IFormDataComponent, IFormDataTypeComponent } from '../o-form-data-component.class';
-import { DialogService, NavigationService, OntimizeService, SnackBarService } from '../../services';
+import { DialogService, NavigationService, OntimizeService, SnackBarService, ONavigationItem } from '../../services';
 import { CanComponentDeactivate, CanDeactivateFormGuard } from './guards/o-form-can-deactivate.guard';
 
 export const DEFAULT_INPUTS_O_FORM = [
@@ -98,7 +98,7 @@ export const DEFAULT_INPUTS_O_FORM = [
 ];
 
 export const DEFAULT_OUTPUTS_O_FORM = [
-  'onFormDataLoaded',
+  'onDataLoaded',
   'beforeCloseDetail',
   'beforeGoEditMode',
   'onFormModeChange'
@@ -196,13 +196,13 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   /* end of parsed inputs variables */
 
   formGroup: FormGroup;
-  onFormDataLoaded: EventEmitter<Object> = new EventEmitter<Object>();
+  onDataLoaded: EventEmitter<Object> = new EventEmitter<Object>();
   beforeCloseDetail: EventEmitter<any> = new EventEmitter<any>();
   beforeGoEditMode: EventEmitter<any> = new EventEmitter<any>();
   onFormModeChange: EventEmitter<Object> = new EventEmitter<Object>();
 
   public loading: boolean = false;
-  public formData: Object = {};/* Array<any> = [];*/
+  public formData: Object = {};
   public navigationData: Array<any> = [];
   public currentIndex = 0;
   public mode: number = OFormComponent.Mode().INITIAL;
@@ -244,7 +244,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
 
   @ViewChild('innerForm') innerFormEl: ElementRef;
 
-  protected ignoreFormCacheKeys: Array<any> = [];
+  ignoreFormCacheKeys: Array<any> = [];
 
   constructor(
     protected router: Router,
@@ -269,7 +269,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
 
     this.reloadStreamSubscription = this.reloadStream.subscribe(valArr => {
       if (Util.isArray(valArr) && valArr.length === 2) {
-        if (self.queryOnInit && valArr[0] === true && valArr[1] === true) {
+        if (!self.isInInsertMode() && self.queryOnInit && valArr[0] === true && valArr[1] === true) {
           self._reloadAction(true);
         }
       }
@@ -286,22 +286,27 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   registerFormComponent(comp: any) {
     if (comp) {
       let attr = comp.getAttribute();
-      if (this._components.hasOwnProperty(attr)) {
-        comp.repeatedAttr = true;
-        console.error('There is already a component registered in the form with the attr: ' + attr);
-        return;
-      }
       if (attr && attr.length > 0) {
-        this._components[attr] = comp;
+
         if (!comp.isAutomaticRegistering()) {
           return;
         }
+
+        if (this._components.hasOwnProperty(attr)) {
+          comp.repeatedAttr = true;
+          console.error('There is already a component registered in the form with the attr: ' + attr);
+          return;
+        }
+
+        this._components[attr] = comp;
         // Setting parent key values...
         if (this.formParentKeysValues && this.formParentKeysValues[attr] !== undefined) {
           let val = this.formParentKeysValues[attr];
-          this._components[attr].setValue(val);
+          this._components[attr].setValue(val, {
+            emitModelToViewChange: false,
+            emitEvent: false
+          });
         }
-
         /*
         * TODO. Check it!!!
         * En un formulario con tabs, cuando se cambia de uno a otro, se destruyen las vistas
@@ -311,8 +316,11 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
         * para que sólo sea cuando se registra de nuevo ;) )
         */
         const cachedValue = this.formCache.getCachedValue(attr);
-        if (cachedValue && this.getDataValues() && this._components.hasOwnProperty(attr)) {
-          this._components[attr].setValue(cachedValue);
+        if (Util.isDefined(cachedValue) && this.getDataValues() && this._components.hasOwnProperty(attr)) {
+          this._components[attr].setValue(cachedValue, {
+            emitModelToViewChange: false,
+            emitEvent: false
+          });
         }
       }
     }
@@ -325,7 +333,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     if (comp) {
       let type = comp.getSQLType();
       let attr = comp.getAttribute();
-      if (type !== SQLTypes.OTHER && attr && attr.length > 0) {
+      if (type !== SQLTypes.OTHER && attr && attr.length > 0 && this.ignoreFormCacheKeys.indexOf(attr) === -1) {
         // Right now just store values different of 'OTHER'
         this._compSQLTypes[attr] = type;
       }
@@ -413,7 +421,8 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
 
   getDataValue(attr: string) {
     if (this.isInInsertMode()) {
-      let val = this.formGroup.value[attr];
+      let urlParams = this.formNavigation.getFilterFromUrlParams();
+      let val = this.formGroup.value[attr] || urlParams[attr];
       return new OFormValue(val);
     } else if (this.isInInitialMode() && !this.isEditableDetail()) {
       let data = this.formData;
@@ -643,10 +652,10 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
 
   protected determinateModeFromUrlSegment(segment: UrlSegment) {
     const _path = segment ? segment['path'] : '';
-    if (_path === 'new') {
+    if (this.isInsertModePath(_path)) {
       this.setInsertMode();
       return;
-    } else if (_path === Codes.DEFAULT_EDIT_ROUTE) {
+    } else if (this.isUpdateModePath(_path)) {
       this.setUpdateMode();
     } else {
       this.setInitialMode();
@@ -738,7 +747,12 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
         Object.keys(self.formGroup.controls).forEach(control => {
           self.formGroup.controls[control].markAsPristine();
         });
-        self.formCache.initializeCache(self.getRegisteredFieldsValues());
+
+        let initialCache = {};
+        Object.keys(self.formData).map((key: string) => {
+          initialCache[key] = self.formData[key].value;
+        });
+        self.formCache.initializeCache(initialCache);
         (self.formGroup.valueChanges as EventEmitter<any>).emit(self.formCache.getInitialDataCache());
         self.formNavigation.updateNavigation(self.formGroup.getRawValue());
       }
@@ -746,7 +760,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   }
 
   _emitData(data) {
-    this.onFormDataLoaded.emit(data);
+    this.onDataLoaded.emit(data);
   }
 
   _backAction() {
@@ -871,8 +885,12 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   */
 
   queryData(filter) {
-    if (this.dataService === undefined) {
-      console.warn('No service configured! aborting query');
+    if (!Util.isDefined(this.dataService)) {
+      console.warn('OFormComponent: no service configured! aborting query');
+      return;
+    }
+    if (!Util.isDefined(filter) || Object.keys(filter).length === 0) {
+      console.warn('OFormComponent: no filter configured! aborting query');
       return;
     }
     if (this.querySubscription) {
@@ -1028,9 +1046,10 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   getAttributesValuesToUpdate(): Object {
     let values = {};
     const self = this;
-    Object.keys(this.formGroup.controls).forEach(function (item) {
-      if (self.ignoreFormCacheKeys.indexOf(item) === -1 && self.formGroup.controls[item].dirty === true) {
-        values[item] = self.formGroup.value[item];
+    Object.keys(this.formGroup.controls).forEach((item) => {
+      const control = self.formGroup.controls[item];
+      if (self.ignoreFormCacheKeys.indexOf(item) === -1 && control.dirty) {
+        values[item] = control.value;
         if (values[item] === undefined) {
           values[item] = null;
         }
@@ -1110,7 +1129,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     return this.formNavigation.getCurrentKeysValues();
   }
 
-  protected getKeysValues() {
+  getKeysValues() {
     let filter = {};
     let currentRecord = this.formData;
     if (!this.keysArray) {
@@ -1304,6 +1323,15 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     return valueCopy;
   }
 
+  protected isInsertModePath(path: string): boolean {
+    const navData: ONavigationItem = this.navigationService.getPreviousRouteData();
+    return Util.isDefined(navData) && path === navData.getInsertFormRoute();
+  }
+
+  protected isUpdateModePath(path: string): boolean {
+    const navData: ONavigationItem = this.navigationService.getPreviousRouteData();
+    return Util.isDefined(navData) && path === navData.getEditFormRoute();
+  }
 }
 
 @NgModule({

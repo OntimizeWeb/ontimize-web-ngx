@@ -38,7 +38,6 @@ export class OTableCellRendererImageComponent extends OBaseTableCellRenderer {
   }
 
   ngOnInit() {
-    super.ngOnInit();
     if (this.table) {
       const oCol = this.table.getOColumn(this.tableColumn.attr);
       oCol.title = undefined;

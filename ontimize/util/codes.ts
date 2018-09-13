@@ -44,7 +44,8 @@ export class Codes {
 
   public static LOGIN_ROUTE = '/login';
   public static DEFAULT_EDIT_ROUTE = 'edit';
-  public static DEFAULT_DETAIL_ROUTE = 'detail';
+  public static DEFAULT_DETAIL_ROUTE = undefined;
+  public static DEFAULT_INSERT_ROUTE = 'new';
 
   public static IGNORE_CAN_DEACTIVATE = 'ignore_can_deactivate';
 
@@ -55,12 +56,19 @@ export class Codes {
   public static ICON_POSITION_LEFT = 'left';
   public static ICON_POSITION_RIGHT = 'right';
 
+  public static COLUMN_TITLE_ALIGN_START = 'start';
+  public static COLUMN_TITLE_ALIGN_CENTER = 'center';
+  public static COLUMN_TITLE_ALIGN_END = 'end';
+  public static COLUMN_TITLE_ALIGN_AUTO = 'auto';
+  public static AVAILABLE_COLUMN_TITLE_ALIGNS =
+  [Codes.COLUMN_TITLE_ALIGN_START, Codes.COLUMN_TITLE_ALIGN_CENTER, Codes.COLUMN_TITLE_ALIGN_END, Codes.COLUMN_TITLE_ALIGN_AUTO];
+
   static isDoubleClickMode(value: string): boolean {
     return Codes.DETAIL_MODE_DBLCLICK_VALUES.indexOf(value) !== -1;
   }
 
   static isValidRowHeight(value: string): boolean {
-    return Codes.AVAILABLE_ROW_HEIGHTS_VALUES.indexOf(value) === -1;
+    return Codes.AVAILABLE_ROW_HEIGHTS_VALUES.indexOf(value) !== -1;
   }
 
   static getIsDetailObject(): any {

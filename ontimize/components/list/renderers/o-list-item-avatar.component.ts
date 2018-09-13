@@ -1,18 +1,6 @@
-import {
-  Component,
-  Inject,
-  Injector,
-  forwardRef,
-  ViewEncapsulation,
-  ElementRef,
-  Renderer,
-  Optional,
-  NgModule,
-  OnInit,
-  AfterViewInit
-} from '@angular/core';
-import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { AfterViewInit, Component, ElementRef, forwardRef, Inject, Injector, NgModule, OnInit, Optional, Renderer, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 import { OSharedModule } from '../../../shared';
 import { OListItemComponent } from '../list-item/o-list-item.component';
@@ -42,8 +30,7 @@ export const DEFAULT_OUTPUTS_O_LIST_ITEM_AVATAR = [
     '[class.o-list-item-avatar]': 'true'
   }
 })
-
-export class OListItemAvatarComponent extends OListItemTextRenderer implements OnInit, AfterViewInit {
+export class OListItemAvatarComponent extends OListItemTextRenderer implements AfterViewInit, OnInit {
 
   protected avatar: string;
   protected avatarType: string;
@@ -89,11 +76,12 @@ export class OListItemAvatarComponent extends OListItemTextRenderer implements O
   set avatarSrc(val: SafeResourceUrl) {
     this._avatarSrc = val;
   }
+
 }
 
 @NgModule({
   declarations: [OListItemAvatarComponent],
-  imports: [OSharedModule, CommonModule],
+  imports: [CommonModule, OSharedModule],
   exports: [OListItemAvatarComponent]
 })
 export class OListItemAvatarModule { }

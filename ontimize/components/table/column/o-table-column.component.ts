@@ -41,6 +41,9 @@ export const DEFAULT_INPUTS_O_TABLE_COLUMN = [
   // title [string]: column title. Default: no value.
   'title',
 
+  // title [start-center-end]: column title alignment. Default: center.
+  'titleAlign: title-align',
+
   // orderable [no|yes]: column can be sorted. Default: yes.
   'orderable',
 
@@ -65,11 +68,6 @@ export const DEFAULT_INPUTS_O_TABLE_COLUMN = [
 
   'minWidth: min-width',
 
-  'class',
-
-  // break-word [no|yes|true|false]: content column can show in multiple lines if it not catch in the cell. Default: no and if content of the cell overflow.
-  'breakWord: break-word',
-
   // async-load [no|yes|true|false]: asynchronous query. Default: no
   'asyncLoad : async-load',
 
@@ -81,6 +79,8 @@ export const DEFAULT_INPUTS_O_TABLE_COLUMN = [
   'tooltipValue: tooltip-value',
 
   'tooltipFunction: tooltip-function',
+
+  'multiline',
 
   ...OTableCellRendererBooleanComponent.DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_BOOLEAN,
   ...OTableCellRendererCurrencyComponent.DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_CURRENCY, // includes Integer and Real
@@ -105,10 +105,7 @@ export const DEFAULT_OUTPUTS_O_TABLE_COLUMN = [
   templateUrl: './o-table-column.component.html',
   styleUrls: ['./o-table-column.component.scss'],
   inputs: DEFAULT_INPUTS_O_TABLE_COLUMN,
-  outputs: DEFAULT_OUTPUTS_O_TABLE_COLUMN,
-  host: {
-    '[class.columnBreakWord]': 'breakWord'
-  }
+  outputs: DEFAULT_OUTPUTS_O_TABLE_COLUMN
 })
 export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
 
@@ -143,6 +140,7 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
   public type: string;
   public attr: string;
   public title: string;
+  public titleAlign: string;
   public sqlType: string;
   protected _SQLType: number;
   protected _defaultSQLTypeKey: string = 'OTHER';
@@ -152,11 +150,18 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
   public editable: boolean = false;
   public width: string;
   public minWidth: string;
-  public class: string;
   @InputConverter()
   public tooltip: boolean = false;
   tooltipValue: string;
   tooltipFunction: Function;
+  set multiline(val: boolean) {
+    val = Util.parseBoolean(String(val));
+    this._multiline = val;
+  }
+  get multiline(): boolean {
+    return this._multiline;
+  }
+  protected _multiline: boolean = false;
   /* input renderer date */
   protected format: string;
   /* input renderer integer */
@@ -202,6 +207,10 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
   @InputConverter()
   showPlaceHolder: boolean = false;
   olabel: string;
+  @InputConverter()
+  updateRecordOnEdit: boolean = true;
+  @InputConverter()
+  showToastOnEdit: boolean = false;
 
   /* input editor date */
   protected locale: string;
@@ -232,9 +241,8 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
   editionStarted: EventEmitter<Object> = new EventEmitter<Object>();
   editionCancelled: EventEmitter<Object> = new EventEmitter<Object>();
   editionCommitted: EventEmitter<Object> = new EventEmitter<Object>();
+  onPostUpdateRecord: EventEmitter<Object> = new EventEmitter<Object>();
 
-  @InputConverter()
-  breakWord: boolean = false;
   @InputConverter()
   asyncLoad: boolean = false;
 
@@ -253,6 +261,7 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
 
   ngOnInit() {
     this.grouping = Util.parseBoolean(this.grouping, true);
+    this.titleAlign = this.parseTitleAlign();
     this.table.registerColumn(this);
     this.subscriptions.add(this.table.onReinitialize.subscribe(() => this.table.registerColumn(this)));
   }
@@ -264,6 +273,11 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
 
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
+  }
+
+  parseTitleAlign(): string {
+    let align = (this.titleAlign || '').toLowerCase();
+    return Codes.AVAILABLE_COLUMN_TITLE_ALIGNS.indexOf(align) !== -1 ? align : undefined;
   }
 
   protected createRenderer() {
@@ -388,9 +402,12 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
       if (newEditor) {
         newEditor.orequired = this.orequired;
         newEditor.showPlaceHolder = this.showPlaceHolder;
+        newEditor.updateRecordOnEdit = this.updateRecordOnEdit;
+        newEditor.showToastOnEdit = this.showToastOnEdit;
         newEditor.editionStarted = this.editionStarted;
         newEditor.editionCancelled = this.editionCancelled;
         newEditor.editionCommitted = this.editionCommitted;
+        newEditor.onPostUpdateRecord = this.onPostUpdateRecord;
         this.registerEditor(newEditor);
       }
     }

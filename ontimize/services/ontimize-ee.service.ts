@@ -73,17 +73,17 @@ export class OntimizeEEService implements IAuthService, IDataService {
       }),
       'observe': 'response'
     };
-    let _startSessionObserver: any;
-    const startSessionObservable = new Observable(observer => _startSessionObserver = observer).share();
-
-    this.httpClient.post(url, null, options).subscribe((resp: any) => {
-      if (Util.isDefined(resp) && Util.isDefined(resp.headers) && Util.isDefined(resp.headers.get('X-Auth-Token'))) {
-        _startSessionObserver.next(resp.headers.get('X-Auth-Token'));
-      } else {
-        // Invalid sessionId...
-        _startSessionObserver.error('Invalid user or password');
-      }
-    }, error => _startSessionObserver.error(error));
+    const self = this;
+    const startSessionObservable = new Observable(_startSessionObserver => {
+      self.httpClient.post(url, null, options).subscribe((resp: any) => {
+        if (Util.isDefined(resp) && Util.isDefined(resp.headers) && Util.isDefined(resp.headers.get('X-Auth-Token'))) {
+          _startSessionObserver.next(resp.headers.get('X-Auth-Token'));
+        } else {
+          // Invalid sessionId...
+          _startSessionObserver.error('Invalid user or password');
+        }
+      }, error => _startSessionObserver.error(error));
+    });
     return startSessionObservable;
   }
 
@@ -117,16 +117,15 @@ export class OntimizeEEService implements IAuthService, IDataService {
       columns: av,
       sqltypes: sqltypes
     });
-    let _innerObserver: any;
-    const dataObservable = new Observable(observer => _innerObserver = observer).share();
-
     const self = this;
-    this.httpClient.post(url, body, options).subscribe(resp => {
-      self.parseSuccessfulResponse(resp, _innerObserver);
-    }, error => {
-      self.parseUnsuccessfulResponse(error, _innerObserver);
-    }, () => _innerObserver.complete());
-    return dataObservable;
+    const dataObservable: Observable<any> = new Observable(_innerObserver => {
+      self.httpClient.post(url, body, options).subscribe(resp => {
+        self.parseSuccessfulQueryResponse(resp, _innerObserver);
+      }, error => {
+        self.parseUnsuccessfulQueryResponse(error, _innerObserver);
+      }, () => _innerObserver.complete());
+    });
+    return dataObservable.share();
   }
 
   public advancedQuery(kv?: Object, av?: Array<string>, entity?: string, sqltypes?: Object,
@@ -153,17 +152,15 @@ export class OntimizeEEService implements IAuthService, IDataService {
       pageSize: pagesize,
       orderBy: orderby
     });
-
-    let _innerObserver: any;
-    const dataObservable = new Observable(observer => _innerObserver = observer).share();
-
     const self = this;
-    this.httpClient.post(url, body, options).subscribe(resp => {
-      self.parseSuccessfulResponse(resp, _innerObserver);
-    }, error => {
-      self.parseUnsuccessfulResponse(error, _innerObserver);
-    }, () => _innerObserver.complete());
-    return dataObservable;
+    const dataObservable: Observable<any> = new Observable(_innerObserver => {
+      self.httpClient.post(url, body, options).subscribe(resp => {
+        self.parseSuccessfulAdvancedQueryResponse(resp, _innerObserver);
+      }, error => {
+        self.parseUnsuccessfulAdvancedQueryResponse(error, _innerObserver);
+      }, () => _innerObserver.complete());
+    });
+    return dataObservable.share();
   }
 
   public insert(av: Object = {}, entity: string, sqltypes?: Object): Observable<any> {
@@ -175,17 +172,15 @@ export class OntimizeEEService implements IAuthService, IDataService {
       data: av,
       sqltypes: sqltypes
     });
-
-    let _innerObserver: any;
-    const dataObservable = new Observable(observer => _innerObserver = observer).share();
-
     const self = this;
-    this.httpClient.post(url, body, options).subscribe(resp => {
-      self.parseSuccessfulResponse(resp, _innerObserver);
-    }, error => {
-      self.parseUnsuccessfulResponse(error, _innerObserver);
-    }, () => _innerObserver.complete());
-    return dataObservable;
+    const dataObservable: Observable<any> = new Observable(_innerObserver => {
+      self.httpClient.post(url, body, options).subscribe(resp => {
+        self.parseSuccessfulInsertResponse(resp, _innerObserver);
+      }, error => {
+        self.parseUnsuccessfulInsertResponse(error, _innerObserver);
+      }, () => _innerObserver.complete());
+    });
+    return dataObservable.share();
   }
 
   public update(kv: Object = {}, av: Object = {}, entity?: string, sqltypes?: Object): Observable<any> {
@@ -198,16 +193,15 @@ export class OntimizeEEService implements IAuthService, IDataService {
       data: av,
       sqltypes: sqltypes
     });
-
-    let _innerObserver: any;
-    const dataObservable = new Observable(observer => _innerObserver = observer).share();
     const self = this;
-    this.httpClient.put(url, body, options).subscribe(resp => {
-      self.parseSuccessfulResponse(resp, _innerObserver);
-    }, error => {
-      self.parseUnsuccessfulResponse(error, _innerObserver);
-    }, () => _innerObserver.complete());
-    return dataObservable;
+    const dataObservable: Observable<any> = new Observable(_innerObserver => {
+      self.httpClient.put(url, body, options).subscribe(resp => {
+        self.parseSuccessfulUpdateResponse(resp, _innerObserver);
+      }, error => {
+        self.parseUnsuccessfulUpdateResponse(error, _innerObserver);
+      }, () => _innerObserver.complete());
+    });
+    return dataObservable.share();
   }
 
   public delete(kv: Object = {}, entity?: string, sqltypes?: Object): Observable<any> {
@@ -220,15 +214,15 @@ export class OntimizeEEService implements IAuthService, IDataService {
         sqltypes: sqltypes
       })
     };
-    let _innerObserver: any;
-    const dataObservable = new Observable(observer => _innerObserver = observer).share();
     const self = this;
-    this.httpClient.delete(url, options).subscribe(resp => {
-      self.parseSuccessfulResponse(resp, _innerObserver);
-    }, error => {
-      self.parseUnsuccessfulResponse(error, _innerObserver);
-    }, () => _innerObserver.complete());
-    return dataObservable;
+    const dataObservable: Observable<any> = new Observable(_innerObserver => {
+      self.httpClient.delete(url, options).subscribe(resp => {
+        self.parseSuccessfulDeleteResponse(resp, _innerObserver);
+      }, error => {
+        self.parseUnsuccessfulDeleteResponse(error, _innerObserver);
+      }, () => _innerObserver.complete());
+    });
+    return dataObservable.share();
   }
 
   redirectLogin(sessionExpired: boolean = false) {
@@ -248,11 +242,59 @@ export class OntimizeEEService implements IAuthService, IDataService {
     return !Util.isDefined(value);
   }
 
+  /**
+   * Successful response parsers, there is one parser for each CRUD method which calls to the common parser.
+   * User can overwrite the chosen methods parsers or the common parser
+   */
   protected parseSuccessfulResponse(resp: any, _innerObserver: any) {
     this.responseParser.parseSuccessfulResponse(resp, _innerObserver, this);
   }
 
+  protected parseSuccessfulQueryResponse(resp: any, _innerObserver: any) {
+    this.parseSuccessfulResponse(resp, _innerObserver);
+  }
+
+  protected parseSuccessfulAdvancedQueryResponse(resp: any, _innerObserver: any) {
+    this.parseSuccessfulResponse(resp, _innerObserver);
+  }
+
+  protected parseSuccessfulInsertResponse(resp: any, _innerObserver: any) {
+    this.parseSuccessfulResponse(resp, _innerObserver);
+  }
+
+  protected parseSuccessfulUpdateResponse(resp: any, _innerObserver: any) {
+    this.parseSuccessfulResponse(resp, _innerObserver);
+  }
+
+  protected parseSuccessfulDeleteResponse(resp: any, _innerObserver: any) {
+    this.parseSuccessfulResponse(resp, _innerObserver);
+  }
+
+  /**
+   * Unsuccessful response parsers, there is one parser for each CRUD method which calls to the common parser.
+   * User can overwrite the chosen methods parsers or the common parser
+   */
   protected parseUnsuccessfulResponse(error: any, _innerObserver: any) {
     this.responseParser.parseUnsuccessfulResponse(error, _innerObserver, this);
+  }
+
+  protected parseUnsuccessfulQueryResponse(resp: any, _innerObserver: any) {
+    this.parseUnsuccessfulResponse(resp, _innerObserver);
+  }
+
+  protected parseUnsuccessfulAdvancedQueryResponse(resp: any, _innerObserver: any) {
+    this.parseUnsuccessfulResponse(resp, _innerObserver);
+  }
+
+  protected parseUnsuccessfulInsertResponse(resp: any, _innerObserver: any) {
+    this.parseUnsuccessfulResponse(resp, _innerObserver);
+  }
+
+  protected parseUnsuccessfulUpdateResponse(resp: any, _innerObserver: any) {
+    this.parseUnsuccessfulResponse(resp, _innerObserver);
+  }
+
+  protected parseUnsuccessfulDeleteResponse(resp: any, _innerObserver: any) {
+    this.parseUnsuccessfulResponse(resp, _innerObserver);
   }
 }

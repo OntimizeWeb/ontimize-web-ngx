@@ -1,19 +1,20 @@
-import { Component, ElementRef, EventEmitter, forwardRef, Inject, Injector, NgModule, Optional, ViewChild } from '@angular/core';
+import { AfterViewChecked, Component, ElementRef, EventEmitter, forwardRef, Inject, Injector, NgModule, OnDestroy, OnInit, Optional, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ValidatorFn } from '@angular/forms/src/directives/validators';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
-import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE, MatDateFormats, MatDatepicker, MatDatepickerInput, MatDatepickerInputEvent } from '@angular/material';
+import { DateAdapter, MAT_DATE_LOCALE, MatDatepicker, MatDatepickerInput, MatDatepickerInputEvent } from '@angular/material';
+import { MediaChange, ObservableMedia } from '@angular/flex-layout';
 import { Subscription } from 'rxjs/Subscription';
 
 import moment from 'moment';
 
-import { OSharedModule } from '../../../shared';
+import { OSharedModule, OntimizeMomentDateAdapter } from '../../../shared';
 import { MomentService } from '../../../services';
 import { OFormValue } from '../../form/OFormValue';
 import { InputConverter } from '../../../decorators';
 import { OFormComponent } from '../../form/o-form.component';
 import { OFormDataComponent } from '../../o-form-data-component.class';
 import { DEFAULT_INPUTS_O_TEXT_INPUT, DEFAULT_OUTPUTS_O_TEXT_INPUT } from '../text-input/o-text-input.component';
+import { Util } from '../../../util/util';
 
 export const DEFAULT_OUTPUTS_O_DATE_INPUT = [
   ...DEFAULT_OUTPUTS_O_TEXT_INPUT
@@ -28,15 +29,11 @@ export const DEFAULT_INPUTS_O_DATE_INPUT = [
   'oMaxDate: max',
   'oTouchUi: touch-ui',
   'oStartAt: start-at',
-  'filterDate: filter-date'
+  'filterDate: filter-date',
+  'textInputEnabled: text-input-enabled'
 ];
 
 export type DateFilterFunction = (date: Date) => boolean;
-
-export let O_DATE_INPUT_DEFAULT_FORMATS: MatDateFormats = {
-  parse: { dateInput: 'L' },
-  display: { dateInput: 'L', monthYearLabel: 'Y', dateA11yLabel: 'LL', monthYearA11yLabel: 'MMMM Y' }
-};
 
 @Component({
   selector: 'o-date-input',
@@ -45,11 +42,10 @@ export let O_DATE_INPUT_DEFAULT_FORMATS: MatDateFormats = {
   outputs: DEFAULT_OUTPUTS_O_DATE_INPUT,
   inputs: DEFAULT_INPUTS_O_DATE_INPUT,
   providers: [
-    { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
-    { provide: MAT_DATE_FORMATS, useValue: O_DATE_INPUT_DEFAULT_FORMATS }
+    { provide: DateAdapter, useClass: OntimizeMomentDateAdapter, deps: [MAT_DATE_LOCALE] }
   ]
 })
-export class ODateInputComponent extends OFormDataComponent {
+export class ODateInputComponent extends OFormDataComponent implements AfterViewChecked, OnDestroy, OnInit {
 
   @ViewChild('matInputRef')
   private matInputRef: ElementRef;
@@ -69,25 +65,27 @@ export class ODateInputComponent extends OFormDataComponent {
   protected oMinDate: string;
   protected oMaxDate: string;
   @InputConverter()
-  protected oTouchUi: boolean = false;
+  protected oTouchUi: boolean;
   protected oStartAt: string;
   protected _filterDate: DateFilterFunction;
+  @InputConverter()
+  textInputEnabled: boolean = true;
 
   protected _minDateString: string;
   protected _maxDateString: string;
 
   private momentSrv: MomentService;
+  protected media: ObservableMedia;
 
-  onChange: EventEmitter<Object> = new EventEmitter<Object>();
   onFocus: EventEmitter<Object> = new EventEmitter<Object>();
   onBlur: EventEmitter<Object> = new EventEmitter<Object>();
 
+  protected mediaSubscription: Subscription;
   protected onLanguageChangeSubscription: Subscription;
 
   constructor(
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
-    @Inject(MAT_DATE_FORMATS) protected matDateFormats: MatDateFormats,
-    dateAdapter: DateAdapter<MomentDateAdapter>,
+    dateAdapter: DateAdapter<OntimizeMomentDateAdapter>,
     elRef: ElementRef,
     injector: Injector
   ) {
@@ -95,6 +93,7 @@ export class ODateInputComponent extends OFormDataComponent {
     this.momentDateAdapter = dateAdapter;
     this._defaultSQLTypeKey = 'DATE';
     this.momentSrv = this.injector.get(MomentService);
+    this.media = this.injector.get(ObservableMedia);
   }
 
   ngOnInit() {
@@ -106,17 +105,13 @@ export class ODateInputComponent extends OFormDataComponent {
     }
 
     if (this.oformat) {
-      this.matDateFormats.display.dateInput = this.oformat;
-      this.matDateFormats.parse.dateInput = this.oformat;
+      (this.momentDateAdapter as any).oFormat = this.oformat;
     }
+
     this.momentDateAdapter.setLocale(this.olocale);
 
     if (this.oStartView) {
       this.datepicker.startView = this.oStartView;
-    }
-
-    if (this.oTouchUi) {
-      this.datepicker.touchUi = this.oTouchUi;
     }
 
     if (this.oStartAt) {
@@ -149,8 +144,22 @@ export class ODateInputComponent extends OFormDataComponent {
     }
   }
 
+  ngAfterViewChecked(): void {
+    this.mediaSubscription = this.media.subscribe((change: MediaChange) => {
+      if (['xs', 'sm'].indexOf(change.mqAlias) !== -1) {
+        this.touchUi = Util.isDefined(this.oTouchUi) ? this.oTouchUi : true;
+      }
+      if (['md', 'lg', 'xl'].indexOf(change.mqAlias) !== -1) {
+        this.touchUi = Util.isDefined(this.oTouchUi) ? this.oTouchUi : false;
+      }
+    });
+  }
+
   ngOnDestroy() {
     super.ngOnDestroy();
+    if (this.mediaSubscription) {
+      this.mediaSubscription.unsubscribe();
+    }
     if (this.onLanguageChangeSubscription) {
       this.onLanguageChangeSubscription.unsubscribe();
     }
@@ -194,11 +203,6 @@ export class ODateInputComponent extends OFormDataComponent {
     return this.clearButton && !this.isReadOnly && !this.isDisabled && this.matInputRef.nativeElement.value;
   }
 
-  resolveValidators(): ValidatorFn[] {
-    let validators: ValidatorFn[] = super.resolveValidators();
-    return validators;
-  }
-
   open() {
     if (!this.isReadOnly && !this.isDisabled) {
       this.datepicker.open();
@@ -225,6 +229,12 @@ export class ODateInputComponent extends OFormDataComponent {
   innerOnBlur(event: any) {
     if (!this.isReadOnly && !this.isDisabled) {
       this.onBlur.emit(event);
+    }
+  }
+
+  onClickInput(e: Event): void {
+    if (!this.textInputEnabled) {
+      this.open();
     }
   }
 
@@ -259,6 +269,16 @@ export class ODateInputComponent extends OFormDataComponent {
   set maxDateString(val: string) {
     this._maxDateString = val;
   }
+
+  get touchUi(): boolean {
+    return this.oTouchUi || false;
+  }
+
+  set touchUi(val: boolean) {
+    this.oTouchUi = val;
+    this.datepicker.touchUi = this.touchUi;
+  }
+
 }
 
 @NgModule({
@@ -266,6 +286,4 @@ export class ODateInputComponent extends OFormDataComponent {
   imports: [CommonModule, OSharedModule],
   exports: [ODateInputComponent]
 })
-
-export class ODateInputModule {
-}
+export class ODateInputModule { }

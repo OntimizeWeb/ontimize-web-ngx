@@ -1,18 +1,18 @@
-import { AfterContentInit, Component, ContentChildren, ElementRef, EventEmitter, forwardRef, Inject, Injector, NgModule, OnChanges, OnInit, Optional, QueryList, SimpleChange, ViewChild, ViewEncapsulation } from '@angular/core';
+import { AfterContentInit, AfterViewInit, Component, ContentChildren, ElementRef, EventEmitter, forwardRef, Inject, Injector, NgModule, OnChanges, OnDestroy, OnInit, Optional, QueryList, SimpleChange, ViewChild, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MatCheckbox } from '@angular/material';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
-import { Util, Codes } from '../../utils';
+import { Codes, Util } from '../../utils';
 import { OSharedModule } from '../../shared';
-import { ServiceUtils } from '../service.utils';
 import { OntimizeService } from '../../services';
 import { InputConverter } from '../../decorators';
 import { ObservableWrapper } from '../../util/async';
 import { OFormComponent } from '../form/o-form.component';
-import { OFormDataNavigation } from '../form/form-components';
+import { OQueryDataArgs, ServiceUtils } from '../service.utils';
 import { OServiceComponent } from '../o-service-component.class';
+import { FilterExpressionUtils } from '../filter-expression.utils';
 import { OListItemModule } from './list-item/o-list-item.component';
 import { OListItemComponent } from './list-item/o-list-item.component';
 import { OListItemDirective } from './list-item/o-list-item.directive';
@@ -24,6 +24,7 @@ export interface IList {
   getKeys(): Array<string>;
   setSelected(item: Object);
   isItemSelected(item: Object);
+  detailMode: string;
 }
 
 export const DEFAULT_INPUTS_O_LIST = [
@@ -45,12 +46,16 @@ export const DEFAULT_INPUTS_O_LIST = [
   'odense : dense',
 
   // delete-button [no|yes]: show delete button when user select items. Default: yes.
-  'deleteButton: delete-button',
+  'deleteButton: delete-button'
 ];
 
 export const DEFAULT_OUTPUTS_O_LIST = [
-  'onChange',
-  'onInsertButtonClick'
+  'onClick',
+  'onDoubleClick',
+  'onInsertButtonClick',
+  'onItemDeleted',
+  'onDataLoaded',
+  'onPaginatedDataLoaded'
 ];
 
 export interface OListInitializationOptions {
@@ -71,16 +76,28 @@ export interface OListInitializationOptions {
   outputs: DEFAULT_OUTPUTS_O_LIST,
   templateUrl: './o-list.component.html',
   styleUrls: ['./o-list.component.scss'],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  host: {
+    '[class.o-list]': 'true'
+  }
 })
-export class OListComponent extends OServiceComponent implements OnInit, IList, AfterContentInit, OnChanges {
+export class OListComponent extends OServiceComponent implements AfterContentInit, AfterViewInit, IList, OnDestroy, OnInit, OnChanges {
 
   public static DEFAULT_INPUTS_O_LIST = DEFAULT_INPUTS_O_LIST;
   public static DEFAULT_OUTPUTS_O_LIST = DEFAULT_OUTPUTS_O_LIST;
 
   /* Inputs */
-  @InputConverter()
-  quickFilter: boolean = true;
+  get quickFilter(): boolean {
+    return this._quickFilter;
+  }
+  set quickFilter(val: boolean) {
+    val = Util.parseBoolean(String(val));
+    this._quickFilter = val;
+    if (val) {
+      setTimeout(() => this.registerQuickFilter(this.searchInputComponent), 0);
+    }
+  }
+  protected _quickFilter: boolean = true;
   protected quickFilterColumns: string;
   @InputConverter()
   refreshButton: boolean = true;
@@ -100,13 +117,15 @@ export class OListComponent extends OServiceComponent implements OnInit, IList, 
   listItemDirectives: QueryList<OListItemDirective>;
 
   @ViewChild(OSearchInputComponent)
-  searchInputComponent: OSearchInputComponent;
+  protected searchInputComponent: OSearchInputComponent;
+  quickFilterComponent: OSearchInputComponent;
 
-  public mdClick: EventEmitter<any> = new EventEmitter();
-  public mdDblClick: EventEmitter<any> = new EventEmitter();
+  public onClick: EventEmitter<any> = new EventEmitter();
+  public onDoubleClick: EventEmitter<any> = new EventEmitter();
   public onInsertButtonClick: EventEmitter<any> = new EventEmitter();
-  public onListDataLoaded: EventEmitter<any> = new EventEmitter();
-  public onPaginatedListDataLoaded: EventEmitter<any> = new EventEmitter();
+  public onItemDeleted: EventEmitter<any> = new EventEmitter();
+  public onDataLoaded: EventEmitter<any> = new EventEmitter();
+  public onPaginatedDataLoaded: EventEmitter<any> = new EventEmitter();
 
   protected quickFilterColArray: string[];
   protected dataResponseArray: Array<any> = [];
@@ -124,98 +143,14 @@ export class OListComponent extends OServiceComponent implements OnInit, IList, 
     return 'OListComponent_' + this.oattr;
   }
 
-  registerSearchInput(input: OSearchInputComponent) {
-    if (input && this.quickFilter) {
-      var self = this;
-      input.onSearch.subscribe(val => {
-        self.filterData(val);
-      });
-    }
-  }
-
-  public onListItemClicked(onNext: (item: OListItemDirective) => void): Object {
-    return ObservableWrapper.subscribe(this.mdClick, onNext);
-  }
-
   ngOnInit(): void {
     this.initialize();
   }
 
-  public ngOnChanges(changes: { [propName: string]: SimpleChange }) {
-    if (typeof (changes['staticData']) !== 'undefined') {
-      this.dataResponseArray = changes['staticData'].currentValue;
-      let filter = (this.state && this.state.filterValue) ? this.state.filterValue : undefined;
-      this.filterData(filter);
-    }
-  }
-
-  reinitialize(options: OListInitializationOptions) {
-    super.reinitialize(options);
-  }
-
-  initialize(): void {
-    super.initialize();
-
-    if (this.staticData && this.staticData.length) {
-      this.dataResponseArray = this.staticData;
-    }
-
-    if (this.quickFilterColumns) {
-      this.quickFilterColArray = Util.parseArray(this.quickFilterColumns, true);
-    } else {
-      this.quickFilterColArray = this.colArray;
-    }
-
-    let initialQueryLength = undefined;
-    if (this.state.hasOwnProperty('queryRecordOffset')) {
-      initialQueryLength = this.state.queryRecordOffset;
-    }
-    this.state.queryRecordOffset = 0;
-    if (!this.state.hasOwnProperty('totalQueryRecordsNumber')) {
-      this.state.totalQueryRecordsNumber = 0;
-    }
-    if (this.queryOnInit) {
-      let queryArgs = {
-        offset: 0,
-        length: initialQueryLength || this.queryRows
-      };
-      this.queryData(this.parentItem, queryArgs);
-    }
-  }
-
-  ngOnDestroy() {
-    this.destroy();
-  }
-
-  destroy() {
-    super.destroy();
-    this.onRouteChangeStorageSubscribe.unsubscribe();
-  }
-
   ngAfterViewInit() {
-    if (this.searchInputComponent) {
-      this.registerSearchInput(this.searchInputComponent);
+    if (Util.isDefined(this.searchInputComponent)) {
+      this.registerQuickFilter(this.searchInputComponent);
     }
-  }
-
-  getDense() {
-    return this.odense || undefined;
-  }
-
-  protected setListItemsData() {
-    var self = this;
-    this.listItemComponents.forEach(function (element: OListItemComponent, index) {
-      element.setItemData(self.dataResponseArray[index]);
-    });
-  }
-
-  protected setListItemDirectivesData() {
-    var self = this;
-    this.listItemDirectives.forEach(function (element: OListItemDirective, index) {
-      element.setItemData(self.dataResponseArray[index]);
-      element.setListComponent(self);
-      self.registerListItemDirective(element);
-    });
   }
 
   ngAfterContentInit() {
@@ -230,6 +165,60 @@ export class OListComponent extends OServiceComponent implements OnInit, IList, 
     });
   }
 
+  ngOnDestroy() {
+    this.destroy();
+  }
+
+  public ngOnChanges(changes: { [propName: string]: SimpleChange }) {
+    if (typeof (changes['staticData']) !== 'undefined') {
+      this.dataResponseArray = changes['staticData'].currentValue;
+      let filter = (this.state && this.state.filterValue) ? this.state.filterValue : undefined;
+      this.filterData(filter);
+    }
+  }
+
+  initialize(): void {
+    super.initialize();
+
+    if (this.staticData && this.staticData.length) {
+      this.dataResponseArray = this.staticData;
+    }
+    if (this.quickFilterColumns) {
+      this.quickFilterColArray = Util.parseArray(this.quickFilterColumns, true);
+    } else {
+      this.quickFilterColArray = this.colArray;
+    }
+    let initialQueryLength = undefined;
+    if (this.state.hasOwnProperty('queryRecordOffset')) {
+      initialQueryLength = this.state.queryRecordOffset;
+    }
+    this.state.queryRecordOffset = 0;
+    if (!this.state.hasOwnProperty('totalQueryRecordsNumber')) {
+      this.state.totalQueryRecordsNumber = 0;
+    }
+    if (this.queryOnInit) {
+      let queryArgs: OQueryDataArgs = {
+        offset: 0,
+        length: initialQueryLength || this.queryRows
+      };
+      this.queryData(void 0, queryArgs);
+    }
+  }
+
+  reinitialize(options: OListInitializationOptions) {
+    super.reinitialize(options);
+  }
+
+  registerQuickFilter(input: OSearchInputComponent) {
+    this.quickFilterComponent = input;
+    if (Util.isDefined(this.quickFilterComponent)) {
+      if (this.state.hasOwnProperty('filterValue')) {
+        this.quickFilterComponent.setValue(this.state.filterValue);
+      }
+      this.quickFilterComponent.onSearch.subscribe(val => this.filterData(val));
+    }
+  }
+
   registerListItemDirective(item: OListItemDirective) {
     if (item) {
       var self = this;
@@ -239,48 +228,58 @@ export class OListComponent extends OServiceComponent implements OnInit, IList, 
         });
       }
       if (Codes.isDoubleClickMode(this.detailMode)) {
-        item.onDblClick(directiveItem => {
-          self.onItemDetailDblClick(directiveItem);
+        item.onDoubleClick(directiveItem => {
+          self.onItemDetailDoubleClick(directiveItem);
         });
       }
     }
   }
 
-  onItemDetailClick(item: OListItemDirective | OListItemComponent) {
+  getDense() {
+    return this.odense || undefined;
+  }
+
+  protected setListItemsData() {
+    var self = this;
+    this.listItemComponents.forEach((element: OListItemComponent, index) => {
+      element.setItemData(self.dataResponseArray[index]);
+    });
+  }
+
+  protected setListItemDirectivesData() {
+    var self = this;
+    this.listItemDirectives.forEach((element: OListItemDirective, index) => {
+      element.setItemData(self.dataResponseArray[index]);
+      element.setListComponent(self);
+      self.registerListItemDirective(element);
+    });
+  }
+
+  public onListItemClicked(onNext: (item: OListItemDirective) => void): Object {
+    return ObservableWrapper.subscribe(this.onClick, onNext);
+  }
+
+  public onItemDetailClick(item: OListItemDirective | OListItemComponent) {
     if (this.oenabled && this.detailMode === Codes.DETAIL_MODE_CLICK) {
       this.saveDataNavigationInLocalStorage();
-      this.viewDetail(item.getItemData());
-      ObservableWrapper.callEmit(this.mdClick, item);
+      let data = item.getItemData();
+      this.viewDetail(data);
+      ObservableWrapper.callEmit(this.onClick, data);
     }
   }
 
-  onItemDetailDblClick(item: OListItemDirective | OListItemComponent) {
+  public onItemDetailDoubleClick(item: OListItemDirective | OListItemComponent) {
     if (this.oenabled && Codes.isDoubleClickMode(this.detailMode)) {
       this.saveDataNavigationInLocalStorage();
-      this.viewDetail(item.getItemData());
-      ObservableWrapper.callEmit(this.mdDblClick, item);
+      let data = item.getItemData();
+      this.viewDetail(data);
+      ObservableWrapper.callEmit(this.onDoubleClick, data);
     }
   }
 
   protected saveDataNavigationInLocalStorage(): void {
-    // Save data of the list in navigation-data in the localstorage
-    OFormDataNavigation.storeNavigationData(this.injector, this.getKeysValues());
+    super.saveDataNavigationInLocalStorage();
     this.storePaginationState = true;
-  }
-
-  protected getKeysValues(): any[] {
-    let data = this.dataArray;
-    const _self = this;
-    return data.map(function (row, i, a) {
-      let obj = {};
-      _self.keysArray.map(function (key, i, a) {
-        if (row[key] !== undefined) {
-          obj[key] = row[key];
-        }
-      });
-
-      return obj;
-    });
   }
 
   getDataToStore(): Object {
@@ -305,31 +304,29 @@ export class OListComponent extends OServiceComponent implements OnInit, IList, 
         }
       }
       this.dataResponseArray = respDataArray;
-      this.filterData(this.state.filterValue);
+      if (!this.pageable) {
+        this.filterData(this.state.filterValue);
+      } else {
+        this.setDataArray(this.dataResponseArray);
+      }
     } else {
       this.setDataArray([]);
     }
-
-    this.loaderSubscription.unsubscribe();
-    if (this.pageable) {
-      ObservableWrapper.callEmit(this.onPaginatedListDataLoaded, data);
+    if (this.loaderSubscription) {
+      this.loaderSubscription.unsubscribe();
     }
-    ObservableWrapper.callEmit(this.onListDataLoaded, this.dataResponseArray);
-  }
-
-  /**
-   *@deprecated
-   */
-  onReload() {
-    this.reloadData();
+    if (this.pageable) {
+      ObservableWrapper.callEmit(this.onPaginatedDataLoaded, data);
+    }
+    ObservableWrapper.callEmit(this.onDataLoaded, this.dataResponseArray);
   }
 
   reloadData() {
-    let queryArgs = {};
+    let queryArgs: OQueryDataArgs = {};
     if (this.pageable) {
       this.state.queryRecordOffset = 0;
       queryArgs = {
-        length: this.dataResponseArray.length,
+        length: Math.max(this.queryRows, this.dataResponseArray.length),
         replace: true
       };
     }
@@ -337,7 +334,7 @@ export class OListComponent extends OServiceComponent implements OnInit, IList, 
       this.selectedItems = [];
       this.state.selectedIndexes = [];
     }
-    this.queryData(this.parentItem, queryArgs);
+    this.queryData(void 0, queryArgs);
   }
 
   configureFilterValue(value: string) {
@@ -349,50 +346,31 @@ export class OListComponent extends OServiceComponent implements OnInit, IList, 
       if (!value.endsWith('*')) {
         returnVal = returnVal + '*';
       }
-
-      returnVal = returnVal.replace(new RegExp('[a\u00E1A\u00C1]', 'gi'), '[a\u00E1A\u00C1]');
-      returnVal = returnVal.replace(new RegExp('[e\u00E9E\u00C9]', 'gi'), '[e\u00E9E\u00C9]');
-      returnVal = returnVal.replace(new RegExp('[i\u00EDI\u00CD]', 'gi'), '[i\u00EDI\u00CD]');
-      returnVal = returnVal.replace(new RegExp('[o\u00F3O\u00D3]', 'gi'), '[o\u00F3O\u00D3]');
-      returnVal = returnVal.replace(new RegExp('[u\u00FAU\u00DA]', 'gi'), '[u\u00FAU\u00DA]');
-      //ñÑ
-      returnVal = returnVal.replace(new RegExp('[\u00F1\u00D1]', 'gi'), '[\u00F1\u00D1]');
-
-      returnVal = returnVal.replace(new RegExp('\\*', 'gi'), '.*');
-      returnVal = returnVal.replace(new RegExp('\\+', 'gi'), '\\\\+');
-      returnVal = returnVal.replace(new RegExp('\\?', 'gi'), '\\\\?');
-      returnVal = returnVal.replace(new RegExp('\\(', 'gi'), '\\\\(');
-      returnVal = returnVal.replace(new RegExp('\\)', 'gi'), '\\\\)');
     }
-
     return returnVal;
   }
+
   /**
-   * Improve this method.
-   * Filters data locally.
-   *  */
+   * Filters data locally
+   * @param value the filtering value
+   */
   filterData(value: string): void {
     if (this.state) {
       this.state.filterValue = value;
     }
-    if (value && value.length > 0 && this.dataResponseArray && this.dataResponseArray.length > 0) {
-      var _val = this.configureFilterValue(value);
+    if (this.pageable) {
+      let queryArgs: OQueryDataArgs = {
+        offset: 0,
+        length: this.queryRows,
+        replace: true
+      };
+      this.queryData(void 0, queryArgs);
+    } else if (value && value.length > 0 && this.dataResponseArray && this.dataResponseArray.length > 0) {
       var self = this;
-      var filteredData = this.dataResponseArray.filter(item => {
-        let found = false;
-        let regExp: RegExp = new RegExp(_val, 'i');
-        self.quickFilterColArray.forEach(col => {
-          let current = item[col];
-          if (current) {
-            if (typeof current === 'string') {
-              let match = regExp.exec(current.toLowerCase());
-              if (match && match.length > 0) {
-                found = true;
-              }
-            }
-          }
+      let filteredData = this.dataResponseArray.filter(item => {
+        return self.quickFilterColArray.some(col => {
+          return new RegExp('^' + Util.normalizeString(this.configureFilterValue(value)).split('*').join('.*') + '$').test(Util.normalizeString(item[col]));
         });
-        return found;
       });
       this.setDataArray(filteredData);
     } else {
@@ -458,58 +436,60 @@ export class OListComponent extends OServiceComponent implements OnInit, IList, 
       if (!this.loading && pendingRegistries) {
         let element = e.target as any;
         if (element.offsetHeight + element.scrollTop + 5 >= element.scrollHeight) {
-          let queryArgs = {
+          let queryArgs: OQueryDataArgs = {
             offset: this.state.queryRecordOffset,
             length: this.queryRows
           };
-          this.queryData(this.parentItem, queryArgs);
+          this.queryData(void 0, queryArgs);
         }
       }
     }
   }
 
   remove(clearSelectedItems: boolean = false) {
-    this.dialogService.confirm('CONFIRM', 'MESSAGES.CONFIRM_DELETE').then(
-      res => {
+    let selectedItems = this.getSelectedItems();
+    if (selectedItems.length > 0) {
+      this.dialogService.confirm('CONFIRM', 'MESSAGES.CONFIRM_DELETE').then(res => {
         if (res === true) {
           if (this.dataService && (this.deleteMethod in this.dataService) && this.entity && (this.keysArray.length > 0)) {
-            let filters = ServiceUtils.getArrayProperties(this.selectedItems, this.keysArray);
-
-
-            let observable = (Observable as any).from(filters)
-              .map(kv => this.dataService[this.deleteMethod](kv, this.entity)).mergeAll();
-            observable.subscribe(
-              res => {
-                console.log('[OList.remove]: response', res);
-              },
-              error => {
-                this.dialogService.alert('ERROR', 'MESSAGES.ERROR_DELETE');
-                console.log('[OList.remove]: error', error);
-              },
-              () => {
-                this.queryData(this.parentItem);
-              }
-            );
+            let filters = ServiceUtils.getArrayProperties(selectedItems, this.keysArray);
+            Observable.merge(filters.map((kv => this.dataService[this.deleteMethod](kv, this.entity)))).subscribe(obs => obs.subscribe(res => {
+              console.log('[OList.remove]: response', res);
+              ObservableWrapper.callEmit(this.onItemDeleted, selectedItems);
+            }, error => {
+              this.dialogService.alert('ERROR', 'MESSAGES.ERROR_DELETE');
+              console.log('[OList.remove]: error', error);
+            }, () => {
+              console.log('[OList.remove]: success');
+              this.reloadData();
+            }));
           } else {
             this.deleteLocalItems();
           }
         } else if (clearSelectedItems) {
-          this.selectedItems = [];
+          this.clearSelection();
         }
       });
-  }
-
-  add() {
-    this.onInsertButtonClick.emit();
-    let route = this.getRouteOfSelectedRow(undefined, 'new');
-    if (route.length > 0) {
-      this.saveDataNavigationInLocalStorage();
-      this.router.navigate(route, { relativeTo: this.actRoute });
     }
   }
 
-  hasTitle(): boolean {
-    return this.title !== undefined;
+  add(e?: Event) {
+    this.onInsertButtonClick.emit(e);
+    super.insertDetail();
+  }
+
+
+
+  getComponentFilter(existingFilter: any = {}): any {
+    let filter = existingFilter;
+    // Apply quick filter
+    if (this.pageable && Util.isDefined(this.quickFilterComponent)) {
+      const searchValue = this.quickFilterComponent.getValue();
+      if (Util.isDefined(searchValue)) {
+        filter[FilterExpressionUtils.BASIC_EXPRESSION_KEY] = FilterExpressionUtils.buildArrayExpressionLike(this.quickFilterColArray, searchValue);
+      }
+    }
+    return super.getComponentFilter(filter);
   }
 
 }

@@ -4,8 +4,8 @@ export var MAP = {
 
   'en': {
     'LANGUAGE': 'Language',
-    'LOCALE_en': 'English',
-    'LOCALE_es': 'Español',
+    'LOCALE_en': 'EN',
+    'LOCALE_es': 'ES',
     'USERNAME': 'Username',
     'PASSWORD': 'Password',
     'LOGIN': 'Login',
@@ -83,7 +83,7 @@ export var MAP = {
     'FORM_VALIDATION.FILE_TYPE': 'Invalid format',
     'FORM_VALIDATION.FILE_MAXSIZE': 'Maximum file size',
     'FORM_VALIDATION.FILE_MAXNUM': 'Max. files',
-
+    'FORM_VALIDATION.HOUR_FORMAT': 'Format not valid format',
     'MESSAGES.FORM_VALIDATION_ERROR': 'Form values are not valid!',
     'MESSAGES.FORM_NOTHING_TO_UPDATE_INFO': 'There are no values to update!',
     'MESSAGES.FORM_CHANGES_WILL_BE_LOST': 'Are you sure you want to continue? All unsaved changes will be lost',
@@ -103,6 +103,7 @@ export var MAP = {
     'MESSAGES.SAVED': 'Saved',
     'MESSAGES.DELETED': 'Deleted',
     'MESSAGES.INSERTED': 'Inserted',
+    'MESSAGES.UPDATED': 'Updated',
     'MESSAGES.NO_RESULTS': 'No results were obtained.',
     'MESSAGES.ERROR_MISSING_LANG': 'Selected language bundle file not found',
     'MESSAGES.CONFIRM_DISCARD_FILTER_BY_COLUMN': 'Are you sure you want to discard all active columns filters?',
@@ -196,15 +197,19 @@ export var MAP = {
     'LAYOUT_MANANGER.MAIN_TAB_LABEL': 'Home',
     'LAYOUT_MANANGER.DIALOG_TITLE': 'Detail',
     'APP_LAYOUT.USER_PROFILE': 'My profile',
-    'CARD_MENU_LAYOUT.BUTTON_TEXT': 'View list'
+    'CARD_MENU_LAYOUT.BUTTON_TEXT': 'View list',
+    'GRID.ITEMS_PER_PAGE': 'Items per page',
+    'GRID.SORT_BY': 'Sort by',
+    'GRID.BUTTON_NEXT': ' View {0} following',
+    'GRID.TEXT_SHOWN_ITEMS': 'Shown {0} items of {1}'
   },
 
   // Spanish
 
   'es': {
     'LANGUAGE': 'Idioma',
-    'LOCALE_en': 'Inglés',
-    'LOCALE_es': 'Español',
+    'LOCALE_en': 'EN',
+    'LOCALE_es': 'ES',
     'USERNAME': 'Usuario',
     'PASSWORD': 'Contraseña',
     'LOGIN': 'Entrar',
@@ -283,6 +288,7 @@ export var MAP = {
     'FORM_VALIDATION.FILE_TYPE': 'Formato no válido',
     'FORM_VALIDATION.FILE_MAXSIZE': 'Tamaño de fichero máximo',
     'FORM_VALIDATION.FILE_MAXNUM': 'Número máximo de ficheros',
+    'FORM_VALIDATION.HOUR_FORMAT': 'Formato no válido',
 
     'MESSAGES.FORM_VALIDATION_ERROR': 'El formulario contiene campos con valores no válidos',
     'MESSAGES.FORM_NOTHING_TO_UPDATE_INFO': '¡No existen valores para actualizar!',
@@ -303,6 +309,7 @@ export var MAP = {
     'MESSAGES.SAVED': 'Guardado',
     'MESSAGES.DELETED': 'Borrado',
     'MESSAGES.INSERTED': 'Insertado',
+    'MESSAGES.UPDATED': 'Actualizado',
     'MESSAGES.NO_RESULTS': 'No se obtuvieron resultados.',
     'MESSAGES.ERROR_MISSING_LANG': 'No se ha encontrado el fichero de configuración del idioma seleccionado',
     'MESSAGES.CONFIRM_DISCARD_FILTER_BY_COLUMN': '¿Está seguro de que quiere descartar todos los filtros de columna activos?',
@@ -395,7 +402,11 @@ export var MAP = {
     'LAYOUT_MANANGER.MAIN_TAB_LABEL': 'Inicio',
     'LAYOUT_MANANGER.DIALOG_TITLE': 'Detalle',
     'APP_LAYOUT.USER_PROFILE': 'Mi perfil',
-    'CARD_MENU_LAYOUT.BUTTON_TEXT': 'Acceder'
+    'CARD_MENU_LAYOUT.BUTTON_TEXT': 'Acceder',
+    'GRID.ITEMS_PER_PAGE': 'Elementos por página',
+    'GRID.SORT_BY': 'Ordenado por ',
+    'GRID.BUTTON_NEXT': ' Ver {0} siguientes',
+    'GRID.TEXT_SHOWN_ITEMS': 'Mostrados {0} elementos de {1}'
   }
 
 };

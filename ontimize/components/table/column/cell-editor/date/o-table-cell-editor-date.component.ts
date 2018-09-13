@@ -1,12 +1,11 @@
-import { Component, Injector, ViewChild, TemplateRef, OnInit, Inject, ElementRef, ViewEncapsulation } from '@angular/core';
-import { MatDateFormats, DateAdapter, MatDatepicker, MAT_DATE_FORMATS, MatDatepickerInputEvent, MAT_DATE_LOCALE } from '@angular/material';
-import { MomentDateAdapter } from '@angular/material-moment-adapter';
+import { Component, Injector, ViewChild, TemplateRef, OnInit, ElementRef, ViewEncapsulation } from '@angular/core';
+import { DateAdapter, MatDatepicker, MatDatepickerInputEvent, MAT_DATE_LOCALE } from '@angular/material';
 import moment from 'moment';
 
+import { OntimizeMomentDateAdapter } from '../../../../../shared';
 import { InputConverter } from '../../../../../decorators';
 import { MomentService } from '../../../../../services';
-import { O_DATE_INPUT_DEFAULT_FORMATS, DateFilterFunction } from '../../../../input/date-input/o-date-input.component';
-
+import { DateFilterFunction } from '../../../../input/date-input/o-date-input.component';
 import { OBaseTableCellEditor } from '../o-base-table-cell-editor.class';
 
 export const DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_DATE = [
@@ -33,8 +32,7 @@ export const DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_DATE = [
   outputs: DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_DATE,
   encapsulation: ViewEncapsulation.None,
   providers: [
-    { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
-    { provide: MAT_DATE_FORMATS, useValue: O_DATE_INPUT_DEFAULT_FORMATS }
+    { provide: DateAdapter, useClass: OntimizeMomentDateAdapter, deps: [MAT_DATE_LOCALE] }
   ]
 })
 
@@ -67,8 +65,7 @@ export class OTableCellEditorDateComponent extends OBaseTableCellEditor implemen
   protected datepicker: MatDatepicker<Date>;
   constructor(
     protected injector: Injector,
-    @Inject(MAT_DATE_FORMATS) protected matDateFormats: MatDateFormats,
-    protected momentDateAdapter: DateAdapter<MomentDateAdapter>
+    protected momentDateAdapter: DateAdapter<OntimizeMomentDateAdapter>
   ) {
     super(injector);
     this.momentSrv = this.injector.get(MomentService);
@@ -80,8 +77,7 @@ export class OTableCellEditorDateComponent extends OBaseTableCellEditor implemen
       this.locale = this.momentSrv.getLocale();
     }
     if (this.format) {
-      this.matDateFormats.display.dateInput = this.format;
-      this.matDateFormats.parse.dateInput = this.format;
+      (this.momentDateAdapter as any).oFormat = this.format;
     }
 
     this.momentDateAdapter.setLocale(this.locale);

@@ -1,8 +1,7 @@
 <div [formGroup]="getFormGroup()" [matTooltip]="tooltip" [matTooltipPosition]="tooltipPosition" [matTooltipShowDelay]="tooltipShowDelay">
+  <mat-form-field [class.read-only]="isReadOnly" [class.custom-width]="hasCustomWidth" fxFlexFill>
 
-  <mat-form-field [class.custom-width]="hasCustomWidth" fxFlexFill [class.visible]="!isReadOnly" [class.hidden]="isReadOnly">
-
-    <mat-select #selectModel [attr.id]="getAttribute()" [id]="getAttribute()" fxFill [formControlName]="getAttribute()" [placeholder]="placeHolder"
+    <mat-select [value]="getValue()" #selectModel [id]="getAttribute()" fxFill [formControlName]="getAttribute()" [placeholder]="placeHolder"
       [multiple]="getMultiple()" [required]="isRequired" (selectionChange)="onSelectionChange($event)">
 
       <mat-select-trigger *ngIf="multiple && multipleTriggerLabel">
@@ -18,15 +17,6 @@
       </mat-option>
     </mat-select>
     <mat-error *ngIf="hasError('required')">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</mat-error>
+    <mat-error *ngFor="let oError of getActiveOErrors()"> {{ oError.text | oTranslate }} </mat-error>
   </mat-form-field>
-
-  <mat-form-field [class.custom-width]="hasCustomWidth" [class.visible]="isReadOnly" [class.hidden]="!isReadOnly" fxFlex fxFill>
-    <input matInput class="mat-input" type="text" [attr.id]="'fake_' + getAttribute()" [id]="'fake_' + getAttribute()" fxFill
-      [class.ng-untouched]="getFormControl() && getFormControl().untouched" [class.ng-touched]="getFormControl() && getFormControl().touched"
-      [class.ng-dirty]="getFormControl() && getFormControl().dirty" [class.ng-pristine]="getFormControl() && getFormControl().pristine"
-      [class.ng-invalid]="getFormControl() && !getFormControl().valid" [class.ng-valid]="getFormControl() && getFormControl().valid"
-      [placeholder]="placeHolder" [value]="getDescriptionValue()" [readonly]="isReadOnly" [required]="isRequired">
-    <mat-error *ngIf="hasError('required')">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</mat-error>
-  </mat-form-field>
-
 </div>

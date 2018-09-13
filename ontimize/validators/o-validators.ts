@@ -1,4 +1,4 @@
-import { FormControl } from '@angular/forms';
+import { FormControl, ValidationErrors } from '@angular/forms';
 
 const EMAIL_REGEXP = /[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?/;
 
@@ -7,13 +7,37 @@ const DNI_PATTERN = '^(([0-9]{8})([-]?)([a-zA-Z]{1}))$';
 const NIE_PATTERN = '^(([x-zX-Z]{1})([-]?)([0-9]{7})([-]?)([a-zA-Z]{1}))$';
 const DNI_CHECK = 'TRWAGMYFPDXBNJZSQVHLCKET';
 const NUMBERS = '0123456789';
+const TWELVE_HOUR_FORMAT_PATTERN = '(([01]?[0-9]):([0-5][0-9]) ([AaPp][Mm]))';
+const TWENTY_FOUR_HOUR_FORMAT_PATTERN = '([01]?[0-9]|2[0-3]):[0-5][0-9]';
 
 export class OValidators {
 
   /**
+  * Hour validator hh:mm am/pm format
+  */
+  static twelveHourFormatValidator(control: FormControl): ValidationErrors {
+    let regExp = new RegExp(TWELVE_HOUR_FORMAT_PATTERN);
+    if (control.value && !regExp.test(control.value)) {
+      return { 'invalidFormatHour': true };
+    }
+    return {};
+  }
+
+  /**
+  * Hour validator HH:mm format
+  */
+  static twentyHourFormatValidator(control: FormControl): ValidationErrors {
+    let regExp = new RegExp(TWENTY_FOUR_HOUR_FORMAT_PATTERN);
+    if (control.value && !regExp.test(control.value)) {
+      return { 'invalidFormatHour': true };
+    }
+    return {};
+  }
+
+  /**
    * Email validator
    */
-  static emailValidator(control: FormControl) {
+  static emailValidator(control: FormControl): ValidationErrors {
     if (control.value && control.value.length > 0 && !EMAIL_REGEXP.test(control.value)) {
       return { 'invalidEmailAddress': true };
     }
@@ -23,8 +47,7 @@ export class OValidators {
   /**
    * NIF validator
    */
-  static nifValidator(control: FormControl): any {
-
+  static nifValidator(control: FormControl): ValidationErrors {
     let newValue = control.value;
     let regExp = new RegExp(DNI_PATTERN + '|' + NIE_PATTERN);
 
@@ -56,6 +79,7 @@ export class OValidators {
         }
       }
     }
+    return undefined;
   }
 
 }

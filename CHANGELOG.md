@@ -1,3 +1,90 @@
+## 3.0.2 (2018-09-13)
+### Features
+* **ontimize-ee.service**, **ontimize.service**: new response parsers methods (separately by each CRUD method) ([c8c9e6f](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c8c9e6f))
+* **o-table-dao**: new `updateQuery` method ([ad4f7ea](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ad4f7ea))
+* **o-service-base-component.class**:
+  * new '*OServiceBaseComponent*' `extractKeysFromRecord` and `getSqlTypes` methods ([0aa24c9](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0aa24c9))
+  * new '*OServiceBaseComponent*' `getParentKeysValues` method ([e94aa61](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e94aa61))
+* **o-form-service-component.class**, **o-combo**, **o-listpicker**: new `query-with-null-parent-keys` attribute ([7e93930](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7e93930))
+* **o-table cell editors**:
+  * updating cell data in server ([360bfd0](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/360bfd0))
+  * new `updateRecordOnEdit` and `showToastOnEdit` inputs and `onPostUpdateRecord` output added to all cell editors ('*OBaseTableCellEditor*' class) ([360bfd0](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/360bfd0))
+* **o-table**:
+  * new `updateRecord` method ([a528120](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a528120))
+  * new `auto-align-titles` input ([1714a25](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1714a25))
+  * supports **infinite scroll** when `pagination-controls="no"` and `pageable="no"` ([9fc3afa](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9fc3afa))
+* **o-table-column**:
+  * new `title-align` input ([1d261e1](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1d261e1))
+  * new `multiline` input ([d5957fe](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d5957fe))
+* **o-list**:
+  * new outputs added: `onItemDeleted`, `onDataLoaded`, `onPaginatedDataLoade` ([2f71849](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2f71849))
+  * added suppor for using the `o-filter-builder` component ([1736a2a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1736a2a))
+  * Now, both `o-list-item` component and `o-list-item` directive make the list items go to item detail when click on them by default. Use the `detail-mode` attribute to configure this ([1cb22d3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1cb22d3) [ee2eecb](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ee2eecb) [60848fe](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/60848fe))
+* **o-list-item-card**: new input `show-image` ([ed89b6b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ed89b6b))
+* **o-app-layout**:
+  * New input `mode` for selecting performance mode `desktop` or `mobile` ([7617175](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7617175))
+  * New input `sidenav-mode` for selecting the [material sidenav mode](https://material.angular.io/components/sidenav/overview#changing-the-sidenav-39-s-behavior) ([c9a787d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c9a787d))
+  * New input `show-language-selector` ([c06bc24](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c06bc24))
+* **o-app-header**: new input `show-language-selector` ([c06bc24](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c06bc24))
+* New **o-validator** component that allows to add a custom validator to a `OFormDataComponent`. ([4e2f841](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4e2f841))
+  * New inner **o-error** inner component for defining the error text of the possible validator errors ([4e2f841](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4e2f841))
+* **OFormDataComponent**:
+  * new `validators` input (closes [#100](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/100)) ([4e2f841](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4e2f841))
+  * support for using `o-validators` and `o-error` inner components (closes [#100](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/100)) ([a2e6bbe](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a2e6bbe))
+  * new exported static `DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT` array containing default ouputs. Also declaring default `onChange` EventEmitter ([3a999c8](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3a999c8))
+* **o-checkbox**: new attributes `boolean-type`, `true-value` and `false-value` ([0d6d0dd](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0d6d0dd)) closes [#187](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/187)
+* New **o-hour-input** component ([8212f85](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/8212f85))
+* New **o-time-input** component ([49fe9c2](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/49fe9c2))
+* **o-table-insertable-row**: new `include-parent-keys` input ([29e2a94](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/29e2a94))
+* **o-image**: new `full-screen-button` input ([78bff44](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/78bff44))
+* **o-list-picker**: new `text-input-enabled` input ([f903f27](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f903f27)) Closes [#181](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/181)
+* **o-date-input**: new `text-input-enabled` input ([edb65ef](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/edb65ef))
+* **o-form-layout-manager**:
+  * new `store-state` input for allowing localStorage state storing (only in tab mode) ([1c0afc1](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1c0afc1)) ([de562f6](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/de562f6))
+  * allowing inner components navigation
+
+### Bug Fixes
+* **o-table, o-list, o-tree**: fixed error when querying data with parent keys and no defined values for some of those parent keys ([0548c8e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0548c8e)).
+* **o-table**:
+  * fixed error attribute `controls` does not show/hide the table tool bar ([2632658](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2632658)).
+  * fixed remove method ([3870b4f](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3870b4f)).
+  * fixed bugs related with `detail-button-in-row` and `edit-button-in-row` inputs ([1cbd261](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1cbd261)).
+* **o-list**: multiple errors fixed:
+  * Navigate to insert form when clicking the insert button ([2f71849](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2f71849)).
+  * Delete selected list items ([2f71849](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2f71849)).
+* **o-combo**: state bugs fixed ([#202](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/202)) ([db1de6f](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/db1de6f))
+* **o-form-data-components**: components state bugs fixed ([#203](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/203)) ([f986d12](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f986d12))
+
+
+### BREAKING CHANGES
+* **ServiceUtils**: method `getParentItemFromForm` has been removed. Use `getParentKeysFromForm` instead.
+* **OServiceBaseComponent**: method `checkQueryReadyParentKeys` has been renamed to `filterContainsAllParentKeys`.
+* **o-list**:
+  * The method `onReload` has been removed as it was deprecated in v1.2.0.
+  * The method `registerSearchInput` has been renamed to `registerQuickFilter`.
+  * The public attribute `searchInputComponent` has been renamed to `quickFilterComponent`.
+* **o-table**:
+  * The attribute `show-table-buttons-text` has been renamed to `show-buttons-text`.
+  * The output `onTableDataLoaded` has been renamed to `onDataLoaded`.
+  * The output `onPaginatedTableDataLoaded` has been renamed to `onPaginatedDataLoaded`.
+  * The attribute `break-word` (breakWord) has been removed. Use `multiline` instead.
+  * editors and renderers:
+    * The method `initialize` which was deprecated in 3.0.0-rc.1 has been removed.
+* **o-form**: Output `onFormDataLoaded` has been renamed to `onDataLoaded`.
+* **o-user-info**: removed input `use-flag-icons`. This component doesn't contain the language selector anymore.
+* Changes in CSS classes naming:
+  * **o-app-layout**: Internal CSS classes changes:
+    * All internal CSS classes starting with `application-sidenav` has changed to `o-app-sidenav`.
+    * All internal CSS classes starting with `application-header` has changed to `o-app-header`.
+    * All internal CSS classes starting with `user-info` has changed to `o-user-info`.
+  * **o-list-picker-dialog**: Internal CSS classes changes:
+    * Internal CSS class `dialog-list-container` has been removed, use `mat-dialog-content` instead.
+    * Internal CSS class `list-picker-search` has changed to `o-list-picker-search`.
+    * Internal CSS class `has-filter` has changed to `o-list-picker-has-filter`.
+  * **o-table**: Internal CSS class `hidden-action-text` has been removed.
+  * **o-form-toolbar**: Internal CSS class `toolbar-form-header` has changed to `o-form-toolbar-header`.
+* **OFormDataNavigation**: This internal class has been removed. You dont have to make any change unless you were overriding its use in the **o-form-navigation** component.
+
 ## 3.0.1 (2018-07-27)
 ### Features
 * **o-list-item**: list item directive now can be attached to `mat-list-item` and `mat-card` components ([e256100](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e256100)).

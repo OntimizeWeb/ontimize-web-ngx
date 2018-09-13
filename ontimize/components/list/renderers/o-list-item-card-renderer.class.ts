@@ -1,23 +1,20 @@
-import {
-  Injector,
-  ElementRef,
-  Renderer,
-  EventEmitter
-} from '@angular/core';
+import { ElementRef, EventEmitter, Injector, Renderer } from '@angular/core';
 
+import { Util } from '../../../util/util';
 import { OListItemComponent } from '../list-item/o-list-item.component';
 
 export const DEFAULT_INPUTS_O_CARD_RENDERER = [
   'title',
   'subtitle',
   'image',
-  'action1Text : action-1-text',
-  'action2Text : action-2-text'
+  'showImage: show-image',
+  'action1Text: action-1-text',
+  'action2Text: action-2-text'
 ];
 
 export const DEFAULT_OUTPUTS_O_CARD_RENDERER = [
-  'onAction1Click : action-1',
-  'onAction2Click : action-2'
+  'onAction1Click: action-1',
+  'onAction2Click: action-2'
 ];
 
 export class OListItemCardRenderer {
@@ -29,6 +26,7 @@ export class OListItemCardRenderer {
   protected _title: string;
   protected _subtitle: string;
   protected _image: string;
+  protected _showImage: boolean = true;
   protected _action1Text: string;
   protected _action2Text: string;
 
@@ -41,8 +39,7 @@ export class OListItemCardRenderer {
     protected _renderer: Renderer,
     protected _injector: Injector,
     protected _listItem: OListItemComponent
-  ) {
-  }
+  ) { }
 
   modifyMatListItemElement() {
     if (this.elRef.nativeElement && this.elRef.nativeElement.parentElement) {
@@ -52,11 +49,17 @@ export class OListItemCardRenderer {
     }
   }
 
-  onAction1ButtonClick(event: any) {
+  onAction1ButtonClick(e?: Event) {
+    if (Util.isDefined(e)) {
+      e.stopPropagation();
+    }
     this.onAction1Click.emit(event);
   }
 
-  onAction2ButtonClick(event: any) {
+  onAction2ButtonClick(e?: Event) {
+    if (Util.isDefined(e)) {
+      e.stopPropagation();
+    }
     this.onAction2Click.emit(event);
   }
 
@@ -88,6 +91,14 @@ export class OListItemCardRenderer {
     this._image = val;
   }
 
+  get showImage(): boolean {
+    return this._showImage;
+  }
+
+  set showImage(val: boolean) {
+    this._showImage = val;
+  }
+
   get action1Text(): string {
     return this._action1Text;
   }
@@ -103,4 +114,5 @@ export class OListItemCardRenderer {
   set action2Text(val: string) {
     this._action2Text = val;
   }
+
 }

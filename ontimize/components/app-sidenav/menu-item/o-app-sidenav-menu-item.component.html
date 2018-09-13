@@ -1,14 +1,14 @@
 <ng-container *ngIf="sidenavOpened">
-  <li class="application-sidenav-menuitem application-sidenav-item" [class.user-info]="isUserInfoItem()">
+  <li class="o-app-sidenav-menuitem o-app-sidenav-item" [class.o-user-info]="isUserInfoItem()">
 
-    <a mat-button *ngIf="!isUserInfoItem() && !isLocaleItem()" (click)="onClick()" [class.application-sidenav-viewer-sidenav-item-selected]="isActiveItem()">
+    <a mat-button *ngIf="!isUserInfoItem() && !isLocaleItem()" (click)="triggerClick($event)" [class.o-app-sidenav-viewer-sidenav-item-selected]="isActiveItem()">
       <div fxLayout="row" fxLayoutAlign="start center">
         <mat-icon *ngIf="menuItem.icon">{{ menuItem.icon }}</mat-icon>
         {{ menuItem.name | oTranslate }}
       </div>
     </a>
 
-    <a mat-button *ngIf="isLocaleItem()" (click)="onClick()">
+    <a mat-button *ngIf="isLocaleItem()" (click)="triggerClick($event)">
       <div fxLayout="row" fxLayoutAlign="space-between center">
         <mat-icon *ngIf="menuItem.icon">{{ menuItem.icon }}</mat-icon>
         {{ menuItem.name | oTranslate }}
@@ -16,10 +16,10 @@
       </div>
     </a>
 
-    <div *ngIf="isUserInfoItem()" fxLayout="column" fxLayoutAlign="center center" class="user-info-menu-item">
-      <div class="user-info-image" fxFlexFill></div>
-      <div class="user-info-item" fxLayout="row" fxLayoutAlign="space-between center" fxFlexFill>
-        <div class="user-info-name">{{ menuItem.user }} </div>
+    <div *ngIf="isUserInfoItem()" fxLayout="column" fxLayoutAlign="center center" class="o-user-info-menu-item">
+      <div class="o-user-info-image" fxFlexFill></div>
+      <div class="o-user-info-item" fxLayout="row" fxLayoutAlign="space-between center" fxFlexFill>
+        <div class="o-user-info-name">{{ menuItem.user }} </div>
         <o-language-selector [use-flag-icons]="useFlagIcons"></o-language-selector>
       </div>
     </div>
@@ -27,8 +27,9 @@
 </ng-container>
 
 <ng-container *ngIf="!sidenavOpened">
-  <li class="application-sidenav-menuitem application-sidenav-item">
-    <a [matTooltip]="tooltip" matTooltipClass="menuitem-tooltip" matTooltipPosition="right" mat-button (click)="onClick()" [class.application-sidenav-viewer-sidenav-item-selected]="isActiveItem()">
+  <li class="o-app-sidenav-menuitem o-app-sidenav-item">
+    <a [matTooltip]="tooltip" matTooltipClass="menuitem-tooltip" matTooltipPosition="right" mat-button (click)="triggerClick($event)"
+      [class.o-app-sidenav-viewer-sidenav-item-selected]="isActiveItem()">
       <mat-icon *ngIf="menuItem.icon">{{ menuItem.icon }}</mat-icon>
     </a>
   </li>

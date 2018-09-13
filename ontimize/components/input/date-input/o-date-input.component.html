@@ -1,10 +1,10 @@
 <div fxLayout="row" fxLayoutAlign="space-between center" [formGroup]="getFormGroup()" [matTooltip]="tooltip" [matTooltipPosition]="tooltipPosition"
   [matTooltipShowDelay]="tooltipShowDelay">
   <mat-form-field [class.custom-width]="hasCustomWidth" class="icon-field" fxFlexFill>
-    <input matInput #matInputRef [matDatepicker]="d" [attr.id]="getAttribute()" [id]="getAttribute()" [formControlName]="getAttribute()"
-      [placeholder]="placeHolder" [readonly]="isReadOnly" [ngModel]="getValueAsDate()" (ngModelChange)="onModelChange($event)"
-      (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)" [matDatepickerFilter]="filterDate" (dateChange)="innerOnChange($event)"
-      [required]="isRequired">
+    <input matInput #matInputRef [matDatepicker]="d" [id]="getAttribute()" [formControlName]="getAttribute()" [placeholder]="placeHolder"
+      [readonly]="isReadOnly || !textInputEnabled" [ngModel]="getValueAsDate()" (ngModelChange)="onModelChange($event)" (focus)="innerOnFocus($event)"
+      (blur)="innerOnBlur($event)" [matDatepickerFilter]="filterDate" (dateChange)="innerOnChange($event)" [required]="isRequired"
+      (click)="onClickInput($event)">
     <button *ngIf="showClearButton" matSuffix mat-icon-button (click)="clearValue()">
       <mat-icon svgIcon="ontimize:close"></mat-icon>
     </button>
@@ -17,5 +17,6 @@
     <mat-error *ngIf="hasError('matDatepickerFilter')">{{ 'FORM_VALIDATION.DATE_FILTER' | oTranslate }}</mat-error>
     <mat-error *ngIf="hasError('matDatepickerMin')">{{ 'FORM_VALIDATION.DATE_MIN' | oTranslate }} {{ minDateString }}</mat-error>
     <mat-error *ngIf="hasError('matDatepickerMax')">{{ 'FORM_VALIDATION.DATE_MAX' | oTranslate }} {{ maxDateString }}</mat-error>
+    <mat-error *ngFor="let oError of getActiveOErrors()"> {{ oError.text | oTranslate }} </mat-error>
   </mat-form-field>
 </div>

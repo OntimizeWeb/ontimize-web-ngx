@@ -1,9 +1,9 @@
 <div fxLayout="row" fxLayoutAlign="space-between center" [formGroup]="getFormGroup()" [matTooltip]="tooltip" [matTooltipPosition]="tooltipPosition"
   [matTooltipShowDelay]="tooltipShowDelay">
   <mat-form-field [class.custom-width]="hasCustomWidth" class="icon-field" fxFlexFill>
-    <input matInput type="text" [attr.id]="getAttribute()" [id]="getAttribute()" [formControlName]="getAttribute()" [placeholder]="placeHolder"
-      [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)" (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)"
-      [readonly]="isReadOnly" [required]="isRequired">
+    <input matInput type="text" [id]="getAttribute()" [formControlName]="getAttribute()" [placeholder]="placeHolder" [ngModel]="getValue()"
+      (ngModelChange)="innerOnChange($event)" (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)" [readonly]="isReadOnly"
+      [required]="isRequired">
     <button *ngIf="showClearButton" matSuffix mat-icon-button (click)="clearValue()">
       <mat-icon svgIcon="ontimize:close"></mat-icon>
     </button>
@@ -11,5 +11,6 @@
     <mat-error *ngIf="hasError('required')">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</mat-error>
     <mat-error *ngIf="hasError('invalidNIF')">{{ 'FORM_VALIDATION.NIF_FORMAT' | oTranslate}}</mat-error>
     <mat-error *ngIf="hasError('invalidNIFLetter')">{{ 'FORM_VALIDATION.DNI_LETTER' | oTranslate}}</mat-error>
+    <mat-error *ngFor="let oError of getActiveOErrors()"> {{ oError.text | oTranslate }} </mat-error>
   </mat-form-field>
 </div>

@@ -106,9 +106,9 @@ export class OTableQuickfilterComponent implements OnInit, AfterViewInit, OnDest
     }
   }
 
-  setValue(value: any) {
+  setValue(value: any, trigger: boolean = true) {
     this.value = value;
-    if (this.table && this.table.dataSource) {
+    if (trigger && this.table && this.table.dataSource) {
       this.table.dataSource.quickFilter = this.value;
     }
   }

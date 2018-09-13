@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, ElementRef, forwardRef, Inject, Injector, NgModule, OnInit, Optional, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl } from '@angular/forms';
-import { ValidatorFn } from '@angular/forms/src/directives/validators';
+import { ValidatorFn, ValidationErrors } from '@angular/forms';
 
 import { Util } from '../../../util/util';
 import { OSharedModule } from '../../../shared';
@@ -191,7 +191,7 @@ export class OIntegerInputComponent extends OTextInputComponent implements After
     return validators;
   }
 
-  protected minValidator(control: FormControl) {
+  protected minValidator(control: FormControl): ValidationErrors {
     if ((typeof (control.value) === 'number') && (control.value < this.min)) {
       return {
         'min': {
@@ -202,7 +202,7 @@ export class OIntegerInputComponent extends OTextInputComponent implements After
     return {};
   }
 
-  protected maxValidator(control: FormControl) {
+  protected maxValidator(control: FormControl): ValidationErrors {
     if ((typeof (control.value) === 'number') && (this.max < control.value)) {
       return {
         'max': {

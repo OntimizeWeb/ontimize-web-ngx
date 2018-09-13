@@ -1,7 +1,6 @@
-import { Component, OnInit, EventEmitter, Injector, NgModule, ViewEncapsulation } from '@angular/core';
-import { FormGroup, FormControl } from '@angular/forms';
+import { Component, EventEmitter, Injector, NgModule, OnInit, ViewEncapsulation } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/distinctUntilChanged';
 
@@ -23,7 +22,10 @@ export const DEFAULT_OUTPUTS_O_SEARCH_INPUT = [
   styleUrls: ['./o-search-input.component.scss'],
   inputs: DEFAULT_INPUTS_O_SEARCH_INPUT,
   outputs: DEFAULT_OUTPUTS_O_SEARCH_INPUT,
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  host: {
+    'class.o-search-input': 'true'
+  }
 })
 export class OSearchInputComponent implements OnInit {
 
@@ -42,7 +44,6 @@ export class OSearchInputComponent implements OnInit {
 
   constructor(protected injector: Injector) {
     this.translateService = this.injector.get(OTranslateService);
-
     this.formGroup = new FormGroup({});
   }
 
@@ -64,6 +65,10 @@ export class OSearchInputComponent implements OnInit {
 
   getValue(): string {
     return this.term.value;
+  }
+
+  setValue(val: string) {
+    this.term.setValue(val);
   }
 
   getFormControl(): FormControl {
@@ -92,8 +97,7 @@ export class OSearchInputComponent implements OnInit {
 
 @NgModule({
   declarations: [OSearchInputComponent],
-  imports: [OSharedModule, CommonModule],
+  imports: [CommonModule, OSharedModule],
   exports: [OSearchInputComponent]
 })
-export class OSearchInputModule {
-}
+export class OSearchInputModule { }

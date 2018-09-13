@@ -1,5 +1,6 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Injector, NgModule, OnDestroy, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, AfterViewChecked, ChangeDetectionStrategy, ChangeDetectorRef, Component, Injector, NgModule, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { MediaChange, ObservableMedia } from '@angular/flex-layout';
 import { Subscription } from 'rxjs/Subscription';
 
 import { OSharedModule } from '../../shared/shared.module';
@@ -22,15 +23,18 @@ export const DEFAULT_OUTPUTS_O_MENU_LAYOUT = [
   outputs: DEFAULT_OUTPUTS_O_MENU_LAYOUT,
   encapsulation: ViewEncapsulation.None,
   host: {
-    '[class.o-menu-layout]': 'true'
+    '[class.o-menu-layout]': 'true',
+    '[class.o-card-menu-layout-bigscreen]': 'isSmallScreen'
   },
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class OCardMenuLayoutComponent implements AfterViewInit, OnDestroy {
+export class OCardMenuLayoutComponent implements AfterViewChecked, AfterViewInit, OnDestroy {
 
   public static DEFAULT_INPUTS_O_MENU_LAYOUT = DEFAULT_INPUTS_O_MENU_LAYOUT;
   public static DEFAULT_OUTPUTS_O_MENU_LAYOUT = DEFAULT_OUTPUTS_O_MENU_LAYOUT;
 
+  protected mediaWatch: Subscription;
+  protected media: ObservableMedia;
   protected translateService: OTranslateService;
   protected translateServiceSubscription: Subscription;
   protected appMenuService: AppMenuService;
@@ -38,10 +42,20 @@ export class OCardMenuLayoutComponent implements AfterViewInit, OnDestroy {
   protected cardItemsArray: MenuRootItem[];
   protected parentMenuId: string;
 
+  get isSmallScreen(): boolean {
+    return this._isSmallScreen;
+  }
+  set isSmallScreen(val: boolean) {
+    this._isSmallScreen = val;
+    this.cd.detectChanges();
+  }
+  protected _isSmallScreen: boolean = false;
+
   constructor(
     private injector: Injector,
     private cd: ChangeDetectorRef
   ) {
+    this.media = this.injector.get(ObservableMedia);
     this.translateService = this.injector.get(OTranslateService);
     this.appMenuService = this.injector.get(AppMenuService);
     this.menuRoots = this.appMenuService.getMenuRoots();
@@ -55,7 +69,21 @@ export class OCardMenuLayoutComponent implements AfterViewInit, OnDestroy {
     this.setCardMenuItems();
   }
 
+  ngAfterViewChecked(): void {
+    this.mediaWatch = this.media.subscribe((change: MediaChange) => {
+      if (['xs', 'sm'].indexOf(change.mqAlias) !== -1) {
+        this.isSmallScreen = true;
+      }
+      if (['md', 'lg', 'xl'].indexOf(change.mqAlias) !== -1) {
+        this.isSmallScreen = false;
+      }
+    });
+  }
+
   ngOnDestroy() {
+    if (this.mediaWatch) {
+      this.mediaWatch.unsubscribe();
+    }
     if (this.translateServiceSubscription) {
       this.translateServiceSubscription.unsubscribe();
     }

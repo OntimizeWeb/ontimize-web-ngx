@@ -5,6 +5,7 @@ import { Util, Codes } from '../../../../../utils';
 import { DialogService, OntimizeService } from '../../../../../services';
 import { OBaseTableCellRenderer } from '../o-base-table-cell-renderer.class';
 import { dataServiceFactory } from '../../../../../services/data-service.provider';
+import { ServiceUtils } from '../../../../service.utils';
 
 export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_SERVICE = [
   'entity',
@@ -59,7 +60,6 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
   }
 
   ngOnInit() {
-    super.ngOnInit();
     this.colArray = Util.parseArray(this.columns, true);
     let pkArray = Util.parseArray(this.parentKeys);
     this._pKeysEquiv = Util.parseParentKeysEquivalences(pkArray);
@@ -82,8 +82,7 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
       console.warn('Service not properly configured! aborting query');
       return;
     }
-
-    const filter = this.getFilterUsingParentKeys(parentItem, this._pKeysEquiv);
+    const filter = ServiceUtils.getFilterUsingParentKeys(parentItem, this._pKeysEquiv);
     let tableColAlias = Object.keys(this._pKeysEquiv).find(key => this._pKeysEquiv[key] === this.column);
     if (Util.isDefined(tableColAlias) && !filter[tableColAlias]) {
       filter[tableColAlias] = cellvalue;
@@ -104,22 +103,6 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
         this.dialogService.alert('ERROR', 'MESSAGES.ERROR_QUERY');
       }
     });
-  }
-
-  getFilterUsingParentKeys(parentItem: any, parentKeysObject: Object) {
-    let filter = {};
-    const parentKeys = Object.keys(parentKeysObject || {});
-
-    if ((parentKeys.length > 0) && (typeof (parentItem) !== 'undefined')) {
-      for (let k = 0; k < parentKeys.length; ++k) {
-        let parentKey = parentKeys[k];
-        if (parentItem.hasOwnProperty(parentKey)) {
-          let currentData = parentItem[parentKey];
-          filter[parentKeysObject[parentKey]] = currentData;
-        }
-      }
-    }
-    return filter;
   }
 
   configureService() {

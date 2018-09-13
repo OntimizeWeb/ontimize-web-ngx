@@ -12,6 +12,23 @@ import { ColumnValueFilterOperator, IColumnValueFilter, OTableEditableRowCompone
 import { OColumn, OTableComponent, OTableOptions } from './o-table.component';
 import { OTableDao } from './o-table.dao';
 
+export const SCROLLVIRTUAL = 'scroll';
+
+export interface ITableOScrollEvent {
+  type: string;
+  data: number;
+}
+
+export class OTableScrollEvent implements ITableOScrollEvent {
+  public data: number;
+  public type: string;
+
+  constructor(data: number) {
+    this.data = data;
+    this.type = SCROLLVIRTUAL;
+  }
+}
+
 export class OTableDataSource extends DataSource<any> {
   dataTotalsChange = new BehaviorSubject<any[]>([]);
   get data(): any[] { return this.dataTotalsChange.value; }
@@ -23,8 +40,16 @@ export class OTableDataSource extends DataSource<any> {
 
   protected _quickFilterChange = new BehaviorSubject('');
   protected _columnValueFilterChange = new Subject();
+  protected _loadDataScrollableChange = new BehaviorSubject<OTableScrollEvent>(new OTableScrollEvent(1));
 
   protected filteredData: any[] = [];
+
+  //load data in scroll
+  get loadDataScrollable(): number { return this._loadDataScrollableChange.getValue().data || 1; }
+  set loadDataScrollable(page: number) {
+    this._loadDataScrollableChange.next(new OTableScrollEvent(page));
+  }
+
   renderedData: any[] = [];
   resultsLength: number = 0;
 
@@ -62,6 +87,8 @@ export class OTableDataSource extends DataSource<any> {
 
       if (this._paginator) {
         displayDataChanges.push(this._paginator.page);
+      } else {
+        displayDataChanges.push(this._loadDataScrollableChange);
       }
     }
 
@@ -69,38 +96,51 @@ export class OTableDataSource extends DataSource<any> {
       displayDataChanges.push(this._columnValueFilterChange);
     }
 
-    return Observable.merge(...displayDataChanges).map(() => {
-      let data =  Object.assign([], this._database.data);
+    return Observable.merge(...displayDataChanges).map((x: any) => {
+      let data = Object.assign([], this._database.data);
       /*
         it is necessary to first calculate the calculated columns and
         then filter and sort the data
       */
-      if (this.existsAnyCalculatedColumn()) {
-        data = this.getColumnCalculatedData(data);
-      }
-
-      if (!this.table.pageable) {
-        data = this.getColumnValueFilterData(data);
-        data = this.getQuickFilterData(data);
-        data = this.getSortedData(data);
-      }
-
-      this.filteredData = Object.assign([], data);
-
-      if (this.table.pageable) {
-        const totalRecordsNumber = this.table.getTotalRecordsNumber();
-        this.resultsLength = totalRecordsNumber !== undefined ? totalRecordsNumber : data.length;
+      if (x instanceof OTableScrollEvent) {
+        this.renderedData = data.slice(0, (x.data * OTableComponent.LIMIT_SCROLLVIRTUAL) - 1);
       } else {
-        this.resultsLength = data.length;
-        data = this.getPaginationData(data);
-      }
-      this.renderedData = data;
-      // If a o-table-column-aggregate exists then emit observable
-      if (this.table.showTotals) {
-        this.dataTotalsChange.next(this.renderedData);
+        if (this.existsAnyCalculatedColumn()) {
+          data = this.getColumnCalculatedData(data);
+        }
+
+        if (!this.table.pageable) {
+          data = this.getColumnValueFilterData(data);
+          data = this.getQuickFilterData(data);
+          data = this.getSortedData(data);
+        }
+
+        this.filteredData = Object.assign([], data);
+
+        if (this.table.pageable) {
+          const totalRecordsNumber = this.table.getTotalRecordsNumber();
+          this.resultsLength = totalRecordsNumber !== undefined ? totalRecordsNumber : data.length;
+        } else {
+          this.resultsLength = data.length;
+          data = this.getPaginationData(data);
+        }
+
+        /** in pagination virtual only show OTableComponent.LIMIT items for better performance of the table */
+        if (!this.table.pageable && !this.table.paginationControls && data.length > OTableComponent.LIMIT_SCROLLVIRTUAL) {
+          var datapaginate = data.slice(0, (this.table.pageScrollVirtual * OTableComponent.LIMIT_SCROLLVIRTUAL) - 1);
+          data = datapaginate;
+        }
+
+        this.renderedData = data;
+        // If a o-table-column-aggregate exists then emit observable
+        if (this.table.showTotals) {
+          this.dataTotalsChange.next(this.renderedData);
+        }
       }
       return this.renderedData;
     });
+
+
   }
 
   /**
@@ -193,6 +233,7 @@ export class OTableDataSource extends DataSource<any> {
     this._sort.sortables.forEach((value, key) => {
       this._sort.deregister(value);
     });
+
     return data.sort(this.sortFunction.bind(this));
   }
 

@@ -1,25 +1,91 @@
 import { Injectable, Injector, EventEmitter } from '@angular/core';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router, ActivatedRouteSnapshot, UrlSegment } from '@angular/router';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/filter';
 
-import { Codes } from '../utils';
+import { Codes, Util } from '../utils';
 import { ObservableWrapper } from '../util/async';
 import { ILocalStorageComponent, LocalStorageService } from './local-storage.service';
 
+export type ONavigationRoutes = {
+  mainFormLayoutManagerComponent?: boolean;
+  detailFormRoute: string;
+  editFormRoute: string;
+  insertFormRoute: string;
+};
+
 export class ONavigationItem {
-  constructor(value: Object) {
-    this.url = value['url'] ? value['url'] : '';
-    this.queryParams = value[Codes.QUERY_PARAMS] ? value[Codes.QUERY_PARAMS] : {};
-    this.text = value['text'] ? value['text'] : '';
-    this.displayText = value['displayText'] ? value['displayText'] : '';
-  }
   url: string;
   queryParams: Object;
   text: string;
   displayText: string;
   terminal: boolean;
+  activeFormMode: string;
+  formRoutes: ONavigationRoutes;
+  formLayoutRoutes: ONavigationRoutes;
+  keysValues: any;
+
+  constructor(value: Object) {
+    this.url = value['url'] ? value['url'] : '';
+    this.queryParams = value[Codes.QUERY_PARAMS] ? value[Codes.QUERY_PARAMS] : {};
+    this.text = value['text'] ? value['text'] : '';
+    this.displayText = value['displayText'] ? value['displayText'] : '';
+    this.formRoutes = value['formRoutes'];
+    this.activeFormMode = value['activeFormMode'];
+    this.keysValues = value['keysValues'];
+  }
+
+  getActiveModePath(): string {
+    let result;
+    if (Util.isDefined(this.activeFormMode)) {
+      result = (this.formRoutes || {})[this.activeFormMode];
+    }
+    return result;
+  }
+
+  findAndMergeNavigationItem(storageData: any[] = []) {
+    const storedItem: ONavigationItem = storageData.find(element => { return element.url === this.url; });
+    if (storedItem) {
+      this[Codes.QUERY_PARAMS] = storedItem[Codes.QUERY_PARAMS];
+      this.displayText = storedItem.displayText;
+      this.formRoutes = storedItem.formRoutes;
+      this.formLayoutRoutes = storedItem.formLayoutRoutes;
+      this.activeFormMode = storedItem.activeFormMode;
+      this.keysValues = storedItem.keysValues;
+    }
+  }
+
+  getInsertFormRoute(): string {
+    const routes = this.formRoutes;
+    return routes ? (routes.insertFormRoute || Codes.DEFAULT_INSERT_ROUTE) : Codes.DEFAULT_INSERT_ROUTE;
+  }
+
+  getEditFormRoute(): string {
+    const routes = this.formRoutes;
+    return routes ? (routes.editFormRoute || Codes.DEFAULT_EDIT_ROUTE) : Codes.DEFAULT_EDIT_ROUTE;
+  }
+
+  getDetailFormRoute(): string {
+    const routes = this.formRoutes;
+    return routes ? (routes.detailFormRoute || Codes.DEFAULT_DETAIL_ROUTE) : Codes.DEFAULT_DETAIL_ROUTE;
+  }
+
+  isMainFormLayoutManagerComponent(): boolean {
+    return Util.isDefined(this.formLayoutRoutes);
+  }
+
+  getFormRoutes(): ONavigationRoutes {
+    return this.formRoutes;
+  }
+
+  setFormRoutes(arg: ONavigationRoutes) {
+    if (arg && arg.mainFormLayoutManagerComponent) {
+      this.formLayoutRoutes = arg;
+    } else {
+      this.formRoutes = arg;
+    }
+  }
 }
 
 @Injectable()
@@ -51,59 +117,105 @@ export class NavigationService implements ILocalStorageComponent {
   }
 
   initialize(): void {
-    var self = this;
-    this.router.events
-      .filter(event => event instanceof NavigationEnd)
-      .map(() => this.router.routerState.root)
-      .map(route => {
-        while (route.firstChild) {
-          route = route.firstChild;
-        }
-        return route;
-      })
-      .filter(route => route.outlet === 'primary')
-      .subscribe((event: ActivatedRoute) => {
-        let route = self.router.routerState.root.snapshot;
-        let displayText = '';
-        let url = '';
-        let navigationItems: Array<ONavigationItem> = [];
-        while (route.firstChild !== null) {
-          route = route.firstChild;
-          if (route.routeConfig === null) { continue; }
-          if (!route.routeConfig.path) { continue; }
-          url += `/${route.url.map((s, i) => {
-            return i === 0 ? displayText = s.path : null;
-          }).filter(s => s !== null).join('/')}`;
-          navigationItems.push(new ONavigationItem({
-            url: url,
-            text: displayText
-          }));
-        }
-        if (navigationItems.length > 0) {
-          navigationItems[navigationItems.length - 1].queryParams = route ? route.queryParams : {};
-        }
-        self.setNavigationItems(navigationItems);
-      });
+    const self = this;
+    const navEndEvents = this.router.events.filter(event => event instanceof NavigationEnd);
+    navEndEvents.map(() => this.router.routerState.root).map(route => {
+      while (route.firstChild) {
+        route = route.firstChild;
+      }
+      return route;
+    }).filter(route => route.outlet === 'primary').subscribe(self.parseNavigationItems.bind(self));
   }
 
-  public setNavigationItems(navigationItems: Array<ONavigationItem>): void {
+  protected parseNavigationItems(activatedRoute: ActivatedRoute) {
+    let storageData: any = this.getStoredData();
+    let route: ActivatedRouteSnapshot = this.router.routerState.root.snapshot;
+
+    let url = '';
+    let navigationItems: Array<ONavigationItem> = [];
+    while (Util.isDefined(route.firstChild)) {
+      route = route.firstChild;
+      if (!route || !route.url || route.routeConfig === null || !route.routeConfig.path) {
+        continue;
+      }
+      const navData: ONavigationItem = navigationItems[navigationItems.length - 1];
+      const parsedRoute: any = this.parseRoute(url, route.url, navData);
+      url = parsedRoute.url;
+
+      if (storageData.length > 1 && parsedRoute.routeArr.length > 0) {
+        const lastStored: any = storageData[storageData.length - 1];
+        if (lastStored.url === url) {
+          const newItem = new ONavigationItem(lastStored);
+          const newItemActivePath = newItem.getActiveModePath();
+          if (!newItemActivePath || parsedRoute.routeArr.length > newItemActivePath.split('/').length) {
+            navigationItems.push(newItem);
+            const parsed: any = this.parseRoute(url, parsedRoute.routeArr, newItem);
+            url = parsed.url;
+            parsedRoute.text = parsed.text;
+          }
+        }
+      }
+
+      let formRoutes = undefined;
+      if (navData && navData.formLayoutRoutes) {
+        formRoutes = Object.assign({}, navData.formLayoutRoutes);
+      }
+      const navigationItem = new ONavigationItem({
+        url: url,
+        queryParams: route.queryParams,
+        text: parsedRoute.text,
+        formRoutes: formRoutes,
+        activeFormMode: formRoutes ? (navData && navData.activeFormMode) : undefined
+      });
+      navigationItem.findAndMergeNavigationItem(storageData);
+      navigationItems.push(navigationItem);
+    }
+    if (navigationItems.length > 1) {
+      navigationItems[navigationItems.length - 1].terminal = true;
+    }
+    this.setNavigationItems(navigationItems);
+  }
+
+
+  protected parseRoute(url: string, routeSegments: UrlSegment[], navData: ONavigationItem): any {
+    let text = '';
+    let modePathArr = [];
+    let modePath = navData ? navData.getActiveModePath() : undefined;
+    if (modePath && modePath.length > 0) {
+      modePathArr = modePath.split('/');
+      const detailRoute = navData.getDetailFormRoute();
+      if (Util.isDefined(detailRoute)) {
+        url += url.length > 0 ? ('/' + detailRoute) : detailRoute;
+      }
+    }
+    let routeArr = [];
+    for (let i = 0, len = routeSegments.length; i < len; i++) {
+      const s: UrlSegment = routeSegments[i];
+      if (modePathArr.indexOf(s.path) === -1 && text.length === 0) {
+        text = text.length > 0 ? ('/' + s.path) : s.path;
+        url += url.length > 0 ? ('/' + s.path) : s.path;
+      } else {
+        routeArr.push(s);
+      }
+    }
+    let activeMode = navData ? navData.activeFormMode : undefined;
+    if (modePath && modePath.length > 0 && (activeMode === 'editFormRoute') || (activeMode === 'insertFormRoute')) {
+      url += url.length > 0 ? ('/' + modePath) : modePath;
+    }
+    return {
+      url: url,
+      text: text,
+      routeArr: routeArr
+    };
+  }
+
+  public setNavigationItems(navigationItems: Array<ONavigationItem>) {
     this.navigationItems = navigationItems;
     this.storeNavigation();
     this.navigationEventsSource.next(this.navigationItems);
   }
 
   public getDataToStore(): Object {
-    let localData = this.localStorageService.getComponentStorage(this, false);
-    if (localData) {
-      this.navigationItems.forEach((element, index) => {
-        let storedElem = localData[Object.keys(localData).find(index => element.url === localData[index]['url'])];
-        if (void 0 !== storedElem) {
-          element.queryParams = element.queryParams && !Object.keys(storedElem[Codes.QUERY_PARAMS]).length ? element.queryParams : storedElem[Codes.QUERY_PARAMS] && Object.keys(storedElem[Codes.QUERY_PARAMS]).length ? storedElem[Codes.QUERY_PARAMS] : {};
-          element.displayText = element.displayText ? element.displayText : storedElem['displayText'] ? storedElem['displayText'] : null;
-        }
-        element.terminal = index === this.navigationItems.length - 1;
-      });
-    }
     return this.navigationItems;
   }
 
@@ -166,6 +278,49 @@ export class NavigationService implements ILocalStorageComponent {
     ObservableWrapper.callEmit(this._sidenavEmitter, 'close');
   }
 
+  storeFormRoutes(routes: ONavigationRoutes, activeMode: string, keysValues: any = undefined) {
+    if (this.navigationItems.length > 0) {
+      this.navigationItems[this.navigationItems.length - 1].setFormRoutes(routes);
+      this.navigationItems[this.navigationItems.length - 1].activeFormMode = activeMode;
+      this.navigationItems[this.navigationItems.length - 1].keysValues = keysValues;
+      this.storeNavigation();
+    }
+  }
+
+  protected getStoredData(): any[] {
+    let storageData: any = this.localStorageService.getComponentStorage(this, false);
+    let result = [];
+    Object.keys(storageData).forEach(key => result.push(storageData[key]));
+    return result;
+  }
+
+  getPreviousRouteData(): ONavigationItem {
+    let result: ONavigationItem;
+    const len = this.navigationItems.length;
+    if (len >= 2) {
+      result = this.navigationItems[len - 2];
+      if (result && result.formRoutes && result.formRoutes.mainFormLayoutManagerComponent && this.navigationItems[len - 3]) {
+        const parent = this.navigationItems[len - 3];
+        if (parent.isMainFormLayoutManagerComponent()) {
+          result = parent;
+        }
+      }
+    }
+    return result;
+  }
+
+  removeLastItem() {
+    this.navigationItems.pop();
+    this.storeNavigation();
+  }
+
+  getLastItem(): ONavigationItem {
+    let result;
+    if (this.navigationItems.length > 0) {
+      result = this.navigationItems[this.navigationItems.length - 1];
+    }
+    return result;
+  }
   //* Provisional
   // protected move(index) {
   //   this.queryByIndex(index);

@@ -3,10 +3,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { Codes, Util } from '../utils';
 import { InputConverter } from '../decorators';
-import { AuthGuardService } from '../services';
-import { OFormValue } from './form/OFormValue';
 import { OFilterBuilderComponent } from '../components';
 import { OFormComponent } from './form/o-form.component';
+import { FilterExpressionUtils } from './filter-expression.utils';
+import { AuthGuardService, OTranslateService, NavigationService } from '../services';
 import { OListInitializationOptions } from './list/o-list.component';
 import { OTableInitializationOptions } from './table/o-table.component';
 import { OFormLayoutManagerComponent } from '../layouts/form-layout/o-form-layout-manager.component';
@@ -16,8 +16,6 @@ export const DEFAULT_INPUTS_O_SERVICE_COMPONENT = [
   ...DEFAULT_INPUTS_O_SERVICE_BASE_COMPONENT,
 
   '_title: title',
-
-  'cssClass: css-class',
 
   // visible [no|yes]: visibility. Default: yes.
   'ovisible: visible',
@@ -73,18 +71,28 @@ export class OServiceComponent extends OServiceBaseComponent {
   public static DEFAULT_INPUTS_O_SERVICE_COMPONENT = DEFAULT_INPUTS_O_SERVICE_COMPONENT;
 
   protected authGuardService: AuthGuardService;
+  protected translateService: OTranslateService;
+  protected navigationService: NavigationService;
 
   /* inputs variables */
-  title: string;
+  // title: string;
+  set title(val: string) {
+    this._title = val;
+  }
+  get title() {
+    if (Util.isDefined(this._title)) {
+      return this.translateService.get(this._title);
+    }
+    return this._title;
+  }
   protected _title: string;
-  protected cssclass: string;
   @InputConverter()
   protected ovisible: boolean = true;
   @InputConverter()
   protected oenabled: boolean = true;
   @InputConverter()
   protected controls: boolean = true;
-  protected detailMode: string = Codes.DETAIL_MODE_CLICK;
+  public detailMode: string = Codes.DETAIL_MODE_CLICK;
   protected detailFormRoute: string;
   @InputConverter()
   protected recursiveDetail: boolean = false;
@@ -124,6 +132,8 @@ export class OServiceComponent extends OServiceBaseComponent {
     this.router = this.injector.get(Router);
     this.actRoute = this.injector.get(ActivatedRoute);
     this.authGuardService = this.injector.get(AuthGuardService);
+    this.translateService = this.injector.get(OTranslateService);
+    this.navigationService = this.injector.get(NavigationService);
     try {
       this.formLayoutManager = this.injector.get(OFormLayoutManagerComponent);
     } catch (e) {
@@ -133,9 +143,6 @@ export class OServiceComponent extends OServiceBaseComponent {
 
   initialize(): void {
     super.initialize();
-    if (Util.isDefined(this._title)) {
-      this.title = this.translateService.get(this._title);
-    }
     this.authGuardService.getPermissions(this.router.url, this.oattr).then(permissions => {
       if (Util.isDefined(permissions)) {
         if (this.ovisible && permissions.visible === false) {
@@ -181,6 +188,10 @@ export class OServiceComponent extends OServiceBaseComponent {
     return this.controls;
   }
 
+  hasTitle(): boolean {
+    return this.title !== undefined;
+  }
+
   getSelectedItems(): any[] {
     return this.selectedItems;
   }
@@ -189,78 +200,59 @@ export class OServiceComponent extends OServiceBaseComponent {
     this.selectedItems = [];
   }
 
-  onLanguageChangeCallback(res: any) {
-    if (typeof (this._title) !== 'undefined') {
-      this.title = this.translateService.get(this._title);
+  protected navigateToDetail(route: any[], qParams: any, relativeTo: ActivatedRoute) {
+    let extras = {
+      relativeTo: relativeTo
+    };
+    let reactivateGuard = false;
+    if (this.formLayoutManager && this.formLayoutManager.isMainComponent(this)) {
+      qParams[Codes.IGNORE_CAN_DEACTIVATE] = true;
+    } else if (this.formLayoutManager) {
+      reactivateGuard = true;
+      this.formLayoutManager.deactivateGuard();
     }
-  }
-
-  viewDetail(item: any): void {
-    let route = this.getRouteOfSelectedRow(item, this.detailFormRoute);
-    if (route.length > 0) {
-      let qParams = Codes.getIsDetailObject();
-      if (this.formLayoutManager) {
-        qParams[Codes.IGNORE_CAN_DEACTIVATE] = true;
-      }
-      let extras = {
-        relativeTo: this.recursiveDetail ? this.actRoute.parent : this.actRoute,
-      };
-      extras[Codes.QUERY_PARAMS] = qParams;
-      this.router.navigate(route, extras);
-    }
-  }
-
-  editDetail(item: any) {
-    let route = this.getRouteOfSelectedRow(item, this.editFormRoute);
-    if (route.length > 0) {
-      route.push(Codes.DEFAULT_EDIT_ROUTE);
-      let extras = {
-        relativeTo: this.recursiveEdit ? this.actRoute.parent : this.actRoute
-      };
-      extras[Codes.QUERY_PARAMS] = Codes.getIsDetailObject();
-      this.router.navigate(route, extras);
+    extras[Codes.QUERY_PARAMS] = qParams;
+    const navigatePromise: Promise<boolean> = this.router.navigate(route, extras);
+    if (reactivateGuard) {
+      const self = this;
+      navigatePromise.then(() => {
+        self.formLayoutManager.activateGuard();
+      });
     }
   }
 
   insertDetail() {
-    let route = [];
-    let insertRoute = this.insertFormRoute !== undefined ? this.insertFormRoute : 'new';
-    route.push(insertRoute);
-    // adding parent-keys info...
-    const encodedParentKeys = this.getEncodedParentKeys();
-    if (encodedParentKeys !== undefined) {
-      let routeObj = {};
-      routeObj[Codes.PARENT_KEYS_KEY] = encodedParentKeys;
-      route.push(routeObj);
+    let route = this.getInsertRoute();
+    if (route.length > 0) {
+      this.storeNavigationFormRoutes('insertFormRoute');
+      const relativeTo = this.recursiveInsert ? this.actRoute.parent : this.actRoute;
+      let qParams = {};
+      this.navigateToDetail(route, qParams, relativeTo);
     }
-    let extras = {
-      relativeTo: this.recursiveInsert ? this.actRoute.parent : this.actRoute,
-    };
-    if (this.formLayoutManager) {
-      const cDeactivate = {};
-      cDeactivate[Codes.IGNORE_CAN_DEACTIVATE] = true;
-      extras[Codes.QUERY_PARAMS] = cDeactivate;
-    }
+  }
 
-    this.router.navigate(route, extras).catch(err => {
-      console.error(err.message);
-    });
+  viewDetail(item: any): void {
+    let route = this.getItemModeRoute(item, 'detailFormRoute');
+    if (route.length > 0) {
+      let qParams = Codes.getIsDetailObject();
+      const relativeTo = this.recursiveDetail ? this.actRoute.parent : this.actRoute;
+      this.navigateToDetail(route, qParams, relativeTo);
+    }
+  }
+
+  editDetail(item: any) {
+    let route = this.getItemModeRoute(item, 'editFormRoute');
+    if (route.length > 0) {
+      let qParams = Codes.getIsDetailObject();
+      const relativeTo = this.recursiveEdit ? this.actRoute.parent : this.actRoute;
+      this.navigateToDetail(route, qParams, relativeTo);
+    }
   }
 
   protected getEncodedParentKeys() {
-    const parentKeys = Object.keys(this._pKeysEquiv);
     let encoded = undefined;
-    if ((parentKeys.length > 0) && Util.isDefined(this.parentItem)) {
-      let pKeys = {};
-      parentKeys.forEach(parentKey => {
-        if (this.parentItem.hasOwnProperty(parentKey)) {
-          let currentData = this.parentItem[parentKey];
-          if (currentData instanceof OFormValue) {
-            currentData = currentData.value;
-          }
-          pKeys[this._pKeysEquiv[parentKey]] = currentData;
-        }
-      });
+    if (Object.keys(this._pKeysEquiv).length > 0) {
+      let pKeys = this.getParentKeysValues();
       if (Object.keys(pKeys).length > 0) {
         encoded = Util.encodeParentKeys(pKeys);
       }
@@ -268,26 +260,53 @@ export class OServiceComponent extends OServiceBaseComponent {
     return encoded;
   }
 
-  getRouteOfSelectedRow(item: any, modeRoute: any) {
+  getInsertRoute(): any[] {
     let route = [];
+    if (Util.isDefined(this.detailFormRoute)) {
+      route.push(this.detailFormRoute);
+    }
+    let insertRoute = Util.isDefined(this.insertFormRoute) ? this.insertFormRoute : Codes.DEFAULT_INSERT_ROUTE;
+    route.push(insertRoute);
+    // adding parent-keys info...
+    const encodedParentKeys = this.getEncodedParentKeys();
+    if (Util.isDefined(encodedParentKeys)) {
+      let routeObj = {};
+      routeObj[Codes.PARENT_KEYS_KEY] = encodedParentKeys;
+      route.push(routeObj);
+    }
+    return route;
+  }
 
-    // if (this.formLayoutManager) {
-    //   route = this.formLayoutManager.getRouteOfActiveItem();
-    // }
-    let filterArr = [];
+  getItemModeRoute(item: any, modeRoute: string): any[] {
+    let result = this.getRouteOfSelectedRow(item);
+    if (result.length > 0) {
+      if (Util.isDefined(this.detailFormRoute)) {
+        result.unshift(this.detailFormRoute);
+      }
+      if (modeRoute === 'editFormRoute') {
+        result.push(this.editFormRoute || Codes.DEFAULT_EDIT_ROUTE);
+      }
+    }
+    if (result.length) {
+      this.storeNavigationFormRoutes(modeRoute, this.getKeysValues());
+      if (this.formLayoutManager && !this.formLayoutManager.isMainComponent(this)) {
+        var activeRoute = this.formLayoutManager.getRouteOfActiveItem();
+        if (activeRoute && activeRoute.length > 0) {
+          result.unshift(activeRoute.join('/'));
+        }
+      }
+    }
+    return result;
+  }
+
+  getRouteOfSelectedRow(item: any): any[] {
+    let route = [];
     if (Util.isObject(item)) {
       this.keysArray.forEach(key => {
         if (Util.isDefined(item[key])) {
-          filterArr.push(item[key]);
+          route.push(item[key]);
         }
       });
-    }
-
-    if (filterArr.length > 0) {
-      if (modeRoute !== undefined) {
-        route.push(modeRoute);
-      }
-      route.push(...filterArr);
     }
     return route;
   }
@@ -351,4 +370,49 @@ export class OServiceComponent extends OServiceBaseComponent {
     this.filterBuilder = filterBuilder;
   }
 
+  getComponentFilter(existingFilter: any = {}): any {
+    let filter = super.getComponentFilter(existingFilter);
+
+    // Add filter from o-filter-builder component
+    if (Util.isDefined(this.filterBuilder)) {
+      let fbFilter = this.filterBuilder.getExpression();
+      if (Util.isDefined(fbFilter)) {
+        if (!Util.isDefined(filter[FilterExpressionUtils.BASIC_EXPRESSION_KEY])) {
+          filter[FilterExpressionUtils.BASIC_EXPRESSION_KEY] = fbFilter;
+        } else {
+          filter[FilterExpressionUtils.BASIC_EXPRESSION_KEY] = FilterExpressionUtils.buildComplexExpression(filter[FilterExpressionUtils.BASIC_EXPRESSION_KEY], fbFilter, FilterExpressionUtils.OP_AND);
+        }
+      }
+    }
+
+    return filter;
+  }
+
+  protected storeNavigationFormRoutes(activeFormMode: string, keysValues: any = undefined) {
+    const mainFormLayoutComp = this.formLayoutManager ? Util.isDefined(this.formLayoutManager.isMainComponent(this)) : undefined;
+    this.navigationService.storeFormRoutes({
+      mainFormLayoutManagerComponent: mainFormLayoutComp,
+      detailFormRoute: this.detailFormRoute,
+      editFormRoute: this.editFormRoute,
+      insertFormRoute: Util.isDefined(this.insertFormRoute) ? this.insertFormRoute : Codes.DEFAULT_INSERT_ROUTE
+    }, activeFormMode, keysValues);
+  }
+
+  protected saveDataNavigationInLocalStorage(): void {
+    // Save data of the list in navigation-data in the localstorage
+  }
+
+  protected getKeysValues(): any[] {
+    let data = this.dataArray;
+    const self = this;
+    return data.map((row) => {
+      let obj = {};
+      self.keysArray.map((key) => {
+        if (row[key] !== undefined) {
+          obj[key] = row[key];
+        }
+      });
+      return obj;
+    });
+  }
 }

@@ -12,14 +12,14 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Validators } from '@angular/forms';
-import { ValidatorFn } from '@angular/forms/src/directives/validators';
+import { ValidatorFn } from '@angular/forms';
 import { MatInput } from '@angular/material';
 
 import { OSharedModule } from '../../../shared';
 import { InputConverter } from '../../../decorators';
 import { OFormComponent } from '../../form/o-form.component';
 import { OFormValue } from '../../form/OFormValue';
-import { OFormDataComponent, DEFAULT_INPUTS_O_FORM_DATA_COMPONENT } from '../../o-form-data-component.class';
+import { OFormDataComponent, DEFAULT_INPUTS_O_FORM_DATA_COMPONENT, DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT } from '../../o-form-data-component.class';
 
 export const DEFAULT_INPUTS_O_TEXT_INPUT = [
   ...DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,
@@ -28,7 +28,7 @@ export const DEFAULT_INPUTS_O_TEXT_INPUT = [
 ];
 
 export const DEFAULT_OUTPUTS_O_TEXT_INPUT = [
-  'onChange',
+  ...DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT,
   'onFocus',
   'onBlur'
 ];
@@ -52,7 +52,6 @@ export class OTextInputComponent extends OFormDataComponent {
   @InputConverter()
   maxLength: number = -1;
 
-  onChange: EventEmitter<Object> = new EventEmitter<Object>();
   onFocus: EventEmitter<Object> = new EventEmitter<Object>();
   onBlur: EventEmitter<Object> = new EventEmitter<Object>();
 

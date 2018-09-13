@@ -1,7 +1,7 @@
 {
   "name": "ontimize-web-ngx",
   "homepage": "https://github.com/OntimizeWeb/ontimize-web-ngx#readme",
-  "version": "3.0.1",
+  "version": "3.1.0",
   "description": "Ontimize Web framework using Angular 5",
   "bugs": "https://github.com/OntimizeWeb/ontimize-web-ngx/issues",
   "author": "Imatia S.L.",
@@ -34,8 +34,9 @@
     "build": "npm run clean && o-ngx-lib-builder build --package ontimize-web-ngx --ng-library ng.ontimizeWeb"
   },
   "dependencies": {
+    "moment": "2.22.1",
     "ng2-dnd": "5.0.2",
-    "moment": "2.22.1"
+    "ngx-material-timepicker": "1.1.2"
   },
   "peerDependencies": {
     "@angular/flex-layout": "5.0.0-beta.13",

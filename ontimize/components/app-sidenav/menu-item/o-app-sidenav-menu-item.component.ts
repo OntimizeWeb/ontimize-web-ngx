@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Injector, NgModule, OnDestroy, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Injector, NgModule, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
@@ -18,7 +18,9 @@ export const DEFAULT_INPUTS_O_APP_SIDENAV_MENU_ITEM = [
   'sidenavOpened : sidenav-opened'
 ];
 
-export const DEFAULT_OUTPUTS_O_APP_SIDENAV_MENU_ITEM = [];
+export const DEFAULT_OUTPUTS_O_APP_SIDENAV_MENU_ITEM = [
+  'onClick'
+];
 
 @Component({
   selector: 'o-app-sidenav-menu-item',
@@ -33,6 +35,8 @@ export class OAppSidenavMenuItemComponent implements AfterViewInit, OnDestroy {
 
   public static DEFAULT_INPUTS_O_APP_SIDENAV_MENU_ITEM = DEFAULT_INPUTS_O_APP_SIDENAV_MENU_ITEM;
   public static DEFAULT_OUTPUTS_O_APP_SIDENAV_MENU_ITEM = DEFAULT_OUTPUTS_O_APP_SIDENAV_MENU_ITEM;
+
+  public onClick: EventEmitter<any> = new EventEmitter<any>();
 
   protected translateService: OTranslateService;
   protected loginService: LoginService;
@@ -85,7 +89,7 @@ export class OAppSidenavMenuItemComponent implements AfterViewInit, OnDestroy {
   }
 
   protected setUserInfoImage() {
-    let imgEl = this.elRef.nativeElement.getElementsByClassName('user-info-image')[0];
+    let imgEl = this.elRef.nativeElement.getElementsByClassName('o-user-info-image')[0];
     if (imgEl !== undefined) {
       const item = this.menuItem as MenuItemUserInfo;
       imgEl.setAttribute('style', 'background-image: url(\'' + item.avatar + '\')');
@@ -136,7 +140,7 @@ export class OAppSidenavMenuItemComponent implements AfterViewInit, OnDestroy {
     }
   }
 
-  onClick() {
+  triggerClick(e: Event) {
     switch (this.menuItemType) {
       case 'action':
         this.executeItemAction();
@@ -153,6 +157,7 @@ export class OAppSidenavMenuItemComponent implements AfterViewInit, OnDestroy {
       default:
         break;
     }
+    this.onClick.emit(e);
   }
 
   isRouteItem(): boolean {
