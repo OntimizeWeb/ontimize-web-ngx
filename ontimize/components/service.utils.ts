@@ -28,7 +28,10 @@ export class ServiceUtils {
     const formDataProperties = Object.keys(form ? form.getDataValues() : {});
     const existsProperties = formDataProperties.length > 0;
 
-    if (existsComponents || existsProperties) {
+    const urlData = form ? form.getFormNavigation().getFilterFromUrlParams() : {};
+    const existsUrlData = Object.keys(urlData).length > 0;
+
+    if (existsComponents || existsProperties || existsUrlData) {
       parentKeys.forEach(key => {
         const formFieldAttr = parentKeysObject[key];
         let currentData;
@@ -39,6 +42,8 @@ export class ServiceUtils {
           if (currentData instanceof OFormValue) {
             currentData = currentData.value;
           }
+        } else if (urlData.hasOwnProperty(formFieldAttr)) {
+          currentData = urlData[formFieldAttr];
         }
         if (Util.isDefined(currentData)) {
           switch (typeof (currentData)) {
