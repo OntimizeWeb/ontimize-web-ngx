@@ -17,7 +17,7 @@
   * new `title-align` input ([1d261e1](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1d261e1))
   * new `multiline` input ([d5957fe](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d5957fe))
 * **o-list**:
-  * new outputs added: `onItemDeleted`, `onDataLoaded`, `onPaginatedDataLoade` ([2f71849](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2f71849))
+  * new outputs added: `onItemDeleted`, `onDataLoaded`, `onPaginatedDataLoaded` ([2f71849](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2f71849))
   * added suppor for using the `o-filter-builder` component ([1736a2a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1736a2a))
   * Now, both `o-list-item` component and `o-list-item` directive make the list items go to item detail when click on them by default. Use the `detail-mode` attribute to configure this ([1cb22d3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1cb22d3) [ee2eecb](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ee2eecb) [60848fe](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/60848fe))
 * **o-list-item-card**: new input `show-image` ([ed89b6b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ed89b6b))
