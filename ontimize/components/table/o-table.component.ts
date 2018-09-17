@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { CdkTableModule } from '@angular/cdk/table';
 import { ObserversModule } from '@angular/cdk/observers';
 import { SelectionModel, SelectionChange } from '@angular/cdk/collections';
-import { MatDialog, MatSort, MatTabGroup, MatTab, MatPaginatorIntl, MatPaginator, MatCheckboxChange, MatMenu, PageEvent, Sort, MatSortHeader } from '@angular/material';
+import { MatDialog, MatTabGroup, MatTab, MatPaginatorIntl, MatPaginator, MatCheckboxChange, MatMenu, PageEvent } from '@angular/material';
 import { DndModule } from 'ng2-dnd';
 import { Observable, Subscription } from 'rxjs';
 
@@ -66,6 +66,9 @@ import {
 } from './column/cell-renderer/cell-renderer';
 
 import { O_TABLE_CELL_EDITORS } from './column/cell-editor/cell-editor';
+import { OMatSortModule } from './extensions/sort/o-mat-sort-module';
+import { OMatSort } from './extensions/sort/o-mat-sort';
+import { OMatSortHeader } from './extensions/sort/o-mat-sort-header';
 
 export const DEFAULT_INPUTS_O_TABLE = [
   ...OServiceComponent.DEFAULT_INPUTS_O_SERVICE_COMPONENT,
@@ -130,7 +133,9 @@ export const DEFAULT_INPUTS_O_TABLE = [
 
   'showPaginatorFirstLastButtons: show-paginator-first-last-buttons',
 
-  'autoAlignTitles: auto-align-titles'
+  'autoAlignTitles: auto-align-titles',
+
+  'multipleSort: multiple-sort'
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE = [
@@ -294,14 +299,14 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   public paginator: OTablePaginatorComponent;
   @ViewChild(MatPaginator) matpaginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(OMatSort) sort: OMatSort;
   @ViewChild('columnFilterOption') columnFilterOption: OTableOptionComponent;
   @ContentChildren(OTableOptionComponent) tableOptions: QueryList<OTableOptionComponent>;
   @ViewChild('menu') matMenu: MatMenu;
   @ViewChild(OTableEditableRowComponent) oTableEditableRow: OTableEditableRowComponent;
 
   // only for insideTabBugWorkaround
-  @ViewChildren(MatSortHeader) protected sortHeaders: QueryList<MatSortHeader>;
+  @ViewChildren(OMatSortHeader) protected sortHeaders: QueryList<OMatSortHeader>;
 
   public tableContextMenu: OContextMenuComponent;
 
@@ -366,6 +371,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   showPaginatorFirstLastButtons: boolean = true;
   @InputConverter()
   autoAlignTitles: boolean = false;
+  @InputConverter()
+  multipleSort: boolean = true;
 
   public daoTable: OTableDao | null;
   public dataSource: OTableDataSource | null;
@@ -801,17 +808,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
         this.sortColArray.splice(i, 1);
       }
     }
-    this.setMatSort();
-  }
-
-  setMatSort() {
-    //set values of sort-columns to matsort
-    if (Util.isDefined(this._oTableOptions.columns) && (this.sortColArray.length > 0)) {
-      const temp = this.sortColArray[0];
-      this.sort.active = temp.columnName;
-      const sortDirection: any = temp.ascendent ? Codes.ASC_SORT : Codes.DESC_SORT;
-      this.sort.direction = sortDirection;
-    }
   }
 
   parseCurrentPage() {
@@ -880,40 +876,37 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   protected insideTabBugWorkaround() {
-    const active = this.sort.active;
-    this.sort.active = '';
     this.sortHeaders.forEach(sortH => {
-      if (sortH.id !== active) {
-        sortH._viewState.toState = 'active';
-        sortH._intl.changes.next();
-      } else {
-        sortH._setAnimationTransitionState({
-          fromState: this.sort.direction,
-          toState: 'active'
-        });
-        sortH._showIndicatorHint = false;
-      }
+      sortH.refresh();
     });
-    this.setMatSort();
   }
 
   registerSortListener() {
-    const self = this;
-    this.sortSubscription = this.sort.sortChange.subscribe((sort: Sort) => {
-      self.sortColArray = [];
+    if (Util.isDefined(this.sort)) {
+      this.sortSubscription = this.sort.oSortChange.subscribe(this.onSortChange.bind(this));
+      this.sort.setMultipleSort(this.multipleSort);
+
+      if (Util.isDefined(this._oTableOptions.columns) && (this.sortColArray.length > 0)) {
+        this.sort.setActiveSortColumns(this.sortColArray);
+      }
+    }
+  }
+
+  protected onSortChange(sortArray: any[]) {
+    this.sortColArray = [];
+    sortArray.forEach((sort) => {
       if (sort.direction !== '') {
-        self.sortColArray.push({
-          columnName: sort.active,
+        this.sortColArray.push({
+          columnName: sort.id,
           ascendent: sort.direction === Codes.ASC_SORT
         });
       }
-      if (self.pageable) {
-        self.reloadData();
-      } else {
-        self.loadingSorting = true;
-
-      }
     });
+    if (this.pageable) {
+      this.reloadData();
+    } else {
+      this.loadingSorting = true;
+    }
   }
 
   setDatasource() {
@@ -927,6 +920,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   set loadingSorting(value: boolean) {
     this._loadingSorting = value;
   }
+
   get loadingSorting(): boolean {
     return this._loadingSorting;
   }
@@ -1040,6 +1034,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       this.dialogService.alert('ERROR', errorOptional);
     }
   }
+
   projectContentChanged() {
     this.loadingSorting = false;
     this.loadingScroll = false;
@@ -2006,7 +2001,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     CdkTableModule,
     DndModule.forRoot(),
     OContextMenuModule,
-    ObserversModule
+    ObserversModule,
+    OMatSortModule
   ],
   exports: [
     OTableComponent,

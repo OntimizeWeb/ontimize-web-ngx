@@ -53,7 +53,7 @@
       [class.horizontal-scroll]="horizontalScroll" [class.scrolled]="horizontalScrolled">
 
       <!-- [class.mat-table]="true" -->
-      <mat-table #tableHeader matSort [class.header-fixed]="fixedHeader" [class.small]="!hasMultilineColumn && rowHeight==='small'"
+      <mat-table #tableHeader oMatSort [class.header-fixed]="fixedHeader" [class.small]="!hasMultilineColumn && rowHeight==='small'"
         [class.medium]="!hasMultilineColumn && rowHeight==='medium'" [class.large]="!hasMultilineColumn && rowHeight==='large'">
         <!--Checkbox Column -->
         <ng-container [matColumnDef]="oTableOptions.selectColumn.name" *ngIf="oTableOptions.selectColumn.visible">
@@ -66,7 +66,7 @@
         <!-- Generic column definition -->
         <ng-container *ngFor="let column of oTableOptions.columns" [matColumnDef]="column.name">
           <ng-container *ngIf="column.orderable">
-            <mat-header-cell *matHeaderCellDef mat-sort-header [fxFlex]="column.width" [style.min-width]="column.getMinWidth()"
+            <mat-header-cell *matHeaderCellDef o-mat-sort-header [fxFlex]="column.width" [style.min-width]="column.getMinWidth()"
               [ngClass]="getTitleAlignClass(column)" [class.active-sort]="isColumnSortActive(column)" [class.desc]="isColumnDescSortActive(column)">
               <mat-icon *ngIf="isColumnFilterable(column)" class="column-filter-icon" [class.active]="isColumnFilterActive(column)"
                 (click)="openColumnFilterDialog(column, $event)" svgIcon="ontimize:filter_list"></mat-icon>
@@ -100,7 +100,7 @@
       <o-table-editable-row [datasource]="dataSource" *ngIf="showFirstInsertableRow"></o-table-editable-row>
 
       <!-- [class.content-table]="true" [class.mat-table]="true" -->
-      <mat-table #table [trackBy]="getTrackByFunction()" [dataSource]="dataSource" matSort class="content-table"
+      <mat-table #table [trackBy]="getTrackByFunction()" [dataSource]="dataSource" oMatSort class="content-table"
         [class.small]="!hasMultilineColumn && rowHeight==='small'" [class.medium]="!hasMultilineColumn && rowHeight==='medium'"
         [class.large]="!hasMultilineColumn && rowHeight==='large'" (cdkObserveContent)="projectContentChanged()"
         (scroll)="onTableScroll($event)">
@@ -121,7 +121,7 @@
         <!-- Generic column definition -->
         <ng-container *ngFor="let column of oTableOptions.columns" [matColumnDef]="column.name">
           <ng-container *ngIf="column.orderable">
-            <mat-header-cell *matHeaderCellDef mat-sort-header [fxFlex]="column.width" [style.min-width]="column.getMinWidth()"
+            <mat-header-cell *matHeaderCellDef o-mat-sort-header [fxFlex]="column.width" [style.min-width]="column.getMinWidth()"
               [ngClass]="getTitleAlignClass(column)">
               <mat-icon *ngIf="isColumnFilterable(column)" class="column-filter-icon" [class.active]="isColumnFilterActive(column)"
                 (click)="openColumnFilterDialog(column, $event)" svgIcon="ontimize:filter_list"></mat-icon>
@@ -181,11 +181,9 @@
       <o-table-editable-row [datasource]="dataSource" *ngIf="showLastInsertableRow"></o-table-editable-row>
 
       <!--LOADING-->
-
       <div *ngIf="showLoading()" class="spinner-container" [class.spinner-container-scrollable]="loadingScroll">
         <mat-progress-spinner mode="indeterminate" strokeWidth="3"></mat-progress-spinner>
       </div>
-
 
     </div>
 
