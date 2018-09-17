@@ -3,6 +3,7 @@
 * **o-bar-menu**: `o-bar-menu` can build automatically base on the application menu configuration with `auto-menu=yes` ([67f543f](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/67f543f))  ([1fc1f63](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1fc1f63))
 * **o-table**: new `multiple-sort` input ([6688618](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6688618))
 
+
 ### Bug Fixes
 * **o-bar-menu** fixed error the menu on mobile screen collapses ([1fc1f63](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1fc1f63)).
 
