@@ -1,4 +1,8 @@
-## 3.0.2 (2018-09-13)
+## 3.1.1
+### Features
+* **o-table**: new `multiple-sort` input ([6688618](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6688618))
+
+## 3.1.0 (2018-09-13)
 ### Features
 * **ontimize-ee.service**, **ontimize.service**: new response parsers methods (separately by each CRUD method) ([c8c9e6f](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c8c9e6f))
 * **o-table-dao**: new `updateQuery` method ([ad4f7ea](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ad4f7ea))
