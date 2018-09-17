@@ -1,20 +1,15 @@
 import {
   Component,
-  Inject,
   Injector,
   ElementRef,
-  forwardRef,
   OnInit,
   NgModule,
   HostListener,
   ViewEncapsulation
 } from '@angular/core';
-
-import { OBarMenuModule, OBarMenuComponent } from './o-bar-menu.component';
-import { OTranslateService } from '../../services';
-
-import { OSharedModule } from '../../shared';
 import { CommonModule } from '@angular/common';
+import { OTranslateService } from '../../../services';
+import { OSharedModule } from '../../../shared';
 
 export const DEFAULT_INPUTS_O_BAR_MENU_GROUP = [
   // title [string]: menu group title. Default: no value.
@@ -32,13 +27,15 @@ export const DEFAULT_INPUTS_O_BAR_MENU_GROUP = [
   templateUrl: './o-bar-menu-group.component.html',
   styleUrls: ['./o-bar-menu-group.component.scss'],
   inputs: DEFAULT_INPUTS_O_BAR_MENU_GROUP,
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  host: {
+    '[class.o-bar-menu-group]': 'true'
+  }
 })
 export class OBarMenuGroupComponent implements OnInit {
 
   public static DEFAULT_INPUTS_O_BAR_MENU_GROUP = DEFAULT_INPUTS_O_BAR_MENU_GROUP;
 
-  protected menu: OBarMenuComponent;
   protected translateService: OTranslateService;
 
   protected _groupTitle: string;
@@ -52,10 +49,8 @@ export class OBarMenuGroupComponent implements OnInit {
   @HostListener('mouseout') onMouseout = () => this.isHovered = false;
 
   constructor(
-    @Inject(forwardRef(() => OBarMenuComponent)) menu: OBarMenuComponent,
     protected elRef: ElementRef,
     protected injector: Injector) {
-    this.menu = menu;
     this.id = 'm_' + String((new Date()).getTime() + Math.random());
 
     this.translateService = this.injector.get(OTranslateService);
@@ -121,7 +116,7 @@ export class OBarMenuGroupComponent implements OnInit {
 
 @NgModule({
   declarations: [OBarMenuGroupComponent],
-  imports: [OSharedModule, CommonModule, OBarMenuModule],
+  imports: [CommonModule, OSharedModule],
   exports: [OBarMenuGroupComponent]
 })
 export class OBarMenuGroupModule {

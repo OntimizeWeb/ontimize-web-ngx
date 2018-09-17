@@ -4,7 +4,10 @@
     <label [attr.for]="id" class="toggle title-label">{{ menuTitle | oTranslate }}</label>
     <input #input [attr.id]="id" type="checkbox" />
     <div class="fake-ul mat-primary menu">
-      <ng-content></ng-content>
+      <ng-content *ngIf="!autoMenu"></ng-content>
+      <ng-container *ngIf="autoMenu">
+        <!-- <o-bar-menu-nested [items]="menuItems"> </o-bar-menu-nested> -->
+      </ng-container>
     </div>
   </nav>
 </mat-toolbar>
