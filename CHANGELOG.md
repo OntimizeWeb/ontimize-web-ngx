@@ -1,3 +1,14 @@
+## 3.1.1
+### Features
+* **o-bar-menu**: `o-bar-menu` can build automatically base on the application menu configuration with `auto-menu=yes` ([67f543f](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/67f543f))  ([1fc1f63](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1fc1f63)) 
+
+### Bug Fixes
+* **o-bar-menu** fixed error the menu on mobile screen collapses ([1fc1f63](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1fc1f63)).
+
+### BREAKING CHANGES
+* **MenuItem**:
+  * attribute '*show-in-app-sidenav*' has been removed ([0c96585](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0c96585)).
+
 ## 3.0.2 (2018-09-13)
 ### Features
 * **ontimize-ee.service**, **ontimize.service**: new response parsers methods (separately by each CRUD method) ([c8c9e6f](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c8c9e6f))

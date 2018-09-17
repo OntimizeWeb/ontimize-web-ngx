@@ -25,20 +25,22 @@ export class ServiceUtils {
     const formComponents = form ? form.getComponents() : {};
     const existsComponents = Object.keys(formComponents).length > 0;
 
-    const formDataProperties = Object.keys(form ? form.getDataValues() : {});
-    const existsProperties = formDataProperties.length > 0;
+    const formDataProperties = form ? form.getDataValues() : {};
+    const existsProperties = Object.keys(formDataProperties).length > 0;
 
-    if (existsComponents || existsProperties) {
+    const urlData = form ? form.getFormNavigation().getFilterFromUrlParams() : {};
+    const existsUrlData = Object.keys(urlData).length > 0;
+
+    if (existsComponents || existsProperties || existsUrlData) {
       parentKeys.forEach(key => {
         const formFieldAttr = parentKeysObject[key];
         let currentData;
         if (formComponents.hasOwnProperty(formFieldAttr)) {
           currentData = formComponents[formFieldAttr].getValue();
-        } else if (formDataProperties.indexOf(formFieldAttr) !== -1) {
-          currentData = form.getDataValue(formFieldAttr);
-          if (currentData instanceof OFormValue) {
-            currentData = currentData.value;
-          }
+        } else if (formDataProperties.hasOwnProperty(formFieldAttr)) {
+          currentData = formDataProperties[formFieldAttr] instanceof OFormComponent ? formDataProperties[formFieldAttr].value : formDataProperties[formFieldAttr];
+        } else if (urlData.hasOwnProperty(formFieldAttr)) {
+          currentData = urlData[formFieldAttr];
         }
         if (Util.isDefined(currentData)) {
           switch (typeof (currentData)) {
