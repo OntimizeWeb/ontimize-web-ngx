@@ -5,10 +5,11 @@ import { OTranslateService } from '../../services';
 import { OSharedModule } from '../../shared';
 import { InputConverter } from '../../decorators/input-converter';
 import { AppMenuService, MenuRootItem } from '../../services/app-menu.service';
-import { OBarMenuItemModule } from './o-bar-menu-item.component';
-import { OBarMenuGroupModule } from './o-bar-menu-group.component';
-import { OBarMenumNestedComponent } from './o-bar-menu-nested.component';
-
+import { OLocaleBarMenuItemModule } from './locale-menu-item/o-locale-bar-menu-item.component';
+import { OBarMenuGroupModule } from './menu-group/o-bar-menu-group.component';
+import { OBarMenuItemModule } from './menu-item/o-bar-menu-item.component';
+import { OBarMenuNestedModule } from './menu-nested/o-bar-menu-nested.component';
+import { OBarMenuSeparatorModule } from './menu-separator/o-bar-menu-separator.component';
 
 export const DEFAULT_INPUTS_O_BAR_MENU = [
   // title [string]: menu title. Default: no value.
@@ -56,7 +57,6 @@ export class OBarMenuComponent {
 
 
   public ngOnInit() {
-
     if (!this.tooltip) {
       this.tooltip = this.menuTitle;
     }
@@ -81,7 +81,6 @@ export class OBarMenuComponent {
         element.checked = false;
       });
     }
-
     let fakeLis = this.elRef.nativeElement.querySelectorAll('.fake-li-hover');
     if (fakeLis) {
       fakeLis.forEach(element => {
@@ -121,13 +120,19 @@ export class OBarMenuComponent {
   get menuItems(): MenuRootItem[] {
     return this.menuRoots;
   }
-
-
 }
 
 @NgModule({
-  declarations: [OBarMenuComponent, OBarMenumNestedComponent],
-  imports: [OSharedModule, CommonModule, OBarMenuItemModule, OBarMenuGroupModule, OBarMenuItemModule],
+  declarations: [OBarMenuComponent],
+  imports: [
+    CommonModule,
+    OSharedModule,
+    OBarMenuGroupModule,
+    OBarMenuItemModule,
+    OLocaleBarMenuItemModule,
+    OBarMenuSeparatorModule,
+    OBarMenuNestedModule
+  ],
   exports: [OBarMenuComponent]
 })
 export class OBarMenuModule {

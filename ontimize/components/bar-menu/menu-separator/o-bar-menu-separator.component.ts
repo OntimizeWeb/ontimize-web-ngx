@@ -1,8 +1,5 @@
 import { Component, ViewEncapsulation, NgModule } from '@angular/core';
-import { OSharedModule } from '../../shared/shared.module';
 import { CommonModule } from '@angular/common';
-import { OBarMenuModule } from './o-bar-menu.component';
-
 
 @Component({
   selector: 'o-bar-menu-separator',
@@ -14,7 +11,7 @@ export class OBarMenuSeparatorComponent {
 }
 @NgModule({
   declarations: [OBarMenuSeparatorComponent],
-  imports: [OSharedModule, CommonModule, OBarMenuModule],
+  imports: [CommonModule],
   exports: [OBarMenuSeparatorComponent]
 })
 export class OBarMenuSeparatorModule {

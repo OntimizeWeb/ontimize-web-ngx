@@ -10,11 +10,10 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 import { RouterModule } from '@angular/router';
-
-import {  OBarMenuComponent } from './o-bar-menu.component';
-import { OTranslateService } from '../../services';
-import { OSharedModule } from '../../shared';
 import { CommonModule } from '@angular/common';
+import { OTranslateService } from '../../../services';
+import { OSharedModule } from '../../../shared';
+import { OBarMenuComponent } from '../o-bar-menu.component';
 
 export const DEFAULT_INPUTS_O_BAR_MENU_ITEM = [
   // title [string]: menu item title. Default: no value.
@@ -162,7 +161,6 @@ export class OBarMenuItemComponent implements OnInit {
     }
   }
 }
-
 
 @NgModule({
   declarations: [OBarMenuItemComponent],

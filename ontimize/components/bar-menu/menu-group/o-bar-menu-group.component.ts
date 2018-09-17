@@ -7,11 +7,9 @@ import {
   HostListener,
   ViewEncapsulation
 } from '@angular/core';
-
-import { OTranslateService } from '../../services';
-
-import { OSharedModule } from '../../shared';
 import { CommonModule } from '@angular/common';
+import { OTranslateService } from '../../../services';
+import { OSharedModule } from '../../../shared';
 
 export const DEFAULT_INPUTS_O_BAR_MENU_GROUP = [
   // title [string]: menu group title. Default: no value.
@@ -118,7 +116,7 @@ export class OBarMenuGroupComponent implements OnInit {
 
 @NgModule({
   declarations: [OBarMenuGroupComponent],
-  imports: [OSharedModule, CommonModule],
+  imports: [CommonModule, OSharedModule],
   exports: [OBarMenuGroupComponent]
 })
 export class OBarMenuGroupModule {
