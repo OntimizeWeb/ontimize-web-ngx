@@ -221,10 +221,10 @@ export class OFormServiceComponent extends OFormDataComponent {
     if (Util.isArray(data)) {
       this.dataArray = data;
       this.syncDataIndex();
-    } else if (Util.isObject(data)) {
+    } else if (Util.isObject(data) && Object.keys(data).length > 0) {
       this.dataArray = [data];
     } else {
-      console.warn('Component has received not supported service data. Supported data are Array or Object');
+      console.warn('Component has received not supported service data. Supported data are Array or not empty Object');
       this.dataArray = [];
     }
   }
