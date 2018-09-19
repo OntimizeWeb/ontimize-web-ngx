@@ -615,6 +615,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   protected initTableAfterViewInit() {
     this.parseVisibleColumns();
     this.setDatasource();
+    this.registerDataSourceListeners();
     this.registerSortListener();
     this.setFiltersConfiguration(this.state);
     this.addDefaultRowButtons();
@@ -929,6 +930,12 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   setDatasource() {
     this.dataSource = new OTableDataSource(this);
+    if (this.daoTable) {
+      this.dataSource.resultsLength = this.daoTable.data.length;
+    }
+  }
+
+  protected registerDataSourceListeners() {
     if (!this.pageable) {
       const self = this;
       this.onRenderedDataChange = this.dataSource.onRenderedDataChange.subscribe(() => {
@@ -936,9 +943,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
           self.loadingSorting = false;
         }, 500);
       });
-    }
-    if (this.daoTable) {
-      this.dataSource.resultsLength = this.daoTable.data.length;
     }
   }
 
@@ -1500,7 +1504,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   getSqlTypes() {
-    return this.dataSource.sqlTypes;
+    return Util.isDefined(this.dataSource.sqlTypes) ? this.dataSource.sqlTypes : {};
   }
 
   setOTableColumnsFilter(tableColumnsFilter: OTableColumnsFilterComponent) {
@@ -2039,6 +2043,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     OTableColumnCalculatedComponent,
     OTableContextMenuComponent,
     OTableRow,
+    OMatSortModule,
     ...O_TABLE_HEADER_COMPONENTS,
     ...O_TABLE_CELL_RENDERERS,
     ...O_TABLE_CELL_EDITORS,

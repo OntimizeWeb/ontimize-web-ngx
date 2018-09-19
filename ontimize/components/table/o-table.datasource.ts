@@ -74,6 +74,10 @@ export class OTableDataSource extends DataSource<any> {
     this._sort = table.sort;
   }
 
+  sortFunction(a: any, b: any): number {
+    return this._sort.sortFunction(a, b);
+  }
+
   get renderedData(): any[] {
     return this._renderedData;
   }
@@ -92,7 +96,10 @@ export class OTableDataSource extends DataSource<any> {
     ];
 
     if (!this.table.pageable) {
-      displayDataChanges.push(this._sort.oSortChange);
+
+      if (this._sort) {
+        displayDataChanges.push(this._sort.oSortChange);
+      }
 
       if (this._tableOptions.filter) {
         displayDataChanges.push(this._quickFilterChange);

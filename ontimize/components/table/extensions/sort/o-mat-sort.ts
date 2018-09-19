@@ -151,7 +151,7 @@ export class OMatSort extends MatSort {
     }, []);
   }
 
-   protected sortFunction(a: any, b: any) {
+  sortFunction(a: any, b: any): number {
     let propertyA: number | string = '';
     let propertyB: number | string = '';
     [propertyA, propertyB] = [a[this.activeSortColumn], b[this.activeSortColumn]];
