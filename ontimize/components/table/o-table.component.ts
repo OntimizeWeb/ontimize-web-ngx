@@ -1504,7 +1504,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   getSqlTypes() {
-    return this.dataSource.sqlTypes;
+    return Util.isDefined(this.dataSource.sqlTypes) ? this.dataSource.sqlTypes : {};
   }
 
   setOTableColumnsFilter(tableColumnsFilter: OTableColumnsFilterComponent) {
