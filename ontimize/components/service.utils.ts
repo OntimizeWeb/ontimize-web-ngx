@@ -64,7 +64,7 @@ export class ServiceUtils {
 
   static getFilterUsingParentKeys(parentItem: any, parentKeysObject: Object) {
     let filter = {};
-    const parentKeys = Object.keys(parentKeysObject || {});
+    const parentKeys = Object.keys(parentKeysObject).map(key => parentKeysObject[key]);
 
     if ((parentKeys.length > 0) && (typeof (parentItem) !== 'undefined')) {
       for (let k = 0; k < parentKeys.length; ++k) {
