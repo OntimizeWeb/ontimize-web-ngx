@@ -54,11 +54,6 @@
     <span fxFlex></span>
     <span class="o-grid-totals">{{ 'GRID.TEXT_SHOWN_ITEMS' | oTranslate :{values: [dataArray.length, totalRecords]} }}</span>
   </div>
-
-  <!-- <mat-paginator *ngIf="paginator" #matpaginator [length]="dataSource?.resultsLength" [pageIndex]="paginator.pageIndex"
-    [pageSize]="queryRows" [pageSizeOptions]="paginator.pageSizeOptions" (page)="onChangePage($event)"
-    [showFirstLastButtons]="paginator.showFirstLastButtons"></mat-paginator> -->
-
   <mat-paginator *ngIf="paginationControls" [length]="totalRecords" [pageSize]="queryRows" [pageSizeOptions]="pageSizeOptions"
     (page)="onChangePage($event)"></mat-paginator>
 
