@@ -419,7 +419,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     return subscription;
   }
 
-  getDataValue(attr: string) {
+  protected getDataValue(attr: string) {
     if (this.isInInsertMode()) {
       let urlParams = this.formNavigation.getFilterFromUrlParams();
       let val = this.formGroup.value[attr] || urlParams[attr];
@@ -1321,6 +1321,49 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
       delete valueCopy[this.ignoreFormCacheKeys[i]];
     }
     return valueCopy;
+  }
+
+  /**
+   * Return the current value of the control in the form
+   */
+  getFieldValue(attr: string): any {
+    let value = null;
+    let comp = this._components[attr];
+    if (comp) {
+      value = comp.value;
+      if (value instanceof OFormValue) {
+        value = comp.value.value;
+      }
+    }
+    return value;
+  }
+
+  getFieldValues(attrs: string[]): any[] {
+    let self = this;
+    let arr = [];
+
+    attrs.forEach((key,index) => {
+      arr[key] = self.getFieldValue(key);
+    });
+    return arr;
+
+  }
+
+  setFieldValue(attr: string, value: any) {
+    let comp = this._components[attr];
+    if (comp) {
+      comp.setValue(value);
+    }
+  }
+
+  deleteFieldValue(attr: string) {
+    this.setFieldValue(attr, null);
+  }
+
+  getFieldReference(attr: string) {
+    let comp = {};
+    comp = this._components[attr];
+    return comp;
   }
 
   protected isInsertModePath(path: string): boolean {
