@@ -1,3 +1,4 @@
+import { EventEmitter } from '@angular/core';
 import { DataSource } from '@angular/cdk/collections';
 import { MatPaginator } from '@angular/material';
 import 'rxjs/add/observable/fromEvent';
@@ -45,13 +46,15 @@ export class OTableDataSource extends DataSource<any> {
 
   protected filteredData: any[] = [];
 
+  onRenderedDataChange: EventEmitter<any> = new EventEmitter<any>();
+
   //load data in scroll
   get loadDataScrollable(): number { return this._loadDataScrollableChange.getValue().data || 1; }
   set loadDataScrollable(page: number) {
     this._loadDataScrollableChange.next(new OTableScrollEvent(page));
   }
 
-  renderedData: any[] = [];
+  protected _renderedData: any[] = [];
   resultsLength: number = 0;
 
   get quickFilter(): string { return this._quickFilterChange.value || ''; }
@@ -69,6 +72,15 @@ export class OTableDataSource extends DataSource<any> {
     }
     this._tableOptions = table.oTableOptions;
     this._sort = table.sort;
+  }
+
+  get renderedData(): any[] {
+    return this._renderedData;
+  }
+
+  set renderedData(arg: any[]) {
+    this._renderedData = arg;
+    this.onRenderedDataChange.emit();
   }
 
   /**
@@ -140,8 +152,6 @@ export class OTableDataSource extends DataSource<any> {
       }
       return this.renderedData;
     });
-
-
   }
 
   /**

@@ -459,6 +459,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   public oTableQuickFilterComponent: OTableQuickfilterComponent;
 
   protected sortSubscription: Subscription;
+  protected onRenderedDataChange: Subscription;
+
   quickFilterCallback: QuickFilterFunction;
 
   @ViewChild('tableBody')
@@ -636,6 +638,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
     if (this.sortSubscription) {
       this.sortSubscription.unsubscribe();
+    }
+    if (this.onRenderedDataChange) {
+      this.onRenderedDataChange.unsubscribe();
     }
     Object.keys(this.asyncLoadSubscriptions).forEach(idx => {
       if (this.asyncLoadSubscriptions[idx]) {
@@ -887,7 +892,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       this.sort.setMultipleSort(this.multipleSort);
 
       if (Util.isDefined(this._oTableOptions.columns) && (this.sortColArray.length > 0)) {
-        this.sort.setActiveSortColumns(this.sortColArray);
+        this.sort.setTableInfo(this.sortColArray);
       }
     }
   }
@@ -911,9 +916,16 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   setDatasource() {
     this.dataSource = new OTableDataSource(this);
+    if (!this.pageable) {
+      const self = this;
+      this.onRenderedDataChange = this.dataSource.onRenderedDataChange.subscribe(() => {
+        setTimeout(() => {
+          self.loadingSorting = false;
+        }, 500);
+      });
+    }
     if (this.daoTable) {
       this.dataSource.resultsLength = this.daoTable.data.length;
-
     }
   }
 
@@ -1036,7 +1048,10 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   projectContentChanged() {
-    this.loadingSorting = false;
+    const self = this;
+    setTimeout(function () {
+      self.loadingSorting = false;
+    }, 500);
     this.loadingScroll = false;
   }
 

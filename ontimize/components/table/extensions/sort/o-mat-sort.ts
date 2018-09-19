@@ -34,7 +34,7 @@ export class OMatSort extends MatSort {
     return activeData;
   }
 
-  setActiveSortColumns(sortColArray: Array<ISQLOrder>) {
+  setTableInfo(sortColArray: Array<ISQLOrder>) {
     sortColArray.forEach((colData: ISQLOrder) => {
       const sortDirection: any = colData.ascendent ? Codes.ASC_SORT : Codes.DESC_SORT;
       this.activeArray.push({
@@ -64,8 +64,8 @@ export class OMatSort extends MatSort {
       this.directionById[sortable.id] = sortable.start ? sortable.start : this.start;
     }
     let activeData = this.getSortColumns();
-    this.oSortChange.emit(activeData);
     this._stateChanges.next();
+    this.oSortChange.emit(activeData);
   }
 
   protected deleteSortColumn(id: string) {
@@ -102,29 +102,39 @@ export class OMatSort extends MatSort {
   }
 
   protected sortByColumns(data: any[], sortColumns: any[]) {
-    const self = this;
-    let firstOrd = false;
-    sortColumns.forEach((sortC: any, i: number) => {
-      self.activeSortColumn = sortC.id;
-      self.activeSortDirection = sortC.direction;
-      if (self.activeSortDirection !== '') {
-        if (!firstOrd) {
-          data = data.sort(self.sortFunction.bind(self));
-          firstOrd = true;
-        } else {
-          let groupedData = self.getDataGroupedByProperty(data, sortColumns[i - 1].id);
-          if (Object.keys(groupedData).length < data.length) {
-            data = self.sortGroupedData(groupedData);
-          }
+    const sortFunctionBind = this.sortFunction.bind(this);
+    for (let i = 0, len = sortColumns.length; i < len; i++) {
+      const sortC = sortColumns[i];
+      this.activeSortColumn = sortC.id;
+      this.activeSortDirection = sortC.direction;
+      if (i === 0) {
+        data = data.sort(sortFunctionBind);
+      } else {
+        let groupedData = this.getDataGrouped(data, sortColumns, i);
+        if (Object.keys(groupedData).length >= data.length) {
+          break;
         }
+        data = this.sortGroupedData(groupedData);
       }
-    });
+    }
     return data;
   }
 
-  protected getDataGroupedByProperty(data: any, property: string) {
+  protected getDataGrouped(data: any, sortColumns: any[], index: number) {
+    var propArr = [];
+    sortColumns.forEach((item, i) => {
+      if (i < index) {
+        propArr.push(item.id);
+      }
+    });
+    if (propArr.length === 0) {
+      return data;
+    }
     return data.reduce((obj: any, item: any) => {
-      let value = item[property] || '';
+      let value = '';
+      propArr.forEach(prop => {
+        value += item[prop];
+      });
       obj[value] = obj[value] || [];
       obj[value].push(item);
       return obj;
@@ -132,19 +142,16 @@ export class OMatSort extends MatSort {
   }
 
   protected sortGroupedData(groupedData: any): any[] {
-    let result = [];
     const self = this;
-    Object.keys(groupedData).forEach(key => {
-      let dataArr = groupedData[key];
-      if (dataArr.length > 1) {
-        dataArr = dataArr.sort(self.sortFunction.bind(self));
-      }
-      result.push(...dataArr);
-    });
-    return result;
+    return Object.keys(groupedData).reduce((obj: any, item: any) => {
+      const arr = groupedData[item];
+      const sorted = arr.length <= 1 ? arr : arr.sort(self.sortFunction.bind(self));
+      obj.push(...sorted);
+      return obj;
+    }, []);
   }
 
-  protected sortFunction(a: any, b: any) {
+   protected sortFunction(a: any, b: any) {
     let propertyA: number | string = '';
     let propertyB: number | string = '';
     [propertyA, propertyB] = [a[this.activeSortColumn], b[this.activeSortColumn]];
