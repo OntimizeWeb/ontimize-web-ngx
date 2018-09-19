@@ -36,7 +36,10 @@ export const DEFAULT_INPUTS_O_LOCALE_BAR_MENU_ITEM = [
   templateUrl: './o-locale-bar-menu-item.component.html',
   styleUrls: ['./o-locale-bar-menu-item.component.scss'],
   inputs: DEFAULT_INPUTS_O_LOCALE_BAR_MENU_ITEM,
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  host: {
+    '[class.o-locale-bar-menu-item]': 'true'
+  }
 })
 export class OLocaleBarMenuItemComponent implements OnInit {
 

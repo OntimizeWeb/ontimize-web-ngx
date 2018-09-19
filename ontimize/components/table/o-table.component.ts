@@ -613,10 +613,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   protected initTableAfterViewInit() {
-    if (this.elRef) {
-      this.elRef.nativeElement.removeAttribute('title');
-    }
-
     this.parseVisibleColumns();
     this.setDatasource();
     this.registerSortListener();
@@ -795,12 +791,29 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   parseVisibleColumns() {
     if (this.state.hasOwnProperty('oColumns-display')) {
       // filtering columns that might be in state storage but not in the actual table definition
-      let stateCols = this.state['oColumns-display'].filter(item => this._oTableOptions.columns.find(col => col.attr === item.attr) !== undefined);
-      this.visibleColArray = stateCols.filter(item => item.visible).map(item => item.attr);
+      let stateCols = [];
+      var self = this;
+      this.state['oColumns-display'].forEach((oCol, index) => {
+        let isVisibleColInColumns = self._oTableOptions.columns.find(col => col.attr === oCol.attr) !== undefined;
+        if (isVisibleColInColumns) {
+          stateCols.push(oCol);
+        } else {
+          console.warn('Unable to load the column ' + oCol.attr + ' from the localstorage');
+        }
+      });
+
+      //if all columns was changed then visibleColArray set with visibleColumns
+      let allColumsNotVisible = stateCols.filter(function (col) { return col.visible === true; }).length === 0;
+      if (allColumsNotVisible || stateCols.length === 0) {
+        this.visibleColArray = Util.parseArray(this.visibleColumns, true);
+      } else {
+        this.visibleColArray = stateCols.filter(item => item.visible).map(item => item.attr);
+      }
     } else {
       this.visibleColArray = Util.parseArray(this.visibleColumns, true);
     }
   }
+
 
   parseSortColumns() {
     let sortColumnsParam = this.state['sort-columns'] || this.sortColumns;

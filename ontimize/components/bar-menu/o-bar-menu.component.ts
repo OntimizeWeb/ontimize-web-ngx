@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { AuthGuardService } from '../../services';
 import { OTranslateService } from '../../services';
 import { OSharedModule } from '../../shared';
-import { InputConverter } from '../../decorators/input-converter';
 import { AppMenuService, MenuRootItem } from '../../services/app-menu.service';
 import { OLocaleBarMenuItemModule } from './locale-menu-item/o-locale-bar-menu-item.component';
 import { OBarMenuGroupModule } from './menu-group/o-bar-menu-group.component';
@@ -14,11 +13,8 @@ import { OBarMenuSeparatorModule } from './menu-separator/o-bar-menu-separator.c
 export const DEFAULT_INPUTS_O_BAR_MENU = [
   // title [string]: menu title. Default: no value.
   'menuTitle: title',
-
   // tooltip [string]: menu tooltip. Default: 'title' value.
   'tooltip',
-  // auto-menu [boolean]: If the component automatically creates or not a panel page based on the application menu configuration. Default: no.
-  'autoMenu:auto-menu'
 ];
 
 @Component({
@@ -34,8 +30,6 @@ export const DEFAULT_INPUTS_O_BAR_MENU = [
 export class OBarMenuComponent {
 
   public static DEFAULT_INPUTS_O_BAR_MENU = DEFAULT_INPUTS_O_BAR_MENU;
-  @InputConverter()
-  autoMenu: boolean = true;
   protected authGuardService: AuthGuardService;
   protected translateService: OTranslateService;
   private appMenuService: AppMenuService;
@@ -66,7 +60,6 @@ export class OBarMenuComponent {
       });
       this.setDOMTitle();
     }
-
   }
 
   setDOMTitle() {

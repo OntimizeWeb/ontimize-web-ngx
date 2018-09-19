@@ -166,6 +166,10 @@ export class OServiceComponent extends OServiceBaseComponent {
 
   afterViewInit() {
     super.afterViewInit();
+    if (this.elRef) {
+      this.elRef.nativeElement.removeAttribute('title');
+    }
+
     if (this.formLayoutManager && this.formLayoutManager.isTabMode()) {
       this.onMainTabSelectedSubscription = this.formLayoutManager.onMainTabSelected.subscribe(() => {
         this.reloadData();

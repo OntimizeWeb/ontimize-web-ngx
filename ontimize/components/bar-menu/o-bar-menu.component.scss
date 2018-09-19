@@ -137,7 +137,10 @@ o-bar-menu {
       }
 
       .o-bar-menu-group,
-      .o-bar-menu-item {
+      .o-bar-menu-item,
+      .o-locale-bar-menu-item,
+      .o-bar-menu-separator {
+
         display: flex;
 
         .mat-list-item {
