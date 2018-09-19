@@ -1,5 +1,6 @@
 import { AfterViewChecked, AfterViewInit, Component, ContentChildren, ElementRef, EventEmitter, forwardRef, Inject, Injector, NgModule, OnChanges, OnDestroy, OnInit, Optional, QueryList, SimpleChange, ViewChild, ViewChildren } from '@angular/core';
 import { MediaChange, ObservableMedia } from '@angular/flex-layout';
+import { MatPaginator, PageEvent } from '@angular/material';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -39,6 +40,8 @@ export const DEFAULT_INPUTS_O_GRID = [
   'gridItemHeight: grid-item-height',
   // refresh-button [no|yes]: show refresh button. Default: yes.
   'refreshButton: refresh-button',
+  // pagination-controls [yes|no|true|false]: show pagination controls. Default: no.
+  'paginationControls: pagination-controls'
 ];
 
 export const DEFAULT_OUTPUTS_O_GRID = [
@@ -76,6 +79,8 @@ export class OGridComponent extends OServiceComponent implements AfterViewChecke
   public showPageSize: boolean = false;
   @InputConverter()
   public showSort: boolean = false;
+  @InputConverter()
+  paginationControls: boolean = false;
   get quickFilter(): boolean {
     return this._quickFilter;
   }
@@ -140,6 +145,7 @@ export class OGridComponent extends OServiceComponent implements AfterViewChecke
   quickFilterComponent: OSearchInputComponent;
   @ViewChildren(OGridItemDirective)
   gridItemDirectives: QueryList<OGridItemDirective>;
+  @ViewChild(MatPaginator) matpaginator: MatPaginator;
 
   set gridItems(value: OGridItemComponent[]) {
     this._gridItems = value;
@@ -148,6 +154,14 @@ export class OGridComponent extends OServiceComponent implements AfterViewChecke
     return this._gridItems;
   }
   protected _gridItems: OGridItemComponent[];
+
+  set currentPage(val: number) {
+    this._currentPage = val;
+  }
+  get currentPage(): number {
+    return this._currentPage;
+  }
+  protected _currentPage: number = 0;
 
   protected subscription: Subscription = new Subscription();
   protected media: ObservableMedia;
@@ -206,9 +220,9 @@ export class OGridComponent extends OServiceComponent implements AfterViewChecke
 
   ngAfterViewInit() {
     super.afterViewInit();
-    if (Util.isDefined(this.searchInputComponent)) {
-      this.registerQuickFilter(this.searchInputComponent);
-    }
+    // if (Util.isDefined(this.searchInputComponent)) {
+    //   this.registerQuickFilter(this.searchInputComponent);
+    // }
     this.setGridItemDirectivesData();
   }
 
@@ -268,8 +282,7 @@ export class OGridComponent extends OServiceComponent implements AfterViewChecke
       if (this.state.hasOwnProperty('filterValue')) {
         this.quickFilterComponent.setValue(this.state.filterValue);
       }
-      const self = this;
-      this.quickFilterComponent.onSearch.subscribe(val => self.filterData(val));
+      this.quickFilterComponent.onSearch.subscribe(val => this.filterData(val));
     }
   }
 
@@ -277,7 +290,7 @@ export class OGridComponent extends OServiceComponent implements AfterViewChecke
    * Filters data locally
    * @param value the filtering value
    */
-  filterData(value?: string): void {
+  filterData(value?: string, loadMore?: boolean): void {
     value = Util.isDefined(value) ? value : Util.isDefined(this.quickFilterComponent) ? this.quickFilterComponent.getValue() : void 0;
     if (this.state) {
       this.state.filterValue = value;
@@ -306,30 +319,25 @@ export class OGridComponent extends OServiceComponent implements AfterViewChecke
           filteredData = filteredData.sort((a, b) => (Util.normalizeString(a[sort.columnName]) > Util.normalizeString(b[sort.columnName])) ? (1 * factor) : (Util.normalizeString(b[sort.columnName]) > Util.normalizeString(a[sort.columnName])) ? (-1 * factor) : 0);
         });
       }
-      this.setDataArray(filteredData.splice(0, this.queryRows));
+      if (this.paginationControls) {
+        this.setDataArray(filteredData.splice(this.currentPage * this.queryRows, this.queryRows));
+      } else {
+        this.setDataArray(this.dataArray.concat(this.dataResponseArray.slice(this.dataArray.length, this.queryRows + (loadMore ? this.dataArray.length : 0))));
+      }
     } else {
       this.setDataArray(this.dataResponseArray);
     }
   }
 
-
-
-  // renderData() {
-  //   let data = this.dataArray;
-  //   if (this.quickFilterComponent) {
-  //     data = this.filterData(this.quickFilterComponent.getValue());
-  //   }
-  //   data = this.sortedData(data);
-  //   data = Object.assign([], data);
-  //   data = this.paginatedData(data);
-  //   this.setDataArray(data);
-  // }
-
   protected setData(data: any, sqlTypes?: any, replace?: boolean) {
     if (Util.isArray(data)) {
       let respDataArray = data;
       if (this.pageable && !replace) {
-        respDataArray = (this.dataResponseArray || []).concat(data);
+        if (this.paginationControls) {
+          respDataArray = data;
+        } else {
+          respDataArray = (this.dataResponseArray || []).concat(data);
+        }
       }
       this.dataResponseArray = respDataArray;
       if (!this.pageable) {
@@ -348,29 +356,6 @@ export class OGridComponent extends OServiceComponent implements AfterViewChecke
     }
     ObservableWrapper.callEmit(this.onDataLoaded, this.dataResponseArray);
   }
-
-  // /** Returns a sorted copy of the database data. */
-  // protected sortedData(data: any[]): any[] {
-  //   if (!this.sortColumn) {
-  //     return data;
-  //   }
-  //   return data.sort(this.sortFunction.bind(this));
-  // }
-
-  // /** Returns a sorted copy of the database data. */
-  // protected paginatedData(data: any[]): any[] {
-  //   return data.splice(0, this.queryRows);
-  // }
-
-  // protected sortFunction(a: any, b: any) {
-  //   let propertyA: number | string = '';
-  //   let propertyB: number | string = '';
-  //   [propertyA, propertyB] = [a[this.sortColumn], b[this.sortColumn]];
-
-  //   let valueA = typeof propertyA === 'undefined' ? '' : propertyA === '' ? propertyA : isNaN(+propertyA) ? propertyA.toString().trim().toLowerCase() : +propertyA;
-  //   let valueB = typeof propertyB === 'undefined' ? '' : propertyB === '' ? propertyB : isNaN(+propertyB) ? propertyB.toString().trim().toLowerCase() : +propertyB;
-  //   return (valueA <= valueB ? -1 : 1);
-  // }
 
   configureFilterValue(value: string) {
     let returnVal = value;
@@ -432,7 +417,7 @@ export class OGridComponent extends OServiceComponent implements AfterViewChecke
       };
       this.queryData(void 0, queryArgs);
     } else {
-      this.dataArray = this.dataArray.concat(this.dataResponseArray.slice(this.dataArray.length, (this.dataArray.length + this.queryRows)));
+      this.filterData(void 0, true);
     }
   }
 
@@ -457,7 +442,10 @@ export class OGridComponent extends OServiceComponent implements AfterViewChecke
 
   getQueryArguments(filter: Object, ovrrArgs?: OQueryDataArgs): Array<any> {
     let queryArguments = super.getQueryArguments(filter, ovrrArgs);
-    queryArguments[6] = this.sortColArray;
+    // queryArguments[3] = this.getSqlTypesForFilter(queryArguments[1]);
+    if (this.pageable) {
+      queryArguments[6] = this.sortColArray;
+    }
     return queryArguments;
   }
 
@@ -470,6 +458,49 @@ export class OGridComponent extends OServiceComponent implements AfterViewChecke
         this.sortColArray.splice(i, 1);
       }
     }
+  }
+
+  onChangePage(e: PageEvent) {
+    if (!this.pageable) {
+      this.currentPage = e.pageIndex;
+      this.filterData();
+      return;
+    }
+    const tableState = this.state;
+
+    const goingBack = e.pageIndex < this.currentPage;
+    this.currentPage = e.pageIndex;
+    const pageSize = e.pageSize;
+
+    const oldQueryRows = this.queryRows;
+    const changingPageSize = (oldQueryRows !== pageSize);
+    this.queryRows = pageSize;
+
+    let newStartRecord;
+    let queryLength;
+
+    if (goingBack || changingPageSize) {
+      newStartRecord = (this.currentPage * this.queryRows);
+      queryLength = this.queryRows;
+    } else {
+      newStartRecord = Math.max(tableState.queryRecordOffset, (this.currentPage * this.queryRows));
+      let newEndRecord = Math.min(newStartRecord + this.queryRows, tableState.totalQueryRecordsNumber);
+      queryLength = Math.min(this.queryRows, newEndRecord - newStartRecord);
+    }
+
+    const queryArgs: OQueryDataArgs = {
+      offset: newStartRecord,
+      length: queryLength
+    };
+    this.queryData(void 0, queryArgs);
+  }
+
+  getDataToStore(): Object {
+    let dataToStore = super.getDataToStore();
+    if (!this.storePaginationState) {
+      delete dataToStore['queryRecordOffset'];
+    }
+    return dataToStore;
   }
 
 }
