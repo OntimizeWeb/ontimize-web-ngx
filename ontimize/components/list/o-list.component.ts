@@ -148,6 +148,7 @@ export class OListComponent extends OServiceComponent implements AfterContentIni
   }
 
   ngAfterViewInit() {
+    super.afterViewInit();
     if (Util.isDefined(this.searchInputComponent)) {
       this.registerQuickFilter(this.searchInputComponent);
     }

@@ -611,10 +611,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   protected initTableAfterViewInit() {
-    if (this.elRef) {
-      this.elRef.nativeElement.removeAttribute('title');
-    }
-
     this.parseVisibleColumns();
     this.setDatasource();
     this.registerSortListener();
