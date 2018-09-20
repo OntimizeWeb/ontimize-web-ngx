@@ -12,6 +12,7 @@
 ### BREAKING CHANGES
 * **MenuItem**:
   * attribute '*show-in-app-sidenav*' has been removed ([0c96585](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0c96585)).
+* **o-grid**: Attribute `page-size-options` has changed, now it receives an string with the page size options separated by ';' ([70dcd43](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/70dcd43)).
 
 ## 3.1.0 (2018-09-13)
 ### Features
