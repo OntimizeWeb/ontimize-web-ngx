@@ -22,7 +22,7 @@ export const DEFAULT_INPUTS_O_GRID = [
   ...OServiceComponent.DEFAULT_INPUTS_O_SERVICE_COMPONENT,
   // cols: Amount of columns in the grid list. Default in extra small and small screen is 1, in medium screen is 2, in large screen is 3 and extra large screen is 4.
   'cols',
-  // page-size-options: The set of provided page size options to display to the user.
+  // page-size-options [string]: Page size options separated by ';'.
   'pageSizeOptions: page-size-options',
   // show-page-size:Whether to hide the page size selection UI from the user.
   'showPageSize: show-page-size',
@@ -123,8 +123,11 @@ export class OGridComponent extends OServiceComponent implements AfterViewChecke
   get pageSizeOptions(): Array<number> {
     return this._pageSizeOptions;
   }
-  set pageSizeOptions(value: Array<number>) {
-    this._pageSizeOptions = value;
+  set pageSizeOptions(val: Array<number>) {
+    if (!(val instanceof Array)) {
+      val = Util.parseArray(String(val)).map(a => parseInt(a));
+    }
+    this._pageSizeOptions = val;
   }
   protected _pageSizeOptions = PAGE_SIZE_OPTIONS;
   /* End Inputs */
