@@ -35,6 +35,13 @@ export interface IErrorData {
   text: string;
 }
 
+
+export class OFormDataOnValueChangeEvent {
+  public static USER_CHANGE = 0;
+  public static PROGRAMATIC_CHANGE = 1;
+  constructor(public type: number, public newValue?: any, public oldValue?: any) {  }
+}
+
 export const DEFAULT_INPUTS_O_FORM_DATA_COMPONENT = [
   'oattr: attr',
   'olabel: label',
@@ -55,7 +62,8 @@ export const DEFAULT_INPUTS_O_FORM_DATA_COMPONENT = [
 ];
 
 export const DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT = [
-  'onChange'
+  'onChange',
+  'onValueChange'
 ];
 
 export class OFormDataComponent extends OBaseComponent implements IFormDataComponent, IFormDataTypeComponent,
@@ -74,6 +82,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
 
   /* Outputs */
   onChange: EventEmitter<Object> = new EventEmitter<Object>();
+  onValueChange: EventEmitter<OFormDataOnValueChangeEvent> = new EventEmitter<OFormDataOnValueChangeEvent>();
 
   @HostBinding('style.width')
   get hostWidth() {

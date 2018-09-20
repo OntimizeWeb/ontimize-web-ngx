@@ -1329,6 +1329,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
 
   /**
    * Return the current value of the control in the form
+   * @param attr
    */
   getFieldValue(attr: string): any {
     let value = null;
@@ -1342,16 +1343,25 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     return value;
   }
 
-  getFieldValues(attrs: string[]): any[] {
+  /**
+   * Return an object with the values of each attribute
+   * @param attrs
+   */
+  getFieldValues(attrs: string[]): any {
     let self = this;
-    let arr = [];
-    attrs.forEach((key, index) => {
+    let arr = {};
+    attrs.forEach((key) => {
       arr[key] = self.getFieldValue(key);
     });
     return arr;
 
   }
 
+  /**
+   * Sets the value of the control in the form.
+   * @param attr attribute of control
+   * @param value value
+   */
   setFieldValue(attr: string, value: any) {
     let comp = this._components[attr];
     if (comp) {
@@ -1359,14 +1369,55 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     }
   }
 
-  deleteFieldValue(attr: string) {
+  /**
+   * Sets the value of each control in the form.
+   * @param values
+   */
+  setFieldValues(values: any) {
+    for (let key in values) {
+      this.setFieldValue(key, values[key]);
+    }
+  }
+
+  /**
+   * Clear the value of each control in the form
+   * @param attr
+   */
+  clearFieldValue(attr: string) {
     this.setFieldValue(attr, null);
   }
 
+  /**
+   * Reset the value of each control in the form
+   * @param attrs
+   */
+  clearFieldValues(attrs: string[]) {
+    let self = this;
+    attrs.forEach((key) => {
+      self.clearFieldValue(key);
+    });
+  }
+
+  /**
+   * Retrieves the reference of the control in the form.
+   * @param attr
+   */
   getFieldReference(attr: string) {
     let comp = {};
     comp = this._components[attr];
     return comp;
+  }
+  /**
+   * Retrieves the reference of each control in the form
+   * @param attrs
+   */
+  getFieldReferences(attrs: string[]) {
+    let arr = {};
+    let self = this;
+    attrs.forEach((key, index) => {
+      arr[key] = self.getFieldReference(key);
+    });
+    return arr;
   }
 
   protected isInsertModePath(path: string): boolean {
