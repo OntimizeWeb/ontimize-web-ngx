@@ -86,6 +86,10 @@ export class ONavigationItem {
       this.formRoutes = arg;
     }
   }
+
+  deleteActiveFormMode() {
+    this.activeFormMode = undefined;
+  }
 }
 
 @Injectable()
@@ -321,6 +325,12 @@ export class NavigationService implements ILocalStorageComponent {
     }
     return result;
   }
+
+  deleteActiveFormMode(arg: ONavigationItem) {
+    arg.deleteActiveFormMode();
+    this.storeNavigation();
+  }
+
   //* Provisional
   // protected move(index) {
   //   this.queryByIndex(index);
