@@ -11,8 +11,7 @@
       <div class="o-grid-paginator" *ngIf="showPageSize">
         <div class="o-grid-page-size-label">{{ 'GRID.ITEMS_PER_PAGE' | oTranslate }}:</div>
         <mat-form-field class="o-grid-select-page" floatLabel="never">
-          <mat-select placeholder="" #pageSizeSelect [(value)]="queryRows" (selectionChange)="reloadData()">
-            <!-- (change)="reloadData()" -->
+          <mat-select placeholder="" #pageSizeSelect [(value)]="queryRows" (selectionChange)="reloadData()" (change)="paginator?._changePageSize($event)">
             <mat-option *ngFor="let page of pageSizeOptions" [value]="page">
               {{ page }}
             </mat-option>
@@ -54,8 +53,8 @@
     <span fxFlex></span>
     <span class="o-grid-totals">{{ 'GRID.TEXT_SHOWN_ITEMS' | oTranslate :{values: [dataArray.length, totalRecords]} }}</span>
   </div>
-  <mat-paginator *ngIf="paginationControls" [length]="totalRecords" [pageSize]="queryRows" [pageSizeOptions]="pageSizeOptions"
-    (page)="onChangePage($event)"></mat-paginator>
+  <mat-paginator #paginator *ngIf="paginationControls" [length]="totalRecords" [pageSize]="queryRows" [pageSizeOptions]="pageSizeOptions"
+    [pageIndex]="currentPage" [showFirstLastButtons]="true" (page)="onChangePage($event)"></mat-paginator>
 
   <div *ngIf="loading" fxLayoutAlign="center center" class="spinner-container">
     <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
