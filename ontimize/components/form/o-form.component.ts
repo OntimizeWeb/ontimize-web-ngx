@@ -1380,7 +1380,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
    * @param attr
    */
   clearFieldValue(attr: string) {
-    this.setFieldValue(attr, null);
+    this.setFieldValue(attr, void 0);
   }
 
   /**
