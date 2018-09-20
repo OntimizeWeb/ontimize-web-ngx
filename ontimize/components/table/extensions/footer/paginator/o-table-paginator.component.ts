@@ -110,12 +110,16 @@ export class OTableMatPaginatorIntl extends MatPaginatorIntl {
     this.itemsPerPageLabel = this.translateService.get('TABLE.PAGINATE.ITEMSPERPAGELABEL');
     this.nextPageLabel = this.translateService.get('TABLE.PAGINATE.NEXT');
     this.previousPageLabel = this.translateService.get('TABLE.PAGINATE.PREVIOUS');
+    this.firstPageLabel = this.translateService.get('TABLE.PAGINATE.FIRST');
+    this.lastPageLabel = this.translateService.get('TABLE.PAGINATE.LAST');
     this.getRangeLabel = this.getORangeLabel;
 
     this.onLanguageChangeSubscribe = this.translateService.onLanguageChanged.subscribe(res => {
       this.itemsPerPageLabel = this.translateService.get('TABLE.PAGINATE.ITEMSPERPAGELABEL');
       this.nextPageLabel = this.translateService.get('TABLE.PAGINATE.NEXT');
       this.previousPageLabel = this.translateService.get('TABLE.PAGINATE.PREVIOUS');
+      this.firstPageLabel = this.translateService.get('TABLE.PAGINATE.FIRST');
+      this.lastPageLabel = this.translateService.get('TABLE.PAGINATE.LAST');
       this.getRangeLabel = this.getORangeLabel;
     });
   }
