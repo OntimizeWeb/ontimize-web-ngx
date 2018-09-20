@@ -47,13 +47,15 @@
   </mat-grid-list>
 
   <!-- GRID FOOTER -->
-  <div *ngIf="!loading" fxlayout="row" class="o-grid-footer" fxFlex layout-padding>
+  <div *ngIf="!loading && !paginationControls" fxlayout="row" class="o-grid-footer" fxFlex layout-padding>
     <button mat-button *ngIf="dataArray.length < totalRecords" (click)="loadMore()" class="mat-raised-button">
       {{ 'GRID.BUTTON_NEXT' | oTranslate }}
     </button>
     <span fxFlex></span>
     <span class="o-grid-totals">{{ 'GRID.TEXT_SHOWN_ITEMS' | oTranslate :{values: [dataArray.length, totalRecords]} }}</span>
   </div>
+  <mat-paginator *ngIf="paginationControls" [length]="totalRecords" [pageSize]="queryRows" [pageSizeOptions]="pageSizeOptions"
+    (page)="onChangePage($event)"></mat-paginator>
 
   <div *ngIf="loading" fxLayoutAlign="center center" class="spinner-container">
     <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
