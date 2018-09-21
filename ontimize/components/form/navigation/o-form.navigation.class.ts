@@ -280,14 +280,16 @@ export class OFormNavigationClass {
     if (this.formLayoutManager) {
       this.form.setInitialMode();
     } else if (this.navigationService && this.form.keysArray && insertedKeys) {
-      let route = [];
-      let extras: NavigationExtras = Object.assign({}, this.getQueryParams(), Codes.getIsDetailObject());
       let params: any[] = [];
       this.form.keysArray.forEach((current, index) => {
         if (insertedKeys[current]) {
           params.push(insertedKeys[current]);
         }
       });
+      let extras: NavigationExtras = {};
+      let qParams: any = Object.assign({}, this.getQueryParams(), Codes.getIsDetailObject());
+      extras[Codes.QUERY_PARAMS] = qParams;
+      let route = [];
       const navData: ONavigationItem = this.navigationService.getPreviousRouteData();
       if (navData) {
         route.push(navData.url);
@@ -296,6 +298,8 @@ export class OFormNavigationClass {
           route.push(detailRoute);
         }
         route.push(...params);
+        // deleting insertFormRoute as active mode (because stayInRecordAfterInsert changes it)
+        this.navigationService.deleteActiveFormMode(navData);
       } else {
         extras.relativeTo = this.actRoute;
         route = ['../', ...params];
@@ -421,12 +425,12 @@ export class OFormNavigationClass {
     return subscription;
   }
 
-  protected storeNavigationFormRoutes(activeFormMode: string) {
+  protected storeNavigationFormRoutes(activeMode: string) {
     this.navigationService.storeFormRoutes({
       detailFormRoute: Codes.DEFAULT_DETAIL_ROUTE,
       editFormRoute: Codes.DEFAULT_EDIT_ROUTE,
       insertFormRoute: Codes.DEFAULT_INSERT_ROUTE
-    }, activeFormMode);
+    }, activeMode);
   }
 
 }

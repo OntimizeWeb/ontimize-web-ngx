@@ -245,6 +245,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   @ViewChild('innerForm') innerFormEl: ElementRef;
 
   ignoreFormCacheKeys: Array<any> = [];
+  protected activeDelete: boolean;
 
   constructor(
     protected router: Router,
@@ -461,7 +462,9 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   }
 
   canDeactivate(): Observable<boolean> | Promise<boolean> | boolean {
-    return this.showConfirmDiscardChanges();
+    const isDeleting = this.activeDelete;
+    this.activeDelete = false;
+    return isDeleting || this.showConfirmDiscardChanges();
   }
 
   showConfirmDiscardChanges(): Promise<boolean> {
@@ -1067,6 +1070,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     const self = this;
     const loader = self.load();
     let observable = new Observable(observer => {
+      this.activeDelete = true;
       this.dataService[this.deleteMethod](filter, this.entity).subscribe(resp => {
         loader.unsubscribe();
         if (resp.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) {
