@@ -62,7 +62,7 @@ export class OFormLayoutTabGroupComponent implements AfterViewInit, OnDestroy {
       if (this.tabsDirectives.length && !this._ignoreTabsDirectivesChange) {
         const tabItem = this.tabsDirectives.last;
         const tabData = this.data[tabItem.index];
-        if (tabData) {
+        if (tabData && !tabData.rendered) {
           this.createTabComponent(tabData, tabItem);
         }
       } else if (this._ignoreTabsDirectivesChange) {
@@ -156,9 +156,10 @@ export class OFormLayoutTabGroupComponent implements AfterViewInit, OnDestroy {
   createTabComponent(tabData: IDetailComponentData, content: OFormLayoutManagerContentDirective) {
     const component = tabData.component;
     const componentFactory = this.componentFactoryResolver.resolveComponentFactory(component);
-    let viewContainerRef = content.viewContainerRef;
+    let viewContainerRef: ViewContainerRef = content.viewContainerRef;
     viewContainerRef.clear();
     viewContainerRef.createComponent(componentFactory);
+    tabData.rendered = true;
   }
 
   getFormCacheData(idArg: string): IDetailComponentData {
@@ -241,15 +242,13 @@ export class OFormLayoutTabGroupComponent implements AfterViewInit, OnDestroy {
   protected createTabsFromState() {
     const self = this;
     const tabComponent = self.data[0].component;
-    let newTabs = [];
     this.state.tabsData.forEach((tabData: any, index: number) => {
       if (tabComponent && index > 0) {
-        newTabs.push(self.createDetailComponent(tabComponent, tabData));
+        setTimeout(() => {
+          self.data.push(self.createDetailComponent(tabComponent, tabData));
+        }, 0);
       }
     });
-    if (newTabs.length > 0) {
-      this.data.push(...newTabs);
-    }
   }
 
   protected createDetailComponent(component: any, paramsObj: any) {
@@ -263,7 +262,6 @@ export class OFormLayoutTabGroupComponent implements AfterViewInit, OnDestroy {
       label: '',
       modified: false
     };
-    // this.addTab(newDetailComp);
     return newDetailComp;
   }
 
