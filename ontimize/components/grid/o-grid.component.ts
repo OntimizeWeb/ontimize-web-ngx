@@ -189,9 +189,6 @@ export class OGridComponent extends OServiceComponent implements AfterViewChecke
 
     this.parseSortColumns();
 
-    if (this.staticData && this.staticData.length) {
-      this.dataResponseArray = this.staticData;
-    }
     if (this.quickFilterColumns) {
       this.quickFilterColArray = Util.parseArray(this.quickFilterColumns, true);
     } else {
@@ -223,9 +220,6 @@ export class OGridComponent extends OServiceComponent implements AfterViewChecke
 
   ngAfterViewInit() {
     super.afterViewInit();
-    // if (Util.isDefined(this.searchInputComponent)) {
-    //   this.registerQuickFilter(this.searchInputComponent);
-    // }
     this.setGridItemDirectivesData();
   }
 
@@ -246,12 +240,8 @@ export class OGridComponent extends OServiceComponent implements AfterViewChecke
     }));
   }
 
-  public ngOnChanges(changes: { [propName: string]: SimpleChange }) {
-    if (typeof (changes['staticData']) !== 'undefined') {
-      this.dataResponseArray = changes['staticData'].currentValue;
-      let filter = (this.state && this.state.filterValue) ? this.state.filterValue : undefined;
-      this.filterData(filter);
-    }
+  ngOnChanges(changes: { [propName: string]: SimpleChange }) {
+    super.ngOnChanges(changes);
   }
 
   protected setGridItemDirectivesData() {
@@ -289,6 +279,18 @@ export class OGridComponent extends OServiceComponent implements AfterViewChecke
     }
   }
 
+  setDataArray(data: any): void {
+    if (Util.isArray(data)) {
+      this.dataResponseArray = data;
+    } else if (Util.isObject(data)) {
+      this.dataResponseArray = [data];
+    } else {
+      console.warn('Component has received not supported service data. Supported data are Array or Object');
+      this.dataResponseArray = [];
+    }
+    this.filterData();
+  }
+
   /**
    * Filters data locally
    * @param value the filtering value
@@ -323,33 +325,42 @@ export class OGridComponent extends OServiceComponent implements AfterViewChecke
         });
       }
       if (this.paginationControls) {
-        this.setDataArray(filteredData.splice(this.currentPage * this.queryRows, this.queryRows));
+        this.dataArray = filteredData.splice(this.currentPage * this.queryRows, this.queryRows);
       } else {
-        this.setDataArray(this.dataArray.concat(this.dataResponseArray.slice(this.dataArray.length, this.queryRows + (loadMore ? this.dataArray.length : 0))));
+        this.dataArray = filteredData.splice(0, this.queryRows * (this.currentPage + 1));
       }
     } else {
-      this.setDataArray(this.dataResponseArray);
+      this.dataArray = this.dataResponseArray;
     }
   }
 
   protected setData(data: any, sqlTypes?: any, replace?: boolean) {
     if (Util.isArray(data)) {
+      let dataArray = data;
       let respDataArray = data;
+      // TODO: check this!
       if (this.pageable && !replace) {
         if (this.paginationControls) {
+          dataArray = data;
           respDataArray = data;
         } else {
+          dataArray = (this.dataArray || []).concat(data);
           respDataArray = (this.dataResponseArray || []).concat(data);
         }
-      }
-      this.dataResponseArray = respDataArray;
-      if (!this.pageable) {
-        this.filterData(this.state.filterValue);
       } else {
-        this.setDataArray(this.dataResponseArray);
+        if (this.paginationControls) {
+          dataArray = data.slice((this.queryRows * (this.currentPage + 1)) - this.queryRows, this.queryRows * (this.currentPage + 1))
+          respDataArray = data;
+        } else {
+          dataArray = data.slice(0, this.queryRows * (this.currentPage + 1));
+          respDataArray = data;
+        }
       }
+      this.dataArray = dataArray;
+      this.dataResponseArray = respDataArray;
     } else {
-      this.setDataArray([]);
+      this.dataArray = [];
+      this.dataResponseArray = [];
     }
     if (this.loaderSubscription) {
       this.loaderSubscription.unsubscribe();
@@ -413,6 +424,7 @@ export class OGridComponent extends OServiceComponent implements AfterViewChecke
   }
 
   loadMore() {
+    this.currentPage += 1;
     if (this.pageable) {
       let queryArgs: OQueryDataArgs = {
         offset: this.state.queryRecordOffset,
