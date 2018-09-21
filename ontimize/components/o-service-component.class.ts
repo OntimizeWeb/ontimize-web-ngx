@@ -293,10 +293,10 @@ export class OServiceComponent extends OServiceBaseComponent {
     }
     if (result.length) {
       this.storeNavigationFormRoutes(modeRoute, this.getKeysValues());
-      if (this.formLayoutManager && !this.formLayoutManager.isMainComponent(this)) {
-        var activeRoute = this.formLayoutManager.getRouteOfActiveItem();
-        if (activeRoute && activeRoute.length > 0) {
-          result.unshift(activeRoute.join('/'));
+      if (this.formLayoutManager) {
+        const compRoute = this.formLayoutManager.getRouteForComponent(this);
+        if (compRoute && compRoute.length > 0) {
+          result.unshift(...compRoute);
         }
       }
     }
@@ -392,14 +392,14 @@ export class OServiceComponent extends OServiceBaseComponent {
     return filter;
   }
 
-  protected storeNavigationFormRoutes(activeFormMode: string, keysValues: any = undefined) {
+  protected storeNavigationFormRoutes(activeMode: string, keysValues: any = undefined) {
     const mainFormLayoutComp = this.formLayoutManager ? Util.isDefined(this.formLayoutManager.isMainComponent(this)) : undefined;
     this.navigationService.storeFormRoutes({
       mainFormLayoutManagerComponent: mainFormLayoutComp,
       detailFormRoute: this.detailFormRoute,
       editFormRoute: this.editFormRoute,
       insertFormRoute: Util.isDefined(this.insertFormRoute) ? this.insertFormRoute : Codes.DEFAULT_INSERT_ROUTE
-    }, activeFormMode, keysValues);
+    }, activeMode, keysValues);
   }
 
   protected saveDataNavigationInLocalStorage(): void {
