@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, CUSTOM_ELEMENTS_SCHEMA, ElementRef, EventEmitter, Injector, NgModule, OnInit, OnDestroy, ViewChild, ContentChildren, QueryList, HostListener } from '@angular/core';
+import { AfterViewInit, Component, CUSTOM_ELEMENTS_SCHEMA, ElementRef, EventEmitter, Injector, NgModule, OnInit, OnDestroy, ViewChild, ContentChildren, QueryList, HostListener, Optional, SkipSelf } from '@angular/core';
 import { ActivatedRoute, ActivatedRouteSnapshot, Route, Router, RouterModule } from '@angular/router';
 import { MatDialog, MatDialogRef } from '@angular/material';
 import { CommonModule } from '@angular/common';
@@ -25,6 +25,7 @@ export interface IDetailComponentData {
   label: string;
   modified: boolean;
   url: string;
+  rendered?: boolean;
 }
 
 export const DEFAULT_INPUTS_O_FORM_LAYOUT_MANAGER = [
@@ -91,7 +92,9 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
     protected router: Router,
     protected actRoute: ActivatedRoute,
     protected dialog: MatDialog,
-    protected elRef: ElementRef
+    protected elRef: ElementRef,
+    @SkipSelf() @Optional()
+    protected parentFormLayoutManager: OFormLayoutManagerComponent
   ) {
     this.oFormLayoutManagerService = this.injector.get(OFormLayoutManagerService);
     this.oFormLayoutManagerService.setFormLayoutManager(this);
@@ -314,6 +317,23 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
 
   ignoreCanDeactivate(): boolean {
     return !this.isGuardActivated;
+  }
+
+  getRouteForComponent(comp: OServiceComponent): any[] {
+    let result = [];
+    if (this.parentFormLayoutManager) {
+      var parentRoute = this.parentFormLayoutManager.getRouteForComponent(comp);
+      if (parentRoute && parentRoute.length > 0) {
+        result.push(...parentRoute);
+      }
+    }
+    if (!this.isMainComponent(comp)) {
+      var activeRoute = this.getRouteOfActiveItem();
+      if (activeRoute && activeRoute.length > 0) {
+        result.push(...activeRoute);
+      }
+    }
+    return result;
   }
 }
 
