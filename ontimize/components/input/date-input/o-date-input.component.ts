@@ -12,7 +12,7 @@ import { MomentService } from '../../../services';
 import { OFormValue } from '../../form/OFormValue';
 import { InputConverter } from '../../../decorators';
 import { OFormComponent } from '../../form/o-form.component';
-import { OFormDataComponent } from '../../o-form-data-component.class';
+import { OFormDataComponent, OFormDataOnValueChangeEvent } from '../../o-form-data-component.class';
 import { DEFAULT_INPUTS_O_TEXT_INPUT, DEFAULT_OUTPUTS_O_TEXT_INPUT } from '../text-input/o-text-input.component';
 import { Util } from '../../../util/util';
 
@@ -210,14 +210,16 @@ export class ODateInputComponent extends OFormDataComponent implements AfterView
   }
 
   onModelChange(event: any) {
-    this.onChange.emit(event);
-  }
-
-  innerOnChange(event: MatDatepickerInputEvent<any>) {
     if (!this.value) {
       this.value = new OFormValue();
     }
-    this.ensureOFormValue(event.value);
+    this.ensureOFormValue(event);
+
+    this.onChange.emit(event);
+  }
+
+  onChangeEvent(event: MatDatepickerInputEvent<any>) {
+    this.setValue(event.value, { changeType: OFormDataOnValueChangeEvent.USER_CHANGE });
   }
 
   innerOnFocus(event: any) {

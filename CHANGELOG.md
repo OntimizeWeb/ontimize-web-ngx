@@ -3,7 +3,9 @@
 * **o-bar-menu**: `o-bar-menu` can build automatically base on the application menu configuration with `auto-menu=yes` ([67f543f](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/67f543f))  ([1fc1f63](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1fc1f63))
 * **o-table**: new `multiple-sort` input ([6688618](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6688618)) ([01257ea](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/01257ea))
 * **o-grid**: The grid component now supports remote pagination ([b855724](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b855724))
-* **o-form**: new `getFieldValue`, `getFieldValues`, `setFieldValue`,`setFieldValues`, `clearFieldValue`,`clearFieldValues`, `getFieldReference` and  `getFieldReferences` methods ([3453182](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3453182)) ([d03d482](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d03d482)) 
+* **o-form**: new `getFieldValue`, `getFieldValues`, `setFieldValue`,`setFieldValues`, `clearFieldValue`,`clearFieldValues`, `getFieldReference` and  `getFieldReferences` methods ([3453182](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3453182)) ([d03d482](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d03d482)) ([e69473b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e69473b))
+* **OFormDataComponent**: new `onValueChange` event being fired if the value changed (whether it was changed by the user or by code) ([0b24228](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0b24228))([07bc3d6](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/07bc3d6))([3ac842e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3ac842e))([e69473b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e69473b))([f7dd987](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f7dd987))
+
 
 
 ### Bug Fixes
