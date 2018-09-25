@@ -64,19 +64,18 @@ export class ServiceUtils {
 
   static getFilterUsingParentKeys(parentItem: any, parentKeysObject: Object) {
     let filter = {};
-    const parentKeys = Object.keys(parentKeysObject).map(key => parentKeysObject[key]);
-
-    if ((parentKeys.length > 0) && (typeof (parentItem) !== 'undefined')) {
-      for (let k = 0; k < parentKeys.length; ++k) {
-        let parentKey = parentKeys[k];
+    const ownKeys = Object.keys(parentKeysObject);
+    if (ownKeys.length > 0 && Util.isDefined(parentItem)) {
+      ownKeys.forEach(ownKey => {
+        let parentKey = parentKeysObject[ownKey];
         if (parentItem.hasOwnProperty(parentKey)) {
           let currentData = parentItem[parentKey];
           if (currentData instanceof OFormValue) {
             currentData = currentData.value;
           }
-          filter[parentKey] = currentData;
+          filter[ownKey] = currentData;
         }
-      }
+      });
     }
     return filter;
   }
