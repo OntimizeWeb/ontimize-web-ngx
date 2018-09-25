@@ -5,7 +5,7 @@ import { ActivatedRoute, Router, UrlSegment } from '@angular/router';
 import 'rxjs/add/observable/combineLatest';
 import { Observable, Subscription } from 'rxjs';
 
-import { OFormValue } from './OFormValue';
+import { OFormValue, IFormValueOptions } from './OFormValue';
 import { OSharedModule } from '../../shared';
 import { InputConverter } from '../../decorators';
 import { IComponent } from '../o-component.class';
@@ -1362,10 +1362,10 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
    * @param attr attribute of control
    * @param value value
    */
-  setFieldValue(attr: string, value: any) {
+  setFieldValue(attr: string, value: any, options?: IFormValueOptions) {
     let comp = this._components[attr];
     if (comp) {
-      comp.setValue(value);
+      comp.setValue(value, options);
     }
   }
 
@@ -1373,9 +1373,9 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
    * Sets the value of each control in the form.
    * @param values
    */
-  setFieldValues(values: any) {
+  setFieldValues(values: any, options?: IFormValueOptions) {
     for (let key in values) {
-      this.setFieldValue(key, values[key]);
+      this.setFieldValue(key, values[key], options);
     }
   }
 
@@ -1383,15 +1383,18 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
    * Clear the value of each control in the form
    * @param attr
    */
-  clearFieldValue(attr: string) {
-    this.setFieldValue(attr, void 0);
+  clearFieldValue(attr: string, options?: IFormValueOptions) {
+    let comp = this._components[attr];
+    if (comp) {
+      comp.clearValue();
+    }
   }
 
   /**
    * Reset the value of each control in the form
    * @param attrs
    */
-  clearFieldValues(attrs: string[]) {
+  clearFieldValues(attrs: string[], options?: IFormValueOptions) {
     let self = this;
     attrs.forEach((key) => {
       self.clearFieldValue(key);
