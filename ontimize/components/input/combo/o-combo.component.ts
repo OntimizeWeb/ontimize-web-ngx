@@ -11,6 +11,7 @@ import { OntimizeService } from '../../../services/ontimize.service';
 import { IFormValueOptions, OFormValue } from '../../form/OFormValue';
 import { OFormServiceComponent } from '../o-form-service-component.class';
 import { dataServiceFactory } from '../../../services/data-service.provider';
+import { OFormDataOnValueChangeEvent } from '../../o-form-data-component.class';
 
 export const DEFAULT_INPUTS_O_COMBO = [
   ...OFormServiceComponent.DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT,
@@ -21,7 +22,7 @@ export const DEFAULT_INPUTS_O_COMBO = [
 ];
 
 export const DEFAULT_OUTPUTS_O_COMBO = [
-  'onChange'
+  ...OFormServiceComponent.DEFAULT_OUTPUTS_O_FORM_SERVICE_COMPONENT
 ];
 
 @Component({
@@ -179,6 +180,8 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
   }
 
   onSelectionChange(event: MatSelectChange): void {
+    var newValue = event.value;
+    this.setValue(newValue, { changeType: OFormDataOnValueChangeEvent.USER_CHANGE });
     this.innerOnChange(event.value);
   }
 
