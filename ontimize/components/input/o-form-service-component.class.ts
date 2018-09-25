@@ -7,7 +7,7 @@ import { InputConverter } from '../../decorators';
 import { IFormValueOptions } from '../form/OFormValue';
 import { OFormComponent } from '../form/o-form.component';
 import { DialogService, OntimizeService } from '../../services';
-import { DEFAULT_INPUTS_O_FORM_DATA_COMPONENT, OFormDataComponent } from '../o-form-data-component.class';
+import { DEFAULT_INPUTS_O_FORM_DATA_COMPONENT, OFormDataComponent, DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT } from '../o-form-data-component.class';
 
 export const DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT = [
   ...DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,
@@ -42,9 +42,15 @@ export const DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT = [
   'queryWithNullParentKeys: query-with-null-parent-keys'
 ];
 
+export const DEFAULT_OUTPUTS_O_FORM_SERVICE_COMPONENT = [
+  ...DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT
+];
+
+
 export class OFormServiceComponent extends OFormDataComponent {
 
   public static DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT = DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT;
+  public static DEFAULT_OUTPUTS_O_FORM_SERVICE_COMPONENT = DEFAULT_OUTPUTS_O_FORM_SERVICE_COMPONENT;
 
   /* Inputs */
   protected staticData: Array<any>;
