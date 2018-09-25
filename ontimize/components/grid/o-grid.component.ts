@@ -260,8 +260,8 @@ export class OGridComponent extends OServiceComponent implements AfterViewChecke
       this.filterData();
     } else {
       let queryArgs: OQueryDataArgs = {};
-      this.state.queryRecordOffset = 0;
       queryArgs = {
+        offset: this.paginationControls ? (this.currentPage * this.queryRows) : 0,
         length: Math.max(this.queryRows, this.dataResponseArray.length),
         replace: true
       };
@@ -338,26 +338,20 @@ export class OGridComponent extends OServiceComponent implements AfterViewChecke
     if (Util.isArray(data)) {
       let dataArray = data;
       let respDataArray = data;
-      // TODO: check this!
-      if (this.pageable && !replace) {
-        if (this.paginationControls) {
-          dataArray = data;
-          respDataArray = data;
+      if (!replace) {
+        if (this.pageable) {
+          dataArray = this.paginationControls ? data : (this.dataArray || []).concat(data);
+          respDataArray = this.paginationControls ? data : (this.dataResponseArray || []).concat(data);
         } else {
-          dataArray = (this.dataArray || []).concat(data);
-          respDataArray = (this.dataResponseArray || []).concat(data);
-        }
-      } else {
-        if (this.paginationControls) {
-          dataArray = data.slice((this.queryRows * (this.currentPage + 1)) - this.queryRows, this.queryRows * (this.currentPage + 1))
-          respDataArray = data;
-        } else {
-          dataArray = data.slice(0, this.queryRows * (this.currentPage + 1));
+          dataArray = data.slice(this.paginationControls ? ((this.queryRows * (this.currentPage + 1)) - this.queryRows) : 0, this.queryRows * (this.currentPage + 1));
           respDataArray = data;
         }
       }
       this.dataArray = dataArray;
       this.dataResponseArray = respDataArray;
+      if (!this.pageable) {
+        this.filterData();
+      }
     } else {
       this.dataArray = [];
       this.dataResponseArray = [];
