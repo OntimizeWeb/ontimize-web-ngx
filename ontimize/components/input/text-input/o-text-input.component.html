@@ -1,9 +1,10 @@
 <div [formGroup]="getFormGroup()" [matTooltip]="tooltip" [matTooltipPosition]="tooltipPosition" [matTooltipShowDelay]="tooltipShowDelay">
   <mat-form-field [class.custom-width]="hasCustomWidth" [class.icon-field]="showClearButton" fxFlexFill>
     <input matInput type="text" [id]="getAttribute()" [formControlName]="getAttribute()" [placeholder]="placeHolder" [ngModel]="getValue()"
-      (ngModelChange)="innerOnChange($event)" (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)" [readonly]="isReadOnly"
+      (ngModelChange)="innerOnChange($event)" (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)" [readonly]="isReadOnly" 
+      (change)="onChangeEvent($event)" 
       [required]="isRequired" />
-    <button *ngIf="showClearButton" matSuffix mat-icon-button (click)="clearValue()">
+    <button *ngIf="showClearButton" matSuffix mat-icon-button (click)="onClickClearValue()">
       <mat-icon svgIcon="ontimize:close"></mat-icon>
     </button>
     <mat-error *ngIf="hasError('required')">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</mat-error>

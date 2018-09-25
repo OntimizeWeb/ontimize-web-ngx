@@ -1,10 +1,10 @@
-<div fxLayout="row" fxLayoutAlign="space-between center" [formGroup]="getFormGroup()" [matTooltip]="tooltip" [matTooltipPosition]="tooltipPosition"
-  [matTooltipShowDelay]="tooltipShowDelay">
+<div fxLayout="row" fxLayoutAlign="space-between center" [formGroup]="getFormGroup()" [matTooltip]="tooltip"
+  [matTooltipPosition]="tooltipPosition" [matTooltipShowDelay]="tooltipShowDelay">
   <mat-form-field [class.custom-width]="hasCustomWidth" class="icon-field" fxFlexFill>
-    <input matInput type="text" [id]="getAttribute()" [formControlName]="getAttribute()" [placeholder]="placeHolder" [ngModel]="getValue()"
-      (ngModelChange)="innerOnChange($event)" (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)" [readonly]="isReadOnly"
-      [required]="isRequired">
-    <button *ngIf="showClearButton" matSuffix mat-icon-button (click)="clearValue()">
+    <input matInput type="text" [id]="getAttribute()" [formControlName]="getAttribute()" [placeholder]="placeHolder"
+      [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)" (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)"
+      (change)="onChangeEvent($event)" [readonly]="isReadOnly" [required]="isRequired">
+    <button *ngIf="showClearButton" matSuffix mat-icon-button (click)="onClickClearValue()">
       <mat-icon svgIcon="ontimize:close"></mat-icon>
     </button>
     <mat-icon matSuffix [class.mat-disabled]="isDisabled" svgIcon="ontimize:perm_identity"></mat-icon>
