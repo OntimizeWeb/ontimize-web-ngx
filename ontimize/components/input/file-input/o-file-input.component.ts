@@ -19,7 +19,7 @@ import { OSharedModule } from '../../../shared';
 import { InputConverter } from '../../../decorators';
 import { OntimizeFileService } from '../../../services';
 import { OFormComponent } from '../../form/o-form.component';
-import { OFormDataComponent, OFormDataOnValueChangeEvent } from '../../o-form-data-component.class';
+import { OFormDataComponent, OValueChangeEvent } from '../../o-form-data-component.class';
 
 import { OFileItem } from './o-file-item.class';
 import { OFileUploader } from './o-file-uploader.class';
@@ -229,7 +229,7 @@ export class OFileInputComponent extends OFormDataComponent implements OnDestroy
       value = this.uploader.files.map(file => file.name).join(', ');
     }
     window.setTimeout(() => {
-      this.setValue(value !== '' ? value : undefined, { changeType: OFormDataOnValueChangeEvent.USER_CHANGE });
+      this.setValue(value !== '' ? value : undefined, { changeType: OValueChangeEvent.USER_CHANGE });
       this.inputFile.nativeElement.value = '';
       if (this._fControl) {
         this._fControl.markAsTouched();

@@ -1,5 +1,5 @@
 import { Component, NgModule, Optional, Inject, ElementRef, Injector, forwardRef, ViewChild, EventEmitter, ViewEncapsulation, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
-import { OFormDataComponent, DEFAULT_INPUTS_O_FORM_DATA_COMPONENT, DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT, OFormDataOnValueChangeEvent } from '../../o-form-data-component.class';
+import { OFormDataComponent, DEFAULT_INPUTS_O_FORM_DATA_COMPONENT, DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT, OValueChangeEvent } from '../../o-form-data-component.class';
 import { CommonModule } from '@angular/common';
 import { ValidatorFn } from '@angular/forms';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
@@ -183,7 +183,7 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
   }
 
   onTimeEvent(event) {
-    this.setValue(event, { changeType: OFormDataOnValueChangeEvent.USER_CHANGE });
+    this.setValue(event, { changeType: OValueChangeEvent.USER_CHANGE });
   }
 }
 @NgModule({
