@@ -3,6 +3,11 @@ import { MatSort, MatSortable } from '@angular/material';
 import { Util, Codes } from '../../../../utils';
 import { ISQLOrder } from '../../../service.utils';
 
+export type OMatSortGroupedData = {
+  key: any;
+  values: any[];
+};
+
 @Directive({
   selector: '[oMatSort]',
   exportAs: 'oMatSort',
@@ -110,8 +115,8 @@ export class OMatSort extends MatSort {
       if (i === 0) {
         data = data.sort(sortFunctionBind);
       } else {
-        let groupedData = this.getDataGrouped(data, sortColumns, i);
-        if (Object.keys(groupedData).length >= data.length) {
+        const groupedData: OMatSortGroupedData[] = this.getDataGrouped(data, sortColumns, i);
+        if (groupedData.length >= data.length) {
           break;
         }
         data = this.sortGroupedData(groupedData);
@@ -120,7 +125,7 @@ export class OMatSort extends MatSort {
     return data;
   }
 
-  protected getDataGrouped(data: any, sortColumns: any[], index: number) {
+  protected getDataGrouped(data: any, sortColumns: any[], index: number): OMatSortGroupedData[] {
     var propArr = [];
     sortColumns.forEach((item, i) => {
       if (i < index) {
@@ -130,21 +135,30 @@ export class OMatSort extends MatSort {
     if (propArr.length === 0) {
       return data;
     }
-    return data.reduce((obj: any, item: any) => {
+    let result: OMatSortGroupedData[] = [];
+    data.forEach(item => {
       let value = '';
       propArr.forEach(prop => {
         value += item[prop];
       });
-      obj[value] = obj[value] || [];
-      obj[value].push(item);
-      return obj;
-    }, {});
+
+      let filtered = result.filter(resItem => resItem.key === value);
+      if (filtered.length === 0) {
+        result.push({
+          key: value,
+          values: [item]
+        });
+      } else if (filtered.length === 1) {
+        filtered[0].values.push(item);
+      }
+    });
+    return result;
   }
 
-  protected sortGroupedData(groupedData: any): any[] {
+  protected sortGroupedData(groupedData: OMatSortGroupedData[]): any[] {
     const self = this;
-    return Object.keys(groupedData).reduce((obj: any, item: any) => {
-      const arr = groupedData[item];
+    return groupedData.reduce((obj: any, item: any) => {
+      const arr = item.values;
       const sorted = arr.length <= 1 ? arr : arr.sort(self.sortFunction.bind(self));
       obj.push(...sorted);
       return obj;
