@@ -36,7 +36,7 @@ export interface IErrorData {
 }
 
 
-export class OFormDataOnValueChangeEvent {
+export class OValueChangeEvent {
   public static USER_CHANGE = 0;
   public static PROGRAMMATIC_CHANGE = 1;
 
@@ -83,7 +83,9 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
 
   /* Outputs */
   onChange: EventEmitter<Object> = new EventEmitter<Object>();
-  onValueChange: EventEmitter<OFormDataOnValueChangeEvent> = new EventEmitter<OFormDataOnValueChangeEvent>();
+  onValueChange: EventEmitter<OValueChangeEvent
+> = new EventEmitter<OValueChangeEvent
+>();
 
   @HostBinding('style.width')
   get hostWidth() {
@@ -266,7 +268,8 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     if (options) {
       this.emitOnValueChange(options.changeType, newValue, this.oldValue);
     } else {
-      this.emitOnValueChange(OFormDataOnValueChangeEvent.PROGRAMMATIC_CHANGE, newValue, this.oldValue);
+      this.emitOnValueChange(OValueChangeEvent
+      .PROGRAMMATIC_CHANGE, newValue, this.oldValue);
     }
 
     this.oldValue = val;
@@ -281,7 +284,8 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
 
   onClickClearValue(): void {
     this.clearValue({
-      changeType: OFormDataOnValueChangeEvent.USER_CHANGE
+      changeType: OValueChangeEvent
+    .USER_CHANGE
     });
   }
 
@@ -298,12 +302,14 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
 
   onChangeEvent($event) {
     var oldValue = this.oldValue;
-    this.emitOnValueChange(OFormDataOnValueChangeEvent.USER_CHANGE, this.getValue(), oldValue);
+    this.emitOnValueChange(OValueChangeEvent
+    .USER_CHANGE, this.getValue(), oldValue);
     this.oldValue = this.getValue();
   }
 
   protected emitOnValueChange(type, newValue, oldValue) {
-    let event = new OFormDataOnValueChangeEvent(type, newValue, oldValue, this);
+    let event = new OValueChangeEvent
+  (type, newValue, oldValue, this);
     this.onValueChange.emit(event);
   }
   get showClearButton(): boolean {

@@ -12,7 +12,7 @@ import { OFormServiceComponent } from '../o-form-service-component.class';
 import { dataServiceFactory } from '../../../services/data-service.provider';
 import { OListPickerDialogComponent } from './o-list-picker-dialog.component';
 import { OSearchInputModule } from '../../input/search-input/o-search-input.component';
-import { OFormDataOnValueChangeEvent } from '../../o-form-data-component.class';
+import { OValueChangeEvent } from '../../o-form-data-component.class';
 
 export const DEFAULT_INPUTS_O_LIST_PICKER = [
   ...OFormServiceComponent.DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT,
@@ -221,7 +221,7 @@ export class OListPickerComponent extends OFormServiceComponent implements After
     if (evt instanceof Object && typeof evt[this.valueColumn] !== 'undefined') {
       var self = this;
       window.setTimeout(() => {
-        self.setValue(evt[self.valueColumn], { changeType: OFormDataOnValueChangeEvent.USER_CHANGE });
+        self.setValue(evt[self.valueColumn], { changeType: OValueChangeEvent.USER_CHANGE });
       if (self._fControl) {
         self._fControl.markAsTouched();
       }

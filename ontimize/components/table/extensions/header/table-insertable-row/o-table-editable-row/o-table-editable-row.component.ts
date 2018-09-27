@@ -65,14 +65,7 @@ export class OTableEditableRowComponent {
       // not intro
       return;
     }
-    let anyTouched = false;
-    // columns with no editor defined
-    Object.keys(this.controls).forEach((controlKey) => {
-      anyTouched = this.controls[controlKey].touched || anyTouched;
-    });
-    if (anyTouched) {
-      this.insertRecord();
-    }
+    this.insertRecord();
   }
 
   get insertableRowTable(): OTableInsertableRowComponent {
@@ -147,7 +140,7 @@ export class OTableEditableRowComponent {
   insertRecord() {
     const self = this;
     if (!this.validateFields()) {
-      this.table.showDialogError('TABLE.ROW_VALIDATION_ERROR');
+      // this.table.showDialogError('TABLE.ROW_VALIDATION_ERROR');
       return;
     }
 

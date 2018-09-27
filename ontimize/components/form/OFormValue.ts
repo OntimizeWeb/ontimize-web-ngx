@@ -14,7 +14,7 @@ export interface IFormValueOptions {
   emitModelToViewChange?: boolean;
   // If emitViewToModelChange is true, an ngModelChange event will be fired to update the model. This is the default behavior if emitViewToModelChange is not specified.
   emitViewToModelChange?: boolean;
-  // If changeType is 0,   onValueChage event will be notificaed type OFormDataOnValueChangeEvent.USER_CHANGE.
+  // If changeType is 0, the onValueChage event will trigger an event performed by the user but an event performed by programming.
   changeType?: number;
 }
 

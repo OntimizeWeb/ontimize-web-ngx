@@ -9,7 +9,7 @@ import { OSharedModule } from '../../../shared';
 import { InputConverter } from '../../../decorators';
 import { OFormComponent } from '../../form/o-form.component';
 import { OFormValue, IFormValueOptions } from '../../form/OFormValue';
-import { OFormDataComponent, DEFAULT_INPUTS_O_FORM_DATA_COMPONENT, DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT, OFormDataOnValueChangeEvent } from '../../o-form-data-component.class';
+import { OFormDataComponent, DEFAULT_INPUTS_O_FORM_DATA_COMPONENT, DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT, OValueChangeEvent } from '../../o-form-data-component.class';
 
 import { ODateInputModule, ODateInputComponent, DateFilterFunction } from '../date-input/o-date-input.component';
 import { OHourInputModule, OHourInputComponent } from '../hour-input/o-hour-input.component';
@@ -97,11 +97,11 @@ export class OTimeInputComponent extends OFormDataComponent implements OnInit, A
   ngOnInit() {
     super.ngOnInit();
     const self = this;
-    Observable.merge(this.dateInput.onValueChange, this.hourInput.onValueChange).subscribe((event: OFormDataOnValueChangeEvent) => {
-      if (event.type === OFormDataOnValueChangeEvent.USER_CHANGE) {
+    Observable.merge(this.dateInput.onValueChange, this.hourInput.onValueChange).subscribe((event: OValueChangeEvent) => {
+      if (event.type === OValueChangeEvent.USER_CHANGE) {
         self.updateComponentValue();
         var newValue = self._fControl.value;
-        self.emitOnValueChange(OFormDataOnValueChangeEvent.USER_CHANGE, newValue, self.oldValue);
+        self.emitOnValueChange(OValueChangeEvent.USER_CHANGE, newValue, self.oldValue);
         self.oldValue = newValue;
       }
     });
