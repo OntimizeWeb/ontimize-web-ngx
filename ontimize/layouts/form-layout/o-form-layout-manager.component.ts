@@ -29,6 +29,7 @@ export interface IDetailComponentData {
 }
 
 export const DEFAULT_INPUTS_O_FORM_LAYOUT_MANAGER = [
+  'oattr: attr',
   'mode',
   'labelColumns: label-columns',
   'separator',
@@ -60,6 +61,7 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
   public static DIALOG_MODE = 'dialog';
   public static TAB_MODE = 'tab';
 
+  oattr: string;
   mode: string;
   labelColumns: string;
   separator: string = ' ';
@@ -97,7 +99,6 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
     protected parentFormLayoutManager: OFormLayoutManagerComponent
   ) {
     this.oFormLayoutManagerService = this.injector.get(OFormLayoutManagerService);
-    this.oFormLayoutManagerService.setFormLayoutManager(this);
     this.localStorageService = this.injector.get(LocalStorageService);
   }
 
@@ -109,6 +110,10 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
     }
     this.labelColsArray = Util.parseArray(this.labelColumns);
     this.addActivateChildGuard();
+    if (!Util.isDefined(this.oattr)) {
+      this.oattr = this.router.url;
+    }
+    this.oFormLayoutManagerService.registerFormLayoutManager(this);
   }
 
   ngAfterViewInit(): void {
@@ -124,10 +129,15 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
   ngOnDestroy() {
     this.destroyAactivateChildGuard();
     this.updateStateStorage();
+    this.oFormLayoutManagerService.removeFormLayoutManager(this);
+  }
+
+  getAttribute() {
+    return this.oattr;
   }
 
   getComponentKey(): string {
-    return 'form-layout-manager';
+    return 'OFormLayoutManagerComponent_' + this.oattr;
   }
 
   getDataToStore(): Object {
@@ -291,6 +301,8 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
     let route = [];
     if (this.isTabMode()) {
       route = this.oTabGroup.getRouteOfActiveItem();
+    } else if (this.isDialogMode()) {
+      route = this.dialogRef.componentInstance.getRouteOfActiveItem();
     }
     return route;
   }
@@ -334,6 +346,10 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
       }
     }
     return result;
+  }
+
+  setAsActiveFormLayoutManager() {
+    this.oFormLayoutManagerService.activeFormLayoutManager = this;
   }
 }
 

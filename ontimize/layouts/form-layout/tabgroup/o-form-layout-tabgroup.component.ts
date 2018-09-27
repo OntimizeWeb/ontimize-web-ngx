@@ -173,10 +173,11 @@ export class OFormLayoutTabGroupComponent implements AfterViewInit, OnDestroy {
   getRouteOfActiveItem(): any[] {
     let route = [];
     if (this.data.length && this.tabGroup.selectedIndex > 0) {
-      const urlParams = this.data[this.tabGroup.selectedIndex - 1].params || [];
-      Object.keys(urlParams).forEach(key => {
-        route.push(urlParams[key]);
+      const urlSegments = this.data[this.tabGroup.selectedIndex - 1].urlSegments || [];
+      urlSegments.forEach((segment) => {
+        route.push(segment.path);
       });
+      return route;
     }
     return route;
   }
@@ -229,6 +230,9 @@ export class OFormLayoutTabGroupComponent implements AfterViewInit, OnDestroy {
       let extras = {};
       extras[Codes.QUERY_PARAMS] = state.tabsData[0].queryParams;
       const self = this;
+      if (this.formLayoutManager) {
+        this.formLayoutManager.setAsActiveFormLayoutManager();
+      }
       this.router.navigate([state.tabsData[0].url], extras).then(val => {
         if (self.data[0]) {
           setTimeout(() => {
@@ -245,7 +249,8 @@ export class OFormLayoutTabGroupComponent implements AfterViewInit, OnDestroy {
     this.state.tabsData.forEach((tabData: any, index: number) => {
       if (tabComponent && index > 0) {
         setTimeout(() => {
-          self.data.push(self.createDetailComponent(tabComponent, tabData));
+          const newDetailData = self.createDetailComponent(tabComponent, tabData);
+          self.data.push(newDetailData);
         }, 0);
       }
     });

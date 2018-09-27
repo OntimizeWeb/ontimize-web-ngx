@@ -10,6 +10,7 @@ import { AuthGuardService, OTranslateService, NavigationService } from '../servi
 import { OListInitializationOptions } from './list/o-list.component';
 import { OTableInitializationOptions } from './table/o-table.component';
 import { OFormLayoutManagerComponent } from '../layouts/form-layout/o-form-layout-manager.component';
+import { OFormLayoutDialogComponent } from '../layouts/form-layout/dialog/o-form-layout-dialog.component';
 import { DEFAULT_INPUTS_O_SERVICE_BASE_COMPONENT, OServiceBaseComponent } from './o-service-base-component.class';
 
 export const DEFAULT_INPUTS_O_SERVICE_COMPONENT = [
@@ -120,6 +121,7 @@ export class OServiceComponent extends OServiceBaseComponent {
 
   protected onMainTabSelectedSubscription: any;
   protected formLayoutManager: OFormLayoutManagerComponent;
+  protected oFormLayoutDialog: OFormLayoutDialogComponent;
 
   public filterBuilder: OFilterBuilderComponent;
 
@@ -136,6 +138,12 @@ export class OServiceComponent extends OServiceBaseComponent {
     this.navigationService = this.injector.get(NavigationService);
     try {
       this.formLayoutManager = this.injector.get(OFormLayoutManagerComponent);
+    } catch (e) {
+      // no parent form layout manager
+    }
+    try {
+      this.oFormLayoutDialog = this.injector.get(OFormLayoutDialogComponent);
+      this.formLayoutManager = this.oFormLayoutDialog.formLayoutManager;
     } catch (e) {
       // no parent form layout manager
     }
@@ -170,10 +178,12 @@ export class OServiceComponent extends OServiceBaseComponent {
       this.elRef.nativeElement.removeAttribute('title');
     }
 
-    if (this.formLayoutManager && this.formLayoutManager.isTabMode()) {
-      this.onMainTabSelectedSubscription = this.formLayoutManager.onMainTabSelected.subscribe(() => {
-        this.reloadData();
-      });
+    if (this.formLayoutManager) {
+      if (this.formLayoutManager.isTabMode()) {
+        this.onMainTabSelectedSubscription = this.formLayoutManager.onMainTabSelected.subscribe(() => {
+          this.reloadData();
+        });
+      }
     }
   }
 
@@ -216,6 +226,9 @@ export class OServiceComponent extends OServiceBaseComponent {
       this.formLayoutManager.deactivateGuard();
     }
     extras[Codes.QUERY_PARAMS] = qParams;
+    if (this.formLayoutManager) {
+      this.formLayoutManager.setAsActiveFormLayoutManager();
+    }
     const navigatePromise: Promise<boolean> = this.router.navigate(route, extras);
     if (reactivateGuard) {
       const self = this;
@@ -227,8 +240,8 @@ export class OServiceComponent extends OServiceBaseComponent {
 
   insertDetail() {
     let route = this.getInsertRoute();
+    this.addFormLayoutManagerRoute(route);
     if (route.length > 0) {
-      this.storeNavigationFormRoutes('insertFormRoute');
       const relativeTo = this.recursiveInsert ? this.actRoute.parent : this.actRoute;
       let qParams = {};
       this.navigateToDetail(route, qParams, relativeTo);
@@ -237,6 +250,7 @@ export class OServiceComponent extends OServiceBaseComponent {
 
   viewDetail(item: any): void {
     let route = this.getItemModeRoute(item, 'detailFormRoute');
+    this.addFormLayoutManagerRoute(route);
     if (route.length > 0) {
       let qParams = Codes.getIsDetailObject();
       const relativeTo = this.recursiveDetail ? this.actRoute.parent : this.actRoute;
@@ -246,10 +260,20 @@ export class OServiceComponent extends OServiceBaseComponent {
 
   editDetail(item: any) {
     let route = this.getItemModeRoute(item, 'editFormRoute');
+    this.addFormLayoutManagerRoute(route);
     if (route.length > 0) {
       let qParams = Codes.getIsDetailObject();
       const relativeTo = this.recursiveEdit ? this.actRoute.parent : this.actRoute;
       this.navigateToDetail(route, qParams, relativeTo);
+    }
+  }
+
+  protected addFormLayoutManagerRoute(routeArr: any[]) {
+    if (this.formLayoutManager && routeArr.length > 0) {
+      const compRoute = this.formLayoutManager.getRouteForComponent(this);
+      if (compRoute && compRoute.length > 0) {
+        routeArr.unshift(...compRoute);
+      }
     }
   }
 
@@ -278,6 +302,9 @@ export class OServiceComponent extends OServiceBaseComponent {
       routeObj[Codes.PARENT_KEYS_KEY] = encodedParentKeys;
       route.push(routeObj);
     }
+    if (route.length > 0) {
+      this.storeNavigationFormRoutes('insertFormRoute');
+    }
     return route;
   }
 
@@ -291,14 +318,8 @@ export class OServiceComponent extends OServiceBaseComponent {
         result.push(this.editFormRoute || Codes.DEFAULT_EDIT_ROUTE);
       }
     }
-    if (result.length) {
+    if (result.length > 0 && !this.oFormLayoutDialog) {
       this.storeNavigationFormRoutes(modeRoute, this.getKeysValues());
-      if (this.formLayoutManager) {
-        const compRoute = this.formLayoutManager.getRouteForComponent(this);
-        if (compRoute && compRoute.length > 0) {
-          result.unshift(...compRoute);
-        }
-      }
     }
     return result;
   }

@@ -66,4 +66,12 @@ export class OFormLayoutDialogComponent implements AfterViewInit {
   closeDialog() {
     this.dialogRef.close();
   }
+
+  getRouteOfActiveItem(): any[] {
+    var route = [];
+    (this.urlSegments || []).forEach((segment) => {
+      route.push(segment.path);
+    });
+    return route;
+  }
 }
