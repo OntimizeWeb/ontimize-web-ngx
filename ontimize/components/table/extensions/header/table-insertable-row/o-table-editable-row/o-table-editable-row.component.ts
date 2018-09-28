@@ -205,7 +205,6 @@ export class OTableEditableRowComponent {
         editor.registerInColumn = false;
         editor.showPlaceHolder = this._insertableRowTable.showPlaceHolder || editor.showPlaceHolder;
         editor.table = self.table;
-        editor.tableColumnAttr = col.attr;
         editor.tableColumn = col.editor ? col.editor.tableColumn : col.definition;
         editor.orequired = this.isColumnRequired(col);
         editor.formControl = this.getControl(col);
