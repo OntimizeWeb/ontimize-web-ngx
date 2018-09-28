@@ -65,6 +65,12 @@ export class OTableEditableRowComponent {
       // not intro
       return;
     }
+    if (!this.elRef.nativeElement.contains(event.target)) {
+      // if keyboard event is not contained in this editable-row
+      return;
+    }
+    event.preventDefault();
+    event.stopPropagation();
     this.insertRecord();
   }
 
