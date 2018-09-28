@@ -6,12 +6,11 @@
 * **o-form**: new `getFieldValue`, `getFieldValues`, `setFieldValue`,`setFieldValues`, `clearFieldValue`,`clearFieldValues`, `getFieldReference` and  `getFieldReferences` methods ([3453182](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3453182)) ([d03d482](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d03d482)) ([e69473b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e69473b))
 * **OFormDataComponent**: new `onValueChange` event being fired if the value changed (whether it was changed by the user or by code) ([0b24228](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0b24228))([07bc3d6](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/07bc3d6))([3ac842e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3ac842e))([e69473b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e69473b))([f7dd987](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f7dd987))
 
-
-
 ### Bug Fixes
+* Fixing missing 'bundles', 'esm5' and 'esm2015' bundling files error.
 * **o-bar-menu** fixed error the menu on mobile screen collapses ([1fc1f63](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1fc1f63)).
 * **service.utils**: fixed error building parent keys filter with aliases ([059ddc3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/059ddc3)) closes ([#212](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/212))
-* **buttons**: Adding type="button" to all html *buttons* ([e3c4779]](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e3c4779])) ([#210](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/210))
+* **buttons**: Adding type="button" to all html *buttons* ([e3c4779](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e3c4779])) ([#210](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/210))
 * **o-table-insertable-row**: fixing bug with multiple insertable rows in same page ([862d8fc](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/862d8fc)) ([#211](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/211))
 
 ### BREAKING CHANGES
