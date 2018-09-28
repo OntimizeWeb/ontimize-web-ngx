@@ -4,7 +4,7 @@
     <input matInput type="email" [id]="getAttribute()" [formControlName]="getAttribute()" [placeholder]="placeHolder"
       [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)" (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)"
       [readonly]="isReadOnly" [required]="isRequired" (change)="onChangeEvent($event)">
-    <button *ngIf="showClearButton" matSuffix mat-icon-button (click)="onClickClearValue()">
+    <button type="button" *ngIf="showClearButton" matSuffix mat-icon-button (click)="onClickClearValue()">
       <mat-icon svgIcon="ontimize:close"></mat-icon>
     </button>
     <mat-icon matSuffix [class.mat-disabled]="isDisabled" svgIcon="ontimize:mail_outline"></mat-icon>

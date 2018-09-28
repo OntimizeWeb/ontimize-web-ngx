@@ -10,11 +10,11 @@
       [required]="isRequired" (keydown.enter)="onKeydownEnter(visibleInput.value)" (click)="onClickInput($event)"
       (change)="onChangeEvent($event)">
 
-    <button [disabled]="isReadOnly || isDisabled" [class.read-only]="isReadOnly" matSuffix mat-icon-button (click)="onClickListpicker($event)">
+    <button type="button" [disabled]="isReadOnly || isDisabled" [class.read-only]="isReadOnly" matSuffix mat-icon-button (click)="onClickListpicker($event)">
       <mat-icon svgIcon="ontimize:search"></mat-icon>
     </button>
 
-    <button [disabled]="isReadOnly || isDisabled" [class.read-only]="isReadOnly" matSuffix mat-icon-button (click)="onClickClearValue($event)">
+    <button type="button" [disabled]="isReadOnly || isDisabled" [class.read-only]="isReadOnly" matSuffix mat-icon-button (click)="onClickClearValue($event)">
       <mat-icon svgIcon="ontimize:clear"></mat-icon>
     </button>
 

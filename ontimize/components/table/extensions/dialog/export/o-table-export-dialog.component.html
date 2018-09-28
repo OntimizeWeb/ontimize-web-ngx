@@ -3,19 +3,19 @@
 <mat-dialog-content>
   <span mat-subheader>{{ 'TABLE.DIALOG.EXPORT.DESCRIPTION' | oTranslate }}</span>
   <div fxLayout="row" fxLayoutAlign="space-around center" layout-padding>
-    <button #excelButton mat-raised-button (click)="exportExcel(excelButton)">
+    <button type="button" #excelButton mat-raised-button (click)="exportExcel(excelButton)">
       <div fxLayout="column" fxLayoutAlign="center center">
         <mat-icon svgIcon="ontimize:EXCEL"></mat-icon>
         <span>{{ 'TABLE.BUTTONS.EXCEL' | oTranslate }}</span>
       </div>
     </button>
-    <button #htmlButton mat-raised-button (click)="exportHTML(htmlButton)">
+    <button type="button" #htmlButton mat-raised-button (click)="exportHTML(htmlButton)">
       <div fxLayout="column" fxLayoutAlign="center center">
         <mat-icon svgIcon="ontimize:HTML"></mat-icon>
         <span>{{ 'TABLE.BUTTONS.HTML' | oTranslate }}</span>
       </div>
     </button>
-    <button #pdfButton mat-raised-button (click)="exportPDF(pdfButton)">
+    <button type="button" #pdfButton mat-raised-button (click)="exportPDF(pdfButton)">
       <div fxLayout="column" fxLayoutAlign="center center">
         <mat-icon svgIcon="ontimize:PDF"></mat-icon>
         <span>{{ 'TABLE.BUTTONS.PDF' | oTranslate }}</span>
@@ -25,5 +25,5 @@
 </mat-dialog-content>
 
 <mat-dialog-actions fxLayoutAlign="end center">
-  <button mat-button [mat-dialog-close]="false">{{ 'CANCEL' | oTranslate | uppercase }}</button>
+  <button type="button"  mat-button [mat-dialog-close]="false">{{ 'CANCEL' | oTranslate | uppercase }}</button>
 </mat-dialog-actions>

@@ -14,7 +14,7 @@
       [format]="oHourFormat" [text-input-enabled]="oHourTextInputEnabled">
     </o-hour-input>
 
-    <button *ngIf="showClearButton" matSuffix mat-icon-button (click)="onClickClearValue()">
+    <button type="button" *ngIf="showClearButton" matSuffix mat-icon-button (click)="onClickClearValue()">
       <mat-icon svgIcon="ontimize:close"></mat-icon>
     </button>
   </div>
