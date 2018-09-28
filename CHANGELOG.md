@@ -11,6 +11,8 @@
 ### Bug Fixes
 * **o-bar-menu** fixed error the menu on mobile screen collapses ([1fc1f63](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1fc1f63)).
 * **service.utils**: fixed error building parent keys filter with aliases ([059ddc3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/059ddc3)) closes ([#212](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/212))
+* **buttons**: Adding type="button" to all html *buttons* ([e3c4779]](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e3c4779])) ([#210](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/210))
+* **o-table-insertable-row**: fixing bug with multiple insertable rows in same page ([862d8fc](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/862d8fc)) ([#211](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/211))
 
 ### BREAKING CHANGES
 * **MenuItem**:
