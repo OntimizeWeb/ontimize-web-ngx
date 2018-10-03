@@ -26,6 +26,7 @@ export const DEFAULT_OUTPUTS_O_COMBO = [
 ];
 
 @Component({
+  moduleId: module.id,
   selector: 'o-combo',
   providers: [
     { provide: OntimizeService, useFactory: dataServiceFactory, deps: [Injector] }

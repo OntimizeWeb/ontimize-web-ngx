@@ -30,6 +30,7 @@ export const DEFAULT_OUTPUTS_O_LIST_PICKER = [
 ];
 
 @Component({
+  moduleId: module.id,
   selector: 'o-list-picker',
   templateUrl: './o-list-picker.component.html',
   styleUrls: ['./o-list-picker.component.scss'],

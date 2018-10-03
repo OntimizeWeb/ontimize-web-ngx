@@ -43,6 +43,7 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
 ];
 
 @Component({
+  moduleId: module.id,
   selector: 'o-form-layout-manager',
   inputs: DEFAULT_INPUTS_O_FORM_LAYOUT_MANAGER,
   outputs: DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER,
@@ -96,7 +97,7 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
     protected dialog: MatDialog,
     protected elRef: ElementRef,
     @SkipSelf() @Optional()
-    protected parentFormLayoutManager: OFormLayoutManagerComponent
+    public parentFormLayoutManager: OFormLayoutManagerComponent
   ) {
     this.oFormLayoutManagerService = this.injector.get(OFormLayoutManagerService);
     this.localStorageService = this.injector.get(LocalStorageService);

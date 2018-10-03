@@ -4,6 +4,7 @@ import { OFormLayoutManagerContentDirective } from '../directives/o-form-layout-
 import { OFormLayoutManagerComponent } from '../../../layouts/form-layout/o-form-layout-manager.component';
 
 @Component({
+  moduleId: module.id,
   selector: 'o-form-layout-dialog',
   templateUrl: 'o-form-layout-dialog.component.html',
   styleUrls: ['o-form-layout-dialog.component.scss'],
@@ -68,9 +69,13 @@ export class OFormLayoutDialogComponent implements AfterViewInit {
   }
 
   getRouteOfActiveItem(): any[] {
-    var route = [];
-    (this.urlSegments || []).forEach((segment) => {
-      route.push(segment.path);
+    const parentRoute = this.formLayoutManager.parentFormLayoutManager.getRouteOfActiveItem();
+    const segments = (this.urlSegments || []);
+    let route = [];
+    segments.forEach((segment, index) => {
+      if (parentRoute[index] !== segment.path) {
+        route.push(segment.path);
+      }
     });
     return route;
   }

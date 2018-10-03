@@ -10,6 +10,7 @@ export const DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_TEXT = [
 ];
 
 @Component({
+  moduleId: module.id,
   selector: 'o-table-cell-editor-text',
   templateUrl: './o-table-cell-editor-text.component.html',
   inputs: DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_TEXT,

@@ -30,6 +30,7 @@ export const DEFAULT_OUTPUTS_O_APP_SIDENAV = [
 ];
 
 @Component({
+  moduleId: module.id,
   selector: 'o-app-sidenav',
   inputs: DEFAULT_INPUTS_O_APP_SIDENAV,
   outputs: DEFAULT_OUTPUTS_O_APP_SIDENAV,

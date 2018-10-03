@@ -80,6 +80,7 @@ export const DEFAULT_OUTPUTS_O_FILE_INPUT = [
 ];
 
 @Component({
+  moduleId: module.id,
   selector: 'o-file-input',
   templateUrl: './o-file-input.component.html',
   styleUrls: ['./o-file-input.component.scss'],

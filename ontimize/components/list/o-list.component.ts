@@ -68,6 +68,7 @@ export interface OListInitializationOptions {
 }
 
 @Component({
+  moduleId: module.id,
   selector: 'o-list',
   providers: [
     { provide: OntimizeService, useFactory: dataServiceFactory, deps: [Injector] }

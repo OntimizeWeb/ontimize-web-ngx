@@ -16,6 +16,7 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_TABGROUP = [
 ];
 
 @Component({
+  moduleId: module.id,
   selector: 'o-form-layout-tabgroup',
   inputs: DEFAULT_INPUTS_O_FORM_LAYOUT_TABGROUP,
   outputs: DEFAULT_OUTPUTS_O_FORM_LAYOUT_TABGROUP,

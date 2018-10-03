@@ -29,6 +29,7 @@ export const DEFAULT_OUTPUTS_O_HTML_INPUT = [
 ];
 
 @Component({
+  moduleId: module.id,
   selector: 'o-html-input',
   templateUrl: './o-html-input.component.html',
   styleUrls: ['./o-html-input.component.scss'],

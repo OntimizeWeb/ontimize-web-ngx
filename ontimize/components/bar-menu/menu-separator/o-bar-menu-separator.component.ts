@@ -2,6 +2,7 @@ import { Component, ViewEncapsulation, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
+  moduleId: module.id,
   selector: 'o-bar-menu-separator',
   templateUrl: './o-bar-menu-separator.component.html',
   styleUrls: ['./o-bar-menu-separator.component.scss'],

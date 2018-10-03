@@ -23,6 +23,7 @@ export interface IColumnValueFilter {
 }
 
 @Component({
+  moduleId: module.id,
   selector: 'o-table-columns-filter',
   template: ' ',
   inputs: DEFAULT_INPUTS_O_TABLE_COLUMN_FILTER,

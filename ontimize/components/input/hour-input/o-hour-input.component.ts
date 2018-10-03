@@ -31,6 +31,7 @@ export const DEFAULT_OUTPUTS_O_HOUR_INPUT = [
 ];
 
 @Component({
+  moduleId: module.id,
   selector: 'o-hour-input',
   templateUrl: './o-hour-input.component.html',
   styleUrls: ['./o-hour-input.component.scss'],

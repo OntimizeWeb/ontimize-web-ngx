@@ -116,6 +116,7 @@ export interface OFormInitializationOptions {
 }
 
 @Component({
+  moduleId: module.id,
   selector: 'o-form',
   providers: [
     { provide: OntimizeService, useFactory: dataServiceFactory, deps: [Injector] }

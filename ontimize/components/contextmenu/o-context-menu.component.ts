@@ -10,6 +10,7 @@ export const DEFAULT_OUTPUTS_O_CONTEXT_MENU = [
 ];
 
 @Component({
+  moduleId: module.id,
   selector: 'o-context-menu',
   template: ' ',
   outputs : DEFAULT_OUTPUTS_O_CONTEXT_MENU

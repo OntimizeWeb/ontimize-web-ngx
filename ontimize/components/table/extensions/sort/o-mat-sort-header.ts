@@ -4,6 +4,7 @@ import { CdkColumnDef } from '@angular/cdk/table';
 import { OMatSort } from './o-mat-sort';
 
 @Component({
+  moduleId: module.id,
   selector: '[o-mat-sort-header]',
   exportAs: 'oMatSortHeader',
   templateUrl: './sort-header.html',

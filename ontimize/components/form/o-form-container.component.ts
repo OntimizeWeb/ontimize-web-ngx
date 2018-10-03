@@ -15,6 +15,7 @@ export const DEFAULT_INPUTS_O_FORM_CONTAINER = [
 ];
 
 @Component({
+  moduleId: module.id,
   selector: 'o-form-container',
   templateUrl: './o-form-container.component.html',
   styleUrls: ['./o-form-container.component.scss'],

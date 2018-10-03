@@ -6,6 +6,7 @@ import { OSharedModule } from '../../shared';
 import { ODialogConfig } from './o-dialog.config';
 
 @Component({
+  moduleId: module.id,
   selector: 'o-dialog',
   templateUrl: './o-dialog.component.html',
   styleUrls: ['./o-dialog.component.scss'],

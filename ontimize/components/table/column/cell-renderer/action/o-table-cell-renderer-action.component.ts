@@ -15,6 +15,7 @@ export const DEFAULT_OUTPUTS_O_TABLE_CELL_RENDERER_ACTION = [
 ];
 
 @Component({
+  moduleId: module.id,
   selector: 'o-table-cell-renderer-action',
   templateUrl: './o-table-cell-renderer-action.component.html',
   styleUrls: ['./o-table-cell-renderer-action.component.scss'],

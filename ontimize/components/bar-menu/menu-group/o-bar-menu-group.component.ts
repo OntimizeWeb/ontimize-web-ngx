@@ -23,6 +23,7 @@ export const DEFAULT_INPUTS_O_BAR_MENU_GROUP = [
 ];
 
 @Component({
+  moduleId: module.id,
   selector: 'o-bar-menu-group',
   templateUrl: './o-bar-menu-group.component.html',
   styleUrls: ['./o-bar-menu-group.component.scss'],

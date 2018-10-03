@@ -14,6 +14,7 @@ export const DEFAULT_INPUTS_O_SIDE_MENU = [
  * @deprecated This component will be removed in following versions
  */
 @Component({
+  moduleId: module.id,
   selector: 'o-side-menu',
   templateUrl: './o-side-menu.component.html',
   styleUrls: ['./o-side-menu.component.scss'],

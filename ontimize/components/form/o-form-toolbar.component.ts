@@ -30,6 +30,7 @@ export const DEFAULT_INPUTS_O_FORM_TOOLBAR = [
 ];
 
 @Component({
+  moduleId: module.id,
   selector: 'o-form-toolbar',
   templateUrl: './o-form-toolbar.component.html',
   styleUrls: ['./o-form-toolbar.component.scss'],

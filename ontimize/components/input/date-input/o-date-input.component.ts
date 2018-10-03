@@ -36,6 +36,7 @@ export const DEFAULT_INPUTS_O_DATE_INPUT = [
 export type DateFilterFunction = (date: Date) => boolean;
 
 @Component({
+  moduleId: module.id,
   selector: 'o-date-input',
   templateUrl: './o-date-input.component.html',
   styles: ['./o-date-input.component.scss'],

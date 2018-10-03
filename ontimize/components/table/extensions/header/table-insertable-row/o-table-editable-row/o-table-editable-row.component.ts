@@ -13,6 +13,7 @@ export const DEFAULT_INPUTS_O_TABLE_EDITABLE_ROW = [
 ];
 
 @Component({
+  moduleId: module.id,
   selector: 'o-table-editable-row',
   templateUrl: './o-table-editable-row.component.html',
   styleUrls: ['./o-table-editable-row.component.scss'],

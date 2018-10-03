@@ -23,6 +23,7 @@ export const DEFAULT_INPUTS_O_LOCALE_SIDE_MENU_ITEM = [
  * @deprecated This component will be removed in following versions
  */
 @Component({
+  moduleId: module.id,
   selector: 'o-locale-side-menu-item',
   templateUrl: './o-locale-side-menu-item.component.html',
   styleUrls: ['./o-locale-side-menu-item.component.scss'],

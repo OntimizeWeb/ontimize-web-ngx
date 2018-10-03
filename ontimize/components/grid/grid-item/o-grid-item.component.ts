@@ -6,6 +6,7 @@ import { OGridComponent } from '../../grid/o-grid.component';
 
 
 @Component({
+  moduleId: module.id,
   selector: 'o-grid-item',
   templateUrl: './o-grid-item.component.html',
   host: {

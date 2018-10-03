@@ -20,6 +20,7 @@ export const DEFAULT_OUTPUTS_O_APP_SIDENAV_MENU_GROUP = [
 ];
 
 @Component({
+  moduleId: module.id,
   selector: 'o-app-sidenav-menu-group',
   inputs: DEFAULT_INPUTS_O_APP_SIDENAV_MENU_GROUP,
   outputs: DEFAULT_OUTPUTS_O_APP_SIDENAV_MENU_GROUP,

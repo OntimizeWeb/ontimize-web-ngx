@@ -14,6 +14,7 @@ export const DEFAULT_INPUTS_O_ROW = [
 ];
 
 @Component({
+  moduleId: module.id,
   selector: 'o-row',
   templateUrl: './o-row.component.html',
   styleUrls: ['./o-row.component.scss'],

@@ -26,6 +26,7 @@ export type OAppLayoutMode = 'mobile' | 'desktop';
 export type OSidenavMode = 'over' | 'push' | 'side';
 
 @Component({
+  moduleId: module.id,
   selector: 'o-app-layout',
   inputs: DEFAULT_INPUTS_O_APP_LAYOUT,
   outputs: DEFAULT_OUTPUTS_O_APP_LAYOUT,

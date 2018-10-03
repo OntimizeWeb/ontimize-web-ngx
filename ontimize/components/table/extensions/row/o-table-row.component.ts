@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { OTableComponent } from '../../o-table.component';
 
 @Component({
+  moduleId: module.id,
   selector: 'o-table-row',
   template: CDK_ROW_TEMPLATE,
   host: {

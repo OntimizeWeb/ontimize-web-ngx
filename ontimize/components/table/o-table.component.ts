@@ -270,6 +270,7 @@ export interface OTableInitializationOptions {
 }
 
 @Component({
+  moduleId: module.id,
   selector: 'o-table',
   templateUrl: './o-table.component.html',
   styleUrls: ['./o-table.component.scss'],

@@ -18,6 +18,7 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_SERVICE = [
 ];
 
 @Component({
+  moduleId: module.id,
   selector: 'o-table-cell-renderer-service',
   templateUrl: './o-table-cell-renderer-service.component.html',
   inputs: DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_SERVICE,

@@ -25,6 +25,7 @@ export const DEFAULT_OUTPUTS_O_TEXTAREA_INPUT = [
 ];
 
 @Component({
+  moduleId: module.id,
   selector: 'o-textarea-input',
   templateUrl: './o-textarea-input.component.html',
   styleUrls: ['./o-textarea-input.component.scss'],

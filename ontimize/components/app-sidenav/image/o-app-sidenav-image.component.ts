@@ -13,6 +13,7 @@ export const DEFAULT_OUTPUTS_O_APP_SIDENAV_IMAGE = [
 ];
 
 @Component({
+  moduleId: module.id,
   selector: 'o-app-sidenav-image',
   inputs: DEFAULT_INPUTS_O_APP_SIDENAV_IMAGE,
   outputs: DEFAULT_OUTPUTS_O_APP_SIDENAV_IMAGE,

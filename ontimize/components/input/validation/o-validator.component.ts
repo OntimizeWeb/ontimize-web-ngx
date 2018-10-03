@@ -14,6 +14,7 @@ export const DEFAULT_INPUTS_O_VALIDATOR = [
 ];
 
 @Component({
+  moduleId: module.id,
   selector: 'o-validator',
   template: ' ',
   inputs: DEFAULT_INPUTS_O_VALIDATOR

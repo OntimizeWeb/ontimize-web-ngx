@@ -38,6 +38,7 @@ export const DEFAULT_OUTPUTS_O_TIME_INPUT = [
 ];
 
 @Component({
+  moduleId: module.id,
   selector: 'o-time-input',
   templateUrl: './o-time-input.component.html',
   styleUrls: ['./o-time-input.component.scss'],

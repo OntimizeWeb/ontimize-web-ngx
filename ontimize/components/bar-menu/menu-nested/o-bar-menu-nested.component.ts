@@ -9,6 +9,7 @@ export const DEFAULT_INPUTS_O_BAR_MENU_NESTED = [
 ];
 
 @Component({
+  moduleId: module.id,
   selector: 'o-bar-menu-nested',
   templateUrl: './o-bar-menu-nested.component.html',
   inputs: DEFAULT_INPUTS_O_BAR_MENU_NESTED,
