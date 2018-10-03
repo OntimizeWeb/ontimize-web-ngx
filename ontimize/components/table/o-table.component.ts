@@ -617,6 +617,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     this.parseVisibleColumns();
     this.setDatasource();
     this.registerDataSourceListeners();
+    this.parseSortColumns();
     this.registerSortListener();
     this.setFiltersConfiguration(this.state);
     this.addDefaultRowButtons();
@@ -816,15 +817,14 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
   }
 
-
   parseSortColumns() {
     let sortColumnsParam = this.state['sort-columns'] || this.sortColumns;
     this.sortColArray = ServiceUtils.parseSortColumns(sortColumnsParam);
-    // ensuring column existence
+    // ensuring column existence and checking its orderable state
     for (let i = this.sortColArray.length - 1; i >= 0; i--) {
       const colName = this.sortColArray[i].columnName;
       const oCol = this.getOColumn(colName);
-      if (!Util.isDefined(oCol)) {
+      if (!Util.isDefined(oCol) || !oCol.orderable) {
         this.sortColArray.splice(i, 1);
       }
     }
@@ -857,8 +857,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       }
       this._oTableOptions.columns.sort((a: OColumn, b: OColumn) => columnsOrder.indexOf(a.attr) - columnsOrder.indexOf(b.attr));
     }
-
-    this.parseSortColumns();
 
     // Initialize quickFilter
     this._oTableOptions.filter = this.quickFilter;
