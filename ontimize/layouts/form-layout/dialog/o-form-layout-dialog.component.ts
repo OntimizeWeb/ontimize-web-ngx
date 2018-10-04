@@ -56,8 +56,9 @@ export class OFormLayoutDialogComponent implements AfterViewInit {
     }
   }
 
-  setLabel(val: string) {
-    let label = val.length ? val : this.formLayoutManager.getLabelFromUrlParams(this.params);
+  updateNavigation(data: any, id: string) {
+    let label = this.formLayoutManager.getLabelFromData(data);
+    label = label.length ? label : this.formLayoutManager.getLabelFromUrlParams(this.params);
     if (label && label.length) {
       label = ': ' + label;
     }
