@@ -758,7 +758,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
         });
         self.formCache.initializeCache(initialCache);
         (self.formGroup.valueChanges as EventEmitter<any>).emit(self.formCache.getInitialDataCache());
-        self.formNavigation.updateNavigation(self.formGroup.getRawValue());
+        self.formNavigation.updateNavigation(self.formCache.getInitialDataCache());
       }
     });
   }

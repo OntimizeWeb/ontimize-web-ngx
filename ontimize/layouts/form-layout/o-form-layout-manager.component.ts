@@ -281,7 +281,7 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
     }
   }
 
-  updateNavigation(data: any, id: string) {
+  getLabelFromData(data: any): string {
     let label = '';
     if (this.labelColsArray.length !== 0 && data !== undefined) {
       this.labelColsArray.forEach((col, idx) => {
@@ -290,11 +290,14 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
         }
       });
     }
+    return label;
+  }
 
+  updateNavigation(data: any, id: string) {
     if (this.isTabMode()) {
-      this.oTabGroup.updateNavigation(id, label);
+      this.oTabGroup.updateNavigation(data, id);
     } else if (this.isDialogMode()) {
-      this.dialogRef.componentInstance.setLabel(label);
+      this.dialogRef.componentInstance.updateNavigation(data, id);
     }
   }
 

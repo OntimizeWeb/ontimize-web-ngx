@@ -194,7 +194,7 @@ export class OFormLayoutTabGroupComponent implements AfterViewInit, OnDestroy {
     this.updatedDataOnTable = true;
   }
 
-  updateNavigation(id: string, label: string) {
+  updateNavigation(data: any, id: string) {
     let index = undefined;
     for (let i = 0, len = this.data.length; i < len; i++) {
       if (this.data[i].id === id) {
@@ -202,6 +202,7 @@ export class OFormLayoutTabGroupComponent implements AfterViewInit, OnDestroy {
         break;
       }
     }
+    let label = this.formLayoutManager.getLabelFromData(data);
     if (index !== undefined) {
       this.tabGroup.selectedIndex = (index + 1);
       label = label.length ? label : this.formLayoutManager.getLabelFromUrlParams(this.data[index].params);
