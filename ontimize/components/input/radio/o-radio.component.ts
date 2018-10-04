@@ -1,5 +1,6 @@
 import { AfterViewInit, Component, ElementRef, forwardRef, Inject, Injector, NgModule, Optional, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { MatRadioChange } from '@angular/material';
 
 import { Util } from '../../../util/util';
 import { OFormValue } from '../../form/OFormValue';
@@ -9,6 +10,7 @@ import { InputConverter } from '../../../decorators/input-converter';
 import { OntimizeService } from '../../../services/ontimize.service';
 import { OFormServiceComponent } from '../o-form-service-component.class';
 import { dataServiceFactory } from '../../../services/data-service.provider';
+import { OValueChangeEvent } from '../../o-form-data-component.class';
 
 export const DEFAULT_INPUTS_O_RADIO = [
   ...OFormServiceComponent.DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT,
@@ -65,7 +67,14 @@ export class ORadioComponent extends OFormServiceComponent implements AfterViewI
   }
 
   innerOnChange(value: any) {
+    this.ensureOFormValue(value);
     this.onChange.emit(value);
+  }
+
+  onMatRadioGroupChange(e: MatRadioChange): void {
+    var newValue = e.value;
+    this.setValue(newValue, { changeType: OValueChangeEvent.USER_CHANGE });
+    this.innerOnChange(e.value);
   }
 
   getOptionDescriptionValue(item: any = {}) {
@@ -107,10 +116,6 @@ export class ORadioComponent extends OFormServiceComponent implements AfterViewI
       }
     }
     return '';
-  }
-
-  onClickBlocker(e: Event) {
-    e.stopPropagation();
   }
 
 }

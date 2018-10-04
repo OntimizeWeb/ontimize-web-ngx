@@ -6,9 +6,9 @@
     fxFill>
     <input matInput [id]="getAttribute()" [formControlName]="getAttribute()" [ngModel]="getValue()" [placeholder]="placeHolder"
       [required]="isRequired" style="display: none" />
-    <mat-radio-group [id]="getAttribute()" [formControlName]="getAttribute()" [name]="getAttribute()" [ngModel]="getValue()"
-      [value]="getValue()" [required]="isRequired" [labelPosition]="labelPosition" (ngModelChange)="innerOnChange($event)"
-      (change)="onChangeEvent($event)" [fxLayout]="layout" fxLayoutGap="8px">
+    <mat-radio-group [id]="getAttribute()" [formControlName]="getAttribute()" [name]="getAttribute()" [value]="getValue()"
+      [required]="isRequired" [labelPosition]="labelPosition" (change)="onMatRadioGroupChange($event)" [fxLayout]="layout"
+      fxLayoutGap="8px">
       <mat-radio-button *ngFor="let item of getDataArray()" [value]="getValueColumn(item)" [disabled]="isDisabled">
         {{ getOptionDescriptionValue(item) }}
       </mat-radio-button>
@@ -16,5 +16,5 @@
     <mat-error *ngIf="hasError('required')">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</mat-error>
     <mat-error *ngFor="let oError of getActiveOErrors()"> {{ oError.text | oTranslate }} </mat-error>
   </mat-form-field>
-  <div *ngIf="isReadOnly" (click)="onClickBlocker($event)" class="read-only-blocker" fxFill></div>
+  <div *ngIf="isReadOnly" (click)="$event.stopPropagation()" class="read-only-blocker" fxFill></div>
 </div>
