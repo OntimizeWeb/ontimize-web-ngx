@@ -1,3 +1,7 @@
+## 3.1.2
+### BREAKING CHANGES
+* **o-form**: `getDataValue` method is now public again.
+
 ## 3.1.1 (2018-10-05)
 ### Features
 * New component `o-radio` ([1ed0286](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1ed0286)) ([e80513e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e80513e))
