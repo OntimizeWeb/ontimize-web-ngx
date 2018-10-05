@@ -421,7 +421,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     return subscription;
   }
 
-  protected getDataValue(attr: string) {
+  getDataValue(attr: string) {
     if (this.isInInsertMode()) {
       let urlParams = this.formNavigation.getFilterFromUrlParams();
       let val = this.formGroup.value[attr] || urlParams[attr];
