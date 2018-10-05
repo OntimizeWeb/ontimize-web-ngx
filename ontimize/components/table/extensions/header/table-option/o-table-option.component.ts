@@ -15,6 +15,7 @@ export const DEFAULT_OUTPUTS_O_TABLE_OPTION = [
 ];
 
 @Component({
+  moduleId: module.id,
   selector: 'o-table-option',
   templateUrl: './o-table-option.component.html',
   styleUrls: ['./o-table-option.component.scss'],

@@ -20,6 +20,7 @@ export const DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_BOOLEAN = [
 ];
 
 @Component({
+  moduleId: module.id,
   selector: 'o-table-cell-editor-boolean',
   templateUrl: './o-table-cell-editor-boolean.component.html',
   styleUrls: ['./o-table-cell-editor-boolean.component.scss'],

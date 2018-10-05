@@ -59,7 +59,7 @@ export class Util {
   static parseArray(value: string, excludeRepeated: boolean = false): string[] {
     let result = [];
     if (value) {
-      result = value.split(';');
+      result = value.split(Codes.ARRAY_INPUT_SEPARATOR);
     }
     if (excludeRepeated && result.length > 0) {
       result = Array.from(new Set(result));

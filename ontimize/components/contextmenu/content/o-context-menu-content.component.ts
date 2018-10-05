@@ -20,6 +20,7 @@ export const DEFAULT_CONTEXT_MENU_CONTENT_OUTPUTS = [
 export const EXPANSION_PANEL_ANIMATION_TIMING = '225ms cubic-bezier(0.4,0.0,0.2,1)';
 
 @Component({
+  moduleId: module.id,
   selector: 'o-context-menu-content',
   templateUrl: 'o-context-menu-content.component.html',
   styleUrls: ['o-context-menu-content.component.scss'],

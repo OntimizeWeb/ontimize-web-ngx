@@ -8,6 +8,7 @@ import { InputConverter } from '../../../decorators/input-converter';
 import { OFormDataComponent } from '../../o-form-data-component.class';
 import { OFormComponent, OFormValue } from '../../form/form-components';
 import { CKEditorComponent, CKEditorModule } from '../../material/ckeditor/ck-editor.component';
+import { OFormServiceComponent } from '../o-form-service-component.class';
 
 export const DEFAULT_INPUTS_O_HTML_INPUT = [
   'oattr: attr',
@@ -22,12 +23,13 @@ export const DEFAULT_INPUTS_O_HTML_INPUT = [
 ];
 
 export const DEFAULT_OUTPUTS_O_HTML_INPUT = [
-  'onChange',
+  ...OFormServiceComponent.DEFAULT_OUTPUTS_O_FORM_SERVICE_COMPONENT,
   'onFocus',
   'onBlur'
 ];
 
 @Component({
+  moduleId: module.id,
   selector: 'o-html-input',
   templateUrl: './o-html-input.component.html',
   styleUrls: ['./o-html-input.component.scss'],

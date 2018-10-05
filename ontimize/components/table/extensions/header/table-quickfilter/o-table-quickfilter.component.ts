@@ -14,6 +14,7 @@ export const DEFAULT_OUTPUTS_O_TABLE_QUICKFILTER = [
 ];
 
 @Component({
+  moduleId: module.id,
   selector: 'o-table-quickfilter',
   templateUrl: './o-table-quickfilter.component.html',
   styleUrls: ['./o-table-quickfilter.component.scss'],

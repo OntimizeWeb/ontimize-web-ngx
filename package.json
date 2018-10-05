@@ -1,7 +1,7 @@
 {
   "name": "ontimize-web-ngx",
   "homepage": "https://github.com/OntimizeWeb/ontimize-web-ngx#readme",
-  "version": "3.1.0",
+  "version": "3.1.1",
   "description": "Ontimize Web framework using Angular 5",
   "bugs": "https://github.com/OntimizeWeb/ontimize-web-ngx/issues",
   "author": "Imatia S.L.",
@@ -65,7 +65,7 @@
     "webpack": "3.11.0"
   },
   "devDependencies": {
-    "ontimize-web-ngx-library-tools": "1.0.0",
+    "ontimize-web-ngx-library-tools": "1.1.0",
     "@angular/animations": "5.2.10",
     "@angular/cdk": "5.2.4",
     "@angular/common": "5.2.10",

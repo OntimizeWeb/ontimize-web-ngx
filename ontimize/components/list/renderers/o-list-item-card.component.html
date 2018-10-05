@@ -6,7 +6,7 @@
     <mat-card-subtitle *ngIf="subtitle !== undefined"> {{ subtitle }}</mat-card-subtitle>
   </mat-card-title-group>
   <mat-card-actions>
-    <button mat-button *ngIf="action1Text !== undefined" (click)="onAction1ButtonClick($event)">{{ action1Text }}</button>
-    <button mat-button *ngIf="action2Text !== undefined" (click)="onAction2ButtonClick($event)">{{ action2Text }}</button>
+    <button type="button" mat-button *ngIf="action1Text !== undefined" (click)="onAction1ButtonClick($event)">{{ action1Text }}</button>
+    <button type="button" mat-button *ngIf="action2Text !== undefined" (click)="onAction2ButtonClick($event)">{{ action2Text }}</button>
   </mat-card-actions>
 </mat-card>

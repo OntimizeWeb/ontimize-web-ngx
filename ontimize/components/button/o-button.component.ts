@@ -16,6 +16,7 @@ export const DEFAULT_INPUTS_O_BUTTON = [
 ];
 
 @Component({
+  moduleId: module.id,
   selector: 'o-button',
   inputs: DEFAULT_INPUTS_O_BUTTON,
   templateUrl: './o-button.component.html',

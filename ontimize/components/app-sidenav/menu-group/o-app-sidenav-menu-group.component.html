@@ -1,4 +1,4 @@
-<button mat-button class="o-app-sidenav-item o-app-sidenav-menugroup" [class.active]="menuGroup.opened" fxLayout="column"
+<button type="button" mat-button class="o-app-sidenav-item o-app-sidenav-menugroup" [class.active]="menuGroup.opened" fxLayout="column"
   fxFill (click)="onClick()" [disabled]="disabled">
   <div fxLayout="row" fxLayoutAlign="start center" fxFill>
     <ng-container *ngIf="sidenavOpened">
@@ -16,7 +16,7 @@
 <div class="o-app-sidenav-menugroup-items-container">
   <ul [@contentExpansion]="contentExpansion" class="o-app-sidenav-menugroup-ul">
     <ng-container *ngFor="let menuItem of menuGroup.items">
-      <o-app-sidenav-menu-item *ngIf="menuItem['show-in-app-sidenav'] !== false" [sidenav-opened]="sidenavOpened" [menu-item]="menuItem"
+      <o-app-sidenav-menu-item  [sidenav-opened]="sidenavOpened" [menu-item]="menuItem"
         [menu-item-type]="appMenuService.getMenuItemType(menuItem)" (onClick)="onMenuItemClick($event)">
       </o-app-sidenav-menu-item>
     </ng-container>

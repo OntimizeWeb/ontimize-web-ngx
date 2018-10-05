@@ -200,8 +200,8 @@ export var MAP = {
     'CARD_MENU_LAYOUT.BUTTON_TEXT': 'View list',
     'GRID.ITEMS_PER_PAGE': 'Items per page',
     'GRID.SORT_BY': 'Sort by',
-    'GRID.BUTTON_NEXT': ' View {0} following',
-    'GRID.TEXT_SHOWN_ITEMS': 'Shown {0} items of {1}'
+    'GRID.BUTTON_NEXT': 'Show more',
+    'GRID.TEXT_SHOWN_ITEMS': '{0} / {1}'
   },
 
   // Spanish
@@ -405,8 +405,8 @@ export var MAP = {
     'CARD_MENU_LAYOUT.BUTTON_TEXT': 'Acceder',
     'GRID.ITEMS_PER_PAGE': 'Elementos por página',
     'GRID.SORT_BY': 'Ordenado por ',
-    'GRID.BUTTON_NEXT': ' Ver {0} siguientes',
-    'GRID.TEXT_SHOWN_ITEMS': 'Mostrados {0} elementos de {1}'
+    'GRID.BUTTON_NEXT': 'Ver más',
+    'GRID.TEXT_SHOWN_ITEMS': '{0} / {1}'
   }
 
 };

@@ -12,9 +12,10 @@ import {
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
-import { OTranslateService } from '../../services';
-import { OBarMenuModule, OBarMenuComponent } from './o-bar-menu.component';
-import { OSharedModule } from '../../shared';
+import { OTranslateService } from '../../../services';
+import { OSharedModule } from '../../../shared';
+import { OBarMenuComponent } from '../o-bar-menu.component';
+
 
 export const DEFAULT_INPUTS_O_LOCALE_BAR_MENU_ITEM = [
   // title [string]: menu item title. Default: no value.
@@ -31,11 +32,15 @@ export const DEFAULT_INPUTS_O_LOCALE_BAR_MENU_ITEM = [
 ];
 
 @Component({
+  moduleId: module.id,
   selector: 'o-locale-bar-menu-item',
   templateUrl: './o-locale-bar-menu-item.component.html',
   styleUrls: ['./o-locale-bar-menu-item.component.scss'],
   inputs: DEFAULT_INPUTS_O_LOCALE_BAR_MENU_ITEM,
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  host: {
+    '[class.o-locale-bar-menu-item]': 'true'
+  }
 })
 export class OLocaleBarMenuItemComponent implements OnInit {
 
@@ -140,7 +145,7 @@ export class OLocaleBarMenuItemComponent implements OnInit {
 
 @NgModule({
   declarations: [OLocaleBarMenuItemComponent],
-  imports: [OSharedModule, CommonModule, RouterModule, OBarMenuModule],
+  imports: [OSharedModule, CommonModule, RouterModule],
   exports: [OLocaleBarMenuItemComponent]
 })
 export class OLocaleBarMenuItemModule {

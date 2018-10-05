@@ -22,6 +22,7 @@ export const DEFAULT_OUTPUTS_O_CHECKBOX = [
 ];
 
 @Component({
+  moduleId: module.id,
   selector: 'o-checkbox',
   inputs: DEFAULT_INPUTS_O_CHECKBOX,
   outputs: DEFAULT_OUTPUTS_O_CHECKBOX,

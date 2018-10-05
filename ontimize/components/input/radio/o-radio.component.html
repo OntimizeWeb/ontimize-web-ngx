@@ -1,0 +1,20 @@
+<div [formGroup]="getFormGroup()" [matTooltip]="tooltip" [matTooltipPosition]="tooltipPosition" [matTooltipShowDelay]="tooltipShowDelay"
+  class="relative">
+  <!-- mat-form-field and hidden input are used only for displaying component label and errors as mat-radio is not supported inside form-field -->
+  <!-- https://github.com/angular/material2/issues/7891 -->
+  <mat-form-field [class.read-only]="isReadOnly" [class.custom-width]="hasCustomWidth" floatPlaceholder="always" class="mat-form-field--no-underline"
+    fxFill>
+    <input matInput [id]="getAttribute()" [formControlName]="getAttribute()" [ngModel]="getValue()" [placeholder]="placeHolder"
+      [required]="isRequired" style="display: none" />
+    <mat-radio-group [id]="getAttribute()" [formControlName]="getAttribute()" [name]="getAttribute()" [value]="getValue()"
+      [required]="isRequired" [labelPosition]="labelPosition" (change)="onMatRadioGroupChange($event)" [fxLayout]="layout"
+      fxLayoutGap="8px">
+      <mat-radio-button *ngFor="let item of getDataArray()" [value]="getValueColumn(item)" [disabled]="isDisabled">
+        {{ getOptionDescriptionValue(item) }}
+      </mat-radio-button>
+    </mat-radio-group>
+    <mat-error *ngIf="hasError('required')">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</mat-error>
+    <mat-error *ngFor="let oError of getActiveOErrors()"> {{ oError.text | oTranslate }} </mat-error>
+  </mat-form-field>
+  <div *ngIf="isReadOnly" (click)="$event.stopPropagation()" class="read-only-blocker" fxFill></div>
+</div>

@@ -16,6 +16,7 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_TABGROUP = [
 ];
 
 @Component({
+  moduleId: module.id,
   selector: 'o-form-layout-tabgroup',
   inputs: DEFAULT_INPUTS_O_FORM_LAYOUT_TABGROUP,
   outputs: DEFAULT_OUTPUTS_O_FORM_LAYOUT_TABGROUP,
@@ -62,7 +63,7 @@ export class OFormLayoutTabGroupComponent implements AfterViewInit, OnDestroy {
       if (this.tabsDirectives.length && !this._ignoreTabsDirectivesChange) {
         const tabItem = this.tabsDirectives.last;
         const tabData = this.data[tabItem.index];
-        if (tabData) {
+        if (tabData && !tabData.rendered) {
           this.createTabComponent(tabData, tabItem);
         }
       } else if (this._ignoreTabsDirectivesChange) {
@@ -156,9 +157,10 @@ export class OFormLayoutTabGroupComponent implements AfterViewInit, OnDestroy {
   createTabComponent(tabData: IDetailComponentData, content: OFormLayoutManagerContentDirective) {
     const component = tabData.component;
     const componentFactory = this.componentFactoryResolver.resolveComponentFactory(component);
-    let viewContainerRef = content.viewContainerRef;
+    let viewContainerRef: ViewContainerRef = content.viewContainerRef;
     viewContainerRef.clear();
     viewContainerRef.createComponent(componentFactory);
+    tabData.rendered = true;
   }
 
   getFormCacheData(idArg: string): IDetailComponentData {
@@ -172,10 +174,11 @@ export class OFormLayoutTabGroupComponent implements AfterViewInit, OnDestroy {
   getRouteOfActiveItem(): any[] {
     let route = [];
     if (this.data.length && this.tabGroup.selectedIndex > 0) {
-      const urlParams = this.data[this.tabGroup.selectedIndex - 1].params || [];
-      Object.keys(urlParams).forEach(key => {
-        route.push(urlParams[key]);
+      const urlSegments = this.data[this.tabGroup.selectedIndex - 1].urlSegments || [];
+      urlSegments.forEach((segment) => {
+        route.push(segment.path);
       });
+      return route;
     }
     return route;
   }
@@ -191,7 +194,7 @@ export class OFormLayoutTabGroupComponent implements AfterViewInit, OnDestroy {
     this.updatedDataOnTable = true;
   }
 
-  updateNavigation(id: string, label: string) {
+  updateNavigation(data: any, id: string) {
     let index = undefined;
     for (let i = 0, len = this.data.length; i < len; i++) {
       if (this.data[i].id === id) {
@@ -199,6 +202,7 @@ export class OFormLayoutTabGroupComponent implements AfterViewInit, OnDestroy {
         break;
       }
     }
+    let label = this.formLayoutManager.getLabelFromData(data);
     if (index !== undefined) {
       this.tabGroup.selectedIndex = (index + 1);
       label = label.length ? label : this.formLayoutManager.getLabelFromUrlParams(this.data[index].params);
@@ -228,6 +232,9 @@ export class OFormLayoutTabGroupComponent implements AfterViewInit, OnDestroy {
       let extras = {};
       extras[Codes.QUERY_PARAMS] = state.tabsData[0].queryParams;
       const self = this;
+      if (this.formLayoutManager) {
+        this.formLayoutManager.setAsActiveFormLayoutManager();
+      }
       this.router.navigate([state.tabsData[0].url], extras).then(val => {
         if (self.data[0]) {
           setTimeout(() => {
@@ -241,15 +248,14 @@ export class OFormLayoutTabGroupComponent implements AfterViewInit, OnDestroy {
   protected createTabsFromState() {
     const self = this;
     const tabComponent = self.data[0].component;
-    let newTabs = [];
     this.state.tabsData.forEach((tabData: any, index: number) => {
       if (tabComponent && index > 0) {
-        newTabs.push(self.createDetailComponent(tabComponent, tabData));
+        setTimeout(() => {
+          const newDetailData = self.createDetailComponent(tabComponent, tabData);
+          self.data.push(newDetailData);
+        }, 0);
       }
     });
-    if (newTabs.length > 0) {
-      this.data.push(...newTabs);
-    }
   }
 
   protected createDetailComponent(component: any, paramsObj: any) {
@@ -263,7 +269,6 @@ export class OFormLayoutTabGroupComponent implements AfterViewInit, OnDestroy {
       label: '',
       modified: false
     };
-    // this.addTab(newDetailComp);
     return newDetailComp;
   }
 

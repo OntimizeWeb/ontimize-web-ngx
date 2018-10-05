@@ -1,16 +1,26 @@
 <div [formGroup]="getFormGroup()" [matTooltip]="tooltip" [matTooltipPosition]="tooltipPosition" [matTooltipShowDelay]="tooltipShowDelay">
   <mat-form-field [class.custom-width]="hasCustomWidth" [class.icon-field]="showClearButton" fxFlexFill>
-    <input matInput [type]="inputType" [id]="getAttribute()" [formControlName]="getAttribute()" [placeholder]="placeHolder" [ngModel]="getValue()"
-      (ngModelChange)="innerOnChange($event)" (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)" [readonly]="isReadOnly"
-      [min]="min" [max]="max" [step]="step" [required]="isRequired">
-    <button *ngIf="showClearButton" matSuffix mat-icon-button (click)="clearValue()">
+    <input matInput [type]="inputType" [id]="getAttribute()" [formControlName]="getAttribute()" [placeholder]="placeHolder"
+      [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)" (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)"
+      (change)="onChangeEvent($event)" [readonly]="isReadOnly" [min]="min" [max]="max" [step]="step" [required]="isRequired">
+    <button type="button" *ngIf="showClearButton" matSuffix mat-icon-button (click)="onClickClearValue()">
       <mat-icon svgIcon="ontimize:close"></mat-icon>
     </button>
     <mat-error *ngIf="hasError('required')">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</mat-error>
-    <mat-error *ngIf="hasError('min')">{{ 'FORM_VALIDATION.MIN_VALUE' | oTranslate }}: {{ getErrorValue('min', 'requiredMin') }}</mat-error>
-    <mat-error *ngIf="hasError('max')">{{ 'FORM_VALIDATION.MAX_VALUE' | oTranslate }}: {{ getErrorValue('max', 'requiredMax') }}</mat-error>
-    <mat-error *ngIf="hasError('minDecimaldigits')">{{ 'FORM_VALIDATION.MIN_DECIMAL_DIGITS' | oTranslate }}: {{ getErrorValue('minDecimaldigits', 'requiredMinDecimaldigits') }}</mat-error>
-    <mat-error *ngIf="hasError('maxDecimaldigits')">{{ 'FORM_VALIDATION.MAX_DECIMAL_DIGITS' | oTranslate }}: {{ getErrorValue('maxDecimaldigits', 'requiredMaxDecimaldigits') }}</mat-error>
+    <mat-error *ngIf="hasError('min')">
+      {{ 'FORM_VALIDATION.MIN_VALUE' | oTranslate }}: {{ getErrorValue('min', 'requiredMin') }}
+    </mat-error>
+    <mat-error *ngIf="hasError('max')">
+      {{ 'FORM_VALIDATION.MAX_VALUE' | oTranslate }}: {{ getErrorValue('max', 'requiredMax') }}
+    </mat-error>
+    <mat-error *ngIf="hasError('minDecimaldigits')">
+      {{ 'FORM_VALIDATION.MIN_DECIMAL_DIGITS' | oTranslate }}: {{ getErrorValue('minDecimaldigits',
+      'requiredMinDecimaldigits') }}
+    </mat-error>
+    <mat-error *ngIf="hasError('maxDecimaldigits')">
+      {{ 'FORM_VALIDATION.MAX_DECIMAL_DIGITS' | oTranslate }}: {{ getErrorValue('maxDecimaldigits',
+      'requiredMaxDecimaldigits') }}
+    </mat-error>
     <mat-error *ngFor="let oError of getActiveOErrors()"> {{ oError.text | oTranslate }} </mat-error>
   </mat-form-field>
 </div>

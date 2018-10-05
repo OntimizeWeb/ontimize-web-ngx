@@ -1,11 +1,12 @@
-<div fxLayout="row" fxLayoutAlign="space-between center" [formGroup]="getFormGroup()" [matTooltip]="tooltip" [matTooltipPosition]="tooltipPosition"
-  [matTooltipShowDelay]="tooltipShowDelay">
+<div fxLayout="row" fxLayoutAlign="space-between center" [formGroup]="getFormGroup()" [matTooltip]="tooltip"
+  [matTooltipPosition]="tooltipPosition" [matTooltipShowDelay]="tooltipShowDelay">
   <mat-form-field [class.custom-width]="hasCustomWidth" class="icon-field" fxFlexFill>
-    <input matInput #matInputRef [matDatepicker]="d" [id]="getAttribute()" [formControlName]="getAttribute()" [placeholder]="placeHolder"
-      [readonly]="isReadOnly || !textInputEnabled" [ngModel]="getValueAsDate()" (ngModelChange)="onModelChange($event)" (focus)="innerOnFocus($event)"
-      (blur)="innerOnBlur($event)" [matDatepickerFilter]="filterDate" (dateChange)="innerOnChange($event)" [required]="isRequired"
-      (click)="onClickInput($event)">
-    <button *ngIf="showClearButton" matSuffix mat-icon-button (click)="clearValue()">
+    <input matInput #matInputRef [matDatepicker]="d" [id]="getAttribute()" [formControlName]="getAttribute()"
+      [placeholder]="placeHolder" [readonly]="isReadOnly || !textInputEnabled" [ngModel]="getValueAsDate()"
+      (ngModelChange)="onModelChange($event)" (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)"
+      [matDatepickerFilter]="filterDate" (dateChange)="onChangeEvent($event)" [required]="isRequired" (click)="onClickInput($event)">
+
+    <button type="button" *ngIf="showClearButton" matSuffix mat-icon-button (click)="onClickClearValue()">
       <mat-icon svgIcon="ontimize:close"></mat-icon>
     </button>
     <mat-datepicker-toggle matSuffix [disabled]="isReadOnly || isDisabled" [class.read-only]="isReadOnly" [for]="d">

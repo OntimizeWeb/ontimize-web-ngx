@@ -1,5 +1,6 @@
+import { EventEmitter } from '@angular/core';
 import { DataSource } from '@angular/cdk/collections';
-import { MatPaginator, MatSort } from '@angular/material';
+import { MatPaginator } from '@angular/material';
 import 'rxjs/add/observable/fromEvent';
 import 'rxjs/add/observable/merge';
 import 'rxjs/add/operator/map';
@@ -11,6 +12,7 @@ import { OTableAggregateComponent } from './extensions/footer/o-table-footer-com
 import { ColumnValueFilterOperator, IColumnValueFilter, OTableEditableRowComponent } from './extensions/header/o-table-header-components';
 import { OColumn, OTableComponent, OTableOptions } from './o-table.component';
 import { OTableDao } from './o-table.dao';
+import { OMatSort } from './extensions/sort/o-mat-sort';
 
 export const SCROLLVIRTUAL = 'scroll';
 
@@ -36,7 +38,7 @@ export class OTableDataSource extends DataSource<any> {
   protected _database: OTableDao;
   protected _paginator: MatPaginator;
   protected _tableOptions: OTableOptions;
-  protected _sort: MatSort;
+  protected _sort: OMatSort;
 
   protected _quickFilterChange = new BehaviorSubject('');
   protected _columnValueFilterChange = new Subject();
@@ -44,13 +46,15 @@ export class OTableDataSource extends DataSource<any> {
 
   protected filteredData: any[] = [];
 
+  onRenderedDataChange: EventEmitter<any> = new EventEmitter<any>();
+
   //load data in scroll
   get loadDataScrollable(): number { return this._loadDataScrollableChange.getValue().data || 1; }
   set loadDataScrollable(page: number) {
     this._loadDataScrollableChange.next(new OTableScrollEvent(page));
   }
 
-  renderedData: any[] = [];
+  protected _renderedData: any[] = [];
   resultsLength: number = 0;
 
   get quickFilter(): string { return this._quickFilterChange.value || ''; }
@@ -70,6 +74,19 @@ export class OTableDataSource extends DataSource<any> {
     this._sort = table.sort;
   }
 
+  sortFunction(a: any, b: any): number {
+    return this._sort.sortFunction(a, b);
+  }
+
+  get renderedData(): any[] {
+    return this._renderedData;
+  }
+
+  set renderedData(arg: any[]) {
+    this._renderedData = arg;
+    this.onRenderedDataChange.emit();
+  }
+
   /**
    * Connect function called by the table to retrieve one stream containing the data to render.
    */
@@ -79,7 +96,10 @@ export class OTableDataSource extends DataSource<any> {
     ];
 
     if (!this.table.pageable) {
-      displayDataChanges.push(this._sort.sortChange);
+
+      if (this._sort) {
+        displayDataChanges.push(this._sort.oSortChange);
+      }
 
       if (this._tableOptions.filter) {
         displayDataChanges.push(this._quickFilterChange);
@@ -139,8 +159,6 @@ export class OTableDataSource extends DataSource<any> {
       }
       return this.renderedData;
     });
-
-
   }
 
   /**
@@ -229,22 +247,7 @@ export class OTableDataSource extends DataSource<any> {
 
   /** Returns a sorted copy of the database data. */
   protected getSortedData(data: any[]): any[] {
-    if (!this._sort.active || this._sort.direction === '') { return data; }
-    this._sort.sortables.forEach((value, key) => {
-      this._sort.deregister(value);
-    });
-
-    return data.sort(this.sortFunction.bind(this));
-  }
-
-  protected sortFunction(a: any, b: any) {
-    let propertyA: number | string = '';
-    let propertyB: number | string = '';
-    [propertyA, propertyB] = [a[this._sort.active], b[this._sort.active]];
-
-    let valueA = typeof propertyA === 'undefined' ? '' : propertyA === '' ? propertyA : isNaN(+propertyA) ? propertyA.toString().trim().toLowerCase() : +propertyA;
-    let valueB = typeof propertyB === 'undefined' ? '' : propertyB === '' ? propertyB : isNaN(+propertyB) ? propertyB.toString().trim().toLowerCase() : +propertyB;
-    return (valueA <= valueB ? -1 : 1) * (this._sort.direction === 'asc' ? 1 : -1);
+    return this._sort.getSortedData(data);
   }
 
   /**

@@ -35,6 +35,14 @@ export interface IErrorData {
   text: string;
 }
 
+
+export class OValueChangeEvent {
+  public static USER_CHANGE = 0;
+  public static PROGRAMMATIC_CHANGE = 1;
+
+  constructor(public type: number, public newValue: any, public oldValue: any, public target: any) { }
+}
+
 export const DEFAULT_INPUTS_O_FORM_DATA_COMPONENT = [
   'oattr: attr',
   'olabel: label',
@@ -55,7 +63,8 @@ export const DEFAULT_INPUTS_O_FORM_DATA_COMPONENT = [
 ];
 
 export const DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT = [
-  'onChange'
+  'onChange',
+  'onValueChange'
 ];
 
 export class OFormDataComponent extends OBaseComponent implements IFormDataComponent, IFormDataTypeComponent,
@@ -74,6 +83,9 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
 
   /* Outputs */
   onChange: EventEmitter<Object> = new EventEmitter<Object>();
+  onValueChange: EventEmitter<OValueChangeEvent
+> = new EventEmitter<OValueChangeEvent
+>();
 
   @HostBinding('style.width')
   get hostWidth() {
@@ -88,6 +100,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   protected _fControl: FormControl;
   protected elRef: ElementRef;
   protected form: OFormComponent;
+  protected oldValue: any;
 
   protected matSuffixSubscription: Subscription;
   @ViewChildren(MatSuffix)
@@ -219,6 +232,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   }
 
   setData(value: any) {
+    this.oldValue = value;
     this.ensureOFormValue(value);
     if (this._fControl) {
       this._fControl.setValue(this.value.value, {
@@ -249,6 +263,33 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   }
 
   setValue(val: any, options?: IFormValueOptions) {
+    var newValue = val;
+    this.setFormValue(val, options);
+    if (options) {
+      this.emitOnValueChange(options.changeType, newValue, this.oldValue);
+    } else {
+      this.emitOnValueChange(OValueChangeEvent
+      .PROGRAMMATIC_CHANGE, newValue, this.oldValue);
+    }
+
+    this.oldValue = val;
+  }
+
+  /**
+   * Clears the component value.
+   */
+  clearValue(options?: IFormValueOptions): void {
+    this.setValue(void 0, options);
+  }
+
+  onClickClearValue(): void {
+    this.clearValue({
+      changeType: OValueChangeEvent
+    .USER_CHANGE
+    });
+  }
+
+  protected setFormValue(val: any, options?: IFormValueOptions) {
     this.ensureOFormValue(val);
     if (this._fControl) {
       this._fControl.setValue(val, options);
@@ -259,13 +300,18 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     }
   }
 
-  /**
-   * Clears the component value.
-   */
-  clearValue(): void {
-    this.setValue(void 0);
+  onChangeEvent($event) {
+    var oldValue = this.oldValue;
+    this.emitOnValueChange(OValueChangeEvent
+    .USER_CHANGE, this.getValue(), oldValue);
+    this.oldValue = this.getValue();
   }
 
+  protected emitOnValueChange(type, newValue, oldValue) {
+    let event = new OValueChangeEvent
+  (type, newValue, oldValue, this);
+    this.onValueChange.emit(event);
+  }
   get showClearButton(): boolean {
     return this.clearButton && !this.isReadOnly && !this.isDisabled && this.getValue();
   }

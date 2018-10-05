@@ -1,0 +1,15 @@
+.o-radio {
+  .mat-form-field--no-underline .mat-input-underline,
+  .mat-form-field--no-underline .mat-input-underline .mat-form-field-ripple {
+    background-image: none;
+    background-color: transparent;
+  }
+
+  .read-only-blocker {
+    z-index: 2;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+  }
+}

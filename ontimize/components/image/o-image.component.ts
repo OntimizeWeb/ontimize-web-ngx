@@ -31,6 +31,7 @@ export const DEFAULT_OUTPUTS_O_IMAGE = [
 ];
 
 @Component({
+  moduleId: module.id,
   selector: 'o-image',
   templateUrl: './o-image.component.html',
   styleUrls: ['./o-image.component.scss'],

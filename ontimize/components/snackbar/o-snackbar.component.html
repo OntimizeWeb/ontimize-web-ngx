@@ -4,5 +4,5 @@
     {{ message | oTranslate }}
   </span>
   <mat-icon *ngIf="icon && iconPosition==='right'">{{ icon }}</mat-icon>
-  <button *ngIf="action" (click)="onAction($event)" class="mat-simple-snackbar-action">{{ action | oTranslate }}</button>
+  <button type="button" *ngIf="action" (click)="onAction($event)" class="mat-simple-snackbar-action">{{ action | oTranslate }}</button>
 </div>

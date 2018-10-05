@@ -1,3 +1,25 @@
+## 3.1.1 (2018-10-05)
+### Features
+* New component `o-radio` ([1ed0286](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1ed0286)) ([e80513e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e80513e))
+* **o-bar-menu**: `o-bar-menu` can build automatically base on the application menu configuration ([67f543f](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/67f543f))  ([1fc1f63](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1fc1f63))
+* **o-table**: new `multiple-sort` input ([6688618](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6688618)) ([01257ea](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/01257ea))
+* **o-grid**: The grid component now supports remote pagination ([b855724](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b855724))
+* **o-form**: new `getFieldValue`, `getFieldValues`, `setFieldValue`,`setFieldValues`, `clearFieldValue`,`clearFieldValues`, `getFieldReference` and  `getFieldReferences` methods ([3453182](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3453182)) ([d03d482](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d03d482)) ([e69473b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e69473b))
+* **OFormDataComponent**: new `onValueChange` event being fired if the value changed (whether it was changed by the user or by code) ([0b24228](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0b24228))([07bc3d6](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/07bc3d6))([3ac842e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3ac842e))([e69473b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e69473b))([f7dd987](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f7dd987))   ([#142](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/142))
+* **o-list**: events `onClick` and `onDoubleClick` are triggered event when `detail-mode` attribute is set to *none* ([989f92b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/989f92b))
+
+### Bug Fixes
+* Fixing missing 'bundles', 'esm5' and 'esm2015' bundling files error.
+* **o-bar-menu** fixed error the menu on mobile screen collapses ([1fc1f63](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1fc1f63)).
+* **service.utils**: fixed error building parent keys filter with aliases ([059ddc3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/059ddc3)) closes ([#212](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/212))
+* **buttons**: Adding type="button" to all html *buttons* ([e3c4779](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e3c4779])) ([#210](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/210))
+* **o-table-insertable-row**: fixing bug with multiple insertable rows in same page ([862d8fc](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/862d8fc)) ([#211](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/211))
+
+### BREAKING CHANGES
+* **MenuItem**:
+  * attribute '*show-in-app-sidenav*' has been removed ([0c96585](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0c96585)).
+* **o-grid**: Attribute `page-size-options` has changed, now it receives an string with the page size options separated by ';' ([70dcd43](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/70dcd43)).
+
 ## 3.1.0 (2018-09-13)
 ### Features
 * **ontimize-ee.service**, **ontimize.service**: new response parsers methods (separately by each CRUD method) ([c8c9e6f](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c8c9e6f))

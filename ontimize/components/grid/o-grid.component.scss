@@ -1,28 +1,29 @@
-:host{
-  .o-grid-container{
+:host.o-grid {
+  .o-grid-container {
     background: #FFFFFF;
 
     .o-grid-paginator,
-    .o-grid-sort{
-      font-size: 0.8em;
-      margin-right:1em;
+    .o-grid-sort {
+      font-size: .8em;
+      margin-right: 1em;
     }
 
-    .o-grid-paginator{
-
+    .o-grid-paginator {
       display: flex;
 
-      .o-grid-select-page{
-        width:60px;
+      .o-grid-select-page {
+        width: 60px;
       }
-      .o-grid-page-size-label{
-        margin:0 4px 0 8px;
+
+      .o-grid-page-size-label {
+        margin: 0 4px 0 8px;
         align-self: center;
       }
     }
-    .o-grid-footer{
-      .o-grid-totals{
-        margin:0px 4px 0px 8px;
+
+    .o-grid-footer {
+      .o-grid-totals {
+        margin-right: 8px;
         font-size: 14px;
       }
     }

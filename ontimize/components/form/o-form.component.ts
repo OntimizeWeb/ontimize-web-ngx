@@ -5,7 +5,7 @@ import { ActivatedRoute, Router, UrlSegment } from '@angular/router';
 import 'rxjs/add/observable/combineLatest';
 import { Observable, Subscription } from 'rxjs';
 
-import { OFormValue } from './OFormValue';
+import { OFormValue, IFormValueOptions } from './OFormValue';
 import { OSharedModule } from '../../shared';
 import { InputConverter } from '../../decorators';
 import { IComponent } from '../o-component.class';
@@ -116,6 +116,7 @@ export interface OFormInitializationOptions {
 }
 
 @Component({
+  moduleId: module.id,
   selector: 'o-form',
   providers: [
     { provide: OntimizeService, useFactory: dataServiceFactory, deps: [Injector] }
@@ -245,6 +246,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   @ViewChild('innerForm') innerFormEl: ElementRef;
 
   ignoreFormCacheKeys: Array<any> = [];
+  protected activeDelete: boolean;
 
   constructor(
     protected router: Router,
@@ -419,7 +421,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     return subscription;
   }
 
-  getDataValue(attr: string) {
+  protected getDataValue(attr: string) {
     if (this.isInInsertMode()) {
       let urlParams = this.formNavigation.getFilterFromUrlParams();
       let val = this.formGroup.value[attr] || urlParams[attr];
@@ -461,7 +463,9 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   }
 
   canDeactivate(): Observable<boolean> | Promise<boolean> | boolean {
-    return this.showConfirmDiscardChanges();
+    const isDeleting = this.activeDelete;
+    this.activeDelete = false;
+    return isDeleting || this.showConfirmDiscardChanges();
   }
 
   showConfirmDiscardChanges(): Promise<boolean> {
@@ -754,7 +758,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
         });
         self.formCache.initializeCache(initialCache);
         (self.formGroup.valueChanges as EventEmitter<any>).emit(self.formCache.getInitialDataCache());
-        self.formNavigation.updateNavigation(self.formGroup.getRawValue());
+        self.formNavigation.updateNavigation(self.formCache.getInitialDataCache());
       }
     });
   }
@@ -1067,6 +1071,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     const self = this;
     const loader = self.load();
     let observable = new Observable(observer => {
+      this.activeDelete = true;
       this.dataService[this.deleteMethod](filter, this.entity).subscribe(resp => {
         loader.unsubscribe();
         if (resp.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) {
@@ -1321,6 +1326,102 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
       delete valueCopy[this.ignoreFormCacheKeys[i]];
     }
     return valueCopy;
+  }
+
+  /**
+   * Return the current value of the control in the form
+   * @param attr
+   */
+  getFieldValue(attr: string): any {
+    let value = null;
+    let comp = this._components[attr];
+    if (comp) {
+      value = comp.value;
+      if (value instanceof OFormValue) {
+        value = comp.value.value;
+      }
+    }
+    return value;
+  }
+
+  /**
+   * Return an object with the values of each attribute
+   * @param attrs
+   */
+  getFieldValues(attrs: string[]): any {
+    let self = this;
+    let arr = {};
+    attrs.forEach((key) => {
+      arr[key] = self.getFieldValue(key);
+    });
+    return arr;
+
+  }
+
+  /**
+   * Sets the value of the control in the form.
+   * @param attr attribute of control
+   * @param value value
+   */
+  setFieldValue(attr: string, value: any, options?: IFormValueOptions) {
+    let comp = this._components[attr];
+    if (comp) {
+      comp.setValue(value, options);
+    }
+  }
+
+  /**
+   * Sets the value of each control in the form.
+   * @param values
+   */
+  setFieldValues(values: any, options?: IFormValueOptions) {
+    for (let key in values) {
+      this.setFieldValue(key, values[key], options);
+    }
+  }
+
+  /**
+   * Clear the value of each control in the form
+   * @param attr
+   */
+  clearFieldValue(attr: string, options?: IFormValueOptions) {
+    let comp = this._components[attr];
+    if (comp) {
+      comp.clearValue();
+    }
+  }
+
+  /**
+   * Reset the value of each control in the form
+   * @param attrs
+   */
+  clearFieldValues(attrs: string[], options?: IFormValueOptions) {
+    let self = this;
+    attrs.forEach((key) => {
+      self.clearFieldValue(key);
+    });
+  }
+
+  /**
+   * Retrieves the reference of the control in the form.
+   * @param attr
+   */
+  getFieldReference(attr: string) {
+    let comp = {};
+    comp = this._components[attr];
+    return comp;
+  }
+  /**
+   * Retrieves the reference of each control in the form
+   * @param attrs
+   */
+  getFieldReferences(attrs: string[]) {
+    let arr = {};
+    let self = this;
+    attrs.forEach((key, index) => {
+      arr[key] = self.getFieldReference(key);
+    });
+    return arr;
   }
 
   protected isInsertModePath(path: string): boolean {

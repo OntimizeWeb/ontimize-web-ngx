@@ -68,6 +68,7 @@ export interface OListInitializationOptions {
 }
 
 @Component({
+  moduleId: module.id,
   selector: 'o-list',
   providers: [
     { provide: OntimizeService, useFactory: dataServiceFactory, deps: [Injector] }
@@ -148,6 +149,7 @@ export class OListComponent extends OServiceComponent implements AfterContentIni
   }
 
   ngAfterViewInit() {
+    super.afterViewInit();
     if (Util.isDefined(this.searchInputComponent)) {
       this.registerQuickFilter(this.searchInputComponent);
     }
@@ -222,16 +224,12 @@ export class OListComponent extends OServiceComponent implements AfterContentIni
   registerListItemDirective(item: OListItemDirective) {
     if (item) {
       var self = this;
-      if (this.detailMode === Codes.DETAIL_MODE_CLICK) {
-        item.onClick(directiveItem => {
-          self.onItemDetailClick(directiveItem);
-        });
-      }
-      if (Codes.isDoubleClickMode(this.detailMode)) {
-        item.onDoubleClick(directiveItem => {
-          self.onItemDetailDoubleClick(directiveItem);
-        });
-      }
+      item.onClick(directiveItem => {
+        self.onItemDetailClick(directiveItem);
+      });
+      item.onDoubleClick(directiveItem => {
+        self.onItemDetailDoubleClick(directiveItem);
+      });
     }
   }
 
@@ -260,21 +258,21 @@ export class OListComponent extends OServiceComponent implements AfterContentIni
   }
 
   public onItemDetailClick(item: OListItemDirective | OListItemComponent) {
+    let data = item.getItemData();
     if (this.oenabled && this.detailMode === Codes.DETAIL_MODE_CLICK) {
       this.saveDataNavigationInLocalStorage();
-      let data = item.getItemData();
       this.viewDetail(data);
-      ObservableWrapper.callEmit(this.onClick, data);
     }
+    ObservableWrapper.callEmit(this.onClick, data);
   }
 
   public onItemDetailDoubleClick(item: OListItemDirective | OListItemComponent) {
+    let data = item.getItemData();
     if (this.oenabled && Codes.isDoubleClickMode(this.detailMode)) {
       this.saveDataNavigationInLocalStorage();
-      let data = item.getItemData();
       this.viewDetail(data);
-      ObservableWrapper.callEmit(this.onDoubleClick, data);
     }
+    ObservableWrapper.callEmit(this.onDoubleClick, data);
   }
 
   protected saveDataNavigationInLocalStorage(): void {

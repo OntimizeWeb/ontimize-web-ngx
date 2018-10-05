@@ -7,6 +7,7 @@ import { OFormComponent } from '../o-form.component';
 import { OFormNavigationClass } from './o-form.navigation.class';
 
 @Component({
+  moduleId: module.id,
   selector: 'o-form-navigation',
   templateUrl: './o-form-navigation.component.html',
   styleUrls: ['./o-form-navigation.component.scss'],

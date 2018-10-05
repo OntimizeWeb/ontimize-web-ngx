@@ -26,6 +26,7 @@ export const DEFAULT_TABLE_COLUMN_AGGREGATE = [
 ];
 
 @Component({
+  moduleId: module.id,
   selector: 'o-table-column-aggregate',
   templateUrl: './o-table-column-aggregate.component.html',
   inputs: DEFAULT_TABLE_COLUMN_AGGREGATE

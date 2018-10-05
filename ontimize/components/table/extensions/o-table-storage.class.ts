@@ -1,3 +1,4 @@
+import { Codes } from '../../../utils';
 import { OColumn, OTableComponent } from '../o-table.component';
 
 export interface ITableFiltersStatus {
@@ -85,8 +86,13 @@ export class OTableStorage {
 
   protected getSortState() {
     let result = {};
-    if (this.table.sortColArray.length > 0 && this.table.sort.active !== undefined) {
-      result['sort-columns'] = this.table.sort.active + ':' + this.table.sort.direction;
+    let sortColumnsArray = this.table.sort.getSortColumns();
+    if (sortColumnsArray.length > 0) {
+      let sortColumns = [];
+      sortColumnsArray.forEach(sortData => {
+        sortColumns.push(sortData.id + Codes.COLUMNS_ALIAS_SEPARATOR + sortData.direction);
+      });
+      result['sort-columns'] = sortColumns.join(Codes.ARRAY_INPUT_SEPARATOR);
     }
     return result;
   }

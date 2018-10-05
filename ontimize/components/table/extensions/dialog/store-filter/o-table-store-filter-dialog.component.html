@@ -16,6 +16,6 @@
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
-  <button mat-button class="mat-primary" [mat-dialog-close]="false">{{ 'CANCEL' | oTranslate | uppercase }}</button>
-  <button mat-button class="mat-primary" [mat-dialog-close]="true" [disabled]="!formGroup.valid">{{ 'SAVE' | oTranslate | uppercase }}</button>
+  <button type="button" mat-button class="mat-primary" [mat-dialog-close]="false">{{ 'CANCEL' | oTranslate | uppercase }}</button>
+  <button type="button" mat-button class="mat-primary" [mat-dialog-close]="true" [disabled]="!formGroup.valid">{{ 'SAVE' | oTranslate | uppercase }}</button>
 </mat-dialog-actions>
