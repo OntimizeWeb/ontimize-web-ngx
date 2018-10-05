@@ -19,6 +19,8 @@
 * **MenuItem**:
   * attribute '*show-in-app-sidenav*' has been removed ([0c96585](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0c96585)).
 * **o-grid**: Attribute `page-size-options` has changed, now it receives an string with the page size options separated by ';' ([70dcd43](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/70dcd43)).
+* **o-form**: `getDataValue` method is now protected, so if you were using it you should change it to use the `getFieldValue` method.
+* **o-service-component.class**: `getRouteOfSelectedRow` has only one parameter now, if you are using it you should remove the second parameter.
 
 ## 3.1.0 (2018-09-13)
 ### Features
