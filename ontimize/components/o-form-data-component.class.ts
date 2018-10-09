@@ -8,6 +8,7 @@ import { OBaseComponent, IComponent } from './o-component.class';
 import { OFormComponent } from './form/o-form.component';
 import { OFormValue, IFormValueOptions } from './form/OFormValue';
 import { OValidatorComponent } from './input/validation/o-validator.component';
+import { AuthGuardService } from '../services';
 
 export interface IMultipleSelection extends IComponent {
   getSelectedItems(): Array<any>;
@@ -84,8 +85,8 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   /* Outputs */
   onChange: EventEmitter<Object> = new EventEmitter<Object>();
   onValueChange: EventEmitter<OValueChangeEvent
-> = new EventEmitter<OValueChangeEvent
->();
+  > = new EventEmitter<OValueChangeEvent
+    >();
 
   @HostBinding('style.width')
   get hostWidth() {
@@ -112,6 +113,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   @ContentChildren(OValidatorComponent)
   protected validatorChildren: QueryList<OValidatorComponent>;
 
+  protected authGuardService: AuthGuardService;
   constructor(
     form: OFormComponent,
     elRef: ElementRef,
@@ -120,6 +122,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     super(injector);
     this.form = form;
     this.elRef = elRef;
+    this.authGuardService = this.injector.get(AuthGuardService);
   }
 
   ngOnInit() {
@@ -177,13 +180,46 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
 
   initialize() {
     super.initialize();
+    let self = this;
     if (this.form) {
       this.registerFormListeners();
       this.isReadOnly = !(this.form.isInUpdateMode() || this.form.isInInsertMode() || this.form.isEditableDetail());
     } else {
       this.isReadOnly = this._disabled;
     }
+
+    //if oattr, it can have permissions
+    if (this.form.oattr) {
+      this.authGuardService.getPermissions(this.form.oattr, this.oattr).then(function (permissions) {
+        if (Util.isDefined(permissions)) {
+          if (self.oenabled && permissions.enabled === false) {
+            let formControl = self.getControl();
+            formControl.disable();
+            self._disabled = true;
+            // const mutationObserver = new MutationObserver(function(mutations) {
+            //   mutations.forEach(function(mutation) {
+            //     console.log(mutation);
+            //   });
+            // });
+            // mutationObserver.observe(self.elementRef.nativeElement , {
+            //   attributes: true});
+          }
+
+
+          if (permissions.visible === false) {
+            self.elRef.nativeElement.remove();
+            self.unregisterFormListeners();
+            self.destroy();
+          }
+        }
+
+      });
+
+    }
+
   }
+
+
 
   protected setSuffixClass(count: number) {
     const iconFieldEl = this.elRef.nativeElement.getElementsByClassName('icon-field');
@@ -269,7 +305,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
       this.emitOnValueChange(options.changeType, newValue, this.oldValue);
     } else {
       this.emitOnValueChange(OValueChangeEvent
-      .PROGRAMMATIC_CHANGE, newValue, this.oldValue);
+        .PROGRAMMATIC_CHANGE, newValue, this.oldValue);
     }
 
     this.oldValue = val;
@@ -285,7 +321,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   onClickClearValue(): void {
     this.clearValue({
       changeType: OValueChangeEvent
-    .USER_CHANGE
+        .USER_CHANGE
     });
   }
 
@@ -303,13 +339,13 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   onChangeEvent($event) {
     var oldValue = this.oldValue;
     this.emitOnValueChange(OValueChangeEvent
-    .USER_CHANGE, this.getValue(), oldValue);
+      .USER_CHANGE, this.getValue(), oldValue);
     this.oldValue = this.getValue();
   }
 
   protected emitOnValueChange(type, newValue, oldValue) {
     let event = new OValueChangeEvent
-  (type, newValue, oldValue, this);
+      (type, newValue, oldValue, this);
     this.onValueChange.emit(event);
   }
   get showClearButton(): boolean {

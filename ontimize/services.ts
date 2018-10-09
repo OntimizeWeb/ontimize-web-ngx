@@ -30,3 +30,5 @@ export * from './services/translate/o-translate.parser';
 
 export * from './services/parser/o-service-response.parser';
 export * from './services/icon-registry.service';
+
+export * from './services/profile.service';

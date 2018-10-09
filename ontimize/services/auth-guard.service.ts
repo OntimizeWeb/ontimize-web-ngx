@@ -6,6 +6,7 @@ import { OntimizeService, LoginService, OUserInfoService } from '../services';
 import { AppConfig, Config } from '../config/app-config';
 import { Util, Codes } from '../utils';
 import { dataServiceFactory } from './data-service.provider';
+import { ProfileService } from './profile.service';
 
 export interface IProfileService {
   isRestricted(route: string): Promise<boolean>;
@@ -30,6 +31,7 @@ export class AuthGuardService implements CanActivate, IProfileService {
   protected user: any;
   protected profile: any;
   protected profileObservable: Observable<any>;
+  protected profileService: ProfileService;
 
 
   constructor(protected injector: Injector) {
@@ -39,6 +41,7 @@ export class AuthGuardService implements CanActivate, IProfileService {
     this.router = this.injector.get(Router);
     this.loginService = this.injector.get(LoginService);
     this.oUserInfoService = this.injector.get(OUserInfoService);
+    this.profileService = this.injector.get(ProfileService);
 
     this.config = this.injector.get(AppConfig).getConfiguration();
 
@@ -124,6 +127,10 @@ export class AuthGuardService implements CanActivate, IProfileService {
     }
     if (isLoggedIn) {
       this.setUserInformation();
+      const self = this;
+      this.profileService.getPermissions().subscribe(x => {
+        self.profile = x;
+      });
     }
     return isLoggedIn;
   }
@@ -169,8 +176,9 @@ export class AuthGuardService implements CanActivate, IProfileService {
 
   public getPermissions(route: string, attr: string): Promise<any> {
     return new Promise((resolve: any, reject: any) => {
-      if (Util.isDefined(this.entity) && Util.isDefined(this.keyColumn) && Util.isDefined(this.valueColumn) && !Util.isDefined(this.profile)) {
-        this.profileObservable.subscribe(res => {
+      //if (Util.isDefined(this.entity) && Util.isDefined(this.keyColumn) && Util.isDefined(this.valueColumn) && !Util.isDefined(this.profile)) {
+      if (!Util.isDefined(this.profile)) {
+        this.profileService.getPermissions().subscribe(res => {
           resolve(this._getPermissions(route, attr));
         }, err => {
           reject(undefined);
@@ -181,12 +189,28 @@ export class AuthGuardService implements CanActivate, IProfileService {
     });
   }
 
-  protected _getPermissions(route: string, attr: string): any {
+  // protected _getPermissions(route: string, attr: string): any {
+  //   let permissions = undefined;
+  //   if (Util.isDefined(this.profile) && Util.isDefined(this.profile[AuthGuardService.PROFILE_COMPONENTS_PROPERTY]) &&
+  //     Util.isDefined(this.profile[AuthGuardService.PROFILE_COMPONENTS_PROPERTY][route]) &&
+  //     Util.isDefined(this.profile[AuthGuardService.PROFILE_COMPONENTS_PROPERTY][route][attr])) {
+  //     permissions = this.profile[AuthGuardService.PROFILE_COMPONENTS_PROPERTY][route][attr];
+  //   }
+  //   return permissions;
+  // }
+
+  protected _getPermissions(selector: string, attr: string): any {
     let permissions = undefined;
-    if (Util.isDefined(this.profile) && Util.isDefined(this.profile[AuthGuardService.PROFILE_COMPONENTS_PROPERTY]) &&
-      Util.isDefined(this.profile[AuthGuardService.PROFILE_COMPONENTS_PROPERTY][route]) &&
-      Util.isDefined(this.profile[AuthGuardService.PROFILE_COMPONENTS_PROPERTY][route][attr])) {
-      permissions = this.profile[AuthGuardService.PROFILE_COMPONENTS_PROPERTY][route][attr];
+    if (Util.isDefined(this.profile) && Util.isDefined(this.profile[AuthGuardService.PROFILE_COMPONENTS_PROPERTY])) {
+      let allComponents: any = this.profile[AuthGuardService.PROFILE_COMPONENTS_PROPERTY];
+
+      let componentsSelector = allComponents.find(function (component) {
+        return component.attr === selector;
+      });
+      if (componentsSelector) {
+        permissions = componentsSelector[AuthGuardService.PROFILE_COMPONENTS_PROPERTY]
+          .find(function (component) { return component.attr === attr; });
+      }
     }
     return permissions;
   }

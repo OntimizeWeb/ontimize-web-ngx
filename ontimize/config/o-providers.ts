@@ -25,7 +25,8 @@ import {
   AppMenuService,
   OUserInfoService,
   OModulesInfoService,
-  OntimizeServiceResponseParser
+  OntimizeServiceResponseParser,
+  ProfileService
 } from '../services';
 
 import { OFormLayoutManagerService } from '../services/o-form-layout-manager.service';
@@ -151,6 +152,10 @@ export function getOntimizeServiceResponseParser(injector: Injector) {
   return new OntimizeServiceResponseParser(injector);
 }
 
+export function getProfileServiceProvider(injector: Injector) {
+  return new ProfileService(injector);
+}
+
 export const ONTIMIZE_PROVIDERS: Provider[] = [
 
   { provide: Events, useValue: getEvents },
@@ -270,5 +275,10 @@ export const ONTIMIZE_PROVIDERS: Provider[] = [
   {
     provide: OContextMenuService,
     useClass: OContextMenuService
-  }
+  },
+  {
+    provide: ProfileService,
+    useFactory: getProfileServiceProvider,
+    deps: [Injector]
+  },
 ];

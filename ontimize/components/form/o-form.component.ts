@@ -94,7 +94,9 @@ export const DEFAULT_INPUTS_O_FORM = [
   'undoButton: undo-button',
 
   //show-header-navigation [string][yes|no|true|false]: Include navigations buttons in form-toolbar. Default: false;
-  'showHeaderNavigation: show-header-navigation'
+  'showHeaderNavigation: show-header-navigation',
+  //attr
+  'oattr:attr'
 ];
 
 export const DEFAULT_OUTPUTS_O_FORM = [
@@ -177,6 +179,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   layoutFill: boolean = true;
   protected _layoutDirection: string = OFormComponent.DEFAULT_LAYOUT_DIRECTION;
   protected _layoutAlign: string;
+  
   @InputConverter()
   protected editableDetail: boolean = true;
   protected keysSqlTypes: string;
@@ -185,6 +188,8 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
 
   @InputConverter()
   showHeaderNavigation: boolean = false;
+
+  public oattr: string = '';
   /* end of inputs variables */
 
   /*parsed inputs variables */
