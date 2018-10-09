@@ -17,6 +17,12 @@ export type OComponentPermissions = {
   enabled: boolean;
 };
 
+export type OComponentContainerPermissions = {
+  attr: string;
+  selector: string;
+  components: OComponentPermissions[];
+};
+
 @Injectable()
 export class ProfileService {
 
@@ -96,7 +102,7 @@ export class ProfileService {
     }
   }
 
-  queryPermissionsFromLocalFile(): Observable<any> {
+  protected queryPermissionsFromLocalFile(): Observable<any> {
     const self = this;
     const dataObservable: Observable<any> = new Observable(innerObserver => {
       self.httpClient.get('assets/profile.json').subscribe((resp: any) => {
@@ -110,7 +116,7 @@ export class ProfileService {
     return dataObservable.share();
   }
 
-  queryPermissions(): Observable<any> {
+  protected queryPermissions(): Observable<any> {
     const self = this;
     const loginService = this.injector.get(LoginService);
     const dataObservable: Observable<any> = new Observable(innerObserver => {
@@ -151,12 +157,12 @@ export class ProfileService {
 
   getPermissions(parentAttr: string, attr: string): OComponentPermissions {
     let permissions = undefined;
-    if (Util.isDefined(this.profile) && Util.isDefined(this.profile[ProfileService.PROFILE_COMPONENTS_PROPERTY])) {
-      const allComponents: any = this.profile[ProfileService.PROFILE_COMPONENTS_PROPERTY];
-      const parentData = allComponents.find((comp) => { return comp.attr === parentAttr; });
+    if (Util.isDefined(this.profile)) {
+      const allComponents: OComponentContainerPermissions[] = this.profile[ProfileService.PROFILE_COMPONENTS_PROPERTY] || [];
+      const parentData: OComponentContainerPermissions = allComponents.find(comp => comp.attr === parentAttr);
       if (Util.isDefined(parentData)) {
-        const parentComponents: any[] = parentData[ProfileService.PROFILE_COMPONENTS_PROPERTY];
-        permissions = parentComponents.find((comp) => { return comp.attr === attr; });
+        const parentComponents: OComponentPermissions[] = parentData[ProfileService.PROFILE_COMPONENTS_PROPERTY];
+        permissions = parentComponents.find(comp => comp.attr === attr);
       }
     }
     return permissions;
