@@ -114,6 +114,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   protected validatorChildren: QueryList<OValidatorComponent>;
 
   protected authGuardService: AuthGuardService;
+  private mutationObserver: MutationObserver;
   constructor(
     form: OFormComponent,
     elRef: ElementRef,
@@ -144,6 +145,45 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
       });
       if (this.validatorChildren.length > 0) {
         this.updateValidators();
+      }
+    }
+
+    //if oattr, it can have permissions
+    if (this.form.oattr) {
+
+      const permissions: OComponentPermissions = this.authGuardService.getPermissions(this.form.oattr, this.oattr);//.then((permissions) => {
+
+      if (Util.isDefined(permissions)) {
+        if (self.oenabled && permissions.enabled === false) {
+          let formControl = self.getControl();
+          formControl.disable();
+          self._disabled = true;
+
+          self.mutationObserver = new MutationObserver(function (mutations) {
+            mutations.forEach(function (mutation) {
+              if (mutation.type === 'attributes' && mutation.attributeName === 'disabled'
+                && mutation.target.attributes.getNamedItem('disabled')===null) {
+                var control = self.getControl();
+                control.disable();
+              }
+            });
+          });
+
+          self.mutationObserver.observe(self.elementRef.nativeElement, {
+            attributes: true,
+            subtree: true,
+            attributeFilter:['disabled']
+          });
+
+        }
+
+
+        if (permissions.visible === false) {
+          self.elRef.nativeElement.remove();
+          self.unregisterFormListeners();
+          self.destroy();
+        }
+
       }
     }
   }
@@ -180,40 +220,12 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
 
   initialize() {
     super.initialize();
-    let self = this;
     if (this.form) {
       this.registerFormListeners();
       this.isReadOnly = !(this.form.isInUpdateMode() || this.form.isInInsertMode() || this.form.isEditableDetail());
     } else {
       this.isReadOnly = this._disabled;
     }
-
-    //if oattr, it can have permissions
-    if (this.form.oattr) {
-      const permissions: OComponentPermissions = this.authGuardService.getPermissions(this.form.oattr, this.oattr);//.then((permissions) => {
-      if (Util.isDefined(permissions)) {
-        if (self.oenabled && permissions.enabled === false) {
-          let formControl = self.getControl();
-          formControl.disable();
-          self._disabled = true;
-          // const mutationObserver = new MutationObserver(function(mutations) {
-          //   mutations.forEach(function(mutation) {
-          //     console.log(mutation);
-          //   });
-          // });
-          // mutationObserver.observe(self.elementRef.nativeElement , {
-          //   attributes: true});
-        }
-
-
-        if (permissions.visible === false) {
-          self.elRef.nativeElement.remove();
-          self.unregisterFormListeners();
-          self.destroy();
-        }
-      }
-    }
-
   }
 
 
@@ -241,6 +253,9 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     }
     if (this.validatorsSubscription) {
       this.validatorsSubscription.unsubscribe();
+    }
+    if (this.mutationObserver) {
+      this.mutationObserver.disconnect();
     }
   }
 
