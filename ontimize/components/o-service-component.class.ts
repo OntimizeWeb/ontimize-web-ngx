@@ -151,16 +151,16 @@ export class OServiceComponent extends OServiceBaseComponent {
 
   initialize(): void {
     super.initialize();
-    this.authGuardService.getPermissions(this.router.url, this.oattr).then(permissions => {
-      if (Util.isDefined(permissions)) {
-        if (this.ovisible && permissions.visible === false) {
-          this.ovisible = false;
-        }
-        if (this.oenabled && permissions.enabled === false) {
-          this.oenabled = false;
-        }
-      }
-    });
+    // this.authGuardService.get Permissions(this.router.url, this.oattr).then(permissions => {
+    //   if (Util.isDefined(permissions)) {
+    //     if (this.ovisible && permissions.visible === false) {
+    //       this.ovisible = false;
+    //     }
+    //     if (this.oenabled && permissions.enabled === false) {
+    //       this.oenabled = false;
+    //     }
+    //   }
+    // });
 
     if (this.detailButtonInRow || this.editButtonInRow) {
       this.detailMode = Codes.DETAIL_MODE_NONE;
