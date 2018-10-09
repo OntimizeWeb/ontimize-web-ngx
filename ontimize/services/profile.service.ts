@@ -44,7 +44,6 @@ export class ProfileService {
 
   constructor(protected injector: Injector) {
     this.httpClient = this.injector.get(HttpClient);
-    // this.loginService = this.injector.get(LoginService);
     this.ontimizeService = this.injector.get(OntimizeService);
 
     this.config = this.injector.get(AppConfig).getConfiguration();
@@ -88,11 +87,14 @@ export class ProfileService {
     return new Promise((resolve: any, reject: any) => {
       self.getUserPermissions().subscribe(() => {
         resolve(true);
+      }, error => {
+        resolve(true);
       });
     });
   }
 
   getUserPermissions(): Observable<any> {
+    this.profile = {};
     if (Util.isDefined(this.entity) && Util.isDefined(this.keyColumn) && Util.isDefined(this.valueColumn)) {
       // if (!Util.isDefined(this.profile) || (this.user !== this.loginService.user)) {
       // }
