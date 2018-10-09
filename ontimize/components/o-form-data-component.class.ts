@@ -114,6 +114,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   protected validatorChildren: QueryList<OValidatorComponent>;
 
   protected authGuardService: AuthGuardService;
+  private mutationObserver: MutationObserver;
   constructor(
     form: OFormComponent,
     elRef: ElementRef,
@@ -196,13 +197,24 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
             let formControl = self.getControl();
             formControl.disable();
             self._disabled = true;
-            // const mutationObserver = new MutationObserver(function(mutations) {
-            //   mutations.forEach(function(mutation) {
-            //     console.log(mutation);
-            //   });
-            // });
-            // mutationObserver.observe(self.elementRef.nativeElement , {
-            //   attributes: true});
+            self.mutationObserver = new MutationObserver(function (mutations) {
+              mutations.forEach(function (mutation) {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'disabled'
+                  && !mutation.target.hasAttribute('disabled')) {
+                  
+                    console.log(mutation);
+                  var control = self.getControl();
+                  control.disable();
+                }
+
+              });
+            });
+
+            self.mutationObserver.observe(self.elementRef.nativeElement, {
+              attributes: true,
+              subtree: true
+            });
+
           }
 
 
@@ -244,6 +256,9 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     }
     if (this.validatorsSubscription) {
       this.validatorsSubscription.unsubscribe();
+    }
+    if (this.mutationObserver) {
+      this.mutationObserver.disconnect();
     }
   }
 
