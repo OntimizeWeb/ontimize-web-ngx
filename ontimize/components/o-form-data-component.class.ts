@@ -8,7 +8,7 @@ import { OBaseComponent, IComponent } from './o-component.class';
 import { OFormComponent } from './form/o-form.component';
 import { OFormValue, IFormValueOptions } from './form/OFormValue';
 import { OValidatorComponent } from './input/validation/o-validator.component';
-import { AuthGuardService } from '../services';
+import { AuthGuardService, OComponentPermissions } from '../services';
 
 export interface IMultipleSelection extends IComponent {
   getSelectedItems(): Array<any>;
@@ -190,31 +190,28 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
 
     //if oattr, it can have permissions
     if (this.form.oattr) {
-      this.authGuardService.getPermissions(this.form.oattr, this.oattr).then(function (permissions) {
-        if (Util.isDefined(permissions)) {
-          if (self.oenabled && permissions.enabled === false) {
-            let formControl = self.getControl();
-            formControl.disable();
-            self._disabled = true;
-            // const mutationObserver = new MutationObserver(function(mutations) {
-            //   mutations.forEach(function(mutation) {
-            //     console.log(mutation);
-            //   });
-            // });
-            // mutationObserver.observe(self.elementRef.nativeElement , {
-            //   attributes: true});
-          }
-
-
-          if (permissions.visible === false) {
-            self.elRef.nativeElement.remove();
-            self.unregisterFormListeners();
-            self.destroy();
-          }
+      const permissions: OComponentPermissions = this.authGuardService.getPermissions(this.form.oattr, this.oattr);//.then((permissions) => {
+      if (Util.isDefined(permissions)) {
+        if (self.oenabled && permissions.enabled === false) {
+          let formControl = self.getControl();
+          formControl.disable();
+          self._disabled = true;
+          // const mutationObserver = new MutationObserver(function(mutations) {
+          //   mutations.forEach(function(mutation) {
+          //     console.log(mutation);
+          //   });
+          // });
+          // mutationObserver.observe(self.elementRef.nativeElement , {
+          //   attributes: true});
         }
 
-      });
 
+        if (permissions.visible === false) {
+          self.elRef.nativeElement.remove();
+          self.unregisterFormListeners();
+          self.destroy();
+        }
+      }
     }
 
   }
