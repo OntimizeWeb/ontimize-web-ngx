@@ -159,24 +159,21 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
           formControl.disable();
           self._disabled = true;
 
-          // self.mutationObserver = new MutationObserver(function (mutations) {
-          //   mutations.forEach(function (mutation) {
-          //     if (mutation.type === 'attributes' && mutation.attributeName === 'disabled'
-          //       && !mutation.target.hasAttribute('disabled'
-          //     ) {
-          //       let elem = mutation.target.attributes;
-          //       console.log(mutation);
-          //       var control = self.getControl();
-          //       control.disable();
-          //     }
+          self.mutationObserver = new MutationObserver(function (mutations) {
+            mutations.forEach(function (mutation) {
+              if (mutation.type === 'attributes' && mutation.attributeName === 'disabled'
+                && mutation.target.attributes.getNamedItem('disabled')===null) {
+                var control = self.getControl();
+                control.disable();
+              }
+            });
+          });
 
-          //   });
-          // });
-
-          // self.mutationObserver.observe(self.elementRef.nativeElement, {
-          //   attributes: true,
-          //   subtree: true
-          // });
+          self.mutationObserver.observe(self.elementRef.nativeElement, {
+            attributes: true,
+            subtree: true,
+            attributeFilter:['disabled']
+          });
 
         }
 
