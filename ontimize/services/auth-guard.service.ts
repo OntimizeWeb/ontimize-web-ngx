@@ -1,6 +1,5 @@
 import { Injector, Injectable } from '@angular/core';
 import { CanActivate, Router, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
-import { Observable } from 'rxjs/Observable';
 import { LoginService, OUserInfoService } from '../services';
 import { Codes } from '../utils';
 import { ProfileService, IProfileService, OComponentPermissions } from './profile.service';
@@ -11,7 +10,6 @@ export class AuthGuardService implements CanActivate, IProfileService {
   protected router: Router;
   protected loginService: LoginService;
   protected oUserInfoService: OUserInfoService;
-  protected profileObservable: Observable<any>;
   protected profileService: ProfileService;
 
   constructor(protected injector: Injector) {
@@ -23,6 +21,7 @@ export class AuthGuardService implements CanActivate, IProfileService {
 
   canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean> | boolean {
     let isLoggedIn = this.loginService.isLoggedIn();
+    let result: Promise<boolean> | boolean = isLoggedIn;
     if (!isLoggedIn) {
       this.profileService.restart();
       this.router.navigate([Codes.LOGIN_ROUTE]);
@@ -44,10 +43,9 @@ export class AuthGuardService implements CanActivate, IProfileService {
     // }
     if (isLoggedIn) {
       this.setUserInformation();
-    }
-    let result: Promise<boolean> | boolean = isLoggedIn;
-    if (isLoggedIn && !this.profileService.hasPermissions()) {
-      result = this.profileService.getUserPermissionsAsPromise();
+      if (!this.profileService.hasPermissions()) {
+        result = this.profileService.getUserPermissionsAsPromise();
+      }
     }
     return result;
   }
