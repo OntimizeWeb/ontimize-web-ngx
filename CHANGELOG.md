@@ -1,4 +1,7 @@
 ## 3.1.2
+### Features
+* **OFormDataComponent**: allowing to use permissions ([3291e57](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3291e57)) ([ca1f933](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ca1f933))
+
 ### BREAKING CHANGES
 * **o-form**: `getDataValue` method is now public again.
 
