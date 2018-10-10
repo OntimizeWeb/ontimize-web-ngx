@@ -171,27 +171,30 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
 
   addActivateChildGuard() {
     let routeConfig = this.getParentActRouteRoute();
-
-    let canActivateChildArray = (routeConfig.canActivateChild || []);
-    let previouslyAdded = false;
-    for (let i = 0, len = canActivateChildArray.length; i < len; i++) {
-      previouslyAdded = (canActivateChildArray[i].name === OFormLayoutManagerComponent.guardClassName);
-      if (previouslyAdded) {
-        break;
+    if (Util.isDefined(routeConfig)) {
+      let canActivateChildArray = (routeConfig.canActivateChild || []);
+      let previouslyAdded = false;
+      for (let i = 0, len = canActivateChildArray.length; i < len; i++) {
+        previouslyAdded = (canActivateChildArray[i].name === OFormLayoutManagerComponent.guardClassName);
+        if (previouslyAdded) {
+          break;
+        }
       }
-    }
-    if (!previouslyAdded) {
-      canActivateChildArray.push(CanActivateFormLayoutChildGuard);
-      routeConfig.canActivateChild = canActivateChildArray;
+      if (!previouslyAdded) {
+        canActivateChildArray.push(CanActivateFormLayoutChildGuard);
+        routeConfig.canActivateChild = canActivateChildArray;
+      }
     }
   }
 
   destroyAactivateChildGuard() {
     let routeConfig = this.getParentActRouteRoute();
-    for (let i = (routeConfig.canActivateChild || []).length - 1; i >= 0; i--) {
-      if (routeConfig.canActivateChild[i].name === OFormLayoutManagerComponent.guardClassName) {
-        routeConfig.canActivateChild.splice(i, 1);
-        break;
+    if (Util.isDefined(routeConfig)) {
+      for (let i = (routeConfig.canActivateChild || []).length - 1; i >= 0; i--) {
+        if (routeConfig.canActivateChild[i].name === OFormLayoutManagerComponent.guardClassName) {
+          routeConfig.canActivateChild.splice(i, 1);
+          break;
+        }
       }
     }
   }
@@ -227,6 +230,7 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
       this.oTabGroup.onCloseTab(id);
     } else if (this.isDialogMode()) {
       this.dialogRef.close();
+      this.reloadMainComponents();
     }
   }
 
@@ -354,6 +358,15 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
 
   setAsActiveFormLayoutManager() {
     this.oFormLayoutManagerService.activeFormLayoutManager = this;
+  }
+
+  reloadMainComponents() {
+    this.tableComponents.forEach((tableComp: OTableComponent) => {
+      tableComp.reloadData();
+    });
+    this.listComponents.forEach((listComp: OListComponent) => {
+      listComp.reloadData();
+    });
   }
 }
 
