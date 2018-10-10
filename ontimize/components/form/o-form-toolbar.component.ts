@@ -76,7 +76,7 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
   @InputConverter()
   showHeaderNavigation: boolean = true;
 
-  constructor(@Inject(forwardRef(() => OFormComponent)) private _form: OFormComponent,
+  constructor( @Inject(forwardRef(() => OFormComponent)) private _form: OFormComponent,
     public element: ElementRef,
     protected injector: Injector) {
     _form.registerToolbar(this);
@@ -197,7 +197,7 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
       this.onCloseDetail();
     } else {
       this.onReload();
-      this.setInitialMode();
+      this._form.setInitialMode();
     }
   }
 
