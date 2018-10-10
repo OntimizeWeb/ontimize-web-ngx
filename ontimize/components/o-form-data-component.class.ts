@@ -160,21 +160,19 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   }
 
   hasEnabledPermission(): boolean {
-    return this.permissions ? (this.permissions.enabled && this.permissions.visible) : true;
+    return this.permissions ? this.permissions.enabled : true;
+  }
+
+  hasVisiblePermission(): boolean {
+    return this.permissions ? this.permissions.visible : true;
   }
 
   getFormGroup(): FormGroup {
     let formGroup = this.form.formGroup;
 
-    if (this.hasEnabledPermission()) {
+    if (!this.hasEnabledPermission() || !this.hasVisiblePermission()) {
       let group = {};
-      const disabled = this.oenabled || false;
-      const cfg = {
-        value: this.getValue(),
-        disabled: disabled
-      };
-      group[this.oattr] = new FormControl(cfg);
-
+      group[this.oattr] = this.getFormControl();
       formGroup = new FormGroup(group);
     }
 
@@ -444,11 +442,13 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   }
 
   set disabled(value: boolean) {
-    this._disabled = value;
-    if (this._fControl && value) {
-      this._fControl.disable();
-    } else if (this._fControl) {
-      this._fControl.enable();
+    if (this.hasVisiblePermission()) {
+      this._disabled = value;
+      if (this._fControl && value) {
+        this._fControl.disable();
+      } else if (this._fControl) {
+        this._fControl.enable();
+      }
     }
   }
 
