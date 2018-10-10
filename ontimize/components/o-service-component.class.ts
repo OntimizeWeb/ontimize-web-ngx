@@ -178,12 +178,10 @@ export class OServiceComponent extends OServiceBaseComponent {
       this.elRef.nativeElement.removeAttribute('title');
     }
 
-    if (this.formLayoutManager) {
-      if (this.formLayoutManager.isTabMode()) {
-        this.onMainTabSelectedSubscription = this.formLayoutManager.onMainTabSelected.subscribe(() => {
-          this.reloadData();
-        });
-      }
+    if (this.formLayoutManager && this.formLayoutManager.isTabMode()) {
+      this.onMainTabSelectedSubscription = this.formLayoutManager.onMainTabSelected.subscribe(() => {
+        this.reloadData();
+      });
     }
   }
 
@@ -239,6 +237,10 @@ export class OServiceComponent extends OServiceBaseComponent {
   }
 
   insertDetail() {
+    if (this.oFormLayoutDialog) {
+      console.warn('Navigation is not available yet in a form layout manager with mode="dialog"');
+      return;
+    }
     let route = this.getInsertRoute();
     this.addFormLayoutManagerRoute(route);
     if (route.length > 0) {
@@ -249,6 +251,10 @@ export class OServiceComponent extends OServiceBaseComponent {
   }
 
   viewDetail(item: any): void {
+    if (this.oFormLayoutDialog) {
+      console.warn('Navigation is not available yet in a form layout manager with mode="dialog"');
+      return;
+    }
     let route = this.getItemModeRoute(item, 'detailFormRoute');
     this.addFormLayoutManagerRoute(route);
     if (route.length > 0) {
@@ -259,6 +265,10 @@ export class OServiceComponent extends OServiceBaseComponent {
   }
 
   editDetail(item: any) {
+    if (this.oFormLayoutDialog) {
+      console.warn('Navigation is not available yet in a form layout manager with mode="dialog"');
+      return;
+    }
     let route = this.getItemModeRoute(item, 'editFormRoute');
     this.addFormLayoutManagerRoute(route);
     if (route.length > 0) {
