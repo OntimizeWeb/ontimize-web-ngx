@@ -84,9 +84,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
 
   /* Outputs */
   onChange: EventEmitter<Object> = new EventEmitter<Object>();
-  onValueChange: EventEmitter<OValueChangeEvent
-  > = new EventEmitter<OValueChangeEvent
-    >();
+  onValueChange: EventEmitter<OValueChangeEvent> = new EventEmitter<OValueChangeEvent>();
 
   @HostBinding('style.width')
   get hostWidth() {
@@ -166,14 +164,21 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   }
 
   getFormGroup(): FormGroup {
-    let group = {};
-    const disabled = this.oenabled || false;
-    const cfg = {
-      value: this.getValue(),
-      disabled: disabled
-    };
-    group[this.oattr] = new FormControl(cfg);
-    return this.form && this.hasEnabledPermission() ? this.form.formGroup : new FormGroup(group);
+    let formGroup = this.form.formGroup;
+
+    if (this.hasEnabledPermission()) {
+      let group = {};
+      const disabled = this.oenabled || false;
+      const cfg = {
+        value: this.getValue(),
+        disabled: disabled
+      };
+      group[this.oattr] = new FormControl(cfg);
+
+      formGroup = new FormGroup(group);
+    }
+
+    return this.form ? formGroup : undefined;
   }
 
   getFormControl(): FormControl {
