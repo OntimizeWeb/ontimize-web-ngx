@@ -114,7 +114,9 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   protected validatorChildren: QueryList<OValidatorComponent>;
 
   protected authGuardService: AuthGuardService;
-  private mutationObserver: MutationObserver;
+  protected mutationObserver: MutationObserver;
+  protected permissions: OComponentPermissions;
+
   constructor(
     form: OFormComponent,
     elRef: ElementRef,
@@ -147,45 +149,6 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
         this.updateValidators();
       }
     }
-
-    //if oattr, it can have permissions
-    if (this.form.oattr) {
-
-      const permissions: OComponentPermissions = this.authGuardService.getPermissions(this.form.oattr, this.oattr);//.then((permissions) => {
-
-      if (Util.isDefined(permissions)) {
-        if (self.oenabled && permissions.enabled === false) {
-          let formControl = self.getControl();
-          formControl.disable();
-          self._disabled = true;
-
-          self.mutationObserver = new MutationObserver(function (mutations) {
-            mutations.forEach(function (mutation) {
-              if (mutation.type === 'attributes' && mutation.attributeName === 'disabled'
-                && mutation.target.attributes.getNamedItem('disabled')===null) {
-                var control = self.getControl();
-                control.disable();
-              }
-            });
-          });
-
-          self.mutationObserver.observe(self.elementRef.nativeElement, {
-            attributes: true,
-            subtree: true,
-            attributeFilter:['disabled']
-          });
-
-        }
-
-
-        if (permissions.visible === false) {
-          self.elRef.nativeElement.remove();
-          self.unregisterFormListeners();
-          self.destroy();
-        }
-
-      }
-    }
   }
 
   ngOnDestroy() {
@@ -198,8 +161,19 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     }
   }
 
+  hasEnabledPermission(): boolean {
+    return this.permissions ? (this.permissions.enabled && this.permissions.visible) : true;
+  }
+
   getFormGroup(): FormGroup {
-    return this.form ? this.form.formGroup : undefined;
+    let group = {};
+    const disabled = this.oenabled || false;
+    const cfg = {
+      value: this.getValue(),
+      disabled: disabled
+    };
+    group[this.oattr] = new FormControl(cfg);
+    return this.form && this.hasEnabledPermission() ? this.form.formGroup : new FormGroup(group);
   }
 
   getFormControl(): FormControl {
@@ -220,7 +194,34 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
 
   initialize() {
     super.initialize();
-    if (this.form) {
+
+    //if oattr in form, it can have permissions
+    if (this.form.oattr) {
+      const permissions: OComponentPermissions = this.authGuardService.getPermissions(this.form.oattr, this.oattr);
+      this.permissions = permissions;
+      if (Util.isDefined(permissions)) {
+        /*disable input per permissions*/
+        if (this.oenabled && permissions.enabled === false) {
+          this._disabled = true;
+          let formControl = this.getControl();
+          formControl.disable();
+          this.disabledChangesInDom();
+
+          if (this.form) {
+            this.form.registerFormComponent(this);
+          }
+        }
+
+        /*hide input per permissions*/
+        if (permissions.visible === false) {
+          this.elRef.nativeElement.remove();
+          this.destroy();
+        }
+      } else {
+        this.registerFormListeners();
+        this.isReadOnly = !(this.form.isInUpdateMode() || this.form.isInInsertMode() || this.form.isEditableDetail());
+      }
+    } else if (this.form) {
       this.registerFormListeners();
       this.isReadOnly = !(this.form.isInUpdateMode() || this.form.isInInsertMode() || this.form.isEditableDetail());
     } else {
@@ -228,6 +229,27 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     }
   }
 
+  /**
+   * Do not allow the disabled attribute to change by code or by inspector
+   * */
+  private disabledChangesInDom() {
+    const self = this;
+    this.mutationObserver = new MutationObserver(function (mutations) {
+      mutations.forEach(function (mutation) {
+        if (mutation.type === 'attributes' && mutation.attributeName === 'disabled'
+          && mutation.target.attributes.getNamedItem('disabled') === null) {
+          var control = self.getControl();
+          control.disable();
+        }
+      });
+    });
+
+    this.mutationObserver.observe(this.elementRef.nativeElement, {
+      attributes: true,
+      subtree: true,
+      attributeFilter: ['disabled']
+    });
+  }
 
 
   protected setSuffixClass(count: number) {
