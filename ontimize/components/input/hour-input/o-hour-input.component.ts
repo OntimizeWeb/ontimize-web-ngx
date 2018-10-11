@@ -184,7 +184,8 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
   }
 
   onTimeEvent(event) {
-    this.setValue(event, { changeType: OValueChangeEvent.USER_CHANGE });
+    /** emitModelToViewChange: false  because onChange event is trigger in ngModelChange */
+    this.setValue(event, { changeType: OValueChangeEvent.USER_CHANGE, emitModelToViewChange: false });
   }
 }
 @NgModule({

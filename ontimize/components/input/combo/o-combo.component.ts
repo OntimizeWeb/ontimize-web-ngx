@@ -182,8 +182,7 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
 
   onSelectionChange(event: MatSelectChange): void {
     var newValue = event.value;
-    this.setValue(newValue, { changeType: OValueChangeEvent.USER_CHANGE });
-    this.innerOnChange(event.value);
+    this.setValue(newValue, { changeType: OValueChangeEvent.USER_CHANGE, emitModelToViewChange:false });
   }
 
   innerOnChange(event: any) {

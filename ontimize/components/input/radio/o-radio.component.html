@@ -4,8 +4,8 @@
   <!-- https://github.com/angular/material2/issues/7891 -->
   <mat-form-field [class.read-only]="isReadOnly" [class.custom-width]="hasCustomWidth" floatPlaceholder="always" class="mat-form-field--no-underline"
     fxFill>
-    <input matInput [id]="getAttribute()" [formControlName]="getAttribute()" [ngModel]="getValue()" [placeholder]="placeHolder"
-      [required]="isRequired" style="display: none" />
+    <input matInput [id]="getAttribute()" [formControlName]="getAttribute()" [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)"
+      [placeholder]="placeHolder" [required]="isRequired" style="display: none" />
     <mat-radio-group [id]="getAttribute()" [formControlName]="getAttribute()" [name]="getAttribute()" [value]="getValue()"
       [required]="isRequired" [labelPosition]="labelPosition" (change)="onMatRadioGroupChange($event)" [fxLayout]="layout"
       fxLayoutGap="8px">

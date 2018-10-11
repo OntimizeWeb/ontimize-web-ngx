@@ -73,8 +73,7 @@ export class ORadioComponent extends OFormServiceComponent implements AfterViewI
 
   onMatRadioGroupChange(e: MatRadioChange): void {
     var newValue = e.value;
-    this.setValue(newValue, { changeType: OValueChangeEvent.USER_CHANGE });
-    this.innerOnChange(e.value);
+    this.setValue(newValue, { changeType: OValueChangeEvent.USER_CHANGE, emitModelToViewChange: false });
   }
 
   getOptionDescriptionValue(item: any = {}) {
