@@ -10,10 +10,9 @@ import { Codes, Util } from '../../utils';
 
 @Injectable()
 export class OntimizeEEPermissionsService implements IPermissionsService {
-  public static DEFAULT_PERMISSIONS_PATH = 'loadPermissions';
+  public static DEFAULT_PERMISSIONS_PATH = '/loadPermissions';
   public static PERMISSIONS_KEY = 'permission';
 
-  public service: string = '';
   public path: string = '';
 
   protected httpClient: HttpClient;
@@ -29,9 +28,11 @@ export class OntimizeEEPermissionsService implements IPermissionsService {
     this._appConfig = this._config.getConfiguration();
   }
 
-  getDefaultServiceConfiguration(serviceName?: string): any {
+  getDefaultServiceConfiguration(permissionsConfig: OntimizeEEPermissionsConfig): any {
+    const serviceName: string = permissionsConfig ? permissionsConfig.service : undefined;
+
     let loginService = this.injector.get(LoginService);
-    let configuration = this._config.getPermissionsConfiguration();
+    let configuration = this._config.getServiceConfiguration();
 
     let servConfig = {};
     if (serviceName && configuration.hasOwnProperty(serviceName)) {
@@ -42,19 +43,15 @@ export class OntimizeEEPermissionsService implements IPermissionsService {
   }
 
   configureService(permissionsConfig: OntimizeEEPermissionsConfig): void {
-    const config = this.getDefaultServiceConfiguration(permissionsConfig.service);
+    const config = this.getDefaultServiceConfiguration(permissionsConfig);
     this._urlBase = config.urlBase ? config.urlBase : this._appConfig['apiEndpoint'];
     this._sessionid = config.session ? config.session.id : -1;
     this._user = config.session ? config.session.user : '';
-    this.path = config.path;
-
-    if (permissionsConfig.service !== undefined) {
-      this.service = config.service;
-    }
+    this.path = config.path ? config.path : OntimizeEEPermissionsService.DEFAULT_PERMISSIONS_PATH;
   }
 
   loadPermissions(): Observable<any> {
-    const url = this._urlBase + (this.path || OntimizeEEPermissionsService.DEFAULT_PERMISSIONS_PATH);
+    const url = this._urlBase + this.path;
     const options = {
       headers: this.buildHeaders()
     };

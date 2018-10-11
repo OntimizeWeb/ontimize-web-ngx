@@ -87,10 +87,6 @@ export class AppConfig {
     return this._config['servicesConfiguration'] || {};
   }
 
-  public getPermissionsConfiguration(): any {
-    return this._config['permissionsConfiguration'] || {};
-  }
-
   public getMenuConfiguration(): MenuRootItem[] {
     return this._config['appMenuConfiguration'] || [];
   }

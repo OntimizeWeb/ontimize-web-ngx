@@ -28,14 +28,9 @@ export class OntimizePermissionsService implements IPermissionsService {
     this._appConfig = this._config.getConfiguration();
   }
 
-  getDefaultServiceConfiguration(serviceName?: string): any {
+  getDefaultServiceConfiguration(): any {
     let loginService = this.injector.get(LoginService);
-    let configuration = this._config.getPermissionsConfiguration();
-
     let servConfig = {};
-    if (serviceName && configuration.hasOwnProperty(serviceName)) {
-      servConfig = configuration[serviceName];
-    }
     servConfig[Codes.SESSION_KEY] = loginService.getSessionInfo();
     return servConfig;
   }
@@ -46,14 +41,16 @@ export class OntimizePermissionsService implements IPermissionsService {
     this._sessionid = config.session ? config.session.id : -1;
     this._user = config.session ? config.session.user : '';
 
-    if (permissionsConfig.entity !== undefined) {
-      this.entity = config.entity;
-    }
-    if (permissionsConfig.keyColumn !== undefined) {
-      this.keyColumn = config.keyColumn;
-    }
-    if (permissionsConfig.valueColumn !== undefined) {
-      this.valueColumn = config.valueColumn;
+    if (Util.isDefined(permissionsConfig)) {
+      if (permissionsConfig.entity !== undefined) {
+        this.entity = permissionsConfig.entity;
+      }
+      if (permissionsConfig.keyColumn !== undefined) {
+        this.keyColumn = permissionsConfig.keyColumn;
+      }
+      if (permissionsConfig.valueColumn !== undefined) {
+        this.valueColumn = permissionsConfig.valueColumn;
+      }
     }
   }
 
