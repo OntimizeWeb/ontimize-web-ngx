@@ -1,9 +1,18 @@
 ## 3.1.2
 ### Features
-* **OFormDataComponent**: allowing to use permissions ([3291e57](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3291e57)) ([ca1f933](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ca1f933)) ([17105dc](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/17105dc))
+* **OFormDataComponent**: allowing to use permissions ([3291e57](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3291e57)) ([ca1f933](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ca1f933)) ([17105dc](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/17105dc)) ([5228ccc](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5228ccc)) ([7e46523](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7e46523)) ([c0eba19](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c0eba19))
+* **Config**:
+  * adding new configurable properties: '*permissionsConfiguration*' and '*permissionsServiceType*' used for permissions configuration ([9ecd082](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9ecd082))
+  * new interface `IPermissionsService` that must be implemented by the service indicated in the '*permissionsServiceType*' property ([9ecd082](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9ecd082))
+* **ontimize-ee-permissions.service**, **ontimize-permissions.service**: new services for loading application permissions ([9ecd082](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9ecd082))
+
 
 ### BREAKING CHANGES
 * **o-form**: `getDataValue` method is now public again.
+* **Config**: removing old '*authGuard*' configurable property.
+* **AuthGuardServiceFactory**: removing factory.
+* **AuthGuardService**: `getPermissions` and `isRestricted` no longer exists in this service. Using `PermissionsService` now.
+
 
 ## 3.1.1 (2018-10-05)
 ### Features
@@ -12,7 +21,7 @@
 * **o-table**: new `multiple-sort` input ([6688618](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6688618)) ([01257ea](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/01257ea))
 * **o-grid**: The grid component now supports remote pagination ([b855724](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b855724))
 * **o-form**: new `getFieldValue`, `getFieldValues`, `setFieldValue`,`setFieldValues`, `clearFieldValue`,`clearFieldValues`, `getFieldReference` and  `getFieldReferences` methods ([3453182](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3453182)) ([d03d482](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d03d482)) ([e69473b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e69473b)) ([5228ccc](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5228ccc)
-* **OFormDataComponent**: new `onValueChange` event being fired if the value changed (whether it was changed by the user or by code) ([0b24228](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0b24228))([07bc3d6](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/07bc3d6))([3ac842e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3ac842e))([e69473b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e69473b))([f7dd987](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f7dd987))   ([#142](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/142)) 
+* **OFormDataComponent**: new `onValueChange` event being fired if the value changed (whether it was changed by the user or by code) ([0b24228](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0b24228))([07bc3d6](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/07bc3d6))([3ac842e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3ac842e))([e69473b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e69473b))([f7dd987](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f7dd987))   ([#142](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/142))
 * **o-list**: events `onClick` and `onDoubleClick` are triggered event when `detail-mode` attribute is set to *none* ([989f92b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/989f92b))
 
 ### Bug Fixes

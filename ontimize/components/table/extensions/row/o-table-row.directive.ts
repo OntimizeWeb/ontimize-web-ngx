@@ -1,22 +1,11 @@
-import { Component, ChangeDetectionStrategy, ViewEncapsulation, AfterViewInit, forwardRef, Inject, ElementRef, OnDestroy, Renderer } from '@angular/core';
-import { MatRow } from '@angular/material';
-import { CDK_ROW_TEMPLATE } from '@angular/cdk/table';
+import { AfterViewInit, forwardRef, Inject, ElementRef, OnDestroy, Renderer, Directive } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 import { OTableComponent } from '../../o-table.component';
 
-@Component({
-  moduleId: module.id,
-  selector: 'o-table-row',
-  template: CDK_ROW_TEMPLATE,
-  host: {
-    'class': 'mat-row',
-    'role': 'row',
-  },
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
-  exportAs: 'oTableRow'
+@Directive({
+  selector: '[oTableRow]'
 })
-export class OTableRow extends MatRow implements AfterViewInit, OnDestroy {
+export class OTableRowDirective implements AfterViewInit, OnDestroy {
   protected resizeSubscription: Subscription;
 
   constructor(
@@ -24,7 +13,6 @@ export class OTableRow extends MatRow implements AfterViewInit, OnDestroy {
     protected elementRef: ElementRef,
     protected renderer: Renderer
   ) {
-    super();
   }
 
   ngAfterViewInit() {

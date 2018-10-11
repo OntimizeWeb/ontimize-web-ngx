@@ -2,7 +2,7 @@ import { Injectable, Injector, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { Codes, IAuthService, ObservableWrapper, ServiceUtils } from '../utils';
-import { OntimizeService, DialogService, ProfileService } from '../services';
+import { OntimizeService, DialogService, PermissionsService } from '../services';
 import { AppConfig, Config } from '../config/app-config';
 
 export interface SessionInfo {
@@ -28,7 +28,6 @@ export class LoginService implements ILoginService {
   private router: Router;
   private ontService: OntimizeService;
   private dialogService: DialogService;
-  protected profileService: ProfileService;
 
   constructor(protected injector: Injector) {
     this._config = this.injector.get(AppConfig).getConfiguration();
@@ -39,7 +38,6 @@ export class LoginService implements ILoginService {
       this._user = sessionInfo.user;
     }
     this.dialogService = injector.get(DialogService);
-    this.profileService = this.injector.get(ProfileService);
   }
 
   public get user(): string {
@@ -77,7 +75,8 @@ export class LoginService implements ILoginService {
       self.retrieveAuthService().then((service) => {
         service.startsession(user, password).subscribe(resp => {
           self.onLoginSuccess(resp);
-          self.profileService.getUserPermissionsAsPromise().then(() => {
+          const permissionsService = self.injector.get(PermissionsService);
+          permissionsService.getUserPermissionsAsPromise().then(() => {
             innerObserver.next();
             innerObserver.complete();
           });

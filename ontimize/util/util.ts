@@ -15,6 +15,10 @@ export interface IDataService {
   'delete'(kv: Object, entity?: string, sqltypes?: Object): Observable<any>;
 }
 
+export interface IPermissionsService {
+  loadPermissions();
+}
+
 export interface IAuthService {
   startsession(user: string, password: string): Observable<any>;
   endsession(user: string, sessionId: number): Observable<any>;
@@ -125,6 +129,18 @@ export class Util {
     }
     return ((arg as IDataService).getDefaultServiceConfiguration !== undefined &&
       (arg as IDataService).configureService !== undefined);
+  }
+
+  /**
+ * Checks wether specified service as argument implements 'IDataService' interface
+ * @param arg The service instance for checking.
+ * @returns boolean
+ */
+  static isPermissionsService(arg: any): arg is IPermissionsService {
+    if (arg === undefined || arg === null) {
+      return false;
+    }
+    return ((arg as IPermissionsService).loadPermissions !== undefined);
   }
 
   /**

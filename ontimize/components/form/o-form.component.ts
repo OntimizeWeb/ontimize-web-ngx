@@ -461,10 +461,11 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   }
 
   clearData() {
-    let filter = this.formNavigation.getFilterFromUrlParams();
-    setTimeout(() => {
-      this._setData(filter);
-    }, 0);
+    const filter = this.formNavigation.getFilterFromUrlParams();
+    this.formGroup.reset({}, {
+      emitEvent: false
+    });
+    this._setData(filter);
   }
 
   canDeactivate(): Observable<boolean> | Promise<boolean> | boolean {
