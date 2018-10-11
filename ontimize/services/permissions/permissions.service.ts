@@ -5,11 +5,6 @@ import { Util } from '../../utils';
 import { OntimizePermissionsService } from './ontimize-permissions.service';
 import { OntimizeEEPermissionsService } from './ontimize-ee-permissions.service';
 
-export interface IOntimizePermissions {
-  isRestricted(route: string): boolean;
-  getPermissions(route: string, attr: string): any;
-}
-
 export type OComponentPermissions = {
   attr: string;
   visible: boolean;
@@ -39,7 +34,6 @@ export class PermissionsService {
     if (Util.isDefined(appConfig.permissionsConfiguration)) {
       this.ontimizePermissionsConfig = appConfig.permissionsConfiguration;
     }
-    this.configureService();
   }
 
   configureService() {
@@ -68,6 +62,7 @@ export class PermissionsService {
 
   getUserPermissionsAsPromise(): Promise<boolean> {
     const self = this;
+    this.configureService();
     return new Promise((resolve: any, reject: any) => {
       self.queryPermissions().subscribe(() => {
         resolve(true);

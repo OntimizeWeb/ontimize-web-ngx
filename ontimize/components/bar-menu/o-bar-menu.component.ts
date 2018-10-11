@@ -1,7 +1,6 @@
 import { Component, Injector, NgModule, ElementRef, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AuthGuardService } from '../../services';
-import { OTranslateService } from '../../services';
+import { OTranslateService, PermissionsService } from '../../services';
 import { OSharedModule } from '../../shared';
 import { AppMenuService, MenuRootItem } from '../../services/app-menu.service';
 import { OLocaleBarMenuItemModule } from './locale-menu-item/o-locale-bar-menu-item.component';
@@ -31,7 +30,7 @@ export const DEFAULT_INPUTS_O_BAR_MENU = [
 export class OBarMenuComponent {
 
   public static DEFAULT_INPUTS_O_BAR_MENU = DEFAULT_INPUTS_O_BAR_MENU;
-  protected authGuardService: AuthGuardService;
+  protected permissionsService: PermissionsService;
   protected translateService: OTranslateService;
   private appMenuService: AppMenuService;
   private menuRoots: MenuRootItem[];
@@ -44,7 +43,7 @@ export class OBarMenuComponent {
     protected elRef: ElementRef,
     protected injector: Injector) {
     this.id = 'm_' + String((new Date()).getTime() + Math.random());
-    this.authGuardService = this.injector.get(AuthGuardService);
+    this.permissionsService = this.injector.get(PermissionsService);
     this.translateService = this.injector.get(OTranslateService);
     this.appMenuService = this.injector.get(AppMenuService);
     this.menuRoots = this.appMenuService.getMenuRoots();
@@ -83,8 +82,8 @@ export class OBarMenuComponent {
     }
   }
 
-  getAuthGuardService(): AuthGuardService {
-    return this.authGuardService;
+  getPermissionsService(): PermissionsService {
+    return this.permissionsService;
   }
 
   get menuTitle(): string {

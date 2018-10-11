@@ -2,7 +2,7 @@ import { Component, ViewChild, Injector, NgModule, ViewEncapsulation } from '@an
 import { MatSidenav } from '@angular/material';
 import { CommonModule } from '@angular/common';
 
-import { AuthGuardService } from '../../services';
+import { PermissionsService } from '../../services';
 import { OSharedModule } from '../../shared';
 
 export const DEFAULT_INPUTS_O_SIDE_MENU = [
@@ -25,7 +25,7 @@ export class OSideMenuComponent {
 
   public static DEFAULT_INPUTS_O_SIDE_MENU = DEFAULT_INPUTS_O_SIDE_MENU;
 
-  protected authGuardService: AuthGuardService;
+  protected permissionsService: PermissionsService;
 
   protected _title: string;
   protected _opened: boolean;
@@ -35,7 +35,7 @@ export class OSideMenuComponent {
 
   constructor(protected injector: Injector) {
     this.opened = false;
-    this.authGuardService = this.injector.get(AuthGuardService);
+    this.permissionsService = this.injector.get(PermissionsService);
   }
 
   public showSidenav() {
@@ -46,8 +46,8 @@ export class OSideMenuComponent {
     });
   }
 
-  getAuthGuardService(): AuthGuardService {
-    return this.authGuardService;
+  getPermissionsService(): PermissionsService {
+    return this.permissionsService;
   }
 
   get title(): string {

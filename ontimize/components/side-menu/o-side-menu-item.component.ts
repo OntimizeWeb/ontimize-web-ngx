@@ -46,7 +46,7 @@ export class OSideMenuItemComponent implements OnInit {
   public ngOnInit() {
     if (typeof (this.route) === 'string') {
       // no devuelve promise
-      // this.menu.getAuthGuardService().isRestricted(this.route)
+      // this.menu.getPermissionsService().isRestricted(this.route)
       //   .then(restricted => this.restricted = restricted)
       //   .catch(err => this.restricted = true);
     } else {

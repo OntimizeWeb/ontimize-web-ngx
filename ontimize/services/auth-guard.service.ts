@@ -2,10 +2,10 @@ import { Injector, Injectable } from '@angular/core';
 import { CanActivate, Router, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { LoginService, OUserInfoService } from '../services';
 import { Codes } from '../utils';
-import { PermissionsService, IOntimizePermissions, OComponentPermissions } from './permissions/permissions.service';
+import { PermissionsService } from './permissions/permissions.service';
 
 @Injectable()
-export class AuthGuardService implements CanActivate, IOntimizePermissions {
+export class AuthGuardService implements CanActivate {
 
   protected router: Router;
   protected loginService: LoginService;
@@ -58,13 +58,4 @@ export class AuthGuardService implements CanActivate, IOntimizePermissions {
       avatar: './assets/images/user_profile.png'
     });
   }
-
-  isRestricted(route: string): boolean {
-    return this.permissionsService.isRestricted(route);
-  }
-
-  getPermissions(parentAttr: string, attr: string): OComponentPermissions {
-    return this.permissionsService.getPermissions(parentAttr, attr);
-  }
-
 }

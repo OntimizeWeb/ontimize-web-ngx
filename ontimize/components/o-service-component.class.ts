@@ -6,7 +6,7 @@ import { InputConverter } from '../decorators';
 import { OFilterBuilderComponent } from '../components';
 import { OFormComponent } from './form/o-form.component';
 import { FilterExpressionUtils } from './filter-expression.utils';
-import { AuthGuardService, OTranslateService, NavigationService } from '../services';
+import { OTranslateService, NavigationService, PermissionsService } from '../services';
 import { OListInitializationOptions } from './list/o-list.component';
 import { OTableInitializationOptions } from './table/o-table.component';
 import { OFormLayoutManagerComponent } from '../layouts/form-layout/o-form-layout-manager.component';
@@ -71,7 +71,7 @@ export class OServiceComponent extends OServiceBaseComponent {
 
   public static DEFAULT_INPUTS_O_SERVICE_COMPONENT = DEFAULT_INPUTS_O_SERVICE_COMPONENT;
 
-  protected authGuardService: AuthGuardService;
+  protected permissionsService: PermissionsService;
   protected translateService: OTranslateService;
   protected navigationService: NavigationService;
 
@@ -133,7 +133,7 @@ export class OServiceComponent extends OServiceBaseComponent {
     super(injector);
     this.router = this.injector.get(Router);
     this.actRoute = this.injector.get(ActivatedRoute);
-    this.authGuardService = this.injector.get(AuthGuardService);
+    this.permissionsService = this.injector.get(PermissionsService);
     this.translateService = this.injector.get(OTranslateService);
     this.navigationService = this.injector.get(NavigationService);
     try {
@@ -151,7 +151,7 @@ export class OServiceComponent extends OServiceBaseComponent {
 
   initialize(): void {
     super.initialize();
-    // this.authGuardService.get Permissions(this.router.url, this.oattr).then(permissions => {
+    // this.permissionsService.get Permissions(this.router.url, this.oattr).then(permissions => {
     //   if (Util.isDefined(permissions)) {
     //     if (this.ovisible && permissions.visible === false) {
     //       this.ovisible = false;

@@ -8,7 +8,7 @@ import { OBaseComponent, IComponent } from './o-component.class';
 import { OFormComponent } from './form/o-form.component';
 import { OFormValue, IFormValueOptions } from './form/OFormValue';
 import { OValidatorComponent } from './input/validation/o-validator.component';
-import { AuthGuardService, OComponentPermissions } from '../services';
+import { OComponentPermissions, PermissionsService } from '../services';
 
 export interface IMultipleSelection extends IComponent {
   getSelectedItems(): Array<any>;
@@ -111,7 +111,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   @ContentChildren(OValidatorComponent)
   protected validatorChildren: QueryList<OValidatorComponent>;
 
-  protected authGuardService: AuthGuardService;
+  protected permissionsService: PermissionsService;
   protected mutationObserver: MutationObserver;
   protected permissions: OComponentPermissions;
 
@@ -123,7 +123,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     super(injector);
     this.form = form;
     this.elRef = elRef;
-    this.authGuardService = this.injector.get(AuthGuardService);
+    this.permissionsService = this.injector.get(PermissionsService);
   }
 
   ngOnInit() {
@@ -220,7 +220,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     if (!this.form || !Util.isDefined(this.form.oattr)) {
       return;
     }
-    this.permissions = this.authGuardService.getPermissions(this.form.oattr, this.oattr);
+    this.permissions = this.permissionsService.getPermissions(this.form.oattr, this.oattr);
     if (!Util.isDefined(this.permissions)) {
       return;
     }
