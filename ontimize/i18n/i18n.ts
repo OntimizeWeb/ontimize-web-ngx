@@ -359,7 +359,7 @@ export var MAP = {
     'TABLE.BUTTONS.RESIZE_COLUMNS': 'Cambiar tamaño de columnas',
     'TABLE.BUTTONS.FILTER': 'Filtrar',
     'TABLE.BUTTONS.FILTER_SAVE': 'Guardar filtro',
-    'TABLE.BUTTONS.FILTER_LOAD': 'Carger filtro',
+    'TABLE.BUTTONS.FILTER_LOAD': 'Aplicar filtro',
     'TABLE.BUTTONS.FILTER_CLEAR': 'Limpiar filtro',
     'TABLE.BUTTONS.REFRESH': 'Refrescar',
     'TABLE.BUTTONS.DELETE': 'Eliminar',
