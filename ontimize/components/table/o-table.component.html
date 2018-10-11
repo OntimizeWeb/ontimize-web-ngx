@@ -166,10 +166,10 @@
 
         <mat-header-row *matHeaderRowDef="[]" style.display="none"></mat-header-row>
 
-        <o-table-row *matRowDef="let row; columns: oTableOptions.visibleColumns;" (click)="handleClick(row, $event)"
+        <mat-row oTableRow *matRowDef="let row; columns: oTableOptions.visibleColumns;" (click)="handleClick(row, $event)"
           (dblclick)="handleDoubleClick(row, $event)" [oContextMenu]="tableContextMenu" [oContextMenuData]="row"
           [class.selected]="!isSelectionModeNone() && isSelected(row)">
-        </o-table-row>
+        </mat-row>
 
       </mat-table>
 

@@ -15,7 +15,7 @@ import { OFormComponent } from '../form/o-form.component';
 import { Codes, ObservableWrapper, Util } from '../../utils';
 import { OServiceComponent } from '../o-service-component.class';
 import { OntimizeService, SnackBarService } from '../../services';
-import { OTableRow } from './extensions/row/o-table-row.component';
+import { OTableRowDirective } from './extensions/row/o-table-row.directive';
 import { OColumnTooltip } from './column/o-table-column.component';
 import { OTableStorage } from './extensions/o-table-storage.class';
 import { dataServiceFactory } from '../../services/data-service.provider';
@@ -2019,7 +2019,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     OTableColumnComponent,
     OTableColumnCalculatedComponent,
     OTableContextMenuComponent,
-    OTableRow,
+    OTableRowDirective,
     ...O_TABLE_CELL_RENDERERS,
     ...O_TABLE_CELL_EDITORS,
     ...O_TABLE_DIALOGS,
@@ -2041,7 +2041,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     CdkTableModule,
     OTableColumnCalculatedComponent,
     OTableContextMenuComponent,
-    OTableRow,
+    OTableRowDirective,
     OMatSortModule,
     ...O_TABLE_HEADER_COMPONENTS,
     ...O_TABLE_CELL_RENDERERS,
