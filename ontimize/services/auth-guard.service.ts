@@ -2,28 +2,28 @@ import { Injector, Injectable } from '@angular/core';
 import { CanActivate, Router, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { LoginService, OUserInfoService } from '../services';
 import { Codes } from '../utils';
-import { ProfileService, IProfileService, OComponentPermissions } from './profile.service';
+import { PermissionsService, IOntimizePermissions, OComponentPermissions } from './permissions/permissions.service';
 
 @Injectable()
-export class AuthGuardService implements CanActivate, IProfileService {
+export class AuthGuardService implements CanActivate, IOntimizePermissions {
 
   protected router: Router;
   protected loginService: LoginService;
   protected oUserInfoService: OUserInfoService;
-  protected profileService: ProfileService;
+  protected permissionsService: PermissionsService;
 
   constructor(protected injector: Injector) {
     this.router = this.injector.get(Router);
     this.loginService = this.injector.get(LoginService);
     this.oUserInfoService = this.injector.get(OUserInfoService);
-    this.profileService = this.injector.get(ProfileService);
+    this.permissionsService = this.injector.get(PermissionsService);
   }
 
   canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean> | boolean {
     let isLoggedIn = this.loginService.isLoggedIn();
     let result: Promise<boolean> | boolean = isLoggedIn;
     if (!isLoggedIn) {
-      this.profileService.restart();
+      this.permissionsService.restart();
       this.router.navigate([Codes.LOGIN_ROUTE]);
     }
     // else
@@ -43,8 +43,8 @@ export class AuthGuardService implements CanActivate, IProfileService {
     // }
     if (isLoggedIn) {
       this.setUserInformation();
-      if (!this.profileService.hasPermissions()) {
-        result = this.profileService.getUserPermissionsAsPromise();
+      if (!this.permissionsService.hasPermissions()) {
+        result = this.permissionsService.getUserPermissionsAsPromise();
       }
     }
     return result;
@@ -60,11 +60,11 @@ export class AuthGuardService implements CanActivate, IProfileService {
   }
 
   isRestricted(route: string): boolean {
-    return this.profileService.isRestricted(route);
+    return this.permissionsService.isRestricted(route);
   }
 
   getPermissions(parentAttr: string, attr: string): OComponentPermissions {
-    return this.profileService.getPermissions(parentAttr, attr);
+    return this.permissionsService.getPermissions(parentAttr, attr);
   }
 
 }

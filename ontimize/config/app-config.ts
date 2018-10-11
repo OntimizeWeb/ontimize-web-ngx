@@ -10,6 +10,16 @@ let DEFAULT_CONFIG: Config = {
 
 export const APP_CONFIG = new InjectionToken<Config>('app.config');
 
+export type OntimizePermissionsConfig = {
+  entity: string;
+  keyColumn: string;
+  valueColumn: string;
+};
+
+export type OntimizeEEPermissionsConfig = {
+  service?: string;
+};
+
 export interface Config {
   // apiEndpoint [string]: The base path of the URL used by app services.
   apiEndpoint?: string;
@@ -56,13 +66,10 @@ export interface Config {
   appMenuConfiguration?: MenuRootItem[];
 
   // authGuard [Object]: Configuration parameters of application permissions.
-  authGuard?: {
-    type?: any;
-    service?: string;
-    entity?: string;
-    keyColumn?: string;
-    valueColumn?: string;
-  };
+  permissionsConfiguration?: OntimizePermissionsConfig | OntimizeEEPermissionsConfig;
+
+  // authGuardServiceType [ undefined | '' | class ]: The permissions service type used (Ontimize REST standart 'OntimizePermissions', Ontimize REST JEE 'OntimizeEEPermissions' or custom implementation) in the whole application. By default 'OntimizePermissions'.
+  permissionsServiceType?: any;
 }
 
 export class AppConfig {
@@ -78,6 +85,10 @@ export class AppConfig {
 
   public getServiceConfiguration(): any {
     return this._config['servicesConfiguration'] || {};
+  }
+
+  public getPermissionsConfiguration(): any {
+    return this._config['permissionsConfiguration'] || {};
   }
 
   public getMenuConfiguration(): MenuRootItem[] {

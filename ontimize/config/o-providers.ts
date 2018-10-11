@@ -18,7 +18,6 @@ import {
   DialogService,
   SnackBarService,
   AuthGuardService,
-  authGuardServiceFactory,
   dataServiceFactory,
   LocalStorageService,
   appConfigFactory,
@@ -26,7 +25,9 @@ import {
   OUserInfoService,
   OModulesInfoService,
   OntimizeServiceResponseParser,
-  ProfileService
+  PermissionsService,
+  OntimizePermissionsService,
+  permissionsServiceFactory
 } from '../services';
 
 import { OFormLayoutManagerService } from '../services/o-form-layout-manager.service';
@@ -152,8 +153,8 @@ export function getOntimizeServiceResponseParser(injector: Injector) {
   return new OntimizeServiceResponseParser(injector);
 }
 
-export function getProfileServiceProvider(injector: Injector) {
-  return new ProfileService(injector);
+export function getPermissionsServiceProvider(injector: Injector) {
+  return new PermissionsService(injector);
 }
 
 export const ONTIMIZE_PROVIDERS: Provider[] = [
@@ -247,10 +248,9 @@ export const ONTIMIZE_PROVIDERS: Provider[] = [
     useFactory: getLocalStorageServiceProvider,
     deps: [Injector]
   },
-  // getAuthServiceProvider
   {
     provide: AuthGuardService,
-    useFactory: authGuardServiceFactory,
+    useClass: AuthGuardService,
     deps: [Injector]
   },
   {
@@ -277,8 +277,13 @@ export const ONTIMIZE_PROVIDERS: Provider[] = [
     useClass: OContextMenuService
   },
   {
-    provide: ProfileService,
-    useFactory: getProfileServiceProvider,
+    provide: PermissionsService,
+    useFactory: getPermissionsServiceProvider,
     deps: [Injector]
   },
+  {
+    provide: OntimizePermissionsService,
+    useFactory: permissionsServiceFactory,
+    deps: [Injector]
+  }
 ];
