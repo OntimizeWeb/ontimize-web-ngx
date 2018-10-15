@@ -207,6 +207,10 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
   }
 
   protected convertToFormatString(value) {
+    if (value === '00:00') {
+      // workaround
+      return value;
+    }
     // maybe not necessary in following versions
     let formatStr = this.format === TWENTY_FOUR_HOUR_FORMAT ? 'HH:mm' : 'hh:mm a';
     let valueString = this.addPeriodString(value);
