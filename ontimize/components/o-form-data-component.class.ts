@@ -307,6 +307,9 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   }
 
   set data(value: any) {
+    /*emit OValueChangeEvent.PROGRAMMATIC_CHANGE when assign value to data*/
+    this.emitOnValueChange(OValueChangeEvent
+      .PROGRAMMATIC_CHANGE, this.getValue(), this.oldValue);
     this.setData(value);
   }
 
@@ -342,14 +345,17 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   }
 
   setValue(val: any, options?: IFormValueOptions) {
-    var newValue = val;
-    this.setFormValue(val, options);
-    if (options) {
-      this.emitOnValueChange(options.changeType, newValue, this.oldValue);
-    } else {
-      this.emitOnValueChange(OValueChangeEvent.PROGRAMMATIC_CHANGE, newValue, this.oldValue);
+    if (this.oldValue !== val) {
+      var newValue = val;
+      this.setFormValue(val, options);
+      if (options) {
+        this.emitOnValueChange(options.changeType, newValue, this.oldValue);
+      } else {
+        this.emitOnValueChange(OValueChangeEvent.PROGRAMMATIC_CHANGE, newValue, this.oldValue);
+      }
+
+      this.oldValue = val;
     }
-    this.oldValue = val;
   }
 
   /**
@@ -377,11 +383,12 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     }
   }
 
+  /*This method is called in output change event, not emit event onValueChange when oldvalue is same than newvalue*/
   onChangeEvent($event) {
-    var oldValue = this.oldValue;
-    this.emitOnValueChange(OValueChangeEvent
-      .USER_CHANGE, this.getValue(), oldValue);
-    this.oldValue = this.getValue();
+    if (this.oldValue !== this.getValue) {
+      this.emitOnValueChange(OValueChangeEvent.USER_CHANGE, this.getValue(), this.oldValue);
+      this.oldValue = this.getValue();
+    }
   }
 
   protected emitOnValueChange(type, newValue, oldValue) {
@@ -389,6 +396,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
       (type, newValue, oldValue, this);
     this.onValueChange.emit(event);
   }
+
   get showClearButton(): boolean {
     return this.clearButton && !this.isReadOnly && !this.isDisabled && this.getValue();
   }

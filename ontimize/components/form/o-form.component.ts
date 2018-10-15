@@ -759,7 +759,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
         });
 
         let initialCache = {};
-        Object.keys(self.formData).map((key: string) => {
+        Object.keys(self.formData).forEach((key: string) => {
           initialCache[key] = self.formData[key].value;
         });
         self.formCache.initializeCache(initialCache);
@@ -941,7 +941,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
       attributes.push(...this.keysArray);
     }
     // add only the fields contained into the form...
-    Object.keys(this._components).map(item => {
+    Object.keys(this._components).forEach(item => {
       if (attributes.indexOf(item) < 0 && this._components[item].isAutomaticRegistering()) {
         attributes.push(item);
       }
@@ -950,7 +950,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     // add fields stored into form cache...
     const dataCache = this.formCache.getDataCache();
     if (dataCache) {
-      Object.keys(dataCache).map(item => {
+      Object.keys(dataCache).forEach(item => {
         if (item !== undefined && attributes.indexOf(item) === -1) {
           attributes.push(item);
         }
@@ -1146,7 +1146,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     if (!this.keysArray) {
       return filter;
     }
-    this.keysArray.map(key => {
+    this.keysArray.forEach(key => {
       if (currentRecord[key] !== undefined) {
         let currentData = currentRecord[key];
         if (currentData instanceof OFormValue) {

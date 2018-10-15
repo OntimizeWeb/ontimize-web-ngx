@@ -1,8 +1,9 @@
 <div [formGroup]="getFormGroup()" [matTooltip]="tooltip" [matTooltipPosition]="tooltipPosition" [matTooltipShowDelay]="tooltipShowDelay">
   <mat-form-field [class.read-only]="isReadOnly" [class.custom-width]="hasCustomWidth" fxFlexFill>
 
-    <mat-select [value]="getValue()" #selectModel [id]="getAttribute()" fxFill [formControlName]="getAttribute()" [placeholder]="placeHolder"
-      [multiple]="getMultiple()" [required]="isRequired" (selectionChange)="onSelectionChange($event)">
+    <mat-select [value]="getValue()" #selectModel [id]="getAttribute()" fxFill [formControlName]="getAttribute()"
+      [placeholder]="placeHolder" [multiple]="getMultiple()" [required]="isRequired" (selectionChange)="onSelectionChange($event)"
+      (ngModelChange)="innerOnChange($event)" [ngModel]="getValue()">
 
       <mat-select-trigger *ngIf="multiple && multipleTriggerLabel">
         {{ selectModel.selected[0] ? getFirstSelectedValue(): '' }}

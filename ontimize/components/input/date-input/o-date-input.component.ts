@@ -220,7 +220,7 @@ export class ODateInputComponent extends OFormDataComponent implements AfterView
   }
 
   onChangeEvent(event: MatDatepickerInputEvent<any>) {
-    this.setValue(event.value, { changeType: OValueChangeEvent.USER_CHANGE });
+    this.setValue(event.value, { changeType: OValueChangeEvent.USER_CHANGE,  emitModelToViewChange:false });
   }
 
   innerOnFocus(event: any) {

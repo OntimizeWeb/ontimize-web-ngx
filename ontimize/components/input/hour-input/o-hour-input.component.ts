@@ -194,7 +194,8 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
 
   onTimeEvent(event) {
     const value = this.convertToFormatString(event);
-    this.setValue(value, { changeType: OValueChangeEvent.USER_CHANGE });
+    /** emitModelToViewChange: false  because onChange event is trigger in ngModelChange */
+    this.setValue(value, { changeType: OValueChangeEvent.USER_CHANGE, emitModelToViewChange: false });
   }
 
   protected addPeriodString(value): string {
