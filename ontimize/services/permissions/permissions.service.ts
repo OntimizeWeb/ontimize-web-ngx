@@ -62,19 +62,23 @@ export class PermissionsService {
 
   getUserPermissionsAsPromise(): Promise<boolean> {
     const self = this;
-    this.configureService();
     return new Promise((resolve: any, reject: any) => {
-      self.queryPermissions().subscribe(() => {
+      self.permissions = {};
+      if (Util.isDefined(self.ontimizePermissionsConfig)) {
+        self.configureService();
+        self.queryPermissions().subscribe(() => {
+          resolve(true);
+        }, error => {
+          resolve(true);
+        });
+      } else {
         resolve(true);
-      }, error => {
-        resolve(true);
-      });
+      }
     });
   }
 
   protected queryPermissions(): Observable<any> {
     const self = this;
-    this.permissions = {};
     const dataObservable: Observable<any> = new Observable(innerObserver => {
       self.permissionsService.loadPermissions().subscribe((res: any) => {
         self.permissions = res;
@@ -115,5 +119,13 @@ export class PermissionsService {
       }
     }
     return permissions;
+  }
+
+  static checkEnabledPermission(comp: any): boolean {
+    if (comp.hasOwnProperty('permissions') && comp.permissions.enabled === false) {
+      console.warn('Operation is not allowed due permissions restriction');
+      return false;
+    }
+    return true;
   }
 }
