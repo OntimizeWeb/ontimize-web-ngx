@@ -13,7 +13,7 @@
     </mat-form-field>
 
     <span mat-subheader>{{ 'TABLE.DIALOG.CONFIGURATION_PROPERTIES' | oTranslate }}</span>
-    <mat-selection-list #propertiesList dense class="o-table-SAVE-configuration-dialog-list">
+    <mat-selection-list #propertiesList dense class="o-table-save-configuration-dialog-list o-scroll">
       <mat-list-option checkboxPosition="before" [selected]="areAllSelected()" #selectAllOption (click)="onSelectAllClicked(selectAllOption.selected)">
         <span matLine>{{ 'SELECT_ALL' | oTranslate }}</span>
       </mat-list-option>
