@@ -307,14 +307,11 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   }
 
   set data(value: any) {
-    /*emit OValueChangeEvent.PROGRAMMATIC_CHANGE when assign value to data*/
-    this.emitOnValueChange(OValueChangeEvent
-      .PROGRAMMATIC_CHANGE, this.getValue(), this.oldValue);
     this.setData(value);
   }
 
   setData(value: any) {
-    this.oldValue = value;
+     /*emit OValueChangeEvent.PROGRAMMATIC_CHANGE when assign value to data*/
     this.ensureOFormValue(value);
     if (this._fControl) {
       this._fControl.setValue(this.value.value, {
@@ -325,6 +322,8 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
         this._fControl.markAsTouched();
       }
     }
+    this.emitOnValueChange(OValueChangeEvent.PROGRAMMATIC_CHANGE, value, this.oldValue);
+    this.oldValue = value;
   }
 
   isAutomaticBinding(): boolean {
@@ -366,10 +365,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   }
 
   onClickClearValue(): void {
-    this.clearValue({
-      changeType: OValueChangeEvent
-        .USER_CHANGE
-    });
+    this.clearValue({ changeType: OValueChangeEvent.USER_CHANGE });
   }
 
   protected setFormValue(val: any, options?: IFormValueOptions) {
