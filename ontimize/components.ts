@@ -16,11 +16,6 @@ export * from './components/list/renderers/o-list-item-avatar.component';
 export * from './components/list/renderers/o-list-item-text.component';
 export * from './components/list/renderers/o-list-item-card.component';
 export * from './components/list/renderers/o-list-item-card-image.component';
-export * from './components/side-menu/o-side-menu.component';
-export * from './components/side-menu/o-side-menu-group.component';
-export * from './components/side-menu/o-side-menu-item.component';
-export * from './components/side-menu/o-locale-side-menu-item.component';
-export * from './components/side-menu/o-side-menu-separator.component';
 export * from './components/table/table-components';
 
 export * from './components/filter-expression.utils';

@@ -17,6 +17,7 @@
 * **IFormDataComponent**: adding new properties to interface ([d12a606](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d12a606))
   * `setValue`, `clearValue` and `getValue` methods.
   * `onChange`, `onValueChange` properties.
+* **o-side-menu**: the side menu component is completely removed ([b13dc69](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b13dc69))
 
 ## 3.1.1 (2018-10-05)
 ### Features
