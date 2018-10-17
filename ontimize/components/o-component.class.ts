@@ -1,6 +1,6 @@
 import { Injector } from '@angular/core';
 import { InputConverter, BooleanConverter } from '../decorators';
-import { OTranslateService } from '../services';
+import { OTranslateService, PermissionsService } from '../services';
 import { Util } from '../utils';
 
 export interface IComponent {
@@ -101,6 +101,9 @@ export class OBaseComponent implements IComponent {
       this._isReadOnly = false;
       return;
     }
+    if (!PermissionsService.checkEnabledPermission(this)) {
+      return;
+    }
     this._isReadOnly = value;
   }
 
@@ -109,6 +112,9 @@ export class OBaseComponent implements IComponent {
   }
 
   set readOnly(value: any) {
+    if (!PermissionsService.checkEnabledPermission(this)) {
+      return;
+    }
     const parsedValue = BooleanConverter(value);
     this._readOnly = parsedValue;
     this._isReadOnly = parsedValue;
@@ -119,6 +125,9 @@ export class OBaseComponent implements IComponent {
   }
 
   set disabled(value: boolean) {
+    if (!PermissionsService.checkEnabledPermission(this)) {
+      return;
+    }
     this._disabled = value;
   }
 
@@ -138,6 +147,9 @@ export class OBaseComponent implements IComponent {
   }
 
   set oenabled(value: any) {
+    if (!PermissionsService.checkEnabledPermission(this)) {
+      return;
+    }
     const parsedValue = BooleanConverter(value);
     this._oenabled = parsedValue;
     this.disabled = !parsedValue;
