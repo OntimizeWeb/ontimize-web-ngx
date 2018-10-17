@@ -29,41 +29,41 @@
 
     <ng-container *ngIf="initialMode">
       <ng-template [ngIf]="showHeaderActionsText" [ngIfElse]="buttonsWithouText">
-        <button type="button" mat-button (click)="onReload($event)" *ngIf="isRefreshBtnEnabled">
+        <button type="button" mat-button (click)="onReload($event)" *ngIf="isRefreshBtnEnabled" attr="refresh">
           <mat-icon svgIcon="ontimize:autorenew"></mat-icon>
           <span>{{ 'REFRESH' | oTranslate }}</span>
         </button>
-        <button type="button" mat-button (click)="onInsert($event)" *ngIf="isInsertBtnEnabled">
+        <button type="button" mat-button (click)="onInsert($event)" *ngIf="isInsertBtnEnabled"  attr="insert">
           <mat-icon svgIcon="ontimize:add"></mat-icon>
           <span>{{ 'ADD' | oTranslate }}</span>
         </button>
-        <button type="button" mat-button (click)="onEdit($event)" *ngIf="isEditBtnEnabled">
+        <button type="button" mat-button (click)="onEdit($event)" *ngIf="isEditBtnEnabled" attr="edit">
           <mat-icon svgIcon="ontimize:edit"></mat-icon>
           <span>{{ 'EDIT' | oTranslate }}</span>
         </button>
-        <button type="button" mat-button (click)="onDelete($event)" *ngIf="isDeleteBtnEnabled">
+        <button type="button" mat-button (click)="onDelete($event)" *ngIf="isDeleteBtnEnabled"  attr="delete">
           <mat-icon svgIcon="ontimize:delete"></mat-icon>
           <span>{{ 'DELETE' | oTranslate }}</span>
         </button>
-        <button type="button" mat-button (click)="onSave($event)" [disabled]="!existsChangesToSave" *ngIf="isSaveBtnEnabled">
+        <button type="button" mat-button (click)="onSave($event)" [disabled]="!existsChangesToSave" *ngIf="isSaveBtnEnabled"  attr="update">
           <mat-icon svgIcon="ontimize:save"></mat-icon>
           <span>{{ 'SAVE' | oTranslate }}</span>
         </button>
       </ng-template>
       <ng-template #buttonsWithouText>
-        <button type="button" mat-icon-button (click)="onReload($event)" *ngIf="isRefreshBtnEnabled">
+        <button type="button" mat-icon-button (click)="onReload($event)" *ngIf="isRefreshBtnEnabled"  attr="refresh">
           <mat-icon svgIcon="ontimize:autorenew"></mat-icon>
         </button>
-        <button type="button" mat-icon-button (click)="onInsert($event)" *ngIf="isInsertBtnEnabled">
+        <button type="button" mat-icon-button (click)="onInsert($event)" *ngIf="isInsertBtnEnabled"  attr="insert">
           <mat-icon svgIcon="ontimize:add"></mat-icon>
         </button>
-        <button type="button" mat-icon-button (click)="onEdit($event)" *ngIf="isEditBtnEnabled">
+        <button type="button" mat-icon-button (click)="onEdit($event)" *ngIf="isEditBtnEnabled" attr="edit">
           <mat-icon svgIcon="ontimize:edit"></mat-icon>
         </button>
-        <button type="button" mat-icon-button (click)="onDelete($event)" *ngIf="isDeleteBtnEnabled">
+        <button type="button" mat-icon-button (click)="onDelete($event)" *ngIf="isDeleteBtnEnabled"  attr="delete">
           <mat-icon svgIcon="ontimize:delete"></mat-icon>
         </button>
-        <button type="button" mat-icon-button (click)="onSave($event)" [disabled]="!existsChangesToSave" *ngIf="isSaveBtnEnabled">
+        <button type="button" mat-icon-button (click)="onSave($event)" [disabled]="!existsChangesToSave" *ngIf="isSaveBtnEnabled" attr="update">
           <mat-icon svgIcon="ontimize:save"></mat-icon>
         </button>
       </ng-template>

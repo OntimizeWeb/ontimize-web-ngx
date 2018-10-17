@@ -16,7 +16,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { OFormComponent } from './o-form.component';
 import { InputConverter } from '../../decorators';
 import { Util } from '../../util/util';
-import { DialogService, NavigationService } from '../../services';
+import { DialogService, NavigationService, PermissionsService, OComponentPermissions } from '../../services';
 import { OSharedModule } from '../../shared';
 import { OFormNavigationComponent } from './navigation/o-form-navigation.component';
 
@@ -70,6 +70,8 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
 
   protected _dialogService: DialogService;
   protected _navigationService: NavigationService;
+  private permissionService: PermissionsService;
+  protected mutationObserver: MutationObserver;
 
   protected formCacheSubscription: Subscription;
 
@@ -82,7 +84,7 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
     _form.registerToolbar(this);
     this._dialogService = this.injector.get(DialogService);
     this._navigationService = this.injector.get(NavigationService);
-
+    this.permissionService = this.injector.get(PermissionsService);
 
   }
 
@@ -102,12 +104,84 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
     }
   }
 
+  ngAfterViewInit(): void {
+    this.parsePermissions();
+
+  }
+
   ngOnDestroy() {
     if (this.formCacheSubscription) {
       this.formCacheSubscription.unsubscribe();
     }
+    if (this.mutationObserver) {
+      this.mutationObserver.disconnect();
+    }
   }
 
+  private parsePermissions() {
+    let permissions: OComponentPermissions[];
+    if (this._form.oattr) {
+      permissions = this.permissionService.getAllPermissionsByParent(this._form.oattr, 'actions');
+
+      if (Util.isDefined(permissions)) {
+        const self = this;
+        permissions.forEach(permission => {
+
+
+          //others actions
+          let elementByAction = self.element.nativeElement.querySelector('[attr="' + permission.attr + '"]');
+          if (Util.isDefined(elementByAction)) {
+            if (!permission.visible) {
+              elementByAction.remove();
+            } else {
+              if (!permission.enabled) {
+                elementByAction.disabled = true;
+                this.disabledChangesInDom(elementByAction);
+              }
+            }
+          }
+          if (PermissionsService.PERMISSIONS_ACTIONS_FORM.indexOf(permission.attr)>-1) {
+            //actions R;I;U;D
+            if (permission.attr === 'update') {
+              let elementByAction = self.element.nativeElement.querySelector('[attr="save"]');
+              if (Util.isDefined(elementByAction)) {
+                if (!permission.visible) {
+                  elementByAction.remove();
+                } else {
+                  if (!permission.enabled) {
+                    elementByAction.disabled = true;
+                    this.disabledChangesInDom(elementByAction);
+                  }
+                }
+              }
+            }
+          }
+        });
+      }
+    }
+  }
+
+  /**
+  * Do not allow the disabled attribute to change by code or by inspector
+  * */
+  private disabledChangesInDom(element: Node) {
+    this.mutationObserver = new MutationObserver(function (mutations) {
+      mutations.forEach(function (mutation) {
+        if (mutation.type === 'attributes' && mutation.attributeName === 'disabled'
+          && mutation.target.attributes.getNamedItem('disabled') === null) {
+          var element = <HTMLInputElement>mutation.target;
+          element.disabled = true;
+        }
+      });
+    });
+
+    this.mutationObserver.observe(element, {
+      attributes: true,
+      subtree: true,
+      attributeFilter: ['disabled']
+    });
+
+  }
   protected manageEditableDetail() {
     let isEditableDetail = this._form.isEditableDetail();
     this.saveBtnEnabled = isEditableDetail;
