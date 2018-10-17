@@ -1,18 +1,22 @@
 ## 3.1.2
 ### Features
-* **OFormDataComponent**: allowing to use permissions ([3291e57](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3291e57)) ([ca1f933](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ca1f933)) ([17105dc](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/17105dc)) ([5228ccc](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5228ccc)) ([7e46523](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7e46523)) ([c0eba19](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c0eba19))
+* **OFormDataComponent**:
+ * allowing to use permissions ([3291e57](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3291e57)) ([ca1f933](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ca1f933)) ([17105dc](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/17105dc)) ([5228ccc](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5228ccc)) ([7e46523](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7e46523)) ([c0eba19](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c0eba19))
+ * blocking operations due permissions configuration ([d12a606](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d12a606))
 * **Config**:
   * adding new configurable properties: '*permissionsConfiguration*' and '*permissionsServiceType*' used for permissions configuration ([9ecd082](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9ecd082))
   * new interface `IPermissionsService` that must be implemented by the service indicated in the '*permissionsServiceType*' property ([9ecd082](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9ecd082))
 * **ontimize-ee-permissions.service**, **ontimize-permissions.service**: new services for loading application permissions ([9ecd082](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9ecd082))
-
+* **OValueChangeEvent**: adding `isUserChange` and `isProgrammaticChange` methods.
 
 ### BREAKING CHANGES
 * **o-form**: `getDataValue` method is now public again.
 * **Config**: removing old '*authGuard*' configurable property.
 * **AuthGuardServiceFactory**: removing factory.
 * **AuthGuardService**: `getPermissions` and `isRestricted` no longer exists in this service. Using `PermissionsService` now.
-
+* **IFormDataComponent**: adding new properties to interface ([d12a606](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d12a606))
+  * `setValue`, `clearValue` and `getValue` methods.
+  * `onChange`, `onValueChange` properties.
 
 ## 3.1.1 (2018-10-05)
 ### Features
