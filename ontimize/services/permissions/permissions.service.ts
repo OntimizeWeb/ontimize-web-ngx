@@ -17,11 +17,20 @@ export type OComponentContainerPermissions = {
   components: OComponentPermissions[];
 };
 
+export const PERMISSIONS_COMPONENTS_PROPERTY = 'components';
+export const PERMISSIONS_ACTIONS_PROPERTY = 'actions';
+
+export type TypePermission = 'components' | 'actions';
+
+
 @Injectable()
 export class PermissionsService {
 
   public static PERMISSIONS_ROUTE_PROPERTY = 'route';
   public static PERMISSIONS_COMPONENTS_PROPERTY = 'components';
+  public static PERMISSIONS_ACTIONS_PROPERTY = 'actions';
+  public static PERMISSIONS_ACTIONS_FORM = ['refresh', 'insert', 'update', 'delete'];
+
 
   protected permissionsService: any;
   protected ontimizePermissionsConfig: any;
@@ -108,18 +117,57 @@ export class PermissionsService {
     return restricted;
   }
 
-  getPermissions(parentAttr: string, attr: string): OComponentPermissions {
-    let permissions = undefined;
+  getPermissionsByAttr(parentAttr: string, type: TypePermission, attr: string): OComponentPermissions {
+    let parentComponents = this.getAllPermissionsByParent(parentAttr, type);
+    let permissions;
+    if (Util.isDefined(parentComponents)) {
+      permissions = parentComponents.find(comp => comp.attr === attr);
+    }
+    return permissions;
+  }
+
+  getAllPermissionsByParent(parentAttr: string, type: TypePermission): OComponentPermissions[] {
+    let permissions: OComponentPermissions[];
     if (Util.isDefined(this.permissions)) {
       const allComponents: OComponentContainerPermissions[] = this.permissions[PermissionsService.PERMISSIONS_COMPONENTS_PROPERTY] || [];
       const parentData: OComponentContainerPermissions = allComponents.find(comp => comp.attr === parentAttr);
+
       if (Util.isDefined(parentData)) {
-        const parentComponents: OComponentPermissions[] = parentData[PermissionsService.PERMISSIONS_COMPONENTS_PROPERTY];
-        permissions = parentComponents.find(comp => comp.attr === attr);
+        switch (type) {
+          case PermissionsService.PERMISSIONS_COMPONENTS_PROPERTY:
+            permissions = parentData[PermissionsService.PERMISSIONS_COMPONENTS_PROPERTY];
+            break;
+          case PermissionsService.PERMISSIONS_ACTIONS_PROPERTY:
+            permissions = parentData[PermissionsService.PERMISSIONS_ACTIONS_PROPERTY];
+            break;
+        }
+
       }
     }
     return permissions;
   }
+
+  /**
+   * @param parentAttr {string} attr of the parent component
+   * @param type {TypePermission}
+   * @param attrs {string[]}
+   * @returns {OComponentPermissions[]} permisions of the actions of the parent
+   */
+
+  getPermissionsActions(parentAttr: string, type: 'components' | 'actions', attrs?: string[]): OComponentPermissions[] {
+    let permissions = [];
+
+    if (!Util.isDefined(attrs)) {
+      permissions.push(this.getAllPermissionsByParent(parentAttr, type));
+    } else {
+      attrs.forEach(element => {
+        permissions.push(this.getPermissionsByAttr(parentAttr, type, element));
+      });
+    }
+
+    return permissions;
+  }
+
 
   static checkEnabledPermission(comp: any): boolean {
     if (comp.hasOwnProperty('permissions') && comp.permissions.enabled === false) {
