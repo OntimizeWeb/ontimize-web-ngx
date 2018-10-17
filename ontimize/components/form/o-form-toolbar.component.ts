@@ -109,15 +109,15 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
   }
 
   protected manageEditableDetail() {
-    let isEditableDetail = this._form.isEditableDetail();
+    const isEditableDetail = this._form.isEditableDetail();
     this.saveBtnEnabled = isEditableDetail;
 
     this.refreshBtnEnabled = this.refreshBtnEnabled && isEditableDetail;
     this.insertBtnEnabled = this.insertBtnEnabled && isEditableDetail;
     this.editBtnEnabled = this.editBtnEnabled && !isEditableDetail;
 
-    let self = this;
-    this.formCacheSubscription = this._form.formGroup.valueChanges.subscribe((value: any) => {
+    const self = this;
+    this._form.getFormCache().onCacheStateChanges.asObservable().subscribe((value: any) => {
       if (self._form.isEditableDetail()) {
         self.existsChangesToSave = self._form.isInitialStateChanged();
       }

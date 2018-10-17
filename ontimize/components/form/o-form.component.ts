@@ -20,6 +20,10 @@ import { IFormDataComponent, IFormDataTypeComponent } from '../o-form-data-compo
 import { DialogService, NavigationService, OntimizeService, SnackBarService, ONavigationItem } from '../../services';
 import { CanComponentDeactivate, CanDeactivateFormGuard } from './guards/o-form-can-deactivate.guard';
 
+export interface IFormDataComponentHash {
+  [attr: string]: IFormDataComponent;
+}
+
 export const DEFAULT_INPUTS_O_FORM = [
   // show-header [boolean]: visibility of form toolbar. Default: yes.
   'showHeader: show-header',
@@ -219,7 +223,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
 
   protected _formToolbar: OFormToolbarComponent;
 
-  protected _components: Object = {};
+  protected _components: IFormDataComponentHash = {};
   protected _compSQLTypes: Object = {};
 
   formParentKeysValues: Object;
@@ -357,9 +361,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
         let control: FormControl = comp.getControl();
         if (control) {
           this.formGroup.registerControl(attr, control);
-          if (comp.isAutomaticRegistering()) {
-            this.formCache.registerComponentCaching(attr, comp);
-          } else {
+          if (!comp.isAutomaticRegistering()) {
             this.ignoreFormCacheKeys.push(comp.getAttribute());
           }
         }
@@ -382,7 +384,6 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
       let attr = comp.getAttribute();
       if (control && attr && attr.length > 0) {
         this.formGroup.removeControl(attr);
-        this.formCache.unregisterComponentCaching(attr);
       }
     }
   }
@@ -403,7 +404,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     }
   }
 
-  getComponents(): Object {
+  getComponents(): IFormDataComponentHash {
     return this._components;
   }
 
@@ -498,8 +499,6 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     this.addDeactivateGuard();
 
     this.formGroup = new FormGroup({});
-
-    this.formCache.registerFormGroupListener();
 
     this.formNavigation.initialize();
 
@@ -640,7 +639,6 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   ngAfterViewInit() {
     this.determinateFormMode();
     this.onFormInitStream.emit(true);
-    this.formCache.initializeCache({});
   }
 
   protected determinateFormMode() {
@@ -741,9 +739,10 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     const self = this;
     this.zone.run(() => {
       this.formData = newFormData;
-      if (this._components) {
-        Object.keys(this._components).forEach(key => {
-          let comp = this._components[key];
+      const components = this.getComponents();
+      if (components) {
+        Object.keys(components).forEach(key => {
+          let comp = components[key];
           if (Util.isFormDataComponent(comp)) {
             try {
               if (comp.isAutomaticBinding()) {
@@ -758,12 +757,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
           self.formGroup.controls[control].markAsPristine();
         });
 
-        let initialCache = {};
-        Object.keys(self.formData).forEach((key: string) => {
-          initialCache[key] = self.formData[key].value;
-        });
-        self.formCache.initializeCache(initialCache);
-        (self.formGroup.valueChanges as EventEmitter<any>).emit(self.formCache.getInitialDataCache());
+        self.formCache.registerCache();
         self.formNavigation.updateNavigation(self.formCache.getInitialDataCache());
       }
     });
@@ -940,9 +934,10 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     if (this.keysArray && this.keysArray.length > 0) {
       attributes.push(...this.keysArray);
     }
+    const components: any = this.getComponents();
     // add only the fields contained into the form...
-    Object.keys(this._components).forEach(item => {
-      if (attributes.indexOf(item) < 0 && this._components[item].isAutomaticRegistering()) {
+    Object.keys(components).forEach(item => {
+      if (attributes.indexOf(item) < 0 && components[item].isAutomaticRegistering()) {
         attributes.push(item);
       }
     });
@@ -1191,29 +1186,30 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   }
 
   registerDynamicFormComponent(dynamicForm) {
-    const self = this;
-    if (dynamicForm) {
-      this.dynamicFormSubscription = dynamicForm.render.subscribe(res => {
-        if (res) {
-          self.refreshComponentsEditableState();
-          if (!self.isInInsertMode() && self.queryOnInit) {
-            self._reloadAction(true);
-          }
-          if (self.formParentKeysValues) {
-            Object.keys(self.formParentKeysValues).forEach(parentKey => {
-              const value = self.formParentKeysValues[parentKey];
-              const comp = self._components[parentKey];
-              if (Util.isFormDataComponent(comp) && comp.isAutomaticBinding()) {
-                (comp as any).setValue(value, {
-                  emitModelToViewChange: false,
-                  emitEvent: false
-                });
-              }
-            });
-          }
-        }
-      });
+    if (!Util.isDefined(dynamicForm)) {
+      return;
     }
+    const self = this;
+    this.dynamicFormSubscription = dynamicForm.render.subscribe(res => {
+      if (res) {
+        self.refreshComponentsEditableState();
+        if (!self.isInInsertMode() && self.queryOnInit) {
+          self._reloadAction(true);
+        }
+        if (self.formParentKeysValues) {
+          Object.keys(self.formParentKeysValues).forEach(parentKey => {
+            const value = self.formParentKeysValues[parentKey];
+            const comp = self.getFieldReference(parentKey);
+            if (Util.isFormDataComponent(comp) && comp.isAutomaticBinding()) {
+              comp.setValue(value, {
+                emitModelToViewChange: false,
+                emitEvent: false
+              });
+            }
+          });
+        }
+      }
+    });
   }
 
   protected refreshComponentsEditableState() {
@@ -1242,7 +1238,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
       Object.keys(components).forEach(key => {
         let comp = components[key];
         let attr = comp.getAttribute();
-        if (comp.isRequired && attr && attr.length > 0) {
+        if ((comp as any).isRequired && attr && attr.length > 0) {
           requiredCompontents[attr] = comp;
         }
       });
@@ -1340,12 +1336,9 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
    */
   getFieldValue(attr: string): any {
     let value = null;
-    let comp = this._components[attr];
+    let comp = this.getFieldReference(attr);
     if (comp) {
-      value = comp.value;
-      if (value instanceof OFormValue) {
-        value = comp.value.value;
-      }
+      value = comp.getValue();
     }
     return value;
   }
@@ -1370,7 +1363,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
    * @param value value
    */
   setFieldValue(attr: string, value: any, options?: IFormValueOptions) {
-    let comp = this._components[attr];
+    let comp = this.getFieldReference(attr);
     if (comp) {
       comp.setValue(value, options);
     }
@@ -1391,9 +1384,9 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
    * @param attr
    */
   clearFieldValue(attr: string, options?: IFormValueOptions) {
-    let comp = this._components[attr];
+    let comp = this.getFieldReference(attr);
     if (comp) {
-      comp.clearValue();
+      comp.clearValue(options);
     }
   }
 
@@ -1404,7 +1397,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   clearFieldValues(attrs: string[], options?: IFormValueOptions) {
     let self = this;
     attrs.forEach((key) => {
-      self.clearFieldValue(key);
+      self.clearFieldValue(key, options);
     });
   }
 
@@ -1412,17 +1405,15 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
    * Retrieves the reference of the control in the form.
    * @param attr
    */
-  getFieldReference(attr: string) {
-    let comp = {};
-    comp = this._components[attr];
-    return comp;
+  getFieldReference(attr: string): IFormDataComponent {
+    return this._components[attr];
   }
   /**
    * Retrieves the reference of each control in the form
    * @param attrs
    */
-  getFieldReferences(attrs: string[]) {
-    let arr = {};
+  getFieldReferences(attrs: string[]): IFormDataComponentHash {
+    let arr: IFormDataComponentHash = {};
     let self = this;
     attrs.forEach((key, index) => {
       arr[key] = self.getFieldReference(key);
