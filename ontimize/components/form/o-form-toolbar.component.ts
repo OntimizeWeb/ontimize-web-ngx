@@ -16,7 +16,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { OFormComponent } from './o-form.component';
 import { InputConverter } from '../../decorators';
 import { Util } from '../../util/util';
-import { DialogService, NavigationService, PermissionsService, OComponentPermissions } from '../../services';
+import { DialogService, NavigationService, PermissionsService, OPermissions } from '../../services';
 import { OSharedModule } from '../../shared';
 import { OFormNavigationComponent } from './navigation/o-form-navigation.component';
 
@@ -119,15 +119,13 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
   }
 
   private parsePermissions() {
-    let permissions: OComponentPermissions[];
+    let permissions: OPermissions[];
     if (this._form.oattr) {
       permissions = this.permissionService.getAllPermissionsByParent(this._form.oattr, 'actions');
 
       if (Util.isDefined(permissions)) {
         const self = this;
-        permissions.forEach(permission => {
-
-
+        permissions.forEach((permission: OPermissions) => {
           //others actions
           let elementByAction = self.element.nativeElement.querySelector('[attr="' + permission.attr + '"]');
           if (Util.isDefined(elementByAction)) {
@@ -140,7 +138,7 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
               }
             }
           }
-          if (PermissionsService.PERMISSIONS_ACTIONS_FORM.indexOf(permission.attr)>-1) {
+          if (PermissionsService.PERMISSIONS_ACTIONS_FORM.indexOf(permission.attr) > -1) {
             //actions R;I;U;D
             if (permission.attr === 'update') {
               let elementByAction = self.element.nativeElement.querySelector('[attr="save"]');
