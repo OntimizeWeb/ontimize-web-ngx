@@ -7,8 +7,9 @@ import { OSharedModule } from '../../shared';
 import { InputConverter } from '../../decorators';
 import { OFilterBuilderClearDirective } from './o-filter-builder-clear.directive';
 import { OFilterBuilderQueryDirective } from './o-filter-builder-query.directive';
-import { OFormComponent, OFormDataComponent, OServiceComponent } from '../../components';
+import { OFormComponent, OServiceComponent } from '../../components';
 import { FilterExpressionUtils, IExpression, IBasicExpression } from '../filter-expression.utils';
+import { IFormDataComponent } from '../o-form-data-component.class';
 
 export const DEFAULT_INPUTS_O_FILTER_BUILDER = [
   // filters: [string] List of pairs of form component attributes and target component colums (targetColumn1:componentAttr1;targetColumn2:componentAttr2;...). Separated by ';'.
@@ -107,7 +108,7 @@ export class OFilterBuilderComponent implements AfterViewInit, OnDestroy, OnInit
   initializeListeners(): void {
     if (this.queryOnChange) {
       this.filterComponents.forEach((filterComponent: IFilterBuilderCmpTarget) => {
-        let formComponent: OFormDataComponent = this.form.getComponents()[filterComponent.formComponentAttr];
+        let formComponent: IFormDataComponent = this.form.getComponents()[filterComponent.formComponentAttr];
         if (formComponent) {
           this.subscriptions.add(formComponent.getFormControl().valueChanges
             .debounceTime(this.queryOnChangeDelay)
@@ -126,7 +127,7 @@ export class OFilterBuilderComponent implements AfterViewInit, OnDestroy, OnInit
     let formComponents = this.form.getComponents();
     let params: Array<{ attr, value }> = [];
     this.filterComponents.forEach((filterComponent: IFilterBuilderCmpTarget) => {
-      let formComponent: OFormDataComponent = formComponents[filterComponent.formComponentAttr];
+      let formComponent: IFormDataComponent = formComponents[filterComponent.formComponentAttr];
       let value = formComponent.getValue();
       params.push({
         attr: filterComponent.targetAttr,

@@ -167,10 +167,8 @@ export class ODateInputComponent extends OFormDataComponent implements AfterView
   }
 
   set data(value: any) {
-    if (value && typeof value.value !== 'undefined') {
-      if (typeof value.value === 'number') {
-        value.value = new Date(value.value);
-      }
+    if (value && Util.isDefined(value.value) && typeof value.value === 'number') {
+      value.value = new Date(value.value);
     }
     super.setData.call(this, value);
   }
@@ -220,7 +218,7 @@ export class ODateInputComponent extends OFormDataComponent implements AfterView
   }
 
   onChangeEvent(event: MatDatepickerInputEvent<any>) {
-    this.setValue(event.value, { changeType: OValueChangeEvent.USER_CHANGE,  emitModelToViewChange:false });
+    this.setValue(event.value, { changeType: OValueChangeEvent.USER_CHANGE, emitModelToViewChange: false });
   }
 
   innerOnFocus(event: any) {

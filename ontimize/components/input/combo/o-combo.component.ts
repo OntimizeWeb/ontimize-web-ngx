@@ -96,9 +96,9 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
   ensureOFormValue(value: any) {
     if (value instanceof OFormValue) {
       this.value = new OFormValue(value.value);
-    } else if ((value !== undefined || value !== null) && !(value instanceof OFormValue)) {
+    } else if (Util.isDefined(value) && !(value instanceof OFormValue)) {
       this.value = new OFormValue(value);
-    } else if ((value === undefined || value === null) && this.nullSelection) {
+    } else if (!Util.isDefined(value) && this.nullSelection) {
       this.value = new OFormValue(undefined);
     } else {
       this.value = new OFormValue(this.defaultValue);
