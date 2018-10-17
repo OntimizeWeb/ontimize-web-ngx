@@ -220,7 +220,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     if (!this.form || !Util.isDefined(this.form.oattr)) {
       return;
     }
-    this.permissions = this.permissionsService.getPermissions(this.form.oattr, this.oattr);
+    this.permissions = this.permissionsService.getPermissionsByAttr(this.form.oattr, 'components', this.oattr);
     if (!Util.isDefined(this.permissions)) {
       return;
     }
@@ -311,7 +311,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   }
 
   setData(value: any) {
-     /*emit OValueChangeEvent.PROGRAMMATIC_CHANGE when assign value to data*/
+    /*emit OValueChangeEvent.PROGRAMMATIC_CHANGE when assign value to data*/
     this.ensureOFormValue(value);
     if (this._fControl) {
       this._fControl.setValue(this.value.value, {
