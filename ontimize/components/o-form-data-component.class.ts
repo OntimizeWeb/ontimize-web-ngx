@@ -238,7 +238,10 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     if (!this.form || !Util.isDefined(this.form.oattr)) {
       return;
     }
-    const permissions: OComponentPermissions = this.permissionsService.getPermissionsByAttr(this.form.oattr,'components', this.oattr);
+    const permissions: OComponentPermissions = this.permissionsService.getPermissionsByAttr(this.form.oattr, 'components', this.oattr);
+    if (!Util.isDefined(permissions)) {
+      return;
+    }
     if (permissions.visible === false) {
       /* hide input per permissions */
       this.elRef.nativeElement.remove();
@@ -327,7 +330,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   }
 
   setData(value: any) {
-    //emit OValueChangeEvent.PROGRAMMATIC_CHANGE when assign value to data
+    // emit OValueChangeEvent.PROGRAMMATIC_CHANGE when assign value to data
     // this method skips the following permissions checking because the form is
     // setting its query result using it
     this.ensureOFormValue(value);
