@@ -29,6 +29,12 @@ export interface IFormDataComponent extends IFormControlComponent {
   data(value: any);
   isAutomaticBinding(): boolean;
   isAutomaticRegistering(): boolean;
+  setValue(val: any, options?: IFormValueOptions);
+  clearValue(options?: IFormValueOptions);
+  getValue(): any;
+
+  onChange: EventEmitter<Object>;
+  onValueChange: EventEmitter<OValueChangeEvent>;
 }
 
 export interface IErrorData {
@@ -40,7 +46,19 @@ export class OValueChangeEvent {
   public static USER_CHANGE = 0;
   public static PROGRAMMATIC_CHANGE = 1;
 
-  constructor(public type: number, public newValue: any, public oldValue: any, public target: any) { }
+  constructor(
+    public type: number,
+    public newValue: any,
+    public oldValue: any,
+    public target: any) { }
+
+  isUserChange(): boolean {
+    return this.type === OValueChangeEvent.USER_CHANGE;
+  }
+
+  isProgrammaticChange(): boolean {
+    return this.type === OValueChangeEvent.PROGRAMMATIC_CHANGE;
+  }
 }
 
 export const DEFAULT_INPUTS_O_FORM_DATA_COMPONENT = [
@@ -220,15 +238,15 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     if (!this.form || !Util.isDefined(this.form.oattr)) {
       return;
     }
-    this.permissions = this.permissionsService.getPermissions(this.form.oattr, this.oattr);
-    if (!Util.isDefined(this.permissions)) {
+    const permissions: OComponentPermissions = this.permissionsService.getPermissions(this.form.oattr, this.oattr);
+    if (!Util.isDefined(permissions)) {
       return;
     }
-    if (this.permissions.visible === false) {
+    if (permissions.visible === false) {
       /* hide input per permissions */
       this.elRef.nativeElement.remove();
       this.destroy();
-    } else if (this.permissions.enabled === false) {
+    } else if (permissions.enabled === false) {
       /* disable input per permissions */
       this.disabled = true;
       this.disabledChangesInDom();
@@ -236,6 +254,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
         this.form.registerFormComponent(this);
       }
     }
+    this.permissions = permissions;
   }
 
   /**
@@ -311,7 +330,8 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   }
 
   setData(value: any) {
-     /*emit OValueChangeEvent.PROGRAMMATIC_CHANGE when assign value to data*/
+    // this method skips the following permissions checking because the form is
+    // setting its query result using it
     this.ensureOFormValue(value);
     if (this._fControl) {
       this._fControl.setValue(this.value.value, {
@@ -344,15 +364,14 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   }
 
   setValue(val: any, options?: IFormValueOptions) {
+    if (!PermissionsService.checkEnabledPermission(this)) {
+      return;
+    }
     if (this.oldValue !== val) {
       var newValue = val;
       this.setFormValue(val, options);
-      if (options) {
-        this.emitOnValueChange(options.changeType, newValue, this.oldValue);
-      } else {
-        this.emitOnValueChange(OValueChangeEvent.PROGRAMMATIC_CHANGE, newValue, this.oldValue);
-      }
-
+      let changeType: number = options ? options.changeType : OValueChangeEvent.PROGRAMMATIC_CHANGE;
+      this.emitOnValueChange(changeType, newValue, this.oldValue);
       this.oldValue = val;
     }
   }
@@ -360,7 +379,10 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   /**
    * Clears the component value.
    */
-  clearValue(options?: IFormValueOptions): void {
+  clearValue(options?: IFormValueOptions) {
+    if (!PermissionsService.checkEnabledPermission(this)) {
+      return;
+    }
     this.setValue(void 0, options);
   }
 
@@ -450,6 +472,9 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   }
 
   set disabled(value: boolean) {
+    if (!PermissionsService.checkEnabledPermission(this)) {
+      return;
+    }
     if (this.hasVisiblePermission()) {
       this._disabled = value;
       if (this._fControl && value) {

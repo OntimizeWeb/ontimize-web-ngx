@@ -123,7 +123,7 @@ export class PermissionsService {
 
   static checkEnabledPermission(comp: any): boolean {
     if (comp.hasOwnProperty('permissions') && comp.permissions.enabled === false) {
-      console.warn('Operation is not allowed due permissions restriction');
+      console.warn('Operation is not allowed due permissions restrictions');
       return false;
     }
     return true;
