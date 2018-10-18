@@ -140,7 +140,7 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
               }
             }
           }
-          if (PermissionsService.PERMISSIONS_ACTIONS_FORM.indexOf(permission.attr)>-1) {
+          if (PermissionsService.PERMISSIONS_ACTIONS_FORM.indexOf(permission.attr) > -1) {
             //actions R;I;U;D
             if (permission.attr === 'update') {
               let elementByAction = self.element.nativeElement.querySelector('[attr="save"]');
@@ -152,6 +152,15 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
                     elementByAction.disabled = true;
                     this.disabledChangesInDom(elementByAction);
                   }
+                }
+              }
+            } else {
+              if (!permission.visible) {
+                elementByAction.remove();
+              } else {
+                if (!permission.enabled) {
+                  elementByAction.disabled = true;
+                  this.disabledChangesInDom(elementByAction);
                 }
               }
             }
