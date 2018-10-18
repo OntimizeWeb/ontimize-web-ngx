@@ -32,11 +32,11 @@ $transition-duration: 500ms;
       }
     }
 
-    &.o-app-sidenav-mode-mobile:not(.opened) {
-      .mat-sidenav.mat-drawer-closed {}
+    // &.o-app-sidenav-mode-mobile:not(.opened) {
+    //   .mat-sidenav.mat-drawer-closed {}
 
-      .mat-sidenav-content.mat-drawer-content {}
-    }
+    //   .mat-sidenav-content.mat-drawer-content {}
+    // }
 
     .mat-drawer-content {
       position: absolute;
@@ -95,7 +95,7 @@ $transition-duration: 500ms;
         transition: background-color $transition-duration;
 
         &.active + .o-app-sidenav-menugroup-items-container {
-          o-app-sidenav-menu-item:last-child li {
+          .o-app-sidenav-menu-item:last-child li {
             border-color: transparent;
           }
         }
@@ -103,6 +103,15 @@ $transition-duration: 500ms;
 
       .o-app-sidenav-menugroup-items-container {
         overflow: hidden;
+      }
+
+      .o-app-sidenav-item {
+        &.disabled {
+          .mat-button-focus-overlay,
+          .mat-ripple {
+            display: none;
+          }
+        }
       }
 
       &.mat-drawer-closing {
