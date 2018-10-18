@@ -74,6 +74,7 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
   protected mutationObserver: MutationObserver;
 
   protected formCacheSubscription: Subscription;
+  protected permissionsActions: OPermissions[];
 
   @InputConverter()
   showHeaderNavigation: boolean = true;
@@ -102,10 +103,6 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
         self.labelHeader = title;
       });
     }
-  }
-
-  ngAfterViewInit(): void {
-    this.parsePermissions();
 
   }
 
@@ -118,52 +115,45 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
     }
   }
 
-  private parsePermissions() {
-    let permissions: OPermissions[];
-    if (this._form.oattr) {
-      permissions = this.permissionService.getAllPermissionsByParent(this._form.oattr, 'actions');
+  ngAfterViewInit(): void {
+    this.parsePermissions();
+  }
 
-      if (Util.isDefined(permissions)) {
+  private parsePermissions() {
+
+    if (this._form.oattr) {
+      this.permissionsActions = this.permissionService.getContainerActionsPermissions(this._form.oattr);
+
+      if (Util.isDefined(this.permissionsActions)) {
         const self = this;
-        permissions.forEach((permission: OPermissions) => {
+        this.permissionsActions.forEach((permission: OPermissions) => {
           //others actions
-          let elementByAction = self.element.nativeElement.querySelector('[attr="' + permission.attr + '"]');
-          if (Util.isDefined(elementByAction)) {
-            if (!permission.visible) {
-              elementByAction.remove();
-            } else {
-              if (!permission.enabled) {
-                elementByAction.disabled = true;
-                this.disabledChangesInDom(elementByAction);
-              }
-            }
-          }
+          self.permissionManagement(permission);
+
           if (PermissionsService.PERMISSIONS_ACTIONS_FORM.indexOf(permission.attr) > -1) {
             //actions R;I;U;D
             if (permission.attr === 'update') {
-              let elementByAction = self.element.nativeElement.querySelector('[attr="save"]');
-              if (Util.isDefined(elementByAction)) {
-                if (!permission.visible) {
-                  elementByAction.remove();
-                } else {
-                  if (!permission.enabled) {
-                    elementByAction.disabled = true;
-                    this.disabledChangesInDom(elementByAction);
-                  }
-                }
-              }
-            } else {
-              if (!permission.visible) {
-                elementByAction.remove();
-              } else {
-                if (!permission.enabled) {
-                  elementByAction.disabled = true;
-                  this.disabledChangesInDom(elementByAction);
-                }
-              }
+              self.permissionManagement(permission, 'save');
+
             }
           }
         });
+      }
+    }
+  }
+
+  private permissionManagement(permission: OPermissions, attr?: string) {
+    let attrAction = Util.isDefined(attr) ? attr : permission.attr;
+    let elementByAction = this.element.nativeElement.querySelector('[attr="' + attrAction + '"]');
+
+    if (Util.isDefined(elementByAction)) {
+      if (!permission.visible) {
+        elementByAction.remove();
+      } else {
+        if (!permission.enabled) {
+          elementByAction.disabled = true;
+          this.disabledChangesInDom(elementByAction);
+        }
       }
     }
   }
@@ -260,6 +250,10 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
   }
 
   onSave(evt: any) {
+    const permissionUpdate = this.permissionsActions.find(comp => comp.attr === 'update');
+    if (!PermissionsService.checkEnabledPermission(permissionUpdate)) {
+      return;
+    }
     this.handleAcceptEditOperation();
   }
 
