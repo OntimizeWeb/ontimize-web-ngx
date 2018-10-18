@@ -131,7 +131,6 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
 
   protected permissionsService: PermissionsService;
   protected mutationObserver: MutationObserver;
-  protected permissions: OPermissions;
 
   constructor(
     form: OFormComponent,
@@ -365,7 +364,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   }
 
   setValue(val: any, options?: IFormValueOptions) {
-    if (!PermissionsService.checkEnabledPermission(this)) {
+    if (!PermissionsService.checkEnabledPermission(this.permissions)) {
       return;
     }
     if (this.oldValue !== val) {
@@ -381,7 +380,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
    * Clears the component value.
    */
   clearValue(options?: IFormValueOptions) {
-    if (!PermissionsService.checkEnabledPermission(this)) {
+    if (!PermissionsService.checkEnabledPermission(this.permissions)) {
       return;
     }
     this.setValue(void 0, options);
@@ -473,7 +472,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   }
 
   set disabled(value: boolean) {
-    if (!PermissionsService.checkEnabledPermission(this)) {
+    if (!PermissionsService.checkEnabledPermission(this.permissions)) {
       return;
     }
     if (this.hasVisiblePermission()) {

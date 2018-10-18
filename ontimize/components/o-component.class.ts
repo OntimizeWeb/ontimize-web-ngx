@@ -1,6 +1,6 @@
 import { Injector } from '@angular/core';
 import { InputConverter, BooleanConverter } from '../decorators';
-import { OTranslateService, PermissionsService } from '../services';
+import { OTranslateService, PermissionsService, OPermissions } from '../services';
 import { Util } from '../utils';
 
 export interface IComponent {
@@ -26,6 +26,7 @@ export class OBaseComponent implements IComponent {
   protected _tooltip: string;
   protected _tooltipPosition: string = 'below';
   protected _tooltipShowDelay: number = 500;
+  protected permissions: OPermissions;
 
   constructor(injector: Injector) {
     this.injector = injector;
@@ -101,7 +102,7 @@ export class OBaseComponent implements IComponent {
       this._isReadOnly = false;
       return;
     }
-    if (!PermissionsService.checkEnabledPermission(this)) {
+    if (!PermissionsService.checkEnabledPermission(this.permissions)) {
       return;
     }
     this._isReadOnly = value;
@@ -112,7 +113,7 @@ export class OBaseComponent implements IComponent {
   }
 
   set readOnly(value: any) {
-    if (!PermissionsService.checkEnabledPermission(this)) {
+    if (!PermissionsService.checkEnabledPermission(this.permissions)) {
       return;
     }
     const parsedValue = BooleanConverter(value);
@@ -125,7 +126,7 @@ export class OBaseComponent implements IComponent {
   }
 
   set disabled(value: boolean) {
-    if (!PermissionsService.checkEnabledPermission(this)) {
+    if (!PermissionsService.checkEnabledPermission(this.permissions)) {
       return;
     }
     this._disabled = value;
@@ -147,7 +148,7 @@ export class OBaseComponent implements IComponent {
   }
 
   set oenabled(value: any) {
-    if (!PermissionsService.checkEnabledPermission(this)) {
+    if (!PermissionsService.checkEnabledPermission(this.permissions)) {
       return;
     }
     const parsedValue = BooleanConverter(value);
