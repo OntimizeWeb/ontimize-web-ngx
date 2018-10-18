@@ -5,6 +5,11 @@ import { Util } from '../../utils';
 import { OntimizePermissionsService } from './ontimize-permissions.service';
 import { OntimizeEEPermissionsService } from './ontimize-ee-permissions.service';
 
+export type OPermissionsDefinition = {
+  components?: OComponentContainerPermissions[];
+  menu?: OPermissions[];
+};
+
 export type OPermissions = {
   attr: string;
   visible: boolean;
@@ -15,23 +20,18 @@ export type OComponentContainerPermissions = {
   attr: string;
   selector: string;
   components: OPermissions[];
+  actions: OPermissions[];
 };
-
-export type OPermissionType = 'components' | 'actions' | 'menu';
 
 @Injectable()
 export class PermissionsService {
 
-  public static PERMISSIONS_MENU_PROPERTY = 'menu';
-  public static PERMISSIONS_COMPONENTS_PROPERTY = 'components';
-  public static PERMISSIONS_ACTIONS_PROPERTY = 'actions';
   public static PERMISSIONS_ACTIONS_FORM = ['refresh', 'insert', 'update', 'delete'];
-
 
   protected permissionsService: any;
   protected ontimizePermissionsConfig: any;
 
-  protected permissions: any;
+  protected permissions: OPermissionsDefinition;
 
   constructor(protected injector: Injector) {
     const appConfig = this.injector.get(AppConfig).getConfiguration();
@@ -98,32 +98,44 @@ export class PermissionsService {
     return dataObservable.share();
   }
 
-  getPermissionsByAttr(parentAttr: string, type: OPermissionType, attr: string): OPermissions {
-    let parentComponents = this.getAllPermissionsByParent(parentAttr, type);
+  getComponentPermissions(attr: string, parentAttr: string): OPermissions {
     let permissions;
-    if (Util.isDefined(parentComponents)) {
-      permissions = parentComponents.find(comp => comp.attr === attr);
+    if (!Util.isDefined(this.permissions)) {
+      return undefined;
+    }
+    const allComponents: OComponentContainerPermissions[] = this.permissions.components || [];
+
+    const parentData: OComponentContainerPermissions = allComponents.find(comp => comp.attr === parentAttr);
+
+    if (Util.isDefined(parentData) && Util.isDefined(parentData.components)) {
+      permissions = parentData.components.find(comp => comp.attr === attr);
     }
     return permissions;
   }
 
-  getAllPermissionsByParent(parentAttr: string, type: OPermissionType): OPermissions[] {
-    let permissions: OPermissions[];
-    if (Util.isDefined(this.permissions)) {
-      const allComponents: OComponentContainerPermissions[] = this.permissions[PermissionsService.PERMISSIONS_COMPONENTS_PROPERTY] || [];
-      const parentData: OComponentContainerPermissions = allComponents.find(comp => comp.attr === parentAttr);
+  getMenuPermissions(attr: string): OPermissions {
+    let permissions;
+    if (!Util.isDefined(this.permissions)) {
+      return undefined;
+    }
+    const allMenu: OPermissions[] = this.permissions.menu || [];
 
-      if (Util.isDefined(parentData)) {
-        switch (type) {
-          case PermissionsService.PERMISSIONS_COMPONENTS_PROPERTY:
-            permissions = parentData[PermissionsService.PERMISSIONS_COMPONENTS_PROPERTY];
-            break;
-          case PermissionsService.PERMISSIONS_ACTIONS_PROPERTY:
-            permissions = parentData[PermissionsService.PERMISSIONS_ACTIONS_PROPERTY];
-            break;
-        }
+    permissions = allMenu.find(comp => comp.attr === attr);
 
-      }
+    return permissions;
+  }
+
+  getContainerActionsPermissions(attr: string): OPermissions[] {
+    let permissions;
+    if (!Util.isDefined(this.permissions)) {
+      return undefined;
+    }
+    const allComponents: OComponentContainerPermissions[] = this.permissions.components || [];
+
+    const containerData: OComponentContainerPermissions = allComponents.find(comp => comp.attr === attr);
+
+    if (Util.isDefined(containerData)) {
+      permissions = containerData.actions || [];
     }
     return permissions;
   }
