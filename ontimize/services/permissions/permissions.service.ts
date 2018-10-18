@@ -140,8 +140,8 @@ export class PermissionsService {
     return permissions;
   }
 
-  static checkEnabledPermission(comp: any): boolean {
-    if (comp.hasOwnProperty('permissions') && comp.permissions.enabled === false) {
+  static checkEnabledPermission(permission: OPermissions): boolean {
+    if (Util.isDefined(permission) && permission.enabled === false) {
       console.warn('Operation is not allowed due permissions restrictions');
       return false;
     }
