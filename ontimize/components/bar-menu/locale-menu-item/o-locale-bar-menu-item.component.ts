@@ -1,32 +1,13 @@
-import {
-  Component,
-  Inject,
-  Injector,
-  forwardRef,
-  ElementRef,
-  OnInit,
-  NgModule,
-  HostListener,
-  ViewEncapsulation
-} from '@angular/core';
+import { Component, Inject, Injector, forwardRef, ElementRef, NgModule, ViewEncapsulation } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
-import { OTranslateService } from '../../../services';
 import { OSharedModule } from '../../../shared';
 import { OBarMenuComponent } from '../o-bar-menu.component';
-
+import { OBaseMenuItemClass } from '../o-base-menu-item.class';
 
 export const DEFAULT_INPUTS_O_LOCALE_BAR_MENU_ITEM = [
-  // title [string]: menu item title. Default: no value.
-  'title',
-
-  // tooltip [string]: menu group tooltip. Default: 'title' value.
-  'tooltip',
-
-  // icon [string]: material icon. Default: no value.
-  'icon',
-
+  ...OBaseMenuItemClass.DEFAULT_INPUTS_O_BASE_MENU_ITEM,
   // locale [string]: language. For example: es
   'locale'
 ];
@@ -42,45 +23,18 @@ export const DEFAULT_INPUTS_O_LOCALE_BAR_MENU_ITEM = [
     '[class.o-locale-bar-menu-item]': 'true'
   }
 })
-export class OLocaleBarMenuItemComponent implements OnInit {
+export class OLocaleBarMenuItemComponent extends OBaseMenuItemClass {
 
   public static DEFAULT_INPUTS_O_LOCALE_BAR_MENU_ITEM = DEFAULT_INPUTS_O_LOCALE_BAR_MENU_ITEM;
 
-  protected menu: OBarMenuComponent;
-  protected translateService: OTranslateService;
-
-  protected _title: string;
-  protected _tooltip: string;
-  protected _icon: string;
-  protected _locale: string;
-  protected _isHovered: boolean = false;
-
-  @HostListener('mouseover') onMouseover = () => this.isHovered = true;
-  @HostListener('mouseout') onMouseout = () => this.isHovered = false;
+  locale: string;
 
   constructor(
-    @Inject(forwardRef(() => OBarMenuComponent)) menu: OBarMenuComponent,
+    @Inject(forwardRef(() => OBarMenuComponent)) protected menu: OBarMenuComponent,
     protected elRef: ElementRef,
-    protected injector: Injector) {
-    this.menu = menu;
-    this.translateService = this.injector.get(OTranslateService);
-  }
-
-  ngOnInit() {
-    if (!this.tooltip) {
-      this.tooltip = this.title;
-    }
-    if (this.translateService) {
-      this.translateService.onLanguageChanged.subscribe(() => {
-        this.setDOMTitle();
-      });
-      this.setDOMTitle();
-    }
-  }
-
-  setDOMTitle() {
-    let tooltip = this.translateService.get(this.tooltip);
-    this.elRef.nativeElement.setAttribute('title', tooltip);
+    protected injector: Injector
+  ) {
+    super(menu, elRef, injector);
   }
 
   configureI18n() {
@@ -100,46 +54,6 @@ export class OLocaleBarMenuItemComponent implements OnInit {
       return (this.translateService.getCurrentLang() === this.locale);
     }
     return false;
-  }
-
-  get title(): string {
-    return this._title;
-  }
-
-  set title(val: string) {
-    this._title = val;
-  }
-
-  get tooltip(): string {
-    return this._tooltip;
-  }
-
-  set tooltip(val: string) {
-    this._tooltip = val;
-  }
-
-  get icon(): string {
-    return this._icon;
-  }
-
-  set icon(val: string) {
-    this._icon = val;
-  }
-
-  get locale(): string {
-    return this._locale;
-  }
-
-  set locale(val: string) {
-    this._locale = val;
-  }
-
-  get isHovered(): boolean {
-    return this._isHovered;
-  }
-
-  set isHovered(val: boolean) {
-    this._isHovered = val;
   }
 }
 

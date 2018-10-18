@@ -1,25 +1,11 @@
-import {
-  Component,
-  Injector,
-  ElementRef,
-  OnInit,
-  NgModule,
-  HostListener,
-  ViewEncapsulation
-} from '@angular/core';
+import { Component, Injector, ElementRef, NgModule, ViewEncapsulation, Inject, forwardRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { OTranslateService } from '../../../services';
 import { OSharedModule } from '../../../shared';
+import { OBarMenuComponent } from '../o-bar-menu.component';
+import { OBaseMenuItemClass } from '../o-base-menu-item.class';
 
 export const DEFAULT_INPUTS_O_BAR_MENU_GROUP = [
-  // title [string]: menu group title. Default: no value.
-  'groupTitle: title',
-
-  // tooltip [string]: menu group tooltip. Default: 'title' value.
-  'tooltip',
-
-  // icon [string]: material icon. Default: no value.
-  'icon'
+  ...OBaseMenuItemClass.DEFAULT_INPUTS_O_BASE_MENU_ITEM
 ];
 
 @Component({
@@ -33,85 +19,18 @@ export const DEFAULT_INPUTS_O_BAR_MENU_GROUP = [
     '[class.o-bar-menu-group]': 'true'
   }
 })
-export class OBarMenuGroupComponent implements OnInit {
+export class OBarMenuGroupComponent extends OBaseMenuItemClass {
 
   public static DEFAULT_INPUTS_O_BAR_MENU_GROUP = DEFAULT_INPUTS_O_BAR_MENU_GROUP;
-
-  protected translateService: OTranslateService;
-
-  protected _groupTitle: string;
-  protected _tooltip: string;
-  protected _icon: string;
-  protected _id: string;
-
-  protected _isHovered: boolean = false;
-
-  @HostListener('mouseover') onMouseover = () => this.isHovered = true;
-  @HostListener('mouseout') onMouseout = () => this.isHovered = false;
+  id: string;
 
   constructor(
+    @Inject(forwardRef(() => OBarMenuComponent)) protected menu: OBarMenuComponent,
     protected elRef: ElementRef,
-    protected injector: Injector) {
+    protected injector: Injector
+  ) {
+    super(menu, elRef, injector);
     this.id = 'm_' + String((new Date()).getTime() + Math.random());
-
-    this.translateService = this.injector.get(OTranslateService);
-  }
-
-  ngOnInit() {
-    if (!this.tooltip) {
-      this.tooltip = this.groupTitle;
-    }
-    if (this.translateService) {
-      this.translateService.onLanguageChanged.subscribe(() => {
-        this.setDOMTitle();
-      });
-      this.setDOMTitle();
-    }
-  }
-
-  setDOMTitle() {
-    let tooltip = this.translateService.get(this.tooltip);
-    this.elRef.nativeElement.setAttribute('title', tooltip);
-  }
-
-  get groupTitle(): string {
-    return this._groupTitle;
-  }
-
-  set groupTitle(val: string) {
-    this._groupTitle = val;
-  }
-
-  get tooltip(): string {
-    return this._tooltip;
-  }
-
-  set tooltip(val: string) {
-    this._tooltip = val;
-  }
-
-  get icon(): string {
-    return this._icon;
-  }
-
-  set icon(val: string) {
-    this._icon = val;
-  }
-
-  get id(): string {
-    return this._id;
-  }
-
-  set id(val: string) {
-    this._id = val;
-  }
-
-  get isHovered(): boolean {
-    return this._isHovered;
-  }
-
-  set isHovered(val: boolean) {
-    this._isHovered = val;
   }
 }
 
