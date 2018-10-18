@@ -25,8 +25,18 @@ export type OComponentContainerPermissions = {
 
 @Injectable()
 export class PermissionsService {
+  public static PERMISSIONS_ACTIONS_REFRESH_FORM = 'refresh';
+  public static PERMISSIONS_ACTIONS_INSERT_FORM = 'insert';
+  public static PERMISSIONS_ACTIONS_UPDATE_FORM = 'update';
+  public static PERMISSIONS_ACTIONS_DELETE_FORM = 'delete';
+  public static MESSAGE_OPERATION_NOT_ALLOWED_PERMISSION ='Operation is not allowed due permissions restrictions';
 
-  public static PERMISSIONS_ACTIONS_FORM = ['refresh', 'insert', 'update', 'delete'];
+  public static PERMISSIONS_ACTIONS_FORM = [
+    PermissionsService.PERMISSIONS_ACTIONS_REFRESH_FORM,
+    PermissionsService.PERMISSIONS_ACTIONS_INSERT_FORM,
+    PermissionsService.PERMISSIONS_ACTIONS_UPDATE_FORM,
+    PermissionsService.PERMISSIONS_ACTIONS_DELETE_FORM
+  ];
 
   protected permissionsService: any;
   protected ontimizePermissionsConfig: any;
@@ -140,9 +150,23 @@ export class PermissionsService {
     return permissions;
   }
 
+  getContainerActionPermissions(attr: string, parentAttr: string): OPermissions {
+    let permissions;
+    if (!Util.isDefined(this.permissions)) {
+      return undefined;
+    }
+    const allComponents: OComponentContainerPermissions[] = this.permissions.components || [];
+    const parentData: OComponentContainerPermissions = allComponents.find(comp => comp.attr === parentAttr);
+
+    if (Util.isDefined(parentData) && Util.isDefined(parentData.actions)) {
+      permissions = parentData.actions.find(comp => comp.attr === attr);
+    }
+    return permissions;
+  }
+
   static checkEnabledPermission(permission: OPermissions): boolean {
     if (Util.isDefined(permission) && permission.enabled === false) {
-      console.warn('Operation is not allowed due permissions restrictions');
+      console.warn(PermissionsService.MESSAGE_OPERATION_NOT_ALLOWED_PERMISSION);
       return false;
     }
     return true;

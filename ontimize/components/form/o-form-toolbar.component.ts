@@ -16,7 +16,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { OFormComponent } from './o-form.component';
 import { InputConverter } from '../../decorators';
 import { Util } from '../../util/util';
-import { DialogService, NavigationService, PermissionsService, OPermissions } from '../../services';
+import { DialogService, NavigationService, PermissionsService, OPermissions, SnackBarService } from '../../services';
 import { OSharedModule } from '../../shared';
 import { OFormNavigationComponent } from './navigation/o-form-navigation.component';
 
@@ -75,6 +75,7 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
 
   protected formCacheSubscription: Subscription;
   protected permissionsActions: OPermissions[];
+  protected snackBarService: SnackBarService;
 
   @InputConverter()
   showHeaderNavigation: boolean = true;
@@ -86,7 +87,7 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
     this._dialogService = this.injector.get(DialogService);
     this._navigationService = this.injector.get(NavigationService);
     this.permissionService = this.injector.get(PermissionsService);
-
+    this.snackBarService = this.injector.get(SnackBarService);
   }
 
   ngOnInit() {
@@ -225,6 +226,9 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
   }
 
   onReload() {
+    if (!this.checkEnabledPermission(PermissionsService.PERMISSIONS_ACTIONS_REFRESH_FORM)) {
+      return;
+    }
     let self = this;
     this._form.showConfirmDiscardChanges().then(val => {
       if (val) {
@@ -234,26 +238,38 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
   }
 
   onInsert() {
+    if (!this.checkEnabledPermission(PermissionsService.PERMISSIONS_ACTIONS_INSERT_FORM)) {
+      return;
+    }
+
     this._form.executeToolbarAction(OFormComponent.GO_INSERT_ACTION, {
       changeToolbarMode: true
     });
   }
 
   onEdit() {
+    if (!this.checkEnabledPermission(PermissionsService.PERMISSIONS_ACTIONS_UPDATE_FORM)) {
+      return;
+    }
+
     this._form.executeToolbarAction(OFormComponent.GO_EDIT_ACTION, {
       changeToolbarMode: true
     });
   }
 
   onDelete(evt: any) {
+    if (!this.checkEnabledPermission(PermissionsService.PERMISSIONS_ACTIONS_DELETE_FORM)) {
+      return;
+    }
+
     this.showConfirmDelete(evt);
   }
 
   onSave(evt: any) {
-    const permissionUpdate = this.permissionsActions.find(comp => comp.attr === 'update');
-    if (!PermissionsService.checkEnabledPermission(permissionUpdate)) {
+    if (!this.checkEnabledPermission(PermissionsService.PERMISSIONS_ACTIONS_UPDATE_FORM)) {
       return;
     }
+
     this.handleAcceptEditOperation();
   }
 
@@ -278,8 +294,14 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
 
   acceptOperation() {
     if (this.editMode) {
+      if (!this.checkEnabledPermission(PermissionsService.PERMISSIONS_ACTIONS_UPDATE_FORM)) {
+        return;
+      }
       this.handleAcceptEditOperation();
     } else if (this.insertMode) {
+      if (!this.checkEnabledPermission(PermissionsService.PERMISSIONS_ACTIONS_INSERT_FORM)) {
+        return;
+      }
       this.handleAcceptInsertOperation();
     }
   }
@@ -344,6 +366,15 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
 
   get isDeleteBtnEnabled(): boolean {
     return this.deleteBtnEnabled;
+  }
+
+  private checkEnabledPermission(attr) {
+    const permission = this.permissionService.getContainerActionPermissions(attr, this._form.oattr);
+    let enabledPermision = PermissionsService.checkEnabledPermission(permission);
+    if (!enabledPermision) {
+      this.snackBarService.open(PermissionsService.MESSAGE_OPERATION_NOT_ALLOWED_PERMISSION);
+    }
+    return enabledPermision;
   }
 
 }
