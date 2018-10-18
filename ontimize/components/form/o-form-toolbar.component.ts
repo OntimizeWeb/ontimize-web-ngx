@@ -133,9 +133,8 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
 
           if (PermissionsService.PERMISSIONS_ACTIONS_FORM.indexOf(permission.attr) > -1) {
             //actions R;I;U;D
-            if (permission.attr === 'update') {
-              self.permissionManagement(permission, 'save');
-
+            if (permission.attr === PermissionsService.PERMISSIONS_ACTIONS_UPDATE_FORM) {
+              self.permissionManagement(permission, 'edit');
             }
           }
         });
@@ -182,7 +181,11 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
   }
   protected manageEditableDetail() {
     const isEditableDetail = this._form.isEditableDetail();
-    this.saveBtnEnabled = isEditableDetail;
+
+    let permissionUpdate: OPermissions = this.permissionService.getContainerActionPermissions(PermissionsService.PERMISSIONS_ACTIONS_UPDATE_FORM, this._form.oattr);
+    if (this.hasEnabledPermission(permissionUpdate)) {
+      this.saveBtnEnabled = isEditableDetail;
+    }
 
     this.refreshBtnEnabled = this.refreshBtnEnabled && isEditableDetail;
     this.insertBtnEnabled = this.insertBtnEnabled && isEditableDetail;
@@ -278,6 +281,11 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
   }
 
   set existsChangesToSave(val: boolean) {
+    const attr = this._form.isEditableDetail() ? PermissionsService.PERMISSIONS_ACTIONS_UPDATE_FORM : PermissionsService.PERMISSIONS_ACTIONS_INSERT_FORM;
+    let permission: OPermissions = this.permissionService.getContainerActionPermissions(attr, this._form.oattr);
+    if (!(Util.isDefined(permission) && permission.enabled === false)) {
+      return;
+    }
     this._existsChangesToSave = val;
   }
 
@@ -377,6 +385,9 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
     return enabledPermision;
   }
 
+  hasEnabledPermission(permission: OPermissions): boolean {
+    return permission ? permission.enabled : true;
+  }
 }
 
 @NgModule({
