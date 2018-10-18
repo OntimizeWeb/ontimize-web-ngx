@@ -1,8 +1,14 @@
 ## 3.1.2
 ### Features
 * **OFormDataComponent**:
- * allowing to use permissions ([3291e57](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3291e57)) ([ca1f933](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ca1f933)) ([17105dc](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/17105dc)) ([5228ccc](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5228ccc)) ([7e46523](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7e46523)) ([c0eba19](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c0eba19))
- * blocking operations due permissions configuration ([d12a606](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d12a606))
+
+  * **Form Controls**
+    * allowing to use permissions ([3291e57](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3291e57)) ([ca1f933](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ca1f933)) ([17105dc](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/17105dc)) ([5228ccc](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5228ccc)) ([7e46523](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7e46523)) ([c0eba19](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c0eba19))
+    * blocking operations due permissions configuration ([d12a606](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d12a606)) ([f6a7032](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f6a7032)) 
+  * **Form Actions**
+    * allowing to use permissions ([b016642](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b016642)) ([4448b5e] (https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4448b5e)) ([e19f9aa](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e19f9aa)) 
+
+    * blocking operations due permissions configuration ([ff93384](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ff93384))
 * **Config**:
   * adding new configurable properties: '*permissionsConfiguration*' and '*permissionsServiceType*' used for permissions configuration ([9ecd082](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9ecd082))
   * new interface `IPermissionsService` that must be implemented by the service indicated in the '*permissionsServiceType*' property ([9ecd082](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9ecd082))
