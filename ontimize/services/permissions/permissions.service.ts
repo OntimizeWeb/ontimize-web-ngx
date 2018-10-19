@@ -1,5 +1,6 @@
 import { Injector, Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
+import { share } from 'rxjs/operators';
 import { AppConfig } from '../../config/app-config';
 import { Util } from '../../utils';
 import { OntimizePermissionsService } from './ontimize-permissions.service';
@@ -29,7 +30,7 @@ export class PermissionsService {
   public static PERMISSIONS_ACTIONS_INSERT_FORM = 'insert';
   public static PERMISSIONS_ACTIONS_UPDATE_FORM = 'update';
   public static PERMISSIONS_ACTIONS_DELETE_FORM = 'delete';
-  public static MESSAGE_OPERATION_NOT_ALLOWED_PERMISSION ='Operation is not allowed due permissions restrictions';
+  public static MESSAGE_OPERATION_NOT_ALLOWED_PERMISSION = 'Operation is not allowed due permissions restrictions';
 
   public static PERMISSIONS_ACTIONS_FORM = [
     PermissionsService.PERMISSIONS_ACTIONS_REFRESH_FORM,
@@ -105,7 +106,7 @@ export class PermissionsService {
         innerObserver.complete();
       });
     });
-    return dataObservable.share();
+    return dataObservable.pipe(share());
   }
 
   getComponentPermissions(attr: string, parentAttr: string): OPermissions {

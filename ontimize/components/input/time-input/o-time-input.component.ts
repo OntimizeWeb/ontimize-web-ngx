@@ -1,7 +1,7 @@
 import { Component, Inject, Injector, forwardRef, ElementRef, EventEmitter, Optional, NgModule, ViewEncapsulation, ViewChild, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormGroup, FormControl } from '@angular/forms';
-import { Subscription } from 'rxjs';
+import { Subscription, merge } from 'rxjs';
 import moment from 'moment';
 
 import { Util } from '../../../utils';
@@ -13,7 +13,6 @@ import { OFormDataComponent, DEFAULT_INPUTS_O_FORM_DATA_COMPONENT, DEFAULT_OUTPU
 
 import { ODateInputModule, ODateInputComponent, DateFilterFunction } from '../date-input/o-date-input.component';
 import { OHourInputModule, OHourInputComponent } from '../hour-input/o-hour-input.component';
-import { Observable } from 'rxjs/Observable';
 
 export const DEFAULT_INPUTS_O_TIME_INPUT = [
   ...DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,
@@ -98,7 +97,7 @@ export class OTimeInputComponent extends OFormDataComponent implements OnInit, A
   ngOnInit() {
     super.ngOnInit();
     const self = this;
-    Observable.merge(this.dateInput.onValueChange, this.hourInput.onValueChange)
+    merge(this.dateInput.onValueChange, this.hourInput.onValueChange)
       .subscribe((event: OValueChangeEvent) => {
         if (event.isUserChange()) {
           self.updateComponentValue();
