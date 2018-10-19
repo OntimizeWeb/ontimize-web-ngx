@@ -107,6 +107,7 @@ export class OFormCacheClass {
     this.formDataCache = undefined;
     this.initializeCache({});
     this.initializedCache = false;
+    this.onCacheStateChanges.emit();
   }
 
   setCacheSnapshot() {

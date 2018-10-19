@@ -403,7 +403,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
 
   /*This method is called in output change event, not emit event onValueChange when oldvalue is same than newvalue*/
   onChangeEvent($event) {
-    if (this.oldValue !== this.getValue) {
+    if (this.oldValue !== this.getValue()) {
       this.emitOnValueChange(OValueChangeEvent.USER_CHANGE, this.getValue(), this.oldValue);
       this.oldValue = this.getValue();
     }
