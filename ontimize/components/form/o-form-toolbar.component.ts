@@ -80,7 +80,7 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
   @InputConverter()
   showHeaderNavigation: boolean = true;
 
-  constructor( @Inject(forwardRef(() => OFormComponent)) private _form: OFormComponent,
+  constructor(@Inject(forwardRef(() => OFormComponent)) private _form: OFormComponent,
     public element: ElementRef,
     protected injector: Injector) {
     _form.registerToolbar(this);
@@ -164,8 +164,9 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
   private disabledChangesInDom(element: Node) {
     this.mutationObserver = new MutationObserver(function (mutations) {
       mutations.forEach(function (mutation) {
-        if (mutation.type === 'attributes' && mutation.attributeName === 'disabled'
-          && mutation.target.attributes.getNamedItem('disabled') === null) {
+        if (mutation.type === 'attributes' && mutation.attributeName === 'disabled') {
+          // TODO 
+          // && mutation.target.attributes.getNamedItem('disabled') === null) {
           var element = <HTMLInputElement>mutation.target;
           element.disabled = true;
         }

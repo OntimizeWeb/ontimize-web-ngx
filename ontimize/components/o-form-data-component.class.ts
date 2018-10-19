@@ -263,8 +263,8 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     const self = this;
     this.mutationObserver = new MutationObserver(function (mutations) {
       mutations.forEach(function (mutation) {
-        if (mutation.type === 'attributes' && mutation.attributeName === 'disabled'
-          && mutation.target.attributes.getNamedItem('disabled') === null) {
+        if (mutation.type === 'attributes' && mutation.attributeName === 'disabled') {
+          // TODO && mutation.target.attributes.getNamedItem('disabled') === null
           const control = self.getControl();
           control.disable();
         }
