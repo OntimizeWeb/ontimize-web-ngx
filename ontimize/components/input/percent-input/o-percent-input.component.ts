@@ -13,6 +13,7 @@ export const DEFAULT_OUTPUTS_O_PERCENT_INPUT = [
 ];
 
 @Component({
+  moduleId: module.id,
   selector: 'o-percent-input',
   templateUrl: './o-percent-input.component.html',
   styleUrls: ['./o-percent-input.component.scss'],

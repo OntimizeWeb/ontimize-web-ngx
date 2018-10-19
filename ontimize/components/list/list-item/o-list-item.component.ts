@@ -7,6 +7,7 @@ import { OSharedModule } from '../../../shared';
 import { OListComponent } from '../o-list.component';
 
 @Component({
+  moduleId: module.id,
   selector: 'o-list-item',
   templateUrl: './o-list-item.component.html',
   styleUrls: ['./o-list-item.component.scss'],

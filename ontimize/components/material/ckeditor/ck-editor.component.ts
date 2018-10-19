@@ -17,6 +17,7 @@ export const CKEDITOR_VALUE_ACCESSOR: any = {
 };
 
 @Component({
+  moduleId: module.id,
   selector: 'ck-editor',
   template: `<textarea #ck></textarea>`,
   providers: [CKEDITOR_VALUE_ACCESSOR],

@@ -25,6 +25,7 @@ export const DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_DATE = [
 ];
 
 @Component({
+  moduleId: module.id,
   selector: 'o-table-cell-editor-date',
   templateUrl: './o-table-cell-editor-date.component.html',
   styleUrls: ['./o-table-cell-editor-date.component.scss'],

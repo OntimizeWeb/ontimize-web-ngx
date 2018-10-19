@@ -4,6 +4,7 @@ import { OFormLayoutManagerContentDirective } from '../directives/o-form-layout-
 import { OFormLayoutManagerComponent } from '../../../layouts/form-layout/o-form-layout-manager.component';
 
 @Component({
+  moduleId: module.id,
   selector: 'o-form-layout-dialog',
   templateUrl: 'o-form-layout-dialog.component.html',
   styleUrls: ['o-form-layout-dialog.component.scss'],
@@ -15,7 +16,7 @@ import { OFormLayoutManagerComponent } from '../../../layouts/form-layout/o-form
 export class OFormLayoutDialogComponent implements AfterViewInit {
   formLayoutManager: OFormLayoutManagerComponent;
   queryParams: any;
-  urlParams: Object;
+  params: Object;
   urlSegments: any[];
   label: string;
   title: string;
@@ -38,7 +39,7 @@ export class OFormLayoutDialogComponent implements AfterViewInit {
       this.data = data.data;
       const component = data.data.component;
       this.componentFactory = this.componentFactoryResolver.resolveComponentFactory(component);
-      this.urlParams = data.data.urlParams;
+      this.params = data.data.params;
       this.queryParams = data.data.queryParams;
       this.urlSegments = data.data.urlSegments;
     }
@@ -55,8 +56,9 @@ export class OFormLayoutDialogComponent implements AfterViewInit {
     }
   }
 
-  setLabel(val: string) {
-    let label = val.length ? val : this.formLayoutManager.getLabelFromUrlParams(this.urlParams);
+  updateNavigation(data: any, id: string) {
+    let label = this.formLayoutManager.getLabelFromData(data);
+    label = label.length ? label : this.formLayoutManager.getLabelFromUrlParams(this.params);
     if (label && label.length) {
       label = ': ' + label;
     }
@@ -65,5 +67,17 @@ export class OFormLayoutDialogComponent implements AfterViewInit {
 
   closeDialog() {
     this.dialogRef.close();
+  }
+
+  getRouteOfActiveItem(): any[] {
+    const parentRoute = this.formLayoutManager.parentFormLayoutManager.getRouteOfActiveItem();
+    const segments = (this.urlSegments || []);
+    let route = [];
+    segments.forEach((segment, index) => {
+      if (parentRoute[index] !== segment.path) {
+        route.push(segment.path);
+      }
+    });
+    return route;
   }
 }

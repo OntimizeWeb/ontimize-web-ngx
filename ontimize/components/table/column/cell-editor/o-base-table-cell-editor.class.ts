@@ -1,10 +1,11 @@
 import { Injector, EventEmitter, OnInit, HostListener } from '@angular/core';
 import { FormControl, ValidatorFn, Validators, FormGroup } from '@angular/forms';
-import { OTranslateService, SnackBarService } from '../../../../services';
+
 import { InputConverter } from '../../../../decorators';
 import { OTableComponent } from '../../o-table.component';
+import { ObservableWrapper, Util } from '../../../../utils';
 import { OTableColumnComponent } from '../o-table-column.component';
-import { Util, ObservableWrapper } from '../../../../utils';
+import { OTranslateService, SnackBarService } from '../../../../services';
 
 export class OBaseTableCellEditor implements OnInit {
 
@@ -35,7 +36,6 @@ export class OBaseTableCellEditor implements OnInit {
   @InputConverter()
   showToastOnEdit: boolean = false;
 
-  protected _tableColumnAttr: string;
   protected _tableColumn: OTableColumnComponent;
   protected _table: OTableComponent;
 
@@ -74,13 +74,8 @@ export class OBaseTableCellEditor implements OnInit {
     this.registerEditor();
   }
 
-  /** @deprecated */
-  initialize() {
-    //
-  }
-
   protected handleKeyup(event: KeyboardEvent) {
-    const oColumn = this.table.getOColumn(this._tableColumnAttr);
+    const oColumn = this.table.getOColumn(this.tableColumnAttr);
     if (!oColumn || !oColumn.editing) {
       return;
     }
@@ -113,7 +108,7 @@ export class OBaseTableCellEditor implements OnInit {
   }
 
   getCellData(): any {
-    return this._rowData[this._tableColumnAttr];
+    return this._rowData[this.tableColumnAttr];
   }
 
   startEdition(data: any) {
@@ -125,7 +120,7 @@ export class OBaseTableCellEditor implements OnInit {
   }
 
   endEdition(saveChanges) {
-    const oColumn = this.table.getOColumn(this._tableColumnAttr);
+    const oColumn = this.table.getOColumn(this.tableColumnAttr);
     if (oColumn) {
       const self = this;
       const updateObserver = this.table.updateCellData(oColumn, this._rowData, saveChanges);
@@ -141,7 +136,7 @@ export class OBaseTableCellEditor implements OnInit {
 
   commitEdition() {
     if (!this.formControl.invalid) {
-      this._rowData[this._tableColumnAttr] = this.formControl.value;
+      this._rowData[this.tableColumnAttr] = this.formControl.value;
       if (!this.isSilentControl()) {
         this.endEdition(true);
         this.editionCommitted.emit(this._rowData);
@@ -157,12 +152,14 @@ export class OBaseTableCellEditor implements OnInit {
     this._tableColumn = arg;
     if (arg) {
       this._table = arg.table;
-      this.tableColumnAttr = arg.attr;
     }
   }
 
-  set tableColumnAttr(arg: string) {
-    this._tableColumnAttr = arg;
+  get tableColumnAttr(): string {
+    if (this._tableColumn) {
+      return this._tableColumn.attr;
+    }
+    return undefined;
   }
 
   set table(arg: OTableComponent) {
@@ -247,4 +244,5 @@ export class OBaseTableCellEditor implements OnInit {
       this.snackBarService.open('MESSAGES.INSERTED', { icon: 'check_circle' });
     }
   }
+
 }

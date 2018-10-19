@@ -7,7 +7,7 @@ import { InputConverter } from '../../decorators';
 import { IFormValueOptions } from '../form/OFormValue';
 import { OFormComponent } from '../form/o-form.component';
 import { DialogService, OntimizeService } from '../../services';
-import { DEFAULT_INPUTS_O_FORM_DATA_COMPONENT, OFormDataComponent } from '../o-form-data-component.class';
+import { DEFAULT_INPUTS_O_FORM_DATA_COMPONENT, OFormDataComponent, DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT } from '../o-form-data-component.class';
 
 export const DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT = [
   ...DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,
@@ -36,12 +36,21 @@ export const DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT = [
   // query-method [string]: name of the service method to perform queries. Default: query.
   'queryMethod: query-method',
 
-  'serviceType : service-type'
+  'serviceType : service-type',
+
+  // query-with-null-parent-keys [string][yes|no|true|false]: Indicates whether or not to trigger query method when parent-keys filter is null. Default: false
+  'queryWithNullParentKeys: query-with-null-parent-keys'
 ];
+
+export const DEFAULT_OUTPUTS_O_FORM_SERVICE_COMPONENT = [
+  ...DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT
+];
+
 
 export class OFormServiceComponent extends OFormDataComponent {
 
   public static DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT = DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT;
+  public static DEFAULT_OUTPUTS_O_FORM_SERVICE_COMPONENT = DEFAULT_OUTPUTS_O_FORM_SERVICE_COMPONENT;
 
   /* Inputs */
   protected staticData: Array<any>;
@@ -61,6 +70,8 @@ export class OFormServiceComponent extends OFormDataComponent {
   protected queryOnEvent: any;
   protected queryMethod: string = Codes.QUERY_METHOD;
   protected serviceType: string;
+  @InputConverter()
+  queryWithNullParentKeys: boolean = false;
 
   /* Internal variables */
   protected dataArray: any[] = [];
@@ -129,7 +140,9 @@ export class OFormServiceComponent extends OFormDataComponent {
     if (this.queryOnEvent !== undefined && this.queryOnEvent.subscribe !== undefined) {
       const self = this;
       this.queryOnEventSubscription = this.queryOnEvent.subscribe((value) => {
-        self.queryData();
+        if (Util.isDefined(value) || this.queryWithNullParentKeys) {
+          self.queryData();
+        }
       });
     }
   }
@@ -214,10 +227,10 @@ export class OFormServiceComponent extends OFormDataComponent {
     if (Util.isArray(data)) {
       this.dataArray = data;
       this.syncDataIndex();
-    } else if (Util.isObject(data)) {
+    } else if (Util.isObject(data) && Object.keys(data).length > 0) {
       this.dataArray = [data];
     } else {
-      console.warn('Component has received not supported service data. Supported data are Array or Object');
+      console.warn('Component has received not supported service data. Supported data are Array or not empty Object');
       this.dataArray = [];
     }
   }

@@ -14,7 +14,7 @@
     <ng-content select=".main-container"></ng-content>
   </div>
 
-  <button *ngIf="buttonText !== undefined" [disabled]="disabledButton" (click)="onButtonClick()" mat-button>{{ buttonText | oTranslate | uppercase }}</button>
+  <button type="button" *ngIf="buttonText !== undefined" [disabled]="disabledButton" (click)="onButtonClick()" mat-button>{{ buttonText | oTranslate | uppercase }}</button>
 
   <div *ngIf="showSecondaryContainer" class="o-card-menu-item-secondary" fxFlex="50" [fxLayout]="secondaryContainerLayout"
     fxLayoutAlign="space-around center">

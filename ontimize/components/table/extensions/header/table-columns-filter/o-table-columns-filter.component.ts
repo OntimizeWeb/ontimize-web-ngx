@@ -23,6 +23,7 @@ export interface IColumnValueFilter {
 }
 
 @Component({
+  moduleId: module.id,
   selector: 'o-table-columns-filter',
   template: ' ',
   inputs: DEFAULT_INPUTS_O_TABLE_COLUMN_FILTER,
@@ -37,10 +38,10 @@ export class OTableColumnsFilterComponent implements OnInit {
   public static DEFAULT_COMPARISON_TYPE = 'VIEW';
   public static MODEL_COMPARISON_TYPE = 'MODEL';
 
-  columns: string;
+  protected _columns: string;
   @InputConverter()
   preloadValues: boolean = true;
-  protected columnsArray: Array<string> = [];
+  protected _columnsArray: Array<string> = [];
   protected columnsComparisonProperty: Object = {};
 
   constructor(
@@ -49,7 +50,6 @@ export class OTableColumnsFilterComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.columnsArray = Util.parseArray(this.columns, true);
     if (this.columnsArray.length === 0) {
       this.columnsArray = this.table.oTableOptions.visibleColumns;
     }
@@ -77,6 +77,19 @@ export class OTableColumnsFilterComponent implements OnInit {
     } else {
       return column.renderer ? column.renderer.getCellData(val) : val;
     }
+  }
+
+  set columns(arg:string) {
+    this._columns = arg;
+    this._columnsArray = Util.parseArray(this._columns, true);
+  }
+
+  set columnsArray(arg: string[]) {
+    this._columnsArray = arg;
+  }
+
+  get columnsArray() : string[] {
+    return this._columnsArray;
   }
 
 }

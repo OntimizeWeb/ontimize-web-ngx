@@ -25,6 +25,7 @@ export class Codes {
   public static HYPHEN_SEPARATOR = '-';
   public static SPACE_SEPARATOR = ' ';
   public static COLUMNS_ALIAS_SEPARATOR = ':';
+  public static ARRAY_INPUT_SEPARATOR = ';';
   public static TYPE_SEPARATOR = ':';
   public static VALUES_SEPARATOR = '=';
   public static ASC_SORT = 'asc';
@@ -68,7 +69,7 @@ export class Codes {
   }
 
   static isValidRowHeight(value: string): boolean {
-    return Codes.AVAILABLE_ROW_HEIGHTS_VALUES.indexOf(value) === -1;
+    return Codes.AVAILABLE_ROW_HEIGHTS_VALUES.indexOf(value) !== -1;
   }
 
   static getIsDetailObject(): any {

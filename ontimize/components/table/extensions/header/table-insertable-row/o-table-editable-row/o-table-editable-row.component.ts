@@ -13,6 +13,7 @@ export const DEFAULT_INPUTS_O_TABLE_EDITABLE_ROW = [
 ];
 
 @Component({
+  moduleId: module.id,
   selector: 'o-table-editable-row',
   templateUrl: './o-table-editable-row.component.html',
   styleUrls: ['./o-table-editable-row.component.scss'],
@@ -65,14 +66,13 @@ export class OTableEditableRowComponent {
       // not intro
       return;
     }
-    let anyTouched = false;
-    // columns with no editor defined
-    Object.keys(this.controls).forEach((controlKey) => {
-      anyTouched = this.controls[controlKey].touched || anyTouched;
-    });
-    if (anyTouched) {
-      this.insertRecord();
+    if (!this.elRef.nativeElement.contains(event.target)) {
+      // if keyboard event is not contained in this editable-row
+      return;
     }
+    event.preventDefault();
+    event.stopPropagation();
+    this.insertRecord();
   }
 
   get insertableRowTable(): OTableInsertableRowComponent {
@@ -147,7 +147,7 @@ export class OTableEditableRowComponent {
   insertRecord() {
     const self = this;
     if (!this.validateFields()) {
-      this.table.showDialogError('TABLE.ROW_VALIDATION_ERROR');
+      // this.table.showDialogError('TABLE.ROW_VALIDATION_ERROR');
       return;
     }
 
@@ -212,7 +212,6 @@ export class OTableEditableRowComponent {
         editor.registerInColumn = false;
         editor.showPlaceHolder = this._insertableRowTable.showPlaceHolder || editor.showPlaceHolder;
         editor.table = self.table;
-        editor.tableColumnAttr = col.attr;
         editor.tableColumn = col.editor ? col.editor.tableColumn : col.definition;
         editor.orequired = this.isColumnRequired(col);
         editor.formControl = this.getControl(col);

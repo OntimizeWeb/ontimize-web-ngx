@@ -1,8 +1,7 @@
 import { Router } from '@angular/router';
-
 import { Codes, Util } from '../utils';
-import { OFormComponent } from './form/o-form.component';
 import { OFormValue } from '../components/form/OFormValue';
+import { OFormComponent } from '../components/form/o-form.component';
 
 export type OQueryDataArgs = {
   replace?: boolean; // Used in the list component for replacing data in setValue method when reloadData method is called
@@ -25,20 +24,24 @@ export class ServiceUtils {
     const formComponents = form ? form.getComponents() : {};
     const existsComponents = Object.keys(formComponents).length > 0;
 
-    const formDataProperties = Object.keys(form ? form.getDataValues() : {});
-    const existsProperties = formDataProperties.length > 0;
+    const formDataProperties = form ? form.getDataValues() : {};
+    const existsProperties = Object.keys(formDataProperties).length > 0;
 
-    if (existsComponents || existsProperties) {
+    const urlData = form ? form.getFormNavigation().getFilterFromUrlParams() : {};
+    const existsUrlData = Object.keys(urlData).length > 0;
+
+    if (existsComponents || existsProperties || existsUrlData) {
       parentKeys.forEach(key => {
         const formFieldAttr = parentKeysObject[key];
         let currentData;
         if (formComponents.hasOwnProperty(formFieldAttr)) {
           currentData = formComponents[formFieldAttr].getValue();
-        } else if (formDataProperties.indexOf(formFieldAttr) !== -1) {
-          currentData = form.getDataValue(formFieldAttr);
-          if (currentData instanceof OFormValue) {
-            currentData = currentData.value;
-          }
+        } else if (formDataProperties.hasOwnProperty(formFieldAttr)) {
+          currentData = formDataProperties[formFieldAttr] instanceof OFormValue ?
+            formDataProperties[formFieldAttr].value :
+            formDataProperties[formFieldAttr];
+        } else if (urlData.hasOwnProperty(formFieldAttr)) {
+          currentData = urlData[formFieldAttr];
         }
         if (Util.isDefined(currentData)) {
           switch (typeof (currentData)) {
@@ -61,19 +64,18 @@ export class ServiceUtils {
 
   static getFilterUsingParentKeys(parentItem: any, parentKeysObject: Object) {
     let filter = {};
-    const parentKeys = Object.keys(parentKeysObject || {});
-
-    if ((parentKeys.length > 0) && (typeof (parentItem) !== 'undefined')) {
-      for (let k = 0; k < parentKeys.length; ++k) {
-        let parentKey = parentKeys[k];
+    const ownKeys = Object.keys(parentKeysObject);
+    if (ownKeys.length > 0 && Util.isDefined(parentItem)) {
+      ownKeys.forEach(ownKey => {
+        let parentKey = parentKeysObject[ownKey];
         if (parentItem.hasOwnProperty(parentKey)) {
           let currentData = parentItem[parentKey];
           if (currentData instanceof OFormValue) {
             currentData = currentData.value;
           }
-          filter[parentKey] = currentData;
+          filter[ownKey] = currentData;
         }
-      }
+      });
     }
     return filter;
   }

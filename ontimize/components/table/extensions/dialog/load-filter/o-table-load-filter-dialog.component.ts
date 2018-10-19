@@ -6,6 +6,7 @@ import { ITableFiltersStatus } from '../../o-table-storage.class';
 import { DialogService } from '../../../../../services/dialog.service';
 
 @Component({
+  moduleId: module.id,
   selector: 'o-table-load-filter-dialog',
   templateUrl: './o-table-load-filter-dialog.component.html',
   styleUrls: ['./o-table-load-filter-dialog.component.scss']

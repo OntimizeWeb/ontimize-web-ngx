@@ -14,6 +14,7 @@ export const DEFAULT_OUTPUTS_O_LIST_ITEM_CARD = [
 ];
 
 @Component({
+  moduleId: module.id,
   selector: 'o-list-item-card',
   templateUrl: './o-list-item-card.component.html',
   styleUrls: ['./o-list-item-card.component.scss'],

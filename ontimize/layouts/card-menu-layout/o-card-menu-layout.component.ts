@@ -16,6 +16,7 @@ export const DEFAULT_OUTPUTS_O_MENU_LAYOUT = [
 ];
 
 @Component({
+  moduleId: module.id,
   selector: 'o-card-menu-layout',
   templateUrl: './o-card-menu-layout.component.html',
   styleUrls: ['./o-card-menu-layout.component.scss'],

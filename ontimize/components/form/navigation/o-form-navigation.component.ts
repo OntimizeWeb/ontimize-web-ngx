@@ -1,13 +1,13 @@
 import { Component, forwardRef, Inject, Injector, ViewEncapsulation, OnDestroy } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-
+import { Router, NavigationExtras, ActivatedRoute } from '@angular/router';
+import { ONavigationItem, NavigationService } from '../../../services/navigation.service';
 import { OFormLayoutManagerComponent } from '../../../layouts';
 import { Util, Codes } from '../../../utils';
 import { OFormComponent } from '../o-form.component';
-import { OFormDataNavigation } from './o-form.data.navigation.class';
 import { OFormNavigationClass } from './o-form.navigation.class';
 
 @Component({
+  moduleId: module.id,
   selector: 'o-form-navigation',
   templateUrl: './o-form-navigation.component.html',
   styleUrls: ['./o-form-navigation.component.scss'],
@@ -21,22 +21,25 @@ export class OFormNavigationComponent implements OnDestroy {
   public navigationData: Array<any> = [];
   private _currentIndex = 0;
 
-  protected formDataNavigation: OFormDataNavigation;
   protected formNavigation: OFormNavigationClass;
+  protected navigationService: NavigationService;
 
   constructor(protected injector: Injector,
     @Inject(forwardRef(() => OFormComponent)) private _form: OFormComponent,
     private router: Router,
-    private actRoute: ActivatedRoute,
+    private actRoute: ActivatedRoute
   ) {
     this.formNavigation = this._form.getFormNavigation();
-    this.formDataNavigation = new OFormDataNavigation(this.injector);
-    this.navigationData = this.formDataNavigation.getComponentStorage();
+    this.navigationService = this.injector.get(NavigationService);
+    const navData = this.navigationService.getPreviousRouteData();
+    if (Util.isDefined(navData) && navData.keysValues) {
+      this.navigationData = navData.keysValues;
+    }
     this.currentIndex = this.getCurrentIndex();
   }
 
   ngOnDestroy(): void {
-    this.formDataNavigation.destroy();
+    //
   }
 
   getCurrentIndex(): number {
@@ -110,17 +113,23 @@ export class OFormNavigationComponent implements OnDestroy {
   private moveWithoutManager(index: number) {
     let route = this.getRouteOfSelectedRow(this.navigationData[index]);
     if (route.length > 0) {
-      const qParams = Codes.getIsDetailObject();
-      let extras = {
-        relativeTo: this.actRoute.parent
-      };
-      extras[Codes.QUERY_PARAMS] = qParams;
-      const self = this;
-      this.router.navigate(route, extras).then((navigationDone: boolean) => {
-        if (navigationDone) {
-          self.currentIndex = index;
+      this.navigationService.removeLastItem();
+      const navData: ONavigationItem = this.navigationService.getLastItem();
+      if (navData) {
+        let extras: NavigationExtras = {};
+        extras[Codes.QUERY_PARAMS] = Codes.getIsDetailObject();
+        const detailRoute = navData.getDetailFormRoute();
+        if (Util.isDefined(detailRoute)) {
+          route.unshift(detailRoute);
         }
-      });
+        route.unshift(navData.url);
+        const self = this;
+        this.router.navigate(route, extras).then((navigationDone: boolean) => {
+          if (navigationDone) {
+            self.currentIndex = index;
+          }
+        });
+      }
     }
   }
 
@@ -131,16 +140,12 @@ export class OFormNavigationComponent implements OnDestroy {
 
   getRouteOfSelectedRow(item: any) {
     let route = [];
-    let filter = undefined;
-    if (typeof (item) === 'object') {
-      for (let k = 0; k < this._form.keysArray.length; ++k) {
-        let key = this._form.keysArray[k];
-        filter = item[key];
-      }
-    }
-    if (typeof (filter) !== 'undefined') {
-
-      route.push(filter);
+    if (Util.isObject(item)) {
+      this._form.keysArray.forEach(key => {
+        if (Util.isDefined(item[key])) {
+          route.push(item[key]);
+        }
+      });
     }
     return route;
   }

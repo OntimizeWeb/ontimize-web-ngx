@@ -1,7 +1,7 @@
 ## 4.0.0-rc.0
 
 ### PEER-DEPENDENCY UPDATES ###
-* **Updated**:  @angular@6.1.6
+* **Updated**:  @angular@6.1.10
 * **Updated**:  @angular/material@6.4.7
 * **Updated**:  @angular/cdk@6.4.7
 * **Updated**:  @angular/flex-layout@6.0.0-beta.18
@@ -17,13 +17,66 @@
 
 ### BREAKING CHANGES
 * **Angular and Angular Material**: updating versions ([be5d6d7](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/be5d6d7))
-## 3.0.2
+
+## 3.1.2
+### Features
+* **OFormDataComponent**:
+
+  * **Form Controls**
+    * allowing to use permissions ([3291e57](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3291e57)) ([ca1f933](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ca1f933)) ([17105dc](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/17105dc)) ([5228ccc](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5228ccc)) ([7e46523](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7e46523)) ([c0eba19](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c0eba19))
+    * blocking operations due permissions configuration ([d12a606](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d12a606)) ([f6a7032](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f6a7032)) 
+  * **Form Actions**
+    * allowing to use permissions ([b016642](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b016642)) ([4448b5e] (https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4448b5e)) ([e19f9aa](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e19f9aa)) 
+
+    * blocking operations due permissions configuration ([ff93384](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ff93384))
+* **Config**:
+  * adding new configurable properties: '*permissionsConfiguration*' and '*permissionsServiceType*' used for permissions configuration ([9ecd082](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9ecd082))
+  * new interface `IPermissionsService` that must be implemented by the service indicated in the '*permissionsServiceType*' property ([9ecd082](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9ecd082))
+* **ontimize-ee-permissions.service**, **ontimize-permissions.service**: new services for loading application permissions ([9ecd082](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9ecd082))
+* **OValueChangeEvent**: adding `isUserChange` and `isProgrammaticChange` methods.
+
+### BREAKING CHANGES
+* **o-form**: `getDataValue` method is now public again.
+* **Config**: removing old '*authGuard*' configurable property.
+* **AuthGuardServiceFactory**: removing factory.
+* **AuthGuardService**: `getPermissions` and `isRestricted` no longer exists in this service. Using `PermissionsService` now.
+* **IFormDataComponent**: adding new properties to interface ([d12a606](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d12a606))
+  * `setValue`, `clearValue` and `getValue` methods.
+  * `onChange`, `onValueChange` properties.
+* **o-side-menu**: the side menu component is completely removed ([b13dc69](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b13dc69))
+
+## 3.1.1 (2018-10-05)
+### Features
+* New component `o-radio` ([1ed0286](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1ed0286)) ([e80513e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e80513e))
+* **o-bar-menu**: `o-bar-menu` can build automatically base on the application menu configuration ([67f543f](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/67f543f))  ([1fc1f63](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1fc1f63))
+* **o-table**: new `multiple-sort` input ([6688618](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6688618)) ([01257ea](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/01257ea))
+* **o-grid**: The grid component now supports remote pagination ([b855724](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b855724))
+* **o-form**: new `getFieldValue`, `getFieldValues`, `setFieldValue`,`setFieldValues`, `clearFieldValue`,`clearFieldValues`, `getFieldReference` and  `getFieldReferences` methods ([3453182](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3453182)) ([d03d482](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d03d482)) ([e69473b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e69473b)) ([5228ccc](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5228ccc)
+* **OFormDataComponent**: new `onValueChange` event being fired if the value changed (whether it was changed by the user or by code) ([0b24228](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0b24228))([07bc3d6](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/07bc3d6))([3ac842e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3ac842e))([e69473b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e69473b))([f7dd987](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f7dd987))   ([#142](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/142))
+* **o-list**: events `onClick` and `onDoubleClick` are triggered event when `detail-mode` attribute is set to *none* ([989f92b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/989f92b))
+
+### Bug Fixes
+* Fixing missing 'bundles', 'esm5' and 'esm2015' bundling files error.
+* **o-bar-menu** fixed error the menu on mobile screen collapses ([1fc1f63](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1fc1f63)).
+* **service.utils**: fixed error building parent keys filter with aliases ([059ddc3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/059ddc3)) closes ([#212](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/212))
+* **buttons**: Adding type="button" to all html *buttons* ([e3c4779](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e3c4779])) ([#210](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/210))
+* **o-table-insertable-row**: fixing bug with multiple insertable rows in same page ([862d8fc](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/862d8fc)) ([#211](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/211))
+
+### BREAKING CHANGES
+* **MenuItem**:
+  * attribute '*show-in-app-sidenav*' has been removed ([0c96585](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0c96585)).
+* **o-grid**: Attribute `page-size-options` has changed, now it receives an string with the page size options separated by ';' ([70dcd43](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/70dcd43)).
+* **o-form**: `getDataValue` method is now protected, so if you were using it you should change it to use the `getFieldValue` method.
+* **o-service-component.class**: `getRouteOfSelectedRow` has only one parameter now, if you are using it you should remove the second parameter.
+
+## 3.1.0 (2018-09-13)
 ### Features
 * **ontimize-ee.service**, **ontimize.service**: new response parsers methods (separately by each CRUD method) ([c8c9e6f](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c8c9e6f))
 * **o-table-dao**: new `updateQuery` method ([ad4f7ea](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ad4f7ea))
 * **o-service-base-component.class**:
   * new '*OServiceBaseComponent*' `extractKeysFromRecord` and `getSqlTypes` methods ([0aa24c9](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0aa24c9))
   * new '*OServiceBaseComponent*' `getParentKeysValues` method ([e94aa61](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e94aa61))
+* **o-form-service-component.class**, **o-combo**, **o-listpicker**: new `query-with-null-parent-keys` attribute ([7e93930](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7e93930))
 * **o-table cell editors**:
   * updating cell data in server ([360bfd0](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/360bfd0))
   * new `updateRecordOnEdit` and `showToastOnEdit` inputs and `onPostUpdateRecord` output added to all cell editors ('*OBaseTableCellEditor*' class) ([360bfd0](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/360bfd0))
@@ -35,7 +88,7 @@
   * new `title-align` input ([1d261e1](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1d261e1))
   * new `multiline` input ([d5957fe](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d5957fe))
 * **o-list**:
-  * new outputs added: `onItemDeleted`, `onDataLoaded`, `onPaginatedDataLoade` ([2f71849](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2f71849))
+  * new outputs added: `onItemDeleted`, `onDataLoaded`, `onPaginatedDataLoaded` ([2f71849](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2f71849))
   * added suppor for using the `o-filter-builder` component ([1736a2a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1736a2a))
   * Now, both `o-list-item` component and `o-list-item` directive make the list items go to item detail when click on them by default. Use the `detail-mode` attribute to configure this ([1cb22d3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1cb22d3) [ee2eecb](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ee2eecb) [60848fe](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/60848fe))
 * **o-list-item-card**: new input `show-image` ([ed89b6b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ed89b6b))
@@ -57,6 +110,9 @@
 * **o-image**: new `full-screen-button` input ([78bff44](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/78bff44))
 * **o-list-picker**: new `text-input-enabled` input ([f903f27](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f903f27)) Closes [#181](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/181)
 * **o-date-input**: new `text-input-enabled` input ([edb65ef](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/edb65ef))
+* **o-form-layout-manager**:
+  * new `store-state` input for allowing localStorage state storing (only in tab mode) ([1c0afc1](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1c0afc1)) ([de562f6](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/de562f6))
+  * allowing inner components navigation
 
 ### Bug Fixes
 * **o-table, o-list, o-tree**: fixed error when querying data with parent keys and no defined values for some of those parent keys ([0548c8e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0548c8e)).
@@ -82,6 +138,9 @@
   * The attribute `show-table-buttons-text` has been renamed to `show-buttons-text`.
   * The output `onTableDataLoaded` has been renamed to `onDataLoaded`.
   * The output `onPaginatedTableDataLoaded` has been renamed to `onPaginatedDataLoaded`.
+  * The attribute `break-word` (breakWord) has been removed. Use `multiline` instead.
+  * editors and renderers:
+    * The method `initialize` which was deprecated in 3.0.0-rc.1 has been removed.
 * **o-form**: Output `onFormDataLoaded` has been renamed to `onDataLoaded`.
 * **o-user-info**: removed input `use-flag-icons`. This component doesn't contain the language selector anymore.
 * Changes in CSS classes naming:
@@ -95,6 +154,7 @@
     * Internal CSS class `has-filter` has changed to `o-list-picker-has-filter`.
   * **o-table**: Internal CSS class `hidden-action-text` has been removed.
   * **o-form-toolbar**: Internal CSS class `toolbar-form-header` has changed to `o-form-toolbar-header`.
+* **OFormDataNavigation**: This internal class has been removed. You dont have to make any change unless you were overriding its use in the **o-form-navigation** component.
 
 ## 3.0.1 (2018-07-27)
 ### Features

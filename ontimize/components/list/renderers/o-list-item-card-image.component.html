@@ -9,11 +9,11 @@
 
   <img *ngIf="image !== undefined" matCardImage src="{{ image }}" [class.exists-action-button]="icon !== undefined">
 
-  <button *ngIf="icon !== undefined && compareListHeight('small')" mat-mini-fab (click)="onActionIconClick($event)" class="action-button">
+  <button type="button" *ngIf="icon !== undefined && compareListHeight('small')" mat-mini-fab (click)="onActionIconClick($event)" class="action-button">
     <mat-icon>{{ icon }}</mat-icon>
   </button>
 
-  <button *ngIf="icon !== undefined && (compareListHeight('medium') || compareListHeight('large'))" mat-fab (click)="onActionIconClick($event)"
+  <button type="button" *ngIf="icon !== undefined && (compareListHeight('medium') || compareListHeight('large'))" mat-fab (click)="onActionIconClick($event)"
     class="action-button">
     <mat-icon>{{ icon }}</mat-icon>
   </button>
@@ -28,11 +28,11 @@
   </mat-card-content>
 
   <mat-card-actions>
-    <button mat-button *ngIf="action1Text !== undefined" (click)="onAction1ButtonClick($event)">{{ action1Text }}</button>
-    <button mat-button *ngIf="action2Text !== undefined" (click)="onAction2ButtonClick($event)">{{ action2Text }}</button>
+    <button type="button" mat-button *ngIf="action1Text !== undefined" (click)="onAction1ButtonClick($event)">{{ action1Text }}</button>
+    <button type="button" mat-button *ngIf="action2Text !== undefined" (click)="onAction2ButtonClick($event)">{{ action2Text }}</button>
 
     <div class="collapse-button-container">
-      <button mat-icon-button *ngIf="collapsible" (click)="collapsed = !collapsed" class="collapse-button">
+      <button type="button" mat-icon-button *ngIf="collapsible" (click)="collapsed = !collapsed" class="collapse-button">
         <mat-icon *ngIf="collapsed" svgIcon="ontimize:keyboard_arrow_down"></mat-icon>
         <mat-icon *ngIf="!collapsed" svgIcon="ontimize:keyboard_arrow_up"></mat-icon>
       </button>

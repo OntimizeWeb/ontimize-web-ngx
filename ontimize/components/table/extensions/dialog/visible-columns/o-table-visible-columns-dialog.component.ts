@@ -6,6 +6,7 @@ import { Util } from '../../../../../utils';
 import { OColumn } from '../../../o-table.component';
 
 @Component({
+  moduleId: module.id,
   selector: 'o-table-visible-columns-dialog',
   templateUrl: 'o-table-visible-columns-dialog.component.html',
   styleUrls: ['o-table-visible-columns-dialog.component.scss'],

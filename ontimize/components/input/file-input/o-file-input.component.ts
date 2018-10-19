@@ -19,10 +19,11 @@ import { OSharedModule } from '../../../shared';
 import { InputConverter } from '../../../decorators';
 import { OntimizeFileService } from '../../../services';
 import { OFormComponent } from '../../form/o-form.component';
-import { OFormDataComponent } from '../../o-form-data-component.class';
+import { OFormDataComponent, OValueChangeEvent } from '../../o-form-data-component.class';
 
 import { OFileItem } from './o-file-item.class';
 import { OFileUploader } from './o-file-uploader.class';
+import { OFormServiceComponent } from '../o-form-service-component.class';
 
 export const DEFAULT_INPUTS_O_FILE_INPUT = [
   'oattr: attr',
@@ -63,7 +64,7 @@ export const DEFAULT_INPUTS_O_FILE_INPUT = [
 ];
 
 export const DEFAULT_OUTPUTS_O_FILE_INPUT = [
-  'onChange',
+  ...OFormServiceComponent.DEFAULT_OUTPUTS_O_FORM_SERVICE_COMPONENT,
   'onBeforeUpload',
   'onBeforeUploadFile',
   'onProgress',
@@ -79,6 +80,7 @@ export const DEFAULT_OUTPUTS_O_FILE_INPUT = [
 ];
 
 @Component({
+  moduleId: module.id,
   selector: 'o-file-input',
   templateUrl: './o-file-input.component.html',
   styleUrls: ['./o-file-input.component.scss'],
@@ -228,7 +230,7 @@ export class OFileInputComponent extends OFormDataComponent implements OnDestroy
       value = this.uploader.files.map(file => file.name).join(', ');
     }
     window.setTimeout(() => {
-      this.setValue(value !== '' ? value : undefined);
+      this.setValue(value !== '' ? value : undefined, { changeType: OValueChangeEvent.USER_CHANGE });
       this.inputFile.nativeElement.value = '';
       if (this._fControl) {
         this._fControl.markAsTouched();
@@ -236,11 +238,21 @@ export class OFileInputComponent extends OFormDataComponent implements OnDestroy
     }, 0);
   }
 
+  /**
+   * Override super.onClickClearValue();
+   * super.clearValue() vs super.onClickClearValue()
+   *  * super.clearValue() emit OValueChangeEvent.PROGRAMMATIC_CHANGE
+   *  * super.onClickClearValue() emit OValueChangeEvent.USER_CHANGE
+   */
   onClickClear(e: Event) {
     e.stopPropagation();
-    this.clearValue();
+    super.onClickClearValue();
+    this.uploader.clear();
   }
 
+  /**
+   * Override super.clearValue();
+   */
   clearValue(): void {
     super.clearValue();
     this.uploader.clear();

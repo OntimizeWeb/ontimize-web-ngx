@@ -11,6 +11,7 @@ export const DEFAULT_INPUTS_O_USER_INFO = [];
 export const DEFAULT_OUTPUTS_O_USER_INFO = [];
 
 @Component({
+  moduleId: module.id,
   selector: 'o-user-info',
   inputs: DEFAULT_INPUTS_O_USER_INFO,
   outputs: DEFAULT_OUTPUTS_O_USER_INFO,

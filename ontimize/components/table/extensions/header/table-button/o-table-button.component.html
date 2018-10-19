@@ -1,5 +1,5 @@
 <ng-container *ngIf="table.showButtonsText">
-  <button mat-button (click)="innerOnClick()">
+  <button type="button" mat-button (click)="innerOnClick()">
     <mat-icon *ngIf="isIconPositionLeft() && svgIcon !== undefined" [svgIcon]="svgIcon"></mat-icon>
     <mat-icon *ngIf="isIconPositionLeft() && svgIcon === undefined">{{ icon }}</mat-icon>
     <span *ngIf="table.showButtonsText">{{ olabel | oTranslate }}</span>
@@ -9,7 +9,7 @@
 </ng-container>
 
 <ng-container *ngIf="!table.showButtonsText">
-  <button mat-icon-button (click)="innerOnClick()">
+  <button type="button" mat-icon-button (click)="innerOnClick()">
     <mat-icon *ngIf="isIconPositionLeft() && svgIcon !== undefined" [svgIcon]="svgIcon"></mat-icon>
     <mat-icon *ngIf="isIconPositionLeft() && svgIcon === undefined">{{ icon }}</mat-icon>
     <span *ngIf="table.showButtonsText">{{ olabel | oTranslate }}</span>

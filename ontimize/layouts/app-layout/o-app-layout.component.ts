@@ -26,6 +26,7 @@ export type OAppLayoutMode = 'mobile' | 'desktop';
 export type OSidenavMode = 'over' | 'push' | 'side';
 
 @Component({
+  moduleId: module.id,
   selector: 'o-app-layout',
   inputs: DEFAULT_INPUTS_O_APP_LAYOUT,
   outputs: DEFAULT_OUTPUTS_O_APP_LAYOUT,
@@ -35,6 +36,8 @@ export type OSidenavMode = 'over' | 'push' | 'side';
 })
 export class OAppLayoutComponent {
 
+  public static DEFAULT_INPUTS_O_APP_LAYOUT = DEFAULT_INPUTS_O_APP_LAYOUT;
+  public static DEFAULT_OUTPUTS_O_APP_LAYOUT = DEFAULT_OUTPUTS_O_APP_LAYOUT;
   public static OAppLayoutModes: OAppLayoutMode[] = ['mobile', 'desktop'];
   public static OSidenavModes: OSidenavMode[] = ['over', 'push', 'side'];
 
@@ -46,6 +49,14 @@ export class OAppLayoutComponent {
   showLanguageSelector: boolean = true;
   @InputConverter()
   useFlagIcons: boolean = false;
+  @InputConverter()
+  protected _showHeader: boolean;
+
+  protected _mode: OAppLayoutMode;
+  protected _sidenavMode: OSidenavMode;
+
+  openedSidenavImg: string;
+  closedSidenavImg: string;
 
   get showHeader(): boolean {
     return this._showHeader;
@@ -54,11 +65,6 @@ export class OAppLayoutComponent {
   set showHeader(val: boolean) {
     this._showHeader = val;
   }
-
-  @InputConverter()
-  protected _showHeader: boolean;
-
-  protected _mode: OAppLayoutMode;
 
   get mode(): OAppLayoutMode {
     return this._mode;
@@ -76,8 +82,6 @@ export class OAppLayoutComponent {
     }
   }
 
-  protected _sidenavMode: OSidenavMode;
-
   get sidenavMode(): OSidenavMode {
     return this._sidenavMode;
   }
@@ -90,12 +94,6 @@ export class OAppLayoutComponent {
       console.error('Invalid `o-app-layout` sidenav-mode (' + val + ')');
     }
   }
-
-  openedSidenavImg: string;
-  closedSidenavImg: string;
-
-  public static DEFAULT_INPUTS_O_APP_LAYOUT = DEFAULT_INPUTS_O_APP_LAYOUT;
-  public static DEFAULT_OUTPUTS_O_APP_LAYOUT = DEFAULT_OUTPUTS_O_APP_LAYOUT;
 }
 
 @NgModule({

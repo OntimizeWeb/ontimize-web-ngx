@@ -197,7 +197,11 @@ export var MAP = {
     'LAYOUT_MANANGER.MAIN_TAB_LABEL': 'Home',
     'LAYOUT_MANANGER.DIALOG_TITLE': 'Detail',
     'APP_LAYOUT.USER_PROFILE': 'My profile',
-    'CARD_MENU_LAYOUT.BUTTON_TEXT': 'View list'
+    'CARD_MENU_LAYOUT.BUTTON_TEXT': 'View list',
+    'GRID.ITEMS_PER_PAGE': 'Items per page',
+    'GRID.SORT_BY': 'Sort by',
+    'GRID.BUTTON_NEXT': 'Show more',
+    'GRID.TEXT_SHOWN_ITEMS': '{0} / {1}'
   },
 
   // Spanish
@@ -355,7 +359,7 @@ export var MAP = {
     'TABLE.BUTTONS.RESIZE_COLUMNS': 'Cambiar tamaño de columnas',
     'TABLE.BUTTONS.FILTER': 'Filtrar',
     'TABLE.BUTTONS.FILTER_SAVE': 'Guardar filtro',
-    'TABLE.BUTTONS.FILTER_LOAD': 'Carger filtro',
+    'TABLE.BUTTONS.FILTER_LOAD': 'Aplicar filtro',
     'TABLE.BUTTONS.FILTER_CLEAR': 'Limpiar filtro',
     'TABLE.BUTTONS.REFRESH': 'Refrescar',
     'TABLE.BUTTONS.DELETE': 'Eliminar',
@@ -398,7 +402,11 @@ export var MAP = {
     'LAYOUT_MANANGER.MAIN_TAB_LABEL': 'Inicio',
     'LAYOUT_MANANGER.DIALOG_TITLE': 'Detalle',
     'APP_LAYOUT.USER_PROFILE': 'Mi perfil',
-    'CARD_MENU_LAYOUT.BUTTON_TEXT': 'Acceder'
+    'CARD_MENU_LAYOUT.BUTTON_TEXT': 'Acceder',
+    'GRID.ITEMS_PER_PAGE': 'Elementos por página',
+    'GRID.SORT_BY': 'Ordenado por ',
+    'GRID.BUTTON_NEXT': 'Ver más',
+    'GRID.TEXT_SHOWN_ITEMS': '{0} / {1}'
   }
 
 };

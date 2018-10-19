@@ -1,5 +1,5 @@
 import { Component, NgModule, Optional, Inject, ElementRef, Injector, forwardRef, ViewChild, EventEmitter, ViewEncapsulation, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
-import { OFormDataComponent, DEFAULT_INPUTS_O_FORM_DATA_COMPONENT, DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT } from '../../o-form-data-component.class';
+import { OFormDataComponent, DEFAULT_INPUTS_O_FORM_DATA_COMPONENT, DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT, OValueChangeEvent } from '../../o-form-data-component.class';
 import { CommonModule } from '@angular/common';
 import { ValidatorFn } from '@angular/forms';
 import moment from 'moment';
@@ -7,10 +7,10 @@ import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 
 import { Util } from '../../../utils';
 import { OSharedModule } from '../../../shared';
-import { OValidators } from '../../../validators/o-validators';
 import { OFormComponent } from '../../form/form-components';
 import { OFormValue, IFormValueOptions } from '../../form/OFormValue';
 import { InputConverter } from '../../../decorators/input-converter';
+import { OValidators } from '../../../validators/o-validators';
 
 const HourFormat = {
   TWELVE: 'hh:mm a',
@@ -20,9 +20,9 @@ const HourFormat = {
 const TWENTY_FOUR_HOUR_FORMAT = 24;
 
 export const DEFAULT_INPUTS_O_HOUR_INPUT = [
-  ...DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,
   'format',
-  'textInputEnabled: text-input-enabled'
+  'textInputEnabled: text-input-enabled',
+  ...DEFAULT_INPUTS_O_FORM_DATA_COMPONENT
 ];
 
 export const DEFAULT_OUTPUTS_O_HOUR_INPUT = [
@@ -32,6 +32,7 @@ export const DEFAULT_OUTPUTS_O_HOUR_INPUT = [
 ];
 
 @Component({
+  moduleId: module.id,
   selector: 'o-hour-input',
   templateUrl: './o-hour-input.component.html',
   styleUrls: ['./o-hour-input.component.scss'],
@@ -87,13 +88,15 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
         originalPickerOpen();
       }
     };
+    this.picker.setTime = function () {
+      let stringVal = self.convertToFormatString(self.picker.timepickerService.fullTime);
+      self.picker.timeSet.next(stringVal);
+      self.picker.close();
+    };
   }
 
-  ngOnDestroy() {
-    super.ngOnDestroy();
-  }
-
-  setData(value: any) {
+  setData(arg: any) {
+    const value = this.format === TWENTY_FOUR_HOUR_FORMAT ? this.convertToFormatString(arg) : arg;
     super.setData(value);
   }
 
@@ -106,11 +109,14 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
         let hour = momentV.get('hour');
         const minutes = momentV.get('minutes');
         let timePeriod = 'AM';
+        if (hour >= 12) {
+          timePeriod = 'PM';
+        }
+        if (hour > 12) {
+          hour -= 12;
+        }
         if (hour === 0) {
           hour = 12;
-        } else if (hour > 12) {
-          timePeriod = 'PM';
-          hour -= 12;
         }
         this.picker.changeTimeUnit(0);
         this.picker.timepickerService.hour = {
@@ -128,6 +134,9 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
   }
 
   innerOnChange(event: any) {
+    if (this.value && (this.value.value === event)) {
+      return;
+    }
     if (!this.value) {
       this.value = new OFormValue();
     }
@@ -154,7 +163,8 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
   }
 
   getValueAsString() {
-    const value = this.getValue();
+    let value = this.getValue();
+    value = this.format === TWENTY_FOUR_HOUR_FORMAT ? this.convertToFormatString(value) : value;
     return Util.isDefined(value) ? value.toLowerCase() : null;
   }
 
@@ -170,7 +180,7 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
   resolveValidators(): ValidatorFn[] {
     let validators: ValidatorFn[] = super.resolveValidators();
     if (this.format === TWENTY_FOUR_HOUR_FORMAT) {
-      validators.push(OValidators.twentyHourFormatValidator);
+      validators.push(OValidators.twentyFourHourFormatValidator);
     } else {
       validators.push(OValidators.twelveHourFormatValidator);
     }
@@ -183,6 +193,31 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
     }
   }
 
+  onTimeEvent(event) {
+    const value = this.convertToFormatString(event);
+    /** emitModelToViewChange: false  because onChange event is trigger in ngModelChange */
+    this.setValue(value, { changeType: OValueChangeEvent.USER_CHANGE, emitModelToViewChange: false });
+  }
+
+  protected addPeriodString(value): string {
+    let result = value;
+    if (value && !(new RegExp(/pm|am$/)).test(value.toLowerCase())) {
+      result += (this.format === TWENTY_FOUR_HOUR_FORMAT) ? ' PM' : ' AM';
+    }
+    return result;
+  }
+
+  protected convertToFormatString(value) {
+    if (value === '00:00') {
+      // workaround
+      return value;
+    }
+    // maybe not necessary in following versions
+    let formatStr = this.format === TWENTY_FOUR_HOUR_FORMAT ? 'HH:mm' : 'hh:mm a';
+    let valueString = this.addPeriodString(value);
+    let result = value ? moment(valueString, 'h:mm A').format(formatStr) : value;
+    return result;
+  }
 }
 
 @NgModule({

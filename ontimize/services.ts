@@ -15,7 +15,6 @@ export * from './services/snackbar.service';
 export * from './services/translate/o-translate.service';
 export * from './services/data-service.provider';
 export * from './services/auth-guard.service';
-export * from './services/auth-guard.provider';
 
 export * from './services/local-storage.service';
 
@@ -30,3 +29,8 @@ export * from './services/translate/o-translate.parser';
 
 export * from './services/parser/o-service-response.parser';
 export * from './services/icon-registry.service';
+
+export * from './services/permissions/ontimize-ee-permissions.service';
+export * from './services/permissions/ontimize-permissions.service';
+export * from './services/permissions/permissions-service.provider';
+export * from './services/permissions/permissions.service';

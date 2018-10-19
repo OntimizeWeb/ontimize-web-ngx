@@ -16,6 +16,7 @@ export const DEFAULT_CONTEXT_MENU_ITEM_OUTPUTS = [
 ];
 
 @Component({
+  moduleId: module.id,
   selector: 'o-context-menu-item',
   templateUrl: 'o-context-menu-item.component.html',
   styleUrls: ['o-context-menu-item.component.scss'],

@@ -6,6 +6,7 @@ import { DialogService } from '../../../../../services';
 import { ITableConfiguration } from '../../o-table-storage.class';
 
 @Component({
+  moduleId: module.id,
   selector: 'o-table-apply-configuration-dialog',
   templateUrl: './o-table-apply-configuration-dialog.component.html',
   styleUrls: ['./o-table-apply-configuration-dialog.component.scss']

@@ -36,7 +36,7 @@
   },
   "dependencies": {
     "moment": "2.22.2",
-    "@beyerleinf/ngx-dnd": "6.0.0-preview3",
+    "ng2-dnd": "5.0.2",
     "ngx-material-timepicker": "2.5.4"
   },
   "peerDependencies": {

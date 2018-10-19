@@ -12,6 +12,7 @@ import { OFormServiceComponent } from '../o-form-service-component.class';
 import { dataServiceFactory } from '../../../services/data-service.provider';
 import { OListPickerDialogComponent } from './o-list-picker-dialog.component';
 import { OSearchInputModule } from '../../input/search-input/o-search-input.component';
+import { OValueChangeEvent } from '../../o-form-data-component.class';
 
 export const DEFAULT_INPUTS_O_LIST_PICKER = [
   ...OFormServiceComponent.DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT,
@@ -23,12 +24,13 @@ export const DEFAULT_INPUTS_O_LIST_PICKER = [
 ];
 
 export const DEFAULT_OUTPUTS_O_LIST_PICKER = [
-  'onChange',
+  ...OFormServiceComponent.DEFAULT_OUTPUTS_O_FORM_SERVICE_COMPONENT,
   'onFocus',
   'onBlur'
 ];
 
 @Component({
+  moduleId: module.id,
   selector: 'o-list-picker',
   templateUrl: './o-list-picker.component.html',
   styleUrls: ['./o-list-picker.component.scss'],
@@ -220,52 +222,52 @@ export class OListPickerComponent extends OFormServiceComponent implements After
     if (evt instanceof Object && typeof evt[this.valueColumn] !== 'undefined') {
       var self = this;
       window.setTimeout(() => {
-        self.setValue(evt[self.valueColumn]);
-        if (self._fControl) {
-          self._fControl.markAsTouched();
-        }
-      }, 0);
-    }
+        self.setValue(evt[self.valueColumn], { changeType: OValueChangeEvent.USER_CHANGE });
+      if (self._fControl) {
+        self._fControl.markAsTouched();
+      }
+    }, 0);
   }
+}
 
-  innerOnFocus(evt: any) {
-    if (!this.isReadOnly && !this.isDisabled) {
-      this.onFocus.emit(evt);
-    }
+innerOnFocus(evt: any) {
+  if (!this.isReadOnly && !this.isDisabled) {
+    this.onFocus.emit(evt);
   }
+}
 
-  innerOnBlur(evt: any) {
-    if (!this.isReadOnly && !this.isDisabled) {
-      const self = this;
-      this.blurTimer = setTimeout(() => {
-        if (!self.blurPrevent) {
+innerOnBlur(evt: any) {
+  if (!this.isReadOnly && !this.isDisabled) {
+    const self = this;
+    this.blurTimer = setTimeout(() => {
+      if (!self.blurPrevent) {
+        self._fControl.markAsTouched();
+        self.onBlur.emit(evt);
+        if (self.visibleInputValue !== undefined && self.visibleInputValue.length > 0) {
+          self.openDialog();
+        } else if (self.visibleInputValue !== undefined) {
+          self.setValue(undefined);
+          self.visibleInputValue = undefined;
+        } else {
           self._fControl.markAsTouched();
           self.onBlur.emit(evt);
-          if (self.visibleInputValue !== undefined && self.visibleInputValue.length > 0) {
-            self.openDialog();
-          } else if (self.visibleInputValue !== undefined) {
-            self.setValue(undefined);
-            self.visibleInputValue = undefined;
-          } else {
-            self._fControl.markAsTouched();
-            self.onBlur.emit(evt);
-          }
         }
-        self.blurPrevent = false;
-      }, this.blurDelay);
-    }
+      }
+      self.blurPrevent = false;
+    }, this.blurDelay);
   }
+}
 
-  onVisibleInputChange(event: any) {
-    this.visibleInputValue = event.target.value;
-  }
+onVisibleInputChange(event: any) {
+  this.visibleInputValue = event.target.value;
+}
 
-  onKeydownEnter(val: any) {
-    clearTimeout(this.blurTimer);
-    this.blurPrevent = true;
-    this.visibleInputValue = val;
-    this.openDialog();
-  }
+onKeydownEnter(val: any) {
+  clearTimeout(this.blurTimer);
+  this.blurPrevent = true;
+  this.visibleInputValue = val;
+  this.openDialog();
+}
 }
 
 @NgModule({

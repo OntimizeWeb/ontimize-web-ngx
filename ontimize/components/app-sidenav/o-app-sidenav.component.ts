@@ -30,6 +30,7 @@ export const DEFAULT_OUTPUTS_O_APP_SIDENAV = [
 ];
 
 @Component({
+  moduleId: module.id,
   selector: 'o-app-sidenav',
   inputs: DEFAULT_INPUTS_O_APP_SIDENAV,
   outputs: DEFAULT_OUTPUTS_O_APP_SIDENAV,
@@ -51,33 +52,8 @@ export class OAppSidenavComponent implements OnInit, OnDestroy, AfterViewInit {
   protected routerSubscription: Subscription;
   appMenuService: AppMenuService;
   protected _menuRootArray: MenuRootItem[] = [];
-
   protected _layoutMode: OAppLayoutMode;
-
-  get layoutMode(): OAppLayoutMode {
-    return this._layoutMode;
-  }
-
-  set layoutMode(val: OAppLayoutMode) {
-    let m = OAppLayoutComponent.OAppLayoutModes.find(e => e === val);
-    if (Util.isDefined(m)) {
-      this._layoutMode = m;
-    }
-  }
-
   protected _sidenavMode: OSidenavMode;
-
-  get sidenavMode(): OSidenavMode {
-    return this._sidenavMode;
-  }
-
-  set sidenavMode(val: OSidenavMode) {
-    let m = OAppLayoutComponent.OSidenavModes.find(e => e === val);
-    if (Util.isDefined(m)) {
-      this._sidenavMode = m;
-    }
-  }
-
   @InputConverter()
   protected opened: boolean = true;
   _showUserInfo: boolean = true;
@@ -136,6 +112,28 @@ export class OAppSidenavComponent implements OnInit, OnDestroy, AfterViewInit {
       });
     }
     this.refreshMenuRoots();
+  }
+
+  get layoutMode(): OAppLayoutMode {
+    return this._layoutMode;
+  }
+
+  set layoutMode(val: OAppLayoutMode) {
+    let m = OAppLayoutComponent.OAppLayoutModes.find(e => e === val);
+    if (Util.isDefined(m)) {
+      this._layoutMode = m;
+    }
+  }
+
+  get sidenavMode(): OSidenavMode {
+    return this._sidenavMode;
+  }
+
+  set sidenavMode(val: OSidenavMode) {
+    let m = OAppLayoutComponent.OSidenavModes.find(e => e === val);
+    if (Util.isDefined(m)) {
+      this._sidenavMode = m;
+    }
   }
 
   protected refreshMenuRoots() {

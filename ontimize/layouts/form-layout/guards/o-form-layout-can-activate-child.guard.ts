@@ -5,18 +5,11 @@ import { OFormLayoutManagerService } from '../../../services/o-form-layout-manag
 
 @Injectable()
 export class CanActivateFormLayoutChildGuard implements CanActivateChild {
-  protected oFormLayoutManager: OFormLayoutManagerComponent;
   protected oFormLayoutService: OFormLayoutManagerService;
 
   constructor(protected injector: Injector) {
     try {
       this.oFormLayoutService = this.injector.get(OFormLayoutManagerService);
-      const self = this;
-      this.oFormLayoutService.getOFormLayoutManagerObservable().subscribe(comp => {
-        if (comp) {
-          self.oFormLayoutManager = comp;
-        }
-      });
     } catch (e) {
       console.log(e);
     }
@@ -24,13 +17,17 @@ export class CanActivateFormLayoutChildGuard implements CanActivateChild {
 
   canActivateChild(childRoute: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     if (this.oFormLayoutManager) {
-      this.oFormLayoutManager.addDetailComponent(childRoute);
+      if (this.oFormLayoutManager.ignoreCanDeactivate()) {
+        return true;
+      }
+      this.oFormLayoutManager.addDetailComponent(childRoute, state.url.substring(0, state.url.indexOf('?')));
+      return false;
     }
-    return false;
+    return true;
   }
 
-  setFormLayoutManager(manager: OFormLayoutManagerComponent) {
-    this.oFormLayoutManager = manager;
+  get oFormLayoutManager(): OFormLayoutManagerComponent {
+    return this.oFormLayoutService.activeFormLayoutManager;
   }
 }
 

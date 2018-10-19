@@ -14,6 +14,7 @@ export class OTableExportConfiguration {
 }
 
 @Component({
+  moduleId: module.id,
   selector: 'o-table-export-dialog',
   templateUrl: 'o-table-export-dialog.component.html',
   styleUrls: ['o-table-export-dialog.component.scss'],

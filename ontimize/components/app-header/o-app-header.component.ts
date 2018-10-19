@@ -21,6 +21,7 @@ export const DEFAULT_OUTPUTS_O_APP_HEADER = [
 ];
 
 @Component({
+  moduleId: module.id,
   selector: 'o-app-header',
   inputs: DEFAULT_INPUTS_O_APP_HEADER,
   outputs: DEFAULT_OUTPUTS_O_APP_HEADER,

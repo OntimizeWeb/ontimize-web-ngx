@@ -16,6 +16,7 @@ export const DEFAULT_OUTPUTS_O_SEARCH_INPUT = [
 ];
 
 @Component({
+  moduleId: module.id,
   selector: 'o-search-input',
   templateUrl: './o-search-input.component.html',
   styleUrls: ['./o-search-input.component.scss'],

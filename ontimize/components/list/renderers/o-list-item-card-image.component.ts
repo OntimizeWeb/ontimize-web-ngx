@@ -17,6 +17,7 @@ export const DEFAULT_OUTPUTS_O_LIST_ITEM_CARD_IMAGE = [
 ];
 
 @Component({
+  moduleId: module.id,
   selector: 'o-list-item-card-image',
   templateUrl: './o-list-item-card-image.component.html',
   styleUrls: ['./o-list-item-card-image.component.scss'],

@@ -1,11 +1,13 @@
 <mat-toolbar class="toolbar-breadcrumb">
-  <ng-template ngFor let-route [ngForOf]="breadcrumbs">
-    <a *ngIf="showBreadcrumbItem(!route.terminal)" class="breadcrumb-item" (click)="onRouteClick(route)" layout-padding>
-      {{ route.displayText ? route.displayText : route.text | uppercase | oTranslate }}
-    </a>
-    <span *ngIf="showBreadcrumbItem(route.terminal)" class="breadcrumb-item active" layout-padding>
-      {{ route.displayText ? route.displayText : route.text | uppercase | oTranslate }}
-    </span>
-    <mat-icon *ngIf="!route.terminal" svgIcon="ontimize:keyboard_arrow_right"></mat-icon>
+  <ng-template ngFor let-route let-i="index" [ngForOf]="breadcrumbs">
+    <ng-container *ngIf="!isNotInsideFormLayoutManager(route, i)">
+      <a *ngIf="!route.terminal" class="breadcrumb-item" (click)="onRouteClick(route)" layout-padding>
+        {{ route.displayText ? route.displayText : route.text | uppercase | oTranslate }}
+      </a>
+      <span *ngIf="showBreadcrumbItem(route)" class="breadcrumb-item active" layout-padding>
+        {{ route.displayText ? route.displayText : route.text | uppercase | oTranslate }}
+      </span>
+      <mat-icon *ngIf="!route.terminal" svgIcon="ontimize:keyboard_arrow_right"></mat-icon>
+    </ng-container>
   </ng-template>
 </mat-toolbar>

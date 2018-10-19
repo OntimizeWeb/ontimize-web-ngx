@@ -34,6 +34,7 @@ export const DEFAULT_OUTPUTS_O_TEXT_INPUT = [
 ];
 
 @Component({
+  moduleId: module.id,
   selector: 'o-text-input',
   templateUrl: './o-text-input.component.html',
   styleUrls: ['./o-text-input.component.scss'],

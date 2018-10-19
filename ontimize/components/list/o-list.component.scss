@@ -84,49 +84,14 @@
       }
     }
 
-    &.o-list-1-detail-buttons,
-    &.o-list-2-detail-buttons {
-      mat-list-item {
-        -moz-box-sizing: border-box;
-        -webkit-box-sizing: border-box;
-        box-sizing: border-box;
-
-        .mat-list-item {
-          padding-right: 0;
-        }
+    &.o-list-item-has-buttons {
+      .o-list-item .mat-list-item-content {
+        padding-right: 72px;
       }
-    }
 
-    &:not(.selectable).o-list-1-detail-buttons {
-      .mat-list-item-content {
-        padding-right: 40px;
+      &[dense] .o-list-item .mat-list-item-content {
+        padding-right: 56px;
       }
-    }
-
-    &:not(.selectable).o-list-2-detail-buttons {
-      .mat-list-item-content {
-        padding-right: 64px;
-      }
-    }
-
-    &:not(.selectable):not(.o-list-1-detail-buttons):not(.o-list-2-detail-buttons) .mat-list-text {
-      padding-right: 0;
-    }
-
-    &.selectable.o-list-1-detail-buttons .mat-list-item-content {
-      padding-right: 60px;
-    }
-
-    &.selectable[dense].o-list-1-detail-buttons .mat-list-item-content {
-      padding-right: 56px;
-    }
-
-    &.selectable.o-list-2-detail-buttons .mat-list-item-content {
-      padding-right: 84px;
-    }
-
-    &.selectable[dense].o-list-2-detail-buttons .mat-list-item-content {
-      padding-right: 80px;
     }
 
     .o-list-item.mat-card,
@@ -136,8 +101,8 @@
   }
 
   .add-button {
-    right: 16px;
-    bottom: 16px;
+    right: 12px;
+    bottom: 12px;
     position: absolute;
   }
 }

@@ -4,8 +4,8 @@
 <div mat-dialog-content (scroll)="onScroll($event)" [class.o-list-picker-has-filter]="filter">
   <mat-list>
     <mat-list-item *ngIf="visibleData.length === 0">
-      {{'LIST.EMPTY' | oTranslate}}
-      <ng-container *ngIf="filter && searchInput && searchInput.getValue().length > 0">
+      {{ 'LIST.EMPTY' | oTranslate }}
+      <ng-container *ngIf="filter && searchInput && searchInput.getValue() && searchInput.getValue().length > 0">
         {{ 'LIST.EMPTY_USING_FILTER' | oTranslate : { values: [searchInput.getValue()] } }}
       </ng-container>
     </mat-list-item>
@@ -16,7 +16,7 @@
   </mat-list>
 </div>
 <mat-dialog-actions align="end">
-  <button mat-button mat-dialog-close>
+  <button type="button" mat-button mat-dialog-close>
     <span>{{ 'CANCEL' | oTranslate | uppercase }}</span>
   </button>
 </mat-dialog-actions>

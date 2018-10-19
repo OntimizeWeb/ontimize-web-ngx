@@ -22,6 +22,7 @@ export class OSnackBarConfig {
 }
 
 @Component({
+  moduleId: module.id,
   selector: 'o-snackbar',
   templateUrl: 'o-snackbar.component.html',
   styleUrls: ['o-snackbar.component.scss']

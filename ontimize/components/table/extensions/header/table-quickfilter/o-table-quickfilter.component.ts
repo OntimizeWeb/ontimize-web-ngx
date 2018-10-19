@@ -15,6 +15,7 @@ export const DEFAULT_OUTPUTS_O_TABLE_QUICKFILTER = [
 ];
 
 @Component({
+  moduleId: module.id,
   selector: 'o-table-quickfilter',
   templateUrl: './o-table-quickfilter.component.html',
   styleUrls: ['./o-table-quickfilter.component.scss'],
@@ -109,9 +110,9 @@ export class OTableQuickfilterComponent implements OnInit, AfterViewInit, OnDest
     }
   }
 
-  setValue(value: any) {
+  setValue(value: any, trigger: boolean = true) {
     this.value = value;
-    if (this.table && this.table.dataSource) {
+    if (trigger && this.table && this.table.dataSource) {
       this.table.dataSource.quickFilter = this.value;
     }
   }

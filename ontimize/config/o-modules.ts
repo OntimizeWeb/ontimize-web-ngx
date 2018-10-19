@@ -17,6 +17,7 @@ import {
   OBarMenuItemModule,
   OLocaleBarMenuItemModule,
   OBarMenuSeparatorModule,
+  OBarMenuNestedModule,
   OBreadcrumbModule,
   OButtonModule,
   OCheckboxModule,
@@ -53,16 +54,13 @@ import {
   OListItemCardImageModule,
   OSearchInputModule,
   OTableModule,
-  OSideMenuModule,
-  OSideMenuGroupModule,
-  OSideMenuItemModule,
-  OLocaleSideMenuItemModule,
-  OSideMenuSeparatorModule,
   OUserInfoModule,
   OLanguageSelectorModule,
   OCardMenuItemModule,
   OHourInputModule,
-  OTimeInputModule
+  OTimeInputModule,
+  OGridModule,
+  ORadioModule
 } from '../components';
 
 import {
@@ -87,6 +85,7 @@ export const INTERNAL_ONTIMIZE_MODULES_EXPORTED: any = [
   OBarMenuItemModule,
   OLocaleBarMenuItemModule,
   OBarMenuSeparatorModule,
+  OBarMenuNestedModule,
   OBreadcrumbModule,
   OButtonModule,
   OCheckboxModule,
@@ -123,11 +122,6 @@ export const INTERNAL_ONTIMIZE_MODULES_EXPORTED: any = [
   OListItemCardImageModule,
   OSearchInputModule,
   OTableModule,
-  OSideMenuModule,
-  OSideMenuGroupModule,
-  OSideMenuItemModule,
-  OLocaleSideMenuItemModule,
-  OSideMenuSeparatorModule,
   OAppLayoutModule,
   OFormLayoutManagerModule,
   OUserInfoModule,
@@ -135,7 +129,9 @@ export const INTERNAL_ONTIMIZE_MODULES_EXPORTED: any = [
   OCardMenuItemModule,
   OCardMenuLayoutModule,
   OHourInputModule,
-  OTimeInputModule
+  OTimeInputModule,
+  OGridModule,
+  ORadioModule
 ];
 
 // AoT requires an exported function for factories
@@ -186,6 +182,7 @@ export const INTERNAL_ONTIMIZE_MODULES: any = [
   OBarMenuItemModule,
   OLocaleBarMenuItemModule,
   OBarMenuSeparatorModule,
+  OBarMenuNestedModule,
   OBreadcrumbModule,
   OButtonModule,
   OCheckboxModule,
@@ -222,11 +219,6 @@ export const INTERNAL_ONTIMIZE_MODULES: any = [
   OListItemCardImageModule,
   OSearchInputModule,
   OTableModule,
-  OSideMenuModule,
-  OSideMenuGroupModule,
-  OSideMenuItemModule,
-  OLocaleSideMenuItemModule,
-  OSideMenuSeparatorModule,
   OAppLayoutModule,
   OFormLayoutManagerModule,
   OUserInfoModule,
@@ -234,7 +226,9 @@ export const INTERNAL_ONTIMIZE_MODULES: any = [
   OCardMenuItemModule,
   OCardMenuLayoutModule,
   OHourInputModule,
-  OTimeInputModule
+  OTimeInputModule,
+  OGridModule,
+  ORadioModule
 ];
 
 @NgModule({

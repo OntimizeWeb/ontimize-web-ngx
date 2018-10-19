@@ -8,6 +8,7 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_DATE = [
 ];
 
 @Component({
+  moduleId: module.id,
   selector: 'o-table-cell-renderer-date',
   templateUrl: './o-table-cell-renderer-date.component.html',
   inputs: DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_DATE
@@ -36,7 +37,6 @@ export class OTableCellRendererDateComponent extends OBaseTableCellRenderer {
   ngOnInit() {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
     //Add 'implements OnInit' to the class.
-    super.ngOnInit();
     this.pipeArguments = {
       format: this.format
     };

@@ -11,6 +11,7 @@ export const DEFAULT_TABLE_AGGREGATE = [
 ];
 
 @Component({
+  moduleId: module.id,
   selector: 'o-table-aggregate',
   templateUrl: './o-table-aggregate.component.html',
   styleUrls: ['./o-table-aggregate.component.scss'],

@@ -19,6 +19,7 @@ export const DEFAULT_OUTPUTS_O_LIST_ITEM_AVATAR = [
 ];
 
 @Component({
+  moduleId: module.id,
   selector: 'o-list-item-avatar',
   templateUrl: './o-list-item-avatar.component.html',
   styleUrls: ['./o-list-item-avatar.component.scss'],

@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Injector, NgModule, OnDestroy, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Injector, NgModule, OnDestroy, ViewEncapsulation, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -8,14 +8,15 @@ import { OSharedModule } from '../../../shared';
 import { InputConverter } from '../../../decorators';
 import { OAppLayoutComponent } from '../../../layouts';
 import { OAppSidenavComponent } from '../o-app-sidenav.component';
-import { DialogService, LoginService, OTranslateService } from '../../../services';
+import { DialogService, LoginService, OTranslateService, OPermissions, PermissionsService } from '../../../services';
 import { OLanguageSelectorModule } from '../../language-selector/o-language-selector.component';
 import { MenuItemAction, MenuItemLocale, MenuItemLogout, MenuItemRoute, MenuItemUserInfo, MenuRootItem } from '../../../services/app-menu.service';
 
 export const DEFAULT_INPUTS_O_APP_SIDENAV_MENU_ITEM = [
   'menuItem : menu-item',
   'menuItemType : menu-item-type',
-  'sidenavOpened : sidenav-opened'
+  'sidenavOpened : sidenav-opened',
+  'disabled'
 ];
 
 export const DEFAULT_OUTPUTS_O_APP_SIDENAV_MENU_ITEM = [
@@ -23,15 +24,19 @@ export const DEFAULT_OUTPUTS_O_APP_SIDENAV_MENU_ITEM = [
 ];
 
 @Component({
+  moduleId: module.id,
   selector: 'o-app-sidenav-menu-item',
   inputs: DEFAULT_INPUTS_O_APP_SIDENAV_MENU_ITEM,
   outputs: DEFAULT_OUTPUTS_O_APP_SIDENAV_MENU_ITEM,
   templateUrl: './o-app-sidenav-menu-item.component.html',
   styleUrls: ['./o-app-sidenav-menu-item.component.scss'],
   encapsulation: ViewEncapsulation.None,
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {
+    '[class.o-app-sidenav-menu-item]': 'true'
+  }
 })
-export class OAppSidenavMenuItemComponent implements AfterViewInit, OnDestroy {
+export class OAppSidenavMenuItemComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public static DEFAULT_INPUTS_O_APP_SIDENAV_MENU_ITEM = DEFAULT_INPUTS_O_APP_SIDENAV_MENU_ITEM;
   public static DEFAULT_OUTPUTS_O_APP_SIDENAV_MENU_ITEM = DEFAULT_OUTPUTS_O_APP_SIDENAV_MENU_ITEM;
@@ -41,17 +46,25 @@ export class OAppSidenavMenuItemComponent implements AfterViewInit, OnDestroy {
   protected translateService: OTranslateService;
   protected loginService: LoginService;
   protected dialogService: DialogService;
+  protected permissionsService: PermissionsService;
+
   protected sidenav: OAppSidenavComponent;
   protected router: Router;
 
+  menuItem: MenuRootItem;
+  menuItemType: string;
   @InputConverter()
   sidenavOpened: boolean = true;
-  public menuItem: MenuRootItem;
-  public menuItemType: string;
+  @InputConverter()
+  disabled: boolean = false;
+
   protected appSidenavToggleSubscription: Subscription;
   protected routerSubscription: Subscription;
   protected oAppLayoutComponent: OAppLayoutComponent;
 
+  protected permissions: OPermissions;
+
+  hidden: boolean;
   constructor(
     protected injector: Injector,
     protected elRef: ElementRef,
@@ -60,12 +73,17 @@ export class OAppSidenavMenuItemComponent implements AfterViewInit, OnDestroy {
     this.translateService = this.injector.get(OTranslateService);
     this.loginService = this.injector.get(LoginService);
     this.dialogService = this.injector.get(DialogService);
+    this.permissionsService = this.injector.get(PermissionsService);
     this.sidenav = this.injector.get(OAppSidenavComponent);
     this.oAppLayoutComponent = this.injector.get(OAppLayoutComponent);
     this.router = this.injector.get(Router);
     this.routerSubscription = this.router.events.subscribe(() => {
       this.cd.detectChanges();
     });
+  }
+
+  ngOnInit() {
+    this.parsePermissions();
   }
 
   ngAfterViewInit() {
@@ -85,6 +103,19 @@ export class OAppSidenavMenuItemComponent implements AfterViewInit, OnDestroy {
     }
     if (this.routerSubscription) {
       this.routerSubscription.unsubscribe();
+    }
+  }
+
+  protected parsePermissions() {
+    // if oattr in form, it can have permissions
+    this.permissions = this.permissionsService.getMenuPermissions(this.menuItem.id);
+    if (!Util.isDefined(this.permissions)) {
+      return;
+    }
+    this.hidden = this.permissions.visible === false;
+    if (!this.disabled) {
+      // if the disabled input is true it means that its parent is disabled using permissions
+      this.disabled = this.permissions.enabled === false;
     }
   }
 
@@ -141,6 +172,9 @@ export class OAppSidenavMenuItemComponent implements AfterViewInit, OnDestroy {
   }
 
   triggerClick(e: Event) {
+    if (this.disabled) {
+      return;
+    }
     switch (this.menuItemType) {
       case 'action':
         this.executeItemAction();

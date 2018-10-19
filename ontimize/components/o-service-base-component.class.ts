@@ -180,6 +180,9 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
     if (this.loaderSubscription) {
       this.loaderSubscription.unsubscribe();
     }
+    if (this.onRouteChangeStorageSubscribe) {
+      this.onRouteChangeStorageSubscribe.unsubscribe();
+    }
   }
 
   ngOnChanges(changes: { [propName: string]: SimpleChange }) {
@@ -280,6 +283,8 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
       let queryArguments = this.getQueryArguments(filter, ovrrArgs);
       if (this.querySubscription) {
         this.querySubscription.unsubscribe();
+      }
+      if (this.loaderSubscription) {
         this.loaderSubscription.unsubscribe();
       }
       this.loaderSubscription = this.load();
@@ -432,4 +437,5 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
   getParentKeysValues() {
     return ServiceUtils.getParentKeysFromForm(this._pKeysEquiv, this.form);
   }
+
 }

@@ -9,10 +9,11 @@ import { OSharedModule } from '../../../shared';
 import { InputConverter } from '../../../decorators';
 import { OFormComponent } from '../../form/o-form.component';
 import { OFormValue, IFormValueOptions } from '../../form/OFormValue';
-import { OFormDataComponent, DEFAULT_INPUTS_O_FORM_DATA_COMPONENT, DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT } from '../../o-form-data-component.class';
+import { OFormDataComponent, DEFAULT_INPUTS_O_FORM_DATA_COMPONENT, DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT, OValueChangeEvent } from '../../o-form-data-component.class';
 
 import { ODateInputModule, ODateInputComponent, DateFilterFunction } from '../date-input/o-date-input.component';
 import { OHourInputModule, OHourInputComponent } from '../hour-input/o-hour-input.component';
+import { Observable } from 'rxjs/Observable';
 
 export const DEFAULT_INPUTS_O_TIME_INPUT = [
   ...DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,
@@ -37,6 +38,7 @@ export const DEFAULT_OUTPUTS_O_TIME_INPUT = [
 ];
 
 @Component({
+  moduleId: module.id,
   selector: 'o-time-input',
   templateUrl: './o-time-input.component.html',
   styleUrls: ['./o-time-input.component.scss'],
@@ -96,11 +98,15 @@ export class OTimeInputComponent extends OFormDataComponent implements OnInit, A
   ngOnInit() {
     super.ngOnInit();
     const self = this;
-    this.formGroupSubscription = this.formGroup.valueChanges.subscribe(value => {
-      if (!this.blockGroupValueChanges) {
-        self.updateComponentValue();
-      }
-    });
+    Observable.merge(this.dateInput.onValueChange, this.hourInput.onValueChange)
+      .subscribe((event: OValueChangeEvent) => {
+        if (event.isUserChange()) {
+          self.updateComponentValue();
+          var newValue = self._fControl.value;
+          self.emitOnValueChange(OValueChangeEvent.USER_CHANGE, newValue, self.oldValue);
+          self.oldValue = newValue;
+        }
+      });
   }
 
   protected updateComponentValue() {
@@ -131,7 +137,7 @@ export class OTimeInputComponent extends OFormDataComponent implements OnInit, A
       this.blockGroupValueChanges = false;
     }
     this.ensureOFormValue(timeValue);
-    this.onChange.emit(timeValue);
+
   }
 
   ngOnDestroy() {
@@ -205,6 +211,8 @@ export class OTimeInputComponent extends OFormDataComponent implements OnInit, A
   }
 
   setData(value: any) {
+    this.oldValue = value;
+
     this.ensureOFormValue(value);
     if (this._fControl) {
       this._fControl.setValue(this.value.value, {
@@ -213,22 +221,25 @@ export class OTimeInputComponent extends OFormDataComponent implements OnInit, A
       });
       this.setInnerComponentsData();
     }
+
   }
 
   setValue(val: any, options?: IFormValueOptions) {
-    super.setValue(val, options);
-    this.setInnerComponentsData();
+    if (this.oldValue !== val) {
+      super.setValue(val, options);
+      this.setInnerComponentsData();
+    }
   }
 
-  clearValue(): void {
+  onClickClearValue(): void {
     this.blockGroupValueChanges = true;
-    this.setValue(void 0);
     if (this.dateInput) {
       this.dateInput.clearValue();
     }
     if (this.hourInput) {
       this.hourInput.clearValue();
     }
+    this.clearValue();
     this.blockGroupValueChanges = false;
   }
 
@@ -252,6 +263,7 @@ export class OTimeInputComponent extends OFormDataComponent implements OnInit, A
     if (this.hourInput) {
       this.hourInput.setTimestampValue(hourValue, options);
     }
+    this.onChange.emit(event);
   }
 
   onFocusInnerComp(event: any) {
@@ -265,6 +277,15 @@ export class OTimeInputComponent extends OFormDataComponent implements OnInit, A
       this.onBlur.emit(event);
     }
   }
+
+  // innerOnChange(event: any) {
+  //   if (!this.value) {
+  //     this.value = new OFormValue();
+  //   }
+  //   this.ensureOFormValue(event);
+  //   this.onChange.emit(event);
+  // }
+
 }
 
 @NgModule({

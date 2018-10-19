@@ -5,6 +5,7 @@ import { MatDialogRef, MatListOption, MatSelectionList } from '@angular/material
 // import { ITableFiltersStatus } from '../../o-table-storage.class';
 
 @Component({
+  moduleId: module.id,
   selector: 'o-table-store-configuration-dialog',
   templateUrl: './o-table-store-configuration-dialog.component.html',
   styleUrls: ['./o-table-store-configuration-dialog.component.scss']

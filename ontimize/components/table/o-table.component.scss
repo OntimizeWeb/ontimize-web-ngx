@@ -18,7 +18,7 @@ $_mat-checkbox-mark-stroke-size-small: 2 / 15 * $mat-checkbox-size-small !defaul
   }
 
   .mat-header-cell {
-    &:not([mat-sort-header]) {
+    &:not([o-mat-sort-header]) {
       &.start {
         place-content: flex-start;
       }
@@ -32,21 +32,17 @@ $_mat-checkbox-mark-stroke-size-small: 2 / 15 * $mat-checkbox-size-small !defaul
       }
     }
 
-    &[mat-sort-header].start {
-      .mat-sort-header-button {
+    &[o-mat-sort-header] {
+      &.start .mat-sort-header-button {
         place-content: flex-start;
       }
-    }
 
-    &[mat-sort-header].center {
-      .mat-sort-header-button {
-        place-content: center;
+      &.center .mat-sort-header-button {
+          place-content: center;
       }
-    }
 
-    &[mat-sort-header].end {
-      .mat-sort-header-button {
-        place-content: flex-end;
+      &.end .mat-sort-header-button {
+          place-content: flex-end;
       }
     }
   }
@@ -231,7 +227,7 @@ $_mat-checkbox-mark-stroke-size-small: 2 / 15 * $mat-checkbox-size-small !defaul
             line-height: 1;
           }
 
-          &:not([mat-sort-header]) {
+          &:not([o-mat-sort-header]) {
             display: flex;
             cursor: default;
           }
@@ -320,6 +316,9 @@ $_mat-checkbox-mark-stroke-size-small: 2 / 15 * $mat-checkbox-size-small !defaul
         box-sizing: border-box;
 
         &.o-mat-cell-multiline {
+          &:not(.mat-header-cell) {
+            padding: 6px 12px;
+          }
           overflow: initial;
           white-space: normal;
           text-overflow: unset;

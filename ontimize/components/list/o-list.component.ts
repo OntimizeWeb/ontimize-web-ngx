@@ -10,7 +10,6 @@ import { OntimizeService } from '../../services';
 import { InputConverter } from '../../decorators';
 import { ObservableWrapper } from '../../util/async';
 import { OFormComponent } from '../form/o-form.component';
-import { OFormDataNavigation } from '../form/form-components';
 import { OQueryDataArgs, ServiceUtils } from '../service.utils';
 import { OServiceComponent } from '../o-service-component.class';
 import { FilterExpressionUtils } from '../filter-expression.utils';
@@ -69,6 +68,7 @@ export interface OListInitializationOptions {
 }
 
 @Component({
+  moduleId: module.id,
   selector: 'o-list',
   providers: [
     { provide: OntimizeService, useFactory: dataServiceFactory, deps: [Injector] }
@@ -149,6 +149,7 @@ export class OListComponent extends OServiceComponent implements AfterContentIni
   }
 
   ngAfterViewInit() {
+    super.afterViewInit();
     if (Util.isDefined(this.searchInputComponent)) {
       this.registerQuickFilter(this.searchInputComponent);
     }
@@ -168,11 +169,6 @@ export class OListComponent extends OServiceComponent implements AfterContentIni
 
   ngOnDestroy() {
     this.destroy();
-  }
-
-  destroy() {
-    super.destroy();
-    this.onRouteChangeStorageSubscribe.unsubscribe();
   }
 
   public ngOnChanges(changes: { [propName: string]: SimpleChange }) {
@@ -228,16 +224,12 @@ export class OListComponent extends OServiceComponent implements AfterContentIni
   registerListItemDirective(item: OListItemDirective) {
     if (item) {
       var self = this;
-      if (this.detailMode === Codes.DETAIL_MODE_CLICK) {
-        item.onClick(directiveItem => {
-          self.onItemDetailClick(directiveItem);
-        });
-      }
-      if (Codes.isDoubleClickMode(this.detailMode)) {
-        item.onDoubleClick(directiveItem => {
-          self.onItemDetailDoubleClick(directiveItem);
-        });
-      }
+      item.onClick(directiveItem => {
+        self.onItemDetailClick(directiveItem);
+      });
+      item.onDoubleClick(directiveItem => {
+        self.onItemDetailDoubleClick(directiveItem);
+      });
     }
   }
 
@@ -266,41 +258,26 @@ export class OListComponent extends OServiceComponent implements AfterContentIni
   }
 
   public onItemDetailClick(item: OListItemDirective | OListItemComponent) {
+    let data = item.getItemData();
     if (this.oenabled && this.detailMode === Codes.DETAIL_MODE_CLICK) {
       this.saveDataNavigationInLocalStorage();
-      let data = item.getItemData();
       this.viewDetail(data);
-      ObservableWrapper.callEmit(this.onClick, data);
     }
+    ObservableWrapper.callEmit(this.onClick, data);
   }
 
   public onItemDetailDoubleClick(item: OListItemDirective | OListItemComponent) {
+    let data = item.getItemData();
     if (this.oenabled && Codes.isDoubleClickMode(this.detailMode)) {
       this.saveDataNavigationInLocalStorage();
-      let data = item.getItemData();
       this.viewDetail(data);
-      ObservableWrapper.callEmit(this.onDoubleClick, data);
     }
+    ObservableWrapper.callEmit(this.onDoubleClick, data);
   }
 
   protected saveDataNavigationInLocalStorage(): void {
-    // Save data of the list in navigation-data in the localstorage
-    OFormDataNavigation.storeNavigationData(this.injector, this.getKeysValues());
+    super.saveDataNavigationInLocalStorage();
     this.storePaginationState = true;
-  }
-
-  protected getKeysValues(): any[] {
-    let data = this.dataArray;
-    const self = this;
-    return data.map((row) => {
-      let obj = {};
-      self.keysArray.map((key) => {
-        if (row[key] !== undefined) {
-          obj[key] = row[key];
-        }
-      });
-      return obj;
-    });
   }
 
   getDataToStore(): Object {
@@ -333,8 +310,9 @@ export class OListComponent extends OServiceComponent implements AfterContentIni
     } else {
       this.setDataArray([]);
     }
-
-    this.loaderSubscription.unsubscribe();
+    if (this.loaderSubscription) {
+      this.loaderSubscription.unsubscribe();
+    }
     if (this.pageable) {
       ObservableWrapper.callEmit(this.onPaginatedDataLoaded, data);
     }
@@ -498,9 +476,7 @@ export class OListComponent extends OServiceComponent implements AfterContentIni
     super.insertDetail();
   }
 
-  hasTitle(): boolean {
-    return this.title !== undefined;
-  }
+
 
   getComponentFilter(existingFilter: any = {}): any {
     let filter = existingFilter;

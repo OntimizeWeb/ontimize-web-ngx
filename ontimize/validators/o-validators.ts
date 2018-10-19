@@ -13,8 +13,8 @@ const TWENTY_FOUR_HOUR_FORMAT_PATTERN = '([01]?[0-9]|2[0-3]):[0-5][0-9]';
 export class OValidators {
 
   /**
-  * Hour validator hh:mm am/pm format
-  */
+* Hour validator hh:mm am/pm format
+*/
   static twelveHourFormatValidator(control: FormControl): ValidationErrors {
     let regExp = new RegExp(TWELVE_HOUR_FORMAT_PATTERN);
     if (control.value && !regExp.test(control.value)) {
@@ -26,7 +26,7 @@ export class OValidators {
   /**
   * Hour validator HH:mm format
   */
-  static twentyHourFormatValidator(control: FormControl): ValidationErrors {
+  static twentyFourHourFormatValidator(control: FormControl): ValidationErrors {
     let regExp = new RegExp(TWENTY_FOUR_HOUR_FORMAT_PATTERN);
     if (control.value && !regExp.test(control.value)) {
       return { 'invalidFormatHour': true };

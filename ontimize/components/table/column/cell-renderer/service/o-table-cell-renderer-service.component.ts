@@ -18,6 +18,7 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_SERVICE = [
 ];
 
 @Component({
+  moduleId: module.id,
   selector: 'o-table-cell-renderer-service',
   templateUrl: './o-table-cell-renderer-service.component.html',
   inputs: DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_SERVICE,
@@ -60,7 +61,6 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
   }
 
   ngOnInit() {
-    super.ngOnInit();
     this.colArray = Util.parseArray(this.columns, true);
     let pkArray = Util.parseArray(this.parentKeys);
     this._pKeysEquiv = Util.parseParentKeysEquivalences(pkArray);

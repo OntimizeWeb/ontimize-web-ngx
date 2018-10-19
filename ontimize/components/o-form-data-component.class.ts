@@ -8,6 +8,7 @@ import { OBaseComponent, IComponent } from './o-component.class';
 import { OFormComponent } from './form/o-form.component';
 import { OFormValue, IFormValueOptions } from './form/OFormValue';
 import { OValidatorComponent } from './input/validation/o-validator.component';
+import { OPermissions, PermissionsService } from '../services';
 
 export interface IMultipleSelection extends IComponent {
   getSelectedItems(): Array<any>;
@@ -28,11 +29,36 @@ export interface IFormDataComponent extends IFormControlComponent {
   data(value: any);
   isAutomaticBinding(): boolean;
   isAutomaticRegistering(): boolean;
+  setValue(val: any, options?: IFormValueOptions);
+  clearValue(options?: IFormValueOptions);
+  getValue(): any;
+
+  onChange: EventEmitter<Object>;
+  onValueChange: EventEmitter<OValueChangeEvent>;
 }
 
 export interface IErrorData {
   name: string;
   text: string;
+}
+
+export class OValueChangeEvent {
+  public static USER_CHANGE = 0;
+  public static PROGRAMMATIC_CHANGE = 1;
+
+  constructor(
+    public type: number,
+    public newValue: any,
+    public oldValue: any,
+    public target: any) { }
+
+  isUserChange(): boolean {
+    return this.type === OValueChangeEvent.USER_CHANGE;
+  }
+
+  isProgrammaticChange(): boolean {
+    return this.type === OValueChangeEvent.PROGRAMMATIC_CHANGE;
+  }
 }
 
 export const DEFAULT_INPUTS_O_FORM_DATA_COMPONENT = [
@@ -55,7 +81,8 @@ export const DEFAULT_INPUTS_O_FORM_DATA_COMPONENT = [
 ];
 
 export const DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT = [
-  'onChange'
+  'onChange',
+  'onValueChange'
 ];
 
 export class OFormDataComponent extends OBaseComponent implements IFormDataComponent, IFormDataTypeComponent,
@@ -74,6 +101,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
 
   /* Outputs */
   onChange: EventEmitter<Object> = new EventEmitter<Object>();
+  onValueChange: EventEmitter<OValueChangeEvent> = new EventEmitter<OValueChangeEvent>();
 
   @HostBinding('style.width')
   get hostWidth() {
@@ -86,8 +114,10 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   protected _SQLType: number = SQLTypes.OTHER;
   protected _defaultSQLTypeKey: string = 'OTHER';
   protected _fControl: FormControl;
+  protected _fGroup: FormGroup;
   protected elRef: ElementRef;
   protected form: OFormComponent;
+  protected oldValue: any;
 
   protected matSuffixSubscription: Subscription;
   @ViewChildren(MatSuffix)
@@ -99,6 +129,9 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   @ContentChildren(OValidatorComponent)
   protected validatorChildren: QueryList<OValidatorComponent>;
 
+  protected permissionsService: PermissionsService;
+  protected mutationObserver: MutationObserver;
+
   constructor(
     form: OFormComponent,
     elRef: ElementRef,
@@ -107,6 +140,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     super(injector);
     this.form = form;
     this.elRef = elRef;
+    this.permissionsService = this.injector.get(PermissionsService);
   }
 
   ngOnInit() {
@@ -142,8 +176,26 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     }
   }
 
+  hasEnabledPermission(): boolean {
+    return this.permissions ? this.permissions.enabled : true;
+  }
+
+  hasVisiblePermission(): boolean {
+    return this.permissions ? this.permissions.visible : true;
+  }
+
   getFormGroup(): FormGroup {
-    return this.form ? this.form.formGroup : undefined;
+    if (this._fGroup) {
+      return this._fGroup;
+    }
+    let formGroup = this.form ? this.form.formGroup : undefined;
+    if ((!this.hasEnabledPermission() || !this.hasVisiblePermission()) && !this._fGroup) {
+      let group = {};
+      group[this.oattr] = this._fControl;
+      this._fGroup = new FormGroup(group);
+      formGroup = this._fGroup;
+    }
+    return formGroup;
   }
 
   getFormControl(): FormControl {
@@ -164,13 +216,68 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
 
   initialize() {
     super.initialize();
-    if (this.form) {
-      this.registerFormListeners();
-      this.isReadOnly = !(this.form.isInUpdateMode() || this.form.isInInsertMode() || this.form.isEditableDetail());
-    } else {
-      this.isReadOnly = this._disabled;
+
+    // ensuring formControl creation
+    this.getControl();
+
+    this.parsePermissions();
+
+    if (!Util.isDefined(this.permissions)) {
+      if (this.form) {
+        this.registerFormListeners();
+        this.isReadOnly = !(this.form.isInUpdateMode() || this.form.isInInsertMode() || this.form.isEditableDetail());
+      } else {
+        this.isReadOnly = this._disabled;
+      }
     }
   }
+
+  protected parsePermissions() {
+    // if oattr in form, it can have permissions
+    if (!this.form || !Util.isDefined(this.form.oattr)) {
+      return;
+    }
+    const permissions: OPermissions = this.permissionsService.getComponentPermissions(this.oattr, this.form.oattr);
+    if (!Util.isDefined(permissions)) {
+      return;
+    }
+    if (permissions.visible === false) {
+      /* hide input per permissions */
+      this.elRef.nativeElement.remove();
+      this.destroy();
+    } else if (permissions.enabled === false) {
+      /* disable input per permissions */
+      this.disabled = true;
+      this.disabledChangesInDom();
+      if (this.form) {
+        this.form.registerFormComponent(this);
+      }
+    }
+    this.permissions = permissions;
+  }
+
+  /**
+   * Do not allow the disabled attribute to change by code or by inspector
+   * */
+  private disabledChangesInDom() {
+    const self = this;
+    this.mutationObserver = new MutationObserver(function (mutations) {
+      mutations.forEach(function (mutation) {
+        if (mutation.type === 'attributes' && mutation.attributeName === 'disabled'
+          && mutation.target.attributes.getNamedItem('disabled') === null) {
+          const control = self.getControl();
+          control.disable();
+        }
+      });
+    });
+
+    this.mutationObserver.observe(this.elementRef.nativeElement, {
+      attributes: true,
+      subtree: true,
+      attributeFilter: ['disabled']
+    });
+  }
+
 
   protected setSuffixClass(count: number) {
     const iconFieldEl = this.elRef.nativeElement.getElementsByClassName('icon-field');
@@ -196,6 +303,9 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     if (this.validatorsSubscription) {
       this.validatorsSubscription.unsubscribe();
     }
+    if (this.mutationObserver) {
+      this.mutationObserver.disconnect();
+    }
   }
 
   registerFormListeners() {
@@ -219,6 +329,9 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   }
 
   setData(value: any) {
+    // emit OValueChangeEvent.PROGRAMMATIC_CHANGE when assign value to data
+    // this method skips the following permissions checking because the form is
+    // setting its query result using it
     this.ensureOFormValue(value);
     if (this._fControl) {
       this._fControl.setValue(this.value.value, {
@@ -229,6 +342,8 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
         this._fControl.markAsTouched();
       }
     }
+    this.emitOnValueChange(OValueChangeEvent.PROGRAMMATIC_CHANGE, value, this.oldValue);
+    this.oldValue = value;
   }
 
   isAutomaticBinding(): boolean {
@@ -249,6 +364,33 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   }
 
   setValue(val: any, options?: IFormValueOptions) {
+    if (!PermissionsService.checkEnabledPermission(this.permissions)) {
+      return;
+    }
+    if (this.oldValue !== val) {
+      var newValue = val;
+      this.setFormValue(val, options);
+      let changeType: number = options ? options.changeType : OValueChangeEvent.PROGRAMMATIC_CHANGE;
+      this.emitOnValueChange(changeType, newValue, this.oldValue);
+      this.oldValue = val;
+    }
+  }
+
+  /**
+   * Clears the component value.
+   */
+  clearValue(options?: IFormValueOptions) {
+    if (!PermissionsService.checkEnabledPermission(this.permissions)) {
+      return;
+    }
+    this.setValue(void 0, options);
+  }
+
+  onClickClearValue(): void {
+    this.clearValue({ changeType: OValueChangeEvent.USER_CHANGE });
+  }
+
+  protected setFormValue(val: any, options?: IFormValueOptions) {
     this.ensureOFormValue(val);
     if (this._fControl) {
       this._fControl.setValue(val, options);
@@ -259,11 +401,18 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     }
   }
 
-  /**
-   * Clears the component value.
-   */
-  clearValue(): void {
-    this.setValue(void 0);
+  /*This method is called in output change event, not emit event onValueChange when oldvalue is same than newvalue*/
+  onChangeEvent($event) {
+    if (this.oldValue !== this.getValue) {
+      this.emitOnValueChange(OValueChangeEvent.USER_CHANGE, this.getValue(), this.oldValue);
+      this.oldValue = this.getValue();
+    }
+  }
+
+  protected emitOnValueChange(type, newValue, oldValue) {
+    let event = new OValueChangeEvent
+      (type, newValue, oldValue, this);
+    this.onValueChange.emit(event);
   }
 
   get showClearButton(): boolean {
@@ -323,11 +472,16 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   }
 
   set disabled(value: boolean) {
-    this._disabled = value;
-    if (this._fControl && value) {
-      this._fControl.disable();
-    } else if (this._fControl) {
-      this._fControl.enable();
+    if (!PermissionsService.checkEnabledPermission(this.permissions)) {
+      return;
+    }
+    if (this.hasVisiblePermission()) {
+      this._disabled = value;
+      if (this._fControl && value) {
+        this._fControl.disable();
+      } else if (this._fControl) {
+        this._fControl.enable();
+      }
     }
   }
 

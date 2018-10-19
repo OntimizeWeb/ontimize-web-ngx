@@ -5,7 +5,7 @@ import { Observable, Subscription, combineLatest } from 'rxjs';
 import { DialogService, NavigationService, ONavigationItem } from '../../../services';
 import { OFormComponent } from '../o-form.component';
 import { Codes, SQLTypes, Util } from '../../../utils';
-import { OFormLayoutManagerComponent } from '../../../layouts/form-layout/o-form-layout-manager.component';
+import { OFormLayoutManagerComponent, IDetailComponentData } from '../../../layouts/form-layout/o-form-layout-manager.component';
 import { OFormLayoutDialogComponent } from '../../../layouts/form-layout/dialog/o-form-layout-dialog.component';
 
 export class OFormNavigationClass {
@@ -106,7 +106,7 @@ export class OFormNavigationClass {
 
   subscribeToQueryParams() {
     if (this.formLayoutManager) {
-      const cacheData = this.formLayoutManager.getFormCacheData(this.id);
+      const cacheData: IDetailComponentData = this.formLayoutManager.getFormCacheData(this.id);
       if (Util.isDefined(cacheData)) {
         this.queryParams = cacheData.queryParams || {};
         this.parseQueryParams();
@@ -130,9 +130,9 @@ export class OFormNavigationClass {
 
   subscribeToUrlParams() {
     if (this.formLayoutManager) {
-      const cacheData = this.formLayoutManager.getFormCacheData(this.id);
+      const cacheData: IDetailComponentData = this.formLayoutManager.getFormCacheData(this.id);
       if (Util.isDefined(cacheData)) {
-        this.urlParams = cacheData.urlParams;
+        this.urlParams = cacheData.params;
         this.parseUrlParams();
       }
     } else {
@@ -157,7 +157,7 @@ export class OFormNavigationClass {
 
   subscribeToUrl() {
     if (this.formLayoutManager) {
-      const cacheData = this.formLayoutManager.getFormCacheData(this.id);
+      const cacheData: IDetailComponentData = this.formLayoutManager.getFormCacheData(this.id);
       if (Util.isDefined(cacheData)) {
         this.urlSegments = cacheData.urlSegments;
       }
@@ -279,14 +279,16 @@ export class OFormNavigationClass {
     if (this.formLayoutManager) {
       this.form.setInitialMode();
     } else if (this.navigationService && this.form.keysArray && insertedKeys) {
-      let route = [];
-      let extras: NavigationExtras = Object.assign({}, this.getQueryParams(), Codes.getIsDetailObject());
       let params: any[] = [];
       this.form.keysArray.forEach((current, index) => {
         if (insertedKeys[current]) {
           params.push(insertedKeys[current]);
         }
       });
+      let extras: NavigationExtras = {};
+      let qParams: any = Object.assign({}, this.getQueryParams(), Codes.getIsDetailObject());
+      extras[Codes.QUERY_PARAMS] = qParams;
+      let route = [];
       const navData: ONavigationItem = this.navigationService.getPreviousRouteData();
       if (navData) {
         route.push(navData.url);
@@ -295,6 +297,8 @@ export class OFormNavigationClass {
           route.push(detailRoute);
         }
         route.push(...params);
+        // deleting insertFormRoute as active mode (because stayInRecordAfterInsert changes it)
+        this.navigationService.deleteActiveFormMode(navData);
       } else {
         extras.relativeTo = this.actRoute;
         route = ['../', ...params];
@@ -307,7 +311,9 @@ export class OFormNavigationClass {
   * Navigates to 'insert' mode
   */
   goInsertMode(options?: any) {
-    if (this.navigationService) {
+    if (this.formLayoutManager && this.formLayoutManager.isDialogMode()) {
+      this.form.setInsertMode();
+    } else if (this.navigationService) {
       let route = [];
       let extras: NavigationExtras = {};
       const navData: ONavigationItem = this.navigationService.getPreviousRouteData();
@@ -335,7 +341,9 @@ export class OFormNavigationClass {
    * Navigates to 'edit' mode
    */
   goEditMode(options?: any) {
-    if (this.navigationService) {
+    if (this.formLayoutManager && this.formLayoutManager.isDialogMode()) {
+      this.form.setUpdateMode();
+    } else if (this.navigationService) {
       let route = [];
       let extras: NavigationExtras = {};
       if (this.form.isDetailForm) {
@@ -407,7 +415,7 @@ export class OFormNavigationClass {
 
   showConfirmDiscardChanges(): Promise<boolean> {
     let subscription: Promise<boolean> = undefined;
-    if (this.form.isInitialStateChanged()) {
+    if (this.form.isInitialStateChanged() && !this.form.isInInsertMode()) {
       subscription = this.dialogService.confirm('CONFIRM', 'MESSAGES.FORM_CHANGES_WILL_BE_LOST');
     }
     if (subscription === undefined) {
@@ -420,12 +428,12 @@ export class OFormNavigationClass {
     return subscription;
   }
 
-  protected storeNavigationFormRoutes(activeFormMode: string) {
+  protected storeNavigationFormRoutes(activeMode: string) {
     this.navigationService.storeFormRoutes({
       detailFormRoute: Codes.DEFAULT_DETAIL_ROUTE,
       editFormRoute: Codes.DEFAULT_EDIT_ROUTE,
       insertFormRoute: Codes.DEFAULT_INSERT_ROUTE
-    }, activeFormMode);
+    }, activeMode);
   }
 
 }
