@@ -7,6 +7,21 @@
   $foreground: map-get($theme, foreground);
 
   .o-app-sidenav {
+    .o-app-sidenav-menu-group,
+    .o-app-sidenav-menu-item {
+      &:not([disabled=true]) {
+        .o-app-sidenav-item {
+           &:focus,
+           > a:focus,
+           > a:hover,
+          &:hover,
+          > a.is-selected {
+            color: mat-color($accent);
+          }
+        }
+      }
+    }
+
     .o-app-sidenav-sidenav {
       background: mat-color($primary);
 
@@ -20,24 +35,6 @@
 
         .o-app-sidenav-viewer-sidenav-item-selected {
           color: mat-color($accent);
-        }
-
-        &.disabled {
-          opacity: .5;
-
-          a {
-            cursor: initial;
-          }
-        }
-
-        &:not(.disabled) {
-           &:focus,
-           > a:focus,
-           > a:hover,
-          &:hover,
-          > a.is-selected {
-            color: mat-color($accent);
-          }
         }
 
         &.o-user-info,
@@ -68,6 +65,7 @@
         }
 
       }
+
       li a {
         color: inherit;
       }

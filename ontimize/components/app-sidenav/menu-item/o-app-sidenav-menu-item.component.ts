@@ -33,7 +33,8 @@ export const DEFAULT_OUTPUTS_O_APP_SIDENAV_MENU_ITEM = [
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
-    '[class.o-app-sidenav-menu-item]': 'true'
+    '[class.o-app-sidenav-menu-item]': 'true',
+    '[attr.disabled]': 'disabled'
   }
 })
 export class OAppSidenavMenuItemComponent implements OnInit, AfterViewInit, OnDestroy {
@@ -63,6 +64,7 @@ export class OAppSidenavMenuItemComponent implements OnInit, AfterViewInit, OnDe
   protected oAppLayoutComponent: OAppLayoutComponent;
 
   protected permissions: OPermissions;
+  protected mutationObserver: MutationObserver;
 
   hidden: boolean;
   constructor(
@@ -104,6 +106,9 @@ export class OAppSidenavMenuItemComponent implements OnInit, AfterViewInit, OnDe
     if (this.routerSubscription) {
       this.routerSubscription.unsubscribe();
     }
+    if (this.mutationObserver) {
+      this.mutationObserver.disconnect();
+    }
   }
 
   protected parsePermissions() {
@@ -117,6 +122,18 @@ export class OAppSidenavMenuItemComponent implements OnInit, AfterViewInit, OnDe
       // if the disabled input is true it means that its parent is disabled using permissions
       this.disabled = this.permissions.enabled === false;
     }
+
+    if (this.disabled) {
+      this.disabledChangesInDom();
+    }
+  }
+
+  private disabledChangesInDom() {
+    const callbackFn = (mutation: MutationRecord) => {
+      let element = <HTMLInputElement>mutation.target;
+      element.setAttribute('disabled', 'true');
+    };
+    this.mutationObserver = PermissionsService.registerDisableChangesInDom(this.elRef.nativeElement, callbackFn);
   }
 
   protected setUserInfoImage() {

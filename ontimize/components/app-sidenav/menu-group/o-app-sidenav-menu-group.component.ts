@@ -35,7 +35,11 @@ export const DEFAULT_OUTPUTS_O_APP_SIDENAV_MENU_GROUP = [
       transition('expanded => collapsed', animate('200ms ease-out'))
     ])
   ],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {
+    '[class.o-app-sidenav-menu-group]': 'true',
+    '[attr.disabled]': 'disabled'
+  }
 })
 export class OAppSidenavMenuGroupComponent implements OnInit, AfterViewInit, OnDestroy {
 
@@ -51,6 +55,7 @@ export class OAppSidenavMenuGroupComponent implements OnInit, AfterViewInit, OnD
   protected sidenav: OAppSidenavComponent;
   protected sidenavSubscription: Subscription;
   protected permissions: OPermissions;
+  protected mutationObserver: MutationObserver;
 
   public menuGroup: MenuGroup;
 
@@ -81,7 +86,7 @@ export class OAppSidenavMenuGroupComponent implements OnInit, AfterViewInit, OnD
     if (this.menuGroup.id === 'user-info') {
       const self = this;
       this.sidenavSubscription = this.sidenav.sidenav.openedChange.subscribe((opened) => {
-        self.disabled = !opened;
+        self.disabled = !opened || (self.permissions && self.permissions.enabled === false);
         self.updateContentExpansion();
       });
     }
@@ -102,6 +107,18 @@ export class OAppSidenavMenuGroupComponent implements OnInit, AfterViewInit, OnD
     }
     this.hidden = this.permissions.visible === false;
     this.disabled = this.permissions.enabled === false;
+
+    if (this.disabled) {
+      this.disabledChangesInDom();
+    }
+  }
+
+  private disabledChangesInDom() {
+    const callbackFn = (mutation: MutationRecord) => {
+      let element = <HTMLInputElement>mutation.target;
+      element.setAttribute('disabled', 'true');
+    };
+    this.mutationObserver = PermissionsService.registerDisableChangesInDom(this.elRef.nativeElement, callbackFn);
   }
 
   onClick() {
