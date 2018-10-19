@@ -10,12 +10,12 @@
     .o-app-sidenav-menu-group,
     .o-app-sidenav-menu-item {
       &:not([disabled=true]) {
-        .o-app-sidenav-item {
-           &:focus,
+        > .o-app-sidenav-item {
+           > a.is-selected,
            > a:focus,
            > a:hover,
-          &:hover,
-          > a.is-selected {
+          &:focus,
+          &:hover {
             color: mat-color($accent);
           }
         }
