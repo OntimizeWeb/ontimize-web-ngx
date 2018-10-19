@@ -1,6 +1,6 @@
 import { OnInit, Injector, ElementRef, HostListener, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
-import { OTranslateService, OPermissions } from '../../services';
+import { OTranslateService, OPermissions, PermissionsService } from '../../services';
 import { Util } from '../../utils';
 import { OBarMenuComponent } from './o-bar-menu.component';
 
@@ -36,6 +36,7 @@ export class OBaseMenuItemClass implements OnInit, OnDestroy {
   @HostListener('mouseout') onMouseout = () => this.isHovered = false;
 
   protected permissions: OPermissions;
+  protected mutationObserver: MutationObserver;
 
   constructor(
     protected menu: OBarMenuComponent,
@@ -62,6 +63,9 @@ export class OBaseMenuItemClass implements OnInit, OnDestroy {
     if (this.onLanguageChangeSubscription) {
       this.onLanguageChangeSubscription.unsubscribe();
     }
+    if (this.mutationObserver) {
+      this.mutationObserver.disconnect();
+    }
   }
 
   setDOMTitle() {
@@ -77,6 +81,18 @@ export class OBaseMenuItemClass implements OnInit, OnDestroy {
     }
     this.restricted = this.permissions.visible === false;
     this.disabled = this.permissions.enabled === false;
+
+    if (this.disabled) {
+      this.disabledChangesInDom();
+    }
+  }
+
+  private disabledChangesInDom() {
+    const callbackFn = (mutation: MutationRecord) => {
+      let element = <HTMLInputElement>mutation.target;
+      element.setAttribute('disabled', 'true');
+    };
+    this.mutationObserver = PermissionsService.registerDisableChangesInDom(this.elRef.nativeElement, callbackFn);
   }
 
   get isHovered(): boolean {
@@ -84,6 +100,8 @@ export class OBaseMenuItemClass implements OnInit, OnDestroy {
   }
 
   set isHovered(val: boolean) {
-    this._isHovered = val;
+    if (!this.disabled) {
+      this._isHovered = val;
+    }
   }
 }
