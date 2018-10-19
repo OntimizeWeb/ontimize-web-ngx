@@ -29,7 +29,7 @@ export class PermissionsService {
   public static PERMISSIONS_ACTIONS_INSERT_FORM = 'insert';
   public static PERMISSIONS_ACTIONS_UPDATE_FORM = 'update';
   public static PERMISSIONS_ACTIONS_DELETE_FORM = 'delete';
-  public static MESSAGE_OPERATION_NOT_ALLOWED_PERMISSION ='Operation is not allowed due permissions restrictions';
+  public static MESSAGE_OPERATION_NOT_ALLOWED_PERMISSION = 'Operation is not allowed due permissions restrictions';
 
   public static PERMISSIONS_ACTIONS_FORM = [
     PermissionsService.PERMISSIONS_ACTIONS_REFRESH_FORM,
@@ -170,5 +170,26 @@ export class PermissionsService {
       return false;
     }
     return true;
+  }
+
+  static registerDisableChangesInDom(nativeElement: any, callback: Function): MutationObserver {
+    const mutationObserver = new MutationObserver((mutations: MutationRecord[]) => {
+      mutations.forEach((mutation: MutationRecord) => {
+        if (mutation.type === 'attributes' && mutation.attributeName === 'disabled') {
+          const attribute = mutation.target.attributes.getNamedItem('disabled');
+          if (attribute === null || attribute.value !== 'true') {
+            callback(mutation);
+          }
+        }
+      });
+    });
+
+    mutationObserver.observe(nativeElement, {
+      attributes: true,
+      subtree: true,
+      attributeFilter: ['disabled']
+    });
+
+    return mutationObserver;
   }
 }
