@@ -261,21 +261,11 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
    * */
   private disabledChangesInDom() {
     const self = this;
-    this.mutationObserver = new MutationObserver(function (mutations) {
-      mutations.forEach(function (mutation) {
-        if (mutation.type === 'attributes' && mutation.attributeName === 'disabled'
-          && mutation.target.attributes.getNamedItem('disabled') === null) {
-          const control = self.getControl();
-          control.disable();
-        }
-      });
-    });
-
-    this.mutationObserver.observe(this.elementRef.nativeElement, {
-      attributes: true,
-      subtree: true,
-      attributeFilter: ['disabled']
-    });
+    const callbackFn = () => {
+      const control = self.getControl();
+      control.disable();
+    };
+    this.mutationObserver = PermissionsService.registerDisableChangesInDom(this.elementRef.nativeElement, callbackFn);
   }
 
 

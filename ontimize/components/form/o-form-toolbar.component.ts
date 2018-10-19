@@ -162,23 +162,13 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
   * Do not allow the disabled attribute to change by code or by inspector
   * */
   private disabledChangesInDom(element: Node) {
-    this.mutationObserver = new MutationObserver(function (mutations) {
-      mutations.forEach(function (mutation) {
-        if (mutation.type === 'attributes' && mutation.attributeName === 'disabled'
-          && mutation.target.attributes.getNamedItem('disabled') === null) {
-          var element = <HTMLInputElement>mutation.target;
-          element.disabled = true;
-        }
-      });
-    });
-
-    this.mutationObserver.observe(element, {
-      attributes: true,
-      subtree: true,
-      attributeFilter: ['disabled']
-    });
-
+    const callbackFn = (mutation: MutationRecord) => {
+      let element = <HTMLInputElement>mutation.target;
+      element.disabled = true;
+    };
+    this.mutationObserver = PermissionsService.registerDisableChangesInDom(element, callbackFn);
   }
+
   protected manageEditableDetail() {
     const isEditableDetail = this._form.isEditableDetail();
 
