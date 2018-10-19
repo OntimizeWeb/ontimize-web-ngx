@@ -124,16 +124,13 @@ export class OAppSidenavMenuItemComponent implements OnInit, AfterViewInit, OnDe
     }
 
     if (this.disabled) {
-      this.disabledChangesInDom();
+      this.mutationObserver = PermissionsService.registerDisableChangesInDom(this.elRef.nativeElement, this.disabledChangesInDom.bind(this), true);
     }
   }
 
-  private disabledChangesInDom() {
-    const callbackFn = (mutation: MutationRecord) => {
-      let element = <HTMLInputElement>mutation.target;
-      element.setAttribute('disabled', 'true');
-    };
-    this.mutationObserver = PermissionsService.registerDisableChangesInDom(this.elRef.nativeElement, callbackFn);
+  private disabledChangesInDom(mutation: MutationRecord) {
+    let element = <HTMLInputElement>mutation.target;
+    element.setAttribute('disabled', 'true');
   }
 
   protected setUserInfoImage() {

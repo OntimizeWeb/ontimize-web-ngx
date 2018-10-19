@@ -71,7 +71,7 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
   protected _dialogService: DialogService;
   protected _navigationService: NavigationService;
   private permissionService: PermissionsService;
-  protected mutationObserver: MutationObserver;
+  protected mutationObservers: MutationObserver[] = [];
 
   protected formCacheSubscription: Subscription;
   protected permissionsActions: OPermissions[];
@@ -111,8 +111,10 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
     if (this.formCacheSubscription) {
       this.formCacheSubscription.unsubscribe();
     }
-    if (this.mutationObserver) {
-      this.mutationObserver.disconnect();
+    if (this.mutationObservers) {
+      this.mutationObservers.forEach((m: MutationObserver) => {
+        m.disconnect();
+      });
     }
   }
 
@@ -152,7 +154,8 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
       } else {
         if (!permission.enabled) {
           elementByAction.disabled = true;
-          this.disabledChangesInDom(elementByAction);
+          const mutationObserver = PermissionsService.registerDisableChangesInDom(elementByAction, this.disabledChangesInDom.bind(this));
+          this.mutationObservers.push(mutationObserver);
         }
       }
     }
@@ -161,12 +164,9 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
   /**
   * Do not allow the disabled attribute to change by code or by inspector
   * */
-  private disabledChangesInDom(element: Node) {
-    const callbackFn = (mutation: MutationRecord) => {
-      let element = <HTMLInputElement>mutation.target;
-      element.disabled = true;
-    };
-    this.mutationObserver = PermissionsService.registerDisableChangesInDom(element, callbackFn);
+  private disabledChangesInDom(mutation: MutationRecord) {
+    let element = <HTMLInputElement>mutation.target;
+    element.disabled = true;
   }
 
   protected manageEditableDetail() {

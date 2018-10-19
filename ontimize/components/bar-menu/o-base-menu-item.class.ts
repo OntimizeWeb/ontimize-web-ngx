@@ -83,16 +83,13 @@ export class OBaseMenuItemClass implements OnInit, OnDestroy {
     this.disabled = this.permissions.enabled === false;
 
     if (this.disabled) {
-      this.disabledChangesInDom();
+      this.mutationObserver = PermissionsService.registerDisableChangesInDom(this.elRef.nativeElement, this.disabledChangesInDom.bind(this), true);
     }
   }
 
-  private disabledChangesInDom() {
-    const callbackFn = (mutation: MutationRecord) => {
-      let element = <HTMLInputElement>mutation.target;
-      element.setAttribute('disabled', 'true');
-    };
-    this.mutationObserver = PermissionsService.registerDisableChangesInDom(this.elRef.nativeElement, callbackFn);
+  private disabledChangesInDom(mutation: MutationRecord) {
+    let element = <HTMLInputElement>mutation.target;
+    element.setAttribute('disabled', 'true');
   }
 
   get isHovered(): boolean {
