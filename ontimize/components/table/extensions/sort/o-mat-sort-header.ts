@@ -14,6 +14,7 @@ import { OMatSort } from './o-mat-sort';
     '(mouseenter)': '_setIndicatorHintVisible(true)',
     '(longpress)': '_setIndicatorHintVisible(true)',
     '(mouseleave)': '_setIndicatorHintVisible(false)',
+    '[attr.aria-sort]': '_getAriaSortAttribute()',
     '[class.mat-sort-header-disabled]': '_isDisabled()',
   },
   encapsulation: ViewEncapsulation.None,
