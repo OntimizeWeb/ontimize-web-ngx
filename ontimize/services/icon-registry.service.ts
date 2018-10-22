@@ -45,22 +45,3 @@ export class OntimizeMatIconRegistry extends MatIconRegistry {
     });
   }
 }
-
-// export function ONTIMIZE_ICON_REGISTRY_PROVIDER_FACTORY(
-//   parentRegistry: OntimizeMatIconRegistry,
-//   httpClient: HttpClient,
-//   sanitizer: DomSanitizer,
-//   document?: any) {
-//   return parentRegistry || new OntimizeMatIconRegistry(httpClient, sanitizer, document);
-// }
-
-// export const ONTIMIZE_ICON_REGISTRY_PROVIDER = {
-//   provide: OntimizeMatIconRegistry,
-//   deps: [
-//     [new Optional(), new SkipSelf(), OntimizeMatIconRegistry],
-//     [new Optional(), HttpClient],
-//     DomSanitizer,
-//     [new Optional(), DOCUMENT as InjectionToken<any>]
-//   ],
-//   useFactory: ONTIMIZE_ICON_REGISTRY_PROVIDER_FACTORY
-// };
