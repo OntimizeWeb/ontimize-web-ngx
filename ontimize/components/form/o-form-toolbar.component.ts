@@ -74,7 +74,7 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
   protected mutationObservers: MutationObserver[] = [];
 
   protected formCacheSubscription: Subscription;
-  protected permissionsActions: OPermissions[];
+  protected actionsPermissions: OPermissions[];
   protected snackBarService: SnackBarService;
 
   @InputConverter()
@@ -125,11 +125,11 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
   private parsePermissions() {
 
     if (this._form.oattr) {
-      this.permissionsActions = this.permissionService.getContainerActionsPermissions(this._form.oattr);
+      this.actionsPermissions = this.permissionService.getContainerActionsPermissions(this._form.oattr);
 
-      if (Util.isDefined(this.permissionsActions)) {
+      if (Util.isDefined(this.actionsPermissions)) {
         const self = this;
-        this.permissionsActions.forEach((permission: OPermissions) => {
+        this.actionsPermissions.forEach((permission: OPermissions) => {
           //others actions
           self.permissionManagement(permission);
 
@@ -172,8 +172,8 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
   protected manageEditableDetail() {
     const isEditableDetail = this._form.isEditableDetail();
 
-    let permissionUpdate: OPermissions = this.permissionService.getContainerActionPermissions(PermissionsService.PERMISSIONS_ACTIONS_UPDATE_FORM, this._form.oattr);
-    if (this.hasEnabledPermission(permissionUpdate)) {
+    let updatePermissions: OPermissions = (this.actionsPermissions || []).find(p => p.attr === PermissionsService.PERMISSIONS_ACTIONS_UPDATE_FORM);
+    if (this.hasEnabledPermission(updatePermissions)) {
       this.saveBtnEnabled = isEditableDetail;
     }
 
@@ -272,8 +272,8 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
 
   set existsChangesToSave(val: boolean) {
     const attr = this._form.isEditableDetail() ? PermissionsService.PERMISSIONS_ACTIONS_UPDATE_FORM : PermissionsService.PERMISSIONS_ACTIONS_INSERT_FORM;
-    let permission: OPermissions = this.permissionService.getContainerActionPermissions(attr, this._form.oattr);
-    if (!(Util.isDefined(permission) && permission.enabled === false)) {
+    let permissions: OPermissions = (this.actionsPermissions || []).find(p => p.attr === attr);
+    if (Util.isDefined(permissions) && permissions.enabled === false) {
       return;
     }
     this._existsChangesToSave = val;
@@ -367,8 +367,8 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
   }
 
   private checkEnabledPermission(attr) {
-    const permission = this.permissionService.getContainerActionPermissions(attr, this._form.oattr);
-    let enabledPermision = PermissionsService.checkEnabledPermission(permission);
+    const permissions: OPermissions = (this.actionsPermissions || []).find(p => p.attr === attr);
+    let enabledPermision = PermissionsService.checkEnabledPermission(permissions);
     if (!enabledPermision) {
       this.snackBarService.open(PermissionsService.MESSAGE_OPERATION_NOT_ALLOWED_PERMISSION);
     }
