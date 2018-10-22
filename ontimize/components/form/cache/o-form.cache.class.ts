@@ -120,18 +120,19 @@ export class OFormCacheClass {
     if (lastElement) {
       const lastCacheValue = this.getCacheLastValue(lastElement.attr);
       const lastValue = (lastCacheValue !== null) ? lastCacheValue : this.initialDataCache[lastElement.attr];
-      this.setFormControlValue(lastElement.attr, lastValue);
+      this.undoComponentValue(lastElement.attr, lastValue);
 
       this.updateFormDataCache();
       this.onCacheStateChanges.emit();
     }
   }
 
-  protected setFormControlValue(attr: string, val: any) {
+  protected undoComponentValue(attr: string, val: any) {
     this.blockCaching = true;
-    let formControl = this.form.formGroup.get(attr);
-    if (formControl) {
-      formControl.setValue(val);
+    const comp = this.form.getFieldReference(attr);
+    if (comp) {
+      (comp as any).oldValue = undefined;
+      comp.setValue(val);
     }
     this.blockCaching = false;
   }

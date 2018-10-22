@@ -410,8 +410,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   }
 
   protected emitOnValueChange(type, newValue, oldValue) {
-    let event = new OValueChangeEvent
-      (type, newValue, oldValue, this);
+    let event = new OValueChangeEvent(type, newValue, oldValue, this);
     this.onValueChange.emit(event);
   }
 

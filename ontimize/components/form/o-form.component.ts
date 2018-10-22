@@ -279,9 +279,12 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     );
 
     this.reloadStreamSubscription = this.reloadStream.subscribe(valArr => {
-      if (Util.isArray(valArr) && valArr.length === 2) {
-        if (!self.isInInsertMode() && self.queryOnInit && valArr[0] === true && valArr[1] === true) {
+      if (Util.isArray(valArr) && valArr.length === 2 && !self.isInInsertMode()) {
+        const valArrValues = valArr[0] === true && valArr[1] === true;
+        if (self.queryOnInit && valArrValues) {
           self._reloadAction(true);
+        } else {
+          self.initializeFields();
         }
       }
     });
@@ -753,14 +756,17 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
             }
           }
         });
-        Object.keys(self.formGroup.controls).forEach(control => {
-          self.formGroup.controls[control].markAsPristine();
-        });
-
-        self.formCache.registerCache();
-        self.formNavigation.updateNavigation(self.formCache.getInitialDataCache());
+        self.initializeFields();
       }
     });
+  }
+
+  protected initializeFields() {
+    Object.keys(this.formGroup.controls).forEach(control => {
+      this.formGroup.controls[control].markAsPristine();
+    });
+    this.formCache.registerCache();
+    this.formNavigation.updateNavigation(this.formCache.getInitialDataCache());
   }
 
   _emitData(data) {
@@ -887,7 +893,6 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   /*
   Utility methods
   */
-
   queryData(filter) {
     if (!Util.isDefined(this.dataService)) {
       console.warn('OFormComponent: no service configured! aborting query');
@@ -1323,11 +1328,15 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   }
 
   getRegisteredFieldsValues() {
-    let valueCopy = Object.assign({}, this.formGroup.getRawValue());
-    for (let i = 0, len = this.ignoreFormCacheKeys.length; i < len; i++) {
-      delete valueCopy[this.ignoreFormCacheKeys[i]];
-    }
-    return valueCopy;
+    let values = {};
+    const components: IFormDataComponentHash = this.getComponents();
+    const self = this;
+    const componentsKeys = Object.keys(components).filter(key => self.ignoreFormCacheKeys.indexOf(key) === -1);
+    componentsKeys.forEach(compKey => {
+      const comp: IFormDataComponent = components[compKey];
+      values[compKey] = comp.getValue();
+    });
+    return values;
   }
 
   /**
