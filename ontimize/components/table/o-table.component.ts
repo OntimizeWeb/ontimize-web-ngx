@@ -846,7 +846,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
 
     if (this.colArray.length) {
-      this.colArray.map((x: string) => this.registerColumn(x));
+      this.colArray.forEach((x: string) => this.registerColumn(x));
 
       let columnsOrder = [];
       if (this.state.hasOwnProperty('oColumns-display')) {
@@ -1124,7 +1124,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     exportCnfg.columns = this._oTableOptions.visibleColumns.filter(c => colsNotIncluded.indexOf(c) === -1);
     // Table column names
     let tableColumnNames = {};
-    this._oTableOptions.visibleColumns.filter(c => colsNotIncluded.indexOf(c) === -1).map(c => tableColumnNames[c] = this.translateService.get(c));
+    this._oTableOptions.visibleColumns.filter(c => colsNotIncluded.indexOf(c) === -1).forEach(c => tableColumnNames[c] = this.translateService.get(c));
     exportCnfg.columnNames = tableColumnNames;
     // Table column sqlTypes
     exportCnfg.sqlTypes = this.getSqlTypes();
@@ -1375,7 +1375,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     const _self = this;
     return data.map((row) => {
       let obj = {};
-      _self.keysArray.map((key) => {
+      _self.keysArray.forEach((key) => {
         if (row[key] !== undefined) {
           obj[key] = row[key];
         }
