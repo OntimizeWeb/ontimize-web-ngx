@@ -71,6 +71,7 @@ import {
 import { OSharedModule } from '../shared';
 import { OTranslateParser } from '../services/translate/o-translate.parser';
 import { Util } from '../utils';
+import { DndModule } from 'ng2-dnd';
 
 export const INTERNAL_ONTIMIZE_MODULES_EXPORTED: any = [
   // Standard modules
@@ -169,9 +170,8 @@ export const INTERNAL_ONTIMIZE_MODULES: any = [
       useFactory: OTranslateParserFactory
     }
   }),
-
+  DndModule.forRoot(),
   NgxMaterialTimepickerModule.forRoot(),
-
   OSharedModule,
 
   // Ontimize modules
