@@ -66,11 +66,15 @@ export class OContextMenuService {
       width: 0,
     });
     this.closeContext();
-    const positionStrategy = this.overlay.position().connectedTo(
-      { nativeElement: context.anchorElement || this.fakeElement },
-      { originX: 'start', originY: 'bottom' },
-      { overlayX: 'start', overlayY: 'top' }
-    );
+    const positionStrategy = this.overlay.position()
+      .flexibleConnectedTo(context.anchorElement || this.fakeElement)
+      .withPositions([{
+        overlayX: 'start',
+        overlayY: 'top',
+        originX: 'start',
+        originY: 'bottom'
+      }]);
+
     this.overlays = [this.overlay.create({
       positionStrategy,
       panelClass: ['o-context-menu'],
