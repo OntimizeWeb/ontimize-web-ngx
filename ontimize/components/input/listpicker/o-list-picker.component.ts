@@ -92,13 +92,7 @@ export class OListPickerComponent extends OFormServiceComponent implements After
   }
 
   ensureOFormValue(value: any) {
-    if (value instanceof OFormValue) {
-      this.value = new OFormValue(value.value);
-    } else if ((value !== undefined || value !== null) && !(value instanceof OFormValue)) {
-      this.value = new OFormValue(value);
-    } else {
-      this.value = new OFormValue(this.defaultValue);
-    }
+    super.ensureOFormValue(value);
     this.syncDataIndex();
   }
 

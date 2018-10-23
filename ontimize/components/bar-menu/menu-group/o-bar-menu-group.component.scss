@@ -1,17 +1,26 @@
-o-bar-menu-group {
-  .fake-ul,
-  .fake-li {
-    .o-bar-menu-group-icon {
-      display: inline-block;
-      margin: 0px 10px 0px 0px;
+.o-bar-menu-group {
+  &[disabled=true] .fake-li {
+    opacity: .5;
 
-      & ~ .o-bar-menu-group-title {
-        padding-left: 0px;
-      }
-    }
-    .o-bar-menu-group-icon-arrow {
-      margin-left:auto;
+    a.o-bar-menu-group-title {
+      cursor: default;
     }
   }
-  
+
+  .fake-li,
+  .fake-ul {
+    .o-bar-menu-group-icon {
+      display: inline-block;
+      margin: 0 10px 0 0;
+
+      & ~ .o-bar-menu-group-title {
+        padding-left: 0;
+      }
+    }
+
+    .o-bar-menu-group-icon-arrow {
+      margin-left: auto;
+    }
+  }
+
 }

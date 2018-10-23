@@ -16,7 +16,8 @@ export const DEFAULT_INPUTS_O_BAR_MENU_GROUP = [
   inputs: DEFAULT_INPUTS_O_BAR_MENU_GROUP,
   encapsulation: ViewEncapsulation.None,
   host: {
-    '[class.o-bar-menu-group]': 'true'
+    '[class.o-bar-menu-group]': 'true',
+    '[attr.disabled]': 'disabled'
   }
 })
 export class OBarMenuGroupComponent extends OBaseMenuItemClass {

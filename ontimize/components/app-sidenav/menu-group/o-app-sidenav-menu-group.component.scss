@@ -1,3 +1,11 @@
-.mat-tooltip.menugroup-tooltip {
-  margin-left: 28px;
+.o-app-sidenav-menu-group {
+  &[disabled=true] {
+    .o-app-sidenav-menugroup {
+      cursor: default;
+    }
+  }
+
+  .mat-tooltip.menugroup-tooltip {
+    margin-left: 28px;
+  }
 }

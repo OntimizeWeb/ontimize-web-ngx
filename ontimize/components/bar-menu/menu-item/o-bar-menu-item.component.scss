@@ -1,4 +1,11 @@
-o-bar-menu-item {
+.o-bar-menu-item {
+  &[disabled=true] .fake-li {
+    opacity: .5;
+
+    a.mat-list-item {
+      cursor: default;
+    }
+  }
 
   .o-bar-menu-item-text {
     display: -webkit-box;
@@ -22,9 +29,10 @@ o-bar-menu-item {
 
   .o-bar-menu-item-icon {
     display: inline-block;
-    margin: 6px 10px 0px 0px;
+    margin: 6px 10px 0 0;
+
     & ~ .o-bar-menu-item-title {
-      padding-left: 0px;
+      padding-left: 0;
     }
   }
 

@@ -145,7 +145,7 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
       return [];
     } else {
       if (this.nullSelection) {
-        return null;
+        return undefined;
       } else {
         return '';
       }

@@ -165,6 +165,9 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
         this.updateValidators();
       }
     }
+    if (this.isDisabled) {
+      this.mutationObserver = PermissionsService.registerDisableChangesInDom(this.getMutationObserverTarget(), this.disabledChangesInDom.bind(this));
+    }
   }
 
   ngOnDestroy() {
@@ -249,7 +252,6 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     } else if (permissions.enabled === false) {
       /* disable input per permissions */
       this.disabled = true;
-      this.disabledChangesInDom();
       if (this.form) {
         this.form.registerFormComponent(this);
       }
@@ -257,28 +259,26 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     this.permissions = permissions;
   }
 
+  protected getMutationObserverTarget(): any {
+    let result;
+    try {
+      result = this.elementRef.nativeElement.getElementsByTagName('input').item(0);
+    } catch (error) {
+      //
+    }
+    return result;
+  }
+
   /**
    * Do not allow the disabled attribute to change by code or by inspector
    * */
   private disabledChangesInDom() {
-    const self = this;
-    this.mutationObserver = new MutationObserver(function (mutations) {
-      mutations.forEach(function (mutation) {
-        if (mutation.type === 'attributes' && mutation.attributeName === 'disabled') {
-          // TODO && mutation.target.attributes.getNamedItem('disabled') === null
-          const control = self.getControl();
-          control.disable();
-        }
-      });
-    });
-
-    this.mutationObserver.observe(this.elementRef.nativeElement, {
-      attributes: true,
-      subtree: true,
-      attributeFilter: ['disabled']
+    const control = this.getFormControl();
+    control.disable({
+      onlySelf: true,
+      emitEvent: false
     });
   }
-
 
   protected setSuffixClass(count: number) {
     const iconFieldEl = this.elRef.nativeElement.getElementsByClassName('icon-field');

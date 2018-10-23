@@ -1,13 +1,7 @@
-// $bg-color: #FFF;
-// $fg-color: rgba(0, 0, 0, 0.7);
-
-/* menu items */
-// $item-bg-color-hover-dark: rgba(0,0,0, 0.16);
-// $item-bg-color-hover-light: rgba(255,255,255, 0.16);
-// $item-fg-color-hover: rgba(0, 0, 0, 0.7);
-
-o-bar-menu {
-  box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2), 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12);
+.o-bar-menu {
+  // > .mat-toolbar {
+  //   overflow-x: auto;
+  // }
 
   .toggle,
   input {
@@ -24,6 +18,10 @@ o-bar-menu {
       clear: both;
     }
 
+    .fake-li a {
+      cursor: pointer;
+    }
+
     .fake-ul {
       float: right;
       padding: 0;
@@ -32,7 +30,7 @@ o-bar-menu {
       position: relative;
 
       &.menu {
-        > o-bar-menu-item {
+        > .o-bar-menu-item {
           .o-bar-menu-item-title {
             top: 0;
             padding-left: 0;
@@ -43,22 +41,12 @@ o-bar-menu {
       .fake-li {
         margin: 0;
         display: inline-block;
-        cursor: pointer;
       }
 
       .fake-ul {
         display: none;
         position: absolute;
         top: 60px;
-        background-color: #FFF;
-
-        .mat-icon,
-        .o-bar-menu-group-title,
-        .o-bar-menu-item-title,
-        label.toggle {
-          // color: $fg-color;
-          color: rgba(0, 0, 0, 0.7);
-        }
 
         .fake-li {
           min-width: 250px;
@@ -67,9 +55,6 @@ o-bar-menu {
           display: list-item;
           position: relative;
           white-space: nowrap;
-          /*background-color: mat-color($mat-primary);*/
-          background-color: #FFF;
-          // background-color: $bg-color;
         }
 
         .fake-ul {
@@ -89,7 +74,6 @@ o-bar-menu {
       display: flex;
       align-items: center;
       padding: 0 20px;
-      color: #FFF;
       font-size: 20px;
       line-height: 60px;
       text-decoration: none;
@@ -101,15 +85,7 @@ o-bar-menu {
   }
   @media all and (min-width : 768px) {
     nav .fake-ul {
-      .fake-li .fake-ul .fake-li-hover {
-        // background: $item-bg-color-hover-dark;
-        background: rgba(0,0,0, 0.16);
-      }
-
       .fake-li-hover {
-        // background-color: $item-bg-color-hover-light;
-        background-color: rgba(255,255,255, 0.16);
-
         > .fake-ul {
           display: inline-block;
           z-index: 1000;
@@ -124,7 +100,7 @@ o-bar-menu {
     }
   }
   @media all and (max-width : 767px) {
-    mat-toolbar {
+    .mat-toolbar {
       height: auto!important;
     }
 
@@ -132,14 +108,10 @@ o-bar-menu {
       margin: 10px 0;
       width: 100%;
 
-      a:hover {
-        background-color: rgba(255, 255, 255, 0.15);
-      }
-
       .o-bar-menu-group,
       .o-bar-menu-item,
-      .o-locale-bar-menu-item,
-      .o-bar-menu-separator {
+      .o-bar-menu-separator,
+      .o-locale-bar-menu-item {
 
         display: flex;
 
@@ -152,7 +124,6 @@ o-bar-menu {
 
       .fake-ul {
         width: 100%;
-        border-top: 1px solid rgba(255,255,255,0.5);
 
         .fake-li {
           width: 100%;
@@ -184,10 +155,6 @@ o-bar-menu {
       border: none;
       cursor: pointer;
 
-      &:hover {
-        background-color: rgba(255, 255, 255, 0.15);
-      }
-
       + a {
         display: none !important;
       }
@@ -202,7 +169,7 @@ o-bar-menu {
       display: inline-block;
     }
 
-    mat-icon.menu-icon {
+    .mat-icon.menu-icon {
       vertical-align: middle;
       display: inline-block;
       line-height: 1;
