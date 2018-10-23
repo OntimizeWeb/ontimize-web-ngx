@@ -8,7 +8,7 @@ import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { Util } from '../../../utils';
 import { OSharedModule } from '../../../shared';
 import { OFormComponent } from '../../form/form-components';
-import { OFormValue, IFormValueOptions } from '../../form/OFormValue';
+import { IFormValueOptions } from '../../form/OFormValue';
 import { InputConverter } from '../../../decorators/input-converter';
 import { OValidators } from '../../../validators/o-validators';
 
@@ -84,19 +84,14 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
   ngAfterViewInit() {
     super.ngAfterViewInit();
 
-    // const originalPickerOpen = this.picker.open.bind(this.picker);
-    // const self = this;
-    // this.picker.open = function (e) {
-    //   if (!self.isReadOnly && !self.isDisabled && self.openPopup) {
-    //     self.openPopup = false;
-    //     originalPickerOpen();
-    //   }
-    // };
-    // this.picker.setTime = function () {
-    //   let stringVal = self.convertToFormatString(self.picker.timepickerService.fullTime);
-    //   self.picker.timeSet.next(stringVal);
-    //   self.picker.close();
-    // };
+    const originalPickerOpen = this.picker.open.bind(this.picker);
+    const self = this;
+    this.picker.open = function (e) {
+      if (!self.isReadOnly && !self.isDisabled && self.openPopup) {
+        self.openPopup = false;
+        originalPickerOpen();
+      }
+    };
   }
 
   setData(arg: any) {
@@ -116,7 +111,7 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
         if (hour >= 12) {
           timePeriod = 'PM';
         }
-        if (hour > 12) {
+        if (hour > 12 && this.format !== TWENTY_FOUR_HOUR_FORMAT) {
           hour -= 12;
         }
         if (hour === 0) {
