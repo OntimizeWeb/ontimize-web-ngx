@@ -148,14 +148,6 @@ export class OHTMLInputComponent extends OFormDataComponent implements AfterView
     return validators;
   }
 
-  innerOnChange(event: any) {
-    if (!this.value) {
-      this.value = new OFormValue();
-    }
-    this.ensureOFormValue(event);
-    this.onChange.emit(event);
-  }
-
   innerOnFocus(event: any) {
     if (!this.isReadOnly && !this.isDisabled) {
       this.onFocus.emit(event);

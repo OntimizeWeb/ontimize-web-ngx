@@ -71,6 +71,15 @@ export class OCheckboxComponent extends OFormDataComponent {
   }
 
   ensureOFormValue(value: any) {
+
+    if (this.booleanType !== 'boolean') {
+      if (typeof value === 'boolean') {
+        value = value ? this.trueValue : this.falseValue;
+      } else {
+        value = value === this.trueValue ? this.trueValue : this.falseValue;
+      }
+    }
+
     if (value instanceof OFormValue) {
       if (!Util.isDefined(value.value)) {
         value.value = this.falseValue;
@@ -86,22 +95,6 @@ export class OCheckboxComponent extends OFormDataComponent {
       return this.value.value === this.trueValue;
     }
     return false;
-  }
-
-  innerOnChange(event: any) {
-    if (!this.value) {
-      this.value = new OFormValue(this.falseValue);
-    }
-    let val = event;
-    if (this.booleanType !== 'boolean') {
-      if (typeof val === 'boolean') {
-        val = event ? this.trueValue : this.falseValue;
-      } else {
-        val = val === this.trueValue ? this.trueValue : this.falseValue;
-      }
-    }
-    this.ensureOFormValue(val);
-    this.onChange.emit(val);
   }
 
   onClickBlocker(evt: Event) {

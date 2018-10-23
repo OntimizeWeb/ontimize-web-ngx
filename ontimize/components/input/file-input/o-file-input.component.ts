@@ -6,7 +6,6 @@ import {
   Inject,
   Injector,
   NgModule,
-  OnDestroy,
   OnInit,
   Optional,
   ViewChild
@@ -87,7 +86,7 @@ export const DEFAULT_OUTPUTS_O_FILE_INPUT = [
   inputs: DEFAULT_INPUTS_O_FILE_INPUT,
   outputs: DEFAULT_OUTPUTS_O_FILE_INPUT
 })
-export class OFileInputComponent extends OFormDataComponent implements OnDestroy, OnInit {
+export class OFileInputComponent extends OFormDataComponent implements OnInit {
 
   public static DEFAULT_INPUTS_O_FILE_INPUT = DEFAULT_INPUTS_O_FILE_INPUT;
   public static DEFAULT_OUTPUTS_O_FILE_INPUT = DEFAULT_OUTPUTS_O_FILE_INPUT;
@@ -153,10 +152,6 @@ export class OFileInputComponent extends OFormDataComponent implements OnDestroy
     this.uploader.onCompleteItem = (item) => this.onCompleteFile.emit(item);
     this.uploader.onErrorAll = (error) => this.onError.emit(error);
     this.uploader.onErrorItem = (item, error) => this.onErrorFile.emit({ item, error });
-  }
-
-  ngOnDestroy() {
-    this.destroy();
   }
 
   initialize() {

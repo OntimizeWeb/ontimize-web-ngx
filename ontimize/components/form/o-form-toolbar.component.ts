@@ -165,7 +165,7 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
     this.mutationObserver = new MutationObserver(function (mutations) {
       mutations.forEach(function (mutation) {
         if (mutation.type === 'attributes' && mutation.attributeName === 'disabled') {
-          // TODO 
+          // TODO
           // && mutation.target.attributes.getNamedItem('disabled') === null) {
           var element = <HTMLInputElement>mutation.target;
           element.disabled = true;

@@ -7,8 +7,8 @@
     [class.mat-disabled]="isDisabled"></mat-icon>
   <mat-form-field [class.custom-width]="hasCustomWidth" class="icon-field" fxFill>
     <input matInput [type]="inputType" [id]="getAttribute()" [formControlName]="getAttribute()" [placeholder]="placeHolder"
-      [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)" (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)"
-      [readonly]="isReadOnly" [min]="min" [max]="max" [step]="step" [required]="isRequired" (change)="onChangeEvent($event)">
+      (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)" [readonly]="isReadOnly" [min]="min" [max]="max"
+      [step]="step" [required]="isRequired" (change)="onChangeEvent($event)">
 
     <button type="button" *ngIf="showClearButton" matSuffix mat-icon-button (click)="onClickClearValue()">
       <mat-icon svgIcon="ontimize:close"></mat-icon>

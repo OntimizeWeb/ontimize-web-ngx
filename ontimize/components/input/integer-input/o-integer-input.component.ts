@@ -99,14 +99,6 @@ export class OIntegerInputComponent extends OTextInputComponent implements After
     this.setPipeValue();
   }
 
-  innerOnChange(event: any) {
-    // Ensure integer value
-    if (Util.isDefined(event)) {
-      event = parseInt(event, 10);
-    }
-    super.innerOnChange(event);
-  }
-
   innerOnFocus(event: any) {
     event.preventDefault();
     event.stopPropagation();

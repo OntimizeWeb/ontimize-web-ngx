@@ -1,4 +1,4 @@
-import { Component, NgModule, Optional, Inject, ElementRef, Injector, forwardRef, ViewChild, EventEmitter, ViewEncapsulation, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
+import { Component, NgModule, Optional, Inject, ElementRef, Injector, forwardRef, ViewChild, EventEmitter, ViewEncapsulation, OnInit, AfterViewInit } from '@angular/core';
 import { OFormDataComponent, DEFAULT_INPUTS_O_FORM_DATA_COMPONENT, DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT, OValueChangeEvent } from '../../o-form-data-component.class';
 import { CommonModule } from '@angular/common';
 import { ValidatorFn } from '@angular/forms';
@@ -22,6 +22,8 @@ const TWENTY_FOUR_HOUR_FORMAT = 24;
 export const DEFAULT_INPUTS_O_HOUR_INPUT = [
   'format',
   'textInputEnabled: text-input-enabled',
+  'min',
+  'max',
   ...DEFAULT_INPUTS_O_FORM_DATA_COMPONENT
 ];
 
@@ -44,7 +46,7 @@ export const DEFAULT_OUTPUTS_O_HOUR_INPUT = [
   }
 })
 
-export class OHourInputComponent extends OFormDataComponent implements OnInit, AfterViewInit, OnDestroy {
+export class OHourInputComponent extends OFormDataComponent implements OnInit, AfterViewInit {
 
   public static DEFAULT_INPUTS_O_HOUR_INPUT = DEFAULT_INPUTS_O_HOUR_INPUT;
   public static DEFAULT_OUTPUTS_O_HOUR_INPUT = DEFAULT_OUTPUTS_O_HOUR_INPUT;
@@ -67,6 +69,8 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
   format: number = TWENTY_FOUR_HOUR_FORMAT;
   @InputConverter()
   textInputEnabled: boolean = true;
+  min: string;
+  max: string;
 
   formatString = HourFormat.TWENTY_FOUR;
 
@@ -80,19 +84,19 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
   ngAfterViewInit() {
     super.ngAfterViewInit();
 
-    const originalPickerOpen = this.picker.open.bind(this.picker);
-    const self = this;
-    this.picker.open = function (e) {
-      if (!self.isReadOnly && !self.isDisabled && self.openPopup) {
-        self.openPopup = false;
-        originalPickerOpen();
-      }
-    };
-    this.picker.setTime = function () {
-      let stringVal = self.convertToFormatString(self.picker.timepickerService.fullTime);
-      self.picker.timeSet.next(stringVal);
-      self.picker.close();
-    };
+    // const originalPickerOpen = this.picker.open.bind(this.picker);
+    // const self = this;
+    // this.picker.open = function (e) {
+    //   if (!self.isReadOnly && !self.isDisabled && self.openPopup) {
+    //     self.openPopup = false;
+    //     originalPickerOpen();
+    //   }
+    // };
+    // this.picker.setTime = function () {
+    //   let stringVal = self.convertToFormatString(self.picker.timepickerService.fullTime);
+    //   self.picker.timeSet.next(stringVal);
+    //   self.picker.close();
+    // };
   }
 
   setData(arg: any) {
@@ -131,17 +135,6 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
       }
       this.picker.open();
     }
-  }
-
-  innerOnChange(event: any) {
-    if (this.value && (this.value.value === event)) {
-      return;
-    }
-    if (!this.value) {
-      this.value = new OFormValue();
-    }
-    this.ensureOFormValue(event);
-    this.onChange.emit(event);
   }
 
   innerOnFocus(event: any) {
@@ -196,7 +189,11 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
   onTimeEvent(event) {
     const value = this.convertToFormatString(event);
     /** emitModelToViewChange: false  because onChange event is trigger in ngModelChange */
-    this.setValue(value, { changeType: OValueChangeEvent.USER_CHANGE, emitModelToViewChange: false });
+    this.setValue(value, {
+      changeType: OValueChangeEvent.USER_CHANGE,
+      emitEvent: false,
+      emitModelToViewChange: false
+    });
   }
 
   protected addPeriodString(value): string {

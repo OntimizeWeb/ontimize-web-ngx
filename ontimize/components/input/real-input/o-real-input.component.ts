@@ -60,14 +60,6 @@ export class ORealInputComponent extends OIntegerInputComponent implements OnIni
     this.pipeArguments.maxDecimalDigits = this.maxDecimalDigits;
   }
 
-  innerOnChange(event: any) {
-    if (!this.value) {
-      this.value = new OFormValue();
-    }
-    this.ensureOFormValue(event);
-    this.onChange.emit(event);
-  }
-
   resolveValidators(): ValidatorFn[] {
     let validators: ValidatorFn[] = super.resolveValidators();
 
