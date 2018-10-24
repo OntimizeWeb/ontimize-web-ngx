@@ -181,6 +181,13 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
     }
   }
 
+  onFormControlChange(value: any) {
+    if (this.oldValue === value) {
+      return;
+    }
+    super.onFormControlChange(value);
+  }
+
   onTimeEvent(event) {
     const value = this.convertToFormatString(event);
     /** emitModelToViewChange: false  because onChange event is trigger in ngModelChange */

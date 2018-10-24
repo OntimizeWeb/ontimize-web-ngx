@@ -1,6 +1,6 @@
 import { Component, ElementRef, EventEmitter, forwardRef, Inject, Injector, NgModule, Optional, ViewChild, OnInit, AfterViewInit, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatOption, MatSelect, MatSelectChange } from '@angular/material';
+import { MatSelect, MatSelectChange } from '@angular/material';
 
 import { Util } from '../../../util/util';
 import { Codes } from '../../../util/codes';
@@ -116,17 +116,17 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
 
   syncDataIndex() {
     super.syncDataIndex();
-    if (this._currentIndex !== undefined && this.nullSelection) {
+    if (this.nullSelection && Util.isDefined(this._currentIndex)) {
       // first position is for null selection that it is not included into dataArray
       this._currentIndex += 1;
     }
-    if (this.selectModel && this.selectModel.options) {
-      const self = this;
-      let option = this.selectModel.options.find((item: MatOption) => item.value === self.getValue());
-      if (option) {
-        option.select();
-      }
+  }
+
+  onFormControlChange(value: any) {
+    if (this.oldValue === value) {
+      return;
     }
+    super.onFormControlChange(value);
   }
 
   getValue() {

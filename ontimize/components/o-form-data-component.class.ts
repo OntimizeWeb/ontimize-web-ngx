@@ -368,7 +368,9 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     const previousValue = this.oldValue;
     if (previousValue !== newValue) {
       this.setFormValue(newValue, options, true);
-      let changeType: number = options ? options.changeType : OValueChangeEvent.PROGRAMMATIC_CHANGE;
+      let changeType: number = (options && options.hasOwnProperty('changeType'))
+        ? options.changeType :
+        OValueChangeEvent.PROGRAMMATIC_CHANGE;
       this.emitOnValueChange(changeType, newValue, previousValue);
     }
   }
@@ -447,8 +449,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
         disabled: this.isDisabled
       };
       this._fControl = new FormControl(cfg, {
-        validators: validators,
-        updateOn: this.getUpdateOn()
+        validators: validators
       });
       const self = this;
       this._fControlSubscription = this._fControl.valueChanges.subscribe(value => {
@@ -456,10 +457,6 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
       });
     }
     return this._fControl;
-  }
-
-  protected getUpdateOn(): any {
-    return 'change';
   }
 
   resolveValidators(): ValidatorFn[] {
