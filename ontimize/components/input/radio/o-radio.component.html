@@ -3,9 +3,9 @@
   <!-- mat-form-field and hidden input are used only for displaying component label and errors as mat-radio is not supported inside form-field -->
   <!-- https://github.com/angular/material2/issues/7891 -->
   <mat-form-field [class.read-only]="isReadOnly" [class.custom-width]="hasCustomWidth" [class.o-radio-from-field-row]="layout==='row'"
-    floatPlaceholder="always" class="mat-form-field--no-underline" fxFill>
-    <input matInput [id]="getAttribute()" [formControlName]="getAttribute()" [placeholder]="placeHolder" [required]="isRequired"
-      style="display: none" />
+    floatLabel="always" class="mat-form-field--no-underline" fxFill>
+    <input matInput [id]="getAttribute()" [formControlName]="getAttribute()" [placeholder]="placeHolder" [required]="isRequired" 
+    style="display: none" />
     <mat-radio-group [id]="getAttribute()" [formControlName]="getAttribute()" [name]="getAttribute()" [value]="getValue()"
       [required]="isRequired" [labelPosition]="labelPosition" (change)="onMatRadioGroupChange($event)" [fxLayout]="layout"
       fxLayoutGap="8px">
