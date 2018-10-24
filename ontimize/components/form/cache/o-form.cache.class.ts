@@ -131,7 +131,7 @@ export class OFormCacheClass {
     this.blockCaching = true;
     const comp = this.form.getFieldReference(attr);
     if (comp) {
-      (comp as any).oldValue = undefined;
+      // (comp as any).oldValue = undefined;
       comp.setValue(val);
     }
     this.blockCaching = false;
