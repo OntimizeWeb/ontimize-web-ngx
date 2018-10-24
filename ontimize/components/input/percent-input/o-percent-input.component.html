@@ -2,8 +2,8 @@
   fxLayout="row" fxLayoutAlign="space-between center">
   <mat-form-field [class.custom-width]="hasCustomWidth" class="icon-field" fxFlexFill>
     <input matInput [type]="inputType" [id]="getAttribute()" [formControlName]="getAttribute()" [placeholder]="placeHolder"
-      [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)" (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)"
-      [readonly]="isReadOnly" (change)="onChangeEvent($event)" [min]="min" [max]="max" [step]="step" [required]="isRequired">
+      (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)" [readonly]="isReadOnly" (change)="onChangeEvent($event)"
+      [min]="min" [max]="max" [step]="step" [required]="isRequired">
     <button type="button" *ngIf="showClearButton" matSuffix mat-icon-button (click)="onClickClearValue()">
       <mat-icon svgIcon="ontimize:close"></mat-icon>
     </button>

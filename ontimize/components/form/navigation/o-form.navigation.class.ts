@@ -150,7 +150,7 @@ export class OFormNavigationClass {
     }
     //TODO Obtain 'datatype' of each key contained into urlParams for
     // for building correctly query filter!!!!
-    if (this.urlParams && Object.keys(this.urlParams).length > 0) {
+    if (this.urlParams) {
       this.onUrlParamChangedStream.emit(true);
     }
   }

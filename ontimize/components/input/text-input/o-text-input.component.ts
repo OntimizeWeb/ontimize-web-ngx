@@ -70,10 +70,6 @@ export class OTextInputComponent extends OFormDataComponent {
     super.ngOnInit();
   }
 
-  ngOnDestroy() {
-    super.ngOnDestroy();
-  }
-
   resolveValidators(): ValidatorFn[] {
     let validators: ValidatorFn[] = super.resolveValidators();
 
@@ -85,14 +81,6 @@ export class OTextInputComponent extends OFormDataComponent {
     }
 
     return validators;
-  }
-
-  innerOnChange(event: any) {
-    if (!this.value) {
-      this.value = new OFormValue();
-    }
-    this.ensureOFormValue(event);
-    this.onChange.emit(event);
   }
 
   innerOnFocus(event: any) {

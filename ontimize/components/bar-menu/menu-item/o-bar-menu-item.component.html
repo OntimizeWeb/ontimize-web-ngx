@@ -1,9 +1,5 @@
 <div class="fake-li mat-primary" *ngIf="!restricted" (click)="collapseMenu($event)" [class.fake-li-hover]="isHovered">
-  <a *ngIf="!action && route" class="mat-list-item" [routerLink]="[ route ]">
-    <mat-icon class="o-bar-menu-item-icon mat-24">{{ icon }}</mat-icon>
-    <div class="o-bar-menu-item-title">{{ title | oTranslate }}</div>
-  </a>
-  <a *ngIf="!route && action" class="mat-list-item" (click)="callAction()">
+  <a *ngIf="action || route" class="mat-list-item" (click)="onClick()">
     <mat-icon class="o-bar-menu-item-icon mat-24">{{ icon }}</mat-icon>
     <div class="o-bar-menu-item-title">{{ title | oTranslate }}</div>
   </a>

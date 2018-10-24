@@ -119,13 +119,6 @@ export class OImageComponent extends OFormDataComponent {
     }
   }
 
-  innerOnChange(event: any) {
-    if (this._fControl && this._fControl.touched) {
-      this._fControl.markAsDirty();
-    }
-    this.onChange.emit(event);
-  }
-
   isEmpty(): boolean {
     return !this.getValue() || this.getValue().length === 0;
   }

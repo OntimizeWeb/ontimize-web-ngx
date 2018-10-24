@@ -145,7 +145,7 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
       return [];
     } else {
       if (this.nullSelection) {
-        return null;
+        return undefined;
       } else {
         return '';
       }
@@ -181,16 +181,15 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
   }
 
   onSelectionChange(event: MatSelectChange): void {
-    var newValue = event.value;
-    this.setValue(newValue, { changeType: OValueChangeEvent.USER_CHANGE, emitModelToViewChange:false });
-  }
-
-  innerOnChange(event: any) {
-    this.ensureOFormValue(event);
-    if (this._fControl && this._fControl.touched) {
-      this._fControl.markAsDirty();
+    if (!this.selectModel.panelOpen) {
+      return;
     }
-    this.onChange.emit(event);
+    var newValue = event.value;
+    this.setValue(newValue, {
+      changeType: OValueChangeEvent.USER_CHANGE,
+      emitEvent: false,
+      emitModelToViewChange: false
+    });
   }
 
   getOptionDescriptionValue(item: any = {}) {
@@ -226,8 +225,7 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
 
   isSelected(item: any, rowIndex: number): boolean {
     let selected = false;
-    if (item && item.hasOwnProperty(this.valueColumn)
-      && this.value) {
+    if (item && item.hasOwnProperty(this.valueColumn) && this.value) {
       let val = item[this.valueColumn];
       if (val === this.value.value) {
         selected = true;
@@ -237,27 +235,27 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
     return selected;
   }
 
-  setValue(val: any, options?: IFormValueOptions): void {
-    if (this.dataArray) {
-      if (!this.multiple) {
-        if (!Util.isDefined(val)) {
-          if (this.nullSelection) {
-            super.setValue(val, options);
-          } else {
-            console.warn('`o-combo` with attr ' + this.oattr + ' cannot be cleared. `null-selection` attribute is false.');
-          }
-        } else {
-          const record = this.dataArray.find(item => item[this.valueColumn] === val);
-          if (record) {
-            super.setValue(val, options);
-          }
-        }
-      } else {
-        if (Util.isDefined(val)) {
-          super.setValue(val, options);
-        }
+  setValue(val: any, options?: IFormValueOptions) {
+    if (!this.dataArray) {
+      return;
+    }
+    const isDefinedVal = Util.isDefined(val);
+    if (this.multiple && !isDefinedVal) {
+      return;
+    }
+
+    if (!isDefinedVal && !this.nullSelection) {
+      console.warn('`o-combo` with attr ' + this.oattr + ' cannot be set. `null-selection` attribute is false.');
+      return;
+    }
+
+    if (isDefinedVal) {
+      const record = this.dataArray.find(item => item[this.valueColumn] === val);
+      if (!Util.isDefined(record)) {
+        return;
       }
     }
+    super.setValue(val, options);
   }
 
   getSelectedItems(): any[] {

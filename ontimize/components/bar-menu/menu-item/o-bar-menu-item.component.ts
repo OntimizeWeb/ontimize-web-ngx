@@ -1,5 +1,5 @@
 import { Component, Inject, Injector, forwardRef, ElementRef, NgModule, ViewEncapsulation } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Util } from '../../../utils';
 import { OSharedModule } from '../../../shared';
@@ -23,13 +23,14 @@ export const DEFAULT_INPUTS_O_BAR_MENU_ITEM = [
   inputs: DEFAULT_INPUTS_O_BAR_MENU_ITEM,
   encapsulation: ViewEncapsulation.None,
   host: {
-    '[class.o-bar-menu-item]': 'true'
+    '[class.o-bar-menu-item]': 'true',
+    '[attr.disabled]': 'disabled'
   }
 })
 export class OBarMenuItemComponent extends OBaseMenuItemClass {
 
   public static DEFAULT_INPUTS_O_BAR_MENU_ITEM = DEFAULT_INPUTS_O_BAR_MENU_ITEM;
-
+  protected router: Router;
   route: string;
   action: Function;
 
@@ -39,6 +40,7 @@ export class OBarMenuItemComponent extends OBaseMenuItemClass {
     protected injector: Injector
   ) {
     super(menu, elRef, injector);
+    this.router = this.injector.get(Router);
   }
 
   ngOnInit() {
@@ -56,8 +58,13 @@ export class OBarMenuItemComponent extends OBaseMenuItemClass {
     }
   }
 
-  callAction() {
-    if (!this.disabled && Util.isDefined(this.action)) {
+  onClick() {
+    if (this.disabled) {
+      return;
+    }
+    if (Util.isDefined(this.route)) {
+      this.router.navigate([this.route]);
+    } else if (Util.isDefined(this.action)) {
       this.action();
     }
   }

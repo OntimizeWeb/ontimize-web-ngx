@@ -2,8 +2,7 @@
   [matTooltipPosition]="tooltipPosition" [matTooltipShowDelay]="tooltipShowDelay">
   <mat-form-field [class.custom-width]="hasCustomWidth" class="icon-field" fxFlexFill>
     <input matInput #matInputRef [matDatepicker]="d" [id]="getAttribute()" [formControlName]="getAttribute()"
-      [placeholder]="placeHolder" [readonly]="isReadOnly || !textInputEnabled" [ngModel]="getValueAsDate()"
-      (ngModelChange)="onModelChange($event)" (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)"
+      [placeholder]="placeHolder" [readonly]="isReadOnly || !textInputEnabled" (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)"
       [matDatepickerFilter]="filterDate" (dateChange)="onChangeEvent($event)" [required]="isRequired" (click)="onClickInput($event)">
 
     <button type="button" *ngIf="showClearButton" matSuffix mat-icon-button (click)="onClickClearValue()">

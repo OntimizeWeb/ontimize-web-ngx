@@ -157,6 +157,10 @@ export class OFormServiceComponent extends OFormDataComponent {
     }
   }
 
+  protected getUpdateOn(): any {
+    return 'blur';
+  }
+
   /* Utility methods */
   configureService() {
     let loadingService: any = OntimizeService;

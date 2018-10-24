@@ -3,7 +3,7 @@
 </mat-toolbar>
 <div mat-dialog-content (scroll)="onScroll($event)" [class.o-list-picker-has-filter]="filter">
   <mat-list>
-    <mat-list-item *ngIf="visibleData.length === 0">
+    <mat-list-item *ngIf="isEmptyData()">
       {{ 'LIST.EMPTY' | oTranslate }}
       <ng-container *ngIf="filter && searchInput && searchInput.getValue() && searchInput.getValue().length > 0">
         {{ 'LIST.EMPTY_USING_FILTER' | oTranslate : { values: [searchInput.getValue()] } }}

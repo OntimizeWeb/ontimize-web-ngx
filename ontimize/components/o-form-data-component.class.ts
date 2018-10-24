@@ -114,6 +114,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   protected _SQLType: number = SQLTypes.OTHER;
   protected _defaultSQLTypeKey: string = 'OTHER';
   protected _fControl: FormControl;
+  protected _fControlSubscription: Subscription;
   protected _fGroup: FormGroup;
   protected elRef: ElementRef;
   protected form: OFormComponent;
@@ -163,6 +164,9 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
       if (this.validatorChildren.length > 0) {
         this.updateValidators();
       }
+    }
+    if (this.isDisabled) {
+      this.mutationObserver = PermissionsService.registerDisableChangesInDom(this.getMutationObserverTarget(), this.disabledChangesInDom.bind(this));
     }
   }
 
@@ -248,7 +252,6 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     } else if (permissions.enabled === false) {
       /* disable input per permissions */
       this.disabled = true;
-      this.disabledChangesInDom();
       if (this.form) {
         this.form.registerFormComponent(this);
       }
@@ -256,28 +259,26 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     this.permissions = permissions;
   }
 
+  protected getMutationObserverTarget(): any {
+    let result;
+    try {
+      result = this.elementRef.nativeElement.getElementsByTagName('input').item(0);
+    } catch (error) {
+      //
+    }
+    return result;
+  }
+
   /**
    * Do not allow the disabled attribute to change by code or by inspector
    * */
   private disabledChangesInDom() {
-    const self = this;
-    this.mutationObserver = new MutationObserver(function (mutations) {
-      mutations.forEach(function (mutation) {
-        if (mutation.type === 'attributes' && mutation.attributeName === 'disabled') {
-          // TODO && mutation.target.attributes.getNamedItem('disabled') === null
-          const control = self.getControl();
-          control.disable();
-        }
-      });
-    });
-
-    this.mutationObserver.observe(this.elementRef.nativeElement, {
-      attributes: true,
-      subtree: true,
-      attributeFilter: ['disabled']
+    const control = this.getFormControl();
+    control.disable({
+      onlySelf: true,
+      emitEvent: false
     });
   }
-
 
   protected setSuffixClass(count: number) {
     const iconFieldEl = this.elRef.nativeElement.getElementsByClassName('icon-field');
@@ -306,6 +307,9 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     if (this.mutationObserver) {
       this.mutationObserver.disconnect();
     }
+    if (this._fControlSubscription) {
+      this._fControlSubscription.unsubscribe();
+    }
   }
 
   registerFormListeners() {
@@ -328,22 +332,16 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     this.setData(value);
   }
 
-  setData(value: any) {
+  setData(newValue: any) {
     // emit OValueChangeEvent.PROGRAMMATIC_CHANGE when assign value to data
     // this method skips the following permissions checking because the form is
     // setting its query result using it
-    this.ensureOFormValue(value);
-    if (this._fControl) {
-      this._fControl.setValue(this.value.value, {
-        emitModelToViewChange: false,
-        emitEvent: false
-      });
-      if (this._fControl.invalid && !this.form.isInInsertMode()) {
-        this._fControl.markAsTouched();
-      }
-    }
-    this.emitOnValueChange(OValueChangeEvent.PROGRAMMATIC_CHANGE, value, this.oldValue);
-    this.oldValue = value;
+    const previousValue = this.oldValue;
+    this.setFormValue(newValue, {
+      emitModelToViewChange: false,
+      emitEvent: false
+    });
+    this.emitOnValueChange(OValueChangeEvent.PROGRAMMATIC_CHANGE, newValue, previousValue);
   }
 
   isAutomaticBinding(): boolean {
@@ -363,16 +361,15 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     return this.defaultValue;
   }
 
-  setValue(val: any, options?: IFormValueOptions) {
+  setValue(newValue: any, options?: IFormValueOptions) {
     if (!PermissionsService.checkEnabledPermission(this.permissions)) {
       return;
     }
-    if (this.oldValue !== val) {
-      var newValue = val;
-      this.setFormValue(val, options);
+    const previousValue = this.oldValue;
+    if (previousValue !== newValue) {
+      this.setFormValue(newValue, options, true);
       let changeType: number = options ? options.changeType : OValueChangeEvent.PROGRAMMATIC_CHANGE;
-      this.emitOnValueChange(changeType, newValue, this.oldValue);
-      this.oldValue = val;
+      this.emitOnValueChange(changeType, newValue, previousValue);
     }
   }
 
@@ -390,33 +387,46 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     this.clearValue({ changeType: OValueChangeEvent.USER_CHANGE });
   }
 
-  protected setFormValue(val: any, options?: IFormValueOptions) {
+  protected setFormValue(val: any, options?: IFormValueOptions, setDirty: boolean = false) {
     this.ensureOFormValue(val);
     if (this._fControl) {
       this._fControl.setValue(val, options);
-      this._fControl.markAsDirty();
+      if (setDirty) {
+        this._fControl.markAsDirty();
+      }
       if (this._fControl.invalid && !this.form.isInInsertMode()) {
         this._fControl.markAsTouched();
       }
     }
+    this.oldValue = val;
   }
 
   /*This method is called in output change event, not emit event onValueChange when oldvalue is same than newvalue*/
-  onChangeEvent($event) {
-    if (this.oldValue !== this.getValue) {
-      this.emitOnValueChange(OValueChangeEvent.USER_CHANGE, this.getValue(), this.oldValue);
-      this.oldValue = this.getValue();
+  onChangeEvent(arg: any) {
+    const value = this.getValue();
+    if (this.oldValue !== value) {
+      const previousValue = this.oldValue;
+      this.oldValue = value;
+      this.emitOnValueChange(OValueChangeEvent.USER_CHANGE, value, previousValue);
     }
   }
 
   protected emitOnValueChange(type, newValue, oldValue) {
-    let event = new OValueChangeEvent
-      (type, newValue, oldValue, this);
+    let event = new OValueChangeEvent(type, newValue, oldValue, this);
     this.onValueChange.emit(event);
   }
 
   get showClearButton(): boolean {
     return this.clearButton && !this.isReadOnly && !this.isDisabled && this.getValue();
+  }
+
+  onFormControlChange(value: any) {
+    // equivalente al innerOnChange
+    if (!this.value) {
+      this.value = new OFormValue();
+    }
+    this.ensureOFormValue(value);
+    this.onChange.emit(value);
   }
 
   ensureOFormValue(value: any) {
@@ -431,14 +441,25 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
 
   getControl(): FormControl {
     if (!this._fControl) {
-      let validators: ValidatorFn[] = this.resolveValidators();
-      let cfg = {
+      const validators: ValidatorFn[] = this.resolveValidators();
+      const cfg = {
         value: this.value ? this.value.value : undefined,
         disabled: this.isDisabled
       };
-      this._fControl = new FormControl(cfg, validators);
+      this._fControl = new FormControl(cfg, {
+        validators: validators,
+        updateOn: this.getUpdateOn()
+      });
+      const self = this;
+      this._fControlSubscription = this._fControl.valueChanges.subscribe(value => {
+        self.onFormControlChange(value);
+      });
     }
     return this._fControl;
+  }
+
+  protected getUpdateOn(): any {
+    return 'change';
   }
 
   resolveValidators(): ValidatorFn[] {

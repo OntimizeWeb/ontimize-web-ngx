@@ -3,11 +3,12 @@
   <mat-form-field [class.custom-width]="hasCustomWidth" class="icon-field" (click)="isDisabled || isReadOnly ? null : inputFile.click()"
     fxFill>
     <input #inputShowValue matInput type="text" [id]="getAttribute()" [formControlName]="getAttribute()" [placeholder]="placeHolder"
-      [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)" [required]="isRequired" readonly (change)="onChangeEvent($event)">
+      [required]="isRequired" readonly (change)="onChangeEvent($event)">
     <button type="button" *ngIf="showClearButton" matSuffix mat-icon-button (click)="onClickClearValue($event)">
       <mat-icon svgIcon="ontimize:close"></mat-icon>
     </button>
-    <button type="button" *ngIf="getValue()" [disabled]="!isValid || uploader.isUploading" matSuffix mat-icon-button (click)="onClickUpload($event)">
+    <button type="button" *ngIf="getValue()" [disabled]="!isValid || uploader.isUploading" matSuffix mat-icon-button
+      (click)="onClickUpload($event)">
       <mat-icon>file_upload</mat-icon>
     </button>
     <mat-error *ngIf="hasError('required')">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</mat-error>

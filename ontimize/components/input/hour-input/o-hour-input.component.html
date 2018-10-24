@@ -3,9 +3,9 @@
 
   <mat-form-field fxFlexFill>
     <input matInput [ngxTimepicker]="picker" [id]="getAttribute()" [placeholder]="placeHolder" [formControlName]="getAttribute()"
-      [readonly]="isReadOnly || !textInputEnabled" [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)"
-      (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)" [required]="isRequired" [format]="format" (click)="onClickInput($event)"
-      [value]="getValueAsString()" (change)="onChangeEvent($event)">
+      [readonly]="isReadOnly || !textInputEnabled" (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)"
+      [required]="isRequired" [format]="format" (click)="onClickInput($event)" [value]="getValueAsString()" (change)="onChangeEvent($event)"
+      [min]="min" [max]="max">
 
     <ngx-material-timepicker #picker (timeSet)="onTimeEvent($event)"></ngx-material-timepicker>
     <button type="button" *ngIf="showClearButton" matSuffix mat-icon-button (click)="onClickClearValue()">
