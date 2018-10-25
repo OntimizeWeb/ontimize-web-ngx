@@ -1,8 +1,8 @@
 import { Injector, Provider } from '@angular/core';
 import { LOCATION_INITIALIZED } from '@angular/common';
 import { BaseRequestOptions, XHRBackend } from '@angular/http';
-import { Events } from '../util/events';
 import { OHttp } from '../util/http/OHttp';
+import { Events } from '../util/events';
 import { AppConfig, Config } from '../config/app-config';
 
 import {
@@ -27,7 +27,8 @@ import {
   OntimizeServiceResponseParser,
   PermissionsService,
   OntimizePermissionsService,
-  permissionsServiceFactory
+  permissionsServiceFactory,
+  OntimizeMatIconRegistry
 } from '../services';
 
 import { OFormLayoutManagerService } from '../services/o-form-layout-manager.service';
@@ -58,6 +59,7 @@ export function appInitializerFactory(injector: Injector, config: Config, oTrans
       oTranslate.setAppLang(userLang).subscribe(resolve, resolve, resolve);
     });
     injector.get(NavigationService).initialize();
+    injector.get(OntimizeMatIconRegistry).initialize();
   });
 }
 
