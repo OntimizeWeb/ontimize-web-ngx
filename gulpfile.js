@@ -11,13 +11,6 @@ const ONTIMIZE_SCSS_CONF = {
   DIST: './dist'
 };
 
-gulp.task('styles', ['themes.styles'], (callback) => {
-  return gulp.src(ONTIMIZE_SCSS_CONF.SRC)
-    .pipe(cssimport(THEMES_STYLES_CONF.OPTIONS))
-    .pipe(gulp.dest(ONTIMIZE_SCSS_CONF.DIST));
-});
-
-
 const THEMES_STYLES_CONF = {
   SRC: './ontimize/components/theming/all-theme.scss',
   DIST_TMP: './tmp',
@@ -29,7 +22,13 @@ const THEMES_STYLES_CONF = {
   MATERIAL_IMPORT: '@import \'node_modules/@angular/material/theming\';'
 };
 
-gulp.task('themes.styles', ['concat.themes.scss'], function () {
+gulp.task('concat.themes.scss', (callback) => {
+  return gulp.src(THEMES_STYLES_CONF.SRC)
+    .pipe(cssimport(THEMES_STYLES_CONF.OPTIONS))
+    .pipe(gulp.dest(THEMES_STYLES_CONF.DIST_TMP));
+});
+
+gulp.task('themes.styles', gulp.series('concat.themes.scss'), function () {
   var matchCount = 0;
   gulp.src([THEMES_STYLES_CONF.DIST_TMP_FILENAME])
     // .pipe(replace(THEMES_STYLES_CONF.MATERIAL_IMPORT, ''))
@@ -44,12 +43,11 @@ gulp.task('themes.styles', ['concat.themes.scss'], function () {
     .pipe(gulp.dest(THEMES_STYLES_CONF.DIST));
 });
 
-gulp.task('concat.themes.scss', (callback) => {
-  return gulp.src(THEMES_STYLES_CONF.SRC)
+gulp.task('styles', gulp.series('themes.styles'), (callback) => {
+  return gulp.src(ONTIMIZE_SCSS_CONF.SRC)
     .pipe(cssimport(THEMES_STYLES_CONF.OPTIONS))
-    .pipe(gulp.dest(THEMES_STYLES_CONF.DIST_TMP));
+    .pipe(gulp.dest(ONTIMIZE_SCSS_CONF.DIST));
 });
-
 
 const FILES = [
   'theme.scss',
@@ -61,13 +59,29 @@ const FILES = [
   'dist'
 ];
 
-gulp.task('copy-files', ['copy.assets'], (callback) => {
-  copyfiles(FILES, true, callback);
-});
-
 gulp.task('copy.assets', (callback) => {
   copyfiles(['assets/**', 'dist'], callback);
 });
+
+gulp.task('copy.files', (callback) => {
+  copyfiles(FILES, true, callback);
+});
+
+gulp.task('copy-files', gulp.parallel('copy.assets', 'copy.files'));
+
+/**
+ * Compile SASS to CSS.
+ * @see https://github.com/ludohenin/gulp-inline-ng2-template
+ * @see https://github.com/sass/node-sass
+ */
+function compileSass(path, ext, file, callback) {
+  let compiledCss = sass.renderSync({
+    file: path,
+    outputStyle: 'compressed',
+  });
+  callback(null, compiledCss.css);
+}
+
 /**
  * Inline templates configuration.
  * @see  https://github.com/ludohenin/gulp-inline-ng2-template
@@ -93,16 +107,3 @@ gulp.task('inline-templates', () => {
     .pipe(inlineTemplates(INLINE_TEMPLATES_CONF.CONFIG))
     .pipe(gulp.dest(INLINE_TEMPLATES_CONF.DIST));
 });
-
-/**
- * Compile SASS to CSS.
- * @see https://github.com/ludohenin/gulp-inline-ng2-template
- * @see https://github.com/sass/node-sass
- */
-function compileSass(path, ext, file, callback) {
-  let compiledCss = sass.renderSync({
-    file: path,
-    outputStyle: 'compressed',
-  });
-  callback(null, compiledCss.css);
-}
