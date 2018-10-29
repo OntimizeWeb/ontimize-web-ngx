@@ -4,7 +4,7 @@ import { CdkTableModule } from '@angular/cdk/table';
 import { ObserversModule } from '@angular/cdk/observers';
 import { SelectionModel, SelectionChange } from '@angular/cdk/collections';
 import { MatDialog, MatTabGroup, MatTab, MatPaginatorIntl, MatPaginator, MatCheckboxChange, MatMenu, PageEvent } from '@angular/material';
-import { DndModule } from 'ng2-dnd';
+import { DndModule } from '@churchs19/ng2-dnd';
 import { Observable, Subscription } from 'rxjs';
 
 import { OSharedModule } from '../../shared';
@@ -69,6 +69,8 @@ import { O_TABLE_CELL_EDITORS } from './column/cell-editor/cell-editor';
 import { OMatSortModule } from './extensions/sort/o-mat-sort-module';
 import { OMatSort } from './extensions/sort/o-mat-sort';
 import { OMatSortHeader } from './extensions/sort/o-mat-sort-header';
+
+export const NAME_COLUMN_SELECT = 'select';
 
 export const DEFAULT_INPUTS_O_TABLE = [
   ...OServiceComponent.DEFAULT_INPUTS_O_SERVICE_COMPONENT,
@@ -240,7 +242,7 @@ export class OTableOptions {
 
   constructor() {
     this.selectColumn = new OColumn();
-    this.selectColumn.name = OTableComponent.NAME_COLUMN_SELECT;
+    this.selectColumn.name = NAME_COLUMN_SELECT;
     this.selectColumn.title = '';
     this.selectColumn.visible = false;
   }
@@ -292,7 +294,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   public static DEFAULT_INPUTS_O_TABLE = DEFAULT_INPUTS_O_TABLE;
   public static DEFAULT_OUTPUTS_O_TABLE = DEFAULT_OUTPUTS_O_TABLE;
 
-  public static NAME_COLUMN_SELECT = 'select';
+  public static NAME_COLUMN_SELECT = NAME_COLUMN_SELECT;
   public loadingScroll = false;
   protected _loadingSorting = false;
 
@@ -875,6 +877,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     // When table is contained into tab component, it is necessary to init table component when attached to DOM.
     const self = this;
     this.tabGroupChangeSubscription = this.tabGroupContainer.selectedTabChange.subscribe((evt) => {
+      let interval;
       let timerCallback = (tab: MatTab) => {
         if (tab && tab.content.isAttached) {
           clearInterval(interval);
@@ -889,7 +892,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
           }
         }
       };
-      const interval = setInterval(timerCallback(evt.tab), 100);
+      interval = setInterval(timerCallback(evt.tab), 100);
     });
   }
 
