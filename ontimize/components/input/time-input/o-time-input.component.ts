@@ -1,7 +1,7 @@
 import { Component, Inject, Injector, forwardRef, ElementRef, EventEmitter, Optional, NgModule, ViewEncapsulation, ViewChild, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormGroup, FormControl } from '@angular/forms';
-import { Subscription, merge } from 'rxjs';
+import { FormGroup } from '@angular/forms';
+import { merge } from 'rxjs';
 import moment from 'moment';
 
 import { Util } from '../../../utils';
@@ -27,6 +27,8 @@ export const DEFAULT_INPUTS_O_TIME_INPUT = [
   'oDateTextInputEnabled: date-text-input-enabled',
 
   'oHourFormat: hour-format',
+  'oHourMin: hour-min',
+  'oHourMax: hour-max',
   'oHourTextInputEnabled: hour-text-input-enabled'
 ];
 
@@ -65,6 +67,8 @@ export class OTimeInputComponent extends OFormDataComponent implements OnInit, A
   oDateTextInputEnabled: boolean = true;
 
   oHourFormat: number = 24;
+  oHourMin: string;
+  oHourMax: string;
   @InputConverter()
   oHourTextInputEnabled: boolean = true;
 
@@ -77,8 +81,6 @@ export class OTimeInputComponent extends OFormDataComponent implements OnInit, A
   onBlur: EventEmitter<Object> = new EventEmitter<Object>();
 
   protected formGroup: FormGroup = new FormGroup({});
-  protected formGroupSubscription: Subscription;
-  protected formControlSubscription: Subscription;
 
   @ViewChild('dateInput')
   protected dateInput: ODateInputComponent;
@@ -97,15 +99,14 @@ export class OTimeInputComponent extends OFormDataComponent implements OnInit, A
   ngOnInit() {
     super.ngOnInit();
     const self = this;
-    merge(this.dateInput.onValueChange, this.hourInput.onValueChange)
-      .subscribe((event: OValueChangeEvent) => {
-        if (event.isUserChange()) {
-          self.updateComponentValue();
-          var newValue = self._fControl.value;
-          self.emitOnValueChange(OValueChangeEvent.USER_CHANGE, newValue, self.oldValue);
-          self.oldValue = newValue;
-        }
-      });
+    merge(this.dateInput.onValueChange, this.hourInput.onValueChange).subscribe((event: OValueChangeEvent) => {
+      if (event.isUserChange()) {
+        self.updateComponentValue();
+        var newValue = self._fControl.value;
+        self.emitOnValueChange(OValueChangeEvent.USER_CHANGE, newValue, self.oldValue);
+        self.oldValue = newValue;
+      }
+    });
   }
 
   protected updateComponentValue() {
@@ -136,17 +137,6 @@ export class OTimeInputComponent extends OFormDataComponent implements OnInit, A
       this.blockGroupValueChanges = false;
     }
     this.ensureOFormValue(timeValue);
-
-  }
-
-  ngOnDestroy() {
-    super.ngOnDestroy();
-    if (this.formGroupSubscription) {
-      this.formGroupSubscription.unsubscribe();
-    }
-    if (this.formControlSubscription) {
-      this.formControlSubscription.unsubscribe();
-    }
   }
 
   ngAfterViewInit() {
@@ -189,43 +179,19 @@ export class OTimeInputComponent extends OFormDataComponent implements OnInit, A
     }
   }
 
-  getControl(): FormControl {
-    const subscribe = !this._fControl;
-    let fControl: FormControl = super.getControl();
-    if (subscribe) {
-      const self = this;
-      this.formControlSubscription = fControl.valueChanges.subscribe(value => {
-        if (self.getValue() !== value) {
-          // se registra aquí para acciones como el deshacer del formulario, que pone los valosres en los formcontrol
-          self.ensureOFormValue(value);
-          self.setInnerComponentsData({
-            emitModelToViewChange: false,
-            emitEvent: false,
-            onlySelf: true
-          });
-        }
-      });
-    }
-    return fControl;
+  onFormControlChange(value: any) {
+    super.onFormControlChange(value);
+    this.setInnerComponentsData({
+      emitModelToViewChange: false,
+      emitEvent: false,
+      onlySelf: true
+    });
   }
 
-  setData(value: any) {
-    this.oldValue = value;
-
-    this.ensureOFormValue(value);
-    if (this._fControl) {
-      this._fControl.setValue(this.value.value, {
-        emitModelToViewChange: false,
-        emitEvent: false
-      });
-      this.setInnerComponentsData();
-    }
-
-  }
-
-  setValue(val: any, options?: IFormValueOptions) {
-    if (this.oldValue !== val) {
-      super.setValue(val, options);
+  setValue(newValue: any, options?: IFormValueOptions) {
+    const changed = this.oldValue !== newValue;
+    super.setValue(newValue, options);
+    if (changed) {
       this.setInnerComponentsData();
     }
   }
@@ -256,13 +222,22 @@ export class OTimeInputComponent extends OFormDataComponent implements OnInit, A
       emitModelToViewChange: false,
       emitEvent: false
     };
-    if (this.dateInput) {
-      this.dateInput.setValue(dateValue, options);
+    if (this.dateInput && this.dateInput.getFormControl()) {
+      this.dateInput.getFormControl().setValue(dateValue, {
+        emitModelToViewChange: false,
+        emitEvent: true,
+        onlySelf: true
+      });
+      // this.dateInput.setValue(dateValue, options);
     }
     if (this.hourInput) {
       this.hourInput.setTimestampValue(hourValue, options);
+      //   this.hourInput.getFormControl().setValue(hourValue, {
+      //     emitModelToViewChange: false,
+      //     emitEvent: true,
+      //     onlySelf: true
+      //   });
     }
-    this.onChange.emit(event);
   }
 
   onFocusInnerComp(event: any) {
@@ -276,15 +251,6 @@ export class OTimeInputComponent extends OFormDataComponent implements OnInit, A
       this.onBlur.emit(event);
     }
   }
-
-  // innerOnChange(event: any) {
-  //   if (!this.value) {
-  //     this.value = new OFormValue();
-  //   }
-  //   this.ensureOFormValue(event);
-  //   this.onChange.emit(event);
-  // }
-
 }
 
 @NgModule({
