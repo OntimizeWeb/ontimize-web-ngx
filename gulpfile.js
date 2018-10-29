@@ -28,26 +28,29 @@ gulp.task('concat.themes.scss', (callback) => {
     .pipe(gulp.dest(THEMES_STYLES_CONF.DIST_TMP));
 });
 
-gulp.task('themes.styles', gulp.series('concat.themes.scss'), function () {
+gulp.task('themes.styles', (callback) => {
   var matchCount = 0;
-  gulp.src([THEMES_STYLES_CONF.DIST_TMP_FILENAME])
-    // .pipe(replace(THEMES_STYLES_CONF.MATERIAL_IMPORT, ''))
-    .pipe(replace(THEMES_STYLES_CONF.MATERIAL_IMPORT, function (match) {
+  // .pipe(replace(THEMES_STYLES_CONF.MATERIAL_IMPORT, ''))
+  return gulp.src([THEMES_STYLES_CONF.DIST_TMP_FILENAME])
+    .pipe(replace(THEMES_STYLES_CONF.MATERIAL_IMPORT, (match) => {
       matchCount++
       if (matchCount === 1) {
         return match;
       } else {
         return '';
       }
-    }))
-    .pipe(gulp.dest(THEMES_STYLES_CONF.DIST));
+    })).pipe(gulp.dest(THEMES_STYLES_CONF.DIST));
 });
 
-gulp.task('styles', gulp.series('themes.styles'), (callback) => {
+gulp.task('styles.creation', (callback) => {
   return gulp.src(ONTIMIZE_SCSS_CONF.SRC)
     .pipe(cssimport(THEMES_STYLES_CONF.OPTIONS))
     .pipe(gulp.dest(ONTIMIZE_SCSS_CONF.DIST));
+
 });
+
+gulp.task('styles', gulp.series('concat.themes.scss', 'themes.styles', 'styles.creation'));
+
 
 const FILES = [
   'theme.scss',
@@ -67,7 +70,7 @@ gulp.task('copy.files', (callback) => {
   copyfiles(FILES, true, callback);
 });
 
-gulp.task('copy-files', gulp.parallel('copy.assets', 'copy.files'));
+gulp.task('copy-files', gulp.series('copy.assets', 'copy.files'));
 
 /**
  * Compile SASS to CSS.
