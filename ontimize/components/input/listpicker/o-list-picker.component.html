@@ -13,7 +13,7 @@
       <mat-icon svgIcon="ontimize:search"></mat-icon>
     </button>
 
-    <button type="button" [disabled]="isReadOnly || isDisabled" [class.read-only]="isReadOnly" matSuffix mat-icon-button (click)="onClickClearValue()">
+    <button type="button" [disabled]="isReadOnly || isDisabled" [class.read-only]="isReadOnly" matSuffix mat-icon-button (click)="onClickClearValue($event)">
       <mat-icon svgIcon="ontimize:clear"></mat-icon>
     </button>
 
