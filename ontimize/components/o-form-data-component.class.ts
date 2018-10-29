@@ -385,7 +385,9 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     this.setValue(void 0, options);
   }
 
-  onClickClearValue(): void {
+  onClickClearValue(event: Event): void {
+    event.stopPropagation();
+    event.preventDefault();
     this.clearValue({ changeType: OValueChangeEvent.USER_CHANGE });
   }
 
