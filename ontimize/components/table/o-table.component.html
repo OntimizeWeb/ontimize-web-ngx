@@ -137,6 +137,14 @@
           <tr mat-footer-row *matFooterRowDef="oTableOptions.visibleColumns; sticky: fixedHeader"></tr>
         </ng-container>
       </table>
+       <!--TABLE EMPTY-->
+       <div class="mat-row o-table-no-results {{ rowHeight }}" *ngIf="dataSource !== undefined && dataSource.resultsLength === 0"
+       fxLayoutAlign="center center">
+       {{'TABLE.EMPTY' | oTranslate}}
+       <ng-container *ngIf="quickFilter && oTableQuickFilterComponent && oTableQuickFilterComponent.value && oTableQuickFilterComponent.value.length > 0">
+         {{ 'TABLE.EMPTY_USING_FILTER' | oTranslate : { values: [oTableQuickFilterComponent.value] } }}
+       </ng-container>
+     </div>
     </div>
     <!-- TABLE EDITABLE ROW position: last -->
     <o-table-editable-row [datasource]="dataSource" *ngIf="showLastInsertableRow"></o-table-editable-row>
