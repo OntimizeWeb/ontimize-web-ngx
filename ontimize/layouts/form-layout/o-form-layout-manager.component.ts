@@ -88,7 +88,7 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
   @ContentChildren(OListComponent, { descendants: true })
   protected listComponents: QueryList<OListComponent>;
 
-  protected isGuardActivated: boolean = true;
+  protected addingGuard: boolean = false;
 
   constructor(
     protected injector: Injector,
@@ -112,7 +112,8 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
     this.labelColsArray = Util.parseArray(this.labelColumns);
     this.addActivateChildGuard();
     if (!Util.isDefined(this.oattr)) {
-      this.oattr = this.router.url;
+      this.oattr = this.title + this.mode;
+      console.warn('o-form-layout-manager must have an unique attr');
     }
     this.oFormLayoutManagerService.registerFormLayoutManager(this);
   }
@@ -128,9 +129,9 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
   }
 
   ngOnDestroy() {
-    this.destroyAactivateChildGuard();
     this.updateStateStorage();
     this.oFormLayoutManagerService.removeFormLayoutManager(this);
+    this.destroyAactivateChildGuard();
   }
 
   getAttribute() {
@@ -181,6 +182,7 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
         }
       }
       if (!previouslyAdded) {
+        this.addingGuard = true;
         canActivateChildArray.push(CanActivateFormLayoutChildGuard);
         routeConfig.canActivateChild = canActivateChildArray;
       }
@@ -188,6 +190,9 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
   }
 
   destroyAactivateChildGuard() {
+    if (!this.addingGuard) {
+      return;
+    }
     let routeConfig = this.getParentActRouteRoute();
     if (Util.isDefined(routeConfig)) {
       for (let i = (routeConfig.canActivateChild || []).length - 1; i >= 0; i--) {
@@ -325,18 +330,6 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
       return true;
     }
     return false;
-  }
-
-  deactivateGuard() {
-    this.isGuardActivated = false;
-  }
-
-  activateGuard() {
-    this.isGuardActivated = true;
-  }
-
-  ignoreCanDeactivate(): boolean {
-    return !this.isGuardActivated;
   }
 
   getRouteForComponent(comp: OServiceComponent): any[] {

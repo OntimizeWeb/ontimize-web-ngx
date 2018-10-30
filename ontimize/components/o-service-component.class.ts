@@ -216,24 +216,12 @@ export class OServiceComponent extends OServiceBaseComponent {
     let extras = {
       relativeTo: relativeTo
     };
-    let reactivateGuard = false;
     if (this.formLayoutManager && this.formLayoutManager.isMainComponent(this)) {
       qParams[Codes.IGNORE_CAN_DEACTIVATE] = true;
-    } else if (this.formLayoutManager) {
-      reactivateGuard = true;
-      this.formLayoutManager.deactivateGuard();
-    }
-    extras[Codes.QUERY_PARAMS] = qParams;
-    if (this.formLayoutManager) {
       this.formLayoutManager.setAsActiveFormLayoutManager();
     }
-    const navigatePromise: Promise<boolean> = this.router.navigate(route, extras);
-    if (reactivateGuard) {
-      const self = this;
-      navigatePromise.then(() => {
-        self.formLayoutManager.activateGuard();
-      });
-    }
+    extras[Codes.QUERY_PARAMS] = qParams;
+    this.router.navigate(route, extras);
   }
 
   insertDetail() {
