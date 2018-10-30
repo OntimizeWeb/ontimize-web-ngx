@@ -62,6 +62,15 @@ export class ServiceUtils {
     return result;
   }
 
+  static filterContainsAllParentKeys(parentKeysFilter, parentKeys): boolean {
+    let pkKeys = Object.keys(parentKeys);
+    if ((pkKeys.length > 0) && Util.isDefined(parentKeysFilter)) {
+      let parentKeysFilterKeys = Object.keys(parentKeysFilter);
+      return pkKeys.every(a => parentKeysFilterKeys.indexOf(a) !== -1);
+    }
+    return true;
+  }
+
   static getFilterUsingParentKeys(parentItem: any, parentKeysObject: Object) {
     let filter = {};
     const ownKeys = Object.keys(parentKeysObject);
