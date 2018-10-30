@@ -764,7 +764,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
       this.formGroup.controls[control].markAsPristine();
     });
     this.formCache.registerCache();
-    this.formNavigation.updateNavigation(this.formCache.getInitialDataCache());
+    this.formNavigation.updateNavigation();
   }
 
   _emitData(data) {
