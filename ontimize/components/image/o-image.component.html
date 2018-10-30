@@ -11,7 +11,7 @@
       <button type="button" [disabled]="isDisabled" matSuffix mat-icon-button (click)="input.click()">
         <mat-icon svgIcon="ontimize:folder_open"></mat-icon>
       </button>
-      <button type="button" [disabled]="isDisabled" matSuffix mat-icon-button (click)="onClickClear($event)">
+      <button type="button" [disabled]="isDisabled" matSuffix mat-icon-button (click)="onClickClearValue($event)">
         <mat-icon svgIcon="ontimize:clear"></mat-icon>
       </button>
       <mat-error *ngIf="hasError('required')">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</mat-error>

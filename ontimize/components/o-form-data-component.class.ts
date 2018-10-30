@@ -337,10 +337,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     // this method skips the following permissions checking because the form is
     // setting its query result using it
     const previousValue = this.oldValue;
-    this.setFormValue(newValue, {
-      emitModelToViewChange: false,
-      emitEvent: false
-    });
+    this.setFormValue(newValue);
     this.emitOnValueChange(OValueChangeEvent.PROGRAMMATIC_CHANGE, newValue, previousValue);
   }
 
@@ -385,14 +382,16 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     this.setValue(void 0, options);
   }
 
-  onClickClearValue(): void {
+  onClickClearValue(event: Event): void {
+    event.stopPropagation();
+    event.preventDefault();
     this.clearValue({ changeType: OValueChangeEvent.USER_CHANGE });
   }
 
   protected setFormValue(val: any, options?: IFormValueOptions, setDirty: boolean = false) {
     this.ensureOFormValue(val);
     if (this._fControl) {
-      this._fControl.setValue(val, options);
+      this._fControl.setValue(this.value.value, options);
       if (setDirty) {
         this._fControl.markAsDirty();
       }

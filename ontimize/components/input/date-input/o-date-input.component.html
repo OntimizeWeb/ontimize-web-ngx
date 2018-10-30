@@ -5,7 +5,7 @@
       [placeholder]="placeHolder" [readonly]="isReadOnly || !textInputEnabled" (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)"
       [matDatepickerFilter]="filterDate" (dateChange)="onChangeEvent($event)" [required]="isRequired" (click)="onClickInput($event)">
 
-    <button type="button" *ngIf="showClearButton" matSuffix mat-icon-button (click)="onClickClearValue()">
+    <button type="button" *ngIf="showClearButton" matSuffix mat-icon-button (click)="onClickClearValue($event)">
       <mat-icon svgIcon="ontimize:close"></mat-icon>
     </button>
     <mat-datepicker-toggle matSuffix [disabled]="isReadOnly || isDisabled" [class.read-only]="isReadOnly" [for]="d">

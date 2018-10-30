@@ -10,7 +10,7 @@
       (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)" [readonly]="isReadOnly" [min]="min" [max]="max"
       [step]="step" [required]="isRequired" (change)="onChangeEvent($event)">
 
-    <button type="button" *ngIf="showClearButton" matSuffix mat-icon-button (click)="onClickClearValue()">
+    <button type="button" *ngIf="showClearButton" matSuffix mat-icon-button (click)="onClickClearValue($event)">
       <mat-icon svgIcon="ontimize:close"></mat-icon>
     </button>
 

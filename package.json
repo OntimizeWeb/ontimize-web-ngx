@@ -37,8 +37,8 @@
   "dependencies": {
     "hammerjs": "^2.0.8",
     "moment": "2.22.2",
-    "ng2-dnd": "5.0.2",
-    "ngx-material-timepicker": "2.5.4"
+    "@churchs19/ng2-dnd": "6.0.0",
+    "ngx-material-timepicker": "2.7.0"
   },
   "peerDependencies": {
     "@angular/flex-layout": "6.0.0-beta.18",
@@ -63,11 +63,9 @@
     "rxjs": "6.3.3",
     "zone.js": "0.8.26",
     "reflect-metadata": "0.1.12",
-    "typescript": "2.9.2",
-    "webpack": "4.17.2"
+    "typescript": "2.9.2"
   },
   "devDependencies": {
-    "ontimize-web-ngx-library-tools": "C:\\Users\\patricia.martinez\\Documents\\ontimize web\\ontimize-web-ngx-library-tools\\ontimize-web-ngx-library-tools-2.0.0.tgz",
     "@angular/animations": "6.1.10",
     "@angular/cdk": "6.4.7",
     "@angular/common": "6.1.10",
@@ -92,19 +90,20 @@
     "@types/node": "7.0.10",
     "@types/uglify-js": "2.6.30",
     "@types/webpack": "4.1.1",
+    "ajv": "6.5.4",
     "copyfiles": "1.2.0",
     "core-js": "2.5.7",
-    "gulp": "3.9.1",
+    "gulp": "4.0.0",
     "gulp-cssimport": "6.0.0",
-    "gulp-inline-ng2-template": "4.1.0",
+    "gulp-inline-ng2-template": "5.0.1",
     "gulp-replace": "0.6.1",
-    "ngc-webpack": "4.1.2",
-    "node-sass": "4.7.2",
+    "node-sass": "4.9.4",
+    "ontimize-web-ngx-library-tools": "C:\\workspace\\github\\TOOLS\\ontimize-web-ngx-library-tools\\ontimize-web-ngx-library-tools-2.0.0.tgz",
     "reflect-metadata": "0.1.12",
     "rimraf": "2.6.2",
     "rxjs": "6.3.3",
-    "zone.js": "0.8.26",
     "typescript": "2.9.2",
-    "webpack": "4.21.0"
+    "webpack": "4.21.0",
+    "zone.js": "0.8.26"
   }
 }

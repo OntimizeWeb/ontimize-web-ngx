@@ -11,10 +11,10 @@
 
     <o-hour-input #hourInput fxFlex attr="hourInput" [read-only]="readOnly" [enabled]="oenabled" [required]="isRequired"
       clear-button="no" automatic-registering="no" automatic-binding="no" (onFocus)="onFocusInnerComp($event)" (onBlur)="onBlurInnerComp($event)"
-      [format]="oHourFormat" [text-input-enabled]="oHourTextInputEnabled">
+      [format]="oHourFormat" [text-input-enabled]="oHourTextInputEnabled" [min]="oHourMin" [max]="oHourMax">
     </o-hour-input>
 
-    <button type="button" *ngIf="showClearButton" matSuffix mat-icon-button (click)="onClickClearValue()">
+    <button type="button" *ngIf="showClearButton" matSuffix mat-icon-button (click)="onClickClearValue($event)">
       <mat-icon svgIcon="ontimize:close"></mat-icon>
     </button>
   </div>
