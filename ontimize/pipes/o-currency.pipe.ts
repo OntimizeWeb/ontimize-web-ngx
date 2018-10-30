@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform, Injector } from '@angular/core';
-
+import { CurrencyService } from '../services';
 
 export interface ICurrencyPipeArgument {
   currencySimbol?: string;
@@ -9,10 +9,6 @@ export interface ICurrencyPipeArgument {
   decimalSeparator?: string;
   decimalDigits?: number;
 }
-
-import {
-  CurrencyService
-} from '../services';
 
 @Pipe({
   name: 'oCurrency'
@@ -25,13 +21,6 @@ export class OCurrencyPipe implements PipeTransform {
   }
 
   transform(text: string, args: ICurrencyPipeArgument): string {
-    let grouping = args.grouping;
-    let thousandSeparator = args.thousandSeparator;
-    let decimalSeparator = args.decimalSeparator;
-    let decimalDigits = args.decimalDigits;
-    let currencySimbol = args.currencySimbol;
-    let currencySymbolPosition = args.currencySymbolPosition;
-
-    return this.currencyService.getCurrencyValue(text, currencySimbol, currencySymbolPosition, grouping, thousandSeparator, decimalSeparator, decimalDigits);
+    return this.currencyService.getCurrencyValue(text, args);
   }
 }
