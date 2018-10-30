@@ -1,6 +1,7 @@
 import { Pipe, PipeTransform, Injector } from '@angular/core';
-
 import { ORealPipe } from './o-real.pipe';
+
+export type OPercentageValueBaseType = 1 | 100;
 
 export interface IPercentPipeArgument {
   grouping?: boolean;
@@ -9,6 +10,7 @@ export interface IPercentPipeArgument {
   decimalSeparator?: string;
   minDecimalDigits?: number;
   maxDecimalDigits?: number;
+  valueBase?: OPercentageValueBaseType;
 }
 
 @Pipe({
@@ -21,14 +23,7 @@ export class OPercentPipe extends ORealPipe implements PipeTransform {
   }
 
   transform(text: string, args: IPercentPipeArgument): string {
-    let grouping = args.grouping;
-    let thousandSeparator = args.thousandSeparator;
-    let locale = args.locale;
-    let decimalSeparator = args.decimalSeparator;
-    let minDecimalDigits = args.minDecimalDigits;
-    let maxDecimalDigits = args.maxDecimalDigits;
-
-    return this.numberService.getPercentValue(text, grouping, thousandSeparator, decimalSeparator, minDecimalDigits, maxDecimalDigits, locale);
+    return this.numberService.getPercentValue(text, args);
   }
 
 }

@@ -24,7 +24,6 @@
 ## 3.1.2
 ### Features
 * **OFormDataComponent**:
-
   * **Form Controls**
     * allowing to use permissions ([3291e57](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3291e57)) ([ca1f933](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ca1f933)) ([17105dc](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/17105dc)) ([5228ccc](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5228ccc)) ([7e46523](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7e46523)) ([c0eba19](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c0eba19))
     * blocking operations due permissions configuration ([d12a606](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d12a606)) ([f6a7032](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f6a7032))
@@ -37,6 +36,9 @@
   * new interface `IPermissionsService` that must be implemented by the service indicated in the '*permissionsServiceType*' property ([9ecd082](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9ecd082))
 * **ontimize-ee-permissions.service**, **ontimize-permissions.service**: new services for loading application permissions ([9ecd082](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9ecd082))
 * **OValueChangeEvent**: adding `isUserChange` and `isProgrammaticChange` methods.
+* **o-table-cell-renderer-percentage**: new `value-base` input ([d9585f6](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d9585f6)) ([#222](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/222))
+
+value-base input added to o-table-cell-renderer-percentage
 
 ### BREAKING CHANGES
 * **o-form**: `getDataValue` method is now public again.

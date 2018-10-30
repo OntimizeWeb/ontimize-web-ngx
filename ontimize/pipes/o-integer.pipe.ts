@@ -20,10 +20,6 @@ export class OIntegerPipe implements PipeTransform {
   }
 
   transform(text: string, args: IIntegerPipeArgument): string {
-    let grouping = args.grouping;
-    let thousandSeparator = args.thousandSeparator;
-    let locale = args.locale;
-
-    return this.numberService.getIntegerValue(text, grouping, thousandSeparator, locale);
+    return this.numberService.getIntegerValue(text, args);
   }
 }
