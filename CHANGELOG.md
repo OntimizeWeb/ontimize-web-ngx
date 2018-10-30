@@ -26,6 +26,7 @@ value-base input added to o-table-cell-renderer-percentage
   * `setValue`, `clearValue` and `getValue` methods.
   * `onChange`, `onValueChange` properties.
 * **o-side-menu**: the side menu component is completely removed ([b13dc69](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b13dc69))
+* **o-service-base-component**: the method `filterContainsAllParentKeys` has been moved to `ServiceUtils` class ([9c2bdd5](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9c2bdd5))
 
 ## 3.1.1 (2018-10-05)
 ### Features
