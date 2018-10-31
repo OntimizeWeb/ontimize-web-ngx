@@ -52,7 +52,7 @@
       {{ 'TABLE.BUTTONS.APPLY_CONFIGURATION' | oTranslate }}
     </button>
   </mat-menu>
-  <div class="o-table-body o-scroll" [class.horizontal-scroll]="horizontalScroll" [class.scrolled]="horizontalScrolled">
+  <div #tableBody class="o-table-body o-scroll" [class.horizontal-scroll]="horizontalScroll" [class.scrolled]="horizontalScrolled">
     <div class="o-table-overflow">
       <table mat-table #table [trackBy]="getTrackByFunction()" [dataSource]="dataSource" oMatSort [class.small]="!hasMultilineColumn && rowHeight==='small'"
         [class.medium]="!hasMultilineColumn && rowHeight==='medium'" [class.large]="!hasMultilineColumn && rowHeight==='large'">
@@ -78,14 +78,14 @@
               [style.width]="column.getMinWidth()">
               <mat-icon *ngIf="isColumnFilterable(column)" class="column-filter-icon" [class.active]="isColumnFilterActive(column)"
                 (click)="openColumnFilterDialog(column, $event)" svgIcon="ontimize:filter_list"></mat-icon>
-                {{ column.title | oTranslate }}
+              {{ column.title | oTranslate }}
             </th>
           </ng-container>
           <ng-container *ngIf="!column.orderable">
             <th mat-header-cell *matHeaderCellDef [ngClass]="getTitleAlignClass(column)" [style.width]="column.getMinWidth()">
               <mat-icon *ngIf="isColumnFilterable(column)" class="column-filter-icon" [class.active]="isColumnFilterActive(column)"
                 (click)="openColumnFilterDialog(column, $event)" svgIcon="ontimize:filter_list"></mat-icon>
-                {{ column.title | oTranslate }}
+              {{ column.title | oTranslate }}
             </th>
           </ng-container>
           <!--Define mat-cell-->
@@ -137,14 +137,14 @@
           <tr mat-footer-row *matFooterRowDef="oTableOptions.visibleColumns; sticky: fixedHeader"></tr>
         </ng-container>
       </table>
-       <!--TABLE EMPTY-->
-       <div class="mat-row o-table-no-results {{ rowHeight }}" *ngIf="dataSource !== undefined && dataSource.resultsLength === 0"
-       fxLayoutAlign="center center">
-       {{'TABLE.EMPTY' | oTranslate}}
-       <ng-container *ngIf="quickFilter && oTableQuickFilterComponent && oTableQuickFilterComponent.value && oTableQuickFilterComponent.value.length > 0">
-         {{ 'TABLE.EMPTY_USING_FILTER' | oTranslate : { values: [oTableQuickFilterComponent.value] } }}
-       </ng-container>
-     </div>
+      <!--TABLE EMPTY-->
+      <div class="mat-row o-table-no-results {{ rowHeight }}" *ngIf="dataSource !== undefined && dataSource.resultsLength === 0"
+        fxLayoutAlign="center center">
+        {{'TABLE.EMPTY' | oTranslate}}
+        <ng-container *ngIf="quickFilter && oTableQuickFilterComponent && oTableQuickFilterComponent.value && oTableQuickFilterComponent.value.length > 0">
+          {{ 'TABLE.EMPTY_USING_FILTER' | oTranslate : { values: [oTableQuickFilterComponent.value] } }}
+        </ng-container>
+      </div>
     </div>
     <!-- TABLE EDITABLE ROW position: last -->
     <o-table-editable-row [datasource]="dataSource" *ngIf="showLastInsertableRow"></o-table-editable-row>
