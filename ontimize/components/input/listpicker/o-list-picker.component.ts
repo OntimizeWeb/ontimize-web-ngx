@@ -7,7 +7,7 @@ import { OntimizeService } from '../../../services';
 import { InputConverter } from '../../../decorators';
 import { OFormComponent } from '../../form/o-form.component';
 import { ODialogModule } from '../../dialog/o-dialog.component';
-import { IFormValueOptions, OFormValue } from '../../form/OFormValue';
+import { OFormValue } from '../../form/OFormValue';
 import { OFormServiceComponent } from '../o-form-service-component.class';
 import { dataServiceFactory } from '../../../services/data-service.provider';
 import { OListPickerDialogComponent } from './o-list-picker-dialog.component';
@@ -131,11 +131,6 @@ export class OListPickerComponent extends OFormServiceComponent implements After
       this.blurPrevent = true;
       this.setValue(undefined);
     }
-  }
-
-  setValue(value: any, options?: IFormValueOptions) {
-    super.setValue(value, options);
-    this.visibleInput.nativeElement.value = '';
   }
 
   onClickInput(e: Event): void {
