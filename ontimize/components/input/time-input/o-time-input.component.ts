@@ -33,9 +33,7 @@ export const DEFAULT_INPUTS_O_TIME_INPUT = [
 ];
 
 export const DEFAULT_OUTPUTS_O_TIME_INPUT = [
-  ...DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT,
-  'onFocus',
-  'onBlur'
+  ...DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT
 ];
 
 @Component({
@@ -76,9 +74,6 @@ export class OTimeInputComponent extends OFormDataComponent implements OnInit, A
 
   public static DEFAULT_INPUTS_O_TIME_INPUT = DEFAULT_INPUTS_O_TIME_INPUT;
   public static DEFAULT_OUTPUTS_O_TIME_INPUT = DEFAULT_OUTPUTS_O_TIME_INPUT;
-
-  onFocus: EventEmitter<Object> = new EventEmitter<Object>();
-  onBlur: EventEmitter<Object> = new EventEmitter<Object>();
 
   protected formGroup: FormGroup = new FormGroup({});
 
@@ -181,11 +176,7 @@ export class OTimeInputComponent extends OFormDataComponent implements OnInit, A
 
   onFormControlChange(value: any) {
     super.onFormControlChange(value);
-    this.setInnerComponentsData({
-      emitModelToViewChange: false,
-      emitEvent: false,
-      onlySelf: true
-    });
+    this.setInnerComponentsData();
   }
 
   setValue(newValue: any, options?: IFormValueOptions) {
@@ -208,7 +199,7 @@ export class OTimeInputComponent extends OFormDataComponent implements OnInit, A
     this.blockGroupValueChanges = false;
   }
 
-  protected setInnerComponentsData(options?: IFormValueOptions) {
+  protected setInnerComponentsData() {
     let dateValue;
     let hourValue;
     if (Util.isDefined(this.value) && Util.isDefined(this.value.value)) {
@@ -218,37 +209,12 @@ export class OTimeInputComponent extends OFormDataComponent implements OnInit, A
         hourValue = momentD.clone().valueOf() - dateValue;
       }
     }
-    options = options || {
-      emitModelToViewChange: false,
-      emitEvent: false
-    };
     if (this.dateInput && this.dateInput.getFormControl()) {
-      this.dateInput.getFormControl().setValue(dateValue, {
-        emitModelToViewChange: false,
-        emitEvent: true,
-        onlySelf: true
-      });
-      // this.dateInput.setValue(dateValue, options);
+      var val = dateValue ? new Date(dateValue) : dateValue;
+      this.dateInput.setValue(val);
     }
     if (this.hourInput) {
-      this.hourInput.setTimestampValue(hourValue, options);
-      //   this.hourInput.getFormControl().setValue(hourValue, {
-      //     emitModelToViewChange: false,
-      //     emitEvent: true,
-      //     onlySelf: true
-      //   });
-    }
-  }
-
-  onFocusInnerComp(event: any) {
-    if (!this.isReadOnly && !this.isDisabled) {
-      this.onFocus.emit(event);
-    }
-  }
-
-  onBlurInnerComp(event: any) {
-    if (!this.isReadOnly && !this.isDisabled) {
-      this.onBlur.emit(event);
+      this.hourInput.setTimestampValue(hourValue);
     }
   }
 }
