@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { InputConverter } from '../../decorators';
 import { OSharedModule } from '../../shared';
 import { Util } from '../../utils';
+import { OTranslateService } from '../../services/translate/o-translate.service';
 import { OFormLayoutManagerService } from '../../services/o-form-layout-manager.service';
 import { ILocalStorageComponent, LocalStorageService } from '../../services/local-storage.service';
 import { OTableComponent } from '../../components/table/o-table.component';
@@ -72,6 +73,7 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
 
   protected labelColsArray: string[] = [];
 
+  protected translateService: OTranslateService;
   protected oFormLayoutManagerService: OFormLayoutManagerService;
   protected localStorageService: LocalStorageService;
   protected onRouteChangeStorageSubscribe: any;
@@ -101,6 +103,7 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
   ) {
     this.oFormLayoutManagerService = this.injector.get(OFormLayoutManagerService);
     this.localStorageService = this.injector.get(LocalStorageService);
+    this.translateService = this.injector.get(OTranslateService);
   }
 
   ngOnInit() {
@@ -291,8 +294,11 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
   }
 
   getLabelFromData(data: any): string {
+    // data === undefined means that inner form is in insertion mode
     let label = '';
-    if (this.labelColsArray.length !== 0 && data !== undefined) {
+    if (!Util.isDefined(data)) {
+      label = this.translateService.get('LAYOUT_MANANGER.INSERTION_MODE_TITLE');
+    } else if (this.labelColsArray.length !== 0) {
       this.labelColsArray.forEach((col, idx) => {
         if (data[col] !== undefined) {
           label += data[col] + ((idx < this.labelColsArray.length - 1) ? this.separator : '');

@@ -243,11 +243,14 @@ export class OFormNavigationClass {
 
   updateNavigation() {
     if (this.formLayoutManager) {
-      let formData = {};
-      const self = this;
-      Object.keys(this.form.formData).forEach(key => {
-        formData[key] = self.form.formData[key].value;
-      });
+      let formData = undefined;
+      if (!this.form.isInInsertMode()) {
+        formData = {};
+        const self = this;
+        Object.keys(this.form.formData).forEach(key => {
+          formData[key] = self.form.formData[key].value;
+        });
+      }
       this.formLayoutManager.updateNavigation(formData, this.id);
     }
   }
