@@ -1,4 +1,4 @@
-import { AfterViewChecked, Component, ElementRef, EventEmitter, forwardRef, Inject, Injector, NgModule, OnDestroy, OnInit, Optional, ViewChild } from '@angular/core';
+import { AfterViewChecked, Component, ElementRef, forwardRef, Inject, Injector, NgModule, OnDestroy, OnInit, Optional, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_LOCALE, MatDatepicker, MatDatepickerInput, MatDatepickerInputEvent } from '@angular/material';
@@ -77,9 +77,6 @@ export class ODateInputComponent extends OFormDataComponent implements AfterView
 
   private momentSrv: MomentService;
   protected media: ObservableMedia;
-
-  onFocus: EventEmitter<Object> = new EventEmitter<Object>();
-  onBlur: EventEmitter<Object> = new EventEmitter<Object>();
 
   protected mediaSubscription: Subscription;
   protected onLanguageChangeSubscription: Subscription;
@@ -223,18 +220,6 @@ export class ODateInputComponent extends OFormDataComponent implements AfterView
       emitEvent: false,
       emitModelToViewChange: false
     });
-  }
-
-  innerOnFocus(event: any) {
-    if (!this.isReadOnly && !this.isDisabled) {
-      this.onFocus.emit(event);
-    }
-  }
-
-  innerOnBlur(event: any) {
-    if (!this.isReadOnly && !this.isDisabled) {
-      this.onBlur.emit(event);
-    }
   }
 
   onClickInput(e: Event): void {

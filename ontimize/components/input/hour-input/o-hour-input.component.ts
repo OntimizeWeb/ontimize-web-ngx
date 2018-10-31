@@ -1,4 +1,4 @@
-import { Component, NgModule, Optional, Inject, ElementRef, Injector, forwardRef, ViewChild, EventEmitter, ViewEncapsulation, OnInit, AfterViewInit } from '@angular/core';
+import { Component, NgModule, Optional, Inject, ElementRef, Injector, forwardRef, ViewChild, ViewEncapsulation, OnInit, AfterViewInit } from '@angular/core';
 import { OFormDataComponent, DEFAULT_INPUTS_O_FORM_DATA_COMPONENT, DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT, OValueChangeEvent } from '../../o-form-data-component.class';
 import { CommonModule } from '@angular/common';
 import { ValidatorFn } from '@angular/forms';
@@ -28,9 +28,7 @@ export const DEFAULT_INPUTS_O_HOUR_INPUT = [
 ];
 
 export const DEFAULT_OUTPUTS_O_HOUR_INPUT = [
-  ...DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT,
-  'onFocus',
-  'onBlur'
+  ...DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT
 ];
 
 @Component({
@@ -58,9 +56,6 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
   ) {
     super(form, elRef, injector);
   }
-
-  onFocus: EventEmitter<Object> = new EventEmitter<Object>();
-  onBlur: EventEmitter<Object> = new EventEmitter<Object>();
 
   @ViewChild('picker')
   private picker: any;
@@ -129,18 +124,6 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
         this.picker.timepickerService.period = timePeriod;
       }
       this.picker.open();
-    }
-  }
-
-  innerOnFocus(event: any) {
-    if (!this.isReadOnly && !this.isDisabled) {
-      this.onFocus.emit(event);
-    }
-  }
-
-  innerOnBlur(event: any) {
-    if (!this.isReadOnly && !this.isDisabled) {
-      this.onBlur.emit(event);
     }
   }
 

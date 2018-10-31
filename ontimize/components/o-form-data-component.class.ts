@@ -82,7 +82,9 @@ export const DEFAULT_INPUTS_O_FORM_DATA_COMPONENT = [
 
 export const DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT = [
   'onChange',
-  'onValueChange'
+  'onValueChange',
+  'onFocus',
+  'onBlur'
 ];
 
 export class OFormDataComponent extends OBaseComponent implements IFormDataComponent, IFormDataTypeComponent,
@@ -102,6 +104,8 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   /* Outputs */
   onChange: EventEmitter<Object> = new EventEmitter<Object>();
   onValueChange: EventEmitter<OValueChangeEvent> = new EventEmitter<OValueChangeEvent>();
+  onFocus: EventEmitter<Object> = new EventEmitter<Object>();
+  onBlur: EventEmitter<Object> = new EventEmitter<Object>();
 
   @HostBinding('style.width')
   get hostWidth() {
@@ -528,4 +532,17 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     });
     this._fControl.setValidators(validators);
   }
+
+  innerOnFocus(event: any) {
+    if (!this.isReadOnly && !this.isDisabled) {
+      this.onFocus.emit(event);
+    }
+  }
+
+  innerOnBlur(event: any) {
+    if (!this.isReadOnly && !this.isDisabled) {
+      this.onBlur.emit(event);
+    }
+  }
+
 }

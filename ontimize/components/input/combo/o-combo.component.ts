@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, forwardRef, Inject, Injector, NgModule, Optional, ViewChild, OnInit, AfterViewInit, OnDestroy, ViewEncapsulation } from '@angular/core';
+import { Component, ElementRef, forwardRef, Inject, Injector, NgModule, Optional, ViewChild, OnInit, AfterViewInit, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatSelect, MatSelectChange } from '@angular/material';
 
@@ -63,8 +63,6 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
 
   @ViewChild('selectModel')
   protected selectModel: MatSelect;
-
-  public onChange: EventEmitter<Object> = new EventEmitter<Object>();
 
   constructor(
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,

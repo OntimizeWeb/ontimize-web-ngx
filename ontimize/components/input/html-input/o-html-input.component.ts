@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, Injector, NgModule, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Injector, NgModule, ViewChild } from '@angular/core';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { CommonModule } from '@angular/common';
 import { ValidatorFn, Validators } from '@angular/forms';
@@ -7,7 +7,7 @@ import { MatTab, MatTabGroup } from '@angular/material';
 import { OSharedModule } from '../../../shared/shared.module';
 import { InputConverter } from '../../../decorators/input-converter';
 import { OFormDataComponent } from '../../o-form-data-component.class';
-import { OFormComponent, OFormValue } from '../../form/form-components';
+import { OFormComponent } from '../../form/form-components';
 import { CKEditorComponent, CKEditorModule } from '../../material/ckeditor/ck-editor.component';
 import { OFormServiceComponent } from '../o-form-service-component.class';
 
@@ -24,9 +24,7 @@ export const DEFAULT_INPUTS_O_HTML_INPUT = [
 ];
 
 export const DEFAULT_OUTPUTS_O_HTML_INPUT = [
-  ...OFormServiceComponent.DEFAULT_OUTPUTS_O_FORM_SERVICE_COMPONENT,
-  'onFocus',
-  'onBlur'
+  ...OFormServiceComponent.DEFAULT_OUTPUTS_O_FORM_SERVICE_COMPONENT
 ];
 
 @Component({
@@ -55,9 +53,6 @@ export class OHTMLInputComponent extends OFormDataComponent implements AfterView
   minLength: number = -1;
   @InputConverter()
   maxLength: number = -1;
-
-  onFocus: EventEmitter<Object> = new EventEmitter<Object>();
-  onBlur: EventEmitter<Object> = new EventEmitter<Object>();
 
   @ViewChild('ckEditor') ckEditor: CKEditorComponent;
 
@@ -146,18 +141,6 @@ export class OHTMLInputComponent extends OFormDataComponent implements AfterView
     }
 
     return validators;
-  }
-
-  innerOnFocus(event: any) {
-    if (!this.isReadOnly && !this.isDisabled) {
-      this.onFocus.emit(event);
-    }
-  }
-
-  innerOnBlur(event: any) {
-    if (!this.isReadOnly && !this.isDisabled) {
-      this.onBlur.emit(event);
-    }
   }
 
   clearValue(): void {
