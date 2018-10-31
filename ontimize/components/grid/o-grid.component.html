@@ -11,7 +11,7 @@
       <div class="o-grid-paginator" *ngIf="showPageSize">
         <div class="o-grid-page-size-label">{{ 'GRID.ITEMS_PER_PAGE' | oTranslate }}:</div>
         <mat-form-field class="o-grid-select-page" floatLabel="never">
-          <mat-select placeholder="" #pageSizeSelect [(value)]="queryRows" (selectionChange)="reloadData()" (change)="paginator?._changePageSize($event)">
+          <mat-select placeholder="" #pageSizeSelect [(value)]="queryRows" (selectionChange)="reloadData()">
             <mat-option *ngFor="let page of pageSizeOptions" [value]="page">
               {{ page }}
             </mat-option>
