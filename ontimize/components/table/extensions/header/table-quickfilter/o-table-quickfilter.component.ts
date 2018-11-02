@@ -58,7 +58,7 @@ export class OTableQuickfilterComponent implements OnInit, AfterViewInit, OnDest
     let result: IExpression = this.getUserFilter();
     if (!Util.isDefined(result) && Util.isDefined(this.value) && this.value.length > 0) {
       let queryCols = [];
-      this.oTableOptions.columns.map((oCol: OColumn) => {
+      this.oTableOptions.columns.forEach((oCol: OColumn) => {
         if (oCol.searching && oCol.visible && !oCol.renderer) {
           queryCols.push(oCol.attr);
         }
