@@ -1,7 +1,6 @@
 const gulp = require('gulp');
 const sass = require('node-sass');
 const inlineTemplates = require('gulp-inline-ng2-template');
-const exec = require('child_process').exec;
 const copyfiles = require('copyfiles');
 const cssimport = require("gulp-cssimport");
 const replace = require('gulp-replace');
@@ -50,7 +49,6 @@ gulp.task('styles.creation', (callback) => {
 });
 
 gulp.task('styles', gulp.series('concat.themes.scss', 'themes.styles', 'styles.creation'));
-
 
 const FILES = [
   'theme.scss',
