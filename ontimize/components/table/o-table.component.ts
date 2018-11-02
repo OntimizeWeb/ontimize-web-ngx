@@ -1805,6 +1805,10 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     return found !== undefined;
   }
 
+  hasTabGroupChangeSubscription(): boolean {
+    return this.tabGroupChangeSubscription !== undefined;
+  }
+
   isEmpty(value: any): boolean {
     return !Util.isDefined(value) || ((typeof value === 'string') && !value);
   }
