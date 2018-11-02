@@ -265,29 +265,29 @@ $_mat-checkbox-mark-stroke-size-small: 2 / 15 * $mat-checkbox-size-small !defaul
 
         &:not([o-mat-sort-header]) {
           &.start {
-            place-content: left;
+            text-align: left;
           }
 
           &.center {
-            place-content: center;
+            text-align: center;
           }
 
           &.end {
-            place-content: right;
+            text-align: right;
           }
         }
 
         &[o-mat-sort-header] {
           &.start .mat-sort-header-button {
-            place-content: left;
+            text-align: left;
           }
 
           &.center .mat-sort-header-button {
-            place-content: center;
+            text-align: center;
           }
 
           &.end .mat-sort-header-button {
-            place-content: right;
+            text-align: right;
           }
         }
 
