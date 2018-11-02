@@ -5,10 +5,13 @@ $mat-checkbox-size-small: 16px !default;
 $_mat-checkbox-mark-stroke-size-small: 2 / 15 * $mat-checkbox-size-small !default;
 
 .o-table {
+  
+  height: 100%;
   .o-table-container {
 
     position: relative;
     margin: 0 .5%;
+    overflow-y: auto;
 
     .o-table-body.horizontal-scroll {
       overflow-x: auto;
