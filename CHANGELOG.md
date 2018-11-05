@@ -1,32 +1,21 @@
 ## 3.1.2
 ### Features
-* **OFormDataComponent**:
-  * **Form Controls**
-    * allowing to use permissions ([3291e57](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3291e57)) ([ca1f933](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ca1f933)) ([17105dc](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/17105dc)) ([5228ccc](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5228ccc)) ([7e46523](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7e46523)) ([c0eba19](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c0eba19))
-    * blocking operations due permissions configuration ([d12a606](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d12a606)) ([f6a7032](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f6a7032))
-  * **Form Actions**
-    * allowing to use permissions ([b016642](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b016642)) ([4448b5e] (https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4448b5e)) ([e19f9aa](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e19f9aa))
-
-    * blocking operations due permissions configuration ([ff93384](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ff93384))
-* **Config**:
-  * adding new configurable properties: '*permissionsConfiguration*' and '*permissionsServiceType*' used for permissions configuration ([9ecd082](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9ecd082))
-  * new interface `IPermissionsService` that must be implemented by the service indicated in the '*permissionsServiceType*' property ([9ecd082](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9ecd082))
-* **ontimize-ee-permissions.service**, **ontimize-permissions.service**: new services for loading application permissions ([9ecd082](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9ecd082))
 * **OValueChangeEvent**: adding `isUserChange` and `isProgrammaticChange` methods.
 * **o-table-cell-renderer-percentage**: new `value-base` input ([d9585f6](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d9585f6)) ([#222](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/222))
 
-value-base input added to o-table-cell-renderer-percentage
-
 ### BREAKING CHANGES
 * **o-form**: `getDataValue` method is now public again.
-* **Config**: removing old '*authGuard*' configurable property.
 * **AuthGuardServiceFactory**: removing factory.
-* **AuthGuardService**: `getPermissions` and `isRestricted` no longer exists in this service. Using `PermissionsService` now.
+* **AuthGuardService**: `getPermissions` and `isRestricted` methods no longer exists.
 * **IFormDataComponent**: adding new properties to interface ([d12a606](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d12a606))
   * `setValue`, `clearValue` and `getValue` methods.
   * `onChange`, `onValueChange` properties.
 * **o-side-menu**: the side menu component is completely removed ([b13dc69](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b13dc69))
 * **o-service-base-component**: the method `filterContainsAllParentKeys` has been moved to `ServiceUtils` class ([9c2bdd5](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9c2bdd5))
+* **o-table-column**: removing `date-model-type` and `date-model-format` unused inputs.
+* **OTableDataSource**: adding `updateRenderedRowData` method.
+* **o-table-column**, **o-table-cell-editor-date**: new `date-value-type` input ([43ae503](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/43ae503))
+* **OBaseTableCellEditor**: `show-toast-on-edit` input changed to `show-notification-on-edit` and its default value is now true ([ba28709](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/ba28709))
 
 ## 3.1.1 (2018-10-05)
 ### Features
