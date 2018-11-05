@@ -80,16 +80,19 @@ export class PermissionsService {
     const self = this;
     return new Promise((resolve: any, reject: any) => {
       self.permissions = {};
-      if (Util.isDefined(self.ontimizePermissionsConfig)) {
-        self.configureService();
-        self.queryPermissions().subscribe(() => {
-          resolve(true);
-        }, error => {
-          resolve(true);
-        });
-      } else {
-        resolve(true);
-      }
+
+      resolve(true);
+
+      // if (Util.isDefined(self.ontimizePermissionsConfig)) {
+      //   self.configureService();
+      //   self.queryPermissions().subscribe(() => {
+      //     resolve(true);
+      //   }, error => {
+      //     resolve(true);
+      //   });
+      // } else {
+      //   resolve(true);
+      // }
     });
   }
 
