@@ -24,6 +24,7 @@ import {
   OTableCellEditorTextComponent,
   OTableCellEditorBooleanComponent,
   OTableCellEditorDateComponent,
+  ODateValueType,
   OTableCellEditorIntegerComponent,
   OTableCellEditorRealComponent
 } from './cell-editor/cell-editor';
@@ -214,6 +215,7 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
   protected oTouchUi: boolean = false;
   protected oStartAt: string;
   protected filterDate: DateFilterFunction;
+  protected dateValueType: ODateValueType = 'string';
 
   /* input editor integer */
   @InputConverter()
@@ -359,6 +361,7 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
             editor.oTouchUi = propsOrigin.oTouchUi;
             editor.oStartAt = propsOrigin.oStartAt;
             editor.filterDate = propsOrigin.filterDate;
+            editor.dateValueType = propsOrigin.dateValueType;
             break;
           case 'boolean':
             editor.indeterminateOnNull = propsOrigin.indeterminateOnNull;
