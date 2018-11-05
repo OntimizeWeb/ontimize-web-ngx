@@ -14,7 +14,7 @@ export class OBaseTableCellEditor implements OnInit {
     'showPlaceHolder: show-placeholder',
     'olabel: label',
     'updateRecordOnEdit: update-record-on-edit',
-    'showToastOnEdit: show-toast-on-edit'
+    'showNotificationOnEdit: show-notification-on-edit'
   ];
 
   public static DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR = [
@@ -34,7 +34,7 @@ export class OBaseTableCellEditor implements OnInit {
   @InputConverter()
   updateRecordOnEdit: boolean = true;
   @InputConverter()
-  showToastOnEdit: boolean = false;
+  showNotificationOnEdit: boolean = true;
 
   protected _tableColumn: OTableColumnComponent;
   protected _table: OTableComponent;
@@ -244,8 +244,8 @@ export class OBaseTableCellEditor implements OnInit {
 
   protected onUpdateSuccess(res: any) {
     ObservableWrapper.callEmit(this.onPostUpdateRecord, res);
-    if (this.showToastOnEdit) {
-      this.snackBarService.open('MESSAGES.INSERTED', { icon: 'check_circle' });
+    if (this.showNotificationOnEdit) {
+      this.snackBarService.open('MESSAGES.UPDATED', { icon: 'check_circle' });
     }
   }
 
