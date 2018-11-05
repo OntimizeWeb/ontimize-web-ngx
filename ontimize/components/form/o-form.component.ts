@@ -789,7 +789,18 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
       filter = this.getCurrentKeysValues();
     }
     this.formCache.restartCache();
+    this.clearComponentsOldValue();
     this.queryData(filter);
+  }
+
+  protected clearComponentsOldValue() {
+    const components: IFormDataComponentHash = this.getComponents();
+    const self = this;
+    const componentsKeys = Object.keys(components).filter(key => self.ignoreFormCacheKeys.indexOf(key) === -1);
+    componentsKeys.forEach(compKey => {
+      const comp: IFormDataComponent = components[compKey];
+      (comp as any).oldValue = undefined;
+    });
   }
 
   /**
