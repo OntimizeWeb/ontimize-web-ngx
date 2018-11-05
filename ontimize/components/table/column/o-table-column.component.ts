@@ -56,14 +56,6 @@ export const DEFAULT_INPUTS_O_TABLE_COLUMN = [
   // editable [no|yes]: column can be edited directly over the table. Default: no.
   'editable',
 
-  // date-model-type [timestamp|string]: if a date column is editable, its model type must be defined to be able to save its value,
-  // e.g. classic ontimize server dates come as timestamps (number), but to be able to save them they have to be send as strings with
-  // the format 'YYYY-MM-DD HH:mm:ss' (especified in the date-model-format attribute). Default: timestamp.
-  'dateModelType: date-model-type',
-
-  // date-model-format [string]: if date model type is string, its date model format should be defined. Default: ISO date.
-  'dateModelFormat: date-model-format',
-
   'width',
 
   'minWidth: min-width',
