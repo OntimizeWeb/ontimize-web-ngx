@@ -239,9 +239,8 @@ export class OFileInputComponent extends OFormDataComponent implements OnInit {
    *  * super.clearValue() emit OValueChangeEvent.PROGRAMMATIC_CHANGE
    *  * super.onClickClearValue() emit OValueChangeEvent.USER_CHANGE
    */
-  onClickClear(e: Event) {
-    e.stopPropagation();
-    super.onClickClearValue();
+  onClickClearValue(e: Event) {
+    super.onClickClearValue(e);
     this.uploader.clear();
   }
 

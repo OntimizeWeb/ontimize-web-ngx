@@ -6,7 +6,6 @@
 /out
 /ontimize/**/*.css
 ontimize.css
-package-lock.json
 /bundles
 # /ontimize/**/*.js
 # /ontimize/**/*.js.map

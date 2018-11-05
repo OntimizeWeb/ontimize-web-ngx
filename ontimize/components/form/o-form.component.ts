@@ -254,7 +254,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   @ViewChild('innerForm') innerFormEl: ElementRef;
 
   ignoreFormCacheKeys: Array<any> = [];
-  protected activeDelete: boolean;
+  canDiscardChanges: boolean;
 
   constructor(
     protected router: Router,
@@ -472,9 +472,9 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   }
 
   canDeactivate(): Observable<boolean> | Promise<boolean> | boolean {
-    const isDeleting = this.activeDelete;
-    this.activeDelete = false;
-    return isDeleting || this.showConfirmDiscardChanges();
+    const canDiscardChanges = this.canDiscardChanges;
+    this.canDiscardChanges = false;
+    return canDiscardChanges || this.showConfirmDiscardChanges();
   }
 
   showConfirmDiscardChanges(): Promise<boolean> {
@@ -527,7 +527,6 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     if (!previouslyAdded) {
       canDeactivateArray.push(this.deactivateGuard.constructor);
       this.actRoute.routeConfig.canDeactivate = canDeactivateArray;
-      // this.router.resetConfig(this.router.config);
     }
   }
 
@@ -546,7 +545,6 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
       if (this.actRoute.routeConfig.canDeactivate.length === 0) {
         delete this.actRoute.routeConfig.canDeactivate;
       }
-      // this.router.resetConfig(this.router.config);
     } catch (e) {
       //
     }
@@ -765,7 +763,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
       this.formGroup.controls[control].markAsPristine();
     });
     this.formCache.registerCache();
-    this.formNavigation.updateNavigation(this.formCache.getInitialDataCache());
+    this.formNavigation.updateNavigation();
   }
 
   _emitData(data) {
@@ -790,7 +788,18 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
       filter = this.getCurrentKeysValues();
     }
     this.formCache.restartCache();
+    this.clearComponentsOldValue();
     this.queryData(filter);
+  }
+
+  protected clearComponentsOldValue() {
+    const components: IFormDataComponentHash = this.getComponents();
+    const self = this;
+    const componentsKeys = Object.keys(components).filter(key => self.ignoreFormCacheKeys.indexOf(key) === -1);
+    componentsKeys.forEach(compKey => {
+      const comp: IFormDataComponent = components[compKey];
+      (comp as any).oldValue = undefined;
+    });
   }
 
   /**
@@ -1076,7 +1085,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     const self = this;
     const loader = self.load();
     let observable = new Observable(observer => {
-      this.activeDelete = true;
+      this.canDiscardChanges = true;
       this.dataService[this.deleteMethod](filter, this.entity).subscribe(resp => {
         loader.unsubscribe();
         if (resp.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) {

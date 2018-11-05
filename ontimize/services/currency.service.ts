@@ -1,4 +1,5 @@
 import { Injector } from '@angular/core';
+import { Util } from '../utils';
 import { NumberService } from './number.service';
 
 export class CurrencyService {
@@ -18,32 +19,33 @@ export class CurrencyService {
     this._symbolPosition = CurrencyService.DEFAULT_CURRENCY_SYMBOL_POSITION;
   }
 
-  public get symbol(): string {
+  get symbol(): string {
     return this._symbol;
   }
 
-  public set symbol(value: string) {
+  set symbol(value: string) {
     this._symbol = value;
   }
 
-  public get symbolPosition(): string {
+  get symbolPosition(): string {
     return this._symbolPosition;
   }
 
-  public set symbolPosition(value: string) {
+  set symbolPosition(value: string) {
     this._symbolPosition = value;
   }
 
-  public getCurrencyValue(value: any, symbol?: string, symbolPosition?: string, grouping?: boolean,
-    thousandSeparator?: string, decimalSeparator?: string, decimalDigits?: number) {
-    if (typeof (symbol) === 'undefined') {
+  getCurrencyValue(value: any, args: any) {
+    let symbol = args ? args.currencySimbol : undefined;
+    let symbolPosition = args ? args.currencySymbolPosition : undefined;
+
+    if (!Util.isDefined(symbol)) {
       symbol = this._symbol;
     }
-    if (typeof (symbolPosition) === 'undefined') {
+    if (!Util.isDefined(symbolPosition)) {
       symbolPosition = this._symbolPosition;
     }
-    let currencyValue = this._numberService.getRealValue(value, grouping, thousandSeparator,
-      decimalSeparator, decimalDigits);
+    let currencyValue = this._numberService.getRealValue(value, args);
     switch (symbolPosition) {
       case 'left':
         currencyValue = symbol + ' ' + currencyValue;

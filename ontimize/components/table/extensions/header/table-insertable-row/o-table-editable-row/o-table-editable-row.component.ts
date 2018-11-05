@@ -16,7 +16,6 @@ export const DEFAULT_INPUTS_O_TABLE_EDITABLE_ROW = [
   moduleId: module.id,
   selector: 'o-table-editable-row',
   templateUrl: './o-table-editable-row.component.html',
-  styleUrls: ['./o-table-editable-row.component.scss'],
   inputs: DEFAULT_INPUTS_O_TABLE_EDITABLE_ROW,
   encapsulation: ViewEncapsulation.None,
   host: {
@@ -37,7 +36,7 @@ export class OTableEditableRowComponent {
 
   protected _tableDataSource: OTableDataSource;
 
-  public editableDatasource: OTableEditableRowDataSource;
+  public editableDatasource: OTableEditableRowDataSource = null;
   protected _insertableRowTable: OTableInsertableRowComponent;
 
   protected controls: any = {};

@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, forwardRef, Inject, Injector, OnInit, OnChanges, Optional, NgModule, SimpleChange, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, forwardRef, Inject, Injector, OnInit, OnChanges, Optional, NgModule, SimpleChange, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatDialog, MatDialogConfig, MatDialogRef, MatInput } from '@angular/material';
 
@@ -7,7 +7,6 @@ import { OntimizeService } from '../../../services';
 import { InputConverter } from '../../../decorators';
 import { OFormComponent } from '../../form/o-form.component';
 import { ODialogModule } from '../../dialog/o-dialog.component';
-import { IFormValueOptions, OFormValue } from '../../form/OFormValue';
 import { OFormServiceComponent } from '../o-form-service-component.class';
 import { dataServiceFactory } from '../../../services/data-service.provider';
 import { OListPickerDialogComponent } from './o-list-picker-dialog.component';
@@ -24,9 +23,7 @@ export const DEFAULT_INPUTS_O_LIST_PICKER = [
 ];
 
 export const DEFAULT_OUTPUTS_O_LIST_PICKER = [
-  ...OFormServiceComponent.DEFAULT_OUTPUTS_O_FORM_SERVICE_COMPONENT,
-  'onFocus',
-  'onBlur'
+  ...OFormServiceComponent.DEFAULT_OUTPUTS_O_FORM_SERVICE_COMPONENT
 ];
 
 @Component({
@@ -62,10 +59,6 @@ export class OListPickerComponent extends OFormServiceComponent implements After
   @ViewChild('inputModel') protected inputModel: MatInput;
   @ViewChild('visibleInput') protected visibleInput: ElementRef;
   protected visibleInputValue: any;
-
-  onChange: EventEmitter<Object> = new EventEmitter<Object>();
-  onFocus: EventEmitter<Object> = new EventEmitter<Object>();
-  onBlur: EventEmitter<Object> = new EventEmitter<Object>();
 
   protected blurTimer;
   protected blurDelay = 200;
@@ -131,11 +124,6 @@ export class OListPickerComponent extends OFormServiceComponent implements After
       this.blurPrevent = true;
       this.setValue(undefined);
     }
-  }
-
-  setValue(value: any, options?: IFormValueOptions) {
-    super.setValue(value, options);
-    this.visibleInput.nativeElement.value = '';
   }
 
   onClickInput(e: Event): void {
@@ -209,12 +197,6 @@ export class OListPickerComponent extends OFormServiceComponent implements After
           self._fControl.markAsTouched();
         }
       }, 0);
-    }
-  }
-
-  innerOnFocus(evt: any) {
-    if (!this.isReadOnly && !this.isDisabled) {
-      this.onFocus.emit(evt);
     }
   }
 

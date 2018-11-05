@@ -71,7 +71,7 @@ import {
 import { OSharedModule } from '../shared';
 import { OTranslateParser } from '../services/translate/o-translate.parser';
 import { Util } from '../utils';
-import { DndModule } from 'ng2-dnd';
+import { DndModule } from '@churchs19/ng2-dnd';
 
 export const INTERNAL_ONTIMIZE_MODULES_EXPORTED: any = [
   // Standard modules

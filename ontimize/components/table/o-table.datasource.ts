@@ -5,7 +5,6 @@ import { Subject, BehaviorSubject, Observable, merge } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { Util } from '../../util/util';
-import { OTableAggregateComponent } from './extensions/footer/o-table-footer-components';
 import { ColumnValueFilterOperator, IColumnValueFilter, OTableEditableRowComponent } from './extensions/header/o-table-header-components';
 import { OColumn, OTableComponent, OTableOptions } from './o-table.component';
 import { OTableDao } from './o-table.dao';
@@ -42,6 +41,7 @@ export class OTableDataSource extends DataSource<any> {
   protected _loadDataScrollableChange = new BehaviorSubject<OTableScrollEvent>(new OTableScrollEvent(1));
 
   protected filteredData: any[] = [];
+  protected aggregateData: any = {};
 
   onRenderedDataChange: EventEmitter<any> = new EventEmitter<any>();
 
@@ -150,12 +150,34 @@ export class OTableDataSource extends DataSource<any> {
 
         this.renderedData = data;
         // If a o-table-column-aggregate exists then emit observable
-        if (this.table.showTotals) {
-          this.dataTotalsChange.next(this.renderedData);
-        }
+        // if (this.table.showTotals) {
+        //   this.dataTotalsChange.next(this.renderedData);
+        // }
+
+        this.aggregateData = this.getAggregatesData(data);
       }
       return this.renderedData;
     }));
+  }
+
+  getAggregatesData(data: any[]): any {
+    var self = this;
+    var obj = {};
+
+    if (typeof this._tableOptions === 'undefined') {
+      return obj;
+    }
+
+    this._tableOptions.columns.forEach((column: OColumn) => {
+      let totalValue = '';
+      if (column.aggregate && column.visible) {
+        totalValue = self.calculateAggregate(data, column);
+      }
+      var key = column.attr;
+      obj[key] = totalValue;
+    });
+
+    return obj;
   }
 
   /**
@@ -166,7 +188,7 @@ export class OTableDataSource extends DataSource<any> {
     const self = this;
     const calculatedCols = this._tableOptions.columns.filter((oCol: OColumn) => oCol.visible && oCol.calculate !== undefined);
     return data.map((row: any) => {
-      calculatedCols.map((oColumn: OColumn) => {
+      calculatedCols.forEach((oColumn: OColumn) => {
         let value;
         if (typeof oColumn.calculate === 'string') {
           value = self.transformFormula(oColumn.calculate, row);
@@ -183,7 +205,7 @@ export class OTableDataSource extends DataSource<any> {
     let formula = formulaArg;
     // 1. replace columns by values of row
     const columnsAttr = this._tableOptions.columns.map((oCol: OColumn) => oCol.attr);
-    columnsAttr.map((column: string) => {
+    columnsAttr.forEach((column: string) => {
       formula = formula.replace(column, row[column]);
     });
 
@@ -279,8 +301,8 @@ export class OTableDataSource extends DataSource<any> {
     return this.renderedData.map(function (row, i, a) {
       /** render each column*/
       var obj = {};
-      Object.keys(row).map(function (column, i, a) {
-        self._tableOptions.columns.map(function (ocolumn: OColumn, i, a) {
+      Object.keys(row).forEach(function (column, i, a) {
+        self._tableOptions.columns.forEach(function (ocolumn: OColumn, i, a) {
           if (column === ocolumn.attr && ocolumn.visible) {
             var key = column;
             if (render && ocolumn.renderer && ocolumn.renderer.getCellData) {
@@ -300,8 +322,8 @@ export class OTableDataSource extends DataSource<any> {
     return this.filteredData.map(function (row, i, a) {
       /** render each column*/
       var obj = {};
-      Object.keys(row).map(function (column, i, a) {
-        self._tableOptions.columns.map(function (ocolumn: OColumn, i, a) {
+      Object.keys(row).forEach(function (column, i, a) {
+        self._tableOptions.columns.forEach(function (ocolumn: OColumn, i, a) {
           if (column === ocolumn.attr) {
             var key = column;
             if (render && ocolumn.renderer && ocolumn.renderer.getCellData) {
@@ -320,7 +342,7 @@ export class OTableDataSource extends DataSource<any> {
     return this.renderedData.map(function (row, i, a) {
       /** render each column*/
       var obj = {};
-      Object.keys(row).map(function (column, i, a) {
+      Object.keys(row).forEach(function (column, i, a) {
         if (column === ocolumn && ocolumn) {
           var key = column;
           obj[key] = row[column];
@@ -411,60 +433,16 @@ export class OTableDataSource extends DataSource<any> {
     return data;
   }
 
-  protected existsAnyCalculatedColumn(): boolean {
-    return this._tableOptions.columns.find((oCol: OColumn) => oCol.calculate !== undefined) !== undefined;
-  }
-}
+  getAggregateData(column: OColumn) {
 
-export class OTableTotalDataSource extends DataSource<any> {
-
-  private _tableOptions: OTableOptions;
-  private _datasourceData: OTableDataSource;
-  constructor(table: OTableAggregateComponent) {
-    super();
-    this._tableOptions = table.oTableOptions;
-    this._datasourceData = table.dataSource;
-  }
-
-  /** Connect function called by the table to retrieve one stream containing the data to render. */
-  connect(): Observable<any[]> {
-    let displayDataChanges: any[];
-    if (this._datasourceData) {
-      displayDataChanges = [
-        this._datasourceData.dataTotalsChange
-      ];
-    }
-    return merge(...displayDataChanges).pipe(map(() => {
-      let data = this._datasourceData.data;
-      data = this.getTotals(data);
-      return data;
-    }));
-  }
-
-  getTotals(data: any[]): any[] {
-    var self = this;
     var obj = {};
+    var totalValue = '';
 
     if (typeof this._tableOptions === 'undefined') {
       return new Array(obj);
     }
-
-    this._tableOptions.columns.map(function (column, i) {
-      let totalValue: number = 0;
-      if (column.aggregate && column.visible) {
-        totalValue = self.calculateAggregate(data, column);
-      } else {
-        return '';
-      }
-      var key = column.attr;
-      if (totalValue > 0) {
-        obj[key] = totalValue;
-      } else {
-        obj[key] = '';
-      }
-      return obj;
-    });
-    return new Array(obj);
+    totalValue = this.aggregateData[column.attr];
+    return totalValue;
   }
 
   calculateAggregate(data: any[], column: OColumn): any {
@@ -489,7 +467,7 @@ export class OTableTotalDataSource extends DataSource<any> {
           break;
       }
     } else {
-      let data: any[] = this._datasourceData.getColumnData(column.attr);
+      let data: any[] = this.getColumnData(column.attr);
       if (typeof operator === 'function') {
         resultAggregate = operator(data);
       }
@@ -531,11 +509,12 @@ export class OTableTotalDataSource extends DataSource<any> {
     return Math.max(...tempMin);
   }
 
-  disconnect() {
-    // TODO
-  }
 
+  protected existsAnyCalculatedColumn(): boolean {
+    return this._tableOptions.columns.find((oCol: OColumn) => oCol.calculate !== undefined) !== undefined;
+  }
 }
+
 
 export class OTableEditableRowDataSource extends DataSource<any> {
 

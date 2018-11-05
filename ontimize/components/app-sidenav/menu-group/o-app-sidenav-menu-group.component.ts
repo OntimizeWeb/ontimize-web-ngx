@@ -86,8 +86,9 @@ export class OAppSidenavMenuGroupComponent implements OnInit, AfterViewInit, OnD
     if (this.menuGroup.id === 'user-info') {
       const self = this;
       this.sidenavSubscription = this.sidenav.sidenav.openedChange.subscribe((opened) => {
-        self.disabled = !opened || (self.permissions && self.permissions.enabled === false);
+        self.disabled = !!(!opened || (self.permissions && self.permissions.enabled === false));
         self.updateContentExpansion();
+        self.cd.markForCheck();
       });
     }
     this.updateContentExpansion();

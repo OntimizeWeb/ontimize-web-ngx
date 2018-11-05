@@ -8,7 +8,7 @@
       [min]="min" [max]="max">
 
     <ngx-material-timepicker #picker (timeSet)="onTimeEvent($event)"></ngx-material-timepicker>
-    <button type="button" *ngIf="showClearButton" matSuffix mat-icon-button (click)="onClickClearValue()">
+    <button type="button" *ngIf="showClearButton" matSuffix mat-icon-button (click)="onClickClearValue($event)">
       <mat-icon svgIcon="ontimize:close"></mat-icon>
     </button>
     <button type="button" matSuffix mat-icon-button (click)="open($event)" [disabled]="isReadOnly || isDisabled">

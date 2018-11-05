@@ -157,10 +157,6 @@ export class OFormServiceComponent extends OFormDataComponent {
     }
   }
 
-  protected getUpdateOn(): any {
-    return 'blur';
-  }
-
   /* Utility methods */
   configureService() {
     let loadingService: any = OntimizeService;
@@ -196,9 +192,8 @@ export class OFormServiceComponent extends OFormDataComponent {
       console.warn('Service not properly configured! aborting query');
       return;
     }
-    filter = ServiceUtils.getParentKeysFromForm(this._pKeysEquiv, this.form);
-
-    if ((Object.keys(this._pKeysEquiv).length > 0) && filter === undefined) {
+    filter = Object.assign(filter || {}, ServiceUtils.getParentKeysFromForm(this._pKeysEquiv, this.form));
+    if (!ServiceUtils.filterContainsAllParentKeys(filter, this._pKeysEquiv) && !this.queryWithNullParentKeys) {
       this.setDataArray([]);
     } else {
       if (this.querySuscription) {
@@ -241,33 +236,37 @@ export class OFormServiceComponent extends OFormDataComponent {
 
   syncDataIndex() {
     this._currentIndex = undefined;
-    if (this.value && this.value.value && this.dataArray) {
-      const self = this;
+    if (!Util.isDefined(this.value) || !Util.isDefined(this.value.value)) {
+      return;
+    }
+    if (!this.dataArray) {
+      return;
+    }
+    const self = this;
+    if (this.value.value instanceof Array) {
+      const valueArray = (self.value.value as Array<any>);
+      this._currentIndex = [];
+      this.dataArray.forEach((item) => {
+        const filtered = valueArray.filter((valueItem) => item[self.valueColumn] === valueItem);
+        filtered.forEach(filteredItem => self._currentIndex.push(filteredItem));
+      });
+    } else {
       this.dataArray.forEach((item, index) => {
-        if (this.value.value instanceof Array) {
-          this._currentIndex = [];
-
-          this.value.value.forEach((itemValue, indexValue) => {
-            if (item[self.valueColumn] === itemValue) {
-              this._currentIndex[this._currentIndex.length] = indexValue;
-            }
-
-          });
-        } else if (item[self.valueColumn] === this.value.value) {
-          self._currentIndex = index;
-        }
-        if (item[self.valueColumn] === this.value.value) {
+        if (item[self.valueColumn] === self.value.value) {
           self._currentIndex = index;
         }
       });
+    }
+    this.queryDataIfNeeded();
+  }
 
-      if (this._currentIndex === undefined) {
-        if (this.queryOnBind && this.dataArray && this.dataArray.length === 0
-          && !this.cacheQueried && !this.isEmpty()) {
-          this.queryData();
-        }
-        return;
-      }
+  protected queryDataIfNeeded() {
+    if (Util.isDefined(this._currentIndex)) {
+      return;
+    }
+    if (this.queryOnBind && this.dataArray && this.dataArray.length === 0
+      && !this.cacheQueried && !this.isEmpty()) {
+      this.queryData();
     }
   }
 

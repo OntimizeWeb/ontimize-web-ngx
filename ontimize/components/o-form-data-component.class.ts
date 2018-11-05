@@ -82,7 +82,9 @@ export const DEFAULT_INPUTS_O_FORM_DATA_COMPONENT = [
 
 export const DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT = [
   'onChange',
-  'onValueChange'
+  'onValueChange',
+  'onFocus',
+  'onBlur'
 ];
 
 export class OFormDataComponent extends OBaseComponent implements IFormDataComponent, IFormDataTypeComponent,
@@ -102,6 +104,8 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   /* Outputs */
   onChange: EventEmitter<Object> = new EventEmitter<Object>();
   onValueChange: EventEmitter<OValueChangeEvent> = new EventEmitter<OValueChangeEvent>();
+  onFocus: EventEmitter<Object> = new EventEmitter<Object>();
+  onBlur: EventEmitter<Object> = new EventEmitter<Object>();
 
   @HostBinding('style.width')
   get hostWidth() {
@@ -337,10 +341,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     // this method skips the following permissions checking because the form is
     // setting its query result using it
     const previousValue = this.oldValue;
-    this.setFormValue(newValue, {
-      emitModelToViewChange: false,
-      emitEvent: false
-    });
+    this.setFormValue(newValue);
     this.emitOnValueChange(OValueChangeEvent.PROGRAMMATIC_CHANGE, newValue, previousValue);
   }
 
@@ -368,7 +369,9 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     const previousValue = this.oldValue;
     if (previousValue !== newValue) {
       this.setFormValue(newValue, options, true);
-      let changeType: number = options ? options.changeType : OValueChangeEvent.PROGRAMMATIC_CHANGE;
+      let changeType: number = (options && options.hasOwnProperty('changeType'))
+        ? options.changeType :
+        OValueChangeEvent.PROGRAMMATIC_CHANGE;
       this.emitOnValueChange(changeType, newValue, previousValue);
     }
   }
@@ -383,14 +386,16 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     this.setValue(void 0, options);
   }
 
-  onClickClearValue(): void {
+  onClickClearValue(event: Event): void {
+    event.stopPropagation();
+    event.preventDefault();
     this.clearValue({ changeType: OValueChangeEvent.USER_CHANGE });
   }
 
   protected setFormValue(val: any, options?: IFormValueOptions, setDirty: boolean = false) {
     this.ensureOFormValue(val);
     if (this._fControl) {
-      this._fControl.setValue(val, options);
+      this._fControl.setValue(this.value.value, options);
       if (setDirty) {
         this._fControl.markAsDirty();
       }
@@ -447,8 +452,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
         disabled: this.isDisabled
       };
       this._fControl = new FormControl(cfg, {
-        validators: validators,
-        updateOn: this.getUpdateOn()
+        validators: validators
       });
       const self = this;
       this._fControlSubscription = this._fControl.valueChanges.subscribe(value => {
@@ -456,10 +460,6 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
       });
     }
     return this._fControl;
-  }
-
-  protected getUpdateOn(): any {
-    return 'change';
   }
 
   resolveValidators(): ValidatorFn[] {
@@ -532,4 +532,17 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     });
     this._fControl.setValidators(validators);
   }
+
+  innerOnFocus(event: any) {
+    if (!this.isReadOnly && !this.isDisabled) {
+      this.onFocus.emit(event);
+    }
+  }
+
+  innerOnBlur(event: any) {
+    if (!this.isReadOnly && !this.isDisabled) {
+      this.onBlur.emit(event);
+    }
+  }
+
 }

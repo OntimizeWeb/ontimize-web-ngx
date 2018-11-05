@@ -30,7 +30,7 @@ export class PermissionsService {
   public static PERMISSIONS_ACTIONS_INSERT_FORM = 'insert';
   public static PERMISSIONS_ACTIONS_UPDATE_FORM = 'update';
   public static PERMISSIONS_ACTIONS_DELETE_FORM = 'delete';
-  public static MESSAGE_OPERATION_NOT_ALLOWED_PERMISSION = 'Operation is not allowed due permissions restrictions';
+  public static MESSAGE_OPERATION_NOT_ALLOWED_PERMISSION = 'Operation is not allowed due to permissions restrictions';
 
   public static PERMISSIONS_ACTIONS_FORM = [
     PermissionsService.PERMISSIONS_ACTIONS_REFRESH_FORM,
@@ -80,16 +80,19 @@ export class PermissionsService {
     const self = this;
     return new Promise((resolve: any, reject: any) => {
       self.permissions = {};
-      if (Util.isDefined(self.ontimizePermissionsConfig)) {
-        self.configureService();
-        self.queryPermissions().subscribe(() => {
-          resolve(true);
-        }, error => {
-          resolve(true);
-        });
-      } else {
-        resolve(true);
-      }
+
+      resolve(true);
+
+      // if (Util.isDefined(self.ontimizePermissionsConfig)) {
+      //   self.configureService();
+      //   self.queryPermissions().subscribe(() => {
+      //     resolve(true);
+      //   }, error => {
+      //     resolve(true);
+      //   });
+      // } else {
+      //   resolve(true);
+      // }
     });
   }
 
@@ -181,7 +184,7 @@ export class PermissionsService {
     const mutationObserver = new MutationObserver((mutations: MutationRecord[]) => {
       const mutation = mutations[0];
       if (mutation.type === 'attributes' && mutation.attributeName === 'disabled') {
-        const attribute = mutation.target.attributes.getNamedItem('disabled');
+        const attribute = (mutation.target as any).attributes.getNamedItem('disabled');
         if (attribute === null || (checkStringValue && attribute.value !== 'true')) {
           callback(mutation);
         }
