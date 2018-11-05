@@ -2,7 +2,7 @@ import { Injector, EventEmitter, OnInit, HostListener } from '@angular/core';
 import { FormControl, ValidatorFn, Validators, FormGroup } from '@angular/forms';
 
 import { InputConverter } from '../../../../decorators';
-import { OTableComponent } from '../../o-table.component';
+import { OTableComponent, OColumn } from '../../o-table.component';
 import { ObservableWrapper, Util } from '../../../../utils';
 import { OTableColumnComponent } from '../o-table-column.component';
 import { OTranslateService, SnackBarService } from '../../../../services';
@@ -62,6 +62,7 @@ export class OBaseTableCellEditor implements OnInit {
   registerInColumn: boolean = true;
 
   protected snackBarService: SnackBarService;
+  protected oldValue: any;
 
   constructor(protected injector: Injector) {
     this.snackBarService = this.injector.get(SnackBarService);
@@ -120,7 +121,7 @@ export class OBaseTableCellEditor implements OnInit {
   }
 
   endEdition(saveChanges) {
-    const oColumn = this.table.getOColumn(this.tableColumnAttr);
+    const oColumn: OColumn = this.table.getOColumn(this.tableColumnAttr);
     if (oColumn) {
       const self = this;
       const updateObserver = this.table.updateCellData(oColumn, this._rowData, saveChanges);
@@ -128,6 +129,8 @@ export class OBaseTableCellEditor implements OnInit {
         updateObserver.subscribe(res => {
           self.onUpdateSuccess(res);
         }, error => {
+          self._rowData[self.tableColumnAttr] = self.oldValue;
+          self.table.dataSource.updateRenderedRowData(self._rowData);
           self.table.showDialogError(error, 'MESSAGES.ERROR_UPDATE');
         });
       }
@@ -136,6 +139,7 @@ export class OBaseTableCellEditor implements OnInit {
 
   commitEdition() {
     if (!this.formControl.invalid) {
+      this.oldValue = this._rowData[this.tableColumnAttr];
       this._rowData[this.tableColumnAttr] = this.formControl.value;
       if (!this.isSilentControl()) {
         this.endEdition(true);
