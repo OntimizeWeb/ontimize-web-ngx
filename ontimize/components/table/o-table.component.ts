@@ -1749,17 +1749,17 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   updateRecord(filter: any, updateData: any, sqlTypes?: Object): Observable<any> {
+    let sqlTypesArg = sqlTypes || {};
     if (!Util.isDefined(sqlTypes)) {
       let allSqlTypes = this.getSqlTypes();
-      let sqlTypes = {};
       Object.keys(filter).forEach(key => {
-        sqlTypes[key] = allSqlTypes[key];
+        sqlTypesArg[key] = allSqlTypes[key];
       });
       Object.keys(updateData).forEach(key => {
-        sqlTypes[key] = allSqlTypes[key];
+        sqlTypesArg[key] = allSqlTypes[key];
       });
     }
-    return this.daoTable.updateQuery(filter, updateData, sqlTypes);
+    return this.daoTable.updateQuery(filter, updateData, sqlTypesArg);
   }
 
   getDataArray() {
