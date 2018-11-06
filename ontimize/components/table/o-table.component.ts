@@ -468,6 +468,11 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   @ViewChild('tableBody')
   protected tableBodyEl: ElementRef;
+  @ViewChild('tableHeader', { read: ElementRef })
+  tableHeaderEl: ElementRef;
+  @ViewChild('tableToolbar', { read: ElementRef })
+  tableToolbarEl: ElementRef;
+
   horizontalScrolled: boolean;
   public onUpdateScrolledState: EventEmitter<any> = new EventEmitter();
   public rowWidth;
@@ -1752,17 +1757,17 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   updateRecord(filter: any, updateData: any, sqlTypes?: Object): Observable<any> {
+    let sqlTypesArg = sqlTypes || {};
     if (!Util.isDefined(sqlTypes)) {
       let allSqlTypes = this.getSqlTypes();
-      let sqlTypes = {};
       Object.keys(filter).forEach(key => {
-        sqlTypes[key] = allSqlTypes[key];
+        sqlTypesArg[key] = allSqlTypes[key];
       });
       Object.keys(updateData).forEach(key => {
-        sqlTypes[key] = allSqlTypes[key];
+        sqlTypesArg[key] = allSqlTypes[key];
       });
     }
-    return this.daoTable.updateQuery(filter, updateData, sqlTypes);
+    return this.daoTable.updateQuery(filter, updateData, sqlTypesArg);
   }
 
   getDataArray() {
@@ -2012,6 +2017,17 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   get hasMultilineColumn(): boolean {
     return this.oTableOptions.columns.some((c: OColumn) => c.multiline);
+  }
+
+  get headerHeight() {
+    let height = 0;
+    if (this.tableHeaderEl && this.tableHeaderEl.nativeElement) {
+      height += this.tableHeaderEl.nativeElement.offsetHeight;
+    }
+    if (this.tableToolbarEl && this.tableToolbarEl.nativeElement) {
+      height += this.tableToolbarEl.nativeElement.offsetHeight;
+    }
+    return height;
   }
 
 }
