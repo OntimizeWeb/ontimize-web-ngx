@@ -244,6 +244,7 @@ export class OGridComponent extends OServiceComponent implements AfterViewChecke
     var self = this;
     this.gridItemDirectives.changes.subscribe(() => {
       this.gridItemDirectives.toArray().forEach((element: OGridItemDirective, index) => {
+        index = self.paginationControls ? index + (self.matpaginator.pageIndex * self.matpaginator.pageSize) : index;
         element.setItemData(self.dataResponseArray[index]);
         element.setGridComponent(self);
         self.registerGridItem(element);

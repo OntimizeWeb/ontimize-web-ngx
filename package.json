@@ -29,6 +29,7 @@
   "es2015": "./esm2015/ontimize-web-ngx.js",
   "typings": "./index.d.ts",
   "scripts": {
+    "pack": "npm run build && cd dist && npm pack && cd ..",
     "preinstall": "npm config set package-lock false",
     "clean": "o-ngx-lib-builder clean",
     "build": "npm run clean && o-ngx-lib-builder build --package ontimize-web-ngx --ng-library ng.ontimizeWeb"
