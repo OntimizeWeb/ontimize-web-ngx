@@ -3,6 +3,9 @@
 * **OValueChangeEvent**: adding `isUserChange` and `isProgrammaticChange` methods.
 * **o-table-cell-renderer-percentage**: new `value-base` input ([d9585f6](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d9585f6)) ([#222](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/222))
 
+### Bug Fixes
+* **o-grid**: open correct detail when clicking on gird items on pages different than the first page ([b9468a3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b9468a3)) closes [#220](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/220)
+
 ### BREAKING CHANGES
 * **o-form**: `getDataValue` method is now public again.
 * **AuthGuardServiceFactory**: removing factory.
