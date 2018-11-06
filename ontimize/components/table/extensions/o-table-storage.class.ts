@@ -148,7 +148,10 @@ export class OTableStorage {
     if (this.table.pageable && this.table.storePaginationState) {
       const state = this.table.state;
       result['totalQueryRecordsNumber'] = state.totalQueryRecordsNumber;
-      result['queryRecordOffset'] = state.queryRecordOffset;
+      result['queryRecordOffset'] = Math.max(
+        (state.queryRecordOffset - this.table.dataSource.renderedData.length),
+        (state.queryRecordOffset - this.table.queryRows)
+      );
     }
     return result;
   }

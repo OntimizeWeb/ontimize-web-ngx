@@ -835,15 +835,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
   }
 
-  parseCurrentPage() {
-    if (this.state.hasOwnProperty('currentPage')) {
-      this.currentPage = this.state['currentPage'];
-    }
-    if (this.pageable) {
-      this.state.queryRecordOffset = (this.currentPage === 0) ? 0 : Math.max(0, (this.state.queryRecordOffset - this.queryRows));
-    }
-  }
-
   initializeParams(): void {
     // If visible-columns is not present then visible-columns is all columns
     if (!this.visibleColumns) {
@@ -866,7 +857,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     // Initialize quickFilter
     this._oTableOptions.filter = this.quickFilter;
 
-    this.parseCurrentPage();
+    if (this.state.hasOwnProperty('currentPage')) {
+      this.currentPage = this.state['currentPage'];
+    }
 
     // Initialize paginator
     if (!this.paginator && this.paginationControls) {
