@@ -1,5 +1,5 @@
 <div class="o-table-container" fxLayout="column" fxLayoutAlign="start stretch" [style.display]="isVisible()? '' : 'none'"
-  (scroll)="onTableScroll($event)"  [class.o-scrollable-container]="hasScrollableContainer()" >
+  (scroll)="onTableScroll($event)" [class.block-events]="showLoading()" [class.o-scrollable-container]="hasScrollableContainer()">
   <div #tableToolbar *ngIf="hasControls()" class="toolbar" fxLayout="row" fxLayoutAlign="space-between center">
     <div class="buttons" fxLayout>
       <o-table-button *ngIf="insertButton" (onClick)="add()" label="TABLE.BUTTONS.ADD" svg-icon="ontimize:add"></o-table-button>
@@ -158,7 +158,8 @@
     [showFirstLastButtons]="paginator.showFirstLastButtons"></mat-paginator>
 
   <!--LOADING-->
-  <div *ngIf="showLoading()" class="spinner-container" [class.spinner-container-scrollable]="loadingScroll">
+  <div *ngIf="showLoading()" [ngStyle]="{'top.px': headerHeight}" class="spinner-container"
+    [class.spinner-container-scrollable]="loadingScroll">
     <mat-progress-spinner mode="indeterminate" strokeWidth="3"></mat-progress-spinner>
   </div>
 </div>

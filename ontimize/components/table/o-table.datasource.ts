@@ -434,7 +434,6 @@ export class OTableDataSource extends DataSource<any> {
   }
 
   getAggregateData(column: OColumn) {
-
     var obj = {};
     var totalValue = '';
 
@@ -509,9 +508,26 @@ export class OTableDataSource extends DataSource<any> {
     return Math.max(...tempMin);
   }
 
-
   protected existsAnyCalculatedColumn(): boolean {
     return this._tableOptions.columns.find((oCol: OColumn) => oCol.calculate !== undefined) !== undefined;
+  }
+
+  updateRenderedRowData(rowData: any) {
+    const tableKeys = this.table.getKeys();
+    let record = this.renderedData.find((data: any) => {
+      let found = true;
+      for (let i = 0, len = tableKeys.length; i < len; i++) {
+        const key = tableKeys[i];
+        if (data[key] !== rowData[key]) {
+          found = false;
+          break;
+        }
+      }
+      return found;
+    });
+    if (Util.isDefined(record)) {
+      Object.assign(record, rowData);
+    }
   }
 }
 

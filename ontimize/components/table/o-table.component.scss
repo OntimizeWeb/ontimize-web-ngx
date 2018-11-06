@@ -5,9 +5,18 @@ $mat-checkbox-size-small: 16px !default;
 $_mat-checkbox-mark-stroke-size-small: 2 / 15 * $mat-checkbox-size-small !default;
 
 .o-table {
-  
+
   height: 100%;
+
   .o-table-container {
+    &.block-events {
+      pointer-events: none;
+
+       > .o-table-body .mat-header-row,
+      > .toolbar {
+        opacity: .75;
+      }
+    }
 
     position: relative;
     margin: 0 .5%;
