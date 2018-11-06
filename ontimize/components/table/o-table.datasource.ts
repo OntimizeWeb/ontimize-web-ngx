@@ -477,8 +477,8 @@ export class OTableTotalDataSource extends DataSource<any> {
       } else {
         return '';
       }
-      var key = column.attr;
-      if (totalValue > 0) {
+      const key = column.attr;
+      if (Util.isDefined(totalValue)) {
         obj[key] = totalValue;
       } else {
         obj[key] = '';
