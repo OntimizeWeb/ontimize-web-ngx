@@ -57,6 +57,6 @@
     [pageIndex]="currentPage" [showFirstLastButtons]="true" (page)="onChangePage($event)"></mat-paginator>
 
   <div *ngIf="loading" fxLayoutAlign="center center" class="spinner-container">
-    <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+    <mat-progress-spinner mode="indeterminate" strokeWidth="3"></mat-progress-spinner>
   </div>
 </div>
