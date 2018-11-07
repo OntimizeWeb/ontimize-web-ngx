@@ -20,12 +20,12 @@
       </div>
 
       <!--O-GRID-SORT-->
-      <div class="o-grid-sort" *ngIf="showSort">
+      <div class="o-grid-sort" *ngIf="showSort && sortableColumns.length > 0">
         <mat-form-field class="o-grid-select-sort" floatLabel="never">
           <mat-icon matPrefix>sort</mat-icon>
-          <mat-select #sortSelect [(value)]="sortColumn" (selectionChange)="reloadData()" placeholder=" {{ 'GRID.SORT_BY' | oTranslate }}">
-            <mat-option *ngFor="let column of sortableColumns" [value]="column">
-              {{ 'GRID.SORT_BY' | oTranslate}} {{ column | oTranslate}}
+          <mat-select #sortSelect [(value)]="currentOrderColumn" (selectionChange)="reloadData()" placeholder=" {{ 'GRID.SORT_BY' | oTranslate }}">
+            <mat-option *ngFor="let column of sortableColumns; let i = index" [value]="i">
+              {{ getSortOptionText(column) }}
             </mat-option>
           </mat-select>
         </mat-form-field>
