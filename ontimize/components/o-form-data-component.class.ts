@@ -1,6 +1,6 @@
 import { Injector, ElementRef, OnInit, OnDestroy, QueryList, ViewChildren, AfterViewInit, HostBinding, ContentChildren, OnChanges, SimpleChange, EventEmitter } from '@angular/core';
 import { FormControl, FormGroup, Validators, ValidatorFn } from '@angular/forms';
-import { MatSuffix } from '@angular/material';
+import { MatSuffix, MatFormFieldAppearance } from '@angular/material';
 import { Subscription } from 'rxjs';
 import { InputConverter } from '../decorators';
 import { SQLTypes, Util } from '../utils';
@@ -77,7 +77,8 @@ export const DEFAULT_INPUTS_O_FORM_DATA_COMPONENT = [
   'width',
   'readOnly: read-only',
   'clearButton: clear-button',
-  'angularValidatorsFn: validators'
+  'angularValidatorsFn: validators',
+  'appearance'
 ];
 
 export const DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT = [
@@ -100,6 +101,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   @InputConverter()
   clearButton: boolean = false;
   angularValidatorsFn: ValidatorFn[] = [];
+  appearance: MatFormFieldAppearance;
 
   /* Outputs */
   onChange: EventEmitter<Object> = new EventEmitter<Object>();

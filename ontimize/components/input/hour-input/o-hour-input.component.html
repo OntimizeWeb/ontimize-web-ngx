@@ -1,7 +1,7 @@
 <div fxLayout="row" fxLayoutAlign="space-between center" [formGroup]="getFormGroup()" [matTooltip]="tooltip"
   [matTooltipPosition]="tooltipPosition" [matTooltipShowDelay]="tooltipShowDelay">
 
-  <mat-form-field fxFlexFill>
+  <mat-form-field [appearance]="appearance" fxFlexFill>
     <input matInput [ngxTimepicker]="picker" [id]="getAttribute()" [placeholder]="placeHolder" [formControlName]="getAttribute()"
       [readonly]="isReadOnly || !textInputEnabled" (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)"
       [required]="isRequired" [format]="format" (click)="onClickInput($event)" [value]="getValueAsString()" (change)="onChangeEvent($event)"
