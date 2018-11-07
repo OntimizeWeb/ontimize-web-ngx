@@ -2,7 +2,7 @@ import { Injectable, Injector, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { Codes, IAuthService, ObservableWrapper, ServiceUtils } from '../utils';
-import { OntimizeService, DialogService } from '../services';
+import { OntimizeService, DialogService, PermissionsService } from '../services';
 import { AppConfig, Config } from '../config/app-config';
 
 export interface SessionInfo {
@@ -66,28 +66,29 @@ export class LoginService implements ILoginService {
       }
     });
     return promise;
-
   }
 
   login(user: string, password: string): Observable<any> {
     this._user = user;
     const self = this;
-    let innerObserver: any;
-    const dataObservable = new Observable(observer => innerObserver = observer).share();
-
-    this.retrieveAuthService().then((service) => {
-      service.startsession(user, password)
-        .subscribe(resp => {
+    const dataObservable: Observable<any> = new Observable(innerObserver => {
+      self.retrieveAuthService().then((service) => {
+        service.startsession(user, password).subscribe(resp => {
           self.onLoginSuccess(resp);
-          innerObserver.next();
-          innerObserver.complete();
+          const permissionsService = self.injector.get(PermissionsService);
+          permissionsService.getUserPermissionsAsPromise().then(() => {
+            innerObserver.next();
+            innerObserver.complete();
+          });
         }, error => {
           self.onLoginError(error);
           innerObserver.error(error);
         });
+      });
     });
-    return dataObservable;
+    return dataObservable.share();
   }
+
   onLoginSuccess(sessionId: number) {
     // save user and sessionid into local storage
     let session = {
@@ -105,22 +106,20 @@ export class LoginService implements ILoginService {
   logout(): Observable<any> {
     ObservableWrapper.callEmit(this.onLogout, null);
     const self = this;
-
-    let innerObserver: any;
-    const dataObservable = new Observable(observer => innerObserver = observer).share();
-    let sessionInfo = this.getSessionInfo();
-
-    this.retrieveAuthService().then((service) => {
-      service.endsession(sessionInfo.user, sessionInfo.id).subscribe(resp => {
-        self.onLogoutSuccess(resp);
-        innerObserver.next();
-        innerObserver.complete();
-      }, error => {
-        self.onLogoutError(error);
-        innerObserver.error(error);
+    const sessionInfo = this.getSessionInfo();
+    const dataObservable: Observable<any> = new Observable(innerObserver => {
+      self.retrieveAuthService().then((service) => {
+        service.endsession(sessionInfo.user, sessionInfo.id).subscribe(resp => {
+          self.onLogoutSuccess(resp);
+          innerObserver.next();
+          innerObserver.complete();
+        }, error => {
+          self.onLogoutError(error);
+          innerObserver.error(error);
+        });
       });
     });
-    return dataObservable;
+    return dataObservable.share();
   }
 
   onLogoutSuccess(sessionId: number) {
@@ -190,5 +189,4 @@ export class LoginService implements ILoginService {
       }
     });
   }
-
 }

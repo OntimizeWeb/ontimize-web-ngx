@@ -32,7 +32,6 @@ import {
   MatPaginatorModule,
   MatSortModule,
   MAT_DATE_LOCALE,
-  MatIconRegistry,
   MAT_DATE_FORMATS
   // PlatformModule,
   // StyleModule,
@@ -44,7 +43,7 @@ import {
 
 import { MatMomentDateModule, MomentDateAdapter } from '@angular/material-moment-adapter';
 import { OverlayModule } from '@angular/cdk/overlay';
-import { OntimizeMatIconRegistry } from '../../services/icon-registry.service';
+import { OntimizeMatIconRegistry } from '../../services/ontimize-icon-registry.service';
 import { dateFormatFactory } from '../../services/mat-date-formats.factory';
 
 const MATERIAL_MODULES = [
@@ -118,7 +117,7 @@ export class OntimizeMomentDateAdapter extends MomentDateAdapter {
     provide: MAT_DATE_FORMATS,
     useFactory: dateFormatFactory
   }, {
-    provide: MatIconRegistry,
+    provide: OntimizeMatIconRegistry,
     useClass: OntimizeMatIconRegistry
   }]
 })

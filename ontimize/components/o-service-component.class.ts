@@ -6,7 +6,7 @@ import { InputConverter } from '../decorators';
 import { OFilterBuilderComponent } from '../components';
 import { OFormComponent } from './form/o-form.component';
 import { FilterExpressionUtils } from './filter-expression.utils';
-import { AuthGuardService, OTranslateService, NavigationService } from '../services';
+import { OTranslateService, NavigationService, PermissionsService } from '../services';
 import { OListInitializationOptions } from './list/o-list.component';
 import { OTableInitializationOptions } from './table/o-table.component';
 import { OFormLayoutManagerComponent } from '../layouts/form-layout/o-form-layout-manager.component';
@@ -71,7 +71,7 @@ export class OServiceComponent extends OServiceBaseComponent {
 
   public static DEFAULT_INPUTS_O_SERVICE_COMPONENT = DEFAULT_INPUTS_O_SERVICE_COMPONENT;
 
-  protected authGuardService: AuthGuardService;
+  protected permissionsService: PermissionsService;
   protected translateService: OTranslateService;
   protected navigationService: NavigationService;
 
@@ -133,7 +133,7 @@ export class OServiceComponent extends OServiceBaseComponent {
     super(injector);
     this.router = this.injector.get(Router);
     this.actRoute = this.injector.get(ActivatedRoute);
-    this.authGuardService = this.injector.get(AuthGuardService);
+    this.permissionsService = this.injector.get(PermissionsService);
     this.translateService = this.injector.get(OTranslateService);
     this.navigationService = this.injector.get(NavigationService);
     try {
@@ -151,16 +151,16 @@ export class OServiceComponent extends OServiceBaseComponent {
 
   initialize(): void {
     super.initialize();
-    this.authGuardService.getPermissions(this.router.url, this.oattr).then(permissions => {
-      if (Util.isDefined(permissions)) {
-        if (this.ovisible && permissions.visible === false) {
-          this.ovisible = false;
-        }
-        if (this.oenabled && permissions.enabled === false) {
-          this.oenabled = false;
-        }
-      }
-    });
+    // this.permissionsService.get Permissions(this.router.url, this.oattr).then(permissions => {
+    //   if (Util.isDefined(permissions)) {
+    //     if (this.ovisible && permissions.visible === false) {
+    //       this.ovisible = false;
+    //     }
+    //     if (this.oenabled && permissions.enabled === false) {
+    //       this.oenabled = false;
+    //     }
+    //   }
+    // });
 
     if (this.detailButtonInRow || this.editButtonInRow) {
       this.detailMode = Codes.DETAIL_MODE_NONE;
@@ -178,12 +178,10 @@ export class OServiceComponent extends OServiceBaseComponent {
       this.elRef.nativeElement.removeAttribute('title');
     }
 
-    if (this.formLayoutManager) {
-      if (this.formLayoutManager.isTabMode()) {
-        this.onMainTabSelectedSubscription = this.formLayoutManager.onMainTabSelected.subscribe(() => {
-          this.reloadData();
-        });
-      }
+    if (this.formLayoutManager && this.formLayoutManager.isTabMode()) {
+      this.onMainTabSelectedSubscription = this.formLayoutManager.onMainTabSelected.subscribe(() => {
+        this.reloadData();
+      });
     }
   }
 
@@ -218,27 +216,19 @@ export class OServiceComponent extends OServiceBaseComponent {
     let extras = {
       relativeTo: relativeTo
     };
-    let reactivateGuard = false;
     if (this.formLayoutManager && this.formLayoutManager.isMainComponent(this)) {
       qParams[Codes.IGNORE_CAN_DEACTIVATE] = true;
-    } else if (this.formLayoutManager) {
-      reactivateGuard = true;
-      this.formLayoutManager.deactivateGuard();
-    }
-    extras[Codes.QUERY_PARAMS] = qParams;
-    if (this.formLayoutManager) {
       this.formLayoutManager.setAsActiveFormLayoutManager();
     }
-    const navigatePromise: Promise<boolean> = this.router.navigate(route, extras);
-    if (reactivateGuard) {
-      const self = this;
-      navigatePromise.then(() => {
-        self.formLayoutManager.activateGuard();
-      });
-    }
+    extras[Codes.QUERY_PARAMS] = qParams;
+    this.router.navigate(route, extras);
   }
 
   insertDetail() {
+    if (this.oFormLayoutDialog) {
+      console.warn('Navigation is not available yet in a form layout manager with mode="dialog"');
+      return;
+    }
     let route = this.getInsertRoute();
     this.addFormLayoutManagerRoute(route);
     if (route.length > 0) {
@@ -249,6 +239,10 @@ export class OServiceComponent extends OServiceBaseComponent {
   }
 
   viewDetail(item: any): void {
+    if (this.oFormLayoutDialog) {
+      console.warn('Navigation is not available yet in a form layout manager with mode="dialog"');
+      return;
+    }
     let route = this.getItemModeRoute(item, 'detailFormRoute');
     this.addFormLayoutManagerRoute(route);
     if (route.length > 0) {
@@ -259,6 +253,10 @@ export class OServiceComponent extends OServiceBaseComponent {
   }
 
   editDetail(item: any) {
+    if (this.oFormLayoutDialog) {
+      console.warn('Navigation is not available yet in a form layout manager with mode="dialog"');
+      return;
+    }
     let route = this.getItemModeRoute(item, 'editFormRoute');
     this.addFormLayoutManagerRoute(route);
     if (route.length > 0) {

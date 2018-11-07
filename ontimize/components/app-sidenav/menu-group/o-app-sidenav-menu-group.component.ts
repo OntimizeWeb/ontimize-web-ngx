@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Injector, NgModule, OnDestroy, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Injector, NgModule, OnDestroy, ViewEncapsulation, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { Subscription } from 'rxjs/Subscription';
@@ -7,7 +7,7 @@ import { Util } from '../../../utils';
 import { OSharedModule } from '../../../shared';
 import { InputConverter } from '../../../decorators';
 import { OAppSidenavComponent } from '../o-app-sidenav.component';
-import { AppMenuService, MenuGroup, OTranslateService } from '../../../services';
+import { AppMenuService, MenuGroup, OTranslateService, PermissionsService, OPermissions } from '../../../services';
 import { OAppSidenavMenuItemModule } from '../menu-item/o-app-sidenav-menu-item.component';
 
 export const DEFAULT_INPUTS_O_APP_SIDENAV_MENU_GROUP = [
@@ -35,9 +35,13 @@ export const DEFAULT_OUTPUTS_O_APP_SIDENAV_MENU_GROUP = [
       transition('expanded => collapsed', animate('200ms ease-out'))
     ])
   ],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {
+    '[class.o-app-sidenav-menu-group]': 'true',
+    '[attr.disabled]': 'disabled'
+  }
 })
-export class OAppSidenavMenuGroupComponent implements AfterViewInit, OnDestroy {
+export class OAppSidenavMenuGroupComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public static DEFAULT_INPUTS_O_APP_SIDENAV_MENU_GROUP = DEFAULT_INPUTS_O_APP_SIDENAV_MENU_GROUP;
   public static DEFAULT_OUTPUTS_O_APP_SIDENAV_MENU_GROUP = DEFAULT_OUTPUTS_O_APP_SIDENAV_MENU_GROUP;
@@ -45,17 +49,21 @@ export class OAppSidenavMenuGroupComponent implements AfterViewInit, OnDestroy {
   public onItemClick: EventEmitter<any> = new EventEmitter<any>();
 
   protected translateService: OTranslateService;
+  protected permissionsService: PermissionsService;
 
   appMenuService: AppMenuService;
   protected sidenav: OAppSidenavComponent;
   protected sidenavSubscription: Subscription;
+  protected permissions: OPermissions;
+  protected mutationObserver: MutationObserver;
 
   public menuGroup: MenuGroup;
 
   @InputConverter()
   sidenavOpened: boolean = true;
 
-  disabled: boolean = false;
+  hidden: boolean;
+  disabled: boolean;
   protected _contentExpansion;
 
   constructor(
@@ -65,20 +73,22 @@ export class OAppSidenavMenuGroupComponent implements AfterViewInit, OnDestroy {
   ) {
     this.translateService = this.injector.get(OTranslateService);
     this.appMenuService = this.injector.get(AppMenuService);
+    this.permissionsService = this.injector.get(PermissionsService);
+
     this.sidenav = this.injector.get(OAppSidenavComponent);
   }
 
-  onClick() {
-    this.menuGroup.opened = !this.menuGroup.opened;
-    this.updateContentExpansion();
+  ngOnInit() {
+    this.parsePermissions();
   }
 
   ngAfterViewInit() {
     if (this.menuGroup.id === 'user-info') {
       const self = this;
       this.sidenavSubscription = this.sidenav.sidenav.openedChange.subscribe((opened) => {
-        self.disabled = !opened;
+        self.disabled = !!(!opened || (self.permissions && self.permissions.enabled === false));
         self.updateContentExpansion();
+        self.cd.markForCheck();
       });
     }
     this.updateContentExpansion();
@@ -88,6 +98,33 @@ export class OAppSidenavMenuGroupComponent implements AfterViewInit, OnDestroy {
     if (this.sidenavSubscription) {
       this.sidenavSubscription.unsubscribe();
     }
+  }
+
+  protected parsePermissions() {
+    // if oattr in form, it can have permissions
+    this.permissions = this.permissionsService.getMenuPermissions(this.menuGroup.id);
+    if (!Util.isDefined(this.permissions)) {
+      return;
+    }
+    this.hidden = this.permissions.visible === false;
+    this.disabled = this.permissions.enabled === false;
+
+    if (this.disabled) {
+      this.mutationObserver = PermissionsService.registerDisableChangesInDom(this.elRef.nativeElement, this.disabledChangesInDom.bind(this), true);
+    }
+  }
+
+  private disabledChangesInDom(mutation: MutationRecord) {
+    let element = <HTMLInputElement>mutation.target;
+    element.setAttribute('disabled', 'true');
+  }
+
+  onClick() {
+    if (this.disabled) {
+      return;
+    }
+    this.menuGroup.opened = !this.menuGroup.opened;
+    this.updateContentExpansion();
   }
 
   updateContentExpansion() {

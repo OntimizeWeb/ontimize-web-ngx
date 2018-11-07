@@ -85,7 +85,7 @@ export class OFormNavigationClass {
   }
 
   initialize() {
-    if (this.formLayoutManager) {
+    if (this.formLayoutManager && this.formLayoutManager.isTabMode()) {
       this.id = this.formLayoutManager.getLastTabId();
     }
   }
@@ -151,7 +151,7 @@ export class OFormNavigationClass {
     }
     //TODO Obtain 'datatype' of each key contained into urlParams for
     // for building correctly query filter!!!!
-    if (this.urlParams && Object.keys(this.urlParams).length > 0) {
+    if (this.urlParams) {
       this.onUrlParamChangedStream.emit(true);
     }
   }
@@ -241,8 +241,16 @@ export class OFormNavigationClass {
     }
   }
 
-  updateNavigation(formData: any) {
+  updateNavigation() {
     if (this.formLayoutManager) {
+      let formData = undefined;
+      if (!this.form.isInInsertMode()) {
+        formData = {};
+        const self = this;
+        Object.keys(this.form.formData).forEach(key => {
+          formData[key] = self.form.formData[key].value;
+        });
+      }
       this.formLayoutManager.updateNavigation(formData, this.id);
     }
   }
@@ -312,7 +320,9 @@ export class OFormNavigationClass {
   * Navigates to 'insert' mode
   */
   goInsertMode(options?: any) {
-    if (this.navigationService) {
+    if (this.formLayoutManager && this.formLayoutManager.isDialogMode()) {
+      this.form.setInsertMode();
+    } else if (this.navigationService) {
       let route = [];
       let extras: NavigationExtras = {};
       const navData: ONavigationItem = this.navigationService.getPreviousRouteData();
@@ -340,7 +350,9 @@ export class OFormNavigationClass {
    * Navigates to 'edit' mode
    */
   goEditMode(options?: any) {
-    if (this.navigationService) {
+    if (this.formLayoutManager && this.formLayoutManager.isDialogMode()) {
+      this.form.setUpdateMode();
+    } else if (this.navigationService) {
       let route = [];
       let extras: NavigationExtras = {};
       if (this.form.isDetailForm) {

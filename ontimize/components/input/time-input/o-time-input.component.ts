@@ -98,14 +98,15 @@ export class OTimeInputComponent extends OFormDataComponent implements OnInit, A
   ngOnInit() {
     super.ngOnInit();
     const self = this;
-    Observable.merge(this.dateInput.onValueChange, this.hourInput.onValueChange).subscribe((event: OValueChangeEvent) => {
-      if (event.type === OValueChangeEvent.USER_CHANGE) {
-        self.updateComponentValue();
-        var newValue = self._fControl.value;
-        self.emitOnValueChange(OValueChangeEvent.USER_CHANGE, newValue, self.oldValue);
-        self.oldValue = newValue;
-      }
-    });
+    Observable.merge(this.dateInput.onValueChange, this.hourInput.onValueChange)
+      .subscribe((event: OValueChangeEvent) => {
+        if (event.isUserChange()) {
+          self.updateComponentValue();
+          var newValue = self._fControl.value;
+          self.emitOnValueChange(OValueChangeEvent.USER_CHANGE, newValue, self.oldValue);
+          self.oldValue = newValue;
+        }
+      });
   }
 
   protected updateComponentValue() {
@@ -136,7 +137,7 @@ export class OTimeInputComponent extends OFormDataComponent implements OnInit, A
       this.blockGroupValueChanges = false;
     }
     this.ensureOFormValue(timeValue);
-    this.onChange.emit(timeValue);
+
   }
 
   ngOnDestroy() {
@@ -224,8 +225,10 @@ export class OTimeInputComponent extends OFormDataComponent implements OnInit, A
   }
 
   setValue(val: any, options?: IFormValueOptions) {
-    super.setValue(val, options);
-    this.setInnerComponentsData();
+    if (this.oldValue !== val) {
+      super.setValue(val, options);
+      this.setInnerComponentsData();
+    }
   }
 
   onClickClearValue(): void {
@@ -260,6 +263,7 @@ export class OTimeInputComponent extends OFormDataComponent implements OnInit, A
     if (this.hourInput) {
       this.hourInput.setTimestampValue(hourValue, options);
     }
+    this.onChange.emit(event);
   }
 
   onFocusInnerComp(event: any) {
@@ -273,6 +277,14 @@ export class OTimeInputComponent extends OFormDataComponent implements OnInit, A
       this.onBlur.emit(event);
     }
   }
+
+  // innerOnChange(event: any) {
+  //   if (!this.value) {
+  //     this.value = new OFormValue();
+  //   }
+  //   this.ensureOFormValue(event);
+  //   this.onChange.emit(event);
+  // }
 
 }
 

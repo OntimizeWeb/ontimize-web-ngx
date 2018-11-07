@@ -276,7 +276,7 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
       return;
     }
     let filterParentKeys = ServiceUtils.getParentKeysFromForm(this._pKeysEquiv, this.form);
-    if (!this.filterContainsAllParentKeys(filterParentKeys) && !this.queryWithNullParentKeys) {
+    if (!ServiceUtils.filterContainsAllParentKeys(filterParentKeys, this._pKeysEquiv) && !this.queryWithNullParentKeys) {
       this.setData([], []);
     } else {
       filter = Object.assign(filter || {}, filterParentKeys);
@@ -315,15 +315,6 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
         }
       });
     }
-  }
-
-  protected filterContainsAllParentKeys(parentKeysFilter): boolean {
-    let pkKeys = Object.keys(this._pKeysEquiv);
-    if ((pkKeys.length > 0) && Util.isDefined(parentKeysFilter)) {
-      let parentKeysFilterKeys = Object.keys(parentKeysFilter);
-      return pkKeys.every(a => parentKeysFilterKeys.indexOf(a) !== -1);
-    }
-    return true;
   }
 
   reloadData() {

@@ -1,10 +1,32 @@
+## 3.1.2 (2018-11-07)
+### Features
+* **OValueChangeEvent**: adding `isUserChange` and `isProgrammaticChange` methods.
+* **o-table-cell-renderer-percentage**: new `value-base` input ([d9585f6](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d9585f6)) ([#222](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/222))
+
+### Bug Fixes
+* **o-grid**: open correct detail when clicking on gird items on pages different than the first page ([b9468a3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b9468a3)) closes [#220](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/220)
+
+### BREAKING CHANGES
+* **o-form**: `getDataValue` method is now public again.
+* **AuthGuardServiceFactory**: removing factory.
+* **AuthGuardService**: `getPermissions` and `isRestricted` methods no longer exists.
+* **IFormDataComponent**: adding new properties to interface ([d12a606](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d12a606))
+  * `setValue`, `clearValue` and `getValue` methods.
+  * `onChange`, `onValueChange` properties.
+* **o-side-menu**: the side menu component is completely removed ([b13dc69](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b13dc69))
+* **o-service-base-component**: the method `filterContainsAllParentKeys` has been moved to `ServiceUtils` class ([9c2bdd5](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9c2bdd5))
+* **o-table-column**: removing `date-model-type` and `date-model-format` unused inputs.
+* **OTableDataSource**: adding `updateRenderedRowData` method.
+* **o-table-column**, **o-table-cell-editor-date**: new `date-value-type` input ([43ae503](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/43ae503))
+* **OBaseTableCellEditor**: `show-toast-on-edit` input changed to `show-notification-on-edit` and its default value is now true ([ba28709](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/ba28709))
+
 ## 3.1.1 (2018-10-05)
 ### Features
 * New component `o-radio` ([1ed0286](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1ed0286)) ([e80513e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e80513e))
 * **o-bar-menu**: `o-bar-menu` can build automatically base on the application menu configuration ([67f543f](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/67f543f))  ([1fc1f63](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1fc1f63))
 * **o-table**: new `multiple-sort` input ([6688618](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6688618)) ([01257ea](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/01257ea))
 * **o-grid**: The grid component now supports remote pagination ([b855724](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b855724))
-* **o-form**: new `getFieldValue`, `getFieldValues`, `setFieldValue`,`setFieldValues`, `clearFieldValue`,`clearFieldValues`, `getFieldReference` and  `getFieldReferences` methods ([3453182](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3453182)) ([d03d482](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d03d482)) ([e69473b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e69473b))
+* **o-form**: new `getFieldValue`, `getFieldValues`, `setFieldValue`,`setFieldValues`, `clearFieldValue`,`clearFieldValues`, `getFieldReference` and  `getFieldReferences` methods ([3453182](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3453182)) ([d03d482](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d03d482)) ([e69473b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e69473b)) ([5228ccc](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5228ccc)
 * **OFormDataComponent**: new `onValueChange` event being fired if the value changed (whether it was changed by the user or by code) ([0b24228](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0b24228))([07bc3d6](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/07bc3d6))([3ac842e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3ac842e))([e69473b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e69473b))([f7dd987](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f7dd987))   ([#142](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/142))
 * **o-list**: events `onClick` and `onDoubleClick` are triggered event when `detail-mode` attribute is set to *none* ([989f92b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/989f92b))
 

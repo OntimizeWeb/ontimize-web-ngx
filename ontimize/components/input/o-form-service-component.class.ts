@@ -192,9 +192,8 @@ export class OFormServiceComponent extends OFormDataComponent {
       console.warn('Service not properly configured! aborting query');
       return;
     }
-    filter = ServiceUtils.getParentKeysFromForm(this._pKeysEquiv, this.form);
-
-    if ((Object.keys(this._pKeysEquiv).length > 0) && filter === undefined) {
+    filter = Object.assign(filter || {}, ServiceUtils.getParentKeysFromForm(this._pKeysEquiv, this.form));
+    if (!ServiceUtils.filterContainsAllParentKeys(filter, this._pKeysEquiv) && !this.queryWithNullParentKeys) {
       this.setDataArray([]);
     } else {
       if (this.querySuscription) {

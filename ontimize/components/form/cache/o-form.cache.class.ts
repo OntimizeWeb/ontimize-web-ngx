@@ -1,7 +1,7 @@
 
 import { Subscription } from 'rxjs/Subscription';
 import { EventEmitter } from '@angular/core';
-import { IFormControlComponent, IFormDataComponent } from '../../o-form-data-component.class';
+import { IFormControlComponent, IFormDataComponent, OValueChangeEvent } from '../../o-form-data-component.class';
 import { OFormComponent } from '../o-form.component';
 
 export class OFormCacheClass {
@@ -9,62 +9,42 @@ export class OFormCacheClass {
   protected initialDataCache: Object = {};
   protected formDataCache: Object;
   protected valueChangesStack: Array<any> = [];
-  protected _componentsSubscritpions: Array<Subscription> = [];
+  protected _componentsSubscritpions: any = {};
   protected blockCaching: boolean = false;
   protected initializedCache: boolean = false;
 
-  protected formCacheSubscription: Subscription;
   onCacheEmptyStateChanges: EventEmitter<boolean> = new EventEmitter<boolean>();
+  onCacheStateChanges: EventEmitter<any> = new EventEmitter<any>();
 
   constructor(protected form: OFormComponent) {
   }
 
-  registerFormGroupListener() {
-    /*
-    * Keeping updated a cache of form data values
-    */
-    var self = this;
-    this.formCacheSubscription = this.form.formGroup.valueChanges.subscribe((value: any) => {
-      if (self.formDataCache === undefined) {
-        // initialize cache
-        self.formDataCache = {};
-      }
-      let cacheData = Object.assign({}, self.form.getRegisteredFieldsValues());
-      cacheData = Object.assign(cacheData, value);
-      self.form.ignoreFormCacheKeys.forEach(key => {
-        delete cacheData[key];
-      });
-      Object.assign(self.formDataCache, cacheData);
-    });
+  protected updateFormDataCache() {
+    this.formDataCache = this.form.getRegisteredFieldsValues();
   }
 
-  protected addChangeToStack(attr: string, comp: IFormControlComponent) {
+  protected addChangeToStack(comp: IFormControlComponent) {
     const currentValue = comp.getFormControl().value;
     const wasEmpty = this.valueChangesStack.length === 0;
     this.valueChangesStack.push({
-      attr: attr,
+      attr: comp.getAttribute(),
       value: currentValue
     });
     if (wasEmpty) {
       this.onCacheEmptyStateChanges.emit(false);
     }
+    this.onCacheStateChanges.emit();
   }
 
-  registerComponentCaching(attr: string, comp: IFormDataComponent) {
+  protected registerComponentCaching(comp: IFormDataComponent) {
     const self = this;
-    this._componentsSubscritpions[attr] = comp.getFormControl().valueChanges.subscribe(value => {
-      // this._componentsSubscritpions[attr] = comp.onChange.subscribe(value => {
+    const attr = comp.getAttribute();
+    this._componentsSubscritpions[attr] = comp.onValueChange.subscribe((value: OValueChangeEvent) => {
       if (self.initializedCache && !self.blockCaching && self.hasComponentChanged(attr, comp)) {
-        self.addChangeToStack(attr, comp);
+        self.updateFormDataCache();
+        self.addChangeToStack(comp);
       }
     });
-  }
-
-  unregisterComponentCaching(attr: string) {
-    if (this._componentsSubscritpions[attr]) {
-      this._componentsSubscritpions[attr].unsubscribe();
-      delete this._componentsSubscritpions[attr];
-    }
   }
 
   getCachedValue(attr: string): any {
@@ -75,10 +55,37 @@ export class OFormCacheClass {
   }
 
   destroy() {
-    if (this.formCacheSubscription) {
-      this.formCacheSubscription.unsubscribe();
-    }
+    Object.keys(this._componentsSubscritpions).forEach((attr) => {
+      const subs: Subscription = this._componentsSubscritpions[attr];
+      subs.unsubscribe();
+    });
+    this._componentsSubscritpions = {};
     this.formDataCache = undefined;
+  }
+
+  protected removeUndefinedProperties(arg: any): any {
+    Object.keys(arg).forEach((key) => {
+      if (arg[key] === undefined) {
+        delete arg[key];
+      }
+    });
+    return arg;
+  }
+
+  registerCache() {
+    let initialCache = this.form.getRegisteredFieldsValues();
+    this.removeUndefinedProperties(initialCache);
+    this.initializeCache(initialCache);
+    this.formDataCache = initialCache;
+
+    const components = this.form.getComponents();
+    const self = this;
+    Object.keys(components).forEach(attr => {
+      const comp: IFormDataComponent = components[attr];
+      if (comp.isAutomaticRegistering()) {
+        self.registerComponentCaching(comp);
+      }
+    });
   }
 
   initializeCache(val: any) {
@@ -97,8 +104,10 @@ export class OFormCacheClass {
   }
 
   restartCache() {
-    this.formDataCache = {};
+    this.formDataCache = undefined;
     this.initializeCache({});
+    this.initializedCache = false;
+    this.onCacheStateChanges.emit();
   }
 
   setCacheSnapshot() {
@@ -107,22 +116,23 @@ export class OFormCacheClass {
 
   undoLastChange(options?) {
     options = (options || {});
-    //removing last element because it is the last changed value
-    // const lastElement = this.valueChangesStack.pop();
     var lastElement = this.valueChangesStack[this.valueChangesStack.length - 1];
-    // && !options.keyboardEvent
     if (lastElement) {
       const lastCacheValue = this.getCacheLastValue(lastElement.attr);
       const lastValue = (lastCacheValue !== null) ? lastCacheValue : this.initialDataCache[lastElement.attr];
-      this.setFormControlValue(lastElement.attr, lastValue);
+      this.undoComponentValue(lastElement.attr, lastValue);
+
+      this.updateFormDataCache();
+      this.onCacheStateChanges.emit();
     }
   }
 
-  protected setFormControlValue(attr: string, val: any) {
+  protected undoComponentValue(attr: string, val: any) {
     this.blockCaching = true;
-    let formControl = this.form.formGroup.get(attr);
-    if (formControl) {
-      formControl.setValue(val);
+    const comp = this.form.getFieldReference(attr);
+    if (comp) {
+      // (comp as any).oldValue = undefined;
+      comp.setValue(val);
     }
     this.blockCaching = false;
   }
@@ -179,23 +189,19 @@ export class OFormCacheClass {
   }
 
   isInitialStateChanged(): boolean {
-    let res = false;
-    let initialKeys = Object.keys(this.initialDataCache);
-    let currentKeys = initialKeys;
-    let currentCache = this.formDataCache;
+    let currentCache;
     if (this.formDataCache) {
       currentCache = Object.assign({}, this.formDataCache);
-      Object.keys(currentCache).forEach(key => {
-        if (currentCache[key] === undefined) {
-          delete currentCache[key];
-        }
-      });
-      currentKeys = Object.keys(currentCache);
+      this.removeUndefinedProperties(currentCache);
     }
+
+    let initialKeys = Object.keys(this.initialDataCache);
+    let currentKeys = currentCache ? Object.keys(currentCache) : initialKeys;
     if (initialKeys.length !== currentKeys.length) {
       return true;
     }
-    for (let i = 0, leni = initialKeys.length; i < leni; i++) {
+    let res = false;
+    for (let i = 0, len = initialKeys.length; i < len; i++) {
       let key = initialKeys[i];
       // TODO be careful with types comparisions
       res = (this.initialDataCache[key] !== currentCache[key]);

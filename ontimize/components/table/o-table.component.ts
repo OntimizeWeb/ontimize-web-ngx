@@ -15,7 +15,7 @@ import { OFormComponent } from '../form/o-form.component';
 import { Codes, ObservableWrapper, Util } from '../../utils';
 import { OServiceComponent } from '../o-service-component.class';
 import { OntimizeService, SnackBarService } from '../../services';
-import { OTableRow } from './extensions/row/o-table-row.component';
+import { OTableRowDirective } from './extensions/row/o-table-row.directive';
 import { OColumnTooltip } from './column/o-table-column.component';
 import { OTableStorage } from './extensions/o-table-storage.class';
 import { dataServiceFactory } from '../../services/data-service.provider';
@@ -466,6 +466,11 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   @ViewChild('tableBody')
   protected tableBodyEl: ElementRef;
+  @ViewChild('tableHeader', { read: ElementRef })
+  tableHeaderEl: ElementRef;
+  @ViewChild('tableToolbar', { read: ElementRef })
+  tableToolbarEl: ElementRef;
+
   horizontalScrolled: boolean;
   public onUpdateScrolledState: EventEmitter<any> = new EventEmitter();
   public rowWidth;
@@ -830,15 +835,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
   }
 
-  parseCurrentPage() {
-    if (this.state.hasOwnProperty('currentPage')) {
-      this.currentPage = this.state['currentPage'];
-    }
-    if (this.pageable) {
-      this.state.queryRecordOffset = (this.currentPage === 0) ? 0 : Math.max(0, (this.state.queryRecordOffset - this.queryRows));
-    }
-  }
-
   initializeParams(): void {
     // If visible-columns is not present then visible-columns is all columns
     if (!this.visibleColumns) {
@@ -861,7 +857,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     // Initialize quickFilter
     this._oTableOptions.filter = this.quickFilter;
 
-    this.parseCurrentPage();
+    if (this.state.hasOwnProperty('currentPage')) {
+      this.currentPage = this.state['currentPage'];
+    }
 
     // Initialize paginator
     if (!this.paginator && this.paginationControls) {
@@ -1749,17 +1747,17 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   updateRecord(filter: any, updateData: any, sqlTypes?: Object): Observable<any> {
+    let sqlTypesArg = sqlTypes || {};
     if (!Util.isDefined(sqlTypes)) {
       let allSqlTypes = this.getSqlTypes();
-      let sqlTypes = {};
       Object.keys(filter).forEach(key => {
-        sqlTypes[key] = allSqlTypes[key];
+        sqlTypesArg[key] = allSqlTypes[key];
       });
       Object.keys(updateData).forEach(key => {
-        sqlTypes[key] = allSqlTypes[key];
+        sqlTypesArg[key] = allSqlTypes[key];
       });
     }
-    return this.daoTable.updateQuery(filter, updateData, sqlTypes);
+    return this.daoTable.updateQuery(filter, updateData, sqlTypesArg);
   }
 
   getDataArray() {
@@ -2011,6 +2009,17 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     return this.oTableOptions.columns.some((c: OColumn) => c.multiline);
   }
 
+  get headerHeight() {
+    let height = 0;
+    if (this.tableHeaderEl && this.tableHeaderEl.nativeElement) {
+      height += this.tableHeaderEl.nativeElement.offsetHeight;
+    }
+    if (this.tableToolbarEl && this.tableToolbarEl.nativeElement) {
+      height += this.tableToolbarEl.nativeElement.offsetHeight;
+    }
+    return height;
+  }
+
 }
 
 @NgModule({
@@ -2019,7 +2028,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     OTableColumnComponent,
     OTableColumnCalculatedComponent,
     OTableContextMenuComponent,
-    OTableRow,
+    OTableRowDirective,
     ...O_TABLE_CELL_RENDERERS,
     ...O_TABLE_CELL_EDITORS,
     ...O_TABLE_DIALOGS,
@@ -2041,7 +2050,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     CdkTableModule,
     OTableColumnCalculatedComponent,
     OTableContextMenuComponent,
-    OTableRow,
+    OTableRowDirective,
     OMatSortModule,
     ...O_TABLE_HEADER_COMPONENTS,
     ...O_TABLE_CELL_RENDERERS,

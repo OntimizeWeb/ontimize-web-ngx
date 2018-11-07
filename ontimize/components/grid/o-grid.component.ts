@@ -73,46 +73,9 @@ export class OGridComponent extends OServiceComponent implements AfterViewChecke
   public static DEFAULT_OUTPUTS_O_GRID = DEFAULT_OUTPUTS_O_GRID;
 
   /* Inputs */
-  public gridItemHeight = '1:1';
   @InputConverter()
-  public refreshButton: boolean = true;
-  @InputConverter()
-  public showPageSize: boolean = false;
-  @InputConverter()
-  public showSort: boolean = false;
-  @InputConverter()
-  paginationControls: boolean = false;
-  get quickFilter(): boolean {
-    return this._quickFilter;
-  }
-  set quickFilter(val: boolean) {
-    val = Util.parseBoolean(String(val));
-    this._quickFilter = val;
-    if (val) {
-      setTimeout(() => this.registerQuickFilter(this.searchInputComponent), 0);
-    }
-  }
-  protected _quickFilter: boolean = true;
-  protected quickFilterColumns: string;
-  get sortColumn(): string {
-    return this._sortColumn;
-  }
-  set sortColumn(val: string) {
-    this._sortColumn = val;
-    this.parseSortColumns();
-  }
-  protected _sortColumn: string;
-  protected sortColArray: Array<ISQLOrder> = [];
-  get sortableColumns(): string[] {
-    return this._sortableColumns;
-  }
-  set sortableColumns(val) {
-    if (!Util.isArray(val)) {
-      val = Util.parseArray(String(val));
-    }
-    this._sortableColumns = val;
-  }
-  protected _sortableColumns;
+  queryRows: number = 32;
+
   get cols(): number {
     return this._cols || this._colsDefault;
   }
@@ -121,6 +84,7 @@ export class OGridComponent extends OServiceComponent implements AfterViewChecke
   }
   protected _cols;
   protected _colsDefault = 1;
+
   get pageSizeOptions(): Array<number> {
     return this._pageSizeOptions;
   }
@@ -131,14 +95,56 @@ export class OGridComponent extends OServiceComponent implements AfterViewChecke
     this._pageSizeOptions = val;
   }
   protected _pageSizeOptions = PAGE_SIZE_OPTIONS;
+
+  @InputConverter()
+  showPageSize: boolean = false;
+  @InputConverter()
+  showSort: boolean = false;
+
+  get sortableColumns(): ISQLOrder[] {
+    return this._sortableColumns;
+  }
+  set sortableColumns(val) {
+    let parsed = [];
+    if (!Util.isArray(val)) {
+      parsed = ServiceUtils.parseSortColumns(String(val));
+    }
+    this._sortableColumns = parsed;
+  }
+  protected sortColumn: string;
+
+  get quickFilter(): boolean {
+    return this._quickFilter;
+  }
+  set quickFilter(val: boolean) {
+    val = Util.parseBoolean(String(val));
+    this._quickFilter = val;
+    if (val) {
+      setTimeout(() => {
+        this.registerQuickFilter(this.searchInputComponent);
+      }, 0);
+    }
+  }
+  protected _quickFilter: boolean = true;
+  protected quickFilterColumns: string;
+  gridItemHeight = '1:1';
+  @InputConverter()
+  refreshButton: boolean = true;
+  @InputConverter()
+  paginationControls: boolean = false;
   /* End Inputs */
+
+  /* Parsed Inputs */
+  protected quickFilterColArray: string[];
+  protected _sortableColumns: ISQLOrder[];
+  protected sortColumnOrder: ISQLOrder;
+  /* End parsed Inputs */
 
   public onClick: EventEmitter<any> = new EventEmitter();
   public onDoubleClick: EventEmitter<any> = new EventEmitter();
   public onDataLoaded: EventEmitter<any> = new EventEmitter();
   public onPaginatedDataLoaded: EventEmitter<any> = new EventEmitter();
 
-  protected quickFilterColArray: string[];
   protected dataResponseArray: Array<any> = [];
   protected storePaginationState: boolean = false;
 
@@ -177,8 +183,6 @@ export class OGridComponent extends OServiceComponent implements AfterViewChecke
   ) {
     super(injector, elRef, form);
     this.media = this.injector.get(ObservableMedia);
-
-    this.queryRows = 32;
   }
 
   ngOnInit(): void {
@@ -188,27 +192,30 @@ export class OGridComponent extends OServiceComponent implements AfterViewChecke
   initialize() {
     super.initialize();
 
-    this.parseSortColumns();
+    if (this.state.hasOwnProperty('sort-column')) {
+      this.sortColumn = this.state['sort-column'];
+    }
+
+    this.parseSortColumn();
+
+    const existingOption = this.pageSizeOptions.find(option => option === this.queryRows);
+    if (!Util.isDefined(existingOption)) {
+      this._pageSizeOptions.push(this.queryRows);
+      this._pageSizeOptions.sort((i: number, j: number) => i - j);
+    }
 
     if (this.quickFilterColumns) {
       this.quickFilterColArray = Util.parseArray(this.quickFilterColumns, true);
     } else {
       this.quickFilterColArray = this.colArray;
     }
-    let initialQueryLength = undefined;
-    if (this.state.hasOwnProperty('queryRecordOffset')) {
-      initialQueryLength = this.state.queryRecordOffset;
+
+    if (this.state.hasOwnProperty('currentPage')) {
+      this.currentPage = this.state['currentPage'];
     }
-    this.state.queryRecordOffset = 0;
-    if (!this.state.hasOwnProperty('totalQueryRecordsNumber')) {
-      this.state.totalQueryRecordsNumber = 0;
-    }
+
     if (this.queryOnInit) {
-      let queryArgs: OQueryDataArgs = {
-        offset: 0,
-        length: initialQueryLength || this.queryRows
-      };
-      this.queryData(void 0, queryArgs);
+      this.queryData();
     }
   }
 
@@ -249,7 +256,7 @@ export class OGridComponent extends OServiceComponent implements AfterViewChecke
     var self = this;
     this.gridItemDirectives.changes.subscribe(() => {
       this.gridItemDirectives.toArray().forEach((element: OGridItemDirective, index) => {
-        element.setItemData(self.dataResponseArray[index]);
+        element.setItemData(self.dataArray[index]);
         element.setGridComponent(self);
         self.registerGridItem(element);
       });
@@ -273,7 +280,7 @@ export class OGridComponent extends OServiceComponent implements AfterViewChecke
   registerQuickFilter(input: OSearchInputComponent) {
     this.quickFilterComponent = input;
     if (Util.isDefined(this.quickFilterComponent)) {
-      if (this.state.hasOwnProperty('filterValue')) {
+      if (this.state.hasOwnProperty('filterValue') && Util.isDefined(this.state['filterValue'])) {
         this.quickFilterComponent.setValue(this.state.filterValue);
       }
       this.quickFilterComponent.onSearch.subscribe(val => this.filterData(val));
@@ -298,7 +305,7 @@ export class OGridComponent extends OServiceComponent implements AfterViewChecke
    */
   filterData(value?: string, loadMore?: boolean): void {
     value = Util.isDefined(value) ? value : Util.isDefined(this.quickFilterComponent) ? this.quickFilterComponent.getValue() : void 0;
-    if (this.state) {
+    if (this.state && Util.isDefined(value)) {
       this.state.filterValue = value;
     }
     if (this.pageable) {
@@ -308,7 +315,9 @@ export class OGridComponent extends OServiceComponent implements AfterViewChecke
         replace: true
       };
       this.queryData(void 0, queryArgs);
-    } else if (this.dataResponseArray && this.dataResponseArray.length > 0) {
+      return;
+    }
+    if (this.dataResponseArray && this.dataResponseArray.length > 0) {
       let filteredData = this.dataResponseArray.slice(0);
       if (value && value.length > 0) {
         var self = this;
@@ -318,12 +327,11 @@ export class OGridComponent extends OServiceComponent implements AfterViewChecke
           });
         });
       }
-      if (this.sortColArray && this.sortColArray.length) {
+      if (Util.isDefined(this.sortColumnOrder)) {
         // Simple sorting
-        this.sortColArray.forEach((sort: ISQLOrder) => {
-          let factor = (sort.ascendent ? 1 : -1);
-          filteredData = filteredData.sort((a, b) => (Util.normalizeString(a[sort.columnName]) > Util.normalizeString(b[sort.columnName])) ? (1 * factor) : (Util.normalizeString(b[sort.columnName]) > Util.normalizeString(a[sort.columnName])) ? (-1 * factor) : 0);
-        });
+        const sort = this.sortColumnOrder;
+        let factor = (sort.ascendent ? 1 : -1);
+        filteredData = filteredData.sort((a, b) => (Util.normalizeString(a[sort.columnName]) > Util.normalizeString(b[sort.columnName])) ? (1 * factor) : (Util.normalizeString(b[sort.columnName]) > Util.normalizeString(a[sort.columnName])) ? (-1 * factor) : 0);
       }
       if (this.paginationControls) {
         this.dataArray = filteredData.splice(this.currentPage * this.queryRows, this.queryRows);
@@ -391,6 +399,11 @@ export class OGridComponent extends OServiceComponent implements AfterViewChecke
     }
   }
 
+  protected saveDataNavigationInLocalStorage() {
+    super.saveDataNavigationInLocalStorage();
+    this.storePaginationState = true;
+  }
+
   public onItemDetailClick(item: OGridItemDirective) {
     if (this.oenabled && this.detailMode === Codes.DETAIL_MODE_CLICK) {
       this.saveDataNavigationInLocalStorage();
@@ -453,21 +466,39 @@ export class OGridComponent extends OServiceComponent implements AfterViewChecke
   getQueryArguments(filter: Object, ovrrArgs?: OQueryDataArgs): Array<any> {
     let queryArguments = super.getQueryArguments(filter, ovrrArgs);
     // queryArguments[3] = this.getSqlTypesForFilter(queryArguments[1]);
-    if (this.pageable) {
-      queryArguments[6] = this.sortColArray;
+    if (this.pageable && Util.isDefined(this.sortColumn)) {
+      queryArguments[6] = [this.sortColumnOrder];
     }
     return queryArguments;
   }
 
-  parseSortColumns() {
-    let sortColumnsParam = this.state['sort-columns'] || this.sortColumn;
-    this.sortColArray = ServiceUtils.parseSortColumns(sortColumnsParam);
-    for (let i = this.sortColArray.length - 1; i >= 0; i--) {
-      const colName = this.sortColArray[i].columnName;
-      if (this.colArray.indexOf(colName) === -1) {
-        this.sortColArray.splice(i, 1);
-      }
+  parseSortColumn() {
+    const parsed = (ServiceUtils.parseSortColumns(this.sortColumn) || [])[0];
+    const exists = this.sortableColumns.find((item: ISQLOrder) =>
+      (item.columnName === parsed.columnName) &&
+      (item.ascendent === parsed.ascendent));
+
+    if (exists) {
+      this.sortColumnOrder = parsed;
     }
+  }
+
+  get currentOrderColumn() {
+    if (!Util.isDefined(this.sortColumnOrder)) {
+      return undefined;
+    }
+    let index;
+    this.sortableColumns.forEach((item: ISQLOrder, i: number) => {
+      if ((item.columnName === this.sortColumnOrder.columnName) &&
+        (item.ascendent === this.sortColumnOrder.ascendent)) {
+        index = i;
+      }
+    });
+    return index;
+  }
+
+  set currentOrderColumn(val: number) {
+    this.sortColumnOrder = this.sortableColumns[val];
   }
 
   onChangePage(e: PageEvent) {
@@ -507,10 +538,34 @@ export class OGridComponent extends OServiceComponent implements AfterViewChecke
 
   getDataToStore(): Object {
     let dataToStore = super.getDataToStore();
-    if (!this.storePaginationState) {
+    dataToStore['currentPage'] = this.currentPage;
+
+    if (this.storePaginationState) {
+      dataToStore['queryRecordOffset'] = Math.max(
+        (this.state.queryRecordOffset - this.dataArray.length),
+        (this.state.queryRecordOffset - this.queryRows)
+      );
+    } else {
       delete dataToStore['queryRecordOffset'];
     }
+
+    if (Util.isDefined(this.sortColumnOrder)) {
+      dataToStore['sort-column'] = this.sortColumnOrder.columnName + Codes.COLUMNS_ALIAS_SEPARATOR +
+        (this.sortColumnOrder.ascendent ? Codes.ASC_SORT : Codes.DESC_SORT);
+    }
     return dataToStore;
+  }
+
+  getSortOptionText(col: ISQLOrder) {
+    let result;
+    let colTextKey = `GRID.SORT_BY_${col.columnName.toUpperCase()}_` + (col.ascendent ? 'ASC' : 'DESC');
+    result = this.translateService.get(colTextKey);
+    if (result !== colTextKey) {
+      return result;
+    }
+    colTextKey = 'GRID.SORT_BY_' + (col.ascendent ? 'ASC' : 'DESC');
+    result = this.translateService.get(colTextKey, [(this.translateService.get(col.columnName) || '').toLowerCase()]);
+    return result;
   }
 
 }

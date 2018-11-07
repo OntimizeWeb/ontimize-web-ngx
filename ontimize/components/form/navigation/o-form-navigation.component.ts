@@ -92,22 +92,17 @@ export class OFormNavigationComponent implements OnDestroy {
   }
 
   move(index: number) {
-    if (this._form.hasDeactivateGuard()) {
-      // when form already has its own deactivate guard, it will control the changes discard
-      this.moveWithoutManager(index);
-    } else {
-      this._form.showConfirmDiscardChanges().then(res => {
-        if (res === true) {
-          const formLayoutManager: OFormLayoutManagerComponent = this._form.getFormManager();
-          this.currentIndex = index;
-          if (formLayoutManager && formLayoutManager.isDialogMode()) {
-            this.moveInDialogManager(formLayoutManager, index);
-          } else {
-            this.moveWithoutManager(index);
-          }
+    this._form.showConfirmDiscardChanges().then(res => {
+      if (res === true) {
+        const formLayoutManager: OFormLayoutManagerComponent = this._form.getFormManager();
+        this.currentIndex = index;
+        if (formLayoutManager && formLayoutManager.isDialogMode()) {
+          this.moveInDialogManager(formLayoutManager, index);
+        } else {
+          this.moveWithoutManager(index);
         }
-      });
-    }
+      }
+    });
   }
 
   private moveWithoutManager(index: number) {
@@ -124,6 +119,7 @@ export class OFormNavigationComponent implements OnDestroy {
         }
         route.unshift(navData.url);
         const self = this;
+        this._form.canDiscardChanges = true;
         this.router.navigate(route, extras).then((navigationDone: boolean) => {
           if (navigationDone) {
             self.currentIndex = index;

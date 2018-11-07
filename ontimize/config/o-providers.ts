@@ -1,8 +1,8 @@
 import { Injector, Provider } from '@angular/core';
 import { LOCATION_INITIALIZED } from '@angular/common';
 import { BaseRequestOptions, XHRBackend } from '@angular/http';
-import { Events } from '../util/events';
 import { OHttp } from '../util/http/OHttp';
+import { Events } from '../util/events';
 import { AppConfig, Config } from '../config/app-config';
 
 import {
@@ -18,14 +18,17 @@ import {
   DialogService,
   SnackBarService,
   AuthGuardService,
-  authGuardServiceFactory,
   dataServiceFactory,
   LocalStorageService,
   appConfigFactory,
   AppMenuService,
   OUserInfoService,
   OModulesInfoService,
-  OntimizeServiceResponseParser
+  OntimizeServiceResponseParser,
+  PermissionsService,
+  OntimizePermissionsService,
+  permissionsServiceFactory,
+  OntimizeMatIconRegistry
 } from '../services';
 
 import { OFormLayoutManagerService } from '../services/o-form-layout-manager.service';
@@ -56,6 +59,7 @@ export function appInitializerFactory(injector: Injector, config: Config, oTrans
       oTranslate.setAppLang(userLang).subscribe(resolve, resolve, resolve);
     });
     injector.get(NavigationService).initialize();
+    injector.get(OntimizeMatIconRegistry).initialize();
   });
 }
 
@@ -151,6 +155,10 @@ export function getOntimizeServiceResponseParser(injector: Injector) {
   return new OntimizeServiceResponseParser(injector);
 }
 
+export function getPermissionsServiceProvider(injector: Injector) {
+  return new PermissionsService(injector);
+}
+
 export const ONTIMIZE_PROVIDERS: Provider[] = [
 
   { provide: Events, useValue: getEvents },
@@ -242,10 +250,9 @@ export const ONTIMIZE_PROVIDERS: Provider[] = [
     useFactory: getLocalStorageServiceProvider,
     deps: [Injector]
   },
-  // getAuthServiceProvider
   {
     provide: AuthGuardService,
-    useFactory: authGuardServiceFactory,
+    useClass: AuthGuardService,
     deps: [Injector]
   },
   {
@@ -270,5 +277,15 @@ export const ONTIMIZE_PROVIDERS: Provider[] = [
   {
     provide: OContextMenuService,
     useClass: OContextMenuService
+  },
+  {
+    provide: PermissionsService,
+    useFactory: getPermissionsServiceProvider,
+    deps: [Injector]
+  },
+  {
+    provide: OntimizePermissionsService,
+    useFactory: permissionsServiceFactory,
+    deps: [Injector]
   }
 ];

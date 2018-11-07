@@ -1,5 +1,4 @@
 import { Injector } from '@angular/core';
-
 import { Util } from '../util/util';
 import { AppConfig, Config } from '../config/app-config';
 
@@ -23,42 +22,45 @@ export class NumberService {
     this._locale = this._config.locale;
   }
 
-  public get grouping(): boolean {
+  get grouping(): boolean {
     return this._grouping;
   }
 
-  public set grouping(value: boolean) {
+  set grouping(value: boolean) {
     this._grouping = value;
   }
 
-  public get minDecimalDigits(): number {
+  get minDecimalDigits(): number {
     return this._minDecimalDigits;
   }
 
-  public set minDecimalDigits(value: number) {
+  set minDecimalDigits(value: number) {
     this._minDecimalDigits = value;
   }
 
-  public get maxDecimalDigits(): number {
+  get maxDecimalDigits(): number {
     return this._maxDecimalDigits;
   }
 
-  public set maxDecimalDigits(value: number) {
+  set maxDecimalDigits(value: number) {
     this._maxDecimalDigits = value;
   }
 
-  public get locale(): string {
+  get locale(): string {
     return this._locale;
   }
 
-  public set locale(value: string) {
+  set locale(value: string) {
     this._locale = value;
   }
 
-  public getIntegerValue(value: any, grouping?: boolean, thousandSeparator?: string, locale?: string) {
+  getIntegerValue(value: any, args: any) {
+    const grouping = args ? args.grouping : undefined;
     if (!Util.isDefined(value) && !Util.isDefined(grouping) || !grouping) {
       return value;
     }
+    const thousandSeparator = args ? args.thousandSeparator : undefined;
+    const locale = args ? args.locale : undefined;
     // Ensure value is an integer
     let intValue: any = parseInt(value, 10);
     if (isNaN(intValue)) {
@@ -76,10 +78,18 @@ export class NumberService {
     return formattedIntValue;
   }
 
-  public getRealValue(value: any, grouping?: boolean, thousandSeparator?: string, decimalSeparator?: string, minDecimalDigits?: number, maxDecimalDigits?: number, locale?: string) {
+  getRealValue(value: any, args: any) {
+    const grouping = args ? args.grouping : undefined;
     if (!Util.isDefined(value) && !Util.isDefined(grouping) || !grouping) {
       return value;
     }
+    const locale = args ? args.locale : undefined;
+    const thousandSeparator = args ? args.thousandSeparator : undefined;
+    const decimalSeparator = args ? args.decimalSeparator : undefined;
+
+    let minDecimalDigits = args ? args.minDecimalDigits : undefined;
+    let maxDecimalDigits = args ? args.maxDecimalDigits : undefined;
+
     if (!Util.isDefined(minDecimalDigits)) {
       minDecimalDigits = this._minDecimalDigits;
     }
@@ -117,11 +127,18 @@ export class NumberService {
     return formattedRealValue;
   }
 
-  public getPercentValue(value: any, grouping?: boolean, thousandSeparator?: string, decimalSeparator?: string, minDecimalDigits?: number, maxDecimalDigits?: number, locale?: string) {
-    let formattedPercentValue = value;
-    value = value * 100;
-
-    formattedPercentValue = this.getRealValue(value, grouping, thousandSeparator, decimalSeparator, minDecimalDigits, maxDecimalDigits) + ' %';
+  getPercentValue(value: any, args: any) {
+    const valueBase = args ? args.valueBase : undefined;
+    let parsedValue = value;
+    switch (valueBase) {
+      case 100:
+        break;
+      case 1:
+      default:
+        parsedValue = parsedValue * 100;
+        break;
+    }
+    const formattedPercentValue = this.getRealValue(parsedValue, args) + ' %';
     return formattedPercentValue;
   }
 

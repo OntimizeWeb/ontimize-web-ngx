@@ -7,6 +7,21 @@
   $foreground: map-get($theme, foreground);
 
   .o-app-sidenav {
+    .o-app-sidenav-menu-group,
+    .o-app-sidenav-menu-item {
+      &:not([disabled=true]) {
+        > .o-app-sidenav-item {
+           > a.is-selected,
+           > a:focus,
+           > a:hover,
+          &:focus,
+          &:hover {
+            color: mat-color($accent);
+          }
+        }
+      }
+    }
+
     .o-app-sidenav-sidenav {
       background: mat-color($primary);
 
@@ -19,14 +34,6 @@
         color: mat-color($primary, default-contrast, 0.54);
 
         .o-app-sidenav-viewer-sidenav-item-selected {
-          color: mat-color($accent);
-        }
-
-         > a.is-selected,
-         > a:focus,
-         > a:hover,
-        &:focus,
-        &:hover {
           color: mat-color($accent);
         }
 
@@ -44,14 +51,19 @@
         }
       }
 
-      .o-app-sidenav-menugroup.active {
-        background: mat-color($primary, 900);
-        color: mat-color($primary, default-contrast);
+      .o-app-sidenav-menugroup {
+        &.active {
+          &:not(.disabled) {
+            background: mat-color($primary, 900);
+            color: mat-color($primary, default-contrast);
+          }
 
-        + .o-app-sidenav-menugroup-items-container ul {
-          background: rgba(0, 0, 0, 0.1);
-          box-shadow: 6px 4px 36px -12px $black-87-opacity inset;
+          + .o-app-sidenav-menugroup-items-container ul {
+            background: rgba(0, 0, 0, 0.1);
+            box-shadow: 6px 4px 36px -12px $black-87-opacity inset;
+          }
         }
+
       }
 
       li a {

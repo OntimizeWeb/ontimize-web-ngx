@@ -1,6 +1,6 @@
 <div class="expandable-container" [style.display]="isVisible()? '' : 'none'" [class.o-scrollable-container]="hasScrollableContainer()"
   (scroll)="onTableScroll($event)">
-  <div class="o-table-container" fxLayout="column" fxLayoutAlign="start stretch" [class.tab-container]="hasTabGroupChangeSubscription()">
+  <div class="o-table-container" fxLayout="column" fxLayoutAlign="start stretch" [class.block-events]="showLoading()" [class.tab-container]="hasTabGroupChangeSubscription()">
     <div #tableToolbar *ngIf="hasControls()" class="toolbar" fxLayout="row" fxLayoutAlign="space-between center">
       <div class="buttons" fxLayout>
         <o-table-button *ngIf="insertButton" (onClick)="add()" label="TABLE.BUTTONS.ADD" svg-icon="ontimize:add">
@@ -166,10 +166,10 @@
 
         <mat-header-row *matHeaderRowDef="[]" style.display="none"></mat-header-row>
 
-        <o-table-row *matRowDef="let row; columns: oTableOptions.visibleColumns;" (click)="handleClick(row, $event)"
+        <mat-row oTableRow *matRowDef="let row; columns: oTableOptions.visibleColumns;" (click)="handleClick(row, $event)"
           (dblclick)="handleDoubleClick(row, $event)" [oContextMenu]="tableContextMenu" [oContextMenuData]="row"
           [class.selected]="!isSelectionModeNone() && isSelected(row)">
-        </o-table-row>
+        </mat-row>
 
       </mat-table>
 
@@ -181,7 +181,7 @@
       <o-table-editable-row [datasource]="dataSource" *ngIf="showLastInsertableRow"></o-table-editable-row>
 
       <!--LOADING-->
-      <div *ngIf="showLoading()" class="spinner-container" [class.spinner-container-scrollable]="loadingScroll">
+      <div *ngIf="showLoading()" [ngStyle]="{'top.px': headerHeight}" class="spinner-container" [class.spinner-container-scrollable]="loadingScroll">
         <mat-progress-spinner mode="indeterminate" strokeWidth="3"></mat-progress-spinner>
       </div>
 

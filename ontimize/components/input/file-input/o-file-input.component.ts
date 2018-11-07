@@ -238,11 +238,21 @@ export class OFileInputComponent extends OFormDataComponent implements OnDestroy
     }, 0);
   }
 
+  /**
+   * Override super.onClickClearValue();
+   * super.clearValue() vs super.onClickClearValue()
+   *  * super.clearValue() emit OValueChangeEvent.PROGRAMMATIC_CHANGE
+   *  * super.onClickClearValue() emit OValueChangeEvent.USER_CHANGE
+   */
   onClickClear(e: Event) {
     e.stopPropagation();
-    this.clearValue();
+    super.onClickClearValue();
+    this.uploader.clear();
   }
 
+  /**
+   * Override super.clearValue();
+   */
   clearValue(): void {
     super.clearValue();
     this.uploader.clear();

@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { InputConverter } from '../../decorators';
 import { OSharedModule } from '../../shared';
 import { Util } from '../../utils';
+import { OTranslateService } from '../../services/translate/o-translate.service';
 import { OFormLayoutManagerService } from '../../services/o-form-layout-manager.service';
 import { ILocalStorageComponent, LocalStorageService } from '../../services/local-storage.service';
 import { OTableComponent } from '../../components/table/o-table.component';
@@ -72,6 +73,7 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
 
   protected labelColsArray: string[] = [];
 
+  protected translateService: OTranslateService;
   protected oFormLayoutManagerService: OFormLayoutManagerService;
   protected localStorageService: LocalStorageService;
   protected onRouteChangeStorageSubscribe: any;
@@ -88,7 +90,7 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
   @ContentChildren(OListComponent, { descendants: true })
   protected listComponents: QueryList<OListComponent>;
 
-  protected isGuardActivated: boolean = true;
+  protected addingGuard: boolean = false;
 
   constructor(
     protected injector: Injector,
@@ -101,6 +103,7 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
   ) {
     this.oFormLayoutManagerService = this.injector.get(OFormLayoutManagerService);
     this.localStorageService = this.injector.get(LocalStorageService);
+    this.translateService = this.injector.get(OTranslateService);
   }
 
   ngOnInit() {
@@ -112,7 +115,8 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
     this.labelColsArray = Util.parseArray(this.labelColumns);
     this.addActivateChildGuard();
     if (!Util.isDefined(this.oattr)) {
-      this.oattr = this.router.url;
+      this.oattr = this.title + this.mode;
+      console.warn('o-form-layout-manager must have an unique attr');
     }
     this.oFormLayoutManagerService.registerFormLayoutManager(this);
   }
@@ -128,9 +132,9 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
   }
 
   ngOnDestroy() {
-    this.destroyAactivateChildGuard();
     this.updateStateStorage();
     this.oFormLayoutManagerService.removeFormLayoutManager(this);
+    this.destroyAactivateChildGuard();
   }
 
   getAttribute() {
@@ -171,27 +175,34 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
 
   addActivateChildGuard() {
     let routeConfig = this.getParentActRouteRoute();
-
-    let canActivateChildArray = (routeConfig.canActivateChild || []);
-    let previouslyAdded = false;
-    for (let i = 0, len = canActivateChildArray.length; i < len; i++) {
-      previouslyAdded = (canActivateChildArray[i].name === OFormLayoutManagerComponent.guardClassName);
-      if (previouslyAdded) {
-        break;
+    if (Util.isDefined(routeConfig)) {
+      let canActivateChildArray = (routeConfig.canActivateChild || []);
+      let previouslyAdded = false;
+      for (let i = 0, len = canActivateChildArray.length; i < len; i++) {
+        previouslyAdded = (canActivateChildArray[i].name === OFormLayoutManagerComponent.guardClassName);
+        if (previouslyAdded) {
+          break;
+        }
       }
-    }
-    if (!previouslyAdded) {
-      canActivateChildArray.push(CanActivateFormLayoutChildGuard);
-      routeConfig.canActivateChild = canActivateChildArray;
+      if (!previouslyAdded) {
+        this.addingGuard = true;
+        canActivateChildArray.push(CanActivateFormLayoutChildGuard);
+        routeConfig.canActivateChild = canActivateChildArray;
+      }
     }
   }
 
   destroyAactivateChildGuard() {
+    if (!this.addingGuard) {
+      return;
+    }
     let routeConfig = this.getParentActRouteRoute();
-    for (let i = (routeConfig.canActivateChild || []).length - 1; i >= 0; i--) {
-      if (routeConfig.canActivateChild[i].name === OFormLayoutManagerComponent.guardClassName) {
-        routeConfig.canActivateChild.splice(i, 1);
-        break;
+    if (Util.isDefined(routeConfig)) {
+      for (let i = (routeConfig.canActivateChild || []).length - 1; i >= 0; i--) {
+        if (routeConfig.canActivateChild[i].name === OFormLayoutManagerComponent.guardClassName) {
+          routeConfig.canActivateChild.splice(i, 1);
+          break;
+        }
       }
     }
   }
@@ -227,6 +238,7 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
       this.oTabGroup.onCloseTab(id);
     } else if (this.isDialogMode()) {
       this.dialogRef.close();
+      this.reloadMainComponents();
     }
   }
 
@@ -282,8 +294,11 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
   }
 
   getLabelFromData(data: any): string {
+    // data === undefined means that inner form is in insertion mode
     let label = '';
-    if (this.labelColsArray.length !== 0 && data !== undefined) {
+    if (!Util.isDefined(data)) {
+      label = this.translateService.get('LAYOUT_MANANGER.INSERTION_MODE_TITLE');
+    } else if (this.labelColsArray.length !== 0) {
       this.labelColsArray.forEach((col, idx) => {
         if (data[col] !== undefined) {
           label += data[col] + ((idx < this.labelColsArray.length - 1) ? this.separator : '');
@@ -323,18 +338,6 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
     return false;
   }
 
-  deactivateGuard() {
-    this.isGuardActivated = false;
-  }
-
-  activateGuard() {
-    this.isGuardActivated = true;
-  }
-
-  ignoreCanDeactivate(): boolean {
-    return !this.isGuardActivated;
-  }
-
   getRouteForComponent(comp: OServiceComponent): any[] {
     let result = [];
     if (this.parentFormLayoutManager) {
@@ -354,6 +357,15 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
 
   setAsActiveFormLayoutManager() {
     this.oFormLayoutManagerService.activeFormLayoutManager = this;
+  }
+
+  reloadMainComponents() {
+    this.tableComponents.forEach((tableComp: OTableComponent) => {
+      tableComp.reloadData();
+    });
+    this.listComponents.forEach((listComp: OListComponent) => {
+      listComp.reloadData();
+    });
   }
 }
 

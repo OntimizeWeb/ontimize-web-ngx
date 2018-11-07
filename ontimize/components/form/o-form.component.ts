@@ -20,6 +20,10 @@ import { IFormDataComponent, IFormDataTypeComponent } from '../o-form-data-compo
 import { DialogService, NavigationService, OntimizeService, SnackBarService, ONavigationItem } from '../../services';
 import { CanComponentDeactivate, CanDeactivateFormGuard } from './guards/o-form-can-deactivate.guard';
 
+export interface IFormDataComponentHash {
+  [attr: string]: IFormDataComponent;
+}
+
 export const DEFAULT_INPUTS_O_FORM = [
   // show-header [boolean]: visibility of form toolbar. Default: yes.
   'showHeader: show-header',
@@ -94,7 +98,9 @@ export const DEFAULT_INPUTS_O_FORM = [
   'undoButton: undo-button',
 
   //show-header-navigation [string][yes|no|true|false]: Include navigations buttons in form-toolbar. Default: false;
-  'showHeaderNavigation: show-header-navigation'
+  'showHeaderNavigation: show-header-navigation',
+  //attr
+  'oattr:attr'
 ];
 
 export const DEFAULT_OUTPUTS_O_FORM = [
@@ -177,6 +183,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   layoutFill: boolean = true;
   protected _layoutDirection: string = OFormComponent.DEFAULT_LAYOUT_DIRECTION;
   protected _layoutAlign: string;
+
   @InputConverter()
   protected editableDetail: boolean = true;
   protected keysSqlTypes: string;
@@ -185,6 +192,8 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
 
   @InputConverter()
   showHeaderNavigation: boolean = false;
+
+  public oattr: string = '';
   /* end of inputs variables */
 
   /*parsed inputs variables */
@@ -214,7 +223,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
 
   protected _formToolbar: OFormToolbarComponent;
 
-  protected _components: Object = {};
+  protected _components: IFormDataComponentHash = {};
   protected _compSQLTypes: Object = {};
 
   formParentKeysValues: Object;
@@ -246,7 +255,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   @ViewChild('innerForm') innerFormEl: ElementRef;
 
   ignoreFormCacheKeys: Array<any> = [];
-  protected activeDelete: boolean;
+  canDiscardChanges: boolean;
 
   constructor(
     protected router: Router,
@@ -270,9 +279,12 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     );
 
     this.reloadStreamSubscription = this.reloadStream.subscribe(valArr => {
-      if (Util.isArray(valArr) && valArr.length === 2) {
-        if (!self.isInInsertMode() && self.queryOnInit && valArr[0] === true && valArr[1] === true) {
+      if (Util.isArray(valArr) && valArr.length === 2 && !self.isInInsertMode()) {
+        const valArrValues = valArr[0] === true && valArr[1] === true;
+        if (self.queryOnInit && valArrValues) {
           self._reloadAction(true);
+        } else {
+          self.initializeFields();
         }
       }
     });
@@ -352,9 +364,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
         let control: FormControl = comp.getControl();
         if (control) {
           this.formGroup.registerControl(attr, control);
-          if (comp.isAutomaticRegistering()) {
-            this.formCache.registerComponentCaching(attr, comp);
-          } else {
+          if (!comp.isAutomaticRegistering()) {
             this.ignoreFormCacheKeys.push(comp.getAttribute());
           }
         }
@@ -377,7 +387,6 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
       let attr = comp.getAttribute();
       if (control && attr && attr.length > 0) {
         this.formGroup.removeControl(attr);
-        this.formCache.unregisterComponentCaching(attr);
       }
     }
   }
@@ -398,7 +407,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     }
   }
 
-  getComponents(): Object {
+  getComponents(): IFormDataComponentHash {
     return this._components;
   }
 
@@ -421,7 +430,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     return subscription;
   }
 
-  protected getDataValue(attr: string) {
+  getDataValue(attr: string) {
     if (this.isInInsertMode()) {
       let urlParams = this.formNavigation.getFilterFromUrlParams();
       let val = this.formGroup.value[attr] || urlParams[attr];
@@ -456,16 +465,17 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   }
 
   clearData() {
-    let filter = this.formNavigation.getFilterFromUrlParams();
-    setTimeout(() => {
-      this._setData(filter);
-    }, 0);
+    const filter = this.formNavigation.getFilterFromUrlParams();
+    this.formGroup.reset({}, {
+      emitEvent: false
+    });
+    this._setData(filter);
   }
 
   canDeactivate(): Observable<boolean> | Promise<boolean> | boolean {
-    const isDeleting = this.activeDelete;
-    this.activeDelete = false;
-    return isDeleting || this.showConfirmDiscardChanges();
+    const canDiscardChanges = this.canDiscardChanges;
+    this.canDiscardChanges = false;
+    return canDiscardChanges || this.showConfirmDiscardChanges();
   }
 
   showConfirmDiscardChanges(): Promise<boolean> {
@@ -493,8 +503,6 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
 
     this.formGroup = new FormGroup({});
 
-    this.formCache.registerFormGroupListener();
-
     this.formNavigation.initialize();
 
     this.initialize();
@@ -520,7 +528,6 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     if (!previouslyAdded) {
       canDeactivateArray.push(this.deactivateGuard.constructor);
       this.actRoute.routeConfig.canDeactivate = canDeactivateArray;
-      // this.router.resetConfig(this.router.config);
     }
   }
 
@@ -539,7 +546,6 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
       if (this.actRoute.routeConfig.canDeactivate.length === 0) {
         delete this.actRoute.routeConfig.canDeactivate;
       }
-      // this.router.resetConfig(this.router.config);
     } catch (e) {
       //
     }
@@ -634,7 +640,6 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   ngAfterViewInit() {
     this.determinateFormMode();
     this.onFormInitStream.emit(true);
-    this.formCache.initializeCache({});
   }
 
   protected determinateFormMode() {
@@ -735,9 +740,10 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     const self = this;
     this.zone.run(() => {
       this.formData = newFormData;
-      if (this._components) {
-        Object.keys(this._components).forEach(key => {
-          let comp = this._components[key];
+      const components = this.getComponents();
+      if (components) {
+        Object.keys(components).forEach(key => {
+          let comp = components[key];
           if (Util.isFormDataComponent(comp)) {
             try {
               if (comp.isAutomaticBinding()) {
@@ -748,19 +754,17 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
             }
           }
         });
-        Object.keys(self.formGroup.controls).forEach(control => {
-          self.formGroup.controls[control].markAsPristine();
-        });
-
-        let initialCache = {};
-        Object.keys(self.formData).map((key: string) => {
-          initialCache[key] = self.formData[key].value;
-        });
-        self.formCache.initializeCache(initialCache);
-        (self.formGroup.valueChanges as EventEmitter<any>).emit(self.formCache.getInitialDataCache());
-        self.formNavigation.updateNavigation(self.formCache.getInitialDataCache());
+        self.initializeFields();
       }
     });
+  }
+
+  protected initializeFields() {
+    Object.keys(this.formGroup.controls).forEach(control => {
+      this.formGroup.controls[control].markAsPristine();
+    });
+    this.formCache.registerCache();
+    this.formNavigation.updateNavigation();
   }
 
   _emitData(data) {
@@ -785,7 +789,18 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
       filter = this.getCurrentKeysValues();
     }
     this.formCache.restartCache();
+    this.clearComponentsOldValue();
     this.queryData(filter);
+  }
+
+  protected clearComponentsOldValue() {
+    const components: IFormDataComponentHash = this.getComponents();
+    const self = this;
+    const componentsKeys = Object.keys(components).filter(key => self.ignoreFormCacheKeys.indexOf(key) === -1);
+    componentsKeys.forEach(compKey => {
+      const comp: IFormDataComponent = components[compKey];
+      (comp as any).oldValue = undefined;
+    });
   }
 
   /**
@@ -887,7 +902,6 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   /*
   Utility methods
   */
-
   queryData(filter) {
     if (!Util.isDefined(this.dataService)) {
       console.warn('OFormComponent: no service configured! aborting query');
@@ -934,9 +948,10 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     if (this.keysArray && this.keysArray.length > 0) {
       attributes.push(...this.keysArray);
     }
+    const components: any = this.getComponents();
     // add only the fields contained into the form...
-    Object.keys(this._components).map(item => {
-      if (attributes.indexOf(item) < 0 && this._components[item].isAutomaticRegistering()) {
+    Object.keys(components).forEach(item => {
+      if (attributes.indexOf(item) < 0 && components[item].isAutomaticRegistering()) {
         attributes.push(item);
       }
     });
@@ -944,7 +959,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     // add fields stored into form cache...
     const dataCache = this.formCache.getDataCache();
     if (dataCache) {
-      Object.keys(dataCache).map(item => {
+      Object.keys(dataCache).forEach(item => {
         if (item !== undefined && attributes.indexOf(item) === -1) {
           attributes.push(item);
         }
@@ -1071,7 +1086,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     const self = this;
     const loader = self.load();
     let observable = new Observable(observer => {
-      this.activeDelete = true;
+      this.canDiscardChanges = true;
       this.dataService[this.deleteMethod](filter, this.entity).subscribe(resp => {
         loader.unsubscribe();
         if (resp.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) {
@@ -1140,7 +1155,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     if (!this.keysArray) {
       return filter;
     }
-    this.keysArray.map(key => {
+    this.keysArray.forEach(key => {
       if (currentRecord[key] !== undefined) {
         let currentData = currentRecord[key];
         if (currentData instanceof OFormValue) {
@@ -1185,29 +1200,30 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   }
 
   registerDynamicFormComponent(dynamicForm) {
-    const self = this;
-    if (dynamicForm) {
-      this.dynamicFormSubscription = dynamicForm.render.subscribe(res => {
-        if (res) {
-          self.refreshComponentsEditableState();
-          if (!self.isInInsertMode() && self.queryOnInit) {
-            self._reloadAction(true);
-          }
-          if (self.formParentKeysValues) {
-            Object.keys(self.formParentKeysValues).forEach(parentKey => {
-              const value = self.formParentKeysValues[parentKey];
-              const comp = self._components[parentKey];
-              if (Util.isFormDataComponent(comp) && comp.isAutomaticBinding()) {
-                (comp as any).setValue(value, {
-                  emitModelToViewChange: false,
-                  emitEvent: false
-                });
-              }
-            });
-          }
-        }
-      });
+    if (!Util.isDefined(dynamicForm)) {
+      return;
     }
+    const self = this;
+    this.dynamicFormSubscription = dynamicForm.render.subscribe(res => {
+      if (res) {
+        self.refreshComponentsEditableState();
+        if (!self.isInInsertMode() && self.queryOnInit) {
+          self._reloadAction(true);
+        }
+        if (self.formParentKeysValues) {
+          Object.keys(self.formParentKeysValues).forEach(parentKey => {
+            const value = self.formParentKeysValues[parentKey];
+            const comp = self.getFieldReference(parentKey);
+            if (Util.isFormDataComponent(comp) && comp.isAutomaticBinding()) {
+              comp.setValue(value, {
+                emitModelToViewChange: false,
+                emitEvent: false
+              });
+            }
+          });
+        }
+      }
+    });
   }
 
   protected refreshComponentsEditableState() {
@@ -1236,7 +1252,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
       Object.keys(components).forEach(key => {
         let comp = components[key];
         let attr = comp.getAttribute();
-        if (comp.isRequired && attr && attr.length > 0) {
+        if ((comp as any).isRequired && attr && attr.length > 0) {
           requiredCompontents[attr] = comp;
         }
       });
@@ -1321,11 +1337,15 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   }
 
   getRegisteredFieldsValues() {
-    let valueCopy = Object.assign({}, this.formGroup.getRawValue());
-    for (let i = 0, len = this.ignoreFormCacheKeys.length; i < len; i++) {
-      delete valueCopy[this.ignoreFormCacheKeys[i]];
-    }
-    return valueCopy;
+    let values = {};
+    const components: IFormDataComponentHash = this.getComponents();
+    const self = this;
+    const componentsKeys = Object.keys(components).filter(key => self.ignoreFormCacheKeys.indexOf(key) === -1);
+    componentsKeys.forEach(compKey => {
+      const comp: IFormDataComponent = components[compKey];
+      values[compKey] = comp.getValue();
+    });
+    return values;
   }
 
   /**
@@ -1334,12 +1354,9 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
    */
   getFieldValue(attr: string): any {
     let value = null;
-    let comp = this._components[attr];
+    let comp = this.getFieldReference(attr);
     if (comp) {
-      value = comp.value;
-      if (value instanceof OFormValue) {
-        value = comp.value.value;
-      }
+      value = comp.getValue();
     }
     return value;
   }
@@ -1364,7 +1381,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
    * @param value value
    */
   setFieldValue(attr: string, value: any, options?: IFormValueOptions) {
-    let comp = this._components[attr];
+    let comp = this.getFieldReference(attr);
     if (comp) {
       comp.setValue(value, options);
     }
@@ -1385,9 +1402,9 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
    * @param attr
    */
   clearFieldValue(attr: string, options?: IFormValueOptions) {
-    let comp = this._components[attr];
+    let comp = this.getFieldReference(attr);
     if (comp) {
-      comp.clearValue();
+      comp.clearValue(options);
     }
   }
 
@@ -1398,7 +1415,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   clearFieldValues(attrs: string[], options?: IFormValueOptions) {
     let self = this;
     attrs.forEach((key) => {
-      self.clearFieldValue(key);
+      self.clearFieldValue(key, options);
     });
   }
 
@@ -1406,17 +1423,15 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
    * Retrieves the reference of the control in the form.
    * @param attr
    */
-  getFieldReference(attr: string) {
-    let comp = {};
-    comp = this._components[attr];
-    return comp;
+  getFieldReference(attr: string): IFormDataComponent {
+    return this._components[attr];
   }
   /**
    * Retrieves the reference of each control in the form
    * @param attrs
    */
-  getFieldReferences(attrs: string[]) {
-    let arr = {};
+  getFieldReferences(attrs: string[]): IFormDataComponentHash {
+    let arr: IFormDataComponentHash = {};
     let self = this;
     attrs.forEach((key, index) => {
       arr[key] = self.getFieldReference(key);

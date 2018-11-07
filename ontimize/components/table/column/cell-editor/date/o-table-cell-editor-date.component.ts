@@ -17,12 +17,18 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_DATE = [
   'max',
   'oTouchUi: touch-ui',
   'startAt: start-at',
-  'filterDate: filter-date'
+  'filterDate: filter-date',
+  // value-type [timestamp|string]: type must be defined to be able to save its value,
+  // e.g. classic ontimize server dates come as timestamps (number), but to be able to save them they have to be send as strings with
+  // the format 'YYYY-MM-DD HH:mm:ss'Default: string.
+  'dateValueType: date-value-type'
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_DATE = [
   ...OBaseTableCellEditor.DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR
 ];
+
+export type ODateValueType = 'string' | 'timestamp';
 
 @Component({
   moduleId: module.id,
@@ -54,6 +60,7 @@ export class OTableCellEditorDateComponent extends OBaseTableCellEditor implemen
   oTouchUi: boolean = false;
   protected startAt: string;
   filterDate: DateFilterFunction;
+  _dateValueType: ODateValueType = 'string';
 
   oStartAt: Date;
   oMinDate: Date;
@@ -142,11 +149,34 @@ export class OTableCellEditorDateComponent extends OBaseTableCellEditor implemen
   }
 
   onDateChange(event: MatDatepickerInputEvent<any>) {
+    if (this.dateValueType === 'timestamp' && event.value) {
+      this.formControl.setValue(event.value.valueOf(), {
+        emitModelToViewChange: false,
+        emitEvent: false
+      });
+    }
     super.commitEdition();
   }
 
   openDatepicker(d: MatDatepicker<Date>) {
     this.datepicker = d;
     d.open();
+  }
+
+  set dateValueType(val: any) {
+    this._dateValueType = OTableCellEditorDateComponent.convertToODateValueType(val);
+  }
+
+  get dateValueType(): any {
+    return this._dateValueType;
+  }
+
+  static convertToODateValueType(val: any): ODateValueType {
+    let result: ODateValueType = 'string';
+    const lowerVal = (val || '').toLowerCase();
+    if (lowerVal === 'string' || lowerVal === 'timestamp') {
+      return lowerVal;
+    }
+    return result;
   }
 }

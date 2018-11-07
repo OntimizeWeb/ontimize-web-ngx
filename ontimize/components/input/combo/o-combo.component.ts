@@ -96,9 +96,9 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
   ensureOFormValue(value: any) {
     if (value instanceof OFormValue) {
       this.value = new OFormValue(value.value);
-    } else if ((value !== undefined || value !== null) && !(value instanceof OFormValue)) {
+    } else if (Util.isDefined(value) && !(value instanceof OFormValue)) {
       this.value = new OFormValue(value);
-    } else if ((value === undefined || value === null) && this.nullSelection) {
+    } else if (!Util.isDefined(value) && this.nullSelection) {
       this.value = new OFormValue(undefined);
     } else {
       this.value = new OFormValue(this.defaultValue);
@@ -145,7 +145,7 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
       return [];
     } else {
       if (this.nullSelection) {
-        return null;
+        return undefined;
       } else {
         return '';
       }
@@ -182,8 +182,7 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
 
   onSelectionChange(event: MatSelectChange): void {
     var newValue = event.value;
-    this.setValue(newValue, { changeType: OValueChangeEvent.USER_CHANGE });
-    this.innerOnChange(event.value);
+    this.setValue(newValue, { changeType: OValueChangeEvent.USER_CHANGE, emitModelToViewChange:false });
   }
 
   innerOnChange(event: any) {
