@@ -5,10 +5,10 @@ import { ValidatorFn, ValidationErrors } from '@angular/forms';
 
 import { Util } from '../../../util/util';
 import { OSharedModule } from '../../../shared';
-import { OFormValue } from '../../form/OFormValue';
 import { InputConverter } from '../../../decorators';
 import { OFormComponent } from '../../form/o-form.component';
 import { IIntegerPipeArgument, OIntegerPipe } from '../../../pipes';
+import { IFormValueOptions, OFormValue } from '../../form/OFormValue';
 import { DEFAULT_INPUTS_O_TEXT_INPUT, DEFAULT_OUTPUTS_O_TEXT_INPUT, OTextInputComponent, OTextInputModule, } from '../text-input/o-text-input.component';
 
 export const DEFAULT_INPUTS_O_INTEGER_INPUT = [
@@ -96,6 +96,17 @@ export class OIntegerInputComponent extends OTextInputComponent implements After
 
   ngAfterViewInit(): void {
     super.ngAfterViewInit();
+  }
+
+  setData(value: any) {
+    super.setData(value);
+    setTimeout(() => {
+      this.setPipeValue();
+    }, 0);
+  }
+
+  setValue(val: any, options?: IFormValueOptions) {
+    super.setValue(val, options);
     this.setPipeValue();
   }
 
@@ -104,7 +115,7 @@ export class OIntegerInputComponent extends OTextInputComponent implements After
     if (Util.isDefined(event)) {
       event = parseInt(event, 10);
     }
-    super.innerOnChange(event);
+    super.innerOnChange(isNaN(event) ? void 0 : event);
   }
 
   innerOnFocus(event: any) {
@@ -131,11 +142,6 @@ export class OIntegerInputComponent extends OTextInputComponent implements After
       formControl.updateValueAndValidity();
     }
     super.innerOnBlur(event);
-  }
-
-  ensureOFormValue(value: any) {
-    super.ensureOFormValue(value);
-    this.setPipeValue();
   }
 
   setPipeValue() {
