@@ -22,6 +22,7 @@
 * **Angular and Angular Material**: updating versions ([be5d6d7](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/be5d6d7))
 
 ## 3.1.2
+## 3.1.2 (2018-11-07)
 ### Features
 * **OValueChangeEvent**: adding `isUserChange` and `isProgrammaticChange` methods.
 * **o-table-cell-renderer-percentage**: new `value-base` input ([d9585f6](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d9585f6)) ([#222](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/222))

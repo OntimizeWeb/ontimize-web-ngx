@@ -198,6 +198,12 @@ export class OGridComponent extends OServiceComponent implements AfterViewChecke
 
     this.parseSortColumn();
 
+    const existingOption = this.pageSizeOptions.find(option => option === this.queryRows);
+    if (!Util.isDefined(existingOption)) {
+      this._pageSizeOptions.push(this.queryRows);
+      this._pageSizeOptions.sort((i: number, j: number) => i - j);
+    }
+
     if (this.quickFilterColumns) {
       this.quickFilterColArray = Util.parseArray(this.quickFilterColumns, true);
     } else {
