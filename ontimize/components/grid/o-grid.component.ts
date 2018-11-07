@@ -89,7 +89,9 @@ export class OGridComponent extends OServiceComponent implements AfterViewChecke
     val = Util.parseBoolean(String(val));
     this._quickFilter = val;
     if (val) {
-      setTimeout(() => this.registerQuickFilter(this.searchInputComponent), 0);
+      setTimeout(() => {
+        this.registerQuickFilter(this.searchInputComponent);
+      }, 0);
     }
   }
   protected _quickFilter: boolean = true;
@@ -195,20 +197,13 @@ export class OGridComponent extends OServiceComponent implements AfterViewChecke
     } else {
       this.quickFilterColArray = this.colArray;
     }
-    let initialQueryLength = undefined;
-    if (this.state.hasOwnProperty('queryRecordOffset')) {
-      initialQueryLength = this.state.queryRecordOffset;
+
+    if (this.state.hasOwnProperty('currentPage')) {
+      this.currentPage = this.state['currentPage'];
     }
-    this.state.queryRecordOffset = 0;
-    if (!this.state.hasOwnProperty('totalQueryRecordsNumber')) {
-      this.state.totalQueryRecordsNumber = 0;
-    }
+
     if (this.queryOnInit) {
-      let queryArgs: OQueryDataArgs = {
-        offset: 0,
-        length: initialQueryLength || this.queryRows
-      };
-      this.queryData(void 0, queryArgs);
+      this.queryData();
     }
   }
 
@@ -249,7 +244,7 @@ export class OGridComponent extends OServiceComponent implements AfterViewChecke
     var self = this;
     this.gridItemDirectives.changes.subscribe(() => {
       this.gridItemDirectives.toArray().forEach((element: OGridItemDirective, index) => {
-        element.setItemData(self.dataResponseArray[index]);
+        element.setItemData(self.dataArray[index]);
         element.setGridComponent(self);
         self.registerGridItem(element);
       });
@@ -273,7 +268,7 @@ export class OGridComponent extends OServiceComponent implements AfterViewChecke
   registerQuickFilter(input: OSearchInputComponent) {
     this.quickFilterComponent = input;
     if (Util.isDefined(this.quickFilterComponent)) {
-      if (this.state.hasOwnProperty('filterValue')) {
+      if (this.state.hasOwnProperty('filterValue') && Util.isDefined(this.state['filterValue'])) {
         this.quickFilterComponent.setValue(this.state.filterValue);
       }
       this.quickFilterComponent.onSearch.subscribe(val => this.filterData(val));
@@ -298,7 +293,7 @@ export class OGridComponent extends OServiceComponent implements AfterViewChecke
    */
   filterData(value?: string, loadMore?: boolean): void {
     value = Util.isDefined(value) ? value : Util.isDefined(this.quickFilterComponent) ? this.quickFilterComponent.getValue() : void 0;
-    if (this.state) {
+    if (this.state && Util.isDefined(value)) {
       this.state.filterValue = value;
     }
     if (this.pageable) {
@@ -308,7 +303,9 @@ export class OGridComponent extends OServiceComponent implements AfterViewChecke
         replace: true
       };
       this.queryData(void 0, queryArgs);
-    } else if (this.dataResponseArray && this.dataResponseArray.length > 0) {
+      return;
+    }
+    if (this.dataResponseArray && this.dataResponseArray.length > 0) {
       let filteredData = this.dataResponseArray.slice(0);
       if (value && value.length > 0) {
         var self = this;
@@ -389,6 +386,11 @@ export class OGridComponent extends OServiceComponent implements AfterViewChecke
         item.onDoubleClick(gridItem => self.onItemDetailDblClick(gridItem));
       }
     }
+  }
+
+  protected saveDataNavigationInLocalStorage() {
+    super.saveDataNavigationInLocalStorage();
+    this.storePaginationState = true;
   }
 
   public onItemDetailClick(item: OGridItemDirective) {
@@ -507,7 +509,14 @@ export class OGridComponent extends OServiceComponent implements AfterViewChecke
 
   getDataToStore(): Object {
     let dataToStore = super.getDataToStore();
-    if (!this.storePaginationState) {
+    dataToStore['currentPage'] = this.currentPage;
+
+    if (this.storePaginationState) {
+      dataToStore['queryRecordOffset'] = Math.max(
+        (this.state.queryRecordOffset - this.dataArray.length),
+        (this.state.queryRecordOffset - this.queryRows)
+      );
+    } else {
       delete dataToStore['queryRecordOffset'];
     }
     return dataToStore;

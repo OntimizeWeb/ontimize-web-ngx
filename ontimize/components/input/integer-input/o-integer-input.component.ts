@@ -125,6 +125,11 @@ export class OIntegerInputComponent extends OTextInputComponent implements After
     super.innerOnBlur(event);
   }
 
+  ensureOFormValue(value: any) {
+    super.ensureOFormValue(value);
+    this.setPipeValue();
+  }
+
   setPipeValue() {
     if (typeof this.pipeArguments !== 'undefined' && !this.isEmpty()) {
       let parsedValue = this.componentPipe.transform(this.getValue(), this.pipeArguments);
