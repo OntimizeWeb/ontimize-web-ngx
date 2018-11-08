@@ -14,7 +14,7 @@ import { OTableDataSource } from './o-table.datasource';
 import { OFormComponent } from '../form/o-form.component';
 import { Codes, ObservableWrapper, Util } from '../../utils';
 import { OServiceComponent } from '../o-service-component.class';
-import { OntimizeService, SnackBarService } from '../../services';
+import { OntimizeService, SnackBarService, OPermissions, OTablePermissions } from '../../services';
 import { OTableRowDirective } from './extensions/row/o-table-row.directive';
 import { OColumnTooltip } from './column/o-table-column.component';
 import { OTableStorage } from './extensions/o-table-storage.class';
@@ -388,7 +388,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   set visibleColArray(arg: Array<any>) {
-    this._visibleColArray = arg;
+    const permissionsBlocked = this.permissions.columns.filter(col => col.visible === false).map(col => col.attr);
+    const permissionsChecked = arg.filter(value => permissionsBlocked.indexOf(value) === -1);
+    this._visibleColArray = permissionsChecked;
     if (this._oTableOptions) {
       const containsSelectionCol = this._oTableOptions.visibleColumns.indexOf(OTableComponent.NAME_COLUMN_SELECT) !== -1;
       if (containsSelectionCol) {
@@ -498,6 +500,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
   }
 
+  protected permissions: OTablePermissions;
+
   constructor(
     injector: Injector,
     elRef: ElementRef,
@@ -526,6 +530,15 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   ngOnDestroy() {
     this.destroy();
+  }
+
+  protected parsePermissions() {
+    this.permissions = this.permissionsService.getTablePermissions(this.oattr);
+  }
+
+  protected getOColumnPermissions(attr: string): OPermissions {
+    const columns = this.permissions ? this.permissions.columns : [];
+    return columns.find(comp => comp.attr === attr) || { attr: attr, enabled: true, visible: true };
   }
 
   /**
@@ -697,6 +710,12 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
    * @param column
    */
   registerColumn(column: OTableColumnComponent | OTableColumnCalculatedComponent | any) {
+    const columnAttr = (typeof column === 'string') ? column : column.attr;
+    const columnPermissions: OPermissions = this.getOColumnPermissions(columnAttr);
+    if (!columnPermissions.visible) {
+      return;
+    }
+
     if (typeof column === 'string') {
       this.registerDefaultColumn(column);
       return;
@@ -1983,6 +2002,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   protected addDefaultRowButtons() {
+    // check permissions
     if (this.editButtonInRow) {
       this.addButtonInRow('editButtonInRow');
     }
