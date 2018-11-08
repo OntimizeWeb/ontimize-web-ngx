@@ -1,5 +1,6 @@
 import { Component, ElementRef, forwardRef, Inject, Injector, NgModule, Optional, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ThemePalette } from '@angular/material';
 
 import { Util } from '../../../util/util';
 import { OSharedModule } from '../../../shared';
@@ -12,8 +13,12 @@ export const DEFAULT_INPUTS_O_CHECKBOX = [
   'trueValue: true-value',
   // false-value: false value. Default: false.
   'falseValue: false-value',
-  // false-value [number|boolean|string]: cellData value type. Default: boolean
+  // boolean-type [number|boolean|string]: cellData value type. Default: boolean
   'booleanType: boolean-type',
+  // color: Theme color palette for the component.
+  'color',
+  // label-position: Whether the label should appear after or before the slide-toggle. Defaults to 'after'
+  'labelPosition: label-position',
   ...DEFAULT_INPUTS_O_FORM_DATA_COMPONENT
 ];
 
@@ -38,9 +43,11 @@ export class OCheckboxComponent extends OFormDataComponent {
   public static DEFAULT_INPUTS_O_CHECKBOX = DEFAULT_INPUTS_O_CHECKBOX;
   public static DEFAULT_OUTPUTS_O_CHECKBOX = DEFAULT_OUTPUTS_O_CHECKBOX;
 
-  trueValue: number | boolean | string = true;
-  falseValue: number | boolean | string = false;
-  booleanType: 'number' | 'boolean' | 'string' = 'boolean';
+  public trueValue: number | boolean | string = true;
+  public falseValue: number | boolean | string = false;
+  public booleanType: 'number' | 'boolean' | 'string' = 'boolean';
+  public color: ThemePalette;
+  public labelPosition: 'before' | 'after' = 'after';
 
   constructor(
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
