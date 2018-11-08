@@ -136,7 +136,7 @@ export class OGridComponent extends OServiceComponent implements AfterViewChecke
 
   /* Parsed Inputs */
   protected quickFilterColArray: string[];
-  protected _sortableColumns: ISQLOrder[];
+  protected _sortableColumns: ISQLOrder[] = [];
   protected sortColumnOrder: ISQLOrder;
   /* End parsed Inputs */
 
