@@ -2,7 +2,7 @@
   [matTooltipPosition]="tooltipPosition" [matTooltipShowDelay]="tooltipShowDelay" class="custom-error o-list-picker-content">
   <input #inputModel class="input-model" type="text" [id]="getAttribute()" [formControlName]="getAttribute()">
 
-  <mat-form-field [appearance]="appearance" [class.custom-width]="hasCustomWidth" class="icon-field"
+  <mat-form-field [appearance]="appearance" [floatLabel]="floatLabel" [class.custom-width]="hasCustomWidth" class="icon-field"
     #innerInputContainer fxFlexFill>
     <mat-label>{{ olabel }}</mat-label>
     <input #visibleInput matInput type="text" [attr.id]="'desc_' + getAttribute()" [id]="'desc_' + getAttribute()"

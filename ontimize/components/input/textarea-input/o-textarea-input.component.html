@@ -1,5 +1,5 @@
 <div [formGroup]="getFormGroup()" [matTooltip]="tooltip" [matTooltipPosition]="tooltipPosition" [matTooltipShowDelay]="tooltipShowDelay">
-  <mat-form-field [appearance]="appearance" [class.custom-width]="hasCustomWidth" fxFlexFill>
+  <mat-form-field [appearance]="appearance" [floatLabel]="floatLabel" [class.custom-width]="hasCustomWidth" fxFlexFill>
     <mat-label>{{ olabel }}</mat-label>
     <textarea matInput class="mat-textarea" type="text" [id]="getAttribute()" [formControlName]="getAttribute()"
       [placeholder]="placeHolder" (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)" [readonly]="isReadOnly"
