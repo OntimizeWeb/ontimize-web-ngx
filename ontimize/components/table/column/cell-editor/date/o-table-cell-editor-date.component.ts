@@ -179,4 +179,8 @@ export class OTableCellEditorDateComponent extends OBaseTableCellEditor implemen
     }
     return result;
   }
+
+  onClosed() {
+    this.inputRef.nativeElement.focus();
+  }
 }
