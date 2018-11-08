@@ -64,6 +64,7 @@ export class OValueChangeEvent {
 export const DEFAULT_INPUTS_O_FORM_DATA_COMPONENT = [
   'oattr: attr',
   'olabel: label',
+  'oplaceholder: placeholder',
   'tooltip',
   'tooltipPosition: tooltip-position',
   'tooltipShowDelay: tooltip-show-delay',

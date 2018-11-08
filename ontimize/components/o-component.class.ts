@@ -11,6 +11,7 @@ export class OBaseComponent implements IComponent {
   /* Inputs */
   protected oattr: string;
   protected olabel: string;
+  protected oplaceholder: string;
   protected _oenabled: boolean = true;
   protected _readOnly: boolean;
   @InputConverter()
@@ -22,7 +23,6 @@ export class OBaseComponent implements IComponent {
 
   protected _disabled: boolean;
   protected _isReadOnly: boolean;
-  protected _placeholder: string;
   protected _tooltip: string;
   protected _tooltipPosition: string = 'below';
   protected _tooltipShowDelay: number = 500;
@@ -37,7 +37,14 @@ export class OBaseComponent implements IComponent {
 
   initialize() {
     this._disabled = !this.oenabled;
-    this._placeholder = (this.olabel !== undefined) ? this.olabel : this.oattr;
+    if (!Util.isDefined(this.olabel)) {
+      this.olabel = this.oattr;
+    }
+    if (!Util.isDefined(this.oplaceholder)) {
+      this.oplaceholder = this.oattr;
+    }
+    this.olabel = this.translateService.get(this.olabel);
+    this.oplaceholder = this.translateService.get(this.oplaceholder);
   }
 
   getAttribute(): string {
@@ -48,14 +55,11 @@ export class OBaseComponent implements IComponent {
   }
 
   get placeHolder(): string {
-    if (Util.isDefined(this._placeholder) && this.translateService) {
-      return this.translateService.get(this._placeholder);
-    }
-    return this._placeholder;
+    return this.oplaceholder;
   }
 
   set placeHolder(value: string) {
-    this._placeholder = value;
+    this.oplaceholder = value;
   }
 
   get tooltip(): string {
