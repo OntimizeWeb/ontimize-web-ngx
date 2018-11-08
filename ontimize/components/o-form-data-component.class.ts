@@ -228,6 +228,13 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   initialize() {
     super.initialize();
 
+    if (Util.isDefined(this.appearance)) {
+      const values = ['legacy', 'standard', 'fill', 'outline'];
+      if (values.indexOf(this.appearance) === -1) {
+        this.appearance = 'legacy';
+      }
+    }
+
     // ensuring formControl creation
     this.getControl();
 
