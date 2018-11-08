@@ -1,6 +1,6 @@
 import { Injector, ElementRef, OnInit, OnDestroy, QueryList, ViewChildren, AfterViewInit, HostBinding, ContentChildren, OnChanges, SimpleChange, EventEmitter } from '@angular/core';
 import { FormControl, FormGroup, Validators, ValidatorFn } from '@angular/forms';
-import { MatSuffix } from '@angular/material';
+import { MatSuffix, MatFormFieldAppearance } from '@angular/material';
 import { Subscription } from 'rxjs';
 import { InputConverter } from '../decorators';
 import { SQLTypes, Util } from '../utils';
@@ -64,6 +64,7 @@ export class OValueChangeEvent {
 export const DEFAULT_INPUTS_O_FORM_DATA_COMPONENT = [
   'oattr: attr',
   'olabel: label',
+  'oplaceholder: placeholder',
   'tooltip',
   'tooltipPosition: tooltip-position',
   'tooltipShowDelay: tooltip-show-delay',
@@ -77,7 +78,8 @@ export const DEFAULT_INPUTS_O_FORM_DATA_COMPONENT = [
   'width',
   'readOnly: read-only',
   'clearButton: clear-button',
-  'angularValidatorsFn: validators'
+  'angularValidatorsFn: validators',
+  'appearance'
 ];
 
 export const DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT = [
@@ -100,6 +102,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   @InputConverter()
   clearButton: boolean = false;
   angularValidatorsFn: ValidatorFn[] = [];
+  appearance: MatFormFieldAppearance;
 
   /* Outputs */
   onChange: EventEmitter<Object> = new EventEmitter<Object>();
@@ -224,6 +227,13 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
 
   initialize() {
     super.initialize();
+
+    if (Util.isDefined(this.appearance)) {
+      const values = ['legacy', 'standard', 'fill', 'outline'];
+      if (values.indexOf(this.appearance) === -1) {
+        this.appearance = 'legacy';
+      }
+    }
 
     // ensuring formControl creation
     this.getControl();

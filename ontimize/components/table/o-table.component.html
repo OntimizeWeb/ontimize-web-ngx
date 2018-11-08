@@ -52,6 +52,7 @@
       {{ 'TABLE.BUTTONS.APPLY_CONFIGURATION' | oTranslate }}
     </button>
   </mat-menu>
+
   <div #tableBody class="o-table-body o-scroll" [class.horizontal-scroll]="horizontalScroll" [class.scrolled]="horizontalScrolled">
     <div class="o-table-overflow">
       <table mat-table #table [trackBy]="getTrackByFunction()" [dataSource]="dataSource" oMatSort [class.small]="!hasMultilineColumn && rowHeight==='small'"
@@ -129,11 +130,13 @@
           </ng-container>
         </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="oTableOptions.visibleColumns; sticky: fixedHeader"></tr>
+        <tr #tableHeader mat-header-row *matHeaderRowDef="oTableOptions.visibleColumns; sticky: fixedHeader"></tr>
+
         <tr mat-row oTableRow *matRowDef="let row; columns: oTableOptions.visibleColumns;" (click)="handleClick(row, $event)"
           (dblclick)="handleDoubleClick(row, $event)" [oContextMenu]="tableContextMenu" [oContextMenuData]="row"
           [class.selected]="!isSelectionModeNone() && isSelected(row)">
         </tr>
+
         <ng-container *ngIf="showTotals">
           <tr mat-footer-row *matFooterRowDef="oTableOptions.visibleColumns; sticky: fixedHeader"></tr>
         </ng-container>

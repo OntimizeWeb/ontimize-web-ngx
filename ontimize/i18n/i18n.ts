@@ -201,6 +201,8 @@ export var MAP = {
     'CARD_MENU_LAYOUT.BUTTON_TEXT': 'View list',
     'GRID.ITEMS_PER_PAGE': 'Items per page',
     'GRID.SORT_BY': 'Sort by',
+    'GRID.SORT_BY_ASC': 'Sort by {0} ascending',
+    'GRID.SORT_BY_DESC': 'Sort by {0} descending',
     'GRID.BUTTON_NEXT': 'Show more',
     'GRID.TEXT_SHOWN_ITEMS': '{0} / {1}'
   },
@@ -406,7 +408,9 @@ export var MAP = {
     'APP_LAYOUT.USER_PROFILE': 'Mi perfil',
     'CARD_MENU_LAYOUT.BUTTON_TEXT': 'Acceder',
     'GRID.ITEMS_PER_PAGE': 'Elementos por página',
-    'GRID.SORT_BY': 'Ordenado por ',
+    'GRID.SORT_BY': 'Ordenado por',
+    'GRID.SORT_BY_ASC': 'Ordenado por {0} ascendente',
+    'GRID.SORT_BY_DESC': 'Ordenado por {0} descendente',
     'GRID.BUTTON_NEXT': 'Ver más',
     'GRID.TEXT_SHOWN_ITEMS': '{0} / {1}'
   }
