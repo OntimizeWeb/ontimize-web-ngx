@@ -1,6 +1,6 @@
 import { Injector, ElementRef, OnInit, OnDestroy, QueryList, ViewChildren, AfterViewInit, HostBinding, ContentChildren, OnChanges, SimpleChange, EventEmitter } from '@angular/core';
 import { FormControl, FormGroup, Validators, ValidatorFn } from '@angular/forms';
-import { MatSuffix, MatFormFieldAppearance } from '@angular/material';
+import { MatSuffix, MatFormFieldAppearance, FloatLabelType } from '@angular/material';
 import { Subscription } from 'rxjs';
 import { InputConverter } from '../decorators';
 import { SQLTypes, Util } from '../utils';
@@ -64,6 +64,7 @@ export class OValueChangeEvent {
 export const DEFAULT_INPUTS_O_FORM_DATA_COMPONENT = [
   'oattr: attr',
   'olabel: label',
+  'floatLabel: float-label',
   'oplaceholder: placeholder',
   'tooltip',
   'tooltipPosition: tooltip-position',
@@ -93,6 +94,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   OnInit, AfterViewInit, OnDestroy, OnChanges {
 
   /* Inputs */
+  protected _floatLabel: FloatLabelType;
   sqlType: string;
   @InputConverter()
   autoBinding: boolean = true;
@@ -102,7 +104,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   @InputConverter()
   clearButton: boolean = false;
   angularValidatorsFn: ValidatorFn[] = [];
-  appearance: MatFormFieldAppearance;
+  protected _appearance: MatFormFieldAppearance;
 
   /* Outputs */
   onChange: EventEmitter<Object> = new EventEmitter<Object>();
@@ -227,13 +229,6 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
 
   initialize() {
     super.initialize();
-
-    if (Util.isDefined(this.appearance)) {
-      const values = ['legacy', 'standard', 'fill', 'outline'];
-      if (values.indexOf(this.appearance) === -1) {
-        this.appearance = 'legacy';
-      }
-    }
 
     // ensuring formControl creation
     this.getControl();
@@ -555,4 +550,27 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     }
   }
 
+  get appearance(): MatFormFieldAppearance {
+    return this._appearance;
+  }
+
+  set appearance(value: MatFormFieldAppearance) {
+    const values = ['legacy', 'standard', 'fill', 'outline'];
+    if (values.indexOf(value) === -1) {
+      value = 'legacy';
+    }
+    this._appearance = value;
+  }
+
+  get floatLabel(): FloatLabelType {
+    return this._floatLabel;
+  }
+
+  set floatLabel(value: FloatLabelType) {
+    const values = ['always', 'never', 'auto'];
+    if (values.indexOf(value) === -1) {
+      value = 'auto';
+    }
+    this._floatLabel = value;
+  }
 }
