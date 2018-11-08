@@ -788,8 +788,6 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     if (useFilter) {
       filter = this.getCurrentKeysValues();
     }
-    this.formCache.restartCache();
-    this.clearComponentsOldValue();
     this.queryData(filter);
   }
 
@@ -911,6 +909,8 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
       console.warn('OFormComponent: no filter configured! aborting query');
       return;
     }
+    this.formCache.restartCache();
+    this.clearComponentsOldValue();
     if (this.querySubscription) {
       this.querySubscription.unsubscribe();
     }
