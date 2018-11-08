@@ -122,7 +122,7 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
     this.parsePermissions();
   }
 
-  private parsePermissions() {
+  protected parsePermissions() {
 
     if (this._form.oattr) {
       this.actionsPermissions = this.permissionService.getContainerActionsPermissions(this._form.oattr);
