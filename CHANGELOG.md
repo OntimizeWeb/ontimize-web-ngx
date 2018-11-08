@@ -17,6 +17,9 @@
 ### Features
 * **o-hour-input**: adding `min` and `max` inputs.
 * **o-time-input**: adding `hour-min` and `hour-max` inputs.
+* **OFormDataComponent**:
+  * adding `appearance` input, view ([Form field appearance variants](https://v6.material.angular.io/components/form-field/overview#form-field-appearance-variants))
+  * adding `placeholder` input. Now you can configure `label` and `placeholder` separately. View ([Form field appearance variants](https://v6.material.angular.io/components/form-field/overview#form-field-appearance-variants))
 
 ### BREAKING CHANGES
 * **Angular and Angular Material**: updating versions ([be5d6d7](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/be5d6d7))
