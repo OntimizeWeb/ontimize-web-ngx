@@ -11,7 +11,7 @@ export class OBaseComponent implements IComponent {
   /* Inputs */
   protected oattr: string;
   protected olabel: string;
-  protected oplaceholder: string;
+  protected oplaceholder: string = '';
   protected _oenabled: boolean = true;
   protected _readOnly: boolean;
   @InputConverter()
@@ -40,11 +40,10 @@ export class OBaseComponent implements IComponent {
     if (!Util.isDefined(this.olabel)) {
       this.olabel = this.oattr;
     }
-    if (!Util.isDefined(this.oplaceholder)) {
-      this.oplaceholder = this.olabel;
-    }
     this.olabel = this.translateService.get(this.olabel);
-    this.oplaceholder = this.translateService.get(this.oplaceholder);
+    if (Util.isDefined(this.oplaceholder) && this.oplaceholder.length > 0) {
+      this.oplaceholder = this.translateService.get(this.oplaceholder);
+    }
   }
 
   getAttribute(): string {
