@@ -5,22 +5,38 @@ import { Util } from '../../utils';
 import { OntimizePermissionsService } from './ontimize-permissions.service';
 import { OntimizeEEPermissionsService } from './ontimize-ee-permissions.service';
 
-export type OPermissionsDefinition = {
-  components?: OComponentContainerPermissions[];
-  menu?: OPermissions[];
-};
-
 export type OPermissions = {
   attr: string;
   visible: boolean;
   enabled: boolean;
 };
 
-export type OComponentContainerPermissions = {
+export type OFormPermissions = {
   attr: string;
   selector: string;
   components: OPermissions[];
   actions: OPermissions[];
+};
+
+export type OTableMenuPermissions = {
+  visible: boolean;
+  enabled: boolean;
+  items: OPermissions[];
+};
+
+export type OTablePermissions = {
+  attr: string;
+  selector: string;
+  menu: OTableMenuPermissions;
+  columns: OPermissions[];
+  actions: OPermissions[];
+};
+
+export type OComponentPermissions = OFormPermissions | OTablePermissions;
+
+export type OPermissionsDefinition = {
+  components?: OComponentPermissions[];
+  menu?: OPermissions[];
 };
 
 @Injectable()
@@ -79,19 +95,17 @@ export class PermissionsService {
     const self = this;
     return new Promise((resolve: any, reject: any) => {
       self.permissions = {};
-
-      resolve(true);
-
-      // if (Util.isDefined(self.ontimizePermissionsConfig)) {
-      //   self.configureService();
-      //   self.queryPermissions().subscribe(() => {
-      //     resolve(true);
-      //   }, error => {
-      //     resolve(true);
-      //   });
-      // } else {
-      //   resolve(true);
-      // }
+      // resolve(true);
+      if (Util.isDefined(self.ontimizePermissionsConfig)) {
+        self.configureService();
+        self.queryPermissions().subscribe(() => {
+          resolve(true);
+        }, error => {
+          resolve(true);
+        });
+      } else {
+        resolve(true);
+      }
     });
   }
 
@@ -111,17 +125,32 @@ export class PermissionsService {
     return dataObservable.share();
   }
 
-  getComponentPermissions(attr: string, parentAttr: string): OPermissions {
+  getTablePermissions(attr: string): OTablePermissions {
+    if (!Util.isDefined(this.permissions)) {
+      return undefined;
+    }
+    let permissions: OTablePermissions;
+    const allComponents = this.permissions.components || [];
+    const attrPermissions = allComponents.find(comp => comp.attr === attr);
+    if (attrPermissions.selector === 'o-table') {
+      permissions = <OTablePermissions>attrPermissions;
+    }
+    return permissions;
+  }
+
+  getFormDataComponentPermissions(attr: string, formAttr: string): OPermissions {
     let permissions;
     if (!Util.isDefined(this.permissions)) {
       return undefined;
     }
-    const allComponents: OComponentContainerPermissions[] = this.permissions.components || [];
-
-    const parentData: OComponentContainerPermissions = allComponents.find(comp => comp.attr === parentAttr);
-
-    if (Util.isDefined(parentData) && Util.isDefined(parentData.components)) {
-      permissions = parentData.components.find(comp => comp.attr === attr);
+    const allComponents = this.permissions.components || [];
+    let formPermissions: OFormPermissions;
+    const formAttrPermissions = allComponents.find(comp => comp.attr === formAttr);
+    if (formAttrPermissions.selector === 'o-form') {
+      formPermissions = <OFormPermissions>formAttrPermissions;
+    }
+    if (Util.isDefined(formPermissions) && Util.isDefined(formPermissions.components)) {
+      permissions = formPermissions.components.find(comp => comp.attr === attr);
     }
     return permissions;
   }
@@ -139,30 +168,15 @@ export class PermissionsService {
   }
 
   getContainerActionsPermissions(attr: string): OPermissions[] {
-    let permissions;
+    let permissions: OPermissions[];
     if (!Util.isDefined(this.permissions)) {
       return undefined;
     }
-    const allComponents: OComponentContainerPermissions[] = this.permissions.components || [];
+    const allComponents = this.permissions.components || [];
+    const attrPermissions: OComponentPermissions = allComponents.find(comp => comp.attr === attr);
 
-    const containerData: OComponentContainerPermissions = allComponents.find(comp => comp.attr === attr);
-
-    if (Util.isDefined(containerData)) {
-      permissions = containerData.actions || [];
-    }
-    return permissions;
-  }
-
-  getContainerActionPermissions(attr: string, parentAttr: string): OPermissions {
-    let permissions;
-    if (!Util.isDefined(this.permissions)) {
-      return undefined;
-    }
-    const allComponents: OComponentContainerPermissions[] = this.permissions.components || [];
-    const parentData: OComponentContainerPermissions = allComponents.find(comp => comp.attr === parentAttr);
-
-    if (Util.isDefined(parentData) && Util.isDefined(parentData.actions)) {
-      permissions = parentData.actions.find(comp => comp.attr === attr);
+    if (Util.isDefined(attrPermissions)) {
+      permissions = attrPermissions.actions || [];
     }
     return permissions;
   }
