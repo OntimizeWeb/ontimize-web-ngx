@@ -27,6 +27,8 @@ import { OFormServiceComponent } from '../o-form-service-component.class';
 export const DEFAULT_INPUTS_O_FILE_INPUT = [
   'oattr: attr',
   'olabel: label',
+  'floatLabel: float-label',
+  'oplaceholder: placeholder',
   'tooltip',
   'tooltipPosition: tooltip-position',
   'tooltipShowDelay: tooltip-show-delay',
@@ -59,7 +61,8 @@ export const DEFAULT_INPUTS_O_FILE_INPUT = [
   'splitUpload: split-upload',
 
   // additional-data [JSON]: used to send aditional information in the upload request.
-  'additionalData: additional-data'
+  'additionalData: additional-data',
+  'appearance'
 ];
 
 export const DEFAULT_OUTPUTS_O_FILE_INPUT = [
