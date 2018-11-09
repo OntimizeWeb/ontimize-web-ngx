@@ -14,7 +14,7 @@ import { OTableDataSource } from './o-table.datasource';
 import { OFormComponent } from '../form/o-form.component';
 import { Codes, ObservableWrapper, Util } from '../../utils';
 import { OServiceComponent } from '../o-service-component.class';
-import { OntimizeService, SnackBarService, OPermissions, OTablePermissions } from '../../services';
+import { OntimizeService, SnackBarService, OPermissions, OTablePermissions, PermissionsService } from '../../services';
 import { OTableRowDirective } from './extensions/row/o-table-row.directive';
 import { OColumnTooltip } from './column/o-table-column.component';
 import { OTableStorage } from './extensions/o-table-storage.class';
@@ -388,7 +388,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   set visibleColArray(arg: Array<any>) {
-    const permissionsBlocked = this.permissions.columns.filter(col => col.visible === false).map(col => col.attr);
+    const permissionsBlocked = this.permissions ? this.permissions.columns.filter(col => col.visible === false).map(col => col.attr) : [];
     const permissionsChecked = arg.filter(value => permissionsBlocked.indexOf(value) === -1);
     this._visibleColArray = permissionsChecked;
     if (this._oTableOptions) {
@@ -526,6 +526,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   ngAfterViewInit() {
     this.afterViewInit();
     this.initTableAfterViewInit();
+    this.parsePermissions();
   }
 
   ngOnDestroy() {
@@ -533,12 +534,25 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   protected parsePermissions() {
-    this.permissions = this.permissionsService.getTablePermissions(this.oattr);
+    // const self = this;
+    // this.permissions.actions.forEach((permission: OPermissions) => {
+
+    // });
   }
 
   protected getOColumnPermissions(attr: string): OPermissions {
     const columns = this.permissions ? this.permissions.columns : [];
     return columns.find(comp => comp.attr === attr) || { attr: attr, enabled: true, visible: true };
+  }
+
+  protected checkEnabledActionPermission(attr) {
+    const actionsPerm = this.permissions.actions;
+    const permissions: OPermissions = (actionsPerm || []).find(p => p.attr === attr);
+    let enabledPermision = PermissionsService.checkEnabledPermission(permissions);
+    if (!enabledPermision) {
+      this.snackBarService.open(PermissionsService.MESSAGE_OPERATION_NOT_ALLOWED_PERMISSION);
+    }
+    return enabledPermision;
   }
 
   /**
@@ -555,6 +569,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     this.initializeParams();
 
     this.initializeDao();
+
+    this.permissions = this.permissionsService.getTablePermissions(this.oattr);
   }
 
   protected initializeDao() {
@@ -1372,6 +1388,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   updateCellData(column: OColumn, data: any, saveChanges: boolean) {
+    // if (!this.checkEnabledActionPermission(PermissionsService.PERMISSIONS_ACTIONS_UPDATE_FORM)) {
+    //   return;
+    // }
     column.editing = false;
     this.editingCell = undefined;
     if (saveChanges && this.editingRow !== undefined) {

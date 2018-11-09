@@ -151,7 +151,6 @@ export class OServiceComponent extends OServiceBaseComponent {
 
   initialize(): void {
     super.initialize();
-    this.parsePermissions();
     if (this.detailButtonInRow || this.editButtonInRow) {
       this.detailMode = Codes.DETAIL_MODE_NONE;
     }
@@ -180,10 +179,6 @@ export class OServiceComponent extends OServiceBaseComponent {
     if (this.onMainTabSelectedSubscription) {
       this.onMainTabSelectedSubscription.unsubscribe();
     }
-  }
-
-  protected parsePermissions() {
-    // Implemented in each component
   }
 
   isVisible(): boolean {
