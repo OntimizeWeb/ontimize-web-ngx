@@ -14,40 +14,14 @@
         <span *ngIf="showTitle" class="table-title" fxFlex>{{ title | oTranslate }}</span>
       </div>
       <o-table-quickfilter *ngIf="quickFilter" (onChange)="reloadPaginatedDataFromStart()"></o-table-quickfilter>
-      <button type="button" *ngIf="showTableMenuButton" mat-icon-button class="o-table-menu-button" [matMenuTriggerFor]="menu">
+      <button type="button" *ngIf="showTableMenuButton" [disabled]="disableTableMenuButton" mat-icon-button class="o-table-menu-button" [matMenuTriggerFor]="tableMenu.matMenu">
         <mat-icon svgIcon="ontimize:more_vert"></mat-icon>
       </button>
-      <mat-menu #menu="matMenu" x-position="before" class="o-table-menu">
-        <o-table-option *ngIf="selectAllCheckbox" [active]="!!state['select-column-visible']" (onClick)="onShowsSelects($event)"
-          label="TABLE.BUTTONS.SELECT" show-active-icon="true">
-        </o-table-option>
-        <o-table-option *ngIf="exportButton" (onClick)="onExportButtonClicked()" label="TABLE.BUTTONS.EXPORT">
-        </o-table-option>
-        <o-table-option *ngIf="columnsVisibilityButton" (onClick)="onChangeColumnsVisibilityClicked()" label="TABLE.BUTTONS.COLVIS">
-        </o-table-option>
-
-        <button type="button" mat-menu-item [matMenuTriggerFor]="filterMenu">{{ 'TABLE.BUTTONS.FILTER' | oTranslate }}</button>
-        <button type="button" mat-menu-item [matMenuTriggerFor]="configurationMenu">{{ 'TABLE.BUTTONS.CONFIGURATION' | oTranslate }}</button>
+      <o-table-menu #tableMenu [select-all-checkbox]="selectAllCheckbox"
+        [export-button]="exportButton" [columns-visibility-button]="columnsVisibilityButton">
         <ng-content select="o-table-option"></ng-content>
-      </mat-menu>
+      </o-table-menu>
     </div>
-
-    <mat-menu #filterMenu="matMenu">
-      <o-table-option *ngIf="oTableColumnsFilterComponent !== undefined" #columnFilterOption (onClick)="onFilterByColumnClicked()"
-        label="TABLE.BUTTONS.FILTER_BY_COLUMN" show-active-icon="true">
-      </o-table-option>
-      <button type="button" mat-menu-item (click)="onStoreFilterClicked()">{{ 'TABLE.BUTTONS.FILTER_SAVE' | oTranslate }}</button>
-      <button type="button" mat-menu-item (click)="onLoadFilterClicked()">{{ 'TABLE.BUTTONS.FILTER_LOAD' | oTranslate }}</button>
-      <button type="button" mat-menu-item (click)="onClearFilterClicked()">{{ 'TABLE.BUTTONS.FILTER_CLEAR' | oTranslate }}</button>
-    </mat-menu>
-
-    <mat-menu #configurationMenu="matMenu">
-      <button type="button" mat-menu-item (click)="onStoreConfigurationClicked()">{{ 'TABLE.BUTTONS.SAVE_CONFIGURATION' | oTranslate
-        }}</button>
-      <button type="button" mat-menu-item (click)="onApplyConfigurationClicked()">{{ 'TABLE.BUTTONS.APPLY_CONFIGURATION' | oTranslate
-        }}</button>
-    </mat-menu>
-
 
     <div #tableBody fxLayout="column" fxLayoutAlign="start stretch" class="o-table-body o-scroll"
       [class.horizontal-scroll]="horizontalScroll" [class.scrolled]="horizontalScrolled">
