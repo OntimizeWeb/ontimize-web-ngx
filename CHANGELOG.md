@@ -1,6 +1,7 @@
 ## 3.2.0
 ### Features
 * New component `o-slide-toggle` ([6c6453b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6c6453b))
+* **o-checkbox**: new attributes `color` and `label-position` ([7e9e69e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7e9e69e))
 
 ## 3.1.2 (2018-11-07)
 ### Features
