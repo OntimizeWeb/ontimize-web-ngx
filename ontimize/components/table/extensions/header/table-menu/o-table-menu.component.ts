@@ -1,11 +1,20 @@
-import { Component, Inject, forwardRef, Injector, ViewEncapsulation, ViewChild } from '@angular/core';
+import { Component, Inject, forwardRef, Injector, ViewEncapsulation, ViewChild, OnDestroy, ChangeDetectionStrategy, OnInit, ElementRef, AfterViewInit } from '@angular/core';
 import { MatDialog, MatMenu } from '@angular/material';
 import { Util } from '../../../../../utils';
 import { InputConverter } from '../../../../../decorators';
-import { SnackBarService, OTranslateService, DialogService } from '../../../../../services';
+import { SnackBarService, OTranslateService, DialogService, OTableMenuPermissions, OPermissions, PermissionsService } from '../../../../../services';
 import { OTableComponent, OColumn } from '../../../o-table.component';
-import { OTableExportConfiguration, OTableExportDialogComponent, OTableVisibleColumnsDialogComponent, OTableStoreFilterDialogComponent, OTableLoadFilterDialogComponent, OTableApplyConfigurationDialogComponent, OTableStoreConfigurationDialogComponent } from '../../dialog/o-table-dialog-components';
 import { OTableCellRendererImageComponent } from '../../../table-components';
+import {
+  OTableExportConfiguration,
+  OTableExportDialogComponent,
+  OTableVisibleColumnsDialogComponent,
+  OTableStoreFilterDialogComponent,
+  OTableLoadFilterDialogComponent,
+  OTableApplyConfigurationDialogComponent,
+  OTableStoreConfigurationDialogComponent
+} from '../../dialog/o-table-dialog-components';
+import { OTableOptionComponent } from '../table-option/o-table-option.component';
 
 export const DEFAULT_INPUTS_O_TABLE_MENU = [
   // select-all-checkbox [yes|no|true|false]: show selection check boxes. Default: no.
@@ -30,11 +39,11 @@ export const DEFAULT_OUTPUTS_O_TABLE_MENU = [];
   encapsulation: ViewEncapsulation.None,
   host: {
     '[class.o-table-menu]': 'true',
-  }
+  },
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class OTableMenuComponent {
-
+export class OTableMenuComponent implements OnInit, AfterViewInit, OnDestroy {
   public static DEFAULT_INPUTS_O_TABLE_MENU = DEFAULT_INPUTS_O_TABLE_MENU;
   public static DEFAULT_OUTPUTS_O_TABLE_MENU = DEFAULT_OUTPUTS_O_TABLE_MENU;
 
@@ -52,6 +61,27 @@ export class OTableMenuComponent {
   protected snackBarService: SnackBarService;
   @ViewChild('menu') matMenu: MatMenu;
 
+  @ViewChild('selectAllCheckboxOption')
+  selectAllCheckboxOption: OTableOptionComponent;
+  @ViewChild('exportButtonOption')
+  exportButtonOption: OTableOptionComponent;
+  @ViewChild('columnsVisibilityButtonOption')
+  columnsVisibilityButtonOption: OTableOptionComponent;
+  @ViewChild('filterMenuButton', { read: ElementRef })
+  filterMenuButton: ElementRef;
+  @ViewChild('configurationMenuButton', { read: ElementRef })
+  configurationMenuButton: ElementRef;
+
+  @ViewChild('filterMenu')
+  filterMenu: MatMenu;
+  @ViewChild('configurationMenu')
+  configurationMenu: MatMenu;
+  @ViewChild('columnFilterOption')
+  columnFilterOption: OTableOptionComponent;
+
+  protected permissions: OTableMenuPermissions;
+  protected mutationObservers: MutationObserver[] = [];
+
   constructor(
     protected injector: Injector,
     protected dialog: MatDialog,
@@ -62,12 +92,150 @@ export class OTableMenuComponent {
     this.snackBarService = this.injector.get(SnackBarService);
   }
 
+  ngOnInit(): void {
+    this.permissions = this.table.getMenuPermissions();
+  }
+
+  ngAfterViewInit(): void {
+    if (this.selectAllCheckboxOption && !this.enabledSelectAllCheckbox) {
+      this.disableOTableOptionComponent(this.selectAllCheckboxOption);
+    }
+    if (this.exportButtonOption && !this.enabledExportButton) {
+      this.disableOTableOptionComponent(this.exportButtonOption);
+    }
+    if (this.columnsVisibilityButtonOption && !this.enabledColumnsVisibilityButton) {
+      this.disableOTableOptionComponent(this.columnsVisibilityButtonOption);
+    }
+    if (this.filterMenuButton && !this.enabledFilterMenu) {
+      this.disableButton(this.filterMenuButton);
+    }
+    if (this.configurationMenuButton && !this.enabledConfigurationMenu) {
+      this.disableButton(this.configurationMenuButton);
+    }
+  }
+
+  protected disableOTableOptionComponent(comp: OTableOptionComponent) {
+    comp.enabled = false;
+    const buttonEL = comp.elRef.nativeElement.querySelector('button');
+    const obs = PermissionsService.registerDisableChangesInDom(buttonEL, this.disabledChangesInDom.bind(this));
+    this.mutationObservers.push(obs);
+  }
+
+  protected disableButton(buttonEL: ElementRef) {
+    buttonEL.nativeElement.disabled = true;
+    const obs = PermissionsService.registerDisableChangesInDom(buttonEL.nativeElement, this.disabledChangesInDom.bind(this));
+    this.mutationObservers.push(obs);
+  }
+
+  ngOnDestroy() {
+    if (this.mutationObservers) {
+      this.mutationObservers.forEach((m: MutationObserver) => {
+        m.disconnect();
+      });
+    }
+  }
+
+  registerOptions(oTableOptions: OTableOptionComponent[]) {
+    const items: OPermissions[] = this.permissions ? this.permissions.items || [] : [];
+    const fixedOptions = ['select-all-checkbox', 'export', 'show-hide-columns', 'filter', 'configuration'];
+    const userItems: OPermissions[] = items.filter((perm: OPermissions) => fixedOptions.indexOf(perm.attr) === -1);
+    const self = this;
+    userItems.forEach((perm: OPermissions) => {
+      const option = oTableOptions.find((oTableOption: OTableOptionComponent) => oTableOption.oattr === perm.attr);
+      self.setPermissionsToOTableOption(perm, option);
+    });
+  }
+
+  protected disabledChangesInDom(mutation: MutationRecord) {
+    let element = <HTMLInputElement>mutation.target;
+    element.disabled = true;
+  }
+
+  protected setPermissionsToOTableOption(perm: OPermissions, option: OTableOptionComponent) {
+    if (perm.visible === false && option) {
+      option.elRef.nativeElement.remove();
+    } else if (perm.enabled === false && option) {
+      option.enabled = false;
+      const buttonEL = option.elRef.nativeElement.querySelector('button');
+      const obs = PermissionsService.registerDisableChangesInDom(buttonEL, this.disabledChangesInDom.bind(this));
+      this.mutationObservers.push(obs);
+    }
+  }
+
+  getPermissionByAttr(attr: string) {
+    const items: OPermissions[] = this.permissions ? this.permissions.items || [] : [];
+    return items.find((perm: OPermissions) => perm.attr === attr);
+  }
+
   get isSelectAllOptionActive(): boolean {
     return !!this.table.state['select-column-visible'];
   }
 
   get showColumnsFilterOption(): boolean {
     return this.table.oTableColumnsFilterComponent !== undefined;
+  }
+
+  get enabledColumnsFilterOption(): boolean {
+    return this.table.oTableColumnsFilterComponent !== undefined;
+  }
+
+  get showSelectAllCheckbox(): boolean {
+    if (!this.selectAllCheckbox) {
+      return false;
+    }
+    const perm: OPermissions = this.getPermissionByAttr('select-all-checkbox');
+    return !(perm && perm.visible === false);
+  }
+
+  get enabledSelectAllCheckbox(): boolean {
+    const perm: OPermissions = this.getPermissionByAttr('select-all-checkbox');
+    return !(perm && perm.enabled === false);
+  }
+
+  get showExportButton(): boolean {
+    if (!this.exportButton) {
+      return false;
+    }
+    const perm: OPermissions = this.getPermissionByAttr('export');
+    return !(perm && perm.visible === false);
+  }
+
+  get enabledExportButton(): boolean {
+    const perm: OPermissions = this.getPermissionByAttr('export');
+    return !(perm && perm.enabled === false);
+  }
+
+  get showColumnsVisibilityButton(): boolean {
+    if (!this.columnsVisibilityButton) {
+      return false;
+    }
+    const perm: OPermissions = this.getPermissionByAttr('show-hide-columns');
+    return !(perm && perm.visible === false);
+  }
+
+  get enabledColumnsVisibilityButton(): boolean {
+    const perm: OPermissions = this.getPermissionByAttr('show-hide-columns');
+    return !(perm && perm.enabled === false);
+  }
+
+  get showFilterMenu(): boolean {
+    const perm: OPermissions = this.getPermissionByAttr('filter');
+    return !(perm && perm.visible === false);
+  }
+
+  get enabledFilterMenu(): boolean {
+    const perm: OPermissions = this.getPermissionByAttr('filter');
+    return !(perm && perm.enabled === false);
+  }
+
+  get showConfigurationMenu(): boolean {
+    const perm: OPermissions = this.getPermissionByAttr('configuration');
+    return !(perm && perm.visible === false);
+  }
+
+  get enabledConfigurationMenu(): boolean {
+    const perm: OPermissions = this.getPermissionByAttr('configuration');
+    return !(perm && perm.enabled === false);
   }
 
   onShowsSelects(event?: any) {
@@ -179,7 +347,6 @@ export class OTableMenuComponent {
       }
     });
   }
-
 
   onStoreConfigurationClicked(): void {
     let dialogRef = this.dialog.open(OTableStoreConfigurationDialogComponent, {

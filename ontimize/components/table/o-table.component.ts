@@ -14,7 +14,7 @@ import { OTableDataSource } from './o-table.datasource';
 import { OFormComponent } from '../form/o-form.component';
 import { Codes, ObservableWrapper, Util } from '../../utils';
 import { OServiceComponent } from '../o-service-component.class';
-import { OntimizeService, SnackBarService, OPermissions, OTablePermissions, PermissionsService } from '../../services';
+import { OntimizeService, SnackBarService, OPermissions, OTablePermissions, PermissionsService, OTableMenuPermissions } from '../../services';
 import { OTableRowDirective } from './extensions/row/o-table-row.directive';
 import { OColumnTooltip } from './column/o-table-column.component';
 import { OTableStorage } from './extensions/o-table-storage.class';
@@ -294,9 +294,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   public paginator: OTablePaginatorComponent;
   @ViewChild(MatPaginator) matpaginator: MatPaginator;
   @ViewChild(OMatSort) sort: OMatSort;
-  @ViewChild('columnFilterOption') columnFilterOption: OTableOptionComponent;
-  @ContentChildren(OTableOptionComponent) tableOptions: QueryList<OTableOptionComponent>;
-  @ViewChild('menu') matMenu: MatMenu;
   @ViewChild(OTableEditableRowComponent) oTableEditableRow: OTableEditableRowComponent;
 
   // only for insideTabBugWorkaround
@@ -499,6 +496,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   protected permissions: OTablePermissions;
   @ViewChild('tableMenu') oTableMenu: OTableMenuComponent;
+  matMenu: MatMenu;
+  @ContentChildren(OTableOptionComponent) tableOptions: QueryList<OTableOptionComponent>;
 
   constructor(
     injector: Injector,
@@ -525,6 +524,10 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     this.afterViewInit();
     this.initTableAfterViewInit();
     this.parsePermissions();
+    if (this.oTableMenu) {
+      this.matMenu = this.oTableMenu.matMenu;
+      this.oTableMenu.registerOptions(this.tableOptions.toArray());
+    }
   }
 
   ngOnDestroy() {
@@ -536,6 +539,10 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     // this.permissions.actions.forEach((permission: OPermissions) => {
 
     // });
+  }
+
+  getMenuPermissions(): OTableMenuPermissions {
+    return this.permissions ? this.permissions.menu : undefined;
   }
 
   protected getOColumnPermissions(attr: string): OPermissions {
@@ -1544,8 +1551,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   clearFilters(triggerDatasourceUpdate: boolean = true): void {
     this.dataSource.clearColumnFilters(triggerDatasourceUpdate);
     this.showFilterByColumnIcon = false;
-    if (this.columnFilterOption) {
-      this.columnFilterOption.active = this.showFilterByColumnIcon;
+    if (this.oTableMenu && this.oTableMenu.columnFilterOption) {
+      this.oTableMenu.columnFilterOption.active = this.showFilterByColumnIcon;
     }
     if (this.oTableQuickFilterComponent) {
       this.oTableQuickFilterComponent.setValue(void 0);
@@ -1586,12 +1593,12 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   get disableTableMenuButton(): boolean {
-    return (this.permissions && this.permissions.menu.enabled === false);
+    return !!(this.permissions && this.permissions.menu.enabled === false);
   }
 
   get showTableMenuButton(): boolean {
-    const permissionBlocked = (this.permissions && this.permissions.menu.visible === false);
-    if (!permissionBlocked) {
+    const permissionHidden = !!(this.permissions && this.permissions.menu.visible === false);
+    if (permissionHidden) {
       return false;
     }
     const staticOpt = this.selectAllCheckbox || this.exportButton || this.columnsVisibilityButton || this.oTableColumnsFilterComponent !== undefined;
@@ -1791,8 +1798,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
     const storedColumnFilters = this.oTableStorage.getStoredColumnsFilters(conf);
     this.showFilterByColumnIcon = storedColumnFilters.length > 0;
-    if (this.columnFilterOption) {
-      this.columnFilterOption.active = this.showFilterByColumnIcon;
+    if (this.oTableMenu && this.oTableMenu.columnFilterOption) {
+      this.oTableMenu.columnFilterOption.active = this.showFilterByColumnIcon;
     }
 
     if (this.oTableColumnsFilterComponent) {
