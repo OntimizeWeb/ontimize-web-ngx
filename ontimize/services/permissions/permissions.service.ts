@@ -132,7 +132,7 @@ export class PermissionsService {
     let permissions: OTablePermissions;
     const allComponents = this.permissions.components || [];
     const attrPermissions = allComponents.find(comp => comp.attr === attr);
-    if (attrPermissions.selector === 'o-table') {
+    if (attrPermissions && attrPermissions.selector === 'o-table') {
       permissions = <OTablePermissions>attrPermissions;
     }
     return permissions;
@@ -146,7 +146,7 @@ export class PermissionsService {
     const allComponents = this.permissions.components || [];
     let formPermissions: OFormPermissions;
     const formAttrPermissions = allComponents.find(comp => comp.attr === formAttr);
-    if (formAttrPermissions.selector === 'o-form') {
+    if (formAttrPermissions && formAttrPermissions.selector === 'o-form') {
       formPermissions = <OFormPermissions>formAttrPermissions;
     }
     if (Util.isDefined(formPermissions) && Util.isDefined(formPermissions.components)) {
