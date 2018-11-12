@@ -1,10 +1,11 @@
 <ng-template #templateref let-cellvalue="cellvalue" let-rowvalue="rowvalue">
   <div [formGroup]="formGroup" class="o-table-cell-editor-date">
     <mat-form-field floatLabel="never">
-      <input #input matInput [placeholder]="getPlaceholder()" [formControl]="formControl" [required]="orequired" [matDatepicker]="d"
-        [matDatepickerFilter]="filterDate" (dateChange)="onDateChange($event)" [min]="oMinDate" [max]="oMaxDate">
+      <input #input matInput [placeholder]="getPlaceholder()" [formControl]="formControl" [required]="orequired"
+        [matDatepicker]="d" [matDatepickerFilter]="filterDate" (dateChange)="onDateChange($event)" [min]="oMinDate"
+        [max]="oMaxDate">
 
-      <mat-datepicker #d [startView]="oStartView" [startAt]="oStartAt" [touchUi]="oTouchUi">
+      <mat-datepicker #d [startView]="oStartView" [startAt]="oStartAt" [touchUi]="oTouchUi" (closed)="onClosed()">
       </mat-datepicker>
 
       <span class="icon-btn" (click)="openDatepicker(d)" matSuffix>
