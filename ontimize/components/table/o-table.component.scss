@@ -12,8 +12,8 @@ $_mat-checkbox-mark-stroke-size-small: 2 / 15 * $mat-checkbox-size-small !defaul
     &.block-events {
       pointer-events: none;
 
-       > .o-table-body .mat-header-row,
-      > .toolbar {
+       > .toolbar,
+      > .o-table-body .mat-header-row {
         opacity: .75;
       }
     }
@@ -21,15 +21,6 @@ $_mat-checkbox-mark-stroke-size-small: 2 / 15 * $mat-checkbox-size-small !defaul
     position: relative;
     margin: 0 .5%;
     overflow-y: auto;
-
-    .o-table-body.horizontal-scroll {
-      overflow-x: auto;
-      padding-bottom: 16px;
-
-      .mat-header-cell {
-        width: 150px;
-      }
-    }
 
     .toolbar {
       height: 40px;
@@ -44,6 +35,21 @@ $_mat-checkbox-mark-stroke-size-small: 2 / 15 * $mat-checkbox-size-small !defaul
         text-align: center;
       }
 
+    }
+
+    .o-table-body {
+      &:not(.horizontal-scroll) {
+        overflow-x: hidden;
+      }
+
+      &.horizontal-scroll {
+        overflow-x: auto;
+        padding-bottom: 16px;
+
+        .mat-header-cell {
+          width: 150px;
+        }
+      }
     }
 
     .o-table-no-results {

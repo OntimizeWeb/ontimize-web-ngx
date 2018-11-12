@@ -1,5 +1,5 @@
 <div [formGroup]="getFormGroup()" [matTooltip]="tooltip" [matTooltipPosition]="tooltipPosition" [matTooltipShowDelay]="tooltipShowDelay">
-  <div class="mat-form-field mat-form-field-suffix" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="8px">
+  <div class="mat-form-field mat-form-field-appearance-legacy" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="8px">
     <o-date-input #dateInput fxFlex attr="dateInput" [read-only]="readOnly" [enabled]="oenabled" [required]="isRequired"
       [label]="placeHolder" clear-button="no" automatic-registering="no" automatic-binding="no" (onFocus)="innerOnFocus($event)"
       (onBlur)="innerOnBlur($event)" [format]="oDateFormat" [locale]="oDateLocale" [start-view]="oDateStartView"
@@ -14,7 +14,7 @@
       [format]="oHourFormat" [text-input-enabled]="oHourTextInputEnabled" [min]="oHourMin" [max]="oHourMax">
     </o-hour-input>
 
-    <button type="button" *ngIf="showClearButton" matSuffix mat-icon-button (click)="onClickClearValue($event)">
+    <button class="mat-form-field-suffix" type="button" *ngIf="showClearButton" matSuffix mat-icon-button (click)="onClickClearValue()">
       <mat-icon svgIcon="ontimize:close"></mat-icon>
     </button>
   </div>

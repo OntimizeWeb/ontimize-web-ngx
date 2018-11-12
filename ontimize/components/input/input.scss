@@ -24,7 +24,8 @@ div.icon-btn {
       text-align: center;
 
       .icon-btn,
-      .mat-icon {
+      .mat-icon,
+      .mat-icon-button .mat-icon {
         vertical-align: middle;
         font-size: 20px;
         line-height: 24px;
