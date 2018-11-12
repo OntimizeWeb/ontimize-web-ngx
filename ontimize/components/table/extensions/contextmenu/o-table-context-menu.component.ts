@@ -1,7 +1,8 @@
-import { Component, forwardRef, Inject, Injector, OnInit } from '@angular/core';
+import { Component, forwardRef, Inject, Injector, OnInit, QueryList, ViewChildren } from '@angular/core';
 
 import { OTableComponent } from '../../o-table.component';
 import { OContextMenuComponent } from '../../../contextmenu/o-context-menu.component';
+import { OContextMenuItemComponent } from '../../../contextmenu/o-context-menu-components';
 
 export const DEFAULT_TABLE_CONTEXT_MENU_INPUTS = [
   'contextMenu : context-menu',
@@ -10,21 +11,30 @@ export const DEFAULT_TABLE_CONTEXT_MENU_INPUTS = [
 @Component({
   moduleId: module.id,
   selector: 'o-table-context-menu',
-  template: ' ',
+  templateUrl: './o-table-context-menu.component.html',
   inputs: DEFAULT_TABLE_CONTEXT_MENU_INPUTS
 })
 
-export class OTableContextMenuComponent implements OnInit {
+export class OTableContextMenuComponent {
 
   public contextMenu: OContextMenuComponent;
+
+  @ViewChildren(OContextMenuItemComponent) items: QueryList<OContextMenuItemComponent>;
 
   constructor(
     protected injector: Injector,
     @Inject(forwardRef(() => OTableComponent)) protected table: OTableComponent
   ) { }
 
-  ngOnInit() {
+
+  ngAfterViewInit(): void {
+    let items = this.contextMenu.oContextMenuItems.toArray().concat(this.items.toArray());
+    this.contextMenu.oContextMenuItems.reset(items);
     this.table.registerContextMenu(this.contextMenu);
+  }
+
+  gotoDetails(data) {
+    this.table.doHandleClick(data);
   }
 
 }

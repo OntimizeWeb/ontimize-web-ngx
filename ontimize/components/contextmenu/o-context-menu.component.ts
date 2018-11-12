@@ -1,4 +1,4 @@
-import { Component, ContentChildren, Injector, OnDestroy, OnInit, EventEmitter } from '@angular/core';
+import { Component, ContentChildren, Injector, OnDestroy, OnInit, EventEmitter, QueryList } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 
 import { ObservableWrapper } from '../../utils';
@@ -17,7 +17,7 @@ export const DEFAULT_OUTPUTS_O_CONTEXT_MENU = [
 })
 export class OContextMenuComponent implements OnDestroy, OnInit {
 
-  @ContentChildren(OContextMenuItemComponent) public oContextMenuItems: OContextMenuItemComponent[];
+  @ContentChildren(OContextMenuItemComponent) public oContextMenuItems: QueryList<OContextMenuItemComponent>;
 
   public oContextMenuService: OContextMenuService;
   protected subscription: Subscription = new Subscription();

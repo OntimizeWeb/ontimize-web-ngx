@@ -46,7 +46,7 @@ export const EXPANSION_PANEL_ANIMATION_TIMING = '225ms cubic-bezier(0.4,0.0,0.2,
 })
 export class OContextMenuContentComponent implements AfterViewInit, OnDestroy, OnInit {
 
-  public menuItems: OContextMenuItemComponent[] = [];
+  public menuItems = [];
   public overlay: OverlayRef;
   public data: any;
   public execute: EventEmitter<{ event: Event, data: any, menuItem: OContextMenuItemComponent }> = new EventEmitter();
