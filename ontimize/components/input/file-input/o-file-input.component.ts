@@ -1,29 +1,16 @@
-import {
-  Component,
-  ElementRef,
-  EventEmitter,
-  forwardRef,
-  Inject,
-  Injector,
-  NgModule,
-  OnDestroy,
-  OnInit,
-  Optional,
-  ViewChild
-} from '@angular/core';
+import { Component, ElementRef, EventEmitter, forwardRef, Inject, Injector, NgModule, OnDestroy, OnInit, Optional, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { ValidatorFn, ValidationErrors } from '@angular/forms';
+import { ValidationErrors, ValidatorFn } from '@angular/forms';
 
 import { OSharedModule } from '../../../shared';
 import { InputConverter } from '../../../decorators';
 import { OntimizeFileService } from '../../../services';
 import { OFormComponent } from '../../form/o-form.component';
-import { OFormDataComponent, OValueChangeEvent } from '../../o-form-data-component.class';
+import { OFormDataComponent, OValueChangeEvent, DEFAULT_INPUTS_O_FORM_DATA_COMPONENT } from '../../o-form-data-component.class';
 
 import { OFileItem } from './o-file-item.class';
 import { OFileUploader } from './o-file-uploader.class';
-import { OFormServiceComponent } from '../o-form-service-component.class';
 
 export const DEFAULT_INPUTS_O_FILE_INPUT = [
   'oattr: attr',
@@ -64,7 +51,7 @@ export const DEFAULT_INPUTS_O_FILE_INPUT = [
 ];
 
 export const DEFAULT_OUTPUTS_O_FILE_INPUT = [
-  ...OFormServiceComponent.DEFAULT_OUTPUTS_O_FORM_SERVICE_COMPONENT,
+  ...DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,
   'onBeforeUpload',
   'onBeforeUploadFile',
   'onProgress',
@@ -330,8 +317,7 @@ export class OFileInputComponent extends OFormDataComponent implements OnDestroy
 
 @NgModule({
   declarations: [OFileInputComponent],
-  imports: [OSharedModule, CommonModule],
+  imports: [CommonModule, OSharedModule],
   exports: [OFileInputComponent]
 })
-export class OFileInputModule {
-}
+export class OFileInputModule { }
