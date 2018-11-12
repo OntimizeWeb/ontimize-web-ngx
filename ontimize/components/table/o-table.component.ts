@@ -1229,6 +1229,14 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     this.reloadData();
   }
 
+  showAndSelectAllCheckbox() {
+    if (this.selectAllCheckbox) {
+      this._oTableOptions.selectColumn.visible = false;
+      this.updateSelectionColumnState();
+      this.selectAll();
+    }
+  }
+
   reloadPaginatedDataFromStart() {
     if (this.pageable) {
       // Initialize page index
@@ -1411,7 +1419,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     const _self = this;
     return data.map((row) => {
       let obj = {};
-      _self.keysArray.map((key) => {
+      _self.keysArray.forEach((key) => {
         if (row[key] !== undefined) {
           obj[key] = row[key];
         }
@@ -1447,7 +1455,11 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   masterToggle(event: MatCheckboxChange) {
-    event.checked ? this.dataSource.renderedData.forEach(row => this.selection.select(row)) : this.clearSelection();
+    event.checked ? this.selectAll() : this.clearSelection();
+  }
+
+  selectAll() {
+    this.dataSource.renderedData.forEach(row => this.selection.select(row));
   }
 
   selectionCheckboxToggle(event: MatCheckboxChange, row: any) {
@@ -2057,6 +2069,10 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       height += this.tableToolbarEl.nativeElement.offsetHeight;
     }
     return height;
+  }
+
+  hasDetailMode(): boolean {
+    return this.detailMode !== Codes.DETAIL_MODE_NONE;
   }
 
 }

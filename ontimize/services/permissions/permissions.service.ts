@@ -30,6 +30,7 @@ export type OTablePermissions = {
   menu: OTableMenuPermissions;
   columns: OPermissions[];
   actions: OPermissions[];
+  contextMenu: OPermissions[];
 };
 
 export type OComponentPermissions = OFormPermissions | OTablePermissions;
@@ -178,6 +179,12 @@ export class PermissionsService {
     if (Util.isDefined(attrPermissions)) {
       permissions = attrPermissions.actions || [];
     }
+    return permissions;
+  }
+
+  getActionsContextMenuTablePermissions(attr: string): OPermissions[] {
+    let permissionsTable: OTablePermissions = this.getTablePermissions(attr);
+    let permissions = permissionsTable.contextMenu || [];
     return permissions;
   }
 
