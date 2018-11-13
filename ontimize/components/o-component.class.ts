@@ -1,5 +1,5 @@
 import { Injector } from '@angular/core';
-import { InputConverter, BooleanConverter } from '../decorators';
+import { BooleanConverter } from '../decorators';
 import { OTranslateService, PermissionsService, OPermissions } from '../services';
 import { Util } from '../utils';
 
@@ -13,8 +13,7 @@ export class OBaseComponent implements IComponent {
   protected olabel: string;
   protected _oenabled: boolean = true;
   protected _readOnly: boolean;
-  @InputConverter()
-  protected orequired: boolean = false;
+  protected _orequired: boolean = false;
 
   /* Internal variables */
   protected injector: Injector;
@@ -132,15 +131,20 @@ export class OBaseComponent implements IComponent {
     this._disabled = value;
   }
 
+  set orequired(val: boolean) {
+    this._orequired = BooleanConverter(val);
+  }
+
+  get orequired(): boolean {
+    return this._orequired;
+  }
+
   get isRequired(): boolean {
     return this.orequired;
   }
 
   set required(value: boolean) {
-    var self = this;
-    window.setTimeout(() => {
-      self.orequired = value;
-    }, 0);
+    this.orequired = value;
   }
 
   get oenabled(): any {

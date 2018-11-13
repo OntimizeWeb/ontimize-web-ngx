@@ -513,4 +513,16 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     });
     this._fControl.setValidators(validators);
   }
+
+  get orequired(): boolean {
+    return this._orequired;
+  }
+
+  set orequired(val: boolean) {
+    const old = this._orequired;
+    this._orequired = BooleanConverter(val);
+    if (val !== old) {
+      this.updateValidators();
+    }
+  }
 }
