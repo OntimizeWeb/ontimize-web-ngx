@@ -2,7 +2,7 @@ import { Injector, ElementRef, OnInit, OnDestroy, QueryList, ViewChildren, After
 import { FormControl, FormGroup, Validators, ValidatorFn } from '@angular/forms';
 import { MatSuffix } from '@angular/material';
 import { Subscription } from 'rxjs/Subscription';
-import { InputConverter } from '../decorators';
+import { InputConverter, BooleanConverter } from '../decorators';
 import { SQLTypes, Util } from '../utils';
 import { OBaseComponent, IComponent } from './o-component.class';
 import { OFormComponent } from './form/o-form.component';
@@ -441,7 +441,10 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   }
 
   resolveValidators(): ValidatorFn[] {
-    let validators: ValidatorFn[] = this.angularValidatorsFn;
+    let validators: ValidatorFn[] = [];
+    this.angularValidatorsFn.forEach((fn: ValidatorFn) => {
+      validators.push(fn);
+    });
     if (this.orequired) {
       validators.push(Validators.required);
     }
