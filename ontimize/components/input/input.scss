@@ -7,7 +7,60 @@ div.icon-btn {
   }
 }
 
+$suffix-size: 24;
+$width24: $suffix-size * 1px;
+
 .mat-form-field {
+  &.mat-form-field-appearance-ontimize {
+    .mat-select-arrow-wrapper {
+      transform: initial;
+    }
+
+    .mat-form-field-wrapper {
+      .mat-form-field-prefix,
+      .mat-form-field-suffix {
+        display: inherit;
+
+        .mat-datepicker-toggle {
+          .mat-button-wrapper {
+            vertical-align: sub;
+          }
+          .mat-icon {
+            font-size: 20px;
+          }
+        }
+      }
+    }
+
+    &.mat-form-field-appearance-legacy {
+      .mat-icon {
+        width: 20px;
+        height: 20px;
+        line-height: 20px;
+      }
+    }
+
+    &:not(.mat-form-field-appearance-legacy) {
+      .mat-form-field-prefix,
+      .mat-form-field-suffix {
+        top: 5px;
+
+        .mat-icon {
+          width: 20px;
+          height: 20px;
+          line-height: 20px;
+        }
+
+        .mat-icon-button {
+          line-height: $width24;
+          display: block;
+          width: $width24;
+          height: $width24;
+        }
+      }
+    }
+  }
+
   input:read-only {
     cursor: default;
   }
@@ -17,7 +70,7 @@ div.icon-btn {
   }
 
   &.icon-field {
-    height: 24px;
+    height: $width24;
 
     .mat-form-field-suffix {
       cursor: default;
@@ -27,15 +80,13 @@ div.icon-btn {
       .mat-icon,
       .mat-icon-button .mat-icon {
         vertical-align: middle;
-        font-size: 20px;
-        line-height: 24px;
       }
 
       .icon-btn,
       .mat-icon-button,
       .mat-icon:not([svgicon]) {
-        width: 24px;
-        height: 24px;
+        width: $width24;
+        height: $width24;
       }
 
       .svg-icon > svg {
@@ -46,26 +97,3 @@ div.icon-btn {
     }
   }
 }
-@mixin mat-form-field-with-icon() {
-  $suffix-size: 24;
-  @for $i from 1 through 4 {
-    $width: ($i * $suffix-size) * 1px;
-
-    .mat-form-field.icon-field {
-      &.icon-field-#{$i}-suffix {
-        .mat-form-field-suffix {
-          width: $width;
-        }
-      }
-
-      &:not(.custom-width) {
-        &.icon-field-#{$i}-suffix {
-          .mat-form-field-infix {
-            width: calc(180px - #{$width});
-          }
-        }
-      }
-    }
-  }
-}
-@include mat-form-field-with-icon();

@@ -104,7 +104,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   @InputConverter()
   clearButton: boolean = false;
   angularValidatorsFn: ValidatorFn[] = [];
-  protected _appearance: MatFormFieldAppearance;
+  protected _appearance: MatFormFieldAppearance = 'standard';
 
   /* Outputs */
   onChange: EventEmitter<Object> = new EventEmitter<Object>();
@@ -177,6 +177,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     if (this.isDisabled) {
       this.mutationObserver = PermissionsService.registerDisableChangesInDom(this.getMutationObserverTarget(), this.disabledChangesInDom.bind(this));
     }
+    this.addOntimizeCustomAppearanceClass();
   }
 
   ngOnDestroy() {
@@ -241,66 +242,6 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
         this.isReadOnly = !(this.form.isInUpdateMode() || this.form.isInInsertMode() || this.form.isEditableDetail());
       } else {
         this.isReadOnly = this._disabled;
-      }
-    }
-  }
-
-  protected parsePermissions() {
-    // if oattr in form, it can have permissions
-    if (!this.form || !Util.isDefined(this.form.oattr)) {
-      return;
-    }
-    const permissions: OPermissions = this.permissionsService.getComponentPermissions(this.oattr, this.form.oattr);
-    if (!Util.isDefined(permissions)) {
-      return;
-    }
-    if (permissions.visible === false) {
-      /* hide input per permissions */
-      this.elRef.nativeElement.remove();
-      this.destroy();
-    } else if (permissions.enabled === false) {
-      /* disable input per permissions */
-      this.disabled = true;
-      if (this.form) {
-        this.form.registerFormComponent(this);
-      }
-    }
-    this.permissions = permissions;
-  }
-
-  protected getMutationObserverTarget(): any {
-    let result;
-    try {
-      result = this.elementRef.nativeElement.getElementsByTagName('input').item(0);
-    } catch (error) {
-      //
-    }
-    return result;
-  }
-
-  /**
-   * Do not allow the disabled attribute to change by code or by inspector
-   * */
-  private disabledChangesInDom() {
-    const control = this.getFormControl();
-    control.disable({
-      onlySelf: true,
-      emitEvent: false
-    });
-  }
-
-  protected setSuffixClass(count: number) {
-    const iconFieldEl = this.elRef.nativeElement.getElementsByClassName('icon-field');
-    if (iconFieldEl.length === 1) {
-      let classList = iconFieldEl[0].classList;
-      classList.forEach(className => {
-        if (className.startsWith('icon-field-')) {
-          classList.remove(className);
-        }
-      });
-      if (count > 0) {
-        let matSuffixClass = `icon-field-${count}-suffix`;
-        iconFieldEl[0].classList.add(matSuffixClass);
       }
     }
   }
@@ -557,7 +498,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   set appearance(value: MatFormFieldAppearance) {
     const values = ['legacy', 'standard', 'fill', 'outline'];
     if (values.indexOf(value) === -1) {
-      value = 'legacy';
+      value = 'standard';
     }
     this._appearance = value;
   }
@@ -572,5 +513,78 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
       value = 'auto';
     }
     this._floatLabel = value;
+  }
+
+  protected parsePermissions() {
+    // if oattr in form, it can have permissions
+    if (!this.form || !Util.isDefined(this.form.oattr)) {
+      return;
+    }
+    const permissions: OPermissions = this.permissionsService.getComponentPermissions(this.oattr, this.form.oattr);
+    if (!Util.isDefined(permissions)) {
+      return;
+    }
+    if (permissions.visible === false) {
+      /* hide input per permissions */
+      this.elRef.nativeElement.remove();
+      this.destroy();
+    } else if (permissions.enabled === false) {
+      /* disable input per permissions */
+      this.disabled = true;
+      if (this.form) {
+        this.form.registerFormComponent(this);
+      }
+    }
+    this.permissions = permissions;
+  }
+
+  protected getMutationObserverTarget(): any {
+    let result;
+    try {
+      result = this.elementRef.nativeElement.getElementsByTagName('input').item(0);
+    } catch (error) {
+      //
+    }
+    return result;
+  }
+
+  /**
+   * Do not allow the disabled attribute to change by code or by inspector
+   * */
+  private disabledChangesInDom() {
+    const control = this.getFormControl();
+    control.disable({
+      onlySelf: true,
+      emitEvent: false
+    });
+  }
+
+  protected setSuffixClass(count: number) {
+    const iconFieldEl = this.elRef.nativeElement.getElementsByClassName('icon-field');
+    if (iconFieldEl.length === 1) {
+      let classList = iconFieldEl[0].classList;
+      classList.forEach(className => {
+        if (className.startsWith('icon-field-')) {
+          classList.remove(className);
+        }
+      });
+      if (count > 0) {
+        let matSuffixClass = `icon-field-${count}-suffix`;
+        iconFieldEl[0].classList.add(matSuffixClass);
+      }
+    }
+  }
+
+  protected addOntimizeCustomAppearanceClass() {
+    try {
+      if (this.elRef) {
+        const matFormFieldEl = this.elRef.nativeElement.getElementsByTagName('mat-form-field');
+        if (matFormFieldEl && matFormFieldEl.length === 1) {
+          matFormFieldEl.item(0).classList.add('mat-form-field-appearance-ontimize');
+        }
+      }
+    } catch (e) {
+      //
+    }
   }
 }
