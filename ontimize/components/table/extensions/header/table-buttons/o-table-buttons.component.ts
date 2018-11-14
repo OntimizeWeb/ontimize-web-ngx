@@ -66,6 +66,9 @@ export class OTableButtonsComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   ngAfterViewInit(): void {
+    if (this.permissions.length === 0) {
+      return;
+    }
     if (this.insertOButton && !this.enabledInsertOButton) {
       this.disableOTableOptionComponent(this.insertOButton);
     }

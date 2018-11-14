@@ -94,11 +94,14 @@ export class OTableMenuComponent implements OnInit, AfterViewInit, OnDestroy {
     this.snackBarService = this.injector.get(SnackBarService);
   }
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.permissions = this.table.getMenuPermissions();
   }
 
-  ngAfterViewInit(): void {
+  ngAfterViewInit() {
+    if (!this.permissions.items || this.permissions.items.length === 0) {
+      return;
+    }
     if (this.selectAllCheckboxOption && !this.enabledSelectAllCheckbox) {
       this.disableOTableOptionComponent(this.selectAllCheckboxOption);
     }
@@ -139,7 +142,7 @@ export class OTableMenuComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   registerOptions(oTableOptions: OTableOptionComponent[]) {
-    const items: OPermissions[] = this.permissions ? this.permissions.items || [] : [];
+    const items: OPermissions[] = this.permissions.items || [];
     const fixedOptions = ['select-all-checkbox', 'export', 'show-hide-columns', 'filter', 'configuration'];
     const userItems: OPermissions[] = items.filter((perm: OPermissions) => fixedOptions.indexOf(perm.attr) === -1);
     const self = this;
@@ -161,7 +164,7 @@ export class OTableMenuComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   getPermissionByAttr(attr: string) {
-    const items: OPermissions[] = this.permissions ? this.permissions.items || [] : [];
+    const items: OPermissions[] = this.permissions.items || [];
     return items.find((perm: OPermissions) => perm.attr === attr);
   }
 
