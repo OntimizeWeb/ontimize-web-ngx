@@ -552,17 +552,32 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   getMenuPermissions(): OTableMenuPermissions {
-    return this.permissions ? this.permissions.menu : undefined;
+    let result: OTableMenuPermissions = this.permissions ? this.permissions.menu : undefined;
+    return result ? result : {
+      visible: true,
+      enabled: true,
+      items: []
+    };
   }
 
-  protected getOColumnPermissions(attr: string): OPermissions {
-    const columns = this.permissions ? this.permissions.columns : [];
+  getOColumnPermissions(attr: string): OPermissions {
+    const columns = this.permissions ? (this.permissions.columns || []) : [];
     return columns.find(comp => comp.attr === attr) || { attr: attr, enabled: true, visible: true };
   }
 
-  protected checkEnabledActionPermission(attr) {
-    const actionsPerm = this.permissions.actions;
-    const permissions: OPermissions = (actionsPerm || []).find(p => p.attr === attr);
+  protected getActionPermissions(attr: string): OPermissions {
+    const actionsPerm = this.permissions ? (this.permissions.actions || []) : [];
+    const permissions: OPermissions = actionsPerm.find(p => p.attr === attr);
+    return permissions || {
+      attr: attr,
+      visible: true,
+      enabled: true
+    };
+  }
+
+  protected checkEnabledActionPermission(attr: string) {
+    const actionsPerm = this.permissions ? (this.permissions.actions || []) : [];
+    const permissions: OPermissions = actionsPerm.find(p => p.attr === attr);
     let enabledPermision = PermissionsUtils.checkEnabledPermission(permissions);
     if (!enabledPermision) {
       this.snackBarService.open(PermissionsUtils.MESSAGE_OPERATION_NOT_ALLOWED_PERMISSION);
@@ -1367,6 +1382,12 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     if (event && column.editing && this.editingCell === event.currentTarget) {
       return;
     }
+    const columnPermissions: OPermissions = this.getOColumnPermissions(column.attr);
+    if (columnPermissions.enabled === false) {
+      console.warn(`${column.attr} edition not allowed due to permissions`);
+      return;
+    }
+
     this.clearSelectionAndEditing();
     this.selectedRow(row);
     this.editingCell = event.currentTarget;
@@ -1381,9 +1402,12 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   updateCellData(column: OColumn, data: any, saveChanges: boolean) {
-    // if (!this.checkEnabledActionPermission(PermissionsUtils.ACTION_UPDATE)) {
-    //   return;
-    // }
+    if (!this.checkEnabledActionPermission(PermissionsUtils.ACTION_UPDATE)) {
+      const res = new Observable(innerObserver => {
+        innerObserver.error();
+      });
+      return res;
+    }
     column.editing = false;
     this.editingCell = undefined;
     if (saveChanges && this.editingRow !== undefined) {
@@ -1613,11 +1637,11 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   get disableTableMenuButton(): boolean {
-    return !!(this.permissions && this.permissions.menu.enabled === false);
+    return !!(this.permissions && this.permissions.menu && this.permissions.menu.enabled === false);
   }
 
   get showTableMenuButton(): boolean {
-    const permissionHidden = !!(this.permissions && this.permissions.menu.visible === false);
+    const permissionHidden = !!(this.permissions && this.permissions.menu && this.permissions.menu.visible === false);
     if (permissionHidden) {
       return false;
     }
@@ -1626,9 +1650,13 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   setOTableInsertableRow(tableInsertableRow: OTableInsertableRowComponent) {
-    this.oTableInsertableRowComponent = tableInsertableRow;
-    this.showFirstInsertableRow = this.oTableInsertableRowComponent.isFirstRow();
-    this.showLastInsertableRow = !this.showFirstInsertableRow;
+    const insertPerm: OPermissions = this.getActionPermissions(PermissionsUtils.ACTION_INSERT);
+    if (insertPerm.visible) {
+      tableInsertableRow.enabled = insertPerm.enabled;
+      this.oTableInsertableRowComponent = tableInsertableRow;
+      this.showFirstInsertableRow = this.oTableInsertableRowComponent.isFirstRow();
+      this.showLastInsertableRow = !this.showFirstInsertableRow;
+    }
   }
 
   clearSelectionAndEditing() {
@@ -1741,6 +1769,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   insertRecord(recordData: any, sqlTypes?: Object): Observable<any> {
+    if (!this.checkEnabledActionPermission(PermissionsUtils.ACTION_INSERT)) {
+      return undefined;
+    }
     if (!Util.isDefined(sqlTypes)) {
       let allSqlTypes = this.getSqlTypes();
       let sqlTypes = {};
@@ -1752,6 +1783,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   updateRecord(filter: any, updateData: any, sqlTypes?: Object): Observable<any> {
+    if (!this.checkEnabledActionPermission(PermissionsUtils.ACTION_UPDATE)) {
+      return Observable.of(this.dataSource.data);
+    }
     let sqlTypesArg = sqlTypes || {};
     if (!Util.isDefined(sqlTypes)) {
       let allSqlTypes = this.getSqlTypes();
@@ -2003,6 +2037,19 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     return height;
   }
 
+  viewDetail(item: any): void {
+    if (!this.checkEnabledActionPermission('detail')) {
+      return;
+    }
+    super.viewDetail(item);
+  }
+
+  editDetail(item: any): void {
+    if (!this.checkEnabledActionPermission('edit')) {
+      return;
+    }
+    super.editDetail(item);
+  }
 }
 
 @NgModule({
