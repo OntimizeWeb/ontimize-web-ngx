@@ -11,7 +11,7 @@ export interface IComponent {
 export class OBaseComponent implements IComponent {
   /* Inputs */
   protected oattr: string;
-  protected olabel: string;
+  olabel: string;
   protected oplaceholder: string = '';
   protected _oenabled: boolean = true;
   protected _readOnly: boolean;
