@@ -13,8 +13,9 @@ import { InputConverter } from '../../decorators';
 import { OTableDataSource } from './o-table.datasource';
 import { OFormComponent } from '../form/o-form.component';
 import { Codes, ObservableWrapper, Util } from '../../utils';
+import { PermissionsUtils } from '../../util/permissions';
 import { OServiceComponent } from '../o-service-component.class';
-import { OntimizeService, SnackBarService, OPermissions, OTablePermissions, PermissionsService, OTableMenuPermissions } from '../../services';
+import { OntimizeService, SnackBarService, OPermissions, OTablePermissions, OTableMenuPermissions } from '../../services';
 import { OTableRowDirective } from './extensions/row/o-table-row.directive';
 import { OColumnTooltip } from './column/o-table-column.component';
 import { OTableStorage } from './extensions/o-table-storage.class';
@@ -37,7 +38,9 @@ import {
   OTableEditableRowComponent,
   IColumnValueFilter,
   ColumnValueFilterOperator,
-  OTableMenuComponent
+  OTableMenuComponent,
+  OTableButtonsComponent,
+  OTableButtonComponent
 } from './extensions/header/o-table-header-components';
 
 import {
@@ -495,9 +498,17 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   protected permissions: OTablePermissions;
-  @ViewChild('tableMenu') oTableMenu: OTableMenuComponent;
   matMenu: MatMenu;
-  @ContentChildren(OTableOptionComponent) tableOptions: QueryList<OTableOptionComponent>;
+
+  @ViewChild('tableMenu')
+  oTableMenu: OTableMenuComponent;
+  @ContentChildren(OTableOptionComponent)
+  tableOptions: QueryList<OTableOptionComponent>;
+
+  @ViewChild('tableButtons')
+  oTableButtons: OTableButtonsComponent;
+  @ContentChildren(OTableButtonComponent)
+  tableButtons: QueryList<OTableButtonComponent>;
 
   constructor(
     injector: Injector,
@@ -523,10 +534,12 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   ngAfterViewInit() {
     this.afterViewInit();
     this.initTableAfterViewInit();
-    this.parsePermissions();
     if (this.oTableMenu) {
       this.matMenu = this.oTableMenu.matMenu;
       this.oTableMenu.registerOptions(this.tableOptions.toArray());
+    }
+    if (this.oTableButtons) {
+      this.oTableButtons.registerButtons(this.tableButtons.toArray());
     }
   }
 
@@ -534,11 +547,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     this.destroy();
   }
 
-  protected parsePermissions() {
-    // const self = this;
-    // this.permissions.actions.forEach((permission: OPermissions) => {
-
-    // });
+  getActionsPermissions(): OPermissions[] {
+    return this.permissions ? (this.permissions.actions || []) : [];
   }
 
   getMenuPermissions(): OTableMenuPermissions {
@@ -553,9 +563,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   protected checkEnabledActionPermission(attr) {
     const actionsPerm = this.permissions.actions;
     const permissions: OPermissions = (actionsPerm || []).find(p => p.attr === attr);
-    let enabledPermision = PermissionsService.checkEnabledPermission(permissions);
+    let enabledPermision = PermissionsUtils.checkEnabledPermission(permissions);
     if (!enabledPermision) {
-      this.snackBarService.open(PermissionsService.MESSAGE_OPERATION_NOT_ALLOWED_PERMISSION);
+      this.snackBarService.open(PermissionsUtils.MESSAGE_OPERATION_NOT_ALLOWED_PERMISSION);
     }
     return enabledPermision;
   }
@@ -1168,10 +1178,16 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   add() {
+    if (!this.checkEnabledActionPermission(PermissionsUtils.ACTION_INSERT)) {
+      return;
+    }
     super.insertDetail();
   }
 
   remove(clearSelectedItems: boolean = false) {
+    if (!this.checkEnabledActionPermission(PermissionsUtils.ACTION_DELETE)) {
+      return;
+    }
     let selectedItems = this.getSelectedItems();
     if (selectedItems.length > 0) {
       this.dialogService.confirm('CONFIRM', 'MESSAGES.CONFIRM_DELETE').then(res => {
@@ -1211,6 +1227,10 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   reloadData() {
+    if (!this.checkEnabledActionPermission(PermissionsUtils.ACTION_REFRESH)) {
+      return;
+    }
+
     this.clearSelection();
     this.finishQuerySubscription = false;
     this.pendingQuery = true;
@@ -1361,7 +1381,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   updateCellData(column: OColumn, data: any, saveChanges: boolean) {
-    // if (!this.checkEnabledActionPermission(PermissionsService.PERMISSIONS_ACTIONS_UPDATE_FORM)) {
+    // if (!this.checkEnabledActionPermission(PermissionsUtils.ACTION_UPDATE)) {
     //   return;
     // }
     column.editing = false;
