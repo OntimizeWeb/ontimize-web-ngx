@@ -1,8 +1,9 @@
-import { Component, Inject, forwardRef, Injector, ViewEncapsulation, ViewChild, OnDestroy, ChangeDetectionStrategy, OnInit, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, Inject, forwardRef, Injector, ViewEncapsulation, ViewChild, OnDestroy, ChangeDetectionStrategy, OnInit, ElementRef, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { MatDialog, MatMenu } from '@angular/material';
 import { Util } from '../../../../../utils';
+import { PermissionsUtils } from '../../../../../util/permissions';
 import { InputConverter } from '../../../../../decorators';
-import { SnackBarService, OTranslateService, DialogService, OTableMenuPermissions, OPermissions, PermissionsService } from '../../../../../services';
+import { SnackBarService, OTranslateService, DialogService, OTableMenuPermissions, OPermissions } from '../../../../../services';
 import { OTableComponent, OColumn } from '../../../o-table.component';
 import { OTableCellRendererImageComponent } from '../../../table-components';
 import {
@@ -85,6 +86,7 @@ export class OTableMenuComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     protected injector: Injector,
     protected dialog: MatDialog,
+    protected cd: ChangeDetectorRef,
     @Inject(forwardRef(() => OTableComponent)) protected table: OTableComponent
   ) {
     this.dialogService = this.injector.get(DialogService);
@@ -112,18 +114,19 @@ export class OTableMenuComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.configurationMenuButton && !this.enabledConfigurationMenu) {
       this.disableButton(this.configurationMenuButton);
     }
+    this.cd.detectChanges();
   }
 
   protected disableOTableOptionComponent(comp: OTableOptionComponent) {
     comp.enabled = false;
     const buttonEL = comp.elRef.nativeElement.querySelector('button');
-    const obs = PermissionsService.registerDisableChangesInDom(buttonEL, this.disabledChangesInDom.bind(this));
+    const obs = PermissionsUtils.registerDisabledChangesInDom(buttonEL);
     this.mutationObservers.push(obs);
   }
 
   protected disableButton(buttonEL: ElementRef) {
     buttonEL.nativeElement.disabled = true;
-    const obs = PermissionsService.registerDisableChangesInDom(buttonEL.nativeElement, this.disabledChangesInDom.bind(this));
+    const obs = PermissionsUtils.registerDisabledChangesInDom(buttonEL.nativeElement);
     this.mutationObservers.push(obs);
   }
 
@@ -146,18 +149,13 @@ export class OTableMenuComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  protected disabledChangesInDom(mutation: MutationRecord) {
-    let element = <HTMLInputElement>mutation.target;
-    element.disabled = true;
-  }
-
   protected setPermissionsToOTableOption(perm: OPermissions, option: OTableOptionComponent) {
     if (perm.visible === false && option) {
       option.elRef.nativeElement.remove();
     } else if (perm.enabled === false && option) {
       option.enabled = false;
       const buttonEL = option.elRef.nativeElement.querySelector('button');
-      const obs = PermissionsService.registerDisableChangesInDom(buttonEL, this.disabledChangesInDom.bind(this));
+      const obs = PermissionsUtils.registerDisabledChangesInDom(buttonEL);
       this.mutationObservers.push(obs);
     }
   }

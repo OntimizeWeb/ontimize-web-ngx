@@ -4,6 +4,7 @@ import { MatSuffix } from '@angular/material';
 import { Subscription } from 'rxjs/Subscription';
 import { InputConverter, BooleanConverter } from '../decorators';
 import { SQLTypes, Util } from '../utils';
+import { PermissionsUtils } from '../util/permissions';
 import { OBaseComponent, IComponent } from './o-component.class';
 import { OFormComponent } from './form/o-form.component';
 import { OFormValue, IFormValueOptions } from './form/OFormValue';
@@ -165,7 +166,9 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
       }
     }
     if (this.isDisabled) {
-      this.mutationObserver = PermissionsService.registerDisableChangesInDom(this.getMutationObserverTarget(), this.disabledChangesInDom.bind(this));
+      this.mutationObserver = PermissionsUtils.registerDisabledChangesInDom(this.getMutationObserverTarget(), {
+        callback: this.disableFormControl.bind(this)
+      });
     }
   }
 
@@ -271,7 +274,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   /**
    * Do not allow the disabled attribute to change by code or by inspector
    * */
-  private disabledChangesInDom() {
+  private disableFormControl() {
     const control = this.getFormControl();
     control.disable({
       onlySelf: true,
@@ -364,7 +367,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   }
 
   setValue(val: any, options?: IFormValueOptions) {
-    if (!PermissionsService.checkEnabledPermission(this.permissions)) {
+    if (!PermissionsUtils.checkEnabledPermission(this.permissions)) {
       return;
     }
     if (this.oldValue !== val) {
@@ -380,7 +383,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
    * Clears the component value.
    */
   clearValue(options?: IFormValueOptions) {
-    if (!PermissionsService.checkEnabledPermission(this.permissions)) {
+    if (!PermissionsUtils.checkEnabledPermission(this.permissions)) {
       return;
     }
     this.setValue(void 0, options);
@@ -474,7 +477,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   }
 
   set disabled(value: boolean) {
-    if (!PermissionsService.checkEnabledPermission(this.permissions)) {
+    if (!PermissionsUtils.checkEnabledPermission(this.permissions)) {
       return;
     }
     if (this.hasVisiblePermission()) {
