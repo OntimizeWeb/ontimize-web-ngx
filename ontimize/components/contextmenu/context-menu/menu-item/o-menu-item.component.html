@@ -1,0 +1,19 @@
+<mat-menu #childMenu="matMenu">
+  <ng-container *ngFor="let child of items">
+    <!-- Handle branch node menu items -->
+    <span *ngIf="isGroup(child) && child.isVisible">
+      <button mat-menu-item color="primary" [matMenuTriggerFor]="menu.childMenu" [disabled]="child.disabled">
+        <mat-icon>{{ child.icon }}</mat-icon>
+        <span>{{ child.label | oTranslate}}</span>
+      </button>
+      <o-menu-item #menu [items]="child.children"></o-menu-item>
+    </span>
+    <!-- Handle leaf node menu items -->
+    <span *ngIf="!isGroup(child) && child.isVisible">
+      <button mat-menu-item (click)="onClick($event,child)" [disabled]="child.disabled">
+        <mat-icon>{{ child.icon }}</mat-icon>
+        <span>{{ child.label | oTranslate}} </span>
+      </button>
+    </span>
+  </ng-container>
+</mat-menu>

@@ -1,10 +1,14 @@
-import { AfterViewInit, Component, ContentChildren, EventEmitter, HostListener, Injector, OnDestroy, OnInit, QueryList, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, Component, ContentChildren, EventEmitter, HostListener, Injector, OnDestroy, OnInit, QueryList, ViewEncapsulation, ViewChild } from '@angular/core';
 import { OverlayRef } from '@angular/cdk/overlay';
 import { Subscription } from 'rxjs/Subscription';
 import { ActiveDescendantKeyManager } from '@angular/cdk/a11y';
-import { trigger, state, style, transition, animate, query, group } from '@angular/animations';
 
-import { OContextMenuItemComponent } from '../item/o-context-menu-item.component';
+import { MatMenuTrigger } from '@angular/material';
+import { OContextMenuService } from '../o-context-menu.service';
+import { OContextMenuItemComponent } from '../context-menu-item/o-context-menu-item.component';
+import { OComponentMenu } from '../o-content-menu.class';
+import { OContextMenuGroupComponent } from '../context-menu-group/o-context-menu-group.component';
+
 
 export const DEFAULT_CONTEXT_MENU_CONTENT_INPUTS = [
   'menuItems',
@@ -17,8 +21,6 @@ export const DEFAULT_CONTEXT_MENU_CONTENT_OUTPUTS = [
   'close'
 ];
 
-export const EXPANSION_PANEL_ANIMATION_TIMING = '225ms cubic-bezier(0.4,0.0,0.2,1)';
-
 @Component({
   moduleId: module.id,
   selector: 'o-context-menu-content',
@@ -29,59 +31,47 @@ export const EXPANSION_PANEL_ANIMATION_TIMING = '225ms cubic-bezier(0.4,0.0,0.2,
   encapsulation: ViewEncapsulation.None,
   host: {
     '[class.o-context-menu-content]': 'true'
-  },
-  animations: [
-    trigger('contentExpansion', [
-      state('collapsed', style({ height: '0px' })),
-      state('expanded', style({ height: '*' })),
-      transition('collapsed=> expanded', group([
-        query('.o-context-menu-item', [
-            style({ opacity: 0 }),
-            animate(EXPANSION_PANEL_ANIMATION_TIMING)
-        ]),
-        animate(EXPANSION_PANEL_ANIMATION_TIMING)
-    ]))
-    ])
-  ]
+  }
 })
 export class OContextMenuContentComponent implements AfterViewInit, OnDestroy, OnInit {
 
-  public menuItems = [];
+  public menuItems: any[] = [];
   public overlay: OverlayRef;
   public data: any;
   public execute: EventEmitter<{ event: Event, data: any, menuItem: OContextMenuItemComponent }> = new EventEmitter();
   public close: EventEmitter<void> = new EventEmitter<void>();
 
   protected _contentExpansion = 'collapsed';
-  @ContentChildren(OContextMenuItemComponent) public oContextMenuItems: QueryList<OContextMenuItemComponent>;
+  @ContentChildren(OComponentMenu) public oContextMenuItems: QueryList<OComponentMenu>;
+  @ViewChild(MatMenuTrigger) trigger: MatMenuTrigger;
 
   protected subscription: Subscription = new Subscription();
-  protected _keyManager: ActiveDescendantKeyManager<OContextMenuItemComponent>;
+  protected _keyManager: ActiveDescendantKeyManager<OContextMenuItemComponent | OContextMenuGroupComponent>;
+
 
   constructor(
-    protected injector: Injector
+    protected injector: Injector,
+    protected menuService: OContextMenuService
   ) { }
 
   ngAfterViewInit() {
-    this.overlay.updatePosition();
-    const self = this;
-    setTimeout(() => {
-      self.contentExpansion = 'expanded';
-    }, 0);
+    this.trigger.openMenu();
   }
 
   ngOnInit() {
+
     this.menuItems.forEach(menuItem => {
       if (this.data) {
         menuItem.data = this.data;
       }
-      this.subscription.add(menuItem.execute.subscribe(event => {
-        this.execute.emit({ ...event, data: this.data, menuItem });
-      }));
+      // this.subscription.add(menuItem.execute.subscribe(event => {
+      //   this.execute.emit({ ...event, data: this.data, menuItem });
+      // }));
     });
-    const queryList = new QueryList<OContextMenuItemComponent>();
+    const queryList = new QueryList<OContextMenuItemComponent | OContextMenuGroupComponent>();
     queryList.reset(this.menuItems);
-    this._keyManager = new ActiveDescendantKeyManager<OContextMenuItemComponent>(queryList).withWrap();
+    this._keyManager = new ActiveDescendantKeyManager<OContextMenuItemComponent | OContextMenuGroupComponent>(queryList).withWrap();
+
   }
 
   ngOnDestroy() {
@@ -122,4 +112,11 @@ export class OContextMenuContentComponent implements AfterViewInit, OnDestroy, O
     }
   }
 
+  onClosed(event) {
+    console.log(event);
+  }
+
+  onOpened(event) {
+    console.log(event);
+  }
 }

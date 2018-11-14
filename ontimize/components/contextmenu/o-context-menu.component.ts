@@ -3,7 +3,7 @@ import { Subscription } from 'rxjs/Subscription';
 
 import { ObservableWrapper } from '../../utils';
 import { OContextMenuService, IOContextMenuContext } from './o-context-menu.service';
-import { OContextMenuItemComponent } from './item/o-context-menu-item.component';
+import { OComponentMenu } from './o-content-menu.class';
 
 export const DEFAULT_OUTPUTS_O_CONTEXT_MENU = [
   'onShow'
@@ -13,11 +13,11 @@ export const DEFAULT_OUTPUTS_O_CONTEXT_MENU = [
   moduleId: module.id,
   selector: 'o-context-menu',
   template: ' ',
-  outputs : DEFAULT_OUTPUTS_O_CONTEXT_MENU
+  outputs: DEFAULT_OUTPUTS_O_CONTEXT_MENU
 })
 export class OContextMenuComponent implements OnDestroy, OnInit {
 
-  @ContentChildren(OContextMenuItemComponent) public oContextMenuItems: QueryList<OContextMenuItemComponent>;
+  @ContentChildren(OComponentMenu) public oContextMenuItems: QueryList<OComponentMenu>;
 
   public oContextMenuService: OContextMenuService;
   protected subscription: Subscription = new Subscription();
@@ -33,6 +33,7 @@ export class OContextMenuComponent implements OnDestroy, OnInit {
   ngOnInit() {
     this.subscription.add(this.oContextMenuService.showContextMenu.subscribe(param => this.showContextMenu(param)));
   }
+
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
