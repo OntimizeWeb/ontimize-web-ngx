@@ -2,7 +2,9 @@
   (scroll)="onTableScroll($event)">
   <div class="o-table-container" fxLayout="column" fxLayoutAlign="start stretch" [class.block-events]="showLoading()" [class.tab-container]="hasTabGroupChangeSubscription()">
     <div #tableToolbar *ngIf="hasControls()" class="toolbar" fxLayout="row" fxLayoutAlign="space-between center">
-      <o-table-buttons #tableButtons [insert-button]="insertButton" [refresh-button]="refreshButton" [delete-button]="showDeleteButton"></o-table-buttons>
+      <o-table-buttons #tableButtons [insert-button]="insertButton" [refresh-button]="refreshButton" [delete-button]="showDeleteButton">
+        <ng-content select="o-table-button"></ng-content>
+      </o-table-buttons>
       <div fxLayout fxFlex>
         <span *ngIf="showTitle" class="table-title" fxFlex>{{ title | oTranslate }}</span>
       </div>
