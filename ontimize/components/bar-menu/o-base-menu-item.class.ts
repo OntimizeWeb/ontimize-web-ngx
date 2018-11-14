@@ -1,6 +1,7 @@
 import { OnInit, Injector, ElementRef, HostListener, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { OTranslateService, OPermissions, PermissionsService } from '../../services';
+import { PermissionsUtils } from '../../util/permissions';
+import { OTranslateService, OPermissions } from '../../services';
 import { Util } from '../../utils';
 import { OBarMenuComponent } from './o-bar-menu.component';
 
@@ -83,13 +84,10 @@ export class OBaseMenuItemClass implements OnInit, OnDestroy {
     this.disabled = this.permissions.enabled === false;
 
     if (this.disabled) {
-      this.mutationObserver = PermissionsService.registerDisableChangesInDom(this.elRef.nativeElement, this.disabledChangesInDom.bind(this), true);
+      this.mutationObserver = PermissionsUtils.registerDisabledChangesInDom(this.elRef.nativeElement, {
+        checkStringValue: true
+      });
     }
-  }
-
-  private disabledChangesInDom(mutation: MutationRecord) {
-    let element = <HTMLInputElement>mutation.target;
-    element.setAttribute('disabled', 'true');
   }
 
   get isHovered(): boolean {

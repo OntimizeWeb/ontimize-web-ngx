@@ -2,8 +2,9 @@ import { Injector, ElementRef, OnInit, OnDestroy, QueryList, ViewChildren, After
 import { FormControl, FormGroup, Validators, ValidatorFn } from '@angular/forms';
 import { MatSuffix, MatFormFieldAppearance, FloatLabelType } from '@angular/material';
 import { Subscription } from 'rxjs';
-import { InputConverter } from '../decorators';
+import { InputConverter, BooleanConverter } from '../decorators';
 import { SQLTypes, Util } from '../utils';
+import { PermissionsUtils } from '../util/permissions';
 import { OBaseComponent, IComponent } from './o-component.class';
 import { OFormComponent } from './form/o-form.component';
 import { OFormValue, IFormValueOptions } from './form/OFormValue';
@@ -175,7 +176,9 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
       }
     }
     if (this.isDisabled) {
-      this.mutationObserver = PermissionsService.registerDisableChangesInDom(this.getMutationObserverTarget(), this.disabledChangesInDom.bind(this));
+      this.mutationObserver = PermissionsUtils.registerDisabledChangesInDom(this.getMutationObserverTarget(), {
+        callback: this.disableFormControl.bind(this)
+      });
     }
     this.addOntimizeCustomAppearanceClass();
   }
@@ -246,6 +249,66 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     }
   }
 
+  protected parsePermissions() {
+    // if oattr in form, it can have permissions
+    if (!this.form || !Util.isDefined(this.form.oattr)) {
+      return;
+    }
+    const permissions: OPermissions = this.permissionsService.getFormDataComponentPermissions(this.oattr, this.form.oattr);
+    if (!Util.isDefined(permissions)) {
+      return;
+    }
+    if (permissions.visible === false) {
+      /* hide input per permissions */
+      this.elRef.nativeElement.remove();
+      this.destroy();
+    } else if (permissions.enabled === false) {
+      /* disable input per permissions */
+      this.disabled = true;
+      if (this.form) {
+        this.form.registerFormComponent(this);
+      }
+    }
+    this.permissions = permissions;
+  }
+
+  protected getMutationObserverTarget(): any {
+    let result;
+    try {
+      result = this.elementRef.nativeElement.getElementsByTagName('input').item(0);
+    } catch (error) {
+      //
+    }
+    return result;
+  }
+
+  /**
+   * Do not allow the disabled attribute to change by code or by inspector
+   * */
+  private disableFormControl() {
+    const control = this.getFormControl();
+    control.disable({
+      onlySelf: true,
+      emitEvent: false
+    });
+  }
+
+  protected setSuffixClass(count: number) {
+    const iconFieldEl = this.elRef.nativeElement.getElementsByClassName('icon-field');
+    if (iconFieldEl.length === 1) {
+      let classList = iconFieldEl[0].classList;
+      classList.forEach(className => {
+        if (className.startsWith('icon-field-')) {
+          classList.remove(className);
+        }
+      });
+      if (count > 0) {
+        let matSuffixClass = `icon-field-${count}-suffix`;
+        iconFieldEl[0].classList.add(matSuffixClass);
+      }
+    }
+  }
+
   destroy() {
     this.unregisterFormListeners();
     if (this.matSuffixSubscription) {
@@ -308,17 +371,16 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     return this.defaultValue;
   }
 
-  setValue(newValue: any, options?: IFormValueOptions) {
-    if (!PermissionsService.checkEnabledPermission(this.permissions)) {
+  setValue(val: any, options?: IFormValueOptions) {
+    if (!PermissionsUtils.checkEnabledPermission(this.permissions)) {
       return;
     }
-    const previousValue = this.oldValue;
-    if (previousValue !== newValue) {
-      this.setFormValue(newValue, options, true);
-      let changeType: number = (options && options.hasOwnProperty('changeType'))
-        ? options.changeType :
-        OValueChangeEvent.PROGRAMMATIC_CHANGE;
-      this.emitOnValueChange(changeType, newValue, previousValue);
+    if (this.oldValue !== val) {
+      const newValue = val;
+      this.setFormValue(val, options);
+      let changeType: number = (options && options.hasOwnProperty('changeType')) ? options.changeType : OValueChangeEvent.PROGRAMMATIC_CHANGE;
+      this.emitOnValueChange(changeType, newValue, this.oldValue);
+      this.oldValue = val;
     }
   }
 
@@ -326,7 +388,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
    * Clears the component value.
    */
   clearValue(options?: IFormValueOptions) {
-    if (!PermissionsService.checkEnabledPermission(this.permissions)) {
+    if (!PermissionsUtils.checkEnabledPermission(this.permissions)) {
       return;
     }
     this.setValue(void 0, options);
@@ -409,7 +471,10 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   }
 
   resolveValidators(): ValidatorFn[] {
-    let validators: ValidatorFn[] = this.angularValidatorsFn;
+    let validators: ValidatorFn[] = [];
+    this.angularValidatorsFn.forEach((fn: ValidatorFn) => {
+      validators.push(fn);
+    });
     if (this.orequired) {
       validators.push(Validators.required);
     }
@@ -439,7 +504,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   }
 
   set disabled(value: boolean) {
-    if (!PermissionsService.checkEnabledPermission(this.permissions)) {
+    if (!PermissionsUtils.checkEnabledPermission(this.permissions)) {
       return;
     }
     if (this.hasVisiblePermission()) {
@@ -479,99 +544,15 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     this._fControl.setValidators(validators);
   }
 
-  innerOnFocus(event: any) {
-    if (!this.isReadOnly && !this.isDisabled) {
-      this.onFocus.emit(event);
-    }
+  get orequired(): boolean {
+    return this._orequired;
   }
 
-  innerOnBlur(event: any) {
-    if (!this.isReadOnly && !this.isDisabled) {
-      this.onBlur.emit(event);
-    }
-  }
-
-  get appearance(): MatFormFieldAppearance {
-    return this._appearance;
-  }
-
-  set appearance(value: MatFormFieldAppearance) {
-    const values = ['legacy', 'standard', 'fill', 'outline'];
-    if (values.indexOf(value) === -1) {
-      value = 'standard';
-    }
-    this._appearance = value;
-  }
-
-  get floatLabel(): FloatLabelType {
-    return this._floatLabel;
-  }
-
-  set floatLabel(value: FloatLabelType) {
-    const values = ['always', 'never', 'auto'];
-    if (values.indexOf(value) === -1) {
-      value = 'auto';
-    }
-    this._floatLabel = value;
-  }
-
-  protected parsePermissions() {
-    // if oattr in form, it can have permissions
-    if (!this.form || !Util.isDefined(this.form.oattr)) {
-      return;
-    }
-    const permissions: OPermissions = this.permissionsService.getComponentPermissions(this.oattr, this.form.oattr);
-    if (!Util.isDefined(permissions)) {
-      return;
-    }
-    if (permissions.visible === false) {
-      /* hide input per permissions */
-      this.elRef.nativeElement.remove();
-      this.destroy();
-    } else if (permissions.enabled === false) {
-      /* disable input per permissions */
-      this.disabled = true;
-      if (this.form) {
-        this.form.registerFormComponent(this);
-      }
-    }
-    this.permissions = permissions;
-  }
-
-  protected getMutationObserverTarget(): any {
-    let result;
-    try {
-      result = this.elementRef.nativeElement.getElementsByTagName('input').item(0);
-    } catch (error) {
-      //
-    }
-    return result;
-  }
-
-  /**
-   * Do not allow the disabled attribute to change by code or by inspector
-   * */
-  private disabledChangesInDom() {
-    const control = this.getFormControl();
-    control.disable({
-      onlySelf: true,
-      emitEvent: false
-    });
-  }
-
-  protected setSuffixClass(count: number) {
-    const iconFieldEl = this.elRef.nativeElement.getElementsByClassName('icon-field');
-    if (iconFieldEl.length === 1) {
-      let classList = iconFieldEl[0].classList;
-      classList.forEach(className => {
-        if (className.startsWith('icon-field-')) {
-          classList.remove(className);
-        }
-      });
-      if (count > 0) {
-        let matSuffixClass = `icon-field-${count}-suffix`;
-        iconFieldEl[0].classList.add(matSuffixClass);
-      }
+  set orequired(val: boolean) {
+    const old = this._orequired;
+    this._orequired = BooleanConverter(val);
+    if (val !== old) {
+      this.updateValidators();
     }
   }
 

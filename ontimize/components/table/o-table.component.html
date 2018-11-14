@@ -1,12 +1,9 @@
 <div class="o-table-container" fxLayout="column" fxLayoutAlign="start stretch" [style.display]="isVisible()? '' : 'none'"
   (scroll)="onTableScroll($event)" [class.block-events]="showLoading()" [class.o-scrollable-container]="hasScrollableContainer()">
   <div #tableToolbar *ngIf="hasControls()" class="toolbar" fxLayout="row" fxLayoutAlign="space-between center">
-    <div class="buttons" fxLayout>
-      <o-table-button *ngIf="insertButton" (onClick)="add()" label="TABLE.BUTTONS.ADD" svg-icon="ontimize:add"></o-table-button>
-      <o-table-button *ngIf="refreshButton" (onClick)="reloadData()" label="TABLE.BUTTONS.REFRESH" svg-icon="ontimize:autorenew"></o-table-button>
+    <o-table-buttons #tableButtons [insert-button]="insertButton" [refresh-button]="refreshButton" [delete-button]="showDeleteButton">
       <ng-content select="o-table-button"></ng-content>
-      <o-table-button *ngIf="showDeleteButton" (onClick)="remove()" label="TABLE.BUTTONS.DELETE" svg-icon="ontimize:delete"></o-table-button>
-    </div>
+    </o-table-buttons>
     <div fxLayout fxFlex>
       <span *ngIf="showTitle" class="table-title" fxFlex>{{ title | oTranslate }}</span>
     </div>
@@ -14,46 +11,13 @@
     <button type="button" *ngIf="showTableMenuButton" mat-icon-button class="o-table-menu-button" [matMenuTriggerFor]="menu">
       <mat-icon svgIcon="ontimize:more_vert"></mat-icon>
     </button>
-    <mat-menu #menu="matMenu" x-position="before" class="o-table-menu">
-      <o-table-option *ngIf="selectAllCheckbox" [active]="!!state['select-column-visible']" (onClick)="onShowsSelects($event)"
-        label="TABLE.BUTTONS.SELECT" show-active-icon="true">
-      </o-table-option>
-      <o-table-option *ngIf="exportButton" (onClick)="onExportButtonClicked()" label="TABLE.BUTTONS.EXPORT">
-      </o-table-option>
-      <o-table-option *ngIf="columnsVisibilityButton" (onClick)="onChangeColumnsVisibilityClicked()" label="TABLE.BUTTONS.COLVIS">
-      </o-table-option>
-
-      <button type="button" mat-menu-item [matMenuTriggerFor]="filterMenu">{{ 'TABLE.BUTTONS.FILTER' | oTranslate }}</button>
-      <button type="button" mat-menu-item [matMenuTriggerFor]="configurationMenu">{{ 'TABLE.BUTTONS.CONFIGURATION' |
-        oTranslate }}</button>
+    <o-table-menu #tableMenu [select-all-checkbox]="selectAllCheckbox" [export-button]="exportButton"
+      [columns-visibility-button]="columnsVisibilityButton">
       <ng-content select="o-table-option"></ng-content>
-    </mat-menu>
+    </o-table-menu>
   </div>
 
-  <mat-menu #filterMenu="matMenu">
-    <o-table-option *ngIf="oTableColumnsFilterComponent !== undefined" #columnFilterOption (onClick)="onFilterByColumnClicked()"
-      label="TABLE.BUTTONS.FILTER_BY_COLUMN" show-active-icon="true">
-    </o-table-option>
-    <button type="button" mat-menu-item (click)="onStoreFilterClicked()">
-      {{ 'TABLE.BUTTONS.FILTER_SAVE' | oTranslate }}
-    </button>
-    <button type="button" mat-menu-item (click)="onLoadFilterClicked()">
-      {{ 'TABLE.BUTTONS.FILTER_LOAD' | oTranslate }}
-    </button>
-    <button type="button" mat-menu-item (click)="onClearFilterClicked()">
-      {{ 'TABLE.BUTTONS.FILTER_CLEAR' | oTranslate }}</button>
-  </mat-menu>
-
-  <mat-menu #configurationMenu="matMenu">
-    <button type="button" mat-menu-item (click)="onStoreConfigurationClicked()">
-      {{ 'TABLE.BUTTONS.SAVE_CONFIGURATION' | oTranslate }}
-    </button>
-    <button type="button" mat-menu-item (click)="onApplyConfigurationClicked()">
-      {{ 'TABLE.BUTTONS.APPLY_CONFIGURATION' | oTranslate }}
-    </button>
-  </mat-menu>
-
-  <div #tableBody class="o-table-body o-scroll" [class.horizontal-scroll]="horizontalScroll" [class.scrolled]="horizontalScrolled">
+    <div #tableBody class="o-table-body o-scroll" [class.horizontal-scroll]="horizontalScroll" [class.scrolled]="horizontalScrolled">
     <div class="o-table-overflow">
       <table mat-table #table [trackBy]="getTrackByFunction()" [dataSource]="dataSource" oMatSort [class.small]="!hasMultilineColumn && rowHeight==='small'"
         [class.medium]="!hasMultilineColumn && rowHeight==='medium'" [class.large]="!hasMultilineColumn && rowHeight==='large'"

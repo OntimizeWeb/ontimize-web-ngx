@@ -82,10 +82,6 @@
         background-color: mat-color($background, hover);
       }
 
-      button:not(.disabled):hover {
-        background-color: mat-color($background, hover);
-      }
-
       .button {
         &.active {
           color: mat-color($foreground, secondary-text);

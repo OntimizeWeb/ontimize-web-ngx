@@ -1,11 +1,12 @@
 <div [class.custom-width]="hasCustomWidth" [formGroup]="getFormGroup()" class="relative" [matTooltip]="tooltip"
   [matTooltipPosition]="tooltipPosition" [matTooltipShowDelay]="tooltipShowDelay" fxLayout="row" fxLayoutAlign="start center"
   fxFill>
-  <mat-checkbox [id]="getAttribute()" [formControlName]="getAttribute()" [checked]="isChecked()" (change)="onChangeEvent($event)"
-    [labelPosition]="labelPosition" [color]="color">
+  <mat-slide-toggle [id]="getAttribute()" [formControlName]="getAttribute()" [ngModel]="isChecked()" [checked]="isChecked()"
+    [required]="isRequired" [labelPosition]="labelPosition" [color]="color" (ngModelChange)="innerOnChange($event)"
+    (change)="onChangeEvent($event)">
     {{ placeHolder }}
     <mat-error *ngIf="hasError('required')">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</mat-error>
     <mat-error *ngFor="let oError of getActiveOErrors()"> {{ oError.text | oTranslate }} </mat-error>
-  </mat-checkbox>
+  </mat-slide-toggle>
   <div *ngIf="isReadOnly" (click)="onClickBlocker($event)" class="read-only-blocker" fxFill></div>
 </div>

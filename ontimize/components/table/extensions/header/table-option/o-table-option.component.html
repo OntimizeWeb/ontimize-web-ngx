@@ -1,4 +1,4 @@
-<button type="button" (click)="innerOnClick()" mat-menu-item fxLayout="row" fxLayoutAlign="start center">
+<button [disabled]="!enabled" type="button" (click)="innerOnClick()" mat-menu-item fxLayout="row" fxLayoutAlign="start center">
   <mat-icon *ngIf="showActiveOptionIcon()" svgIcon="ontimize:done" fxLayout></mat-icon>
   {{ olabel | oTranslate }}
   <mat-icon *ngIf="icon"> {{ icon }}</mat-icon>

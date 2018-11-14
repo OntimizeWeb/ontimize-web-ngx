@@ -186,10 +186,10 @@ export class OIntegerInputComponent extends OTextInputComponent implements After
 
   resolveValidators(): ValidatorFn[] {
     let validators: ValidatorFn[] = super.resolveValidators();
-    if (typeof (this.min) !== 'undefined') {
+    if (Util.isDefined(this.min)) {
       validators.push(this.minValidator.bind(this));
     }
-    if (typeof (this.max) !== 'undefined') {
+    if (Util.isDefined(this.max)) {
       validators.push(this.maxValidator.bind(this));
     }
     return validators;

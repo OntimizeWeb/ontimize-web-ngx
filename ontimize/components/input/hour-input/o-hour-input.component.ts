@@ -7,6 +7,7 @@ import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 
 import { Util } from '../../../utils';
 import { OSharedModule } from '../../../shared';
+import { NumberConverter } from '../../../decorators';
 import { OFormComponent } from '../../form/form-components';
 import { IFormValueOptions } from '../../form/OFormValue';
 import { InputConverter } from '../../../decorators/input-converter';
@@ -18,6 +19,7 @@ const HourFormat = {
 };
 
 const TWENTY_FOUR_HOUR_FORMAT = 24;
+const TWELVE_FOUR_HOUR_FORMAT = 12;
 
 export const DEFAULT_INPUTS_O_HOUR_INPUT = [
   'format',
@@ -59,21 +61,16 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
 
   @ViewChild('picker')
   private picker: any;
-
-  @InputConverter()
-  format: number = TWENTY_FOUR_HOUR_FORMAT;
+  protected _format: number = TWENTY_FOUR_HOUR_FORMAT;
   @InputConverter()
   textInputEnabled: boolean = true;
   min: string;
   max: string;
 
-  formatString = HourFormat.TWENTY_FOUR;
-
   private openPopup = false;
 
   ngOnInit() {
     super.ngOnInit();
-    this.formatString = (this.format === TWENTY_FOUR_HOUR_FORMAT ? HourFormat.TWENTY_FOUR : HourFormat.TWELVE);
   }
 
   ngAfterViewInit() {
@@ -87,6 +84,10 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
         originalPickerOpen();
       }
     };
+  }
+
+  get formatString(): string {
+    return (this.format === TWENTY_FOUR_HOUR_FORMAT ? HourFormat.TWENTY_FOUR : HourFormat.TWELVE);
   }
 
   setData(arg: any) {
@@ -199,6 +200,22 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
     let valueString = this.addPeriodString(value);
     let result = value ? moment(valueString, 'h:mm A').format(formatStr) : value;
     return result;
+  }
+
+  set format(val: number) {
+    const old = this._format;
+    let parsedVal = NumberConverter(val);
+    if (parsedVal !== TWELVE_FOUR_HOUR_FORMAT && parsedVal !== TWENTY_FOUR_HOUR_FORMAT) {
+      parsedVal = TWENTY_FOUR_HOUR_FORMAT;
+    }
+    this._format = parsedVal;
+    if (parsedVal !== old) {
+      this.updateValidators();
+    }
+  }
+
+  get format(): number {
+    return this._format;
   }
 }
 

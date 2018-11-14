@@ -5,7 +5,7 @@ import { ValidatorFn } from '@angular/forms';
 import { MatInput } from '@angular/material';
 
 import { OSharedModule } from '../../../shared';
-import { InputConverter } from '../../../decorators';
+import { NumberConverter } from '../../../decorators';
 import { OFormComponent } from '../../form/o-form.component';
 import { OFormDataComponent, DEFAULT_INPUTS_O_FORM_DATA_COMPONENT, DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT } from '../../o-form-data-component.class';
 
@@ -34,10 +34,8 @@ export class OTextInputComponent extends OFormDataComponent {
   public static DEFAULT_INPUTS_O_TEXT_INPUT = DEFAULT_INPUTS_O_TEXT_INPUT;
   public static DEFAULT_OUTPUTS_O_TEXT_INPUT = DEFAULT_OUTPUTS_O_TEXT_INPUT;
 
-  @InputConverter()
-  minLength: number = -1;
-  @InputConverter()
-  maxLength: number = -1;
+  protected _minLength: number = -1;
+  protected _maxLength: number = -1;
 
   @ViewChild('matInputRef')
   protected matInputRef: MatInput;
@@ -66,6 +64,29 @@ export class OTextInputComponent extends OFormDataComponent {
     return validators;
   }
 
+  set minLength(val: number) {
+    const old = this._minLength;
+    this._minLength = NumberConverter(val);
+    if (val !== old) {
+      this.updateValidators();
+    }
+  }
+
+  get minLength(): number {
+    return this._minLength;
+  }
+
+  set maxLength(val: number) {
+    const old = this._maxLength;
+    this._maxLength = NumberConverter(val);
+    if (val !== old) {
+      this.updateValidators();
+    }
+  }
+
+  get maxLength(): number {
+    return this._maxLength;
+  }
 }
 
 @NgModule({

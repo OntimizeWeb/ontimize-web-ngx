@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs';
 import { Util } from '../../../utils';
 import { OSharedModule } from '../../../shared';
 import { InputConverter } from '../../../decorators';
+import { PermissionsUtils } from '../../../util/permissions';
 import { OAppSidenavComponent } from '../o-app-sidenav.component';
 import { AppMenuService, MenuGroup, OTranslateService, PermissionsService, OPermissions } from '../../../services';
 import { OAppSidenavMenuItemModule } from '../menu-item/o-app-sidenav-menu-item.component';
@@ -110,13 +111,10 @@ export class OAppSidenavMenuGroupComponent implements OnInit, AfterViewInit, OnD
     this.disabled = this.permissions.enabled === false;
 
     if (this.disabled) {
-      this.mutationObserver = PermissionsService.registerDisableChangesInDom(this.elRef.nativeElement, this.disabledChangesInDom.bind(this), true);
+      this.mutationObserver = PermissionsUtils.registerDisabledChangesInDom(this.elRef.nativeElement, {
+        checkStringValue: true
+      });
     }
-  }
-
-  private disabledChangesInDom(mutation: MutationRecord) {
-    let element = <HTMLInputElement>mutation.target;
-    element.setAttribute('disabled', 'true');
   }
 
   onClick() {

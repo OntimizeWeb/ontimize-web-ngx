@@ -3,12 +3,11 @@ import { CommonModule } from '@angular/common';
 import { ThemePalette } from '@angular/material';
 
 import { Util } from '../../../util/util';
-import { OSharedModule } from '../../../shared';
-import { OFormValue } from '../../form/OFormValue';
-import { OFormComponent } from '../../form/o-form.component';
-import { OFormDataComponent, DEFAULT_INPUTS_O_FORM_DATA_COMPONENT, DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT } from '../../o-form-data-component.class';
+import { OSharedModule } from '../../../shared/shared.module';
+import { OFormComponent, OFormValue } from '../../form/form-components';
+import { DEFAULT_INPUTS_O_FORM_DATA_COMPONENT, DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT, OFormDataComponent } from '../../o-form-data-component.class';
 
-export const DEFAULT_INPUTS_O_CHECKBOX = [
+export const DEFAULT_INPUTS_O_SLIDETOGGLE = [
   // true-value: true value. Default: true.
   'trueValue: true-value',
   // false-value: false value. Default: false.
@@ -22,26 +21,26 @@ export const DEFAULT_INPUTS_O_CHECKBOX = [
   ...DEFAULT_INPUTS_O_FORM_DATA_COMPONENT
 ];
 
-export const DEFAULT_OUTPUTS_O_CHECKBOX = [
+export const DEFAULT_OUTPUTS_O_SLIDETOGGLE = [
   ...DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT
 ];
 
 @Component({
   moduleId: module.id,
-  selector: 'o-checkbox',
-  inputs: DEFAULT_INPUTS_O_CHECKBOX,
-  outputs: DEFAULT_OUTPUTS_O_CHECKBOX,
-  templateUrl: './o-checkbox.component.html',
-  styleUrls: ['./o-checkbox.component.scss'],
+  selector: 'o-slide-toggle',
+  inputs: DEFAULT_INPUTS_O_SLIDETOGGLE,
+  outputs: DEFAULT_OUTPUTS_O_SLIDETOGGLE,
+  templateUrl: './o-slide-toggle.component.html',
+  styleUrls: ['./o-slide-toggle.component.scss'],
   encapsulation: ViewEncapsulation.None,
   host: {
-    '[class.o-checkbox]': 'true'
+    '[class.o-slide-toggle]': 'true'
   }
 })
-export class OCheckboxComponent extends OFormDataComponent {
+export class OSlideToggleComponent extends OFormDataComponent {
 
-  public static DEFAULT_INPUTS_O_CHECKBOX = DEFAULT_INPUTS_O_CHECKBOX;
-  public static DEFAULT_OUTPUTS_O_CHECKBOX = DEFAULT_OUTPUTS_O_CHECKBOX;
+  public static DEFAULT_INPUTS_O_CHECKBOX = DEFAULT_INPUTS_O_SLIDETOGGLE;
+  public static DEFAULT_OUTPUTS_O_CHECKBOX = DEFAULT_OUTPUTS_O_SLIDETOGGLE;
 
   public trueValue: number | boolean | string = true;
   public falseValue: number | boolean | string = false;
@@ -78,15 +77,6 @@ export class OCheckboxComponent extends OFormDataComponent {
   }
 
   ensureOFormValue(value: any) {
-
-    if (this.booleanType !== 'boolean') {
-      if (typeof value === 'boolean') {
-        value = value ? this.trueValue : this.falseValue;
-      } else {
-        value = value === this.trueValue ? this.trueValue : this.falseValue;
-      }
-    }
-
     if (value instanceof OFormValue) {
       if (!Util.isDefined(value.value)) {
         value.value = this.falseValue;
@@ -104,15 +94,31 @@ export class OCheckboxComponent extends OFormDataComponent {
     return false;
   }
 
-  onClickBlocker(evt: Event) {
-    evt.stopPropagation();
+  innerOnChange(event: any) {
+    if (!this.value) {
+      this.value = new OFormValue(this.falseValue);
+    }
+    let val = event;
+    if (this.booleanType !== 'boolean') {
+      if (typeof val === 'boolean') {
+        val = event ? this.trueValue : this.falseValue;
+      } else {
+        val = val === this.trueValue ? this.trueValue : this.falseValue;
+      }
+    }
+    this.ensureOFormValue(val);
+    this.onChange.emit(val);
+  }
+
+  onClickBlocker(e: Event) {
+    e.stopPropagation();
   }
 
 }
 
 @NgModule({
-  declarations: [OCheckboxComponent],
+  declarations: [OSlideToggleComponent],
   imports: [CommonModule, OSharedModule],
-  exports: [OCheckboxComponent]
+  exports: [OSlideToggleComponent]
 })
-export class OCheckboxModule { }
+export class OSlideToggleModule { }

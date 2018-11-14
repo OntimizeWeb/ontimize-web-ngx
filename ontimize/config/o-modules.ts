@@ -59,7 +59,8 @@ import {
   OHourInputModule,
   OTimeInputModule,
   OGridModule,
-  ORadioModule
+  ORadioModule,
+  OSlideToggleModule
 } from '../components';
 
 import {
@@ -131,7 +132,8 @@ export const INTERNAL_ONTIMIZE_MODULES_EXPORTED: any = [
   OHourInputModule,
   OTimeInputModule,
   OGridModule,
-  ORadioModule
+  ORadioModule,
+  OSlideToggleModule
 ];
 
 // AoT requires an exported function for factories
@@ -226,7 +228,8 @@ export const INTERNAL_ONTIMIZE_MODULES: any = [
   OHourInputModule,
   OTimeInputModule,
   OGridModule,
-  ORadioModule
+  ORadioModule,
+  OSlideToggleModule
 ];
 
 @NgModule({

@@ -11,7 +11,7 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_BOOLEAN = [
   'trueValue: true-value',
   // false-value: false value. Default: false.
   'falseValue: false-value',
-  // false-value [number|boolean|string]: cellData value type. Default: boolean
+  // boolean-type [number|boolean|string]: cellData value type. Default: boolean
   'booleanType: boolean-type'
 ];
 

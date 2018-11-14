@@ -62,15 +62,12 @@ export class ORealInputComponent extends OIntegerInputComponent implements OnIni
 
   resolveValidators(): ValidatorFn[] {
     let validators: ValidatorFn[] = super.resolveValidators();
-
-    if (typeof (this.minDecimalDigits) !== 'undefined') {
+    if (Util.isDefined(this.minDecimalDigits)) {
       validators.push(this.minDecimalDigitsValidator.bind(this));
     }
-
-    if (typeof (this.maxDecimalDigits) !== 'undefined') {
+    if (Util.isDefined(this.maxDecimalDigits)) {
       validators.push(this.maxDecimalDigitsValidator.bind(this));
     }
-
     return validators;
   }
 

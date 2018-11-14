@@ -1,6 +1,7 @@
 import { Injector } from '@angular/core';
-import { InputConverter, BooleanConverter } from '../decorators';
-import { OTranslateService, PermissionsService, OPermissions } from '../services';
+import { BooleanConverter } from '../decorators';
+import { OTranslateService, OPermissions } from '../services';
+import { PermissionsUtils } from '../util/permissions';
 import { Util } from '../utils';
 
 export interface IComponent {
@@ -14,8 +15,7 @@ export class OBaseComponent implements IComponent {
   protected oplaceholder: string = '';
   protected _oenabled: boolean = true;
   protected _readOnly: boolean;
-  @InputConverter()
-  protected orequired: boolean = false;
+  protected _orequired: boolean = false;
 
   /* Internal variables */
   protected injector: Injector;
@@ -105,7 +105,7 @@ export class OBaseComponent implements IComponent {
       this._isReadOnly = false;
       return;
     }
-    if (!PermissionsService.checkEnabledPermission(this.permissions)) {
+    if (!PermissionsUtils.checkEnabledPermission(this.permissions)) {
       return;
     }
     this._isReadOnly = value;
@@ -116,7 +116,7 @@ export class OBaseComponent implements IComponent {
   }
 
   set readOnly(value: any) {
-    if (!PermissionsService.checkEnabledPermission(this.permissions)) {
+    if (!PermissionsUtils.checkEnabledPermission(this.permissions)) {
       return;
     }
     const parsedValue = BooleanConverter(value);
@@ -129,10 +129,18 @@ export class OBaseComponent implements IComponent {
   }
 
   set disabled(value: boolean) {
-    if (!PermissionsService.checkEnabledPermission(this.permissions)) {
+    if (!PermissionsUtils.checkEnabledPermission(this.permissions)) {
       return;
     }
     this._disabled = value;
+  }
+
+  set orequired(val: boolean) {
+    this._orequired = BooleanConverter(val);
+  }
+
+  get orequired(): boolean {
+    return this._orequired;
   }
 
   get isRequired(): boolean {
@@ -140,10 +148,7 @@ export class OBaseComponent implements IComponent {
   }
 
   set required(value: boolean) {
-    var self = this;
-    window.setTimeout(() => {
-      self.orequired = value;
-    }, 0);
+    this.orequired = value;
   }
 
   get oenabled(): any {
@@ -151,7 +156,7 @@ export class OBaseComponent implements IComponent {
   }
 
   set oenabled(value: any) {
-    if (!PermissionsService.checkEnabledPermission(this.permissions)) {
+    if (!PermissionsUtils.checkEnabledPermission(this.permissions)) {
       return;
     }
     const parsedValue = BooleanConverter(value);

@@ -5,11 +5,10 @@ import { ValidatorFn, Validators } from '@angular/forms';
 import { MatTab, MatTabGroup } from '@angular/material';
 
 import { OSharedModule } from '../../../shared/shared.module';
-import { InputConverter } from '../../../decorators/input-converter';
-import { OFormDataComponent } from '../../o-form-data-component.class';
+import { NumberConverter } from '../../../decorators';
 import { OFormComponent } from '../../form/form-components';
 import { CKEditorComponent, CKEditorModule } from '../../material/ckeditor/ck-editor.component';
-import { OFormServiceComponent } from '../o-form-service-component.class';
+import { OFormDataComponent, DEFAULT_INPUTS_O_FORM_DATA_COMPONENT } from '../../o-form-data-component.class';
 
 export const DEFAULT_INPUTS_O_HTML_INPUT = [
   'oattr: attr',
@@ -24,7 +23,9 @@ export const DEFAULT_INPUTS_O_HTML_INPUT = [
 ];
 
 export const DEFAULT_OUTPUTS_O_HTML_INPUT = [
-  ...OFormServiceComponent.DEFAULT_OUTPUTS_O_FORM_SERVICE_COMPONENT
+  ...DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,
+  'onFocus',
+  'onBlur'
 ];
 
 @Component({
@@ -49,10 +50,8 @@ export class OHTMLInputComponent extends OFormDataComponent implements AfterView
   public static DEFAULT_INPUTS_O_HTML_INPUT = DEFAULT_INPUTS_O_HTML_INPUT;
   public static DEFAULT_OUTPUTS_O_HTML_INPUT = DEFAULT_OUTPUTS_O_HTML_INPUT;
 
-  @InputConverter()
-  minLength: number = -1;
-  @InputConverter()
-  maxLength: number = -1;
+  protected _minLength: number = -1;
+  protected _maxLength: number = -1;
 
   @ViewChild('ckEditor') ckEditor: CKEditorComponent;
 
@@ -132,14 +131,12 @@ export class OHTMLInputComponent extends OFormDataComponent implements AfterView
 
   resolveValidators(): ValidatorFn[] {
     let validators: ValidatorFn[] = super.resolveValidators();
-
     if (this.minLength >= 0) {
       validators.push(Validators.minLength(this.minLength));
     }
     if (this.maxLength >= 0) {
       validators.push(Validators.maxLength(this.maxLength));
     }
-
     return validators;
   }
 
@@ -159,11 +156,34 @@ export class OHTMLInputComponent extends OFormDataComponent implements AfterView
     return this.ckEditor.instance;
   }
 
+  set minLength(val: number) {
+    const old = this._minLength;
+    this._minLength = NumberConverter(val);
+    if (val !== old) {
+      this.updateValidators();
+    }
+  }
+
+  get minLength(): number {
+    return this._minLength;
+  }
+
+  set maxLength(val: number) {
+    const old = this._maxLength;
+    this._maxLength = NumberConverter(val);
+    if (val !== old) {
+      this.updateValidators();
+    }
+  }
+
+  get maxLength(): number {
+    return this._maxLength;
+  }
 }
 
 @NgModule({
   declarations: [OHTMLInputComponent],
-  imports: [OSharedModule, CommonModule, CKEditorModule],
+  imports: [CKEditorModule, CommonModule, OSharedModule],
   exports: [OHTMLInputComponent]
 })
 export class OHTMLInputModule { }
