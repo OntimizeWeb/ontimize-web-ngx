@@ -7,7 +7,7 @@
 * **Updated**:  @angular/flex-layout@6.0.0-beta.18
 * **Updated**:  @ngx-translate/core@10.0.2
 * **Updated**:  @ngx-translate/http-loader@3.0.1
-* **Updated**:  ngx-material-timepicker@2.7.0
+* **Updated**:  ngx-material-timepicker@2.8.3
 * **Updated**:  typescript@2.9.2
 * **Updated**:  rxjs@6.3.1
 * **Updated**:  zone.js@0.8.26
@@ -18,13 +18,14 @@
 * **o-hour-input**: adding `min` and `max` inputs.
 * **o-time-input**: adding `hour-min` and `hour-max` inputs.
 * **OFormDataComponent**:
-  * adding `appearance` input, view ([Form field appearance variants](https://v6.material.angular.io/components/form-field/overview#form-field-appearance-variants))
-  * adding `placeholder` input. Now you can configure `label` and `placeholder` separately. View ([Form field appearance variants](https://v6.material.angular.io/components/form-field/overview#form-field-appearance-variants))
+  * adding `appearance` input. View ([Form field appearance variants](https://v6.material.angular.io/components/form-field/overview#form-field-appearance-variants)) for details.
+  * adding `placeholder` input. Now you can configure `label` and `placeholder` separately. View ([Form field appearance variants](https://v6.material.angular.io/components/form-field/overview#form-field-appearance-variants)) for details.
+  * adding `float-label` input. View ([Form field floating label](https://v6.material.angular.io/components/form-field/overview#floating-label)) for details.
+
 
 ### BREAKING CHANGES
 * **Angular and Angular Material**: updating versions ([be5d6d7](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/be5d6d7))
 
-## 3.1.2
 ## 3.1.2 (2018-11-07)
 ### Features
 * **OValueChangeEvent**: adding `isUserChange` and `isProgrammaticChange` methods.
