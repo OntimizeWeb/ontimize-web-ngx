@@ -47,6 +47,8 @@ export class OTableInsertableRowComponent implements OnInit {
   @InputConverter()
   includeParentKeys: boolean = true;
 
+  enabled = true;
+
   constructor(
     protected injector: Injector,
     @Inject(forwardRef(() => OTableComponent)) protected table: OTableComponent

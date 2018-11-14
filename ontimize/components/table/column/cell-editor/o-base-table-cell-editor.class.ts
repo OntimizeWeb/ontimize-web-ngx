@@ -14,7 +14,8 @@ export class OBaseTableCellEditor implements OnInit {
     'showPlaceHolder: show-placeholder',
     'olabel: label',
     'updateRecordOnEdit: update-record-on-edit',
-    'showNotificationOnEdit: show-notification-on-edit'
+    'showNotificationOnEdit: show-notification-on-edit',
+    'enabled'
   ];
 
   public static DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR = [
@@ -35,6 +36,7 @@ export class OBaseTableCellEditor implements OnInit {
   updateRecordOnEdit: boolean = true;
   @InputConverter()
   showNotificationOnEdit: boolean = true;
+  protected _enabled: boolean = true;
 
   protected _tableColumn: OTableColumnComponent;
   protected _table: OTableComponent;
@@ -92,7 +94,7 @@ export class OBaseTableCellEditor implements OnInit {
       const validators: ValidatorFn[] = this.resolveValidators();
       const cfg = {
         value: undefined,
-        disabled: false
+        disabled: !this.enabled
       };
       this.formControl = new FormControl(cfg, validators);
       this.formGroup.addControl(Math.random().toString(36), this.formControl);
@@ -249,4 +251,14 @@ export class OBaseTableCellEditor implements OnInit {
     }
   }
 
+  set enabled(arg: boolean) {
+    this._enabled = arg;
+    if (this.formControl) {
+      this._enabled ? this.formControl.enable() : this.formControl.disable();
+    }
+  }
+
+  get enabled(): boolean {
+    return this._enabled;
+  }
 }

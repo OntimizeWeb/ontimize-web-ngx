@@ -32,6 +32,7 @@
 * **o-table-option**, **o-table-button**:
   * New `attr` and `enabled` inputs.
   * New `elRef` parameter in constructor.
+* **OBaseTableCellEditor**: new `enabled` input.
 
 ## 3.1.2 (2018-11-07)
 ### Features
