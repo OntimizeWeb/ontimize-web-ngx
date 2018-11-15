@@ -1,12 +1,17 @@
 import { Component, forwardRef, Inject, Injector, ViewChild } from '@angular/core';
 
 import { OTableComponent } from '../../o-table.component';
-import { OContextMenuComponent } from '../../../contextmenu/o-context-menu.component';
-import { OComponentMenuItems } from '../../../contextmenu/o-content-menu.class';
+import { OContextMenuComponent, OComponentMenuItems } from '../../../contextmenu/o-context-menu-components';
 import { Util } from '../../../../utils';
+import { InputConverter } from '../../../../decorators';
 
 export const DEFAULT_TABLE_CONTEXT_MENU_INPUTS = [
   'contextMenu : context-menu',
+  'showInsert:insert',
+  'showEdit:edit',
+  'showViewDetail:view-detail',
+  'showCopy:copy',
+  'showSelectAll:select-all'
 ];
 
 @Component({
@@ -18,20 +23,23 @@ export const DEFAULT_TABLE_CONTEXT_MENU_INPUTS = [
 
 export class OTableContextMenuComponent {
 
-  public static INSERT_ACTION = 'INSERT_ACTION';
-  public static GOTO_DETAIL = 'GOTO_DETAIL';
-  public static EDIT_ACTION = 'EDIT_ACTION';
-  public static SELECT_ALL = 'SELECT_ALL';
-  public static COPY_CELL = 'COPY_CELL';
-  public static COPY_ROW = 'COPY_ROW';
-  public static COPY_ALL = 'COPY_ALL';
-  public static COPY_SELECTION = 'COPY_SELECTION';
-
-
   public static INSERT_ATTR = 'insert';
   public static GOTO_DETAIL_ATTR = 'detail';
   public static EDIT_ATTR = 'edit';
-  public static SELECT_ALL_ATTR = 'select_all';
+  public static SELECT_ALL_ATTR = 'select-all';
+  public static COPY_ATTR = 'copy';
+
+  @InputConverter()
+  showInsert: boolean = true;
+  @InputConverter()
+  showEdit: boolean = true;
+  @InputConverter()
+  showViewDetail: boolean = false;
+  @InputConverter()
+  showCopy: boolean = true;
+  @InputConverter()
+  showSelectAll: boolean = true;
+
 
   public contextMenu: OContextMenuComponent;
   @ViewChild('defaultContextMenu') defaultContextMenu: OContextMenuComponent;
@@ -45,7 +53,7 @@ export class OTableContextMenuComponent {
 
     let itemsParsed = this.parseItems();
     if (this.contextMenu) {
-      let items = this.contextMenu.oContextMenuItems.toArray().concat(itemsParsed);
+      let items = itemsParsed.concat(this.contextMenu.oContextMenuItems.toArray());
       this.defaultContextMenu.oContextMenuItems.reset(items);
     } else {
       this.defaultContextMenu.oContextMenuItems.reset(itemsParsed);
@@ -63,22 +71,27 @@ export class OTableContextMenuComponent {
       if (element.isItemMenu()) {
         switch (attr) {
           case OTableContextMenuComponent.INSERT_ATTR:
-            if (this.table.insertButton) {
+            if (this.showInsert) {
               itemsParsed.push(element);
             }
             break;
           case OTableContextMenuComponent.GOTO_DETAIL_ATTR:
-            if (this.table.isDetailMode()) {
+            if (this.showViewDetail) {
               itemsParsed.push(element);
             }
             break;
           case OTableContextMenuComponent.EDIT_ATTR:
-            if (this.table.isEditionMode()) {
+            if (this.showEdit) {
               itemsParsed.push(element);
             }
             break;
           case OTableContextMenuComponent.SELECT_ALL_ATTR:
-            if (!this.table.isSelectionModeNone()) {
+            if (this.showSelectAll && !this.table.isSelectionModeNone()) {
+              itemsParsed.push(element);
+            }
+            break;
+            case OTableContextMenuComponent.COPY_ATTR:
+            if (this.showCopy) {
               itemsParsed.push(element);
             }
             break;
@@ -96,75 +109,38 @@ export class OTableContextMenuComponent {
   }
 
   gotoDetails(event) {
-    this.executeAction(OTableContextMenuComponent.GOTO_DETAIL, event.data);
+    this.table.viewDetail(event.data);
   }
 
   edit(event) {
-    this.executeAction(OTableContextMenuComponent.EDIT_ACTION, event.data);
+    this.table.doHandleClick(event.data);
   }
 
   add() {
-    this.executeAction(OTableContextMenuComponent.INSERT_ACTION, event);
+    this.table.add();
   }
 
   selectAll() {
-    this.executeAction(OTableContextMenuComponent.SELECT_ALL, event);
+    this.table.showAndSelectAllCheckbox();
   }
 
   copyAll() {
-    this.executeAction(OTableContextMenuComponent.COPY_ALL, event);
+    this.table.copyAll();
   }
 
   copyCell(event) {
-
-    this.executeAction(OTableContextMenuComponent.COPY_CELL, event);
+    let cell_data = this.defaultContextMenu.origin.innerText;
+    Util.copyToClipboard(cell_data);
   }
 
   copySelection() {
-    this.executeAction(OTableContextMenuComponent.COPY_SELECTION, event);
+    this.table.copySelection();
   }
 
   copyRow(event) {
-    this.executeAction(OTableContextMenuComponent.COPY_ROW, event);
-  }
-
-  executeAction(option, event) {
-
-    switch (option) {
-      case OTableContextMenuComponent.INSERT_ACTION:
-        this.table.add();
-        break;
-      case OTableContextMenuComponent.GOTO_DETAIL:
-        this.table.viewDetail(event.data);
-        break;
-      case OTableContextMenuComponent.EDIT_ACTION:
-        this.table.doHandleClick(event.data);
-        break;
-      case OTableContextMenuComponent.SELECT_ALL:
-        this.table.showAndSelectAllCheckbox();
-        break;
-      case OTableContextMenuComponent.COPY_ALL:
-        this.table.copyAll();
-        break;
-      case OTableContextMenuComponent.COPY_SELECTION:
-        this.table.copySelection();
-        break;
-      case OTableContextMenuComponent.COPY_CELL:
-        let cell_data = this.defaultContextMenu.origin.innerHTML;
-        this.table.copyData(cell_data);
-        break;
-
-      case OTableContextMenuComponent.COPY_ROW:
-        this.table.copyData(JSON.stringify(event.data));
-
-        break;
-    }
+    var data = JSON.stringify(this.table.dataSource.getRenderedData([event.data]));
+    Util.copyToClipboard(data);
   }
 
 
-
-
-
-  // deshabilitar opcion selectAllCheckbox si select-all-checkbox = false
-  // deshabilitar opcion insertar si detail-mode es
 }

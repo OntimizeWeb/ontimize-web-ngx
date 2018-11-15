@@ -257,7 +257,7 @@ export class OTableDataSource extends DataSource<any> {
     return this._database.data;
   }
 
-  /** Return data of the visible columns of the table  without rendering */
+  /** Return data of the visible columns of the table without rendering */
   getCurrentData(): any[] {
     return this.getData();
   }
@@ -268,7 +268,7 @@ export class OTableDataSource extends DataSource<any> {
 
   /** Return data of the visible columns of the table  rendering */
   getCurrentRendererData(): any[] {
-    return this.getData(true);
+    return this.getRenderedData(this.renderedData);
   }
 
   /** Return sql types of the current data */
@@ -276,17 +276,20 @@ export class OTableDataSource extends DataSource<any> {
     return this._database.sqlTypes;
   }
 
-  protected getData(render?: boolean) {
-    let self = this;
+  protected getData() {
+    return this.renderedData;
+  }
 
-    return this.renderedData.map(function (row, i, a) {
+  public getRenderedData(data) {
+    let self = this;
+    return data.map(function (row, i, a) {
       /** render each column*/
       var obj = {};
       Object.keys(row).forEach(function (column, i, a) {
         self._tableOptions.columns.forEach(function (ocolumn: OColumn, i, a) {
           if (column === ocolumn.attr && ocolumn.visible) {
             var key = column;
-            if (render && ocolumn.renderer && ocolumn.renderer.getCellData) {
+            if (ocolumn.renderer && ocolumn.renderer.getCellData) {
               obj[key] = ocolumn.renderer.getCellData(row[column], row);
             } else {
               obj[key] = row[column];
@@ -297,6 +300,7 @@ export class OTableDataSource extends DataSource<any> {
       return obj;
     });
   }
+
 
   protected getAllData(render?: boolean) {
     let self = this;

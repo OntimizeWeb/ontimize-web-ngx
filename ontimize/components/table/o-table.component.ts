@@ -2078,32 +2078,18 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     return this.detailMode !== Codes.DETAIL_MODE_NONE;
   }
 
-  isEditionMode(): boolean {
-    //return this.detailMode !== Codes.DETAIL_MODE_NONE;
-    let isDetailMode = true;
-    if (this.form && !this.form.isEditableDetail()) {
-      isDetailMode = false;
-    }
-    return isDetailMode;
-  }
-
-  copyData(data: string) {
-    document.addEventListener('copy', (e: ClipboardEvent) => {
-      e.clipboardData.setData('text/plain', data);
-      e.preventDefault();
-      document.removeEventListener('copy', null);
-    });
-    document.execCommand('copy');
-
-  }
   copyAll() {
-    this.copyData(JSON.stringify(this.getRenderedValue()));
+    Util.copyToClipboard(JSON.stringify(this.getRenderedValue()));
   }
 
   copySelection() {
-    this.copyData(JSON.stringify(this.getSelectedItems()));
+    let selectedItems = this.dataSource.getRenderedData(this.getSelectedItems());
+    Util.copyToClipboard(JSON.stringify(selectedItems));
   }
+
+
 }
+
 @NgModule({
   declarations: [
     OTableComponent,
