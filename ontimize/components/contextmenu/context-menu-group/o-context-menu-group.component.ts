@@ -1,5 +1,5 @@
 import { Component, OnInit, forwardRef, ContentChildren, QueryList } from '@angular/core';
-import { DEFAULT_INPUTS_O_CONTEXT_MENU_ITEMS, OComponentMenu } from '../o-content-menu.class';
+import { DEFAULT_INPUTS_O_CONTEXT_MENU_ITEMS, OComponentMenuItems } from '../o-content-menu.class';
 
 export const DEFAULT_CONTEXT_MENU_GROUP_INPUTS = [
   ...DEFAULT_INPUTS_O_CONTEXT_MENU_ITEMS,
@@ -10,28 +10,20 @@ export const DEFAULT_CONTEXT_MENU_GROUP_INPUTS = [
   selector: 'o-context-menu-group',
   template: ' ',
   inputs: DEFAULT_CONTEXT_MENU_GROUP_INPUTS,
-  providers: [{ provide: OComponentMenu, useExisting: forwardRef(() => OContextMenuGroupComponent) }]
+  providers: [{ provide: OComponentMenuItems, useExisting: forwardRef(() => OContextMenuGroupComponent) }]
 })
 
-//export class OContextMenuGroupComponent  implements  OnInit {
-export class OContextMenuGroupComponent extends OComponentMenu implements OnInit {
+export class OContextMenuGroupComponent extends OComponentMenuItems implements OnInit {
 
-  public type = 'group';
+  public type = OComponentMenuItems.TYPE_GROUP_MENU;
   public children = [];
 
-  @ContentChildren(OComponentMenu) public oContextMenuItems: QueryList<OComponentMenu>;
+  @ContentChildren(OComponentMenuItems) public oContextMenuItems: QueryList<OComponentMenuItems>;
 
 
   ngAfterContentInit() {
     this.children = this.oContextMenuItems.toArray().slice(1, this.oContextMenuItems.toArray().length);
   }
 
-  public setActiveStyles(): void {
-    this.isActive = true;
-  }
-
-  public setInactiveStyles(): void {
-    this.isActive = false;
-  }
 
 }

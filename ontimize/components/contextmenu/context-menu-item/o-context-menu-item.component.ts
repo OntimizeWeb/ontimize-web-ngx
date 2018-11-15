@@ -1,6 +1,5 @@
 import { Component, EventEmitter, OnInit, forwardRef } from '@angular/core';
-import { Highlightable } from '@angular/cdk/a11y';
-import { OComponentMenu, DEFAULT_INPUTS_O_CONTEXT_MENU_ITEMS } from '../o-content-menu.class';
+import { OComponentMenuItems, DEFAULT_INPUTS_O_CONTEXT_MENU_ITEMS } from '../o-content-menu.class';
 
 export const DEFAULT_CONTEXT_MENU_ITEM_OUTPUTS = [
   'execute'
@@ -13,13 +12,13 @@ export const DEFAULT_CONTEXT_MENU_ITEM_INPUTS = [...DEFAULT_INPUTS_O_CONTEXT_MEN
   template: ' ',
   inputs: DEFAULT_CONTEXT_MENU_ITEM_INPUTS,
   outputs: DEFAULT_CONTEXT_MENU_ITEM_OUTPUTS,
-  providers: [{ provide: OComponentMenu, useExisting: forwardRef(() => OContextMenuItemComponent) }]
+  providers: [{ provide: OComponentMenuItems, useExisting: forwardRef(() => OContextMenuItemComponent) }]
 
 })
-export class OContextMenuItemComponent extends OComponentMenu implements Highlightable, OnInit {
+export class OContextMenuItemComponent extends OComponentMenuItems implements OnInit {
 
   public execute: EventEmitter<{ event: Event, data: any }> = new EventEmitter();
-  public type = 'item';
+  public type = OComponentMenuItems.TYPE_ITEM_MENU;
 
   public onClick(event: MouseEvent): void {
     event.preventDefault();
@@ -34,12 +33,6 @@ export class OContextMenuItemComponent extends OComponentMenu implements Highlig
     this.execute.emit({ event: $event, data: data });
   }
 
-  public setActiveStyles(): void {
-    this.isActive = true;
-  }
 
-  public setInactiveStyles(): void {
-    this.isActive = false;
-  }
 
 }

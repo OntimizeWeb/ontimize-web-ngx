@@ -5,7 +5,7 @@ import { Subject } from 'rxjs/Subject';
 import { Subscription } from 'rxjs/Subscription';
 
 import { OContextMenuComponent } from './o-context-menu.component';
-import { OComponentMenu } from './o-content-menu.class';
+import { OComponentMenuItems } from './o-content-menu.class';
 import { OContextMenuContentComponent } from './context-menu/o-context-menu-content.component';
 
 export interface IOContextMenuClickEvent {
@@ -16,7 +16,7 @@ export interface IOContextMenuClickEvent {
 }
 
 export interface IOContextMenuContext extends IOContextMenuClickEvent {
-  menuItems?: QueryList<OComponentMenu>;
+  menuItems?: QueryList<OComponentMenuItems>;
 }
 
 @Injectable()

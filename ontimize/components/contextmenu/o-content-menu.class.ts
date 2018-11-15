@@ -9,8 +9,6 @@ export const DEFAULT_INPUTS_O_CONTEXT_MENU_ITEMS = [
   'ovisible: visible',
   'children'
 ];
-
-
 export class OComponentMenuItems {
   public static TYPE_ITEM_MENU = 'item_menu';
   public static TYPE_GROUP_MENU = 'item_group';
@@ -47,13 +45,6 @@ export class OComponentMenuItems {
   }
 
 
-  public setActiveStyles(): void {
-    this.isActive = true;
-  }
-
-  public setInactiveStyles(): void {
-    this.isActive = false;
-  }
 
   protected parseInput(value: any, defaultValue?: boolean): boolean {
     if (value instanceof Function || typeof value === 'boolean') {

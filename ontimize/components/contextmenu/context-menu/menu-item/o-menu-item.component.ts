@@ -12,13 +12,12 @@ export const DEFAULT_CONTEXT_MENU_CONTENT_ITEM_INPUTS = [
   moduleId: module.id,
   selector: 'o-menu-item',
   templateUrl: 'o-menu-item.component.html',
-  styleUrls: ['o-menu-item.component.scss'],
   inputs: DEFAULT_CONTEXT_MENU_CONTENT_ITEM_INPUTS
 })
 export class OMenuItemComponent {
 
   @Input() items: any[];
-  @ViewChild('childMenu') public childMenu:MatMenu;
+  @ViewChild('childMenu') public childMenu: MatMenu;
   @ViewChild(OMenuItemComponent) menu: OMenuItemComponent;
 
   constructor(
@@ -26,8 +25,8 @@ export class OMenuItemComponent {
     protected menuService: OContextMenuService
   ) { }
 
-  onClick(event, data) {
-    data.triggerExecute(data, event);
+  onClick(item, event?) {
+    item.triggerExecute(item.data, event);
   }
 
   isGroup(item): boolean {
