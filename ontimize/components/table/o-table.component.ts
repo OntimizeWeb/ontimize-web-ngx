@@ -1213,7 +1213,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
           if (this.dataService && (this.deleteMethod in this.dataService) && this.entity && (this.keysArray.length > 0)) {
             let filters = ServiceUtils.getArrayProperties(selectedItems, this.keysArray);
             this.daoTable.removeQuery(filters).subscribe(res => {
-              console.log('[OTable.remove]: response', res);
               ObservableWrapper.callEmit(this.onRowDeleted, selectedItems);
             }, error => {
               this.showDialogError(error, 'MESSAGES.ERROR_DELETE');

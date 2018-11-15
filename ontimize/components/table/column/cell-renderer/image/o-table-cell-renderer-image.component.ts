@@ -46,8 +46,6 @@ export class OTableCellRendererImageComponent extends OBaseTableCellRenderer {
   }
 
   getSource(cellData: any) {
-
-    //console.log("sourcde ")
     this._source = '';
     switch (this.imageType) {
       case 'base64':

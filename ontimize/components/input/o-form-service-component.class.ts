@@ -1,4 +1,4 @@
-import { ElementRef, Injector } from '@angular/core';
+import { ElementRef, EventEmitter, Injector } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { Codes, Util } from '../../utils';
@@ -36,16 +36,19 @@ export const DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT = [
   // query-method [string]: name of the service method to perform queries. Default: query.
   'queryMethod: query-method',
 
-  'serviceType : service-type',
+  'serviceType: service-type',
 
   // query-with-null-parent-keys [string][yes|no|true|false]: Indicates whether or not to trigger query method when parent-keys filter is null. Default: false
-  'queryWithNullParentKeys: query-with-null-parent-keys'
+  'queryWithNullParentKeys: query-with-null-parent-keys',
+
+  // set-value-on-value-change [string]: Form component attributes whose value will be set when the value of the current component changes due to user interaction. Separated by ';'. Accepted format: attr | columnName:attr
+  'setValueOnValueChange: set-value-on-value-change'
 ];
 
 export const DEFAULT_OUTPUTS_O_FORM_SERVICE_COMPONENT = [
-  ...DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT
+  ...DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT,
+  'onSetValueOnValueChange'
 ];
-
 
 export class OFormServiceComponent extends OFormDataComponent {
 
@@ -72,6 +75,10 @@ export class OFormServiceComponent extends OFormDataComponent {
   protected serviceType: string;
   @InputConverter()
   queryWithNullParentKeys: boolean = false;
+  public setValueOnValueChange: string;
+
+  /* Outputs */
+  public onSetValueOnValueChange: EventEmitter<Object> = new EventEmitter<Object>();
 
   /* Internal variables */
   protected dataArray: any[] = [];
@@ -82,6 +89,7 @@ export class OFormServiceComponent extends OFormDataComponent {
   protected querySuscription: Subscription;
   protected cacheQueried: boolean = false;
   protected _pKeysEquiv = {};
+  protected _setValueOnValueChangeEquiv = {};
   protected _formDataSubcribe;
   protected _currentIndex;
   protected dialogService: DialogService;
@@ -120,6 +128,9 @@ export class OFormServiceComponent extends OFormDataComponent {
     let pkArray = Util.parseArray(this.parentKeys);
     this._pKeysEquiv = Util.parseParentKeysEquivalences(pkArray);
 
+    let setValueSetArray = Util.parseArray(this.setValueOnValueChange);
+    this._setValueOnValueChangeEquiv = Util.parseParentKeysEquivalences(setValueSetArray);
+
     if (this.form) {
       const self = this;
       if (self.queryOnBind) {
@@ -154,6 +165,25 @@ export class OFormServiceComponent extends OFormDataComponent {
     }
     if (this.queryOnEventSubscription) {
       this.queryOnEventSubscription.unsubscribe();
+    }
+  }
+
+  protected emitOnValueChange(type, newValue, oldValue) {
+    super.emitOnValueChange(type, newValue, oldValue);
+    // Set value for 'set-value-on-value-change' components
+    let record = this.getSelectedRecord();
+    this.onSetValueOnValueChange.emit(record);
+    let setValueSetKeys = Object.keys(this._setValueOnValueChangeEquiv);
+    if (setValueSetKeys.length) {
+      let formComponents = this.form.getComponents();
+      if (Util.isDefined(record)) {
+        setValueSetKeys.forEach(key => {
+          let comp = formComponents[this._setValueOnValueChangeEquiv[key]];
+          if (Util.isDefined(comp)) {
+            comp.setValue(record[key]);
+          }
+        });
+      }
     }
   }
 

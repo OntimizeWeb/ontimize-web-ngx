@@ -55,6 +55,7 @@
   * New `elRef` parameter in constructor.
 * **OBaseTableCellEditor**: new `enabled` input.
 * **OServiceBaseComponent**: new `query-on-event` input ([e2dfb06](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e2dfb06))
+* **OFormServiceComponent (o-combo, o-list-picker, o-radio)**: new input `set-value-on-value-change` and output `onSetValueOnValueChange` ([c972d2d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c972d2d))
 
 ## 3.1.2 (2018-11-07)
 ### Features
