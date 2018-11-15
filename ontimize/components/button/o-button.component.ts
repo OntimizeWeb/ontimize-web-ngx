@@ -1,17 +1,16 @@
-import { Component, OnInit, NgModule, ViewEncapsulation } from '@angular/core';
-import { OSharedModule } from '../../shared';
+import { Component, NgModule, OnInit, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
+
+import { OSharedModule } from '../../shared';
 
 export const DEFAULT_INPUTS_O_BUTTON = [
   'oattr: attr',
   'olabel: label',
-
   // type [FLAT|RAISED|ICON|FAB|MINI-FAB]: The type of button. Default: FLAT.
   'otype: type',
-
   //icon [string]: Name of google icon (see https://design.google.com/icons/)
   'icon',
-  'iconPosition : icon-position',
+  'iconPosition: icon-position',
   'image'
 ];
 
@@ -21,9 +20,11 @@ export const DEFAULT_INPUTS_O_BUTTON = [
   inputs: DEFAULT_INPUTS_O_BUTTON,
   templateUrl: './o-button.component.html',
   styleUrls: ['./o-button.component.scss'],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  host: {
+    '[class.o-button]': 'true'
+  }
 })
-
 export class OButtonComponent implements OnInit {
 
   public static DEFAULT_INPUTS_O_BUTTON = DEFAULT_INPUTS_O_BUTTON;
@@ -62,12 +63,12 @@ export class OButtonComponent implements OnInit {
   isFlat(): boolean {
     return this.otype === 'FLAT';
   }
+
 }
 
 @NgModule({
   declarations: [OButtonComponent],
-  imports: [OSharedModule, CommonModule],
+  imports: [CommonModule, OSharedModule],
   exports: [OButtonComponent]
 })
-export class OButtonModule {
-}
+export class OButtonModule { }
