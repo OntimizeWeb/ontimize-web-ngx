@@ -25,6 +25,8 @@ export const DEFAULT_INPUTS_O_SERVICE_BASE_COMPONENT = [
   // query-on-init [no|yes]: query on bind. Default: yes.
   'queryOnBind: query-on-bind',
 
+  'queryOnEvent: query-on-event',
+
   'pageable',
 
   // columns [string]: columns of the entity, separated by ';'. Default: no value.
@@ -79,6 +81,7 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
   queryOnInit: boolean = true;
   @InputConverter()
   queryOnBind: boolean = true;
+  queryOnEvent: any;
   @InputConverter()
   pageable: boolean = false;
   columns: string;
@@ -117,6 +120,8 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
 
   protected form: OFormComponent;
   protected alreadyStored: boolean = false;
+
+  protected queryOnEventSubscription: Subscription;
 
   constructor(
     protected injector: Injector
@@ -164,6 +169,15 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
     if (this.form && Util.isDefined(this.dataService)) {
       this.setFormComponent(this.form);
     }
+
+    if (Util.isDefined(this.queryOnEvent) && Util.isDefined(this.queryOnEvent.subscribe)) {
+      const self = this;
+      this.queryOnEventSubscription = this.queryOnEvent.subscribe((value) => {
+        if (Util.isDefined(value) || this.queryWithNullParentKeys) {
+          self.queryData();
+        }
+      });
+    }
   }
 
   afterViewInit() {
@@ -182,6 +196,9 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
     }
     if (this.onRouteChangeStorageSubscribe) {
       this.onRouteChangeStorageSubscribe.unsubscribe();
+    }
+    if (this.queryOnEventSubscription) {
+      this.queryOnEventSubscription.unsubscribe();
     }
   }
 
