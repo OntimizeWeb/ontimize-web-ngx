@@ -1,6 +1,7 @@
 ## 3.2.0
 ### Features
 * New component `o-slide-toggle` ([6c6453b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6c6453b))
+* New components `o-button-toggle` and `o-button-toggle-group` ([311a2ac](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/311a2ac))
 * **o-checkbox**: new attributes `color` and `label-position` ([7e9e69e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7e9e69e))
 * **o-table-option**, **o-table-button**:
   * New `attr` and `enabled` inputs.
