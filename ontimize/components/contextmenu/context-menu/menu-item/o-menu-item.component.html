@@ -9,11 +9,11 @@
       <o-menu-item #menu [items]="child.children"></o-menu-item>
     </span>
     <!-- Handle leaf node menu items -->
-    <span *ngIf="!isGroup(child) && child.isVisible">
-      <button mat-menu-item (click)="onClick($event,child)" [disabled]="child.disabled">
-        <mat-icon>{{ child.icon }}</mat-icon>
-        <span>{{ child.label | oTranslate}} </span>
-      </button>
-    </span>
+    <button mat-menu-item (click)="onClick($event,child)" [disabled]="child.disabled" *ngIf="isItem(child) && child.isVisible">
+      <mat-icon>{{ child.icon }}</mat-icon>
+      <span>{{ child.label | oTranslate}} </span>
+    </button>
+    <!-- separator leaf node menu items -->
+    <mat-divider *ngIf="isSepararor(child) && child.isVisible"></mat-divider>
   </ng-container>
 </mat-menu>
