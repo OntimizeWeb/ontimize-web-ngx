@@ -1,6 +1,6 @@
 import { Component, Injector, Inject, forwardRef, ViewEncapsulation, ElementRef, ChangeDetectionStrategy, ComponentFactoryResolver, ViewChild, ViewContainerRef, ChangeDetectorRef } from '@angular/core';
 import { FormControl, ValidatorFn, Validators } from '@angular/forms';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { ObservableWrapper, Util } from '../../../../../../utils';
 import { SnackBarService, OTranslateService, OPermissions } from '../../../../../../services';
 import { OTableEditableRowDataSource, OTableDataSource } from '../../../../o-table.datasource';

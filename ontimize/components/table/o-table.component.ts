@@ -5,7 +5,7 @@ import { ObserversModule } from '@angular/cdk/observers';
 import { SelectionModel, SelectionChange } from '@angular/cdk/collections';
 import { MatDialog, MatTabGroup, MatTab, MatPaginatorIntl, MatPaginator, MatCheckboxChange, MatMenu, PageEvent } from '@angular/material';
 import { DndModule } from '@churchs19/ng2-dnd';
-import { Observable, Subscription } from 'rxjs';
+import { Observable, Subscription, of } from 'rxjs';
 
 import { OSharedModule } from '../../shared';
 import { OTableDao } from './o-table.dao';
@@ -1787,7 +1787,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   updateRecord(filter: any, updateData: any, sqlTypes?: Object): Observable<any> {
     if (!this.checkEnabledActionPermission(PermissionsUtils.ACTION_UPDATE)) {
-      return Observable.of(this.dataSource.data);
+      return of(this.dataSource.data);
     }
     let sqlTypesArg = sqlTypes || {};
     if (!Util.isDefined(sqlTypes)) {
