@@ -517,6 +517,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
     this.snackBarService = this.injector.get(SnackBarService);
     this.oTableStorage = new OTableStorage(this);
+
   }
 
   ngOnInit() {
@@ -1230,8 +1231,10 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   showAndSelectAllCheckbox() {
-    if (this.selectAllCheckbox) {
-      this._oTableOptions.selectColumn.visible = false;
+    if (this.isSelectionModeMultiple()) {
+      if (this.selectAllCheckbox) {
+        this._oTableOptions.selectColumn.visible = true;
+      }
       this.updateSelectionColumnState();
       this.selectAll();
     }
@@ -2071,12 +2074,36 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     return height;
   }
 
-  hasDetailMode(): boolean {
+  isDetailMode(): boolean {
     return this.detailMode !== Codes.DETAIL_MODE_NONE;
   }
 
-}
+  isEditionMode(): boolean {
+    //return this.detailMode !== Codes.DETAIL_MODE_NONE;
+    let isDetailMode = true;
+    if (this.form && !this.form.isEditableDetail()) {
+      isDetailMode = false;
+    }
+    return isDetailMode;
+  }
 
+  copyData(data: string) {
+    document.addEventListener('copy', (e: ClipboardEvent) => {
+      e.clipboardData.setData('text/plain', data);
+      e.preventDefault();
+      document.removeEventListener('copy', null);
+    });
+    document.execCommand('copy');
+
+  }
+  copyAll() {
+    this.copyData(JSON.stringify(this.getRenderedValue()));
+  }
+
+  copySelection() {
+    this.copyData(JSON.stringify(this.getSelectedItems()));
+  }
+}
 @NgModule({
   declarations: [
     OTableComponent,

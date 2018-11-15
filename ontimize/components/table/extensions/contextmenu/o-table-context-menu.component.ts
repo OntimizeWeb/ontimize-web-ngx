@@ -1,10 +1,9 @@
-import { Component, forwardRef, Inject, Injector, QueryList, ViewChildren, ViewChild, OnInit } from '@angular/core';
+import { Component, forwardRef, Inject, Injector, ViewChild } from '@angular/core';
 
 import { OTableComponent } from '../../o-table.component';
 import { OContextMenuComponent } from '../../../contextmenu/o-context-menu.component';
-import { OContextMenuItemComponent } from '../../../contextmenu/o-context-menu-components';
-import { OPermissions, PermissionsService, SnackBarService } from '../../../../services';
-
+import { OComponentMenuItems } from '../../../contextmenu/o-content-menu.class';
+import { Util } from '../../../../utils';
 
 export const DEFAULT_TABLE_CONTEXT_MENU_INPUTS = [
   'contextMenu : context-menu',
@@ -17,108 +16,155 @@ export const DEFAULT_TABLE_CONTEXT_MENU_INPUTS = [
   inputs: DEFAULT_TABLE_CONTEXT_MENU_INPUTS
 })
 
-export class OTableContextMenuComponent implements OnInit {
+export class OTableContextMenuComponent {
 
   public static INSERT_ACTION = 'INSERT_ACTION';
   public static GOTO_DETAIL = 'GOTO_DETAIL';
   public static EDIT_ACTION = 'EDIT_ACTION';
   public static SELECT_ALL = 'SELECT_ALL';
+  public static COPY_CELL = 'COPY_CELL';
+  public static COPY_ROW = 'COPY_ROW';
+  public static COPY_ALL = 'COPY_ALL';
+  public static COPY_SELECTION = 'COPY_SELECTION';
+
+
+  public static INSERT_ATTR = 'insert';
+  public static GOTO_DETAIL_ATTR = 'detail';
+  public static EDIT_ATTR = 'edit';
+  public static SELECT_ALL_ATTR = 'select_all';
 
   public contextMenu: OContextMenuComponent;
-
-
-  @ViewChildren(OContextMenuItemComponent) items: QueryList<OContextMenuItemComponent>;
   @ViewChild('defaultContextMenu') defaultContextMenu: OContextMenuComponent;
-  protected actionsPermissions: OPermissions[];
-  private permissionService: PermissionsService;
-  private snackBarService: SnackBarService;
 
   constructor(
     protected injector: Injector,
     @Inject(forwardRef(() => OTableComponent)) protected table: OTableComponent
-  ) {
-    this.permissionService = this.injector.get(PermissionsService);
-    this.snackBarService = this.injector.get(SnackBarService);
-  }
-
-  ngOnInit() {
-    this.parsePermissions();
-  }
+  ) { }
 
   ngAfterViewInit(): void {
+
+    let itemsParsed = this.parseItems();
     if (this.contextMenu) {
-      let items = this.contextMenu.oContextMenuItems.toArray().concat(this.items.toArray());
+      let items = this.contextMenu.oContextMenuItems.toArray().concat(itemsParsed);
       this.defaultContextMenu.oContextMenuItems.reset(items);
+    } else {
+      this.defaultContextMenu.oContextMenuItems.reset(itemsParsed);
     }
     this.table.registerContextMenu(this.defaultContextMenu);
   }
 
-  gotoDetails(item) {
-    if (!this.table.hasDetailMode()) {
-      return;
+  parseItems(items?: OComponentMenuItems[]): OComponentMenuItems[] {
+    let itemsParsed = [];
+    if (!Util.isDefined(items)) {
+      items = this.defaultContextMenu.oContextMenuItems.toArray();
     }
-    this.executeAction(OTableContextMenuComponent.GOTO_DETAIL, item);
+    items.forEach(element => {
+      let attr = element.attr;
+      if (element.isItemMenu()) {
+        switch (attr) {
+          case OTableContextMenuComponent.INSERT_ATTR:
+            if (this.table.insertButton) {
+              itemsParsed.push(element);
+            }
+            break;
+          case OTableContextMenuComponent.GOTO_DETAIL_ATTR:
+            if (this.table.isDetailMode()) {
+              itemsParsed.push(element);
+            }
+            break;
+          case OTableContextMenuComponent.EDIT_ATTR:
+            if (this.table.isEditionMode()) {
+              itemsParsed.push(element);
+            }
+            break;
+          case OTableContextMenuComponent.SELECT_ALL_ATTR:
+            if (!this.table.isSelectionModeNone()) {
+              itemsParsed.push(element);
+            }
+            break;
+          default:
+            itemsParsed.push(element);
+            break;
+        }
+      } else {
+        element.children = this.parseItems(element.children);
+        itemsParsed.push(element);
+      }
+    });
+
+    return itemsParsed;
   }
 
-  edit(item) {
-    if (!this.table.hasDetailMode()) {
-      return;
-    }
-    this.executeAction(OTableContextMenuComponent.EDIT_ACTION, item);
+  gotoDetails(event) {
+    this.executeAction(OTableContextMenuComponent.GOTO_DETAIL, event.data);
+  }
+
+  edit(event) {
+    this.executeAction(OTableContextMenuComponent.EDIT_ACTION, event.data);
   }
 
   add() {
-    if (!this.table.hasDetailMode()) {
-      return;
-    }
-
-    this.executeAction(OTableContextMenuComponent.INSERT_ACTION);
+    this.executeAction(OTableContextMenuComponent.INSERT_ACTION, event);
   }
 
   selectAll() {
-    this.executeAction(OTableContextMenuComponent.SELECT_ALL);
+    this.executeAction(OTableContextMenuComponent.SELECT_ALL, event);
   }
 
+  copyAll() {
+    this.executeAction(OTableContextMenuComponent.COPY_ALL, event);
+  }
 
-  executeAction(option, item?) {
-    if (!this.checkEnabledPermission(PermissionsService.PERMISSIONS_ACTIONS_INSERT_FORM)) {
-      return;
-    }
+  copyCell(event) {
+
+    this.executeAction(OTableContextMenuComponent.COPY_CELL, event);
+  }
+
+  copySelection() {
+    this.executeAction(OTableContextMenuComponent.COPY_SELECTION, event);
+  }
+
+  copyRow(event) {
+    this.executeAction(OTableContextMenuComponent.COPY_ROW, event);
+  }
+
+  executeAction(option, event) {
 
     switch (option) {
       case OTableContextMenuComponent.INSERT_ACTION:
         this.table.add();
         break;
       case OTableContextMenuComponent.GOTO_DETAIL:
-        this.table.viewDetail(item);
+        this.table.viewDetail(event.data);
         break;
       case OTableContextMenuComponent.EDIT_ACTION:
-        this.table.editDetail(item);
+        this.table.doHandleClick(event.data);
         break;
       case OTableContextMenuComponent.SELECT_ALL:
         this.table.showAndSelectAllCheckbox();
         break;
+      case OTableContextMenuComponent.COPY_ALL:
+        this.table.copyAll();
+        break;
+      case OTableContextMenuComponent.COPY_SELECTION:
+        this.table.copySelection();
+        break;
+      case OTableContextMenuComponent.COPY_CELL:
+        let cell_data = this.defaultContextMenu.origin.innerHTML;
+        this.table.copyData(cell_data);
+        break;
+
+      case OTableContextMenuComponent.COPY_ROW:
+        this.table.copyData(JSON.stringify(event.data));
+
+        break;
     }
   }
 
 
 
-  protected parsePermissions() {
-    if (this.table.oattr) {
-      this.actionsPermissions = this.permissionService.getActionsContextMenuTablePermissions(this.table.oattr);
-    }
-  }
-
-  private checkEnabledPermission(attr) {
-    const permissions: OPermissions = (this.actionsPermissions || []).find(p => p.attr === attr);
-    let enabledPermision = PermissionsService.checkEnabledPermission(permissions);
-    if (!enabledPermision) {
-      this.snackBarService.open(PermissionsService.MESSAGE_OPERATION_NOT_ALLOWED_PERMISSION);
-    }
-    return enabledPermision;
-  }
 
 
   // deshabilitar opcion selectAllCheckbox si select-all-checkbox = false
-  // deshabilitar opcion insertar si detail-mode es 
+  // deshabilitar opcion insertar si detail-mode es
 }

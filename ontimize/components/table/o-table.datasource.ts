@@ -282,8 +282,8 @@ export class OTableDataSource extends DataSource<any> {
     return this.renderedData.map(function (row, i, a) {
       /** render each column*/
       var obj = {};
-      Object.keys(row).map(function (column, i, a) {
-        self._tableOptions.columns.map(function (ocolumn: OColumn, i, a) {
+      Object.keys(row).forEach(function (column, i, a) {
+        self._tableOptions.columns.forEach(function (ocolumn: OColumn, i, a) {
           if (column === ocolumn.attr && ocolumn.visible) {
             var key = column;
             if (render && ocolumn.renderer && ocolumn.renderer.getCellData) {
@@ -303,8 +303,8 @@ export class OTableDataSource extends DataSource<any> {
     return this.filteredData.map(function (row, i, a) {
       /** render each column*/
       var obj = {};
-      Object.keys(row).map(function (column, i, a) {
-        self._tableOptions.columns.map(function (ocolumn: OColumn, i, a) {
+      Object.keys(row).forEach(function (column, i, a) {
+        self._tableOptions.columns.forEach(function (ocolumn: OColumn, i, a) {
           if (column === ocolumn.attr) {
             var key = column;
             if (render && ocolumn.renderer && ocolumn.renderer.getCellData) {
@@ -323,7 +323,7 @@ export class OTableDataSource extends DataSource<any> {
     return this.renderedData.map(function (row, i, a) {
       /** render each column*/
       var obj = {};
-      Object.keys(row).map(function (column, i, a) {
+      Object.keys(row).forEach(function (column, i, a) {
         if (column === ocolumn && ocolumn) {
           var key = column;
           obj[key] = row[column];

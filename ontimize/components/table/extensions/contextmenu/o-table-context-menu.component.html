@@ -1,7 +1,14 @@
 <o-context-menu #defaultContextMenu>
-  <o-context-menu-item #item icon="details" label="ver detalle" (execute)="gotoDetails(item.data)"></o-context-menu-item>
-  <o-context-menu-item icon="edit" label="Editar"  (execute)="edit(item.data)"></o-context-menu-item>
-  <o-context-menu-item label="insertar" icon="add" (execute)="add()"></o-context-menu-item>
-  <o-context-menu-item label="copiar" icon="file_copy"></o-context-menu-item>
-  <o-context-menu-item label="seleccionar todo" icon="select_all" (execute)="selectAll()" ></o-context-menu-item>
+  <o-context-menu-item attr="detail" icon="details" label="TABLE_CONTEXT_MENU.VIEW_DETAIL" (execute)="gotoDetails($event)"></o-context-menu-item>
+  <o-context-menu-item attr="edit" icon="edit" label="TABLE_CONTEXT_MENU.EDIT" (execute)="edit($event)"></o-context-menu-item>
+  <o-context-menu-item attr="insert" label="TABLE_CONTEXT_MENU.INSERT" icon="add" (execute)="add($event)"></o-context-menu-item>
+  <o-context-menu-separator></o-context-menu-separator>
+  <o-context-menu-group label="TABLE_CONTEXT_MENU.COPY" icon="file_copy" type="group">
+    <o-context-menu-item icon="file_copy" label="TABLE_CONTEXT_MENU.COPY_CELL" (execute)="copyCell($event)"></o-context-menu-item>
+    <o-context-menu-item icon="file_copy" label="TABLE_CONTEXT_MENU.COPY_ROW" (execute)="copyRow($event)"></o-context-menu-item>
+    <o-context-menu-item label="TABLE_CONTEXT_MENU.COPY_ALL" icon="file_copy" (execute)="copyAll($event)"></o-context-menu-item>
+    <o-context-menu-item label="TABLE_CONTEXT_MENU.COPY_SELECTION" icon="file_copy" (execute)="copySelection($event)"></o-context-menu-item>
+  </o-context-menu-group>
+  <o-context-menu-separator></o-context-menu-separator>
+  <o-context-menu-item attr="select-all" label="TABLE_CONTEXT_MENU.SELECT_ALL" icon="select_all" (execute)="selectAll($event)"></o-context-menu-item>
 </o-context-menu>

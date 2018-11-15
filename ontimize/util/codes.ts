@@ -18,6 +18,10 @@ export class Codes {
   public static DETAIL_MODE_CLICK = 'click';
   public static DETAIL_MODE_DBLCLICK_VALUES = ['dblclick', 'doubleclick'];
 
+  public static EDITION_MODE_NONE = 'none';
+  public static EDITION_MODE_CLICK = 'click';
+  public static EDITION_MODE_DBLCLICK_VALUES = ['dblclick', 'doubleclick'];
+
   public static SELECTION_MODE_NONE = 'none';
   public static SELECTION_MODE_SINGLE = 'single';
   public static SELECTION_MODE_MULTIPLE = 'multiple';
