@@ -174,7 +174,6 @@ export class OTableEditableRowComponent {
   }
 
   protected onInsertSuccess(res: any) {
-    console.log('[OTableEditableRow.insertRecord]: response', res);
     ObservableWrapper.callEmit(this.insertableRowTable.onPostInsertRecord, res);
     this.snackBarService.open('MESSAGES.INSERTED', { icon: 'check_circle' });
     this.cleanFields();
