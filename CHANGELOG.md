@@ -6,6 +6,7 @@
   * New `attr` and `enabled` inputs.
   * New `elRef` parameter in constructor.
 * **OBaseTableCellEditor**: new `enabled` input.
+* **OServiceBaseComponent**: new `query-on-event` input ([e2dfb06](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e2dfb06))
 
 ## 3.1.2 (2018-11-07)
 ### Features
