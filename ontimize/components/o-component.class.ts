@@ -11,8 +11,8 @@ export interface IComponent {
 export class OBaseComponent implements IComponent {
   /* Inputs */
   protected oattr: string;
-  olabel: string;
-  protected oplaceholder: string = '';
+  protected _olabel: string;
+  protected oplaceholder: string;
   protected _oenabled: boolean = true;
   protected _readOnly: boolean;
   protected _orequired: boolean = false;
@@ -37,10 +37,10 @@ export class OBaseComponent implements IComponent {
 
   initialize() {
     this._disabled = !this.oenabled;
-    if (!Util.isDefined(this.olabel)) {
-      this.olabel = this.oattr;
+    if (!Util.isDefined(this._olabel)) {
+      this._olabel = this.oattr;
     }
-    this.olabel = this.translateService.get(this.olabel);
+    this._olabel = this.translateService.get(this._olabel);
     if (Util.isDefined(this.oplaceholder) && this.oplaceholder.length > 0) {
       this.oplaceholder = this.translateService.get(this.oplaceholder);
     }
@@ -163,4 +163,13 @@ export class OBaseComponent implements IComponent {
     this._oenabled = parsedValue;
     this.disabled = !parsedValue;
   }
+
+  get olabel(): string {
+    return this._olabel;
+  }
+
+  set olabel(value: string) {
+    this._olabel = value;
+  }
+
 }
