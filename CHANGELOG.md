@@ -18,9 +18,30 @@
 * **o-hour-input**: adding `min` and `max` inputs.
 * **o-time-input**: adding `hour-min` and `hour-max` inputs.
 * **OFormDataComponent**:
-  * adding `appearance` input. View ([Form field appearance variants](https://v6.material.angular.io/components/form-field/overview#form-field-appearance-variants)) for details.
-  * adding `placeholder` input. Now you can configure `label` and `placeholder` separately. View ([Form field appearance variants](https://v6.material.angular.io/components/form-field/overview#form-field-appearance-variants)) for details.
-  * adding `float-label` input. View ([Form field floating label](https://v6.material.angular.io/components/form-field/overview#floating-label)) for details.
+  * Adding `placeholder` input. Now you can configure `label` and `placeholder` separately. View ([Form field appearance variants](https://v6.material.angular.io/components/form-field/overview#form-field-appearance-variants)) for details.
+
+  * Adding `appearance` input. View ([Form field appearance variants](https://v6.material.angular.io/components/form-field/overview#form-field-appearance-variants)) for details.
+  You can use angular material global provider to configure appearance in all module form fields:
+  ```javascript
+  import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material';
+
+  @NgModule({
+    providers: [{ provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'legacy | standard | fill | outline' } }],
+    ...
+  })
+  ```
+
+  * Adding `float-label` input. View ([Form field floating label](https://v6.material.angular.io/components/form-field/overview#floating-label)) for details.
+  You can use angular material global provider to configure floating labels in all module form fields:
+  ```javascript
+  import { MAT_LABEL_GLOBAL_OPTIONS } from '@angular/material';
+
+  @NgModule({
+    providers: [{ provide: MAT_LABEL_GLOBAL_OPTIONS, useValue: { float: 'always | never | auto' } }],
+    ...
+  })
+  ```
+
 
 
 ### BREAKING CHANGES
