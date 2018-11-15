@@ -6,10 +6,15 @@ export const DEFAULT_INPUTS_O_CONTEXT_MENU_ITEMS = [
   'data',
   'label',
   'oenabled: enabled',
-  'ovisible: visible'
+  'ovisible: visible',
+  'children'
 ];
 
-export class OComponentMenu {
+
+export class OComponentMenuItems {
+  public static TYPE_ITEM_MENU = 'item_menu';
+  public static TYPE_GROUP_MENU = 'item_group';
+  public static TYPE_SEPARATOR_MENU = 'item_separator';
   protected oenabled;
   protected ovisible;
   public isActive: boolean | ((item: any) => boolean) = true;
@@ -18,6 +23,9 @@ export class OComponentMenu {
   public label: string;
   public enabled: boolean | ((item: any) => boolean) = true;
   public visible: boolean | ((item: any) => boolean) = true;
+  public attr;
+  public type = OComponentMenuItems.TYPE_GROUP_MENU;
+  public children = [];
 
   ngOnInit() {
     this.enabled = this.parseInput(this.oenabled, true);
@@ -52,5 +60,9 @@ export class OComponentMenu {
       return value;
     }
     return Util.parseBoolean(value, defaultValue);
+  }
+
+  public isItemMenu(): boolean {
+    return this.type === OComponentMenuItems.TYPE_ITEM_MENU;
   }
 }
