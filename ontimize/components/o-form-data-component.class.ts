@@ -1,6 +1,6 @@
 import { Injector, ElementRef, OnInit, OnDestroy, QueryList, ViewChildren, AfterViewInit, HostBinding, ContentChildren, OnChanges, SimpleChange, EventEmitter } from '@angular/core';
 import { FormControl, FormGroup, Validators, ValidatorFn } from '@angular/forms';
-import { MatSuffix, MatFormFieldAppearance, FloatLabelType } from '@angular/material';
+import { MatSuffix, MatFormFieldAppearance, FloatLabelType, MatFormFieldDefaultOptions, MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material';
 import { Subscription } from 'rxjs';
 import { InputConverter, BooleanConverter } from '../decorators';
 import { SQLTypes, Util } from '../utils';
@@ -105,7 +105,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   @InputConverter()
   clearButton: boolean = false;
   angularValidatorsFn: ValidatorFn[] = [];
-  protected _appearance: MatFormFieldAppearance = 'standard';
+  protected _appearance: MatFormFieldAppearance;
 
   /* Outputs */
   onChange: EventEmitter<Object> = new EventEmitter<Object>();
@@ -142,6 +142,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
 
   protected permissionsService: PermissionsService;
   protected mutationObserver: MutationObserver;
+  protected matFormFieldDefaultOptions: MatFormFieldDefaultOptions;
 
   constructor(
     form: OFormComponent,
@@ -152,6 +153,12 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     this.form = form;
     this.elRef = elRef;
     this.permissionsService = this.injector.get(PermissionsService);
+    try {
+      this.matFormFieldDefaultOptions = this.injector.get(MAT_FORM_FIELD_DEFAULT_OPTIONS);
+    } catch (e) {
+      this.matFormFieldDefaultOptions = { appearance: 'standard' };
+    }
+    this._appearance = this.matFormFieldDefaultOptions.appearance;
   }
 
   ngOnInit() {
@@ -515,7 +522,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   set appearance(value: MatFormFieldAppearance) {
     const values = ['legacy', 'standard', 'fill', 'outline'];
     if (values.indexOf(value) === -1) {
-      value = 'standard';
+      value = this.matFormFieldDefaultOptions.appearance;
     }
     this._appearance = value;
   }
