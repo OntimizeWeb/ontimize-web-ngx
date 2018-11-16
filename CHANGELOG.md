@@ -1,4 +1,9 @@
-## 4.0.0-rc.0
+## 4.0.0-rc.0 (2018-11-16)
+
+### BREAKING CHANGES
+* **Angular and Angular Material**:
+  * Updating versions ([be5d6d7](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/be5d6d7))
+  * You can use the official [Angular Update Guide](https://update.angular.io/)
 
 ### PEER-DEPENDENCY UPDATES ###
 * **Updated**:  @angular@6.1.10
@@ -12,7 +17,7 @@
 * **Updated**:  rxjs@6.3.1
 * **Updated**:  zone.js@0.8.26
 * **Updated**:  core-js@2.5.7
-* **NOTE**: you must update your ([node version to 8 or later](https://www.hostingadvice.com/how-to/update-node-js-latest-version/))
+* **NOTE**: you must update your ([node version to 8 or later](https://nodejs.org/en/download/))
 
 ### Features
 * **o-hour-input**: adding `min` and `max` inputs.
@@ -41,14 +46,7 @@
     ...
   })
   ```
-
-
-
-### BREAKING CHANGES
-* **Angular and Angular Material**: updating versions ([be5d6d7](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/be5d6d7))
-## 3.2.0
-### Features
-* New component `o-slide-toggle` ([6c6453b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6c6453b))
+* **o-slide-toggle**: New component `o-slide-toggle` ([6c6453b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6c6453b))
 * **o-checkbox**: new attributes `color` and `label-position` ([7e9e69e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7e9e69e))
 * **o-table-option**, **o-table-button**:
   * New `attr` and `enabled` inputs.
