@@ -1,3 +1,7 @@
+
+## 4.0.0-rc.1
+* New components `o-button-toggle` and `o-button-toggle-group` ([311a2ac](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/311a2ac))
+
 ## 4.0.0-rc.0 (2018-11-16)
 
 ### BREAKING CHANGES

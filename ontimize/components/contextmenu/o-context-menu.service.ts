@@ -1,11 +1,11 @@
-import { ComponentRef, ElementRef, Injectable } from '@angular/core';
+import { ComponentRef, ElementRef, Injectable, QueryList } from '@angular/core';
 import { Overlay, OverlayRef, ScrollStrategyOptions } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
 import { Subscription, Subject } from 'rxjs';
 
 import { OContextMenuComponent } from './o-context-menu.component';
-import { OContextMenuContentComponent } from './content/o-context-menu-content.component';
-import { OContextMenuItemComponent } from './item/o-context-menu-item.component';
+import { OComponentMenuItems } from './o-content-menu.class';
+import { OContextMenuContentComponent } from './context-menu/o-context-menu-content.component';
 
 export interface IOContextMenuClickEvent {
   anchorElement?: ElementRef;
@@ -15,7 +15,7 @@ export interface IOContextMenuClickEvent {
 }
 
 export interface IOContextMenuContext extends IOContextMenuClickEvent {
-  menuItems?: OContextMenuItemComponent[];
+  menuItems?: QueryList<OComponentMenuItems>;
 }
 
 @Injectable()
@@ -84,7 +84,7 @@ export class OContextMenuService {
   }
 
   protected attachContextMenu(overlay: OverlayRef, context: IOContextMenuContext): void {
-    const contextMenuContent: ComponentRef<OContextMenuContentComponent> = overlay.attach(new ComponentPortal(OContextMenuContentComponent));
+    const contextMenuContent: ComponentRef<any> = overlay.attach(new ComponentPortal(OContextMenuContentComponent));
     contextMenuContent.instance.overlay = overlay;
     contextMenuContent.instance.menuItems = context.menuItems;
     contextMenuContent.instance.data = context.data;
@@ -93,7 +93,6 @@ export class OContextMenuService {
     subscriptions.add(contextMenuContent.instance.execute.asObservable().subscribe(() => this.closeContext()));
     subscriptions.add(contextMenuContent.instance.close.asObservable().subscribe(() => this.closeContext()));
 
-    contextMenuContent.onDestroy(() => context.menuItems.forEach(menuItem => menuItem.isActive = false));
   }
 
 }

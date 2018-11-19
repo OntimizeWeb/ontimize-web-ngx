@@ -527,6 +527,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
     this.snackBarService = this.injector.get(SnackBarService);
     this.oTableStorage = new OTableStorage(this);
+
   }
 
   ngOnInit() {
@@ -1235,6 +1236,16 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     this.reloadData();
   }
 
+  showAndSelectAllCheckbox() {
+    if (this.isSelectionModeMultiple()) {
+      if (this.selectAllCheckbox) {
+        this._oTableOptions.selectColumn.visible = true;
+      }
+      this.updateSelectionColumnState();
+      this.selectAll();
+    }
+  }
+
   reloadPaginatedDataFromStart() {
     if (this.pageable) {
       // Initialize page index
@@ -1467,7 +1478,11 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   masterToggle(event: MatCheckboxChange) {
-    event.checked ? this.dataSource.renderedData.forEach(row => this.selection.select(row)) : this.clearSelection();
+    event.checked ? this.selectAll() : this.clearSelection();
+  }
+
+  selectAll() {
+    this.dataSource.renderedData.forEach(row => this.selection.select(row));
   }
 
   selectionCheckboxToggle(event: MatCheckboxChange, row: any) {
@@ -2039,6 +2054,21 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     return height;
   }
 
+
+  isDetailMode(): boolean {
+    return this.detailMode !== Codes.DETAIL_MODE_NONE;
+  }
+
+  copyAll() {
+    Util.copyToClipboard(JSON.stringify(this.getRenderedValue()));
+  }
+
+  copySelection() {
+    let selectedItems = this.dataSource.getRenderedData(this.getSelectedItems());
+    Util.copyToClipboard(JSON.stringify(selectedItems));
+  }
+
+
   viewDetail(item: any): void {
     if (!this.checkEnabledActionPermission('detail')) {
       return;
@@ -2052,6 +2082,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
     super.editDetail(item);
   }
+
 }
 
 @NgModule({

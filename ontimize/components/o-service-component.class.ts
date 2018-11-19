@@ -419,7 +419,7 @@ export class OServiceComponent extends OServiceBaseComponent {
     const self = this;
     return data.map((row) => {
       let obj = {};
-      self.keysArray.map((key) => {
+      self.keysArray.forEach((key) => {
         if (row[key] !== undefined) {
           obj[key] = row[key];
         }

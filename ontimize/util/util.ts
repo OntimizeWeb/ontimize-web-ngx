@@ -269,7 +269,7 @@ export class Util {
    */
   static getValuesFromObject(obj: Object = {}): Array<any> {
     let array: Array<any> = [];
-    Object.keys(obj).map(key => {
+    Object.keys(obj).forEach(key => {
       if (typeof obj[key] === 'object') {
         array.push(Util.getValuesFromObject(obj[key]));
       }
@@ -288,5 +288,15 @@ export class Util {
       result = defaultValue || Codes.ICON_POSITION_LEFT;
     }
     return result;
+  }
+
+  static copyToClipboard(data: string) {
+    document.addEventListener('copy', (e: ClipboardEvent) => {
+      e.clipboardData.setData('text/plain', data);
+      e.preventDefault();
+      document.removeEventListener('copy', null);
+    });
+    document.execCommand('copy');
+
   }
 }
