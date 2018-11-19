@@ -1,7 +1,7 @@
 import { Component, forwardRef, Inject, Injector, ViewChild } from '@angular/core';
 
 import { OTableComponent } from '../../o-table.component';
-import { OContextMenuComponent, OComponentMenuItems } from '../../../contextmenu/o-context-menu-components';
+import { OContextMenuComponent } from '../../../contextmenu/o-context-menu-components';
 import { Util } from '../../../../utils';
 import { InputConverter } from '../../../../decorators';
 
@@ -51,7 +51,7 @@ export class OTableContextMenuComponent {
 
   ngAfterViewInit(): void {
 
-    let itemsParsed = this.parseItems();
+    let itemsParsed = this.defaultContextMenu.oContextMenuItems.toArray();
     if (this.contextMenu) {
       let items = itemsParsed.concat(this.contextMenu.oContextMenuItems.toArray());
       this.defaultContextMenu.oContextMenuItems.reset(items);
@@ -61,52 +61,45 @@ export class OTableContextMenuComponent {
     this.table.registerContextMenu(this.defaultContextMenu);
   }
 
-  parseItems(items?: OComponentMenuItems[]): OComponentMenuItems[] {
-    let itemsParsed = [];
-    if (!Util.isDefined(items)) {
-      items = this.defaultContextMenu.oContextMenuItems.toArray();
+  isVisibleDetail() {
+    let isVisible = false;
+    if (this.showViewDetail) {
+      isVisible = true;
     }
-    items.forEach(element => {
-      let attr = element.attr;
-      if (element.isItemMenu()) {
-        switch (attr) {
-          case OTableContextMenuComponent.INSERT_ATTR:
-            if (this.showInsert) {
-              itemsParsed.push(element);
-            }
-            break;
-          case OTableContextMenuComponent.GOTO_DETAIL_ATTR:
-            if (this.showViewDetail) {
-              itemsParsed.push(element);
-            }
-            break;
-          case OTableContextMenuComponent.EDIT_ATTR:
-            if (this.showEdit) {
-              itemsParsed.push(element);
-            }
-            break;
-          case OTableContextMenuComponent.SELECT_ALL_ATTR:
-            if (this.showSelectAll && !this.table.isSelectionModeNone()) {
-              itemsParsed.push(element);
-            }
-            break;
-            case OTableContextMenuComponent.COPY_ATTR:
-            if (this.showCopy) {
-              itemsParsed.push(element);
-            }
-            break;
-          default:
-            itemsParsed.push(element);
-            break;
-        }
-      } else {
-        element.children = this.parseItems(element.children);
-        itemsParsed.push(element);
-      }
-    });
-
-    return itemsParsed;
+    return isVisible;
   }
+
+  isVisibleEdit() {
+    let isVisible = false;
+    if (this.showEdit) {
+      isVisible = true;
+    }
+    return isVisible;
+  }
+
+  isVisibleInsert() {
+    let isVisible = false;
+    if (this.showInsert) {
+      isVisible = true;
+    }
+    return isVisible;
+  }
+  isVisibleSelectAll() {
+    let isVisible = false;
+    if (this.showSelectAll && !this.table.isSelectionModeNone()) {
+      isVisible = true;
+    }
+    return isVisible;
+  }
+
+  isVisibleCopy() {
+    let isVisible = false;
+    if (this.showCopy) {
+      isVisible = true;
+    }
+    return isVisible;
+  }
+
 
   gotoDetails(event) {
     this.table.viewDetail(event.data);

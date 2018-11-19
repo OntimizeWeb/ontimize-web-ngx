@@ -1,14 +1,16 @@
 <o-context-menu #defaultContextMenu>
-  <o-context-menu-item attr="detail" icon="chevron_right" label="TABLE_CONTEXT_MENU.VIEW_DETAIL" (execute)="gotoDetails($event)"></o-context-menu-item>
-  <o-context-menu-item attr="edit" icon="edit" label="TABLE_CONTEXT_MENU.EDIT" (execute)="edit($event)"></o-context-menu-item>
-  <o-context-menu-item attr="insert" label="TABLE_CONTEXT_MENU.INSERT" icon="add" (execute)="add($event)"></o-context-menu-item>
-  <o-context-menu-separator></o-context-menu-separator>
-  <o-context-menu-group label="TABLE_CONTEXT_MENU.COPY" icon="file_copy" type="group">
+  <o-context-menu-item attr="detail" icon="chevron_right" label="TABLE_CONTEXT_MENU.VIEW_DETAIL" (execute)="gotoDetails($event)"
+    [visible]="isVisibleDetail()"></o-context-menu-item>
+  <o-context-menu-item attr="edit" icon="edit" label="TABLE_CONTEXT_MENU.EDIT" (execute)="edit($event)" [visible]="isVisibleEdit()"></o-context-menu-item>
+  <o-context-menu-item attr="insert" label="TABLE_CONTEXT_MENU.INSERT" icon="add" (execute)="add($event)" [visible]="isVisibleInsert()"></o-context-menu-item>
+  <o-context-menu-separator [visible]="isVisibleCopy()"></o-context-menu-separator>
+  <o-context-menu-group label="TABLE_CONTEXT_MENU.COPY" icon="file_copy" type="group" [visible]="isVisibleCopy()">
     <o-context-menu-item icon="file_copy" label="TABLE_CONTEXT_MENU.COPY_CELL" (execute)="copyCell($event)"></o-context-menu-item>
     <o-context-menu-item icon="file_copy" label="TABLE_CONTEXT_MENU.COPY_ROW" (execute)="copyRow($event)"></o-context-menu-item>
     <o-context-menu-item label="TABLE_CONTEXT_MENU.COPY_ALL" icon="file_copy" (execute)="copyAll($event)"></o-context-menu-item>
     <o-context-menu-item label="TABLE_CONTEXT_MENU.COPY_SELECTION" icon="file_copy" (execute)="copySelection($event)"></o-context-menu-item>
   </o-context-menu-group>
-  <o-context-menu-separator></o-context-menu-separator>
-  <o-context-menu-item attr="select-all" label="TABLE_CONTEXT_MENU.SELECT_ALL" icon="select_all" (execute)="selectAll($event)"></o-context-menu-item>
+  <o-context-menu-separator [visible]="isVisibleSelectAll()"></o-context-menu-separator>
+  <o-context-menu-item attr="select-all" label="TABLE_CONTEXT_MENU.SELECT_ALL" icon="select_all" (execute)="selectAll($event)"
+    [visible]="isVisibleSelectAll()"></o-context-menu-item>
 </o-context-menu>
