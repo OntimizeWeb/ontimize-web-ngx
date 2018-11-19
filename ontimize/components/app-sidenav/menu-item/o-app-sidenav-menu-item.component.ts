@@ -7,6 +7,7 @@ import { Util } from '../../../utils';
 import { OSharedModule } from '../../../shared';
 import { InputConverter } from '../../../decorators';
 import { OAppLayoutComponent } from '../../../layouts';
+import { PermissionsUtils } from '../../../util/permissions';
 import { OAppSidenavComponent } from '../o-app-sidenav.component';
 import { DialogService, LoginService, OTranslateService, OPermissions, PermissionsService } from '../../../services';
 import { OLanguageSelectorModule } from '../../language-selector/o-language-selector.component';
@@ -124,13 +125,10 @@ export class OAppSidenavMenuItemComponent implements OnInit, AfterViewInit, OnDe
     }
 
     if (this.disabled) {
-      this.mutationObserver = PermissionsService.registerDisableChangesInDom(this.elRef.nativeElement, this.disabledChangesInDom.bind(this), true);
+      this.mutationObserver = PermissionsUtils.registerDisabledChangesInDom(this.elRef.nativeElement, {
+        checkStringValue: true
+      });
     }
-  }
-
-  private disabledChangesInDom(mutation: MutationRecord) {
-    let element = <HTMLInputElement>mutation.target;
-    element.setAttribute('disabled', 'true');
   }
 
   protected setUserInfoImage() {

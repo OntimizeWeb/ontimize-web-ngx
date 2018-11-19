@@ -1,7 +1,8 @@
 import { Component, Injector, Inject, forwardRef, ViewEncapsulation, ElementRef, ChangeDetectionStrategy, ComponentFactoryResolver, ViewChild, ViewContainerRef, ChangeDetectorRef } from '@angular/core';
 import { FormControl, ValidatorFn, Validators } from '@angular/forms';
+import { Observable } from 'rxjs/Observable';
 import { ObservableWrapper, Util } from '../../../../../../utils';
-import { SnackBarService, OTranslateService } from '../../../../../../services';
+import { SnackBarService, OTranslateService, OPermissions } from '../../../../../../services';
 import { OTableEditableRowDataSource, OTableDataSource } from '../../../../o-table.datasource';
 import { OTableComponent, OTableOptions, OColumn } from '../../../../o-table.component';
 import { OTableColumnComponent } from '../../../../column/o-table-column.component';
@@ -104,12 +105,12 @@ export class OTableEditableRowComponent {
     return this.insertableRowTable !== undefined && this.insertableRowTable.isColumnInsertable(column);
   }
 
-  getControl(column: OColumn): FormControl {
+  getControl(column: OColumn, disabled: boolean = false): FormControl {
     if (!this.controls[column.attr]) {
       const validators: ValidatorFn[] = this.resolveValidators(column);
       const cfg = {
         value: undefined,
-        disabled: false
+        disabled: disabled
       };
       this.controls[column.attr] = new FormControl(cfg, validators);
     }
@@ -150,14 +151,15 @@ export class OTableEditableRowComponent {
       // this.table.showDialogError('TABLE.ROW_VALIDATION_ERROR');
       return;
     }
-
     let values = this.getAttributesValuesToInsert();
-    this.table.insertRecord(values).subscribe(res => {
-      self.onInsertSuccess(res);
-    }, error => {
-      console.log('[OTableEditableRow.insertRecord]: error', error);
-      self.table.showDialogError(error, 'MESSAGES.ERROR_INSERT');
-    });
+    const insertObservable: Observable<any> = this.table.insertRecord(values);
+    if (insertObservable) {
+      insertObservable.subscribe(res => {
+        self.onInsertSuccess(res);
+      }, error => {
+        self.table.showDialogError(error, 'MESSAGES.ERROR_INSERT');
+      });
+    }
   }
 
   protected getAttributesValuesToInsert(): Object {
@@ -172,7 +174,6 @@ export class OTableEditableRowComponent {
   }
 
   protected onInsertSuccess(res: any) {
-    console.log('[OTableEditableRow.insertRecord]: response', res);
     ObservableWrapper.callEmit(this.insertableRowTable.onPostInsertRecord, res);
     this.snackBarService.open('MESSAGES.INSERTED', { icon: 'check_circle' });
     this.cleanFields();
@@ -209,12 +210,18 @@ export class OTableEditableRowComponent {
         const columnEditorType = col.editor ? col.editor.type : col.type;
         const editor: OBaseTableCellEditor = this.tableColumn.buildCellEditor(columnEditorType, this.resolver, this.container, col.editor);
         this.columnEditors[col.attr] = editor;
+        let disabledCol = !this._insertableRowTable.enabled;
+        if (!disabledCol) {
+          const columnPermissions: OPermissions = this.table.getOColumnPermissions(col.attr);
+          disabledCol = columnPermissions.enabled === false;
+        }
+        editor.enabled = !disabledCol;
         editor.registerInColumn = false;
         editor.showPlaceHolder = this._insertableRowTable.showPlaceHolder || editor.showPlaceHolder;
         editor.table = self.table;
         editor.tableColumn = col.editor ? col.editor.tableColumn : col.definition;
         editor.orequired = this.isColumnRequired(col);
-        editor.formControl = this.getControl(col);
+        editor.formControl = this.getControl(col, disabledCol);
         editor.controlArgs = { silent: true };
         editor.startEdition(self.rowData);
         editor.formControl.markAsUntouched();

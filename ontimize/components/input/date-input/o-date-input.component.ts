@@ -174,28 +174,21 @@ export class ODateInputComponent extends OFormDataComponent implements AfterView
   }
 
   getValueAsDate(): any {
-    let value = this.getValue();
-    if (typeof value !== 'undefined') {
-      if (typeof value === 'number') {
-        let dateObj = new Date(value);
-        this.ensureOFormValue(dateObj);
-        return dateObj;
-      }
+    let value = super.getValue();
+    if (Util.isDefined(value) && typeof value === 'number') {
+      let dateObj = new Date(value);
+      this.ensureOFormValue(dateObj);
+      return dateObj;
     }
     return value;
   }
 
   getValue(): any {
-    let timestampValue: any;
-    if (this.value instanceof OFormValue) {
-      if (this.value.value) {
-        timestampValue = this.value.value;
-      }
+    let timestampValue = super.getValue();
+    if (timestampValue && timestampValue instanceof Date) {
+      timestampValue = timestampValue.getTime();
     }
-    if (timestampValue) {
-      return timestampValue;
-    }
-    return undefined;
+    return timestampValue;
   }
 
   get showClearButton(): boolean {

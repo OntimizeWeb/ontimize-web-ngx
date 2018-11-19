@@ -2,8 +2,9 @@ import { Injector, ElementRef, OnInit, OnDestroy, QueryList, ViewChildren, After
 import { FormControl, FormGroup, Validators, ValidatorFn } from '@angular/forms';
 import { MatSuffix } from '@angular/material';
 import { Subscription } from 'rxjs/Subscription';
-import { InputConverter } from '../decorators';
+import { InputConverter, BooleanConverter } from '../decorators';
 import { SQLTypes, Util } from '../utils';
+import { PermissionsUtils } from '../util/permissions';
 import { OBaseComponent, IComponent } from './o-component.class';
 import { OFormComponent } from './form/o-form.component';
 import { OFormValue, IFormValueOptions } from './form/OFormValue';
@@ -165,7 +166,9 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
       }
     }
     if (this.isDisabled) {
-      this.mutationObserver = PermissionsService.registerDisableChangesInDom(this.getMutationObserverTarget(), this.disabledChangesInDom.bind(this));
+      this.mutationObserver = PermissionsUtils.registerDisabledChangesInDom(this.getMutationObserverTarget(), {
+        callback: this.disableFormControl.bind(this)
+      });
     }
   }
 
@@ -271,7 +274,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   /**
    * Do not allow the disabled attribute to change by code or by inspector
    * */
-  private disabledChangesInDom() {
+  private disableFormControl() {
     const control = this.getFormControl();
     control.disable({
       onlySelf: true,
@@ -364,7 +367,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   }
 
   setValue(val: any, options?: IFormValueOptions) {
-    if (!PermissionsService.checkEnabledPermission(this.permissions)) {
+    if (!PermissionsUtils.checkEnabledPermission(this.permissions)) {
       return;
     }
     if (this.oldValue !== val) {
@@ -380,7 +383,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
    * Clears the component value.
    */
   clearValue(options?: IFormValueOptions) {
-    if (!PermissionsService.checkEnabledPermission(this.permissions)) {
+    if (!PermissionsUtils.checkEnabledPermission(this.permissions)) {
       return;
     }
     this.setValue(void 0, options);
@@ -441,7 +444,10 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   }
 
   resolveValidators(): ValidatorFn[] {
-    let validators: ValidatorFn[] = this.angularValidatorsFn;
+    let validators: ValidatorFn[] = [];
+    this.angularValidatorsFn.forEach((fn: ValidatorFn) => {
+      validators.push(fn);
+    });
     if (this.orequired) {
       validators.push(Validators.required);
     }
@@ -471,7 +477,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   }
 
   set disabled(value: boolean) {
-    if (!PermissionsService.checkEnabledPermission(this.permissions)) {
+    if (!PermissionsUtils.checkEnabledPermission(this.permissions)) {
       return;
     }
     if (this.hasVisiblePermission()) {
@@ -509,5 +515,17 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
       self.errorsData.push(...errorsData);
     });
     this._fControl.setValidators(validators);
+  }
+
+  get orequired(): boolean {
+    return this._orequired;
+  }
+
+  set orequired(val: boolean) {
+    const old = this._orequired;
+    this._orequired = BooleanConverter(val);
+    if (val !== old) {
+      this.updateValidators();
+    }
   }
 }

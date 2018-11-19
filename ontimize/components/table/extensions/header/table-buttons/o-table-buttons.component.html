@@ -1,0 +1,6 @@
+<div class="buttons" fxLayout>
+  <o-table-button #insertOButton *ngIf="showInsertOButton" (onClick)="add()" label="TABLE.BUTTONS.ADD" svg-icon="ontimize:add"></o-table-button>
+  <o-table-button #refreshOButton *ngIf="showRefreshOButton" (onClick)="reloadData()" label="TABLE.BUTTONS.REFRESH" svg-icon="ontimize:autorenew"></o-table-button>
+  <ng-content></ng-content>
+  <o-table-button #deleteOButton *ngIf="showDeleteOButton" (onClick)="remove()" label="TABLE.BUTTONS.DELETE" svg-icon="ontimize:delete"></o-table-button>
+</div>

@@ -1,7 +1,14 @@
 ## 3.2.0
 ### Features
 * New component `o-slide-toggle` ([6c6453b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6c6453b))
+* New components `o-button-toggle` and `o-button-toggle-group` ([311a2ac](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/311a2ac))
 * **o-checkbox**: new attributes `color` and `label-position` ([7e9e69e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7e9e69e))
+* **o-table-option**, **o-table-button**:
+  * New `attr` and `enabled` inputs.
+  * New `elRef` parameter in constructor.
+* **OBaseTableCellEditor**: new `enabled` input.
+* **OServiceBaseComponent**: new `query-on-event` input ([e2dfb06](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e2dfb06))
+* **OFormServiceComponent (o-combo, o-list-picker, o-radio)**: new input `set-value-on-value-change` and output `onSetValueOnValueChange` ([c972d2d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c972d2d))
 
 ## 3.1.2 (2018-11-07)
 ### Features

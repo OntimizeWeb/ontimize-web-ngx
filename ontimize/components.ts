@@ -1,6 +1,7 @@
 export * from './components/bar-menu/bar-menu.components';
 export * from './components/breadcrumb/o-breadcrumb.component';
 export * from './components/button/o-button.component';
+export * from './components/button-toggle/o-button-toggle.module';
 export * from './components/container/column/o-column.component';
 export * from './components/container/row/o-row.component';
 export * from './components/contextmenu/o-context-menu.module';

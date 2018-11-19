@@ -42,18 +42,6 @@ export type OPermissionsDefinition = {
 
 @Injectable()
 export class PermissionsService {
-  public static PERMISSIONS_ACTIONS_REFRESH_FORM = 'refresh';
-  public static PERMISSIONS_ACTIONS_INSERT_FORM = 'insert';
-  public static PERMISSIONS_ACTIONS_UPDATE_FORM = 'update';
-  public static PERMISSIONS_ACTIONS_DELETE_FORM = 'delete';
-  public static MESSAGE_OPERATION_NOT_ALLOWED_PERMISSION = 'Operation is not allowed due to permissions restrictions';
-
-  public static PERMISSIONS_ACTIONS_FORM = [
-    PermissionsService.PERMISSIONS_ACTIONS_REFRESH_FORM,
-    PermissionsService.PERMISSIONS_ACTIONS_INSERT_FORM,
-    PermissionsService.PERMISSIONS_ACTIONS_UPDATE_FORM,
-    PermissionsService.PERMISSIONS_ACTIONS_DELETE_FORM
-  ];
 
   protected permissionsService: any;
   protected ontimizePermissionsConfig: any;
@@ -218,4 +206,5 @@ export class PermissionsService {
 
     return mutationObserver;
   }
+
 }
