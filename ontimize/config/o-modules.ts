@@ -59,7 +59,8 @@ import {
   OTimeInputModule,
   OGridModule,
   ORadioModule,
-  OSlideToggleModule
+  OSlideToggleModule,
+  OSliderModule
 } from '../components';
 
 import {
@@ -132,7 +133,8 @@ export const INTERNAL_ONTIMIZE_MODULES_EXPORTED: any = [
   OTimeInputModule,
   OGridModule,
   ORadioModule,
-  OSlideToggleModule
+  OSlideToggleModule,
+  OSliderModule
 ];
 
 // AoT requires an exported function for factories
