@@ -14,6 +14,7 @@
   * New component  `o-context-menu-separator` that represents a separator in the menu
 * **o-table-context-menu**: includes the next options: `view detail`, `edit`, `insert`, `copy options` and `select all`.  ([ee465d4](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ee465d4)) ([99d5040](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/99d5040))([e05cc93](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e05cc93)) ([1b94c3c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ 1b94c3c))
 * **o-app-layout-header**: new component for adding custom content to `o-app-layout` header ([dc0d408](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/dc0d408))
+* New component `o-slider` ([a885043](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a885043))
 
 ## 3.1.2 (2018-11-07)
 ### Features
