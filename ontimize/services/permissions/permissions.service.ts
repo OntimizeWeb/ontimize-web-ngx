@@ -176,35 +176,4 @@ export class PermissionsService {
     return permissions;
   }
 
-  static checkEnabledPermission(permission: OPermissions): boolean {
-    if (Util.isDefined(permission) && permission.enabled === false) {
-      console.warn(PermissionsService.MESSAGE_OPERATION_NOT_ALLOWED_PERMISSION);
-      return false;
-    }
-    return true;
-  }
-
-  static registerDisableChangesInDom(nativeElement: any, callback: Function, checkStringValue: boolean = false): MutationObserver {
-    if (!Util.isDefined(nativeElement)) {
-      return undefined;
-    }
-
-    const mutationObserver = new MutationObserver((mutations: MutationRecord[]) => {
-      const mutation = mutations[0];
-      if (mutation.type === 'attributes' && mutation.attributeName === 'disabled') {
-        const attribute = mutation.target.attributes.getNamedItem('disabled');
-        if (attribute === null || (checkStringValue && attribute.value !== 'true')) {
-          callback(mutation);
-        }
-      }
-    });
-
-    mutationObserver.observe(nativeElement, {
-      attributes: true,
-      attributeFilter: ['disabled']
-    });
-
-    return mutationObserver;
-  }
-
 }
