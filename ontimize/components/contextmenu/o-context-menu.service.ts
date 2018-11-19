@@ -90,7 +90,6 @@ export class OContextMenuService {
     subscriptions.add(contextMenuContent.instance.execute.asObservable().subscribe(() => this.closeContext()));
     subscriptions.add(contextMenuContent.instance.close.asObservable().subscribe(() => this.closeContext()));
 
-    contextMenuContent.onDestroy(() => context.menuItems.forEach(menuItem => menuItem.isActive = false));
   }
 
 }

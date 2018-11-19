@@ -7,8 +7,9 @@ import { OContextMenuComponent } from './o-context-menu.component';
 import { OContextMenuContentComponent } from './context-menu/o-context-menu-content.component';
 import { OContextMenuItemComponent } from './context-menu-item/o-context-menu-item.component';
 import { OContextMenuGroupComponent } from './context-menu-group/o-context-menu-group.component';
-import { OMenuItemComponent } from './context-menu/menu-item/o-menu-item.component';
+
 import { OContextMenuSeparatorComponent } from './context-menu-separator/o-context-menu-separator.component';
+import { OWrapperContentMenuComponent } from './context-menu/wrapper-content-menu/wrapper-content-menu.component';
 
 @NgModule({
   imports: [CommonModule, OSharedModule],
@@ -20,7 +21,7 @@ import { OContextMenuSeparatorComponent } from './context-menu-separator/o-conte
     OContextMenuComponent,
     OContextMenuItemComponent,
     OContextMenuGroupComponent,
-    OMenuItemComponent,
+    OWrapperContentMenuComponent,
     OContextMenuSeparatorComponent]
 })
 export class OContextMenuModule { }

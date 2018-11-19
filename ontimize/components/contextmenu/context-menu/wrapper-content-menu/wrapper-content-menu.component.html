@@ -6,7 +6,7 @@
         <mat-icon>{{ child.icon }}</mat-icon>
         <span>{{ child.label | oTranslate}}</span>
       </button>
-      <o-menu-item #menu [items]="child.children"></o-menu-item>
+      <wrapper-content-menu #menu [items]="child.children"></wrapper-content-menu>
     </span>
     <!-- Handle leaf node menu items -->
     <button mat-menu-item (click)="onClick(child, $event)" [disabled]="child.disabled" *ngIf="isItem(child) && child.isVisible">

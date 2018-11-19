@@ -1,12 +1,10 @@
 import { AfterViewInit, Component, ContentChildren, EventEmitter, Injector, OnInit, QueryList, ViewEncapsulation, ViewChild } from '@angular/core';
 import { OverlayRef } from '@angular/cdk/overlay';
-
 import { MatMenuTrigger } from '@angular/material';
-import { OContextMenuService } from '../o-context-menu.service';
-import { OContextMenuItemComponent } from '../context-menu-item/o-context-menu-item.component';
 import { OComponentMenuItems } from '../o-content-menu.class';
-
-import { OMenuItemComponent } from './menu-item/o-menu-item.component';
+import { OContextMenuService } from '../o-context-menu.service';
+import { OContextMenuItemComponent } from '../o-context-menu-components';
+import { OWrapperContentMenuComponent } from './wrapper-content-menu/wrapper-content-menu.component';
 
 
 export const DEFAULT_CONTEXT_MENU_CONTENT_INPUTS = [
@@ -31,7 +29,7 @@ export const DEFAULT_CONTEXT_MENU_CONTENT_OUTPUTS = [
     '[class.o-context-menu-content]': 'true'
   }
 })
-export class OContextMenuContentComponent implements AfterViewInit,  OnInit {
+export class OContextMenuContentComponent implements AfterViewInit, OnInit {
 
   public menuItems: any[] = [];
   public overlay: OverlayRef;
@@ -42,7 +40,7 @@ export class OContextMenuContentComponent implements AfterViewInit,  OnInit {
 
   @ContentChildren(OComponentMenuItems) public oContextMenuItems: QueryList<OComponentMenuItems>;
   @ViewChild(MatMenuTrigger) trigger: MatMenuTrigger;
-  @ViewChild(OMenuItemComponent) menu: OMenuItemComponent;
+  @ViewChild(OWrapperContentMenuComponent) menu: OWrapperContentMenuComponent;
 
 
   constructor(
@@ -56,22 +54,27 @@ export class OContextMenuContentComponent implements AfterViewInit,  OnInit {
 
   ngOnInit() {
     this.initialize();
+    this.menu.close.subscribe('se cerro la menu');
 
   }
 
   initialize() {
-   this.setData(this.menuItems);
+    this.setData(this.menuItems);
   }
 
   setData(items) {
     items.forEach(menuItem => {
       if (this.data) {
         menuItem.data = this.data;
-        if (menuItem.children && menuItem.children.length>0) {
+        if (menuItem.children && menuItem.children.length > 0) {
           this.setData(menuItem.children);
         }
       }
     });
+  }
+
+  onMenuClosed(event) {
+    this.close.emit();
   }
 
 

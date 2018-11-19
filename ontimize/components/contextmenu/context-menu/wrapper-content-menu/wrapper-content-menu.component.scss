@@ -1,0 +1,6 @@
+.mat-menu-content  {
+  mat-divider.mat-divider:first-child,
+  mat-divider.mat-divider:last-child {
+    display: none;
+  }
+}

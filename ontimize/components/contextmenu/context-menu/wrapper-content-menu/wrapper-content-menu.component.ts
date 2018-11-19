@@ -10,15 +10,16 @@ export const DEFAULT_CONTEXT_MENU_CONTENT_ITEM_INPUTS = [
 
 @Component({
   moduleId: module.id,
-  selector: 'o-menu-item',
-  templateUrl: 'o-menu-item.component.html',
+  selector: 'wrapper-content-menu',
+  templateUrl: 'wrapper-content-menu.component.html',
+  styleUrls: ['./wrapper-content-menu.component.scss'],
   inputs: DEFAULT_CONTEXT_MENU_CONTENT_ITEM_INPUTS
 })
-export class OMenuItemComponent {
+export class OWrapperContentMenuComponent {
 
   @Input() items: any[];
   @ViewChild('childMenu') public childMenu: MatMenu;
-  @ViewChild(OMenuItemComponent) menu: OMenuItemComponent;
+  @ViewChild(OWrapperContentMenuComponent) menu: OWrapperContentMenuComponent;
 
   constructor(
     protected injector: Injector,
@@ -51,6 +52,4 @@ export class OMenuItemComponent {
     }
     return isItem;
   }
-
-
 }
