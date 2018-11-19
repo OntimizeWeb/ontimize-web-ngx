@@ -6,7 +6,7 @@
   $foreground: map-get($theme, foreground);
 
   .o-app-header {
-    .o-app-header {
+    nav {
       .sidenav-toggle {
         color: mat-color($primary, default-contrast);
         background: mat-color($primary);

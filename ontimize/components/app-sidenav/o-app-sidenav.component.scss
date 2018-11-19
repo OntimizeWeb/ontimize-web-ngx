@@ -39,24 +39,18 @@ $transition-duration: 500ms;
     height: 100%;
 
     &.o-app-sidenav-mode-desktop:not(.opened) {
-      .mat-sidenav.mat-drawer-closed {
+      .o-app-sidenav-sidenav.mat-drawer-closed {
         visibility: visible !important;
         transform: translate3d($sidenav-diff, 0, 0);
       }
 
-      .mat-sidenav-content.mat-drawer-content {
+      .o-app-sidenav-content.mat-drawer-content {
         margin-right: $sidenav-closed-width !important;
         transform: translate3d($sidenav-closed-width, 0, 0) !important;
       }
     }
 
-    // &.o-app-sidenav-mode-mobile:not(.opened) {
-    //   .mat-sidenav.mat-drawer-closed {}
-
-    //   .mat-sidenav-content.mat-drawer-content {}
-    // }
-
-    .mat-drawer-content {
+    .o-app-sidenav-content {
       position: absolute;
       right: 0;
       left: 0;
