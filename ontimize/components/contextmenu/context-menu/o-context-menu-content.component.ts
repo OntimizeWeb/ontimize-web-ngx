@@ -54,8 +54,6 @@ export class OContextMenuContentComponent implements AfterViewInit, OnInit {
 
   ngOnInit() {
     this.initialize();
-    this.menu.close.subscribe('se cerro la menu');
-
   }
 
   initialize() {
