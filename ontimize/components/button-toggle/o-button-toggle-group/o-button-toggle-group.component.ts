@@ -1,14 +1,17 @@
-import { AfterViewInit, Component, ComponentFactory, ComponentFactoryResolver, ContentChildren, EventEmitter, forwardRef, OnInit, QueryList, ViewEncapsulation, ViewChild, ViewContainerRef } from '@angular/core';
+import { AfterViewInit, Component, ComponentFactory, ComponentFactoryResolver, ContentChildren, EventEmitter, forwardRef, OnInit, QueryList, ViewChild, ViewContainerRef, ViewEncapsulation } from '@angular/core';
 import { MatButtonToggleChange, MatButtonToggleGroup } from '@angular/material';
 
 import { Util } from '../../../utils';
+import { InputConverter } from '../../../decorators';
 import { OButtonToggleComponent } from '../o-button-toggle.component';
 
 export const DEFAULT_INPUTS_O_BUTTON_TOGGLE_GROUP = [
   'oattr: attr',
   'name',
   'enabled',
-  'layout'
+  'layout',
+  'multiple',
+  'value'
 ];
 
 export const DEFAULT_OUTPUTS_O_BUTTON_TOGGLE_GROUP = [
@@ -50,18 +53,14 @@ export class OButtonToggleGroupComponent implements AfterViewInit, OnInit {
   }
   protected _enabled: boolean = true;
   public layout: 'row' | 'column' = 'row';
+  @InputConverter()
+  public multiple: boolean = false;
+  public value: any;
   /* End inputs */
 
   /* Outputs */
   public onChange: EventEmitter<MatButtonToggleChange> = new EventEmitter();
   /* End outputs */
-
-  get value(): any {
-    return this._innerButtonToggleGroup ? this._innerButtonToggleGroup.value : void 0;
-  }
-  set value(val: any) {
-    this._innerButtonToggleGroup.value = val;
-  }
 
   @ViewChild(MatButtonToggleGroup)
   protected _innerButtonToggleGroup: MatButtonToggleGroup;
@@ -102,6 +101,14 @@ export class OButtonToggleGroupComponent implements AfterViewInit, OnInit {
     });
     this._innerButtonToggleGroup._buttonToggles.reset(childList.map(c => c._innerButtonToggle));
     this._children.reset(childList);
+  }
+
+  getValue(): any {
+    return this._innerButtonToggleGroup ? this._innerButtonToggleGroup.value : void 0;
+  }
+
+  setValue(val: any): void {
+    this._innerButtonToggleGroup.value = val;
   }
 
 }
