@@ -2,6 +2,6 @@
   [matTooltipShowDelay]="tooltipShowDelay">
   <mat-slider [color]="color" [invert]="invert" [max]="max" [min]="min" [step]="step" [thumbLabel]="thumbLabel"
     [tickInterval]="tickInterval" [ngModel]="getValue()" [vertical]="vertical" [id]="getAttribute()" [formControlName]="getAttribute()"
-    (ngModelChange)="innerOnChange($event)" (change)="onChangeEvent($event)"></mat-slider>
+    (ngModelChange)="innerOnChange($event)" (change)="onChangeEvent($event)" [displayWith]="oDisplayWith"></mat-slider>
   <div *ngIf="isReadOnly" (click)="onClickBlocker($event)" class="read-only-blocker" fxFill></div>
 </div>
