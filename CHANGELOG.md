@@ -16,6 +16,10 @@
 * **o-app-layout-header**: new component for adding custom content to `o-app-layout` header ([dc0d408](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/dc0d408))
 * New component `o-slider` ([a885043](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a885043))
 
+
+### Note on HammerJS
+The sliding behavior in `o-slider` component requires that HammerJS is loaded on the page. You can see the support of Material in next ([link])(https://material.angular.io/guide/getting-started#step-5-gesture-support)
+
 ## 3.1.2 (2018-11-07)
 ### Features
 * **OValueChangeEvent**: adding `isUserChange` and `isProgrammaticChange` methods.
