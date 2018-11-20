@@ -1,6 +1,6 @@
 
 ## 4.0.0-rc.1
-* New components `o-button-toggle` and `o-button-toggle-group` ([311a2ac](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/311a2ac))
+* New components `o-button-toggle` and `o-button-toggle-group` ([311a2ac](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/311a2ac)) ([415f8b0](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/415f8b0))
 
 ## 4.0.0-rc.0 (2018-11-16)
 
@@ -59,7 +59,7 @@
 * **OServiceBaseComponent**: new `query-on-event` input ([e2dfb06](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e2dfb06))
 * **OFormServiceComponent (o-combo, o-list-picker, o-radio)**: new input `set-value-on-value-change` and output `onSetValueOnValueChange` ([c972d2d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c972d2d))
 * *o-context-menu*:  ([db32ecf](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/db32ecf))([a6d6b44](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a6d6b44))
-  * New component `o-context-menu-group` that supports the ability to open a sub-menu. 
+  * New component `o-context-menu-group` that supports the ability to open a sub-menu.
   * New component  `o-context-menu-separator` that represents a separator in the menu
 * **o-table-context-menu**: includes the next options: `view detail`, `edit`, `insert`, `copy options` and `select all`.  ([ee465d4](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ee465d4)) ([99d5040](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/99d5040))([e05cc93](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e05cc93)) ([1b94c3c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ 1b94c3c))
 * **o-app-layout-header**: new component for adding custom content to `o-app-layout` header ([dc0d408](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/dc0d408))
