@@ -85,6 +85,10 @@ export class OAppHeaderComponent implements OnDestroy {
     this._headerTitle = value;
   }
 
+  get showHeaderTitle(): boolean {
+    return this._headerTitle.length > 0;
+  }
+
 }
 
 @NgModule({
