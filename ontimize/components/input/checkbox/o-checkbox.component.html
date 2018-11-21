@@ -3,7 +3,7 @@
   fxFill>
   <mat-checkbox [id]="getAttribute()" [formControlName]="getAttribute()" [checked]="isChecked()" (change)="onChangeEvent($event)"
     [labelPosition]="labelPosition" [color]="color">
-    {{ placeHolder }}
+    {{ olabel }}
     <mat-error *ngIf="hasError('required')">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</mat-error>
     <mat-error *ngFor="let oError of getActiveOErrors()"> {{ oError.text | oTranslate }} </mat-error>
   </mat-checkbox>

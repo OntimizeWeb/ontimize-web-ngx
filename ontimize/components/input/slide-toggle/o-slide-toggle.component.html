@@ -4,7 +4,7 @@
   <mat-slide-toggle [id]="getAttribute()" [formControlName]="getAttribute()" [ngModel]="isChecked()" [checked]="isChecked()"
     [required]="isRequired" [labelPosition]="labelPosition" [color]="color" (ngModelChange)="innerOnChange($event)"
     (change)="onChangeEvent($event)">
-    {{ placeHolder }}
+    {{ olabel }}
     <mat-error *ngIf="hasError('required')">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</mat-error>
     <mat-error *ngFor="let oError of getActiveOErrors()"> {{ oError.text | oTranslate }} </mat-error>
   </mat-slide-toggle>
