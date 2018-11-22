@@ -54,5 +54,12 @@ export class OContextMenuItemComponent extends OComponentMenuItems implements On
     return !this.enabled;
   }
 
+  public get isVisible() {
+    if (this.visible instanceof Function) {
+      return this.visible(this.data);
+    }
+    return this.visible;
+  }
+
 
 }
