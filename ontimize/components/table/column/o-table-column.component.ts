@@ -169,10 +169,11 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
   protected currencySymbolPosition: string;
 
   /* input renderer boolean */
-  protected trueValueType: string;
-  protected trueValue: string;
-  protected falseValueType: string;
-  protected falseValue: string;
+  protected trueValue: any;
+  protected falseValue: any;
+  protected renderTrueValue: any;
+  protected renderFalseValue: any;
+  protected renderType: string = 'string';
   protected booleanType: string = 'boolean';
 
   /* input image */
@@ -228,6 +229,8 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
   /* input editor boolean */
   @InputConverter()
   indeterminateOnNull: boolean = false;
+  @InputConverter()
+  autoCommit: boolean;
 
   /* output cell renderer action */
   onClick: EventEmitter<Object> = new EventEmitter<Object>();
@@ -300,10 +303,11 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
               newRenderer.thousandSeparator = this.thousandSeparator;
               break;
             case 'boolean':
-              newRenderer.trueValueType = this.trueValueType;
               newRenderer.trueValue = this.trueValue;
-              newRenderer.falseValueType = this.falseValueType;
               newRenderer.falseValue = this.falseValue;
+              newRenderer.renderTrueValue = this.renderTrueValue;
+              newRenderer.renderFalseValue = this.renderFalseValue;
+              newRenderer.renderType = this.renderType;
               newRenderer.booleanType = this.booleanType;
               break;
             case 'real':
@@ -365,6 +369,7 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
             break;
           case 'boolean':
             editor.indeterminateOnNull = propsOrigin.indeterminateOnNull;
+            editor.autoCommit = propsOrigin.autoCommit;
             editor.trueValue = propsOrigin.trueValue;
             editor.falseValue = propsOrigin.falseValue;
             editor.booleanType = propsOrigin.booleanType;

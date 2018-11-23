@@ -17,8 +17,7 @@ export const DEFAULT_INPUTS_O_SLIDER_INPUT = [
   'step',
   'thumbLabel:thumb-label',
   'tickInterval:tick-interval',
-  'vertical',
-  'oDisplayWith:displayWith'
+  'layout'
 ];
 
 export const DEFAULT_OUTPUTS_O_SLIDER_INPUT = [
@@ -104,6 +103,8 @@ export class OSliderComponent extends OFormDataComponent {
     var newValue = e.value;
     this.setValue(newValue, { changeType: OValueChangeEvent.USER_CHANGE, emitModelToViewChange: false });
   }
+
+  public layout: 'row' | 'column' = 'row';
 }
 
 @NgModule({

@@ -213,7 +213,9 @@ export var MAP = {
     'TABLE_CONTEXT_MENU.COPY_ROW':'Copy row',
     'TABLE_CONTEXT_MENU.COPY_ALL':'Copy all',
     'TABLE_CONTEXT_MENU.COPY_SELECTION':'Copy selection',
-    'TABLE_CONTEXT_MENU.SELECT_ALL':'Select all'
+    'TABLE_CONTEXT_MENU.SELECT_ALL':'Select all',
+    'TABLE_CONTEXT_MENU.REFRESH':'Refresh',
+    'TABLE_CONTEXT_MENU.DELETE':'Delete'
   },
 
   // Spanish
@@ -430,7 +432,9 @@ export var MAP = {
     'TABLE_CONTEXT_MENU.COPY_ROW':'Copiar celda',
     'TABLE_CONTEXT_MENU.COPY_ALL':'Copy all',
     'TABLE_CONTEXT_MENU.COPY_SELECTION':'Copiar selección',
-    'TABLE_CONTEXT_MENU.SELECT_ALL':'Seleccionar todos'
+    'TABLE_CONTEXT_MENU.SELECT_ALL':'Seleccionar todos',
+    'TABLE_CONTEXT_MENU.REFRESH':'Refrescar',
+    'TABLE_CONTEXT_MENU.DELETE':'Borrar'
   }
 
 };

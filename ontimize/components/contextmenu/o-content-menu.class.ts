@@ -15,13 +15,11 @@ export class OComponentMenuItems {
   public type = OComponentMenuItems.TYPE_GROUP_MENU;
 
   ngOnInit() {
-
     this.visible = this.parseInput(this.ovisible, true);
   }
 
 
   public get isVisible() {
-
     return this.visible;
   }
 

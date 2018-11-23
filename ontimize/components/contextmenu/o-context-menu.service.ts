@@ -80,6 +80,7 @@ export class OContextMenuService {
       panelClass: ['o-context-menu'],
       scrollStrategy: this.scrollStrategy.close()
     })];
+
     this.attachContextMenu(this.overlays[0], context);
   }
 
@@ -89,9 +90,6 @@ export class OContextMenuService {
     contextMenuContent.instance.menuItems = context.menuItems;
     contextMenuContent.instance.data = context.data;
 
-    const subscriptions: Subscription = new Subscription();
-    subscriptions.add(contextMenuContent.instance.execute.asObservable().subscribe(() => this.closeContext()));
-    subscriptions.add(contextMenuContent.instance.close.asObservable().subscribe(() => this.closeContext()));
 
   }
 

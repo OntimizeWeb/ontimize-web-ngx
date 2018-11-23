@@ -61,7 +61,7 @@ import {
   OBaseTableCellRenderer
 } from './column/cell-renderer/cell-renderer';
 
-import { O_TABLE_CELL_EDITORS } from './column/cell-editor/cell-editor';
+import { O_TABLE_CELL_EDITORS, OTableCellEditorBooleanComponent } from './column/cell-editor/cell-editor';
 import { OMatSortModule } from './extensions/sort/o-mat-sort-module';
 import { OMatSort } from './extensions/sort/o-mat-sort';
 import { OMatSortHeader } from './extensions/sort/o-mat-sort-header';
@@ -1730,6 +1730,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   useCellEditor(column: OColumn, row: any): boolean {
+    if (column.editor && column.editor instanceof OTableCellEditorBooleanComponent && column.editor.autoCommit) {
+      return false;
+    }
     return column.editor && column.editing && this.selection.isSelected(row);
   }
 
