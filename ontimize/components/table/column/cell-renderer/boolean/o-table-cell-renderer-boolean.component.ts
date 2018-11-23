@@ -96,16 +96,20 @@ export class OTableCellRendererBooleanComponent extends OBaseTableCellRenderer i
   }
 
   getCellData(cellvalue: any, rowvalue?: any) {
+    let result = cellvalue;
     const cellIsTrue = this.hasCellDataTrueValue(cellvalue);
     let value = cellIsTrue ? this.trueValue : this.falseValue;
     switch (this.renderType) {
       case 'string':
-        return this.translateService.get(value);
+        result = this.translateService.get(value);
+        break;
       case 'number':
-        return value;
+        result = value;
+        break;
       default:
-        return cellvalue;
+        break;
     }
+    return result;
   }
 
   get booleanType(): string {
