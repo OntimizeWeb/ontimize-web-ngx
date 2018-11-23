@@ -382,11 +382,13 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     this.onChange.emit(value);
   }
 
-  ensureOFormValue(value: any) {
-    if (value instanceof OFormValue) {
-      this.value = new OFormValue(value.value);
-    } else if (value !== undefined && !(value instanceof OFormValue)) {
-      this.value = new OFormValue(value);
+  ensureOFormValue(arg: any) {
+    if (arg instanceof OFormValue) {
+      this.value = arg;
+    } else if (Util.isDefined(arg) && !(arg instanceof OFormValue)) {
+      let val: OFormValue = this.value || new OFormValue();
+      val.value = arg;
+      this.value = val;
     } else {
       this.value = new OFormValue(this.defaultValue);
     }
