@@ -50,6 +50,8 @@ export class OSliderComponent extends OFormDataComponent {
     super(form, elRef, injector);
   }
 
+  color: string;
+
   @InputConverter()
   public vertical: boolean = false;
 

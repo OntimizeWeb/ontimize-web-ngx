@@ -1,19 +1,20 @@
-import { Component, Injector, ViewChild, TemplateRef } from '@angular/core';
+import { Component, Injector, ViewChild, TemplateRef, OnInit } from '@angular/core';
 import { OTranslateService } from '../../../../../services';
 import { Util } from '../../../../../utils';
 import { OBaseTableCellRenderer } from '../o-base-table-cell-renderer.class';
 
 export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_BOOLEAN = [
-  // true-value-type [string|number|icon|image]: type of value if true. Default: no value.
-  'trueValueType: true-value-type',
   // true-value [string]: true value. Default: no value.
   'trueValue: true-value',
-  // false-value-type [string|number|icon|image]: type of value if false. Default: no value.
-  'falseValueType: false-value-type',
   // false-value [string]: false value. Default: no value.
   'falseValue: false-value',
   // false-value [number|boolean|string]: cellData value type. Default: boolean
-  'booleanType: boolean-type'
+  'booleanType: boolean-type',
+
+  'renderTrueValue: render-true-value',
+  'renderFalseValue: render-false-value',
+  // [string|number|icon|image]
+  'renderType: render-type'
 ];
 
 @Component({
@@ -22,19 +23,21 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_BOOLEAN = [
   templateUrl: './o-table-cell-renderer-boolean.component.html',
   inputs: DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_BOOLEAN
 })
-export class OTableCellRendererBooleanComponent extends OBaseTableCellRenderer {
+export class OTableCellRendererBooleanComponent extends OBaseTableCellRenderer implements OnInit {
 
   public static DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_BOOLEAN = DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_BOOLEAN;
 
-  public trueValueType: string;
-  public trueValue: string;
-  public falseValueType: string;
-  public falseValue: string;
+  trueValue: any;
+  falseValue: any;
+  protected _renderTrueValue: any;
+  protected _renderFalseValue: any;
 
-  protected booleanType: string = 'boolean';
+  protected _renderType: string = 'string';
+  protected _booleanType: string = 'boolean';
   protected translateService: OTranslateService;
 
-  @ViewChild('templateref', { read: TemplateRef }) public templateref: TemplateRef<any>;
+  @ViewChild('templateref', { read: TemplateRef })
+  templateref: TemplateRef<any>;
 
   constructor(protected injector: Injector) {
     super(injector);
@@ -42,40 +45,110 @@ export class OTableCellRendererBooleanComponent extends OBaseTableCellRenderer {
     this.translateService = this.injector.get(OTranslateService);
   }
 
-  public hasCellDataTrueValue(cellData: any): boolean {
-    let comparisonValue: boolean = undefined;
-    if (typeof cellData !== 'undefined') {
-      switch (this.booleanType) {
-        case 'string':
-          comparisonValue = Util.parseBoolean(cellData, false);
-          break;
-        case 'number':
-          comparisonValue = (cellData === 1);
-          break;
-        case 'boolean':
-        default:
-          // boolean comparision as default value of dataType
-          comparisonValue = (cellData === true);
-          break;
+  ngOnInit() {
+    this.parseInputs();
+  }
+
+  protected parseInputs() {
+    switch (this.booleanType) {
+      case 'string':
+        this.parseStringInputs();
+        break;
+      case 'number':
+        this.parseNumberInputs();
+        break;
+      default:
+        this.trueValue = true;
+        this.falseValue = false;
+        break;
+    }
+  }
+
+  protected parseStringInputs() {
+    if ((this.trueValue || '').length === 0) {
+      this.trueValue = undefined;
+    }
+    if ((this.falseValue || '').length === 0) {
+      this.falseValue = undefined;
+    }
+  }
+
+  protected parseNumberInputs() {
+    this.trueValue = parseInt(this.trueValue);
+    if (isNaN(this.trueValue)) {
+      this.trueValue = 1;
+    }
+    this.falseValue = parseInt(this.falseValue);
+    if (isNaN(this.falseValue)) {
+      this.falseValue = 0;
+    }
+  }
+
+  hasCellDataTrueValue(cellData: any): boolean {
+    let result: boolean = undefined;
+    if (Util.isDefined(cellData)) {
+      result = (cellData === this.trueValue);
+      if (this.booleanType === 'string' && !Util.isDefined(this.trueValue)) {
+        result = Util.parseBoolean(cellData, false);
       }
     }
-    return comparisonValue;
+    return result;
   }
 
-
-  public getCellData(cellData: any) {
-    let type = this.hasCellDataTrueValue(cellData) ? this.trueValueType : this.falseValueType;
-    let value = this.hasCellDataTrueValue(cellData) ? this.trueValue : this.falseValue;
-
-    switch (type) {
+  getCellData(cellvalue: any, rowvalue?: any) {
+    let result = cellvalue;
+    const cellIsTrue = this.hasCellDataTrueValue(cellvalue);
+    let value = cellIsTrue ? this.trueValue : this.falseValue;
+    switch (this.renderType) {
       case 'string':
-        return this.translateService.get(value);
+        result = this.translateService.get(value);
+        break;
       case 'number':
-        return value;
+        result = value;
+        break;
       default:
-        return cellData;
+        break;
     }
+    return result;
   }
 
+  get booleanType(): string {
+    return this._booleanType;
+  }
 
+  set booleanType(arg: string) {
+    arg = (arg || '').toLowerCase();
+    if (['number', 'boolean', 'string'].indexOf(arg) === -1) {
+      arg = 'boolean';
+    }
+    this._booleanType = arg;
+  }
+
+  get renderType(): string {
+    return this._renderType;
+  }
+
+  set renderType(arg: string) {
+    arg = (arg || '').toLowerCase();
+    if (['string', 'number', 'icon', 'image'].indexOf(arg) === -1) {
+      arg = 'string';
+    }
+    this._renderType = arg;
+  }
+
+  get renderTrueValue(): string {
+    return this._renderTrueValue || this.trueValue;
+  }
+
+  set renderTrueValue(arg: string) {
+    this._renderTrueValue = arg;
+  }
+
+  get renderFalseValue(): string {
+    return this._renderFalseValue || this.falseValue;
+  }
+
+  set renderFalseValue(arg: string) {
+    this._renderFalseValue = arg;
+  }
 }

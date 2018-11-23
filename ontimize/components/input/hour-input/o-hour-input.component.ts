@@ -8,7 +8,7 @@ import { Util } from '../../../utils';
 import { OSharedModule } from '../../../shared';
 import { NumberConverter } from '../../../decorators';
 import { OFormComponent } from '../../form/form-components';
-import { OFormValue, IFormValueOptions } from '../../form/OFormValue';
+import { IFormValueOptions } from '../../form/OFormValue';
 import { InputConverter } from '../../../decorators/input-converter';
 import { OValidators } from '../../../validators/o-validators';
 
@@ -20,9 +20,12 @@ const HourFormat = {
 const TWENTY_FOUR_HOUR_FORMAT = 24;
 const TWELVE_FOUR_HOUR_FORMAT = 12;
 
+export type OHourValueType = 'string' | 'timestamp';
+
 export const DEFAULT_INPUTS_O_HOUR_INPUT = [
   'format',
   'textInputEnabled: text-input-enabled',
+  'valueType: value-type',
   ...DEFAULT_INPUTS_O_FORM_DATA_COMPONENT
 ];
 
@@ -66,6 +69,7 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
   protected _format: number = TWENTY_FOUR_HOUR_FORMAT;
   @InputConverter()
   textInputEnabled: boolean = true;
+  protected _valueType: OHourValueType = 'timestamp';
 
   private openPopup = false;
 
@@ -87,6 +91,14 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
     this.picker.setTime = function () {
       let stringVal = self.convertToFormatString(self.picker.timepickerService.fullTime);
       self.picker.timeSet.next(stringVal);
+      // ensuring fControl value
+      if (self._fControl) {
+        self._fControl.setValue(self.value.value, {
+          emitEvent: false,
+          emitModelToViewChange: false,
+          emitViewToModelChange: true
+        });
+      }
       self.picker.close();
     };
   }
@@ -96,8 +108,14 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
   }
 
   setData(arg: any) {
-    const value = this.format === TWENTY_FOUR_HOUR_FORMAT ? this.convertToFormatString(arg) : arg;
-    super.setData(value);
+    super.setData(arg);
+  }
+
+  ensureOFormValue(value: any) {
+    super.ensureOFormValue(value);
+    if (this.valueType === 'timestamp' && typeof this.value.value === 'string') {
+      this.value.value = this.defaultValue;
+    }
   }
 
   open(e?: Event) {
@@ -105,7 +123,6 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
     if (this.picker) {
       let momentV = moment(this.getValueAsTimeStamp());
       if (this.picker.timepickerService && momentV.isValid()) {
-        momentV = momentV.utcOffset(0);
         let hour = momentV.get('hour');
         const minutes = momentV.get('minutes');
         let timePeriod = 'AM';
@@ -133,17 +150,6 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
     }
   }
 
-  innerOnChange(event: any) {
-    if (this.value && (this.value.value === event)) {
-      return;
-    }
-    if (!this.value) {
-      this.value = new OFormValue();
-    }
-    this.ensureOFormValue(event);
-    this.onChange.emit(event);
-  }
-
   innerOnFocus(event: any) {
     if (!this.isReadOnly && !this.isDisabled) {
       this.onFocus.emit(event);
@@ -157,9 +163,13 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
   }
 
   getValueAsTimeStamp() {
+    const value = this.getValue();
+    if (typeof value === 'number') {
+      return value;
+    }
     const formatMoment = 'MM/DD/YYYY ' + this.formatString;
-    const momentV = moment('01/01/1970 ' + this.getValue(), formatMoment);
-    return momentV.add(1, 'hour').valueOf();
+    const momentV = moment('01/01/1970 ' + value, formatMoment);
+    return momentV.valueOf();
   }
 
   getValueAsString() {
@@ -194,7 +204,16 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
   }
 
   onTimeEvent(event) {
-    const value = this.convertToFormatString(event);
+    const compValue = this.getValue();
+    const eventM = moment(event, this.formatString);
+    const eventTimestamp = eventM.valueOf() - eventM.startOf('day').valueOf();
+    let value = event;
+    if (typeof compValue === 'number') {
+      const valueM = moment(compValue);
+      value = valueM.startOf('day').add(eventTimestamp).valueOf();
+    } else {
+      value = this.convertToFormatString(event);
+    }
     /** emitModelToViewChange: false  because onChange event is trigger in ngModelChange */
     this.setValue(value, { changeType: OValueChangeEvent.USER_CHANGE, emitModelToViewChange: false });
   }
@@ -208,14 +227,17 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
   }
 
   protected convertToFormatString(value) {
-    if (value === '00:00') {
-      // workaround
+    if (value === '00:00' || !Util.isDefined(value)) {
       return value;
     }
-    // maybe not necessary in following versions
-    let formatStr = this.format === TWENTY_FOUR_HOUR_FORMAT ? 'HH:mm' : 'hh:mm a';
-    let valueString = this.addPeriodString(value);
-    let result = value ? moment(valueString, 'h:mm A').format(formatStr) : value;
+    const formatStr = this.format === TWENTY_FOUR_HOUR_FORMAT ? 'HH:mm' : 'hh:mm a';
+    let result = value;
+    if (typeof value === 'number') {
+      result = moment(value).format(formatStr);
+    } else {
+      var valueString = this.addPeriodString(value);
+      result = value ? moment(valueString, 'h:mm A').format(formatStr) : value;
+    }
     return result;
   }
 
@@ -234,6 +256,24 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
   get format(): number {
     return this._format;
   }
+
+  set valueType(val: any) {
+    this._valueType = this.convertToOHourValueType(val);
+  }
+
+  get valueType(): any {
+    return this._valueType;
+  }
+
+  convertToOHourValueType(val: any): OHourValueType {
+    let result: OHourValueType = 'string';
+    const lowerVal = (val || '').toLowerCase();
+    if (lowerVal === 'string' || lowerVal === 'timestamp') {
+      return lowerVal;
+    }
+    return result;
+  }
+
 }
 
 @NgModule({
