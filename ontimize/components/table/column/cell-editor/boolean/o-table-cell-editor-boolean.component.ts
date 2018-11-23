@@ -51,6 +51,46 @@ export class OTableCellEditorBooleanComponent extends OBaseTableCellEditor {
     super(injector);
   }
 
+  ngOnInit() {
+    super.ngOnInit();
+    this.parseInputs();
+  }
+
+  protected parseInputs() {
+    switch (this.booleanType) {
+      case 'string':
+        this.parseStringInputs();
+        break;
+      case 'number':
+        this.parseNumberInputs();
+        break;
+      default:
+        this.trueValue = true;
+        this.falseValue = false;
+        break;
+    }
+  }
+
+  protected parseStringInputs() {
+    if ((this.trueValue || '').length === 0) {
+      this.trueValue = undefined;
+    }
+    if ((this.falseValue || '').length === 0) {
+      this.falseValue = undefined;
+    }
+  }
+
+  protected parseNumberInputs() {
+    this.trueValue = parseInt(this.trueValue);
+    if (isNaN(this.trueValue)) {
+      this.trueValue = 1;
+    }
+    this.falseValue = parseInt(this.falseValue);
+    if (isNaN(this.falseValue)) {
+      this.falseValue = 0;
+    }
+  }
+
   getCellData() {
     let cellData = super.getCellData();
     this.indeterminate = this.indeterminateOnNull && !Util.isDefined(cellData);
@@ -60,36 +100,29 @@ export class OTableCellEditorBooleanComponent extends OBaseTableCellEditor {
     return cellData;
   }
 
-  private OTCEBC_parseValueFromString(val: string): boolean {
-    return Util.parseBoolean(val, false);
-  }
-
-  private OTCEBC_parseValueFromNumber(val: string | number): number {
-    const value = typeof val === 'number' ? val : parseInt(val);
-    return (value === 1) ? 1 : 0;
-  }
-
-  private OTCEBC_parseValueFromBoolean(val: any): boolean {
-    return (val === true);
-  }
-
-  protected parseValueByType(val: any): boolean | number {
-    let result;
-    // check if booleanType exists or the switch will break
-    if (!this.booleanType) {
-      result = this.OTCEBC_parseValueFromBoolean(val);
+  hasCellDataTrueValue(cellData: any): boolean {
+    let result: boolean = undefined;
+    if (Util.isDefined(cellData)) {
+      result = (cellData === this.trueValue);
+      if (this.booleanType === 'string' && !Util.isDefined(this.trueValue)) {
+        result = Util.parseBoolean(cellData, false);
+      }
     }
+    return result;
+  }
+
+  protected parseValueByType(val: any): any {
+    let result = val;
+    const cellIsTrue = this.hasCellDataTrueValue(val);
+    let value = cellIsTrue ? this.trueValue : this.falseValue;
     switch (this.booleanType) {
       case 'string':
-        result = this.OTCEBC_parseValueFromString(val);
+        result = this.translateService.get(value);
         break;
       case 'number':
-        result = this.OTCEBC_parseValueFromNumber(val);
+        result = value;
         break;
-      case 'boolean':
       default:
-        // boolean comparision as default value of dataType
-        result = this.OTCEBC_parseValueFromBoolean(val);
         break;
     }
     return result;
