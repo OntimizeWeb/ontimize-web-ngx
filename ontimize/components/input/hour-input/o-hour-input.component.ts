@@ -217,14 +217,6 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
     });
   }
 
-  protected addPeriodString(value): string {
-    let result = value;
-    if (value && !(new RegExp(/pm|am$/)).test(value.toLowerCase())) {
-      result += (this.format === TWENTY_FOUR_HOUR_FORMAT) ? ' PM' : ' AM';
-    }
-    return result;
-  }
-
   protected convertToFormatString(value) {
     if (value === '00:00' || !Util.isDefined(value)) {
       return value;
@@ -234,8 +226,7 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
     if (typeof value === 'number') {
       result = moment(value).format(formatStr);
     } else {
-      var valueString = this.addPeriodString(value);
-      result = value ? moment(valueString, 'h:mm A').format(formatStr) : value;
+      result = value ? moment(value, 'h:mm A').format(formatStr) : value;
     }
     return result;
   }
