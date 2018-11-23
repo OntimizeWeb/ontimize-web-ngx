@@ -229,6 +229,8 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
   /* input editor boolean */
   @InputConverter()
   indeterminateOnNull: boolean = false;
+  @InputConverter()
+  autoCommit: boolean;
 
   /* output cell renderer action */
   onClick: EventEmitter<Object> = new EventEmitter<Object>();
@@ -367,6 +369,7 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
             break;
           case 'boolean':
             editor.indeterminateOnNull = propsOrigin.indeterminateOnNull;
+            editor.autoCommit = propsOrigin.autoCommit;
             editor.trueValue = propsOrigin.trueValue;
             editor.falseValue = propsOrigin.falseValue;
             editor.booleanType = propsOrigin.booleanType;

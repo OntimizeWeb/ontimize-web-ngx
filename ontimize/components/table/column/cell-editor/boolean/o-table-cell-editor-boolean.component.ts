@@ -12,7 +12,8 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_BOOLEAN = [
   // false-value: false value. Default: false.
   'falseValue: false-value',
   // boolean-type [number|boolean|string]: cellData value type. Default: boolean
-  'booleanType: boolean-type'
+  'booleanType: boolean-type',
+  'autoCommit: auto-commit'
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_BOOLEAN = [
@@ -46,6 +47,8 @@ export class OTableCellEditorBooleanComponent extends OBaseTableCellEditor {
   trueValue: any = true;
   falseValue: any = false;
   booleanType: string = 'boolean';
+  @InputConverter()
+  autoCommit: boolean = true;
 
   constructor(protected injector: Injector) {
     super(injector);
@@ -89,6 +92,19 @@ export class OTableCellEditorBooleanComponent extends OBaseTableCellEditor {
     if (isNaN(this.falseValue)) {
       this.falseValue = 0;
     }
+  }
+
+  startEdition(data: any) {
+    super.startEdition(data);
+    const self = this;
+    setTimeout(() => {
+      // using setTimeout to forcing this code execution after super.activateColumnEdition column.editing = true line
+      if (self.autoCommit) {
+        const isTrue = (self.formControl.value === self.trueValue);
+        self.formControl.setValue(isTrue ? self.falseValue : self.trueValue, { emitEvent: false });
+        self.commitEdition();
+      }
+    }, 0);
   }
 
   getCellData() {
