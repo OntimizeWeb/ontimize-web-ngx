@@ -60,6 +60,7 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
     injector: Injector
   ) {
     super(form, elRef, injector);
+    this._defaultSQLTypeKey = 'TIMESTAMP';
   }
 
   @ViewChild('picker')
