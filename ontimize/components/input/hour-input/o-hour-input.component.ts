@@ -88,19 +88,6 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
         originalPickerOpen();
       }
     };
-    this.picker.setTime = function () {
-      let stringVal = self.convertToFormatString(self.picker.timepickerService.fullTime);
-      self.picker.timeSet.next(stringVal);
-      // ensuring fControl value
-      if (self._fControl) {
-        self._fControl.setValue(self.value.value, {
-          emitEvent: false,
-          emitModelToViewChange: false,
-          emitViewToModelChange: true
-        });
-      }
-      self.picker.close();
-    };
   }
 
   get formatString(): string {
@@ -162,7 +149,7 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
 
   getValueAsString() {
     let value = this.getValue();
-    value = this.format === TWENTY_FOUR_HOUR_FORMAT ? this.convertToFormatString(value) : value;
+    value = this.convertToFormatString(value);
     return Util.isDefined(value) ? value.toLowerCase() : null;
   }
 
@@ -203,7 +190,7 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
     const eventM = moment(event, this.formatString);
     const eventTimestamp = eventM.valueOf() - eventM.startOf('day').valueOf();
     let value = event;
-    if (typeof compValue === 'number') {
+    if (this.valueType === 'timestamp') {
       const valueM = moment(compValue);
       value = valueM.startOf('day').add(eventTimestamp).valueOf();
     } else {
@@ -264,6 +251,9 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
     return result;
   }
 
+  onTimepickerClosed() {
+    this.onTimeEvent(this.picker.timepickerService.getFullTime(this.picker.format));
+  }
 }
 
 @NgModule({
