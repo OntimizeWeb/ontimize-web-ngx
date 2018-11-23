@@ -35,8 +35,6 @@ export class OContextMenuContentComponent implements AfterViewInit, OnInit {
   public overlay: OverlayRef;
   public data: any;
   public execute: EventEmitter<{ event: Event, data: any, menuItem: OContextMenuItemComponent }> = new EventEmitter();
-  public close: EventEmitter<void> = new EventEmitter<void>();
-
 
   @ContentChildren(OComponentMenuItems) public oContextMenuItems: QueryList<OComponentMenuItems>;
   @ViewChild(MatMenuTrigger) trigger: MatMenuTrigger;
@@ -72,7 +70,7 @@ export class OContextMenuContentComponent implements AfterViewInit, OnInit {
   }
 
   onMenuClosed(event) {
-    this.close.emit();
+    this.menuService.closeContextMenu.next();
   }
 
 

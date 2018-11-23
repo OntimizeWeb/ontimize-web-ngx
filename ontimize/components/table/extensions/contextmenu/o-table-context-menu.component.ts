@@ -1,4 +1,4 @@
-import { Component, forwardRef, Inject, Injector, ViewChild } from '@angular/core';
+import { Component, forwardRef, Inject, Injector, ViewChild, OnInit } from '@angular/core';
 
 import { OTableComponent } from '../../o-table.component';
 import { OContextMenuComponent } from '../../../contextmenu/o-context-menu-components';
@@ -11,7 +11,9 @@ export const DEFAULT_TABLE_CONTEXT_MENU_INPUTS = [
   'showEdit:edit',
   'showViewDetail:view-detail',
   'showCopy:copy',
-  'showSelectAll:select-all'
+  'showSelectAll:select-all',
+  'showRefresh:refresh',
+  'showDelete:delete'
 ];
 
 @Component({
@@ -21,7 +23,7 @@ export const DEFAULT_TABLE_CONTEXT_MENU_INPUTS = [
   inputs: DEFAULT_TABLE_CONTEXT_MENU_INPUTS
 })
 
-export class OTableContextMenuComponent {
+export class OTableContextMenuComponent implements OnInit {
 
   public static INSERT_ATTR = 'insert';
   public static GOTO_DETAIL_ATTR = 'detail';
@@ -39,6 +41,10 @@ export class OTableContextMenuComponent {
   showCopy: boolean = true;
   @InputConverter()
   showSelectAll: boolean = true;
+  @InputConverter()
+  showRefresh: boolean = true;
+  @InputConverter()
+  showDelete: boolean = true;
 
 
   public contextMenu: OContextMenuComponent;
@@ -48,6 +54,15 @@ export class OTableContextMenuComponent {
     protected injector: Injector,
     @Inject(forwardRef(() => OTableComponent)) protected table: OTableComponent
   ) { }
+
+  ngOnInit(): void {
+    this.defaultContextMenu.onClose.subscribe(param => {
+      if (!this.table.isSelectionModeMultiple()) {
+        this.table.clearSelection();
+      }
+    });
+  }
+
 
   ngAfterViewInit(): void {
 
@@ -100,6 +115,21 @@ export class OTableContextMenuComponent {
     return isVisible;
   }
 
+  isVisibleRefresh() {
+    let isVisible = false;
+    if (this.showRefresh) {
+      isVisible = true;
+    }
+    return isVisible;
+  }
+
+  isVisibleDelete() {
+    let isVisible = false;
+    if (this.showDelete) {
+      isVisible = true;
+    }
+    return isVisible;
+  }
 
   gotoDetails(event) {
     this.table.viewDetail(event.data);
@@ -134,6 +164,15 @@ export class OTableContextMenuComponent {
     var data = JSON.stringify(this.table.dataSource.getRenderedData([event.data]));
     Util.copyToClipboard(data);
   }
+
+  delete(event) {
+    this.table.remove();
+  }
+
+  refresh() {
+    this.table.refresh();
+  }
+
 
 
 }
