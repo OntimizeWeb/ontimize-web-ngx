@@ -10,7 +10,8 @@ export const DEFAULT_INPUTS_O_CONTEXT_MENU_ITEM = [
   'icon',
   'data',
   'label',
-  'oenabled: enabled'];
+  'oenabled: enabled',
+  'svgIcon: svg-icon'];
 @Component({
   moduleId: module.id,
   selector: 'o-context-menu-item',
@@ -29,6 +30,7 @@ export class OContextMenuItemComponent extends OComponentMenuItems implements On
   public data: any;
   public label: string;
   public enabled: boolean | ((item: any) => boolean) = true;
+  public svgIcon: string;
 
   ngOnInit() {
     super.ngOnInit();
