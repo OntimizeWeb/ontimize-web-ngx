@@ -6,7 +6,8 @@ import { OContextMenuService, IOContextMenuContext } from './o-context-menu.serv
 import { OComponentMenuItems } from './o-content-menu.class';
 
 export const DEFAULT_OUTPUTS_O_CONTEXT_MENU = [
-  'onShow'
+  'onShow',
+  'onClose'
 ];
 
 @Component({
@@ -23,6 +24,7 @@ export class OContextMenuComponent implements OnDestroy, OnInit {
   protected subscription: Subscription = new Subscription();
   public origin: HTMLElement;
   public onShow: EventEmitter<any> = new EventEmitter();
+  public onClose: EventEmitter<any> = new EventEmitter();
 
   constructor(
     protected injector: Injector
@@ -32,6 +34,7 @@ export class OContextMenuComponent implements OnDestroy, OnInit {
 
   ngOnInit() {
     this.subscription.add(this.oContextMenuService.showContextMenu.subscribe(param => this.showContextMenu(param)));
+    this.subscription.add(this.oContextMenuService.closeContextMenu.subscribe(param => this.onClose.emit()));
   }
 
   ngOnDestroy() {
