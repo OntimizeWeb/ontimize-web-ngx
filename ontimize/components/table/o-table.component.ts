@@ -1981,6 +1981,10 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     return align;
   }
 
+  public getCellAlignClass(column: OColumn): string {
+    return Util.isDefined(column.definition) && Util.isDefined(column.definition.contentAlign) ? 'o-' + column.definition.contentAlign : '';
+  }
+
   onTableScroll(e) {
     if (this.hasScrollableContainer()) {
       const tableViewHeight = e.target.offsetHeight; // viewport: ~500px

@@ -106,9 +106,9 @@
           </ng-container>
 
           <mat-cell *matCellDef="let row" #cell [fxFlex]="column.width" [style.min-width]="column.getMinWidth()"
-            [ngClass]="column.className" (click)="handleCellClick(column, row, $event)" (dblclick)="handleCellDoubleClick(column, row, $event)"
-            [class.empty-cell]="isEmpty(row[column.name])" [matTooltipDisabled]="!column.hasTooltip()" [matTooltip]="column.getTooltip(row)"
-            matTooltipPosition="below" matTooltipShowDelay="750" matTooltipClass="o-table-cell-tooltip"
+            [ngClass]="[column.className, getCellAlignClass(column)]" (click)="handleCellClick(column, row, $event)"
+            (dblclick)="handleCellDoubleClick(column, row, $event)" [class.empty-cell]="isEmpty(row[column.name])" [matTooltipDisabled]="!column.hasTooltip()"
+            [matTooltip]="column.getTooltip(row)" matTooltipPosition="below" matTooltipShowDelay="750" matTooltipClass="o-table-cell-tooltip"
             [class.o-mat-cell-multiline]="column.multiline">
 
             <ng-container *ngIf="usePlainRender(column, row)">

@@ -286,6 +286,22 @@ $_mat-checkbox-mark-stroke-size-small: 2 / 15 * $mat-checkbox-size-small !defaul
             min-height: 16px;
           }
 
+          &.o-start {
+            text-align: start;
+          }
+
+          &.o-center {
+            text-align: center;
+          }
+
+          &.o-end {
+            text-align: end;
+          }
+
+          * {
+            vertical-align: middle;
+          }
+
           .image-avatar {
             width: 34px;
             height: 34px;
