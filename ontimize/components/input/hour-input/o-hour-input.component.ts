@@ -91,6 +91,11 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
     };
   }
 
+  protected emitOnValueChange(type, newValue, oldValue) {
+    this.onChange.emit(newValue);
+    super.emitOnValueChange(type, newValue, oldValue);
+  }
+
   get formatString(): string {
     return (this.format === TWENTY_FOUR_HOUR_FORMAT ? HourFormat.TWENTY_FOUR : HourFormat.TWELVE);
   }

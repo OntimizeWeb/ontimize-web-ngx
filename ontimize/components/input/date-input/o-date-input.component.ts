@@ -9,7 +9,7 @@ import moment from 'moment';
 
 import { OSharedModule, OntimizeMomentDateAdapter } from '../../../shared';
 import { MomentService } from '../../../services';
-import { OFormValue } from '../../form/OFormValue';
+import { OFormValue, IFormValueOptions } from '../../form/OFormValue';
 import { InputConverter } from '../../../decorators';
 import { OFormComponent } from '../../form/o-form.component';
 import { OFormDataComponent, OValueChangeEvent } from '../../o-form-data-component.class';
@@ -80,6 +80,7 @@ export class ODateInputComponent extends OFormDataComponent implements AfterView
 
   protected mediaSubscription: Subscription;
   protected onLanguageChangeSubscription: Subscription;
+  protected dateValue: Date;
 
   constructor(
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
@@ -137,7 +138,7 @@ export class ODateInputComponent extends OFormDataComponent implements AfterView
     if (this.updateLocaleOnChange) {
       this.onLanguageChangeSubscription = this.translateService.onLanguageChanged.subscribe(() => {
         this.momentDateAdapter.setLocale(this.translateService.getCurrentLang());
-        this.setValue(this.getValueAsDate());
+        this.setValue(this.getValue());
       });
     }
   }
@@ -163,21 +164,24 @@ export class ODateInputComponent extends OFormDataComponent implements AfterView
     }
   }
 
-  set data(value: any) {
-    if (value && Util.isDefined(value.value) && typeof value.value === 'number') {
-      value.value = new Date(value.value);
+  setValue(val: any, options?: IFormValueOptions): void {
+    if (typeof val !== 'number') {
+      console.warn('ODateInputComponent only acepts a timestamp value');
+      val = undefined;
     }
-    super.setData.call(this, value);
+    super.setValue(val, options);
+  }
+
+  set data(value: any) {
+    if (typeof value !== 'number') {
+      console.warn('ODateInputComponent only acepts a timestamp value');
+      value = undefined;
+    }
+    super.setData(value);
   }
 
   getValueAsDate(): any {
-    let value = super.getValue();
-    if (Util.isDefined(value) && typeof value === 'number') {
-      let dateObj = new Date(value);
-      this.ensureOFormValue(dateObj);
-      return dateObj;
-    }
-    return value;
+    return this.dateValue;
   }
 
   getValue(): any {
@@ -199,16 +203,26 @@ export class ODateInputComponent extends OFormDataComponent implements AfterView
   }
 
   onModelChange(event: any) {
+    let val = event;
+    // ensuring the storage of timestamp value
+    if (event instanceof Date) {
+      val = event.getTime();
+    } else if (event instanceof moment) {
+      val = event.valueOf();
+    }
+    if (this.oldValue === val) {
+      return;
+    }
     if (!this.value) {
       this.value = new OFormValue();
     }
-    this.ensureOFormValue(event);
-
-    this.onChange.emit(event);
+    this.ensureOFormValue(val);
+    this.onChange.emit(val);
   }
 
   onChangeEvent(event: MatDatepickerInputEvent<any>) {
-    this.setValue(event.value, {
+    const isValid = event.value.isValid && event.value.isValid();
+    this.setValue(isValid ? event.value.valueOf() : event.value, {
       changeType: OValueChangeEvent.USER_CHANGE,
       emitEvent: false,
       emitModelToViewChange: false
