@@ -109,11 +109,12 @@ export class OTimeInputComponent extends OFormDataComponent implements OnInit, A
       this.value = new OFormValue();
     }
     let timeValue;
-    let values = this.formGroup.getRawValue();
+    // let values = this.formGroup.getRawValue();
     try {
-      const dateVal = moment(values['dateInput']).startOf('day').valueOf();
+      // const dateVal = (values['dateInput'] ? moment(values['dateInput']) : moment()).startOf('day').valueOf();
       const hourVal = this.hourInput.getValueAsTimeStamp() || 0;
-      timeValue = dateVal + hourVal;
+      // timeValue = dateVal + hourVal;
+      timeValue = hourVal;
     } catch (e) {
       //
     }
@@ -209,12 +210,11 @@ export class OTimeInputComponent extends OFormDataComponent implements OnInit, A
         hourValue = momentD.clone().valueOf() - dateValue;
       }
     }
-    if (this.dateInput && this.dateInput.getFormControl()) {
-      var val = dateValue ? new Date(dateValue) : dateValue;
-      this.dateInput.setValue(val);
+    if (this.dateInput) {
+      this.dateInput.setValue(dateValue);
     }
     if (this.hourInput) {
-      this.hourInput.setTimestampValue(hourValue);
+      this.hourInput.setValue(hourValue);
     }
   }
 }
