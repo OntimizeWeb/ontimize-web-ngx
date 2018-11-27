@@ -46,7 +46,7 @@
   </mat-grid-list>
 
   <!-- GRID FOOTER -->
-  <div *ngIf="!loading && !paginationControls" fxlayout="row" class="o-grid-footer" fxFlex layout-padding>
+  <div *ngIf="!paginationControls" fxlayout="row" class="o-grid-footer" fxFlex layout-padding>
     <button type="button" mat-button *ngIf="dataArray.length < totalRecords" (click)="loadMore()" class="mat-raised-button">
       {{ 'GRID.BUTTON_NEXT' | oTranslate }}
     </button>
@@ -56,7 +56,10 @@
   <mat-paginator #paginator *ngIf="paginationControls" [length]="totalRecords" [pageSize]="queryRows" [pageSizeOptions]="pageSizeOptions"
     [pageIndex]="currentPage" [showFirstLastButtons]="true" (page)="onChangePage($event)"></mat-paginator>
 
-  <div *ngIf="loading" fxLayoutAlign="center center" class="spinner-container">
-    <mat-progress-spinner mode="indeterminate" strokeWidth="3"></mat-progress-spinner>
+  <div *ngIf="loading" fxLayout="row" fxLayoutAlign="center end" class="o-loading-blocker">
+    <div fxLayoutAlign="center center" [class.o-spinner-container-controls]="hasControls()" class="o-spinner-container">
+      <mat-progress-spinner mode="indeterminate" strokeWidth="3"></mat-progress-spinner>
+    </div>
   </div>
+
 </div>
