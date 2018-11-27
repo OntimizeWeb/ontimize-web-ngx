@@ -351,7 +351,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
         this._fControl.markAsTouched();
       }
     }
-    this.oldValue = val;
+    this.oldValue = this.value.value;
   }
 
   /*This method is called in output change event, not emit event onValueChange when oldvalue is same than newvalue*/
@@ -404,12 +404,18 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
       this._fControl = new FormControl(cfg, {
         validators: validators
       });
-      const self = this;
+      this.registerOnFormControlChange();
+    }
+    return this._fControl;
+  }
+
+  protected registerOnFormControlChange() {
+    const self = this;
+    if (this._fControl) {
       this._fControlSubscription = this._fControl.valueChanges.subscribe(value => {
         self.onFormControlChange(value);
       });
     }
-    return this._fControl;
   }
 
   resolveValidators(): ValidatorFn[] {
