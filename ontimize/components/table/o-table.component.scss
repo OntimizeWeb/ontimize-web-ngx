@@ -221,6 +221,22 @@ $_mat-checkbox-mark-stroke-size-small: 2 / 15 * $mat-checkbox-size-small !defaul
             cursor: pointer;
           }
 
+          &.o-start {
+            text-align: start;
+          }
+
+          &.o-center {
+            text-align: center;
+          }
+
+          &.o-end {
+            text-align: end;
+          }
+
+          * {
+            vertical-align: middle;
+          }
+
           &.o-mat-cell-multiline {
             &:not(.mat-header-cell) {
               padding: 6px 12px;
@@ -231,9 +247,9 @@ $_mat-checkbox-mark-stroke-size-small: 2 / 15 * $mat-checkbox-size-small !defaul
           }
 
           .image-avatar {
+            display: inline-block;
             width: 34px;
             height: 34px;
-            margin: 1px auto;
             overflow: hidden;
             border-radius: 50%;
             position: relative;
@@ -254,7 +270,9 @@ $_mat-checkbox-mark-stroke-size-small: 2 / 15 * $mat-checkbox-size-small !defaul
             }
           }
 
-        }
+      .o-action-cell-renderer {
+        display: inline-block;
+        cursor: pointer;
       }
 
       .mat-header-cell {

@@ -42,8 +42,11 @@ export const DEFAULT_INPUTS_O_TABLE_COLUMN = [
   // title [string]: column title. Default: no value.
   'title',
 
-  // title [start-center-end]: column title alignment. Default: center.
+  // title-align [start | center | end]: column title alignment. Default: center.
   'titleAlign: title-align',
+
+  // content-align [start | center | end]: column content alignment.
+  'contentAlign: content-align',
 
   // orderable [no|yes]: column can be sorted. Default: yes.
   'orderable',
@@ -135,6 +138,7 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
   public attr: string;
   public title: string;
   public titleAlign: string;
+  public contentAlign: 'start' | 'center' | 'end';
   public sqlType: string;
   protected _SQLType: number;
   protected _defaultSQLTypeKey: string = 'OTHER';

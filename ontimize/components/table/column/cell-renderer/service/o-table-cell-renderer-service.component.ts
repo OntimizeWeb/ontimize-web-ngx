@@ -1,11 +1,12 @@
 import { Component, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 
-import { Util, Codes } from '../../../../../utils';
 import { DialogService, OntimizeService } from '../../../../../services';
-import { OBaseTableCellRenderer } from '../o-base-table-cell-renderer.class';
 import { dataServiceFactory } from '../../../../../services/data-service.provider';
+import { Codes, Util } from '../../../../../utils';
 import { ServiceUtils } from '../../../../service.utils';
+import { OColumn } from '../../../o-table.component';
+import { OBaseTableCellRenderer } from '../o-base-table-cell-renderer.class';
 
 export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_SERVICE = [
   'entity',
@@ -61,8 +62,13 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
   }
 
   ngOnInit() {
+    if (this.table) {
+      const oCol: OColumn = this.table.getOColumn(this.tableColumn.attr);
+      oCol.definition.contentAlign = oCol.definition.contentAlign ? oCol.definition.contentAlign : 'center';
+    }
+
     this.colArray = Util.parseArray(this.columns, true);
-    let pkArray = Util.parseArray(this.parentKeys);
+    const pkArray = Util.parseArray(this.parentKeys);
     this._pKeysEquiv = Util.parseParentKeysEquivalences(pkArray);
     this.configureService();
   }
@@ -76,15 +82,15 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
     return '';
   }
 
-  queryData(cellvalue, parentItem: any = undefined) {
-    var self = this;
+  queryData(cellvalue, parentItem?: any) {
+    const self = this;
 
     if (!this.dataService || !(this.queryMethod in this.dataService) || !this.entity) {
       console.warn('Service not properly configured! aborting query');
       return;
     }
     const filter = ServiceUtils.getFilterUsingParentKeys(parentItem, this._pKeysEquiv);
-    let tableColAlias = Object.keys(this._pKeysEquiv).find(key => this._pKeysEquiv[key] === this.column);
+    const tableColAlias = Object.keys(this._pKeysEquiv).find(key => this._pKeysEquiv[key] === this.column);
     if (Util.isDefined(tableColAlias) && !filter[tableColAlias]) {
       filter[tableColAlias] = cellvalue;
     } else {
@@ -114,7 +120,7 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
     try {
       this.dataService = this.injector.get(loadingService);
       if (Util.isDataService(this.dataService)) {
-        let serviceCfg = this.dataService.getDefaultServiceConfiguration(this.service);
+        const serviceCfg = this.dataService.getDefaultServiceConfiguration(this.service);
         if (this.entity) {
           serviceCfg['entity'] = this.entity;
         }

@@ -55,7 +55,7 @@
             </th>
           </ng-container>
           <!--Define mat-cell-->
-          <td mat-cell *matCellDef="let row" #cell [style.width]="column.getMinWidth()" [ngClass]="column.className"
+          <td mat-cell *matCellDef="let row" #cell [style.width]="column.getMinWidth()" [ngClass]="[column.className, getCellAlignClass(column)]"
             (click)="handleCellClick(column, row, $event)" (dblclick)="handleCellDoubleClick(column, row, $event)"
             [class.empty-cell]="isEmpty(row[column.name])" [matTooltipDisabled]="!column.hasTooltip()" [matTooltip]="column.getTooltip(row)"
             matTooltipPosition="below" matTooltipShowDelay="750" matTooltipClass="o-table-cell-tooltip"
@@ -74,7 +74,7 @@
             </ng-template>
 
             <ng-container *ngIf="useDetailButton(column)">
-              <div fxLayoutAlign="center center" class="action-cell-renderer" (click)="onDetailButtonClick(column, row, $event)">
+              <div fxLayoutAlign="center center" class="o-action-cell-renderer" (click)="onDetailButtonClick(column, row, $event)">
                 <mat-icon>{{ getDetailButtonIcon(column) }}</mat-icon>
               </div>
             </ng-container>
