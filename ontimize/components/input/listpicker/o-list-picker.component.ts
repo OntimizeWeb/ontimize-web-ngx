@@ -35,7 +35,8 @@ export const DEFAULT_OUTPUTS_O_LIST_PICKER = [
   templateUrl: './o-list-picker.component.html',
   styleUrls: ['./o-list-picker.component.scss'],
   providers: [
-    { provide: OntimizeService, useFactory: dataServiceFactory, deps: [Injector] }
+    { provide: OntimizeService, useFactory: dataServiceFactory, deps: [Injector] },
+    { provide: OFormServiceComponent, useExisting: forwardRef(() => OListPickerComponent) }
   ],
   inputs: DEFAULT_INPUTS_O_LIST_PICKER,
   outputs: DEFAULT_OUTPUTS_O_LIST_PICKER
