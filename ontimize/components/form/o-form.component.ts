@@ -788,8 +788,6 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     if (useFilter) {
       filter = this.getCurrentKeysValues();
     }
-    this.formCache.restartCache();
-    this.clearComponentsOldValue();
     this.queryData(filter);
   }
 
@@ -911,6 +909,8 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
       console.warn('OFormComponent: no filter configured! aborting query');
       return;
     }
+    this.formCache.restartCache();
+    this.clearComponentsOldValue();
     if (this.querySubscription) {
       this.querySubscription.unsubscribe();
     }
@@ -1006,7 +1006,6 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   }
 
   protected postCorrectInsert(result: any) {
-    console.log('[OFormComponent.postCorrectInsert]', result);
     this.snackBarService.open('MESSAGES.INSERTED', { icon: 'check_circle' });
   }
 
@@ -1078,7 +1077,6 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   }
 
   protected postCorrectUpdate(result: any) {
-    console.log('[OFormComponent.postCorrectUpdate]', result);
     this.snackBarService.open('MESSAGES.SAVED', { icon: 'check_circle' });
   }
 
@@ -1108,7 +1106,6 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   }
 
   protected postCorrectDelete(result: any) {
-    console.log('[OFormComponent.postCorrectDelete]', result);
     this.snackBarService.open('MESSAGES.DELETED', { icon: 'check_circle' });
   }
 

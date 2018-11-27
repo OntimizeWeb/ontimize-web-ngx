@@ -16,6 +16,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { OFormComponent } from './o-form.component';
 import { InputConverter } from '../../decorators';
 import { Util } from '../../util/util';
+import { PermissionsUtils } from '../../util/permissions';
 import { DialogService, NavigationService, PermissionsService, OPermissions, SnackBarService } from '../../services';
 import { OSharedModule } from '../../shared';
 import { OFormNavigationComponent } from './navigation/o-form-navigation.component';
@@ -122,25 +123,26 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
     this.parsePermissions();
   }
 
-  private parsePermissions() {
-
+  protected parsePermissions() {
     if (this._form.oattr) {
       this.actionsPermissions = this.permissionService.getContainerActionsPermissions(this._form.oattr);
 
-      if (Util.isDefined(this.actionsPermissions)) {
-        const self = this;
-        this.actionsPermissions.forEach((permission: OPermissions) => {
-          //others actions
-          self.permissionManagement(permission);
-
-          if (PermissionsService.PERMISSIONS_ACTIONS_FORM.indexOf(permission.attr) > -1) {
-            //actions R;I;U;D
-            if (permission.attr === PermissionsService.PERMISSIONS_ACTIONS_UPDATE_FORM) {
-              self.permissionManagement(permission, 'edit');
-            }
-          }
-        });
+      if (!Util.isDefined(this.actionsPermissions)) {
+        return;
       }
+      const self = this;
+      this.actionsPermissions.forEach((permission: OPermissions) => {
+        //others actions
+        self.permissionManagement(permission);
+
+        if (PermissionsUtils.STANDARD_ACTIONS.indexOf(permission.attr) > -1) {
+          //actions R;I;U;D
+          if (permission.attr === PermissionsUtils.ACTION_UPDATE) {
+            self.permissionManagement(permission, 'edit');
+          }
+        }
+      });
+
     }
   }
 
@@ -154,25 +156,17 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
       } else {
         if (!permission.enabled) {
           elementByAction.disabled = true;
-          const mutationObserver = PermissionsService.registerDisableChangesInDom(elementByAction, this.disabledChangesInDom.bind(this));
+          const mutationObserver = PermissionsUtils.registerDisabledChangesInDom(elementByAction);
           this.mutationObservers.push(mutationObserver);
         }
       }
     }
   }
 
-  /**
-  * Do not allow the disabled attribute to change by code or by inspector
-  * */
-  private disabledChangesInDom(mutation: MutationRecord) {
-    let element = <HTMLInputElement>mutation.target;
-    element.disabled = true;
-  }
-
   protected manageEditableDetail() {
     const isEditableDetail = this._form.isEditableDetail();
 
-    let updatePermissions: OPermissions = (this.actionsPermissions || []).find(p => p.attr === PermissionsService.PERMISSIONS_ACTIONS_UPDATE_FORM);
+    let updatePermissions: OPermissions = (this.actionsPermissions || []).find(p => p.attr === PermissionsUtils.ACTION_UPDATE);
     if (this.hasEnabledPermission(updatePermissions)) {
       this.saveBtnEnabled = isEditableDetail;
     }
@@ -219,7 +213,7 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
   }
 
   onReload() {
-    if (!this.checkEnabledPermission(PermissionsService.PERMISSIONS_ACTIONS_REFRESH_FORM)) {
+    if (!this.checkEnabledPermission(PermissionsUtils.ACTION_REFRESH)) {
       return;
     }
     let self = this;
@@ -231,7 +225,7 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
   }
 
   onInsert() {
-    if (!this.checkEnabledPermission(PermissionsService.PERMISSIONS_ACTIONS_INSERT_FORM)) {
+    if (!this.checkEnabledPermission(PermissionsUtils.ACTION_INSERT)) {
       return;
     }
 
@@ -241,7 +235,7 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
   }
 
   onEdit() {
-    if (!this.checkEnabledPermission(PermissionsService.PERMISSIONS_ACTIONS_UPDATE_FORM)) {
+    if (!this.checkEnabledPermission(PermissionsUtils.ACTION_UPDATE)) {
       return;
     }
 
@@ -251,7 +245,7 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
   }
 
   onDelete(evt: any) {
-    if (!this.checkEnabledPermission(PermissionsService.PERMISSIONS_ACTIONS_DELETE_FORM)) {
+    if (!this.checkEnabledPermission(PermissionsUtils.ACTION_DELETE)) {
       return;
     }
 
@@ -259,7 +253,7 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
   }
 
   onSave(evt: any) {
-    if (!this.checkEnabledPermission(PermissionsService.PERMISSIONS_ACTIONS_UPDATE_FORM)) {
+    if (!this.checkEnabledPermission(PermissionsUtils.ACTION_UPDATE)) {
       return;
     }
 
@@ -271,7 +265,7 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
   }
 
   set existsChangesToSave(val: boolean) {
-    const attr = this._form.isEditableDetail() ? PermissionsService.PERMISSIONS_ACTIONS_UPDATE_FORM : PermissionsService.PERMISSIONS_ACTIONS_INSERT_FORM;
+    const attr = this._form.isEditableDetail() ? PermissionsUtils.ACTION_UPDATE : PermissionsUtils.ACTION_INSERT;
     let permissions: OPermissions = (this.actionsPermissions || []).find(p => p.attr === attr);
     if (Util.isDefined(permissions) && permissions.enabled === false) {
       return;
@@ -292,12 +286,12 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
 
   acceptOperation() {
     if (this.editMode) {
-      if (!this.checkEnabledPermission(PermissionsService.PERMISSIONS_ACTIONS_UPDATE_FORM)) {
+      if (!this.checkEnabledPermission(PermissionsUtils.ACTION_UPDATE)) {
         return;
       }
       this.handleAcceptEditOperation();
     } else if (this.insertMode) {
-      if (!this.checkEnabledPermission(PermissionsService.PERMISSIONS_ACTIONS_INSERT_FORM)) {
+      if (!this.checkEnabledPermission(PermissionsUtils.ACTION_INSERT)) {
         return;
       }
       this.handleAcceptInsertOperation();
@@ -368,9 +362,9 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
 
   private checkEnabledPermission(attr) {
     const permissions: OPermissions = (this.actionsPermissions || []).find(p => p.attr === attr);
-    let enabledPermision = PermissionsService.checkEnabledPermission(permissions);
+    let enabledPermision = PermissionsUtils.checkEnabledPermission(permissions);
     if (!enabledPermision) {
-      this.snackBarService.open(PermissionsService.MESSAGE_OPERATION_NOT_ALLOWED_PERMISSION);
+      this.snackBarService.open(PermissionsUtils.MESSAGE_OPERATION_NOT_ALLOWED_PERMISSION);
     }
     return enabledPermision;
   }

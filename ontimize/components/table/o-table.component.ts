@@ -13,8 +13,9 @@ import { InputConverter } from '../../decorators';
 import { OTableDataSource } from './o-table.datasource';
 import { OFormComponent } from '../form/o-form.component';
 import { Codes, ObservableWrapper, Util } from '../../utils';
+import { PermissionsUtils } from '../../util/permissions';
 import { OServiceComponent } from '../o-service-component.class';
-import { OntimizeService, SnackBarService } from '../../services';
+import { OntimizeService, SnackBarService, OPermissions, OTablePermissions, OTableMenuPermissions } from '../../services';
 import { OTableRowDirective } from './extensions/row/o-table-row.directive';
 import { OColumnTooltip } from './column/o-table-column.component';
 import { OTableStorage } from './extensions/o-table-storage.class';
@@ -36,7 +37,10 @@ import {
   OTableQuickfilterComponent,
   OTableEditableRowComponent,
   IColumnValueFilter,
-  ColumnValueFilterOperator
+  ColumnValueFilterOperator,
+  OTableMenuComponent,
+  OTableButtonsComponent,
+  OTableButtonComponent
 } from './extensions/header/o-table-header-components';
 
 import {
@@ -49,23 +53,15 @@ import {
 
 import {
   O_TABLE_DIALOGS,
-  OTableExportConfiguration,
-  OTableExportDialogComponent,
-  OTableLoadFilterDialogComponent,
-  OTableStoreFilterDialogComponent,
-  OTableVisibleColumnsDialogComponent,
-  OTableFilterByColumnDataDialogComponent,
-  OTableStoreConfigurationDialogComponent,
-  OTableApplyConfigurationDialogComponent
+  OTableFilterByColumnDataDialogComponent
 } from './extensions/dialog/o-table-dialog-components';
 
 import {
   O_TABLE_CELL_RENDERERS,
-  OBaseTableCellRenderer,
-  OTableCellRendererImageComponent
+  OBaseTableCellRenderer
 } from './column/cell-renderer/cell-renderer';
 
-import { O_TABLE_CELL_EDITORS } from './column/cell-editor/cell-editor';
+import { O_TABLE_CELL_EDITORS, OTableCellEditorBooleanComponent } from './column/cell-editor/cell-editor';
 import { OMatSortModule } from './extensions/sort/o-mat-sort-module';
 import { OMatSort } from './extensions/sort/o-mat-sort';
 import { OMatSortHeader } from './extensions/sort/o-mat-sort-header';
@@ -301,9 +297,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   public paginator: OTablePaginatorComponent;
   @ViewChild(MatPaginator) matpaginator: MatPaginator;
   @ViewChild(OMatSort) sort: OMatSort;
-  @ViewChild('columnFilterOption') columnFilterOption: OTableOptionComponent;
-  @ContentChildren(OTableOptionComponent) tableOptions: QueryList<OTableOptionComponent>;
-  @ViewChild('menu') matMenu: MatMenu;
   @ViewChild(OTableEditableRowComponent) oTableEditableRow: OTableEditableRowComponent;
 
   // only for insideTabBugWorkaround
@@ -383,12 +376,18 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   /*parsed inputs variables */
   protected _visibleColArray: Array<string> = [];
 
+  get originalVisibleColumns(): string {
+    return this.visibleColumns;
+  }
+
   get visibleColArray(): Array<any> {
     return this._visibleColArray;
   }
 
   set visibleColArray(arg: Array<any>) {
-    this._visibleColArray = arg;
+    const permissionsBlocked = this.permissions ? this.permissions.columns.filter(col => col.visible === false).map(col => col.attr) : [];
+    const permissionsChecked = arg.filter(value => permissionsBlocked.indexOf(value) === -1);
+    this._visibleColArray = permissionsChecked;
     if (this._oTableOptions) {
       const containsSelectionCol = this._oTableOptions.visibleColumns.indexOf(OTableComponent.NAME_COLUMN_SELECT) !== -1;
       if (containsSelectionCol) {
@@ -475,7 +474,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   public onUpdateScrolledState: EventEmitter<any> = new EventEmitter();
   public rowWidth;
 
-  protected oTableStorage: OTableStorage;
+  oTableStorage: OTableStorage;
   storePaginationState: boolean = false;
 
   /* In the case the table havent paginationControl and pageable, the table has pagination virtual*/
@@ -498,6 +497,19 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
   }
 
+  protected permissions: OTablePermissions;
+  matMenu: MatMenu;
+
+  @ViewChild('tableMenu')
+  oTableMenu: OTableMenuComponent;
+  @ContentChildren(OTableOptionComponent)
+  tableOptions: QueryList<OTableOptionComponent>;
+
+  @ViewChild('tableButtons')
+  oTableButtons: OTableButtonsComponent;
+  @ContentChildren(OTableButtonComponent)
+  tableButtons: QueryList<OTableButtonComponent>;
+
   constructor(
     injector: Injector,
     elRef: ElementRef,
@@ -513,6 +525,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
     this.snackBarService = this.injector.get(SnackBarService);
     this.oTableStorage = new OTableStorage(this);
+
   }
 
   ngOnInit() {
@@ -522,10 +535,55 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   ngAfterViewInit() {
     this.afterViewInit();
     this.initTableAfterViewInit();
+    if (this.oTableMenu) {
+      this.matMenu = this.oTableMenu.matMenu;
+      this.oTableMenu.registerOptions(this.tableOptions.toArray());
+    }
+    if (this.oTableButtons) {
+      this.oTableButtons.registerButtons(this.tableButtons.toArray());
+    }
   }
 
   ngOnDestroy() {
     this.destroy();
+  }
+
+  getActionsPermissions(): OPermissions[] {
+    return this.permissions ? (this.permissions.actions || []) : [];
+  }
+
+  getMenuPermissions(): OTableMenuPermissions {
+    let result: OTableMenuPermissions = this.permissions ? this.permissions.menu : undefined;
+    return result ? result : {
+      visible: true,
+      enabled: true,
+      items: []
+    };
+  }
+
+  getOColumnPermissions(attr: string): OPermissions {
+    const columns = this.permissions ? (this.permissions.columns || []) : [];
+    return columns.find(comp => comp.attr === attr) || { attr: attr, enabled: true, visible: true };
+  }
+
+  protected getActionPermissions(attr: string): OPermissions {
+    const actionsPerm = this.permissions ? (this.permissions.actions || []) : [];
+    const permissions: OPermissions = actionsPerm.find(p => p.attr === attr);
+    return permissions || {
+      attr: attr,
+      visible: true,
+      enabled: true
+    };
+  }
+
+  protected checkEnabledActionPermission(attr: string) {
+    const actionsPerm = this.permissions ? (this.permissions.actions || []) : [];
+    const permissions: OPermissions = actionsPerm.find(p => p.attr === attr);
+    let enabledPermision = PermissionsUtils.checkEnabledPermission(permissions);
+    if (!enabledPermision) {
+      this.snackBarService.open(PermissionsUtils.MESSAGE_OPERATION_NOT_ALLOWED_PERMISSION);
+    }
+    return enabledPermision;
   }
 
   /**
@@ -542,6 +600,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     this.initializeParams();
 
     this.initializeDao();
+
+    this.permissions = this.permissionsService.getTablePermissions(this.oattr);
   }
 
   protected initializeDao() {
@@ -697,6 +757,12 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
    * @param column
    */
   registerColumn(column: OTableColumnComponent | OTableColumnCalculatedComponent | any) {
+    const columnAttr = (typeof column === 'string') ? column : column.attr;
+    const columnPermissions: OPermissions = this.getOColumnPermissions(columnAttr);
+    if (!columnPermissions.visible) {
+      return;
+    }
+
     if (typeof column === 'string') {
       this.registerDefaultColumn(column);
       return;
@@ -1112,47 +1178,15 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   onExportButtonClicked() {
-    let exportCnfg: OTableExportConfiguration = new OTableExportConfiguration();
-    // Table data
-    exportCnfg.data = this.getRenderedValue();
-    // get column's attr whose renderer is OTableCellRendererImageComponent
-    let colsNotIncluded: string[] = this._oTableOptions.columns.filter(c => void 0 !== c.renderer && c.renderer instanceof OTableCellRendererImageComponent).map(c => c.attr);
-    colsNotIncluded.forEach(attr => exportCnfg.data.forEach(row => delete row[attr]));
-    // Table columns
-    exportCnfg.columns = this._oTableOptions.visibleColumns.filter(c => colsNotIncluded.indexOf(c) === -1);
-    // Table column names
-    let tableColumnNames = {};
-    this._oTableOptions.visibleColumns.filter(c => colsNotIncluded.indexOf(c) === -1).map(c => tableColumnNames[c] = this.translateService.get(c));
-    exportCnfg.columnNames = tableColumnNames;
-    // Table column sqlTypes
-    exportCnfg.sqlTypes = this.getSqlTypes();
-    // Table service, needed for configuring ontimize export service with table service configuration
-    exportCnfg.service = this.service;
-
-    let dialogRef = this.dialog.open(OTableExportDialogComponent, {
-      data: exportCnfg,
-      disableClose: true
-    });
-
-    dialogRef.afterClosed().subscribe(result => result ? this.snackBarService.open('MESSAGES.SUCCESS_EXPORT_TABLE_DATA', { icon: 'check_circle' }) : null);
+    if (this.oTableMenu) {
+      this.oTableMenu.onExportButtonClicked();
+    }
   }
 
   onChangeColumnsVisibilityClicked() {
-    let dialogRef = this.dialog.open(OTableVisibleColumnsDialogComponent, {
-      data: {
-        originalVisibleColumns: Util.parseArray(this.visibleColumns, true),
-        columnsData: this._oTableOptions.columns
-      },
-      disableClose: true
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.visibleColArray = dialogRef.componentInstance.getVisibleColumns();
-        let columnsOrder = dialogRef.componentInstance.getColumnsOrder();
-        this._oTableOptions.columns.sort((a: OColumn, b: OColumn) => columnsOrder.indexOf(a.attr) - columnsOrder.indexOf(b.attr));
-      }
-    });
+    if (this.oTableMenu) {
+      this.oTableMenu.onChangeColumnsVisibilityClicked();
+    }
   }
 
   onMatTableContentChanged() {
@@ -1160,10 +1194,16 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   add() {
+    if (!this.checkEnabledActionPermission(PermissionsUtils.ACTION_INSERT)) {
+      return;
+    }
     super.insertDetail();
   }
 
   remove(clearSelectedItems: boolean = false) {
+    if (!this.checkEnabledActionPermission(PermissionsUtils.ACTION_DELETE)) {
+      return;
+    }
     let selectedItems = this.getSelectedItems();
     if (selectedItems.length > 0) {
       this.dialogService.confirm('CONFIRM', 'MESSAGES.CONFIRM_DELETE').then(res => {
@@ -1171,7 +1211,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
           if (this.dataService && (this.deleteMethod in this.dataService) && this.entity && (this.keysArray.length > 0)) {
             let filters = ServiceUtils.getArrayProperties(selectedItems, this.keysArray);
             this.daoTable.removeQuery(filters).subscribe(res => {
-              console.log('[OTable.remove]: response', res);
               ObservableWrapper.callEmit(this.onRowDeleted, selectedItems);
             }, error => {
               this.showDialogError(error, 'MESSAGES.ERROR_DELETE');
@@ -1194,6 +1233,16 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     this.reloadData();
   }
 
+  showAndSelectAllCheckbox() {
+    if (this.isSelectionModeMultiple()) {
+      if (this.selectAllCheckbox) {
+        this._oTableOptions.selectColumn.visible = true;
+      }
+      this.updateSelectionColumnState();
+      this.selectAll();
+    }
+  }
+
   reloadPaginatedDataFromStart() {
     if (this.pageable) {
       // Initialize page index
@@ -1203,6 +1252,10 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   reloadData() {
+    if (!this.checkEnabledActionPermission(PermissionsUtils.ACTION_REFRESH)) {
+      return;
+    }
+
     this.clearSelection();
     this.finishQuerySubscription = false;
     this.pendingQuery = true;
@@ -1339,6 +1392,12 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     if (event && column.editing && this.editingCell === event.currentTarget) {
       return;
     }
+    const columnPermissions: OPermissions = this.getOColumnPermissions(column.attr);
+    if (columnPermissions.enabled === false) {
+      console.warn(`${column.attr} edition not allowed due to permissions`);
+      return;
+    }
+
     this.clearSelectionAndEditing();
     this.selectedRow(row);
     this.editingCell = event.currentTarget;
@@ -1353,6 +1412,12 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   updateCellData(column: OColumn, data: any, saveChanges: boolean) {
+    if (!this.checkEnabledActionPermission(PermissionsUtils.ACTION_UPDATE)) {
+      const res = new Observable(innerObserver => {
+        innerObserver.error();
+      });
+      return res;
+    }
     column.editing = false;
     this.editingCell = undefined;
     if (saveChanges && this.editingRow !== undefined) {
@@ -1373,7 +1438,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     const _self = this;
     return data.map((row) => {
       let obj = {};
-      _self.keysArray.map((key) => {
+      _self.keysArray.forEach((key) => {
         if (row[key] !== undefined) {
           obj[key] = row[key];
         }
@@ -1384,11 +1449,12 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   onShowsSelects(event?: any) {
-    this._oTableOptions.selectColumn.visible = !this._oTableOptions.selectColumn.visible;
-    this.updateSelectionColumnState();
+    if (this.oTableMenu) {
+      this.oTableMenu.onShowsSelects(event);
+    }
   }
 
-  protected updateSelectionColumnState() {
+  updateSelectionColumnState() {
     if (!this._oTableOptions.selectColumn.visible) {
       this.clearSelection();
     }
@@ -1409,7 +1475,11 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   masterToggle(event: MatCheckboxChange) {
-    event.checked ? this.dataSource.renderedData.forEach(row => this.selection.select(row)) : this.clearSelection();
+    event.checked ? this.selectAll() : this.clearSelection();
+  }
+
+  selectAll() {
+    this.dataSource.renderedData.forEach(row => this.selection.select(row));
   }
 
   selectionCheckboxToggle(event: MatCheckboxChange, row: any) {
@@ -1513,69 +1583,34 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   onFilterByColumnClicked() {
-    if (this.showFilterByColumnIcon && this.dataSource.isColumnValueFilterActive()) {
-      const self = this;
-      this.dialogService.confirm('CONFIRM', 'MESSAGES.CONFIRM_DISCARD_FILTER_BY_COLUMN').then(res => {
-        if (res) {
-          self.dataSource.clearColumnFilters();
-        }
-        self.showFilterByColumnIcon = !res;
-      });
-    } else {
-      this.showFilterByColumnIcon = !this.showFilterByColumnIcon;
+    if (this.oTableMenu) {
+      this.oTableMenu.onFilterByColumnClicked();
     }
   }
 
-  onStoreFilterClicked(): void {
-    let dialogRef = this.dialog.open(OTableStoreFilterDialogComponent, {
-      data: this.oTableStorage.getStoredFilters().map(filter => filter.name),
-      width: '30vw',
-      disableClose: true
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.oTableStorage.storeFilter(dialogRef.componentInstance.getFilterAttributes());
-      }
-    });
+  onStoreFilterClicked() {
+    if (this.oTableMenu) {
+      this.oTableMenu.onStoreFilterClicked();
+    }
   }
 
-  onLoadFilterClicked(): void {
-    let dialogRef = this.dialog.open(OTableLoadFilterDialogComponent, {
-      data: this.oTableStorage.getStoredFilters(),
-      width: '30vw',
-      disableClose: true
-    });
-
-    dialogRef.componentInstance.onDelete.subscribe(filterName => this.oTableStorage.deleteStoredFilter(filterName));
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        let selectedFilterName: string = dialogRef.componentInstance.getSelectedFilterName();
-        if (selectedFilterName) {
-          let storedFilter = this.oTableStorage.getStoredFilterConf(selectedFilterName);
-          if (storedFilter) {
-            this.setFiltersConfiguration(storedFilter);
-            this.reloadPaginatedDataFromStart();
-          }
-        }
-      }
-    });
+  onLoadFilterClicked() {
+    if (this.oTableMenu) {
+      this.oTableMenu.onLoadFilterClicked();
+    }
   }
 
-  onClearFilterClicked(): void {
-    this.dialogService.confirm('CONFIRM', 'TABLE.DIALOG.CONFIRM_CLEAR_FILTER').then(result => {
-      if (result) {
-        this.clearFilters();
-        this.reloadPaginatedDataFromStart();
-      }
-    });
+  onClearFilterClicked() {
+    if (this.oTableMenu) {
+      this.oTableMenu.onClearFilterClicked();
+    }
   }
 
   clearFilters(triggerDatasourceUpdate: boolean = true): void {
     this.dataSource.clearColumnFilters(triggerDatasourceUpdate);
     this.showFilterByColumnIcon = false;
-    if (this.columnFilterOption) {
-      this.columnFilterOption.active = this.showFilterByColumnIcon;
+    if (this.oTableMenu && this.oTableMenu.columnFilterOption) {
+      this.oTableMenu.columnFilterOption.active = this.showFilterByColumnIcon;
     }
     if (this.oTableQuickFilterComponent) {
       this.oTableQuickFilterComponent.setValue(void 0);
@@ -1615,15 +1650,27 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     });
   }
 
+  get disableTableMenuButton(): boolean {
+    return !!(this.permissions && this.permissions.menu && this.permissions.menu.enabled === false);
+  }
+
   get showTableMenuButton(): boolean {
+    const permissionHidden = !!(this.permissions && this.permissions.menu && this.permissions.menu.visible === false);
+    if (permissionHidden) {
+      return false;
+    }
     const staticOpt = this.selectAllCheckbox || this.exportButton || this.columnsVisibilityButton || this.oTableColumnsFilterComponent !== undefined;
     return staticOpt || this.tableOptions.length > 0;
   }
 
   setOTableInsertableRow(tableInsertableRow: OTableInsertableRowComponent) {
-    this.oTableInsertableRowComponent = tableInsertableRow;
-    this.showFirstInsertableRow = this.oTableInsertableRowComponent.isFirstRow();
-    this.showLastInsertableRow = !this.showFirstInsertableRow;
+    const insertPerm: OPermissions = this.getActionPermissions(PermissionsUtils.ACTION_INSERT);
+    if (insertPerm.visible) {
+      tableInsertableRow.enabled = insertPerm.enabled;
+      this.oTableInsertableRowComponent = tableInsertableRow;
+      this.showFirstInsertableRow = this.oTableInsertableRowComponent.isFirstRow();
+      this.showLastInsertableRow = !this.showFirstInsertableRow;
+    }
   }
 
   clearSelectionAndEditing() {
@@ -1680,6 +1727,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   useCellEditor(column: OColumn, row: any): boolean {
+    if (column.editor && column.editor instanceof OTableCellEditorBooleanComponent && column.editor.autoCommit) {
+      return false;
+    }
     return column.editor && column.editing && this.selection.isSelected(row);
   }
 
@@ -1736,6 +1786,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   insertRecord(recordData: any, sqlTypes?: Object): Observable<any> {
+    if (!this.checkEnabledActionPermission(PermissionsUtils.ACTION_INSERT)) {
+      return undefined;
+    }
     if (!Util.isDefined(sqlTypes)) {
       let allSqlTypes = this.getSqlTypes();
       let sqlTypes = {};
@@ -1747,6 +1800,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   updateRecord(filter: any, updateData: any, sqlTypes?: Object): Observable<any> {
+    if (!this.checkEnabledActionPermission(PermissionsUtils.ACTION_UPDATE)) {
+      return Observable.of(this.dataSource.data);
+    }
     let sqlTypesArg = sqlTypes || {};
     if (!Util.isDefined(sqlTypes)) {
       let allSqlTypes = this.getSqlTypes();
@@ -1808,13 +1864,13 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     return !Util.isDefined(value) || ((typeof value === 'string') && !value);
   }
 
-  protected setFiltersConfiguration(conf: any) {
+  setFiltersConfiguration(conf: any) {
     this.filterCaseSensitive = conf.hasOwnProperty('filter-case-sensitive') ? conf['filter-case-sensitive'] : this.filterCaseSensitive;
 
     const storedColumnFilters = this.oTableStorage.getStoredColumnsFilters(conf);
     this.showFilterByColumnIcon = storedColumnFilters.length > 0;
-    if (this.columnFilterOption) {
-      this.columnFilterOption.active = this.showFilterByColumnIcon;
+    if (this.oTableMenu && this.oTableMenu.columnFilterOption) {
+      this.oTableMenu.columnFilterOption.active = this.showFilterByColumnIcon;
     }
 
     if (this.oTableColumnsFilterComponent) {
@@ -1838,42 +1894,19 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
   }
 
-  onStoreConfigurationClicked(): void {
-    let dialogRef = this.dialog.open(OTableStoreConfigurationDialogComponent, {
-      width: '30vw',
-      disableClose: true
-    });
-    const self = this;
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        const configurationData = dialogRef.componentInstance.getConfigurationAttributes();
-        const tableProperties = dialogRef.componentInstance.getSelectedTableProperties();
-        self.oTableStorage.storeConfiguration(configurationData, tableProperties);
-      }
-    });
+  onStoreConfigurationClicked() {
+    if (this.oTableMenu) {
+      this.oTableMenu.onStoreConfigurationClicked();
+    }
   }
 
-  onApplyConfigurationClicked(): void {
-    let dialogRef = this.dialog.open(OTableApplyConfigurationDialogComponent, {
-      data: this.oTableStorage.getStoredConfigurations(),
-      width: '30vw',
-      disableClose: true
-    });
-    const self = this;
-    dialogRef.componentInstance.onDelete.subscribe(configurationName => this.oTableStorage.deleteStoredConfiguration(configurationName));
-    dialogRef.afterClosed().subscribe(result => {
-      if (result && dialogRef.componentInstance.isDefaultConfigurationSelected()) {
-        self.applyDefaultConfiguration();
-      } else if (result) {
-        let selectedConfigurationName: string = dialogRef.componentInstance.getSelectedConfigurationName();
-        if (selectedConfigurationName) {
-          self.applyConfiguration(selectedConfigurationName);
-        }
-      }
-    });
+  onApplyConfigurationClicked() {
+    if (this.oTableMenu) {
+      this.oTableMenu.onApplyConfigurationClicked();
+    }
   }
 
-  protected applyDefaultConfiguration() {
+  applyDefaultConfiguration() {
     this.oTableStorage.reset();
     this.initializeParams();
     this.parseVisibleColumns();
@@ -1884,7 +1917,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     this.reloadData();
   }
 
-  protected applyConfiguration(configurationName: string) {
+  applyConfiguration(configurationName: string) {
     let storedConfiguration = this.oTableStorage.getStoredConfiguration(configurationName);
     if (storedConfiguration) {
       const properties = storedConfiguration[OTableStorage.STORED_PROPERTIES_KEY] || [];
@@ -1948,6 +1981,10 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     return align;
   }
 
+  public getCellAlignClass(column: OColumn): string {
+    return Util.isDefined(column.definition) && Util.isDefined(column.definition.contentAlign) ? 'o-' + column.definition.contentAlign : '';
+  }
+
   onTableScroll(e) {
     if (this.hasScrollableContainer()) {
       const tableViewHeight = e.target.offsetHeight; // viewport: ~500px
@@ -1983,6 +2020,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   protected addDefaultRowButtons() {
+    // check permissions
     if (this.editButtonInRow) {
       this.addButtonInRow('editButtonInRow');
     }
@@ -2018,6 +2056,35 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       height += this.tableToolbarEl.nativeElement.offsetHeight;
     }
     return height;
+  }
+
+
+  isDetailMode(): boolean {
+    return this.detailMode !== Codes.DETAIL_MODE_NONE;
+  }
+
+  copyAll() {
+    Util.copyToClipboard(JSON.stringify(this.getRenderedValue()));
+  }
+
+  copySelection() {
+    let selectedItems = this.dataSource.getRenderedData(this.getSelectedItems());
+    Util.copyToClipboard(JSON.stringify(selectedItems));
+  }
+
+
+  viewDetail(item: any): void {
+    if (!this.checkEnabledActionPermission('detail')) {
+      return;
+    }
+    super.viewDetail(item);
+  }
+
+  editDetail(item: any): void {
+    if (!this.checkEnabledActionPermission('edit')) {
+      return;
+    }
+    super.editDetail(item);
   }
 
 }

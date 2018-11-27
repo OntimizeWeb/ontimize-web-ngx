@@ -1,3 +1,38 @@
+## 3.2.0 (2018-11-27)
+### Features
+* New component `o-slide-toggle` ([6c6453b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6c6453b))
+* New components `o-button-toggle` and `o-button-toggle-group` ([311a2ac](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/311a2ac))
+* **o-checkbox**: new attributes `color` and `label-position` ([7e9e69e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7e9e69e))
+* **o-table-option**, **o-table-button**:
+  * New `attr` and `enabled` inputs.
+  * New `elRef` parameter in constructor.
+* **OBaseTableCellEditor**: new `enabled` input.
+* **OServiceBaseComponent**: new `query-on-event` input ([e2dfb06](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e2dfb06))
+* **OFormServiceComponent (o-combo, o-list-picker, o-radio)**: new input `set-value-on-value-change` and output `onSetValueOnValueChange` ([c972d2d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c972d2d))
+* **o-context-menu**:  ([db32ecf](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/db32ecf))([a6d6b44](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a6d6b44))
+  * New component `o-context-menu-group` that supports the ability to open a sub-menu.
+  * New component  `o-context-menu-separator` that represents a separator in the menu
+* **o-table-context-menu**: includes the next options: `view detail`, `edit`, `insert`, `copy options` and `select all`.  ([ee465d4](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ee465d4)) ([99d5040](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/99d5040))([e05cc93](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e05cc93)) ([1b94c3c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1b94c3c))
+* **o-app-layout-header**: new component for adding custom content to `o-app-layout` header ([dc0d408](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/dc0d408))
+* **o-app-layout-sidenav**: new component for adding custom content to `o-app-layout` sidenav ([4e12eb9](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4e12eb9))
+* New component `o-slider` ([a885043](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a885043))
+* **o-table-cell-renderer-boolean**: new `render-type`, `render-true-value` and `render-false-value` inputs ([a8cca0d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a8cca0d))
+* **o-table-cell-editor-boolean**: new `auto-commit` input ([627aed3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/627aed3))
+* **o-table-column**: New attribute `content-align` ([6c23f4b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6c23f4b))
+* **AppConfig**: adding properties for allowing remote permissions query.
+
+### Note on HammerJS
+The sliding behavior in `o-slider` component requires that HammerJS is loaded on the page. You can see the support of Material in next ([link](https://material.angular.io/guide/getting-started#step-5-gesture-support))
+
+### Bug Fixes
+* **o-grid**: loading spinner displays properly ([7d08582](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7d08582)), closes [#231](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/231)
+
+### BREAKING CHANGES
+* **AppConfig**: removing `authGuard` property.
+* **o-table-cell-renderer-boolean**: `true-value-type` and `false-value-type` inputs no longer exists ([a8cca0d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a8cca0d))
+* **o-date-input**: this component now only allows to receive and return timestamp values ([e0be14a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e0be14a))
+* **o-table**: CSS class `action-cell-renderer` has been renamed to `o-action-cell-renderer`.
+
 ## 3.1.2 (2018-11-07)
 ### Features
 * **OValueChangeEvent**: adding `isUserChange` and `isProgrammaticChange` methods.

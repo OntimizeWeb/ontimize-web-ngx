@@ -1,7 +1,7 @@
 <ng-template #templateref let-cellvalue="cellvalue" let-rowvalue="rowvalue">
-  <div fxLayoutAlign="center center" class="action-cell-renderer" (click)="innerOnClick($event, rowvalue)">
+  <div class="o-action-cell-renderer" (click)="innerOnClick($event, rowvalue)">
     <mat-icon *ngIf="isIconPositionLeft()">{{ icon }}</mat-icon>
-    <ng-container *ngIf="text !== undefined">{{ text | oTranslate }}</ng-container>
+    <span *ngIf="text !== undefined">{{ text | oTranslate }}</span>
     <mat-icon *ngIf="isIconPositionRight()">{{ icon }}</mat-icon>
   </div>
 </ng-template>

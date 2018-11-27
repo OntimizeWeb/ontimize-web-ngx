@@ -20,3 +20,5 @@ export * from './o-form-service-component.class';
 export * from './hour-input/o-hour-input.component';
 export * from './time-input/o-time-input.component';
 export * from './radio/o-radio.component';
+export * from './slide-toggle/o-slide-toggle.component';
+export * from './slider/o-slider.component';

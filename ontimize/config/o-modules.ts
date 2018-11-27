@@ -17,6 +17,7 @@ import {
   OBarMenuNestedModule,
   OBreadcrumbModule,
   OButtonModule,
+  OButtonToggleModule,
   OCheckboxModule,
   OComboModule,
   OColumnModule,
@@ -57,7 +58,9 @@ import {
   OHourInputModule,
   OTimeInputModule,
   OGridModule,
-  ORadioModule
+  ORadioModule,
+  OSlideToggleModule,
+  OSliderModule
 } from '../components';
 
 import {
@@ -85,6 +88,7 @@ export const INTERNAL_ONTIMIZE_MODULES_EXPORTED: any = [
   OBarMenuNestedModule,
   OBreadcrumbModule,
   OButtonModule,
+  OButtonToggleModule,
   OCheckboxModule,
   OComboModule,
   OColumnModule,
@@ -128,7 +132,9 @@ export const INTERNAL_ONTIMIZE_MODULES_EXPORTED: any = [
   OHourInputModule,
   OTimeInputModule,
   OGridModule,
-  ORadioModule
+  ORadioModule,
+  OSlideToggleModule,
+  OSliderModule
 ];
 
 // AoT requires an exported function for factories
@@ -179,6 +185,7 @@ export const INTERNAL_ONTIMIZE_MODULES: any = [
   OBarMenuNestedModule,
   OBreadcrumbModule,
   OButtonModule,
+  OButtonToggleModule,
   OCheckboxModule,
   OComboModule,
   OColumnModule,
@@ -222,7 +229,8 @@ export const INTERNAL_ONTIMIZE_MODULES: any = [
   OHourInputModule,
   OTimeInputModule,
   OGridModule,
-  ORadioModule
+  ORadioModule,
+  OSlideToggleModule
 ];
 
 @NgModule({

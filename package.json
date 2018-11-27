@@ -1,7 +1,7 @@
 {
   "name": "ontimize-web-ngx",
   "homepage": "https://github.com/OntimizeWeb/ontimize-web-ngx#readme",
-  "version": "3.1.3",
+  "version": "3.2.0",
   "description": "Ontimize Web framework using Angular 5",
   "bugs": "https://github.com/OntimizeWeb/ontimize-web-ngx/issues",
   "author": "Imatia S.L.",
@@ -36,7 +36,8 @@
   "dependencies": {
     "moment": "2.22.1",
     "ng2-dnd": "5.0.2",
-    "ngx-material-timepicker": "1.1.2"
+    "ngx-material-timepicker": "1.1.2",
+    "hammerjs": "2.0.8"
   },
   "peerDependencies": {
     "@angular/flex-layout": "5.0.0-beta.13",

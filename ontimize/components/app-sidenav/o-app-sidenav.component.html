@@ -1,14 +1,17 @@
-<mat-sidenav-container class="o-app-sidenav-container" [class.opened]="sidenav.opened" [class.o-app-sidenav-mode-desktop]="(layoutMode || 'desktop') === 'desktop'"
-  [class.o-app-sidenav-mode-mobile]="(layoutMode || 'desktop') !== 'desktop'">
+<mat-sidenav-container class="o-app-sidenav-container" [class.opened]="sidenav.opened"
+  [class.o-app-sidenav-mode-desktop]="(layoutMode || 'desktop') === 'desktop'" [class.o-app-sidenav-mode-mobile]="(layoutMode || 'desktop') !== 'desktop'">
 
   <mat-sidenav #sidenav class="o-app-sidenav-sidenav o-scroll" [opened]="isSidenavOpened()" [mode]="(sidenavMode || ((layoutMode || 'desktop') === 'desktop' ? 'side' : 'over'))"
-    [class.mat-drawer-opened]="sidenav.opened" [class.mat-drawer-closed]="!sidenav.opened">
+    [class.mat-drawer-opened]="sidenav.opened" [class.mat-drawer-closed]="!sidenav.opened" fxLayout="column"
+    fxLayoutAlign="start stretch">
 
     <div fxLayout="row" fxLayoutAlign="end" *ngIf="showToggleButton" class="sidenav-toggle-container">
       <mat-icon class="sidenav-toggle" (click)="toggleSidenav()" svgIcon="ontimize:menu">menu</mat-icon>
     </div>
 
     <o-app-sidenav-image [opened-src]="openedSidenavImg" [closed-src]="closedSidenavImg"> </o-app-sidenav-image>
+
+    <ng-content select="o-app-layout-sidenav-projection-start"></ng-content>
 
     <nav *ngFor="let menuRootItem of menuRootArray">
 
@@ -22,6 +25,9 @@
         (onItemClick)="onMenuItemClick($event)">
       </o-app-sidenav-menu-group>
     </nav>
+
+    <ng-content select="o-app-layout-sidenav-projection-end"></ng-content>
+
   </mat-sidenav>
 
   <mat-sidenav-content class="o-app-sidenav-content">

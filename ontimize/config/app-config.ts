@@ -65,15 +65,6 @@ export interface Config {
   // appMenuConfiguration?: MenuGroup[];
   appMenuConfiguration?: MenuRootItem[];
 
-   // authGuard [Object]: Configuration parameters of application permissions.
-   authGuard?: {
-    type?: any;
-    service?: string;
-    entity?: string;
-    keyColumn?: string;
-    valueColumn?: string;
-  };
-
   // permissionsConfiguration [Object]: Configuration parameters of application permissions.
   permissionsConfiguration?: OntimizePermissionsConfig | OntimizeEEPermissionsConfig;
 

@@ -17,7 +17,7 @@ export class OValidators {
 */
   static twelveHourFormatValidator(control: FormControl): ValidationErrors {
     let regExp = new RegExp(TWELVE_HOUR_FORMAT_PATTERN);
-    if (control.value && !regExp.test(control.value)) {
+    if (control.value && typeof control.value === 'string' && !regExp.test(control.value)) {
       return { 'invalidFormatHour': true };
     }
     return {};
@@ -28,7 +28,7 @@ export class OValidators {
   */
   static twentyFourHourFormatValidator(control: FormControl): ValidationErrors {
     let regExp = new RegExp(TWENTY_FOUR_HOUR_FORMAT_PATTERN);
-    if (control.value && !regExp.test(control.value)) {
+    if (control.value && typeof control.value === 'string' && !regExp.test(control.value)) {
       return { 'invalidFormatHour': true };
     }
     return {};

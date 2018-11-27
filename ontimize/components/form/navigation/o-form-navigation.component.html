@@ -1,8 +1,15 @@
 <ng-container *ngIf="showNavigation()">
-  <mat-icon aria-label="First" (click)="first()" layout-padding [class.mat-disabled]="isFirst()" svgIcon="ontimize:first_page">
-  </mat-icon>
-  <mat-icon aria-label="Previous" (click)="previous()" layout-padding [class.mat-disabled]="isFirst()" svgIcon="ontimize:keyboard_arrow_left"></mat-icon>
-  <span>{{ currentIndex + 1 }} / {{ navigationData.length }}</span>
-  <mat-icon aria-label="Next" (click)="next()" layout-padding [class.mat-disabled]="isLast()" svgIcon="ontimize:keyboard_arrow_right"></mat-icon>
-  <mat-icon aria-label="Last" (click)="last()" layout-padding [class.mat-disabled]="isLast()" svgIcon="ontimize:last_page"></mat-icon>
+  <button mat-icon-button [disabled]="isFirst()" (click)="first()">
+    <mat-icon aria-label="First" layout-padding svgIcon="ontimize:first_page"></mat-icon>
+  </button>
+  <button mat-icon-button [disabled]="isFirst()" (click)="previous()">
+    <mat-icon aria-label="Previous" layout-padding svgIcon="ontimize:keyboard_arrow_left"></mat-icon>
+  </button>
+  <span layout-padding>{{ currentIndex + 1 }} / {{ navigationData.length }}</span>
+  <button mat-icon-button [disabled]="isLast()" (click)="next()">
+    <mat-icon aria-label="Next" layout-padding svgIcon="ontimize:keyboard_arrow_right"></mat-icon>
+  </button>
+  <button mat-icon-button [disabled]="isLast()" (click)="last()">
+    <mat-icon aria-label="Last" layout-padding svgIcon="ontimize:last_page"></mat-icon>
+  </button>
 </ng-container>

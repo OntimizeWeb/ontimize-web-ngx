@@ -7,6 +7,8 @@ import { OSharedModule } from '../../shared';
 import { InputConverter } from '../../decorators';
 import { OAppHeaderModule } from '../../components/app-header/o-app-header.component';
 import { OAppSidenavModule } from '../../components/app-sidenav/o-app-sidenav.component';
+import { OAppLayoutHeaderComponent } from './app-layout-header/o-app-layout-header.component';
+import { OAppLayoutSidenavComponent } from './app-layout-sidenav/o-app-layout-sidenav.component';
 
 export const DEFAULT_INPUTS_O_APP_LAYOUT = [
   'mode',
@@ -98,7 +100,7 @@ export class OAppLayoutComponent {
 
 @NgModule({
   imports: [CommonModule, OSharedModule, RouterModule, OAppSidenavModule, OAppHeaderModule],
-  declarations: [OAppLayoutComponent],
-  exports: [OAppLayoutComponent]
+  declarations: [OAppLayoutComponent, OAppLayoutHeaderComponent, OAppLayoutSidenavComponent],
+  exports: [OAppLayoutComponent, OAppLayoutHeaderComponent, OAppLayoutSidenavComponent]
 })
 export class OAppLayoutModule { }

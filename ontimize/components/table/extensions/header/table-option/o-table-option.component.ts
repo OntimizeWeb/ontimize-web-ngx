@@ -1,8 +1,10 @@
-import { Component, Inject, forwardRef, EventEmitter, Injector, ViewEncapsulation } from '@angular/core';
+import { Component, Inject, forwardRef, EventEmitter, Injector, ViewEncapsulation, ElementRef } from '@angular/core';
 import { OTableComponent } from '../../../o-table.component';
 import { InputConverter } from '../../../../../decorators';
 
 export const DEFAULT_INPUTS_O_TABLE_OPTION = [
+  'oattr: attr',
+  'enabled',
   'icon',
   // show-active-icon [string][yes|no|true|false]: show icon when option is active. Default :no.
   'showActiveIcon : show-active-icon',
@@ -35,6 +37,9 @@ export class OTableOptionComponent {
 
   onClick: EventEmitter<Object> = new EventEmitter<Object>();
 
+  oattr: string;
+  @InputConverter()
+  enabled: boolean = true;
   icon: string;
   olabel: string;
   @InputConverter()
@@ -44,6 +49,7 @@ export class OTableOptionComponent {
 
   constructor(
     protected injector: Injector,
+    public elRef: ElementRef,
     @Inject(forwardRef(() => OTableComponent)) protected table: OTableComponent
   ) {
 

@@ -1,6 +1,13 @@
-<nav class="o-app-header">
+<nav fxFlex fxLayout="row" fxLayoutAlign="space-between stretch">
   <mat-icon class="sidenav-toggle" (click)="onSidenavToggle.emit()" svgIcon="ontimize:menu"></mat-icon>
-  <span fxLayout="row" fxLayoutAlign="center center" fxFlex class="o-app-header-title">{{ headerTitle | oTranslate }}</span>
-  <o-user-info *ngIf="showUserInfo"></o-user-info>
-  <o-language-selector *ngIf="showLanguageSelector" [use-flag-icons]="useFlagIcons"></o-language-selector>
+  <div fxFlex fxLayout="row" fxLayoutAlign="space-between stretch">
+    <ng-content></ng-content>
+    <span *ngIf="showHeaderTitle" class="o-app-header-title" fxLayout="row" fxLayoutAlign="center center">
+      {{ headerTitle | oTranslate }}
+    </span>
+    <div fxLayout="row" fxLayoutAlign="end stretch">
+      <o-user-info *ngIf="showUserInfo"></o-user-info>
+      <o-language-selector *ngIf="showLanguageSelector" [use-flag-icons]="useFlagIcons"></o-language-selector>
+    </div>
+  </div>
 </nav>

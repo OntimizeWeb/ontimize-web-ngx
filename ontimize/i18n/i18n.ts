@@ -204,7 +204,18 @@ export var MAP = {
     'GRID.SORT_BY_ASC': 'Sort by {0} ascending',
     'GRID.SORT_BY_DESC': 'Sort by {0} descending',
     'GRID.BUTTON_NEXT': 'Show more',
-    'GRID.TEXT_SHOWN_ITEMS': '{0} / {1}'
+    'GRID.TEXT_SHOWN_ITEMS': '{0} / {1}',
+    'TABLE_CONTEXT_MENU.VIEW_DETAIL':'View detail',
+    'TABLE_CONTEXT_MENU.EDIT':'Edit',
+    'TABLE_CONTEXT_MENU.INSERT':'Insert',
+    'TABLE_CONTEXT_MENU.COPY':'Copy',
+    'TABLE_CONTEXT_MENU.COPY_CELL':'Copy cell',
+    'TABLE_CONTEXT_MENU.COPY_ROW':'Copy row',
+    'TABLE_CONTEXT_MENU.COPY_ALL':'Copy all',
+    'TABLE_CONTEXT_MENU.COPY_SELECTION':'Copy selection',
+    'TABLE_CONTEXT_MENU.SELECT_ALL':'Select all',
+    'TABLE_CONTEXT_MENU.REFRESH':'Refresh',
+    'TABLE_CONTEXT_MENU.DELETE':'Delete'
   },
 
   // Spanish
@@ -412,7 +423,18 @@ export var MAP = {
     'GRID.SORT_BY_ASC': 'Ordenado por {0} ascendente',
     'GRID.SORT_BY_DESC': 'Ordenado por {0} descendente',
     'GRID.BUTTON_NEXT': 'Ver más',
-    'GRID.TEXT_SHOWN_ITEMS': '{0} / {1}'
+    'GRID.TEXT_SHOWN_ITEMS': '{0} / {1}',
+    'TABLE_CONTEXT_MENU.VIEW_DETAIL':'Ver detalle',
+    'TABLE_CONTEXT_MENU.EDIT':'Editar',
+    'TABLE_CONTEXT_MENU.INSERT':'Insertar',
+    'TABLE_CONTEXT_MENU.COPY':'Copiar',
+    'TABLE_CONTEXT_MENU.COPY_CELL':'Copiar celda',
+    'TABLE_CONTEXT_MENU.COPY_ROW':'Copiar celda',
+    'TABLE_CONTEXT_MENU.COPY_ALL':'Copy all',
+    'TABLE_CONTEXT_MENU.COPY_SELECTION':'Copiar selección',
+    'TABLE_CONTEXT_MENU.SELECT_ALL':'Seleccionar todos',
+    'TABLE_CONTEXT_MENU.REFRESH':'Refrescar',
+    'TABLE_CONTEXT_MENU.DELETE':'Borrar'
   }
 
 };
