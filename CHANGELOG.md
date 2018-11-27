@@ -1,7 +1,9 @@
 
 ## 4.0.0-rc.1
+### Features
 * New components `o-button-toggle` and `o-button-toggle-group` ([311a2ac](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/311a2ac)) ([415f8b0](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/415f8b0))
 * New components `o-slider` ([a885043](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a885043))
+* **o-hour-input**: allowing to introduce hour value manually in the component input ([51fb9dc](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/51fb9dc))
 
 ## 4.0.0-rc.0 (2018-11-16)
 
