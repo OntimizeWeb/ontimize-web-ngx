@@ -1,4 +1,4 @@
-## 3.2.0
+## 3.2.0 (2018-11-27)
 ### Features
 * New component `o-slide-toggle` ([6c6453b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6c6453b))
 * New components `o-button-toggle` and `o-button-toggle-group` ([311a2ac](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/311a2ac))
@@ -19,6 +19,7 @@
 * **o-table-cell-renderer-boolean**: new `render-type`, `render-true-value` and `render-false-value` inputs ([a8cca0d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a8cca0d))
 * **o-table-cell-editor-boolean**: new `auto-commit` input ([627aed3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/627aed3))
 * **o-table-column**: New attribute `content-align` ([6c23f4b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6c23f4b))
+* **AppConfig**: adding properties for allowing remote permissions query.
 
 ### Note on HammerJS
 The sliding behavior in `o-slider` component requires that HammerJS is loaded on the page. You can see the support of Material in next ([link](https://material.angular.io/guide/getting-started#step-5-gesture-support))
