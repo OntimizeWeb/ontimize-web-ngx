@@ -30,6 +30,7 @@ The sliding behavior in `o-slider` component requires that HammerJS is loaded on
 * **AppConfig**: removing `authGuard` property.
 * **o-table-cell-renderer-boolean**: `true-value-type` and `false-value-type` inputs no longer exists ([a8cca0d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a8cca0d))
 * **o-date-input**: this component now only allows to receive and return timestamp values ([e0be14a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e0be14a))
+* **o-table**: CSS class `action-cell-renderer` has been renamed to `o-action-cell-renderer`.
 
 ## 3.1.2 (2018-11-07)
 ### Features

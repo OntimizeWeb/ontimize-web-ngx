@@ -124,7 +124,7 @@
             </ng-template>
 
             <ng-container *ngIf="useDetailButton(column)">
-              <div fxLayoutAlign="center center" class="action-cell-renderer" (click)="onDetailButtonClick(column, row, $event)">
+              <div fxLayoutAlign="center center" class="o-action-cell-renderer" (click)="onDetailButtonClick(column, row, $event)">
                 <mat-icon>{{ getDetailButtonIcon(column) }}</mat-icon>
               </div>
             </ng-container>
