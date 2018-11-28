@@ -1,15 +1,15 @@
-import { Base64 } from './base64';
 import { Observable } from 'rxjs/Observable';
+
 import { IFormDataComponent } from '../components/o-form-data-component.class';
 import { SessionInfo } from '../services/login.service';
+import { Base64 } from './base64';
 import { Codes } from './codes';
 
 export interface IDataService {
   getDefaultServiceConfiguration(serviceName?: string): Object;
   configureService(config: any): void;
   query(kv?: Object, av?: Array<string>, entity?: string, sqltypes?: Object): Observable<any>;
-  advancedQuery(kv?: Object, av?: Array<string>, entity?: string, sqltypes?: Object,
-    offset?: number, pagesize?: number, orderby?: Array<Object>): Observable<any>;
+  advancedQuery(kv?: Object, av?: Array<string>, entity?: string, sqltypes?: Object, offset?: number, pagesize?: number, orderby?: Array<Object>): Observable<any>;
   insert(av: Object, entity?: string, sqltypes?: Object): Observable<any>;
   update(kv: Object, av: Object, entity?: string, sqltypes?: Object): Observable<any>;
   'delete'(kv: Object, entity?: string, sqltypes?: Object): Observable<any>;
@@ -77,12 +77,20 @@ export class Util {
    * @returns Object
    */
   static parseParentKeysEquivalences(pKeysArray: Array<string>, separator: string = ':'): Object {
-    let equivalences = {};
+    const equivalences = {};
     if (pKeysArray && pKeysArray.length > 0) {
       pKeysArray.forEach(item => {
-        let aux = item.split(separator);
+        const aux = item.split(separator);
         if (aux && aux.length === 2) {
-          equivalences[aux[0]] = aux[1];
+          if (/.+\[.+\]/.test(aux[1])) {
+            const equivKey = aux[1].substring(0, aux[1].indexOf('['));
+            const equivValue = aux[1].substring(aux[1].indexOf('[') + 1, aux[1].indexOf(']'));
+            const equiv = {};
+            equiv[equivKey] = equivValue;
+            equivalences[aux[0]] = equiv;
+          } else {
+            equivalences[aux[0]] = aux[1];
+          }
         } else if (aux && aux.length === 1) {
           equivalences[item] = item;
         }
@@ -105,7 +113,7 @@ export class Util {
   static decodeParentKeys(parentKeys: string): Object {
     let decoded = {};
     if (parentKeys && parentKeys.length > 0) {
-      let d = Base64.decode(parentKeys);
+      const d = Base64.decode(parentKeys);
       decoded = JSON.parse(d);
     }
     return decoded;
@@ -132,10 +140,10 @@ export class Util {
   }
 
   /**
- * Checks wether specified service as argument implements 'IDataService' interface
- * @param arg The service instance for checking.
- * @returns boolean
- */
+   * Checks wether specified service as argument implements 'IDataService' interface
+   * @param arg The service instance for checking.
+   * @returns boolean
+   */
   static isPermissionsService(arg: any): arg is IPermissionsService {
     if (arg === undefined || arg === null) {
       return false;
@@ -155,7 +163,6 @@ export class Util {
     return ((arg as IFormDataComponent).isAutomaticBinding !== undefined);
   }
 
-
   /**
    * Compare is equal two objects
    * @param a Object 1
@@ -164,23 +171,20 @@ export class Util {
    */
   static isEquivalent(a, b) {
     // Create arrays of property names
-    var aProps = Object.getOwnPropertyNames(a);
-    var bProps = Object.getOwnPropertyNames(b);
+    const aProps = Object.getOwnPropertyNames(a);
+    const bProps = Object.getOwnPropertyNames(b);
 
-    // If number of properties is different,
-    // objects are not equivalent
+    // If number of properties is different, objects are not equivalent
     if (aProps.length !== bProps.length) {
       return false;
     }
 
     for (var i = 0; i < aProps.length; i++) {
-      var propName = aProps[i];
-
-      // If values of same property are not equal,
-      // objects are not equivalent
+      const propName = aProps[i];
+      // If values of same property are not equal, objects are not equivalent
       let bValue = b[propName];
       if (typeof a[propName] === 'number') {
-        let intB = parseInt(bValue);
+        const intB = parseInt(bValue);
         bValue = isNaN(intB) ? bValue : intB;
       }
       if (a[propName] !== bValue) {
@@ -188,8 +192,7 @@ export class Util {
       }
     }
 
-    // If we made it this far, objects
-    // are considered equivalent
+    // If we made it this far, objects are considered equivalent
     return true;
   }
 
@@ -204,13 +207,18 @@ export class Util {
       // NaN === NaN
       return true;
     }
-    let t1 = typeof o1, t2 = typeof o2, length: number, key: any, keySet: any;
+    const t1 = typeof o1;
+    const t2 = typeof o2;
+    let length: number;
+    let key: any;
+    let keySet: any;
     if (t1 === t2 && t1 === 'object') {
       if (Array.isArray(o1)) {
         if (!Array.isArray(o2)) {
           return false;
         }
-        if ((length = o1.length) === o2.length) {
+        length = o1.length;
+        if (length === o2.length) {
           for (key = 0; key < length; key++) {
             if (!Util.equals(o1[key], o2[key])) {
               return false;
@@ -223,7 +231,7 @@ export class Util {
           return false;
         }
         keySet = Object.create(null);
-        for (key in o1) {
+        for (key of o1) {
           if (!Util.equals(o1[key], o2[key])) {
             return false;
           }
@@ -268,7 +276,7 @@ export class Util {
    * @param obj the object
    */
   static getValuesFromObject(obj: Object = {}): Array<any> {
-    let array: Array<any> = [];
+    const array: Array<any> = [];
     Object.keys(obj).forEach(key => {
       if (typeof obj[key] === 'object') {
         array.push(Util.getValuesFromObject(obj[key]));
@@ -297,6 +305,6 @@ export class Util {
       document.removeEventListener('copy', null);
     });
     document.execCommand('copy');
-
   }
+
 }
