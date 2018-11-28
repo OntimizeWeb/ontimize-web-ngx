@@ -243,7 +243,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     if (!this.form || !Util.isDefined(this.form.oattr)) {
       return;
     }
-    const permissions: OPermissions = this.permissionsService.getFormDataComponentPermissions(this.oattr, this.form.oattr);
+    const permissions: OPermissions = this.form.getFormComponentPermissions(this.oattr);
     if (!Util.isDefined(permissions)) {
       return;
     }

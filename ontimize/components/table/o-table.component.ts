@@ -601,7 +601,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
     this.initializeDao();
 
-    this.permissions = this.permissionsService.getTablePermissions(this.oattr);
+    this.permissions = this.permissionsService.getTablePermissions(this.oattr, this.actRoute);
   }
 
   protected initializeDao() {
