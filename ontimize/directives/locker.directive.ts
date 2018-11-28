@@ -14,7 +14,9 @@ export const DEFAULT_INPUTS_O_LOCKER = [
 })
 
 export class OLockerDirective {
+
   private loadingParentDiv;
+  private componentDiv;
   static DEFAULT_INPUTS_O_LOCKER = DEFAULT_INPUTS_O_LOCKER;
 
   private _oLockerMode = 'disable';
@@ -55,6 +57,7 @@ export class OLockerDirective {
   }
 
   private addLoading() {
+    this.componentDiv = this.element.nativeElement.firstChild;//set opacity in componentDiv 
     this.loadingParentDiv = this.renderer.createElement('div');
     var loaderChild1 = this.renderer.createElement('div');
     var loaderChild2 = this.renderer.createElement('div');
@@ -64,17 +67,17 @@ export class OLockerDirective {
     this.renderer.appendChild(this.loadingParentDiv, loaderChild3);
     this.renderer.appendChild(this.loadingParentDiv, loaderChild2);
     this.renderer.appendChild(this.loadingParentDiv, loaderChild1);
-    this.renderer.insertBefore(this.element.nativeElement, this.loadingParentDiv, this.element.nativeElement.firstChild);
+    this.renderer.insertBefore(this.element.nativeElement, this.loadingParentDiv, this.componentDiv);
     this.renderer.addClass(this.loadingParentDiv, 'o-loading');
     this.renderer.addClass(this.element.nativeElement, 'relative');
-    this.renderer.setStyle(this.element.nativeElement, 'opacity', '0.6');
+    this.renderer.setStyle(this.componentDiv, 'opacity', '0.6');
   }
 
   private removeLoading() {
     if (this.loadingParentDiv) {
       this.renderer.removeChild(this.element.nativeElement, this.loadingParentDiv);
       this.renderer.removeClass(this.element.nativeElement, 'relative');
-      this.renderer.removeStyle(this.element.nativeElement, 'opacity');
+      this.renderer.removeStyle(this.componentDiv, 'opacity');
     }
   }
 
