@@ -1,7 +1,7 @@
 <ng-template #templateref let-cellvalue="cellvalue" let-rowvalue="rowvalue">
-  <div class="o-action-cell-renderer" (click)="innerOnClick($event, rowvalue)">
+  <span class="o-action-cell-renderer" (click)="innerOnClick($event, rowvalue)">
     <mat-icon *ngIf="isIconPositionLeft()">{{ icon }}</mat-icon>
     <span *ngIf="text !== undefined">{{ text | oTranslate }}</span>
     <mat-icon *ngIf="isIconPositionRight()">{{ icon }}</mat-icon>
-  </div>
+  </span>
 </ng-template>
