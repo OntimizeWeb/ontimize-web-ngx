@@ -1,3 +1,8 @@
+## 3.2.1 
+
+### Bug Fixes
+* **o-grid**: pagination local in grid  ([916e632](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/916e632)), closes [#229](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/229)
+
 ## 3.2.0 (2018-11-27)
 ### Features
 * New component `o-slide-toggle` ([6c6453b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6c6453b))
@@ -39,7 +44,7 @@ The sliding behavior in `o-slider` component requires that HammerJS is loaded on
 * **o-table-cell-renderer-percentage**: new `value-base` input ([d9585f6](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d9585f6)) ([#222](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/222))
 
 ### Bug Fixes
-* **o-grid**: open correct detail when clicking on gird items on pages different than the first page ([b9468a3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b9468a3)) closes [#220](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/220)
+* **o-grid**: open correct detail when clicking on grid items on pages different than the first page ([b9468a3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b9468a3)) closes [#220](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/220)
 
 ### BREAKING CHANGES
 * **o-form**: `getDataValue` method is now public again.
