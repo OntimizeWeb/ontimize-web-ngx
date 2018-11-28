@@ -504,6 +504,7 @@ export class OGridComponent extends OServiceComponent implements AfterViewChecke
   onChangePage(e: PageEvent) {
     if (!this.pageable) {
       this.currentPage = e.pageIndex;
+      this.queryRows = e.pageSize;
       this.filterData();
       return;
     }
