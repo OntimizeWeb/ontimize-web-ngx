@@ -1,4 +1,10 @@
-## 3.2.1 
+## 3.2.1
+### BREAKING CHANGES
+* **PermissionsService**: ([2d186c9](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2d186c9))
+  * adding new parameter to `getTablePermissions` method
+  * adding `getFormPermissions` method
+  * removing `getFormDataComponentPermissions`, `getActionsContextMenuTablePermissions` and `getContainerActionsPermissions` methods
+* **o-form**: new `getFormComponentPermissions` and  `getActionsPermissions` methods
 
 ### Bug Fixes
 * **o-grid**: pagination local in grid  ([916e632](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/916e632)), closes [#229](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/229)
