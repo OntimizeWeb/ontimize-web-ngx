@@ -42,7 +42,7 @@ export class ServiceUtils {
           // Is service component (combo, listpicker, radio)
           // if (component instanceof OFormServiceComponent) {
           if ('getSelectedRecord' in component) {
-            currentData = (component as any).getSelectedRecord()[parentKeysObject[key][formFieldAttr]];
+            currentData = ((component as any).getSelectedRecord() || {})[parentKeysObject[key][formFieldAttr]];
           } else {
             currentData = component.getValue();
           }
