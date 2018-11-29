@@ -30,7 +30,4 @@ export * from './services/translate/o-translate.parser';
 export * from './services/parser/o-service-response.parser';
 export * from './services/ontimize-icon-registry.service';
 
-export * from './services/permissions/ontimize-ee-permissions.service';
-export * from './services/permissions/ontimize-permissions.service';
-export * from './services/permissions/permissions-service.provider';
-export * from './services/permissions/permissions.service';
+export * from './services/permissions/o-permissions.module';
