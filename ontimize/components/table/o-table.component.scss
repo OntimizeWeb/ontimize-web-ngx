@@ -55,24 +55,13 @@ $_mat-checkbox-mark-stroke-size-small: 2 / 15 * $mat-checkbox-size-small !defaul
   div.expandable-container {
     overflow-y: auto;
     height: 100%;
-  
+
   }
 
   .o-table-container {
-   
     .o-table-body {
-      flex: 1 1 auto;
-      display:flex;
-      flex-direction: column;
-      flex-wrap: nowrap;
-      justify-content: flex-start;
-      align-items: flex-start;
-      align-content: stretch;
-
       .content-table {
-        flex: 1 1 auto;
         overflow-y: auto;
-        align-self: auto;
       }
     }
 
