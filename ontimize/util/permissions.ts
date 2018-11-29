@@ -6,7 +6,6 @@ export class PermissionsUtils {
   public static ACTION_INSERT = 'insert';
   public static ACTION_UPDATE = 'update';
   public static ACTION_DELETE = 'delete';
-  public static MESSAGE_OPERATION_NOT_ALLOWED_PERMISSION = 'Operation is not allowed due to permissions restrictions';
 
   public static STANDARD_ACTIONS = [
     PermissionsUtils.ACTION_REFRESH,
@@ -17,7 +16,7 @@ export class PermissionsUtils {
 
   static checkEnabledPermission(permission: OPermissions): boolean {
     if (Util.isDefined(permission) && permission.enabled === false) {
-      console.warn(PermissionsUtils.MESSAGE_OPERATION_NOT_ALLOWED_PERMISSION);
+      console.warn('MESSAGES.OPERATION_NOT_ALLOWED_PERMISSION');
       return false;
     }
     return true;

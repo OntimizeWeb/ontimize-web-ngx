@@ -581,7 +581,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     const permissions: OPermissions = actionsPerm.find(p => p.attr === attr);
     let enabledPermision = PermissionsUtils.checkEnabledPermission(permissions);
     if (!enabledPermision) {
-      this.snackBarService.open(PermissionsUtils.MESSAGE_OPERATION_NOT_ALLOWED_PERMISSION);
+      this.snackBarService.open('MESSAGES.OPERATION_NOT_ALLOWED_PERMISSION');
     }
     return enabledPermision;
   }
