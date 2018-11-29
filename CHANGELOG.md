@@ -8,6 +8,8 @@
 
 ### Bug Fixes
 * **o-grid**: pagination local in grid  ([916e632](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/916e632)), closes [#229](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/229)
+* **o-table**: expand the table in the container
+  ([8d50a68](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/8d50a68))
 
 ## 3.2.0 (2018-11-27)
 ### Features
