@@ -4,6 +4,10 @@
   * adding new parameter to `getTablePermissions` method
   * adding `getFormPermissions` method
   * removing `getFormDataComponentPermissions`, `getActionsContextMenuTablePermissions` and `getContainerActionsPermissions` methods
+  * Routes ([1cc62a9](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1cc62a9))
+    * allowing to define permissions for routes
+    * new `PermissionsGuardService` CanActivateChild guard
+
 * **o-form**: new `getFormComponentPermissions` and  `getActionsPermissions` methods
 
 ### Bug Fixes
