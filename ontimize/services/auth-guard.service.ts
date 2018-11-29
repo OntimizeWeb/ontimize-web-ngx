@@ -26,21 +26,6 @@ export class AuthGuardService implements CanActivate {
       this.permissionsService.restart();
       this.router.navigate([Codes.LOGIN_ROUTE]);
     }
-    // else
-    // TODO por si la ruta estuviera restringida, posible funcionalidad en el futuro?
-    //   this.profileObservable.subscribe(res => {
-    //     let restricted = this._isRestricted(state.url);
-    //     if (restricted) {
-    //       this.router.navigate([Codes.LOGIN_ROUTE]);
-    //     }
-    //     return restricted;
-    //   }, err => {
-    //     this.router.navigate([Codes.LOGIN_ROUTE]);
-    //     return false;
-    //   });
-    // } else if (this._isRestricted(state.url)) {
-    //   this.router.navigate([Codes.LOGIN_ROUTE]);
-    // }
     if (isLoggedIn) {
       this.setUserInformation();
       if (!this.permissionsService.hasPermissions()) {

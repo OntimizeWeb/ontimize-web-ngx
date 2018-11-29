@@ -1,6 +1,7 @@
 import { Injector, Provider } from '@angular/core';
 import { LOCATION_INITIALIZED } from '@angular/common';
 import { BaseRequestOptions, XHRBackend } from '@angular/http';
+import { Router } from '@angular/router';
 import { OHttp } from '../util/http/OHttp';
 import { Events } from '../util/events';
 import { AppConfig, Config } from '../config/app-config';
@@ -25,14 +26,21 @@ import {
   OUserInfoService,
   OModulesInfoService,
   OntimizeServiceResponseParser,
-  PermissionsService,
-  OntimizePermissionsService,
-  permissionsServiceFactory,
   OntimizeMatIconRegistry
 } from '../services';
 
 import { OFormLayoutManagerService } from '../services/o-form-layout-manager.service';
 import { OContextMenuService } from '../components/contextmenu/o-context-menu.service';
+import { Codes } from '../util/codes';
+import { Error403Component } from '../services/permissions/error403/o-error-403.component';
+
+function addPermissionsRouteGuard(injector: Injector) {
+  const route = injector.get(Router);
+  const exists403 = route.config.find(route => route.path === Codes.FORBIDDEN_ROUTE);
+  if (!exists403) {
+    route.config.push({ path: Codes.FORBIDDEN_ROUTE, component: Error403Component });
+  }
+}
 
 export function appInitializerFactory(injector: Injector, config: Config, oTranslate: OTranslateService) {
   return () => new Promise<any>((resolve: any) => {
@@ -60,6 +68,7 @@ export function appInitializerFactory(injector: Injector, config: Config, oTrans
     });
     injector.get(NavigationService).initialize();
     injector.get(OntimizeMatIconRegistry).initialize();
+    addPermissionsRouteGuard(injector);
   });
 }
 
@@ -153,10 +162,6 @@ export function getOModulesInfoServiceProvider(injector: Injector) {
 
 export function getOntimizeServiceResponseParser(injector: Injector) {
   return new OntimizeServiceResponseParser(injector);
-}
-
-export function getPermissionsServiceProvider(injector: Injector) {
-  return new PermissionsService(injector);
 }
 
 export const ONTIMIZE_PROVIDERS: Provider[] = [
@@ -277,15 +282,5 @@ export const ONTIMIZE_PROVIDERS: Provider[] = [
   {
     provide: OContextMenuService,
     useClass: OContextMenuService
-  },
-  {
-    provide: PermissionsService,
-    useFactory: getPermissionsServiceProvider,
-    deps: [Injector]
-  },
-  {
-    provide: OntimizePermissionsService,
-    useFactory: permissionsServiceFactory,
-    deps: [Injector]
   }
 ];

@@ -75,6 +75,7 @@ import { OSharedModule } from '../shared';
 import { OTranslateParser } from '../services/translate/o-translate.parser';
 import { Util } from '../utils';
 import { DndModule } from '@churchs19/ng2-dnd';
+import { OPermissionsModule } from '../services/permissions/o-permissions.module';
 
 export const INTERNAL_ONTIMIZE_MODULES_EXPORTED: any = [
   // Standard modules
@@ -250,5 +251,6 @@ export class OntimizeWebTranslateModule { }
 export const ONTIMIZE_MODULES: any = [
   BrowserModule,
   BrowserAnimationsModule,
-  OntimizeWebTranslateModule
+  OntimizeWebTranslateModule,
+  OPermissionsModule
 ];
