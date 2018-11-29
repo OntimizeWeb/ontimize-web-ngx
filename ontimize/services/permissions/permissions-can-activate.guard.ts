@@ -1,5 +1,5 @@
 import { Injector, Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { CanActivateChild, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
 import { Util } from '../../utils';
 import { SnackBarService } from '../snackbar.service';
