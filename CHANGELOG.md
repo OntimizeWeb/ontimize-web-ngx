@@ -26,6 +26,18 @@ The sliding behavior in `o-slider` component requires that HammerJS is loaded on
 * **o-table-cell-renderer-boolean**: `true-value-type` and `false-value-type` inputs no longer exists ([a8cca0d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a8cca0d))
 * **o-date-input**: this component now only allows to receive and return timestamp values ([e0be14a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e0be14a))
 * **o-table**: CSS class `action-cell-renderer` has been renamed to `o-action-cell-renderer`.
+## 3.2.1
+### BREAKING CHANGES
+* **PermissionsService**: ([2d186c9](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2d186c9))
+  * adding new parameter to `getTablePermissions` method
+  * adding `getFormPermissions` method
+  * removing `getFormDataComponentPermissions`, `getActionsContextMenuTablePermissions` and `getContainerActionsPermissions` methods
+* **o-form**: new `getFormComponentPermissions` and  `getActionsPermissions` methods
+
+### Bug Fixes
+* **o-grid**: pagination local in grid  ([916e632](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/916e632)), closes [#229](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/229)
+* **o-table**: expand the table in the container
+  ([8d50a68](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/8d50a68))
 
 ## 3.2.0 (2018-11-27)
 ### Features
@@ -125,7 +137,7 @@ The sliding behavior in `o-slider` component requires that HammerJS is loaded on
 * **o-table-cell-renderer-percentage**: new `value-base` input ([d9585f6](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d9585f6)) ([#222](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/222))
 
 ### Bug Fixes
-* **o-grid**: open correct detail when clicking on gird items on pages different than the first page ([b9468a3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b9468a3)) closes [#220](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/220)
+* **o-grid**: open correct detail when clicking on grid items on pages different than the first page ([b9468a3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b9468a3)) closes [#220](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/220)
 
 ### BREAKING CHANGES
 * **o-form**: `getDataValue` method is now public again.

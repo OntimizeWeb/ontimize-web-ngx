@@ -1,24 +1,26 @@
 <div class="o-table-container" fxLayout="column" fxLayoutAlign="start stretch" [style.display]="isVisible()? '' : 'none'"
   (scroll)="onTableScroll($event)" [class.block-events]="showLoading()" [class.o-scrollable-container]="hasScrollableContainer()">
-  <div #tableToolbar *ngIf="hasControls()" class="toolbar" fxLayout="row" fxLayoutAlign="space-between center">
-    <o-table-buttons #tableButtons [insert-button]="insertButton" [refresh-button]="refreshButton" [delete-button]="showDeleteButton">
-      <ng-content select="o-table-button"></ng-content>
-    </o-table-buttons>
-    <div fxLayout fxFlex>
-      <span *ngIf="showTitle" class="table-title" fxFlex>{{ title | oTranslate }}</span>
+  <div #tableToolbar *ngIf="hasControls()" class="toolbar" >
+    <div fxLayout="row" fxLayoutAlign="space-between center">
+      <o-table-buttons #tableButtons [insert-button]="insertButton" [refresh-button]="refreshButton" [delete-button]="showDeleteButton">
+        <ng-content select="o-table-button"></ng-content>
+      </o-table-buttons>
+      <div fxLayout fxFlex>
+        <span *ngIf="showTitle" class="table-title" fxFlex>{{ title | oTranslate }}</span>
+      </div>
+      <o-table-quickfilter *ngIf="quickFilter" (onChange)="reloadPaginatedDataFromStart()"></o-table-quickfilter>
+      <button type="button" *ngIf="showTableMenuButton" mat-icon-button class="o-table-menu-button" [matMenuTriggerFor]="tableMenu.matMenu">
+        <mat-icon svgIcon="ontimize:more_vert"></mat-icon>
+      </button>
+      <o-table-menu #tableMenu [select-all-checkbox]="selectAllCheckbox" [export-button]="exportButton"
+        [columns-visibility-button]="columnsVisibilityButton">
+        <ng-content select="o-table-option"></ng-content>
+      </o-table-menu>
     </div>
-    <o-table-quickfilter *ngIf="quickFilter" (onChange)="reloadPaginatedDataFromStart()"></o-table-quickfilter>
-    <button type="button" *ngIf="showTableMenuButton" mat-icon-button class="o-table-menu-button" [matMenuTriggerFor]="tableMenu.matMenu">
-      <mat-icon svgIcon="ontimize:more_vert"></mat-icon>
-    </button>
-    <o-table-menu #tableMenu [select-all-checkbox]="selectAllCheckbox" [export-button]="exportButton"
-      [columns-visibility-button]="columnsVisibilityButton">
-      <ng-content select="o-table-option"></ng-content>
-    </o-table-menu>
   </div>
 
   <div #tableBody class="o-table-body o-scroll" [class.horizontal-scroll]="horizontalScroll" [class.scrolled]="horizontalScrolled">
-    <div class="o-table-overflow">
+    <div class="o-table-overflow o-scroll">
       <table mat-table #table [trackBy]="getTrackByFunction()" [dataSource]="dataSource" oMatSort [class.small]="!hasMultilineColumn && rowHeight==='small'"
         [class.medium]="!hasMultilineColumn && rowHeight==='medium'" [class.large]="!hasMultilineColumn && rowHeight==='large'"
         (scroll)="onTableScroll($event)" (cdkObserveContent)="projectContentChanged()">

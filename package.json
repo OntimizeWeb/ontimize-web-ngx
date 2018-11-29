@@ -30,7 +30,8 @@
   "typings": "./index.d.ts",
   "scripts": {
     "clean": "o-ngx-lib-builder clean",
-    "build": "npm run clean && o-ngx-lib-builder build --package ontimize-web-ngx --ng-library ng.ontimizeWeb"
+    "build": "npm run clean && o-ngx-lib-builder build --package ontimize-web-ngx --ng-library ng.ontimizeWeb",
+    "pack": "npm run build && cd dist && npm pack && cd .."
   },
   "dependencies": {
     "hammerjs": "^2.0.8",

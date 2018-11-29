@@ -249,6 +249,66 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     }
   }
 
+  protected parsePermissions() {
+    // if oattr in form, it can have permissions
+    if (!this.form || !Util.isDefined(this.form.oattr)) {
+      return;
+    }
+    const permissions: OPermissions = this.form.getFormComponentPermissions(this.oattr);
+    if (!Util.isDefined(permissions)) {
+      return;
+    }
+    if (permissions.visible === false) {
+      /* hide input per permissions */
+      this.elRef.nativeElement.remove();
+      this.destroy();
+    } else if (permissions.enabled === false) {
+      /* disable input per permissions */
+      this.disabled = true;
+      if (this.form) {
+        this.form.registerFormComponent(this);
+      }
+    }
+    this.permissions = permissions;
+  }
+
+  protected getMutationObserverTarget(): any {
+    let result;
+    try {
+      result = this.elementRef.nativeElement.getElementsByTagName('input').item(0);
+    } catch (error) {
+      //
+    }
+    return result;
+  }
+
+  /**
+   * Do not allow the disabled attribute to change by code or by inspector
+   * */
+  private disableFormControl() {
+    const control = this.getFormControl();
+    control.disable({
+      onlySelf: true,
+      emitEvent: false
+    });
+  }
+
+  protected setSuffixClass(count: number) {
+    const iconFieldEl = this.elRef.nativeElement.getElementsByClassName('icon-field');
+    if (iconFieldEl.length === 1) {
+      let classList = iconFieldEl[0].classList;
+      classList.forEach(className => {
+        if (className.startsWith('icon-field-')) {
+          classList.remove(className);
+        }
+      });
+      if (count > 0) {
+        let matSuffixClass = `icon-field-${count}-suffix`;
+        iconFieldEl[0].classList.add(matSuffixClass);
+      }
+    }
+  }
+
   destroy() {
     this.unregisterFormListeners();
     if (this.matSuffixSubscription) {
@@ -538,65 +598,6 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
       value = 'auto';
     }
     this._floatLabel = value;
-  }
-
-  protected parsePermissions() {
-    // if oattr in form, it can have permissions
-    if (!this.form || !Util.isDefined(this.form.oattr)) {
-      return;
-    }
-    const permissions: OPermissions = this.permissionsService.getFormDataComponentPermissions(this.oattr, this.form.oattr);
-    if (!Util.isDefined(permissions)) {
-      return;
-    }
-    if (permissions.visible === false) {
-      /* hide input per permissions */
-      this.elRef.nativeElement.remove();
-      this.destroy();
-    } else if (permissions.enabled === false) {
-      /* disable input per permissions */
-      this.disabled = true;
-      if (this.form) {
-        this.form.registerFormComponent(this);
-      }
-    }
-    this.permissions = permissions;
-  }
-
-  protected getMutationObserverTarget(): any {
-    let result;
-    try {
-      result = this.elementRef.nativeElement.getElementsByTagName('input').item(0);
-    } catch (error) {
-      //
-    }
-    return result;
-  }
-  /**
-    * Do not allow the disabled attribute to change by code or by inspector
-    * */
-  private disableFormControl() {
-    const control = this.getFormControl();
-    control.disable({
-      onlySelf: true,
-      emitEvent: false
-    });
-  }
-
-  protected setSuffixClass(count: number) {
-    const iconFieldEl = this.elRef.nativeElement.getElementsByClassName('icon-field');
-    if (iconFieldEl.length === 1) {
-      let classList = iconFieldEl[0].classList;
-      classList.forEach(className => {
-        if (className.startsWith('icon-field-')) {
-          classList.remove(className);
-        }
-      });
-      if (count > 0) {
-        let matSuffixClass = `icon-field-${count}-suffix`;
-        iconFieldEl[0].classList.add(matSuffixClass);
-      }
-    }
   }
 
   protected addOntimizeCustomAppearanceClass() {

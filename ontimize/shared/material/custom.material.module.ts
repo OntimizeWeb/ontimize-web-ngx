@@ -1,5 +1,7 @@
 import { NgModule, Injectable, Optional, Inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Moment } from 'moment';
+import moment from 'moment';
 import {
   MatButtonToggleModule,
   MatButtonModule,
@@ -103,6 +105,17 @@ export class OntimizeMomentDateAdapter extends MomentDateAdapter {
 
   parse(value: any, parseFormat: string | string[]): any | null {
     return super.parse(value, this.oFormat || parseFormat);
+  }
+
+  deserialize(value: any): Moment | null {
+    let date;
+    if (typeof value === 'number') {
+      date = moment(value);
+    }
+    if (date && this.isValid(date)) {
+      return date;
+    }
+    return super.deserialize(value);
   }
 }
 

@@ -16,7 +16,7 @@ import { dataServiceFactory } from '../../services/data-service.provider';
 import { OFormNavigationClass } from './navigation/o-form.navigation.class';
 import { OFormToolbarComponent, OFormToolbarModule } from './o-form-toolbar.component';
 import { IFormDataComponent, IFormDataTypeComponent } from '../o-form-data-component.class';
-import { DialogService, NavigationService, OntimizeService, SnackBarService, ONavigationItem } from '../../services';
+import { DialogService, NavigationService, OntimizeService, SnackBarService, ONavigationItem, PermissionsService, OFormPermissions, OPermissions } from '../../services';
 import { CanComponentDeactivate, CanDeactivateFormGuard } from './guards/o-form-can-deactivate.guard';
 
 export interface IFormDataComponentHash {
@@ -241,6 +241,9 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
 
   protected formContainer: OFormContainerComponent;
 
+  protected permissionsService: PermissionsService;
+  protected permissions: OFormPermissions;
+
   public static Mode(): any {
     enum m {
       QUERY,
@@ -270,8 +273,9 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     this.dialogService = injector.get(DialogService);
     this.navigationService = injector.get(NavigationService);
     this.snackBarService = injector.get(SnackBarService);
-    const self = this;
+    this.permissionsService = this.injector.get(PermissionsService);
 
+    const self = this;
     this.reloadStream = combineLatest(
       self.onFormInitStream.asObservable(),
       self.formNavigation.navigationStream.asObservable()
@@ -583,6 +587,8 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     }
 
     this.mode = OFormComponent.Mode().INITIAL;
+
+    this.permissions = this.permissionsService.getFormPermissions(this.oattr, this.actRoute);
   }
 
   reinitialize(options: OFormInitializationOptions) {
@@ -1443,6 +1449,22 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   protected isUpdateModePath(path: string): boolean {
     const navData: ONavigationItem = this.navigationService.getPreviousRouteData();
     return Util.isDefined(navData) && path === navData.getEditFormRoute();
+  }
+
+  getFormComponentPermissions(attr: string): OPermissions {
+    let permissions: OPermissions;
+    if (Util.isDefined(this.permissions)) {
+      permissions = (this.permissions.components || []).find(comp => comp.attr === attr);
+    }
+    return permissions;
+  }
+
+  getActionsPermissions(): OPermissions[] {
+    let permissions: OPermissions[];
+    if (Util.isDefined(this.permissions)) {
+      permissions = (this.permissions.actions || []);
+    }
+    return permissions;
   }
 }
 

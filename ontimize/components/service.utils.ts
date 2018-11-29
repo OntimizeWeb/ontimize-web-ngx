@@ -1,7 +1,8 @@
 import { Router } from '@angular/router';
-import { Codes, Util } from '../utils';
-import { OFormValue } from '../components/form/OFormValue';
+
 import { OFormComponent } from '../components/form/o-form.component';
+import { OFormValue } from '../components/form/OFormValue';
+import { Codes, Util } from '../utils';
 
 export type OQueryDataArgs = {
   replace?: boolean; // Used in the list component for replacing data in setValue method when reloadData method is called
@@ -18,7 +19,7 @@ export interface ISQLOrder {
 export class ServiceUtils {
 
   static getParentKeysFromForm(parentKeysObject: Object, form: OFormComponent) {
-    let result = {};
+    const result = {};
     const parentKeys = Object.keys(parentKeysObject || {});
 
     const formComponents = form ? form.getComponents() : {};
@@ -32,10 +33,19 @@ export class ServiceUtils {
 
     if (existsComponents || existsProperties || existsUrlData) {
       parentKeys.forEach(key => {
-        const formFieldAttr = parentKeysObject[key];
+        // Parent key equivalence may be an object
+        const isEquivObject = Util.isObject(parentKeysObject[key]);
+        const formFieldAttr = !isEquivObject ? parentKeysObject[key] : Object.keys(parentKeysObject[key])[0];
         let currentData;
         if (formComponents.hasOwnProperty(formFieldAttr)) {
-          currentData = formComponents[formFieldAttr].getValue();
+          const component = formComponents[formFieldAttr];
+          // Is service component (combo, listpicker, radio)
+          // if (component instanceof OFormServiceComponent) {
+          if ('getSelectedRecord' in component) {
+            currentData = (component as any).getSelectedRecord()[parentKeysObject[key][formFieldAttr]];
+          } else {
+            currentData = component.getValue();
+          }
         } else if (formDataProperties.hasOwnProperty(formFieldAttr)) {
           currentData = formDataProperties[formFieldAttr] instanceof OFormValue ?
             formDataProperties[formFieldAttr].value :
@@ -63,20 +73,20 @@ export class ServiceUtils {
   }
 
   static filterContainsAllParentKeys(parentKeysFilter, parentKeys): boolean {
-    let pkKeys = Object.keys(parentKeys);
+    const pkKeys = Object.keys(parentKeys);
     if ((pkKeys.length > 0) && Util.isDefined(parentKeysFilter)) {
-      let parentKeysFilterKeys = Object.keys(parentKeysFilter);
+      const parentKeysFilterKeys = Object.keys(parentKeysFilter);
       return pkKeys.every(a => parentKeysFilterKeys.indexOf(a) !== -1);
     }
     return true;
   }
 
   static getFilterUsingParentKeys(parentItem: any, parentKeysObject: Object) {
-    let filter = {};
+    const filter = {};
     const ownKeys = Object.keys(parentKeysObject);
     if (ownKeys.length > 0 && Util.isDefined(parentItem)) {
       ownKeys.forEach(ownKey => {
-        let parentKey = parentKeysObject[ownKey];
+        const parentKey = parentKeysObject[ownKey];
         if (parentItem.hasOwnProperty(parentKey)) {
           let currentData = parentItem[parentKey];
           if (currentData instanceof OFormValue) {
@@ -97,7 +107,7 @@ export class ServiceUtils {
   }
 
   static getObjectProperties(object: any, properties: any[]): any {
-    let objectProperties = {};
+    const objectProperties = {};
     properties.forEach(key => {
       objectProperties[key] = object[key];
     });
@@ -105,13 +115,13 @@ export class ServiceUtils {
   }
 
   static parseSortColumns(sortColumns: string): Array<ISQLOrder> {
-    let sortColArray = [];
+    const sortColArray = [];
     if (sortColumns) {
-      let cols = Util.parseArray(sortColumns);
-      cols.forEach((col) => {
-        let colDef = col.split(Codes.TYPE_SEPARATOR);
+      const cols = Util.parseArray(sortColumns);
+      cols.forEach(col => {
+        const colDef = col.split(Codes.TYPE_SEPARATOR);
         if (colDef.length > 0) {
-          let colName = colDef[0];
+          const colName = colDef[0];
           const colSort = colDef[1] || Codes.ASC_SORT;
           sortColArray.push({
             columnName: colName,
@@ -124,9 +134,9 @@ export class ServiceUtils {
   }
 
   static redirectLogin(router: Router, sessionExpired: boolean = false) {
-    let arg = {};
+    const arg = {};
     arg[Codes.SESSION_EXPIRED_KEY] = sessionExpired;
-    let extras = {};
+    const extras = {};
     extras[Codes.QUERY_PARAMS] = arg;
     router.navigate([Codes.LOGIN_ROUTE], extras);
   }

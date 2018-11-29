@@ -172,7 +172,11 @@ export class ODateInputComponent extends OFormDataComponent implements AfterView
     super.setValue(val, options);
   }
 
-  set data(value: any) {
+  set data(val: any) {
+    let value = val;
+    if (val instanceof OFormValue) {
+      value = val.value;
+    }
     if (typeof value !== 'number') {
       console.warn('ODateInputComponent only acepts a timestamp value');
       value = undefined;
