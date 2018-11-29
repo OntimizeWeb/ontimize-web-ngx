@@ -65,6 +65,7 @@ import { O_TABLE_CELL_EDITORS, OTableCellEditorBooleanComponent } from './column
 import { OMatSortModule } from './extensions/sort/o-mat-sort-module';
 import { OMatSort } from './extensions/sort/o-mat-sort';
 import { OMatSortHeader } from './extensions/sort/o-mat-sort-header';
+import { OTableExpandedFooter } from './o-table-expanded-footer.directive';
 
 export const NAME_COLUMN_SELECT = 'select';
 
@@ -2099,6 +2100,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     OTableColumnCalculatedComponent,
     OTableContextMenuComponent,
     OTableRowDirective,
+    OTableExpandedFooter,
     ...O_TABLE_CELL_RENDERERS,
     ...O_TABLE_CELL_EDITORS,
     ...O_TABLE_DIALOGS,
@@ -2121,6 +2123,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     OTableColumnCalculatedComponent,
     OTableContextMenuComponent,
     OTableRowDirective,
+    OTableExpandedFooter,
     OMatSortModule,
     ...O_TABLE_HEADER_COMPONENTS,
     ...O_TABLE_CELL_RENDERERS,
