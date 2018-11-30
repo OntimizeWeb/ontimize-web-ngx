@@ -124,10 +124,10 @@ export class PermissionsService {
   protected getPermissionIdFromActRoute(actRoute: ActivatedRoute): string {
     let result: string;
     let snapshot: ActivatedRouteSnapshot = actRoute.snapshot;
-    result = (snapshot.data || {})['permissionId'];
+    result = ((snapshot.data || {})['oPermission'] || {})['permissionId'];
     while (Util.isDefined(snapshot.firstChild) && !Util.isDefined(result)) {
       snapshot = snapshot.firstChild;
-      result = (snapshot.data || {})['permissionId'];
+      result = ((snapshot.data || {})['oPermission'] || {})['permissionId'];
     }
     return result;
   }
