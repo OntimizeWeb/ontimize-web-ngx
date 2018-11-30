@@ -1,8 +1,8 @@
 import { Injector, Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
 import { CanActivateChild, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
 import { Util } from '../../utils';
 import { SnackBarService } from '../snackbar.service';
+import { ShareCanActivateChildService } from '../share-can-activate-child.service';
 import { PermissionsService } from './permissions.service';
 
 @Injectable()
@@ -11,14 +11,17 @@ export class PermissionsGuardService implements CanActivateChild {
   protected router: Router;
   protected permissionsService: PermissionsService;
   protected snackBarService: SnackBarService;
+  protected shareCanActivateChildService: ShareCanActivateChildService;
 
   constructor(protected injector: Injector) {
     this.router = this.injector.get(Router);
     this.permissionsService = this.injector.get(PermissionsService);
     this.snackBarService = this.injector.get(SnackBarService);
+    this.shareCanActivateChildService = this.injector.get(ShareCanActivateChildService);
+    this.shareCanActivateChildService.setPermissionsGuard(this);
   }
 
-  canActivateChild(childRoute: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | Observable<boolean> | Promise<boolean> {
+  canActivateChild(childRoute: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
     let restricted: boolean = false;
     const oPermission = childRoute.data ? childRoute.data['oPermission'] : undefined;
     const permissionId: string = (oPermission || {})['permissionId'];
