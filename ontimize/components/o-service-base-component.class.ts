@@ -62,7 +62,17 @@ export const DEFAULT_INPUTS_O_SERVICE_BASE_COMPONENT = [
   'storeState: store-state',
 
   // query-with-null-parent-keys [string][yes|no|true|false]: Indicates whether or not to trigger query method when parent-keys filter is null. Default: false
-  'queryWithNullParentKeys: query-with-null-parent-keys'
+  'queryWithNullParentKeys: query-with-null-parent-keys',
+
+  // [function]: function to execute on query error. Default: no value.
+  'queryFallbackFunction: query-fallback-function'
+  // ,
+
+  // 'insertFallbackFunction: insert-fallback-function',
+
+  // 'updateFallbackFunction: update-fallback-function',
+
+  // 'deleteFallbackFunction: delete-fallback-function'
 ];
 
 export class OServiceBaseComponent implements ILocalStorageComponent {
@@ -99,6 +109,10 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
   storeState: boolean = true;
   @InputConverter()
   queryWithNullParentKeys: boolean = false;
+  queryFallbackFunction: Function;
+  // insertFallbackFunction: Function;
+  // updateFallbackFunction: Function;
+  // deleteFallbackFunction: Function;
   /* end of inputs variables */
 
   /* parsed inputs variables */
@@ -178,6 +192,19 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
         }
       });
     }
+
+    if (typeof this.queryFallbackFunction !== 'function') {
+      this.queryFallbackFunction = undefined;
+    }
+    // if (typeof this.insertFallbackFunction !== 'function') {
+    //   this.insertFallbackFunction = undefined;
+    // }
+    // if (typeof this.updateFallbackFunction !== 'function') {
+    //   this.updateFallbackFunction = undefined;
+    // }
+    // if (typeof this.deleteFallbackFunction !== 'function') {
+    //   this.deleteFallbackFunction = undefined;
+    // }
   }
 
   afterViewInit() {
@@ -325,7 +352,9 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
       }, err => {
         self.setData([], []);
         self.loaderSubscription.unsubscribe();
-        if (err && typeof err !== 'object') {
+        if (Util.isDefined(self.queryFallbackFunction)) {
+          self.queryFallbackFunction(err);
+        } else if (err && typeof err !== 'object') {
           self.dialogService.alert('ERROR', err);
         } else {
           self.dialogService.alert('ERROR', 'MESSAGES.ERROR_QUERY');
