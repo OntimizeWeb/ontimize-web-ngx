@@ -1,6 +1,6 @@
 <div class="o-table-container" fxLayout="column" fxLayoutAlign="start stretch" [style.display]="isVisible()? '' : 'none'"
   (scroll)="onTableScroll($event)" [class.block-events]="showLoading()" [class.o-scrollable-container]="hasScrollableContainer()">
-  <div #tableToolbar *ngIf="hasControls()" class="toolbar" >
+  <div #tableToolbar *ngIf="hasControls()" class="toolbar">
     <div fxLayout="row" fxLayoutAlign="space-between center">
       <o-table-buttons #tableButtons [insert-button]="insertButton" [refresh-button]="refreshButton" [delete-button]="showDeleteButton">
         <ng-content select="o-table-button"></ng-content>
@@ -23,7 +23,7 @@
     <div class="o-table-overflow o-scroll">
       <table mat-table #table [trackBy]="getTrackByFunction()" [dataSource]="dataSource" oMatSort [class.small]="!hasMultilineColumn && rowHeight==='small'"
         [class.medium]="!hasMultilineColumn && rowHeight==='medium'" [class.large]="!hasMultilineColumn && rowHeight==='large'"
-        (scroll)="onTableScroll($event)" (cdkObserveContent)="projectContentChanged()">
+        (scroll)="onTableScroll($event)" (cdkObserveContent)="projectContentChanged()" oTableExpandedFooter>
 
         <!--Checkbox Column -->
         <ng-container [matColumnDef]="oTableOptions.selectColumn.name" *ngIf="oTableOptions.selectColumn.visible">
@@ -83,17 +83,17 @@
           </td>
           <!--Define mat-footer-cell-->
           <ng-container *ngIf="showTotals">
-            <td mat-footer-cell *matFooterCellDef [ngClass]="column.className">
-              <div class="title" *ngIf="column.aggregate && column.aggregate.title">
-                {{ column.aggregate.title | oTranslate }}
-              </div>
-              <ng-container *ngIf="!column.renderer">
-                {{ dataSource.getAggregateData(column) }}
-              </ng-container>
-              <ng-template *ngIf="column.renderer && column.aggregate" [ngTemplateOutlet]="column.renderer.templateref"
-                [ngTemplateOutletContext]="{cellvalue: dataSource.getAggregateData(column)}"></ng-template>
-            </td>
-          </ng-container>
+              <td mat-footer-cell *matFooterCellDef [ngClass]="column.className">
+                <div class="title" *ngIf="column.aggregate && column.aggregate.title">
+                  {{ column.aggregate.title | oTranslate }}
+                </div>
+                <ng-container *ngIf="!column.renderer">
+                  {{ dataSource.getAggregateData(column) }}
+                </ng-container>
+                <ng-template *ngIf="column.renderer && column.aggregate" [ngTemplateOutlet]="column.renderer.templateref"
+                  [ngTemplateOutletContext]="{cellvalue: dataSource.getAggregateData(column)}"></ng-template>
+              </td>
+            </ng-container>
         </ng-container>
 
         <tr #tableHeader mat-header-row *matHeaderRowDef="oTableOptions.visibleColumns; sticky: fixedHeader"></tr>
@@ -104,17 +104,10 @@
         </tr>
 
         <ng-container *ngIf="showTotals">
-          <tr mat-footer-row *matFooterRowDef="oTableOptions.visibleColumns; sticky: fixedHeader"></tr>
+          <tr mat-footer-row *matFooterRowDef="oTableOptions.visibleColumns; sticky: true"></tr>
         </ng-container>
       </table>
-      <!--TABLE EMPTY-->
-      <div class="mat-row o-table-no-results {{ rowHeight }}" *ngIf="dataSource !== undefined && dataSource.resultsLength === 0"
-        fxLayoutAlign="center center">
-        {{'TABLE.EMPTY' | oTranslate}}
-        <ng-container *ngIf="quickFilter && oTableQuickFilterComponent && oTableQuickFilterComponent.value && oTableQuickFilterComponent.value.length > 0">
-          {{ 'TABLE.EMPTY_USING_FILTER' | oTranslate : { values: [oTableQuickFilterComponent.value] } }}
-        </ng-container>
-      </div>
+
     </div>
     <!-- TABLE EDITABLE ROW position: last -->
     <o-table-editable-row [datasource]="dataSource" *ngIf="showLastInsertableRow"></o-table-editable-row>
