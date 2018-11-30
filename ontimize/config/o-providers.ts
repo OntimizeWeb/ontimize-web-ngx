@@ -33,6 +33,7 @@ import { OFormLayoutManagerService } from '../services/o-form-layout-manager.ser
 import { OContextMenuService } from '../components/contextmenu/o-context-menu.service';
 import { Codes } from '../util/codes';
 import { Error403Component } from '../services/permissions/error403/o-error-403.component';
+import { ShareCanActivateChildService } from '../services/share-can-activate-child.service';
 
 function addPermissionsRouteGuard(injector: Injector) {
   const route = injector.get(Router);
@@ -282,5 +283,9 @@ export const ONTIMIZE_PROVIDERS: Provider[] = [
   {
     provide: OContextMenuService,
     useClass: OContextMenuService
+  },
+  {
+    provide: ShareCanActivateChildService,
+    useClass: ShareCanActivateChildService
   }
 ];
