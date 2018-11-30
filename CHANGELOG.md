@@ -14,6 +14,7 @@
 * **o-table-cell-editor-boolean**: new `auto-commit` input ([627aed3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/627aed3))
 * **o-table-column**: New attribute `content-align` ([6c23f4b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6c23f4b))
 * **AppConfig**: adding properties for allowing remote permissions query.
+* **OServiceBaseComponent**: new `query-fallback-function` input ([fec7eab](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/fec7eab))
 
 ### Note on HammerJS
 The sliding behavior in `o-slider` component requires that HammerJS is loaded on the page. You can see the support of Material in next ([link](https://material.angular.io/guide/getting-started#step-5-gesture-support))
