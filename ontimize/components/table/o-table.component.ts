@@ -429,6 +429,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   public onDataLoaded: EventEmitter<any> = new EventEmitter();
   public onPaginatedDataLoaded: EventEmitter<any> = new EventEmitter();
   public onReinitialize: EventEmitter<any> = new EventEmitter();
+  public onContentChange: EventEmitter<any> = new EventEmitter();
 
   selection = new SelectionModel<Element>(true, []);
   protected selectionChangeSubscription: Subscription;
@@ -460,9 +461,10 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   public oTableQuickFilterComponent: OTableQuickfilterComponent;
-
   protected sortSubscription: Subscription;
   protected onRenderedDataChange: Subscription;
+  private previousRendererData;
+
 
   quickFilterCallback: QuickFilterFunction;
 
@@ -715,7 +717,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       }
     });
   }
-
   /**
    * Method update store localstorage, call of the ILocalStorage
    */
@@ -1137,6 +1138,13 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       self.loadingSorting = false;
     }, 500);
     this.loadingScroll = false;
+
+    if (this.previousRendererData !== this.dataSource.renderedData) {
+      ObservableWrapper.callEmit(this.onContentChange, this.dataSource.renderedData);
+      this.previousRendererData = this.dataSource.renderedData;
+    }
+
+
   }
 
   getAttributesValuesToQuery(): Array<string> {
