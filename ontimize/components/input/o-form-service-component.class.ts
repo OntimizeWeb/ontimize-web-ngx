@@ -1,5 +1,5 @@
-import { ElementRef, EventEmitter, Injector } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { ElementRef, EventEmitter, Injector, NgZone } from '@angular/core';
+import { Subscription, Subject, BehaviorSubject } from 'rxjs';
 
 import { Codes, Util } from '../../utils';
 import { ServiceUtils } from '../service.utils';
@@ -8,22 +8,20 @@ import { IFormValueOptions } from '../form/OFormValue';
 import { OFormComponent } from '../form/o-form.component';
 import { DialogService, OntimizeService } from '../../services';
 import { DEFAULT_INPUTS_O_FORM_DATA_COMPONENT, OFormDataComponent, DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT } from '../o-form-data-component.class';
+import { Observable } from 'rxjs/Observable';
 
 export const DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT = [
   ...DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,
   //static-data [Array<any>] : way to populate with static data. Default: no value.
   'staticData: static-data',
-
   'entity',
   'service',
   'columns',
   'valueColumn: value-column',
   'valueColumnType: value-column-type',
   'parentKeys: parent-keys',
-
   // Visible columns into selection dialog from parameter 'columns'. With empty parameter all columns are visible.
   'visibleColumns: visible-columns',
-
   // Visible columns in text field. By default, it is the parameter value of visible columns.
   'descriptionColumns: description-columns',
 
@@ -86,6 +84,9 @@ export class OFormServiceComponent extends OFormDataComponent {
   protected visibleColArray: string[] = [];
   protected descriptionColArray: string[] = [];
   protected dataService: OntimizeService;
+  public loaderSubscription: Subscription;
+  loading: boolean = false;
+
   protected querySuscription: Subscription;
   protected cacheQueried: boolean = false;
   protected _pKeysEquiv = {};
@@ -95,6 +96,9 @@ export class OFormServiceComponent extends OFormDataComponent {
   protected dialogService: DialogService;
 
   protected queryOnEventSubscription: Subscription;
+  public delayLoad = 250;
+  public loadingSubject = new BehaviorSubject<boolean>(false);
+
 
   constructor(
     form: OFormComponent,
@@ -166,6 +170,9 @@ export class OFormServiceComponent extends OFormDataComponent {
     if (this.queryOnEventSubscription) {
       this.queryOnEventSubscription.unsubscribe();
     }
+    if (this.loaderSubscription) {
+      this.loaderSubscription.unsubscribe();
+    }
   }
 
   protected emitOnValueChange(type, newValue, oldValue) {
@@ -229,16 +236,29 @@ export class OFormServiceComponent extends OFormDataComponent {
       if (this.querySuscription) {
         this.querySuscription.unsubscribe();
       }
+      if (this.loaderSubscription) {
+        this.loaderSubscription.unsubscribe();
+      }
+
       const queryCols = this.getAttributesValuesToQuery();
+
+      this.loaderSubscription = this.load();
       this.querySuscription = this.dataService[this.queryMethod](filter, queryCols, this.entity).subscribe(resp => {
+
         if (resp.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) {
           self.cacheQueried = true;
           self.setDataArray(resp.data);
         } else {
           console.log('error');
         }
+        window.setTimeout(() => { this.loading = false; self.loadingSubject.next(false);  self.loaderSubscription.unsubscribe(); }, 10000);
+        //self.loadingSubject.next(false);
+
+
       }, err => {
         console.log(err);
+        self.loadingSubject.next(false);
+        self.loaderSubscription.unsubscribe();
         if (err && !Util.isObject(err)) {
           this.dialogService.alert('ERROR', err);
         } else {
@@ -327,4 +347,49 @@ export class OFormServiceComponent extends OFormDataComponent {
     return result;
   }
 
+  load(): any {
+
+    // var self = this;
+    // var zone = this.injector.get(NgZone);
+
+    // var timer = window.setTimeout(() => {
+    //   self.loadingSubject.next(true);
+
+    // }, this.delayLoad);
+
+    // return () => {
+    //   window.clearTimeout(timer);
+    //   zone.run(() => {
+    //     self.loading = false;
+    //   });
+    // };
+
+    //return this.loadingSubject.subscribe(x => this.loading = x);
+
+    var self = this;
+    var zone = this.injector.get(NgZone);
+    var loadObservable = new Observable(observer => {
+      var timer = window.setTimeout(() => {
+        observer.next(true);
+      }, self.delayLoad);
+
+      return () => {
+        window.clearTimeout(timer);
+        zone.run(() => {
+          observer.next(false);
+          self.loading = false;
+        });
+      };
+
+    });
+    var subscription = loadObservable.subscribe(val => {
+      zone.run(() => {
+        self.loading = val as boolean;
+        self.loadingSubject.next(val as boolean);
+      });
+    });
+    return subscription;
+
+
+  }
 }

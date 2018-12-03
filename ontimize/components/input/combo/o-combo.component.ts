@@ -29,7 +29,8 @@ export const DEFAULT_OUTPUTS_O_COMBO = [
   moduleId: module.id,
   selector: 'o-combo',
   providers: [
-    { provide: OntimizeService, useFactory: dataServiceFactory, deps: [Injector] }
+    { provide: OntimizeService, useFactory: dataServiceFactory, deps: [Injector] },
+    { provide: OFormServiceComponent, useExisting: forwardRef(() => OComboComponent) }
   ],
   inputs: DEFAULT_INPUTS_O_COMBO,
   outputs: DEFAULT_OUTPUTS_O_COMBO,
@@ -182,7 +183,7 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
 
   onSelectionChange(event: MatSelectChange): void {
     var newValue = event.value;
-    this.setValue(newValue, { changeType: OValueChangeEvent.USER_CHANGE, emitModelToViewChange:false });
+    this.setValue(newValue, { changeType: OValueChangeEvent.USER_CHANGE, emitModelToViewChange: false });
   }
 
   innerOnChange(event: any) {
