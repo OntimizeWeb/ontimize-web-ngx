@@ -57,7 +57,7 @@ export class OLockerDirective {
   }
 
   private addLoading() {
-    this.componentDiv = this.element.nativeElement.firstChild;//set opacity in componentDiv 
+    this.componentDiv = this.element.nativeElement.children[0];//set opacity in componentDiv 
     this.loadingParentDiv = this.renderer.createElement('div');
     var loaderChild1 = this.renderer.createElement('div');
     var loaderChild2 = this.renderer.createElement('div');
@@ -83,15 +83,12 @@ export class OLockerDirective {
 
   @Input()
   set oLockerMode(value: 'load' | 'disabled') {
-    console.log('oLockerMode', value);
     this._oLockerMode = value;
   }
 
   @Input()
   set oLockerDelay(value: number) {
-    console.log('delay', value);
     this.parent.delayLoad = value;
-
   }
 
   ngOnDestroy() {
