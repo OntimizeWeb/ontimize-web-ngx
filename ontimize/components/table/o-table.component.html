@@ -107,13 +107,12 @@
           <tr mat-footer-row *matFooterRowDef="oTableOptions.visibleColumns; sticky: true"></tr>
         </ng-container>
       </table>
-
     </div>
-    <!-- TABLE EDITABLE ROW position: last -->
-    <o-table-editable-row [datasource]="dataSource" *ngIf="showLastInsertableRow"></o-table-editable-row>
-
   </div>
 
+  <!-- TABLE EDITABLE ROW position: last -->
+  <o-table-editable-row [datasource]="dataSource" *ngIf="showLastInsertableRow"></o-table-editable-row>
+  
   <!--TABLE PAGINATOR-->
   <mat-paginator *ngIf="paginator" #matpaginator [length]="dataSource?.resultsLength" [pageIndex]="paginator.pageIndex"
     [pageSize]="queryRows" [pageSizeOptions]="paginator.pageSizeOptions" (page)="onChangePage($event)"

@@ -6,7 +6,6 @@ import { HostListener } from '@angular/core';
 import { Injector } from '@angular/core';
 import { OTranslateService } from '../../services';
 
-
 @Directive({
   selector: '[oTableExpandedFooter]'
 })
@@ -42,19 +41,21 @@ export class OTableExpandedFooter {
   registerContentChange() {
     this.additionDiv = this.renderer.createElement('div');
     this.renderer.addClass(this.additionDiv, 'o-table-no-results');
-    this.spanMessageNotResults = this.renderer.createElement('span');
-    this.renderer.appendChild(this.additionDiv,this.spanMessageNotResults);
     this.renderer.insertBefore(this.element.nativeElement, this.additionDiv, this.tableFooter);
     const self = this;
 
     this.onContentChangeSubscription = this.table.onContentChange.subscribe((data) => {
-      self.updateHeight();
       self.updateMessageNotResults(data);
+      self.updateHeight();
     });
 
   }
 
   updateHeight() {
+    //reset old height
+    this.renderer.setStyle(this.additionDiv, 'height', 'auto');
+
+    //calculate new height
     const childNodes = this.element.nativeElement.childNodes;
     let totalHeight = 0;
     let diferentHeight = 0;
@@ -66,24 +67,28 @@ export class OTableExpandedFooter {
     });
 
     diferentHeight = this.element.nativeElement.parentNode.clientHeight - totalHeight;
-    this.renderer.setStyle(this.additionDiv, 'height', (diferentHeight > 0 ? diferentHeight : 0) + 'px');
+    this.renderer.setStyle(this.additionDiv, 'height', diferentHeight > 0 ? diferentHeight + 'px' : 'auto');
     this.renderer.setStyle(this.additionDiv, 'width', this.element.nativeElement.clientWidth + 'px');
   }
 
   updateMessageNotResults(data) {
-    if (data.length > 0) {
+    //reset span message
+    if (this.spanMessageNotResults) {
       this.renderer.removeChild(this.element.nativeElement, this.spanMessageNotResults);
-    } else {
+    }
+
+    //calculate new message
+    if (data.length === 0) {
       let result = '';
       result = this.translateService.get('TABLE.EMPTY');
       if (this.table.quickFilter && this.table.oTableQuickFilterComponent &&
         this.table.oTableQuickFilterComponent.value && this.table.oTableQuickFilterComponent.value.length > 0) {
         result += this.translateService.get('TABLE.EMPTY_USING_FILTER', [(this.table.oTableQuickFilterComponent.value)]);
-        this.spanMessageNotResults = this.renderer.createText(result);
+        this.spanMessageNotResults = this.renderer.createElement('span');
+        let messageNotResults = this.renderer.createText(result);
+        this.renderer.appendChild(this.spanMessageNotResults, messageNotResults);
         this.renderer.appendChild(this.additionDiv, this.spanMessageNotResults);
       }
-
-
     }
   }
 
