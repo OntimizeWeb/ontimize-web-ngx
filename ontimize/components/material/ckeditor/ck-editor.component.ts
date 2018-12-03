@@ -10,17 +10,15 @@ const defaults = {
   customConfig: ''
 };
 
-export const CKEDITOR_VALUE_ACCESSOR: any = {
-  provide: NG_VALUE_ACCESSOR,
-  useExisting: forwardRef(() => CKEditorComponent),
-  multi: true
-};
-
 @Component({
   moduleId: module.id,
   selector: 'ck-editor',
   template: `<textarea #ck></textarea>`,
-  providers: [CKEDITOR_VALUE_ACCESSOR],
+  providers: [{
+    provide: NG_VALUE_ACCESSOR,
+    useExisting: forwardRef(() => CKEditorComponent),
+    multi: true
+  }],
   exportAs: 'ckEditor'
 })
 export class CKEditorComponent implements AfterViewInit, OnDestroy, ControlValueAccessor {
@@ -155,7 +153,7 @@ export class CKEditorComponent implements AfterViewInit, OnDestroy, ControlValue
     if (this.ckIns) {
       // Fix bug that can't emit change event when set non-html tag value twice in fullpage mode.
       this.ckIns.setData(this.innerValue);
-      let val = this.ckIns.getData();
+      const val = this.ckIns.getData();
       this.ckIns.setData(val);
     }
   }
