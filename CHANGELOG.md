@@ -1,6 +1,7 @@
 ## 3.2.1
 ### Features
 * **o-form**: new `getFormComponentPermissions` and  `getActionsPermissions` methods
+* **o-table**: new attribute `select-all-checkbox-visible` ([a553447](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a553447))
 
 ### BREAKING CHANGES
 * **PermissionsService**: ([2d186c9](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2d186c9))
