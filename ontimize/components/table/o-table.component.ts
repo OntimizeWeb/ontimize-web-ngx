@@ -107,7 +107,7 @@ export const DEFAULT_INPUTS_O_TABLE = [
   // show-buttons-text [yes|no|true|false]: show text of header buttons. Default: yes.
   'showButtonsText: show-buttons-text',
 
-  // select-all-checkbox [yes|no|true|false]: show selection check boxes. Default: no.
+  // select-all-checkbox [yes|no|true|false]:  show in the menu the option of selection check boxes . Default: no.
   'selectAllCheckbox: select-all-checkbox',
 
   // pagination-controls [yes|no|true|false]: show pagination controls. Default: yes.
@@ -134,7 +134,9 @@ export const DEFAULT_INPUTS_O_TABLE = [
 
   'autoAlignTitles: auto-align-titles',
 
-  'multipleSort: multiple-sort'
+  'multipleSort: multiple-sort',
+  // select-all-checkbox-visible [yes|no|true|false]: show selection check boxes.Default: no.
+  'selectAllCheckboxVisible: select-all-checkbox-visible'
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE = [
@@ -370,6 +372,20 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   autoAlignTitles: boolean = false;
   @InputConverter()
   multipleSort: boolean = true;
+
+
+  protected _selectAllCheckboxVisible;
+  @InputConverter()
+  set selectAllCheckboxVisible(value: boolean) {
+    this._selectAllCheckboxVisible = this.state['select-column-visible'] || value;
+    this.oTableOptions.selectColumn.visible = value;
+    this.updateSelectionColumnState();
+  }
+
+  get selectAllCheckboxVisible(): boolean {
+    return this._selectAllCheckboxVisible;
+  }
+
 
   public daoTable: OTableDao | null;
   public dataSource: OTableDataSource | null;

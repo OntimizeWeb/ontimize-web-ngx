@@ -249,8 +249,10 @@ export class OFormServiceComponent extends OFormDataComponent {
         } else {
           console.log('error');
         }
-        window.setTimeout(() => { this.loading = false; self.loadingSubject.next(false); self.loaderSubscription.unsubscribe(); }, 10000);
-        // self.loadingSubject.next(false);
+
+        //window.setTimeout(() => { this.loading = false; self.loadingSubject.next(false); self.loaderSubscription.unsubscribe(); }, 10000);
+        self.loadingSubject.next(false);
+        self.loaderSubscription.unsubscribe();
       }, err => {
         console.log(err);
         self.loadingSubject.next(false);
@@ -342,23 +344,6 @@ export class OFormServiceComponent extends OFormDataComponent {
   }
 
   load(): any {
-
-    // var self = this;
-    // var zone = this.injector.get(NgZone);
-
-    // var timer = window.setTimeout(() => {
-    //   self.loadingSubject.next(true);
-
-    // }, this.delayLoad);
-
-    // return () => {
-    //   window.clearTimeout(timer);
-    //   zone.run(() => {
-    //     self.loading = false;
-    //   });
-    // };
-
-    // return this.loadingSubject.subscribe(x => this.loading = x);
 
     var self = this;
     var zone = this.injector.get(NgZone);
