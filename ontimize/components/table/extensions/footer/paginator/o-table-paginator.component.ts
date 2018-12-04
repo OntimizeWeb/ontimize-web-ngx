@@ -122,6 +122,7 @@ export class OTableMatPaginatorIntl extends MatPaginatorIntl {
       this.firstPageLabel = this.translateService.get('TABLE.PAGINATE.FIRST');
       this.lastPageLabel = this.translateService.get('TABLE.PAGINATE.LAST');
       this.getRangeLabel = this.getORangeLabel;
+      this.changes.next();
     });
   }
 

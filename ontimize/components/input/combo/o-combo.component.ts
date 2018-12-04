@@ -29,7 +29,8 @@ export const DEFAULT_OUTPUTS_O_COMBO = [
   moduleId: module.id,
   selector: 'o-combo',
   providers: [
-    { provide: OntimizeService, useFactory: dataServiceFactory, deps: [Injector] }
+    { provide: OntimizeService, useFactory: dataServiceFactory, deps: [Injector] },
+    { provide: OFormServiceComponent, useExisting: forwardRef(() => OComboComponent) }
   ],
   inputs: DEFAULT_INPUTS_O_COMBO,
   outputs: DEFAULT_OUTPUTS_O_COMBO,
@@ -182,7 +183,7 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
     if (!this.selectModel.panelOpen) {
       return;
     }
-    var newValue = event.value;
+    const newValue = event.value;
     this.setValue(newValue, {
       changeType: OValueChangeEvent.USER_CHANGE,
       emitEvent: false,
@@ -193,7 +194,7 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
   getOptionDescriptionValue(item: any = {}) {
     let descTxt = '';
     if (this.descriptionColArray && this.descriptionColArray.length > 0) {
-      var self = this;
+      const self = this;
       this.descriptionColArray.forEach((col, index) => {
         let txt = item[col];
         if (txt) {
