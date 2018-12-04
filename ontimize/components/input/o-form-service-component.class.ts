@@ -250,7 +250,7 @@ export class OFormServiceComponent extends OFormDataComponent {
         } else {
           console.log('error');
         }
-        window.setTimeout(() => { this.loading = false; self.loadingSubject.next(false);  self.loaderSubscription.unsubscribe(); }, 10000);
+        window.setTimeout(() => { this.loading = false; self.loadingSubject.next(false); self.loaderSubscription.unsubscribe(); }, 10000);
       }, err => {
         console.log(err);
         self.loadingSubject.next(false);
