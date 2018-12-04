@@ -2,16 +2,16 @@ import { AfterViewInit, Component, ElementRef, forwardRef, Inject, Injector, OnI
 import { CommonModule } from '@angular/common';
 import { MatDialog, MatDialogConfig, MatDialogRef, MatInput } from '@angular/material';
 
-import { OSharedModule } from '../../../shared';
-import { OntimizeService } from '../../../services';
 import { InputConverter } from '../../../decorators';
-import { OFormComponent } from '../../form/o-form.component';
-import { ODialogModule } from '../../dialog/o-dialog.component';
-import { OFormServiceComponent } from '../o-form-service-component.class';
+import { OntimizeService } from '../../../services';
 import { dataServiceFactory } from '../../../services/data-service.provider';
-import { OListPickerDialogComponent } from './o-list-picker-dialog.component';
+import { OSharedModule } from '../../../shared';
+import { ODialogModule } from '../../dialog/o-dialog.component';
 import { OSearchInputModule } from '../../input/search-input/o-search-input.component';
 import { OValueChangeEvent } from '../../o-form-data-component.class';
+import { OFormComponent } from '../../form/o-form.component';
+import { OFormServiceComponent } from '../o-form-service-component.class';
+import { OListPickerDialogComponent } from './o-list-picker-dialog.component';
 
 export const DEFAULT_INPUTS_O_LIST_PICKER = [
   ...OFormServiceComponent.DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT,
@@ -87,7 +87,8 @@ export class OListPickerComponent extends OFormServiceComponent implements After
 
   ensureOFormValue(value: any) {
     super.ensureOFormValue(value);
-    this.syncDataIndex();
+    // This call make the component querying its data multiple times, but getting description value is needed
+    this.syncDataIndex(false);
   }
 
   ngAfterViewInit(): void {
@@ -103,9 +104,9 @@ export class OListPickerComponent extends OFormServiceComponent implements After
   getDescriptionValue() {
     let descTxt = '';
     if (this.descriptionColArray && this._currentIndex !== undefined) {
-      var self = this;
+      const self = this;
       this.descriptionColArray.forEach((descCol, index) => {
-        let txt = self.dataArray[self._currentIndex][descCol];
+        const txt = self.dataArray[self._currentIndex][descCol];
         if (txt) {
           descTxt += txt;
         }
@@ -237,9 +238,8 @@ export class OListPickerComponent extends OFormServiceComponent implements After
 
 @NgModule({
   declarations: [OListPickerDialogComponent, OListPickerComponent],
-  imports: [OSharedModule, CommonModule, ODialogModule, OSearchInputModule],
+  imports: [CommonModule, ODialogModule, OSearchInputModule, OSharedModule],
   exports: [OListPickerComponent],
   entryComponents: [OListPickerDialogComponent]
 })
-export class OListPickerModule {
-}
+export class OListPickerModule { }

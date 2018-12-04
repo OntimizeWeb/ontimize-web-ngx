@@ -83,17 +83,17 @@
           </td>
           <!--Define mat-footer-cell-->
           <ng-container *ngIf="showTotals">
-              <td mat-footer-cell *matFooterCellDef [ngClass]="column.className">
-                <div class="title" *ngIf="column.aggregate && column.aggregate.title">
-                  {{ column.aggregate.title | oTranslate }}
-                </div>
-                <ng-container *ngIf="!column.renderer">
-                  {{ dataSource.getAggregateData(column) }}
-                </ng-container>
-                <ng-template *ngIf="column.renderer && column.aggregate" [ngTemplateOutlet]="column.renderer.templateref"
-                  [ngTemplateOutletContext]="{cellvalue: dataSource.getAggregateData(column)}"></ng-template>
-              </td>
-            </ng-container>
+            <td mat-footer-cell *matFooterCellDef [ngClass]="column.className">
+              <div class="title" *ngIf="column.aggregate && column.aggregate.title">
+                {{ column.aggregate.title | oTranslate }}
+              </div>
+              <ng-container *ngIf="!column.renderer">
+                {{ dataSource.getAggregateData(column) }}
+              </ng-container>
+              <ng-template *ngIf="column.renderer && column.aggregate" [ngTemplateOutlet]="column.renderer.templateref"
+                [ngTemplateOutletContext]="{cellvalue: dataSource.getAggregateData(column)}"></ng-template>
+            </td>
+          </ng-container>
         </ng-container>
 
         <tr #tableHeader mat-header-row *matHeaderRowDef="oTableOptions.visibleColumns; sticky: fixedHeader"></tr>
@@ -112,7 +112,7 @@
 
   <!-- TABLE EDITABLE ROW position: last -->
   <o-table-editable-row [datasource]="dataSource" *ngIf="showLastInsertableRow"></o-table-editable-row>
-  
+
   <!--TABLE PAGINATOR-->
   <mat-paginator *ngIf="paginator" #matpaginator [length]="dataSource?.resultsLength" [pageIndex]="paginator.pageIndex"
     [pageSize]="queryRows" [pageSizeOptions]="paginator.pageSizeOptions" (page)="onChangePage($event)"

@@ -1,6 +1,6 @@
 import { Directive, Input, ElementRef, Renderer2, Optional, Host } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { OFormServiceComponent } from '../components';
-import { Subscription } from 'rxjs/Subscription';
 
 export const DEFAULT_INPUTS_O_LOCKER = [
   'oLockerMode',
@@ -57,7 +57,7 @@ export class OLockerDirective {
   }
 
   private addLoading() {
-    this.componentDiv = this.element.nativeElement.children[0];//set opacity in componentDiv 
+    this.componentDiv = this.element.nativeElement.children[0];//set opacity in componentDiv
     this.loadingParentDiv = this.renderer.createElement('div');
     var loaderChild1 = this.renderer.createElement('div');
     var loaderChild2 = this.renderer.createElement('div');

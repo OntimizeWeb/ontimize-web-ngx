@@ -126,11 +126,12 @@ export class OntimizeExportService {
     this.httpClient.get(url, options).subscribe((resp: any) => {
       let fileData = resp.body;
       let fileURL = URL.createObjectURL(fileData);
-      // window.open(fileURL, '_self');
       let a = document.createElement('a');
+      document.body.appendChild(a);
       a.href = fileURL;
       a.download = fileId + '.' + fileExtension;
       a.click();
+      document.body.removeChild(a);
       _innerObserver.next(fileData);
       URL.revokeObjectURL(fileURL);
     }, error => _innerObserver.error(error),
