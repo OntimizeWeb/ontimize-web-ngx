@@ -26,8 +26,8 @@
       [class.horizontal-scroll]="horizontalScroll" [class.scrolled]="horizontalScrolled">
 
       <!-- [class.mat-table]="true" -->
-      <mat-table #tableHeader oMatSort [class.header-fixed]="fixedHeader" [class.small]="!hasMultilineColumn && rowHeight==='small'"
-        [class.medium]="!hasMultilineColumn && rowHeight==='medium'" [class.large]="!hasMultilineColumn && rowHeight==='large'">
+      <mat-table #tableHeader oMatSort [class.header-fixed]="fixedHeader" [class.small]="rowHeight==='small'"
+        [class.medium]="rowHeight==='medium'" [class.large]="rowHeight==='large'">
         <!--Checkbox Column -->
         <ng-container [matColumnDef]="oTableOptions.selectColumn.name" *ngIf="oTableOptions.selectColumn.visible">
           <mat-header-cell *matHeaderCellDef>
