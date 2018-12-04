@@ -132,7 +132,7 @@ export const DEFAULT_INPUTS_O_TABLE = [
   'autoAlignTitles: auto-align-titles',
 
   'multipleSort: multiple-sort',
-   // select-all-checkbox-visible [yes|no|true|false]: show selection check boxes.Default: no.
+  // select-all-checkbox-visible [yes|no|true|false]: show selection check boxes.Default: no.
   'selectAllCheckboxVisible: select-all-checkbox-visible'
 ];
 
@@ -924,7 +924,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
 
     if (this.colArray.length) {
-      this.colArray.map((x: string) => this.registerColumn(x));
+      this.colArray.forEach((x: string) => this.registerColumn(x));
 
       let columnsOrder = [];
       if (this.state.hasOwnProperty('oColumns-display')) {
