@@ -1,17 +1,17 @@
-import { Component, ElementRef, EventEmitter, forwardRef, Inject, Injector, NgModule, Optional, ViewChild, OnInit, AfterViewInit, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { AfterViewInit, Component, ElementRef, EventEmitter, forwardRef, Inject, Injector, NgModule, OnDestroy, OnInit, Optional, ViewChild, ViewEncapsulation } from '@angular/core';
 import { MatOption, MatSelect, MatSelectChange } from '@angular/material';
 
-import { Util } from '../../../util/util';
-import { Codes } from '../../../util/codes';
-import { OFormComponent } from '../../form/o-form.component';
-import { OSharedModule } from '../../../shared/shared.module';
 import { InputConverter } from '../../../decorators/input-converter';
-import { OntimizeService } from '../../../services/ontimize.service';
-import { IFormValueOptions, OFormValue } from '../../form/OFormValue';
-import { OFormServiceComponent } from '../o-form-service-component.class';
 import { dataServiceFactory } from '../../../services/data-service.provider';
+import { OntimizeService } from '../../../services/ontimize.service';
+import { OSharedModule } from '../../../shared/shared.module';
+import { Codes } from '../../../util/codes';
+import { Util } from '../../../util/util';
+import { OFormComponent } from '../../form/o-form.component';
+import { IFormValueOptions, OFormValue } from '../../form/OFormValue';
 import { OValueChangeEvent } from '../../o-form-data-component.class';
+import { OFormServiceComponent } from '../o-form-service-component.class';
 
 export const DEFAULT_INPUTS_O_COMBO = [
   ...OFormServiceComponent.DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT,
@@ -81,7 +81,7 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
     if (this.queryOnInit) {
       this.queryData();
     } else if (this.queryOnBind) {
-      //TODO do it better. When changing tabs it is necessary to invoke new query
+      // TODO do it better. When changing tabs it is necessary to invoke new query
       this.syncDataIndex();
     }
   }
@@ -104,7 +104,8 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
     } else {
       this.value = new OFormValue(this.defaultValue);
     }
-    this.syncDataIndex();
+    // This call make the component querying its data multiple times
+    // this.syncDataIndex();
   }
 
   ngOnDestroy() {
@@ -286,7 +287,7 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
 
 @NgModule({
   declarations: [OComboComponent],
-  imports: [OSharedModule, CommonModule],
+  imports: [CommonModule, OSharedModule],
   exports: [OComboComponent]
 })
 export class OComboModule { }
