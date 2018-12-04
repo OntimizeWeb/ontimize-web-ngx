@@ -14,6 +14,8 @@
 * **o-grid**: pagination local in grid  ([916e632](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/916e632)), closes [#229](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/229)
 * **o-table**: expand the table in the container
   ([8d50a68](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/8d50a68))
+  * **o-grid** and **o-table**: emit changes event in translations of the page
+  ([f627826](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f627826))
 
 ## 3.2.0 (2018-11-27)
 ### Features
