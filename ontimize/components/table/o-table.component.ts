@@ -2071,10 +2071,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     this._oTableOptions.visibleColumns.push(name);
   }
 
-  get hasMultilineColumn(): boolean {
-    return this.oTableOptions.columns.some((c: OColumn) => c.multiline);
-  }
-
   get headerHeight() {
     let height = 0;
     if (this.tableHeaderEl && this.tableHeaderEl.nativeElement) {

@@ -21,9 +21,9 @@
 
   <div #tableBody class="o-table-body o-scroll" [class.horizontal-scroll]="horizontalScroll" [class.scrolled]="horizontalScrolled">
     <div class="o-table-overflow o-scroll">
-      <table mat-table #table [trackBy]="getTrackByFunction()" [dataSource]="dataSource" oMatSort [class.small]="!hasMultilineColumn && rowHeight==='small'"
-        [class.medium]="!hasMultilineColumn && rowHeight==='medium'" [class.large]="!hasMultilineColumn && rowHeight==='large'"
-        (scroll)="onTableScroll($event)" (cdkObserveContent)="projectContentChanged()" oTableExpandedFooter>
+      <table mat-table #table [trackBy]="getTrackByFunction()" [dataSource]="dataSource" oMatSort [class.small]="rowHeight==='small'"
+        [class.medium]="rowHeight==='medium'" [class.large]="rowHeight==='large'" (scroll)="onTableScroll($event)"
+        (cdkObserveContent)="projectContentChanged()" oTableExpandedFooter>
 
         <!--Checkbox Column -->
         <ng-container [matColumnDef]="oTableOptions.selectColumn.name" *ngIf="oTableOptions.selectColumn.visible">
