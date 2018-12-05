@@ -1,4 +1,8 @@
 .o-app-sidenav-menu-group {
+  .o-app-sidenav-menugroup {
+    width: 100%;
+  }
+
   &[disabled=true] {
     .o-app-sidenav-menugroup {
       cursor: default;
