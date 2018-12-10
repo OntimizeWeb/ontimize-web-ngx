@@ -149,9 +149,9 @@
       <o-table-editable-row [datasource]="dataSource" *ngIf="showLastInsertableRow"></o-table-editable-row>
 
       <!--LOADING-->
-      <div *ngIf="showLoading()" [ngStyle]="{'top.px': headerHeight}" class="spinner-container"
-        [class.spinner-container-scrollable]="loadingScroll">
-        <mat-progress-spinner mode="indeterminate" strokeWidth="3"></mat-progress-spinner>
+      <div #spinnerContainer *ngIf="showLoading()" fxLayout="column" fxLayoutAlign="center center" [ngStyle]="{'top.px': headerHeight}"
+        class="spinner-container" [class.spinner-container-scrollable]="loadingScroll" >
+        <mat-progress-spinner mode="indeterminate" strokeWidth="3" [diameter]="diameterSpinner"></mat-progress-spinner>
       </div>
 
     </div>

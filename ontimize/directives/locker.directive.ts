@@ -57,7 +57,7 @@ export class OLockerDirective {
   }
 
   private addLoading() {
-    this.componentDiv = this.element.nativeElement.children[0];//set opacity in componentDiv 
+    this.componentDiv = this.element.nativeElement.children[0];//set opacity in componentDiv
     this.loadingParentDiv = this.renderer.createElement('div');
     var loaderChild1 = this.renderer.createElement('div');
     var loaderChild2 = this.renderer.createElement('div');

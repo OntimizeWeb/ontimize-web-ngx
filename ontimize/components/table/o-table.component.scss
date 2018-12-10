@@ -127,11 +127,6 @@ $_mat-checkbox-mark-stroke-size-small: 2 / 15 * $mat-checkbox-size-small !defaul
       -webkit-transition: opacity .25s linear;
       transition: opacity .25s linear;
 
-      .mat-progress-spinner {
-        height: 100%;
-        left: calc(50% - 50px);
-        top: calc(50% - 50px);
-      }
     }
 
     .spinner-container-scrollable {

@@ -289,6 +289,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   public static DEFAULT_INPUTS_O_TABLE = DEFAULT_INPUTS_O_TABLE;
   public static DEFAULT_OUTPUTS_O_TABLE = DEFAULT_OUTPUTS_O_TABLE;
+  static DEFAULT_BASE_SIZE_SPINNER = 100;
 
   public static NAME_COLUMN_SELECT = 'select';
   public loadingScroll = false;
@@ -303,6 +304,21 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   // only for insideTabBugWorkaround
   @ViewChildren(OMatSortHeader) protected sortHeaders: QueryList<OMatSortHeader>;
+
+  @ViewChild('spinnerContainer', { read: ElementRef })
+  spinnerContainer: ElementRef;
+  get diameterSpinner() {
+    const minHeight = DEFAULT_BASE_SIZE_SPINNER;
+    let height = 0;
+    if (this.spinnerContainer && this.spinnerContainer.nativeElement) {
+      height = this.spinnerContainer.nativeElement.offsetHeight;
+    }
+    if (height > 0 && height <= 100) {
+      return Math.floor(height - (height * 0.1));
+    } else {
+      return minHeight;
+    }
+  }
 
   public tableContextMenu: OContextMenuComponent;
 
