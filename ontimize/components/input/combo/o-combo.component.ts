@@ -116,8 +116,8 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
     return this.nullSelection;
   }
 
-  syncDataIndex() {
-    super.syncDataIndex();
+  syncDataIndex(queryIfNotFound: boolean = true) {
+    super.syncDataIndex(queryIfNotFound);
     if (this._currentIndex !== undefined && this.nullSelection) {
       // first position is for null selection that it is not included into dataArray
       this._currentIndex += 1;
