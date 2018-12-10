@@ -37,8 +37,8 @@ $o_table_row_small: 28px;
     &.block-events {
       pointer-events: none;
 
-       > .o-table-body .mat-header-row,
-      > .toolbar {
+       > .toolbar,
+      > .o-table-body .mat-header-row {
         opacity: .75;
       }
     }
@@ -443,12 +443,8 @@ $o_table_row_small: 28px;
 }
 
 .mat-tooltip.o-table-cell-tooltip {
-  position: absolute;
-  top: -12px;
   word-wrap: break-word;
   max-height: 64px;
   overflow: hidden;
   min-width: 140px;
-  text-align: center;
-  width: 100%;
 }
