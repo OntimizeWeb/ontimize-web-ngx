@@ -19,6 +19,8 @@
 * **o-grid** and **o-table**: emit changes event in translations of the page
   ([f627826](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f627826))
 * **ontimize-export.service**: fixing download bug ([dbeaf42](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/dbeaf42)) [#237](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/237)
+* **o-table**: the spinner produces scroll
+  ([ef36e52](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ef36e52))
 
 ## 3.2.0 (2018-11-27)
 ### Features

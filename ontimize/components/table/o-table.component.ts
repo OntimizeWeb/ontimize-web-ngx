@@ -308,7 +308,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   @ViewChild('spinnerContainer', { read: ElementRef })
   spinnerContainer: ElementRef;
   get diameterSpinner() {
-    const minHeight = DEFAULT_BASE_SIZE_SPINNER;
+    const minHeight = OTableComponent.DEFAULT_BASE_SIZE_SPINNER;
     let height = 0;
     if (this.spinnerContainer && this.spinnerContainer.nativeElement) {
       height = this.spinnerContainer.nativeElement.offsetHeight;
