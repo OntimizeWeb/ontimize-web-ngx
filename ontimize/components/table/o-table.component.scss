@@ -68,8 +68,8 @@ $_mat-checkbox-mark-stroke-size-small: 2 / 15 * $mat-checkbox-size-small !defaul
     &.block-events {
       pointer-events: none;
 
-       > .o-table-body .mat-header-row,
-      > .toolbar {
+       > .toolbar,
+      > .o-table-body .mat-header-row {
         opacity: .75;
       }
     }
@@ -481,11 +481,9 @@ $_mat-checkbox-mark-stroke-size-small: 2 / 15 * $mat-checkbox-size-small !defaul
 }
 
 .mat-tooltip.o-table-cell-tooltip {
-  position: absolute;
-  top: -12px;
+  margin: 6px;
   word-wrap: break-word;
   max-height: 64px;
   overflow: hidden;
   min-width: 140px;
-  text-align: center;
 }
