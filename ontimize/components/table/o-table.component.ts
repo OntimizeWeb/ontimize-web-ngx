@@ -136,7 +136,11 @@ export const DEFAULT_INPUTS_O_TABLE = [
 
   'multipleSort: multiple-sort',
   // select-all-checkbox-visible [yes|no|true|false]: show selection check boxes.Default: no.
-  'selectAllCheckboxVisible: select-all-checkbox-visible'
+  'selectAllCheckboxVisible: select-all-checkbox-visible',
+
+  'orderable',
+
+  'resizable'
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE = [
@@ -170,11 +174,13 @@ export class OColumn {
   definition: OTableColumnComponent;
   tooltip: OColumnTooltip;
   multiline: boolean;
+  resizable: boolean;
 
-  setDefaultProperties() {
+  setDefaultProperties(table: OTableComponent) {
     this.type = 'string';
     this.className = 'o-column-' + (this.type) + ' ';
-    this.orderable = true;
+    this.orderable = table.orderable;
+    this.resizable = table.resizable;
     this.searchable = true;
     this.searching = true;
     // column without 'attr' should contain only renderers that do not depend on cell data, but row data (e.g. actions)
@@ -292,7 +298,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   public static DEFAULT_INPUTS_O_TABLE = DEFAULT_INPUTS_O_TABLE;
   public static DEFAULT_OUTPUTS_O_TABLE = DEFAULT_OUTPUTS_O_TABLE;
-  static DEFAULT_BASE_SIZE_SPINNER = 100;
+  public static DEFAULT_BASE_SIZE_SPINNER = 100;
 
   public static NAME_COLUMN_SELECT = NAME_COLUMN_SELECT;
   public loadingScroll = false;
@@ -311,7 +317,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   @ViewChild('spinnerContainer', { read: ElementRef })
   spinnerContainer: ElementRef;
   get diameterSpinner() {
-    const minHeight = DEFAULT_BASE_SIZE_SPINNER;
+    const minHeight = OTableComponent.DEFAULT_BASE_SIZE_SPINNER;
     let height = 0;
     if (this.spinnerContainer && this.spinnerContainer.nativeElement) {
       height = this.spinnerContainer.nativeElement.offsetHeight;
@@ -388,7 +394,10 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   autoAlignTitles: boolean = false;
   @InputConverter()
   multipleSort: boolean = true;
-
+  @InputConverter()
+  orderable: boolean = true;
+  @InputConverter()
+  resizable: boolean = true;
 
   protected _selectAllCheckboxVisible;
   @InputConverter()
@@ -784,7 +793,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
     let colDef: OColumn = new OColumn();
     colDef.attr = column;
-    colDef.setDefaultProperties();
+    colDef.setDefaultProperties(this);
     this.pushOColumnDefinition(colDef);
   }
 
@@ -811,19 +820,30 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
     let colDef: OColumn = new OColumn();
     colDef.attr = column.attr;
-    colDef.setDefaultProperties();
+    colDef.setDefaultProperties(this);
     colDef.title = Util.isDefined(column.title) ? column.title : column.attr;
     colDef.definition = column;
     colDef.multiline = column.multiline;
 
-    if (Util.isDefined(column.width)) {
-      colDef.width = column.width;
+    let columnWidth = column.width;
+    const storedCols = this.state['oColumns-display'];
+    if (Util.isDefined(storedCols)) {
+      const storedData = storedCols.find(oCol => oCol.attr === colDef.attr);
+      if (Util.isDefined(storedData) && Util.isDefined(storedData.width)) {
+        columnWidth = storedData.width;
+      }
+    }
+    if (Util.isDefined(columnWidth)) {
+      colDef.width = columnWidth;
     }
     if (Util.isDefined(column.minWidth)) {
       colDef.minWidth = column.minWidth;
     }
     if (Util.isDefined(column.orderable)) {
       colDef.orderable = column.orderable;
+    }
+    if (Util.isDefined(column.resizable)) {
+      colDef.resizable = column.resizable;
     }
     if (Util.isDefined(column.searchable)) {
       colDef.searchable = column.searchable;
@@ -902,7 +922,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     if (this.state.hasOwnProperty('oColumns-display')) {
       // filtering columns that might be in state storage but not in the actual table definition
       let stateCols = [];
-      var self = this;
+      const self = this;
       this.state['oColumns-display'].forEach((oCol, index) => {
         let isVisibleColInColumns = self._oTableOptions.columns.find(col => col.attr === oCol.attr) !== undefined;
         if (isVisibleColInColumns) {
@@ -2076,11 +2096,12 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   protected addButtonInRow(name: string) {
     let colDef: OColumn = new OColumn();
     colDef.attr = name;
-    colDef.setDefaultProperties();
+    colDef.setDefaultProperties(this);
     colDef.type = name;
     colDef.visible = true;
     colDef.searchable = false;
     colDef.orderable = false;
+    colDef.resizable = false;
     colDef.title = undefined;
     colDef.width = '48px';
     this.pushOColumnDefinition(colDef);

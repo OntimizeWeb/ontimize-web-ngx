@@ -78,6 +78,8 @@ export const DEFAULT_INPUTS_O_TABLE_COLUMN = [
 
   'multiline',
 
+  'resizable',
+
   ...OTableCellRendererBooleanComponent.DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_BOOLEAN,
   ...OTableCellRendererCurrencyComponent.DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_CURRENCY, // includes Integer and Real
   ...OTableCellRendererDateComponent.DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_DATE,
@@ -142,7 +144,8 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
   public sqlType: string;
   protected _SQLType: number;
   protected _defaultSQLTypeKey: string = 'OTHER';
-  protected _orderable: boolean = true;
+  protected _orderable: boolean;
+  protected _resizable: boolean;
   protected _searchable: boolean = true;
   @InputConverter()
   public editable: boolean = false;
@@ -450,6 +453,18 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
 
   get orderable(): any {
     return this._orderable;
+  }
+
+  set resizable(val: any) {
+    this._resizable = typeof val === 'boolean' ? val : Util.parseBoolean(val, true);
+    const oCol = this.table.getOColumn(this.attr);
+    if (oCol) {
+      oCol.resizable = this._resizable;
+    }
+  }
+
+  get resizable(): any {
+    return this._resizable;
   }
 
   set searchable(val: any) {

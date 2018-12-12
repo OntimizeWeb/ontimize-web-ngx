@@ -15,7 +15,6 @@ $o_table_row_small: 28px;
 
   div.expandable-container {
     overflow-y: auto;
-
   }
 
   .o-table-container {
@@ -28,17 +27,19 @@ $o_table_row_small: 28px;
     align-content: stretch;
 
     .o-table-body {
-
       display: flex;
       flex: 1 1 auto;
 
+      thead .mat-header-row th:last-child .o-table-column-resizer {
+        display: none;
+      }
     }
 
     &.block-events {
       pointer-events: none;
 
-       > .o-table-body .mat-header-row,
-      > .toolbar {
+       > .toolbar,
+      > .o-table-body .mat-header-row {
         opacity: .75;
       }
     }
@@ -269,6 +270,14 @@ $o_table_row_small: 28px;
           white-space: nowrap;
           text-overflow: ellipsis;
 
+          &:first-of-type {
+            padding-left: 24px;
+          }
+
+          &:last-of-type {
+            padding-right: 24px;
+          }
+
           &.empty-cell {
             min-height: 16px;
           }
@@ -334,6 +343,8 @@ $o_table_row_small: 28px;
       }
 
       .mat-header-cell {
+        overflow: hidden;
+
         .column-filter-icon {
           font-size: 20px;
           width: 20px;
@@ -384,8 +395,8 @@ $o_table_row_small: 28px;
             text-align: right;
           }
 
-          .mat-sort-header-sorted .mat-sort-header-button {
-            padding-left: 18px;
+          .mat-sort-header-button {
+            padding-left: 12px;
           }
         }
 

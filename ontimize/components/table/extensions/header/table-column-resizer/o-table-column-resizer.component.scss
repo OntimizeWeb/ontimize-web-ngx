@@ -1,0 +1,19 @@
+.o-table-column-resizer {
+  display: inline-block;
+  cursor: col-resize;
+  width: 2px;
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: -1px;
+
+  span {
+    height: 100%;
+    width: 100%;
+    display: block;
+  }
+
+  &.disabled {
+    cursor: default;
+  }
+}

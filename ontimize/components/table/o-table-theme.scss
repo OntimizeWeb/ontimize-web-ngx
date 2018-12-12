@@ -7,6 +7,10 @@
   $foreground: map-get($theme, foreground);
 
   .o-table {
+    .o-table-column-resizer {
+      background: mat-color($foreground, secondary-text, 0.24);
+    }
+
     .spinner-container {
       background-color: mat-color($background, background);
     }

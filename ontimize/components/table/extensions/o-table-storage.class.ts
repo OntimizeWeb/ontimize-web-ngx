@@ -114,7 +114,8 @@ export class OTableStorage {
     this.table.oTableOptions.columns.forEach((oCol: OColumn) => {
       oColumnsData.push({
         attr: oCol.attr,
-        visible: oCol.visible
+        visible: oCol.visible,
+        width: oCol.width
       });
     });
     result['oColumns-display'] = oColumnsData;

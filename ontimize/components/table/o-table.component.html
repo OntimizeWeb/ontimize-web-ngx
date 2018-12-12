@@ -40,17 +40,24 @@
 
         <!-- Generic column definition -->
         <ng-container *ngFor="let column of oTableOptions.columns" [matColumnDef]="column.name">
-          <!--Define mat-header-cell-->
+          <!--Define header-cell-->
           <ng-container *ngIf="column.orderable">
             <th mat-header-cell *matHeaderCellDef o-mat-sort-header [ngClass]="getTitleAlignClass(column)"
-              [style.width]="column.getMinWidth()">
+              [style.width]="column.getMinWidth()" [class.resizable]="resizable">
+
+              <o-table-column-resizer *ngIf="resizable" [column]="column"></o-table-column-resizer>
+
               <mat-icon *ngIf="isColumnFilterable(column)" class="column-filter-icon" [class.active]="isColumnFilterActive(column)"
                 (click)="openColumnFilterDialog(column, $event)" svgIcon="ontimize:filter_list"></mat-icon>
               {{ column.title | oTranslate }}
             </th>
           </ng-container>
           <ng-container *ngIf="!column.orderable">
-            <th mat-header-cell *matHeaderCellDef [ngClass]="getTitleAlignClass(column)" [style.width]="column.getMinWidth()">
+            <th mat-header-cell *matHeaderCellDef [ngClass]="getTitleAlignClass(column)" [style.width]="column.getMinWidth()"
+              [class.resizable]="resizable">
+
+              <o-table-column-resizer *ngIf="resizable" [column]="column"></o-table-column-resizer>
+
               <mat-icon *ngIf="isColumnFilterable(column)" class="column-filter-icon" [class.active]="isColumnFilterActive(column)"
                 (click)="openColumnFilterDialog(column, $event)" svgIcon="ontimize:filter_list"></mat-icon>
               {{ column.title | oTranslate }}
