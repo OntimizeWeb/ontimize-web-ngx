@@ -50,11 +50,14 @@ The sliding behavior in `o-slider` component requires that HammerJS is loaded on
 
 ### Bug Fixes
 * **o-grid**: pagination local in grid  ([916e632](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/916e632)), closes [#229](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/229)
-* **o-table**: expand the table in the container
-  ([8d50a68](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/8d50a68))
+* **o-table**:
+  * expand the table in the container ([8d50a68](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/8d50a68))
+  * the spinner produces scroll ([ef36e52](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ef36e52))
+  * tooltip not show when text is long and cell is at the edge of the screen ([9e5f328](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9e5f328))
 * **o-grid** and **o-table**: emit changes event in translations of the page
   ([f627826](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f627826))
 * **ontimize-export.service**: fixing download bug ([dbeaf42](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/dbeaf42)) [#237](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/237)
+
 
 ## 3.2.0 (2018-11-27)
 ### Features

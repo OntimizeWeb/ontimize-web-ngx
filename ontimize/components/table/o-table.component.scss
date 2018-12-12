@@ -46,7 +46,6 @@ $o_table_row_small: 28px;
 
     position: relative;
     margin: 0 .5%;
-    overflow-y: auto;
 
     .toolbar {
       height: 40px;
@@ -427,11 +426,6 @@ $o_table_row_small: 28px;
     -webkit-transition: opacity .25s linear;
     transition: opacity .25s linear;
 
-    .mat-progress-spinner {
-      height: 100%;
-      left: calc(50% - 50px);
-      top: calc(50% - 50px);
-    }
   }
 
   .spinner-container-scrollable {
@@ -460,12 +454,8 @@ $o_table_row_small: 28px;
 }
 
 .mat-tooltip.o-table-cell-tooltip {
-  position: absolute;
-  top: -12px;
   word-wrap: break-word;
   max-height: 64px;
   overflow: hidden;
   min-width: 140px;
-  text-align: center;
-  width: 100%;
 }
