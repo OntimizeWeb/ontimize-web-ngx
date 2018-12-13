@@ -38,8 +38,8 @@ $o_table_row_small: 28px;
     &.block-events {
       pointer-events: none;
 
-       > .toolbar,
-      > .o-table-body .mat-header-row {
+       > .o-table-body .mat-header-row,
+      > .toolbar {
         opacity: .75;
       }
     }
@@ -343,6 +343,7 @@ $o_table_row_small: 28px;
 
       .mat-header-cell {
         overflow: hidden;
+        position: relative;
 
         .column-filter-icon {
           font-size: 20px;
@@ -360,6 +361,10 @@ $o_table_row_small: 28px;
           white-space: nowrap;
           text-overflow: ellipsis;
           display: block;
+        }
+
+        &.resizable .mat-sort-header-arrow {
+          margin-right: 8px;
         }
 
         .mat-sort-header-arrow {

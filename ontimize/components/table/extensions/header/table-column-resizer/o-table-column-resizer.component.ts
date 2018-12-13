@@ -113,6 +113,11 @@ export class OTableColumnResizerComponent implements OnInit {
     }
   }
 
+  onClick(event: MouseEvent) {
+    event.stopPropagation();
+    event.preventDefault();
+  }
+
   onMouseDown(event: MouseEvent) {
     event.stopPropagation();
     event.preventDefault();
@@ -134,6 +139,8 @@ export class OTableColumnResizerComponent implements OnInit {
     this.renderer.listen('body', 'mousemove', this.onMouseMove.bind(this));
     const self = this;
     this.renderer.listen('body', 'mouseup', (event) => {
+      event.stopPropagation();
+      event.preventDefault();
       if (self.pressed) {
         self.pressed = false;
         self.nextColumnsWidth = {};
