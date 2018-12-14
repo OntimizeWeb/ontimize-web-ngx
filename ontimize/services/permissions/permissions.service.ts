@@ -248,9 +248,6 @@ export class PermissionsService {
 
   isPermissionIdRouteRestricted(permissionId: string): boolean {
     const routeData = (this.permissions.routes || []).find(route => route.permissionId === permissionId);
-    if (Util.isDefined(routeData)) {
-      return routeData.enabled === false;
-    }
-    return true;
+    return Util.isDefined(routeData) && routeData.enabled === false;
   }
 }

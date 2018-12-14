@@ -273,7 +273,7 @@ export class OFormServiceComponent extends OFormDataComponent {
   setDataArray(data: any): void {
     if (Util.isArray(data)) {
       this.dataArray = data;
-      this.syncDataIndex();
+      this.syncDataIndex(false);
     } else if (Util.isObject(data) && Object.keys(data).length > 0) {
       this.dataArray = [data];
     } else {

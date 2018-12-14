@@ -20,7 +20,7 @@
   * new `resizable` input ([3523d54](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3523d54))
 * **AppConfig**: adding properties for allowing remote permissions query.
 * **OServiceBaseComponent**: new `query-fallback-function` input ([fec7eab](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/fec7eab))
-
+* **o-date-input**: new `value-type` input
 
 ### Note on HammerJS
 The sliding behavior in `o-slider` component requires that HammerJS is loaded on the page. You can see the support of Material in next ([link](https://material.angular.io/guide/getting-started#step-5-gesture-support))
@@ -33,10 +33,12 @@ The sliding behavior in `o-slider` component requires that HammerJS is loaded on
 * **o-table-cell-renderer-boolean**: `true-value-type` and `false-value-type` inputs no longer exists ([a8cca0d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a8cca0d))
 * **o-date-input**: this component now only allows to receive and return timestamp values ([e0be14a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e0be14a))
 * **o-table**: CSS class `action-cell-renderer` has been renamed to `o-action-cell-renderer`.
+
 ## 3.2.1
 ### Features
 * **o-form**: new `getFormComponentPermissions` and  `getActionsPermissions` methods
 * **o-table**: new attribute `select-all-checkbox-visible` ([a553447](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a553447))
+* **o-date-input**: new `value-type` input ([8876586](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/8876586))
 
 ### BREAKING CHANGES
 * **PermissionsService**: ([2d186c9](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2d186c9))

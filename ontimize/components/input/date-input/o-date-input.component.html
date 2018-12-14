@@ -1,12 +1,11 @@
 <div fxLayout="row" fxLayoutAlign="space-between center" [formGroup]="getFormGroup()" [matTooltip]="tooltip"
-  [matTooltipPosition]="tooltipPosition" [matTooltipShowDelay]="tooltipShowDelay">
+  [matTooltipPosition]="tooltipPosition" [matTooltipShowDelay]="tooltipShowDelay" (click)="onClickInput($event)">
   <mat-form-field [appearance]="appearance" [floatLabel]="floatLabel" [class.custom-width]="hasCustomWidth" class="icon-field"
     fxFlexFill>
     <mat-label>{{ olabel }}</mat-label>
     <input matInput #matInputRef [matDatepicker]="d" [id]="getAttribute()" [formControlName]="getAttribute()"
       [placeholder]="placeHolder" [readonly]="isReadOnly || !textInputEnabled" (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)"
-      [matDatepickerFilter]="filterDate" (dateChange)="onChangeEvent($event)" [required]="isRequired" (click)="onClickInput($event)"
-      [value]="getValueAsDate()">
+      [matDatepickerFilter]="filterDate" (dateChange)="onChangeEvent($event)" [required]="isRequired" [value]="getValueAsDate()">
 
     <button type="button" *ngIf="showClearButton" matSuffix mat-icon-button (click)="onClickClearValue($event)">
       <mat-icon svgIcon="ontimize:close"></mat-icon>

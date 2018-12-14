@@ -6,7 +6,7 @@ import { Codes } from '../../../util/codes';
 import { SQLTypes } from '../../../util/sqltypes';
 import { InputConverter } from '../../../decorators';
 import { OTableComponent } from '../o-table.component';
-import { DateFilterFunction } from '../../../components/input/date-input/o-date-input.component';
+import { DateFilterFunction, ODateValueType } from '../../../components/input/date-input/o-date-input.component';
 
 import {
   OTableCellRendererDateComponent,
@@ -24,7 +24,6 @@ import {
   OTableCellEditorTextComponent,
   OTableCellEditorBooleanComponent,
   OTableCellEditorDateComponent,
-  ODateValueType,
   OTableCellEditorIntegerComponent,
   OTableCellEditorRealComponent
 } from './cell-editor/cell-editor';
@@ -223,7 +222,7 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
   protected oTouchUi: boolean = false;
   protected oStartAt: string;
   protected filterDate: DateFilterFunction;
-  protected dateValueType: ODateValueType = 'string';
+  protected dateValueType: ODateValueType = 'timestamp';
 
   /* input editor integer */
   @InputConverter()

@@ -20,7 +20,7 @@ export class ServiceUtils {
 
   static getParentKeysFromForm(parentKeysObject: Object, form: OFormComponent) {
     const result = {};
-    const parentKeys = Object.keys(parentKeysObject || {});
+    const ownKeys = Object.keys(parentKeysObject || {});
 
     const formComponents = form ? form.getComponents() : {};
     const existsComponents = Object.keys(formComponents).length > 0;
@@ -32,24 +32,23 @@ export class ServiceUtils {
     const existsUrlData = Object.keys(urlData).length > 0;
 
     if (existsComponents || existsProperties || existsUrlData) {
-      parentKeys.forEach(key => {
+      ownKeys.forEach(ownKey => {
+        const keyValue = parentKeysObject[ownKey];
         // Parent key equivalence may be an object
-        const isEquivObject = Util.isObject(parentKeysObject[key]);
-        const formFieldAttr = !isEquivObject ? parentKeysObject[key] : Object.keys(parentKeysObject[key])[0];
+        const isEquivObject = Util.isObject(keyValue);
+        const formFieldAttr = isEquivObject ? Object.keys(keyValue)[0] : keyValue;
         let currentData;
         if (formComponents.hasOwnProperty(formFieldAttr)) {
           const component = formComponents[formFieldAttr];
           // Is service component (combo, listpicker, radio)
-          // if (component instanceof OFormServiceComponent) {
-          if ('getSelectedRecord' in component) {
-            currentData = ((component as any).getSelectedRecord() || {})[parentKeysObject[key][formFieldAttr]];
+          if ('getSelectedRecord' in component && isEquivObject) {
+            currentData = ((component as any).getSelectedRecord() || {})[keyValue[formFieldAttr]];
           } else {
             currentData = component.getValue();
           }
         } else if (formDataProperties.hasOwnProperty(formFieldAttr)) {
-          currentData = formDataProperties[formFieldAttr] instanceof OFormValue ?
-            formDataProperties[formFieldAttr].value :
-            formDataProperties[formFieldAttr];
+          const formPropValue = formDataProperties[formFieldAttr];
+          currentData = formPropValue instanceof OFormValue ? formPropValue.value : formPropValue;
         } else if (urlData.hasOwnProperty(formFieldAttr)) {
           currentData = urlData[formFieldAttr];
         }
@@ -57,12 +56,12 @@ export class ServiceUtils {
           switch (typeof (currentData)) {
             case 'string':
               if (currentData.trim().length > 0) {
-                result[key] = currentData.trim();
+                result[ownKey] = currentData.trim();
               }
               break;
             case 'number':
               if (!isNaN(currentData)) {
-                result[key] = currentData;
+                result[ownKey] = currentData;
               }
               break;
           }
