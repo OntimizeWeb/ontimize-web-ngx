@@ -12,7 +12,7 @@
 * **o-app-layout-sidenav**: new component for adding custom content to `o-app-layout` sidenav ([4e12eb9](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4e12eb9))
 * **o-table-cell-renderer-boolean**: new `render-type`, `render-true-value` and `render-false-value` inputs ([a8cca0d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a8cca0d))
 * **o-table-cell-editor-boolean**: new `auto-commit` input ([627aed3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/627aed3))
-* **o-table-column**:
+* **o-table**:
   * new attribute `content-align` ([6c23f4b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6c23f4b))
   * new `resizable` input ([3523d54](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3523d54))
 * **o-table-column**:
@@ -20,7 +20,6 @@
   * new `resizable` input ([3523d54](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3523d54))
 * **AppConfig**: adding properties for allowing remote permissions query.
 * **OServiceBaseComponent**: new `query-fallback-function` input ([fec7eab](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/fec7eab))
-
 
 
 ### Note on HammerJS
