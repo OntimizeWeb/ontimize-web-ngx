@@ -357,7 +357,7 @@ export class ODateInputComponent extends OFormDataComponent implements AfterView
       value = val.value;
     }
     value = this.ensureODateValueType(value);
-    super.setFormValue(value, options);
+    super.setFormValue(value, options, setDirty);
   }
 
   set valueType(val: any) {
