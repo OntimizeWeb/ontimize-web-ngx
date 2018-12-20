@@ -12,10 +12,11 @@ import { OSharedModule, OntimizeMomentDateAdapter } from '../../../shared';
 import { MomentService } from '../../../services';
 import { OFormValue, IFormValueOptions } from '../../form/OFormValue';
 import { InputConverter } from '../../../decorators';
+import { Util } from '../../../util/util';
+import { SQLTypes } from '../../../util/sqltypes';
 import { OFormComponent } from '../../form/o-form.component';
 import { OFormDataComponent, OValueChangeEvent } from '../../o-form-data-component.class';
 import { DEFAULT_INPUTS_O_TEXT_INPUT, DEFAULT_OUTPUTS_O_TEXT_INPUT } from '../text-input/o-text-input.component';
-import { Util } from '../../../util/util';
 
 export type ODateValueType = 'string' | 'date' | 'timestamp' | 'iso-8601';
 
@@ -332,7 +333,12 @@ export class ODateInputComponent extends OFormDataComponent implements AfterView
         break;
       case 'iso-8601':
         if (typeof val !== 'string') {
-          result = undefined;
+          const acceptTimestamp = typeof val === 'number' && this.getSQLType() === SQLTypes.TIMESTAMP;
+          if (acceptTimestamp) {
+            this.dateValue = new Date(val);
+          } else {
+            result = undefined;
+          }
         } else {
           let m = moment(val);
           if (m.isValid()) {
