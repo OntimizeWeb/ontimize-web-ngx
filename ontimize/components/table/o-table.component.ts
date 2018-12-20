@@ -12,7 +12,7 @@ import { OTableDao } from './o-table.dao';
 import { InputConverter } from '../../decorators';
 import { OTableDataSource } from './o-table.datasource';
 import { OFormComponent } from '../form/o-form.component';
-import { Codes, ObservableWrapper, Util } from '../../utils';
+import { Codes, ObservableWrapper, Util, SQLTypes } from '../../utils';
 import { PermissionsUtils } from '../../util/permissions';
 import { OServiceComponent } from '../o-service-component.class';
 import { OntimizeService, SnackBarService, OPermissions, OTablePermissions, OTableMenuPermissions } from '../../services';
@@ -1230,11 +1230,10 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       }
     });
     Object.assign(allSqlTypes, this.getSqlTypes());
-
     let filterCols = Util.getValuesFromObject(filter);
     let sqlTypes = {};
     Object.keys(allSqlTypes).forEach(key => {
-      if (filterCols.indexOf(key) !== -1) {
+      if (filterCols.indexOf(key) !== -1 && allSqlTypes[key] !== SQLTypes.OTHER) {
         sqlTypes[key] = allSqlTypes[key];
       }
     });
