@@ -22,6 +22,7 @@
 * **o-grid** and **o-table**: emit changes event in translations of the page
   ([f627826](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f627826))
 * **ontimize-export.service**: fixing download bug ([dbeaf42](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/dbeaf42)) [#237](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/237)
+* **o-context-menu** Fixed position if none of the provided positions fit ([8c72f40](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/8c72f40))
 
 
 ## 3.2.0 (2018-11-27)
