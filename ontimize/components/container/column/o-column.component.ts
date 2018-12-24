@@ -153,7 +153,7 @@ export class OColumnComponent implements OnInit, AfterViewInit {
     let arr_ = this.elRef.nativeElement.classList;
     if (arr_ && arr_.length) {
       var self = this;
-      arr_.forEach((item, index) => {
+      [].slice.call(arr_).forEach((item, index) => {
         if (item.startsWith('mat-elevation')) {
           self.elRef.nativeElement.classList.remove(item);
         }

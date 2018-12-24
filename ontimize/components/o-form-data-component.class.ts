@@ -296,10 +296,10 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   protected setSuffixClass(count: number) {
     const iconFieldEl = this.elRef.nativeElement.getElementsByClassName('icon-field');
     if (iconFieldEl.length === 1) {
-      let classList = iconFieldEl[0].classList;
+      const classList = [].slice.call(iconFieldEl[0].classList);
       classList.forEach(className => {
         if (className.startsWith('icon-field-')) {
-          classList.remove(className);
+          iconFieldEl[0].classList.remove(className);
         }
       });
       if (count > 0) {
