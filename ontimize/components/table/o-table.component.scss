@@ -357,19 +357,29 @@ $o_table_row_small: 28px;
 
         .mat-sort-header-button {
           flex: 1;
-          overflow: hidden;
-          white-space: nowrap;
-          text-overflow: ellipsis;
           display: block;
-        }
-
-        &.resizable .mat-sort-header-arrow {
-          margin-right: 8px;
         }
 
         .mat-sort-header-arrow {
           margin-top: auto;
           margin-bottom: auto;
+        }
+
+        .header-title-container {
+          cursor: default;
+        }
+
+        &.resizable .mat-sort-header-arrow,
+        .header-title-container {
+          margin-right: 14px;
+        }
+
+        &:not([o-mat-sort-header]),
+        .header-title-container,
+        .mat-sort-header-button {
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
         }
 
         &:not([o-mat-sort-header]) {

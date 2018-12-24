@@ -1,16 +1,20 @@
 .o-table-column-resizer {
+  &:not(.disabled) {
+    cursor: col-resize;
+  }
   display: inline-block;
-  cursor: col-resize;
-  width: 2px;
+  width: 13px;
   position: absolute;
   right: 0;
-  top: 0;
-  bottom: -1px;
+  top: 6px;
+  bottom: 6px;
 
   span {
     height: 100%;
-    width: 100%;
+    width: 1px;
     display: block;
+    margin-left: auto;
+    margin-right: auto;
   }
 
   &.disabled {

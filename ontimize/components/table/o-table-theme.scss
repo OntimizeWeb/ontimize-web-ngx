@@ -7,7 +7,7 @@
   $foreground: map-get($theme, foreground);
 
   .o-table {
-    .o-table-column-resizer {
+    .o-table-column-resizer span {
       background: mat-color($foreground, secondary-text, 0.24);
     }
 
