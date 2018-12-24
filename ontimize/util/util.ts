@@ -306,4 +306,16 @@ export class Util {
     document.execCommand('copy');
   }
 
+  static checkPixelsValueString(value: string, defaultValue?: any): string {
+    return (value || '').toLowerCase().endsWith('px') ? value : (defaultValue || undefined);
+  }
+
+  static extractPixelsValue(value: string, defaultValue: number = undefined): number {
+    let result: number;
+    if (Util.isDefined(Util.checkPixelsValueString(value))) {
+      let parsed = parseFloat(value.substr(0, value.length - 'px'.length));
+      result = isNaN(parsed) ? defaultValue : parsed;
+    }
+    return Util.isDefined(result) ? result : defaultValue;
+  }
 }
