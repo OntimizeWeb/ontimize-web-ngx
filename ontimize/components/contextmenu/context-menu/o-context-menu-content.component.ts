@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ContentChildren, EventEmitter, Injector, OnInit, QueryList, ViewEncapsulation, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ContentChildren, EventEmitter, Injector, OnInit, QueryList, ViewEncapsulation, ViewChild, HostListener } from '@angular/core';
 import { OverlayRef } from '@angular/cdk/overlay';
 import { MatMenuTrigger } from '@angular/material';
 import { OComponentMenuItems } from '../o-content-menu.class';
@@ -44,6 +44,11 @@ export class OContextMenuContentComponent implements AfterViewInit, OnInit {
     protected injector: Injector,
     protected menuService: OContextMenuService
   ) { }
+
+  @HostListener('document:click')
+  click() {
+    this.close();
+  }
 
   ngAfterViewInit() {
     this.trigger.openMenu();
