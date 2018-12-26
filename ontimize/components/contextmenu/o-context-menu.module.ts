@@ -9,7 +9,7 @@ import { OContextMenuItemComponent } from './context-menu-item/o-context-menu-it
 import { OContextMenuGroupComponent } from './context-menu-group/o-context-menu-group.component';
 
 import { OContextMenuSeparatorComponent } from './context-menu-separator/o-context-menu-separator.component';
-import { OWrapperContentMenuComponent } from './context-menu/wrapper-content-menu/wrapper-content-menu.component';
+import { OWrapperContentMenuComponent } from './context-menu/o-wrapper-content-menu/o-wrapper-content-menu.component';
 
 @NgModule({
   imports: [CommonModule, OSharedModule],
