@@ -18,6 +18,7 @@
 * **o-table-column**:
   * new `orderable` input ([3523d54](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3523d54))
   * new `resizable` input ([3523d54](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3523d54))
+  * new `max-width` input
 * **AppConfig**: adding properties for allowing remote permissions query.
 * **OServiceBaseComponent**: new `query-fallback-function` input ([fec7eab](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/fec7eab))
 * **o-date-input**: new `value-type` input
