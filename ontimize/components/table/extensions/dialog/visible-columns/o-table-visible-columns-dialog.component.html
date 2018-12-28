@@ -4,7 +4,7 @@
   <mat-list dnd-sortable-container [sortableData]="columns">
     <ng-container *ngFor="let column of columns; let x = index">
       <mat-list-item *ngIf="column.showInList" (click)="onClickColumn(column)" dnd-sortable [sortableIndex]="x" [dragData]="column"
-        [dragEnabled]="true">
+        [dragEnabled]="true" (onDragSuccess)="onDragSuccess($event)">
         <mat-icon mat-list-icon svgIcon="ontimize:drag_handle"></mat-icon>
         <span mat-line>{{ (column.title || column.attr) | oTranslate }}</span>
         <mat-icon *ngIf="column.visible" svgIcon="ontimize:visibility"></mat-icon>

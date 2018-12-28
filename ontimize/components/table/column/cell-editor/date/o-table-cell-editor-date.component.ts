@@ -1,4 +1,4 @@
-import { Component, Injector, ViewChild, TemplateRef, OnInit, ElementRef, ViewEncapsulation } from '@angular/core';
+import { Component, Injector, ViewChild, TemplateRef, OnInit, ElementRef, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/core';
 import { DateAdapter, MatDatepicker, MatDatepickerInputEvent, MAT_DATE_LOCALE } from '@angular/material';
 import moment from 'moment';
 
@@ -37,6 +37,7 @@ export const DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_DATE = [
   inputs: DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_DATE,
   outputs: DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_DATE,
   encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     { provide: DateAdapter, useClass: OntimizeMomentDateAdapter, deps: [MAT_DATE_LOCALE] }
   ]

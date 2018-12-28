@@ -1,4 +1,4 @@
-import { Component, Injector, ViewChild, TemplateRef } from '@angular/core';
+import { Component, Injector, ViewChild, TemplateRef, ChangeDetectionStrategy } from '@angular/core';
 import { FormControl, ValidatorFn } from '@angular/forms';
 
 import { InputConverter } from '../../../../../decorators';
@@ -19,6 +19,7 @@ export const DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_INTEGER = [
   moduleId: module.id,
   selector: 'o-table-cell-editor-integer',
   templateUrl: './o-table-cell-editor-integer.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   inputs: DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_INTEGER,
   outputs: DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_INTEGER
 })

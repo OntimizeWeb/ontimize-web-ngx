@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, forwardRef, EventEmitter, Injector, ViewEncapsulation, ViewChild, ElementRef, OnDestroy, AfterViewInit } from '@angular/core';
+import { Component, OnInit, Inject, forwardRef, EventEmitter, Injector, ViewEncapsulation, ViewChild, ElementRef, OnDestroy, AfterViewInit, ChangeDetectionStrategy } from '@angular/core';
 import { MatCheckboxChange, MatMenu } from '@angular/material';
 import { Subscription, fromEvent } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
@@ -22,6 +22,7 @@ export const DEFAULT_OUTPUTS_O_TABLE_QUICKFILTER = [
   inputs: DEFAULT_INPUTS_O_TABLE_QUICKFILTER,
   outputs: DEFAULT_OUTPUTS_O_TABLE_QUICKFILTER,
   encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     '[class.o-table-quickfilter]': 'true',
   }

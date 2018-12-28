@@ -1,4 +1,4 @@
-import { Component, forwardRef, Inject, Injector, ViewChild, OnInit } from '@angular/core';
+import { Component, forwardRef, Inject, Injector, ViewChild, OnInit, ChangeDetectionStrategy } from '@angular/core';
 
 import { OTableComponent } from '../../o-table.component';
 import { OContextMenuComponent } from '../../../contextmenu/o-context-menu-components';
@@ -20,6 +20,7 @@ export const DEFAULT_TABLE_CONTEXT_MENU_INPUTS = [
   moduleId: module.id,
   selector: 'o-table-context-menu',
   templateUrl: './o-table-context-menu.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   inputs: DEFAULT_TABLE_CONTEXT_MENU_INPUTS
 })
 
@@ -65,7 +66,6 @@ export class OTableContextMenuComponent implements OnInit {
 
 
   ngAfterViewInit(): void {
-
     let itemsParsed = this.defaultContextMenu.oContextMenuItems.toArray();
     if (this.contextMenu) {
       let items = itemsParsed.concat(this.contextMenu.oContextMenuItems.toArray());
@@ -99,6 +99,7 @@ export class OTableContextMenuComponent implements OnInit {
     }
     return isVisible;
   }
+
   isVisibleSelectAll() {
     let isVisible = false;
     if (this.showSelectAll && !this.table.isSelectionModeNone()) {

@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, ChangeDetectionStrategy } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 
@@ -8,7 +8,8 @@ import { ITableFiltersStatus } from '../../o-table-storage.class';
   moduleId: module.id,
   selector: 'o-table-store-filter-dialog',
   templateUrl: './o-table-store-filter-dialog.component.html',
-  styleUrls: ['./o-table-store-filter-dialog.component.scss']
+  styleUrls: ['./o-table-store-filter-dialog.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class OTableStoreFilterDialogComponent {
 

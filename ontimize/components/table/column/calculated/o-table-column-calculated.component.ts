@@ -1,4 +1,4 @@
-import { Component, Inject, forwardRef, Injector, ComponentFactoryResolver } from '@angular/core';
+import { Component, Inject, forwardRef, Injector, ComponentFactoryResolver, ChangeDetectionStrategy } from '@angular/core';
 import { OTableComponent } from '../../o-table.component';
 import { OTableColumnComponent, DEFAULT_INPUTS_O_TABLE_COLUMN } from '../o-table-column.component';
 
@@ -26,7 +26,8 @@ export class OColumnCalculated {
       provide: OTableColumnComponent,
       useExisting: forwardRef(() => OTableColumnCalculatedComponent)
     }
-  ]
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 
 export class OTableColumnCalculatedComponent extends OTableColumnComponent {

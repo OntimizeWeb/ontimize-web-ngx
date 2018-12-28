@@ -1,4 +1,4 @@
-import { Component, Injector, ViewChild, TemplateRef, ElementRef } from '@angular/core';
+import { Component, Injector, ViewChild, TemplateRef, ElementRef, ChangeDetectionStrategy } from '@angular/core';
 import { OBaseTableCellEditor } from '../o-base-table-cell-editor.class';
 
 export const DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_TEXT = [
@@ -13,6 +13,7 @@ export const DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_TEXT = [
   moduleId: module.id,
   selector: 'o-table-cell-editor-text',
   templateUrl: './o-table-cell-editor-text.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   inputs: DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_TEXT,
   outputs: DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_TEXT
 })

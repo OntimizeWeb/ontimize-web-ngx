@@ -1,5 +1,5 @@
 
-import { Component, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, Injector, OnInit, TemplateRef, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 
 import { CurrencyService } from '../../../../../services';
 import { ICurrencyPipeArgument, OCurrencyPipe } from '../../../../../pipes';
@@ -20,6 +20,7 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_CURRENCY = [
   moduleId: module.id,
   selector: 'o-table-cell-renderer-currency',
   templateUrl: './o-table-cell-renderer-currency.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   inputs: DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_CURRENCY
 })
 export class OTableCellRendererCurrencyComponent extends OBaseTableCellRenderer implements OnInit {

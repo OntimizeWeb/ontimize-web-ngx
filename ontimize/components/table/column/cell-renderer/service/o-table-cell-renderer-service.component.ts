@@ -1,4 +1,4 @@
-import { Component, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, Injector, OnInit, TemplateRef, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { DialogService, OntimizeService } from '../../../../../services';
@@ -23,6 +23,7 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_SERVICE = [
   selector: 'o-table-cell-renderer-service',
   templateUrl: './o-table-cell-renderer-service.component.html',
   inputs: DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_SERVICE,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     // Service renderer must have its own service instance in order to avoid overriding table service configuration
     { provide: OntimizeService, useFactory: dataServiceFactory, deps: [Injector] }

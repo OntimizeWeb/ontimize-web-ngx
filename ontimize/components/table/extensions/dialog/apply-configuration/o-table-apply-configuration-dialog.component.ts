@@ -1,4 +1,4 @@
-import { Component, Inject, Injector, EventEmitter, ViewChild, OnInit, } from '@angular/core';
+import { Component, Inject, Injector, EventEmitter, ViewChild, OnInit, ChangeDetectionStrategy, } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA, MatListOption, MatSelectionList } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
 import { DialogService } from '../../../../../services';
@@ -9,7 +9,8 @@ import { ITableConfiguration } from '../../o-table-storage.class';
   moduleId: module.id,
   selector: 'o-table-apply-configuration-dialog',
   templateUrl: './o-table-apply-configuration-dialog.component.html',
-  styleUrls: ['./o-table-apply-configuration-dialog.component.scss']
+  styleUrls: ['./o-table-apply-configuration-dialog.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class OTableApplyConfigurationDialogComponent implements OnInit {
 

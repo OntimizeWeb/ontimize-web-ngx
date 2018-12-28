@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, Inject, ViewChild, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Inject, ViewChild, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/core';
 import { MatCheckboxChange, MatDialogRef, MAT_DIALOG_DATA, MatSelectionList } from '@angular/material';
 import { FormControl } from '@angular/forms';
 import { fromEvent } from 'rxjs';
@@ -19,6 +19,7 @@ export interface ITableFilterByColumnDataInterface {
   templateUrl: 'o-table-filter-by-column-data-dialog.component.html',
   styleUrls: ['o-table-filter-by-column-data-dialog.component.scss'],
   encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     '[class.o-filter-by-column-dialog]': 'true'
   }

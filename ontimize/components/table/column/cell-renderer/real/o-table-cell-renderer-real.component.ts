@@ -1,4 +1,4 @@
-import { Component, Injector, TemplateRef, ViewChild } from '@angular/core';
+import { Component, Injector, TemplateRef, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 
 import { NumberService } from '../../../../../services';
 import { IRealPipeArgument, ORealPipe } from '../../../../../pipes';
@@ -16,6 +16,7 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_REAL = [
   moduleId: module.id,
   selector: 'o-table-cell-renderer-real',
   templateUrl: './o-table-cell-renderer-real.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   inputs: DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_REAL
 })
 export class OTableCellRendererRealComponent extends OTableCellRendererIntegerComponent {

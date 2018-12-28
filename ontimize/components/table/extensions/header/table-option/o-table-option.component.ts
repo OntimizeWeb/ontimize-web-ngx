@@ -1,4 +1,4 @@
-import { Component, Inject, forwardRef, EventEmitter, Injector, ViewEncapsulation, ElementRef } from '@angular/core';
+import { Component, Inject, forwardRef, EventEmitter, Injector, ViewEncapsulation, ElementRef, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { OTableComponent } from '../../../o-table.component';
 import { InputConverter } from '../../../../../decorators';
 
@@ -24,6 +24,7 @@ export const DEFAULT_OUTPUTS_O_TABLE_OPTION = [
   inputs: DEFAULT_INPUTS_O_TABLE_OPTION,
   outputs: DEFAULT_OUTPUTS_O_TABLE_OPTION,
   encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     '[class.o-table-option]': 'true',
   }
@@ -47,21 +48,32 @@ export class OTableOptionComponent {
   @InputConverter()
   active: boolean = false;
 
+  cd: ChangeDetectorRef;
+
   constructor(
     protected injector: Injector,
     public elRef: ElementRef,
     @Inject(forwardRef(() => OTableComponent)) protected table: OTableComponent
   ) {
-
+    try {
+      this.cd = this.injector.get(ChangeDetectorRef);
+    } catch (e) {
+      // no parent form
+    }
   }
 
   innerOnClick() {
     this.onClick.emit();
-    this.active = !this.active;
+    this.setActive(!this.active);
   }
 
   showActiveOptionIcon() {
     return this.showActiveIcon && this.active;
+  }
+
+  setActive(val: boolean) {
+    this.active = val;
+    this.cd.detectChanges();
   }
 
 }

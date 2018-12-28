@@ -1,4 +1,4 @@
-import { HostListener, Injector, NgZone, SimpleChange } from '@angular/core';
+import { HostListener, Injector, NgZone, SimpleChange, ChangeDetectorRef } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 
 import { Util, Codes } from '../utils';
@@ -130,12 +130,13 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
   protected querySubscription: Subscription;
   protected dataService: any;
   protected _state: any = {};
-  loading: boolean = false;
+  protected _loading: boolean = false;
 
   protected form: OFormComponent;
   protected alreadyStored: boolean = false;
 
   protected queryOnEventSubscription: Subscription;
+  public cd: ChangeDetectorRef;
 
   constructor(
     protected injector: Injector
@@ -143,6 +144,7 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
     this.dialogService = this.injector.get(DialogService);
     this.localStorageService = this.injector.get(LocalStorageService);
     try {
+      this.cd = this.injector.get(ChangeDetectorRef);
       this.form = this.injector.get(OFormComponent);
     } catch (e) {
       // no parent form
@@ -396,6 +398,15 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
       });
     });
     return subscription;
+  }
+
+  set loading(value: boolean) {
+    this._loading = value;
+    this.cd.detectChanges();
+  }
+
+  get loading(): boolean {
+    return this._loading;
   }
 
   /**

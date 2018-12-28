@@ -1,4 +1,4 @@
-import { Component, Inject, ViewEncapsulation } from '@angular/core';
+import { Component, Inject, ViewEncapsulation, ChangeDetectionStrategy, ChangeDetectorRef, Injector } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
 import { Util } from '../../../../../utils';
@@ -12,6 +12,7 @@ import { DragDropService } from '@churchs19/ng2-dnd';
   styleUrls: ['o-table-visible-columns-dialog.component.scss'],
   encapsulation: ViewEncapsulation.None,
   providers: [DragDropService],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     '[class.o-table-visible-columns-dialog]': 'true'
   }
@@ -19,11 +20,18 @@ import { DragDropService } from '@churchs19/ng2-dnd';
 export class OTableVisibleColumnsDialogComponent {
 
   columns: Array<any> = [];
+  protected cd: ChangeDetectorRef;
 
   constructor(
+    protected injector: Injector,
     public dialogRef: MatDialogRef<OTableVisibleColumnsDialogComponent>,
     @Inject(MAT_DIALOG_DATA) data: any
   ) {
+    try {
+      this.cd = this.injector.get(ChangeDetectorRef);
+    } catch (e) {
+      // no parent form
+    }
     if (Util.isArray(data.columnsData) && Util.isArray(data.originalVisibleColumns)) {
       let originalCols = data.originalVisibleColumns;
       data.columnsData.forEach((oCol: OColumn) => {
@@ -49,4 +57,7 @@ export class OTableVisibleColumnsDialogComponent {
     col.visible = !col.visible;
   }
 
+  onDragSuccess(arg: any) {
+    this.cd.detectChanges();
+  }
 }

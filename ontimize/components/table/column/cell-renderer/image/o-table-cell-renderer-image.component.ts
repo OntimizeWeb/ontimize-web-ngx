@@ -1,4 +1,4 @@
-import { Component, Injector, TemplateRef, ViewChild } from '@angular/core';
+import { Component, Injector, TemplateRef, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 
 import { OColumn } from '../../../o-table.component';
 import { OBaseTableCellRenderer } from '../o-base-table-cell-renderer.class';
@@ -20,6 +20,7 @@ export const DEFAULT_OUTPUTS_O_TABLE_CELL_RENDERER_IMAGE = [
   moduleId: module.id,
   selector: 'o-table-cell-renderer-image',
   templateUrl: './o-table-cell-renderer-image.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   inputs: DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_IMAGE
 })
 export class OTableCellRendererImageComponent extends OBaseTableCellRenderer {

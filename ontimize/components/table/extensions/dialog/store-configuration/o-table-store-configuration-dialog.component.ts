@@ -1,4 +1,4 @@
-import { Component, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, ViewChild, AfterViewInit, ChangeDetectionStrategy } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MatListOption, MatSelectionList } from '@angular/material';
 
@@ -8,7 +8,8 @@ import { MatDialogRef, MatListOption, MatSelectionList } from '@angular/material
   moduleId: module.id,
   selector: 'o-table-store-configuration-dialog',
   templateUrl: './o-table-store-configuration-dialog.component.html',
-  styleUrls: ['./o-table-store-configuration-dialog.component.scss']
+  styleUrls: ['./o-table-store-configuration-dialog.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class OTableStoreConfigurationDialogComponent implements AfterViewInit {
 
