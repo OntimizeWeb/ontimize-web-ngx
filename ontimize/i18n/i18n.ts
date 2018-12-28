@@ -219,6 +219,7 @@ export var MAP = {
     'TABLE_CONTEXT_MENU.COPY_ALL': 'Copy all',
     'TABLE_CONTEXT_MENU.COPY_SELECTION': 'Copy selection',
     'TABLE_CONTEXT_MENU.SELECT_ALL': 'Select all',
+    'TABLE_CONTEXT_MENU.DESELECT_ALL': 'Deselect all',
     'TABLE_CONTEXT_MENU.REFRESH': 'Refresh',
     'TABLE_CONTEXT_MENU.DELETE': 'Delete'
   },

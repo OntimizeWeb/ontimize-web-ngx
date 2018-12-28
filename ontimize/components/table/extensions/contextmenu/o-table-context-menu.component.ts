@@ -148,6 +148,9 @@ export class OTableContextMenuComponent implements OnInit {
     this.table.showAndSelectAllCheckbox();
   }
 
+  unSelectAll() {
+    this.table.selection.clear();
+  }
   copyAll() {
     this.table.copyAll();
   }
@@ -173,7 +176,5 @@ export class OTableContextMenuComponent implements OnInit {
   refresh() {
     this.table.refresh();
   }
-
-
 
 }
