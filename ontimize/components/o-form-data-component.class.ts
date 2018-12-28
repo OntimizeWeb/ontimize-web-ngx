@@ -243,7 +243,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     if (!this.form || !Util.isDefined(this.form.oattr)) {
       return;
     }
-    const permissions: OPermissions = this.permissionsService.getFormDataComponentPermissions(this.oattr, this.form.oattr);
+    const permissions: OPermissions = this.form.getFormComponentPermissions(this.oattr);
     if (!Util.isDefined(permissions)) {
       return;
     }
@@ -335,16 +335,10 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     // emit OValueChangeEvent.PROGRAMMATIC_CHANGE when assign value to data
     // this method skips the following permissions checking because the form is
     // setting its query result using it
-    this.ensureOFormValue(value);
-    if (this._fControl) {
-      this._fControl.setValue(this.value.value, {
-        emitModelToViewChange: false,
-        emitEvent: false
-      });
-      if (this._fControl.invalid && !this.form.isInInsertMode()) {
-        this._fControl.markAsTouched();
-      }
-    }
+    this.setFormValue(value, {
+      emitModelToViewChange: false,
+      emitEvent: false
+    }, false);
     this.emitOnValueChange(OValueChangeEvent.PROGRAMMATIC_CHANGE, value, this.oldValue);
     this.oldValue = this.value.value;
   }
@@ -372,7 +366,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     }
     if (this.oldValue !== val) {
       var newValue = val;
-      this.setFormValue(val, options);
+      this.setFormValue(val, options, true);
       let changeType: number = options ? options.changeType : OValueChangeEvent.PROGRAMMATIC_CHANGE;
       this.emitOnValueChange(changeType, newValue, this.oldValue);
       this.oldValue = val;
@@ -393,11 +387,13 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     this.clearValue({ changeType: OValueChangeEvent.USER_CHANGE });
   }
 
-  protected setFormValue(val: any, options?: IFormValueOptions) {
+  protected setFormValue(val: any, options?: IFormValueOptions, setDirty: boolean = false) {
     this.ensureOFormValue(val);
     if (this._fControl) {
       this._fControl.setValue(val, options);
-      this._fControl.markAsDirty();
+      if (setDirty) {
+        this._fControl.markAsDirty();
+      }
       if (this._fControl.invalid && !this.form.isInInsertMode()) {
         this._fControl.markAsTouched();
       }

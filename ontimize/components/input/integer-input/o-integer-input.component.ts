@@ -1,15 +1,14 @@
-import { AfterViewInit, Component, ElementRef, forwardRef, Inject, Injector, NgModule, OnInit, Optional, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormControl } from '@angular/forms';
-import { ValidatorFn, ValidationErrors } from '@angular/forms';
+import { AfterViewInit, Component, ElementRef, forwardRef, Inject, Injector, NgModule, OnInit, Optional, ViewEncapsulation } from '@angular/core';
+import { FormControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 
-import { Util } from '../../../util/util';
-import { OSharedModule } from '../../../shared';
 import { InputConverter } from '../../../decorators';
-import { OFormComponent } from '../../form/o-form.component';
 import { IIntegerPipeArgument, OIntegerPipe } from '../../../pipes';
+import { OSharedModule } from '../../../shared';
+import { Util } from '../../../util/util';
+import { OFormComponent } from '../../form/o-form.component';
 import { IFormValueOptions, OFormValue } from '../../form/OFormValue';
-import { DEFAULT_INPUTS_O_TEXT_INPUT, DEFAULT_OUTPUTS_O_TEXT_INPUT, OTextInputComponent, OTextInputModule, } from '../text-input/o-text-input.component';
+import { DEFAULT_INPUTS_O_TEXT_INPUT, DEFAULT_OUTPUTS_O_TEXT_INPUT, OTextInputComponent, OTextInputModule } from '../text-input/o-text-input.component';
 
 export const DEFAULT_INPUTS_O_INTEGER_INPUT = [
   ...DEFAULT_INPUTS_O_TEXT_INPUT,
@@ -62,6 +61,7 @@ export class OIntegerInputComponent extends OTextInputComponent implements After
     injector: Injector
   ) {
     super(form, elRef, injector);
+    this._defaultSQLTypeKey = 'INTEGER';
 
     // Firefox workaround
     if (navigator.userAgent.toLowerCase().indexOf('firefox') > -1) {
@@ -137,7 +137,7 @@ export class OIntegerInputComponent extends OTextInputComponent implements After
       return;
     }
     this.setPipeValue();
-    let formControl: FormControl = this.getControl();
+    const formControl: FormControl = this.getControl();
     if (formControl) {
       formControl.updateValueAndValidity();
     }
@@ -146,7 +146,7 @@ export class OIntegerInputComponent extends OTextInputComponent implements After
 
   setPipeValue() {
     if (typeof this.pipeArguments !== 'undefined' && !this.isEmpty()) {
-      let parsedValue = this.componentPipe.transform(this.getValue(), this.pipeArguments);
+      const parsedValue = this.componentPipe.transform(this.getValue(), this.pipeArguments);
       this.setTextDOMValue(parsedValue);
     }
   }
@@ -161,7 +161,7 @@ export class OIntegerInputComponent extends OTextInputComponent implements After
   }
 
   getInputEl() {
-    var inputElement = undefined;
+    let inputElement;
     if (this.elRef.nativeElement.tagName === 'INPUT') {
       inputElement = this.elRef.nativeElement;
     } else {
@@ -182,7 +182,7 @@ export class OIntegerInputComponent extends OTextInputComponent implements After
   }
 
   setTextDOMValue(val: any) {
-    let inputElement = this.getInputEl();
+    const inputElement = this.getInputEl();
     if (Util.isDefined(inputElement)) {
       // Firefox workaround
       if (navigator.userAgent.toLowerCase().indexOf('firefox') === -1) {
@@ -193,7 +193,7 @@ export class OIntegerInputComponent extends OTextInputComponent implements After
   }
 
   resolveValidators(): ValidatorFn[] {
-    let validators: ValidatorFn[] = super.resolveValidators();
+    const validators: ValidatorFn[] = super.resolveValidators();
     if (Util.isDefined(this.min)) {
       validators.push(this.minValidator.bind(this));
     }
@@ -206,8 +206,8 @@ export class OIntegerInputComponent extends OTextInputComponent implements After
   protected minValidator(control: FormControl): ValidationErrors {
     if ((typeof (control.value) === 'number') && (control.value < this.min)) {
       return {
-        'min': {
-          'requiredMin': this.min
+        min: {
+          requiredMin: this.min
         }
       };
     }
@@ -217,8 +217,8 @@ export class OIntegerInputComponent extends OTextInputComponent implements After
   protected maxValidator(control: FormControl): ValidationErrors {
     if ((typeof (control.value) === 'number') && (this.max < control.value)) {
       return {
-        'max': {
-          'requiredMax': this.max
+        max: {
+          requiredMax: this.max
         }
       };
     }

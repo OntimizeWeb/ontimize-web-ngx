@@ -1,6 +1,6 @@
 <ng-container *ngIf="!hidden">
   <button type="button" mat-button class="o-app-sidenav-item o-app-sidenav-menugroup" [class.active]="menuGroup.opened"
-    fxLayout="column" fxFill (click)="onClick()">
+    fxLayout="column" (click)="onClick()">
     <div fxLayout="row" fxLayoutAlign="start center" fxFill>
       <ng-container *ngIf="sidenavOpened">
         <mat-icon *ngIf="menuGroup.icon">{{ menuGroup.icon }}</mat-icon>

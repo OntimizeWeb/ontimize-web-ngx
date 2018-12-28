@@ -1,3 +1,30 @@
+## 3.2.1 (2018-12-28)
+### Features
+* **o-form**: new `getFormComponentPermissions` and  `getActionsPermissions` methods
+* **o-table**: new attribute `select-all-checkbox-visible` ([a553447](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a553447))
+* **o-date-input**: new `value-type` input ([8876586](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/8876586))
+
+### BREAKING CHANGES
+* **PermissionsService**: ([2d186c9](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2d186c9))
+  * adding new parameter to `getTablePermissions` method
+  * adding `getFormPermissions` method
+  * removing `getFormDataComponentPermissions`, `getActionsContextMenuTablePermissions` and `getContainerActionsPermissions` methods
+  * Routes ([1cc62a9](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1cc62a9))
+    * allowing to define permissions for routes
+    * new `PermissionsGuardService` CanActivateChild guard
+
+### Bug Fixes
+* **o-grid**: pagination local in grid  ([916e632](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/916e632)), closes [#229](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/229)
+* **o-table**:
+  * expand the table in the container ([8d50a68](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/8d50a68))
+  * the spinner produces scroll ([ef36e52](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ef36e52))
+  * tooltip not show when text is long and cell is at the edge of the screen ([9e5f328](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9e5f328))
+* **o-grid** and **o-table**: emit changes event in translations of the page
+  ([f627826](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f627826))
+* **ontimize-export.service**: fixing download bug ([dbeaf42](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/dbeaf42)) [#237](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/237)
+* **o-context-menu** Fixed position if none of the provided positions fit ([8c72f40](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/8c72f40))
+
+
 ## 3.2.0 (2018-11-27)
 ### Features
 * New component `o-slide-toggle` ([6c6453b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6c6453b))
@@ -39,7 +66,7 @@ The sliding behavior in `o-slider` component requires that HammerJS is loaded on
 * **o-table-cell-renderer-percentage**: new `value-base` input ([d9585f6](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d9585f6)) ([#222](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/222))
 
 ### Bug Fixes
-* **o-grid**: open correct detail when clicking on gird items on pages different than the first page ([b9468a3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b9468a3)) closes [#220](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/220)
+* **o-grid**: open correct detail when clicking on grid items on pages different than the first page ([b9468a3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b9468a3)) closes [#220](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/220)
 
 ### BREAKING CHANGES
 * **o-form**: `getDataValue` method is now public again.

@@ -12,7 +12,7 @@ import { OTableDao } from './o-table.dao';
 import { InputConverter } from '../../decorators';
 import { OTableDataSource } from './o-table.datasource';
 import { OFormComponent } from '../form/o-form.component';
-import { Codes, ObservableWrapper, Util } from '../../utils';
+import { Codes, ObservableWrapper, Util, SQLTypes } from '../../utils';
 import { PermissionsUtils } from '../../util/permissions';
 import { OServiceComponent } from '../o-service-component.class';
 import { OntimizeService, SnackBarService, OPermissions, OTablePermissions, OTableMenuPermissions } from '../../services';
@@ -104,7 +104,7 @@ export const DEFAULT_INPUTS_O_TABLE = [
   // show-buttons-text [yes|no|true|false]: show text of header buttons. Default: yes.
   'showButtonsText: show-buttons-text',
 
-  // select-all-checkbox [yes|no|true|false]: show selection check boxes. Default: no.
+  // select-all-checkbox [yes|no|true|false]:  show in the menu the option of selection check boxes . Default: no.
   'selectAllCheckbox: select-all-checkbox',
 
   // pagination-controls [yes|no|true|false]: show pagination controls. Default: yes.
@@ -131,7 +131,9 @@ export const DEFAULT_INPUTS_O_TABLE = [
 
   'autoAlignTitles: auto-align-titles',
 
-  'multipleSort: multiple-sort'
+  'multipleSort: multiple-sort',
+  // select-all-checkbox-visible [yes|no|true|false]: show selection check boxes.Default: no.
+  'selectAllCheckboxVisible: select-all-checkbox-visible'
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE = [
@@ -287,6 +289,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   public static DEFAULT_INPUTS_O_TABLE = DEFAULT_INPUTS_O_TABLE;
   public static DEFAULT_OUTPUTS_O_TABLE = DEFAULT_OUTPUTS_O_TABLE;
+  static DEFAULT_BASE_SIZE_SPINNER = 100;
 
   public static NAME_COLUMN_SELECT = 'select';
   public loadingScroll = false;
@@ -301,6 +304,21 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   // only for insideTabBugWorkaround
   @ViewChildren(OMatSortHeader) protected sortHeaders: QueryList<OMatSortHeader>;
+
+  @ViewChild('spinnerContainer', { read: ElementRef })
+  spinnerContainer: ElementRef;
+  get diameterSpinner() {
+    const minHeight = OTableComponent.DEFAULT_BASE_SIZE_SPINNER;
+    let height = 0;
+    if (this.spinnerContainer && this.spinnerContainer.nativeElement) {
+      height = this.spinnerContainer.nativeElement.offsetHeight;
+    }
+    if (height > 0 && height <= 100) {
+      return Math.floor(height - (height * 0.1));
+    } else {
+      return minHeight;
+    }
+  }
 
   public tableContextMenu: OContextMenuComponent;
 
@@ -367,6 +385,20 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   autoAlignTitles: boolean = false;
   @InputConverter()
   multipleSort: boolean = true;
+
+
+  protected _selectAllCheckboxVisible;
+  @InputConverter()
+  set selectAllCheckboxVisible(value: boolean) {
+    this._selectAllCheckboxVisible = this.state['select-column-visible'] || value;
+    this.oTableOptions.selectColumn.visible = value;
+    this.updateSelectionColumnState();
+  }
+
+  get selectAllCheckboxVisible(): boolean {
+    return this._selectAllCheckboxVisible;
+  }
+
 
   public daoTable: OTableDao | null;
   public dataSource: OTableDataSource | null;
@@ -581,7 +613,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     const permissions: OPermissions = actionsPerm.find(p => p.attr === attr);
     let enabledPermision = PermissionsUtils.checkEnabledPermission(permissions);
     if (!enabledPermision) {
-      this.snackBarService.open(PermissionsUtils.MESSAGE_OPERATION_NOT_ALLOWED_PERMISSION);
+      this.snackBarService.open('MESSAGES.OPERATION_NOT_ALLOWED_PERMISSION');
     }
     return enabledPermision;
   }
@@ -601,7 +633,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
     this.initializeDao();
 
-    this.permissions = this.permissionsService.getTablePermissions(this.oattr);
+    this.permissions = this.permissionsService.getTablePermissions(this.oattr, this.actRoute);
   }
 
   protected initializeDao() {
@@ -908,7 +940,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
 
     if (this.colArray.length) {
-      this.colArray.map((x: string) => this.registerColumn(x));
+      this.colArray.forEach((x: string) => this.registerColumn(x));
 
       let columnsOrder = [];
       if (this.state.hasOwnProperty('oColumns-display')) {
@@ -1166,11 +1198,10 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       }
     });
     Object.assign(allSqlTypes, this.getSqlTypes());
-
     let filterCols = Util.getValuesFromObject(filter);
     let sqlTypes = {};
     Object.keys(allSqlTypes).forEach(key => {
-      if (filterCols.indexOf(key) !== -1) {
+      if (filterCols.indexOf(key) !== -1 && allSqlTypes[key] !== SQLTypes.OTHER) {
         sqlTypes[key] = allSqlTypes[key];
       }
     });

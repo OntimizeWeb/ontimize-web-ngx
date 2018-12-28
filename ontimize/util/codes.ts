@@ -48,6 +48,7 @@ export class Codes {
   public static SESSION_EXPIRED_KEY = 'session-expired';
 
   public static LOGIN_ROUTE = '/login';
+  public static FORBIDDEN_ROUTE = '403';
   public static DEFAULT_EDIT_ROUTE = 'edit';
   public static DEFAULT_DETAIL_ROUTE = undefined;
   public static DEFAULT_INSERT_ROUTE = 'new';

@@ -1,5 +1,5 @@
-<div fxLayout="row" fxLayoutAlign="space-between center" [formGroup]="getFormGroup()" [matTooltip]="tooltip"
-  [matTooltipPosition]="tooltipPosition" [matTooltipShowDelay]="tooltipShowDelay" class="custom-error o-list-picker-content">
+<div (click)="onClickInput($event)" fxLayout="row" fxLayoutAlign="space-between center" [formGroup]="getFormGroup()"
+  [matTooltip]="tooltip" [matTooltipPosition]="tooltipPosition" [matTooltipShowDelay]="tooltipShowDelay" class="custom-error o-list-picker-content">
   <input #inputModel class="input-model" type="text" [id]="getAttribute()" [formControlName]="getAttribute()" [ngModel]="getValue()"
     (ngModelChange)="innerOnChange($event)">
 
@@ -7,14 +7,15 @@
     <input #visibleInput matInput type="text" [attr.id]="'desc_' + getAttribute()" [id]="'desc_' + getAttribute()"
       [placeholder]="placeHolder" [value]="getDescriptionValue()" (input)="onVisibleInputChange($event)" (focus)="innerOnFocus($event)"
       (blur)="innerOnBlur($event)" [readonly]="isReadOnly || !textInputEnabled" [formControlName]="getAttribute()"
-      [required]="isRequired" (keydown.enter)="onKeydownEnter(visibleInput.value)" (click)="onClickInput($event)"
-      (change)="onChangeEvent($event)">
+      [required]="isRequired" (keydown.enter)="onKeydownEnter(visibleInput.value)" (change)="onChangeEvent($event)">
 
-    <button type="button" [disabled]="isReadOnly || isDisabled" [class.read-only]="isReadOnly" matSuffix mat-icon-button (click)="onClickListpicker($event)">
+    <button type="button" [disabled]="isReadOnly || isDisabled" [class.read-only]="isReadOnly" matSuffix
+      mat-icon-button (click)="onClickListpicker($event)">
       <mat-icon svgIcon="ontimize:search"></mat-icon>
     </button>
 
-    <button type="button" [disabled]="isReadOnly || isDisabled" [class.read-only]="isReadOnly" matSuffix mat-icon-button (click)="onClickClearValue()">
+    <button type="button" [disabled]="isReadOnly || isDisabled" [class.read-only]="isReadOnly" matSuffix
+      mat-icon-button (click)="onClickClearValue()">
       <mat-icon svgIcon="ontimize:clear"></mat-icon>
     </button>
 

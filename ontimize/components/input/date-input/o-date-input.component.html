@@ -1,11 +1,9 @@
 <div fxLayout="row" fxLayoutAlign="space-between center" [formGroup]="getFormGroup()" [matTooltip]="tooltip"
-  [matTooltipPosition]="tooltipPosition" [matTooltipShowDelay]="tooltipShowDelay">
+  [matTooltipPosition]="tooltipPosition" [matTooltipShowDelay]="tooltipShowDelay" (click)="onClickInput($event)">
   <mat-form-field [class.custom-width]="hasCustomWidth" class="icon-field" fxFlexFill>
     <input matInput #matInputRef [matDatepicker]="d" [id]="getAttribute()" [formControlName]="getAttribute()"
-      [placeholder]="placeHolder" [readonly]="isReadOnly || !textInputEnabled" [ngModel]="getValueAsDate()"
-      (ngModelChange)="onModelChange($event)" (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)"
-      [matDatepickerFilter]="filterDate" (dateChange)="onChangeEvent($event)" [required]="isRequired" (click)="onClickInput($event)">
-
+      [placeholder]="placeHolder" [readonly]="isReadOnly || !textInputEnabled" [ngModel]="getValueAsDate()" (focus)="innerOnFocus($event)"
+      (blur)="innerOnBlur($event)" [matDatepickerFilter]="filterDate" (dateChange)="onChangeEvent($event)" [required]="isRequired">
     <button type="button" *ngIf="showClearButton" matSuffix mat-icon-button (click)="onClickClearValue()">
       <mat-icon svgIcon="ontimize:close"></mat-icon>
     </button>

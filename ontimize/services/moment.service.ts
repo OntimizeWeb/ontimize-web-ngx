@@ -7,7 +7,7 @@ export class MomentService {
 
   // HTML5 input date: YYYY-MM-DD // locale ES-es: DD-MM-YYYY // locale EN-en: MM-DD-YYYY // ISO 8601:
   // YYYY-MM-DDThh:mm:ss.S // UTC: YYYY-MM-DD hh:mm:ssZ
-  static DATE_FORMATS = ['YYYY-MM-DD', 'DD-MM-YYYY', 'MM-DD-YYYY', 'YYYY-MM-DDThh:mm:ss.S', 'YYYY-MM-DD hh:mm:ssZ'];
+  static DATE_FORMATS = ['YYYY-MM-DD', 'DD-MM-YYYY', 'MM-DD-YYYY', 'YYYY-MM-DDThh:mm:ss.S', 'YYYY-MM-DDThh:mm:ss.SSSZ', 'YYYY-MM-DD hh:mm:ssZ'];
   static defaultFormat: string = 'L';
   private _locale: string;
   private _config: Config;
@@ -40,4 +40,3 @@ export class MomentService {
   }
 
 }
-

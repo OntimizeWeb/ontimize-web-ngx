@@ -7,12 +7,11 @@ export const DEFAULT_CONTEXT_MENU_CONTENT_ITEM_INPUTS = [
   'items'
 ];
 
-
 @Component({
   moduleId: module.id,
-  selector: 'wrapper-content-menu',
-  templateUrl: 'wrapper-content-menu.component.html',
-  styleUrls: ['./wrapper-content-menu.component.scss'],
+  selector: 'o-wrapper-content-menu',
+  templateUrl: 'o-wrapper-content-menu.component.html',
+  styleUrls: ['./o-wrapper-content-menu.component.scss'],
   inputs: DEFAULT_CONTEXT_MENU_CONTENT_ITEM_INPUTS
 })
 export class OWrapperContentMenuComponent {

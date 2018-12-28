@@ -1,15 +1,4 @@
-import {
-  Component,
-  OnInit,
-  OnDestroy,
-  Inject,
-  Injector,
-  forwardRef,
-  ElementRef,
-  NgModule,
-  ViewEncapsulation
-} from '@angular/core';
-
+import { Component, OnInit, OnDestroy, Inject, Injector, forwardRef, ElementRef, NgModule, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs/Subscription';
 
@@ -17,7 +6,7 @@ import { OFormComponent } from './o-form.component';
 import { InputConverter } from '../../decorators';
 import { Util } from '../../util/util';
 import { PermissionsUtils } from '../../util/permissions';
-import { DialogService, NavigationService, PermissionsService, OPermissions, SnackBarService } from '../../services';
+import { DialogService, NavigationService, OPermissions, SnackBarService } from '../../services';
 import { OSharedModule } from '../../shared';
 import { OFormNavigationComponent } from './navigation/o-form-navigation.component';
 
@@ -71,7 +60,6 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
 
   protected _dialogService: DialogService;
   protected _navigationService: NavigationService;
-  private permissionService: PermissionsService;
   protected mutationObservers: MutationObserver[] = [];
 
   protected formCacheSubscription: Subscription;
@@ -87,7 +75,6 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
     _form.registerToolbar(this);
     this._dialogService = this.injector.get(DialogService);
     this._navigationService = this.injector.get(NavigationService);
-    this.permissionService = this.injector.get(PermissionsService);
     this.snackBarService = this.injector.get(SnackBarService);
   }
 
@@ -125,7 +112,7 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
 
   protected parsePermissions() {
     if (this._form.oattr) {
-      this.actionsPermissions = this.permissionService.getContainerActionsPermissions(this._form.oattr);
+      this.actionsPermissions = this._form.getActionsPermissions();
 
       if (!Util.isDefined(this.actionsPermissions)) {
         return;
@@ -364,7 +351,7 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
     const permissions: OPermissions = (this.actionsPermissions || []).find(p => p.attr === attr);
     let enabledPermision = PermissionsUtils.checkEnabledPermission(permissions);
     if (!enabledPermision) {
-      this.snackBarService.open(PermissionsUtils.MESSAGE_OPERATION_NOT_ALLOWED_PERMISSION);
+      this.snackBarService.open('MESSAGES.OPERATION_NOT_ALLOWED_PERMISSION');
     }
     return enabledPermision;
   }

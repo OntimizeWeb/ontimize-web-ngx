@@ -1,10 +1,10 @@
-import { AfterViewInit, Component, ContentChildren, EventEmitter, Injector, OnInit, QueryList, ViewEncapsulation, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ContentChildren, EventEmitter, Injector, OnInit, QueryList, ViewEncapsulation, ViewChild, HostListener } from '@angular/core';
 import { OverlayRef } from '@angular/cdk/overlay';
 import { MatMenuTrigger } from '@angular/material';
 import { OComponentMenuItems } from '../o-content-menu.class';
 import { OContextMenuService } from '../o-context-menu.service';
 import { OContextMenuItemComponent } from '../o-context-menu-components';
-import { OWrapperContentMenuComponent } from './wrapper-content-menu/wrapper-content-menu.component';
+import { OWrapperContentMenuComponent } from './o-wrapper-content-menu/o-wrapper-content-menu.component';
 
 
 export const DEFAULT_CONTEXT_MENU_CONTENT_INPUTS = [
@@ -40,14 +40,23 @@ export class OContextMenuContentComponent implements AfterViewInit, OnInit {
   @ViewChild(MatMenuTrigger) trigger: MatMenuTrigger;
   @ViewChild(OWrapperContentMenuComponent) menu: OWrapperContentMenuComponent;
 
-
   constructor(
     protected injector: Injector,
     protected menuService: OContextMenuService
   ) { }
 
+  @HostListener('document:click')
+  click() {
+    this.close();
+  }
+
   ngAfterViewInit() {
     this.trigger.openMenu();
+    //this code is to disable the backdrop of the menu
+    let elem = Array.from(document.getElementsByClassName('cdk-overlay-backdrop') as HTMLCollectionOf<HTMLElement>);
+    elem.forEach(element => {
+      element.style.pointerEvents = 'none';
+    });
   }
 
   ngOnInit() {
@@ -73,5 +82,8 @@ export class OContextMenuContentComponent implements AfterViewInit, OnInit {
     this.menuService.closeContextMenu.next();
   }
 
+  close() {
+    this.trigger.closeMenu();
+  }
 
 }

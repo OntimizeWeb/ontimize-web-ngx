@@ -54,9 +54,17 @@ $_mat-checkbox-mark-stroke-size-small: 2 / 15 * $mat-checkbox-size-small !defaul
 
   div.expandable-container {
     overflow-y: auto;
+    height: 100%;
+
   }
 
   .o-table-container {
+    .o-table-body {
+      .content-table {
+        overflow-y: auto;
+      }
+    }
+
     &.block-events {
       pointer-events: none;
 
@@ -119,11 +127,6 @@ $_mat-checkbox-mark-stroke-size-small: 2 / 15 * $mat-checkbox-size-small !defaul
       -webkit-transition: opacity .25s linear;
       transition: opacity .25s linear;
 
-      .mat-progress-spinner {
-        height: 100%;
-        left: calc(50% - 50px);
-        top: calc(50% - 50px);
-      }
     }
 
     .spinner-container-scrollable {
@@ -478,11 +481,9 @@ $_mat-checkbox-mark-stroke-size-small: 2 / 15 * $mat-checkbox-size-small !defaul
 }
 
 .mat-tooltip.o-table-cell-tooltip {
-  position: absolute;
-  top: -12px;
+  margin: 6px;
   word-wrap: break-word;
   max-height: 64px;
   overflow: hidden;
   min-width: 140px;
-  text-align: center;
 }

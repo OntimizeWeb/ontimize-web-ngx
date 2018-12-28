@@ -1,29 +1,31 @@
-import { ElementRef, EventEmitter, Injector } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { ElementRef, EventEmitter, Injector, NgZone } from '@angular/core';
+import { BehaviorSubject, Subscription } from 'rxjs';
+import { Observable } from 'rxjs/Observable';
 
-import { Codes, Util } from '../../utils';
-import { ServiceUtils } from '../service.utils';
 import { InputConverter } from '../../decorators';
-import { IFormValueOptions } from '../form/OFormValue';
-import { OFormComponent } from '../form/o-form.component';
 import { DialogService, OntimizeService } from '../../services';
-import { DEFAULT_INPUTS_O_FORM_DATA_COMPONENT, OFormDataComponent, DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT } from '../o-form-data-component.class';
+import { Codes, Util } from '../../utils';
+import { OFormComponent } from '../form/o-form.component';
+import { IFormValueOptions } from '../form/OFormValue';
+import {
+  DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,
+  DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT,
+  OFormDataComponent,
+} from '../o-form-data-component.class';
+import { ServiceUtils } from '../service.utils';
 
 export const DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT = [
   ...DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,
-  //static-data [Array<any>] : way to populate with static data. Default: no value.
+  // static-data [Array<any>] : way to populate with static data. Default: no value.
   'staticData: static-data',
-
   'entity',
   'service',
   'columns',
   'valueColumn: value-column',
   'valueColumnType: value-column-type',
   'parentKeys: parent-keys',
-
   // Visible columns into selection dialog from parameter 'columns'. With empty parameter all columns are visible.
   'visibleColumns: visible-columns',
-
   // Visible columns in text field. By default, it is the parameter value of visible columns.
   'descriptionColumns: description-columns',
 
@@ -86,6 +88,9 @@ export class OFormServiceComponent extends OFormDataComponent {
   protected visibleColArray: string[] = [];
   protected descriptionColArray: string[] = [];
   protected dataService: OntimizeService;
+  public loaderSubscription: Subscription;
+  loading: boolean = false;
+
   protected querySuscription: Subscription;
   protected cacheQueried: boolean = false;
   protected _pKeysEquiv = {};
@@ -95,6 +100,8 @@ export class OFormServiceComponent extends OFormDataComponent {
   protected dialogService: DialogService;
 
   protected queryOnEventSubscription: Subscription;
+  public delayLoad = 250;
+  public loadingSubject = new BehaviorSubject<boolean>(false);
 
   constructor(
     form: OFormComponent,
@@ -115,7 +122,7 @@ export class OFormServiceComponent extends OFormDataComponent {
 
     this.visibleColArray = Util.parseArray(this.visibleColumns, true);
     if (Util.isArrayEmpty(this.visibleColArray)) {
-      //It is necessary to assing value to visibleColumns to propagate the parameter.
+      // It is necessary to assing value to visibleColumns to propagate the parameter.
       this.visibleColumns = this.columns;
       this.visibleColArray = this.colArray;
     }
@@ -131,13 +138,9 @@ export class OFormServiceComponent extends OFormDataComponent {
     let setValueSetArray = Util.parseArray(this.setValueOnValueChange);
     this._setValueOnValueChangeEquiv = Util.parseParentKeysEquivalences(setValueSetArray);
 
-    if (this.form) {
+    if (this.form && this.queryOnBind) {
       const self = this;
-      if (self.queryOnBind) {
-        this._formDataSubcribe = this.form.onDataLoaded.subscribe(data => {
-          self.queryData();
-        });
-      }
+      this._formDataSubcribe = this.form.onDataLoaded.subscribe(() => self.queryData());
     }
 
     if (this.staticData) {
@@ -165,6 +168,9 @@ export class OFormServiceComponent extends OFormDataComponent {
     }
     if (this.queryOnEventSubscription) {
       this.queryOnEventSubscription.unsubscribe();
+    }
+    if (this.loaderSubscription) {
+      this.loaderSubscription.unsubscribe();
     }
   }
 
@@ -229,7 +235,13 @@ export class OFormServiceComponent extends OFormDataComponent {
       if (this.querySuscription) {
         this.querySuscription.unsubscribe();
       }
+      if (this.loaderSubscription) {
+        this.loaderSubscription.unsubscribe();
+      }
+
       const queryCols = this.getAttributesValuesToQuery();
+
+      this.loaderSubscription = this.load();
       this.querySuscription = this.dataService[this.queryMethod](filter, queryCols, this.entity).subscribe(resp => {
         if (resp.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) {
           self.cacheQueried = true;
@@ -237,8 +249,14 @@ export class OFormServiceComponent extends OFormDataComponent {
         } else {
           console.log('error');
         }
+
+        //window.setTimeout(() => { this.loading = false; self.loadingSubject.next(false); self.loaderSubscription.unsubscribe(); }, 10000);
+        self.loadingSubject.next(false);
+        self.loaderSubscription.unsubscribe();
       }, err => {
         console.log(err);
+        self.loadingSubject.next(false);
+        self.loaderSubscription.unsubscribe();
         if (err && !Util.isObject(err)) {
           this.dialogService.alert('ERROR', err);
         } else {
@@ -255,7 +273,7 @@ export class OFormServiceComponent extends OFormDataComponent {
   setDataArray(data: any): void {
     if (Util.isArray(data)) {
       this.dataArray = data;
-      this.syncDataIndex();
+      this.syncDataIndex(false);
     } else if (Util.isObject(data) && Object.keys(data).length > 0) {
       this.dataArray = [data];
     } else {
@@ -264,19 +282,17 @@ export class OFormServiceComponent extends OFormDataComponent {
     }
   }
 
-  syncDataIndex() {
+  syncDataIndex(queryIfNotFound: boolean = true) {
     this._currentIndex = undefined;
     if (this.value && this.value.value && this.dataArray) {
       const self = this;
       this.dataArray.forEach((item, index) => {
         if (this.value.value instanceof Array) {
           this._currentIndex = [];
-
           this.value.value.forEach((itemValue, indexValue) => {
             if (item[self.valueColumn] === itemValue) {
               this._currentIndex[this._currentIndex.length] = indexValue;
             }
-
           });
         } else if (item[self.valueColumn] === this.value.value) {
           self._currentIndex = index;
@@ -286,7 +302,7 @@ export class OFormServiceComponent extends OFormDataComponent {
         }
       });
 
-      if (this._currentIndex === undefined) {
+      if (this._currentIndex === undefined && queryIfNotFound) {
         if (this.queryOnBind && this.dataArray && this.dataArray.length === 0
           && !this.cacheQueried && !this.isEmpty()) {
           this.queryData();
@@ -325,6 +341,33 @@ export class OFormServiceComponent extends OFormDataComponent {
       result = this.getDataArray().find(item => item[this.valueColumn] === selectedValue);
     }
     return result;
+  }
+
+  load(): any {
+
+    var self = this;
+    var zone = this.injector.get(NgZone);
+    var loadObservable = new Observable(observer => {
+      var timer = window.setTimeout(() => {
+        observer.next(true);
+      }, self.delayLoad);
+
+      return () => {
+        window.clearTimeout(timer);
+        zone.run(() => {
+          observer.next(false);
+          self.loading = false;
+        });
+      };
+
+    });
+    var subscription = loadObservable.subscribe(val => {
+      zone.run(() => {
+        self.loading = val as boolean;
+        self.loadingSubject.next(val as boolean);
+      });
+    });
+    return subscription;
   }
 
 }
