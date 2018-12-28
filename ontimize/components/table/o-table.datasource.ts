@@ -362,6 +362,9 @@ export class OTableDataSource extends DataSource<any> {
     filters.forEach(filter => {
       this.columnValueFilters.push(filter);
     });
+    if (!this.table.pageable) {
+      this._columnValueFilterChange.next();
+    }
   }
 
   isColumnValueFilterActive(): boolean {
