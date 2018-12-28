@@ -8,6 +8,8 @@ $o_table_row_large: 48px;
 $o_table_row_medium: 36px;
 $o_table_row_small: 28px;
 
+$o_table_row_padding: 24px;
+
 .o-table {
 
   height: 100%;
@@ -122,14 +124,6 @@ $o_table_row_small: 28px;
 
         tr.mat-row {
           height: $o_table_row_small;
-
-          td {
-            > div {
-              display: flex;
-              align-content: center;
-              align-items: center;
-            }
-          }
         }
 
         .mat-header-row,
@@ -177,14 +171,6 @@ $o_table_row_small: 28px;
 
         tr.mat-row {
           height: $o_table_row_medium;
-
-          td {
-            > div {
-              display: flex;
-              align-content: center;
-              align-items: center;
-            }
-          }
         }
 
         .mat-header-row,
@@ -223,13 +209,6 @@ $o_table_row_small: 28px;
         tr.mat-row {
           height: $o_table_row_large;
 
-          td {
-            > div {
-              display: flex;
-              align-content: center;
-              align-items: center;
-            }
-          }
         }
 
         tr.mat-header-row {
@@ -269,12 +248,18 @@ $o_table_row_small: 28px;
           white-space: nowrap;
           text-overflow: ellipsis;
 
+          // > div {
+          //   display: flex;
+          //   align-content: center;
+          //   align-items: center;
+          // }
+
           &:first-of-type {
-            padding-left: 24px;
+            padding-left: $o_table_row_padding;
           }
 
           &:last-of-type {
-            padding-right: 24px;
+            padding-right: $o_table_row_padding;
           }
 
           &.empty-cell {
@@ -421,7 +406,8 @@ $o_table_row_small: 28px;
         &.mat-column-select {
           width: 18px;
           box-sizing: content-box;
-          padding: 0 4px;
+          padding: 0 0 0 $o_table_row_padding;
+          overflow: initial;
         }
 
       }
@@ -453,7 +439,6 @@ $o_table_row_small: 28px;
     .o-table-container {
       display: flex;
       flex-direction: column;
-
     }
 
     .o-table-body {

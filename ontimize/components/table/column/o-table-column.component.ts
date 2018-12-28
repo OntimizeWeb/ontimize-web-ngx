@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ComponentFactory, ComponentFactoryResolver, EventEmitter, forwardRef, Inject, Injector, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+import { AfterViewInit, Component, ComponentFactory, ComponentFactoryResolver, EventEmitter, forwardRef, Inject, Injector, OnDestroy, OnInit, ViewChild, ViewContainerRef, ChangeDetectionStrategy } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { Util } from '../../../util/util';
@@ -61,12 +61,16 @@ export const DEFAULT_INPUTS_O_TABLE_COLUMN = [
 
   'width',
 
+  // only in pixels
   'minWidth: min-width',
+
+  // only in pixels
+  'maxWidth: max-width',
 
   // async-load [no|yes|true|false]: asynchronous query. Default: no
   'asyncLoad : async-load',
 
-  // sqltype[string]: Data type according to Java standard. See SQLType ngClass. Default: 'OTHER'
+  // sqltype[string]: Data type according to Java standard. See SQLType class. Default: 'OTHER'
   'sqlType: sql-type',
 
   'tooltip',
@@ -102,6 +106,7 @@ export const DEFAULT_OUTPUTS_O_TABLE_COLUMN = [
   selector: 'o-table-column',
   templateUrl: './o-table-column.component.html',
   styleUrls: ['./o-table-column.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   inputs: DEFAULT_INPUTS_O_TABLE_COLUMN,
   outputs: DEFAULT_OUTPUTS_O_TABLE_COLUMN
 })
@@ -150,6 +155,7 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
   public editable: boolean = false;
   public width: string;
   public minWidth: string;
+  public maxWidth: string;
   @InputConverter()
   public tooltip: boolean = false;
   tooltipValue: string;
@@ -426,6 +432,9 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
     if (oCol !== undefined) {
       oCol.renderer = this.renderer;
     }
+    if (this.renderer.ngOnInit) {
+      this.renderer.ngOnInit();
+    }
   }
 
   public registerEditor(editor: any) {
@@ -433,6 +442,9 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
     const oCol = this.table.getOColumn(this.attr);
     if (oCol !== undefined) {
       oCol.editor = this.editor;
+    }
+    if (this.editor.ngOnInit) {
+      this.editor.ngOnInit();
     }
   }
 

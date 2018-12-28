@@ -1,4 +1,4 @@
-import { Component, ContentChildren, ElementRef, EventEmitter, forwardRef, HostListener, Inject, Injector, NgModule, OnDestroy, OnInit, Optional, QueryList, ViewChild, ViewChildren, ViewEncapsulation } from '@angular/core';
+import { Component, ContentChildren, ElementRef, EventEmitter, forwardRef, HostListener, Inject, Injector, NgModule, OnDestroy, OnInit, Optional, QueryList, ViewChild, ViewChildren, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CdkTableModule } from '@angular/cdk/table';
 import { ObserversModule } from '@angular/cdk/observers';
@@ -169,12 +169,29 @@ export class OColumn {
   editing: boolean;
   width: string;
   minWidth: string;
+  maxWidth: string;
   aggregate: OColumnAggregate;
   calculate: string | OperatorFunction;
   definition: OTableColumnComponent;
   tooltip: OColumnTooltip;
   multiline: boolean;
   resizable: boolean;
+  DOMWidth: number;
+  padding: number;
+
+  constructor(
+    attr: string = undefined,
+    table: OTableComponent = undefined,
+    column: OTableColumnComponent | OTableColumnCalculatedComponent = undefined
+  ) {
+    this.attr = attr;
+    if (Util.isDefined(table)) {
+      this.setDefaultProperties(table);
+    }
+    if (Util.isDefined(column)) {
+      this.setColumnProperties(column);
+    }
+  }
 
   setDefaultProperties(table: OTableComponent) {
     this.type = 'string';
@@ -187,6 +204,55 @@ export class OColumn {
     this.name = this.attr;
     this.title = this.attr;
     this.multiline = false;
+  }
+
+  setColumnProperties(column: OTableColumnComponent | OTableColumnCalculatedComponent | any) {
+    this.title = Util.isDefined(column.title) ? column.title : column.attr;
+    this.definition = column;
+    this.multiline = column.multiline;
+
+    if (Util.isDefined(column.minWidth)) {
+      this.minWidth = column.minWidth;
+    }
+    if (Util.isDefined(column.maxWidth)) {
+      this.maxWidth = column.maxWidth;
+    }
+    if (Util.isDefined(column.orderable)) {
+      this.orderable = column.orderable;
+    }
+    if (Util.isDefined(column.resizable)) {
+      this.resizable = column.resizable;
+    }
+    if (Util.isDefined(column.searchable)) {
+      this.searchable = column.searchable;
+    }
+    if (Util.isDefined(column.renderer)) {
+      this.renderer = column.renderer;
+    }
+    if (Util.isDefined(column.editor)) {
+      this.editor = column.editor;
+    }
+    if (Util.isDefined(column.type)) {
+      this.type = column.type;
+      this.className = 'o-column-' + (this.type) + ' ';
+    }
+    if (Util.isDefined(column.getSQLType)) {
+      this.sqlType = column.getSQLType();
+    }
+    if (Util.isDefined(column.class)) {
+      this.className = Util.isDefined(this.className) ? (this.className + ' ' + column.class) : column.class;
+    }
+    if (column instanceof OTableColumnCalculatedComponent) {
+      if (Util.isDefined(column.operation) || Util.isDefined(column.functionOperation)) {
+        this.calculate = column.operation ? column.operation : column.functionOperation;
+      }
+    }
+    if (Util.isDefined(column.tooltip) && column.tooltip) {
+      this.tooltip = {
+        value: column.tooltipValue,
+        function: column.tooltipFunction
+      };
+    }
   }
 
   set searchable(val: boolean) {
@@ -226,6 +292,41 @@ export class OColumn {
       return this.width;
     }
     return this.minWidth;
+  }
+
+  getMinWidthValue() {
+    return Util.extractPixelsValue(this.minWidth, OTableComponent.DEFAULT_COLUMN_MIN_WIDTH) - this.padding;
+  }
+
+  getMaxWidthValue() {
+    const value = Util.extractPixelsValue(this.maxWidth);
+    return value ? value - this.padding : undefined;
+  }
+
+  getRenderWidth() {
+    if (Util.isDefined(this.width)) {
+      return this.width;
+    }
+    if (Util.isDefined(this.minWidth)) {
+      const minValue = Util.extractPixelsValue(this.minWidth);
+      if (this.DOMWidth < minValue) {
+        this.DOMWidth = minValue;
+        return this.minWidth;
+      }
+    }
+    if (Util.isDefined(this.maxWidth)) {
+      const maxValue = Util.extractPixelsValue(this.maxWidth);
+      if (this.DOMWidth > maxValue) {
+        this.DOMWidth = maxValue;
+        return this.maxWidth;
+      }
+    }
+    return Util.isDefined(this.DOMWidth) ? this.DOMWidth + 'px' : undefined;
+  }
+
+  setWidth(val: number) {
+    this.width = val + 'px';
+    this.DOMWidth = val;
   }
 
   getTitleAlignClass() {
@@ -287,6 +388,7 @@ export interface OTableInitializationOptions {
   inputs: DEFAULT_INPUTS_O_TABLE,
   outputs: DEFAULT_OUTPUTS_O_TABLE,
   encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     '[class.o-table]': 'true',
     '[class.ontimize-table]': 'true',
@@ -299,6 +401,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   public static DEFAULT_INPUTS_O_TABLE = DEFAULT_INPUTS_O_TABLE;
   public static DEFAULT_OUTPUTS_O_TABLE = DEFAULT_OUTPUTS_O_TABLE;
   public static DEFAULT_BASE_SIZE_SPINNER = 100;
+  public static FIRST_LAST_CELL_PADDING = 24;
+  public static DEFAULT_COLUMN_MIN_WIDTH = 80;
 
   public static NAME_COLUMN_SELECT = NAME_COLUMN_SELECT;
   public loadingScroll = false;
@@ -791,9 +895,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       // a default column definition trying to replace an already existing definition
       return;
     }
-    let colDef: OColumn = new OColumn();
-    colDef.attr = column;
-    colDef.setDefaultProperties(this);
+    let colDef: OColumn = new OColumn(column, this);
     this.pushOColumnDefinition(colDef);
   }
 
@@ -818,12 +920,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       // a o-table-column definition trying to replace an already existing o-table-column definition
       return;
     }
-    let colDef: OColumn = new OColumn();
-    colDef.attr = column.attr;
-    colDef.setDefaultProperties(this);
-    colDef.title = Util.isDefined(column.title) ? column.title : column.attr;
-    colDef.definition = column;
-    colDef.multiline = column.multiline;
+    let colDef: OColumn = new OColumn(column.attr, this, column);
 
     let columnWidth = column.width;
     const storedCols = this.state['oColumns-display'];
@@ -835,45 +932,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
     if (Util.isDefined(columnWidth)) {
       colDef.width = columnWidth;
-    }
-    if (Util.isDefined(column.minWidth)) {
-      colDef.minWidth = column.minWidth;
-    }
-    if (Util.isDefined(column.orderable)) {
-      colDef.orderable = column.orderable;
-    }
-    if (Util.isDefined(column.resizable)) {
-      colDef.resizable = column.resizable;
-    }
-    if (Util.isDefined(column.searchable)) {
-      colDef.searchable = column.searchable;
-    }
-    if (Util.isDefined(column.renderer)) {
-      colDef.renderer = column.renderer;
-    }
-    if (Util.isDefined(column.editor)) {
-      colDef.editor = column.editor;
-    }
-    if (Util.isDefined(column.type)) {
-      colDef.type = column.type;
-      colDef.className = 'o-column-' + (colDef.type) + ' ';
-    }
-    if (Util.isDefined(column.getSQLType)) {
-      colDef.sqlType = column.getSQLType();
-    }
-    if (Util.isDefined(column.class)) {
-      colDef.className = Util.isDefined(colDef.className) ? (colDef.className + ' ' + column.class) : column.class;
-    }
-    if (column instanceof OTableColumnCalculatedComponent) {
-      if (Util.isDefined(column.operation) || Util.isDefined(column.functionOperation)) {
-        colDef.calculate = column.operation ? column.operation : column.functionOperation;
-      }
-    }
-    if (Util.isDefined(column.tooltip) && column.tooltip) {
-      colDef.tooltip = {
-        value: column.tooltipValue,
-        function: column.tooltipFunction
-      };
     }
     if (column && (column.asyncLoad || column.type === 'action')) {
       this.avoidQueryColumns.push(column.attr);
@@ -1068,6 +1126,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   set loadingSorting(value: boolean) {
     this._loadingSorting = value;
+    this.cd.detectChanges();
   }
 
   get loadingSorting(): boolean {
@@ -1196,7 +1255,15 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       this.previousRendererData = this.dataSource.renderedData;
     }
 
-
+    if (Util.isDefined(this.tableHeaderEl)) {
+      [].slice.call(this.tableHeaderEl.nativeElement.children).forEach(thEl => {
+        const oCol: OColumn = self.getOColumnFromTh(thEl);
+        if (Util.isDefined(oCol)) {
+          oCol.padding = (!thEl.previousElementSibling || !thEl.nextElementSibling) ? OTableComponent.FIRST_LAST_CELL_PADDING : 0;
+          oCol.DOMWidth = thEl.clientWidth - oCol.padding;
+        }
+      });
+    }
   }
 
   getAttributesValuesToQuery(): Array<string> {
@@ -1487,7 +1554,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       Object.assign(this.editingRow, data);
     }
     this.editingRow = undefined;
-    if (column.editor.updateRecordOnEdit) {
+    this.cd.detectChanges();
+    if (saveChanges && column.editor.updateRecordOnEdit) {
       let toUpdate = {};
       toUpdate[column.attr] = data[column.attr];
       const kv = this.extractKeysFromRecord(data);
@@ -1615,7 +1683,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
           } else if (Util.isObject(res.data)) {
             data = res.data;
           }
-          this.daoTable.setAsincronColumn(data, rowData);
+          this.daoTable.setAsynchronousColumn(data, rowData);
+          this.cd.detectChanges();
         }
       });
     }
@@ -1673,7 +1742,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     this.dataSource.clearColumnFilters(triggerDatasourceUpdate);
     this.showFilterByColumnIcon = false;
     if (this.oTableMenu && this.oTableMenu.columnFilterOption) {
-      this.oTableMenu.columnFilterOption.active = this.showFilterByColumnIcon;
+      this.oTableMenu.columnFilterOption.setActive(this.showFilterByColumnIcon);
     }
     if (this.oTableQuickFilterComponent) {
       this.oTableQuickFilterComponent.setValue(void 0);
@@ -1933,7 +2002,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     const storedColumnFilters = this.oTableStorage.getStoredColumnsFilters(conf);
     this.showFilterByColumnIcon = storedColumnFilters.length > 0;
     if (this.oTableMenu && this.oTableMenu.columnFilterOption) {
-      this.oTableMenu.columnFilterOption.active = this.showFilterByColumnIcon;
+      this.oTableMenu.columnFilterOption.setActive(this.showFilterByColumnIcon);
     }
 
     if (this.oTableColumnsFilterComponent) {
@@ -2093,9 +2162,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   protected addButtonInRow(name: string) {
-    let colDef: OColumn = new OColumn();
-    colDef.attr = name;
-    colDef.setDefaultProperties(this);
+    let colDef: OColumn = new OColumn(name, this);
     colDef.type = name;
     colDef.visible = true;
     colDef.searchable = false;
@@ -2147,6 +2214,15 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     super.editDetail(item);
   }
 
+  getOColumnFromTh(th: any): OColumn {
+    let result: OColumn;
+    const classList: any[] = [].slice.call((th as Element).classList);
+    const columnClass = classList.find((className: string) => (className.startsWith('mat-column-')));
+    if (Util.isDefined(columnClass)) {
+      result = this.getOColumn(columnClass.substr('mat-column-'.length));
+    }
+    return result;
+  }
 }
 
 @NgModule({

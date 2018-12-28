@@ -59,7 +59,7 @@ export class OTableDao {
     return of(data);
   }
 
-  setAsincronColumn(value: Array<any>, rowData: any) {
+  setAsynchronousColumn(value: Array<any>, rowData: any) {
     // Object.assign(this.data[rowIndex], value);
     let index = null;
     for (let i = 0; i < this.data.length; i++) {
