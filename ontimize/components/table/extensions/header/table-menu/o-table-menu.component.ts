@@ -99,6 +99,11 @@ export class OTableMenuComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit() {
+    if (this.columnFilterOption) {
+      this.columnFilterOption.setActive(this.table.showFilterByColumnIcon);
+      this.cd.detectChanges();
+    }
+
     if (!this.permissions.items || this.permissions.items.length === 0) {
       return;
     }
@@ -286,6 +291,7 @@ export class OTableMenuComponent implements OnInit, AfterViewInit, OnDestroy {
         this.table.visibleColArray = dialogRef.componentInstance.getVisibleColumns();
         let columnsOrder = dialogRef.componentInstance.getColumnsOrder();
         this.table.oTableOptions.columns.sort((a: OColumn, b: OColumn) => columnsOrder.indexOf(a.attr) - columnsOrder.indexOf(b.attr));
+        this.table.cd.detectChanges();
       }
     });
   }
@@ -298,9 +304,11 @@ export class OTableMenuComponent implements OnInit, AfterViewInit, OnDestroy {
           self.table.dataSource.clearColumnFilters();
         }
         self.table.showFilterByColumnIcon = !res;
+        self.table.cd.detectChanges();
       });
     } else {
       this.table.showFilterByColumnIcon = !this.table.showFilterByColumnIcon;
+      this.table.cd.detectChanges();
     }
   }
 
