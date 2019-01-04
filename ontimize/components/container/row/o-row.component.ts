@@ -4,13 +4,15 @@ import { InputConverter } from '../../../decorators';
 import { OFormComponent } from '../../form/o-form.component';
 import { OTranslateService } from '../../../services';
 import { OSharedModule } from '../../../shared';
+import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material';
 
 export const DEFAULT_INPUTS_O_ROW = [
   'oattr: attr',
   'titleLabel: title-label',
   'layoutAlign: layout-align',
   'layoutFill: layout-fill',
-  'elevation'
+  'elevation',
+  'appearanceOutline: appearance-outline'
 ];
 
 @Component({
@@ -21,7 +23,8 @@ export const DEFAULT_INPUTS_O_ROW = [
   inputs: DEFAULT_INPUTS_O_ROW,
   encapsulation: ViewEncapsulation.None,
   host: {
-    '[class.o-row]': 'true'
+    '[class.o-row]': 'true',
+    '[class.appearance-outline]': 'getAppearanceOutline()'
   }
 })
 export class ORowComponent implements OnInit, AfterViewInit {
@@ -35,13 +38,18 @@ export class ORowComponent implements OnInit, AfterViewInit {
   protected defaultLayoutAlign: string = 'start start';
   protected _layoutAlign: string;
   protected translateService: OTranslateService;
+
   @InputConverter()
   layoutFill: boolean = false;
+
+  @InputConverter()
+  appearanceOutline: boolean = false;
 
   constructor(
     @Optional() @Inject(forwardRef(() => OFormComponent)) protected form: OFormComponent,
     protected elRef: ElementRef,
-    protected injector: Injector) {
+    protected injector: Injector,
+    @Optional() @Inject(MAT_FORM_FIELD_DEFAULT_OPTIONS) private matFormDefaultOption) {
 
     this.translateService = this.injector.get(OTranslateService);
   }
@@ -69,6 +77,13 @@ export class ORowComponent implements OnInit, AfterViewInit {
     //     element.style.height = (this.elRef.nativeElement.clientHeight - titleH) + 'px';
     //   }
     // }
+  }
+
+  getAppearanceOutline() {
+    if (!this.matFormDefaultOption) {
+      return false;
+    }
+    return this.matFormDefaultOption.appearance === 'outline' && this.hasTitle();
   }
 
   getAttribute() {
