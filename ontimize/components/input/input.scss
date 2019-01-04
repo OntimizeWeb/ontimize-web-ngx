@@ -16,34 +16,30 @@ $width24: $suffix-size * 1px;
       transform: initial;
     }
 
+  }
+
+  &.mat-form-field-appearance-legacy {
+    .mat-icon {
+      width: 20px;
+      height: 20px;
+      line-height: 20px;
+    }
+
+    .mat-form-field-prefix,
+    .mat-form-field-suffix {
+      .mat-icon-button {
+        .mat-icon {
+          font-size: 150%;
+        }
+      }
+    }
+  }
+
+  &:not(.mat-form-field-appearance-legacy) {
     .mat-form-field-wrapper {
       .mat-form-field-prefix,
       .mat-form-field-suffix {
         display: inherit;
-
-        .mat-datepicker-toggle {
-          .mat-button-wrapper {
-            vertical-align: sub;
-          }
-          .mat-icon {
-            font-size: 20px;
-          }
-        }
-      }
-    }
-
-    &.mat-form-field-appearance-legacy {
-      .mat-icon {
-        width: 20px;
-        height: 20px;
-        line-height: 20px;
-      }
-    }
-
-    &:not(.mat-form-field-appearance-legacy) {
-      .mat-form-field-prefix,
-      .mat-form-field-suffix {
-        top: 5px;
 
         .mat-icon {
           width: 20px;
