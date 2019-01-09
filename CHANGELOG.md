@@ -2,6 +2,9 @@
 ### Features
 * **o-app-layout**: new `beforeOpenSidenav`, `afterOpenSidenav`, `beforeCloseSidenav` and `afterCloseSidenav` outputs ([1a2a028](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1a2a028)), closes [#243](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/243)
 
+### Bug Fixes
+* **o-form-navigation**: fixing index error ([f487e54](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f487e54)), closes [#238](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/238)
+
 ## 3.2.1 (2018-12-28)
 ### Features
 * **o-form**: new `getFormComponentPermissions` and  `getActionsPermissions` methods
