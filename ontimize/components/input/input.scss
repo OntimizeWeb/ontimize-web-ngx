@@ -28,12 +28,14 @@ $width24: $suffix-size * 1px;
     .mat-form-field-prefix,
     .mat-form-field-suffix {
       .mat-icon-button {
+        vertical-align: bottom;
         .mat-icon {
           font-size: 150%;
         }
       }
     }
   }
+
 
   &:not(.mat-form-field-appearance-legacy) {
     .mat-form-field-wrapper {
@@ -75,7 +77,7 @@ $width24: $suffix-size * 1px;
       .icon-btn,
       .mat-icon,
       .mat-icon-button .mat-icon {
-        vertical-align: middle;
+        vertical-align: bottom;
       }
 
       .icon-btn,
