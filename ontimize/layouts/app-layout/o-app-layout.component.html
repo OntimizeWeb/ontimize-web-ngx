@@ -1,6 +1,7 @@
 <o-app-sidenav #appSidenav [sidenav-mode]="sidenavMode" [opened]="sidenavOpened" [show-user-info]="showUserInfo"
   [show-toggle-button]="!showHeader" [opened-sidenav-image]="openedSidenavImg" [closed-sidenav-image]="closedSidenavImg"
-  [layout-mode]="mode" [class.header-layout]="showHeader">
+  [layout-mode]="mode" [class.header-layout]="showHeader" (onSidenavToggle)="sidenavToggle($event)"
+  (afterSidenavToggle)="afterToggle($event)">
 
   <ng-content select="o-app-layout-sidenav[position=start]" ngProjectAs="o-app-layout-sidenav-projection-start"></ng-content>
   <ng-content select="o-app-layout-sidenav[position=end]" ngProjectAs="o-app-layout-sidenav-projection-end"></ng-content>
