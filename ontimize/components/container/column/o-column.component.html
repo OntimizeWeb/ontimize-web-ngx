@@ -1,5 +1,6 @@
 <div *ngIf="!collapsible" class="o-container">
   <div *ngIf="hasHeader()" fxLayoutAlign="start center" class="o-container-title" layout-padding>
+    <mat-icon *ngIf="icon">{{ icon }}</mat-icon>
     <span>{{ title | oTranslate }}</span>
   </div>
   <div class="o-container-scroll o-scroll">

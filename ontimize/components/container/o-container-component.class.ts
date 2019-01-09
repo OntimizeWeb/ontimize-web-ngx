@@ -24,6 +24,7 @@ export class OContainerComponent implements AfterViewInit {
   protected _layoutAlign: string;
   @InputConverter()
   layoutFill: boolean = false;
+  public icon: string;
 
   constructor(
     @Optional() @Inject(forwardRef(() => OFormComponent)) protected form: OFormComponent,
@@ -66,7 +67,7 @@ export class OContainerComponent implements AfterViewInit {
   }
 
   hasHeader(): boolean {
-    return !!this.title;
+    return !!this.title && !!this.icon;
   }
 
   propagateElevationToDOM() {
