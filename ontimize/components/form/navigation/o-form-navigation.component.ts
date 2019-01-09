@@ -43,16 +43,27 @@ export class OFormNavigationComponent implements OnDestroy {
   }
 
   getCurrentIndex(): number {
-    let index: number = 0;
-    const currentItem = this.formNavigation.getUrlParams();
-    for (let i = 0, len = this.navigationData.length; i < len; i++) {
-      const item = this.navigationData[i];
-      if (Util.isEquivalent(item, currentItem)) {
-        index = i;
-        break;
+    // getting available navigationData keys
+    let keysArray = [];
+    this._form.keysArray.forEach(key => {
+      if ((this.navigationData[0] || {}).hasOwnProperty(key)) {
+        keysArray.push(key);
       }
-    }
-    return index;
+    });
+    // current url keys object
+    let currentKeys = {};
+    const currentItem = this.formNavigation.getUrlParams();
+    keysArray.forEach(key => {
+      currentKeys[key] = currentItem[key];
+    });
+    let index: number = this.navigationData.findIndex((item: any) => {
+      let itemKeys = {};
+      keysArray.forEach(key => {
+        itemKeys[key] = item[key];
+      });
+      return Util.isEquivalent(itemKeys, currentKeys);
+    });
+    return index >= 0 ? index : 0;
   }
 
   next() {
