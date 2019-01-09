@@ -10,59 +10,33 @@
     flex-direction: column;
     box-sizing: border-box;
 
+    .o-container-title {
+      margin: 0 4px;
+      height: 39px;
+      border-bottom-width: 2px;
+      border-bottom-style: solid;
+
+      span {
+        font-weight: 400;
+        font-size: 18px;
+        padding-left: 8px;
+      }
+    }
+
     .o-container-scroll {
       overflow: auto;
+
+      .o-container-content.o-container-content-gap {
+        padding: 24px 30px 8px;
+      }
     }
   }
 }
 
-.o-container-title {
-  -webkit-box-ordinal-group: 1;
-  -moz-box-ordinal-group: 1;
-  -webkit-order: 0;
-  -ms-flex-order: 0;
-  order: 0;
-  -webkit-box-flex: 0;
-  -moz-box-flex: 0;
-  -webkit-flex: 0 1 auto;
-  -ms-flex: 0 1 auto;
-  flex: 0 1 auto;
-  -webkit-align-self: auto;
-  -ms-flex-item-align: auto;
-  align-self: auto;
-  margin: 0 4px;
-  height: 39px;
-
-  span {
-    font-weight: 700;
-    font-size: 18px;
-    padding-bottom: 0;
-    padding-left: 4px;
-  }
-}
-
-.o-container-content {
-  -webkit-box-ordinal-group: 1;
-  -moz-box-ordinal-group: 1;
-  -webkit-order: 0;
-  -ms-flex-order: 0;
-  order: 0;
-  -webkit-box-flex: 1;
-  -moz-box-flex: 1;
-  -webkit-flex: 1 1 auto;
-  -ms-flex: 1 1 auto;
-  flex: 1 1 auto;
-  -webkit-align-self: auto;
-  -ms-flex-item-align: auto;
-  align-self: auto;
-
-  &.o-container-content-gap {
-    padding: 8px 4px;
-  }
-}
 /* Legacy Firefox implementation treats all flex containers as inline-block elements. */
 @-moz-document url-prefix() {
-  .o-container {
+  .o-column .o-container,
+  .o-row .o-container {
     width: 100%;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
