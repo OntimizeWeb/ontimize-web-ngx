@@ -1,24 +1,24 @@
-import { ElementRef, forwardRef, Inject, Injector, Optional } from '@angular/core';
+import { AfterViewInit, ElementRef, forwardRef, Inject, Injector, Optional } from '@angular/core';
 
 import { InputConverter } from '../../decorators/input-converter';
 import { OFormComponent } from '../form/form-components';
 
 export const DEFAULT_INPUTS_O_CONTAINER = [
   'oattr: attr',
-  'titleLabel: title-label',
+  'title',
   'layoutAlign: layout-align',
   'layoutFill: layout-fill',
   'elevation',
   'icon'
 ];
 
-export class OContainerComponent {
+export class OContainerComponent implements AfterViewInit {
 
   public static DEFAULT_INPUTS_O_CONTAINER = DEFAULT_INPUTS_O_CONTAINER;
 
   public oattr: string;
 
-  public titleLabel: string;
+  public title: string;
   protected _elevation: number = 0;
   protected defaultLayoutAlign: string = 'start start';
   protected _layoutAlign: string;
@@ -30,6 +30,12 @@ export class OContainerComponent {
     protected elRef: ElementRef,
     protected injector: Injector
   ) { }
+
+  ngAfterViewInit(): void {
+    if (this.elRef) {
+      this.elRef.nativeElement.removeAttribute('title');
+    }
+  }
 
   getAttribute() {
     if (this.oattr) {
@@ -60,7 +66,7 @@ export class OContainerComponent {
   }
 
   hasHeader(): boolean {
-    return !!this.titleLabel;
+    return !!this.title;
   }
 
   propagateElevationToDOM() {

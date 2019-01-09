@@ -1,6 +1,6 @@
 <div *ngIf="!collapsible" class="o-container">
   <div *ngIf="hasHeader()" fxLayoutAlign="start center" class="o-container-title" layout-padding>
-    <span>{{ titleLabel | oTranslate }}</span>
+    <span>{{ title | oTranslate }}</span>
   </div>
   <div class="o-container-scroll o-scroll">
     <div id="innerCol" class="o-container-content" [class.o-container-content-gap]="hasHeader() || (elevation > 0 && elevation <= 12)"
