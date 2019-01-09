@@ -67,7 +67,7 @@ export class OContainerComponent implements AfterViewInit {
   }
 
   hasHeader(): boolean {
-    return !!this.title && !!this.icon;
+    return !!this.title || !!this.icon;
   }
 
   propagateElevationToDOM() {

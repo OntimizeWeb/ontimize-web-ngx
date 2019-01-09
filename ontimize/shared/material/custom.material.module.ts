@@ -1,52 +1,46 @@
-import { NgModule, Injectable, Optional, Inject } from '@angular/core';
+import { OverlayModule } from '@angular/cdk/overlay';
 import { CommonModule } from '@angular/common';
-import { Moment } from 'moment';
-import moment from 'moment';
+import { Inject, Injectable, NgModule, Optional } from '@angular/core';
 import {
-  MatButtonToggleModule,
+  DateAdapter,
+  MAT_DATE_FORMATS,
+  MAT_DATE_LOCALE,
+  MatAutocompleteModule,
   MatButtonModule,
+  MatButtonToggleModule,
+  MatCardModule,
   MatCheckboxModule,
+  MatChipsModule,
   MatDatepickerModule,
+  MatDialogModule,
+  MatExpansionModule,
+  MatFormFieldModule,
+  MatGridListModule,
+  MatIconModule,
+  MatInputModule,
+  MatListModule,
+  MatMenuModule,
+  MatPaginatorModule,
+  MatProgressBarModule,
+  MatProgressSpinnerModule,
   MatRadioModule,
   MatRippleModule,
   MatSelectModule,
-  MatSlideToggleModule,
-  MatSliderModule,
   MatSidenavModule,
-  MatListModule,
-  MatGridListModule,
-  MatCardModule,
-  MatChipsModule,
-  MatIconModule,
-  MatInputModule,
-  MatFormFieldModule,
-  MatProgressSpinnerModule,
-  MatProgressBarModule,
+  MatSliderModule,
+  MatSlideToggleModule,
   MatSnackBarModule,
+  MatSortModule,
+  MatTableModule,
   MatTabsModule,
   MatToolbarModule,
   MatTooltipModule,
-  MatMenuModule,
-  MatDialogModule,
-  MatAutocompleteModule,
-  DateAdapter,
-  MatTableModule,
-  MatPaginatorModule,
-  MatSortModule,
-  MAT_DATE_LOCALE,
-  MAT_DATE_FORMATS
-  // PlatformModule,
-  // StyleModule,
-  // PortalModule,
-  // RtlModule,
-  // A11yModule,
-  // ObserveContentModule
 } from '@angular/material';
-
 import { MatMomentDateModule, MomentDateAdapter } from '@angular/material-moment-adapter';
-import { OverlayModule } from '@angular/cdk/overlay';
-import { OntimizeMatIconRegistry } from '../../services/ontimize-icon-registry.service';
+import moment, { Moment } from 'moment';
+
 import { dateFormatFactory } from '../../services/mat-date-formats.factory';
+import { OntimizeMatIconRegistry } from '../../services/ontimize-icon-registry.service';
 
 const MATERIAL_MODULES = [
   MatAutocompleteModule,
@@ -57,6 +51,7 @@ const MATERIAL_MODULES = [
   MatCheckboxModule,
   MatDatepickerModule,
   MatDialogModule,
+  MatExpansionModule,
   MatGridListModule,
   MatIconModule,
   MatInputModule,
@@ -95,7 +90,7 @@ export class OntimizeMomentDateAdapter extends MomentDateAdapter {
 
   oFormat: string;
 
-  constructor( @Optional() @Inject(MAT_DATE_LOCALE) dateLocale: string) {
+  constructor(@Optional() @Inject(MAT_DATE_LOCALE) dateLocale: string) {
     super(dateLocale);
   }
 
