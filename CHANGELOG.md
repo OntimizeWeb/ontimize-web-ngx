@@ -1,3 +1,18 @@
+## 3.2.2
+### Features
+* **o-row**, **o-column**:
+  * Row and column components now extend from `OContainerComponent` class that provides shared functionality ([4713e3e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4713e3e))
+  * Added new attribute `icon` ([69fc936](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/69fc936))
+* New container components **o-row-collapsible** and **o-colum-collapsible** ([b1eb483](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b1eb483))
+
+### BREAKING CHANGES
+* **o-row**, **o-column**:
+  * Attribute `title-label` has been renamed to `title`.
+  * Method `hasTitle` has been replaced by method `hasHeader`.
+  * CSS classes `o-container-title-item` and `container-title` has been replaced by `o-container-title`.
+  * CSS class `o-container-content-item` has been renamed to `o-container-content`.
+  * CSS class `container-content` has been renamed to `o-container-content-gap`.
+
 ## 3.2.1 (2018-12-28)
 ### Features
 * **o-form**: new `getFormComponentPermissions` and  `getActionsPermissions` methods
