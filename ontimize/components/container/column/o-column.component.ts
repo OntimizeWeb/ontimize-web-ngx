@@ -1,4 +1,4 @@
-import { Component, Inject, Injector, forwardRef, ElementRef, OnInit, Optional, NgModule, ViewEncapsulation, AfterViewInit } from '@angular/core';
+import { Component, Inject, Injector, forwardRef, ElementRef, OnInit, Optional, NgModule, ViewEncapsulation, AfterViewInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { InputConverter } from '../../../decorators';
 import { OFormComponent } from '../../form/o-form.component';
@@ -12,7 +12,7 @@ export const DEFAULT_INPUTS_O_COLUMN = [
   'layoutAlign: layout-align',
   'layoutFill: layout-fill',
   'elevation',
-  'appearanceOutline: appearance-outline'
+  'appearance: appearance'
 ];
 
 @Component({
@@ -30,7 +30,7 @@ export const DEFAULT_INPUTS_O_COLUMN = [
 export class OColumnComponent implements OnInit, AfterViewInit {
 
   public static DEFAULT_INPUTS_O_COLUMN = DEFAULT_INPUTS_O_COLUMN;
-
+  public static APPEARANCE_OUTLINE = 'outline';
   oattr: string;
 
   protected _titleLabel: string;
@@ -38,12 +38,13 @@ export class OColumnComponent implements OnInit, AfterViewInit {
   protected defaultLayoutAlign: string = 'start start';
   protected _layoutAlign: string;
   protected translateService: OTranslateService;
+  public appearance:string;
 
   @InputConverter()
   layoutFill: boolean = false;
 
-  @InputConverter()
-  appearanceOutline: boolean = false;
+  @ViewChild('title') private _titleEl: ElementRef;
+  @ViewChild('container') _containerRef: ElementRef;
 
   constructor(
     @Optional() @Inject(forwardRef(() => OFormComponent)) protected form: OFormComponent,
@@ -61,8 +62,39 @@ export class OColumnComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
+    if (this.getAppearanceOutline()) {
+      this.updateOutlineGap();
+    }
     this.propagateLayoutFillToDOM();
   }
+
+  updateOutlineGap() {
+    if (this.getAppearanceOutline()) {
+      const titleEl = this._titleEl ? this._titleEl.nativeElement : null;
+
+      const container = this._containerRef.nativeElement;
+      if (titleEl && titleEl.children.length) {
+        const containerRect = container.getBoundingClientRect();
+        if (containerRect.width === 0 && containerRect.height === 0) {
+          return;
+        }
+
+        const containerStart = containerRect.left;
+        const labelStart = titleEl.getBoundingClientRect().left;
+        const labelWidth = titleEl.offsetWidth;
+        const startWidth = labelStart - containerStart;
+        const startEls = container.querySelectorAll('.mat-form-field-outline-start');
+        const gapEls = container.querySelectorAll('.container-outline-gap');
+        for (let i = 0; i < gapEls.length; i++) {
+          gapEls.item(i).style.width = `${labelWidth}px`;
+        }
+        for (let i = 0; i < startEls.length; i++) {
+          startEls.item(i).style.width = `${startWidth}px`;
+        }
+      }
+    }
+  }
+
 
   propagateLayoutFillToDOM() {
     // let innerCol = this.elRef.nativeElement.querySelectorAll('div#innerCol');
@@ -80,14 +112,13 @@ export class OColumnComponent implements OnInit, AfterViewInit {
   }
 
   getAppearanceOutline() {
-
-    if (this.appearanceOutline) {
+    if (this.appearance === OColumnComponent.APPEARANCE_OUTLINE && this.hasTitle()) {
       return true;
     }
     if (!this.matFormDefaultOption) {
       return false;
     }
-    return this.matFormDefaultOption.appearance === 'outline' && this.hasTitle();
+    return this.matFormDefaultOption.appearance === OColumnComponent.APPEARANCE_OUTLINE && this.hasTitle();
   }
 
 

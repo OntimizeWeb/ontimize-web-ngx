@@ -1,11 +1,9 @@
 @import 'node_modules/@angular/material/theming';
-
 @mixin o-container-theme($theme) {
   $background: map-get($theme, background);
   $foreground: map-get($theme, foreground);
 
   .o-container {
-
     .o-container-title-item {
       border-bottom-width: 1px;
       border-bottom-style: solid;
@@ -18,7 +16,57 @@
 
   }
 
+  .o-column.appearance-outline,
+  .o-row.appearance-outline {
+    > .o-container {
+      .container-title {
+        position: absolute;
+        border-bottom: 0;
+
+        span {
+          color: mat-color($foreground, text);
+          font-weight: bold;
+        }
+      }
+
+    }
+
+    .container-outline {
+      display: flex;
+      position: absolute;
+      top: .25em;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      pointer-events: none;
+
+      
+      .container-outline-end,
+      .container-outline-start {
+        border: 2px solid currentColor;
+        min-width: 5px;
+      }
+
+      .container-outline-start {
+        border-radius: 5px 0 0 5px;
+        border-right-style: none;
+      }
+
+      .container-outline-end {
+        border-radius: 0 5px 5px 0;
+        border-left-style: none;
+        flex-grow: 1;
+      }
+
+      .container-outline-gap {
+        border: 2px solid currentColor;
+        border-left-style: none;
+        border-right-style: none;
+        border-top-style: none;
+      }
+
+    }
+
+  }
+
 }
-
-
-

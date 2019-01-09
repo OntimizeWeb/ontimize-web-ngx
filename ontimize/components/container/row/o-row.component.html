@@ -1,9 +1,15 @@
-<div class="o-container">
-	<div *ngIf="hasTitle()" class="o-container-title-item container-title" layout-padding>
-		<span >{{ titleLabel }}</span>
+<div class="o-container" #container>
+	<div #title *ngIf="hasTitle()" class="o-container-title-item container-title" layout-padding>
+		<span (cdkObserveContent)="updateOutlineGap()">{{ titleLabel }}</span>
 	</div>
 	<div class="o-container-scroll o-scroll">
-		<div id="innerRow" class="o-container-content-item" fxLayoutAlign="{{ layoutAlign }}" fxLayout="row" [class.fillLayout]="layoutFill">
+		<div class="container-outline" *ngIf="getAppearanceOutline()">
+			<div class="container-outline-start"></div>
+			<div class="container-outline-gap"></div>
+			<div class="container-outline-end"></div>
+		</div>
+		<div id="innerRow" class="o-container-content-item" fxLayoutAlign="{{ layoutAlign }}" fxLayout="row"
+		 [class.fillLayout]="layoutFill">
 			<ng-content></ng-content>
 		</div>
 	</div>

@@ -5,8 +5,10 @@
     flex-direction: column;
     width: 100%;
 
+
     .o-container-scroll{
       overflow:auto;
+      position: relative;
     }
   }
 }
