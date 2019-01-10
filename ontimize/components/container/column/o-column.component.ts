@@ -38,7 +38,7 @@ export class OColumnComponent implements OnInit, AfterViewInit {
   protected defaultLayoutAlign: string = 'start start';
   protected _layoutAlign: string;
   protected translateService: OTranslateService;
-  public appearance:string;
+  protected _appearance: string;
 
   @InputConverter()
   layoutFill: boolean = false;
@@ -138,6 +138,15 @@ export class OColumnComponent implements OnInit, AfterViewInit {
     this._elevation = elevation;
     this.propagateElevationToDOM();
     this.propagatePaddingToDOM();
+  }
+
+  get appearance() {
+    return this._appearance;
+  }
+
+  set appearance(value: string) {
+    this._appearance = value;
+    setTimeout(() => { this.updateOutlineGap(); });
   }
 
   get layoutAlign() {
