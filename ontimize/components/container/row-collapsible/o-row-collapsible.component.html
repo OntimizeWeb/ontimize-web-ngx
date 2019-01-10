@@ -1,16 +1,14 @@
 <mat-expansion-panel [expanded]="expanded" class="o-container">
-  <mat-expansion-panel-header expandedHeight="37px" collapsedHeight="37px" class="o-container-header">
+  <mat-expansion-panel-header expandedHeight="37px" collapsedHeight="37px">
     <mat-panel-title fxLayout="row" fxLayoutAlign="start center" class="o-container-title">
       <mat-icon *ngIf="icon">{{ icon }}</mat-icon>
       <span>{{ title | oTranslate }}</span>
     </mat-panel-title>
-    <mat-panel-description fxLayout="row" fxLayoutAlign="start center" class="o-container-description">
+    <mat-panel-description fxLayout="row" fxLayoutAlign="start center">
       <span>{{ description | oTranslate }}</span>
     </mat-panel-description>
   </mat-expansion-panel-header>
-  <div class="o-container-scroll o-scroll">
-    <div id="innerRow" class="o-container-content" fxLayoutAlign="{{ layoutAlign }}" fxLayout="row">
-      <ng-content></ng-content>
-    </div>
+  <div id="innerRow" fxLayout="row" fxLayoutAlign="{{ layoutAlign }}" class="o-container-scroll o-scroll" fxFlex="grow">
+    <ng-content></ng-content>
   </div>
 </mat-expansion-panel>
