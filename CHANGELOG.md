@@ -17,6 +17,7 @@
   * CSS classes `o-container-title-item` and `container-title` has been replaced by `o-container-title`.
   * CSS class `o-container-content-item` has been renamed to `o-container-content`.
   * CSS class `container-content` has been renamed to `o-container-content-gap`.
+* **o-form**: Attribute `layout-fill` has been removed.
 
 ## 3.2.1 (2018-12-28)
 ### Features

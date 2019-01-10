@@ -1,24 +1,25 @@
-import { ChangeDetectorRef, Component, CUSTOM_ELEMENTS_SCHEMA, ElementRef, EventEmitter, Injector, NgModule, NgZone, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import 'rxjs/add/observable/combineLatest';
+
 import { CommonModule } from '@angular/common';
+import { ChangeDetectorRef, Component, CUSTOM_ELEMENTS_SCHEMA, ElementRef, EventEmitter, Injector, NgModule, NgZone, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router, UrlSegment } from '@angular/router';
-import 'rxjs/add/observable/combineLatest';
 import { Observable, Subscription } from 'rxjs';
 
-import { OFormValue, IFormValueOptions } from './OFormValue';
-import { OSharedModule } from '../../shared';
 import { InputConverter } from '../../decorators';
-import { IComponent } from '../o-component.class';
-import { Codes, SQLTypes, Util } from '../../utils';
 import { OFormLayoutManagerComponent } from '../../layouts';
-import { OFormCacheClass } from './cache/o-form.cache.class';
-import { OFormContainerComponent } from './o-form-container.component';
+import { DialogService, NavigationService, OFormPermissions, ONavigationItem, OntimizeService, OPermissions, PermissionsService, SnackBarService } from '../../services';
 import { dataServiceFactory } from '../../services/data-service.provider';
-import { OFormNavigationClass } from './navigation/o-form.navigation.class';
-import { OFormToolbarComponent, OFormToolbarModule } from './o-form-toolbar.component';
+import { OSharedModule } from '../../shared';
+import { Codes, SQLTypes, Util } from '../../utils';
+import { IComponent } from '../o-component.class';
 import { IFormDataComponent, IFormDataTypeComponent } from '../o-form-data-component.class';
-import { DialogService, NavigationService, OntimizeService, SnackBarService, ONavigationItem, PermissionsService, OFormPermissions, OPermissions } from '../../services';
+import { OFormCacheClass } from './cache/o-form.cache.class';
 import { CanComponentDeactivate, CanDeactivateFormGuard } from './guards/o-form-can-deactivate.guard';
+import { OFormNavigationClass } from './navigation/o-form.navigation.class';
+import { OFormContainerComponent } from './o-form-container.component';
+import { OFormToolbarComponent, OFormToolbarModule } from './o-form-toolbar.component';
+import { IFormValueOptions, OFormValue } from './OFormValue';
 
 export interface IFormDataComponentHash {
   [attr: string]: IFormDataComponent;
@@ -79,9 +80,6 @@ export const DEFAULT_INPUTS_O_FORM = [
   // delete-method [string]: name of the service method to perform deletions. Default: delete.
   'deleteMethod: delete-method',
 
-  // layout-fill [string][yes|no|true|false]: Default: true;
-  'layoutFill: layout-fill',
-
   // layout-direction [string][column|row]: Default: column
   'layoutDirection: layout-direction',
 
@@ -133,8 +131,7 @@ export interface OFormInitializationOptions {
   outputs: DEFAULT_OUTPUTS_O_FORM,
   encapsulation: ViewEncapsulation.None,
   host: {
-    '[class.o-form]': 'true',
-    '[class.fill]': 'layoutFill'
+    '[class.o-form]': 'true'
   }
 })
 export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate {
@@ -179,8 +176,6 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   protected insertMethod: string = Codes.INSERT_METHOD;
   protected updateMethod: string = Codes.UPDATE_METHOD;
   protected deleteMethod: string = Codes.DELETE_METHOD;
-  @InputConverter()
-  layoutFill: boolean = true;
   protected _layoutDirection: string = OFormComponent.DEFAULT_LAYOUT_DIRECTION;
   protected _layoutAlign: string;
 
