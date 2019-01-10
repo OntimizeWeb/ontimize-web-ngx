@@ -1,6 +1,5 @@
 import { AfterViewInit, ElementRef, forwardRef, Inject, Injector, Optional } from '@angular/core';
 
-import { InputConverter } from '../../decorators/input-converter';
 import { OFormComponent } from '../form/form-components';
 
 export const DEFAULT_INPUTS_O_CONTAINER = [
