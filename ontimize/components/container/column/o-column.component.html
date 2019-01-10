@@ -1,9 +1,9 @@
-<div *ngIf="!collapsible" class="o-container">
+<div fxLayout="column" class="o-container" fxFill>
   <div *ngIf="hasHeader()" fxLayoutAlign="start center" class="o-container-title" layout-padding>
     <mat-icon *ngIf="icon">{{ icon }}</mat-icon>
     <span>{{ title | oTranslate }}</span>
   </div>
-  <div class="o-container-scroll o-scroll">
+  <div class="o-container-scroll o-scroll" fxFlex="grow">
     <div id="innerCol" class="o-container-content" [class.o-container-content-gap]="hasHeader() || (elevation > 0 && elevation <= 12)"
       fxLayoutAlign="{{ layoutAlign }}" fxLayout="column" [class.fillLayout]="layoutFill">
       <ng-content></ng-content>

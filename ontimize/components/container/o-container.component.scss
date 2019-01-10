@@ -26,8 +26,12 @@
     .o-container-scroll {
       overflow: auto;
 
-      .o-container-content.o-container-content-gap {
-        padding: 24px 30px 8px;
+      .o-container-content {
+        height: 100%;
+
+        &.o-container-content-gap {
+          padding: 24px 30px 8px;
+        }
       }
     }
   }
