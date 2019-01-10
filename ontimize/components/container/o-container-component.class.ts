@@ -7,7 +7,6 @@ export const DEFAULT_INPUTS_O_CONTAINER = [
   'oattr: attr',
   'title',
   'layoutAlign: layout-align',
-  'layoutFill: layout-fill',
   'elevation',
   'icon'
 ];
@@ -22,8 +21,6 @@ export class OContainerComponent implements AfterViewInit {
   protected _elevation: number = 0;
   protected defaultLayoutAlign: string = 'start start';
   protected _layoutAlign: string;
-  @InputConverter()
-  layoutFill: boolean = false;
   public icon: string;
 
   constructor(

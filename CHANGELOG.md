@@ -12,6 +12,7 @@
 ### BREAKING CHANGES
 * **o-row**, **o-column**:
   * Attribute `title-label` has been renamed to `title`.
+  * Attribute `layout-fill` has been removed.
   * Method `hasTitle` has been replaced by method `hasHeader`.
   * CSS classes `o-container-title-item` and `container-title` has been replaced by `o-container-title`.
   * CSS class `o-container-content-item` has been renamed to `o-container-content`.
