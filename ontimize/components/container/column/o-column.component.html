@@ -1,16 +1,17 @@
-<div class="o-container" #container>
-	<div #title *ngIf="hasTitle()" class="o-container-title-item container-title" layout-padding>
-		<span (cdkObserveContent)="updateOutlineGap()" >{{ titleLabel }}</span>
-	</div>
-	<div class="o-container-scroll o-scroll">
-		<div class="container-outline" *ngIf="getAppearanceOutline()">
-			<div class="container-outline-start"></div>
-			<div class="container-outline-gap"></div>
-			<div class="container-outline-end"></div>
-		</div>
-		<div id="innerCol" class="o-container-content-item" fxLayoutAlign="{{ layoutAlign }}" fxLayout="column"
-		 [class.fillLayout]="layoutFill">
-			<ng-content></ng-content>
-		</div>
-	</div>
+<div #container fxLayout="column" class="o-container" fxFill>
+  <div #title *ngIf="hasHeader()" fxLayoutAlign="start center" class="o-container-title" layout-padding>
+    <mat-icon *ngIf="icon">{{ icon }}</mat-icon>
+    <span (cdkObserveContent)="updateOutlineGap()">{{ title | oTranslate }}</span>
+  </div>
+  <div class="o-container-scroll o-scroll" fxFlex="grow">
+    <div class="container-outline" *ngIf="getAppearanceOutline()">
+      <div class="container-outline-start"></div>
+      <div class="container-outline-gap"></div>
+      <div class="container-outline-end"></div>
+    </div>
+    <div id="innerCol" class="o-container-content" [class.o-container-content-gap]="hasHeader() || (elevation > 0 && elevation <= 12)"
+      fxLayoutAlign="{{ layoutAlign }}" fxLayout="column">
+      <ng-content></ng-content>
+    </div>
+  </div>
 </div>

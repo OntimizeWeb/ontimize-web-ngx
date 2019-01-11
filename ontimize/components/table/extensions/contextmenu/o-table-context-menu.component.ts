@@ -53,7 +53,7 @@ export class OTableContextMenuComponent implements OnInit {
 
   constructor(
     protected injector: Injector,
-    @Inject(forwardRef(() => OTableComponent)) protected table: OTableComponent
+    @Inject(forwardRef(() => OTableComponent)) public table: OTableComponent
   ) { }
 
   ngOnInit(): void {

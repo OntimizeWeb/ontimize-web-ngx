@@ -1,4 +1,3 @@
-
 ## 4.0.0-rc.1
 ### Features
 * New components `o-button-toggle` and `o-button-toggle-group` ([311a2ac](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/311a2ac)) ([415f8b0](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/415f8b0))
@@ -36,7 +35,28 @@ The sliding behavior in `o-slider` component requires that HammerJS is loaded on
 * **o-date-input**: this component now only allows to receive and return timestamp values ([e0be14a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e0be14a))
 * **o-table**: CSS class `action-cell-renderer` has been renamed to `o-action-cell-renderer`.
 
-## 3.2.1
+## 3.2.2
+### Features
+* **o-row**, **o-column**:
+  * Row and column components now extend from `OContainerComponent` class that provides shared functionality ([4713e3e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4713e3e))
+  * Added new attribute `icon` ([69fc936](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/69fc936))
+* New container components **o-row-collapsible** and **o-colum-collapsible** ([b1eb483](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b1eb483)) ([0850ef3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0850ef3))
+* **o-app-layout**: new `beforeOpenSidenav`, `afterOpenSidenav`, `beforeCloseSidenav` and `afterCloseSidenav` outputs ([1a2a028](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1a2a028)), closes [#243](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/243)
+
+### Bug Fixes
+* **o-form-navigation**: fixing index error ([f487e54](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f487e54)), closes [#238](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/238)
+
+### BREAKING CHANGES
+* **o-row**, **o-column**:
+  * Attribute `title-label` has been renamed to `title`.
+  * Attribute `layout-fill` has been removed.
+  * Method `hasTitle` has been replaced by method `hasHeader`.
+  * CSS classes `o-container-title-item` and `container-title` has been replaced by `o-container-title`.
+  * CSS class `o-container-content-item` has been renamed to `o-container-content`.
+  * CSS class `container-content` has been renamed to `o-container-content-gap`.
+* **o-form**: Attribute `layout-fill` has been removed.
+
+## 3.2.1 (2018-12-28)
 ### Features
 * **o-form**: new `getFormComponentPermissions` and  `getActionsPermissions` methods
 * **o-table**: new attribute `select-all-checkbox-visible` ([a553447](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a553447))

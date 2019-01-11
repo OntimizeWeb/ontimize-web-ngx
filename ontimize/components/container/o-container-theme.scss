@@ -3,17 +3,24 @@
   $background: map-get($theme, background);
   $foreground: map-get($theme, foreground);
 
-  .o-container {
-    .o-container-title-item {
-      border-bottom-width: 1px;
-      border-bottom-style: solid;
-      border-bottom-color: mat-color($foreground, divider);
-    }
+  .o-column,
+  .o-column-collapsible,
+  .o-row,
+  .o-row-collapsible {
+    > .o-container {
+      &.mat-expansion-panel {
+        background-color: inherit;
+      }
 
-    .container-title {
-      color: mat-color($foreground, secondary-text);
-    }
+      .o-container-header,
+      .o-container-title {
+        border-color: mat-color($primary);
+      }
 
+      .o-container-title {
+        color: mat-color($foreground, secondary-text);
+      }
+    }
   }
 
   .o-column.appearance-outline,
@@ -28,7 +35,6 @@
           font-weight: bold;
         }
       }
-
     }
 
     .container-outline {
@@ -40,7 +46,6 @@
       bottom: 0;
       pointer-events: none;
 
-      
       .container-outline-end,
       .container-outline-start {
         border: 2px solid currentColor;
@@ -64,9 +69,6 @@
         border-right-style: none;
         border-top-style: none;
       }
-
     }
-
   }
-
 }
