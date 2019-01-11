@@ -306,13 +306,13 @@ export class Util {
     document.execCommand('copy');
   }
 
-  static checkPixelsValueString(value: string, defaultValue?: any): string {
-    return (value || '').toLowerCase().endsWith('px') ? value : (defaultValue || undefined);
+  static checkPixelsValueString(value: string): boolean {
+    return (value || '').toLowerCase().endsWith('px');
   }
 
   static extractPixelsValue(value: string, defaultValue: number = undefined): number {
     let result: number;
-    if (Util.isDefined(Util.checkPixelsValueString(value))) {
+    if (Util.checkPixelsValueString(value)) {
       let parsed = parseFloat(value.substr(0, value.length - 'px'.length));
       result = isNaN(parsed) ? defaultValue : parsed;
     }

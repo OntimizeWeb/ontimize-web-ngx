@@ -167,7 +167,7 @@ export class OColumn {
   renderer: OBaseTableCellRenderer;
   editor: any;
   editing: boolean;
-  width: string;
+  _width: string;
   minWidth: string;
   maxWidth: string;
   aggregate: OColumnAggregate;
@@ -295,33 +295,44 @@ export class OColumn {
   }
 
   getMinWidthValue() {
-    return Util.extractPixelsValue(this.minWidth, OTableComponent.DEFAULT_COLUMN_MIN_WIDTH) - this.padding;
+    return Util.extractPixelsValue(this.minWidth, OTableComponent.DEFAULT_COLUMN_MIN_WIDTH);
   }
 
   getMaxWidthValue() {
     const value = Util.extractPixelsValue(this.maxWidth);
-    return value ? value - this.padding : undefined;
+    return value ? value : undefined;
   }
 
   getRenderWidth() {
     if (Util.isDefined(this.width)) {
       return this.width;
     }
-    if (Util.isDefined(this.minWidth)) {
-      const minValue = Util.extractPixelsValue(this.minWidth);
-      if (this.DOMWidth < minValue) {
-        this.DOMWidth = minValue;
-        return this.minWidth;
-      }
+    const minValue = Util.extractPixelsValue(this.minWidth, OTableComponent.DEFAULT_COLUMN_MIN_WIDTH);
+    if (Util.isDefined(minValue) && this.DOMWidth < minValue) {
+      this.DOMWidth = minValue;
     }
+
     if (Util.isDefined(this.maxWidth)) {
       const maxValue = Util.extractPixelsValue(this.maxWidth);
-      if (this.DOMWidth > maxValue) {
+      if (Util.isDefined(maxValue) && this.DOMWidth > maxValue) {
         this.DOMWidth = maxValue;
-        return this.maxWidth;
       }
     }
-    return Util.isDefined(this.DOMWidth) ? this.DOMWidth + 'px' : undefined;
+    return Util.isDefined(this.DOMWidth) ? (this.DOMWidth - (this.padding || 0)) + 'px' : undefined;
+  }
+
+  set width(val: string) {
+    let widthVal = val;
+    const pxVal = Util.extractPixelsValue(val);
+    if (Util.isDefined(pxVal)) {
+      this.DOMWidth = pxVal;
+      widthVal = undefined;
+    }
+    this._width = widthVal;
+  }
+
+  get width(): string {
+    return this._width;
   }
 
   setWidth(val: number) {
@@ -645,6 +656,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
         }
       }, 0);
     }
+    // if (this.resizable) {
+
+    // }
   }
 
   protected permissions: OTablePermissions;
@@ -1259,8 +1273,12 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       [].slice.call(this.tableHeaderEl.nativeElement.children).forEach(thEl => {
         const oCol: OColumn = self.getOColumnFromTh(thEl);
         if (Util.isDefined(oCol)) {
-          oCol.padding = (!thEl.previousElementSibling || !thEl.nextElementSibling) ? OTableComponent.FIRST_LAST_CELL_PADDING : 0;
-          oCol.DOMWidth = thEl.clientWidth - oCol.padding;
+          if (!Util.isDefined(oCol.padding)) {
+            oCol.padding = (!thEl.previousElementSibling || !thEl.nextElementSibling) ? OTableComponent.FIRST_LAST_CELL_PADDING : 0;
+          }
+          if (!Util.isDefined(oCol.DOMWidth)) {
+            oCol.DOMWidth = thEl.clientWidth;
+          }
         }
       });
     }

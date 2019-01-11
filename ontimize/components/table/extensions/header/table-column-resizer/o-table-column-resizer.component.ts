@@ -192,10 +192,12 @@ export class OTableColumnResizerComponent implements OnInit, OnDestroy {
     const self = this;
     this.blockedMinCols = [];
     this.blockedMaxCols = [];
-    this.table.oTableOptions.columns.forEach(oCol => {
+    this.nextOColumns.forEach(oCol => {
       if (oCol.DOMWidth <= oCol.getMinWidthValue()) {
         self.blockedMinCols.push(oCol.attr);
       }
+    });
+    this.table.oTableOptions.columns.forEach(oCol => {
       const maxW = oCol.getMaxWidthValue();
       if (Util.isDefined(maxW) && oCol.DOMWidth >= maxW) {
         self.blockedMaxCols.push(oCol.attr);
