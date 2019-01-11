@@ -3,6 +3,7 @@ import { ElementRef, forwardRef, Inject, Injector, Optional } from '@angular/cor
 import { InputConverter } from '../../decorators/input-converter';
 import { OFormComponent } from '../form/form-components';
 import { OContainerComponent } from './o-container-component.class';
+import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material';
 
 export const DEFAULT_INPUTS_O_CONTAINER_COLLAPSIBLE = [
   ...OContainerComponent.DEFAULT_INPUTS_O_CONTAINER,
@@ -21,9 +22,10 @@ export class OContainerCollapsibleComponent extends OContainerComponent {
   constructor(
     @Optional() @Inject(forwardRef(() => OFormComponent)) protected form: OFormComponent,
     protected elRef: ElementRef,
-    protected injector: Injector
+    protected injector: Injector,
+    @Optional() @Inject(MAT_FORM_FIELD_DEFAULT_OPTIONS) protected matFormDefaultOption
   ) {
-    super(form, elRef, injector);
+    super(form, elRef, injector, matFormDefaultOption);
   }
 
 }

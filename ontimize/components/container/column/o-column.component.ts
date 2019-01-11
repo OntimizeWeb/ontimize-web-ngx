@@ -19,7 +19,7 @@ export const DEFAULT_INPUTS_O_COLUMN = [
   encapsulation: ViewEncapsulation.None,
   host: {
     '[class.o-column]': 'true',
-    '[class.appearance-outline]': 'getAppearanceOutline()'
+    '[class.o-appearance-outline]': 'getAppearanceOutline()'
   }
 })
 export class OColumnComponent extends OContainerComponent {

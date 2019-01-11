@@ -35,6 +35,62 @@
       }
     }
   }
+
+  &.o-appearance-outline {
+    > .o-container {
+      .o-container-title {
+        position: absolute;
+        border-bottom: 0;
+        transform: translate(0, -50%);
+
+        span {
+          // color: mat-color($foreground, text);
+          font-weight: bold;
+        }
+      }
+    }
+
+    .o-container-outline {
+      display: flex;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      pointer-events: none;
+
+      .o-container-outline-end,
+      .o-container-outline-start {
+        border-top-style: solid;
+        border-bottom-style: solid;
+        border-width: 2px;
+        min-width: 5px;
+      }
+
+      .o-container-outline-start {
+        border-radius: 5px 0 0 5px;
+        border-right-style: none;
+        border-left-style: solid;
+      }
+
+      .o-container-outline-end {
+        border-radius: 0 5px 5px 0;
+        border-left-style: none;
+        border-right-style: solid;
+        flex-grow: 1;
+      }
+
+      .o-container-outline-gap {
+        border-bottom-style: solid;
+        border-width: 2px;
+
+        border-left-style: none;
+        border-right-style: none;
+        border-top-style: none;
+      }
+    }
+  }
+
 }
 
 /* Legacy Firefox implementation treats all flex containers as inline-block elements. */

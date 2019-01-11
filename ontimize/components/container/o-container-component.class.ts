@@ -26,7 +26,7 @@ export class OContainerComponent implements AfterViewInit {
   public icon: string;
   protected _appearance: string;
 
-  @ViewChild('title') protected _titleEl: ElementRef;
+  @ViewChild('containerTitle') protected _titleEl: ElementRef;
   @ViewChild('container') protected _containerRef: ElementRef;
 
   constructor(
@@ -130,14 +130,10 @@ export class OContainerComponent implements AfterViewInit {
         const labelWidth = titleEl.offsetWidth;
         const startWidth = labelStart - containerStart;
 
-        const startEls = container.querySelectorAll('.mat-form-field-outline-start');
-        const gapEls = container.querySelectorAll('.container-outline-gap');
-        for (let i = 0; i < gapEls.length; i++) {
-          gapEls.item(i).style.width = `${labelWidth}px`;
-        }
-        for (let i = 0; i < startEls.length; i++) {
-          startEls.item(i).style.width = `${startWidth}px`;
-        }
+        const startEls = container.querySelectorAll('.o-container-outline-start');
+        const gapEls = container.querySelectorAll('.o-container-outline-gap');
+        gapEls[0].style.width = `${labelWidth}px`;
+        startEls[0].style.width = `${startWidth}px`;
       }
     }
   }
