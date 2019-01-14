@@ -1,11 +1,11 @@
 .o-column,
 .o-row {
-  &[class*="mat-elevation-z"],
-  &[class*="o-appearance-outline"] {
+  &[class*="mat-elevation-z"] {
     margin: 8px 0;
   }
 
   &[class*="o-appearance-outline"] {
+    margin: 16px 0 8px;
     box-shadow: none;
   }
 

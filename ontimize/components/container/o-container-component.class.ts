@@ -1,4 +1,4 @@
-import { AfterViewInit, ElementRef, forwardRef, Inject, Injector, Optional, ViewChild } from '@angular/core';
+import { AfterViewInit, ElementRef, forwardRef, Inject, Injector, OnDestroy, Optional, ViewChild } from '@angular/core';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material';
 
 import { OFormComponent } from '../form/form-components';
@@ -12,7 +12,7 @@ export const DEFAULT_INPUTS_O_CONTAINER = [
   'appearance'
 ];
 
-export class OContainerComponent implements AfterViewInit {
+export class OContainerComponent implements AfterViewInit, OnDestroy {
 
   public static APPEARANCE_OUTLINE = 'outline';
   public static DEFAULT_INPUTS_O_CONTAINER = DEFAULT_INPUTS_O_CONTAINER;
@@ -26,7 +26,17 @@ export class OContainerComponent implements AfterViewInit {
   public icon: string;
   protected _appearance: string;
 
-  @ViewChild('containerTitle') protected _titleEl: ElementRef;
+  protected titleObserver = new MutationObserver(() => this.updateOutlineGap());
+
+  protected _titleEl: ElementRef;
+  @ViewChild('containerTitle') set containerTitle(elem: ElementRef) {
+    this._titleEl = elem;
+    if (this._titleEl) {
+      this.registerObserver();
+    } else {
+      this.unRegisterObserver();
+    }
+  }
   @ViewChild('container') protected _containerRef: ElementRef;
 
   constructor(
@@ -40,12 +50,14 @@ export class OContainerComponent implements AfterViewInit {
     if (this.elRef) {
       this.elRef.nativeElement.removeAttribute('title');
     }
-    if (this.getAppearanceOutline()) {
-      this.updateOutlineGap();
-    }
+    this.registerObserver();
   }
 
-  getAttribute() {
+  ngOnDestroy(): void {
+    this.unRegisterObserver();
+  }
+
+  public getAttribute() {
     if (this.oattr) {
       return this.oattr;
     } else if (this.elRef && this.elRef.nativeElement.attributes['attr']) {
@@ -82,18 +94,22 @@ export class OContainerComponent implements AfterViewInit {
     this._layoutAlign = align;
   }
 
-  hasHeader(): boolean {
+  public hasHeader(): boolean {
     return !!this.title || !!this.icon;
   }
 
-  propagateElevationToDOM() {
+  public isAppearanceOutline(): boolean {
+    return this.appearance === OContainerComponent.APPEARANCE_OUTLINE || (this.matFormDefaultOption && this.matFormDefaultOption.appearance === OContainerComponent.APPEARANCE_OUTLINE);
+  }
+
+  protected propagateElevationToDOM(): void {
     this.cleanElevationCSSclasses();
     if (this.elevation > 0 && this.elevation <= 12) {
       this.elRef.nativeElement.classList.add('mat-elevation-z' + this.elevation);
     }
   }
 
-  cleanElevationCSSclasses() {
+  protected cleanElevationCSSclasses(): void {
     const classList = this.elRef.nativeElement.classList;
     if (classList && classList.length) {
       classList.forEach((item: string) => {
@@ -104,37 +120,39 @@ export class OContainerComponent implements AfterViewInit {
     }
   }
 
-  getAppearanceOutline() {
-    if (this.appearance === OContainerComponent.APPEARANCE_OUTLINE && this.hasHeader()) {
-      return true;
-    }
-    if (!this.matFormDefaultOption) {
-      return false;
-    }
-    return this.matFormDefaultOption.appearance === OContainerComponent.APPEARANCE_OUTLINE && this.hasHeader();
-  }
-
-  updateOutlineGap() {
-    if (this.getAppearanceOutline()) {
+  protected updateOutlineGap(): void {
+    if (this.isAppearanceOutline()) {
       const titleEl = this._titleEl ? this._titleEl.nativeElement : null;
 
       const container = this._containerRef.nativeElement;
-      if (titleEl && titleEl.children.length) {
-        const containerRect = container.getBoundingClientRect();
-        if (containerRect.width === 0 && containerRect.height === 0) {
-          return;
-        }
-
-        const containerStart = containerRect.left;
-        const labelStart = titleEl.getBoundingClientRect().left;
-        const labelWidth = titleEl.offsetWidth;
-        const startWidth = labelStart - containerStart;
-
-        const startEls = container.querySelectorAll('.o-container-outline-start');
-        const gapEls = container.querySelectorAll('.o-container-outline-gap');
-        gapEls[0].style.width = `${labelWidth}px`;
-        startEls[0].style.width = `${startWidth}px`;
+      const containerRect = container.getBoundingClientRect();
+      if (containerRect.width === 0 && containerRect.height === 0) {
+        return;
       }
+
+      const containerStart = containerRect.left;
+      const labelStart = titleEl.getBoundingClientRect().left;
+      const labelWidth = this.hasHeader() ? titleEl.offsetWidth : 0;
+      const startWidth = labelStart - containerStart;
+
+      const startEls = container.querySelectorAll('.o-container-outline-start');
+      const gapEls = container.querySelectorAll('.o-container-outline-gap');
+      gapEls[0].style.width = `${labelWidth}px`;
+      startEls[0].style.width = `${startWidth}px`;
+    }
+  }
+
+  protected registerObserver(): void {
+    this.titleObserver.observe(this._titleEl.nativeElement, {
+      childList: true,
+      characterData: true,
+      subtree: true
+    });
+  }
+
+  protected unRegisterObserver(): void {
+    if (this.titleObserver) {
+      this.titleObserver.disconnect();
     }
   }
 

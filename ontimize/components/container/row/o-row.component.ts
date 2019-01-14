@@ -19,7 +19,7 @@ export const DEFAULT_INPUTS_O_ROW = [
   encapsulation: ViewEncapsulation.None,
   host: {
     '[class.o-row]': 'true',
-    '[class.o-appearance-outline]': 'getAppearanceOutline()'
+    '[class.o-appearance-outline]': 'isAppearanceOutline()'
   }
 })
 export class ORowComponent extends OContainerComponent {

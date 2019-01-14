@@ -1,15 +1,15 @@
 <div #container fxLayout="column" class="o-container" fxFill>
   <div #containerTitle *ngIf="hasHeader()" fxLayoutAlign="start center" class="o-container-title" layout-padding>
     <mat-icon *ngIf="icon">{{ icon }}</mat-icon>
-    <span (cdkObserveContent)="updateOutlineGap()">{{ title | oTranslate }}</span>
+    <span *ngIf="title">{{ title | oTranslate }}</span>
   </div>
   <div class="o-container-scroll o-scroll" fxFlex="grow">
-    <div class="o-container-outline" *ngIf="getAppearanceOutline()">
+    <div class="o-container-outline" *ngIf="isAppearanceOutline() && hasHeader()">
       <div class="o-container-outline-start"></div>
       <div class="o-container-outline-gap"></div>
       <div class="o-container-outline-end"></div>
     </div>
-    <div id="innerCol" class="o-container-content" [class.o-container-content-gap]="hasHeader() || (elevation > 0 && elevation <= 12)"
+    <div id="innerCol" class="o-container-content" [class.o-container-content-gap]="hasHeader() || (elevation > 0 && elevation <= 12 && !isAppearanceOutline())"
       fxLayoutAlign="{{ layoutAlign }}" fxLayout="column">
       <ng-content></ng-content>
     </div>
