@@ -48,4 +48,8 @@
   textarea:disabled {
     color: mat-color($foreground, disabled-text);
   }
+
+  .o-tooltip.o-mat-error {
+    background: mat-color($warn);
+  }
 }
