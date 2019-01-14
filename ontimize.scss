@@ -1,5 +1,6 @@
 @import 'ontimize/components/material/styles.scss';
 @import 'ontimize/components/container/o-container.component.scss';
+@import 'ontimize/components/container/o-container-collapsible.component.scss';
 @import 'ontimize/components/input/input.scss';
 
 .relative {
@@ -8,10 +9,12 @@
 
 .cdk-overlay-pane-custom {
   .mat-dialog-container {
-    padding: 0 0 24px 0 !important;
+    padding: 0 0 24px !important;
+
     .mat-dialog-content.dialog-list-container {
       margin: 0;
     }
+
     .mat-dialog-actions {
       padding: 12px 24px;
     }
@@ -32,13 +35,28 @@
 
 $steps: 6;
 @mixin padding-margin-x {
-  @for $i from 1 through $steps {
+   @for $i from 1 through $steps{
     $val: $i * 4;
-    .vertical-padding-#{$val} { padding-top: $val * 1px; padding-bottom: $val * 1px; }
-    .horizontal-padding-#{$val} { padding-left: $val * 1px; padding-right: $val * 1px; }
-    .vertical-margin-#{$val} { margin-top: $val * 1px; margin-bottom: $val * 1px; }
-    .horizontal-margin-#{$val} { margin-left: $val * 1px; margin-right: $val * 1px; }
+
+    .vertical-padding-#{$val} {
+      padding-top: $val * 1px;
+      padding-bottom: $val * 1px;
+    }
+
+    .horizontal-padding-#{$val} {
+      padding-left: $val * 1px;
+      padding-right: $val * 1px;
+    }
+
+    .vertical-margin-#{$val} {
+      margin-top: $val * 1px;
+      margin-bottom: $val * 1px;
+    }
+
+    .horizontal-margin-#{$val} {
+      margin-left: $val * 1px;
+      margin-right: $val * 1px;
+    }
   }
 }
-
 @include padding-margin-x();

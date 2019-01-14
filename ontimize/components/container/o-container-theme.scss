@@ -3,21 +3,23 @@
   $background: map-get($theme, background);
   $foreground: map-get($theme, foreground);
 
-  .o-container {
-    .o-container-title {
-      border-bottom: 2px solid mat-color($primary);
-
-      span {
-        font-weight: 400;
+  .o-column,
+  .o-column-collapsible,
+  .o-row,
+  .o-row-collapsible {
+    > .o-container {
+      &.mat-expansion-panel {
+        background-color: inherit;
       }
-    }
 
-    .o-container-content-gap {
-      padding: 24px 30px 8px;
-    }
+      .o-container-header,
+      .o-container-title {
+        border-color: mat-color($primary);
+      }
 
-    .o-container-title {
-      color: mat-color($foreground, secondary-text);
+      .o-container-title {
+        color: mat-color($foreground, secondary-text);
+      }
     }
   }
 }

@@ -1,13 +1,11 @@
 import { AfterViewInit, ElementRef, forwardRef, Inject, Injector, Optional } from '@angular/core';
 
-import { InputConverter } from '../../decorators/input-converter';
 import { OFormComponent } from '../form/form-components';
 
 export const DEFAULT_INPUTS_O_CONTAINER = [
   'oattr: attr',
   'title',
   'layoutAlign: layout-align',
-  'layoutFill: layout-fill',
   'elevation',
   'icon'
 ];
@@ -22,8 +20,6 @@ export class OContainerComponent implements AfterViewInit {
   protected _elevation: number = 0;
   protected defaultLayoutAlign: string = 'start start';
   protected _layoutAlign: string;
-  @InputConverter()
-  layoutFill: boolean = false;
   public icon: string;
 
   constructor(
@@ -67,7 +63,7 @@ export class OContainerComponent implements AfterViewInit {
   }
 
   hasHeader(): boolean {
-    return !!this.title && !!this.icon;
+    return !!this.title || !!this.icon;
   }
 
   propagateElevationToDOM() {

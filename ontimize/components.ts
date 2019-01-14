@@ -4,6 +4,8 @@ export * from './components/button/o-button.component';
 export * from './components/button-toggle/o-button-toggle.module';
 export * from './components/container/column/o-column.component';
 export * from './components/container/row/o-row.component';
+export * from './components/container/column-collapsible/o-column-collapsible.component';
+export * from './components/container/row-collapsible/o-row-collapsible.component';
 export * from './components/contextmenu/o-context-menu.module';
 export * from './components/dialog/o-dialog.component';
 export * from './components/snackbar/o-snackbar.component';
