@@ -1,7 +1,12 @@
 .o-column,
 .o-row {
-  &[class*="mat-elevation-z"] {
+  &[class*="mat-elevation-z"],
+  &[class*="o-appearance-outline"] {
     margin: 8px 0;
+  }
+
+  &[class*="o-appearance-outline"] {
+    box-shadow: none;
   }
 
   > .o-container {
@@ -42,9 +47,9 @@
         position: absolute;
         border-bottom: 0;
         transform: translate(0, -50%);
+        margin-left: 18px;
 
         span {
-          // color: mat-color($foreground, text);
           font-weight: bold;
         }
       }
