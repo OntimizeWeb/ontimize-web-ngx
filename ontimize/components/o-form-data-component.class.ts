@@ -3,13 +3,14 @@ import { FormControl, FormGroup, Validators, ValidatorFn } from '@angular/forms'
 import { MatSuffix } from '@angular/material';
 import { Subscription } from 'rxjs/Subscription';
 import { InputConverter, BooleanConverter } from '../decorators';
-import { SQLTypes, Util } from '../utils';
+import { SQLTypes, Util, Codes } from '../utils';
 import { PermissionsUtils } from '../util/permissions';
 import { OBaseComponent, IComponent } from './o-component.class';
 import { OFormComponent } from './form/o-form.component';
 import { OFormValue, IFormValueOptions } from './form/OFormValue';
 import { OValidatorComponent } from './input/validation/o-validator.component';
 import { OPermissions, PermissionsService } from '../services';
+import { OMatErrorComponent, OMatErrorOptions, O_MAT_ERROR_OPTIONS } from '../shared/material/o-mat-error/o-mat-error';
 
 export interface IMultipleSelection extends IComponent {
   getSelectedItems(): Array<any>;
@@ -133,6 +134,10 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   protected permissionsService: PermissionsService;
   protected mutationObserver: MutationObserver;
 
+  protected errorOptions: OMatErrorOptions;
+  @ViewChildren(OMatErrorComponent)
+  protected oMatErrorChildren: QueryList<OMatErrorComponent>;
+
   constructor(
     form: OFormComponent,
     elRef: ElementRef,
@@ -142,6 +147,11 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     this.form = form;
     this.elRef = elRef;
     this.permissionsService = this.injector.get(PermissionsService);
+    try {
+      this.errorOptions = this.injector.get(O_MAT_ERROR_OPTIONS) || {};
+    } catch (e) {
+      this.errorOptions = {};
+    }
   }
 
   ngOnInit() {
@@ -525,5 +535,26 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     if (val !== old) {
       this.updateValidators();
     }
+  }
+
+  protected getTooltipClass(): string {
+    const liteError = this.errorOptions.type === Codes.O_MAT_ERROR_LITE;
+    if (!liteError) {
+      return super.getTooltipClass();
+    }
+    const errorClass = Util.isDefined(this._fControl.errors) ? 'o-mat-error' : '';
+    return `${super.getTooltipClass()} ${errorClass}`;
+  }
+
+  protected getTooltipText(): string {
+    const liteError = this.errorOptions.type === Codes.O_MAT_ERROR_LITE;
+    if (liteError && Util.isDefined(this._fControl.errors) && this.oMatErrorChildren && this.oMatErrorChildren.length > 0) {
+      let result: string = '';
+      this.oMatErrorChildren.forEach((oMatError: OMatErrorComponent) => {
+        result += `${oMatError.text}\n`;
+      });
+      return result;
+    }
+    return super.getTooltipText();
   }
 }

@@ -7,6 +7,11 @@ div.icon-btn {
   }
 }
 
+.o-tooltip.o-mat-error {
+  white-space: pre-line;
+  margin-top: 0;
+}
+
 .mat-form-field {
   input:read-only {
     cursor: default;
@@ -45,6 +50,7 @@ div.icon-btn {
     }
   }
 }
+
 @mixin mat-form-field-with-icon() {
   $suffix-size: 24;
   @for $i from 1 through 4 {

@@ -15,9 +15,14 @@ import {
 import { ONTIMIZE_DIRECTIVES } from '../config/o-directives';
 import { OCustomMaterialModule } from './material/custom.material.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { OMatErrorModule } from './material/o-mat-error/o-mat-error';
+export * from './material/o-mat-error/o-mat-error';
 
 @NgModule({
-  imports: [FlexLayoutModule],
+  imports: [
+    FlexLayoutModule,
+    OMatErrorModule
+  ],
   declarations: [
     ColumnsFilterPipe,
     OrderByPipe,
@@ -30,6 +35,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
   ],
   exports: [
     FlexLayoutModule,
+    OMatErrorModule,
     FormsModule,
     ReactiveFormsModule,
     OTranslateModule,

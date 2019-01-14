@@ -1,4 +1,4 @@
-<div fxLayout="row" fxLayoutAlign="space-between center" [formGroup]="getFormGroup()" [matTooltip]="tooltip"
+<div fxLayout="row" fxLayoutAlign="space-between center" [formGroup]="getFormGroup()" [matTooltip]="tooltip" [matTooltipClass]="tooltipClass"
   [matTooltipPosition]="tooltipPosition" [matTooltipShowDelay]="tooltipShowDelay" (click)="onClickInput($event)">
   <mat-form-field [class.custom-width]="hasCustomWidth" class="icon-field" fxFlexFill>
     <input matInput #matInputRef [matDatepicker]="d" [id]="getAttribute()" [formControlName]="getAttribute()"
@@ -11,11 +11,11 @@
       <mat-icon matDatepickerToggleIcon>today</mat-icon>
     </mat-datepicker-toggle>
     <mat-datepicker #d [disabled]="isReadOnly || isDisabled"></mat-datepicker>
-    <mat-error *ngIf="hasError('required')">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</mat-error>
-    <mat-error *ngIf="hasError('matDatepickerParse')">{{ 'FORM_VALIDATION.DATE_PARSE' | oTranslate }} {{ oformat }}</mat-error>
-    <mat-error *ngIf="hasError('matDatepickerFilter')">{{ 'FORM_VALIDATION.DATE_FILTER' | oTranslate }}</mat-error>
-    <mat-error *ngIf="hasError('matDatepickerMin')">{{ 'FORM_VALIDATION.DATE_MIN' | oTranslate }} {{ minDateString }}</mat-error>
-    <mat-error *ngIf="hasError('matDatepickerMax')">{{ 'FORM_VALIDATION.DATE_MAX' | oTranslate }} {{ maxDateString }}</mat-error>
-    <mat-error *ngFor="let oError of getActiveOErrors()"> {{ oError.text | oTranslate }} </mat-error>
+    <mat-error *ngIf="hasError('required')" text="{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}"></mat-error>
+    <mat-error *ngIf="hasError('matDatepickerParse')" text="{{ 'FORM_VALIDATION.DATE_PARSE' | oTranslate }} {{ oformat }}"></mat-error>
+    <mat-error *ngIf="hasError('matDatepickerFilter')" text="{{ 'FORM_VALIDATION.DATE_FILTER' | oTranslate }}"></mat-error>
+    <mat-error *ngIf="hasError('matDatepickerMin')" text="{{ 'FORM_VALIDATION.DATE_MIN' | oTranslate }} {{ minDateString }}"></mat-error>
+    <mat-error *ngIf="hasError('matDatepickerMax')" text="{{ 'FORM_VALIDATION.DATE_MAX' | oTranslate }} {{ maxDateString }}"></mat-error>
+    <mat-error *ngFor="let oError of getActiveOErrors()" text="{{ oError.text | oTranslate }}"></mat-error>
   </mat-form-field>
 </div>
