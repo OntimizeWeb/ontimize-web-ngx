@@ -61,7 +61,19 @@ export class OBaseComponent implements IComponent {
     this.oplaceholder = value;
   }
 
+  get tooltipClass(): string {
+    return this.getTooltipClass();
+  }
+
+  protected getTooltipClass(): string {
+    return 'o-tooltip';
+  }
+
   get tooltip(): string {
+    return this.getTooltipText();
+  }
+
+  protected getTooltipText(): string {
     if (Util.isDefined(this._tooltip) && this.translateService) {
       return this.translateService.get(this._tooltip);
     }

@@ -10,6 +10,11 @@ div.icon-btn {
 $suffix-size: 24;
 $width24: $suffix-size * 1px;
 
+.o-tooltip.o-mat-error {
+  white-space: pre-line;
+  margin-top: 0;
+}
+
 .mat-form-field {
   &.mat-form-field-appearance-ontimize {
     .mat-select-arrow-wrapper {
@@ -29,13 +34,13 @@ $width24: $suffix-size * 1px;
     .mat-form-field-suffix {
       .mat-icon-button {
         vertical-align: bottom;
+
         .mat-icon {
           font-size: 150%;
         }
       }
     }
   }
-
 
   &:not(.mat-form-field-appearance-legacy) {
     .mat-form-field-wrapper {

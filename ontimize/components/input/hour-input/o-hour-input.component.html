@@ -1,5 +1,6 @@
 <div fxLayout="row" fxLayoutAlign="space-between center" [formGroup]="getFormGroup()" [matTooltip]="tooltip"
-  [matTooltipPosition]="tooltipPosition" [matTooltipShowDelay]="tooltipShowDelay" (click)="onClickInput($event)">
+  [matTooltipClass]="tooltipClass" [matTooltipPosition]="tooltipPosition" [matTooltipShowDelay]="tooltipShowDelay"
+  (click)="onClickInput($event)">
 
   <mat-form-field [appearance]="appearance" [floatLabel]="floatLabel" fxFlexFill>
     <mat-label>{{ olabel }}</mat-label>
@@ -15,10 +16,8 @@
     <button type="button" matSuffix mat-icon-button (click)="open($event)" [disabled]="isReadOnly || isDisabled">
       <mat-icon svgIcon="ontimize:clock "></mat-icon>
     </button>
-    <mat-error *ngIf="hasError('required')">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }} </mat-error>
-    <mat-error *ngIf="hasError('invalidFormatHour')">
-      {{ 'FORM_VALIDATION.HOUR_FORMAT' | oTranslate }} {{ formatString }}
-    </mat-error>
-    <mat-error *ngFor="let oError of getActiveOErrors()"> {{ oError.text | oTranslate }} </mat-error>
+    <mat-error *ngIf="hasError('required')" text="{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }} "></mat-error>
+    <mat-error *ngIf="hasError('invalidFormatHour')" text="{{ 'FORM_VALIDATION.HOUR_FORMAT' | oTranslate }} {{ formatString }}"></mat-error>
+    <mat-error *ngFor="let oError of getActiveOErrors()" text="{{ oError.text | oTranslate }}"></mat-error>
   </mat-form-field>
 </div>

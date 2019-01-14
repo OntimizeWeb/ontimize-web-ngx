@@ -69,6 +69,9 @@ export class Codes {
   public static AVAILABLE_COLUMN_TITLE_ALIGNS =
   [Codes.COLUMN_TITLE_ALIGN_START, Codes.COLUMN_TITLE_ALIGN_CENTER, Codes.COLUMN_TITLE_ALIGN_END, Codes.COLUMN_TITLE_ALIGN_AUTO];
 
+  public static O_MAT_ERROR_STANDARD = 'standard';
+  public static O_MAT_ERROR_LITE = 'lite';
+
   static isDoubleClickMode(value: string): boolean {
     return Codes.DETAIL_MODE_DBLCLICK_VALUES.indexOf(value) !== -1;
   }
