@@ -22,6 +22,7 @@
 * **OServiceBaseComponent**: new `query-fallback-function` input ([fec7eab](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/fec7eab))
 * **o-date-input**: new `value-type` input
 * **o-row and o-column**: new `appearance` input ([8616872](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/8616872))
+* **o-row-collapsible** and **o-colum-collapsible**: new `appearance` attribute ([41ace5d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/41ace5d)) ([fc92303](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/fc92303))
 
 ### Note on HammerJS
 The sliding behavior in `o-slider` component requires that HammerJS is loaded on the page. You can see the support of Material in next ([link](https://material.angular.io/guide/getting-started#step-5-gesture-support))
