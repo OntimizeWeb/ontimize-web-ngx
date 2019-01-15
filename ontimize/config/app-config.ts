@@ -8,6 +8,14 @@ let DEFAULT_CONFIG: Config = {
   title: 'Ontimize Web App'
 };
 
+export const O_INPUTS_OPTIONS = new InjectionToken<OInputsOptions>('o-inputs-options');
+
+export type OInputsColor = 'primary' | 'accent';
+
+export interface OInputsOptions {
+  iconColor?: OInputsColor;
+}
+
 export const APP_CONFIG = new InjectionToken<Config>('app.config');
 
 export type OntimizePermissionsConfig = {

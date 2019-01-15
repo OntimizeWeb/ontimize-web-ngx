@@ -11,6 +11,7 @@ import { OFormValue, IFormValueOptions } from './form/OFormValue';
 import { OValidatorComponent } from './input/validation/o-validator.component';
 import { OPermissions, PermissionsService } from '../services';
 import { OMatErrorComponent, OMatErrorOptions, O_MAT_ERROR_OPTIONS } from '../shared/material/o-mat-error/o-mat-error';
+import { O_INPUTS_OPTIONS, OInputsOptions } from '../config/app-config';
 
 export interface IMultipleSelection extends IComponent {
   getSelectedItems(): Array<any>;
@@ -138,6 +139,8 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   @ViewChildren(OMatErrorComponent)
   protected oMatErrorChildren: QueryList<OMatErrorComponent>;
 
+  protected oInputsOptions: OInputsOptions;
+
   constructor(
     form: OFormComponent,
     elRef: ElementRef,
@@ -180,6 +183,8 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
         callback: this.disableFormControl.bind(this)
       });
     }
+
+    this.parseOInputsOptions();
   }
 
   ngOnDestroy() {
@@ -556,5 +561,19 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
       return result;
     }
     return super.getTooltipText();
+  }
+
+  protected parseOInputsOptions() {
+    try {
+      this.oInputsOptions = this.injector.get(O_INPUTS_OPTIONS);
+    } catch (e) {
+      this.oInputsOptions = {};
+    }
+    if (this.oInputsOptions.iconColor === Codes.O_INPUTS_OPTIONS_COLOR_ACCENT) {
+      const matFormFieldEL = this.elRef.nativeElement.getElementsByTagName('mat-form-field')[0];
+      if (Util.isDefined(matFormFieldEL)) {
+        matFormFieldEL.classList.add('accent');
+      }
+    }
   }
 }

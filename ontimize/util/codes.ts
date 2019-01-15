@@ -72,6 +72,8 @@ export class Codes {
   public static O_MAT_ERROR_STANDARD = 'standard';
   public static O_MAT_ERROR_LITE = 'lite';
 
+  public static O_INPUTS_OPTIONS_COLOR_ACCENT = 'accent';
+
   static isDoubleClickMode(value: string): boolean {
     return Codes.DETAIL_MODE_DBLCLICK_VALUES.indexOf(value) !== -1;
   }
