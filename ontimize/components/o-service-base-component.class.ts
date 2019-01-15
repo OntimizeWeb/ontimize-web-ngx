@@ -299,20 +299,19 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
     }
   }
 
-  setFormComponent(form: OFormComponent) {
+  setFormComponent(form: OFormComponent): void {
     if (!Util.isDefined(this.form)) {
       this.form = form;
     }
 
-    var self = this;
-    if (self.queryOnBind) {
-      this.onFormDataSubscribe = this.form.onDataLoaded.subscribe(data => {
-        self.queryData();
-      });
+    if (this.queryOnBind) {
+      // Use `reloadPaginatedDataFromStart` instead of `queryData` or `reloadData` for reseting pagination query info on consecutive form details
+      this.onFormDataSubscribe = this.form.onDataLoaded.subscribe(() => this.reloadPaginatedDataFromStart());
     }
-    let dataValues = this.form.getDataValues();
+
+    const dataValues = this.form.getDataValues();
     if (Util.isDefined(dataValues) && Object.keys(dataValues).length > 0) {
-      self.queryData();
+      this.queryData();
     }
   }
 
