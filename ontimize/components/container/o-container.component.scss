@@ -1,5 +1,7 @@
 .o-column,
 .o-row {
+  display: block;
+
   &[class*="mat-elevation-z"] {
     margin: 8px 0;
   }
@@ -25,13 +27,10 @@
 
     .o-container-scroll {
       overflow: auto;
+      height: 100%;
 
-      .o-container-content {
-        height: 100%;
-
-        &.o-container-content-gap {
-          padding: 24px 30px 8px;
-        }
+      &.o-container-gap {
+        padding: 24px 30px 8px;
       }
     }
   }
