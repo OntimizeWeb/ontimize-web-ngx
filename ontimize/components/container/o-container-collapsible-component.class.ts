@@ -38,21 +38,20 @@ export class OContainerCollapsibleComponent extends OContainerComponent {
         return;
       }
 
-      const containerStart = containerOutlineRect.left;
-
       const titleEl = exPanelHeader.querySelector('.o-container-title.mat-expansion-panel-header-title');
       const descrEl = exPanelHeader.querySelector('.mat-expansion-panel-header-description');
 
-      let titleWidth = 4;
-      for (let i = 0; i < titleEl.children.length; i++) {
-        titleWidth += titleEl.children.item(i).offsetWidth;
-      }
+      const containerStart = containerOutlineRect.left;
       const descrStart = descrEl.getBoundingClientRect().left;
-      let descrWidth = 8;
-      for (let i = 0; i < descrEl.children.length; i++) {
-        descrWidth += descrEl.children.item(i).offsetWidth;
+
+      let titleWidth = 0;
+      if (this.hasHeader()) {
+        titleWidth += this.icon ? titleEl.querySelector('mat-icon').offsetWidth : 0; // icon
+        titleWidth += this.title ? titleEl.querySelector('span').offsetWidth : 0; // title
+        titleWidth = titleWidth === 0 ? 0 : titleWidth + 4;
       }
 
+      let descrWidth = this.description ? descrEl.querySelector('span').offsetWidth + 8 : 0;
       const empty1Width = descrStart - containerStart - 14 - titleWidth - 4;
 
       const gapTitleEls = containerOutline.querySelectorAll('.o-container-outline-gap-title');

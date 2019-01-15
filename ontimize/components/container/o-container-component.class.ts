@@ -33,6 +33,7 @@ export class OContainerComponent implements AfterViewInit, OnDestroy {
     this._titleEl = elem;
     if (this._titleEl) {
       this.registerObserver();
+      this.updateOutlineGap(); // This must be triggered when title container is re-registered
     } else {
       this.unRegisterObserver();
     }
