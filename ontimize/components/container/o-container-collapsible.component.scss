@@ -1,5 +1,7 @@
 .o-column-collapsible,
 .o-row-collapsible {
+  display: block;
+
   &[class*="mat-elevation-z"] {
     margin: 8px 0;
   }
