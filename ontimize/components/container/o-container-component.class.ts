@@ -144,11 +144,13 @@ export class OContainerComponent implements AfterViewInit, OnDestroy {
   }
 
   protected registerObserver(): void {
-    this.titleObserver.observe(this._titleEl.nativeElement, {
-      childList: true,
-      characterData: true,
-      subtree: true
-    });
+    if (this._titleEl) {
+      this.titleObserver.observe(this._titleEl.nativeElement, {
+        childList: true,
+        characterData: true,
+        subtree: true
+      });
+    }
   }
 
   protected unRegisterObserver(): void {

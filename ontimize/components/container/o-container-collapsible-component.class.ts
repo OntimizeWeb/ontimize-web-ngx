@@ -65,11 +65,13 @@ export class OContainerCollapsibleComponent extends OContainerComponent {
   }
 
   protected registerObserver(): void {
-    this.titleObserver.observe((this._titleEl as any)._element.nativeElement, {
-      childList: true,
-      characterData: true,
-      subtree: true
-    });
+    if (this._titleEl) {
+      this.titleObserver.observe((this._titleEl as any)._element.nativeElement, {
+        childList: true,
+        characterData: true,
+        subtree: true
+      });
+    }
   }
 
 }
