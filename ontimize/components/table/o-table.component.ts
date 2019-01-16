@@ -619,8 +619,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   public oTableQuickFilterComponent: OTableQuickfilterComponent;
   protected sortSubscription: Subscription;
   protected onRenderedDataChange: Subscription;
-  private previousRendererData;
-
+  protected previousRendererData;
 
   quickFilterCallback: QuickFilterFunction;
 
@@ -1276,7 +1275,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
           if (!Util.isDefined(oCol.padding)) {
             oCol.padding = (!thEl.previousElementSibling || !thEl.nextElementSibling) ? OTableComponent.FIRST_LAST_CELL_PADDING : 0;
           }
-          if (!Util.isDefined(oCol.DOMWidth)) {
+          if (!Util.isDefined(oCol.DOMWidth) && thEl.clientWidth > 0) {
             oCol.DOMWidth = thEl.clientWidth;
           }
         }
