@@ -7,8 +7,11 @@
   }
 
   &[class*="o-appearance-outline"] {
-    margin: 16px 0 8px;
     box-shadow: none;
+  }
+  
+  &[class*="o-appearance-outline-title"] {
+    margin: 16px 0 8px;
   }
 
   > .o-container {
