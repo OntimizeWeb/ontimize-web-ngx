@@ -35,7 +35,9 @@ export const DEFAULT_INPUTS_O_FORM_LAYOUT_MANAGER = [
   'labelColumns: label-columns',
   'separator',
   'title',
-  'storeState: store-state'
+  'storeState: store-state',
+  // attr of the child form from which the data for building the tab title will be obtained
+  'titleDataOrigin: title-data-origin'
 ];
 
 export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
@@ -70,6 +72,7 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
   title: string;
   @InputConverter()
   storeState: boolean = true;
+  titleDataOrigin: string;
 
   protected labelColsArray: string[] = [];
 
@@ -366,6 +369,12 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
     this.listComponents.forEach((listComp: OListComponent) => {
       listComp.reloadData();
     });
+  }
+
+  allowToUpdateNavigation(formAttr: string): boolean {
+    return (this.isTabMode() && Util.isDefined(this.titleDataOrigin)) ?
+      this.titleDataOrigin === formAttr :
+      true;
   }
 }
 
