@@ -9,7 +9,8 @@ export const DEFAULT_INPUTS_O_CONTAINER = [
   'layoutAlign: layout-align',
   'elevation',
   'icon',
-  'appearance'
+  'appearance',
+  'layoutGap:layout-gap'
 ];
 
 export class OContainerComponent implements AfterViewInit, OnDestroy {
@@ -25,6 +26,7 @@ export class OContainerComponent implements AfterViewInit, OnDestroy {
   protected _layoutAlign: string;
   public icon: string;
   protected _appearance: string;
+  protected _layoutGap: string;
 
   protected titleObserver = new MutationObserver(() => this.updateOutlineGap());
 
@@ -95,12 +97,24 @@ export class OContainerComponent implements AfterViewInit, OnDestroy {
     this._layoutAlign = align;
   }
 
+  get layoutGap() {
+    return this._layoutGap;
+  }
+
+  set layoutGap(layoutGap: string) {
+    this._layoutGap = layoutGap;
+  }
+
   public hasHeader(): boolean {
     return !!this.title || !!this.icon;
   }
 
   public isAppearanceOutline(): boolean {
     return this.appearance === OContainerComponent.APPEARANCE_OUTLINE || (this.matFormDefaultOption && this.matFormDefaultOption.appearance === OContainerComponent.APPEARANCE_OUTLINE);
+  }
+
+  public hasTitleInAppearanceOutline(): boolean {
+    return this.isAppearanceOutline() && this.hasHeader();
   }
 
   protected propagateElevationToDOM(): void {

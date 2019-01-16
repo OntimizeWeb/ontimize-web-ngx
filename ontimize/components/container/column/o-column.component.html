@@ -3,7 +3,7 @@
     <mat-icon *ngIf="icon">{{ icon }}</mat-icon>
     <span *ngIf="title">{{ title | oTranslate }}</span>
   </div>
-  <div id="innerCol" fxLayout="column" fxLayoutAlign="{{ layoutAlign }}" [class.o-container-gap]="hasHeader() || (elevation > 0 && elevation <= 12)"
+  <div id="innerCol" fxLayout="column" fxLayoutAlign="{{ layoutAlign }}" fxLayoutGap="{{ layoutGap }}" [class.o-container-gap]="hasHeader() || (elevation > 0 && elevation <= 12)"
     class="o-container-scroll o-scroll" fxFlex="grow">
     <div class="o-container-outline" *ngIf="isAppearanceOutline() && hasHeader()">
       <div class="o-container-outline-start"></div>
