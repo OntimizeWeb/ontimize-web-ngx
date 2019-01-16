@@ -1,4 +1,4 @@
-## 4.0.0-rc.1
+## 4.0.0-rc.1 (2018-01-16)
 ### Features
 * New components `o-button-toggle` and `o-button-toggle-group` ([311a2ac](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/311a2ac)) ([415f8b0](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/415f8b0))
 * New components `o-slider` ([a885043](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a885043))
@@ -24,22 +24,7 @@
 * **o-row and o-column**: new `appearance` input ([8616872](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/8616872))
 * **o-row-collapsible** and **o-colum-collapsible**: new `appearance` attribute ([41ace5d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/41ace5d)) ([fc92303](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/fc92303))
 * **o-row and o-column**: new `appearance` input ([8616872](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/8616872))
-* **o-row, o-column, o-row-collapsible** and **o-colum-collapsible**: new `layout-gap` attribute ([e302c25](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e302c25)) 
-
-### Note on HammerJS
-The sliding behavior in `o-slider` component requires that HammerJS is loaded on the page. You can see the support of Material in next ([link](https://material.angular.io/guide/getting-started#step-5-gesture-support))
-
-### Bug Fixes
-* **o-grid**: loading spinner displays properly ([7d08582](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7d08582)), closes [#231](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/231)
-
-### BREAKING CHANGES
-* **AppConfig**: removing `authGuard` property.
-* **o-table-cell-renderer-boolean**: `true-value-type` and `false-value-type` inputs no longer exists ([a8cca0d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a8cca0d))
-* **o-date-input**: this component now only allows to receive and return timestamp values ([e0be14a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e0be14a))
-* **o-table**: CSS class `action-cell-renderer` has been renamed to `o-action-cell-renderer`.
-
-## 3.2.2
-### Features
+* **o-row, o-column, o-row-collapsible** and **o-colum-collapsible**: new `layout-gap` attribute ([e302c25](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e302c25))
 * **o-row**, **o-column**:
   * Row and column components now extend from `OContainerComponent` class that provides shared functionality ([4713e3e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4713e3e))
   * Added new attribute `icon` ([69fc936](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/69fc936))
@@ -49,11 +34,19 @@ The sliding behavior in `o-slider` component requires that HammerJS is loaded on
 * **O_INPUTS_OPTIONS**: new provider for allowing to configure input components ([01692e0](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/01692e0))
 * **o-form-layout-manager**: new `title-data-origin` input ([c88ab98](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c88ab98))
 
+### Note on HammerJS
+The sliding behavior in `o-slider` component requires that HammerJS is loaded on the page. You can see the support of Material in next ([link](https://material.angular.io/guide/getting-started#step-5-gesture-support))
+
 ### Bug Fixes
+* **o-grid**: loading spinner displays properly ([7d08582](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7d08582)), closes [#231](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/231)
 * **o-form-navigation**: fixing index error ([f487e54](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f487e54)), closes [#238](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/238)
 * **OServiceBaseComponent**: fixed bug on service components with pagination and located inside a detail form ([9c69c4b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9c69c4b)) ([bb0b04a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/bb0b04a))
 
 ### BREAKING CHANGES
+* **AppConfig**: removing `authGuard` property.
+* **o-table-cell-renderer-boolean**: `true-value-type` and `false-value-type` inputs no longer exists ([a8cca0d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a8cca0d))
+* **o-date-input**: this component now only allows to receive and return timestamp values ([e0be14a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e0be14a))
+* **o-table**: CSS class `action-cell-renderer` has been renamed to `o-action-cell-renderer`.
 * **o-row**, **o-column**:
   * Attribute `title-label` has been renamed to `title`.
   * Attribute `layout-fill` has been removed.
