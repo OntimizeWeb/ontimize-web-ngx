@@ -277,6 +277,12 @@ export class OGridComponent extends OServiceComponent implements AfterViewChecke
     }
   }
 
+  reloadPaginatedDataFromStart(): void {
+    this.currentPage = 0;
+    this.dataResponseArray = [];
+    this.reloadData();
+  }
+
   registerQuickFilter(input: OSearchInputComponent) {
     this.quickFilterComponent = input;
     if (Util.isDefined(this.quickFilterComponent)) {

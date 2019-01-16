@@ -335,6 +335,11 @@ export class OListComponent extends OServiceComponent implements AfterContentIni
     this.queryData(void 0, queryArgs);
   }
 
+  reloadPaginatedDataFromStart(): void {
+    this.dataResponseArray = [];
+    this.reloadData();
+  }
+
   configureFilterValue(value: string) {
     let returnVal = value;
     if (value && value.length > 0) {
