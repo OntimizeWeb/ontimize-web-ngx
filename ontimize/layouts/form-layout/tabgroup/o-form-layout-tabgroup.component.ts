@@ -195,15 +195,9 @@ export class OFormLayoutTabGroupComponent implements AfterViewInit, OnDestroy {
   }
 
   updateNavigation(data: any, id: string) {
-    let index = undefined;
-    for (let i = 0, len = this.data.length; i < len; i++) {
-      if (this.data[i].id === id) {
-        index = i;
-        break;
-      }
-    }
-    let label = this.formLayoutManager.getLabelFromData(data);
-    if (index !== undefined) {
+    let index = this.data.findIndex((item: any) => item.id === id);
+    if (index >= 0) {
+      let label = this.formLayoutManager.getLabelFromData(data);
       this.tabGroup.selectedIndex = (index + 1);
       label = label.length ? label : this.formLayoutManager.getLabelFromUrlParams(this.data[index].params);
       this.data[index].label = label;

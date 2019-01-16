@@ -241,7 +241,7 @@ export class OFormNavigationClass {
   }
 
   updateNavigation() {
-    if (this.formLayoutManager) {
+    if (this.formLayoutManager && this.formLayoutManager.allowToUpdateNavigation(this.form.oattr)) {
       let formData = undefined;
       if (!this.form.isInInsertMode()) {
         formData = {};
