@@ -276,8 +276,7 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
     }
 
     if (this.queryOnBind) {
-      // Use `reloadPaginatedDataFromStart` instead of `queryData` or `reloadData` for reseting pagination query info on consecutive form details
-      this.onFormDataSubscribe = this.form.onDataLoaded.subscribe(() => this.reloadPaginatedDataFromStart());
+      this.onFormDataSubscribe = this.form.onDataLoaded.subscribe(() => this.pageable ? this.reloadPaginatedDataFromStart() : this.reloadData());
     }
 
     const dataValues = this.form.getDataValues();
