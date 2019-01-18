@@ -32,6 +32,9 @@ export class OContainerCollapsibleComponent extends OContainerComponent {
     if (this.isAppearanceOutline()) {
       const exPanelHeader = this._titleEl ? (this._titleEl as any)._element.nativeElement : null;
 
+      if (!this._containerRef) {
+        return;
+      }
       const containerOutline = this._containerRef.nativeElement;
       const containerOutlineRect = containerOutline.getBoundingClientRect();
       if (containerOutlineRect.width === 0 && containerOutlineRect.height === 0) {

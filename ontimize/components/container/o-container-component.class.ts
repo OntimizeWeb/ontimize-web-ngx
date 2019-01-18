@@ -139,6 +139,9 @@ export class OContainerComponent implements AfterViewInit, OnDestroy {
     if (this.isAppearanceOutline()) {
       const titleEl = this._titleEl ? this._titleEl.nativeElement : null;
 
+      if (!this._containerRef) {
+        return;
+      }
       const container = this._containerRef.nativeElement;
       const containerRect = container.getBoundingClientRect();
       if (containerRect.width === 0 && containerRect.height === 0) {
