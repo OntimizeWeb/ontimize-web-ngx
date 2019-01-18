@@ -7,8 +7,10 @@
   }
 
   &[class*="o-appearance-outline"] {
-    margin: 16px 0 8px;
     box-shadow: none;
+  }
+  &[class*="o-appearance-outline-title"] {
+    margin: 16px 0 8px;
   }
 
   > .o-container {
@@ -24,7 +26,7 @@
       border-bottom-style: solid;
 
       span {
-        font-weight: 400;
+        font-weight: 500;
         font-size: 18px;
         padding-left: 8px;
       }
@@ -66,7 +68,7 @@
       .o-container-outline-end,
       .o-container-outline-start {
         min-width: 5px;
-        border-width: 2px;
+        border-width: 1px;
         border-top-style: solid;
         border-bottom-style: solid;
       }
@@ -85,7 +87,7 @@
       }
 
       .o-container-outline-gap {
-        border-width: 2px;
+        border-width: 1px;
         border-top-style: none;
         border-bottom-style: solid;
         border-left-style: none;

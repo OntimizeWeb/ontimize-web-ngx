@@ -12,33 +12,41 @@
         background-color: inherit;
       }
 
-      .o-container-header,
-      .o-container-title {
-        border-color: mat-color($primary);
+       > .mat-expansion-panel-header,
+       > .o-container-header,
+      > .o-container-title {
+        border-color: mat-color($foreground, divider);
         color: mat-color($foreground, text);
-      }
 
-      .o-container-title {
-        color: mat-color($foreground, secondary-text);
+        .mat-tab-label,
+        .mat-tab-link {
+          color: mat-color($foreground, text);
+        }
+
       }
     }
   }
 
   .o-column.o-appearance-outline,
-  .o-row.o-appearance-outline {
+  .o-row.o-appearance-outline,
+  .o-column-collapsible.o-appearance-outline,
+  .o-row-collapsible.o-appearance-outline {
     > .o-container {
       .o-container-title {
-        span {
-          color: mat-color($foreground, text);
-        }
+        color: mat-color($foreground, text);
       }
     }
 
     .o-container-outline {
       .o-container-outline-end,
       .o-container-outline-gap,
+      .o-container-outline-gap-title,
+      .o-container-outline-gap-empty1,
+      .o-container-outline-gap-description,
+      .o-container-outline-gap-empty2,
+      .o-container-outline-gap-icon,
       .o-container-outline-start {
-        border-color: mat-color($primary);
+        border-color: mat-color($foreground, divider);
       }
     }
   }

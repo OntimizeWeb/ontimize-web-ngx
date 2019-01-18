@@ -19,7 +19,8 @@ export const DEFAULT_INPUTS_O_COLUMN_COLLAPSIBLE = [
   encapsulation: ViewEncapsulation.None,
   host: {
     '[class.o-column-collapsible]': 'true',
-    '[class.o-appearance-outline]': 'isAppearanceOutline()'
+    '[class.o-appearance-outline]': 'isAppearanceOutline()',
+    '[class.o-appearance-outline-title]': 'hasTitleInAppearanceOutline()'
   }
 })
 export class OColumnCollapsibleComponent extends OContainerCollapsibleComponent {

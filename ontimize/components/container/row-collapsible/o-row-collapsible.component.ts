@@ -19,7 +19,8 @@ export const DEFAULT_INPUTS_O_ROW_COLLAPSIBLE = [
   encapsulation: ViewEncapsulation.None,
   host: {
     '[class.o-row-collapsible]': 'true',
-    '[class.o-appearance-outline]': 'isAppearanceOutline()'
+    '[class.o-appearance-outline]': 'isAppearanceOutline()',
+    '[class.o-appearance-outline-title]': 'hasTitleInAppearanceOutline()'
   }
 })
 export class ORowCollapsibleComponent extends OContainerCollapsibleComponent {
