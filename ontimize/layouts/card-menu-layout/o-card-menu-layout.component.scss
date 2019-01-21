@@ -27,10 +27,10 @@
     max-width: 290px;
     height: 45%;
     min-height: 180px;
-    max-height: 250px;
 
     &.compact {
       height: 30%;
+      max-height: 250px;
     }
   }
 }
