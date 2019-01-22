@@ -24,8 +24,7 @@ export const DEFAULT_OUTPUTS_O_MENU_LAYOUT = [
   outputs: DEFAULT_OUTPUTS_O_MENU_LAYOUT,
   encapsulation: ViewEncapsulation.None,
   host: {
-    '[class.o-menu-layout]': 'true',
-    '[class.o-card-menu-layout-bigscreen]': 'isSmallScreen'
+    '[class.o-menu-layout]': 'true'
   },
   changeDetection: ChangeDetectionStrategy.OnPush
 })
