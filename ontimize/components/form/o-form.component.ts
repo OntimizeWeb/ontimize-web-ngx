@@ -799,6 +799,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     componentsKeys.forEach(compKey => {
       const comp: IFormDataComponent = components[compKey];
       (comp as any).oldValue = undefined;
+      comp.getFormControl().setValue(undefined);
     });
   }
 
