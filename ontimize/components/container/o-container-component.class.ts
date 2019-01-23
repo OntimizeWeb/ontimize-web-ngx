@@ -27,6 +27,7 @@ export class OContainerComponent implements AfterViewInit, OnDestroy {
   public icon: string;
   protected _appearance: string;
   protected _layoutGap: string;
+  private _outlineGapCalculationNeededImmediately = false;
 
   protected titleObserver = new MutationObserver(() => this.updateOutlineGap());
 
@@ -54,6 +55,12 @@ export class OContainerComponent implements AfterViewInit, OnDestroy {
       this.elRef.nativeElement.removeAttribute('title');
     }
     this.registerObserver();
+  }
+
+  ngAfterContentChecked() {
+    if (this._outlineGapCalculationNeededImmediately) {
+      this.updateOutlineGap();
+    }
   }
 
   ngOnDestroy(): void {
@@ -142,6 +149,11 @@ export class OContainerComponent implements AfterViewInit, OnDestroy {
       if (!this._containerRef) {
         return;
       }
+      if (!document.documentElement!.contains(this.elRef.nativeElement)) {
+        this._outlineGapCalculationNeededImmediately = true;
+        return;
+      }
+
       const container = this._containerRef.nativeElement;
       const containerRect = container.getBoundingClientRect();
       if (containerRect.width === 0 && containerRect.height === 0) {
@@ -157,6 +169,7 @@ export class OContainerComponent implements AfterViewInit, OnDestroy {
       const gapEls = container.querySelectorAll('.o-container-outline-gap');
       gapEls[0].style.width = `${labelWidth}px`;
       startEls[0].style.width = `${startWidth}px`;
+      this._outlineGapCalculationNeededImmediately = false;
     }
   }
 
