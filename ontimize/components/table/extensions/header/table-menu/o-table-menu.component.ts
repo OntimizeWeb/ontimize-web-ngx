@@ -39,7 +39,7 @@ export const DEFAULT_OUTPUTS_O_TABLE_MENU = [];
   outputs: DEFAULT_OUTPUTS_O_TABLE_MENU,
   encapsulation: ViewEncapsulation.None,
   host: {
-    '[class.o-table-menu]': 'true',
+    '[class.o-table-menu]': 'true'
   },
   changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -96,6 +96,10 @@ export class OTableMenuComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit() {
     this.permissions = this.table.getMenuPermissions();
+
+  }
+  getRowHeigh() {
+    return this.table.rowHeight;
   }
 
   ngAfterViewInit() {
@@ -103,6 +107,9 @@ export class OTableMenuComponent implements OnInit, AfterViewInit, OnDestroy {
       this.columnFilterOption.setActive(this.table.showFilterByColumnIcon);
       this.cd.detectChanges();
     }
+    this.matMenu.panelClass = this.getRowHeight() + ' o-table-menu';
+    this.filterMenu.panelClass = this.getRowHeight() + ' o-table-menu';
+    this.configurationMenu.panelClass = this.getRowHeight() + ' o-table-menu';
 
     if (!this.permissions.items || this.permissions.items.length === 0) {
       return;
@@ -242,6 +249,10 @@ export class OTableMenuComponent implements OnInit, AfterViewInit, OnDestroy {
   get enabledConfigurationMenu(): boolean {
     const perm: OPermissions = this.getPermissionByAttr('configuration');
     return !(perm && perm.enabled === false);
+  }
+
+  getRowHeight() {
+    return this.table.rowHeight;
   }
 
   onShowsSelects(event?: any) {
