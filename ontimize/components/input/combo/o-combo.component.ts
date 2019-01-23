@@ -198,7 +198,7 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
       const self = this;
       this.descriptionColArray.forEach((col, index) => {
         let txt = item[col];
-        if (txt) {
+        if (Util.isDefined(txt)) {
           if (self.translate && self.translateService) {
             txt = self.translateService.get(txt);
           }
@@ -253,6 +253,10 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
       const record = this.dataArray.find(item => item[this.valueColumn] === val);
       if (!Util.isDefined(record)) {
         return;
+      }
+    } else {
+      if (Util.isDefined(val)) {
+        super.setValue(val, options);
       }
     }
     super.setValue(val, options);

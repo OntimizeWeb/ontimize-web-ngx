@@ -10,9 +10,13 @@ div.icon-btn {
 $suffix-size: 24;
 $width24: $suffix-size * 1px;
 
-.o-tooltip.o-mat-error {
-  white-space: pre-line;
-  margin-top: 0;
+.o-tooltip.mat-tooltip {
+  margin-top: -15px;
+  margin-bottom: 0;
+
+  &.o-mat-error {
+    white-space: pre-line;
+  }
 }
 
 .mat-form-field {

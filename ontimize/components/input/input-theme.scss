@@ -14,6 +14,7 @@
   $foreground: map-get($theme, foreground);
   $warn: map-get($theme, warn);
   $underline-color: mat-color($foreground, divider, if($is-dark-theme, 0.7, 0.42));
+  $primary: map-get($theme, primary);
   $accent: map-get($theme, accent);
 
   .mat-form-field {
@@ -42,6 +43,10 @@
         background-color: $underline-color;
       }
     }
+
+    &.mat-form-field-invalid .mat-input-suffix .mat-icon {
+      color: mat-color($warn);
+    }
   }
 
   input:not([type]):disabled,
@@ -64,6 +69,8 @@
   }
 
   .o-tooltip.o-mat-error {
-    background: mat-color($warn);
+    background: mat-color($primary, default-contrast);
+    border: 1px solid mat-color($warn);
+    color: mat-color($warn);
   }
 }
