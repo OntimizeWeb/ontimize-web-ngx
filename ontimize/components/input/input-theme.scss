@@ -34,7 +34,7 @@
       color: mat-color($foreground, disabled-button);
     }
 
-    &.read-only {
+    &.mat-form-field-appearance-ontimize.read-only {
       .mat-select-disabled .mat-select-value {
         color: inherit;
       }
