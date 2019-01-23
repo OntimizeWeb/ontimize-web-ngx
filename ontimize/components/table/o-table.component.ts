@@ -1183,6 +1183,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   getQueryArguments(filter: Object, ovrrArgs?: OQueryDataArgs): Array<any> {
     let queryArguments = super.getQueryArguments(filter, ovrrArgs);
     queryArguments[3] = this.getSqlTypesForFilter(queryArguments[1]);
+    Object.assign(queryArguments[3], ovrrArgs ? ovrrArgs.sqltypes || {} : {});
     if (this.pageable) {
       queryArguments[5] = this.paginator.isShowingAllRows(queryArguments[5]) ? this.state.totalQueryRecordsNumber : queryArguments[5];
       queryArguments[6] = this.sortColArray;
