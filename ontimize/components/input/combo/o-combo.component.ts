@@ -183,8 +183,11 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
   }
 
   onSelectionChange(event: MatSelectChange): void {
-    var newValue = event.value;
-    this.setValue(newValue, { changeType: OValueChangeEvent.USER_CHANGE, emitModelToViewChange: false });
+    const newValue = event.value;
+    this.setValue(newValue, {
+      changeType: OValueChangeEvent.USER_CHANGE,
+      emitModelToViewChange: false
+    });
   }
 
   innerOnChange(event: any) {
@@ -201,7 +204,7 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
       var self = this;
       this.descriptionColArray.forEach((col, index) => {
         let txt = item[col];
-        if (txt) {
+        if (Util.isDefined(txt)) {
           if (self.translate && self.translateService) {
             txt = self.translateService.get(txt);
           }
@@ -240,24 +243,25 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
   }
 
   setValue(val: any, options?: IFormValueOptions): void {
-    if (this.dataArray) {
-      if (!this.multiple) {
-        if (!Util.isDefined(val)) {
-          if (this.nullSelection) {
-            super.setValue(val, options);
-          } else {
-            console.warn('`o-combo` with attr ' + this.oattr + ' cannot be cleared. `null-selection` attribute is false.');
-          }
+    if (!this.dataArray) {
+      return;
+    }
+    if (!this.multiple) {
+      if (!Util.isDefined(val)) {
+        if (this.nullSelection) {
+          super.setValue(val, options);
         } else {
-          const record = this.dataArray.find(item => item[this.valueColumn] === val);
-          if (record) {
-            super.setValue(val, options);
-          }
+          console.warn('`o-combo` with attr ' + this.oattr + ' cannot be cleared. `null-selection` attribute is false.');
         }
       } else {
-        if (Util.isDefined(val)) {
+        const record = this.dataArray.find(item => item[this.valueColumn] === val);
+        if (record) {
           super.setValue(val, options);
         }
+      }
+    } else {
+      if (Util.isDefined(val)) {
+        super.setValue(val, options);
       }
     }
   }
