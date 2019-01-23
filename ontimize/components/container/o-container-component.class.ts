@@ -74,7 +74,7 @@ export class OContainerComponent implements AfterViewInit {
   }
 
   cleanElevationCSSclasses() {
-    const classList = this.elRef.nativeElement.classList;
+    const classList = [].slice.call(this.elRef.nativeElement.classList);
     if (classList && classList.length) {
       classList.forEach((item: string) => {
         if (item.startsWith('mat-elevation')) {
