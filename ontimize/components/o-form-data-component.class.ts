@@ -303,7 +303,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
       const classList = [].slice.call(iconFieldEl[0].classList);
       classList.forEach(className => {
         if (className.startsWith('icon-field-')) {
-          classList.remove(className);
+          iconFieldEl[0].classList.remove(className);
         }
       });
       if (count > 0) {
