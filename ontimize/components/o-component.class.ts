@@ -63,7 +63,7 @@ export class OBaseComponent implements IComponent {
   }
 
   protected getTooltipClass(): string {
-    return 'o-tooltip';
+    return `o-tooltip ${this.tooltipPosition}`;
   }
 
   get tooltip(): string {
