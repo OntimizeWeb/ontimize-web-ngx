@@ -7,7 +7,8 @@ export const DEFAULT_INPUTS_O_CONTAINER = [
   'title',
   'layoutAlign: layout-align',
   'elevation',
-  'icon'
+  'icon',
+  'layoutGap: layout-gap'
 ];
 
 export class OContainerComponent implements AfterViewInit {
@@ -21,6 +22,7 @@ export class OContainerComponent implements AfterViewInit {
   protected defaultLayoutAlign: string = 'start start';
   protected _layoutAlign: string;
   public icon: string;
+  protected _layoutGap: string;
 
   constructor(
     @Optional() @Inject(forwardRef(() => OFormComponent)) protected form: OFormComponent,
@@ -60,6 +62,14 @@ export class OContainerComponent implements AfterViewInit {
       align = this.defaultLayoutAlign;
     }
     this._layoutAlign = align;
+  }
+
+  get layoutGap() {
+    return this._layoutGap;
+  }
+
+  set layoutGap(layoutGap: string) {
+    this._layoutGap = layoutGap;
   }
 
   hasHeader(): boolean {
