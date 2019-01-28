@@ -22,12 +22,10 @@
     .o-container-title {
       margin: 0 4px;
       height: 39px;
-      border-bottom-width: 2px;
+      border-bottom-width: 1px;
       border-bottom-style: solid;
 
       span {
-        font-weight: 500;
-        font-size: 18px;
         padding-left: 8px;
       }
     }
@@ -49,10 +47,6 @@
         border-bottom: 0;
         transform: translate(0, -50%);
         margin-left: 18px;
-
-        span {
-          font-weight: bold;
-        }
       }
     }
 
