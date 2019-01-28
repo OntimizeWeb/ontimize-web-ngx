@@ -1,5 +1,5 @@
-<div [formGroup]="getFormGroup()" [matTooltip]="tooltip" [matTooltipClass]="tooltipClass" [matTooltipPosition]="tooltipPosition" [matTooltipShowDelay]="tooltipShowDelay"
-  fxLayout="row" fxLayoutAlign="space-between center">
+<div [formGroup]="getFormGroup()" [matTooltip]="tooltip" [matTooltipClass]="tooltipClass" [matTooltipPosition]="tooltipPosition"
+  [matTooltipShowDelay]="tooltipShowDelay" [matTooltipHideDelay]="tooltipHideDelay" fxLayout="row" fxLayoutAlign="space-between center">
   <mat-form-field [class.custom-width]="hasCustomWidth" class="icon-field" fxFlexFill>
     <input matInput [type]="inputType" [id]="getAttribute()" [formControlName]="getAttribute()" [placeholder]="placeHolder"
       [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)" (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)"

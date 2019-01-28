@@ -1,5 +1,6 @@
 <div fxLayout="row" fxLayoutAlign="space-between center" [formGroup]="getFormGroup()" [matTooltip]="tooltip"
-  [matTooltipClass]="tooltipClass" [matTooltipPosition]="tooltipPosition" [matTooltipShowDelay]="tooltipShowDelay">
+  [matTooltipClass]="tooltipClass" [matTooltipPosition]="tooltipPosition" [matTooltipShowDelay]="tooltipShowDelay"
+  [matTooltipHideDelay]="tooltipHideDelay">
   <mat-form-field [class.custom-width]="hasCustomWidth" class="icon-field" (click)="isDisabled || isReadOnly ? null : inputFile.click()"
     fxFill>
     <input #inputShowValue matInput type="text" [id]="getAttribute()" [formControlName]="getAttribute()" [placeholder]="placeHolder"

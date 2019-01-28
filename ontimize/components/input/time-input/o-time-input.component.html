@@ -1,4 +1,5 @@
-<div [formGroup]="getFormGroup()" [matTooltip]="tooltip" [matTooltipClass]="tooltipClass" [matTooltipPosition]="tooltipPosition" [matTooltipShowDelay]="tooltipShowDelay">
+<div [formGroup]="getFormGroup()" [matTooltip]="tooltip" [matTooltipClass]="tooltipClass" [matTooltipPosition]="tooltipPosition"
+  [matTooltipShowDelay]="tooltipShowDelay" [matTooltipHideDelay]="tooltipHideDelay">
   <div class="mat-form-field mat-form-field-suffix" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="8px">
     <o-date-input #dateInput fxFlex attr="dateInput" [read-only]="readOnly" [enabled]="oenabled" [required]="isRequired"
       [label]="placeHolder" clear-button="no" automatic-registering="no" automatic-binding="no" (onFocus)="onFocusInnerComp($event)"

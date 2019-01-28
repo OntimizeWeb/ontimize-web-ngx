@@ -18,6 +18,7 @@ export const DEFAULT_INPUTS_O_FILE_INPUT = [
   'tooltip',
   'tooltipPosition: tooltip-position',
   'tooltipShowDelay: tooltip-show-delay',
+  'tooltipHideDelay: tooltip-hide-delay',
   'oenabled: enabled',
   'orequired: required',
   'service',

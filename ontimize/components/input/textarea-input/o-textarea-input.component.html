@@ -1,5 +1,5 @@
 <div [formGroup]="getFormGroup()" [matTooltip]="tooltip" [matTooltipClass]="tooltipClass" [matTooltipPosition]="tooltipPosition"
-  [matTooltipShowDelay]="tooltipShowDelay">
+  [matTooltipShowDelay]="tooltipShowDelay" [matTooltipHideDelay]="tooltipHideDelay">
   <mat-form-field [class.custom-width]="hasCustomWidth" fxFlexFill>
     <textarea matInput class="mat-textarea" type="text" [id]="getAttribute()" [formControlName]="getAttribute()"
       [placeholder]="placeHolder" [ngModel]="getValue()" (ngModelChange)="innerOnChange($event)" (change)="onChangeEvent($event)"

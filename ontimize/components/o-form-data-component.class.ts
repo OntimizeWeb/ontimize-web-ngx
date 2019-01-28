@@ -70,6 +70,7 @@ export const DEFAULT_INPUTS_O_FORM_DATA_COMPONENT = [
   'tooltip',
   'tooltipPosition: tooltip-position',
   'tooltipShowDelay: tooltip-show-delay',
+  'tooltipHideDelay: tooltip-hide-delay',
   'data',
   'autoBinding: automatic-binding',
   'autoRegistering: automatic-registering',
