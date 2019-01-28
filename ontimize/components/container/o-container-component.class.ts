@@ -10,7 +10,7 @@ export const DEFAULT_INPUTS_O_CONTAINER = [
   'elevation',
   'icon',
   'appearance',
-  'layoutGap:layout-gap'
+  'layoutGap: layout-gap'
 ];
 
 export class OContainerComponent implements AfterViewInit, OnDestroy {
@@ -132,7 +132,7 @@ export class OContainerComponent implements AfterViewInit, OnDestroy {
   }
 
   protected cleanElevationCSSclasses(): void {
-    const classList = this.elRef.nativeElement.classList;
+    const classList = [].slice.call(this.elRef.nativeElement.classList);
     if (classList && classList.length) {
       classList.forEach((item: string) => {
         if (item.startsWith('mat-elevation')) {
