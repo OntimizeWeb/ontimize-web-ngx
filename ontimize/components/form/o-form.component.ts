@@ -16,7 +16,7 @@ import { OFormCacheClass } from './cache/o-form.cache.class';
 import { CanComponentDeactivate, CanDeactivateFormGuard } from './guards/o-form-can-deactivate.guard';
 import { OFormNavigationClass } from './navigation/o-form.navigation.class';
 import { OFormContainerComponent } from './o-form-container.component';
-import { OFormToolbarComponent, OFormToolbarModule } from './o-form-toolbar.component';
+import { OFormToolbarComponent, OFormToolbarModule } from './toolbar/o-form-toolbar.component';
 import { IFormValueOptions, OFormValue } from './OFormValue';
 
 export interface IFormDataComponentHash {

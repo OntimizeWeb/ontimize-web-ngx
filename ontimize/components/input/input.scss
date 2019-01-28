@@ -11,8 +11,23 @@ $suffix-size: 24;
 $width24: $suffix-size * 1px;
 
 .o-tooltip.mat-tooltip {
-  margin-top: -15px;
-  margin-bottom: 0;
+  &.after,
+  &.right {
+    margin-left: 5px;
+  }
+
+  &.before,
+  &.left {
+    margin-right: 5px;
+  }
+
+  &.above {
+    margin-bottom: -15px;
+  }
+
+  &.below {
+    margin-top: -15px;
+  }
 
   &.o-mat-error {
     white-space: pre-line;

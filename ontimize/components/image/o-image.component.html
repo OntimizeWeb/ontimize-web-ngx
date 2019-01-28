@@ -1,5 +1,6 @@
 <div class="container-image relative" fxLayoutAlign="center center" [formGroup]="getFormGroup()" [matTooltip]="tooltip"
-  [matTooltipPosition]="tooltipPosition" [matTooltipShowDelay]="tooltipShowDelay" fxLayout="column" [ngClass]="{'auto-fit-image':autoFit}">
+  [matTooltipPosition]="tooltipPosition" [matTooltipShowDelay]="tooltipShowDelay" [matTooltipHideDelay]="tooltipHideDelay"
+  fxLayout="column" [ngClass]="{'auto-fit-image':autoFit}">
   <div class="input-image-container">
     <mat-form-field fxFill class="input-image icon-field" *ngIf="hasControls()">
       <input matInput #inputControl [formControlName]="getAttribute()" type="text" [id]="getAttribute()" class="mat-input input-control" />

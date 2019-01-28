@@ -1,6 +1,6 @@
 <div [class.custom-width]="hasCustomWidth" [formGroup]="getFormGroup()" class="relative" [matTooltip]="tooltip"
   [matTooltipClass]="tooltipClass" [matTooltipPosition]="tooltipPosition" [matTooltipShowDelay]="tooltipShowDelay"
-  fxLayout="row" fxLayoutAlign="start center" fxFill>
+  [matTooltipHideDelay]="tooltipHideDelay" fxLayout="row" fxLayoutAlign="start center" fxFill>
   <mat-checkbox [id]="getAttribute()" [formControlName]="getAttribute()" [checked]="isChecked()" (change)="onChangeEvent($event)"
     [labelPosition]="labelPosition" [color]="color">
     {{ olabel }}

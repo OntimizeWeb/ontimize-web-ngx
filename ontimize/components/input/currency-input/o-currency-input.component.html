@@ -1,5 +1,5 @@
 <div [formGroup]="getFormGroup()" [matTooltip]="tooltip" [matTooltipClass]="tooltipClass" [matTooltipPosition]="tooltipPosition"
-  [matTooltipShowDelay]="tooltipShowDelay" fxLayout="row" fxLayoutAlign="space-between center">
+  [matTooltipShowDelay]="tooltipShowDelay" [matTooltipHideDelay]="tooltipHideDelay" fxLayout="row" fxLayoutAlign="space-between center">
 
   <div *ngIf="useSymbol('left')" matSuffix class="icon-btn" [class.mat-disabled]="isDisabled">
     {{ currency_symbols[currencySymbol] }}

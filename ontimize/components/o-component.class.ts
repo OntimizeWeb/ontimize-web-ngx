@@ -26,6 +26,7 @@ export class OBaseComponent implements IComponent {
   protected _tooltip: string;
   protected _tooltipPosition: string = 'below';
   protected _tooltipShowDelay: number = 500;
+  protected _tooltipHideDelay: number = 0;
   protected permissions: OPermissions;
 
   constructor(injector: Injector) {
@@ -66,7 +67,7 @@ export class OBaseComponent implements IComponent {
   }
 
   protected getTooltipClass(): string {
-    return 'o-tooltip';
+    return `o-tooltip ${this.tooltipPosition}`;
   }
 
   get tooltip(): string {
@@ -98,6 +99,14 @@ export class OBaseComponent implements IComponent {
 
   set tooltipShowDelay(value: number) {
     this._tooltipShowDelay = value;
+  }
+
+  get tooltipHideDelay(): number {
+    return this._tooltipHideDelay;
+  }
+
+  set tooltipHideDelay(value: number) {
+    this._tooltipHideDelay = value;
   }
 
   get isReadOnly(): boolean {

@@ -70,7 +70,8 @@ export class OntimizeService implements IAuthService, IDataService {
   }
 
   public startsession(user: string, password: string): Observable<any> {
-    const url = this._urlBase + this._startSessionPath + '?user=' + user + '&password=' + password;
+    const encodedPassword = encodeURIComponent(password);
+    const url = this._urlBase + this._startSessionPath + '?user=' + user + '&password=' + encodedPassword;
     const self = this;
     const dataObservable: Observable<any> = new Observable(_startSessionObserver => {
       self.httpClient.get(url).subscribe(resp => {

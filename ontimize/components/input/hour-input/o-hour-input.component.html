@@ -1,6 +1,6 @@
 <div fxLayout="row" fxLayoutAlign="space-between center" [formGroup]="getFormGroup()" [matTooltip]="tooltip"
   [matTooltipClass]="tooltipClass" [matTooltipPosition]="tooltipPosition" [matTooltipShowDelay]="tooltipShowDelay"
-  (click)="onClickInput($event)">
+  [matTooltipHideDelay]="tooltipHideDelay" (click)="onClickInput($event)">
 
   <mat-form-field [appearance]="appearance" [floatLabel]="floatLabel" fxFlexFill>
     <mat-label>{{ olabel }}</mat-label>
