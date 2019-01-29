@@ -1,5 +1,6 @@
 @import 'node_modules/@angular/material/theming';
 @import './app-global-theme.scss';
+@import './layout-margin-padding.scss';
 @import '../breadcrumb/o-breadcrumb-theme.scss';
 @import '../container/o-container-theme.scss';
 @import '../form/toolbar/o-form-toolbar-theme.scss';
@@ -17,7 +18,7 @@
 @import '../input/hour-input/o-hour-input-theme.scss';
 @import '../../layouts/form-layout/tabgroup/o-form-layout-tabgroup-theme.scss';
 @import '../bar-menu/o-bar-menu-theme.scss';
-@import '../grid//o-grid.theme.scss';
+@import '../grid/o-grid.theme.scss';
 
 // Create a theme.
 @mixin o-material-theme($theme, $typography: null) {
@@ -42,4 +43,5 @@
   @include o-form-layout-tabgroup-theme($theme);
   @include o-bar-menu-theme($theme);
   @include o-grid-theme($theme);
+  @include layout-padding-margin();
 }
