@@ -66,7 +66,6 @@
     "webpack": "3.11.0"
   },
   "devDependencies": {
-    "ontimize-web-ngx-library-tools": "1.1.0",
     "@angular/animations": "5.2.10",
     "@angular/cdk": "5.2.4",
     "@angular/common": "5.2.10",
@@ -87,12 +86,11 @@
     "@ngx-translate/core": "9.1.1",
     "@ngx-translate/http-loader": "2.0.1",
     "@types/hammerjs": "2.0.34",
-    "@types/jasmine": "2.5.46",
+    "@types/moment": "2.13.0",
     "@types/node": "7.0.10",
     "@types/source-map": "0.5.7",
     "@types/uglify-js": "2.6.30",
     "@types/webpack": "4.1.1",
-    "@types/moment": "2.13.0",
     "copyfiles": "1.2.0",
     "core-js": "2.5.3",
     "gulp": "3.9.1",
@@ -101,11 +99,12 @@
     "gulp-replace": "0.6.1",
     "ngc-webpack": "4.1.2",
     "node-sass": "4.7.2",
+    "ontimize-web-ngx-library-tools": "1.1.0",
     "reflect-metadata": "0.1.12",
     "rimraf": "2.6.2",
     "rxjs": "5.5.6",
-    "zone.js": "0.8.20",
     "typescript": "2.4.2",
-    "webpack": "3.11.0"
+    "webpack": "3.11.0",
+    "zone.js": "0.8.20"
   }
 }
