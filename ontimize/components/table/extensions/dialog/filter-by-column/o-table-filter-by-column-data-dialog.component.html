@@ -11,18 +11,22 @@
         <input matInput #filter placeholder="{{ 'TABLE.FILTER' | oTranslate }}">
         <mat-hint>{{ 'TABLE.FILTER_BY_COLUMN.HINT_STAR' | oTranslate }}</mat-hint>
       </mat-form-field>
-      <mat-checkbox (change)="onSelectAllChange($event)" [checked]="areAllSelected()" [indeterminate]="isIndeterminate()" [disabled]="!listData"
-        class="select-all-checkbox">
+      <mat-checkbox (change)="onSelectAllChange($event)" [checked]="areAllSelected()" [indeterminate]="isIndeterminate()"
+        [disabled]="!listData" class="select-all-checkbox">
         {{ 'TABLE.FILTER_BY_COLUMN.CHECK_ALL' | oTranslate }}
       </mat-checkbox>
-      <span *ngIf="!listData" class="column-filter-empty-list">{{ 'TABLE.FILTER_BY_COLUMN.LIST_EMPTY_FILTER' | oTranslate }}</span>
-      <span *ngIf="listData?.length === 0" class="column-filter-empty-list">{{ 'TABLE.FILTER_BY_COLUMN.LIST_EMPTY' | oTranslate }}</span>
+      <span *ngIf="!listData" class="column-filter-empty-list">{{ 'TABLE.FILTER_BY_COLUMN.LIST_EMPTY_FILTER' |
+        oTranslate }}</span>
+      <span *ngIf="listData?.length === 0" class="column-filter-empty-list">{{ 'TABLE.FILTER_BY_COLUMN.LIST_EMPTY' |
+        oTranslate }}</span>
       <mat-selection-list *ngIf="preloadValues || listData" #filterValueList fxFlex fxLayout="column" class="select-values-list">
-        <mat-list-option *ngFor="let record of listData; let i = index" checkboxPosition="before" [selected]="record.selected" [value]="record.value">
+        <mat-list-option *ngFor="let record of listData; let i = index" checkboxPosition="before" [selected]="record.selected"
+          [value]="record.value">
           <ng-container *ngIf="!column.renderer">
             {{ record.value || ('TABLE.FILTER_BY_COLUMN.EMPTY_VALUE' | oTranslate) }}
           </ng-container>
-          <ng-template *ngIf="column.renderer" [ngTemplateOutlet]="column.renderer.templateref" [ngTemplateOutletContext]="{ cellvalue: record.value, rowvalue: getRowValue(i) }"></ng-template>
+          <ng-template *ngIf="column.renderer" [ngTemplateOutlet]="column.renderer.templateref"
+            [ngTemplateOutletContext]="{ cellvalue: record.value, rowvalue: getRowValue(i) }"></ng-template>
         </mat-list-option>
       </mat-selection-list>
     </div>
@@ -62,6 +66,8 @@
 </div>
 
 <mat-dialog-actions align="end">
-  <button type="button" mat-button class="mat-primary" [mat-dialog-close]="false">{{ 'CANCEL' | oTranslate | uppercase }}</button>
-  <button type="button" mat-button class="mat-primary" [mat-dialog-close]="true">{{ 'ACCEPT' | oTranslate | uppercase }}</button>
+  <button type="button" mat-button class="mat-primary" [mat-dialog-close]="false">{{ 'CANCEL' | oTranslate | uppercase
+    }}</button>
+  <button type="button" mat-button class="mat-primary" [mat-dialog-close]="true">{{ 'ACCEPT' | oTranslate | uppercase
+    }}</button>
 </mat-dialog-actions>
