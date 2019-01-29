@@ -68,8 +68,8 @@ $_mat-checkbox-mark-stroke-size-small: 2 / 15 * $mat-checkbox-size-small !defaul
     &.block-events {
       pointer-events: none;
 
-       > .toolbar,
-      > .o-table-body .mat-header-row {
+       > .o-table-body .mat-header-row,
+      > .toolbar {
         opacity: .75;
       }
     }
@@ -133,38 +133,11 @@ $_mat-checkbox-mark-stroke-size-small: 2 / 15 * $mat-checkbox-size-small !defaul
       position: relative;
     }
 
-    .o-table-no-results {
-      &.small {
-        min-height: 32px;
-      }
-
-      &.medium {
-        min-height: 36px;
-      }
-
-      &.large {
-        min-height: 48px;
-      }
-    }
-
     .mat-table {
       &.small {
-        .mat-header-row {
-          min-height: 32px;
-          max-height: 32px;
-          line-height: 32px;
-        }
-
-        .mat-row {
-          min-height: 28px;
-          max-height: 28px;
-
-          .mat-cell {
-            .image-avatar {
-              width: 22px;
-              height: 22px;
-            }
-          }
+        .mat-row .mat-cell .image-avatar {
+          width: 22px;
+          height: 22px;
         }
 
         .mat-checkbox-inner-container {
@@ -182,22 +155,9 @@ $_mat-checkbox-mark-stroke-size-small: 2 / 15 * $mat-checkbox-size-small !defaul
       }
 
       &.medium {
-        .mat-header-row {
-          min-height: 40px;
-          max-height: 40px;
-          line-height: 40px;
-        }
-
-        .mat-row {
-          min-height: 36px;
-          max-height: 36px;
-
-          .mat-cell {
-            .image-avatar {
-              width: 28px;
-              height: 28px;
-            }
-          }
+        .mat-row .mat-cell .image-avatar {
+          width: 28px;
+          height: 28px;
         }
 
         .mat-checkbox-inner-container {
@@ -211,19 +171,6 @@ $_mat-checkbox-mark-stroke-size-small: 2 / 15 * $mat-checkbox-size-small !defaul
           .mat-checkbox-mixedmark {
             height: floor($_mat-checkbox-mark-stroke-size-medim);
           }
-        }
-      }
-
-      &.large {
-        .mat-header-row {
-          min-height: 52px;
-          max-height: 52px;
-          line-height: 52px;
-        }
-
-        .mat-row {
-          min-height: 48px;
-          max-height: 48px;
         }
       }
 

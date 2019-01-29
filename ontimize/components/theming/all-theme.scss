@@ -30,7 +30,7 @@
   @include input-theme($theme);
   @include o-date-input-theme($theme);
   @include o-dialog-theme($theme);
-  @include o-table-theme($theme);
+  @include o-table-theme($theme, $typography);
   @include o-list-theme($theme);
   @include o-list-picker-theme($theme);
   @include o-app-header-theme($theme);
