@@ -7,6 +7,10 @@
     }
   }
 
+  .mat-icon[svgicon="ontimize:drag_handle"] {
+    cursor: move;
+  }
+
   .mat-icon[svgicon="ontimize:visibility"],
   .mat-icon[svgicon="ontimize:visibility_off"] {
     svg {
