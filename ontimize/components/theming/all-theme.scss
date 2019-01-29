@@ -1,5 +1,6 @@
 @import 'node_modules/@angular/material/theming';
 @import './app-global-theme.scss';
+@import './layout-margin-padding.scss';
 @import '../breadcrumb/o-breadcrumb-theme.scss';
 @import '../container/o-container-theme.scss';
 @import '../form/toolbar/o-form-toolbar-theme.scss';
@@ -42,4 +43,5 @@
   @include o-form-layout-tabgroup-theme($theme);
   @include o-bar-menu-theme($theme);
   @include o-grid-theme($theme);
+  @include o-layout-padding-margin();
 }
