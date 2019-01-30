@@ -1,10 +1,6 @@
 .o-table-visible-columns-dialog {
-  mat-list-item {
+  .mat-list-item {
     cursor: pointer;
-
-    &.dnd-sortable-drag {
-      background: #EBEBEB;
-    }
   }
 
   .mat-icon[svgicon="ontimize:drag_handle"] {

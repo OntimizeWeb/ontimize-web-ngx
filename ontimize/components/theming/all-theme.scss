@@ -8,6 +8,7 @@
 @import '../input/date-input/o-date-input-theme.scss';
 @import '../dialog/o-dialog-theme.scss';
 @import '../table/o-table-theme.scss';
+@import '../table/o-table-typography.scss';
 @import '../list/o-list-theme.scss';
 @import '../input/listpicker/o-list-picker-theme.scss';
 @import '../app-header/o-app-header-theme.scss';
@@ -31,7 +32,8 @@
   @include input-theme($theme);
   @include o-date-input-theme($theme);
   @include o-dialog-theme($theme);
-  @include o-table-theme($theme, $typography);
+  @include o-table-theme($theme);
+  @include o-table-typography($typography);
   @include o-list-theme($theme);
   @include o-list-picker-theme($theme);
   @include o-app-header-theme($theme);

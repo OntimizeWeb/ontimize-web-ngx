@@ -1,53 +1,11 @@
 @import 'node_modules/@angular/material/theming';
-@import './o-table-typography.scss';
-@mixin o-table-theme($theme, $typography: null) {
+@mixin o-table-theme($theme) {
   $primary: map-get($theme, primary);
   $accent: map-get($theme, accent);
   $warn: map-get($theme, warn);
   $background: map-get($theme, background);
   $foreground: map-get($theme, foreground);
-  @if $typography == null {
-    $typography: o-table-typography-config();
-  }
 
-  $small-header-height: mat-font-size($typography, small-header-height);
-  $small-row-height: mat-font-size($typography, small-row-height);
-  $small-header-font-size: mat-font-size($typography, small-header-font-size);
-  $small-row-font-size: mat-font-size($typography, small-row-font-size);
-
-  $medium-header-height: mat-font-size($typography, medium-header-height);
-  $medium-row-height: mat-font-size($typography, medium-row-height);
-  $medium-header-font-size: mat-font-size($typography, medium-header-font-size);
-  $medium-row-font-size: mat-font-size($typography, medium-row-font-size);
-
-  $large-header-height: mat-font-size($typography, large-header-height);
-  $large-row-height: mat-font-size($typography, large-row-height);
-  $large-header-font-size: mat-font-size($typography, large-header-font-size);
-  $large-row-font-size: mat-font-size($typography, large-row-font-size);
-
-  .o-table-menu {
-    &.small {
-      .mat-menu-item {
-        line-height:$small-row-height;
-        height: $small-row-height;
-      }
-    }
-
-    &.medium {
-      .mat-menu-item {
-        line-height: $small-row-height;;
-        height: $medium-row-height;
-      }
-    }
-
-    &.large {
-      .mat-menu-item {
-        line-height: $large-row-height;
-        height: $large-row-height;
-      }
-    }
-  }
-  
   .o-table {
     .o-table-menu-button {
       color: mat-color($foreground, secondary-text);
@@ -157,96 +115,11 @@
       }
     }
 
-   
+  }
 
-    .o-table-container {
-      .mat-table {
-        &.small {
-          .mat-header-row {
-            min-height: $small-header-height;
-            max-height: $small-header-height;
-            line-height: $small-header-height;
-
-            .mat-header-cell {
-              font-size: $small-header-font-size;
-            }
-          }
-
-          .mat-row {
-            min-height: $small-row-height;
-            max-height: $small-row-height;
-
-            .mat-cell {
-              .mat-form-field {
-                font-size: $small-row-font-size;
-              }
-              font-size: $small-row-font-size;
-            }
-          }
-        }
-
-        &.medium {
-          .mat-header-row {
-            min-height: $medium-header-height;
-            max-height: $medium-header-height;
-            line-height: $medium-header-height;
-
-            .mat-header-cell {
-              font-size: $medium-header-font-size;
-            }
-          }
-
-          .mat-row {
-            min-height: $medium-row-height;
-            max-height: $medium-row-height;
-
-            .mat-cell {
-              .mat-form-field {
-                font-size: $medium-row-font-size;
-              }
-              font-size: $medium-row-font-size;
-            }
-          }
-        }
-
-        &.large {
-          .mat-header-row {
-            min-height: $large-header-height;
-            max-height: $large-header-height;
-            line-height: $large-header-height;
-
-            .mat-header-cell {
-              font-size: $large-header-font-size;
-            }
-          }
-
-          .mat-row {
-            min-height: $large-row-height;
-            max-height: $large-row-height;
-
-            .mat-cell {
-              .mat-form-field {
-                font-size: $large-row-font-size;
-              }
-              font-size: $large-row-font-size;
-            }
-          }
-        }
-      }
-
-      .o-table-no-results {
-        &.small {
-          min-height: $small-header-height;
-        }
-
-        &.medium {
-          min-height: $medium-header-height;
-        }
-
-        &.large {
-          min-height: $large-header-height;
-        }
-      }
+  .o-table-visible-columns-dialog {
+    .mat-list-item.dnd-sortable-drag {
+      background: mat-color($primary, 50);
     }
   }
 }
