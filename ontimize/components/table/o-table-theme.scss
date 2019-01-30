@@ -54,20 +54,6 @@
     .buttons {
       button {
         color: mat-color($foreground, secondary-text);
-      }
-
-      button:not(.disabled):hover {
-        background-color: mat-color($background, hover);
-      }
-
-      .button {
-        &.active {
-          color: mat-color($foreground, secondary-text);
-
-          &::after {
-            background: #eee;
-          }
-        }
 
         &.disabled {
           color: mat-color($background, disabled-button);
@@ -76,10 +62,9 @@
     }
 
     .mat-table {
-      &.editable-row-table {
-        .mat-row {
-          background-color: mat-color($background, status-bar, 0.9);
-        }
+      &.editable-row-table .mat-row,
+      &.totals-table .mat-row {
+        background-color: mat-color($background, status-bar, 0.9);
       }
 
       &.totals-table {
@@ -89,7 +74,6 @@
 
         .mat-row {
           font-weight: bold;
-          background-color: mat-color($background, status-bar, 0.9);
         }
       }
 
