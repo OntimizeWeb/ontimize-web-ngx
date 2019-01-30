@@ -36,104 +36,60 @@
   );
   @return $config;
 }
+@mixin o-table-size-typography($typography, $size) {
+
+  $header-height: mat-font-size($typography, #{$size}-header-height);
+  $row-height: mat-font-size($typography, #{$size}-row-height);
+  $header-font-size: mat-font-size($typography, #{$size}-header-font-size);
+  $row-font-size: mat-font-size($typography, #{$size}-row-font-size);
+
+  .o-table .o-table-container {
+    .mat-table.#{$size} {
+      tr.mat-header-row {
+        height: $header-height;
+
+        .mat-header-cell {
+          font-size: $header-font-size;
+        }
+      }
+
+      tr.mat-row {
+        height: $row-height;
+
+        .mat-cell {
+          .mat-form-field {
+            font-size: $row-font-size;
+          }
+          font-size: $row-font-size;
+        }
+      }
+
+      .o-table-no-results span {
+        font-size: $row-font-size;
+        line-height: $header-height;
+      }
+    }
+  }
+
+  .o-table-context-menu.#{$size},
+  .o-table-menu.#{$size} {
+    .mat-menu-item {
+      line-height: $row-height;
+      height: $row-height;
+    }
+  }
+
+  .o-table-visible-columns-dialog {
+    .mat-list.#{$size} .mat-list-item {
+      height: $header-height;
+    }
+  }
+}
 @mixin o-table-typography($typography: null) {
    @if $typography == null{
     $typography: o-table-typography-config();
   }
-
-  $small-header-height: mat-font-size($typography, small-header-height);
-  $small-row-height: mat-font-size($typography, small-row-height);
-  $small-header-font-size: mat-font-size($typography, small-header-font-size);
-  $small-row-font-size: mat-font-size($typography, small-row-font-size);
-
-  $medium-header-height: mat-font-size($typography, medium-header-height);
-  $medium-row-height: mat-font-size($typography, medium-row-height);
-  $medium-header-font-size: mat-font-size($typography, medium-header-font-size);
-  $medium-row-font-size: mat-font-size($typography, medium-row-font-size);
-
-  $large-header-height: mat-font-size($typography, large-header-height);
-  $large-row-height: mat-font-size($typography, large-row-height);
-  $large-header-font-size: mat-font-size($typography, large-header-font-size);
-  $large-row-font-size: mat-font-size($typography, large-row-font-size);
-
-  .o-table .o-table-container {
-    .mat-table {
-      &.small {
-        tr.mat-header-row {
-          height: $small-header-height;
-          .mat-header-cell {
-            font-size: $small-header-font-size;
-          }
-        }
-
-        tr.mat-row {
-          height: $small-row-height;
-
-          .mat-cell {
-            .mat-form-field {
-              font-size: $small-row-font-size;
-            }
-            font-size: $small-row-font-size;
-          }
-        }
-
-        .o-table-no-results span {
-          font-size: $small-row-font-size;
-          line-height: $small-header-height;
-        }
-      }
-
-      &.medium {
-        tr.mat-header-row {
-          height: $medium-header-height;
-
-          .mat-header-cell {
-            font-size: $medium-header-font-size;
-          }
-        }
-
-        tr.mat-row {
-          height: $medium-row-height;
-
-          .mat-cell {
-            .mat-form-field {
-              font-size: $medium-row-font-size;
-            }
-            font-size: $medium-row-font-size;
-          }
-        }
-
-        .o-table-no-results span {
-          line-height: $medium-header-height;
-          font-size: $medium-row-font-size;
-        }
-      }
-
-      &.large {
-        tr.mat-header-row {
-          height: $large-header-height;
-
-          .mat-header-cell {
-            font-size: $large-header-font-size;
-          }
-        }
-
-        tr.mat-row {
-          height: $large-row-height;
-
-          .mat-cell {
-            .mat-form-field {
-              font-size: $large-row-font-size;
-            }
-            font-size: $large-row-font-size;
-          }
-        }
-
-        .o-table-no-results span {
-          line-height: $large-header-height;
-          font-size: $large-row-font-size;
-        }
-      }
-    }
-  }
+  @include o-table-size-typography($typography, 'small');
+  @include o-table-size-typography($typography, 'medium');
+  @include o-table-size-typography($typography, 'large');
 }

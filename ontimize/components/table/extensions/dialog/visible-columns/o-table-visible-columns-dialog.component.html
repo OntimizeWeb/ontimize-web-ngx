@@ -1,7 +1,8 @@
 <span mat-dialog-title>{{ 'TABLE.BUTTONS.COLVIS' | oTranslate }}</span>
 
 <mat-dialog-content>
-  <mat-list dnd-sortable-container [sortableData]="columns">
+  <mat-list dnd-sortable-container [sortableData]="columns" [class.small]="rowHeight==='small'" [class.medium]="rowHeight==='medium'"
+    [class.large]="rowHeight==='large'">
     <ng-container *ngFor="let column of columns; let x = index">
       <mat-list-item *ngIf="column.showInList" (click)="onClickColumn(column)" dnd-sortable [sortableIndex]="x" [dragData]="column"
         [dragEnabled]="true" (onDragSuccess)="onDragSuccess($event)">

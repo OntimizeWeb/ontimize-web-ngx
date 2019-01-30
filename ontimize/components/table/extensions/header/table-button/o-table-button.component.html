@@ -1,5 +1,5 @@
 <ng-container *ngIf="table.showButtonsText">
-  <button type="button" [disabled]="!enabled" [class.disabled]="!enabled" mat-button (click)="innerOnClick()">
+  <button type="button" [disabled]="!enabled" [class.disabled]="!enabled" mat-stroked-button (click)="innerOnClick()">
     <mat-icon *ngIf="isIconPositionLeft() && svgIcon !== undefined" [svgIcon]="svgIcon"></mat-icon>
     <mat-icon *ngIf="isIconPositionLeft() && svgIcon === undefined">{{ icon }}</mat-icon>
     <span *ngIf="table.showButtonsText">{{ olabel | oTranslate }}</span>

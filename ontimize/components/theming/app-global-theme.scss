@@ -21,25 +21,26 @@
     font-family: mat-font-family($typography);
   }
 
-  .o-scroll::-webkit-scrollbar {
+  ::-webkit-scrollbar {
     width: 4px;
     height: 4px;
     background-color: transparent;
     opacity: 1.0;
   }
 
-  .o-scroll::-webkit-scrollbar-track {
+  ::-webkit-scrollbar-track {
     -webkit-box-shadow: none;
     border-radius: 0;
     background-color: transparent;
   }
 
-  .o-scroll::-webkit-scrollbar-thumb {
+  ::-webkit-scrollbar-thumb {
     border-radius: 0;
     -webkit-box-shadow: none;
     background-color: mat-color($primary, 200);
     opacity: 1.0;
   }
+
   .o-loading {
     display: inline-block;
     position: absolute;

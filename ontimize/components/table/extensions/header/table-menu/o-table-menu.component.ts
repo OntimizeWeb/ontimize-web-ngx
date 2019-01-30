@@ -98,7 +98,8 @@ export class OTableMenuComponent implements OnInit, AfterViewInit, OnDestroy {
     this.permissions = this.table.getMenuPermissions();
 
   }
-  getRowHeigh() {
+
+  getRowHeight() {
     return this.table.rowHeight;
   }
 
@@ -251,10 +252,6 @@ export class OTableMenuComponent implements OnInit, AfterViewInit, OnDestroy {
     return !(perm && perm.enabled === false);
   }
 
-  getRowHeight() {
-    return this.table.rowHeight;
-  }
-
   onShowsSelects(event?: any) {
     const tableOptions = this.table.oTableOptions;
     tableOptions.selectColumn.visible = !tableOptions.selectColumn.visible;
@@ -292,7 +289,8 @@ export class OTableMenuComponent implements OnInit, AfterViewInit, OnDestroy {
     let dialogRef = this.dialog.open(OTableVisibleColumnsDialogComponent, {
       data: {
         originalVisibleColumns: Util.parseArray(this.table.originalVisibleColumns, true),
-        columnsData: this.table.oTableOptions.columns
+        columnsData: this.table.oTableOptions.columns,
+        rowHeight: this.table.rowHeight
       },
       disableClose: true
     });

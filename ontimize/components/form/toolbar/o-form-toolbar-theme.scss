@@ -6,17 +6,8 @@
   .o-form-toolbar-header {
     background-color: mat-color($background, app-bar);
 
-    .mat-toolbar-tools .o-form-toolbar-button {
-      &[disabled],
-      &[disabled] mat-icon {
-        color: mat-color($background, disabled-button);
-        cursor: initial;
-      }
-
-      .mat-icon.mat-disabled {
-        color: mat-color($background, disabled-button);
-        cursor: initial;
-      }
+    .mat-toolbar-tools .o-form-toolbar-button[disabled] {
+      color: mat-color($background, disabled-button);
     }
   }
 }

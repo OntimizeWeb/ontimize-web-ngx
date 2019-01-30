@@ -4,7 +4,8 @@ import { OComponentMenuItems } from '../../o-content-menu.class';
 import { MatMenu } from '@angular/material/menu';
 
 export const DEFAULT_CONTEXT_MENU_CONTENT_ITEM_INPUTS = [
-  'items'
+  'items',
+  'class'
 ];
 
 @Component({

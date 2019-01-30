@@ -1,18 +1,21 @@
-.o-table-button .mat-button {
-  text-decoration: none;
-  outline: none;
-  cursor: pointer;
-  display: inline-block;
-  margin: 0;
-  padding: 0;
-  min-width: auto;
-  border-radius: 0;
-  height: 40px;
-  padding: 0 8px;
+.o-table-button {
+  margin: 0 8px;
 
-  &:not(.disabled):hover {
-    .mat-button-focus-overlay {
-      background-color: transparent;
+  .mat-stroked-button {
+    padding: 0 6px;
+    line-height: 30px;
+
+    .mat-button-wrapper {
+      display: flex;
+      align-items: center;
+
+      .mat-icon {
+        margin-right: 4px;
+      }
+
+      span {
+        flex: 1;
+      }
     }
   }
 }
