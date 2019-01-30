@@ -44,8 +44,8 @@ $o_table_row_padding: 24px;
     &.block-events {
       pointer-events: none;
 
-       > .toolbar,
-      > .o-table-body .mat-header-row {
+       > .o-table-body .mat-header-row,
+      > .toolbar {
         opacity: .75;
       }
     }
@@ -98,6 +98,7 @@ $o_table_row_padding: 24px;
         -webkit-transition: opacity .25s linear;
         transition: opacity .25s linear;
 
+<<<<<<< HEAD
       }
 
       &.horizontal-scroll {
@@ -114,11 +115,14 @@ $o_table_row_padding: 24px;
       }
     }
 
+=======
+>>>>>>> 266bbef7877a915672be43d6efc80f0d39e24d68
     .mat-table {
       table-layout: fixed;
       width: 100%;
 
       &.small {
+<<<<<<< HEAD
         .o-table-no-results {
           span {
             height: $o_table_row_small;
@@ -153,6 +157,11 @@ $o_table_row_padding: 24px;
             }
 
           }
+=======
+        .mat-row .mat-cell .image-avatar {
+          width: 22px;
+          height: 22px;
+>>>>>>> 266bbef7877a915672be43d6efc80f0d39e24d68
         }
 
         tr.mat-header-row {
@@ -173,6 +182,7 @@ $o_table_row_padding: 24px;
           }
         }
 
+<<<<<<< HEAD
         tr.mat-row {
           height: $o_table_row_medium;
         }
@@ -186,6 +196,13 @@ $o_table_row_padding: 24px;
               height: 28px;
             }
           }
+=======
+      &.medium {
+        .mat-row .mat-cell .image-avatar {
+          width: 28px;
+          height: 28px;
+        }
+>>>>>>> 266bbef7877a915672be43d6efc80f0d39e24d68
 
           .mat-checkbox-inner-container {
             height: $mat-checkbox-size-medium;
@@ -202,11 +219,24 @@ $o_table_row_padding: 24px;
         }
       }
 
+<<<<<<< HEAD
       &.large {
         .o-table-no-results {
           span {
             height: $o_table_row_large;
             line-height: $o_table_row_large;
+=======
+      .mat-header-row {
+        line-height: 48px;
+
+        .mat-header-cell {
+          .column-filter-icon {
+            font-size: 20px;
+            width: 20px;
+            height: 20px;
+            margin-right: 8px;
+            line-height: 1;
+>>>>>>> 266bbef7877a915672be43d6efc80f0d39e24d68
           }
         }
 

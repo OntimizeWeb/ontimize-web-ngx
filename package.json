@@ -85,7 +85,7 @@
     "@ngx-translate/core": "10.0.2",
     "@ngx-translate/http-loader": "3.0.1",
     "@types/hammerjs": "2.0.34",
-    "@types/jasmine": "2.5.46",
+    "@types/moment": "2.13.0",
     "@types/node": "7.0.10",
     "@types/uglify-js": "2.6.30",
     "@types/webpack": "4.1.1",
