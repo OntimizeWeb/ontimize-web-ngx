@@ -59,19 +59,15 @@
   .o-table .o-table-container {
     .mat-table {
       &.small {
-        .mat-header-row {
-          min-height: $small-header-height;
-          max-height: $small-header-height;
-          line-height: $small-header-height;
-
+        tr.mat-header-row {
+          height: $small-header-height;
           .mat-header-cell {
             font-size: $small-header-font-size;
           }
         }
 
-        .mat-row {
-          min-height: $small-row-height;
-          max-height: $small-row-height;
+        tr.mat-row {
+          height: $small-row-height;
 
           .mat-cell {
             .mat-form-field {
@@ -80,22 +76,24 @@
             font-size: $small-row-font-size;
           }
         }
+
+        .o-table-no-results span {
+          font-size: $small-row-font-size;
+          line-height: $small-header-height;
+        }
       }
 
       &.medium {
-        .mat-header-row {
-          min-height: $medium-header-height;
-          max-height: $medium-header-height;
-          line-height: $medium-header-height;
+        tr.mat-header-row {
+          height: $medium-header-height;
 
           .mat-header-cell {
             font-size: $medium-header-font-size;
           }
         }
 
-        .mat-row {
-          min-height: $medium-row-height;
-          max-height: $medium-row-height;
+        tr.mat-row {
+          height: $medium-row-height;
 
           .mat-cell {
             .mat-form-field {
@@ -104,22 +102,24 @@
             font-size: $medium-row-font-size;
           }
         }
+
+        .o-table-no-results span {
+          line-height: $medium-header-height;
+          font-size: $medium-row-font-size;
+        }
       }
 
       &.large {
-        .mat-header-row {
-          min-height: $large-header-height;
-          max-height: $large-header-height;
-          line-height: $large-header-height;
+        tr.mat-header-row {
+          height: $large-header-height;
 
           .mat-header-cell {
             font-size: $large-header-font-size;
           }
         }
 
-        .mat-row {
-          min-height: $large-row-height;
-          max-height: $large-row-height;
+        tr.mat-row {
+          height: $large-row-height;
 
           .mat-cell {
             .mat-form-field {
@@ -128,20 +128,11 @@
             font-size: $large-row-font-size;
           }
         }
-      }
-    }
 
-    .o-table-no-results {
-      &.small {
-        min-height: $small-header-height;
-      }
-
-      &.medium {
-        min-height: $medium-header-height;
-      }
-
-      &.large {
-        min-height: $large-header-height;
+        .o-table-no-results span {
+          line-height: $large-header-height;
+          font-size: $large-row-font-size;
+        }
       }
     }
   }

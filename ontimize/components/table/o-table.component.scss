@@ -4,10 +4,6 @@ $_mat-checkbox-mark-stroke-size-medim: 2 / 15 * $mat-checkbox-size-medium !defau
 $mat-checkbox-size-small: 16px !default;
 $_mat-checkbox-mark-stroke-size-small: 2 / 15 * $mat-checkbox-size-small !default;
 
-$o_table_row_large: 48px;
-$o_table_row_medium: 36px;
-$o_table_row_small: 28px;
-
 $o_table_row_padding: 24px;
 
 .o-table {
@@ -44,8 +40,8 @@ $o_table_row_padding: 24px;
     &.block-events {
       pointer-events: none;
 
-       > .o-table-body .mat-header-row,
-      > .toolbar {
+       > .toolbar,
+      > .o-table-body .mat-header-row {
         opacity: .75;
       }
     }
@@ -110,6 +106,7 @@ $o_table_row_padding: 24px;
       }
 
       .o-table-no-results {
+        cursor: default;
         text-align: center;
       }
     }
@@ -119,17 +116,6 @@ $o_table_row_padding: 24px;
       width: 100%;
 
       &.small {
-        .o-table-no-results {
-          span {
-            height: $o_table_row_small;
-            line-height: $o_table_row_small;
-          }
-        }
-
-        tr.mat-row {
-          height: $o_table_row_small;
-        }
-
         .mat-header-row,
         .mat-row {
           .mat-checkbox-inner-container {
@@ -154,29 +140,9 @@ $o_table_row_padding: 24px;
 
           }
         }
-
-        tr.mat-header-row {
-          height: 32px;
-          line-height: 32px;
-        }
       }
 
       &.medium {
-        tr.mat-header-row {
-          height: 40px;
-        }
-
-        .o-table-no-results {
-          span {
-            height: $o_table_row_medium;
-            line-height: $o_table_row_medium;
-          }
-        }
-
-        tr.mat-row {
-          height: $o_table_row_medium;
-        }
-
         .mat-header-row,
         .mat-row {
           .mat-cell,
@@ -199,25 +165,6 @@ $o_table_row_padding: 24px;
               height: floor($_mat-checkbox-mark-stroke-size-medim);
             }
           }
-        }
-      }
-
-      &.large {
-        .o-table-no-results {
-          span {
-            height: $o_table_row_large;
-            line-height: $o_table_row_large;
-          }
-        }
-
-        tr.mat-row {
-          height: $o_table_row_large;
-
-        }
-
-        tr.mat-header-row {
-          //font-size: 24;
-          height: 52px;
         }
       }
 
