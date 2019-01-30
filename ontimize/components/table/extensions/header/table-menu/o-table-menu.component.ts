@@ -285,7 +285,8 @@ export class OTableMenuComponent implements OnInit, AfterViewInit, OnDestroy {
     let dialogRef = this.dialog.open(OTableVisibleColumnsDialogComponent, {
       data: {
         originalVisibleColumns: Util.parseArray(this.table.originalVisibleColumns, true),
-        columnsData: this.table.oTableOptions.columns
+        columnsData: this.table.oTableOptions.columns,
+        rowHeight: this.table.rowHeight
       },
       disableClose: true
     });

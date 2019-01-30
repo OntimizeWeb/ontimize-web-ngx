@@ -1,7 +1,7 @@
 import { Component, Inject, ViewEncapsulation } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { DragDropService } from 'ng2-dnd';
-import { Util } from '../../../../../utils';
+import { Util, Codes } from '../../../../../utils';
 import { OColumn } from '../../../o-table.component';
 
 @Component({
@@ -18,6 +18,7 @@ import { OColumn } from '../../../o-table.component';
 export class OTableVisibleColumnsDialogComponent {
 
   columns: Array<any> = [];
+  rowHeight: string = Codes.DEFAULT_ROW_HEIGHT;
 
   constructor(
     public dialogRef: MatDialogRef<OTableVisibleColumnsDialogComponent>,
@@ -33,6 +34,9 @@ export class OTableVisibleColumnsDialogComponent {
           showInList: (oCol.definition !== undefined || oCol.visible || originalCols.indexOf(oCol.attr) !== -1)
         });
       });
+    }
+    if (Util.isDefined(data.rowHeight)) {
+      this.rowHeight = data.rowHeight;
     }
   }
 
