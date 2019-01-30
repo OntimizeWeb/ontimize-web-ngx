@@ -25,6 +25,29 @@
   $large-header-font-size: mat-font-size($typography, large-header-font-size);
   $large-row-font-size: mat-font-size($typography, large-row-font-size);
 
+  .o-table-menu {
+    &.small {
+      .mat-menu-item {
+        line-height:$small-row-height;
+        height: $small-row-height;
+      }
+    }
+
+    &.medium {
+      .mat-menu-item {
+        line-height: $small-row-height;;
+        height: $medium-row-height;
+      }
+    }
+
+    &.large {
+      .mat-menu-item {
+        line-height: $large-row-height;
+        height: $large-row-height;
+      }
+    }
+  }
+  
   .o-table {
     .o-table-menu-button {
       color: mat-color($foreground, secondary-text);
@@ -133,6 +156,8 @@
         border-color: mat-color($background, background);
       }
     }
+
+   
 
     .o-table-container {
       .mat-table {
