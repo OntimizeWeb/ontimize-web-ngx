@@ -98,7 +98,16 @@ export class OTableMenuComponent implements OnInit, AfterViewInit, OnDestroy {
     this.permissions = this.table.getMenuPermissions();
   }
 
+  getRowHeight() {
+    return this.table.rowHeight;
+  }
+
   ngAfterViewInit() {
+    this.matMenu.panelClass = this.getRowHeight() + ' o-table-menu';
+    this.filterMenu.panelClass = this.getRowHeight() + ' o-table-menu';
+    this.configurationMenu.panelClass = this.getRowHeight() + ' o-table-menu';
+
+
     if (!this.permissions.items || this.permissions.items.length === 0) {
       return;
     }
