@@ -25,6 +25,7 @@
   $large-header-font-size: mat-font-size($typography, large-header-font-size);
   $large-row-font-size: mat-font-size($typography, large-row-font-size);
 
+  .o-table-context-menu,
   .o-table-menu {
     &.small {
       .mat-menu-item {

@@ -766,6 +766,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     this.tableContextMenu = value;
     const self = this;
     this.tableContextMenu.onShow.subscribe((params: IOContextMenuContext) => {
+      params.class = 'o-table-context-menu ' + this.rowHeight;
       if (params.data && !self.selection.isSelected(params.data)) {
         self.selection.clear();
         self.selection.select(params.data);

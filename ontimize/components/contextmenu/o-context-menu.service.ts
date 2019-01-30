@@ -18,6 +18,7 @@ export interface IOContextMenuClickEvent {
 
 export interface IOContextMenuContext extends IOContextMenuClickEvent {
   menuItems?: QueryList<OComponentMenuItems>;
+  class?: string;
 }
 
 @Injectable()
@@ -68,7 +69,6 @@ export class OContextMenuService {
     context.event.preventDefault();
     context.event.stopPropagation();
 
-    // TODO: submenu
     this.fakeElement.getBoundingClientRect = (): ClientRect => ({
       bottom: context.event.clientY,
       height: 0,
@@ -116,7 +116,7 @@ export class OContextMenuService {
     contextMenuContent.instance.overlay = overlay;
     contextMenuContent.instance.menuItems = context.menuItems;
     contextMenuContent.instance.data = context.data;
-
+    contextMenuContent.instance.menuClass = context.class;
     this.registerBackdropEvents(overlay);
   }
 
