@@ -73,6 +73,7 @@
     }
   }
 
+  .o-table-context-menu.#{$size},
   .o-table-menu.#{$size} {
     .mat-menu-item {
       line-height: $row-height;
