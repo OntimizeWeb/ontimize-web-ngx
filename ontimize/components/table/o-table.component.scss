@@ -68,8 +68,8 @@ $_mat-checkbox-mark-stroke-size-small: 2 / 15 * $mat-checkbox-size-small !defaul
     &.block-events {
       pointer-events: none;
 
-       > .o-table-body .mat-header-row,
-      > .toolbar {
+       > .toolbar,
+      > .o-table-body .mat-header-row {
         opacity: .75;
       }
     }
@@ -222,14 +222,6 @@ $_mat-checkbox-mark-stroke-size-small: 2 / 15 * $mat-checkbox-size-small !defaul
         -ms-user-select: none;
         /* Non-prefixed version, currently supported by Chrome and Opera */
         user-select: none;
-
-        &.selected {
-          background: #E0E0E0;
-        }
-
-        &:last-child {
-          border-bottom: none;
-        }
 
         .mat-cell {
           &.empty-cell {
