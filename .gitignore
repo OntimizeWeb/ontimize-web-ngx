@@ -23,15 +23,15 @@ ontimize.css
 /.sonar
 sonar-project.properties
 
-
 # misc
 /.travis.yml
 npm-debug.log
 testem.log
+/coverage
 
 # e2e
 /e2e/*.js
 /e2e/*.map
 
-#System Files
+# System Files
 .DS_Store
