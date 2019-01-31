@@ -184,14 +184,6 @@ $o_table_row_padding: 24px;
         /* Non-prefixed version, currently supported by Chrome and Opera */
         user-select: none;
 
-        &.selected {
-          background: #E0E0E0;
-        }
-
-        &:last-child {
-          border-bottom: none;
-        }
-
         .mat-cell {
           padding: 0 12px;
           overflow: hidden;
