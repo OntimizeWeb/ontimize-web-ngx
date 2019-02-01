@@ -5,7 +5,7 @@ import { Codes, ObservableWrapper } from '../../../utils';
 import { OGridComponent } from '../o-grid.component';
 
 @Directive({
-  selector: 'mat-grid-tile',
+  selector: 'mat-grid-tile[o-grid-item]',
   host: {
     '(click)': 'onItemClicked($event)',
     '(dblclick)': 'onItemDoubleClicked($event)'
