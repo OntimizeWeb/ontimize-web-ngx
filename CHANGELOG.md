@@ -24,6 +24,7 @@
   * CSS class `o-container-content-item` has been removed.
   * CSS class `container-content` has been renamed to `o-container-gap`.
 * **o-form**: Attribute `layout-fill` has been removed.
+* **o-grid**: Directive `o-grid-item` selector has changed, if you are using material `mat-grid-tile` components inside a `o-grid` you shoud attach the `o-grid-item` directive to your `mat-grid-tile`.
 
 ## 3.2.1 (2018-12-28)
 ### Features
