@@ -1,7 +1,7 @@
 <form [formGroup]="getFormGroup()">
   <div fxLayout="row" fxLayoutAlign="space-between center">
-    <mat-icon svgIcon="ontimize:search"></mat-icon>
     <mat-form-field [class.custom-width]="hasCustomWidth">
+      <mat-icon svgIcon="ontimize:search" matPrefix></mat-icon>
       <input #term matInput id="term" type="search" [placeholder]="placeHolder" formControlName="term">
     </mat-form-field>
   </div>
