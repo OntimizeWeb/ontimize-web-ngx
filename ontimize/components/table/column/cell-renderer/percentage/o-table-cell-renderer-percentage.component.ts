@@ -47,8 +47,8 @@ export class OTableCellRendererPercentageComponent extends OTableCellRendererRea
 
   ngOnInit() {
     this.pipeArguments = {
-      minDecimalDigits: this.decimalDigits,
-      maxDecimalDigits: this.decimalDigits,
+      minDecimalDigits: this.minDecimalDigits,
+      maxDecimalDigits: this.maxDecimalDigits,
       decimalSeparator: this.decimalSeparator,
       grouping: this.grouping,
       thousandSeparator: this.thousandSeparator,
