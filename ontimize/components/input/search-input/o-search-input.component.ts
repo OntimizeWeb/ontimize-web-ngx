@@ -1,10 +1,12 @@
-import { Component, EventEmitter, Injector, NgModule, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, EventEmitter, Injector, NgModule, OnInit, ViewEncapsulation, ElementRef } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 import { OTranslateService } from '../../../services';
 import { OSharedModule } from '../../../shared';
+import { OInputsOptions, O_INPUTS_OPTIONS } from '../../../config/app-config';
+import { Util } from '../../../utils';
 
 export const DEFAULT_INPUTS_O_SEARCH_INPUT = [
   'placeholder',
@@ -41,8 +43,10 @@ export class OSearchInputComponent implements OnInit {
   protected term: FormControl;
 
   protected translateService: OTranslateService;
+  protected oInputsOptions: OInputsOptions;
 
-  constructor(protected injector: Injector) {
+  constructor(protected injector: Injector,
+    protected elRef: ElementRef) {
     this.translateService = this.injector.get(OTranslateService);
     this.formGroup = new FormGroup({});
   }
@@ -57,6 +61,15 @@ export class OSearchInputComponent implements OnInit {
       .subscribe(term => {
         this.onSearch.emit(term);
       });
+  }
+
+  ngAfterViewInit() {
+    try {
+      this.oInputsOptions = this.injector.get(O_INPUTS_OPTIONS);
+    } catch (e) {
+      this.oInputsOptions = {};
+    }
+    Util.parseOInputsOptions(this.elRef, this.oInputsOptions);
   }
 
   getFormGroup(): FormGroup {

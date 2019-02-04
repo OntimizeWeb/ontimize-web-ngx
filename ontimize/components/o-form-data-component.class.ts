@@ -195,7 +195,14 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
       });
     }
     this.addOntimizeCustomAppearanceClass();
-    this.parseOInputsOptions();
+    try {
+      this.oInputsOptions = this.injector.get(O_INPUTS_OPTIONS);
+    } catch (e) {
+      this.oInputsOptions = {};
+    }
+
+    Util.parseOInputsOptions(this.elRef, this.oInputsOptions);
+
   }
 
   ngOnDestroy() {
@@ -649,17 +656,4 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     return super.getTooltipText();
   }
 
-  protected parseOInputsOptions() {
-    try {
-      this.oInputsOptions = this.injector.get(O_INPUTS_OPTIONS);
-    } catch (e) {
-      this.oInputsOptions = {};
-    }
-    if (this.oInputsOptions.iconColor === Codes.O_INPUTS_OPTIONS_COLOR_ACCENT) {
-      const matFormFieldEL = this.elRef.nativeElement.getElementsByTagName('mat-form-field')[0];
-      if (Util.isDefined(matFormFieldEL)) {
-        matFormFieldEL.classList.add('accent');
-      }
-    }
-  }
 }
