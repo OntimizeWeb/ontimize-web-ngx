@@ -10,7 +10,7 @@
 * **O_INPUTS_OPTIONS**: new provider for allowing to configure input components ([01692e0](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/01692e0))
 * **o-form-layout-manager**: new `title-data-origin` input ([c88ab98](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c88ab98))
 * **o-form-data-component**: new `tooltip-hide-delay` input ([18733ef](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/18733ef]))
-* New classes  **layout-padding-vertical**,**layout-padding-horizontal**,**layout-padding-left**,**layout-padding-right**,**layout-padding-top**, **layout-padding-bottom**, **layout-margin-vertical**,**layout-margin-horizontal**,**layout-margin-left**,**layout-margin-right**,**layout-margin-top**, **layout-margin-bottom**
+* New classes  **layout-padding-vertical**,**layout-padding-horizontal**,**layout-padding-left**,**layout-padding-right**,**layout-padding-top**, **layout-padding-bottom**, **layout-margin-vertical**,**layout-margin-horizontal**,**layout-margin-left**,**layout-margin-right**,**layout-margin-top**, **layout-margin-bottom** ([6901980](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6901980]))
 
 ### Bug Fixes
 * **o-form-navigation**: fixing index error ([f487e54](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f487e54)), closes [#238](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/238)
@@ -26,8 +26,7 @@
   * CSS class `container-content` has been renamed to `o-container-gap`.
   
 * **o-form**: Attribute `layout-fill` has been removed.
-* **o-table-cell-renderer-currency**, **o-table-cell-renderer-real**, : Attribute `decimal-digits` has been removed. Use the new attributes `min-decimal-digits` and `max-decimal-digits`([a58b414](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a58b414))
-
+* **o-table-cell-renderer-currency**, **o-table-cell-renderer-real**, **o-table-cell-renderer-percentage**: Attribute `decimal-digits` has been removed. Use the new attributes `min-decimal-digits` and `max-decimal-digits`([a58b414](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a58b414))([c1a29bd](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c1a29bd))
 
 
 ## 3.2.1 (2018-12-28)
