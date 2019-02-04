@@ -10,6 +10,7 @@
 * **O_INPUTS_OPTIONS**: new provider for allowing to configure input components ([01692e0](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/01692e0))
 * **o-form-layout-manager**: new `title-data-origin` input ([c88ab98](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c88ab98))
 * **o-form-data-component**: new `tooltip-hide-delay` input ([18733ef](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/18733ef]))
+* New classes  **layout-padding-vertical**,**layout-padding-horizontal**,**layout-padding-left**,**layout-padding-right**,**layout-padding-top**, **layout-padding-bottom**, **layout-margin-vertical**,**layout-margin-horizontal**,**layout-margin-left**,**layout-margin-right**,**layout-margin-top**, **layout-margin-bottom**
 
 ### Bug Fixes
 * **o-form-navigation**: fixing index error ([f487e54](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f487e54)), closes [#238](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/238)
@@ -23,8 +24,11 @@
   * CSS classes `o-container-title-item` and `container-title` has been replaced by `o-container-title`.
   * CSS class `o-container-content-item` has been removed.
   * CSS class `container-content` has been renamed to `o-container-gap`.
+  
 * **o-form**: Attribute `layout-fill` has been removed.
-* **o-grid**: Directive `o-grid-item` selector has changed, if you are using material `mat-grid-tile` components inside a `o-grid` you shoud attach the `o-grid-item` directive to your `mat-grid-tile`.
+* **o-table-cell-renderer-currency**, **o-table-cell-renderer-real**, : Attribute `decimal-digits` has been removed. Use the new attributes `min-decimal-digits` and `max-decimal-digits`([a58b414](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a58b414))
+
+
 
 ## 3.2.1 (2018-12-28)
 ### Features
