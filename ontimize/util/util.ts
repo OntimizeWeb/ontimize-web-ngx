@@ -307,4 +307,20 @@ export class Util {
     document.execCommand('copy');
   }
 
+  /**
+   * Added class 'accent' in <mat-form-field> and set the color  accent in the icons
+   * @param {ElementRef} elRef
+   * @param {O_INPUTS_OPTIONS} oInputsOptions
+   */
+
+  static parseOInputsOptions(elRef, oInputsOptions) {
+
+    if (oInputsOptions.iconColor === Codes.O_INPUTS_OPTIONS_COLOR_ACCENT) {
+      const matFormFieldEL = elRef.nativeElement.getElementsByTagName('mat-form-field')[0];
+      if (Util.isDefined(matFormFieldEL)) {
+        matFormFieldEL.classList.add('accent');
+      }
+    }
+  }
+
 }
