@@ -166,7 +166,7 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
   protected thousandSeparator: string = ',';
   /* input renderer real */
   protected decimalSeparator: string = '.';
-  protected decimalDigits: number = 2;
+
   /* input renderer currency */
   protected currencySymbol: string;
   protected currencySymbolPosition: string;
@@ -228,6 +228,10 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
   max: number;
   @InputConverter()
   step: number;
+  @InputConverter()
+  minDecimalDigits: number = 2;
+  @InputConverter()
+  maxDecimalDigits: number = 2;
 
   /* input editor boolean */
   @InputConverter()
@@ -294,7 +298,8 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
               newRenderer.currencySymbol = this.currencySymbol;
               newRenderer.currencySymbolPosition = this.currencySymbolPosition;
               newRenderer.decimalSeparator = this.decimalSeparator;
-              newRenderer.decimalDigits = this.decimalDigits;
+              newRenderer.minDecimalDigits = this.minDecimalDigits;
+              newRenderer.maxDecimalDigits = this.maxDecimalDigits;
               newRenderer.grouping = this.grouping;
               newRenderer.thousandSeparator = this.thousandSeparator;
               break;
@@ -316,7 +321,8 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
             case 'real':
             case 'percentage':
               newRenderer.decimalSeparator = this.decimalSeparator;
-              newRenderer.decimalDigits = this.decimalDigits;
+              newRenderer.minDecimalDigits = this.minDecimalDigits;
+              newRenderer.maxDecimalDigits = this.maxDecimalDigits;
               newRenderer.grouping = this.grouping;
               newRenderer.thousandSeparator = this.thousandSeparator;
               break;
