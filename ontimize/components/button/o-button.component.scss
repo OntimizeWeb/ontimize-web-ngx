@@ -1,3 +1,7 @@
 .o-button {
   display: inline-block;
+
+  .mat-icon-button .mat-button-ripple.mat-ripple {
+    border-radius: 50%;
+  }
 }
