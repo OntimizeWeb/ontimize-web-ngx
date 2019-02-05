@@ -35,6 +35,7 @@ export class OContextMenuContentComponent implements AfterViewInit, OnInit {
   public menuItems: any[] = [];
   public overlay: OverlayRef;
   public data: any;
+  public menuClass;
   public execute: EventEmitter<{ event: Event, data: any, menuItem: OContextMenuItemComponent }> = new EventEmitter();
 
   @ContentChildren(OComponentMenuItems) public oContextMenuItems: QueryList<OComponentMenuItems>;
