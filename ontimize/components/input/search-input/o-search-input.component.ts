@@ -1,11 +1,11 @@
-import { Component, EventEmitter, Injector, NgModule, OnInit, ViewEncapsulation, ElementRef } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { Component, ElementRef, EventEmitter, Injector, NgModule, OnInit, ViewEncapsulation } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
+import { O_INPUTS_OPTIONS, OInputsOptions } from '../../../config/app-config';
 import { OTranslateService } from '../../../services';
 import { OSharedModule } from '../../../shared';
-import { OInputsOptions, O_INPUTS_OPTIONS } from '../../../config/app-config';
 import { Util } from '../../../utils';
 
 export const DEFAULT_INPUTS_O_SEARCH_INPUT = [
@@ -26,7 +26,7 @@ export const DEFAULT_OUTPUTS_O_SEARCH_INPUT = [
   outputs: DEFAULT_OUTPUTS_O_SEARCH_INPUT,
   encapsulation: ViewEncapsulation.None,
   host: {
-    'class.o-search-input': 'true'
+    '[class.o-search-input]': 'true'
   }
 })
 export class OSearchInputComponent implements OnInit {
@@ -34,10 +34,10 @@ export class OSearchInputComponent implements OnInit {
   public static DEFAULT_INPUTS_O_SEARCH_INPUT = DEFAULT_INPUTS_O_SEARCH_INPUT;
   public static DEFAULT_OUTPUTS_O_SEARCH_INPUT = DEFAULT_OUTPUTS_O_SEARCH_INPUT;
 
-  placeholder: string = 'SEARCH';
-  width: string;
+  public placeholder: string = 'SEARCH';
+  public width: string;
 
-  onSearch: EventEmitter<any> = new EventEmitter<any>();
+  public onSearch: EventEmitter<any> = new EventEmitter<any>();
 
   protected formGroup: FormGroup;
   protected term: FormControl;
@@ -45,13 +45,15 @@ export class OSearchInputComponent implements OnInit {
   protected translateService: OTranslateService;
   protected oInputsOptions: OInputsOptions;
 
-  constructor(protected injector: Injector,
-    protected elRef: ElementRef) {
+  constructor(
+    protected injector: Injector,
+    protected elRef: ElementRef
+  ) {
     this.translateService = this.injector.get(OTranslateService);
     this.formGroup = new FormGroup({});
   }
 
-  ngOnInit() {
+  public ngOnInit(): void {
     this.term = new FormControl();
     this.formGroup.addControl('term', this.term);
 
@@ -63,7 +65,7 @@ export class OSearchInputComponent implements OnInit {
       });
   }
 
-  ngAfterViewInit() {
+  public ngAfterViewInit(): void {
     try {
       this.oInputsOptions = this.injector.get(O_INPUTS_OPTIONS);
     } catch (e) {
@@ -72,19 +74,19 @@ export class OSearchInputComponent implements OnInit {
     Util.parseOInputsOptions(this.elRef, this.oInputsOptions);
   }
 
-  getFormGroup(): FormGroup {
+  public getFormGroup(): FormGroup {
     return this.formGroup;
   }
 
-  getValue(): string {
+  public getValue(): string {
     return this.term.value;
   }
 
-  setValue(val: string) {
+  public setValue(val: string): void {
     this.term.setValue(val);
   }
 
-  getFormControl(): FormControl {
+  public getFormControl(): FormControl {
     return this.term;
   }
 
@@ -96,10 +98,7 @@ export class OSearchInputComponent implements OnInit {
   }
 
   set placeHolder(value: string) {
-    var self = this;
-    window.setTimeout(() => {
-      self.placeholder = value;
-    }, 0);
+    window.setTimeout(() => this.placeholder = value, 0);
   }
 
   get hasCustomWidth(): boolean {

@@ -1,5 +1,5 @@
-import { Component, NgModule, OnInit, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, NgModule, OnInit, ViewEncapsulation } from '@angular/core';
 
 import { OSharedModule } from '../../shared';
 
@@ -8,7 +8,7 @@ export const DEFAULT_INPUTS_O_BUTTON = [
   'olabel: label',
   // type [FLAT|RAISED|ICON|FAB|MINI-FAB]: The type of button. Default: FLAT.
   'otype: type',
-  //icon [string]: Name of google icon (see https://design.google.com/icons/)
+  // icon [string]: Name of google icon (see https://design.google.com/icons/)
   'icon',
   'iconPosition: icon-position',
   'image'

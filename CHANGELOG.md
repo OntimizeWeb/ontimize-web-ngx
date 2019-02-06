@@ -57,9 +57,9 @@ The sliding behavior in `o-slider` component requires that HammerJS is loaded on
   * CSS classes `o-container-title-item` and `container-title` has been replaced by `o-container-title`.
   * CSS class `o-container-content-item` has been removed.
   * CSS class `container-content` has been renamed to `o-container-gap`.
-  
 * **o-form**: Attribute `layout-fill` has been removed.
 * **o-table-cell-renderer-currency**, **o-table-cell-renderer-real**, **o-table-cell-renderer-percentage**: Attribute `decimal-digits` has been removed. Use the new attributes `min-decimal-digits` and `max-decimal-digits`([a58b414](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a58b414))([c1a29bd](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c1a29bd))
+* **o-button**: internal CSS class `o-button-text` has been removed.
 
 
 ## 3.2.1 (2018-12-28)
