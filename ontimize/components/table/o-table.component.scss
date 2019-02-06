@@ -271,6 +271,12 @@ $o_table_row_padding: 24px;
         overflow: hidden;
         position: relative;
 
+        &:first-of-type,
+        &:last-of-type {
+          padding-left: 0;
+          padding-right: 0;
+        }
+
         .column-filter-icon {
           cursor: pointer;
           float: left;
@@ -284,6 +290,7 @@ $o_table_row_padding: 24px;
         }
 
         .mat-sort-header-button {
+          padding-left: 30px;
           flex: 1;
           display: block;
         }
@@ -297,8 +304,7 @@ $o_table_row_padding: 24px;
           cursor: default;
         }
 
-        &.resizable .mat-sort-header-arrow,
-        .header-title-container {
+        &.resizable .mat-sort-header-arrow {
           margin-right: 14px;
         }
 
