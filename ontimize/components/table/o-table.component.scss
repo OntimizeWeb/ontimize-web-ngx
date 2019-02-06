@@ -270,11 +270,28 @@ $o_table_row_padding: 24px;
       .mat-header-cell {
         overflow: hidden;
         position: relative;
+        padding: 0 12px;
+        box-sizing: border-box;
 
         &:first-of-type,
         &:last-of-type {
           padding-left: 0;
           padding-right: 0;
+        }
+
+        &:not(.o-column-image) {
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+        }
+
+        &.o-mat-cell-multiline {
+          &:not(.mat-header-cell) {
+            padding: 6px 12px;
+          }
+          overflow: initial;
+          white-space: normal;
+          text-overflow: unset;
         }
 
         .column-filter-icon {

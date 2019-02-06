@@ -1,6 +1,7 @@
-import { Component, ViewChild, AfterViewInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ViewChild, AfterViewInit, Injector, ChangeDetectionStrategy } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MatListOption, MatSelectionList } from '@angular/material';
+import { OTableBaseDialogClass } from '../o-table-base-dialog.class';
 
 // import { ITableFiltersStatus } from '../../o-table-storage.class';
 
@@ -11,7 +12,7 @@ import { MatDialogRef, MatListOption, MatSelectionList } from '@angular/material
   styleUrls: ['./o-table-store-configuration-dialog.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class OTableStoreConfigurationDialogComponent implements AfterViewInit {
+export class OTableStoreConfigurationDialogComponent  extends OTableBaseDialogClass implements AfterViewInit {
 
   @ViewChild('propertiesList')
   propertiesList: MatSelectionList;
@@ -41,8 +42,12 @@ export class OTableStoreConfigurationDialogComponent implements AfterViewInit {
   });
 
   constructor(
-    public dialogRef: MatDialogRef<OTableStoreConfigurationDialogComponent>
-  ) { }
+    public dialogRef: MatDialogRef<OTableStoreConfigurationDialogComponent>,
+    protected injector: Injector
+  ) {
+    super(injector);
+    this.setFormControl(this.formGroup.get('name'));
+  }
 
   ngAfterViewInit(): void {
     this.propertiesList.selectAll();
