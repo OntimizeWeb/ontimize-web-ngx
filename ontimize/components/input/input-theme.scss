@@ -1,4 +1,13 @@
 @import 'node_modules/@angular/material/theming';
+@mixin icon-color-mixin($icon-color) {
+  .icon-btn,
+  .mat-icon,
+  .read-only .mat-icon,
+  .svg-icon {
+    color: $icon-color;
+  }
+}
+
 @mixin input-theme($theme) {
   $is-dark-theme: map-get($theme, is-dark);
   $foreground: map-get($theme, foreground);
@@ -6,14 +15,6 @@
   $underline-color: mat-color($foreground, divider, if($is-dark-theme, 0.7, 0.42));
   $primary: map-get($theme, primary);
   $accent: map-get($theme, accent);
-  @mixin icon-color-mixin($icon-color) {
-    .icon-btn,
-    .mat-icon,
-    .read-only .mat-icon,
-    .svg-icon {
-      color: $icon-color;
-    }
-  }
 
   .mat-form-field {
     &.mat-form-field-disabled.accent {
