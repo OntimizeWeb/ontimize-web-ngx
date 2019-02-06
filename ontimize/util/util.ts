@@ -309,8 +309,8 @@ export class Util {
 
   /**
    * Added class 'accent' in <mat-form-field> and set the color  accent in the icons
-   * @param {ElementRef} elRef
-   * @param {O_INPUTS_OPTIONS} oInputsOptions
+   * @param elRef
+   * @param oInputsOptions
    */
 
   static parseOInputsOptions(elRef, oInputsOptions) {
