@@ -1158,7 +1158,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
    */
   queryData(filter: any = undefined, ovrrArgs?: OQueryDataArgs) {
     // If tab exists and is not active then wait for queryData
-    if (this.tabContainer && !this.tabContainer.isActive) {
+    if (this.isInsideInactiveTab()) {
       this.pendingQuery = true;
       this.pendingQueryFilter = filter;
       return;
@@ -1166,6 +1166,14 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     this.pendingQuery = false;
     this.pendingQueryFilter = undefined;
     super.queryData(filter, ovrrArgs);
+  }
+
+  protected isInsideInactiveTab(): boolean {
+    let result: boolean = false;
+    if (this.tabContainer && this.tabGroupContainer) {
+      result = !(this.tabContainer.isActive || (this.tabGroupContainer.selectedIndex === this.tabContainer.position));
+    }
+    return result;
   }
 
   getComponentFilter(existingFilter: any = {}): any {
