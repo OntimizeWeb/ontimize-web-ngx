@@ -137,23 +137,31 @@ export class OAppSidenavComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   protected refreshMenuRoots() {
-    let firstRoot = this.menuRootArray[0];
-    let alreadyExistsUserInfo = firstRoot ? firstRoot.id === 'user-info' : false;
-    if (this.showUserInfo && this.userInfo && this.showToggleButton && !alreadyExistsUserInfo) {
-      let userInfoItem: MenuItemUserInfo = {
-        id: this.userInfo.username,
-        name: this.userInfo.username,
-        user: this.userInfo.username,
-        avatar: this.userInfo.avatar
-      };
-      let menuGroupUserInfo: MenuGroup = {
-        id: 'user-info',
-        name: 'APP_LAYOUT.USER_PROFILE',
-        items: [userInfoItem],
-        opened: true,
-        icon: 'person_pin'
-      };
-      this.menuRootArray.unshift(menuGroupUserInfo);
+    if (this.showUserInfo && this.userInfo && this._showToggleButton) {
+      const firstRoot = this.menuRootArray[0];
+      const alreadyExistsUserInfo = firstRoot ? firstRoot.id === 'user-info' : false;
+      if (alreadyExistsUserInfo) {
+        const userInfoItem: MenuItemUserInfo = (this.menuRootArray[0] as MenuGroup).items[0] as MenuItemUserInfo;
+        userInfoItem.id = this.userInfo.username;
+        userInfoItem.name = this.userInfo.username;
+        userInfoItem.user = this.userInfo.username;
+        userInfoItem.avatar = this.userInfo.avatar;
+      } else {
+        const userInfoItem: MenuItemUserInfo = {
+          id: this.userInfo.username,
+          name: this.userInfo.username,
+          user: this.userInfo.username,
+          avatar: this.userInfo.avatar
+        };
+        const menuGroupUserInfo: MenuGroup = {
+          id: 'user-info',
+          name: 'APP_LAYOUT.USER_PROFILE',
+          items: [userInfoItem],
+          opened: true,
+          icon: 'person_pin'
+        };
+        this.menuRootArray.unshift(menuGroupUserInfo);
+      }
     }
   }
 
