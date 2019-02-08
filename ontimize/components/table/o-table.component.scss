@@ -40,8 +40,8 @@ $o_table_row_padding: 24px;
     &.block-events {
       pointer-events: none;
 
-       > .toolbar,
-      > .o-table-body .mat-header-row {
+       > .o-table-body .mat-header-row,
+      > .toolbar {
         opacity: .75;
       }
     }
@@ -307,14 +307,15 @@ $o_table_row_padding: 24px;
         }
 
         .mat-sort-header-button {
-          padding-left: 30px;
           flex: 1;
           display: block;
+          place-content: center;
         }
 
         .mat-sort-header-arrow {
-          margin-top: auto;
-          margin-bottom: auto;
+          margin: 2px 0 0;
+          position: absolute;
+          right: 0;
         }
 
         .header-title-container {
@@ -322,7 +323,7 @@ $o_table_row_padding: 24px;
         }
 
         &.resizable .mat-sort-header-arrow {
-          margin-right: 14px;
+          margin-right: 2px;
         }
 
         &:not([o-mat-sort-header]),
