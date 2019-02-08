@@ -332,8 +332,8 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
     }
   }
 
-  reloadData() {
-    console.log('reloadData');
+  public reloadData(): void {
+    this.queryData();
   }
 
   /**
