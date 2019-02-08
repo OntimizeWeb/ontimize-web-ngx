@@ -41,7 +41,11 @@ export const DEFAULT_INPUTS_O_GRID = [
   // refresh-button [no|yes]: show refresh button. Default: yes.
   'refreshButton: refresh-button',
   // pagination-controls [yes|no|true|false]: show pagination controls. Default: no.
-  'paginationControls: pagination-controls'
+  'paginationControls: pagination-controls',
+  //gutterSize: Size of the grid list's gutter in pixels.
+  'gutterSize:gutter-size',
+  // fix-header [yes|no|true|false]: fixed footer when the content is greather than its own height. Default: no.
+  'fixedHeader:fixed-header',
 ];
 
 export const DEFAULT_OUTPUTS_O_GRID = [
@@ -64,7 +68,8 @@ const PAGE_SIZE_OPTIONS = [8, 16, 24, 32, 64];
   templateUrl: './o-grid.component.html',
   styleUrls: ['./o-grid.component.scss'],
   host: {
-    '[class.o-grid]': 'true'
+    '[class.o-grid]': 'true',
+    '[class.o-grid-fixed]': 'fixedHeader',
   }
 })
 export class OGridComponent extends OServiceComponent implements AfterViewChecked, AfterViewInit, OnChanges, OnDestroy, OnInit {
@@ -75,6 +80,15 @@ export class OGridComponent extends OServiceComponent implements AfterViewChecke
   /* Inputs */
   @InputConverter()
   queryRows: number = 32;
+
+  @InputConverter()
+  fixedHeader: boolean = false;
+
+  @InputConverter()
+  showPageSize: boolean = false;
+
+  @InputConverter()
+  showSort: boolean = false;
 
   get cols(): number {
     return this._cols || this._colsDefault;
@@ -96,10 +110,7 @@ export class OGridComponent extends OServiceComponent implements AfterViewChecke
   }
   protected _pageSizeOptions = PAGE_SIZE_OPTIONS;
 
-  @InputConverter()
-  showPageSize: boolean = false;
-  @InputConverter()
-  showSort: boolean = false;
+
 
   get sortableColumns(): ISQLOrder[] {
     return this._sortableColumns;
