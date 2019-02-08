@@ -40,8 +40,8 @@
 
   <!--MAT-GRID-LIST-->
 
-  <mat-grid-list [cols]="cols" gutterSize="1em" [rowHeight]="gridItemHeight" class="o-mat-grid-list fill-remaining">
-    <mat-grid-tile *ngFor="let item of gridItems" [colspan]="item.cols" [rowspan]="tile.rows">
+  <mat-grid-list [cols]="cols" [gutterSize]="gutterSize" [rowHeight]="gridItemHeight" class="o-mat-grid-list fill-remaining">
+    <mat-grid-tile *ngFor="let item of gridItems" [colspan]="item.colspan" [rowspan]="item.rowspan">
       <ng-container *ngTemplateOutlet="item.template"></ng-container>
     </mat-grid-tile>
   </mat-grid-list>

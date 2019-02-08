@@ -90,6 +90,8 @@ export class OGridComponent extends OServiceComponent implements AfterViewChecke
   @InputConverter()
   showSort: boolean = false;
 
+  gutterSize = '1px';
+
   get cols(): number {
     return this._cols || this._colsDefault;
   }
