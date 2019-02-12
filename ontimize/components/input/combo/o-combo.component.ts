@@ -122,13 +122,6 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
     }
   }
 
-  onFormControlChange(value: any) {
-    if (this.oldValue === value) {
-      return;
-    }
-    super.onFormControlChange(value);
-  }
-
   getValue() {
     if (this.value instanceof OFormValue) {
       if (this.value.value !== undefined) {
