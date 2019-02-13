@@ -1,7 +1,6 @@
 import { Observable } from 'rxjs/Observable';
 
 import { IFormDataComponent } from '../components/o-form-data-component.class';
-import { SessionInfo } from '../services/login.service';
 import { Base64 } from './base64';
 import { Codes } from './codes';
 
@@ -23,19 +22,6 @@ export interface IAuthService {
   startsession(user: string, password: string): Observable<any>;
   endsession(user: string, sessionId: number): Observable<any>;
   redirectLogin?(sessionExpired?: boolean);
-}
-
-export interface IOntimizeServiceConf {
-  urlBase?: string;
-  session: SessionInfo;
-  entity?: string;
-  kv?: Object;
-  av?: Array<string>;
-  sqltypes?: Object;
-  pagesize?: number;
-  offset?: number;
-  orderby?: Array<Object>;
-  totalsize?: number;
 }
 
 export class Util {
