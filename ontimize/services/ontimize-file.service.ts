@@ -1,11 +1,11 @@
-import { Injector, Injectable } from '@angular/core';
 import { HttpClient, HttpEventType, HttpHeaders, HttpRequest } from '@angular/common/http';
+import { Injectable, Injector } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 
-import { LoginService } from '../services';
 import { AppConfig, Config } from '../config/app-config';
-import { Util, Codes, ServiceUtils } from '../utils';
+import { LoginService } from '../services';
+import { Codes, ServiceUtils } from '../utils';
 
 @Injectable()
 export class OntimizeFileService {
@@ -128,7 +128,4 @@ export class OntimizeFileService {
     ServiceUtils.redirectLogin(router, sessionExpired);
   }
 
-  isNullOrUndef(value: any): boolean {
-    return !Util.isDefined(value);
-  }
 }
