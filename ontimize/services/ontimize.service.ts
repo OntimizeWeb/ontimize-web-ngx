@@ -1,12 +1,12 @@
-import { Injector, Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Injectable, Injector } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { share } from 'rxjs/operators';
 
-import { LoginService } from '../services';
 import { AppConfig, Config } from '../config/app-config';
-import { IAuthService, IDataService, Util, Codes, ServiceUtils } from '../utils';
+import { LoginService } from '../services';
+import { Codes, IAuthService, IDataService, ServiceUtils, Util } from '../utils';
 import { OntimizeServiceResponseParser } from './parser/o-service-response.parser';
 
 @Injectable()
@@ -278,14 +278,10 @@ export class OntimizeService implements IAuthService, IDataService {
     });
   }
 
-  isNullOrUndef(value: any): boolean {
-    return !Util.isDefined(value);
-  }
-
-  /**
- * Successful response parsers, there is one parser for each CRUD method which calls to the common parser.
- * User can overwrite the chosen methods parsers or the common parser
- */
+  /*
+   * Successful response parsers, there is one parser for each CRUD method which calls to the common parser.
+   * User can overwrite the chosen methods parsers or the common parser
+   */
   protected parseSuccessfulResponse(resp: any, _innerObserver: any) {
     this.responseParser.parseSuccessfulResponse(resp, _innerObserver, this);
   }
@@ -310,7 +306,7 @@ export class OntimizeService implements IAuthService, IDataService {
     this.parseSuccessfulResponse(resp, _innerObserver);
   }
 
-  /**
+  /*
    * Unsuccessful response parsers, there is one parser for each CRUD method which calls to the common parser.
    * User can overwrite the chosen methods parsers or the common parser
    */
@@ -337,4 +333,5 @@ export class OntimizeService implements IAuthService, IDataService {
   protected parseUnsuccessfulDeleteResponse(resp: any, _innerObserver: any) {
     this.parseUnsuccessfulResponse(resp, _innerObserver);
   }
+
 }

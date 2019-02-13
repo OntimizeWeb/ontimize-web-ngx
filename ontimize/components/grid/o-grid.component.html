@@ -1,4 +1,4 @@
-<div [style.display]="isVisible()? '' : 'none'" class="o-grid-container">
+<div [style.display]="isVisible()? '' : 'none'" class="o-grid-container" fxLayout="column" fxLayoutAlign="start stretch">
   <!--TOOLBAR-->
   <mat-toolbar *ngIf="hasControls()" class="o-grid-toolbar">
     <div class="mat-toolbar-tools" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px" fxFill>
@@ -39,22 +39,25 @@
   </mat-toolbar>
 
   <!--MAT-GRID-LIST-->
-  <mat-grid-list [cols]="cols" gutterSize="1em" [rowHeight]="gridItemHeight">
-    <mat-grid-tile *ngFor="let item of gridItems">
+
+  <mat-grid-list [cols]="cols" [gutterSize]="gutterSize" [rowHeight]="gridItemHeight" class="o-mat-grid-list fill-remaining">
+    <mat-grid-tile *ngFor="let item of gridItems" [colspan]="item.colspan" [rowspan]="item.rowspan">
       <ng-container *ngTemplateOutlet="item.template"></ng-container>
     </mat-grid-tile>
   </mat-grid-list>
 
+
   <!-- GRID FOOTER -->
-  <div *ngIf="!paginationControls" fxlayout="row" class="o-grid-footer" fxFlex layout-padding>
+  <div *ngIf="!paginationControls" fxlayout="row" class="o-grid-footer" layout-padding>
     <button type="button" mat-button *ngIf="dataArray.length < totalRecords" (click)="loadMore()" class="mat-raised-button">
       {{ 'GRID.BUTTON_NEXT' | oTranslate }}
     </button>
     <span fxFlex></span>
     <span class="o-grid-totals">{{ 'GRID.TEXT_SHOWN_ITEMS' | oTranslate :{values: [dataArray.length, totalRecords]} }}</span>
   </div>
-  <mat-paginator #paginator *ngIf="paginationControls" [length]="totalRecords" [pageSize]="queryRows" [pageSizeOptions]="pageSizeOptions"
-    [pageIndex]="currentPage" [showFirstLastButtons]="true" (page)="onChangePage($event)"></mat-paginator>
+
+  <mat-paginator class="o-mat-paginator" #paginator *ngIf="paginationControls" [length]="totalRecords" [pageSize]="queryRows"
+    [pageSizeOptions]="pageSizeOptions" [pageIndex]="currentPage" [showFirstLastButtons]="true" (page)="onChangePage($event)"></mat-paginator>
 
   <div *ngIf="loading" fxLayout="row" fxLayoutAlign="center end" class="o-loading-blocker">
     <div fxLayoutAlign="center center" [class.o-spinner-container-controls]="hasControls()" class="o-spinner-container">
