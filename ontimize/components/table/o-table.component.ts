@@ -575,6 +575,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   protected asyncLoadSubscriptions: Object = {};
 
   protected querySubscription: Subscription;
+  protected contextMenuSubscription: Subscription;
   protected finishQuerySubscription: boolean = false;
 
   public onClick: EventEmitter<any> = new EventEmitter();
@@ -590,6 +591,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   selection = new SelectionModel<Element>(true, []);
   protected selectionChangeSubscription: Subscription;
 
+  public oTableFilterByColumnDataDialogComponent:OTableFilterByColumnDataDialogComponent;
   public oTableColumnsFilterComponent: OTableColumnsFilterComponent;
   public showFilterByColumnIcon: boolean = false;
   public showTotals: boolean = false;
@@ -860,6 +862,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     if (this.tabGroupChangeSubscription) {
       this.tabGroupChangeSubscription.unsubscribe();
     }
+
     if (this.selectionChangeSubscription) {
       this.selectionChangeSubscription.unsubscribe();
     }
@@ -868,6 +871,10 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
     if (this.onRenderedDataChange) {
       this.onRenderedDataChange.unsubscribe();
+    }
+
+    if (this.contextMenuSubscription) {
+      this.contextMenuSubscription.unsubscribe();
     }
     Object.keys(this.asyncLoadSubscriptions).forEach(idx => {
       if (this.asyncLoadSubscriptions[idx]) {
@@ -895,7 +902,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   registerContextMenu(value: OContextMenuComponent): void {
     this.tableContextMenu = value;
     const self = this;
-    this.tableContextMenu.onShow.subscribe((params: IOContextMenuContext) => {
+    this.contextMenuSubscription = this.tableContextMenu.onShow.subscribe((params: IOContextMenuContext) => {
       params.class = 'o-table-context-menu ' + this.rowHeight;
       if (params.data && !self.selection.isSelected(params.data)) {
         self.selection.clear();
@@ -1767,7 +1774,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   clearFilters(triggerDatasourceUpdate: boolean = true): void {
     this.dataSource.clearColumnFilters(triggerDatasourceUpdate);
-    this.showFilterByColumnIcon = false;
     if (this.oTableMenu && this.oTableMenu.columnFilterOption) {
       this.oTableMenu.columnFilterOption.setActive(this.showFilterByColumnIcon);
     }
@@ -1777,6 +1783,10 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   isColumnFilterable(column: OColumn): boolean {
+    return (this.oTableColumnsFilterComponent && this.oTableColumnsFilterComponent.isColumnFilterable(column.attr));
+  }
+
+  isModeColumnFilterable(column: OColumn): boolean {
     return this.showFilterByColumnIcon &&
       (this.oTableColumnsFilterComponent && this.oTableColumnsFilterComponent.isColumnFilterable(column.attr));
   }
@@ -1789,25 +1799,28 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   openColumnFilterDialog(column: OColumn, event: Event) {
     event.stopPropagation();
     event.preventDefault();
-    let dialogRef = this.dialog.open(OTableFilterByColumnDataDialogComponent, {
-      data: {
-        previousFilter: this.dataSource.getColumnValueFilterByAttr(column.attr),
-        column: column,
-        tableData: this.dataSource.getTableData(),
-        preloadValues: this.oTableColumnsFilterComponent.preloadValues
-      },
-      disableClose: true,
-      panelClass: 'cdk-overlay-pane-custom'
-    });
-    const self = this;
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        let columnValueFilter = dialogRef.componentInstance.getColumnValuesFilter();
-        self.dataSource.addColumnFilter(columnValueFilter);
-        self.reloadPaginatedDataFromStart();
-      }
-    });
+    if (this.oTableColumnsFilterComponent) {
+      let dialogRef = this.dialog.open(OTableFilterByColumnDataDialogComponent, {
+        data: {
+          previousFilter: this.dataSource.getColumnValueFilterByAttr(column.attr),
+          column: column,
+          tableData: this.dataSource.getTableData(),
+          preloadValues: this.oTableColumnsFilterComponent.preloadValues
+        },
+        disableClose: true,
+        panelClass: 'cdk-overlay-pane-custom'
+      });
+      const self = this;
+      dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          let columnValueFilter = dialogRef.componentInstance.getColumnValuesFilter();
+          self.dataSource.addColumnFilter(columnValueFilter);
+          self.reloadPaginatedDataFromStart();
+        }
+      });
+    }
   }
+
 
   get disableTableMenuButton(): boolean {
     return !!(this.permissions && this.permissions.menu && this.permissions.menu.enabled === false);

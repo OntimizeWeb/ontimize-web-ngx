@@ -221,7 +221,10 @@ export var MAP = {
     'TABLE_CONTEXT_MENU.SELECT_ALL': 'Select all',
     'TABLE_CONTEXT_MENU.DESELECT_ALL': 'Deselect all',
     'TABLE_CONTEXT_MENU.REFRESH': 'Refresh',
-    'TABLE_CONTEXT_MENU.DELETE': 'Delete'
+    'TABLE_CONTEXT_MENU.DELETE': 'Delete',
+    'TABLE_CONTEXT_MENU.FILTER': 'Filter',
+    'TABLE_CONTEXT_MENU.FILTER_BY': 'Filter by:',
+    'TABLE_CONTEXT_MENU.FILTER_BY_VALUE': 'Filter by this value'
   },
 
   // Spanish
@@ -445,7 +448,10 @@ export var MAP = {
     'TABLE_CONTEXT_MENU.COPY_SELECTION': 'Copiar selección',
     'TABLE_CONTEXT_MENU.SELECT_ALL': 'Seleccionar todos',
     'TABLE_CONTEXT_MENU.REFRESH': 'Refrescar',
-    'TABLE_CONTEXT_MENU.DELETE': 'Borrar'
+    'TABLE_CONTEXT_MENU.DELETE': 'Borrar',
+    'TABLE_CONTEXT_MENU.FILTER': 'Filtrar',
+    'TABLE_CONTEXT_MENU.FILTER_BY': 'Filter by:',
+    'TABLE_CONTEXT_MENU.FILTER_BY_VALUE': 'Filtrar por este valor'
   }
 
 };

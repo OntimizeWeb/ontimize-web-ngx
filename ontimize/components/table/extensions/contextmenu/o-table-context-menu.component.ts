@@ -1,9 +1,12 @@
-import { Component, forwardRef, Inject, Injector, ViewChild, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, forwardRef, Inject, Injector, ViewChild, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 
-import { OTableComponent } from '../../o-table.component';
 import { OContextMenuComponent } from '../../../contextmenu/o-context-menu-components';
 import { Util } from '../../../../utils';
 import { InputConverter } from '../../../../decorators';
+import { Subscription } from 'rxjs';
+import { OTranslateService } from '../../../../services';
+import { IOContextMenuContext } from '../../../contextmenu/o-context-menu.service';
+import { OColumn, IColumnValueFilter, ColumnValueFilterOperator, OTableComponent } from '../../table-components';
 
 export const DEFAULT_TABLE_CONTEXT_MENU_INPUTS = [
   'contextMenu : context-menu',
@@ -13,7 +16,8 @@ export const DEFAULT_TABLE_CONTEXT_MENU_INPUTS = [
   'showCopy:copy',
   'showSelectAll:select-all',
   'showRefresh:refresh',
-  'showDelete:delete'
+  'showDelete:delete',
+  'showFilter:filter'
 ];
 
 @Component({
@@ -26,12 +30,9 @@ export const DEFAULT_TABLE_CONTEXT_MENU_INPUTS = [
 
 export class OTableContextMenuComponent implements OnInit {
 
-  public static INSERT_ATTR = 'insert';
-  public static GOTO_DETAIL_ATTR = 'detail';
-  public static EDIT_ATTR = 'edit';
-  public static SELECT_ALL_ATTR = 'select-all';
-  public static COPY_ATTR = 'copy';
+  public data: any;
 
+  contextMenuSubscription: Subscription = new Subscription();
   @InputConverter()
   showInsert: boolean = true;
   @InputConverter()
@@ -46,24 +47,51 @@ export class OTableContextMenuComponent implements OnInit {
   showRefresh: boolean = true;
   @InputConverter()
   showDelete: boolean = true;
+  @InputConverter()
+  showFilter: boolean = true;
 
 
   public contextMenu: OContextMenuComponent;
   @ViewChild('defaultContextMenu') defaultContextMenu: OContextMenuComponent;
+  public cd: ChangeDetectorRef;
+
+  protected translateService: OTranslateService;
+  public isVisibleFilter;
+  private row;
+  private column: OColumn;
+
 
   constructor(
     protected injector: Injector,
     @Inject(forwardRef(() => OTableComponent)) public table: OTableComponent
-  ) { }
+  ) {
+    this.translateService = this.injector.get(OTranslateService);
+    this.cd = this.injector.get(ChangeDetectorRef);
+
+  }
 
   ngOnInit(): void {
-    this.defaultContextMenu.onClose.subscribe(param => {
+    this.contextMenuSubscription.add(this.defaultContextMenu.onClose.subscribe((param: IOContextMenuContext) => {
       if (!this.table.isSelectionModeMultiple()) {
         this.table.clearSelection();
       }
-    });
+    }));
+
+    this.contextMenuSubscription.add(this.defaultContextMenu.onShow.subscribe((param: IOContextMenuContext) => {
+      this.initProperties(param);
+    }));
+
   }
 
+
+  private initProperties(param: IOContextMenuContext) {
+    this.data = param.data;
+    let columnName = this.data.cellName;
+    this.column = this.table.getOColumn(columnName);
+    this.row = this.data.rowValue;
+    this.isVisibleFilter = this.checkVisibleFilter();
+    this.cd.detectChanges();
+  }
 
   ngAfterViewInit(): void {
     let itemsParsed = this.defaultContextMenu.oContextMenuItems.toArray();
@@ -73,6 +101,7 @@ export class OTableContextMenuComponent implements OnInit {
     } else {
       this.defaultContextMenu.oContextMenuItems.reset(itemsParsed);
     }
+
     this.table.registerContextMenu(this.defaultContextMenu);
   }
 
@@ -175,6 +204,42 @@ export class OTableContextMenuComponent implements OnInit {
 
   refresh() {
     this.table.refresh();
+  }
+
+  filterByValue(event) {
+    this.table.showFilterByColumnIcon = true;
+    const columValueFilter: IColumnValueFilter = {
+      attr: this.column.attr,
+      operator: ColumnValueFilterOperator.IN,
+      values: [this.row[this.column.attr]]
+    };
+    this.table.dataSource.addColumnFilter(columValueFilter);
+    this.table.reloadPaginatedDataFromStart();
+  }
+
+
+  get labelFilterByColumn() {
+    let label = '';
+    if (this.column && this.column.attr) {
+      label = this.translateService.get('TABLE_CONTEXT_MENU.FILTER_BY') + ' ' + this.translateService.get(this.column.attr);
+    }
+    return label;
+  }
+
+  filterByColumn(event) {
+    if (this.table.oTableMenu) {
+      this.table.showFilterByColumnIcon = true;
+      this.table.oTableMenu.columnFilterOption.active = true;
+      this.table.openColumnFilterDialog(this.column, event.event);
+    }
+  }
+
+  checkVisibleFilter(): boolean {
+    let isVisible = false;
+    if (this.column) {
+      isVisible = this.showFilter && this.table.isColumnFilterable(this.column);
+    }
+    return isVisible;
   }
 
 }
