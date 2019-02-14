@@ -1,9 +1,11 @@
 import { InjectionToken } from '@angular/core';
+
 import { MenuRootItem } from '../services';
+import { ORemoteConfiguration } from '../types';
 import { Util } from '../utils';
 
-let DEFAULT_LOCAL_STORAGE_KEY = 'ontimize-web-uuid';
-let DEFAULT_CONFIG: Config = {
+const DEFAULT_LOCAL_STORAGE_KEY = 'ontimize-web-uuid';
+const DEFAULT_CONFIG: Config = {
   uuid: DEFAULT_LOCAL_STORAGE_KEY,
   title: 'Ontimize Web App'
 };
@@ -38,6 +40,9 @@ export interface Config {
     // path [string]: The path of the URL to remote bundle method.
     path?: string;
   };
+
+  /** Remote configuration storage parameter */
+  remoteConfig?: ORemoteConfiguration;
 
   // startSessionPath [string]: The path of the URL to startsession method.
   startSessionPath?: string;
@@ -92,11 +97,11 @@ export class AppConfig {
   }
 
   public getServiceConfiguration(): any {
-    return this._config['servicesConfiguration'] || {};
+    return this._config.servicesConfiguration || {};
   }
 
   public getMenuConfiguration(): MenuRootItem[] {
-    return this._config['appMenuConfiguration'] || [];
+    return this._config.appMenuConfiguration || [];
   }
 
   public useRemoteBundle(): boolean {
@@ -104,8 +109,8 @@ export class AppConfig {
   }
 
   public getBundleEndpoint(): string {
-    let result = undefined;
-    let existsBundleConf = (Util.isDefined(this._config.bundle));
+    let result: string;
+    const existsBundleConf = (Util.isDefined(this._config.bundle));
 
     if (existsBundleConf && Util.isDefined(this._config.bundle.endpoint)) {
       result = this._config.bundle.endpoint;
@@ -142,5 +147,9 @@ export class AppConfig {
     }
     return undefined;
   }
-}
 
+  public getRemoteConfigurationConfig(): ORemoteConfiguration {
+    return this._config.remoteConfig || {};
+  }
+
+}

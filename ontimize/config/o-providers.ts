@@ -1,39 +1,39 @@
-import { Injector, Provider } from '@angular/core';
 import { LOCATION_INITIALIZED } from '@angular/common';
+import { Injector, Provider } from '@angular/core';
 import { BaseRequestOptions, XHRBackend } from '@angular/http';
 import { Router } from '@angular/router';
-import { OHttp } from '../util/http/OHttp';
-import { Events } from '../util/events';
-import { AppConfig, Config } from '../config/app-config';
 
+import { OContextMenuService } from '../components/contextmenu/o-context-menu.service';
+import { AppConfig, Config } from '../config/app-config';
 import {
-  LoginService,
-  NavigationService,
-  OntimizeService,
-  OntimizeFileService,
-  OntimizeExportService,
-  MomentService,
-  NumberService,
-  CurrencyService,
-  OTranslateService,
-  DialogService,
-  SnackBarService,
-  AuthGuardService,
-  dataServiceFactory,
-  LocalStorageService,
   appConfigFactory,
   AppMenuService,
-  OUserInfoService,
+  AuthGuardService,
+  CurrencyService,
+  dataServiceFactory,
+  DialogService,
+  LocalStorageService,
+  LoginService,
+  MomentService,
+  NavigationService,
+  NumberService,
   OModulesInfoService,
+  OntimizeExportService,
+  OntimizeFileService,
+  OntimizeMatIconRegistry,
+  OntimizeService,
   OntimizeServiceResponseParser,
-  OntimizeMatIconRegistry
+  OTranslateService,
+  OUserInfoService,
+  SnackBarService
 } from '../services';
-
 import { OFormLayoutManagerService } from '../services/o-form-layout-manager.service';
-import { OContextMenuService } from '../components/contextmenu/o-context-menu.service';
-import { Codes } from '../util/codes';
 import { Error403Component } from '../services/permissions/error403/o-error-403.component';
+import { ORemoteConfigurationService } from '../services/remote-config.service';
 import { ShareCanActivateChildService } from '../services/share-can-activate-child.service';
+import { Codes } from '../util/codes';
+import { Events } from '../util/events';
+import { OHttp } from '../util/http/OHttp';
 
 function addPermissionsRouteGuard(injector: Injector) {
   const route = injector.get(Router);
@@ -165,6 +165,10 @@ export function getOntimizeServiceResponseParser(injector: Injector) {
   return new OntimizeServiceResponseParser(injector);
 }
 
+export function getORemoteConfigurationService(injector: Injector): ORemoteConfigurationService {
+  return new ORemoteConfigurationService(injector);
+}
+
 export const ONTIMIZE_PROVIDERS: Provider[] = [
 
   { provide: Events, useValue: getEvents },
@@ -287,5 +291,10 @@ export const ONTIMIZE_PROVIDERS: Provider[] = [
   {
     provide: ShareCanActivateChildService,
     useClass: ShareCanActivateChildService
+  },
+  {
+    provide: ORemoteConfigurationService,
+    useFactory: getORemoteConfigurationService,
+    deps: [Injector]
   }
 ];

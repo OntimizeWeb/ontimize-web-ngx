@@ -31,3 +31,4 @@ export * from './services/parser/o-service-response.parser';
 export * from './services/ontimize-icon-registry.service';
 
 export * from './services/permissions/o-permissions.module';
+export * from './services/remote-config.service';
