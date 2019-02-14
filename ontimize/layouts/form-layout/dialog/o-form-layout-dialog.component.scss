@@ -1,22 +1,26 @@
-
 .o-form-layout-dialog-overlay {
   width: 65%;
   height: 90%;
 
-  .mat-toolbar {
+  .title-container {
+    cursor: default;
+    height: 64px;
+    padding: 0 16px;
+
     .mat-dialog-title {
       width: 100%;
-      margin: 10px 0;
       padding-left: 24px;
       text-align: center;
+      margin: 0;
     }
+
     .mat-icon {
       cursor: pointer;
     }
   }
 
   .mat-dialog-container {
-    padding: 0!important;
+    padding: 0 !important;
     overflow: hidden;
 
     .mat-dialog-content.form-layout-dialog-container {
@@ -28,14 +32,14 @@
     }
 
     .o-form-layout-dialog {
-      
       o-form-toolbar .mat-toolbar {
         padding: 0;
       }
+
       .o-form {
         form.inner-form {
           position: relative;
-          margin-top:0px;
+          margin-top: 0;
         }
       }
     }

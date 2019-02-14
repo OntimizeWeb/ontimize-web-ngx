@@ -86,12 +86,26 @@
     }
   }
 
+  .o-form-layout-dialog-overlay {
+    .title-container {
+      border-bottom: 1px solid mat-color($primary, 200);
+
+      .mat-icon {
+        color: mat-color($primary, 200);
+      }
+    }
+  }
+
   .o-dialog-class {
     .mat-dialog-container {
       border: 1px solid mat-color($primary, 200);
 
       .mat-dialog-title {
         border-bottom: 1px solid mat-color($primary, 200);
+      }
+
+      .empty-filter-list {
+        color: mat-color($foreground, disabled-text);
       }
     }
   }
@@ -105,6 +119,21 @@
 
       .mat-dialog-content {
         font-size: mat-font-size($typography, input);
+
+        .mat-selection-list[dense] {
+          outline: none;
+
+          .mat-list-item {
+            .empty-filter-list,
+            .mat-list-text > * {
+              font-size: mat-font-size($typography, subheading-1);
+            }
+
+            .mat-line:nth-child(n+2) {
+              font-size: mat-font-size($typography, caption);
+            }
+          }
+        }
       }
     }
   }
