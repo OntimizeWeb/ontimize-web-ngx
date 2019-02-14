@@ -54,7 +54,7 @@ export class OTableColumnsFilterComponent implements OnInit {
       this.columnsArray = this.table.oTableOptions.visibleColumns;
     }
     const self = this;
-    this.columnsArray.map((colData, i, arr) => {
+    this.columnsArray.forEach((colData, i, arr) => {
       let colDef = colData.split(Codes.TYPE_SEPARATOR);
       let colName = colDef[0];
       let compType = (colDef[1] || '').toUpperCase();

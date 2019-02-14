@@ -266,7 +266,7 @@ export class OTableMenuComponent implements OnInit, AfterViewInit, OnDestroy {
     exportCnfg.columns = tableOptions.visibleColumns.filter(c => colsNotIncluded.indexOf(c) === -1);
     // Table column names
     let tableColumnNames = {};
-    tableOptions.visibleColumns.filter(c => colsNotIncluded.indexOf(c) === -1).map(c => tableColumnNames[c] = this.translateService.get(c));
+    tableOptions.visibleColumns.filter(c => colsNotIncluded.indexOf(c) === -1).forEach(c => tableColumnNames[c] = this.translateService.get(c));
     exportCnfg.columnNames = tableColumnNames;
     // Table column sqlTypes
     exportCnfg.sqlTypes = this.table.getSqlTypes();

@@ -8,19 +8,13 @@ export class OComponentMenuItems {
   public static TYPE_ITEM_MENU = 'item_menu';
   public static TYPE_GROUP_MENU = 'item_group';
   public static TYPE_SEPARATOR_MENU = 'item_separator';
-  protected ovisible;
-
-  public visible: boolean | ((item: any) => boolean) = true;
+  public ovisible: boolean | ((item: any) => boolean) = true;
   public attr;
   public type = OComponentMenuItems.TYPE_GROUP_MENU;
 
-  ngOnInit() {
-    this.visible = this.parseInput(this.ovisible, true);
-  }
-
 
   public get isVisible() {
-    return this.visible;
+    return this.parseInput(this.ovisible);
   }
 
   protected parseInput(value: any, defaultValue?: boolean): boolean {
