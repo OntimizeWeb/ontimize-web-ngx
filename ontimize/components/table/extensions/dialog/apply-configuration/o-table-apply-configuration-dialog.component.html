@@ -1,7 +1,7 @@
 <span mat-dialog-title>{{ 'TABLE.BUTTONS.APPLY_CONFIGURATION' | oTranslate }}</span>
 
 <mat-dialog-content>
-  <span mat-subheader>{{ 'TABLE.DIALOG.APPLY_CONFIGURATION' | oTranslate }}</span>
+  <div mat-subheader>{{ 'TABLE.DIALOG.APPLY_CONFIGURATION' | oTranslate }}</div>
   <mat-selection-list #configurationList dense class="o-table-apply-configuration-dialog-list">
     <mat-list-option checkboxPosition="before" [value]="default_configuration">
       <span matLine class="o-table-apply-configuration-dialog-list-title">{{ 'TABLE.DIALOG.APPLY_CONFIGURATION_DEFAULT' | oTranslate }}</span>

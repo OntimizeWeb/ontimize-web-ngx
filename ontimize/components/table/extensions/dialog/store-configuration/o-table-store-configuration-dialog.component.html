@@ -1,19 +1,18 @@
 <span mat-dialog-title>{{ 'TABLE.BUTTONS.SAVE_CONFIGURATION' | oTranslate }}</span>
 
 <mat-dialog-content>
-  <span mat-subheader>{{ 'TABLE.DIALOG.SAVE_CONFIGURATION' | oTranslate }}</span>
-  <form #form [formGroup]="formGroup" fxLayout="column" layout-padding>
+  <div mat-subheader>{{ 'TABLE.DIALOG.SAVE_CONFIGURATION' | oTranslate }}</div>
+  <form #form [formGroup]="formGroup" fxLayout="column">
     <mat-form-field>
-      <input matInput [matTooltip]="tooltipText" [matTooltipClass]="tooltipClass" placeholder="{{ 'TABLE.DIALOG.CONFIGURATION_NAME' | oTranslate }}" formControlName="name"
-        required>
+      <input matInput [matTooltip]="tooltipText" [matTooltipClass]="tooltipClass" placeholder="{{ 'TABLE.DIALOG.CONFIGURATION_NAME' | oTranslate }}"
+        formControlName="name" required>
       <mat-error *ngIf="formGroup.controls['name'].hasError('required')" text="{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}"></mat-error>
     </mat-form-field>
     <mat-form-field class="example-full-width">
       <textarea matInput placeholder="{{ 'TABLE.DIALOG.CONFIGURATION_DESCRIPTION' | oTranslate }}" formControlName="description"
         rows="4" cols="50"></textarea>
     </mat-form-field>
-
-    <span mat-subheader>{{ 'TABLE.DIALOG.CONFIGURATION_PROPERTIES' | oTranslate }}</span>
+    <div class="inner-subheader" mat-subheader>{{ 'TABLE.DIALOG.CONFIGURATION_PROPERTIES' | oTranslate }}</div>
     <mat-selection-list #propertiesList dense class="o-table-save-configuration-dialog-list o-scroll">
       <mat-list-option checkboxPosition="before" [selected]="areAllSelected()" #selectAllOption (click)="onSelectAllClicked(selectAllOption.selected)">
         <span matLine>{{ 'SELECT_ALL' | oTranslate }}</span>

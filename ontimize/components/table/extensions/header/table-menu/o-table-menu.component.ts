@@ -275,7 +275,8 @@ export class OTableMenuComponent implements OnInit, AfterViewInit, OnDestroy {
 
     let dialogRef = this.dialog.open(OTableExportDialogComponent, {
       data: exportCnfg,
-      disableClose: true
+      disableClose: true,
+      panelClass: ['o-dialog-class', 'o-table-dialog']
     });
 
     dialogRef.afterClosed().subscribe(result => result ? this.snackBarService.open('MESSAGES.SUCCESS_EXPORT_TABLE_DATA', { icon: 'check_circle' }) : null);
@@ -288,7 +289,8 @@ export class OTableMenuComponent implements OnInit, AfterViewInit, OnDestroy {
         columnsData: this.table.oTableOptions.columns,
         rowHeight: this.table.rowHeight
       },
-      disableClose: true
+      disableClose: true,
+      panelClass: ['o-dialog-class', 'o-table-dialog']
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -318,7 +320,8 @@ export class OTableMenuComponent implements OnInit, AfterViewInit, OnDestroy {
     let dialogRef = this.dialog.open(OTableStoreFilterDialogComponent, {
       data: this.table.oTableStorage.getStoredFilters().map(filter => filter.name),
       width: '30vw',
-      disableClose: true
+      disableClose: true,
+      panelClass: ['o-dialog-class', 'o-table-dialog']
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -332,7 +335,8 @@ export class OTableMenuComponent implements OnInit, AfterViewInit, OnDestroy {
     let dialogRef = this.dialog.open(OTableLoadFilterDialogComponent, {
       data: this.table.oTableStorage.getStoredFilters(),
       width: '30vw',
-      disableClose: true
+      disableClose: true,
+      panelClass: ['o-dialog-class', 'o-table-dialog']
     });
 
     dialogRef.componentInstance.onDelete.subscribe(filterName => this.table.oTableStorage.deleteStoredFilter(filterName));
@@ -362,7 +366,8 @@ export class OTableMenuComponent implements OnInit, AfterViewInit, OnDestroy {
   onStoreConfigurationClicked(): void {
     let dialogRef = this.dialog.open(OTableStoreConfigurationDialogComponent, {
       width: '30vw',
-      disableClose: true
+      disableClose: true,
+      panelClass: ['o-dialog-class', 'o-table-dialog']
     });
     const self = this;
     dialogRef.afterClosed().subscribe(result => {
@@ -378,7 +383,8 @@ export class OTableMenuComponent implements OnInit, AfterViewInit, OnDestroy {
     let dialogRef = this.dialog.open(OTableApplyConfigurationDialogComponent, {
       data: this.table.oTableStorage.getStoredConfigurations(),
       width: '30vw',
-      disableClose: true
+      disableClose: true,
+      panelClass: ['o-dialog-class', 'o-table-dialog']
     });
     const self = this;
     dialogRef.componentInstance.onDelete.subscribe(configurationName => this.table.oTableStorage.deleteStoredConfiguration(configurationName));

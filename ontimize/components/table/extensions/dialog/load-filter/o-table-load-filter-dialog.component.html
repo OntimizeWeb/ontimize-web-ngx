@@ -1,7 +1,6 @@
 <span mat-dialog-title>{{ 'TABLE.BUTTONS.FILTER_LOAD' | oTranslate }}</span>
-
-<span mat-subheader>{{ 'TABLE.DIALOG.LOAD_FILTER' | oTranslate }}</span>
 <mat-dialog-content>
+  <div mat-subheader>{{ 'TABLE.DIALOG.LOAD_FILTER' | oTranslate }}</div>
   <mat-selection-list #filterList dense class="o-table-load-filter-dialog-list">
     <mat-list-option *ngFor="let filter of filters " [value]="filter.name" checkboxPosition="before" disableRipple="yes">
       <h4 matLine class="o-table-load-filter-dialog-list-title">{{ filter.name }}</h4>
@@ -19,7 +18,10 @@
     {{ 'DELETE' | oTranslate | uppercase }}
   </button>
   <span fxFlex></span>
-  <button type="button" mat-button class="mat-primary" [mat-dialog-close]="false">{{ 'CANCEL' | oTranslate | uppercase }}</button>
+  <button type="button" mat-button class="mat-primary" [mat-dialog-close]="false">
+    {{ 'CANCEL' | oTranslate | uppercase }}
+  </button>
   <button type="button" mat-button class="mat-primary" [mat-dialog-close]="true" [disabled]="filterList.selectedOptions.selected.length!==1 ">{{
-    'TABLE.BUTTONS.APPLY' | oTranslate | uppercase }}</button>
+    'TABLE.BUTTONS.APPLY' | oTranslate | uppercase }}
+  </button>
 </mat-dialog-actions>

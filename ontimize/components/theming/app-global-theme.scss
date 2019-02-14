@@ -58,7 +58,7 @@
       margin: 6px;
       border: 3px solid;
       border-radius: 50%;
-      left:50%;
+      left: 50%;
       animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
       border-color: mat-color($primary) transparent transparent transparent;
     }
@@ -83,6 +83,29 @@
 
     100% {
       transform: rotate(360deg);
+    }
+  }
+
+  .o-dialog-class {
+    .mat-dialog-container {
+      border: 1px solid mat-color($primary, 200);
+
+      .mat-dialog-title {
+        border-bottom: 1px solid mat-color($primary, 200);
+      }
+    }
+  }
+
+  .o-dialog-class {
+    .mat-dialog-container {
+      .mat-dialog-title {
+        line-height: mat-font-size($typography, title);
+        font-size: mat-font-size($typography, title);
+      }
+
+      .mat-dialog-content {
+        font-size: mat-font-size($typography, input);
+      }
     }
   }
 

@@ -1,11 +1,16 @@
 .o-filter-by-column-dialog {
+  .mat-slide-toggle {
+    padding: 24px 0 12px;
+    margin: 0;
+  }
+
   .content-wrapper {
     max-height: 430px;
     min-height: 430px;
     min-width: 250px;
 
     .mat-form-field.hinted {
-      margin-bottom: 18px;
+      margin-bottom: 24px;
     }
 
     .select-all-checkbox {
@@ -31,10 +36,6 @@
           }
         }
       }
-    }
-
-    .mat-slide-toggle {
-      margin: 12px 0;
     }
 
     .column-filter-empty-list {

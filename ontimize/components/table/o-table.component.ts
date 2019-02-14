@@ -1671,7 +1671,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
         preloadValues: this.oTableColumnsFilterComponent.preloadValues
       },
       disableClose: true,
-      panelClass: 'cdk-overlay-pane-custom'
+      panelClass: ['o-dialog-class', 'o-table-dialog']
     });
     const self = this;
     dialogRef.afterClosed().subscribe(result => {
