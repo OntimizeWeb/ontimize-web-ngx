@@ -1799,26 +1799,24 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   openColumnFilterDialog(column: OColumn, event: Event) {
     event.stopPropagation();
     event.preventDefault();
-    if (this.oTableColumnsFilterComponent) {
-      let dialogRef = this.dialog.open(OTableFilterByColumnDataDialogComponent, {
-        data: {
-          previousFilter: this.dataSource.getColumnValueFilterByAttr(column.attr),
-          column: column,
-          tableData: this.dataSource.getTableData(),
-          preloadValues: this.oTableColumnsFilterComponent.preloadValues
-        },
-        disableClose: true,
-        panelClass: 'cdk-overlay-pane-custom'
-      });
-      const self = this;
-      dialogRef.afterClosed().subscribe(result => {
-        if (result) {
-          let columnValueFilter = dialogRef.componentInstance.getColumnValuesFilter();
-          self.dataSource.addColumnFilter(columnValueFilter);
-          self.reloadPaginatedDataFromStart();
-        }
-      });
-    }
+    let dialogRef = this.dialog.open(OTableFilterByColumnDataDialogComponent, {
+      data: {
+        previousFilter: this.dataSource.getColumnValueFilterByAttr(column.attr),
+        column: column,
+        tableData: this.dataSource.getTableData(),
+        preloadValues: this.oTableColumnsFilterComponent.preloadValues
+      },
+      disableClose: true,
+      panelClass: ['o-dialog-class', 'o-table-dialog']
+    });
+    const self = this;
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        let columnValueFilter = dialogRef.componentInstance.getColumnValuesFilter();
+        self.dataSource.addColumnFilter(columnValueFilter);
+        self.reloadPaginatedDataFromStart();
+      }
+    });
   }
 
 

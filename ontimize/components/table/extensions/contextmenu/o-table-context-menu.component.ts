@@ -5,7 +5,6 @@ import { Util } from '../../../../utils';
 import { InputConverter } from '../../../../decorators';
 import { Subscription } from 'rxjs';
 import { OTranslateService } from '../../../../services';
-import { IOContextMenuContext } from '../../../contextmenu/o-context-menu.service';
 import { OColumn, IColumnValueFilter, ColumnValueFilterOperator, OTableComponent } from '../../table-components';
 
 export const DEFAULT_TABLE_CONTEXT_MENU_INPUTS = [
@@ -29,8 +28,6 @@ export const DEFAULT_TABLE_CONTEXT_MENU_INPUTS = [
 })
 
 export class OTableContextMenuComponent implements OnInit {
-
-  public data: any;
 
   contextMenuSubscription: Subscription = new Subscription();
   @InputConverter()
@@ -71,24 +68,24 @@ export class OTableContextMenuComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.contextMenuSubscription.add(this.defaultContextMenu.onClose.subscribe((param: IOContextMenuContext) => {
+    this.contextMenuSubscription.add(this.defaultContextMenu.onClose.subscribe((param: any) => {
       if (!this.table.isSelectionModeMultiple()) {
         this.table.clearSelection();
       }
     }));
 
-    this.contextMenuSubscription.add(this.defaultContextMenu.onShow.subscribe((param: IOContextMenuContext) => {
+    this.contextMenuSubscription.add(this.defaultContextMenu.onShow.subscribe((param: any) => {
       this.initProperties(param);
     }));
 
   }
 
 
-  private initProperties(param: IOContextMenuContext) {
-    this.data = param.data;
-    let columnName = this.data.cellName;
+  private initProperties(param: any) {
+    var data = param.data;
+    let columnName = data.cellName;
     this.column = this.table.getOColumn(columnName);
-    this.row = this.data.rowValue;
+    this.row = data.rowValue;
     this.isVisibleFilter = this.checkVisibleFilter();
     this.cd.detectChanges();
   }
@@ -162,11 +159,13 @@ export class OTableContextMenuComponent implements OnInit {
   }
 
   gotoDetails(event) {
-    this.table.viewDetail(event.data);
+    const data = event.data.rowValue;
+    this.table.viewDetail(data);
   }
 
   edit(event) {
-    this.table.doHandleClick(event.data);
+    const data = event.data.rowValue;
+    this.table.doHandleClick(data);
   }
 
   add() {
@@ -194,7 +193,7 @@ export class OTableContextMenuComponent implements OnInit {
   }
 
   copyRow(event) {
-    var data = JSON.stringify(this.table.dataSource.getRenderedData([event.data]));
+    var data = JSON.stringify(this.table.dataSource.getRenderedData([event.data.rowValue]));
     Util.copyToClipboard(data);
   }
 
