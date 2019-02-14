@@ -1,3 +1,5 @@
+## 3.3.0
+**o-table-context-menu**: includes new filtering options ([059cd83](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/059cd83))
 ## 3.2.2
 ### Features
 * **o-row**, **o-column**:
