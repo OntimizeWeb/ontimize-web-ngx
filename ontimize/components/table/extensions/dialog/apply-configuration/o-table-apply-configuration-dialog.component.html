@@ -15,9 +15,8 @@
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
-  <button type="button" mat-raised-button [disabled]="configurationList.selectedOptions.selected.length!==1 || isDefaultConfigurationSelected()"
+  <button type="button" mat-button [disabled]="configurationList.selectedOptions.selected.length!==1 || isDefaultConfigurationSelected()"
     (click)="removeConfiguration(configurationList.selectedOptions.selected[0].value)">
-    <mat-icon svgIcon="ontimize:delete"></mat-icon>
     {{ 'DELETE' | oTranslate | uppercase }}
   </button>
   <span fxFlex></span>

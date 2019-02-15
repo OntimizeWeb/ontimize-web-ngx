@@ -1,4 +1,4 @@
-import { Component, Inject, Injector, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, Inject, Injector, OnInit, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA, MatButton } from '@angular/material';
 
 import { DialogService, OExportExtension, OntimizeExportService, OTranslateService } from '../../../../../services';
@@ -21,7 +21,8 @@ export class OTableExportConfiguration {
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     'class': 'o-table-export-dialog'
-  }
+  },
+  encapsulation: ViewEncapsulation.None
 })
 export class OTableExportDialogComponent implements OnInit {
 

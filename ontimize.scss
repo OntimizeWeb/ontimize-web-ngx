@@ -12,21 +12,26 @@
     border-radius: 2px;
 
     .mat-dialog-title {
+      cursor: default;
       margin: -24px;
       padding: 16px 20px;
     }
 
-    .mat-subheader {
-      cursor: default;
-      padding: 24px 0 32px;
-
-      &.inner-subheader {
-        padding: 0;
-      }
-    }
-
     .mat-dialog-content {
       padding: 24px 30px 8px;
+
+      .mat-subheader {
+        cursor: default;
+        padding: 24px 0;
+
+        &.inner-subheader {
+          padding: 0;
+        }
+
+        + .mat-selection-list[dense] {
+          margin-top: -12px;
+        }
+      }
 
       .alert-content {
         padding: 30px 0 12px;
@@ -39,7 +44,12 @@
       }
 
       .mat-selection-list[dense] {
+        outline: none;
         padding-top: 0;
+
+        .mat-list-item {
+          cursor: default;
+        }
       }
     }
 

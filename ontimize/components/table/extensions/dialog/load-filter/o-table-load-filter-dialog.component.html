@@ -6,15 +6,14 @@
       <h4 matLine class="o-table-load-filter-dialog-list-title">{{ filter.name }}</h4>
       <p matLine>{{ filter.description }}</p>
     </mat-list-option>
-    <mat-list-item *ngIf="filters.length===0">
-      <span>{{ 'TABLE.DIALOG.EMPTY_FILTER_LIST' | oTranslate }}</span>
+    <mat-list-item *ngIf="filters.length === 0">
+      <span class="empty-filter-list">{{ 'TABLE.DIALOG.EMPTY_FILTER_LIST' | oTranslate }}</span>
     </mat-list-item>
   </mat-selection-list>
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
-  <button type="button" mat-raised-button [disabled]="filterList.selectedOptions.selected.length!==1" (click)="removeFilter(filterList.selectedOptions.selected[0].value)">
-    <mat-icon svgIcon="ontimize:delete"></mat-icon>
+  <button type="button" mat-button [disabled]="filterList.selectedOptions.selected.length!==1" (click)="removeFilter(filterList.selectedOptions.selected[0].value)">
     {{ 'DELETE' | oTranslate | uppercase }}
   </button>
   <span fxFlex></span>
