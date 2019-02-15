@@ -34,6 +34,11 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
 
   @ViewChild('templateref', { read: TemplateRef }) public templateref: TemplateRef<any>;
 
+  public rowData: any;
+  public cellValues = [];
+  public renderValue: any;
+  public responseMap = {};
+
   /* Inputs */
   protected entity: string;
   protected service: string;
@@ -50,18 +55,12 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
   protected querySubscription: Subscription;
   protected dialogService: DialogService;
 
-  rowData: any;
-  cellValues = [];
-  renderValue: any;
-
-  responseMap = {};
-
   constructor(protected injector: Injector) {
     super(injector);
     this.dialogService = injector.get(DialogService);
   }
 
-  ngOnInit() {
+  public ngOnInit(): void {
     if (this.table) {
       const oCol: OColumn = this.table.getOColumn(this.tableColumn.attr);
       oCol.definition.contentAlign = oCol.definition.contentAlign ? oCol.definition.contentAlign : 'center';
@@ -73,7 +72,7 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
     this.configureService();
   }
 
-  getDescriptionValue(cellvalue: any, rowValue: any): String {
+  public getDescriptionValue(cellvalue: any, rowValue: any): String {
     // let keyValue = rowValue[this.column];
     if (cellvalue !== undefined && this.cellValues.indexOf(cellvalue) === -1) {
       this.queryData(cellvalue, rowValue);
@@ -82,7 +81,7 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
     return '';
   }
 
-  queryData(cellvalue, parentItem?: any) {
+  public queryData(cellvalue, parentItem?: any): void {
     const self = this;
 
     if (!this.dataService || !(this.queryMethod in this.dataService) || !this.entity) {
@@ -91,8 +90,10 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
     }
     const filter = ServiceUtils.getFilterUsingParentKeys(parentItem, this._pKeysEquiv);
     const tableColAlias = Object.keys(this._pKeysEquiv).find(key => this._pKeysEquiv[key] === this.column);
-    if (Util.isDefined(tableColAlias) && !filter[tableColAlias]) {
-      filter[tableColAlias] = cellvalue;
+    if (Util.isDefined(tableColAlias)) {
+      if (!filter[tableColAlias]) {
+        filter[tableColAlias] = cellvalue;
+      }
     } else {
       filter[this.column] = cellvalue;
     }
@@ -112,7 +113,7 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
     });
   }
 
-  configureService() {
+  public configureService(): void {
     let loadingService: any = OntimizeService;
     if (this.serviceType) {
       loadingService = this.serviceType;
