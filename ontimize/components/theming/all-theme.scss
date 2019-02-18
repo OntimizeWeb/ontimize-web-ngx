@@ -27,7 +27,7 @@
   @include angular-material-theme($theme);
   @include app-global-theme($theme, $typography);
   @include o-breadcrumb-theme($theme);
-  @include o-container-theme($theme);
+  @include o-container-theme($theme, $typography);
   @include o-form-toolbar-theme($theme);
   @include input-theme($theme);
   @include o-date-input-theme($theme);
