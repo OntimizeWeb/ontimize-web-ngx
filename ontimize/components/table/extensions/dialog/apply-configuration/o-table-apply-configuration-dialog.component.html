@@ -15,12 +15,12 @@
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
-  <button type="button" mat-button [disabled]="configurationList.selectedOptions.selected.length!==1 || isDefaultConfigurationSelected()"
+  <button type="button" mat-stroked-button [disabled]="configurationList.selectedOptions.selected.length!==1 || isDefaultConfigurationSelected()"
     (click)="removeConfiguration(configurationList.selectedOptions.selected[0].value)">
     {{ 'DELETE' | oTranslate | uppercase }}
   </button>
   <span fxFlex></span>
-  <button type="button" mat-button class="mat-primary" [mat-dialog-close]="false">{{ 'CANCEL' | oTranslate | uppercase }}</button>
-  <button type="button" mat-button class="mat-primary" [mat-dialog-close]="true" [disabled]="configurationList.selectedOptions.selected.length!==1">{{
+  <button type="button" mat-stroked-button class="mat-primary" [mat-dialog-close]="false">{{ 'CANCEL' | oTranslate | uppercase }}</button>
+  <button type="button" mat-stroked-button class="mat-primary" [mat-dialog-close]="true" [disabled]="configurationList.selectedOptions.selected.length!==1">{{
     'OK' | oTranslate | uppercase }}</button>
 </mat-dialog-actions>
