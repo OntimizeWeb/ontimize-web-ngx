@@ -1,7 +1,10 @@
 @import 'node_modules/@angular/material/theming';
-@mixin o-container-theme($theme) {
+@mixin o-container-theme($theme, $typography: null) {
   $background: map-get($theme, background);
   $foreground: map-get($theme, foreground);
+  @if $typography == null {
+    $typography: mat-typography-config();
+  }
 
   .o-column,
   .o-column-collapsible,
@@ -12,9 +15,9 @@
         background-color: inherit;
       }
 
-       > .o-container-header,
+       > .mat-expansion-panel-header,
        > .o-container-title,
-      > .mat-expansion-panel-header {
+      > .o-container-header {
         border-color: mat-color($foreground, divider);
         color: mat-color($foreground, text);
 
@@ -23,6 +26,15 @@
           color: mat-color($foreground, text);
         }
 
+      }
+
+      > .o-container-title {
+        span {
+          font: {
+            size: mat-font-size($typography, input);
+            weight: mat-font-weight($typography, input);
+          }
+        }
       }
     }
   }
