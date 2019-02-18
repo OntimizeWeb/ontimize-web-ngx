@@ -11,21 +11,15 @@
 
         .mat-form-field-wrapper {
           padding-bottom: 0;
+          .mat-form-field-flex{
+            padding-top:0;
+          }
 
           .mat-form-field-underline {
             display: none;
           }
         }
 
-        .mat-form-field-can-float.mat-form-field-should-float {
-          label.mat-form-field-label.mat-input-placeholder.mat-form-field-placeholder:not(.mat-form-field-empty) {
-            display: none;
-          }
-
-          label.mat-form-field-label.mat-input-placeholder.mat-form-field-placeholder {
-            transform: none;
-          }
-        }
       }
 
     }
@@ -39,8 +33,8 @@
 
       &.o-list-picker-has-filter {
         // 100% - toolbar (64px) - buttons (61px)
-        max-height: calc(100% - 150px);
-        min-height: calc(100% - 150px);
+        max-height: calc(100% - 152px);
+        min-height: calc(100% - 152px);
       }
 
       mat-list mat-list-item {

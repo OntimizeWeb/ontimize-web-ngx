@@ -7,10 +7,12 @@ import { O_INPUTS_OPTIONS, OInputsOptions } from '../../../config/app-config';
 import { OTranslateService } from '../../../services';
 import { OSharedModule } from '../../../shared';
 import { Util } from '../../../utils';
+import { FloatLabelType } from '@angular/material';
 
 export const DEFAULT_INPUTS_O_SEARCH_INPUT = [
   'placeholder',
-  'width'
+  'width',
+  'floatLabel: float-label'
 ];
 
 export const DEFAULT_OUTPUTS_O_SEARCH_INPUT = [
@@ -44,6 +46,8 @@ export class OSearchInputComponent implements OnInit {
 
   protected translateService: OTranslateService;
   protected oInputsOptions: OInputsOptions;
+  /* Inputs */
+  protected _floatLabel: FloatLabelType;
 
   constructor(
     protected injector: Injector,
@@ -105,6 +109,18 @@ export class OSearchInputComponent implements OnInit {
     return this.width !== undefined;
   }
 
+
+  get floatLabel(): FloatLabelType {
+    return this._floatLabel;
+  }
+
+  set floatLabel(value: FloatLabelType) {
+    const values = ['always', 'never', 'auto'];
+    if (values.indexOf(value) === -1) {
+      value = 'auto';
+    }
+    this._floatLabel = value;
+  }
 }
 
 @NgModule({

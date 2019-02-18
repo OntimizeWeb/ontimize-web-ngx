@@ -1,5 +1,5 @@
 <form [formGroup]="getFormGroup()">
-  <mat-form-field [class.custom-width]="hasCustomWidth">
+  <mat-form-field [class.custom-width]="hasCustomWidth"  [floatLabel]="floatLabel" appearance="standard">
     <mat-icon svgIcon="ontimize:search" matPrefix></mat-icon>
     <input #term matInput id="term" type="search" [placeholder]="placeHolder" formControlName="term">
   </mat-form-field>
