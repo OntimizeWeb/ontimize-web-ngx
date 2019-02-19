@@ -1,3 +1,12 @@
+## 4.0.0
+### BREAKING CHANGES
+* **o-image**:
+  * Internal CSS class `container-image` has been renamed to `o-image-content`.
+  * Internal CSS class `input-image` has been renamed to `o-image-form-field`,
+  * Internal CSS class `image-container` has been renamed to `o-image-display-container`.
+  * Internal CSS class `auto-fit-image` has been renamed to `o-image-auto-fit`,
+  * Internal CSS class `input-image-container` has been removed.
+
 ## 4.0.0-rc.1 (2018-01-16)
 ### Features
 * New components `o-button-toggle` and `o-button-toggle-group` ([311a2ac](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/311a2ac)) ([415f8b0](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/415f8b0))
@@ -36,7 +45,7 @@
 * **o-form-layout-manager**: new `title-data-origin` input ([c88ab98](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c88ab98))
 * **o-form-data-component**: new `tooltip-hide-delay` input ([18733ef](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/18733ef]))
 * New classes  **layout-padding-vertical**,**layout-padding-horizontal**,**layout-padding-left**,**layout-padding-right**,**layout-padding-top**, **layout-padding-bottom**, **layout-margin-vertical**,**layout-margin-horizontal**,**layout-margin-left**,**layout-margin-right**,**layout-margin-top**, **layout-margin-bottom** ([6901980](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6901980]))
-* **o-grid**: 
+* **o-grid**:
   * New `fixed-header` attribute ([4fa91d9](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4fa91d9]))
   * New `gutter-size` attribute ([4e45aaf](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4e45aaf]))
 * **o-grid-item**: New `colspan` and `rowspan`  attributes ([f1b33a1](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f1b33a1]))

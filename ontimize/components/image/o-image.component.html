@@ -1,27 +1,27 @@
-<div class="container-image relative" fxLayoutAlign="center center" [formGroup]="getFormGroup()" [matTooltip]="tooltip"
-  [matTooltipPosition]="tooltipPosition" [matTooltipShowDelay]="tooltipShowDelay" [matTooltipHideDelay]="tooltipHideDelay"
-  fxLayout="column" [ngClass]="{'auto-fit-image':autoFit}">
-  <div class="input-image-container">
-    <mat-form-field fxFill class="input-image icon-field" *ngIf="hasControls()">
-      <input matInput #inputControl [formControlName]="getAttribute()" type="text" [id]="getAttribute()" class="mat-input input-control" />
-      <input #input type="file" [disabled]="isDisabled" (change)="fileChange(input)" class="input-file" fxFill />
-      <label #titleLabel (click)="input.click()">{{ 'CHOOSE_FILE' | oTranslate }}</label>
-      <button type="button" *ngIf="fullScreenButton" [disabled]="isDisabled" matSuffix mat-icon-button (click)="openFullScreen($event)">
-        <mat-icon svgIcon="ontimize:fullscreen"></mat-icon>
-      </button>
-      <button type="button" [disabled]="isDisabled" matSuffix mat-icon-button (click)="input.click()">
-        <mat-icon svgIcon="ontimize:folder_open"></mat-icon>
-      </button>
-      <button type="button" [disabled]="isDisabled" matSuffix mat-icon-button (click)="onClickClearValue($event)">
-        <mat-icon svgIcon="ontimize:clear"></mat-icon>
-      </button>
-      <mat-error *ngIf="hasError('required')">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</mat-error>
-    </mat-form-field>
-  </div>
-  <div class="image-container" fxLayoutAlign="center">
+<div fxLayout="column" [formGroup]="getFormGroup()" [matTooltip]="tooltip" [matTooltipPosition]="tooltipPosition"
+  [matTooltipShowDelay]="tooltipShowDelay" [matTooltipHideDelay]="tooltipHideDelay" [class.o-image-auto-fit]="autoFit" class="o-image-content" fxFill>
+
+  <mat-form-field *ngIf="hasControls()" class="o-image-form-field">
+    <input matInput readonly (click)="input.click()" [value]="currentFileName" [placeholder]="olabel" />
+    <input matInput [formControlName]="getAttribute()" type="text" [id]="getAttribute()" class="o-image-form-field-input" />
+    <input #input type="file" [disabled]="isDisabled" (change)="fileChange(input)" class="o-image-form-field-hidden" fxFlex />
+
+    <button type="button" *ngIf="fullScreenButton" [disabled]="isDisabled" matSuffix mat-icon-button (click)="openFullScreen($event)">
+      <mat-icon svgIcon="ontimize:fullscreen"></mat-icon>
+    </button>
+    <button type="button" [disabled]="isDisabled" matSuffix mat-icon-button (click)="input.click()">
+      <mat-icon svgIcon="ontimize:folder_open"></mat-icon>
+    </button>
+    <button type="button" [disabled]="isDisabled" matSuffix mat-icon-button (click)="onClickClearValue($event)">
+      <mat-icon svgIcon="ontimize:close"></mat-icon>
+    </button>
+    <mat-error *ngIf="hasError('required')">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</mat-error>
+  </mat-form-field>
+
+  <div fxLayout="column" fxLayoutAlign="center center" fxFlex="grow" class="o-image-display-container">
     <img *ngIf="!(isEmpty())" [src]="getSrcValue()" alt="" (click)="openFileSelector()" />
-    <mat-icon class="empty-icon" [class.mat-disabled]="isDisabled" aria-label="empty image" *ngIf="useEmptyIcon()"
-      (click)="openFileSelector()">{{ emptyicon }}</mat-icon>
+    <mat-icon class="empty-icon" [class.mat-disabled]="isDisabled" aria-label="empty image" *ngIf="useEmptyIcon()" (click)="openFileSelector()">
+      {{ emptyicon }}</mat-icon>
     <img [src]="getSrcValue()" alt="empty image" *ngIf="useEmptyImage()" (click)="openFileSelector()" />
   </div>
   <div *ngIf="isReadOnly" fxFill class="read-only-blocker" (click)="onClickBlocker($event)"></div>
