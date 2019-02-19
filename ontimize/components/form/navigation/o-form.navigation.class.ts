@@ -70,17 +70,6 @@ export class OFormNavigationClass {
         self.navigationStream.emit(true);
       }
     });
-
-    if (this.formLayoutManager && this.formLayoutManager.isTabMode()) {
-      this.onCloseTabSubscription = this.formLayoutManager.onCloseTab.subscribe((args: any) => {
-        if (args.id === self.id) {
-          const closeTabEmitter: EventEmitter<boolean> = args.onCloseTabAccepted;
-          self.showConfirmDiscardChanges().then(res => {
-            closeTabEmitter.emit(res);
-          });
-        }
-      });
-    }
   }
 
   initialize() {
