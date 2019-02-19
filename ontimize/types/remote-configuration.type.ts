@@ -1,7 +1,11 @@
 /** Remote configuration storage */
 export type ORemoteConfiguration = {
-  /** The path of the URL for the remote configuration storage requests. Default: '/config' */
-  path?: string;
+  /** timeout [number]: Timeout for making remote storage requests. Default: 1000*60*10 (10 minutes) */
+  timeout?: number;
+  /** endpoint [string]: The URL used by remote configuration service */
+  endpoint?: string;
+  /** The path of the URL for the remote configuration storage requests */
+  path: string;
   /** Database columns used in the remote configuration storage service */
   columns?: ORemoteConfigurationColumns
 };

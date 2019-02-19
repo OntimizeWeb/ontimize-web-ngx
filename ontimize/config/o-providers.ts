@@ -2,6 +2,7 @@ import { LOCATION_INITIALIZED } from '@angular/common';
 import { Injector, Provider } from '@angular/core';
 import { BaseRequestOptions, XHRBackend } from '@angular/http';
 import { Router } from '@angular/router';
+import { combineLatest } from 'rxjs';
 
 import { OContextMenuService } from '../components/contextmenu/o-context-menu.service';
 import { AppConfig, Config } from '../config/app-config';
@@ -45,6 +46,7 @@ function addPermissionsRouteGuard(injector: Injector) {
 
 export function appInitializerFactory(injector: Injector, config: Config, oTranslate: OTranslateService) {
   return () => new Promise<any>((resolve: any) => {
+    let observableArray = [];
     const locationInitialized = injector.get(LOCATION_INITIALIZED, Promise.resolve(null));
     locationInitialized.then(() => {
       oTranslate.setDefaultLang('en');
@@ -64,12 +66,18 @@ export function appInitializerFactory(injector: Injector, config: Config, oTrans
       if (userLang && config.applicationLocales.indexOf(userLang) === -1) {
         config.applicationLocales.push(userLang);
       }
+      injector.get(NavigationService).initialize();
+      injector.get(OntimizeMatIconRegistry).initialize();
+      const remoteConfigService = injector.get(ORemoteConfigurationService);
 
-      oTranslate.setAppLang(userLang).subscribe(resolve, resolve, resolve);
+      addPermissionsRouteGuard(injector);
+
+      observableArray.push(oTranslate.setAppLang(userLang));
+      observableArray.push(remoteConfigService.initializeRemoteStorageData());
+      combineLatest(observableArray).subscribe(() => {
+        resolve();
+      });
     });
-    injector.get(NavigationService).initialize();
-    injector.get(OntimizeMatIconRegistry).initialize();
-    addPermissionsRouteGuard(injector);
   });
 }
 

@@ -1,10 +1,10 @@
 import { Injectable, Injector, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
 import { share } from 'rxjs/operators';
 
 import { Codes, IAuthService, ObservableWrapper, ServiceUtils } from '../utils';
-import { OntimizeService, DialogService, PermissionsService } from '../services';
+import { OntimizeService, DialogService, PermissionsService, ORemoteConfigurationService } from '../services';
 import { AppConfig, Config } from '../config/app-config';
 
 export interface SessionInfo {
@@ -77,121 +77,124 @@ export class LoginService implements ILoginService {
     const dataObservable = new Observable(observer => innerObserver = observer).pipe(share());
 
     this.retrieveAuthService().then((service) => {
-      service.startsession(user, password)
-        .subscribe(resp => {
-          self.onLoginSuccess(resp);
-          const permissionsService = self.injector.get(PermissionsService);
-          permissionsService.getUserPermissionsAsPromise().then(() => {
-            innerObserver.next();
-            innerObserver.complete();
-          });
-        }, error => {
-          self.onLoginError(error);
-          innerObserver.error(error);
+      service.startsession(user, password).subscribe(resp => {
+        self.onLoginSuccess(resp);
+        const permissionsService = self.injector.get(PermissionsService);
+        const remoteConfigService = self.injector.get(ORemoteConfigurationService);
+        let pendingArray = [];
+        pendingArray.push(permissionsService.getUserPermissionsAsPromise());
+        pendingArray.push(remoteConfigService.initializeRemoteStorageData());
+        combineLatest(pendingArray).subscribe(() => {
+          innerObserver.next();
+          innerObserver.complete();
         });
+      }, error => {
+        self.onLoginError(error);
+        innerObserver.error(error);
+      });
     });
 
     return dataObservable.pipe(share());
   }
 
-onLoginSuccess(sessionId: number) {
-  // save user and sessionid into local storage
-  let session = {
-    user: this._user,
-    id: sessionId
-  };
-  this.storeSessionInfo(session);
-  ObservableWrapper.callEmit(this.onLogin, session);
-}
+  onLoginSuccess(sessionId: number) {
+    // save user and sessionid into local storage
+    let session = {
+      user: this._user,
+      id: sessionId
+    };
+    this.storeSessionInfo(session);
+    ObservableWrapper.callEmit(this.onLogin, session);
+  }
 
-onLoginError(error: any) {
-  this.dialogService.alert('ERROR', 'MESSAGES.ERROR_LOGIN');
-}
+  onLoginError(error: any) {
+    this.dialogService.alert('ERROR', 'MESSAGES.ERROR_LOGIN');
+  }
 
-logout(): Observable < any > {
-  ObservableWrapper.callEmit(this.onLogout, null);
-  const self = this;
-  const sessionInfo = this.getSessionInfo();
-  const dataObservable: Observable<any> = new Observable(innerObserver => {
-    self.retrieveAuthService().then((service) => {
-      service.endsession(sessionInfo.user, sessionInfo.id).subscribe(resp => {
-        self.onLogoutSuccess(resp);
-        innerObserver.next();
-        innerObserver.complete();
-      }, error => {
-        self.onLogoutError(error);
-        innerObserver.error(error);
+  logout(): Observable<any> {
+    ObservableWrapper.callEmit(this.onLogout, null);
+    const self = this;
+    const sessionInfo = this.getSessionInfo();
+    const dataObservable: Observable<any> = new Observable(innerObserver => {
+      self.retrieveAuthService().then((service) => {
+        service.endsession(sessionInfo.user, sessionInfo.id).subscribe(resp => {
+          self.onLogoutSuccess(resp);
+          innerObserver.next();
+          innerObserver.complete();
+        }, error => {
+          self.onLogoutError(error);
+          innerObserver.error(error);
+        });
       });
     });
-  });
-  return dataObservable.pipe(share());
-}
+    return dataObservable.pipe(share());
+  }
 
-onLogoutSuccess(sessionId: number) {
-  if (sessionId === 0) {
+  onLogoutSuccess(sessionId: number) {
+    if (sessionId === 0) {
+      let sessionInfo = this.getSessionInfo();
+      delete sessionInfo.id;
+      delete sessionInfo.user;
+      this.storeSessionInfo(sessionInfo);
+    }
+  }
+
+  onLogoutError(error: any) {
+    console.error('Error on logout');
+  }
+
+  sessionExpired() {
     let sessionInfo = this.getSessionInfo();
     delete sessionInfo.id;
     delete sessionInfo.user;
     this.storeSessionInfo(sessionInfo);
   }
-}
 
-onLogoutError(error: any) {
-  console.error('Error on logout');
-}
-
-sessionExpired() {
-  let sessionInfo = this.getSessionInfo();
-  delete sessionInfo.id;
-  delete sessionInfo.user;
-  this.storeSessionInfo(sessionInfo);
-}
-
-isLoggedIn(): boolean {
-  let sessionInfo = this.getSessionInfo();
-  if (sessionInfo && sessionInfo.id && sessionInfo.user && sessionInfo.user.length > 0) {
-    if (isNaN(sessionInfo.id) && sessionInfo.id < 0) {
-      return false;
+  isLoggedIn(): boolean {
+    let sessionInfo = this.getSessionInfo();
+    if (sessionInfo && sessionInfo.id && sessionInfo.user && sessionInfo.user.length > 0) {
+      if (isNaN(sessionInfo.id) && sessionInfo.id < 0) {
+        return false;
+      }
+      return true;
     }
-    return true;
+    return false;
   }
-  return false;
-}
 
   public storeSessionInfo(sessionInfo: SessionInfo) {
-  if (sessionInfo !== undefined) {
-    let info = localStorage.getItem(this._localStorageKey);
-    let stored = null;
-    if (info && info.length > 0) {
-      stored = JSON.parse(info);
-    } else {
-      stored = {};
+    if (sessionInfo !== undefined) {
+      let info = localStorage.getItem(this._localStorageKey);
+      let stored = null;
+      if (info && info.length > 0) {
+        stored = JSON.parse(info);
+      } else {
+        stored = {};
+      }
+      stored[Codes.SESSION_KEY] = sessionInfo;
+      localStorage.setItem(this._localStorageKey, JSON.stringify(stored));
     }
-    stored[Codes.SESSION_KEY] = sessionInfo;
-    localStorage.setItem(this._localStorageKey, JSON.stringify(stored));
   }
-}
 
   public getSessionInfo(): SessionInfo {
-  const info = localStorage.getItem(this._localStorageKey);
-  if (!info) {
-    return undefined;
+    const info = localStorage.getItem(this._localStorageKey);
+    if (!info) {
+      return undefined;
+    }
+    let stored = JSON.parse(info);
+    return stored[Codes.SESSION_KEY] || {};
   }
-  let stored = JSON.parse(info);
-  return stored[Codes.SESSION_KEY] || {};
-}
 
   public logoutAndRedirect() {
-  this.logout().subscribe(() => {
-    ServiceUtils.redirectLogin(this.router, false);
-  });
-}
+    this.logout().subscribe(() => {
+      ServiceUtils.redirectLogin(this.router, false);
+    });
+  }
 
   public logoutWithConfirmationAndRedirect() {
-  this.dialogService.confirm('CONFIRM', 'MESSAGES.CONFIRM_LOGOUT').then(res => {
-    if (res) {
-      this.logoutAndRedirect();
-    }
-  });
-}
+    this.dialogService.confirm('CONFIRM', 'MESSAGES.CONFIRM_LOGOUT').then(res => {
+      if (res) {
+        this.logoutAndRedirect();
+      }
+    });
+  }
 }

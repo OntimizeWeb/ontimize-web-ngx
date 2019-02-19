@@ -110,8 +110,7 @@ export class AppConfig {
 
   public getBundleEndpoint(): string {
     let result: string;
-    const existsBundleConf = (Util.isDefined(this._config.bundle));
-
+    const existsBundleConf = this.useRemoteBundle();
     if (existsBundleConf && Util.isDefined(this._config.bundle.endpoint)) {
       result = this._config.bundle.endpoint;
     } else if (existsBundleConf && Util.isDefined(this._config.bundle.path)) {
@@ -149,7 +148,22 @@ export class AppConfig {
   }
 
   public getRemoteConfigurationConfig(): ORemoteConfiguration {
-    return this._config.remoteConfig || {};
+    return this._config.remoteConfig;
+  }
+
+  public useRemoteConfiguration(): boolean {
+    return Util.isDefined(this._config.remoteConfig);
+  }
+
+  public getRemoteConfigurationEndpoint(): string {
+    let result: string;
+    const existsRemoteConf = this.useRemoteConfiguration();
+    if (existsRemoteConf && Util.isDefined(this._config.remoteConfig.endpoint)) {
+      result = this._config.remoteConfig.endpoint;
+    } else if (existsRemoteConf && Util.isDefined(this._config.remoteConfig.path)) {
+      result = this._config.apiEndpoint + '/' + this._config.remoteConfig.path;
+    }
+    return result;
   }
 
 }
