@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { CdkTableModule } from '@angular/cdk/table';
 import { ObserversModule } from '@angular/cdk/observers';
 import { SelectionModel, SelectionChange } from '@angular/cdk/collections';
-import { MatDialog, MatTabGroup, MatTab, MatPaginatorIntl, MatPaginator, MatCheckboxChange, MatMenu, PageEvent } from '@angular/material';
+import { MatDialog, MatTabGroup, MatTab, MatPaginatorIntl, MatPaginator, MatCheckboxChange, MatMenu, PageEvent, MAT_RIPPLE_GLOBAL_OPTIONS } from '@angular/material';
 import { DndModule } from '@churchs19/ng2-dnd';
 import { Observable, Subscription, of } from 'rxjs';
 
@@ -591,7 +591,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   selection = new SelectionModel<Element>(true, []);
   protected selectionChangeSubscription: Subscription;
 
-  public oTableFilterByColumnDataDialogComponent:OTableFilterByColumnDataDialogComponent;
+  public oTableFilterByColumnDataDialogComponent: OTableFilterByColumnDataDialogComponent;
   public oTableColumnsFilterComponent: OTableColumnsFilterComponent;
   public showFilterByColumnIcon: boolean = false;
   public showTotals: boolean = false;
@@ -2310,6 +2310,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   providers: [{
     provide: MatPaginatorIntl,
     useClass: OTableMatPaginatorIntl
-  }]
+  },
+  { provide: MAT_RIPPLE_GLOBAL_OPTIONS, useValue: { disabled: true } }]
 })
 export class OTableModule { }
