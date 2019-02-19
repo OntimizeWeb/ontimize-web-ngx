@@ -8,21 +8,21 @@
     <mat-menu #menu="matMenu" class="o-table-quickfilter-menu">
       <div fxLayout="column" class="checkbox-container">
 
-        <mat-checkbox (click)="$event.stopPropagation()" disableRipple="yes" [checked]="areAllColumnsChecked()"
+        <mat-checkbox (click)="$event.stopPropagation()" [checked]="areAllColumnsChecked()"
           (change)="onSelectAllChange($event)">
           {{ 'SELECT_ALL' | oTranslate}}
         </mat-checkbox>
         <mat-divider></mat-divider>
 
         <ng-container *ngFor="let column of quickFilterColumns">
-          <mat-checkbox (click)="$event.stopPropagation()" disableRipple="yes" [checked]="isChecked(column)" (change)="onCheckboxChange(column, $event)">
+          <mat-checkbox (click)="$event.stopPropagation()"  [checked]="isChecked(column)" (change)="onCheckboxChange(column, $event)">
             {{ column.title | oTranslate }}
           </mat-checkbox>
         </ng-container>
 
         <ng-container *ngIf="showCaseSensitiveCheckbox()">
           <mat-divider></mat-divider>
-          <mat-checkbox (click)="$event.stopPropagation()" disableRipple="yes" [checked]="oTableOptions.filterCaseSensitive"
+          <mat-checkbox (click)="$event.stopPropagation()"  [checked]="oTableOptions.filterCaseSensitive"
             (change)="oTableOptions.filterCaseSensitive = $event.checked">
             {{ 'TABLE.FILTER.CASE_SENSITIVE' | oTranslate}}
           </mat-checkbox>
