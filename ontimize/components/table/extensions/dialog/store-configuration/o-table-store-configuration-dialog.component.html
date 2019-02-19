@@ -13,19 +13,24 @@
         rows="4" cols="50"></textarea>
     </mat-form-field>
     <div class="inner-subheader" mat-subheader>{{ 'TABLE.DIALOG.CONFIGURATION_PROPERTIES' | oTranslate }}</div>
-    <mat-selection-list #propertiesList dense class="o-table-save-configuration-dialog-list o-scroll">
-      <mat-list-option checkboxPosition="before" [selected]="areAllSelected()" #selectAllOption (click)="onSelectAllClicked(selectAllOption.selected)">
-        <span matLine>{{ 'SELECT_ALL' | oTranslate }}</span>
-      </mat-list-option>
-      <mat-list-option checkboxPosition="before" *ngFor="let property of properties; let i = index" [value]="property.property">
-        <span matLine>{{ property.name | oTranslate }}</span>
-      </mat-list-option>
-    </mat-selection-list>
+    <div fxLayout="column">
+      <mat-checkbox (change)="onSelectAllChange($event)" [checked]="areAllSelected()" [indeterminate]="isIndeterminate()"
+        class="select-all-checkbox">
+        {{ 'SELECT_ALL' | oTranslate }}
+      </mat-checkbox>
+
+      <mat-selection-list #propertiesList dense class="o-table-save-configuration-dialog-list o-scroll">
+        <mat-list-option checkboxPosition="before" *ngFor="let property of properties; let i = index" [value]="property.property">
+          <span matLine>{{ property.name | oTranslate }}</span>
+        </mat-list-option>
+      </mat-selection-list>
+    </div>
   </form>
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
-  <button type="button" mat-stroked-button class="mat-primary" [mat-dialog-close]="false">{{ 'CANCEL' | oTranslate | uppercase }}</button>
+  <button type="button" mat-stroked-button class="mat-primary" [mat-dialog-close]="false">{{ 'CANCEL' | oTranslate |
+    uppercase }}</button>
   <button type="button" mat-stroked-button class="mat-primary" [mat-dialog-close]="true" [disabled]="!formGroup.valid || propertiesList.selectedOptions.selected.length===0">{{
     'SAVE' | oTranslate | uppercase }}</button>
 </mat-dialog-actions>
