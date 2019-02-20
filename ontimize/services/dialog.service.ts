@@ -78,7 +78,8 @@ export class DialogService {
   protected openDialog(observer) {
     let cfg: MatDialogConfig = {
       role: 'alertdialog',
-      disableClose: true
+      disableClose: true,
+      panelClass: ['o-dialog-class', 'o-dialog-service']
     };
     this.dialogRef = this.ng2Dialog.open(ODialogComponent, cfg);
     this.dialogRef.afterClosed().subscribe(result => {

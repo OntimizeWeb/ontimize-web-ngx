@@ -1,15 +1,8 @@
-:host {
-  &.o-table-export-dialog {
-    .mat-icon {
-      padding: 6px 6px 0;
-      width: 48px;
-      height: 48px;
-      font-size: 48px;
-    }
-
-    .mat-dialog-content > div {
-      margin-top: 10px;
-    }
-
+.o-table-export-dialog {
+  .mat-icon {
+    padding: 6px 6px 0;
+    width: 48px;
+    height: 48px;
+    font-size: 48px;
   }
 }

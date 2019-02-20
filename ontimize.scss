@@ -7,16 +7,69 @@
   position: relative;
 }
 
-.cdk-overlay-pane-custom {
+.o-dialog-class {
   .mat-dialog-container {
-    padding: 0 0 24px !important;
+    border-radius: 2px;
 
-    .mat-dialog-content.dialog-list-container {
-      margin: 0;
+    .mat-dialog-title {
+      cursor: default;
+      margin: -24px;
+      padding: 20px 20px 16px;
+    }
+
+    .mat-dialog-content {
+      padding: 24px 30px 8px;
+
+      .mat-subheader {
+        cursor: default;
+        padding: 24px 0;
+
+        &.inner-subheader {
+          padding: 0;
+        }
+
+        + .mat-selection-list[dense] {
+          margin-top: -12px;
+        }
+      }
+
+      .alert-content {
+        padding: 30px 0 12px;
+      }
+
+      form {
+        > *:not(:last-child) {
+          margin-bottom: 18px;
+        }
+      }
+
+      .mat-selection-list[dense] {
+        overflow: auto;
+        outline: none;
+        padding-top: 0;
+
+        .mat-list-item {
+          cursor: default;
+        }
+
+        p {
+          white-space: normal;
+        }
+      }
     }
 
     .mat-dialog-actions {
-      padding: 12px 24px;
+      margin: 0 -6px -24px;
+      padding-top: 0;
+    }
+  }
+
+  &.o-dialog-service,
+  &.o-table-dialog {
+    .mat-dialog-container {
+      .mat-dialog-actions {
+        padding-top: 12px;
+      }
     }
   }
 }

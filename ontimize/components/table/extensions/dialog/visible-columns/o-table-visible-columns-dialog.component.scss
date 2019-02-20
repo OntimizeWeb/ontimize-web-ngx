@@ -3,13 +3,17 @@
     overflow: hidden;
 
     .mat-list {
-      padding: 0;
+      padding-top: 24px;
 
       .mat-list-item {
         cursor: pointer;
 
-        .mat-list-item-content div.mat-list-text {
-          padding: 0 8px;
+        .mat-list-item-content {
+          padding: 0;
+
+          div.mat-list-text {
+            padding: 0 8px;
+          }
         }
       }
     }

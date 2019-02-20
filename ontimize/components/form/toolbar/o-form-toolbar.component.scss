@@ -5,7 +5,7 @@
   .o-form-toolbar-header {
     min-height: 50px;
     max-height: 50px;
-    padding: 0 16px 0 0;
+    padding: 0 16px 0 4px;
 
     mat-toolbar-row {
       height: 50px;
@@ -32,6 +32,7 @@
           &[disabled] {
             cursor: default;
           }
+
           &:not(.mat-icon-button) .mat-button-wrapper {
             display: flex;
             align-items: center;
@@ -53,6 +54,7 @@
 
         &.mat-stroked-button {
           min-width: 100px;
+          margin: 0 6px;
         }
       }
     }

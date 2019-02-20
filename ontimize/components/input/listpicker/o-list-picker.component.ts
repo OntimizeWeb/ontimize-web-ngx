@@ -147,7 +147,7 @@ export class OListPickerComponent extends OFormServiceComponent implements After
     let cfg: MatDialogConfig = {
       role: 'dialog',
       disableClose: false,
-      panelClass: 'cdk-overlay-list-picker',
+      panelClass: ['cdk-overlay-list-picker','o-dialog-class'],
       data: {
         data: this.getDialogDataArray(this.dataArray),
         filter: this.filter,

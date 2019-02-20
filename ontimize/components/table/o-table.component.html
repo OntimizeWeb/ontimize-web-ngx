@@ -33,8 +33,7 @@
           </th>
           <td mat-cell *matCellDef="let row">
             <mat-checkbox name="id[]" (click)="$event.stopPropagation()" (change)="selectionCheckboxToggle($event, row)"
-              [checked]="selection.isSelected(row)">
-            </mat-checkbox>
+              [checked]="selection.isSelected(row)"> </mat-checkbox>
           </td>
         </ng-container>
 
@@ -45,7 +44,7 @@
           <th mat-header-cell *matHeaderCellDef [ngClass]="getTitleAlignClass(column)" [style.width]="column.getRenderWidth()"
             [class.resizable]="resizable">
 
-            <mat-icon *ngIf="isColumnFilterable(column)" class="column-filter-icon" [class.active]="isColumnFilterActive(column)"
+            <mat-icon *ngIf="isModeColumnFilterable(column)" class="column-filter-icon" [class.active]="isColumnFilterActive(column)"
               (click)="openColumnFilterDialog(column, $event)" svgIcon="ontimize:filter_list">
             </mat-icon>
 
@@ -63,8 +62,9 @@
           <!--Define mat-cell-->
           <td mat-cell *matCellDef="let row" [ngClass]="[column.className, getCellAlignClass(column)]" (click)="handleCellClick(column, row, $event)"
             (dblclick)="handleCellDoubleClick(column, row, $event)" [class.empty-cell]="isEmpty(row[column.name])"
-            [matTooltipDisabled]="!column.hasTooltip()" [matTooltip]="column.getTooltip(row)" matTooltipPosition="below"
-            matTooltipShowDelay="750" matTooltipClass="o-table-cell-tooltip" [class.o-mat-cell-multiline]="column.multiline">
+            [matTooltipDisabled]="!column.hasTooltip()" [matTooltip]="column.getTooltip(row)" matTooltipPosition="below" matTooltipShowDelay="750"
+            matTooltipClass="o-table-cell-tooltip" [class.o-mat-cell-multiline]="column.multiline" [oContextMenu]="tableContextMenu"
+            [oContextMenuData]="{ cellName:column.name, rowValue:row}">
 
             <ng-container *ngIf="usePlainRender(column, row); else cellRender">
               {{ row[column.name] }}
@@ -102,8 +102,7 @@
         <tr #tableHeader mat-header-row *matHeaderRowDef="oTableOptions.visibleColumns; sticky: fixedHeader"></tr>
 
         <tr mat-row oTableRow *matRowDef="let row; columns: oTableOptions.visibleColumns;" (click)="handleClick(row, $event)"
-          (dblclick)="handleDoubleClick(row, $event)" [oContextMenu]="tableContextMenu" [oContextMenuData]="row"
-          [class.selected]="!isSelectionModeNone() && isSelected(row)">
+          (dblclick)="handleDoubleClick(row, $event)" [class.selected]="!isSelectionModeNone() && isSelected(row)">
         </tr>
 
         <ng-container *ngIf="showTotals">
@@ -114,9 +113,9 @@
   </div>
 
   <!--TABLE PAGINATOR-->
-  <mat-paginator *ngIf="paginator" #matpaginator [length]="dataSource?.resultsLength" [pageIndex]="paginator.pageIndex"
-    [pageSize]="queryRows" [pageSizeOptions]="paginator.pageSizeOptions" (page)="onChangePage($event)"
-    [showFirstLastButtons]="paginator.showFirstLastButtons"></mat-paginator>
+  <mat-paginator *ngIf="paginator" #matpaginator [length]="dataSource?.resultsLength" [pageIndex]="paginator.pageIndex" [pageSize]="queryRows"
+    [pageSizeOptions]="paginator.pageSizeOptions" (page)="onChangePage($event)" [showFirstLastButtons]="paginator.showFirstLastButtons">
+  </mat-paginator>
 
   <!--LOADING-->
   <div #spinnerContainer *ngIf="showLoading()" fxLayout="column" fxLayoutAlign="center center" [ngStyle]="{'top.px': headerHeight}"

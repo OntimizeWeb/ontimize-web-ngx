@@ -7,6 +7,12 @@
   <o-context-menu-item attr="insert" label="TABLE_CONTEXT_MENU.INSERT" icon="add" (execute)="add()" [visible]="isVisibleInsert()"></o-context-menu-item>
   <o-context-menu-item attr="delete" label="TABLE_CONTEXT_MENU.DELETE" icon="delete" (execute)="delete($event)"
     [visible]="isVisibleDelete()"></o-context-menu-item>
+  <!-- FILTER GROUP -->
+  <o-context-menu-group label="TABLE_CONTEXT_MENU.FILTER" icon="filter_list" type="group" [visible]="isVisibleFilter">
+    <o-context-menu-item icon="filter_list" [label]="labelFilterByColumn" (execute)="filterByColumn($event)"></o-context-menu-item>
+    <o-context-menu-item icon="filter_list" label="TABLE_CONTEXT_MENU.FILTER_BY_VALUE" (execute)="filterByValue($event)"></o-context-menu-item>
+  </o-context-menu-group>
+  <!-- COPY GROUP -->
   <o-context-menu-separator [visible]="isVisibleCopy()"></o-context-menu-separator>
   <o-context-menu-group label="TABLE_CONTEXT_MENU.COPY" icon="file_copy" type="group" [visible]="isVisibleCopy()">
     <o-context-menu-item icon="file_copy" label="TABLE_CONTEXT_MENU.COPY_CELL" (execute)="copyCell($event)"></o-context-menu-item>
