@@ -3,6 +3,8 @@ import { Injector, EventEmitter } from '@angular/core';
 import { Router, NavigationStart } from '@angular/router';
 import { ObservableWrapper } from '../util/async';
 import { AppConfig, Config } from '../config/app-config';
+import { SessionInfo } from '../services';
+import { LoginService } from './login.service';
 
 export interface ILocalStorageComponent {
   storeState?: boolean;
@@ -12,15 +14,19 @@ export interface ILocalStorageComponent {
 
 export class LocalStorageService {
   static COMPONENTS_STORAGE_KEY: string = 'components';
+  static USERS_STORAGE_KEY: string = 'users';
+  static SESSION_STORAGE_KEY: string = 'session';
 
   public onRouteChange: EventEmitter<any> = new EventEmitter();
 
   private _config: Config;
   private _router: Router;
+  private loginService: LoginService;
 
   constructor(protected injector: Injector) {
     this._config = this.injector.get(AppConfig).getConfiguration();
     this._router = this.injector.get(Router);
+    this.loginService = this.injector.get(LoginService);
 
     var self = this;
     this._router.events.subscribe(
@@ -64,24 +70,16 @@ export class LocalStorageService {
 
   private getAppComponentData(key: string): Object {
     let componentData = undefined;
-    let appData = {};
-    let appStoredData = localStorage.getItem(this._config['uuid']);
-    if (appStoredData) {
+    let storedComponents: Object = this.getComponentsByUserSession() || {};
+    if (storedComponents[key]) {
+      let decoded = atob(storedComponents[key]);
       try {
-        appData = JSON.parse(appStoredData);
+        componentData = JSON.parse(decoded);
       } catch (e) {
-        appData = {};
-      }
-      let storedComponents: Object = appData[LocalStorageService.COMPONENTS_STORAGE_KEY] || {};
-      if (storedComponents[key]) {
-        let decoded = atob(storedComponents[key]);
-        try {
-          componentData = JSON.parse(decoded);
-        } catch (e) {
-          componentData = undefined;
-        }
+        componentData = undefined;
       }
     }
+
     return componentData;
   }
 
@@ -92,39 +90,58 @@ export class LocalStorageService {
     } catch (e) {
       componentDataB64 = undefined;
     }
-    if (componentDataB64) {
-      let appStoredData = localStorage.getItem(this._config['uuid']);
-      if (!appStoredData) {
-        let newAppData: Object = {};
-        let componentData = {};
-        componentData[componentKey] = componentDataB64;
-        newAppData[LocalStorageService.COMPONENTS_STORAGE_KEY] = componentData;
-        localStorage.setItem(this._config['uuid'], JSON.stringify(newAppData));
-      } else {
-        let appData = {};
-        try {
-          appData = JSON.parse(appStoredData);
-        } catch (e) {
-          appData = {};
-        }
-        let componentsData: Object = appData[LocalStorageService.COMPONENTS_STORAGE_KEY] || {};
-        componentsData[componentKey] = componentDataB64;
-        appData[LocalStorageService.COMPONENTS_STORAGE_KEY] = componentsData;
-        localStorage.setItem(this._config['uuid'], JSON.stringify(appData));
-      }
-    }
+    //if (componentDataB64) {
+      this.setComponentsByUserSession(componentKey, componentDataB64);
+
+    //}
   }
 
-  // b64EncodeUnicode(str) {
-  //   return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function (match, p1) {
-  //     // return String.fromCharCode('0x' + p1);
-  //     return String.fromCharCode(p1);
-  //   }));
-  // }
 
-  // b64DecodeUnicode(str) {
-  //   return decodeURIComponent(Array.prototype.map.call(atob(str), function (c) {
-  //     return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-  //   }).join(''));
-  // }
+  private getComponentsByUserSession(): Object {
+    let storedComponentsByUser = {};
+    let appData = this.getStoredData();
+    let session: SessionInfo = appData[LocalStorageService.SESSION_STORAGE_KEY] || {};
+    let users = appData[LocalStorageService.USERS_STORAGE_KEY] || {};
+
+    storedComponentsByUser = users[session.user][LocalStorageService.COMPONENTS_STORAGE_KEY] || {};
+
+    return storedComponentsByUser;
+  }
+
+  private setComponentsByUserSession(componentKey, componentDataB64) {
+    let appData = this.getStoredData();
+    let session = appData[LocalStorageService.SESSION_STORAGE_KEY] || {};//uuid -> session
+    let users = appData[LocalStorageService.USERS_STORAGE_KEY] || {};//uuid -> users
+
+    const idUser = session.user || this.loginService.getSessionInfo().user;
+    let user = users[idUser] || {};//uuid -> users-> user
+
+    let componentData = {};
+    if (users[idUser]) {
+      componentData = users[idUser][LocalStorageService.COMPONENTS_STORAGE_KEY];
+    }
+    componentData[componentKey] = componentDataB64;
+
+    user[LocalStorageService.COMPONENTS_STORAGE_KEY] = componentData;
+    users[idUser] = user;
+    appData[LocalStorageService.USERS_STORAGE_KEY] = users;
+
+    localStorage.setItem(this._config['uuid'], JSON.stringify(appData));
+
+  }
+
+  public getStoredData(): Object {
+    let appData = {};
+    let appStoredData = localStorage.getItem(this._config['uuid']);
+    if (appStoredData) {
+      try {
+        appData = JSON.parse(appStoredData);
+      } catch (e) {
+        appData = {};
+      }
+
+    }
+    return appData;
+  }
 }
+
