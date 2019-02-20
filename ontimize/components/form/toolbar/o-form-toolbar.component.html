@@ -7,6 +7,8 @@
 
     <o-form-navigation #formNavigation *ngIf="showNavigation" fxLayout="row" fxLayoutAlign="space-between center"></o-form-navigation>
 
+    <ng-template *ngIf="includeBreadcrumb" #breadcrumb></ng-template>
+
     <span *ngIf="getLabelHeaderAlign() === 'center' || getLabelHeaderAlign() === 'end'" class="fill-remaining"></span>
     <div *ngIf="labelHeader!=''" fxLayout="row" fxLayoutAlign="center center">
       <span>{{ labelHeader | oTranslate }}</span>

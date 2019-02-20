@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Inject, Injector, forwardRef, ElementRef, NgModule, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, OnDestroy, Inject, Injector, forwardRef, ElementRef, NgModule, ViewEncapsulation, ViewContainerRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
 
@@ -66,13 +66,19 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
   protected actionsPermissions: OPermissions[];
   protected snackBarService: SnackBarService;
 
+  protected _includeBreadcrumb: boolean;
+
   @InputConverter()
   showHeaderNavigation: boolean = true;
 
-  constructor(@Inject(forwardRef(() => OFormComponent)) private _form: OFormComponent,
+  @ViewChild('breadcrumb', { read: ViewContainerRef }) breadContainer;
+
+  constructor(
+    @Inject(forwardRef(() => OFormComponent)) private _form: OFormComponent,
     public element: ElementRef,
-    protected injector: Injector) {
-    _form.registerToolbar(this);
+    protected injector: Injector
+  ) {
+    this._form.registerToolbar(this);
     this._dialogService = this.injector.get(DialogService);
     this._navigationService = this.injector.get(NavigationService);
     this.snackBarService = this.injector.get(SnackBarService);
@@ -92,7 +98,10 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
         self.labelHeader = title;
       });
     }
-
+    this.includeBreadcrumb = this._form.includeBreadcrumb && this._form.formContainer.breadcrumb;
+    if (this.includeBreadcrumb) {
+      this._form.formContainer.breadcrumb = false;
+    }
   }
 
   ngOnDestroy() {
@@ -108,6 +117,9 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
 
   ngAfterViewInit(): void {
     this.parsePermissions();
+    if (this.includeBreadcrumb) {
+      this._form.formContainer.createBreadcrumb(this.breadContainer);
+    }
   }
 
   protected parsePermissions() {
@@ -358,6 +370,14 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
 
   hasEnabledPermission(permission: OPermissions): boolean {
     return permission ? permission.enabled : true;
+  }
+
+  get includeBreadcrumb(): boolean {
+    return this._includeBreadcrumb;
+  }
+
+  set includeBreadcrumb(arg: boolean) {
+    this._includeBreadcrumb = arg;
   }
 }
 

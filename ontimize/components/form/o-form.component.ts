@@ -97,7 +97,9 @@ export const DEFAULT_INPUTS_O_FORM = [
   'showHeaderNavigation: show-header-navigation',
 
   //attr
-  'oattr:attr'
+  'oattr:attr',
+
+  'includeBreadcrumb: include-breadcrumb'
 ];
 
 export const DEFAULT_OUTPUTS_O_FORM = [
@@ -177,17 +179,16 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   protected deleteMethod: string = Codes.DELETE_METHOD;
   protected _layoutDirection: string = OFormComponent.DEFAULT_LAYOUT_DIRECTION;
   protected _layoutAlign: string;
-
   @InputConverter()
   protected editableDetail: boolean = true;
   protected keysSqlTypes: string;
   @InputConverter()
   undoButton: boolean = true;
-
   @InputConverter()
   showHeaderNavigation: boolean = false;
-
   public oattr: string = '';
+  @InputConverter()
+  includeBreadcrumb: boolean = false;
   /* end of inputs variables */
 
   /*parsed inputs variables */
@@ -234,7 +235,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   protected formCache: OFormCacheClass;
   protected formNavigation: OFormNavigationClass;
 
-  protected formContainer: OFormContainerComponent;
+  public formContainer: OFormContainerComponent;
 
   protected permissionsService: PermissionsService;
   protected permissions: OFormPermissions;
