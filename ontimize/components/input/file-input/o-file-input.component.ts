@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, forwardRef, Inject, Injector, NgModule, OnDestroy, OnInit, Optional, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, forwardRef, Inject, Injector, NgModule, OnInit, Optional, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ValidationErrors, ValidatorFn } from '@angular/forms';
@@ -15,9 +15,12 @@ import { OFileUploader } from './o-file-uploader.class';
 export const DEFAULT_INPUTS_O_FILE_INPUT = [
   'oattr: attr',
   'olabel: label',
+  'floatLabel: float-label',
+  'oplaceholder: placeholder',
   'tooltip',
   'tooltipPosition: tooltip-position',
   'tooltipShowDelay: tooltip-show-delay',
+  'tooltipHideDelay: tooltip-hide-delay',
   'oenabled: enabled',
   'orequired: required',
   'service',
@@ -47,7 +50,8 @@ export const DEFAULT_INPUTS_O_FILE_INPUT = [
   'splitUpload: split-upload',
 
   // additional-data [JSON]: used to send aditional information in the upload request.
-  'additionalData: additional-data'
+  'additionalData: additional-data',
+  'appearance'
 ];
 
 export const DEFAULT_OUTPUTS_O_FILE_INPUT = [
@@ -74,7 +78,7 @@ export const DEFAULT_OUTPUTS_O_FILE_INPUT = [
   inputs: DEFAULT_INPUTS_O_FILE_INPUT,
   outputs: DEFAULT_OUTPUTS_O_FILE_INPUT
 })
-export class OFileInputComponent extends OFormDataComponent implements OnDestroy, OnInit {
+export class OFileInputComponent extends OFormDataComponent implements OnInit {
 
   public static DEFAULT_INPUTS_O_FILE_INPUT = DEFAULT_INPUTS_O_FILE_INPUT;
   public static DEFAULT_OUTPUTS_O_FILE_INPUT = DEFAULT_OUTPUTS_O_FILE_INPUT;
@@ -140,10 +144,6 @@ export class OFileInputComponent extends OFormDataComponent implements OnDestroy
     this.uploader.onCompleteItem = (item) => this.onCompleteFile.emit(item);
     this.uploader.onErrorAll = (error) => this.onError.emit(error);
     this.uploader.onErrorItem = (item, error) => this.onErrorFile.emit({ item, error });
-  }
-
-  ngOnDestroy() {
-    this.destroy();
   }
 
   initialize() {
@@ -231,9 +231,8 @@ export class OFileInputComponent extends OFormDataComponent implements OnDestroy
    *  * super.clearValue() emit OValueChangeEvent.PROGRAMMATIC_CHANGE
    *  * super.onClickClearValue() emit OValueChangeEvent.USER_CHANGE
    */
-  onClickClear(e: Event) {
-    e.stopPropagation();
-    super.onClickClearValue();
+  onClickClearValue(e: Event) {
+    super.onClickClearValue(e);
     this.uploader.clear();
   }
 

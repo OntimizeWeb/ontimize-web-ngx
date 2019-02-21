@@ -1,7 +1,7 @@
 <span mat-dialog-title>{{ 'TABLE.BUTTONS.APPLY_CONFIGURATION' | oTranslate }}</span>
 
 <mat-dialog-content>
-  <span mat-subheader>{{ 'TABLE.DIALOG.APPLY_CONFIGURATION' | oTranslate }}</span>
+  <div mat-subheader>{{ 'TABLE.DIALOG.APPLY_CONFIGURATION' | oTranslate }}</div>
   <mat-selection-list #configurationList dense class="o-table-apply-configuration-dialog-list">
     <mat-list-option checkboxPosition="before" [value]="default_configuration">
       <span matLine class="o-table-apply-configuration-dialog-list-title">{{ 'TABLE.DIALOG.APPLY_CONFIGURATION_DEFAULT' | oTranslate }}</span>
@@ -15,12 +15,12 @@
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
-  <button type="button" mat-raised-button [disabled]="configurationList.selectedOptions.selected.length!==1 || isDefaultConfigurationSelected()"
+  <button type="button" mat-stroked-button [disabled]="configurationList.selectedOptions.selected.length!==1 || isDefaultConfigurationSelected()"
     (click)="removeConfiguration(configurationList.selectedOptions.selected[0].value)">
-    <mat-icon svgIcon="ontimize:delete"></mat-icon>
-    <span>{{ 'DELETE' | oTranslate | uppercase }}</span>
+    {{ 'DELETE' | oTranslate | uppercase }}
   </button>
   <span fxFlex></span>
-  <button type="button" mat-button class="mat-primary" [mat-dialog-close]="false">{{ 'CANCEL' | oTranslate | uppercase }}</button>
-  <button type="button" mat-button class="mat-primary" [mat-dialog-close]="true" [disabled]="configurationList.selectedOptions.selected.length!==1">{{ 'OK' | oTranslate | uppercase }}</button>
+  <button type="button" mat-stroked-button class="mat-primary" [mat-dialog-close]="false">{{ 'CANCEL' | oTranslate | uppercase }}</button>
+  <button type="button" mat-stroked-button class="mat-primary" [mat-dialog-close]="true" [disabled]="configurationList.selectedOptions.selected.length!==1">{{
+    'OK' | oTranslate | uppercase }}</button>
 </mat-dialog-actions>

@@ -1,95 +1,48 @@
-o-image{
+.o-image {
   display: flex;
   height: inherit;
-}
 
-.container-image {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: auto; 
-  width:100%;
-  
-  .input-image-container {
-    flex: 1;
-    width:100%;
-
-    .input-file {
-      opacity: 0;
-      outline: none;
-      overflow: hidden;
-      position: absolute;
-    }
-
-    .input-file + label {
-  
-      cursor: pointer;
-      text-align: center;
-      padding-top: 4px;
-      font-size: 14px;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      overflow: hidden;
-      color: rgba(0,0,0,0.38);
-      width: 100%;
-    }
-
-    .input-image {
-          
-    
-        .empty-icon {
-          font-size: 8em;
-          height: auto;
-          width: auto;
-          cursor: pointer;
-          color: rgba(0,0,0,0.47);
-          vertical-align: middle;
-    
-          &.mat-disabled {
-            cursor: default;
-            color: rgba(0, 0, 0, 0.26);
-          }
-        }
-    
-      }
-    
-      
-    }
-  }
-
-  .image-container {
-    height: 100%; /* NEW */
+  .o-image-content {
+    position: relative;
     width: 100%;
-    display:flex;
-    flex-direction: column;
 
-    > img {
+    .o-image-form-field {
       width: 100%;
-      height:100%;
+
+      .o-image-form-field-hidden {
+        display: none !important;
+      }
+
+      .o-image-form-field-input {
+        opacity: 0;
+        outline: none;
+        width: 0;
+      }
     }
-  }
-  
 
+    .o-image-display-container {
+      width: 100%;
 
+      > img {
+        height: 100%;
+        width: 100%;
+      }
+    }
 
-.auto-fit-image{
-  .image-container > img {
+    &.o-image-auto-fit .o-image-display-container > img {
+      height: auto;
       max-height: 100%;
       max-width: 100%;
       object-fit: contain;
-      width:auto;
-      height:auto;
-      
-  }
-}
-.input-control {
-  display: none !important;
-}
+      width: auto;
+    }
 
-.read-only-blocker {
-  z-index: 2;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
+    .read-only-blocker {
+      left: 0;
+      right: 0;
+      position: absolute;
+      top: 0;
+      z-index: 2;
+    }
+  }
 }

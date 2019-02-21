@@ -1,5 +1,5 @@
-import { AfterViewInit, forwardRef, Inject, ElementRef, OnDestroy, Renderer, Directive } from '@angular/core';
-import { Subscription } from 'rxjs/Subscription';
+import { AfterViewInit, forwardRef, Inject, ElementRef, OnDestroy, Renderer2, Directive } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { OTableComponent } from '../../o-table.component';
 
 @Directive({
@@ -11,7 +11,7 @@ export class OTableRowDirective implements AfterViewInit, OnDestroy {
   constructor(
     @Inject(forwardRef(() => OTableComponent)) public table: OTableComponent,
     protected elementRef: ElementRef,
-    protected renderer: Renderer
+    protected renderer: Renderer2
   ) {
   }
 
@@ -65,7 +65,7 @@ export class OTableRowDirective implements AfterViewInit, OnDestroy {
 
   setRowWidth(value: number) {
     const widthValue = value !== undefined ? value + 'px' : 'auto';
-    this.renderer.setElementStyle(this.elementRef.nativeElement, 'width', widthValue);
+    this.renderer.setStyle(this.elementRef.nativeElement, 'width', widthValue);
     this.table.rowWidth = value;
   }
 

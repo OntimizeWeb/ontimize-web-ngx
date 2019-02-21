@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Injector, OnInit, TemplateRef, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 
 import { Codes, Util } from '../../../../../utils';
 import { OBaseTableCellRenderer } from '../o-base-table-cell-renderer.class';
@@ -19,6 +19,7 @@ export const DEFAULT_OUTPUTS_O_TABLE_CELL_RENDERER_ACTION = [
   selector: 'o-table-cell-renderer-action',
   templateUrl: './o-table-cell-renderer-action.component.html',
   styleUrls: ['./o-table-cell-renderer-action.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   inputs: DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_ACTION,
   outputs: DEFAULT_OUTPUTS_O_TABLE_CELL_RENDERER_ACTION
 })

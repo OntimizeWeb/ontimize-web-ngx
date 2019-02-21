@@ -5,7 +5,7 @@
   .o-form-toolbar-header {
     min-height: 50px;
     max-height: 50px;
-    padding: 0 16px 0 0;
+    padding: 0 16px 0 4px;
 
     mat-toolbar-row {
       height: 50px;
@@ -28,17 +28,33 @@
       align-items: center;
 
       button {
+        &.o-form-toolbar-button {
+          &[disabled] {
+            cursor: default;
+          }
+
+          &:not(.mat-icon-button) .mat-button-wrapper {
+            display: flex;
+            align-items: center;
+
+            span {
+              flex: 1;
+            }
+          }
+        }
+
         &:not(.mat-icon-button) {
           padding: 0 6px;
         }
 
         &.mat-icon-button {
           padding: 0;
-          margin:0;
+          margin: 0;
         }
 
-        .mat-button {
+        &.mat-stroked-button {
           min-width: 100px;
+          margin: 0 6px;
         }
       }
     }

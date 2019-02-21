@@ -1,4 +1,4 @@
-import { Component, Injector, ViewChild, TemplateRef } from '@angular/core';
+import { Component, Injector, ViewChild, TemplateRef, ChangeDetectionStrategy } from '@angular/core';
 import { OMomentPipe, IMomentPipeArgument } from '../../../../../pipes';
 import { OBaseTableCellRenderer } from '../o-base-table-cell-renderer.class';
 
@@ -11,6 +11,7 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_DATE = [
   moduleId: module.id,
   selector: 'o-table-cell-renderer-date',
   templateUrl: './o-table-cell-renderer-date.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   inputs: DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_DATE
 })
 export class OTableCellRendererDateComponent extends OBaseTableCellRenderer {

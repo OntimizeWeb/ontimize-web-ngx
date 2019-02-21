@@ -33,7 +33,6 @@ export class OContextMenuItemComponent extends OComponentMenuItems implements On
   public svgIcon: string;
 
   ngOnInit() {
-    super.ngOnInit();
     this.enabled = this.parseInput(this.oenabled, true);
   }
   public onClick(event: MouseEvent): void {
@@ -57,10 +56,10 @@ export class OContextMenuItemComponent extends OComponentMenuItems implements On
   }
 
   public get isVisible() {
-    if (this.visible instanceof Function) {
-      return this.visible(this.data);
+    if (this.ovisible instanceof Function) {
+      return this.ovisible(this.data);
     }
-    return this.visible;
+    return this.ovisible;
   }
 
 

@@ -1,4 +1,4 @@
-import { Component, Inject, forwardRef, OnInit, Injector } from '@angular/core';
+import { Component, Inject, forwardRef, OnInit, Injector, ChangeDetectionStrategy } from '@angular/core';
 import { OTableComponent, OColumn } from '../../../o-table.component';
 import { Util, Codes } from '../../../../../utils';
 import { InputConverter } from '../../../../../decorators';
@@ -26,6 +26,7 @@ export interface IColumnValueFilter {
   moduleId: module.id,
   selector: 'o-table-columns-filter',
   template: ' ',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   inputs: DEFAULT_INPUTS_O_TABLE_COLUMN_FILTER,
   outputs: DEFAULT_OUTPUTS_O_TABLE_COLUMN_FILTER
 })
@@ -54,7 +55,7 @@ export class OTableColumnsFilterComponent implements OnInit {
       this.columnsArray = this.table.oTableOptions.visibleColumns;
     }
     const self = this;
-    this.columnsArray.map((colData, i, arr) => {
+    this.columnsArray.forEach((colData, i, arr) => {
       let colDef = colData.split(Codes.TYPE_SEPARATOR);
       let colName = colDef[0];
       let compType = (colDef[1] || '').toUpperCase();

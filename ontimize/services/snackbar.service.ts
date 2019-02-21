@@ -1,6 +1,6 @@
 import { Injectable, Injector } from '@angular/core';
 import { MatSnackBar, MatSnackBarRef } from '@angular/material';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
 import { OSnackBarComponent, OSnackBarConfig } from '../components/snackbar/o-snackbar.component';
 

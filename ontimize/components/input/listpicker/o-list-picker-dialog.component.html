@@ -1,9 +1,10 @@
-<mat-toolbar #toolbar color="primary" class="mat-elevation-z5" *ngIf="filter">
-  <o-search-input #searchInput (onSearch)="onFilterList($event)" class="o-list-picker-search"></o-search-input>
-</mat-toolbar>
+
+<div class="title-container" *ngIf="filter">
+  <o-search-input #searchInput (onSearch)="onFilterList($event)" class="o-list-picker-search" float-label="no"></o-search-input>
+</div>
 <div mat-dialog-content (scroll)="onScroll($event)" [class.o-list-picker-has-filter]="filter">
   <mat-list>
-    <mat-list-item *ngIf="visibleData.length === 0">
+    <mat-list-item *ngIf="isEmptyData()">
       {{ 'LIST.EMPTY' | oTranslate }}
       <ng-container *ngIf="filter && searchInput && searchInput.getValue() && searchInput.getValue().length > 0">
         {{ 'LIST.EMPTY_USING_FILTER' | oTranslate : { values: [searchInput.getValue()] } }}
@@ -16,7 +17,5 @@
   </mat-list>
 </div>
 <mat-dialog-actions align="end">
-  <button type="button" mat-button mat-dialog-close>
-    <span>{{ 'CANCEL' | oTranslate | uppercase }}</span>
-  </button>
+  <button type="button" mat-stroked-button mat-dialog-close>{{ 'CANCEL' | oTranslate | uppercase }}</button>
 </mat-dialog-actions>

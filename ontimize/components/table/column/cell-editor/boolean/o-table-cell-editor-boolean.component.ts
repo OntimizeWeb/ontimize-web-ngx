@@ -1,4 +1,4 @@
-import { Component, Injector, ViewChild, TemplateRef, ViewEncapsulation } from '@angular/core';
+import { Component, Injector, ViewChild, TemplateRef, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/core';
 import { MatCheckboxChange } from '@angular/material';
 import { Util } from '../../../../../utils';
 import { InputConverter } from '../../../../../decorators';
@@ -27,6 +27,7 @@ export const DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_BOOLEAN = [
   styleUrls: ['./o-table-cell-editor-boolean.component.scss'],
   inputs: DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_BOOLEAN,
   outputs: DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_BOOLEAN,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
     '[class.o-table-cell-editor-boolean]': 'true'

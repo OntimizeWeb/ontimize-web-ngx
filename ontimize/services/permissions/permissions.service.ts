@@ -1,6 +1,7 @@
 import { Injector, Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { share } from 'rxjs/operators';
 import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
-import { Observable } from 'rxjs/Observable';
 import { AppConfig } from '../../config/app-config';
 import { Util } from '../../utils';
 import { OntimizePermissionsService } from './ontimize-permissions.service';
@@ -118,7 +119,7 @@ export class PermissionsService {
         innerObserver.complete();
       });
     });
-    return dataObservable.share();
+    return dataObservable.pipe(share());
   }
 
   protected getPermissionIdFromActRoute(actRoute: ActivatedRoute): string {

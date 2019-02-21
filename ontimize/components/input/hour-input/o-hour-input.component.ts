@@ -1,16 +1,21 @@
-import { Component, NgModule, Optional, Inject, ElementRef, Injector, forwardRef, ViewChild, EventEmitter, ViewEncapsulation, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
+import { Component, NgModule, Optional, Inject, ElementRef, Injector, forwardRef, ViewChild, ViewEncapsulation, OnInit, AfterViewInit } from '@angular/core';
 import { OFormDataComponent, DEFAULT_INPUTS_O_FORM_DATA_COMPONENT, DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT, OValueChangeEvent } from '../../o-form-data-component.class';
 import { CommonModule } from '@angular/common';
 import { ValidatorFn } from '@angular/forms';
-import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import moment from 'moment';
+import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
+
 import { Util } from '../../../utils';
 import { OSharedModule } from '../../../shared';
 import { NumberConverter } from '../../../decorators';
 import { OFormComponent } from '../../form/form-components';
 import { IFormValueOptions } from '../../form/OFormValue';
 import { InputConverter } from '../../../decorators/input-converter';
-import { OValidators } from '../../../validators/o-validators';
+import {
+  OValidators,
+  TWELVE_HOUR_FORMAT_PATTERN,
+  TWENTY_FOUR_HOUR_FORMAT_PATTERN
+} from '../../../validators/o-validators';
 
 const HourFormat = {
   TWELVE: 'hh:mm a',
@@ -25,14 +30,14 @@ export type OHourValueType = 'string' | 'timestamp';
 export const DEFAULT_INPUTS_O_HOUR_INPUT = [
   'format',
   'textInputEnabled: text-input-enabled',
+  'min',
+  'max',
   'valueType: value-type',
   ...DEFAULT_INPUTS_O_FORM_DATA_COMPONENT
 ];
 
 export const DEFAULT_OUTPUTS_O_HOUR_INPUT = [
-  ...DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT,
-  'onFocus',
-  'onBlur'
+  ...DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT
 ];
 
 @Component({
@@ -48,7 +53,7 @@ export const DEFAULT_OUTPUTS_O_HOUR_INPUT = [
   }
 })
 
-export class OHourInputComponent extends OFormDataComponent implements OnInit, AfterViewInit, OnDestroy {
+export class OHourInputComponent extends OFormDataComponent implements OnInit, AfterViewInit {
 
   public static DEFAULT_INPUTS_O_HOUR_INPUT = DEFAULT_INPUTS_O_HOUR_INPUT;
   public static DEFAULT_OUTPUTS_O_HOUR_INPUT = DEFAULT_OUTPUTS_O_HOUR_INPUT;
@@ -62,17 +67,17 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
     this._defaultSQLTypeKey = 'TIMESTAMP';
   }
 
-  onFocus: EventEmitter<Object> = new EventEmitter<Object>();
-  onBlur: EventEmitter<Object> = new EventEmitter<Object>();
-
   @ViewChild('picker')
   private picker: any;
   protected _format: number = TWENTY_FOUR_HOUR_FORMAT;
   @InputConverter()
   textInputEnabled: boolean = true;
+  min: string;
+  max: string;
   protected _valueType: OHourValueType = 'timestamp';
 
   private openPopup = false;
+  protected onKeyboardInputDone = false;
 
   ngOnInit() {
     super.ngOnInit();
@@ -80,33 +85,91 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
 
   ngAfterViewInit() {
     super.ngAfterViewInit();
+    this.modifyPickerMethods();
+  }
 
-    const originalPickerOpen = this.picker.open.bind(this.picker);
-    const self = this;
-    this.picker.open = function (e) {
-      if (!self.isReadOnly && !self.isDisabled && self.openPopup) {
-        self.openPopup = false;
-        originalPickerOpen();
+  protected modifyPickerMethods() {
+    if (this.picker) {
+      const self = this;
+      if (this.picker.open) {
+        const originalPickerOpen = this.picker.open.bind(this.picker);
+        this.picker.open = (e) => {
+          if (!self.isReadOnly && !self.isDisabled && self.openPopup) {
+            self.openPopup = false;
+            originalPickerOpen();
+          }
+        };
       }
-    };
-    this.picker.setTime = function () {
-      let stringVal = self.convertToFormatString(self.picker.timepickerService.fullTime);
-      self.picker.timeSet.next(stringVal);
-      // ensuring fControl value
-      if (self._fControl) {
-        self._fControl.setValue(self.value.value, {
-          emitEvent: false,
-          emitModelToViewChange: false,
-          emitViewToModelChange: true
-        });
+      const ngxTimepicker = this.picker.timepickerInput;
+      if (ngxTimepicker && ngxTimepicker.onInput) {
+        ngxTimepicker.onInput = (value: string) => {
+          self.onKeyboardInputDone = true;
+          // ngxTimepicker.value = value;
+          // ngxTimepicker.onChange(value);
+        };
       }
-      self.picker.close();
-    };
+    }
+  }
+
+  onKeyDown(e: KeyboardEvent): void {
+    if (!this.isInputAllowed(e)) {
+      e.preventDefault();
+    }
+  }
+
+  protected isInputAllowed(e: KeyboardEvent): boolean {
+    // Allow: backspace, delete, tab, escape, enter
+    if ([46, 8, 9, 27, 13].some(n => n === e.keyCode) ||
+      (e.key === ':') ||
+      // Allow: Ctrl/cmd+A
+      (e.keyCode === 65 && (e.ctrlKey === true || e.metaKey === true)) ||
+      // Allow: Ctrl/cmd+C
+      (e.keyCode === 67 && (e.ctrlKey === true || e.metaKey === true)) ||
+      // Allow: Ctrl/cmd+X
+      (e.keyCode === 88 && (e.ctrlKey === true || e.metaKey === true)) ||
+      // Allow: home, end, left, right, up, down
+      (e.keyCode >= 35 && e.keyCode <= 40)) {
+      return true;
+    }
+    return !((e.keyCode < 48 || e.keyCode > 57) && (e.keyCode < 96 || e.keyCode > 105));
+  }
+
+  innerOnBlur(event: any) {
+    if (this.onKeyboardInputDone) {
+      this.updateValeOnInputChange(event);
+    }
+    super.innerOnBlur(event);
+  }
+
+  protected updateValeOnInputChange(blurEvent: any) {
+    const ngxTimepicker = this.picker.timepickerInput;
+    if (ngxTimepicker && this.onKeyboardInputDone) {
+      const pattern = (this.format === TWENTY_FOUR_HOUR_FORMAT)
+        ? TWENTY_FOUR_HOUR_FORMAT_PATTERN
+        : TWELVE_HOUR_FORMAT_PATTERN;
+      const regExp = new RegExp(pattern);
+      const value = blurEvent.currentTarget.value;
+      if (!regExp.test(value)) {
+        this.clearValue();
+      } else if (this.valueType === 'string') {
+        this.setValue(value);
+      } else if (this.valueType === 'timestamp') {
+        const m = moment(value, this.formatString);
+        if (m.isValid()) {
+          this.setValue(m.valueOf());
+        }
+      }
+    }
+    this.onKeyboardInputDone = false;
   }
 
   protected emitOnValueChange(type, newValue, oldValue) {
     this.onChange.emit(newValue);
     super.emitOnValueChange(type, newValue, oldValue);
+  }
+
+  registerOnFormControlChange() {
+    // This component does not need this subscription
   }
 
   get formatString(): string {
@@ -127,44 +190,7 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
   open(e?: Event) {
     this.openPopup = true;
     if (this.picker) {
-      let momentV = moment(this.getValueAsTimeStamp());
-      if (this.picker.timepickerService && momentV.isValid()) {
-        let hour = momentV.get('hour');
-        const minutes = momentV.get('minutes');
-        let timePeriod = 'AM';
-        if (hour >= 12) {
-          timePeriod = 'PM';
-        }
-        if (hour > 12) {
-          hour -= 12;
-        }
-        if (hour === 0) {
-          hour = 12;
-        }
-        this.picker.changeTimeUnit(0);
-        this.picker.timepickerService.hour = {
-          time: hour,
-          angle: hour * 30
-        };
-        this.picker.timepickerService.minute = {
-          time: minutes === 0 ? '00' : minutes,
-          angle: minutes === 0 ? 360 : minutes * 6
-        };
-        this.picker.timepickerService.period = timePeriod;
-      }
       this.picker.open();
-    }
-  }
-
-  innerOnFocus(event: any) {
-    if (!this.isReadOnly && !this.isDisabled) {
-      this.onFocus.emit(event);
-    }
-  }
-
-  innerOnBlur(event: any) {
-    if (!this.isReadOnly && !this.isDisabled) {
-      this.onBlur.emit(event);
     }
   }
 
@@ -180,7 +206,7 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
 
   getValueAsString() {
     let value = this.getValue();
-    value = this.format === TWENTY_FOUR_HOUR_FORMAT ? this.convertToFormatString(value) : value;
+    value = this.convertToFormatString(value);
     return Util.isDefined(value) ? value.toLowerCase() : null;
   }
 
@@ -209,12 +235,19 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
     }
   }
 
+  onFormControlChange(value: any) {
+    if (this.oldValue === value) {
+      return;
+    }
+    super.onFormControlChange(value);
+  }
+
   onTimeEvent(event) {
     const compValue = this.getValue();
     const eventM = moment(event, this.formatString);
     const eventTimestamp = eventM.valueOf() - eventM.startOf('day').valueOf();
     let value = event;
-    if (typeof compValue === 'number') {
+    if (this.valueType === 'timestamp') {
       const valueM = moment(compValue);
       value = valueM.startOf('day').add(eventTimestamp).valueOf();
     } else {
@@ -275,11 +308,14 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
     return result;
   }
 
+  onTimepickerClosed() {
+    this.onTimeEvent(this.picker.timepickerService.getFullTime(this.picker.format));
+  }
 }
 
 @NgModule({
   declarations: [OHourInputComponent],
-  imports: [OSharedModule, CommonModule, NgxMaterialTimepickerModule.forRoot()],
+  imports: [OSharedModule, CommonModule, NgxMaterialTimepickerModule],
   exports: [OHourInputComponent]
 })
 export class OHourInputModule { }

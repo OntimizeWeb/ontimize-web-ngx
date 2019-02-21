@@ -24,10 +24,10 @@ export const DEFAULT_OUTPUTS_O_TABLE_BUTTONS = [];
   inputs: DEFAULT_INPUTS_O_TABLE_BUTTONS,
   outputs: DEFAULT_OUTPUTS_O_TABLE_BUTTONS,
   encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     '[class.o-table-buttons]': 'true',
-  },
-  changeDetection: ChangeDetectionStrategy.OnPush
+  }
 })
 
 export class OTableButtonsComponent implements OnInit, AfterViewInit, OnDestroy {

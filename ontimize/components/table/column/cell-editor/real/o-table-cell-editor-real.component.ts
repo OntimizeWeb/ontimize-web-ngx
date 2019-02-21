@@ -1,4 +1,4 @@
-import { Component, Injector, ViewChild, TemplateRef } from '@angular/core';
+import { Component, Injector, ViewChild, TemplateRef, ChangeDetectionStrategy } from '@angular/core';
 import { ValidatorFn, FormControl } from '@angular/forms';
 import { InputConverter } from '../../../../../decorators';
 import { OTableCellEditorIntegerComponent } from '../integer/o-table-cell-editor-integer.component';
@@ -16,6 +16,7 @@ export const DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_REAL = [
   moduleId: module.id,
   selector: 'o-table-cell-editor-real',
   templateUrl: './o-table-cell-editor-real.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   inputs: DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_REAL,
   outputs: DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_REAL
 })

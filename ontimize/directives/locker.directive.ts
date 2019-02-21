@@ -1,6 +1,6 @@
 import { Directive, Input, ElementRef, Renderer2, Optional, Host } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { OFormServiceComponent } from '../components';
-import { Subscription } from 'rxjs/Subscription';
 
 export const DEFAULT_INPUTS_O_LOCKER = [
   'oLockerMode',

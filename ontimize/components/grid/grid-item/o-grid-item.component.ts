@@ -3,12 +3,18 @@ import { Component, ElementRef, EventEmitter, forwardRef, HostListener, Inject, 
 import { OSharedModule } from '../../../shared';
 import { Codes, ObservableWrapper } from '../../../utils';
 import { OGridComponent } from '../../grid/o-grid.component';
+import { InputConverter } from '../../../decorators';
 
+export const DEFAULT_INPUTS_O_GRID_ITEM = [
+  'colspan',
+  'rowspan'
+];
 
 @Component({
   moduleId: module.id,
   selector: 'o-grid-item',
   templateUrl: './o-grid-item.component.html',
+  inputs: DEFAULT_INPUTS_O_GRID_ITEM,
   host: {
     '[class.o-grid-item]': 'true',
     '(click)': 'onItemClicked($event)',
@@ -23,11 +29,16 @@ export class OGridItemComponent {
   mdDoubleClick: EventEmitter<any> = new EventEmitter();
 
   @ViewChild(TemplateRef) public template: TemplateRef<any>;
+  @InputConverter()
+  colspan: number = 1;
+  @InputConverter()
+  rowspan: number = 1;
 
   constructor(
     public _el: ElementRef,
     private renderer: Renderer,
-    @Optional() @Inject(forwardRef(() => OGridComponent)) public _grid: OGridComponent) {  }
+    @Optional() @Inject(forwardRef(() => OGridComponent)) public _grid: OGridComponent) { }
+
 
   @HostListener('mouseenter')
   onMouseEnter() {

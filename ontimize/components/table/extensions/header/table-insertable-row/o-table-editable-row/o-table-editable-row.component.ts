@@ -1,6 +1,6 @@
 import { Component, Injector, Inject, forwardRef, ViewEncapsulation, ElementRef, ChangeDetectionStrategy, ComponentFactoryResolver, ViewChild, ViewContainerRef, ChangeDetectorRef } from '@angular/core';
 import { FormControl, ValidatorFn, Validators } from '@angular/forms';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { ObservableWrapper, Util } from '../../../../../../utils';
 import { SnackBarService, OTranslateService, OPermissions } from '../../../../../../services';
 import { OTableEditableRowDataSource, OTableDataSource } from '../../../../o-table.datasource';
@@ -17,7 +17,6 @@ export const DEFAULT_INPUTS_O_TABLE_EDITABLE_ROW = [
   moduleId: module.id,
   selector: 'o-table-editable-row',
   templateUrl: './o-table-editable-row.component.html',
-  styleUrls: ['./o-table-editable-row.component.scss'],
   inputs: DEFAULT_INPUTS_O_TABLE_EDITABLE_ROW,
   encapsulation: ViewEncapsulation.None,
   host: {
@@ -38,7 +37,7 @@ export class OTableEditableRowComponent {
 
   protected _tableDataSource: OTableDataSource;
 
-  public editableDatasource: OTableEditableRowDataSource;
+  public editableDatasource: OTableEditableRowDataSource = null;
   protected _insertableRowTable: OTableInsertableRowComponent;
 
   protected controls: any = {};

@@ -1,10 +1,11 @@
 import { Directive, ElementRef, EventEmitter, HostListener, Renderer } from '@angular/core';
 
+import { Util } from '../../../util/util';
 import { Codes, ObservableWrapper } from '../../../utils';
 import { OGridComponent } from '../o-grid.component';
 
 @Directive({
-  selector: 'mat-grid-tile',
+  selector: 'mat-grid-tile[o-grid-item]',
   host: {
     '(click)': 'onItemClicked($event)',
     '(dblclick)': 'onItemDoubleClicked($event)'
@@ -19,8 +20,8 @@ export class OGridItemDirective {
   protected grid: OGridComponent;
 
   @HostListener('mouseenter')
-  onMouseEnter() {
-    if (this.grid.detailMode !== Codes.DETAIL_MODE_NONE) {
+  onMouseEnter(): void {
+    if (Util.isDefined(this.grid) && this.grid.detailMode !== Codes.DETAIL_MODE_NONE) {
       this.renderer.setElementStyle(this._el.nativeElement, 'cursor', 'pointer');
     }
   }
@@ -38,25 +39,25 @@ export class OGridItemDirective {
     return ObservableWrapper.subscribe(this.mdDoubleClick, onNext);
   }
 
-  onItemClicked(e?: Event) {
+  onItemClicked(e?: Event): void {
     ObservableWrapper.callEmit(this.mdClick, this);
   }
 
-  onItemDoubleClicked(e?: Event) {
+  onItemDoubleClicked(e?: Event): void {
     ObservableWrapper.callEmit(this.mdDoubleClick, this);
   }
 
-  setItemData(data) {
+  setItemData(data: Object): void {
     if (!this.modelData) {
       this.modelData = data;
     }
   }
 
-  getItemData() {
+  getItemData(): Object {
     return this.modelData;
   }
 
-  setGridComponent(grid: OGridComponent) {
+  setGridComponent(grid: OGridComponent): void {
     this.grid = grid;
   }
 

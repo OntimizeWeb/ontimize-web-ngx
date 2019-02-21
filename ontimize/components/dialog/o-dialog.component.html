@@ -1,4 +1,4 @@
-<h1 *ngIf="title && title.length > 0" mat-dialog-title>{{ title | oTranslate }}</h1>
+<div *ngIf="title && title.length > 0" mat-dialog-title>{{ title | oTranslate }}</div>
 <div mat-dialog-content>
   <div fxLayout="row" class="alert-content" [class.alert-content-icon]="useIcon" fxLayoutAlign="space-between center">
     <mat-icon *ngIf="useIcon" class="alert-icon" [class.info]="isInfo" [class.warn]="isWarn" [class.error]="isError">{{ icon }}</mat-icon>
@@ -7,10 +7,6 @@
 </div>
 <mat-dialog-actions align="end">
   <span fxFlex></span>
-  <button type="button" *ngIf="twoOptions" mat-button class="mat-primary" mat-dialog-close>
-    <span>{{ cancelButtonText | oTranslate | uppercase }}</span>
-  </button>
-  <button type="button" mat-button class="mat-primary" (click)="onOkClick($event)">
-    <span>{{ okButtonText | oTranslate | uppercase }}</span>
-  </button>
+  <button type="button" *ngIf="twoOptions" mat-stroked-button class="mat-primary" mat-dialog-close>{{ cancelButtonText | oTranslate | uppercase }}</button>
+  <button type="button" mat-stroked-button class="mat-primary" (click)="onOkClick($event)">{{ okButtonText | oTranslate | uppercase }}</button>
 </mat-dialog-actions>

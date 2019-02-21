@@ -1,5 +1,5 @@
 import { Injectable, Injector } from '@angular/core';
-import { Subscriber } from 'rxjs/Subscriber';
+import { Subscriber } from 'rxjs';
 
 import { Codes, IAuthService } from '../../utils';
 

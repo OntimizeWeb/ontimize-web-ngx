@@ -1,11 +1,12 @@
-import { AfterViewInit, animate, ChangeDetectorRef, Component, ElementRef, EventEmitter, Injector, NgModule, state, style, transition, trigger, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Injector, NgModule, ViewChild } from '@angular/core';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 import { CommonModule } from '@angular/common';
 import { ValidatorFn, Validators } from '@angular/forms';
 import { MatTab, MatTabGroup } from '@angular/material';
 
 import { OSharedModule } from '../../../shared/shared.module';
 import { NumberConverter } from '../../../decorators';
-import { OFormComponent, OFormValue } from '../../form/form-components';
+import { OFormComponent } from '../../form/form-components';
 import { CKEditorComponent, CKEditorModule } from '../../material/ckeditor/ck-editor.component';
 import { OFormDataComponent, DEFAULT_INPUTS_O_FORM_DATA_COMPONENT } from '../../o-form-data-component.class';
 
@@ -51,9 +52,6 @@ export class OHTMLInputComponent extends OFormDataComponent implements AfterView
 
   protected _minLength: number = -1;
   protected _maxLength: number = -1;
-
-  onFocus: EventEmitter<Object> = new EventEmitter<Object>();
-  onBlur: EventEmitter<Object> = new EventEmitter<Object>();
 
   @ViewChild('ckEditor') ckEditor: CKEditorComponent;
 
@@ -140,26 +138,6 @@ export class OHTMLInputComponent extends OFormDataComponent implements AfterView
       validators.push(Validators.maxLength(this.maxLength));
     }
     return validators;
-  }
-
-  innerOnChange(event: any) {
-    if (!this.value) {
-      this.value = new OFormValue();
-    }
-    this.ensureOFormValue(event);
-    this.onChange.emit(event);
-  }
-
-  innerOnFocus(event: any) {
-    if (!this.isReadOnly && !this.isDisabled) {
-      this.onFocus.emit(event);
-    }
-  }
-
-  innerOnBlur(event: any) {
-    if (!this.isReadOnly && !this.isDisabled) {
-      this.onBlur.emit(event);
-    }
   }
 
   clearValue(): void {

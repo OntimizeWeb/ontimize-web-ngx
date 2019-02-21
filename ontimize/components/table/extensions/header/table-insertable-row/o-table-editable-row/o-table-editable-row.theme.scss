@@ -1,7 +1,6 @@
 @import 'node_modules/@angular/material/theming';
 @mixin o-table-editable-row-theme($theme) {
   $primary: map-get($theme, primary);
-  $accent: map-get($theme, accent);
   $warn: map-get($theme, warn);
   $background: map-get($theme, background);
   $foreground: map-get($theme, foreground);

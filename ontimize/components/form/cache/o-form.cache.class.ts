@@ -1,6 +1,7 @@
 
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 import { EventEmitter } from '@angular/core';
+import { Util } from '../../../utils';
 import { IFormControlComponent, IFormDataComponent, OValueChangeEvent } from '../../o-form-data-component.class';
 import { OFormComponent } from '../o-form.component';
 
@@ -39,6 +40,9 @@ export class OFormCacheClass {
   protected registerComponentCaching(comp: IFormDataComponent) {
     const self = this;
     const attr = comp.getAttribute();
+    if (!Util.isDefined(comp.onValueChange)) {
+      return;
+    }
     this._componentsSubscritpions[attr] = comp.onValueChange.subscribe((value: OValueChangeEvent) => {
       if (self.initializedCache && !self.blockCaching && self.hasComponentChanged(attr, comp)) {
         self.updateFormDataCache();

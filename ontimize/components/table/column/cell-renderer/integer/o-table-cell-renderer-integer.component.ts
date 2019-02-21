@@ -1,4 +1,4 @@
-import { AfterContentInit, Component, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { AfterContentInit, Component, Injector, OnInit, TemplateRef, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 
 import { InputConverter } from '../../../../../decorators';
 import { IIntegerPipeArgument, OIntegerPipe } from '../../../../../pipes';
@@ -15,6 +15,7 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_INTEGER = [
   moduleId: module.id,
   selector: 'o-table-cell-renderer-integer',
   templateUrl: './o-table-cell-renderer-integer.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   inputs: DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_INTEGER
 })
 export class OTableCellRendererIntegerComponent extends OBaseTableCellRenderer implements AfterContentInit, OnInit {

@@ -1,15 +1,17 @@
 import { Injector, ElementRef, OnInit, OnDestroy, QueryList, ViewChildren, AfterViewInit, HostBinding, ContentChildren, OnChanges, SimpleChange, EventEmitter } from '@angular/core';
 import { FormControl, FormGroup, Validators, ValidatorFn } from '@angular/forms';
-import { MatSuffix } from '@angular/material';
-import { Subscription } from 'rxjs/Subscription';
+import { MatSuffix, MatFormFieldAppearance, FloatLabelType } from '@angular/material';
+import { Subscription } from 'rxjs';
 import { InputConverter, BooleanConverter } from '../decorators';
-import { SQLTypes, Util } from '../utils';
+import { SQLTypes, Util, Codes } from '../utils';
 import { PermissionsUtils } from '../util/permissions';
 import { OBaseComponent, IComponent } from './o-component.class';
 import { OFormComponent } from './form/o-form.component';
 import { OFormValue, IFormValueOptions } from './form/OFormValue';
 import { OValidatorComponent } from './input/validation/o-validator.component';
 import { OPermissions, PermissionsService } from '../services';
+import { OMatErrorComponent, OMatErrorOptions, O_MAT_ERROR_OPTIONS } from '../shared/material/o-mat-error/o-mat-error';
+import { O_INPUTS_OPTIONS, OInputsOptions } from '../config/app-config';
 
 export interface IMultipleSelection extends IComponent {
   getSelectedItems(): Array<any>;
@@ -65,9 +67,12 @@ export class OValueChangeEvent {
 export const DEFAULT_INPUTS_O_FORM_DATA_COMPONENT = [
   'oattr: attr',
   'olabel: label',
+  'floatLabel: float-label',
+  'oplaceholder: placeholder',
   'tooltip',
   'tooltipPosition: tooltip-position',
   'tooltipShowDelay: tooltip-show-delay',
+  'tooltipHideDelay: tooltip-hide-delay',
   'data',
   'autoBinding: automatic-binding',
   'autoRegistering: automatic-registering',
@@ -78,18 +83,22 @@ export const DEFAULT_INPUTS_O_FORM_DATA_COMPONENT = [
   'width',
   'readOnly: read-only',
   'clearButton: clear-button',
-  'angularValidatorsFn: validators'
+  'angularValidatorsFn: validators',
+  'appearance'
 ];
 
 export const DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT = [
   'onChange',
-  'onValueChange'
+  'onValueChange',
+  'onFocus',
+  'onBlur'
 ];
 
 export class OFormDataComponent extends OBaseComponent implements IFormDataComponent, IFormDataTypeComponent,
   OnInit, AfterViewInit, OnDestroy, OnChanges {
 
   /* Inputs */
+  protected _floatLabel: FloatLabelType;
   sqlType: string;
   @InputConverter()
   autoBinding: boolean = true;
@@ -99,10 +108,13 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   @InputConverter()
   clearButton: boolean = false;
   angularValidatorsFn: ValidatorFn[] = [];
+  protected _appearance: MatFormFieldAppearance;
 
   /* Outputs */
   onChange: EventEmitter<Object> = new EventEmitter<Object>();
   onValueChange: EventEmitter<OValueChangeEvent> = new EventEmitter<OValueChangeEvent>();
+  onFocus: EventEmitter<Object> = new EventEmitter<Object>();
+  onBlur: EventEmitter<Object> = new EventEmitter<Object>();
 
   @HostBinding('style.width')
   get hostWidth() {
@@ -115,6 +127,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   protected _SQLType: number = SQLTypes.OTHER;
   protected _defaultSQLTypeKey: string = 'OTHER';
   protected _fControl: FormControl;
+  protected _fControlSubscription: Subscription;
   protected _fGroup: FormGroup;
   protected elRef: ElementRef;
   protected form: OFormComponent;
@@ -133,6 +146,12 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   protected permissionsService: PermissionsService;
   protected mutationObserver: MutationObserver;
 
+  protected errorOptions: OMatErrorOptions;
+  @ViewChildren(OMatErrorComponent)
+  protected oMatErrorChildren: QueryList<OMatErrorComponent>;
+
+  protected oInputsOptions: OInputsOptions;
+
   constructor(
     form: OFormComponent,
     elRef: ElementRef,
@@ -142,6 +161,11 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     this.form = form;
     this.elRef = elRef;
     this.permissionsService = this.injector.get(PermissionsService);
+    try {
+      this.errorOptions = this.injector.get(O_MAT_ERROR_OPTIONS) || {};
+    } catch (e) {
+      this.errorOptions = {};
+    }
   }
 
   ngOnInit() {
@@ -170,6 +194,15 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
         callback: this.disableFormControl.bind(this)
       });
     }
+    this.addOntimizeCustomAppearanceClass();
+    try {
+      this.oInputsOptions = this.injector.get(O_INPUTS_OPTIONS);
+    } catch (e) {
+      this.oInputsOptions = {};
+    }
+
+    Util.parseOInputsOptions(this.elRef, this.oInputsOptions);
+
   }
 
   ngOnDestroy() {
@@ -285,10 +318,10 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   protected setSuffixClass(count: number) {
     const iconFieldEl = this.elRef.nativeElement.getElementsByClassName('icon-field');
     if (iconFieldEl.length === 1) {
-      let classList = iconFieldEl[0].classList;
+      const classList = [].slice.call(iconFieldEl[0].classList);
       classList.forEach(className => {
         if (className.startsWith('icon-field-')) {
-          classList.remove(className);
+          iconFieldEl[0].classList.remove(className);
         }
       });
       if (count > 0) {
@@ -308,6 +341,9 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     }
     if (this.mutationObserver) {
       this.mutationObserver.disconnect();
+    }
+    if (this._fControlSubscription) {
+      this._fControlSubscription.unsubscribe();
     }
   }
 
@@ -331,16 +367,13 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     this.setData(value);
   }
 
-  setData(value: any) {
+  setData(newValue: any) {
     // emit OValueChangeEvent.PROGRAMMATIC_CHANGE when assign value to data
     // this method skips the following permissions checking because the form is
     // setting its query result using it
-    this.setFormValue(value, {
-      emitModelToViewChange: false,
-      emitEvent: false
-    }, false);
-    this.emitOnValueChange(OValueChangeEvent.PROGRAMMATIC_CHANGE, value, this.oldValue);
-    this.oldValue = this.value.value;
+    const previousValue = this.oldValue;
+    this.setFormValue(newValue);
+    this.emitOnValueChange(OValueChangeEvent.PROGRAMMATIC_CHANGE, newValue, previousValue);
   }
 
   isAutomaticBinding(): boolean {
@@ -365,9 +398,9 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
       return;
     }
     if (this.oldValue !== val) {
-      var newValue = val;
-      this.setFormValue(val, options, true);
-      let changeType: number = options ? options.changeType : OValueChangeEvent.PROGRAMMATIC_CHANGE;
+      const newValue = val;
+      this.setFormValue(val, options);
+      let changeType: number = (options && options.hasOwnProperty('changeType')) ? options.changeType : OValueChangeEvent.PROGRAMMATIC_CHANGE;
       this.emitOnValueChange(changeType, newValue, this.oldValue);
       this.oldValue = val;
     }
@@ -383,14 +416,16 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     this.setValue(void 0, options);
   }
 
-  onClickClearValue(): void {
+  onClickClearValue(event: Event): void {
+    event.stopPropagation();
+    event.preventDefault();
     this.clearValue({ changeType: OValueChangeEvent.USER_CHANGE });
   }
 
   protected setFormValue(val: any, options?: IFormValueOptions, setDirty: boolean = false) {
     this.ensureOFormValue(val);
     if (this._fControl) {
-      this._fControl.setValue(val, options);
+      this._fControl.setValue(this.value.value, options);
       if (setDirty) {
         this._fControl.markAsDirty();
       }
@@ -398,13 +433,16 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
         this._fControl.markAsTouched();
       }
     }
+    this.oldValue = this.value.value;
   }
 
   /*This method is called in output change event, not emit event onValueChange when oldvalue is same than newvalue*/
-  onChangeEvent($event) {
-    if (this.oldValue !== this.getValue()) {
-      this.emitOnValueChange(OValueChangeEvent.USER_CHANGE, this.getValue(), this.oldValue);
-      this.oldValue = this.getValue();
+  onChangeEvent(arg: any) {
+    const value = this.getValue();
+    if (this.oldValue !== value) {
+      const previousValue = this.oldValue;
+      this.oldValue = value;
+      this.emitOnValueChange(OValueChangeEvent.USER_CHANGE, value, previousValue);
     }
   }
 
@@ -415,6 +453,15 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
 
   get showClearButton(): boolean {
     return this.clearButton && !this.isReadOnly && !this.isDisabled && this.getValue();
+  }
+
+  onFormControlChange(value: any) {
+    // equivalente al innerOnChange
+    if (!this.value) {
+      this.value = new OFormValue();
+    }
+    this.ensureOFormValue(value);
+    this.onChange.emit(value);
   }
 
   ensureOFormValue(arg: any) {
@@ -431,14 +478,26 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
 
   getControl(): FormControl {
     if (!this._fControl) {
-      let validators: ValidatorFn[] = this.resolveValidators();
-      let cfg = {
+      const validators: ValidatorFn[] = this.resolveValidators();
+      const cfg = {
         value: this.value ? this.value.value : undefined,
         disabled: this.isDisabled
       };
-      this._fControl = new FormControl(cfg, validators);
+      this._fControl = new FormControl(cfg, {
+        validators: validators
+      });
+      this.registerOnFormControlChange();
     }
     return this._fControl;
+  }
+
+  protected registerOnFormControlChange() {
+    const self = this;
+    if (this._fControl) {
+      this._fControlSubscription = this._fControl.valueChanges.subscribe(value => {
+        self.onFormControlChange(value);
+      });
+    }
   }
 
   resolveValidators(): ValidatorFn[] {
@@ -526,4 +585,75 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
       this.updateValidators();
     }
   }
+
+  innerOnFocus(event: any) {
+    if (!this.isReadOnly && !this.isDisabled) {
+      this.onFocus.emit(event);
+    }
+  }
+
+  innerOnBlur(event: any) {
+    if (!this.isReadOnly && !this.isDisabled) {
+      this.onBlur.emit(event);
+    }
+  }
+
+  get appearance(): MatFormFieldAppearance {
+    return this._appearance;
+  }
+
+  set appearance(value: MatFormFieldAppearance) {
+    const values = ['legacy', 'standard', 'fill', 'outline'];
+    if (values.indexOf(value) === -1) {
+      value = undefined;
+    }
+    this._appearance = value;
+  }
+
+  get floatLabel(): FloatLabelType {
+    return this._floatLabel;
+  }
+
+  set floatLabel(value: FloatLabelType) {
+    const values = ['always', 'never', 'auto'];
+    if (values.indexOf(value) === -1) {
+      value = 'auto';
+    }
+    this._floatLabel = value;
+  }
+
+  protected addOntimizeCustomAppearanceClass() {
+    try {
+      if (this.elRef) {
+        const matFormFieldEl = this.elRef.nativeElement.getElementsByTagName('mat-form-field');
+        if (matFormFieldEl && matFormFieldEl.length === 1) {
+          matFormFieldEl.item(0).classList.add('mat-form-field-appearance-ontimize');
+        }
+      }
+    } catch (e) {
+      //
+    }
+  }
+
+  protected getTooltipClass(): string {
+    const liteError = this.errorOptions.type === Codes.O_MAT_ERROR_LITE;
+    if (!liteError) {
+      return super.getTooltipClass();
+    }
+    const errorClass = Util.isDefined(this._fControl.errors) ? 'o-mat-error' : '';
+    return `${super.getTooltipClass()} ${errorClass}`;
+  }
+
+  protected getTooltipText(): string {
+    const liteError = this.errorOptions.type === Codes.O_MAT_ERROR_LITE;
+    if (liteError && Util.isDefined(this._fControl.errors) && this.oMatErrorChildren && this.oMatErrorChildren.length > 0) {
+      let result: string = '';
+      this.oMatErrorChildren.forEach((oMatError: OMatErrorComponent) => {
+        result += `${oMatError.text}\n`;
+      });
+      return result;
+    }
+    return super.getTooltipText();
+  }
+
 }

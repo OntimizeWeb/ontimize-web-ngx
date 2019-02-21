@@ -39,7 +39,7 @@ export const DEFAULT_OUTPUTS_O_TABLE_MENU = [];
   outputs: DEFAULT_OUTPUTS_O_TABLE_MENU,
   encapsulation: ViewEncapsulation.None,
   host: {
-    '[class.o-table-menu]': 'true',
+    '[class.o-table-menu]': 'true'
   },
   changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -96,9 +96,22 @@ export class OTableMenuComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit() {
     this.permissions = this.table.getMenuPermissions();
+
+  }
+
+  getRowHeight() {
+    return this.table.rowHeight;
   }
 
   ngAfterViewInit() {
+    if (this.columnFilterOption) {
+      this.columnFilterOption.setActive(this.table.showFilterByColumnIcon);
+      this.cd.detectChanges();
+    }
+    this.matMenu.panelClass = this.getRowHeight() + ' o-table-menu';
+    this.filterMenu.panelClass = this.getRowHeight() + ' o-table-menu';
+    this.configurationMenu.panelClass = this.getRowHeight() + ' o-table-menu';
+
     if (!this.permissions.items || this.permissions.items.length === 0) {
       return;
     }
@@ -257,7 +270,7 @@ export class OTableMenuComponent implements OnInit, AfterViewInit, OnDestroy {
     exportCnfg.columns = tableOptions.visibleColumns.filter(c => colsNotIncluded.indexOf(c) === -1);
     // Table column names
     let tableColumnNames = {};
-    tableOptions.visibleColumns.filter(c => colsNotIncluded.indexOf(c) === -1).map(c => tableColumnNames[c] = this.translateService.get(c));
+    tableOptions.visibleColumns.filter(c => colsNotIncluded.indexOf(c) === -1).forEach(c => tableColumnNames[c] = this.translateService.get(c));
     exportCnfg.columnNames = tableColumnNames;
     // Table column sqlTypes
     exportCnfg.sqlTypes = this.table.getSqlTypes();
@@ -266,7 +279,8 @@ export class OTableMenuComponent implements OnInit, AfterViewInit, OnDestroy {
 
     let dialogRef = this.dialog.open(OTableExportDialogComponent, {
       data: exportCnfg,
-      disableClose: true
+      disableClose: true,
+      panelClass: ['o-dialog-class', 'o-table-dialog']
     });
 
     dialogRef.afterClosed().subscribe(result => result ? this.snackBarService.open('MESSAGES.SUCCESS_EXPORT_TABLE_DATA', { icon: 'check_circle' }) : null);
@@ -276,9 +290,11 @@ export class OTableMenuComponent implements OnInit, AfterViewInit, OnDestroy {
     let dialogRef = this.dialog.open(OTableVisibleColumnsDialogComponent, {
       data: {
         originalVisibleColumns: Util.parseArray(this.table.originalVisibleColumns, true),
-        columnsData: this.table.oTableOptions.columns
+        columnsData: this.table.oTableOptions.columns,
+        rowHeight: this.table.rowHeight
       },
-      disableClose: true
+      disableClose: true,
+      panelClass: ['o-dialog-class', 'o-table-dialog']
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -286,6 +302,7 @@ export class OTableMenuComponent implements OnInit, AfterViewInit, OnDestroy {
         this.table.visibleColArray = dialogRef.componentInstance.getVisibleColumns();
         let columnsOrder = dialogRef.componentInstance.getColumnsOrder();
         this.table.oTableOptions.columns.sort((a: OColumn, b: OColumn) => columnsOrder.indexOf(a.attr) - columnsOrder.indexOf(b.attr));
+        this.table.cd.detectChanges();
       }
     });
   }
@@ -298,9 +315,11 @@ export class OTableMenuComponent implements OnInit, AfterViewInit, OnDestroy {
           self.table.dataSource.clearColumnFilters();
         }
         self.table.showFilterByColumnIcon = !res;
+        self.table.cd.detectChanges();
       });
     } else {
       this.table.showFilterByColumnIcon = !this.table.showFilterByColumnIcon;
+      this.table.cd.detectChanges();
     }
   }
 
@@ -308,7 +327,8 @@ export class OTableMenuComponent implements OnInit, AfterViewInit, OnDestroy {
     let dialogRef = this.dialog.open(OTableStoreFilterDialogComponent, {
       data: this.table.oTableStorage.getStoredFilters().map(filter => filter.name),
       width: '30vw',
-      disableClose: true
+      disableClose: true,
+      panelClass: ['o-dialog-class', 'o-table-dialog']
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -322,7 +342,8 @@ export class OTableMenuComponent implements OnInit, AfterViewInit, OnDestroy {
     let dialogRef = this.dialog.open(OTableLoadFilterDialogComponent, {
       data: this.table.oTableStorage.getStoredFilters(),
       width: '30vw',
-      disableClose: true
+      disableClose: true,
+      panelClass: ['o-dialog-class', 'o-table-dialog']
     });
 
     dialogRef.componentInstance.onDelete.subscribe(filterName => this.table.oTableStorage.deleteStoredFilter(filterName));
@@ -352,7 +373,8 @@ export class OTableMenuComponent implements OnInit, AfterViewInit, OnDestroy {
   onStoreConfigurationClicked(): void {
     let dialogRef = this.dialog.open(OTableStoreConfigurationDialogComponent, {
       width: '30vw',
-      disableClose: true
+      disableClose: true,
+      panelClass: ['o-dialog-class', 'o-table-dialog']
     });
     const self = this;
     dialogRef.afterClosed().subscribe(result => {
@@ -368,7 +390,8 @@ export class OTableMenuComponent implements OnInit, AfterViewInit, OnDestroy {
     let dialogRef = this.dialog.open(OTableApplyConfigurationDialogComponent, {
       data: this.table.oTableStorage.getStoredConfigurations(),
       width: '30vw',
-      disableClose: true
+      disableClose: true,
+      panelClass: ['o-dialog-class', 'o-table-dialog']
     });
     const self = this;
     dialogRef.componentInstance.onDelete.subscribe(configurationName => this.table.oTableStorage.deleteStoredConfiguration(configurationName));

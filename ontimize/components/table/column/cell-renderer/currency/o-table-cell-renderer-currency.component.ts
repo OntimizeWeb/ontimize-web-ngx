@@ -1,10 +1,12 @@
 
-import { Component, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, Injector, OnInit, TemplateRef, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 
 import { CurrencyService } from '../../../../../services';
 import { ICurrencyPipeArgument, OCurrencyPipe } from '../../../../../pipes';
 import { OBaseTableCellRenderer } from '../o-base-table-cell-renderer.class';
 import { OTableCellRendererRealComponent } from '../real/o-table-cell-renderer-real.component';
+import { InputConverter } from '../../../../../decorators';
+
 
 export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_CURRENCY = [
   ...OTableCellRendererRealComponent.DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_REAL,
@@ -20,16 +22,22 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_CURRENCY = [
   moduleId: module.id,
   selector: 'o-table-cell-renderer-currency',
   templateUrl: './o-table-cell-renderer-currency.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   inputs: DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_CURRENCY
 })
 export class OTableCellRendererCurrencyComponent extends OBaseTableCellRenderer implements OnInit {
 
   public static DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_CURRENCY = DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_CURRENCY;
 
+  @InputConverter()
+  minDecimalDigits: number = 2;
+  @InputConverter()
+  maxDecimalDigits: number = 2;
+
   protected currencySymbol: string;
   protected currencySymbolPosition: string;
   protected decimalSeparator: string = '.';
-  protected decimalDigits: number = 2;
+
   protected grouping: boolean = true;
   protected thousandSeparator: string = ',';
 
@@ -57,14 +65,17 @@ export class OTableCellRendererCurrencyComponent extends OBaseTableCellRenderer 
     if (typeof this.currencySymbolPosition === 'undefined') {
       this.currencySymbolPosition = this.currencyService.symbolPosition;
     }
+
     this.pipeArguments = {
       currencySimbol: this.currencySymbol,
       currencySymbolPosition: this.currencySymbolPosition,
-      decimalDigits: this.decimalDigits,
+      minDecimalDigits: this.minDecimalDigits,
+      maxDecimalDigits: this.maxDecimalDigits,
       decimalSeparator: this.decimalSeparator,
       grouping: this.grouping,
       thousandSeparator: this.thousandSeparator
     };
+
   }
 
 }

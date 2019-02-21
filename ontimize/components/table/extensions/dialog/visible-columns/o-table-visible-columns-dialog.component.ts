@@ -1,8 +1,8 @@
-import { Component, Inject, ViewEncapsulation } from '@angular/core';
+import { Component, Inject, ViewEncapsulation, ChangeDetectionStrategy, ChangeDetectorRef, Injector } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { DragDropService } from 'ng2-dnd';
-import { Util } from '../../../../../utils';
+import { Util, Codes } from '../../../../../utils';
 import { OColumn } from '../../../o-table.component';
+import { DragDropService } from '@churchs19/ng2-dnd';
 
 @Component({
   moduleId: module.id,
@@ -11,6 +11,7 @@ import { OColumn } from '../../../o-table.component';
   styleUrls: ['o-table-visible-columns-dialog.component.scss'],
   encapsulation: ViewEncapsulation.None,
   providers: [DragDropService],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     '[class.o-table-visible-columns-dialog]': 'true'
   }
@@ -18,11 +19,19 @@ import { OColumn } from '../../../o-table.component';
 export class OTableVisibleColumnsDialogComponent {
 
   columns: Array<any> = [];
+  protected cd: ChangeDetectorRef;
+  rowHeight: string = Codes.DEFAULT_ROW_HEIGHT;
 
   constructor(
+    protected injector: Injector,
     public dialogRef: MatDialogRef<OTableVisibleColumnsDialogComponent>,
     @Inject(MAT_DIALOG_DATA) data: any
   ) {
+    try {
+      this.cd = this.injector.get(ChangeDetectorRef);
+    } catch (e) {
+      // no parent form
+    }
     if (Util.isArray(data.columnsData) && Util.isArray(data.originalVisibleColumns)) {
       let originalCols = data.originalVisibleColumns;
       data.columnsData.forEach((oCol: OColumn) => {
@@ -33,6 +42,9 @@ export class OTableVisibleColumnsDialogComponent {
           showInList: (oCol.definition !== undefined || oCol.visible || originalCols.indexOf(oCol.attr) !== -1)
         });
       });
+    }
+    if (Util.isDefined(data.rowHeight)) {
+      this.rowHeight = data.rowHeight;
     }
   }
 
@@ -48,4 +60,7 @@ export class OTableVisibleColumnsDialogComponent {
     col.visible = !col.visible;
   }
 
+  onDragSuccess(arg: any) {
+    this.cd.detectChanges();
+  }
 }

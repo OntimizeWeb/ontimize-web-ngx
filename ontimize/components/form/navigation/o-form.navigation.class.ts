@@ -1,7 +1,6 @@
 import { EventEmitter, Injector } from '@angular/core';
 import { ActivatedRoute, Router, UrlSegmentGroup, NavigationExtras } from '@angular/router';
-import { Observable, Subscription } from 'rxjs';
-import 'rxjs/add/operator/combineLatest';
+import { Observable, Subscription, combineLatest } from 'rxjs';
 
 import { DialogService, NavigationService, ONavigationItem } from '../../../services';
 import { OFormComponent } from '../o-form.component';
@@ -62,7 +61,7 @@ export class OFormNavigationClass {
     }
 
     const self = this;
-    this.combinedNavigationStream = Observable.combineLatest(
+    this.combinedNavigationStream = combineLatest(
       self.onUrlParamChangedStream.asObservable()
     );
 
@@ -71,17 +70,6 @@ export class OFormNavigationClass {
         self.navigationStream.emit(true);
       }
     });
-
-    if (this.formLayoutManager && this.formLayoutManager.isTabMode()) {
-      this.onCloseTabSubscription = this.formLayoutManager.onCloseTab.subscribe((args: any) => {
-        if (args.id === self.id) {
-          const closeTabEmitter: EventEmitter<boolean> = args.onCloseTabAccepted;
-          self.showConfirmDiscardChanges().then(res => {
-            closeTabEmitter.emit(res);
-          });
-        }
-      });
-    }
   }
 
   initialize() {
@@ -242,7 +230,7 @@ export class OFormNavigationClass {
   }
 
   updateNavigation() {
-    if (this.formLayoutManager) {
+    if (this.formLayoutManager && this.formLayoutManager.allowToUpdateNavigation(this.form.oattr)) {
       let formData = undefined;
       if (!this.form.isInInsertMode()) {
         formData = {};

@@ -1,7 +1,7 @@
-<mat-toolbar color="primary" class="mat-elevation-z1">
-  <span mat-dialog-title> {{ (title || 'LAYOUT_MANANGER.DIALOG_TITLE') | oTranslate }}{{ label }} </span>
+<div fxLayout="row" fxLayoutAlign="space-between center" class="title-container">
+  <span fxFlex fxLayoutAlign="center center" mat-dialog-title> {{ (title || 'LAYOUT_MANANGER.DIALOG_TITLE') | oTranslate }}{{ label }} </span>
   <mat-icon (click)="closeDialog()" svgIcon="ontimize:close"></mat-icon>
-</mat-toolbar>
+</div>
 
 <div mat-dialog-content class="form-layout-dialog-container">
   <ng-template o-form-layout-manager-content></ng-template>

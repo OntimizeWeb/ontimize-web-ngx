@@ -7,7 +7,6 @@ import { IRealPipeArgument, ORealPipe } from '../../../pipes';
 import { OSharedModule } from '../../../shared';
 import { Util } from '../../../util/util';
 import { OFormComponent } from '../../form/form-components';
-import { OFormValue } from '../../form/OFormValue';
 import { DEFAULT_INPUTS_O_INTEGER_INPUT, DEFAULT_OUTPUTS_O_INTEGER_INPUT, OIntegerInputComponent, OIntegerInputModule } from '../integer-input/o-integer-input.component';
 
 export const DEFAULT_INPUTS_O_REAL_INPUT = [
@@ -59,23 +58,15 @@ export class ORealInputComponent extends OIntegerInputComponent implements OnIni
     this._defaultSQLTypeKey = 'FLOAT';
   }
 
-  setComponentPipe() {
+  setComponentPipe(): void {
     this.componentPipe = new ORealPipe(this.injector);
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     super.ngOnInit();
     this.pipeArguments.decimalSeparator = this.decimalSeparator;
     this.pipeArguments.minDecimalDigits = this.minDecimalDigits;
     this.pipeArguments.maxDecimalDigits = this.maxDecimalDigits;
-  }
-
-  innerOnChange(event: any) {
-    if (!this.value) {
-      this.value = new OFormValue();
-    }
-    this.ensureOFormValue(event);
-    this.onChange.emit(event);
   }
 
   resolveValidators(): ValidatorFn[] {

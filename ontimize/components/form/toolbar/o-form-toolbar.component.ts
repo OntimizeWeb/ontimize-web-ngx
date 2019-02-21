@@ -1,14 +1,14 @@
 import { Component, OnInit, OnDestroy, Inject, Injector, forwardRef, ElementRef, NgModule, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 
-import { OFormComponent } from './o-form.component';
-import { InputConverter } from '../../decorators';
-import { Util } from '../../util/util';
-import { PermissionsUtils } from '../../util/permissions';
-import { DialogService, NavigationService, OPermissions, SnackBarService } from '../../services';
-import { OSharedModule } from '../../shared';
-import { OFormNavigationComponent } from './navigation/o-form-navigation.component';
+import { InputConverter } from '../../../decorators';
+import { Util } from '../../../util/util';
+import { PermissionsUtils } from '../../../util/permissions';
+import { DialogService, NavigationService, OPermissions, SnackBarService } from '../../../services';
+import { OSharedModule } from '../../../shared';
+import { OFormNavigationComponent } from '../navigation/o-form-navigation.component';
+import { OFormComponent } from '../o-form.component';
 
 export const DEFAULT_INPUTS_O_FORM_TOOLBAR = [
   'labelHeader: label-header',
@@ -69,7 +69,7 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
   @InputConverter()
   showHeaderNavigation: boolean = true;
 
-  constructor( @Inject(forwardRef(() => OFormComponent)) private _form: OFormComponent,
+  constructor(@Inject(forwardRef(() => OFormComponent)) private _form: OFormComponent,
     public element: ElementRef,
     protected injector: Injector) {
     _form.registerToolbar(this);

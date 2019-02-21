@@ -1,6 +1,6 @@
 import { Injectable, Injector } from '@angular/core';
 import { CanActivateChild, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { Util } from '../../../utils';
 import { OFormLayoutManagerService } from '../../../services/o-form-layout-manager.service';
 import { ShareCanActivateChildService } from '../../../services/share-can-activate-child.service';

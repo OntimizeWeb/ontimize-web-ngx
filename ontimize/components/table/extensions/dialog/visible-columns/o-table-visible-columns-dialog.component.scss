@@ -1,16 +1,30 @@
 .o-table-visible-columns-dialog {
-  mat-list-item {
-    cursor: pointer;
+  .mat-dialog-content {
+    overflow: hidden;
 
-    &.dnd-sortable-drag {
-      background: #EBEBEB;
+    .mat-list {
+      padding-top: 24px;
+
+      .mat-list-item {
+        cursor: pointer;
+
+        .mat-list-item-content {
+          padding: 0;
+
+          div.mat-list-text {
+            padding: 0 8px;
+          }
+        }
+      }
     }
-  }
 
-  .mat-icon[svgicon="ontimize:visibility"],
-  .mat-icon[svgicon="ontimize:visibility_off"] {
-    svg {
-      width: 125%;
+    .mat-icon[svgicon="ontimize:drag_handle"] {
+      cursor: move;
+    }
+
+    .mat-icon[svgicon="ontimize:visibility"],
+    .mat-icon[svgicon="ontimize:visibility_off"] {
+      width: 32px;
     }
   }
 }

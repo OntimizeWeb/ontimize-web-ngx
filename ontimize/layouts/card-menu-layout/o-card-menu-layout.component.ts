@@ -1,7 +1,7 @@
 import { AfterViewInit, AfterViewChecked, ChangeDetectionStrategy, ChangeDetectorRef, Component, Injector, NgModule, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MediaChange, ObservableMedia } from '@angular/flex-layout';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 
 import { OSharedModule } from '../../shared/shared.module';
 import { AppMenuService, OTranslateService } from '../../services';
@@ -24,8 +24,7 @@ export const DEFAULT_OUTPUTS_O_MENU_LAYOUT = [
   outputs: DEFAULT_OUTPUTS_O_MENU_LAYOUT,
   encapsulation: ViewEncapsulation.None,
   host: {
-    '[class.o-menu-layout]': 'true',
-    '[class.o-card-menu-layout-bigscreen]': 'isSmallScreen'
+    '[class.o-menu-layout]': 'true'
   },
   changeDetection: ChangeDetectionStrategy.OnPush
 })

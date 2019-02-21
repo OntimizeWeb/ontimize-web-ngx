@@ -1,6 +1,6 @@
 import { ElementRef, EventEmitter, Injector, NgZone } from '@angular/core';
 import { BehaviorSubject, Subscription } from 'rxjs';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
 import { InputConverter } from '../../decorators';
 import { DialogService, OntimizeService } from '../../services';
@@ -344,7 +344,6 @@ export class OFormServiceComponent extends OFormDataComponent {
   }
 
   load(): any {
-
     var self = this;
     var zone = this.injector.get(NgZone);
     var loadObservable = new Observable(observer => {
@@ -368,6 +367,13 @@ export class OFormServiceComponent extends OFormDataComponent {
       });
     });
     return subscription;
+  }
+
+  onFormControlChange(value: any) {
+    if (this.oldValue === value) {
+      return;
+    }
+    super.onFormControlChange(value);
   }
 
 }

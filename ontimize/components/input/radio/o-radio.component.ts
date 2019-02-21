@@ -66,14 +66,13 @@ export class ORadioComponent extends OFormServiceComponent implements AfterViewI
     }
   }
 
-  innerOnChange(value: any) {
-    this.ensureOFormValue(value);
-    this.onChange.emit(value);
-  }
-
   onMatRadioGroupChange(e: MatRadioChange): void {
     var newValue = e.value;
-    this.setValue(newValue, { changeType: OValueChangeEvent.USER_CHANGE, emitModelToViewChange: false });
+    this.setValue(newValue, {
+      changeType: OValueChangeEvent.USER_CHANGE,
+      emitEvent: false,
+      emitModelToViewChange: false
+    });
   }
 
   getOptionDescriptionValue(item: any = {}) {

@@ -1,5 +1,5 @@
-import { Component, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { Subscription } from 'rxjs/Subscription';
+import { Component, Injector, OnInit, TemplateRef, ViewChild, ChangeDetectionStrategy } from '@angular/core';
+import { Subscription } from 'rxjs';
 
 import { DialogService, OntimizeService } from '../../../../../services';
 import { dataServiceFactory } from '../../../../../services/data-service.provider';
@@ -23,6 +23,7 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_SERVICE = [
   selector: 'o-table-cell-renderer-service',
   templateUrl: './o-table-cell-renderer-service.component.html',
   inputs: DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_SERVICE,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     // Service renderer must have its own service instance in order to avoid overriding table service configuration
     { provide: OntimizeService, useFactory: dataServiceFactory, deps: [Injector] }
@@ -33,6 +34,11 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
   public static DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_SERVICE = DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_SERVICE;
 
   @ViewChild('templateref', { read: TemplateRef }) public templateref: TemplateRef<any>;
+
+  public rowData: any;
+  public cellValues = [];
+  public renderValue: any;
+  public responseMap = {};
 
   /* Inputs */
   protected entity: string;
@@ -50,18 +56,12 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
   protected querySubscription: Subscription;
   protected dialogService: DialogService;
 
-  rowData: any;
-  cellValues = [];
-  renderValue: any;
-
-  responseMap = {};
-
   constructor(protected injector: Injector) {
     super(injector);
     this.dialogService = injector.get(DialogService);
   }
 
-  ngOnInit() {
+  public ngOnInit(): void {
     if (this.table) {
       const oCol: OColumn = this.table.getOColumn(this.tableColumn.attr);
       oCol.definition.contentAlign = oCol.definition.contentAlign ? oCol.definition.contentAlign : 'center';
@@ -73,7 +73,7 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
     this.configureService();
   }
 
-  getDescriptionValue(cellvalue: any, rowValue: any): String {
+  public getDescriptionValue(cellvalue: any, rowValue: any): String {
     // let keyValue = rowValue[this.column];
     if (cellvalue !== undefined && this.cellValues.indexOf(cellvalue) === -1) {
       this.queryData(cellvalue, rowValue);
@@ -82,7 +82,7 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
     return '';
   }
 
-  queryData(cellvalue, parentItem?: any) {
+  public queryData(cellvalue, parentItem?: any): void {
     const self = this;
 
     if (!this.dataService || !(this.queryMethod in this.dataService) || !this.entity) {
@@ -91,8 +91,10 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
     }
     const filter = ServiceUtils.getFilterUsingParentKeys(parentItem, this._pKeysEquiv);
     const tableColAlias = Object.keys(this._pKeysEquiv).find(key => this._pKeysEquiv[key] === this.column);
-    if (Util.isDefined(tableColAlias) && !filter[tableColAlias]) {
-      filter[tableColAlias] = cellvalue;
+    if (Util.isDefined(tableColAlias)) {
+      if (!filter[tableColAlias]) {
+        filter[tableColAlias] = cellvalue;
+      }
     } else {
       filter[this.column] = cellvalue;
     }
@@ -112,7 +114,7 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
     });
   }
 
-  configureService() {
+  public configureService(): void {
     let loadingService: any = OntimizeService;
     if (this.serviceType) {
       loadingService = this.serviceType;

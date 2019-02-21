@@ -1,16 +1,20 @@
-<mat-menu #menu="matMenu" x-position="before" class="o-table-menu">
-  <o-table-option #selectAllCheckboxOption *ngIf="showSelectAllCheckbox" [active]="isSelectAllOptionActive" (onClick)="onShowsSelects($event)" label="TABLE.BUTTONS.SELECT" show-active-icon="true"></o-table-option>
+<mat-menu #menu="matMenu" x-position="before">
+  <o-table-option #selectAllCheckboxOption *ngIf="showSelectAllCheckbox" [active]="isSelectAllOptionActive" (onClick)="onShowsSelects($event)"
+    label="TABLE.BUTTONS.SELECT" show-active-icon="true"></o-table-option>
   <o-table-option #exportButtonOption *ngIf="showExportButton" (onClick)="onExportButtonClicked()" label="TABLE.BUTTONS.EXPORT"></o-table-option>
-  <o-table-option #columnsVisibilityButtonOption *ngIf="showColumnsVisibilityButton" (onClick)="onChangeColumnsVisibilityClicked()" label="TABLE.BUTTONS.COLVIS"></o-table-option>
+  <o-table-option #columnsVisibilityButtonOption *ngIf="showColumnsVisibilityButton" (onClick)="onChangeColumnsVisibilityClicked()"
+    label="TABLE.BUTTONS.COLVIS"></o-table-option>
 
-  <button type="button" #filterMenuButton *ngIf="showFilterMenu" mat-menu-item [matMenuTriggerFor]="filterMenu">{{ 'TABLE.BUTTONS.FILTER' | oTranslate }}</button>
-  <button type="button" #configurationMenuButton *ngIf="showConfigurationMenu" mat-menu-item [matMenuTriggerFor]="configurationMenu">{{ 'TABLE.BUTTONS.CONFIGURATION' | oTranslate }}</button>
+  <button type="button" #filterMenuButton *ngIf="showFilterMenu" mat-menu-item [matMenuTriggerFor]="filterMenu">{{
+    'TABLE.BUTTONS.FILTER' | oTranslate }}</button>
+  <button type="button" #configurationMenuButton *ngIf="showConfigurationMenu" mat-menu-item [matMenuTriggerFor]="configurationMenu">{{
+    'TABLE.BUTTONS.CONFIGURATION' | oTranslate }}</button>
   <ng-content></ng-content>
 </mat-menu>
 
 <mat-menu #filterMenu="matMenu">
-  <o-table-option #columnFilterOption *ngIf="showColumnsFilterOption" show-active-icon="true"
-    (onClick)="onFilterByColumnClicked()" label="TABLE.BUTTONS.FILTER_BY_COLUMN">
+  <o-table-option #columnFilterOption *ngIf="showColumnsFilterOption" show-active-icon="true" (onClick)="onFilterByColumnClicked()"
+    label="TABLE.BUTTONS.FILTER_BY_COLUMN">
   </o-table-option>
   <button type="button" mat-menu-item (click)="onStoreFilterClicked()">{{ 'TABLE.BUTTONS.FILTER_SAVE' | oTranslate }}</button>
   <button type="button" mat-menu-item (click)="onLoadFilterClicked()">{{ 'TABLE.BUTTONS.FILTER_LOAD' | oTranslate }}</button>
@@ -18,6 +22,8 @@
 </mat-menu>
 
 <mat-menu #configurationMenu="matMenu">
-  <button type="button" mat-menu-item (click)="onStoreConfigurationClicked()">{{ 'TABLE.BUTTONS.SAVE_CONFIGURATION' | oTranslate }}</button>
-  <button type="button" mat-menu-item (click)="onApplyConfigurationClicked()">{{ 'TABLE.BUTTONS.APPLY_CONFIGURATION' | oTranslate }}</button>
+  <button type="button" mat-menu-item (click)="onStoreConfigurationClicked()">{{ 'TABLE.BUTTONS.SAVE_CONFIGURATION' |
+    oTranslate }}</button>
+  <button type="button" mat-menu-item (click)="onApplyConfigurationClicked()">{{ 'TABLE.BUTTONS.APPLY_CONFIGURATION' |
+    oTranslate }}</button>
 </mat-menu>

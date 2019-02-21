@@ -1,6 +1,6 @@
 import { Injector, NgModule, Component, OnInit, ViewEncapsulation, OnDestroy, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 import { OSharedModule } from '../../../shared';
 import { OAppSidenavComponent } from '../o-app-sidenav.component';
 

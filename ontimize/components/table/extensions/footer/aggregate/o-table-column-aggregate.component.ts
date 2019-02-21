@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, forwardRef, Inject, Injector } from '@angular/core';
+import { Component, OnDestroy, OnInit, forwardRef, Inject, Injector, ChangeDetectionStrategy } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { OTableComponent } from '../../../o-table.component';
@@ -29,6 +29,7 @@ export const DEFAULT_TABLE_COLUMN_AGGREGATE = [
   moduleId: module.id,
   selector: 'o-table-column-aggregate',
   templateUrl: './o-table-column-aggregate.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   inputs: DEFAULT_TABLE_COLUMN_AGGREGATE
 
 })

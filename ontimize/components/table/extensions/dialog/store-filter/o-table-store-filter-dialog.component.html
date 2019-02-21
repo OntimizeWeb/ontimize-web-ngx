@@ -1,21 +1,21 @@
 <span mat-dialog-title>{{ 'TABLE.BUTTONS.SAVE_FILTER' | oTranslate }}</span>
 
 <mat-dialog-content>
-  <span mat-subheader>{{ 'TABLE.DIALOG.SAVE_FILTER' | oTranslate }}</span>
-  <form #form [formGroup]="formGroup" fxLayout="column" layout-padding>
+  <div mat-subheader>{{ 'TABLE.DIALOG.SAVE_FILTER' | oTranslate }}</div>
+  <form #form [formGroup]="formGroup" fxLayout="column">
     <mat-form-field>
-      <input matInput placeholder="{{ 'TABLE.DIALOG.FILTER_NAME' | oTranslate }}" formControlName="name" required>
-      <mat-error *ngIf="formGroup.controls['name'].hasError('filterNameAlreadyExists')">{{ 'TABLE.DIALOG.FILTER_NAME_ALREADY_EXISTS' | oTranslate }}</mat-error>
-      <mat-error *ngIf="formGroup.controls['name'].hasError('required')">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</mat-error>
+      <input matInput [matTooltip]="tooltipText" [matTooltipClass]="tooltipClass" placeholder="{{ 'TABLE.DIALOG.FILTER_NAME' | oTranslate }}"
+        formControlName="name" required>
+      <mat-error *ngIf="formGroup.controls['name'].hasError('filterNameAlreadyExists')" text="{{ 'TABLE.DIALOG.FILTER_NAME_ALREADY_EXISTS' | oTranslate }}"></mat-error>
+      <mat-error *ngIf="formGroup.controls['name'].hasError('required')" text="{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}"></mat-error>
     </mat-form-field>
     <mat-form-field class="example-full-width">
-      <textarea matInput placeholder="{{ 'TABLE.DIALOG.FILTER_DESCRIPTION' | oTranslate }}" formControlName="description" rows="4"
-        cols="50"></textarea>
+      <textarea matInput placeholder="{{ 'TABLE.DIALOG.FILTER_DESCRIPTION' | oTranslate }}" formControlName="description" rows="4" cols="50"></textarea>
     </mat-form-field>
   </form>
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
-  <button type="button" mat-button class="mat-primary" [mat-dialog-close]="false">{{ 'CANCEL' | oTranslate | uppercase }}</button>
-  <button type="button" mat-button class="mat-primary" [mat-dialog-close]="true" [disabled]="!formGroup.valid">{{ 'SAVE' | oTranslate | uppercase }}</button>
+  <button type="button" mat-stroked-button class="mat-primary" [mat-dialog-close]="false">{{ 'CANCEL' | oTranslate | uppercase }}</button>
+  <button type="button" mat-stroked-button class="mat-primary" [mat-dialog-close]="true" [disabled]="!formGroup.valid">{{'SAVE' | oTranslate | uppercase }}</button>
 </mat-dialog-actions>

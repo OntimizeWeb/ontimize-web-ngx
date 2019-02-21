@@ -1,8 +1,7 @@
 import { Injectable, Injector, EventEmitter } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router, ActivatedRouteSnapshot, UrlSegment } from '@angular/router';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/filter';
+import { Observable, ReplaySubject } from 'rxjs';
+import { map, filter } from 'rxjs/operators';
 
 import { Codes, Util } from '../utils';
 import { ObservableWrapper } from '../util/async';
@@ -122,13 +121,17 @@ export class NavigationService implements ILocalStorageComponent {
 
   initialize(): void {
     const self = this;
-    const navEndEvents = this.router.events.filter(event => event instanceof NavigationEnd);
-    navEndEvents.map(() => this.router.routerState.root).map(route => {
-      while (route.firstChild) {
-        route = route.firstChild;
-      }
-      return route;
-    }).filter(route => route.outlet === 'primary').subscribe(self.parseNavigationItems.bind(self));
+    const navEndEvents = this.router.events.pipe(filter(event => event instanceof NavigationEnd));
+    navEndEvents
+      .pipe(map(() => this.router.routerState.root))
+      .pipe(map(route => {
+        while (route.firstChild) {
+          route = route.firstChild;
+        }
+        return route;
+      }))
+      .pipe(filter(route => route.outlet === 'primary'))
+      .subscribe(self.parseNavigationItems.bind(self));
   }
 
   protected parseNavigationItems(activatedRoute: ActivatedRoute) {

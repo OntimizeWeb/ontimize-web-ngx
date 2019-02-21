@@ -1,6 +1,4 @@
-import { BehaviorSubject, Observable } from 'rxjs';
-import 'rxjs/add/observable/of';
-
+import { BehaviorSubject, Observable, merge, of } from 'rxjs';
 import { OQueryDataArgs } from '../service.utils';
 
 export class OTableDao {
@@ -31,13 +29,13 @@ export class OTableDao {
   }
 
   removeQuery(filters: any): Observable<any> {
-    return Observable.merge(...filters.map((kv => this.dataService[this.methods.delete](kv, this.entity))));
+    return merge(...filters.map((kv => this.dataService[this.methods.delete](kv, this.entity))));
   }
 
   insertQuery(av: Object, sqlTypes?: Object): Observable<any> {
     if (this.usingStaticData) {
       this.data.push(av);
-      return Observable.of(this.data);
+      return of(this.data);
     } else {
       return this.dataService[this.methods.insert](av, this.entity, sqlTypes);
     }
@@ -45,7 +43,7 @@ export class OTableDao {
 
   updateQuery(kv: Object, av: Object, sqlTypes?: Object): Observable<any> {
     if (this.usingStaticData) {
-      return Observable.of(this.data);
+      return of(this.data);
     } else {
       return this.dataService[this.methods.update](kv, av, this.entity, sqlTypes);
     }
@@ -58,10 +56,10 @@ export class OTableDao {
   setDataArray(data: Array<any>) {
     this.dataChange.next(data);
     this.isLoadingResults = false;
-    return Observable.of(data);
+    return of(data);
   }
 
-  setAsincronColumn(value: Array<any>, rowData: any) {
+  setAsynchronousColumn(value: Array<any>, rowData: any) {
     // Object.assign(this.data[rowIndex], value);
     let index = null;
     for (let i = 0; i < this.data.length; i++) {

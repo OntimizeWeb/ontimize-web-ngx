@@ -1,13 +1,12 @@
-import { Injector, Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Injectable, Injector } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/share';
+import { Observable } from 'rxjs';
+import { share } from 'rxjs/operators';
 
-import { LoginService } from '../services';
 import { AppConfig, Config } from '../config/app-config';
-import { IAuthService, IDataService, Util, Codes, ServiceUtils } from '../utils';
+import { LoginService } from '../services';
+import { Codes, IAuthService, IDataService, ServiceUtils, Util } from '../utils';
 import { OntimizeServiceResponseParser } from './parser/o-service-response.parser';
 
 @Injectable()
@@ -89,7 +88,7 @@ export class OntimizeEEService implements IAuthService, IDataService {
 
   public endsession(user: string, sessionId: any): Observable<any> {
     let _closeSessionObserver: any;
-    const closeSessionObservable = new Observable(observer => _closeSessionObserver = observer).share();
+    const closeSessionObservable = new Observable(observer => _closeSessionObserver = observer).pipe(share());
     setTimeout(() => {
       _closeSessionObserver.next(0);
     }, 0);
@@ -98,7 +97,7 @@ export class OntimizeEEService implements IAuthService, IDataService {
 
   public hassession(user: string, sessionId: any): Observable<any> {
     let _observer: any;
-    const observable = new Observable(observer => _observer = observer).share();
+    const observable = new Observable(observer => _observer = observer).pipe(share());
     return observable;
   }
 
@@ -125,7 +124,7 @@ export class OntimizeEEService implements IAuthService, IDataService {
         self.parseUnsuccessfulQueryResponse(error, _innerObserver);
       }, () => _innerObserver.complete());
     });
-    return dataObservable.share();
+    return dataObservable.pipe(share());
   }
 
   public advancedQuery(kv?: Object, av?: Array<string>, entity?: string, sqltypes?: Object,
@@ -160,7 +159,7 @@ export class OntimizeEEService implements IAuthService, IDataService {
         self.parseUnsuccessfulAdvancedQueryResponse(error, _innerObserver);
       }, () => _innerObserver.complete());
     });
-    return dataObservable.share();
+    return dataObservable.pipe(share());
   }
 
   public insert(av: Object = {}, entity: string, sqltypes?: Object): Observable<any> {
@@ -180,7 +179,7 @@ export class OntimizeEEService implements IAuthService, IDataService {
         self.parseUnsuccessfulInsertResponse(error, _innerObserver);
       }, () => _innerObserver.complete());
     });
-    return dataObservable.share();
+    return dataObservable.pipe(share());
   }
 
   public update(kv: Object = {}, av: Object = {}, entity?: string, sqltypes?: Object): Observable<any> {
@@ -201,7 +200,7 @@ export class OntimizeEEService implements IAuthService, IDataService {
         self.parseUnsuccessfulUpdateResponse(error, _innerObserver);
       }, () => _innerObserver.complete());
     });
-    return dataObservable.share();
+    return dataObservable.pipe(share());
   }
 
   public delete(kv: Object = {}, entity?: string, sqltypes?: Object): Observable<any> {
@@ -222,7 +221,7 @@ export class OntimizeEEService implements IAuthService, IDataService {
         self.parseUnsuccessfulDeleteResponse(error, _innerObserver);
       }, () => _innerObserver.complete());
     });
-    return dataObservable.share();
+    return dataObservable.pipe(share());
   }
 
   redirectLogin(sessionExpired: boolean = false) {
@@ -238,11 +237,7 @@ export class OntimizeEEService implements IAuthService, IDataService {
     });
   }
 
-  isNullOrUndef(value: any): boolean {
-    return !Util.isDefined(value);
-  }
-
-  /**
+  /*
    * Successful response parsers, there is one parser for each CRUD method which calls to the common parser.
    * User can overwrite the chosen methods parsers or the common parser
    */
@@ -270,7 +265,7 @@ export class OntimizeEEService implements IAuthService, IDataService {
     this.parseSuccessfulResponse(resp, _innerObserver);
   }
 
-  /**
+  /*
    * Unsuccessful response parsers, there is one parser for each CRUD method which calls to the common parser.
    * User can overwrite the chosen methods parsers or the common parser
    */
@@ -297,4 +292,5 @@ export class OntimizeEEService implements IAuthService, IDataService {
   protected parseUnsuccessfulDeleteResponse(resp: any, _innerObserver: any) {
     this.parseUnsuccessfulResponse(resp, _innerObserver);
   }
+
 }

@@ -21,25 +21,26 @@
     font-family: mat-font-family($typography);
   }
 
-  .o-scroll::-webkit-scrollbar {
+  ::-webkit-scrollbar {
     width: 4px;
     height: 4px;
     background-color: transparent;
     opacity: 1.0;
   }
 
-  .o-scroll::-webkit-scrollbar-track {
+  ::-webkit-scrollbar-track {
     -webkit-box-shadow: none;
     border-radius: 0;
     background-color: transparent;
   }
 
-  .o-scroll::-webkit-scrollbar-thumb {
+  ::-webkit-scrollbar-thumb {
     border-radius: 0;
     -webkit-box-shadow: none;
     background-color: mat-color($primary, 200);
     opacity: 1.0;
   }
+
   .o-loading {
     display: inline-block;
     position: absolute;
@@ -57,7 +58,7 @@
       margin: 6px;
       border: 3px solid;
       border-radius: 50%;
-      left:50%;
+      left: 50%;
       animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
       border-color: mat-color($primary) transparent transparent transparent;
     }
@@ -82,6 +83,67 @@
 
     100% {
       transform: rotate(360deg);
+    }
+  }
+
+  .o-form-layout-dialog-overlay,
+  .o-list-picker-dialog
+   {
+    .title-container {
+      border-bottom: 1px solid mat-color($primary, 200);
+    }
+  }
+  .o-form-layout-dialog-overlay {
+    .title-container {
+      .mat-icon {
+        color: mat-color($primary, 200);
+      }
+    }
+  }
+
+  .o-dialog-class {
+    .mat-dialog-container {
+      border: 1px solid mat-color($primary, 200);
+
+      .mat-dialog-title {
+        border-bottom: 1px solid mat-color($primary, 200);
+      }
+
+      .empty-filter-list {
+        color: mat-color($foreground, disabled-text);
+      }
+    }
+  }
+
+  .o-dialog-class {
+    .mat-dialog-container {
+      .mat-dialog-title {
+        line-height: mat-font-size($typography, title);
+        font-size: mat-font-size($typography, title);
+      }
+
+      .mat-dialog-content {
+        font-size: mat-font-size($typography, input);
+
+        .mat-selection-list[dense] {
+          outline: none;
+
+          .mat-list-item {
+            .empty-filter-list,
+            .mat-list-text > * {
+              font-size: mat-font-size($typography, subheading-1);
+            }
+
+            .mat-line:nth-child(n+2) {
+              font-size: mat-font-size($typography, caption);
+            }
+          }
+        }
+      }
+    }
+    .mat-dialog-actions > button {
+      margin-left: 12px;
+      
     }
   }
 

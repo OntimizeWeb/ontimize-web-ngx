@@ -1,5 +1,5 @@
+import { AfterViewInit, Component, ElementRef, forwardRef, Inject, Injector, OnInit, OnChanges, Optional, NgModule, SimpleChange, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AfterViewInit, Component, ElementRef, EventEmitter, forwardRef, Inject, Injector, NgModule, OnChanges, OnDestroy, OnInit, Optional, SimpleChange, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogConfig, MatDialogRef, MatInput } from '@angular/material';
 
 import { InputConverter } from '../../../decorators';
@@ -7,10 +7,9 @@ import { OntimizeService } from '../../../services';
 import { dataServiceFactory } from '../../../services/data-service.provider';
 import { OSharedModule } from '../../../shared';
 import { ODialogModule } from '../../dialog/o-dialog.component';
-import { OFormComponent } from '../../form/o-form.component';
-import { OFormValue } from '../../form/OFormValue';
 import { OSearchInputModule } from '../../input/search-input/o-search-input.component';
 import { OValueChangeEvent } from '../../o-form-data-component.class';
+import { OFormComponent } from '../../form/o-form.component';
 import { OFormServiceComponent } from '../o-form-service-component.class';
 import { OListPickerDialogComponent } from './o-list-picker-dialog.component';
 
@@ -24,9 +23,7 @@ export const DEFAULT_INPUTS_O_LIST_PICKER = [
 ];
 
 export const DEFAULT_OUTPUTS_O_LIST_PICKER = [
-  ...OFormServiceComponent.DEFAULT_OUTPUTS_O_FORM_SERVICE_COMPONENT,
-  'onFocus',
-  'onBlur'
+  ...OFormServiceComponent.DEFAULT_OUTPUTS_O_FORM_SERVICE_COMPONENT
 ];
 
 @Component({
@@ -41,7 +38,7 @@ export const DEFAULT_OUTPUTS_O_LIST_PICKER = [
   inputs: DEFAULT_INPUTS_O_LIST_PICKER,
   outputs: DEFAULT_OUTPUTS_O_LIST_PICKER
 })
-export class OListPickerComponent extends OFormServiceComponent implements AfterViewInit, OnChanges, OnDestroy, OnInit {
+export class OListPickerComponent extends OFormServiceComponent implements AfterViewInit, OnChanges, OnInit {
 
   public static DEFAULT_INPUTS_O_LIST_PICKER = DEFAULT_INPUTS_O_LIST_PICKER;
   public static DEFAULT_OUTPUTS_O_LIST_PICKER = DEFAULT_OUTPUTS_O_LIST_PICKER;
@@ -63,10 +60,6 @@ export class OListPickerComponent extends OFormServiceComponent implements After
   @ViewChild('inputModel') protected inputModel: MatInput;
   @ViewChild('visibleInput') protected visibleInput: ElementRef;
   protected visibleInputValue: any;
-
-  onChange: EventEmitter<Object> = new EventEmitter<Object>();
-  onFocus: EventEmitter<Object> = new EventEmitter<Object>();
-  onBlur: EventEmitter<Object> = new EventEmitter<Object>();
 
   protected blurTimer;
   protected blurDelay = 200;
@@ -98,10 +91,6 @@ export class OListPickerComponent extends OFormServiceComponent implements After
     this.syncDataIndex(false);
   }
 
-  ngOnDestroy() {
-    super.ngOnDestroy();
-  }
-
   ngAfterViewInit(): void {
     super.ngAfterViewInit();
     if (this.queryOnInit) {
@@ -127,14 +116,6 @@ export class OListPickerComponent extends OFormServiceComponent implements After
       });
     }
     return descTxt;
-  }
-
-  innerOnChange(event: any) {
-    if (!this.value) {
-      this.value = new OFormValue();
-    }
-    this.ensureOFormValue(event);
-    this.onChange.emit(event);
   }
 
   onClickClear(e: Event): void {
@@ -166,7 +147,7 @@ export class OListPickerComponent extends OFormServiceComponent implements After
     let cfg: MatDialogConfig = {
       role: 'dialog',
       disableClose: false,
-      panelClass: 'cdk-overlay-list-picker',
+      panelClass: ['cdk-overlay-list-picker','o-dialog-class'],
       data: {
         data: this.getDialogDataArray(this.dataArray),
         filter: this.filter,
@@ -218,12 +199,6 @@ export class OListPickerComponent extends OFormServiceComponent implements After
           self._fControl.markAsTouched();
         }
       }, 0);
-    }
-  }
-
-  innerOnFocus(evt: any) {
-    if (!this.isReadOnly && !this.isDisabled) {
-      this.onFocus.emit(evt);
     }
   }
 

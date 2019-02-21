@@ -11,7 +11,8 @@ export interface IComponent {
 export class OBaseComponent implements IComponent {
   /* Inputs */
   protected oattr: string;
-  olabel: string;
+  protected _olabel: string;
+  protected oplaceholder: string;
   protected _oenabled: boolean = true;
   protected _readOnly: boolean;
   protected _orequired: boolean = false;
@@ -22,10 +23,10 @@ export class OBaseComponent implements IComponent {
 
   protected _disabled: boolean;
   protected _isReadOnly: boolean;
-  protected _placeholder: string;
   protected _tooltip: string;
   protected _tooltipPosition: string = 'below';
   protected _tooltipShowDelay: number = 500;
+  protected _tooltipHideDelay: number = 0;
   protected permissions: OPermissions;
 
   constructor(injector: Injector) {
@@ -37,7 +38,13 @@ export class OBaseComponent implements IComponent {
 
   initialize() {
     this._disabled = !this.oenabled;
-    this._placeholder = (this.olabel !== undefined) ? this.olabel : this.oattr;
+    if (!Util.isDefined(this._olabel)) {
+      this._olabel = this.oattr;
+    }
+    this._olabel = this.translateService.get(this._olabel);
+    if (Util.isDefined(this.oplaceholder) && this.oplaceholder.length > 0) {
+      this.oplaceholder = this.translateService.get(this.oplaceholder);
+    }
   }
 
   getAttribute(): string {
@@ -48,17 +55,26 @@ export class OBaseComponent implements IComponent {
   }
 
   get placeHolder(): string {
-    if (Util.isDefined(this._placeholder) && this.translateService) {
-      return this.translateService.get(this._placeholder);
-    }
-    return this._placeholder;
+    return this.oplaceholder;
   }
 
   set placeHolder(value: string) {
-    this._placeholder = value;
+    this.oplaceholder = value;
+  }
+
+  get tooltipClass(): string {
+    return this.getTooltipClass();
+  }
+
+  protected getTooltipClass(): string {
+    return `o-tooltip ${this.tooltipPosition}`;
   }
 
   get tooltip(): string {
+    return this.getTooltipText();
+  }
+
+  protected getTooltipText(): string {
     if (Util.isDefined(this._tooltip) && this.translateService) {
       return this.translateService.get(this._tooltip);
     }
@@ -83,6 +99,14 @@ export class OBaseComponent implements IComponent {
 
   set tooltipShowDelay(value: number) {
     this._tooltipShowDelay = value;
+  }
+
+  get tooltipHideDelay(): number {
+    return this._tooltipHideDelay;
+  }
+
+  set tooltipHideDelay(value: number) {
+    this._tooltipHideDelay = value;
   }
 
   get isReadOnly(): boolean {
@@ -160,4 +184,13 @@ export class OBaseComponent implements IComponent {
     this._oenabled = parsedValue;
     this.disabled = !parsedValue;
   }
+
+  get olabel(): string {
+    return this._olabel;
+  }
+
+  set olabel(value: string) {
+    this._olabel = value;
+  }
+
 }

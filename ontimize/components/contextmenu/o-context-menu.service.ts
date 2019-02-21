@@ -1,9 +1,7 @@
 import { ComponentRef, ElementRef, Injectable, QueryList } from '@angular/core';
 import { Overlay, OverlayRef, ScrollStrategyOptions } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
-import { Subject } from 'rxjs/Subject';
-import { Subscription } from 'rxjs/Subscription';
-import { fromEvent } from 'rxjs/observable/fromEvent';
+import { Subscription, Subject, fromEvent } from 'rxjs';
 
 import { OContextMenuComponent } from './o-context-menu.component';
 import { OComponentMenuItems } from './o-content-menu.class';
@@ -18,6 +16,7 @@ export interface IOContextMenuClickEvent {
 
 export interface IOContextMenuContext extends IOContextMenuClickEvent {
   menuItems?: QueryList<OComponentMenuItems>;
+  class?: string;
 }
 
 @Injectable()
@@ -68,7 +67,6 @@ export class OContextMenuService {
     context.event.preventDefault();
     context.event.stopPropagation();
 
-    // TODO: submenu
     this.fakeElement.getBoundingClientRect = (): ClientRect => ({
       bottom: context.event.clientY,
       height: 0,
@@ -77,27 +75,15 @@ export class OContextMenuService {
       top: context.event.clientY,
       width: 0,
     });
-
-    /* */
-    const positionStrategy = this.overlay.position().connectedTo(
-      { nativeElement: context.anchorElement || this.fakeElement },
-      { originX: 'start', originY: 'bottom' },
-      { overlayX: 'start', overlayY: 'top' }
-    ).withFallbackPosition(
-      { originX: 'start', originY: 'top' },
-      { overlayX: 'start', overlayY: 'bottom' })
-      .withFallbackPosition(
-      { originX: 'end', originY: 'top' },
-      { overlayX: 'start', overlayY: 'top' })
-      .withFallbackPosition(
-      { originX: 'start', originY: 'top' },
-      { overlayX: 'end', overlayY: 'top' })
-      .withFallbackPosition(
-      { originX: 'end', originY: 'center' },
-      { overlayX: 'start', overlayY: 'center' })
-      .withFallbackPosition(
-      { originX: 'start', originY: 'center' },
-      { overlayX: 'end', overlayY: 'center' });
+    this.closeContext();
+    const positionStrategy = this.overlay.position()
+      .flexibleConnectedTo(context.anchorElement || this.fakeElement)
+      .withPositions([{
+        overlayX: 'start',
+        overlayY: 'top',
+        originX: 'start',
+        originY: 'bottom'
+      }]);
 
     let overlayRef = this.overlay.create({
       positionStrategy,
@@ -116,7 +102,7 @@ export class OContextMenuService {
     contextMenuContent.instance.overlay = overlay;
     contextMenuContent.instance.menuItems = context.menuItems;
     contextMenuContent.instance.data = context.data;
-
+    contextMenuContent.instance.menuClass = context.class;
     this.registerBackdropEvents(overlay);
   }
 

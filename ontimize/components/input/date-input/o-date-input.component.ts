@@ -1,10 +1,9 @@
-import { AfterViewChecked, Component, ElementRef, EventEmitter, forwardRef, Inject, Injector, NgModule, OnDestroy, OnInit, Optional, ViewChild } from '@angular/core';
+import { AfterViewChecked, Component, ElementRef, forwardRef, Inject, Injector, NgModule, OnDestroy, OnInit, Optional, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormControl } from '@angular/forms';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_LOCALE, MatDatepicker, MatDatepickerInput, MatDatepickerInputEvent } from '@angular/material';
 import { MediaChange, ObservableMedia } from '@angular/flex-layout';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 
 import moment from 'moment';
 
@@ -84,14 +83,9 @@ export class ODateInputComponent extends OFormDataComponent implements AfterView
   private momentSrv: MomentService;
   protected media: ObservableMedia;
 
-  onFocus: EventEmitter<Object> = new EventEmitter<Object>();
-  onBlur: EventEmitter<Object> = new EventEmitter<Object>();
-
   protected mediaSubscription: Subscription;
   protected onLanguageChangeSubscription: Subscription;
   protected dateValue: Date;
-
-  protected _fControlSubscription: Subscription;
 
   constructor(
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
@@ -173,9 +167,6 @@ export class ODateInputComponent extends OFormDataComponent implements AfterView
     if (this.onLanguageChangeSubscription) {
       this.onLanguageChangeSubscription.unsubscribe();
     }
-    if (this._fControlSubscription) {
-      this._fControlSubscription.unsubscribe();
-    }
   }
 
   getValueAsDate(): any {
@@ -198,23 +189,6 @@ export class ODateInputComponent extends OFormDataComponent implements AfterView
     if (!this.isReadOnly && !this.isDisabled) {
       this.datepicker.open();
     }
-  }
-
-  getControl(): FormControl {
-    const subscribe = !this._fControl;
-    let fControl: FormControl = super.getControl();
-    if (subscribe) {
-      const self = this;
-      this._fControlSubscription = fControl.valueChanges.subscribe(value => {
-        // equivalente al innerOnChange
-        if (!self.value) {
-          self.value = new OFormValue();
-        }
-        self.ensureOFormValue(value);
-        self.onChange.emit(value);
-      });
-    }
-    return fControl;
   }
 
   onChangeEvent(event: MatDatepickerInputEvent<any>) {
@@ -240,18 +214,6 @@ export class ODateInputComponent extends OFormDataComponent implements AfterView
       emitEvent: false,
       emitModelToViewChange: false
     });
-  }
-
-  innerOnFocus(event: any) {
-    if (!this.isReadOnly && !this.isDisabled) {
-      this.onFocus.emit(event);
-    }
-  }
-
-  innerOnBlur(event: any) {
-    if (!this.isReadOnly && !this.isDisabled) {
-      this.onBlur.emit(event);
-    }
   }
 
   onClickInput(e: Event): void {

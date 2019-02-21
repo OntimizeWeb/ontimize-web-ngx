@@ -1,10 +1,15 @@
-<div class="o-container">
-	<div *ngIf="hasTitle()" class="o-container-title-item container-title" layout-padding>
-		<span>{{ titleLabel }}</span>
-	</div>
-	<div class="o-container-scroll o-scroll">
-		<div id="innerCol" class="o-container-content-item" fxLayoutAlign="{{ layoutAlign }}" fxLayout="column" [class.fillLayout]="layoutFill">
-			<ng-content></ng-content>
-		</div>
-	</div>
+<div #container fxLayout="column" class="o-container" fxFill>
+  <div #containerTitle *ngIf="hasHeader()" fxLayoutAlign="start center" class="o-container-title" layout-padding>
+    <mat-icon *ngIf="icon">{{ icon }}</mat-icon>
+    <span *ngIf="title">{{ title | oTranslate }}</span>
+  </div>
+  <div [class.o-container-gap]="hasHeader() || (elevation > 0 && elevation <= 12)" class="o-container-scroll o-scroll">
+    <div class="o-container-outline" *ngIf="isAppearanceOutline() && hasHeader()">
+      <div class="o-container-outline-start"></div>
+      <div class="o-container-outline-gap"></div>
+      <div class="o-container-outline-end"></div>
+    </div>
+    <div fxLayout="column" fxLayoutAlign="{{ layoutAlign }}" fxLayoutGap="{{ layoutGap }}" fxFlex="grow">
+      <ng-content></ng-content>
+    </div>
 </div>

@@ -1,8 +1,9 @@
 import { Component, ViewEncapsulation, Injector, ComponentFactoryResolver, ViewContainerRef, ViewChildren, QueryList, ViewChild, AfterViewInit, EventEmitter, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { MatTabGroup, MatTabChangeEvent } from '@angular/material';
-import { Router } from '@angular/router';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 import { Util, Codes } from '../../../utils';
+import { Router } from '@angular/router';
+import { DialogService } from '../../../services/dialog.service';
 import { OFormLayoutManagerContentDirective } from '../directives/o-form-layout-manager-content.directive';
 import { IDetailComponentData, OFormLayoutManagerComponent } from '../o-form-layout-manager.component';
 
@@ -47,6 +48,7 @@ export class OFormLayoutTabGroupComponent implements AfterViewInit, OnDestroy {
   protected tabsDirectivesSubscription: Subscription;
   protected router: Router;
   protected loading: boolean = false;
+  protected dialogService: DialogService;
 
   constructor(
     protected injector: Injector,
@@ -54,6 +56,7 @@ export class OFormLayoutTabGroupComponent implements AfterViewInit, OnDestroy {
     protected location: ViewContainerRef,
     private cd: ChangeDetectorRef
   ) {
+    this.dialogService = injector.get(DialogService);
     this.formLayoutManager = this.injector.get(OFormLayoutManagerComponent);
     this.router = this.injector.get(Router);
   }
@@ -147,10 +150,14 @@ export class OFormLayoutTabGroupComponent implements AfterViewInit, OnDestroy {
           }
         }
       });
-      this.formLayoutManager.onCloseTab.emit({
-        onCloseTabAccepted: onCloseTabAccepted,
-        id: id
-      });
+      const tabData = this.data.find((item: IDetailComponentData) => item.id === id);
+      if (Util.isDefined(tabData) && tabData.modified) {
+        this.dialogService.confirm('CONFIRM', 'MESSAGES.FORM_CHANGES_WILL_BE_LOST').then(res => {
+          onCloseTabAccepted.emit(res);
+        });
+      } else {
+        onCloseTabAccepted.emit(true);
+      }
     }
   }
 
@@ -190,20 +197,14 @@ export class OFormLayoutTabGroupComponent implements AfterViewInit, OnDestroy {
         break;
       }
     }
-    //when modified state of a tab, we must reload thedata of table
+    //when modified state of a tab, we must reload the data of table
     this.updatedDataOnTable = true;
   }
 
   updateNavigation(data: any, id: string) {
-    let index = undefined;
-    for (let i = 0, len = this.data.length; i < len; i++) {
-      if (this.data[i].id === id) {
-        index = i;
-        break;
-      }
-    }
-    let label = this.formLayoutManager.getLabelFromData(data);
-    if (index !== undefined) {
+    let index = this.data.findIndex((item: any) => item.id === id);
+    if (index >= 0) {
+      let label = this.formLayoutManager.getLabelFromData(data);
       this.tabGroup.selectedIndex = (index + 1);
       label = label.length ? label : this.formLayoutManager.getLabelFromUrlParams(this.data[index].params);
       this.data[index].label = label;

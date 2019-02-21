@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, forwardRef, EventEmitter, Injector, ViewEncapsulation, ElementRef } from '@angular/core';
+import { Component, OnInit, Inject, forwardRef, EventEmitter, Injector, ViewEncapsulation, ElementRef, ChangeDetectionStrategy } from '@angular/core';
 import { Util, Codes } from '../../../../../utils';
 import { InputConverter } from '../../../../../decorators';
 import { OTableComponent } from '../../../o-table.component';
@@ -24,6 +24,7 @@ export const DEFAULT_OUTPUTS_O_TABLE_BUTTON = [
   inputs: DEFAULT_INPUTS_O_TABLE_BUTTON,
   outputs: DEFAULT_OUTPUTS_O_TABLE_BUTTON,
   encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     '[class.o-table-button]': 'true',
   }

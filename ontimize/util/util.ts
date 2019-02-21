@@ -1,7 +1,6 @@
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
 import { IFormDataComponent } from '../components/o-form-data-component.class';
-import { SessionInfo } from '../services/login.service';
 import { Base64 } from './base64';
 import { Codes } from './codes';
 
@@ -23,19 +22,6 @@ export interface IAuthService {
   startsession(user: string, password: string): Observable<any>;
   endsession(user: string, sessionId: number): Observable<any>;
   redirectLogin?(sessionExpired?: boolean);
-}
-
-export interface IOntimizeServiceConf {
-  urlBase?: string;
-  session: SessionInfo;
-  entity?: string;
-  kv?: Object;
-  av?: Array<string>;
-  sqltypes?: Object;
-  pagesize?: number;
-  offset?: number;
-  orderby?: Array<Object>;
-  totalsize?: number;
 }
 
 export class Util {
@@ -305,6 +291,34 @@ export class Util {
       document.removeEventListener('copy', null);
     });
     document.execCommand('copy');
+  }
+
+  static checkPixelsValueString(value: string): boolean {
+    return (value || '').toLowerCase().endsWith('px');
+  }
+
+  static extractPixelsValue(value: string, defaultValue: number = undefined): number {
+    let result: number;
+    if (Util.checkPixelsValueString(value)) {
+      let parsed = parseFloat(value.substr(0, value.length - 'px'.length));
+      result = isNaN(parsed) ? defaultValue : parsed;
+    }
+    return Util.isDefined(result) ? result : defaultValue;
+  }
+  /**
+   * Added class 'accent' in <mat-form-field> and set the color  accent in the icons
+   * @param elRef
+   * @param oInputsOptions
+   */
+
+  static parseOInputsOptions(elRef, oInputsOptions) {
+
+    if (oInputsOptions.iconColor === Codes.O_INPUTS_OPTIONS_COLOR_ACCENT) {
+      const matFormFieldEL = elRef.nativeElement.getElementsByTagName('mat-form-field')[0];
+      if (Util.isDefined(matFormFieldEL)) {
+        matFormFieldEL.classList.add('accent');
+      }
+    }
   }
 
 }

@@ -1,7 +1,7 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Injector, NgModule, OnDestroy, ViewEncapsulation, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 
 import { Util } from '../../../utils';
 import { OSharedModule } from '../../../shared';
@@ -9,7 +9,7 @@ import { InputConverter } from '../../../decorators';
 import { OAppLayoutComponent } from '../../../layouts';
 import { PermissionsUtils } from '../../../util/permissions';
 import { OAppSidenavComponent } from '../o-app-sidenav.component';
-import { DialogService, LoginService, OTranslateService, OPermissions, PermissionsService } from '../../../services';
+import { DialogService, LoginService, OTranslateService, OPermissions, PermissionsService, OUserInfoService } from '../../../services';
 import { OLanguageSelectorModule } from '../../language-selector/o-language-selector.component';
 import { MenuItemAction, MenuItemLocale, MenuItemLogout, MenuItemRoute, MenuItemUserInfo, MenuRootItem } from '../../../services/app-menu.service';
 
@@ -49,6 +49,8 @@ export class OAppSidenavMenuItemComponent implements OnInit, AfterViewInit, OnDe
   protected loginService: LoginService;
   protected dialogService: DialogService;
   protected permissionsService: PermissionsService;
+  protected oUserInfoService: OUserInfoService;
+  protected userInfoSubscription: Subscription;
 
   protected sidenav: OAppSidenavComponent;
   protected router: Router;
@@ -77,6 +79,7 @@ export class OAppSidenavMenuItemComponent implements OnInit, AfterViewInit, OnDe
     this.loginService = this.injector.get(LoginService);
     this.dialogService = this.injector.get(DialogService);
     this.permissionsService = this.injector.get(PermissionsService);
+    this.oUserInfoService = this.injector.get(OUserInfoService);
     this.sidenav = this.injector.get(OAppSidenavComponent);
     this.oAppLayoutComponent = this.injector.get(OAppLayoutComponent);
     this.router = this.injector.get(Router);
@@ -97,6 +100,12 @@ export class OAppSidenavMenuItemComponent implements OnInit, AfterViewInit, OnDe
           this.setUserInfoImage();
         }
       });
+      this.userInfoSubscription = this.oUserInfoService.getUserInfoObservable().subscribe(res => {
+        if (Util.isDefined(res.avatar) && this.sidenav.sidenav.opened) {
+          (this.menuItem as MenuItemUserInfo).avatar = res.avatar;
+          this.setUserInfoImage();
+        }
+      });
     }
   }
 
@@ -109,6 +118,9 @@ export class OAppSidenavMenuItemComponent implements OnInit, AfterViewInit, OnDe
     }
     if (this.mutationObserver) {
       this.mutationObserver.disconnect();
+    }
+    if (this.userInfoSubscription) {
+      this.userInfoSubscription.unsubscribe();
     }
   }
 

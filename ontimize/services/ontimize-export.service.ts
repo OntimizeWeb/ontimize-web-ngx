@@ -1,7 +1,8 @@
 import { Injectable, Injector } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
+import { share } from 'rxjs/operators';
 
 import { LoginService } from '../services';
 import { AppConfig, Config } from '../config/app-config';
@@ -79,7 +80,7 @@ export class OntimizeExportService {
     };
     const body = JSON.stringify(data);
     let _innerObserver: any;
-    const dataObservable = new Observable(observer => _innerObserver = observer).share();
+    const dataObservable = new Observable(observer => _innerObserver = observer).pipe(share());
 
     const self = this;
     // TODO: try multipart
@@ -104,7 +105,7 @@ export class OntimizeExportService {
     const url = this._urlBase + this.downloadPath + '/' + fileExtension + '/' + fileId;
 
     let _innerObserver: any;
-    const dataObservable = new Observable(observer => _innerObserver = observer).share();
+    const dataObservable = new Observable(observer => _innerObserver = observer).pipe(share());
     // let responseType: string;
     // if (OExportExtension.Excel === fileExtension) {
     //   responseType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';

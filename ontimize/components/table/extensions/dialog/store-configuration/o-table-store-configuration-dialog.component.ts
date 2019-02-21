@@ -1,16 +1,17 @@
-import { Component, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, ViewChild, AfterViewInit, Injector, ChangeDetectionStrategy } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatDialogRef, MatListOption, MatSelectionList } from '@angular/material';
+import { MatDialogRef, MatListOption, MatSelectionList, MatCheckboxChange } from '@angular/material';
+import { OTableBaseDialogClass } from '../o-table-base-dialog.class';
 
-// import { ITableFiltersStatus } from '../../o-table-storage.class';
 
 @Component({
   moduleId: module.id,
   selector: 'o-table-store-configuration-dialog',
   templateUrl: './o-table-store-configuration-dialog.component.html',
-  styleUrls: ['./o-table-store-configuration-dialog.component.scss']
+  styleUrls: ['./o-table-store-configuration-dialog.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class OTableStoreConfigurationDialogComponent implements AfterViewInit {
+export class OTableStoreConfigurationDialogComponent extends OTableBaseDialogClass implements AfterViewInit {
 
   @ViewChild('propertiesList')
   propertiesList: MatSelectionList;
@@ -40,8 +41,12 @@ export class OTableStoreConfigurationDialogComponent implements AfterViewInit {
   });
 
   constructor(
-    public dialogRef: MatDialogRef<OTableStoreConfigurationDialogComponent>
-  ) { }
+    public dialogRef: MatDialogRef<OTableStoreConfigurationDialogComponent>,
+    protected injector: Injector
+  ) {
+    super(injector);
+    this.setFormControl(this.formGroup.get('name'));
+  }
 
   ngAfterViewInit(): void {
     this.propertiesList.selectAll();
@@ -51,8 +56,8 @@ export class OTableStoreConfigurationDialogComponent implements AfterViewInit {
     return this.propertiesList && this.propertiesList.options && this.propertiesList.options.length === this.propertiesList.selectedOptions.selected.length;
   }
 
-  onSelectAllClicked(selectAll: boolean) {
-    selectAll ? this.propertiesList.selectAll() : this.propertiesList.deselectAll();
+  onSelectAllChange(event: MatCheckboxChange) {
+    event.checked ? this.propertiesList.selectAll() : this.propertiesList.deselectAll();
   }
 
   getConfigurationAttributes(): any {
@@ -63,4 +68,9 @@ export class OTableStoreConfigurationDialogComponent implements AfterViewInit {
     let selected: MatListOption[] = this.propertiesList.selectedOptions.selected;
     return selected.length ? selected.map(item => item.value) : [];
   }
+
+  isIndeterminate(): boolean {
+    return !this.areAllSelected();
+  }
+
 }

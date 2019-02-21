@@ -7,79 +7,73 @@
   $foreground: map-get($theme, foreground);
 
   .o-table {
-    .o-table-menu-button {
-      color: mat-color($foreground, secondary-text);
-    }
-
-    .mat-header-row {
-      background-color: mat-color($background, status-bar, 0.9);
-
-      .mat-header-cell {
-        color: mat-color($foreground, text);
-
-        .column-filter-icon.active {
-          color: mat-color($accent);
-        }
-      }
+    .o-table-column-resizer span {
+      background: mat-color($foreground, secondary-text, 0.24);
     }
 
     .spinner-container {
       background-color: mat-color($background, background);
     }
 
-    .mat-row {
-      &:hover {
-        cursor: pointer;
-        background-color: mat-color($foreground, base, 0.18);
-      }
-
-      .mat-cell {
-        color: mat-color($foreground, secondary-text);
-
-        &.o-column-currency,
-        &.o-column-integer,
-        &.o-column-real {
-          text-align: right;
-        }
-
-        &.o-column-action,
-        &.o-column-boolean,
-        &.o-column-date {
-          text-align: center;
-        }
-
-      }
-    }
-
-    .buttons {
-      button {
-        color: mat-color($foreground, secondary-text);
-      }
-
-      button:not(.disabled):hover {
-        background-color: mat-color($background, hover);
-      }
-
-      .button {
-        &.active {
-          color: mat-color($foreground, secondary-text);
-
-          &::after {
-            background: #eee;
-          }
-        }
-
-        &.disabled {
-          color: mat-color($background, disabled-button);
-        }
-      }
+    .o-table-menu-button {
+      color: mat-color($foreground, secondary-text);
     }
 
     .mat-table {
-      &.editable-row-table {
-        .mat-row {
-          background-color: mat-color($background, status-bar, 0.9);
+      .mat-header-row {
+
+        .mat-header-cell {
+          color: mat-color($foreground, text);
+
+          .column-filter-icon.active {
+            color: mat-color($accent);
+          }
+
         }
+      }
+
+      .mat-row {
+        &:hover {
+          cursor: pointer;
+          background-color: mat-color($foreground, base, 0.18);
+        }
+
+        &.selected {
+          background: mat-color($primary, 50);
+        }
+
+        .mat-cell {
+          color: mat-color($foreground, secondary-text);
+        }
+
+      }
+
+      .mat-footer-row {
+        font-weight: bold;
+        background-color: mat-color($background, status-bar, 0.9);
+      }
+
+      .mat-footer-row,
+      .mat-row {
+        .mat-cell,
+        .mat-footer-cell {
+          &.o-column-currency,
+          &.o-column-integer,
+          &.o-column-real {
+            text-align: right;
+          }
+
+          &.o-column-action,
+          &.o-column-boolean,
+          &.o-column-date {
+            text-align: center;
+          }
+        }
+      }
+
+      &.editable-row-table .mat-row,
+      &.totals-table .mat-row {
+        background-color: mat-color($background, status-bar, 0.9);
       }
 
       &.totals-table {
@@ -89,10 +83,18 @@
 
         .mat-row {
           font-weight: bold;
-          background-color: mat-color($background, status-bar, 0.9);
         }
       }
+    }
 
+    .buttons {
+      button {
+        color: mat-color($foreground, secondary-text);
+
+        &.disabled {
+          color: mat-color($background, disabled-button);
+        }
+      }
     }
 
     .o-table-body.horizontal-scroll {
@@ -114,5 +116,13 @@
         border-color: mat-color($background, background);
       }
     }
+
   }
+
+  .o-table-visible-columns-dialog {
+    .mat-list-item.dnd-sortable-drag {
+      background: mat-color($primary, 50);
+    }
+  }
+
 }

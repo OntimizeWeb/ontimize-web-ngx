@@ -1,6 +1,7 @@
 import { AfterViewInit, Component, EventEmitter, forwardRef, Inject, Injector, NgModule, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 
 import { Codes, Util } from '../../utils';
 import { OSharedModule } from '../../shared';
@@ -110,9 +111,10 @@ export class OFilterBuilderComponent implements AfterViewInit, OnDestroy, OnInit
       this.filterComponents.forEach((filterComponent: IFilterBuilderCmpTarget) => {
         let formComponent: IFormDataComponent = this.form.getComponents()[filterComponent.formComponentAttr];
         if (formComponent) {
-          this.subscriptions.add(formComponent.getFormControl().valueChanges
-            .debounceTime(this.queryOnChangeDelay)
-            .subscribe(a => this.triggerReload()));
+          this.subscriptions.add(
+            formComponent.getFormControl().valueChanges
+              .pipe(debounceTime(this.queryOnChangeDelay))
+              .subscribe(a => this.triggerReload()));
         }
       });
     }

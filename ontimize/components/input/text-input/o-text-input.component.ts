@@ -1,15 +1,4 @@
-import {
-  Component,
-  Inject,
-  Injector,
-  forwardRef,
-  ElementRef,
-  EventEmitter,
-  Optional,
-  ViewChild,
-  NgModule,
-  ViewEncapsulation
-} from '@angular/core';
+import { Component, Inject, Injector, forwardRef, ElementRef, Optional, ViewChild, NgModule, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Validators } from '@angular/forms';
 import { ValidatorFn } from '@angular/forms';
@@ -18,7 +7,6 @@ import { MatInput } from '@angular/material';
 import { OSharedModule } from '../../../shared';
 import { NumberConverter } from '../../../decorators';
 import { OFormComponent } from '../../form/o-form.component';
-import { OFormValue } from '../../form/OFormValue';
 import { OFormDataComponent, DEFAULT_INPUTS_O_FORM_DATA_COMPONENT, DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT } from '../../o-form-data-component.class';
 
 export const DEFAULT_INPUTS_O_TEXT_INPUT = [
@@ -28,9 +16,7 @@ export const DEFAULT_INPUTS_O_TEXT_INPUT = [
 ];
 
 export const DEFAULT_OUTPUTS_O_TEXT_INPUT = [
-  ...DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT,
-  'onFocus',
-  'onBlur'
+  ...DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT
 ];
 
 @Component({
@@ -51,9 +37,6 @@ export class OTextInputComponent extends OFormDataComponent {
   protected _minLength: number = -1;
   protected _maxLength: number = -1;
 
-  onFocus: EventEmitter<Object> = new EventEmitter<Object>();
-  onBlur: EventEmitter<Object> = new EventEmitter<Object>();
-
   @ViewChild('matInputRef')
   protected matInputRef: MatInput;
 
@@ -68,10 +51,6 @@ export class OTextInputComponent extends OFormDataComponent {
     super.ngOnInit();
   }
 
-  ngOnDestroy() {
-    super.ngOnDestroy();
-  }
-
   resolveValidators(): ValidatorFn[] {
     let validators: ValidatorFn[] = super.resolveValidators();
 
@@ -83,26 +62,6 @@ export class OTextInputComponent extends OFormDataComponent {
     }
 
     return validators;
-  }
-
-  innerOnChange(event: any) {
-    if (!this.value) {
-      this.value = new OFormValue();
-    }
-    this.ensureOFormValue(event);
-    this.onChange.emit(event);
-  }
-
-  innerOnFocus(event: any) {
-    if (!this.isReadOnly && !this.isDisabled) {
-      this.onFocus.emit(event);
-    }
-  }
-
-  innerOnBlur(event: any) {
-    if (!this.isReadOnly && !this.isDisabled) {
-      this.onBlur.emit(event);
-    }
   }
 
   set minLength(val: number) {

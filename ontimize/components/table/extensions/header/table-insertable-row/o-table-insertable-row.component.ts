@@ -1,4 +1,4 @@
-import { Component, Inject, forwardRef, OnInit, Injector, EventEmitter } from '@angular/core';
+import { Component, Inject, forwardRef, OnInit, Injector, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 import { OTableComponent, OColumn } from '../../../o-table.component';
 import { Util } from '../../../../../utils';
 import { InputConverter } from '../../../../../decorators';
@@ -21,6 +21,7 @@ export const DEFAULT_OUTPUTS_O_TABLE_INSERTABLE_ROW = [
   moduleId: module.id,
   selector: 'o-table-insertable-row',
   template: ' ',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   inputs: DEFAULT_INPUTS_O_TABLE_INSERTABLE_ROW,
   outputs: DEFAULT_OUTPUTS_O_TABLE_INSERTABLE_ROW
 })

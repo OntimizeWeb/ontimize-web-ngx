@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Inject, Injector, OnInit, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Inject, Injector, OnInit, ViewChild, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef, MatListOption, MatSelectionList } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
 
@@ -9,7 +9,8 @@ import { DialogService } from '../../../../../services/dialog.service';
   moduleId: module.id,
   selector: 'o-table-load-filter-dialog',
   templateUrl: './o-table-load-filter-dialog.component.html',
-  styleUrls: ['./o-table-load-filter-dialog.component.scss']
+  styleUrls: ['./o-table-load-filter-dialog.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class OTableLoadFilterDialogComponent implements OnInit {
 
@@ -20,6 +21,7 @@ export class OTableLoadFilterDialogComponent implements OnInit {
   onDelete: EventEmitter<string> = new EventEmitter();
 
   protected dialogService: DialogService;
+  protected cd: ChangeDetectorRef;
 
   constructor(
     public dialogRef: MatDialogRef<OTableLoadFilterDialogComponent>,
@@ -28,6 +30,11 @@ export class OTableLoadFilterDialogComponent implements OnInit {
   ) {
     this.loadFilters(data);
     this.dialogService = this.injector.get(DialogService);
+    try {
+      this.cd = this.injector.get(ChangeDetectorRef);
+    } catch (e) {
+      // no parent form
+    }
   }
 
   ngOnInit(): void {
@@ -47,6 +54,7 @@ export class OTableLoadFilterDialogComponent implements OnInit {
     this.dialogService.confirm('CONFIRM', 'TABLE.DIALOG.CONFIRM_REMOVE_FILTER').then(result => {
       if (result) {
         this.onDelete.emit(filterName);
+        this.cd.detectChanges();
       }
     });
   }

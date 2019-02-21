@@ -10,7 +10,8 @@ import { OWrapperContentMenuComponent } from './o-wrapper-content-menu/o-wrapper
 export const DEFAULT_CONTEXT_MENU_CONTENT_INPUTS = [
   'menuItems',
   'overlay',
-  'data'
+  'data',
+  'menuClass'
 ];
 
 export const DEFAULT_CONTEXT_MENU_CONTENT_OUTPUTS = [
@@ -34,6 +35,7 @@ export class OContextMenuContentComponent implements AfterViewInit, OnInit {
   public menuItems: any[] = [];
   public overlay: OverlayRef;
   public data: any;
+  public menuClass;
   public execute: EventEmitter<{ event: Event, data: any, menuItem: OContextMenuItemComponent }> = new EventEmitter();
 
   @ContentChildren(OComponentMenuItems) public oContextMenuItems: QueryList<OComponentMenuItems>;
@@ -87,3 +89,5 @@ export class OContextMenuContentComponent implements AfterViewInit, OnInit {
   }
 
 }
+
+

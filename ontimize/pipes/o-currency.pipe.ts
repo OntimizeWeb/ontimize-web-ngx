@@ -7,7 +7,8 @@ export interface ICurrencyPipeArgument {
   grouping?: boolean;
   thousandSeparator?: string;
   decimalSeparator?: string;
-  decimalDigits?: number;
+  minDecimalDigits?: number;
+  maxDecimalDigits?: number;
 }
 
 @Pipe({

@@ -1,8 +1,9 @@
-import { Component, forwardRef, Inject, Injector, ViewEncapsulation, OnDestroy } from '@angular/core';
-import { Router, NavigationExtras, ActivatedRoute } from '@angular/router';
-import { ONavigationItem, NavigationService } from '../../../services/navigation.service';
+import { Component, forwardRef, Inject, Injector, OnDestroy, ViewEncapsulation } from '@angular/core';
+import { NavigationExtras, Router } from '@angular/router';
+
 import { OFormLayoutManagerComponent } from '../../../layouts';
-import { Util, Codes } from '../../../utils';
+import { NavigationService, ONavigationItem } from '../../../services/navigation.service';
+import { Codes, Util } from '../../../utils';
 import { OFormComponent } from '../o-form.component';
 import { OFormNavigationClass } from './o-form.navigation.class';
 
@@ -24,10 +25,10 @@ export class OFormNavigationComponent implements OnDestroy {
   protected formNavigation: OFormNavigationClass;
   protected navigationService: NavigationService;
 
-  constructor(protected injector: Injector,
+  constructor(
+    protected injector: Injector,
     @Inject(forwardRef(() => OFormComponent)) private _form: OFormComponent,
-    private router: Router,
-    private actRoute: ActivatedRoute
+    private router: Router
   ) {
     this.formNavigation = this._form.getFormNavigation();
     this.navigationService = this.injector.get(NavigationService);
@@ -43,16 +44,27 @@ export class OFormNavigationComponent implements OnDestroy {
   }
 
   getCurrentIndex(): number {
-    let index: number = 0;
-    const currentItem = this.formNavigation.getUrlParams();
-    for (let i = 0, len = this.navigationData.length; i < len; i++) {
-      const item = this.navigationData[i];
-      if (Util.isEquivalent(item, currentItem)) {
-        index = i;
-        break;
+    // getting available navigationData keys
+    let keysArray = [];
+    this._form.keysArray.forEach(key => {
+      if ((this.navigationData[0] || {}).hasOwnProperty(key)) {
+        keysArray.push(key);
       }
-    }
-    return index;
+    });
+    // current url keys object
+    let currentKeys = {};
+    const currentItem = this.formNavigation.getUrlParams();
+    keysArray.forEach(key => {
+      currentKeys[key] = currentItem[key];
+    });
+    let index: number = this.navigationData.findIndex((item: any) => {
+      let itemKeys = {};
+      keysArray.forEach(key => {
+        itemKeys[key] = item[key];
+      });
+      return Util.isEquivalent(itemKeys, currentKeys);
+    });
+    return index >= 0 ? index : 0;
   }
 
   next() {

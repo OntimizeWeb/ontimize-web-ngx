@@ -1,6 +1,6 @@
+import { Component, ElementRef, forwardRef, Inject, Injector, NgModule, Optional, ViewChild, OnInit, AfterViewInit, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AfterViewInit, Component, ElementRef, EventEmitter, forwardRef, Inject, Injector, NgModule, OnDestroy, OnInit, Optional, ViewChild, ViewEncapsulation } from '@angular/core';
-import { MatOption, MatSelect, MatSelectChange } from '@angular/material';
+import { MatSelect, MatSelectChange } from '@angular/material';
 
 import { InputConverter } from '../../../decorators/input-converter';
 import { dataServiceFactory } from '../../../services/data-service.provider';
@@ -65,8 +65,6 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
   @ViewChild('selectModel')
   protected selectModel: MatSelect;
 
-  public onChange: EventEmitter<Object> = new EventEmitter<Object>();
-
   constructor(
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
     elRef: ElementRef,
@@ -122,13 +120,6 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
       // first position is for null selection that it is not included into dataArray
       this._currentIndex += 1;
     }
-    if (this.selectModel && this.selectModel.options) {
-      const self = this;
-      let option = this.selectModel.options.find((item: MatOption) => item.value === self.getValue());
-      if (option) {
-        option.select();
-      }
-    }
   }
 
   getValue() {
@@ -183,25 +174,24 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
   }
 
   onSelectionChange(event: MatSelectChange): void {
-    var newValue = event.value;
-    this.setValue(newValue, { changeType: OValueChangeEvent.USER_CHANGE, emitModelToViewChange: false });
-  }
-
-  innerOnChange(event: any) {
-    this.ensureOFormValue(event);
-    if (this._fControl && this._fControl.touched) {
-      this._fControl.markAsDirty();
+    if (!this.selectModel.panelOpen) {
+      return;
     }
-    this.onChange.emit(event);
+    const newValue = event.value;
+    this.setValue(newValue, {
+      changeType: OValueChangeEvent.USER_CHANGE,
+      emitEvent: false,
+      emitModelToViewChange: false
+    });
   }
 
   getOptionDescriptionValue(item: any = {}) {
     let descTxt = '';
     if (this.descriptionColArray && this.descriptionColArray.length > 0) {
-      var self = this;
+      const self = this;
       this.descriptionColArray.forEach((col, index) => {
         let txt = item[col];
-        if (txt) {
+        if (Util.isDefined(txt)) {
           if (self.translate && self.translateService) {
             txt = self.translateService.get(txt);
           }
@@ -228,8 +218,7 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
 
   isSelected(item: any, rowIndex: number): boolean {
     let selected = false;
-    if (item && item.hasOwnProperty(this.valueColumn)
-      && this.value) {
+    if (item && item.hasOwnProperty(this.valueColumn) && this.value) {
       let val = item[this.valueColumn];
       if (val === this.value.value) {
         selected = true;
@@ -239,27 +228,31 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
     return selected;
   }
 
-  setValue(val: any, options?: IFormValueOptions): void {
-    if (this.dataArray) {
-      if (!this.multiple) {
-        if (!Util.isDefined(val)) {
-          if (this.nullSelection) {
-            super.setValue(val, options);
-          } else {
-            console.warn('`o-combo` with attr ' + this.oattr + ' cannot be cleared. `null-selection` attribute is false.');
-          }
-        } else {
-          const record = this.dataArray.find(item => item[this.valueColumn] === val);
-          if (record) {
-            super.setValue(val, options);
-          }
-        }
-      } else {
-        if (Util.isDefined(val)) {
-          super.setValue(val, options);
-        }
+  setValue(val: any, options?: IFormValueOptions) {
+    if (!this.dataArray) {
+      return;
+    }
+    const isDefinedVal = Util.isDefined(val);
+    if (this.multiple && !isDefinedVal) {
+      return;
+    }
+
+    if (!isDefinedVal && !this.nullSelection) {
+      console.warn('`o-combo` with attr ' + this.oattr + ' cannot be set. `null-selection` attribute is false.');
+      return;
+    }
+
+    if (isDefinedVal) {
+      const record = this.dataArray.find(item => item[this.valueColumn] === val);
+      if (!Util.isDefined(record)) {
+        return;
+      }
+    } else {
+      if (Util.isDefined(val)) {
+        super.setValue(val, options);
       }
     }
+    super.setValue(val, options);
   }
 
   getSelectedItems(): any[] {

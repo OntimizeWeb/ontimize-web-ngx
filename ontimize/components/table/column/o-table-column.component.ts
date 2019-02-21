@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ComponentFactory, ComponentFactoryResolver, EventEmitter, forwardRef, Inject, Injector, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+import { AfterViewInit, Component, ComponentFactory, ComponentFactoryResolver, EventEmitter, forwardRef, Inject, Injector, OnDestroy, OnInit, ViewChild, ViewContainerRef, ChangeDetectionStrategy } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { Util } from '../../../util/util';
@@ -61,12 +61,16 @@ export const DEFAULT_INPUTS_O_TABLE_COLUMN = [
 
   'width',
 
+  // only in pixels
   'minWidth: min-width',
+
+  // only in pixels
+  'maxWidth: max-width',
 
   // async-load [no|yes|true|false]: asynchronous query. Default: no
   'asyncLoad : async-load',
 
-  // sqltype[string]: Data type according to Java standard. See SQLType ngClass. Default: 'OTHER'
+  // sqltype[string]: Data type according to Java standard. See SQLType class. Default: 'OTHER'
   'sqlType: sql-type',
 
   'tooltip',
@@ -76,6 +80,8 @@ export const DEFAULT_INPUTS_O_TABLE_COLUMN = [
   'tooltipFunction: tooltip-function',
 
   'multiline',
+
+  'resizable',
 
   ...OTableCellRendererBooleanComponent.DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_BOOLEAN,
   ...OTableCellRendererCurrencyComponent.DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_CURRENCY, // includes Integer and Real
@@ -100,6 +106,7 @@ export const DEFAULT_OUTPUTS_O_TABLE_COLUMN = [
   selector: 'o-table-column',
   templateUrl: './o-table-column.component.html',
   styleUrls: ['./o-table-column.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   inputs: DEFAULT_INPUTS_O_TABLE_COLUMN,
   outputs: DEFAULT_OUTPUTS_O_TABLE_COLUMN
 })
@@ -141,12 +148,14 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
   public sqlType: string;
   protected _SQLType: number;
   protected _defaultSQLTypeKey: string = 'OTHER';
-  protected _orderable: boolean = true;
+  protected _orderable: boolean;
+  protected _resizable: boolean;
   protected _searchable: boolean = true;
   @InputConverter()
   public editable: boolean = false;
   public width: string;
   public minWidth: string;
+  public maxWidth: string;
   @InputConverter()
   public tooltip: boolean = false;
   tooltipValue: string;
@@ -166,7 +175,7 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
   protected thousandSeparator: string = ',';
   /* input renderer real */
   protected decimalSeparator: string = '.';
-  protected decimalDigits: number = 2;
+
   /* input renderer currency */
   protected currencySymbol: string;
   protected currencySymbolPosition: string;
@@ -228,6 +237,10 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
   max: number;
   @InputConverter()
   step: number;
+  @InputConverter()
+  minDecimalDigits: number = 2;
+  @InputConverter()
+  maxDecimalDigits: number = 2;
 
   /* input editor boolean */
   @InputConverter()
@@ -294,7 +307,8 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
               newRenderer.currencySymbol = this.currencySymbol;
               newRenderer.currencySymbolPosition = this.currencySymbolPosition;
               newRenderer.decimalSeparator = this.decimalSeparator;
-              newRenderer.decimalDigits = this.decimalDigits;
+              newRenderer.minDecimalDigits = this.minDecimalDigits;
+              newRenderer.maxDecimalDigits = this.maxDecimalDigits;
               newRenderer.grouping = this.grouping;
               newRenderer.thousandSeparator = this.thousandSeparator;
               break;
@@ -316,7 +330,8 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
             case 'real':
             case 'percentage':
               newRenderer.decimalSeparator = this.decimalSeparator;
-              newRenderer.decimalDigits = this.decimalDigits;
+              newRenderer.minDecimalDigits = this.minDecimalDigits;
+              newRenderer.maxDecimalDigits = this.maxDecimalDigits;
               newRenderer.grouping = this.grouping;
               newRenderer.thousandSeparator = this.thousandSeparator;
               break;
@@ -423,6 +438,9 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
     if (oCol !== undefined) {
       oCol.renderer = this.renderer;
     }
+    if (this.renderer.ngOnInit) {
+      this.renderer.ngOnInit();
+    }
   }
 
   public registerEditor(editor: any) {
@@ -430,6 +448,9 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
     const oCol = this.table.getOColumn(this.attr);
     if (oCol !== undefined) {
       oCol.editor = this.editor;
+    }
+    if (this.editor.ngOnInit) {
+      this.editor.ngOnInit();
     }
   }
 
@@ -449,6 +470,18 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
 
   get orderable(): any {
     return this._orderable;
+  }
+
+  set resizable(val: any) {
+    this._resizable = typeof val === 'boolean' ? val : Util.parseBoolean(val, true);
+    const oCol = this.table.getOColumn(this.attr);
+    if (oCol) {
+      oCol.resizable = this._resizable;
+    }
+  }
+
+  get resizable(): any {
+    return this._resizable;
   }
 
   set searchable(val: any) {

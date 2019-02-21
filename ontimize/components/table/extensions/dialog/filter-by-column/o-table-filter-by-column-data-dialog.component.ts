@@ -1,7 +1,8 @@
-import { AfterViewInit, Component, ElementRef, Inject, ViewChild, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Inject, ViewChild, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/core';
 import { MatCheckboxChange, MatDialogRef, MAT_DIALOG_DATA, MatSelectionList } from '@angular/material';
 import { FormControl } from '@angular/forms';
-import { Observable } from 'rxjs/Observable';
+import { fromEvent } from 'rxjs';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 import { Util } from '../../../../../util/util';
 import { OColumn } from '../../../o-table.component';
@@ -18,6 +19,7 @@ export interface ITableFilterByColumnDataInterface {
   templateUrl: 'o-table-filter-by-column-data-dialog.component.html',
   styleUrls: ['o-table-filter-by-column-data-dialog.component.scss'],
   encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     '[class.o-filter-by-column-dialog]': 'true'
   }
@@ -86,8 +88,10 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
   initializeFilterEvent() {
     if (this.filter) {
       const self = this;
-      Observable.fromEvent(this.filter.nativeElement, 'keyup')
-        .debounceTime(150).distinctUntilChanged().subscribe(() => {
+      fromEvent(this.filter.nativeElement, 'keyup')
+        .pipe(debounceTime(150))
+        .pipe(distinctUntilChanged())
+        .subscribe(() => {
           let filterValue: string = self.filter.nativeElement.value;
           filterValue = Util.normalizeString(filterValue);
           if (filterValue.indexOf('*') !== -1) {

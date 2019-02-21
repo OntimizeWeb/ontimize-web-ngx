@@ -1,10 +1,12 @@
-import { Component, OnInit, Inject, forwardRef, EventEmitter, Injector, ViewEncapsulation, ViewChild, ElementRef, OnDestroy, AfterViewInit } from '@angular/core';
+import { Component, OnInit, Inject, forwardRef, EventEmitter, Injector, ViewEncapsulation, ViewChild, ElementRef, OnDestroy, AfterViewInit, ChangeDetectionStrategy } from '@angular/core';
 import { MatCheckboxChange, MatMenu } from '@angular/material';
-import { Observable } from 'rxjs/Observable';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription, fromEvent } from 'rxjs';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+
 import { Util } from '../../../../../utils';
 import { OTableComponent, OColumn, OTableOptions } from '../../../o-table.component';
 import { IExpression, FilterExpressionUtils } from '../../../../filter-expression.utils';
+import { OInputsOptions, O_INPUTS_OPTIONS } from '../../../../../config/app-config';
 
 export const DEFAULT_INPUTS_O_TABLE_QUICKFILTER = [
 ];
@@ -21,6 +23,7 @@ export const DEFAULT_OUTPUTS_O_TABLE_QUICKFILTER = [
   inputs: DEFAULT_INPUTS_O_TABLE_QUICKFILTER,
   outputs: DEFAULT_OUTPUTS_O_TABLE_QUICKFILTER,
   encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     '[class.o-table-quickfilter]': 'true',
   }
@@ -37,10 +40,14 @@ export class OTableQuickfilterComponent implements OnInit, AfterViewInit, OnDest
   value: string;
   onChange: EventEmitter<Object> = new EventEmitter<Object>();
 
+  protected oInputsOptions: OInputsOptions;
+
   constructor(
     protected injector: Injector,
+    protected elRef: ElementRef,
     @Inject(forwardRef(() => OTableComponent)) protected table: OTableComponent
   ) {
+
   }
 
   public ngOnInit() {
@@ -51,13 +58,20 @@ export class OTableQuickfilterComponent implements OnInit, AfterViewInit, OnDest
 
   ngAfterViewInit() {
     this.initializeEventFilter();
+
+    try {
+      this.oInputsOptions = this.injector.get(O_INPUTS_OPTIONS);
+    } catch (e) {
+      this.oInputsOptions = {};
+    }
+    Util.parseOInputsOptions(this.elRef, this.oInputsOptions);
   }
 
   get filterExpression(): IExpression {
     let result: IExpression = this.getUserFilter();
     if (!Util.isDefined(result) && Util.isDefined(this.value) && this.value.length > 0) {
       let queryCols = [];
-      this.oTableOptions.columns.map((oCol: OColumn) => {
+      this.oTableOptions.columns.forEach((oCol: OColumn) => {
         if (oCol.searching && oCol.visible && !oCol.renderer) {
           queryCols.push(oCol.attr);
         }
@@ -82,8 +96,10 @@ export class OTableQuickfilterComponent implements OnInit, AfterViewInit, OnDest
 
   initializeEventFilter() {
     if (this.filter && !this.quickFilterObservable) {
-      this.quickFilterObservable = Observable.fromEvent(this.filter.nativeElement, 'keyup')
-        .debounceTime(150).distinctUntilChanged().subscribe(() => {
+      this.quickFilterObservable = fromEvent(this.filter.nativeElement, 'keyup')
+        .pipe(debounceTime(150))
+        .pipe(distinctUntilChanged())
+        .subscribe(() => {
           const filterValue = this.filter.nativeElement.value;
           if (!this.table.dataSource || this.value === filterValue) {
             return;

@@ -1,17 +1,31 @@
 @import 'node_modules/@angular/material/theming';
+@mixin icon-color-mixin($icon-color) {
+  .icon-btn,
+  .mat-icon,
+  .read-only .mat-icon,
+  .svg-icon {
+    color: $icon-color;
+  }
+}
+
 @mixin input-theme($theme) {
   $is-dark-theme: map-get($theme, is-dark);
   $foreground: map-get($theme, foreground);
   $warn: map-get($theme, warn);
   $underline-color: mat-color($foreground, divider, if($is-dark-theme, 0.7, 0.42));
+  $primary: map-get($theme, primary);
+  $accent: map-get($theme, accent);
 
   .mat-form-field {
+    &.mat-form-field-disabled.accent {
+      @include icon-color-mixin(mat-color($accent, 0.42));
+    }
+
     &:not(.mat-form-field-disabled) {
-      .icon-btn,
-      .mat-icon,
-      .read-only .mat-icon,
-      .svg-icon {
-        color: mat-color($foreground, icon);
+      @include icon-color-mixin(mat-color($foreground, icon));
+
+      &.accent {
+        @include icon-color-mixin(mat-color($accent));
       }
     }
 
@@ -19,7 +33,7 @@
       color: mat-color($foreground, disabled-button);
     }
 
-    &.read-only {
+    &.mat-form-field-appearance-ontimize.read-only {
       .mat-select-disabled .mat-select-value {
         color: inherit;
       }
@@ -27,6 +41,10 @@
       .mat-form-field-underline {
         background-color: $underline-color;
       }
+    }
+
+    &.mat-form-field-invalid .mat-input-suffix .mat-icon {
+      color: mat-color($warn);
     }
   }
 
@@ -47,5 +65,11 @@
   input[type="week"]:disabled,
   textarea:disabled {
     color: mat-color($foreground, disabled-text);
+  }
+
+  .o-tooltip.o-mat-error {
+    background: mat-color($primary, default-contrast);
+    border: 1px solid mat-color($warn);
+    color: mat-color($warn);
   }
 }

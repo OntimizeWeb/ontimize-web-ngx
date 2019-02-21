@@ -102,7 +102,7 @@ export class OBaseTableCellEditor implements OnInit {
   }
 
   registerEditor() {
-    if (this.registerInColumn) {
+    if (this.registerInColumn && !Util.isDefined(this.tableColumn.editor)) {
       this.tableColumn.registerEditor(this);
       if (!Util.isDefined(this.type) && Util.isDefined(this.tableColumn.type)) {
         this.type = this.tableColumn.type;

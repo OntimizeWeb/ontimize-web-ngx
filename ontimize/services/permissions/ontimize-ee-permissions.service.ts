@@ -1,8 +1,10 @@
+
+import { share } from 'rxjs/operators';
 import { Injector, Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/share';
+import { Observable } from 'rxjs';
+
+
 import { IPermissionsService } from '../../utils';
 import { LoginService } from '../../services';
 import { AppConfig, Config, OntimizeEEPermissionsConfig } from '../../config/app-config';
@@ -75,7 +77,7 @@ export class OntimizeEEPermissionsService implements IPermissionsService {
         _innerObserver.error(error);
       }, () => _innerObserver.complete());
     });
-    return dataObservable.share();
+    return dataObservable.pipe(share());
   }
 
   protected buildHeaders(): HttpHeaders {

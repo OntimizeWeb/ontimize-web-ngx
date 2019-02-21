@@ -4,7 +4,8 @@ import { OComponentMenuItems } from '../../o-content-menu.class';
 import { MatMenu } from '@angular/material/menu';
 
 export const DEFAULT_CONTEXT_MENU_CONTENT_ITEM_INPUTS = [
-  'items'
+  'items',
+  'class'
 ];
 
 @Component({
@@ -15,7 +16,7 @@ export const DEFAULT_CONTEXT_MENU_CONTENT_ITEM_INPUTS = [
   inputs: DEFAULT_CONTEXT_MENU_CONTENT_ITEM_INPUTS
 })
 export class OWrapperContentMenuComponent {
-
+  public class;
   @Input() items: any[];
   @ViewChild('childMenu') public childMenu: MatMenu;
   @ViewChild(OWrapperContentMenuComponent) menu: OWrapperContentMenuComponent;
