@@ -83,7 +83,7 @@ export class LoginService implements ILoginService {
         const remoteConfigService = self.injector.get(ORemoteConfigurationService);
         let pendingArray = [];
         pendingArray.push(permissionsService.getUserPermissionsAsPromise());
-        pendingArray.push(remoteConfigService.initializeRemoteStorageData());
+        pendingArray.push(remoteConfigService.initialize());
         combineLatest(pendingArray).subscribe(() => {
           innerObserver.next();
           innerObserver.complete();
@@ -118,9 +118,12 @@ export class LoginService implements ILoginService {
     const dataObservable: Observable<any> = new Observable(innerObserver => {
       self.retrieveAuthService().then((service) => {
         service.endsession(sessionInfo.user, sessionInfo.id).subscribe(resp => {
-          self.onLogoutSuccess(resp);
-          innerObserver.next();
-          innerObserver.complete();
+          const remoteConfigService = self.injector.get(ORemoteConfigurationService);
+          remoteConfigService.finalize().subscribe(() => {
+            self.onLogoutSuccess(resp);
+            innerObserver.next();
+            innerObserver.complete();
+          });
         }, error => {
           self.onLogoutError(error);
           innerObserver.error(error);

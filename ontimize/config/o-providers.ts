@@ -68,12 +68,11 @@ export function appInitializerFactory(injector: Injector, config: Config, oTrans
       }
       injector.get(NavigationService).initialize();
       injector.get(OntimizeMatIconRegistry).initialize();
-      const remoteConfigService = injector.get(ORemoteConfigurationService);
-
+      injector.get(LocalStorageService).setBackwardCompatibility();
       addPermissionsRouteGuard(injector);
-
       observableArray.push(oTranslate.setAppLang(userLang));
-      observableArray.push(remoteConfigService.initializeRemoteStorageData());
+      const remoteConfigService = injector.get(ORemoteConfigurationService);
+      observableArray.push(remoteConfigService.initialize());
       combineLatest(observableArray).subscribe(() => {
         resolve();
       });
