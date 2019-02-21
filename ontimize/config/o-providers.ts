@@ -66,6 +66,10 @@ export function appInitializerFactory(injector: Injector, config: Config, oTrans
       if (userLang && config.applicationLocales.indexOf(userLang) === -1) {
         config.applicationLocales.push(userLang);
       }
+      if (config['uuid'] === undefined || config['uuid'] === null || config['uuid'] === '') {
+        console.error('Your app must have an \'uuid\' property defined on your app.config file. Otherwise, your application will not work correctly.');
+        alert('Your app must have an \'uuid\' property defined on your app.config file. Otherwise, your application will not work correctly.');
+      }
       injector.get(NavigationService).initialize();
       injector.get(OntimizeMatIconRegistry).initialize();
       injector.get(LocalStorageService).setBackwardCompatibility();

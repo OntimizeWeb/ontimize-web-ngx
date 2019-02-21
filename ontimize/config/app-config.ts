@@ -4,7 +4,7 @@ import { MenuRootItem } from '../services';
 import { ORemoteConfiguration } from '../types';
 import { Util } from '../utils';
 
-const DEFAULT_LOCAL_STORAGE_KEY = 'ontimize-web-uuid';
+const DEFAULT_LOCAL_STORAGE_KEY = undefined;
 const DEFAULT_CONFIG: Config = {
   uuid: DEFAULT_LOCAL_STORAGE_KEY,
   title: 'Ontimize Web App'
@@ -48,7 +48,7 @@ export interface Config {
   startSessionPath?: string;
 
   // uuid [string]: Application identifier. Is the unique package identifier of the app. It is used when storing or managing temporal data related with the app. By default is set as 'ontimize-web-uuid'./
-  uuid: string;
+  uuid?: string;
 
   // title [string]: Title of the app. By default 'Ontimize Web App'.
   title: string;
