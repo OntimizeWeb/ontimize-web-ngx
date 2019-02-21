@@ -44,7 +44,9 @@ export class OFormContainerComponent {
 
   ngAfterViewInit() {
     this.breadcrumb = this.breadcrumb && this.form && !this.formMananger;
-    this.createBreadcrumb();
+    if (this.breadcrumb) {
+      this.createBreadcrumb(this.breadContainer);
+    }
   }
 
   setForm(form: OFormComponent) {
@@ -52,15 +54,12 @@ export class OFormContainerComponent {
     this.formMananger = form.getFormManager();
   }
 
-
-  createBreadcrumb() {
-    if (this.breadcrumb) {
-      const factory = this.resolver.resolveComponentFactory(OBreadcrumbComponent);
-      const ref = this.breadContainer.createComponent(factory);
-      ref.instance._formRef = this.form;
-      ref.instance.labelColumns = this.breadcrumbLabelColumns;
-      ref.instance.separator = this.breadcrumbSeparator;
-    }
+  createBreadcrumb(container: any) {
+    const factory = this.resolver.resolveComponentFactory(OBreadcrumbComponent);
+    const ref = container.createComponent(factory);
+    ref.instance._formRef = this.form;
+    ref.instance.labelColumns = this.breadcrumbLabelColumns;
+    ref.instance.separator = this.breadcrumbSeparator;
   }
 }
 

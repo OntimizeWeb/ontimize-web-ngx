@@ -1,6 +1,7 @@
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 
-import { INTERNAL_ONTIMIZE_MODULES_EXPORTED, INTERNAL_ONTIMIZE_MODULES } from './ontimize/config/o-modules';
+import { ODialogComponent, OSnackBarComponent } from './ontimize/components';
+import { INTERNAL_ONTIMIZE_MODULES, INTERNAL_ONTIMIZE_MODULES_EXPORTED } from './ontimize/config/o-modules';
 
 export { ONTIMIZE_MODULES } from './ontimize/config/o-modules';
 export { ONTIMIZE_PROVIDERS } from './ontimize/config/o-providers';
@@ -16,8 +17,7 @@ export * from './ontimize/layouts';
 export * from './ontimize/utils';
 export * from './ontimize/shared';
 export * from './ontimize/validators/o-validators';
-
-import { ODialogComponent, OSnackBarComponent } from './ontimize/components';
+export * from './ontimize/types';
 
 @NgModule({
   imports: INTERNAL_ONTIMIZE_MODULES,
@@ -28,5 +28,4 @@ import { ODialogComponent, OSnackBarComponent } from './ontimize/components';
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
-export class OntimizeWebModule {
-}
+export class OntimizeWebModule { }

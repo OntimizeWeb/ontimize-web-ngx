@@ -1,3 +1,7 @@
+#4.0.1
+### Features
+* **o-form**: new `include-breadcrumb` input ([80d9ddc](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/80d9ddc))
+
 ## 4.0.0 (2018-02-19)
 ### Features
 * **o-form-data-component**: new `tooltip-hide-delay` input ([18733ef](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/18733ef]))
