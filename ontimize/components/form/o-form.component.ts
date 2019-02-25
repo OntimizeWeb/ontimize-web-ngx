@@ -99,7 +99,9 @@ export const DEFAULT_INPUTS_O_FORM = [
   //attr
   'oattr:attr',
 
-  'includeBreadcrumb: include-breadcrumb'
+  'includeBreadcrumb: include-breadcrumb',
+
+  'updateToolbarOnBlur: update-toolbar-on-blur'
 ];
 
 export const DEFAULT_OUTPUTS_O_FORM = [
@@ -189,6 +191,8 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   public oattr: string = '';
   @InputConverter()
   includeBreadcrumb: boolean = false;
+  @InputConverter()
+  updateToolbarOnBlur: boolean = true;
   /* end of inputs variables */
 
   /*parsed inputs variables */
