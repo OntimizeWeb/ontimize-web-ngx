@@ -1,6 +1,9 @@
 #4.0.1
 ### Features
-* **o-form**: new `include-breadcrumb` input ([80d9ddc](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/80d9ddc))
+* **o-form**:
+  * new `include-breadcrumb` input ([80d9ddc](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/80d9ddc))
+  * new `update-toolbar-on-blur` input ([d891359](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d891359))
+* **AppConfig**: Adding properties for allowing remote configuration storage.
 
 ## 4.0.0 (2018-02-19)
 ### Features
