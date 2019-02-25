@@ -101,7 +101,7 @@ export const DEFAULT_INPUTS_O_FORM = [
 
   'includeBreadcrumb: include-breadcrumb',
 
-  'updateToolbarOnBlur: update-toolbar-on-blur'
+  'detectChangesOnBlur: detect-changes-on-blur'
 ];
 
 export const DEFAULT_OUTPUTS_O_FORM = [
@@ -192,7 +192,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   @InputConverter()
   includeBreadcrumb: boolean = false;
   @InputConverter()
-  updateToolbarOnBlur: boolean = true;
+  detectChangesOnBlur: boolean = true;
   /* end of inputs variables */
 
   /*parsed inputs variables */

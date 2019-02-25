@@ -40,7 +40,7 @@ export class OFormCacheClass {
   protected registerComponentCaching(comp: IFormDataComponent) {
     const self = this;
     const attr = comp.getAttribute();
-    const listenTo = this.form.updateToolbarOnBlur ? comp.onValueChange : comp.onChange;
+    const listenTo = this.form.detectChangesOnBlur ? comp.onValueChange : comp.onChange;
     if (!Util.isDefined(listenTo)) {
       return;
     }
