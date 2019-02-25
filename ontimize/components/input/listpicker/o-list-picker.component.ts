@@ -197,6 +197,7 @@ export class OListPickerComponent extends OFormServiceComponent implements After
         self.setValue(evt[self.valueColumn], { changeType: OValueChangeEvent.USER_CHANGE });
         if (self._fControl) {
           self._fControl.markAsTouched();
+          self._fControl.markAsDirty();
         }
       }, 0);
     }
