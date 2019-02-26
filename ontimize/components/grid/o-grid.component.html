@@ -54,7 +54,7 @@
 
 
   <!-- GRID FOOTER -->
-  <div *ngIf="!paginationControls && showFooter" fxlayout="row" class="o-grid-footer" layout-padding>
+  <div *ngIf="!paginationControls && showFooter" fxlayout="row" class="o-grid-footer">
     <button type="button" mat-button *ngIf="dataArray.length < totalRecords" (click)="loadMore()" class="mat-raised-button">
       {{ 'GRID.BUTTON_NEXT' | oTranslate }}
     </button>
