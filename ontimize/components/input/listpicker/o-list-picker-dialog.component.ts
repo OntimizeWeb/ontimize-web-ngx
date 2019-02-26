@@ -1,4 +1,4 @@
-import { OnInit, Component, Inject, Injector, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, Inject, Injector, ViewChild, ViewEncapsulation } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
 import { Util } from '../../../util/util';
@@ -21,7 +21,7 @@ export const DEFAULT_INPUTS_O_LIST_PICKER = [
     '[class.o-list-picker-dialog]': 'true'
   }
 })
-export class OListPickerDialogComponent implements OnInit {
+export class OListPickerDialogComponent {
 
   protected data: Array<any> = [];
   protected visibleColsArray: Array<string>;
@@ -56,7 +56,7 @@ export class OListPickerDialogComponent implements OnInit {
     this.searchVal = data.searchVal;
   }
 
-  ngOnInit(): void {
+  ngAfterViewInit(): void {
     if (Util.isDefined(this.searchVal) && this.searchInput !== undefined && this.searchVal.length > 0) {
       this.searchInput.getFormControl().setValue(this.searchVal, {
         emitEvent: false
