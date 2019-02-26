@@ -1,14 +1,12 @@
-import { Component, ElementRef, EventEmitter, forwardRef, Inject, Injector, NgModule, OnInit, Optional, ViewChild } from '@angular/core';
-import { FormControl } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { ValidationErrors, ValidatorFn } from '@angular/forms';
+import { Component, ElementRef, EventEmitter, forwardRef, Inject, Injector, NgModule, OnInit, Optional, ViewChild } from '@angular/core';
+import { FormControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 
-import { OSharedModule } from '../../../shared';
 import { InputConverter } from '../../../decorators';
 import { OntimizeFileService } from '../../../services';
+import { OSharedModule } from '../../../shared';
 import { OFormComponent } from '../../form/o-form.component';
-import { OFormDataComponent, OValueChangeEvent, DEFAULT_INPUTS_O_FORM_DATA_COMPONENT } from '../../o-form-data-component.class';
-
+import { DEFAULT_INPUTS_O_FORM_DATA_COMPONENT, OFormDataComponent, OValueChangeEvent } from '../../o-form-data-component.class';
 import { OFileItem } from './o-file-item.class';
 import { OFileUploader } from './o-file-uploader.class';
 
@@ -83,43 +81,40 @@ export class OFileInputComponent extends OFormDataComponent implements OnInit {
   public static DEFAULT_INPUTS_O_FILE_INPUT = DEFAULT_INPUTS_O_FILE_INPUT;
   public static DEFAULT_OUTPUTS_O_FILE_INPUT = DEFAULT_OUTPUTS_O_FILE_INPUT;
 
-  /* Inputs */
+  public uploader: OFileUploader;
+  public fileService: OntimizeFileService;
+  @ViewChild('inputFile')
+  public inputFile: ElementRef;
+
+  public autoBinding: boolean = false;
+  public autoRegistering: boolean = false;
+  @InputConverter()
+  public showInfo: boolean = false;
+  @InputConverter()
+  public multiple: boolean = false;
+  @InputConverter()
+  public splitUpload: boolean = true;
   public acceptFileType: string;
   public maxFileSize: number;
+  @InputConverter()
+  public maxFiles: number = -1;
+
+  public onBeforeUpload: EventEmitter<any> = new EventEmitter<any>();
+  public onBeforeUploadFile: EventEmitter<any> = new EventEmitter<any>();
+  public onProgress: EventEmitter<any> = new EventEmitter<any>();
+  public onProgressFile: EventEmitter<any> = new EventEmitter<any>();
+  public onCancel: EventEmitter<any> = new EventEmitter<any>();
+  public onCancelFile: EventEmitter<any> = new EventEmitter<any>();
+  public onUpload: EventEmitter<any> = new EventEmitter<any>();
+  public onUploadFile: EventEmitter<any> = new EventEmitter<any>();
+  public onComplete: EventEmitter<any> = new EventEmitter<any>();
+  public onCompleteFile: EventEmitter<any> = new EventEmitter<any>();
+  public onError: EventEmitter<any> = new EventEmitter<any>();
+  public onErrorFile: EventEmitter<any> = new EventEmitter<any>();
+
   protected service: string;
   protected entity: string;
   protected serviceType: string;
-  autoBinding: boolean = false;
-  autoRegistering: boolean = false;
-  @InputConverter()
-  showInfo: boolean = false;
-  @InputConverter()
-  multiple: boolean = false;
-  @InputConverter()
-  protected maxFiles: number = -1;
-  @InputConverter()
-  splitUpload: boolean = true;
-
-  /* Outputs */
-  onBeforeUpload: EventEmitter<any> = new EventEmitter<any>();
-  onBeforeUploadFile: EventEmitter<any> = new EventEmitter<any>();
-  onProgress: EventEmitter<any> = new EventEmitter<any>();
-  onProgressFile: EventEmitter<any> = new EventEmitter<any>();
-  onCancel: EventEmitter<any> = new EventEmitter<any>();
-  onCancelFile: EventEmitter<any> = new EventEmitter<any>();
-  onUpload: EventEmitter<any> = new EventEmitter<any>();
-  onUploadFile: EventEmitter<any> = new EventEmitter<any>();
-  onComplete: EventEmitter<any> = new EventEmitter<any>();
-  onCompleteFile: EventEmitter<any> = new EventEmitter<any>();
-  onError: EventEmitter<any> = new EventEmitter<any>();
-  onErrorFile: EventEmitter<any> = new EventEmitter<any>();
-
-  /* Internal variables */
-  uploader: OFileUploader;
-  fileService: OntimizeFileService;
-
-  @ViewChild('inputFile')
-  inputFile: ElementRef;
 
   constructor(
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
@@ -129,24 +124,24 @@ export class OFileInputComponent extends OFormDataComponent implements OnInit {
     super(form, elRef, injector);
   }
 
-  ngOnInit() {
+  public ngOnInit(): void {
     this.initialize();
 
     this.uploader.onBeforeUploadAll = () => this.onBeforeUpload.emit();
-    this.uploader.onBeforeUploadItem = (item) => this.onBeforeUploadFile.emit(item);
-    this.uploader.onProgressAll = (progress) => this.onProgress.emit(progress);
-    this.uploader.onProgressItem = (item, progress) => this.onProgressFile.emit({ item, progress });
+    this.uploader.onBeforeUploadItem = item => this.onBeforeUploadFile.emit(item);
+    this.uploader.onProgressAll = progress => this.onProgress.emit(progress);
+    this.uploader.onProgressItem = (item, progress) => this.onProgressFile.emit({ item: item, progress: progress });
     this.uploader.onCancelAll = () => this.onCancel.emit();
-    this.uploader.onCancelItem = (item) => this.onCancelFile.emit();
-    this.uploader.onSuccessAll = (response) => this.onUpload.emit({ response });
-    this.uploader.onSuccessItem = (item, response) => this.onUploadFile.emit({ item, response });
+    this.uploader.onCancelItem = item => this.onCancelFile.emit();
+    this.uploader.onSuccessAll = response => this.onUpload.emit({ response: response });
+    this.uploader.onSuccessItem = (item, response) => this.onUploadFile.emit({ item: item, response: response });
     this.uploader.onCompleteAll = () => this.onComplete.emit();
-    this.uploader.onCompleteItem = (item) => this.onCompleteFile.emit(item);
-    this.uploader.onErrorAll = (error) => this.onError.emit(error);
-    this.uploader.onErrorItem = (item, error) => this.onErrorFile.emit({ item, error });
+    this.uploader.onCompleteItem = item => this.onCompleteFile.emit(item);
+    this.uploader.onErrorAll = error => this.onError.emit(error);
+    this.uploader.onErrorItem = (item, error) => this.onErrorFile.emit({ item: item, error: error });
   }
 
-  initialize() {
+  public initialize(): void {
     super.initialize();
 
     if (!this.service) {
@@ -161,7 +156,7 @@ export class OFileInputComponent extends OFormDataComponent implements OnInit {
     this.uploader.splitUpload = this.splitUpload;
   }
 
-  configureService() {
+  public configureService(): void {
     let loadingService: any = OntimizeFileService;
     if (this.serviceType) {
       loadingService = this.serviceType;
@@ -170,9 +165,9 @@ export class OFileInputComponent extends OFormDataComponent implements OnInit {
       this.fileService = this.injector.get(loadingService);
 
       if (this.fileService) {
-        let serviceCfg = this.fileService.getDefaultServiceConfiguration(this.service);
+        const serviceCfg: any = this.fileService.getDefaultServiceConfiguration(this.service);
         if (this.entity) {
-          serviceCfg['entity'] = this.entity;
+          serviceCfg.entity = this.entity;
         }
         this.fileService.configureService(serviceCfg);
       }
@@ -181,8 +176,8 @@ export class OFileInputComponent extends OFormDataComponent implements OnInit {
     }
   }
 
-  resolveValidators(): ValidatorFn[] {
-    let validators: ValidatorFn[] = super.resolveValidators();
+  public resolveValidators(): ValidatorFn[] {
+    const validators: ValidatorFn[] = super.resolveValidators();
     if (this.acceptFileType) {
       validators.push(this.filetypeValidator.bind(this));
     }
@@ -195,7 +190,7 @@ export class OFileInputComponent extends OFormDataComponent implements OnInit {
     return validators;
   }
 
-  innerOnChange(event: any) {
+  public innerOnChange(event: any): void {
     this.ensureOFormValue(event);
     if (this._fControl && this._fControl.touched) {
       this._fControl.markAsDirty();
@@ -203,26 +198,30 @@ export class OFileInputComponent extends OFormDataComponent implements OnInit {
     this.onChange.emit(event);
   }
 
-  fileSelected(event: Event): void {
+  public fileSelected(event: Event): void {
     let value: string = '';
     if (event) {
-      let files: FileList = event.target['files'];
-      if (!this.multiple) {
-        this.uploader.clear();
+      const target: any = event.target || event.srcElement;
+      if (target.files.length > 0) {
+        const files: FileList = target.files;
+        if (!this.multiple) {
+          this.uploader.clear();
+        }
+        for (let i = 0, f: File; i < files.length; i++) {
+          f = files[i];
+          const fileItem: OFileItem = new OFileItem(f, this.uploader);
+          this.uploader.addFile(fileItem);
+        }
+        value = this.uploader.files.map(file => file.name).join(', ');
+
+        window.setTimeout(() => {
+          this.setValue(value !== '' ? value : undefined, { changeType: OValueChangeEvent.USER_CHANGE });
+          if (this._fControl) {
+            this._fControl.markAsTouched();
+          }
+        }, 0);
       }
-      for (var i = 0, f: File; f = files[i]; i++) {
-        let fileItem: OFileItem = new OFileItem(f, this.uploader);
-        this.uploader.addFile(fileItem);
-      }
-      value = this.uploader.files.map(file => file.name).join(', ');
     }
-    window.setTimeout(() => {
-      this.setValue(value !== '' ? value : undefined, { changeType: OValueChangeEvent.USER_CHANGE });
-      this.inputFile.nativeElement.value = '';
-      if (this._fControl) {
-        this._fControl.markAsTouched();
-      }
-    }, 0);
   }
 
   /**
@@ -231,7 +230,7 @@ export class OFileInputComponent extends OFormDataComponent implements OnInit {
    *  * super.clearValue() emit OValueChangeEvent.PROGRAMMATIC_CHANGE
    *  * super.onClickClearValue() emit OValueChangeEvent.USER_CHANGE
    */
-  onClickClearValue(e: Event) {
+  public onClickClearValue(e: Event): void {
     super.onClickClearValue(e);
     this.uploader.clear();
   }
@@ -239,23 +238,23 @@ export class OFileInputComponent extends OFormDataComponent implements OnInit {
   /**
    * Override super.clearValue();
    */
-  clearValue(): void {
+  public clearValue(): void {
     super.clearValue();
     this.uploader.clear();
   }
 
-  onClickUpload(e: Event) {
+  public onClickUpload(e: Event): void {
     e.stopPropagation();
     if (this.isValid) {
       this.upload();
     }
   }
 
-  upload() {
+  public upload(): void {
     this.uploader.upload();
   }
 
-  get files() {
+  get files(): OFileItem[] {
     return this.uploader.files;
   }
 
@@ -274,11 +273,11 @@ export class OFileInputComponent extends OFormDataComponent implements OnInit {
 
   protected filetypeValidator(control: FormControl): ValidationErrors {
     if (control.value && control.value.length > 0 && this.acceptFileType) {
-      let regex: RegExp = new RegExp(this.acceptFileType.replace(';', '|'));
+      const regex: RegExp = new RegExp(this.acceptFileType.replace(';', '|'));
       if (!this.files.every(file => file.type.match(regex) !== null || file.name.substr(file.name.lastIndexOf('.')).match(regex) !== null)) {
         return {
-          'fileType': {
-            'allowedFileTypes': this.acceptFileType.replace(';', ', ')
+          fileType: {
+            allowedFileTypes: this.acceptFileType.replace(';', ', ')
           }
         };
       }
@@ -290,8 +289,8 @@ export class OFileInputComponent extends OFormDataComponent implements OnInit {
     if (control.value && control.value.length > 0 && this.maxFileSize) {
       if (!this.files.every(file => file.size < this.maxFileSize)) {
         return {
-          'fileSize': {
-            'maxFileSize': this.maxFileSize
+          fileSize: {
+            maxFileSize: this.maxFileSize
           }
         };
       }
@@ -303,8 +302,8 @@ export class OFileInputComponent extends OFormDataComponent implements OnInit {
     if (control.value && control.value.length > 0 && this.multiple && this.maxFiles !== -1) {
       if (this.maxFiles < this.files.length) {
         return {
-          'numFile': {
-            'maxFiles': this.maxFiles
+          numFile: {
+            maxFiles: this.maxFiles
           }
         };
       }
