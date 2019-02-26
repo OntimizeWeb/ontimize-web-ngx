@@ -242,6 +242,9 @@ export class OGridComponent extends OServiceComponent implements AfterViewChecke
   ngAfterViewInit() {
     super.afterViewInit();
     this.setGridItemDirectivesData();
+    if (this.searchInputComponent) {
+      this.registerQuickFilter(this.searchInputComponent);
+    }
   }
 
   ngAfterViewChecked(): void {
