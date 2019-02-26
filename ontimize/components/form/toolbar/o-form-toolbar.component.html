@@ -1,13 +1,13 @@
-<mat-toolbar class="o-form-toolbar-header">
+<mat-toolbar class="o-form-toolbar-header" [class.breadcrumb]="includeBreadcrumb" fxLayout="column">
 
-  <div class="mat-toolbar-tools" fxFill>
+  <ng-template *ngIf="includeBreadcrumb" #breadcrumb></ng-template>
+
+  <div class="mat-toolbar-tools" fxLayout="row" fxLayoutAlign="space-between center">
     <button type="button" mat-icon-button (click)="onCloseDetail()" *ngIf="isDetail" class="o-form-toolbar-button">
       <mat-icon svgIcon="ontimize:arrow_back"></mat-icon>
     </button>
 
     <o-form-navigation #formNavigation *ngIf="showNavigation" fxLayout="row" fxLayoutAlign="space-between center"></o-form-navigation>
-
-    <ng-template *ngIf="includeBreadcrumb" #breadcrumb></ng-template>
 
     <span *ngIf="getLabelHeaderAlign() === 'center' || getLabelHeaderAlign() === 'end'" class="fill-remaining"></span>
     <div *ngIf="labelHeader!=''" fxLayout="row" fxLayoutAlign="center center">
