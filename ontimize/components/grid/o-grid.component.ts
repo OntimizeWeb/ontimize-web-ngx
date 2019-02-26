@@ -46,6 +46,8 @@ export const DEFAULT_INPUTS_O_GRID = [
   'gutterSize:gutter-size',
   // fix-header [yes|no|true|false]: fixed footer when the content is greather than its own height. Default: no.
   'fixedHeader:fixed-header',
+  //show-footer:Indicates whether or not to show the footer:Default:true
+  'showFooter:show-footer'
 ];
 
 export const DEFAULT_OUTPUTS_O_GRID = [
@@ -89,6 +91,9 @@ export class OGridComponent extends OServiceComponent implements AfterViewChecke
 
   @InputConverter()
   showSort: boolean = false;
+
+  @InputConverter()
+  showFooter: boolean = true;
 
   gutterSize = '1px';
 

@@ -54,7 +54,7 @@
 
 
   <!-- GRID FOOTER -->
-  <div *ngIf="!paginationControls" fxlayout="row" class="o-grid-footer" layout-padding>
+  <div *ngIf="!paginationControls && showFooter" fxlayout="row" class="o-grid-footer" layout-padding>
     <button type="button" mat-button *ngIf="dataArray.length < totalRecords" (click)="loadMore()" class="mat-raised-button">
       {{ 'GRID.BUTTON_NEXT' | oTranslate }}
     </button>
@@ -62,7 +62,7 @@
     <span class="o-grid-totals">{{ 'GRID.TEXT_SHOWN_ITEMS' | oTranslate :{values: [dataArray.length, totalRecords]} }}</span>
   </div>
 
-  <mat-paginator class="o-mat-paginator" #paginator *ngIf="paginationControls" [length]="totalRecords" [pageSize]="queryRows"
+  <mat-paginator class="o-mat-paginator" #paginator *ngIf="paginationControls && showFooter" [length]="totalRecords" [pageSize]="queryRows"
     [pageSizeOptions]="pageSizeOptions" [pageIndex]="currentPage" [showFirstLastButtons]="true" (page)="onChangePage($event)"></mat-paginator>
 
   <div *ngIf="loading" fxLayout="row" fxLayoutAlign="center end" class="o-loading-blocker">
