@@ -14,12 +14,14 @@
 * **o-grid**: 
   * New `fixed-header` attribute ([4fa91d9](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4fa91d9]))
   * New `gutter-size` attribute ([4e45aaf](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4e45aaf]))
+  * New `show-footer` attribute ([a60e2f3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a60e2f3]))
 * **o-grid-item**: New `colspan` and `rowspan`  attributes ([f1b33a1](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f1b33a1]))
-**o-table-context-menu**: includes new filtering options ([059cd83](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/059cd83))
+
 
 ### Bug Fixes
 * **o-form-navigation**: fixing index error ([f487e54](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f487e54)), closes [#238](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/238)
 * **OServiceBaseComponent**: fixed bug on service components with pagination and located inside a detail form ([9c69c4b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9c69c4b)) ([bb0b04a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/bb0b04a))
+**o-grid**: It shows message of no results ([4f1878c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4f1878c))  closes [#245](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/245)
 
 ### BREAKING CHANGES
 * **o-row**, **o-column**:
