@@ -6,7 +6,7 @@ import { OSharedModule } from '../../shared';
 export const DEFAULT_INPUTS_O_BUTTON = [
   'oattr: attr',
   'olabel: label',
-  // type [FLAT|RAISED|ICON|FAB|MINI-FAB]: The type of button. Default: FLAT.
+  // type [BASIC|RAISED|STROKED|FLAT|ICON|FLOATING|FLOATING-MIN]: The type of button. Default: STROKED.
   'otype: type',
   // icon [string]: Name of google icon (see https://design.google.com/icons/)
   'icon',
@@ -29,7 +29,7 @@ export class OButtonComponent implements OnInit {
 
   public static DEFAULT_INPUTS_O_BUTTON = DEFAULT_INPUTS_O_BUTTON;
 
-  protected static DEFAULT_TYPE = 'RAISED';
+  protected static DEFAULT_TYPE = 'STROKED';
 
   protected oattr: string;
   olabel: string;
@@ -57,13 +57,29 @@ export class OButtonComponent implements OnInit {
   }
 
   isRaised(): boolean {
-    return ((this.otype === 'RAISED') || !this.otype);
+    return this.otype === 'RAISED';
   }
 
   isFlat(): boolean {
     return this.otype === 'FLAT';
   }
 
+  isStroked(): boolean {
+    return (this.otype === 'STROKED' || !this.otype);
+  }
+
+  isBasic(): boolean {
+    return this.otype === 'BASIC';
+  }
+
+  isFloatingMini(): boolean {
+    return this.otype === 'FLOATING-MINI';
+  }
+
+
+  isIconButton():boolean{
+    return this.otype === 'ICON';
+  }
 }
 
 @NgModule({
