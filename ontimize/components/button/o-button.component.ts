@@ -6,7 +6,7 @@ import { OSharedModule } from '../../shared';
 export const DEFAULT_INPUTS_O_BUTTON = [
   'oattr: attr',
   'olabel: label',
-  // type [BASIC|RAISED|STROKED|FLAT|ICON|FLOATING|FLOATING-MIN]: The type of button. Default: STROKED.
+  // type [BASIC|RAISED|STROKED|FLAT|ICON|FAB|MINI-FAB]: The type of button. Default: STROKED.
   'otype: type',
   // icon [string]: Name of google icon (see https://design.google.com/icons/)
   'icon',
@@ -52,8 +52,8 @@ export class OButtonComponent implements OnInit {
     return this.icon !== undefined && (this.olabel === undefined || this.olabel === '');
   }
 
-  isFloating(): boolean {
-    return this.otype === 'FLOATING';
+  isFab(): boolean {
+    return this.otype === 'FAB';
   }
 
   isRaised(): boolean {
@@ -72,8 +72,8 @@ export class OButtonComponent implements OnInit {
     return this.otype === 'BASIC';
   }
 
-  isFloatingMini(): boolean {
-    return this.otype === 'FLOATING-MINI';
+  isMiniFab(): boolean {
+    return this.otype === 'FAB-MINI';
   }
 
 

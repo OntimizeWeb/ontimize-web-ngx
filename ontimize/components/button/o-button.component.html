@@ -30,14 +30,14 @@
   <mat-icon class="material-icons o-button-icon" *ngIf="icon!==undefined" style="vertical-align:middle">{{ icon }}</mat-icon>
 </button>
 
-<button type="button" *ngIf="isFloating()" mat-fab>
+<button type="button" *ngIf="isFab()" mat-fab>
   <img src="{{ image }}" class="o-button-image" *ngIf="image!=undefined" />
   <mat-icon class="material-icons o-button-icon" *ngIf="icon!==undefined" style="vertical-align:middle">{{ icon }}</mat-icon>
   <br *ngIf="iconPosition==='top'" />
   {{ olabel | oTranslate }}
 </button>
 
-<button type="button" *ngIf="isFloatingMini()" mat-mini-fab >
+<button type="button" *ngIf="isMiniFab()" mat-mini-fab >
   <img src="{{ image }}" class="o-button-image" *ngIf="image!=undefined" />
   <mat-icon class="material-icons o-button-icon" *ngIf="icon!==undefined" style="vertical-align:middle">{{ icon }}</mat-icon>
   <br *ngIf="iconPosition==='top'" />
