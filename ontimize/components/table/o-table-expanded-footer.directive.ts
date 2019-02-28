@@ -45,7 +45,6 @@ export class OTableExpandedFooter {
     const self = this;
 
     this.onContentChangeSubscription = this.table.onContentChange.subscribe((data) => {
-      self.updateMessageNotResults(data);
       self.updateHeight();
     });
 
