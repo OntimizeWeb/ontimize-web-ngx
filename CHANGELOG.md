@@ -4,6 +4,11 @@
   * new `include-breadcrumb` input ([80d9ddc](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/80d9ddc))
   * new `detect-changes-on-blur` input ([d891359](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d891359)) ([216d9ff](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/216d9ff))
 * **AppConfig**: Adding properties for allowing remote configuration storage.
+* **o-button**: new button variants, *STROKED*,*BASIC*, *ICON*,*FAB* and *MINI-FAB* ([df76383](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/df76383]))([cf12fcb](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/cf12fcb]))
+
+### BREAKING CHANGES
+* **o-buttom**:
+  * Type `FLOATING` has been renamed to `FAB`.
 
 ## 4.0.0 (2018-02-19)
 ### Features
