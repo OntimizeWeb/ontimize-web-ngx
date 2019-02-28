@@ -7,7 +7,7 @@
 * **o-button**: new button variants, *STROKED*,*BASIC*, *ICON*,*FAB* and *MINI-FAB* ([df76383](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/df76383]))([cf12fcb](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/cf12fcb]))
 
 ### BREAKING CHANGES
-* **o-buttom**:
+* **o-button**:
   * Type `FLOATING` has been renamed to `FAB`.
 
 ## 4.0.0 (2018-02-19)
