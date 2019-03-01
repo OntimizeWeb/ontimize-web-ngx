@@ -10,7 +10,7 @@ import { OntimizeService } from '../../services';
 import { InputConverter } from '../../decorators';
 import { ObservableWrapper } from '../../util/async';
 import { OFormComponent } from '../form/o-form.component';
-import { OQueryDataArgs, ServiceUtils } from '../service.utils';
+import { OQueryDataArgs, ServiceUtils, ISQLOrder } from '../service.utils';
 import { OServiceComponent } from '../o-service-component.class';
 import { FilterExpressionUtils } from '../filter-expression.utils';
 import { OListItemModule } from './list-item/o-list-item.component';
@@ -46,7 +46,13 @@ export const DEFAULT_INPUTS_O_LIST = [
   'odense : dense',
 
   // delete-button [no|yes]: show delete button when user select items. Default: yes.
-  'deleteButton: delete-button'
+  'deleteButton: delete-button',
+
+  // filter [yes|no|true|false]: filter si case sensitive. Default: no.
+  'filterCaseSensitive: filter-case-sensitive',
+
+  // sort-columns [string]: initial sorting, with the format column:[ASC|DESC], separated by ';'. Default: no value.
+  'sortColumns: sort-columns'
 ];
 
 export const DEFAULT_OUTPUTS_O_LIST = [
@@ -109,6 +115,9 @@ export class OListComponent extends OServiceComponent implements AfterContentIni
   odense: boolean = false;
   @InputConverter()
   deleteButton: boolean = true;
+  @InputConverter()
+  filterCaseSensitive: boolean = false;
+  protected sortColumns: string;
   /* End Inputs */
 
   @ContentChildren(OListItemComponent)
@@ -120,6 +129,8 @@ export class OListComponent extends OServiceComponent implements AfterContentIni
   @ViewChild(OSearchInputComponent)
   protected searchInputComponent: OSearchInputComponent;
   quickFilterComponent: OSearchInputComponent;
+
+  public sortColArray: Array<ISQLOrder> = [];
 
   public onClick: EventEmitter<any> = new EventEmitter();
   public onDoubleClick: EventEmitter<any> = new EventEmitter();
@@ -150,6 +161,9 @@ export class OListComponent extends OServiceComponent implements AfterContentIni
 
   ngAfterViewInit() {
     super.afterViewInit();
+    this.parseSortColumns();
+    this.filterCaseSensitive = this.state.hasOwnProperty('filter-case-sensitive') ?
+      this.state['filter-case-sensitive'] : this.filterCaseSensitive;
     if (Util.isDefined(this.searchInputComponent)) {
       this.registerQuickFilter(this.searchInputComponent);
     }
@@ -185,11 +199,10 @@ export class OListComponent extends OServiceComponent implements AfterContentIni
     if (this.staticData && this.staticData.length) {
       this.dataResponseArray = this.staticData;
     }
-    if (this.quickFilterColumns) {
-      this.quickFilterColArray = Util.parseArray(this.quickFilterColumns, true);
-    } else {
-      this.quickFilterColArray = this.colArray;
+    if (!Util.isDefined(this.quickFilterColumns)) {
+      this.quickFilterColumns = this.columns;
     }
+    this.quickFilterColArray = Util.parseArray(this.quickFilterColumns, true);
     let initialQueryLength = undefined;
     if (this.state.hasOwnProperty('queryRecordOffset')) {
       initialQueryLength = this.state.queryRecordOffset;
@@ -216,6 +229,10 @@ export class OListComponent extends OServiceComponent implements AfterContentIni
     if (Util.isDefined(this.quickFilterComponent)) {
       if (this.state.hasOwnProperty('filterValue')) {
         this.quickFilterComponent.setValue(this.state.filterValue);
+      }
+      if (this.state.hasOwnProperty('quickFilterActiveColumns')) {
+        const parsedArr = Util.parseArray(this.state.quickFilterActiveColumns, true);
+        this.quickFilterComponent.setActiveColumns(parsedArr);
       }
       this.quickFilterComponent.onSearch.subscribe(val => this.filterData(val));
     }
@@ -285,6 +302,10 @@ export class OListComponent extends OServiceComponent implements AfterContentIni
     if (!this.storePaginationState) {
       delete dataToStore['queryRecordOffset'];
     }
+    if (this.quickFilter && Util.isDefined(this.quickFilterComponent)) {
+      dataToStore['quickFilterActiveColumns'] = this.quickFilterComponent.getActiveColumns().join(Codes.ARRAY_INPUT_SEPARATOR);
+    }
+    dataToStore['filter-case-sensitive'] = this.isFilterCaseSensitive();
     return dataToStore;
   }
 
@@ -369,10 +390,12 @@ export class OListComponent extends OServiceComponent implements AfterContentIni
       };
       this.queryData(void 0, queryArgs);
     } else if (value && value.length > 0 && this.dataResponseArray && this.dataResponseArray.length > 0) {
-      var self = this;
+      const self = this;
+      const caseSensitive = this.isFilterCaseSensitive();
       let filteredData = this.dataResponseArray.filter(item => {
-        return self.quickFilterColArray.some(col => {
-          return new RegExp('^' + Util.normalizeString(this.configureFilterValue(value)).split('*').join('.*') + '$').test(Util.normalizeString(item[col]));
+        return self.getQuickFilterColumns().some(col => {
+          const regExpStr = '^' + Util.normalizeString(this.configureFilterValue(value), !caseSensitive).split('*').join('.*') + '$';
+          return new RegExp(regExpStr).test(Util.normalizeString(item[col], !caseSensitive));
         });
       });
       this.setDataArray(filteredData);
@@ -479,20 +502,62 @@ export class OListComponent extends OServiceComponent implements AfterContentIni
     super.insertDetail();
   }
 
-
-
   getComponentFilter(existingFilter: any = {}): any {
     let filter = existingFilter;
     // Apply quick filter
     if (this.pageable && Util.isDefined(this.quickFilterComponent)) {
       const searchValue = this.quickFilterComponent.getValue();
       if (Util.isDefined(searchValue)) {
-        filter[FilterExpressionUtils.BASIC_EXPRESSION_KEY] = FilterExpressionUtils.buildArrayExpressionLike(this.quickFilterColArray, searchValue);
+        const filterCols = this.getQuickFilterColumns();
+        if (filterCols.length > 0) {
+          filter[FilterExpressionUtils.BASIC_EXPRESSION_KEY] =
+            FilterExpressionUtils.buildArrayExpressionLike(filterCols, searchValue);
+        }
       }
     }
     return super.getComponentFilter(filter);
   }
 
+  parseSortColumns() {
+    let sortColumnsParam = this.state['sort-columns'] || this.sortColumns;
+    this.sortColArray = ServiceUtils.parseSortColumns(sortColumnsParam);
+  }
+
+  getQueryArguments(filter: Object, ovrrArgs?: OQueryDataArgs): Array<any> {
+    let queryArguments = super.getQueryArguments(filter, ovrrArgs);
+    if (this.pageable) {
+      queryArguments[6] = this.sortColArray;
+    }
+    return queryArguments;
+  }
+
+  getQuickFilterColumns(): string[] {
+    let result = this.quickFilterColArray;
+    if (Util.isDefined(this.quickFilterComponent)) {
+      result = this.quickFilterComponent.getActiveColumns();
+    }
+    return result;
+  }
+
+  getQuickFilterValue(): string {
+    let result = '';
+    if (Util.isDefined(this.quickFilterComponent)) {
+      return this.quickFilterComponent.getValue();
+    }
+    return result;
+  }
+
+  isFilterCaseSensitive(): boolean {
+    const useQuickFilterValue = Util.isDefined(this.quickFilterComponent) && this.showCaseSensitiveCheckbox();
+    if (useQuickFilterValue) {
+      return this.quickFilterComponent.filterCaseSensitive;
+    }
+    return this.filterCaseSensitive;
+  }
+
+  showCaseSensitiveCheckbox(): boolean {
+    return !this.pageable;
+  }
 }
 
 @NgModule({
