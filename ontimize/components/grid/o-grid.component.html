@@ -37,10 +37,16 @@
       <o-search-input *ngIf="quickFilter" placeholder=""></o-search-input>
     </div>
   </mat-toolbar>
+  <!--not results-->
+  <div class="o-grid-no-results fill-remaining" *ngIf="gridItems.length === 0" fxLayoutAlign="center start" layout-padding>
+    {{'GRID.EMPTY' | oTranslate}} 
+    <ng-container *ngIf="quickFilter && searchInputComponent && searchInputComponent.getValue() && searchInputComponent.getValue().length > 0">
+      {{ 'GRID.EMPTY_USING_FILTER' | oTranslate : { values: [ searchInputComponent.getValue()] } }}
+    </ng-container>
+  </div>
 
   <!--MAT-GRID-LIST-->
-
-  <mat-grid-list [cols]="cols" [gutterSize]="gutterSize" [rowHeight]="gridItemHeight" class="o-mat-grid-list fill-remaining">
+  <mat-grid-list [cols]="cols" [gutterSize]="gutterSize" [rowHeight]="gridItemHeight" class="o-mat-grid-list fill-remaining" *ngIf="gridItems.length > 0">
     <mat-grid-tile *ngFor="let item of gridItems" [colspan]="item.colspan" [rowspan]="item.rowspan">
       <ng-container *ngTemplateOutlet="item.template"></ng-container>
     </mat-grid-tile>
@@ -48,7 +54,7 @@
 
 
   <!-- GRID FOOTER -->
-  <div *ngIf="!paginationControls" fxlayout="row" class="o-grid-footer" layout-padding>
+  <div *ngIf="!paginationControls && showFooter" fxlayout="row" class="o-grid-footer">
     <button type="button" mat-button *ngIf="dataArray.length < totalRecords" (click)="loadMore()" class="mat-raised-button">
       {{ 'GRID.BUTTON_NEXT' | oTranslate }}
     </button>
@@ -56,7 +62,7 @@
     <span class="o-grid-totals">{{ 'GRID.TEXT_SHOWN_ITEMS' | oTranslate :{values: [dataArray.length, totalRecords]} }}</span>
   </div>
 
-  <mat-paginator class="o-mat-paginator" #paginator *ngIf="paginationControls" [length]="totalRecords" [pageSize]="queryRows"
+  <mat-paginator class="o-mat-paginator" #paginator *ngIf="paginationControls && showFooter" [length]="totalRecords" [pageSize]="queryRows"
     [pageSizeOptions]="pageSizeOptions" [pageIndex]="currentPage" [showFirstLastButtons]="true" (page)="onChangePage($event)"></mat-paginator>
 
   <div *ngIf="loading" fxLayout="row" fxLayoutAlign="center end" class="o-loading-blocker">

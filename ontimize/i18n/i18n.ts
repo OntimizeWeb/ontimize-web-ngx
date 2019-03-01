@@ -211,6 +211,8 @@ export var MAP = {
     'GRID.SORT_BY_DESC': 'Sort by {0} descending',
     'GRID.BUTTON_NEXT': 'Show more',
     'GRID.TEXT_SHOWN_ITEMS': '{0} / {1}',
+    'GRID.EMPTY': 'No results found',
+    'GRID.EMPTY_USING_FILTER': ' using filter "{0}"',
     'TABLE_CONTEXT_MENU.VIEW_DETAIL': 'View detail',
     'TABLE_CONTEXT_MENU.EDIT': 'Edit',
     'TABLE_CONTEXT_MENU.INSERT': 'Insert',
@@ -440,6 +442,8 @@ export var MAP = {
     'GRID.SORT_BY_DESC': 'Ordenado por {0} descendente',
     'GRID.BUTTON_NEXT': 'Ver más',
     'GRID.TEXT_SHOWN_ITEMS': '{0} / {1}',
+    'GRID.EMPTY': 'No se han obtenido resultados',
+    'GRID.EMPTY_USING_FILTER': ' usando el filtro "{0}"',
     'TABLE_CONTEXT_MENU.VIEW_DETAIL': 'Ver detalle',
     'TABLE_CONTEXT_MENU.EDIT': 'Editar',
     'TABLE_CONTEXT_MENU.INSERT': 'Insertar',
@@ -454,6 +458,7 @@ export var MAP = {
     'TABLE_CONTEXT_MENU.FILTER': 'Filtrar',
     'TABLE_CONTEXT_MENU.FILTER_BY': 'Filter by:',
     'TABLE_CONTEXT_MENU.FILTER_BY_VALUE': 'Filtrar por este valor'
+
   }
 
 };
