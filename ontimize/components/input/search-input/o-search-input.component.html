@@ -29,7 +29,7 @@
           <ng-container *ngIf="showCaseSensitiveCheckbox">
             <mat-divider></mat-divider>
             <mat-checkbox (click)="$event.stopPropagation()" [checked]="filterCaseSensitive"
-              (change)="onFilterCaseSensitiveChange($event.checked)">
+              (change)="onFilterCaseSensitiveChange($event)">
               {{ 'TABLE.FILTER.CASE_SENSITIVE' | oTranslate}}
             </mat-checkbox>
           </ng-container>

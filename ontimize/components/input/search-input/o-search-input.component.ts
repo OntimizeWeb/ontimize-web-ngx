@@ -54,7 +54,7 @@ export class OSearchInputComponent implements OnInit {
   protected _appearance: MatFormFieldAppearance;
   public columns: string;
   @InputConverter()
-  public filterCaseSensitive: boolean = false;
+  protected _filterCaseSensitive: boolean = false;
   @InputConverter()
   public showCaseSensitiveCheckbox: boolean = false;
   @InputConverter()
@@ -85,6 +85,14 @@ export class OSearchInputComponent implements OnInit {
       value = undefined;
     }
     this._appearance = value;
+  }
+
+  get filterCaseSensitive(): boolean {
+    return this._filterCaseSensitive;
+  }
+
+  set filterCaseSensitive(value: boolean) {
+    this._filterCaseSensitive = value;
   }
   /* end of parsed inputs variables */
 
@@ -195,6 +203,7 @@ export class OSearchInputComponent implements OnInit {
 
   onFilterCaseSensitiveChange(event: MatCheckboxChange) {
     this.filterCaseSensitive = event.checked;
+    this.triggerOnSearch();
   }
 
   getActiveColumns(): string[] {
