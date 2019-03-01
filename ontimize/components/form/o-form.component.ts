@@ -1070,13 +1070,15 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   getAttributesValuesToUpdate(): Object {
     let values = {};
     const self = this;
-    Object.keys(this.formGroup.controls).forEach((item) => {
+    const changedAttrs = this.formCache.getChangedFormControlsAttr();
+    Object.keys(this.formGroup.controls).filter(controlName =>
+      self.ignoreFormCacheKeys.indexOf(controlName) === -1 &&
+      changedAttrs.indexOf(controlName) !== -1
+    ).forEach((item) => {
       const control = self.formGroup.controls[item];
-      if (self.ignoreFormCacheKeys.indexOf(item) === -1 && control.dirty) {
-        values[item] = control.value;
-        if (values[item] === undefined) {
-          values[item] = null;
-        }
+      values[item] = control.value;
+      if (values[item] === undefined) {
+        values[item] = null;
       }
     });
     return values;

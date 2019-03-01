@@ -17,6 +17,8 @@ export class OFormCacheClass {
   onCacheEmptyStateChanges: EventEmitter<boolean> = new EventEmitter<boolean>();
   onCacheStateChanges: EventEmitter<any> = new EventEmitter<any>();
 
+  protected changedFormControls: string[] = [];
+
   constructor(protected form: OFormComponent) {
   }
 
@@ -46,6 +48,9 @@ export class OFormCacheClass {
     }
     this._componentsSubscritpions[attr] = listenTo.subscribe(() => {
       if (self.initializedCache && !self.blockCaching && self.hasComponentChanged(attr, comp)) {
+        if (self.changedFormControls.indexOf(attr) === -1) {
+          self.changedFormControls.push(attr);
+        }
         self.updateFormDataCache();
         self.addChangeToStack(comp);
       }
@@ -66,6 +71,7 @@ export class OFormCacheClass {
     });
     this._componentsSubscritpions = {};
     this.formDataCache = undefined;
+    this.changedFormControls = [];
   }
 
   protected removeUndefinedProperties(arg: any): any {
@@ -98,6 +104,7 @@ export class OFormCacheClass {
     this.valueChangesStack = [];
     this.onCacheEmptyStateChanges.emit(true);
     this.initializedCache = true;
+    this.changedFormControls = [];
   }
 
   getInitialDataCache() {
@@ -217,4 +224,7 @@ export class OFormCacheClass {
     return res;
   }
 
+  getChangedFormControlsAttr(): string[] {
+    return this.changedFormControls;
+  }
 }
