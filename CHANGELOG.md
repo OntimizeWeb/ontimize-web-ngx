@@ -3,6 +3,7 @@
 * **o-form**:
   * new `include-breadcrumb` input ([80d9ddc](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/80d9ddc))
   * new `detect-changes-on-blur` input ([d891359](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d891359)) ([216d9ff](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/216d9ff))
+* **o-form-layout-manager**: new attributes `dialog-class`, `dialog-width`, `dialog-min-width`, `dialog-max-width`, `dialog-height`, `dialog-min-height`, `dialog-max-height` ([d891359](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d891359)) ([216d9ff](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/216d9ff))
 * **AppConfig**: Adding properties for allowing remote configuration storage.
 * **o-list**: new `sort-columns`and `filter-case-sensitive` inputs ([b8bf534](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b8bf534))
 * **o-search-input**: new `appearance`, `columns`, `filter-case-sensitive`, `show-case-sensitive-checkbox` and `show-menu` inputs ([eab96f6](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/eab96f6))
