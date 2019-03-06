@@ -97,7 +97,11 @@ export const DEFAULT_INPUTS_O_FORM = [
   'showHeaderNavigation: show-header-navigation',
 
   //attr
-  'oattr:attr'
+  'oattr:attr',
+
+  'includeBreadcrumb: include-breadcrumb',
+
+  'detectChangesOnBlur: detect-changes-on-blur'
 ];
 
 export const DEFAULT_OUTPUTS_O_FORM = [
@@ -177,17 +181,18 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   protected deleteMethod: string = Codes.DELETE_METHOD;
   protected _layoutDirection: string = OFormComponent.DEFAULT_LAYOUT_DIRECTION;
   protected _layoutAlign: string;
-
   @InputConverter()
   protected editableDetail: boolean = true;
   protected keysSqlTypes: string;
   @InputConverter()
   undoButton: boolean = true;
-
   @InputConverter()
   showHeaderNavigation: boolean = false;
-
   public oattr: string = '';
+  @InputConverter()
+  includeBreadcrumb: boolean = false;
+  @InputConverter()
+  detectChangesOnBlur: boolean = true;
   /* end of inputs variables */
 
   /*parsed inputs variables */
@@ -234,7 +239,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   protected formCache: OFormCacheClass;
   protected formNavigation: OFormNavigationClass;
 
-  protected formContainer: OFormContainerComponent;
+  public formContainer: OFormContainerComponent;
 
   protected permissionsService: PermissionsService;
   protected permissions: OFormPermissions;
@@ -1065,13 +1070,15 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   getAttributesValuesToUpdate(): Object {
     let values = {};
     const self = this;
-    Object.keys(this.formGroup.controls).forEach((item) => {
+    const changedAttrs = this.formCache.getChangedFormControlsAttr();
+    Object.keys(this.formGroup.controls).filter(controlName =>
+      self.ignoreFormCacheKeys.indexOf(controlName) === -1 &&
+      changedAttrs.indexOf(controlName) !== -1
+    ).forEach((item) => {
       const control = self.formGroup.controls[item];
-      if (self.ignoreFormCacheKeys.indexOf(item) === -1 && control.dirty) {
-        values[item] = control.value;
-        if (values[item] === undefined) {
-          values[item] = null;
-        }
+      values[item] = control.value;
+      if (values[item] === undefined) {
+        values[item] = null;
       }
     });
     return values;

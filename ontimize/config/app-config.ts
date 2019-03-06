@@ -1,9 +1,11 @@
 import { InjectionToken } from '@angular/core';
+
 import { MenuRootItem } from '../services';
+import { ORemoteConfiguration } from '../types';
 import { Util } from '../utils';
 
-let DEFAULT_LOCAL_STORAGE_KEY = 'ontimize-web-uuid';
-let DEFAULT_CONFIG: Config = {
+const DEFAULT_LOCAL_STORAGE_KEY = undefined;
+const DEFAULT_CONFIG: Config = {
   uuid: DEFAULT_LOCAL_STORAGE_KEY,
   title: 'Ontimize Web App'
 };
@@ -39,11 +41,14 @@ export interface Config {
     path?: string;
   };
 
+  /** Remote configuration storage parameter */
+  remoteConfig?: ORemoteConfiguration;
+
   // startSessionPath [string]: The path of the URL to startsession method.
   startSessionPath?: string;
 
   // uuid [string]: Application identifier. Is the unique package identifier of the app. It is used when storing or managing temporal data related with the app. By default is set as 'ontimize-web-uuid'./
-  uuid: string;
+  uuid?: string;
 
   // title [string]: Title of the app. By default 'Ontimize Web App'.
   title: string;
@@ -92,11 +97,11 @@ export class AppConfig {
   }
 
   public getServiceConfiguration(): any {
-    return this._config['servicesConfiguration'] || {};
+    return this._config.servicesConfiguration || {};
   }
 
   public getMenuConfiguration(): MenuRootItem[] {
-    return this._config['appMenuConfiguration'] || [];
+    return this._config.appMenuConfiguration || [];
   }
 
   public useRemoteBundle(): boolean {
@@ -104,9 +109,8 @@ export class AppConfig {
   }
 
   public getBundleEndpoint(): string {
-    let result = undefined;
-    let existsBundleConf = (Util.isDefined(this._config.bundle));
-
+    let result: string;
+    const existsBundleConf = this.useRemoteBundle();
     if (existsBundleConf && Util.isDefined(this._config.bundle.endpoint)) {
       result = this._config.bundle.endpoint;
     } else if (existsBundleConf && Util.isDefined(this._config.bundle.path)) {
@@ -142,5 +146,24 @@ export class AppConfig {
     }
     return undefined;
   }
-}
 
+  public getRemoteConfigurationConfig(): ORemoteConfiguration {
+    return this._config.remoteConfig;
+  }
+
+  public useRemoteConfiguration(): boolean {
+    return Util.isDefined(this._config.remoteConfig);
+  }
+
+  public getRemoteConfigurationEndpoint(): string {
+    let result: string;
+    const existsRemoteConf = this.useRemoteConfiguration();
+    if (existsRemoteConf && Util.isDefined(this._config.remoteConfig.endpoint)) {
+      result = this._config.remoteConfig.endpoint;
+    } else if (existsRemoteConf && Util.isDefined(this._config.remoteConfig.path)) {
+      result = this._config.apiEndpoint + '/' + this._config.remoteConfig.path;
+    }
+    return result;
+  }
+
+}

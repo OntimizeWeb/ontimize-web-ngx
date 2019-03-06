@@ -13,6 +13,9 @@ import { OFormComponent } from '../../form/o-form.component';
 import { OFormServiceComponent } from '../o-form-service-component.class';
 import { OListPickerDialogComponent } from './o-list-picker-dialog.component';
 
+import { FormControl } from '@angular/forms';
+import { IFormValueOptions } from '../../form/form-components';
+
 export const DEFAULT_INPUTS_O_LIST_PICKER = [
   ...OFormServiceComponent.DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT,
   'filter',
@@ -65,12 +68,14 @@ export class OListPickerComponent extends OFormServiceComponent implements After
   protected blurDelay = 200;
   protected blurPrevent = false;
 
+  stateCtrl: FormControl;
   constructor(
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
     elRef: ElementRef,
     injector: Injector) {
     super(form, elRef, injector);
     this.matDialog = this.injector.get(MatDialog);
+    this.stateCtrl = new FormControl();
   }
 
   ngOnInit(): any {
@@ -89,6 +94,12 @@ export class OListPickerComponent extends OFormServiceComponent implements After
     super.ensureOFormValue(value);
     // This call make the component querying its data multiple times, but getting description value is needed
     this.syncDataIndex(false);
+  }
+
+  protected setFormValue(val: any, options?: IFormValueOptions, setDirty: boolean = false) {
+
+    super.setFormValue(val, options, setDirty);
+    this.stateCtrl.setValue(this.getDescriptionValue());
   }
 
   ngAfterViewInit(): void {
@@ -115,6 +126,7 @@ export class OListPickerComponent extends OFormServiceComponent implements After
         }
       });
     }
+
     return descTxt;
   }
 
@@ -147,7 +159,7 @@ export class OListPickerComponent extends OFormServiceComponent implements After
     let cfg: MatDialogConfig = {
       role: 'dialog',
       disableClose: false,
-      panelClass: ['cdk-overlay-list-picker','o-dialog-class'],
+      panelClass: ['cdk-overlay-list-picker', 'o-dialog-class'],
       data: {
         data: this.getDialogDataArray(this.dataArray),
         filter: this.filter,
@@ -197,6 +209,7 @@ export class OListPickerComponent extends OFormServiceComponent implements After
         self.setValue(evt[self.valueColumn], { changeType: OValueChangeEvent.USER_CHANGE });
         if (self._fControl) {
           self._fControl.markAsTouched();
+          self._fControl.markAsDirty();
         }
       }, 0);
     }

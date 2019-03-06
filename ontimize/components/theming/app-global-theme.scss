@@ -86,27 +86,29 @@
     }
   }
 
+  $dialog-borders-color: #929292;
+
   .o-form-layout-dialog-overlay,
-  .o-list-picker-dialog
-   {
+  .o-list-picker-dialog {
     .title-container {
-      border-bottom: 1px solid mat-color($primary, 200);
+      border-bottom: 1px solid $dialog-borders-color;
     }
   }
+
   .o-form-layout-dialog-overlay {
     .title-container {
       .mat-icon {
-        color: mat-color($primary, 200);
+        color: $dialog-borders-color;
       }
     }
   }
 
   .o-dialog-class {
     .mat-dialog-container {
-      border: 1px solid mat-color($primary, 200);
+      border: 1px solid $dialog-borders-color;
 
       .mat-dialog-title {
-        border-bottom: 1px solid mat-color($primary, 200);
+        border-bottom: 1px solid $dialog-borders-color;
       }
 
       .empty-filter-list {
@@ -141,9 +143,9 @@
         }
       }
     }
+
     .mat-dialog-actions > button {
       margin-left: 12px;
-      
     }
   }
 

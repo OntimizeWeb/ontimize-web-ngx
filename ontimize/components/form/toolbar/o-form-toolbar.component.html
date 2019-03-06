@@ -1,6 +1,8 @@
-<mat-toolbar class="o-form-toolbar-header">
+<mat-toolbar class="o-form-toolbar-header" [class.breadcrumb]="includeBreadcrumb" fxLayout="column">
 
-  <div class="mat-toolbar-tools" fxFill>
+  <ng-template *ngIf="includeBreadcrumb" #breadcrumb></ng-template>
+
+  <div class="mat-toolbar-tools" fxLayout="row" fxLayoutAlign="space-between center">
     <button type="button" mat-icon-button (click)="onCloseDetail()" *ngIf="isDetail" class="o-form-toolbar-button">
       <mat-icon svgIcon="ontimize:arrow_back"></mat-icon>
     </button>

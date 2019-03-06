@@ -1,3 +1,19 @@
+#4.0.1
+### Features
+* **o-form**:
+  * new `include-breadcrumb` input ([80d9ddc](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/80d9ddc))
+  * new `detect-changes-on-blur` input ([d891359](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d891359)) ([216d9ff](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/216d9ff))
+* **o-form-layout-manager**: new attributes `dialog-class`, `dialog-width`, `dialog-min-width`, `dialog-max-width`, `dialog-height`, `dialog-min-height`, `dialog-max-height` ([d891359](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d891359)) ([216d9ff](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/216d9ff))
+* **AppConfig**: Adding properties for allowing remote configuration storage.
+* **o-list**: new `sort-columns`and `filter-case-sensitive` inputs ([b8bf534](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b8bf534))
+* **o-search-input**: new `appearance`, `columns`, `filter-case-sensitive`, `show-case-sensitive-checkbox` and `show-menu` inputs ([eab96f6](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/eab96f6))
+* **o-button**: new button variants, *STROKED*,*BASIC*, *ICON*,*FAB* and *MINI-FAB* ([df76383](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/df76383]))([cf12fcb](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/cf12fcb]))
+* New directive **oHidden** used for hiding components ([fe54972](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/fe54972))
+
+### BREAKING CHANGES
+* **o-button**:
+  * Type `FLOATING` has been renamed to `FAB`.
+
 ## 4.0.0 (2018-02-19)
 ### Features
 * **o-form-data-component**: new `tooltip-hide-delay` input ([18733ef](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/18733ef]))
@@ -63,6 +79,7 @@ The sliding behavior in `o-slider` component requires that HammerJS is loaded on
 * **o-grid**: loading spinner displays properly ([7d08582](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7d08582)), closes [#231](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/231)
 * **o-form-navigation**: fixing index error ([f487e54](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f487e54)), closes [#238](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/238)
 * **OServiceBaseComponent**: fixed bug on service components with pagination and located inside a detail form ([9c69c4b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9c69c4b)) ([bb0b04a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/bb0b04a))
+**o-grid**: It shows message of no results ([4f1878c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4f1878c))  closes [#245](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/245)
 
 ### BREAKING CHANGES
 * **AppConfig**: removing `authGuard` property.

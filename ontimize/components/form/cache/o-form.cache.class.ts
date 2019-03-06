@@ -2,7 +2,7 @@
 import { Subscription } from 'rxjs';
 import { EventEmitter } from '@angular/core';
 import { Util } from '../../../utils';
-import { IFormControlComponent, IFormDataComponent, OValueChangeEvent } from '../../o-form-data-component.class';
+import { IFormControlComponent, IFormDataComponent } from '../../o-form-data-component.class';
 import { OFormComponent } from '../o-form.component';
 
 export class OFormCacheClass {
@@ -16,6 +16,8 @@ export class OFormCacheClass {
 
   onCacheEmptyStateChanges: EventEmitter<boolean> = new EventEmitter<boolean>();
   onCacheStateChanges: EventEmitter<any> = new EventEmitter<any>();
+
+  protected changedFormControls: string[] = [];
 
   constructor(protected form: OFormComponent) {
   }
@@ -40,11 +42,15 @@ export class OFormCacheClass {
   protected registerComponentCaching(comp: IFormDataComponent) {
     const self = this;
     const attr = comp.getAttribute();
-    if (!Util.isDefined(comp.onValueChange)) {
+    const listenTo = this.form.detectChangesOnBlur ? comp.onValueChange : comp.onChange;
+    if (!Util.isDefined(listenTo)) {
       return;
     }
-    this._componentsSubscritpions[attr] = comp.onValueChange.subscribe((value: OValueChangeEvent) => {
+    this._componentsSubscritpions[attr] = listenTo.subscribe(() => {
       if (self.initializedCache && !self.blockCaching && self.hasComponentChanged(attr, comp)) {
+        if (self.changedFormControls.indexOf(attr) === -1) {
+          self.changedFormControls.push(attr);
+        }
         self.updateFormDataCache();
         self.addChangeToStack(comp);
       }
@@ -65,6 +71,7 @@ export class OFormCacheClass {
     });
     this._componentsSubscritpions = {};
     this.formDataCache = undefined;
+    this.changedFormControls = [];
   }
 
   protected removeUndefinedProperties(arg: any): any {
@@ -97,6 +104,7 @@ export class OFormCacheClass {
     this.valueChangesStack = [];
     this.onCacheEmptyStateChanges.emit(true);
     this.initializedCache = true;
+    this.changedFormControls = [];
   }
 
   getInitialDataCache() {
@@ -216,4 +224,7 @@ export class OFormCacheClass {
     return res;
   }
 
+  getChangedFormControlsAttr(): string[] {
+    return this.changedFormControls;
+  }
 }

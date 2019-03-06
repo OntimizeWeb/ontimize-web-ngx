@@ -22,7 +22,8 @@ export const DEFAULT_INPUTS_O_SLIDER_INPUT = [
   'step',
   'thumbLabel:thumb-label',
   'tickInterval:tick-interval',
-  'layout'
+  'layout',
+  'oDisplayWith:display-with'
 ];
 
 export const DEFAULT_OUTPUTS_O_SLIDER_INPUT = [
@@ -76,13 +77,8 @@ export class OSliderComponent extends OFormDataComponent {
   }
   _tickInterval: 'auto' | number = 0;
 
-  get oDisplayWith(): SliderDisplayFunction {
-    return this._displayWith;
-  }
-  set oDisplayWith(val: SliderDisplayFunction) {
-    this._displayWith = val;
-  }
-  protected _displayWith: SliderDisplayFunction;
+
+  oDisplayWith: SliderDisplayFunction;
 
   constructor(
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,

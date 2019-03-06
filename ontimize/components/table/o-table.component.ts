@@ -526,7 +526,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     return this._selectAllCheckboxVisible;
   }
 
-
   public daoTable: OTableDao | null;
   public dataSource: OTableDataSource | null;
   protected visibleColumns: string;
@@ -675,6 +674,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   @ContentChildren(OTableButtonComponent)
   tableButtons: QueryList<OTableButtonComponent>;
 
+  @ViewChild(OTableExpandedFooter)
+  oTableExpandedFooter: OTableExpandedFooter;
+
   constructor(
     injector: Injector,
     elRef: ElementRef,
@@ -690,7 +692,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
     this.snackBarService = this.injector.get(SnackBarService);
     this.oTableStorage = new OTableStorage(this);
-
   }
 
   ngOnInit() {
@@ -1258,6 +1259,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     this.daoTable.dataChange.next(data);
     this.daoTable.isLoadingResults = false;
     this.updateScrolledState();
+    if (Util.isDefined(data) && data.length === 0) {
+      this.oTableExpandedFooter.updateMessageNotResults(data);
+    }
     if (this.pageable) {
       ObservableWrapper.callEmit(this.onPaginatedDataLoaded, data);
     }

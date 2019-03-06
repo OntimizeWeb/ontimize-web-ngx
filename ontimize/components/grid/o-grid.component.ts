@@ -46,6 +46,8 @@ export const DEFAULT_INPUTS_O_GRID = [
   'gutterSize:gutter-size',
   // fix-header [yes|no|true|false]: fixed footer when the content is greather than its own height. Default: no.
   'fixedHeader:fixed-header',
+  //show-footer:Indicates whether or not to show the footer:Default:true
+  'showFooter:show-footer'
 ];
 
 export const DEFAULT_OUTPUTS_O_GRID = [
@@ -89,6 +91,9 @@ export class OGridComponent extends OServiceComponent implements AfterViewChecke
 
   @InputConverter()
   showSort: boolean = false;
+
+  @InputConverter()
+  showFooter: boolean = true;
 
   gutterSize = '1px';
 
@@ -242,6 +247,9 @@ export class OGridComponent extends OServiceComponent implements AfterViewChecke
   ngAfterViewInit() {
     super.afterViewInit();
     this.setGridItemDirectivesData();
+    if (this.searchInputComponent) {
+      this.registerQuickFilter(this.searchInputComponent);
+    }
   }
 
   ngAfterViewChecked(): void {
@@ -486,7 +494,7 @@ export class OGridComponent extends OServiceComponent implements AfterViewChecke
     const queryArguments = super.getQueryArguments(filter, ovrrArgs);
     // queryArguments[3] = this.getSqlTypesForFilter(queryArguments[1]);
     if (this.pageable && Util.isDefined(this.sortColumn)) {
-      queryArguments[6] = [this.sortColumnOrder];
+      queryArguments[6] = this.sortColumnOrder ? [this.sortColumnOrder] : this.sortColumnOrder;
     }
     return queryArguments;
   }
@@ -581,7 +589,7 @@ export class OGridComponent extends OServiceComponent implements AfterViewChecke
       return result;
     }
     colTextKey = 'GRID.SORT_BY_' + (col.ascendent ? 'ASC' : 'DESC');
-    result = this.translateService.get(colTextKey, [(this.translateService.get(col.columnName) || '').toLowerCase()]);
+    result = this.translateService.get(colTextKey, [(this.translateService.get(col.columnName) || '')]);
     return result;
   }
 

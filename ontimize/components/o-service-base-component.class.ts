@@ -437,7 +437,9 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
   getQueryArguments(filter: Object, ovrrArgs?: OQueryDataArgs): Array<any> {
     const compFilter = this.getComponentFilter(filter);
     const queryCols = this.getAttributesValuesToQuery();
-    let queryArguments = [compFilter, queryCols, this.entity, Util.isDefined(ovrrArgs) ? ovrrArgs.sqltypes : undefined];
+    let sqlTypes = (ovrrArgs && ovrrArgs.hasOwnProperty('sqltypes')) ? ovrrArgs.sqltypes : this.form?this.form.getAttributesSQLTypes():{};
+
+    let queryArguments = [compFilter, queryCols, this.entity, sqlTypes];
     if (this.pageable) {
       let queryOffset = (ovrrArgs && ovrrArgs.hasOwnProperty('offset')) ? ovrrArgs.offset : this.state.queryRecordOffset;
       let queryRowsN = (ovrrArgs && ovrrArgs.hasOwnProperty('length')) ? ovrrArgs.length : this.queryRows;
