@@ -542,7 +542,7 @@ export class OListComponent extends OServiceComponent implements AfterContentIni
   getQuickFilterValue(): string {
     let result = '';
     if (Util.isDefined(this.quickFilterComponent)) {
-      return this.quickFilterComponent.getValue();
+      return this.quickFilterComponent.getValue() || '';
     }
     return result;
   }
