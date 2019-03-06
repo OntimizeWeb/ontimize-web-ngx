@@ -79,6 +79,7 @@ The sliding behavior in `o-slider` component requires that HammerJS is loaded on
 * **o-grid**: loading spinner displays properly ([7d08582](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7d08582)), closes [#231](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/231)
 * **o-form-navigation**: fixing index error ([f487e54](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f487e54)), closes [#238](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/238)
 * **OServiceBaseComponent**: fixed bug on service components with pagination and located inside a detail form ([9c69c4b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9c69c4b)) ([bb0b04a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/bb0b04a))
+**o-grid**: It shows message of no results ([4f1878c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4f1878c))  closes [#245](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/245)
 
 ### BREAKING CHANGES
 * **AppConfig**: removing `authGuard` property.

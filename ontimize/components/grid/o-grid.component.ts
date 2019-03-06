@@ -494,7 +494,7 @@ export class OGridComponent extends OServiceComponent implements AfterViewChecke
     const queryArguments = super.getQueryArguments(filter, ovrrArgs);
     // queryArguments[3] = this.getSqlTypesForFilter(queryArguments[1]);
     if (this.pageable && Util.isDefined(this.sortColumn)) {
-      queryArguments[6] = [this.sortColumnOrder];
+      queryArguments[6] = this.sortColumnOrder ? [this.sortColumnOrder] : this.sortColumnOrder;
     }
     return queryArguments;
   }
@@ -589,7 +589,7 @@ export class OGridComponent extends OServiceComponent implements AfterViewChecke
       return result;
     }
     colTextKey = 'GRID.SORT_BY_' + (col.ascendent ? 'ASC' : 'DESC');
-    result = this.translateService.get(colTextKey, [(this.translateService.get(col.columnName) || '').toLowerCase()]);
+    result = this.translateService.get(colTextKey, [(this.translateService.get(col.columnName) || '')]);
     return result;
   }
 
