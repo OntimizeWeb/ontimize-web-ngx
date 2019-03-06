@@ -24,6 +24,7 @@ export class OFormNavigationComponent implements OnDestroy {
 
   protected formNavigation: OFormNavigationClass;
   protected navigationService: NavigationService;
+  protected formLayoutManager: OFormLayoutManagerComponent;
 
   constructor(
     protected injector: Injector,
@@ -32,12 +33,22 @@ export class OFormNavigationComponent implements OnDestroy {
   ) {
     this.formNavigation = this._form.getFormNavigation();
     this.navigationService = this.injector.get(NavigationService);
-    const navData = this.navigationService.getPreviousRouteData();
+
+    this.formLayoutManager = this._form.getFormManager();
+
+    let navData;
+    if (this.formLayoutManager && this.formLayoutManager.isDialogMode()) {
+      navData = this.navigationService.getLastItem();
+    } else {
+      navData = this.navigationService.getPreviousRouteData();
+    }
+
     if (Util.isDefined(navData) && navData.keysValues) {
       this.navigationData = navData.keysValues;
     }
     this.currentIndex = this.getCurrentIndex();
   }
+
 
   ngOnDestroy(): void {
     //
@@ -106,10 +117,10 @@ export class OFormNavigationComponent implements OnDestroy {
   move(index: number) {
     this._form.showConfirmDiscardChanges().then(res => {
       if (res === true) {
-        const formLayoutManager: OFormLayoutManagerComponent = this._form.getFormManager();
+
         this.currentIndex = index;
-        if (formLayoutManager && formLayoutManager.isDialogMode()) {
-          this.moveInDialogManager(formLayoutManager, index);
+        if (this.formLayoutManager && this.formLayoutManager.isDialogMode()) {
+          this.moveInDialogManager(this.formLayoutManager, index);
         } else {
           this.moveWithoutManager(index);
         }
@@ -169,5 +180,6 @@ export class OFormNavigationComponent implements OnDestroy {
   get currentIndex(): number {
     return this._currentIndex;
   }
+
 
 }
