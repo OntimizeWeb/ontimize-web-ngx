@@ -1,4 +1,4 @@
-## 3.2.2
+## 3.2.2 (2019-03-06)
 ### Features
 * **o-row**, **o-column**:
   * Row and column components now extend from `OContainerComponent` class that provides shared functionality ([4713e3e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4713e3e))
@@ -11,7 +11,7 @@
 * **o-form-layout-manager**: new `title-data-origin` input ([c88ab98](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c88ab98))
 * **o-form-data-component**: new `tooltip-hide-delay` input ([18733ef](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/18733ef]))
 * New classes  **layout-padding-vertical**,**layout-padding-horizontal**,**layout-padding-left**,**layout-padding-right**,**layout-padding-top**, **layout-padding-bottom**, **layout-margin-vertical**,**layout-margin-horizontal**,**layout-margin-left**,**layout-margin-right**,**layout-margin-top**, **layout-margin-bottom** ([6901980](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6901980]))
-* **o-grid**: 
+* **o-grid**:
   * New `fixed-header` attribute ([4fa91d9](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4fa91d9]))
   * New `gutter-size` attribute ([4e45aaf](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4e45aaf]))
   * New `show-footer` attribute ([a60e2f3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a60e2f3]))
