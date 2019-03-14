@@ -3,7 +3,6 @@ import { ChangeDetectorRef, Component, CUSTOM_ELEMENTS_SCHEMA, ElementRef, Event
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router, UrlSegment } from '@angular/router';
 import { combineLatest, Observable, Subscription } from 'rxjs';
-
 import { InputConverter } from '../../decorators';
 import { OFormLayoutManagerComponent } from '../../layouts';
 import { DialogService, NavigationService, OFormPermissions, ONavigationItem, OntimizeService, OPermissions, PermissionsService, SnackBarService } from '../../services';
@@ -16,8 +15,9 @@ import { OFormCacheClass } from './cache/o-form.cache.class';
 import { CanComponentDeactivate, CanDeactivateFormGuard } from './guards/o-form-can-deactivate.guard';
 import { OFormNavigationClass } from './navigation/o-form.navigation.class';
 import { OFormContainerComponent } from './o-form-container.component';
-import { OFormToolbarComponent, OFormToolbarModule } from './toolbar/o-form-toolbar.component';
 import { IFormValueOptions, OFormValue } from './OFormValue';
+import { OFormToolbarComponent, OFormToolbarModule } from './toolbar/o-form-toolbar.component';
+
 
 export interface IFormDataComponentHash {
   [attr: string]: IFormDataComponent;
@@ -27,8 +27,11 @@ export const DEFAULT_INPUTS_O_FORM = [
   // show-header [boolean]: visibility of form toolbar. Default: yes.
   'showHeader: show-header',
 
-  // header-mode [string][ none | floating]: painting mode of form toolbar. Default: 'floating'
+  // header-mode [string][ none | floating ]: painting mode of form toolbar. Default: 'floating'
   'headerMode: header-mode',
+
+  // header-position [ top | bottom ]: position of the form toolbar. Default: 'top'
+  'headerPosition: header-position',
 
   // label-header [string]: displayable text on form toolbar. Default: ''.
   'labelheader: label-header',
@@ -159,6 +162,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   @InputConverter()
   showHeader: boolean = true;
   headerMode: string = 'floating';
+  headerPosition: 'top' | 'bottom' = 'top';
   labelheader: string = '';
   labelHeaderAlign: string = 'center';
   headeractions: string = '';
