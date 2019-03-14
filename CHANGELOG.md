@@ -1,4 +1,9 @@
-#4.0.1
+#4.0.2
+### Features
+* **o-form**:
+  * new `header-position` input ([63f0f36](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/63f0f36))
+
+#4.0.1 (2019-03-06)
 ### Features
 * **o-form**:
   * new `include-breadcrumb` input ([80d9ddc](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/80d9ddc))
