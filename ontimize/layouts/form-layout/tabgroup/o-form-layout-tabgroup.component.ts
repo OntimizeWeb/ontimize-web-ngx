@@ -84,15 +84,23 @@ export class OFormLayoutTabGroupComponent implements AfterViewInit, OnDestroy {
     }
   }
 
-  addTab(compData: IDetailComponentData) {
+  addTab(arg: IDetailComponentData) {
     let addNewComp = true;
+    let compData: IDetailComponentData = arg;
     const newCompParams = compData.params;
-    this.data.forEach(comp => {
-      const currParams = comp.params || {};
-      Object.keys(currParams).forEach(key => {
-        addNewComp = addNewComp && (currParams[key] !== newCompParams[key]);
+    const existingData = this.data.find(item => item.component === compData.component);
+    if (existingData && existingData.insertionMode) {
+      compData = existingData;
+      addNewComp = false;
+    }
+    if (addNewComp) {
+      this.data.forEach(comp => {
+        const currParams = comp.params || {};
+        Object.keys(currParams).forEach(key => {
+          addNewComp = addNewComp && (currParams[key] !== newCompParams[key]);
+        });
       });
-    });
+    }
     if (addNewComp) {
       this.data.push(compData);
     } else {
@@ -201,13 +209,14 @@ export class OFormLayoutTabGroupComponent implements AfterViewInit, OnDestroy {
     this.updatedDataOnTable = true;
   }
 
-  updateNavigation(data: any, id: string) {
+  updateNavigation(data: any, id: string, insertionMode?: boolean) {
     let index = this.data.findIndex((item: any) => item.id === id);
     if (index >= 0) {
       let label = this.formLayoutManager.getLabelFromData(data);
       this.tabGroup.selectedIndex = (index + 1);
       label = label.length ? label : this.formLayoutManager.getLabelFromUrlParams(this.data[index].params);
       this.data[index].label = label;
+      this.data[index].insertionMode = insertionMode;
     }
   }
 

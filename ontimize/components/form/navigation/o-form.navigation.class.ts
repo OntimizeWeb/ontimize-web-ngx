@@ -230,16 +230,18 @@ export class OFormNavigationClass {
   }
 
   updateNavigation() {
-    if (this.formLayoutManager && this.formLayoutManager.allowToUpdateNavigation(this.form.oattr)) {
-      let formData = undefined;
-      if (!this.form.isInInsertMode()) {
-        formData = {};
+    if (this.formLayoutManager) {
+      const isInInsertMode = this.form.isInInsertMode();
+      let formData = {};
+      if (isInInsertMode) {
+        formData['new_tab_title'] = 'LAYOUT_MANANGER.INSERTION_MODE_TITLE';
+      } else if (this.formLayoutManager.allowToUpdateNavigation(this.form.oattr)) {
         const self = this;
         Object.keys(this.form.formData).forEach(key => {
           formData[key] = self.form.formData[key].value;
         });
       }
-      this.formLayoutManager.updateNavigation(formData, this.id);
+      this.formLayoutManager.updateNavigation(formData, this.id, isInInsertMode);
     }
   }
 

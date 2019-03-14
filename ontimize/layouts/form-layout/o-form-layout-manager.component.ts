@@ -43,6 +43,7 @@ export interface IDetailComponentData {
   modified: boolean;
   url: string;
   rendered?: boolean;
+  insertionMode?: boolean;
 }
 
 export const DEFAULT_INPUTS_O_FORM_LAYOUT_MANAGER = [
@@ -328,11 +329,11 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
   }
 
   public getLabelFromData(data: any): string {
-    // data === undefined means that inner form is in insertion mode
     let label = '';
-    if (!Util.isDefined(data)) {
-      label = this.translateService.get('LAYOUT_MANANGER.INSERTION_MODE_TITLE');
-    } else if (this.labelColsArray.length !== 0) {
+    const isDataDefined = Util.isDefined(data);
+    if (isDataDefined && data.hasOwnProperty('new_tab_title')) {
+      label = this.translateService.get(data['new_tab_title']);
+    } else if (isDataDefined && this.labelColsArray.length !== 0) {
       this.labelColsArray.forEach((col, idx) => {
         if (data[col] !== undefined) {
           label += data[col] + ((idx < this.labelColsArray.length - 1) ? this.separator : '');
@@ -342,9 +343,9 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
     return label;
   }
 
-  public updateNavigation(data: any, id: string): void {
+  public updateNavigation(data: any, id: string, insertionMode?: boolean): void {
     if (this.isTabMode()) {
-      this.oTabGroup.updateNavigation(data, id);
+      this.oTabGroup.updateNavigation(data, id, insertionMode);
     } else if (this.isDialogMode()) {
       this.dialogRef.componentInstance.updateNavigation(data, id);
     }
