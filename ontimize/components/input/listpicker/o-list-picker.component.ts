@@ -82,14 +82,6 @@ export class OListPickerComponent extends OFormServiceComponent implements After
     this.initialize();
   }
 
-  ngOnChanges(changes: { [propName: string]: SimpleChange }) {
-    super.ngOnChanges(changes);
-    if (typeof (changes['staticData']) !== 'undefined') {
-      this.cacheQueried = true;
-      this.setDataArray(changes['staticData'].currentValue);
-    }
-  }
-
   ensureOFormValue(value: any) {
     super.ensureOFormValue(value);
     // This call make the component querying its data multiple times, but getting description value is needed
