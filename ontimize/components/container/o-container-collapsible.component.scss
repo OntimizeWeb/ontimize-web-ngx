@@ -9,7 +9,7 @@
   &[class*="o-appearance-outline"] {
     box-shadow: none;
   }
-  
+
   &[class*="o-appearance-outline-title"] {
     margin: 16px 0 8px;
   }
@@ -108,6 +108,10 @@
       &:not(.o-container-outline-expanded) .o-container-outline-gap-title,
       &:not(.o-container-outline-expanded) .o-container-outline-start {
         border-bottom-style: none;
+      }
+
+      &.o-container-outline-expanded {
+        z-index: -1;
       }
 
       .o-container-outline-end,
