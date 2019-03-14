@@ -2,7 +2,7 @@ import { Router } from '@angular/router';
 
 import { OFormComponent } from '../components/form/o-form.component';
 import { OFormValue } from '../components/form/OFormValue';
-import { Codes, Util } from '../utils';
+import { Codes, Util, SQLTypes } from '../utils';
 
 export type OQueryDataArgs = {
   replace?: boolean; // Used in the list component for replacing data in setValue method when reloadData method is called
@@ -30,6 +30,13 @@ export class ServiceUtils {
 
     const urlData = form ? form.getFormNavigation().getFilterFromUrlParams() : {};
     const existsUrlData = Object.keys(urlData).length > 0;
+    if (existsUrlData) {
+      form.keysArray.forEach((key: string, i: number) => {
+        if (urlData.hasOwnProperty(key)) {
+          urlData[key] = SQLTypes.parseUsingSQLType(urlData[key], form.keysSqlTypesArray[i]);
+        }
+      });
+    }
 
     if (existsComponents || existsProperties || existsUrlData) {
       ownKeys.forEach(ownKey => {
