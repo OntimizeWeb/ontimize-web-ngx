@@ -275,9 +275,7 @@ export class OFormNavigationClass {
   }
 
   stayInRecordAfterInsert(insertedKeys: Object) {
-    if (this.formLayoutManager) {
-      this.form.setInitialMode();
-    } else if (this.navigationService && this.form.keysArray && insertedKeys) {
+    if (this.navigationService && this.form.keysArray && insertedKeys) {
       let params: any[] = [];
       this.form.keysArray.forEach((current, index) => {
         if (insertedKeys[current]) {
@@ -288,7 +286,13 @@ export class OFormNavigationClass {
       let qParams: any = Object.assign({}, this.getQueryParams(), Codes.getIsDetailObject());
       extras[Codes.QUERY_PARAMS] = qParams;
       let route = [];
-      const navData: ONavigationItem = this.navigationService.getPreviousRouteData();
+
+      let navData: ONavigationItem = this.navigationService.getPreviousRouteData();
+      if (this.formLayoutManager) {
+        this.formLayoutManager.setAsActiveFormLayoutManager();
+        navData = this.navigationService.getLastItem();
+        this.formLayoutManager.closeDetail(this.id);
+      }
       if (navData) {
         route.push(navData.url);
         const detailRoute = navData.getDetailFormRoute();

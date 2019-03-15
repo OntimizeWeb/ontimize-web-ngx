@@ -39,7 +39,6 @@ export class OFormLayoutTabGroupComponent implements AfterViewInit, OnDestroy {
   title: string;
   protected _state: any;
 
-  private _ignoreTabsDirectivesChange: boolean = false;
   @ViewChild('tabGroup') tabGroup: MatTabGroup;
   @ViewChildren(OFormLayoutManagerContentDirective) tabsDirectives: QueryList<OFormLayoutManagerContentDirective>;
 
@@ -63,14 +62,12 @@ export class OFormLayoutTabGroupComponent implements AfterViewInit, OnDestroy {
 
   ngAfterViewInit() {
     this.tabsDirectivesSubscription = this.tabsDirectives.changes.subscribe(changes => {
-      if (this.tabsDirectives.length && !this._ignoreTabsDirectivesChange) {
+      if (this.tabsDirectives.length) {
         const tabItem = this.tabsDirectives.last;
         const tabData = this.data[tabItem.index];
         if (tabData && !tabData.rendered) {
           this.createTabComponent(tabData, tabItem);
         }
-      } else if (this._ignoreTabsDirectivesChange) {
-        this._ignoreTabsDirectivesChange = false;
       }
     });
   }
@@ -149,7 +146,6 @@ export class OFormLayoutTabGroupComponent implements AfterViewInit, OnDestroy {
       const self = this;
       this.closeTabSubscription = onCloseTabAccepted.asObservable().subscribe(res => {
         if (res) {
-          self._ignoreTabsDirectivesChange = true;
           for (let i = self.data.length - 1; i >= 0; i--) {
             if (this.data[i].id === id) {
               self.data.splice(i, 1);
