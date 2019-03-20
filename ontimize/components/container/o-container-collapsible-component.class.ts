@@ -8,7 +8,10 @@ import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material';
 export const DEFAULT_INPUTS_O_CONTAINER_COLLAPSIBLE = [
   ...OContainerComponent.DEFAULT_INPUTS_O_CONTAINER,
   'expanded',
-  'description'
+  'description',
+  'collapsedHeight:collapsed-height',
+  'expandedHeight:expanded-height',
+
 ];
 
 export class OContainerCollapsibleComponent extends OContainerComponent {
@@ -17,6 +20,8 @@ export class OContainerCollapsibleComponent extends OContainerComponent {
 
   @InputConverter()
   public expanded: boolean = true;
+  public collapsedHeight = "37px";
+  public expandedHeight = "37px";
   public description: string;
 
   constructor(

@@ -1,5 +1,5 @@
 <mat-expansion-panel #expPanel [expanded]="expanded" class="o-container">
-  <mat-expansion-panel-header #containerTitle expandedHeight="37px" collapsedHeight="37px">
+  <mat-expansion-panel-header #containerTitle [expandedHeight]="expandedHeight" [collapsedHeight]="collapsedHeight">
     <mat-panel-title fxLayout="row" fxLayoutAlign="start center" class="o-container-title">
       <mat-icon *ngIf="icon">{{ icon }}</mat-icon>
       <span *ngIf="title">{{ title | oTranslate }}</span>
