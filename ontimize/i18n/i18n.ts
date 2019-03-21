@@ -453,6 +453,7 @@ export var MAP = {
     'TABLE_CONTEXT_MENU.COPY_ALL': 'Copy all',
     'TABLE_CONTEXT_MENU.COPY_SELECTION': 'Copiar selección',
     'TABLE_CONTEXT_MENU.SELECT_ALL': 'Seleccionar todos',
+    'TABLE_CONTEXT_MENU.DESELECT_ALL': 'Deseleccionar todos',
     'TABLE_CONTEXT_MENU.REFRESH': 'Refrescar',
     'TABLE_CONTEXT_MENU.DELETE': 'Borrar',
     'TABLE_CONTEXT_MENU.FILTER': 'Filtrar',

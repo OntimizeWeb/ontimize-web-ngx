@@ -265,6 +265,7 @@ export class OTableMenuComponent implements OnInit, AfterViewInit, OnDestroy {
     exportCnfg.data = this.table.getRenderedValue();
     // get column's attr whose renderer is OTableCellRendererImageComponent
     let colsNotIncluded: string[] = tableOptions.columns.filter(c => void 0 !== c.renderer && c.renderer instanceof OTableCellRendererImageComponent).map(c => c.attr);
+    colsNotIncluded.push(OTableComponent.NAME_COLUMN_SELECT);
     colsNotIncluded.forEach(attr => exportCnfg.data.forEach(row => delete row[attr]));
     // Table columns
     exportCnfg.columns = tableOptions.visibleColumns.filter(c => colsNotIncluded.indexOf(c) === -1);
