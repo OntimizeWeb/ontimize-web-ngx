@@ -1,4 +1,4 @@
-import { ElementRef, forwardRef, Inject, Injector, Optional } from '@angular/core';
+import { ElementRef, forwardRef, Inject, Injector, Optional, ViewChild } from '@angular/core';
 
 import { InputConverter } from '../../decorators/input-converter';
 import { OFormComponent } from '../form/form-components';
@@ -17,6 +17,18 @@ export const DEFAULT_INPUTS_O_CONTAINER_COLLAPSIBLE = [
 export class OContainerCollapsibleComponent extends OContainerComponent {
 
   public static DEFAULT_INPUTS_O_CONTAINER_COLLAPSIBLE = DEFAULT_INPUTS_O_CONTAINER_COLLAPSIBLE;
+
+  protected contentObserver = new MutationObserver(() => this.updateHeightExpansionPanelContent());
+  protected _containerCollapsibleRef;
+
+  @ViewChild('containerContent') set containerContent(elem: ElementRef) {
+    this._containerCollapsibleRef = elem;
+    if (this._containerCollapsibleRef) {
+      this.registerContentObserver();
+    } else {
+      this.unregisterContentObserver();
+    }
+  }
 
   @InputConverter()
   public expanded: boolean = true;
@@ -75,6 +87,31 @@ export class OContainerCollapsibleComponent extends OContainerComponent {
   protected registerObserver(): void {
     if (this._titleEl) {
       this.titleObserver.observe((this._titleEl as any)._element.nativeElement, {
+        childList: true,
+        characterData: true,
+        subtree: true
+      });
+    }
+  }
+
+  protected updateHeightExpansionPanelContent(): void {
+    var exPanelHeader = this._titleEl ? (this._titleEl as any)._element.nativeElement : null;
+    var exPanelContent = this._containerCollapsibleRef ? this._containerCollapsibleRef.nativeElement : null;
+    var parentHeight = exPanelHeader.parentNode ? exPanelHeader.parentNode.offsetHeight : null;
+
+    exPanelContent.style.height = (parentHeight - 2 - exPanelHeader.offsetHeight) + 'px';
+  }
+
+
+  unregisterContentObserver(): any {
+    if (this.contentObserver) {
+      this.contentObserver.disconnect();
+    }
+  }
+
+  registerContentObserver(): any {
+    if (this._containerCollapsibleRef) {
+      this.contentObserver.observe(this._containerCollapsibleRef.nativeElement, {
         childList: true,
         characterData: true,
         subtree: true

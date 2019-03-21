@@ -8,7 +8,7 @@
       <span>{{ description | oTranslate }}</span>
     </mat-panel-description>
   </mat-expansion-panel-header>
-  <div id="innerRow" fxLayout="row" fxLayoutAlign="{{ layoutAlign }}" fxLayoutGap="{{ layoutGap }}" class="o-container-scroll o-scroll"
+  <div #containerContent id="innerRow" fxLayout="row" fxLayoutAlign="{{ layoutAlign }}" fxLayoutGap="{{ layoutGap }}" class="o-container-scroll o-scroll"
     fxFlex="grow">
     <ng-content></ng-content>
   </div>

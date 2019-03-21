@@ -33,7 +33,7 @@
         padding-left: 8px;
         border-bottom-width: 1px;
         border-bottom-style: solid;
-
+       
         .mat-expansion-panel-header-title span {
           font-weight: 500;
           font-size: 18px;
@@ -46,8 +46,6 @@
       }
 
       .mat-expansion-panel-content {
-        height: calc(100% - 37px - 2px);
-        // font: inherit;
         font-style: inherit;
         font-variant-ligatures: inherit;
         font-variant-caps: inherit;
