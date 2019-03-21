@@ -2,19 +2,19 @@
 <mat-dialog-content>
   <div mat-subheader>{{ 'TABLE.DIALOG.EXPORT.DESCRIPTION' | oTranslate }}</div>
   <div fxLayout="row" fxLayoutAlign="space-around center">
-    <button type="button" #excelButton mat-raised-button (click)="exportExcel(excelButton)">
+    <button type="button" #excelButton mat-raised-button (click)="exportExcel(excelButton)" class="excel-button">
       <div fxLayout="column" fxLayoutAlign="center center">
         <mat-icon svgIcon="ontimize:EXCEL"></mat-icon>
         <span>{{ 'TABLE.BUTTONS.EXCEL' | oTranslate }}</span>
       </div>
     </button>
-    <button type="button" #htmlButton mat-raised-button (click)="exportHTML(htmlButton)">
+    <button type="button" #htmlButton mat-raised-button (click)="exportHTML(htmlButton)" class="html-button">
       <div fxLayout="column" fxLayoutAlign="center center">
         <mat-icon svgIcon="ontimize:HTML"></mat-icon>
         <span>{{ 'TABLE.BUTTONS.HTML' | oTranslate }}</span>
       </div>
     </button>
-    <button type="button" #pdfButton mat-raised-button (click)="exportPDF(pdfButton)">
+    <button type="button" #pdfButton mat-raised-button (click)="exportPDF(pdfButton)" class="pdf-button">
       <div fxLayout="column" fxLayoutAlign="center center">
         <mat-icon svgIcon="ontimize:PDF"></mat-icon>
         <span>{{ 'TABLE.BUTTONS.PDF' | oTranslate }}</span>
