@@ -117,24 +117,27 @@ export class OFormNavigationClass {
     this.form.isDetailForm = this.formLayoutManager ? false : (isDetail === 'true');
   }
 
-  subscribeToUrlParams() {
+  updateUrlParams() {
     if (this.formLayoutManager) {
       const cacheData: IDetailComponentData = this.formLayoutManager.getFormCacheData(this.id);
       if (Util.isDefined(cacheData)) {
         this.urlParams = cacheData.params;
-        this.parseUrlParams();
       }
     } else {
       const self = this;
       this.urlParamSub = this.actRoute.params.subscribe(params => {
         self.urlParams = params;
-        self.parseUrlParams();
       });
     }
   }
 
+  subscribeToUrlParams() {
+    this.updateUrlParams();
+    this.parseUrlParams();
+  }
+
   private parseUrlParams() {
-    if (this.urlParams[Codes.PARENT_KEYS_KEY] !== undefined) {
+    if (Util.isDefined(this.urlParams) && Util.isDefined(this.urlParams[Codes.PARENT_KEYS_KEY])) {
       this.form.formParentKeysValues = Util.decodeParentKeys(this.urlParams[Codes.PARENT_KEYS_KEY]);
     }
     //TODO Obtain 'datatype' of each key contained into urlParams for
@@ -275,7 +278,17 @@ export class OFormNavigationClass {
   }
 
   stayInRecordAfterInsert(insertedKeys: Object) {
-    if (this.navigationService && this.form.keysArray && insertedKeys) {
+    if (this.formLayoutManager) {
+      this.form.setInitialMode();
+      const self = this;
+      const subscription = this.form.onDataLoaded.subscribe(() => {
+        const keys = self.form.getKeysValues();
+        self.formLayoutManager.updateActiveData({ params: keys });
+        self.updateUrlParams();
+        subscription.unsubscribe();
+      });
+      this.form.queryData(insertedKeys);
+    } else if (this.navigationService && this.form.keysArray && insertedKeys) {
       let params: any[] = [];
       this.form.keysArray.forEach((current, index) => {
         if (insertedKeys[current]) {
@@ -286,13 +299,7 @@ export class OFormNavigationClass {
       let qParams: any = Object.assign({}, this.getQueryParams(), Codes.getIsDetailObject());
       extras[Codes.QUERY_PARAMS] = qParams;
       let route = [];
-
-      let navData: ONavigationItem = this.navigationService.getPreviousRouteData();
-      if (this.formLayoutManager) {
-        this.formLayoutManager.setAsActiveFormLayoutManager();
-        navData = this.navigationService.getLastItem();
-        this.formLayoutManager.closeDetail(this.id);
-      }
+      const navData: ONavigationItem = this.navigationService.getPreviousRouteData();
       if (navData) {
         route.push(navData.url);
         const detailRoute = navData.getDetailFormRoute();

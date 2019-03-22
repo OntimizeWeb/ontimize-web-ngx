@@ -76,8 +76,7 @@ export class OButtonComponent implements OnInit {
     return this.otype === 'FAB-MINI';
   }
 
-
-  isIconButton():boolean{
+  isIconButton(): boolean {
     return this.otype === 'ICON';
   }
 }

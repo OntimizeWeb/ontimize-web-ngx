@@ -55,6 +55,10 @@ export class ONavigationItem {
     }
   }
 
+  isInsertFormRoute(): boolean {
+    return this.activeFormMode === 'insertFormRoute';
+  }
+
   getInsertFormRoute(): string {
     const routes = this.formRoutes;
     return routes ? (routes.insertFormRoute || Codes.DEFAULT_INSERT_ROUTE) : Codes.DEFAULT_INSERT_ROUTE;

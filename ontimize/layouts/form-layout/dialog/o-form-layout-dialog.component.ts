@@ -65,6 +65,10 @@ export class OFormLayoutDialogComponent implements AfterViewInit {
     this.label = label;
   }
 
+  updateActiveData(data: any) {
+    this.data = Object.assign(this.data, data);
+  }
+
   closeDialog() {
     this.dialogRef.close();
   }

@@ -32,6 +32,7 @@ import { OFormLayoutDialogComponent } from './dialog/o-form-layout-dialog.compon
 import { OFormLayoutManagerContentDirective } from './directives/o-form-layout-manager-content.directive';
 import { CanActivateFormLayoutChildGuard } from './guards/o-form-layout-can-activate-child.guard';
 import { OFormLayoutTabGroupComponent } from './tabgroup/o-form-layout-tabgroup.component';
+import { NavigationService } from '../../services/navigation.service';
 
 export interface IDetailComponentData {
   params: any;
@@ -127,6 +128,8 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
 
   protected addingGuard: boolean = false;
 
+  public navigationService: NavigationService;
+
   constructor(
     protected injector: Injector,
     protected router: Router,
@@ -139,6 +142,7 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
     this.oFormLayoutManagerService = this.injector.get(OFormLayoutManagerService);
     this.localStorageService = this.injector.get(LocalStorageService);
     this.translateService = this.injector.get(OTranslateService);
+    this.navigationService = this.injector.get(NavigationService);
   }
 
   public ngOnInit(): void {
@@ -348,6 +352,14 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
       this.oTabGroup.updateNavigation(data, id, insertionMode);
     } else if (this.isDialogMode()) {
       this.dialogRef.componentInstance.updateNavigation(data, id);
+    }
+  }
+
+  public updateActiveData(data: any) {
+    if (this.isTabMode()) {
+      this.oTabGroup.updateActiveData(data);
+    } else if (this.isDialogMode()) {
+      this.dialogRef.componentInstance.updateActiveData(data);
     }
   }
 
