@@ -20,8 +20,8 @@ export class OContainerCollapsibleComponent extends OContainerComponent {
 
   @InputConverter()
   public expanded: boolean = true;
-  public collapsedHeight = "37px";
-  public expandedHeight = "37px";
+  public collapsedHeight = '37px';
+  public expandedHeight = '37px';
   public description: string;
 
   constructor(

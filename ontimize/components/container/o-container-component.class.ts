@@ -119,8 +119,7 @@ export class OContainerComponent implements AfterViewInit, OnDestroy {
 
   public isAppearanceOutline(): boolean {
     let isAppearanceOutline = (this.matFormDefaultOption && this.matFormDefaultOption.appearance === OContainerComponent.APPEARANCE_OUTLINE);
-
-    if (Util.isDefined(this.appearance)){
+    if (Util.isDefined(this.appearance)) {
       isAppearanceOutline = this.appearance === OContainerComponent.APPEARANCE_OUTLINE;
     }
     return isAppearanceOutline;
