@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { DialogService } from '../../../services/dialog.service';
 import { OFormLayoutManagerContentDirective } from '../directives/o-form-layout-manager-content.directive';
 import { IDetailComponentData, OFormLayoutManagerComponent } from '../o-form-layout-manager.component';
+import { ONavigationItem } from '../../../services/navigation.service';
 
 export const DEFAULT_INPUTS_O_FORM_LAYOUT_TABGROUP = [
   'title'
@@ -81,15 +82,14 @@ export class OFormLayoutTabGroupComponent implements AfterViewInit, OnDestroy {
     }
   }
 
-  addTab(arg: IDetailComponentData) {
+  addTab(compData: IDetailComponentData) {
     let addNewComp = true;
-    let compData: IDetailComponentData = arg;
-    const newCompParams = compData.params;
-    const existingData = this.data.find(item => item.component === compData.component);
-    if (existingData && existingData.insertionMode) {
-      compData = existingData;
-      addNewComp = false;
+    const navData: ONavigationItem = this.formLayoutManager.navigationService.getLastItem();
+    if (navData.isInsertFormRoute()) {
+      const existingData = this.data.find(item => item.insertionMode);
+      addNewComp = !existingData;
     }
+    const newCompParams = compData.params;
     if (addNewComp) {
       this.data.forEach(comp => {
         const currParams = comp.params || {};
@@ -110,10 +110,7 @@ export class OFormLayoutTabGroupComponent implements AfterViewInit, OnDestroy {
     const compParams = compData.params;
     this.data.forEach((comp, i) => {
       const currParams = comp.params || {};
-      let sameParams = true;
-      Object.keys(currParams).forEach(key => {
-        sameParams = sameParams && (currParams[key] === compParams[key]);
-      });
+      let sameParams = Util.isEquivalent(currParams, compParams);
       if (sameParams) {
         compIndex = i;
       }
@@ -213,6 +210,13 @@ export class OFormLayoutTabGroupComponent implements AfterViewInit, OnDestroy {
       label = label.length ? label : this.formLayoutManager.getLabelFromUrlParams(this.data[index].params);
       this.data[index].label = label;
       this.data[index].insertionMode = insertionMode;
+    }
+  }
+
+  updateActiveData(data: any) {
+    const index = this.tabGroup.selectedIndex - 1;
+    if (Util.isDefined(this.data[index])) {
+      this.data[index] = Object.assign(this.data[index], data);
     }
   }
 
