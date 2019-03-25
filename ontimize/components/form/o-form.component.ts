@@ -1275,7 +1275,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
 
   set layoutDirection(val: string) {
     const parsedVal = (val || '').toLowerCase();
-    this._layoutDirection = ['row', 'column'].indexOf(parsedVal) !== -1 ? parsedVal : OFormComponent.DEFAULT_LAYOUT_DIRECTION;
+    this._layoutDirection = ['row', 'column', 'row-reverse', 'column-reverse'].indexOf(parsedVal) !== -1 ? parsedVal : OFormComponent.DEFAULT_LAYOUT_DIRECTION;
   }
 
   get layoutAlign(): string {
