@@ -2001,6 +2001,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       this.staticData = data;
       this.daoTable.usingStaticData = true;
       this.daoTable.setDataArray(this.staticData);
+      this.cd.detectChanges();
     }
   }
 
