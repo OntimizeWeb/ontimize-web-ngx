@@ -9,6 +9,7 @@
   &[class*="o-appearance-outline"] {
     box-shadow: none;
   }
+
   &[class*="o-appearance-outline-title"] {
     margin: 16px 0 8px;
   }
@@ -23,6 +24,7 @@
       cursor: default;
       margin: 0 4px;
       height: 39px;
+      line-height: 39px;
       border-bottom-width: 1px;
       border-bottom-style: solid;
 
