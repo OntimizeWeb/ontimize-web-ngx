@@ -11,6 +11,10 @@ $o_table_row_padding: 24px;
   height: 100%;
   max-height: 100%;
 
+  &.o-table-disabled {
+    opacity: .4;
+  }
+
   .o-table-container {
     height: 100%;
     display: flex;
@@ -390,6 +394,15 @@ $o_table_row_padding: 24px;
         }
 
       }
+    }
+
+    .o-table-disabled-blocker {
+      bottom: 0;
+      left: 0;
+      position: absolute;
+      right: 0;
+      top: 0;
+      z-index: 10;
     }
   }
 

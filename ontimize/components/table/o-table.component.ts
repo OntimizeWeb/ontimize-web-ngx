@@ -140,7 +140,10 @@ export const DEFAULT_INPUTS_O_TABLE = [
 
   'orderable',
 
-  'resizable'
+  'resizable',
+
+  // enabled [yes|no|true|false]: enables de table. Default: yes
+  'enabled'
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE = [
@@ -404,6 +407,7 @@ export interface OTableInitializationOptions {
     '[class.o-table]': 'true',
     '[class.ontimize-table]': 'true',
     '[class.o-table-fixed]': 'fixedHeader',
+    '[class.o-table-disabled]': '!enabled',
     '(document:click)': 'handleDOMClick($event)'
   }
 })
@@ -513,6 +517,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   orderable: boolean = true;
   @InputConverter()
   resizable: boolean = true;
+  @InputConverter()
+  public enabled: boolean = true;
 
   protected _selectAllCheckboxVisible;
   @InputConverter()
