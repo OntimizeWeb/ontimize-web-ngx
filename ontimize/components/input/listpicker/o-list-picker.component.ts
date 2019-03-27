@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, forwardRef, Inject, Injector, OnInit, OnChanges, Optional, NgModule, SimpleChange, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, forwardRef, Inject, Injector, OnInit, OnChanges, Optional, NgModule, ViewChild, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatDialog, MatDialogConfig, MatDialogRef, MatInput } from '@angular/material';
 
@@ -26,7 +26,9 @@ export const DEFAULT_INPUTS_O_LIST_PICKER = [
 ];
 
 export const DEFAULT_OUTPUTS_O_LIST_PICKER = [
-  ...OFormServiceComponent.DEFAULT_OUTPUTS_O_FORM_SERVICE_COMPONENT
+  ...OFormServiceComponent.DEFAULT_OUTPUTS_O_FORM_SERVICE_COMPONENT,
+  'onDialogAccept',
+  'onDialogCancel'
 ];
 
 @Component({
@@ -56,6 +58,11 @@ export class OListPickerComponent extends OFormServiceComponent implements After
   @InputConverter()
   textInputEnabled: boolean = true;
   /* End inputs */
+
+  /* Outputs */
+  public onDialogAccept: EventEmitter<any> = new EventEmitter();
+  public onDialogCancel: EventEmitter<any> = new EventEmitter();
+  /* End outputs */
 
   protected matDialog: MatDialog;
   protected dialogRef: MatDialogRef<OListPickerDialogComponent>;
@@ -196,14 +203,17 @@ export class OListPickerComponent extends OFormServiceComponent implements After
     this.dialogRef = null;
     this.visibleInputValue = undefined;
     if (evt instanceof Object && typeof evt[this.valueColumn] !== 'undefined') {
-      var self = this;
+      const self = this;
       window.setTimeout(() => {
         self.setValue(evt[self.valueColumn], { changeType: OValueChangeEvent.USER_CHANGE });
         if (self._fControl) {
           self._fControl.markAsTouched();
           self._fControl.markAsDirty();
         }
+        self.onDialogAccept.emit();
       }, 0);
+    } else {
+      this.onDialogCancel.emit();
     }
   }
 
