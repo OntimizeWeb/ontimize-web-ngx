@@ -4,6 +4,7 @@
   * new `header-position` input ([63f0f36](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/63f0f36))
 * **OContainerCollapsibleComponent**:
   * new `collapsed-height` and  `expanded-height` input ([6dbbd95](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6dbbd95))
+* **o-table**: new `enabled` attribute.
 
 #4.0.1 (2019-03-06)
 ### Features
