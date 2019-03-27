@@ -245,7 +245,7 @@ export class OBaseTableCellEditor implements OnInit {
   }
 
   protected onUpdateSuccess(res: any) {
-    ObservableWrapper.callEmit(this.onPostUpdateRecord, res);
+    ObservableWrapper.callEmit(this.onPostUpdateRecord, this._rowData);
     if (this.showNotificationOnEdit) {
       this.snackBarService.open('MESSAGES.UPDATED', { icon: 'check_circle' });
     }
