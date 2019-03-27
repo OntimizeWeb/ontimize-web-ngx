@@ -122,4 +122,7 @@
     class="spinner-container" [class.spinner-container-scrollable]="loadingScroll">
     <mat-progress-spinner mode="indeterminate" strokeWidth="3" [diameter]="diameterSpinner"></mat-progress-spinner>
   </div>
+
+  <!-- Disable blocker -->
+  <div *ngIf="!enabled" class="o-table-disabled-blocker"></div>
 </div>
