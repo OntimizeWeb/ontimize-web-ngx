@@ -1,6 +1,6 @@
 <ng-template #templateref let-cellvalue="cellvalue" let-rowvalue="rowvalue">
   <div [formGroup]="formGroup">
-    <mat-form-field floatLabel="never">
+    <mat-form-field floatLabel="never" appearance="standard">
       <input #input matInput type="number" [placeholder]="getPlaceholder()" [formControl]="formControl" [required]="orequired" [min]="min"
         [max]="max" [step]="step">
 
