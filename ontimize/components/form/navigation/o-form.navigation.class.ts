@@ -181,16 +181,16 @@ export class OFormNavigationClass {
       return filter;
     }
     if (this.form.keysArray) {
-      this.form.keysArray.map((key, index) => {
+      this.form.keysArray.forEach((key, index) => {
         if (objectParam[key]) {
           filter[key] = SQLTypes.parseUsingSQLType(objectParam[key], this.form.keysSqlTypesArray[index]);
         }
       });
     }
-    Object.keys(this.form._pKeysEquiv).forEach(item => {
+    Object.keys(this.form._pKeysEquiv).forEach((item, index) => {
       let urlVal = objectParam[this.form._pKeysEquiv[item]];
       if (urlVal) {
-        filter[item] = urlVal;
+        filter[item] = SQLTypes.parseUsingSQLType(urlVal, this.form.keysSqlTypesArray[index]);
       }
     });
     return filter;
