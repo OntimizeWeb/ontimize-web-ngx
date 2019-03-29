@@ -517,8 +517,14 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   orderable: boolean = true;
   @InputConverter()
   resizable: boolean = true;
-  @InputConverter()
-  public enabled: boolean = true;
+  protected _enabled: boolean = true;
+  get enabled(): boolean {
+    return this._enabled;
+  }
+  set enabled(val: boolean) {
+    val = Util.parseBoolean(String(val));
+    this._enabled = val;
+  }
 
   protected _selectAllCheckboxVisible;
   @InputConverter()
