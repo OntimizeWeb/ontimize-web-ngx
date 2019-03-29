@@ -111,7 +111,10 @@ export const DEFAULT_OUTPUTS_O_FORM = [
   'onDataLoaded',
   'beforeCloseDetail',
   'beforeGoEditMode',
-  'onFormModeChange'
+  'onFormModeChange',
+  'onInsert',
+  'onUpdate',
+  'onDelete'
 ];
 
 export interface OFormInitializationOptions {
@@ -213,6 +216,9 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   beforeCloseDetail: EventEmitter<any> = new EventEmitter<any>();
   beforeGoEditMode: EventEmitter<any> = new EventEmitter<any>();
   onFormModeChange: EventEmitter<Object> = new EventEmitter<Object>();
+  public onInsert: EventEmitter<any> = new EventEmitter();
+  public onUpdate: EventEmitter<any> = new EventEmitter();
+  public onDelete: EventEmitter<any> = new EventEmitter();
 
   public loading: boolean = false;
   public formData: Object = {};
@@ -418,7 +424,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     return this._components;
   }
 
-  public load(): any {
+  public load(): Subscription {
     const self = this;
     const loadObservable = new Observable(observer => {
       const timer = window.setTimeout(() => {
@@ -429,12 +435,8 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
         window.clearTimeout(timer);
         self.loading = false;
       };
-
     });
-    const subscription = loadObservable.subscribe(val => {
-      self.loading = val as boolean;
-    });
-    return subscription;
+    return loadObservable.subscribe(val => this.loading = val as boolean);
   }
 
   getDataValue(attr: string) {
@@ -837,7 +839,6 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     this.insertData(values, sqlTypes).subscribe(resp => {
       self.postCorrectInsert(resp);
       self.formCache.setCacheSnapshot();
-      //TODO mostrar un toast indicando que la operación fue correcta...
       if (self.stayInRecordAfterInsert) {
         self._stayInRecordAfterInsert(resp);
       } else {
@@ -879,7 +880,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     let sqlTypes = this.getAttributesSQLTypes();
 
     if (Object.keys(values).length === 0) {
-      //Nothing to update
+      // Nothing to update
       this.dialogService.alert('INFO', 'MESSAGES.FORM_NOTHING_TO_UPDATE_INFO');
       return;
     }
@@ -888,7 +889,6 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     this.updateData(filter, values, sqlTypes).subscribe(resp => {
       self.postCorrectUpdate(resp);
       self.formCache.setCacheSnapshot();
-      // TODO mostrar un toast indicando que la operación fue correcta...
       if (self.stayInRecordAfterEdit) {
         self._reloadAction(true);
       } else {
@@ -931,25 +931,27 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     this.loaderSubscription = this.load();
     let av = this.getAttributesToQuery();
     let sqlTypes = this.getAttributesSQLTypes();
-    this.querySubscription = this.dataService[this.queryMethod](filter, av, this.entity, sqlTypes).subscribe(resp => {
-      self.loaderSubscription.unsubscribe();
-      if (resp.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) {
-        self._setData(resp.data);
-      } else {
+    this.querySubscription = this.dataService[this.queryMethod](filter, av, this.entity, sqlTypes).subscribe(
+      resp => {
+        if (resp.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) {
+          self._setData(resp.data);
+        } else {
+          self._updateFormData({});
+          self.dialogService.alert('ERROR', 'MESSAGES.ERROR_QUERY');
+          console.log('ERROR: ' + resp.message);
+        }
+      },
+      err => {
+        console.log(err);
         self._updateFormData({});
-        self.dialogService.alert('ERROR', 'MESSAGES.ERROR_QUERY');
-        console.log('ERROR: ' + resp.message);
-      }
-    }, err => {
-      console.log(err);
-      self._updateFormData({});
-      if (err && err.statusText) {
-        self.dialogService.alert('ERROR', err.statusText);
-      } else {
-        self.dialogService.alert('ERROR', 'MESSAGES.ERROR_QUERY');
-      }
-      self.loaderSubscription.unsubscribe();
-    });
+        if (err && err.statusText) {
+          self.dialogService.alert('ERROR', err.statusText);
+        } else {
+          self.dialogService.alert('ERROR', 'MESSAGES.ERROR_QUERY');
+        }
+      },
+      () => self.loaderSubscription.unsubscribe()
+    );
   }
 
   getAttributesToQuery(): Array<any> {
@@ -983,18 +985,18 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     const self = this;
     const loader = self.load();
     let observable = new Observable(observer => {
-      this.dataService[this.insertMethod](values, this.entity, sqlTypes).subscribe(resp => {
-        loader.unsubscribe();
-        if (resp.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) {
-          observer.next(resp.data);
-          observer.complete();
-        } else {
-          observer.error(resp.message);
-        }
-      }, err => {
-        loader.unsubscribe();
-        observer.error(err);
-      });
+      this.dataService[this.insertMethod](values, this.entity, sqlTypes).subscribe(
+        resp => {
+          if (resp.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) {
+            observer.next(resp.data);
+            observer.complete();
+          } else {
+            observer.error(resp.message);
+          }
+        },
+        err => observer.error(err),
+        () => loader.unsubscribe()
+      );
     });
     return observable;
   }
@@ -1017,6 +1019,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
 
   protected postCorrectInsert(result: any) {
     this.snackBarService.open('MESSAGES.INSERTED', { icon: 'check_circle' });
+    this.onInsert.emit(result);
   }
 
   protected postIncorrectInsert(result: any) {
@@ -1055,18 +1058,18 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     const self = this;
     const loader = self.load();
     let observable = new Observable(observer => {
-      this.dataService[this.updateMethod](filter, values, this.entity, sqlTypes).subscribe(resp => {
-        loader.unsubscribe();
-        if (resp.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) {
-          observer.next(resp.data);
-          observer.complete();
-        } else {
-          observer.error(resp.message);
-        }
-      }, err => {
-        loader.unsubscribe();
-        observer.error(err);
-      });
+      this.dataService[this.updateMethod](filter, values, this.entity, sqlTypes).subscribe(
+        resp => {
+          if (resp.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) {
+            observer.next(resp.data);
+            observer.complete();
+          } else {
+            observer.error(resp.message);
+          }
+        },
+        err => observer.error(err),
+        () => loader.unsubscribe()
+      );
     });
     return observable;
   }
@@ -1090,6 +1093,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
 
   protected postCorrectUpdate(result: any) {
     this.snackBarService.open('MESSAGES.SAVED', { icon: 'check_circle' });
+    this.onUpdate.emit(result);
   }
 
   deleteData(filter): Observable<any> {
@@ -1097,22 +1101,23 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     const loader = self.load();
     let observable = new Observable(observer => {
       this.canDiscardChanges = true;
-      this.dataService[this.deleteMethod](filter, this.entity).subscribe(resp => {
-        loader.unsubscribe();
-        if (resp.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) {
-          self.formCache.setCacheSnapshot();
-          self.postCorrectDelete(resp);
-          observer.next(resp.data);
-          observer.complete();
-        } else {
-          self.postIncorrectDelete(resp);
-          observer.error(resp.message);
-        }
-      }, err => {
-        loader.unsubscribe();
-        self.postIncorrectDelete(err);
-        observer.error(err);
-      });
+      this.dataService[this.deleteMethod](filter, this.entity).subscribe(
+        resp => {
+          if (resp.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) {
+            self.formCache.setCacheSnapshot();
+            self.postCorrectDelete(resp);
+            observer.next(resp.data);
+            observer.complete();
+          } else {
+            self.postIncorrectDelete(resp);
+            observer.error(resp.message);
+          }
+        },
+        err => {
+          self.postIncorrectDelete(err);
+          observer.error(err);
+        },
+        () => loader.unsubscribe());
     });
     return observable;
   }
@@ -1473,6 +1478,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     }
     return permissions;
   }
+
 }
 
 @NgModule({
