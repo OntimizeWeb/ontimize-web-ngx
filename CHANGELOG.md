@@ -2,6 +2,7 @@
 ### Features
 * **o-form**:
   * new `header-position` input ([63f0f36](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/63f0f36))
+  * new outputs `onInsert`, `onUpdate` and `onDelete` ([85992e6](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/85992e6))
 * **OContainerCollapsibleComponent**:
   * new `collapsed-height` and  `expanded-height` input ([6dbbd95](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6dbbd95))
 * **o-list-picker**: new `onDialogAccept` and `onDialogCancel` outputs ([fd0247d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/fd0247d))
