@@ -1,20 +1,21 @@
-import { AfterViewInit, Component, ElementRef, forwardRef, Inject, Injector, OnInit, OnChanges, Optional, NgModule, ViewChild, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { AfterViewInit, Component, ElementRef, EventEmitter, forwardRef, Inject, Injector, NgModule, OnChanges, OnInit, Optional, ViewChild } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { MatDialog, MatDialogConfig, MatDialogRef, MatInput } from '@angular/material';
 
 import { InputConverter } from '../../../decorators';
+import { BooleanConverter } from '../../../decorators/input-converter';
 import { OntimizeService } from '../../../services';
 import { dataServiceFactory } from '../../../services/data-service.provider';
 import { OSharedModule } from '../../../shared';
+import { PermissionsUtils } from '../../../util/permissions';
 import { ODialogModule } from '../../dialog/o-dialog.component';
+import { IFormValueOptions } from '../../form/form-components';
+import { OFormComponent } from '../../form/o-form.component';
 import { OSearchInputModule } from '../../input/search-input/o-search-input.component';
 import { OValueChangeEvent } from '../../o-form-data-component.class';
-import { OFormComponent } from '../../form/o-form.component';
 import { OFormServiceComponent } from '../o-form-service-component.class';
 import { OListPickerDialogComponent } from './o-list-picker-dialog.component';
-
-import { FormControl } from '@angular/forms';
-import { IFormValueOptions } from '../../form/form-components';
 
 export const DEFAULT_INPUTS_O_LIST_PICKER = [
   ...OFormServiceComponent.DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT,
@@ -249,6 +250,20 @@ export class OListPickerComponent extends OFormServiceComponent implements After
     this.visibleInputValue = val;
     this.openDialog();
   }
+
+  set oenabled(value: any) {
+    /* Override oenabled from OBaseComponent */
+    if (!PermissionsUtils.checkEnabledPermission(this.permissions)) {
+      return;
+    }
+    const parsedValue = BooleanConverter(value);
+    this._oenabled = parsedValue;
+    this.disabled = !parsedValue;
+    /* End override */
+
+    parsedValue ? this.stateCtrl.enable() : this.stateCtrl.disable();
+  }
+
 }
 
 @NgModule({
