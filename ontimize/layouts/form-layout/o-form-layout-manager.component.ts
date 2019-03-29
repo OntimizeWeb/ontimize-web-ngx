@@ -130,6 +130,9 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
 
   public navigationService: NavigationService;
 
+  public markForUpdate: boolean = false;
+  public onTriggerUpdate: EventEmitter<any> = new EventEmitter<any>();
+
   constructor(
     protected injector: Injector,
     protected router: Router,
@@ -308,6 +311,9 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
       dialogConfig.maxHeight = this.dialogMaxHeight;
     }
     this.dialogRef = this.dialog.open(OFormLayoutDialogComponent, dialogConfig);
+    this.dialogRef.afterClosed().subscribe(() => {
+      this.updateIfNeeded();
+    });
   }
 
   public getFormCacheData(formId: string): IDetailComponentData {
@@ -438,6 +444,12 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
     return actRoute.routeConfig;
   }
 
+  public updateIfNeeded() {
+    if (this.markForUpdate) {
+      this.markForUpdate = false;
+      this.onTriggerUpdate.emit();
+    }
+  }
 }
 
 @NgModule({

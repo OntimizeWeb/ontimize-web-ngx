@@ -838,6 +838,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
       self.postCorrectInsert(resp);
       self.formCache.setCacheSnapshot();
       //TODO mostrar un toast indicando que la operación fue correcta...
+      self.markFormLayoutManagerToUpdate();
       if (self.stayInRecordAfterInsert) {
         self._stayInRecordAfterInsert(resp);
       } else {
@@ -889,6 +890,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
       self.postCorrectUpdate(resp);
       self.formCache.setCacheSnapshot();
       // TODO mostrar un toast indicando que la operación fue correcta...
+      self.markFormLayoutManagerToUpdate();
       if (self.stayInRecordAfterEdit) {
         self._reloadAction(true);
       } else {
@@ -1472,6 +1474,13 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
       permissions = (this.permissions.actions || []);
     }
     return permissions;
+  }
+
+  protected markFormLayoutManagerToUpdate() {
+    const formLayoutManager = this.getFormManager();
+    if (Util.isDefined(formLayoutManager)) {
+      formLayoutManager.markForUpdate = true;
+    }
   }
 }
 

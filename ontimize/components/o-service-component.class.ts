@@ -119,7 +119,7 @@ export class OServiceComponent extends OServiceBaseComponent {
   protected router: Router;
   protected actRoute: ActivatedRoute;
 
-  protected onMainTabSelectedSubscription: any;
+  protected onTriggerUpdateSubscription: any;
   protected formLayoutManager: OFormLayoutManagerComponent;
   protected oFormLayoutDialog: OFormLayoutDialogComponent;
 
@@ -167,8 +167,8 @@ export class OServiceComponent extends OServiceBaseComponent {
       this.elRef.nativeElement.removeAttribute('title');
     }
 
-    if (this.formLayoutManager && this.formLayoutManager.isTabMode()) {
-      this.onMainTabSelectedSubscription = this.formLayoutManager.onMainTabSelected.subscribe(() => {
+    if (this.formLayoutManager && this.formLayoutManager.isMainComponent(this)) {
+      this.onTriggerUpdateSubscription = this.formLayoutManager.onTriggerUpdate.subscribe(() => {
         this.reloadData();
       });
     }
@@ -176,8 +176,8 @@ export class OServiceComponent extends OServiceBaseComponent {
 
   destroy() {
     super.destroy();
-    if (this.onMainTabSelectedSubscription) {
-      this.onMainTabSelectedSubscription.unsubscribe();
+    if (this.onTriggerUpdateSubscription) {
+      this.onTriggerUpdateSubscription.unsubscribe();
     }
   }
 

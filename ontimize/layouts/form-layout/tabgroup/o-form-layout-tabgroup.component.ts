@@ -43,7 +43,6 @@ export class OFormLayoutTabGroupComponent implements AfterViewInit, OnDestroy {
   @ViewChild('tabGroup') tabGroup: MatTabGroup;
   @ViewChildren(OFormLayoutManagerContentDirective) tabsDirectives: QueryList<OFormLayoutManagerContentDirective>;
 
-  protected updatedDataOnTable: boolean = false;
   protected closeTabSubscription: Subscription;
   protected tabsDirectivesSubscription: Subscription;
   protected router: Router;
@@ -121,9 +120,8 @@ export class OFormLayoutTabGroupComponent implements AfterViewInit, OnDestroy {
   }
 
   onTabSelectChange(arg: MatTabChangeEvent) {
-    if (this.formLayoutManager && this.tabGroup.selectedIndex === 0 && this.updatedDataOnTable) {
-      this.formLayoutManager.onMainTabSelected.emit();
-      this.updatedDataOnTable = false;
+    if (this.formLayoutManager && this.tabGroup.selectedIndex === 0) {
+      this.formLayoutManager.updateIfNeeded();
     }
     if (Util.isDefined(this.state) && Util.isDefined(this.state.tabsData)) {
       if (this.state.tabsData.length > 1) {
@@ -198,8 +196,6 @@ export class OFormLayoutTabGroupComponent implements AfterViewInit, OnDestroy {
         break;
       }
     }
-    //when modified state of a tab, we must reload the data of table
-    this.updatedDataOnTable = true;
   }
 
   updateNavigation(data: any, id: string, insertionMode?: boolean) {
