@@ -1,10 +1,10 @@
 <span mat-dialog-title>{{ 'TABLE.BUTTONS.FILTER_LOAD' | oTranslate }}</span>
-<mat-dialog-content>
+<mat-dialog-content fxLayout="column">
   <div mat-subheader>{{ 'TABLE.DIALOG.LOAD_FILTER' | oTranslate }}</div>
   <mat-selection-list #filterList dense class="o-table-load-filter-dialog-list">
     <mat-list-option *ngFor="let filter of filters " [value]="filter.name" checkboxPosition="before">
-      <h4 matLine class="o-table-load-filter-dialog-list-title">{{ filter.name }}</h4>
-      <p matLine>{{ filter.description }}</p>
+      <span matLine class="o-table-load-filter-dialog-list-title">{{ filter.name }}</span>
+      <span matLine>{{ filter.description }}</span>
     </mat-list-option>
     <mat-list-item *ngIf="filters.length === 0">
       <span class="empty-filter-list">{{ 'TABLE.DIALOG.EMPTY_FILTER_LIST' | oTranslate }}</span>
@@ -14,14 +14,9 @@
 
 <mat-dialog-actions align="end">
   <button type="button" mat-stroked-button [disabled]="filterList.selectedOptions.selected.length!==1"
-    (click)="removeFilter(filterList.selectedOptions.selected[0].value)">
-    {{ 'DELETE' | oTranslate | uppercase }}
-  </button>
+    (click)="removeFilter(filterList.selectedOptions.selected[0].value)">{{ 'DELETE' | oTranslate | uppercase }}</button>
   <span fxFlex></span>
-  <button type="button" mat-stroked-button class="mat-primary" [mat-dialog-close]="false">
-    {{ 'CANCEL' | oTranslate | uppercase }}
-  </button>
-  <button type="button" mat-stroked-button class="mat-primary" [mat-dialog-close]="true" [disabled]="filterList.selectedOptions.selected.length!==1 ">{{
-    'TABLE.BUTTONS.APPLY' | oTranslate | uppercase }}
-  </button>
+  <button type="button" mat-stroked-button class="mat-primary" [mat-dialog-close]="false">{{ 'CANCEL' | oTranslate | uppercase }}</button>
+  <button type="button" mat-stroked-button class="mat-primary" [mat-dialog-close]="true"
+    [disabled]="filterList.selectedOptions.selected.length!==1">{{ 'TABLE.BUTTONS.APPLY' | oTranslate | uppercase }}</button>
 </mat-dialog-actions>
