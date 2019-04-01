@@ -38,7 +38,7 @@ export const DEFAULT_OUTPUTS_O_APP_SIDENAV_MENU_GROUP = [
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
-    '[class.o-app-sidenav-menu-group]': 'true',
+    '[class]': 'getClass()',
     '[attr.disabled]': 'disabled'
   }
 })
@@ -154,6 +154,13 @@ export class OAppSidenavMenuGroupComponent implements OnInit, AfterViewInit, OnD
     this.onItemClick.emit(e);
   }
 
+  getClass() {
+    let className = 'o-app-sidenav-menu-group';
+    if (this.menuGroup.class) {
+      className += ' ' + this.menuGroup.class;
+    }
+    return className;
+  }
 }
 
 @NgModule({

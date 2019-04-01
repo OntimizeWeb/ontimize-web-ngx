@@ -11,6 +11,7 @@ export interface MenuGroup {
   items: (MenuItemRoute | MenuItemAction | MenuItemLocale | MenuItemLogout | MenuItemUserInfo | MenuGroup | MenuItem)[];
   opened?: boolean;
   tooltip?: string;
+  class?:string;
 }
 
 export interface MenuItem {
@@ -20,6 +21,7 @@ export interface MenuItem {
   icon?: string;
   image?: string;
   component?: any;
+  class?:string;
   'component-inputs'?: Object;
   'show-in-card-menu'?: boolean;
 }
