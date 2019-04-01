@@ -338,6 +338,10 @@ export class OColumn {
     return this._width;
   }
 
+  getWidthToStore(): any {
+    return this._width || this.DOMWidth;
+  }
+
   setWidth(val: number) {
     this.width = val + 'px';
     this.DOMWidth = val;

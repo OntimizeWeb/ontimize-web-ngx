@@ -115,7 +115,7 @@ export class OTableStorage {
       oColumnsData.push({
         attr: oCol.attr,
         visible: oCol.visible,
-        width: oCol.width
+        width: oCol.getWidthToStore()
       });
     });
     result['oColumns-display'] = oColumnsData;

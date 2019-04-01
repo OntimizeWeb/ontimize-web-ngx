@@ -298,11 +298,11 @@ export class Util {
   }
 
   static checkPixelsValueString(value: string): boolean {
-    return (value || '').toLowerCase().endsWith('px');
+    return typeof value === 'string' ? value.toLowerCase().endsWith('px') : false;
   }
 
-  static extractPixelsValue(value: string, defaultValue: number = undefined): number {
-    let result: number;
+  static extractPixelsValue(value: any, defaultValue: number = undefined): number {
+    let result: number = typeof value === 'number' ? value : undefined;
     if (Util.checkPixelsValueString(value)) {
       let parsed = parseFloat(value.substr(0, value.length - 'px'.length));
       result = isNaN(parsed) ? defaultValue : parsed;
