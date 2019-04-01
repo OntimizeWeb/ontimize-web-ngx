@@ -1275,7 +1275,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     this.daoTable.dataChange.next(data);
     this.daoTable.isLoadingResults = false;
     this.updateScrolledState();
-    if (Util.isDefined(data) && data.length === 0) {
+    if (Util.isDefined(data)) {
       this.oTableExpandedFooter.updateMessageNotResults(data);
     }
     if (this.pageable) {
