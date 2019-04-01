@@ -316,10 +316,12 @@ export class OTableMenuComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  onStoreFilterClicked(): void {
-    let dialogRef = this.dialog.open(OTableStoreFilterDialogComponent, {
+  public onStoreFilterClicked(): void {
+    const dialogRef = this.dialog.open(OTableStoreFilterDialogComponent, {
       data: this.table.oTableStorage.getStoredFilters().map(filter => filter.name),
-      width: '30vw',
+      width: 'calc((75em - 100%) * 1000)',
+      maxWidth: '65vw',
+      minWidth: '30vw',
       disableClose: true,
       panelClass: ['o-dialog-class', 'o-table-dialog']
     });
@@ -331,10 +333,12 @@ export class OTableMenuComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  onLoadFilterClicked(): void {
-    let dialogRef = this.dialog.open(OTableLoadFilterDialogComponent, {
+  public onLoadFilterClicked(): void {
+    const dialogRef = this.dialog.open(OTableLoadFilterDialogComponent, {
       data: this.table.oTableStorage.getStoredFilters(),
-      width: '30vw',
+      width: 'calc((75em - 100%) * 1000)',
+      maxWidth: '65vw',
+      minWidth: '30vw',
       disableClose: true,
       panelClass: ['o-dialog-class', 'o-table-dialog']
     });
@@ -342,9 +346,9 @@ export class OTableMenuComponent implements OnInit, AfterViewInit, OnDestroy {
     dialogRef.componentInstance.onDelete.subscribe(filterName => this.table.oTableStorage.deleteStoredFilter(filterName));
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        let selectedFilterName: string = dialogRef.componentInstance.getSelectedFilterName();
+        const selectedFilterName: string = dialogRef.componentInstance.getSelectedFilterName();
         if (selectedFilterName) {
-          let storedFilter = this.table.oTableStorage.getStoredFilterConf(selectedFilterName);
+          const storedFilter = this.table.oTableStorage.getStoredFilterConf(selectedFilterName);
           if (storedFilter) {
             this.table.setFiltersConfiguration(storedFilter);
             this.table.reloadPaginatedDataFromStart();
@@ -365,7 +369,9 @@ export class OTableMenuComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public onStoreConfigurationClicked(): void {
     const dialogRef = this.dialog.open(OTableStoreConfigurationDialogComponent, {
-      width: '30vw',
+      width: 'calc((75em - 100%) * 1000)',
+      maxWidth: '65vw',
+      minWidth: '30vw',
       disableClose: true,
       panelClass: ['o-dialog-class', 'o-table-dialog']
     });
@@ -379,10 +385,12 @@ export class OTableMenuComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  onApplyConfigurationClicked(): void {
-    let dialogRef = this.dialog.open(OTableApplyConfigurationDialogComponent, {
+  public onApplyConfigurationClicked(): void {
+    const dialogRef = this.dialog.open(OTableApplyConfigurationDialogComponent, {
       data: this.table.oTableStorage.getStoredConfigurations(),
-      width: '30vw',
+      width: 'calc((75em - 100%) * 1000)',
+      maxWidth: '65vw',
+      minWidth: '30vw',
       disableClose: true,
       panelClass: ['o-dialog-class', 'o-table-dialog']
     });
@@ -392,11 +400,12 @@ export class OTableMenuComponent implements OnInit, AfterViewInit, OnDestroy {
       if (result && dialogRef.componentInstance.isDefaultConfigurationSelected()) {
         self.table.applyDefaultConfiguration();
       } else if (result) {
-        let selectedConfigurationName: string = dialogRef.componentInstance.getSelectedConfigurationName();
+        const selectedConfigurationName: string = dialogRef.componentInstance.getSelectedConfigurationName();
         if (selectedConfigurationName) {
           self.table.applyConfiguration(selectedConfigurationName);
         }
       }
     });
   }
+
 }
