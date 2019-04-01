@@ -8,6 +8,9 @@
 * **o-list-picker**: new `onDialogAccept` and `onDialogCancel` outputs ([fd0247d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/fd0247d))
 * **OFormServiceComponent**: new `onDataLoaded` output ([3d0cf70](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3d0cf70))
 * **o-table**: new `enabled` attribute ([5d48cef](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5d48cef)).
+* **
+### Bug Fixing
+* **MenuGroup,MenuItem**: new `class` attribute  ([6a4c500](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6a4c500))
 
 #4.0.1 (2019-03-06)
 ### Features
