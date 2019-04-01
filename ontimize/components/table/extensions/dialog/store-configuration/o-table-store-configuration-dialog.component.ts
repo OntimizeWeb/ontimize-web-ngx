@@ -19,21 +19,24 @@ export class OTableStoreConfigurationDialogComponent extends OTableBaseDialogCla
   public properties: any[] = [{
     property: 'sort',
     name: 'TABLE.DIALOG.PROPERTIES.SORT',
+    info: 'TABLE.DIALOG.PROPERTIES.SORT.INFO'
   }, {
     property: 'columns-display',
-    name: 'TABLE.DIALOG.PROPERTIES.COLUMNS_DISPLAY'
+    name: 'TABLE.DIALOG.PROPERTIES.COLUMNS_DISPLAY',
+    info: 'TABLE.DIALOG.PROPERTIES.COLUMNS_DISPLAY.INFO'
   }, {
     property: 'quick-filter',
-    name: 'TABLE.DIALOG.PROPERTIES.QUICK_FILTER'
+    name: 'TABLE.DIALOG.PROPERTIES.QUICK_FILTER',
+    info: 'TABLE.DIALOG.PROPERTIES.QUICK_FILTER.INFO'
   }, {
     property: 'columns-filter',
-    name: 'TABLE.DIALOG.PROPERTIES.COLUMNS_FILTER'
+    name: 'TABLE.DIALOG.PROPERTIES.COLUMNS_FILTER',
+    info: 'TABLE.DIALOG.PROPERTIES.COLUMNS_FILTER.INFO'
+
   }, {
     property: 'page',
-    name: 'TABLE.DIALOG.PROPERTIES.PAGE'
-  }, {
-    property: 'columns-width',
-    name: 'TABLE.DIALOG.PROPERTIES.COLUMNS_WIDTH'
+    name: 'TABLE.DIALOG.PROPERTIES.PAGE',
+    info: 'TABLE.DIALOG.PROPERTIES.PAGE.INFO'
   }];
 
   public formGroup: FormGroup = new FormGroup({
