@@ -1,20 +1,13 @@
-import { Component, Inject, forwardRef, Injector, ViewEncapsulation, ViewChild, OnDestroy, ChangeDetectionStrategy, OnInit, ElementRef, AfterViewInit, ChangeDetectorRef } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, forwardRef, Inject, Injector, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { MatDialog, MatMenu } from '@angular/material';
-import { Util } from '../../../../../utils';
-import { PermissionsUtils } from '../../../../../util/permissions';
+
 import { InputConverter } from '../../../../../decorators';
-import { SnackBarService, OTranslateService, DialogService, OTableMenuPermissions, OPermissions } from '../../../../../services';
-import { OTableComponent, OColumn } from '../../../o-table.component';
+import { DialogService, OPermissions, OTableMenuPermissions, OTranslateService, SnackBarService } from '../../../../../services';
+import { PermissionsUtils } from '../../../../../util/permissions';
+import { Util } from '../../../../../utils';
+import { OColumn, OTableComponent } from '../../../o-table.component';
 import { OTableCellRendererImageComponent } from '../../../table-components';
-import {
-  OTableExportConfiguration,
-  OTableExportDialogComponent,
-  OTableVisibleColumnsDialogComponent,
-  OTableStoreFilterDialogComponent,
-  OTableLoadFilterDialogComponent,
-  OTableApplyConfigurationDialogComponent,
-  OTableStoreConfigurationDialogComponent
-} from '../../dialog/o-table-dialog-components';
+import { OTableApplyConfigurationDialogComponent, OTableExportConfiguration, OTableExportDialogComponent, OTableLoadFilterDialogComponent, OTableStoreConfigurationDialogComponent, OTableStoreFilterDialogComponent, OTableVisibleColumnsDialogComponent } from '../../dialog/o-table-dialog-components';
 import { OTableOptionComponent } from '../table-option/o-table-option.component';
 
 export const DEFAULT_INPUTS_O_TABLE_MENU = [
@@ -43,8 +36,8 @@ export const DEFAULT_OUTPUTS_O_TABLE_MENU = [];
   },
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-
 export class OTableMenuComponent implements OnInit, AfterViewInit, OnDestroy {
+
   public static DEFAULT_INPUTS_O_TABLE_MENU = DEFAULT_INPUTS_O_TABLE_MENU;
   public static DEFAULT_OUTPUTS_O_TABLE_MENU = DEFAULT_OUTPUTS_O_TABLE_MENU;
 
@@ -96,7 +89,6 @@ export class OTableMenuComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit() {
     this.permissions = this.table.getMenuPermissions();
-
   }
 
   getRowHeight() {
@@ -371,8 +363,8 @@ export class OTableMenuComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  onStoreConfigurationClicked(): void {
-    let dialogRef = this.dialog.open(OTableStoreConfigurationDialogComponent, {
+  public onStoreConfigurationClicked(): void {
+    const dialogRef = this.dialog.open(OTableStoreConfigurationDialogComponent, {
       width: '30vw',
       disableClose: true,
       panelClass: ['o-dialog-class', 'o-table-dialog']
