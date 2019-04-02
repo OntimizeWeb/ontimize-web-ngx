@@ -1,6 +1,7 @@
 import { Injector } from '@angular/core';
+
 import { BooleanConverter } from '../decorators';
-import { OTranslateService, OPermissions } from '../services';
+import { OPermissions, OTranslateService } from '../services';
 import { PermissionsUtils } from '../util/permissions';
 import { Util } from '../utils';
 
@@ -9,11 +10,12 @@ export interface IComponent {
 }
 
 export class OBaseComponent implements IComponent {
+
   /* Inputs */
   protected oattr: string;
   protected _olabel: string;
   protected oplaceholder: string;
-  protected _oenabled: boolean = true;
+  protected _enabled: boolean = true;
   protected _readOnly: boolean;
   protected _orequired: boolean = false;
 
@@ -21,7 +23,6 @@ export class OBaseComponent implements IComponent {
   protected injector: Injector;
   protected translateService: OTranslateService;
 
-  protected _disabled: boolean;
   protected _isReadOnly: boolean;
   protected _tooltip: string;
   protected _tooltipPosition: string = 'below';
@@ -36,8 +37,7 @@ export class OBaseComponent implements IComponent {
     }
   }
 
-  initialize() {
-    this._disabled = !this.oenabled;
+  public initialize(): void {
     if (!Util.isDefined(this._olabel)) {
       this._olabel = this.oattr;
     }
@@ -47,11 +47,19 @@ export class OBaseComponent implements IComponent {
     }
   }
 
-  getAttribute(): string {
+  public getAttribute(): string {
     if (this.oattr) {
       return this.oattr;
     }
     return undefined;
+  }
+
+  public setEnabled(value: boolean): void {
+    if (!PermissionsUtils.checkEnabledPermission(this.permissions)) {
+      return;
+    }
+    const parsedValue = BooleanConverter(value);
+    this._enabled = parsedValue;
   }
 
   get placeHolder(): string {
@@ -70,15 +78,15 @@ export class OBaseComponent implements IComponent {
     return `o-tooltip ${this.tooltipPosition}`;
   }
 
-  get tooltip(): string {
-    return this.getTooltipText();
-  }
-
   protected getTooltipText(): string {
     if (Util.isDefined(this._tooltip) && this.translateService) {
       return this.translateService.get(this._tooltip);
     }
     return this._tooltip;
+  }
+
+  get tooltip(): string {
+    return this.getTooltipText();
   }
 
   set tooltip(value: string) {
@@ -117,12 +125,12 @@ export class OBaseComponent implements IComponent {
     this.setIsReadOnly(value);
   }
 
-  protected setIsReadOnly(value: boolean) {
+  protected setIsReadOnly(value: boolean): void {
     // only modifiyng read only state if the component has not its own read-only input
     if (Util.isDefined(this.readOnly)) {
       return;
     }
-    if (this._disabled) {
+    if (!this.enabled) {
       this._isReadOnly = false;
       return;
     }
@@ -145,17 +153,6 @@ export class OBaseComponent implements IComponent {
     this._isReadOnly = parsedValue;
   }
 
-  get isDisabled(): boolean {
-    return this._disabled;
-  }
-
-  set disabled(value: boolean) {
-    if (!PermissionsUtils.checkEnabledPermission(this.permissions)) {
-      return;
-    }
-    this._disabled = value;
-  }
-
   set orequired(val: boolean) {
     this._orequired = BooleanConverter(val);
   }
@@ -172,17 +169,13 @@ export class OBaseComponent implements IComponent {
     this.orequired = value;
   }
 
-  get oenabled(): any {
-    return this._oenabled;
+  get enabled(): any {
+    return this._enabled;
   }
 
-  set oenabled(value: any) {
-    if (!PermissionsUtils.checkEnabledPermission(this.permissions)) {
-      return;
-    }
+  set enabled(value: any) {
     const parsedValue = BooleanConverter(value);
-    this._oenabled = parsedValue;
-    this.disabled = !parsedValue;
+    this.setEnabled(parsedValue);
   }
 
   get olabel(): string {

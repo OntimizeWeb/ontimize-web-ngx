@@ -4,15 +4,15 @@
   <mat-form-field *ngIf="hasControls()" class="o-image-form-field">
     <input matInput readonly (click)="input.click()" [value]="currentFileName" [placeholder]="olabel" />
     <input matInput [formControlName]="getAttribute()" type="text" [id]="getAttribute()" class="o-image-form-field-input" />
-    <input #input type="file" [disabled]="isDisabled" (change)="fileChange(input)" class="o-image-form-field-hidden" fxFlex />
+    <input #input type="file" [disabled]="!enabled" (change)="fileChange(input)" class="o-image-form-field-hidden" fxFlex />
 
-    <button type="button" *ngIf="fullScreenButton" [disabled]="isDisabled" matSuffix mat-icon-button (click)="openFullScreen($event)">
+    <button type="button" *ngIf="fullScreenButton" [disabled]="!enabled" matSuffix mat-icon-button (click)="openFullScreen($event)">
       <mat-icon svgIcon="ontimize:fullscreen"></mat-icon>
     </button>
-    <button type="button" [disabled]="isDisabled" matSuffix mat-icon-button (click)="input.click()">
+    <button type="button" [disabled]="!enabled" matSuffix mat-icon-button (click)="input.click()">
       <mat-icon svgIcon="ontimize:folder_open"></mat-icon>
     </button>
-    <button type="button" [disabled]="isDisabled" matSuffix mat-icon-button (click)="onClickClearValue($event)">
+    <button type="button" [disabled]="!enabled" matSuffix mat-icon-button (click)="onClickClearValue($event)">
       <mat-icon svgIcon="ontimize:close"></mat-icon>
     </button>
     <mat-error *ngIf="hasError('required')">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</mat-error>
@@ -20,7 +20,7 @@
 
   <div fxLayout="column" fxLayoutAlign="center center" fxFlex="grow" class="o-image-display-container">
     <img *ngIf="!(isEmpty())" [src]="getSrcValue()" alt="" (click)="openFileSelector()" />
-    <mat-icon class="empty-icon" [class.mat-disabled]="isDisabled" aria-label="empty image" *ngIf="useEmptyIcon()" (click)="openFileSelector()">
+    <mat-icon class="empty-icon" [class.mat-disabled]="!enabled" aria-label="empty image" *ngIf="useEmptyIcon()" (click)="openFileSelector()">
       {{ emptyicon }}</mat-icon>
     <img [src]="getSrcValue()" alt="empty image" *ngIf="useEmptyImage()" (click)="openFileSelector()" />
   </div>

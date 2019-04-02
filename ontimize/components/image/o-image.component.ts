@@ -182,7 +182,7 @@ export class OImageComponent extends OFormDataComponent {
   }
 
   public onClickClearValue(e: Event): void {
-    if (!this.isReadOnly && !this.isDisabled) {
+    if (!this.isReadOnly && this.enabled) {
       super.onClickClearValue(e);
       this.fileInput.nativeElement.value = '';
       // if (this.titleLabel) {

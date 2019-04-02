@@ -1,17 +1,17 @@
 import { ElementRef, Injector } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { Codes, Util } from '../utils';
-import { InputConverter } from '../decorators';
 import { OFilterBuilderComponent } from '../components';
-import { OFormComponent } from './form/o-form.component';
-import { FilterExpressionUtils } from './filter-expression.utils';
-import { OTranslateService, NavigationService, PermissionsService } from '../services';
-import { OListInitializationOptions } from './list/o-list.component';
-import { OTableInitializationOptions } from './table/o-table.component';
-import { OFormLayoutManagerComponent } from '../layouts/form-layout/o-form-layout-manager.component';
+import { InputConverter } from '../decorators';
 import { OFormLayoutDialogComponent } from '../layouts/form-layout/dialog/o-form-layout-dialog.component';
+import { OFormLayoutManagerComponent } from '../layouts/form-layout/o-form-layout-manager.component';
+import { NavigationService, OTranslateService, PermissionsService } from '../services';
+import { Codes, Util } from '../utils';
+import { FilterExpressionUtils } from './filter-expression.utils';
+import { OFormComponent } from './form/o-form.component';
+import { OListInitializationOptions } from './list/o-list.component';
 import { DEFAULT_INPUTS_O_SERVICE_BASE_COMPONENT, OServiceBaseComponent } from './o-service-base-component.class';
+import { OTableInitializationOptions } from './table/o-table.component';
 
 export const DEFAULT_INPUTS_O_SERVICE_COMPONENT = [
   ...DEFAULT_INPUTS_O_SERVICE_BASE_COMPONENT,
@@ -22,9 +22,9 @@ export const DEFAULT_INPUTS_O_SERVICE_COMPONENT = [
   'ovisible: visible',
 
   // enabled [no|yes]: editability. Default: yes.
-  'oenabled: enabled',
+  'enabled',
 
-  //controls [string][yes|no|true|false]:
+  // controls [string][yes|no|true|false]:
   'controls',
 
   // detail-mode [none|click|doubleclick]: way to open the detail form of a row. Default: 'click'.
