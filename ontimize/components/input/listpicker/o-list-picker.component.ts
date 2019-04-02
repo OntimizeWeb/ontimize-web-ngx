@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { AfterViewInit, Component, ElementRef, EventEmitter, forwardRef, Inject, Injector, NgModule, OnChanges, OnInit, Optional, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, forwardRef, Inject, Injector, NgModule, OnChanges, OnInit, Optional, SimpleChange, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatDialog, MatDialogConfig, MatDialogRef, MatInput } from '@angular/material';
 
@@ -77,6 +77,7 @@ export class OListPickerComponent extends OFormServiceComponent implements After
   protected blurPrevent = false;
 
   stateCtrl: FormControl;
+
   constructor(
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
     elRef: ElementRef,
@@ -88,6 +89,14 @@ export class OListPickerComponent extends OFormServiceComponent implements After
 
   ngOnInit(): any {
     this.initialize();
+  }
+
+  public ngOnChanges(changes: { [propName: string]: SimpleChange }) {
+    super.ngOnChanges(changes);
+    if (typeof (changes['staticData']) !== 'undefined') {
+      this.cacheQueried = true;
+      this.setDataArray(changes['staticData'].currentValue);
+    }
   }
 
   ensureOFormValue(value: any) {
@@ -126,7 +135,6 @@ export class OListPickerComponent extends OFormServiceComponent implements After
         }
       });
     }
-
     return descTxt;
   }
 

@@ -1,4 +1,4 @@
-import { ElementRef, EventEmitter, Injector, NgZone, SimpleChange } from '@angular/core';
+import { ElementRef, EventEmitter, Injector, NgZone } from '@angular/core';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { Observable } from 'rxjs';
 
@@ -376,14 +376,6 @@ export class OFormServiceComponent extends OFormDataComponent {
       return;
     }
     super.onFormControlChange(value);
-  }
-
-  ngOnChanges(changes: { [propName: string]: SimpleChange }) {
-    super.ngOnChanges(changes);
-    if (typeof (changes['staticData']) !== 'undefined') {
-      this.cacheQueried = true;
-      this.setDataArray(changes['staticData'].currentValue);
-    }
   }
 
 }

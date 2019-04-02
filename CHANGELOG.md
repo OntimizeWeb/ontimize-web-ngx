@@ -8,10 +8,12 @@
 * **o-list-picker**: new `onDialogAccept` and `onDialogCancel` outputs ([fd0247d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/fd0247d))
 * **OFormServiceComponent**: new `onDataLoaded` output ([3d0cf70](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3d0cf70))
 * **o-table**: new `enabled` attribute ([5d48cef](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5d48cef)).
+* **MenuGroup, MenuItem**: new `class` attribute  ([6a4c500](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6a4c500))
 * **o-form-navigation**: allowing to navigate through paginated components (`OServiceComponent`) details ([286ba71](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/286ba71))
 
-### Bug Fixing
-* **MenuGroup,MenuItem**: new `class` attribute  ([6a4c500](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6a4c500))
+### Bug Fixes
+* **o-table**: fixed error on table store configuration dialog ([ad6c84b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ad6c84b)), closes [#256](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/256)
+* **o-grid**: sort by numeric column ([2b38fb5](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2b38fb5)), closes [#253](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/253)
 
 #4.0.1 (2019-03-06)
 ### Features

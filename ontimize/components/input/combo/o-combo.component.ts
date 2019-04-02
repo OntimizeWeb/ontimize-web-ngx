@@ -1,5 +1,5 @@
-import { Component, ElementRef, forwardRef, Inject, Injector, NgModule, Optional, ViewChild, OnInit, AfterViewInit, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { AfterViewInit, Component, ElementRef, forwardRef, Inject, Injector, NgModule, OnDestroy, OnInit, Optional, ViewChild, ViewEncapsulation } from '@angular/core';
 import { MatSelect, MatSelectChange } from '@angular/material';
 
 import { InputConverter } from '../../../decorators/input-converter';
@@ -276,6 +276,7 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
       this._fControl.enable();
     }
   }
+
 }
 
 @NgModule({

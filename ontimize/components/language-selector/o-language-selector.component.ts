@@ -4,6 +4,7 @@ import { OSharedModule } from '../../shared';
 import { OTranslateService } from '../../services';
 import { AppConfig } from '../../config/app-config';
 import { InputConverter } from '../../decorators';
+import LocaleCode from '../../util/locale';
 
 export const DEFAULT_INPUTS_O_LANGUAGE_SELECTOR = [
   'useFlagIcons: use-flag-icons'
@@ -47,7 +48,8 @@ export class OLanguageSelectorComponent {
   }
 
   getFlagClass(lang: string) {
-    const flagName = (lang !== 'en') ? lang : 'gb';
+    let flagName = LocaleCode.getCountryCode(lang);
+    flagName = (flagName !== 'en') ? flagName : 'gb';
     return 'flag-icon-' + flagName;
   }
 
@@ -64,6 +66,11 @@ export class OLanguageSelectorComponent {
   getCurrentLang(): string {
     return this.translateService.getCurrentLang();
   }
+
+  getCurrentCountry(): string {
+    return LocaleCode.getCountryCode(this.getCurrentLang());
+  }
+
 }
 
 @NgModule({

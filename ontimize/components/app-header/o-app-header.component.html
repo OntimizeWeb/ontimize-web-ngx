@@ -5,7 +5,7 @@
     <span *ngIf="showHeaderTitle" class="o-app-header-title" fxLayout="row" fxLayoutAlign="center center">
       {{ headerTitle | oTranslate }}
     </span>
-    <div fxLayout="row" fxLayoutAlign="end stretch">
+    <div fxLayout="row" fxLayoutAlign="end stretch" class="o-app-header-default-actions"> 
       <o-user-info *ngIf="showUserInfo"></o-user-info>
       <o-language-selector *ngIf="showLanguageSelector" [use-flag-icons]="useFlagIcons"></o-language-selector>
     </div>
