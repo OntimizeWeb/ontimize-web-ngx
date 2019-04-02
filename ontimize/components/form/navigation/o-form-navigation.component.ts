@@ -1,11 +1,25 @@
 import { Component, forwardRef, Inject, Injector, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { NavigationExtras, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 import { OFormLayoutManagerComponent } from '../../../layouts';
 import { NavigationService, ONavigationItem } from '../../../services/navigation.service';
+import { OntimizeService } from '../../../services/ontimize.service';
+import { dataServiceFactory } from '../../../services/data-service.provider';
 import { Codes, Util } from '../../../utils';
 import { OFormComponent } from '../o-form.component';
 import { OFormNavigationClass } from './o-form.navigation.class';
+
+export type QueryConfiguration = {
+  serviceType: string;
+  queryArguments: any[];
+  entity: string;
+  service: string;
+  queryMethod: string;
+  totalRecordsNumber: number;
+  queryRows: number;
+  queryRecordOffset: number;
+};
 
 @Component({
   moduleId: module.id,
@@ -15,7 +29,10 @@ import { OFormNavigationClass } from './o-form.navigation.class';
   encapsulation: ViewEncapsulation.None,
   host: {
     '[class.o-form-navigation]': 'true'
-  }
+  },
+  providers: [
+    { provide: OntimizeService, useFactory: dataServiceFactory, deps: [Injector] }
+  ]
 })
 export class OFormNavigationComponent implements OnDestroy {
 
@@ -25,6 +42,10 @@ export class OFormNavigationComponent implements OnDestroy {
   protected formNavigation: OFormNavigationClass;
   protected navigationService: NavigationService;
   protected formLayoutManager: OFormLayoutManagerComponent;
+
+  protected querySubscription: Subscription;
+  protected dataService: any;
+  protected queryConf: QueryConfiguration;
 
   constructor(
     protected injector: Injector,
@@ -42,19 +63,65 @@ export class OFormNavigationComponent implements OnDestroy {
     } else {
       navData = this.navigationService.getPreviousRouteData();
     }
-
-    if (Util.isDefined(navData) && navData.keysValues) {
+    if (Util.isDefined(navData)) {
       this.navigationData = navData.keysValues;
+      this.queryConf = navData.queryConfiguration;
     }
     this.currentIndex = this.getCurrentIndex();
+    this.configureService();
   }
 
+  configureService() {
+    if (!this.queryConf) {
+      return;
+    }
+    let loadingService: any = OntimizeService;
+    if (this.queryConf.serviceType) {
+      loadingService = this.queryConf.serviceType;
+    }
+    try {
+      this.dataService = this.injector.get(loadingService);
+      if (Util.isDataService(this.dataService)) {
+        let serviceCfg = this.dataService.getDefaultServiceConfiguration(this.queryConf.service);
+        if (this.queryConf.entity) {
+          serviceCfg['entity'] = this.queryConf.entity;
+        }
+        this.dataService.configureService(serviceCfg);
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+  protected queryNavigationData(offset: number, length: number = undefined): Promise<any> {
+    const self = this;
+    return new Promise<any>((resolve: any, reject: any) => {
+      const conf = self.queryConf;
+      let queryArgs = conf.queryArguments;
+
+      queryArgs[1] = self.getKeysArray();
+      queryArgs[4] = offset;
+      queryArgs[5] = length ? length : conf.queryRows;
+
+      self.querySubscription = self.dataService[conf.queryMethod].apply(self.dataService, queryArgs).subscribe(res => {
+        if (res.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) {
+          self.navigationData = res.data;
+          self.queryConf.queryRecordOffset = offset;
+        }
+        resolve();
+      }, () => {
+        reject();
+      });
+    });
+  }
 
   ngOnDestroy(): void {
-    //
+    if (this.querySubscription) {
+      this.querySubscription.unsubscribe();
+    }
   }
 
-  getCurrentIndex(): number {
+  protected getKeysArray(): string[] {
     // getting available navigationData keys
     let keysArray = [];
     this._form.keysArray.forEach(key => {
@@ -62,6 +129,11 @@ export class OFormNavigationComponent implements OnDestroy {
         keysArray.push(key);
       }
     });
+    return keysArray;
+  }
+
+  getCurrentIndex(): number {
+    const keysArray = this.getKeysArray();
     // current url keys object
     let currentKeys = {};
     const currentItem = this.formNavigation.getUrlParams();
@@ -83,6 +155,11 @@ export class OFormNavigationComponent implements OnDestroy {
     let index = this.currentIndex + 1;
     if (total > index) {
       this.move(index);
+    } else if (this.queryConf) {
+      const offset: number = (this.queryConf.queryRecordOffset || 0) + this.queryConf.queryRows;
+      this.queryNavigationData(offset).then(() => {
+        this.move(0);
+      });
     } else {
       console.log('form-toolbar->next(): total > index');
     }
@@ -92,32 +169,59 @@ export class OFormNavigationComponent implements OnDestroy {
     let index = this.currentIndex - 1;
     if (index >= 0) {
       this.move(index);
+    } else if (this.queryConf) {
+      const offset: number = this.queryConf.queryRecordOffset - this.queryConf.queryRows;
+      this.queryNavigationData(offset).then(() => {
+        this.move(this.navigationData.length - 1);
+      });
     } else {
       console.log('form-toolbar->next(): index < 0');
     }
   }
 
   first() {
-    this.move(0);
+    if (!this.queryConf || this.queryConf.queryRecordOffset === 0) {
+      this.move(0);
+    } else {
+      this.queryNavigationData(0).then(() => {
+        this.move(0);
+      });
+    }
   }
 
   last() {
-    let index = this.navigationData.length - 1;
-    this.move(index);
+    if (!this.queryConf || this.isLast()) {
+      let index = this.navigationData.length - 1;
+      this.move(index);
+    } else {
+      const length = this.queryConf.totalRecordsNumber % this.queryConf.queryRows;
+      const offset = this.queryConf.totalRecordsNumber - length;
+      this.queryNavigationData(offset, length).then(() => {
+        this.move(this.navigationData.length - 1);
+      });
+    }
   }
 
   isFirst() {
-    return this.currentIndex === 0;
+    let result: boolean = this.currentIndex === 0;
+    if (result && this.queryConf) {
+      result = this.queryConf.queryRecordOffset === 0;
+    }
+    return result;
   }
 
   isLast() {
-    return this.currentIndex === (this.navigationData.length - 1);
+    let result: boolean = this.currentIndex === (this.navigationData.length - 1);
+    if (result && this.queryConf) {
+      result = (this.queryConf.queryRecordOffset + this.queryConf.queryRows)
+        >= this.queryConf.totalRecordsNumber;
+    }
+    return result;
   }
 
   move(index: number) {
     this._form.showConfirmDiscardChanges().then(res => {
       if (res === true) {
-
         this.currentIndex = index;
         if (this.formLayoutManager && this.formLayoutManager.isDialogMode()) {
           this.moveInDialogManager(this.formLayoutManager, index);
@@ -141,11 +245,10 @@ export class OFormNavigationComponent implements OnDestroy {
           route.unshift(detailRoute);
         }
         route.unshift(navData.url);
-        const self = this;
         this._form.canDiscardChanges = true;
         this.router.navigate(route, extras).then((navigationDone: boolean) => {
           if (navigationDone) {
-            self.currentIndex = index;
+            this.currentIndex = index;
           }
         });
       }
@@ -181,5 +284,18 @@ export class OFormNavigationComponent implements OnDestroy {
     return this._currentIndex;
   }
 
+  getRecordIndex(): number {
+    let index = this.currentIndex + 1;
+    if (this.queryConf) {
+      index += this.queryConf.queryRecordOffset;
+    }
+    return index;
+  }
 
+  getTotalRecordsNumber(): number {
+    if (this.queryConf && this.queryConf.totalRecordsNumber) {
+      return this.queryConf.totalRecordsNumber;
+    }
+    return this.navigationData.length;
+  }
 }

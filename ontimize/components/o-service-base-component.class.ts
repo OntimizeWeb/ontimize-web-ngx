@@ -137,6 +137,7 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
 
   protected queryOnEventSubscription: Subscription;
   public cd: ChangeDetectorRef;
+  protected queryArguments: any[];
 
   constructor(
     protected injector: Injector
@@ -334,6 +335,7 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
       }
       this.loaderSubscription = this.load();
       const self = this;
+      this.queryArguments = queryArguments;
       this.querySubscription = this.dataService[queryMethodName].apply(this.dataService, queryArguments).subscribe(res => {
         let data = undefined;
         let sqlTypes = undefined;

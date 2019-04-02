@@ -117,23 +117,20 @@ export class OFormNavigationClass {
     this.form.isDetailForm = this.formLayoutManager ? false : (isDetail === 'true');
   }
 
-  updateUrlParams() {
+  subscribeToUrlParams() {
     if (this.formLayoutManager) {
       const cacheData: IDetailComponentData = this.formLayoutManager.getFormCacheData(this.id);
       if (Util.isDefined(cacheData)) {
         this.urlParams = cacheData.params;
+        this.parseUrlParams();
       }
     } else {
       const self = this;
       this.urlParamSub = this.actRoute.params.subscribe(params => {
         self.urlParams = params;
+        this.parseUrlParams();
       });
     }
-  }
-
-  subscribeToUrlParams() {
-    this.updateUrlParams();
-    this.parseUrlParams();
   }
 
   private parseUrlParams() {
@@ -284,7 +281,10 @@ export class OFormNavigationClass {
       const subscription = this.form.onDataLoaded.subscribe(() => {
         const keys = self.form.getKeysValues();
         self.formLayoutManager.updateActiveData({ params: keys });
-        self.updateUrlParams();
+        const cacheData: IDetailComponentData = self.formLayoutManager.getFormCacheData(self.id);
+        if (Util.isDefined(cacheData)) {
+          self.urlParams = cacheData.params;
+        }
         subscription.unsubscribe();
       });
       this.form.queryData(insertedKeys);

@@ -1107,6 +1107,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
         resp => {
           if (resp.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) {
             self.formCache.setCacheSnapshot();
+            self.markFormLayoutManagerToUpdate();
             self.postCorrectDelete(resp);
             observer.next(resp.data);
             observer.complete();

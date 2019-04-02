@@ -306,7 +306,26 @@ export class OServiceComponent extends OServiceBaseComponent {
       }
     }
     if (result.length > 0 && !this.oFormLayoutDialog) {
-      this.storeNavigationFormRoutes(modeRoute, this.getKeysValues());
+      this.storeNavigationFormRoutes(modeRoute, this.getQueryConfiguration());
+    }
+    return result;
+  }
+
+  protected getQueryConfiguration() {
+    let result = {
+      keysValues: this.getKeysValues()
+    };
+    if (this.pageable) {
+      result = Object.assign({
+        serviceType: this.serviceType,
+        queryArguments: this.queryArguments,
+        entity: this.entity,
+        service: this.service,
+        queryMethod: this.pageable ? this.paginatedQueryMethod : this.queryMethod,
+        totalRecordsNumber: this.getTotalRecordsNumber(),
+        queryRows: this.queryRows,
+        queryRecordOffset: (this.state.queryRecordOffset - this.queryRows)
+      }, result);
     }
     return result;
   }
@@ -400,14 +419,14 @@ export class OServiceComponent extends OServiceBaseComponent {
     return filter;
   }
 
-  protected storeNavigationFormRoutes(activeMode: string, keysValues: any = undefined) {
+  protected storeNavigationFormRoutes(activeMode: string, queryConf: any = undefined) {
     const mainFormLayoutComp = this.formLayoutManager ? Util.isDefined(this.formLayoutManager.isMainComponent(this)) : undefined;
     this.navigationService.storeFormRoutes({
       mainFormLayoutManagerComponent: mainFormLayoutComp,
       detailFormRoute: this.detailFormRoute,
       editFormRoute: this.editFormRoute,
       insertFormRoute: Util.isDefined(this.insertFormRoute) ? this.insertFormRoute : Codes.DEFAULT_INSERT_ROUTE
-    }, activeMode, keysValues);
+    }, activeMode, queryConf);
   }
 
   protected saveDataNavigationInLocalStorage(): void {
