@@ -23,7 +23,10 @@ export const DEFAULT_INPUTS_O_IMAGE = [
   'height',
   // auto-fit [yes|no true|false]: Adjusts the image to the content or not. Default: true.
   'autoFit: auto-fit',
-  'fullScreenButton: full-screen-button'
+  'fullScreenButton: full-screen-button',
+  // accept-file-type [string]: file types allowed on the file input, separated by ';'. Default: image/*.
+  // file_extension, image/*, media_type. See https://www.w3schools.com/tags/att_input_accept.asp
+  'acceptFileType: accept-file-type'
 ];
 
 export const DEFAULT_OUTPUTS_O_IMAGE = [
@@ -47,6 +50,7 @@ export class OImageComponent extends OFormDataComponent {
   public static DEFAULT_INPUTS_O_IMAGE = DEFAULT_INPUTS_O_IMAGE;
   public static DEFAULT_OUTPUTS_O_IMAGE = DEFAULT_OUTPUTS_O_IMAGE;
 
+  public acceptFileType: string = 'image/*';
   public emptyimage: string;
   public emptyicon: string;
   public height: string;
@@ -156,18 +160,18 @@ export class OImageComponent extends OFormDataComponent {
       if (this.value.value instanceof Object && this.value.value.bytes) {
         let src: string = '';
         if (this.value.value.bytes.substring(0, 4) === 'data') {
-          src = 'data:image/png;base64,' + this.value.value.bytes.substring(this.value.value.bytes.indexOf('base64') + 7);
+          src = 'data:image/*;base64,' + this.value.value.bytes.substring(this.value.value.bytes.indexOf('base64') + 7);
         } else {
-          src = 'data:image/png;base64,' + this.value.value.bytes;
+          src = 'data:image/*;base64,' + this.value.value.bytes;
         }
         return this._domSanitizer.bypassSecurityTrustUrl(src);
       } else if (typeof this.value.value === 'string' &&
         this.value.value.length > 300) {
         let src: string = '';
         if (this.value.value.substring(0, 4) === 'data') {
-          src = 'data:image/png;base64,' + this.value.value.substring(this.value.value.indexOf('base64') + 7);
+          src = 'data:image/*;base64,' + this.value.value.substring(this.value.value.indexOf('base64') + 7);
         } else {
-          src = 'data:image/png;base64,' + this.value.value;
+          src = 'data:image/*;base64,' + this.value.value;
         }
         return this._domSanitizer.bypassSecurityTrustUrl(src);
       }

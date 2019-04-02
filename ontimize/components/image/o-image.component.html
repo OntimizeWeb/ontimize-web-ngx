@@ -4,7 +4,8 @@
   <mat-form-field *ngIf="hasControls()" class="o-image-form-field">
     <input matInput readonly (click)="input.click()" [value]="currentFileName" [placeholder]="olabel" />
     <input matInput [formControlName]="getAttribute()" type="text" [id]="getAttribute()" class="o-image-form-field-input" />
-    <input #input type="file" [disabled]="!enabled" (change)="fileChange(input)" class="o-image-form-field-hidden" fxFlex />
+    <input #input type="file" [disabled]="!enabled" [accept]="acceptFileType ? acceptFileType.replace(';',',') : 'image/*'"
+      (change)="fileChange(input)" class="o-image-form-field-hidden" fxFlex />
 
     <button type="button" *ngIf="fullScreenButton" [disabled]="!enabled" matSuffix mat-icon-button (click)="openFullScreen($event)">
       <mat-icon svgIcon="ontimize:fullscreen"></mat-icon>
