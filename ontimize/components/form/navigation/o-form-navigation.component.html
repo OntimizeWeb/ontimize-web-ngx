@@ -5,7 +5,7 @@
   <button mat-icon-button class="o-form-toolbar-button" [disabled]="isFirst()" (click)="previous()">
     <mat-icon aria-label="Previous" layout-padding svgIcon="ontimize:keyboard_arrow_left"></mat-icon>
   </button>
-  <span layout-padding>{{ currentIndex + 1 }} / {{ navigationData.length }}</span>
+  <span layout-padding>{{ getRecordIndex() }} / {{ getTotalRecordsNumber() }}</span>
   <button mat-icon-button class="o-form-toolbar-button" [disabled]="isLast()" (click)="next()">
     <mat-icon aria-label="Next" layout-padding svgIcon="ontimize:keyboard_arrow_right"></mat-icon>
   </button>
