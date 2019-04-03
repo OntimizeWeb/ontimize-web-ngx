@@ -1,18 +1,10 @@
-import {
-  Component, Inject, Injector, forwardRef, ElementRef,
-  Optional,
-  NgModule,
-  ViewEncapsulation
-} from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { OSharedModule } from '../../../shared';
+import { Component, ElementRef, forwardRef, Inject, Injector, NgModule, Optional, ViewEncapsulation } from '@angular/core';
+
 import { InputConverter } from '../../../decorators';
+import { OSharedModule } from '../../../shared';
 import { OFormComponent } from '../../form/o-form.component';
-import {
-  OTextInputComponent,
-  DEFAULT_INPUTS_O_TEXT_INPUT,
-  DEFAULT_OUTPUTS_O_TEXT_INPUT
-} from '../text-input/o-text-input.component';
+import { DEFAULT_INPUTS_O_TEXT_INPUT, DEFAULT_OUTPUTS_O_TEXT_INPUT, OTextInputComponent } from '../text-input/o-text-input.component';
 
 export const DEFAULT_INPUTS_O_TEXTAREA_INPUT = [
   ...DEFAULT_INPUTS_O_TEXT_INPUT,
@@ -39,9 +31,9 @@ export class OTextareaInputComponent extends OTextInputComponent {
   public static DEFAULT_OUTPUTS_O_TEXTAREA_INPUT = DEFAULT_OUTPUTS_O_TEXTAREA_INPUT;
 
   @InputConverter()
-  rows: number = 5;
+  public rows: number = 5;
   @InputConverter()
-  columns: number = 3;
+  public columns: number = 3;
 
   constructor(
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
@@ -50,9 +42,9 @@ export class OTextareaInputComponent extends OTextInputComponent {
     super(form, elRef, injector);
   }
 
-  isResizable() {
+  public isResizable(): boolean {
     let resizable = true;
-    if (this.isDisabled || this.isReadOnly) {
+    if (!this.enabled || this.isReadOnly) {
       resizable = false;
     }
     return resizable;
@@ -62,8 +54,7 @@ export class OTextareaInputComponent extends OTextInputComponent {
 
 @NgModule({
   declarations: [OTextareaInputComponent],
-  imports: [OSharedModule, CommonModule],
+  imports: [CommonModule, OSharedModule],
   exports: [OTextareaInputComponent]
 })
-export class OTextareaInputModule {
-}
+export class OTextareaInputModule { }

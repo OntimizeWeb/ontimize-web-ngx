@@ -1,5 +1,6 @@
-import { Directive, Input, ElementRef, Renderer2, Optional, Host } from '@angular/core';
+import { Directive, ElementRef, Host, Input, Optional, Renderer2 } from '@angular/core';
 import { Subscription } from 'rxjs';
+
 import { OFormServiceComponent } from '../components';
 
 export const DEFAULT_INPUTS_O_LOCKER = [
@@ -15,12 +16,13 @@ export const DEFAULT_INPUTS_O_LOCKER = [
 
 export class OLockerDirective {
 
+  public static DEFAULT_INPUTS_O_LOCKER = DEFAULT_INPUTS_O_LOCKER;
+
   private loadingParentDiv;
   private componentDiv;
-  static DEFAULT_INPUTS_O_LOCKER = DEFAULT_INPUTS_O_LOCKER;
 
   private _oLockerMode = 'disable';
-  subscription: Subscription;
+  private subscription: Subscription;
 
   constructor(
     private element: ElementRef,
@@ -32,7 +34,11 @@ export class OLockerDirective {
     }
   }
 
-  private manageLockerMode(loading: boolean) {
+  public ngOnDestroy(): void {
+    this.subscription.unsubscribe();
+  }
+
+  private manageLockerMode(loading: boolean): void {
     if (this._oLockerMode === 'load') {
       this.manageLoadMode(loading);
     } else {
@@ -40,15 +46,15 @@ export class OLockerDirective {
     }
   }
 
-
-  private manageDisableMode(loading: boolean) {
+  private manageDisableMode(loading: boolean): void {
     if (loading) {
-      this.parent.disabled = true;
+      this.parent.enabled = false;
     } else {
-      this.parent.disabled = false;
+      this.parent.enabled = true;
     }
   }
-  private manageLoadMode(loading: boolean) {
+
+  private manageLoadMode(loading: boolean): void {
     if (loading) {
       this.addLoading();
     } else {
@@ -56,13 +62,13 @@ export class OLockerDirective {
     }
   }
 
-  private addLoading() {
-    this.componentDiv = this.element.nativeElement.children[0];//set opacity in componentDiv
+  private addLoading(): void {
+    this.componentDiv = this.element.nativeElement.children[0]; // set opacity in componentDiv
     this.loadingParentDiv = this.renderer.createElement('div');
-    var loaderChild1 = this.renderer.createElement('div');
-    var loaderChild2 = this.renderer.createElement('div');
-    var loaderChild3 = this.renderer.createElement('div');
-    var loaderChild4 = this.renderer.createElement('div');
+    const loaderChild1 = this.renderer.createElement('div');
+    const loaderChild2 = this.renderer.createElement('div');
+    const loaderChild3 = this.renderer.createElement('div');
+    const loaderChild4 = this.renderer.createElement('div');
     this.renderer.appendChild(this.loadingParentDiv, loaderChild4);
     this.renderer.appendChild(this.loadingParentDiv, loaderChild3);
     this.renderer.appendChild(this.loadingParentDiv, loaderChild2);
@@ -73,7 +79,7 @@ export class OLockerDirective {
     this.renderer.setStyle(this.componentDiv, 'opacity', '0.6');
   }
 
-  private removeLoading() {
+  private removeLoading(): void {
     if (this.loadingParentDiv) {
       this.renderer.removeChild(this.element.nativeElement, this.loadingParentDiv);
       this.renderer.removeClass(this.element.nativeElement, 'relative');
@@ -89,10 +95,6 @@ export class OLockerDirective {
   @Input()
   set oLockerDelay(value: number) {
     this.parent.delayLoad = value;
-  }
-
-  ngOnDestroy() {
-    this.subscription.unsubscribe();
   }
 
 }

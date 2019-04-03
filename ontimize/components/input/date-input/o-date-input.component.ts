@@ -1,19 +1,18 @@
-import { AfterViewChecked, Component, ElementRef, forwardRef, Inject, Injector, NgModule, OnDestroy, OnInit, Optional, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MomentDateAdapter } from '@angular/material-moment-adapter';
-import { DateAdapter, MAT_DATE_LOCALE, MatDatepicker, MatDatepickerInput, MatDatepickerInputEvent } from '@angular/material';
+import { AfterViewChecked, Component, ElementRef, forwardRef, Inject, Injector, NgModule, OnDestroy, OnInit, Optional, ViewChild } from '@angular/core';
 import { MediaChange, ObservableMedia } from '@angular/flex-layout';
+import { DateAdapter, MAT_DATE_LOCALE, MatDatepicker, MatDatepickerInput, MatDatepickerInputEvent } from '@angular/material';
+import { MomentDateAdapter } from '@angular/material-moment-adapter';
+import moment from 'moment';
 import { Subscription } from 'rxjs';
 
-import moment from 'moment';
-
-import { OSharedModule, OntimizeMomentDateAdapter } from '../../../shared';
-import { MomentService } from '../../../services';
-import { OFormValue, IFormValueOptions } from '../../form/OFormValue';
 import { InputConverter } from '../../../decorators';
-import { Util } from '../../../util/util';
+import { MomentService } from '../../../services';
+import { OntimizeMomentDateAdapter, OSharedModule } from '../../../shared';
 import { SQLTypes } from '../../../util/sqltypes';
+import { Util } from '../../../util/util';
 import { OFormComponent } from '../../form/o-form.component';
+import { IFormValueOptions, OFormValue } from '../../form/OFormValue';
 import { OFormDataComponent, OValueChangeEvent } from '../../o-form-data-component.class';
 import { DEFAULT_INPUTS_O_TEXT_INPUT, DEFAULT_OUTPUTS_O_TEXT_INPUT } from '../text-input/o-text-input.component';
 
@@ -52,17 +51,14 @@ export type DateFilterFunction = (date: Date) => boolean;
 })
 export class ODateInputComponent extends OFormDataComponent implements AfterViewChecked, OnDestroy, OnInit {
 
-  @ViewChild('matInputRef')
-  private matInputRef: ElementRef;
-
   @ViewChild(MatDatepicker)
-  datepicker: MatDatepicker<Date>;
+  public datepicker: MatDatepicker<Date>;
 
   @ViewChild(MatDatepickerInput)
-  datepickerInput: MatDatepickerInput<Date>;
+  public datepickerInput: MatDatepickerInput<Date>;
 
-  private momentDateAdapter: DateAdapter<MomentDateAdapter>;
-
+  @InputConverter()
+  public textInputEnabled: boolean = true;
   protected _oformat: string = 'L';
   protected olocale: string;
   protected updateLocaleOnChange: boolean = false;
@@ -73,19 +69,21 @@ export class ODateInputComponent extends OFormDataComponent implements AfterView
   protected oTouchUi: boolean;
   protected oStartAt: string;
   protected _filterDate: DateFilterFunction;
-  @InputConverter()
-  textInputEnabled: boolean = true;
   protected _valueType: ODateValueType = 'timestamp';
 
   protected _minDateString: string;
   protected _maxDateString: string;
 
-  private momentSrv: MomentService;
   protected media: ObservableMedia;
-
   protected mediaSubscription: Subscription;
   protected onLanguageChangeSubscription: Subscription;
   protected dateValue: Date;
+
+  @ViewChild('matInputRef')
+  private matInputRef: ElementRef;
+
+  private momentSrv: MomentService;
+  private momentDateAdapter: DateAdapter<MomentDateAdapter>;
 
   constructor(
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
@@ -100,7 +98,16 @@ export class ODateInputComponent extends OFormDataComponent implements AfterView
     this.media = this.injector.get(ObservableMedia);
   }
 
-  ngOnInit() {
+  public static convertToODateValueType(val: any): ODateValueType {
+    let result: ODateValueType = 'timestamp';
+    const lowerVal = (val || '').toLowerCase();
+    if (lowerVal === 'string' || lowerVal === 'date' || lowerVal === 'timestamp' || lowerVal === 'iso-8601') {
+      result = lowerVal;
+    }
+    return result;
+  }
+
+  public ngOnInit(): void {
     this.initialize();
 
     if (!this.olocale) {
@@ -123,8 +130,8 @@ export class ODateInputComponent extends OFormDataComponent implements AfterView
     }
 
     if (this.oMinDate) {
-      let date = new Date(this.oMinDate);
-      let momentD = moment(date);
+      const date = new Date(this.oMinDate);
+      const momentD = moment(date);
       if (momentD.isValid()) {
         this.datepickerInput.min = date;
         this.minDateString = momentD.format(this.oformat);
@@ -132,8 +139,8 @@ export class ODateInputComponent extends OFormDataComponent implements AfterView
     }
 
     if (this.oMaxDate) {
-      let date = new Date(this.oMaxDate);
-      let momentD = moment(date);
+      const date = new Date(this.oMaxDate);
+      const momentD = moment(date);
       if (momentD.isValid()) {
         this.datepickerInput.max = date;
         this.maxDateString = momentD.format(this.oformat);
@@ -148,7 +155,7 @@ export class ODateInputComponent extends OFormDataComponent implements AfterView
     }
   }
 
-  ngAfterViewChecked(): void {
+  public ngAfterViewChecked(): void {
     this.mediaSubscription = this.media.subscribe((change: MediaChange) => {
       if (['xs', 'sm'].indexOf(change.mqAlias) !== -1) {
         this.touchUi = Util.isDefined(this.oTouchUi) ? this.oTouchUi : true;
@@ -159,7 +166,7 @@ export class ODateInputComponent extends OFormDataComponent implements AfterView
     });
   }
 
-  ngOnDestroy() {
+  public ngOnDestroy(): void {
     super.ngOnDestroy();
     if (this.mediaSubscription) {
       this.mediaSubscription.unsubscribe();
@@ -169,11 +176,11 @@ export class ODateInputComponent extends OFormDataComponent implements AfterView
     }
   }
 
-  getValueAsDate(): any {
+  public getValueAsDate(): any {
     return this.dateValue;
   }
 
-  getValue(): any {
+  public getValue(): any {
     let timestampValue = super.getValue();
     if (timestampValue && timestampValue instanceof Date) {
       timestampValue = timestampValue.getTime();
@@ -182,16 +189,16 @@ export class ODateInputComponent extends OFormDataComponent implements AfterView
   }
 
   get showClearButton(): boolean {
-    return this.clearButton && !this.isReadOnly && !this.isDisabled && this.matInputRef.nativeElement.value;
+    return this.clearButton && !this.isReadOnly && this.enabled && this.matInputRef.nativeElement.value;
   }
 
-  open() {
-    if (!this.isReadOnly && !this.isDisabled) {
+  public open(): void {
+    if (!this.isReadOnly && this.enabled) {
       this.datepicker.open();
     }
   }
 
-  onChangeEvent(event: MatDatepickerInputEvent<any>) {
+  public onChangeEvent(event: MatDatepickerInputEvent<any>): void {
     const isValid = event.value && event.value.isValid && event.value.isValid();
     let val = isValid ? event.value.valueOf() : event.value;
     const m = moment(val);
@@ -216,7 +223,7 @@ export class ODateInputComponent extends OFormDataComponent implements AfterView
     });
   }
 
-  onClickInput(e: Event): void {
+  public onClickInput(e: Event): void {
     if (!this.textInputEnabled) {
       this.open();
     }
@@ -263,7 +270,7 @@ export class ODateInputComponent extends OFormDataComponent implements AfterView
     this.datepicker.touchUi = this.touchUi;
   }
 
-  protected ensureODateValueType(val: any) {
+  protected ensureODateValueType(val: any): void {
     if (!Util.isDefined(val)) {
       return val;
     }
@@ -271,7 +278,7 @@ export class ODateInputComponent extends OFormDataComponent implements AfterView
     switch (this.valueType) {
       case 'string':
         if (typeof val === 'string') {
-          let m = moment(val, this.oformat);
+          const m = moment(val, this.oformat);
           if (m.isValid()) {
             this.dateValue = new Date(m.valueOf());
           }
@@ -302,7 +309,7 @@ export class ODateInputComponent extends OFormDataComponent implements AfterView
             result = undefined;
           }
         } else {
-          let m = moment(val);
+          const m = moment(val);
           if (m.isValid()) {
             this.dateValue = new Date(m.valueOf());
           } else {
@@ -319,7 +326,7 @@ export class ODateInputComponent extends OFormDataComponent implements AfterView
     return result;
   }
 
-  protected setFormValue(val: any, options?: IFormValueOptions, setDirty: boolean = false) {
+  protected setFormValue(val: any, options?: IFormValueOptions, setDirty: boolean = false): void {
     let value = val;
     if (val instanceof OFormValue) {
       value = val.value;
@@ -336,14 +343,6 @@ export class ODateInputComponent extends OFormDataComponent implements AfterView
     return this._valueType;
   }
 
-  static convertToODateValueType(val: any): ODateValueType {
-    let result: ODateValueType = 'timestamp';
-    const lowerVal = (val || '').toLowerCase();
-    if (lowerVal === 'string' || lowerVal === 'date' || lowerVal === 'timestamp' || lowerVal === 'iso-8601') {
-      result = lowerVal;
-    }
-    return result;
-  }
 }
 
 @NgModule({
