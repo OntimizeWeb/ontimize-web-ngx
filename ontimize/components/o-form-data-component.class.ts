@@ -85,7 +85,9 @@ export const DEFAULT_INPUTS_O_FORM_DATA_COMPONENT = [
   'readOnly: read-only',
   'clearButton: clear-button',
   'angularValidatorsFn: validators',
-  'appearance'
+  'appearance',
+  'hideRequiredMarker:hide-required-marker',
+  'labelVisible:label-visible'
 ];
 
 export const DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT = [
@@ -108,6 +110,10 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   @InputConverter()
   public clearButton: boolean = false;
   public angularValidatorsFn: ValidatorFn[] = [];
+  @InputConverter()
+  public hideRequiredMarker: boolean = true;
+  @InputConverter()
+  public labelVisible: boolean = true;
 
   /* Outputs */
   public onChange: EventEmitter<Object> = new EventEmitter<Object>();
