@@ -507,6 +507,9 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   }
 
   get floatLabel(): FloatLabelType {
+    if(!this.labelVisible){
+      this.floatLabel = 'never';
+    }
     return this._floatLabel;
   }
 
