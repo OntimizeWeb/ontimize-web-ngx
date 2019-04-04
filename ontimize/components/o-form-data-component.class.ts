@@ -85,7 +85,9 @@ export const DEFAULT_INPUTS_O_FORM_DATA_COMPONENT = [
   'readOnly: read-only',
   'clearButton: clear-button',
   'angularValidatorsFn: validators',
-  'appearance'
+  'appearance',
+  'hideRequiredMarker:hide-required-marker',
+  'labelVisible:label-visible'
 ];
 
 export const DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT = [
@@ -108,6 +110,10 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   @InputConverter()
   public clearButton: boolean = false;
   public angularValidatorsFn: ValidatorFn[] = [];
+  @InputConverter()
+  public hideRequiredMarker: boolean = false;
+  @InputConverter()
+  public labelVisible: boolean = true;
 
   /* Outputs */
   public onChange: EventEmitter<Object> = new EventEmitter<Object>();
@@ -333,13 +339,13 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     return this.defaultValue;
   }
 
-  public setValue(val: any, options?: IFormValueOptions): void {
+  public setValue(val: any, options?: IFormValueOptions, setDirty: boolean = false): void {
     if (!PermissionsUtils.checkEnabledPermission(this.permissions)) {
       return;
     }
     if (this.oldValue !== val) {
       const newValue = val;
-      this.setFormValue(val, options);
+      this.setFormValue(val, options, setDirty);
       const changeType: number = (options && options.hasOwnProperty('changeType')) ? options.changeType : OValueChangeEvent.PROGRAMMATIC_CHANGE;
       this.emitOnValueChange(changeType, newValue, this.oldValue);
       this.oldValue = val;
@@ -349,17 +355,17 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   /**
    * Clears the component value.
    */
-  public clearValue(options?: IFormValueOptions): void {
+  public clearValue(options?: IFormValueOptions, setDirty: boolean = false): void {
     if (!PermissionsUtils.checkEnabledPermission(this.permissions)) {
       return;
     }
-    this.setValue(void 0, options);
+    this.setValue(void 0, options, setDirty);
   }
 
   public onClickClearValue(event: Event): void {
     event.stopPropagation();
     event.preventDefault();
-    this.clearValue({ changeType: OValueChangeEvent.USER_CHANGE });
+    this.clearValue({ changeType: OValueChangeEvent.USER_CHANGE }, true);
   }
 
   /* This method is called in output change event, not emit event onValueChange when oldvalue is same than newvalue*/

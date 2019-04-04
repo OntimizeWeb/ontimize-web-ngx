@@ -1,9 +1,12 @@
-<div fxLayout="row" fxLayoutAlign="space-between center" [formGroup]="getFormGroup()" [matTooltip]="tooltip" [matTooltipClass]="tooltipClass"
-  [matTooltipPosition]="tooltipPosition" [matTooltipShowDelay]="tooltipShowDelay" [matTooltipHideDelay]="tooltipHideDelay">
-  <mat-form-field [appearance]="appearance" [floatLabel]="floatLabel" [class.custom-width]="hasCustomWidth" class="icon-field" fxFlexFill>
-    <mat-label>{{ olabel }}</mat-label>
-    <input matInput type="text" [id]="getAttribute()" [formControlName]="getAttribute()" [placeholder]="placeHolder" (focus)="innerOnFocus($event)"
-      (blur)="innerOnBlur($event)" (change)="onChangeEvent($event)" [readonly]="isReadOnly" [required]="isRequired">
+<div fxLayout="row" fxLayoutAlign="space-between center" [formGroup]="getFormGroup()" [matTooltip]="tooltip"
+  [matTooltipClass]="tooltipClass" [matTooltipPosition]="tooltipPosition" [matTooltipShowDelay]="tooltipShowDelay"
+  [matTooltipHideDelay]="tooltipHideDelay">
+  <mat-form-field [appearance]="appearance" [floatLabel]="floatLabel" [hideRequiredMarker]="hideRequiredMarker"
+    [class.custom-width]="hasCustomWidth" class="icon-field" fxFlexFill>
+    <mat-label *ngIf="labelVisible">{{ olabel }}</mat-label>
+    <input matInput type="text" [id]="getAttribute()" [formControlName]="getAttribute()" [placeholder]="placeHolder"
+      (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)" (change)="onChangeEvent($event)"
+      [readonly]="isReadOnly" [required]="isRequired">
     <button type="button" *ngIf="showClearButton" matSuffix mat-icon-button (click)="onClickClearValue($event)">
       <mat-icon svgIcon="ontimize:close"></mat-icon>
     </button>
