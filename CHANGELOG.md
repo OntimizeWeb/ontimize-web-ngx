@@ -11,10 +11,13 @@
 * **MenuGroup, MenuItem**: new `class` attribute  ([6a4c500](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6a4c500))
 * **o-form-navigation**: allowing to navigate through paginated components (`OServiceComponent`) details ([286ba71](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/286ba71))
 * **o-image**: new `accept-file-type` input ([cd61beb](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/cd61beb))
+* **o-form-data**:new `hide-required-marker` and `label-visible` inputs ([d39db97](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d39db97))
+* **o-time-input**:new `hour-placeholder` and `date-placeholder` inputs ([48d3b9c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/48d3b9c))
 
 ### Bug Fixes
 * **o-table**: fixed error on table store configuration dialog ([ad6c84b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ad6c84b)), closes [#256](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/256)
 * **o-grid**: sort by numeric column ([2b38fb5](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2b38fb5)), closes [#253](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/253)
+* **o-time-input**: impossible to select a different date of 01/01/1970  ([48d3b9c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/48d3b9c)), closes [#255](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/255)
 
 #4.0.1 (2019-03-06)
 ### Features
