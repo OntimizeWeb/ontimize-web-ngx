@@ -11,8 +11,11 @@
 * **MenuGroup, MenuItem**: new `class` attribute  ([6a4c500](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6a4c500))
 * **o-form-navigation**: allowing to navigate through paginated components (`OServiceComponent`) details ([286ba71](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/286ba71))
 * **o-image**: new `accept-file-type` input ([cd61beb](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/cd61beb))
-* **o-form-data**:new `hide-required-marker` and `label-visible` inputs ([d39db97](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d39db97))
-* **o-time-input**:new `hour-placeholder` and `date-placeholder` inputs ([48d3b9c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/48d3b9c))
+* **o-form-data**: new `hide-required-marker` and `label-visible` inputs ([d39db97](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d39db97))
+* **o-time-input**: new `hour-placeholder` and `date-placeholder` inputs ([48d3b9c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/48d3b9c))
+* **o-form-layout-manager**: updating main content when updating, deleting or inserting new data ([20adc1d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/20adc1d)) ([050da7c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/050da7c))
+* **o-table-cell-renderer-service**: listening to editor changes for updating the renderer ([cf56430](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/cf56430)) ([d596c5d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d596c5d))
+* **OFormServiceComponent**: new `onDataLoaded` output ([3d0cf70](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3d0cf70))
 
 ### Bug Fixes
 * **o-table**: fixed error on table store configuration dialog ([ad6c84b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ad6c84b)), closes [#256](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/256)
