@@ -180,7 +180,6 @@ export class OColumn {
   multiline: boolean;
   resizable: boolean;
   DOMWidth: number;
-  padding: number;
 
   constructor(
     attr: string = undefined,
@@ -321,7 +320,7 @@ export class OColumn {
         this.DOMWidth = maxValue;
       }
     }
-    return Util.isDefined(this.DOMWidth) ? (this.DOMWidth - (this.padding || 0)) + 'px' : undefined;
+    return Util.isDefined(this.DOMWidth) ? (this.DOMWidth + 'px') : undefined;
   }
 
   set width(val: string) {
@@ -921,7 +920,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     const self = this;
     this.contextMenuSubscription = this.tableContextMenu.onShow.subscribe((params: IOContextMenuContext) => {
       params.class = 'o-table-context-menu ' + this.rowHeight;
-      
+
       if (params.data && !self.selection.isSelected(params.data.rowValue)) {
         self.selection.clear();
         self.selection.select(params.data.rowValue);
@@ -1309,9 +1308,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       [].slice.call(this.tableHeaderEl.nativeElement.children).forEach(thEl => {
         const oCol: OColumn = self.getOColumnFromTh(thEl);
         if (Util.isDefined(oCol)) {
-          if (!Util.isDefined(oCol.padding)) {
-            oCol.padding = (!thEl.previousElementSibling || !thEl.nextElementSibling) ? OTableComponent.FIRST_LAST_CELL_PADDING : 0;
-          }
           if (!Util.isDefined(oCol.DOMWidth) && thEl.clientWidth > 0) {
             oCol.DOMWidth = thEl.clientWidth;
           }
