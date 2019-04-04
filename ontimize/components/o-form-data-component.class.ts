@@ -339,13 +339,13 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     return this.defaultValue;
   }
 
-  public setValue(val: any, options?: IFormValueOptions): void {
+  public setValue(val: any, options?: IFormValueOptions, setDirty: boolean = false): void {
     if (!PermissionsUtils.checkEnabledPermission(this.permissions)) {
       return;
     }
     if (this.oldValue !== val) {
       const newValue = val;
-      this.setFormValue(val, options);
+      this.setFormValue(val, options, setDirty);
       const changeType: number = (options && options.hasOwnProperty('changeType')) ? options.changeType : OValueChangeEvent.PROGRAMMATIC_CHANGE;
       this.emitOnValueChange(changeType, newValue, this.oldValue);
       this.oldValue = val;
@@ -355,17 +355,17 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   /**
    * Clears the component value.
    */
-  public clearValue(options?: IFormValueOptions): void {
+  public clearValue(options?: IFormValueOptions, setDirty: boolean = false): void {
     if (!PermissionsUtils.checkEnabledPermission(this.permissions)) {
       return;
     }
-    this.setValue(void 0, options);
+    this.setValue(void 0, options, setDirty);
   }
 
   public onClickClearValue(event: Event): void {
     event.stopPropagation();
     event.preventDefault();
-    this.clearValue({ changeType: OValueChangeEvent.USER_CHANGE });
+    this.clearValue({ changeType: OValueChangeEvent.USER_CHANGE }, true);
   }
 
   /* This method is called in output change event, not emit event onValueChange when oldvalue is same than newvalue*/
