@@ -111,7 +111,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   public clearButton: boolean = false;
   public angularValidatorsFn: ValidatorFn[] = [];
   @InputConverter()
-  public hideRequiredMarker: boolean = true;
+  public hideRequiredMarker: boolean = false;
   @InputConverter()
   public labelVisible: boolean = true;
 
