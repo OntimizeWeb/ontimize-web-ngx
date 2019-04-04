@@ -32,6 +32,7 @@ import { OFormLayoutDialogComponent } from './dialog/o-form-layout-dialog.compon
 import { OFormLayoutManagerContentDirective } from './directives/o-form-layout-manager-content.directive';
 import { CanActivateFormLayoutChildGuard } from './guards/o-form-layout-can-activate-child.guard';
 import { OFormLayoutTabGroupComponent } from './tabgroup/o-form-layout-tabgroup.component';
+import { NavigationService } from '../../services/navigation.service';
 
 export interface IDetailComponentData {
   params: any;
@@ -43,6 +44,7 @@ export interface IDetailComponentData {
   modified: boolean;
   url: string;
   rendered?: boolean;
+  insertionMode?: boolean;
 }
 
 export const DEFAULT_INPUTS_O_FORM_LAYOUT_MANAGER = [
@@ -126,6 +128,11 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
 
   protected addingGuard: boolean = false;
 
+  public navigationService: NavigationService;
+
+  public markForUpdate: boolean = false;
+  public onTriggerUpdate: EventEmitter<any> = new EventEmitter<any>();
+
   constructor(
     protected injector: Injector,
     protected router: Router,
@@ -138,6 +145,7 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
     this.oFormLayoutManagerService = this.injector.get(OFormLayoutManagerService);
     this.localStorageService = this.injector.get(LocalStorageService);
     this.translateService = this.injector.get(OTranslateService);
+    this.navigationService = this.injector.get(NavigationService);
   }
 
   public ngOnInit(): void {
@@ -303,6 +311,9 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
       dialogConfig.maxHeight = this.dialogMaxHeight;
     }
     this.dialogRef = this.dialog.open(OFormLayoutDialogComponent, dialogConfig);
+    this.dialogRef.afterClosed().subscribe(() => {
+      this.updateIfNeeded();
+    });
   }
 
   public getFormCacheData(formId: string): IDetailComponentData {
@@ -328,11 +339,11 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
   }
 
   public getLabelFromData(data: any): string {
-    // data === undefined means that inner form is in insertion mode
     let label = '';
-    if (!Util.isDefined(data)) {
-      label = this.translateService.get('LAYOUT_MANANGER.INSERTION_MODE_TITLE');
-    } else if (this.labelColsArray.length !== 0) {
+    const isDataDefined = Util.isDefined(data);
+    if (isDataDefined && data.hasOwnProperty('new_tab_title')) {
+      label = this.translateService.get(data['new_tab_title']);
+    } else if (isDataDefined && this.labelColsArray.length !== 0) {
       this.labelColsArray.forEach((col, idx) => {
         if (data[col] !== undefined) {
           label += data[col] + ((idx < this.labelColsArray.length - 1) ? this.separator : '');
@@ -342,11 +353,19 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
     return label;
   }
 
-  public updateNavigation(data: any, id: string): void {
+  public updateNavigation(data: any, id: string, insertionMode?: boolean): void {
     if (this.isTabMode()) {
-      this.oTabGroup.updateNavigation(data, id);
+      this.oTabGroup.updateNavigation(data, id, insertionMode);
     } else if (this.isDialogMode()) {
       this.dialogRef.componentInstance.updateNavigation(data, id);
+    }
+  }
+
+  public updateActiveData(data: any) {
+    if (this.isTabMode()) {
+      this.oTabGroup.updateActiveData(data);
+    } else if (this.isDialogMode()) {
+      this.dialogRef.componentInstance.updateActiveData(data);
     }
   }
 
@@ -425,6 +444,12 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
     return actRoute.routeConfig;
   }
 
+  public updateIfNeeded() {
+    if (this.markForUpdate) {
+      this.markForUpdate = false;
+      this.onTriggerUpdate.emit();
+    }
+  }
 }
 
 @NgModule({

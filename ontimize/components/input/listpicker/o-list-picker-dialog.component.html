@@ -1,8 +1,7 @@
-
 <div class="title-container" *ngIf="filter">
   <o-search-input #searchInput (onSearch)="onFilterList($event)" class="o-list-picker-search" float-label="no"></o-search-input>
 </div>
-<div mat-dialog-content (scroll)="onScroll($event)" [class.o-list-picker-has-filter]="filter">
+<div mat-dialog-content (scroll)="onScroll($event)" [class.o-list-picker-has-filter]="filter" fxFlex>
   <mat-list>
     <mat-list-item *ngIf="isEmptyData()">
       {{ 'LIST.EMPTY' | oTranslate }}

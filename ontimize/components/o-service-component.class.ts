@@ -1,17 +1,17 @@
 import { ElementRef, Injector } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { Codes, Util } from '../utils';
-import { InputConverter } from '../decorators';
 import { OFilterBuilderComponent } from '../components';
-import { OFormComponent } from './form/o-form.component';
-import { FilterExpressionUtils } from './filter-expression.utils';
-import { OTranslateService, NavigationService, PermissionsService } from '../services';
-import { OListInitializationOptions } from './list/o-list.component';
-import { OTableInitializationOptions } from './table/o-table.component';
-import { OFormLayoutManagerComponent } from '../layouts/form-layout/o-form-layout-manager.component';
+import { InputConverter } from '../decorators';
 import { OFormLayoutDialogComponent } from '../layouts/form-layout/dialog/o-form-layout-dialog.component';
+import { OFormLayoutManagerComponent } from '../layouts/form-layout/o-form-layout-manager.component';
+import { NavigationService, OTranslateService, PermissionsService } from '../services';
+import { Codes, Util } from '../utils';
+import { FilterExpressionUtils } from './filter-expression.utils';
+import { OFormComponent } from './form/o-form.component';
+import { OListInitializationOptions } from './list/o-list.component';
 import { DEFAULT_INPUTS_O_SERVICE_BASE_COMPONENT, OServiceBaseComponent } from './o-service-base-component.class';
+import { OTableInitializationOptions } from './table/o-table.component';
 
 export const DEFAULT_INPUTS_O_SERVICE_COMPONENT = [
   ...DEFAULT_INPUTS_O_SERVICE_BASE_COMPONENT,
@@ -22,9 +22,9 @@ export const DEFAULT_INPUTS_O_SERVICE_COMPONENT = [
   'ovisible: visible',
 
   // enabled [no|yes]: editability. Default: yes.
-  'oenabled: enabled',
+  'enabled',
 
-  //controls [string][yes|no|true|false]:
+  // controls [string][yes|no|true|false]:
   'controls',
 
   // detail-mode [none|click|doubleclick]: way to open the detail form of a row. Default: 'click'.
@@ -119,7 +119,7 @@ export class OServiceComponent extends OServiceBaseComponent {
   protected router: Router;
   protected actRoute: ActivatedRoute;
 
-  protected onMainTabSelectedSubscription: any;
+  protected onTriggerUpdateSubscription: any;
   protected formLayoutManager: OFormLayoutManagerComponent;
   protected oFormLayoutDialog: OFormLayoutDialogComponent;
 
@@ -167,8 +167,8 @@ export class OServiceComponent extends OServiceBaseComponent {
       this.elRef.nativeElement.removeAttribute('title');
     }
 
-    if (this.formLayoutManager && this.formLayoutManager.isTabMode()) {
-      this.onMainTabSelectedSubscription = this.formLayoutManager.onMainTabSelected.subscribe(() => {
+    if (this.formLayoutManager && this.formLayoutManager.isMainComponent(this)) {
+      this.onTriggerUpdateSubscription = this.formLayoutManager.onTriggerUpdate.subscribe(() => {
         this.reloadData();
       });
     }
@@ -176,8 +176,8 @@ export class OServiceComponent extends OServiceBaseComponent {
 
   destroy() {
     super.destroy();
-    if (this.onMainTabSelectedSubscription) {
-      this.onMainTabSelectedSubscription.unsubscribe();
+    if (this.onTriggerUpdateSubscription) {
+      this.onTriggerUpdateSubscription.unsubscribe();
     }
   }
 
@@ -306,7 +306,26 @@ export class OServiceComponent extends OServiceBaseComponent {
       }
     }
     if (result.length > 0 && !this.oFormLayoutDialog) {
-      this.storeNavigationFormRoutes(modeRoute, this.getKeysValues());
+      this.storeNavigationFormRoutes(modeRoute, this.getQueryConfiguration());
+    }
+    return result;
+  }
+
+  protected getQueryConfiguration() {
+    let result = {
+      keysValues: this.getKeysValues()
+    };
+    if (this.pageable) {
+      result = Object.assign({
+        serviceType: this.serviceType,
+        queryArguments: this.queryArguments,
+        entity: this.entity,
+        service: this.service,
+        queryMethod: this.pageable ? this.paginatedQueryMethod : this.queryMethod,
+        totalRecordsNumber: this.getTotalRecordsNumber(),
+        queryRows: this.queryRows,
+        queryRecordOffset: (this.state.queryRecordOffset - this.queryRows)
+      }, result);
     }
     return result;
   }
@@ -400,14 +419,14 @@ export class OServiceComponent extends OServiceBaseComponent {
     return filter;
   }
 
-  protected storeNavigationFormRoutes(activeMode: string, keysValues: any = undefined) {
+  protected storeNavigationFormRoutes(activeMode: string, queryConf: any = undefined) {
     const mainFormLayoutComp = this.formLayoutManager ? Util.isDefined(this.formLayoutManager.isMainComponent(this)) : undefined;
     this.navigationService.storeFormRoutes({
       mainFormLayoutManagerComponent: mainFormLayoutComp,
       detailFormRoute: this.detailFormRoute,
       editFormRoute: this.editFormRoute,
       insertFormRoute: Util.isDefined(this.insertFormRoute) ? this.insertFormRoute : Codes.DEFAULT_INSERT_ROUTE
-    }, activeMode, keysValues);
+    }, activeMode, queryConf);
   }
 
   protected saveDataNavigationInLocalStorage(): void {

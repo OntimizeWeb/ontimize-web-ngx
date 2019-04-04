@@ -34,7 +34,7 @@ export const DEFAULT_OUTPUTS_O_APP_SIDENAV_MENU_ITEM = [
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
-    '[class.o-app-sidenav-menu-item]': 'true',
+    '[class]': 'getClass()',
     '[attr.disabled]': 'disabled'
   }
 })
@@ -260,6 +260,15 @@ export class OAppSidenavMenuItemComponent implements OnInit, AfterViewInit, OnDe
       result += ': ' + this.translateService.get(this.menuItem.tooltip);
     }
     return result;
+  }
+
+  
+  getClass() {
+    let className = 'o-app-sidenav-menu-item';
+    if (this.menuItem.class) {
+      className += ' ' + this.menuItem.class;
+    }
+    return className;
   }
 
 }

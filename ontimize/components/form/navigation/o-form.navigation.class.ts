@@ -128,13 +128,13 @@ export class OFormNavigationClass {
       const self = this;
       this.urlParamSub = this.actRoute.params.subscribe(params => {
         self.urlParams = params;
-        self.parseUrlParams();
+        this.parseUrlParams();
       });
     }
   }
 
   private parseUrlParams() {
-    if (this.urlParams[Codes.PARENT_KEYS_KEY] !== undefined) {
+    if (Util.isDefined(this.urlParams) && Util.isDefined(this.urlParams[Codes.PARENT_KEYS_KEY])) {
       this.form.formParentKeysValues = Util.decodeParentKeys(this.urlParams[Codes.PARENT_KEYS_KEY]);
     }
     //TODO Obtain 'datatype' of each key contained into urlParams for
@@ -178,16 +178,16 @@ export class OFormNavigationClass {
       return filter;
     }
     if (this.form.keysArray) {
-      this.form.keysArray.map((key, index) => {
+      this.form.keysArray.forEach((key, index) => {
         if (objectParam[key]) {
           filter[key] = SQLTypes.parseUsingSQLType(objectParam[key], this.form.keysSqlTypesArray[index]);
         }
       });
     }
-    Object.keys(this.form._pKeysEquiv).forEach(item => {
+    Object.keys(this.form._pKeysEquiv).forEach((item, index) => {
       let urlVal = objectParam[this.form._pKeysEquiv[item]];
       if (urlVal) {
-        filter[item] = urlVal;
+        filter[item] = SQLTypes.parseUsingSQLType(urlVal, this.form.keysSqlTypesArray[index]);
       }
     });
     return filter;
@@ -230,16 +230,18 @@ export class OFormNavigationClass {
   }
 
   updateNavigation() {
-    if (this.formLayoutManager && this.formLayoutManager.allowToUpdateNavigation(this.form.oattr)) {
-      let formData = undefined;
-      if (!this.form.isInInsertMode()) {
-        formData = {};
+    if (this.formLayoutManager) {
+      const isInInsertMode = this.form.isInInsertMode();
+      let formData = {};
+      if (isInInsertMode) {
+        formData['new_tab_title'] = 'LAYOUT_MANANGER.INSERTION_MODE_TITLE';
+      } else if (this.formLayoutManager.allowToUpdateNavigation(this.form.oattr)) {
         const self = this;
         Object.keys(this.form.formData).forEach(key => {
           formData[key] = self.form.formData[key].value;
         });
       }
-      this.formLayoutManager.updateNavigation(formData, this.id);
+      this.formLayoutManager.updateNavigation(formData, this.id, isInInsertMode);
     }
   }
 
@@ -275,6 +277,17 @@ export class OFormNavigationClass {
   stayInRecordAfterInsert(insertedKeys: Object) {
     if (this.formLayoutManager) {
       this.form.setInitialMode();
+      const self = this;
+      const subscription = this.form.onDataLoaded.subscribe(() => {
+        const keys = self.form.getKeysValues();
+        self.formLayoutManager.updateActiveData({ params: keys });
+        const cacheData: IDetailComponentData = self.formLayoutManager.getFormCacheData(self.id);
+        if (Util.isDefined(cacheData)) {
+          self.urlParams = cacheData.params;
+        }
+        subscription.unsubscribe();
+      });
+      this.form.queryData(insertedKeys);
     } else if (this.navigationService && this.form.keysArray && insertedKeys) {
       let params: any[] = [];
       this.form.keysArray.forEach((current, index) => {

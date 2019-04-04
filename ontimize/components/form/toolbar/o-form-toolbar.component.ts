@@ -309,7 +309,7 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
     this._dialogService.confirm('CONFIRM', 'MESSAGES.CONFIRM_DELETE').then(res => {
       if (res === true) {
         this._form.executeToolbarAction(OFormComponent.DELETE_ACTION).subscribe(resp => {
-          //TODO mostrar un toast indicando que la operación fue correcta...
+          this._form.onDelete.emit(resp);
           this.onCloseDetail();
         }, err => {
           console.log('OFormToolbar.delete error');

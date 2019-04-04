@@ -2,6 +2,7 @@ import { AfterViewInit, ElementRef, forwardRef, Inject, Injector, OnDestroy, Opt
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material';
 
 import { OFormComponent } from '../form/form-components';
+import { Util } from '../../utils';
 
 export const DEFAULT_INPUTS_O_CONTAINER = [
   'oattr: attr',
@@ -117,7 +118,11 @@ export class OContainerComponent implements AfterViewInit, OnDestroy {
   }
 
   public isAppearanceOutline(): boolean {
-    return this.appearance === OContainerComponent.APPEARANCE_OUTLINE || (this.matFormDefaultOption && this.matFormDefaultOption.appearance === OContainerComponent.APPEARANCE_OUTLINE);
+    let isAppearanceOutline = (this.matFormDefaultOption && this.matFormDefaultOption.appearance === OContainerComponent.APPEARANCE_OUTLINE);
+    if (Util.isDefined(this.appearance)) {
+      isAppearanceOutline = this.appearance === OContainerComponent.APPEARANCE_OUTLINE;
+    }
+    return isAppearanceOutline;
   }
 
   public hasTitleInAppearanceOutline(): boolean {

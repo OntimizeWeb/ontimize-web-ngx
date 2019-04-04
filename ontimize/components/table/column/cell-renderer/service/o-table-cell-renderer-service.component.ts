@@ -56,6 +56,8 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
   protected querySubscription: Subscription;
   protected dialogService: DialogService;
 
+  protected editorSuscription: Subscription;
+
   constructor(protected injector: Injector) {
     super(injector);
     this.dialogService = injector.get(DialogService);
@@ -63,7 +65,7 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
 
   public ngOnInit(): void {
     if (this.table) {
-      const oCol: OColumn = this.table.getOColumn(this.tableColumn.attr);
+      const oCol: OColumn = this.table.getOColumn(this.column);
       oCol.definition.contentAlign = oCol.definition.contentAlign ? oCol.definition.contentAlign : 'center';
     }
 
@@ -73,8 +75,23 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
     this.configureService();
   }
 
+  public ngAfterViewInit() {
+    const oCol: OColumn = this.table.getOColumn(this.column);
+    if (Util.isDefined(oCol.editor)) {
+      const self = this;
+      this.editorSuscription = oCol.editor.onPostUpdateRecord.subscribe((data: any) => {
+        self.queryData(data[self.tableColumn.attr], data);
+      });
+    }
+  }
+
+  public ngOnDestroy() {
+    if (this.editorSuscription) {
+      this.editorSuscription.unsubscribe();
+    }
+  }
+
   public getDescriptionValue(cellvalue: any, rowValue: any): String {
-    // let keyValue = rowValue[this.column];
     if (cellvalue !== undefined && this.cellValues.indexOf(cellvalue) === -1) {
       this.queryData(cellvalue, rowValue);
       this.cellValues.push(cellvalue);
@@ -84,7 +101,6 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
 
   public queryData(cellvalue, parentItem?: any): void {
     const self = this;
-
     if (!this.dataService || !(this.queryMethod in this.dataService) || !this.entity) {
       console.warn('Service not properly configured! aborting query');
       return;

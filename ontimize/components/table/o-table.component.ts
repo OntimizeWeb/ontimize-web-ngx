@@ -140,7 +140,10 @@ export const DEFAULT_INPUTS_O_TABLE = [
 
   'orderable',
 
-  'resizable'
+  'resizable',
+
+  // enabled [yes|no|true|false]: enables de table. Default: yes
+  'enabled'
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE = [
@@ -335,6 +338,10 @@ export class OColumn {
     return this._width;
   }
 
+  getWidthToStore(): any {
+    return this._width || this.DOMWidth;
+  }
+
   setWidth(val: number) {
     this.width = val + 'px';
     this.DOMWidth = val;
@@ -404,6 +411,7 @@ export interface OTableInitializationOptions {
     '[class.o-table]': 'true',
     '[class.ontimize-table]': 'true',
     '[class.o-table-fixed]': 'fixedHeader',
+    '[class.o-table-disabled]': '!enabled',
     '(document:click)': 'handleDOMClick($event)'
   }
 })
@@ -513,6 +521,14 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   orderable: boolean = true;
   @InputConverter()
   resizable: boolean = true;
+  protected _enabled: boolean = true;
+  get enabled(): boolean {
+    return this._enabled;
+  }
+  set enabled(val: boolean) {
+    val = Util.parseBoolean(String(val));
+    this._enabled = val;
+  }
 
   protected _selectAllCheckboxVisible;
   @InputConverter()
@@ -905,9 +921,10 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     const self = this;
     this.contextMenuSubscription = this.tableContextMenu.onShow.subscribe((params: IOContextMenuContext) => {
       params.class = 'o-table-context-menu ' + this.rowHeight;
-      if (params.data && !self.selection.isSelected(params.data)) {
+      
+      if (params.data && !self.selection.isSelected(params.data.rowValue)) {
         self.selection.clear();
-        self.selection.select(params.data);
+        self.selection.select(params.data.rowValue);
       }
     });
   }
@@ -1259,7 +1276,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     this.daoTable.dataChange.next(data);
     this.daoTable.isLoadingResults = false;
     this.updateScrolledState();
-    if (Util.isDefined(data) && data.length === 0) {
+    if (Util.isDefined(data)) {
       this.oTableExpandedFooter.updateMessageNotResults(data);
     }
     if (this.pageable) {
@@ -2001,6 +2018,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       this.staticData = data;
       this.daoTable.usingStaticData = true;
       this.daoTable.setDataArray(this.staticData);
+      this.cd.detectChanges();
     }
   }
 

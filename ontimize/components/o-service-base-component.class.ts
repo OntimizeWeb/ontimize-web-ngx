@@ -137,6 +137,7 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
 
   protected queryOnEventSubscription: Subscription;
   public cd: ChangeDetectorRef;
+  protected queryArguments: any[];
 
   constructor(
     protected injector: Injector
@@ -297,6 +298,7 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
       console.warn('Component has received not supported service data. Supported data are Array or Object');
       this.dataArray = [];
     }
+    this.cd.detectChanges();
   }
 
   setFormComponent(form: OFormComponent): void {
@@ -333,6 +335,7 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
       }
       this.loaderSubscription = this.load();
       const self = this;
+      this.queryArguments = queryArguments;
       this.querySubscription = this.dataService[queryMethodName].apply(this.dataService, queryArguments).subscribe(res => {
         let data = undefined;
         let sqlTypes = undefined;
@@ -437,7 +440,7 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
   getQueryArguments(filter: Object, ovrrArgs?: OQueryDataArgs): Array<any> {
     const compFilter = this.getComponentFilter(filter);
     const queryCols = this.getAttributesValuesToQuery();
-    let sqlTypes = (ovrrArgs && ovrrArgs.hasOwnProperty('sqltypes')) ? ovrrArgs.sqltypes : this.form?this.form.getAttributesSQLTypes():{};
+    let sqlTypes = (ovrrArgs && ovrrArgs.hasOwnProperty('sqltypes')) ? ovrrArgs.sqltypes : this.form ? this.form.getAttributesSQLTypes() : {};
 
     let queryArguments = [compFilter, queryCols, this.entity, sqlTypes];
     if (this.pageable) {

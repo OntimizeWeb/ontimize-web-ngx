@@ -1,8 +1,8 @@
-import { Component, ViewChild, AfterViewInit, Injector, ChangeDetectionStrategy } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, Injector, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatDialogRef, MatListOption, MatSelectionList, MatCheckboxChange } from '@angular/material';
-import { OTableBaseDialogClass } from '../o-table-base-dialog.class';
+import { MatCheckboxChange, MatDialogRef, MatListOption, MatSelectionList } from '@angular/material';
 
+import { OTableBaseDialogClass } from '../o-table-base-dialog.class';
 
 @Component({
   moduleId: module.id,
@@ -14,26 +14,31 @@ import { OTableBaseDialogClass } from '../o-table-base-dialog.class';
 export class OTableStoreConfigurationDialogComponent extends OTableBaseDialogClass implements AfterViewInit {
 
   @ViewChild('propertiesList')
-  propertiesList: MatSelectionList;
+  public propertiesList: MatSelectionList;
 
-  properties: Array<any> = [{
+  public properties: any[] = [{
     property: 'sort',
     name: 'TABLE.DIALOG.PROPERTIES.SORT',
+    info: 'TABLE.DIALOG.PROPERTIES.SORT.INFO'
   }, {
     property: 'columns-display',
-    name: 'TABLE.DIALOG.PROPERTIES.COLUMNS_DISPLAY'
+    name: 'TABLE.DIALOG.PROPERTIES.COLUMNS_DISPLAY',
+    info: 'TABLE.DIALOG.PROPERTIES.COLUMNS_DISPLAY.INFO'
   }, {
     property: 'quick-filter',
-    name: 'TABLE.DIALOG.PROPERTIES.QUICK_FILTER'
+    name: 'TABLE.DIALOG.PROPERTIES.QUICK_FILTER',
+    info: 'TABLE.DIALOG.PROPERTIES.QUICK_FILTER.INFO'
   }, {
     property: 'columns-filter',
-    name: 'TABLE.DIALOG.PROPERTIES.COLUMNS_FILTER'
+    name: 'TABLE.DIALOG.PROPERTIES.COLUMNS_FILTER',
+    info: 'TABLE.DIALOG.PROPERTIES.COLUMNS_FILTER.INFO'
   }, {
     property: 'page',
-    name: 'TABLE.DIALOG.PROPERTIES.PAGE'
+    name: 'TABLE.DIALOG.PROPERTIES.PAGE',
+    info: 'TABLE.DIALOG.PROPERTIES.PAGE.INFO'
   }];
 
-  formGroup: FormGroup = new FormGroup({
+  public formGroup: FormGroup = new FormGroup({
     name: new FormControl('', [
       Validators.required
     ]),
@@ -48,28 +53,28 @@ export class OTableStoreConfigurationDialogComponent extends OTableBaseDialogCla
     this.setFormControl(this.formGroup.get('name'));
   }
 
-  ngAfterViewInit(): void {
+  public ngAfterViewInit(): void {
     this.propertiesList.selectAll();
   }
 
-  areAllSelected(): boolean {
+  public areAllSelected(): boolean {
     return this.propertiesList && this.propertiesList.options && this.propertiesList.options.length === this.propertiesList.selectedOptions.selected.length;
   }
 
-  onSelectAllChange(event: MatCheckboxChange) {
+  public onSelectAllChange(event: MatCheckboxChange): void {
     event.checked ? this.propertiesList.selectAll() : this.propertiesList.deselectAll();
   }
 
-  getConfigurationAttributes(): any {
+  public getConfigurationAttributes(): any {
     return this.formGroup.value;
   }
 
-  getSelectedTableProperties(): any[] {
-    let selected: MatListOption[] = this.propertiesList.selectedOptions.selected;
+  public getSelectedTableProperties(): any[] {
+    const selected: MatListOption[] = this.propertiesList.selectedOptions.selected;
     return selected.length ? selected.map(item => item.value) : [];
   }
 
-  isIndeterminate(): boolean {
+  public isIndeterminate(): boolean {
     return !this.areAllSelected();
   }
 

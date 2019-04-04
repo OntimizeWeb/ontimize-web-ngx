@@ -1,7 +1,7 @@
-import { Component, Inject, Injector, forwardRef, ElementRef, EventEmitter, Optional, NgModule, ViewEncapsulation, ViewChild, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
+import { Component, Inject, Injector, forwardRef, ElementRef, EventEmitter, Optional, NgModule, ViewEncapsulation, ViewChild, OnInit, AfterViewInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormGroup } from '@angular/forms';
-import { merge } from 'rxjs';
+import { merge, Subscription } from 'rxjs';
 import moment from 'moment';
 
 import { Util } from '../../../utils';
@@ -29,7 +29,9 @@ export const DEFAULT_INPUTS_O_TIME_INPUT = [
   'oHourFormat: hour-format',
   'oHourMin: hour-min',
   'oHourMax: hour-max',
-  'oHourTextInputEnabled: hour-text-input-enabled'
+  'oHourTextInputEnabled: hour-text-input-enabled',
+  'oHourPlaceholder:hour-placeholder',
+  'oDatePlaceholder:date-placeholder'
 ];
 
 export const DEFAULT_OUTPUTS_O_TIME_INPUT = [
@@ -69,6 +71,8 @@ export class OTimeInputComponent extends OFormDataComponent implements OnInit, A
   oHourMax: string;
   @InputConverter()
   oHourTextInputEnabled: boolean = true;
+  oHourPlaceholder = '';
+  oDatePlaceholder = '';
 
   protected blockGroupValueChanges: boolean;
 
@@ -83,10 +87,13 @@ export class OTimeInputComponent extends OFormDataComponent implements OnInit, A
   @ViewChild('hourInput')
   protected hourInput: OHourInputComponent;
 
+  subscription: Subscription = new Subscription();
+
   constructor(
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
     elRef: ElementRef,
-    injector: Injector) {
+    injector: Injector,
+    protected cd: ChangeDetectorRef) {
     super(form, elRef, injector);
     this._defaultSQLTypeKey = 'DATE';
   }
@@ -94,7 +101,7 @@ export class OTimeInputComponent extends OFormDataComponent implements OnInit, A
   ngOnInit() {
     super.ngOnInit();
     const self = this;
-    merge(this.dateInput.onValueChange, this.hourInput.onValueChange).subscribe((event: OValueChangeEvent) => {
+    const mergeSubscription = merge(this.dateInput.onValueChange, this.hourInput.onValueChange).subscribe((event: OValueChangeEvent) => {
       if (event.isUserChange()) {
         self.updateComponentValue();
         var newValue = self._fControl.value;
@@ -102,6 +109,15 @@ export class OTimeInputComponent extends OFormDataComponent implements OnInit, A
         self.oldValue = newValue;
       }
     });
+
+    this.subscription.add(mergeSubscription);
+
+    this._fControl.markAsTouched = function(){
+      self.dateInput.getFormControl().markAsTouched();
+      self.hourInput.getFormControl().markAsTouched();
+    }
+
+
   }
 
   protected updateComponentValue() {
@@ -109,12 +125,12 @@ export class OTimeInputComponent extends OFormDataComponent implements OnInit, A
       this.value = new OFormValue();
     }
     let timeValue;
-    // let values = this.formGroup.getRawValue();
+    let values = this.formGroup.getRawValue();
     try {
-      // const dateVal = (values['dateInput'] ? moment(values['dateInput']) : moment()).startOf('day').valueOf();
+      const dateVal = (values['dateInput'] ? moment(values['dateInput']) : moment()).startOf('day').valueOf();
       const hourVal = this.hourInput.getValueAsTimeStamp() || 0;
-      // timeValue = dateVal + hourVal;
-      timeValue = hourVal;
+      timeValue = dateVal + hourVal;
+      //timeValue = hourVal;
     } catch (e) {
       //
     }
@@ -168,7 +184,6 @@ export class OTimeInputComponent extends OFormDataComponent implements OnInit, A
       this.formGroup.registerControl('dateInput', this.dateInput.getFormControl());
     }
     if (this.hourInput) {
-      this.hourInput.placeHolder = undefined;
       if (this.hourInput.getFormControl()) {
         this.formGroup.registerControl('hourInput', this.hourInput.getFormControl());
       }
@@ -216,6 +231,13 @@ export class OTimeInputComponent extends OFormDataComponent implements OnInit, A
     if (this.hourInput) {
       this.hourInput.setValue(hourValue);
     }
+
+    this.cd.detectChanges();
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+    
   }
 }
 

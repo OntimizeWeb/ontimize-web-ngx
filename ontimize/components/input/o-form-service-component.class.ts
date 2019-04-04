@@ -49,7 +49,8 @@ export const DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT = [
 
 export const DEFAULT_OUTPUTS_O_FORM_SERVICE_COMPONENT = [
   ...DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT,
-  'onSetValueOnValueChange'
+  'onSetValueOnValueChange',
+  'onDataLoaded'
 ];
 
 export class OFormServiceComponent extends OFormDataComponent {
@@ -81,6 +82,7 @@ export class OFormServiceComponent extends OFormDataComponent {
 
   /* Outputs */
   public onSetValueOnValueChange: EventEmitter<Object> = new EventEmitter<Object>();
+  public onDataLoaded: EventEmitter<Object> = new EventEmitter<Object>();
 
   /* Internal variables */
   protected dataArray: any[] = [];
@@ -249,7 +251,6 @@ export class OFormServiceComponent extends OFormDataComponent {
         } else {
           console.log('error');
         }
-
         //window.setTimeout(() => { this.loading = false; self.loadingSubject.next(false); self.loaderSubscription.unsubscribe(); }, 10000);
         self.loadingSubject.next(false);
         self.loaderSubscription.unsubscribe();
@@ -280,6 +281,7 @@ export class OFormServiceComponent extends OFormDataComponent {
       console.warn('Component has received not supported service data. Supported data are Array or not empty Object');
       this.dataArray = [];
     }
+    this.onDataLoaded.emit(this.dataArray);
   }
 
   syncDataIndex(queryIfNotFound: boolean = true) {

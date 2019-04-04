@@ -1,19 +1,18 @@
-<div fxLayout="row" fxLayoutAlign="space-between center" [formGroup]="getFormGroup()" [matTooltip]="tooltip"
-  [matTooltipClass]="tooltipClass" [matTooltipPosition]="tooltipPosition" [matTooltipShowDelay]="tooltipShowDelay"
-  [matTooltipHideDelay]="tooltipHideDelay" (click)="onClickInput($event)">
+<div fxLayout="row" fxLayoutAlign="space-between center" [formGroup]="getFormGroup()" [matTooltip]="tooltip" [matTooltipClass]="tooltipClass"
+  [matTooltipPosition]="tooltipPosition" [matTooltipShowDelay]="tooltipShowDelay" [matTooltipHideDelay]="tooltipHideDelay"
+  (click)="onClickInput($event)">
 
-  <mat-form-field [appearance]="appearance" [floatLabel]="floatLabel" fxFlexFill>
-    <mat-label>{{ olabel }}</mat-label>
+  <mat-form-field [appearance]="appearance" [floatLabel]="floatLabel" fxFlexFill [hideRequiredMarker]="hideRequiredMarker">
+    <mat-label *ngIf="labelVisible">{{ olabel }}</mat-label>
     <input matInput [ngxTimepicker]="picker" [id]="getAttribute()" [placeholder]="placeHolder" [formControlName]="getAttribute()"
-      [readonly]="isReadOnly || !textInputEnabled" (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)"
-      [required]="isRequired" [format]="format" (change)="onChangeEvent($event)" [min]="min" [max]="max" [value]="getValueAsString()"
-      (keydown)="onKeyDown($event)">
+      [readonly]="isReadOnly || !textInputEnabled" (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)" [required]="isRequired"
+      [format]="format" (change)="onChangeEvent($event)" [min]="min" [max]="max" [value]="getValueAsString()" (keydown)="onKeyDown($event)">
 
     <ngx-material-timepicker #picker (closed)="onTimepickerClosed()"></ngx-material-timepicker>
     <button type="button" *ngIf="showClearButton" matSuffix mat-icon-button (click)="onClickClearValue($event)">
       <mat-icon svgIcon="ontimize:close"></mat-icon>
     </button>
-    <button type="button" matSuffix mat-icon-button (click)="open($event)" [disabled]="isReadOnly || isDisabled">
+    <button type="button" matSuffix mat-icon-button (click)="open($event)" [disabled]="isReadOnly || !enabled">
       <mat-icon svgIcon="ontimize:clock "></mat-icon>
     </button>
     <mat-error *ngIf="hasError('required')" text="{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }} "></mat-error>

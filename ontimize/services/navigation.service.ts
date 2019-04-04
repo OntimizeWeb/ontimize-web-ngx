@@ -24,6 +24,7 @@ export class ONavigationItem {
   formRoutes: ONavigationRoutes;
   formLayoutRoutes: ONavigationRoutes;
   keysValues: any;
+  queryConfiguration: any;
 
   constructor(value: Object) {
     this.url = value['url'] ? value['url'] : '';
@@ -33,6 +34,7 @@ export class ONavigationItem {
     this.formRoutes = value['formRoutes'];
     this.activeFormMode = value['activeFormMode'];
     this.keysValues = value['keysValues'];
+    this.queryConfiguration = value['queryConfiguration'];
   }
 
   getActiveModePath(): string {
@@ -52,7 +54,12 @@ export class ONavigationItem {
       this.formLayoutRoutes = storedItem.formLayoutRoutes;
       this.activeFormMode = storedItem.activeFormMode;
       this.keysValues = storedItem.keysValues;
+      this.queryConfiguration = storedItem.queryConfiguration;
     }
+  }
+
+  isInsertFormRoute(): boolean {
+    return this.activeFormMode === 'insertFormRoute';
   }
 
   getInsertFormRoute(): string {
@@ -285,11 +292,17 @@ export class NavigationService implements ILocalStorageComponent {
     ObservableWrapper.callEmit(this._sidenavEmitter, 'close');
   }
 
-  storeFormRoutes(routes: ONavigationRoutes, activeMode: string, keysValues: any = undefined) {
+  storeFormRoutes(routes: ONavigationRoutes, activeMode: string, queryConf: any = undefined) {
     if (this.navigationItems.length > 0) {
       this.navigationItems[this.navigationItems.length - 1].setFormRoutes(routes);
       this.navigationItems[this.navigationItems.length - 1].activeFormMode = activeMode;
-      this.navigationItems[this.navigationItems.length - 1].keysValues = keysValues;
+      if (queryConf) {
+        this.navigationItems[this.navigationItems.length - 1].keysValues = queryConf.keysValues;
+        delete queryConf.keysValues;
+        if (Object.keys(queryConf).length > 0) {
+          this.navigationItems[this.navigationItems.length - 1].queryConfiguration = queryConf;
+        }
+      }
       this.storeNavigation();
     }
   }
