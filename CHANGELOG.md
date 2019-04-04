@@ -1,3 +1,7 @@
+## 4.0.3
+### Features
+* **o-combo**: new `searchable` input ([2ae599d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2ae599d))
+
 ## 4.0.2 (2019-04-04)
 ### Features
 * **o-form**:
