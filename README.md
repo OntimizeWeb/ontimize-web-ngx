@@ -12,7 +12,11 @@ To try Ontimize Web today, visit the [Ontimize Web Docs](https://ontimizeweb.git
 
 ### Ontimize Web Examples
 
-There is a practical [Quick Start App](https://github.com/OntimizeWeb/ontimize-web-ngx-quickstart), a perfect starting point for building your own Ontimize Web app.
+View all the examples in action at [Ontimize Web](https://try.imatia.com/ontimizeweb/).
+
+### Ontimize Web Getting Started
+
+There is a practical [Getting Started](https://github.com/OntimizeWeb/ontimize-web-ngx-quickstart), a perfect starting point for building your own Ontimize Web app.
 
 ### Versions and dependencies
 Each version of the Addons is compatible with a version of the framework, you can check the dependencies between Angular, Ontimize web and Addons [here](https://ontimizeweb.github.io/docs/versions/).
