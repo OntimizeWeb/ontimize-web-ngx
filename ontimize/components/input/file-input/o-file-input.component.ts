@@ -49,7 +49,9 @@ export const DEFAULT_INPUTS_O_FILE_INPUT = [
 
   // additional-data [JSON]: used to send aditional information in the upload request.
   'additionalData: additional-data',
-  'appearance'
+  'appearance',
+  'hideRequiredMarker:hide-required-marker',
+  'labelVisible:label-visible'
 ];
 
 export const DEFAULT_OUTPUTS_O_FILE_INPUT = [
@@ -124,7 +126,9 @@ export class OFileInputComponent extends OFormDataComponent implements OnInit {
     super(form, elRef, injector);
   }
 
-  public ngOnInit(): void {
+  ngOnInit() {
+    super.ngOnInit();
+  
     this.initialize();
 
     this.uploader.onBeforeUploadAll = () => this.onBeforeUpload.emit();
