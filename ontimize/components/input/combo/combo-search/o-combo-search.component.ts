@@ -100,7 +100,7 @@ export class OComboSearchComponent implements OnInit, OnDestroy {
   /**
    * Handles the key down event with MatSelect.
    * Allows e.g. selecting with enter key, navigation with arrow keys, etc.
-   * @param {KeyboardEvent} event
+   * @param event
    */
   public handleKeydown(event: KeyboardEvent): void {
     if (event.keyCode === 32) {
