@@ -483,7 +483,6 @@ export class OListComponent extends OServiceComponent implements AfterContentIni
               ObservableWrapper.callEmit(this.onItemDeleted, selectedItems);
             }, error => {
               this.dialogService.alert('ERROR', 'MESSAGES.ERROR_DELETE');
-              console.log('[OList.remove]: error', error);
             }, () => {
               this.reloadData();
             }));

@@ -113,7 +113,7 @@ export class PermissionsService {
         self.permissions = res;
         innerObserver.next(res);
       }, (err: any) => {
-        console.log('[Permissions.queryPermissions]: error', err);
+        console.error('[Permissions.queryPermissions]: error', err);
         innerObserver.error(err);
       }, () => {
         innerObserver.complete();

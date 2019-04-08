@@ -78,7 +78,7 @@ export class OTableExportDialogComponent implements OnInit {
         self.exportService.downloadFile(resp.data[0]['xslxId'], OExportExtension.Excel).subscribe(
           () => self.dialogRef.close(true),
           downloadError => {
-            console.log(downloadError);
+            console.error(downloadError);
             self.dialogRef.close(false);
           }
         );
@@ -106,7 +106,7 @@ export class OTableExportDialogComponent implements OnInit {
           self.exportService.downloadFile(resp.data[0]['htmlId'], OExportExtension.HTML).subscribe(
             () => self.dialogRef.close(true),
             downloadError => {
-              console.log(downloadError);
+              console.error(downloadError);
               self.dialogRef.close(false);
             }
           );
@@ -134,7 +134,7 @@ export class OTableExportDialogComponent implements OnInit {
           self.exportService.downloadFile(resp.data[0]['pdfId'], OExportExtension.PDF).subscribe(
             () => self.dialogRef.close(true),
             downloadError => {
-              console.log(downloadError);
+              console.error(downloadError);
               self.dialogRef.close(false);
             }
           );
@@ -162,7 +162,7 @@ export class OTableExportDialogComponent implements OnInit {
   }
 
   protected handleError(err): void {
-    console.log(err);
+    console.error(err);
     const self = this;
     if (err instanceof HttpErrorResponse) {
       this.dialogService.alert('ERROR', err.message).then(() => self.dialogRef.close(false));

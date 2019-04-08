@@ -940,11 +940,11 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
         } else {
           self._updateFormData({});
           self.dialogService.alert('ERROR', 'MESSAGES.ERROR_QUERY');
-          console.log('ERROR: ' + resp.message);
+          console.error('ERROR: ' + resp.message);
         }
       },
       err => {
-        console.log(err);
+        console.error(err);
         self._updateFormData({});
         if (err && err.statusText) {
           self.dialogService.alert('ERROR', err.statusText);
@@ -1025,17 +1025,14 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   }
 
   protected postIncorrectInsert(result: any) {
-    console.log('[OFormComponent.postIncorrectInsert]', result);
     this.showError('insert', result);
   }
 
   protected postIncorrectDelete(result: any) {
-    console.log('[OFormComponent.postIncorrectDelete]', result);
     this.showError('delete', result);
   }
 
   protected postIncorrectUpdate(result: any) {
-    console.log('[OFormComponent.postIncorrectUpdate]', result);
     this.showError('update', result);
   }
 

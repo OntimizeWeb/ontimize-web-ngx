@@ -112,7 +112,7 @@ export class OntimizeFileService {
         }
       }
     }, error => {
-      console.log(error);
+      console.error(error);
       if (error.status === 401) {
         self.redirectLogin(true);
       } else {
