@@ -260,7 +260,7 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
           this._form.onDelete.emit(resp);
           this.onCloseDetail();
         }, err => {
-          console.err('OFormToolbar.delete error');
+          console.error('OFormToolbar.delete error', err);
         });
       }
     }
