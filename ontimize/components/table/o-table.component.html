@@ -102,7 +102,7 @@
         <tr #tableHeader mat-header-row *matHeaderRowDef="oTableOptions.visibleColumns; sticky: fixedHeader"></tr>
 
         <tr mat-row oTableRow *matRowDef="let row; columns: oTableOptions.visibleColumns;" (click)="handleClick(row, $event)"
-          (dblclick)="handleDoubleClick(row, $event)" [class.selected]="!isSelectionModeNone() && isSelected(row)">
+          (dblclick)="handleDoubleClick(row, $event)" [class.selected]="!isSelectionModeNone() && selection.isSelected(row)">
         </tr>
 
         <ng-container *ngIf="showTotals">

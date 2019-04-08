@@ -71,11 +71,9 @@ export class OTableButtonsComponent implements OnInit, OnDestroy {
     if (this.refreshButton && (refreshPerm && refreshPerm.enabled === false)) {
       this.enabledRefreshButton.next(false);
     }
-    if (this.deleteButton) {
-      this.subscription = this.table.selection.changed.subscribe(() =>
-        deletePerm ? this.enabledDeleteButton.next(deletePerm.enabled && !this.table.selection.isEmpty()) : this.enabledDeleteButton.next(!this.table.selection.isEmpty())
-      );
-    }
+    this.subscription = this.table.selection.changed.subscribe(() =>
+      deletePerm ? this.enabledDeleteButton.next(deletePerm.enabled && !this.table.selection.isEmpty()) : this.enabledDeleteButton.next(!this.table.selection.isEmpty())
+    );
   }
 
   public ngOnDestroy(): void {

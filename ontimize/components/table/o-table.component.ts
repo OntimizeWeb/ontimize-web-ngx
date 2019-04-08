@@ -1,4 +1,4 @@
-import { SelectionChange, SelectionModel } from '@angular/cdk/collections';
+import { SelectionChange } from '@angular/cdk/collections';
 import { ObserversModule } from '@angular/cdk/observers';
 import { CdkTableModule } from '@angular/cdk/table';
 import { CommonModule } from '@angular/common';
@@ -573,7 +573,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   public onReinitialize: EventEmitter<any> = new EventEmitter();
   public onContentChange: EventEmitter<any> = new EventEmitter();
 
-  selection = new SelectionModel<Element>(true, []);
   protected selectionChangeSubscription: Subscription;
 
   public oTableFilterByColumnDataDialogComponent: OTableFilterByColumnDataDialogComponent;
@@ -1451,7 +1450,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       this.handleMultipleSelection(item);
     } else if (!this.isSelectionModeNone()) {
       const selectedItems = this.getSelectedItems();
-      if (this.isSelected(item) && selectedItems.length === 1 && this.editionEnabled) {
+      if (this.selection.isSelected(item) && selectedItems.length === 1 && this.editionEnabled) {
         return;
       } else {
         this.clearSelectionAndEditing();
@@ -1622,33 +1621,29 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
   }
 
-  isAllSelected() {
+  public isAllSelected(): boolean {
     const numSelected = this.selection.selected.length;
     const numRows = this.dataSource ? this.dataSource.renderedData.length : undefined;
     return numSelected > 0 && numSelected === numRows;
   }
 
-  masterToggle(event: MatCheckboxChange) {
+  public masterToggle(event: MatCheckboxChange): void {
     event.checked ? this.selectAll() : this.clearSelection();
   }
 
-  selectAll() {
+  public selectAll(): void {
     this.dataSource.renderedData.forEach(row => this.selection.select(row));
   }
 
-  selectionCheckboxToggle(event: MatCheckboxChange, row: any) {
+  public selectionCheckboxToggle(event: MatCheckboxChange, row: any): void {
     if (this.isSelectionModeSingle()) {
       this.clearSelection();
     }
     this.selectedRow(row);
   }
 
-  selectedRow(row: any) {
-    this.selection.toggle(row);
-  }
-
-  isSelected(item): boolean {
-    return this.selection.selected.indexOf(item) !== -1;
+  public selectedRow(row: any): void {
+    this.setSelected(row);
   }
 
   get showDeleteButton(): boolean {
@@ -1837,14 +1832,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     this._oTableOptions.columns.forEach(item => {
       item.editing = false;
     });
-  }
-
-  clearSelection() {
-    this.selection.clear();
-  }
-
-  getSelectedItems(): any[] {
-    return this.selection.selected;
   }
 
   useDetailButton(column: OColumn): boolean {
