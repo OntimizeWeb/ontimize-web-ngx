@@ -1,71 +1,41 @@
-import { Component, ContentChildren, ElementRef, EventEmitter, forwardRef, HostListener, Inject, Injector, NgModule, OnDestroy, OnInit, Optional, QueryList, ViewChild, ViewChildren, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { CdkTableModule } from '@angular/cdk/table';
+import { SelectionChange, SelectionModel } from '@angular/cdk/collections';
 import { ObserversModule } from '@angular/cdk/observers';
-import { SelectionModel, SelectionChange } from '@angular/cdk/collections';
-import { MatDialog, MatTabGroup, MatTab, MatPaginatorIntl, MatPaginator, MatCheckboxChange, MatMenu, PageEvent, MAT_RIPPLE_GLOBAL_OPTIONS } from '@angular/material';
+import { CdkTableModule } from '@angular/cdk/table';
+import { CommonModule } from '@angular/common';
+import { ChangeDetectionStrategy, Component, ContentChildren, ElementRef, EventEmitter, forwardRef, HostListener, Inject, Injector, NgModule, OnDestroy, OnInit, Optional, QueryList, ViewChild, ViewChildren, ViewEncapsulation } from '@angular/core';
+import { MAT_RIPPLE_GLOBAL_OPTIONS, MatCheckboxChange, MatDialog, MatMenu, MatPaginator, MatPaginatorIntl, MatTab, MatTabGroup, PageEvent } from '@angular/material';
 import { DndModule } from '@churchs19/ng2-dnd';
-import { Observable, Subscription, of } from 'rxjs';
+import { Observable, of, Subscription } from 'rxjs';
 
-import { OSharedModule } from '../../shared';
-import { OTableDao } from './o-table.dao';
 import { InputConverter } from '../../decorators';
-import { OTableDataSource } from './o-table.datasource';
-import { OFormComponent } from '../form/o-form.component';
-import { Codes, ObservableWrapper, Util, SQLTypes } from '../../utils';
-import { PermissionsUtils } from '../../util/permissions';
-import { OServiceComponent } from '../o-service-component.class';
-import { OntimizeService, SnackBarService, OPermissions, OTablePermissions, OTableMenuPermissions } from '../../services';
-import { OTableRowDirective } from './extensions/row/o-table-row.directive';
-import { OColumnTooltip } from './column/o-table-column.component';
-import { OTableStorage } from './extensions/o-table-storage.class';
+import { OntimizeService, OPermissions, OTableMenuPermissions, OTablePermissions, SnackBarService } from '../../services';
 import { dataServiceFactory } from '../../services/data-service.provider';
-import { OTableColumnComponent } from './column/o-table-column.component';
+import { OSharedModule } from '../../shared';
+import { PermissionsUtils } from '../../util/permissions';
+import { Codes, ObservableWrapper, SQLTypes, Util } from '../../utils';
+import { OContextMenuComponent } from '../contextmenu/o-context-menu-components';
 import { OContextMenuModule } from '../contextmenu/o-context-menu.module';
-import { ISQLOrder, OQueryDataArgs, ServiceUtils } from '../service.utils';
 import { IOContextMenuContext } from '../contextmenu/o-context-menu.service';
 import { FilterExpressionUtils, IExpression } from '../filter-expression.utils';
-import { OContextMenuComponent } from '../contextmenu/o-context-menu-components';
-import { OTableContextMenuComponent } from './extensions/contextmenu/o-table-context-menu.component';
+import { OFormComponent } from '../form/o-form.component';
+import { OServiceComponent } from '../o-service-component.class';
+import { ISQLOrder, OQueryDataArgs, ServiceUtils } from '../service.utils';
 import { OperatorFunction, OTableColumnCalculatedComponent } from './column/calculated/o-table-column-calculated.component';
-
-import {
-  O_TABLE_HEADER_COMPONENTS,
-  OTableOptionComponent,
-  OTableColumnsFilterComponent,
-  OTableInsertableRowComponent,
-  OTableQuickfilterComponent,
-  OTableEditableRowComponent,
-  IColumnValueFilter,
-  ColumnValueFilterOperator,
-  OTableMenuComponent,
-  OTableButtonsComponent,
-  OTableButtonComponent
-} from './extensions/header/o-table-header-components';
-
-import {
-  O_TABLE_FOOTER_COMPONENTS,
-  OColumnAggregate,
-  OTableColumnAggregateComponent,
-  OTableMatPaginatorIntl,
-  OTablePaginatorComponent
-} from './extensions/footer/o-table-footer-components';
-
-import {
-  O_TABLE_DIALOGS,
-  OTableFilterByColumnDataDialogComponent
-} from './extensions/dialog/o-table-dialog-components';
-
-import {
-  O_TABLE_CELL_RENDERERS,
-  OBaseTableCellRenderer
-} from './column/cell-renderer/cell-renderer';
-
 import { O_TABLE_CELL_EDITORS, OTableCellEditorBooleanComponent } from './column/cell-editor/cell-editor';
-import { OMatSortModule } from './extensions/sort/o-mat-sort-module';
+import { O_TABLE_CELL_RENDERERS, OBaseTableCellRenderer } from './column/cell-renderer/cell-renderer';
+import { OColumnTooltip, OTableColumnComponent } from './column/o-table-column.component';
+import { OTableContextMenuComponent } from './extensions/contextmenu/o-table-context-menu.component';
+import { O_TABLE_DIALOGS, OTableFilterByColumnDataDialogComponent } from './extensions/dialog/o-table-dialog-components';
+import { O_TABLE_FOOTER_COMPONENTS, OColumnAggregate, OTableColumnAggregateComponent, OTableMatPaginatorIntl, OTablePaginatorComponent } from './extensions/footer/o-table-footer-components';
+import { ColumnValueFilterOperator, IColumnValueFilter, O_TABLE_HEADER_COMPONENTS, OTableButtonComponent, OTableButtonsComponent, OTableColumnsFilterComponent, OTableEditableRowComponent, OTableInsertableRowComponent, OTableMenuComponent, OTableOptionComponent, OTableQuickfilterComponent } from './extensions/header/o-table-header-components';
+import { OTableStorage } from './extensions/o-table-storage.class';
+import { OTableRowDirective } from './extensions/row/o-table-row.directive';
 import { OMatSort } from './extensions/sort/o-mat-sort';
 import { OMatSortHeader } from './extensions/sort/o-mat-sort-header';
+import { OMatSortModule } from './extensions/sort/o-mat-sort-module';
 import { OTableExpandedFooter } from './o-table-expanded-footer.directive';
+import { OTableDao } from './o-table.dao';
+import { OTableDataSource } from './o-table.datasource';
 
 export const NAME_COLUMN_SELECT = 'select';
 
@@ -921,7 +891,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     const self = this;
     this.contextMenuSubscription = this.tableContextMenu.onShow.subscribe((params: IOContextMenuContext) => {
       params.class = 'o-table-context-menu ' + this.rowHeight;
-      
+
       if (params.data && !self.selection.isSelected(params.data.rowValue)) {
         self.selection.clear();
         self.selection.select(params.data.rowValue);
@@ -1684,7 +1654,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   get showDeleteButton(): boolean {
-    return this.deleteButton && !this.selection.isEmpty();
+    return this.deleteButton;
   }
 
   getTrackByFunction(): Function {

@@ -11,3 +11,16 @@
     line-height: normal;
   }
 }
+
+.o-combo-panel.o-combo-panel-search {
+  overflow: hidden;
+
+  .mat-select-content {
+    height: 100%;
+
+    .o-combo-options-container {
+      height: calc(100% - 3em);
+      overflow: auto;
+    }
+  }
+}

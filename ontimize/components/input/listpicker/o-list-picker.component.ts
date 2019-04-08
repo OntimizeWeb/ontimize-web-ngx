@@ -74,7 +74,7 @@ export class OListPickerComponent extends OFormServiceComponent implements After
   protected blurDelay = 200;
   protected blurPrevent = false;
 
-  protected stateCtrl: FormControl;
+  public stateCtrl: FormControl;
 
   constructor(
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,

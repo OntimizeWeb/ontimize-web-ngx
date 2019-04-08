@@ -1,6 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { AfterViewInit, Component, ElementRef, forwardRef, Inject, Injector, NgModule, OnDestroy, OnInit, Optional, ViewChild, ViewEncapsulation } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { MatSelect, MatSelectChange } from '@angular/material';
+import { Subscription } from 'rxjs';
 
 import { InputConverter } from '../../../decorators/input-converter';
 import { dataServiceFactory } from '../../../services/data-service.provider';
@@ -12,13 +14,15 @@ import { OFormComponent } from '../../form/o-form.component';
 import { IFormValueOptions, OFormValue } from '../../form/OFormValue';
 import { OValueChangeEvent } from '../../o-form-data-component.class';
 import { OFormServiceComponent } from '../o-form-service-component.class';
+import { OComboSearchComponent } from './combo-search/o-combo-search.component';
 
 export const DEFAULT_INPUTS_O_COMBO = [
   ...OFormServiceComponent.DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT,
   'translate',
   'multiple',
   'nullSelection: null-selection',
-  'multipleTriggerLabel: multiple-trigger-label'
+  'multipleTriggerLabel: multiple-trigger-label',
+  'searchable'
 ];
 
 export const DEFAULT_OUTPUTS_O_COMBO = [
@@ -46,24 +50,30 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
   public static DEFAULT_INPUTS_O_COMBO = DEFAULT_INPUTS_O_COMBO;
   public static DEFAULT_OUTPUTS_O_COMBO = DEFAULT_OUTPUTS_O_COMBO;
 
+  public value: OFormValue;
+  public searchControl: FormControl = new FormControl();
+
   /* Inputs */
+  @InputConverter()
+  public multiple: boolean;
+  @InputConverter()
+  public multipleTriggerLabel: boolean = false;
+  @InputConverter()
+  public searchable: boolean = false;
   @InputConverter()
   protected translate: boolean = false;
   @InputConverter()
   protected nullSelection: boolean = true;
-  @InputConverter()
-  multiple: boolean;
-  @InputConverter()
-  multipleTriggerLabel: boolean = false;
   /* End inputs*/
-
-  value: OFormValue;
 
   @ViewChild('inputModel')
   protected inputModel: ElementRef;
 
   @ViewChild('selectModel')
   protected selectModel: MatSelect;
+
+  protected filteredDataArray: any[] = [];
+  protected subscription: Subscription = new Subscription();
 
   constructor(
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
@@ -74,7 +84,12 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
     this.defaultValue = '';
   }
 
-  ngAfterViewInit(): void {
+  public ngOnInit(): void {
+    super.ngOnInit();
+    this.subscription.add(this.searchControl.valueChanges.subscribe(() => this.searchFilter()));
+  }
+
+  public ngAfterViewInit(): void {
     super.ngAfterViewInit();
     if (this.queryOnInit) {
       this.queryData();
@@ -84,7 +99,12 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
     }
   }
 
-  initialize() {
+  public ngOnDestroy(): void {
+    this.subscription.unsubscribe();
+    this.destroy();
+  }
+
+  public initialize(): void {
     super.initialize();
     if (this.multiple) {
       this.nullSelection = false;
@@ -92,7 +112,7 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
     }
   }
 
-  ensureOFormValue(value: any) {
+  public ensureOFormValue(value: any): void {
     if (value instanceof OFormValue) {
       this.value = new OFormValue(value.value);
     } else if (Util.isDefined(value) && !(value instanceof OFormValue)) {
@@ -106,15 +126,24 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
     // this.syncDataIndex();
   }
 
-  ngOnDestroy() {
-    this.destroy();
+  public setDataArray(data: any): void {
+    super.setDataArray(data);
+    this.filteredDataArray = data;
   }
 
-  hasNullSelection(): boolean {
+  public getDataArray(): any[] {
+    return this.dataArray;
+  }
+
+  public getFilteredDataArray(): any[] {
+    return this.filteredDataArray;
+  }
+
+  public hasNullSelection(): boolean {
     return this.nullSelection;
   }
 
-  syncDataIndex(queryIfNotFound: boolean = true) {
+  public syncDataIndex(queryIfNotFound: boolean = true): void {
     super.syncDataIndex(queryIfNotFound);
     if (this._currentIndex !== undefined && this.nullSelection) {
       // first position is for null selection that it is not included into dataArray
@@ -122,7 +151,7 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
     }
   }
 
-  getValue() {
+  public getValue(): any {
     if (this.value instanceof OFormValue) {
       if (this.value.value !== undefined) {
         return this.value.value;
@@ -133,7 +162,7 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
     return '';
   }
 
-  getEmptyValue() {
+  public getEmptyValue(): any {
     if (this.multiple) {
       return [];
     } else {
@@ -145,7 +174,7 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
     }
   }
 
-  clearValue(): void {
+  public clearValue(): void {
     if (this.multiple) {
       this.setValue(this.defaultValue);
     } else {
@@ -153,27 +182,11 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
     }
   }
 
-  getMultiple(): boolean {
+  public getMultiple(): boolean {
     return this.multiple;
   }
 
-  protected parseByValueColumnType(val: any) {
-    if (!Util.isDefined(this.multiple)) {
-      return val;
-    }
-    let valueArr: any[] = this.multiple ? val : [val];
-    if (this.valueColumnType === Codes.TYPE_INT) {
-      valueArr.forEach((item, index) => {
-        const parsed = parseInt(item);
-        if (!isNaN(parsed)) {
-          valueArr[index] = parsed;
-        }
-      });
-    }
-    return this.multiple ? valueArr : valueArr[0];
-  }
-
-  onSelectionChange(event: MatSelectChange): void {
+  public onSelectionChange(event: MatSelectChange): void {
     if (!this.selectModel.panelOpen) {
       return;
     }
@@ -185,7 +198,7 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
     });
   }
 
-  getOptionDescriptionValue(item: any = {}) {
+  public getOptionDescriptionValue(item: any = {}): string {
     let descTxt = '';
     if (this.descriptionColArray && this.descriptionColArray.length > 0) {
       const self = this;
@@ -205,7 +218,7 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
     return descTxt;
   }
 
-  getValueColumn(item: any) {
+  public getValueColumn(item: any): any {
     if (item && item.hasOwnProperty(this.valueColumn)) {
       let option = item[this.valueColumn];
       if (option === 'undefined') {
@@ -216,10 +229,10 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
     return '';
   }
 
-  isSelected(item: any, rowIndex: number): boolean {
+  public isSelected(item: any, rowIndex: number): boolean {
     let selected = false;
     if (item && item.hasOwnProperty(this.valueColumn) && this.value) {
-      let val = item[this.valueColumn];
+      const val = item[this.valueColumn];
       if (val === this.value.value) {
         selected = true;
         this._currentIndex = rowIndex;
@@ -228,7 +241,7 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
     return selected;
   }
 
-  setValue(val: any, options?: IFormValueOptions) {
+  public setValue(val: any, options?: IFormValueOptions): void {
     if (!this.dataArray) {
       return;
     }
@@ -255,21 +268,21 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
     super.setValue(val, options);
   }
 
-  getSelectedItems(): any[] {
+  public getSelectedItems(): any[] {
     return this.getValue();
   }
 
-  setSelectedItems(values: any[]) {
+  public setSelectedItems(values: any[]): void {
     this.setValue(values);
   }
 
-  getFirstSelectedValue() {
+  public getFirstSelectedValue(): void {
     return this.selectModel.selected[0].viewValue;
   }
 
-  protected setIsReadOnly(value: boolean) {
+  protected setIsReadOnly(value: boolean): void {
     super.setIsReadOnly(value);
-    let disabled = Util.isDefined(this.readOnly) ? this.readOnly : value;
+    const disabled = Util.isDefined(this.readOnly) ? this.readOnly : value;
     if (this._fControl && disabled) {
       this._fControl.disable();
     } else if (this._fControl) {
@@ -277,11 +290,44 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
     }
   }
 
+  protected parseByValueColumnType(val: any): any {
+    if (!Util.isDefined(this.multiple)) {
+      return val;
+    }
+    const valueArr: any[] = this.multiple ? val : [val];
+    if (this.valueColumnType === Codes.TYPE_INT) {
+      valueArr.forEach((item, index) => {
+        const parsed = parseInt(item);
+        if (!isNaN(parsed)) {
+          valueArr[index] = parsed;
+        }
+      });
+    }
+    return this.multiple ? valueArr : valueArr[0];
+  }
+
+  protected searchFilter(): void {
+    if (this.dataArray || this.dataArray.length) {
+
+      // get the search keyword
+      let search = this.searchControl.value;
+      if (!search) {
+        this.filteredDataArray = this.dataArray.slice();
+        return;
+      } else {
+        search = search.toLowerCase();
+      }
+
+      // filter
+      this.filteredDataArray = this.dataArray.filter(item => this.getOptionDescriptionValue(item).toLowerCase().indexOf(search) > -1);
+    }
+  }
+
 }
 
 @NgModule({
-  declarations: [OComboComponent],
+  declarations: [OComboComponent, OComboSearchComponent],
   imports: [CommonModule, OSharedModule],
-  exports: [OComboComponent]
+  exports: [OComboComponent, OComboSearchComponent]
 })
 export class OComboModule { }

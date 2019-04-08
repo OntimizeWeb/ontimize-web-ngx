@@ -1,6 +1,7 @@
-import { Component, OnInit, Inject, forwardRef, EventEmitter, Injector, ViewEncapsulation, ElementRef, ChangeDetectionStrategy } from '@angular/core';
-import { Util, Codes } from '../../../../../utils';
+import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, forwardRef, Inject, Injector, OnInit, ViewEncapsulation } from '@angular/core';
+
 import { InputConverter } from '../../../../../decorators';
+import { Codes, Util } from '../../../../../utils';
 import { OTableComponent } from '../../../o-table.component';
 
 export const DEFAULT_INPUTS_O_TABLE_BUTTON = [
@@ -29,46 +30,44 @@ export const DEFAULT_OUTPUTS_O_TABLE_BUTTON = [
     '[class.o-table-button]': 'true',
   }
 })
-
 export class OTableButtonComponent implements OnInit {
 
   public static DEFAULT_INPUTS_O_TABLE_BUTTON = DEFAULT_INPUTS_O_TABLE_BUTTON;
   public static DEFAULT_OUTPUTS_O_TABLE_BUTTON = DEFAULT_OUTPUTS_O_TABLE_BUTTON;
 
-  onClick: EventEmitter<Object> = new EventEmitter<Object>();
+  public onClick: EventEmitter<Object> = new EventEmitter<Object>();
 
-  oattr: string;
+  public oattr: string;
   @InputConverter()
-  enabled: boolean = true;
-  icon: string;
-  svgIcon: string;
-  olabel: string;
-  iconPosition: string;
+  public enabled: boolean = true;
+  public icon: string;
+  public svgIcon: string;
+  public olabel: string;
+  public iconPosition: string;
 
   constructor(
     protected injector: Injector,
     public elRef: ElementRef,
     @Inject(forwardRef(() => OTableComponent)) protected _table: OTableComponent
-  ) {
+  ) { }
 
-  }
-
-  public ngOnInit() {
+  public ngOnInit(): void {
     if (!Util.isDefined(this.icon) && !Util.isDefined(this.svgIcon)) {
       this.icon = 'priority_high';
     }
     this.iconPosition = Util.parseIconPosition(this.iconPosition);
   }
 
-  innerOnClick() {
+  public innerOnClick(): void {
     this.onClick.emit();
   }
 
-  isIconPositionLeft() {
+  public isIconPositionLeft(): boolean {
     return this.iconPosition === Codes.ICON_POSITION_LEFT;
   }
 
-  get table() {
+  get table(): OTableComponent {
     return this._table;
   }
+
 }

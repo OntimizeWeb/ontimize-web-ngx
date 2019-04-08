@@ -1,12 +1,12 @@
-import { Component, OnInit, OnDestroy, Inject, Injector, forwardRef, ElementRef, NgModule, ViewEncapsulation, ViewContainerRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Subscription } from 'rxjs';
+import { Component, ElementRef, forwardRef, Inject, Injector, NgModule, OnDestroy, OnInit, ViewChild, ViewContainerRef, ViewEncapsulation } from '@angular/core';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 
 import { InputConverter } from '../../../decorators';
-import { Util } from '../../../util/util';
-import { PermissionsUtils } from '../../../util/permissions';
 import { DialogService, NavigationService, OPermissions, SnackBarService } from '../../../services';
 import { OSharedModule } from '../../../shared';
+import { PermissionsUtils } from '../../../util/permissions';
+import { Util } from '../../../util/util';
 import { OFormNavigationComponent } from '../navigation/o-form-navigation.component';
 import { OFormComponent } from '../o-form.component';
 
@@ -15,7 +15,7 @@ export const DEFAULT_INPUTS_O_FORM_TOOLBAR = [
   'labelHeaderAlign: label-header-align',
   'headeractions: header-actions',
   'showHeaderActionsText: show-header-actions-text',
-  //show-header-navigation [string][yes|no|true|false]: Include navigations buttons in form-toolbar. Default: true;
+  // show-header-navigation [string][yes|no|true|false]: Include navigations buttons in form-toolbar. Default: true;
   'showHeaderNavigation:show-header-navigation'
 ];
 
@@ -30,31 +30,38 @@ export const DEFAULT_INPUTS_O_FORM_TOOLBAR = [
     '[class.o-form-toolbar]': 'true'
   }
 })
-
 export class OFormToolbarComponent implements OnInit, OnDestroy {
 
   public static DEFAULT_INPUTS_O_FORM_TOOLBAR = DEFAULT_INPUTS_O_FORM_TOOLBAR;
 
   /* Bindings */
-  labelHeader: string = '';
-  headeractions: string = '';
-  labelHeaderAlign: string = 'center';
+  public labelHeader: string = '';
+  public headeractions: string = '';
+  public labelHeaderAlign: string = 'center';
 
   @InputConverter()
-  showHeaderActionsText: boolean = true;
+  public showHeaderActionsText: boolean = true;
+  @InputConverter()
+  public showHeaderNavigation: boolean = true;
 
-  formActions: string[];
-  isDetail: boolean = true;
+  public formActions: string[];
+  public isDetail: boolean = true;
 
   public editMode: boolean = false;
   public insertMode: boolean = false;
   public initialMode: boolean = true;
 
-  refreshBtnEnabled: boolean = false;
-  insertBtnEnabled: boolean = false;
-  editBtnEnabled: boolean = false;
-  deleteBtnEnabled: boolean = false;
-  saveBtnEnabled: boolean = false;
+  public refreshBtnEnabled: boolean = false;
+  public insertBtnEnabled: boolean = false;
+  public editBtnEnabled: boolean = false;
+  public deleteBtnEnabled: boolean = false;
+  public saveBtnEnabled: boolean = false;
+
+  @ViewChild('breadcrumb', { read: ViewContainerRef })
+  public breadContainer: ViewContainerRef;
+
+  public isSaveBtnEnabled: Observable<boolean>;
+  public isEditBtnEnabled: Observable<boolean>;
 
   protected _existsChangesToSave: boolean = false;
 
@@ -68,23 +75,24 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
 
   protected _includeBreadcrumb: boolean;
 
-  @InputConverter()
-  showHeaderNavigation: boolean = true;
-
-  @ViewChild('breadcrumb', { read: ViewContainerRef }) breadContainer;
+  protected _isSaveBtnEnabledSubject = new BehaviorSubject<boolean>(false);
+  protected _isEditBtnEnabledSubject = new BehaviorSubject<boolean>(false);
 
   constructor(
     @Inject(forwardRef(() => OFormComponent)) private _form: OFormComponent,
     public element: ElementRef,
     protected injector: Injector
   ) {
+    this.isSaveBtnEnabled = this._isSaveBtnEnabledSubject.asObservable();
+    this.isEditBtnEnabled = this._isEditBtnEnabledSubject.asObservable();
+
     this._form.registerToolbar(this);
     this._dialogService = this.injector.get(DialogService);
     this._navigationService = this.injector.get(NavigationService);
     this.snackBarService = this.injector.get(SnackBarService);
   }
 
-  ngOnInit() {
+  public ngOnInit(): void {
     this.formActions = Util.parseArray(this.headeractions);
     if (this.formActions && this.formActions.length > 0) {
       this.refreshBtnEnabled = this.formActions.indexOf('R') !== -1;
@@ -93,7 +101,7 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
       this.deleteBtnEnabled = !this.insertMode && this.formActions.indexOf('D') !== -1;
     }
     if (this._navigationService) {
-      var self = this;
+      const self = this;
       this._navigationService.onTitleChange(title => {
         self.labelHeader = title;
       });
@@ -104,7 +112,7 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
     }
   }
 
-  ngOnDestroy() {
+  public ngOnDestroy(): void {
     if (this.formCacheSubscription) {
       this.formCacheSubscription.unsubscribe();
     }
@@ -115,107 +123,47 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
     }
   }
 
-  ngAfterViewInit(): void {
+  public ngAfterViewInit(): void {
     this.parsePermissions();
     if (this.includeBreadcrumb) {
       this._form.formContainer.createBreadcrumb(this.breadContainer);
     }
   }
 
-  protected parsePermissions() {
-    if (this._form.oattr) {
-      this.actionsPermissions = this._form.getActionsPermissions();
-
-      if (!Util.isDefined(this.actionsPermissions)) {
-        return;
-      }
-      const self = this;
-      this.actionsPermissions.forEach((permission: OPermissions) => {
-        //others actions
-        self.permissionManagement(permission);
-
-        if (PermissionsUtils.STANDARD_ACTIONS.indexOf(permission.attr) > -1) {
-          //actions R;I;U;D
-          if (permission.attr === PermissionsUtils.ACTION_UPDATE) {
-            self.permissionManagement(permission, 'edit');
-          }
-        }
-      });
-
-    }
-  }
-
-  private permissionManagement(permission: OPermissions, attr?: string) {
-    let attrAction = Util.isDefined(attr) ? attr : permission.attr;
-    let elementByAction = this.element.nativeElement.querySelector('[attr="' + attrAction + '"]');
-
-    if (Util.isDefined(elementByAction)) {
-      if (!permission.visible) {
-        elementByAction.remove();
-      } else {
-        if (!permission.enabled) {
-          elementByAction.disabled = true;
-          const mutationObserver = PermissionsUtils.registerDisabledChangesInDom(elementByAction);
-          this.mutationObservers.push(mutationObserver);
-        }
-      }
-    }
-  }
-
-  protected manageEditableDetail() {
-    const isEditableDetail = this._form.isEditableDetail();
-
-    let updatePermissions: OPermissions = (this.actionsPermissions || []).find(p => p.attr === PermissionsUtils.ACTION_UPDATE);
-    if (this.hasEnabledPermission(updatePermissions)) {
-      this.saveBtnEnabled = isEditableDetail;
-    }
-
-    this.refreshBtnEnabled = this.refreshBtnEnabled && isEditableDetail;
-    this.insertBtnEnabled = this.insertBtnEnabled && isEditableDetail;
-    this.editBtnEnabled = this.editBtnEnabled && !isEditableDetail;
-
-    const self = this;
-    this._form.getFormCache().onCacheStateChanges.asObservable().subscribe((value: any) => {
-      if (self._form.isEditableDetail()) {
-        self.existsChangesToSave = self._form.isInitialStateChanged();
-      }
-    });
-  }
-
-  setInitialMode() {
+  public setInitialMode(): void {
     this.manageEditableDetail();
     this.initialMode = true;
     this.insertMode = false;
     this.editMode = false;
   }
 
-  setInsertMode() {
+  public setInsertMode(): void {
     this.initialMode = false;
     this.insertMode = true;
     this.editMode = false;
   }
 
-  setEditMode() {
+  public setEditMode(): void {
     this.initialMode = false;
     this.insertMode = false;
     this.editMode = true;
   }
 
-  onCloseDetail() {
+  public onCloseDetail(): void {
     this._form.executeToolbarAction(OFormComponent.CLOSE_DETAIL_ACTION, {
       changeToolbarMode: true
     });
   }
 
-  onBack() {
+  public onBack(): void {
     this._form.executeToolbarAction(OFormComponent.BACK_ACTION);
   }
 
-  onReload() {
+  public onReload(): void {
     if (!this.checkEnabledPermission(PermissionsUtils.ACTION_REFRESH)) {
       return;
     }
-    let self = this;
+    const self = this;
     this._form.showConfirmDiscardChanges().then(val => {
       if (val) {
         self._form.executeToolbarAction(OFormComponent.RELOAD_ACTION);
@@ -223,7 +171,7 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
     });
   }
 
-  onInsert() {
+  public onInsert(): void {
     if (!this.checkEnabledPermission(PermissionsUtils.ACTION_INSERT)) {
       return;
     }
@@ -233,7 +181,7 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
     });
   }
 
-  onEdit() {
+  public onEdit(): void {
     if (!this.checkEnabledPermission(PermissionsUtils.ACTION_UPDATE)) {
       return;
     }
@@ -243,7 +191,7 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
     });
   }
 
-  onDelete(evt: any) {
+  public onDelete(evt: any): void {
     if (!this.checkEnabledPermission(PermissionsUtils.ACTION_DELETE)) {
       return;
     }
@@ -251,7 +199,7 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
     this.showConfirmDelete(evt);
   }
 
-  onSave(evt: any) {
+  public onSave(evt: any): void {
     if (!this.checkEnabledPermission(PermissionsUtils.ACTION_UPDATE)) {
       return;
     }
@@ -265,14 +213,14 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
 
   set existsChangesToSave(val: boolean) {
     const attr = this._form.isEditableDetail() ? PermissionsUtils.ACTION_UPDATE : PermissionsUtils.ACTION_INSERT;
-    let permissions: OPermissions = (this.actionsPermissions || []).find(p => p.attr === attr);
+    const permissions: OPermissions = (this.actionsPermissions || []).find(p => p.attr === attr);
     if (Util.isDefined(permissions) && permissions.enabled === false) {
       return;
     }
     this._existsChangesToSave = val;
   }
 
-  cancelOperation() {
+  public cancelOperation(): void {
     if (this.isDetail) {
       this.onCloseDetail();
     } else if (!this.isDetail && this.insertMode) {
@@ -283,7 +231,7 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
     }
   }
 
-  acceptOperation() {
+  public acceptOperation(): void {
     if (this.editMode) {
       if (!this.checkEnabledPermission(PermissionsUtils.ACTION_UPDATE)) {
         return;
@@ -297,15 +245,15 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
     }
   }
 
-  handleAcceptInsertOperation() {
+  public handleAcceptInsertOperation(): void {
     this._form.executeToolbarAction(OFormComponent.INSERT_ACTION);
   }
 
-  handleAcceptEditOperation() {
+  public handleAcceptEditOperation(): void {
     this._form.executeToolbarAction(OFormComponent.EDIT_ACTION);
   }
 
-  showConfirmDelete(evt: any) {
+  public showConfirmDelete(evt: any): void {
     this._dialogService.confirm('CONFIRM', 'MESSAGES.CONFIRM_DELETE').then(res => {
       if (res === true) {
         this._form.executeToolbarAction(OFormComponent.DELETE_ACTION).subscribe(resp => {
@@ -323,7 +271,7 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
     return this.showHeaderNavigation && !(this._form.getFormManager() && this._form.getFormManager().isTabMode());
   }
 
-  getLabelHeaderAlign(): string {
+  public getLabelHeaderAlign(): string {
     return this.labelHeaderAlign;
   }
 
@@ -335,12 +283,8 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
     return this._form.isCacheStackEmpty;
   }
 
-  onUndoLastChange() {
+  public onUndoLastChange(): void {
     this._form.executeToolbarAction(OFormComponent.UNDO_LAST_CHANGE_ACTION);
-  }
-
-  get isSaveBtnEnabled(): boolean {
-    return this.saveBtnEnabled;
   }
 
   get isRefreshBtnEnabled(): boolean {
@@ -351,24 +295,11 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
     return this.insertBtnEnabled;
   }
 
-  get isEditBtnEnabled(): boolean {
-    return this.editBtnEnabled;
-  }
-
   get isDeleteBtnEnabled(): boolean {
     return this.deleteBtnEnabled;
   }
 
-  private checkEnabledPermission(attr) {
-    const permissions: OPermissions = (this.actionsPermissions || []).find(p => p.attr === attr);
-    let enabledPermision = PermissionsUtils.checkEnabledPermission(permissions);
-    if (!enabledPermision) {
-      this.snackBarService.open('MESSAGES.OPERATION_NOT_ALLOWED_PERMISSION');
-    }
-    return enabledPermision;
-  }
-
-  hasEnabledPermission(permission: OPermissions): boolean {
+  public hasEnabledPermission(permission: OPermissions): boolean {
     return permission ? permission.enabled : true;
   }
 
@@ -379,6 +310,75 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
   set includeBreadcrumb(arg: boolean) {
     this._includeBreadcrumb = arg;
   }
+
+  protected manageEditableDetail(): void {
+    const isEditableDetail = this._form.isEditableDetail();
+
+    const updatePermissions: OPermissions = (this.actionsPermissions || []).find(p => p.attr === PermissionsUtils.ACTION_UPDATE);
+    if (this.hasEnabledPermission(updatePermissions)) {
+      this.saveBtnEnabled = isEditableDetail;
+    }
+
+    this.refreshBtnEnabled = this.refreshBtnEnabled && isEditableDetail;
+    this.insertBtnEnabled = this.insertBtnEnabled && isEditableDetail;
+    this.editBtnEnabled = this.editBtnEnabled && !isEditableDetail;
+
+    const self = this;
+    this._form.getFormCache().onCacheStateChanges.asObservable().subscribe((value: any) => {
+      if (self._form.isEditableDetail()) {
+        self.existsChangesToSave = self._form.isInitialStateChanged();
+      }
+    });
+  }
+
+  protected parsePermissions(): void {
+    if (this._form.oattr) {
+      this.actionsPermissions = this._form.getActionsPermissions();
+
+      if (!Util.isDefined(this.actionsPermissions)) {
+        return;
+      }
+      const self = this;
+      this.actionsPermissions.forEach((permission: OPermissions) => {
+        // others actions
+        self.permissionManagement(permission);
+
+        if (PermissionsUtils.STANDARD_ACTIONS.indexOf(permission.attr) > -1) {
+          // actions R;I;U;D
+          if (permission.attr === PermissionsUtils.ACTION_UPDATE) {
+            self.permissionManagement(permission, 'edit');
+          }
+        }
+      });
+    }
+  }
+
+  private permissionManagement(permission: OPermissions, attr?: string): void {
+    const attrAction = Util.isDefined(attr) ? attr : permission.attr;
+    const elementByAction = this.element.nativeElement.querySelector('[attr="' + attrAction + '"]');
+
+    if (Util.isDefined(elementByAction)) {
+      if (!permission.visible) {
+        elementByAction.remove();
+      } else {
+        if (!permission.enabled) {
+          elementByAction.disabled = true;
+          const mutationObserver = PermissionsUtils.registerDisabledChangesInDom(elementByAction);
+          this.mutationObservers.push(mutationObserver);
+        }
+      }
+    }
+  }
+
+  private checkEnabledPermission(attr): boolean {
+    const permissions: OPermissions = (this.actionsPermissions || []).find(p => p.attr === attr);
+    const enabledPermision = PermissionsUtils.checkEnabledPermission(permissions);
+    if (!enabledPermision) {
+      this.snackBarService.open('MESSAGES.OPERATION_NOT_ALLOWED_PERMISSION');
+    }
+    return enabledPermision;
+  }
+
 }
 
 @NgModule({
