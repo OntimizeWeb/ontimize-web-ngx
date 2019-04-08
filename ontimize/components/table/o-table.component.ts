@@ -1345,7 +1345,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   onMatTableContentChanged() {
-    console.log('onMatTableContentChanged');
+    //
   }
 
   add() {
@@ -1369,9 +1369,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
               ObservableWrapper.callEmit(this.onRowDeleted, selectedItems);
             }, error => {
               this.showDialogError(error, 'MESSAGES.ERROR_DELETE');
-              console.log('[OTable.remove]: error', error);
             }, () => {
-              console.log('[OTable.remove]: success');
               this.reloadData();
             });
           } else {

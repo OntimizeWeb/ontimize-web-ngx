@@ -248,14 +248,12 @@ export class OFormServiceComponent extends OFormDataComponent {
         if (resp.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) {
           self.cacheQueried = true;
           self.setDataArray(resp.data);
-        } else {
-          console.log('error');
         }
         //window.setTimeout(() => { this.loading = false; self.loadingSubject.next(false); self.loaderSubscription.unsubscribe(); }, 10000);
         self.loadingSubject.next(false);
         self.loaderSubscription.unsubscribe();
       }, err => {
-        console.log(err);
+        console.error(err);
         self.loadingSubject.next(false);
         self.loaderSubscription.unsubscribe();
         if (err && !Util.isObject(err)) {
