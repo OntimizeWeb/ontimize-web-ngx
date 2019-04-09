@@ -50,12 +50,9 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
   public editMode: boolean = false;
   public insertMode: boolean = false;
   public initialMode: boolean = true;
-
   public refreshBtnEnabled: boolean = false;
   public insertBtnEnabled: boolean = false;
-  public editBtnEnabled: boolean = false;
   public deleteBtnEnabled: boolean = false;
-  public saveBtnEnabled: boolean = false;
 
   @ViewChild('breadcrumb', { read: ViewContainerRef })
   public breadContainer: ViewContainerRef;
@@ -63,6 +60,23 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
   public isSaveBtnEnabled: Observable<boolean>;
   public isEditBtnEnabled: Observable<boolean>;
 
+  get editBtnEnabled(): boolean {
+    return this._editBtnEnabled;
+  }
+  set editBtnEnabled(value: boolean) {
+    this._editBtnEnabled = value;
+    this._isEditBtnEnabledSubject.next(this._editBtnEnabled);
+  }
+  protected _editBtnEnabled: boolean = false;
+
+  get saveBtnEnabled(): boolean {
+    return this._saveBtnEnabled;
+  }
+  set saveBtnEnabled(value: boolean) {
+    this._saveBtnEnabled = value;
+    this._isSaveBtnEnabledSubject.next(this._saveBtnEnabled);
+  }
+  protected _saveBtnEnabled: boolean = false;
   protected _existsChangesToSave: boolean = false;
 
   protected _dialogService: DialogService;
