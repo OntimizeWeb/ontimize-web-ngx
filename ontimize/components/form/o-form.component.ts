@@ -942,6 +942,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
           self.dialogService.alert('ERROR', 'MESSAGES.ERROR_QUERY');
           console.error('ERROR: ' + resp.message);
         }
+        self.loaderSubscription.unsubscribe();
       },
       err => {
         console.error(err);
@@ -951,9 +952,8 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
         } else {
           self.dialogService.alert('ERROR', 'MESSAGES.ERROR_QUERY');
         }
-      },
-      () => self.loaderSubscription.unsubscribe()
-    );
+        self.loaderSubscription.unsubscribe();
+      });
   }
 
   getAttributesToQuery(): Array<any> {
@@ -984,8 +984,11 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   }
 
   insertData(values, sqlTypes?: Object): Observable<any> {
+    if (this.loaderSubscription) {
+      this.loaderSubscription.unsubscribe();
+    }
+    this.loaderSubscription = this.load();
     const self = this;
-    const loader = self.load();
     let observable = new Observable(observer => {
       this.dataService[this.insertMethod](values, this.entity, sqlTypes).subscribe(
         resp => {
@@ -995,10 +998,12 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
           } else {
             observer.error(resp.message);
           }
+          self.loaderSubscription.unsubscribe();
         },
-        err => observer.error(err),
-        () => loader.unsubscribe()
-      );
+        err => {
+          observer.error(err);
+          self.loaderSubscription.unsubscribe();
+        });
     });
     return observable;
   }
@@ -1054,8 +1059,11 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   }
 
   updateData(filter, values, sqlTypes?: Object): Observable<any> {
+    if (this.loaderSubscription) {
+      this.loaderSubscription.unsubscribe();
+    }
+    this.loaderSubscription = this.load();
     const self = this;
-    const loader = self.load();
     let observable = new Observable(observer => {
       this.dataService[this.updateMethod](filter, values, this.entity, sqlTypes).subscribe(
         resp => {
@@ -1065,10 +1073,12 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
           } else {
             observer.error(resp.message);
           }
+          self.loaderSubscription.unsubscribe();
         },
-        err => observer.error(err),
-        () => loader.unsubscribe()
-      );
+        err => {
+          observer.error(err);
+          self.loaderSubscription.unsubscribe();
+        });
     });
     return observable;
   }
@@ -1096,8 +1106,11 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   }
 
   deleteData(filter): Observable<any> {
+    if (this.loaderSubscription) {
+      this.loaderSubscription.unsubscribe();
+    }
+    this.loaderSubscription = this.load();
     const self = this;
-    const loader = self.load();
     let observable = new Observable(observer => {
       this.canDiscardChanges = true;
       this.dataService[this.deleteMethod](filter, this.entity).subscribe(
@@ -1112,12 +1125,13 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
             self.postIncorrectDelete(resp);
             observer.error(resp.message);
           }
+          self.loaderSubscription.unsubscribe();
         },
         err => {
           self.postIncorrectDelete(err);
           observer.error(err);
-        },
-        () => loader.unsubscribe());
+          self.loaderSubscription.unsubscribe();
+        });
     });
     return observable;
   }
