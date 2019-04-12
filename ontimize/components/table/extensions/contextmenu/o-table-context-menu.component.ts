@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, forwardRef, Inject, Injector, OnInit, ViewChild } from '@angular/core';
 import { BehaviorSubject, Subscription } from 'rxjs';
 
-import { InputConverter } from '../../../../decorators';
 import { OTranslateService } from '../../../../services';
 import { Util } from '../../../../utils';
 import { OContextMenuComponent } from '../../../contextmenu/o-context-menu-components';
@@ -38,64 +37,80 @@ export class OTableContextMenuComponent implements OnInit {
   public isVisibleDelete: BehaviorSubject<boolean> = new BehaviorSubject(true);
   public isVisibleFilter: BehaviorSubject<boolean> = new BehaviorSubject(true);
 
-  @InputConverter()
   set showInsert(value: boolean) {
+    if (typeof value !== 'boolean') {
+      value = Util.parseBoolean(value as any);
+    }
     this.isVisibleInsert.next(value);
   }
   get showInsert(): boolean {
     return this.isVisibleInsert.getValue();
   }
 
-  @InputConverter()
   set showEdit(value: boolean) {
+    if (typeof value !== 'boolean') {
+      value = Util.parseBoolean(value as any);
+    }
     this.isVisibleEdit.next(value);
   }
   get showEdit(): boolean {
     return this.isVisibleEdit.getValue();
   }
 
-  @InputConverter()
   set showViewDetail(value: boolean) {
+    if (typeof value !== 'boolean') {
+      value = Util.parseBoolean(value as any);
+    }
     this.isVisibleDetail.next(value);
   }
   get showViewDetail(): boolean {
     return this.isVisibleDetail.getValue();
   }
 
-  @InputConverter()
   set showCopy(value: boolean) {
+    if (typeof value !== 'boolean') {
+      value = Util.parseBoolean(value as any);
+    }
     this.isVisibleCopy.next(value);
   }
   get showCopy(): boolean {
     return this.isVisibleCopy.getValue();
   }
 
-  @InputConverter()
   set showSelectAll(value: boolean) {
+    if (typeof value !== 'boolean') {
+      value = Util.parseBoolean(value as any);
+    }
     this.table.isSelectionModeNone() ? this.isVisibleSelectAll.next(false) : this.isVisibleSelectAll.next(value);
   }
   get showSelectAll(): boolean {
     return this.isVisibleSelectAll.getValue();
   }
 
-  @InputConverter()
   set showRefresh(value: boolean) {
+    if (typeof value !== 'boolean') {
+      value = Util.parseBoolean(value as any);
+    }
     this.isVisibleRefresh.next(value);
   }
   get showRefresh(): boolean {
     return this.isVisibleRefresh.getValue();
   }
 
-  @InputConverter()
   set showDelete(value: boolean) {
+    if (typeof value !== 'boolean') {
+      value = Util.parseBoolean(value as any);
+    }
     this.isVisibleDelete.next(value);
   }
   get showDelete(): boolean {
     return this.isVisibleDelete.getValue();
   }
 
-  @InputConverter()
   set showFilter(value: boolean) {
+    if (typeof value !== 'boolean') {
+      value = Util.parseBoolean(value as any);
+    }
     this.isVisibleFilter.next(value);
   }
   get showFilter(): boolean {
