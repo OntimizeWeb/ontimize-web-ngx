@@ -78,7 +78,6 @@ export class OContextMenuContentComponent implements AfterViewInit, OnInit {
   }
 
   public onMenuClosed(e: Event): void {
-    console.log('onMenuClosed', e);
     this.close();
   }
 

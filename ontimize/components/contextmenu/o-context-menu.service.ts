@@ -43,10 +43,7 @@ export class OContextMenuService implements OnDestroy {
     private overlay: Overlay,
     private scrollStrategy: ScrollStrategyOptions
   ) {
-    this.subscription.add(this.closeContextMenu.subscribe(e => {
-      console.log('closeContextMenu', e);
-      this.destroyOverlays();
-    }));
+    this.subscription.add(this.closeContextMenu.subscribe(() => this.destroyOverlays()));
   }
 
   public ngOnDestroy(): void {
