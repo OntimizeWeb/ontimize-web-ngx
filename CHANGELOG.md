@@ -3,6 +3,9 @@
 * **o-combo**: new `searchable` input ([2ae599d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2ae599d))
 * **o-table**: new cell renderer `o-table-cell-renderer-translate` ([2763c47](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2763c47)).
 
+### Bug Fixes
+* **o-context-menu**: remove overlay when context menu is removed ([a2bf383](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a2bf383))
+
 ## 4.0.2 (2019-04-04)
 ### Features
 * **o-form**:
