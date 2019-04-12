@@ -1,9 +1,8 @@
-import { Component, ContentChildren, Injector, OnDestroy, OnInit, EventEmitter, QueryList } from '@angular/core';
+import { Component, ContentChildren, EventEmitter, Injector, OnDestroy, OnInit, QueryList } from '@angular/core';
 import { Subscription } from 'rxjs';
 
-import { ObservableWrapper } from '../../utils';
-import { OContextMenuService, IOContextMenuContext } from './o-context-menu.service';
 import { OComponentMenuItems } from './o-content-menu.class';
+import { IOContextMenuContext, OContextMenuService } from './o-context-menu.service';
 
 export const DEFAULT_OUTPUTS_O_CONTEXT_MENU = [
   'onShow',
@@ -18,13 +17,15 @@ export const DEFAULT_OUTPUTS_O_CONTEXT_MENU = [
 })
 export class OContextMenuComponent implements OnDestroy, OnInit {
 
-  @ContentChildren(OComponentMenuItems) public oContextMenuItems: QueryList<OComponentMenuItems>;
+  @ContentChildren(OComponentMenuItems)
+  public oContextMenuItems: QueryList<OComponentMenuItems>;
 
-  public oContextMenuService: OContextMenuService;
-  protected subscription: Subscription = new Subscription();
   public origin: HTMLElement;
   public onShow: EventEmitter<any> = new EventEmitter();
   public onClose: EventEmitter<any> = new EventEmitter();
+
+  public oContextMenuService: OContextMenuService;
+  protected subscription: Subscription = new Subscription();
 
   constructor(
     protected injector: Injector
@@ -32,18 +33,18 @@ export class OContextMenuComponent implements OnDestroy, OnInit {
     this.oContextMenuService = this.injector.get(OContextMenuService);
   }
 
-  ngOnInit() {
+  public ngOnInit(): void {
     this.subscription.add(this.oContextMenuService.showContextMenu.subscribe(param => this.showContextMenu(param)));
     this.subscription.add(this.oContextMenuService.closeContextMenu.subscribe(param => this.onClose.emit()));
   }
 
-  ngOnDestroy() {
+  public ngOnDestroy(): void {
     this.subscription.unsubscribe();
   }
 
-  showContextMenu(params: IOContextMenuContext): void {
-    this.origin = <HTMLElement>params.event.target;
-    ObservableWrapper.callEmit(this.onShow, params);
+  public showContextMenu(params: IOContextMenuContext): void {
+    this.origin = params.event.target as HTMLElement;
+    this.onShow.emit(params);
     if (params.contextMenu !== this) {
       return;
     }
