@@ -42,6 +42,7 @@ export class OTranslateHttpLoader extends TranslateHttpLoader {
         innerObserver.next(res);
         innerObserver.complete();
       }, error => {
+        console.error(error);
         innerObserver.next(undefined);
       },
         () => innerObserver.complete());
