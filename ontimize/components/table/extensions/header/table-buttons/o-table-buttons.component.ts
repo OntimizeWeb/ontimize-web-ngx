@@ -1,7 +1,9 @@
-import { Component, Inject, forwardRef, Injector, ViewEncapsulation, ViewChild, OnDestroy, ChangeDetectionStrategy, OnInit, ElementRef, AfterViewInit, ChangeDetectorRef } from '@angular/core';
-import { PermissionsUtils } from '../../../../../util/permissions';
-import { OPermissions } from '../../../../../services';
+import { ChangeDetectionStrategy, Component, forwardRef, Inject, Injector, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { BehaviorSubject, Subscription } from 'rxjs';
+
 import { InputConverter } from '../../../../../decorators';
+import { OPermissions } from '../../../../../services';
+import { PermissionsUtils } from '../../../../../util/permissions';
 import { OTableComponent } from '../../../o-table.component';
 import { OTableButtonComponent } from '../table-button/o-table-button.component';
 
@@ -29,100 +31,86 @@ export const DEFAULT_OUTPUTS_O_TABLE_BUTTONS = [];
     '[class.o-table-buttons]': 'true',
   }
 })
+export class OTableButtonsComponent implements OnInit, OnDestroy {
 
-export class OTableButtonsComponent implements OnInit, AfterViewInit, OnDestroy {
   public static DEFAULT_INPUTS_O_TABLE_BUTTONS = DEFAULT_INPUTS_O_TABLE_BUTTONS;
   public static DEFAULT_OUTPUTS_O_TABLE_BUTTONS = DEFAULT_OUTPUTS_O_TABLE_BUTTONS;
 
   /* Inputs */
   @InputConverter()
-  insertButton: boolean = true;
+  public insertButton: boolean = true;
   @InputConverter()
-  refreshButton: boolean = true;
+  public refreshButton: boolean = true;
   @InputConverter()
-  deleteButton: boolean = true;
+  public deleteButton: boolean = true;
   /* End of inputs */
 
-  @ViewChild('insertOButton')
-  insertOButton: OTableButtonComponent;
-  @ViewChild('refreshOButton')
-  refreshOButton: OTableButtonComponent;
-  @ViewChild('deleteOButton')
-  deleteOButton: OTableButtonComponent;
+  public enabledInsertButton: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
+  public enabledRefreshButton: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
+  public enabledDeleteButton: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
   protected permissions: OPermissions[];
   protected mutationObservers: MutationObserver[] = [];
+  protected subscription: Subscription;
 
   constructor(
     protected injector: Injector,
-    protected cd: ChangeDetectorRef,
     @Inject(forwardRef(() => OTableComponent)) protected table: OTableComponent
   ) {
-
-  }
-
-  ngOnInit(): void {
     this.permissions = this.table.getActionsPermissions();
   }
 
-  ngAfterViewInit(): void {
-    if (this.permissions.length === 0) {
-      return;
+  public ngOnInit(): void {
+    const insertPerm: OPermissions = this.getPermissionByAttr('insert');
+    const refreshPerm: OPermissions = this.getPermissionByAttr('refresh');
+    const deletePerm: OPermissions = this.getPermissionByAttr('delete');
+
+    if (this.insertButton && (insertPerm && insertPerm.enabled === false)) {
+      this.enabledInsertButton.next(false);
     }
-    if (this.insertOButton && !this.enabledInsertOButton) {
-      this.disableOTableOptionComponent(this.insertOButton);
+    if (this.refreshButton && (refreshPerm && refreshPerm.enabled === false)) {
+      this.enabledRefreshButton.next(false);
     }
-    if (this.refreshOButton && !this.enabledRefreshOButton) {
-      this.disableOTableOptionComponent(this.refreshOButton);
-    }
-    if (this.deleteOButton && !this.enabledDeleteOButton) {
-      this.disableOTableOptionComponent(this.deleteOButton);
-    }
-    this.cd.detectChanges();
+    this.subscription = this.table.selection.changed.subscribe(() =>
+      deletePerm ? this.enabledDeleteButton.next(deletePerm.enabled && !this.table.selection.isEmpty()) : this.enabledDeleteButton.next(!this.table.selection.isEmpty())
+    );
   }
 
-  protected disableOTableOptionComponent(comp: OTableButtonComponent) {
-    comp.enabled = false;
-    const buttonEL = comp.elRef.nativeElement.querySelector('button');
-    const obs = PermissionsUtils.registerDisabledChangesInDom(buttonEL);
-    this.mutationObservers.push(obs);
-  }
-
-  protected disableButton(buttonEL: ElementRef) {
-    buttonEL.nativeElement.disabled = true;
-    const obs = PermissionsUtils.registerDisabledChangesInDom(buttonEL.nativeElement);
-    this.mutationObservers.push(obs);
-  }
-
-  ngOnDestroy() {
+  public ngOnDestroy(): void {
     if (this.mutationObservers) {
       this.mutationObservers.forEach((m: MutationObserver) => {
         m.disconnect();
       });
     }
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
   }
 
-  add() {
+  public add(): void {
     this.table.add();
   }
 
-  reloadData() {
+  public reloadData(): void {
     this.table.reloadData();
   }
 
-  remove() {
+  public remove(): void {
     this.table.remove();
   }
 
-  protected setPermissionsToOTableButton(perm: OPermissions, button: OTableButtonComponent) {
-    if (perm.visible === false && button) {
-      button.elRef.nativeElement.remove();
-    } else if (perm.enabled === false && button) {
-      button.enabled = false;
-      const buttonEL = button.elRef.nativeElement.querySelector('button');
-      const obs = PermissionsUtils.registerDisabledChangesInDom(buttonEL);
-      this.mutationObservers.push(obs);
-    }
+  public getPermissionByAttr(attr: string): OPermissions {
+    return this.permissions.find((perm: OPermissions) => perm.attr === attr);
+  }
+
+  public registerButtons(oTableButtons: OTableButtonComponent[]): void {
+    const fixedButtons = ['insert', 'refresh', 'delete'];
+    const userItems: OPermissions[] = this.permissions.filter((perm: OPermissions) => fixedButtons.indexOf(perm.attr) === -1);
+    const self = this;
+    userItems.forEach((perm: OPermissions) => {
+      const button = oTableButtons.find((oTableButton: OTableButtonComponent) => oTableButton.oattr === perm.attr);
+      self.setPermissionsToOTableButton(perm, button);
+    });
   }
 
   get showInsertOButton(): boolean {
@@ -149,33 +137,15 @@ export class OTableButtonsComponent implements OnInit, AfterViewInit, OnDestroy 
     return !(perm && perm.visible === false);
   }
 
-  getPermissionByAttr(attr: string) {
-    return this.permissions.find((perm: OPermissions) => perm.attr === attr);
-  }
-
-  get enabledInsertOButton(): boolean {
-    const perm: OPermissions = this.getPermissionByAttr('insert');
-    return !(perm && perm.enabled === false);
-  }
-
-  get enabledRefreshOButton(): boolean {
-    const perm: OPermissions = this.getPermissionByAttr('refresh');
-    return !(perm && perm.enabled === false);
-  }
-
-  get enabledDeleteOButton(): boolean {
-    const perm: OPermissions = this.getPermissionByAttr('delete');
-    return !(perm && perm.enabled === false);
-  }
-
-  registerButtons(oTableButtons: OTableButtonComponent[]) {
-    const fixedButtons = ['insert', 'refresh', 'delete'];
-    const userItems: OPermissions[] = this.permissions.filter((perm: OPermissions) => fixedButtons.indexOf(perm.attr) === -1);
-    const self = this;
-    userItems.forEach((perm: OPermissions) => {
-      const button = oTableButtons.find((oTableButton: OTableButtonComponent) => oTableButton.oattr === perm.attr);
-      self.setPermissionsToOTableButton(perm, button);
-    });
+  protected setPermissionsToOTableButton(perm: OPermissions, button: OTableButtonComponent): void {
+    if (perm.visible === false && button) {
+      button.elRef.nativeElement.remove();
+    } else if (perm.enabled === false && button) {
+      button.enabled = false;
+      const buttonEL = button.elRef.nativeElement.querySelector('button');
+      const obs = PermissionsUtils.registerDisabledChangesInDom(buttonEL);
+      this.mutationObservers.push(obs);
+    }
   }
 
 }

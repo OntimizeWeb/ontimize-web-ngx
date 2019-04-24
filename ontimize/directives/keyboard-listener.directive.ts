@@ -39,7 +39,7 @@ export class OKeyboardListenerDirective implements OnInit {
       try {
         this.keyboardNumberKeysArray.push(parseInt(key));
       } catch (e) {
-        console.log(e);
+        console.error(e);
       }
     });
   }

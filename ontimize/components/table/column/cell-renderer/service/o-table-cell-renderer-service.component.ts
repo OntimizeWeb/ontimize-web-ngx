@@ -117,11 +117,9 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
     this.querySubscription = this.dataService[this.queryMethod](filter, this.colArray, this.entity).subscribe(resp => {
       if (resp.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) {
         self.responseMap[cellvalue] = resp.data[0][self.valueColumn];
-      } else {
-        console.log('error');
       }
     }, err => {
-      console.log(err);
+      console.error(err);
       if (err && typeof err !== 'object') {
         this.dialogService.alert('ERROR', err);
       } else {

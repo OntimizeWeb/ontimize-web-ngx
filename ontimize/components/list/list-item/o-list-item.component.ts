@@ -1,9 +1,9 @@
-import { AfterContentInit, Component, ElementRef, forwardRef, Inject, Injector, ContentChild, ContentChildren, NgModule, Optional, QueryList, Renderer2, ViewChild, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { AfterContentInit, Component, ContentChild, ContentChildren, ElementRef, forwardRef, Inject, Injector, NgModule, Optional, QueryList, Renderer2, ViewChild, ViewEncapsulation } from '@angular/core';
 import { MatLine, MatListAvatarCssMatStyler, MatListItem } from '@angular/material';
 
-import { Util } from '../../../util/util';
 import { OSharedModule } from '../../../shared';
+import { Util } from '../../../util/util';
 import { OListComponent } from '../o-list.component';
 
 @Component({
@@ -18,16 +18,18 @@ import { OListComponent } from '../o-list.component';
 })
 export class OListItemComponent implements AfterContentInit {
 
-  modelData: Object;
+  public modelData: any;
   protected _isSelected: boolean = false;
 
-  @ContentChildren(MatLine) _lines: QueryList<MatLine>;
+  @ContentChildren(MatLine)
+  protected _lines: QueryList<MatLine>;
 
-  @ViewChild('innerListItem') _innerListItem: MatListItem;
+  @ViewChild('innerListItem')
+  protected _innerListItem: MatListItem;
 
   @ContentChild(MatListAvatarCssMatStyler)
   set _hasAvatar(avatar: MatListAvatarCssMatStyler) {
-    let listItemNativeEl = this.elRef.nativeElement.getElementsByTagName('mat-list-item');
+    const listItemNativeEl = this.elRef.nativeElement.getElementsByTagName('mat-list-item');
     if (listItemNativeEl && listItemNativeEl.length === 1) {
       if ((avatar !== null && avatar !== undefined)) {
         this._renderer.addClass(listItemNativeEl[0], 'mat-list-avatar');
@@ -44,11 +46,11 @@ export class OListItemComponent implements AfterContentInit {
     @Optional() @Inject(forwardRef(() => OListComponent)) public _list: OListComponent
   ) { }
 
-  ngAfterContentInit() {
-    var matLinesRef = this._lines;
-    var ngAfterContentInitOriginal = this._innerListItem.ngAfterContentInit;
+  public ngAfterContentInit(): void {
+    const matLinesRef = this._lines;
+    const ngAfterContentInitOriginal = this._innerListItem.ngAfterContentInit;
     this._innerListItem.ngAfterContentInit = function () {
-      let emptyDiv = this._element.nativeElement.querySelector('.mat-list-text:empty');
+      const emptyDiv = this._element.nativeElement.querySelector('.mat-list-text:empty');
       if (emptyDiv) {
         emptyDiv.remove();
       }
@@ -57,57 +59,50 @@ export class OListItemComponent implements AfterContentInit {
     };
   }
 
-  onClick(e?: Event) {
+  public onClick(e?: Event): void {
     if (!this._list.detailButtonInRow) {
       this._list.onItemDetailClick(this);
     }
   }
 
-  onDoubleClick(e?: Event) {
+  public onDoubleClick(e?: Event): void {
     if (!this._list.detailButtonInRow) {
       this._list.onItemDetailDoubleClick(this);
     }
   }
 
-  onDetailIconClicked(e?: Event) {
+  public onDetailIconClicked(e?: Event): void {
     if (Util.isDefined(e)) {
       e.stopPropagation();
     }
     this._list.viewDetail(this.modelData);
   }
 
-  onEditIconClicked(e?: Event) {
+  public onEditIconClicked(e?: Event): void {
     if (Util.isDefined(e)) {
       e.stopPropagation();
     }
     this._list.editDetail(this.modelData);
   }
 
-  setItemData(data) {
+  public setItemData(data: any): void {
     if (!this.modelData) {
       this.modelData = data;
-      if (this._list.selectable) {
-        this.isSelected = this._list.isItemSelected(this.modelData);
-      }
     }
   }
 
-  getItemData() {
+  public getItemData(): any {
     return this.modelData;
   }
 
-  onCheckboxChange(evt) {
+  public onCheckboxChange(e?: Event): void {
     if (this._list.selectable) {
-      this.isSelected = this._list.setSelected(this.modelData);
+      this._list.setSelected(this.modelData);
     }
   }
 
   get isSelected(): boolean {
-    return this._isSelected;
-  }
-
-  set isSelected(val: boolean) {
-    this._isSelected = val;
+    return this._list.selection.isSelected(this.modelData);
   }
 
 }

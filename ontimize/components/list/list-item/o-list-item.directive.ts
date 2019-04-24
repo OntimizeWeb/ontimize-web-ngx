@@ -1,10 +1,9 @@
-import { Directive, ElementRef, Input, HostListener, OnDestroy, OnInit, Renderer2 } from '@angular/core';
+import { Directive, ElementRef, EventEmitter, HostListener, Input, OnDestroy, OnInit, Renderer2 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { EventEmitter } from '@angular/core';
 
-import { IList } from '../o-list.component';
-import { Codes } from '../../../util/codes';
 import { ObservableWrapper } from '../../../util/async';
+import { Codes } from '../../../util/codes';
+import { IList } from '../o-list.component';
 
 @Directive({
   selector: 'o-list-item, mat-list-item[o-list-item], mat-card[o-list-item]',
@@ -17,24 +16,17 @@ import { ObservableWrapper } from '../../../util/async';
 })
 export class OListItemDirective implements OnInit, OnDestroy {
 
-  mdClick: EventEmitter<any> = new EventEmitter();
-  mdDoubleClick: EventEmitter<any> = new EventEmitter();
-
-  protected subcription: any;
-  protected _list: IList;
+  public mdClick: EventEmitter<any> = new EventEmitter();
+  public mdDoubleClick: EventEmitter<any> = new EventEmitter();
 
   @Input('o-list-item')
-  modelData: Object;
+  public modelData: Object;
 
   @Input('selectable')
-  selectable: boolean = false;
+  public selectable: boolean = false;
 
-  @HostListener('mouseenter')
-  onMouseEnter() {
-    if (!this.selectable && this._list.detailMode !== Codes.DETAIL_MODE_NONE) {
-      this.renderer.setStyle(this._el.nativeElement, 'cursor', 'pointer');
-    }
-  }
+  protected _list: IList;
+  protected subcription: any;
 
   constructor(
     public _el: ElementRef,
@@ -42,19 +34,32 @@ export class OListItemDirective implements OnInit, OnDestroy {
     public actRoute: ActivatedRoute
   ) { }
 
-  ngOnInit() {
+  public ngOnInit(): void {
     this.subcription = this.actRoute.params.subscribe(params => this.updateActiveState(params));
   }
 
-  updateActiveState(params) {
+  public ngOnDestroy(): void {
+    if (this.subcription) {
+      this.subcription.unsubscribe();
+    }
+  }
+
+  @HostListener('mouseenter')
+  public onMouseEnter(): void {
+    if (!this.selectable && this._list.detailMode !== Codes.DETAIL_MODE_NONE) {
+      this.renderer.setStyle(this._el.nativeElement, 'cursor', 'pointer');
+    }
+  }
+
+  public updateActiveState(params): void {
     if (this._list) {
-      let aKeys = this._list.getKeys();
+      const aKeys = this._list.getKeys();
       if (this.modelData) {
         let _act = false;
         if (aKeys.length > 0) {
           for (let k = 0; k < aKeys.length; ++k) {
-            let key = aKeys[k];
-            let id = params[key];
+            const key = aKeys[k];
+            const id = params[key];
             _act = (this.modelData[key] === id);
             if (_act === false) {
               break;
@@ -72,13 +77,7 @@ export class OListItemDirective implements OnInit, OnDestroy {
     }
   }
 
-  ngOnDestroy() {
-    if (this.subcription) {
-      this.subcription.unsubscribe();
-    }
-  }
-
-  onItemClicked(e?: Event) {
+  public onItemClicked(e?: Event): void {
     if (!this.selectable) {
       ObservableWrapper.callEmit(this.mdClick, this);
     }
@@ -88,7 +87,7 @@ export class OListItemDirective implements OnInit, OnDestroy {
     return ObservableWrapper.subscribe(this.mdClick, onNext);
   }
 
-  onItemDoubleClicked(e?: Event) {
+  public onItemDoubleClicked(e?: Event): void {
     if (!this.selectable) {
       ObservableWrapper.callEmit(this.mdDoubleClick, this);
     }
@@ -98,25 +97,25 @@ export class OListItemDirective implements OnInit, OnDestroy {
     return ObservableWrapper.subscribe(this.mdDoubleClick, onNext);
   }
 
-  public isSelected() {
+  public isSelected(): boolean {
     return this._list.isItemSelected(this.modelData);
   }
 
-  public onSelect() {
+  public onSelect(): void {
     this._list.setSelected(this.modelData);
   }
 
-  setListComponent(list: IList) {
+  public setListComponent(list: IList): void {
     this._list = list;
   }
 
-  setItemData(data) {
+  public setItemData(data: any): void {
     if (!this.modelData) {
       this.modelData = data;
     }
   }
 
-  getItemData() {
+  public getItemData(): any {
     return this.modelData;
   }
 

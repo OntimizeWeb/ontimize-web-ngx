@@ -1,12 +1,12 @@
-<div [formGroup]="getFormGroup()" [matTooltip]="tooltip" [matTooltipClass]="tooltipClass"
-  [matTooltipPosition]="tooltipPosition" [matTooltipShowDelay]="tooltipShowDelay"
-  [matTooltipHideDelay]="tooltipHideDelay">
-  <mat-form-field [appearance]="appearance" [floatLabel]="floatLabel" [class.read-only]="isReadOnly"
-    [class.custom-width]="hasCustomWidth" fxFlexFill [hideRequiredMarker]="hideRequiredMarker">
+<div [formGroup]="getFormGroup()" [matTooltip]="tooltip" [matTooltipClass]="tooltipClass" [matTooltipPosition]="tooltipPosition"
+  [matTooltipShowDelay]="tooltipShowDelay" [matTooltipHideDelay]="tooltipHideDelay">
+  <mat-form-field [appearance]="appearance" [floatLabel]="floatLabel" [class.read-only]="isReadOnly" [class.custom-width]="hasCustomWidth"
+    [hideRequiredMarker]="hideRequiredMarker" fxFill>
     <mat-label *ngIf="labelVisible">{{ olabel }}</mat-label>
-    <mat-select [value]="getValue()" #selectModel [id]="getAttribute()" fxFill [formControlName]="getAttribute()"
-      [placeholder]="placeHolder" [multiple]="getMultiple()" [required]="isRequired"
+    <mat-select [value]="getValue()" #selectModel [id]="getAttribute()" fxFill [formControlName]="getAttribute()" [placeholder]="placeHolder"
+      [multiple]="getMultiple()" [required]="isRequired" [panelClass]="{ 'o-combo-panel': true, 'o-combo-panel-search': searchable }"
       (selectionChange)="onSelectionChange($event)">
+      <o-combo-search *ngIf="searchable" [formControl]="searchControl"></o-combo-search>
 
       <mat-select-trigger *ngIf="multiple && multipleTriggerLabel">
         {{ selectModel.selected[0] ? getFirstSelectedValue(): '' }}
@@ -15,10 +15,12 @@
         </span>
       </mat-select-trigger>
 
-      <mat-option *ngIf="hasNullSelection()" [value]="null"></mat-option>
-      <mat-option *ngFor="let item of getDataArray(); let rowIndex = index" [value]="getValueColumn(item)">
-        {{ getOptionDescriptionValue(item) }}
-      </mat-option>
+      <div class="o-combo-options-container">
+        <mat-option *ngIf="hasNullSelection()" [value]="null"></mat-option>
+        <mat-option *ngFor="let item of getFilteredDataArray()" [value]="getValueColumn(item)">
+          {{ getOptionDescriptionValue(item) }}
+        </mat-option>
+      </div>
     </mat-select>
 
     <mat-error *ngIf="hasError('required')" text="{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}"></mat-error>

@@ -1,15 +1,15 @@
-import { Injectable, Injector, EventEmitter } from '@angular/core';
+import { EventEmitter, Injectable, Injector } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable, combineLatest } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
 import { share } from 'rxjs/operators';
 
-import { Codes, IAuthService, ObservableWrapper, ServiceUtils } from '../utils';
-import { OntimizeService, DialogService, PermissionsService, ORemoteConfigurationService } from '../services';
 import { AppConfig, Config } from '../config/app-config';
+import { DialogService, OntimizeService, ORemoteConfigurationService, PermissionsService } from '../services';
+import { Codes, IAuthService, ObservableWrapper, ServiceUtils } from '../utils';
 
 export interface SessionInfo {
-  id: number;
-  user: string;
+  id?: number;
+  user?: string;
 }
 
 export interface ILoginService {
@@ -21,6 +21,7 @@ export interface ILoginService {
 
 @Injectable()
 export class LoginService implements ILoginService {
+
   public onLogin: EventEmitter<any> = new EventEmitter();
   public onLogout: EventEmitter<any> = new EventEmitter();
 
@@ -35,7 +36,7 @@ export class LoginService implements ILoginService {
     this._config = this.injector.get(AppConfig).getConfiguration();
     this.router = this.injector.get(Router);
     this._localStorageKey = this._config['uuid'];
-    let sessionInfo = this.getSessionInfo();
+    const sessionInfo = this.getSessionInfo();
     if (sessionInfo && sessionInfo.id && sessionInfo.user && sessionInfo.user.length > 0) {
       this._user = sessionInfo.user;
     }
@@ -50,38 +51,36 @@ export class LoginService implements ILoginService {
     return this._localStorageKey;
   }
 
-  configureOntimizeAuthService(config: Object): void {
+  public configureOntimizeAuthService(config: Object): void {
     this.ontService = this.injector.get(OntimizeService);
-    let servConf = {};
+    const servConf = {};
     servConf[Codes.SESSION_KEY] = this.getSessionInfo();
     this.ontService.configureService(servConf);
   }
 
-  retrieveAuthService(): Promise<IAuthService> {
-    var self = this;
-    let promise = new Promise<IAuthService>((resolve: any) => {
-      if (self.ontService !== undefined) {
-        resolve(self.ontService);
+  public retrieveAuthService(): Promise<IAuthService> {
+    return new Promise<IAuthService>(resolve => {
+      if (this.ontService !== undefined) {
+        resolve(this.ontService);
       } else {
-        self.configureOntimizeAuthService(self._config);
-        resolve(self.ontService);
+        this.configureOntimizeAuthService(this._config);
+        resolve(this.ontService);
       }
     });
-    return promise;
   }
 
-  login(user: string, password: string): Observable<any> {
+  public login(user: string, password: string): Observable<any> {
     this._user = user;
     const self = this;
     let innerObserver: any;
     const dataObservable = new Observable(observer => innerObserver = observer).pipe(share());
 
-    this.retrieveAuthService().then((service) => {
+    this.retrieveAuthService().then(service => {
       service.startsession(user, password).subscribe(resp => {
         self.onLoginSuccess(resp);
         const permissionsService = self.injector.get(PermissionsService);
         const remoteConfigService = self.injector.get(ORemoteConfigurationService);
-        let pendingArray = [];
+        const pendingArray = [];
         pendingArray.push(permissionsService.getUserPermissionsAsPromise());
         pendingArray.push(remoteConfigService.initialize());
         combineLatest(pendingArray).subscribe(() => {
@@ -97,9 +96,9 @@ export class LoginService implements ILoginService {
     return dataObservable.pipe(share());
   }
 
-  onLoginSuccess(sessionId: number) {
+  public onLoginSuccess(sessionId: number): void {
     // save user and sessionid into local storage
-    let session = {
+    const session = {
       user: this._user,
       id: sessionId
     };
@@ -107,16 +106,16 @@ export class LoginService implements ILoginService {
     ObservableWrapper.callEmit(this.onLogin, session);
   }
 
-  onLoginError(error: any) {
+  public onLoginError(error: any): void {
     this.dialogService.alert('ERROR', 'MESSAGES.ERROR_LOGIN');
   }
 
-  logout(): Observable<any> {
+  public logout(): Observable<any> {
     ObservableWrapper.callEmit(this.onLogout, null);
     const self = this;
     const sessionInfo = this.getSessionInfo();
     const dataObservable: Observable<any> = new Observable(innerObserver => {
-      self.retrieveAuthService().then((service) => {
+      self.retrieveAuthService().then(service => {
         service.endsession(sessionInfo.user, sessionInfo.id).subscribe(resp => {
           const remoteConfigService = self.injector.get(ORemoteConfigurationService);
           remoteConfigService.finalize().subscribe(() => {
@@ -133,28 +132,28 @@ export class LoginService implements ILoginService {
     return dataObservable.pipe(share());
   }
 
-  onLogoutSuccess(sessionId: number) {
+  public onLogoutSuccess(sessionId: number): void {
     if (sessionId === 0) {
-      let sessionInfo = this.getSessionInfo();
+      const sessionInfo = this.getSessionInfo();
       delete sessionInfo.id;
       delete sessionInfo.user;
       this.storeSessionInfo(sessionInfo);
     }
   }
 
-  onLogoutError(error: any) {
+  public onLogoutError(error: any): void {
     console.error('Error on logout');
   }
 
-  sessionExpired() {
-    let sessionInfo = this.getSessionInfo();
+  public sessionExpired(): void {
+    const sessionInfo = this.getSessionInfo();
     delete sessionInfo.id;
     delete sessionInfo.user;
     this.storeSessionInfo(sessionInfo);
   }
 
-  isLoggedIn(): boolean {
-    let sessionInfo = this.getSessionInfo();
+  public isLoggedIn(): boolean {
+    const sessionInfo = this.getSessionInfo();
     if (sessionInfo && sessionInfo.id && sessionInfo.user && sessionInfo.user.length > 0) {
       if (isNaN(sessionInfo.id) && sessionInfo.id < 0) {
         return false;
@@ -164,9 +163,9 @@ export class LoginService implements ILoginService {
     return false;
   }
 
-  public storeSessionInfo(sessionInfo: SessionInfo) {
+  public storeSessionInfo(sessionInfo: SessionInfo): void {
     if (sessionInfo !== undefined) {
-      let info = localStorage.getItem(this._localStorageKey);
+      const info = localStorage.getItem(this._localStorageKey);
       let stored = null;
       if (info && info.length > 0) {
         stored = JSON.parse(info);
@@ -181,23 +180,24 @@ export class LoginService implements ILoginService {
   public getSessionInfo(): SessionInfo {
     const info = localStorage.getItem(this._localStorageKey);
     if (!info) {
-      return undefined;
+      return {};
     }
-    let stored = JSON.parse(info);
+    const stored = JSON.parse(info);
     return stored[Codes.SESSION_KEY] || {};
   }
 
-  public logoutAndRedirect() {
+  public logoutAndRedirect(): void {
     this.logout().subscribe(() => {
       ServiceUtils.redirectLogin(this.router, false);
     });
   }
 
-  public logoutWithConfirmationAndRedirect() {
+  public logoutWithConfirmationAndRedirect(): void {
     this.dialogService.confirm('CONFIRM', 'MESSAGES.CONFIRM_LOGOUT').then(res => {
       if (res) {
         this.logoutAndRedirect();
       }
     });
   }
+
 }

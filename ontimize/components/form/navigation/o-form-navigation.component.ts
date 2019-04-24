@@ -161,7 +161,7 @@ export class OFormNavigationComponent implements OnDestroy {
         this.move(0);
       });
     } else {
-      console.log('form-toolbar->next(): total > index');
+      console.error('form-toolbar->next(): total > index');
     }
   }
 
@@ -175,7 +175,7 @@ export class OFormNavigationComponent implements OnDestroy {
         this.move(this.navigationData.length - 1);
       });
     } else {
-      console.log('form-toolbar->next(): index < 0');
+      console.error('form-toolbar->next(): index < 0');
     }
   }
 

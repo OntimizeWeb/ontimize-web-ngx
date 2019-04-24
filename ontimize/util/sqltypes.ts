@@ -420,7 +420,7 @@ export class SQLTypes {
           break;
       }
     } catch (err) {
-      console.log('SQLTypes.parseUsingSQLType error');
+      console.error('SQLTypes.parseUsingSQLType error');
     }
     return value;
   }

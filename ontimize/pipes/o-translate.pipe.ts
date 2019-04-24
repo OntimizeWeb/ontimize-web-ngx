@@ -1,13 +1,4 @@
-import {
-  Pipe,
-  PipeTransform,
-  Injector,
-  NgModule,
-  ModuleWithProviders,
-  OnDestroy,
-  EventEmitter,
-  ChangeDetectorRef
-} from '@angular/core';
+import { ChangeDetectorRef, EventEmitter, Injector, ModuleWithProviders, NgModule, OnDestroy, Pipe, PipeTransform } from '@angular/core';
 
 import { OTranslateService } from '../services';
 import { Util } from '../utils';
@@ -21,20 +12,26 @@ export interface ITranslatePipeArgument {
   pure: false // required to update the value when the promise is resolved
 })
 export class OTranslatePipe implements PipeTransform, OnDestroy {
-  value: string = '';
-  lastKey: string;
-  lastParams: any;
 
-  onLanguageChanged: EventEmitter<any>;
+  public value: string = '';
+  public lastKey: string;
+  public lastParams: any;
+
+  public onLanguageChanged: EventEmitter<any>;
 
   protected oTranslateService: OTranslateService;
+  protected _ref: ChangeDetectorRef;
 
-  constructor(protected injector: Injector, private _ref: ChangeDetectorRef) {
+  constructor(protected injector: Injector) {
+    this._ref = this.injector.get(ChangeDetectorRef);
     this.oTranslateService = this.injector.get(OTranslateService);
   }
 
-  transform(text: string, args: ITranslatePipeArgument): string {
+  public ngOnDestroy(): void {
+    this._dispose();
+  }
 
+  public transform(text: string, args: ITranslatePipeArgument): string {
     if (!text || text.length === 0) {
       return text;
     }
@@ -58,7 +55,7 @@ export class OTranslatePipe implements PipeTransform, OnDestroy {
 
     // subscribe to onLanguageChanged event, in case the language changes
     if (!this.onLanguageChanged) {
-      this.onLanguageChanged = this.oTranslateService.onLanguageChanged.subscribe((lang) => {
+      this.onLanguageChanged = this.oTranslateService.onLanguageChanged.subscribe(lang => {
         if (this.lastKey) {
           this.lastKey = null; // we want to make sure it doesn't return the same value until it's been updated
           this.updateValue(text);
@@ -68,24 +65,20 @@ export class OTranslatePipe implements PipeTransform, OnDestroy {
     return this.value;
   }
 
-  updateValue(key: string): void {
+  public updateValue(key: string): void {
     const args = Util.isDefined(this.lastParams) ? this.lastParams.values || [] : [];
 
-    let res = this.oTranslateService.get(key, args);
+    const res = this.oTranslateService.get(key, args);
     this.value = res !== undefined ? res : key;
     this.lastKey = key;
     this._ref.markForCheck();
   }
 
-  _dispose(): void {
+  protected _dispose(): void {
     if (typeof this.onLanguageChanged !== 'undefined') {
       this.onLanguageChanged.unsubscribe();
       this.onLanguageChanged = undefined;
     }
-  }
-
-  ngOnDestroy(): void {
-    this._dispose();
   }
 
 }
@@ -96,7 +89,7 @@ export class OTranslatePipe implements PipeTransform, OnDestroy {
   exports: [OTranslatePipe]
 })
 export class OTranslateModule {
-  static forRoot(): ModuleWithProviders {
+  public static forRoot(): ModuleWithProviders {
     return {
       ngModule: OTranslateModule,
       providers: []

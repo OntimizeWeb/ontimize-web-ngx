@@ -214,7 +214,7 @@ export class OTableDataSource extends DataSource<any> {
     try {
       resultFormula = (new Function('return ' + formula))();
     } catch (e) {
-      console.log('Operation defined in the calculated column is incorrect ');
+      console.error('Operation defined in the calculated column is incorrect ');
     }
     // 3. Return result
     return resultFormula;

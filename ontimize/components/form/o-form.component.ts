@@ -940,20 +940,20 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
         } else {
           self._updateFormData({});
           self.dialogService.alert('ERROR', 'MESSAGES.ERROR_QUERY');
-          console.log('ERROR: ' + resp.message);
+          console.error('ERROR: ' + resp.message);
         }
+        self.loaderSubscription.unsubscribe();
       },
       err => {
-        console.log(err);
+        console.error(err);
         self._updateFormData({});
         if (err && err.statusText) {
           self.dialogService.alert('ERROR', err.statusText);
         } else {
           self.dialogService.alert('ERROR', 'MESSAGES.ERROR_QUERY');
         }
-      },
-      () => self.loaderSubscription.unsubscribe()
-    );
+        self.loaderSubscription.unsubscribe();
+      });
   }
 
   getAttributesToQuery(): Array<any> {
@@ -984,8 +984,11 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   }
 
   insertData(values, sqlTypes?: Object): Observable<any> {
+    if (this.loaderSubscription) {
+      this.loaderSubscription.unsubscribe();
+    }
+    this.loaderSubscription = this.load();
     const self = this;
-    const loader = self.load();
     let observable = new Observable(observer => {
       this.dataService[this.insertMethod](values, this.entity, sqlTypes).subscribe(
         resp => {
@@ -995,10 +998,12 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
           } else {
             observer.error(resp.message);
           }
+          self.loaderSubscription.unsubscribe();
         },
-        err => observer.error(err),
-        () => loader.unsubscribe()
-      );
+        err => {
+          observer.error(err);
+          self.loaderSubscription.unsubscribe();
+        });
     });
     return observable;
   }
@@ -1025,17 +1030,14 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   }
 
   protected postIncorrectInsert(result: any) {
-    console.log('[OFormComponent.postIncorrectInsert]', result);
     this.showError('insert', result);
   }
 
   protected postIncorrectDelete(result: any) {
-    console.log('[OFormComponent.postIncorrectDelete]', result);
     this.showError('delete', result);
   }
 
   protected postIncorrectUpdate(result: any) {
-    console.log('[OFormComponent.postIncorrectUpdate]', result);
     this.showError('update', result);
   }
 
@@ -1057,8 +1059,11 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   }
 
   updateData(filter, values, sqlTypes?: Object): Observable<any> {
+    if (this.loaderSubscription) {
+      this.loaderSubscription.unsubscribe();
+    }
+    this.loaderSubscription = this.load();
     const self = this;
-    const loader = self.load();
     let observable = new Observable(observer => {
       this.dataService[this.updateMethod](filter, values, this.entity, sqlTypes).subscribe(
         resp => {
@@ -1068,10 +1073,12 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
           } else {
             observer.error(resp.message);
           }
+          self.loaderSubscription.unsubscribe();
         },
-        err => observer.error(err),
-        () => loader.unsubscribe()
-      );
+        err => {
+          observer.error(err);
+          self.loaderSubscription.unsubscribe();
+        });
     });
     return observable;
   }
@@ -1099,8 +1106,11 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   }
 
   deleteData(filter): Observable<any> {
+    if (this.loaderSubscription) {
+      this.loaderSubscription.unsubscribe();
+    }
+    this.loaderSubscription = this.load();
     const self = this;
-    const loader = self.load();
     let observable = new Observable(observer => {
       this.canDiscardChanges = true;
       this.dataService[this.deleteMethod](filter, this.entity).subscribe(
@@ -1115,12 +1125,13 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
             self.postIncorrectDelete(resp);
             observer.error(resp.message);
           }
+          self.loaderSubscription.unsubscribe();
         },
         err => {
           self.postIncorrectDelete(err);
           observer.error(err);
-        },
-        () => loader.unsubscribe());
+          self.loaderSubscription.unsubscribe();
+        });
     });
     return observable;
   }

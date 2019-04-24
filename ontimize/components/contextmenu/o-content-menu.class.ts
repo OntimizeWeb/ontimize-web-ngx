@@ -1,10 +1,12 @@
-
 import { Util } from '../../utils';
+
 export const DEFAULT_INPUTS_O_CONTEXT_MENU_ITEMS = [
   'attr',
   'ovisible: visible'
 ];
+
 export class OComponentMenuItems {
+
   public static TYPE_ITEM_MENU = 'item_menu';
   public static TYPE_GROUP_MENU = 'item_group';
   public static TYPE_SEPARATOR_MENU = 'item_separator';
@@ -12,8 +14,7 @@ export class OComponentMenuItems {
   public attr;
   public type = OComponentMenuItems.TYPE_GROUP_MENU;
 
-
-  public get isVisible() {
+  public get isVisible(): boolean {
     return this.parseInput(this.ovisible);
   }
 
