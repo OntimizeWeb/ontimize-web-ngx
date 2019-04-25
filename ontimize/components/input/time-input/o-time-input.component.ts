@@ -1,18 +1,18 @@
-import { Component, Inject, Injector, forwardRef, ElementRef, EventEmitter, Optional, NgModule, ViewEncapsulation, ViewChild, OnInit, AfterViewInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, Inject, Injector, NgModule, OnDestroy, OnInit, Optional, ViewChild, ViewEncapsulation, forwardRef } from '@angular/core';
+import { DEFAULT_INPUTS_O_FORM_DATA_COMPONENT, DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT, OFormDataComponent, OValueChangeEvent } from '../../o-form-data-component.class';
+import { DateFilterFunction, ODateInputComponent, ODateInputModule } from '../date-input/o-date-input.component';
+import { IFormValueOptions, OFormValue } from '../../form/OFormValue';
+import { OHourInputComponent, OHourInputModule } from '../hour-input/o-hour-input.component';
+import { Subscription, merge } from 'rxjs';
+
 import { CommonModule } from '@angular/common';
 import { FormGroup } from '@angular/forms';
-import { merge, Subscription } from 'rxjs';
-import moment from 'moment';
-
-import { Util } from '../../../utils';
-import { OSharedModule } from '../../../shared';
 import { InputConverter } from '../../../decorators';
 import { OFormComponent } from '../../form/o-form.component';
-import { OFormValue, IFormValueOptions } from '../../form/OFormValue';
-import { OFormDataComponent, DEFAULT_INPUTS_O_FORM_DATA_COMPONENT, DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT, OValueChangeEvent } from '../../o-form-data-component.class';
-
-import { ODateInputModule, ODateInputComponent, DateFilterFunction } from '../date-input/o-date-input.component';
-import { OHourInputModule, OHourInputComponent } from '../hour-input/o-hour-input.component';
+import { OFormControl } from '../o-form-control.class';
+import { OSharedModule } from '../../../shared';
+import { Util } from '../../../utils';
+import moment from 'moment';
 
 export const DEFAULT_INPUTS_O_TIME_INPUT = [
   ...DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,
@@ -112,11 +112,13 @@ export class OTimeInputComponent extends OFormDataComponent implements OnInit, A
 
     this.subscription.add(mergeSubscription);
 
-    this._fControl.markAsTouched = function(){
-      self.dateInput.getFormControl().markAsTouched();
-      self.hourInput.getFormControl().markAsTouched();
-    }
+  }
 
+  public createFormControl(cfg, validators): OFormControl {
+
+    this._fControl = super.createFormControl(cfg, validators);
+    this._fControl.fControlChildren = [this.dateInput, this.hourInput];
+    return this._fControl;
 
   }
 
@@ -135,18 +137,9 @@ export class OTimeInputComponent extends OFormDataComponent implements OnInit, A
       //
     }
     if (this._fControl) {
-      this._fControl.setValue(timeValue, {
-        emitModelToViewChange: false,
-        emitEvent: true,
-        onlySelf: true
-      });
+      this._fControl.setValue(timeValue);
       this._fControl.markAsDirty();
-
-      let val = {};
-      val[this.getAttribute()] = timeValue;
-      this.blockGroupValueChanges = true;
-      (this.form.formGroup.valueChanges as EventEmitter<any>).emit(val);
-      this.blockGroupValueChanges = false;
+     
     }
     this.ensureOFormValue(timeValue);
   }
@@ -237,7 +230,7 @@ export class OTimeInputComponent extends OFormDataComponent implements OnInit, A
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
-    
+
   }
 }
 
