@@ -1,3 +1,6 @@
+## 4.0.4 
+* **OFormControl**: adding class `OFormControl` ([7a9cef6](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7a9cef6))
+
 ## 4.0.3 (2019-04-24)
 ### Features
 * **o-combo**: new `searchable` input ([2ae599d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2ae599d))
