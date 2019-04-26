@@ -1,23 +1,23 @@
-import { SelectionModel } from '@angular/cdk/collections';
-import { CommonModule } from '@angular/common';
-import { AfterContentInit, AfterViewInit, Component, ContentChildren, ElementRef, EventEmitter, forwardRef, Inject, Injector, NgModule, OnChanges, OnDestroy, OnInit, Optional, QueryList, SimpleChange, ViewChild, ViewEncapsulation } from '@angular/core';
-import { MatCheckbox } from '@angular/material';
-import { RouterModule } from '@angular/router';
-import { merge, Subscription } from 'rxjs';
-
-import { InputConverter } from '../../decorators';
-import { OntimizeService } from '../../services';
-import { dataServiceFactory } from '../../services/data-service.provider';
-import { OSharedModule } from '../../shared';
-import { ObservableWrapper } from '../../util/async';
+import { AfterContentInit, AfterViewInit, Component, ContentChildren, ElementRef, EventEmitter, Inject, Injector, NgModule, OnChanges, OnDestroy, OnInit, Optional, QueryList, SimpleChange, ViewChild, ViewEncapsulation, forwardRef } from '@angular/core';
 import { Codes, Util } from '../../utils';
-import { FilterExpressionUtils } from '../filter-expression.utils';
-import { OFormComponent } from '../form/o-form.component';
-import { OSearchInputComponent, OSearchInputModule } from '../input/search-input/o-search-input.component';
-import { OServiceComponent } from '../o-service-component.class';
 import { ISQLOrder, OQueryDataArgs, ServiceUtils } from '../service.utils';
 import { OListItemComponent, OListItemModule } from './list-item/o-list-item.component';
+import { OSearchInputComponent, OSearchInputModule } from '../input/search-input/o-search-input.component';
+import { Subscription, merge } from 'rxjs';
+
+import { CommonModule } from '@angular/common';
+import { FilterExpressionUtils } from '../filter-expression.utils';
+import { InputConverter } from '../../decorators';
+import { MatCheckbox } from '@angular/material';
+import { OFormComponent } from '../form/o-form.component';
 import { OListItemDirective } from './list-item/o-list-item.directive';
+import { OServiceComponent } from '../o-service-component.class';
+import { OSharedModule } from '../../shared';
+import { ObservableWrapper } from '../../util/async';
+import { OntimizeService } from '../../services';
+import { RouterModule } from '@angular/router';
+import { SelectionModel } from '@angular/cdk/collections';
+import { dataServiceFactory } from '../../services/data-service.provider';
 
 export interface IList {
   detailMode: string;
@@ -368,7 +368,7 @@ export class OListComponent extends OServiceComponent implements AfterContentIni
   public onScroll(e: Event): void {
     if (this.pageable) {
       const pendingRegistries = this.dataResponseArray.length < this.state.totalQueryRecordsNumber;
-      if (!this.loading && pendingRegistries) {
+      if (!this.loadingSubject.value && pendingRegistries) {
         const element = e.target as any;
         if (element.offsetHeight + element.scrollTop + 5 >= element.scrollHeight) {
           const queryArgs: OQueryDataArgs = {
