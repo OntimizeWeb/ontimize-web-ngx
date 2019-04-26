@@ -3,7 +3,7 @@
   [matTooltipHideDelay]="tooltipHideDelay" (click)="onClickInput($event)">
   <mat-form-field [appearance]="appearance" [floatLabel]="floatLabel" [hideRequiredMarker]="hideRequiredMarker"
     [class.custom-width]="hasCustomWidth" class="icon-field" fxFlexFill>
-    <mat-label *ngIf="labelVisible">{{ olabel }}</mat-label>
+    <mat-label *ngIf="labelVisible">{{ olabel | oTranslate }}</mat-label>
     <input matInput #matInputRef [matDatepicker]="d" [id]="getAttribute()" [formControlName]="getAttribute()"
       [placeholder]="placeHolder" [readonly]="isReadOnly || !textInputEnabled" (focus)="innerOnFocus($event)"
       (blur)="innerOnBlur($event)" [matDatepickerFilter]="filterDate" (dateChange)="onChangeEvent($event)"

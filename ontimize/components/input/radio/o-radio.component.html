@@ -6,7 +6,7 @@
   <mat-form-field [appearance]="appearance" [floatLabel]="floatLabel" [hideRequiredMarker]="hideRequiredMarker"
     [class.read-only]="isReadOnly" [class.custom-width]="hasCustomWidth" [class.o-radio-from-field-row]="layout==='row'"
     floatLabel="always" class="mat-form-field--no-underline" fxFill>
-    <mat-label *ngIf="labelVisible">{{ olabel }}</mat-label>
+    <mat-label *ngIf="labelVisible">{{ olabel | oTranslate }}</mat-label>
     <input matInput [id]="getAttribute()" [formControlName]="getAttribute()" [placeholder]="placeHolder"
       [required]="isRequired" style="display: none" />
     <mat-radio-group [id]="getAttribute()" [formControlName]="getAttribute()" [name]="getAttribute()"

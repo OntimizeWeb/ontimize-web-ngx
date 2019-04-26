@@ -3,7 +3,7 @@
   [matTooltipHideDelay]="tooltipHideDelay" fxLayout="row" fxLayoutAlign="start center" fxFill>
   <mat-checkbox [id]="getAttribute()" [formControlName]="getAttribute()" [checked]="isChecked()" (change)="onChangeEvent($event)"
     [labelPosition]="labelPosition" [color]="color">
-    {{ olabel }}
+    {{ olabel | oTranslate }}
     <mat-error *ngIf="hasError('required')" text="{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}"></mat-error>
     <mat-error *ngFor="let oError of getActiveOErrors()" text="{{ oError.text | oTranslate }}"></mat-error>
   </mat-checkbox>
