@@ -13,6 +13,7 @@ export * from './components/filter-builder/o-filter-builder-components';
 export * from './components/form/form-components';
 export * from './components/image/o-image.component';
 export * from './components/input/input.components';
+export * from './components/input/o-form-control.class';
 export * from './components/list/o-list.component';
 export * from './components/list/list-item/o-list-item.component';
 export * from './components/list/renderers/o-list-item-avatar.component';
@@ -32,4 +33,3 @@ export * from './components/user-info/o-user-info.component';
 export * from './components/language-selector/o-language-selector.component';
 export * from './components/card-menu-item/o-card-menu-item.component';
 export * from './components/grid/o-grid.component';
-
