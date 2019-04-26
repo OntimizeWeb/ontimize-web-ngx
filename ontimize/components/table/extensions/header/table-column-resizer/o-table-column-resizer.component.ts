@@ -1,7 +1,8 @@
-import { Component, ChangeDetectionStrategy, Renderer2, ViewEncapsulation, forwardRef, Inject, ElementRef, OnInit, HostListener, NgZone, OnDestroy } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, HostListener, Inject, NgZone, OnDestroy, OnInit, Renderer2, ViewEncapsulation, forwardRef } from '@angular/core';
+import { OColumn, OTableComponent } from '../../../o-table.component';
+
 import { InputConverter } from '../../../../../decorators';
 import { Util } from '../../../../../util/util';
-import { OColumn, OTableComponent } from '../../../o-table.component';
 
 export const DEFAULT_INPUTS_O_TABLE_COLUMN_RESIZER = [
   'column'

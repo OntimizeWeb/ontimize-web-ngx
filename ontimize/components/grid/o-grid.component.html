@@ -66,7 +66,7 @@
   <mat-paginator class="o-mat-paginator" #paginator *ngIf="paginationControls && showFooter" [length]="totalRecords" [pageSize]="queryRows"
     [pageSizeOptions]="pageSizeOptions" [pageIndex]="currentPage" [showFirstLastButtons]="true" (page)="onChangePage($event)"></mat-paginator>
 
-  <div *ngIf="loading" fxLayout="row" fxLayoutAlign="center end" class="o-loading-blocker">
+  <div *ngIf="loading | async" fxLayout="row" fxLayoutAlign="center end" class="o-loading-blocker">
     <div fxLayoutAlign="center center" [class.o-spinner-container-controls]="hasControls()" class="o-spinner-container">
       <mat-progress-spinner mode="indeterminate" strokeWidth="3"></mat-progress-spinner>
     </div>
