@@ -1783,7 +1783,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
         previousFilter: this.dataSource.getColumnValueFilterByAttr(column.attr),
         column: column,
         tableData: this.dataSource.getTableData(),
-        preloadValues: this.oTableColumnsFilterComponent.preloadValues
+        preloadValues: this.oTableColumnsFilterComponent.preloadValues,
+        mode: this.oTableColumnsFilterComponent.mode
       },
       disableClose: true,
       panelClass: ['o-dialog-class', 'o-table-dialog']
