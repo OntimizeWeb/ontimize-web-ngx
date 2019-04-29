@@ -1,23 +1,23 @@
-import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, CUSTOM_ELEMENTS_SCHEMA, ElementRef, EventEmitter, Injector, NgModule, NgZone, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router, UrlSegment } from '@angular/router';
-import { combineLatest, Observable, Subscription } from 'rxjs';
-import { InputConverter } from '../../decorators';
-import { OFormLayoutManagerComponent } from '../../layouts';
-import { DialogService, NavigationService, OFormPermissions, ONavigationItem, OntimizeService, OPermissions, PermissionsService, SnackBarService } from '../../services';
-import { dataServiceFactory } from '../../services/data-service.provider';
-import { OSharedModule } from '../../shared';
-import { Codes, SQLTypes, Util } from '../../utils';
-import { IComponent } from '../o-component.class';
-import { IFormDataComponent, IFormDataTypeComponent } from '../o-form-data-component.class';
-import { OFormCacheClass } from './cache/o-form.cache.class';
+import { CUSTOM_ELEMENTS_SCHEMA, ChangeDetectorRef, Component, ElementRef, EventEmitter, Injector, NgModule, NgZone, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { CanComponentDeactivate, CanDeactivateFormGuard } from './guards/o-form-can-deactivate.guard';
-import { OFormNavigationClass } from './navigation/o-form.navigation.class';
-import { OFormContainerComponent } from './o-form-container.component';
+import { Codes, SQLTypes, Util } from '../../utils';
+import { DialogService, NavigationService, OFormPermissions, ONavigationItem, OPermissions, OntimizeService, PermissionsService, SnackBarService } from '../../services';
+import { FormControl, FormGroup } from '@angular/forms';
+import { IFormDataComponent, IFormDataTypeComponent } from '../o-form-data-component.class';
 import { IFormValueOptions, OFormValue } from './OFormValue';
 import { OFormToolbarComponent, OFormToolbarModule } from './toolbar/o-form-toolbar.component';
+import { Observable, Subscription, combineLatest } from 'rxjs';
 
+import { CommonModule } from '@angular/common';
+import { IComponent } from '../o-component.class';
+import { InputConverter } from '../../decorators';
+import { OFormCacheClass } from './cache/o-form.cache.class';
+import { OFormContainerComponent } from './o-form-container.component';
+import { OFormLayoutManagerComponent } from '../../layouts';
+import { OFormNavigationClass } from './navigation/o-form.navigation.class';
+import { OSharedModule } from '../../shared';
+import { dataServiceFactory } from '../../services/data-service.provider';
 
 export interface IFormDataComponentHash {
   [attr: string]: IFormDataComponent;

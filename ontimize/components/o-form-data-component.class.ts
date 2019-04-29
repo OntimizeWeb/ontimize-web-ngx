@@ -2,7 +2,7 @@ import { AfterViewInit, ContentChildren, ElementRef, EventEmitter, HostBinding, 
 import { BooleanConverter, InputConverter } from '../decorators';
 import { Codes, SQLTypes, Util } from '../utils';
 import { FloatLabelType, MatFormFieldAppearance, MatSuffix } from '@angular/material';
-import { FormGroup, ValidatorFn, Validators } from '@angular/forms';
+import { FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { IComponent, OBaseComponent } from './o-component.class';
 import { IFormValueOptions, OFormValue } from './form/OFormValue';
 import { OInputsOptions, O_INPUTS_OPTIONS } from '../config/app-config';
@@ -25,8 +25,8 @@ export interface IFormDataTypeComponent extends IComponent {
 }
 
 export interface IFormControlComponent extends IComponent {
-  getControl(): OFormControl;
-  getFormControl(): OFormControl;
+  getControl(): FormControl;
+  getFormControl(): FormControl;
   hasError(error: string): boolean;
 }
 
@@ -244,7 +244,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     return formGroup;
   }
 
-  public getFormControl(): OFormControl {
+  public getFormControl(): FormControl {
     return this._fControl;
   }
 
@@ -413,7 +413,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     }, null);
   }
 
-  public getControl(): OFormControl {
+  public getControl(): FormControl {
     if (!this._fControl) {
       const validators: ValidatorFn[] = this.resolveValidators();
       const cfg = {
