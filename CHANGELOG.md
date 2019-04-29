@@ -1,5 +1,6 @@
 ## 4.0.4 
 * **OFormControl**: adding class `OFormControl` ([7a9cef6](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7a9cef6))
+* **o-table-columns-filter**: new `mode` attribute ([1b5d8ee](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1b5d8ee))
 
 ## 4.0.3 (2019-04-24)
 ### Features
