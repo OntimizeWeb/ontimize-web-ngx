@@ -1,15 +1,16 @@
-import { Component, OnInit, Inject, forwardRef, EventEmitter, Injector, ViewEncapsulation, ViewChild, ElementRef, OnDestroy, AfterViewInit, ChangeDetectionStrategy } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, EventEmitter, forwardRef, Inject, Injector, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { MatCheckboxChange, MatMenu } from '@angular/material';
-import { Subscription, fromEvent } from 'rxjs';
+import { fromEvent, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
+import { O_INPUTS_OPTIONS, OInputsOptions } from '../../../../../config/app-config';
+import { SQLTypes } from '../../../../../util/sqltypes';
 import { Util } from '../../../../../utils';
-import { OTableComponent, OColumn, OTableOptions } from '../../../o-table.component';
-import { IExpression, FilterExpressionUtils } from '../../../../filter-expression.utils';
-import { OInputsOptions, O_INPUTS_OPTIONS } from '../../../../../config/app-config';
+import { FilterExpressionUtils, IExpression } from '../../../../filter-expression.utils';
+import { OTableCellRendererServiceComponent } from '../../../column/cell-renderer/cell-renderer';
+import { OColumn, OTableComponent, OTableOptions } from '../../../o-table.component';
 
-export const DEFAULT_INPUTS_O_TABLE_QUICKFILTER = [
-];
+export const DEFAULT_INPUTS_O_TABLE_QUICKFILTER = [];
 
 export const DEFAULT_OUTPUTS_O_TABLE_QUICKFILTER = [
   'onChange'
@@ -28,35 +29,35 @@ export const DEFAULT_OUTPUTS_O_TABLE_QUICKFILTER = [
     '[class.o-table-quickfilter]': 'true',
   }
 })
-
 export class OTableQuickfilterComponent implements OnInit, AfterViewInit, OnDestroy {
+
   public static DEFAULT_INPUTS_O_TABLE_QUICKFILTER = DEFAULT_INPUTS_O_TABLE_QUICKFILTER;
   public static DEFAULT_OUTPUTS_O_TABLE_QUICKFILTER = DEFAULT_OUTPUTS_O_TABLE_QUICKFILTER;
 
-  @ViewChild('filter') filter: ElementRef;
-  @ViewChild('menu') matMenu: MatMenu;
-  protected quickFilterObservable: Subscription;
+  @ViewChild('filter')
+  public filter: ElementRef;
+  @ViewChild('menu')
+  public matMenu: MatMenu;
 
-  value: string;
-  onChange: EventEmitter<Object> = new EventEmitter<Object>();
+  public value: string;
+  public onChange: EventEmitter<Object> = new EventEmitter<Object>();
 
   protected oInputsOptions: OInputsOptions;
+  protected quickFilterObservable: Subscription;
 
   constructor(
     protected injector: Injector,
     protected elRef: ElementRef,
     @Inject(forwardRef(() => OTableComponent)) protected table: OTableComponent
-  ) {
+  ) { }
 
-  }
-
-  public ngOnInit() {
+  public ngOnInit(): void {
     this.table.registerQuickFilter(this);
     // workaround because 'x-position="before"' was not working in the template
     this.matMenu.xPosition = 'before';
   }
 
-  ngAfterViewInit() {
+  public ngAfterViewInit(): void {
     this.initializeEventFilter();
 
     try {
@@ -67,24 +68,60 @@ export class OTableQuickfilterComponent implements OnInit, AfterViewInit, OnDest
     Util.parseOInputsOptions(this.elRef, this.oInputsOptions);
   }
 
+  public ngOnDestroy(): void {
+    if (this.quickFilterObservable) {
+      this.quickFilterObservable.unsubscribe();
+    }
+  }
+
+  get oTableOptions(): OTableOptions {
+    return this.table.oTableOptions;
+  }
+
+  get quickFilterColumns(): OColumn[] {
+    return this.table.oTableOptions.columns.filter(oCol => {
+      // CHECK: Why columns with renderers are not filtered?
+      // return oCol.searchable && oCol.visible && !Util.isDefined(oCol.renderer);
+      return oCol.searchable && oCol.visible;
+    });
+  }
+
   get filterExpression(): IExpression {
     let result: IExpression = this.getUserFilter();
     if (!Util.isDefined(result) && Util.isDefined(this.value) && this.value.length > 0) {
-      let queryCols = [];
+      const expressions: IExpression[] = [];
+      // const queryCols: string[] = [];
       this.oTableOptions.columns.forEach((oCol: OColumn) => {
-        if (oCol.searching && oCol.visible && !oCol.renderer) {
-          queryCols.push(oCol.attr);
+        // CHECK: Why columns with renderers are not filtered?
+        // if (oCol.searching && oCol.visible && !oCol.renderer) {
+        if (oCol.searching && oCol.visible && this.isFilterableColumn(oCol)) {
+          if (oCol.renderer instanceof OTableCellRendererServiceComponent) { // Filter column with service renderer
+            // Look for the value in the renderer cache
+            const cacheValue = Object.keys(oCol.renderer.responseMap).find(key => Util.normalizeString(oCol.renderer['responseMap'][key]).indexOf(Util.normalizeString(this.value)) !== -1);
+            if (cacheValue) {
+              expressions.push(FilterExpressionUtils.buildExpressionEquals(oCol.attr, SQLTypes.parseUsingSQLType(cacheValue, SQLTypes.getSQLTypeKey(oCol.sqlType))));
+            }
+          } else if (SQLTypes.isNumericSQLType(oCol.sqlType)) { // Filter numeric column
+            const numValue: any = SQLTypes.parseUsingSQLType(this.value, SQLTypes.getSQLTypeKey(oCol.sqlType));
+            if (numValue) {
+              expressions.push(FilterExpressionUtils.buildExpressionEquals(oCol.attr, numValue));
+            }
+          } else { // Default
+            expressions.push(FilterExpressionUtils.buildExpressionLike(oCol.attr, this.value));
+          }
+          // queryCols.push(oCol.attr);
         }
       });
-      result = FilterExpressionUtils.buildArrayExpressionLike(queryCols, this.value);
+      result = expressions.reduce((a, b) => FilterExpressionUtils.buildComplexExpression(a, b, FilterExpressionUtils.OP_OR));
+      // result = FilterExpressionUtils.buildArrayExpressionLike(queryCols, this.value);
     }
     return result;
   }
 
-  getUserFilter() {
-    let result: IExpression = undefined;
+  public getUserFilter(): IExpression {
+    let result: IExpression;
     if (this.table.quickFilterCallback instanceof Function) {
-      let userFilter = this.table.quickFilterCallback(this.value);
+      const userFilter = this.table.quickFilterCallback(this.value);
       if (Util.isDefined(userFilter) && FilterExpressionUtils.instanceofExpression(userFilter)) {
         result = (userFilter as IExpression);
       } else if (Util.isDefined(userFilter)) {
@@ -94,22 +131,22 @@ export class OTableQuickfilterComponent implements OnInit, AfterViewInit, OnDest
     return result;
   }
 
-  initializeEventFilter() {
+  public initializeEventFilter(): void {
     if (this.filter && !this.quickFilterObservable) {
       this.quickFilterObservable = fromEvent(this.filter.nativeElement, 'keyup')
         .pipe(debounceTime(150))
         .pipe(distinctUntilChanged())
         .subscribe(() => {
-          const filterValue = this.filter.nativeElement.value;
-          if (!this.table.dataSource || this.value === filterValue) {
+          const filterVal = this.filter.nativeElement.value;
+          if (!this.table.dataSource || this.value === filterVal) {
             return;
           }
-          this.setValue(filterValue);
+          this.setValue(filterVal);
           this.onChange.emit(this.value);
         });
 
       // if exists filter value in storage then filter result table
-      let filterValue = this.value || this.filter.nativeElement.value;
+      const filterValue = this.value || this.filter.nativeElement.value;
       this.filter.nativeElement.value = filterValue;
       if (this.table.dataSource && filterValue && filterValue.length) {
         this.table.dataSource.quickFilter = filterValue;
@@ -117,47 +154,31 @@ export class OTableQuickfilterComponent implements OnInit, AfterViewInit, OnDest
     }
   }
 
-  ngOnDestroy(): void {
-    if (this.quickFilterObservable) {
-      this.quickFilterObservable.unsubscribe();
-    }
-  }
-
-  setValue(value: any, trigger: boolean = true) {
+  public setValue(value: any, trigger: boolean = true): void {
     this.value = value;
     if (trigger && this.table && this.table.dataSource) {
       this.table.dataSource.quickFilter = this.value;
     }
   }
 
-  get oTableOptions(): OTableOptions {
-    return this.table.oTableOptions;
-  }
-
-  get quickFilterColumns(): Array<OColumn> {
-    return this.table.oTableOptions.columns.filter((oCol) => {
-      return oCol.searchable && oCol.visible && !Util.isDefined(oCol.renderer);
-    });
-  }
-
-  onMenuClosed() {
+  public onMenuClosed(): void {
     this.setValue(this.value);
     this.onChange.emit(this.value);
   }
 
-  isChecked(column: OColumn): boolean {
+  public isChecked(column: OColumn): boolean {
     return column.searching;
   }
 
-  onCheckboxChange(column: OColumn, event: MatCheckboxChange) {
+  public onCheckboxChange(column: OColumn, event: MatCheckboxChange): void {
     column.searching = event.checked;
   }
 
-  showCaseSensitiveCheckbox(): boolean {
+  public showCaseSensitiveCheckbox(): boolean {
     return !this.table.pageable;
   }
 
-  areAllColumnsChecked(): boolean {
+  public areAllColumnsChecked(): boolean {
     let result: boolean = true;
     this.quickFilterColumns.forEach((col: OColumn) => {
       result = result && col.searching;
@@ -165,9 +186,22 @@ export class OTableQuickfilterComponent implements OnInit, AfterViewInit, OnDest
     return result;
   }
 
-  onSelectAllChange(event: MatCheckboxChange) {
+  public onSelectAllChange(event: MatCheckboxChange): void {
     this.quickFilterColumns.forEach((col: OColumn) => {
       col.searching = event.checked;
     });
   }
+
+  protected isFilterableColumn(column: OColumn): boolean {
+    return !column.renderer || (
+      column.type === 'string' ||
+      column.type === 'translate' ||
+      column.type === ' integer' ||
+      column.type === 'real' ||
+      column.type === 'percentage' ||
+      column.type === 'currency' ||
+      column.type === 'service'
+    );
+  }
+
 }

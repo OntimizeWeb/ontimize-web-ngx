@@ -7,21 +7,29 @@ import { OTableColumnComponent } from '../o-table-column.component';
 export class OBaseTableCellRenderer implements AfterContentInit {
 
   public templateref: TemplateRef<any>;
+  public tableColumn: OTableColumnComponent;
 
+  protected type: string;
   protected pipeArguments: any;
   protected componentPipe: PipeTransform;
-  tableColumn: OTableColumnComponent;
-  protected type: string;
 
   constructor(protected injector: Injector) {
     this.tableColumn = this.injector.get(OTableColumnComponent);
   }
 
-  ngAfterContentInit(): void {
+  public ngAfterContentInit(): void {
     this.registerRenderer();
   }
 
-  registerRenderer() {
+  get table(): OTableComponent {
+    return this.tableColumn.table;
+  }
+
+  get column(): string {
+    return this.tableColumn.attr;
+  }
+
+  public registerRenderer(): void {
     this.tableColumn.registerRenderer(this);
     if (!Util.isDefined(this.type) && Util.isDefined(this.tableColumn.type)) {
       this.type = this.tableColumn.type;
@@ -33,7 +41,7 @@ export class OBaseTableCellRenderer implements AfterContentInit {
    * @param cellvalue the internal table cell value
    * @param rowvalue the table row value
    */
-  getCellData(cellvalue: any, rowvalue?: any) {
+  public getCellData(cellvalue: any, rowvalue?: any): string {
     let parsedValue: string;
     if (this.componentPipe && typeof this.pipeArguments !== 'undefined' && cellvalue !== undefined) {
       parsedValue = this.componentPipe.transform(cellvalue, this.pipeArguments);
@@ -43,15 +51,7 @@ export class OBaseTableCellRenderer implements AfterContentInit {
     return parsedValue;
   }
 
-  get table(): OTableComponent {
-    return this.tableColumn.table;
-  }
-
-  get column(): string {
-    return this.tableColumn.attr;
-  }
-
-  getTooltip(cellValue: any, rowValue: any) {
+  public getTooltip(cellValue: any, rowValue: any): string {
     return this.getCellData(cellValue, rowValue);
   }
 

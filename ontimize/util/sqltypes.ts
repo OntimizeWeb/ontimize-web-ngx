@@ -1,4 +1,5 @@
 export class SQLTypes {
+
   /**
    * <P>The constant in the Java programming language, sometimes referred
    * to as a type code, that identifies the generic SQL type
@@ -48,7 +49,6 @@ export class SQLTypes {
    */
   public static REAL = 7;
 
-
   /**
    * <P>The constant in the Java programming language, sometimes referred
    * to as a type code, that identifies the generic SQL type
@@ -91,7 +91,6 @@ export class SQLTypes {
    */
   public static LONGVARCHAR = -1;
 
-
   /**
    * <P>The constant in the Java programming language, sometimes referred
    * to as a type code, that identifies the generic SQL type
@@ -112,7 +111,6 @@ export class SQLTypes {
    * <code>TIMESTAMP</code>.
    */
   public static TIMESTAMP = 93;
-
 
   /**
    * <P>The constant in the Java programming language, sometimes referred
@@ -149,8 +147,6 @@ export class SQLTypes {
    * the methods <code>getObject</code> and <code>setObject</code>.
    */
   public static OTHER = 1111;
-
-
 
   /**
    * The constant in the Java programming language, sometimes referred to
@@ -224,7 +220,7 @@ export class SQLTypes {
    */
   public static BOOLEAN = 16;
 
-  //------------------------- JDBC 4.0 -----------------------------------
+  // ------------------------- JDBC 4.0 -----------------------------------
 
   /**
    * The constant in the Java programming language, sometimes referred to
@@ -278,7 +274,7 @@ export class SQLTypes {
   public static SQLXML = 2009;
 
   public static getSQLTypeValue(type: string): number {
-    let value;
+    let value: number;
     type = type ? type.toUpperCase() : '';
     switch (type) {
       case 'BIT':
@@ -399,6 +395,127 @@ export class SQLTypes {
     return value;
   }
 
+  public static getSQLTypeKey(type: number): string {
+    let value: string;
+    switch (type) {
+      case SQLTypes.BIT:
+        value = 'BIT';
+        break;
+      case SQLTypes.TINYINT:
+        value = 'TINYINT';
+        break;
+      case SQLTypes.SMALLINT:
+        value = 'SMALLINT';
+        break;
+      case SQLTypes.INTEGER:
+        value = 'INTEGER';
+        break;
+      case SQLTypes.BIGINT:
+        value = 'BIGINT';
+        break;
+      case SQLTypes.FLOAT:
+        value = 'FLOAT';
+        break;
+      case SQLTypes.REAL:
+        value = 'REAL';
+        break;
+      case SQLTypes.DOUBLE:
+        value = 'DOUBLE';
+        break;
+      case SQLTypes.NUMERIC:
+        value = 'NUMERIC';
+        break;
+      case SQLTypes.DECIMAL:
+        value = 'DECIMAL';
+        break;
+      case SQLTypes.CHAR:
+        value = 'CHAR';
+        break;
+      case SQLTypes.VARCHAR:
+        value = 'VARCHAR';
+        break;
+      case SQLTypes.LONGVARCHAR:
+        value = 'LONGVARCHAR';
+        break;
+      case SQLTypes.DATE:
+        value = 'DATE';
+        break;
+      case SQLTypes.TIME:
+        value = 'TIME';
+        break;
+      case SQLTypes.TIMESTAMP:
+        value = 'TIMESTAMP';
+        break;
+      case SQLTypes.BINARY:
+        value = 'BINARY';
+        break;
+      case SQLTypes.VARBINARY:
+        value = 'VARBINARY';
+        break;
+      case SQLTypes.LONGVARBINARY:
+        value = 'LONGVARBINARY';
+        break;
+      case SQLTypes.NULL:
+        value = 'NULL';
+        break;
+      case SQLTypes.OTHER:
+        value = 'OTHER';
+        break;
+      case SQLTypes.JAVA_OBJECT:
+        value = 'JAVA_OBJECT';
+        break;
+      case SQLTypes.DISTINCT:
+        value = 'DISTINCT';
+        break;
+      case SQLTypes.STRUCT:
+        value = 'STRUCT';
+        break;
+      case SQLTypes.ARRAY:
+        value = 'ARRAY';
+        break;
+      case SQLTypes.BLOB:
+        value = 'BLOB';
+        break;
+      case SQLTypes.CLOB:
+        value = 'CLOB';
+        break;
+      case SQLTypes.REF:
+        value = 'REF';
+        break;
+      case SQLTypes.DATALINK:
+        value = 'DATALINK';
+        break;
+      case SQLTypes.BOOLEAN:
+        value = 'BOOLEAN';
+        break;
+      case SQLTypes.ROWID:
+        value = 'ROWID';
+        break;
+      case SQLTypes.NCHAR:
+        value = 'NCHAR';
+        break;
+      case SQLTypes.NVARCHAR:
+        value = 'NVARCHAR';
+        break;
+      case SQLTypes.LONGNVARCHAR:
+        value = 'LONGNVARCHAR';
+        break;
+      case SQLTypes.NCLOB:
+        value = 'NCLOB';
+        break;
+      case SQLTypes.SQLXML:
+        value = 'SQLXML';
+        break;
+      case SQLTypes.BASE64:
+        value = 'BASE64';
+        break;
+      default:
+        value = 'OTHER';
+        break;
+    }
+    return value;
+  }
+
   public static parseUsingSQLType(arg: any, type: string): any {
     let value = arg;
     type = type ? type.toUpperCase() : '';
@@ -408,7 +525,7 @@ export class SQLTypes {
         case 'SMALLINT':
         case 'INTEGER':
         case 'BIGINT':
-          value = parseInt(arg);
+          value = Number(arg);
           break;
         case 'FLOAT':
         case 'REAL':
@@ -424,5 +541,19 @@ export class SQLTypes {
     }
     return value;
   }
-}
 
+  public static isNumericSQLType(arg: number): boolean {
+    return [
+      SQLTypes.TINYINT,
+      SQLTypes.SMALLINT,
+      SQLTypes.INTEGER,
+      SQLTypes.BIGINT,
+      SQLTypes.FLOAT,
+      SQLTypes.REAL,
+      SQLTypes.DOUBLE,
+      SQLTypes.NUMERIC,
+      SQLTypes.DECIMAL
+    ].indexOf(arg) !== -1;
+  }
+
+}
