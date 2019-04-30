@@ -4,7 +4,7 @@ import { ITranslatePipeArgument, OTranslatePipe } from '../../../../../pipes';
 import { OBaseTableCellRenderer } from '../o-base-table-cell-renderer.class';
 
 export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_TRANSLATE = [
-  // translate-params [(rowData: any) => any[]]: function thar receives the row data and return the parameters for the translate pipe.
+  // translate-params [(rowData: any) => any[]]: function that receives the row data and return the parameters for the translate pipe.
   'translateArgsFn: translate-params'
 ];
 
