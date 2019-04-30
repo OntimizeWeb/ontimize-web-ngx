@@ -1,9 +1,9 @@
-import { Component, Injector, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, Injector, NgModule } from '@angular/core';
 import { MatSnackBarRef } from '@angular/material';
 
-import { OSharedModule } from '../../shared';
 import { OTranslateModule } from '../../pipes/o-translate.pipe';
+import { OSharedModule } from '../../shared';
 
 export declare type OSnackBarIconPosition = 'left' | 'right';
 
@@ -12,27 +12,32 @@ export declare type OSnackBarIconPosition = 'left' | 'right';
  */
 export class OSnackBarConfig {
   /** Text shown in the action button. */
-  action?: string;
+  public action?: string;
   /** Time the SnackBar is shown. */
-  milliseconds?: number;
+  public milliseconds?: number;
   /** Material icon shown in the SnackBar. */
-  icon?: string;
+  public icon?: string;
   /** Position where the icon is shown. Default left. */
-  iconPosition?: OSnackBarIconPosition;
+  public iconPosition?: OSnackBarIconPosition;
+  /** CSS class to be added to the snack bar container */
+  public cssClass?: string;
 }
 
 @Component({
   moduleId: module.id,
   selector: 'o-snackbar',
   templateUrl: 'o-snackbar.component.html',
-  styleUrls: ['o-snackbar.component.scss']
+  styleUrls: ['o-snackbar.component.scss'],
+  host: {
+    '[class.o-snackbar]': 'true'
+  }
 })
 export class OSnackBarComponent {
 
-  message: string;
-  action: string;
-  icon: string;
-  iconPosition: OSnackBarIconPosition = 'left';
+  public message: string;
+  public action: string;
+  public icon: string;
+  public iconPosition: OSnackBarIconPosition = 'left';
 
   protected snackBarRef: MatSnackBarRef<{}>;
 
@@ -42,7 +47,7 @@ export class OSnackBarComponent {
     this.snackBarRef = this.injector.get(MatSnackBarRef);
   }
 
-  open(message: string, config?: OSnackBarConfig): void {
+  public open(message: string, config?: OSnackBarConfig): void {
     this.message = message;
     if (config) {
       if (config.action) {
@@ -57,7 +62,7 @@ export class OSnackBarComponent {
     }
   }
 
-  onAction(e: Event): void {
+  public onAction(e: Event): void {
     this.snackBarRef.closeWithAction();
   }
 
@@ -66,7 +71,6 @@ export class OSnackBarComponent {
 @NgModule({
   declarations: [OSnackBarComponent],
   imports: [CommonModule, OSharedModule, OTranslateModule],
-  exports: [OSnackBarComponent, CommonModule]
+  exports: [CommonModule, OSnackBarComponent]
 })
-export class OSnackBarModule {
-}
+export class OSnackBarModule { }
