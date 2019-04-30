@@ -159,7 +159,7 @@ export class OComboSearchComponent implements OnInit, OnDestroy {
 
   /**
    * Resets the current search value
-   * @param {boolean} focus whether to focus after resetting
+   * @param focus whether to focus after resetting
    */
   public reset(focus?: boolean): void {
     if (!this.searchSelectInput) {
