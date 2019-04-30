@@ -1,5 +1,5 @@
 import { Component, Inject, Injector, ViewChild, ViewEncapsulation } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 
 import { Util } from '../../../util/util';
 import { OSearchInputComponent } from '../../input/search-input/o-search-input.component';
@@ -23,18 +23,20 @@ export const DEFAULT_INPUTS_O_LIST_PICKER = [
 })
 export class OListPickerDialogComponent {
 
-  protected data: Array<any> = [];
-  protected visibleColsArray: Array<string>;
+  public filter: boolean = true;
+  public visibleData: any = [];
+  public searchVal: string;
 
-  filter: boolean = true;
-  visibleData: Array<any> = [];
-  searchVal: string;
+  @ViewChild('searchInput')
+  public searchInput: OSearchInputComponent;
+
+  protected data: any[] = [];
+  protected menuColumns: string;
+  protected visibleColsArray: string[];
 
   protected _startIndex: number = 0;
   protected recordsNumber: number = 100;
   protected scrollThreshold: number = 200;
-
-  @ViewChild('searchInput') searchInput: OSearchInputComponent;
 
   constructor(
     public dialogRef: MatDialogRef<OListPickerDialogComponent>,
@@ -53,10 +55,13 @@ export class OListPickerDialogComponent {
     if (data.filter !== undefined) {
       this.filter = data.filter;
     }
+    if (data.menuColumns) {
+      this.menuColumns = data.menuColumns;
+    }
     this.searchVal = data.searchVal;
   }
 
-  ngAfterViewInit(): void {
+  public ngAfterViewInit(): void {
     if (Util.isDefined(this.searchVal) && this.searchInput !== undefined && this.searchVal.length > 0) {
       this.searchInput.getFormControl().setValue(this.searchVal, {
         emitEvent: false
@@ -67,20 +72,29 @@ export class OListPickerDialogComponent {
     }
   }
 
-  onClickListItem(e: Event, value: any): void {
+  get startIndex(): number {
+    return this._startIndex;
+  }
+
+  set startIndex(val: number) {
+    this._startIndex = val;
+    this.visibleData = this.data.slice(this.startIndex, this.recordsNumber);
+  }
+
+  public onClickListItem(e: Event, value: any): void {
     this.dialogRef.close(value);
   }
 
-  trackByFn(index: number, item: any) {
+  public trackByFn(index: number, item: any): number {
     return index;
   }
 
-  onScroll(event: any): void {
+  public onScroll(event: any): void {
     if (event && event.target && this.visibleData.length < this.data.length) {
-      let pendingScroll = event.target.scrollHeight - (event.target.scrollTop + event.target.clientHeight);
+      const pendingScroll = event.target.scrollHeight - (event.target.scrollTop + event.target.clientHeight);
       if (!isNaN(pendingScroll) && pendingScroll <= this.scrollThreshold) {
         let index = this.visibleData.length;
-        let searchVal = this.searchInput.getValue();
+        const searchVal = this.searchInput.getValue();
         if (Util.isDefined(searchVal) && searchVal.length > 0) {
           index = this.visibleData[this.visibleData.length - 1]['_parsedIndex'];
         }
@@ -98,7 +112,7 @@ export class OListPickerDialogComponent {
     }
   }
 
-  onFilterList(searchVal: any) {
+  public onFilterList(searchVal: any): void {
     this.visibleData = this.transform(this.data, {
       filtervalue: searchVal,
       filtercolumns: this.visibleColsArray
@@ -107,22 +121,17 @@ export class OListPickerDialogComponent {
     this.visibleData = this.visibleData.slice(this.startIndex, this.recordsNumber);
   }
 
-  set startIndex(val: number) {
-    this._startIndex = val;
-    this.visibleData = this.data.slice(this.startIndex, this.recordsNumber);
+  public isEmptyData(): boolean {
+    return Util.isDefined(this.visibleData) ? this.visibleData.length === 0 : true;
   }
 
-  get startIndex(): number {
-    return this._startIndex;
-  }
-
-  private transform(value: Array<any>, args: any): any {
+  private transform(value: any[], args: any): any {
     if (!args || args.length <= 1) {
       return value;
     }
 
-    let filterValue = args['filtervalue'] ? args['filtervalue'] : '';
-    let filterColumns = args['filtercolumns'];
+    const filterValue = args['filtervalue'] ? args['filtervalue'] : '';
+    const filterColumns = args['filtercolumns'];
 
     if (!filterColumns || !filterValue || filterValue.length === 0) {
       return value;
@@ -132,9 +141,9 @@ export class OListPickerDialogComponent {
       return value;
     }
 
-    return value.filter((item) => {
+    return value.filter(item => {
       for (let i = 0; i < filterColumns.length; i++) {
-        let colName = filterColumns[i];
+        const colName = filterColumns[i];
         if (this._isBlank(colName)) {
           continue;
         }
@@ -155,10 +164,6 @@ export class OListPickerDialogComponent {
 
   private _isBlank(value: string): boolean {
     return !Util.isDefined(value) || value.length === 0;
-  }
-
-  isEmptyData(): boolean {
-    return Util.isDefined(this.visibleData) ? this.visibleData.length === 0 : true;
   }
 
 }

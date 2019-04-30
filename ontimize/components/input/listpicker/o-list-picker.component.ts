@@ -1,20 +1,20 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, Inject, Injector, NgModule, OnChanges, OnInit, Optional, SimpleChange, ViewChild, forwardRef } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { AfterViewInit, Component, ElementRef, EventEmitter, forwardRef, Inject, Injector, NgModule, OnChanges, OnInit, Optional, SimpleChange, ViewChild } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { MatDialog, MatDialogConfig, MatDialogRef, MatInput } from '@angular/material';
 
-import { CommonModule } from '@angular/common';
-import { FormControl } from '@angular/forms';
-import { IFormValueOptions } from '../../form/form-components';
 import { InputConverter } from '../../../decorators';
+import { OntimizeService } from '../../../services';
+import { dataServiceFactory } from '../../../services/data-service.provider';
+import { OSharedModule } from '../../../shared';
 import { ODialogModule } from '../../dialog/o-dialog.component';
+import { IFormValueOptions } from '../../form/form-components';
 import { OFormComponent } from '../../form/o-form.component';
+import { OSearchInputModule } from '../../input/search-input/o-search-input.component';
+import { OValueChangeEvent } from '../../o-form-data-component.class';
 import { OFormControl } from '../o-form-control.class';
 import { OFormServiceComponent } from '../o-form-service-component.class';
 import { OListPickerDialogComponent } from './o-list-picker-dialog.component';
-import { OSearchInputModule } from '../../input/search-input/o-search-input.component';
-import { OSharedModule } from '../../../shared';
-import { OValueChangeEvent } from '../../o-form-data-component.class';
-import { OntimizeService } from '../../../services';
-import { dataServiceFactory } from '../../../services/data-service.provider';
 
 export const DEFAULT_INPUTS_O_LIST_PICKER = [
   ...OFormServiceComponent.DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT,
@@ -53,6 +53,8 @@ export class OListPickerComponent extends OFormServiceComponent implements After
   public onDialogCancel: EventEmitter<any> = new EventEmitter();
   /* End outputs */
 
+  public stateCtrl: FormControl;
+
   /* Inputs */
   @InputConverter()
   public textInputEnabled: boolean = true;
@@ -74,8 +76,6 @@ export class OListPickerComponent extends OFormServiceComponent implements After
   protected blurTimer;
   protected blurDelay = 200;
   protected blurPrevent = false;
-
-  public stateCtrl: FormControl;
 
   constructor(
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
@@ -99,7 +99,7 @@ export class OListPickerComponent extends OFormServiceComponent implements After
   }
 
   public createFormControl(): OFormControl {
-    this._fControl = super.createFormControl()
+    this._fControl = super.createFormControl();
     this._fControl.fControlChildren = [this.stateCtrl];
     return this._fControl;
   }
@@ -232,6 +232,7 @@ export class OListPickerComponent extends OFormServiceComponent implements After
         data: this.getDialogDataArray(this.dataArray),
         filter: this.filter,
         searchVal: this.visibleInputValue,
+        menuColumns: this.visibleColumns, // TODO: improve this, this is passed to `o-search-input` of the dialog
         visibleColumns: this.visibleColArray,
         queryRows: this.queryRows
       }
