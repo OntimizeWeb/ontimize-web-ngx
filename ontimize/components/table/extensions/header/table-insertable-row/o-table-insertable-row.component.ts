@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ComponentFactoryResolver, ElementRef, EventEmitter, Inject, Injector, OnInit, forwardRef } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ComponentFactoryResolver, EventEmitter, Inject, Injector, OnInit, forwardRef } from '@angular/core';
 import { FormControl, ValidatorFn, Validators } from '@angular/forms';
 import { OColumn, OTableComponent } from '../../../o-table.component';
 import { OPermissions, OTranslateService, SnackBarService } from '../../../../../services';
@@ -112,10 +112,18 @@ export class OTableInsertableRowComponent implements OnInit {
           editor.table = self.table;
           editor.tableColumn = col.editor ? col.editor.tableColumn : col.definition;
           editor.orequired = this.isColumnRequired(col);
-          editor.formControl = this.getControl(col, disabledCol);
-          editor.controlArgs = { silent: true };
-          editor.startEdition(self.rowData);
-          editor.formControl.markAsUntouched();
+          let self2 = this;
+          editor.editorCreated.subscribe(x=>{
+            //self.getControl(col, disabledCol);
+             editor.controlArgs = { silent: true };
+             editor.startEdition(self2.rowData);
+             editor.formControl.markAsUntouched();
+             self2.controls[col.attr] = editor.getFormControl();
+          })
+          // editor.formControl = this.getControl(col, disabledCol);
+          // editor.controlArgs = { silent: true };
+          // editor.startEdition(self.rowData);
+          // editor.formControl.markAsUntouched();
           col.editor = editor;
           
         }

@@ -1,7 +1,7 @@
 import { BehaviorSubject, Observable, Subscription, combineLatest, of } from 'rxjs';
 import { ChangeDetectionStrategy, Component, ContentChildren, ElementRef, EventEmitter, HostListener, Inject, Injector, NgModule, OnDestroy, OnInit, Optional, QueryList, ViewChild, ViewChildren, ViewEncapsulation, forwardRef } from '@angular/core';
 import { Codes, ObservableWrapper, SQLTypes, Util } from '../../utils';
-import { ColumnValueFilterOperator, IColumnValueFilter, OTableButtonComponent, OTableButtonsComponent, OTableColumnsFilterComponent, OTableEditableRowComponent, OTableInsertableRowComponent, OTableMenuComponent, OTableOptionComponent, OTableQuickfilterComponent, O_TABLE_HEADER_COMPONENTS } from './extensions/header/o-table-header-components';
+import { ColumnValueFilterOperator, IColumnValueFilter, OTableButtonComponent, OTableButtonsComponent, OTableColumnsFilterComponent, OTableInsertableRowComponent, OTableMenuComponent, OTableOptionComponent, OTableQuickfilterComponent, O_TABLE_HEADER_COMPONENTS } from './extensions/header/o-table-header-components';
 import { FilterExpressionUtils, IExpression } from '../filter-expression.utils';
 import { ISQLOrder, OQueryDataArgs, ServiceUtils } from '../service.utils';
 import { MAT_RIPPLE_GLOBAL_OPTIONS, MatCheckboxChange, MatDialog, MatMenu, MatPaginator, MatPaginatorIntl, MatTab, MatTabGroup, PageEvent } from '@angular/material';

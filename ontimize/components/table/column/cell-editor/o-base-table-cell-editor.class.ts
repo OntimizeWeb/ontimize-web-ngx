@@ -54,6 +54,8 @@ export class OBaseTableCellEditor implements OnInit {
 
   onPostUpdateRecord: EventEmitter<Object> = new EventEmitter<Object>();
 
+  public editorCreated: EventEmitter<Object> = new EventEmitter<Object>();
+
   @HostListener('document:keyup', ['$event'])
   onDocumentKeyup(event: KeyboardEvent) {
     this.handleKeyup(event);
@@ -75,6 +77,7 @@ export class OBaseTableCellEditor implements OnInit {
   ngOnInit(): void {
      this.createFormControl();
      this.registerEditor();
+     this.editorCreated.emit(this);
   }
 
   protected handleKeyup(event: KeyboardEvent) {
@@ -260,5 +263,9 @@ export class OBaseTableCellEditor implements OnInit {
 
   get enabled(): boolean {
     return this._enabled;
+  }
+
+  getFormControl(){
+    return this.formControl;
   }
 }
