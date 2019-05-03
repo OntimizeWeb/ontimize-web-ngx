@@ -39,7 +39,6 @@
   @include o-app-sidenav-theme($theme);
   @include o-app-layout-theme($theme);
   @include o-card-menu-item-theme($theme);
-  @include o-table-editable-row-theme($theme);
   @include o-hour-input-theme($theme);
   @include o-form-layout-tabgroup-theme($theme);
   @include o-bar-menu-theme($theme);
