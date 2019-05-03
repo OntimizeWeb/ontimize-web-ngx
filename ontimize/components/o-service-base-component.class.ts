@@ -147,6 +147,7 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
     this.dialogService = this.injector.get(DialogService);
     this.localStorageService = this.injector.get(LocalStorageService);
     try {
+      this.cd = this.injector.get(ChangeDetectorRef);
       this.form = this.injector.get(OFormComponent);
     } catch (e) {
       // no parent form

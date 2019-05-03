@@ -10,7 +10,7 @@ export const DEFAULT_INPUTS_O_TABLE_COLUMN_FILTER = [
 
   // preloadValues [true|false|yes|no]: indicates whether or not to show the list values when the filter dialog is opened. Default: true.
   'preloadValues: preload-values',
-  //mode [default | custom]
+  //mode [default | selection |  custom]
   'mode'
 ];
 

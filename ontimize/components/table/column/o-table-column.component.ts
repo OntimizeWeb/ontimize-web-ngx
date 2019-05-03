@@ -1,12 +1,5 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, ComponentFactory, ComponentFactoryResolver, EventEmitter, forwardRef, Inject, Injector, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
-import { Subscription } from 'rxjs';
-
+import { AfterViewInit, ChangeDetectionStrategy, Component, ComponentFactory, ComponentFactoryResolver, EventEmitter, Inject, Injector, OnDestroy, OnInit, ViewChild, ViewContainerRef, forwardRef } from '@angular/core';
 import { DateFilterFunction, ODateValueType } from '../../../components/input/date-input/o-date-input.component';
-import { InputConverter } from '../../../decorators';
-import { Codes } from '../../../util/codes';
-import { SQLTypes } from '../../../util/sqltypes';
-import { Util } from '../../../util/util';
-import { OTableComponent } from '../o-table.component';
 import {
   OTableCellEditorBooleanComponent,
   OTableCellEditorDateComponent,
@@ -25,7 +18,14 @@ import {
   OTableCellRendererRealComponent,
   OTableCellRendererServiceComponent
 } from './cell-renderer/cell-renderer';
+
+import { Codes } from '../../../util/codes';
+import { InputConverter } from '../../../decorators';
 import { OTableCellRendererTranslateComponent } from './cell-renderer/translate/o-table-cell-renderer-translate.component';
+import { OTableComponent } from '../o-table.component';
+import { SQLTypes } from '../../../util/sqltypes';
+import { Subscription } from 'rxjs';
+import { Util } from '../../../util/util';
 
 export interface OColumnTooltip {
   value?: string;
@@ -401,9 +401,6 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
             editor.booleanType = propsOrigin.booleanType;
             break;
           case 'integer':
-            editor.min = propsOrigin.min;
-            editor.max = propsOrigin.max;
-            editor.step = Util.isDefined(propsOrigin.step) ? propsOrigin.step : editor.step;
           case 'percentage':
           case 'currency':
           case 'real':

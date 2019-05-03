@@ -327,6 +327,7 @@ export class OColumn {
 
 }
 
+const SUFFIX_COLUMN_INSERTABLE = '_insertable';
 export class OTableOptions {
   selectColumn: OColumn;
   columns: Array<OColumn> = [];
@@ -349,6 +350,12 @@ export class OTableOptions {
     this._visibleColumns = arg;
     this.columns.forEach((oCol: OColumn) => {
       oCol.visible = this._visibleColumns.indexOf(oCol.attr) !== -1;
+    });
+  }
+
+  get columnsInsertables(): Array<string> {
+    return this._visibleColumns.map((col: string) => {
+      return col + SUFFIX_COLUMN_INSERTABLE;
     });
   }
 }
@@ -400,7 +407,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   public paginator: OTablePaginatorComponent;
   @ViewChild(MatPaginator) matpaginator: MatPaginator;
   @ViewChild(OMatSort) sort: OMatSort;
-  @ViewChild(OTableEditableRowComponent) oTableEditableRow: OTableEditableRowComponent;
 
   // only for insideTabBugWorkaround
   @ViewChildren(OMatSortHeader) protected sortHeaders: QueryList<OMatSortHeader>;
@@ -515,6 +521,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   /*parsed inputs variables */
   protected _visibleColArray: Array<string> = [];
 
+ 
+
   get originalVisibleColumns(): string {
     return this.visibleColumns;
   }
@@ -534,7 +542,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       }
       this._oTableOptions.visibleColumns = this._visibleColArray;
     }
- 
+
   }
 
   public sortColArray: Array<ISQLOrder> = [];
@@ -700,6 +708,10 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     this.destroy();
   }
 
+  getSuffixColumnInsertable() {
+    return SUFFIX_COLUMN_INSERTABLE;
+  }
+
   getActionsPermissions(): OPermissions[] {
     return this.permissions ? (this.permissions.actions || []) : [];
   }
@@ -797,6 +809,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
     this.updateSelectionColumnState();
   }
+
 
   reinitialize(options: OTableInitializationOptions): void {
     if (options) {
@@ -1054,7 +1067,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     if (!this.paginator && this.paginationControls) {
       this.paginator = new OTablePaginatorComponent(this.injector, this);
     }
-
+  
     this.initializeCheckboxColumn();
   }
 
@@ -1614,7 +1627,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     } else if (this._oTableOptions.visibleColumns && !this._oTableOptions.selectColumn.visible && this._oTableOptions.visibleColumns[0] === OTableComponent.NAME_COLUMN_SELECT) {
       this._oTableOptions.visibleColumns.shift();
     }
-   
+
   }
 
   public isAllSelected(): boolean {
@@ -1820,6 +1833,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       this.oTableInsertableRowComponent = tableInsertableRow;
       this.showFirstInsertableRow = this.oTableInsertableRowComponent.isFirstRow();
       this.showLastInsertableRow = !this.showFirstInsertableRow;
+      this.oTableInsertableRowComponent.initializeEditors();
     }
   }
 
@@ -1933,7 +1947,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
     if (!Util.isDefined(sqlTypes)) {
       let allSqlTypes = this.getSqlTypes();
-      let sqlTypes = {};
+      sqlTypes = {};
       Object.keys(recordData).forEach(key => {
         sqlTypes[key] = allSqlTypes[key];
       });

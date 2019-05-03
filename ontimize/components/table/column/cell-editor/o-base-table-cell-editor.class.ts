@@ -1,11 +1,11 @@
-import { Injector, EventEmitter, OnInit, HostListener } from '@angular/core';
-import { FormControl, ValidatorFn, Validators, FormGroup } from '@angular/forms';
+import { EventEmitter, HostListener, Injector, OnInit } from '@angular/core';
+import { FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
+import { OColumn, OTableComponent } from '../../o-table.component';
+import { OTranslateService, SnackBarService } from '../../../../services';
+import { ObservableWrapper, Util } from '../../../../utils';
 
 import { InputConverter } from '../../../../decorators';
-import { OTableComponent, OColumn } from '../../o-table.component';
-import { ObservableWrapper, Util } from '../../../../utils';
 import { OTableColumnComponent } from '../o-table-column.component';
-import { OTranslateService, SnackBarService } from '../../../../services';
 
 export class OBaseTableCellEditor implements OnInit {
 
@@ -73,8 +73,8 @@ export class OBaseTableCellEditor implements OnInit {
   }
 
   ngOnInit(): void {
-    this.createFormControl();
-    this.registerEditor();
+     this.createFormControl();
+     this.registerEditor();
   }
 
   protected handleKeyup(event: KeyboardEvent) {
