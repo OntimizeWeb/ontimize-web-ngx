@@ -1,4 +1,4 @@
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { Codes, Util } from '../utils';
 import { DEFAULT_INPUTS_O_SERVICE_BASE_COMPONENT, OServiceBaseComponent } from './o-service-base-component.class';
 import { ElementRef, Injector } from '@angular/core';
@@ -117,8 +117,6 @@ export class OServiceComponent extends OServiceBaseComponent {
   public filterBuilder: OFilterBuilderComponent;
   public selection = new SelectionModel<Element>(true, []);
 
-  protected router: Router;
-  protected actRoute: ActivatedRoute;
 
   protected onTriggerUpdateSubscription: any;
   protected formLayoutManager: OFormLayoutManagerComponent;
@@ -130,8 +128,6 @@ export class OServiceComponent extends OServiceBaseComponent {
     protected form: OFormComponent
   ) {
     super(injector);
-    this.router = this.injector.get(Router);
-    this.actRoute = this.injector.get(ActivatedRoute);
     this.permissionsService = this.injector.get(PermissionsService);
     this.translateService = this.injector.get(OTranslateService);
     this.navigationService = this.injector.get(NavigationService);
