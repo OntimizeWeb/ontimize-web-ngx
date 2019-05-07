@@ -7,6 +7,7 @@
 
 ### Bug Fixes
 * **o-list-picker**: fixed no columns selected error ([978d7cd](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/978d7cd))
+* **o-service-base-component**: fixing storage bugs [#251](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/251) sort by numeric column ([2a59669](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2a59669))
 
 ## 4.0.3 (2019-04-24)
 ### Features
