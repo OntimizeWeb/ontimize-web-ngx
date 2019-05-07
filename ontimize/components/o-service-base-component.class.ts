@@ -6,6 +6,7 @@ import { OQueryDataArgs, ServiceUtils } from './service.utils';
 
 import { InputConverter } from '../decorators';
 import { OFormComponent } from './form/o-form.component';
+import { ActivatedRoute, Router } from '@angular/router';
 
 export const DEFAULT_INPUTS_O_SERVICE_BASE_COMPONENT = [
   // attr [string]: list identifier. It is mandatory if data are provided through the data attribute. Default: entity (if set).
@@ -132,7 +133,7 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
   protected _state: any = {};
 
   protected loadingSubject = new BehaviorSubject<boolean>(false);
-  public loading  : Observable<boolean> = this.loadingSubject.asObservable();
+  public loading: Observable<boolean> = this.loadingSubject.asObservable();
 
   protected form: OFormComponent;
   protected alreadyStored: boolean = false;
@@ -141,11 +142,16 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
   public cd: ChangeDetectorRef;//borrar
   protected queryArguments: any[];
 
+  protected router: Router;
+  protected actRoute: ActivatedRoute;
+
   constructor(
     protected injector: Injector
   ) {
     this.dialogService = this.injector.get(DialogService);
     this.localStorageService = this.injector.get(LocalStorageService);
+    this.router = this.injector.get(Router);
+    this.actRoute = this.injector.get(ActivatedRoute);
     try {
       this.cd = this.injector.get(ChangeDetectorRef);
       this.form = this.injector.get(OFormComponent);
@@ -255,6 +261,16 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
 
   getDataToStore(): Object {
     return this.state;
+  }
+
+  getRouteKey(): string {
+    let route = this.router.url;
+    this.actRoute.params.subscribe(params => {
+      Object.keys(params).forEach(key => {
+        route = route.replace(params[key], key);
+      });
+    });
+    return route;
   }
 
   getKeys() {

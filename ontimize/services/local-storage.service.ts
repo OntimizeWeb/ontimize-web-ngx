@@ -11,6 +11,7 @@ export interface ILocalStorageComponent {
   storeState?: boolean;
   getDataToStore(): Object;
   getComponentKey(): string;
+  getRouteKey?(): string;
 }
 
 export class LocalStorageService {
@@ -30,7 +31,7 @@ export class LocalStorageService {
     this._router = this.injector.get(Router);
     this.loginService = this.injector.get(LoginService);
 
-    var self = this;
+    const self = this;
     this._router.events.subscribe(event => {
       if (event instanceof NavigationStart) {
         ObservableWrapper.callEmit(self.onRouteChange, {});
@@ -39,23 +40,26 @@ export class LocalStorageService {
   }
 
   getComponentStorage(comp: ILocalStorageComponent, useRouteOnKey: boolean = true): Object {
-    var componentKey = comp.getComponentKey();
-    var completeKey = componentKey;
+    const componentKey = comp.getComponentKey();
+    let completeKey = componentKey;
     if (useRouteOnKey) {
-      completeKey += '_' + this._router.url;
+      completeKey += '_' + comp.getRouteKey();
     }
     return this.getAppComponentData(completeKey) || {};
   }
 
   updateComponentStorage(comp: ILocalStorageComponent, useRouteOnKey: boolean = true) {
-    var dataToStore = comp.getDataToStore();
-    var componentKey = comp.getComponentKey();
-    var completeKey = componentKey;
+    const dataToStore = comp.getDataToStore();
+    const componentKey = comp.getComponentKey();
+    if (!Util.isDefined(componentKey)) {
+      return;
+    }
+    let completeKey = componentKey;
     if (useRouteOnKey) {
-      completeKey += '_' + this._router.url;
+      completeKey += '_' + comp.getRouteKey();
     }
     let storedObject = {};
-    for (var prop in dataToStore) {
+    for (let prop in dataToStore) {
       if (dataToStore.hasOwnProperty(prop)) {
         storedObject[prop] = dataToStore[prop];
       }
