@@ -965,7 +965,8 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     const components: any = this.getComponents();
     // add only the fields contained into the form...
     Object.keys(components).forEach(item => {
-      if (attributes.indexOf(item) < 0 && components[item].isAutomaticRegistering()) {
+      if (attributes.indexOf(item) < 0 &&
+        components[item].isAutomaticRegistering() && components[item].isAutomaticBinding()) {
         attributes.push(item);
       }
     });
