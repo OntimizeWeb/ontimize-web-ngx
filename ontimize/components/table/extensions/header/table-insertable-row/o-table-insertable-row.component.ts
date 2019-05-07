@@ -45,7 +45,7 @@ export class OTableInsertableRowComponent implements OnInit {
 
   onPostInsertRecord: EventEmitter<any> = new EventEmitter();
   columnEditors: any = {};
-  trWrapper:EventTarget;
+  trWrapper: EventTarget;
 
   protected position: string = OTableInsertableRowComponent.DEFAULT_ROW_POSITION;
 
@@ -95,44 +95,36 @@ export class OTableInsertableRowComponent implements OnInit {
 
   initializeEditors(): void {
     const self = this;
-    this.table.oTableOptions.columns.forEach((col,i,array) => {
+    this.table.oTableOptions.columns.forEach((col, i, array) => {
       if (self.isColumnInsertable(col)) {
         const columnEditorType = col.editor ? col.editor.type : col.type;
         if (col.definition) {
-          const editor: OBaseTableCellEditor = col.definition.buildCellEditor(columnEditorType, this.resolver, col.definition.container, col.editor);
+          const editor: OBaseTableCellEditor = col.definition.buildCellEditor(columnEditorType, this.resolver, col.definition.container, col.definition);
           this.columnEditors[col.attr] = editor;
           let disabledCol = !this.enabled;
           if (!disabledCol) {
             const columnPermissions: OPermissions = this.table.getOColumnPermissions(col.attr);
             disabledCol = columnPermissions.enabled === false;
           }
+
           editor.enabled = !disabledCol;
-          editor.registerInColumn = false;
           editor.showPlaceHolder = this.showPlaceHolder || editor.showPlaceHolder;
           editor.table = self.table;
           editor.tableColumn = col.editor ? col.editor.tableColumn : col.definition;
           editor.orequired = this.isColumnRequired(col);
-          let self2 = this;
-          editor.editorCreated.subscribe(x=>{
-            //self.getControl(col, disabledCol);
-             editor.controlArgs = { silent: true };
-             editor.startEdition(self2.rowData);
-             editor.formControl.markAsUntouched();
-             self2.controls[col.attr] = editor.getFormControl();
-          })
-          // editor.formControl = this.getControl(col, disabledCol);
-          // editor.controlArgs = { silent: true };
-          // editor.startEdition(self.rowData);
-          // editor.formControl.markAsUntouched();
+          editor.formControl = this.getControl(col, disabledCol);
+          editor.controlArgs = { silent: true };
+          editor.rowData = self.rowData;
+          editor.startEdition(self.rowData);
+          editor.formControl.markAsUntouched();
           col.editor = editor;
-          
         }
       }
-      array[i]= col;
-      
-      
+      array[i] = col;
+
+
     });
-    
+
 
   }
 
@@ -140,7 +132,6 @@ export class OTableInsertableRowComponent implements OnInit {
     return this.isColumnInsertable(column) && Util.isDefined(this.columnEditors[column.attr]);
   }
 
-  
   getControl(column: OColumn, disabled: boolean = false): FormControl {
     if (!this.controls[column.attr]) {
       const validators: ValidatorFn[] = this.resolveValidators(column);
@@ -160,9 +151,15 @@ export class OTableInsertableRowComponent implements OnInit {
     }
     return validators;
   }
+
   getPlaceholder(column: OColumn): string {
+    let showPlaceHolder = this.showPlaceHolder;
     const cellEditor = this.columnEditors[column.attr];
-    const showPlaceHolder = cellEditor ? cellEditor.showPlaceHolder : (this.showPlaceHolder || column.definition.showPlaceHolder);
+    if (cellEditor) {
+      showPlaceHolder = cellEditor.showPlaceHolder
+    } else if (column.definition) {
+      showPlaceHolder = showPlaceHolder || column.definition.showPlaceHolder;
+    }
     return showPlaceHolder ? this.translateService.get(column.title) : undefined;
   }
 
@@ -173,13 +170,13 @@ export class OTableInsertableRowComponent implements OnInit {
       return;
     }
     this.trWrapper = event.currentTarget;
-    
+
     event.preventDefault();
     event.stopPropagation();
     this.insertRecord();
   }
 
-  
+
   insertRecord() {
     const self = this;
     if (!this.validateFields()) {
@@ -235,9 +232,9 @@ export class OTableInsertableRowComponent implements OnInit {
     // columns with no editor defined
     const controlKeys = Object.keys(this.controls);
     controlKeys.forEach((controlKey) => {
-      this.controls[controlKey].reset();
+      this.controls[controlKey].setValue(void 0);
     });
-     let firstInputEl = (this.trWrapper as any).querySelector('input#' + controlKeys[0]);
+    let firstInputEl = (this.trWrapper as any).querySelector('input');
     if (firstInputEl) {
       setTimeout(() => {
         firstInputEl.focus();

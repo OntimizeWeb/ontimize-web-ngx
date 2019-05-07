@@ -110,8 +110,9 @@
 
         <!--FOOTER-INSERTABLE-->
         <ng-container *ngIf="showLastInsertableRow && oTableInsertableRowComponent">
-          <ng-container [matColumnDef]="oTableOptions.selectColumn.name + getSuffixColumnInsertable()" *ngIf="oTableOptions.selectColumn.visible">
-            <td mat-footer-cell *matFooterCellDef  >
+          <ng-container [matColumnDef]="oTableOptions.selectColumn.name + getSuffixColumnInsertable()"
+            *ngIf="oTableOptions.selectColumn.visible">
+            <td mat-footer-cell *matFooterCellDef>
             </td>
           </ng-container>
           <ng-container *ngFor="let column of oTableOptions.columns"
@@ -142,12 +143,13 @@
         </ng-container>
 
         <ng-container *ngIf="showFirstInsertableRow && oTableInsertableRowComponent">
-          <ng-container [matColumnDef]="oTableOptions.selectColumn.name + getSuffixColumnInsertable()" *ngIf="oTableOptions.selectColumn.visible">
+          <ng-container [matColumnDef]="getColumnInsertable(oTableOptions.selectColumn.name)"
+            *ngIf="oTableOptions.selectColumn.visible">
             <td mat-header-cell *matHeaderCellDef>
             </td>
           </ng-container>
           <ng-container *ngFor="let column of oTableOptions.columns"
-            [matColumnDef]="column.name+ getSuffixColumnInsertable()">
+            [matColumnDef]="getColumnInsertable(column.name)">
 
             <td mat-header-cell *matHeaderCellDef [ngClass]="column.className">
               <ng-container
@@ -182,14 +184,15 @@
         </tr>
         <ng-container *ngIf="showLastInsertableRow">
           <tr mat-footer-row *matFooterRowDef="oTableOptions.columnsInsertables; sticky: true"
-            (keyup)="oTableInsertableRowComponent.handleKeyboardEvent($event)"></tr>
+            (keyup)="oTableInsertableRowComponent.handleKeyboardEvent($event)" class="o-table-insertable"></tr>
         </ng-container>
         <ng-container *ngIf="showFirstInsertableRow">
           <tr mat-header-row *matHeaderRowDef="oTableOptions.columnsInsertables; sticky: true"
-            (keyup)="oTableInsertableRowComponent.handleKeyboardEvent($event)"></tr>
+            (keyup)="oTableInsertableRowComponent.handleKeyboardEvent($event)" class="o-table-insertable"> </tr>
         </ng-container>
         <ng-container *ngIf="showTotals | async">
-          <tr mat-footer-row *matFooterRowDef="oTableOptions.visibleColumns; sticky: true"></tr>
+          <tr mat-footer-row *matFooterRowDef="oTableOptions.visibleColumns; sticky: true" class="o-table-aggregate">
+          </tr>
         </ng-container>
       </table>
     </div>

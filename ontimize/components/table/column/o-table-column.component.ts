@@ -394,11 +394,11 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
             editor.dateValueType = propsOrigin.dateValueType;
             break;
           case 'boolean':
+            editor.booleanType = propsOrigin.booleanType;
             editor.indeterminateOnNull = propsOrigin.indeterminateOnNull;
             editor.autoCommit = propsOrigin.autoCommit;
             editor.trueValue = propsOrigin.trueValue;
             editor.falseValue = propsOrigin.falseValue;
-            editor.booleanType = propsOrigin.booleanType;
             break;
           case 'integer':
           case 'percentage':
