@@ -1,20 +1,20 @@
-import { CommonModule } from '@angular/common';
-import { AfterViewInit, Component, ElementRef, EventEmitter, forwardRef, Inject, Injector, NgModule, OnChanges, OnInit, Optional, SimpleChange, ViewChild } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Inject, Injector, NgModule, OnChanges, OnInit, Optional, SimpleChange, ViewChild, forwardRef } from '@angular/core';
 import { MatDialog, MatDialogConfig, MatDialogRef, MatInput } from '@angular/material';
 
-import { InputConverter } from '../../../decorators';
-import { OntimizeService } from '../../../services';
-import { dataServiceFactory } from '../../../services/data-service.provider';
-import { OSharedModule } from '../../../shared';
-import { ODialogModule } from '../../dialog/o-dialog.component';
+import { CommonModule } from '@angular/common';
+import { FormControl } from '@angular/forms';
 import { IFormValueOptions } from '../../form/form-components';
+import { InputConverter } from '../../../decorators';
+import { ODialogModule } from '../../dialog/o-dialog.component';
 import { OFormComponent } from '../../form/o-form.component';
-import { OSearchInputModule } from '../../input/search-input/o-search-input.component';
-import { OValueChangeEvent } from '../../o-form-data-component.class';
 import { OFormControl } from '../o-form-control.class';
 import { OFormServiceComponent } from '../o-form-service-component.class';
 import { OListPickerDialogComponent } from './o-list-picker-dialog.component';
+import { OSearchInputModule } from '../../input/search-input/o-search-input.component';
+import { OSharedModule } from '../../../shared';
+import { OValueChangeEvent } from '../../o-form-data-component.class';
+import { OntimizeService } from '../../../services';
+import { dataServiceFactory } from '../../../services/data-service.provider';
 
 export const DEFAULT_INPUTS_O_LIST_PICKER = [
   ...OFormServiceComponent.DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT,
@@ -199,7 +199,6 @@ export class OListPickerComponent extends OFormServiceComponent implements After
             self.visibleInputValue = undefined;
           } else {
             self._fControl.markAsTouched();
-            self.onBlur.emit(evt);
           }
         }
         self.blurPrevent = false;
