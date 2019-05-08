@@ -2247,6 +2247,11 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
     return result;
   }
+
+  getColumnInsertable(name):string{
+    return name+ this.getSuffixColumnInsertable();
+
+  }
 }
 
 @NgModule({
