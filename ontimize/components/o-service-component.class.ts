@@ -323,7 +323,7 @@ export class OServiceComponent extends OServiceBaseComponent {
         queryMethod: this.pageable ? this.paginatedQueryMethod : this.queryMethod,
         totalRecordsNumber: this.getTotalRecordsNumber(),
         queryRows: this.queryRows,
-        queryRecordOffset: (this.state.queryRecordOffset - this.queryRows)
+        queryRecordOffset: Math.max(this.state.queryRecordOffset - this.queryRows, 0)
       }, result);
     }
     return result;
