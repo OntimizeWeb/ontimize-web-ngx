@@ -49,6 +49,7 @@ export class OSearchInputComponent implements OnInit {
 
   public onSearch: EventEmitter<any> = new EventEmitter<any>();
 
+  public colArray: ColumnObject[] = [];
   public placeholder: string = 'SEARCH';
   public width: string;
   public columns: string;
@@ -60,7 +61,6 @@ export class OSearchInputComponent implements OnInit {
   protected _filterCaseSensitive: boolean = false;
   protected _floatLabel: FloatLabelType;
   protected _appearance: MatFormFieldAppearance;
-  protected colArray: ColumnObject[] = [];
 
   protected formGroup: FormGroup;
   protected term: FormControl;
