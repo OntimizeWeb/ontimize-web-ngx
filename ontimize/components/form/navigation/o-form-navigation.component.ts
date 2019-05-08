@@ -195,9 +195,8 @@ export class OFormNavigationComponent implements OnDestroy {
       let index = this.navigationData.length - 1;
       this.move(index);
     } else {
-      const length = this.queryConf.totalRecordsNumber % this.queryConf.queryRows;
-      const offset = this.queryConf.totalRecordsNumber - length;
-      this.queryNavigationData(offset, length).then(() => {
+      const offset = this.queryConf.totalRecordsNumber - this.queryConf.queryRows;
+      this.queryNavigationData(offset, this.queryConf.queryRows).then(() => {
         this.move(this.navigationData.length - 1);
       });
     }
