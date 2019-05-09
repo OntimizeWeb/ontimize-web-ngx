@@ -4,6 +4,7 @@
 * **o-table-columns-filter**: new `mode` attribute ([1b5d8ee](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1b5d8ee))
 * **o-table**: now the table distinguish text and numeric columns when filtering its data through the quick filter component. It also allow filering using *service cell renderer* values ([7fba4b9](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7fba4b9))
 * **OSnackBarConfig**: new `cssClass` attribute ([eaa601b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/eaa601b))
+* **o-form-layout-tabgroup**: new `onSelectedTabChange` and `onCloseTab` outputs ([29f73a0](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/29f73a0))
 
 ### Bug Fixes
 * **o-list-picker**: fixed no columns selected error ([978d7cd](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/978d7cd))
