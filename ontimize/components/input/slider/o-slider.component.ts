@@ -1,17 +1,15 @@
-import { CommonModule } from '@angular/common';
-import { Component, ElementRef, forwardRef, Inject, Injector, NgModule, Optional, ViewEncapsulation } from '@angular/core';
-import { MatSliderChange } from '@angular/material/slider';
-
-import { OFormComponent } from '../../../components';
-import { InputConverter } from '../../../decorators';
-import { OSharedModule } from '../../../shared';
-import { OFormValue } from '../../form/OFormValue';
+import { Component, ElementRef, Inject, Injector, NgModule, Optional, ViewEncapsulation, forwardRef } from '@angular/core';
 import {
   DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,
   DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT,
-  OFormDataComponent,
-  OValueChangeEvent,
+  OFormDataComponent
 } from '../../o-form-data-component.class';
+
+import { CommonModule } from '@angular/common';
+import { InputConverter } from '../../../decorators';
+import { OFormComponent } from '../../../components';
+import { OFormValue } from '../../form/OFormValue';
+import { OSharedModule } from '../../../shared';
 
 export const DEFAULT_INPUTS_O_SLIDER_INPUT = [
   ...DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,
@@ -98,11 +96,6 @@ export class OSliderComponent extends OFormDataComponent {
 
   onClickBlocker(evt: Event) {
     evt.stopPropagation();
-  }
-
-  onChangeEvent(e: MatSliderChange): void {
-    var newValue = e.value;
-    this.setValue(newValue, { changeType: OValueChangeEvent.USER_CHANGE, emitModelToViewChange: false });
   }
 
 }

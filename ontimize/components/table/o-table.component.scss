@@ -107,6 +107,9 @@ $o_table_row_padding: 24px;
       .o-table-no-results {
         cursor: default;
         text-align: center;
+        td{
+          text-align: center
+        }
       }
     }
 
