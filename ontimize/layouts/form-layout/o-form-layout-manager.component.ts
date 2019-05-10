@@ -67,6 +67,7 @@ export const DEFAULT_INPUTS_O_FORM_LAYOUT_MANAGER = [
 
 export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
   'onMainTabSelected',
+  'onSelectedTabChange',
   'onCloseTab'
 ];
 
@@ -111,6 +112,7 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
   public dialogRef: MatDialogRef<OFormLayoutDialogComponent>;
 
   public onMainTabSelected: EventEmitter<any> = new EventEmitter<any>();
+  public onSelectedTabChange: EventEmitter<any> = new EventEmitter<any>();
   public onCloseTab: EventEmitter<any> = new EventEmitter<any>();
 
   protected labelColsArray: string[] = [];
@@ -118,7 +120,7 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
   protected translateService: OTranslateService;
   protected oFormLayoutManagerService: OFormLayoutManagerService;
   protected localStorageService: LocalStorageService;
-  protected onRouteChangeStorageSubscribe: any;
+  protected onRouteChangeStorageSubscription: any;
 
   @ContentChildren(OTableComponent, { descendants: true })
   protected tableComponents: QueryList<OTableComponent>;
@@ -146,6 +148,11 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
     this.localStorageService = this.injector.get(LocalStorageService);
     this.translateService = this.injector.get(OTranslateService);
     this.navigationService = this.injector.get(NavigationService);
+    if (this.storeState) {
+      this.onRouteChangeStorageSubscription = this.localStorageService.onRouteChange.subscribe(res => {
+        this.updateStateStorage();
+      });
+    }
   }
 
   public ngOnInit(): void {
@@ -174,6 +181,9 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
   }
 
   public ngOnDestroy(): void {
+    if (this.onRouteChangeStorageSubscription) {
+      this.onRouteChangeStorageSubscription.unsubscribe();
+    }
     this.updateStateStorage();
     this.oFormLayoutManagerService.removeFormLayoutManager(this);
     this.destroyAactivateChildGuard();
@@ -262,7 +272,7 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
       label: '',
       modified: false
     };
-    if (this.isTabMode()) {
+    if (this.isTabMode() && Util.isDefined(this.oTabGroup)) {
       this.oTabGroup.addTab(newDetailComp);
     } else if (this.isDialogMode()) {
       this.openFormLayoutDialog(newDetailComp);
@@ -270,9 +280,9 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
   }
 
   public closeDetail(id?: string): void {
-    if (this.isTabMode()) {
+    if (this.isTabMode() && Util.isDefined(this.oTabGroup)) {
       this.oTabGroup.closeTab(id);
-    } else if (this.isDialogMode()) {
+    } else if (this.isDialogMode() && Util.isDefined(this.dialogRef)) {
       this.dialogRef.close();
       this.reloadMainComponents();
     }
@@ -333,7 +343,7 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
   }
 
   public setModifiedState(modified: boolean, id: string): void {
-    if (this.isTabMode()) {
+    if (this.isTabMode() && Util.isDefined(this.oTabGroup)) {
       this.oTabGroup.setModifiedState(modified, id);
     }
   }
@@ -354,37 +364,37 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
   }
 
   public updateNavigation(data: any, id: string, insertionMode?: boolean): void {
-    if (this.isTabMode()) {
+    if (this.isTabMode() && Util.isDefined(this.oTabGroup)) {
       this.oTabGroup.updateNavigation(data, id, insertionMode);
-    } else if (this.isDialogMode()) {
+    } else if (this.isDialogMode() && Util.isDefined(this.dialogRef)) {
       this.dialogRef.componentInstance.updateNavigation(data, id);
     }
   }
 
   public updateActiveData(data: any) {
-    if (this.isTabMode()) {
+    if (this.isTabMode() && Util.isDefined(this.oTabGroup)) {
       this.oTabGroup.updateActiveData(data);
-    } else if (this.isDialogMode()) {
+    } else if (this.isDialogMode() && Util.isDefined(this.dialogRef)) {
       this.dialogRef.componentInstance.updateActiveData(data);
     }
   }
 
   public getRouteOfActiveItem(): any[] {
     let route = [];
-    if (this.isTabMode()) {
+    if (this.isTabMode() && Util.isDefined(this.oTabGroup)) {
       route = this.oTabGroup.getRouteOfActiveItem();
-    } else if (this.isDialogMode()) {
+    } else if (this.isDialogMode() && Util.isDefined(this.dialogRef)) {
       route = this.dialogRef.componentInstance.getRouteOfActiveItem();
     }
     return route;
   }
 
   public isMainComponent(comp: OServiceComponent): boolean {
-    const table = this.tableComponents.find(tableComp => tableComp === comp);
+    const table = this.tableComponents && this.tableComponents.find(tableComp => tableComp === comp);
     if (Util.isDefined(table)) {
       return true;
     }
-    const list = this.listComponents.find(listComp => listComp === comp);
+    const list = this.listComponents && this.listComponents.find(listComp => listComp === comp);
     if (Util.isDefined(list)) {
       return true;
     }
@@ -422,13 +432,13 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
   }
 
   public allowToUpdateNavigation(formAttr: string): boolean {
-    return (this.isTabMode() && Util.isDefined(this.titleDataOrigin)) ?
+    return (this.isTabMode() && Util.isDefined(this.oTabGroup) && Util.isDefined(this.titleDataOrigin)) ?
       this.titleDataOrigin === formAttr :
       true;
   }
 
   protected updateStateStorage(): void {
-    if (this.localStorageService && this.isTabMode() && this.storeState) {
+    if (this.localStorageService && this.isTabMode() && Util.isDefined(this.oTabGroup) && this.storeState) {
       this.localStorageService.updateComponentStorage(this, false);
     }
   }
@@ -449,6 +459,16 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
       this.markForUpdate = false;
       this.onTriggerUpdate.emit();
     }
+  }
+
+  public getActiveItemData(): any {
+    let data;
+    if (this.isTabMode() && Util.isDefined(this.oTabGroup)) {
+      data = this.oTabGroup.getActiveItemData();
+    } else if (this.isDialogMode() && Util.isDefined(this.dialogRef)) {
+      data = this.dialogRef.componentInstance.getActiveItemData();
+    }
+    return data;
   }
 }
 

@@ -50,6 +50,7 @@ export class OFormLayoutTabGroupComponent implements AfterViewInit, OnDestroy {
   protected loading: boolean = false;
   protected dialogService: DialogService;
 
+  public onMainTabSelected: EventEmitter<any> = new EventEmitter<any>();
   public onSelectedTabChange: EventEmitter<any> = new EventEmitter<any>();
   public onCloseTab: EventEmitter<any> = new EventEmitter<any>();
 
@@ -126,6 +127,7 @@ export class OFormLayoutTabGroupComponent implements AfterViewInit, OnDestroy {
   onTabSelectChange(arg: MatTabChangeEvent) {
     if (this.formLayoutManager && this.tabGroup.selectedIndex === 0) {
       this.formLayoutManager.updateIfNeeded();
+      this.onMainTabSelected.emit();
     }
     if (Util.isDefined(this.state) && Util.isDefined(this.state.tabsData)) {
       if (this.state.tabsData.length > 1) {
@@ -309,6 +311,10 @@ export class OFormLayoutTabGroupComponent implements AfterViewInit, OnDestroy {
 
   get state(): any {
     return this._state;
+  }
+
+  getActiveItemData(): any {
+    return this.data[this.selectedTabIndex - 1];
   }
 
 }
