@@ -124,7 +124,7 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
   protected oattrFromEntity: boolean = false;
   /* end of parsed inputs variables */
 
-  protected onRouteChangeStorageSubscribe: any;
+  protected onRouteChangeStorageSubscription: any;
   protected onFormDataSubscribe: any;
 
   protected loaderSubscription: Subscription;
@@ -171,8 +171,11 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
     this._pKeysEquiv = Util.parseParentKeysEquivalences(pkArray, Codes.COLUMNS_ALIAS_SEPARATOR);
 
     if (this.storeState) {
-      this.onRouteChangeStorageSubscribe = this.localStorageService.onRouteChange.subscribe(res => {
+      this.onRouteChangeStorageSubscription = this.localStorageService.onRouteChange.subscribe(res => {
         this.updateStateStorage();
+        // when the storage is updated because a route change
+        // the alreadyStored control variable is changed to its initial value
+        this.alreadyStored = false;
       });
 
       // Get previous status
@@ -232,12 +235,13 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
     if (this.loaderSubscription) {
       this.loaderSubscription.unsubscribe();
     }
-    if (this.onRouteChangeStorageSubscribe) {
-      this.onRouteChangeStorageSubscribe.unsubscribe();
+    if (this.onRouteChangeStorageSubscription) {
+      this.onRouteChangeStorageSubscription.unsubscribe();
     }
     if (this.queryOnEventSubscription) {
       this.queryOnEventSubscription.unsubscribe();
     }
+    this.updateStateStorage();
   }
 
   ngOnChanges(changes: { [propName: string]: SimpleChange }) {
