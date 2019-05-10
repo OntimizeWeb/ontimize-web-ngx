@@ -240,8 +240,8 @@ export class OFormNavigationClass {
         Object.keys(this.form.formData).forEach(key => {
           formData[key] = self.form.formData[key].value;
         });
+        this.formLayoutManager.updateNavigation(formData, this.id, isInInsertMode);
       }
-      this.formLayoutManager.updateNavigation(formData, this.id, isInInsertMode);
     }
   }
 
