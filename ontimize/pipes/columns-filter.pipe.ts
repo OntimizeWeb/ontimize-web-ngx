@@ -9,7 +9,7 @@ export class ColumnsFilterPipe implements PipeTransform {
   filterValue: string;
   filterColumns: Array<string>;
 
-  transform(value: Array<any>, args: any): any {
+  public transform(value: Array<any>, args: any): any {
     if (!args || args.length <= 1) {
       return value;
     }

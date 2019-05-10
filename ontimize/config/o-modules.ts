@@ -1,12 +1,7 @@
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { APP_CONFIG, AppConfig } from '../config/app-config';
 import { APP_INITIALIZER, Injector, NgModule } from '@angular/core';
-import { HttpModule } from '@angular/http';
-import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { DndModule } from '@churchs19/ng2-dnd';
-import { TranslateLoader, TranslateModule, TranslateParser } from '@ngx-translate/core';
-import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
-
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { OAppLayoutModule, OCardMenuLayoutModule, OFormLayoutManagerModule } from '../layouts';
 import {
   OBarMenuGroupModule,
   OBarMenuItemModule,
@@ -32,8 +27,8 @@ import {
   OFormContainerModule,
   OFormModule,
   OGridModule,
-  OHourInputModule,
   OHTMLInputModule,
+  OHourInputModule,
   OImageModule,
   OIntegerInputModule,
   OLanguageSelectorModule,
@@ -53,22 +48,27 @@ import {
   ORowCollapsibleModule,
   ORowModule,
   OSearchInputModule,
-  OSliderModule,
   OSlideToggleModule,
+  OSliderModule,
   OSnackBarModule,
   OTableModule,
-  OTextareaInputModule,
   OTextInputModule,
+  OTextareaInputModule,
   OTimeInputModule,
   OUserInfoModule,
   OValidatorModule,
 } from '../components';
-import { APP_CONFIG, AppConfig } from '../config/app-config';
-import { OAppLayoutModule, OCardMenuLayoutModule, OFormLayoutManagerModule } from '../layouts';
 import { OTranslateHttpLoader, OTranslateService } from '../services';
+import { TranslateLoader, TranslateModule, TranslateParser } from '@ngx-translate/core';
+
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { BrowserModule } from '@angular/platform-browser';
+import { DndModule } from '@churchs19/ng2-dnd';
+import { HttpModule } from '@angular/http';
+import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { OPermissionsModule } from '../services/permissions/o-permissions.module';
-import { OTranslateParser } from '../services/translate/o-translate.parser';
 import { OSharedModule } from '../shared';
+import { OTranslateParser } from '../services/translate/o-translate.parser';
 import { Util } from '../utils';
 import { appInitializerFactory } from './o-providers';
 

@@ -1,4 +1,5 @@
-import { Pipe, PipeTransform, Injector } from '@angular/core';
+import { Injector, Pipe, PipeTransform } from '@angular/core';
+
 import { OIntegerPipe } from './o-integer.pipe';
 
 export interface IRealPipeArgument {
@@ -19,7 +20,7 @@ export class ORealPipe extends OIntegerPipe implements PipeTransform {
     super(injector);
   }
 
-  transform(text: string, args: IRealPipeArgument): string {
+  public transform(text: string, args: IRealPipeArgument): string {
     return this.numberService.getRealValue(text, args);
   }
 

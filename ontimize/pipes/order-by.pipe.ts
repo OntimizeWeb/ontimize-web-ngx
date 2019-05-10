@@ -1,4 +1,3 @@
-
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({ name: 'orderBy', pure: false })
@@ -19,7 +18,7 @@ export class OrderByPipe implements PipeTransform {
     return 0; //equal each other
   }
 
-  transform(input: any, [config = '+']): any {
+  public transform(input: any, [config = '+']): any {
 
     if (!Array.isArray(input)) { return input; }
 
