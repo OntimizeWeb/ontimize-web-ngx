@@ -1,14 +1,15 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, EventEmitter, forwardRef, Inject, Injector, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Inject, Injector, OnDestroy, OnInit, ViewChild, ViewEncapsulation, forwardRef } from '@angular/core';
+import { FilterExpressionUtils, IExpression } from '../../../../filter-expression.utils';
 import { MatCheckboxChange, MatMenu } from '@angular/material';
-import { fromEvent, Subscription } from 'rxjs';
+import { OColumn, OTableComponent, OTableOptions } from '../../../o-table.component';
+import { OInputsOptions, O_INPUTS_OPTIONS } from '../../../../../config/app-config';
+import { Subscription, fromEvent } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
-import { O_INPUTS_OPTIONS, OInputsOptions } from '../../../../../config/app-config';
+import { FormControl } from '@angular/forms';
+import { OTableCellRendererServiceComponent } from '../../../column/cell-renderer/cell-renderer';
 import { SQLTypes } from '../../../../../util/sqltypes';
 import { Util } from '../../../../../utils';
-import { FilterExpressionUtils, IExpression } from '../../../../filter-expression.utils';
-import { OTableCellRendererServiceComponent } from '../../../column/cell-renderer/cell-renderer';
-import { OColumn, OTableComponent, OTableOptions } from '../../../o-table.component';
 
 export const DEFAULT_INPUTS_O_TABLE_QUICKFILTER = [];
 
@@ -36,11 +37,14 @@ export class OTableQuickfilterComponent implements OnInit, AfterViewInit, OnDest
 
   @ViewChild('filter')
   public filter: ElementRef;
+  
   @ViewChild('menu')
   public matMenu: MatMenu;
 
   public value: string;
   public onChange: EventEmitter<Object> = new EventEmitter<Object>();
+
+  public formControl;
 
   protected oInputsOptions: OInputsOptions;
   protected quickFilterObservable: Subscription;
@@ -49,7 +53,9 @@ export class OTableQuickfilterComponent implements OnInit, AfterViewInit, OnDest
     protected injector: Injector,
     protected elRef: ElementRef,
     @Inject(forwardRef(() => OTableComponent)) protected table: OTableComponent
-  ) { }
+  ) {
+    this.formControl = new FormControl();
+   }
 
   public ngOnInit(): void {
     this.table.registerQuickFilter(this);
@@ -147,7 +153,8 @@ export class OTableQuickfilterComponent implements OnInit, AfterViewInit, OnDest
 
       // if exists filter value in storage then filter result table
       const filterValue = this.value || this.filter.nativeElement.value;
-      this.filter.nativeElement.value = filterValue;
+      //this.filter.nativeElement.value = filterValue;
+      this.formControl.setValue(filterValue);
       if (this.table.dataSource && filterValue && filterValue.length) {
         this.table.dataSource.quickFilter = filterValue;
       }

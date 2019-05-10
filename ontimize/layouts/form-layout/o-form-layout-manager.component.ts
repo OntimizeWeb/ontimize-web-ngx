@@ -1,9 +1,9 @@
-import { CommonModule } from '@angular/common';
+import { ActivatedRoute, ActivatedRouteSnapshot, Route, Router, RouterModule } from '@angular/router';
 import {
   AfterViewInit,
+  CUSTOM_ELEMENTS_SCHEMA,
   Component,
   ContentChildren,
-  CUSTOM_ELEMENTS_SCHEMA,
   ElementRef,
   EventEmitter,
   HostListener,
@@ -16,23 +16,23 @@ import {
   SkipSelf,
   ViewChild
 } from '@angular/core';
-import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material';
-import { ActivatedRoute, ActivatedRouteSnapshot, Route, Router, RouterModule } from '@angular/router';
-
-import { OListComponent } from '../../components/list/o-list.component';
-import { OServiceComponent } from '../../components/o-service-component.class';
-import { OTableComponent } from '../../components/table/o-table.component';
-import { InputConverter } from '../../decorators';
 import { ILocalStorageComponent, LocalStorageService } from '../../services/local-storage.service';
-import { OFormLayoutManagerService } from '../../services/o-form-layout-manager.service';
-import { OTranslateService } from '../../services/translate/o-translate.service';
-import { OSharedModule } from '../../shared';
-import { Util } from '../../utils';
+import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material';
+
+import { CanActivateFormLayoutChildGuard } from './guards/o-form-layout-can-activate-child.guard';
+import { CommonModule } from '@angular/common';
+import { InputConverter } from '../../decorators';
+import { NavigationService } from '../../services/navigation.service';
 import { OFormLayoutDialogComponent } from './dialog/o-form-layout-dialog.component';
 import { OFormLayoutManagerContentDirective } from './directives/o-form-layout-manager-content.directive';
-import { CanActivateFormLayoutChildGuard } from './guards/o-form-layout-can-activate-child.guard';
+import { OFormLayoutManagerService } from '../../services/o-form-layout-manager.service';
 import { OFormLayoutTabGroupComponent } from './tabgroup/o-form-layout-tabgroup.component';
-import { NavigationService } from '../../services/navigation.service';
+import { OListComponent } from '../../components/list/o-list.component';
+import { OServiceComponent } from '../../components/o-service-component.class';
+import { OSharedModule } from '../../shared';
+import { OTableComponent } from '../../components/table/o-table.component';
+import { OTranslateService } from '../../services/translate/o-translate.service';
+import { Util } from '../../utils';
 
 export interface IDetailComponentData {
   params: any;
@@ -271,7 +271,7 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
 
   public closeDetail(id?: string): void {
     if (this.isTabMode()) {
-      this.oTabGroup.onCloseTab(id);
+      this.oTabGroup.closeTab(id);
     } else if (this.isDialogMode()) {
       this.dialogRef.close();
       this.reloadMainComponents();
