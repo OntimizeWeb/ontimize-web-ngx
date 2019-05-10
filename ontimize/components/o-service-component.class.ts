@@ -117,10 +117,12 @@ export class OServiceComponent extends OServiceBaseComponent {
   public filterBuilder: OFilterBuilderComponent;
   public selection = new SelectionModel<Element>(true, []);
 
-
   protected onTriggerUpdateSubscription: any;
   protected formLayoutManager: OFormLayoutManagerComponent;
+  protected formLayoutManagerTabIndex: number;
   protected oFormLayoutDialog: OFormLayoutDialogComponent;
+
+  protected tabsSubscriptions: any;
 
   constructor(
     injector: Injector,
@@ -154,6 +156,26 @@ export class OServiceComponent extends OServiceBaseComponent {
     if (!Codes.isValidRowHeight(this.rowHeight)) {
       this.rowHeight = Codes.DEFAULT_ROW_HEIGHT;
     }
+
+    if (this.formLayoutManager && this.formLayoutManager.isTabMode() && this.formLayoutManager.oTabGroup) {
+
+      this.formLayoutManagerTabIndex = this.formLayoutManager.oTabGroup.data.length;
+
+      this.tabsSubscriptions = this.formLayoutManager.oTabGroup.onSelectedTabChange.subscribe(() => {
+        if (this.formLayoutManagerTabIndex !== this.formLayoutManager.oTabGroup.selectedTabIndex) {
+          this.updateStateStorage();
+          // when the storage is updated because a form layout manager tab change
+          // the alreadyStored control variable is changed to its initial value
+          this.alreadyStored = false;
+        }
+      });
+
+      this.tabsSubscriptions.add(this.formLayoutManager.oTabGroup.onCloseTab.subscribe((tabData) => {
+        if (this.formLayoutManagerTabIndex === this.formLayoutManager.oTabGroup.selectedTabIndex) {
+          this.updateStateStorage();
+        }
+      }));
+    }
   }
 
   public afterViewInit(): void {
@@ -161,7 +183,6 @@ export class OServiceComponent extends OServiceBaseComponent {
     if (this.elRef) {
       this.elRef.nativeElement.removeAttribute('title');
     }
-
     if (this.formLayoutManager && this.formLayoutManager.isMainComponent(this)) {
       this.onTriggerUpdateSubscription = this.formLayoutManager.onTriggerUpdate.subscribe(() => {
         this.reloadData();
@@ -173,6 +194,9 @@ export class OServiceComponent extends OServiceBaseComponent {
     super.destroy();
     if (this.onTriggerUpdateSubscription) {
       this.onTriggerUpdateSubscription.unsubscribe();
+    }
+    if (this.tabsSubscriptions) {
+      this.tabsSubscriptions.unsubscribe();
     }
   }
 
@@ -446,4 +470,17 @@ export class OServiceComponent extends OServiceBaseComponent {
     });
   }
 
+  getRouteKey(): string {
+    let route = '';
+    if (this.formLayoutManager && !this.formLayoutManager.isMainComponent(this)) {
+      route = this.router.url;
+      const itemData = this.formLayoutManager.getActiveItemData();
+      if (itemData && itemData.params) {
+        route += '/' + (Object.keys(itemData.params).join('/'));
+      }
+    } else {
+      route = super.getRouteKey();
+    }
+    return route;
+  }
 }
