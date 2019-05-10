@@ -1,5 +1,5 @@
-import { Injector, Pipe, PipeTransform } from '@angular/core';
 
+import { Pipe, PipeTransform, Injector } from '@angular/core';
 import { MomentService } from '../services';
 
 export interface IMomentPipeArgument {
@@ -18,7 +18,7 @@ export class OMomentPipe implements PipeTransform {
     this.momentService = this.injector.get(MomentService);
   }
 
-  public transform(value: any, args: IMomentPipeArgument) {
+  transform(value: any, args: IMomentPipeArgument) {
     let format = args.format;
     return this.momentService.parseDate(value, format);
   }

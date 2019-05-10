@@ -1,5 +1,4 @@
-import { Injector, Pipe, PipeTransform } from '@angular/core';
-
+import { Pipe, PipeTransform, Injector } from '@angular/core';
 import { CurrencyService } from '../services';
 
 export interface ICurrencyPipeArgument {
@@ -22,7 +21,7 @@ export class OCurrencyPipe implements PipeTransform {
     this.currencyService = this.injector.get(CurrencyService);
   }
 
-  public transform(text: string, args: ICurrencyPipeArgument): string {
+  transform(text: string, args: ICurrencyPipeArgument): string {
     return this.currencyService.getCurrencyValue(text, args);
   }
 }

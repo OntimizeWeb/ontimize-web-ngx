@@ -12,5 +12,5 @@ export const DEFAULT_INPUTS_O_APP_LAYOUT_SIDENAV = [
 })
 export class OAppLayoutSidenavComponent {
 
-  public position: 'start' | 'end' = 'end';
+  position: 'start' | 'end' = 'end';
 }

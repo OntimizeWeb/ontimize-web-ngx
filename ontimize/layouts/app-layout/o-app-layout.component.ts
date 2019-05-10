@@ -1,14 +1,14 @@
-import { Component, EventEmitter, NgModule, ViewEncapsulation } from '@angular/core';
-
+import { Component, NgModule, ViewEncapsulation, EventEmitter } from '@angular/core';
+import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
+
+import { Util } from '../../util/util';
+import { OSharedModule } from '../../shared';
 import { InputConverter } from '../../decorators';
 import { OAppHeaderModule } from '../../components/app-header/o-app-header.component';
+import { OAppSidenavModule } from '../../components/app-sidenav/o-app-sidenav.component';
 import { OAppLayoutHeaderComponent } from './app-layout-header/o-app-layout-header.component';
 import { OAppLayoutSidenavComponent } from './app-layout-sidenav/o-app-layout-sidenav.component';
-import { OAppSidenavModule } from '../../components/app-sidenav/o-app-sidenav.component';
-import { OSharedModule } from '../../shared';
-import { RouterModule } from '@angular/router';
-import { Util } from '../../util/util';
 
 export const DEFAULT_INPUTS_O_APP_LAYOUT = [
   'mode',
@@ -49,26 +49,26 @@ export class OAppLayoutComponent {
   public static OSidenavModes: OSidenavMode[] = ['over', 'push', 'side'];
 
   @InputConverter()
-  public sidenavOpened: boolean = true;
+  sidenavOpened: boolean = true;
   @InputConverter()
-  public showUserInfo: boolean = true;
+  showUserInfo: boolean = true;
   @InputConverter()
-  public showLanguageSelector: boolean = true;
+  showLanguageSelector: boolean = true;
   @InputConverter()
-  public useFlagIcons: boolean = false;
+  useFlagIcons: boolean = false;
   @InputConverter()
   protected _showHeader: boolean;
 
   protected _mode: OAppLayoutMode;
   protected _sidenavMode: OSidenavMode;
 
-  public openedSidenavImg: string;
-  public closedSidenavImg: string;
+  openedSidenavImg: string;
+  closedSidenavImg: string;
 
-  public beforeOpenSidenav: EventEmitter<boolean> = new EventEmitter<boolean>();
-  public afterOpenSidenav: EventEmitter<boolean> = new EventEmitter<boolean>();
-  public beforeCloseSidenav: EventEmitter<boolean> = new EventEmitter<boolean>();
-  public afterCloseSidenav: EventEmitter<boolean> = new EventEmitter<boolean>();
+  beforeOpenSidenav: EventEmitter<boolean> = new EventEmitter<boolean>();
+  afterOpenSidenav: EventEmitter<boolean> = new EventEmitter<boolean>();
+  beforeCloseSidenav: EventEmitter<boolean> = new EventEmitter<boolean>();
+  afterCloseSidenav: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   get showHeader(): boolean {
     return this._showHeader;
@@ -99,7 +99,7 @@ export class OAppLayoutComponent {
   }
 
   set sidenavMode(val: OSidenavMode) {
-    const m = OAppLayoutComponent.OSidenavModes.find(e => e === val);
+    let m = OAppLayoutComponent.OSidenavModes.find(e => e === val);
     if (Util.isDefined(m)) {
       this._sidenavMode = m;
     } else {
@@ -107,11 +107,11 @@ export class OAppLayoutComponent {
     }
   }
 
-  public sidenavToggle(opened: boolean) {
+  sidenavToggle(opened: boolean) {
     opened ? this.beforeOpenSidenav.emit() : this.beforeCloseSidenav.emit();
   }
 
-  public afterToggle(opened: boolean) {
+  afterToggle(opened: boolean) {
     opened ? this.afterOpenSidenav.emit() : this.afterCloseSidenav.emit();
   }
 }

@@ -1,8 +1,8 @@
-import { OHiddenDirective } from '../directives/o-hidden.directive';
+import { OTabGroupDirective } from '../directives/o-tab-group.directive';
 import { OKeyboardListenerDirective } from '../directives/keyboard-listener.directive';
 import { OListItemDirective } from '../components/list/list-item/o-list-item.directive';
 import { OLockerDirective } from '../directives/locker.directive';
-import { OTabGroupDirective } from '../directives/o-tab-group.directive';
+import { OHiddenDirective } from '../directives/o-hidden.directive';
 
 export const ONTIMIZE_DIRECTIVES = [
   // Ontimize directives...
