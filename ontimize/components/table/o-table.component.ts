@@ -521,8 +521,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   /*parsed inputs variables */
   protected _visibleColArray: Array<string> = [];
 
- 
-
   get originalVisibleColumns(): string {
     return this.visibleColumns;
   }
@@ -1067,7 +1065,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     if (!this.paginator && this.paginationControls) {
       this.paginator = new OTablePaginatorComponent(this.injector, this);
     }
-  
+
     this.initializeCheckboxColumn();
   }
 
@@ -1081,9 +1079,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
           clearInterval(interval);
           if (tab === self.tabContainer) {
             self.insideTabBugWorkaround();
-            if (self.tabGroupChangeSubscription) {
-              self.tabGroupChangeSubscription.unsubscribe();
-            }
             if (self.pendingQuery) {
               self.queryData(self.pendingQueryFilter);
             }
