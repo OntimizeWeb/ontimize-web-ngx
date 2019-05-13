@@ -93,7 +93,7 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
     if (!Util.isDefined(value) || this.valueType === 'string') {
       return value;
     } else if (this.valueType === 'timestamp') {
-      return moment('01011970' + value, 'DDMMYYYY' + this.formatString).unix();
+      return moment(value, this.formatString).year(1970).startOf('year').valueOf();
     }
   }
 
@@ -125,20 +125,6 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
     if (this.picker) {
       this.picker.open();
     }
-  }
-
-  public getValueAsTimeStamp(): any {
-    const value = this.getValue();
-    if (!Util.isDefined(value)) {
-      return 0;
-    }
-    if (typeof value === 'number') {
-      return value;
-    }
-    // const formatMoment = 'MM/DD/YYYY ' + this.formatString;
-    // const momentV = moment('01/01/1970 ' + value, formatMoment);
-    // return momentV.valueOf();
-    return moment('01011970' + value, 'DDMMYYYY' + this.formatString).unix();
   }
 
   public setTimestampValue(value: any, options?: IFormValueOptions): void {
