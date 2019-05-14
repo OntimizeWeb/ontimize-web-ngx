@@ -1,8 +1,8 @@
-import { Component, ViewEncapsulation, Injector, ComponentFactoryResolver, ViewContainerRef, ViewChildren, QueryList, ViewChild, AfterViewInit, EventEmitter, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Component, ViewEncapsulation, Injector, ComponentFactoryResolver, ViewContainerRef, ViewChildren, QueryList, ViewChild, AfterViewInit, EventEmitter, OnDestroy, ChangeDetectorRef, ElementRef } from '@angular/core';
 import { MatTabGroup, MatTabChangeEvent } from '@angular/material';
+import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Util, Codes } from '../../../utils';
-import { Router } from '@angular/router';
 import { DialogService } from '../../../services/dialog.service';
 import { OFormLayoutManagerContentDirective } from '../directives/o-form-layout-manager-content.directive';
 import { IDetailComponentData, OFormLayoutManagerComponent } from '../o-form-layout-manager.component';
@@ -58,6 +58,7 @@ export class OFormLayoutTabGroupComponent implements AfterViewInit, OnDestroy {
     protected injector: Injector,
     protected componentFactoryResolver: ComponentFactoryResolver,
     protected location: ViewContainerRef,
+    protected elRef: ElementRef,
     private cd: ChangeDetectorRef
   ) {
     this.dialogService = injector.get(DialogService);
@@ -313,8 +314,11 @@ export class OFormLayoutTabGroupComponent implements AfterViewInit, OnDestroy {
     return this._state;
   }
 
-  getActiveItemData(): any {
-    return this.data[this.selectedTabIndex - 1];
+  getParams(): any {
+    return Util.isDefined(this.data[0]) ? this.data[0].params : undefined;
   }
 
+  get elementRef(): ElementRef {
+    return this.elRef;
+  }
 }

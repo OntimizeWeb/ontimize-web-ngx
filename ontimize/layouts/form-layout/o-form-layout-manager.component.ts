@@ -175,7 +175,7 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
       this.elRef.nativeElement.removeAttribute('title');
     }
     if (this.storeState && this.isTabMode() && Util.isDefined(this.oTabGroup)) {
-      const state = this.localStorageService.getComponentStorage(this, false);
+      const state = this.localStorageService.getComponentStorage(this);
       this.oTabGroup.initializeComponentState(state);
     }
   }
@@ -284,7 +284,7 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
       this.oTabGroup.closeTab(id);
     } else if (this.isDialogMode() && Util.isDefined(this.dialogRef)) {
       this.dialogRef.close();
-      this.reloadMainComponents();
+      this.onTriggerUpdate.emit();
     }
   }
 
@@ -390,15 +390,16 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
   }
 
   public isMainComponent(comp: OServiceComponent): boolean {
-    const table = this.tableComponents && this.tableComponents.find(tableComp => tableComp === comp);
-    if (Util.isDefined(table)) {
-      return true;
+    let result = false;
+    if (this.isTabMode() && Util.isDefined(this.oTabGroup)) {
+      const firstTab = this.oTabGroup.elementRef.nativeElement.getElementsByTagName('mat-tab-body')[0];
+      if (firstTab) {
+        result = firstTab.contains(comp.elementRef.nativeElement);
+      }
+    } else if (this.isDialogMode() && Util.isDefined(this.dialogRef)) {
+      result = !comp.oFormLayoutDialog;
     }
-    const list = this.listComponents && this.listComponents.find(listComp => listComp === comp);
-    if (Util.isDefined(list)) {
-      return true;
-    }
-    return false;
+    return result;
   }
 
   public getRouteForComponent(comp: OServiceComponent): any[] {
@@ -422,15 +423,6 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
     this.oFormLayoutManagerService.activeFormLayoutManager = this;
   }
 
-  public reloadMainComponents(): void {
-    this.tableComponents.forEach((tableComp: OTableComponent) => {
-      tableComp.reloadData();
-    });
-    this.listComponents.forEach((listComp: OListComponent) => {
-      listComp.reloadData();
-    });
-  }
-
   public allowToUpdateNavigation(formAttr: string): boolean {
     return (this.isTabMode() && Util.isDefined(this.oTabGroup) && Util.isDefined(this.titleDataOrigin)) ?
       this.titleDataOrigin === formAttr :
@@ -439,7 +431,7 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
 
   protected updateStateStorage(): void {
     if (this.localStorageService && this.isTabMode() && Util.isDefined(this.oTabGroup) && this.storeState) {
-      this.localStorageService.updateComponentStorage(this, false);
+      this.localStorageService.updateComponentStorage(this);
     }
   }
 
@@ -461,12 +453,12 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
     }
   }
 
-  public getActiveItemData(): any {
+  public getParams(): any {
     let data;
     if (this.isTabMode() && Util.isDefined(this.oTabGroup)) {
-      data = this.oTabGroup.getActiveItemData();
+      data = this.oTabGroup.getParams();
     } else if (this.isDialogMode() && Util.isDefined(this.dialogRef)) {
-      data = this.dialogRef.componentInstance.getActiveItemData();
+      data = this.dialogRef.componentInstance.getParams();
     }
     return data;
   }

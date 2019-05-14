@@ -39,24 +39,24 @@ export class LocalStorageService {
     });
   }
 
-  getComponentStorage(comp: ILocalStorageComponent, useRouteOnKey: boolean = true): Object {
+  getComponentStorage(comp: ILocalStorageComponent, routeKey: string = undefined): Object {
     const componentKey = comp.getComponentKey();
     let completeKey = componentKey;
-    if (useRouteOnKey) {
-      completeKey += '_' + comp.getRouteKey();
+    if (routeKey) {
+      completeKey += '_' + routeKey;
     }
     return this.getAppComponentData(completeKey) || {};
   }
 
-  updateComponentStorage(comp: ILocalStorageComponent, useRouteOnKey: boolean = true) {
+  updateComponentStorage(comp: ILocalStorageComponent, routeKey: string = undefined) {
     const dataToStore = comp.getDataToStore();
     const componentKey = comp.getComponentKey();
     if (!Util.isDefined(componentKey)) {
       return;
     }
     let completeKey = componentKey;
-    if (useRouteOnKey) {
-      completeKey += '_' + comp.getRouteKey();
+    if (routeKey) {
+      completeKey += '_' + routeKey;
     }
     let storedObject = {};
     for (let prop in dataToStore) {

@@ -178,8 +178,7 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
         this.alreadyStored = false;
       });
 
-      // Get previous status
-      this.state = this.localStorageService.getComponentStorage(this);
+      this.initializeState();
 
       if (Util.isDefined(this.state['query-rows'])) {
         this.queryRows = this.state['query-rows'];
@@ -488,7 +487,7 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
   protected updateStateStorage(): void {
     if (this.localStorageService && this.storeState && !this.alreadyStored) {
       this.alreadyStored = true;
-      this.localStorageService.updateComponentStorage(this);
+      this.localStorageService.updateComponentStorage(this, this.getRouteKey());
     }
   }
 
@@ -496,4 +495,8 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
     //
   }
 
+  initializeState() {
+    // Get previous status
+    this.state = this.localStorageService.getComponentStorage(this, this.getRouteKey());
+  }
 }

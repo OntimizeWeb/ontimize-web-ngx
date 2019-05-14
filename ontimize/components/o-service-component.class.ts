@@ -120,7 +120,7 @@ export class OServiceComponent extends OServiceBaseComponent {
   protected onTriggerUpdateSubscription: any;
   protected formLayoutManager: OFormLayoutManagerComponent;
   protected formLayoutManagerTabIndex: number;
-  protected oFormLayoutDialog: OFormLayoutDialogComponent;
+  public oFormLayoutDialog: OFormLayoutDialogComponent;
 
   protected tabsSubscriptions: any;
 
@@ -147,16 +147,6 @@ export class OServiceComponent extends OServiceBaseComponent {
   }
 
   public initialize(): void {
-    super.initialize();
-    if (this.detailButtonInRow || this.editButtonInRow) {
-      this.detailMode = Codes.DETAIL_MODE_NONE;
-    }
-
-    this.rowHeight = this.rowHeight ? this.rowHeight.toLowerCase() : this.rowHeight;
-    if (!Codes.isValidRowHeight(this.rowHeight)) {
-      this.rowHeight = Codes.DEFAULT_ROW_HEIGHT;
-    }
-
     if (this.formLayoutManager && this.formLayoutManager.isTabMode() && this.formLayoutManager.oTabGroup) {
 
       this.formLayoutManagerTabIndex = this.formLayoutManager.oTabGroup.data.length;
@@ -170,11 +160,20 @@ export class OServiceComponent extends OServiceBaseComponent {
         }
       });
 
-      this.tabsSubscriptions.add(this.formLayoutManager.oTabGroup.onCloseTab.subscribe((tabData) => {
+      this.tabsSubscriptions.add(this.formLayoutManager.oTabGroup.onCloseTab.subscribe(() => {
         if (this.formLayoutManagerTabIndex === this.formLayoutManager.oTabGroup.selectedTabIndex) {
           this.updateStateStorage();
         }
       }));
+    }
+    super.initialize();
+    if (this.detailButtonInRow || this.editButtonInRow) {
+      this.detailMode = Codes.DETAIL_MODE_NONE;
+    }
+
+    this.rowHeight = this.rowHeight ? this.rowHeight.toLowerCase() : this.rowHeight;
+    if (!Codes.isValidRowHeight(this.rowHeight)) {
+      this.rowHeight = Codes.DEFAULT_ROW_HEIGHT;
     }
   }
 
@@ -474,13 +473,34 @@ export class OServiceComponent extends OServiceBaseComponent {
     let route = '';
     if (this.formLayoutManager && !this.formLayoutManager.isMainComponent(this)) {
       route = this.router.url;
-      const itemData = this.formLayoutManager.getActiveItemData();
-      if (itemData && itemData.params) {
-        route += '/' + (Object.keys(itemData.params).join('/'));
+      const params = this.formLayoutManager.getParams();
+      if (params) {
+        route += '/' + (Object.keys(params).join('/'));
       }
     } else {
       route = super.getRouteKey();
     }
     return route;
+  }
+
+  get elementRef(): ElementRef {
+    return this.elRef;
+  }
+
+  initializeState() {
+    let routeKey = super.getRouteKey();
+    if (this.formLayoutManager && this.formLayoutManager.isTabMode() && !this.formLayoutManager.isMainComponent(this)) {
+      try {
+        const params = this.formLayoutManager.oTabGroup.state.tabsData[0].params;
+        if (params) {
+          routeKey = this.router.url;
+          routeKey += '/' + (Object.keys(params).join('/'));
+        }
+      } catch (e) {
+        //
+      }
+    }
+    // Get previous status
+    this.state = this.localStorageService.getComponentStorage(this, routeKey);
   }
 }
