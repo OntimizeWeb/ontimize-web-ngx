@@ -168,7 +168,7 @@ export class OTimeInputComponent extends OFormDataComponent implements OnInit, A
     if (this.dateInput) {
       this.dateInput.setValue(dateValue);
     }
-    if (this.hourInput && this.hourInput.isEmpty()) {
+    if (this.hourInput) {
       this.hourInput.setTimestampValue(hourValue);
     }
     this.cd.detectChanges();
