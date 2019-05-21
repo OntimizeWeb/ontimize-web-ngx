@@ -93,7 +93,7 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
     if (!Util.isDefined(value) || this.valueType === 'string') {
       return value;
     } else if (this.valueType === 'timestamp') {
-      return moment(value, this.formatString).year(1970).startOf('year').valueOf();
+      return moment(value, this.formatString).valueOf();
     }
   }
 
@@ -186,18 +186,10 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
     return result;
   }
 
-  public onTimepickerChange(value: string): void {
-    this.onTimeEvent(value);
-  }
-
-  public onTimeEvent(event): void {
-    const compValue = this.getValue();
-    const eventM = moment(event, this.formatString);
-    const eventTimestamp = eventM.valueOf() - eventM.startOf('day').valueOf();
-    let value = event;
+  public onTimepickerChange(event: string): void {
+    let value: any = event;
     if (this.valueType === 'timestamp') {
-      const valueM = moment(compValue);
-      value = valueM.startOf('day').add(eventTimestamp).valueOf();
+      value = moment(event, this.formatString).valueOf();
     } else {
       value = this.convertToFormatString(event);
     }
