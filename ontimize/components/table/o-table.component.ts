@@ -653,7 +653,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     // }
   }
 
-  // protected permissions: OTablePermissions;
+  protected permissions: OTablePermissions;
   matMenu: MatMenu;
 
   @ViewChild('tableMenu')
