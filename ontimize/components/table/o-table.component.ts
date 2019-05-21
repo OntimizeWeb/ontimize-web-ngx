@@ -653,7 +653,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     // }
   }
 
-  protected permissions: OTablePermissions;
+  // protected permissions: OTablePermissions;
   matMenu: MatMenu;
 
   @ViewChild('tableMenu')
@@ -1648,6 +1648,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   public selectedRow(row: any): void {
     this.setSelected(row);
+    this.cd.detectChanges();
   }
 
   get showDeleteButton(): boolean {
