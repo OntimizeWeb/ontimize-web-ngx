@@ -284,7 +284,7 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
       this.oTabGroup.closeTab(id);
     } else if (this.isDialogMode() && Util.isDefined(this.dialogRef)) {
       this.dialogRef.close();
-      this.onTriggerUpdate.emit();
+      this.reloadMainComponents();
     }
   }
 
@@ -421,6 +421,10 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
 
   public setAsActiveFormLayoutManager(): void {
     this.oFormLayoutManagerService.activeFormLayoutManager = this;
+  }
+
+  public reloadMainComponents(): void {
+    this.onTriggerUpdate.emit();
   }
 
   public allowToUpdateNavigation(formAttr: string): boolean {
