@@ -1,12 +1,8 @@
 {
-  "extends": "tslint:recommended",
+  "rulesDirectory": [
+    "node_modules/codelyzer"
+  ],
   "rules": {
-    "arrow-parens": [
-      true,
-      "ban-single-arg-parens"
-    ],
-    "arrow-return-shorthand": true,
-    "ban-types": false,
     "class-name": true,
     "curly": true,
     "eofline": true,
@@ -14,37 +10,15 @@
       true,
       "spaces"
     ],
-    "interface-name": false,
-    "interface-over-type-literal": false,
-    "max-classes-per-file": false,
-    "max-line-length": [
-      true,
-      {
-        "limit": 150,
-        "ignore-pattern": "^import |^export {(.*?)}"
-      }
-    ],
-    "member-access": true,
-    "member-ordering": [
-      true,
-      {
-        "order": "fields-first"
-      }
-    ],
-    "no-console": false,
+    "no-arg": true,
+    "no-construct": true,
     "no-duplicate-variable": true,
     "no-empty": true,
     "no-eval": true,
-    "no-string-literal": true,
     "no-trailing-whitespace": true,
     "no-unused-expression": true,
     "no-unused-variable": false,
     "no-use-before-declare": true,
-    "object-literal-shorthand": [
-      true,
-      "never"
-    ],
-    "object-literal-sort-keys": false,
     "one-line": [
       true,
       "check-open-brace",
@@ -56,8 +30,6 @@
       true,
       "single"
     ],
-    "radix": false,
-    "return-undefined": true,
     "semicolon": [
       true,
       "always"
@@ -66,11 +38,6 @@
       true
     ],
     "triple-equals": true,
-    "typedef": [
-      true,
-      "call-signature",
-      "property-declaration"
-    ],
     "variable-name": false
   }
 }
