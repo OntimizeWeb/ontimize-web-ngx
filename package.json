@@ -29,7 +29,6 @@
   "es2015": "./esm2015/ontimize-web-ngx.js",
   "typings": "./index.d.ts",
   "scripts": {
-    "pack": "npm run build && cd dist && npm pack && cd..",
     "clean": "rimraf coverage && o-ngx-lib-builder clean",
     "test": "karma start",
     "test-watch": "karma start --singleRun=false --autoWatch=true",
