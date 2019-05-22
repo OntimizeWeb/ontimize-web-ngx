@@ -1,11 +1,11 @@
-import { Injector, EventEmitter, OnInit, HostListener } from '@angular/core';
-import { FormControl, ValidatorFn, Validators, FormGroup } from '@angular/forms';
+import { EventEmitter, HostListener, Injector, OnInit } from '@angular/core';
+import { FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
+import { OColumn, OTableComponent } from '../../o-table.component';
+import { OTranslateService, SnackBarService } from '../../../../services';
+import { ObservableWrapper, Util } from '../../../../utils';
 
 import { InputConverter } from '../../../../decorators';
-import { OTableComponent, OColumn } from '../../o-table.component';
-import { ObservableWrapper, Util } from '../../../../utils';
 import { OTableColumnComponent } from '../o-table-column.component';
-import { OTranslateService, SnackBarService } from '../../../../services';
 
 export class OBaseTableCellEditor implements OnInit {
 
@@ -54,6 +54,8 @@ export class OBaseTableCellEditor implements OnInit {
 
   onPostUpdateRecord: EventEmitter<Object> = new EventEmitter<Object>();
 
+  public editorCreated: EventEmitter<Object> = new EventEmitter<Object>();
+
   @HostListener('document:keyup', ['$event'])
   onDocumentKeyup(event: KeyboardEvent) {
     this.handleKeyup(event);
@@ -73,8 +75,9 @@ export class OBaseTableCellEditor implements OnInit {
   }
 
   ngOnInit(): void {
-    this.createFormControl();
-    this.registerEditor();
+     this.createFormControl();
+     this.registerEditor();
+     this.editorCreated.emit(this);
   }
 
   protected handleKeyup(event: KeyboardEvent) {
@@ -260,5 +263,9 @@ export class OBaseTableCellEditor implements OnInit {
 
   get enabled(): boolean {
     return this._enabled;
+  }
+
+  getFormControl(){
+    return this.formControl;
   }
 }

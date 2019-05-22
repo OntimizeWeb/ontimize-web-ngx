@@ -11,6 +11,7 @@ export interface ILocalStorageComponent {
   storeState?: boolean;
   getDataToStore(): Object;
   getComponentKey(): string;
+  getRouteKey?(): string;
 }
 
 export class LocalStorageService {
@@ -30,7 +31,7 @@ export class LocalStorageService {
     this._router = this.injector.get(Router);
     this.loginService = this.injector.get(LoginService);
 
-    var self = this;
+    const self = this;
     this._router.events.subscribe(event => {
       if (event instanceof NavigationStart) {
         ObservableWrapper.callEmit(self.onRouteChange, {});
@@ -38,24 +39,27 @@ export class LocalStorageService {
     });
   }
 
-  getComponentStorage(comp: ILocalStorageComponent, useRouteOnKey: boolean = true): Object {
-    var componentKey = comp.getComponentKey();
-    var completeKey = componentKey;
-    if (useRouteOnKey) {
-      completeKey += '_' + this._router.url;
+  getComponentStorage(comp: ILocalStorageComponent, routeKey: string = undefined): Object {
+    const componentKey = comp.getComponentKey();
+    let completeKey = componentKey;
+    if (routeKey) {
+      completeKey += '_' + routeKey;
     }
     return this.getAppComponentData(completeKey) || {};
   }
 
-  updateComponentStorage(comp: ILocalStorageComponent, useRouteOnKey: boolean = true) {
-    var dataToStore = comp.getDataToStore();
-    var componentKey = comp.getComponentKey();
-    var completeKey = componentKey;
-    if (useRouteOnKey) {
-      completeKey += '_' + this._router.url;
+  updateComponentStorage(comp: ILocalStorageComponent, routeKey: string = undefined) {
+    const dataToStore = comp.getDataToStore();
+    const componentKey = comp.getComponentKey();
+    if (!Util.isDefined(componentKey)) {
+      return;
+    }
+    let completeKey = componentKey;
+    if (routeKey) {
+      completeKey += '_' + routeKey;
     }
     let storedObject = {};
-    for (var prop in dataToStore) {
+    for (let prop in dataToStore) {
       if (dataToStore.hasOwnProperty(prop)) {
         storedObject[prop] = dataToStore[prop];
       }

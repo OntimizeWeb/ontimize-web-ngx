@@ -1,6 +1,6 @@
 <div class="quickFilter" fxLayout="row">
   <mat-form-field floatLabel="never">
-    <input matInput #filter placeholder="{{ 'TABLE.FILTER' | oTranslate}}">
+    <input matInput #filter placeholder="{{ 'TABLE.FILTER' | oTranslate}}" [formControl]="formControl">
     <span class="icon-btn search-icon" matPrefix fxFlexLayout="flex-end" (menuClosed)="onMenuClosed()"
       [matMenuTriggerFor]="menu">
       <mat-icon svgIcon="ontimize:search"></mat-icon>

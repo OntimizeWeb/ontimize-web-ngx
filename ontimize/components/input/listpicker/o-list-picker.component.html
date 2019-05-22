@@ -6,7 +6,7 @@
 
   <mat-form-field [appearance]="appearance" [floatLabel]="floatLabel" [class.custom-width]="hasCustomWidth"
     [hideRequiredMarker]="hideRequiredMarker" class="icon-field" #innerInputContainer fxFlexFill>
-    <mat-label *ngIf="labelVisible">{{ olabel }}</mat-label>
+    <mat-label *ngIf="labelVisible">{{ olabel | oTranslate }}</mat-label>
     <input #visibleInput matInput type="text" [attr.id]="'desc_' + getAttribute()" [id]="'desc_' + getAttribute()"
       [formControl]="stateCtrl" [placeholder]="placeHolder" [value]="getDescriptionValue()"
       (input)="onVisibleInputChange($event)" (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)"

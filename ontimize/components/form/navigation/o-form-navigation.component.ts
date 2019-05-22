@@ -64,7 +64,7 @@ export class OFormNavigationComponent implements OnDestroy {
       navData = this.navigationService.getPreviousRouteData();
     }
     if (Util.isDefined(navData)) {
-      this.navigationData = navData.keysValues;
+      this.navigationData = navData.keysValues || [];
       this.queryConf = navData.queryConfiguration;
     }
     this.currentIndex = this.getCurrentIndex();
@@ -123,9 +123,10 @@ export class OFormNavigationComponent implements OnDestroy {
 
   protected getKeysArray(): string[] {
     // getting available navigationData keys
+    const navData = this.navigationData ? (this.navigationData[0] || {}) : {};
     let keysArray = [];
     this._form.keysArray.forEach(key => {
-      if ((this.navigationData[0] || {}).hasOwnProperty(key)) {
+      if (navData.hasOwnProperty(key)) {
         keysArray.push(key);
       }
     });
@@ -140,7 +141,7 @@ export class OFormNavigationComponent implements OnDestroy {
     keysArray.forEach(key => {
       currentKeys[key] = currentItem[key];
     });
-    let index: number = this.navigationData.findIndex((item: any) => {
+    let index: number = (this.navigationData || []).findIndex((item: any) => {
       let itemKeys = {};
       keysArray.forEach(key => {
         itemKeys[key] = item[key];
@@ -194,9 +195,8 @@ export class OFormNavigationComponent implements OnDestroy {
       let index = this.navigationData.length - 1;
       this.move(index);
     } else {
-      const length = this.queryConf.totalRecordsNumber % this.queryConf.queryRows;
-      const offset = this.queryConf.totalRecordsNumber - length;
-      this.queryNavigationData(offset, length).then(() => {
+      const offset = this.queryConf.totalRecordsNumber - this.queryConf.queryRows;
+      this.queryNavigationData(offset, this.queryConf.queryRows).then(() => {
         this.move(this.navigationData.length - 1);
       });
     }
@@ -273,7 +273,7 @@ export class OFormNavigationComponent implements OnDestroy {
   }
 
   showNavigation() {
-    return this.navigationData.length > 1;
+    return (this.navigationData || []).length > 1;
   }
 
   set currentIndex(arg: number) {

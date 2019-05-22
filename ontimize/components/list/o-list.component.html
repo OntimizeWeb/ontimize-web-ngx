@@ -1,6 +1,6 @@
 <div class="o-list-container" [style.display]="isVisible()? '' : 'none'" fxFill>
-  <div *ngIf="loading" fxLayoutAlign="center center" [class.pageable-loading]="pageable && state.queryRecordOffset > 0" class="spinner-container">
-    <mat-progress-spinner *ngIf="loading" strokeWidth="3" mode="indeterminate"></mat-progress-spinner>
+  <div *ngIf="loading | async" fxLayoutAlign="center center" [class.pageable-loading]="pageable && state.queryRecordOffset > 0" class="spinner-container">
+    <mat-progress-spinner  strokeWidth="3" mode="indeterminate"></mat-progress-spinner>
   </div>
 
   <mat-toolbar *ngIf="hasControls()" [class.dense]="odense">

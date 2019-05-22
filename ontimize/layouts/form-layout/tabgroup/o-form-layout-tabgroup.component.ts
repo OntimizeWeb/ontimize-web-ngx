@@ -1,8 +1,8 @@
-import { Component, ViewEncapsulation, Injector, ComponentFactoryResolver, ViewContainerRef, ViewChildren, QueryList, ViewChild, AfterViewInit, EventEmitter, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Component, ViewEncapsulation, Injector, ComponentFactoryResolver, ViewContainerRef, ViewChildren, QueryList, ViewChild, AfterViewInit, EventEmitter, OnDestroy, ChangeDetectorRef, ElementRef } from '@angular/core';
 import { MatTabGroup, MatTabChangeEvent } from '@angular/material';
+import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Util, Codes } from '../../../utils';
-import { Router } from '@angular/router';
 import { DialogService } from '../../../services/dialog.service';
 import { OFormLayoutManagerContentDirective } from '../directives/o-form-layout-manager-content.directive';
 import { IDetailComponentData, OFormLayoutManagerComponent } from '../o-form-layout-manager.component';
@@ -14,6 +14,7 @@ export const DEFAULT_INPUTS_O_FORM_LAYOUT_TABGROUP = [
 
 export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_TABGROUP = [
   'onMainTabSelected',
+  'onSelectedTabChange',
   'onCloseTab'
 ];
 
@@ -49,10 +50,15 @@ export class OFormLayoutTabGroupComponent implements AfterViewInit, OnDestroy {
   protected loading: boolean = false;
   protected dialogService: DialogService;
 
+  public onMainTabSelected: EventEmitter<any> = new EventEmitter<any>();
+  public onSelectedTabChange: EventEmitter<any> = new EventEmitter<any>();
+  public onCloseTab: EventEmitter<any> = new EventEmitter<any>();
+
   constructor(
     protected injector: Injector,
     protected componentFactoryResolver: ComponentFactoryResolver,
     protected location: ViewContainerRef,
+    protected elRef: ElementRef,
     private cd: ChangeDetectorRef
   ) {
     this.dialogService = injector.get(DialogService);
@@ -122,6 +128,7 @@ export class OFormLayoutTabGroupComponent implements AfterViewInit, OnDestroy {
   onTabSelectChange(arg: MatTabChangeEvent) {
     if (this.formLayoutManager && this.tabGroup.selectedIndex === 0) {
       this.formLayoutManager.updateIfNeeded();
+      this.onMainTabSelected.emit();
     }
     if (Util.isDefined(this.state) && Util.isDefined(this.state.tabsData)) {
       if (this.state.tabsData.length > 1) {
@@ -133,30 +140,34 @@ export class OFormLayoutTabGroupComponent implements AfterViewInit, OnDestroy {
         this.state = undefined;
       }
     }
+    this.onSelectedTabChange.emit(this.data[this.selectedTabIndex - 1]);
   }
 
-  onCloseTab(id: string) {
-    if (this.formLayoutManager) {
-      const onCloseTabAccepted: EventEmitter<any> = new EventEmitter<any>();
-      const self = this;
-      this.closeTabSubscription = onCloseTabAccepted.asObservable().subscribe(res => {
-        if (res) {
-          for (let i = self.data.length - 1; i >= 0; i--) {
-            if (this.data[i].id === id) {
-              self.data.splice(i, 1);
-              break;
-            }
+  closeTab(id: string) {
+    if (!this.formLayoutManager) {
+      return;
+    }
+    const onCloseTabAccepted: EventEmitter<any> = new EventEmitter<any>();
+    const self = this;
+    this.closeTabSubscription = onCloseTabAccepted.asObservable().subscribe(res => {
+      if (res) {
+        let tabData;
+        for (let i = self.data.length - 1; i >= 0; i--) {
+          if (self.data[i].id === id) {
+            tabData = self.data.splice(i, 1)[0];
+            break;
           }
         }
-      });
-      const tabData = this.data.find((item: IDetailComponentData) => item.id === id);
-      if (Util.isDefined(tabData) && tabData.modified) {
-        this.dialogService.confirm('CONFIRM', 'MESSAGES.FORM_CHANGES_WILL_BE_LOST').then(res => {
-          onCloseTabAccepted.emit(res);
-        });
-      } else {
-        onCloseTabAccepted.emit(true);
+        self.onCloseTab.emit(tabData);
       }
+    });
+    const tabData = this.data.find((item: IDetailComponentData) => item.id === id);
+    if (Util.isDefined(tabData) && tabData.modified) {
+      this.dialogService.confirm('CONFIRM', 'MESSAGES.FORM_CHANGES_WILL_BE_LOST').then(res => {
+        onCloseTabAccepted.emit(res);
+      });
+    } else {
+      onCloseTabAccepted.emit(true);
     }
   }
 
@@ -301,5 +312,13 @@ export class OFormLayoutTabGroupComponent implements AfterViewInit, OnDestroy {
 
   get state(): any {
     return this._state;
+  }
+
+  getParams(): any {
+    return Util.isDefined(this.data[0]) ? this.data[0].params : undefined;
+  }
+
+  get elementRef(): ElementRef {
+    return this.elRef;
   }
 }

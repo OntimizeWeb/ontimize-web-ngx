@@ -9,16 +9,9 @@
     .title-container {
       padding: 5px 20px;
 
-      .o-search-input,
       .o-search-input mat-form-field {
-        width: 100%;
-
         .mat-form-field-wrapper {
           padding-bottom: 0;
-
-          .mat-form-field-flex {
-            padding-top: 0;
-          }
 
           .mat-form-field-underline {
             display: none;

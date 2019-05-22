@@ -1,13 +1,15 @@
 <div fxLayout="column" [formGroup]="getFormGroup()" [matTooltip]="tooltip" [matTooltipPosition]="tooltipPosition"
-  [matTooltipShowDelay]="tooltipShowDelay" [matTooltipHideDelay]="tooltipHideDelay" [class.o-image-auto-fit]="autoFit" class="o-image-content" fxFill>
+  [matTooltipShowDelay]="tooltipShowDelay" [matTooltipHideDelay]="tooltipHideDelay" [class.o-image-auto-fit]="autoFit"
+  class="o-image-content" fxFill>
 
   <mat-form-field *ngIf="hasControls()" class="o-image-form-field">
-    <input matInput readonly (click)="input.click()" [value]="currentFileName" [placeholder]="olabel" />
-    <input matInput [formControlName]="getAttribute()" type="text" [id]="getAttribute()" class="o-image-form-field-input" />
-    <input #input type="file" [disabled]="!enabled" [accept]="acceptFileType ? acceptFileType.replace(';',',') : 'image/*'"
-      (change)="fileChange(input)" class="o-image-form-field-hidden" fxFlex />
+    <input matInput readonly (click)="input.click()" [placeholder]="olabel" [required]="isRequired" [formControl]="stateCtrl" />
+    <input matInput [formControlName]="getAttribute()" type="text" [id]="getAttribute()" class="o-image-form-field-input" [required]="isRequired" />
+    <input #input type="file" [disabled]="!enabled" [accept]="acceptFileType ? acceptFileType.replace(';',',') : 'image/*'" (change)="fileChange(input)"
+      class="o-image-form-field-hidden" fxFlex />
 
-    <button type="button" *ngIf="fullScreenButton" [disabled]="!enabled" matSuffix mat-icon-button (click)="openFullScreen($event)">
+    <button type="button" *ngIf="fullScreenButton" [disabled]="!enabled" matSuffix mat-icon-button
+      (click)="openFullScreen($event)">
       <mat-icon svgIcon="ontimize:fullscreen"></mat-icon>
     </button>
     <button type="button" [disabled]="!enabled" matSuffix mat-icon-button (click)="input.click()">

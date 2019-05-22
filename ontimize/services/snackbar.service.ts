@@ -1,5 +1,5 @@
 import { Injectable, Injector } from '@angular/core';
-import { MatSnackBar, MatSnackBarRef } from '@angular/material';
+import { MatSnackBar, MatSnackBarRef, MatSnackBarConfig } from '@angular/material';
 import { Observable } from 'rxjs';
 
 import { OSnackBarComponent, OSnackBarConfig } from '../components/snackbar/o-snackbar.component';
@@ -8,6 +8,7 @@ import { OSnackBarComponent, OSnackBarConfig } from '../components/snackbar/o-sn
 export class SnackBarService {
 
   protected static DEFAULT_DURATION: number = 2000;
+  protected static DEFAULT_CONTAINER_CLASS: string = 'o-snackbar-container';
 
   protected matSnackBar: MatSnackBar;
   protected snackBarRef: MatSnackBarRef<OSnackBarComponent>;
@@ -19,13 +20,21 @@ export class SnackBarService {
   }
 
   public open(message: string, config?: OSnackBarConfig): Promise<any> {
-    var self = this;
-    let observable: Observable<any> = Observable.create(
+    const self = this;
+    const observable: Observable<any> = Observable.create(
       observer => {
-        self.snackBarRef = self.matSnackBar.openFromComponent(OSnackBarComponent, {
-          duration: config && config.milliseconds ? config.milliseconds : SnackBarService.DEFAULT_DURATION
-        });
-        self.snackBarRef.onAction().subscribe((arg) => {
+        const containerClasses: string[] = [SnackBarService.DEFAULT_CONTAINER_CLASS];
+        if (config && config.cssClass) {
+          containerClasses.push(config.cssClass);
+        }
+
+        const matConfig: MatSnackBarConfig = {
+          duration: config && config.milliseconds ? config.milliseconds : SnackBarService.DEFAULT_DURATION,
+          panelClass: containerClasses
+        };
+        self.snackBarRef = self.matSnackBar.openFromComponent(OSnackBarComponent, matConfig);
+
+        self.snackBarRef.onAction().subscribe(arg => {
           observer.next(arg);
         });
         self.snackBarRef.afterDismissed().subscribe(() => {

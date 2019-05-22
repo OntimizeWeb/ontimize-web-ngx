@@ -1,12 +1,12 @@
-import { AfterViewInit, Component, ElementRef, Inject, ViewChild, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/core';
-import { MatCheckboxChange, MatDialogRef, MAT_DIALOG_DATA, MatSelectionList } from '@angular/material';
-import { FormControl } from '@angular/forms';
-import { fromEvent } from 'rxjs';
+import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, Inject, ViewChild, ViewEncapsulation } from '@angular/core';
+import { BehaviorSubject, Observable, fromEvent } from 'rxjs';
+import { ColumnValueFilterOperator, IColumnValueFilter } from '../../header/o-table-header-components';
+import { MAT_DIALOG_DATA, MatCheckboxChange, MatDialogRef, MatSelectionList, MatSlideToggleChange } from '@angular/material';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
-import { Util } from '../../../../../util/util';
+import { FormControl } from '@angular/forms';
 import { OColumn } from '../../../o-table.component';
-import { ColumnValueFilterOperator, IColumnValueFilter } from '../../header/o-table-header-components';
+import { Util } from '../../../../../util/util';
 
 export interface ITableFilterByColumnDataInterface {
   value: any;
@@ -28,7 +28,12 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
 
   column: OColumn;
   preloadValues: boolean = true;
-  isCustomFiter: boolean = false;
+  mode: string;
+  private isCustomFilterSubject = new BehaviorSubject<boolean>(false);
+  isCustomFilter: Observable<boolean> = this.isCustomFilterSubject.asObservable();
+
+  private isDefaultFilterSubject = new BehaviorSubject<boolean>(false);
+  isDefaultFilter: Observable<boolean> = this.isDefaultFilterSubject.asObservable();
 
   fcText = new FormControl();
   fcFrom = new FormControl();
@@ -53,9 +58,15 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
       operator: undefined,
       values: undefined
     };
+    if (data.mode) {
+      this.isDefaultFilterSubject.next(data.mode === 'default');
+      this.isCustomFilterSubject.next(data.mode === 'custom');
+      this.mode = data.mode;
+    }
+
     if (data.previousFilter) {
       previousFilter = data.previousFilter;
-      this.isCustomFiter = [ColumnValueFilterOperator.LESS_EQUAL, ColumnValueFilterOperator.MORE_EQUAL, ColumnValueFilterOperator.BETWEEN, ColumnValueFilterOperator.EQUAL].indexOf(previousFilter.operator) !== -1;
+      this.isCustomFilterSubject.next([ColumnValueFilterOperator.LESS_EQUAL, ColumnValueFilterOperator.MORE_EQUAL, ColumnValueFilterOperator.BETWEEN, ColumnValueFilterOperator.EQUAL].indexOf(previousFilter.operator) !== -1);
     }
     if (data.hasOwnProperty('preloadValues')) {
       this.preloadValues = data.preloadValues;
@@ -65,7 +76,12 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
       this.initializeCustomFilterValues(previousFilter);
       this.initializeDataList(previousFilter);
     }
+
+    if (data.mode) {
+      this.mode = data.mode;
+    }
   }
+
 
   ngAfterViewInit() {
     this.initializeFilterEvent();
@@ -177,7 +193,7 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
       values: undefined
     };
 
-    if (!this.isCustomFiter) {
+    if (!this.isCustomFilterSubject.getValue()) {
       if (this.selectedValues.length) {
         filter.operator = ColumnValueFilterOperator.IN;
         filter.values = this.selectedValues.map((item) => item.value);
@@ -206,9 +222,11 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
     return filter;
   }
 
-  onSlideChange(e: Event): void {
-    this.isCustomFiter = !this.isCustomFiter;
-    if (!this.isCustomFiter) {
+  onSlideChange(e: MatSlideToggleChange): void {
+    this.isCustomFilterSubject.next(e.checked);
+
+    if (!e.checked) {
+      //Selection mode
       this.initializeDataList();
       const self = this;
       setTimeout(() => {
@@ -233,6 +251,10 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
     return this.tableData[i];
   }
 
+
+  getFixedDimensionClass(){
+    return this.mode==='selection' || this.mode==='default' 
+  }
   protected getTypedValue(control: FormControl): any {
     let value = control.value;
     if (this.isNumericType()) {

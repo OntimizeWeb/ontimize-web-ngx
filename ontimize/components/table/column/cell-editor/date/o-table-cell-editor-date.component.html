@@ -1,9 +1,9 @@
 <ng-template #templateref let-cellvalue="cellvalue" let-rowvalue="rowvalue">
   <div [formGroup]="formGroup" class="o-table-cell-editor-date">
-    <mat-form-field floatLabel="never" appearance="standard">
-      <input #input matInput [placeholder]="getPlaceholder()" [formControl]="formControl" [required]="orequired"
-        [matDatepicker]="d" [matDatepickerFilter]="filterDate" (dateChange)="onDateChange($event)" [min]="oMinDate"
-        [max]="oMaxDate">
+    <mat-form-field floatLabel="never">
+      <input #input matInput [placeholder]="getPlaceholder()" [formControl]="formControl"
+        [required]="orequired" [matDatepicker]="d" [matDatepickerFilter]="filterDate"
+        (dateChange)="onDateChange($event)" [min]="oMinDate" [max]="oMaxDate">
 
       <mat-datepicker #d [startView]="oStartView" [startAt]="oStartAt" [touchUi]="oTouchUi" (closed)="onClosed()">
       </mat-datepicker>
@@ -13,10 +13,13 @@
       </span>
 
       <mat-error *ngIf="hasError('required')">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</mat-error>
-      <mat-error *ngIf="hasError('matDatepickerParse')">{{ 'FORM_VALIDATION.DATE_PARSE' | oTranslate }} {{ format }}</mat-error>
+      <mat-error *ngIf="hasError('matDatepickerParse')">{{ 'FORM_VALIDATION.DATE_PARSE' | oTranslate }} {{ format }}
+      </mat-error>
       <mat-error *ngIf="hasError('matDatepickerFilter')">{{ 'FORM_VALIDATION.DATE_FILTER' | oTranslate }}</mat-error>
-      <mat-error *ngIf="hasError('matDatepickerMin')">{{ 'FORM_VALIDATION.DATE_MIN' | oTranslate }} {{ minDateString }}</mat-error>
-      <mat-error *ngIf="hasError('matDatepickerMax')">{{ 'FORM_VALIDATION.DATE_MAX' | oTranslate }} {{ maxDateString }}</mat-error>
+      <mat-error *ngIf="hasError('matDatepickerMin')">{{ 'FORM_VALIDATION.DATE_MIN' | oTranslate }} {{ minDateString }}
+      </mat-error>
+      <mat-error *ngIf="hasError('matDatepickerMax')">{{ 'FORM_VALIDATION.DATE_MAX' | oTranslate }} {{ maxDateString }}
+      </mat-error>
     </mat-form-field>
   </div>
 </ng-template>

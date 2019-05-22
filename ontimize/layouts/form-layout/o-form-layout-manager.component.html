@@ -1,4 +1,6 @@
-<o-form-layout-tabgroup #tabGroup [title]="title" *ngIf="isTabMode(); else elseBlock">
+<o-form-layout-tabgroup #tabGroup *ngIf="isTabMode(); else elseBlock" [title]="title"
+  (onMainTabSelected)="onMainTabSelected.emit($event)" (onSelectedTabChange)="onSelectedTabChange.emit($event)"
+  (onCloseTab)="onCloseTab.emit($event)">
   <ng-content *ngTemplateOutlet="elseBlock"></ng-content>
 </o-form-layout-tabgroup>
 

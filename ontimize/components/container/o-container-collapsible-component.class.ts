@@ -1,27 +1,33 @@
 import { ElementRef, forwardRef, Inject, Injector, Optional, ViewChild } from '@angular/core';
+import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material';
 
 import { InputConverter } from '../../decorators/input-converter';
 import { OFormComponent } from '../form/form-components';
 import { OContainerComponent } from './o-container-component.class';
-import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material';
 
 export const DEFAULT_INPUTS_O_CONTAINER_COLLAPSIBLE = [
   ...OContainerComponent.DEFAULT_INPUTS_O_CONTAINER,
   'expanded',
   'description',
   'collapsedHeight:collapsed-height',
-  'expandedHeight:expanded-height',
-
+  'expandedHeight:expanded-height'
 ];
 
 export class OContainerCollapsibleComponent extends OContainerComponent {
 
   public static DEFAULT_INPUTS_O_CONTAINER_COLLAPSIBLE = DEFAULT_INPUTS_O_CONTAINER_COLLAPSIBLE;
 
-  protected contentObserver = new MutationObserver(() => this.updateHeightExpansionPanelContent());
-  protected _containerCollapsibleRef;
+  @InputConverter()
+  public expanded: boolean = true;
+  public collapsedHeight = '37px';
+  public expandedHeight = '37px';
+  public description: string;
 
-  @ViewChild('containerContent') set containerContent(elem: ElementRef) {
+  protected contentObserver = new MutationObserver(() => this.updateHeightExpansionPanelContent());
+  protected _containerCollapsibleRef: ElementRef;
+
+  @ViewChild('containerContent')
+  set containerContent(elem: ElementRef) {
     this._containerCollapsibleRef = elem;
     if (this._containerCollapsibleRef) {
       this.registerContentObserver();
@@ -29,12 +35,6 @@ export class OContainerCollapsibleComponent extends OContainerComponent {
       this.unregisterContentObserver();
     }
   }
-
-  @InputConverter()
-  public expanded: boolean = true;
-  public collapsedHeight = '37px';
-  public expandedHeight = '37px';
-  public description: string;
 
   constructor(
     @Optional() @Inject(forwardRef(() => OFormComponent)) protected form: OFormComponent,
@@ -71,7 +71,7 @@ export class OContainerCollapsibleComponent extends OContainerComponent {
         titleWidth = titleWidth === 0 ? 0 : titleWidth + 4;
       }
 
-      let descrWidth = this.description ? descrEl.querySelector('span').offsetWidth + 8 : 0;
+      const descrWidth = this.description ? descrEl.querySelector('span').offsetWidth + 8 : 0;
       const empty1Width = descrStart - containerStart - 14 - titleWidth - 4;
 
       const gapTitleEls = containerOutline.querySelectorAll('.o-container-outline-gap-title');
@@ -95,21 +95,21 @@ export class OContainerCollapsibleComponent extends OContainerComponent {
   }
 
   protected updateHeightExpansionPanelContent(): void {
-    var exPanelHeader = this._titleEl ? (this._titleEl as any)._element.nativeElement : null;
-    var exPanelContent = this._containerCollapsibleRef ? this._containerCollapsibleRef.nativeElement : null;
-    var parentHeight = exPanelHeader.parentNode ? exPanelHeader.parentNode.offsetHeight : null;
+    const exPanelHeader = this._titleEl ? (this._titleEl as any)._element.nativeElement : null;
+    const exPanelContent = this._containerCollapsibleRef ? this._containerCollapsibleRef.nativeElement : null;
+    const parentHeight = exPanelHeader.parentNode ? exPanelHeader.parentNode.offsetHeight : null;
 
-    exPanelContent.style.height = (parentHeight - 2 - exPanelHeader.offsetHeight) + 'px';
+    const height = (OContainerComponent.APPEARANCE_OUTLINE === this.appearance) ? parentHeight : (parentHeight - exPanelHeader.offsetHeight);
+    exPanelContent.style.height = height + 'px';
   }
 
-
-  unregisterContentObserver(): any {
+  protected unregisterContentObserver(): any {
     if (this.contentObserver) {
       this.contentObserver.disconnect();
     }
   }
 
-  registerContentObserver(): any {
+  protected registerContentObserver(): any {
     if (this._containerCollapsibleRef) {
       this.contentObserver.observe(this._containerCollapsibleRef.nativeElement, {
         childList: true,

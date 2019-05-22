@@ -1,3 +1,21 @@
+## 4.0.4 (2019-05-22)
+### Features
+* **OFormControl**: adding class `OFormControl` ([7a9cef6](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7a9cef6))
+* **o-table-columns-filter**: new `mode` attribute ([1b5d8ee](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1b5d8ee))
+* **o-table**: now the table distinguish text and numeric columns when filtering its data through the quick filter component. It also allow filering using *service cell renderer* values ([7fba4b9](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7fba4b9))
+* **OSnackBarConfig**: new `cssClass` attribute ([eaa601b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/eaa601b))
+* **o-form-layout-tabgroup**: new `onSelectedTabChange` and `onCloseTab` outputs ([29f73a0](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/29f73a0))
+
+### Bug Fixes
+* **o-list-picker**: fixed no columns selected error ([978d7cd](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/978d7cd))
+* **o-service-base-component**: fixing storage bugs [#251](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/251) sort by numeric column ([2a59669](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2a59669))
+* **o-table-insertable-row**: fixed that the insert row in the table is not shown [#261](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/261)([f346f1f](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f346f1f)) ([3dce76f](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3dce76f)) ([3dce76f4b837af](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f4b837a))
+* **o-time-input**: internal date build from date and hour inputs fixed ([bb88e9a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/bb88e9a)) Closes [#267](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/267)
+* **o-list-picker**: new `dialog-disable-close` input ([b4bc292](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b4bc292))
+
+### BREAKING CHANGES
+* **o-hour-input**: method `getValueAsTimeStamp` has been removed, the method `getValue` returns the input value in the format indicated by the attribute `value-type`
+
 ## 4.0.3 (2019-04-24)
 ### Features
 * **o-combo**: new `searchable` input ([2ae599d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2ae599d))

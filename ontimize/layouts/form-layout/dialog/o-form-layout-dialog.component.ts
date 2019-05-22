@@ -84,4 +84,9 @@ export class OFormLayoutDialogComponent implements AfterViewInit {
     });
     return route;
   }
+
+  getParams(): any {
+    return this.params;
+  }
+
 }

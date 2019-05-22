@@ -1,18 +1,18 @@
-import { SelectionModel } from '@angular/cdk/collections';
+import { ActivatedRoute } from '@angular/router';
+import { Codes, Util } from '../utils';
+import { DEFAULT_INPUTS_O_SERVICE_BASE_COMPONENT, OServiceBaseComponent } from './o-service-base-component.class';
 import { ElementRef, Injector } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { NavigationService, OTranslateService, PermissionsService } from '../services';
 
-import { OFilterBuilderComponent } from '../components';
+import { FilterExpressionUtils } from './filter-expression.utils';
 import { InputConverter } from '../decorators';
+import { OFilterBuilderComponent } from '../components';
+import { OFormComponent } from './form/o-form.component';
 import { OFormLayoutDialogComponent } from '../layouts/form-layout/dialog/o-form-layout-dialog.component';
 import { OFormLayoutManagerComponent } from '../layouts/form-layout/o-form-layout-manager.component';
-import { NavigationService, OTranslateService, PermissionsService } from '../services';
-import { Codes, Util } from '../utils';
-import { FilterExpressionUtils } from './filter-expression.utils';
-import { OFormComponent } from './form/o-form.component';
 import { OListInitializationOptions } from './list/o-list.component';
-import { DEFAULT_INPUTS_O_SERVICE_BASE_COMPONENT, OServiceBaseComponent } from './o-service-base-component.class';
 import { OTableInitializationOptions } from './table/o-table.component';
+import { SelectionModel } from '@angular/cdk/collections';
 
 export const DEFAULT_INPUTS_O_SERVICE_COMPONENT = [
   ...DEFAULT_INPUTS_O_SERVICE_BASE_COMPONENT,
@@ -117,12 +117,12 @@ export class OServiceComponent extends OServiceBaseComponent {
   public filterBuilder: OFilterBuilderComponent;
   public selection = new SelectionModel<Element>(true, []);
 
-  protected router: Router;
-  protected actRoute: ActivatedRoute;
-
   protected onTriggerUpdateSubscription: any;
   protected formLayoutManager: OFormLayoutManagerComponent;
-  protected oFormLayoutDialog: OFormLayoutDialogComponent;
+  protected formLayoutManagerTabIndex: number;
+  public oFormLayoutDialog: OFormLayoutDialogComponent;
+
+  protected tabsSubscriptions: any;
 
   constructor(
     injector: Injector,
@@ -130,8 +130,6 @@ export class OServiceComponent extends OServiceBaseComponent {
     protected form: OFormComponent
   ) {
     super(injector);
-    this.router = this.injector.get(Router);
-    this.actRoute = this.injector.get(ActivatedRoute);
     this.permissionsService = this.injector.get(PermissionsService);
     this.translateService = this.injector.get(OTranslateService);
     this.navigationService = this.injector.get(NavigationService);
@@ -149,6 +147,25 @@ export class OServiceComponent extends OServiceBaseComponent {
   }
 
   public initialize(): void {
+    if (this.formLayoutManager && this.formLayoutManager.isTabMode() && this.formLayoutManager.oTabGroup) {
+
+      this.formLayoutManagerTabIndex = this.formLayoutManager.oTabGroup.data.length;
+
+      this.tabsSubscriptions = this.formLayoutManager.oTabGroup.onSelectedTabChange.subscribe(() => {
+        if (this.formLayoutManagerTabIndex !== this.formLayoutManager.oTabGroup.selectedTabIndex) {
+          this.updateStateStorage();
+          // when the storage is updated because a form layout manager tab change
+          // the alreadyStored control variable is changed to its initial value
+          this.alreadyStored = false;
+        }
+      });
+
+      this.tabsSubscriptions.add(this.formLayoutManager.oTabGroup.onCloseTab.subscribe(() => {
+        if (this.formLayoutManagerTabIndex === this.formLayoutManager.oTabGroup.selectedTabIndex) {
+          this.updateStateStorage();
+        }
+      }));
+    }
     super.initialize();
     if (this.detailButtonInRow || this.editButtonInRow) {
       this.detailMode = Codes.DETAIL_MODE_NONE;
@@ -165,7 +182,6 @@ export class OServiceComponent extends OServiceBaseComponent {
     if (this.elRef) {
       this.elRef.nativeElement.removeAttribute('title');
     }
-
     if (this.formLayoutManager && this.formLayoutManager.isMainComponent(this)) {
       this.onTriggerUpdateSubscription = this.formLayoutManager.onTriggerUpdate.subscribe(() => {
         this.reloadData();
@@ -177,6 +193,9 @@ export class OServiceComponent extends OServiceBaseComponent {
     super.destroy();
     if (this.onTriggerUpdateSubscription) {
       this.onTriggerUpdateSubscription.unsubscribe();
+    }
+    if (this.tabsSubscriptions) {
+      this.tabsSubscriptions.unsubscribe();
     }
   }
 
@@ -327,7 +346,7 @@ export class OServiceComponent extends OServiceBaseComponent {
         queryMethod: this.pageable ? this.paginatedQueryMethod : this.queryMethod,
         totalRecordsNumber: this.getTotalRecordsNumber(),
         queryRows: this.queryRows,
-        queryRecordOffset: (this.state.queryRecordOffset - this.queryRows)
+        queryRecordOffset: Math.max(this.state.queryRecordOffset - this.queryRows, 0)
       }, result);
     }
     return result;
@@ -450,4 +469,38 @@ export class OServiceComponent extends OServiceBaseComponent {
     });
   }
 
+  getRouteKey(): string {
+    let route = '';
+    if (this.formLayoutManager && !this.formLayoutManager.isMainComponent(this)) {
+      route = this.router.url;
+      const params = this.formLayoutManager.getParams();
+      if (params) {
+        route += '/' + (Object.keys(params).join('/'));
+      }
+    } else {
+      route = super.getRouteKey();
+    }
+    return route;
+  }
+
+  get elementRef(): ElementRef {
+    return this.elRef;
+  }
+
+  initializeState() {
+    let routeKey = super.getRouteKey();
+    if (this.formLayoutManager && this.formLayoutManager.isTabMode() && !this.formLayoutManager.isMainComponent(this)) {
+      try {
+        const params = this.formLayoutManager.oTabGroup.state.tabsData[0].params;
+        if (params) {
+          routeKey = this.router.url;
+          routeKey += '/' + (Object.keys(params).join('/'));
+        }
+      } catch (e) {
+        //
+      }
+    }
+    // Get previous status
+    this.state = this.localStorageService.getComponentStorage(this, routeKey);
+  }
 }

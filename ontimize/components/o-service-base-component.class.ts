@@ -1,11 +1,12 @@
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { ChangeDetectorRef, HostListener, Injector, NgZone, SimpleChange } from '@angular/core';
-import { Observable, Subscription } from 'rxjs';
+import { Codes, Util } from '../utils';
+import { DialogService, ILocalStorageComponent, LocalStorageService, OntimizeService } from '../services';
+import { OQueryDataArgs, ServiceUtils } from './service.utils';
 
 import { InputConverter } from '../decorators';
-import { DialogService, ILocalStorageComponent, LocalStorageService, OntimizeService } from '../services';
-import { Codes, Util } from '../utils';
 import { OFormComponent } from './form/o-form.component';
-import { OQueryDataArgs, ServiceUtils } from './service.utils';
+import { ActivatedRoute, Router } from '@angular/router';
 
 export const DEFAULT_INPUTS_O_SERVICE_BASE_COMPONENT = [
   // attr [string]: list identifier. It is mandatory if data are provided through the data attribute. Default: entity (if set).
@@ -123,27 +124,34 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
   protected oattrFromEntity: boolean = false;
   /* end of parsed inputs variables */
 
-  protected onRouteChangeStorageSubscribe: any;
+  protected onRouteChangeStorageSubscription: any;
   protected onFormDataSubscribe: any;
 
   protected loaderSubscription: Subscription;
   protected querySubscription: Subscription;
   protected dataService: any;
   protected _state: any = {};
-  protected _loading: boolean = false;
+
+  protected loadingSubject = new BehaviorSubject<boolean>(false);
+  public loading: Observable<boolean> = this.loadingSubject.asObservable();
 
   protected form: OFormComponent;
   protected alreadyStored: boolean = false;
 
   protected queryOnEventSubscription: Subscription;
-  public cd: ChangeDetectorRef;
+  public cd: ChangeDetectorRef;//borrar
   protected queryArguments: any[];
+
+  protected router: Router;
+  protected actRoute: ActivatedRoute;
 
   constructor(
     protected injector: Injector
   ) {
     this.dialogService = this.injector.get(DialogService);
     this.localStorageService = this.injector.get(LocalStorageService);
+    this.router = this.injector.get(Router);
+    this.actRoute = this.injector.get(ActivatedRoute);
     try {
       this.cd = this.injector.get(ChangeDetectorRef);
       this.form = this.injector.get(OFormComponent);
@@ -163,12 +171,14 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
     this._pKeysEquiv = Util.parseParentKeysEquivalences(pkArray, Codes.COLUMNS_ALIAS_SEPARATOR);
 
     if (this.storeState) {
-      this.onRouteChangeStorageSubscribe = this.localStorageService.onRouteChange.subscribe(res => {
+      this.onRouteChangeStorageSubscription = this.localStorageService.onRouteChange.subscribe(res => {
         this.updateStateStorage();
+        // when the storage is updated because a route change
+        // the alreadyStored control variable is changed to its initial value
+        this.alreadyStored = false;
       });
 
-      // Get previous status
-      this.state = this.localStorageService.getComponentStorage(this);
+      this.initializeState();
 
       if (Util.isDefined(this.state['query-rows'])) {
         this.queryRows = this.state['query-rows'];
@@ -224,12 +234,13 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
     if (this.loaderSubscription) {
       this.loaderSubscription.unsubscribe();
     }
-    if (this.onRouteChangeStorageSubscribe) {
-      this.onRouteChangeStorageSubscribe.unsubscribe();
+    if (this.onRouteChangeStorageSubscription) {
+      this.onRouteChangeStorageSubscription.unsubscribe();
     }
     if (this.queryOnEventSubscription) {
       this.queryOnEventSubscription.unsubscribe();
     }
+    this.updateStateStorage();
   }
 
   ngOnChanges(changes: { [propName: string]: SimpleChange }) {
@@ -253,6 +264,16 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
 
   getDataToStore(): Object {
     return this.state;
+  }
+
+  getRouteKey(): string {
+    let route = this.router.url;
+    this.actRoute.params.subscribe(params => {
+      Object.keys(params).forEach(key => {
+        route = route.replace(params[key], key);
+      });
+    });
+    return route;
   }
 
   getKeys() {
@@ -291,7 +312,6 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
       console.warn('Component has received not supported service data. Supported data are Array or Object');
       this.dataArray = [];
     }
-    this.cd.detectChanges();
   }
 
   public setFormComponent(form: OFormComponent): void {
@@ -376,26 +396,17 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
       return () => {
         window.clearTimeout(timer);
         zone.run(() => {
-          self.loading = false;
+          self.loadingSubject.next(false);
         });
       };
 
     });
     var subscription = loadObservable.subscribe(val => {
       zone.run(() => {
-        self.loading = val as boolean;
+        self.loadingSubject.next(val as boolean);
       });
     });
     return subscription;
-  }
-
-  set loading(value: boolean) {
-    this._loading = value;
-    this.cd.detectChanges();
-  }
-
-  get loading(): boolean {
-    return this._loading;
   }
 
   /**
@@ -476,7 +487,7 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
   protected updateStateStorage(): void {
     if (this.localStorageService && this.storeState && !this.alreadyStored) {
       this.alreadyStored = true;
-      this.localStorageService.updateComponentStorage(this);
+      this.localStorageService.updateComponentStorage(this, this.getRouteKey());
     }
   }
 
@@ -484,4 +495,8 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
     //
   }
 
+  initializeState() {
+    // Get previous status
+    this.state = this.localStorageService.getComponentStorage(this, this.getRouteKey());
+  }
 }

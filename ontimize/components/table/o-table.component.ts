@@ -1,41 +1,41 @@
-import { SelectionChange } from '@angular/cdk/collections';
-import { ObserversModule } from '@angular/cdk/observers';
+import { BehaviorSubject, Observable, Subscription, combineLatest, of } from 'rxjs';
+import { ChangeDetectionStrategy, Component, ContentChildren, ElementRef, EventEmitter, HostListener, Inject, Injector, NgModule, OnDestroy, OnInit, Optional, QueryList, ViewChild, ViewChildren, ViewEncapsulation, forwardRef } from '@angular/core';
+import { Codes, ObservableWrapper, SQLTypes, Util } from '../../utils';
+import { ColumnValueFilterOperator, IColumnValueFilter, OTableButtonComponent, OTableButtonsComponent, OTableColumnsFilterComponent, OTableInsertableRowComponent, OTableMenuComponent, OTableOptionComponent, OTableQuickfilterComponent, O_TABLE_HEADER_COMPONENTS } from './extensions/header/o-table-header-components';
+import { FilterExpressionUtils, IExpression } from '../filter-expression.utils';
+import { ISQLOrder, OQueryDataArgs, ServiceUtils } from '../service.utils';
+import { MAT_RIPPLE_GLOBAL_OPTIONS, MatCheckboxChange, MatDialog, MatMenu, MatPaginator, MatPaginatorIntl, MatTab, MatTabGroup, PageEvent } from '@angular/material';
+import { OBaseTableCellRenderer, O_TABLE_CELL_RENDERERS } from './column/cell-renderer/cell-renderer';
+import { OColumnAggregate, OTableColumnAggregateComponent, OTableMatPaginatorIntl, OTablePaginatorComponent, O_TABLE_FOOTER_COMPONENTS } from './extensions/footer/o-table-footer-components';
+import { OColumnTooltip, OTableColumnComponent } from './column/o-table-column.component';
+import { OPermissions, OTableMenuPermissions, OTablePermissions, OntimizeService, SnackBarService } from '../../services';
+import { OTableCellEditorBooleanComponent, O_TABLE_CELL_EDITORS } from './column/cell-editor/cell-editor';
+import { OTableColumnCalculatedComponent, OperatorFunction } from './column/calculated/o-table-column-calculated.component';
+import { OTableFilterByColumnDataDialogComponent, O_TABLE_DIALOGS } from './extensions/dialog/o-table-dialog-components';
+
 import { CdkTableModule } from '@angular/cdk/table';
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, ContentChildren, ElementRef, EventEmitter, forwardRef, HostListener, Inject, Injector, NgModule, OnDestroy, OnInit, Optional, QueryList, ViewChild, ViewChildren, ViewEncapsulation } from '@angular/core';
-import { MAT_RIPPLE_GLOBAL_OPTIONS, MatCheckboxChange, MatDialog, MatMenu, MatPaginator, MatPaginatorIntl, MatTab, MatTabGroup, PageEvent } from '@angular/material';
 import { DndModule } from '@churchs19/ng2-dnd';
-import { Observable, of, Subscription } from 'rxjs';
-
+import { IOContextMenuContext } from '../contextmenu/o-context-menu.service';
 import { InputConverter } from '../../decorators';
-import { OntimizeService, OPermissions, OTableMenuPermissions, OTablePermissions, SnackBarService } from '../../services';
-import { dataServiceFactory } from '../../services/data-service.provider';
-import { OSharedModule } from '../../shared';
-import { PermissionsUtils } from '../../util/permissions';
-import { Codes, ObservableWrapper, SQLTypes, Util } from '../../utils';
 import { OContextMenuComponent } from '../contextmenu/o-context-menu-components';
 import { OContextMenuModule } from '../contextmenu/o-context-menu.module';
-import { IOContextMenuContext } from '../contextmenu/o-context-menu.service';
-import { FilterExpressionUtils, IExpression } from '../filter-expression.utils';
 import { OFormComponent } from '../form/o-form.component';
-import { OServiceComponent } from '../o-service-component.class';
-import { ISQLOrder, OQueryDataArgs, ServiceUtils } from '../service.utils';
-import { OperatorFunction, OTableColumnCalculatedComponent } from './column/calculated/o-table-column-calculated.component';
-import { O_TABLE_CELL_EDITORS, OTableCellEditorBooleanComponent } from './column/cell-editor/cell-editor';
-import { O_TABLE_CELL_RENDERERS, OBaseTableCellRenderer } from './column/cell-renderer/cell-renderer';
-import { OColumnTooltip, OTableColumnComponent } from './column/o-table-column.component';
-import { OTableContextMenuComponent } from './extensions/contextmenu/o-table-context-menu.component';
-import { O_TABLE_DIALOGS, OTableFilterByColumnDataDialogComponent } from './extensions/dialog/o-table-dialog-components';
-import { O_TABLE_FOOTER_COMPONENTS, OColumnAggregate, OTableColumnAggregateComponent, OTableMatPaginatorIntl, OTablePaginatorComponent } from './extensions/footer/o-table-footer-components';
-import { ColumnValueFilterOperator, IColumnValueFilter, O_TABLE_HEADER_COMPONENTS, OTableButtonComponent, OTableButtonsComponent, OTableColumnsFilterComponent, OTableEditableRowComponent, OTableInsertableRowComponent, OTableMenuComponent, OTableOptionComponent, OTableQuickfilterComponent } from './extensions/header/o-table-header-components';
-import { OTableStorage } from './extensions/o-table-storage.class';
-import { OTableRowDirective } from './extensions/row/o-table-row.directive';
 import { OMatSort } from './extensions/sort/o-mat-sort';
 import { OMatSortHeader } from './extensions/sort/o-mat-sort-header';
 import { OMatSortModule } from './extensions/sort/o-mat-sort-module';
-import { OTableExpandedFooter } from './o-table-expanded-footer.directive';
+import { OServiceComponent } from '../o-service-component.class';
+import { OSharedModule } from '../../shared';
+import { OTableContextMenuComponent } from './extensions/contextmenu/o-table-context-menu.component';
 import { OTableDao } from './o-table.dao';
 import { OTableDataSource } from './o-table.datasource';
+import { OTableExpandedFooter } from './o-table-expanded-footer.directive';
+import { OTableRowDirective } from './extensions/row/o-table-row.directive';
+import { OTableStorage } from './extensions/o-table-storage.class';
+import { ObserversModule } from '@angular/cdk/observers';
+import { PermissionsUtils } from '../../util/permissions';
+import { SelectionChange } from '@angular/cdk/collections';
+import { dataServiceFactory } from '../../services/data-service.provider';
 
 export const NAME_COLUMN_SELECT = 'select';
 
@@ -327,6 +327,7 @@ export class OColumn {
 
 }
 
+const SUFFIX_COLUMN_INSERTABLE = '_insertable';
 export class OTableOptions {
   selectColumn: OColumn;
   columns: Array<OColumn> = [];
@@ -349,6 +350,12 @@ export class OTableOptions {
     this._visibleColumns = arg;
     this.columns.forEach((oCol: OColumn) => {
       oCol.visible = this._visibleColumns.indexOf(oCol.attr) !== -1;
+    });
+  }
+
+  get columnsInsertables(): Array<string> {
+    return this._visibleColumns.map((col: string) => {
+      return col + SUFFIX_COLUMN_INSERTABLE;
     });
   }
 }
@@ -394,15 +401,12 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   public static DEFAULT_COLUMN_MIN_WIDTH = 80;
 
   public static NAME_COLUMN_SELECT = NAME_COLUMN_SELECT;
-  public loadingScroll = false;
-  protected _loadingSorting = false;
 
   protected snackBarService: SnackBarService;
 
   public paginator: OTablePaginatorComponent;
   @ViewChild(MatPaginator) matpaginator: MatPaginator;
   @ViewChild(OMatSort) sort: OMatSort;
-  @ViewChild(OTableEditableRowComponent) oTableEditableRow: OTableEditableRowComponent;
 
   // only for insideTabBugWorkaround
   @ViewChildren(OMatSortHeader) protected sortHeaders: QueryList<OMatSortHeader>;
@@ -428,10 +432,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   selectAllCheckbox: boolean = false;
   @InputConverter()
   exportButton: boolean = true;
-  // @InputConverter()
-  // columnsResizeButton: boolean = true;
-  // @InputConverter()
-  // columnsGroupButton: boolean = true;
   @InputConverter()
   columnsVisibilityButton: boolean = true;
   @InputConverter()
@@ -452,6 +452,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     this.quickFilterPvt = value;
     this._oTableOptions.filter = this.quickFilterPvt;
   }
+
   get quickFilter(): boolean {
     return this.quickFilterPvt;
   }
@@ -539,9 +540,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       }
       this._oTableOptions.visibleColumns = this._visibleColArray;
     }
-    if (this.oTableEditableRow) {
-      this.oTableEditableRow.cd.detectChanges();
-    }
+
   }
 
   public sortColArray: Array<ISQLOrder> = [];
@@ -578,7 +577,14 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   public oTableFilterByColumnDataDialogComponent: OTableFilterByColumnDataDialogComponent;
   public oTableColumnsFilterComponent: OTableColumnsFilterComponent;
   public showFilterByColumnIcon: boolean = false;
-  public showTotals: boolean = false;
+
+
+  private showTotalsSubject = new BehaviorSubject<boolean>(false);
+  public showTotals: Observable<boolean> = this.showTotalsSubject.asObservable();
+  private loadingSortingSubject = new BehaviorSubject<boolean>(false);
+  protected loadingSorting: Observable<boolean> = this.loadingSortingSubject.asObservable();
+  private loadingScrollSubject = new BehaviorSubject<boolean>(false);
+  public loadingScroll: Observable<boolean> = this.loadingScrollSubject.asObservable();
 
   public oTableInsertableRowComponent: OTableInsertableRowComponent;
   public showFirstInsertableRow: boolean = false;
@@ -589,6 +595,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   protected clickPrevent = false;
   protected editingCell: any;
   protected editingRow: any;
+
 
   protected _currentPage: number = 0;
   set currentPage(val: number) {
@@ -699,6 +706,10 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     this.destroy();
   }
 
+  getSuffixColumnInsertable() {
+    return SUFFIX_COLUMN_INSERTABLE;
+  }
+
   getActionsPermissions(): OPermissions[] {
     return this.permissions ? (this.permissions.actions || []) : [];
   }
@@ -796,6 +807,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
     this.updateSelectionColumnState();
   }
+
 
   reinitialize(options: OTableInitializationOptions): void {
     if (options) {
@@ -976,7 +988,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   registerColumnAggregate(column: OColumnAggregate) {
-    this.showTotals = true;
+    this.showTotalsSubject.next(true);
     const alreadyExisting = this.getOColumn(column.attr);
     if (alreadyExisting !== undefined) {
       const replacingIndex = this._oTableOptions.columns.indexOf(alreadyExisting);
@@ -1067,9 +1079,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
           clearInterval(interval);
           if (tab === self.tabContainer) {
             self.insideTabBugWorkaround();
-            if (self.tabGroupChangeSubscription) {
-              self.tabGroupChangeSubscription.unsubscribe();
-            }
             if (self.pendingQuery) {
               self.queryData(self.pendingQueryFilter);
             }
@@ -1110,7 +1119,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     if (this.pageable) {
       this.reloadData();
     } else {
-      this.loadingSorting = true;
+      this.loadingSortingSubject.next(true);
     }
   }
 
@@ -1126,24 +1135,20 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       const self = this;
       this.onRenderedDataChange = this.dataSource.onRenderedDataChange.subscribe(() => {
         setTimeout(() => {
-          self.loadingSorting = false;
+          self.loadingSortingSubject.next(false);
         }, 500);
       });
     }
   }
 
-  set loadingSorting(value: boolean) {
-    this._loadingSorting = value;
-    this.cd.detectChanges();
+  get showLoading() {
+    return combineLatest(
+      this.loading,
+      this.loadingSorting,
+      this.loadingScroll,
+      (x, y, z) => (x || y || z));
   }
 
-  get loadingSorting(): boolean {
-    return this._loadingSorting;
-  }
-
-  showLoading(): boolean {
-    return this.loading || this.loadingSorting || this.loadingScroll;
-  }
 
   /**
    * This method manages the call to the service
@@ -1245,9 +1250,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     this.daoTable.dataChange.next(data);
     this.daoTable.isLoadingResults = false;
     this.updateScrolledState();
-    if (Util.isDefined(data)) {
-      this.oTableExpandedFooter.updateMessageNotResults(data);
-    }
+    // if (Util.isDefined(data)) {
+    //   this.oTableExpandedFooter.updateMessageNotResults(data);
+    // }
     if (this.pageable) {
       ObservableWrapper.callEmit(this.onPaginatedDataLoaded, data);
     }
@@ -1265,9 +1270,10 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   projectContentChanged() {
     const self = this;
     setTimeout(function () {
-      self.loadingSorting = false;
+      self.loadingSortingSubject.next(false);
     }, 500);
-    this.loadingScroll = false;
+    this.loadingScrollSubject.next(false);
+
 
     if (this.previousRendererData !== this.dataSource.renderedData) {
       ObservableWrapper.callEmit(this.onContentChange, this.dataSource.renderedData);
@@ -1576,7 +1582,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       Object.assign(this.editingRow, data);
     }
     this.editingRow = undefined;
-    this.cd.detectChanges();
+
     if (saveChanges && column.editor.updateRecordOnEdit) {
       let toUpdate = {};
       toUpdate[column.attr] = data[column.attr];
@@ -1616,9 +1622,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     } else if (this._oTableOptions.visibleColumns && !this._oTableOptions.selectColumn.visible && this._oTableOptions.visibleColumns[0] === OTableComponent.NAME_COLUMN_SELECT) {
       this._oTableOptions.visibleColumns.shift();
     }
-    if (this.oTableInsertableRowComponent !== undefined && this.oTableEditableRow) {
-      this.oTableEditableRow.cd.detectChanges();
-    }
+
   }
 
   public isAllSelected(): boolean {
@@ -1644,6 +1648,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   public selectedRow(row: any): void {
     this.setSelected(row);
+    this.cd.detectChanges();
   }
 
   get showDeleteButton(): boolean {
@@ -1702,7 +1707,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
             data = res.data;
           }
           this.daoTable.setAsynchronousColumn(data, rowData);
-          this.cd.detectChanges();
         }
       });
     }
@@ -1788,7 +1792,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
         previousFilter: this.dataSource.getColumnValueFilterByAttr(column.attr),
         column: column,
         tableData: this.dataSource.getTableData(),
-        preloadValues: this.oTableColumnsFilterComponent.preloadValues
+        preloadValues: this.oTableColumnsFilterComponent.preloadValues,
+        mode: this.oTableColumnsFilterComponent.mode
       },
       disableClose: true,
       panelClass: ['o-dialog-class', 'o-table-dialog']
@@ -1824,6 +1829,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       this.oTableInsertableRowComponent = tableInsertableRow;
       this.showFirstInsertableRow = this.oTableInsertableRowComponent.isFirstRow();
       this.showLastInsertableRow = !this.showFirstInsertableRow;
+      this.oTableInsertableRowComponent.initializeEditors();
     }
   }
 
@@ -1937,7 +1943,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
     if (!Util.isDefined(sqlTypes)) {
       let allSqlTypes = this.getSqlTypes();
-      let sqlTypes = {};
+      sqlTypes = {};
       Object.keys(recordData).forEach(key => {
         sqlTypes[key] = allSqlTypes[key];
       });
@@ -1973,7 +1979,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       this.staticData = data;
       this.daoTable.usingStaticData = true;
       this.daoTable.setDataArray(this.staticData);
-      this.cd.detectChanges();
     }
   }
 
@@ -2157,7 +2162,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
     // throw event change scroll
     if (pageVirtualBefore !== this.pageScrollVirtual) {
-      this.loadingScroll = true;
+      this.loadingScrollSubject.next(true);
       this.dataSource.loadDataScrollable = this.pageScrollVirtual;
     }
   }
@@ -2237,6 +2242,11 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       result = this.getOColumn(columnClass.substr('mat-column-'.length));
     }
     return result;
+  }
+
+  getColumnInsertable(name):string{
+    return name+ this.getSuffixColumnInsertable();
+
   }
 }
 

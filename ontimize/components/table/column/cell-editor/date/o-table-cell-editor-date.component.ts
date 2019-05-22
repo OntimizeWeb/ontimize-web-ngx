@@ -1,13 +1,13 @@
-import { Component, Injector, ViewChild, TemplateRef, OnInit, ElementRef, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/core';
-import { DateAdapter, MatDatepicker, MatDatepickerInputEvent, MAT_DATE_LOCALE } from '@angular/material';
-import moment from 'moment';
+import { ChangeDetectionStrategy, Component, ElementRef, Injector, OnInit, TemplateRef, ViewChild, ViewEncapsulation } from '@angular/core';
+import { DateAdapter, MAT_DATE_LOCALE, MatDatepicker, MatDatepickerInputEvent } from '@angular/material';
+import { DateFilterFunction, ODateInputComponent, ODateValueType } from '../../../../input/date-input/o-date-input.component';
 
-import { Util } from '../../../../../utils';
-import { OntimizeMomentDateAdapter } from '../../../../../shared';
 import { InputConverter } from '../../../../../decorators';
 import { MomentService } from '../../../../../services';
-import { DateFilterFunction, ODateValueType, ODateInputComponent } from '../../../../input/date-input/o-date-input.component';
 import { OBaseTableCellEditor } from '../o-base-table-cell-editor.class';
+import { OntimizeMomentDateAdapter } from '../../../../../shared';
+import { Util } from '../../../../../utils';
+import moment from 'moment';
 
 export const DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_DATE = [
   ...OBaseTableCellEditor.DEFAULT_INPUTS_O_TABLE_CELL_EDITOR,
@@ -190,15 +190,31 @@ export class OTableCellEditorDateComponent extends OBaseTableCellEditor implemen
   }
 
   onDateChange(event: MatDatepickerInputEvent<any>) {
-    var isValid = event.value && event.value.isValid && event.value.isValid();
-    if (isValid) {
-      var dateVal = new Date(event.value.valueOf());
-      this.formControl.setValue(dateVal, {
-        emitModelToViewChange: false,
-        emitEvent: false
-      });
-      this.commitEdition();
+    const isValid = event.value && event.value.isValid && event.value.isValid();
+    let val = isValid ? event.value.valueOf() : event.value;
+    const m = moment(val);
+    switch (this.dateValueType) {
+      case 'string':
+        if (val) {
+          val = m.format(this.format);
+        }
+        break;
+      case 'date':
+        val = new Date(val);
+        break;
+      case 'iso-8601':
+        val = m.toISOString();
+        break;
+      case 'timestamp':
+      default:
+        break;
     }
+
+    this.formControl.setValue(val, {
+      emitModelToViewChange: false,
+      emitEvent: false
+    });
+    this.commitEdition();
   }
 
   openDatepicker(d: MatDatepicker<Date>) {
