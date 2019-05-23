@@ -23,7 +23,8 @@ export const DEFAULT_INPUTS_O_LIST_PICKER = [
   'dialogHeight : dialog-height',
   'queryRows: query-rows',
   'textInputEnabled: text-input-enabled',
-  'dialogDisableClose: dialog-disable-close'
+  'dialogDisableClose: dialog-disable-close',
+  'dialogClass: dialog-class'
 ];
 
 export const DEFAULT_OUTPUTS_O_LIST_PICKER = [
@@ -65,6 +66,7 @@ export class OListPickerComponent extends OFormServiceComponent implements After
   protected filter: boolean = true;
   protected dialogWidth: string;
   protected dialogHeight: string = '55%';
+  protected dialogClass:string;
   @InputConverter()
   protected queryRows: number;
   /* End inputs */
@@ -229,7 +231,7 @@ export class OListPickerComponent extends OFormServiceComponent implements After
     const cfg: MatDialogConfig = {
       role: 'dialog',
       disableClose: this.dialogDisableClose,
-      panelClass: ['cdk-overlay-list-picker', 'o-dialog-class'],
+      panelClass: ['cdk-overlay-list-picker', 'o-dialog-class',this.dialogClass],
       data: {
         data: this.getDialogDataArray(this.dataArray),
         filter: this.filter,
