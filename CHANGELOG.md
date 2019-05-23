@@ -1,3 +1,6 @@
+## 4.0.5
+* **o-list-picker**: new `dialog-class` input ([321fd4b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/321fd4b))
+
 ## 4.0.4 (2019-05-22)
 ### Features
 * **OFormControl**: adding class `OFormControl` ([7a9cef6](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7a9cef6))
