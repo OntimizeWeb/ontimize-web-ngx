@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, Injector, TemplateRef, ViewChild } 
 import { IMomentPipeArgument, OMomentPipe } from '../../../../../pipes';
 
 import { OBaseTableCellRenderer } from '../o-base-table-cell-renderer.class';
+import { Util } from '../../../../../util/util';
 
 export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_TIME = [
   'format'
@@ -21,7 +22,7 @@ export class OTableCellRendererTimeComponent extends OBaseTableCellRenderer {
   protected componentPipe: OMomentPipe;
   protected pipeArguments: IMomentPipeArgument;
 
-  protected format: string = "L HH:mm a";
+  protected _format: string = "L HH:mm a";
   protected locale: string;
 
 
@@ -34,6 +35,11 @@ export class OTableCellRendererTimeComponent extends OBaseTableCellRenderer {
     this.setComponentPipe();
   }
 
+  set format(value:string){
+    if(Util.isDefined(value)){
+      this._format = value;
+    }
+  }
   setComponentPipe() {
     this.componentPipe = new OMomentPipe(this.injector);
   }
@@ -42,7 +48,7 @@ export class OTableCellRendererTimeComponent extends OBaseTableCellRenderer {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
     //Add 'implements OnInit' to the class.
     this.pipeArguments = {
-      format: this.format
+      format: this._format
     };
   }
 }
