@@ -1,5 +1,6 @@
 ## 4.0.5
 * **o-list-picker**: new `dialog-class` input ([321fd4b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/321fd4b))
+* **o-table**: new cell render `o-table-cell-renderer-time` and cell editor `o-table-cell-editor-time` ([399cdbc](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/399cdbc))
 
 ## 4.0.4 (2019-05-22)
 ### Features
