@@ -7,6 +7,7 @@ import { OTableCellRendererIntegerComponent } from './integer/o-table-cell-rende
 import { OTableCellRendererPercentageComponent } from './percentage/o-table-cell-renderer-percentage.component';
 import { OTableCellRendererRealComponent } from './real/o-table-cell-renderer-real.component';
 import { OTableCellRendererServiceComponent } from './service/o-table-cell-renderer-service.component';
+import { OTableCellRendererTimeComponent } from './time/o-table-cell-renderer-time.component';
 import { OTableCellRendererTranslateComponent } from './translate/o-table-cell-renderer-translate.component';
 
 export * from './action/o-table-cell-renderer-action.component';
@@ -20,6 +21,7 @@ export * from './real/o-table-cell-renderer-real.component';
 export * from './service/o-table-cell-renderer-service.component';
 
 export * from './o-base-table-cell-renderer.class';
+export * from './time/o-table-cell-renderer-time.component';
 
 export const O_TABLE_CELL_RENDERERS = [
   OTableCellRendererActionComponent,
@@ -31,5 +33,6 @@ export const O_TABLE_CELL_RENDERERS = [
   OTableCellRendererCurrencyComponent,
   OTableCellRendererPercentageComponent,
   OTableCellRendererServiceComponent,
-  OTableCellRendererTranslateComponent
+  OTableCellRendererTranslateComponent,
+  OTableCellRendererTimeComponent
 ];
