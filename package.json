@@ -1,7 +1,7 @@
 {
   "name": "ontimize-web-ngx",
   "homepage": "https://github.com/OntimizeWeb/ontimize-web-ngx#readme",
-  "version": "4.0.5-SNAPSHOT",
+  "version": "4.0.5-1-SNAPSHOT",
   "description": "Ontimize Web framework using Angular 6",
   "bugs": "https://github.com/OntimizeWeb/ontimize-web-ngx/issues",
   "author": "Imatia S.L.",
@@ -32,8 +32,7 @@
     "clean": "rimraf coverage && o-ngx-lib-builder clean",
     "test": "karma start",
     "test-watch": "karma start --singleRun=false --autoWatch=true",
-    "build": "npm run clean && o-ngx-lib-builder build --package ontimize-web-ngx --ng-library ng.ontimizeWeb",
-    "pack": "npm run build && cd dist && npm pack && cd .."
+    "build": "npm run clean && o-ngx-lib-builder build --package ontimize-web-ngx --ng-library ng.ontimizeWeb"
   },
   "dependencies": {
     "@churchs19/ng2-dnd": "6.0.0",
