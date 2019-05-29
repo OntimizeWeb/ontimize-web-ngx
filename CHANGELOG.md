@@ -1,3 +1,7 @@
+## 4.0.4 (2019-xx-xx)
+### Features
+* **OFormControl**: new `confirm-exit` input ([01d0d29]](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/01d0d29]))
+
 ## 4.0.4 (2019-05-22)
 ### Features
 * **OFormControl**: adding class `OFormControl` ([7a9cef6](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7a9cef6))
