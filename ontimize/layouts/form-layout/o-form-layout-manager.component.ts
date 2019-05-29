@@ -396,7 +396,7 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
       if (firstTab) {
         result = firstTab.contains(comp.elementRef.nativeElement);
       }
-    } else if (this.isDialogMode() && Util.isDefined(this.dialogRef)) {
+    } else if (this.isDialogMode()) {
       result = !comp.oFormLayoutDialog;
     }
     return result;
