@@ -17,7 +17,7 @@ import { CdkTableModule } from '@angular/cdk/table';
 import { CommonModule } from '@angular/common';
 import { DndModule } from '@churchs19/ng2-dnd';
 import { IOContextMenuContext } from '../contextmenu/o-context-menu.service';
-import { InputConverter } from '../../decorators';
+import { InputConverter, BooleanConverter } from '../../decorators/input-converter';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { OContextMenuComponent } from '../contextmenu/o-context-menu-components';
 import { OContextMenuModule } from '../contextmenu/o-context-menu.module';
@@ -503,10 +503,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   protected _selectAllCheckboxVisible;
-  @InputConverter()
   set selectAllCheckboxVisible(value: boolean) {
-    this._selectAllCheckboxVisible = this.state['select-column-visible'] || value;
-    this.oTableOptions.selectColumn.visible = value;
+    this._selectAllCheckboxVisible = BooleanConverter(this.state['select-column-visible']) || BooleanConverter(value);
+    this.oTableOptions.selectColumn.visible = this._selectAllCheckboxVisible;
     this.updateSelectionColumnState();
   }
 
@@ -1559,7 +1558,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
     this.clearSelectionAndEditing();
     this.selectedRow(row);
-    this.editingCell = event.currentTarget;
+    if (event) {
+      this.editingCell = event.currentTarget;
+    }
     let rowData = {};
     this.keysArray.forEach((key) => {
       rowData[key] = row[key];
@@ -1568,9 +1569,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     this.editingRow = row;
     column.editing = true;
     column.editor.startEdition(rowData);
- 
     this.cd.detectChanges();
-
   }
 
   updateCellData(column: OColumn, data: any, saveChanges: boolean) {
@@ -1625,7 +1624,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     } else if (this._oTableOptions.visibleColumns && !this._oTableOptions.selectColumn.visible && this._oTableOptions.visibleColumns[0] === OTableComponent.NAME_COLUMN_SELECT) {
       this._oTableOptions.visibleColumns.shift();
     }
-
   }
 
   public isAllSelected(): boolean {
