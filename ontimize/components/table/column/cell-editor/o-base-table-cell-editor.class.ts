@@ -133,10 +133,12 @@ export class OBaseTableCellEditor implements OnInit {
       if (updateObserver) {
         updateObserver.subscribe(res => {
           self.onUpdateSuccess(res);
+          self.table.cd.detectChanges();
         }, error => {
           self._rowData[self.tableColumnAttr] = self.oldValue;
           self.table.dataSource.updateRenderedRowData(self._rowData);
           self.table.showDialogError(error, 'MESSAGES.ERROR_UPDATE');
+          self.table.cd.detectChanges();
         });
       }
     }
