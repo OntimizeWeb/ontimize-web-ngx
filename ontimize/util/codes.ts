@@ -67,7 +67,7 @@ export class Codes {
   public static COLUMN_TITLE_ALIGN_END = 'end';
   public static COLUMN_TITLE_ALIGN_AUTO = 'auto';
   public static AVAILABLE_COLUMN_TITLE_ALIGNS =
-  [Codes.COLUMN_TITLE_ALIGN_START, Codes.COLUMN_TITLE_ALIGN_CENTER, Codes.COLUMN_TITLE_ALIGN_END, Codes.COLUMN_TITLE_ALIGN_AUTO];
+    [Codes.COLUMN_TITLE_ALIGN_START, Codes.COLUMN_TITLE_ALIGN_CENTER, Codes.COLUMN_TITLE_ALIGN_END, Codes.COLUMN_TITLE_ALIGN_AUTO];
 
   public static O_MAT_ERROR_STANDARD = 'standard';
   public static O_MAT_ERROR_LITE = 'lite';
@@ -77,7 +77,7 @@ export class Codes {
     TWELVE: 'hh:mm a',
     TWENTY_FOUR: 'HH:mm a',
   };
-  
+
   public static TWENTY_FOUR_HOUR_FORMAT = 24;
   public static TWELVE_FOUR_HOUR_FORMAT = 12;
 
@@ -95,7 +95,7 @@ export class Codes {
     return res;
   }
 
-  static formatString(format:number){
+  static formatString(format: number) {
     return (format === Codes.TWENTY_FOUR_HOUR_FORMAT ? Codes.HourFormat.TWENTY_FOUR : Codes.HourFormat.TWELVE);
   }
 }

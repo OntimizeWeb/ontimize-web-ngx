@@ -330,7 +330,7 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
               newRenderer.format = this.format;
               break;
             case 'time':
-              newRenderer.format = this.format
+              newRenderer.format = this.format;
               break;
             case 'integer':
               newRenderer.grouping = this.grouping;

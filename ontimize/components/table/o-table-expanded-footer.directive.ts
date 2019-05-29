@@ -74,9 +74,8 @@ export class OTableExpandedFooter {
     }
   }
 
-
   // updateColspanTr() {
-  // TODO 
+  // TODO
   //LAUNCH  WHEN HAVE OBSERVER OVER VISIBLE COLUMNS
   //   if (this.spanMessageNotResults) {
   //     this.td.setAttribute('colspan', this.tableHeader.querySelectorAll('th').length);

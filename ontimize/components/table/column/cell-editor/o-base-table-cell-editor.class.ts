@@ -75,9 +75,9 @@ export class OBaseTableCellEditor implements OnInit {
   }
 
   ngOnInit(): void {
-     this.createFormControl();
-     this.registerEditor();
-     this.editorCreated.emit(this);
+    this.createFormControl();
+    this.registerEditor();
+    this.editorCreated.emit(this);
   }
 
   protected handleKeyup(event: KeyboardEvent) {
@@ -267,7 +267,7 @@ export class OBaseTableCellEditor implements OnInit {
     return this._enabled;
   }
 
-  getFormControl(){
+  getFormControl() {
     return this.formControl;
   }
 }

@@ -262,7 +262,6 @@ export class OAppSidenavMenuItemComponent implements OnInit, AfterViewInit, OnDe
     return result;
   }
 
-  
   getClass() {
     let className = 'o-app-sidenav-menu-item';
     if (this.menuItem.class) {

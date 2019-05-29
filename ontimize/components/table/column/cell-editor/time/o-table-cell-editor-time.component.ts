@@ -165,7 +165,7 @@ export class OTableCellEditorTimeComponent extends OBaseTableCellEditor implemen
 
   onDateChange(event: MatDatepickerInputEvent<any>) {
     const isValid = event.value && event.value.isValid && event.value.isValid();
-    let val = isValid ? event.value.valueOf() :  moment().startOf('day');
+    let val = isValid ? event.value.valueOf() : moment().startOf('day');
 
 
     this.formControlDate.setValue(val, {
@@ -195,10 +195,9 @@ export class OTableCellEditorTimeComponent extends OBaseTableCellEditor implemen
       emitModelToViewChange: false
     });
 
-    this.updateComponentValue()
+    this.updateComponentValue();
     this.commitEdition();
   }
-
 
   openDatepicker(d: MatDatepicker<Date>) {
     this.datepicker = d;
@@ -290,7 +289,6 @@ export class OTableCellEditorTimeComponent extends OBaseTableCellEditor implemen
     }
   }
 
-
   hasErrorDate(error: string): boolean {
     return this.formControlDate && this.formControlDate.touched;
   }
@@ -298,7 +296,6 @@ export class OTableCellEditorTimeComponent extends OBaseTableCellEditor implemen
   hasErrorHour(error: string): boolean {
     return this.formControlHour && this.formControlHour.touched && this.hasErrorExclusive(error);
   }
-
 
   getCellDataDate(): any {
     let value = super.getCellData();
@@ -390,6 +387,5 @@ export class OTableCellEditorTimeComponent extends OBaseTableCellEditor implemen
     }
     return !((e.keyCode < 48 || e.keyCode > 57) && (e.keyCode < 96 || e.keyCode > 105));
   }
-
 
 }

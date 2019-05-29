@@ -82,7 +82,6 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
     }
   }
 
-
   ngAfterViewInit() {
     this.initializeFilterEvent();
   }
@@ -251,10 +250,10 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
     return this.tableData[i];
   }
 
-
-  getFixedDimensionClass(){
-    return this.mode==='selection' || this.mode==='default' 
+  getFixedDimensionClass() {
+    return this.mode === 'selection' || this.mode === 'default';
   }
+
   protected getTypedValue(control: FormControl): any {
     let value = control.value;
     if (this.isNumericType()) {

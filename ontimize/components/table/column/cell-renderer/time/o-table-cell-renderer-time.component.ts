@@ -22,12 +22,10 @@ export class OTableCellRendererTimeComponent extends OBaseTableCellRenderer {
   protected componentPipe: OMomentPipe;
   protected pipeArguments: IMomentPipeArgument;
 
-  protected _format: string = "L HH:mm a";
+  protected _format: string = 'L HH:mm a';
   protected locale: string;
 
-
   @ViewChild('templateref', { read: TemplateRef }) public templateref: TemplateRef<any>;
-
 
   constructor(protected injector: Injector) {
     super(injector);
@@ -35,8 +33,8 @@ export class OTableCellRendererTimeComponent extends OBaseTableCellRenderer {
     this.setComponentPipe();
   }
 
-  set format(value:string){
-    if(Util.isDefined(value)){
+  set format(value: string) {
+    if (Util.isDefined(value)) {
       this._format = value;
     }
   }

@@ -37,7 +37,7 @@ export class OTableQuickfilterComponent implements OnInit, AfterViewInit, OnDest
 
   @ViewChild('filter')
   public filter: ElementRef;
-  
+
   @ViewChild('menu')
   public matMenu: MatMenu;
 
@@ -55,7 +55,7 @@ export class OTableQuickfilterComponent implements OnInit, AfterViewInit, OnDest
     @Inject(forwardRef(() => OTableComponent)) protected table: OTableComponent
   ) {
     this.formControl = new FormControl();
-   }
+  }
 
   public ngOnInit(): void {
     this.table.registerQuickFilter(this);
@@ -203,7 +203,7 @@ export class OTableQuickfilterComponent implements OnInit, AfterViewInit, OnDest
     return !column.renderer || (
       column.type === 'string' ||
       column.type === 'translate' ||
-      column.type === ' integer' ||
+      column.type === 'integer' ||
       column.type === 'real' ||
       column.type === 'percentage' ||
       column.type === 'currency' ||

@@ -19,6 +19,6 @@ export const O_TABLE_CELL_EDITORS = [
   OTableCellEditorDateComponent,
   OTableCellEditorIntegerComponent,
   OTableCellEditorRealComponent,
-  OTableCellEditorTextComponent, 
+  OTableCellEditorTextComponent,
   OTableCellEditorTimeComponent
 ];

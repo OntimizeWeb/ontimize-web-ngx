@@ -106,7 +106,6 @@ export class OTableInsertableRowComponent implements OnInit {
             const columnPermissions: OPermissions = this.table.getOColumnPermissions(col.attr);
             disabledCol = columnPermissions.enabled === false;
           }
-
           editor.enabled = !disabledCol;
           editor.showPlaceHolder = this.showPlaceHolder || editor.showPlaceHolder;
           editor.table = self.table;
@@ -121,11 +120,7 @@ export class OTableInsertableRowComponent implements OnInit {
         }
       }
       array[i] = col;
-
-
     });
-
-
   }
 
   useCellEditor(column: OColumn): boolean {
@@ -156,13 +151,12 @@ export class OTableInsertableRowComponent implements OnInit {
     let showPlaceHolder = this.showPlaceHolder;
     const cellEditor = this.columnEditors[column.attr];
     if (cellEditor) {
-      showPlaceHolder = cellEditor.showPlaceHolder
+      showPlaceHolder = cellEditor.showPlaceHolder;
     } else if (column.definition) {
       showPlaceHolder = showPlaceHolder || column.definition.showPlaceHolder;
     }
     return showPlaceHolder ? this.translateService.get(column.title) : undefined;
   }
-
 
   handleKeyboardEvent(event: KeyboardEvent) {
     if (event.keyCode !== 13) {
@@ -175,7 +169,6 @@ export class OTableInsertableRowComponent implements OnInit {
     event.stopPropagation();
     this.insertRecord();
   }
-
 
   insertRecord() {
     const self = this;
@@ -242,11 +235,9 @@ export class OTableInsertableRowComponent implements OnInit {
     }
   }
 
-
   columnHasError(column: OColumn, error: string): boolean {
     const control = this.controls[column.attr];
     return control && control.touched && control.hasError(error);
   }
-
 
 }

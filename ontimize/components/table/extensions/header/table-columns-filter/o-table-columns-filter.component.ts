@@ -1,13 +1,11 @@
 import { ChangeDetectionStrategy, Component, Inject, Injector, OnInit, forwardRef } from '@angular/core';
 import { Codes, Util } from '../../../../../utils';
 import { OColumn, OTableComponent } from '../../../o-table.component';
-
 import { InputConverter } from '../../../../../decorators';
 
 export const DEFAULT_INPUTS_O_TABLE_COLUMN_FILTER = [
   // columns [string]: columns that might be filtered, separated by ';'. Default: all visible columns.
   'columns',
-
   // preloadValues [true|false|yes|no]: indicates whether or not to show the list values when the filter dialog is opened. Default: true.
   'preloadValues: preload-values',
   //mode [default | selection |  custom]
@@ -42,18 +40,17 @@ export class OTableColumnsFilterComponent implements OnInit {
 
   public static DEFAULT_COMPARISON_TYPE = 'VIEW';
   public static MODEL_COMPARISON_TYPE = 'MODEL';
-  public static OTableColumnsFilterModes = ['default', 'selection', 'custom']
+  public static OTableColumnsFilterModes = ['default', 'selection', 'custom'];
 
   protected _columns: string;
   protected _mode: string = 'default';
   @InputConverter()
   preloadValues: boolean = true;
 
-
   get mode(): string {
     return this._mode;
   }
-  
+
   @InputConverter()
   set mode(val: string) {
     let m = OTableColumnsFilterComponent.OTableColumnsFilterModes.find(e => e === val);
