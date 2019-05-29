@@ -73,6 +73,13 @@ export class Codes {
   public static O_MAT_ERROR_LITE = 'lite';
 
   public static O_INPUTS_OPTIONS_COLOR_ACCENT = 'accent';
+  public static HourFormat = {
+    TWELVE: 'hh:mm a',
+    TWENTY_FOUR: 'HH:mm a',
+  };
+  
+  public static TWENTY_FOUR_HOUR_FORMAT = 24;
+  public static TWELVE_FOUR_HOUR_FORMAT = 12;
 
   static isDoubleClickMode(value: string): boolean {
     return Codes.DETAIL_MODE_DBLCLICK_VALUES.indexOf(value) !== -1;
@@ -86,5 +93,9 @@ export class Codes {
     let res = {};
     res[Codes.IS_DETAIL] = 'true';
     return res;
+  }
+
+  static formatString(format:number){
+    return (format === Codes.TWENTY_FOUR_HOUR_FORMAT ? Codes.HourFormat.TWENTY_FOUR : Codes.HourFormat.TWELVE);
   }
 }
