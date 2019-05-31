@@ -348,8 +348,10 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
       const newValue = val;
       const previousValue = this.oldValue;
       this.setFormValue(val, options, setDirty);
-      const changeType: number = (options && options.hasOwnProperty('changeType')) ? options.changeType : OValueChangeEvent.PROGRAMMATIC_CHANGE;
-      this.emitOnValueChange(changeType, newValue, previousValue);
+      if (options.emitModelToViewValueChange !== false) {
+        const changeType: number = (options && options.hasOwnProperty('changeType')) ? options.changeType : OValueChangeEvent.PROGRAMMATIC_CHANGE;
+        this.emitOnValueChange(changeType, newValue, previousValue);
+      }
     }
   }
 
@@ -515,7 +517,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   }
 
   get floatLabel(): FloatLabelType {
-    if(!this.labelVisible) {
+    if (!this.labelVisible) {
       this.floatLabel = 'never';
     }
     return this._floatLabel;
