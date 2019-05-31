@@ -4,6 +4,7 @@ import { FormControl, ValidatorFn } from '@angular/forms';
 import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-moment-adapter';
 
 import { Codes } from '../../../../../util/codes';
+import { IFormValueOptions } from '../../../../form/form-components';
 import { MomentService } from '../../../../../services/moment.service';
 import { OBaseTableCellEditor } from '../o-base-table-cell-editor.class';
 import { Util } from '../../../../../util/util';
@@ -65,12 +66,10 @@ export class OTableCellEditorTimeComponent extends OBaseTableCellEditor implemen
   @ViewChild(MatDatepickerInput)
   public datepickerInput: MatDatepickerInput<Date>;
 
-
   formControlHour: FormControl;
   formControlDate: FormControl;
 
-  protected oHourFormat: number = Codes.TWENTY_FOUR_HOUR_FORMAT;
-  protected onKeyboardInputDone = false;
+
   public oDateFormat: string = 'L';
   public oHourMax: string;
   public oHourMin: string;
@@ -78,13 +77,8 @@ export class OTableCellEditorTimeComponent extends OBaseTableCellEditor implemen
   private _oDateLocale;
   protected oHourPlaceholder: string;
   protected oDatePlaceholder: string;
-  public set oDateLocale(value: string) {
-    this._oDateLocale = value;
-    if (Util.isDefined(this._oDateLocale)) {
-      this.adapter.setLocale(value);
-    }
-  }
-
+  protected oHourFormat: number = Codes.TWENTY_FOUR_HOUR_FORMAT;
+  protected onKeyboardInputDone = false;
   protected oMinDate: string;
   protected oMaxDate: string;
   protected _minDateString: string;
@@ -98,22 +92,19 @@ export class OTableCellEditorTimeComponent extends OBaseTableCellEditor implemen
   ) {
     super(injector);
     this.momentSrv = this.injector.get(MomentService);
-
   }
 
   ngOnInit(): void {
     super.ngOnInit();
-
     this.createInternalFormControl();
-
     if (!this._oDateLocale) {
       this.oDateLocale = this.momentSrv.getLocale();
     }
+
     if (this.oMinDate) {
-      const date = new Date(this.oMaxDate);
+      const date = new Date(this.oMinDate);
       const momentD = moment(date);
       if (momentD.isValid()) {
-        this.datepickerInput.min = date;
         this.minDateString = momentD.format(this.oDateFormat);
       }
     }
@@ -122,24 +113,10 @@ export class OTableCellEditorTimeComponent extends OBaseTableCellEditor implemen
       const date = new Date(this.oMaxDate);
       const momentD = moment(date);
       if (momentD.isValid()) {
-        this.datepickerInput.max = date;
         this.maxDateString = momentD.format(this.oDateFormat);
       }
     }
   }
-
-  public ngAfterViewChecked(): void {
-    this.modifyPickerMethods();
-  }
-
-
-  setTime(event) {
-    event.preventDefault();
-    event.stopPropagation();
-    this.picker.setTime();
-
-  }
-
 
   createInternalFormControl() {
     if (!this.formControlDate) {
@@ -163,10 +140,20 @@ export class OTableCellEditorTimeComponent extends OBaseTableCellEditor implemen
     }
   }
 
+  public ngAfterViewChecked(): void {
+    this.modifyPickerMethods();
+  }
+
+  setTime(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    this.picker.setTime();
+
+  }
+
   onDateChange(event: MatDatepickerInputEvent<any>) {
     const isValid = event.value && event.value.isValid && event.value.isValid();
     let val = isValid ? event.value.valueOf() : moment().startOf('day');
-
 
     this.formControlDate.setValue(val, {
       emitModelToViewChange: false,
@@ -177,26 +164,79 @@ export class OTableCellEditorTimeComponent extends OBaseTableCellEditor implemen
   }
 
 
-
-  onHourChange(event) {
-    if (this.formControlHour.invalid) {
-      return;
+  protected updateValeOnInputChange(blurEvent: any): void {
+    if (this.onKeyboardInputDone) {
+      let value: string = blurEvent.currentTarget.value;
+      // ngx-material-timepicker does not allow writing characters on input, so we add 'AM/PM' in order to make validation work properly
+      value = this.parseHour(value);
+      this.formControlHour.setValue(value);
     }
-    let value: any;
+    this.onKeyboardInputDone = false;
+  }
+
+  /**
+   * Receives an hour input introduced by the user and returns the hour formated acording current format
+   * @param value
+   */
+  protected parseHour(value: string): string {
+    const strArray = value.split(':');
+    let hour: any = strArray[0];
+
+    if (Codes.TWELVE_FOUR_HOUR_FORMAT === this.oHourFormat) {
+      if (hour) {
+        hour = parseInt(hour);
+        const period = hour <= 12 ? ' AM' : ' PM';
+        if (hour > 12) {
+          hour = hour - 12;
+        }
+        strArray[0] = hour;
+        value = strArray.join(':') + period;
+      }
+    }
+    return value;
+  }
+
+
+  public onHourChange(event) {
+
+    let value;
     if (event instanceof Event) {
-      value = moment((event.currentTarget as any).value, this.formatString).valueOf();
+      this.updateValeOnInputChange(event);
     } else {
-      value = moment(event, this.formatString).valueOf();
+      value = this.convertToFormatString(event);
+      /** emitModelToViewChange: false  because onChange event is trigger in ngModelChange */
+      this.formControlHour.setValue(value, {
+        emitEvent: false,
+        emitModelToViewChange: false
+      });
     }
 
-    /** emitModelToViewChange: false  because onChange event is trigger in ngModelChange */
-    this.formControlHour.setValue(value, {
-      emitEvent: false,
-      emitModelToViewChange: false
-    });
 
     this.updateComponentValue();
     this.commitEdition();
+  }
+
+  public setTimestampValue(value: any, options?: IFormValueOptions): void {
+    let parsedValue;
+    const momentV = Util.isDefined(value) ? moment(value) : value;
+    if (momentV && momentV.isValid()) {
+      parsedValue = momentV.utcOffset(0).format(this.formatString);
+    }
+    this.formControlHour.setValue(parsedValue, options);
+  }
+
+  protected convertToFormatString(value): string {
+    if (value === '00:00' || !Util.isDefined(value)) {
+      return value;
+    }
+    const formatStr = this.oHourFormat === Codes.TWENTY_FOUR_HOUR_FORMAT ? 'HH:mm' : 'hh:mm a';
+    let result = value;
+    if (typeof value === 'number') {
+      result = moment(value).format(formatStr);
+    } else {
+      result = value ? moment(value, 'h:mm A').format(formatStr) : value;
+    }
+    return result;
   }
 
   openDatepicker(d: MatDatepicker<Date>) {
@@ -232,24 +272,7 @@ export class OTableCellEditorTimeComponent extends OBaseTableCellEditor implemen
       this.picker.open();
     }
   }
-  protected setInnerComponentsData(data): void {
-    let dateValue: any;
-    let hourValue: any;
-    if (Util.isDefined(data)) {
-      const momentD = moment(data);
-      if (momentD.isValid()) {
-        dateValue = momentD.clone().startOf('day').valueOf();
-        hourValue = momentD.clone().valueOf() - dateValue;
-      }
-    }
-    if (this.dateInput) {
-      this.formControlDate.setValue(dateValue);
-    }
-    if (this.hourInput) {
-      this.formControlHour.setValue(hourValue);
-    }
 
-  }
   protected handleKeyup(event: KeyboardEvent) {
     const oColumn = this.table.getOColumn(this.tableColumn.attr);
     if (!oColumn) {
@@ -268,16 +291,16 @@ export class OTableCellEditorTimeComponent extends OBaseTableCellEditor implemen
     const values = this.formGroup.getRawValue();
     const mDate = (values['dateInput'] ? moment(values['dateInput']) : moment()).startOf('day');
 
-    const mHour = moment(values['hourInput']);
+    const mHour = moment(values['hourInput'], this.formatString);
     timeValue = mDate.clone()
       .set('hour', mHour.get('hour'))
       .set('minute', mHour.get('minutes'))
       .valueOf();
+
     if (this.formControl) {
       this.formControl.setValue(timeValue);
       this.formControl.markAsDirty();
     }
-
   }
 
   protected modifyPickerMethods(): void {
@@ -290,11 +313,30 @@ export class OTableCellEditorTimeComponent extends OBaseTableCellEditor implemen
   }
 
   hasErrorDate(error: string): boolean {
-    return this.formControlDate && this.formControlDate.touched;
+    return this.formControlDate && this.formControlDate.touched && this.hasErrorExclusive(error);
   }
 
+  hasErrorExclusive(error: string): boolean {
+    let hasError = false;
+    const errorsOrder = ['matDatepickerMax', 'matDatepickerMin', 'matDatepickerFilter', 'matDatepickerParse', 'required'];
+    const errors = this.formControlDate.errors;
+    if (Util.isDefined(errors)) {
+      if (Object.keys(errors).length === 1) {
+        return errors.hasOwnProperty(error);
+      } else {
+        for (let i = 0, len = errorsOrder.length; i < len; i++) {
+          hasError = errors.hasOwnProperty(errorsOrder[i]);
+          if (hasError) {
+            hasError = (errorsOrder[i] === error);
+            break;
+          }
+        }
+      }
+    }
+    return hasError;
+  }
   hasErrorHour(error: string): boolean {
-    return this.formControlHour && this.formControlHour.touched && this.hasErrorExclusive(error);
+    return this.formControlHour && this.formControlHour.touched;
   }
 
   getCellDataDate(): any {
@@ -356,6 +398,22 @@ export class OTableCellEditorTimeComponent extends OBaseTableCellEditor implemen
     this._maxDateString = val;
   }
 
+  public set oDateLocale(value: string) {
+    this._oDateLocale = value;
+    if (Util.isDefined(this._oDateLocale)) {
+      this.adapter.setLocale(value);
+    }
+  }
+
+  get minDate(): Date {
+    return new Date(this.oMinDate);
+  }
+
+  get maxDate(): Date {
+    return new Date(this.oMaxDate);
+  }
+
+
   onClosed() {
     this.dateInput.nativeElement.focus();
   }
@@ -367,25 +425,10 @@ export class OTableCellEditorTimeComponent extends OBaseTableCellEditor implemen
   }
 
   public onKeyDown(e: KeyboardEvent): void {
-    if (!this.isInputAllowed(e)) {
+    if (!Codes.isHourInputAllowed(e)) {
       e.preventDefault();
     }
   }
-  protected isInputAllowed(e: KeyboardEvent): boolean {
-    // Allow: backspace, delete, tab, escape, enter
-    if ([46, 8, 9, 27, 13].some(n => n === e.keyCode) ||
-      (e.key === ':') ||
-      // Allow: Ctrl/cmd+A
-      (e.keyCode === 65 && (e.ctrlKey === true || e.metaKey === true)) ||
-      // Allow: Ctrl/cmd+C
-      (e.keyCode === 67 && (e.ctrlKey === true || e.metaKey === true)) ||
-      // Allow: Ctrl/cmd+X
-      (e.keyCode === 88 && (e.ctrlKey === true || e.metaKey === true)) ||
-      // Allow: home, end, left, right, up, down
-      (e.keyCode >= 35 && e.keyCode <= 40)) {
-      return true;
-    }
-    return !((e.keyCode < 48 || e.keyCode > 57) && (e.keyCode < 96 || e.keyCode > 105));
-  }
+ 
 
 }

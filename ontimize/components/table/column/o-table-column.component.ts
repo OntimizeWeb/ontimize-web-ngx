@@ -410,7 +410,7 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
             editor.oDateFormat = propsOrigin.oDateFormat;
             editor.oHourFormat = propsOrigin.oHourFormat;
             editor.oDateLocale = propsOrigin.oDateLocale;
-            editor.MinDate = propsOrigin.oMinDate;
+            editor.oMinDate = propsOrigin.oMinDate;
             editor.oMaxDate = propsOrigin.oMaxDate;
 
             editor.oTouchUi = propsOrigin.oTouchUi;
