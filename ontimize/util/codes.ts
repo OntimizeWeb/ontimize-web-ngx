@@ -98,4 +98,22 @@ export class Codes {
   static formatString(format: number) {
     return (format === Codes.TWENTY_FOUR_HOUR_FORMAT ? Codes.HourFormat.TWENTY_FOUR : Codes.HourFormat.TWELVE);
   }
+  
+
+  static isHourInputAllowed(e: KeyboardEvent): boolean {
+    // Allow: backspace, delete, tab, escape, enter
+    if ([46, 8, 9, 27, 13].some(n => n === e.keyCode) ||
+      (e.key === ':') ||
+      // Allow: Ctrl/cmd+A
+      (e.keyCode === 65 && (e.ctrlKey === true || e.metaKey === true)) ||
+      // Allow: Ctrl/cmd+C
+      (e.keyCode === 67 && (e.ctrlKey === true || e.metaKey === true)) ||
+      // Allow: Ctrl/cmd+X
+      (e.keyCode === 88 && (e.ctrlKey === true || e.metaKey === true)) ||
+      // Allow: home, end, left, right, up, down
+      (e.keyCode >= 35 && e.keyCode <= 40)) {
+      return true;
+    }
+    return !((e.keyCode < 48 || e.keyCode > 57) && (e.keyCode < 96 || e.keyCode > 105));
+  }
 }
