@@ -95,6 +95,7 @@
     "awesome-typescript-loader": "3.4.0",
     "copyfiles": "1.2.0",
     "core-js": "2.5.7",
+    "fstream": "1.0.12",
     "gulp": "4.0.0",
     "gulp-cssimport": "6.0.0",
     "gulp-inline-ng2-template": "5.0.1",
@@ -119,10 +120,12 @@
     "rxjs": "6.3.3",
     "rxjs-compat": "6.3.3",
     "source-map-loader": "0.2.3",
+    "tar": "2.2.2",
     "ts-helpers": "1.1.2",
     "tslint-loader": "3.5.3",
     "typescript": "2.9.2",
     "webpack": "4.21.0",
+    "ws": "3.3.1",
     "zone.js": "0.8.26"
   }
 }
