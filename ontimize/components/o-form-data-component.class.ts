@@ -340,7 +340,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     return this.defaultValue;
   }
 
-  public setValue(val: any, options?: IFormValueOptions, setDirty: boolean = false): void {
+  public setValue(val: any, options: IFormValueOptions = {}, setDirty: boolean = false): void {
     if (!PermissionsUtils.checkEnabledPermission(this.permissions)) {
       return;
     }
