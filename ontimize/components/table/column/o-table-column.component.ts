@@ -5,7 +5,8 @@ import {
   OTableCellEditorDateComponent,
   OTableCellEditorIntegerComponent,
   OTableCellEditorRealComponent,
-  OTableCellEditorTextComponent
+  OTableCellEditorTextComponent,
+  OTableCellEditorTimeComponent
 } from './cell-editor/cell-editor';
 import {
   OTableCellRendererActionComponent,
@@ -16,7 +17,8 @@ import {
   OTableCellRendererIntegerComponent,
   OTableCellRendererPercentageComponent,
   OTableCellRendererRealComponent,
-  OTableCellRendererServiceComponent
+  OTableCellRendererServiceComponent,
+  OTableCellRendererTimeComponent
 } from './cell-renderer/cell-renderer';
 
 import { Codes } from '../../../util/codes';
@@ -93,7 +95,9 @@ export const DEFAULT_INPUTS_O_TABLE_COLUMN = [
   ...OTableCellEditorBooleanComponent.DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_BOOLEAN,
   ...OTableCellEditorDateComponent.DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_DATE,
   ...OTableCellEditorRealComponent.DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_REAL, // includes Integer
-  ...OTableCellEditorTextComponent.DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_TEXT
+  ...OTableCellEditorTextComponent.DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_TEXT,
+  ...OTableCellEditorTimeComponent.DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_TIME,
+
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE_COLUMN = [
@@ -125,7 +129,8 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
     percentage: OTableCellRendererPercentageComponent,
     real: OTableCellRendererRealComponent,
     service: OTableCellRendererServiceComponent,
-    translate: OTableCellRendererTranslateComponent
+    translate: OTableCellRendererTranslateComponent,
+    time: OTableCellRendererTimeComponent
   };
 
   protected static editorsMapping = {
@@ -135,7 +140,8 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
     real: OTableCellEditorRealComponent,
     percentage: OTableCellEditorRealComponent,
     currency: OTableCellEditorRealComponent,
-    text: OTableCellEditorTextComponent
+    text: OTableCellEditorTextComponent,
+    time: OTableCellEditorTimeComponent
   };
 
   public renderer: any;
@@ -161,6 +167,7 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
   public tooltip: boolean = false;
   tooltipValue: string;
   tooltipFunction: Function;
+
   set multiline(val: boolean) {
     val = Util.parseBoolean(String(val));
     this._multiline = val;
@@ -211,6 +218,9 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
 
   /* input renderer translate */
   protected translateArgsFn: (rowData: any) => any[];
+  /**input time */
+  oDateFormat = 'L';
+  oHourFormat = 24;
 
   /* input editor */
   @InputConverter()
@@ -319,6 +329,9 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
             case 'date':
               newRenderer.format = this.format;
               break;
+            case 'time':
+              newRenderer.format = this.format;
+              break;
             case 'integer':
               newRenderer.grouping = this.grouping;
               newRenderer.thousandSeparator = this.thousandSeparator;
@@ -392,6 +405,23 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
             editor.oStartAt = propsOrigin.oStartAt;
             editor.filterDate = propsOrigin.filterDate;
             editor.dateValueType = propsOrigin.dateValueType;
+            break;
+          case 'time':
+            editor.oDateFormat = propsOrigin.oDateFormat;
+            editor.oHourFormat = propsOrigin.oHourFormat;
+            editor.oDateLocale = propsOrigin.oDateLocale;
+            editor.oMinDate = propsOrigin.oMinDate;
+            editor.oMaxDate = propsOrigin.oMaxDate;
+
+            editor.oTouchUi = propsOrigin.oTouchUi;
+            editor.oDateStartAt = propsOrigin.oDateStartAt;
+            editor.oDateTextInputEnabled = propsOrigin.oDateTextInputEnabled;
+
+            editor.oHourMin = propsOrigin.oHourMin;
+            editor.oHourMax = propsOrigin.oHourMax;
+            editor.oHourTextInputEnabled = propsOrigin.oHourTextInputEnabled;
+            editor.oHourPlaceholder = propsOrigin.oHourPlaceholder;
+            editor.oDatePlaceholder = propsOrigin.oDatePlaceholder;
             break;
           case 'boolean':
             editor.booleanType = propsOrigin.booleanType;

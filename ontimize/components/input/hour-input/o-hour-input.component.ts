@@ -1,16 +1,5 @@
-import { CommonModule } from '@angular/common';
-import { AfterViewInit, Component, ElementRef, forwardRef, Inject, Injector, NgModule, OnInit, Optional, ViewChild, ViewEncapsulation } from '@angular/core';
-import { ValidatorFn } from '@angular/forms';
-import moment from 'moment';
-import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
-
-import { NumberConverter } from '../../../decorators';
-import { InputConverter } from '../../../decorators/input-converter';
-import { OSharedModule } from '../../../shared';
-import { Util } from '../../../utils';
-import { OValidators } from '../../../validators/o-validators';
-import { OFormComponent } from '../../form/form-components';
-import { IFormValueOptions } from '../../form/OFormValue';
+import { AfterViewInit, Component, ElementRef, Inject, Injector, NgModule, OnInit, Optional, ViewChild, ViewEncapsulation, forwardRef } from '@angular/core';
+import { Codes, Util } from '../../../utils';
 import {
   DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,
   DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT,
@@ -18,13 +7,16 @@ import {
   OValueChangeEvent
 } from '../../o-form-data-component.class';
 
-const HourFormat = {
-  TWELVE: 'hh:mm a',
-  TWENTY_FOUR: 'HH:mm a',
-};
-
-const TWENTY_FOUR_HOUR_FORMAT = 24;
-const TWELVE_FOUR_HOUR_FORMAT = 12;
+import { CommonModule } from '@angular/common';
+import { IFormValueOptions } from '../../form/OFormValue';
+import { InputConverter } from '../../../decorators/input-converter';
+import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
+import { NumberConverter } from '../../../decorators';
+import { OFormComponent } from '../../form/form-components';
+import { OSharedModule } from '../../../shared';
+import { OValidators } from '../../../validators/o-validators';
+import { ValidatorFn } from '@angular/forms';
+import moment from 'moment';
 
 export type OHourValueType = 'string' | 'timestamp';
 
@@ -62,7 +54,7 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
   public textInputEnabled: boolean = true;
   public min: string;
   public max: string;
-  protected _format: number = TWENTY_FOUR_HOUR_FORMAT;
+  protected _format: number = Codes.TWENTY_FOUR_HOUR_FORMAT;
   protected onKeyboardInputDone = false;
   protected _valueType: OHourValueType = 'timestamp';
 
@@ -98,7 +90,7 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
   }
 
   public onKeyDown(e: KeyboardEvent): void {
-    if (!this.isInputAllowed(e)) {
+    if (!Codes.isHourInputAllowed(e)) {
       e.preventDefault();
     }
   }
@@ -115,7 +107,7 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
   }
 
   get formatString(): string {
-    return (this.format === TWENTY_FOUR_HOUR_FORMAT ? HourFormat.TWENTY_FOUR : HourFormat.TWELVE);
+    return (this.format === Codes.TWENTY_FOUR_HOUR_FORMAT ? Codes.HourFormat.TWENTY_FOUR : Codes.HourFormat.TWELVE);
   }
 
   public open(e?: Event): void {
@@ -138,7 +130,7 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
 
   public resolveValidators(): ValidatorFn[] {
     const validators: ValidatorFn[] = super.resolveValidators();
-    if (this.format === TWENTY_FOUR_HOUR_FORMAT) {
+    if (this.format === Codes.TWENTY_FOUR_HOUR_FORMAT) {
       validators.push(OValidators.twentyFourHourFormatValidator);
     } else {
       validators.push(OValidators.twelveHourFormatValidator);
@@ -156,8 +148,8 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
   set format(val: number) {
     const old = this._format;
     let parsedVal = NumberConverter(val);
-    if (parsedVal !== TWELVE_FOUR_HOUR_FORMAT && parsedVal !== TWENTY_FOUR_HOUR_FORMAT) {
-      parsedVal = TWENTY_FOUR_HOUR_FORMAT;
+    if (parsedVal !== Codes.TWELVE_FOUR_HOUR_FORMAT && parsedVal !== Codes.TWENTY_FOUR_HOUR_FORMAT) {
+      parsedVal = Codes.TWENTY_FOUR_HOUR_FORMAT;
     }
     this._format = parsedVal;
     if (parsedVal !== old) {
@@ -186,6 +178,10 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
     return result;
   }
 
+  public onChangeEvent(arg: any): void {
+    this.onTimepickerChange(arg.target.value);
+  }
+
   public onTimepickerChange(event: string): void {
     let value: any = event;
     if (this.valueType === 'timestamp') {
@@ -210,23 +206,6 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
     }
   }
 
-  protected isInputAllowed(e: KeyboardEvent): boolean {
-    // Allow: backspace, delete, tab, escape, enter
-    if ([46, 8, 9, 27, 13].some(n => n === e.keyCode) ||
-      (e.key === ':') ||
-      // Allow: Ctrl/cmd+A
-      (e.keyCode === 65 && (e.ctrlKey === true || e.metaKey === true)) ||
-      // Allow: Ctrl/cmd+C
-      (e.keyCode === 67 && (e.ctrlKey === true || e.metaKey === true)) ||
-      // Allow: Ctrl/cmd+X
-      (e.keyCode === 88 && (e.ctrlKey === true || e.metaKey === true)) ||
-      // Allow: home, end, left, right, up, down
-      (e.keyCode >= 35 && e.keyCode <= 40)) {
-      return true;
-    }
-    return !((e.keyCode < 48 || e.keyCode > 57) && (e.keyCode < 96 || e.keyCode > 105));
-  }
-
   protected updateValeOnInputChange(blurEvent: any): void {
     if (this.onKeyboardInputDone) {
       let value: string = blurEvent.currentTarget.value;
@@ -245,7 +224,7 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
     const strArray = value.split(':');
     let hour: any = strArray[0];
 
-    if (TWELVE_FOUR_HOUR_FORMAT === this.format) {
+    if (Codes.TWELVE_FOUR_HOUR_FORMAT === this.format) {
       if (hour) {
         hour = parseInt(hour);
         const period = hour <= 12 ? ' AM' : ' PM';
@@ -255,7 +234,7 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
         strArray[0] = hour;
         value = strArray.join(':') + period;
       }
-    } else if (TWELVE_FOUR_HOUR_FORMAT === this.format) {
+    } else if (Codes.TWELVE_FOUR_HOUR_FORMAT === this.format) {
       // do nothing
     }
     return value;
@@ -270,7 +249,7 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
     if (value === '00:00' || !Util.isDefined(value)) {
       return value;
     }
-    const formatStr = this.format === TWENTY_FOUR_HOUR_FORMAT ? 'HH:mm' : 'hh:mm a';
+    const formatStr = this.format === Codes.TWENTY_FOUR_HOUR_FORMAT ? 'HH:mm' : 'hh:mm a';
     let result = value;
     if (typeof value === 'number') {
       result = moment(value).format(formatStr);

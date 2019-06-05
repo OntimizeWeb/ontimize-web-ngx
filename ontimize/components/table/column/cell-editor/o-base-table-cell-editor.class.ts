@@ -75,9 +75,9 @@ export class OBaseTableCellEditor implements OnInit {
   }
 
   ngOnInit(): void {
-     this.createFormControl();
-     this.registerEditor();
-     this.editorCreated.emit(this);
+    this.createFormControl();
+    this.registerEditor();
+    this.editorCreated.emit(this);
   }
 
   protected handleKeyup(event: KeyboardEvent) {
@@ -133,10 +133,12 @@ export class OBaseTableCellEditor implements OnInit {
       if (updateObserver) {
         updateObserver.subscribe(res => {
           self.onUpdateSuccess(res);
+          self.table.cd.detectChanges();
         }, error => {
           self._rowData[self.tableColumnAttr] = self.oldValue;
           self.table.dataSource.updateRenderedRowData(self._rowData);
           self.table.showDialogError(error, 'MESSAGES.ERROR_UPDATE');
+          self.table.cd.detectChanges();
         });
       }
     }
@@ -265,7 +267,7 @@ export class OBaseTableCellEditor implements OnInit {
     return this._enabled;
   }
 
-  getFormControl(){
+  getFormControl() {
     return this.formControl;
   }
 }

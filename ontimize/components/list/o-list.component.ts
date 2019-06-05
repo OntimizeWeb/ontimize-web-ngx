@@ -227,6 +227,10 @@ export class OListComponent extends OServiceComponent implements AfterContentIni
   }
 
   public registerQuickFilter(input: OSearchInputComponent): void {
+    if (Util.isDefined(this.quickFilterComponent)) {
+      // avoiding to register a quickfiltercomponent if it already exists one
+      return;
+    }
     this.quickFilterComponent = input;
     if (Util.isDefined(this.quickFilterComponent)) {
       if (this.state.hasOwnProperty('filterValue')) {

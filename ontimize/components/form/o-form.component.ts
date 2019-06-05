@@ -126,7 +126,9 @@ export const DEFAULT_INPUTS_O_FORM = [
 
   'includeBreadcrumb: include-breadcrumb',
 
-  'detectChangesOnBlur: detect-changes-on-blur'
+  'detectChangesOnBlur: detect-changes-on-blur',
+
+  'confirmExit: confirm-exit'
 ];
 
 export const DEFAULT_OUTPUTS_O_FORM = [
@@ -222,6 +224,8 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   includeBreadcrumb: boolean = false;
   @InputConverter()
   detectChangesOnBlur: boolean = true;
+  @InputConverter()
+  confirmExit: boolean = true;
   /* end of inputs variables */
 
   /*parsed inputs variables */
@@ -504,6 +508,9 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   }
 
   canDeactivate(): Observable<boolean> | Promise<boolean> | boolean {
+    if (!this.confirmExit) {
+      return true;
+    }
     const canDiscardChanges = this.canDiscardChanges;
     this.canDiscardChanges = false;
     return canDiscardChanges || this.showConfirmDiscardChanges();

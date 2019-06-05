@@ -16,6 +16,8 @@ export interface IFormValueOptions {
   emitViewToModelChange?: boolean;
   // If changeType is 0, the onValueChage event will trigger an event performed by the user but an event performed by programming.
   changeType?: number;
+  // If emitModelToViewValueChange is true, the view will be notified about the new value via an onValueChange event. This is the default behavior if emitModelToViewValueChange is not specified.
+  emitModelToViewValueChange?: boolean;
 }
 
 

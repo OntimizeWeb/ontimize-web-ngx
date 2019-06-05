@@ -1,7 +1,7 @@
 import { Component, ElementRef, HostBinding, Inject, Injector, NgModule, Optional, ViewChild, ViewEncapsulation, forwardRef } from '@angular/core';
 import { DEFAULT_INPUTS_O_FORM_DATA_COMPONENT, DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT, OFormDataComponent } from '../o-form-data-component.class';
 import { FormControl, FormGroup } from '@angular/forms';
-import { IFormValueOptions, OFormValue } from '../form/OFormValue';
+import { OFormValue } from '../form/OFormValue';
 
 import { CommonModule } from '@angular/common';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -132,9 +132,8 @@ export class OImageComponent extends OFormDataComponent {
     return !this.getValue() || this.getValue().length === 0;
   }
 
-  
   public createFormControl(): OFormControl {
-    this._fControl = super.createFormControl()
+    this._fControl = super.createFormControl();
     this._fControl.fControlChildren = [this.stateCtrl];
     return this._fControl;
   }
@@ -162,7 +161,7 @@ export class OImageComponent extends OFormDataComponent {
       //   this.titleLabel.nativeElement.textContent = input.files[0].name;
       // }
       this.currentFileName = input.files[0].name;
-      this.stateCtrl.setValue( this.currentFileName);
+      this.stateCtrl.setValue(this.currentFileName);
     }
   }
 

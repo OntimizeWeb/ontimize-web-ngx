@@ -60,7 +60,7 @@ export class OTableCellEditorBooleanComponent extends OBaseTableCellEditor {
 
   ngOnInit() {
     super.ngOnInit();
-    this.parseInputs()
+    this.parseInputs();
   }
 
   protected parseInputs() {

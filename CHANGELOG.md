@@ -1,3 +1,10 @@
+## 4.0.5 (2019-06-05)
+### Features
+* **o-list-picker**: new `dialog-class` input ([321fd4b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/321fd4b))
+* **o-table**: new cell render `o-table-cell-renderer-time` and cell editor `o-table-cell-editor-time` ([399cdbc](https://github.com/OntimizeWeb/ontimize-web-ngx/
+* **o-form**: new `confirm-exit` input ([01d0d29]](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/01d0d29]))
+* **IFormValueOptions**: adding new `emitModelToViewValueChange` property ([4d11cd8]](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4d11cd8]))
+
 ## 4.0.4 (2019-05-22)
 ### Features
 * **OFormControl**: adding class `OFormControl` ([7a9cef6](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7a9cef6))
