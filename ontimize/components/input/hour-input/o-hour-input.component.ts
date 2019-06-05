@@ -178,6 +178,10 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
     return result;
   }
 
+  public onChangeEvent(arg: any): void {
+    this.onTimepickerChange(arg.target.value);
+  }
+
   public onTimepickerChange(event: string): void {
     let value: any = event;
     if (this.valueType === 'timestamp') {
