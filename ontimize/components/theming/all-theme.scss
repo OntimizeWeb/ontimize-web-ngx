@@ -19,6 +19,7 @@
 @import '../../layouts/form-layout/tabgroup/o-form-layout-tabgroup-theme.scss';
 @import '../bar-menu/o-bar-menu-theme.scss';
 @import '../grid/o-grid.theme.scss';
+@import '../input/date-range/o-daterange-input-theme.scss';
 
 // Create a theme.
 @mixin o-material-theme($theme, $typography: null) {
@@ -44,4 +45,5 @@
   @include o-bar-menu-theme($theme);
   @include o-grid-theme($theme);
   @include o-layout-padding-margin();
+  @include o-daterange-input-theme($theme);
 }

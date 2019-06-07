@@ -234,7 +234,14 @@ export var MAP = {
     'TABLE_CONTEXT_MENU.DELETE': 'Delete',
     'TABLE_CONTEXT_MENU.FILTER': 'Filter',
     'TABLE_CONTEXT_MENU.FILTER_BY': 'Filter by:',
-    'TABLE_CONTEXT_MENU.FILTER_BY_VALUE': 'Filter by this value'
+    'TABLE_CONTEXT_MENU.FILTER_BY_VALUE': 'Filter by this value',
+    'DATERANGE.today': 'Today',
+    'DATERANGE.yesterday': 'Yesterday',
+    'DATERANGE.last_7days':'Last 7 days',
+    'DATERANGE.last_30days':'Last 30 days',
+    'DATERANGE.this_month':'This month',
+    'DATERANGE.last_month':'Last month',
+    'DATERANGE.this_year':'This year'
   },
 
   // Spanish
@@ -473,7 +480,14 @@ export var MAP = {
     'TABLE_CONTEXT_MENU.DELETE': 'Borrar',
     'TABLE_CONTEXT_MENU.FILTER': 'Filtrar',
     'TABLE_CONTEXT_MENU.FILTER_BY': 'Filter by:',
-    'TABLE_CONTEXT_MENU.FILTER_BY_VALUE': 'Filtrar por este valor'
+    'TABLE_CONTEXT_MENU.FILTER_BY_VALUE': 'Filtrar por este valor',
+    'DATERANGE.today': 'Hoy',
+    'DATERANGE.yesterday': 'Ayer',
+    'DATERANGE.last_7days':'Últimos 7 días',
+    'DATERANGE.last_30days':'Últimos 30 días',
+    'DATERANGE.this_month':'Este mes',
+    'DATERANGE.last_month':'Mes pasado',
+    'DATERANGE.this_year':'Este año'
 
   }
 

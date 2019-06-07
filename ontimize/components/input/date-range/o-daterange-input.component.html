@@ -1,0 +1,24 @@
+<div fxLayout="row" fxLayoutAlign="space-between center" [formGroup]="getFormGroup()" [matTooltip]="tooltip"
+  [matTooltipClass]="tooltipClass" [matTooltipPosition]="tooltipPosition" [matTooltipShowDelay]="tooltipShowDelay"
+  [matTooltipHideDelay]="tooltipHideDelay">
+
+  <mat-form-field [appearance]="appearance" [floatLabel]="floatLabel" [hideRequiredMarker]="hideRequiredMarker"
+    [class.custom-width]="hasCustomWidth" class="icon-field" fxFlexFill>
+    <mat-label *ngIf="labelVisible">{{ olabel | oTranslate }}</mat-label>
+    <input matInput type="text" o-daterange-input [id]="getAttribute()" [formControlName]="getAttribute()"
+      [required]="isRequired" [placeholder]="placeHolder" [readonly]="isReadOnly" showDropdowns="true" showCancel="true"
+      [showRanges]="showRanges" (rangeClicked)="rangeClicked($event)" (datesUpdated)="datesUpdated($event)"
+      [oTouchUi]="oTouchUi" [minDate]="oMinDate" [maxDate]="oMaxDate" [separator]="separator"
+      (blur)="innerOnBlur($event)" (change)="onChangeEvent($event)">
+
+    <button type="button" matSuffix mat-icon-button (click)="openPicker()" [disabled]="isReadOnly || !enabled">
+      <mat-icon>today</mat-icon>
+    </button>
+
+    <button type="button" *ngIf="showClearButton" matSuffix mat-icon-button (click)="onClickClearValue($event)"
+      [disabled]="isReadOnly || !enabled">
+      <mat-icon svgIcon="ontimize:close"></mat-icon>
+    </button>
+
+  </mat-form-field>
+</div>
