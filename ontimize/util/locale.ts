@@ -16,6 +16,12 @@ export default class LocaleCode {
     let result = code.toLowerCase();
     if (match && match.length > 2) {
       result = match[2].toLowerCase();
+    } else {
+      /*Exception pt is locale id of Portuguese Brazil
+      and pt-PT is Portuguese Portugal */
+      if (result === 'pt') {
+        result = 'br';
+      }
     }
     return result;
   }
