@@ -1,7 +1,7 @@
 import { ESCAPE, UP_ARROW } from '@angular/cdk/keycodes';
 import { Overlay, OverlayConfig, OverlayRef, PositionStrategy, ScrollStrategyOptions } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
-import { ChangeDetectorRef, ComponentRef, Directive, ElementRef, EventEmitter, forwardRef, Injector, Input, KeyValueDiffer, KeyValueDiffers, NgZone, Output, ViewContainerRef } from '@angular/core';
+import { ChangeDetectorRef, ComponentRef, Directive, ElementRef, EventEmitter, forwardRef, Input, KeyValueDiffer, KeyValueDiffers, NgZone, Output, ViewContainerRef } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material';
 import * as _moment from 'moment';
@@ -90,27 +90,24 @@ export class ODaterangepickerDirective {
   timePickerIncrement: number = 1;
   @Input()
   timePickerSeconds: Boolean = false;
-  _locale: any = {
-    direction: 'ltr',
-    separator: ' - ',
-    weekLabel: 'W',
-    applyLabel: 'Select dates',
-    cancelLabel: 'Cancel',
-    customRangeLabel: 'Custom range',
-    daysOfWeek: moment.weekdaysMin(),
-    monthNames: moment.monthsShort(),
-    firstDay: moment.localeData().firstDayOfWeek(),
-    format: 'L'
-  }
+  _locale: any;
+  _separator: string;
+
   @Input() set separator(value) {
-    if (this.value !== null) {
-      this._locale.separator = value
+    if (value !== null) {
+      this._separator = value;
+      if (this._locale) {
+        this._locale.separator = value
+      }
     }
   }
 
   @Input() set locale(value) {
-    if (this.value !== null) {
+    if (value !== null) {
       this._locale = value
+      if (this._separator) {
+        this._locale.separator = this._separator;
+      }
     }
   }
   get locale(): any {
@@ -135,7 +132,7 @@ export class ODaterangepickerDirective {
   oTouchUi: Boolean = false;
 
   @Input() set startKey(value) {
-    if (value !== null) {
+    if (value && value !== null) {
       this._startKey = value;
     } else {
       this._startKey = 'startDate';
@@ -145,7 +142,7 @@ export class ODaterangepickerDirective {
     return this._startKey;
   }
   @Input() set endKey(value) {
-    if (value !== null) {
+    if (value && value !== null) {
       this._endKey = value;
     } else {
       this._endKey = 'endDate';
@@ -172,7 +169,7 @@ export class ODaterangepickerDirective {
   @Output('rangeClicked') rangeClicked: EventEmitter<Object> = new EventEmitter();
   @Output('datesUpdated') datesUpdated: EventEmitter<Object> = new EventEmitter();
 
-  private momentSrv:MomentService;
+  private momentSrv: MomentService;
   private _popupComponentRef: ComponentRef<DaterangepickerComponent> | null;
   private _calendarPortal: ComponentPortal<DaterangepickerComponent>;
   _popupRef: OverlayRef;
@@ -186,14 +183,10 @@ export class ODaterangepickerDirective {
     public _changeDetectorRef: ChangeDetectorRef,
     public _el: ElementRef,
     private differs: KeyValueDiffers,
-    private injector:Injector,
     private scrollStrategy: ScrollStrategyOptions
   ) {
     this.drops = 'down';
     this.opens = 'right';
-    this.momentSrv = this.injector.get(MomentService);
-    _moment.locale(this.momentSrv.getLocale());
-
   }
 
   initializeListeners(instance) {
@@ -225,6 +218,8 @@ export class ODaterangepickerDirective {
     instance.minDate = this.minDate;
     instance.maxDate = this.maxDate;
     instance.locale = this.locale;
+    instance.showWeekNumbers = this.showWeekNumbers;
+
     if (this.showRanges) {
       instance.ranges = this.ranges;
       instance.keepCalendarOpeningWithRange = true;
@@ -256,18 +251,15 @@ export class ODaterangepickerDirective {
     this._onTouched();
   }
 
-  open(event?: any) {
-    let instance;
+  open() {
     if (!this.oTouchUi) {
       this.openAsPopup()
-      instance = this._popupComponentRef.instance;
 
     } else {
       this.openAsDialog();
-      instance = this._dialogRef.componentInstance;
     }
 
-    this.initializeListeners(instance);
+
 
   }
 
@@ -295,20 +287,20 @@ export class ODaterangepickerDirective {
     this._onTouched = fn;
   }
 
-  setValueInDateComponent(val) {
+  setValueInDateComponent(instance, val) {
     if (val) {
       if (val[this._startKey]) {
-        this._popupComponentRef.instance.setStartDate(val[this._startKey])
+        instance.setStartDate(val[this._startKey])
       }
       if (val[this._endKey]) {
-        this._popupComponentRef.instance.setEndDate(val[this._endKey])
+        instance.setEndDate(val[this._endKey])
       }
-      this._popupComponentRef.instance.calculateChosenLabel();
-      if (this._popupComponentRef.instance.chosenLabel) {
-        this._el.nativeElement.value = this._popupComponentRef.instance.chosenLabel;
+      instance.calculateChosenLabel();
+      if (instance.chosenLabel) {
+        this._el.nativeElement.value = instance.chosenLabel;
       }
     } else {
-      this._popupComponentRef.instance.clear();
+      instance.clear();
     }
 
   }
@@ -390,12 +382,11 @@ export class ODaterangepickerDirective {
       this._createPopup();
     }
 
+
     if (!this._popupRef.hasAttached()) {
       this._popupComponentRef = this._popupRef.attach(this._calendarPortal);
-      this.setValueInDateComponent(this.value);
-      //this.picker = this;
-      //this._popupComponentRef.instance.datepicker = this;
-
+      this.initializeListeners(this._popupComponentRef.instance);
+      this.setValueInDateComponent(this._popupComponentRef.instance, this.value);
 
       // Update the position once the calendar has rendered.
       this._ngZone.onStable.asObservable().pipe(take(1)).subscribe(() => {
@@ -433,7 +424,7 @@ export class ODaterangepickerDirective {
       .flexibleConnectedTo(this._el)
       // .withTransformOriginOn('.mat-datepicker-content')
       // .withFlexibleDimensions(false)
-      // .withViewportMargin(8)
+      .withViewportMargin(8)
       // .withLockedPosition()
       .withPositions([
         {
@@ -480,6 +471,8 @@ export class ODaterangepickerDirective {
       panelClass: 'mat-datepicker-dialog',
     });
 
+    this.initializeListeners(this._dialogRef.componentInstance);
+    this.setValueInDateComponent(this._dialogRef.componentInstance, this.value);
     this._dialogRef.afterClosed().subscribe(() => this.close());
     //this._dialogRef.componentInstance. = this;
 

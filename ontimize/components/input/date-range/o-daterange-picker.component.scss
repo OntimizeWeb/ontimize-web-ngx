@@ -42,14 +42,13 @@ $input-height: 3rem !default;
 */
 .md-drppicker {
   position: absolute;
-  font-family: Roboto, sans-serif;
   border-radius: 4px;
   width: $md-drppicker-width;
   padding: 4px;
   margin-top: -10px;
   overflow: hidden;
   z-index: 1000;
-  font-size: 14px;
+  font-size: 13px;
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.16), 0 2px 8px 0 rgba(0, 0, 0, 0.12);
 
   &.double {
@@ -188,7 +187,8 @@ $input-height: 3rem !default;
       padding: 0;
       white-space: nowrap;
       text-align: center;
-      min-width: 32px;
+      height: 36px;
+      width: 36px;
 
       span {
         pointer-events: none;
@@ -207,9 +207,9 @@ $input-height: 3rem !default;
     margin: 0;
   }
 
-  th {
-    color: #988c8c;
-  }
+  // th {
+  //   color: #988c8c;
+  // }
 
   td,
   th {

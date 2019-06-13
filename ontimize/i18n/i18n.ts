@@ -80,6 +80,8 @@ export var MAP = {
     'FORM_VALIDATION.DATE_FILTER': 'Date is not valid for the defined filter',
     'FORM_VALIDATION.DATE_MIN': 'Date min',
     'FORM_VALIDATION.DATE_MAX': 'Date max',
+    'FORM_VALIDATION.DATERANGE_MIN':'Date min is not in the range',
+    'FORM_VALIDATION.DATERANGE_MAX':'Date max is not in the range',
 
     'FORM_VALIDATION.FILE_TYPE': 'Invalid format',
     'FORM_VALIDATION.FILE_MAXSIZE': 'Maximum file size',
@@ -241,7 +243,8 @@ export var MAP = {
     'DATERANGE.last_30days':'Last 30 days',
     'DATERANGE.this_month':'This month',
     'DATERANGE.last_month':'Last month',
-    'DATERANGE.this_year':'This year'
+    'DATERANGE.this_year':'This year',
+    'DATERANGE.APPLYLABEL':'Select dates'
   },
 
   // Spanish
@@ -487,7 +490,8 @@ export var MAP = {
     'DATERANGE.last_30days':'Últimos 30 días',
     'DATERANGE.this_month':'Este mes',
     'DATERANGE.last_month':'Mes pasado',
-    'DATERANGE.this_year':'Este año'
+    'DATERANGE.this_year':'Este año',
+    'DATERANGE.APPLYLABEL':'Seleccionar fechas'
 
   }
 

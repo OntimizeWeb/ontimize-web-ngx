@@ -1,9 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, forwardRef, Inject, Injector, NgModule, OnDestroy, OnInit, Optional, ViewChild } from '@angular/core';
+import { FormControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import * as _moment from 'moment';
 import { InputConverter } from '../../../decorators/input-converter';
 import { MomentService } from '../../../services/moment.service';
+import { OTranslateService } from '../../../services/translate/o-translate.service';
 import { OSharedModule } from '../../../shared';
+import { Util } from '../../../util/util';
 import { OFormComponent } from '../../form/o-form.component';
 import { IFormValueOptions } from '../../form/OFormValue';
 import { OFormDataComponent, OValueChangeEvent } from '../../o-form-data-component.class';
@@ -11,8 +14,6 @@ import { DEFAULT_INPUTS_O_DATE_INPUT } from '../date-input/o-date-input.componen
 import { DEFAULT_OUTPUTS_O_TEXT_INPUT } from '../text-input/o-text-input.component';
 import { ODaterangepickerDirective } from './o-daterange-input.directive';
 import { DaterangepickerComponent } from './o-daterange-picker.component';
-
-
 
 export const DEFAULT_OUTPUTS_O_DATERANGE_INPUT = [
   ...DEFAULT_OUTPUTS_O_TEXT_INPUT
@@ -23,6 +24,8 @@ export const DEFAULT_INPUTS_O_DATERANGE_INPUT = [
   'showWeekNumbers:show-week-numbers',
   'showRanges:show-ranges',
   'olocale:locale',
+  'startKey',
+  'endKey',
   ...DEFAULT_INPUTS_O_DATE_INPUT
 ];
 
@@ -41,6 +44,11 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
   @ViewChild(ODaterangepickerDirective) pickerDirective: ODaterangepickerDirective;
   picker: DaterangepickerComponent;
 
+  @ViewChild('matInputRef')
+  private matInputRef: ElementRef;
+
+  @InputConverter()
+  public textInputEnabled: boolean = true;
 
   @InputConverter()
   public showWeekNumbers: boolean = false;
@@ -52,8 +60,6 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
   public showRanges: boolean = false;
 
   protected _oMinDate: _moment.Moment;
-  protected olocale: string;
-
   get oMinDate() {
     return this._oMinDate;
   }
@@ -68,8 +74,50 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
   set oMaxDate(value) {
     this._oMaxDate = value;
   }
-  protected oformat: string = 'L';
+
+  protected _startKey: string = 'startDate';
+  get startKey() {
+    return this._startKey;
+  }
+  set startKey(value) {
+    this._startKey = value;
+  }
+
+  protected _endKey: string = 'endDate';;
+  get endKey() {
+    return this._endKey;
+  }
+  set endKey(value) {
+    this._endKey = value;
+  }
+
+  protected _separator = ' - ';
+  get separator() {
+    return this._separator;
+  }
+
+  set separator(value) {
+    this._separator = value;
+    if (this.getFormControl() && this.getFormControl().value) {
+      this.updateElement();
+    }
+  }
+
+  get showClearButton(): boolean {
+    return this.clearButton && !this.isReadOnly && this.enabled && this.matInputRef.nativeElement.value;;
+  }
+
+  get localeOptions() {
+    return this._localeOptions;
+  }
+
+  public oformat: string = 'L';
+  protected _localeOptions: any;
+  protected olocale: string;
+
   private momentSrv: MomentService;
+  private oTranslate: OTranslateService;
+
 
   constructor(
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
@@ -77,11 +125,26 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
     injector: Injector
   ) {
     super(form, elRef, injector);
+    this.oTranslate = this.injector.get(OTranslateService);
+    this.momentSrv = this.injector.get(MomentService);
+    this._localeOptions = {
+      direction: 'ltr',
+      separator: ' - ',
+      weekLabel: 'W',
+      applyLabel: this.oTranslate.get('DATERANGE.APPLYLABEL'),
+      cancelLabel: this.oTranslate.get('CANCEL'),
+      customRangeLabel: 'Custom range',
+      daysOfWeek: moment.weekdaysMin(),
+      monthNames: moment.monthsShort(),
+      firstDay: moment.localeData().firstDayOfWeek(),
+      format: 'L'
+    }
 
   }
 
   ngOnInit() {
     super.ngOnInit();
+
     if (this.oMinDate) {
       const momentD = moment(this.oMinDate, this.oformat);
       if (momentD.isValid()) {
@@ -97,6 +160,11 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
     }
     if (!this.olocale) {
       this.olocale = this.momentSrv.getLocale();
+      moment.locale(this.olocale);
+
+    }
+    if (this.oformat) {
+      this._localeOptions.format = this.oformat;
     }
   }
 
@@ -104,22 +172,34 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
     this.pickerDirective.open();
   }
 
-  rangeClicked(range) {
-    // this.setValue(range, {
-    //   changeType: OValueChangeEvent.USER_CHANGE,
-    //   emitEvent: false,
-    //   emitModelToViewChange: false
-    // })
-    // console.log('[rangeClicked] range is : ', range);
+  public onChangeEvent(event: any): void {
+    let objectValue;
+    if (event instanceof Object) {
+      objectValue = event;
+    } else {
+      let value = event.currentTarget.value;
+      if (value !== '') {
+        objectValue = this.getDateRangeToString(value);
+      }
+
+      if (objectValue[this._startKey].isValid && objectValue[this._endKey].isValid) {
+        this.setValue(objectValue, {
+          changeType: OValueChangeEvent.USER_CHANGE,
+          emitEvent: false,
+          emitModelToViewChange: false
+        });
+      }
+    }
+
   }
 
-  public onChangeEvent(event: Event): void {
-    console.log('evnet');
-    //todo validar
+  public onClickClearValue(e: Event): void {
+    super.onClickClearValue(e);
+    this.updateElement();
   }
 
   datesUpdated(range) {
-    console.log('[datesUpdated] range is : ', range);
+
     this.pickerDirective.close();
     this.setValue(range,
       {
@@ -140,13 +220,69 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
   }
 
   updateElement() {
-
-    let chosenLabel = this.value.value[this.pickerDirective.startKey].format(this.pickerDirective.locale.format) +
-      this.pickerDirective.locale.separator + this.value.value[this.pickerDirective.endKey].format(this.pickerDirective.locale.format);
+    let chosenLabel = this.value ? this.value.value[this.pickerDirective.startKey].format(this.oformat) +
+      this.separator + this.value.value[this.pickerDirective.endKey].format(this.oformat) : this.value;
     this.pickerDirective._el.nativeElement.value = chosenLabel
   }
 
+  getDateRangeToString(valueToString: string) {
+    let value = {};
+    let range = valueToString.split(this.separator.trim());
+    value[this._startKey] = moment(range[0], this.oformat)
+    value[this._endKey] = moment(range[1], this.oformat)
+    return value;
+  }
 
+
+  resolveValidators(): ValidatorFn[] {
+    const validators: ValidatorFn[] = super.resolveValidators();
+    if (Util.isDefined(this._oMinDate)) {
+      validators.push(this.minDateValidator.bind(this));
+    }
+    if (Util.isDefined(this._oMaxDate)) {
+      validators.push(this.maxDateValidator.bind(this));
+    }
+
+    validators.push(this.parseDateValidator.bind(this));
+    return validators;
+  }
+
+
+  protected minDateValidator(control: FormControl): ValidationErrors {
+    if ((control.value instanceof Object)
+      && control.value[this._startKey].isBefore(this._oMinDate)) {
+      return {
+        dateRangeMin: {
+          dateMin: this._oMinDate.format(this.oformat)
+        }
+      };
+    }
+    return {};
+  }
+
+  protected maxDateValidator(control: FormControl): ValidationErrors {
+    if ((control.value instanceof Object)
+      && control.value[this._endKey].isAfter(this._oMaxDate)) {
+      return {
+        dateRangeMax: {
+          dateMax: this._oMaxDate.format(this.oformat)
+        }
+      };
+    }
+    return {};
+  }
+  protected parseDateValidator(control: FormControl): ValidationErrors {
+    if ((control.value instanceof Object)
+      && !control.value[this._startKey].isValid
+      && !control.value[this._endKey].isValid) {
+      return {
+        dateRangeParse: {
+          format: this.oformat + this._localeOptions.separator + this.oformat
+        }
+      };
+    }
+    return {};
+  }
 }
 
 @NgModule({

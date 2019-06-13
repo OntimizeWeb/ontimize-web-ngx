@@ -1,9 +1,7 @@
 import { ChangeDetectorRef, Component, ElementRef, EventEmitter, forwardRef, Input, OnInit, Output, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormControl, NG_VALUE_ACCESSOR } from '@angular/forms';
 import * as _moment from 'moment';
-import { DefaultLocaleConfig } from './o-daterange-picker.config';
-
-
+import { InputConverter } from '../../../decorators/input-converter';
 
 const moment = _moment;
 
@@ -50,7 +48,7 @@ export class DaterangepickerComponent implements OnInit {
     singleDatePicker: Boolean = false;
     @Input()
     showDropdowns: Boolean = false;
-    @Input()
+    @InputConverter()
     showWeekNumbers: Boolean = false;
     @Input()
     showISOWeekNumbers: Boolean = false;
@@ -86,7 +84,7 @@ export class DaterangepickerComponent implements OnInit {
     lastDayOfPreviousMonthClass: string = null;
 
     @Input()
-    locale:any;
+    locale: any;
     // custom ranges
     _ranges: any = {};
 
@@ -125,13 +123,11 @@ export class DaterangepickerComponent implements OnInit {
     @ViewChild('pickerContainer') pickerContainer: ElementRef;
 
     constructor(
-        private el: ElementRef,
         private _ref: ChangeDetectorRef
     ) {
         this.choosedDate = new EventEmitter();
         this.rangeClicked = new EventEmitter();
         this.datesUpdated = new EventEmitter();
-
     }
 
     ngOnInit() {
@@ -1042,7 +1038,6 @@ export class DaterangepickerComponent implements OnInit {
      *  build the locale config
      */
     private _buildLocale() {
-         this.locale = { ...DefaultLocaleConfig, ...this.locale };
         if (!this.locale.format) {
             if (this.timePicker) {
                 this.locale.format = moment.localeData().longDateFormat('lll');

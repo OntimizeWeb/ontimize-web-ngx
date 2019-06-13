@@ -5,11 +5,12 @@
   <mat-form-field [appearance]="appearance" [floatLabel]="floatLabel" [hideRequiredMarker]="hideRequiredMarker"
     [class.custom-width]="hasCustomWidth" class="icon-field" fxFlexFill>
     <mat-label *ngIf="labelVisible">{{ olabel | oTranslate }}</mat-label>
-    <input matInput type="text" o-daterange-input [id]="getAttribute()" [formControlName]="getAttribute()"
-      [required]="isRequired" [placeholder]="placeHolder" [readonly]="isReadOnly" showDropdowns="true" showCancel="true"
-      [showRanges]="showRanges" (rangeClicked)="rangeClicked($event)" (datesUpdated)="datesUpdated($event)"
-      [oTouchUi]="oTouchUi" [minDate]="oMinDate" [maxDate]="oMaxDate" [separator]="separator"
-      (blur)="innerOnBlur($event)" (change)="onChangeEvent($event)">
+    <input #matInputRef matInput type="text" o-daterange-input [id]="getAttribute()" [formControlName]="getAttribute()"
+      [required]="isRequired" [placeholder]="placeHolder" [readonly]="isReadOnly || !textInputEnabled"
+      showDropdowns="true" showCancel="true" [showRanges]="showRanges" (rangeClicked)="rangeClicked($event)"
+      (datesUpdated)="datesUpdated($event)" [oTouchUi]="oTouchUi" [minDate]="oMinDate" [maxDate]="oMaxDate"
+     (blur)="innerOnBlur($event)" (change)="onChangeEvent($event)" [locale]="localeOptions"   [separator]="separator"
+      [startKey]="startKey" [endKey]="endKey" [showWeekNumbers]="showWeekNumbers">
 
     <button type="button" matSuffix mat-icon-button (click)="openPicker()" [disabled]="isReadOnly || !enabled">
       <mat-icon>today</mat-icon>
@@ -20,5 +21,16 @@
       <mat-icon svgIcon="ontimize:close"></mat-icon>
     </button>
 
+    <mat-error *ngIf="hasError('required')" text="{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}"></mat-error>
+    <mat-error *ngIf="hasError('dateRangeParse')"
+      text="{{ 'FORM_VALIDATION.DATE_PARSE' | oTranslate }} : {{ getErrorValue('dateRangeParse', 'format') }}">
+    </mat-error>
+    <mat-error *ngIf="hasError('dateRangeMin')"
+      text="{{ 'FORM_VALIDATION.DATERANGE_MIN' | oTranslate }} : {{ getErrorValue('dateRangeMin', 'dateMin') }}">
+    </mat-error>
+    <mat-error *ngIf="hasError('dateRangeMax')"
+      text="{{ 'FORM_VALIDATION.DATERANGE_MAX' | oTranslate }} : {{ getErrorValue('dateRangeMax', 'dateMax') }}">
+    </mat-error>
+    <mat-error *ngFor="let oError of getActiveOErrors()" text="{{ oError.text | oTranslate }}"></mat-error>
   </mat-form-field>
 </div>
