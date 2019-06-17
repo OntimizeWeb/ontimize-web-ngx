@@ -130,7 +130,7 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
     this._localeOptions = {
       direction: 'ltr',
       separator: ' - ',
-      weekLabel: 'W',
+      weekLabel: this.oTranslate.get('DATERANGE.W'),
       applyLabel: this.oTranslate.get('DATERANGE.APPLYLABEL'),
       cancelLabel: this.oTranslate.get('CANCEL'),
       customRangeLabel: 'Custom range',
@@ -168,34 +168,39 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
     }
   }
 
+
   public openPicker() {
     this.pickerDirective.open();
   }
 
   public onChangeEvent(event: any): void {
     let objectValue;
-    if (event instanceof Object) {
-      objectValue = event;
-    } else {
-      let value = event.currentTarget.value;
+    if (event instanceof Event) {
+      let value = (event.target as HTMLInputElement).value;
       if (value !== '') {
         objectValue = this.getDateRangeToString(value);
       }
-
-      if (objectValue[this._startKey].isValid && objectValue[this._endKey].isValid) {
-        this.setValue(objectValue, {
-          changeType: OValueChangeEvent.USER_CHANGE,
-          emitEvent: false,
-          emitModelToViewChange: false
-        });
-      }
+    } else {
+      objectValue = event;
     }
 
+    this.setValue(objectValue, {
+      changeType: OValueChangeEvent.USER_CHANGE,
+      emitEvent: false,
+      emitModelToViewChange: false
+    });
+
+  }
+
+  public setValue(val: any, options: IFormValueOptions = {}, setDirty: boolean = false){
+    super.setValue(val, options, setDirty);
+    this.updateElement();
   }
 
   public onClickClearValue(e: Event): void {
     super.onClickClearValue(e);
-    this.updateElement();
+    this.pickerDirective.value = undefined;
+    this.pickerDirective.datesUpdated.emit(undefined);
   }
 
   datesUpdated(range) {
@@ -209,10 +214,6 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
       });
   }
 
-  setValue(newValue: any, options?: IFormValueOptions) {
-    super.setValue(newValue, options);
-  }
-
   public setData(newValue: any): void {
     super.setData(newValue);
     this.pickerDirective.datesUpdated.emit(newValue);
@@ -220,22 +221,24 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
   }
 
   updateElement() {
-    let chosenLabel = this.value ? this.value.value[this.pickerDirective.startKey].format(this.oformat) +
-      this.separator + this.value.value[this.pickerDirective.endKey].format(this.oformat) : this.value;
+    let chosenLabel = (this.value && this.value.value) ? this.value.value[this.pickerDirective.startKey].format(this.oformat) +
+      this.separator + this.value.value[this.pickerDirective.endKey].format(this.oformat) : null;
     this.pickerDirective._el.nativeElement.value = chosenLabel
   }
 
   getDateRangeToString(valueToString: string) {
     let value = {};
-    let range = valueToString.split(this.separator.trim());
-    value[this._startKey] = moment(range[0], this.oformat)
-    value[this._endKey] = moment(range[1], this.oformat)
+    let range = valueToString.split(this.separator);
+    value[this._startKey] = moment(range[0].trim(), this.oformat)
+    value[this._endKey] = moment(range[1].trim(), this.oformat)
     return value;
   }
 
 
   resolveValidators(): ValidatorFn[] {
     const validators: ValidatorFn[] = super.resolveValidators();
+
+    validators.push(this.rangeDateValidator.bind(this));
     if (Util.isDefined(this._oMinDate)) {
       validators.push(this.minDateValidator.bind(this));
     }
@@ -248,12 +251,24 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
   }
 
 
-  protected minDateValidator(control: FormControl): ValidationErrors {
+  protected rangeDateValidator(control: FormControl): ValidationErrors {
+
     if ((control.value instanceof Object)
-      && control.value[this._startKey].isBefore(this._oMinDate)) {
+      && control.value[this._endKey].isSameOrBefore(control.value[this._startKey])) {
+      return {
+        dateRange: true
+      };
+    }
+    return {};
+  }
+
+  protected minDateValidator(control: FormControl): ValidationErrors {
+    const mindate = moment(this._oMinDate);
+    if ((control.value instanceof Object)
+      && control.value[this._startKey].isBefore(mindate)) {
       return {
         dateRangeMin: {
-          dateMin: this._oMinDate.format(this.oformat)
+          dateMin: mindate.format(this.oformat)
         }
       };
     }
@@ -261,11 +276,12 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
   }
 
   protected maxDateValidator(control: FormControl): ValidationErrors {
+    const maxdate = moment(this._oMaxDate);
     if ((control.value instanceof Object)
-      && control.value[this._endKey].isAfter(this._oMaxDate)) {
+      && control.value[this._endKey].isAfter(maxdate)) {
       return {
         dateRangeMax: {
-          dateMax: this._oMaxDate.format(this.oformat)
+          dateMax: maxdate.format(this.oformat)
         }
       };
     }
@@ -273,8 +289,8 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
   }
   protected parseDateValidator(control: FormControl): ValidationErrors {
     if ((control.value instanceof Object)
-      && !control.value[this._startKey].isValid
-      && !control.value[this._endKey].isValid) {
+      && ((control.value[this._startKey] && !control.value[this._startKey].isValid())
+      || (control.value[this._endKey] && !control.value[this._endKey].isValid()))) {
       return {
         dateRangeParse: {
           format: this.oformat + this._localeOptions.separator + this.oformat

@@ -386,7 +386,9 @@ export class ODaterangepickerDirective {
     if (!this._popupRef.hasAttached()) {
       this._popupComponentRef = this._popupRef.attach(this._calendarPortal);
       this.initializeListeners(this._popupComponentRef.instance);
-      this.setValueInDateComponent(this._popupComponentRef.instance, this.value);
+      if (this.value) {
+        this.setValueInDateComponent(this._popupComponentRef.instance, this.value);
+      }
 
       // Update the position once the calendar has rendered.
       this._ngZone.onStable.asObservable().pipe(take(1)).subscribe(() => {
@@ -472,7 +474,9 @@ export class ODaterangepickerDirective {
     });
 
     this.initializeListeners(this._dialogRef.componentInstance);
-    this.setValueInDateComponent(this._dialogRef.componentInstance, this.value);
+    if (this.value) {
+      this.setValueInDateComponent(this._dialogRef.componentInstance, this.value);
+    }
     this._dialogRef.afterClosed().subscribe(() => this.close());
     //this._dialogRef.componentInstance. = this;
 

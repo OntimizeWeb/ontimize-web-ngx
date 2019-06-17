@@ -7,11 +7,10 @@
     <mat-label *ngIf="labelVisible">{{ olabel | oTranslate }}</mat-label>
     <input #matInputRef matInput type="text" o-daterange-input [id]="getAttribute()" [formControlName]="getAttribute()"
       [required]="isRequired" [placeholder]="placeHolder" [readonly]="isReadOnly || !textInputEnabled"
-      showDropdowns="true" showCancel="true" [showRanges]="showRanges" (rangeClicked)="rangeClicked($event)"
+      showDropdowns="true" showCancel="true" [showRanges]="showRanges" 
       (datesUpdated)="datesUpdated($event)" [oTouchUi]="oTouchUi" [minDate]="oMinDate" [maxDate]="oMaxDate"
-     (blur)="innerOnBlur($event)" (change)="onChangeEvent($event)" [locale]="localeOptions"   [separator]="separator"
+      (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)" (change)="onChangeEvent($event)" [locale]="localeOptions"   [separator]="separator"
       [startKey]="startKey" [endKey]="endKey" [showWeekNumbers]="showWeekNumbers">
-
     <button type="button" matSuffix mat-icon-button (click)="openPicker()" [disabled]="isReadOnly || !enabled">
       <mat-icon>today</mat-icon>
     </button>
@@ -22,6 +21,7 @@
     </button>
 
     <mat-error *ngIf="hasError('required')" text="{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}"></mat-error>
+    <mat-error *ngIf="hasError('dateRange')" text="{{ 'FORM_VALIDATION.DATERANGE_INVALID' | oTranslate }}"></mat-error>
     <mat-error *ngIf="hasError('dateRangeParse')"
       text="{{ 'FORM_VALIDATION.DATE_PARSE' | oTranslate }} : {{ getErrorValue('dateRangeParse', 'format') }}">
     </mat-error>
