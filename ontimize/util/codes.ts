@@ -98,7 +98,7 @@ export class Codes {
   static formatString(format: number) {
     return (format === Codes.TWENTY_FOUR_HOUR_FORMAT ? Codes.HourFormat.TWENTY_FOUR : Codes.HourFormat.TWELVE);
   }
-  
+
 
   static isHourInputAllowed(e: KeyboardEvent): boolean {
     // Allow: backspace, delete, tab, escape, enter

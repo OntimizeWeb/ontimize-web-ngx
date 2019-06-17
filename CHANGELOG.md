@@ -1,3 +1,7 @@
+## 4.0.6
+### Features
+* **FilterExpressionUtils**: added operator `IN` and method `buildExpressionIn` ([fcc0003](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/fcc0003))
+
 ## 4.0.5 (2019-06-05)
 ### Features
 * **o-list-picker**: new `dialog-class` input ([321fd4b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/321fd4b))

@@ -7,6 +7,7 @@ import { DndModule } from '@churchs19/ng2-dnd';
 import { TranslateLoader, TranslateModule, TranslateParser } from '@ngx-translate/core';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { OBarMenuGroupModule, OBarMenuItemModule, OBarMenuModule, OBarMenuNestedModule, OBarMenuSeparatorModule, OBreadcrumbModule, OButtonModule, OButtonToggleModule, OCardMenuItemModule, OCheckboxModule, OColumnCollapsibleModule, OColumnModule, OComboModule, OContextMenuModule, OCurrencyInputModule, ODateInputModule, ODialogModule, OEmailInputModule, OErrorModule, OFileInputModule, OFilterBuilderModule, OFormContainerModule, OFormModule, OGridModule, OHourInputModule, OHTMLInputModule, OImageModule, OIntegerInputModule, OLanguageSelectorModule, OListItemAvatarModule, OListItemCardImageModule, OListItemCardModule, OListItemModule, OListItemTextModule, OListModule, OListPickerModule, OLocaleBarMenuItemModule, ONIFInputModule, OPasswordInputModule, OPercentInputModule, ORadioModule, ORealInputModule, ORowCollapsibleModule, ORowModule, OSearchInputModule, OSliderModule, OSlideToggleModule, OSnackBarModule, OTableModule, OTextareaInputModule, OTextInputModule, OTimeInputModule, OUserInfoModule, OValidatorModule } from '../components';
+import { ODateRangeInputModule } from '../components/input/date-range/o-daterange-input.component';
 import { AppConfig, APP_CONFIG } from '../config/app-config';
 import { OAppLayoutModule, OCardMenuLayoutModule, OFormLayoutManagerModule } from '../layouts';
 import { OTranslateHttpLoader, OTranslateService } from '../services';
@@ -80,7 +81,8 @@ export const INTERNAL_ONTIMIZE_MODULES_EXPORTED: any = [
   OGridModule,
   ORadioModule,
   OSlideToggleModule,
-  OSliderModule
+  OSliderModule,
+  ODateRangeInputModule
 ];
 
 // AoT requires an exported function for factories
@@ -179,7 +181,8 @@ export const INTERNAL_ONTIMIZE_MODULES: any = [
   OTimeInputModule,
   OGridModule,
   ORadioModule,
-  OSlideToggleModule
+  OSlideToggleModule,
+  ODateRangeInputModule
 ];
 
 @NgModule({
