@@ -7,7 +7,7 @@ export interface IExpression {
   /** The operator. */
   op: string;
   /** The right operand. */
-  rop?: string | IExpression;
+  rop?: string | any[] | IExpression;
 }
 
 export interface IBasicExpression {
@@ -92,6 +92,11 @@ export class FilterExpressionUtils {
    * The `MORE EQUAL` operator.
    */
   static OP_MORE_EQUAL: string = '>=';
+
+  /**
+   * The `IN` operator.
+   */
+  static OP_IN: string = 'IN';
 
   /**
    * Evaluates if the the expression provided is an instance of `IBasicExpression`..
@@ -277,6 +282,15 @@ export class FilterExpressionUtils {
       lop: key,
       op: FilterExpressionUtils.OP_MORE_EQUAL,
       rop: value
+    };
+    return expr;
+  }
+
+  static buildExpressionIn(key: string, values: any[]): IExpression {
+    let expr: IExpression = {
+      lop: key,
+      op: FilterExpressionUtils.OP_IN,
+      rop: values
     };
     return expr;
   }
