@@ -32,7 +32,7 @@ export class OTableContextMenuComponent implements OnInit {
   public isVisibleEdit: BehaviorSubject<boolean> = new BehaviorSubject(true);
   public isVisibleDetail: BehaviorSubject<boolean> = new BehaviorSubject(true);
   public isVisibleCopy: BehaviorSubject<boolean> = new BehaviorSubject(true);
-  public isVisibleSelectAll: BehaviorSubject<boolean> = new BehaviorSubject(true);
+  public isVisibleSelectAll: BehaviorSubject<boolean> = new BehaviorSubject(undefined);
   public isVisibleRefresh: BehaviorSubject<boolean> = new BehaviorSubject(true);
   public isVisibleDelete: BehaviorSubject<boolean> = new BehaviorSubject(true);
   public isVisibleFilter: BehaviorSubject<boolean> = new BehaviorSubject(true);
@@ -152,7 +152,9 @@ export class OTableContextMenuComponent implements OnInit {
     } else {
       this.defaultContextMenu.oContextMenuItems.reset(itemsParsed);
     }
-
+    if (!Util.isDefined(this.showSelectAll)) {
+      this.isVisibleSelectAll.next(this.table.selectAllCheckbox);
+    }
     this.table.registerContextMenu(this.defaultContextMenu);
   }
 
