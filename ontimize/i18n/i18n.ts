@@ -1,3 +1,4 @@
+
 export var MAP = {
 
   // English
@@ -80,7 +81,9 @@ export var MAP = {
     'FORM_VALIDATION.DATE_FILTER': 'Date is not valid for the defined filter',
     'FORM_VALIDATION.DATE_MIN': 'Date min',
     'FORM_VALIDATION.DATE_MAX': 'Date max',
-
+    'FORM_VALIDATION.DATERANGE_MIN':'Date min is not in the range',
+    'FORM_VALIDATION.DATERANGE_MAX':'Date max is not in the range',
+    'FORM_VALIDATION.DATERANGE_INVALID':'Date range invalid',
     'FORM_VALIDATION.FILE_TYPE': 'Invalid format',
     'FORM_VALIDATION.FILE_MAXSIZE': 'Maximum file size',
     'FORM_VALIDATION.FILE_MAXNUM': 'Max. files',
@@ -234,7 +237,16 @@ export var MAP = {
     'TABLE_CONTEXT_MENU.DELETE': 'Delete',
     'TABLE_CONTEXT_MENU.FILTER': 'Filter',
     'TABLE_CONTEXT_MENU.FILTER_BY': 'Filter by:',
-    'TABLE_CONTEXT_MENU.FILTER_BY_VALUE': 'Filter by this value'
+    'TABLE_CONTEXT_MENU.FILTER_BY_VALUE': 'Filter by this value',
+    'DATERANGE.today': 'Today',
+    'DATERANGE.yesterday': 'Yesterday',
+    'DATERANGE.last_7days':'Last 7 days',
+    'DATERANGE.last_30days':'Last 30 days',
+    'DATERANGE.this_month':'This month',
+    'DATERANGE.last_month':'Last month',
+    'DATERANGE.this_year':'This year',
+    'DATERANGE.APPLYLABEL':'Select dates',
+    'DATERANGE.W':'W'
   },
 
   // Spanish
@@ -318,6 +330,7 @@ export var MAP = {
     'FORM_VALIDATION.DATE_FILTER': 'Fecha no es válida para el filtro definido',
     'FORM_VALIDATION.DATE_MIN': 'Fecha mínima',
     'FORM_VALIDATION.DATE_MAX': 'Fecha máxima',
+    'FORM_VALIDATION.DATERANGE_INVALID':'Rango de fechas inválido',
 
     'FORM_VALIDATION.FILE_TYPE': 'Formato no válido',
     'FORM_VALIDATION.FILE_MAXSIZE': 'Tamaño de fichero máximo',
