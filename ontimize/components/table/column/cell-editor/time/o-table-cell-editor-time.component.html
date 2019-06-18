@@ -45,11 +45,13 @@
 
     </mat-form-field>
 
-    <ngx-material-timepicker #picker (timeSet)="onHourChange($event)" [confirmBtnTmpl]="confirmBtn">
-    </ngx-material-timepicker>
-
+    <ngx-material-timepicker #picker (timeSet)="onHourChange($event)" [confirmBtnTmpl]="confirmBtn"
+      [cancelBtnTmpl]="cancelBtn"></ngx-material-timepicker>
     <ng-template #confirmBtn>
-      <button class="timepicker-button" type="button" (click)="setTime($event)"><span>Ok</span></button>
+      <button mat-stroked-button type="button" (click)="setTime($event)"><span>{{'OK' | oTranslate}}</span></button>
+    </ng-template>
+    <ng-template #cancelBtn>
+      <button mat-stroked-button type="button" (click)="close($event)"><span>{{'CANCEL' | oTranslate}}</span></button>
     </ng-template>
   </div>
 

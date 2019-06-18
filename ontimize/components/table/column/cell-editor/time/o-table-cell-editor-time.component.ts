@@ -372,10 +372,10 @@ export class OTableCellEditorTimeComponent extends OBaseTableCellEditor implemen
     const cellDataHour = this.getCellDataHour();
     this.formControlHour.setValue(cellDataHour);
     this.formGroup.markAsTouched();
-  
+
   }
 
- 
+
 
   get formatString(): string {
     return Codes.formatString(this.oHourFormat);
@@ -428,6 +428,6 @@ export class OTableCellEditorTimeComponent extends OBaseTableCellEditor implemen
       e.preventDefault();
     }
   }
- 
+
 
 }
