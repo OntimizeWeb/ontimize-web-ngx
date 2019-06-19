@@ -83,7 +83,7 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
     this._startKey = value;
   }
 
-  protected _endKey: string = 'endDate';;
+  protected _endKey: string = 'endDate';
   get endKey() {
     return this._endKey;
   }
@@ -104,7 +104,7 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
   }
 
   get showClearButton(): boolean {
-    return this.clearButton && !this.isReadOnly && this.enabled && this.matInputRef.nativeElement.value;;
+    return this.clearButton && !this.isReadOnly && this.enabled && this.matInputRef.nativeElement.value;
   }
 
   get localeOptions() {
@@ -138,8 +138,7 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
       monthNames: moment.monthsShort(),
       firstDay: moment.localeData().firstDayOfWeek(),
       format: 'L'
-    }
-
+    };
   }
 
   ngOnInit() {
@@ -192,7 +191,7 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
 
   }
 
-  public setValue(val: any, options: IFormValueOptions = {}, setDirty: boolean = false){
+  public setValue(val: any, options: IFormValueOptions = {}, setDirty: boolean = false) {
     super.setValue(val, options, setDirty);
     this.updateElement();
   }
@@ -223,14 +222,14 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
   updateElement() {
     let chosenLabel = (this.value && this.value.value) ? this.value.value[this.pickerDirective.startKey].format(this.oformat) +
       this.separator + this.value.value[this.pickerDirective.endKey].format(this.oformat) : null;
-    this.pickerDirective._el.nativeElement.value = chosenLabel
+    this.pickerDirective._el.nativeElement.value = chosenLabel;
   }
 
   getDateRangeToString(valueToString: string) {
     let value = {};
     let range = valueToString.split(this.separator);
-    value[this._startKey] = moment(range[0].trim(), this.oformat)
-    value[this._endKey] = moment(range[1].trim(), this.oformat)
+    value[this._startKey] = moment(range[0].trim(), this.oformat);
+    value[this._endKey] = moment(range[1].trim(), this.oformat);
     return value;
   }
 
@@ -290,7 +289,7 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
   protected parseDateValidator(control: FormControl): ValidationErrors {
     if ((control.value instanceof Object)
       && ((control.value[this._startKey] && !control.value[this._startKey].isValid())
-      || (control.value[this._endKey] && !control.value[this._endKey].isValid()))) {
+        || (control.value[this._endKey] && !control.value[this._endKey].isValid()))) {
       return {
         dateRangeParse: {
           format: this.oformat + this._localeOptions.separator + this.oformat

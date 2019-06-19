@@ -37,7 +37,7 @@ export class ODaterangepickerDirective {
   @Input()
   minDate: _moment.Moment = null;
   @Input()
-  maxDate: _moment.Moment = null
+  maxDate: _moment.Moment = null;
   @Input()
   showCustomRangeLabel: boolean;
   @Input()
@@ -97,14 +97,14 @@ export class ODaterangepickerDirective {
     if (value !== null) {
       this._separator = value;
       if (this._locale) {
-        this._locale.separator = value
+        this._locale.separator = value;
       }
     }
   }
 
   @Input() set locale(value) {
     if (value !== null) {
-      this._locale = value
+      this._locale = value;
       if (this._separator) {
         this._locale.separator = this._separator;
       }
@@ -126,7 +126,7 @@ export class ODaterangepickerDirective {
     'DATERANGE.this_month': [moment().startOf('month'), moment().endOf('month')],
     'DATERANGE.last_month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
     'DATERANGE.this_year': [moment().startOf('year'), moment().endOf('year')]
-  }
+  };
 
   @Input()
   oTouchUi: Boolean = false;
@@ -137,7 +137,7 @@ export class ODaterangepickerDirective {
     } else {
       this._startKey = 'startDate';
     }
-  };
+  }
   get startKey(): string {
     return this._startKey;
   }
@@ -147,7 +147,7 @@ export class ODaterangepickerDirective {
     } else {
       this._endKey = 'endDate';
     }
-  };
+  }
   get endKey(): string {
     return this._endKey;
   }
@@ -223,7 +223,7 @@ export class ODaterangepickerDirective {
     if (this.showRanges) {
       instance.ranges = this.ranges;
       instance.keepCalendarOpeningWithRange = true;
-      instance.alwaysShowCalendars = true
+      instance.alwaysShowCalendars = true;
     }
     this.localeDiffer = this.differs.find(this.locale).create();
   }
@@ -253,14 +253,11 @@ export class ODaterangepickerDirective {
 
   open() {
     if (!this.oTouchUi) {
-      this.openAsPopup()
+      this.openAsPopup();
 
     } else {
       this.openAsDialog();
     }
-
-
-
   }
 
   ngOnDestroy() {
@@ -271,7 +268,6 @@ export class ODaterangepickerDirective {
       this._popupComponentRef = null;
     }
   }
-
 
   clear() {
     this._popupComponentRef.instance.clear();
@@ -290,10 +286,10 @@ export class ODaterangepickerDirective {
   setValueInDateComponent(instance, val) {
     if (val) {
       if (val[this._startKey]) {
-        instance.setStartDate(val[this._startKey])
+        instance.setStartDate(val[this._startKey]);
       }
       if (val[this._endKey]) {
-        instance.setEndDate(val[this._endKey])
+        instance.setEndDate(val[this._endKey]);
       }
       instance.calculateChosenLabel();
       if (instance.chosenLabel) {

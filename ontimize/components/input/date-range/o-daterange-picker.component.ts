@@ -133,7 +133,7 @@ export class DaterangepickerComponent implements OnInit {
     ngOnInit() {
         this._buildLocale();
         const daysOfWeek = [...this.locale.daysOfWeek];
-        if (this.locale.firstDay != 0) {
+        if (this.locale.firstDay !== 0) {
             var iterator = this.locale.firstDay;
 
             while (iterator > 0) {
@@ -216,17 +216,17 @@ export class DaterangepickerComponent implements OnInit {
 
     }
     renderTimePicker(side: SideEnum) {
-        if (side == SideEnum.right && !this.endDate) {
+        if (side === SideEnum.right && !this.endDate) {
             return;
         }
         let selected, minDate;
-        let maxDate = this.maxDate
+        let maxDate = this.maxDate;
         if (side === SideEnum.left) {
             selected = this.startDate.clone(),
-                minDate = this.minDate
+                minDate = this.minDate;
         } else if (side === SideEnum.right) {
             selected = this.endDate.clone(),
-                minDate = this.startDate
+                minDate = this.startDate;
         }
         const start = this.timePicker24Hour ? 0 : 1;
         const end = this.timePicker24Hour ? 23 : 12;
@@ -247,7 +247,7 @@ export class DaterangepickerComponent implements OnInit {
         for (let i = start; i <= end; i++) {
             let i_in_24 = i;
             if (!this.timePicker24Hour) {
-                i_in_24 = selected.hour() >= 12 ? (i == 12 ? 12 : i + 12) : (i == 12 ? 0 : i);
+                i_in_24 = selected.hour() >= 12 ? (i === 12 ? 12 : i + 12) : (i === 12 ? 0 : i);
             }
 
             let time = selected.clone().hour(i_in_24);
@@ -260,7 +260,7 @@ export class DaterangepickerComponent implements OnInit {
             }
 
             this.timepickerVariables[side].hours.push(i);
-            if (i_in_24 == selected.hour() && !disabled) {
+            if (i_in_24 === selected.hour() && !disabled) {
                 this.timepickerVariables[side].selectedHour = i;
             } else if (disabled) {
                 this.timepickerVariables[side].disabledHours.push(i);
@@ -268,10 +268,10 @@ export class DaterangepickerComponent implements OnInit {
         }
         // generate minutes
         for (var i = 0; i < 60; i += this.timePickerIncrement) {
-            var padded = i < 10 ? '0' + i : i;
-            var time = selected.clone().minute(i);
+            let padded = i < 10 ? '0' + i : i;
+            let time = selected.clone().minute(i);
 
-            var disabled = false;
+            let disabled = false;
             if (minDate && time.second(59).isBefore(minDate)) {
                 disabled = true;
             }
@@ -280,7 +280,7 @@ export class DaterangepickerComponent implements OnInit {
             }
             this.timepickerVariables[side].minutes.push(i);
             this.timepickerVariables[side].minutesLabel.push(padded);
-            if (selected.minute() == i && !disabled) {
+            if (selected.minute() === i && !disabled) {
                 this.timepickerVariables[side].selectedMinute = i;
             } else if (disabled) {
                 this.timepickerVariables[side].disabledMinutes.push(i);
@@ -288,11 +288,11 @@ export class DaterangepickerComponent implements OnInit {
         }
         // generate seconds
         if (this.timePickerSeconds) {
-            for (var i = 0; i < 60; i++) {
-                var padded = i < 10 ? '0' + i : i;
-                var time = selected.clone().second(i);
+            for (let i = 0; i < 60; i++) {
+                let padded = i < 10 ? '0' + i : i;
+                let time = selected.clone().second(i);
 
-                var disabled = false;
+                let disabled = false;
                 if (minDate && time.isBefore(minDate)) {
                     disabled = true;
                 }
@@ -302,7 +302,7 @@ export class DaterangepickerComponent implements OnInit {
 
                 this.timepickerVariables[side].seconds.push(i);
                 this.timepickerVariables[side].secondsLabel.push(padded);
-                if (selected.second() == i && !disabled) {
+                if (selected.second() === i && !disabled) {
                     this.timepickerVariables[side].selectedSecond = i;
                 } else if (disabled) {
                     this.timepickerVariables[side].disabledSeconds.push(i);
@@ -447,7 +447,7 @@ export class DaterangepickerComponent implements OnInit {
             };
         }
 
-        this._buildCells(calendar, side)
+        this._buildCells(calendar, side);
     }
     setStartDate(startDate) {
         if (typeof startDate === 'string') {
@@ -617,16 +617,16 @@ export class DaterangepickerComponent implements OnInit {
         if (this.rangesArray.length > 0) {
             for (const range in this.ranges) {
                 if (this.timePicker) {
-                    var format = this.timePickerSeconds ? "YYYY-MM-DD HH:mm:ss" : "YYYY-MM-DD HH:mm";
+                    var format = this.timePickerSeconds ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD HH:mm';
                     //ignore times when comparing dates if time picker seconds is not enabled
-                    if (this.startDate.format(format) == this.ranges[range][0].format(format) && this.endDate.format(format) == this.ranges[range][1].format(format)) {
+                    if (this.startDate.format(format) === this.ranges[range][0].format(format) && this.endDate.format(format) === this.ranges[range][1].format(format)) {
                         customRange = false;
                         this.chosenRange = this.rangesArray[i];
                         break;
                     }
                 } else {
                     //ignore times when comparing dates if time picker is not enabled
-                    if (this.startDate.format('YYYY-MM-DD') == this.ranges[range][0].format('YYYY-MM-DD') && this.endDate.format('YYYY-MM-DD') == this.ranges[range][1].format('YYYY-MM-DD')) {
+                    if (this.startDate.format('YYYY-MM-DD') === this.ranges[range][0].format('YYYY-MM-DD') && this.endDate.format('YYYY-MM-DD') === this.ranges[range][1].format('YYYY-MM-DD')) {
                         customRange = false;
                         this.chosenRange = this.rangesArray[i];
                         break;
@@ -715,10 +715,12 @@ export class DaterangepickerComponent implements OnInit {
 
         if (!this.timePicker24Hour) {
             var ampm = this.timepickerVariables[side].ampmModel;
-            if (ampm === 'PM' && hour < 12)
+            if (ampm === 'PM' && hour < 12) {
                 hour += 12;
-            if (ampm === 'AM' && hour === 12)
+            }
+            if (ampm === 'AM' && hour === 12) {
                 hour = 0;
+            }
         }
 
         if (side === SideEnum.left) {
@@ -729,7 +731,7 @@ export class DaterangepickerComponent implements OnInit {
             this.setStartDate(start);
             if (this.singleDatePicker) {
                 this.endDate = this.startDate.clone();
-            } else if (this.endDate && this.endDate.format('YYYY-MM-DD') == start.format('YYYY-MM-DD') && this.endDate.isBefore(start)) {
+            } else if (this.endDate && this.endDate.format('YYYY-MM-DD') === start.format('YYYY-MM-DD') && this.endDate.isBefore(start)) {
                 this.setEndDate(start.clone());
             }
         } else if (this.endDate) {
@@ -847,7 +849,7 @@ export class DaterangepickerComponent implements OnInit {
 
         if (this.endDate || date.isBefore(this.startDate, 'day')) { // picking start
             if (this.timePicker) {
-                date = this._getDateWithTime(date, SideEnum.left)
+                date = this._getDateWithTime(date, SideEnum.left);
             }
             this.endDate = null;
             this.setStartDate(date.clone());
@@ -857,7 +859,7 @@ export class DaterangepickerComponent implements OnInit {
             this.setEndDate(this.startDate.clone());
         } else { // picking end
             if (this.timePicker) {
-                date = this._getDateWithTime(date, SideEnum.right)
+                date = this._getDateWithTime(date, SideEnum.right);
             }
             this.setEndDate(date.clone());
             if (this.autoApply) {
@@ -887,7 +889,7 @@ export class DaterangepickerComponent implements OnInit {
      */
     clickRange(e, label) {
         this.chosenRange = label;
-        if (label == this.locale.customRangeLabel) {
+        if (label === this.locale.customRangeLabel) {
             this.isShown = true; // show calendars
             this.showCalInRanges = true;
         } else {
@@ -919,13 +921,12 @@ export class DaterangepickerComponent implements OnInit {
                 this.rightCalendar.month.year(dates[1].year());
                 this.updateCalendars();
                 if (this.timePicker) {
-                    this.renderTimePicker(SideEnum.left)
-                    this.renderTimePicker(SideEnum.right)
+                    this.renderTimePicker(SideEnum.left);
+                    this.renderTimePicker(SideEnum.right);
                 }
             }
-
         }
-    };
+    }
 
 
 
@@ -968,7 +969,7 @@ export class DaterangepickerComponent implements OnInit {
      * @param e event
      */
     handleInternalClick(e) {
-        e.stopPropagation()
+        e.stopPropagation();
     }
     /**
      * update the locale options
@@ -1005,19 +1006,20 @@ export class DaterangepickerComponent implements OnInit {
             if (!this.minDate) {
                 return false;
             }
-            return date.isBefore(this.minDate)
+            return date.isBefore(this.minDate);
         });
 
         const areBothAfter = rangeMarkers.every(date => {
             if (!this.maxDate) {
                 return false;
             }
-            return date.isAfter(this.maxDate)
+            return date.isAfter(this.maxDate);
         });
         return (areBothBefore || areBothAfter);
     }
+
     /**
-     * 
+     *
      * @param date the date to add time
      * @param side left or right
      */
@@ -1025,10 +1027,12 @@ export class DaterangepickerComponent implements OnInit {
         let hour = parseInt(this.timepickerVariables[side].selectedHour, 10);
         if (!this.timePicker24Hour) {
             var ampm = this.timepickerVariables[side].ampmModel;
-            if (ampm === 'PM' && hour < 12)
+            if (ampm === 'PM' && hour < 12) {
                 hour += 12;
-            if (ampm === 'AM' && hour === 12)
+            }
+            if (ampm === 'AM' && hour === 12) {
                 hour = 0;
+            }
         }
         var minute = parseInt(this.timepickerVariables[side].selectedMinute, 10);
         var second = this.timePickerSeconds ? parseInt(this.timepickerVariables[side].selectedSecond, 10) : 0;
@@ -1102,11 +1106,11 @@ export class DaterangepickerComponent implements OnInit {
                     classes.push('active', 'start-date');
                 }
                 // highlight the currently selected end date
-                if (this.endDate != null && calendar[row][col].format('YYYY-MM-DD') === this.endDate.format('YYYY-MM-DD')) {
+                if (this.endDate !== null && calendar[row][col].format('YYYY-MM-DD') === this.endDate.format('YYYY-MM-DD')) {
                     classes.push('active', 'end-date');
                 }
                 // highlight dates in-between the selected dates
-                if (this.endDate != null && calendar[row][col] > this.startDate && calendar[row][col] < this.endDate) {
+                if (this.endDate !== null && calendar[row][col] > this.startDate && calendar[row][col] < this.endDate) {
                     classes.push('in-range');
                 }
                 // apply custom classes for this date
