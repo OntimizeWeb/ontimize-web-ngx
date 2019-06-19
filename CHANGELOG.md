@@ -1,4 +1,6 @@
-## 4.0.6
+## 4.0.7
+
+## 4.0.6 (2019-06-19)
 ### Features
 * **FilterExpressionUtils**: added operator `IN` and method `buildExpressionIn` ([fcc0003](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/fcc0003))
 * New component `o-daterange-input` ([7c48c09](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7c48c09))
