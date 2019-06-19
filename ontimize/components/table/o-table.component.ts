@@ -502,11 +502,11 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     this._enabled = val;
   }
 
-  protected _selectAllCheckboxVisible;
+  protected _selectAllCheckboxVisible: boolean;
   set selectAllCheckboxVisible(value: boolean) {
     this._selectAllCheckboxVisible = BooleanConverter(this.state['select-column-visible']) || BooleanConverter(value);
     this.oTableOptions.selectColumn.visible = this._selectAllCheckboxVisible;
-    this.updateSelectionColumnState();
+    this.initializeCheckboxColumn();
   }
 
   get selectAllCheckboxVisible(): boolean {
@@ -787,28 +787,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
   }
 
-  protected initializeCheckboxColumn() {
-    if (!this.selectAllCheckbox) {
-      return;
-    }
-    // Update checkbox column visibility
-    this._oTableOptions.selectColumn.visible = !!this.state['select-column-visible'];
-
-    // Initializing row selection listener
-    if (!this.selectionChangeSubscription) {
-      this.selectionChangeSubscription = this.selection.onChange.subscribe((selectionData: SelectionChange<any>) => {
-        if (selectionData && selectionData.added.length > 0) {
-          ObservableWrapper.callEmit(this.onRowSelected, selectionData.added);
-        }
-        if (selectionData && selectionData.removed.length > 0) {
-          ObservableWrapper.callEmit(this.onRowDeselected, selectionData.removed);
-        }
-      });
-    }
-    this.updateSelectionColumnState();
-  }
-
-
   reinitialize(options: OTableInitializationOptions): void {
     if (options) {
       let clonedOpts = Object.assign({}, options);
@@ -1064,6 +1042,10 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     // Initialize paginator
     if (!this.paginator && this.paginationControls) {
       this.paginator = new OTablePaginatorComponent(this.injector, this);
+    }
+
+    if (!Util.isDefined(this.selectAllCheckboxVisible)) {
+      this._oTableOptions.selectColumn.visible = !!this.state['select-column-visible'];
     }
 
     this.initializeCheckboxColumn();
@@ -1396,7 +1378,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       if (this.selectAllCheckbox) {
         this._oTableOptions.selectColumn.visible = true;
       }
-      this.updateSelectionColumnState();
+      this.initializeCheckboxColumn();
       this.selectAll();
     }
   }
@@ -1615,7 +1597,22 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
   }
 
-  updateSelectionColumnState() {
+  initializeCheckboxColumn() {
+    // Initializing row selection listener
+    if (!this.selectionChangeSubscription && this.oTableOptions.selectColumn.visible) {
+      this.selectionChangeSubscription = this.selection.onChange.subscribe((selectionData: SelectionChange<any>) => {
+        if (selectionData && selectionData.added.length > 0) {
+          ObservableWrapper.callEmit(this.onRowSelected, selectionData.added);
+        }
+        if (selectionData && selectionData.removed.length > 0) {
+          ObservableWrapper.callEmit(this.onRowDeselected, selectionData.removed);
+        }
+      });
+    }
+    this.updateSelectionColumnState();
+  }
+
+  protected updateSelectionColumnState() {
     if (!this._oTableOptions.selectColumn.visible) {
       this.clearSelection();
     }

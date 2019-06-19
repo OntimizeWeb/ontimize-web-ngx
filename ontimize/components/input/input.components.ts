@@ -23,3 +23,4 @@ export * from './time-input/o-time-input.component';
 export * from './radio/o-radio.component';
 export * from './slide-toggle/o-slide-toggle.component';
 export * from './slider/o-slider.component';
+export * from './date-range/o-daterange-input.component';

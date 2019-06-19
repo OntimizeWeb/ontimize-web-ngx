@@ -1,3 +1,11 @@
+## 4.0.6
+### Features
+* **FilterExpressionUtils**: added operator `IN` and method `buildExpressionIn` ([fcc0003](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/fcc0003))
+* New component `o-daterange-input` ([7c48c09](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7c48c09))
+* **Modules**: Exporting '*ONTIMIZE_MODULES_WITHOUT_ANIMATIONS*' array of common modules that should be imported in app module if you *don`t need animations*.
+* Added translations in portuges ([da648cb](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/da648cb))
+* **o-hour-input, o-table-cell-editor-time**:Fix translation in text button ([d842fbd](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d842fbd)) ([17f5ca3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/17f5ca3))
+
 ## 4.0.5 (2019-06-05)
 ### Features
 * **o-list-picker**: new `dialog-class` input ([321fd4b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/321fd4b))

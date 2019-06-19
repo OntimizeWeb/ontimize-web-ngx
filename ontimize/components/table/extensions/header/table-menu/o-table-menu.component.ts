@@ -174,7 +174,7 @@ export class OTableMenuComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   get isSelectAllOptionActive(): boolean {
-    return !!this.table.state['select-column-visible'];
+    return this.table.oTableOptions.selectColumn.visible;
   }
 
   get showColumnsFilterOption(): boolean {
@@ -247,7 +247,7 @@ export class OTableMenuComponent implements OnInit, AfterViewInit, OnDestroy {
   onShowsSelects(event?: any) {
     const tableOptions = this.table.oTableOptions;
     tableOptions.selectColumn.visible = !tableOptions.selectColumn.visible;
-    this.table.updateSelectionColumnState();
+    this.table.initializeCheckboxColumn();
   }
 
   onExportButtonClicked() {

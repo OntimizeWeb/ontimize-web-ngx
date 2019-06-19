@@ -1,14 +1,14 @@
 import { ChangeDetectionStrategy, Component, ElementRef, Injector, OnInit, TemplateRef, ViewChild, ViewEncapsulation } from '@angular/core';
-import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE, MatDatepicker, MatDatepickerInput, MatDatepickerInputEvent } from '@angular/material';
 import { FormControl, ValidatorFn } from '@angular/forms';
+import { DateAdapter, MatDatepicker, MatDatepickerInput, MatDatepickerInputEvent, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material';
 import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-moment-adapter';
-
-import { Codes } from '../../../../../util/codes';
-import { IFormValueOptions } from '../../../../form/form-components';
-import { MomentService } from '../../../../../services/moment.service';
-import { OBaseTableCellEditor } from '../o-base-table-cell-editor.class';
-import { Util } from '../../../../../util/util';
 import moment from 'moment';
+import { MomentService } from '../../../../../services/moment.service';
+import { Codes } from '../../../../../util/codes';
+import { Util } from '../../../../../util/util';
+import { IFormValueOptions } from '../../../../form/form-components';
+import { OBaseTableCellEditor } from '../o-base-table-cell-editor.class';
+
 
 export const DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_TIME = [
   ...OBaseTableCellEditor.DEFAULT_INPUTS_O_TABLE_CELL_EDITOR,
@@ -364,19 +364,18 @@ export class OTableCellEditorTimeComponent extends OBaseTableCellEditor implemen
     }
     return value;
   }
-
-  set rowData(arg: any) {
-    this._rowData = arg;
+  startEdition(data: any) {
+    super.startEdition(data);
     const cellDataDate = this.getCellDataDate();
     this.formControlDate.setValue(cellDataDate);
-    //this.formControlDate.markAsTouched();
 
     const cellDataHour = this.getCellDataHour();
     this.formControlHour.setValue(cellDataHour);
-    //this.formControlHour.markAsTouched();
     this.formGroup.markAsTouched();
 
   }
+
+
 
   get formatString(): string {
     return Codes.formatString(this.oHourFormat);
@@ -429,6 +428,6 @@ export class OTableCellEditorTimeComponent extends OBaseTableCellEditor implemen
       e.preventDefault();
     }
   }
- 
+
 
 }
