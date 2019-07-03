@@ -220,10 +220,11 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
   }
 
   updateElement() {
-    let chosenLabel = (this.value && this.value.value) ? this.value.value[this.pickerDirective.startKey].format(this.oformat) +
+    let chosenLabel = (this.isObjectDataRangeNull(this.value)) ? this.value.value[this.pickerDirective.startKey].format(this.oformat) +
       this.separator + this.value.value[this.pickerDirective.endKey].format(this.oformat) : null;
     this.pickerDirective._el.nativeElement.value = chosenLabel;
   }
+
 
   getDateRangeToString(valueToString: string) {
     let value = {};
@@ -249,11 +250,15 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
     return validators;
   }
 
+  isObjectDataRangeNull(objectValue): boolean {
+    return objectValue && objectValue.value && objectValue.value[this.pickerDirective.startKey] && objectValue.value[this.pickerDirective.endKey];
+  }
+
 
   protected rangeDateValidator(control: FormControl): ValidationErrors {
 
     if ((control.value instanceof Object)
-      && control.value[this._endKey].isSameOrBefore(control.value[this._startKey])) {
+      && !this.isObjectDataRangeNull(control) && control.value[this._endKey].isSameOrBefore(control.value[this._startKey])) {
       return {
         dateRange: true
       };
@@ -264,7 +269,7 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
   protected minDateValidator(control: FormControl): ValidationErrors {
     const mindate = moment(this._oMinDate);
     if ((control.value instanceof Object)
-      && control.value[this._startKey].isBefore(mindate)) {
+      && !this.isObjectDataRangeNull(control) && control.value[this._startKey].isBefore(mindate)) {
       return {
         dateRangeMin: {
           dateMin: mindate.format(this.oformat)
@@ -277,7 +282,7 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
   protected maxDateValidator(control: FormControl): ValidationErrors {
     const maxdate = moment(this._oMaxDate);
     if ((control.value instanceof Object)
-      && control.value[this._endKey].isAfter(maxdate)) {
+      && !this.isObjectDataRangeNull(control) && control.value[this._endKey].isAfter(maxdate)) {
       return {
         dateRangeMax: {
           dateMax: maxdate.format(this.oformat)
@@ -288,6 +293,7 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
   }
   protected parseDateValidator(control: FormControl): ValidationErrors {
     if ((control.value instanceof Object)
+      && !this.isObjectDataRangeNull(control)
       && ((control.value[this._startKey] && !control.value[this._startKey].isValid())
         || (control.value[this._endKey] && !control.value[this._endKey].isValid()))) {
       return {
