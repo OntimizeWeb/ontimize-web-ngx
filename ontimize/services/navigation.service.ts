@@ -239,7 +239,7 @@ export class NavigationService implements ILocalStorageComponent {
 
   protected storeNavigation(): void {
     if (this.localStorageService) {
-      this.localStorageService.updateComponentStorage(this, false);
+      this.localStorageService.updateComponentStorage(this);
     }
   }
 
@@ -308,7 +308,7 @@ export class NavigationService implements ILocalStorageComponent {
   }
 
   protected getStoredData(): any[] {
-    let storageData: any = this.localStorageService.getComponentStorage(this, false);
+    let storageData: any = this.localStorageService.getComponentStorage(this);
     let result = [];
     Object.keys(storageData).forEach(key => result.push(storageData[key]));
     return result;

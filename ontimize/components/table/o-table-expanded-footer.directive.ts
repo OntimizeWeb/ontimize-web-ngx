@@ -1,22 +1,22 @@
+import { Directive, ElementRef, Inject, Renderer2, forwardRef } from '@angular/core';
 
-import { forwardRef, Inject, ElementRef, Renderer2, Directive } from '@angular/core';
-import { OTableComponent } from './table-components';
-import { Subscription } from 'rxjs';
-import { HostListener } from '@angular/core';
 import { Injector } from '@angular/core';
+import { OTableComponent } from './table-components';
 import { OTranslateService } from '../../services';
+import { Subscription } from 'rxjs';
 
 @Directive({
   selector: '[oTableExpandedFooter]'
 })
 export class OTableExpandedFooter {
 
-  tableFooter;
-  additionDiv;
   spanMessageNotResults;
   translateService: OTranslateService;
-
+  tableBody: any;
+  tableHeader: any;
+  tdTableWithMessage;
   protected onContentChangeSubscription: Subscription;
+
   constructor(
     @Inject(forwardRef(() => OTableComponent)) public table: OTableComponent,
     public element: ElementRef,
@@ -26,48 +26,30 @@ export class OTableExpandedFooter {
     this.translateService = this.injector.get(OTranslateService);
   }
 
-  @HostListener('window:resize', ['$event'])
-  onResize(event) {
-    this.updateHeight();
-  }
 
   ngAfterViewInit() {
     if (this.element.nativeElement.childNodes[2]) {
-      this.tableFooter = this.element.nativeElement.childNodes[2];
+      this.tableBody = this.element.nativeElement.childNodes[1];
+      this.tableHeader = this.element.nativeElement.childNodes[0];
     }
     this.registerContentChange();
   }
 
   registerContentChange() {
-    this.additionDiv = this.renderer.createElement('div');
-    this.renderer.addClass(this.additionDiv, 'o-table-no-results');
-    this.renderer.insertBefore(this.element.nativeElement, this.additionDiv, this.tableFooter);
+    /**Create a tr with a td and inside put the message and add to tbody
+     * <tr><td><span> {message}</span><td><tr>
+    */
+    let tr = this.renderer.createElement('tr');
+    this.tdTableWithMessage = this.renderer.createElement('td');
+    this.renderer.addClass(tr, 'o-table-no-results');
+    tr.appendChild(this.tdTableWithMessage);
+    this.renderer.appendChild(this.tableBody, tr);
+
     const self = this;
-
     this.onContentChangeSubscription = this.table.onContentChange.subscribe((data) => {
-      self.updateHeight();
+      self.updateMessageNotResults(data);
     });
 
-  }
-
-  updateHeight() {
-    //reset old height
-    this.renderer.setStyle(this.additionDiv, 'height', 'auto');
-
-    //calculate new height
-    const childNodes = this.element.nativeElement.childNodes;
-    let totalHeight = 0;
-    let diferentHeight = 0;
-
-    childNodes.forEach(function (element) {
-      if (['tbody', 'thead', 'tfoot'].indexOf(element.nodeName.toLowerCase()) > -1) {
-        totalHeight += element.clientHeight;
-      }
-    });
-
-    diferentHeight = this.element.nativeElement.parentNode.clientHeight - totalHeight - 1;
-    this.renderer.setStyle(this.additionDiv, 'height', diferentHeight > 0 ? diferentHeight + 'px' : 'auto');
-    this.renderer.setStyle(this.additionDiv, 'width', this.element.nativeElement.clientWidth + 'px');
   }
 
   updateMessageNotResults(data) {
@@ -76,7 +58,7 @@ export class OTableExpandedFooter {
       this.renderer.removeChild(this.element.nativeElement, this.spanMessageNotResults);
     }
 
-    //calculate new message
+    //generate new message
     if (data.length === 0) {
       let result = '';
       result = this.translateService.get('TABLE.EMPTY');
@@ -85,11 +67,21 @@ export class OTableExpandedFooter {
         result += this.translateService.get('TABLE.EMPTY_USING_FILTER', [(this.table.oTableQuickFilterComponent.value)]);
         this.spanMessageNotResults = this.renderer.createElement('span');
         let messageNotResults = this.renderer.createText(result);
+        this.tdTableWithMessage.setAttribute('colspan', this.tableHeader.querySelectorAll('th').length);
         this.renderer.appendChild(this.spanMessageNotResults, messageNotResults);
-        this.renderer.appendChild(this.additionDiv, this.spanMessageNotResults);
+        this.renderer.appendChild(this.tdTableWithMessage, this.spanMessageNotResults);
       }
     }
   }
+
+  // updateColspanTr() {
+  // TODO
+  //LAUNCH  WHEN HAVE OBSERVER OVER VISIBLE COLUMNS
+  //   if (this.spanMessageNotResults) {
+  //     this.td.setAttribute('colspan', this.tableHeader.querySelectorAll('th').length);
+  //     this.renderer.appendChild(this.td, this.spanMessageNotResults);
+  //   }
+  // }
 
   destroy() {
     if (this.onContentChangeSubscription) {

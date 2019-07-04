@@ -1,6 +1,5 @@
-import { Component, Injector, OnInit, TemplateRef, ViewChild, ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
-
 import { DialogService, OntimizeService } from '../../../../../services';
 import { dataServiceFactory } from '../../../../../services/data-service.provider';
 import { Codes, Util } from '../../../../../utils';
@@ -60,6 +59,7 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
 
   constructor(protected injector: Injector) {
     super(injector);
+    this.tableColumn.type = 'service';
     this.dialogService = injector.get(DialogService);
   }
 
@@ -75,7 +75,7 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
     this.configureService();
   }
 
-  public ngAfterViewInit() {
+  public ngAfterViewInit(): void {
     const oCol: OColumn = this.table.getOColumn(this.column);
     if (Util.isDefined(oCol.editor)) {
       const self = this;
@@ -85,13 +85,13 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
     }
   }
 
-  public ngOnDestroy() {
+  public ngOnDestroy(): void {
     if (this.editorSuscription) {
       this.editorSuscription.unsubscribe();
     }
   }
 
-  public getDescriptionValue(cellvalue: any, rowValue: any): String {
+  public getDescriptionValue(cellvalue: any, rowValue: any): string {
     if (cellvalue !== undefined && this.cellValues.indexOf(cellvalue) === -1) {
       this.queryData(cellvalue, rowValue);
       this.cellValues.push(cellvalue);
@@ -117,11 +117,9 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
     this.querySubscription = this.dataService[this.queryMethod](filter, this.colArray, this.entity).subscribe(resp => {
       if (resp.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) {
         self.responseMap[cellvalue] = resp.data[0][self.valueColumn];
-      } else {
-        console.log('error');
       }
     }, err => {
-      console.log(err);
+      console.error(err);
       if (err && typeof err !== 'object') {
         this.dialogService.alert('ERROR', err);
       } else {
@@ -147,6 +145,10 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
     } catch (e) {
       console.error(e);
     }
+  }
+
+  public getCellData(cellvalue: any, rowvalue?: any): string {
+    return this.responseMap[cellvalue];
   }
 
 }

@@ -17,7 +17,7 @@ export class CanActivateFormLayoutChildGuard implements CanActivateChild {
     try {
       this.oFormLayoutService = this.injector.get(OFormLayoutManagerService);
     } catch (e) {
-      console.log(e);
+      console.error(e);
     }
   }
 

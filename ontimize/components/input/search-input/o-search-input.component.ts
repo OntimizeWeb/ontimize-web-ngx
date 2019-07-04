@@ -5,10 +5,10 @@ import { FloatLabelType, MatCheckboxChange, MatFormFieldAppearance } from '@angu
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 import { O_INPUTS_OPTIONS, OInputsOptions } from '../../../config/app-config';
+import { InputConverter } from '../../../decorators/input-converter';
 import { OTranslateService, SnackBarService } from '../../../services';
 import { OSharedModule } from '../../../shared';
 import { Util } from '../../../utils';
-import { InputConverter } from '../../../decorators/input-converter';
 
 export const DEFAULT_INPUTS_O_SEARCH_INPUT = [
   'placeholder',
@@ -47,56 +47,20 @@ export class OSearchInputComponent implements OnInit {
   public static DEFAULT_INPUTS_O_SEARCH_INPUT = DEFAULT_INPUTS_O_SEARCH_INPUT;
   public static DEFAULT_OUTPUTS_O_SEARCH_INPUT = DEFAULT_OUTPUTS_O_SEARCH_INPUT;
 
-  /* Inputs */
+  public onSearch: EventEmitter<any> = new EventEmitter<any>();
+
+  public colArray: ColumnObject[] = [];
   public placeholder: string = 'SEARCH';
   public width: string;
-  protected _floatLabel: FloatLabelType;
-  protected _appearance: MatFormFieldAppearance;
   public columns: string;
-  @InputConverter()
-  protected _filterCaseSensitive: boolean = false;
   @InputConverter()
   public showCaseSensitiveCheckbox: boolean = false;
   @InputConverter()
   public showMenu: boolean = true;
-
-  /* parsed inputs variables */
-  get floatLabel(): FloatLabelType {
-    return this._floatLabel;
-  }
-
-  set floatLabel(value: FloatLabelType) {
-    const values = ['always', 'never', 'auto'];
-    if (values.indexOf(value) === -1) {
-      value = 'auto';
-    }
-    this._floatLabel = value;
-  }
-
-  protected colArray: Array<ColumnObject> = [];
-
-  get appearance(): MatFormFieldAppearance {
-    return this._appearance;
-  }
-
-  set appearance(value: MatFormFieldAppearance) {
-    const values = ['legacy', 'standard', 'fill', 'outline'];
-    if (values.indexOf(value) === -1) {
-      value = undefined;
-    }
-    this._appearance = value;
-  }
-
-  get filterCaseSensitive(): boolean {
-    return this._filterCaseSensitive;
-  }
-
-  set filterCaseSensitive(value: boolean) {
-    this._filterCaseSensitive = value;
-  }
-  /* end of parsed inputs variables */
-
-  public onSearch: EventEmitter<any> = new EventEmitter<any>();
+  @InputConverter()
+  protected _filterCaseSensitive: boolean = false;
+  protected _floatLabel: FloatLabelType;
+  protected _appearance: MatFormFieldAppearance;
 
   protected formGroup: FormGroup;
   protected term: FormControl;
@@ -142,6 +106,38 @@ export class OSearchInputComponent implements OnInit {
     Util.parseOInputsOptions(this.elRef, this.oInputsOptions);
   }
 
+  get floatLabel(): FloatLabelType {
+    return this._floatLabel;
+  }
+
+  set floatLabel(value: FloatLabelType) {
+    const values = ['always', 'never', 'auto'];
+    if (values.indexOf(value) === -1) {
+      value = 'auto';
+    }
+    this._floatLabel = value;
+  }
+
+  get appearance(): MatFormFieldAppearance {
+    return this._appearance;
+  }
+
+  set appearance(value: MatFormFieldAppearance) {
+    const values = ['legacy', 'standard', 'fill', 'outline'];
+    if (values.indexOf(value) === -1) {
+      value = undefined;
+    }
+    this._appearance = value;
+  }
+
+  get filterCaseSensitive(): boolean {
+    return this._filterCaseSensitive;
+  }
+
+  set filterCaseSensitive(value: boolean) {
+    this._filterCaseSensitive = value;
+  }
+
   public getFormGroup(): FormGroup {
     return this.formGroup;
   }
@@ -158,17 +154,6 @@ export class OSearchInputComponent implements OnInit {
     return this.term;
   }
 
-  get placeHolder(): string {
-    if (this.translateService) {
-      return this.translateService.get(this.placeholder);
-    }
-    return this.placeholder;
-  }
-
-  set placeHolder(value: string) {
-    window.setTimeout(() => this.placeholder = value, 0);
-  }
-
   get hasCustomWidth(): boolean {
     return this.width !== undefined;
   }
@@ -177,23 +162,23 @@ export class OSearchInputComponent implements OnInit {
     return this.showMenu && this.colArray.length > 0;
   }
 
-  isChecked(column: ColumnObject): boolean {
+  public isChecked(column: ColumnObject): boolean {
     return column.checked;
   }
 
-  onCheckboxChange(column: ColumnObject, event: MatCheckboxChange) {
+  public onCheckboxChange(column: ColumnObject, event: MatCheckboxChange): void {
     column.checked = event.checked;
     this.triggerOnSearch();
   }
 
-  onSelectAllChange(event: MatCheckboxChange) {
+  public onSelectAllChange(event: MatCheckboxChange): void {
     this.colArray.forEach((col: ColumnObject) => {
       col.checked = event.checked;
     });
     this.triggerOnSearch();
   }
 
-  areAllColumnsChecked(): boolean {
+  public areAllColumnsChecked(): boolean {
     let result: boolean = true;
     this.colArray.forEach((col: ColumnObject) => {
       result = result && col.checked;
@@ -201,22 +186,16 @@ export class OSearchInputComponent implements OnInit {
     return result;
   }
 
-  onFilterCaseSensitiveChange(event: MatCheckboxChange) {
+  public onFilterCaseSensitiveChange(event: MatCheckboxChange): void {
     this.filterCaseSensitive = event.checked;
     this.triggerOnSearch();
   }
 
-  getActiveColumns(): string[] {
-    let result = [];
-    this.colArray.forEach((col: ColumnObject) => {
-      if (col.checked) {
-        result.push(col.column);
-      }
-    });
-    return result;
+  public getActiveColumns(): string[] {
+    return this.colArray.filter(col => col.checked).map(col => col.column);
   }
 
-  setActiveColumns(arg: string[]) {
+  public setActiveColumns(arg: string[]): void {
     this.colArray.forEach((c: ColumnObject) => {
       c.checked = arg.indexOf(c.column) !== -1;
     });
@@ -230,7 +209,7 @@ export class OSearchInputComponent implements OnInit {
     return true;
   }
 
-  protected triggerOnSearch() {
+  protected triggerOnSearch(): void {
     const term = this.term.value;
     if (this.checkActiveColumns() && Util.isDefined(term) && term.length > 0) {
       this.onSearch.emit(term);

@@ -1,5 +1,6 @@
 export * from './checkbox/o-checkbox.component';
 export * from './combo/o-combo.component';
+export * from './combo/combo-search/o-combo-search.component';
 export * from './currency-input/o-currency-input.component';
 export * from './date-input/o-date-input.component';
 export * from './email-input/o-email-input.component';
@@ -22,3 +23,4 @@ export * from './time-input/o-time-input.component';
 export * from './radio/o-radio.component';
 export * from './slide-toggle/o-slide-toggle.component';
 export * from './slider/o-slider.component';
+export * from './date-range/o-daterange-input.component';

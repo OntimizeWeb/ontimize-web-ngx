@@ -1,18 +1,19 @@
 import { AfterViewInit, ContentChildren, ElementRef, EventEmitter, HostBinding, Injector, OnChanges, OnDestroy, OnInit, QueryList, SimpleChange, ViewChildren } from '@angular/core';
-import { FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
-import { FloatLabelType, MatFormFieldAppearance, MatSuffix } from '@angular/material';
-import { Subscription } from 'rxjs';
-
-import { O_INPUTS_OPTIONS, OInputsOptions } from '../config/app-config';
 import { BooleanConverter, InputConverter } from '../decorators';
-import { OPermissions, PermissionsService } from '../services';
-import { O_MAT_ERROR_OPTIONS, OMatErrorComponent, OMatErrorOptions } from '../shared/material/o-mat-error/o-mat-error';
-import { PermissionsUtils } from '../util/permissions';
 import { Codes, SQLTypes, Util } from '../utils';
-import { OFormComponent } from './form/o-form.component';
-import { IFormValueOptions, OFormValue } from './form/OFormValue';
-import { OValidatorComponent } from './input/validation/o-validator.component';
+import { FloatLabelType, MatFormFieldAppearance, MatSuffix } from '@angular/material';
+import { FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { IComponent, OBaseComponent } from './o-component.class';
+import { IFormValueOptions, OFormValue } from './form/OFormValue';
+import { OInputsOptions, O_INPUTS_OPTIONS } from '../config/app-config';
+import { OMatErrorComponent, OMatErrorOptions, O_MAT_ERROR_OPTIONS } from '../shared/material/o-mat-error/o-mat-error';
+import { OPermissions, PermissionsService } from '../services';
+
+import { OFormComponent } from './form/o-form.component';
+import { OFormControl } from './input/o-form-control.class';
+import { OValidatorComponent } from './input/validation/o-validator.component';
+import { PermissionsUtils } from '../util/permissions';
+import { Subscription } from 'rxjs';
 
 export interface IMultipleSelection extends IComponent {
   getSelectedItems(): any[];
@@ -131,7 +132,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   protected defaultValue: any = void 0;
   protected _SQLType: number = SQLTypes.OTHER;
   protected _defaultSQLTypeKey: string = 'OTHER';
-  protected _fControl: FormControl;
+  protected _fControl: OFormControl;
   protected _fControlSubscription: Subscription;
   protected _fGroup: FormGroup;
   protected elRef: ElementRef;
@@ -339,16 +340,18 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     return this.defaultValue;
   }
 
-  public setValue(val: any, options?: IFormValueOptions, setDirty: boolean = false): void {
+  public setValue(val: any, options: IFormValueOptions = {}, setDirty: boolean = false): void {
     if (!PermissionsUtils.checkEnabledPermission(this.permissions)) {
       return;
     }
     if (this.oldValue !== val) {
       const newValue = val;
+      const previousValue = this.oldValue;
       this.setFormValue(val, options, setDirty);
-      const changeType: number = (options && options.hasOwnProperty('changeType')) ? options.changeType : OValueChangeEvent.PROGRAMMATIC_CHANGE;
-      this.emitOnValueChange(changeType, newValue, this.oldValue);
-      this.oldValue = val;
+      if (options && options.emitModelToViewValueChange !== false) {
+        const changeType: number = (options && options.hasOwnProperty('changeType')) ? options.changeType : OValueChangeEvent.PROGRAMMATIC_CHANGE;
+        this.emitOnValueChange(changeType, newValue, previousValue);
+      }
     }
   }
 
@@ -403,6 +406,15 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     }
   }
 
+  /**
+   * This method should overwritten in the child component when it have addicional form control or other oFormDataComponent
+   */
+  public createFormControl(cfg?, validators?): OFormControl {
+    return new OFormControl(cfg, {
+      validators: validators
+    }, null);
+  }
+
   public getControl(): FormControl {
     if (!this._fControl) {
       const validators: ValidatorFn[] = this.resolveValidators();
@@ -410,9 +422,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
         value: this.value ? this.value.value : undefined,
         disabled: !this.enabled
       };
-      this._fControl = new FormControl(cfg, {
-        validators: validators
-      });
+      this._fControl = this.createFormControl(cfg, validators);
       this.registerOnFormControlChange();
     }
     return this._fControl;
@@ -507,6 +517,9 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   }
 
   get floatLabel(): FloatLabelType {
+    if (!this.labelVisible) {
+      this.floatLabel = 'never';
+    }
     return this._floatLabel;
   }
 
@@ -554,14 +567,16 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     this._fControl.clearValidators();
     this.errorsData = [];
     const validators = this.resolveValidators();
-    this.validatorChildren.forEach((oValidator: OValidatorComponent) => {
-      const validatorFunction: ValidatorFn = oValidator.getValidatorFn();
-      if (validatorFunction) {
-        validators.push(validatorFunction);
-      }
-      const errorsData: IErrorData[] = oValidator.getErrorsData();
-      self.errorsData.push(...errorsData);
-    });
+    if (this.validatorChildren) {
+      this.validatorChildren.forEach((oValidator: OValidatorComponent) => {
+        const validatorFunction: ValidatorFn = oValidator.getValidatorFn();
+        if (validatorFunction) {
+          validators.push(validatorFunction);
+        }
+        const errorsData: IErrorData[] = oValidator.getErrorsData();
+        self.errorsData.push(...errorsData);
+      });
+    }
     this._fControl.setValidators(validators);
   }
 

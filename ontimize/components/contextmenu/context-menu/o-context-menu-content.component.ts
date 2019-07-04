@@ -1,11 +1,11 @@
-import { AfterViewInit, Component, ContentChildren, EventEmitter, Injector, OnInit, QueryList, ViewEncapsulation, ViewChild, HostListener } from '@angular/core';
 import { OverlayRef } from '@angular/cdk/overlay';
+import { AfterViewInit, Component, ContentChildren, EventEmitter, HostListener, Injector, OnInit, QueryList, ViewChild } from '@angular/core';
 import { MatMenuTrigger } from '@angular/material';
-import { OComponentMenuItems } from '../o-content-menu.class';
-import { OContextMenuService } from '../o-context-menu.service';
-import { OContextMenuItemComponent } from '../o-context-menu-components';
-import { OWrapperContentMenuComponent } from './o-wrapper-content-menu/o-wrapper-content-menu.component';
 
+import { OComponentMenuItems } from '../o-content-menu.class';
+import { OContextMenuItemComponent } from '../o-context-menu-components';
+import { OContextMenuService } from '../o-context-menu.service';
+import { OWrapperContentMenuComponent } from './o-wrapper-content-menu/o-wrapper-content-menu.component';
 
 export const DEFAULT_CONTEXT_MENU_CONTENT_INPUTS = [
   'menuItems',
@@ -25,7 +25,6 @@ export const DEFAULT_CONTEXT_MENU_CONTENT_OUTPUTS = [
   templateUrl: 'o-context-menu-content.component.html',
   inputs: DEFAULT_CONTEXT_MENU_CONTENT_INPUTS,
   outputs: DEFAULT_CONTEXT_MENU_CONTENT_OUTPUTS,
-  encapsulation: ViewEncapsulation.None,
   host: {
     '[class.o-context-menu-content]': 'true'
   }
@@ -35,12 +34,15 @@ export class OContextMenuContentComponent implements AfterViewInit, OnInit {
   public menuItems: any[] = [];
   public overlay: OverlayRef;
   public data: any;
-  public menuClass;
+  public menuClass: string;
   public execute: EventEmitter<{ event: Event, data: any, menuItem: OContextMenuItemComponent }> = new EventEmitter();
 
-  @ContentChildren(OComponentMenuItems) public oContextMenuItems: QueryList<OComponentMenuItems>;
-  @ViewChild(MatMenuTrigger) trigger: MatMenuTrigger;
-  @ViewChild(OWrapperContentMenuComponent) menu: OWrapperContentMenuComponent;
+  @ContentChildren(OComponentMenuItems)
+  public oContextMenuItems: QueryList<OComponentMenuItems>;
+  @ViewChild(MatMenuTrigger)
+  public trigger: MatMenuTrigger;
+  @ViewChild(OWrapperContentMenuComponent)
+  public menu: OWrapperContentMenuComponent;
 
   constructor(
     protected injector: Injector,
@@ -48,28 +50,23 @@ export class OContextMenuContentComponent implements AfterViewInit, OnInit {
   ) { }
 
   @HostListener('document:click')
-  click() {
+  public click(): void {
     this.close();
   }
 
-  ngAfterViewInit() {
-    this.trigger.openMenu();
-    //this code is to disable the backdrop of the menu
-    let elem = Array.from(document.getElementsByClassName('cdk-overlay-backdrop') as HTMLCollectionOf<HTMLElement>);
-    elem.forEach(element => {
-      element.style.pointerEvents = 'none';
-    });
-  }
-
-  ngOnInit() {
+  public ngOnInit(): void {
     this.initialize();
   }
 
-  initialize() {
+  public ngAfterViewInit(): void {
+    this.trigger.openMenu();
+  }
+
+  public initialize(): void {
     this.setData(this.menuItems);
   }
 
-  setData(items) {
+  public setData(items): void {
     items.forEach(menuItem => {
       if (this.data) {
         menuItem.data = this.data;
@@ -80,14 +77,13 @@ export class OContextMenuContentComponent implements AfterViewInit, OnInit {
     });
   }
 
-  onMenuClosed(event) {
+  public onMenuClosed(e: Event): void {
+    this.close();
+  }
+
+  public close(): void {
+    this.trigger.closeMenu();
     this.menuService.closeContextMenu.next();
   }
 
-  close() {
-    this.trigger.closeMenu();
-  }
-
 }
-
-

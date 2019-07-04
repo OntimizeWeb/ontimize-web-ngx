@@ -10,7 +10,7 @@
     overflow-y: auto;
     flex-direction: column;
   }
-  
+
 
   form {
     &.inner-form {
@@ -20,7 +20,7 @@
       max-height: 100%;
 
       .progress-bar-container {
-        padding: 8px 8px 0;
+        padding: 8px;
       }
     }
 

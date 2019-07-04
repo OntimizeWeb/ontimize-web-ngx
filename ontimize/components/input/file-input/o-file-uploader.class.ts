@@ -103,7 +103,7 @@ export class OFileUploader {
         } else if (resp.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) {
           self._onSuccessItem(item, resp);
         } else {
-          console.log('error');
+          console.error('uploadItem error');
           self._onErrorItem(item, 'Unknow error');
         }
       },
@@ -140,7 +140,7 @@ export class OFileUploader {
       } else if (resp.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) {
         self._onSuccessAll(resp);
       } else {
-        console.log('error');
+        console.error('uploadItems error');
       }
     },
       err => self._onErrorAll(err),

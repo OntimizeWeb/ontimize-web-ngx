@@ -1,13 +1,15 @@
 <ng-template #templateref let-cellvalue="cellvalue" let-rowvalue="rowvalue">
   <div [formGroup]="formGroup">
-    <mat-form-field floatLabel="never" appearance="standard">
+    <mat-form-field floatLabel="never">
 
-      <input #input matInput type="number" [placeholder]="getPlaceholder()" [formControl]="formControl" [required]="orequired" [min]="min"
-        [max]="max" [step]="step">
+      <input #input matInput type="number" [placeholder]="getPlaceholder()" [formControl]="formControl"
+        [required]="orequired" [min]="min" [max]="max" [step]="step">
 
       <mat-error *ngIf="hasError('required')">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</mat-error>
-      <mat-error *ngIf="hasError('min')">{{ 'FORM_VALIDATION.MIN_VALUE' | oTranslate }}: {{ getErrorValue('min', 'requiredMin') }}</mat-error>
-      <mat-error *ngIf="hasError('max')">{{ 'FORM_VALIDATION.MAX_VALUE' | oTranslate }}: {{ getErrorValue('max', 'requiredMax') }}</mat-error>
+      <mat-error *ngIf="hasError('min')">{{ 'FORM_VALIDATION.MIN_VALUE' | oTranslate }}:
+        {{ getErrorValue('min', 'requiredMin') }}</mat-error>
+      <mat-error *ngIf="hasError('max')">{{ 'FORM_VALIDATION.MAX_VALUE' | oTranslate }}:
+        {{ getErrorValue('max', 'requiredMax') }}</mat-error>
 
     </mat-form-field>
   </div>

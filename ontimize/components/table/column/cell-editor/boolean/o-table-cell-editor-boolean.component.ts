@@ -1,8 +1,9 @@
-import { Component, Injector, ViewChild, TemplateRef, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/core';
-import { MatCheckboxChange } from '@angular/material';
-import { Util } from '../../../../../utils';
+import { ChangeDetectionStrategy, Component, Injector, TemplateRef, ViewChild, ViewEncapsulation } from '@angular/core';
+
 import { InputConverter } from '../../../../../decorators';
+import { MatCheckboxChange } from '@angular/material';
 import { OBaseTableCellEditor } from '../o-base-table-cell-editor.class';
+import { Util } from '../../../../../utils';
 
 export const DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_BOOLEAN = [
   ...OBaseTableCellEditor.DEFAULT_INPUTS_O_TABLE_CELL_EDITOR,
@@ -45,9 +46,11 @@ export class OTableCellEditorBooleanComponent extends OBaseTableCellEditor {
 
   @InputConverter()
   indeterminateOnNull: boolean = false;
-  trueValue: any = true;
-  falseValue: any = false;
+  trueValue: any;
+  falseValue: any;
+
   booleanType: string = 'boolean';
+
   @InputConverter()
   autoCommit: boolean = true;
 
@@ -104,6 +107,9 @@ export class OTableCellEditorBooleanComponent extends OBaseTableCellEditor {
         const isTrue = (self.formControl.value === self.trueValue);
         self.formControl.setValue(isTrue ? self.falseValue : self.trueValue, { emitEvent: false });
         self.commitEdition();
+      } else {
+        const isTrue = (self.formControl.value === self.trueValue);
+        self.formControl.setValue(isTrue ? self.trueValue : self.falseValue, { emitEvent: false });
       }
     }, 0);
   }
@@ -137,7 +143,7 @@ export class OTableCellEditorBooleanComponent extends OBaseTableCellEditor {
         result = this.translateService.get(value);
         break;
       case 'number':
-        result = value;
+        result = parseInt(value);
         break;
       default:
         break;

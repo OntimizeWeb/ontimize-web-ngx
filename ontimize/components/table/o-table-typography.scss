@@ -45,7 +45,7 @@
 
   .o-table .o-table-container {
     .mat-table.#{$size} {
-      tr.mat-header-row {
+      tr.mat-header-row:not(.o-table-insertable) {
         height: $header-height;
 
         .mat-header-cell {
@@ -57,6 +57,17 @@
         height: $row-height;
 
         .mat-cell {
+          .mat-form-field {
+            font-size: $row-font-size;
+          }
+          font-size: $row-font-size;
+        }
+      }
+
+      tr.o-table-insertable.mat-header-row{
+        height: $row-height;
+
+        .mat-table-sticky {
           .mat-form-field {
             font-size: $row-font-size;
           }

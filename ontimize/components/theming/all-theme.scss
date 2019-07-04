@@ -15,11 +15,11 @@
 @import '../app-sidenav/o-app-sidenav-theme.scss';
 @import '../../layouts/app-layout/o-app-layout-theme.scss';
 @import '../card-menu-item/o-card-menu-item.component.theme.scss';
-@import '../table/extensions/header/table-insertable-row/o-table-editable-row/o-table-editable-row.theme.scss';
 @import '../input/hour-input/o-hour-input-theme.scss';
 @import '../../layouts/form-layout/tabgroup/o-form-layout-tabgroup-theme.scss';
 @import '../bar-menu/o-bar-menu-theme.scss';
 @import '../grid/o-grid.theme.scss';
+@import '../input/date-range/o-daterange-input-theme.scss';
 
 // Create a theme.
 @mixin o-material-theme($theme, $typography: null) {
@@ -40,10 +40,10 @@
   @include o-app-sidenav-theme($theme);
   @include o-app-layout-theme($theme);
   @include o-card-menu-item-theme($theme);
-  @include o-table-editable-row-theme($theme);
   @include o-hour-input-theme($theme);
   @include o-form-layout-tabgroup-theme($theme);
   @include o-bar-menu-theme($theme);
   @include o-grid-theme($theme);
   @include o-layout-padding-margin();
+  @include o-daterange-input-theme($theme);
 }

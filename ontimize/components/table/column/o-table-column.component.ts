@@ -1,32 +1,33 @@
-import { AfterViewInit, Component, ComponentFactory, ComponentFactoryResolver, EventEmitter, forwardRef, Inject, Injector, OnDestroy, OnInit, ViewChild, ViewContainerRef, ChangeDetectionStrategy } from '@angular/core';
-import { Subscription } from 'rxjs';
-
-import { Util } from '../../../util/util';
-import { Codes } from '../../../util/codes';
-import { SQLTypes } from '../../../util/sqltypes';
-import { InputConverter } from '../../../decorators';
-import { OTableComponent } from '../o-table.component';
+import { AfterViewInit, ChangeDetectionStrategy, Component, ComponentFactory, ComponentFactoryResolver, EventEmitter, Inject, Injector, OnDestroy, OnInit, ViewChild, ViewContainerRef, forwardRef } from '@angular/core';
 import { DateFilterFunction, ODateValueType } from '../../../components/input/date-input/o-date-input.component';
-
 import {
-  OTableCellRendererDateComponent,
-  OTableCellRendererCurrencyComponent,
-  OTableCellRendererImageComponent,
-  OTableCellRendererIntegerComponent,
-  OTableCellRendererRealComponent,
-  OTableCellRendererBooleanComponent,
-  OTableCellRendererPercentageComponent,
-  OTableCellRendererActionComponent,
-  OTableCellRendererServiceComponent
-} from './cell-renderer/cell-renderer';
-
-import {
-  OTableCellEditorTextComponent,
   OTableCellEditorBooleanComponent,
   OTableCellEditorDateComponent,
   OTableCellEditorIntegerComponent,
-  OTableCellEditorRealComponent
+  OTableCellEditorRealComponent,
+  OTableCellEditorTextComponent,
+  OTableCellEditorTimeComponent
 } from './cell-editor/cell-editor';
+import {
+  OTableCellRendererActionComponent,
+  OTableCellRendererBooleanComponent,
+  OTableCellRendererCurrencyComponent,
+  OTableCellRendererDateComponent,
+  OTableCellRendererImageComponent,
+  OTableCellRendererIntegerComponent,
+  OTableCellRendererPercentageComponent,
+  OTableCellRendererRealComponent,
+  OTableCellRendererServiceComponent,
+  OTableCellRendererTimeComponent
+} from './cell-renderer/cell-renderer';
+
+import { Codes } from '../../../util/codes';
+import { InputConverter } from '../../../decorators';
+import { OTableCellRendererTranslateComponent } from './cell-renderer/translate/o-table-cell-renderer-translate.component';
+import { OTableComponent } from '../o-table.component';
+import { SQLTypes } from '../../../util/sqltypes';
+import { Subscription } from 'rxjs';
+import { Util } from '../../../util/util';
 
 export interface OColumnTooltip {
   value?: string;
@@ -89,11 +90,14 @@ export const DEFAULT_INPUTS_O_TABLE_COLUMN = [
   ...OTableCellRendererImageComponent.DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_IMAGE,
   ...OTableCellRendererActionComponent.DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_ACTION,
   ...OTableCellRendererServiceComponent.DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_SERVICE,
+  ...OTableCellRendererTranslateComponent.DEFAULT_IPUTS_O_TABLE_CELL_RENDERER_TRANSLATE,
 
   ...OTableCellEditorBooleanComponent.DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_BOOLEAN,
   ...OTableCellEditorDateComponent.DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_DATE,
   ...OTableCellEditorRealComponent.DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_REAL, // includes Integer
-  ...OTableCellEditorTextComponent.DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_TEXT
+  ...OTableCellEditorTextComponent.DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_TEXT,
+  ...OTableCellEditorTimeComponent.DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_TIME,
+
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE_COLUMN = [
@@ -116,25 +120,28 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
   public static DEFAULT_OUTPUTS_O_TABLE_COLUMN = DEFAULT_OUTPUTS_O_TABLE_COLUMN;
 
   protected static renderersMapping = {
-    'action': OTableCellRendererActionComponent,
-    'boolean': OTableCellRendererBooleanComponent,
-    'currency': OTableCellRendererCurrencyComponent,
-    'date': OTableCellRendererDateComponent,
-    'image': OTableCellRendererImageComponent,
-    'integer': OTableCellRendererIntegerComponent,
-    'percentage': OTableCellRendererPercentageComponent,
-    'real': OTableCellRendererRealComponent,
-    'service': OTableCellRendererServiceComponent
+    action: OTableCellRendererActionComponent,
+    boolean: OTableCellRendererBooleanComponent,
+    currency: OTableCellRendererCurrencyComponent,
+    date: OTableCellRendererDateComponent,
+    image: OTableCellRendererImageComponent,
+    integer: OTableCellRendererIntegerComponent,
+    percentage: OTableCellRendererPercentageComponent,
+    real: OTableCellRendererRealComponent,
+    service: OTableCellRendererServiceComponent,
+    translate: OTableCellRendererTranslateComponent,
+    time: OTableCellRendererTimeComponent
   };
 
   protected static editorsMapping = {
-    'boolean': OTableCellEditorBooleanComponent,
-    'date': OTableCellEditorDateComponent,
-    'integer': OTableCellEditorIntegerComponent,
-    'real': OTableCellEditorRealComponent,
-    'percentage': OTableCellEditorRealComponent,
-    'currency': OTableCellEditorRealComponent,
-    'text': OTableCellEditorTextComponent
+    boolean: OTableCellEditorBooleanComponent,
+    date: OTableCellEditorDateComponent,
+    integer: OTableCellEditorIntegerComponent,
+    real: OTableCellEditorRealComponent,
+    percentage: OTableCellEditorRealComponent,
+    currency: OTableCellEditorRealComponent,
+    text: OTableCellEditorTextComponent,
+    time: OTableCellEditorTimeComponent
   };
 
   public renderer: any;
@@ -160,6 +167,7 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
   public tooltip: boolean = false;
   tooltipValue: string;
   tooltipFunction: Function;
+
   set multiline(val: boolean) {
     val = Util.parseBoolean(String(val));
     this._multiline = val;
@@ -207,6 +215,12 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
   protected parentKeys: string;
   protected queryMethod: string = Codes.QUERY_METHOD;
   protected serviceType: string;
+
+  /* input renderer translate */
+  protected translateArgsFn: (rowData: any) => any[];
+  /**input time */
+  oDateFormat = 'L';
+  oHourFormat = 24;
 
   /* input editor */
   @InputConverter()
@@ -294,14 +308,14 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
     return Codes.AVAILABLE_COLUMN_TITLE_ALIGNS.indexOf(align) !== -1 ? align : undefined;
   }
 
-  protected createRenderer() {
+  protected createRenderer(): void {
     if (!Util.isDefined(this.renderer) && Util.isDefined(this.type)) {
       const componentRef = OTableColumnComponent.renderersMapping[this.type];
       if (componentRef !== undefined) {
-        let factory: ComponentFactory<any> = this.resolver.resolveComponentFactory(componentRef);
+        const factory: ComponentFactory<any> = this.resolver.resolveComponentFactory(componentRef);
         if (factory) {
-          let ref = this.container.createComponent(factory);
-          let newRenderer = ref.instance;
+          const ref = this.container.createComponent(factory);
+          const newRenderer = ref.instance;
           switch (this.type) {
             case 'currency':
               newRenderer.currencySymbol = this.currencySymbol;
@@ -313,6 +327,9 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
               newRenderer.thousandSeparator = this.thousandSeparator;
               break;
             case 'date':
+              newRenderer.format = this.format;
+              break;
+            case 'time':
               newRenderer.format = this.format;
               break;
             case 'integer':
@@ -355,6 +372,10 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
               newRenderer.parentKeys = this.parentKeys;
               newRenderer.queryMethod = this.queryMethod;
               newRenderer.serviceType = this.serviceType;
+              break;
+            case 'translate':
+              newRenderer.translateArgsFn = this.translateArgsFn;
+              break;
           }
           this.registerRenderer(newRenderer);
         }
@@ -385,17 +406,31 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
             editor.filterDate = propsOrigin.filterDate;
             editor.dateValueType = propsOrigin.dateValueType;
             break;
+          case 'time':
+            editor.oDateFormat = propsOrigin.oDateFormat;
+            editor.oHourFormat = propsOrigin.oHourFormat;
+            editor.oDateLocale = propsOrigin.oDateLocale;
+            editor.oMinDate = propsOrigin.oMinDate;
+            editor.oMaxDate = propsOrigin.oMaxDate;
+
+            editor.oTouchUi = propsOrigin.oTouchUi;
+            editor.oDateStartAt = propsOrigin.oDateStartAt;
+            editor.oDateTextInputEnabled = propsOrigin.oDateTextInputEnabled;
+
+            editor.oHourMin = propsOrigin.oHourMin;
+            editor.oHourMax = propsOrigin.oHourMax;
+            editor.oHourTextInputEnabled = propsOrigin.oHourTextInputEnabled;
+            editor.oHourPlaceholder = propsOrigin.oHourPlaceholder;
+            editor.oDatePlaceholder = propsOrigin.oDatePlaceholder;
+            break;
           case 'boolean':
+            editor.booleanType = propsOrigin.booleanType;
             editor.indeterminateOnNull = propsOrigin.indeterminateOnNull;
             editor.autoCommit = propsOrigin.autoCommit;
             editor.trueValue = propsOrigin.trueValue;
             editor.falseValue = propsOrigin.falseValue;
-            editor.booleanType = propsOrigin.booleanType;
             break;
           case 'integer':
-            editor.min = propsOrigin.min;
-            editor.max = propsOrigin.max;
-            editor.step = Util.isDefined(propsOrigin.step) ? propsOrigin.step : editor.step;
           case 'percentage':
           case 'currency':
           case 'real':

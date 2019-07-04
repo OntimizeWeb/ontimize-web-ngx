@@ -40,8 +40,8 @@ https://plnkr.co or similar (you can use this template as a starting point: http
 ## Environment
 
 <pre><code>
-Angular version: X.Y.Z
-<!-- Check whether this is still an issue in the most recent Angular version -->
+ontimize-web-ngx version: X.Y.Z
+<!-- Check whether this is still an issue in the most recent ontimize-web-ngx version -->
 
 Browser: <em>Check one of the following options with "x"</em>
 - [ ] Chrome (desktop) version XX

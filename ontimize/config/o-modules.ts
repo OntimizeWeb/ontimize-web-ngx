@@ -2,68 +2,13 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { APP_INITIALIZER, Injector, NgModule } from '@angular/core';
 import { HttpModule } from '@angular/http';
 import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { DndModule } from '@churchs19/ng2-dnd';
 import { TranslateLoader, TranslateModule, TranslateParser } from '@ngx-translate/core';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
-
-import {
-  OBarMenuGroupModule,
-  OBarMenuItemModule,
-  OBarMenuModule,
-  OBarMenuNestedModule,
-  OBarMenuSeparatorModule,
-  OBreadcrumbModule,
-  OButtonModule,
-  OButtonToggleModule,
-  OCardMenuItemModule,
-  OCheckboxModule,
-  OColumnCollapsibleModule,
-  OColumnModule,
-  OComboModule,
-  OContextMenuModule,
-  OCurrencyInputModule,
-  ODateInputModule,
-  ODialogModule,
-  OEmailInputModule,
-  OErrorModule,
-  OFileInputModule,
-  OFilterBuilderModule,
-  OFormContainerModule,
-  OFormModule,
-  OGridModule,
-  OHourInputModule,
-  OHTMLInputModule,
-  OImageModule,
-  OIntegerInputModule,
-  OLanguageSelectorModule,
-  OListItemAvatarModule,
-  OListItemCardImageModule,
-  OListItemCardModule,
-  OListItemModule,
-  OListItemTextModule,
-  OListModule,
-  OListPickerModule,
-  OLocaleBarMenuItemModule,
-  ONIFInputModule,
-  OPasswordInputModule,
-  OPercentInputModule,
-  ORadioModule,
-  ORealInputModule,
-  ORowCollapsibleModule,
-  ORowModule,
-  OSearchInputModule,
-  OSliderModule,
-  OSlideToggleModule,
-  OSnackBarModule,
-  OTableModule,
-  OTextareaInputModule,
-  OTextInputModule,
-  OTimeInputModule,
-  OUserInfoModule,
-  OValidatorModule,
-} from '../components';
-import { APP_CONFIG, AppConfig } from '../config/app-config';
+import { OBarMenuGroupModule, OBarMenuItemModule, OBarMenuModule, OBarMenuNestedModule, OBarMenuSeparatorModule, OBreadcrumbModule, OButtonModule, OButtonToggleModule, OCardMenuItemModule, OCheckboxModule, OColumnCollapsibleModule, OColumnModule, OComboModule, OContextMenuModule, OCurrencyInputModule, ODateInputModule, ODialogModule, OEmailInputModule, OErrorModule, OFileInputModule, OFilterBuilderModule, OFormContainerModule, OFormModule, OGridModule, OHourInputModule, OHTMLInputModule, OImageModule, OIntegerInputModule, OLanguageSelectorModule, OListItemAvatarModule, OListItemCardImageModule, OListItemCardModule, OListItemModule, OListItemTextModule, OListModule, OListPickerModule, OLocaleBarMenuItemModule, ONIFInputModule, OPasswordInputModule, OPercentInputModule, ORadioModule, ORealInputModule, ORowCollapsibleModule, ORowModule, OSearchInputModule, OSliderModule, OSlideToggleModule, OSnackBarModule, OTableModule, OTextareaInputModule, OTextInputModule, OTimeInputModule, OUserInfoModule, OValidatorModule } from '../components';
+import { ODateRangeInputModule } from '../components/input/date-range/o-daterange-input.component';
+import { AppConfig, APP_CONFIG } from '../config/app-config';
 import { OAppLayoutModule, OCardMenuLayoutModule, OFormLayoutManagerModule } from '../layouts';
 import { OTranslateHttpLoader, OTranslateService } from '../services';
 import { OPermissionsModule } from '../services/permissions/o-permissions.module';
@@ -71,6 +16,7 @@ import { OTranslateParser } from '../services/translate/o-translate.parser';
 import { OSharedModule } from '../shared';
 import { Util } from '../utils';
 import { appInitializerFactory } from './o-providers';
+
 
 export const INTERNAL_ONTIMIZE_MODULES_EXPORTED: any = [
   // Standard modules
@@ -135,7 +81,8 @@ export const INTERNAL_ONTIMIZE_MODULES_EXPORTED: any = [
   OGridModule,
   ORadioModule,
   OSlideToggleModule,
-  OSliderModule
+  OSliderModule,
+  ODateRangeInputModule
 ];
 
 // AoT requires an exported function for factories
@@ -234,7 +181,8 @@ export const INTERNAL_ONTIMIZE_MODULES: any = [
   OTimeInputModule,
   OGridModule,
   ORadioModule,
-  OSlideToggleModule
+  OSlideToggleModule,
+  ODateRangeInputModule
 ];
 
 @NgModule({
@@ -253,3 +201,10 @@ export const ONTIMIZE_MODULES: any = [
   OntimizeWebTranslateModule,
   OPermissionsModule
 ];
+
+export const ONTIMIZE_MODULES_WITHOUT_ANIMATIONS: any = [
+  NoopAnimationsModule,
+  OntimizeWebTranslateModule,
+  OPermissionsModule
+];
+

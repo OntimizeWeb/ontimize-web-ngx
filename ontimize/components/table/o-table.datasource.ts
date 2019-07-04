@@ -1,14 +1,14 @@
-import { EventEmitter } from '@angular/core';
-import { DataSource } from '@angular/cdk/collections';
-import { MatPaginator } from '@angular/material';
-import { Subject, BehaviorSubject, Observable, merge } from 'rxjs';
-import { map } from 'rxjs/operators';
-
-import { Util } from '../../util/util';
-import { ColumnValueFilterOperator, IColumnValueFilter, OTableEditableRowComponent } from './extensions/header/o-table-header-components';
+import { BehaviorSubject, Observable, Subject, merge } from 'rxjs';
+import { ColumnValueFilterOperator, IColumnValueFilter } from './extensions/header/o-table-header-components';
 import { OColumn, OTableComponent, OTableOptions } from './o-table.component';
-import { OTableDao } from './o-table.dao';
+
+import { DataSource } from '@angular/cdk/collections';
+import { EventEmitter } from '@angular/core';
+import { MatPaginator } from '@angular/material';
 import { OMatSort } from './extensions/sort/o-mat-sort';
+import { OTableDao } from './o-table.dao';
+import { Util } from '../../util/util';
+import { map } from 'rxjs/operators';
 
 export const SCROLLVIRTUAL = 'scroll';
 
@@ -214,7 +214,7 @@ export class OTableDataSource extends DataSource<any> {
     try {
       resultFormula = (new Function('return ' + formula))();
     } catch (e) {
-      console.log('Operation defined in the calculated column is incorrect ');
+      console.error('Operation defined in the calculated column is incorrect ');
     }
     // 3. Return result
     return resultFormula;
@@ -539,38 +539,4 @@ export class OTableDataSource extends DataSource<any> {
 }
 
 
-export class OTableEditableRowDataSource extends DataSource<any> {
 
-  protected _tableOptions: OTableOptions;
-  protected _datasourceData: OTableDataSource;
-
-  constructor(protected editableRowTable: OTableEditableRowComponent) {
-    super();
-    this._tableOptions = editableRowTable.oTableOptions;
-    this._datasourceData = editableRowTable.tableDataSource;
-  }
-
-  /** Connect function called by the table to retrieve one stream containing the data to render. */
-  connect(): Observable<any[]> {
-    let displayDataChanges: any[];
-    if (this._datasourceData) {
-      displayDataChanges = [
-        this._datasourceData.dataTotalsChange
-      ];
-    }
-
-    let emptyData = {};
-    this._tableOptions.visibleColumns.forEach(col => {
-      emptyData[col] = '';
-    });
-
-    return merge(...displayDataChanges).pipe(map(() => {
-      return [emptyData];
-    }));
-  }
-
-  disconnect() {
-    // TODO
-  }
-
-}

@@ -1,4 +1,5 @@
-<mat-toolbar class="o-form-toolbar-header" [class.breadcrumb]="includeBreadcrumb" fxLayout="column" fxLayoutAlign="center center">
+<mat-toolbar class="o-form-toolbar-header" [class.breadcrumb]="includeBreadcrumb" fxLayout="column"
+  fxLayoutAlign="center center">
 
   <ng-template *ngIf="includeBreadcrumb" #breadcrumb></ng-template>
 
@@ -7,7 +8,8 @@
       <mat-icon svgIcon="ontimize:arrow_back"></mat-icon>
     </button>
 
-    <o-form-navigation #formNavigation *ngIf="showNavigation" fxLayout="row" fxLayoutAlign="space-between center"></o-form-navigation>
+    <o-form-navigation #formNavigation *ngIf="showNavigation" fxLayout="row" fxLayoutAlign="space-between center">
+    </o-form-navigation>
 
     <span *ngIf="getLabelHeaderAlign() === 'center' || getLabelHeaderAlign() === 'end'" class="fill-remaining"></span>
     <div *ngIf="labelHeader!=''" fxLayout="row" fxLayoutAlign="center center">
@@ -18,58 +20,66 @@
     <ng-content select="[o-custom-form-toolbar-buttons-wrapper]"></ng-content>
 
     <ng-template [ngIf]="showHeaderActionsText" [ngIfElse]="undoBtnWithoutText">
-      <button type="button" class="o-form-toolbar-button" mat-stroked-button (click)="onUndoLastChange()" [disabled]="isChangesStackEmpty"
-        *ngIf="showUndoButton">
+      <button type="button" class="o-form-toolbar-button" mat-stroked-button (click)="onUndoLastChange()"
+        [disabled]="isChangesStackEmpty" *ngIf="showUndoButton">
         <mat-icon svgIcon="ontimize:undo"></mat-icon>
         <span>{{ 'UNDO' | oTranslate }}</span>
       </button>
     </ng-template>
     <ng-template #undoBtnWithoutText>
-      <button type="button" class="o-form-toolbar-button" mat-icon-button (click)="onUndoLastChange()" [disabled]="isChangesStackEmpty"
-        *ngIf="showUndoButton">
+      <button type="button" class="o-form-toolbar-button" mat-icon-button (click)="onUndoLastChange()"
+        [disabled]="isChangesStackEmpty" *ngIf="showUndoButton">
         <mat-icon svgIcon="ontimize:undo"></mat-icon>
       </button>
     </ng-template>
 
     <ng-container *ngIf="initialMode">
       <ng-template [ngIf]="showHeaderActionsText" [ngIfElse]="buttonsWithouText">
-        <button type="button" class="o-form-toolbar-button" mat-stroked-button (click)="onReload($event)" *ngIf="isRefreshBtnEnabled" attr="refresh">
+        <button type="button" class="o-form-toolbar-button" mat-stroked-button (click)="onReload($event)"
+          *ngIf="isRefreshBtnEnabled" attr="refresh">
           <mat-icon svgIcon="ontimize:autorenew"></mat-icon>
           <span>{{ 'REFRESH' | oTranslate }}</span>
         </button>
-        <button type="button" class="o-form-toolbar-button" mat-stroked-button (click)="onInsert($event)" *ngIf="isInsertBtnEnabled" attr="insert">
+        <button type="button" class="o-form-toolbar-button" mat-stroked-button (click)="onInsert($event)"
+          *ngIf="isInsertBtnEnabled" attr="insert">
           <mat-icon svgIcon="ontimize:add"></mat-icon>
           <span>{{ 'ADD' | oTranslate }}</span>
         </button>
-        <button type="button" class="o-form-toolbar-button" mat-stroked-button (click)="onEdit($event)" *ngIf="isEditBtnEnabled" attr="edit">
+        <button type="button" class="o-form-toolbar-button" mat-stroked-button (click)="onEdit($event)"
+          *ngIf="isEditBtnEnabled | async" attr="edit">
           <mat-icon svgIcon="ontimize:edit"></mat-icon>
           <span>{{ 'EDIT' | oTranslate }}</span>
         </button>
-        <button type="button" class="o-form-toolbar-button" mat-stroked-button (click)="onDelete($event)" *ngIf="isDeleteBtnEnabled" attr="delete">
+        <button type="button" class="o-form-toolbar-button" mat-stroked-button (click)="onDelete($event)"
+          *ngIf="isDeleteBtnEnabled" attr="delete">
           <mat-icon svgIcon="ontimize:delete"></mat-icon>
           <span>{{ 'DELETE' | oTranslate }}</span>
         </button>
-        <button type="button" class="o-form-toolbar-button" mat-stroked-button (click)="onSave($event)" [disabled]="!existsChangesToSave"
-          *ngIf="isSaveBtnEnabled" attr="update">
+        <button type="button" class="o-form-toolbar-button" mat-stroked-button (click)="onSave($event)"
+          [disabled]="!(existsChangesToSave | async)" *ngIf="isSaveBtnEnabled | async" attr="update">
           <mat-icon svgIcon="ontimize:save"></mat-icon>
           <span>{{ 'SAVE' | oTranslate }}</span>
         </button>
       </ng-template>
       <ng-template #buttonsWithouText>
-        <button type="button" class="o-form-toolbar-button" mat-icon-button (click)="onReload($event)" *ngIf="isRefreshBtnEnabled" attr="refresh">
+        <button type="button" class="o-form-toolbar-button" mat-icon-button (click)="onReload($event)"
+          *ngIf="isRefreshBtnEnabled" attr="refresh">
           <mat-icon svgIcon="ontimize:autorenew"></mat-icon>
         </button>
-        <button type="button" class="o-form-toolbar-button" mat-icon-button (click)="onInsert($event)" *ngIf="isInsertBtnEnabled" attr="insert">
+        <button type="button" class="o-form-toolbar-button" mat-icon-button (click)="onInsert($event)"
+          *ngIf="isInsertBtnEnabled" attr="insert">
           <mat-icon svgIcon="ontimize:add"></mat-icon>
         </button>
-        <button type="button" class="o-form-toolbar-button" mat-icon-button (click)="onEdit($event)" *ngIf="isEditBtnEnabled" attr="edit">
+        <button type="button" class="o-form-toolbar-button" mat-icon-button (click)="onEdit($event)"
+          *ngIf="isEditBtnEnabled | async" attr="edit">
           <mat-icon svgIcon="ontimize:edit"></mat-icon>
         </button>
-        <button type="button" class="o-form-toolbar-button" mat-icon-button (click)="onDelete($event)" *ngIf="isDeleteBtnEnabled" attr="delete">
+        <button type="button" class="o-form-toolbar-button" mat-icon-button (click)="onDelete($event)"
+          *ngIf="isDeleteBtnEnabled" attr="delete">
           <mat-icon svgIcon="ontimize:delete"></mat-icon>
         </button>
-        <button type="button" class="o-form-toolbar-button" mat-icon-button (click)="onSave($event)" [disabled]="!existsChangesToSave"
-          *ngIf="isSaveBtnEnabled" attr="update">
+        <button type="button" class="o-form-toolbar-button" mat-icon-button (click)="onSave($event)"
+          [disabled]="!existsChangesToSave" *ngIf="isSaveBtnEnabled | async" attr="update">
           <mat-icon svgIcon="ontimize:save"></mat-icon>
         </button>
       </ng-template>
@@ -80,7 +90,8 @@
         <mat-icon svgIcon="ontimize:clear"></mat-icon>
         <span *ngIf="showHeaderActionsText">{{ 'CANCEL' | oTranslate }}</span>
       </button>
-      <button type="button" class="o-form-toolbar-button" mat-stroked-button color="primary" (click)="acceptOperation($event)">
+      <button type="button" class="o-form-toolbar-button" mat-stroked-button color="primary"
+        (click)="acceptOperation($event)">
         <mat-icon svgIcon="ontimize:done"></mat-icon>
         <span *ngIf="showHeaderActionsText">{{ 'INSERT' | oTranslate }}</span>
       </button>

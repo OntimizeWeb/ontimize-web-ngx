@@ -41,7 +41,6 @@ export class OBaseComponent implements IComponent {
     if (!Util.isDefined(this._olabel)) {
       this._olabel = this.oattr;
     }
-    this._olabel = this.translateService.get(this._olabel);
     if (Util.isDefined(this.oplaceholder) && this.oplaceholder.length > 0) {
       this.oplaceholder = this.translateService.get(this.oplaceholder);
     }

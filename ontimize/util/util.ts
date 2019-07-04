@@ -89,9 +89,6 @@ export class Util {
     let encoded: string = '';
     if (parentKeys) {
       encoded = Base64.encode(JSON.stringify(parentKeys));
-      // test
-      // var d = Base64.decode(encoded);
-      // console.log(parentKeys, encoded, d, JSON.parse(d));
     }
     return encoded;
   }

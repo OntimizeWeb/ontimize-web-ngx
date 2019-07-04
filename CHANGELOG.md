@@ -1,4 +1,49 @@
-#4.0.2
+## 4.0.7
+### Bug Fixes
+* **o-table-cell-renderer-service**:not render cell value when export data table ([a594521](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a594521))
+
+## 4.0.6 (2019-06-19)
+### Features
+* **FilterExpressionUtils**: added operator `IN` and method `buildExpressionIn` ([fcc0003](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/fcc0003))
+* New component `o-daterange-input` ([7c48c09](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7c48c09))
+* **Modules**: Exporting '*ONTIMIZE_MODULES_WITHOUT_ANIMATIONS*' array of common modules that should be imported in app module if you *don`t need animations*.
+* Added translations in portuges ([da648cb](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/da648cb))
+* **o-hour-input, o-table-cell-editor-time**:Fix translation in text button ([d842fbd](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d842fbd)) ([17f5ca3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/17f5ca3))
+
+## 4.0.5 (2019-06-05)
+### Features
+* **o-list-picker**: new `dialog-class` input ([321fd4b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/321fd4b))
+* **o-table**: new cell render `o-table-cell-renderer-time` and cell editor `o-table-cell-editor-time` ([399cdbc](https://github.com/OntimizeWeb/ontimize-web-ngx/
+* **o-form**: new `confirm-exit` input ([01d0d29]](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/01d0d29]))
+* **IFormValueOptions**: adding new `emitModelToViewValueChange` property ([4d11cd8]](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4d11cd8]))
+
+## 4.0.4 (2019-05-22)
+### Features
+* **OFormControl**: adding class `OFormControl` ([7a9cef6](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7a9cef6))
+* **o-table-columns-filter**: new `mode` attribute ([1b5d8ee](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1b5d8ee))
+* **o-table**: now the table distinguish text and numeric columns when filtering its data through the quick filter component. It also allow filering using *service cell renderer* values ([7fba4b9](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7fba4b9))
+* **OSnackBarConfig**: new `cssClass` attribute ([eaa601b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/eaa601b))
+* **o-form-layout-tabgroup**: new `onSelectedTabChange` and `onCloseTab` outputs ([29f73a0](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/29f73a0))
+
+### Bug Fixes
+* **o-list-picker**: fixed no columns selected error ([978d7cd](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/978d7cd))
+* **o-service-base-component**: fixing storage bugs [#251](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/251) sort by numeric column ([2a59669](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2a59669))
+* **o-table-insertable-row**: fixed that the insert row in the table is not shown [#261](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/261)([f346f1f](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f346f1f)) ([3dce76f](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3dce76f)) ([3dce76f4b837af](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f4b837a))
+* **o-time-input**: internal date build from date and hour inputs fixed ([bb88e9a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/bb88e9a)) Closes [#267](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/267)
+* **o-list-picker**: new `dialog-disable-close` input ([b4bc292](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b4bc292))
+
+### BREAKING CHANGES
+* **o-hour-input**: method `getValueAsTimeStamp` has been removed, the method `getValue` returns the input value in the format indicated by the attribute `value-type`
+
+## 4.0.3 (2019-04-24)
+### Features
+* **o-combo**: new `searchable` input ([2ae599d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2ae599d))
+* **o-table**: new cell renderer `o-table-cell-renderer-translate` ([2763c47](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2763c47)).
+
+### Bug Fixes
+* **o-context-menu**: remove overlay when context menu is removed ([a2bf383](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a2bf383))
+
+## 4.0.2 (2019-04-04)
 ### Features
 * **o-form**:
   * new `header-position` input ([63f0f36](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/63f0f36))
@@ -11,15 +56,20 @@
 * **MenuGroup, MenuItem**: new `class` attribute  ([6a4c500](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6a4c500))
 * **o-form-navigation**: allowing to navigate through paginated components (`OServiceComponent`) details ([286ba71](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/286ba71))
 * **o-image**: new `accept-file-type` input ([cd61beb](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/cd61beb))
-* **o-form-data**:new `hide-required-marker` and `label-visible` inputs ([d39db97](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d39db97))
-* **o-time-input**:new `hour-placeholder` and `date-placeholder` inputs ([48d3b9c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/48d3b9c))
+* **o-form-data**: new `hide-required-marker` and `label-visible` inputs ([d39db97](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d39db97))
+* **o-time-input**: new `hour-placeholder` and `date-placeholder` inputs ([48d3b9c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/48d3b9c))
+* **o-form-layout-manager**: updating main content when updating, deleting or inserting new data ([20adc1d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/20adc1d)) ([050da7c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/050da7c))
+* **o-table-cell-renderer-service**: listening to editor changes for updating the renderer ([cf56430](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/cf56430)) ([d596c5d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d596c5d))
+* **OFormServiceComponent**: new `onDataLoaded` output ([3d0cf70](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3d0cf70))
+* **o-form-data**: new `hide-required-marker` and `label-visible` inputs ([d39db97](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d39db97)) ([a7d0e8d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a7d0e8d)) ([5fb5509](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5fb5509))
+* **o-time-input**: new `hour-placeholder` and `date-placeholder` inputs ([48d3b9c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/48d3b9c))
 
 ### Bug Fixes
 * **o-table**: fixed error on table store configuration dialog ([ad6c84b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ad6c84b)), closes [#256](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/256)
 * **o-grid**: sort by numeric column ([2b38fb5](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2b38fb5)), closes [#253](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/253)
 * **o-time-input**: impossible to select a different date of 01/01/1970  ([48d3b9c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/48d3b9c)), closes [#255](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/255)
 
-#4.0.1 (2019-03-06)
+## 4.0.1 (2019-03-06)
 ### Features
 * **o-form**:
   * new `include-breadcrumb` input ([80d9ddc](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/80d9ddc))

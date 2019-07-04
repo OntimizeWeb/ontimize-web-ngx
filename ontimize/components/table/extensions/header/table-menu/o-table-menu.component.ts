@@ -1,14 +1,14 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, forwardRef, Inject, Injector, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Inject, Injector, OnDestroy, OnInit, ViewChild, ViewEncapsulation, forwardRef } from '@angular/core';
+import { DialogService, OPermissions, OTableMenuPermissions, OTranslateService, SnackBarService } from '../../../../../services';
 import { MatDialog, MatMenu } from '@angular/material';
+import { OColumn, OTableComponent } from '../../../o-table.component';
+import { OTableApplyConfigurationDialogComponent, OTableExportConfiguration, OTableExportDialogComponent, OTableLoadFilterDialogComponent, OTableStoreConfigurationDialogComponent, OTableStoreFilterDialogComponent, OTableVisibleColumnsDialogComponent } from '../../dialog/o-table-dialog-components';
 
 import { InputConverter } from '../../../../../decorators';
-import { DialogService, OPermissions, OTableMenuPermissions, OTranslateService, SnackBarService } from '../../../../../services';
+import { OTableCellRendererImageComponent } from '../../../table-components';
+import { OTableOptionComponent } from '../table-option/o-table-option.component';
 import { PermissionsUtils } from '../../../../../util/permissions';
 import { Util } from '../../../../../utils';
-import { OColumn, OTableComponent } from '../../../o-table.component';
-import { OTableCellRendererImageComponent } from '../../../table-components';
-import { OTableApplyConfigurationDialogComponent, OTableExportConfiguration, OTableExportDialogComponent, OTableLoadFilterDialogComponent, OTableStoreConfigurationDialogComponent, OTableStoreFilterDialogComponent, OTableVisibleColumnsDialogComponent } from '../../dialog/o-table-dialog-components';
-import { OTableOptionComponent } from '../table-option/o-table-option.component';
 
 export const DEFAULT_INPUTS_O_TABLE_MENU = [
   // select-all-checkbox [yes|no|true|false]: show selection check boxes. Default: no.
@@ -174,7 +174,7 @@ export class OTableMenuComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   get isSelectAllOptionActive(): boolean {
-    return !!this.table.state['select-column-visible'];
+    return this.table.oTableOptions.selectColumn.visible;
   }
 
   get showColumnsFilterOption(): boolean {
@@ -247,7 +247,7 @@ export class OTableMenuComponent implements OnInit, AfterViewInit, OnDestroy {
   onShowsSelects(event?: any) {
     const tableOptions = this.table.oTableOptions;
     tableOptions.selectColumn.visible = !tableOptions.selectColumn.visible;
-    this.table.updateSelectionColumnState();
+    this.table.initializeCheckboxColumn();
   }
 
   onExportButtonClicked() {

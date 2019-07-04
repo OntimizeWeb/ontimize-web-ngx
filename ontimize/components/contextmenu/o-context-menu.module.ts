@@ -1,15 +1,14 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
+
 import { OSharedModule } from '../../shared';
-
-import { OContextMenuDirective } from './o-context-menu.directive';
-import { OContextMenuComponent } from './o-context-menu.component';
-import { OContextMenuContentComponent } from './context-menu/o-context-menu-content.component';
-import { OContextMenuItemComponent } from './context-menu-item/o-context-menu-item.component';
 import { OContextMenuGroupComponent } from './context-menu-group/o-context-menu-group.component';
-
+import { OContextMenuItemComponent } from './context-menu-item/o-context-menu-item.component';
 import { OContextMenuSeparatorComponent } from './context-menu-separator/o-context-menu-separator.component';
+import { OContextMenuContentComponent } from './context-menu/o-context-menu-content.component';
 import { OWrapperContentMenuComponent } from './context-menu/o-wrapper-content-menu/o-wrapper-content-menu.component';
+import { OContextMenuComponent } from './o-context-menu.component';
+import { OContextMenuDirective } from './o-context-menu.directive';
 
 @NgModule({
   imports: [CommonModule, OSharedModule],
