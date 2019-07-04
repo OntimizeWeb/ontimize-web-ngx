@@ -1,4 +1,6 @@
 ## 4.0.7
+### Bug Fixes
+* **o-table-cell-renderer-service**:not render cell value when export data table ([a594521](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a594521))
 
 ## 4.0.6 (2019-06-19)
 ### Features
