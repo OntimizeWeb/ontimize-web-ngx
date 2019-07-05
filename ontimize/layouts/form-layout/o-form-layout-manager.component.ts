@@ -1,38 +1,24 @@
-import { ActivatedRoute, ActivatedRouteSnapshot, Route, Router, RouterModule } from '@angular/router';
-import {
-  AfterViewInit,
-  CUSTOM_ELEMENTS_SCHEMA,
-  Component,
-  ContentChildren,
-  ElementRef,
-  EventEmitter,
-  HostListener,
-  Injector,
-  NgModule,
-  OnDestroy,
-  OnInit,
-  Optional,
-  QueryList,
-  SkipSelf,
-  ViewChild
-} from '@angular/core';
-import { ILocalStorageComponent, LocalStorageService } from '../../services/local-storage.service';
-import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material';
-
-import { CanActivateFormLayoutChildGuard } from './guards/o-form-layout-can-activate-child.guard';
 import { CommonModule } from '@angular/common';
-import { InputConverter } from '../../decorators';
-import { NavigationService } from '../../services/navigation.service';
-import { OFormLayoutDialogComponent } from './dialog/o-form-layout-dialog.component';
-import { OFormLayoutManagerContentDirective } from './directives/o-form-layout-manager-content.directive';
-import { OFormLayoutManagerService } from '../../services/o-form-layout-manager.service';
-import { OFormLayoutTabGroupComponent } from './tabgroup/o-form-layout-tabgroup.component';
+import { AfterViewInit, Component, ContentChild, ContentChildren, CUSTOM_ELEMENTS_SCHEMA, ElementRef, EventEmitter, HostListener, Injector, NgModule, OnDestroy, OnInit, Optional, QueryList, SkipSelf, ViewChild } from '@angular/core';
+import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material';
+import { ActivatedRoute, ActivatedRouteSnapshot, Route, Router, RouterModule } from '@angular/router';
 import { OListComponent } from '../../components/list/o-list.component';
 import { OServiceComponent } from '../../components/o-service-component.class';
-import { OSharedModule } from '../../shared';
 import { OTableComponent } from '../../components/table/o-table.component';
+import { InputConverter } from '../../decorators';
+import { ILocalStorageComponent, LocalStorageService } from '../../services/local-storage.service';
+import { NavigationService } from '../../services/navigation.service';
+import { OFormLayoutManagerService } from '../../services/o-form-layout-manager.service';
 import { OTranslateService } from '../../services/translate/o-translate.service';
+import { OSharedModule } from '../../shared';
 import { Util } from '../../utils';
+import { OFormLayoutDialogComponent } from './dialog/o-form-layout-dialog.component';
+import { OFormLayoutDialogOptionsComponent } from './dialog/options/o-form-layout-dialog-options.component';
+import { OFormLayoutManagerContentDirective } from './directives/o-form-layout-manager-content.directive';
+import { CanActivateFormLayoutChildGuard } from './guards/o-form-layout-can-activate-child.guard';
+import { OFormLayoutTabGroupComponent } from './tabgroup/o-form-layout-tabgroup.component';
+import { OFormLayoutTabGroupOptionsComponent } from './tabgroup/options/o-form-layout-tabgroup-options.component';
+
 
 export interface IDetailComponentData {
   params: any;
@@ -45,6 +31,7 @@ export interface IDetailComponentData {
   url: string;
   rendered?: boolean;
   insertionMode?: boolean;
+  formDataByLabelColumns?: any;
 }
 
 export const DEFAULT_INPUTS_O_FORM_LAYOUT_MANAGER = [
@@ -127,6 +114,12 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
 
   @ContentChildren(OListComponent, { descendants: true })
   protected listComponents: QueryList<OListComponent>;
+
+  @ContentChild(OFormLayoutTabGroupOptionsComponent)
+  protected tabGroupOptions: OFormLayoutTabGroupOptionsComponent;
+
+  @ContentChild(OFormLayoutDialogOptionsComponent)
+  protected dialogOptions: OFormLayoutDialogOptionsComponent;
 
   protected addingGuard: boolean = false;
 
@@ -219,6 +212,18 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
     return label;
   }
 
+  public getFormDataFromLabelColumns(data: any) {
+    let formData = {};
+    Object.keys(data).map(x => {
+      if (this.labelColsArray.indexOf(x) > -1) {
+        formData[x] = data[x];
+      }
+    });
+    return formData;
+
+  }
+
+
   public addActivateChildGuard(): void {
     const routeConfig = this.getParentActRouteRoute();
     if (Util.isDefined(routeConfig)) {
@@ -272,6 +277,7 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
       label: '',
       modified: false
     };
+
     if (this.isTabMode() && Util.isDefined(this.oTabGroup)) {
       this.oTabGroup.addTab(newDetailComp);
     } else if (this.isDialogMode()) {
@@ -294,32 +300,23 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
       cssclass.push(this.dialogClass);
     }
     const dialogConfig: MatDialogConfig = {
-      panelClass: cssclass,
-      disableClose: true,
       data: {
         data: detailComp,
         layoutManagerComponent: this,
-        title: this.title
-      }
+        title: this.title,
+      },
+      width: this.dialogOptions.width || this.dialogWidth,
+      minWidth: this.dialogOptions.minWidth || this.dialogMinWidth,
+      maxWidth: this.dialogOptions.maxWidth || this.dialogMaxWidth,
+      height: this.dialogOptions.height || this.dialogHeight,
+      minHeight: this.dialogOptions.minHeight || this.dialogMinHeight,
+      maxHeight: this.dialogOptions.maxHeight || this.dialogMaxHeight,
+      disableClose: this.dialogOptions.disableClose || true,
+      position: this.dialogOptions.position,
+      panelClass: this.dialogOptions.class || cssclass
     };
-    if (this.dialogWidth) {
-      dialogConfig.width = this.dialogWidth;
-    }
-    if (this.dialogMinWidth) {
-      dialogConfig.minWidth = this.dialogMinWidth;
-    }
-    if (this.dialogMaxWidth) {
-      dialogConfig.maxWidth = this.dialogMaxWidth;
-    }
-    if (this.dialogHeight) {
-      dialogConfig.height = this.dialogHeight;
-    }
-    if (this.dialogMinHeight) {
-      dialogConfig.minHeight = this.dialogMinHeight;
-    }
-    if (this.dialogMaxHeight) {
-      dialogConfig.maxHeight = this.dialogMaxHeight;
-    }
+
+
     this.dialogRef = this.dialog.open(OFormLayoutDialogComponent, dialogConfig);
     this.dialogRef.afterClosed().subscribe(() => {
       this.updateIfNeeded();
@@ -474,9 +471,15 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
     OFormLayoutDialogComponent,
     OFormLayoutManagerComponent,
     OFormLayoutTabGroupComponent,
-    OFormLayoutManagerContentDirective
+    OFormLayoutManagerContentDirective,
+    OFormLayoutDialogOptionsComponent,
+    OFormLayoutTabGroupOptionsComponent
   ],
-  exports: [OFormLayoutManagerComponent],
+  exports: [
+    OFormLayoutManagerComponent,
+    OFormLayoutDialogOptionsComponent,
+    OFormLayoutTabGroupOptionsComponent
+  ],
   entryComponents: [OFormLayoutDialogComponent],
   providers: [{
     provide: CanActivateFormLayoutChildGuard,

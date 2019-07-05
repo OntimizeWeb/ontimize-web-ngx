@@ -1,19 +1,34 @@
-<mat-tab-group #tabGroup oTabGroup="ontimize" fxFill [(selectedIndex)]="selectedTabIndex" (selectedTabChange)="onTabSelectChange($event)">
+<mat-tab-group #tabGroup oTabGroup="ontimize" fxFill [(selectedIndex)]="selectedTabIndex"
+  (selectedTabChange)="onTabSelectChange($event)" [color]="color" [backgroundColor]="backgroundColor"
+  [headerPosition]="headerPosition" [@.disabled]="disableAnimation">
   <mat-tab label="{{ (title || 'LAYOUT_MANANGER.MAIN_TAB_LABEL') | oTranslate }}">
     <ng-content></ng-content>
   </mat-tab>
 
+
   <mat-tab *ngFor="let tabData of data; let i = index">
     <ng-template mat-tab-label>
+
       <span class="tab-label" [class.modified]="tabData.modified">
-        {{ tabData.label }}
+        <ng-container *ngIf="icon && isIconPositionLeft">
+          <mat-icon>{{ icon }}</mat-icon>
+        </ng-container>
+        <ng-container *ngIf="templateMatTabLabel">
+          <ng-container *ngTemplateOutlet="templateMatTabLabel;context:{tabData:tabData.formDataByLabelColumns}">
+          </ng-container>
+        </ng-container>
+        <ng-container *ngIf="!templateMatTabLabel">
+          {{ tabData.label }}
+        </ng-container>
+        <ng-container *ngIf="icon && !isIconPositionLeft">
+          <mat-icon>{{ icon }}</mat-icon>
+        </ng-container>
       </span>
       <mat-icon (click)="closeTab(tabData.id)" svgIcon="ontimize:close"></mat-icon>
     </ng-template>
-
     <ng-template o-form-layout-manager-content [index]="i"></ng-template>
   </mat-tab>
 </mat-tab-group>
-<div *ngIf="showLoading" class="spinner-container"  fxLayout="column" fxLayoutAlign="center center">
+<div *ngIf="showLoading" class="spinner-container" fxLayout="column" fxLayoutAlign="center center">
   <mat-progress-spinner mode="indeterminate" strokeWidth="3"></mat-progress-spinner>
 </div>
