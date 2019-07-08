@@ -275,7 +275,8 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
       url: url,
       id: Math.random().toString(36),
       label: '',
-      modified: false
+      modified: false,
+      formDataByLabelColumns: {}
     };
 
     if (this.isTabMode() && Util.isDefined(this.oTabGroup)) {
@@ -305,16 +306,23 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
         layoutManagerComponent: this,
         title: this.title,
       },
-      width: this.dialogOptions.width || this.dialogWidth,
-      minWidth: this.dialogOptions.minWidth || this.dialogMinWidth,
-      maxWidth: this.dialogOptions.maxWidth || this.dialogMaxWidth,
-      height: this.dialogOptions.height || this.dialogHeight,
-      minHeight: this.dialogOptions.minHeight || this.dialogMinHeight,
-      maxHeight: this.dialogOptions.maxHeight || this.dialogMaxHeight,
-      disableClose: this.dialogOptions.disableClose || true,
-      position: this.dialogOptions.position,
-      panelClass: this.dialogOptions.class || cssclass
+      width: this.dialogOptions ? this.dialogOptions.width : this.dialogWidth,
+      minWidth: this.dialogOptions ? this.dialogOptions.minWidth : this.dialogMinWidth,
+      maxWidth: this.dialogOptions ? this.dialogOptions.maxWidth : this.dialogMaxWidth,
+      height: this.dialogOptions ? this.dialogOptions.height : this.dialogHeight,
+      minHeight: this.dialogOptions ? this.dialogOptions.minHeight : this.dialogMinHeight,
+      maxHeight: this.dialogOptions ? this.dialogOptions.maxHeight : this.dialogMaxHeight,
+      disableClose: this.dialogOptions ? this.dialogOptions.disableClose : true,
+      panelClass: this.dialogOptions ? this.dialogOptions.class : cssclass
+
     };
+
+    if (this.dialogOptions) {
+      dialogConfig.closeOnNavigation = this.dialogOptions.closeOnNavigation;
+      dialogConfig.backdropClass = this.dialogOptions.backdropClass;
+      dialogConfig.position = this.dialogOptions.position;
+      dialogConfig.disableClose = this.dialogOptions.disableClose;
+    }
 
 
     this.dialogRef = this.dialog.open(OFormLayoutDialogComponent, dialogConfig);
