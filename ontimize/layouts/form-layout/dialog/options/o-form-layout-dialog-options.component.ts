@@ -12,6 +12,7 @@ export const DEFAULT_INPUTS_O_FORM_LAYOUT_DIALOG_OPTIONS = [
   'maxHeight max-height',
   'class',
   'position',
+  'backdropClass: backdrop-class',
   'closeOnNavigation: close-on-navigation',
   'disableClose:disable-close'
 ];
@@ -44,6 +45,8 @@ export class OFormLayoutDialogOptionsComponent {
   public class: string | string[] = '';
 
   public position: DialogPosition;
+
+  public backdropClass: string;
 
   @InputConverter()
   public closeOnNavigation: boolean = true;
