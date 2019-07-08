@@ -1,7 +1,7 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, EventEmitter, Injector, OnDestroy, QueryList, ViewChild, ViewChildren, ViewContainerRef, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, Component, ComponentFactoryResolver, ElementRef, EventEmitter, Injector, OnDestroy, QueryList, ViewChild, ViewChildren, ViewContainerRef, ViewEncapsulation } from '@angular/core';
 import { MatTabChangeEvent, MatTabGroup } from '@angular/material';
 import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { BehaviorSubject, Subscription } from 'rxjs';
 import { DialogService } from '../../../services/dialog.service';
 import { ONavigationItem } from '../../../services/navigation.service';
 import { Codes, Util } from '../../../utils';
@@ -41,6 +41,7 @@ export class OFormLayoutTabGroupComponent implements AfterViewInit, OnDestroy {
   public selectedTabIndex: number | null;
   public title: string;
   public options: any;
+  public showLoading = new BehaviorSubject<boolean>(false);
   protected _state: any;
 
   @ViewChild('tabGroup') tabGroup: MatTabGroup;
@@ -60,8 +61,7 @@ export class OFormLayoutTabGroupComponent implements AfterViewInit, OnDestroy {
     protected injector: Injector,
     protected componentFactoryResolver: ComponentFactoryResolver,
     protected location: ViewContainerRef,
-    protected elRef: ElementRef,
-    private cd: ChangeDetectorRef
+    protected elRef: ElementRef
   ) {
     this.dialogService = injector.get(DialogService);
     this.formLayoutManager = this.injector.get(OFormLayoutManagerComponent);
@@ -341,24 +341,12 @@ export class OFormLayoutTabGroupComponent implements AfterViewInit, OnDestroy {
     return newDetailComp;
   }
 
-  get showLoading(): boolean {
-    return this.loading;
-  }
-
-  set showLoading(arg: boolean) {
-    this.loading = arg;
-  }
-
   set state(arg: any) {
     this._state = arg;
     if (Util.isDefined(arg)) {
-      this.showLoading = true;
+      this.showLoading.next(true);
     } else {
-      const self = this;
-      setTimeout(() => {
-        self.showLoading = false;
-        self.cd.detectChanges();
-      }, 1000);
+      this.showLoading.next(false);
     }
   }
 
