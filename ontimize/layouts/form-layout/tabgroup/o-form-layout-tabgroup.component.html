@@ -14,7 +14,7 @@
           <mat-icon>{{ icon }}</mat-icon>
         </ng-container>
         <ng-container *ngIf="templateMatTabLabel">
-          <ng-container *ngTemplateOutlet="templateMatTabLabel;context:{tabData:tabData.formDataByLabelColumns}">
+          <ng-container *ngTemplateOutlet="templateMatTabLabel;context:{$implicit:tabData.formDataByLabelColumns}">
           </ng-container>
         </ng-container>
         <ng-container *ngIf="!templateMatTabLabel">
