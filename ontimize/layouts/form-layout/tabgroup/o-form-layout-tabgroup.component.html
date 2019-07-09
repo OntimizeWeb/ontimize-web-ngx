@@ -13,11 +13,11 @@
         <ng-container *ngIf="icon && isIconPositionLeft">
           <mat-icon>{{ icon }}</mat-icon>
         </ng-container>
-        <ng-container *ngIf="templateMatTabLabel && tabData.formDataByLabelColumns">
+        <ng-container *ngIf="templateMatTabLabel && tabData.formDataByLabelColumns && !tabData.insertionMode ">
           <ng-container *ngTemplateOutlet="templateMatTabLabel;context:{$implicit:tabData.formDataByLabelColumns}">
           </ng-container>
         </ng-container>
-        <ng-container *ngIf="!templateMatTabLabel">
+        <ng-container *ngIf="!templateMatTabLabel || tabData.insertionMode">
           {{ tabData.label }}
         </ng-container>
         <ng-container *ngIf="icon && !isIconPositionLeft">

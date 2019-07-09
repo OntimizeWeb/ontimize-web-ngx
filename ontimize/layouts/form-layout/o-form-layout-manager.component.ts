@@ -164,13 +164,15 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
   }
 
   public ngAfterViewInit(): void {
-    if (this.elRef) {
-      this.elRef.nativeElement.removeAttribute('title');
-    }
-    if (this.storeState && this.isTabMode() && Util.isDefined(this.oTabGroup)) {
-      const state = this.localStorageService.getComponentStorage(this);
-      this.oTabGroup.initializeComponentState(state);
-    }
+    setTimeout(() => {
+      if (this.elRef) {
+        this.elRef.nativeElement.removeAttribute('title');
+      }
+      if (this.storeState && this.isTabMode() && Util.isDefined(this.oTabGroup)) {
+        const state = this.localStorageService.getComponentStorage(this);
+        this.oTabGroup.initializeComponentState(state);
+      }
+    });
   }
 
   public ngOnDestroy(): void {
@@ -222,8 +224,6 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
     return formData;
 
   }
-
-
   public addActivateChildGuard(): void {
     const routeConfig = this.getParentActRouteRoute();
     if (Util.isDefined(routeConfig)) {
@@ -275,8 +275,7 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
       url: url,
       id: Math.random().toString(36),
       label: '',
-      modified: false,
-      formDataByLabelColumns: {}
+      modified: false
     };
 
     if (this.isTabMode() && Util.isDefined(this.oTabGroup)) {

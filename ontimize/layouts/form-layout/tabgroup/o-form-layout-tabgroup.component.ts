@@ -69,6 +69,7 @@ export class OFormLayoutTabGroupComponent implements AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit() {
+
     this.tabsDirectivesSubscription = this.tabsDirectives.changes.subscribe(changes => {
       if (this.tabsDirectives.length) {
         const tabItem = this.tabsDirectives.last;
@@ -268,7 +269,9 @@ export class OFormLayoutTabGroupComponent implements AfterViewInit, OnDestroy {
       label = label.length ? label : this.formLayoutManager.getLabelFromUrlParams(this.data[index].params);
       this.data[index].label = label;
       this.data[index].insertionMode = insertionMode;
-      this.data[index].formDataByLabelColumns = this.formLayoutManager.getFormDataFromLabelColumns(data);
+      if (Object.keys(data).length > 0) {
+        this.data[index].formDataByLabelColumns = this.formLayoutManager.getFormDataFromLabelColumns(data);
+      }
     }
   }
 
