@@ -41,6 +41,7 @@ export class OTableColumnResizerComponent implements OnInit, OnDestroy {
   protected maxWidth: any;
 
   protected startX: any;
+  protected endX: number;
 
   protected headerEl: any;
 
@@ -133,17 +134,18 @@ export class OTableColumnResizerComponent implements OnInit, OnDestroy {
     if (!this.isResizing || !(event instanceof MouseEvent)) {
       return;
     }
-    let movementX = (event.screenX - this.startX);
+    this.endX = event.screenX;
+    const movementX = (this.endX - this.startX);
     let newColumnWidth = this.startWidth + movementX;
 
     const lessThanMin = newColumnWidth < this.minWidth;
     const moreThanMax = newColumnWidth > this.maxWidth;
     if (movementX === 0 || lessThanMin || moreThanMax) {
       return;
-    }
+    }   
     if (!this.table.horizontalScroll) {
-      this.updateBlockedCols();
       this.calculateNewColumnsWidth(movementX, newColumnWidth);
+      this.updateBlockedCols();
     } else {
       this.column.setWidth(newColumnWidth);
     }
@@ -181,7 +183,8 @@ export class OTableColumnResizerComponent implements OnInit, OnDestroy {
     const self = this;
     this.blockedMinCols = [];
     this.blockedMaxCols = [];
-    this.nextOColumns.forEach(oCol => {
+    const columns = [this.column, ...this.nextOColumns];
+    columns.forEach(oCol => {
       if (oCol.DOMWidth <= oCol.getMinWidthValue()) {
         self.blockedMinCols.push(oCol.attr);
       }
