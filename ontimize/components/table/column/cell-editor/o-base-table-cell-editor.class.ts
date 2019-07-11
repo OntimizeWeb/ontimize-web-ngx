@@ -60,6 +60,7 @@ export class OBaseTableCellEditor implements OnInit {
   onDocumentKeyup(event: KeyboardEvent) {
     this.handleKeyup(event);
   }
+  
   inputRef: any;
 
   protected type: string;
@@ -86,8 +87,10 @@ export class OBaseTableCellEditor implements OnInit {
       return;
     }
     if (event.keyCode === 27) {
+      // escape
       this.onEscClicked();
     } else if (event.keyCode === 13 || event.keyCode === 9) {
+      // intro or tab
       this.commitEdition();
     }
   }
@@ -140,6 +143,8 @@ export class OBaseTableCellEditor implements OnInit {
           self.table.showDialogError(error, 'MESSAGES.ERROR_UPDATE');
           self.table.cd.detectChanges();
         });
+      } else {
+        self.table.cd.detectChanges();
       }
     }
   }
