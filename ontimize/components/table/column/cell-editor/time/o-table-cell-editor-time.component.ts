@@ -9,7 +9,6 @@ import { Util } from '../../../../../util/util';
 import { IFormValueOptions } from '../../../../form/form-components';
 import { OBaseTableCellEditor } from '../o-base-table-cell-editor.class';
 
-
 export const DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_TIME = [
   ...OBaseTableCellEditor.DEFAULT_INPUTS_O_TABLE_CELL_EDITOR,
   'oDateFormat: date-format',

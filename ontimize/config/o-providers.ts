@@ -15,7 +15,6 @@ import { Codes } from '../util/codes';
 import { Events } from '../util/events';
 import { OHttp } from '../util/http/OHttp';
 
-
 function addPermissionsRouteGuard(injector: Injector) {
   const route = injector.get(Router);
   const exists403 = route.config.find(route => route.path === Codes.FORBIDDEN_ROUTE);
@@ -23,6 +22,7 @@ function addPermissionsRouteGuard(injector: Injector) {
     route.config.push({ path: Codes.FORBIDDEN_ROUTE, component: Error403Component });
   }
 }
+
 
 export function appInitializerFactory(injector: Injector, config: Config, oTranslate: OTranslateService) {
   return () => new Promise<any>((resolve: any) => {
