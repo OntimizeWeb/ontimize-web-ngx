@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ElementRef, Injector, OnInit, TemplateRef, ViewChild, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, Injector, OnInit, TemplateRef, ViewChild, ViewEncapsulation, HostListener } from '@angular/core';
 import { FormControl, ValidatorFn } from '@angular/forms';
 import { DateAdapter, MatDatepicker, MatDatepickerInput, MatDatepickerInputEvent, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material';
 import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-moment-adapter';
@@ -69,7 +69,6 @@ export class OTableCellEditorTimeComponent extends OBaseTableCellEditor implemen
   formControlHour: FormControl;
   formControlDate: FormControl;
 
-
   public oDateFormat: string = 'L';
   public oHourMax: string;
   public oHourMin: string;
@@ -85,6 +84,15 @@ export class OTableCellEditorTimeComponent extends OBaseTableCellEditor implemen
   protected _maxDateString: string;
   protected datepicker: MatDatepicker<Date>;
   private momentSrv: MomentService;
+
+  // only true when hour input is focused
+  public enabledCommitOnTabPress: boolean = false;
+  protected activeKeys: Object = {};
+
+  @HostListener('document:keydown', ['$event'])
+  onDocumentKeydown(event: KeyboardEvent) {
+    this.handleKeydown(event);
+  }
 
   constructor(
     protected injector: Injector,
@@ -148,7 +156,6 @@ export class OTableCellEditorTimeComponent extends OBaseTableCellEditor implemen
     event.preventDefault();
     event.stopPropagation();
     this.picker.setTime();
-
   }
 
   onDateChange(event: MatDatepickerInputEvent<any>) {
@@ -160,9 +167,7 @@ export class OTableCellEditorTimeComponent extends OBaseTableCellEditor implemen
       emitEvent: false
     });
     this.updateComponentValue();
-    this.commitEdition();
   }
-
 
   protected updateValeOnInputChange(blurEvent: any): void {
     if (this.onKeyboardInputDone) {
@@ -196,9 +201,7 @@ export class OTableCellEditorTimeComponent extends OBaseTableCellEditor implemen
     return value;
   }
 
-
   public onHourChange(event) {
-
     let value;
     if (event instanceof Event) {
       this.updateValeOnInputChange(event);
@@ -210,10 +213,7 @@ export class OTableCellEditorTimeComponent extends OBaseTableCellEditor implemen
         emitModelToViewChange: false
       });
     }
-
-
     this.updateComponentValue();
-    this.commitEdition();
   }
 
   public setTimestampValue(value: any, options?: IFormValueOptions): void {
@@ -273,15 +273,24 @@ export class OTableCellEditorTimeComponent extends OBaseTableCellEditor implemen
     }
   }
 
-  protected handleKeyup(event: KeyboardEvent) {
+  protected handleKeydown(e: KeyboardEvent) {
+    this.activeKeys[e.keyCode] = true;
+  }
+
+  protected handleKeyup(e: KeyboardEvent) {
+    this.activeKeys[e.keyCode] = false;
     const oColumn = this.table.getOColumn(this.tableColumn.attr);
     if (!oColumn) {
+      return;
+    }
+    if (e.keyCode === 9 && (this.activeKeys[16] || !this.enabledCommitOnTabPress)) {
+      // tab + shift or tab pressed with focus in the date component  
       return;
     }
     if (!oColumn.editing && this.datepicker && this.datepicker.opened) {
       this.datepicker.close();
     } else {
-      super.handleKeyup(event);
+      super.handleKeyup(e);
     }
   }
 
@@ -364,6 +373,7 @@ export class OTableCellEditorTimeComponent extends OBaseTableCellEditor implemen
     }
     return value;
   }
+
   startEdition(data: any) {
     super.startEdition(data);
     const cellDataDate = this.getCellDataDate();
@@ -372,10 +382,7 @@ export class OTableCellEditorTimeComponent extends OBaseTableCellEditor implemen
     const cellDataHour = this.getCellDataHour();
     this.formControlHour.setValue(cellDataHour);
     this.formGroup.markAsTouched();
-
   }
-
-
 
   get formatString(): string {
     return Codes.formatString(this.oHourFormat);
@@ -412,9 +419,12 @@ export class OTableCellEditorTimeComponent extends OBaseTableCellEditor implemen
     return new Date(this.oMaxDate);
   }
 
-
-  onClosed() {
+  onDatepickerClosed() {
     this.dateInput.nativeElement.focus();
+  }
+
+  onTimepickerClosed() {
+    this.hourInput.nativeElement.focus();
   }
 
   commitEdition() {
@@ -428,6 +438,5 @@ export class OTableCellEditorTimeComponent extends OBaseTableCellEditor implemen
       e.preventDefault();
     }
   }
-
 
 }
