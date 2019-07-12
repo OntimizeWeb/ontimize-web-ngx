@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
-
 import { DialogService, OntimizeService } from '../../../../../services';
 import { dataServiceFactory } from '../../../../../services/data-service.provider';
 import { Codes, Util } from '../../../../../utils';
@@ -146,6 +145,10 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
     } catch (e) {
       console.error(e);
     }
+  }
+
+  public getCellData(cellvalue: any, rowvalue?: any): string {
+    return this.responseMap[cellvalue];
   }
 
 }

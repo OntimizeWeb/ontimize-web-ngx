@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, forwardRef, Inject, Injector, NgModule, OnDestroy, OnInit, ViewChild, ViewContainerRef, ViewEncapsulation } from '@angular/core';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
-
 import { InputConverter } from '../../../decorators';
 import { DialogService, NavigationService, OPermissions, SnackBarService } from '../../../services';
 import { OSharedModule } from '../../../shared';
@@ -9,6 +8,7 @@ import { PermissionsUtils } from '../../../util/permissions';
 import { Util } from '../../../util/util';
 import { OFormNavigationComponent } from '../navigation/o-form-navigation.component';
 import { OFormComponent } from '../o-form.component';
+
 
 export const DEFAULT_INPUTS_O_FORM_TOOLBAR = [
   'labelHeader: label-header',
@@ -59,6 +59,27 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
 
   public isSaveBtnEnabled: Observable<boolean>;
   public isEditBtnEnabled: Observable<boolean>;
+  public existsChangesToSave: Observable<boolean>;
+
+  get changesToSave(): boolean {
+    return this._changesToSave;
+
+  }
+
+  set changesToSave(val: boolean) {
+    this._changesToSave = val;
+    const attr = this._form.isEditableDetail() ? PermissionsUtils.ACTION_UPDATE : PermissionsUtils.ACTION_INSERT;
+    const permissions: OPermissions = (this.actionsPermissions || []).find(p => p.attr === attr);
+    if (Util.isDefined(permissions) && permissions.enabled === false) {
+      return;
+    }
+
+    this._existsChangesToSaveSubject.next(val);
+
+  }
+
+  protected _changesToSave: boolean = false;
+
 
   get editBtnEnabled(): boolean {
     return this._editBtnEnabled;
@@ -77,7 +98,7 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
     this._isSaveBtnEnabledSubject.next(this._saveBtnEnabled);
   }
   protected _saveBtnEnabled: boolean = false;
-  protected _existsChangesToSave: boolean = false;
+
 
   protected _dialogService: DialogService;
   protected _navigationService: NavigationService;
@@ -91,6 +112,7 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
 
   protected _isSaveBtnEnabledSubject = new BehaviorSubject<boolean>(false);
   protected _isEditBtnEnabledSubject = new BehaviorSubject<boolean>(false);
+  protected _existsChangesToSaveSubject = new BehaviorSubject<boolean>(false);
 
   constructor(
     @Inject(forwardRef(() => OFormComponent)) private _form: OFormComponent,
@@ -99,6 +121,7 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
   ) {
     this.isSaveBtnEnabled = this._isSaveBtnEnabledSubject.asObservable();
     this.isEditBtnEnabled = this._isEditBtnEnabledSubject.asObservable();
+    this.existsChangesToSave = this._existsChangesToSaveSubject.asObservable();
 
     this._form.registerToolbar(this);
     this._dialogService = this.injector.get(DialogService);
@@ -221,18 +244,6 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
     this.handleAcceptEditOperation();
   }
 
-  get existsChangesToSave(): boolean {
-    return this._existsChangesToSave;
-  }
-
-  set existsChangesToSave(val: boolean) {
-    const attr = this._form.isEditableDetail() ? PermissionsUtils.ACTION_UPDATE : PermissionsUtils.ACTION_INSERT;
-    const permissions: OPermissions = (this.actionsPermissions || []).find(p => p.attr === attr);
-    if (Util.isDefined(permissions) && permissions.enabled === false) {
-      return;
-    }
-    this._existsChangesToSave = val;
-  }
 
   public cancelOperation(): void {
     if (this.isDetail) {
@@ -340,7 +351,7 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
     const self = this;
     this._form.getFormCache().onCacheStateChanges.asObservable().subscribe((value: any) => {
       if (self._form.isEditableDetail()) {
-        self.existsChangesToSave = self._form.isInitialStateChanged();
+        self.changesToSave = self._form.isInitialStateChanged();
       }
     });
   }

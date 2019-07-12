@@ -1,34 +1,11 @@
 import { CommonModule } from '@angular/common';
-import {
-  ChangeDetectorRef,
-  Component,
-  CUSTOM_ELEMENTS_SCHEMA,
-  ElementRef,
-  EventEmitter,
-  Injector,
-  NgModule,
-  NgZone,
-  OnDestroy,
-  OnInit,
-  ViewChild,
-  ViewEncapsulation
-} from '@angular/core';
+import { ChangeDetectorRef, Component, CUSTOM_ELEMENTS_SCHEMA, ElementRef, EventEmitter, Injector, NgModule, NgZone, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router, UrlSegment } from '@angular/router';
 import { combineLatest, Observable, Subscription } from 'rxjs';
-
 import { InputConverter } from '../../decorators';
 import { OFormLayoutManagerComponent } from '../../layouts';
-import {
-  DialogService,
-  NavigationService,
-  OFormPermissions,
-  ONavigationItem,
-  OntimizeService,
-  OPermissions,
-  PermissionsService,
-  SnackBarService
-} from '../../services';
+import { DialogService, NavigationService, OFormPermissions, ONavigationItem, OntimizeService, OPermissions, PermissionsService, SnackBarService } from '../../services';
 import { dataServiceFactory } from '../../services/data-service.provider';
 import { OSharedModule } from '../../shared';
 import { Codes, SQLTypes, Util } from '../../utils';
@@ -40,6 +17,7 @@ import { OFormNavigationClass } from './navigation/o-form.navigation.class';
 import { OFormContainerComponent } from './o-form-container.component';
 import { IFormValueOptions, OFormValue } from './OFormValue';
 import { OFormToolbarComponent, OFormToolbarModule } from './toolbar/o-form-toolbar.component';
+
 
 export interface IFormDataComponentHash {
   [attr: string]: IFormDataComponent;
@@ -678,8 +656,10 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   }
 
   ngAfterViewInit() {
-    this.determinateFormMode();
-    this.onFormInitStream.emit(true);
+    setTimeout(() => {
+      this.determinateFormMode();
+      this.onFormInitStream.emit(true);
+    });
   }
 
   /*

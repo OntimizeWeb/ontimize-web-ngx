@@ -1,4 +1,10 @@
-## 4.0.6
+## 4.0.7
+### Features
+* New components **o-form-layout-dialog-options** and **o-form-layout-tabgroup-options** ([2ad8ae1](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2ad8ae1))
+### Bug Fixes
+* **o-table-cell-renderer-service**:not render cell value when export data table ([a594521](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a594521))
+
+## 4.0.6 (2019-06-19)
 ### Features
 * **FilterExpressionUtils**: added operator `IN` and method `buildExpressionIn` ([fcc0003](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/fcc0003))
 * New component `o-daterange-input` ([7c48c09](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7c48c09))
