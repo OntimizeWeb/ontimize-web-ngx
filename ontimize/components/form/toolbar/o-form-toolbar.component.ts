@@ -73,7 +73,7 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
     if (Util.isDefined(permissions) && permissions.enabled === false) {
       return;
     }
-        
+
     this._existsChangesToSaveSubject.next(val);
 
   }

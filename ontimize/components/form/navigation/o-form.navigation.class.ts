@@ -1,12 +1,12 @@
 import { EventEmitter, Injector } from '@angular/core';
-import { ActivatedRoute, Router, UrlSegmentGroup, NavigationExtras } from '@angular/router';
-import { Observable, Subscription, combineLatest } from 'rxjs';
-
-import { DialogService, NavigationService, ONavigationItem } from '../../../services';
-import { OFormComponent } from '../o-form.component';
-import { Codes, SQLTypes, Util } from '../../../utils';
-import { OFormLayoutManagerComponent, IDetailComponentData } from '../../../layouts/form-layout/o-form-layout-manager.component';
+import { ActivatedRoute, NavigationExtras, Router, UrlSegmentGroup } from '@angular/router';
+import { combineLatest, Observable, Subscription } from 'rxjs';
 import { OFormLayoutDialogComponent } from '../../../layouts/form-layout/dialog/o-form-layout-dialog.component';
+import { IDetailComponentData, OFormLayoutManagerComponent } from '../../../layouts/form-layout/o-form-layout-manager.component';
+import { DialogService, NavigationService, ONavigationItem } from '../../../services';
+import { Codes, SQLTypes, Util } from '../../../utils';
+import { OFormComponent } from '../o-form.component';
+
 
 export class OFormNavigationClass {
 

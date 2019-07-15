@@ -1,10 +1,11 @@
 import { ChangeDetectionStrategy, Component, forwardRef, Inject, Injector, OnInit, ViewChild } from '@angular/core';
 import { BehaviorSubject, Subscription } from 'rxjs';
-
+import { InputConverter } from '../../../../decorators/input-converter';
 import { OTranslateService } from '../../../../services';
 import { Util } from '../../../../utils';
 import { OContextMenuComponent } from '../../../contextmenu/o-context-menu-components';
 import { ColumnValueFilterOperator, IColumnValueFilter, OColumn, OTableComponent } from '../../table-components';
+
 
 export const DEFAULT_TABLE_CONTEXT_MENU_INPUTS = [
   'contextMenu: context-menu',
@@ -32,7 +33,7 @@ export class OTableContextMenuComponent implements OnInit {
   public isVisibleEdit: BehaviorSubject<boolean> = new BehaviorSubject(true);
   public isVisibleDetail: BehaviorSubject<boolean> = new BehaviorSubject(true);
   public isVisibleCopy: BehaviorSubject<boolean> = new BehaviorSubject(true);
-  public isVisibleSelectAll: BehaviorSubject<boolean> = new BehaviorSubject(undefined);
+  public isVisibleSelectAll: BehaviorSubject<boolean> = new BehaviorSubject(true);
   public isVisibleRefresh: BehaviorSubject<boolean> = new BehaviorSubject(true);
   public isVisibleDelete: BehaviorSubject<boolean> = new BehaviorSubject(true);
   public isVisibleFilter: BehaviorSubject<boolean> = new BehaviorSubject(true);
@@ -76,7 +77,8 @@ export class OTableContextMenuComponent implements OnInit {
   get showCopy(): boolean {
     return this.isVisibleCopy.getValue();
   }
-
+  
+  @InputConverter()
   set showSelectAll(value: boolean) {
     if (typeof value !== 'boolean') {
       value = Util.parseBoolean(value as any);

@@ -1,33 +1,12 @@
 import { LOCATION_INITIALIZED } from '@angular/common';
 import { Injector, Provider } from '@angular/core';
 import { BaseRequestOptions, XHRBackend } from '@angular/http';
+import { MAT_RIPPLE_GLOBAL_OPTIONS } from '@angular/material';
 import { Router } from '@angular/router';
 import { combineLatest } from 'rxjs';
-
 import { OContextMenuService } from '../components/contextmenu/o-context-menu.service';
 import { AppConfig, Config } from '../config/app-config';
-import {
-  appConfigFactory,
-  AppMenuService,
-  AuthGuardService,
-  CurrencyService,
-  dataServiceFactory,
-  DialogService,
-  LocalStorageService,
-  LoginService,
-  MomentService,
-  NavigationService,
-  NumberService,
-  OModulesInfoService,
-  OntimizeExportService,
-  OntimizeFileService,
-  OntimizeMatIconRegistry,
-  OntimizeService,
-  OntimizeServiceResponseParser,
-  OTranslateService,
-  OUserInfoService,
-  SnackBarService
-} from '../services';
+import { appConfigFactory, AppMenuService, AuthGuardService, CurrencyService, dataServiceFactory, DialogService, LocalStorageService, LoginService, MomentService, NavigationService, NumberService, OModulesInfoService, OntimizeExportService, OntimizeFileService, OntimizeMatIconRegistry, OntimizeService, OntimizeServiceResponseParser, OTranslateService, OUserInfoService, SnackBarService } from '../services';
 import { OFormLayoutManagerService } from '../services/o-form-layout-manager.service';
 import { Error403Component } from '../services/permissions/error403/o-error-403.component';
 import { ORemoteConfigurationService } from '../services/remote-config.service';
@@ -43,6 +22,7 @@ function addPermissionsRouteGuard(injector: Injector) {
     route.config.push({ path: Codes.FORBIDDEN_ROUTE, component: Error403Component });
   }
 }
+
 
 export function appInitializerFactory(injector: Injector, config: Config, oTranslate: OTranslateService) {
   return () => new Promise<any>((resolve: any) => {
@@ -307,5 +287,7 @@ export const ONTIMIZE_PROVIDERS: Provider[] = [
     provide: ORemoteConfigurationService,
     useFactory: getORemoteConfigurationService,
     deps: [Injector]
-  }
+  },
+  //disabled global ripple 
+  { provide: MAT_RIPPLE_GLOBAL_OPTIONS, useValue: { disabled: true } }
 ];

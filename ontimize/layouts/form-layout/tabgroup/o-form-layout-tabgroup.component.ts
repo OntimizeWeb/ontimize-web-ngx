@@ -1,15 +1,16 @@
-import { Component, ViewEncapsulation, Injector, ComponentFactoryResolver, ViewContainerRef, ViewChildren, QueryList, ViewChild, AfterViewInit, EventEmitter, OnDestroy, ChangeDetectorRef, ElementRef } from '@angular/core';
-import { MatTabGroup, MatTabChangeEvent } from '@angular/material';
+import { AfterViewInit, Component, ComponentFactoryResolver, ElementRef, EventEmitter, Injector, OnDestroy, QueryList, ViewChild, ViewChildren, ViewContainerRef, ViewEncapsulation } from '@angular/core';
+import { MatTabChangeEvent, MatTabGroup } from '@angular/material';
 import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
-import { Util, Codes } from '../../../utils';
+import { BehaviorSubject, Subscription } from 'rxjs';
 import { DialogService } from '../../../services/dialog.service';
+import { ONavigationItem } from '../../../services/navigation.service';
+import { Codes, Util } from '../../../utils';
 import { OFormLayoutManagerContentDirective } from '../directives/o-form-layout-manager-content.directive';
 import { IDetailComponentData, OFormLayoutManagerComponent } from '../o-form-layout-manager.component';
-import { ONavigationItem } from '../../../services/navigation.service';
 
 export const DEFAULT_INPUTS_O_FORM_LAYOUT_TABGROUP = [
-  'title'
+  'title',
+  'options'
 ];
 
 export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_TABGROUP = [
@@ -36,9 +37,11 @@ export class OFormLayoutTabGroupComponent implements AfterViewInit, OnDestroy {
   public static DEFAULT_OUTPUTS_O_FORM_LAYOUT_TABGROUP = DEFAULT_OUTPUTS_O_FORM_LAYOUT_TABGROUP;
 
   protected formLayoutManager: OFormLayoutManagerComponent;
-  data: IDetailComponentData[] = [];
-  selectedTabIndex: number | null;
-  title: string;
+  public data: IDetailComponentData[] = [];
+  public selectedTabIndex: number | null;
+  public title: string;
+  public options: any;
+  public showLoading = new BehaviorSubject<boolean>(false);
   protected _state: any;
 
   @ViewChild('tabGroup') tabGroup: MatTabGroup;
@@ -58,8 +61,7 @@ export class OFormLayoutTabGroupComponent implements AfterViewInit, OnDestroy {
     protected injector: Injector,
     protected componentFactoryResolver: ComponentFactoryResolver,
     protected location: ViewContainerRef,
-    protected elRef: ElementRef,
-    private cd: ChangeDetectorRef
+    protected elRef: ElementRef
   ) {
     this.dialogService = injector.get(DialogService);
     this.formLayoutManager = this.injector.get(OFormLayoutManagerComponent);
@@ -67,6 +69,7 @@ export class OFormLayoutTabGroupComponent implements AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit() {
+
     this.tabsDirectivesSubscription = this.tabsDirectives.changes.subscribe(changes => {
       if (this.tabsDirectives.length) {
         const tabItem = this.tabsDirectives.last;
@@ -85,6 +88,55 @@ export class OFormLayoutTabGroupComponent implements AfterViewInit, OnDestroy {
     if (this.closeTabSubscription) {
       this.closeTabSubscription.unsubscribe();
     }
+  }
+
+
+  public get disableAnimation() {
+    return this.options && this.options.disableAnimation;
+  }
+
+  public get headerPosition() {
+    let headerPosition;
+    if (this.options && this.options.headerPosition) {
+      headerPosition = this.options.headerPosition;
+    }
+    return headerPosition;
+  }
+
+  public get color() {
+    let color;
+    if (this.options && this.options.color) {
+      color = this.options.color;
+    }
+    return color;
+  }
+
+  public get backgroundColor() {
+    let backgroundColor;
+    if (this.options && this.options.backgroundColor) {
+      backgroundColor = this.options.backgroundColor;
+    }
+    return backgroundColor;
+  }
+
+  public get templateMatTabLabel() {
+    let templateMatTabLabel;
+    if (this.options && this.options.templateMatTabLabel) {
+      templateMatTabLabel = this.options.templateMatTabLabel;
+    }
+    return templateMatTabLabel;
+  }
+
+  public get icon() {
+    let icon;
+    if (this.options && this.options.icon) {
+      icon = this.options.icon;
+    }
+    return icon;
+  }
+
+  public get isIconPositionLeft() {
+    return this.options && this.options.iconPosition === 'left';
   }
 
   addTab(compData: IDetailComponentData) {
@@ -217,6 +269,9 @@ export class OFormLayoutTabGroupComponent implements AfterViewInit, OnDestroy {
       label = label.length ? label : this.formLayoutManager.getLabelFromUrlParams(this.data[index].params);
       this.data[index].label = label;
       this.data[index].insertionMode = insertionMode;
+      if (Object.keys(data).length > 0) {
+        this.data[index].formDataByLabelColumns = this.formLayoutManager.getFormDataFromLabelColumns(data);
+      }
     }
   }
 
@@ -289,24 +344,12 @@ export class OFormLayoutTabGroupComponent implements AfterViewInit, OnDestroy {
     return newDetailComp;
   }
 
-  get showLoading(): boolean {
-    return this.loading;
-  }
-
-  set showLoading(arg: boolean) {
-    this.loading = arg;
-  }
-
   set state(arg: any) {
     this._state = arg;
     if (Util.isDefined(arg)) {
-      this.showLoading = true;
+      this.showLoading.next(true);
     } else {
-      const self = this;
-      setTimeout(() => {
-        self.showLoading = false;
-        self.cd.detectChanges();
-      }, 1000);
+      this.showLoading.next(false);
     }
   }
 

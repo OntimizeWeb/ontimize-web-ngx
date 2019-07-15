@@ -214,7 +214,6 @@ export class OTableCellEditorDateComponent extends OBaseTableCellEditor implemen
       emitModelToViewChange: false,
       emitEvent: false
     });
-    this.commitEdition();
   }
 
   openDatepicker(d: MatDatepicker<Date>) {
