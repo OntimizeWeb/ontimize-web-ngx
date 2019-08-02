@@ -41,7 +41,6 @@ export class OTableColumnResizerComponent implements OnInit, OnDestroy {
   protected maxWidth: any;
 
   protected startX: any;
-  protected endX: number;
 
   protected headerEl: any;
 
@@ -134,15 +133,17 @@ export class OTableColumnResizerComponent implements OnInit, OnDestroy {
     if (!this.isResizing || !(event instanceof MouseEvent)) {
       return;
     }
-    this.endX = event.screenX;
-    const movementX = (this.endX - this.startX);
+    const movementX = (event.screenX - this.startX);
+    if (movementX === 0) {
+      return;
+    }
     let newColumnWidth = this.startWidth + movementX;
 
     const lessThanMin = newColumnWidth < this.minWidth;
     const moreThanMax = newColumnWidth > this.maxWidth;
-    if (movementX === 0 || lessThanMin || moreThanMax) {
+    if (lessThanMin || moreThanMax) {
       return;
-    }   
+    }
     if (!this.table.horizontalScroll) {
       this.calculateNewColumnsWidth(movementX, newColumnWidth);
       this.updateBlockedCols();
@@ -205,19 +206,21 @@ export class OTableColumnResizerComponent implements OnInit, OnDestroy {
   }
 
   protected calculateUsingNextColumnsRestrictions(movementX: number, newColumnWidth: number) {
-    let widthRatio = movementX / this.nextOColumns.length;
-    if (this.blockedMinCols.length < this.nextOColumns.length) {
-      let cols = this.nextOColumns.filter((oCol: OColumn) => this.blockedMinCols.indexOf(oCol.attr) === -1);
-      cols.forEach(oCol => {
-        let newWidth = (this.columnsStartWidth[oCol.attr] - widthRatio);
-        let minWidth = oCol.getMinWidthValue();
-        if (newWidth <= minWidth) {
-          newWidth = minWidth;
-          this.blockedMinCols.push(oCol.attr);
-        }
-        oCol.setWidth(newWidth);
-      });
+    const availableCols = this.nextOColumns.length - this.blockedMinCols.length;
+    if (availableCols <= 0) {
+      return;
     }
+    let widthRatio = movementX / availableCols;
+    let cols = this.nextOColumns.filter((oCol: OColumn) => this.blockedMinCols.indexOf(oCol.attr) === -1);
+    cols.forEach(oCol => {
+      let newWidth = (this.columnsStartWidth[oCol.attr] - widthRatio);
+      let minWidth = oCol.getMinWidthValue();
+      if (newWidth <= minWidth) {
+        newWidth = minWidth;
+        this.blockedMinCols.push(oCol.attr);
+      }
+      oCol.setWidth(newWidth);
+    });
     this.column.setWidth(newColumnWidth);
   }
 

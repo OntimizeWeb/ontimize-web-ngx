@@ -1264,10 +1264,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     if (Util.isDefined(this.tableHeaderEl)) {
       [].slice.call(this.tableHeaderEl.nativeElement.children).forEach(thEl => {
         const oCol: OColumn = self.getOColumnFromTh(thEl);
-        if (Util.isDefined(oCol)) {
-          if (!Util.isDefined(oCol.DOMWidth) && thEl.clientWidth > 0) {
-            oCol.DOMWidth = thEl.clientWidth;
-          }
+        if (Util.isDefined(oCol) && thEl.clientWidth > 0 && oCol.DOMWidth !== thEl.clientWidth) {
+          oCol.DOMWidth = thEl.clientWidth;
         }
       });
     }
