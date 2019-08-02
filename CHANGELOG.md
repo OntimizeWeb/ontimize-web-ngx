@@ -1,6 +1,8 @@
 ## 4.0.7
 ### Features
 * New components **o-form-layout-dialog-options** and **o-form-layout-tabgroup-options** ([2ad8ae1](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2ad8ae1))
+* **o-button**: new `svg-icon` input  ([404ae8f](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/404ae8f))
+
 ### Bug Fixes
 * **o-table-cell-renderer-service**:not render cell value when export data table ([a594521](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a594521))
 
