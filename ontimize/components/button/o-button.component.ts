@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, NgModule, OnInit, ViewEncapsulation } from '@angular/core';
-
 import { OSharedModule } from '../../shared';
+
 
 export const DEFAULT_INPUTS_O_BUTTON = [
   'oattr: attr',
@@ -10,6 +10,7 @@ export const DEFAULT_INPUTS_O_BUTTON = [
   'otype: type',
   // icon [string]: Name of google icon (see https://design.google.com/icons/)
   'icon',
+  'svgIcon : svg-icon',
   'iconPosition: icon-position',
   'image'
 ];
@@ -35,6 +36,7 @@ export class OButtonComponent implements OnInit {
   olabel: string;
   protected otype: string;
   icon: string;
+  svgIcon: string;
   iconPosition: string; // left (default), top, TODO: right, bottom?
   image: string;
 
