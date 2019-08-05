@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ElementRef, Injector, OnInit, TemplateRef, ViewChild, ViewEncapsulation, HostListener } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, HostListener, Injector, OnInit, TemplateRef, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormControl, ValidatorFn } from '@angular/forms';
 import { DateAdapter, MatDatepicker, MatDatepickerInput, MatDatepickerInputEvent, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material';
 import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-moment-adapter';
@@ -283,7 +283,7 @@ export class OTableCellEditorTimeComponent extends OBaseTableCellEditor implemen
       return;
     }
     if (e.keyCode === 9 && (this.activeKeys[16] || !this.enabledCommitOnTabPress)) {
-      // tab + shift or tab pressed with focus in the date component  
+      // tab + shift or tab pressed with focus in the date component
       return;
     }
     if (!oColumn.editing && this.datepicker && this.datepicker.opened) {
