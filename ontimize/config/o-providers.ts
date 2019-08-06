@@ -288,6 +288,6 @@ export const ONTIMIZE_PROVIDERS: Provider[] = [
     useFactory: getORemoteConfigurationService,
     deps: [Injector]
   },
-  //disabled global ripple 
+  // disabled global ripple
   { provide: MAT_RIPPLE_GLOBAL_OPTIONS, useValue: { disabled: true } }
 ];

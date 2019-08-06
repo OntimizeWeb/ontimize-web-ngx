@@ -94,7 +94,7 @@ export class OTableCellRendererActionComponent extends OBaseTableCellRenderer im
     return Util.isDefined(this.icon) && this.iconPosition === Codes.ICON_POSITION_RIGHT;
   }
 
-  isSvgIconPositionRight(){
+  isSvgIconPositionRight() {
     return Util.isDefined(this.svgIcon) && this.iconPosition === Codes.ICON_POSITION_RIGHT;
   }
 
