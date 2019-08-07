@@ -52,9 +52,6 @@ export const DEFAULT_INPUTS_O_TABLE = [
   // sort-columns [string]: initial sorting, with the format column:[ASC|DESC], separated by ';'. Default: no value.
   'sortColumns: sort-columns',
 
-  // quick-filter [no|yes]: show quick filter. Default: yes.
-  'quickFilterPvt: quick-filter',
-
   'quickFilterCallback: quick-filter-function',
 
   // delete-button [no|yes]: show delete button. Default: yes.
@@ -83,9 +80,6 @@ export const DEFAULT_INPUTS_O_TABLE = [
 
   // pagination-controls [yes|no|true|false]: show pagination controls. Default: yes.
   'paginationControls: pagination-controls',
-
-  // filter [yes|no|true|false]: filter si case sensitive. Default: no.
-  'filterCaseSensitive: filter-case-sensitive',
 
   // fix-header [yes|no|true|false]: fixed header and footer when the content is greather than its own height. Default: no.
   'fixedHeader: fixed-header',
@@ -447,22 +441,23 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     this._oTableOptions = value;
   }
 
-  @InputConverter()
-  protected quickFilterPvt: boolean = true;
   set quickFilter(value: boolean) {
-    this.quickFilterPvt = value;
-    this._oTableOptions.filter = this.quickFilterPvt;
+    value = Util.parseBoolean(String(value));
+    this._quickFilter = value;
+    this._oTableOptions.filter = value;
   }
 
   get quickFilter(): boolean {
-    return this.quickFilterPvt;
+    return this._quickFilter;
   }
 
   protected filterCaseSensitivePvt: boolean = false;
   @InputConverter()
   set filterCaseSensitive(value: boolean) {
     this.filterCaseSensitivePvt = value;
-    this._oTableOptions.filterCaseSensitive = this.filterCaseSensitivePvt;
+    if (this._oTableOptions) {
+      this._oTableOptions.filterCaseSensitive = this.filterCaseSensitivePvt;
+    }
   }
   get filterCaseSensitive(): boolean {
     return this.filterCaseSensitivePvt;
@@ -865,8 +860,11 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     return this.oTableStorage.getDataToStore();
   }
 
-  registerQuickFilter(arg: OTableQuickfilterComponent) {
-    this.oTableQuickFilterComponent = arg;
+  registerQuickFilter(arg: any) {
+    const quickFilter = (arg as OTableQuickfilterComponent);
+    // forcing quickFilterComponent to be undefined, table uses oTableQuickFilterComponent
+    this.quickFilterComponent = undefined;
+    this.oTableQuickFilterComponent = quickFilter;
     this.oTableQuickFilterComponent.setValue(this.state['filter'], false);
   }
 
@@ -1160,67 +1158,72 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   getComponentFilter(existingFilter: any = {}): any {
     let filter = existingFilter;
     if (this.pageable) {
-      // Apply quick filter
-      let quickFilterExpr = this.oTableQuickFilterComponent ? this.oTableQuickFilterComponent.filterExpression : undefined;
-      if (quickFilterExpr) {
+      if (Object.keys(filter).length > 0) {
         const parentItemExpr = FilterExpressionUtils.buildExpressionFromObject(filter);
-        const filterExpr = FilterExpressionUtils.buildComplexExpression(parentItemExpr, quickFilterExpr, FilterExpressionUtils.OP_AND);
         filter = {};
-        filter[FilterExpressionUtils.FILTER_EXPRESSION_KEY] = filterExpr;
+        filter[FilterExpressionUtils.FILTER_EXPRESSION_KEY] = parentItemExpr;
       }
-      // Apply column filters
-      let columnFilters: IColumnValueFilter[] = this.dataSource.getColumnValueFilters();
-      let beColumnFilters: Array<IExpression> = [];
-      columnFilters.forEach(colFilter => {
-        // Prepare basic expressions
-        if (Util.isDefined(colFilter.operator)) {
-          switch (colFilter.operator) {
-            case ColumnValueFilterOperator.IN:
-              if (Util.isArray(colFilter.values)) {
-                let besIn: Array<IExpression> = colFilter.values.map(value => FilterExpressionUtils.buildExpressionEquals(colFilter.attr, value));
-                let beIn: IExpression = besIn.pop();
-                besIn.forEach(be => {
-                  beIn = FilterExpressionUtils.buildComplexExpression(beIn, be, FilterExpressionUtils.OP_OR);
-                });
-                beColumnFilters.push(beIn);
-              }
-              break;
-            case ColumnValueFilterOperator.BETWEEN:
-              if (Util.isArray(colFilter.values) && colFilter.values.length === 2) {
-                let beFrom = FilterExpressionUtils.buildExpressionLessEqual(colFilter.attr, colFilter.values[0]);
-                let beTo = FilterExpressionUtils.buildExpressionMoreEqual(colFilter.attr, colFilter.values[1]);
-                beColumnFilters.push(FilterExpressionUtils.buildComplexExpression(beFrom, beTo, FilterExpressionUtils.OP_AND));
-              }
-              break;
-            case ColumnValueFilterOperator.EQUAL:
-              beColumnFilters.push(FilterExpressionUtils.buildExpressionLike(colFilter.attr, colFilter.values));
-              break;
-            case ColumnValueFilterOperator.LESS_EQUAL:
-              beColumnFilters.push(FilterExpressionUtils.buildExpressionLessEqual(colFilter.attr, colFilter.values));
-              break;
-            case ColumnValueFilterOperator.MORE_EQUAL:
-              beColumnFilters.push(FilterExpressionUtils.buildExpressionMoreEqual(colFilter.attr, colFilter.values));
-              break;
-          }
-        }
-      });
-      // Build complete column filters basic expression
-      let beColFilter: IExpression = beColumnFilters.pop();
-      beColumnFilters.forEach(be => {
-        beColFilter = FilterExpressionUtils.buildComplexExpression(beColFilter, be, FilterExpressionUtils.OP_AND);
-      });
-
+      const beColFilter = this.getColumnFiltersExpression();
       // Add column filters basic expression to current filter
-      if (beColFilter) {
-        if (!Util.isDefined(filter[FilterExpressionUtils.FILTER_EXPRESSION_KEY])) {
-          filter[FilterExpressionUtils.FILTER_EXPRESSION_KEY] = beColFilter;
-        } else {
-          filter[FilterExpressionUtils.FILTER_EXPRESSION_KEY] = FilterExpressionUtils.buildComplexExpression(filter[FilterExpressionUtils.FILTER_EXPRESSION_KEY], beColFilter, FilterExpressionUtils.OP_AND);
-        }
+      if (beColFilter && !Util.isDefined(filter[FilterExpressionUtils.FILTER_EXPRESSION_KEY])) {
+        filter[FilterExpressionUtils.FILTER_EXPRESSION_KEY] = beColFilter;
+      } else if (beColFilter) {
+        filter[FilterExpressionUtils.FILTER_EXPRESSION_KEY] =
+          FilterExpressionUtils.buildComplexExpression(filter[FilterExpressionUtils.FILTER_EXPRESSION_KEY], beColFilter, FilterExpressionUtils.OP_AND);
       }
     }
-
     return super.getComponentFilter(filter);
+  }
+
+  protected getQuickFilterExpression(): IExpression {
+    if (Util.isDefined(this.oTableQuickFilterComponent)) {
+      return this.oTableQuickFilterComponent.filterExpression;
+    }
+    return undefined;
+  }
+
+  protected getColumnFiltersExpression(): IExpression {
+    // Apply column filters
+    let columnFilters: IColumnValueFilter[] = this.dataSource.getColumnValueFilters();
+    let beColumnFilters: Array<IExpression> = [];
+    columnFilters.forEach(colFilter => {
+      // Prepare basic expressions
+      switch (colFilter.operator) {
+        case ColumnValueFilterOperator.IN:
+          if (Util.isArray(colFilter.values)) {
+            let besIn: Array<IExpression> = colFilter.values.map(value => FilterExpressionUtils.buildExpressionEquals(colFilter.attr, value));
+            let beIn: IExpression = besIn.pop();
+            besIn.forEach(be => {
+              beIn = FilterExpressionUtils.buildComplexExpression(beIn, be, FilterExpressionUtils.OP_OR);
+            });
+            beColumnFilters.push(beIn);
+          }
+          break;
+        case ColumnValueFilterOperator.BETWEEN:
+          if (Util.isArray(colFilter.values) && colFilter.values.length === 2) {
+            let beFrom = FilterExpressionUtils.buildExpressionLessEqual(colFilter.attr, colFilter.values[0]);
+            let beTo = FilterExpressionUtils.buildExpressionMoreEqual(colFilter.attr, colFilter.values[1]);
+            beColumnFilters.push(FilterExpressionUtils.buildComplexExpression(beFrom, beTo, FilterExpressionUtils.OP_AND));
+          }
+          break;
+        case ColumnValueFilterOperator.EQUAL:
+          beColumnFilters.push(FilterExpressionUtils.buildExpressionLike(colFilter.attr, colFilter.values));
+          break;
+        case ColumnValueFilterOperator.LESS_EQUAL:
+          beColumnFilters.push(FilterExpressionUtils.buildExpressionLessEqual(colFilter.attr, colFilter.values));
+          break;
+        case ColumnValueFilterOperator.MORE_EQUAL:
+          beColumnFilters.push(FilterExpressionUtils.buildExpressionMoreEqual(colFilter.attr, colFilter.values));
+          break;
+      }
+
+    });
+    // Build complete column filters basic expression
+    let beColFilter: IExpression = beColumnFilters.pop();
+    beColumnFilters.forEach(be => {
+      beColFilter = FilterExpressionUtils.buildComplexExpression(beColFilter, be, FilterExpressionUtils.OP_AND);
+    });
+    return beColFilter;
   }
 
   updatePaginationInfo(queryRes: any) {

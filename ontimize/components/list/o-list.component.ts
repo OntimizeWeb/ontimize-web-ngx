@@ -1,12 +1,11 @@
-import { AfterContentInit, AfterViewInit, Component, ContentChildren, ElementRef, EventEmitter, Inject, Injector, NgModule, OnChanges, OnDestroy, OnInit, Optional, QueryList, SimpleChange, ViewChild, ViewEncapsulation, forwardRef } from '@angular/core';
+import { AfterContentInit, AfterViewInit, Component, ContentChildren, ElementRef, EventEmitter, Inject, Injector, NgModule, OnChanges, OnDestroy, OnInit, Optional, QueryList, SimpleChange, ViewEncapsulation, forwardRef } from '@angular/core';
 import { Codes, Util } from '../../utils';
 import { ISQLOrder, OQueryDataArgs, ServiceUtils } from '../service.utils';
 import { OListItemComponent, OListItemModule } from './list-item/o-list-item.component';
-import { OSearchInputComponent, OSearchInputModule } from '../input/search-input/o-search-input.component';
+import { OSearchInputModule } from '../input/search-input/o-search-input.component';
 import { Subscription, merge } from 'rxjs';
 
 import { CommonModule } from '@angular/common';
-import { FilterExpressionUtils } from '../filter-expression.utils';
 import { InputConverter } from '../../decorators';
 import { MatCheckbox } from '@angular/material';
 import { OFormComponent } from '../form/o-form.component';
@@ -30,9 +29,6 @@ export interface IList {
 export const DEFAULT_INPUTS_O_LIST = [
   ...OServiceComponent.DEFAULT_INPUTS_O_SERVICE_COMPONENT,
 
-  // quick-filter [no|yes]: show quick filter. Default: yes.
-  'quickFilter: quick-filter',
-
   // quick-filter-columns [string]: columns of the filter, separated by ';'. Default: no value.
   'quickFilterColumns: quick-filter-columns',
 
@@ -47,9 +43,6 @@ export const DEFAULT_INPUTS_O_LIST = [
 
   // delete-button [no|yes]: show delete button when user select items. Default: yes.
   'deleteButton: delete-button',
-
-  // filter [yes|no|true|false]: filter si case sensitive. Default: no.
-  'filterCaseSensitive: filter-case-sensitive',
 
   // sort-columns [string]: initial sorting, with the format column:[ASC|DESC], separated by ';'. Default: no value.
   'sortColumns: sort-columns'
@@ -108,24 +101,10 @@ export class OListComponent extends OServiceComponent implements AfterContentIni
   public odense: boolean = false;
   @InputConverter()
   public deleteButton: boolean = true;
-  @InputConverter()
-  public filterCaseSensitive: boolean = false;
-  get quickFilter(): boolean {
-    return this._quickFilter;
-  }
-  set quickFilter(val: boolean) {
-    val = Util.parseBoolean(String(val));
-    this._quickFilter = val;
-    if (val) {
-      setTimeout(() => this.registerQuickFilter(this.searchInputComponent), 0);
-    }
-  }
   public quickFilterColumns: string;
   public route: string;
   public sortColumns: string;
   /* End Inputs */
-
-  public quickFilterComponent: OSearchInputComponent;
 
   public sortColArray: ISQLOrder[] = [];
 
@@ -139,11 +118,6 @@ export class OListComponent extends OServiceComponent implements AfterContentIni
   public selection = new SelectionModel<Element>(true, []);
   public enabledDeleteButton: boolean = false;
 
-  @ViewChild(OSearchInputComponent)
-  protected searchInputComponent: OSearchInputComponent;
-
-  protected _quickFilter: boolean = true;
-  protected quickFilterColArray: string[];
   protected dataResponseArray: any[] = [];
   protected storePaginationState: boolean = false;
   protected subscription: Subscription = new Subscription();
@@ -224,24 +198,6 @@ export class OListComponent extends OServiceComponent implements AfterContentIni
 
   public reinitialize(options: OListInitializationOptions): void {
     super.reinitialize(options);
-  }
-
-  public registerQuickFilter(input: OSearchInputComponent): void {
-    if (Util.isDefined(this.quickFilterComponent)) {
-      // avoiding to register a quickfiltercomponent if it already exists one
-      return;
-    }
-    this.quickFilterComponent = input;
-    if (Util.isDefined(this.quickFilterComponent)) {
-      if (this.state.hasOwnProperty('filterValue')) {
-        this.quickFilterComponent.setValue(this.state.filterValue);
-      }
-      if (this.state.hasOwnProperty('quickFilterActiveColumns')) {
-        const parsedArr = Util.parseArray(this.state.quickFilterActiveColumns, true);
-        this.quickFilterComponent.setActiveColumns(parsedArr);
-      }
-      this.quickFilterComponent.onSearch.subscribe(val => this.filterData(val));
-    }
   }
 
   public registerListItemDirective(item: OListItemDirective): void {
@@ -414,22 +370,6 @@ export class OListComponent extends OServiceComponent implements AfterContentIni
     super.insertDetail();
   }
 
-  public getComponentFilter(existingFilter: any = {}): any {
-    const filter = existingFilter;
-    // Apply quick filter
-    if (this.pageable && Util.isDefined(this.quickFilterComponent)) {
-      const searchValue = this.quickFilterComponent.getValue();
-      if (Util.isDefined(searchValue)) {
-        const filterCols = this.getQuickFilterColumns();
-        if (filterCols.length > 0) {
-          filter[FilterExpressionUtils.BASIC_EXPRESSION_KEY] =
-            FilterExpressionUtils.buildArrayExpressionLike(filterCols, searchValue);
-        }
-      }
-    }
-    return super.getComponentFilter(filter);
-  }
-
   public parseSortColumns(): void {
     const sortColumnsParam = this.state['sort-columns'] || this.sortColumns;
     this.sortColArray = ServiceUtils.parseSortColumns(sortColumnsParam);
@@ -465,10 +405,6 @@ export class OListComponent extends OServiceComponent implements AfterContentIni
       return this.quickFilterComponent.filterCaseSensitive;
     }
     return this.filterCaseSensitive;
-  }
-
-  public showCaseSensitiveCheckbox(): boolean {
-    return !this.pageable;
   }
 
   protected setListItemsData(): void {
