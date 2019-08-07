@@ -77,7 +77,7 @@ export class OTableContextMenuComponent implements OnInit {
   get showCopy(): boolean {
     return this.isVisibleCopy.getValue();
   }
-  
+
   @InputConverter()
   set showSelectAll(value: boolean) {
     if (typeof value !== 'boolean') {

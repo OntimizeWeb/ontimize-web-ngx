@@ -3,7 +3,7 @@
     class="icon-field" fxFill>
     <mat-icon *ngIf="!showFilterMenu" svgIcon="ontimize:search" matPrefix></mat-icon>
     <mat-icon *ngIf="showFilterMenu" svgIcon="ontimize:search" matPrefix [matMenuTriggerFor]="menu"
-      class="menu-trigger"></mat-icon>
+      class="menu-trigger" (menuClosed)="onMenuClosed()"></mat-icon>
     <input #term matInput id="term" type="search" placeholder="{{ placeholder | oTranslate }}" formControlName="term">
   </mat-form-field>
 </form>

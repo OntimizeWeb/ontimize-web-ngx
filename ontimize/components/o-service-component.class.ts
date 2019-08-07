@@ -1,12 +1,12 @@
 import { ActivatedRoute } from '@angular/router';
 import { Codes, Util } from '../utils';
 import { DEFAULT_INPUTS_O_SERVICE_BASE_COMPONENT, OServiceBaseComponent } from './o-service-base-component.class';
-import { ElementRef, Injector } from '@angular/core';
+import { ElementRef, Injector, ViewChild, forwardRef } from '@angular/core';
 import { NavigationService, OTranslateService, PermissionsService } from '../services';
 
-import { FilterExpressionUtils } from './filter-expression.utils';
+import { FilterExpressionUtils, IExpression } from './filter-expression.utils';
 import { InputConverter } from '../decorators';
-import { OFilterBuilderComponent } from '../components';
+import { OFilterBuilderComponent, OSearchInputComponent } from '../components';
 import { OFormComponent } from './form/o-form.component';
 import { OFormLayoutDialogComponent } from '../layouts/form-layout/dialog/o-form-layout-dialog.component';
 import { OFormLayoutManagerComponent } from '../layouts/form-layout/o-form-layout-manager.component';
@@ -65,7 +65,13 @@ export const DEFAULT_INPUTS_O_SERVICE_COMPONENT = [
   'insertFormRoute: insert-form-route',
 
   // recursive-insert [no|yes]: do not append insert keys when navigate (overwrite current). Default: no.
-  'recursiveInsert: recursive-insert'
+  'recursiveInsert: recursive-insert',
+
+  // filter [yes|no|true|false]: whether filter is case sensitive. Default: no.
+  'filterCaseSensitive: filter-case-sensitive',
+
+  // quick-filter [no|yes]: show quick filter. Default: yes.
+  'quickFilter: quick-filter',
 ];
 
 export class OServiceComponent extends OServiceBaseComponent {
@@ -112,6 +118,19 @@ export class OServiceComponent extends OServiceBaseComponent {
   protected insertFormRoute: string;
   @InputConverter()
   protected recursiveInsert: boolean = false;
+  @InputConverter()
+  public filterCaseSensitive: boolean = false;
+  protected _quickFilter: boolean = true;
+  get quickFilter(): boolean {
+    return this._quickFilter;
+  }
+  set quickFilter(val: boolean) {
+    val = Util.parseBoolean(String(val));
+    this._quickFilter = val;
+    if (val) {
+      setTimeout(() => this.registerQuickFilter(this.searchInputComponent), 0);
+    }
+  }
   /* end of inputs variables */
 
   public filterBuilder: OFilterBuilderComponent;
@@ -123,6 +142,10 @@ export class OServiceComponent extends OServiceBaseComponent {
   public oFormLayoutDialog: OFormLayoutDialogComponent;
 
   protected tabsSubscriptions: any;
+  public quickFilterComponent: OSearchInputComponent;
+  @ViewChild((forwardRef(() => OSearchInputComponent)))
+  protected searchInputComponent: OSearchInputComponent;
+  protected quickFilterColArray: string[];
 
   constructor(
     injector: Injector,
@@ -426,19 +449,36 @@ export class OServiceComponent extends OServiceBaseComponent {
   public getComponentFilter(existingFilter: any = {}): any {
     let filter = super.getComponentFilter(existingFilter);
 
-    // Add filter from o-filter-builder component
-    if (Util.isDefined(this.filterBuilder)) {
-      let fbFilter = this.filterBuilder.getExpression();
-      if (Util.isDefined(fbFilter)) {
-        if (!Util.isDefined(filter[FilterExpressionUtils.BASIC_EXPRESSION_KEY])) {
-          filter[FilterExpressionUtils.BASIC_EXPRESSION_KEY] = fbFilter;
-        } else {
-          filter[FilterExpressionUtils.BASIC_EXPRESSION_KEY] = FilterExpressionUtils.buildComplexExpression(filter[FilterExpressionUtils.BASIC_EXPRESSION_KEY], fbFilter, FilterExpressionUtils.OP_AND);
-        }
-      }
+    const quickFilterExpr = this.getQuickFilterExpression();
+    const filterBuilderExpr = this.getFilterBuilderExpression();
+    let complexExpr = quickFilterExpr || filterBuilderExpr;
+    if (quickFilterExpr && filterBuilderExpr) {
+      complexExpr = FilterExpressionUtils.buildComplexExpression(quickFilterExpr, filterBuilderExpr, FilterExpressionUtils.OP_AND);
+    }
+
+    if (complexExpr && !Util.isDefined(filter[FilterExpressionUtils.BASIC_EXPRESSION_KEY])) {
+      filter[FilterExpressionUtils.BASIC_EXPRESSION_KEY] = complexExpr;
+    } else if (complexExpr) {
+      filter[FilterExpressionUtils.BASIC_EXPRESSION_KEY] =
+        FilterExpressionUtils.buildComplexExpression(filter[FilterExpressionUtils.BASIC_EXPRESSION_KEY], complexExpr, FilterExpressionUtils.OP_AND);
     }
 
     return filter;
+  }
+
+  protected getQuickFilterExpression(): IExpression {
+    if (this.pageable && Util.isDefined(this.quickFilterComponent)) {
+      return this.quickFilterComponent.filterExpression;
+    }
+    return undefined;
+  }
+
+  protected getFilterBuilderExpression(): IExpression {
+    // Add filter from o-filter-builder component
+    if (Util.isDefined(this.filterBuilder)) {
+      return this.filterBuilder.getExpression();
+    }
+    return undefined;
   }
 
   protected storeNavigationFormRoutes(activeMode: string, queryConf?: any): void {
@@ -503,4 +543,32 @@ export class OServiceComponent extends OServiceBaseComponent {
     // Get previous status
     this.state = this.localStorageService.getComponentStorage(this, routeKey);
   }
+
+  public showCaseSensitiveCheckbox(): boolean {
+    return !this.pageable;
+  }
+
+  public registerQuickFilter(arg: any): void {
+    const quickFilter = (arg as OSearchInputComponent);
+    if (Util.isDefined(this.quickFilterComponent)) {
+      // avoiding to register a quickfiltercomponent if it already exists one
+      return;
+    }
+    this.quickFilterComponent = quickFilter;
+    if (Util.isDefined(this.quickFilterComponent)) {
+      if (this.state.hasOwnProperty('filterValue')) {
+        this.quickFilterComponent.setValue(this.state.filterValue);
+      }
+      if (this.state.hasOwnProperty('quickFilterActiveColumns')) {
+        const parsedArr = Util.parseArray(this.state.quickFilterActiveColumns, true);
+        this.quickFilterComponent.setActiveColumns(parsedArr);
+      }
+      this.quickFilterComponent.onSearch.subscribe(val => this.filterData());
+    }
+  }
+
+  public filterData(value?: string, loadMore?: boolean): void {
+    //
+  }
+
 }

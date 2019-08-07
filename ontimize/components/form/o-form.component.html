@@ -17,7 +17,7 @@
 
     <form #innerForm [formGroup]="formGroup" class="inner-form" [class.form-no-toolbar]="!showHeader" autocomplete="off" autocorrect="off"
       autocapitalize="off" spellcheck="false">
-      <div *ngIf="loading" class="progress-bar-container">
+      <div *ngIf="loading | async" class="progress-bar-container">
         <mat-progress-bar mode="indeterminate"></mat-progress-bar>
       </div>
       <div layout-padding [fxLayout]="layoutDirection" [fxLayoutAlign]="layoutAlign" class="o-form-content-wrapper">

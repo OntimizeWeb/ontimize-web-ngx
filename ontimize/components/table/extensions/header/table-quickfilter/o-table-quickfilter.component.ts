@@ -118,7 +118,9 @@ export class OTableQuickfilterComponent implements OnInit, AfterViewInit, OnDest
           // queryCols.push(oCol.attr);
         }
       });
-      result = expressions.reduce((a, b) => FilterExpressionUtils.buildComplexExpression(a, b, FilterExpressionUtils.OP_OR));
+      if (expressions.length > 0) {
+        result = expressions.reduce((a, b) => FilterExpressionUtils.buildComplexExpression(a, b, FilterExpressionUtils.OP_OR));
+      }
       // result = FilterExpressionUtils.buildArrayExpressionLike(queryCols, this.value);
     }
     return result;
@@ -182,7 +184,7 @@ export class OTableQuickfilterComponent implements OnInit, AfterViewInit, OnDest
   }
 
   public showCaseSensitiveCheckbox(): boolean {
-    return !this.table.pageable;
+    return this.table.showCaseSensitiveCheckbox();
   }
 
   public areAllColumnsChecked(): boolean {
