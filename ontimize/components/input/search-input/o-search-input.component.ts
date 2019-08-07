@@ -8,7 +8,7 @@ import { O_INPUTS_OPTIONS, OInputsOptions } from '../../../config/app-config';
 import { InputConverter } from '../../../decorators/input-converter';
 import { OTranslateService, SnackBarService } from '../../../services';
 import { OSharedModule } from '../../../shared';
-import { Util } from '../../../utils';
+import { Util, IExpression, FilterExpressionUtils } from '../../../utils';
 
 export const DEFAULT_INPUTS_O_SEARCH_INPUT = [
   'placeholder',
@@ -168,14 +168,14 @@ export class OSearchInputComponent implements OnInit {
 
   public onCheckboxChange(column: ColumnObject, event: MatCheckboxChange): void {
     column.checked = event.checked;
-    this.triggerOnSearch();
+    // triggerOnSearch if we want to trigger search on each change
   }
 
   public onSelectAllChange(event: MatCheckboxChange): void {
     this.colArray.forEach((col: ColumnObject) => {
       col.checked = event.checked;
     });
-    this.triggerOnSearch();
+    // triggerOnSearch if we want to trigger search on each change
   }
 
   public areAllColumnsChecked(): boolean {
@@ -188,7 +188,7 @@ export class OSearchInputComponent implements OnInit {
 
   public onFilterCaseSensitiveChange(event: MatCheckboxChange): void {
     this.filterCaseSensitive = event.checked;
-    this.triggerOnSearch();
+    // triggerOnSearch if we want to trigger search on each change
   }
 
   public getActiveColumns(): string[] {
@@ -214,6 +214,22 @@ export class OSearchInputComponent implements OnInit {
     if (this.checkActiveColumns() && Util.isDefined(term) && term.length > 0) {
       this.onSearch.emit(term);
     }
+  }
+
+  public onMenuClosed(): void {
+    this.triggerOnSearch();
+  }
+
+  get filterExpression(): IExpression {
+    let result: IExpression;
+    const termValue = this.getValue();
+    if (Util.isDefined(termValue) && termValue.length > 0) {
+      const filterCols = this.getActiveColumns();
+      if (filterCols.length > 0) {
+        return FilterExpressionUtils.buildArrayExpressionLike(filterCols, termValue);
+      }
+    }
+    return result;
   }
 }
 
