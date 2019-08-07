@@ -1455,6 +1455,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
 
   protected postCorrectDelete(result: any): void {
     this.snackBarService.open('MESSAGES.DELETED', { icon: 'check_circle' });
+    this.onDelete.emit(result);
   }
 
   protected markFormLayoutManagerToUpdate(): void {
