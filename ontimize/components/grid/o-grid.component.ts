@@ -4,7 +4,6 @@ import { MediaChange, ObservableMedia } from '@angular/flex-layout';
 import { MatPaginator, PageEvent } from '@angular/material';
 import { RouterModule } from '@angular/router';
 import { Subscription } from 'rxjs';
-
 import { OSearchInputModule } from '../../components';
 import { InputConverter } from '../../decorators';
 import { OntimizeService } from '../../services';
@@ -305,14 +304,19 @@ export class OGridComponent extends OServiceComponent implements AfterViewChecke
       this.queryData(void 0, queryArgs);
       return;
     }
+
     if (this.dataResponseArray && this.dataResponseArray.length > 0) {
       let filteredData = this.dataResponseArray.slice(0);
       if (value && value.length > 0) {
+        const caseSensitive = this.isFilterCaseSensitive();
         const self = this;
+
         filteredData = filteredData.filter(item => {
-          return self.quickFilterColArray.some(col => {
-            return new RegExp('^' + Util.normalizeString(this.configureFilterValue(value)).split('*').join('.*') + '$').test(Util.normalizeString(item[col]));
+          return self.getQuickFilterColumns().some(col => {
+            const regExpStr = Util.escapeSpecialCharacter(Util.normalizeString(value, !caseSensitive));
+            return new RegExp(regExpStr).test(Util.normalizeString(item[col], !caseSensitive));
           });
+
         });
       }
       if (Util.isDefined(this.sortColumnOrder)) {
@@ -334,19 +338,6 @@ export class OGridComponent extends OServiceComponent implements AfterViewChecke
     } else {
       this.dataArray = this.dataResponseArray;
     }
-  }
-
-  public configureFilterValue(value: string): string {
-    let returnVal = value;
-    if (value && value.length > 0) {
-      if (!value.startsWith('*')) {
-        returnVal = '*' + returnVal;
-      }
-      if (!value.endsWith('*')) {
-        returnVal = returnVal + '*';
-      }
-    }
-    return returnVal;
   }
 
   public registerGridItem(item: OGridItemDirective): void {

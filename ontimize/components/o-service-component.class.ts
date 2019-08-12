@@ -1,18 +1,18 @@
+import { SelectionModel } from '@angular/cdk/collections';
+import { ElementRef, forwardRef, Injector, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Codes, Util } from '../utils';
-import { DEFAULT_INPUTS_O_SERVICE_BASE_COMPONENT, OServiceBaseComponent } from './o-service-base-component.class';
-import { ElementRef, Injector, ViewChild, forwardRef } from '@angular/core';
-import { NavigationService, OTranslateService, PermissionsService } from '../services';
-
-import { FilterExpressionUtils, IExpression } from './filter-expression.utils';
-import { InputConverter } from '../decorators';
 import { OFilterBuilderComponent, OSearchInputComponent } from '../components';
-import { OFormComponent } from './form/o-form.component';
+import { InputConverter } from '../decorators';
 import { OFormLayoutDialogComponent } from '../layouts/form-layout/dialog/o-form-layout-dialog.component';
 import { OFormLayoutManagerComponent } from '../layouts/form-layout/o-form-layout-manager.component';
+import { NavigationService, OTranslateService, PermissionsService } from '../services';
+import { Codes, Util } from '../utils';
+import { FilterExpressionUtils, IExpression } from './filter-expression.utils';
+import { OFormComponent } from './form/o-form.component';
 import { OListInitializationOptions } from './list/o-list.component';
+import { DEFAULT_INPUTS_O_SERVICE_BASE_COMPONENT, OServiceBaseComponent } from './o-service-base-component.class';
 import { OTableInitializationOptions } from './table/o-table.component';
-import { SelectionModel } from '@angular/cdk/collections';
+
 
 export const DEFAULT_INPUTS_O_SERVICE_COMPONENT = [
   ...DEFAULT_INPUTS_O_SERVICE_BASE_COMPONENT,
@@ -563,7 +563,7 @@ export class OServiceComponent extends OServiceBaseComponent {
         const parsedArr = Util.parseArray(this.state.quickFilterActiveColumns, true);
         this.quickFilterComponent.setActiveColumns(parsedArr);
       }
-      this.quickFilterComponent.onSearch.subscribe(val => this.filterData());
+      this.quickFilterComponent.onSearch.subscribe(val => this.filterData(val));
     }
   }
 
@@ -571,4 +571,40 @@ export class OServiceComponent extends OServiceBaseComponent {
     //
   }
 
+  public isFilterCaseSensitive(): boolean {
+    const useQuickFilterValue = Util.isDefined(this.quickFilterComponent) && this.showCaseSensitiveCheckbox();
+    if (useQuickFilterValue) {
+      return this.quickFilterComponent.filterCaseSensitive;
+    }
+    return this.filterCaseSensitive;
+  }
+
+  public configureFilterValue(value: string): string {
+    let returnVal = value;
+    if (value && value.length > 0) {
+      if (!value.startsWith('*')) {
+        returnVal = '*' + returnVal;
+      }
+      if (!value.endsWith('*')) {
+        returnVal = returnVal + '*';
+      }
+    }
+    return returnVal;
+  }
+
+  public getQuickFilterValue(): string {
+    const result = '';
+    if (Util.isDefined(this.quickFilterComponent)) {
+      return this.quickFilterComponent.getValue() || '';
+    }
+    return result;
+  }
+
+  public getQuickFilterColumns(): string[] {
+    let result = this.quickFilterColArray;
+    if (Util.isDefined(this.quickFilterComponent)) {
+      result = this.quickFilterComponent.getActiveColumns();
+    }
+    return result;
+  }
 }
