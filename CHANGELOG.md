@@ -9,6 +9,7 @@
 
 ### Bug Fixes
 * **o-table-cell-renderer-service**:not render cell value when export data table ([a594521](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a594521))
+* **o-grid**: not filter by checked columns  ([29f5036](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/29f5036)) Closes [#283](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/283)
 
 ## 4.0.6 (2019-06-19)
 ### Features
