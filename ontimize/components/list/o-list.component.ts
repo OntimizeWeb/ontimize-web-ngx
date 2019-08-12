@@ -1,22 +1,22 @@
-import { AfterContentInit, AfterViewInit, Component, ContentChildren, ElementRef, EventEmitter, Inject, Injector, NgModule, OnChanges, OnDestroy, OnInit, Optional, QueryList, SimpleChange, ViewEncapsulation, forwardRef } from '@angular/core';
-import { Codes, Util } from '../../utils';
-import { ISQLOrder, OQueryDataArgs, ServiceUtils } from '../service.utils';
-import { OListItemComponent, OListItemModule } from './list-item/o-list-item.component';
-import { OSearchInputModule } from '../input/search-input/o-search-input.component';
-import { Subscription, merge } from 'rxjs';
-
+import { SelectionModel } from '@angular/cdk/collections';
 import { CommonModule } from '@angular/common';
-import { InputConverter } from '../../decorators';
+import { AfterContentInit, AfterViewInit, Component, ContentChildren, ElementRef, EventEmitter, forwardRef, Inject, Injector, NgModule, OnChanges, OnDestroy, OnInit, Optional, QueryList, SimpleChange, ViewEncapsulation } from '@angular/core';
 import { MatCheckbox } from '@angular/material';
-import { OFormComponent } from '../form/o-form.component';
-import { OListItemDirective } from './list-item/o-list-item.directive';
-import { OServiceComponent } from '../o-service-component.class';
+import { RouterModule } from '@angular/router';
+import { merge, Subscription } from 'rxjs';
+import { InputConverter } from '../../decorators';
+import { OntimizeService } from '../../services';
+import { dataServiceFactory } from '../../services/data-service.provider';
 import { OSharedModule } from '../../shared';
 import { ObservableWrapper } from '../../util/async';
-import { OntimizeService } from '../../services';
-import { RouterModule } from '@angular/router';
-import { SelectionModel } from '@angular/cdk/collections';
-import { dataServiceFactory } from '../../services/data-service.provider';
+import { Codes, Util } from '../../utils';
+import { OFormComponent } from '../form/o-form.component';
+import { OSearchInputModule } from '../input/search-input/o-search-input.component';
+import { OServiceComponent } from '../o-service-component.class';
+import { ISQLOrder, OQueryDataArgs, ServiceUtils } from '../service.utils';
+import { OListItemComponent, OListItemModule } from './list-item/o-list-item.component';
+import { OListItemDirective } from './list-item/o-list-item.directive';
+
 
 export interface IList {
   detailMode: string;
@@ -284,7 +284,7 @@ export class OListComponent extends OServiceComponent implements AfterContentIni
    * Filters data locally
    * @param value the filtering value
    */
-  public filterData(value: string): void {
+  public filterData(value: string, loadMore?: boolean): void {
     if (this.state) {
       this.state.filterValue = value;
     }
@@ -300,7 +300,7 @@ export class OListComponent extends OServiceComponent implements AfterContentIni
       const caseSensitive = this.isFilterCaseSensitive();
       const filteredData = this.dataResponseArray.filter(item => {
         return self.getQuickFilterColumns().some(col => {
-          const regExpStr = '^' + Util.normalizeString(this.configureFilterValue(value), !caseSensitive).split('*').join('.*') + '$';
+          const regExpStr = Util.escapeSpecialCharacter(Util.normalizeString(value, !caseSensitive));
           return new RegExp(regExpStr).test(Util.normalizeString(item[col], !caseSensitive));
         });
       });
@@ -381,30 +381,6 @@ export class OListComponent extends OServiceComponent implements AfterContentIni
       queryArguments[6] = this.sortColArray;
     }
     return queryArguments;
-  }
-
-  public getQuickFilterColumns(): string[] {
-    let result = this.quickFilterColArray;
-    if (Util.isDefined(this.quickFilterComponent)) {
-      result = this.quickFilterComponent.getActiveColumns();
-    }
-    return result;
-  }
-
-  public getQuickFilterValue(): string {
-    const result = '';
-    if (Util.isDefined(this.quickFilterComponent)) {
-      return this.quickFilterComponent.getValue() || '';
-    }
-    return result;
-  }
-
-  public isFilterCaseSensitive(): boolean {
-    const useQuickFilterValue = Util.isDefined(this.quickFilterComponent) && this.showCaseSensitiveCheckbox();
-    if (useQuickFilterValue) {
-      return this.quickFilterComponent.filterCaseSensitive;
-    }
-    return this.filterCaseSensitive;
   }
 
   protected setListItemsData(): void {

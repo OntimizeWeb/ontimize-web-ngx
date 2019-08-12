@@ -1,8 +1,8 @@
 import { Observable } from 'rxjs';
-
 import { IFormDataComponent } from '../components/o-form-data-component.class';
 import { Base64 } from './base64';
 import { Codes } from './codes';
+
 
 export interface IDataService {
   getDefaultServiceConfiguration(serviceName?: string): Object;
@@ -320,6 +320,31 @@ export class Util {
         matFormFieldEL.classList.add('accent');
       }
     }
+  }
+
+
+  /**
+   *  Return string with escaped special character 
+   * */
+  static escapeSpecialCharacter(S: string): string {
+
+    let str = String(S);
+
+    let cpList = Array.from(str[Symbol.iterator]());
+
+    let cuList = [];
+    for (let c of cpList) {
+      // i. If c is a SpecialCharacter then do:
+      if ('^$\\.*+?()[]{}|'.indexOf(c) !== -1) {
+        // a. Append "\" to cuList.
+        cuList.push('\\');
+      }
+      // Append c to cpList.
+      cuList.push(c);
+    }
+    let L = cuList.join('');
+    return L;
+
   }
 
 }
