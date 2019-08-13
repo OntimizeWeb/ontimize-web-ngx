@@ -324,7 +324,7 @@ export class Util {
 
 
   /**
-   *  Return string with escaped special character 
+   *  Return string with escaped special character
    * */
   static escapeSpecialCharacter(S: string): string {
 

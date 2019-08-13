@@ -45,7 +45,10 @@ export const DEFAULT_INPUTS_O_LIST = [
   'deleteButton: delete-button',
 
   // sort-columns [string]: initial sorting, with the format column:[ASC|DESC], separated by ';'. Default: no value.
-  'sortColumns: sort-columns'
+  'sortColumns: sort-columns',
+
+   // insert-button-position [ top | bottom ]: position of the insert button. Default: 'bottom'
+  'insertButtonPosition:insert-button-position'
 ];
 
 export const DEFAULT_OUTPUTS_O_LIST = [
@@ -117,7 +120,7 @@ export class OListComponent extends OServiceComponent implements AfterContentIni
 
   public selection = new SelectionModel<Element>(true, []);
   public enabledDeleteButton: boolean = false;
-
+  public insertButtonPosition: 'top' | 'bottom' = 'bottom';
   protected dataResponseArray: any[] = [];
   protected storePaginationState: boolean = false;
   protected subscription: Subscription = new Subscription();
