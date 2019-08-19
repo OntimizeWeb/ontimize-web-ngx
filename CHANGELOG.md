@@ -6,6 +6,9 @@
   * new `filter-case-sensitive` input (removed from `o-list` and `o-table`) 
   * new `quick-filter` input (removed from `o-grid`, `o-table`  and `o-list`) 
   * new `showCaseSensitiveCheckbox`, `getComponentFilter` and `registerQuickFilter` methods
+* **o-list**: 
+  * new `insert-button-position` input([f5ae203])(https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f5ae203)) Closes [#282](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/282)
+  * new `insert-button-floatable` input([f96b5d4])(https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f96b5d4)) 
 
 ### Bug Fixes
 * **o-table-cell-renderer-service**:not render cell value when export data table ([a594521](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a594521))
