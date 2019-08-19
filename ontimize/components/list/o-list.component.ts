@@ -48,7 +48,9 @@ export const DEFAULT_INPUTS_O_LIST = [
   'sortColumns: sort-columns',
 
    // insert-button-position [ top | bottom ]: position of the insert button. Default: 'bottom'
-  'insertButtonPosition:insert-button-position'
+  'insertButtonPosition:insert-button-position',
+   // insert-button-floatable [no|yes]: ndicates whether or not to position of the insert button is floating . Default: 'yes'
+  'insertButtonFloatable:insert-button-floatable'
 ];
 
 export const DEFAULT_OUTPUTS_O_LIST = [
@@ -104,6 +106,8 @@ export class OListComponent extends OServiceComponent implements AfterContentIni
   public odense: boolean = false;
   @InputConverter()
   public deleteButton: boolean = true;
+  @InputConverter()
+  public insertButtonFloatable:boolean = true;
   public quickFilterColumns: string;
   public route: string;
   public sortColumns: string;
@@ -268,19 +272,6 @@ export class OListComponent extends OServiceComponent implements AfterContentIni
   public reloadPaginatedDataFromStart(): void {
     this.dataResponseArray = [];
     this.reloadData();
-  }
-
-  public configureFilterValue(value: string): string {
-    let returnVal = value;
-    if (value && value.length > 0) {
-      if (!value.startsWith('*')) {
-        returnVal = '*' + returnVal;
-      }
-      if (!value.endsWith('*')) {
-        returnVal = returnVal + '*';
-      }
-    }
-    return returnVal;
   }
 
   /**

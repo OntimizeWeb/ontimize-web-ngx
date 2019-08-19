@@ -6,9 +6,14 @@
 
   <mat-toolbar *ngIf="hasControls()" [class.dense]="odense">
     <div class="mat-toolbar-tools" fxLayout="row" fxFill fxLayoutAlign="start center">
+      <button *ngIf="insertButton && !insertButtonFloatable" type="button" mat-icon-button aria-label="Insert"
+        (click)="add($event)">
+        <mat-icon svgIcon="ontimize:add"></mat-icon>
+      </button>
       <button type="button" mat-icon-button aria-label="Refresh" (click)="reloadData()" *ngIf="refreshButton">
         <mat-icon svgIcon="ontimize:autorenew"></mat-icon>
       </button>
+
       <button *ngIf="deleteButton" type="button" mat-icon-button aria-label="Delete" [disabled]="!enabledDeleteButton"
         [class.disabled]="!enabledDeleteButton" (click)="remove()">
         <mat-icon svgIcon="ontimize:delete"></mat-icon>
@@ -42,12 +47,12 @@
     </mat-list>
 
     <!--INSERT BUTTONcd -->
-    <button type="button" *ngIf="insertButton && odense" mat-mini-fab (click)="add($event)" class="add-button"
-      [class.add-button-bottom]="insertButtonPosition ==='bottom'"
+    <button type="button" *ngIf="insertButton && insertButtonFloatable && odense" mat-mini-fab (click)="add($event)"
+      class="add-button" [class.add-button-bottom]="insertButtonPosition ==='bottom'"
       [class.add-button-top]="insertButtonPosition ==='top'">
       <mat-icon svgIcon="ontimize:add"></mat-icon>
     </button>
-    <button type="button" *ngIf="insertButton && !odense" mat-fab (click)="add($event)"
+    <button type="button" *ngIf="insertButton && insertButtonFloatable && !odense" mat-fab (click)="add($event)"
       class="add-button add-button-bottom" [class.add-button-bottom]="insertButtonPosition ==='bottom'"
       [class.add-button-top]="insertButtonPosition ==='top'">
       <mat-icon svgIcon="ontimize:add"></mat-icon>
