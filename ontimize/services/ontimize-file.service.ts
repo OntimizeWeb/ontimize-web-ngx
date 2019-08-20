@@ -3,7 +3,6 @@ import { Injectable, Injector } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { share } from 'rxjs/operators';
-
 import { AppConfig, Config } from '../config/app-config';
 import { LoginService } from '../services';
 import { Codes, ServiceUtils } from '../utils';
@@ -126,6 +125,10 @@ export class OntimizeFileService {
 
   protected redirectLogin(sessionExpired: boolean = false) {
     let router = this.injector.get(Router);
+    const loginService = this.injector.get(LoginService);
+    if (sessionExpired) {
+      loginService.sessionExpired();
+    }
     ServiceUtils.redirectLogin(router, sessionExpired);
   }
 
