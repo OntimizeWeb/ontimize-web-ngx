@@ -47,9 +47,10 @@ export const DEFAULT_INPUTS_O_LIST = [
   // sort-columns [string]: initial sorting, with the format column:[ASC|DESC], separated by ';'. Default: no value.
   'sortColumns: sort-columns',
 
-   // insert-button-position [ top | bottom ]: position of the insert button. Default: 'bottom'
+  // insert-button-position [ top | bottom ]: position of the insert button. Default: 'bottom'
   'insertButtonPosition:insert-button-position',
-   // insert-button-floatable [no|yes]: ndicates whether or not to position of the insert button is floating . Default: 'yes'
+
+  // insert-button-floatable [no|yes]: Indicates whether or not to position of the insert button is floating . Default: 'yes'
   'insertButtonFloatable:insert-button-floatable'
 ];
 
@@ -107,7 +108,7 @@ export class OListComponent extends OServiceComponent implements AfterContentIni
   @InputConverter()
   public deleteButton: boolean = true;
   @InputConverter()
-  public insertButtonFloatable:boolean = true;
+  public insertButtonFloatable: boolean = true;
   public quickFilterColumns: string;
   public route: string;
   public sortColumns: string;
@@ -295,7 +296,7 @@ export class OListComponent extends OServiceComponent implements AfterContentIni
       const filteredData = this.dataResponseArray.filter(item => {
         return self.getQuickFilterColumns().some(col => {
           const regExpStr = Util.escapeSpecialCharacter(Util.normalizeString(value, !caseSensitive));
-          return new RegExp(regExpStr).test(Util.normalizeString(item[col], !caseSensitive));
+          return new RegExp(regExpStr).test(Util.normalizeString(item[col].toString(), !caseSensitive));
         });
       });
       this.setDataArray(filteredData);

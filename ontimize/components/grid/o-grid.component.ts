@@ -314,7 +314,7 @@ export class OGridComponent extends OServiceComponent implements AfterViewChecke
         filteredData = filteredData.filter(item => {
           return self.getQuickFilterColumns().some(col => {
             const regExpStr = Util.escapeSpecialCharacter(Util.normalizeString(value, !caseSensitive));
-            return new RegExp(regExpStr).test(Util.normalizeString(item[col], !caseSensitive));
+            return new RegExp(regExpStr).test(Util.normalizeString(item[col].toString(), !caseSensitive));
           });
 
         });
