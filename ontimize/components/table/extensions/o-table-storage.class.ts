@@ -13,6 +13,7 @@ export interface ITableConfiguration {
 }
 
 export class OTableStorage {
+
   public static STORED_FILTER_KEY = 'stored-filter';
   public static USER_STORED_FILTERS_KEY = 'user-stored-filters';
 
@@ -29,7 +30,7 @@ export class OTableStorage {
       'filter': this.table.oTableQuickFilterComponent ? this.table.oTableQuickFilterComponent.value : ''
     };
 
-    const properties = ['sort', 'columns-display', 'columns-filter', 'quick-filter', 'page'];
+    const properties = ['sort', 'columns-display', 'columns-filter', 'quick-filter', 'page', 'initial-configuration'];
     Object.assign(dataToStore, this.getTablePropertiesToStore(properties));
 
     const storedFiltersArr = this.getStoredFilters();
@@ -68,6 +69,9 @@ export class OTableStorage {
         break;
       case 'page':
         result = this.getPageState();
+        break;
+      case 'initial-configuration':
+        result = this.getInitialConfigurationState();
         break;
     }
     return result;
@@ -154,6 +158,14 @@ export class OTableStorage {
         (state.queryRecordOffset - this.table.queryRows)
       );
     }
+    return result;
+  }
+
+  protected getInitialConfigurationState(): any {
+    let result = {};
+    let initialConfiguration = {};
+    initialConfiguration['oColumns-display'] = this.table.originalVisibleColumns;
+    result['initial-configuration'] = initialConfiguration;
     return result;
   }
 

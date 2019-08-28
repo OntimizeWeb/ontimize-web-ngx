@@ -985,19 +985,53 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
           console.warn('Unable to load the column ' + oCol.attr + ' from the localstorage');
         }
       });
-
-      //if all columns was changed then visibleColArray set with visibleColumns
-      let allColumsNotVisible = stateCols.filter(function (col) { return col.visible === true; }).length === 0;
-      if (allColumsNotVisible || stateCols.length === 0) {
-        this.visibleColArray = Util.parseArray(this.visibleColumns, true);
-      } else {
-        this.visibleColArray = stateCols.filter(item => item.visible).map(item => item.attr);
-      }
+      stateCols = this.checkChangesVisibleColummnsInInitialConfiguration(stateCols);
+      this.visibleColArray = stateCols.filter(item => item.visible).map(item => item.attr);
     } else {
       this.visibleColArray = Util.parseArray(this.visibleColumns, true);
+      this._oTableOptions.columns.sort((a: OColumn, b: OColumn) => this.visibleColArray.indexOf(a.attr) - this.visibleColArray.indexOf(b.attr));
     }
   }
 
+  checkChangesVisibleColummnsInInitialConfiguration(stateCols) {
+    if (this.state.hasOwnProperty('initial-configuration')) {
+      if (this.state['initial-configuration'].hasOwnProperty('oColumns-display')) {
+        let originalVisibleColArray = Util.parseArray(this.state['initial-configuration']['oColumns-display'], true);
+        let visibleColArray = Util.parseArray(this.originalVisibleColumns, true);
+
+        //Find values in visible-columns that they arent in original-visible-columns in localstorage
+        // in this case you have to add this column to this.visibleColArray
+        let colToAddInVisibleCol = Util.differenceArrays(visibleColArray, originalVisibleColArray);
+        if (colToAddInVisibleCol.length > 0) {
+          colToAddInVisibleCol.forEach(colAdd => {
+            if (stateCols.filter(col => col.attr === colAdd).length > 0) {
+              stateCols = stateCols.map(col => {
+                if (colToAddInVisibleCol.indexOf(col.attr) > -1) {
+                  col.visible = true;
+                }
+                return col;
+              });
+            } else {
+              stateCols.push(this.getOColumn(colAdd));
+            }
+          });
+        }
+
+        // Find values in original-visible-columns in localstorage that they arent in this.visibleColArray
+        // in this case you have to delete this column to this.visibleColArray
+        let colToDeleteInVisibleCol = Util.differenceArrays(originalVisibleColArray, visibleColArray);
+        if (colToDeleteInVisibleCol.length > 0) {
+          stateCols = stateCols.map(col => {
+            if (colToDeleteInVisibleCol.indexOf(col.attr) > -1) {
+              col.visible = false;
+            }
+            return col;
+          });
+        }
+      }
+    }
+    return stateCols;
+  }
   parseSortColumns() {
     let sortColumnsParam = this.state['sort-columns'] || this.sortColumns;
     this.sortColArray = ServiceUtils.parseSortColumns(sortColumnsParam);
@@ -1027,6 +1061,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
         columnsOrder = this.colArray.filter(attr => this.visibleColArray.indexOf(attr) === -1);
         columnsOrder.push(...this.visibleColArray);
       }
+
       this._oTableOptions.columns.sort((a: OColumn, b: OColumn) => columnsOrder.indexOf(a.attr) - columnsOrder.indexOf(b.attr));
     }
 

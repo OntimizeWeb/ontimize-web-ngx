@@ -347,4 +347,12 @@ export class Util {
 
   }
 
+  static differenceArrays(array1: Array<any>, array2: Array<any>): Array<any> {
+    const difference = array1.filter(obj => {
+      return !array2.some(obj2 => {
+        return obj === obj2;
+      });
+    });
+    return difference;
+  }
 }
