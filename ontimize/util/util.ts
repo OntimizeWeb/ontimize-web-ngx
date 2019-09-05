@@ -214,7 +214,7 @@ export class Util {
           return false;
         }
         keySet = Object.create(null);
-        for (key of o1) {
+        for (key in o1) {
           if (!Util.equals(o1[key], o2[key])) {
             return false;
           }
@@ -350,7 +350,7 @@ export class Util {
   static differenceArrays(array1: Array<any>, array2: Array<any>): Array<any> {
     const difference = array1.filter(obj => {
       return !array2.some(obj2 => {
-        return obj === obj2;
+        return this.equals(obj, obj2);
       });
     });
     return difference;
