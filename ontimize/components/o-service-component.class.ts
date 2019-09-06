@@ -542,7 +542,7 @@ export class OServiceComponent extends OServiceBaseComponent {
     }
     // Get previous status
     this.state = this.localStorageService.getComponentStorage(this, routeKey);
-    
+
   }
 
   public showCaseSensitiveCheckbox(): boolean {

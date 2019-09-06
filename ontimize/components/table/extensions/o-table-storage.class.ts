@@ -165,7 +165,13 @@ export class OTableStorage {
     let result = {};
     let initialConfiguration = {};
     initialConfiguration['oColumns-display'] = this.table.originalVisibleColumns;
+    initialConfiguration['sort-columns'] = this.table.originalSortColumns;
+    initialConfiguration['select-column-visible'] = this.table.oTableOptions.selectColumn.visible;
+    initialConfiguration['filter-case-sensitive'] = this.table.filterCaseSensitive;
+    initialConfiguration['query-rows'] = this.table.originalQueryRows;
+
     result['initial-configuration'] = initialConfiguration;
+
     return result;
   }
 

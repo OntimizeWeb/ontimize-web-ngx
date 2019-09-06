@@ -1,11 +1,11 @@
 
-import { Injector, EventEmitter } from '@angular/core';
-import { Router, NavigationStart } from '@angular/router';
-import { ObservableWrapper } from '../util/async';
+import { EventEmitter, Injector } from '@angular/core';
+import { NavigationStart, Router } from '@angular/router';
 import { AppConfig, Config } from '../config/app-config';
 import { SessionInfo } from '../services';
-import { LoginService } from './login.service';
+import { ObservableWrapper } from '../util/async';
 import { Util } from '../util/util';
+import { LoginService } from './login.service';
 
 export interface ILocalStorageComponent {
   storeState?: boolean;

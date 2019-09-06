@@ -454,7 +454,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   protected filterCaseSensitivePvt: boolean = false;
   @InputConverter()
   set filterCaseSensitive(value: boolean) {
-    this.filterCaseSensitivePvt = value;
+    this.filterCaseSensitivePvt = BooleanConverter(value);
     if (this._oTableOptions) {
       this._oTableOptions.filterCaseSensitive = this.filterCaseSensitivePvt;
     }
@@ -520,6 +520,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     return this.visibleColumns;
   }
 
+  get originalSortColumns(): string {
+    return this.sortColumns;
+  }
   get visibleColArray(): Array<any> {
     return this._visibleColArray;
   }
@@ -1035,6 +1038,34 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   parseSortColumns() {
     let sortColumnsParam = this.state['sort-columns'] || this.sortColumns;
     this.sortColArray = ServiceUtils.parseSortColumns(sortColumnsParam);
+
+    //checking the original sort columns with the sort columns in initial configuration in local storage
+    if (this.state['sort-columns'] && this.state['initial-configuration']['sort-columns']) {
+
+      const initialConfigSortColumnsArray = ServiceUtils.parseSortColumns(this.state['initial-configuration']['sort-columns']);
+      const originalSortColumnsArray = ServiceUtils.parseSortColumns(this.originalSortColumns);
+      const self = this;
+      // Find values in visible-columns that they arent in original-visible-columns in localstorage
+      // in this case you have to add this column to this.visibleColArray
+      let colToAddInVisibleCol = Util.differenceArrays(originalSortColumnsArray, initialConfigSortColumnsArray);
+      if (colToAddInVisibleCol.length > 0) {
+        colToAddInVisibleCol.forEach(colAdd => {
+          self.sortColArray.push(colAdd);
+        });
+      }
+
+      let colToDelInVisibleCol = Util.differenceArrays(initialConfigSortColumnsArray, originalSortColumnsArray);
+      if (colToDelInVisibleCol.length > 0) {
+        colToDelInVisibleCol.forEach((colDel) => {
+          self.sortColArray.forEach((col, i) => {
+            if (col.columnName === colDel.columnName) {
+              self.sortColArray.splice(i, 1);
+            }
+          });
+        });
+      }
+    }
+
     // ensuring column existence and checking its orderable state
     for (let i = this.sortColArray.length - 1; i >= 0; i--) {
       const colName = this.sortColArray[i].columnName;
@@ -1077,8 +1108,16 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       this.paginator = new OTablePaginatorComponent(this.injector, this);
     }
 
+
     if (!Util.isDefined(this.selectAllCheckboxVisible)) {
       this._oTableOptions.selectColumn.visible = !!this.state['select-column-visible'];
+    } else {
+      //checking the original selectAllCheckboxVisible with selectAllCheckboxVisible in initial configuration in local storage
+      if (this.selectAllCheckboxVisible === this.state['initial-configuration']['select-column-visible']) {
+        this._oTableOptions.selectColumn.visible = !!this.state['select-column-visible'];
+      } else {
+        this._oTableOptions.selectColumn.visible = this.selectAllCheckboxVisible;
+      }
     }
 
     this.initializeCheckboxColumn();
@@ -2053,7 +2092,17 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   setFiltersConfiguration(conf: any) {
-    this.filterCaseSensitive = conf.hasOwnProperty('filter-case-sensitive') ? conf['filter-case-sensitive'] : this.filterCaseSensitive;
+    //initialize filterCaseSensitive
+
+    /* 
+      Checking the original filterCaseSensitive with the filterCaseSensitive in initial configuration in local storage
+      if filterCaseSensitive in initial configuration is equals to original filterCaseSensitive input
+      filterCaseSensitive will be the value in local storage
+    */
+    if (Util.isDefined(this.filterCaseSensitive) && this.state['initial-configuration'].hasOwnProperty('filter-case-sensitive') &&
+      this.filterCaseSensitive === conf['initial-configuration']['filter-case-sensitive']) {
+      this.filterCaseSensitive = conf.hasOwnProperty('filter-case-sensitive') ? conf['filter-case-sensitive'] : this.filterCaseSensitive;
+    }
 
     const storedColumnFilters = this.oTableStorage.getStoredColumnsFilters(conf);
     this.showFilterByColumnIcon = storedColumnFilters.length > 0;
