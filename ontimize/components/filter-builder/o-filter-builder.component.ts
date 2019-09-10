@@ -92,7 +92,7 @@ export class OFilterBuilderComponent implements AfterViewInit, OnDestroy, OnInit
     // Parse filters
     if (this.filters) {
       let filterArray: Array<string> = Util.parseArray(this.filters);
-      filterArray.map(filter => {
+      filterArray.forEach(filter => {
         let filterElms = filter.split(Codes.COLUMNS_ALIAS_SEPARATOR);
         this.filterComponents.push({
           targetAttr: filterElms[0],
@@ -173,6 +173,9 @@ export class OFilterBuilderComponent implements AfterViewInit, OnDestroy, OnInit
    * Trigger the `reloadData` method from the target component.
    */
   triggerReload(): void {
+    if (!this.targetCmp) {
+      return;
+    }
     if (this.targetCmp.pageable) {
       this.targetCmp.reloadPaginatedDataFromStart();
     } else {
