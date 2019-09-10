@@ -7,7 +7,6 @@ import { MatDialog, MatDialogRef } from '@angular/material';
 import * as _moment from 'moment';
 import { merge } from 'rxjs';
 import { filter, take } from 'rxjs/operators';
-import { MomentService } from '../../../services/moment.service';
 import { DaterangepickerComponent } from './o-daterange-picker.component';
 
 
@@ -30,9 +29,10 @@ export class ODaterangepickerDirective {
 
   private _onChange = Function.prototype;
   private _onTouched = Function.prototype;
-  private _validatorChange = Function.prototype;
+  public _validatorChange = Function.prototype;
   private _value: any;
-  private localeDiffer: KeyValueDiffer<string, any>;
+
+  public localeDiffer: KeyValueDiffer<string, any>;
 
   @Input()
   minDate: _moment.Moment = null;
@@ -169,7 +169,6 @@ export class ODaterangepickerDirective {
   @Output('rangeClicked') rangeClicked: EventEmitter<Object> = new EventEmitter();
   @Output('datesUpdated') datesUpdated: EventEmitter<Object> = new EventEmitter();
 
-  private momentSrv: MomentService;
   private _popupComponentRef: ComponentRef<DaterangepickerComponent> | null;
   private _calendarPortal: ComponentPortal<DaterangepickerComponent>;
   _popupRef: OverlayRef;
