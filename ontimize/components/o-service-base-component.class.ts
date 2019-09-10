@@ -201,8 +201,8 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
 
       // if query-rows in initial configuration is equals to original query-rows input
       // query_rows will be the value in local storage
-      if (Util.isDefined(this.state['query-rows'])) {
-        if (Util.isDefined(this.state['initial-configuration']['query-rows'])
+      if (this.state.hasOwnProperty('query-rows')) {
+        if (this.state['initial-configuration'].hasOwnProperty['query-rows']
           && this.state['initial-configuration']['query-rows'] === this.originalQueryRows) {
           this.queryRows = this.state['query-rows'];
         }

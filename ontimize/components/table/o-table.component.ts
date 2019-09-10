@@ -130,7 +130,7 @@ export class OColumn {
   className: string;
   orderable: boolean;
   _searchable: boolean;
-  searching: boolean;
+  searching: boolean;//this column is used to filter in quickfilter
   visible: boolean;
   renderer: OBaseTableCellRenderer;
   editor: any;
@@ -997,12 +997,14 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   checkChangesVisibleColummnsInInitialConfiguration(stateCols) {
+
     if (this.state.hasOwnProperty('initial-configuration')) {
       if (this.state['initial-configuration'].hasOwnProperty('oColumns-display')) {
-        let originalVisibleColArray = Util.parseArray(this.state['initial-configuration']['oColumns-display'], true);
-        let visibleColArray = Util.parseArray(this.originalVisibleColumns, true);
 
-        //Find values in visible-columns that they arent in original-visible-columns in localstorage
+        const originalVisibleColArray = Util.parseArray(this.state['initial-configuration']['oColumns-display'], true);
+        const visibleColArray = Util.parseArray(this.originalVisibleColumns, true);
+
+        // Find values in visible-columns that they arent in original-visible-columns in localstorage
         // in this case you have to add this column to this.visibleColArray
         let colToAddInVisibleCol = Util.differenceArrays(visibleColArray, originalVisibleColArray);
         if (colToAddInVisibleCol.length > 0) {
@@ -1015,7 +1017,11 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
                 return col;
               });
             } else {
-              stateCols.push(this.getOColumn(colAdd));
+              stateCols.push({
+                attr: colAdd,
+                visible: true,
+                width: undefined
+              });
             }
           });
         }
@@ -1035,6 +1041,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
     return stateCols;
   }
+  
   parseSortColumns() {
     let sortColumnsParam = this.state['sort-columns'] || this.sortColumns;
     this.sortColArray = ServiceUtils.parseSortColumns(sortColumnsParam);
@@ -1112,8 +1119,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     if (!Util.isDefined(this.selectAllCheckboxVisible)) {
       this._oTableOptions.selectColumn.visible = !!this.state['select-column-visible'];
     } else {
-      //checking the original selectAllCheckboxVisible with selectAllCheckboxVisible in initial configuration in local storage
-      if (this.selectAllCheckboxVisible === this.state['initial-configuration']['select-column-visible']) {
+      //checking the original selectAllCheckboxVisible with select-column-visible in initial configuration in local storage
+      if (this.state.hasOwnProperty('initial-configuration') && this.state['initial-configuration'].hasOwnProperty('select-column-visible')
+        && this.selectAllCheckboxVisible === this.state['initial-configuration']['select-column-visible']) {
         this._oTableOptions.selectColumn.visible = !!this.state['select-column-visible'];
       } else {
         this._oTableOptions.selectColumn.visible = this.selectAllCheckboxVisible;
@@ -2099,7 +2107,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       if filterCaseSensitive in initial configuration is equals to original filterCaseSensitive input
       filterCaseSensitive will be the value in local storage
     */
-    if (Util.isDefined(this.filterCaseSensitive) && this.state['initial-configuration'].hasOwnProperty('filter-case-sensitive') &&
+    if (Util.isDefined(this.filterCaseSensitive) && this.state.hasOwnProperty('initial-configuration') &&
+      this.state['initial-configuration'].hasOwnProperty('filter-case-sensitive') &&
       this.filterCaseSensitive === conf['initial-configuration']['filter-case-sensitive']) {
       this.filterCaseSensitive = conf.hasOwnProperty('filter-case-sensitive') ? conf['filter-case-sensitive'] : this.filterCaseSensitive;
     }
@@ -2120,9 +2129,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       storedColumnsData.forEach((oColData: any) => {
         const oCol = this.getOColumn(oColData.attr);
         if (oCol) {
-          if (oColData.hasOwnProperty('searchable')) {
-            oCol.searchable = oColData.searchable;
-          }
           if (oColData.hasOwnProperty('searching')) {
             oCol.searching = oColData.searching;
           }
