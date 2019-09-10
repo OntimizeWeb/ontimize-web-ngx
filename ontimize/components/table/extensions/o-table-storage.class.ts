@@ -29,7 +29,7 @@ export class OTableStorage {
       'filter': this.table.oTableQuickFilterComponent ? this.table.oTableQuickFilterComponent.value : ''
     };
 
-    const properties = ['sort', 'columns-display', 'columns-filter', 'quick-filter', 'page'];
+    const properties = ['sort', 'columns-display', 'columns-filter', 'quick-filter', 'page', 'selection'];
     Object.assign(dataToStore, this.getTablePropertiesToStore(properties));
 
     const storedFiltersArr = this.getStoredFilters();
@@ -68,6 +68,9 @@ export class OTableStorage {
         break;
       case 'page':
         result = this.getPageState();
+        break;
+      case 'selection':
+        result = this.getSelectionState();
         break;
     }
     return result;
@@ -153,6 +156,25 @@ export class OTableStorage {
         (state.queryRecordOffset - this.table.dataSource.renderedData.length),
         (state.queryRecordOffset - this.table.queryRows)
       );
+    }
+    return result;
+  }
+
+  protected getSelectionState(): any {
+    let result: any = {
+      'selection': []
+    };
+    if (this.table && this.table.keepSelectedItems) {
+      // storing selected items keys values
+      const selection = [];
+      this.table.getSelectedItems().forEach(item => {
+        let data = {};
+        this.table.getKeys().forEach(key=> {
+          data[key] = item[key];
+        });
+        selection.push(data);
+      });
+      result.selection = selection;
     }
     return result;
   }

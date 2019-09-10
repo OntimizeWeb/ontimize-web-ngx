@@ -108,7 +108,9 @@ export const DEFAULT_INPUTS_O_TABLE = [
   'resizable',
 
   // enabled [yes|no|true|false]: enables de table. Default: yes
-  'enabled'
+  'enabled',
+
+  'keepSelectedItems: keep-selected-items'
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE = [
@@ -507,6 +509,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   get selectAllCheckboxVisible(): boolean {
     return this._selectAllCheckboxVisible;
   }
+
+  @InputConverter()
+  keepSelectedItems: boolean = true;
 
   public daoTable: OTableDao | null;
   public dataSource: OTableDataSource | null;
@@ -1065,7 +1070,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
           }
         }
       };
-      interval = setInterval(timerCallback(evt.tab), 100);
+      interval = setInterval(() => { timerCallback(evt.tab); }, 100);
     });
   }
 
@@ -1232,12 +1237,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   protected setData(data: any, sqlTypes: any) {
     this.daoTable.sqlTypesChange.next(sqlTypes);
-    this.daoTable.dataChange.next(data);
-    this.daoTable.isLoadingResults = false;
+    this.daoTable.setDataArray(data);
     this.updateScrolledState();
-    // if (Util.isDefined(data)) {
-    //   this.oTableExpandedFooter.updateMessageNotResults(data);
-    // }
     if (this.pageable) {
       ObservableWrapper.callEmit(this.onPaginatedDataLoaded, data);
     }
@@ -1277,6 +1278,25 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
           }
         }
       });
+    }
+
+    if (this.state.hasOwnProperty('selection') && this.dataSource.renderedData.length) {
+      this.state.selection.forEach(selectedItem => {
+        // finding selected item data in the table rendered data
+        const foundItem = this.dataSource.renderedData.find(data => {
+          let result = true;
+          Object.keys(selectedItem).forEach(key => {
+            result = result && (data[key] === selectedItem[key]);
+          });
+          return result;
+        });
+        if (foundItem) {
+          this.selection.select(foundItem);
+        }
+      });
+
+      // removing selected items from state for avoiding another possible projectContentChanged calls
+      this.state.selection = [];
     }
   }
 
@@ -1487,8 +1507,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       return;
     }
 
-    const editingColumn = this._oTableOptions.columns.filter(item => item.editing);
-    if (editingColumn && editingColumn.length > 0) {
+    const activeEditingColumns = this._oTableOptions.columns.filter(item => item.editing);
+    if (activeEditingColumns && activeEditingColumns.length > 0) {
       return;
     }
 
@@ -1497,14 +1517,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       return;
     }
 
-    const tableContent = this.elRef.nativeElement.querySelector('.o-table-container');
-    if (!tableContent) {
-      return;
-    }
-
-    if (tableContent && !tableContent.contains(event.target)
-      && (!this.editingCell || !this.editingCell.contains(event.target))
-      && this.selection && this.selection.selected.length) {
+    const tableContainer = this.elRef.nativeElement.querySelector('.o-table-container');
+    const tableContent = this.elRef.nativeElement.querySelector('.o-table-container table.mat-table');
+    if (tableContainer && tableContent && tableContainer.contains(event.target) && !tableContent.contains(event.target)) {
       this.clearSelection();
     }
   }
@@ -1808,7 +1823,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       }
     });
   }
-
 
   get disableTableMenuButton(): boolean {
     return !!(this.permissions && this.permissions.menu && this.permissions.menu.enabled === false);
@@ -2206,7 +2220,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     return height;
   }
 
-
   isDetailMode(): boolean {
     return this.detailMode !== Codes.DETAIL_MODE_NONE;
   }
@@ -2219,7 +2232,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     let selectedItems = this.dataSource.getRenderedData(this.getSelectedItems());
     Util.copyToClipboard(JSON.stringify(selectedItems));
   }
-
 
   viewDetail(item: any): void {
     if (!this.checkEnabledActionPermission('detail')) {
@@ -2247,7 +2259,10 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   getColumnInsertable(name): string {
     return name + this.getSuffixColumnInsertable();
+  }
 
+  isRowSelected(row: any): boolean {
+    return !this.isSelectionModeNone() && this.selection.isSelected(row);
   }
 }
 
