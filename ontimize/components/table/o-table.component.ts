@@ -48,7 +48,6 @@ export const DEFAULT_INPUTS_O_TABLE = [
 
   // editable-columns [string]: columns that can be edited directly over the table, separated by ';'. Default: no value.
   // 'editableColumns: editable-columns',
-
   // sort-columns [string]: initial sorting, with the format column:[ASC|DESC], separated by ';'. Default: no value.
   'sortColumns: sort-columns',
 
@@ -1041,7 +1040,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
     return stateCols;
   }
-  
+
   parseSortColumns() {
     let sortColumnsParam = this.state['sort-columns'] || this.sortColumns;
     this.sortColArray = ServiceUtils.parseSortColumns(sortColumnsParam);
@@ -2102,7 +2101,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   setFiltersConfiguration(conf: any) {
     //initialize filterCaseSensitive
 
-    /* 
+    /*
       Checking the original filterCaseSensitive with the filterCaseSensitive in initial configuration in local storage
       if filterCaseSensitive in initial configuration is equals to original filterCaseSensitive input
       filterCaseSensitive will be the value in local storage
