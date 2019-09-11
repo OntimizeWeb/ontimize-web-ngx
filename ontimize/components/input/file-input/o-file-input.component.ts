@@ -267,6 +267,14 @@ export class OFileInputComponent extends OFormDataComponent implements OnInit {
     }
   }
 
+  public innerOnChange(event: any): void {
+    this.ensureOFormValue(event);
+    if (this._fControl && this._fControl.touched) {
+      this._fControl.markAsDirty();
+    }
+    this.onChange.emit(event);
+  }
+
   protected filetypeValidator(control: FormControl): ValidationErrors {
     if (control.value && control.value.length > 0 && this.acceptFileType) {
       const regex: RegExp = new RegExp(this.acceptFileType.replace(';', '|'));
@@ -306,6 +314,7 @@ export class OFileInputComponent extends OFormDataComponent implements OnInit {
     }
     return {};
   }
+
 
 }
 
