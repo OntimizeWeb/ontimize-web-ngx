@@ -48,7 +48,6 @@ export const DEFAULT_INPUTS_O_TABLE = [
 
   // editable-columns [string]: columns that can be edited directly over the table, separated by ';'. Default: no value.
   // 'editableColumns: editable-columns',
-
   // sort-columns [string]: initial sorting, with the format column:[ASC|DESC], separated by ';'. Default: no value.
   'sortColumns: sort-columns',
 
@@ -132,7 +131,7 @@ export class OColumn {
   className: string;
   orderable: boolean;
   _searchable: boolean;
-  searching: boolean;
+  searching: boolean;//this column is used to filter in quickfilter
   visible: boolean;
   renderer: OBaseTableCellRenderer;
   editor: any;
@@ -456,7 +455,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   protected filterCaseSensitivePvt: boolean = false;
   @InputConverter()
   set filterCaseSensitive(value: boolean) {
-    this.filterCaseSensitivePvt = value;
+    this.filterCaseSensitivePvt = BooleanConverter(value);
     if (this._oTableOptions) {
       this._oTableOptions.filterCaseSensitive = this.filterCaseSensitivePvt;
     }
@@ -525,6 +524,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     return this.visibleColumns;
   }
 
+  get originalSortColumns(): string {
+    return this.sortColumns;
+  }
   get visibleColArray(): Array<any> {
     return this._visibleColArray;
   }
@@ -922,13 +924,26 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       return;
     }
     let colDef: OColumn = new OColumn(column.attr, this, column);
-
     let columnWidth = column.width;
     const storedCols = this.state['oColumns-display'];
+
     if (Util.isDefined(storedCols)) {
       const storedData = storedCols.find(oCol => oCol.attr === colDef.attr);
       if (Util.isDefined(storedData) && Util.isDefined(storedData.width)) {
-        columnWidth = storedData.width;
+        // check that the width of the columns saved in the initial configuration 
+        // in the local storage is different from the original value
+        if (this.state.hasOwnProperty('initial-configuration')) {
+          if (this.state['initial-configuration'].hasOwnProperty('oColumns-display')) {
+            let initialStoredCols = this.state['initial-configuration']['oColumns-display'];
+            initialStoredCols.forEach(element => {
+              if (colDef.attr === element.attr && element.width === colDef.definition.originalWidth) {
+                columnWidth = storedData.width;
+              }
+            });
+          } else {
+            columnWidth = storedData.width;
+          }
+        }
       }
     }
     if (Util.isDefined(columnWidth)) {
@@ -990,22 +1005,101 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
           console.warn('Unable to load the column ' + oCol.attr + ' from the localstorage');
         }
       });
-
-      //if all columns was changed then visibleColArray set with visibleColumns
-      let allColumsNotVisible = stateCols.filter(function (col) { return col.visible === true; }).length === 0;
-      if (allColumsNotVisible || stateCols.length === 0) {
-        this.visibleColArray = Util.parseArray(this.visibleColumns, true);
-      } else {
-        this.visibleColArray = stateCols.filter(item => item.visible).map(item => item.attr);
-      }
+      stateCols = this.checkChangesVisibleColummnsInInitialConfiguration(stateCols);
+      this.visibleColArray = stateCols.filter(item => item.visible).map(item => item.attr);
     } else {
       this.visibleColArray = Util.parseArray(this.visibleColumns, true);
+      this._oTableOptions.columns.sort((a: OColumn, b: OColumn) => this.visibleColArray.indexOf(a.attr) - this.visibleColArray.indexOf(b.attr));
     }
+  }
+
+  checkChangesVisibleColummnsInInitialConfiguration(stateCols) {
+    const self = this;
+    if (this.state.hasOwnProperty('initial-configuration')) {
+      if (this.state['initial-configuration'].hasOwnProperty('oColumns-display')) {
+
+        const originalVisibleColArray = this.state['initial-configuration']['oColumns-display'].map(x => {
+          if (x.visible === true) {
+            return x.attr;
+          }
+        });
+        const visibleColArray = Util.parseArray(this.originalVisibleColumns, true);
+
+        // Find values in visible-columns that they arent in original-visible-columns in localstorage
+        // in this case you have to add this column to this.visibleColArray
+        let colToAddInVisibleCol = Util.differenceArrays(visibleColArray, originalVisibleColArray);
+        if (colToAddInVisibleCol.length > 0) {
+          colToAddInVisibleCol.forEach((colAdd, index) => {
+            if (stateCols.filter(col => col.attr === colAdd).length > 0) {
+              stateCols = stateCols.map(col => {
+                if (colToAddInVisibleCol.indexOf(col.attr) > -1) {
+                  col.visible = true;
+                }
+                return col;
+              });
+            } else {
+              self.colArray.forEach((element, i) => {
+                if (element === colAdd) {
+                  stateCols.splice(i + 1, 0,
+                    {
+                      attr: colAdd,
+                      visible: true,
+                      width: undefined
+                    });
+                }
+
+              });
+            }
+          });
+        }
+
+        // Find values in original-visible-columns in localstorage that they arent in this.visibleColArray
+        // in this case you have to delete this column to this.visibleColArray
+        let colToDeleteInVisibleCol = Util.differenceArrays(originalVisibleColArray, visibleColArray);
+        if (colToDeleteInVisibleCol.length > 0) {
+          stateCols = stateCols.map(col => {
+            if (colToDeleteInVisibleCol.indexOf(col.attr) > -1) {
+              col.visible = false;
+            }
+            return col;
+          });
+        }
+      }
+    }
+    return stateCols;
   }
 
   parseSortColumns() {
     let sortColumnsParam = this.state['sort-columns'] || this.sortColumns;
     this.sortColArray = ServiceUtils.parseSortColumns(sortColumnsParam);
+
+    //checking the original sort columns with the sort columns in initial configuration in local storage
+    if (this.state['sort-columns'] && this.state['initial-configuration']['sort-columns']) {
+
+      const initialConfigSortColumnsArray = ServiceUtils.parseSortColumns(this.state['initial-configuration']['sort-columns']);
+      const originalSortColumnsArray = ServiceUtils.parseSortColumns(this.originalSortColumns);
+      const self = this;
+      // Find values in visible-columns that they arent in original-visible-columns in localstorage
+      // in this case you have to add this column to this.visibleColArray
+      let colToAddInVisibleCol = Util.differenceArrays(originalSortColumnsArray, initialConfigSortColumnsArray);
+      if (colToAddInVisibleCol.length > 0) {
+        colToAddInVisibleCol.forEach(colAdd => {
+          self.sortColArray.push(colAdd);
+        });
+      }
+
+      let colToDelInVisibleCol = Util.differenceArrays(initialConfigSortColumnsArray, originalSortColumnsArray);
+      if (colToDelInVisibleCol.length > 0) {
+        colToDelInVisibleCol.forEach((colDel) => {
+          self.sortColArray.forEach((col, i) => {
+            if (col.columnName === colDel.columnName) {
+              self.sortColArray.splice(i, 1);
+            }
+          });
+        });
+      }
+    }
+
     // ensuring column existence and checking its orderable state
     for (let i = this.sortColArray.length - 1; i >= 0; i--) {
       const colName = this.sortColArray[i].columnName;
@@ -1032,7 +1126,16 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
         columnsOrder = this.colArray.filter(attr => this.visibleColArray.indexOf(attr) === -1);
         columnsOrder.push(...this.visibleColArray);
       }
-      this._oTableOptions.columns.sort((a: OColumn, b: OColumn) => columnsOrder.indexOf(a.attr) - columnsOrder.indexOf(b.attr));
+
+      this._oTableOptions.columns.sort((a: OColumn, b: OColumn) => {
+        if (columnsOrder.indexOf(a.attr) === -1) {
+          //if it is not in local storage because it is new, keep order
+          return 0;
+        } else {
+          return columnsOrder.indexOf(a.attr) - columnsOrder.indexOf(b.attr);
+        }
+      });
+
     }
 
     // Initialize quickFilter
@@ -1047,8 +1150,17 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       this.paginator = new OTablePaginatorComponent(this.injector, this);
     }
 
+
     if (!Util.isDefined(this.selectAllCheckboxVisible)) {
       this._oTableOptions.selectColumn.visible = !!this.state['select-column-visible'];
+    } else {
+      //checking the original selectAllCheckboxVisible with select-column-visible in initial configuration in local storage
+      if (this.state.hasOwnProperty('initial-configuration') && this.state['initial-configuration'].hasOwnProperty('select-column-visible')
+        && this.selectAllCheckboxVisible === this.state['initial-configuration']['select-column-visible']) {
+        this._oTableOptions.selectColumn.visible = !!this.state['select-column-visible'];
+      } else {
+        this._oTableOptions.selectColumn.visible = this.selectAllCheckboxVisible;
+      }
     }
 
     this.initializeCheckboxColumn();
@@ -2032,7 +2144,18 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   setFiltersConfiguration(conf: any) {
-    this.filterCaseSensitive = conf.hasOwnProperty('filter-case-sensitive') ? conf['filter-case-sensitive'] : this.filterCaseSensitive;
+    //initialize filterCaseSensitive
+
+    /*
+      Checking the original filterCaseSensitive with the filterCaseSensitive in initial configuration in local storage
+      if filterCaseSensitive in initial configuration is equals to original filterCaseSensitive input
+      filterCaseSensitive will be the value in local storage
+    */
+    if (Util.isDefined(this.filterCaseSensitive) && this.state.hasOwnProperty('initial-configuration') &&
+      this.state['initial-configuration'].hasOwnProperty('filter-case-sensitive') &&
+      this.filterCaseSensitive === conf['initial-configuration']['filter-case-sensitive']) {
+      this.filterCaseSensitive = conf.hasOwnProperty('filter-case-sensitive') ? conf['filter-case-sensitive'] : this.filterCaseSensitive;
+    }
 
     const storedColumnFilters = this.oTableStorage.getStoredColumnsFilters(conf);
     this.showFilterByColumnIcon = storedColumnFilters.length > 0;
@@ -2050,9 +2173,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       storedColumnsData.forEach((oColData: any) => {
         const oCol = this.getOColumn(oColData.attr);
         if (oCol) {
-          if (oColData.hasOwnProperty('searchable')) {
-            oCol.searchable = oColData.searchable;
-          }
           if (oColData.hasOwnProperty('searching')) {
             oCol.searching = oColData.searching;
           }

@@ -134,7 +134,7 @@ export class DaterangepickerComponent implements OnInit {
         this._buildLocale();
         const daysOfWeek = [...this.locale.daysOfWeek];
         if (this.locale.firstDay !== 0) {
-            var iterator = this.locale.firstDay;
+            let iterator = this.locale.firstDay;
 
             while (iterator > 0) {
                 daysOfWeek.push(daysOfWeek.shift());
@@ -175,7 +175,7 @@ export class DaterangepickerComponent implements OnInit {
                     start = this.minDate.clone();
                 }
 
-                var maxDate = this.maxDate;
+                let maxDate = this.maxDate;
                 if (this.maxSpan && maxDate && start.clone().add(this.maxSpan).isAfter(maxDate)) {
                     maxDate = start.clone().add(this.maxSpan);
                 }
@@ -191,9 +191,9 @@ export class DaterangepickerComponent implements OnInit {
                 }
 
                 //Support unicode chars in the range names.
-                var elem = document.createElement('textarea');
+                let elem = document.createElement('textarea');
                 elem.innerHTML = range;
-                var rangeHtml = elem.value;
+                let rangeHtml = elem.value;
 
                 this.ranges[rangeHtml] = [start, end];
             }
@@ -312,9 +312,6 @@ export class DaterangepickerComponent implements OnInit {
         // generate AM/PM
         if (!this.timePicker24Hour) {
 
-            var am_html = '';
-            var pm_html = '';
-
             if (minDate && selected.clone().hour(12).minute(0).second(0).isBefore(minDate)) {
                 this.timepickerVariables[side].amDisabled = true;
             }
@@ -432,7 +429,7 @@ export class DaterangepickerComponent implements OnInit {
             const inMinYear = currentYear === minYear;
             const inMaxYear = currentYear === maxYear;
             const years = [];
-            for (var y = minYear; y <= maxYear; y++) {
+            for (let y = minYear; y <= maxYear; y++) {
                 years.push(y);
             }
             this.calendarVariables[side].dropdowns = {
@@ -617,7 +614,7 @@ export class DaterangepickerComponent implements OnInit {
         if (this.rangesArray.length > 0) {
             for (const range in this.ranges) {
                 if (this.timePicker) {
-                    var format = this.timePickerSeconds ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD HH:mm';
+                    const format = this.timePickerSeconds ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD HH:mm';
                     //ignore times when comparing dates if time picker seconds is not enabled
                     if (this.startDate.format(format) === this.ranges[range][0].format(format) && this.endDate.format(format) === this.ranges[range][1].format(format)) {
                         customRange = false;
@@ -709,12 +706,12 @@ export class DaterangepickerComponent implements OnInit {
      */
     timeChanged(timeEvent: any, side: SideEnum) {
 
-        var hour = parseInt(this.timepickerVariables[side].selectedHour, 10);
-        var minute = parseInt(this.timepickerVariables[side].selectedMinute, 10);
-        var second = this.timePickerSeconds ? parseInt(this.timepickerVariables[side].selectedSecond, 10) : 0;
+        let hour = parseInt(this.timepickerVariables[side].selectedHour, 10);
+        let minute = parseInt(this.timepickerVariables[side].selectedMinute, 10);
+        let second = this.timePickerSeconds ? parseInt(this.timepickerVariables[side].selectedSecond, 10) : 0;
 
         if (!this.timePicker24Hour) {
-            var ampm = this.timepickerVariables[side].ampmModel;
+            const ampm = this.timepickerVariables[side].ampmModel;
             if (ampm === 'PM' && hour < 12) {
                 hour += 12;
             }
@@ -724,7 +721,7 @@ export class DaterangepickerComponent implements OnInit {
         }
 
         if (side === SideEnum.left) {
-            var start = this.startDate.clone();
+            let start = this.startDate.clone();
             start.hour(hour);
             start.minute(minute);
             start.second(second);
@@ -735,7 +732,7 @@ export class DaterangepickerComponent implements OnInit {
                 this.setEndDate(start.clone());
             }
         } else if (this.endDate) {
-            var end = this.endDate.clone();
+            let end = this.endDate.clone();
             end.hour(hour);
             end.minute(minute);
             end.second(second);
@@ -893,7 +890,7 @@ export class DaterangepickerComponent implements OnInit {
             this.isShown = true; // show calendars
             this.showCalInRanges = true;
         } else {
-            var dates = this.ranges[label];
+            const dates = this.ranges[label];
             this.startDate = dates[0].clone();
             this.endDate = dates[1].clone();
             if (this.showRangeLabelOnInput && label !== this.locale.customRangeLabel) {
@@ -1026,7 +1023,7 @@ export class DaterangepickerComponent implements OnInit {
     private _getDateWithTime(date, side: SideEnum): _moment.Moment {
         let hour = parseInt(this.timepickerVariables[side].selectedHour, 10);
         if (!this.timePicker24Hour) {
-            var ampm = this.timepickerVariables[side].ampmModel;
+            const ampm = this.timepickerVariables[side].ampmModel;
             if (ampm === 'PM' && hour < 12) {
                 hour += 12;
             }
@@ -1034,8 +1031,8 @@ export class DaterangepickerComponent implements OnInit {
                 hour = 0;
             }
         }
-        var minute = parseInt(this.timepickerVariables[side].selectedMinute, 10);
-        var second = this.timePickerSeconds ? parseInt(this.timepickerVariables[side].selectedSecond, 10) : 0;
+        const minute = parseInt(this.timepickerVariables[side].selectedMinute, 10);
+        const second = this.timePickerSeconds ? parseInt(this.timepickerVariables[side].selectedSecond, 10) : 0;
         return date.clone().hour(hour).minute(minute).second(second);
     }
     /**
