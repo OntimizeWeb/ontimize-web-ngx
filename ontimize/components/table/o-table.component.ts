@@ -919,13 +919,26 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       return;
     }
     let colDef: OColumn = new OColumn(column.attr, this, column);
-
     let columnWidth = column.width;
     const storedCols = this.state['oColumns-display'];
+
     if (Util.isDefined(storedCols)) {
       const storedData = storedCols.find(oCol => oCol.attr === colDef.attr);
       if (Util.isDefined(storedData) && Util.isDefined(storedData.width)) {
-        columnWidth = storedData.width;
+        // check that the width of the columns saved in the initial configuration 
+        // in the local storage is different from the original value
+        if (this.state.hasOwnProperty('initial-configuration')) {
+          if (this.state['initial-configuration'].hasOwnProperty('oColumns-display')) {
+            let initialStoredCols = this.state['initial-configuration']['oColumns-display'];
+            initialStoredCols.forEach(element => {
+              if (colDef.attr === element.attr && element.width === colDef.definition.originalWidth) {
+                columnWidth = storedData.width;
+              }
+            });
+          } else {
+            columnWidth = storedData.width;
+          }
+        }
       }
     }
     if (Util.isDefined(columnWidth)) {
@@ -996,18 +1009,22 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   checkChangesVisibleColummnsInInitialConfiguration(stateCols) {
-
+    const self = this;
     if (this.state.hasOwnProperty('initial-configuration')) {
       if (this.state['initial-configuration'].hasOwnProperty('oColumns-display')) {
 
-        const originalVisibleColArray = Util.parseArray(this.state['initial-configuration']['oColumns-display'], true);
+        const originalVisibleColArray = this.state['initial-configuration']['oColumns-display'].map(x => {
+          if (x.visible === true) {
+            return x.attr;
+          }
+        });
         const visibleColArray = Util.parseArray(this.originalVisibleColumns, true);
 
         // Find values in visible-columns that they arent in original-visible-columns in localstorage
         // in this case you have to add this column to this.visibleColArray
         let colToAddInVisibleCol = Util.differenceArrays(visibleColArray, originalVisibleColArray);
         if (colToAddInVisibleCol.length > 0) {
-          colToAddInVisibleCol.forEach(colAdd => {
+          colToAddInVisibleCol.forEach((colAdd, index) => {
             if (stateCols.filter(col => col.attr === colAdd).length > 0) {
               stateCols = stateCols.map(col => {
                 if (colToAddInVisibleCol.indexOf(col.attr) > -1) {
@@ -1016,10 +1033,16 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
                 return col;
               });
             } else {
-              stateCols.push({
-                attr: colAdd,
-                visible: true,
-                width: undefined
+              self.colArray.forEach((element, i) => {
+                if (element === colAdd) {
+                  stateCols.splice(i + 1, 0,
+                    {
+                      attr: colAdd,
+                      visible: true,
+                      width: undefined
+                    });
+                }
+
               });
             }
           });
@@ -1099,7 +1122,15 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
         columnsOrder.push(...this.visibleColArray);
       }
 
-      this._oTableOptions.columns.sort((a: OColumn, b: OColumn) => columnsOrder.indexOf(a.attr) - columnsOrder.indexOf(b.attr));
+      this._oTableOptions.columns.sort((a: OColumn, b: OColumn) => {
+        if (columnsOrder.indexOf(a.attr) === -1) {
+          //if it is not in local storage because it is new, keep order
+          return 0;
+        } else {
+          return columnsOrder.indexOf(a.attr) - columnsOrder.indexOf(b.attr);
+        }
+      });
+
     }
 
     // Initialize quickFilter

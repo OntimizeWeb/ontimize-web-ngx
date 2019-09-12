@@ -1,4 +1,4 @@
-import { Codes } from '../../../utils';
+import { Codes, Util } from '../../../utils';
 import { OColumn, OTableComponent } from '../o-table.component';
 
 export interface ITableFiltersStatus {
@@ -41,6 +41,7 @@ export class OTableStorage {
     if (storedConfigurationsArr.length > 0) {
       dataToStore[OTableStorage.STORED_CONFIGURATIONS_KEY] = storedConfigurationsArr;
     }
+
     return dataToStore;
   }
 
@@ -164,7 +165,19 @@ export class OTableStorage {
   protected getInitialConfigurationState(): any {
     let result = {};
     let initialConfiguration = {};
-    initialConfiguration['oColumns-display'] = this.table.originalVisibleColumns;
+
+    let oColumnsData = [];
+    const self = this;
+    Util.parseArray(this.table.originalVisibleColumns, true).forEach((x: string) => {
+      let oCol = self.table.getOColumn(x);
+      oColumnsData.push({
+        attr: oCol.attr,
+        visible: true,
+        width: oCol.definition ? oCol.definition.originalWidth : undefined
+      });
+    });
+
+    initialConfiguration['oColumns-display'] = oColumnsData;
     initialConfiguration['sort-columns'] = this.table.originalSortColumns;
     initialConfiguration['select-column-visible'] = this.table.oTableOptions.selectColumn.visible;
     initialConfiguration['filter-case-sensitive'] = this.table.filterCaseSensitive;
