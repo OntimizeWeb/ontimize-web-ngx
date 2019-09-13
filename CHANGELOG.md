@@ -10,10 +10,12 @@
   * new `insert-button-position` input ([f5ae203](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f5ae203)) Closes [#282](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/282)
   * new `insert-button-floatable` input ([f96b5d4](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f96b5d4)) 
 * **o-table**: new `keep-selected-items` input ([29de43b9](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/29de43b9))
+* **o-list-picker**: show or hidde clear button ([bb3b6eb](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/bb3b6eb))
 
 ### Bug Fixes
 * **o-table-cell-renderer-service**:not render cell value when export data table ([a594521](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a594521))
 * **o-grid**: not filter by checked columns  ([29f5036](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/29f5036)) Closes [#283](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/283)
+* **o-table**:([42e5ccf](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/42e5ccf)) Closes [#284](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/284)
 
 ## 4.0.6 (2019-06-19)
 ### Features
