@@ -929,7 +929,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     if (Util.isDefined(storedCols)) {
       const storedData = storedCols.find(oCol => oCol.attr === colDef.attr);
       if (Util.isDefined(storedData) && Util.isDefined(storedData.width)) {
-        // check that the width of the columns saved in the initial configuration 
+        // check that the width of the columns saved in the initial configuration
         // in the local storage is different from the original value
         if (this.state.hasOwnProperty('initial-configuration')) {
           if (this.state['initial-configuration'].hasOwnProperty('oColumns-display')) {
