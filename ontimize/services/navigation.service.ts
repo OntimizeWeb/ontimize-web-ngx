@@ -99,6 +99,8 @@ export class ONavigationItem {
   }
 }
 
+const MAXIMIUM_NAVIGATION_HEAP_SIZE = 15;
+
 @Injectable()
 export class NavigationService implements ILocalStorageComponent {
 
@@ -113,7 +115,7 @@ export class NavigationService implements ILocalStorageComponent {
   protected router: Router;
 
   protected localStorageService: LocalStorageService;
-  // protected location: Location;
+  protected location: Location;
 
   private navigationEventsSource: ReplaySubject<Array<ONavigationItem>> = new ReplaySubject<Array<ONavigationItem>>(1);
   public navigationEvents$: Observable<Array<ONavigationItem>> = this.navigationEventsSource.asObservable();
@@ -127,10 +129,22 @@ export class NavigationService implements ILocalStorageComponent {
   ) {
     this.router = this.injector.get(Router);
     this.localStorageService = this.injector.get(LocalStorageService);
-    // this.location = this.injector.get(Location);
-    // this.location.subscribe(val => {
-    //   console.log(val);
-    // });
+    this.location = this.injector.get(Location);
+    this.location.subscribe(val => {
+      const previousRoute = this.getPreviousRouteData();
+      const qParams = Object.keys(previousRoute.queryParams);
+      let arr = [];
+      qParams.forEach(function (p) {
+        arr.push(`${p}=${previousRoute.queryParams[p]}`);
+      });
+      let fullUrl = `/${previousRoute.url}`;
+      if (arr.length > 0) {
+        fullUrl = `/${previousRoute.url}?${arr.join('&')}`;
+      }
+      if (fullUrl === val.url) {
+        this.navigationItems.pop();
+      }
+    });
   }
 
   initialize(): void {
@@ -209,8 +223,11 @@ export class NavigationService implements ILocalStorageComponent {
     let routeArr = [];
     for (let i = 0, len = routeSegments.length; i < len; i++) {
       const s: UrlSegment = routeSegments[i];
-      if (modePathArr.indexOf(s.path) === -1 && text.length === 0) {
+      const notModePath: boolean = modePathArr.indexOf(s.path) === -1;
+      if (notModePath && text.length === 0) {
         text = text.length > 0 ? ('/' + s.path) : s.path;
+        url += url.length > 0 ? ('/' + s.path) : s.path;
+      } else if (notModePath) {
         url += url.length > 0 ? ('/' + s.path) : s.path;
       } else {
         routeArr.push(s);
@@ -352,7 +369,7 @@ export class NavigationService implements ILocalStorageComponent {
   }
 
   protected mergeNavigationItems(navigationItems: ONavigationItem[], storedNavigation: ONavigationItem[]): ONavigationItem[] {
-    if (storedNavigation.length === 0) {
+    if (storedNavigation.length === 0 || storedNavigation.length > MAXIMIUM_NAVIGATION_HEAP_SIZE) {
       return navigationItems;
     }
     let result: ONavigationItem[] = [];
