@@ -3,7 +3,6 @@ import { AfterViewInit, Component, ElementRef, forwardRef, Inject, Injector, NgM
 import { FormControl } from '@angular/forms';
 import { MatSelect, MatSelectChange } from '@angular/material';
 import { Subscription } from 'rxjs';
-
 import { InputConverter } from '../../../decorators/input-converter';
 import { dataServiceFactory } from '../../../services/data-service.provider';
 import { OntimizeService } from '../../../services/ontimize.service';
@@ -15,6 +14,7 @@ import { IFormValueOptions, OFormValue } from '../../form/OFormValue';
 import { OValueChangeEvent } from '../../o-form-data-component.class';
 import { OFormServiceComponent } from '../o-form-service-component.class';
 import { OComboSearchComponent } from './combo-search/o-combo-search.component';
+
 
 export const DEFAULT_INPUTS_O_COMBO = [
   ...OFormServiceComponent.DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT,
@@ -282,14 +282,15 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
 
   protected setIsReadOnly(value: boolean): void {
     super.setIsReadOnly(value);
-    const disabled = Util.isDefined(this.readOnly) ? this.readOnly : value;
-    if (this._fControl && disabled) {
-      this._fControl.disable();
-    } else if (this._fControl) {
-      this._fControl.enable();
+    const readOnly = Util.isDefined(this.readOnly) ? this.readOnly : value;
+    if (this.enabled) {
+      if (this._fControl && readOnly) {
+        this._fControl.disable();
+      } else if (this._fControl) {
+        this._fControl.enable();
+      }
     }
   }
-
   protected parseByValueColumnType(val: any): any {
     if (!Util.isDefined(this.multiple)) {
       return val;

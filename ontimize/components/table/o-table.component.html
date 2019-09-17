@@ -180,7 +180,7 @@
 
         <tr mat-row oTableRow *matRowDef="let row; columns: oTableOptions.visibleColumns;"
           (click)="handleClick(row, $event)" (dblclick)="handleDoubleClick(row, $event)"
-          [class.selected]="!isSelectionModeNone() && selection.isSelected(row)">
+          [class.selected]="isRowSelected(row)">
         </tr>
         <ng-container *ngIf="showLastInsertableRow">
           <tr mat-footer-row *matFooterRowDef="oTableOptions.columnsInsertables; sticky: true"

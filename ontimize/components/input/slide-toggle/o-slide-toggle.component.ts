@@ -1,11 +1,11 @@
-import { Component, ElementRef, forwardRef, Inject, Injector, NgModule, Optional, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, ElementRef, forwardRef, Inject, Injector, NgModule, Optional, ViewEncapsulation } from '@angular/core';
 import { ThemePalette } from '@angular/material';
-
-import { Util } from '../../../util/util';
 import { OSharedModule } from '../../../shared/shared.module';
+import { Util } from '../../../util/util';
 import { OFormComponent, OFormValue } from '../../form/form-components';
 import { DEFAULT_INPUTS_O_FORM_DATA_COMPONENT, DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT, OFormDataComponent } from '../../o-form-data-component.class';
+
 
 export const DEFAULT_INPUTS_O_SLIDETOGGLE = [
   // true-value: true value. Default: true.
@@ -92,22 +92,6 @@ export class OSlideToggleComponent extends OFormDataComponent {
       return this.value.value === this.trueValue;
     }
     return false;
-  }
-
-  innerOnChange(event: any) {
-    if (!this.value) {
-      this.value = new OFormValue(this.falseValue);
-    }
-    let val = event;
-    if (this.booleanType !== 'boolean') {
-      if (typeof val === 'boolean') {
-        val = event ? this.trueValue : this.falseValue;
-      } else {
-        val = val === this.trueValue ? this.trueValue : this.falseValue;
-      }
-    }
-    this.ensureOFormValue(val);
-    this.onChange.emit(val);
   }
 
   onClickBlocker(e: Event) {

@@ -1,11 +1,10 @@
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable, Injector } from '@angular/core';
 import { Router } from '@angular/router';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { share } from 'rxjs/operators';
-
-import { LoginService } from '../services';
 import { AppConfig, Config } from '../config/app-config';
+import { LoginService } from '../services';
 import { Codes, ServiceUtils } from '../utils';
 
 export const EXPORT_PATH_DEFAULT: string = '/export';
@@ -142,6 +141,10 @@ export class OntimizeExportService {
 
   protected redirectLogin(sessionExpired: boolean = false): void {
     let router = this.injector.get(Router);
+    const loginService = this.injector.get(LoginService);
+    if (sessionExpired) {
+      loginService.sessionExpired();
+    }
     ServiceUtils.redirectLogin(router, sessionExpired);
   }
 

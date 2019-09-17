@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, CUSTOM_ELEMENTS_SCHEMA, ElementRef, EventEmitter, Injector, NgModule, NgZone, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router, UrlSegment } from '@angular/router';
-import { combineLatest, Observable, Subscription } from 'rxjs';
+import { combineLatest, Observable, Subscription, BehaviorSubject } from 'rxjs';
 import { InputConverter } from '../../decorators';
 import { OFormLayoutManagerComponent } from '../../layouts';
 import { DialogService, NavigationService, OFormPermissions, ONavigationItem, OntimizeService, OPermissions, PermissionsService, SnackBarService } from '../../services';
@@ -224,7 +224,8 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   public onUpdate: EventEmitter<any> = new EventEmitter();
   public onDelete: EventEmitter<any> = new EventEmitter();
 
-  public loading: boolean = false;
+  protected loadingSubject = new BehaviorSubject<boolean>(false);
+  public loading: Observable<boolean> = this.loadingSubject.asObservable();
   public formData: Object = {};
   public navigationData: Array<any> = [];
   public currentIndex = 0;
@@ -428,19 +429,28 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     return this._components;
   }
 
-  public load(): Subscription {
-    const self = this;
-    const loadObservable = new Observable(observer => {
-      const timer = window.setTimeout(() => {
+  public load(): any {
+    var self = this;
+    var zone = this.injector.get(NgZone);
+    var loadObservable = new Observable(observer => {
+      var timer = window.setTimeout(() => {
         observer.next(true);
       }, 250);
 
       return () => {
         window.clearTimeout(timer);
-        self.loading = false;
+        zone.run(() => {
+          self.loadingSubject.next(false);
+        });
       };
+
     });
-    return loadObservable.subscribe(val => this.loading = val as boolean);
+    var subscription = loadObservable.subscribe(val => {
+      zone.run(() => {
+        self.loadingSubject.next(val as boolean);
+      });
+    });
+    return subscription;
   }
 
   getDataValue(attr: string) {
@@ -1455,6 +1465,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
 
   protected postCorrectDelete(result: any): void {
     this.snackBarService.open('MESSAGES.DELETED', { icon: 'check_circle' });
+    this.onDelete.emit(result);
   }
 
   protected markFormLayoutManagerToUpdate(): void {

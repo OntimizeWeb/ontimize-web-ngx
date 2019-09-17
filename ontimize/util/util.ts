@@ -1,8 +1,8 @@
 import { Observable } from 'rxjs';
-
 import { IFormDataComponent } from '../components/o-form-data-component.class';
 import { Base64 } from './base64';
 import { Codes } from './codes';
+
 
 export interface IDataService {
   getDefaultServiceConfiguration(serviceName?: string): Object;
@@ -214,7 +214,7 @@ export class Util {
           return false;
         }
         keySet = Object.create(null);
-        for (key of o1) {
+        for (key in o1) {
           if (!Util.equals(o1[key], o2[key])) {
             return false;
           }
@@ -322,4 +322,37 @@ export class Util {
     }
   }
 
+
+  /**
+   *  Return string with escaped special character
+   * */
+  static escapeSpecialCharacter(S: string): string {
+
+    let str = String(S);
+
+    let cpList = Array.from(str[Symbol.iterator]());
+
+    let cuList = [];
+    for (let c of cpList) {
+      // i. If c is a SpecialCharacter then do:
+      if ('^$\\.*+?()[]{}|'.indexOf(c) !== -1) {
+        // a. Append "\" to cuList.
+        cuList.push('\\');
+      }
+      // Append c to cpList.
+      cuList.push(c);
+    }
+    let L = cuList.join('');
+    return L;
+
+  }
+
+  static differenceArrays(array1: Array<any>, array2: Array<any>): Array<any> {
+    const difference = array1.filter(obj => {
+      return !array2.some(obj2 => {
+        return this.equals(obj, obj2);
+      });
+    });
+    return difference;
+  }
 }
