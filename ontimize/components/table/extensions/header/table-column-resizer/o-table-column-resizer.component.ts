@@ -63,7 +63,7 @@ export class OTableColumnResizerComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     if (!this.isDisabled) {
       this.headerEl = this.getHeaderEL();
-      if (!this.table.horizontalScroll && this.headerEl) {
+      if (this.headerEl) {
         this.nextOColumns = this.getFollowingOColumns();
       }
     }
