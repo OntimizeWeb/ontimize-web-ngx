@@ -48,6 +48,7 @@ export const DEFAULT_INPUTS_O_TABLE = [
 
   // editable-columns [string]: columns that can be edited directly over the table, separated by ';'. Default: no value.
   // 'editableColumns: editable-columns',
+
   // sort-columns [string]: initial sorting, with the format column:[ASC|DESC], separated by ';'. Default: no value.
   'sortColumns: sort-columns',
 
@@ -930,7 +931,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     if (Util.isDefined(storedCols)) {
       const storedData = storedCols.find(oCol => oCol.attr === colDef.attr);
       if (Util.isDefined(storedData) && Util.isDefined(storedData.width)) {
-        // check that the width of the columns saved in the initial configuration 
+        // check that the width of the columns saved in the initial configuration
         // in the local storage is different from the original value
         if (this.state.hasOwnProperty('initial-configuration')) {
           if (this.state['initial-configuration'].hasOwnProperty('oColumns-display')) {
