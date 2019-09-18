@@ -164,6 +164,8 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
   protected router: Router;
   protected actRoute: ActivatedRoute;
 
+  protected sqlTypes = undefined;
+
   constructor(
     protected injector: Injector
   ) {
@@ -370,19 +372,19 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
       this.queryArguments = queryArguments;
       this.querySubscription = this.dataService[queryMethodName].apply(this.dataService, queryArguments).subscribe(res => {
         let data = undefined;
-        let sqlTypes = undefined;
+        this.sqlTypes = undefined;
         if (Util.isArray(res)) {
           data = res;
-          sqlTypes = {};
+          this.sqlTypes = {};
         } else if ((res.code === Codes.ONTIMIZE_SUCCESSFUL_CODE)) {
           const arrData = (res.data !== undefined) ? res.data : [];
           data = Util.isArray(arrData) ? arrData : [];
-          sqlTypes = res.sqlTypes;
+          this.sqlTypes = res.sqlTypes;
           if (this.pageable) {
             this.updatePaginationInfo(res);
           }
         }
-        self.setData(data, sqlTypes, (ovrrArgs && ovrrArgs.replace));
+        self.setData(data, this.sqlTypes, (ovrrArgs && ovrrArgs.replace));
         self.loaderSubscription.unsubscribe();
       }, err => {
         self.setData([], []);
@@ -493,7 +495,7 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
   }
 
   getSqlTypes() {
-    return {};
+    return Util.isDefined(this.sqlTypes) ? this.sqlTypes : {};
   }
 
   get state(): any {
