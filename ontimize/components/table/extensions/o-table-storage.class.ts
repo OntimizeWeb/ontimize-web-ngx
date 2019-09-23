@@ -182,6 +182,7 @@ export class OTableStorage {
       });
       result.selection = selection;
     }
+    return result;
   }
 
   protected getInitialConfigurationState(): any {
