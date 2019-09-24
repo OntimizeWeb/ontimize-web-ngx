@@ -3,7 +3,7 @@
   class="o-image-content" fxFill>
 
   <mat-form-field *ngIf="hasControls()" class="o-image-form-field">
-    <input matInput readonly (click)="input.click()" [placeholder]="olabel" [required]="isRequired" [formControl]="stateCtrl" />
+    <input matInput readonly (click)="input.click()" [placeholder]="olabel | oTranslate" [required]="isRequired" [formControl]="stateCtrl" />
     <input matInput [formControlName]="getAttribute()" type="text" [id]="getAttribute()" class="o-image-form-field-input" [required]="isRequired" />
     <input #input type="file" [disabled]="!enabled" [accept]="acceptFileType ? acceptFileType.replace(';',',') : 'image/*'" (change)="fileChange(input)"
       class="o-image-form-field-hidden" fxFlex />
