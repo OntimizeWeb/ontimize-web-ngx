@@ -482,6 +482,10 @@ export class ODaterangepickerDirective {
       this._popupRef.detach();
     }
 
+    if (this._dialogRef) {
+      this._dialogRef.close();
+    }
+
     if (this._calendarPortal && this._calendarPortal.isAttached) {
       this._calendarPortal.detach();
     }
