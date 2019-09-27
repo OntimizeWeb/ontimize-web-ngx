@@ -58,7 +58,8 @@ export class OTableButtonComponent implements OnInit {
     this.iconPosition = Util.parseIconPosition(this.iconPosition);
   }
 
-  public innerOnClick(): void {
+  public innerOnClick(event): void {
+    event.stopPropagation();
     this.onClick.emit();
   }
 

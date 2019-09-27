@@ -147,7 +147,6 @@ export class OColumn {
   multiline: boolean;
   resizable: boolean;
   DOMWidth: number;
-  padding: number;
 
   constructor(
     attr: string = undefined,
@@ -288,7 +287,7 @@ export class OColumn {
         this.DOMWidth = maxValue;
       }
     }
-    return Util.isDefined(this.DOMWidth) ? (this.DOMWidth - (this.padding || 0)) + 'px' : undefined;
+    return Util.isDefined(this.DOMWidth) ? (this.DOMWidth + 'px') : undefined;
   }
 
   set width(val: string) {
@@ -861,6 +860,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       }
     });
   }
+
   /**
    * Method update store localstorage, call of the ILocalStorage
    */
@@ -888,8 +888,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       params.class = 'o-table-context-menu ' + this.rowHeight;
 
       if (params.data && !self.selection.isSelected(params.data.rowValue)) {
-        self.selection.clear();
-        self.selection.select(params.data.rowValue);
+        self.clearSelection();
+        self.selectedRow(params.data.rowValue);
       }
     });
   }
@@ -1373,7 +1373,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }, 500);
     this.loadingScrollSubject.next(false);
 
-
     if (this.previousRendererData !== this.dataSource.renderedData) {
       ObservableWrapper.callEmit(this.onContentChange, this.dataSource.renderedData);
       this.previousRendererData = this.dataSource.renderedData;
@@ -1382,18 +1381,13 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     if (Util.isDefined(this.tableHeaderEl)) {
       [].slice.call(this.tableHeaderEl.nativeElement.children).forEach(thEl => {
         const oCol: OColumn = self.getOColumnFromTh(thEl);
-        if (Util.isDefined(oCol)) {
-          if (!Util.isDefined(oCol.padding)) {
-            oCol.padding = (!thEl.previousElementSibling || !thEl.nextElementSibling) ? OTableComponent.FIRST_LAST_CELL_PADDING : 0;
-          }
-          if (!Util.isDefined(oCol.DOMWidth) && thEl.clientWidth > 0) {
-            oCol.DOMWidth = thEl.clientWidth;
-          }
+        if (Util.isDefined(oCol) && thEl.clientWidth > 0 && oCol.DOMWidth !== thEl.clientWidth) {
+          oCol.DOMWidth = thEl.clientWidth;
         }
       });
     }
 
-    if (this.state.hasOwnProperty('selection') && this.dataSource.renderedData.length) {
+    if (this.state.hasOwnProperty('selection') && this.dataSource.renderedData.length > 0 && this.getSelectedItems().length === 0) {
       this.state.selection.forEach(selectedItem => {
         // finding selected item data in the table rendered data
         const foundItem = this.dataSource.renderedData.find(data => {
@@ -1407,9 +1401,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
           this.selection.select(foundItem);
         }
       });
-
-      // removing selected items from state for avoiding another possible projectContentChanged calls
-      this.state.selection = [];
     }
   }
 
@@ -1531,7 +1522,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     if (!this.checkEnabledActionPermission(PermissionsUtils.ACTION_REFRESH)) {
       return;
     }
-
+    Object.assign(this.state, this.oTableStorage.getTablePropertyToStore('selection'));
     this.clearSelection();
     this.finishQuerySubscription = false;
     this.pendingQuery = true;
@@ -1563,6 +1554,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     if ((this.detailMode === Codes.DETAIL_MODE_CLICK)) {
       ObservableWrapper.callEmit(this.onClick, item);
       this.saveDataNavigationInLocalStorage();
+      this.selection.clear();
+      this.selectedRow(item);
       this.viewDetail(item);
       return;
     }
