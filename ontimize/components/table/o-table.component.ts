@@ -1378,14 +1378,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       this.previousRendererData = this.dataSource.renderedData;
     }
 
-    if (Util.isDefined(this.tableHeaderEl)) {
-      [].slice.call(this.tableHeaderEl.nativeElement.children).forEach(thEl => {
-        const oCol: OColumn = self.getOColumnFromTh(thEl);
-        if (Util.isDefined(oCol) && thEl.clientWidth > 0 && oCol.DOMWidth !== thEl.clientWidth) {
-          oCol.DOMWidth = thEl.clientWidth;
-        }
-      });
-    }
+    this.getColumnsWidthFromDOM();
 
     if (this.state.hasOwnProperty('selection') && this.dataSource.renderedData.length > 0 && this.getSelectedItems().length === 0) {
       this.state.selection.forEach(selectedItem => {
@@ -2377,6 +2370,34 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   isRowSelected(row: any): boolean {
     return !this.isSelectionModeNone() && this.selection.isSelected(row);
+  }
+
+  protected getColumnsWidthFromDOM() {
+    if (Util.isDefined(this.tableHeaderEl)) {
+      [].slice.call(this.tableHeaderEl.nativeElement.children).forEach(thEl => {
+        const oCol: OColumn = this.getOColumnFromTh(thEl);
+        if (Util.isDefined(oCol) && thEl.clientWidth > 0 && oCol.DOMWidth !== thEl.clientWidth) {
+          oCol.DOMWidth = thEl.clientWidth;
+        }
+      });
+    }
+  }
+
+  refreshColumnsWidth() {
+    this.oTableOptions.columns.filter(c => c.visible).forEach((c) => {
+      c.DOMWidth = undefined;
+    });
+    this.cd.detectChanges();
+    setTimeout(() => {
+      this.getColumnsWidthFromDOM();
+      this.oTableOptions.columns.filter(c => c.visible).forEach(c => {
+        if (Util.isDefined(c.definition) && Util.isDefined(c.definition.width)) {
+          c.width = c.definition.width;
+        }
+        c.getRenderWidth();
+      });
+      this.cd.detectChanges();
+    }, 0);
   }
 }
 
