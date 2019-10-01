@@ -84,27 +84,37 @@ export class OCheckboxComponent extends OFormDataComponent {
 
   ensureOFormValue(value: any) {
     this.parseInputs();
-    if (this.booleanType !== 'boolean') {
-      if (typeof value === 'boolean') {
-        value = value ? this.trueValue : this.falseValue;
-      } else {
-        value = value === this.trueValue;
-      }
-    }
-
     if (value instanceof OFormValue) {
-      if (!Util.isDefined(value.value)) {
+      if (value.value === undefined) {
         value.value = false;
       }
+      this.value = new OFormValue(this.parseValueByType(value.value) === this.trueValue);
+    } else if (typeof value === 'boolean') {
       this.value = new OFormValue(value);
     } else {
-      this.value = new OFormValue(value === this.trueValue);
+      this.value = new OFormValue(this.parseValueByType(value) === this.trueValue);
     }
-    return this.value;
   }
 
   onClickBlocker(evt: Event) {
     evt.stopPropagation();
+  }
+
+
+  parseValueByType(value: any) {
+    let result: any;
+    switch (this.booleanType) {
+      case 'string':
+        result = value + '';
+        break;
+      case 'number':
+        result = parseInt(value);
+        break;
+      default:
+        result = value;
+        break;
+    }
+    return result;
   }
 
   protected parseStringInputs() {
