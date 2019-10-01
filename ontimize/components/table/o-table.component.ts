@@ -110,7 +110,10 @@ export const DEFAULT_INPUTS_O_TABLE = [
   // enabled [yes|no|true|false]: enables de table. Default: yes
   'enabled',
 
-  'keepSelectedItems: keep-selected-items'
+  'keepSelectedItems: keep-selected-items',
+
+  //export-mode ['visible'|'all']: sets the mode to export data. Default: 'visible'
+  'exportMode: export-mode'
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE = [
@@ -512,6 +515,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   @InputConverter()
   keepSelectedItems: boolean = true;
 
+  public exportMode: string = Codes.EXPORT_MODE_VISIBLE;
   public daoTable: OTableDao | null;
   public dataSource: OTableDataSource | null;
   protected visibleColumns: string;
@@ -1833,6 +1837,10 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   getAllValues() {
     return this.dataSource.getCurrentAllData();
+  }
+
+  getAllRenderedValues() {
+    return this.dataSource.getAllRendererData();
   }
 
   getRenderedValue() {
