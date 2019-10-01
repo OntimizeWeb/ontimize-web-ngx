@@ -27,7 +27,7 @@ export class OContainerCollapsibleComponent extends OContainerComponent {
   @ViewChild('expPanel') expPanel: MatExpansionPanel;
   protected _containerCollapsibleRef: ElementRef<HTMLElement>;
 
- 
+
   constructor(
     @Optional() @Inject(forwardRef(() => OFormComponent)) protected form: OFormComponent,
     protected elRef: ElementRef,
