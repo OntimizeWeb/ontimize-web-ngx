@@ -26,8 +26,8 @@
     [class.scrolled]="horizontalScrolled">
     <div class="o-table-overflow o-scroll">
       <table mat-table #table [trackBy]="getTrackByFunction()" [dataSource]="dataSource" oMatSort
-        [class.small]="rowHeight==='small'" [class.medium]="rowHeight==='medium'" [class.large]="rowHeight==='large'"
-        (scroll)="onTableScroll($event)" (cdkObserveContent)="projectContentChanged()" oTableExpandedFooter>
+        [ngClass]="rowHeightObservable | async" (scroll)="onTableScroll($event)"
+        (cdkObserveContent)="projectContentChanged()" oTableExpandedFooter>
 
         <!--Checkbox Column -->
         <ng-container [matColumnDef]="oTableOptions.selectColumn.name" *ngIf="oTableOptions.selectColumn.visible">
@@ -148,8 +148,7 @@
             <td mat-header-cell *matHeaderCellDef>
             </td>
           </ng-container>
-          <ng-container *ngFor="let column of oTableOptions.columns"
-            [matColumnDef]="getColumnInsertable(column.name)">
+          <ng-container *ngFor="let column of oTableOptions.columns" [matColumnDef]="getColumnInsertable(column.name)">
 
             <td mat-header-cell *matHeaderCellDef [ngClass]="column.className">
               <ng-container
