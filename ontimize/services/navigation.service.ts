@@ -1,5 +1,5 @@
 import { Injectable, Injector, EventEmitter } from '@angular/core';
-import { ActivatedRoute, NavigationEnd, Router, ActivatedRouteSnapshot, UrlSegment, ResolveStart, ResolveEnd, RoutesRecognized } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router, ActivatedRouteSnapshot, UrlSegment } from '@angular/router';
 import { Location } from '@angular/common';
 import { Observable, ReplaySubject } from 'rxjs';
 import { map, filter } from 'rxjs/operators';
@@ -206,7 +206,7 @@ export class NavigationService implements ILocalStorageComponent {
       navigationItems[navigationItems.length - 1].terminal = true;
     }
     const mergedNavigation = this.mergeNavigationItems(navigationItems, storedNavigation);
-    this.setNavigationItems(mergedNavigation);
+    this.setNavigationItems(navigationItems, mergedNavigation);
   }
 
   protected parseRoute(url: string, routeSegments: UrlSegment[], navData: ONavigationItem): any {
@@ -244,10 +244,10 @@ export class NavigationService implements ILocalStorageComponent {
     };
   }
 
-  public setNavigationItems(navigationItems: ONavigationItem[]) {
-    this.navigationItems = navigationItems;
+  public setNavigationItems(navigationItems: ONavigationItem[], mergedNavigationItems: ONavigationItem[]) {
+    this.navigationItems = mergedNavigationItems;
     this.storeNavigation();
-    this.navigationEventsSource.next(this.navigationItems);
+    this.navigationEventsSource.next(navigationItems);
   }
 
   public getDataToStore(): Object {
