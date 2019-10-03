@@ -69,7 +69,7 @@
             (click)="handleCellClick(column, row, $event)" (dblclick)="handleCellDoubleClick(column, row, $event)"
             [class.empty-cell]="isEmpty(row[column.name])" [matTooltipDisabled]="!column.hasTooltip()"
             [matTooltip]="column.getTooltip(row)" matTooltipPosition="below" matTooltipShowDelay="750"
-            matTooltipClass="o-table-cell-tooltip" [class.o-mat-cell-multiline]="column.multiline"
+            matTooltipClass="o-table-cell-tooltip" [class.o-mat-cell-multiline]="(column.isMultiline | async)"
             [oContextMenu]="tableContextMenu" [oContextMenuData]="{ cellName:column.name, rowValue:row}">
 
             <ng-container *ngIf="usePlainRender(column, row); else cellRender">

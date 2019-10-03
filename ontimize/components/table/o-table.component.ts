@@ -147,9 +147,12 @@ export class OColumn {
   calculate: string | OperatorFunction;
   definition: OTableColumnComponent;
   tooltip: OColumnTooltip;
-  multiline: boolean;
   resizable: boolean;
   DOMWidth: number;
+
+  private multilineSubject: BehaviorSubject<boolean> = new BehaviorSubject(this.multiline);
+  public isMultiline: Observable<boolean> = this.multilineSubject.asObservable();
+  private _multiline: boolean;
 
   constructor(
     attr: string = undefined,
@@ -234,6 +237,16 @@ export class OColumn {
 
   get searchable(): boolean {
     return this._searchable;
+  }
+
+  set multiline(val: boolean) {
+    val = Util.parseBoolean(String(val));
+    this._multiline = val;
+    this.multilineSubject.next(this._multiline);
+  }
+
+  get multiline(): boolean {
+    return this._multiline;
   }
 
   hasTooltip(): boolean {
