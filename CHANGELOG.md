@@ -12,6 +12,7 @@
 * **o-table**: new `keep-selected-items` input ([29de43b9](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/29de43b9))
 * **o-list-picker**: show or hidde clear button ([bb3b6eb](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/bb3b6eb))
 * **o-table**: new `export-mode` input and `getAllRenderedValues` method([5a90d2d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5a90d2d))
+* **ODialogComponent**:  allow to show html text ([783427c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/783427c))
 
 ### Bug Fixes
 * **o-table-cell-renderer-service**:not render cell value when export data table ([a594521](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a594521))
