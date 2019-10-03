@@ -16,7 +16,10 @@
 ### Bug Fixes
 * **o-table-cell-renderer-service**:not render cell value when export data table ([a594521](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a594521))
 * **o-grid**: not filter by checked columns  ([29f5036](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/29f5036)) Closes [#283](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/283)
-* **o-table**:([42e5ccf](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/42e5ccf)) Closes [#284](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/284)
+* **o-table**:
+  * ([42e5ccf](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/42e5ccf)) Closes [#284](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/284)
+  * ([bfbe85e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/bfbe85e)) Closes [#287](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/287)
+  * ([2f0a4f6](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2f0a4f6)) ([593b7cb](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/593b7cb)) Closes [#285](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/285)
 * **o-checkbox**:([f871ac7d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f871ac7d)) Closes [#286](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/286)
 * **containers**:([347330b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/347330b)) Closes [#288](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/288)
 
