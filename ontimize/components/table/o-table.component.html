@@ -26,8 +26,8 @@
     [class.scrolled]="horizontalScrolled">
     <div class="o-table-overflow o-scroll">
       <table mat-table #table [trackBy]="getTrackByFunction()" [dataSource]="dataSource" oMatSort
-        [class.small]="rowHeight==='small'" [class.medium]="rowHeight==='medium'" [class.large]="rowHeight==='large'"
-        (scroll)="onTableScroll($event)" (cdkObserveContent)="projectContentChanged()" oTableExpandedFooter>
+        [ngClass]="rowHeightObservable | async" (scroll)="onTableScroll($event)"
+        (cdkObserveContent)="projectContentChanged()" oTableExpandedFooter>
 
         <!--Checkbox Column -->
         <ng-container [matColumnDef]="oTableOptions.selectColumn.name" *ngIf="oTableOptions.selectColumn.visible">
@@ -69,7 +69,7 @@
             (click)="handleCellClick(column, row, $event)" (dblclick)="handleCellDoubleClick(column, row, $event)"
             [class.empty-cell]="isEmpty(row[column.name])" [matTooltipDisabled]="!column.hasTooltip()"
             [matTooltip]="column.getTooltip(row)" matTooltipPosition="below" matTooltipShowDelay="750"
-            matTooltipClass="o-table-cell-tooltip" [class.o-mat-cell-multiline]="column.multiline"
+            matTooltipClass="o-table-cell-tooltip" [class.o-mat-cell-multiline]="(column.isMultiline | async)"
             [oContextMenu]="tableContextMenu" [oContextMenuData]="{ cellName:column.name, rowValue:row}">
 
             <ng-container *ngIf="usePlainRender(column, row); else cellRender">
@@ -148,8 +148,7 @@
             <td mat-header-cell *matHeaderCellDef>
             </td>
           </ng-container>
-          <ng-container *ngFor="let column of oTableOptions.columns"
-            [matColumnDef]="getColumnInsertable(column.name)">
+          <ng-container *ngFor="let column of oTableOptions.columns" [matColumnDef]="getColumnInsertable(column.name)">
 
             <td mat-header-cell *matHeaderCellDef [ngClass]="column.className">
               <ng-container

@@ -1,6 +1,7 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import { ElementRef, forwardRef, Injector, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { OFilterBuilderComponent, OSearchInputComponent } from '../components';
 import { InputConverter } from '../decorators';
 import { OFormLayoutDialogComponent } from '../layouts/form-layout/dialog/o-form-layout-dialog.component';
@@ -12,8 +13,6 @@ import { OFormComponent } from './form/o-form.component';
 import { OListInitializationOptions } from './list/o-list.component';
 import { DEFAULT_INPUTS_O_SERVICE_BASE_COMPONENT, OServiceBaseComponent } from './o-service-base-component.class';
 import { OTableInitializationOptions } from './table/o-table.component';
-
-
 export const DEFAULT_INPUTS_O_SERVICE_COMPONENT = [
   ...DEFAULT_INPUTS_O_SERVICE_BASE_COMPONENT,
 
@@ -114,7 +113,20 @@ export class OServiceComponent extends OServiceBaseComponent {
   editButtonInRowIcon: string = Codes.EDIT_ICON;
   @InputConverter()
   insertButton: boolean;
-  rowHeight: string = Codes.DEFAULT_ROW_HEIGHT;
+  protected _rowHeight = Codes.DEFAULT_ROW_HEIGHT;
+  protected rowHeightSubject: BehaviorSubject<string> = new BehaviorSubject(this._rowHeight);
+  protected rowHeightObservable: Observable<string> = this.rowHeightSubject.asObservable();
+
+  set rowHeight(value) {
+    this._rowHeight = value ? value.toLowerCase() : value;
+    if (!Codes.isValidRowHeight(this._rowHeight)) {
+      this._rowHeight = Codes.DEFAULT_ROW_HEIGHT;
+    }
+    this.rowHeightSubject.next(this._rowHeight);
+  }
+  get rowHeight(): string {
+    return this._rowHeight;
+  }
   protected insertFormRoute: string;
   @InputConverter()
   protected recursiveInsert: boolean = false;
@@ -194,10 +206,6 @@ export class OServiceComponent extends OServiceBaseComponent {
       this.detailMode = Codes.DETAIL_MODE_NONE;
     }
 
-    this.rowHeight = this.rowHeight ? this.rowHeight.toLowerCase() : this.rowHeight;
-    if (!Codes.isValidRowHeight(this.rowHeight)) {
-      this.rowHeight = Codes.DEFAULT_ROW_HEIGHT;
-    }
   }
 
   public afterViewInit(): void {
