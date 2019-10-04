@@ -1,4 +1,4 @@
-## 4.0.7
+## 4.0.7 (2019-10-04)
 ### Features
 * New components **o-form-layout-dialog-options** and **o-form-layout-tabgroup-options** ([2ad8ae1](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2ad8ae1))
 * **o-button**: new `svg-icon` input ([404ae8f](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/404ae8f))
@@ -9,9 +9,11 @@
 * **o-list**: 
   * new `insert-button-position` input ([f5ae203](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f5ae203)) Closes [#282](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/282)
   * new `insert-button-floatable` input ([f96b5d4](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f96b5d4)) 
-* **o-table**: new `keep-selected-items` input ([29de43b9](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/29de43b9))
+* **o-table**: 
+  * new `keep-selected-items` input ([29de43b9](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/29de43b9))
+  * new `export-mode` input and `getAllRenderedValues` method([5a90d2d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5a90d2d))
+
 * **o-list-picker**: show or hidde clear button ([bb3b6eb](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/bb3b6eb))
-* **o-table**: new `export-mode` input and `getAllRenderedValues` method([5a90d2d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5a90d2d))
 * **ODialogComponent**:  allow to show html text ([783427c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/783427c))
 
 ### Bug Fixes
