@@ -1,10 +1,11 @@
-import { Component, EventEmitter, Injector, OnInit, TemplateRef, ViewChild, ChangeDetectionStrategy } from '@angular/core';
-
+import { ChangeDetectionStrategy, Component, EventEmitter, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Codes, Util } from '../../../../../utils';
 import { OBaseTableCellRenderer } from '../o-base-table-cell-renderer.class';
 
+
 export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_ACTION = [
   'icon',
+  'svgIcon:svg-icon',
   'action',
   'text',
   'iconPosition: icon-position'
@@ -33,6 +34,7 @@ export class OTableCellRendererActionComponent extends OBaseTableCellRenderer im
   _icon: string;
   text: string;
   iconPosition: string;
+  public svgIcon: string;
 
   @ViewChild('templateref', { read: TemplateRef }) public templateref: TemplateRef<any>;
 
@@ -92,4 +94,11 @@ export class OTableCellRendererActionComponent extends OBaseTableCellRenderer im
     return Util.isDefined(this.icon) && this.iconPosition === Codes.ICON_POSITION_RIGHT;
   }
 
+  isSvgIconPositionRight() {
+    return Util.isDefined(this.svgIcon) && this.iconPosition === Codes.ICON_POSITION_RIGHT;
+  }
+
+  isSvgIconPositionLeft() {
+    return Util.isDefined(this.svgIcon) && this.iconPosition === Codes.ICON_POSITION_LEFT;
+  }
 }

@@ -64,7 +64,7 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
     return this._oMinDate;
   }
   set oMinDate(value) {
-    this._oMinDate = value;
+    this._oMinDate = moment(value, this.oformat);
   }
 
   protected _oMaxDate: _moment.Moment;
@@ -72,7 +72,7 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
     return this._oMaxDate;
   }
   set oMaxDate(value) {
-    this._oMaxDate = value;
+    this._oMaxDate = moment(value, this.oformat);
   }
 
   protected _startKey: string = 'startDate';
@@ -144,19 +144,6 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
   ngOnInit() {
     super.ngOnInit();
 
-    if (this.oMinDate) {
-      const momentD = moment(this.oMinDate, this.oformat);
-      if (momentD.isValid()) {
-        this._oMinDate = momentD;
-      }
-    }
-
-    if (this.oMaxDate) {
-      const momentD = moment(this.oMaxDate, this.oformat);
-      if (momentD.isValid()) {
-        this._oMaxDate = momentD;
-      }
-    }
     if (!this.olocale) {
       this.olocale = this.momentSrv.getLocale();
       moment.locale(this.olocale);
@@ -220,7 +207,7 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
   }
 
   updateElement() {
-    let chosenLabel = (this.isObjectDataRangeNull(this.value)) ? this.value.value[this.pickerDirective.startKey].format(this.oformat) +
+    let chosenLabel = (!this.isObjectDataRangeNull(this.value)) ? this.value.value[this.pickerDirective.startKey].format(this.oformat) +
       this.separator + this.value.value[this.pickerDirective.endKey].format(this.oformat) : null;
     this.pickerDirective._el.nativeElement.value = chosenLabel;
   }
@@ -251,7 +238,9 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
   }
 
   isObjectDataRangeNull(objectValue): boolean {
-    return objectValue && objectValue.value && objectValue.value[this.pickerDirective.startKey] && objectValue.value[this.pickerDirective.endKey];
+    return objectValue !== null && objectValue.value !== null &&
+      !Util.isDefined(objectValue.value[this.pickerDirective.startKey]) &&
+      !Util.isDefined(objectValue.value[this.pickerDirective.endKey]);
   }
 
 

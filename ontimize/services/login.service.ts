@@ -2,7 +2,6 @@ import { EventEmitter, Injectable, Injector } from '@angular/core';
 import { Router } from '@angular/router';
 import { combineLatest, Observable } from 'rxjs';
 import { share } from 'rxjs/operators';
-
 import { AppConfig, Config } from '../config/app-config';
 import { DialogService, OntimizeService, ORemoteConfigurationService, PermissionsService } from '../services';
 import { Codes, IAuthService, ObservableWrapper, ServiceUtils } from '../utils';
@@ -134,10 +133,7 @@ export class LoginService implements ILoginService {
 
   public onLogoutSuccess(sessionId: number): void {
     if (sessionId === 0) {
-      const sessionInfo = this.getSessionInfo();
-      delete sessionInfo.id;
-      delete sessionInfo.user;
-      this.storeSessionInfo(sessionInfo);
+      this.sessionExpired();
     }
   }
 

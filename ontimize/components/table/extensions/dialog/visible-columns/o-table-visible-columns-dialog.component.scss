@@ -1,6 +1,8 @@
 .o-table-visible-columns-dialog {
-  .mat-dialog-content {
-    overflow: hidden;
+  .mat-dialog-content.mat-dialog-content {
+    overflow: auto;
+    padding-top: 0;
+    margin-top: 24px;
 
     .mat-list {
       padding-top: 24px;

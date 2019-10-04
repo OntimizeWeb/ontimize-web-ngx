@@ -1,12 +1,12 @@
-import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { ChangeDetectorRef, HostListener, Injector, NgZone, SimpleChange } from '@angular/core';
-import { Codes, Util } from '../utils';
+import { ActivatedRoute, Router } from '@angular/router';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+import { InputConverter } from '../decorators';
 import { DialogService, ILocalStorageComponent, LocalStorageService, OntimizeService } from '../services';
+import { Codes, Util } from '../utils';
+import { OFormComponent } from './form/o-form.component';
 import { OQueryDataArgs, ServiceUtils } from './service.utils';
 
-import { InputConverter } from '../decorators';
-import { OFormComponent } from './form/o-form.component';
-import { ActivatedRoute, Router } from '@angular/router';
 
 export const DEFAULT_INPUTS_O_SERVICE_BASE_COMPONENT = [
   // attr [string]: list identifier. It is mandatory if data are provided through the data attribute. Default: entity (if set).
@@ -49,7 +49,7 @@ export const DEFAULT_INPUTS_O_SERVICE_BASE_COMPONENT = [
   'paginatedQueryMethod : paginated-query-method',
 
   // query-rows [number]: number of rows per page. Default: 10.
-  'queryRows: query-rows',
+  'oQueryRows: query-rows',
 
   // insert-method [string]: name of the service method to perform inserts. Default: insert.
   'insertMethod: insert-method',
@@ -101,8 +101,27 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
   staticData: Array<any>;
   queryMethod: string = Codes.QUERY_METHOD;
   paginatedQueryMethod: string = Codes.PAGINATED_QUERY_METHOD;
+
+  originalQueryRows: number = Codes.DEFAULT_QUERY_ROWS;
+  protected _queryRows = this.originalQueryRows;
+
   @InputConverter()
-  queryRows: number = Codes.DEFAULT_QUERY_ROWS;
+  set oQueryRows(value: number) {
+    if (Util.isDefined(value)) {
+      this.originalQueryRows = value;
+      this._queryRows = value;
+    }
+  }
+
+  get queryRows(): number {
+    return this._queryRows;
+  }
+
+  set queryRows(value: number) {
+    if (Util.isDefined(value)) {
+      this._queryRows = value;
+    }
+  }
   insertMethod: string = Codes.INSERT_METHOD;
   updateMethod: string = Codes.UPDATE_METHOD;
   deleteMethod: string = Codes.DELETE_METHOD;
@@ -145,6 +164,8 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
   protected router: Router;
   protected actRoute: ActivatedRoute;
 
+  protected sqlTypes = undefined;
+
   constructor(
     protected injector: Injector
   ) {
@@ -180,8 +201,13 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
 
       this.initializeState();
 
-      if (Util.isDefined(this.state['query-rows'])) {
-        this.queryRows = this.state['query-rows'];
+      // if query-rows in initial configuration is equals to original query-rows input
+      // query_rows will be the value in local storage
+      if (this.state.hasOwnProperty('query-rows')) {
+        if (this.state.hasOwnProperty('initial-configuration') && this.state['initial-configuration'].hasOwnProperty['query-rows']
+          && this.state['initial-configuration']['query-rows'] === this.originalQueryRows) {
+          this.queryRows = this.state['query-rows'];
+        }
       }
     }
 
@@ -346,19 +372,19 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
       this.queryArguments = queryArguments;
       this.querySubscription = this.dataService[queryMethodName].apply(this.dataService, queryArguments).subscribe(res => {
         let data = undefined;
-        let sqlTypes = undefined;
+        this.sqlTypes = undefined;
         if (Util.isArray(res)) {
           data = res;
-          sqlTypes = {};
+          this.sqlTypes = {};
         } else if ((res.code === Codes.ONTIMIZE_SUCCESSFUL_CODE)) {
           const arrData = (res.data !== undefined) ? res.data : [];
           data = Util.isArray(arrData) ? arrData : [];
-          sqlTypes = res.sqlTypes;
+          this.sqlTypes = res.sqlTypes;
           if (this.pageable) {
             this.updatePaginationInfo(res);
           }
         }
-        self.setData(data, sqlTypes, (ovrrArgs && ovrrArgs.replace));
+        self.setData(data, this.sqlTypes, (ovrrArgs && ovrrArgs.replace));
         self.loaderSubscription.unsubscribe();
       }, err => {
         self.setData([], []);
@@ -469,7 +495,7 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
   }
 
   getSqlTypes() {
-    return {};
+    return Util.isDefined(this.sqlTypes) ? this.sqlTypes : {};
   }
 
   get state(): any {

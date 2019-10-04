@@ -1,52 +1,67 @@
-<button type="button" *ngIf="isBasic()" mat-button  [class.mat-icon-button]="needsIconButtonClass">
+<button type="button" *ngIf="isBasic()" mat-button [class.mat-icon-button]="needsIconButtonClass">
   <img src="{{ image }}" class="o-button-image" *ngIf="image!=undefined" />
-  <mat-icon class="material-icons o-button-icon" *ngIf="icon!==undefined" style="vertical-align:middle">{{ icon }}</mat-icon>
+  <mat-icon class="material-icons o-button-icon" *ngIf="icon!==undefined" style="vertical-align:middle">{{ icon }}
+  </mat-icon>
+  <mat-icon class="material-icons o-button-icon" *ngIf="svgIcon!==undefined" style="vertical-align:middle"
+    [svgIcon]="svgIcon"></mat-icon>
   <br *ngIf="iconPosition==='top'" />
   {{ olabel | oTranslate }}
 </button>
 
-<button type="button" *ngIf="isRaised()" mat-raised-button class="mat-raised-button" [class.mat-icon-button]="needsIconButtonClass">
+<button type="button" *ngIf="isRaised()" mat-raised-button class="mat-raised-button"
+  [class.mat-icon-button]="needsIconButtonClass">
   <img src="{{ image }}" class="o-button-image" *ngIf="image!=undefined" />
-  <mat-icon class="material-icons o-button-icon" *ngIf="icon!==undefined" style="vertical-align:middle">{{ icon }}</mat-icon>
+  <mat-icon class="material-icons o-button-icon" *ngIf="icon!==undefined" style="vertical-align:middle">{{ icon }}
+  </mat-icon>
+  <mat-icon class="material-icons o-button-icon" *ngIf="svgIcon!==undefined" style="vertical-align:middle"
+  [svgIcon]="svgIcon"></mat-icon>
   <br *ngIf="iconPosition==='top'" />
   {{ olabel | oTranslate }}
 </button>
 
-<button type="button" *ngIf="isStroked()" mat-stroked-button  [class.mat-icon-button]="needsIconButtonClass">
+<button type="button" *ngIf="isStroked()" mat-stroked-button [class.mat-icon-button]="needsIconButtonClass">
   <img src="{{ image }}" class="o-button-image" *ngIf="image!=undefined" />
-  <mat-icon class="material-icons o-button-icon" *ngIf="icon!==undefined" style="vertical-align:middle">{{ icon }}</mat-icon>
+  <mat-icon class="material-icons o-button-icon" *ngIf="icon!==undefined" style="vertical-align:middle">{{ icon }}
+  </mat-icon>
+  <mat-icon class="material-icons o-button-icon" *ngIf="svgIcon!==undefined" style="vertical-align:middle"
+  [svgIcon]="svgIcon"></mat-icon>
   <br *ngIf="iconPosition==='top'" />
   {{ olabel | oTranslate }}
 </button>
 
-<button type="button" *ngIf="isFlat()" mat-flat-button  [class.mat-icon-button]="needsIconButtonClass">
+<button type="button" *ngIf="isFlat()" mat-flat-button [class.mat-icon-button]="needsIconButtonClass">
   <img src="{{ image }}" class="o-button-image" *ngIf="image!=undefined" />
-  <mat-icon class="material-icons o-button-icon" *ngIf="icon!==undefined" style="vertical-align:middle">{{ icon }}</mat-icon>
+  <mat-icon class="material-icons o-button-icon" *ngIf="icon!==undefined" style="vertical-align:middle">{{ icon }}
+  </mat-icon>
+  <mat-icon class="material-icons o-button-icon" *ngIf="svgIcon!==undefined" style="vertical-align:middle"
+  [svgIcon]="svgIcon"></mat-icon>
   <br *ngIf="iconPosition==='top'" />
   {{ olabel | oTranslate }}
 </button>
 
 <button type="button" *ngIf="isIconButton()" mat-icon-button [class.mat-icon-button]="needsIconButtonClass">
-  <mat-icon class="material-icons o-button-icon" *ngIf="icon!==undefined" style="vertical-align:middle">{{ icon }}</mat-icon>
+  <mat-icon class="material-icons o-button-icon" *ngIf="icon!==undefined" style="vertical-align:middle">{{ icon }}
+  </mat-icon>
+  <mat-icon class="material-icons o-button-icon" *ngIf="svgIcon!==undefined" style="vertical-align:middle"
+  [svgIcon]="svgIcon"></mat-icon>
 </button>
 
 <button type="button" *ngIf="isFab()" mat-fab>
   <img src="{{ image }}" class="o-button-image" *ngIf="image!=undefined" />
-  <mat-icon class="material-icons o-button-icon" *ngIf="icon!==undefined" style="vertical-align:middle">{{ icon }}</mat-icon>
+  <mat-icon class="material-icons o-button-icon" *ngIf="icon!==undefined" style="vertical-align:middle">{{ icon }}
+  </mat-icon>
+  <mat-icon class="material-icons o-button-icon" *ngIf="svgIcon!==undefined" style="vertical-align:middle"
+  [svgIcon]="svgIcon"></mat-icon>
   <br *ngIf="iconPosition==='top'" />
   {{ olabel | oTranslate }}
 </button>
 
-<button type="button" *ngIf="isMiniFab()" mat-mini-fab >
+<button type="button" *ngIf="isMiniFab()" mat-mini-fab>
   <img src="{{ image }}" class="o-button-image" *ngIf="image!=undefined" />
-  <mat-icon class="material-icons o-button-icon" *ngIf="icon!==undefined" style="vertical-align:middle">{{ icon }}</mat-icon>
+  <mat-icon class="material-icons o-button-icon" *ngIf="icon!==undefined" style="vertical-align:middle">{{ icon }}
+  </mat-icon>
+  <mat-icon class="material-icons o-button-icon" *ngIf="svgIcon!==undefined" style="vertical-align:middle"
+  [svgIcon]="svgIcon"></mat-icon>
   <br *ngIf="iconPosition==='top'" />
   {{ olabel | oTranslate }}
 </button>
-
-
-
-
-
-
-

@@ -1,7 +1,7 @@
-import { Component, OnInit, Inject, Injector, Injectable, forwardRef, ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectionStrategy, Component, forwardRef, Inject, Injectable, Injector, OnInit } from '@angular/core';
 import { MatPaginatorIntl } from '@angular/material';
-import { OTranslateService } from '../../../../../services';
 import { InputConverter } from '../../../../../decorators';
+import { OTranslateService } from '../../../../../services';
 import { OTableComponent } from '../../../o-table.component';
 
 export const DEFAULT_PAGINATOR_TABLE = [
@@ -71,7 +71,8 @@ export class OTablePaginatorComponent implements OnInit {
       this._pageSize = value;
     }
 
-    let result: any[] = this.pageSizeOptions.filter(option => option === this._pageSize);
+    /* Modify === by == because they option and this._pageSize types  can be diferents (number == string) */
+    let result: any[] = this.pageSizeOptions.filter(option => option == this._pageSize);
     if (result.length === 0) {
       this._pageSizeOptions.push(value);
       this._pageSizeOptions.sort((i: number, j: number) => i - j);

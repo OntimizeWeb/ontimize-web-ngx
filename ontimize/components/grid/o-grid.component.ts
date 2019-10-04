@@ -4,14 +4,12 @@ import { MediaChange, ObservableMedia } from '@angular/flex-layout';
 import { MatPaginator, PageEvent } from '@angular/material';
 import { RouterModule } from '@angular/router';
 import { Subscription } from 'rxjs';
-
-import { OSearchInputComponent, OSearchInputModule } from '../../components';
+import { OSearchInputModule } from '../../components';
 import { InputConverter } from '../../decorators';
 import { OntimizeService } from '../../services';
 import { dataServiceFactory } from '../../services/data-service.provider';
 import { OSharedModule } from '../../shared';
 import { Codes, ObservableWrapper, Util } from '../../utils';
-import { FilterExpressionUtils } from '../filter-expression.utils';
 import { OFormComponent } from '../form/form-components';
 import { OServiceComponent } from '../o-service-component.class';
 import { ISQLOrder, OQueryDataArgs, ServiceUtils } from '../service.utils';
@@ -32,8 +30,6 @@ export const DEFAULT_INPUTS_O_GRID = [
   'sortableColumns: sortable-columns',
   // sortColumns[string]: columns of the sortingcolumns, separated by ';'. Default: no value.
   'sortColumn: sort-column',
-  // quick-filter [no|yes]: show quick filter. Default: yes.
-  'quickFilter: quick-filter',
   // quick-filter-columns [string]: columns of the filter, separated by ';'. Default: no value.
   'quickFilterColumns: quick-filter-columns',
   //  grid-item-height[string]: Set internal representation of row height from the user-provided value.. Default: 1:1.
@@ -133,19 +129,6 @@ export class OGridComponent extends OServiceComponent implements AfterViewChecke
     this._sortableColumns = parsed;
   }
 
-  get quickFilter(): boolean {
-    return this._quickFilter;
-  }
-  set quickFilter(val: boolean) {
-    val = Util.parseBoolean(String(val));
-    this._quickFilter = val;
-    if (val) {
-      setTimeout(() => {
-        this.registerQuickFilter(this.searchInputComponent);
-      }, 0);
-    }
-  }
-
   public quickFilterColumns: string;
   /* End Inputs */
 
@@ -156,16 +139,12 @@ export class OGridComponent extends OServiceComponent implements AfterViewChecke
 
   @ContentChildren(OGridItemComponent)
   public inputGridItems: QueryList<OGridItemComponent>;
-  public quickFilterComponent: OSearchInputComponent;
   @ViewChildren(OGridItemDirective)
   public gridItemDirectives: QueryList<OGridItemDirective>;
   @ViewChild(MatPaginator)
   public matpaginator: MatPaginator;
-  @ViewChild(OSearchInputComponent)
-  protected searchInputComponent: OSearchInputComponent;
 
   /* Parsed Inputs */
-  protected quickFilterColArray: string[];
   protected _sortableColumns: ISQLOrder[] = [];
   protected sortColumnOrder: ISQLOrder;
   /* End parsed Inputs */
@@ -174,7 +153,6 @@ export class OGridComponent extends OServiceComponent implements AfterViewChecke
   protected _colsDefault = 1;
   protected _pageSizeOptions = PAGE_SIZE_OPTIONS;
   protected sortColumn: string;
-  protected _quickFilter: boolean = true;
   protected dataResponseArray: any[] = [];
   protected storePaginationState: boolean = false;
 
@@ -225,11 +203,10 @@ export class OGridComponent extends OServiceComponent implements AfterViewChecke
       this._pageSizeOptions.sort((i: number, j: number) => i - j);
     }
 
-    if (this.quickFilterColumns) {
-      this.quickFilterColArray = Util.parseArray(this.quickFilterColumns, true);
-    } else {
-      this.quickFilterColArray = this.colArray;
+    if (!Util.isDefined(this.quickFilterColumns)) {
+      this.quickFilterColumns = this.columns;
     }
+    this.quickFilterColArray = Util.parseArray(this.quickFilterColumns, true);
 
     if (this.state.hasOwnProperty('currentPage')) {
       this.currentPage = this.state['currentPage'];
@@ -296,15 +273,6 @@ export class OGridComponent extends OServiceComponent implements AfterViewChecke
     this.reloadData();
   }
 
-  public registerQuickFilter(input: OSearchInputComponent): void {
-    this.quickFilterComponent = input;
-    if (Util.isDefined(this.quickFilterComponent)) {
-      if (this.state.hasOwnProperty('filterValue') && Util.isDefined(this.state['filterValue'])) {
-        this.quickFilterComponent.setValue(this.state.filterValue);
-      }
-      this.quickFilterComponent.onSearch.subscribe(val => this.filterData(val));
-    }
-  }
 
   public setDataArray(data: any): void {
     if (Util.isArray(data)) {
@@ -336,14 +304,19 @@ export class OGridComponent extends OServiceComponent implements AfterViewChecke
       this.queryData(void 0, queryArgs);
       return;
     }
+
     if (this.dataResponseArray && this.dataResponseArray.length > 0) {
       let filteredData = this.dataResponseArray.slice(0);
       if (value && value.length > 0) {
+        const caseSensitive = this.isFilterCaseSensitive();
         const self = this;
+
         filteredData = filteredData.filter(item => {
-          return self.quickFilterColArray.some(col => {
-            return new RegExp('^' + Util.normalizeString(this.configureFilterValue(value)).split('*').join('.*') + '$').test(Util.normalizeString(item[col]));
+          return self.getQuickFilterColumns().some(col => {
+            const regExpStr = Util.escapeSpecialCharacter(Util.normalizeString(value, !caseSensitive));
+            return new RegExp(regExpStr).test(Util.normalizeString(item[col] + '', !caseSensitive));
           });
+
         });
       }
       if (Util.isDefined(this.sortColumnOrder)) {
@@ -351,7 +324,7 @@ export class OGridComponent extends OServiceComponent implements AfterViewChecke
         const sort = this.sortColumnOrder;
         const factor = (sort.ascendent ? 1 : -1);
         // filteredData = filteredData.sort((a, b) => (Util.normalizeString(a[sort.columnName]) > Util.normalizeString(b[sort.columnName])) ? (1 * factor) : (Util.normalizeString(b[sort.columnName]) > Util.normalizeString(a[sort.columnName])) ? (-1 * factor) : 0);
-        filteredData = filteredData.sort((a, b) => {
+        filteredData.sort((a, b) => {
           const aOp = isNaN(a[sort.columnName]) ? Util.normalizeString(a[sort.columnName]) : a[sort.columnName];
           const bOp = isNaN(b[sort.columnName]) ? Util.normalizeString(b[sort.columnName]) : b[sort.columnName];
           return (aOp > bOp) ? (1 * factor) : (bOp > aOp) ? (-1 * factor) : 0;
@@ -365,19 +338,6 @@ export class OGridComponent extends OServiceComponent implements AfterViewChecke
     } else {
       this.dataArray = this.dataResponseArray;
     }
-  }
-
-  public configureFilterValue(value: string): string {
-    let returnVal = value;
-    if (value && value.length > 0) {
-      if (!value.startsWith('*')) {
-        returnVal = '*' + returnVal;
-      }
-      if (!value.endsWith('*')) {
-        returnVal = returnVal + '*';
-      }
-    }
-    return returnVal;
   }
 
   public registerGridItem(item: OGridItemDirective): void {
@@ -437,18 +397,6 @@ export class OGridComponent extends OServiceComponent implements AfterViewChecke
       return this.getTotalRecordsNumber();
     }
     return this.dataResponseArray.length;
-  }
-
-  public getComponentFilter(existingFilter: any = {}): any {
-    const filter = existingFilter;
-    // Apply quick filter
-    if (this.pageable && Util.isDefined(this.quickFilterComponent)) {
-      const searchValue = this.quickFilterComponent.getValue();
-      if (Util.isDefined(searchValue)) {
-        filter[FilterExpressionUtils.BASIC_EXPRESSION_KEY] = FilterExpressionUtils.buildArrayExpressionLike(this.quickFilterColArray, searchValue);
-      }
-    }
-    return super.getComponentFilter(filter);
   }
 
   public getQueryArguments(filter: Object, ovrrArgs?: OQueryDataArgs): any[] {

@@ -1,14 +1,15 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Inject, Injector, OnDestroy, OnInit, ViewChild, ViewEncapsulation, forwardRef } from '@angular/core';
-import { DialogService, OPermissions, OTableMenuPermissions, OTranslateService, SnackBarService } from '../../../../../services';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, forwardRef, Inject, Injector, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { MatDialog, MatMenu } from '@angular/material';
-import { OColumn, OTableComponent } from '../../../o-table.component';
-import { OTableApplyConfigurationDialogComponent, OTableExportConfiguration, OTableExportDialogComponent, OTableLoadFilterDialogComponent, OTableStoreConfigurationDialogComponent, OTableStoreFilterDialogComponent, OTableVisibleColumnsDialogComponent } from '../../dialog/o-table-dialog-components';
-
 import { InputConverter } from '../../../../../decorators';
-import { OTableCellRendererImageComponent } from '../../../table-components';
-import { OTableOptionComponent } from '../table-option/o-table-option.component';
+import { DialogService, OPermissions, OTableMenuPermissions, OTranslateService, SnackBarService } from '../../../../../services';
 import { PermissionsUtils } from '../../../../../util/permissions';
-import { Util } from '../../../../../utils';
+import { Codes, Util } from '../../../../../utils';
+import { OColumn, OTableComponent } from '../../../o-table.component';
+import { OTableCellRendererImageComponent } from '../../../table-components';
+import { OTableApplyConfigurationDialogComponent, OTableExportConfiguration, OTableExportDialogComponent, OTableLoadFilterDialogComponent, OTableStoreConfigurationDialogComponent, OTableStoreFilterDialogComponent, OTableVisibleColumnsDialogComponent } from '../../dialog/o-table-dialog-components';
+import { OTableOptionComponent } from '../table-option/o-table-option.component';
+import { Observable } from 'rxjs';
+
 
 export const DEFAULT_INPUTS_O_TABLE_MENU = [
   // select-all-checkbox [yes|no|true|false]: show selection check boxes. Default: no.
@@ -91,18 +92,11 @@ export class OTableMenuComponent implements OnInit, AfterViewInit, OnDestroy {
     this.permissions = this.table.getMenuPermissions();
   }
 
-  getRowHeight() {
-    return this.table.rowHeight;
-  }
-
   ngAfterViewInit() {
     if (this.columnFilterOption) {
       this.columnFilterOption.setActive(this.table.showFilterByColumnIcon);
       this.cd.detectChanges();
     }
-    this.matMenu.panelClass = this.getRowHeight() + ' o-table-menu';
-    this.filterMenu.panelClass = this.getRowHeight() + ' o-table-menu';
-    this.configurationMenu.panelClass = this.getRowHeight() + ' o-table-menu';
 
     if (!this.permissions.items || this.permissions.items.length === 0) {
       return;
@@ -193,6 +187,9 @@ export class OTableMenuComponent implements OnInit, AfterViewInit, OnDestroy {
     return !(perm && perm.visible === false);
   }
 
+  get rowHeightObservable(): Observable<string> {
+    return this.table.rowHeightObservable;
+  }
   get enabledSelectAllCheckbox(): boolean {
     const perm: OPermissions = this.getPermissionByAttr('select-all-checkbox');
     return !(perm && perm.enabled === false);
@@ -254,7 +251,7 @@ export class OTableMenuComponent implements OnInit, AfterViewInit, OnDestroy {
     const tableOptions = this.table.oTableOptions;
     let exportCnfg: OTableExportConfiguration = new OTableExportConfiguration();
     // Table data
-    exportCnfg.data = this.table.getRenderedValue();
+    exportCnfg.data = this.table.exportMode === Codes.EXPORT_MODE_VISIBLE ? this.table.getRenderedValue() : this.table.getAllRenderedValues();
     // get column's attr whose renderer is OTableCellRendererImageComponent
     let colsNotIncluded: string[] = tableOptions.columns.filter(c => void 0 !== c.renderer && c.renderer instanceof OTableCellRendererImageComponent).map(c => c.attr);
     colsNotIncluded.push(OTableComponent.NAME_COLUMN_SELECT);
@@ -295,7 +292,7 @@ export class OTableMenuComponent implements OnInit, AfterViewInit, OnDestroy {
         this.table.visibleColArray = dialogRef.componentInstance.getVisibleColumns();
         let columnsOrder = dialogRef.componentInstance.getColumnsOrder();
         this.table.oTableOptions.columns.sort((a: OColumn, b: OColumn) => columnsOrder.indexOf(a.attr) - columnsOrder.indexOf(b.attr));
-        this.table.cd.detectChanges();
+        this.table.refreshColumnsWidth();
       }
     });
   }

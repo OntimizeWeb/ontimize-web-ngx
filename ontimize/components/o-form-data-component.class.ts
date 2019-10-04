@@ -1,19 +1,19 @@
 import { AfterViewInit, ContentChildren, ElementRef, EventEmitter, HostBinding, Injector, OnChanges, OnDestroy, OnInit, QueryList, SimpleChange, ViewChildren } from '@angular/core';
-import { BooleanConverter, InputConverter } from '../decorators';
-import { Codes, SQLTypes, Util } from '../utils';
-import { FloatLabelType, MatFormFieldAppearance, MatSuffix } from '@angular/material';
 import { FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
-import { IComponent, OBaseComponent } from './o-component.class';
-import { IFormValueOptions, OFormValue } from './form/OFormValue';
+import { FloatLabelType, MatFormFieldAppearance, MatSuffix } from '@angular/material';
+import { Subscription } from 'rxjs';
 import { OInputsOptions, O_INPUTS_OPTIONS } from '../config/app-config';
-import { OMatErrorComponent, OMatErrorOptions, O_MAT_ERROR_OPTIONS } from '../shared/material/o-mat-error/o-mat-error';
+import { BooleanConverter, InputConverter } from '../decorators';
 import { OPermissions, PermissionsService } from '../services';
-
+import { OMatErrorComponent, OMatErrorOptions, O_MAT_ERROR_OPTIONS } from '../shared/material/o-mat-error/o-mat-error';
+import { PermissionsUtils } from '../util/permissions';
+import { Codes, SQLTypes, Util } from '../utils';
 import { OFormComponent } from './form/o-form.component';
+import { IFormValueOptions, OFormValue } from './form/OFormValue';
 import { OFormControl } from './input/o-form-control.class';
 import { OValidatorComponent } from './input/validation/o-validator.component';
-import { PermissionsUtils } from '../util/permissions';
-import { Subscription } from 'rxjs';
+import { IComponent, OBaseComponent } from './o-component.class';
+
 
 export interface IMultipleSelection extends IComponent {
   getSelectedItems(): any[];

@@ -6,6 +6,7 @@ import { Util } from '../../../util/util';
 import { OFormComponent } from '../../form/o-form.component';
 import { OFormValue } from '../../form/OFormValue';
 import { DEFAULT_INPUTS_O_FORM_DATA_COMPONENT, DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT, OFormDataComponent } from '../../o-form-data-component.class';
+import { OFormControl } from '../o-form-control.class';
 
 
 export const DEFAULT_INPUTS_O_CHECKBOX = [
@@ -43,8 +44,8 @@ export class OCheckboxComponent extends OFormDataComponent {
   public static DEFAULT_INPUTS_O_CHECKBOX = DEFAULT_INPUTS_O_CHECKBOX;
   public static DEFAULT_OUTPUTS_O_CHECKBOX = DEFAULT_OUTPUTS_O_CHECKBOX;
 
-  public trueValue: number | boolean | string = true;
-  public falseValue: number | boolean | string = false;
+  public trueValue: any = true;
+  public falseValue: any = false;
   public booleanType: 'number' | 'boolean' | 'string' = 'boolean';
   public color: ThemePalette;
   public labelPosition: 'before' | 'after' = 'after';
@@ -56,7 +57,6 @@ export class OCheckboxComponent extends OFormDataComponent {
   ) {
     super(form, elRef, injector);
     this._defaultSQLTypeKey = 'BOOLEAN';
-    this.defaultValue = false;
   }
 
   initialize() {
@@ -74,42 +74,82 @@ export class OCheckboxComponent extends OFormDataComponent {
           this.sqlType = 'BOOLEAN';
       }
     }
-    this.defaultValue = this.falseValue;
+
+    const context = this;
+    (this.getFormControl() as OFormControl).getValue.bind(context);
+    (this.getFormControl() as OFormControl).getValue = function () {
+      return this.value ? context.trueValue : context.falseValue;
+    };
   }
 
   ensureOFormValue(value: any) {
-
-    if (this.booleanType !== 'boolean') {
-      if (typeof value === 'boolean') {
-        value = value ? this.trueValue : this.falseValue;
-      } else {
-        if (value instanceof OFormValue) {
-          value = value.value === this.trueValue ? this.trueValue : this.falseValue;
-        } else {
-          value = value === this.trueValue ? this.trueValue : this.falseValue;
-        }
-      }
-    }
-
+    this.parseInputs();
     if (value instanceof OFormValue) {
-      if (!Util.isDefined(value.value)) {
-        value.value = this.falseValue;
+      if (value.value === undefined) {
+        value.value = false;
       }
-      this.value = new OFormValue(value.value);
+      this.value = new OFormValue(this.parseValueByType(value.value) === this.trueValue);
+    } else if (typeof value === 'boolean') {
+      this.value = new OFormValue(value);
     } else {
-      this.value = new OFormValue(value === this.trueValue ? this.trueValue : this.falseValue);
+      this.value = new OFormValue(this.parseValueByType(value) === this.trueValue);
     }
-  }
-
-  isChecked(): boolean {
-    if (this.value instanceof OFormValue) {
-      return this.value.value === this.trueValue;
-    }
-    return false;
   }
 
   onClickBlocker(evt: Event) {
     evt.stopPropagation();
+  }
+
+
+  parseValueByType(value: any) {
+    let result: any;
+    switch (this.booleanType) {
+      case 'string':
+        result = value + '';
+        break;
+      case 'number':
+        result = parseInt(value);
+        break;
+      default:
+        result = value;
+        break;
+    }
+    return result;
+  }
+
+  protected parseStringInputs() {
+    if ((this.trueValue || '').length === 0) {
+      this.trueValue = undefined;
+    }
+    if ((this.falseValue || '').length === 0) {
+      this.falseValue = undefined;
+    }
+  }
+
+  protected parseNumberInputs() {
+    this.trueValue = parseInt(this.trueValue);
+    if (isNaN(this.trueValue)) {
+      this.trueValue = 1;
+    }
+    this.falseValue = parseInt(this.falseValue);
+    if (isNaN(this.falseValue)) {
+      this.falseValue = 0;
+    }
+  }
+
+  protected parseInputs() {
+    switch (this.booleanType) {
+      case 'string':
+        this.parseStringInputs();
+        break;
+      case 'number':
+        this.parseNumberInputs();
+        break;
+      default:
+        this.trueValue = true;
+        this.falseValue = false;
+        break;
+    }
   }
 
 }

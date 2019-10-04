@@ -232,16 +232,20 @@ export class OFormNavigationClass {
   updateNavigation() {
     if (this.formLayoutManager) {
       const isInInsertMode = this.form.isInInsertMode();
-      let formData = {};
+      let formData;
       if (isInInsertMode) {
+        formData = {};
         formData['new_tab_title'] = 'LAYOUT_MANANGER.INSERTION_MODE_TITLE';
       } else if (this.formLayoutManager.allowToUpdateNavigation(this.form.oattr)) {
+        formData = {};
         const self = this;
         Object.keys(this.form.formData).forEach(key => {
           formData[key] = self.form.formData[key].value;
         });
       }
-      this.formLayoutManager.updateNavigation(formData, this.id, isInInsertMode);
+      if (formData) {
+        this.formLayoutManager.updateNavigation(formData, this.id, isInInsertMode);
+      }
     }
   }
 
