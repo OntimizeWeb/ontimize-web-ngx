@@ -115,7 +115,7 @@ export class OServiceComponent extends OServiceBaseComponent {
   insertButton: boolean;
   protected _rowHeight = Codes.DEFAULT_ROW_HEIGHT;
   protected rowHeightSubject: BehaviorSubject<string> = new BehaviorSubject(this._rowHeight);
-  protected rowHeightObservable: Observable<string> = this.rowHeightSubject.asObservable();
+  public rowHeightObservable: Observable<string> = this.rowHeightSubject.asObservable();
 
   set rowHeight(value) {
     this._rowHeight = value ? value.toLowerCase() : value;

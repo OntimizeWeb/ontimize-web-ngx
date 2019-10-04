@@ -8,6 +8,7 @@ import { OColumn, OTableComponent } from '../../../o-table.component';
 import { OTableCellRendererImageComponent } from '../../../table-components';
 import { OTableApplyConfigurationDialogComponent, OTableExportConfiguration, OTableExportDialogComponent, OTableLoadFilterDialogComponent, OTableStoreConfigurationDialogComponent, OTableStoreFilterDialogComponent, OTableVisibleColumnsDialogComponent } from '../../dialog/o-table-dialog-components';
 import { OTableOptionComponent } from '../table-option/o-table-option.component';
+import { Observable } from 'rxjs';
 
 
 export const DEFAULT_INPUTS_O_TABLE_MENU = [
@@ -186,6 +187,9 @@ export class OTableMenuComponent implements OnInit, AfterViewInit, OnDestroy {
     return !(perm && perm.visible === false);
   }
 
+  get rowHeightObservable(): Observable<string> {
+    return this.table.rowHeightObservable;
+  }
   get enabledSelectAllCheckbox(): boolean {
     const perm: OPermissions = this.getPermissionByAttr('select-all-checkbox');
     return !(perm && perm.enabled === false);
