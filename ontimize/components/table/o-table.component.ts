@@ -1311,7 +1311,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   protected getQuickFilterExpression(): IExpression {
-    if (Util.isDefined(this.oTableQuickFilterComponent)) {
+    if (Util.isDefined(this.oTableQuickFilterComponent) && this.pageable) {
       return this.oTableQuickFilterComponent.filterExpression;
     }
     return undefined;
