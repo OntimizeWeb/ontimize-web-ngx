@@ -265,7 +265,8 @@ export class OFormNavigationClass {
       this.formLayoutManager.closeDetail(this.id);
     } else if (this.navigationService) {
       this.form.beforeCloseDetail.emit();
-      const navData: ONavigationItem = this.navigationService.getPreviousRouteData();
+      this.navigationService.removeLastItem();
+      const navData: ONavigationItem = this.navigationService.getLastItem();
       if (navData) {
         let extras: NavigationExtras = {};
         extras[Codes.QUERY_PARAMS] = navData.queryParams;
@@ -367,7 +368,7 @@ export class OFormNavigationClass {
 
       let params: any[] = [];
       const urlParams = this.getUrlParams();
-      this.form.keysArray.map(key => {
+      this.form.keysArray.forEach(key => {
         if (urlParams[key]) {
           params.push(urlParams[key]);
         }
