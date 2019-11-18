@@ -107,6 +107,12 @@ export class OntimizeMomentDateAdapter extends MomentDateAdapter {
     if (typeof value === 'number') {
       date = moment(value);
     }
+    if (typeof value === 'string') {
+      if (!value) {
+        return null;
+      }
+      date = moment(value, this.oFormat).locale(this.locale);
+    }
     if (date && this.isValid(date)) {
       return date;
     }
