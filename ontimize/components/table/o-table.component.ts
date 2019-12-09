@@ -112,7 +112,7 @@ export const DEFAULT_INPUTS_O_TABLE = [
 
   'keepSelectedItems: keep-selected-items',
 
-  //export-mode ['visible'|'all']: sets the mode to export data. Default: 'visible'
+  // export-mode ['visible'|'local'|'all']: sets the mode to export data. Default: 'visible'
   'exportMode: export-mode'
 ];
 

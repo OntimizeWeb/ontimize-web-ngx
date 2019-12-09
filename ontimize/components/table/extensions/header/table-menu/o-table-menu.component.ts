@@ -250,12 +250,26 @@ export class OTableMenuComponent implements OnInit, AfterViewInit, OnDestroy {
   onExportButtonClicked() {
     const tableOptions = this.table.oTableOptions;
     let exportCnfg: OTableExportConfiguration = new OTableExportConfiguration();
-    // Table data
-    exportCnfg.data = this.table.exportMode === Codes.EXPORT_MODE_VISIBLE ? this.table.getRenderedValue() : this.table.getAllRenderedValues();
+
     // get column's attr whose renderer is OTableCellRendererImageComponent
     let colsNotIncluded: string[] = tableOptions.columns.filter(c => void 0 !== c.renderer && c.renderer instanceof OTableCellRendererImageComponent).map(c => c.attr);
     colsNotIncluded.push(OTableComponent.NAME_COLUMN_SELECT);
-    colsNotIncluded.forEach(attr => exportCnfg.data.forEach(row => delete row[attr]));
+
+    // Table data/filters
+    switch (this.table.exportMode) {
+      case Codes.EXPORT_MODE_ALL:
+        exportCnfg.filters = this.table.getComponentFilter();
+        break;
+      case Codes.EXPORT_MODE_LOCAL:
+        exportCnfg.data = this.table.getAllRenderedValues();
+        colsNotIncluded.forEach(attr => exportCnfg.data.forEach(row => delete row[attr]));
+        break;
+      default:
+        exportCnfg.data = this.table.getRenderedValue();
+        colsNotIncluded.forEach(attr => exportCnfg.data.forEach(row => delete row[attr]));
+        break;
+    }
+
     // Table columns
     exportCnfg.columns = tableOptions.visibleColumns.filter(c => colsNotIncluded.indexOf(c) === -1);
     // Table column names

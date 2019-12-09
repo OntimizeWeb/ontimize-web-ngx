@@ -6,11 +6,12 @@ import { DialogService, OExportExtension, OntimizeExportService, OTranslateServi
 import { Codes, SQLTypes, Util } from '../../../../../utils';
 
 export class OTableExportConfiguration {
-  data: any[];
   columns: Array<any>;
   columnNames: Object;
   sqlTypes: Object;
   service: string;
+  data?: any[];
+  filters?: Object;
 }
 
 @Component({
@@ -69,7 +70,8 @@ export class OTableExportDialogComponent implements OnInit {
       data: this.config.data,
       columns: this.config.columns,
       columnNames: this.config.columnNames,
-      sqlTypes: this.config.sqlTypes
+      sqlTypes: this.config.sqlTypes,
+      filters: this.config.filters
     };
     let self = this;
     this.proccessExportData(exportData.data, exportData.sqlTypes);
@@ -96,7 +98,8 @@ export class OTableExportDialogComponent implements OnInit {
       data: this.config.data,
       columns: this.config.columns,
       columnNames: this.config.columnNames,
-      sqlTypes: this.config.sqlTypes
+      sqlTypes: this.config.sqlTypes,
+      filters: this.config.filters
     };
     let self = this;
     this.proccessExportData(exportData.data, exportData.sqlTypes);
@@ -124,7 +127,8 @@ export class OTableExportDialogComponent implements OnInit {
       data: this.config.data,
       columns: this.config.columns,
       columnNames: this.config.columnNames,
-      sqlTypes: this.config.sqlTypes
+      sqlTypes: this.config.sqlTypes,
+      filters: this.config.filters
     };
     let self = this;
     this.proccessExportData(exportData.data, exportData.sqlTypes);
