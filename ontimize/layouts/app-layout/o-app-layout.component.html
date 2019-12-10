@@ -3,12 +3,15 @@
   [layout-mode]="mode" [class.header-layout]="showHeader" (onSidenavToggle)="sidenavToggle($event)"
   (afterSidenavToggle)="afterToggle($event)">
 
-  <ng-content select="o-app-layout-sidenav[position=start]" ngProjectAs="o-app-layout-sidenav-projection-start"></ng-content>
-  <ng-content select="o-app-layout-sidenav[position=end]" ngProjectAs="o-app-layout-sidenav-projection-end"></ng-content>
+  <ng-content select="o-app-layout-sidenav[position=start]" ngProjectAs="o-app-layout-sidenav-projection-start">
+  </ng-content>
+  <ng-content select="o-app-layout-sidenav[position=end]" ngProjectAs="o-app-layout-sidenav-projection-end">
+  </ng-content>
   <ng-content select="o-app-layout-sidenav" ngProjectAs="o-app-layout-sidenav-projection-end"></ng-content>
 
-  <o-app-header *ngIf="showHeader" [show-user-info]="showUserInfo" [show-language-selector]="showLanguageSelector"
-    [use-flag-icons]="useFlagIcons" (onSidenavToggle)="appSidenav.toggleSidenav()">
+  <o-app-header #appHeader *ngIf="showHeader" [show-user-info]="showUserInfo"
+    [show-language-selector]="showLanguageSelector" [use-flag-icons]="useFlagIcons"
+    (onSidenavToggle)="appSidenav.toggleSidenav()">
 
     <ng-content select="o-app-layout-header"></ng-content>
 

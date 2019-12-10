@@ -1,14 +1,14 @@
-import { BehaviorSubject, Observable, Subject, merge } from 'rxjs';
-import { ColumnValueFilterOperator, IColumnValueFilter } from './extensions/header/o-table-header-components';
-import { OColumn, OTableComponent, OTableOptions } from './o-table.component';
-
 import { DataSource } from '@angular/cdk/collections';
 import { EventEmitter } from '@angular/core';
 import { MatPaginator } from '@angular/material';
-import { OMatSort } from './extensions/sort/o-mat-sort';
-import { OTableDao } from './o-table.dao';
-import { Util } from '../../util/util';
+import { BehaviorSubject, merge, Observable, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { Util } from '../../util/util';
+import { ColumnValueFilterOperator, IColumnValueFilter } from './extensions/header/o-table-header-components';
+import { OMatSort } from './extensions/sort/o-mat-sort';
+import { OColumn, OTableComponent, OTableOptions } from './o-table.component';
+import { OTableDao } from './o-table.dao';
+
 
 export const SCROLLVIRTUAL = 'scroll';
 
@@ -282,12 +282,17 @@ export class OTableDataSource extends DataSource<any> {
   }
 
   getCurrentAllData(): any[] {
-    return this.getAllData();
+    return this.getAllData(false, false);
   }
 
   /** Return data of the visible columns of the table  rendering */
   getCurrentRendererData(): any[] {
     return this.getRenderedData(this.renderedData);
+  }
+
+  /** Return all data of the table rendering */
+  getAllRendererData(): any[] {
+    return this.getAllData(true, true);
   }
 
   /** Return sql types of the current data */
@@ -321,7 +326,7 @@ export class OTableDataSource extends DataSource<any> {
   }
 
 
-  protected getAllData(render?: boolean) {
+  protected getAllData(render?: boolean, onlyVisibleColumns?: boolean) {
     let self = this;
     return this.filteredData.map(function (row, i, a) {
       /** render each column*/
@@ -329,6 +334,9 @@ export class OTableDataSource extends DataSource<any> {
       Object.keys(row).forEach(function (column, i, a) {
         self._tableOptions.columns.forEach(function (ocolumn: OColumn, i, a) {
           if (column === ocolumn.attr) {
+            if (onlyVisibleColumns && !ocolumn.visible) {
+              return;
+            }
             var key = column;
             if (render && ocolumn.renderer && ocolumn.renderer.getCellData) {
               obj[key] = ocolumn.renderer.getCellData(row[column], row);
@@ -336,6 +344,7 @@ export class OTableDataSource extends DataSource<any> {
               obj[key] = row[column];
             }
           }
+
         });
       });
       return obj;

@@ -1,14 +1,14 @@
-import { Component, NgModule, ViewEncapsulation, EventEmitter } from '@angular/core';
-import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
-
-import { Util } from '../../util/util';
-import { OSharedModule } from '../../shared';
-import { InputConverter } from '../../decorators';
+import { Component, EventEmitter, NgModule, ViewChild, ViewEncapsulation } from '@angular/core';
+import { RouterModule } from '@angular/router';
 import { OAppHeaderModule } from '../../components/app-header/o-app-header.component';
-import { OAppSidenavModule } from '../../components/app-sidenav/o-app-sidenav.component';
+import { OAppSidenavComponent, OAppSidenavModule } from '../../components/app-sidenav/o-app-sidenav.component';
+import { InputConverter } from '../../decorators';
+import { OSharedModule } from '../../shared';
+import { Util } from '../../util/util';
 import { OAppLayoutHeaderComponent } from './app-layout-header/o-app-layout-header.component';
 import { OAppLayoutSidenavComponent } from './app-layout-sidenav/o-app-layout-sidenav.component';
+
 
 export const DEFAULT_INPUTS_O_APP_LAYOUT = [
   'mode',
@@ -58,6 +58,9 @@ export class OAppLayoutComponent {
   useFlagIcons: boolean = false;
   @InputConverter()
   protected _showHeader: boolean;
+
+  @ViewChild('appSidenav')
+  public appSidenav: OAppSidenavComponent;
 
   protected _mode: OAppLayoutMode;
   protected _sidenavMode: OSidenavMode;

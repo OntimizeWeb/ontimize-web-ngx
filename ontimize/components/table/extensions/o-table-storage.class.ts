@@ -1,4 +1,4 @@
-import { Codes } from '../../../utils';
+import { Codes, Util } from '../../../utils';
 import { OColumn, OTableComponent } from '../o-table.component';
 
 export interface ITableFiltersStatus {
@@ -13,6 +13,7 @@ export interface ITableConfiguration {
 }
 
 export class OTableStorage {
+
   public static STORED_FILTER_KEY = 'stored-filter';
   public static USER_STORED_FILTERS_KEY = 'user-stored-filters';
 
@@ -29,7 +30,8 @@ export class OTableStorage {
       'filter': this.table.oTableQuickFilterComponent ? this.table.oTableQuickFilterComponent.value : ''
     };
 
-    const properties = ['sort', 'columns-display', 'columns-filter', 'quick-filter', 'page'];
+    const properties = ['sort', 'columns-display', 'columns-filter', 'quick-filter', 'page', 'selection', 'initial-configuration'];
+
     Object.assign(dataToStore, this.getTablePropertiesToStore(properties));
 
     const storedFiltersArr = this.getStoredFilters();
@@ -40,6 +42,7 @@ export class OTableStorage {
     if (storedConfigurationsArr.length > 0) {
       dataToStore[OTableStorage.STORED_CONFIGURATIONS_KEY] = storedConfigurationsArr;
     }
+
     return dataToStore;
   }
 
@@ -68,6 +71,12 @@ export class OTableStorage {
         break;
       case 'page':
         result = this.getPageState();
+        break;
+      case 'selection':
+        result = this.getSelectionState();
+        break;
+      case 'initial-configuration':
+        result = this.getInitialConfigurationState();
         break;
     }
     return result;
@@ -154,6 +163,51 @@ export class OTableStorage {
         (state.queryRecordOffset - this.table.queryRows)
       );
     }
+    return result;
+  }
+
+  protected getSelectionState(): any {
+    let result: any = {
+      'selection': []
+    };
+    if (this.table && this.table.keepSelectedItems) {
+      // storing selected items keys values
+      const selection = [];
+      this.table.getSelectedItems().forEach(item => {
+        let data = {};
+        this.table.getKeys().forEach(key => {
+          data[key] = item[key];
+        });
+        selection.push(data);
+      });
+      result.selection = selection;
+    }
+    return result;
+  }
+
+  protected getInitialConfigurationState(): any {
+    let result = {};
+    let initialConfiguration = {};
+
+    let oColumnsData = [];
+    const self = this;
+    Util.parseArray(this.table.originalVisibleColumns, true).forEach((x: string) => {
+      let oCol = self.table.getOColumn(x);
+      oColumnsData.push({
+        attr: oCol.attr,
+        visible: true,
+        width: oCol.definition ? oCol.definition.originalWidth : undefined
+      });
+    });
+
+    initialConfiguration['oColumns-display'] = oColumnsData;
+    initialConfiguration['sort-columns'] = this.table.originalSortColumns;
+    initialConfiguration['select-column-visible'] = this.table.oTableOptions.selectColumn.visible;
+    initialConfiguration['filter-case-sensitive'] = this.table.filterCaseSensitive;
+    initialConfiguration['query-rows'] = this.table.originalQueryRows;
+
+    result['initial-configuration'] = initialConfiguration;
+
     return result;
   }
 

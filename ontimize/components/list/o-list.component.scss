@@ -38,6 +38,12 @@
 
     &.o-list-content-toolbar-dense {
       height: calc(100% - 48px); // total height - toolbar height
+
+      .add-button {
+        &.add-button-top {
+          top: 60px;
+        }
+      }
     }
   }
 
@@ -102,7 +108,15 @@
 
   .add-button {
     right: 12px;
-    bottom: 12px;
     position: absolute;
+
+    &.add-button-bottom {
+      bottom: 12px;
+    }
+
+    &.add-button-top {
+      top: 88px;
+    }
   }
+
 }

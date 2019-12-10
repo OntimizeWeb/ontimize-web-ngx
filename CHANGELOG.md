@@ -1,8 +1,30 @@
-## 4.0.7
+## 4.0.7 (2019-10-04)
 ### Features
 * New components **o-form-layout-dialog-options** and **o-form-layout-tabgroup-options** ([2ad8ae1](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2ad8ae1))
+* **o-button**: new `svg-icon` input ([404ae8f](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/404ae8f))
+* **OServiceComponent**: ([660a57b9](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/660a57b9)) ([0b24c82b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0b24c82b))
+  * new `filter-case-sensitive` input (removed from `o-list` and `o-table`) 
+  * new `quick-filter` input (removed from `o-grid`, `o-table`  and `o-list`) 
+  * new `showCaseSensitiveCheckbox`, `getComponentFilter` and `registerQuickFilter` methods
+* **o-list**: 
+  * new `insert-button-position` input ([f5ae203](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f5ae203)) Closes [#282](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/282)
+  * new `insert-button-floatable` input ([f96b5d4](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f96b5d4)) 
+* **o-table**: 
+  * new `keep-selected-items` input ([29de43b9](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/29de43b9))
+  * new `export-mode` input and `getAllRenderedValues` method([5a90d2d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5a90d2d))
+
+* **o-list-picker**: show or hidde clear button ([bb3b6eb](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/bb3b6eb))
+* **ODialogComponent**:  allow to show html text ([783427c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/783427c))
+
 ### Bug Fixes
 * **o-table-cell-renderer-service**:not render cell value when export data table ([a594521](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a594521))
+* **o-grid**: not filter by checked columns  ([29f5036](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/29f5036)) Closes [#283](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/283)
+* **o-table**: 
+  * adding new columns to my tables they are being hidden by default. ([42e5ccf](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/42e5ccf)) Closes [#284](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/284)
+  * Dialog for show/hide columns associated to a oTable has not visible scroll bar ([bfbe85e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/bfbe85e)) Closes [#287](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/287)
+  * ([2f0a4f6](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2f0a4f6)) ([593b7cb](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/593b7cb)) Closes [#285](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/285)
+* **o-checkbox**:  checking not work with no boolean values ([f871ac7d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f871ac7d)) Closes [#286](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/286)
+* **containers**: fixed container when it is initialized with the attribute expanded=false ([347330b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/347330b)) Closes [#288](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/288)
 
 ## 4.0.6 (2019-06-19)
 ### Features

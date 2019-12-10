@@ -1,4 +1,4 @@
-<mat-menu #menu="matMenu" x-position="before">
+<mat-menu #menu="matMenu" x-position="before" [class]="(rowHeightObservable | async) +' o-table-menu'">
   <o-table-option #selectAllCheckboxOption *ngIf="showSelectAllCheckbox" [active]="isSelectAllOptionActive"
     (onClick)="onShowsSelects($event)" label="TABLE.BUTTONS.SELECT" show-active-icon="true"></o-table-option>
   <o-table-option #exportButtonOption *ngIf="showExportButton" (onClick)="onExportButtonClicked()"
@@ -14,7 +14,7 @@
   <ng-content></ng-content>
 </mat-menu>
 
-<mat-menu #filterMenu="matMenu">
+<mat-menu #filterMenu="matMenu" [class]="(rowHeightObservable| async) +' o-table-menu'">
   <o-table-option #columnFilterOption *ngIf="showColumnsFilterOption" show-active-icon="true"
     (onClick)="onFilterByColumnClicked()" label="TABLE.BUTTONS.FILTER_BY_COLUMN">
   </o-table-option>
@@ -26,7 +26,7 @@
     (click)="onClearFilterClicked()">{{ 'TABLE.BUTTONS.FILTER_CLEAR' | oTranslate }}</button>
 </mat-menu>
 
-<mat-menu #configurationMenu="matMenu">
+<mat-menu #configurationMenu="matMenu" [class]="(rowHeightObservable | async) +' o-table-menu'">
   <button type="button" mat-menu-item (click)="onStoreConfigurationClicked()">{{ 'TABLE.BUTTONS.SAVE_CONFIGURATION' |
     oTranslate }}</button>
   <button type="button" mat-menu-item (click)="onApplyConfigurationClicked()">{{ 'TABLE.BUTTONS.APPLY_CONFIGURATION' |

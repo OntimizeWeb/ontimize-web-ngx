@@ -1,14 +1,14 @@
-import { Component, ElementRef, EventEmitter, Inject, Injector, NgModule, OnInit, Optional, ViewChild, forwardRef } from '@angular/core';
-import { DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT, OFormDataComponent, OValueChangeEvent } from '../../o-form-data-component.class';
-import { FormControl, ValidationErrors, ValidatorFn } from '@angular/forms';
-
 import { CommonModule } from '@angular/common';
+import { Component, ElementRef, EventEmitter, forwardRef, Inject, Injector, NgModule, OnInit, Optional, ViewChild } from '@angular/core';
+import { FormControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { InputConverter } from '../../../decorators';
+import { OntimizeFileService } from '../../../services';
+import { OSharedModule } from '../../../shared';
+import { OFormComponent } from '../../form/o-form.component';
+import { DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT, OFormDataComponent, OValueChangeEvent } from '../../o-form-data-component.class';
 import { OFileItem } from './o-file-item.class';
 import { OFileUploader } from './o-file-uploader.class';
-import { OFormComponent } from '../../form/o-form.component';
-import { OSharedModule } from '../../../shared';
-import { OntimizeFileService } from '../../../services';
+
 
 export const DEFAULT_INPUTS_O_FILE_INPUT = [
   'oattr: attr',
@@ -194,14 +194,6 @@ export class OFileInputComponent extends OFormDataComponent implements OnInit {
     return validators;
   }
 
-  public innerOnChange(event: any): void {
-    this.ensureOFormValue(event);
-    if (this._fControl && this._fControl.touched) {
-      this._fControl.markAsDirty();
-    }
-    this.onChange.emit(event);
-  }
-
   public fileSelected(event: Event): void {
     let value: string = '';
     if (event) {
@@ -275,6 +267,14 @@ export class OFileInputComponent extends OFormDataComponent implements OnInit {
     }
   }
 
+  public innerOnChange(event: any): void {
+    this.ensureOFormValue(event);
+    if (this._fControl && this._fControl.touched) {
+      this._fControl.markAsDirty();
+    }
+    this.onChange.emit(event);
+  }
+
   protected filetypeValidator(control: FormControl): ValidationErrors {
     if (control.value && control.value.length > 0 && this.acceptFileType) {
       const regex: RegExp = new RegExp(this.acceptFileType.replace(';', '|'));
@@ -314,6 +314,7 @@ export class OFileInputComponent extends OFormDataComponent implements OnInit {
     }
     return {};
   }
+
 
 }
 

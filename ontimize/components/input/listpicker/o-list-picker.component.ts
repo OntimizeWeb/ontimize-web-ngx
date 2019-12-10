@@ -1,20 +1,20 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, Inject, Injector, NgModule, OnChanges, OnInit, Optional, SimpleChange, ViewChild, forwardRef } from '@angular/core';
-import { MatDialog, MatDialogConfig, MatDialogRef, MatInput } from '@angular/material';
-
 import { CommonModule } from '@angular/common';
+import { AfterViewInit, Component, ElementRef, EventEmitter, forwardRef, Inject, Injector, NgModule, OnChanges, OnInit, Optional, SimpleChange, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { IFormValueOptions } from '../../form/form-components';
+import { MatDialog, MatDialogConfig, MatDialogRef, MatInput } from '@angular/material';
 import { InputConverter } from '../../../decorators';
+import { OntimizeService } from '../../../services';
+import { dataServiceFactory } from '../../../services/data-service.provider';
+import { OSharedModule } from '../../../shared';
 import { ODialogModule } from '../../dialog/o-dialog.component';
+import { IFormValueOptions } from '../../form/form-components';
 import { OFormComponent } from '../../form/o-form.component';
+import { OSearchInputModule } from '../../input/search-input/o-search-input.component';
+import { OValueChangeEvent } from '../../o-form-data-component.class';
 import { OFormControl } from '../o-form-control.class';
 import { OFormServiceComponent } from '../o-form-service-component.class';
 import { OListPickerDialogComponent } from './o-list-picker-dialog.component';
-import { OSearchInputModule } from '../../input/search-input/o-search-input.component';
-import { OSharedModule } from '../../../shared';
-import { OValueChangeEvent } from '../../o-form-data-component.class';
-import { OntimizeService } from '../../../services';
-import { dataServiceFactory } from '../../../services/data-service.provider';
+
 
 export const DEFAULT_INPUTS_O_LIST_PICKER = [
   ...OFormServiceComponent.DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT,
@@ -66,9 +66,13 @@ export class OListPickerComponent extends OFormServiceComponent implements After
   protected filter: boolean = true;
   protected dialogWidth: string;
   protected dialogHeight: string = '55%';
-  protected dialogClass:string;
+  protected dialogClass: string;
   @InputConverter()
   protected queryRows: number;
+
+  /*Override clearButton = true */
+  // @InputConverter()
+  // public clearButton: boolean = true;
   /* End inputs */
 
   protected matDialog: MatDialog;
@@ -89,6 +93,8 @@ export class OListPickerComponent extends OFormServiceComponent implements After
     super(form, elRef, injector);
     this.matDialog = this.injector.get(MatDialog);
     this.stateCtrl = new FormControl();
+    /* overwritte clearButton to true */
+    this.clearButton = true;
   }
 
   public ngOnInit(): void {
@@ -231,7 +237,7 @@ export class OListPickerComponent extends OFormServiceComponent implements After
     const cfg: MatDialogConfig = {
       role: 'dialog',
       disableClose: this.dialogDisableClose,
-      panelClass: ['cdk-overlay-list-picker', 'o-dialog-class',this.dialogClass],
+      panelClass: ['cdk-overlay-list-picker', 'o-dialog-class', this.dialogClass],
       data: {
         data: this.getDialogDataArray(this.dataArray),
         filter: this.filter,

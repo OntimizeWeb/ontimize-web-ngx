@@ -61,6 +61,10 @@ export class OFormControl extends FormControl {
     });
   }
 
+  getValue() {
+    return this.value;
+  }
+
   /**setValue(value: any, options: { } => Not override this method because there is a case where the children have a different value than the main one
    */
 }

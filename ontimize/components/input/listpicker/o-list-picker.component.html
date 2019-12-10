@@ -19,7 +19,7 @@
     </button>
 
     <button type="button" [disabled]="isReadOnly || !enabled" [class.read-only]="isReadOnly" matSuffix mat-icon-button
-      (click)="onClickClearValue($event)">
+      (click)="onClickClearValue($event)" *ngIf="showClearButton">
       <mat-icon svgIcon="ontimize:clear"></mat-icon>
     </button>
 

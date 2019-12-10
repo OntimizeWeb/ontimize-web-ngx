@@ -1,12 +1,11 @@
-import { Injector, Injectable } from '@angular/core';
-import { EventEmitter } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Subscriber, Observable } from 'rxjs';
+import { EventEmitter, Injectable, Injector } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { MomentService, SnackBarService } from '../../services';
-import * as CORE_TRANSLATIONS from '../../i18n/i18n';
-import { ObservableWrapper } from '../../util/async';
+import { Observable, Subscriber } from 'rxjs';
 import { AppConfig } from '../../config/app-config';
+import * as CORE_TRANSLATIONS from '../../i18n/i18n';
+import { MomentService, SnackBarService } from '../../services';
+import { ObservableWrapper } from '../../util/async';
 
 @Injectable()
 export class OTranslateService {
