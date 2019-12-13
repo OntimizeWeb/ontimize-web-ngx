@@ -99,7 +99,7 @@ export class OTableExportDialogComponent implements OnInit, OnDestroy {
           () => self.dialogRef.close(true),
           downloadError => {
             console.error(downloadError);
-            self.dialogRef.close(false);
+            self.dialogService.alert('ERROR', downloadError.message).then(() => self.dialogRef.close(false));
           }
         );
       } else {
