@@ -258,7 +258,7 @@ export class OTableMenuComponent implements OnInit, AfterViewInit, OnDestroy {
     // Table data/filters
     switch (this.table.exportMode) {
       case Codes.EXPORT_MODE_ALL:
-        exportCnfg.filters = this.table.getComponentFilter();
+        exportCnfg.filter = this.table.getComponentFilter();
         break;
       case Codes.EXPORT_MODE_LOCAL:
         exportCnfg.data = this.table.getAllRenderedValues();
@@ -269,6 +269,8 @@ export class OTableMenuComponent implements OnInit, AfterViewInit, OnDestroy {
         colsNotIncluded.forEach(attr => exportCnfg.data.forEach(row => delete row[attr]));
         break;
     }
+    exportCnfg.mode = this.table.exportMode;
+    exportCnfg.entity = this.table.entity;
 
     // Table columns
     exportCnfg.columns = tableOptions.visibleColumns.filter(c => colsNotIncluded.indexOf(c) === -1);

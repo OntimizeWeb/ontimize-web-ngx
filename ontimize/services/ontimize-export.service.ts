@@ -30,6 +30,7 @@ export class OntimizeExportService {
   protected _urlBase: string;
   protected _appConfig: Config;
   protected _config: AppConfig;
+  protected exportAll: boolean = false;
 
   constructor(protected injector: Injector) {
     this.httpClient = this.injector.get(HttpClient);
@@ -49,11 +50,14 @@ export class OntimizeExportService {
     return servConfig;
   }
 
-  public configureService(config: any): void {
+  public configureService(config: any, modeAll = false): void {
+    this.exportAll = modeAll;
     this._urlBase = config.urlBase ? config.urlBase : this._appConfig['apiEndpoint'];
     this._sessionid = config.session ? config.session.id : -1;
     if (config.exportPath) {
       this.exportPath = config.exportPath;
+    } else if (this.exportAll) {
+      this.exportPath = config.path;
     }
     if (config.downloadPath) {
       this.downloadPath = config.downloadPath;
@@ -68,8 +72,8 @@ export class OntimizeExportService {
     this._urlBase = value;
   }
 
-  public exportData(data: any, format: string): Observable<any> {
-    const url = this._urlBase + this.exportPath + '/' + format;
+  public exportData(data: any, format: string, entity?: string): Observable<any> {
+    const url = this._urlBase + this.exportPath + (this.exportAll ? '/' + entity : '') + '/' + format;
     const options = {
       headers: new HttpHeaders({
         'Access-Control-Allow-Origin': '*',

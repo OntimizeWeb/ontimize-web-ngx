@@ -11,7 +11,9 @@ export class OTableExportConfiguration {
   sqlTypes: Object;
   service: string;
   data?: any[];
-  filters?: Object;
+  filter?: Object;
+  mode: string;
+  entity: string;
 }
 
 @Component({
@@ -58,7 +60,7 @@ export class OTableExportDialogComponent implements OnInit {
     try {
       this.exportService = this.injector.get(loadingService);
       let serviceCfg = this.exportService.getDefaultServiceConfiguration(this.config.service);
-      this.exportService.configureService(serviceCfg);
+      this.exportService.configureService(serviceCfg, Codes.EXPORT_MODE_ALL === this.config.mode);
     } catch (e) {
       console.error(e);
     }
@@ -71,11 +73,11 @@ export class OTableExportDialogComponent implements OnInit {
       columns: this.config.columns,
       columnNames: this.config.columnNames,
       sqlTypes: this.config.sqlTypes,
-      filters: this.config.filters
+      filter: this.config.filter
     };
     let self = this;
     this.proccessExportData(exportData.data, exportData.sqlTypes);
-    this.exportService.exportData(exportData, OExportExtension.Excel).subscribe((resp) => {
+    this.exportService.exportData(exportData, OExportExtension.Excel, this.config.entity).subscribe((resp) => {
       if (resp.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) {
         self.exportService.downloadFile(resp.data[0]['xslxId'], OExportExtension.Excel).subscribe(
           () => self.dialogRef.close(true),
@@ -99,11 +101,11 @@ export class OTableExportDialogComponent implements OnInit {
       columns: this.config.columns,
       columnNames: this.config.columnNames,
       sqlTypes: this.config.sqlTypes,
-      filters: this.config.filters
+      filter: this.config.filter
     };
     let self = this;
     this.proccessExportData(exportData.data, exportData.sqlTypes);
-    this.exportService.exportData(exportData, OExportExtension.HTML).subscribe(
+    this.exportService.exportData(exportData, OExportExtension.HTML, this.config.entity).subscribe(
       (resp) => {
         if (resp.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) {
           self.exportService.downloadFile(resp.data[0]['htmlId'], OExportExtension.HTML).subscribe(
@@ -128,11 +130,11 @@ export class OTableExportDialogComponent implements OnInit {
       columns: this.config.columns,
       columnNames: this.config.columnNames,
       sqlTypes: this.config.sqlTypes,
-      filters: this.config.filters
+      filter: this.config.filter
     };
     let self = this;
     this.proccessExportData(exportData.data, exportData.sqlTypes);
-    this.exportService.exportData(exportData, OExportExtension.PDF).subscribe(
+    this.exportService.exportData(exportData, OExportExtension.PDF, this.config.entity).subscribe(
       (resp) => {
         if (resp.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) {
           self.exportService.downloadFile(resp.data[0]['pdfId'], OExportExtension.PDF).subscribe(
