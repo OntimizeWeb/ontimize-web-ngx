@@ -2,6 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { ChangeDetectionStrategy, Component, Inject, Injector, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { MAT_DIALOG_DATA, MatButton, MatDialogRef } from '@angular/material';
 import { Subscription } from 'rxjs';
+import { filter } from 'rxjs/operators';
 
 import { DialogService, OntimizeExportService, OTranslateService } from '../../../../../services';
 import { Codes, SQLTypes, Util } from '../../../../../utils';
@@ -60,7 +61,7 @@ export class OTableExportDialogComponent implements OnInit, OnDestroy {
   initialize(): void {
     this.configureService();
     this.subscription.add(
-      this.oTableExportButtonService.export$.subscribe(e => this.export(e))
+      this.oTableExportButtonService.export$.pipe(filter(type => ['xlsx', 'html', 'pdf'].indexOf(type) === -1)).subscribe(e => this.export(e))
     );
   }
 
