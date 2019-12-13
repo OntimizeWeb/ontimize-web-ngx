@@ -3,18 +3,13 @@ import { Injectable, Injector } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { share } from 'rxjs/operators';
+
 import { AppConfig, Config } from '../config/app-config';
 import { LoginService } from '../services';
 import { Codes, ServiceUtils } from '../utils';
 
 export const EXPORT_PATH_DEFAULT: string = '/export';
 export const DOWNLOAD_PATH_DEFAULT: string = EXPORT_PATH_DEFAULT + '/download';
-
-export class OExportExtension {
-  public static Excel: string = 'xlsx';
-  public static HTML: string = 'html';
-  public static PDF: string = 'pdf';
-}
 
 @Injectable()
 export class OntimizeExportService {
@@ -109,14 +104,6 @@ export class OntimizeExportService {
 
     let _innerObserver: any;
     const dataObservable = new Observable(observer => _innerObserver = observer).pipe(share());
-    // let responseType: string;
-    // if (OExportExtension.Excel === fileExtension) {
-    //   responseType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
-    // } else if (OExportExtension.HTML === fileExtension) {
-    //   responseType = 'text/html';
-    // } else if (OExportExtension.PDF === fileExtension) {
-    //   responseType = 'application/pdf';
-    // }
     const options: any = {
       headers: new HttpHeaders({
         'Access-Control-Allow-Origin': '*',

@@ -19,6 +19,9 @@
         [columns-visibility-button]="columnsVisibilityButton">
         <ng-content select="o-table-option"></ng-content>
       </o-table-menu>
+      <ng-template #exportOptsTemplate>
+        <ng-content select="o-table-export-button"></ng-content>
+      </ng-template>
     </div>
   </div>
 

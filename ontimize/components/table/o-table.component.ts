@@ -2,11 +2,31 @@ import { SelectionChange } from '@angular/cdk/collections';
 import { ObserversModule } from '@angular/cdk/observers';
 import { CdkTableModule } from '@angular/cdk/table';
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, ContentChildren, ElementRef, EventEmitter, forwardRef, HostListener, Inject, Injector, NgModule, OnDestroy, OnInit, Optional, QueryList, ViewChild, ViewChildren, ViewEncapsulation } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ContentChildren,
+  ElementRef,
+  EventEmitter,
+  forwardRef,
+  HostListener,
+  Inject,
+  Injector,
+  NgModule,
+  OnDestroy,
+  OnInit,
+  Optional,
+  QueryList,
+  TemplateRef,
+  ViewChild,
+  ViewChildren,
+  ViewEncapsulation
+} from '@angular/core';
 import { MatCheckboxChange, MatDialog, MatMenu, MatPaginator, MatPaginatorIntl, MatTab, MatTabGroup, PageEvent } from '@angular/material';
 import { DndModule } from '@churchs19/ng2-dnd';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { BehaviorSubject, combineLatest, Observable, of, Subscription } from 'rxjs';
+
 import { BooleanConverter, InputConverter } from '../../decorators/input-converter';
 import { OntimizeService, OPermissions, OTableMenuPermissions, OTablePermissions, SnackBarService } from '../../services';
 import { dataServiceFactory } from '../../services/data-service.provider';
@@ -21,13 +41,32 @@ import { OFormComponent } from '../form/o-form.component';
 import { OServiceComponent } from '../o-service-component.class';
 import { ISQLOrder, OQueryDataArgs, ServiceUtils } from '../service.utils';
 import { OperatorFunction, OTableColumnCalculatedComponent } from './column/calculated/o-table-column-calculated.component';
-import { OTableCellEditorBooleanComponent, O_TABLE_CELL_EDITORS } from './column/cell-editor/cell-editor';
-import { OBaseTableCellRenderer, O_TABLE_CELL_RENDERERS } from './column/cell-renderer/cell-renderer';
+import { O_TABLE_CELL_EDITORS, OTableCellEditorBooleanComponent } from './column/cell-editor/cell-editor';
+import { O_TABLE_CELL_RENDERERS, OBaseTableCellRenderer } from './column/cell-renderer/cell-renderer';
 import { OColumnTooltip, OTableColumnComponent } from './column/o-table-column.component';
 import { OTableContextMenuComponent } from './extensions/contextmenu/o-table-context-menu.component';
-import { OTableFilterByColumnDataDialogComponent, O_TABLE_DIALOGS } from './extensions/dialog/o-table-dialog-components';
-import { OColumnAggregate, OTableColumnAggregateComponent, OTableMatPaginatorIntl, OTablePaginatorComponent, O_TABLE_FOOTER_COMPONENTS } from './extensions/footer/o-table-footer-components';
-import { ColumnValueFilterOperator, IColumnValueFilter, OTableButtonComponent, OTableButtonsComponent, OTableColumnsFilterComponent, OTableInsertableRowComponent, OTableMenuComponent, OTableOptionComponent, OTableQuickfilterComponent, O_TABLE_HEADER_COMPONENTS } from './extensions/header/o-table-header-components';
+import { O_TABLE_DIALOGS, OTableFilterByColumnDataDialogComponent } from './extensions/dialog/o-table-dialog-components';
+import { OTableExportButton } from './extensions/export-button/o-table-export-button.component';
+import { OTableExportButtonService } from './extensions/export-button/o-table-export-button.service';
+import {
+  O_TABLE_FOOTER_COMPONENTS,
+  OColumnAggregate,
+  OTableColumnAggregateComponent,
+  OTableMatPaginatorIntl,
+  OTablePaginatorComponent
+} from './extensions/footer/o-table-footer-components';
+import {
+  ColumnValueFilterOperator,
+  IColumnValueFilter,
+  O_TABLE_HEADER_COMPONENTS,
+  OTableButtonComponent,
+  OTableButtonsComponent,
+  OTableColumnsFilterComponent,
+  OTableInsertableRowComponent,
+  OTableMenuComponent,
+  OTableOptionComponent,
+  OTableQuickfilterComponent
+} from './extensions/header/o-table-header-components';
 import { OTableStorage } from './extensions/o-table-storage.class';
 import { OTableRowDirective } from './extensions/row/o-table-row.directive';
 import { OMatSort } from './extensions/sort/o-mat-sort';
@@ -36,7 +75,6 @@ import { OMatSortModule } from './extensions/sort/o-mat-sort-module';
 import { OTableExpandedFooter } from './o-table-expanded-footer.directive';
 import { OTableDao } from './o-table.dao';
 import { OTableDataSource } from './o-table.datasource';
-
 
 export const NAME_COLUMN_SELECT = 'select';
 
@@ -687,6 +725,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   @ViewChild(OTableExpandedFooter)
   oTableExpandedFooter: OTableExpandedFooter;
+
+  @ViewChild('exportOptsTemplate')
+  exportOptsTemplate: TemplateRef<any>;
 
   constructor(
     injector: Injector,
@@ -2430,6 +2471,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     OTableContextMenuComponent,
     OTableRowDirective,
     OTableExpandedFooter,
+    OTableExportButton,
     ...O_TABLE_CELL_RENDERERS,
     ...O_TABLE_CELL_EDITORS,
     ...O_TABLE_DIALOGS,
@@ -2455,6 +2497,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     OTableRowDirective,
     OTableExpandedFooter,
     OMatSortModule,
+    OTableExportButton,
     ...O_TABLE_HEADER_COMPONENTS,
     ...O_TABLE_CELL_RENDERERS,
     ...O_TABLE_CELL_EDITORS,
@@ -2467,9 +2510,12 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     ...O_TABLE_CELL_EDITORS,
     ...O_TABLE_DIALOGS
   ],
-  providers: [{
-    provide: MatPaginatorIntl,
-    useClass: OTableMatPaginatorIntl
-  }]
+  providers: [
+    OTableExportButtonService,
+    {
+      provide: MatPaginatorIntl,
+      useClass: OTableMatPaginatorIntl
+    }
+  ]
 })
 export class OTableModule { }
