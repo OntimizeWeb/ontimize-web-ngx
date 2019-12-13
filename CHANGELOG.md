@@ -1,6 +1,7 @@
 ## 4.0.8
 ### Features
 * **o-table**: new value `local` for `export-mode` input
+* **o-table**: new `o-table-export-button` component ([3258fe6](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3258fe6))
 
 ### BREAKING CHANGES
 * **o-table**: `export-mode` value `all` has been replaced by `local`
