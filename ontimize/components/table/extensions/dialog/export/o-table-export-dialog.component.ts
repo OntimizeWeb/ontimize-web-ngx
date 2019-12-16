@@ -1,12 +1,12 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { ChangeDetectionStrategy, Component, Inject, Injector, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
-import { MAT_DIALOG_DATA, MatButton, MatDialogRef } from '@angular/material';
+import { MatButton, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
-
 import { DialogService, OntimizeExportService, OTranslateService } from '../../../../../services';
 import { Codes, SQLTypes, Util } from '../../../../../utils';
 import { OTableExportButtonService } from '../../export-button/o-table-export-button.service';
+
 
 export class OTableExportConfiguration {
   columns: Array<any>;
@@ -43,7 +43,7 @@ export class OTableExportDialogComponent implements OnInit, OnDestroy {
   constructor(
     public dialogRef: MatDialogRef<OTableExportDialogComponent>,
     protected injector: Injector,
-    @Inject(MAT_DIALOG_DATA) protected config: OTableExportConfiguration
+    @Inject(MAT_DIALOG_DATA) public config: OTableExportConfiguration
   ) {
     this.dialogService = injector.get(DialogService);
     this.translateService = this.injector.get(OTranslateService);
