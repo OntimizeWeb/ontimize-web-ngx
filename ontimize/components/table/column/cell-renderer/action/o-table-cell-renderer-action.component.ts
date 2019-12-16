@@ -48,7 +48,7 @@ export class OTableCellRendererActionComponent extends OBaseTableCellRenderer im
   ngOnInit() {
     if (this.table) {
       const oCol = this.table.getOColumn(this.tableColumn.attr);
-      oCol.title = undefined;
+      oCol.title = Util.isDefined(this.tableColumn.title) ? this.tableColumn.title : 'TABLE.COLUMNS.TITLE_EMPTY';
     }
     this.iconPosition = Util.parseIconPosition(this.iconPosition);
   }
