@@ -3,6 +3,10 @@
 * **o-table**: new value `local` for `export-mode` input
 * **o-table**: new `o-table-export-button` component ([3258fe6](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3258fe6))
 
+### Bug Fixes
+* **o-table-cell-renderer-action**, **o-table-cell-renderer-image**: not show title in the column ([b4bc292](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b4bc292)) Closes [#288](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/288)
+* **o-combo**: throw error when request result is a empty object  ([4884fe2](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e14b8ec)) Closes [#296](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/296)
+
 ### BREAKING CHANGES
 * **o-table**: `export-mode` value `all` has been replaced by `local`
 * **o-table**: `export-mode="all"` has changed, now it sends the current filters to the backend in order to generate the report with all data
