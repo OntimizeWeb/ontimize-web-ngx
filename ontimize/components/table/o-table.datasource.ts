@@ -223,13 +223,15 @@ export class OTableDataSource extends DataSource<any> {
   getQuickFilterData(data: any[]): any[] {
     let filterData = this.quickFilter;
     if (filterData !== undefined && filterData.length > 0) {
+      if (!this._tableOptions.filterCaseSensitive) {
+        filterData = filterData.toLowerCase();
+      }
       return data.filter((item: any) => {
-        let searchStr = this.getStringSearchable(item);
-        if (!this._tableOptions.filterCaseSensitive) {
-          searchStr = searchStr.toLowerCase();
-          filterData = filterData.toLowerCase();
-        }
-        return searchStr.indexOf(filterData) !== -1;
+        // Getting custom columns filter columns result
+        const passCustomFilter = this.fulfillsCustomFilterFunctions(filterData, item);
+        // Getting other searchable columns standard result
+        const passSearchString = this.fulfillsQuickfilter(filterData, item);
+        return passCustomFilter || passSearchString;
       });
     } else {
       return data;
@@ -252,16 +254,18 @@ export class OTableDataSource extends DataSource<any> {
     // TODO
   }
 
-  protected getStringSearchable(item) {
-    return this._tableOptions.columns.map((oCol: OColumn) => {
-      if (oCol.searching && oCol.visible) {
-        let filterValue = item[oCol.attr];
-        if (oCol.renderer && oCol.renderer.getCellData) {
-          filterValue = oCol.renderer.getCellData(filterValue, item);
-        }
-        return filterValue;
-      }
-    }).join(' ');
+  protected fulfillsCustomFilterFunctions(filter: string, item: any) {
+    const customFilterCols = this.table.oTableOptions.columns.filter(oCol => oCol.useCustomFilterFunction());
+    return customFilterCols.some(oCol => oCol.renderer.filterFunction(item[oCol.attr], item, filter));
+  }
+
+  protected fulfillsQuickfilter(filter: string, item: any): boolean {
+    const columns = this._tableOptions.columns.filter((oCol: OColumn) => oCol.useQuickfilterFunction());
+    let searchStr = columns.map((oCol: OColumn) => oCol.getFilterValue(item[oCol.attr], item).join(' ')).join(' ');
+    if (!this._tableOptions.filterCaseSensitive) {
+      searchStr = searchStr.toLowerCase();
+    }
+    return searchStr.indexOf(filter) !== -1;
   }
 
   /** Returns a sorted copy of the database data. */
@@ -305,63 +309,40 @@ export class OTableDataSource extends DataSource<any> {
   }
 
   public getRenderedData(data) {
-    let self = this;
-    return data.map(function (row, i, a) {
-      /** render each column*/
-      var obj = {};
-      Object.keys(row).forEach(function (column, i, a) {
-        self._tableOptions.columns.forEach(function (ocolumn: OColumn, i, a) {
-          if (column === ocolumn.attr && ocolumn.visible) {
-            var key = column;
-            if (ocolumn.renderer && ocolumn.renderer.getCellData) {
-              obj[key] = ocolumn.renderer.getCellData(row[column], row);
-            } else {
-              obj[key] = row[column];
-            }
-          }
-        });
+    const tableColumns = this._tableOptions.columns.filter((oCol) => {
+      return oCol.visible && oCol.renderer && oCol.renderer.getCellData;
+    });
+    return data.map((row) => {
+      let obj = Object.assign({}, row);
+      tableColumns.forEach((oCol: OColumn) => {
+        obj[oCol.attr] = oCol.renderer.getCellData(row[oCol.attr], row);
       });
       return obj;
     });
   }
 
-
   protected getAllData(render?: boolean, onlyVisibleColumns?: boolean) {
-    let self = this;
-    return this.filteredData.map(function (row, i, a) {
+    let tableColumns = this._tableOptions.columns.filter((oCol) => render && oCol.renderer && oCol.renderer.getCellData);
+    if (onlyVisibleColumns) {
+      tableColumns = this._tableOptions.columns.filter((oCol) => oCol.visible);
+    }
+    return this.filteredData.map((row) => {
       /** render each column*/
-      var obj = {};
-      Object.keys(row).forEach(function (column, i, a) {
-        self._tableOptions.columns.forEach(function (ocolumn: OColumn, i, a) {
-          if (column === ocolumn.attr) {
-            if (onlyVisibleColumns && !ocolumn.visible) {
-              return;
-            }
-            var key = column;
-            if (render && ocolumn.renderer && ocolumn.renderer.getCellData) {
-              obj[key] = ocolumn.renderer.getCellData(row[column], row);
-            } else {
-              obj[key] = row[column];
-            }
-          }
-
-        });
+      let obj = Object.assign({}, row);
+      tableColumns.forEach((oCol: OColumn) => {
+        obj[oCol.attr] = oCol.renderer.getCellData(row[oCol.attr], row);
       });
       return obj;
     });
   }
 
   public getColumnData(ocolumn: string) {
-    return this.renderedData.map(function (row, i, a) {
+    return this.renderedData.map((row) => {
       /** render each column*/
-      var obj = {};
-      Object.keys(row).forEach(function (column, i, a) {
-        if (column === ocolumn && ocolumn) {
-          var key = column;
-          obj[key] = row[column];
-
-        }
-      });
+      let obj = {};
+      if (ocolumn) {
+        obj[ocolumn] = row[ocolumn];
+      }
       return obj;
     });
   }
@@ -419,31 +400,41 @@ export class OTableDataSource extends DataSource<any> {
 
   getColumnValueFilterData(data: any[]): any[] {
     this.columnValueFilters.forEach(filter => {
-      switch (filter.operator) {
-        case ColumnValueFilterOperator.IN:
-          let filterColumn = this.table.oTableOptions.columns.filter(col => col.attr === filter.attr)[0];
-          if (filterColumn) {
+      let filterColumn = this.table.oTableOptions.columns.find(col => col.attr === filter.attr);
+      if (filterColumn) {
+        switch (filter.operator) {
+          case ColumnValueFilterOperator.IN:
             data = data.filter((item: any) => {
-              return (filter.values.indexOf(item[filter.attr]) !== -1);
+              if (filterColumn.renderer && filterColumn.renderer.filterFunction) {
+                return filterColumn.renderer.filterFunction(item[filter.attr], item);
+              } else {
+                const colValues = filterColumn.getFilterValue(item[filter.attr], item).map(f => Util.normalizeString(f));
+                const filterValues = filter.values.map(f => Util.normalizeString(f));
+                return filterValues.some(value => colValues.indexOf(value) !== -1);
+              }
             });
-          }
-          break;
-        case ColumnValueFilterOperator.EQUAL:
-          if (filter.values.indexOf('*') !== -1) {
-            data = data.filter(item => new RegExp('^' + Util.normalizeString(filter.values).split('*').join('.*') + '$').test(Util.normalizeString(item[filter.attr])));
-          } else {
-            data = data.filter(item => (Util.normalizeString(item[filter.attr]).indexOf(Util.normalizeString(filter.values)) !== -1));
-          }
-          break;
-        case ColumnValueFilterOperator.BETWEEN:
-          data = data.filter(item => item[filter.attr] >= filter.values[0] && item[filter.attr] <= filter.values[1]);
-          break;
-        case ColumnValueFilterOperator.MORE_EQUAL:
-          data = data.filter(item => item[filter.attr] >= filter.values);
-          break;
-        case ColumnValueFilterOperator.LESS_EQUAL:
-          data = data.filter(item => item[filter.attr] <= filter.values);
-          break;
+            break;
+          case ColumnValueFilterOperator.EQUAL:
+            const normalizedValue = Util.normalizeString(filter.values);
+            data = data.filter(item => {
+              const colValues = filterColumn.getFilterValue(item[filter.attr], item).map(f => Util.normalizeString(f));
+              let regExp;
+              if (normalizedValue.includes('*')) {
+                regExp = new RegExp('^' + normalizedValue.split('*').join('.*') + '$');
+              }
+              return colValues.some(colValue => regExp ? regExp.test(colValue) : colValue.includes(normalizedValue));
+            });
+            break;
+          case ColumnValueFilterOperator.BETWEEN:
+            data = data.filter(item => item[filter.attr] >= filter.values[0] && item[filter.attr] <= filter.values[1]);
+            break;
+          case ColumnValueFilterOperator.MORE_EQUAL:
+            data = data.filter(item => item[filter.attr] >= filter.values);
+            break;
+          case ColumnValueFilterOperator.LESS_EQUAL:
+            data = data.filter(item => item[filter.attr] <= filter.values);
+            break;
+        }
       }
     });
     return data;

@@ -23,12 +23,12 @@
       <mat-selection-list *ngIf="preloadValues || listData" #filterValueList fxFlex fxLayout="column"
         class="select-values-list">
         <mat-list-option *ngFor="let record of listData; let i = index" checkboxPosition="before"
-          [selected]="record.selected" [value]="record.value">
+          [selected]="record.selected" [value]="record.renderedValue">
           <ng-container *ngIf="!column.renderer">
             {{ record.value || ('TABLE.FILTER_BY_COLUMN.EMPTY_VALUE' | oTranslate) }}
           </ng-container>
           <ng-template *ngIf="column.renderer" [ngTemplateOutlet]="column.renderer.templateref"
-            [ngTemplateOutletContext]="{ cellvalue: record.value, rowvalue: getRowValue(i) }"></ng-template>
+            [ngTemplateOutletContext]="{ cellvalue: record.value, rowvalue: getRowValue(record.tableIndex) }"></ng-template>
         </mat-list-option>
       </mat-selection-list>
     </div>

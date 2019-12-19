@@ -11,6 +11,8 @@ import { Util } from '../../../../../util/util';
 export interface ITableFilterByColumnDataInterface {
   value: any;
   selected: boolean;
+  renderedValue?: any;
+  tableIndex?:number;
 }
 
 @Component({
@@ -72,11 +74,11 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
       this.preloadValues = data.preloadValues;
     }
     if (data.tableData && Array.isArray(data.tableData)) {
+      this.tableData = data.tableData;
       this.getDistinctValues(data.tableData, previousFilter);
       this.initializeCustomFilterValues(previousFilter);
       this.initializeDataList(previousFilter);
     }
-
     if (data.mode) {
       this.mode = data.mode;
     }
@@ -173,14 +175,19 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
   }
 
   getDistinctValues(data: Array<any>, filter: IColumnValueFilter): void {
-    let colValues: any[] = data.map(elem => elem[this.column.attr]);
-    colValues.forEach((value, i) => {
-      if (this.columnData.find(item => item.value === value) === undefined) {
+    const colRenderedValues = this.getColumnDataUsingRenderer();
+    const colValues: any[] = data.map(elem => elem[this.column.attr]);
+
+    colRenderedValues.forEach((renderedValue, i) => {
+      if (!this.columnData.find(item => item.renderedValue === renderedValue)) {
         this.columnData.push({
-          value: value,
-          selected: filter.operator === ColumnValueFilterOperator.IN && (filter.values || []).indexOf(value) !== -1
+          renderedValue: renderedValue,
+          value: colValues[i],
+          selected: filter.operator === ColumnValueFilterOperator.IN && (filter.values || []).indexOf(renderedValue) !== -1,
+          // storing the first index where this renderedValue is obtained. In the template of this component the column renderer will obtain the
+          // row value of this index
+          tableIndex: i
         });
-        this.tableData.push(data[i]);
       }
     });
   }
@@ -265,4 +272,8 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
     return value;
   }
 
+  protected getColumnDataUsingRenderer() {
+    const useRenderer = this.column.renderer && this.column.renderer.getCellData;
+    return this.tableData.map((row) => useRenderer ? this.column.renderer.getCellData(row[this.column.attr], row) : row[this.column.attr]);
+  }
 }

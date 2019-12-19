@@ -1,9 +1,10 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Codes, Util } from '../../../../../utils';
-import { OBaseTableCellRenderer } from '../o-base-table-cell-renderer.class';
+import { DEFAULT_INPUTS_O_BASE_TABLE_CELL_RENDERER, OBaseTableCellRenderer } from '../o-base-table-cell-renderer.class';
 
 
 export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_ACTION = [
+  ...DEFAULT_INPUTS_O_BASE_TABLE_CELL_RENDERER,
   'icon',
   'svgIcon:svg-icon',
   'action',
@@ -48,7 +49,7 @@ export class OTableCellRendererActionComponent extends OBaseTableCellRenderer im
   ngOnInit() {
     if (this.table) {
       const oCol = this.table.getOColumn(this.tableColumn.attr);
-      oCol.title = undefined;
+      oCol.title = Util.isDefined(this.tableColumn.title) ? this.tableColumn.title : undefined;
     }
     this.iconPosition = Util.parseIconPosition(this.iconPosition);
   }

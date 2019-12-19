@@ -1,8 +1,9 @@
 import { Component, Injector, ViewChild, TemplateRef, ChangeDetectionStrategy } from '@angular/core';
 import { OMomentPipe, IMomentPipeArgument } from '../../../../../pipes';
-import { OBaseTableCellRenderer } from '../o-base-table-cell-renderer.class';
+import { OBaseTableCellRenderer, DEFAULT_INPUTS_O_BASE_TABLE_CELL_RENDERER } from '../o-base-table-cell-renderer.class';
 
 export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_DATE = [
+  ...DEFAULT_INPUTS_O_BASE_TABLE_CELL_RENDERER,
   // format [string]: date format. See MomentJS (http://momentjs.com/).
   'format'
 ];

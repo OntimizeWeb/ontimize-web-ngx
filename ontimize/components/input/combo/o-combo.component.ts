@@ -72,7 +72,21 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
   @ViewChild('selectModel')
   protected selectModel: MatSelect;
 
-  protected filteredDataArray: any[] = [];
+  protected _filteredDataArray: any[] = [];
+  set filteredDataArray(data: any) {
+    if (Util.isArray(data)) {
+      this._filteredDataArray = data;
+    } else if (Util.isObject(data) && Object.keys(data).length > 0) {
+      this._filteredDataArray = [data];
+    } else {
+      console.warn('Component has received not supported service data. Supported data are Array or not empty Object');
+      this._filteredDataArray = [];
+    }
+  }
+  get filteredDataArray(): any {
+    return this._filteredDataArray;
+  }
+
   protected subscription: Subscription = new Subscription();
 
   constructor(

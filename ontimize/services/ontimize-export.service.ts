@@ -3,33 +3,24 @@ import { Injectable, Injector } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { share } from 'rxjs/operators';
+
 import { AppConfig, Config } from '../config/app-config';
 import { LoginService } from '../services';
 import { Codes, ServiceUtils } from '../utils';
 
-export const EXPORT_PATH_DEFAULT: string = '/export';
-export const DOWNLOAD_PATH_DEFAULT: string = EXPORT_PATH_DEFAULT + '/download';
-
-export class OExportExtension {
-  public static Excel: string = 'xlsx';
-  public static HTML: string = 'html';
-  public static PDF: string = 'pdf';
-}
-
 @Injectable()
 export class OntimizeExportService {
 
-  public EXPORT_PATH_DEFAULT: string = EXPORT_PATH_DEFAULT;
-  public DOWNLOAD_PATH_DEFAULT: string = DOWNLOAD_PATH_DEFAULT;
-
-  public exportPath: string = EXPORT_PATH_DEFAULT;
-  public downloadPath: string = DOWNLOAD_PATH_DEFAULT;
+  public exportPath: string;
+  public downloadPath: string;
+  public servicePath: string;
 
   protected httpClient: HttpClient;
   protected _sessionid: string;
   protected _urlBase: string;
   protected _appConfig: Config;
   protected _config: AppConfig;
+  protected exportAll: boolean = false;
 
   constructor(protected injector: Injector) {
     this.httpClient = this.injector.get(HttpClient);
@@ -49,7 +40,8 @@ export class OntimizeExportService {
     return servConfig;
   }
 
-  public configureService(config: any): void {
+  public configureService(config: any, modeAll = false): void {
+    this.exportAll = modeAll;
     this._urlBase = config.urlBase ? config.urlBase : this._appConfig['apiEndpoint'];
     this._sessionid = config.session ? config.session.id : -1;
     if (config.exportPath) {
@@ -57,6 +49,9 @@ export class OntimizeExportService {
     }
     if (config.downloadPath) {
       this.downloadPath = config.downloadPath;
+    }
+    if (config.path) {
+      this.servicePath = config.path;
     }
   }
 
@@ -68,8 +63,9 @@ export class OntimizeExportService {
     this._urlBase = value;
   }
 
-  public exportData(data: any, format: string): Observable<any> {
-    const url = this._urlBase + this.exportPath + '/' + format;
+  public exportData(data: any, format: string, entity?: string): Observable<any> {
+    const url = this._urlBase + (this.exportPath ? this.exportPath : '') + this.servicePath + '/' + entity + '/' + format;
+
     const options = {
       headers: new HttpHeaders({
         'Access-Control-Allow-Origin': '*',
@@ -101,18 +97,10 @@ export class OntimizeExportService {
   }
 
   public downloadFile(fileId: string, fileExtension: string): Observable<any> {
-    const url = this._urlBase + this.downloadPath + '/' + fileExtension + '/' + fileId;
+    const url = this._urlBase + (this.downloadPath ? this.downloadPath : '') + this.servicePath + '/' + fileExtension + '/' + fileId;
 
     let _innerObserver: any;
     const dataObservable = new Observable(observer => _innerObserver = observer).pipe(share());
-    // let responseType: string;
-    // if (OExportExtension.Excel === fileExtension) {
-    //   responseType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
-    // } else if (OExportExtension.HTML === fileExtension) {
-    //   responseType = 'text/html';
-    // } else if (OExportExtension.PDF === fileExtension) {
-    //   responseType = 'application/pdf';
-    // }
     const options: any = {
       headers: new HttpHeaders({
         'Access-Control-Allow-Origin': '*',

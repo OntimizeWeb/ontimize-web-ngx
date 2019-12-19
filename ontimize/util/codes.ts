@@ -26,8 +26,9 @@ export class Codes {
   public static SELECTION_MODE_SINGLE = 'single';
   public static SELECTION_MODE_MULTIPLE = 'multiple';
 
-  public static EXPORT_MODE_VISIBLE ='visible';
-  public static EXPORT_MODE_ALL ='all';
+  public static EXPORT_MODE_VISIBLE = 'visible';
+  public static EXPORT_MODE_LOCAL = 'local';
+  public static EXPORT_MODE_ALL = 'all';
 
   public static HYPHEN_SEPARATOR = '-';
   public static SPACE_SEPARATOR = ' ';

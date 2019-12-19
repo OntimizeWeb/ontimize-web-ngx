@@ -10,7 +10,16 @@
       <div fxLayout fxFlex>
         <span *ngIf="showTitle" class="table-title" fxFlex>{{ title | oTranslate }}</span>
       </div>
-      <o-table-quickfilter *ngIf="quickFilter" (onChange)="reloadPaginatedDataFromStart()"></o-table-quickfilter>
+
+      <ng-container *ngIf="quickfilterContentChild; else customQuickFilter">
+        <ng-content select="o-table-quickfilter"></ng-content>
+      </ng-container>
+      <ng-template #customQuickFilter>
+        <ng-container *ngIf="quickFilter">
+          <o-table-quickfilter (onChange)="reloadPaginatedDataFromStart()"></o-table-quickfilter>
+        </ng-container>
+      </ng-template>
+
       <button type="button" *ngIf="showTableMenuButton" mat-icon-button class="o-table-menu-button"
         [matMenuTriggerFor]="tableMenu.matMenu" (click)="$event.stopPropagation()">
         <mat-icon svgIcon="ontimize:more_vert"></mat-icon>
@@ -19,6 +28,9 @@
         [columns-visibility-button]="columnsVisibilityButton">
         <ng-content select="o-table-option"></ng-content>
       </o-table-menu>
+      <ng-template #exportOptsTemplate>
+        <ng-content select="o-table-export-button"></ng-content>
+      </ng-template>
     </div>
   </div>
 

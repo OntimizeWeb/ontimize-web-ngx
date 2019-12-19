@@ -1,22 +1,17 @@
-import { AfterViewInit, Component, ElementRef, Inject, Injector, NgModule, OnInit, Optional, ViewChild, ViewEncapsulation, forwardRef } from '@angular/core';
-import { Codes, Util } from '../../../utils';
-import {
-  DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,
-  DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT,
-  OFormDataComponent,
-  OValueChangeEvent
-} from '../../o-form-data-component.class';
-
 import { CommonModule } from '@angular/common';
-import { IFormValueOptions } from '../../form/OFormValue';
-import { InputConverter } from '../../../decorators/input-converter';
-import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
-import { NumberConverter } from '../../../decorators';
-import { OFormComponent } from '../../form/form-components';
-import { OSharedModule } from '../../../shared';
-import { OValidators } from '../../../validators/o-validators';
+import { AfterViewInit, Component, ElementRef, forwardRef, Inject, Injector, NgModule, OnInit, Optional, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ValidatorFn } from '@angular/forms';
 import moment from 'moment';
+import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
+import { NumberConverter } from '../../../decorators';
+import { InputConverter } from '../../../decorators/input-converter';
+import { OSharedModule } from '../../../shared';
+import { Codes, Util } from '../../../utils';
+import { OValidators } from '../../../validators/o-validators';
+import { OFormComponent } from '../../form/form-components';
+import { IFormValueOptions } from '../../form/OFormValue';
+import { DEFAULT_INPUTS_O_FORM_DATA_COMPONENT, DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT, OFormDataComponent, OValueChangeEvent } from '../../o-form-data-component.class';
+
 
 export type OHourValueType = 'string' | 'timestamp';
 
@@ -77,16 +72,6 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
   public ngAfterViewInit(): void {
     super.ngAfterViewInit();
     this.modifyPickerMethods();
-  }
-
-  public getValue(): any {
-    const value = super.getValue();
-    // Component value is always string internally, it must be converted to expected type
-    if (!Util.isDefined(value) || this.valueType === 'string') {
-      return value;
-    } else if (this.valueType === 'timestamp') {
-      return moment(value, this.formatString).valueOf();
-    }
   }
 
   public onKeyDown(e: KeyboardEvent): void {

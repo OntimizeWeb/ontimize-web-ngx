@@ -1,10 +1,10 @@
-import { Component, Injector, TemplateRef, ViewChild, ChangeDetectionStrategy } from '@angular/core';
-
+import { ChangeDetectionStrategy, Component, Injector, TemplateRef, ViewChild } from '@angular/core';
 import { Util } from '../../../../../util/util';
 import { OColumn } from '../../../o-table.component';
-import { OBaseTableCellRenderer } from '../o-base-table-cell-renderer.class';
+import { DEFAULT_INPUTS_O_BASE_TABLE_CELL_RENDERER, OBaseTableCellRenderer } from '../o-base-table-cell-renderer.class';
 
 export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_IMAGE = [
+  ...DEFAULT_INPUTS_O_BASE_TABLE_CELL_RENDERER,
   // image-type [base64|url]: image type (extern url or base64). Default: no value.
   'imageType: image-type',
   // empty-image [string]: url of the image to be shown if the column has not any value. Default: no value.

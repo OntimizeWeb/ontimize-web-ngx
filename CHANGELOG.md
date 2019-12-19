@@ -1,15 +1,37 @@
+## 4.1.0
+### Features
+* **o-table**: 
+  * new value `local` for `export-mode` input
+  * new `o-table-export-button` component ([3258fe6](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3258fe6))
+  * allowing to define custom `o-table-quickfilter` ([e964043a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e964043a))
+* **OBaseTableCellRenderer**: new `filter-source` and `filter-function` inputs (inherited by all cell renderers)  ([f5296660](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f5296660))
+* **o-table-column**: new `filter-expression-function` input ([f5296660](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f5296660))
+
+### Bug Fixes
+* **o-table-cell-renderer-action**, **o-table-cell-renderer-image**: not show title in the column ([b4bc292](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b4bc292)) Closes [#288](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/288)
+* **o-combo**: throw error when request result is a empty object  ([4884fe2](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e14b8ec)) Closes [#296](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/296)
+
+### BREAKING CHANGES
+* **o-table**: exportation and download paths has changed, now they are similar to the CRUD methods paths.
+> Example:<br>
+> Export path: https://www.mydomain.com/service/rest/customers/customer/pdf<br>
+> Download path: https://www.mydomain.com/service/rest/customers/pdf
+
+* **o-table**: `export-mode` value `all` has been replaced by `local`
+* **o-table**: `export-mode="all"` has changed, now it sends the current filters to the backend in order to generate the report with all data
+
 ## 4.0.7 (2019-10-04)
 ### Features
 * New components **o-form-layout-dialog-options** and **o-form-layout-tabgroup-options** ([2ad8ae1](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2ad8ae1))
 * **o-button**: new `svg-icon` input ([404ae8f](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/404ae8f))
 * **OServiceComponent**: ([660a57b9](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/660a57b9)) ([0b24c82b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0b24c82b))
-  * new `filter-case-sensitive` input (removed from `o-list` and `o-table`) 
-  * new `quick-filter` input (removed from `o-grid`, `o-table`  and `o-list`) 
+  * new `filter-case-sensitive` input (removed from `o-list` and `o-table`)
+  * new `quick-filter` input (removed from `o-grid`, `o-table`  and `o-list`)
   * new `showCaseSensitiveCheckbox`, `getComponentFilter` and `registerQuickFilter` methods
-* **o-list**: 
+* **o-list**:
   * new `insert-button-position` input ([f5ae203](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f5ae203)) Closes [#282](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/282)
-  * new `insert-button-floatable` input ([f96b5d4](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f96b5d4)) 
-* **o-table**: 
+  * new `insert-button-floatable` input ([f96b5d4](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f96b5d4))
+* **o-table**:
   * new `keep-selected-items` input ([29de43b9](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/29de43b9))
   * new `export-mode` input and `getAllRenderedValues` method([5a90d2d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5a90d2d))
 
@@ -19,7 +41,7 @@
 ### Bug Fixes
 * **o-table-cell-renderer-service**:not render cell value when export data table ([a594521](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a594521))
 * **o-grid**: not filter by checked columns  ([29f5036](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/29f5036)) Closes [#283](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/283)
-* **o-table**: 
+* **o-table**:
   * adding new columns to my tables they are being hidden by default. ([42e5ccf](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/42e5ccf)) Closes [#284](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/284)
   * Dialog for show/hide columns associated to a oTable has not visible scroll bar ([bfbe85e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/bfbe85e)) Closes [#287](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/287)
   * ([2f0a4f6](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2f0a4f6)) ([593b7cb](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/593b7cb)) Closes [#285](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/285)

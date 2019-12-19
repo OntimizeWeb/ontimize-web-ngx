@@ -1,9 +1,10 @@
 import { ChangeDetectionStrategy, Component, Injector, TemplateRef, ViewChild } from '@angular/core';
 
 import { ITranslatePipeArgument, OTranslatePipe } from '../../../../../pipes';
-import { OBaseTableCellRenderer } from '../o-base-table-cell-renderer.class';
+import { OBaseTableCellRenderer, DEFAULT_INPUTS_O_BASE_TABLE_CELL_RENDERER } from '../o-base-table-cell-renderer.class';
 
 export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_TRANSLATE = [
+  ...DEFAULT_INPUTS_O_BASE_TABLE_CELL_RENDERER,
   // translate-params [(rowData: any) => any[]]: function that receives the row data and return the parameters for the translate pipe.
   'translateArgsFn: translate-params'
 ];

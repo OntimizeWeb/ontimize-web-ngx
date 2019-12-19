@@ -1,16 +1,23 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { ChangeDetectionStrategy, Component, Inject, Injector, OnInit, ViewEncapsulation } from '@angular/core';
-import { MAT_DIALOG_DATA, MatButton, MatDialogRef } from '@angular/material';
-
-import { DialogService, OExportExtension, OntimizeExportService, OTranslateService } from '../../../../../services';
+import { ChangeDetectionStrategy, Component, Inject, Injector, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { MatButton, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { Subscription } from 'rxjs';
+import { filter } from 'rxjs/operators';
+import { DialogService, OntimizeExportService, OTranslateService } from '../../../../../services';
 import { Codes, SQLTypes, Util } from '../../../../../utils';
+import { OTableExportButtonService } from '../../export-button/o-table-export-button.service';
+
 
 export class OTableExportConfiguration {
-  data: any[];
   columns: Array<any>;
   columnNames: Object;
   sqlTypes: Object;
   service: string;
+  data?: any[];
+  filter?: Object;
+  mode: string;
+  entity: string;
+  options?: any;
 }
 
 @Component({
@@ -25,27 +32,37 @@ export class OTableExportConfiguration {
   },
   encapsulation: ViewEncapsulation.None
 })
-export class OTableExportDialogComponent implements OnInit {
+export class OTableExportDialogComponent implements OnInit, OnDestroy {
 
   protected dialogService: DialogService;
   protected exportService: OntimizeExportService;
   protected translateService: OTranslateService;
+  protected oTableExportButtonService: OTableExportButtonService;
+  private subscription: Subscription = new Subscription();
 
   constructor(
     public dialogRef: MatDialogRef<OTableExportDialogComponent>,
     protected injector: Injector,
-    @Inject(MAT_DIALOG_DATA) protected config: OTableExportConfiguration
+    @Inject(MAT_DIALOG_DATA) public config: OTableExportConfiguration
   ) {
     this.dialogService = injector.get(DialogService);
     this.translateService = this.injector.get(OTranslateService);
+    this.oTableExportButtonService = this.injector.get(OTableExportButtonService);
   }
 
   ngOnInit() {
     this.initialize();
   }
 
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+  }
+
   initialize(): void {
     this.configureService();
+    this.subscription.add(
+      this.oTableExportButtonService.export$.pipe(filter(type => ['xlsx', 'html', 'pdf'].indexOf(type) === -1)).subscribe(e => this.export(e))
+    );
   }
 
   configureService(): void {
@@ -57,91 +74,38 @@ export class OTableExportDialogComponent implements OnInit {
     try {
       this.exportService = this.injector.get(loadingService);
       let serviceCfg = this.exportService.getDefaultServiceConfiguration(this.config.service);
-      this.exportService.configureService(serviceCfg);
+      this.exportService.configureService(serviceCfg, Codes.EXPORT_MODE_ALL === this.config.mode);
     } catch (e) {
       console.error(e);
     }
   }
 
-  exportExcel(excelButton: MatButton): void {
-    excelButton.disabled = true;
+  export(exportType: string, button?: MatButton): void {
+    if (button) {
+      button.disabled = true;
+    }
     let exportData = {
       data: this.config.data,
       columns: this.config.columns,
       columnNames: this.config.columnNames,
-      sqlTypes: this.config.sqlTypes
+      sqlTypes: this.config.sqlTypes,
+      filter: this.config.filter
     };
     let self = this;
     this.proccessExportData(exportData.data, exportData.sqlTypes);
-    this.exportService.exportData(exportData, OExportExtension.Excel).subscribe((resp) => {
+    this.exportService.exportData(exportData, exportType, this.config.entity).subscribe((resp) => {
       if (resp.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) {
-        self.exportService.downloadFile(resp.data[0]['xslxId'], OExportExtension.Excel).subscribe(
+        self.exportService.downloadFile(resp.data[0][exportType + 'Id'], exportType).subscribe(
           () => self.dialogRef.close(true),
           downloadError => {
             console.error(downloadError);
-            self.dialogRef.close(false);
+            self.dialogService.alert('ERROR', downloadError.message).then(() => self.dialogRef.close(false));
           }
         );
       } else {
         self.dialogService.alert('ERROR', resp.message).then(() => self.dialogRef.close(false));
       }
     },
-      (err) => self.handleError(err)
-    );
-  }
-
-  exportHTML(htmlButton: MatButton): void {
-    htmlButton.disabled = true;
-    let exportData = {
-      data: this.config.data,
-      columns: this.config.columns,
-      columnNames: this.config.columnNames,
-      sqlTypes: this.config.sqlTypes
-    };
-    let self = this;
-    this.proccessExportData(exportData.data, exportData.sqlTypes);
-    this.exportService.exportData(exportData, OExportExtension.HTML).subscribe(
-      (resp) => {
-        if (resp.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) {
-          self.exportService.downloadFile(resp.data[0]['htmlId'], OExportExtension.HTML).subscribe(
-            () => self.dialogRef.close(true),
-            downloadError => {
-              console.error(downloadError);
-              self.dialogRef.close(false);
-            }
-          );
-        } else {
-          self.dialogService.alert('ERROR', resp.message).then(() => self.dialogRef.close(false));
-        }
-      },
-      (err) => self.handleError(err)
-    );
-  }
-
-  exportPDF(pdfButton: MatButton): void {
-    pdfButton.disabled = true;
-    let exportData = {
-      data: this.config.data,
-      columns: this.config.columns,
-      columnNames: this.config.columnNames,
-      sqlTypes: this.config.sqlTypes
-    };
-    let self = this;
-    this.proccessExportData(exportData.data, exportData.sqlTypes);
-    this.exportService.exportData(exportData, OExportExtension.PDF).subscribe(
-      (resp) => {
-        if (resp.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) {
-          self.exportService.downloadFile(resp.data[0]['pdfId'], OExportExtension.PDF).subscribe(
-            () => self.dialogRef.close(true),
-            downloadError => {
-              console.error(downloadError);
-              self.dialogRef.close(false);
-            }
-          );
-        } else {
-          self.dialogService.alert('ERROR', resp.message).then(() => self.dialogRef.close(false));
-        }
-      },
       (err) => self.handleError(err)
     );
   }

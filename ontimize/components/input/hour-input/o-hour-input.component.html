@@ -26,7 +26,7 @@
   [cancelBtnTmpl]="cancelBtn"></ngx-material-timepicker>
   
 <ng-template #confirmBtn>
-  <button mat-stroked-button type="button" (click)="setTime($event)"><span>{{'OK' | oTranslate}}</span></button>
+  <button mat-stroked-button type="button" (click)="picker.setTime($event)"><span>{{'OK' | oTranslate}}</span></button>
 </ng-template>
 <ng-template #cancelBtn>
   <button mat-stroked-button type="button" (click)="picker.close()"><span>{{'CANCEL' | oTranslate}}</span></button>

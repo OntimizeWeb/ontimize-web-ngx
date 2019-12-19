@@ -2,9 +2,10 @@ import { AfterContentInit, Component, Injector, OnInit, TemplateRef, ViewChild, 
 
 import { InputConverter } from '../../../../../decorators';
 import { IIntegerPipeArgument, OIntegerPipe } from '../../../../../pipes';
-import { OBaseTableCellRenderer } from '../o-base-table-cell-renderer.class';
+import { OBaseTableCellRenderer, DEFAULT_INPUTS_O_BASE_TABLE_CELL_RENDERER } from '../o-base-table-cell-renderer.class';
 
 export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_INTEGER = [
+  ...DEFAULT_INPUTS_O_BASE_TABLE_CELL_RENDERER,
   // grouping [no|yes]: grouping thousands. Default: yes.
   'grouping',
   // thousand-separator [string]: thousands separator when grouping. Default: comma (,).
