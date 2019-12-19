@@ -1,7 +1,11 @@
 ## 4.1.0
 ### Features
-* **o-table**: new value `local` for `export-mode` input
-* **o-table**: new `o-table-export-button` component ([3258fe6](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3258fe6))
+* **o-table**: 
+  * new value `local` for `export-mode` input
+  * new `o-table-export-button` component ([3258fe6](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3258fe6))
+  * allowing to define custom `o-table-quickfilter` ([e964043a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e964043a))
+* **OBaseTableCellRenderer**: new `filter-source` and `filter-function` inputs (inherited by all cell renderers)  ([f5296660](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f5296660))
+* **o-table-column**: new `filter-expression-function` input ([f5296660](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f5296660))
 
 ### Bug Fixes
 * **o-table-cell-renderer-action**, **o-table-cell-renderer-image**: not show title in the column ([b4bc292](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b4bc292)) Closes [#288](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/288)
