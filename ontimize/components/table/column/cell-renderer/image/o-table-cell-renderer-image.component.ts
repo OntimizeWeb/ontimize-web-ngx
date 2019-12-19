@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, Injector, TemplateRef, ViewChild } from '@angular/core';
 import { Util } from '../../../../../util/util';
 import { OColumn } from '../../../o-table.component';
-import { OBaseTableCellRenderer, DEFAULT_INPUTS_O_BASE_TABLE_CELL_RENDERER } from '../o-base-table-cell-renderer.class';
+import { DEFAULT_INPUTS_O_BASE_TABLE_CELL_RENDERER, OBaseTableCellRenderer } from '../o-base-table-cell-renderer.class';
 
 export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_IMAGE = [
   ...DEFAULT_INPUTS_O_BASE_TABLE_CELL_RENDERER,
@@ -45,7 +45,7 @@ export class OTableCellRendererImageComponent extends OBaseTableCellRenderer {
   ngOnInit() {
     if (this.table) {
       const oCol: OColumn = this.table.getOColumn(this.tableColumn.attr);
-      oCol.title = Util.isDefined(this.tableColumn.title) ? this.tableColumn.title : 'TABLE.COLUMNS.TITLE_EMPTY';
+      oCol.title = Util.isDefined(this.tableColumn.title) ? this.tableColumn.title : undefined;
       oCol.definition.contentAlign = oCol.definition.contentAlign ? oCol.definition.contentAlign : 'center';
     }
   }
