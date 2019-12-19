@@ -250,22 +250,42 @@ export class OTableMenuComponent implements OnInit, AfterViewInit, OnDestroy {
   onExportButtonClicked() {
     const tableOptions = this.table.oTableOptions;
     let exportCnfg: OTableExportConfiguration = new OTableExportConfiguration();
-    // Table data
-    exportCnfg.data = this.table.exportMode === Codes.EXPORT_MODE_VISIBLE ? this.table.getRenderedValue() : this.table.getAllRenderedValues();
+
     // get column's attr whose renderer is OTableCellRendererImageComponent
     let colsNotIncluded: string[] = tableOptions.columns.filter(c => void 0 !== c.renderer && c.renderer instanceof OTableCellRendererImageComponent).map(c => c.attr);
     colsNotIncluded.push(OTableComponent.NAME_COLUMN_SELECT);
-    colsNotIncluded.forEach(attr => exportCnfg.data.forEach(row => delete row[attr]));
+
+    // Table data/filters
+    switch (this.table.exportMode) {
+      case Codes.EXPORT_MODE_ALL:
+        exportCnfg.filter = this.table.getComponentFilter();
+        break;
+      case Codes.EXPORT_MODE_LOCAL:
+        exportCnfg.data = this.table.getAllRenderedValues();
+        colsNotIncluded.forEach(attr => exportCnfg.data.forEach(row => delete row[attr]));
+        break;
+      default:
+        exportCnfg.data = this.table.getRenderedValue();
+        colsNotIncluded.forEach(attr => exportCnfg.data.forEach(row => delete row[attr]));
+        break;
+    }
+    exportCnfg.mode = this.table.exportMode;
+    exportCnfg.entity = this.table.entity;
+
     // Table columns
     exportCnfg.columns = tableOptions.visibleColumns.filter(c => colsNotIncluded.indexOf(c) === -1);
     // Table column names
     let tableColumnNames = {};
-    tableOptions.visibleColumns.filter(c => colsNotIncluded.indexOf(c) === -1).forEach(c => tableColumnNames[c] = this.translateService.get(c));
+    tableOptions.visibleColumns.filter(c => colsNotIncluded.indexOf(c) === -1).forEach(c => {
+      const oColumn = tableOptions.columns.find(oc => oc.attr === c);
+      tableColumnNames[c] = this.translateService.get(oColumn.title ? oColumn.title : oColumn.attr);
+    });
     exportCnfg.columnNames = tableColumnNames;
     // Table column sqlTypes
     exportCnfg.sqlTypes = this.table.getSqlTypes();
     // Table service, needed for configuring ontimize export service with table service configuration
     exportCnfg.service = this.table.service;
+    exportCnfg.options = this.table.exportOptsTemplate;
 
     let dialogRef = this.dialog.open(OTableExportDialogComponent, {
       data: exportCnfg,

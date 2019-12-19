@@ -1,7 +1,7 @@
 {
   "name": "ontimize-web-ngx",
   "homepage": "https://github.com/OntimizeWeb/ontimize-web-ngx#readme",
-  "version": "4.0.8-2-SNAPSHOT",
+  "version": "4.1.0",
   "description": "Ontimize Web framework using Angular 6",
   "bugs": "https://github.com/OntimizeWeb/ontimize-web-ngx/issues",
   "author": "Imatia S.L.",
@@ -128,6 +128,7 @@
     "typescript": "2.9.2",
     "webpack": "^4.21.0",
     "ws": "3.3.1",
-    "zone.js": "0.8.26"
+    "zone.js": "0.8.26",
+    "serialize-javascript": ">=2.1.1"
   }
 }

@@ -1,25 +1,14 @@
 <span mat-dialog-title>{{ 'TABLE.BUTTONS.EXPORT' | oTranslate }}</span>
 <mat-dialog-content>
   <div mat-subheader>{{ 'TABLE.DIALOG.EXPORT.DESCRIPTION' | oTranslate }}</div>
-  <div fxLayout="row" fxLayoutAlign="space-around center">
-    <button type="button" #excelButton mat-raised-button (click)="exportExcel(excelButton)" class="excel-button">
-      <div fxLayout="column" fxLayoutAlign="center center">
-        <mat-icon svgIcon="ontimize:EXCEL"></mat-icon>
-        <span>{{ 'TABLE.BUTTONS.EXCEL' | oTranslate }}</span>
-      </div>
-    </button>
-    <button type="button" #htmlButton mat-raised-button (click)="exportHTML(htmlButton)" class="html-button">
-      <div fxLayout="column" fxLayoutAlign="center center">
-        <mat-icon svgIcon="ontimize:HTML"></mat-icon>
-        <span>{{ 'TABLE.BUTTONS.HTML' | oTranslate }}</span>
-      </div>
-    </button>
-    <button type="button" #pdfButton mat-raised-button (click)="exportPDF(pdfButton)" class="pdf-button">
-      <div fxLayout="column" fxLayoutAlign="center center">
-        <mat-icon svgIcon="ontimize:PDF"></mat-icon>
-        <span>{{ 'TABLE.BUTTONS.PDF' | oTranslate }}</span>
-      </div>
-    </button>
+  <div fxLayout="row wrap" fxLayoutAlign="space-around center" fxLayoutGap="8px">
+    <o-table-export-button #excelButton svg-icon="ontimize:EXCEL" label="TABLE.BUTTONS.EXCEL" export-type="xlsx"
+      (onClick)="export('xlsx', excelButton)" class="excel-button"></o-table-export-button>
+    <o-table-export-button #htmlButton svg-icon="ontimize:HTML" label="TABLE.BUTTONS.HTML" export-type="html" (onClick)="export('html', htmlButton)"
+      class="html-button"></o-table-export-button>
+    <o-table-export-button #pdfButton svg-icon="ontimize:PDF" label="TABLE.BUTTONS.PDF" export-type="pdf" (onClick)="export('pdf', pdfButton)"
+      class="pdf-button"></o-table-export-button>
+    <ng-container *ngTemplateOutlet="config.options"></ng-container>
   </div>
 </mat-dialog-content>
 
