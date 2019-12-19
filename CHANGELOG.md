@@ -1,4 +1,4 @@
-## 4.1.0
+## 4.1.0 (2019-12-19)
 ### Features
 * **o-table**: 
   * new value `local` for `export-mode` input
