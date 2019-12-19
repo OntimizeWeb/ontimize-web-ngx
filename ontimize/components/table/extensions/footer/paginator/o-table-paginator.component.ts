@@ -72,7 +72,7 @@ export class OTablePaginatorComponent implements OnInit {
     }
 
     /* Modify === by == because they option and this._pageSize types  can be diferents (number == string) */
-    let result: any[] = this.pageSizeOptions.filter(option => option == this._pageSize);
+    let result: any[] = this.pageSizeOptions.filter(option => option === this._pageSize);
     if (result.length === 0) {
       this._pageSizeOptions.push(value);
       this._pageSizeOptions.sort((i: number, j: number) => i - j);
