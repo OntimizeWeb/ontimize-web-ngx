@@ -1,4 +1,4 @@
-## 4.0.8
+## 4.1.0
 ### Features
 * **o-table**: new value `local` for `export-mode` input
 * **o-table**: new `o-table-export-button` component ([3258fe6](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3258fe6))
@@ -8,6 +8,11 @@
 * **o-combo**: throw error when request result is a empty object  ([4884fe2](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e14b8ec)) Closes [#296](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/296)
 
 ### BREAKING CHANGES
+* **o-table**: exportation and download paths has changed, now they are similar to the CRUD methods paths.
+> Example:<br>
+> Export path: https://www.mydomain.com/service/rest/customers/customer/pdf<br>
+> Download path: https://www.mydomain.com/service/rest/customers/pdf
+
 * **o-table**: `export-mode` value `all` has been replaced by `local`
 * **o-table**: `export-mode="all"` has changed, now it sends the current filters to the backend in order to generate the report with all data
 
