@@ -14,8 +14,10 @@
       <ng-container *ngIf="quickfilterContentChild; else customQuickFilter">
         <ng-content select="o-table-quickfilter"></ng-content>
       </ng-container>
-      <ng-template *ngIf="quickFilter" #customQuickFilter>
-        <o-table-quickfilter (onChange)="reloadPaginatedDataFromStart()"></o-table-quickfilter>
+      <ng-template #customQuickFilter>
+        <ng-container *ngIf="quickFilter">
+          <o-table-quickfilter (onChange)="reloadPaginatedDataFromStart()"></o-table-quickfilter>
+        </ng-container>
       </ng-template>
 
       <button type="button" *ngIf="showTableMenuButton" mat-icon-button class="o-table-menu-button"
