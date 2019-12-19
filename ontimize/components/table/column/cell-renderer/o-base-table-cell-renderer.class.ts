@@ -4,10 +4,17 @@ import { Util } from '../../../../utils';
 import { OTableComponent } from '../../o-table.component';
 import { OTableColumnComponent } from '../o-table-column.component';
 
+export const DEFAULT_INPUTS_O_BASE_TABLE_CELL_RENDERER = [
+  'filterSource: filter-source',
+  'filterFunction: filter-function'
+];
+
 export class OBaseTableCellRenderer implements AfterContentInit {
 
   public templateref: TemplateRef<any>;
   public tableColumn: OTableColumnComponent;
+  public _filterSource: 'render' | 'data' | 'both' = 'render';
+  public filterFunction: (cellValue: any, rowValue: any, quickFilter?: string) => boolean;
 
   protected type: string;
   protected pipeArguments: any;
@@ -18,6 +25,9 @@ export class OBaseTableCellRenderer implements AfterContentInit {
   }
 
   public ngAfterContentInit(): void {
+    if (typeof this.filterFunction !== 'function') {
+      this.filterFunction = undefined;
+    }
     this.registerRenderer();
   }
 
@@ -43,7 +53,7 @@ export class OBaseTableCellRenderer implements AfterContentInit {
    */
   public getCellData(cellvalue: any, rowvalue?: any): string {
     let parsedValue: string;
-    if (this.componentPipe && typeof this.pipeArguments !== 'undefined' && cellvalue !== undefined) {
+    if (this.componentPipe && this.pipeArguments !== undefined && cellvalue !== undefined) {
       parsedValue = this.componentPipe.transform(cellvalue, this.pipeArguments);
     } else {
       parsedValue = cellvalue;
@@ -53,6 +63,31 @@ export class OBaseTableCellRenderer implements AfterContentInit {
 
   public getTooltip(cellValue: any, rowValue: any): string {
     return this.getCellData(cellValue, rowValue);
+  }
+
+  set filterSource(val: string) {
+    const lowerVal = (val || '').toLowerCase();
+    this._filterSource = (lowerVal === 'render' || lowerVal === 'data' || lowerVal === 'both') ? lowerVal : 'render';
+  }
+
+  get filterSource(): string {
+    return this._filterSource;
+  }
+
+  getFilter(cellValue: any, rowValue?: any): any[] {
+    let result;
+    switch (this.filterSource) {
+      case 'render':
+        result = [this.getCellData(cellValue, rowValue)];
+        break;
+      case 'data':
+        result = [cellValue];
+        break;
+      case 'both':
+        result = [cellValue, this.getCellData(cellValue, rowValue)];
+        break;
+    }
+    return result;
   }
 
 }

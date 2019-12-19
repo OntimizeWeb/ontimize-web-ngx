@@ -2,7 +2,7 @@ import { SelectionChange } from '@angular/cdk/collections';
 import { ObserversModule } from '@angular/cdk/observers';
 import { CdkTableModule } from '@angular/cdk/table';
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, ContentChildren, ElementRef, EventEmitter, forwardRef, HostListener, Inject, Injector, NgModule, OnDestroy, OnInit, Optional, QueryList, ViewChild, ViewChildren, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ContentChildren, ElementRef, EventEmitter, forwardRef, HostListener, Inject, Injector, NgModule, OnDestroy, OnInit, Optional, QueryList, ViewChild, ViewChildren, ViewEncapsulation, ContentChild } from '@angular/core';
 import { MatCheckboxChange, MatDialog, MatMenu, MatPaginator, MatPaginatorIntl, MatTab, MatTabGroup, PageEvent } from '@angular/material';
 import { DndModule } from '@churchs19/ng2-dnd';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
@@ -149,6 +149,7 @@ export class OColumn {
   tooltip: OColumnTooltip;
   resizable: boolean;
   DOMWidth: number;
+  filterExpressionFunction: (columnAttr: string, quickFilter?: string) => IExpression;
 
   private multilineSubject: BehaviorSubject<boolean> = new BehaviorSubject(this.multiline);
   public isMultiline: Observable<boolean> = this.multilineSubject.asObservable();
@@ -227,6 +228,9 @@ export class OColumn {
         value: column.tooltipValue,
         function: column.tooltipFunction
       };
+    }
+    if (Util.isDefined(column.filterExpressionFunction)) {
+      this.filterExpressionFunction = column.filterExpressionFunction;
     }
   }
 
@@ -337,6 +341,21 @@ export class OColumn {
     return Codes.COLUMN_TITLE_ALIGN_CENTER;
   }
 
+  getFilterValue(cellValue: any, rowValue?: any): any[] {
+    if (this.renderer) {
+      return this.renderer.getFilter(cellValue, rowValue);
+    } else {
+      return [cellValue];
+    }
+  }
+
+  useCustomFilterFunction(): boolean {
+    return this.searching && this.visible && this.renderer !== undefined && this.renderer.filterFunction !== undefined;
+  }
+
+  useQuickfilterFunction(): boolean {
+    return this.searching && this.visible && !(this.renderer !== undefined && this.renderer.filterFunction !== undefined);
+  }
 }
 
 const SUFFIX_COLUMN_INSERTABLE = '_insertable';
@@ -454,6 +473,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   get oTableOptions(): OTableOptions {
     return this._oTableOptions;
   }
+
   set oTableOptions(value: OTableOptions) {
     this._oTableOptions = value;
   }
@@ -544,6 +564,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   get originalSortColumns(): string {
     return this.sortColumns;
   }
+
   get visibleColArray(): Array<any> {
     return this._visibleColArray;
   }
@@ -559,7 +580,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       }
       this._oTableOptions.visibleColumns = this._visibleColArray;
     }
-
   }
 
   public sortColArray: Array<ISQLOrder> = [];
@@ -687,6 +707,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   @ViewChild(OTableExpandedFooter)
   oTableExpandedFooter: OTableExpandedFooter;
+
+  @ContentChild(OTableQuickfilterComponent)
+  quickfilterContentChild: OTableQuickfilterComponent;
 
   constructor(
     injector: Injector,

@@ -2,12 +2,14 @@ import { ChangeDetectionStrategy, Component, Injector, OnInit, TemplateRef, View
 import { Subscription } from 'rxjs';
 import { DialogService, OntimizeService } from '../../../../../services';
 import { dataServiceFactory } from '../../../../../services/data-service.provider';
-import { Codes, Util } from '../../../../../utils';
+import { Codes, Util, SQLTypes, FilterExpressionUtils } from '../../../../../utils';
 import { ServiceUtils } from '../../../../service.utils';
 import { OColumn } from '../../../o-table.component';
-import { OBaseTableCellRenderer } from '../o-base-table-cell-renderer.class';
+import { OBaseTableCellRenderer, DEFAULT_INPUTS_O_BASE_TABLE_CELL_RENDERER } from '../o-base-table-cell-renderer.class';
+import { IExpression } from '../../../../filter-expression.utils';
 
 export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_SERVICE = [
+  ...DEFAULT_INPUTS_O_BASE_TABLE_CELL_RENDERER,
   'entity',
   'service',
   'columns',
@@ -151,4 +153,13 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
     return this.responseMap[cellvalue];
   }
 
+  public getFilterExpression(quickFilter: string): IExpression {
+    const oCol: OColumn = this.table.getOColumn(this.column);
+    let result: IExpression;
+    const cacheValue = Object.keys(this.responseMap).find(key => Util.normalizeString(this.responseMap[key]).indexOf(Util.normalizeString(quickFilter)) !== -1);
+    if (cacheValue) {
+      result = FilterExpressionUtils.buildExpressionEquals(this.column, SQLTypes.parseUsingSQLType(cacheValue, SQLTypes.getSQLTypeKey(oCol.sqlType)));
+    }
+    return result;
+  }
 }

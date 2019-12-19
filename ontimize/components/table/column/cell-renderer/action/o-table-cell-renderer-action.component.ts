@@ -1,9 +1,10 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Codes, Util } from '../../../../../utils';
-import { OBaseTableCellRenderer } from '../o-base-table-cell-renderer.class';
+import { OBaseTableCellRenderer, DEFAULT_INPUTS_O_BASE_TABLE_CELL_RENDERER } from '../o-base-table-cell-renderer.class';
 
 
 export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_ACTION = [
+  ...DEFAULT_INPUTS_O_BASE_TABLE_CELL_RENDERER,
   'icon',
   'svgIcon:svg-icon',
   'action',

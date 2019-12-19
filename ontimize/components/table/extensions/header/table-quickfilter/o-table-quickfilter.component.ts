@@ -96,32 +96,34 @@ export class OTableQuickfilterComponent implements OnInit, AfterViewInit, OnDest
     let result: IExpression = this.getUserFilter();
     if (!Util.isDefined(result) && Util.isDefined(this.value) && this.value.length > 0) {
       const expressions: IExpression[] = [];
-      // const queryCols: string[] = [];
-      this.oTableOptions.columns.forEach((oCol: OColumn) => {
-        // CHECK: Why columns with renderers are not filtered?
-        // if (oCol.searching && oCol.visible && !oCol.renderer) {
-        if (oCol.searching && oCol.visible && this.isFilterableColumn(oCol)) {
-          if (oCol.renderer instanceof OTableCellRendererServiceComponent) { // Filter column with service renderer
-            // Look for the value in the renderer cache
-            const cacheValue = Object.keys(oCol.renderer.responseMap).find(key => Util.normalizeString(oCol.renderer['responseMap'][key]).indexOf(Util.normalizeString(this.value)) !== -1);
-            if (cacheValue) {
-              expressions.push(FilterExpressionUtils.buildExpressionEquals(oCol.attr, SQLTypes.parseUsingSQLType(cacheValue, SQLTypes.getSQLTypeKey(oCol.sqlType))));
+      this.oTableOptions.columns
+        .filter((oCol: OColumn) => oCol.searching && oCol.visible && this.isFilterableColumn(oCol))
+        .forEach((oCol: OColumn) => {
+          // CHECK: Why columns with renderers are not filtered?
+          // if (!oCol.renderer) {
+          if (oCol.filterExpressionFunction) {
+            expressions.push(oCol.filterExpressionFunction(oCol.attr, this.value));
+          } else if (oCol.renderer instanceof OTableCellRendererServiceComponent) {
+            // Filter column with service renderer. Look for the value in the renderer cache
+            let expr = oCol.renderer.getFilterExpression(this.value);
+            if (expr) {
+              expressions.push(expr);
             }
-          } else if (SQLTypes.isNumericSQLType(oCol.sqlType)) { // Filter numeric column
-            const numValue: any = SQLTypes.parseUsingSQLType(this.value, SQLTypes.getSQLTypeKey(oCol.sqlType));
-            if (numValue) {
-              expressions.push(FilterExpressionUtils.buildExpressionEquals(oCol.attr, numValue));
-            }
-          } else { // Default
+            // }
+            //  else if (SQLTypes.isNumericSQLType(oCol.sqlType)) {
+            //   // Filter numeric column
+            //   const numValue: any = SQLTypes.parseUsingSQLType(this.value, SQLTypes.getSQLTypeKey(oCol.sqlType));
+            //   if (numValue) {
+            //     expressions.push(FilterExpressionUtils.buildExpressionEquals(oCol.attr, numValue));
+            //   }
+          } else {
+            // Default
             expressions.push(FilterExpressionUtils.buildExpressionLike(oCol.attr, this.value));
           }
-          // queryCols.push(oCol.attr);
-        }
-      });
+        });
       if (expressions.length > 0) {
         result = expressions.reduce((a, b) => FilterExpressionUtils.buildComplexExpression(a, b, FilterExpressionUtils.OP_OR));
       }
-      // result = FilterExpressionUtils.buildArrayExpressionLike(queryCols, this.value);
     }
     return result;
   }

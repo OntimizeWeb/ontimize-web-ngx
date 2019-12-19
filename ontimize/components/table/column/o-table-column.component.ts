@@ -9,6 +9,7 @@ import { OTableComponent } from '../o-table.component';
 import { OTableCellEditorBooleanComponent, OTableCellEditorDateComponent, OTableCellEditorIntegerComponent, OTableCellEditorRealComponent, OTableCellEditorTextComponent, OTableCellEditorTimeComponent } from './cell-editor/cell-editor';
 import { OTableCellRendererActionComponent, OTableCellRendererBooleanComponent, OTableCellRendererCurrencyComponent, OTableCellRendererDateComponent, OTableCellRendererImageComponent, OTableCellRendererIntegerComponent, OTableCellRendererPercentageComponent, OTableCellRendererRealComponent, OTableCellRendererServiceComponent, OTableCellRendererTimeComponent } from './cell-renderer/cell-renderer';
 import { OTableCellRendererTranslateComponent } from './cell-renderer/translate/o-table-cell-renderer-translate.component';
+import { IExpression } from '../../filter-expression.utils';
 
 
 export interface OColumnTooltip {
@@ -66,6 +67,8 @@ export const DEFAULT_INPUTS_O_TABLE_COLUMN = [
 
   'resizable',
 
+  'filterExpressionFunction: filter-expression-function',
+
   ...OTableCellRendererBooleanComponent.DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_BOOLEAN,
   ...OTableCellRendererCurrencyComponent.DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_CURRENCY, // includes Integer and Real
   ...OTableCellRendererDateComponent.DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_DATE,
@@ -79,7 +82,6 @@ export const DEFAULT_INPUTS_O_TABLE_COLUMN = [
   ...OTableCellEditorRealComponent.DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_REAL, // includes Integer
   ...OTableCellEditorTextComponent.DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_TEXT,
   ...OTableCellEditorTimeComponent.DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_TIME,
-
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE_COLUMN = [
@@ -158,6 +160,12 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
     return this._multiline;
   }
   protected _multiline: boolean = false;
+
+  filterExpressionFunction: (columnAttr: string, quickFilter?: string) => IExpression;
+
+  /* input renderer base */
+  public _filterSource: 'render' | 'data' | 'both' = 'render';
+  public filterFunction: (cellValue: any, rowValue: any, quickFilter?: string) => boolean;
   /* input renderer date */
   protected format: string;
   /* input renderer integer */
@@ -308,6 +316,8 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
         if (factory) {
           const ref = this.container.createComponent(factory);
           const newRenderer = ref.instance;
+          newRenderer.filterSource = this.filterSource;
+          newRenderer.filterFunction = this.filterFunction;
           switch (this.type) {
             case 'currency':
               newRenderer.currencySymbol = this.currencySymbol;
@@ -547,4 +557,12 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
     return this._SQLType;
   }
 
+  set filterSource(val: string) {
+    const lowerVal = (val || '').toLowerCase();
+    this._filterSource = (lowerVal === 'render' || lowerVal === 'data' || lowerVal === 'both') ? lowerVal : 'render';
+  }
+
+  get filterSource(): string {
+    return this._filterSource;
+  }
 }

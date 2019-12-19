@@ -1,9 +1,10 @@
 import { Component, Injector, ViewChild, TemplateRef, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { OTranslateService } from '../../../../../services';
 import { Util } from '../../../../../utils';
-import { OBaseTableCellRenderer } from '../o-base-table-cell-renderer.class';
+import { OBaseTableCellRenderer, DEFAULT_INPUTS_O_BASE_TABLE_CELL_RENDERER } from '../o-base-table-cell-renderer.class';
 
 export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_BOOLEAN = [
+  ...DEFAULT_INPUTS_O_BASE_TABLE_CELL_RENDERER,
   // true-value [string]: true value. Default: no value.
   'trueValue: true-value',
   // false-value [string]: false value. Default: no value.
