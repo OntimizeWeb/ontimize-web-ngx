@@ -1,0 +1,20 @@
+<span mat-dialog-title>{{ 'TABLE.BUTTONS.COLVIS' | oTranslate }}</span>
+
+<mat-dialog-content>
+  <mat-list dnd-sortable-container [sortableData]="columns" [ngClass]="rowHeight">
+    <ng-container *ngFor="let column of columns; let x = index">
+      <mat-list-item *ngIf="column.showInList" (click)="onClickColumn(column)" dnd-sortable [sortableIndex]="x"
+        [dragData]="column" [dragEnabled]="true" (onDragSuccess)="onDragSuccess($event)">
+        <mat-icon mat-list-icon svgIcon="ontimize:drag_handle"></mat-icon>
+        <span mat-line>{{ (column.title || column.attr) | oTranslate }}</span>
+        <mat-icon *ngIf="column.visible" svgIcon="ontimize:visibility"></mat-icon>
+        <mat-icon *ngIf="!column.visible" svgIcon="ontimize:visibility_off"></mat-icon>
+      </mat-list-item>
+    </ng-container>
+  </mat-list>
+</mat-dialog-content>
+
+<mat-dialog-actions fxLayoutAlign="end center">
+  <button type="button" mat-stroked-button [mat-dialog-close]="false">{{ 'CANCEL' | oTranslate | uppercase }}</button>
+  <button type="button" mat-stroked-button [mat-dialog-close]="true">{{ 'ACCEPT' | oTranslate | uppercase }}</button>
+</mat-dialog-actions>

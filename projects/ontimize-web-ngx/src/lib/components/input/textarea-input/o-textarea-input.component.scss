@@ -1,0 +1,9 @@
+.mat-textarea {
+  &.no-resize {
+    resize: none;
+  }
+}
+
+.mat-textarea {
+  resize: vertical;
+}

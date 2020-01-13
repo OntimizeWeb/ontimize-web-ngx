@@ -1,0 +1,14 @@
+.mat-list .mat-list-item.o-card-item,
+.mat-list .mat-list-item.o-card-item .mat-list-item-content {
+  height: auto;
+}
+
+.o-list-item-card {
+  padding: 8px 0;
+
+  mat-card,
+  mat-card-actions,
+  mat-card-title-group {
+    width: 100%;
+  }
+}

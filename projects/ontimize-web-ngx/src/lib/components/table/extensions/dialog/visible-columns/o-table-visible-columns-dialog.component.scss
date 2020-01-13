@@ -1,0 +1,32 @@
+.o-table-visible-columns-dialog {
+  .mat-dialog-content.mat-dialog-content {
+    overflow: auto;
+    padding-top: 0;
+    margin-top: 24px;
+
+    .mat-list {
+      padding-top: 24px;
+
+      .mat-list-item {
+        cursor: pointer;
+
+        .mat-list-item-content {
+          padding: 0;
+
+          div.mat-list-text {
+            padding: 0 8px;
+          }
+        }
+      }
+    }
+
+    .mat-icon[svgicon="ontimize:drag_handle"] {
+      cursor: move;
+    }
+
+    .mat-icon[svgicon="ontimize:visibility"],
+    .mat-icon[svgicon="ontimize:visibility_off"] {
+      width: 32px;
+    }
+  }
+}

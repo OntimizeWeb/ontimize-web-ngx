@@ -1,0 +1,76 @@
+<div [style.display]="isVisible()? '' : 'none'" class="o-grid-container" fxLayout="column" fxLayoutAlign="start stretch">
+  <!--TOOLBAR-->
+  <mat-toolbar *ngIf="hasControls()" class="o-grid-toolbar">
+    <div class="mat-toolbar-tools" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px" fxFill>
+      <!--button refresh-->
+      <button type="button" mat-icon-button aria-label="Refresh" (click)="reloadData()" *ngIf="refreshButton">
+        <mat-icon svgIcon="ontimize:autorenew"></mat-icon>
+      </button>
+
+      <!--O-GRID-PAGINATOR-->
+      <div class="o-grid-paginator" *ngIf="showPageSize">
+        <div class="o-grid-page-size-label">{{ 'GRID.ITEMS_PER_PAGE' | oTranslate }}:</div>
+        <mat-form-field class="o-grid-select-page" floatLabel="never">
+          <mat-select placeholder="" #pageSizeSelect [(value)]="queryRows" (selectionChange)="reloadData()">
+            <mat-option *ngFor="let page of pageSizeOptions" [value]="page">
+              {{ page }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <!--O-GRID-SORT-->
+      <div class="o-grid-sort" *ngIf="showSort && sortableColumns.length > 0">
+        <mat-form-field class="o-grid-select-sort" floatLabel="never">
+          <mat-icon matPrefix>sort</mat-icon>
+          <mat-select #sortSelect [(value)]="currentOrderColumn" (selectionChange)="reloadData()" placeholder=" {{ 'GRID.SORT_BY' | oTranslate }}">
+            <mat-option *ngFor="let column of sortableColumns; let i = index" [value]="i">
+              {{ getSortOptionText(column) }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div fxLayoutAlign="center center" fxFlex>
+        <span *ngIf="hasTitle()" fxLayoutAlign="center center">{{ title | oTranslate }}</span>
+      </div>
+      <o-search-input *ngIf="quickFilter" [columns]="quickFilterColumns" [filter-case-sensitive]="filterCaseSensitive" 
+        [show-case-sensitive-checkbox]="showCaseSensitiveCheckbox()" placeholder="" ></o-search-input>
+    </div>
+  </mat-toolbar>
+
+  <!--not results-->
+  <div class="o-grid-no-results fill-remaining" *ngIf="gridItems.length === 0" fxLayoutAlign="center start" layout-padding>
+    {{'GRID.EMPTY' | oTranslate}}
+    <ng-container *ngIf="quickFilter && searchInputComponent && searchInputComponent.getValue() && searchInputComponent.getValue().length > 0">
+      {{ 'GRID.EMPTY_USING_FILTER' | oTranslate : { values: [ searchInputComponent.getValue()] } }}
+    </ng-container>
+  </div>
+
+  <!--MAT-GRID-LIST-->
+  <mat-grid-list [cols]="cols" [gutterSize]="gutterSize" [rowHeight]="gridItemHeight" class="o-mat-grid-list fill-remaining"
+    *ngIf="gridItems.length > 0">
+    <mat-grid-tile o-grid-item *ngFor="let item of gridItems" [colspan]="item.colspan" [rowspan]="item.rowspan">
+      <ng-container *ngTemplateOutlet="item.template"></ng-container>
+    </mat-grid-tile>
+  </mat-grid-list>
+
+  <!-- GRID FOOTER -->
+  <div *ngIf="!paginationControls && showFooter" fxLayout="row" fxLayoutAlign="center center" class="o-grid-footer">
+    <button type="button" mat-button *ngIf="dataArray.length < totalRecords" (click)="loadMore()" class="mat-raised-button">
+      {{ 'GRID.BUTTON_NEXT' | oTranslate }}
+    </button>
+    <span fxFlex></span>
+    <span class="o-grid-totals">{{ 'GRID.TEXT_SHOWN_ITEMS' | oTranslate :{values: [dataArray.length, totalRecords]} }}</span>
+  </div>
+
+  <mat-paginator class="o-mat-paginator" #paginator *ngIf="paginationControls && showFooter" [length]="totalRecords" [pageSize]="queryRows"
+    [pageSizeOptions]="pageSizeOptions" [pageIndex]="currentPage" [showFirstLastButtons]="true" (page)="onChangePage($event)"></mat-paginator>
+
+  <div *ngIf="loading | async" fxLayout="row" fxLayoutAlign="center end" class="o-loading-blocker">
+    <div fxLayoutAlign="center center" [class.o-spinner-container-controls]="hasControls()" class="o-spinner-container">
+      <mat-progress-spinner mode="indeterminate" strokeWidth="3"></mat-progress-spinner>
+    </div>
+  </div>
+
+</div>

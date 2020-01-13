@@ -1,0 +1,7 @@
+<div [formGroup]="getFormGroup()" class="relative" [matTooltip]="tooltip" [matTooltipClass]="tooltipClass"
+  [matTooltipPosition]="tooltipPosition" [matTooltipShowDelay]="tooltipShowDelay" [matTooltipHideDelay]="tooltipHideDelay">
+  <mat-slider [color]="color" [invert]="invert" [max]="max" [min]="min" [step]="step" [thumbLabel]="thumbLabel"
+    [tickInterval]="tickInterval" [vertical]="layout==='column'" [id]="getAttribute()"
+    [formControlName]="getAttribute()" (change)="onChangeEvent($event)" [displayWith]="oDisplayWith"></mat-slider>
+  <div *ngIf="isReadOnly" (click)="onClickBlocker($event)" class="read-only-blocker" fxFill></div>
+</div>

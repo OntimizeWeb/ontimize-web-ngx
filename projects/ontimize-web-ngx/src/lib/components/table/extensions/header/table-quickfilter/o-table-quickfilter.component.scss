@@ -1,0 +1,31 @@
+.o-table-quickfilter {
+  .quickFilter {
+    padding-right: 24px;
+
+    .mat-form-field-flex {
+      align-items: flex-end;
+    }
+  }
+
+  .search-icon {
+    cursor: pointer;
+  }
+}
+
+.o-table-quickfilter-menu {
+  .mat-divider {
+    margin: 8px 0;
+  }
+
+  .checkbox-container {
+    padding: 6px 12px;
+
+    .mat-checkbox-layout {
+      white-space: normal;
+
+      .mat-checkbox-ripple {
+        display: none;
+      }
+    }
+  }
+}

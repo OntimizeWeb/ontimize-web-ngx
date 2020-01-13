@@ -1,0 +1,74 @@
+@import 'node_modules/@angular/material/theming';
+@mixin o-app-sidenav-theme($theme) {
+  $primary: map-get($theme, primary);
+  $accent: map-get($theme, accent);
+  $warn: map-get($theme, warn);
+  $background: map-get($theme, background);
+  $foreground: map-get($theme, foreground);
+
+  .o-app-sidenav {
+    .o-app-sidenav-menu-group,
+    .o-app-sidenav-menu-item {
+      &:not([disabled=true]) {
+        > .o-app-sidenav-item {
+           > a.is-selected,
+           > a:focus,
+           > a:hover,
+          &:focus,
+          &:hover {
+            color: mat-color($accent);
+          }
+        }
+      }
+    }
+
+    .o-app-sidenav-sidenav {
+      background: mat-color($primary);
+
+      .sidenav-toggle {
+        color: mat-color($primary, default-contrast);
+      }
+
+      .o-app-sidenav-item {
+        border-color: mat-color($primary, default-contrast, 0.12);
+        color: mat-color($primary, default-contrast, 0.54);
+
+        .o-app-sidenav-viewer-sidenav-item-selected {
+          color: mat-color($accent);
+        }
+
+        &.o-user-info,
+        &.o-user-info {
+          &:focus,
+          &:hover {
+            color: inherit;
+          }
+          color: inherit;
+
+          .o-user-info-menu-item .o-user-info-item {
+            background: mat-color($primary, default-contrast, 0.74);
+          }
+        }
+      }
+
+      .o-app-sidenav-menugroup {
+        &.active {
+          &:not(.disabled) {
+            background: mat-color($primary, 900);
+            color: mat-color($primary, default-contrast);
+          }
+
+          + .o-app-sidenav-menugroup-items-container ul {
+            background: rgba(0, 0, 0, 0.1);
+            box-shadow: 6px 4px 36px -12px $black-87-opacity inset;
+          }
+        }
+
+      }
+
+      li a {
+        color: inherit;
+      }
+    }
+  }
+}

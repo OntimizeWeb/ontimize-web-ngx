@@ -1,0 +1,152 @@
+@import 'node_modules/@angular/material/theming';
+@mixin app-global-theme($theme, $typography: null) {
+  $background: map-get($theme, background);
+  $foreground: map-get($theme, foreground);
+  $primary: map-get($theme, primary);
+  @if $typography == null {
+    $typography: mat-typography-config();
+  }
+
+  body,
+  html {
+    background-color: mat-color($background, background);
+  }
+
+  button,
+  html,
+  input,
+  select,
+  span,
+  textarea {
+    font-family: mat-font-family($typography);
+  }
+
+  ::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+    background-color: transparent;
+    opacity: 1.0;
+  }
+
+  ::-webkit-scrollbar-track {
+    -webkit-box-shadow: none;
+    border-radius: 0;
+    background-color: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    border-radius: 0;
+    -webkit-box-shadow: none;
+    background-color: mat-color($primary, 200);
+    opacity: 1.0;
+  }
+
+  .o-loading {
+    display: inline-block;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    margin: 0 auto;
+    z-index: 999;
+
+    div {
+      box-sizing: border-box;
+      display: block;
+      position: absolute;
+      width: 40px;
+      height: 40px;
+      margin: 6px;
+      border: 3px solid;
+      border-radius: 50%;
+      left: 50%;
+      animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+      border-color: mat-color($primary) transparent transparent transparent;
+    }
+
+    div:nth-child(1) {
+      animation-delay: -0.45s;
+    }
+
+    div:nth-child(2) {
+      animation-delay: -0.3s;
+    }
+
+    div:nth-child(3) {
+      animation-delay: -0.15s;
+    }
+
+  }
+  @keyframes lds-ring {
+    0% {
+      transform: rotate(0deg);
+    }
+
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  $dialog-borders-color: #929292;
+
+  .o-form-layout-dialog-overlay,
+  .o-list-picker-dialog {
+    .title-container {
+      border-bottom: 1px solid $dialog-borders-color;
+    }
+  }
+
+  .o-form-layout-dialog-overlay {
+    .title-container {
+      .mat-icon {
+        color: $dialog-borders-color;
+      }
+    }
+  }
+
+  .o-dialog-class {
+    .mat-dialog-container {
+      border: 1px solid $dialog-borders-color;
+
+      .mat-dialog-title {
+        border-bottom: 1px solid $dialog-borders-color;
+      }
+
+      .empty-filter-list {
+        color: mat-color($foreground, disabled-text);
+      }
+    }
+  }
+
+  .o-dialog-class {
+    .mat-dialog-container {
+      .mat-dialog-title {
+        line-height: mat-font-size($typography, title);
+        font-size: mat-font-size($typography, title);
+      }
+
+      .mat-dialog-content {
+        font-size: mat-font-size($typography, input);
+
+        .mat-selection-list[dense] {
+          outline: none;
+
+          .mat-list-item {
+            .empty-filter-list,
+            .mat-list-text > * {
+              font-size: mat-font-size($typography, subheading-1);
+            }
+
+            .mat-line:nth-child(n+2) {
+              font-size: mat-font-size($typography, caption);
+            }
+          }
+        }
+      }
+    }
+
+    .mat-dialog-actions > button {
+      margin-left: 12px;
+    }
+  }
+
+}

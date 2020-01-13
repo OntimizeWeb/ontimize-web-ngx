@@ -1,0 +1,9 @@
+.o-list-picker-content {
+  .input-model {
+    display: none !important;
+  }
+
+  .mat-button.mat-disabled {
+    cursor: default;
+  }
+}

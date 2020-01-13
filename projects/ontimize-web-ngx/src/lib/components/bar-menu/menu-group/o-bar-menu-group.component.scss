@@ -1,0 +1,26 @@
+.o-bar-menu-group {
+  &[disabled=true] .fake-li {
+    opacity: .5;
+
+    a.o-bar-menu-group-title {
+      cursor: default;
+    }
+  }
+
+  .fake-li,
+  .fake-ul {
+    .o-bar-menu-group-icon {
+      display: inline-block;
+      margin: 0 10px 0 0;
+
+      & ~ .o-bar-menu-group-title {
+        padding-left: 0;
+      }
+    }
+
+    .o-bar-menu-group-icon-arrow {
+      margin-left: auto;
+    }
+  }
+
+}

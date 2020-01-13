@@ -1,0 +1,24 @@
+.o-search-input {
+  .mat-icon {
+    vertical-align: bottom;
+    cursor: default;
+
+    &.menu-trigger {
+      cursor: pointer;
+    }
+  }
+
+  .mat-input-element {
+    line-height: 20px;
+  }
+}
+
+.o-search-input-menu {
+  .mat-divider {
+    margin: 8px 0;
+  }
+
+  .checkbox-container {
+    padding: 6px 12px;
+  }
+}

@@ -1,0 +1,18 @@
+.o-menu-layout {
+  display: block;
+  height: 100%;
+  width: 100%;
+
+  .o-card-menu-item {
+    height: 45%;
+    margin: 16px 0;
+    max-width: 290px;
+    min-height: 180px;
+    min-width: 290px;
+
+    &.compact {
+      height: 30%;
+      max-height: 250px;
+    }
+  }
+}

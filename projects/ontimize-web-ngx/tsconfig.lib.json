@@ -1,0 +1,46 @@
+{
+  "compileOnSave": false,
+  "buildOnSave": false,
+  "compilerOptions": {
+    "target": "es5",
+    "module": "es2015",
+    "moduleResolution": "node",
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "declaration": true,
+    "noImplicitReturns": true,
+    "listFiles": true,
+    "noUnusedLocals": false,
+    "pretty": true,
+    "stripInternal": true,
+    "outDir": "dist",
+    "noUnusedParameters": false,
+    "allowSyntheticDefaultImports": true,
+    "types": [
+      "moment",
+      "hammerjs",
+      "jasmine",
+      "node"
+    ],
+    "typeRoots": [
+      "node_modules/@types"
+    ],
+    "lib": [
+      "dom",
+      "es2016"
+    ]
+  },
+  "exclude": [
+    "node_modules",
+    "dist"
+  ],
+  "include": [
+    "src/lib/ontimize-web-ngx.module.ts",
+    "src/lib/**/*.ts"
+  ],
+  "angularCompilerOptions": {
+    "skipMetadataEmit": false,
+    "strictMetadataEmit": true
+  }
+}

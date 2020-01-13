@@ -1,0 +1,56 @@
+// Layout-padding-xxx & Layout-margin-xxxx
+// ------------------------------
+$baseline-grid: 8px !default;
+$layout-gutter-width: ($baseline-grid * 2) !default;
+$layout-gutter-width-vertical: $baseline-grid;
+$layout-gutter-width-horizontal: 14px !default;
+@mixin o-layout-padding-margin() {
+  [layout-padding-vertical] {
+    padding: $layout-gutter-width-vertical 0;
+  }
+
+  [layout-margin-vertical] {
+    margin: $layout-gutter-width-vertical 0;
+  }
+
+  [layout-padding-horizontal] {
+    padding: 0 $layout-gutter-width-horizontal;
+  }
+
+  [layout-margin-horizontal] {
+    margin: 0 $layout-gutter-width-horizontal;
+  }
+
+  [layout-padding-left] {
+    padding-left: $layout-gutter-width-horizontal;
+  }
+
+  [layout-margin-left] {
+    margin-left: $layout-gutter-width-horizontal;
+  }
+
+  [layout-padding-right] {
+    padding-right: $layout-gutter-width-horizontal;
+  }
+
+  [layout-margin-right] {
+    margin-right: $layout-gutter-width-horizontal;
+  }
+
+  [layout-padding-top] {
+    padding-top: $layout-gutter-width-vertical;
+  }
+
+  [layout-margin-top] {
+    margin-top: $layout-gutter-width-vertical;
+  }
+
+  [layout-padding-bottom] {
+    padding-bottom: $layout-gutter-width-vertical;
+  }
+
+  [layout-margin-bottom] {
+    margin-bottom: $layout-gutter-width-vertical;
+  }
+
+}

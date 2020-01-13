@@ -1,0 +1,28 @@
+@import 'node_modules/@angular/material/theming';
+
+
+@mixin o-card-menu-item-theme($theme) {
+  $primary: map-get($theme, primary);
+  $accent: map-get($theme, accent);
+  $warn: map-get($theme, warn);
+  $background: map-get($theme, background);
+  $foreground: map-get($theme, foreground);
+
+  .o-card-menu-item {
+
+    background: mat-color($background, background);
+    border: 1px solid mat-color($primary, 0.17);
+
+    .mat-button {
+      color: mat-color($primary);
+      background: mat-color($accent);
+    }
+
+    .o-card-menu-item-icon,
+    .o-card-menu-item-info {
+      color: mat-color($primary, 0.54);
+    }
+
+  }
+
+}

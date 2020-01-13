@@ -1,0 +1,37 @@
+.o-form {
+  display: flex;
+  flex: auto;
+  flex-direction: column;
+  max-height: 100%;
+
+  .scrolling {
+    display: flex;
+    flex: auto;
+    overflow-y: auto;
+    flex-direction: column;
+  }
+
+
+  form {
+    &.inner-form {
+      display: flex;
+      flex: auto;
+      flex-direction: column;
+      max-height: 100%;
+
+      .progress-bar-container {
+        padding: 8px;
+      }
+    }
+
+    &.form-no-toolbar {
+      top: 0;
+    }
+
+    .o-form-content-wrapper {
+      height: 100%;
+      width: 100%;
+      box-sizing: border-box;
+    }
+  }
+}

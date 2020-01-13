@@ -7,17 +7,26 @@
     "declaration": false,
     "downlevelIteration": true,
     "experimentalDecorators": true,
-    "module": "esnext",
     "moduleResolution": "node",
     "importHelpers": true,
-    "target": "es2015",
+    "allowSyntheticDefaultImports": true,
+    "target": "es5",
+    "module": "es2015",
     "typeRoots": [
       "node_modules/@types"
     ],
     "lib": [
       "es2018",
       "dom"
-    ]
+    ],
+    "paths": {
+      "ontimize-web-ngx": [
+        "dist/ontimize-web-ngx"
+      ],
+      "ontimize-web-ngx/*": [
+        "dist/ontimize-web-ngx/*"
+      ]
+    }
   },
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,

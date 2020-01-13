@@ -1,0 +1,19 @@
+.o-radio {
+  .mat-form-field--no-underline .mat-form-field-underline,
+  .mat-form-field--no-underline .mat-form-field-underline .mat-form-field-ripple {
+    background-image: none;
+    background-color: transparent;
+  }
+
+  .mat-form-field:not(.custom-width).o-radio-from-field-row .mat-form-field-infix {
+    width: auto;
+  }
+
+  .read-only-blocker {
+    z-index: 2;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+  }
+}

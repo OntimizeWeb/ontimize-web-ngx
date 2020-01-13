@@ -1,0 +1,25 @@
+.o-app-header {
+  z-index: 2;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.24);
+  height: 56px;
+
+  nav {
+    padding-right: 16px;
+
+    .sidenav-toggle {
+      text-align: center;
+      padding: 16px;
+      cursor: pointer;
+    }
+
+    .o-app-header-title {
+      padding: 0 16px;
+      cursor: default;
+    }
+
+    .o-app-header-default-actions {
+      margin-left: auto;
+    }
+  }
+
+}
