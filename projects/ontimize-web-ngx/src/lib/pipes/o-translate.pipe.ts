@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, EventEmitter, Injector, ModuleWithProviders, NgModule, OnDestroy, Pipe, PipeTransform } from '@angular/core';
 
-import { OTranslateService } from '../services';
-import { Util } from '../utils';
+import { OTranslateService } from '../services/translate/o-translate.service';
+import { Util } from '../util/util';
 
 export interface ITranslatePipeArgument {
   values?: any[];

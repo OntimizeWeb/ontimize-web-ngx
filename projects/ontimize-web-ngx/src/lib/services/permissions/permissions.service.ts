@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { share } from 'rxjs/operators';
 import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
 import { AppConfig } from '../../config/app-config';
-import { Util } from '../../utils';
+import { Util } from '../../util/util';
 import { OntimizePermissionsService } from './ontimize-permissions.service';
 import { OntimizeEEPermissionsService } from './ontimize-ee-permissions.service';
 

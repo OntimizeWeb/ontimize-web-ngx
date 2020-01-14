@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform, Injector } from '@angular/core';
-import { CurrencyService } from '../services';
+import { CurrencyService } from '../services/currency.service';
 
 export interface ICurrencyPipeArgument {
   currencySimbol?: string;

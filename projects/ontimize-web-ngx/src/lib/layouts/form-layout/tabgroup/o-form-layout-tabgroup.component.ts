@@ -4,7 +4,8 @@ import { Router } from '@angular/router';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { DialogService } from '../../../services/dialog.service';
 import { ONavigationItem } from '../../../services/navigation.service';
-import { Codes, Util } from '../../../utils';
+import { Codes } from '../../../util/codes';
+import { Util } from '../../../util/util';
 import { OFormLayoutManagerContentDirective } from '../directives/o-form-layout-manager-content.directive';
 import { IDetailComponentData, OFormLayoutManagerComponent } from '../o-form-layout-manager.component';
 

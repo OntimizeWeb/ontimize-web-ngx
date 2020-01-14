@@ -3,8 +3,14 @@ import { Router } from '@angular/router';
 import { combineLatest, Observable } from 'rxjs';
 import { share } from 'rxjs/operators';
 import { AppConfig, Config } from '../config/app-config';
-import { DialogService, OntimizeService, ORemoteConfigurationService, PermissionsService } from '../services';
-import { Codes, IAuthService, ObservableWrapper, ServiceUtils } from '../utils';
+import { DialogService } from '../services/dialog.service';
+import { OntimizeService } from '../services/ontimize.service';
+import { ORemoteConfigurationService } from '../services/remote-config.service';
+import { PermissionsService } from '../services/permissions/permissions.service';
+import { Codes } from '../util/codes';
+import { IAuthService } from '../util/util';
+import { ObservableWrapper } from '../util/async';
+import { ServiceUtils } from '../components/service.utils';
 
 export interface SessionInfo {
   id?: number;

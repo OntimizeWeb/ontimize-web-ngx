@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, ChangeDetectionStrategy, Component, ElementRef, EventEmitter, HostListener, Injector, NgModule, OnDestroy, OnInit, ViewEncapsulation, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, ChangeDetectionStrategy, Component, ElementRef, EventEmitter, HostListener, Injector, NgModule, OnDestroy, OnInit, ViewEncapsulation, ViewChild, Inject, forwardRef, Injectable } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatSidenav } from '@angular/material';
 import { Router, RouterModule } from '@angular/router';
@@ -6,13 +6,14 @@ import { MediaChange, MediaObserver } from '@angular/flex-layout';
 import { Subscription } from 'rxjs';
 
 import { Util } from '../../util/util';
-import { OSharedModule } from '../../shared';
+import { OSharedModule } from '../../shared/shared.module';
 import { InputConverter } from '../../decorators';
 import { OAppSidenavImageModule } from './image/o-app-sidenav-image.component';
 import { OAppSidenavMenuItemModule } from './menu-item/o-app-sidenav-menu-item.component';
 import { OAppSidenavMenuGroupModule } from './menu-group/o-app-sidenav-menu-group.component';
 import { OAppLayoutComponent, OAppLayoutMode, OSidenavMode } from '../../layouts/app-layout/o-app-layout.component';
-import { AppMenuService, MenuRootItem, MenuItemUserInfo, MenuGroup, OUserInfoService, UserInfo } from '../../services';
+import { AppMenuService, MenuRootItem, MenuItemUserInfo, MenuGroup } from '../../services/app-menu.service';
+import { OUserInfoService, UserInfo } from '../../services/o-user-info.service';
 
 export const DEFAULT_INPUTS_O_APP_SIDENAV = [
   'opened',
@@ -28,7 +29,9 @@ export const DEFAULT_OUTPUTS_O_APP_SIDENAV = [
   'onSidenavToggle',
   'afterSidenavToggle'
 ];
-
+@Injectable({
+  providedIn: 'root'
+})
 @Component({
   moduleId: module.id,
   selector: 'o-app-sidenav',
@@ -75,7 +78,8 @@ export class OAppSidenavComponent implements OnInit, OnDestroy, AfterViewInit {
     protected router: Router,
     protected elRef: ElementRef,
     protected cd: ChangeDetectorRef,
-    protected media: MediaObserver
+    protected media: MediaObserver,
+    @Inject(forwardRef(() => OAppLayoutComponent)) form: OAppLayoutComponent
   ) {
     this.appMenuService = this.injector.get(AppMenuService);
     this.menuRootArray = this.appMenuService.getMenuRoots();

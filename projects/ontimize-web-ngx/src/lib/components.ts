@@ -1,4 +1,11 @@
-export * from './components/bar-menu/bar-menu.components';
+export * from './components/bar-menu/o-bar-menu.component';
+export * from './components/bar-menu/o-base-menu-item.class';
+export * from './components/bar-menu/locale-menu-item/o-locale-bar-menu-item.component';
+export * from './components/bar-menu/menu-group/o-bar-menu-group.component';
+export * from './components/bar-menu/menu-item/o-bar-menu-item.component';
+export * from './components/bar-menu/menu-nested/o-bar-menu-nested.component';
+export * from './components/bar-menu/menu-separator/o-bar-menu-separator.component';
+
 export * from './components/breadcrumb/o-breadcrumb.component';
 export * from './components/button/o-button.component';
 export * from './components/button-toggle/o-button-toggle.module';
@@ -17,7 +24,7 @@ export * from './components/form/toolbar/o-form-toolbar.component';
 export * from './components/form/OFormValue';
 export * from './components/form/o-form-container.component';
 export * from './components/form/cache/o-form.cache.class';
-export * from './components/form/navigation/o-form-navigation.component';
+// export * from './components/form/navigation/o-form-navigation.component';
 export * from './components/form/navigation/o-form.navigation.class';
 
 export * from './components/image/o-image.component';
@@ -65,7 +72,6 @@ export * from './components/table/column/cell-editor/cell-editor';
 export * from './components/table/extensions/dialog/o-table-dialog-components';
 export * from './components/table/extensions/footer/o-table-footer-components';
 export * from './components/table/extensions/header/o-table-header-components';
-
 
 export * from './components/filter-expression.utils';
 export * from './components/o-component.class';

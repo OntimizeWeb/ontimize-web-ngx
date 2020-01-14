@@ -37,7 +37,7 @@ export class OGridItemComponent {
   constructor(
     public _el: ElementRef,
     private renderer: Renderer,
-    @Optional() @Inject(forwardRef(() => OGridComponent)) public _grid: OGridComponent) { }
+    @Inject(forwardRef(() => OGridComponent)) public _grid: OGridComponent) { }
 
 
   @HostListener('mouseenter')

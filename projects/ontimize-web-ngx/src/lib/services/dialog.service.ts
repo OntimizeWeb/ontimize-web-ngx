@@ -1,7 +1,8 @@
 import { Injectable, Injector } from '@angular/core';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material';
 import { Observable } from 'rxjs';
-import { ODialogComponent, ODialogConfig } from '../components';
+import { ODialogComponent } from '../components/dialog/o-dialog.component';
+import { ODialogConfig } from '../components/dialog/o-dialog.config';
 
 @Injectable()
 export class DialogService {

@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform, Injector } from '@angular/core';
-import { NumberService } from '../services';
+import { NumberService } from '../services/number.service';
 
 export interface IIntegerPipeArgument {
   grouping?: boolean;

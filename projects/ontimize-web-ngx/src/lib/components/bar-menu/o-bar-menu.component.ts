@@ -1,6 +1,7 @@
 import { Component, Injector, NgModule, ElementRef, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { OTranslateService, PermissionsService } from '../../services';
+import { PermissionsService } from '../../services/permissions/permissions.service';
+import { OTranslateService } from '../../services/translate/o-translate.service';
 import { OSharedModule } from '../../shared';
 import { AppMenuService, MenuRootItem } from '../../services/app-menu.service';
 import { OLocaleBarMenuItemModule } from './locale-menu-item/o-locale-bar-menu-item.component';

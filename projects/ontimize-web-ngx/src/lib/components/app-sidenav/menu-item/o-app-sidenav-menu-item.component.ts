@@ -6,7 +6,7 @@ import { Subscription } from 'rxjs';
 import { Util } from '../../../utils';
 import { OSharedModule } from '../../../shared';
 import { InputConverter } from '../../../decorators';
-import { OAppLayoutComponent } from '../../../layouts';
+import { OAppLayoutComponent } from '../../../layouts/app-layout/o-app-layout.component';
 import { PermissionsUtils } from '../../../util/permissions';
 import { OAppSidenavComponent } from '../o-app-sidenav.component';
 import { DialogService, LoginService, OTranslateService, OPermissions, PermissionsService, OUserInfoService } from '../../../services';

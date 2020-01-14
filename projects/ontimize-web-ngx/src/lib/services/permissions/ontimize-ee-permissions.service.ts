@@ -6,9 +6,10 @@ import { Observable } from 'rxjs';
 
 
 import { IPermissionsService } from '../../utils';
-import { LoginService } from '../../services';
+import { LoginService } from '../../services/login.service';
 import { AppConfig, Config, OntimizeEEPermissionsConfig } from '../../config/app-config';
-import { Codes, Util } from '../../utils';
+import { Util } from '../../util/util';
+import { Codes } from '../../util/codes';
 
 @Injectable()
 export class OntimizeEEPermissionsService implements IPermissionsService {

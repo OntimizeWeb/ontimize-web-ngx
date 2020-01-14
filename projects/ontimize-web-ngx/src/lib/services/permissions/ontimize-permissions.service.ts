@@ -4,11 +4,10 @@ import { Injector, Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-
-import { IPermissionsService } from '../../utils';
-import { LoginService } from '../../services';
+import { LoginService } from '../../services/login.service';
 import { AppConfig, Config, OntimizePermissionsConfig } from '../../config/app-config';
-import { Util, Codes } from '../../utils';
+import { Util, IPermissionsService } from '../../util/util';
+import { Codes } from '../../util/codes';
 
 @Injectable()
 export class OntimizePermissionsService implements IPermissionsService {

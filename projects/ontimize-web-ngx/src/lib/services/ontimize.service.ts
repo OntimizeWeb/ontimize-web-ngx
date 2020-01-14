@@ -4,8 +4,10 @@ import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { share } from 'rxjs/operators';
 import { AppConfig, Config } from '../config/app-config';
-import { LoginService } from '../services';
-import { Codes, IAuthService, IDataService, ServiceUtils, Util } from '../utils';
+import { LoginService } from '../services/login.service';
+import { IAuthService, IDataService, Util } from '../util/util';
+import { Codes } from '../util/codes';
+import { ServiceUtils } from '../components/service.utils';
 import { OntimizeServiceResponseParser } from './parser/o-service-response.parser';
 
 @Injectable()

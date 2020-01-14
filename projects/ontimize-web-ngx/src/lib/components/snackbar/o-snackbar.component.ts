@@ -2,8 +2,8 @@ import { CommonModule } from '@angular/common';
 import { Component, Injector, NgModule } from '@angular/core';
 import { MatSnackBarRef } from '@angular/material';
 
-import { OTranslateModule } from '../../pipes/o-translate.pipe';
-import { OSharedModule } from '../../shared';
+// import { OTranslateModule } from '../../pipes/o-translate.pipe';
+import { OSharedModule } from '../../shared/shared.module';
 
 export declare type OSnackBarIconPosition = 'left' | 'right';
 
@@ -70,7 +70,7 @@ export class OSnackBarComponent {
 
 @NgModule({
   declarations: [OSnackBarComponent],
-  imports: [CommonModule, OSharedModule, OTranslateModule],
+  imports: [CommonModule, OSharedModule],
   exports: [CommonModule, OSnackBarComponent]
 })
 export class OSnackBarModule { }

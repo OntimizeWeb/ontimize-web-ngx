@@ -4,7 +4,8 @@ import { Location } from '@angular/common';
 import { Observable, ReplaySubject } from 'rxjs';
 import { map, filter } from 'rxjs/operators';
 
-import { Codes, Util } from '../utils';
+import { Codes } from '../util/codes';
+import { Util } from '../util/util';
 import { ObservableWrapper } from '../util/async';
 import { ILocalStorageComponent, LocalStorageService } from './local-storage.service';
 

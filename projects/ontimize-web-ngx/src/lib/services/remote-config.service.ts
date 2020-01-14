@@ -3,7 +3,8 @@ import { Injectable, Injector, HostListener } from '@angular/core';
 import { Observable, Subscriber, timer, Subscription } from 'rxjs';
 
 import { AppConfig } from '../config/app-config';
-import { OntimizeServiceResponse, ORemoteConfiguration, ORemoteConfigurationColumns } from '../types';
+import { ORemoteConfiguration, ORemoteConfigurationColumns } from '../types/remote-configuration.type';
+import { OntimizeServiceResponse } from '../types/ontimize-service-config.type';
 import { Codes } from '../util/codes';
 import { LoginService, SessionInfo } from './login.service';
 import { LocalStorageService } from './local-storage.service';

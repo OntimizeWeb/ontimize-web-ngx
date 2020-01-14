@@ -4,7 +4,8 @@ import { TranslateService } from '@ngx-translate/core';
 import { Observable, Subscriber } from 'rxjs';
 import { AppConfig } from '../../config/app-config';
 import * as CORE_TRANSLATIONS from '../../i18n/i18n';
-import { MomentService, SnackBarService } from '../../services';
+import { MomentService } from '../../services/moment.service';
+import { SnackBarService } from '../../services/snackbar.service';
 import { ObservableWrapper } from '../../util/async';
 
 @Injectable()

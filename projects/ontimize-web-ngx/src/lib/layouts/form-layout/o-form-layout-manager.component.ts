@@ -11,7 +11,7 @@ import { NavigationService } from '../../services/navigation.service';
 import { OFormLayoutManagerService } from '../../services/o-form-layout-manager.service';
 import { OTranslateService } from '../../services/translate/o-translate.service';
 import { OSharedModule } from '../../shared';
-import { Util } from '../../utils';
+import { Util } from '../../util/util';
 import { OFormLayoutDialogComponent } from './dialog/o-form-layout-dialog.component';
 import { OFormLayoutDialogOptionsComponent } from './dialog/options/o-form-layout-dialog-options.component';
 import { OFormLayoutManagerContentDirective } from './directives/o-form-layout-manager-content.directive';

@@ -2,7 +2,9 @@ import { Router } from '@angular/router';
 
 import { OFormComponent } from '../components/form/o-form.component';
 import { OFormValue } from '../components/form/OFormValue';
-import { Codes, Util, SQLTypes } from '../utils';
+import { Codes } from '../util/codes';
+import { Util } from '../util/util';
+import { SQLTypes } from '../util/sqltypes';
 
 export type OQueryDataArgs = {
   replace?: boolean; // Used in the list component for replacing data in setValue method when reloadData method is called

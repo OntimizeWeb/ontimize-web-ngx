@@ -1,7 +1,7 @@
 import { Injector, NgModule, Component, OnInit, ViewEncapsulation, OnDestroy, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
-import { OSharedModule } from '../../../shared';
+import { OSharedModule } from '../../../shared/shared.module';
 import { OAppSidenavComponent } from '../o-app-sidenav.component';
 
 export const DEFAULT_INPUTS_O_APP_SIDENAV_IMAGE = [

@@ -1,5 +1,5 @@
 import { Injector } from '@angular/core';
-import { Util } from '../utils';
+import { Util } from '../util/util';
 import { NumberService } from './number.service';
 
 export class CurrencyService {

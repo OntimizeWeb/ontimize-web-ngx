@@ -1,14 +1,13 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, NgModule, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, EventEmitter, NgModule, ViewChild, ViewEncapsulation, InjectionToken, Injectable } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { OAppHeaderModule } from '../../components/app-header/o-app-header.component';
-import { OAppSidenavComponent, OAppSidenavModule } from '../../components/app-sidenav/o-app-sidenav.component';
 import { InputConverter } from '../../decorators';
-import { OSharedModule } from '../../shared';
+import { OSharedModule } from '../../shared/shared.module';
 import { Util } from '../../util/util';
 import { OAppLayoutHeaderComponent } from './app-layout-header/o-app-layout-header.component';
 import { OAppLayoutSidenavComponent } from './app-layout-sidenav/o-app-layout-sidenav.component';
-
+import { OAppSidenavComponent, OAppSidenavModule } from '../../components/app-sidenav/o-app-sidenav.component';
 
 export const DEFAULT_INPUTS_O_APP_LAYOUT = [
   'mode',
@@ -40,6 +39,10 @@ export type OSidenavMode = 'over' | 'push' | 'side';
   templateUrl: './o-app-layout.component.html',
   styleUrls: ['./o-app-layout.component.scss'],
   encapsulation: ViewEncapsulation.None
+})
+
+@Injectable({
+  providedIn: 'root'
 })
 export class OAppLayoutComponent {
 

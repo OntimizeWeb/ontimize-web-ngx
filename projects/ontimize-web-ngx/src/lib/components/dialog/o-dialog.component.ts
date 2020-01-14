@@ -2,7 +2,7 @@ import { Component, NgModule, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatDialogRef } from '@angular/material';
 import { OTranslateModule } from '../../pipes/o-translate.pipe';
-import { OSharedModule } from '../../shared';
+import { OSharedModule } from '../../shared/shared.module';
 import { ODialogConfig } from './o-dialog.config';
 
 @Component({

@@ -4,9 +4,9 @@ import { MediaChange, MediaObserver } from '@angular/flex-layout';
 import { MatPaginator, PageEvent } from '@angular/material';
 import { RouterModule } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { OSearchInputModule } from '../../components';
+import { OSearchInputModule } from '../../components/input/search-input/o-search-input.component';
 import { InputConverter } from '../../decorators';
-import { OntimizeService } from '../../services';
+import { OntimizeService } from '../../services/ontimize.service';
 import { dataServiceFactory } from '../../services/data-service.provider';
 import { OSharedModule } from '../../shared';
 import { Codes, ObservableWrapper, Util } from '../../utils';
@@ -178,7 +178,7 @@ export class OGridComponent extends OServiceComponent implements AfterViewChecke
   constructor(
     injector: Injector,
     elRef: ElementRef,
-    @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent
+    @Inject(forwardRef(() => OFormComponent)) form: OFormComponent
   ) {
     super(injector, elRef, form);
     this.media = this.injector.get(MediaObserver);
