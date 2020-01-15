@@ -3,13 +3,13 @@ import { CommonModule } from '@angular/common';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { Subscription } from 'rxjs';
 
-import { Util } from '../../../utils';
-import { OSharedModule } from '../../../shared';
+import { Util } from '../../../util/util';
+import { OSharedModule } from '../../../shared/shared.module';
 import { InputConverter } from '../../../decorators';
 import { PermissionsUtils } from '../../../util/permissions';
 import { OAppSidenavComponent } from '../o-app-sidenav.component';
 import { AppMenuService, MenuGroup, OTranslateService, PermissionsService, OPermissions } from '../../../services';
-import { OAppSidenavMenuItemModule } from '../menu-item/o-app-sidenav-menu-item.component';
+import { OAppSidenavMenuItemModule } from '../menu-item/o-app-sidenav-menu-item.module';
 
 export const DEFAULT_INPUTS_O_APP_SIDENAV_MENU_GROUP = [
   'menuGroup : menu-group',

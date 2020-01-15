@@ -6,9 +6,10 @@ import { debounceTime } from 'rxjs/operators';
 import { Codes, Util } from '../../utils';
 import { OSharedModule } from '../../shared';
 import { InputConverter } from '../../decorators';
-import { OFilterBuilderClearDirective } from './o-filter-builder-clear.directive';
-import { OFilterBuilderQueryDirective } from './o-filter-builder-query.directive';
-import { OFormComponent, OServiceComponent } from '../../components';
+// import { OFilterBuilderClearDirective } from './o-filter-builder-clear.directive';
+// import { OFilterBuilderQueryDirective } from './o-filter-builder-query.directive';
+import { OFormComponent } from '../../components/form/o-form.component';
+import { OServiceComponent } from '../../components/o-service-component.class';
 import { FilterExpressionUtils, IExpression, IBasicExpression } from '../filter-expression.utils';
 import { IFormDataComponent } from '../o-form-data-component.class';
 
@@ -204,20 +205,20 @@ export class OFilterBuilderComponent implements AfterViewInit, OnDestroy, OnInit
 
 }
 
-@NgModule({
-  imports: [
-    OSharedModule,
-    CommonModule
-  ],
-  declarations: [
-    OFilterBuilderComponent,
-    OFilterBuilderClearDirective,
-    OFilterBuilderQueryDirective
-  ],
-  exports: [
-    OFilterBuilderComponent,
-    OFilterBuilderClearDirective,
-    OFilterBuilderQueryDirective
-  ]
-})
-export class OFilterBuilderModule { }
+// @NgModule({
+//   imports: [
+//     OSharedModule,
+//     CommonModule
+//   ],
+//   declarations: [
+//     OFilterBuilderComponent,
+//     OFilterBuilderClearDirective,
+//     OFilterBuilderQueryDirective
+//   ],
+//   exports: [
+//     OFilterBuilderComponent,
+//     OFilterBuilderClearDirective,
+//     OFilterBuilderQueryDirective
+//   ]
+// })
+// export class OFilterBuilderModule { }

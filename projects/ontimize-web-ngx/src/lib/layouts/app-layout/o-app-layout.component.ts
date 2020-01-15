@@ -5,9 +5,11 @@ import { OAppHeaderModule } from '../../components/app-header/o-app-header.compo
 import { InputConverter } from '../../decorators';
 import { OSharedModule } from '../../shared/shared.module';
 import { Util } from '../../util/util';
+import { Codes, OAppLayoutMode, OSidenavMode } from '../../util/codes';
 import { OAppLayoutHeaderComponent } from './app-layout-header/o-app-layout-header.component';
 import { OAppLayoutSidenavComponent } from './app-layout-sidenav/o-app-layout-sidenav.component';
-import { OAppSidenavComponent, OAppSidenavModule } from '../../components/app-sidenav/o-app-sidenav.component';
+import { OAppSidenavComponent } from '../../components/app-sidenav/o-app-sidenav.component';
+import { OAppSidenavModule } from '../../components/app-sidenav/o-app-sidenav.module';
 
 export const DEFAULT_INPUTS_O_APP_LAYOUT = [
   'mode',
@@ -28,8 +30,8 @@ export const DEFAULT_OUTPUTS_O_APP_LAYOUT: any[] = [
   'afterCloseSidenav'
 ];
 
-export type OAppLayoutMode = 'mobile' | 'desktop';
-export type OSidenavMode = 'over' | 'push' | 'side';
+// export type OAppLayoutMode = 'mobile' | 'desktop';
+// export type OSidenavMode = 'over' | 'push' | 'side';
 
 @Component({
   moduleId: module.id,
@@ -41,15 +43,12 @@ export type OSidenavMode = 'over' | 'push' | 'side';
   encapsulation: ViewEncapsulation.None
 })
 
-@Injectable({
-  providedIn: 'root'
-})
 export class OAppLayoutComponent {
 
   public static DEFAULT_INPUTS_O_APP_LAYOUT = DEFAULT_INPUTS_O_APP_LAYOUT;
   public static DEFAULT_OUTPUTS_O_APP_LAYOUT = DEFAULT_OUTPUTS_O_APP_LAYOUT;
-  public static OAppLayoutModes: OAppLayoutMode[] = ['mobile', 'desktop'];
-  public static OSidenavModes: OSidenavMode[] = ['over', 'push', 'side'];
+  // public static OAppLayoutModes: OAppLayoutMode[] = ['mobile', 'desktop'];
+  // public static OSidenavModes: OSidenavMode[] = ['over', 'push', 'side'];
 
   @InputConverter()
   sidenavOpened: boolean = true;
@@ -89,7 +88,7 @@ export class OAppLayoutComponent {
   }
 
   set mode(val: OAppLayoutMode) {
-    let m = OAppLayoutComponent.OAppLayoutModes.find(e => e === val);
+    let m = Codes.OAppLayoutModes.find(e => e === val);
     if (Util.isDefined(m)) {
       this._mode = m;
       if (this._mode === 'mobile' && !Util.isDefined(this.showHeader)) {
@@ -105,7 +104,7 @@ export class OAppLayoutComponent {
   }
 
   set sidenavMode(val: OSidenavMode) {
-    let m = OAppLayoutComponent.OSidenavModes.find(e => e === val);
+    let m = Codes.OSidenavModes.find(e => e === val);
     if (Util.isDefined(m)) {
       this._sidenavMode = m;
     } else {

@@ -1,3 +1,5 @@
+export type OAppLayoutMode = 'mobile' | 'desktop';
+export type OSidenavMode = 'over' | 'push' | 'side';
 export class Codes {
 
   public static PAGINATED_QUERY_METHOD = 'advancedQuery';
@@ -84,6 +86,12 @@ export class Codes {
 
   public static TWENTY_FOUR_HOUR_FORMAT = 24;
   public static TWELVE_FOUR_HOUR_FORMAT = 12;
+
+  public static OAppLayoutModes: OAppLayoutMode[] = ['mobile', 'desktop'];
+  public static OSidenavModes: OSidenavMode[] = ['over', 'push', 'side'];
+
+  public static OAppLayoutMode = ['mobile', 'desktop'];
+  public static OSidenavMode = ['over', 'push', 'side'];
 
   static isDoubleClickMode(value: string): boolean {
     return Codes.DETAIL_MODE_DBLCLICK_VALUES.indexOf(value) !== -1;

@@ -8,9 +8,10 @@ import { OSharedModule } from '../../../shared';
 import { InputConverter } from '../../../decorators';
 import { OAppLayoutComponent } from '../../../layouts/app-layout/o-app-layout.component';
 import { PermissionsUtils } from '../../../util/permissions';
+// import { OAppSidenavModule } from '../o-app-sidenav.module';
 import { OAppSidenavComponent } from '../o-app-sidenav.component';
 import { DialogService, LoginService, OTranslateService, OPermissions, PermissionsService, OUserInfoService } from '../../../services';
-import { OLanguageSelectorModule } from '../../language-selector/o-language-selector.component';
+// import { OLanguageSelectorModule } from '../../language-selector/o-language-selector.component';
 import { MenuItemAction, MenuItemLocale, MenuItemLogout, MenuItemRoute, MenuItemUserInfo, MenuRootItem } from '../../../services/app-menu.service';
 
 export const DEFAULT_INPUTS_O_APP_SIDENAV_MENU_ITEM = [
@@ -272,9 +273,9 @@ export class OAppSidenavMenuItemComponent implements OnInit, AfterViewInit, OnDe
 
 }
 
-@NgModule({
-  imports: [CommonModule, OLanguageSelectorModule, OSharedModule, RouterModule],
-  declarations: [OAppSidenavMenuItemComponent],
-  exports: [OAppSidenavMenuItemComponent]
-})
-export class OAppSidenavMenuItemModule { }
+// @NgModule({
+//   imports: [CommonModule, OLanguageSelectorModule, OSharedModule, RouterModule],
+//   declarations: [OAppSidenavMenuItemComponent],
+//   exports: [OAppSidenavMenuItemComponent]
+// })
+// export class OAppSidenavMenuItemModule { }
