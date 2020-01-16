@@ -17,7 +17,10 @@ export * from './components/container/row-collapsible/o-row-collapsible.componen
 export * from './components/contextmenu/o-context-menu.module';
 export * from './components/dialog/o-dialog.component';
 export * from './components/snackbar/o-snackbar.component';
-export * from './components/filter-builder/o-filter-builder-components';
+export * from './components/filter-builder/o-filter-builder.component';
+export * from './components/filter-builder/o-filter-builder-clear.directive';
+export * from './components/filter-builder/o-filter-builder-query.directive';
+
 
 export * from './components/form/o-form.component';
 export * from './components/form/toolbar/o-form-toolbar.component';

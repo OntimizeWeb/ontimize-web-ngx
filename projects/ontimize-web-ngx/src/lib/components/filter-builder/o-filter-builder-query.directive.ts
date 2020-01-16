@@ -1,7 +1,7 @@
 import { Directive, Optional } from '@angular/core';
 
 import { Util } from '../../utils';
-import { OFilterBuilderComponent } from './o-filter-builder-components';
+import { OFilterBuilderComponent } from './o-filter-builder.component';
 
 @Directive({
   selector: '[oFilterBuilderQuery]',
