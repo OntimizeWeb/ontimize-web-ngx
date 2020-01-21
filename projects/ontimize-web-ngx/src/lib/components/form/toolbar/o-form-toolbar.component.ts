@@ -6,6 +6,7 @@ import { DialogService, NavigationService, OPermissions, SnackBarService } from 
 import { OSharedModule } from '../../../shared';
 import { PermissionsUtils } from '../../../util/permissions';
 import { Util } from '../../../util/util';
+import { Codes } from '../../../util/codes';
 import { OFormNavigationComponent } from '../navigation/o-form-navigation.component';
 import { OFormComponent } from '../o-form.component';
 
@@ -187,13 +188,13 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
   }
 
   public onCloseDetail(): void {
-    this._form.executeToolbarAction(OFormComponent.CLOSE_DETAIL_ACTION, {
+    this._form.executeToolbarAction(Codes.CLOSE_DETAIL_ACTION, {
       changeToolbarMode: true
     });
   }
 
   public onBack(): void {
-    this._form.executeToolbarAction(OFormComponent.BACK_ACTION);
+    this._form.executeToolbarAction(Codes.BACK_ACTION);
   }
 
   public onReload(): void {
@@ -203,7 +204,7 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
     const self = this;
     this._form.showConfirmDiscardChanges().then(val => {
       if (val) {
-        self._form.executeToolbarAction(OFormComponent.RELOAD_ACTION);
+        self._form.executeToolbarAction(Codes.RELOAD_ACTION);
       }
     });
   }
@@ -213,7 +214,7 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this._form.executeToolbarAction(OFormComponent.GO_INSERT_ACTION, {
+    this._form.executeToolbarAction(Codes.GO_INSERT_ACTION, {
       changeToolbarMode: true
     });
   }
@@ -223,7 +224,7 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this._form.executeToolbarAction(OFormComponent.GO_EDIT_ACTION, {
+    this._form.executeToolbarAction(Codes.GO_EDIT_ACTION, {
       changeToolbarMode: true
     });
   }
@@ -271,17 +272,17 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
   }
 
   public handleAcceptInsertOperation(): void {
-    this._form.executeToolbarAction(OFormComponent.INSERT_ACTION);
+    this._form.executeToolbarAction(Codes.INSERT_ACTION);
   }
 
   public handleAcceptEditOperation(): void {
-    this._form.executeToolbarAction(OFormComponent.EDIT_ACTION);
+    this._form.executeToolbarAction(Codes.EDIT_ACTION);
   }
 
   public showConfirmDelete(evt: any): void {
     this._dialogService.confirm('CONFIRM', 'MESSAGES.CONFIRM_DELETE').then(res => {
       if (res === true) {
-        this._form.executeToolbarAction(OFormComponent.DELETE_ACTION).subscribe(resp => {
+        this._form.executeToolbarAction(Codes.DELETE_ACTION).subscribe(resp => {
           this._form.onDelete.emit(resp);
           this.onCloseDetail();
         }, err => {
@@ -309,7 +310,7 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
   }
 
   public onUndoLastChange(): void {
-    this._form.executeToolbarAction(OFormComponent.UNDO_LAST_CHANGE_ACTION);
+    this._form.executeToolbarAction(Codes.UNDO_LAST_CHANGE_ACTION);
   }
 
   get isRefreshBtnEnabled(): boolean {

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 
 @Component({
   selector: 'lib-ontimize-web-ngx',
@@ -7,7 +7,8 @@ import { Component, OnInit } from '@angular/core';
       ontimize-web-ngx works!
     </p>
   `,
-  styles: []
+  styleUrls: ['../../ontimize.scss', '../../theme.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class OntimizeWebNgxComponent implements OnInit {
 

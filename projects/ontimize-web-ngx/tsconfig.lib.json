@@ -2,11 +2,12 @@
   "compileOnSave": false,
   "buildOnSave": false,
   "compilerOptions": {
+    "baseUrl": "./",
     "target": "es5",
     "module": "es2015",
     "moduleResolution": "node",
     "removeComments": true,
-    "emitDecoratorMetadata": true,
+    "emitDecoratorMetadata": false,
     "experimentalDecorators": true,
     "declaration": true,
     "noImplicitReturns": true,
@@ -36,8 +37,7 @@
     "dist"
   ],
   "include": [
-    "src/lib/ontimize-web-ngx.module.ts",
-    "src/lib/**/*.ts"
+    "src/lib/ontimize-web-ngx.module.ts"   
   ],
   "angularCompilerOptions": {
     "skipMetadataEmit": false,

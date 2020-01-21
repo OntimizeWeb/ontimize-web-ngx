@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, ElementRef, EventEmitter, forwardRef, HostListener, Inject, NgModule, Optional, Renderer, TemplateRef, ViewChild } from '@angular/core';
 import { OSharedModule } from '../../../shared';
 import { Codes, ObservableWrapper } from '../../../utils';
-import { OGridComponent } from '../../grid/o-grid.component';
+// import { OGridComponent } from '../../grid/o-grid.component';
 import { InputConverter } from '../../../decorators';
 
 export const DEFAULT_INPUTS_O_GRID_ITEM = [
@@ -33,19 +33,22 @@ export class OGridItemComponent {
   colspan: number = 1;
   @InputConverter()
   rowspan: number = 1;
+  render: any;
 
   constructor(
     public _el: ElementRef,
-    private renderer: Renderer,
-    @Inject(forwardRef(() => OGridComponent)) public _grid: OGridComponent) { }
+    private renderer: Renderer) {
 
-
-  @HostListener('mouseenter')
-  onMouseEnter() {
-    if (this._grid.detailMode !== Codes.DETAIL_MODE_NONE) {
-      this.renderer.setElementStyle(this._el.nativeElement, 'cursor', 'pointer');
     }
-  }
+    // @Inject(forwardRef(() => OGridComponent)) public _grid: OGridComponent) { }
+
+
+  // @HostListener('mouseenter')
+  // onMouseEnter() {
+  //   if (this._grid.detailMode !== Codes.DETAIL_MODE_NONE) {
+  //     this.renderer.setElementStyle(this._el.nativeElement, 'cursor', 'pointer');
+  //   }
+  // }
 
   onItemClicked(e?: Event) {
     ObservableWrapper.callEmit(this.mdClick, this);

@@ -151,15 +151,13 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   public static DEFAULT_INPUTS_O_FORM = DEFAULT_INPUTS_O_FORM;
   public static DEFAULT_OUTPUTS_O_FORM = DEFAULT_OUTPUTS_O_FORM;
 
-  public static BACK_ACTION: string = 'BACK';
-  public static CLOSE_DETAIL_ACTION: string = 'CLOSE';
-  public static RELOAD_ACTION: string = 'RELOAD';
-  public static GO_EDIT_ACTION: string = 'GO_EDIT';
-  public static EDIT_ACTION: string = 'EDIT';
-  public static INSERT_ACTION: string = 'INSERT';
-  public static GO_INSERT_ACTION: string = 'GO_INSERT';
-  public static DELETE_ACTION: string = 'DELETE';
-  public static UNDO_LAST_CHANGE_ACTION: string = 'UNDO_LAST_CHANGE';
+  // public static RELOAD_ACTION: string = 'RELOAD';
+  // public static GO_EDIT_ACTION: string = 'GO_EDIT';
+  // public static EDIT_ACTION: string = 'EDIT';
+  // public static INSERT_ACTION: string = 'INSERT';
+  // public static GO_INSERT_ACTION: string = 'GO_INSERT';
+  // public static DELETE_ACTION: string = 'DELETE';
+  // public static UNDO_LAST_CHANGE_ACTION: string = 'UNDO_LAST_CHANGE';
 
   public static DEFAULT_LAYOUT_DIRECTION = 'column';
   public static guardClassName = 'CanDeactivateFormGuard';
@@ -511,15 +509,15 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
 
   executeToolbarAction(action: string, options?: any) {
     switch (action) {
-      case OFormComponent.BACK_ACTION: this._backAction(); break;
-      case OFormComponent.CLOSE_DETAIL_ACTION: this._closeDetailAction(options); break;
-      case OFormComponent.RELOAD_ACTION: this._reloadAction(true); break;
-      case OFormComponent.GO_INSERT_ACTION: this._goInsertMode(options); break;
-      case OFormComponent.INSERT_ACTION: this._insertAction(); break;
-      case OFormComponent.GO_EDIT_ACTION: this._goEditMode(options); break;
-      case OFormComponent.EDIT_ACTION: this._editAction(); break;
-      case OFormComponent.UNDO_LAST_CHANGE_ACTION: this._undoLastChangeAction(); break;
-      case OFormComponent.DELETE_ACTION: return this._deleteAction();
+      case Codes.BACK_ACTION: this._backAction(); break;
+      case Codes.CLOSE_DETAIL_ACTION: this._closeDetailAction(options); break;
+      case Codes.RELOAD_ACTION: this._reloadAction(true); break;
+      case Codes.GO_INSERT_ACTION: this._goInsertMode(options); break;
+      case Codes.INSERT_ACTION: this._insertAction(); break;
+      case Codes.GO_EDIT_ACTION: this._goEditMode(options); break;
+      case Codes.EDIT_ACTION: this._editAction(); break;
+      case Codes.UNDO_LAST_CHANGE_ACTION: this._undoLastChangeAction(); break;
+      case Codes.DELETE_ACTION: return this._deleteAction();
       default: break;
     }
     return undefined;

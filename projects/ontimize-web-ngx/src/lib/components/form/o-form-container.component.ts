@@ -2,7 +2,7 @@ import { Component, ViewEncapsulation, ViewContainerRef, ViewChild, ComponentFac
 import { CommonModule } from '@angular/common';
 
 import { OSharedModule } from '../../shared';
-import { OBreadcrumbComponent } from '../../components';
+import { OBreadcrumbComponent } from '../../components/breadcrumb/o-breadcrumb.component';
 import { InputConverter } from '../../decorators';
 import { OFormLayoutManagerComponent } from '../../layouts';
 import { OFormComponent } from './o-form.component';

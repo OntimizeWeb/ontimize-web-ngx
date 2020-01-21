@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { AfterViewChecked, AfterViewInit, Component, ContentChildren, ElementRef, EventEmitter, forwardRef, Inject, Injector, NgModule, OnChanges, OnDestroy, OnInit, Optional, QueryList, SimpleChange, ViewChild, ViewChildren } from '@angular/core';
+import { AfterViewChecked, AfterViewInit, Component, ContentChildren, ElementRef, EventEmitter, forwardRef, Inject, Injector, NgModule, OnChanges, OnDestroy, OnInit, Optional, QueryList, SimpleChange, ViewChild, ViewChildren, HostListener, Renderer2 } from '@angular/core';
 import { MediaChange, MediaObserver } from '@angular/flex-layout';
 import { MatPaginator, PageEvent } from '@angular/material';
 import { RouterModule } from '@angular/router';
@@ -178,6 +178,8 @@ export class OGridComponent extends OServiceComponent implements AfterViewChecke
   constructor(
     injector: Injector,
     elRef: ElementRef,
+    public _el: ElementRef,
+    private render: Renderer2,
     @Inject(forwardRef(() => OFormComponent)) form: OFormComponent
   ) {
     super(injector, elRef, form);
@@ -214,6 +216,16 @@ export class OGridComponent extends OServiceComponent implements AfterViewChecke
 
     if (this.queryOnInit) {
       this.queryData();
+    }
+  }
+
+  @HostListener('mouseenter')
+  // TODO->Aqui deberia tirar el mouseEnter desde el Grid-Item
+  onMouseEnter() {
+    if (this.detailMode !== Codes.DETAIL_MODE_NONE) {
+      this.gridItems.forEach(element => {
+        element.render.setElementStyle(this._el.nativeElement, 'cursor', 'pointer');
+      });
     }
   }
 

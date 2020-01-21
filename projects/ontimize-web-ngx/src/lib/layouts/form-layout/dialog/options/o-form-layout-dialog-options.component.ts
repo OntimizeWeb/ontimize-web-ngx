@@ -1,7 +1,7 @@
 import { Component, forwardRef, Inject, ViewEncapsulation } from '@angular/core';
 import { DialogPosition } from '@angular/material';
 import { InputConverter } from '../../../../decorators/input-converter';
-import { OFormLayoutManagerComponent } from '../../o-form-layout-manager.component';
+// import { OFormLayoutManagerComponent } from '../../o-form-layout-manager.component';
 
 export const DEFAULT_INPUTS_O_FORM_LAYOUT_DIALOG_OPTIONS = [
   'width',
@@ -29,7 +29,8 @@ export const DEFAULT_INPUTS_O_FORM_LAYOUT_DIALOG_OPTIONS = [
   }
 })
 export class OFormLayoutDialogOptionsComponent {
-  constructor(@Inject(forwardRef(() => OFormLayoutManagerComponent)) protected oFormLayoutManager: OFormLayoutManagerComponent) { }
+  // constructor(@Inject(forwardRef(() => OFormLayoutManagerComponent)) protected oFormLayoutManager: OFormLayoutManagerComponent) { }
+  constructor () { }
   public width: string = '';
 
   public minWidth: number | string;

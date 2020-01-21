@@ -2,10 +2,12 @@ import { AfterViewInit, Component, Injector, NgModule, OnDestroy, OnInit, ViewEn
 import { CommonModule } from '@angular/common';
 import { ActivatedRouteSnapshot, Router, RouterModule } from '@angular/router';
 import { Subscription } from 'rxjs';
-
-import { Codes } from '../../utils';
+import { Util } from '../../util/util';
+import { Codes } from '../../util/codes';
 import { OSharedModule } from '../../shared';
-import { NavigationService, OFormComponent, ONavigationItem, Util } from '../../ontimize-web-ngx.module';
+// import { NavigationService, OFormComponent, ONavigationItem, Util } from '../../ontimize-web-ngx.module';
+import { NavigationService, ONavigationItem } from '../../services/navigation.service';
+import { OFormComponent } from '../form/o-form.component';
 
 export const DEFAULT_INPUTS_O_BREADCRUMB = [
   // form [OFormComponent]: Ontimize Web Form reference.

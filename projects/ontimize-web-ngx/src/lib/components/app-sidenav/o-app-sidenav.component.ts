@@ -6,7 +6,7 @@ import { MediaChange, MediaObserver } from '@angular/flex-layout';
 import { Subscription } from 'rxjs';
 
 import { Util } from '../../util/util';
-import { OSharedModule } from '../../shared/shared.module';
+// import { OSharedModule } from '../../shared/shared.module';
 import { InputConverter } from '../../decorators';
 import { AppMenuService, MenuRootItem, MenuItemUserInfo, MenuGroup } from '../../services/app-menu.service';
 import { OUserInfoService, UserInfo } from '../../services/o-user-info.service';
