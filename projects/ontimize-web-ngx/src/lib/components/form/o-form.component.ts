@@ -18,6 +18,7 @@ import { OFormNavigationClass } from './navigation/o-form.navigation.class';
 import { OFormContainerComponent } from './o-form-container.component';
 import { IFormValueOptions, OFormValue } from './OFormValue';
 import { OFormToolbarComponent, OFormToolbarModule } from './toolbar/o-form-toolbar.component';
+import { OFormService } from '../../services/forms/o-form.service';
 
 
 export interface IFormDataComponentHash {
@@ -135,7 +136,8 @@ export interface OFormInitializationOptions {
   moduleId: module.id,
   selector: 'o-form',
   providers: [
-    { provide: OntimizeService, useFactory: dataServiceFactory, deps: [Injector] }
+    { provide: OntimizeService, useFactory: dataServiceFactory, deps: [Injector] },
+    OFormService,
   ],
   templateUrl: './o-form.component.html',
   styleUrls: ['./o-form.component.scss'],
@@ -279,7 +281,9 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     protected zone: NgZone,
     protected cd: ChangeDetectorRef,
     protected injector: Injector,
-    protected elRef: ElementRef) {
+    protected elRef: ElementRef,
+    private oformService: OFormService
+    ) {
 
     this.formCache = new OFormCacheClass(this);
     this.formNavigation = new OFormNavigationClass(this.injector, this, this.router, this.actRoute);

@@ -9,6 +9,7 @@ import { Util } from '../../../util/util';
 import { Codes } from '../../../util/codes';
 import { OFormNavigationComponent } from '../navigation/o-form-navigation.component';
 import { OFormComponent } from '../o-form.component';
+// import { OFormService } from '../../../services/forms/o-form.service';
 
 
 export const DEFAULT_INPUTS_O_FORM_TOOLBAR = [
@@ -30,6 +31,7 @@ export const DEFAULT_INPUTS_O_FORM_TOOLBAR = [
   host: {
     '[class.o-form-toolbar]': 'true'
   }
+  // providers: [{ provide: OFormComponent, useExisting: forwardRef(() => OFormComponent) }]
 })
 export class OFormToolbarComponent implements OnInit, OnDestroy {
 
@@ -116,7 +118,7 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
   protected _existsChangesToSaveSubject = new BehaviorSubject<boolean>(false);
 
   constructor(
-    @Inject(forwardRef(() => OFormComponent)) private _form: OFormComponent,
+    private _form: OFormComponent,
     public element: ElementRef,
     protected injector: Injector
   ) {

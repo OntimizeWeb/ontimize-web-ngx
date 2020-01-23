@@ -31,8 +31,7 @@
   "scripts": {
     "clean": "rimraf coverage && o-ngx-lib-builder clean",
     "test": "karma start",
-    "test-watch": "karma start --singleRun=false --autoWatch=true",
-    "build": "npm run clean && o-ngx-lib-builder build --package ontimize-web-ngx --ng-library ng.ontimizeWeb"
+    "test-watch": "karma start --singleRun=false --autoWatch=true"
   },
   "peerDependencies": {
     "@angular/common": "^8.2.14",
