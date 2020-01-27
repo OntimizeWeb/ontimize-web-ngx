@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, NgModule, OnInit, ViewEncapsulation } from '@angular/core';
-import { OSharedModule } from '../../shared';
+import { OSharedModule } from '../../shared/shared.module';
 
 
 export const DEFAULT_INPUTS_O_BUTTON = [

@@ -4,8 +4,8 @@ import { Validators } from '@angular/forms';
 import { ValidatorFn } from '@angular/forms';
 import { MatInput } from '@angular/material';
 
-import { OSharedModule } from '../../../shared';
-import { NumberConverter } from '../../../decorators';
+import { OSharedModule } from '../../../shared/shared.module';
+import { NumberConverter } from '../../../decorators/input-converter';
 import { OFormComponent } from '../../form/o-form.component';
 import { OFormDataComponent, DEFAULT_INPUTS_O_FORM_DATA_COMPONENT, DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT } from '../../o-form-data-component.class';
 

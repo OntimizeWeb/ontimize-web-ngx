@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { AfterContentInit, Component, ContentChild, ContentChildren, ElementRef, forwardRef, Inject, Injector, NgModule, Optional, QueryList, Renderer2, ViewChild, ViewEncapsulation } from '@angular/core';
 import { MatLine, MatListAvatarCssMatStyler, MatListItem } from '@angular/material';
 
-import { OSharedModule } from '../../../shared';
+import { OSharedModule } from '../../../shared/shared.module';
 import { Util } from '../../../util/util';
 import { OListComponent } from '../o-list.component';
 

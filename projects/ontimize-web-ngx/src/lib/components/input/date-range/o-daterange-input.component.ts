@@ -5,7 +5,7 @@ import * as _moment from 'moment';
 import { InputConverter } from '../../../decorators/input-converter';
 import { MomentService } from '../../../services/moment.service';
 import { OTranslateService } from '../../../services/translate/o-translate.service';
-import { OSharedModule } from '../../../shared';
+import { OSharedModule } from '../../../shared/shared.module';
 import { Util } from '../../../util/util';
 import { OFormComponent } from '../../form/o-form.component';
 import { IFormValueOptions } from '../../form/OFormValue';

@@ -1,6 +1,6 @@
 import { Component, Injector, ElementRef, NgModule, ViewEncapsulation, Inject, forwardRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { OSharedModule } from '../../../shared';
+import { OSharedModule } from '../../../shared/shared.module';
 import { OBarMenuComponent } from '../o-bar-menu.component';
 import { OBaseMenuItemClass } from '../o-base-menu-item.class';
 

@@ -1,7 +1,8 @@
 import { Injector } from '@angular/core';
 
 import { BooleanConverter } from '../decorators';
-import { OPermissions, OTranslateService } from '../services';
+import { OPermissions } from '../services/permissions/o-permissions.module';
+import { OTranslateService } from '../services/translate/o-translate.service';
 import { PermissionsUtils } from '../util/permissions';
 import { Util } from '../utils';
 

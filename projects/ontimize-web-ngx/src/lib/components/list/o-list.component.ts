@@ -4,12 +4,13 @@ import { AfterContentInit, AfterViewInit, Component, ContentChildren, ElementRef
 import { MatCheckbox } from '@angular/material';
 import { RouterModule } from '@angular/router';
 import { merge, Subscription } from 'rxjs';
-import { InputConverter } from '../../decorators';
+import { InputConverter } from '../../decorators/input-converter';
 import { OntimizeService } from '../../services/ontimize.service';
 import { dataServiceFactory } from '../../services/data-service.provider';
-import { OSharedModule } from '../../shared';
+import { OSharedModule } from '../../shared/shared.module';
 import { ObservableWrapper } from '../../util/async';
-import { Codes, Util } from '../../utils';
+import { Util } from '../../util/util';
+import { Codes } from '../../util/codes';
 import { OFormComponent } from '../form/o-form.component';
 import { OSearchInputModule } from '../input/search-input/o-search-input.component';
 import { OServiceComponent } from '../o-service-component.class';
@@ -136,7 +137,7 @@ export class OListComponent extends OServiceComponent implements AfterContentIni
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent
   ) {
     super(injector, elRef, form);
-  }
+  }  
 
   public ngOnInit(): void {
     this.initialize();

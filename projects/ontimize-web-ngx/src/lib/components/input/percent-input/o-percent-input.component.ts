@@ -1,7 +1,7 @@
 import { Component, NgModule, OnInit, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { OSharedModule } from '../../../shared';
-import { InputConverter } from '../../../decorators';
+import { OSharedModule } from '../../../shared/shared.module';
+import { InputConverter } from '../../../decorators/input-converter';
 import { DEFAULT_INPUTS_O_REAL_INPUT, DEFAULT_OUTPUTS_O_REAL_INPUT, ORealInputComponent, ORealInputModule } from '../real-input/o-real-input.component';
 
 export const DEFAULT_INPUTS_O_PERCENT_INPUT = [

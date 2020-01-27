@@ -1,6 +1,6 @@
 import { Directive, Optional } from '@angular/core';
 
-import { Util } from '../../utils';
+import { Util } from '../../util/util';
 import { OFilterBuilderComponent } from './o-filter-builder.component';
 
 @Directive({

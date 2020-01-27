@@ -1,8 +1,8 @@
 import { Component, Injector, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ValidatorFn } from '@angular/forms';
-import { Util } from '../../../utils';
-import { OSharedModule } from '../../../shared';
+import { Util } from '../../../util/util';
+import { OSharedModule } from '../../../shared/shared.module';
 import { IErrorData } from '../../o-form-data-component.class';
 import { OErrorComponent } from './o-error.component';
 

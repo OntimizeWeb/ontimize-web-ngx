@@ -20,27 +20,6 @@
             "tsConfig": "projects/ontimize-web-ngx/tsconfig.lib.json",
             "project": "projects/ontimize-web-ngx/ng-package.json",
           }
-          // "assets": [
-          //   {
-          //     "glob": "**/*",
-          //     "input": "projects/ontimize-web-ngx/assets",
-          //     "output": "dist/assets"
-          //   },
-          //   {
-          //     "glob": "**/*",
-          //     "input": "projects/ontimize-web-ngx/ontimize.scss",
-          //     "output": "dist/"
-          //   }
-          // ]
-          // "assets": [
-          //   "projects/ontimize-web-ngx/assets"
-          // ],
-          // "styles": [
-          //   "projects/ontimize-web-ngx/*.scss"
-          // ],
-          // "scripts": [
-          //   "projects/ontimize-web-ngx/node_modules/moment/min/moment.min.js"
-          // ]
         },
         "test": {
           "builder": "@angular-devkit/build-angular:karma",

@@ -3,8 +3,10 @@ import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
 
-import { OSharedModule } from '../../shared';
-import { DialogService, LoginService, OUserInfoService, UserInfo } from '../../services';
+import { OSharedModule } from '../../shared/shared.module';
+import { DialogService } from '../../services/dialog.service';
+import { LoginService } from '../../services/login.service';
+import { OUserInfoService, UserInfo } from '../../services/o-user-info.service';
 
 export const DEFAULT_INPUTS_O_USER_INFO = [];
 

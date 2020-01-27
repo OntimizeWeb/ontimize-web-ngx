@@ -2,10 +2,10 @@ import { CommonModule } from '@angular/common';
 import { AfterViewInit, Component, ElementRef, EventEmitter, forwardRef, Inject, Injector, NgModule, OnChanges, OnInit, Optional, SimpleChange, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatDialog, MatDialogConfig, MatDialogRef, MatInput } from '@angular/material';
-import { InputConverter } from '../../../decorators';
-import { OntimizeService } from '../../../services';
+import { InputConverter } from '../../../decorators/input-converter';
+import { OntimizeService } from '../../../services/ontimize.service';
 import { dataServiceFactory } from '../../../services/data-service.provider';
-import { OSharedModule } from '../../../shared';
+import { OSharedModule } from '../../../shared/shared.module';
 import { ODialogModule } from '../../dialog/o-dialog.component';
 import { IFormValueOptions } from '../../form/oFormValue';
 import { OFormComponent } from '../../form/o-form.component';
@@ -14,7 +14,6 @@ import { OValueChangeEvent } from '../../o-form-data-component.class';
 import { OFormControl } from '../o-form-control.class';
 import { OFormServiceComponent } from '../o-form-service-component.class';
 import { OListPickerDialogComponent } from './o-list-picker-dialog.component';
-
 
 export const DEFAULT_INPUTS_O_LIST_PICKER = [
   ...OFormServiceComponent.DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT,

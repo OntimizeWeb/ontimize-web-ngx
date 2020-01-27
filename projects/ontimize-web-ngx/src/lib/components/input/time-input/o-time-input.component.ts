@@ -4,9 +4,9 @@ import { FormGroup } from '@angular/forms';
 import moment from 'moment';
 import { merge, Subscription } from 'rxjs';
 
-import { InputConverter } from '../../../decorators';
-import { OSharedModule } from '../../../shared';
-import { Util } from '../../../utils';
+import { InputConverter } from '../../../decorators/input-converter';
+import { OSharedModule } from '../../../shared/shared.module';
+import { Util } from '../../../util/util';
 import { OFormComponent } from '../../form/o-form.component';
 import { IFormValueOptions, OFormValue } from '../../form/OFormValue';
 import {

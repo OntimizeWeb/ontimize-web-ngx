@@ -2,8 +2,8 @@ import { Component, ElementRef, EventEmitter, forwardRef, Inject, Injector, NgMo
 import { CommonModule } from '@angular/common';
 
 import { Util } from '../../../util/util';
-import { OSharedModule } from '../../../shared';
-import { InputConverter } from '../../../decorators';
+import { OSharedModule } from '../../../shared/shared.module';
+import { InputConverter } from '../../../decorators/input-converter';
 import { OListItemComponent } from '../list-item/o-list-item.component';
 import { OListItemCardRenderer } from './o-list-item-card-renderer.class';
 

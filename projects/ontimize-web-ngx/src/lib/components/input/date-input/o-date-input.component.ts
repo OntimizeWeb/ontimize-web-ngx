@@ -4,12 +4,13 @@ import { DateAdapter, MAT_DATE_LOCALE, MatDatepicker, MatDatepickerInput, MatDat
 import { IFormValueOptions, OFormValue } from '../../form/OFormValue';
 import { MediaChange, MediaObserver } from '@angular/flex-layout';
 import { OFormDataComponent, OValueChangeEvent } from '../../o-form-data-component.class';
-import { OSharedModule, OntimizeMomentDateAdapter } from '../../../shared';
+import { OSharedModule } from '../../../shared/shared.module';
+import { OntimizeMomentDateAdapter } from '../../../shared/material/custom.material.module';
 
 import { CommonModule } from '@angular/common';
-import { InputConverter } from '../../../decorators';
+import { InputConverter } from '../../../decorators/input-converter';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
-import { MomentService } from '../../../services';
+import { MomentService } from '../../../services/moment.service';
 import { OFormComponent } from '../../form/o-form.component';
 import { SQLTypes } from '../../../util/sqltypes';
 import { Subscription } from 'rxjs';

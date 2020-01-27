@@ -6,9 +6,11 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 import { O_INPUTS_OPTIONS, OInputsOptions } from '../../../config/app-config';
 import { InputConverter } from '../../../decorators/input-converter';
-import { OTranslateService, SnackBarService } from '../../../services';
-import { OSharedModule } from '../../../shared';
-import { Util, IExpression, FilterExpressionUtils } from '../../../utils';
+import { SnackBarService } from '../../../services/snackbar.service';
+import { OTranslateService } from '../../../services/translate/o-translate.service';
+import { OSharedModule } from '../../../shared/shared.module';
+import { Util } from '../../../util/util';
+import { IExpression, FilterExpressionUtils } from '../../../components/filter-expression.utils';
 
 export const DEFAULT_INPUTS_O_SEARCH_INPUT = [
   'placeholder',

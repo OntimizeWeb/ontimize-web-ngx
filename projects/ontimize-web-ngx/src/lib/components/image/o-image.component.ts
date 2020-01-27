@@ -3,8 +3,8 @@ import { Component, ElementRef, forwardRef, HostBinding, Inject, Injector, NgMod
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material';
 import { DomSanitizer } from '@angular/platform-browser';
-import { InputConverter } from '../../decorators';
-import { OSharedModule } from '../../shared';
+import { InputConverter } from '../../decorators/input-converter';
+import { OSharedModule } from '../../shared/shared.module';
 import { Util } from '../../util/util';
 import { OFormComponent } from '../form/o-form.component';
 import { OFormValue } from '../form/OFormValue';

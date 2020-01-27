@@ -2,7 +2,7 @@ import { Component, Inject, Injector, forwardRef, ElementRef, NgModule, ViewEnca
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
-import { OSharedModule } from '../../../shared';
+import { OSharedModule } from '../../../shared/shared.module';
 import { OBarMenuComponent } from '../o-bar-menu.component';
 import { OBaseMenuItemClass } from '../o-base-menu-item.class';
 

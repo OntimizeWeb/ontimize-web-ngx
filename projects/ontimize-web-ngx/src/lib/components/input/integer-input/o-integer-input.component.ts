@@ -3,8 +3,8 @@ import { AfterViewInit, Component, ElementRef, forwardRef, Inject, Injector, NgM
 import { FormControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 
 import { InputConverter } from '../../../decorators';
-import { IIntegerPipeArgument, OIntegerPipe } from '../../../pipes';
-import { OSharedModule } from '../../../shared';
+import { IIntegerPipeArgument, OIntegerPipe } from '../../../pipes/o-integer.pipe';
+import { OSharedModule } from '../../../shared/shared.module';
 import { Util } from '../../../util/util';
 import { OFormComponent } from '../../form/o-form.component';
 import { IFormValueOptions, OFormValue } from '../../form/OFormValue';

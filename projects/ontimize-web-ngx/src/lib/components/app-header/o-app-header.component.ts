@@ -4,9 +4,9 @@ import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
 
 import { ServiceUtils } from '../../utils';
-import { OSharedModule } from '../../shared';
-import { InputConverter } from '../../decorators';
-import { OUserInfoModule } from '../../components';
+import { OSharedModule } from '../../shared/shared.module';
+import { InputConverter } from '../../decorators/input-converter';
+import { OUserInfoModule } from '../../components/user-info/o-user-info.component';
 import { DialogService, OModulesInfoService } from '../../services';
 import { OLanguageSelectorModule } from '../language-selector/o-language-selector.component';
 

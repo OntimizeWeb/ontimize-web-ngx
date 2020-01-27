@@ -1,9 +1,12 @@
 import { ChangeDetectorRef, HostListener, Injector, NgZone, SimpleChange } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
-import { InputConverter } from '../decorators';
-import { DialogService, ILocalStorageComponent, LocalStorageService, OntimizeService } from '../services';
-import { Codes, Util } from '../utils';
+import { InputConverter } from '../decorators/input-converter';
+import { DialogService } from '../services/dialog.service';
+import { ILocalStorageComponent, LocalStorageService } from '../services/local-storage.service';
+import { OntimizeService } from '../services/ontimize.service';
+import { Util } from '../util/util';
+import { Codes } from '../util/codes';
 import { OFormComponent } from './form/o-form.component';
 import { OQueryDataArgs, ServiceUtils } from './service.utils';
 

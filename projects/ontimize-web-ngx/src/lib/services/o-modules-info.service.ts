@@ -1,7 +1,7 @@
 import { Injectable, Injector } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
-import { OTranslateService } from '../services';
+import { OTranslateService } from '../services/translate/o-translate.service';
 
 export interface ModuleInfo {
   name?: string;

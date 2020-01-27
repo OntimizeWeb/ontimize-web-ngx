@@ -2,9 +2,9 @@ import { CommonModule } from '@angular/common';
 import { Component, ElementRef, forwardRef, Inject, Injector, NgModule, OnInit, Optional, ViewEncapsulation } from '@angular/core';
 import { FormControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 
-import { InputConverter } from '../../../decorators';
-import { IRealPipeArgument, ORealPipe } from '../../../pipes';
-import { OSharedModule } from '../../../shared';
+import { InputConverter } from '../../../decorators/input-converter';
+import { IRealPipeArgument, ORealPipe } from '../../../pipes/o-real.pipe';
+import { OSharedModule } from '../../../shared/shared.module';
 import { Util } from '../../../util/util';
 import { OFormComponent } from '../../form/o-form.component';
 import { DEFAULT_INPUTS_O_INTEGER_INPUT, DEFAULT_OUTPUTS_O_INTEGER_INPUT, OIntegerInputComponent, OIntegerInputModule } from '../integer-input/o-integer-input.component';

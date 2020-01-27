@@ -1,6 +1,6 @@
 import { NgModule, Injector } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { OSharedModule } from '../../shared';
+import { OSharedModule } from '../../shared/shared.module';
 import { Error403Component } from './error403/o-error-403.component';
 import { PermissionsGuardService } from './permissions-can-activate.guard';
 import { OntimizePermissionsService } from './ontimize-permissions.service';

@@ -2,7 +2,7 @@ import { Component, Injector, NgModule, ElementRef, ViewEncapsulation } from '@a
 import { CommonModule } from '@angular/common';
 import { PermissionsService } from '../../services/permissions/permissions.service';
 import { OTranslateService } from '../../services/translate/o-translate.service';
-import { OSharedModule } from '../../shared';
+import { OSharedModule } from '../../shared/shared.module';
 import { AppMenuService, MenuRootItem } from '../../services/app-menu.service';
 import { OLocaleBarMenuItemModule } from './locale-menu-item/o-locale-bar-menu-item.component';
 import { OBarMenuGroupModule } from './menu-group/o-bar-menu-group.component';

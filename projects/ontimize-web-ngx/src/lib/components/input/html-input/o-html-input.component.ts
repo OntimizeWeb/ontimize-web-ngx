@@ -5,7 +5,7 @@ import { ValidatorFn, Validators } from '@angular/forms';
 import { MatTab, MatTabGroup } from '@angular/material';
 
 import { OSharedModule } from '../../../shared/shared.module';
-import { NumberConverter } from '../../../decorators';
+import { NumberConverter } from '../../../decorators/input-converter';
 import { OFormComponent } from '../../form/o-form.component';
 import { CKEditorComponent, CKEditorModule } from '../../material/ckeditor/ck-editor.component';
 import { OFormDataComponent, DEFAULT_INPUTS_O_FORM_DATA_COMPONENT } from '../../o-form-data-component.class';

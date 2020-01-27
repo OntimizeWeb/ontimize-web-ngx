@@ -3,10 +3,10 @@ import { AfterViewInit, Component, ElementRef, forwardRef, Inject, Injector, NgM
 import { ValidatorFn } from '@angular/forms';
 import moment from 'moment';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
-import { NumberConverter } from '../../../decorators';
-import { InputConverter } from '../../../decorators/input-converter';
-import { OSharedModule } from '../../../shared';
-import { Codes, Util } from '../../../utils';
+import { NumberConverter, InputConverter } from '../../../decorators/input-converter';
+import { OSharedModule } from '../../../shared/shared.module';
+import { Util } from '../../../util/util';
+import { Codes } from '../../../util/codes';
 import { OValidators } from '../../../validators/o-validators';
 import { OFormComponent } from '../../form/o-form.component';
 import { IFormValueOptions } from '../../form/OFormValue';

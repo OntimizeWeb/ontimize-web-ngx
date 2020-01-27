@@ -1,8 +1,8 @@
 import { AfterViewInit, Component, ComponentFactory, ComponentFactoryResolver, ContentChildren, EventEmitter, forwardRef, OnInit, QueryList, ViewChild, ViewContainerRef, ViewEncapsulation } from '@angular/core';
 import { MatButtonToggleChange, MatButtonToggleGroup } from '@angular/material';
 
-import { Util } from '../../../utils';
-import { InputConverter } from '../../../decorators';
+import { Util } from '../../../util/util';
+import { InputConverter } from '../../../decorators/input-converter';
 import { OButtonToggleComponent } from '../o-button-toggle.component';
 
 export const DEFAULT_INPUTS_O_BUTTON_TOGGLE_GROUP = [

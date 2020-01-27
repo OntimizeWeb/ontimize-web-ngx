@@ -1,9 +1,9 @@
 import { Component, Injector, EventEmitter, NgModule, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { OSharedModule } from '../../shared';
-import { OTranslateService } from '../../services';
+import { OSharedModule } from '../../shared/shared.module';
+import { OTranslateService } from '../../services/translate/o-translate.service';
 import { AppConfig } from '../../config/app-config';
-import { InputConverter } from '../../decorators';
+import { InputConverter } from '../../decorators/input-converter';
 import LocaleCode from '../../util/locale';
 
 export const DEFAULT_INPUTS_O_LANGUAGE_SELECTOR = [

@@ -3,9 +3,9 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
-import { OSharedModule } from '../../shared';
-import { InputConverter } from '../../decorators';
-import { OTranslateService } from '../../services';
+import { OSharedModule } from '../../shared/shared.module';
+import { InputConverter } from '../../decorators/input-converter';
+import { OTranslateService } from '../../services/translate/o-translate.service';
 
 export const DEFAULT_INPUTS_O_MENU_CARD = [
   'title',

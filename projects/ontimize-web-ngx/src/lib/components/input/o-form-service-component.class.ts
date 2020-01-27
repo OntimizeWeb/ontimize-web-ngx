@@ -2,9 +2,11 @@ import { ElementRef, EventEmitter, Injector, NgZone } from '@angular/core';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { Observable } from 'rxjs';
 
-import { InputConverter } from '../../decorators';
-import { DialogService, OntimizeService } from '../../services';
-import { Codes, Util } from '../../utils';
+import { InputConverter } from '../../decorators/input-converter';
+import { DialogService } from '../../services/dialog.service';
+import { OntimizeService } from '../../services/ontimize.service';
+import { Util } from '../../util/util';
+import { Codes } from '../../util/codes';
 import { OFormComponent } from '../form/o-form.component';
 import { IFormValueOptions } from '../form/OFormValue';
 import {

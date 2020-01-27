@@ -1,8 +1,9 @@
 import { OnInit, Injector, ElementRef, HostListener, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { PermissionsUtils } from '../../util/permissions';
-import { OTranslateService, OPermissions } from '../../services';
-import { Util } from '../../utils';
+import { OPermissions } from '../../services/permissions/permissions.service';
+import { OTranslateService } from '../../services/translate/o-translate.service';
+import { Util } from '../../util/util';
 import { OBarMenuComponent } from './o-bar-menu.component';
 
 export const DEFAULT_INPUTS_O_BASE_MENU_ITEM = [

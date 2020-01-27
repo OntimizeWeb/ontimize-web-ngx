@@ -3,12 +3,21 @@ import { ChangeDetectorRef, Component, CUSTOM_ELEMENTS_SCHEMA, ElementRef, Event
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router, UrlSegment } from '@angular/router';
 import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
-import { InputConverter } from '../../decorators';
-import { OFormLayoutManagerComponent } from '../../layouts';
-import { DialogService, NavigationService, OFormPermissions, ONavigationItem, OntimizeService, OPermissions, PermissionsService, SnackBarService } from '../../services';
+import { InputConverter } from '../../decorators/input-converter';
+import { OFormLayoutManagerComponent } from '../../layouts/form-layout/o-form-layout-manager.component';
+
+import { DialogService } from '../../services/dialog.service';
+import { NavigationService, ONavigationItem } from '../../services/navigation.service';
+import { OFormPermissions, OPermissions, PermissionsService } from '../../services/permissions/permissions.service';
+import { OntimizeService } from '../../services/ontimize.service';
+import { SnackBarService } from '../../services/snackbar.service';
+import { OFormService } from '../../services/forms/o-form.service';
+
 import { dataServiceFactory } from '../../services/data-service.provider';
-import { OSharedModule } from '../../shared';
-import { Codes, SQLTypes, Util } from '../../utils';
+import { OSharedModule } from '../../shared/shared.module';
+import { Util } from '../../util/util';
+import { Codes } from '../../util/codes';
+import { SQLTypes } from '../../util/sqltypes';
 import { OFormControl } from '../input/o-form-control.class';
 import { IComponent } from '../o-component.class';
 import { IFormDataComponent, IFormDataTypeComponent } from '../o-form-data-component.class';
@@ -18,7 +27,6 @@ import { OFormNavigationClass } from './navigation/o-form.navigation.class';
 import { OFormContainerComponent } from './o-form-container.component';
 import { IFormValueOptions, OFormValue } from './OFormValue';
 import { OFormToolbarComponent, OFormToolbarModule } from './toolbar/o-form-toolbar.component';
-import { OFormService } from '../../services/forms/o-form.service';
 
 
 export interface IFormDataComponentHash {

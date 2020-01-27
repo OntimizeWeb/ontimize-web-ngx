@@ -3,9 +3,10 @@ import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 
-import { Codes, Util } from '../../utils';
-import { OSharedModule } from '../../shared';
-import { InputConverter } from '../../decorators';
+import { Codes } from '../../util/codes';
+import { Util } from '../../util/util';
+import { OSharedModule } from '../../shared/shared.module';
+import { InputConverter } from '../../decorators/input-converter';
 // import { OFilterBuilderClearDirective } from './o-filter-builder-clear.directive';
 // import { OFilterBuilderQueryDirective } from './o-filter-builder-query.directive';
 import { OFormComponent } from '../../components/form/o-form.component';
