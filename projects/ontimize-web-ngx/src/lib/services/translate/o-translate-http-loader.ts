@@ -5,7 +5,7 @@ import { Observable, combineLatest } from 'rxjs';
 import { share } from 'rxjs/operators';
 
 import { AppConfig } from '../../config/app-config';
-import { Codes } from '../../utils';
+import { Codes } from '../../util/codes';
 import { OTranslateService } from './o-translate.service';
 
 export class OTranslateHttpLoader extends TranslateHttpLoader {

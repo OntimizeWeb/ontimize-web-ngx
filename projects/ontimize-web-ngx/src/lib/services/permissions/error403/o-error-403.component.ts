@@ -1,6 +1,6 @@
 import { Component, ViewEncapsulation, Injector } from '@angular/core';
 import { NavigationExtras, Router } from '@angular/router';
-import { Codes } from '../../../utils';
+import { Codes } from '../../../util/codes';
 import { NavigationService, ONavigationItem } from '../../navigation.service';
 
 @Component({

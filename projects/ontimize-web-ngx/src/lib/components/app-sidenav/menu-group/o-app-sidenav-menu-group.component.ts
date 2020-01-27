@@ -5,7 +5,7 @@ import { Subscription } from 'rxjs';
 
 import { Util } from '../../../util/util';
 import { OSharedModule } from '../../../shared/shared.module';
-import { InputConverter } from '../../../decorators';
+import { InputConverter } from '../../../decorators/input-converter';
 import { PermissionsUtils } from '../../../util/permissions';
 import { OAppSidenavComponent } from '../o-app-sidenav.component';
 import { AppMenuService, MenuGroup, OTranslateService, PermissionsService, OPermissions } from '../../../services';

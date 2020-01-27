@@ -1,7 +1,7 @@
 
 import { Subscription } from 'rxjs';
 import { EventEmitter } from '@angular/core';
-import { Util } from '../../../utils';
+import { Util } from '../../../util/util';
 import { IFormControlComponent, IFormDataComponent } from '../../o-form-data-component.class';
 import { OFormComponent } from '../o-form.component';
 

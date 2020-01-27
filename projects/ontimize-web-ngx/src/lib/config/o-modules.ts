@@ -64,11 +64,13 @@ import { OListModule } from '../components/list/o-list.component';
 import { OFilterBuilderModule } from '../components/filter-builder/o-filter-builder.module';
 import { ODateRangeInputModule } from '../components/input/date-range/o-daterange-input.component';
 import { AppConfig, APP_CONFIG } from '../config/app-config';
-import { OAppLayoutModule, OCardMenuLayoutModule, OFormLayoutManagerModule } from '../layouts';
+import { OAppLayoutModule } from '../layouts/app-layout/o-app-layout.component';
+import { OFormLayoutManagerModule } from '../layouts/form-layout/o-form-layout-manager.component';
+import { OCardMenuLayoutModule } from '../layouts/card-menu-layout/o-card-menu-layout.component';
 import { OTranslateHttpLoader, OTranslateService } from '../services';
 import { OPermissionsModule } from '../services/permissions/o-permissions.module';
 import { OTranslateParser } from '../services/translate/o-translate.parser';
-import { OSharedModule } from '../shared';
+import { OSharedModule } from '../shared/shared.module';
 import { Util } from '../util/util';
 import { appInitializerFactory } from './o-providers';
 

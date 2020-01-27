@@ -1,5 +1,5 @@
 import { Injector, Injectable } from '@angular/core';
-import { Codes } from '../utils';
+import { Codes } from '../util/codes';
 import { AppConfig } from '../config/app-config';
 
 export type MenuRootItem = (MenuGroup | MenuItemRoute | MenuItemAction | MenuItemLocale | MenuItemLogout | MenuItemUserInfo | MenuItem);

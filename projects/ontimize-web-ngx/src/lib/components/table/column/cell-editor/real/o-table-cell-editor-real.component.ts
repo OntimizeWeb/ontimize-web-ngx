@@ -1,6 +1,6 @@
 import { Component, Injector, ViewChild, TemplateRef, ChangeDetectionStrategy } from '@angular/core';
 import { ValidatorFn, FormControl } from '@angular/forms';
-import { InputConverter } from '../../../../../decorators';
+import { InputConverter } from '../../../../../decorators/input-converter';
 import { OTableCellEditorIntegerComponent } from '../integer/o-table-cell-editor-integer.component';
 import { OBaseTableCellEditor } from '../o-base-table-cell-editor.class';
 

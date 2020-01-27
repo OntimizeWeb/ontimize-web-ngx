@@ -1,9 +1,10 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, forwardRef, Inject, Injector, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { MatDialog, MatMenu } from '@angular/material';
-import { InputConverter } from '../../../../../decorators';
+import { InputConverter } from '../../../../../decorators/input-converter';
 import { DialogService, OPermissions, OTableMenuPermissions, OTranslateService, SnackBarService } from '../../../../../services';
 import { PermissionsUtils } from '../../../../../util/permissions';
-import { Codes, Util } from '../../../../../utils';
+import { Util } from '../../../../../util/util';
+import { Codes } from '../../../../../util/codes';
 import { OColumn, OTableComponent } from '../../../o-table.component';
 import { OTableCellRendererImageComponent } from '../../../column/cell-renderer/image/o-table-cell-renderer-image.component';
 import { OTableApplyConfigurationDialogComponent, OTableExportConfiguration, OTableExportDialogComponent, OTableLoadFilterDialogComponent, OTableStoreConfigurationDialogComponent, OTableStoreFilterDialogComponent, OTableVisibleColumnsDialogComponent } from '../../dialog/o-table-dialog-components';

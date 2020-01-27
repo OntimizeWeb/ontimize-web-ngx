@@ -1,9 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, forwardRef, Inject, Injector, NgModule, OnDestroy, OnInit, ViewChild, ViewContainerRef, ViewEncapsulation } from '@angular/core';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
-import { InputConverter } from '../../../decorators';
+import { InputConverter } from '../../../decorators/input-converter';
 import { DialogService, NavigationService, OPermissions, SnackBarService } from '../../../services';
-import { OSharedModule } from '../../../shared';
+import { OSharedModule } from '../../../shared/shared.module';
 import { PermissionsUtils } from '../../../util/permissions';
 import { Util } from '../../../util/util';
 import { Codes } from '../../../util/codes';

@@ -2,9 +2,10 @@ import { ChangeDetectionStrategy, Component, ComponentFactoryResolver, EventEmit
 import { FormControl, ValidatorFn, Validators } from '@angular/forms';
 import { OColumn, OTableComponent } from '../../../o-table.component';
 import { OPermissions, OTranslateService, SnackBarService } from '../../../../../services';
-import { Observable, ObservableWrapper, Util } from '../../../../../utils';
+import { Util } from '../../../../../util/util';
+import { Observable, ObservableWrapper } from '../../../../../util/async';
 
-import { InputConverter } from '../../../../../decorators';
+import { InputConverter } from '../../../../../decorators/input-converter';
 import { OBaseTableCellEditor } from '../../../column/cell-editor/cell-editor';
 
 export const DEFAULT_INPUTS_O_TABLE_INSERTABLE_ROW = [

@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, NgModule, ViewChild, ViewEncapsulation, InjectionToken, Injectable } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { OAppHeaderModule } from '../../components/app-header/o-app-header.component';
-import { InputConverter } from '../../decorators';
+import { InputConverter } from '../../decorators/input-converter';
 import { OSharedModule } from '../../shared/shared.module';
 import { Util } from '../../util/util';
 import { Codes, OAppLayoutMode, OSidenavMode } from '../../util/codes';

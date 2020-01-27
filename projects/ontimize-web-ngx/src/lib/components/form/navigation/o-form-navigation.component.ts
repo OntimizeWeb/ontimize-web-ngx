@@ -2,11 +2,12 @@ import { Component, forwardRef, Inject, Injector, OnDestroy, ViewEncapsulation }
 import { NavigationExtras, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
-import { OFormLayoutManagerComponent } from '../../../layouts';
+import { OFormLayoutManagerComponent } from '../../../layouts/form-layout/o-form-layout-manager.component';
 import { NavigationService, ONavigationItem } from '../../../services/navigation.service';
 import { OntimizeService } from '../../../services/ontimize.service';
 import { dataServiceFactory } from '../../../services/data-service.provider';
-import { Codes, Util } from '../../../utils';
+import { Util } from '../../../util/util';
+import { Codes } from '../../../util/codes';
 import { OFormComponent } from '../o-form.component';
 import { OFormNavigationClass } from './o-form.navigation.class';
 

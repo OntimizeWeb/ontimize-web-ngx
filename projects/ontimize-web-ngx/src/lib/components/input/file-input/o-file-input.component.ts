@@ -1,9 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, EventEmitter, forwardRef, Inject, Injector, NgModule, OnInit, Optional, ViewChild } from '@angular/core';
 import { FormControl, ValidationErrors, ValidatorFn } from '@angular/forms';
-import { InputConverter } from '../../../decorators';
-import { OntimizeFileService } from '../../../services';
-import { OSharedModule } from '../../../shared';
+import { InputConverter } from '../../../decorators/input-converter';
+import { OntimizeFileService } from '../../../services/ontimize-file.service';
+import { OSharedModule } from '../../../shared/shared.module';
 import { OFormComponent } from '../../form/o-form.component';
 import { DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT, OFormDataComponent, OValueChangeEvent } from '../../o-form-data-component.class';
 import { OFileItem } from './o-file-item.class';

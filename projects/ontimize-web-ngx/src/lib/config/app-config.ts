@@ -1,8 +1,8 @@
 import { InjectionToken } from '@angular/core';
 
-import { MenuRootItem } from '../services';
-import { ORemoteConfiguration } from '../types';
-import { Util } from '../utils';
+import { MenuRootItem } from '../services/app-menu.service';
+import { ORemoteConfiguration } from '../types/remote-configuration.type';
+import { Util } from '../util/util';
 
 const DEFAULT_LOCAL_STORAGE_KEY = undefined;
 const DEFAULT_CONFIG: Config = {

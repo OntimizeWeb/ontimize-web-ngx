@@ -2,7 +2,10 @@ import { ChangeDetectionStrategy, Component, Injector, OnInit, TemplateRef, View
 import { Subscription } from 'rxjs';
 import { DialogService, OntimizeService } from '../../../../../services';
 import { dataServiceFactory } from '../../../../../services/data-service.provider';
-import { Codes, Util, SQLTypes, FilterExpressionUtils } from '../../../../../utils';
+import { Util } from '../../../../../util/util';
+import { Codes } from '../../../../../util/codes';
+import { SQLTypes } from '../../../../../util/sqltypes';
+import { FilterExpressionUtils } from '../../../../../components/filter-expression.utils';
 import { ServiceUtils } from '../../../../service.utils';
 import { OColumn } from '../../../o-table.component';
 import { OBaseTableCellRenderer, DEFAULT_INPUTS_O_BASE_TABLE_CELL_RENDERER } from '../o-base-table-cell-renderer.class';

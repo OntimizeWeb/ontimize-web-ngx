@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
 
-import { ServiceUtils } from '../../utils';
+import { ServiceUtils } from '../../components/service.utils';
 import { OSharedModule } from '../../shared/shared.module';
 import { InputConverter } from '../../decorators/input-converter';
 import { OUserInfoModule } from '../../components/user-info/o-user-info.component';

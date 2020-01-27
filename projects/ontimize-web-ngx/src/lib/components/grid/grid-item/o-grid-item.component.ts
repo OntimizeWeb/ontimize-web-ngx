@@ -1,9 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, EventEmitter, forwardRef, HostListener, Inject, NgModule, Optional, Renderer, TemplateRef, ViewChild } from '@angular/core';
-import { OSharedModule } from '../../../shared';
-import { Codes, ObservableWrapper } from '../../../utils';
+import { OSharedModule } from '../../../shared/shared.module';
+import { Codes } from '../../../util/codes';
+import { ObservableWrapper } from '../../../util/async';
 // import { OGridComponent } from '../../grid/o-grid.component';
-import { InputConverter } from '../../../decorators';
+import { InputConverter } from '../../../decorators/input-converter';
 
 export const DEFAULT_INPUTS_O_GRID_ITEM = [
   'colspan',

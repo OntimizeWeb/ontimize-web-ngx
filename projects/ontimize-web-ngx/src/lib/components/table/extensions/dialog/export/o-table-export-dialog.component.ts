@@ -4,7 +4,9 @@ import { MatButton, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { DialogService, OntimizeExportService, OTranslateService } from '../../../../../services';
-import { Codes, SQLTypes, Util } from '../../../../../utils';
+import { Codes } from '../../../../../util/codes';
+import { SQLTypes } from '../../../../../util/sqltypes';
+import { Util } from '../../../../../util/util';
 import { OTableExportButtonService } from '../../export-button/o-table-export-button.service';
 
 

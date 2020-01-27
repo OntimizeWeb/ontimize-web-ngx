@@ -9,7 +9,7 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { FormControl } from '@angular/forms';
 import { OTableCellRendererServiceComponent } from '../../../column/cell-renderer/cell-renderer';
 import { SQLTypes } from '../../../../../util/sqltypes';
-import { Util } from '../../../../../utils';
+import { Util } from '../../../../../util/util';
 
 export const DEFAULT_INPUTS_O_TABLE_QUICKFILTER = [];
 

@@ -1,7 +1,7 @@
 import { Component, EventEmitter, ViewEncapsulation, ViewChild, ViewContainerRef } from '@angular/core';
 import { MatButtonToggleChange, MatButtonToggle } from '@angular/material';
 
-import { Util } from '../../utils';
+import { Util } from '../../util/util';
 
 export const DEFAULT_INPUTS_O_BUTTON_TOGGLE = [
   'oattr: attr',

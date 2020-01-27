@@ -3,9 +3,9 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { Subscription } from 'rxjs';
 
-import { Util } from '../../../utils';
-import { OSharedModule } from '../../../shared';
-import { InputConverter } from '../../../decorators';
+import { Util } from '../../../util/util';
+import { OSharedModule } from '../../../shared/shared.module';
+import { InputConverter } from '../../../decorators/input-converter';
 import { OAppLayoutComponent } from '../../../layouts/app-layout/o-app-layout.component';
 import { PermissionsUtils } from '../../../util/permissions';
 // import { OAppSidenavModule } from '../o-app-sidenav.module';

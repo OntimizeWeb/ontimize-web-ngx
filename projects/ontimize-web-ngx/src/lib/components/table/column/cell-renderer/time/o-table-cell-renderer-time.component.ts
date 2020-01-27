@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Injector, TemplateRef, ViewChild } from '@angular/core';
-import { IMomentPipeArgument, OMomentPipe } from '../../../../../pipes';
+import { IMomentPipeArgument, OMomentPipe } from '../../../../../pipes/o-moment.pipe';
 
 import { OBaseTableCellRenderer, DEFAULT_INPUTS_O_BASE_TABLE_CELL_RENDERER } from '../o-base-table-cell-renderer.class';
 import { Util } from '../../../../../util/util';

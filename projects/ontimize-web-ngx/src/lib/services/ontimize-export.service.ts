@@ -6,7 +6,8 @@ import { share } from 'rxjs/operators';
 
 import { AppConfig, Config } from '../config/app-config';
 import { LoginService } from '../services/login.service';
-import { Codes, ServiceUtils } from '../utils';
+import { Codes } from '../util/codes';
+import { ServiceUtils } from '../components/service.utils';
 
 @Injectable()
 export class OntimizeExportService {
