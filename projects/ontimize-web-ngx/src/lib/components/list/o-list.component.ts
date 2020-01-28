@@ -14,7 +14,7 @@ import { Codes } from '../../util/codes';
 import { OFormComponent } from '../form/o-form.component';
 import { OSearchInputModule } from '../input/search-input/o-search-input.component';
 import { OServiceComponent } from '../o-service-component.class';
-import { ISQLOrder, OQueryDataArgs, ServiceUtils } from '../service.utils';
+import { ISQLOrder, OQueryDataArgs, ServiceUtils } from '../../util/service.utils';
 import { OListItemComponent, OListItemModule } from './list-item/o-list-item.component';
 import { OListItemDirective } from './list-item/o-list-item.directive';
 
@@ -77,7 +77,7 @@ export interface OListInitializationOptions {
   moduleId: module.id,
   selector: 'o-list',
   providers: [
-    { provide: OntimizeService, useFactory: dataServiceFactory, deps: [Injector] }
+    OntimizeService
   ],
   inputs: DEFAULT_INPUTS_O_LIST,
   outputs: DEFAULT_OUTPUTS_O_LIST,

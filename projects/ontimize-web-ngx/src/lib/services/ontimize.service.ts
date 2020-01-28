@@ -7,7 +7,7 @@ import { AppConfig, Config } from '../config/app-config';
 import { LoginService } from '../services/login.service';
 import { IAuthService, IDataService, Util } from '../util/util';
 import { Codes } from '../util/codes';
-import { ServiceUtils } from '../components/service.utils';
+import { ServiceUtils } from '../util/service.utils';
 import { OntimizeServiceResponseParser } from './parser/o-service-response.parser';
 
 @Injectable()

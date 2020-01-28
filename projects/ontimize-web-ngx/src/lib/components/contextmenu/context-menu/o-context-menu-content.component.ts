@@ -3,9 +3,9 @@ import { AfterViewInit, Component, ContentChildren, EventEmitter, HostListener, 
 import { MatMenuTrigger } from '@angular/material';
 
 import { OComponentMenuItems } from '../o-content-menu.class';
-import { OContextMenuItemComponent } from '../o-context-menu-components';
 import { OContextMenuService } from '../o-context-menu.service';
 import { OWrapperContentMenuComponent } from './o-wrapper-content-menu/o-wrapper-content-menu.component';
+import { OContextMenuItemComponent } from '../context-menu-item/o-context-menu-item.component';
 
 export const DEFAULT_CONTEXT_MENU_CONTENT_INPUTS = [
   'menuItems',

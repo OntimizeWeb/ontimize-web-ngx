@@ -1,9 +1,9 @@
 import { Component, Injector, TemplateRef, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 
-import { NumberService } from '../../../../../services';
-import { IRealPipeArgument, ORealPipe } from '../../../../../pipes';
+import { NumberService } from '../../../../../services/number.service';
+import { IRealPipeArgument, ORealPipe } from '../../../../../pipes/o-real.pipe';
 import { DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_INTEGER, OTableCellRendererIntegerComponent } from '../integer/o-table-cell-renderer-integer.component';
-import { InputConverter } from '../../../../../decorators';
+import { InputConverter } from '../../../../../decorators/input-converter';
 
 export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_REAL = [
   ...DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_INTEGER,

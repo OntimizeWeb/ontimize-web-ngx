@@ -1,11 +1,11 @@
 
 import { Component, Injector, OnInit, TemplateRef, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 
-import { CurrencyService } from '../../../../../services';
-import { ICurrencyPipeArgument, OCurrencyPipe } from '../../../../../pipes';
+import { CurrencyService } from '../../../../../services/currency.service';
+import { ICurrencyPipeArgument, OCurrencyPipe } from '../../../../../pipes/o-currency.pipe';
 import { OBaseTableCellRenderer } from '../o-base-table-cell-renderer.class';
 import { OTableCellRendererRealComponent } from '../real/o-table-cell-renderer-real.component';
-import { InputConverter } from '../../../../../decorators';
+import { InputConverter } from '../../../../../decorators/input-converter';
 
 
 export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_CURRENCY = [

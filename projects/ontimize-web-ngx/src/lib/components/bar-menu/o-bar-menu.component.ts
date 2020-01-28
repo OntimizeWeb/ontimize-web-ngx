@@ -4,11 +4,12 @@ import { PermissionsService } from '../../services/permissions/permissions.servi
 import { OTranslateService } from '../../services/translate/o-translate.service';
 import { OSharedModule } from '../../shared/shared.module';
 import { AppMenuService, MenuRootItem } from '../../services/app-menu.service';
-import { OLocaleBarMenuItemModule } from './locale-menu-item/o-locale-bar-menu-item.component';
-import { OBarMenuGroupModule } from './menu-group/o-bar-menu-group.component';
-import { OBarMenuItemModule } from './menu-item/o-bar-menu-item.component';
-import { OBarMenuNestedModule } from './menu-nested/o-bar-menu-nested.component';
-import { OBarMenuSeparatorModule } from './menu-separator/o-bar-menu-separator.component';
+import { OLocaleBarMenuItemComponent } from './locale-menu-item/o-locale-bar-menu-item.component';
+import { OBarMenuItemComponent } from './menu-item/o-bar-menu-item.component';
+import { OBarMenuNestedComponent } from './menu-nested/o-bar-menu-nested.component';
+import { OBarMenuSeparatorComponent } from './menu-separator/o-bar-menu-separator.component';
+import { OBarMenuGroupComponent } from './menu-group/o-bar-menu-group.component';
+import { RouterModule } from '@angular/router';
 
 export const DEFAULT_INPUTS_O_BAR_MENU = [
   // title [string]: menu title. Default: no value.
@@ -117,15 +118,18 @@ export class OBarMenuComponent {
 }
 
 @NgModule({
-  declarations: [OBarMenuComponent],
+  declarations: [
+    OBarMenuComponent,
+    OBarMenuItemComponent,
+    OBarMenuGroupComponent,
+    OLocaleBarMenuItemComponent,
+    OBarMenuSeparatorComponent,
+    OBarMenuNestedComponent
+  ],
   imports: [
     CommonModule,
     OSharedModule,
-    OBarMenuGroupModule,
-    OBarMenuItemModule,
-    OLocaleBarMenuItemModule,
-    OBarMenuSeparatorModule,
-    OBarMenuNestedModule
+    RouterModule
   ],
   exports: [OBarMenuComponent]
 })

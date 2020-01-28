@@ -5,12 +5,12 @@ import { ActivatedRoute, ActivatedRouteSnapshot, Route, Router, RouterModule } f
 import { OListComponent } from '../../components/list/o-list.component';
 import { OServiceComponent } from '../../components/o-service-component.class';
 import { OTableComponent } from '../../components/table/o-table.component';
-import { InputConverter } from '../../decorators';
+import { InputConverter } from '../../decorators/input-converter';
 import { ILocalStorageComponent, LocalStorageService } from '../../services/local-storage.service';
 import { NavigationService } from '../../services/navigation.service';
 import { OFormLayoutManagerService } from '../../services/o-form-layout-manager.service';
 import { OTranslateService } from '../../services/translate/o-translate.service';
-import { OSharedModule } from '../../shared';
+import { OSharedModule } from '../../shared/shared.module';
 import { Util } from '../../util/util';
 import { OFormLayoutDialogComponent } from './dialog/o-form-layout-dialog.component';
 import { OFormLayoutDialogOptionsComponent } from './dialog/options/o-form-layout-dialog-options.component';

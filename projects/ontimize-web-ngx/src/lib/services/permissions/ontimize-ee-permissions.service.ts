@@ -5,10 +5,9 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 
-import { IPermissionsService } from '../../utils';
 import { LoginService } from '../../services/login.service';
 import { AppConfig, Config, OntimizeEEPermissionsConfig } from '../../config/app-config';
-import { Util } from '../../util/util';
+import { Util, IPermissionsService } from '../../util/util';
 import { Codes } from '../../util/codes';
 
 @Injectable()

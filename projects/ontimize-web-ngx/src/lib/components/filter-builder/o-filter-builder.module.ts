@@ -1,4 +1,4 @@
-import { OSharedModule } from '../../shared';
+import { OSharedModule } from '../../shared/shared.module';
 import { CommonModule } from '@angular/common';
 import { OFilterBuilderClearDirective } from './o-filter-builder-clear.directive';
 import { OFilterBuilderQueryDirective } from './o-filter-builder-query.directive';

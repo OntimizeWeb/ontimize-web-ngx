@@ -1,6 +1,6 @@
 import { AfterContentInit, Injector, PipeTransform, TemplateRef } from '@angular/core';
 
-import { Util } from '../../../../utils';
+import { Util } from '../../../../util/util';
 import { OTableComponent } from '../../o-table.component';
 import { OTableColumnComponent } from '../o-table-column.component';
 

@@ -1,19 +1,15 @@
-import { AfterViewInit, ChangeDetectorRef, ChangeDetectionStrategy, Component, ElementRef, EventEmitter, HostListener, Injector, NgModule, OnDestroy, OnInit, ViewEncapsulation, ViewChild, Inject, forwardRef, Injectable } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { MatSidenav } from '@angular/material'; 
-import { Router, RouterModule } from '@angular/router';
+import { AfterViewInit, ChangeDetectorRef, ChangeDetectionStrategy, Component, ElementRef, EventEmitter, HostListener, Injector, NgModule, OnDestroy, OnInit, ViewEncapsulation, ViewChild } from '@angular/core';
+import { MatSidenav } from '@angular/material';
+import { Router } from '@angular/router';
 import { MediaChange, MediaObserver } from '@angular/flex-layout';
 import { Subscription } from 'rxjs';
 
 import { Util } from '../../util/util';
-// import { OSharedModule } from '../../shared/shared.module';
-import { InputConverter } from '../../decorators';
+import { InputConverter } from '../../decorators/input-converter';
 import { AppMenuService, MenuRootItem, MenuItemUserInfo, MenuGroup } from '../../services/app-menu.service';
 import { OUserInfoService, UserInfo } from '../../services/o-user-info.service';
 
 import { Codes, OAppLayoutMode, OSidenavMode } from '../../util/codes';
-
-// import { OAppLayoutComponent, OAppLayoutMode, OSidenavMode  } from '../../layouts/app-layout/o-app-layout.component';
 
 export const DEFAULT_INPUTS_O_APP_SIDENAV = [
   'opened',
@@ -48,7 +44,7 @@ export class OAppSidenavComponent implements OnInit, OnDestroy, AfterViewInit {
   public static DEFAULT_INPUTS_O_APP_LAYOUT = DEFAULT_INPUTS_O_APP_SIDENAV;
   public static DEFAULT_OUTPUTS_O_APP_LAYOUT = DEFAULT_OUTPUTS_O_APP_SIDENAV;
 
-  @ViewChild(MatSidenav, {static: false}) sidenav: MatSidenav;
+  @ViewChild(MatSidenav, { static: false }) sidenav: MatSidenav;
 
   protected routerSubscription: Subscription;
   appMenuService: AppMenuService;
@@ -228,13 +224,5 @@ export class OAppSidenavComponent implements OnInit, OnDestroy, AfterViewInit {
       this.sidenav.close();
     }
   }
-
 }
 
-
-// @NgModule({
-//   imports: [CommonModule, OAppSidenavMenuGroupModule, OAppSidenavImageModule, OAppSidenavMenuItemModule, OSharedModule, RouterModule],
-//   declarations: [OAppSidenavComponent],
-//   exports: [OAppSidenavComponent]
-// }) 
-// export class OAppSidenavModule { }

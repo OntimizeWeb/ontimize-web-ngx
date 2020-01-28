@@ -3,9 +3,9 @@ import { BehaviorSubject, Subscription } from 'rxjs';
 import { InputConverter } from '../../../../decorators/input-converter';
 import { OTranslateService } from '../../../../services/translate/o-translate.service';
 import { Util } from '../../../../util/util';
-import { OContextMenuComponent } from '../../../contextmenu/o-context-menu-components';
-import { ColumnValueFilterOperator, IColumnValueFilter } from '../header/o-table-header-components';
 import { OColumn, OTableComponent } from '../../o-table.component';
+import { OContextMenuComponent } from '../../../contextmenu/o-context-menu.component';
+import { IColumnValueFilter, ColumnValueFilterOperator } from '../header/table-columns-filter/o-table-columns-filter.component';
 
 export const DEFAULT_TABLE_CONTEXT_MENU_INPUTS = [
   'contextMenu: context-menu',

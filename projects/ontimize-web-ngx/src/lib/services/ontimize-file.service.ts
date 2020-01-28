@@ -5,7 +5,8 @@ import { Observable } from 'rxjs';
 import { share } from 'rxjs/operators';
 import { AppConfig, Config } from '../config/app-config';
 import { LoginService } from '../services/login.service';
-import { Codes, ServiceUtils } from '../utils';
+import { Codes } from '../util/codes';
+import { ServiceUtils } from '../util/service.utils';
 
 @Injectable()
 export class OntimizeFileService {

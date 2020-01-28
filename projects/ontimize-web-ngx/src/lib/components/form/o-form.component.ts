@@ -144,7 +144,7 @@ export interface OFormInitializationOptions {
   moduleId: module.id,
   selector: 'o-form',
   providers: [
-    { provide: OntimizeService, useFactory: dataServiceFactory, deps: [Injector] },
+    OntimizeService,
     OFormService,
   ],
   templateUrl: './o-form.component.html',

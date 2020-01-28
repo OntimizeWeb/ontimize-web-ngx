@@ -1,4 +1,5 @@
-import { Codes, Util } from '../../../utils';
+import { Codes } from '../../../util/codes';
+import { Util } from '../../../util/util';
 import { OColumn, OTableComponent } from '../o-table.component';
 
 export interface ITableFiltersStatus {

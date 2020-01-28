@@ -1,8 +1,6 @@
-import { Component, Inject, Injector, forwardRef, ElementRef, NgModule, ViewEncapsulation } from '@angular/core';
-import { RouterModule, Router } from '@angular/router';
-import { CommonModule } from '@angular/common';
+import { Component, Inject, Injector, forwardRef, ElementRef, ViewEncapsulation } from '@angular/core';
+import { Router } from '@angular/router';
 import { Util } from '../../../util/util';
-import { OSharedModule } from '../../../shared/shared.module';
 import { OBarMenuComponent } from '../o-bar-menu.component';
 import { OBaseMenuItemClass } from '../o-base-menu-item.class';
 
@@ -68,12 +66,4 @@ export class OBarMenuItemComponent extends OBaseMenuItemClass {
       this.action();
     }
   }
-}
-
-@NgModule({
-  declarations: [OBarMenuItemComponent],
-  imports: [OSharedModule, CommonModule, RouterModule],
-  exports: [OBarMenuItemComponent]
-})
-export class OBarMenuItemModule {
 }

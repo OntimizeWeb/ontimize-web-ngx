@@ -1,6 +1,4 @@
-import { Component, Injector, OnInit, Optional, Inject, forwardRef, NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { OSharedModule } from '../../../shared/shared.module';
+import { Component, Injector, OnInit, Optional, Inject, forwardRef } from '@angular/core';
 import { OValidatorComponent } from './o-validator.component';
 
 export const DEFAULT_INPUTS_O_ERROR = [
@@ -45,12 +43,4 @@ export class OErrorComponent implements OnInit {
     return this.text;
   }
 
-}
-
-@NgModule({
-  declarations: [OErrorComponent],
-  imports: [OSharedModule, CommonModule],
-  exports: [OErrorComponent]
-})
-export class OErrorModule {
 }

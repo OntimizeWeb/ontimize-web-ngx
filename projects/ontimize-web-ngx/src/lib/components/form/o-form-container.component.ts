@@ -1,10 +1,10 @@
 import { Component, ViewEncapsulation, ViewContainerRef, ViewChild, ComponentFactoryResolver, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { OSharedModule } from '../../shared';
+import { OSharedModule } from '../../shared/shared.module';
 import { OBreadcrumbComponent } from '../../components/breadcrumb/o-breadcrumb.component';
-import { InputConverter } from '../../decorators';
-import { OFormLayoutManagerComponent } from '../../layouts';
+import { InputConverter } from '../../decorators/input-converter';
+import { OFormLayoutManagerComponent } from '../../layouts/form-layout/o-form-layout-manager.component';
 import { OFormComponent } from './o-form.component';
 
 export const DEFAULT_INPUTS_O_FORM_CONTAINER = [

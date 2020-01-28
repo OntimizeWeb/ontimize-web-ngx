@@ -1,5 +1,5 @@
 import { BehaviorSubject, Observable, merge, of } from 'rxjs';
-import { OQueryDataArgs } from '../service.utils';
+import { OQueryDataArgs } from '../../util/service.utils';
 
 export class OTableDao {
 

@@ -3,7 +3,8 @@ import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, I
 import { Subscription } from 'rxjs';
 
 import { OCardMenuItemModule } from '../../components/card-menu-item/o-card-menu-item.component';
-import { AppMenuService, OTranslateService } from '../../services';
+import { AppMenuService } from '../../services/app-menu.service';
+import { OTranslateService } from '../../services/translate/o-translate.service';
 import { MenuGroup, MenuRootItem } from '../../services/app-menu.service';
 import { OSharedModule } from '../../shared/shared.module';
 

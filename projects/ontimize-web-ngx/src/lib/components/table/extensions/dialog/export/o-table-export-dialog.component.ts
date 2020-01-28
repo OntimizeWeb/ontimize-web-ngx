@@ -3,8 +3,12 @@ import { ChangeDetectionStrategy, Component, Inject, Injector, OnDestroy, OnInit
 import { MatButton, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { DialogService, OntimizeExportService, OTranslateService } from '../../../../../services';
-import { Codes, SQLTypes, Util } from '../../../../../utils';
+import { DialogService } from '../../../../../services/dialog.service';
+import { OntimizeExportService } from '../../../../../services/ontimize-export.service';
+import { OTranslateService } from '../../../../../services/translate/o-translate.service';
+import { Codes } from '../../../../../util/codes';
+import { SQLTypes } from '../../../../../util/sqltypes';
+import { Util } from '../../../../../util/util';
 import { OTableExportButtonService } from '../../export-button/o-table-export-button.service';
 
 
@@ -28,7 +32,7 @@ export class OTableExportConfiguration {
   providers: [OntimizeExportService],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
-    'class': 'o-table-export-dialog'
+    class: 'o-table-export-dialog'
   },
   encapsulation: ViewEncapsulation.None
 })

@@ -1,6 +1,6 @@
 import { Injector, Injectable } from '@angular/core';
 import { CanActivateChild, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
-import { Util } from '../../utils';
+import { Util } from '../../util/util';
 import { SnackBarService } from '../snackbar.service';
 import { ShareCanActivateChildService } from '../share-can-activate-child.service';
 import { PermissionsService } from './permissions.service';

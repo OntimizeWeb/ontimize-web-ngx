@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, forwardRef, Inject, Injectable, Injector, OnInit } from '@angular/core';
 import { MatPaginatorIntl } from '@angular/material';
-import { InputConverter } from '../../../../../decorators';
-import { OTranslateService } from '../../../../../services';
+import { InputConverter } from '../../../../../decorators/input-converter';
+import { OTranslateService } from '../../../../../services/translate/o-translate.service';
 import { OTableComponent } from '../../../o-table.component';
 
 export const DEFAULT_PAGINATOR_TABLE = [

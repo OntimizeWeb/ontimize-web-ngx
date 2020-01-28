@@ -1,7 +1,8 @@
 import { ChangeDetectionStrategy, Component, Inject, Injector, OnInit, forwardRef } from '@angular/core';
-import { Codes, Util } from '../../../../../utils';
+import { Codes } from '../../../../../util/codes';
+import { Util } from '../../../../../util/util';
 import { OColumn, OTableComponent } from '../../../o-table.component';
-import { InputConverter } from '../../../../../decorators';
+import { InputConverter } from '../../../../../decorators/input-converter';
 
 export const DEFAULT_INPUTS_O_TABLE_COLUMN_FILTER = [
   // columns [string]: columns that might be filtered, separated by ';'. Default: all visible columns.

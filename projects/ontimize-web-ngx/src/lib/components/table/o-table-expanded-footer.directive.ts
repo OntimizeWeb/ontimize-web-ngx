@@ -2,7 +2,7 @@ import { Directive, ElementRef, Inject, Renderer2, forwardRef } from '@angular/c
 
 import { Injector } from '@angular/core';
 import { OTableComponent } from './o-table.component';
-import { OTranslateService } from '../../services';
+import { OTranslateService } from '../../services/translate/o-translate.service';
 import { Subscription } from 'rxjs';
 
 @Directive({

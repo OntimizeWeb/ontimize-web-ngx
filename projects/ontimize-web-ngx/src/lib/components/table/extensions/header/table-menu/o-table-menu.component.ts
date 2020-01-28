@@ -1,14 +1,24 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, forwardRef, Inject, Injector, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { MatDialog, MatMenu } from '@angular/material';
-import { InputConverter } from '../../../../../decorators';
-import { DialogService, OPermissions, OTableMenuPermissions, OTranslateService, SnackBarService } from '../../../../../services';
+import { InputConverter } from '../../../../../decorators/input-converter';
+import { DialogService } from '../../../../../services/dialog.service';
+import { OPermissions, OTableMenuPermissions } from '../../../../../services/permissions/permissions.service';
+import { OTranslateService } from '../../../../../services/translate/o-translate.service';
+import { SnackBarService } from '../../../../../services/snackbar.service';
+
 import { PermissionsUtils } from '../../../../../util/permissions';
-import { Codes, Util } from '../../../../../utils';
+import { Codes } from '../../../../../util/codes';
+import { Util } from '../../../../../util/util';
 import { OColumn, OTableComponent } from '../../../o-table.component';
 import { OTableCellRendererImageComponent } from '../../../column/cell-renderer/image/o-table-cell-renderer-image.component';
-import { OTableApplyConfigurationDialogComponent, OTableExportConfiguration, OTableExportDialogComponent, OTableLoadFilterDialogComponent, OTableStoreConfigurationDialogComponent, OTableStoreFilterDialogComponent, OTableVisibleColumnsDialogComponent } from '../../dialog/o-table-dialog-components';
 import { OTableOptionComponent } from '../table-option/o-table-option.component';
 import { Observable } from 'rxjs';
+import { OTableExportConfiguration, OTableExportDialogComponent } from '../../dialog/export/o-table-export-dialog.component';
+import { OTableVisibleColumnsDialogComponent } from '../../dialog/visible-columns/o-table-visible-columns-dialog.component';
+import { OTableStoreFilterDialogComponent } from '../../dialog/store-filter/o-table-store-filter-dialog.component';
+import { OTableLoadFilterDialogComponent } from '../../dialog/load-filter/o-table-load-filter-dialog.component';
+import { OTableStoreConfigurationDialogComponent } from '../../dialog/store-configuration/o-table-store-configuration-dialog.component';
+import { OTableApplyConfigurationDialogComponent } from '../../dialog/apply-configuration/o-table-apply-configuration-dialog.component';
 
 
 export const DEFAULT_INPUTS_O_TABLE_MENU = [
@@ -54,24 +64,24 @@ export class OTableMenuComponent implements OnInit, AfterViewInit, OnDestroy {
   protected dialogService: DialogService;
   protected translateService: OTranslateService;
   protected snackBarService: SnackBarService;
-  @ViewChild('menu', {static: false}) matMenu: MatMenu;
+  @ViewChild('menu', { static: false }) matMenu: MatMenu;
 
-  @ViewChild('selectAllCheckboxOption', {static: false})
+  @ViewChild('selectAllCheckboxOption', { static: false })
   selectAllCheckboxOption: OTableOptionComponent;
-  @ViewChild('exportButtonOption', {static: false})
+  @ViewChild('exportButtonOption', { static: false })
   exportButtonOption: OTableOptionComponent;
-  @ViewChild('columnsVisibilityButtonOption', {static: false})
+  @ViewChild('columnsVisibilityButtonOption', { static: false })
   columnsVisibilityButtonOption: OTableOptionComponent;
   @ViewChild('filterMenuButton', { read: ElementRef, static: false })
   filterMenuButton: ElementRef;
   @ViewChild('configurationMenuButton', { read: ElementRef, static: false })
   configurationMenuButton: ElementRef;
 
-  @ViewChild('filterMenu', {static: false})
+  @ViewChild('filterMenu', { static: false })
   filterMenu: MatMenu;
-  @ViewChild('configurationMenu', {static: false})
+  @ViewChild('configurationMenu', { static: false })
   configurationMenu: MatMenu;
-  @ViewChild('columnFilterOption', {static: false})
+  @ViewChild('columnFilterOption', { static: false })
   columnFilterOption: OTableOptionComponent;
 
   protected permissions: OTableMenuPermissions;

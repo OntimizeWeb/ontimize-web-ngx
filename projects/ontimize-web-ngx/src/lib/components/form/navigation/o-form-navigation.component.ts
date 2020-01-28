@@ -2,11 +2,11 @@ import { Component, forwardRef, Inject, Injector, OnDestroy, ViewEncapsulation }
 import { NavigationExtras, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
-import { OFormLayoutManagerComponent } from '../../../layouts';
+import { OFormLayoutManagerComponent } from '../../../layouts/form-layout/o-form-layout-manager.component';
 import { NavigationService, ONavigationItem } from '../../../services/navigation.service';
 import { OntimizeService } from '../../../services/ontimize.service';
-import { dataServiceFactory } from '../../../services/data-service.provider';
-import { Codes, Util } from '../../../utils';
+import { Codes } from '../../../util/codes';
+import { Util } from '../../../util/util';
 import { OFormComponent } from '../o-form.component';
 import { OFormNavigationClass } from './o-form.navigation.class';
 
@@ -32,7 +32,7 @@ export type QueryConfiguration = {
     '[class.o-form-navigation]': 'true'
   },
   providers: [
-    { provide: OntimizeService, useFactory: dataServiceFactory, deps: [Injector] }
+    OntimizeService
   ]
 })
 export class OFormNavigationComponent implements OnDestroy {

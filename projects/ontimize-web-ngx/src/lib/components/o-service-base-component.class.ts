@@ -8,7 +8,7 @@ import { OntimizeService } from '../services/ontimize.service';
 import { Util } from '../util/util';
 import { Codes } from '../util/codes';
 import { OFormComponent } from './form/o-form.component';
-import { OQueryDataArgs, ServiceUtils } from './service.utils';
+import { OQueryDataArgs, ServiceUtils } from '../util/service.utils';
 
 
 export const DEFAULT_INPUTS_O_SERVICE_BASE_COMPONENT = [

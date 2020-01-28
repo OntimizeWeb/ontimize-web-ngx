@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { CanDeactivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { Observable } from 'rxjs';
-import { Codes } from '../../../utils';
+import { Codes } from '../../../util/codes';
 import { OFormComponent } from '../o-form.component';
 
 export interface CanComponentDeactivate {

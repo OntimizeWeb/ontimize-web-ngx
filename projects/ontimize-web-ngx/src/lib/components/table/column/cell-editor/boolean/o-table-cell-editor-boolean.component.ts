@@ -1,9 +1,9 @@
 import { ChangeDetectionStrategy, Component, Injector, TemplateRef, ViewChild, ViewEncapsulation } from '@angular/core';
 
-import { InputConverter } from '../../../../../decorators';
+import { InputConverter } from '../../../../../decorators/input-converter';
 import { MatCheckboxChange } from '@angular/material';
 import { OBaseTableCellEditor } from '../o-base-table-cell-editor.class';
-import { Util } from '../../../../../utils';
+import { Util } from '../../../../../util/util';
 
 export const DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_BOOLEAN = [
   ...OBaseTableCellEditor.DEFAULT_INPUTS_O_TABLE_CELL_EDITOR,

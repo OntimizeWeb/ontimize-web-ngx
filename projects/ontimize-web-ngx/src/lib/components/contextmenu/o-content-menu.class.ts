@@ -1,4 +1,4 @@
-import { Util } from '../../utils';
+import { Util } from '../../util/util';
 
 export const DEFAULT_INPUTS_O_CONTEXT_MENU_ITEMS = [
   'attr',

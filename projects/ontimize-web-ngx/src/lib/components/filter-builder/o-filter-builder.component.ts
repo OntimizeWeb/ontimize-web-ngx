@@ -1,18 +1,15 @@
-import { AfterViewInit, Component, EventEmitter, forwardRef, Inject, Injector, NgModule, OnDestroy, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { AfterViewInit, Component, EventEmitter, forwardRef, Inject, Injector, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 
 import { Codes } from '../../util/codes';
 import { Util } from '../../util/util';
-import { OSharedModule } from '../../shared/shared.module';
 import { InputConverter } from '../../decorators/input-converter';
-// import { OFilterBuilderClearDirective } from './o-filter-builder-clear.directive';
-// import { OFilterBuilderQueryDirective } from './o-filter-builder-query.directive';
 import { OFormComponent } from '../../components/form/o-form.component';
 import { OServiceComponent } from '../../components/o-service-component.class';
-import { FilterExpressionUtils, IExpression, IBasicExpression } from '../filter-expression.utils';
 import { IFormDataComponent } from '../o-form-data-component.class';
+import { FilterExpressionUtils, IExpression, IBasicExpression } from '../../util/filter-expression.utils';
+
 
 export const DEFAULT_INPUTS_O_FILTER_BUILDER = [
   // filters: [string] List of pairs of form component attributes and target component colums (targetColumn1:componentAttr1;targetColumn2:componentAttr2;...). Separated by ';'.
@@ -205,21 +202,3 @@ export class OFilterBuilderComponent implements AfterViewInit, OnDestroy, OnInit
   }
 
 }
-
-// @NgModule({
-//   imports: [
-//     OSharedModule,
-//     CommonModule
-//   ],
-//   declarations: [
-//     OFilterBuilderComponent,
-//     OFilterBuilderClearDirective,
-//     OFilterBuilderQueryDirective
-//   ],
-//   exports: [
-//     OFilterBuilderComponent,
-//     OFilterBuilderClearDirective,
-//     OFilterBuilderQueryDirective
-//   ]
-// })
-// export class OFilterBuilderModule { }

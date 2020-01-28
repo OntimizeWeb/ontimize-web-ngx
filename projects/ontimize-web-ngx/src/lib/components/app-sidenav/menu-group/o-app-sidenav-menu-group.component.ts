@@ -5,11 +5,13 @@ import { Subscription } from 'rxjs';
 
 import { Util } from '../../../util/util';
 import { OSharedModule } from '../../../shared/shared.module';
-import { InputConverter } from '../../../decorators';
+import { InputConverter } from '../../../decorators/input-converter';
 import { PermissionsUtils } from '../../../util/permissions';
 import { OAppSidenavComponent } from '../o-app-sidenav.component';
-import { AppMenuService, MenuGroup, OTranslateService, PermissionsService, OPermissions } from '../../../services';
 import { OAppSidenavMenuItemModule } from '../menu-item/o-app-sidenav-menu-item.module';
+import { OTranslateService } from '../../../services/translate/o-translate.service';
+import { AppMenuService, MenuGroup } from '../../../services/app-menu.service';
+import { OPermissions, PermissionsService } from '../../../services/permissions/permissions.service';
 
 export const DEFAULT_INPUTS_O_APP_SIDENAV_MENU_GROUP = [
   'menuGroup : menu-group',

@@ -1,7 +1,7 @@
 import { AfterContentInit, Component, Injector, OnInit, TemplateRef, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 
-import { InputConverter } from '../../../../../decorators';
-import { IIntegerPipeArgument, OIntegerPipe } from '../../../../../pipes';
+import { InputConverter } from '../../../../../decorators/input-converter';
+import { IIntegerPipeArgument, OIntegerPipe } from '../../../../../pipes/o-integer.pipe';
 import { OBaseTableCellRenderer, DEFAULT_INPUTS_O_BASE_TABLE_CELL_RENDERER } from '../o-base-table-cell-renderer.class';
 
 export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_INTEGER = [

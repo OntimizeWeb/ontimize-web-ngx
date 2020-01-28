@@ -14,7 +14,7 @@ import { Codes } from '../../util/codes';
 import { ObservableWrapper } from '../../util/async';
 import { OFormComponent } from '../form/o-form.component';
 import { OServiceComponent } from '../o-service-component.class';
-import { ISQLOrder, OQueryDataArgs, ServiceUtils } from '../service.utils';
+import { ISQLOrder, OQueryDataArgs, ServiceUtils } from '../../util/service.utils';
 import { OGridItemComponent, OGridItemModule } from './grid-item/o-grid-item.component';
 import { OGridItemDirective } from './grid-item/o-grid-item.directive';
 
@@ -61,7 +61,7 @@ const PAGE_SIZE_OPTIONS = [8, 16, 24, 32, 64];
   moduleId: module.id,
   selector: 'o-grid',
   providers: [
-    { provide: OntimizeService, useFactory: dataServiceFactory, deps: [Injector] }
+    OntimizeService
   ],
   inputs: DEFAULT_INPUTS_O_GRID,
   outputs: DEFAULT_OUTPUTS_O_GRID,
