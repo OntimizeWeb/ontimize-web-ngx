@@ -10,7 +10,12 @@ import { OAppLayoutComponent } from '../../../layouts/app-layout/o-app-layout.co
 import { PermissionsUtils } from '../../../util/permissions';
 // import { OAppSidenavModule } from '../o-app-sidenav.module';
 import { OAppSidenavComponent } from '../o-app-sidenav.component';
-import { DialogService, LoginService, OTranslateService, OPermissions, PermissionsService, OUserInfoService } from '../../../services';
+import { DialogService } from '../../../services/dialog.service';
+import { LoginService } from '../../../services/login.service';
+import { OTranslateService } from '../../../services/translate/o-translate.service';
+import { OUserInfoService } from '../../../services/o-user-info.service';
+import { OPermissions, PermissionsService } from '../../../services/permissions/permissions.service';
+
 // import { OLanguageSelectorModule } from '../../language-selector/o-language-selector.component';
 import { MenuItemAction, MenuItemLocale, MenuItemLogout, MenuItemRoute, MenuItemUserInfo, MenuRootItem } from '../../../services/app-menu.service';
 

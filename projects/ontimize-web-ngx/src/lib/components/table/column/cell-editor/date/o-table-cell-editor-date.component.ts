@@ -3,7 +3,7 @@ import { DateAdapter, MAT_DATE_LOCALE, MatDatepicker, MatDatepickerInputEvent } 
 import { DateFilterFunction, ODateInputComponent, ODateValueType } from '../../../../input/date-input/o-date-input.component';
 
 import { InputConverter } from '../../../../../decorators/input-converter';
-import { MomentService } from '../../../../../services';
+import { MomentService } from '../../../../../services/moment.service';
 import { OBaseTableCellEditor } from '../o-base-table-cell-editor.class';
 import { OntimizeMomentDateAdapter } from '../../../../../shared/material/custom.material.module';
 import { Util } from '../../../../../util/util';

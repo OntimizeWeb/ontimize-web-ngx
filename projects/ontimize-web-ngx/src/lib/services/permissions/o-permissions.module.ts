@@ -11,12 +11,12 @@ export function getPermissionsServiceProvider(injector: Injector) {
   return new PermissionsService(injector);
 }
 
-export * from './error403/o-error-403.component';
-export * from './ontimize-ee-permissions.service';
-export * from './ontimize-permissions.service';
-export * from './permissions-can-activate.guard';
-export * from './permissions-service.provider';
-export * from './permissions.service';
+// export * from './error403/o-error-403.component';
+// export * from './ontimize-ee-permissions.service';
+// export * from './ontimize-permissions.service';
+// export * from './permissions-can-activate.guard';
+// export * from './permissions-service.provider';
+// export * from './permissions.service';
 
 @NgModule({
   declarations: [Error403Component],

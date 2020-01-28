@@ -3,7 +3,9 @@ import { ChangeDetectionStrategy, Component, Inject, Injector, OnDestroy, OnInit
 import { MatButton, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { DialogService, OntimizeExportService, OTranslateService } from '../../../../../services';
+import { DialogService } from '../../../../../services/dialog.service';
+import { OntimizeExportService } from '../../../../../services/ontimize-export.service';
+import { OTranslateService } from '../../../../../services/translate/o-translate.service';
 import { Codes } from '../../../../../util/codes';
 import { SQLTypes } from '../../../../../util/sqltypes';
 import { Util } from '../../../../../util/util';

@@ -7,7 +7,8 @@ import { ServiceUtils } from '../../components/service.utils';
 import { OSharedModule } from '../../shared/shared.module';
 import { InputConverter } from '../../decorators/input-converter';
 import { OUserInfoModule } from '../../components/user-info/o-user-info.component';
-import { DialogService, OModulesInfoService } from '../../services';
+import { DialogService } from '../../services/dialog.service';
+import { OModulesInfoService } from '../../services/o-modules-info.service';
 import { OLanguageSelectorModule } from '../language-selector/o-language-selector.component';
 
 export const DEFAULT_INPUTS_O_APP_HEADER = [

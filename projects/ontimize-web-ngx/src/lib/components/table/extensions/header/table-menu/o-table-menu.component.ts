@@ -1,7 +1,10 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, forwardRef, Inject, Injector, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { MatDialog, MatMenu } from '@angular/material';
 import { InputConverter } from '../../../../../decorators/input-converter';
-import { DialogService, OPermissions, OTableMenuPermissions, OTranslateService, SnackBarService } from '../../../../../services';
+import { DialogService } from '../../../../../services/dialog.service';
+import { OTranslateService } from '../../../../../services/translate/o-translate.service';
+import { OPermissions, OTableMenuPermissions } from '../../../../../services/permissions/permissions.service';
+import { SnackBarService } from '../../../../../services/snackbar.service';
 import { PermissionsUtils } from '../../../../../util/permissions';
 import { Util } from '../../../../../util/util';
 import { Codes } from '../../../../../util/codes';

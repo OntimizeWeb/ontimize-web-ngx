@@ -8,7 +8,9 @@ import { OSharedModule } from '../../../shared/shared.module';
 import { InputConverter } from '../../../decorators/input-converter';
 import { PermissionsUtils } from '../../../util/permissions';
 import { OAppSidenavComponent } from '../o-app-sidenav.component';
-import { AppMenuService, MenuGroup, OTranslateService, PermissionsService, OPermissions } from '../../../services';
+import { AppMenuService, MenuGroup } from '../../../services/app-menu.service';
+import { PermissionsService, OPermissions } from '../../../services/permissions/permissions.service';
+import { OTranslateService } from '../../../services/translate/o-translate.service';
 import { OAppSidenavMenuItemModule } from '../menu-item/o-app-sidenav-menu-item.module';
 
 export const DEFAULT_INPUTS_O_APP_SIDENAV_MENU_GROUP = [

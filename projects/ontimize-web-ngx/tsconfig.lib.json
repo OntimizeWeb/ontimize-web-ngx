@@ -5,14 +5,13 @@
     "baseUrl": "./",
     "target": "es5",
     "module": "es2015",
-    "moduleResolution": "node",
+    "moduleResolution": "classic",
     "removeComments": true,
-    "emitDecoratorMetadata": false,
-    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": false,
     "declaration": true,
     "noImplicitReturns": true,
     "listFiles": true,
-    "noUnusedLocals": false,
     "pretty": true,
     "stripInternal": true,
     "outDir": "dist",
@@ -29,7 +28,7 @@
     ],
     "lib": [
       "dom",
-      "es2016"
+      "es2015"
     ]
   },
   "exclude": [

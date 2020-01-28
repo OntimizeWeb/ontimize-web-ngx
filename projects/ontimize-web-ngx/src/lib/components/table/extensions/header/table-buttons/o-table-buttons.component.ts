@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, forwardRef, Inject, Injector, OnDes
 import { BehaviorSubject, Subscription } from 'rxjs';
 
 import { InputConverter } from '../../../../../decorators/input-converter';
-import { OPermissions } from '../../../../../services/permissions/o-permissions.module';
+import { OPermissions } from '../../../../../services/permissions/permissions.service';
 import { PermissionsUtils } from '../../../../../util/permissions';
 import { OTableComponent } from '../../../o-table.component';
 import { OTableButtonComponent } from '../table-button/o-table-button.component';

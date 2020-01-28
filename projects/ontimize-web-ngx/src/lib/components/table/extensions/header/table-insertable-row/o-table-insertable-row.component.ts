@@ -1,7 +1,9 @@
 import { ChangeDetectionStrategy, Component, ComponentFactoryResolver, EventEmitter, Inject, Injector, OnInit, forwardRef } from '@angular/core';
 import { FormControl, ValidatorFn, Validators } from '@angular/forms';
 import { OColumn, OTableComponent } from '../../../o-table.component';
-import { OPermissions, OTranslateService, SnackBarService } from '../../../../../services';
+import { OTranslateService } from '../../../../../services/translate/o-translate.service';
+import { OPermissions } from '../../../../../services/permissions/permissions.service';
+import { SnackBarService } from '../../../../../services/snackbar.service';
 import { Util } from '../../../../../util/util';
 import { Observable, ObservableWrapper } from '../../../../../util/async';
 

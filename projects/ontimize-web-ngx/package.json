@@ -116,7 +116,7 @@
     "moment": "^2.24.0",
     "ngc-webpack": "^4.1.2",
     "ngx-material-timepicker": "^5.3.0",
-    "node-sass": "^4.13.0",
+    "node-sass": "^4.13.1",
     "ontimize-web-ngx-library-tools": "^4.0.2",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.0",

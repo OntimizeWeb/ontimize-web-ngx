@@ -2,7 +2,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { Component, EventEmitter, Inject, Injector, OnInit, ViewChild } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef, MatListOption, MatSelectionList } from '@angular/material';
 
-import { DialogService } from '../../../../../services';
+import { DialogService } from '../../../../../services/dialog.service';
 import { ITableConfiguration } from '../../o-table-storage.class';
 
 @Component({

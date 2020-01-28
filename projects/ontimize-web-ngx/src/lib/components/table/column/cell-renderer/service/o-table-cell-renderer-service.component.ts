@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { DialogService, OntimizeService } from '../../../../../services';
+import { DialogService } from '../../../../../services/dialog.service';
+import { OntimizeService } from '../../../../../services/ontimize.service';
 import { dataServiceFactory } from '../../../../../services/data-service.provider';
 import { Util } from '../../../../../util/util';
 import { Codes } from '../../../../../util/codes';
