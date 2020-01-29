@@ -45,7 +45,7 @@ export class OTableDataSource extends DataSource<any> {
 
   onRenderedDataChange: EventEmitter<any> = new EventEmitter<any>();
 
-  //load data in scroll
+  // load data in scroll
   get loadDataScrollable(): number { return this._loadDataScrollableChange.getValue().data || 1; }
   set loadDataScrollable(page: number) {
     this._loadDataScrollableChange.next(new OTableScrollEvent(page));
@@ -88,7 +88,7 @@ export class OTableDataSource extends DataSource<any> {
    * Connect function called by the table to retrieve one stream containing the data to render.
    */
   connect(): Observable<any[]> {
-    let displayDataChanges: any[] = [
+    const displayDataChanges: any[] = [
       this._database.dataChange
     ];
 
@@ -144,7 +144,7 @@ export class OTableDataSource extends DataSource<any> {
 
         /** in pagination virtual only show OTableComponent.LIMIT items for better performance of the table */
         if (!this.table.pageable && !this.table.paginationControls && data.length > OTableComponent.LIMIT_SCROLLVIRTUAL) {
-          var datapaginate = data.slice(0, (this.table.pageScrollVirtual * OTableComponent.LIMIT_SCROLLVIRTUAL) - 1);
+          const datapaginate = data.slice(0, (this.table.pageScrollVirtual * OTableComponent.LIMIT_SCROLLVIRTUAL) - 1);
           data = datapaginate;
         }
 
@@ -161,8 +161,8 @@ export class OTableDataSource extends DataSource<any> {
   }
 
   getAggregatesData(data: any[]): any {
-    var self = this;
-    var obj = {};
+    const self = this;
+    const obj = {};
 
     if (typeof this._tableOptions === 'undefined') {
       return obj;
@@ -173,7 +173,7 @@ export class OTableDataSource extends DataSource<any> {
       if (column.aggregate && column.visible) {
         totalValue = self.calculateAggregate(data, column);
       }
-      var key = column.attr;
+      const key = column.attr;
       obj[key] = totalValue;
     });
 
@@ -313,7 +313,7 @@ export class OTableDataSource extends DataSource<any> {
       return oCol.visible && oCol.renderer && oCol.renderer.getCellData;
     });
     return data.map((row) => {
-      let obj = Object.assign({}, row);
+      const obj = Object.assign({}, row);
       tableColumns.forEach((oCol: OColumn) => {
         obj[oCol.attr] = oCol.renderer.getCellData(row[oCol.attr], row);
       });
@@ -327,8 +327,8 @@ export class OTableDataSource extends DataSource<any> {
       tableColumns = this._tableOptions.columns.filter((oCol) => oCol.visible);
     }
     return this.filteredData.map((row) => {
-      /** render each column*/
-      let obj = Object.assign({}, row);
+      // render each column
+      const obj = Object.assign({}, row);
       tableColumns.forEach((oCol: OColumn) => {
         obj[oCol.attr] = oCol.renderer.getCellData(row[oCol.attr], row);
       });
@@ -338,8 +338,8 @@ export class OTableDataSource extends DataSource<any> {
 
   public getColumnData(ocolumn: string) {
     return this.renderedData.map((row) => {
-      /** render each column*/
-      let obj = {};
+      // render each column
+      const obj = {};
       if (ocolumn) {
         obj[ocolumn] = row[ocolumn];
       }
@@ -400,7 +400,7 @@ export class OTableDataSource extends DataSource<any> {
 
   getColumnValueFilterData(data: any[]): any[] {
     this.columnValueFilters.forEach(filter => {
-      let filterColumn = this.table.oTableOptions.columns.find(col => col.attr === filter.attr);
+      const filterColumn = this.table.oTableOptions.columns.find(col => col.attr === filter.attr);
       if (filterColumn) {
         switch (filter.operator) {
           case ColumnValueFilterOperator.IN:
@@ -441,8 +441,8 @@ export class OTableDataSource extends DataSource<any> {
   }
 
   getAggregateData(column: OColumn) {
-    var obj = {};
-    var totalValue = '';
+    const obj = {};
+    let totalValue = '';
 
     if (typeof this._tableOptions === 'undefined') {
       return new Array(obj);
@@ -453,7 +453,7 @@ export class OTableDataSource extends DataSource<any> {
 
   calculateAggregate(data: any[], column: OColumn): any {
     let resultAggregate;
-    let operator = column.aggregate.operator;
+    const operator = column.aggregate.operator;
     if (typeof operator === 'string') {
       switch (operator.toLowerCase()) {
         case 'count':
@@ -473,9 +473,9 @@ export class OTableDataSource extends DataSource<any> {
           break;
       }
     } else {
-      let data: any[] = this.getColumnData(column.attr);
+      const columnData: any[] = this.getColumnData(column.attr);
       if (typeof operator === 'function') {
-        resultAggregate = operator(data);
+        resultAggregate = operator(columnData);
       }
     }
     return resultAggregate;
@@ -484,7 +484,7 @@ export class OTableDataSource extends DataSource<any> {
   sum(column, data): number {
     let value = 0;
     if (data) {
-      value = data.reduce(function (acumulator, currentValue) {
+      value = data.reduce((acumulator, currentValue) => {
         return acumulator + (isNaN(currentValue[column]) ? 0 : currentValue[column]);
       }, value);
     }
@@ -494,7 +494,7 @@ export class OTableDataSource extends DataSource<any> {
   count(column, data): number {
     let value = 0;
     if (data) {
-      value = data.reduce(function (acumulator, currentValue, currentIndex) {
+      value = data.reduce((acumulator, currentValue, currentIndex) => {
         return acumulator + 1;
       }, 0);
     }
@@ -521,7 +521,7 @@ export class OTableDataSource extends DataSource<any> {
 
   updateRenderedRowData(rowData: any) {
     const tableKeys = this.table.getKeys();
-    let record = this.renderedData.find((data: any) => {
+    const record = this.renderedData.find((data: any) => {
       let found = true;
       for (let i = 0, len = tableKeys.length; i < len; i++) {
         const key = tableKeys[i];

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Injector, OnInit, TemplateRef, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { DialogService } from '../../../../../services/dialog.service';
 import { OntimizeService } from '../../../../../services/ontimize.service';
@@ -34,7 +34,7 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_SERVICE = [
     OntimizeService
   ]
 })
-export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer implements OnInit {
+export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer implements OnInit, AfterViewInit, OnDestroy {
 
   public static DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_SERVICE = DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_SERVICE;
 

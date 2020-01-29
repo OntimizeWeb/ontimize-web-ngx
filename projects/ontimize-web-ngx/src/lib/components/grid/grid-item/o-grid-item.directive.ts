@@ -1,4 +1,4 @@
-import { Directive, ElementRef, EventEmitter, HostListener, Renderer } from '@angular/core';
+import { Directive, ElementRef, EventEmitter, HostListener, Renderer2 } from '@angular/core';
 import { Codes } from '../../../util/codes';
 import { Util } from '../../../util/util';
 import { ObservableWrapper } from '../../../util/async';
@@ -22,13 +22,13 @@ export class OGridItemDirective {
   @HostListener('mouseenter')
   onMouseEnter(): void {
     if (Util.isDefined(this.grid) && this.grid.detailMode !== Codes.DETAIL_MODE_NONE) {
-      this.renderer.setElementStyle(this._el.nativeElement, 'cursor', 'pointer');
+      this.renderer.setStyle(this._el.nativeElement, 'cursor', 'pointer');
     }
   }
 
   constructor(
     public _el: ElementRef,
-    private renderer: Renderer
+    private renderer: Renderer2
   ) { }
 
   public onClick(onNext: (item: OGridItemDirective) => void): Object {

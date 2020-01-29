@@ -90,9 +90,9 @@ export class OFilterBuilderComponent implements AfterViewInit, OnDestroy, OnInit
   initialize(): void {
     // Parse filters
     if (this.filters) {
-      let filterArray: Array<string> = Util.parseArray(this.filters);
+      const filterArray: Array<string> = Util.parseArray(this.filters);
       filterArray.forEach(filter => {
-        let filterElms = filter.split(Codes.COLUMNS_ALIAS_SEPARATOR);
+        const filterElms = filter.split(Codes.COLUMNS_ALIAS_SEPARATOR);
         this.filterComponents.push({
           targetAttr: filterElms[0],
           formComponentAttr: filterElms[1] ? filterElms[1] : filterElms[0]
@@ -108,7 +108,7 @@ export class OFilterBuilderComponent implements AfterViewInit, OnDestroy, OnInit
   initializeListeners(): void {
     if (this.queryOnChange) {
       this.filterComponents.forEach((filterComponent: IFilterBuilderCmpTarget) => {
-        let formComponent: IFormDataComponent = this.form.getComponents()[filterComponent.formComponentAttr];
+        const formComponent: IFormDataComponent = this.form.getComponents()[filterComponent.formComponentAttr];
         if (formComponent) {
           this.subscriptions.add(
             formComponent.getFormControl().valueChanges
@@ -125,11 +125,11 @@ export class OFilterBuilderComponent implements AfterViewInit, OnDestroy, OnInit
    */
   getExpression(): IExpression {
     // Prepare form filter values [... { attr, value }]
-    let formComponents = this.form.getComponents();
-    let params: Array<{ attr, value }> = [];
+    const formComponents = this.form.getComponents();
+    const params: Array<{ attr, value }> = [];
     this.filterComponents.forEach((filterComponent: IFilterBuilderCmpTarget) => {
-      let formComponent: IFormDataComponent = formComponents[filterComponent.formComponentAttr];
-      let value = formComponent.getValue();
+      const formComponent: IFormDataComponent = formComponents[filterComponent.formComponentAttr];
+      const value = formComponent.getValue();
       params.push({
         attr: filterComponent.targetAttr,
         value: value
@@ -142,7 +142,7 @@ export class OFilterBuilderComponent implements AfterViewInit, OnDestroy, OnInit
     }
 
     // Generate desfault expression
-    let expressions: Array<IExpression> = [];
+    const expressions: Array<IExpression> = [];
     params.forEach(elem => {
       if (Util.isDefined(elem.value)) {
         expressions.push(FilterExpressionUtils.buildExpressionEquals(elem.attr, elem.value));
@@ -187,7 +187,7 @@ export class OFilterBuilderComponent implements AfterViewInit, OnDestroy, OnInit
    * Clear the form components used for the filter.
    */
   clearFilter(): void {
-    let formComponents = this.form.getComponents();
+    const formComponents = this.form.getComponents();
     this.getFilterAttrs().forEach((attr: string) => {
       formComponents[attr].setValue(void 0);
     });

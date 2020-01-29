@@ -59,7 +59,7 @@ export class OSnackBarComponent {
   }
 
   public onAction(e: Event): void {
-    this.snackBarRef.closeWithAction();
+    this.snackBarRef.dismissWithAction();
   }
 
 }

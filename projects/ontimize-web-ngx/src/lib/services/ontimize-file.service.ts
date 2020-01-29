@@ -26,8 +26,8 @@ export class OntimizeFileService {
   }
 
   public getDefaultServiceConfiguration(serviceName?: string) {
-    let loginService: LoginService = this.injector.get(LoginService);
-    let configuration = this._config.getServiceConfiguration();
+    const loginService: LoginService = this.injector.get(LoginService);
+    const configuration = this._config.getServiceConfiguration();
 
     let servConfig = {};
     if (serviceName && configuration.hasOwnProperty(serviceName)) {
@@ -62,13 +62,13 @@ export class OntimizeFileService {
 
     const headers: HttpHeaders = new HttpHeaders({
       'Access-Control-Allow-Origin': '*',
-      'Authorization': 'Bearer ' + this._sessionid
+      Authorization: 'Bearer ' + this._sessionid
     });
 
     let _innerObserver: any;
     const dataObservable = new Observable(observer => _innerObserver = observer).pipe(share());
 
-    let toUpload: any = new FormData();
+    const toUpload: any = new FormData();
     files.forEach(item => {
       item.prepareToUpload();
       item.isUploading = true;
@@ -88,7 +88,7 @@ export class OntimizeFileService {
     this.httpClient.request(request).subscribe(resp => {
       if (HttpEventType.UploadProgress === resp.type) {
         // Upload progress event received
-        let progressData = {
+        const progressData = {
           loaded: resp.loaded,
           total: resp.total
         };
@@ -125,7 +125,7 @@ export class OntimizeFileService {
   }
 
   protected redirectLogin(sessionExpired: boolean = false) {
-    let router = this.injector.get(Router);
+    const router = this.injector.get(Router);
     const loginService = this.injector.get(LoginService);
     if (sessionExpired) {
       loginService.sessionExpired();

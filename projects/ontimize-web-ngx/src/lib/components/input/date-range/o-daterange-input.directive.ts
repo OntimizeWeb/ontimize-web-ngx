@@ -1,17 +1,15 @@
 import { ESCAPE, UP_ARROW } from '@angular/cdk/keycodes';
 import { Overlay, OverlayConfig, OverlayRef, PositionStrategy, ScrollStrategyOptions } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
-import { ChangeDetectorRef, ComponentRef, Directive, ElementRef, EventEmitter, forwardRef, Input, KeyValueDiffer, KeyValueDiffers, NgZone, Output, ViewContainerRef } from '@angular/core';
+import { ChangeDetectorRef, ComponentRef, Directive, ElementRef, EventEmitter, forwardRef, Input, KeyValueDiffer, KeyValueDiffers, NgZone, Output, ViewContainerRef, OnDestroy } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material';
 import * as _moment from 'moment';
 import { merge } from 'rxjs';
 import { filter, take } from 'rxjs/operators';
 import { DaterangepickerComponent } from './o-daterange-picker.component';
-
-
-
 const moment = _moment;
+
 @Directive({
   selector: 'input[o-daterange-input]',
   host: {
@@ -25,7 +23,7 @@ const moment = _moment;
     }
   ]
 })
-export class ODaterangepickerDirective {
+export class ODaterangepickerDirective implements OnDestroy {
 
   private _onChange = Function.prototype;
   private _onTouched = Function.prototype;
@@ -81,15 +79,15 @@ export class ODaterangepickerDirective {
   showCancel: boolean = false;
   // timepicker variables
   @Input()
-  timePicker: Boolean = false;
+  timePicker: boolean = false;
   @Input()
-  showRanges: Boolean = false;
+  showRanges: boolean = false;
   @Input()
-  timePicker24Hour: Boolean = false;
+  timePicker24Hour: boolean = false;
   @Input()
   timePickerIncrement: number = 1;
   @Input()
-  timePickerSeconds: Boolean = false;
+  timePickerSeconds: boolean = false;
   _locale: any;
   _separator: string;
 
@@ -129,7 +127,7 @@ export class ODaterangepickerDirective {
   };
 
   @Input()
-  oTouchUi: Boolean = false;
+  oTouchUi: boolean = false;
 
   @Input() set startKey(value) {
     if (value && value !== null) {
@@ -473,7 +471,7 @@ export class ODaterangepickerDirective {
       this.setValueInDateComponent(this._dialogRef.componentInstance, this.value);
     }
     this._dialogRef.afterClosed().subscribe(() => this.close());
-    //this._dialogRef.componentInstance. = this;
+    // this._dialogRef.componentInstance. = this;
 
   }
 

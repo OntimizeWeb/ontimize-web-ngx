@@ -19,7 +19,7 @@ export class OMomentPipe implements PipeTransform {
   }
 
   transform(value: any, args: IMomentPipeArgument) {
-    let format = args.format;
+    const format = args.format;
     return this.momentService.parseDate(value, format);
   }
 }

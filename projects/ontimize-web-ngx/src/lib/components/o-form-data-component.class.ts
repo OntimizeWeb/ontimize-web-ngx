@@ -13,9 +13,8 @@ import { Codes } from '../util/codes';
 import { OFormComponent } from './form/o-form.component';
 import { IFormValueOptions, OFormValue } from './form/OFormValue';
 import { OFormControl } from './input/o-form-control.class';
-import { OValidatorComponent } from './input/validation/o-validator.component';
 import { IComponent, OBaseComponent } from './o-component.class';
-
+import { OValidatorComponent } from '../shared/components/validation/o-validator.component';
 
 export interface IMultipleSelection extends IComponent {
   getSelectedItems(): any[];

@@ -38,8 +38,8 @@ export class OntimizeEEService implements IAuthService, IDataService {
   }
 
   public getDefaultServiceConfiguration(serviceName?: string) {
-    let loginService = this.injector.get(LoginService);
-    let configuration = this._config.getServiceConfiguration();
+    const loginService = this.injector.get(LoginService);
+    const configuration = this._config.getServiceConfiguration();
 
     let servConfig = {};
     if (serviceName && configuration.hasOwnProperty(serviceName)) {
@@ -54,7 +54,7 @@ export class OntimizeEEService implements IAuthService, IDataService {
     this._sessionid = config.session ? config.session.id : -1;
     this.path = config.path;
     this._startSessionPath = this._appConfig['startSessionPath'] ? this._appConfig['startSessionPath'] : '/users/login';
-    //TODO init other params
+    // TODO init other params
   }
 
   public get urlBase(): string {
@@ -69,9 +69,9 @@ export class OntimizeEEService implements IAuthService, IDataService {
     const url = this.urlBase + this._startSessionPath;
     const options: any = {
       headers: new HttpHeaders({
-        'Authorization': 'Basic ' + btoa(user + ':' + password)
+        Authorization: 'Basic ' + btoa(user + ':' + password)
       }),
-      'observe': 'response'
+      observe: 'response'
     };
     const self = this;
     const startSessionObservable = new Observable(_startSessionObserver => {
@@ -103,7 +103,7 @@ export class OntimizeEEService implements IAuthService, IDataService {
   }
 
   public query(kv?: Object, av?: Array<string>, entity?: string, sqltypes?: Object): Observable<any> {
-    //TODO improve this -> merge between global conf and specific params of method calling
+    // TODO improve this -> merge between global conf and specific params of method calling
     kv = (Util.isDefined(kv)) ? kv : this.kv;
     av = (Util.isDefined(av)) ? av : this.av;
     sqltypes = (Util.isDefined(sqltypes)) ? sqltypes : this.sqltypes;
@@ -131,7 +131,7 @@ export class OntimizeEEService implements IAuthService, IDataService {
   public advancedQuery(kv?: Object, av?: Array<string>, entity?: string, sqltypes?: Object,
     offset?: number, pagesize?: number, orderby?: Array<Object>): Observable<any> {
 
-    //TODO improve this -> merge between global conf and specific params of method calling
+    // TODO improve this -> merge between global conf and specific params of method calling
     kv = (Util.isDefined(kv)) ? kv : this.kv;
     av = (Util.isDefined(av)) ? av : this.av;
     sqltypes = (Util.isDefined(sqltypes)) ? sqltypes : this.sqltypes;
@@ -226,7 +226,7 @@ export class OntimizeEEService implements IAuthService, IDataService {
   }
 
   redirectLogin(sessionExpired: boolean = false) {
-    let router = this.injector.get(Router);
+    const router = this.injector.get(Router);
     const loginService = this.injector.get(LoginService);
     if (sessionExpired) {
       loginService.sessionExpired();
@@ -238,7 +238,7 @@ export class OntimizeEEService implements IAuthService, IDataService {
     return new HttpHeaders({
       'Access-Control-Allow-Origin': '*',
       'Content-Type': 'application/json;charset=UTF-8',
-      'Authorization': 'Bearer ' + this._sessionid
+      Authorization: 'Bearer ' + this._sessionid
     });
   }
 

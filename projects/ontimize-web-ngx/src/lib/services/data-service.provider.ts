@@ -17,7 +17,7 @@ class DataServiceFactory {
     } else if ('OntimizeEE' === this.config.serviceType) {
       return new OntimizeEEService(this.injector);
     } else {
-      let newInstance = Object.create((this.config.serviceType as any).prototype);
+      const newInstance = Object.create((this.config.serviceType as any).prototype);
       this.config.serviceType.apply(newInstance, new Array(this.injector));
       return newInstance;
     }

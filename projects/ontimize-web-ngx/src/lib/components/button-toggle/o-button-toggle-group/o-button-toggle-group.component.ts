@@ -62,9 +62,9 @@ export class OButtonToggleGroupComponent implements AfterViewInit, OnInit {
   public onChange: EventEmitter<MatButtonToggleChange> = new EventEmitter();
   /* End outputs */
 
-  @ViewChild(MatButtonToggleGroup, {static: false})
+  @ViewChild(MatButtonToggleGroup, { static: false })
   protected _innerButtonToggleGroup: MatButtonToggleGroup;
-  @ViewChild('childContainer', { read: ViewContainerRef, static: false})
+  @ViewChild('childContainer', { read: ViewContainerRef, static: false })
   protected _viewContainerRef: ViewContainerRef;
   @ContentChildren(forwardRef(() => OButtonToggleComponent))
   protected _children: QueryList<OButtonToggleComponent>;
@@ -85,8 +85,8 @@ export class OButtonToggleGroupComponent implements AfterViewInit, OnInit {
   protected buildChildren(): void {
     const factory: ComponentFactory<OButtonToggleComponent> = this.resolver.resolveComponentFactory(OButtonToggleComponent);
     this._viewContainerRef.clear();
-    let childList = this._children.map((child) => {
-      let componentRef = this._viewContainerRef.createComponent(factory);
+    const childList = this._children.map((child) => {
+      const componentRef = this._viewContainerRef.createComponent(factory);
       componentRef.instance.oattr = child.oattr;
       componentRef.instance.label = child.label;
       componentRef.instance.icon = child.icon;

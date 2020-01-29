@@ -4,16 +4,16 @@ import 'reflect-metadata';
 export function OComponent(newCompAnnotations: any) {
 
   function OComponentInner(target: Function) {
-    var parentTarget = Object.getPrototypeOf(target.prototype).constructor;
-    var parentAnnotations = Reflect.getMetadata('annotations', parentTarget);
+    const parentTarget = Object.getPrototypeOf(target.prototype).constructor;
+    const parentAnnotations = Reflect.getMetadata('annotations', parentTarget);
     if (parentAnnotations) {
-      var parentAnnotation = parentAnnotations[0];
+      const parentAnnotation = parentAnnotations[0];
       copyDecorators(newCompAnnotations, parentAnnotation);
     } else if (parentTarget.hasOwnProperty('decorators')) {
-      var parentDecorators = getDecorators(parentTarget);
+      const parentDecorators = getDecorators(parentTarget);
       copyDecorators(newCompAnnotations, parentDecorators);
     }
-    var metadata = new Component(newCompAnnotations);
+    const metadata = new Component(newCompAnnotations);
     Reflect.defineMetadata('annotations', [metadata], target);
   }
   return OComponentInner;
@@ -24,7 +24,7 @@ function isPresent(obj) {
 }
 
 function getDecorators(target: any) {
-  let decoratorsObj = undefined;
+  let decoratorsObj;
   const decorators = target.decorators[0];
   if (decorators && decorators.args && decorators.args[0]) {
     decoratorsObj = decorators.args[0];

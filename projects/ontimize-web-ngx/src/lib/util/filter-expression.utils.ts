@@ -118,7 +118,7 @@ export class FilterExpressionUtils {
       if (!FilterExpressionUtils.instanceofExpression(exp)) {
         console.error('The expression provided is not an instance of \'IExpression\'');
       }
-      let be: IBasicExpression = {
+      const be: IBasicExpression = {
         '@basic_expression': exp
       };
       return be;
@@ -146,7 +146,7 @@ export class FilterExpressionUtils {
       if (!FilterExpressionUtils.instanceofExpression(exp)) {
         console.error('The expression provided is not an instance of \'IExpression\'');
       }
-      let be: IFilterExpression = {
+      const be: IFilterExpression = {
         '@filter_expression': exp
       };
       return be;
@@ -177,7 +177,7 @@ export class FilterExpressionUtils {
     if (expr2.lop === undefined && expr2.op === undefined) {
       return expr1;
     }
-    let expr: IExpression = {
+    const expr: IExpression = {
       lop: expr1,
       op: op,
       rop: expr2
@@ -192,7 +192,7 @@ export class FilterExpressionUtils {
    * @returns the `IExpression`.
    */
   static buildExpressionEquals(key: string, value: any): IExpression {
-    let expr: IExpression = {
+    const expr: IExpression = {
       lop: key,
       op: FilterExpressionUtils.OP_EQUAL,
       rop: value
@@ -206,7 +206,7 @@ export class FilterExpressionUtils {
    * @returns the `IExpression`.
    */
   static buildExpressionIsNotNull(key: string): IExpression {
-    let expr: IExpression = {
+    const expr: IExpression = {
       lop: key,
       op: FilterExpressionUtils.OP_NOT_NULL
     };
@@ -219,7 +219,7 @@ export class FilterExpressionUtils {
    * @returns the `IExpression`.
    */
   static buildExpressionIsNull(key: string): IExpression {
-    let expr: IExpression = {
+    const expr: IExpression = {
       lop: key,
       op: FilterExpressionUtils.OP_NULL
     };
@@ -233,7 +233,7 @@ export class FilterExpressionUtils {
    * @returns the `IExpression`.
    */
   static buildExpressionLess(key: string, value: any): IExpression {
-    let expr: IExpression = {
+    const expr: IExpression = {
       lop: key,
       op: FilterExpressionUtils.OP_LESS,
       rop: value
@@ -248,7 +248,7 @@ export class FilterExpressionUtils {
    * @returns the `IExpression`.
    */
   static buildExpressionLessEqual(key: string, value: any): IExpression {
-    let expr: IExpression = {
+    const expr: IExpression = {
       lop: key,
       op: FilterExpressionUtils.OP_LESS_EQUAL,
       rop: value
@@ -263,7 +263,7 @@ export class FilterExpressionUtils {
    * @returns the `IExpression`.
    */
   static buildExpressionMore(key: string, value: any): IExpression {
-    let expr: IExpression = {
+    const expr: IExpression = {
       lop: key,
       op: FilterExpressionUtils.OP_MORE,
       rop: value
@@ -278,7 +278,7 @@ export class FilterExpressionUtils {
    * @returns the `IExpression`.
    */
   static buildExpressionMoreEqual(key: string, value: any): IExpression {
-    let expr: IExpression = {
+    const expr: IExpression = {
       lop: key,
       op: FilterExpressionUtils.OP_MORE_EQUAL,
       rop: value
@@ -287,7 +287,7 @@ export class FilterExpressionUtils {
   }
 
   static buildExpressionIn(key: string, values: any[]): IExpression {
-    let expr: IExpression = {
+    const expr: IExpression = {
       lop: key,
       op: FilterExpressionUtils.OP_IN,
       rop: values
@@ -308,7 +308,7 @@ export class FilterExpressionUtils {
         value = '%' + value + '%';
       }
     }
-    let expr: IExpression = {
+    const expr: IExpression = {
       lop: key,
       op: FilterExpressionUtils.OP_NOT_LIKE,
       rop: value
@@ -329,7 +329,7 @@ export class FilterExpressionUtils {
         value = '%' + value + '%';
       }
     }
-    let expr: IExpression = {
+    const expr: IExpression = {
       lop: key,
       op: FilterExpressionUtils.OP_LIKE,
       rop: value
@@ -347,7 +347,7 @@ export class FilterExpressionUtils {
     if (value !== undefined) {
       value = '%' + value;
     }
-    let expr: IExpression = {
+    const expr: IExpression = {
       lop: key,
       op: FilterExpressionUtils.OP_LIKE,
       rop: value
@@ -365,7 +365,7 @@ export class FilterExpressionUtils {
     if (value !== undefined) {
       value = value + '%';
     }
-    let expr: IExpression = {
+    const expr: IExpression = {
       lop: key,
       op: FilterExpressionUtils.OP_LIKE,
       rop: value
@@ -380,7 +380,7 @@ export class FilterExpressionUtils {
    * @returns the `IExpression`.
    */
   static buildExpressionNotEquals(key: string, value: any): IExpression {
-    let expr: IExpression = {
+    const expr: IExpression = {
       lop: key,
       op: FilterExpressionUtils.OP_NOT_EQUAL,
       rop: value
@@ -402,7 +402,7 @@ export class FilterExpressionUtils {
   static buildExpressionNullAndValue(key: string, value: any, op: string): IExpression {
     const isNull: IExpression = FilterExpressionUtils.buildExpressionIsNull(key);
     const equals: IExpression = FilterExpressionUtils.buildExpressionEquals(key, value);
-    let expr: IExpression = {
+    const expr: IExpression = {
       lop: isNull,
       op: op,
       rop: equals

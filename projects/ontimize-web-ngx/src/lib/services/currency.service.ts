@@ -14,7 +14,7 @@ export class CurrencyService {
 
   constructor(protected injector: Injector) {
     this._numberService = this.injector.get(NumberService);
-    //TODO: initialize from config
+    // TODO: initialize from config
     this._symbol = CurrencyService.DEFAULT_CURRENCY_SYMBOL;
     this._symbolPosition = CurrencyService.DEFAULT_CURRENCY_SYMBOL_POSITION;
   }

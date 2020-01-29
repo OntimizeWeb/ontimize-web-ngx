@@ -1,5 +1,5 @@
 
-import {share} from 'rxjs/operators';
+import { share } from 'rxjs/operators';
 import { Injector, Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -30,8 +30,8 @@ export class OntimizePermissionsService implements IPermissionsService {
   }
 
   getDefaultServiceConfiguration(): any {
-    let loginService = this.injector.get(LoginService);
-    let servConfig = {};
+    const loginService = this.injector.get(LoginService);
+    const servConfig = {};
     servConfig[Codes.SESSION_KEY] = loginService.getSessionInfo();
     return servConfig;
   }
@@ -56,10 +56,10 @@ export class OntimizePermissionsService implements IPermissionsService {
   }
 
   loadPermissions(): Observable<any> {
-    let kv: Object = {};
+    const kv: Object = {};
     kv[this.keyColumn] = this._user;
 
-    let av = [this.valueColumn];
+    const av = [this.valueColumn];
 
     const url = this._urlBase + '/query';
     const options = {

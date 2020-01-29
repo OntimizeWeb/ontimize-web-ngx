@@ -30,8 +30,8 @@ export class OntimizeExportService {
   }
 
   public getDefaultServiceConfiguration(serviceName?: string): Object {
-    let loginService: LoginService = this.injector.get(LoginService);
-    let configuration = this._config.getServiceConfiguration();
+    const loginService: LoginService = this.injector.get(LoginService);
+    const configuration = this._config.getServiceConfiguration();
 
     let servConfig = {};
     if (serviceName && configuration.hasOwnProperty(serviceName)) {
@@ -71,7 +71,7 @@ export class OntimizeExportService {
       headers: new HttpHeaders({
         'Access-Control-Allow-Origin': '*',
         'Content-Type': 'application/json;charset=UTF-8',
-        'Authorization': 'Bearer ' + this._sessionid
+        Authorization: 'Bearer ' + this._sessionid
       })
     };
     const body = JSON.stringify(data);
@@ -105,16 +105,16 @@ export class OntimizeExportService {
     const options: any = {
       headers: new HttpHeaders({
         'Access-Control-Allow-Origin': '*',
-        'Authorization': 'Bearer ' + this._sessionid
+        Authorization: 'Bearer ' + this._sessionid
       }),
-      'observe': 'response',
-      'responseType': 'blob'
+      observe: 'response',
+      responseType: 'blob'
     };
     // .map((res: any) => new Blob([res.blob()], { type: responseType }))
     this.httpClient.get(url, options).subscribe((resp: any) => {
-      let fileData = resp.body;
-      let fileURL = URL.createObjectURL(fileData);
-      let a = document.createElement('a');
+      const fileData = resp.body;
+      const fileURL = URL.createObjectURL(fileData);
+      const a = document.createElement('a');
       document.body.appendChild(a);
       a.href = fileURL;
       a.download = fileId + '.' + fileExtension;
@@ -129,7 +129,7 @@ export class OntimizeExportService {
   }
 
   protected redirectLogin(sessionExpired: boolean = false): void {
-    let router = this.injector.get(Router);
+    const router = this.injector.get(Router);
     const loginService = this.injector.get(LoginService);
     if (sessionExpired) {
       loginService.sessionExpired();

@@ -92,7 +92,7 @@ export class ORemoteConfigurationService {
           if (Util.isDefined(storedConf)) {
             let componentsData;
             try {
-              let decoded = atob(storedConf);
+              const decoded = atob(storedConf);
               componentsData = JSON.parse(decoded);
             } catch (e) {
               componentsData = {};
@@ -185,7 +185,7 @@ export class ORemoteConfigurationService {
     return new HttpHeaders({
       'Access-Control-Allow-Origin': '*',
       'Content-Type': 'application/json;charset=UTF-8',
-      'Authorization': 'Bearer ' + sessionInfo.id
+      Authorization: 'Bearer ' + sessionInfo.id
     });
   }
 

@@ -136,10 +136,10 @@ export class OFormServiceComponent extends OFormDataComponent {
       this.descriptionColArray = this.visibleColArray;
     }
 
-    let pkArray = Util.parseArray(this.parentKeys);
+    const pkArray = Util.parseArray(this.parentKeys);
     this._pKeysEquiv = Util.parseParentKeysEquivalences(pkArray);
 
-    let setValueSetArray = Util.parseArray(this.setValueOnValueChange);
+    const setValueSetArray = Util.parseArray(this.setValueOnValueChange);
     this._setValueOnValueChangeEquiv = Util.parseParentKeysEquivalences(setValueSetArray);
 
     if (this.form && this.queryOnBind) {
@@ -181,14 +181,14 @@ export class OFormServiceComponent extends OFormDataComponent {
   protected emitOnValueChange(type, newValue, oldValue) {
     super.emitOnValueChange(type, newValue, oldValue);
     // Set value for 'set-value-on-value-change' components
-    let record = this.getSelectedRecord();
+    const record = this.getSelectedRecord();
     this.onSetValueOnValueChange.emit(record);
-    let setValueSetKeys = Object.keys(this._setValueOnValueChangeEquiv);
+    const setValueSetKeys = Object.keys(this._setValueOnValueChangeEquiv);
     if (setValueSetKeys.length) {
-      let formComponents = this.form.getComponents();
+      const formComponents = this.form.getComponents();
       if (Util.isDefined(record)) {
         setValueSetKeys.forEach(key => {
-          let comp = formComponents[this._setValueOnValueChangeEquiv[key]];
+          const comp = formComponents[this._setValueOnValueChangeEquiv[key]];
           if (Util.isDefined(comp)) {
             comp.setValue(record[key]);
           }
@@ -207,7 +207,7 @@ export class OFormServiceComponent extends OFormDataComponent {
       this.dataService = this.injector.get(loadingService);
 
       if (Util.isDataService(this.dataService)) {
-        let serviceCfg = this.dataService.getDefaultServiceConfiguration(this.service);
+        const serviceCfg = this.dataService.getDefaultServiceConfiguration(this.service);
         if (this.entity) {
           serviceCfg['entity'] = this.entity;
         }
@@ -219,14 +219,14 @@ export class OFormServiceComponent extends OFormDataComponent {
   }
 
   getAttributesValuesToQuery(columns?: Array<any>) {
-    let result = Util.isDefined(columns) ? columns : this.colArray;
+    const result = Util.isDefined(columns) ? columns : this.colArray;
     if (result.indexOf(this.valueColumn) === -1) {
       result.push(this.valueColumn);
     }
     return result;
   }
 
-  queryData(filter: any = undefined) {
+  queryData(filter?: any) {
     const self = this;
     if (!this.dataService || !(this.queryMethod in this.dataService) || !this.entity) {
       console.warn('Service not properly configured! aborting query');
@@ -251,7 +251,7 @@ export class OFormServiceComponent extends OFormDataComponent {
           self.cacheQueried = true;
           self.setDataArray(resp.data);
         }
-        //window.setTimeout(() => { this.loading = false; self.loadingSubject.next(false); self.loaderSubscription.unsubscribe(); }, 10000);
+        // window.setTimeout(() => { this.loading = false; self.loadingSubject.next(false); self.loaderSubscription.unsubscribe(); }, 10000);
         self.loadingSubject.next(false);
         self.loaderSubscription.unsubscribe();
       }, err => {
@@ -337,7 +337,7 @@ export class OFormServiceComponent extends OFormDataComponent {
   }
 
   getSelectedRecord() {
-    let result = undefined;
+    let result;
     const selectedValue = this.getValue();
     if (Util.isDefined(selectedValue)) {
       result = this.getDataArray().find(item => item[this.valueColumn] === selectedValue);
@@ -346,10 +346,10 @@ export class OFormServiceComponent extends OFormDataComponent {
   }
 
   load(): any {
-    var self = this;
-    var zone = this.injector.get(NgZone);
-    var loadObservable = new Observable(observer => {
-      var timer = window.setTimeout(() => {
+    const self = this;
+    const zone = this.injector.get(NgZone);
+    const loadObservable = new Observable(observer => {
+      const timer = window.setTimeout(() => {
         observer.next(true);
       }, self.delayLoad);
 
@@ -362,7 +362,7 @@ export class OFormServiceComponent extends OFormDataComponent {
       };
 
     });
-    var subscription = loadObservable.subscribe(val => {
+    const subscription = loadObservable.subscribe(val => {
       zone.run(() => {
         self.loading = val as boolean;
         self.loadingSubject.next(val as boolean);

@@ -124,7 +124,7 @@ export class OTableCellEditorBooleanComponent extends OBaseTableCellEditor {
   }
 
   hasCellDataTrueValue(cellData: any): boolean {
-    let result: boolean = undefined;
+    let result: boolean;
     if (Util.isDefined(cellData)) {
       result = (cellData === this.trueValue);
       if (this.booleanType === 'string' && !Util.isDefined(this.trueValue)) {
@@ -137,7 +137,7 @@ export class OTableCellEditorBooleanComponent extends OBaseTableCellEditor {
   protected parseValueByType(val: any): any {
     let result = val;
     const cellIsTrue = this.hasCellDataTrueValue(val);
-    let value = cellIsTrue ? this.trueValue : this.falseValue;
+    const value = cellIsTrue ? this.trueValue : this.falseValue;
     switch (this.booleanType) {
       case 'string':
         result = this.translateService.get(value);

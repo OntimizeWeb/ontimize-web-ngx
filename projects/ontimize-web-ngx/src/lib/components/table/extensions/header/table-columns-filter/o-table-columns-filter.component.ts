@@ -9,7 +9,7 @@ export const DEFAULT_INPUTS_O_TABLE_COLUMN_FILTER = [
   'columns',
   // preloadValues [true|false|yes|no]: indicates whether or not to show the list values when the filter dialog is opened. Default: true.
   'preloadValues: preload-values',
-  //mode [default | selection |  custom]
+  // mode [default | selection |  custom]
   'mode'
 ];
 
@@ -54,7 +54,7 @@ export class OTableColumnsFilterComponent implements OnInit {
 
   @InputConverter()
   set mode(val: string) {
-    let m = OTableColumnsFilterComponent.OTableColumnsFilterModes.find(e => e === val);
+    const m = OTableColumnsFilterComponent.OTableColumnsFilterModes.find(e => e === val);
     if (Util.isDefined(m)) {
       this._mode = m;
     } else {
@@ -76,8 +76,8 @@ export class OTableColumnsFilterComponent implements OnInit {
     }
     const self = this;
     this.columnsArray.forEach((colData, i, arr) => {
-      let colDef = colData.split(Codes.TYPE_SEPARATOR);
-      let colName = colDef[0];
+      const colDef = colData.split(Codes.TYPE_SEPARATOR);
+      const colName = colDef[0];
       let compType = (colDef[1] || '').toUpperCase();
       if ([OTableColumnsFilterComponent.DEFAULT_COMPARISON_TYPE, OTableColumnsFilterComponent.MODEL_COMPARISON_TYPE].indexOf(compType) === -1) {
         compType = OTableColumnsFilterComponent.DEFAULT_COMPARISON_TYPE;

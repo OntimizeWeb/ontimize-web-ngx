@@ -21,7 +21,7 @@ export class AuthGuardService implements CanActivate {
   }
 
   canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean> | boolean {
-    let isLoggedIn = this.loginService.isLoggedIn();
+    const isLoggedIn = this.loginService.isLoggedIn();
     let result: Promise<boolean> | boolean = isLoggedIn;
     if (!isLoggedIn) {
       this.permissionsService.restart();

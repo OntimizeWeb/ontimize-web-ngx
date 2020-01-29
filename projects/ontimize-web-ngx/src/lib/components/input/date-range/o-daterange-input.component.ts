@@ -163,7 +163,7 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
   public onChangeEvent(event: any): void {
     let objectValue;
     if (event instanceof Event) {
-      let value = (event.target as HTMLInputElement).value;
+      const value = (event.target as HTMLInputElement).value;
       if (value !== '') {
         objectValue = this.getDateRangeToString(value);
       }
@@ -208,15 +208,15 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
   }
 
   updateElement() {
-    let chosenLabel = (!this.isObjectDataRangeNull(this.value)) ? this.value.value[this.pickerDirective.startKey].format(this.oformat) +
+    const chosenLabel = (!this.isObjectDataRangeNull(this.value)) ? this.value.value[this.pickerDirective.startKey].format(this.oformat) +
       this.separator + this.value.value[this.pickerDirective.endKey].format(this.oformat) : null;
     this.pickerDirective._el.nativeElement.value = chosenLabel;
   }
 
 
   getDateRangeToString(valueToString: string) {
-    let value = {};
-    let range = valueToString.split(this.separator);
+    const value = {};
+    const range = valueToString.split(this.separator);
     value[this._startKey] = moment(range[0].trim(), this.oformat);
     value[this._endKey] = moment(range[1].trim(), this.oformat);
     return value;

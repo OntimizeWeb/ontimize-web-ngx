@@ -43,13 +43,13 @@ export class OTableCellEditorIntegerComponent extends OBaseTableCellEditor {
   }
 
   getCellData() {
-    let cellData = super.getCellData();
-    let intValue = parseInt(cellData);
+    const cellData = super.getCellData();
+    const intValue = parseInt(cellData);
     return isNaN(intValue) ? undefined : intValue;
   }
 
   resolveValidators(): ValidatorFn[] {
-    let validators: ValidatorFn[] = super.resolveValidators();
+    const validators: ValidatorFn[] = super.resolveValidators();
     if (typeof (this.min) !== 'undefined') {
       validators.push(this.minValidator.bind(this));
     }
@@ -62,8 +62,8 @@ export class OTableCellEditorIntegerComponent extends OBaseTableCellEditor {
   protected minValidator(control: FormControl) {
     if ((typeof (control.value) === 'number') && (control.value < this.min)) {
       return {
-        'min': {
-          'requiredMin': this.min
+        min: {
+          requiredMin: this.min
         }
       };
     }
@@ -73,8 +73,8 @@ export class OTableCellEditorIntegerComponent extends OBaseTableCellEditor {
   protected maxValidator(control: FormControl) {
     if ((typeof (control.value) === 'number') && (this.max < control.value)) {
       return {
-        'max': {
-          'requiredMax': this.max
+        max: {
+          requiredMax: this.max
         }
       };
     }

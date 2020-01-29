@@ -58,11 +58,6 @@ export class OBaseTableCellEditor implements OnInit {
 
   public editorCreated: EventEmitter<Object> = new EventEmitter<Object>();
 
-  @HostListener('document:keyup', ['$event'])
-  onDocumentKeyup(event: KeyboardEvent) {
-    this.handleKeyup(event);
-  }
-
   inputRef: any;
 
   protected type: string;
@@ -70,6 +65,11 @@ export class OBaseTableCellEditor implements OnInit {
 
   protected snackBarService: SnackBarService;
   protected oldValue: any;
+
+  @HostListener('document:keyup', ['$event'])
+  onDocumentKeyup(event: KeyboardEvent) {
+    this.handleKeyup(event);
+  }
 
   constructor(protected injector: Injector) {
     this.snackBarService = this.injector.get(SnackBarService);
@@ -204,7 +204,7 @@ export class OBaseTableCellEditor implements OnInit {
   }
 
   resolveValidators(): ValidatorFn[] {
-    let validators: ValidatorFn[] = [];
+    const validators: ValidatorFn[] = [];
     if (this.orequired) {
       validators.push(Validators.required);
     }

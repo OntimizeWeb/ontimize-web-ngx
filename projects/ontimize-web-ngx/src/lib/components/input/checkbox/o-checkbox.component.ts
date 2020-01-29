@@ -77,7 +77,7 @@ export class OCheckboxComponent extends OFormDataComponent {
 
     const context = this;
     (this.getFormControl() as OFormControl).getValue.bind(context);
-    (this.getFormControl() as OFormControl).getValue = function () {
+    (this.getFormControl() as OFormControl).getValue = () => {
       return this.value ? context.trueValue : context.falseValue;
     };
   }

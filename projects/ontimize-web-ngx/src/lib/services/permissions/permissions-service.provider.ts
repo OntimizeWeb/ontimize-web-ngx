@@ -20,7 +20,7 @@ export class PermissionsServiceFactory {
     } else if ('OntimizeEEPermissions' === serviceType) {
       return new OntimizeEEPermissionsService(this.injector);
     } else {
-      let newInstance = Object.create((serviceType as any).prototype);
+      const newInstance = Object.create((serviceType as any).prototype);
       serviceType.apply(newInstance, new Array(this.injector));
       return newInstance;
     }

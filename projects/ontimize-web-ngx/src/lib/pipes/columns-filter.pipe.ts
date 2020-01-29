@@ -25,10 +25,10 @@ export class ColumnsFilterPipe implements PipeTransform {
       return value;
     }
 
-    let that = this;
+    const that = this;
     return value.filter((item) => {
       for (let i = 0; i < that.filterColumns.length; i++) {
-        let colName = that.filterColumns[i];
+        const colName = that.filterColumns[i];
         if (this._isBlank(colName)) {
           continue;
         }

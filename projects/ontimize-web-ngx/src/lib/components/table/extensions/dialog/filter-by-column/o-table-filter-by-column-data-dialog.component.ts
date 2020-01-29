@@ -12,7 +12,7 @@ export interface ITableFilterByColumnDataInterface {
   value: any;
   selected: boolean;
   renderedValue?: any;
-  tableIndex?:number;
+  tableIndex?: number;
 }
 
 @Component({
@@ -45,8 +45,8 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
   protected tableData: Array<any> = [];
   protected _listData: Array<ITableFilterByColumnDataInterface>;
 
-  @ViewChild('filter', {static: false}) filter: ElementRef;
-  @ViewChild('filterValueList', {static: false}) filterValueList: MatSelectionList;
+  @ViewChild('filter', { static: false }) filter: ElementRef;
+  @ViewChild('filterValueList', { static: false }) filterValueList: MatSelectionList;
 
   constructor(
     public dialogRef: MatDialogRef<OTableFilterByColumnDataDialogComponent>,
@@ -193,7 +193,7 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
   }
 
   getColumnValuesFilter(): IColumnValueFilter {
-    let filter = {
+    const filter = {
       attr: this.column.attr,
       operator: undefined,
       values: undefined
@@ -211,8 +211,8 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
       }
       if (this.fcFrom.value && this.fcTo.value) {
         filter.operator = ColumnValueFilterOperator.BETWEEN;
-        let fromValue = this.getTypedValue(this.fcFrom);
-        let toValue = this.getTypedValue(this.fcTo);
+        const fromValue = this.getTypedValue(this.fcFrom);
+        const toValue = this.getTypedValue(this.fcTo);
         filter.values = fromValue <= toValue ? [fromValue, toValue] : [toValue, fromValue];
       } else {
         if (this.fcFrom.value) {
@@ -232,7 +232,7 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
     this.isCustomFilterSubject.next(e.checked);
 
     if (!e.checked) {
-      //Selection mode
+      // Selection mode
       this.initializeDataList();
       const self = this;
       setTimeout(() => {

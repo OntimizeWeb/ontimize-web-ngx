@@ -33,8 +33,8 @@ export class OntimizeEEPermissionsService implements IPermissionsService {
   getDefaultServiceConfiguration(permissionsConfig: OntimizeEEPermissionsConfig): any {
     const serviceName: string = permissionsConfig ? permissionsConfig.service : undefined;
 
-    let loginService = this.injector.get(LoginService);
-    let configuration = this._config.getServiceConfiguration();
+    const loginService = this.injector.get(LoginService);
+    const configuration = this._config.getServiceConfiguration();
 
     let servConfig = {};
     if (serviceName && configuration.hasOwnProperty(serviceName)) {
@@ -62,7 +62,7 @@ export class OntimizeEEPermissionsService implements IPermissionsService {
       self.httpClient.get(url, options).subscribe((res: any) => {
         let permissions = {};
         if ((res.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) && Util.isDefined(res.data)) {
-          let response = res.data;
+          const response = res.data;
           if ((response.length === 1) && Util.isObject(response[0])) {
             try {
               permissions = JSON.parse(response[0][OntimizeEEPermissionsService.PERMISSIONS_KEY]);
@@ -84,7 +84,7 @@ export class OntimizeEEPermissionsService implements IPermissionsService {
     return new HttpHeaders({
       'Access-Control-Allow-Origin': '*',
       'Content-Type': 'application/json;charset=UTF-8',
-      'Authorization': 'Bearer ' + this._sessionid
+      Authorization: 'Bearer ' + this._sessionid
     });
   }
 

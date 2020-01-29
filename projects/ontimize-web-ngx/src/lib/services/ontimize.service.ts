@@ -39,8 +39,8 @@ export class OntimizeService implements IAuthService, IDataService {
   }
 
   public getDefaultServiceConfiguration(serviceName?: string): Object {
-    let loginService = this.injector.get(LoginService);
-    let configuration = this._config.getServiceConfiguration();
+    const loginService = this.injector.get(LoginService);
+    const configuration = this._config.getServiceConfiguration();
 
     let servConfig = {};
     if (serviceName && configuration.hasOwnProperty(serviceName)) {
@@ -59,7 +59,7 @@ export class OntimizeService implements IAuthService, IDataService {
     if (config.entity !== undefined) {
       this.entity = config.entity;
     }
-    //TODO init other params like 'kv', 'av', etc.
+    // TODO init other params like 'kv', 'av', etc.
   }
 
   public get urlBase(): string {
@@ -79,7 +79,7 @@ export class OntimizeService implements IAuthService, IDataService {
         if (resp >= 0) {
           _startSessionObserver.next(resp);
         } else {
-          //Invalid sessionId...
+          // Invalid sessionId...
           _startSessionObserver.error('Invalid user or password');
         }
       }, error => _startSessionObserver.error(error));
@@ -116,7 +116,7 @@ export class OntimizeService implements IAuthService, IDataService {
 
   public query(kv?: Object, av?: Array<string>, entity?: string, sqltypes?: Object): Observable<any> {
     entity = (Util.isDefined(entity)) ? entity : this.entity;
-    //TODO improve this -> merge between global conf and specific params of method calling
+    // TODO improve this -> merge between global conf and specific params of method calling
     kv = (Util.isDefined(kv)) ? kv : this.kv;
     av = (Util.isDefined(av)) ? av : this.av;
     sqltypes = (Util.isDefined(sqltypes)) ? sqltypes : this.sqltypes;
@@ -149,7 +149,7 @@ export class OntimizeService implements IAuthService, IDataService {
     offset?: number, pagesize?: number, orderby?: Array<Object>): Observable<any> {
 
     entity = (Util.isDefined(entity)) ? entity : this.entity;
-    //TODO improve this -> merge between global conf and specific params of method calling
+    // TODO improve this -> merge between global conf and specific params of method calling
     kv = (Util.isDefined(kv)) ? kv : this.kv;
     av = (Util.isDefined(av)) ? av : this.av;
     sqltypes = (Util.isDefined(sqltypes)) ? sqltypes : this.sqltypes;
@@ -268,7 +268,7 @@ export class OntimizeService implements IAuthService, IDataService {
   }
 
   redirectLogin(sessionExpired: boolean = false) {
-    let router = this.injector.get(Router);
+    const router = this.injector.get(Router);
     const loginService = this.injector.get(LoginService);
     if (sessionExpired) {
       loginService.sessionExpired();

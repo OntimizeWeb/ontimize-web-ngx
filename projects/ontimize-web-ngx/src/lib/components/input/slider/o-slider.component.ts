@@ -29,7 +29,7 @@ export type SliderDisplayFunction = (value: number | null) => string | number;
   moduleId: module.id,
   selector: 'o-slider',
   host: {
-    'class': 'o-slider'
+    class: 'o-slider'
   },
   templateUrl: 'o-slider.component.html',
   styleUrls: ['./o-slider.component.scss'],

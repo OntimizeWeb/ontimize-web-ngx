@@ -18,10 +18,10 @@ export const DEFAULT_TABLE_COLUMN_AGGREGATE = [
   // title [string]: Title for the header total column
   'title',
 
-  //aggregate [sum | count | avg | min |max]
+  // aggregate [sum | count | avg | min |max]
   'aggregate',
 
-  //function-aggregate [ (value: any[]) => number] Function that calculates a value on the values of the column 'attr'
+  // function-aggregate [ (value: any[]) => number] Function that calculates a value on the values of the column 'attr'
   'functionAggregate: function-aggregate'
 ];
 
@@ -34,13 +34,13 @@ export const DEFAULT_TABLE_COLUMN_AGGREGATE = [
 
 })
 export class OTableColumnAggregateComponent implements OnDestroy, OnInit {
+  public static DEFAULT_AGGREGATE = 'SUM';
 
   public attr: string;
   public aggregate: string;
   public table: OTableComponent;
   public title: string = '';
   protected _aggregateFunction: AggregateFunction;
-  public static DEFAULT_AGGREGATE = 'SUM';
 
   protected subscription: Subscription = new Subscription();
 
@@ -71,7 +71,7 @@ export class OTableColumnAggregateComponent implements OnDestroy, OnInit {
       return;
     }
 
-    let ocolumnaggregate: OColumnAggregate = new OColumnAggregate();
+    const ocolumnaggregate: OColumnAggregate = new OColumnAggregate();
     ocolumnaggregate.attr = this.attr;
     if (this.title) {
       ocolumnaggregate.title = this.title;

@@ -46,7 +46,7 @@ export class OTableLoadFilterDialogComponent implements OnInit {
   }
 
   getSelectedFilterName(): string {
-    let selected: MatListOption[] = this.filterList.selectedOptions.selected;
+    const selected: MatListOption[] = this.filterList.selectedOptions.selected;
     return selected.length ? selected[0].value : void 0;
   }
 

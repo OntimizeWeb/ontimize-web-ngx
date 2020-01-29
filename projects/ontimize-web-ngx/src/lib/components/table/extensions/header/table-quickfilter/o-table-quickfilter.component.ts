@@ -105,7 +105,7 @@ export class OTableQuickfilterComponent implements OnInit, AfterViewInit, OnDest
             expressions.push(oCol.filterExpressionFunction(oCol.attr, this.value));
           } else if (oCol.renderer instanceof OTableCellRendererServiceComponent) {
             // Filter column with service renderer. Look for the value in the renderer cache
-            let expr = oCol.renderer.getFilterExpression(this.value);
+            const expr = oCol.renderer.getFilterExpression(this.value);
             if (expr) {
               expressions.push(expr);
             }
@@ -157,7 +157,7 @@ export class OTableQuickfilterComponent implements OnInit, AfterViewInit, OnDest
 
       // if exists filter value in storage then filter result table
       const filterValue = this.value || this.filter.nativeElement.value;
-      //this.filter.nativeElement.value = filterValue;
+      // this.filter.nativeElement.value = filterValue;
       this.formControl.setValue(filterValue);
       if (this.table.dataSource && filterValue && filterValue.length) {
         this.table.dataSource.quickFilter = filterValue;

@@ -26,7 +26,7 @@ export class OModulesInfoService {
 
     this.router.events.subscribe(ev => {
       if (ev instanceof NavigationEnd) {
-        let translation = this.translateService.get(ev.url);
+        const translation = this.translateService.get(ev.url);
         if (translation !== ev.url) {
           this.setModuleInfo({
             name: translation

@@ -1,4 +1,4 @@
-import { AfterViewInit, ElementRef, forwardRef, Inject, Injector, OnDestroy, Optional, ViewChild } from '@angular/core';
+import { AfterViewInit, ElementRef, forwardRef, Inject, Injector, OnDestroy, Optional, ViewChild, AfterContentChecked } from '@angular/core';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material';
 
 import { OFormComponent } from '../form/o-form.component';
@@ -14,7 +14,7 @@ export const DEFAULT_INPUTS_O_CONTAINER = [
   'layoutGap: layout-gap'
 ];
 
-export class OContainerComponent implements AfterViewInit, OnDestroy {
+export class OContainerComponent implements AfterViewInit, OnDestroy, AfterContentChecked {
 
   public static APPEARANCE_OUTLINE = 'outline';
   public static DEFAULT_INPUTS_O_CONTAINER = DEFAULT_INPUTS_O_CONTAINER;
@@ -33,7 +33,7 @@ export class OContainerComponent implements AfterViewInit, OnDestroy {
   protected titleObserver = new MutationObserver(() => this.updateOutlineGap());
 
   protected _titleEl: ElementRef;
-  @ViewChild('containerTitle', {static: false}) set containerTitle(elem: ElementRef) {
+  @ViewChild('containerTitle', { static: false }) set containerTitle(elem: ElementRef) {
     this._titleEl = elem;
     if (this._titleEl) {
       this.registerObserver();
@@ -42,7 +42,7 @@ export class OContainerComponent implements AfterViewInit, OnDestroy {
       this.unRegisterObserver();
     }
   }
-  @ViewChild('container', {static: false}) protected _containerRef: ElementRef;
+  @ViewChild('container', { static: false }) protected _containerRef: ElementRef;
 
   constructor(
     @Optional() @Inject(forwardRef(() => OFormComponent)) protected form: OFormComponent,
@@ -82,7 +82,7 @@ export class OContainerComponent implements AfterViewInit, OnDestroy {
 
   set appearance(value: string) {
     this._appearance = value;
-    setTimeout(() => { this.updateOutlineGap(); });
+    setTimeout(() => { this.updateOutlineGap(); }, 0);
   }
 
   get elevation() {

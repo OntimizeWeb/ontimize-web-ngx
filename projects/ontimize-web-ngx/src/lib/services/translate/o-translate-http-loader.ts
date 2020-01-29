@@ -9,11 +9,12 @@ import { Codes } from '../../util/codes';
 import { OTranslateService } from './o-translate.service';
 
 export class OTranslateHttpLoader extends TranslateHttpLoader {
-  protected appConfig: AppConfig;
-  protected httpClient: HttpClient;
 
   static BUNDLE_KEY = 'key';
   static BUNDLE_VALUE = 'value';
+
+  protected appConfig: AppConfig;
+  protected httpClient: HttpClient;
 
   constructor(
     httpClient: HttpClient,
@@ -49,7 +50,7 @@ export class OTranslateHttpLoader extends TranslateHttpLoader {
   }
 
   getTranslation(lang: string): any {
-    let translationOrigins: any[] = [];
+    const translationOrigins: any[] = [];
 
     translationOrigins.push(this.getLocalTranslation(lang));
 
@@ -72,7 +73,7 @@ export class OTranslateHttpLoader extends TranslateHttpLoader {
   getRemoteBundle(lang: string): Observable<any> {
     const bundleEndpoint = this.appConfig.getBundleEndpoint();
     let innerObserver: any;
-    let dataObservable = new Observable(observer => innerObserver = observer).pipe(share());
+    const dataObservable = new Observable(observer => innerObserver = observer).pipe(share());
     if (!bundleEndpoint) {
       innerObserver.next([]);
     }
@@ -96,7 +97,7 @@ export class OTranslateHttpLoader extends TranslateHttpLoader {
   }
 
   protected parseBundleResponse(data: any[]): any {
-    let result = {};
+    const result = {};
     data.forEach((item) => {
       result[item[OTranslateHttpLoader.BUNDLE_KEY]] = item[OTranslateHttpLoader.BUNDLE_VALUE];
     });

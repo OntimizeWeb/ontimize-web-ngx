@@ -71,7 +71,7 @@ export class OComboSearchComponent implements OnInit, OnDestroy {
             const keyManager = this.matSelect._keyManager;
             if (keyManager && this.matSelect.panelOpen) {
               // avoid "expression has been changed" error
-              setTimeout(() => keyManager.setFirstItemActive());
+              setTimeout(() => keyManager.setFirstItemActive(), 0);
             }
           });
       });

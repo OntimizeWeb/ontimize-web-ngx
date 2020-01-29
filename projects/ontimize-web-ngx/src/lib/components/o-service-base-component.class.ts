@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, HostListener, Injector, NgZone, SimpleChange } from '@angular/core';
+import { ChangeDetectorRef, HostListener, Injector, NgZone, SimpleChange, OnChanges } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { InputConverter } from '../decorators/input-converter';
@@ -79,7 +79,7 @@ export const DEFAULT_INPUTS_O_SERVICE_BASE_COMPONENT = [
   // 'deleteFallbackFunction: delete-fallback-function'
 ];
 
-export class OServiceBaseComponent implements ILocalStorageComponent {
+export class OServiceBaseComponent implements ILocalStorageComponent, OnChanges {
 
   public static DEFAULT_INPUTS_O_SERVICE_BASE_COMPONENT = DEFAULT_INPUTS_O_SERVICE_BASE_COMPONENT;
 
@@ -161,7 +161,7 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
   protected alreadyStored: boolean = false;
 
   protected queryOnEventSubscription: Subscription;
-  public cd: ChangeDetectorRef;//borrar
+  public cd: ChangeDetectorRef; //borrar
   protected queryArguments: any[];
 
   protected router: Router;
@@ -191,7 +191,7 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
     }
     this.keysArray = Util.parseArray(this.keys);
     this.colArray = Util.parseArray(this.columns, true);
-    let pkArray = Util.parseArray(this.parentKeys);
+    const pkArray = Util.parseArray(this.parentKeys);
     this._pKeysEquiv = Util.parseParentKeysEquivalences(pkArray, Codes.COLUMNS_ALIAS_SEPARATOR);
 
     if (this.storeState) {
@@ -317,7 +317,7 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
     try {
       this.dataService = this.injector.get(loadingService);
       if (Util.isDataService(this.dataService)) {
-        let serviceCfg = this.dataService.getDefaultServiceConfiguration(this.service);
+        const serviceCfg = this.dataService.getDefaultServiceConfiguration(this.service);
         if (this.entity) {
           serviceCfg['entity'] = this.entity;
         }
@@ -354,16 +354,16 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
   }
 
   public queryData(filter?: any, ovrrArgs?: OQueryDataArgs): void {
-    let queryMethodName = this.pageable ? this.paginatedQueryMethod : this.queryMethod;
+    const queryMethodName = this.pageable ? this.paginatedQueryMethod : this.queryMethod;
     if (!this.dataService || !(queryMethodName in this.dataService) || !this.entity) {
       return;
     }
-    let filterParentKeys = ServiceUtils.getParentKeysFromForm(this._pKeysEquiv, this.form);
+    const filterParentKeys = ServiceUtils.getParentKeysFromForm(this._pKeysEquiv, this.form);
     if (!ServiceUtils.filterContainsAllParentKeys(filterParentKeys, this._pKeysEquiv) && !this.queryWithNullParentKeys) {
       this.setData([], []);
     } else {
       filter = Object.assign(filter || {}, filterParentKeys);
-      let queryArguments = this.getQueryArguments(filter, ovrrArgs);
+      const queryArguments = this.getQueryArguments(filter, ovrrArgs);
       if (this.querySubscription) {
         this.querySubscription.unsubscribe();
       }
@@ -374,7 +374,7 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
       const self = this;
       this.queryArguments = queryArguments;
       this.querySubscription = this.dataService[queryMethodName].apply(this.dataService, queryArguments).subscribe(res => {
-        let data = undefined;
+        let data;
         this.sqlTypes = undefined;
         if (Util.isArray(res)) {
           data = res;
@@ -415,10 +415,10 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
   }
 
   load(): any {
-    var self = this;
-    var zone = this.injector.get(NgZone);
-    var loadObservable = new Observable(observer => {
-      var timer = window.setTimeout(() => {
+    const self = this;
+    const zone = this.injector.get(NgZone);
+    const loadObservable = new Observable(observer => {
+      const timer = window.setTimeout(() => {
         observer.next(true);
       }, 250);
 
@@ -430,7 +430,7 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
       };
 
     });
-    var subscription = loadObservable.subscribe(val => {
+    const subscription = loadObservable.subscribe(val => {
       zone.run(() => {
         self.loadingSubject.next(val as boolean);
       });
@@ -444,7 +444,7 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
    * @returns object containing item object properties contained in keysArray
    */
   extractKeysFromRecord(item: any): Object {
-    let result = {};
+    const result = {};
     if (Util.isObject(item)) {
       this.keysArray.forEach(key => {
         if (Util.isDefined(item[key])) {
@@ -456,7 +456,7 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
   }
 
   getAttributesValuesToQuery(): Array<string> {
-    let result = this.colArray;
+    const result = this.colArray;
     this.keysArray.forEach(key => {
       if (result.indexOf(key) === -1) {
         result.push(key);
@@ -468,19 +468,19 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
   getQueryArguments(filter: Object, ovrrArgs?: OQueryDataArgs): Array<any> {
     const compFilter = this.getComponentFilter(filter);
     const queryCols = this.getAttributesValuesToQuery();
-    let sqlTypes = (ovrrArgs && ovrrArgs.hasOwnProperty('sqltypes')) ? ovrrArgs.sqltypes : this.form ? this.form.getAttributesSQLTypes() : {};
+    const sqlTypes = (ovrrArgs && ovrrArgs.hasOwnProperty('sqltypes')) ? ovrrArgs.sqltypes : this.form ? this.form.getAttributesSQLTypes() : {};
 
     let queryArguments = [compFilter, queryCols, this.entity, sqlTypes];
     if (this.pageable) {
-      let queryOffset = (ovrrArgs && ovrrArgs.hasOwnProperty('offset')) ? ovrrArgs.offset : this.state.queryRecordOffset;
-      let queryRowsN = (ovrrArgs && ovrrArgs.hasOwnProperty('length')) ? ovrrArgs.length : this.queryRows;
+      const queryOffset = (ovrrArgs && ovrrArgs.hasOwnProperty('offset')) ? ovrrArgs.offset : this.state.queryRecordOffset;
+      const queryRowsN = (ovrrArgs && ovrrArgs.hasOwnProperty('length')) ? ovrrArgs.length : this.queryRows;
       queryArguments = queryArguments.concat([queryOffset, queryRowsN, undefined]);
     }
     return queryArguments;
   }
 
   updatePaginationInfo(queryRes: any) {
-    let resultEndIndex = queryRes.startRecordIndex + (queryRes.data ? queryRes.data.length : 0);
+    const resultEndIndex = queryRes.startRecordIndex + (queryRes.data ? queryRes.data.length : 0);
     if (queryRes.startRecordIndex !== undefined) {
       this.state.queryRecordOffset = resultEndIndex;
     }

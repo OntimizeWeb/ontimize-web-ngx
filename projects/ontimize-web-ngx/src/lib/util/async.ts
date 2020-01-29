@@ -8,7 +8,7 @@ import { EventEmitter } from '@angular/core';
 export { Observable, Subject } from 'rxjs';
 
 export function noop() {
-  //nothing to do
+  // nothing to do
 }
 
 export class ObservableWrapper {
@@ -16,7 +16,7 @@ export class ObservableWrapper {
   static subscribe<T>(
     emitter: any, onNext: (value: T) => void, onError?: (exception: any) => void,
     onComplete: () => void = () => {
-      //nothing to do
+      // nothing to do
     }): Object {
     onError = (typeof onError === 'function') && onError || noop;
     onComplete = (typeof onComplete === 'function') && onComplete || noop;

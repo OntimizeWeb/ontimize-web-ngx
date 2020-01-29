@@ -1,6 +1,5 @@
 export * from './async';
 export * from './base64';
-export * from './events';
 export * from './permissions';
 export * from './sqltypes';
 export * from './util';

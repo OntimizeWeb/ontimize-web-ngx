@@ -1,8 +1,8 @@
 import { Injectable, Injector } from '@angular/core';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material';
 import { Observable } from 'rxjs';
-import { ODialogComponent } from '../components/dialog/o-dialog.component';
-import { ODialogConfig } from '../components/dialog/o-dialog.config';
+import { ODialogComponent } from '../shared/components/dialog/o-dialog.component';
+import { ODialogConfig } from '../shared/components/dialog/o-dialog.config';
 
 @Injectable()
 export class DialogService {
@@ -22,62 +22,52 @@ export class DialogService {
   }
 
   public alert(title: string, message: string, config?: ODialogConfig): Promise<any> {
-    var self = this;
-    let observable = Observable.create(
-      observer => {
-        self.openDialog(observer);
-        self.dialogRef.componentInstance.alert(title, message, config);
-      }
-    );
+    const self = this;
+    const observable = new Observable(observer => {
+      self.openDialog(observer);
+      self.dialogRef.componentInstance.alert(title, message, config);
+    });
     return observable.toPromise();
   }
 
   public info(title: string, message: string, config?: ODialogConfig): Promise<any> {
-    var self = this;
-    let observable = Observable.create(
-      observer => {
-        self.openDialog(observer);
-        self.dialogRef.componentInstance.info(title, message, config);
-      }
-    );
+    const self = this;
+    const observable = new Observable(observer => {
+      self.openDialog(observer);
+      self.dialogRef.componentInstance.info(title, message, config);
+    });
     return observable.toPromise();
   }
 
   public warn(title: string, message: string, config?: ODialogConfig): Promise<any> {
-    var self = this;
-    let observable = Observable.create(
-      observer => {
-        self.openDialog(observer);
-        self.dialogRef.componentInstance.warn(title, message, config);
-      }
-    );
+    const self = this;
+    const observable = new Observable(observer => {
+      self.openDialog(observer);
+      self.dialogRef.componentInstance.warn(title, message, config);
+    });
     return observable.toPromise();
   }
 
   public error(title: string, message: string, config?: ODialogConfig): Promise<any> {
-    var self = this;
-    let observable = Observable.create(
-      observer => {
-        self.openDialog(observer);
-        self.dialogRef.componentInstance.error(title, message, config);
-      }
-    );
+    const self = this;
+    const observable = new Observable(observer => {
+      self.openDialog(observer);
+      self.dialogRef.componentInstance.error(title, message, config);
+    });
     return observable.toPromise();
   }
 
   public confirm(title: string, message: string, config?: ODialogConfig): Promise<any> {
-    var self = this;
-    let observable = Observable.create(
-      observer => {
-        self.openDialog(observer);
-        self.dialogRef.componentInstance.confirm(title, message, config);
-      }
-    );
+    const self = this;
+    const observable = new Observable(observer => {
+      self.openDialog(observer);
+      self.dialogRef.componentInstance.confirm(title, message, config);
+    });
     return observable.toPromise();
   }
 
   protected openDialog(observer) {
-    let cfg: MatDialogConfig = {
+    const cfg: MatDialogConfig = {
       role: 'alertdialog',
       disableClose: true,
       panelClass: ['o-dialog-class', 'o-dialog-service']

@@ -15,12 +15,13 @@ export interface OMatErrorOptions {
 let nextUniqueId = 0;
 
 @Component({
+  // tslint:disable-next-line: component-selector
   selector: 'mat-error',
   templateUrl: './o-mat-error.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
-    'class': 'mat-error',
-    'role': 'alert',
+    class: 'mat-error',
+    role: 'alert',
     '[attr.id]': 'id'
   }
 })

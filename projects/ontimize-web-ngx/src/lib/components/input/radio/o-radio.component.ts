@@ -66,7 +66,7 @@ export class ORadioComponent extends OFormServiceComponent implements AfterViewI
   }
 
   onMatRadioGroupChange(e: MatRadioChange): void {
-    var newValue = e.value;
+    const newValue = e.value;
     this.setValue(newValue, {
       changeType: OValueChangeEvent.USER_CHANGE,
       emitEvent: false,
@@ -77,7 +77,7 @@ export class ORadioComponent extends OFormServiceComponent implements AfterViewI
   getOptionDescriptionValue(item: any = {}) {
     let descTxt = '';
     if (this.descriptionColArray && this.descriptionColArray.length > 0) {
-      var self = this;
+      const self = this;
       this.descriptionColArray.forEach((col, index) => {
         let txt = item[col];
         if (txt) {
@@ -107,7 +107,7 @@ export class ORadioComponent extends OFormServiceComponent implements AfterViewI
 
   getDescriptionValue() {
     if (Util.isDefined(this.descriptionColArray) && this.descriptionColArray.length) {
-      let currItem = this.dataArray.find(e => e[this.valueColumn] === this.getValue());
+      const currItem = this.dataArray.find(e => e[this.valueColumn] === this.getValue());
       if (Util.isDefined(currItem)) {
         return this.descriptionColArray.map(col => (this.translate && this.translateService) ? this.translateService.get(currItem[col]) : currItem[col]).join(this.separator);
       }

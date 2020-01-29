@@ -65,9 +65,7 @@ export class OFormNavigationClass {
     }
 
     const self = this;
-    this.combinedNavigationStream = combineLatest(
-      self.onUrlParamChangedStream.asObservable()
-    );
+    this.combinedNavigationStream = combineLatest([self.onUrlParamChangedStream.asObservable()]);
 
     this.combinedNavigationStream.subscribe(valArr => {
       if (Util.isArray(valArr) && valArr.length === 1 && valArr[0]) {
@@ -116,7 +114,7 @@ export class OFormNavigationClass {
   }
 
   private parseQueryParams() {
-    let isDetail = this.queryParams[Codes.IS_DETAIL];
+    const isDetail = this.queryParams[Codes.IS_DETAIL];
     // ensuring isdetail = false when using form layout manager
     this.form.isDetailForm = this.formLayoutManager ? false : (isDetail === 'true');
   }
@@ -141,7 +139,7 @@ export class OFormNavigationClass {
     if (Util.isDefined(this.urlParams) && Util.isDefined(this.urlParams[Codes.PARENT_KEYS_KEY])) {
       this.form.formParentKeysValues = Util.decodeParentKeys(this.urlParams[Codes.PARENT_KEYS_KEY]);
     }
-    //TODO Obtain 'datatype' of each key contained into urlParams for
+    // TODO Obtain 'datatype' of each key contained into urlParams for
     // for building correctly query filter!!!!
     if (this.urlParams) {
       this.onUrlParamChangedStream.emit(true);
@@ -177,7 +175,7 @@ export class OFormNavigationClass {
   }
 
   private getFilterFromObject(objectParam: any) {
-    let filter = {};
+    const filter = {};
     if (!objectParam || Object.keys(objectParam).length === 0) {
       return filter;
     }
@@ -189,7 +187,7 @@ export class OFormNavigationClass {
       });
     }
     Object.keys(this.form._pKeysEquiv).forEach((item, index) => {
-      let urlVal = objectParam[this.form._pKeysEquiv[item]];
+      const urlVal = objectParam[this.form._pKeysEquiv[item]];
       if (urlVal) {
         filter[item] = SQLTypes.parseUsingSQLType(urlVal, this.form.keysSqlTypesArray[index]);
       }
@@ -198,7 +196,7 @@ export class OFormNavigationClass {
   }
 
   getFilterFromUrlParams() {
-    let filter = Object.assign({}, this.getUrlParams() || {});
+    const filter = Object.assign({}, this.getUrlParams() || {});
     const urlParamsKeys = Object.keys(filter || {});
     if (urlParamsKeys.length > 0) {
       urlParamsKeys.forEach(key => {
@@ -257,7 +255,7 @@ export class OFormNavigationClass {
     if (!this.formLayoutManager && this.navigationService) {
       const navData: ONavigationItem = this.navigationService.getPreviousRouteData();
       if (navData) {
-        let extras = {};
+        const extras = {};
         extras[Codes.QUERY_PARAMS] = navData.queryParams;
         this.router.navigate([navData.url], extras);
       }
@@ -272,7 +270,7 @@ export class OFormNavigationClass {
       this.navigationService.removeLastItem();
       const navData: ONavigationItem = this.navigationService.getLastItem();
       if (navData) {
-        let extras: NavigationExtras = {};
+        const extras: NavigationExtras = {};
         extras[Codes.QUERY_PARAMS] = navData.queryParams;
         this.router.navigate([navData.url], extras).then(val => {
           if (val && options && options.changeToolbarMode) {
@@ -298,14 +296,14 @@ export class OFormNavigationClass {
       });
       this.form.queryData(insertedKeys);
     } else if (this.navigationService && this.form.keysArray && insertedKeys) {
-      let params: any[] = [];
+      const params: any[] = [];
       this.form.keysArray.forEach((current, index) => {
         if (insertedKeys[current]) {
           params.push(insertedKeys[current]);
         }
       });
-      let extras: NavigationExtras = {};
-      let qParams: any = Object.assign({}, this.getQueryParams(), Codes.getIsDetailObject());
+      const extras: NavigationExtras = {};
+      const qParams: any = Object.assign({}, this.getQueryParams(), Codes.getIsDetailObject());
       extras[Codes.QUERY_PARAMS] = qParams;
       let route = [];
       const navData: ONavigationItem = this.navigationService.getPreviousRouteData();
@@ -327,14 +325,14 @@ export class OFormNavigationClass {
   }
 
   /**
-  * Navigates to 'insert' mode
-  */
+   * Navigates to 'insert' mode
+   */
   goInsertMode(options?: any) {
     if (this.formLayoutManager && this.formLayoutManager.isDialogMode()) {
       this.form.setInsertMode();
     } else if (this.navigationService) {
       let route = [];
-      let extras: NavigationExtras = {};
+      const extras: NavigationExtras = {};
       const navData: ONavigationItem = this.navigationService.getPreviousRouteData();
       if (!this.formLayoutManager && navData) {
         route.push(navData.url);
@@ -364,13 +362,13 @@ export class OFormNavigationClass {
       this.form.setUpdateMode();
     } else if (this.navigationService) {
       let route = [];
-      let extras: NavigationExtras = {};
+      const extras: NavigationExtras = {};
       if (this.form.isDetailForm) {
         extras[Codes.QUERY_PARAMS] = Codes.getIsDetailObject();
       }
       extras[Codes.QUERY_PARAMS] = Object.assign({}, this.getQueryParams(), extras[Codes.QUERY_PARAMS] || {});
 
-      let params: any[] = [];
+      const params: any[] = [];
       const urlParams = this.getUrlParams();
       this.form.keysArray.forEach(key => {
         if (urlParams[key]) {
@@ -401,14 +399,14 @@ export class OFormNavigationClass {
   }
 
   /**
-  * @deprecated
-  */
+   * @deprecated
+   */
   getNestedLevelsNumber() {
     let actRoute = this.actRoute;
     let i = 0;
     while (actRoute.parent) {
       actRoute = actRoute.parent;
-      actRoute.url.subscribe(function (x) {
+      actRoute.url.subscribe((x) => {
         if (x && x.length) {
           i++;
         }
@@ -418,8 +416,8 @@ export class OFormNavigationClass {
   }
 
   /**
-  * @deprecated
-  */
+   * @deprecated
+   */
   getFullUrlSegments() {
     let fullUrlSegments = [];
     const router = this.router;
@@ -433,12 +431,12 @@ export class OFormNavigationClass {
   }
 
   showConfirmDiscardChanges(): Promise<boolean> {
-    let subscription: Promise<boolean> = undefined;
+    let subscription: Promise<boolean>;
     if (this.form.isInitialStateChanged() && !this.form.isInInsertMode()) {
       subscription = this.dialogService.confirm('CONFIRM', 'MESSAGES.FORM_CHANGES_WILL_BE_LOST');
     }
     if (subscription === undefined) {
-      const observable = Observable.create(observer => {
+      const observable = new Observable<boolean>(observer => {
         observer.next(true);
         observer.complete();
       });

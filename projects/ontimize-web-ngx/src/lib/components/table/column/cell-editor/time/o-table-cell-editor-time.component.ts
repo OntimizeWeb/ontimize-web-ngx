@@ -158,7 +158,7 @@ export class OTableCellEditorTimeComponent extends OBaseTableCellEditor implemen
 
   onDateChange(event: MatDatepickerInputEvent<any>) {
     const isValid = event.value && event.value.isValid && event.value.isValid();
-    let val = isValid ? event.value.valueOf() : moment().startOf('day');
+    const val = isValid ? event.value.valueOf() : moment().startOf('day');
 
     this.formControlDate.setValue(val, {
       emitModelToViewChange: false,
@@ -347,7 +347,7 @@ export class OTableCellEditorTimeComponent extends OBaseTableCellEditor implemen
   }
 
   getCellDataDate(): any {
-    let value = super.getCellData();
+    const value = super.getCellData();
     if (Util.isDefined(value)) {
       const m = moment(value);
       let result = value;
@@ -360,7 +360,7 @@ export class OTableCellEditorTimeComponent extends OBaseTableCellEditor implemen
   }
 
   getCellDataHour(): any {
-    let value = super.getCellData();
+    const value = super.getCellData();
     if (Util.isDefined(value)) {
       const m = moment(value);
       let result = value;

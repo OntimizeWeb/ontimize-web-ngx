@@ -45,7 +45,7 @@ export class OFormLayoutTabGroupComponent implements AfterViewInit, OnDestroy {
   public showLoading = new BehaviorSubject<boolean>(false);
   protected _state: any;
 
-  @ViewChild('tabGroup', {static: false}) tabGroup: MatTabGroup;
+  @ViewChild('tabGroup', { static: false }) tabGroup: MatTabGroup;
   @ViewChildren(OFormLayoutManagerContentDirective) tabsDirectives: QueryList<OFormLayoutManagerContentDirective>;
 
   protected closeTabSubscription: Subscription;
@@ -168,7 +168,7 @@ export class OFormLayoutTabGroupComponent implements AfterViewInit, OnDestroy {
     const compParams = compData.params;
     this.data.forEach((comp, i) => {
       const currParams = comp.params || {};
-      let sameParams = Util.isEquivalent(currParams, compParams);
+      const sameParams = Util.isEquivalent(currParams, compParams);
       if (sameParams) {
         compIndex = i;
       }
@@ -204,14 +204,14 @@ export class OFormLayoutTabGroupComponent implements AfterViewInit, OnDestroy {
     const self = this;
     this.closeTabSubscription = onCloseTabAccepted.asObservable().subscribe(res => {
       if (res) {
-        let tabData;
+        let closedTabData;
         for (let i = self.data.length - 1; i >= 0; i--) {
           if (self.data[i].id === id) {
-            tabData = self.data.splice(i, 1)[0];
+            closedTabData = self.data.splice(i, 1)[0];
             break;
           }
         }
-        self.onCloseTab.emit(tabData);
+        self.onCloseTab.emit(closedTabData);
       }
     });
     const tabData = this.data.find((item: IDetailComponentData) => item.id === id);
@@ -227,7 +227,7 @@ export class OFormLayoutTabGroupComponent implements AfterViewInit, OnDestroy {
   createTabComponent(tabData: IDetailComponentData, content: OFormLayoutManagerContentDirective) {
     const component = tabData.component;
     const componentFactory = this.componentFactoryResolver.resolveComponentFactory(component);
-    let viewContainerRef: ViewContainerRef = content.viewContainerRef;
+    const viewContainerRef: ViewContainerRef = content.viewContainerRef;
     viewContainerRef.clear();
     viewContainerRef.createComponent(componentFactory);
     tabData.rendered = true;
@@ -242,7 +242,7 @@ export class OFormLayoutTabGroupComponent implements AfterViewInit, OnDestroy {
   }
 
   getRouteOfActiveItem(): any[] {
-    let route = [];
+    const route = [];
     if (this.data.length && this.tabGroup.selectedIndex > 0) {
       const urlSegments = this.data[this.tabGroup.selectedIndex - 1].urlSegments || [];
       urlSegments.forEach((segment) => {
@@ -263,7 +263,7 @@ export class OFormLayoutTabGroupComponent implements AfterViewInit, OnDestroy {
   }
 
   updateNavigation(data: any, id: string, insertionMode?: boolean) {
-    let index = this.data.findIndex((item: any) => item.id === id);
+    const index = this.data.findIndex((item: any) => item.id === id);
     if (index >= 0) {
       let label = this.formLayoutManager.getLabelFromData(data);
       this.tabGroup.selectedIndex = (index + 1);
@@ -284,7 +284,7 @@ export class OFormLayoutTabGroupComponent implements AfterViewInit, OnDestroy {
   }
 
   getDataToStore(): Object {
-    let tabsData = [];
+    const tabsData = [];
     this.data.map((data: IDetailComponentData) => {
       tabsData.push({
         params: data.params,
@@ -302,7 +302,7 @@ export class OFormLayoutTabGroupComponent implements AfterViewInit, OnDestroy {
   initializeComponentState(state: any) {
     if (Util.isDefined(state) && Util.isDefined(state.tabsData) && Util.isDefined(state.tabsData[0])) {
       this.state = state;
-      let extras = {};
+      const extras = {};
       extras[Codes.QUERY_PARAMS] = state.tabsData[0].queryParams;
       const self = this;
       if (this.formLayoutManager) {

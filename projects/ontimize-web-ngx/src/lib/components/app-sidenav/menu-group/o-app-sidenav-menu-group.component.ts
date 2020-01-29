@@ -86,9 +86,9 @@ export class OAppSidenavMenuGroupComponent implements OnInit, AfterViewInit, OnD
   }
 
   ngAfterViewInit() {
-    if (this.menuGroup.id === 'user-info') {
+    if (this.menuGroup.id === 'user-info' && this.sidenav) {
       const self = this;
-      this.sidenavSubscription = this.sidenav.sidenav.openedChange.subscribe((opened) => {
+      this.sidenavSubscription = this.sidenav.onSidenavOpenedChange.subscribe((opened) => {
         self.disabled = !!(!opened || (self.permissions && self.permissions.enabled === false));
         self.updateContentExpansion();
         self.cd.markForCheck();
@@ -130,7 +130,7 @@ export class OAppSidenavMenuGroupComponent implements OnInit, AfterViewInit, OnD
   updateContentExpansion() {
     let isOpened = this.menuGroup && this.menuGroup.opened;
     if (this.menuGroup.id === 'user-info') {
-      isOpened = (this.sidenav && this.sidenav.sidenav.opened) && isOpened;
+      isOpened = (this.sidenav && this.sidenav.sidenav && this.sidenav.sidenav.opened) && isOpened;
     }
     this.contentExpansion = isOpened ? 'expanded' : 'collapsed';
   }

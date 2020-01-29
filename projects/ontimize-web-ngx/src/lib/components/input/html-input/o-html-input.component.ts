@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Injector, NgModule, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Injector, NgModule, ViewChild, OnInit } from '@angular/core';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { CommonModule } from '@angular/common';
 import { ValidatorFn, Validators } from '@angular/forms';
@@ -45,7 +45,7 @@ export const DEFAULT_OUTPUTS_O_HTML_INPUT = [
     ])
   ]
 })
-export class OHTMLInputComponent extends OFormDataComponent implements AfterViewInit {
+export class OHTMLInputComponent extends OFormDataComponent implements OnInit, AfterViewInit {
 
   public static DEFAULT_INPUTS_O_HTML_INPUT = DEFAULT_INPUTS_O_HTML_INPUT;
   public static DEFAULT_OUTPUTS_O_HTML_INPUT = DEFAULT_OUTPUTS_O_HTML_INPUT;
@@ -53,7 +53,7 @@ export class OHTMLInputComponent extends OFormDataComponent implements AfterView
   protected _minLength: number = -1;
   protected _maxLength: number = -1;
 
-  @ViewChild('ckEditor', {static: false}) ckEditor: CKEditorComponent;
+  @ViewChild('ckEditor', { static: false }) ckEditor: CKEditorComponent;
 
   protected tabGroupContainer: MatTabGroup;
   protected tabContainer: MatTab;
@@ -82,8 +82,8 @@ export class OHTMLInputComponent extends OFormDataComponent implements AfterView
 
   ngOnInit() {
     super.ngOnInit();
+    const self = this;
     if (this.form) {
-      var self = this;
       this.form.beforeCloseDetail.subscribe((evt: any) => {
         self.destroyCKEditor();
       });
@@ -111,16 +111,16 @@ export class OHTMLInputComponent extends OFormDataComponent implements AfterView
 
 
   hasError(error: string): boolean {
-    let result = super.hasError(error);
+    const result = super.hasError(error);
     this._subscriptAnimationState = result ? 'enter' : 'void';
     return result;
   }
 
   isInActiveTab(): boolean {
-    var result: boolean = !(this.tabGroupContainer && this.tabContainer);
+    let result: boolean = !(this.tabGroupContainer && this.tabContainer);
     if (!result) {
-      var self = this;
-      this.tabGroupContainer._tabs.forEach(function (tab, index) {
+      const self = this;
+      this.tabGroupContainer._tabs.forEach((tab, index) => {
         if (tab === self.tabContainer) {
           result = (self.tabGroupContainer.selectedIndex === index);
         }
@@ -130,7 +130,7 @@ export class OHTMLInputComponent extends OFormDataComponent implements AfterView
   }
 
   resolveValidators(): ValidatorFn[] {
-    let validators: ValidatorFn[] = super.resolveValidators();
+    const validators: ValidatorFn[] = super.resolveValidators();
     if (this.minLength >= 0) {
       validators.push(Validators.minLength(this.minLength));
     }

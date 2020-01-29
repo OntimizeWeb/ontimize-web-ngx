@@ -87,7 +87,7 @@ export class OTableCellRendererBooleanComponent extends OBaseTableCellRenderer i
   }
 
   hasCellDataTrueValue(cellData: any): boolean {
-    let result: boolean = undefined;
+    let result: boolean;
     if (Util.isDefined(cellData)) {
       result = (cellData === this.trueValue);
       if (this.booleanType === 'string' && !Util.isDefined(this.trueValue)) {
@@ -100,7 +100,7 @@ export class OTableCellRendererBooleanComponent extends OBaseTableCellRenderer i
   getCellData(cellvalue: any, rowvalue?: any) {
     let result = cellvalue;
     const cellIsTrue = this.hasCellDataTrueValue(cellvalue);
-    let value = cellIsTrue ? this.trueValue : this.falseValue;
+    const value = cellIsTrue ? this.trueValue : this.falseValue;
     switch (this.renderType) {
       case 'string':
         result = this.translateService.get(value);

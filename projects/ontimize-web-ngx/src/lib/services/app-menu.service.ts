@@ -11,7 +11,7 @@ export interface MenuGroup {
   items: (MenuItemRoute | MenuItemAction | MenuItemLocale | MenuItemLogout | MenuItemUserInfo | MenuGroup | MenuItem)[];
   opened?: boolean;
   tooltip?: string;
-  class?:string;
+  class?: string;
 }
 
 export interface MenuItem {
@@ -21,7 +21,7 @@ export interface MenuItem {
   icon?: string;
   image?: string;
   component?: any;
-  class?:string;
+  class?: string;
   'component-inputs'?: Object;
   'show-in-card-menu'?: boolean;
 }
@@ -63,10 +63,10 @@ export class AppMenuService {
 
     this.ALL_MENU_ITEMS = [];
     for (let i = 0, len = this.MENU_ROOTS.length; i < len; i++) {
-      let item: MenuRootItem = this.MENU_ROOTS[i];
+      const item: MenuRootItem = this.MENU_ROOTS[i];
       this.ALL_MENU_ITEMS = this.ALL_MENU_ITEMS.concat(this.getMenuItems(item));
     }
-    //this.ALL_MENU_ITEMS = this.MENU_ROOTS.reduce((result, category) => result.concat(category.items), []);
+    // this.ALL_MENU_ITEMS = this.MENU_ROOTS.reduce((result, category) => result.concat(category.items), []);
   }
 
   getMenuRoots(): MenuRootItem[] {

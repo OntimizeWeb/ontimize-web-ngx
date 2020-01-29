@@ -48,7 +48,7 @@ export class PermissionsUtils {
   }
 
   static setDisabledDOMElement(mutation: MutationRecord) {
-    let element = <HTMLInputElement>mutation.target;
+    const element = <HTMLInputElement>mutation.target;
     element.setAttribute('disabled', 'true');
   }
 }

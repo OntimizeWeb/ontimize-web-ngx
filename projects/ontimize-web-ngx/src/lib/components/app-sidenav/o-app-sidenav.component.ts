@@ -1,7 +1,7 @@
-import { AfterViewInit, ChangeDetectorRef, ChangeDetectionStrategy, Component, ElementRef, EventEmitter, HostListener, Injector, NgModule, OnDestroy, OnInit, ViewEncapsulation, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, ChangeDetectionStrategy, Component, ElementRef, EventEmitter, HostListener, Injector, OnDestroy, OnInit, ViewEncapsulation, ViewChild } from '@angular/core';
 import { MatSidenav } from '@angular/material';
 import { Router } from '@angular/router';
-import { MediaChange, MediaObserver } from '@angular/flex-layout';
+import { MediaObserver } from '@angular/flex-layout';
 import { Subscription } from 'rxjs';
 
 import { Util } from '../../util/util';
@@ -22,6 +22,9 @@ export const DEFAULT_INPUTS_O_APP_SIDENAV = [
 ];
 
 export const DEFAULT_OUTPUTS_O_APP_SIDENAV = [
+  'onSidenavOpenedChange',
+  'onSidenavOpenedStart',
+  'onSidenavClosedStart',
   'onSidenavToggle',
   'afterSidenavToggle'
 ];
@@ -44,7 +47,8 @@ export class OAppSidenavComponent implements OnInit, OnDestroy, AfterViewInit {
   public static DEFAULT_INPUTS_O_APP_LAYOUT = DEFAULT_INPUTS_O_APP_SIDENAV;
   public static DEFAULT_OUTPUTS_O_APP_LAYOUT = DEFAULT_OUTPUTS_O_APP_SIDENAV;
 
-  @ViewChild(MatSidenav, { static: false }) sidenav: MatSidenav;
+  @ViewChild(MatSidenav, { static: false })
+  sidenav: MatSidenav;
 
   protected routerSubscription: Subscription;
   appMenuService: AppMenuService;
@@ -58,6 +62,9 @@ export class OAppSidenavComponent implements OnInit, OnDestroy, AfterViewInit {
   openedSidenavImg: string;
   closedSidenavImg: string;
 
+  onSidenavOpenedChange: EventEmitter<boolean> = new EventEmitter<boolean>();
+  onSidenavOpenedStart: EventEmitter<void> = new EventEmitter<void>();
+  onSidenavClosedStart: EventEmitter<void> = new EventEmitter<void>();
   onSidenavToggle: EventEmitter<boolean> = new EventEmitter<boolean>();
   afterSidenavToggle: EventEmitter<boolean> = new EventEmitter<boolean>();
   protected oUserInfoService: OUserInfoService;
@@ -78,7 +85,7 @@ export class OAppSidenavComponent implements OnInit, OnDestroy, AfterViewInit {
     this.menuRootArray = this.appMenuService.getMenuRoots();
     this.oUserInfoService = this.injector.get(OUserInfoService);
     const self = this;
-    this.mediaWatch = this.media.media$.subscribe((change: MediaChange) => {
+    this.mediaWatch = this.media.asObservable().subscribe(() => {
       if (self.isScreenSmall() && self.sidenav) {
         self.sidenav.close();
       }
@@ -116,7 +123,7 @@ export class OAppSidenavComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   set layoutMode(val: OAppLayoutMode) {
-    let m = Codes.OAppLayoutModes.find(e => e === val);
+    const m = Codes.OAppLayoutModes.find(e => e === val);
     if (Util.isDefined(m)) {
       this._layoutMode = m;
     }
@@ -127,7 +134,7 @@ export class OAppSidenavComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   set sidenavMode(val: OSidenavMode) {
-    let m = Codes.OSidenavModes.find(e => e === val);
+    const m = Codes.OSidenavModes.find(e => e === val);
     if (Util.isDefined(m)) {
       this._sidenavMode = m;
     }
@@ -219,10 +226,22 @@ export class OAppSidenavComponent implements OnInit, OnDestroy, AfterViewInit {
     this._showToggleButton = arg;
   }
 
-  onMenuItemClick(e: Event): void {
+  onMenuItemClick(): void {
     if (this.isMobileMode()) {
       this.sidenav.close();
     }
+  }
+
+  sidenavClosedStart() {
+    this.onSidenavClosedStart.emit();
+  }
+
+  sidenavOpenedStart() {
+    this.onSidenavOpenedStart.emit();
+  }
+
+  sidenavOpenedChange() {
+    this.onSidenavOpenedChange.emit();
   }
 }
 
