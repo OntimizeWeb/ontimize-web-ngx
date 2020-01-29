@@ -9,15 +9,11 @@ Run `ng generate component component-name --project ontimize-web-ngx` to generat
 
 ## Build
 
-Run `ng build ontimize-web-ngx` to build the project. The build artifacts will be stored in the `dist/` directory.
+Run `npm run build` to build the project. The build artifacts will be stored in the `dist/` directory.
 
 ## Publishing
 
 After building your library with `ng build ontimize-web-ngx`, go to the dist folder `cd dist/ontimize-web-ngx` and run `npm publish`.
-
-## Running unit tests
-
-Run `ng test ontimize-web-ngx` to execute the unit tests via [Karma](https://karma-runner.github.io).
 
 ## Further help
 
