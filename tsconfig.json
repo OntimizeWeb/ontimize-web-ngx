@@ -25,6 +25,9 @@
       ],
       "ontimize-web-ngx/*": [
         "dist/ontimize-web-ngx/*"
+      ],
+      "@ontimize/*": [
+        "projects/ontimize-web-ngx/src/lib/*"
       ]
     }
   },

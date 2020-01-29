@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, forwardRef, Inject, Injector, OnInit, ViewEncapsulation } from '@angular/core';
 
 import { InputConverter } from '../../../../../decorators/input-converter';
-import { Util } from '../../../../../util/util';
 import { Codes } from '../../../../../util/codes';
+import { Util } from '../../../../../util/util';
 import { OTableComponent } from '../../../o-table.component';
 
 export const DEFAULT_INPUTS_O_TABLE_BUTTON = [

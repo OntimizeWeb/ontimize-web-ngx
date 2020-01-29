@@ -10,7 +10,7 @@ import { SnackBarService } from '../../../services/snackbar.service';
 import { OTranslateService } from '../../../services/translate/o-translate.service';
 import { OSharedModule } from '../../../shared/shared.module';
 import { Util } from '../../../util/util';
-import { IExpression, FilterExpressionUtils } from '../../../components/filter-expression.utils';
+import { IExpression, FilterExpressionUtils } from '../../../util/filter-expression.utils';
 
 export const DEFAULT_INPUTS_O_SEARCH_INPUT = [
   'placeholder',

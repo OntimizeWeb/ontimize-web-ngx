@@ -1,8 +1,4 @@
-import { Component, Inject, Injector, forwardRef, ElementRef, NgModule, ViewEncapsulation } from '@angular/core';
-import { RouterModule } from '@angular/router';
-import { CommonModule } from '@angular/common';
-
-import { OSharedModule } from '../../../shared/shared.module';
+import { Component, Inject, Injector, forwardRef, ElementRef, ViewEncapsulation } from '@angular/core';
 import { OBarMenuComponent } from '../o-bar-menu.component';
 import { OBaseMenuItemClass } from '../o-base-menu-item.class';
 
@@ -55,12 +51,4 @@ export class OLocaleBarMenuItemComponent extends OBaseMenuItemClass {
     }
     return false;
   }
-}
-
-@NgModule({
-  declarations: [OLocaleBarMenuItemComponent],
-  imports: [OSharedModule, CommonModule, RouterModule],
-  exports: [OLocaleBarMenuItemComponent]
-})
-export class OLocaleBarMenuItemModule {
 }

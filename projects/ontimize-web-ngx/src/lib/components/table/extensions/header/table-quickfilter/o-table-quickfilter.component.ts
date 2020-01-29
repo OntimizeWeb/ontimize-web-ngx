@@ -1,5 +1,4 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Inject, Injector, OnDestroy, OnInit, ViewChild, ViewEncapsulation, forwardRef } from '@angular/core';
-import { FilterExpressionUtils, IExpression } from '../../../../filter-expression.utils';
 import { MatCheckboxChange, MatMenu } from '@angular/material';
 import { OColumn, OTableComponent, OTableOptions } from '../../../o-table.component';
 import { OInputsOptions, O_INPUTS_OPTIONS } from '../../../../../config/app-config';
@@ -7,9 +6,11 @@ import { Subscription, fromEvent } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 import { FormControl } from '@angular/forms';
-import { OTableCellRendererServiceComponent } from '../../../column/cell-renderer/cell-renderer';
 import { SQLTypes } from '../../../../../util/sqltypes';
+
+import { IExpression, FilterExpressionUtils } from '../../../../../util/filter-expression.utils';
 import { Util } from '../../../../../util/util';
+import { OTableCellRendererServiceComponent } from '../../../column/cell-renderer/service/o-table-cell-renderer-service.component';
 
 export const DEFAULT_INPUTS_O_TABLE_QUICKFILTER = [];
 
@@ -35,10 +36,10 @@ export class OTableQuickfilterComponent implements OnInit, AfterViewInit, OnDest
   public static DEFAULT_INPUTS_O_TABLE_QUICKFILTER = DEFAULT_INPUTS_O_TABLE_QUICKFILTER;
   public static DEFAULT_OUTPUTS_O_TABLE_QUICKFILTER = DEFAULT_OUTPUTS_O_TABLE_QUICKFILTER;
 
-  @ViewChild('filter', {static: false})
+  @ViewChild('filter', { static: false })
   public filter: ElementRef;
 
-  @ViewChild('menu', {static: false})
+  @ViewChild('menu', { static: false })
   public matMenu: MatMenu;
 
   public value: string;

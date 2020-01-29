@@ -6,10 +6,25 @@ import { Codes } from '../../../util/codes';
 import { SQLTypes } from '../../../util/sqltypes';
 import { Util } from '../../../util/util';
 import { OTableComponent } from '../o-table.component';
-import { OTableCellEditorBooleanComponent, OTableCellEditorDateComponent, OTableCellEditorIntegerComponent, OTableCellEditorRealComponent, OTableCellEditorTextComponent, OTableCellEditorTimeComponent } from './cell-editor/cell-editor';
-import { OTableCellRendererActionComponent, OTableCellRendererBooleanComponent, OTableCellRendererCurrencyComponent, OTableCellRendererDateComponent, OTableCellRendererImageComponent, OTableCellRendererIntegerComponent, OTableCellRendererPercentageComponent, OTableCellRendererRealComponent, OTableCellRendererServiceComponent, OTableCellRendererTimeComponent } from './cell-renderer/cell-renderer';
+import { IExpression } from '../../../util/filter-expression.utils';
+
+import { OTableCellEditorBooleanComponent } from './cell-editor/boolean/o-table-cell-editor-boolean.component';
+import { OTableCellEditorDateComponent } from './cell-editor/date/o-table-cell-editor-date.component';
+import { OTableCellEditorRealComponent } from './cell-editor/real/o-table-cell-editor-real.component';
+import { OTableCellEditorTextComponent } from './cell-editor/text/o-table-cell-editor-text.component';
+import { OTableCellEditorTimeComponent } from './cell-editor/time/o-table-cell-editor-time.component';
+import { OTableCellEditorIntegerComponent } from './cell-editor/integer/o-table-cell-editor-integer.component';
+import { OTableCellRendererBooleanComponent } from './cell-renderer/boolean/o-table-cell-renderer-boolean.component';
+import { OTableCellRendererCurrencyComponent } from './cell-renderer/currency/o-table-cell-renderer-currency.component';
+import { OTableCellRendererDateComponent } from './cell-renderer/date/o-table-cell-renderer-date.component';
+import { OTableCellRendererImageComponent } from './cell-renderer/image/o-table-cell-renderer-image.component';
+import { OTableCellRendererActionComponent } from './cell-renderer/action/o-table-cell-renderer-action.component';
+import { OTableCellRendererServiceComponent } from './cell-renderer/service/o-table-cell-renderer-service.component';
 import { OTableCellRendererTranslateComponent } from './cell-renderer/translate/o-table-cell-renderer-translate.component';
-import { IExpression } from '../../filter-expression.utils';
+import { OTableCellRendererIntegerComponent } from './cell-renderer/integer/o-table-cell-renderer-integer.component';
+import { OTableCellRendererPercentageComponent } from './cell-renderer/percentage/o-table-cell-renderer-percentage.component';
+import { OTableCellRendererRealComponent } from './cell-renderer/real/o-table-cell-renderer-real.component';
+import { OTableCellRendererTimeComponent } from './cell-renderer/time/o-table-cell-renderer-time.component';
 
 
 export interface OColumnTooltip {

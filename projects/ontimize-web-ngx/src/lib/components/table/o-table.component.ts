@@ -39,40 +39,25 @@ import { Util } from '../../util/util';
 import { Codes } from '../../util/codes';
 import { SQLTypes } from '../../util/sqltypes';
 import { ObservableWrapper } from '../../util/async';
-import { OContextMenuComponent } from '../contextmenu/o-context-menu-components';
+import { OContextMenuComponent } from '../contextmenu/o-context-menu.component';
 import { OContextMenuModule } from '../contextmenu/o-context-menu.module';
 import { IOContextMenuContext } from '../contextmenu/o-context-menu.service';
-import { FilterExpressionUtils, IExpression } from '../filter-expression.utils';
 import { OFormComponent } from '../form/o-form.component';
 import { OServiceComponent } from '../o-service-component.class';
-import { ISQLOrder, OQueryDataArgs, ServiceUtils } from '../service.utils';
+import { ISQLOrder, OQueryDataArgs, ServiceUtils } from '../../util/service.utils';
 import { OperatorFunction, OTableColumnCalculatedComponent } from './column/calculated/o-table-column-calculated.component';
-import { O_TABLE_CELL_EDITORS, OTableCellEditorBooleanComponent } from './column/cell-editor/cell-editor';
-import { O_TABLE_CELL_RENDERERS, OBaseTableCellRenderer } from './column/cell-renderer/cell-renderer';
+import { O_TABLE_CELL_EDITORS } from './column/cell-editor/cell-editor';
+import { OTableCellEditorBooleanComponent } from './column/cell-editor/boolean/o-table-cell-editor-boolean.component';
+import { O_TABLE_CELL_RENDERERS } from './column/cell-renderer/cell-renderer';
+import { OBaseTableCellRenderer } from './column/cell-renderer/o-base-table-cell-renderer.class';
 import { OColumnTooltip, OTableColumnComponent } from './column/o-table-column.component';
 import { OTableContextMenuComponent } from './extensions/contextmenu/o-table-context-menu.component';
-import { O_TABLE_DIALOGS, OTableFilterByColumnDataDialogComponent } from './extensions/dialog/o-table-dialog-components';
+import { O_TABLE_DIALOGS } from './extensions/dialog/o-table-dialog-components';
+import { OTableFilterByColumnDataDialogComponent } from './extensions/dialog/filter-by-column/o-table-filter-by-column-data-dialog.component';
 import { OTableExportButton } from './extensions/export-button/o-table-export-button.component';
 import { OTableExportButtonService } from './extensions/export-button/o-table-export-button.service';
-import {
-  O_TABLE_FOOTER_COMPONENTS,
-  OColumnAggregate,
-  OTableColumnAggregateComponent,
-  OTableMatPaginatorIntl,
-  OTablePaginatorComponent
-} from './extensions/footer/o-table-footer-components';
-import {
-  ColumnValueFilterOperator,
-  IColumnValueFilter,
-  O_TABLE_HEADER_COMPONENTS,
-  OTableButtonComponent,
-  OTableButtonsComponent,
-  OTableColumnsFilterComponent,
-  OTableInsertableRowComponent,
-  OTableMenuComponent,
-  OTableOptionComponent,
-  OTableQuickfilterComponent
-} from './extensions/header/o-table-header-components';
+import { O_TABLE_FOOTER_COMPONENTS } from './extensions/footer/o-table-footer-components';
+import { O_TABLE_HEADER_COMPONENTS } from './extensions/header/o-table-header-components';
 import { OTableStorage } from './extensions/o-table-storage.class';
 import { OTableRowDirective } from './extensions/row/o-table-row.directive';
 import { OMatSort } from './extensions/sort/o-mat-sort';
@@ -81,6 +66,16 @@ import { OMatSortModule } from './extensions/sort/o-mat-sort-module';
 import { OTableExpandedFooter } from './o-table-expanded-footer.directive';
 import { OTableDao } from './o-table.dao';
 import { OTableDataSource } from './o-table.datasource';
+import { IExpression, FilterExpressionUtils } from '../../util/filter-expression.utils';
+import { OTablePaginatorComponent, OTableMatPaginatorIntl } from './extensions/footer/paginator/o-table-paginator.component';
+import { OColumnAggregate, OTableColumnAggregateComponent } from './extensions/footer/aggregate/o-table-column-aggregate.component';
+import { OTableColumnsFilterComponent, ColumnValueFilterOperator, IColumnValueFilter } from './extensions/header/table-columns-filter/o-table-columns-filter.component';
+import { OTableInsertableRowComponent } from './extensions/header/table-insertable-row/o-table-insertable-row.component';
+import { OTableQuickfilterComponent } from './extensions/header/table-quickfilter/o-table-quickfilter.component';
+import { OTableButtonsComponent } from './extensions/header/table-buttons/o-table-buttons.component';
+import { OTableOptionComponent } from './extensions/header/table-option/o-table-option.component';
+import { OTableMenuComponent } from './extensions/header/table-menu/o-table-menu.component';
+import { OTableButtonComponent } from './extensions/header/table-button/o-table-button.component';
 
 export const NAME_COLUMN_SELECT = 'select';
 
@@ -364,7 +359,7 @@ export class OColumn {
     if (Util.isDefined(pxVal)) {
       this.DOMWidth = pxVal;
       widthVal = undefined;
-    }    
+    }
     this._width = widthVal;
   }
 
@@ -457,7 +452,7 @@ export interface OTableInitializationOptions {
   templateUrl: './o-table.component.html',
   styleUrls: ['./o-table.component.scss'],
   providers: [
-    { provide: OntimizeService, useFactory: dataServiceFactory, deps: [Injector] }
+    OntimizeService
   ],
   inputs: DEFAULT_INPUTS_O_TABLE,
   outputs: DEFAULT_OUTPUTS_O_TABLE,
@@ -484,8 +479,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   protected snackBarService: SnackBarService;
 
   public paginator: OTablePaginatorComponent;
-  @ViewChild(MatPaginator, {static: false}) matpaginator: MatPaginator;
-  @ViewChild(OMatSort, {static: false}) sort: OMatSort;
+  @ViewChild(MatPaginator, { static: false }) matpaginator: MatPaginator;
+  @ViewChild(OMatSort, { static: false }) sort: OMatSort;
 
   // only for insideTabBugWorkaround
   @ViewChildren(OMatSortHeader) protected sortHeaders: QueryList<OMatSortHeader>;
@@ -575,7 +570,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   resizable: boolean = true;
   @InputConverter()
   autoAdjust: boolean = true;
-  
+
   protected _enabled: boolean = true;
   get enabled(): boolean {
     return this._enabled;
@@ -706,7 +701,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   quickFilterCallback: QuickFilterFunction;
 
-  @ViewChild('tableBody', {static: false})
+  @ViewChild('tableBody', { static: false })
   protected tableBodyEl: ElementRef;
   @ViewChild('tableHeader', { read: ElementRef, static: false })
   tableHeaderEl: ElementRef;
@@ -746,22 +741,22 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   protected permissions: OTablePermissions;
   matMenu: MatMenu;
 
-  @ViewChild('tableMenu', {static: false})
+  @ViewChild('tableMenu', { static: false })
   oTableMenu: OTableMenuComponent;
   @ContentChildren(OTableOptionComponent)
   tableOptions: QueryList<OTableOptionComponent>;
 
-  @ViewChild('tableButtons', {static: false})
+  @ViewChild('tableButtons', { static: false })
   oTableButtons: OTableButtonsComponent;
   @ContentChildren(OTableButtonComponent)
   tableButtons: QueryList<OTableButtonComponent>;
 
-  @ViewChild(OTableExpandedFooter, {static: false})
+  @ViewChild(OTableExpandedFooter, { static: false })
   oTableExpandedFooter: OTableExpandedFooter;
 
-  @ContentChild(OTableQuickfilterComponent, {static: false})
+  @ContentChild(OTableQuickfilterComponent, { static: false })
   quickfilterContentChild: OTableQuickfilterComponent;
-  @ViewChild('exportOptsTemplate', {static: false})
+  @ViewChild('exportOptsTemplate', { static: false })
   exportOptsTemplate: TemplateRef<any>;
 
   constructor(

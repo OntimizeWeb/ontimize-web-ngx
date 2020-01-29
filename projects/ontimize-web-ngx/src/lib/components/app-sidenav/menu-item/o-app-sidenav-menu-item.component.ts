@@ -1,23 +1,18 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Injector, NgModule, OnDestroy, ViewEncapsulation, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { Router, RouterModule } from '@angular/router';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Injector, OnDestroy, ViewEncapsulation, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 import { Util } from '../../../util/util';
-import { OSharedModule } from '../../../shared/shared.module';
 import { InputConverter } from '../../../decorators/input-converter';
 import { OAppLayoutComponent } from '../../../layouts/app-layout/o-app-layout.component';
 import { PermissionsUtils } from '../../../util/permissions';
-// import { OAppSidenavModule } from '../o-app-sidenav.module';
 import { OAppSidenavComponent } from '../o-app-sidenav.component';
-import { DialogService } from '../../../services/dialog.service';
-import { LoginService } from '../../../services/login.service';
-import { OTranslateService } from '../../../services/translate/o-translate.service';
-import { OUserInfoService } from '../../../services/o-user-info.service';
-import { OPermissions, PermissionsService } from '../../../services/permissions/permissions.service';
-
-// import { OLanguageSelectorModule } from '../../language-selector/o-language-selector.component';
 import { MenuItemAction, MenuItemLocale, MenuItemLogout, MenuItemRoute, MenuItemUserInfo, MenuRootItem } from '../../../services/app-menu.service';
+import { OTranslateService } from '../../../services/translate/o-translate.service';
+import { LoginService } from '../../../services/login.service';
+import { PermissionsService, OPermissions } from '../../../services/permissions/permissions.service';
+import { DialogService } from '../../../services/dialog.service';
+import { OUserInfoService } from '../../../services/o-user-info.service';
 
 export const DEFAULT_INPUTS_O_APP_SIDENAV_MENU_ITEM = [
   'menuItem : menu-item',
@@ -277,10 +272,3 @@ export class OAppSidenavMenuItemComponent implements OnInit, AfterViewInit, OnDe
   }
 
 }
-
-// @NgModule({
-//   imports: [CommonModule, OLanguageSelectorModule, OSharedModule, RouterModule],
-//   declarations: [OAppSidenavMenuItemComponent],
-//   exports: [OAppSidenavMenuItemComponent]
-// })
-// export class OAppSidenavMenuItemModule { }

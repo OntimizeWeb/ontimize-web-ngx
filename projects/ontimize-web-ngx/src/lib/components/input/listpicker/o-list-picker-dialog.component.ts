@@ -4,7 +4,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { Util } from '../../../util/util';
 import { OSearchInputComponent } from '../../input/search-input/o-search-input.component';
 
-export const DEFAULT_INPUTS_O_LIST_PICKER = [
+export const DEFAULT_INPUTS_O_LIST_PICKER_DIALOG = [
   'data',
   'visibleColumns: visible-columns',
   'filter'
@@ -15,7 +15,7 @@ export const DEFAULT_INPUTS_O_LIST_PICKER = [
   selector: 'o-list-picker-dialog',
   templateUrl: './o-list-picker-dialog.component.html',
   styleUrls: ['./o-list-picker-dialog.component.scss'],
-  inputs: DEFAULT_INPUTS_O_LIST_PICKER,
+  inputs: DEFAULT_INPUTS_O_LIST_PICKER_DIALOG,
   encapsulation: ViewEncapsulation.None,
   host: {
     '[class.o-list-picker-dialog]': 'true'
@@ -81,7 +81,7 @@ export class OListPickerDialogComponent {
     this.visibleData = this.data.slice(this.startIndex, this.recordsNumber);
   }
 
-  public onClickListItem(e: Event, value: any): void {
+  public onClickListItem(e: any, value: any): void {
     this.dialogRef.close(value);
   }
 

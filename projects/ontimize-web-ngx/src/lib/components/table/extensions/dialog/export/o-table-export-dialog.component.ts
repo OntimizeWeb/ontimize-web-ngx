@@ -32,7 +32,7 @@ export class OTableExportConfiguration {
   providers: [OntimizeExportService],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
-    'class': 'o-table-export-dialog'
+    class: 'o-table-export-dialog'
   },
   encapsulation: ViewEncapsulation.None
 })

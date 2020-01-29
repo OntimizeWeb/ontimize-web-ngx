@@ -1,11 +1,8 @@
-import { Component, Injector, NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, Injector } from '@angular/core';
 import { ValidatorFn } from '@angular/forms';
 import { Util } from '../../../util/util';
-import { OSharedModule } from '../../../shared/shared.module';
-import { IErrorData } from '../../o-form-data-component.class';
 import { OErrorComponent } from './o-error.component';
-
+import { IErrorData } from '../../../components/o-form-data-component.class';
 
 export const DEFAULT_INPUTS_O_VALIDATOR = [
   'validatorFn: validator-function',
@@ -58,12 +55,4 @@ export class OValidatorComponent {
     }
     return result;
   }
-}
-
-@NgModule({
-  declarations: [OValidatorComponent],
-  imports: [OSharedModule, CommonModule],
-  exports: [OValidatorComponent]
-})
-export class OValidatorModule {
 }

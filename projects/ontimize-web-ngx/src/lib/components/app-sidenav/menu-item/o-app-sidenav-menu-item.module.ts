@@ -7,8 +7,8 @@ import { RouterModule } from '@angular/router';
 import { OAppSidenavMenuItemComponent } from './o-app-sidenav-menu-item.component';
 
 @NgModule({
-	imports: [CommonModule, OLanguageSelectorModule, OSharedModule, RouterModule],
-	declarations: [OAppSidenavMenuItemComponent],
-	exports: [OAppSidenavMenuItemComponent]
+  imports: [CommonModule, OLanguageSelectorModule, OSharedModule, RouterModule],
+  declarations: [OAppSidenavMenuItemComponent],
+  exports: [OAppSidenavMenuItemComponent]
 })
 export class OAppSidenavMenuItemModule { }

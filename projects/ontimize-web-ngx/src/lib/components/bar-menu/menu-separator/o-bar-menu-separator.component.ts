@@ -1,5 +1,4 @@
-import { Component, ViewEncapsulation, NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, ViewEncapsulation } from '@angular/core';
 
 @Component({
   moduleId: module.id,
@@ -12,11 +11,4 @@ import { CommonModule } from '@angular/common';
   }
 })
 export class OBarMenuSeparatorComponent {
-}
-@NgModule({
-  declarations: [OBarMenuSeparatorComponent],
-  imports: [CommonModule],
-  exports: [OBarMenuSeparatorComponent]
-})
-export class OBarMenuSeparatorModule {
 }

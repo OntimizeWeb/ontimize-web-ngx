@@ -4,10 +4,10 @@ import { MatPaginator } from '@angular/material';
 import { BehaviorSubject, merge, Observable, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Util } from '../../util/util';
-import { ColumnValueFilterOperator, IColumnValueFilter } from './extensions/header/o-table-header-components';
 import { OMatSort } from './extensions/sort/o-mat-sort';
 import { OColumn, OTableComponent, OTableOptions } from './o-table.component';
 import { OTableDao } from './o-table.dao';
+import { IColumnValueFilter, ColumnValueFilterOperator } from './extensions/header/table-columns-filter/o-table-columns-filter.component';
 
 
 export const SCROLLVIRTUAL = 'scroll';

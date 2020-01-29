@@ -4,9 +4,7 @@ import { FormControl } from '@angular/forms';
 import { MatDialog, MatDialogConfig, MatDialogRef, MatInput } from '@angular/material';
 import { InputConverter } from '../../../decorators/input-converter';
 import { OntimizeService } from '../../../services/ontimize.service';
-import { dataServiceFactory } from '../../../services/data-service.provider';
 import { OSharedModule } from '../../../shared/shared.module';
-import { ODialogModule } from '../../dialog/o-dialog.component';
 import { IFormValueOptions } from '../../form/oFormValue';
 import { OFormComponent } from '../../form/o-form.component';
 import { OSearchInputModule } from '../../input/search-input/o-search-input.component';
@@ -38,7 +36,7 @@ export const DEFAULT_OUTPUTS_O_LIST_PICKER = [
   templateUrl: './o-list-picker.component.html',
   styleUrls: ['./o-list-picker.component.scss'],
   providers: [
-    { provide: OntimizeService, useFactory: dataServiceFactory, deps: [Injector] },
+    OntimizeService,
     { provide: OFormServiceComponent, useExisting: forwardRef(() => OListPickerComponent) }
   ],
   inputs: DEFAULT_INPUTS_O_LIST_PICKER,
@@ -77,8 +75,8 @@ export class OListPickerComponent extends OFormServiceComponent implements After
   protected matDialog: MatDialog;
   protected dialogRef: MatDialogRef<OListPickerDialogComponent>;
 
-  @ViewChild('inputModel', {static: false}) protected inputModel: MatInput;
-  @ViewChild('visibleInput', {static: false}) protected visibleInput: ElementRef;
+  @ViewChild('inputModel', { static: false }) protected inputModel: MatInput;
+  @ViewChild('visibleInput', { static: false }) protected visibleInput: ElementRef;
   protected visibleInputValue: any;
 
   protected blurTimer;
@@ -282,7 +280,7 @@ export class OListPickerComponent extends OFormServiceComponent implements After
 
 @NgModule({
   declarations: [OListPickerDialogComponent, OListPickerComponent],
-  imports: [CommonModule, ODialogModule, OSearchInputModule, OSharedModule],
+  imports: [CommonModule, OSharedModule, OSearchInputModule],
   exports: [OListPickerComponent],
   entryComponents: [OListPickerDialogComponent]
 })

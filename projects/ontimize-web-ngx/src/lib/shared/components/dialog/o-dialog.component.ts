@@ -1,8 +1,5 @@
-import { Component, NgModule, ViewEncapsulation } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, ViewEncapsulation } from '@angular/core';
 import { MatDialogRef } from '@angular/material';
-import { OTranslateModule } from '../../pipes/o-translate.pipe';
-import { OSharedModule } from '../../shared/shared.module';
 import { ODialogConfig } from './o-dialog.config';
 
 @Component({
@@ -177,13 +174,3 @@ export class ODialogComponent {
     this._useIcon = val;
   }
 }
-
-@NgModule({
-  declarations: [ODialogComponent],
-  imports: [CommonModule, OSharedModule, OTranslateModule],
-  exports: [ODialogComponent, CommonModule]
-})
-export class ODialogModule {
-}
-
-export * from './o-dialog.config';

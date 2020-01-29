@@ -3,14 +3,14 @@ import { Subscription } from 'rxjs';
 import { DialogService } from '../../../../../services/dialog.service';
 import { OntimizeService } from '../../../../../services/ontimize.service';
 import { dataServiceFactory } from '../../../../../services/data-service.provider';
-import { Util } from '../../../../../util/util';
 import { Codes } from '../../../../../util/codes';
+import { Util } from '../../../../../util/util';
 import { SQLTypes } from '../../../../../util/sqltypes';
-import { FilterExpressionUtils } from '../../../../../components/filter-expression.utils';
-import { ServiceUtils } from '../../../../service.utils';
+import { IExpression, FilterExpressionUtils } from '../../../../../util/filter-expression.utils';
+
+import { ServiceUtils } from '../../../../../util/service.utils';
 import { OColumn } from '../../../o-table.component';
 import { OBaseTableCellRenderer, DEFAULT_INPUTS_O_BASE_TABLE_CELL_RENDERER } from '../o-base-table-cell-renderer.class';
-import { IExpression } from '../../../../filter-expression.utils';
 
 export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_SERVICE = [
   ...DEFAULT_INPUTS_O_BASE_TABLE_CELL_RENDERER,
@@ -31,7 +31,7 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_SERVICE = [
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     // Service renderer must have its own service instance in order to avoid overriding table service configuration
-    { provide: OntimizeService, useFactory: dataServiceFactory, deps: [Injector] }
+    OntimizeService
   ]
 })
 export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer implements OnInit {

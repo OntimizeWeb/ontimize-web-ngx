@@ -12,11 +12,12 @@ import { PermissionsService } from '../services/permissions/permissions.service'
 import { OTranslateService } from '../services/translate/o-translate.service';
 import { Util } from '../util/util';
 import { Codes } from '../util/codes';
-import { FilterExpressionUtils, IExpression } from './filter-expression.utils';
 import { OFormComponent } from './form/o-form.component';
 import { OListInitializationOptions } from './list/o-list.component';
 import { DEFAULT_INPUTS_O_SERVICE_BASE_COMPONENT, OServiceBaseComponent } from './o-service-base-component.class';
 import { OTableInitializationOptions } from './table/o-table.component';
+import { IExpression, FilterExpressionUtils } from '../util/filter-expression.utils';
+
 export const DEFAULT_INPUTS_O_SERVICE_COMPONENT = [
   ...DEFAULT_INPUTS_O_SERVICE_BASE_COMPONENT,
 

@@ -1,7 +1,6 @@
 import { Directive, ElementRef, EventEmitter, HostListener, Renderer } from '@angular/core';
-
-import { Util } from '../../../util/util';
 import { Codes } from '../../../util/codes';
+import { Util } from '../../../util/util';
 import { ObservableWrapper } from '../../../util/async';
 import { OGridComponent } from '../o-grid.component';
 

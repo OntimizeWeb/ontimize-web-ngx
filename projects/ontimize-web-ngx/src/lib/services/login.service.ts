@@ -10,7 +10,7 @@ import { PermissionsService } from '../services/permissions/permissions.service'
 import { Codes } from '../util/codes';
 import { IAuthService } from '../util/util';
 import { ObservableWrapper } from '../util/async';
-import { ServiceUtils } from '../components/service.utils';
+import { ServiceUtils } from '../util/service.utils';
 
 export interface SessionInfo {
   id?: number;

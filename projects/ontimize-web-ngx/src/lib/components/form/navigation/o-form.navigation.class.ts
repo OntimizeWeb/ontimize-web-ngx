@@ -3,12 +3,13 @@ import { ActivatedRoute, NavigationExtras, Router, UrlSegmentGroup } from '@angu
 import { combineLatest, Observable, Subscription } from 'rxjs';
 import { OFormLayoutDialogComponent } from '../../../layouts/form-layout/dialog/o-form-layout-dialog.component';
 import { IDetailComponentData, OFormLayoutManagerComponent } from '../../../layouts/form-layout/o-form-layout-manager.component';
-import { DialogService } from '../../../services/dialog.service';
-import { NavigationService, ONavigationItem } from '../../../services/navigation.service';
-import { Util } from '../../../util/util';
 import { Codes } from '../../../util/codes';
 import { SQLTypes } from '../../../util/sqltypes';
+import { Util } from '../../../util/util';
+
 import { OFormComponent } from '../o-form.component';
+import { DialogService } from '../../../services/dialog.service';
+import { NavigationService, ONavigationItem } from '../../../services/navigation.service';
 
 
 export class OFormNavigationClass {

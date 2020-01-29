@@ -3,8 +3,8 @@ import { FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms'
 import { InputConverter } from '../../../../decorators/input-converter';
 import { OTranslateService } from '../../../../services/translate/o-translate.service';
 import { SnackBarService } from '../../../../services/snackbar.service';
-import { Util } from '../../../../util/util';
 import { ObservableWrapper } from '../../../../util/async';
+import { Util } from '../../../../util/util';
 import { OColumn, OTableComponent } from '../../o-table.component';
 import { OTableColumnComponent } from '../o-table-column.component';
 

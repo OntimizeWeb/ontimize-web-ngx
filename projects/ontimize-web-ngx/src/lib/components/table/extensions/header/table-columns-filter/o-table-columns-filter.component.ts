@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, Inject, Injector, OnInit, forwardRef } from '@angular/core';
-import { Util } from '../../../../../util/util';
+
 import { Codes } from '../../../../../util/codes';
+import { Util } from '../../../../../util/util';
 import { OColumn, OTableComponent } from '../../../o-table.component';
 import { InputConverter } from '../../../../../decorators/input-converter';
 

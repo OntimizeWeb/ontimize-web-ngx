@@ -14,7 +14,7 @@ import {
   DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT,
   OFormDataComponent,
 } from '../o-form-data-component.class';
-import { ServiceUtils } from '../service.utils';
+import { ServiceUtils } from '../../util/service.utils';
 
 export const DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT = [
   ...DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,

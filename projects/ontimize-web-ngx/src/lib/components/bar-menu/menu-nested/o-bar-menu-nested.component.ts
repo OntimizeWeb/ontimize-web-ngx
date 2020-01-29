@@ -1,8 +1,5 @@
-import { Component, Injector, ViewEncapsulation, NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, Injector, ViewEncapsulation } from '@angular/core';
 import { AppMenuService, MenuRootItem } from '../../../services/app-menu.service';
-import { OBarMenuGroupModule } from '../menu-group/o-bar-menu-group.component';
-import { OBarMenuItemModule } from '../menu-item/o-bar-menu-item.component';
 
 export const DEFAULT_INPUTS_O_BAR_MENU_NESTED = [
   'items'
@@ -38,12 +35,4 @@ export class OBarMenuNestedComponent {
   isMenuGroup(item: any): boolean {
     return this.appMenuService.getMenuItemType(item) === 'group';
   }
-}
-
-@NgModule({
-  declarations: [OBarMenuNestedComponent],
-  imports: [CommonModule, OBarMenuGroupModule, OBarMenuItemModule],
-  exports: [OBarMenuNestedComponent]
-})
-export class OBarMenuNestedModule {
 }
