@@ -44,9 +44,3 @@ export class OErrorComponent implements OnInit {
   }
 
 }
-
-@NgModule({
-  declarations: [OErrorComponent] ,
-  exports: [OErrorComponent],
-})
-export class OErrorModule { }
