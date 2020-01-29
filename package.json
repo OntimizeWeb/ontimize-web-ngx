@@ -4,7 +4,8 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build && scss-bundle -p scss-bundle-ontimize.config.json && scss-bundle -p scss-bundle-theme.config.json && cd dist/ontimize-web-ngx && npm pack",
+    "build": "ng build && scss-bundle -p scss-bundle-ontimize.config.json && scss-bundle -p scss-bundle-theme.config.json",
+    "postbuild": "copyfiles -u 3 ./projects/ontimize-web-ngx/assets/svg/ontimize-icon-set.svg ./dist/ontimize-web-ngx/assets && echo '----¡Assets copied!----'  && cd dist/ontimize-web-ngx && npm pack",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
@@ -19,7 +20,6 @@
     "@angular/platform-browser": "~8.2.14",
     "@angular/platform-browser-dynamic": "~8.2.14",
     "@angular/router": "~8.2.14",
-    "copyfiles": "^2.2.0",
     "rxjs": "~6.4.0",
     "tslib": "^1.10.0",
     "zone.js": "~0.9.1"
@@ -34,6 +34,7 @@
     "@types/jasminewd2": "~2.0.3",
     "@types/node": "~8.9.4",
     "codelyzer": "^5.0.0",
+    "copyfiles": "^2.2.0",
     "jasmine-core": "3.5.0",
     "jasmine-spec-reporter": "~4.2.1",
     "karma": "~4.1.0",
