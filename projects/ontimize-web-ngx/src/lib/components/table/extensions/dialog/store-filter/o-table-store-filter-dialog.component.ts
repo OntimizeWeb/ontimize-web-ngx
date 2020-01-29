@@ -42,9 +42,9 @@ export class OTableStoreFilterDialogComponent extends OTableBaseDialogClass {
   }
 
   protected filterNameValidator(control: FormControl) {
-    let ctrlValue: string = control.value;
+    const ctrlValue: string = control.value;
     if (this.filterNames.indexOf(ctrlValue) !== -1) {
-      return { 'filterNameAlreadyExists': true };
+      return { filterNameAlreadyExists: true };
     }
     return {};
   }

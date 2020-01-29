@@ -1,4 +1,4 @@
-import { Component, Inject, Injector, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, Inject, Injector, ViewChild, ViewEncapsulation, AfterViewInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 
 import { Util } from '../../../util/util';
@@ -21,13 +21,13 @@ export const DEFAULT_INPUTS_O_LIST_PICKER_DIALOG = [
     '[class.o-list-picker-dialog]': 'true'
   }
 })
-export class OListPickerDialogComponent {
+export class OListPickerDialogComponent implements AfterViewInit {
 
   public filter: boolean = true;
   public visibleData: any = [];
   public searchVal: string;
 
-  @ViewChild('searchInput', {static: false})
+  @ViewChild('searchInput', { static: false })
   public searchInput: OSearchInputComponent;
 
   protected data: any[] = [];

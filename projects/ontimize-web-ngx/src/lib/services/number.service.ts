@@ -14,7 +14,7 @@ export class NumberService {
 
   constructor(protected injector: Injector) {
     this._config = this.injector.get(AppConfig).getConfiguration();
-    //TODO: initialize from config
+    // TODO: initialize from config
     this._minDecimalDigits = NumberService.DEFAULT_DECIMAL_DIGITS;
     this._maxDecimalDigits = NumberService.DEFAULT_DECIMAL_DIGITS;
 
@@ -62,7 +62,7 @@ export class NumberService {
     const thousandSeparator = args ? args.thousandSeparator : undefined;
     const locale = args ? args.locale : undefined;
     // Ensure value is an integer
-    let intValue: any = parseInt(value, 10);
+    const intValue: any = parseInt(value, 10);
     if (isNaN(intValue)) {
       return void 0;
     }
@@ -98,7 +98,7 @@ export class NumberService {
     }
 
     let formattedRealValue = value;
-    let formatterArgs = {
+    const formatterArgs = {
       minimumFractionDigits: minDecimalDigits,
       maximumFractionDigits: maxDecimalDigits
     };
@@ -108,13 +108,13 @@ export class NumberService {
     } else if (!Util.isDefined(thousandSeparator) || !Util.isDefined(decimalSeparator)) {
       formattedRealValue = new Intl.NumberFormat(this._locale, formatterArgs).format(value);
     } else {
-      let realValue = parseFloat(value);
+      const realValue = parseFloat(value);
       if (!isNaN(realValue)) {
         formattedRealValue = String(realValue);
         let tmpStr = realValue.toFixed(maxDecimalDigits);
         tmpStr = tmpStr.replace('.', decimalSeparator);
         if (grouping) {
-          let parts = tmpStr.split(decimalSeparator);
+          const parts = tmpStr.split(decimalSeparator);
           if (parts.length > 0) {
             parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, thousandSeparator);
             formattedRealValue = parts.join(decimalSeparator);

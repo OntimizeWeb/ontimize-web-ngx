@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { AfterViewChecked, AfterViewInit, Component, ContentChildren, ElementRef, EventEmitter, forwardRef, Inject, Injector, NgModule, OnChanges, OnDestroy, OnInit, Optional, QueryList, SimpleChange, ViewChild, ViewChildren, HostListener, Renderer2 } from '@angular/core';
+import { AfterViewChecked, AfterViewInit, Component, ContentChildren, ElementRef, EventEmitter, forwardRef, Inject, Injector, NgModule, OnChanges, OnDestroy, OnInit, Optional, QueryList, SimpleChange, ViewChild, ViewChildren, HostListener, Renderer2, AfterContentInit } from '@angular/core';
 import { MediaChange, MediaObserver } from '@angular/flex-layout';
 import { MatPaginator, PageEvent } from '@angular/material';
 import { RouterModule } from '@angular/router';
@@ -72,7 +72,7 @@ const PAGE_SIZE_OPTIONS = [8, 16, 24, 32, 64];
     '[class.o-grid-fixed]': 'fixedHeader',
   }
 })
-export class OGridComponent extends OServiceComponent implements AfterViewChecked, AfterViewInit, OnChanges, OnDestroy, OnInit {
+export class OGridComponent extends OServiceComponent implements AfterViewChecked, AfterViewInit, OnChanges, OnDestroy, OnInit, AfterContentInit {
 
   public static DEFAULT_INPUTS_O_GRID = DEFAULT_INPUTS_O_GRID;
   public static DEFAULT_OUTPUTS_O_GRID = DEFAULT_OUTPUTS_O_GRID;
@@ -143,7 +143,7 @@ export class OGridComponent extends OServiceComponent implements AfterViewChecke
   public inputGridItems: QueryList<OGridItemComponent>;
   @ViewChildren(OGridItemDirective)
   public gridItemDirectives: QueryList<OGridItemDirective>;
-  @ViewChild(MatPaginator, {static: false})
+  @ViewChild(MatPaginator, { static: false })
   public matpaginator: MatPaginator;
 
   /* Parsed Inputs */
@@ -247,18 +247,20 @@ export class OGridComponent extends OServiceComponent implements AfterViewChecke
   }
 
   public ngAfterViewChecked(): void {
-    this.subscription.add(this.media.media$.subscribe((change: MediaChange) => {
-      switch (change.mqAlias) {
-        case 'xs':
-        case 'sm':
-          this._colsDefault = 1;
-          break;
-        case 'md':
-          this._colsDefault = 2;
-          break;
-        case 'lg':
-        case 'xl':
-          this._colsDefault = 4;
+    this.subscription.add(this.media.asObservable().subscribe((change: MediaChange[]) => {
+      if (change && change[0]) {
+        switch (change[0].mqAlias) {
+          case 'xs':
+          case 'sm':
+            this._colsDefault = 1;
+            break;
+          case 'md':
+            this._colsDefault = 2;
+            break;
+          case 'lg':
+          case 'xl':
+            this._colsDefault = 4;
+        }
       }
     }));
   }

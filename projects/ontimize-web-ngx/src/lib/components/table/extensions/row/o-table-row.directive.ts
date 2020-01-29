@@ -29,7 +29,7 @@ export class OTableRowDirective implements AfterViewInit, OnDestroy {
     if (this.table.horizontalScroll) {
       const self = this;
       this.table.onUpdateScrolledState.subscribe(scrolled => {
-        setTimeout(function () {
+        setTimeout(() => {
           if (scrolled) {
             self.calculateRowWidth();
           } else {

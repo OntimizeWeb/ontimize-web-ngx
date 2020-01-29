@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation, ViewContainerRef, ViewChild, ComponentFactoryResolver, NgModule } from '@angular/core';
+import { Component, ViewEncapsulation, ViewContainerRef, ViewChild, ComponentFactoryResolver, NgModule, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { OSharedModule } from '../../shared/shared.module';
@@ -27,7 +27,7 @@ export const DEFAULT_INPUTS_O_FORM_CONTAINER = [
   }
 })
 
-export class OFormContainerComponent {
+export class OFormContainerComponent implements AfterViewInit {
 
   @ViewChild('breadcrumb', { read: ViewContainerRef, static: false }) breadContainer;
 

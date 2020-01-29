@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Injector, TemplateRef, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Injector, TemplateRef, ViewChild, OnInit } from '@angular/core';
 import { Util } from '../../../../../util/util';
 import { OColumn } from '../../../o-table.component';
 import { DEFAULT_INPUTS_O_BASE_TABLE_CELL_RENDERER, OBaseTableCellRenderer } from '../o-base-table-cell-renderer.class';
@@ -24,7 +24,7 @@ export const DEFAULT_OUTPUTS_O_TABLE_CELL_RENDERER_IMAGE = [
   changeDetection: ChangeDetectionStrategy.OnPush,
   inputs: DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_IMAGE
 })
-export class OTableCellRendererImageComponent extends OBaseTableCellRenderer {
+export class OTableCellRendererImageComponent extends OBaseTableCellRenderer implements OnInit {
 
   public static DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_IMAGE = DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_IMAGE;
   public static DEFAULT_OUTPUTS_O_TABLE_CELL_RENDERER_IMAGE = DEFAULT_OUTPUTS_O_TABLE_CELL_RENDERER_IMAGE;

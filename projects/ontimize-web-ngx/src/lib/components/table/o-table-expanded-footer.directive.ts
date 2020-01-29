@@ -1,4 +1,4 @@
-import { Directive, ElementRef, Inject, Renderer2, forwardRef } from '@angular/core';
+import { Directive, ElementRef, Inject, Renderer2, forwardRef, AfterViewInit } from '@angular/core';
 
 import { Injector } from '@angular/core';
 import { OTableComponent } from './o-table.component';
@@ -8,7 +8,7 @@ import { Subscription } from 'rxjs';
 @Directive({
   selector: '[oTableExpandedFooter]'
 })
-export class OTableExpandedFooter {
+export class OTableExpandedFooterDirective implements AfterViewInit {
 
   spanMessageNotResults;
   translateService: OTranslateService;
@@ -38,8 +38,8 @@ export class OTableExpandedFooter {
   registerContentChange() {
     /**Create a tr with a td and inside put the message and add to tbody
      * <tr><td><span> {message}</span><td><tr>
-    */
-    let tr = this.renderer.createElement('tr');
+     */
+    const tr = this.renderer.createElement('tr');
     this.tdTableWithMessage = this.renderer.createElement('td');
     this.renderer.addClass(tr, 'o-table-no-results');
     tr.appendChild(this.tdTableWithMessage);
@@ -53,12 +53,12 @@ export class OTableExpandedFooter {
   }
 
   updateMessageNotResults(data) {
-    //reset span message
+    // reset span message
     if (this.spanMessageNotResults) {
       this.renderer.removeChild(this.element.nativeElement, this.spanMessageNotResults);
     }
 
-    //generate new message
+    // generate new message
     if (data.length === 0) {
       let result = '';
       result = this.translateService.get('TABLE.EMPTY');
@@ -66,7 +66,7 @@ export class OTableExpandedFooter {
         this.table.oTableQuickFilterComponent.value && this.table.oTableQuickFilterComponent.value.length > 0) {
         result += this.translateService.get('TABLE.EMPTY_USING_FILTER', [(this.table.oTableQuickFilterComponent.value)]);
         this.spanMessageNotResults = this.renderer.createElement('span');
-        let messageNotResults = this.renderer.createText(result);
+        const messageNotResults = this.renderer.createText(result);
         this.tdTableWithMessage.setAttribute('colspan', this.tableHeader.querySelectorAll('th').length);
         this.renderer.appendChild(this.spanMessageNotResults, messageNotResults);
         this.renderer.appendChild(this.tdTableWithMessage, this.spanMessageNotResults);
@@ -76,7 +76,7 @@ export class OTableExpandedFooter {
 
   // updateColspanTr() {
   // TODO
-  //LAUNCH  WHEN HAVE OBSERVER OVER VISIBLE COLUMNS
+  // LAUNCH  WHEN HAVE OBSERVER OVER VISIBLE COLUMNS
   //   if (this.spanMessageNotResults) {
   //     this.td.setAttribute('colspan', this.tableHeader.querySelectorAll('th').length);
   //     this.renderer.appendChild(this.td, this.spanMessageNotResults);

@@ -30,7 +30,7 @@ export class OMatSort extends MatSort {
   }
 
   getSortColumns(): any[] {
-    let activeData = [];
+    const activeData = [];
     this.activeArray.forEach((s: MatSortable) => {
       activeData.push({
         id: s.id,
@@ -69,7 +69,7 @@ export class OMatSort extends MatSort {
       this.activeArray.push(sortable);
       this.directionById[sortable.id] = sortable.start ? sortable.start : this.start;
     }
-    let activeData = this.getSortColumns();
+    const activeData = this.getSortColumns();
     this._stateChanges.next();
     this.oSortChange.emit(activeData);
   }
@@ -97,7 +97,7 @@ export class OMatSort extends MatSort {
   }
 
   getSortedData(data: any[]): any[] {
-    let sortColumns = this.getSortColumns();
+    const sortColumns = this.getSortColumns();
     if (sortColumns.length === 0 || data.length === 0) {
       return data;
     }
@@ -127,7 +127,7 @@ export class OMatSort extends MatSort {
   }
 
   protected getDataGrouped(data: any, sortColumns: any[], index: number): OMatSortGroupedData[] {
-    var propArr = [];
+    const propArr = [];
     sortColumns.forEach((item, i) => {
       if (i < index) {
         propArr.push(item.id);
@@ -136,14 +136,14 @@ export class OMatSort extends MatSort {
     if (propArr.length === 0) {
       return data;
     }
-    let result: OMatSortGroupedData[] = [];
+    const result: OMatSortGroupedData[] = [];
     data.forEach(item => {
       let value = '';
       propArr.forEach(prop => {
         value += item[prop];
       });
 
-      let filtered = result.filter(resItem => resItem.key === value);
+      const filtered = result.filter(resItem => resItem.key === value);
       if (filtered.length === 0) {
         result.push({
           key: value,
@@ -171,8 +171,8 @@ export class OMatSort extends MatSort {
     let propertyB: number | string = '';
     [propertyA, propertyB] = [a[this.activeSortColumn], b[this.activeSortColumn]];
 
-    let valueA = typeof propertyA === 'undefined' ? '' : propertyA === '' ? propertyA : isNaN(+propertyA) ? propertyA.toString().trim().toLowerCase() : +propertyA;
-    let valueB = typeof propertyB === 'undefined' ? '' : propertyB === '' ? propertyB : isNaN(+propertyB) ? propertyB.toString().trim().toLowerCase() : +propertyB;
+    const valueA = typeof propertyA === 'undefined' ? '' : propertyA === '' ? propertyA : isNaN(+propertyA) ? propertyA.toString().trim().toLowerCase() : +propertyA;
+    const valueB = typeof propertyB === 'undefined' ? '' : propertyB === '' ? propertyB : isNaN(+propertyB) ? propertyB.toString().trim().toLowerCase() : +propertyB;
     return (valueA <= valueB ? -1 : 1) * (this.activeSortDirection === 'asc' ? 1 : -1);
   }
 

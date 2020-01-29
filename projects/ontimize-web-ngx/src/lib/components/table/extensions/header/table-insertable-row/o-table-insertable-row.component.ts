@@ -142,7 +142,7 @@ export class OTableInsertableRowComponent implements OnInit {
   }
 
   resolveValidators(column: OColumn): ValidatorFn[] {
-    let validators: ValidatorFn[] = [];
+    const validators: ValidatorFn[] = [];
     if (this.isColumnRequired(column)) {
       validators.push(Validators.required);
     }
@@ -178,7 +178,7 @@ export class OTableInsertableRowComponent implements OnInit {
       // this.table.showDialogError('TABLE.ROW_VALIDATION_ERROR');
       return;
     }
-    let values = this.getAttributesValuesToInsert();
+    const values = this.getAttributesValuesToInsert();
     const insertObservable: Observable<any> = this.table.insertRecord(values);
     if (insertObservable) {
       insertObservable.subscribe(res => {
@@ -229,7 +229,7 @@ export class OTableInsertableRowComponent implements OnInit {
     controlKeys.forEach((controlKey) => {
       this.controls[controlKey].setValue(void 0);
     });
-    let firstInputEl = (this.trWrapper as any).querySelector('input');
+    const firstInputEl = (this.trWrapper as any).querySelector('input');
     if (firstInputEl) {
       setTimeout(() => {
         firstInputEl.focus();

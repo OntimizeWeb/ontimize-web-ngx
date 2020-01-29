@@ -70,14 +70,14 @@ export class OTableExportDialogComponent implements OnInit, OnDestroy {
   }
 
   configureService(): void {
-    let loadingService: any = OntimizeExportService;
+    const loadingService: any = OntimizeExportService;
     // TODO: allow service type selection (extension)
     // if (this.serviceType) {
     //   loadingService = this.serviceType;
     // }
     try {
       this.exportService = this.injector.get(loadingService);
-      let serviceCfg = this.exportService.getDefaultServiceConfiguration(this.config.service);
+      const serviceCfg = this.exportService.getDefaultServiceConfiguration(this.config.service);
       this.exportService.configureService(serviceCfg, Codes.EXPORT_MODE_ALL === this.config.mode);
     } catch (e) {
       console.error(e);
@@ -88,14 +88,14 @@ export class OTableExportDialogComponent implements OnInit, OnDestroy {
     if (button) {
       button.disabled = true;
     }
-    let exportData = {
+    const exportData = {
       data: this.config.data,
       columns: this.config.columns,
       columnNames: this.config.columnNames,
       sqlTypes: this.config.sqlTypes,
       filter: this.config.filter
     };
-    let self = this;
+    const self = this;
     this.proccessExportData(exportData.data, exportData.sqlTypes);
     this.exportService.exportData(exportData, exportType, this.config.entity).subscribe((resp) => {
       if (resp.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) {
@@ -118,8 +118,8 @@ export class OTableExportDialogComponent implements OnInit, OnDestroy {
     // Parse boolean
     Object.keys(sqlTypes).forEach(key => {
       if (SQLTypes.BOOLEAN === sqlTypes[key]) {
-        let yes = this.translateService.get('YES');
-        let no = this.translateService.get('NO');
+        const yes = this.translateService.get('YES');
+        const no = this.translateService.get('NO');
         data.forEach(row => {
           if (row[key]) {
             row[key] = Util.parseBoolean(row[key]) ? yes : no;

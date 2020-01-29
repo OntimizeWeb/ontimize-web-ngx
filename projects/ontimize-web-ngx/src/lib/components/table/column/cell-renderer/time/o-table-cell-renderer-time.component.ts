@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Injector, TemplateRef, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Injector, TemplateRef, ViewChild, OnInit } from '@angular/core';
 import { IMomentPipeArgument, OMomentPipe } from '../../../../../pipes/o-moment.pipe';
 
 import { OBaseTableCellRenderer, DEFAULT_INPUTS_O_BASE_TABLE_CELL_RENDERER } from '../o-base-table-cell-renderer.class';
@@ -16,7 +16,7 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_TIME = [
   changeDetection: ChangeDetectionStrategy.OnPush,
   inputs: DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_TIME
 })
-export class OTableCellRendererTimeComponent extends OBaseTableCellRenderer {
+export class OTableCellRendererTimeComponent extends OBaseTableCellRenderer implements OnInit {
 
   public static DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_TIME = DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_TIME;
 
@@ -44,8 +44,7 @@ export class OTableCellRendererTimeComponent extends OBaseTableCellRenderer {
   }
 
   ngOnInit() {
-    //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
-    //Add 'implements OnInit' to the class.
+    // Called after the constructor, initializing input properties, and the first call to ngOnChanges.
     this.pipeArguments = {
       format: this._format
     };

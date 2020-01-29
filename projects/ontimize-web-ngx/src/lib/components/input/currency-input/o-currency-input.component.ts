@@ -26,19 +26,18 @@ export class OCurrencyInputComponent extends ORealInputComponent implements OnIn
 
   public static DEFAULT_INPUTS_O_CURRENCY_INPUT = DEFAULT_INPUTS_O_CURRENCY_INPUT;
   public static DEFAULT_OUTPUTS_O_CURRENCY_INPUT = DEFAULT_OUTPUTS_O_CURRENCY_INPUT;
+  static currency_icons = ['USD', 'EUR', 'GBP', 'ILS', 'INR', 'JPY', 'KRW', 'BTC'];
 
   currency_symbols = {
-    'CRC': '₡', // Costa Rican Colón
-    'NGN': '₦', // Nigerian Naira
-    'PHP': '₱', // Philippine Peso
-    'PLN': 'zł', // Polish Zloty
-    'PYG': '₲', // Paraguayan Guarani
-    'THB': '฿', // Thai Baht
-    'UAH': '₴', // Ukrainian Hryvnia
-    'VND': '₫', // Vietnamese Dong
+    CRC: '₡', // Costa Rican Colón
+    NGN: '₦', // Nigerian Naira
+    PHP: '₱', // Philippine Peso
+    PLN: 'zł', // Polish Zloty
+    PYG: '₲', // Paraguayan Guarani
+    THB: '฿', // Thai Baht
+    UAH: '₴', // Ukrainian Hryvnia
+    VND: '₫', // Vietnamese Dong
   };
-
-  static currency_icons = ['USD', 'EUR', 'GBP', 'ILS', 'INR', 'JPY', 'KRW', 'BTC'];
 
   currencySymbol: string = 'EUR';
   currencySymbolPosition: string = 'right';

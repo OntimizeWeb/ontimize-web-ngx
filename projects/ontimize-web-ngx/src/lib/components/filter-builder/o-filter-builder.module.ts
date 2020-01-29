@@ -7,19 +7,19 @@ import { OFilterBuilderComponent } from './o-filter-builder.component';
 import { NgModule } from '@angular/core';
 
 @NgModule({
-    imports: [
-      OSharedModule,
-      CommonModule
-    ],
-    declarations: [
-      OFilterBuilderComponent,
-      OFilterBuilderClearDirective,
-      OFilterBuilderQueryDirective
-    ],
-    exports: [
-      OFilterBuilderComponent,
-      OFilterBuilderClearDirective,
-      OFilterBuilderQueryDirective
-    ]
-  })
-  export class OFilterBuilderModule { }
+  imports: [
+    OSharedModule,
+    CommonModule
+  ],
+  declarations: [
+    OFilterBuilderComponent,
+    OFilterBuilderClearDirective,
+    OFilterBuilderQueryDirective
+  ],
+  exports: [
+    OFilterBuilderComponent,
+    OFilterBuilderClearDirective,
+    OFilterBuilderQueryDirective
+  ]
+})
+export class OFilterBuilderModule { }

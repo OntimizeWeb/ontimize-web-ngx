@@ -66,7 +66,7 @@ export class PermissionsService {
   }
 
   protected configureService() {
-    let loadingService: any = OntimizePermissionsService;
+    const loadingService: any = OntimizePermissionsService;
     try {
       this.permissionsService = this.injector.get(loadingService);
       if (Util.isPermissionsService(this.permissionsService)) {
@@ -150,12 +150,12 @@ export class PermissionsService {
       return undefined;
     }
     let routePermissions: any;
-    let genericRoutePerm: OComponentPermissions = this.getComponentPermissionsUsingRoute(attr, actRoute);
+    const genericRoutePerm: OComponentPermissions = this.getComponentPermissionsUsingRoute(attr, actRoute);
     if (genericRoutePerm && genericRoutePerm.selector === selector) {
       routePermissions = genericRoutePerm;
     }
     let compPermissions: any;
-    let attrPermissions = (this.permissions.components || []).find(comp => comp.attr === attr);
+    const attrPermissions = (this.permissions.components || []).find(comp => comp.attr === attr);
     if (attrPermissions && attrPermissions.selector === selector) {
       compPermissions = attrPermissions;
     }
@@ -175,7 +175,7 @@ export class PermissionsService {
     if (!Util.isDefined(routePerm) || !Util.isDefined(compPerm)) {
       return compPerm || routePerm;
     }
-    let permissions: OTablePermissions = {
+    const permissions: OTablePermissions = {
       selector: 'o-table',
       attr: routePerm.attr,
       menu: this.mergeOTableMenuPermissions(compPerm.menu, routePerm.menu),
@@ -196,7 +196,7 @@ export class PermissionsService {
     if (!Util.isDefined(routePerm) || !Util.isDefined(compPerm)) {
       return compPerm || routePerm;
     }
-    let permissions: OFormPermissions = {
+    const permissions: OFormPermissions = {
       selector: 'o-form',
       attr: routePerm.attr,
       components: this.mergeOPermissionsArrays(compPerm.components, routePerm.components),
@@ -221,9 +221,9 @@ export class PermissionsService {
     if (!Util.isDefined(permissionsA) || !Util.isDefined(permissionsB)) {
       return permissionsA || permissionsB;
     }
-    let result = Object.assign([], permissionsA);
+    const result = Object.assign([], permissionsA);
     permissionsB.forEach((perm: OPermissions) => {
-      let found = result.find(r => r.attr === perm.attr);
+      const found = result.find(r => r.attr === perm.attr);
       if (found) {
         found.visible = perm.visible;
         found.enabled = perm.enabled;
@@ -238,7 +238,7 @@ export class PermissionsService {
     if (!Util.isDefined(permissionsA) || !Util.isDefined(permissionsB)) {
       return permissionsA || permissionsB;
     }
-    let result = {
+    const result = {
       visible: permissionsB.visible,
       enabled: permissionsB.enabled,
       items: this.mergeOPermissionsArrays(permissionsA.items, permissionsB.items)

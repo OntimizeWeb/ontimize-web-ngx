@@ -20,30 +20,29 @@ export class SnackBarService {
 
   public open(message: string, config?: OSnackBarConfig): Promise<any> {
     const self = this;
-    const observable: Observable<any> = Observable.create(
-      observer => {
-        const containerClasses: string[] = [SnackBarService.DEFAULT_CONTAINER_CLASS];
-        if (config && config.cssClass) {
-          containerClasses.push(config.cssClass);
-        }
-
-        const matConfig: MatSnackBarConfig = {
-          duration: config && config.milliseconds ? config.milliseconds : SnackBarService.DEFAULT_DURATION,
-          panelClass: containerClasses
-        };
-        self.snackBarRef = self.matSnackBar.openFromComponent(OSnackBarComponent, matConfig);
-
-        self.snackBarRef.onAction().subscribe(arg => {
-          observer.next(arg);
-        });
-        self.snackBarRef.afterDismissed().subscribe(() => {
-          observer.complete();
-          self.snackBarRef = null;
-        });
-
-        self.snackBarRef.instance.open(message, config);
+    const observable: Observable<any> = new Observable(observer => {
+      const containerClasses: string[] = [SnackBarService.DEFAULT_CONTAINER_CLASS];
+      if (config && config.cssClass) {
+        containerClasses.push(config.cssClass);
       }
-    );
+
+      const matConfig: MatSnackBarConfig = {
+        duration: config && config.milliseconds ? config.milliseconds : SnackBarService.DEFAULT_DURATION,
+        panelClass: containerClasses
+      };
+      self.snackBarRef = self.matSnackBar.openFromComponent(OSnackBarComponent, matConfig);
+
+      self.snackBarRef.onAction().subscribe(arg => {
+        observer.next(arg);
+      });
+
+      self.snackBarRef.afterDismissed().subscribe(() => {
+        observer.complete();
+        self.snackBarRef = null;
+      });
+
+      self.snackBarRef.instance.open(message, config);
+    });
     return observable.toPromise();
   }
 

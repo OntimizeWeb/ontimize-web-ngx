@@ -95,7 +95,7 @@ export class OSlideToggleComponent extends OFormDataComponent {
     return false;
   }
 
-  onClickBlocker(e: Event) {
+  onClickBlocker(e: MouseEvent) {
     e.stopPropagation();
   }
 

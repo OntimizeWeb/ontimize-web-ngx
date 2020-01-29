@@ -137,7 +137,7 @@ export class OListComponent extends OServiceComponent implements AfterContentIni
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent
   ) {
     super(injector, elRef, form);
-  }  
+  }
 
   public ngOnInit(): void {
     this.initialize();

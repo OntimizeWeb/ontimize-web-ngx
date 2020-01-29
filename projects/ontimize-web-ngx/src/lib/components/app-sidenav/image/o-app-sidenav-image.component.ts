@@ -48,10 +48,10 @@ export class OAppSidenavImageComponent implements OnInit, OnDestroy {
   ngOnInit() {
     if (this.sidenav) {
       const self = this;
-      this.sidenavOpenSubs = this.sidenav.sidenav.openedStart.subscribe((opened) => {
+      this.sidenavOpenSubs = this.sidenav.onSidenavClosedStart.subscribe(() => {
         self.updateImage();
       });
-      this.sidenavCloseSubs = this.sidenav.sidenav.closedStart.subscribe((opened) => {
+      this.sidenavCloseSubs = this.sidenav.onSidenavOpenedStart.subscribe(() => {
         self.updateImage();
       });
     }
@@ -68,7 +68,7 @@ export class OAppSidenavImageComponent implements OnInit, OnDestroy {
   }
 
   updateImage() {
-    if (this.sidenav && this.sidenav.sidenav.opened) {
+    if (this.sidenav && this.sidenav.sidenav && this.sidenav.sidenav.opened) {
       this.setOpenedImg();
     } else {
       this.setClosedImg();

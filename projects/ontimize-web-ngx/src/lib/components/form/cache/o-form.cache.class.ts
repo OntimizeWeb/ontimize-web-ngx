@@ -84,7 +84,7 @@ export class OFormCacheClass {
   }
 
   registerCache() {
-    let initialCache = this.form.getRegisteredFieldsValues();
+    const initialCache = this.form.getRegisteredFieldsValues();
     this.removeUndefinedProperties(initialCache);
     this.initializeCache(initialCache);
     this.formDataCache = initialCache;
@@ -128,7 +128,7 @@ export class OFormCacheClass {
 
   undoLastChange(options?) {
     options = (options || {});
-    var lastElement = this.valueChangesStack[this.valueChangesStack.length - 1];
+    const lastElement = this.valueChangesStack[this.valueChangesStack.length - 1];
     if (lastElement) {
       const lastCacheValue = this.getCacheLastValue(lastElement.attr);
       const lastValue = (lastCacheValue !== null) ? lastCacheValue : this.initialDataCache[lastElement.attr];
@@ -169,7 +169,7 @@ export class OFormCacheClass {
   }
 
   protected updateChangesStack(attr: string) {
-    let index: number = undefined;
+    let index: number;
     for (let i = this.valueChangesStack.length - 1; i >= 0; i--) {
       const current = this.valueChangesStack[i];
       if (current.attr === attr) {
@@ -207,14 +207,14 @@ export class OFormCacheClass {
       this.removeUndefinedProperties(currentCache);
     }
 
-    let initialKeys = Object.keys(this.initialDataCache);
-    let currentKeys = currentCache ? Object.keys(currentCache) : initialKeys;
+    const initialKeys = Object.keys(this.initialDataCache);
+    const currentKeys = currentCache ? Object.keys(currentCache) : initialKeys;
     if (initialKeys.length !== currentKeys.length) {
       return true;
     }
     let res = false;
     for (let i = 0, len = initialKeys.length; i < len; i++) {
-      let key = initialKeys[i];
+      const key = initialKeys[i];
       // TODO be careful with types comparisions
       res = (this.initialDataCache[key] !== currentCache[key]);
       if (res) {

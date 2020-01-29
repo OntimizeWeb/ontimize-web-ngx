@@ -22,7 +22,7 @@ export function NumberConverter(value: any) {
 export function InputConverter(converter?: Function) {
   function InputConverterInner(target: Object, key: string) {
     if (converter === undefined) {
-      var metadata = (<any>Reflect).getMetadata('design:type', target, key);
+      const metadata = (<any>Reflect).getMetadata('design:type', target, key);
       if (metadata === undefined || metadata === null) {
         throw new Error('The reflection metadata could not be found.');
       }
@@ -37,7 +37,7 @@ export function InputConverter(converter?: Function) {
       }
     }
 
-    var definition = Object.getOwnPropertyDescriptor(target, key);
+    const definition = Object.getOwnPropertyDescriptor(target, key);
     if (definition) {
       Object.defineProperty(target, key, {
         get: definition.get,
@@ -49,11 +49,11 @@ export function InputConverter(converter?: Function) {
       });
     } else {
       Object.defineProperty(target, key, {
-        get: function () {
-          return this['__' + key];
+        get: () => {
+          return target['__' + key];
         },
-        set: function (newValue) {
-          this['__' + key] = converter(newValue);
+        set: (newValue) => {
+          target['__' + key] = converter(newValue);
         },
         enumerable: true,
         configurable: true

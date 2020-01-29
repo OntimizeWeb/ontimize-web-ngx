@@ -30,7 +30,7 @@ export const DEFAULT_INPUTS_O_FORM_LAYOUT_DIALOG_OPTIONS = [
 })
 export class OFormLayoutDialogOptionsComponent {
   // constructor(@Inject(forwardRef(() => OFormLayoutManagerComponent)) protected oFormLayoutManager: OFormLayoutManagerComponent) { }
-  constructor () { }
+  constructor() { }
   public width: string = '';
 
   public minWidth: number | string;

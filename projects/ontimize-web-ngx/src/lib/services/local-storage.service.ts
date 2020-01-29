@@ -38,7 +38,7 @@ export class LocalStorageService {
     });
   }
 
-  getComponentStorage(comp: ILocalStorageComponent, routeKey: string = undefined): Object {
+  getComponentStorage(comp: ILocalStorageComponent, routeKey?: string): Object {
     const componentKey = comp.getComponentKey();
     let completeKey = componentKey;
     if (routeKey) {
@@ -47,7 +47,7 @@ export class LocalStorageService {
     return this.getAppComponentData(completeKey) || {};
   }
 
-  updateComponentStorage(comp: ILocalStorageComponent, routeKey: string = undefined) {
+  updateComponentStorage(comp: ILocalStorageComponent, routeKey?: string) {
     const dataToStore = comp.getDataToStore();
     const componentKey = comp.getComponentKey();
     if (!Util.isDefined(componentKey)) {
@@ -57,7 +57,7 @@ export class LocalStorageService {
     if (routeKey) {
       completeKey += '_' + routeKey;
     }
-    let storedObject = {};
+    const storedObject = {};
     for (let prop in dataToStore) {
       if (dataToStore.hasOwnProperty(prop)) {
         storedObject[prop] = dataToStore[prop];
@@ -67,10 +67,10 @@ export class LocalStorageService {
   }
 
   private getAppComponentData(key: string): Object {
-    let componentData = undefined;
-    let storedComponents: Object = this.getSessionUserComponentsData() || {};
+    let componentData;
+    const storedComponents: Object = this.getSessionUserComponentsData() || {};
     if (storedComponents[key]) {
-      let decoded = atob(storedComponents[key]);
+      const decoded = atob(storedComponents[key]);
       try {
         componentData = JSON.parse(decoded);
       } catch (e) {
@@ -81,7 +81,7 @@ export class LocalStorageService {
   }
 
   updateAppComponentStorage(componentKey: string, componentData: Object) {
-    let componentDataB64: Object = undefined;
+    let componentDataB64: Object;
     try {
       componentDataB64 = btoa(JSON.stringify(componentData));
     } catch (e) {
@@ -92,34 +92,34 @@ export class LocalStorageService {
 
   public getSessionUserComponentsData(): Object {
     let storedComponentsByUser = {};
-    let appData = this.getStoredData();
-    let session: SessionInfo = appData[LocalStorageService.SESSION_STORAGE_KEY] || {};
-    let users = appData[LocalStorageService.USERS_STORAGE_KEY] || {};
+    const appData = this.getStoredData();
+    const session: SessionInfo = appData[LocalStorageService.SESSION_STORAGE_KEY] || {};
+    const users = appData[LocalStorageService.USERS_STORAGE_KEY] || {};
     storedComponentsByUser = (users[session.user] || {})[LocalStorageService.COMPONENTS_STORAGE_KEY] || {};
     return storedComponentsByUser;
   }
 
   public storeSessionUserComponentsData(componentsData: object) {
-    let appData = this.getStoredData();
-    let session: SessionInfo = appData[LocalStorageService.SESSION_STORAGE_KEY] || {};
+    const appData = this.getStoredData();
+    const session: SessionInfo = appData[LocalStorageService.SESSION_STORAGE_KEY] || {};
     if (!Util.isDefined(appData[LocalStorageService.USERS_STORAGE_KEY])) {
       appData[LocalStorageService.USERS_STORAGE_KEY] = {};
     }
-    let userData = appData[LocalStorageService.USERS_STORAGE_KEY][session.user] || {};
+    const userData = appData[LocalStorageService.USERS_STORAGE_KEY][session.user] || {};
     userData[LocalStorageService.COMPONENTS_STORAGE_KEY] = componentsData;
     appData[LocalStorageService.USERS_STORAGE_KEY][session.user] = userData;
     this.setLocalStorage(appData);
   }
 
   private storeComponentInSessionUser(componentKey, componentDataB64) {
-    let appData = this.getStoredData();
-    let session = appData[LocalStorageService.SESSION_STORAGE_KEY] || {}; // uuid -> session
+    const appData = this.getStoredData();
+    const session = appData[LocalStorageService.SESSION_STORAGE_KEY] || {}; // uuid -> session
     if (!Util.isDefined(session) || !Util.isDefined(session.user)) {
       return;
     }
-    let users = appData[LocalStorageService.USERS_STORAGE_KEY] || {}; // uuid -> users
+    const users = appData[LocalStorageService.USERS_STORAGE_KEY] || {}; // uuid -> users
     const idUser = session.user || this.loginService.getSessionInfo().user;
-    let user = users[idUser] || {}; //uuid -> users-> user
+    const user = users[idUser] || {}; // uuid -> users-> user
 
     let componentData = {};
     if (users[idUser]) {
@@ -136,7 +136,7 @@ export class LocalStorageService {
 
   public getStoredData(): Object {
     let appData = {};
-    let appStoredData = localStorage.getItem(this._config['uuid']);
+    const appStoredData = localStorage.getItem(this._config['uuid']);
     if (appStoredData) {
       try {
         appData = JSON.parse(appStoredData);
@@ -148,12 +148,12 @@ export class LocalStorageService {
   }
 
   public setBackwardCompatibility() {
-    let appData = this.getStoredData();
-    let session = appData[LocalStorageService.SESSION_STORAGE_KEY];
+    const appData = this.getStoredData();
+    const session = appData[LocalStorageService.SESSION_STORAGE_KEY];
     if (!Util.isDefined(session) || !Util.isDefined(session.user)) {
       return;
     }
-    let componentsInfo = appData[LocalStorageService.COMPONENTS_STORAGE_KEY] || {};
+    const componentsInfo = appData[LocalStorageService.COMPONENTS_STORAGE_KEY] || {};
     let usersObject = {};
     const existsUsersTag = Util.isDefined(appData[LocalStorageService.USERS_STORAGE_KEY]);
     let createUserInfo = existsUsersTag;

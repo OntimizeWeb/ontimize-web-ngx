@@ -27,8 +27,8 @@ export class OTableStorage {
   ) { }
 
   getDataToStore() {
-    let dataToStore = {
-      'filter': this.table.oTableQuickFilterComponent ? this.table.oTableQuickFilterComponent.value : ''
+    const dataToStore = {
+      filter: this.table.oTableQuickFilterComponent ? this.table.oTableQuickFilterComponent.value : ''
     };
 
     const properties = ['sort', 'columns-display', 'columns-filter', 'quick-filter', 'page', 'selection', 'initial-configuration'];
@@ -48,7 +48,7 @@ export class OTableStorage {
   }
 
   getTablePropertiesToStore(properties: string[]) {
-    let result = {};
+    const result = {};
     properties.forEach(prop => {
       Object.assign(result, this.getTablePropertyToStore(prop));
     });
@@ -84,7 +84,7 @@ export class OTableStorage {
   }
 
   reset() {
-    let state = {};
+    const state = {};
     state[OTableStorage.USER_STORED_FILTERS_KEY] = this.table.state[OTableStorage.USER_STORED_FILTERS_KEY];
     state[OTableStorage.STORED_CONFIGURATIONS_KEY] = this.table.state[OTableStorage.STORED_CONFIGURATIONS_KEY];
     if (this.table.pageable) {
@@ -95,10 +95,10 @@ export class OTableStorage {
   }
 
   protected getSortState() {
-    let result = {};
-    let sortColumnsArray = this.table.sort.getSortColumns();
+    const result = {};
+    const sortColumnsArray = this.table.sort.getSortColumns();
     if (sortColumnsArray.length > 0) {
-      let sortColumns = [];
+      const sortColumns = [];
       sortColumnsArray.forEach(sortData => {
         sortColumns.push(sortData.id + Codes.COLUMNS_ALIAS_SEPARATOR + sortData.direction);
       });
@@ -108,7 +108,7 @@ export class OTableStorage {
   }
 
   protected getColumnFiltersState() {
-    let result = {};
+    const result = {};
     if (this.table.oTableColumnsFilterComponent) {
       const columnValueFilters = this.table.dataSource.getColumnValueFilters();
       if (columnValueFilters.length > 0) {
@@ -119,8 +119,8 @@ export class OTableStorage {
   }
 
   protected getColumnsDisplayState() {
-    let result = {};
-    let oColumnsData = [];
+    const result = {};
+    const oColumnsData = [];
     this.table.oTableOptions.columns.forEach((oCol: OColumn) => {
       oColumnsData.push({
         attr: oCol.attr,
@@ -134,9 +134,9 @@ export class OTableStorage {
   }
 
   protected getColumnsQuickFilterState() {
-    let result = {};
+    const result = {};
     const tableOptions = this.table.oTableOptions;
-    let oColumnsData = [];
+    const oColumnsData = [];
     tableOptions.columns.forEach((oCol: OColumn) => {
       oColumnsData.push({
         attr: oCol.attr,
@@ -150,7 +150,7 @@ export class OTableStorage {
   }
 
   protected getPageState(): any {
-    let result: any = {
+    const result: any = {
       'query-rows': this.table.matpaginator ? this.table.matpaginator.pageSize : ''
     };
     if (this.table.currentPage > 0 && this.table.storePaginationState) {
@@ -168,14 +168,14 @@ export class OTableStorage {
   }
 
   protected getSelectionState(): any {
-    let result: any = {
-      'selection': []
+    const result: any = {
+      selection: []
     };
     if (this.table && this.table.keepSelectedItems) {
       // storing selected items keys values
       const selection = [];
       this.table.getSelectedItems().forEach(item => {
-        let data = {};
+        const data = {};
         this.table.getKeys().forEach(key => {
           data[key] = item[key];
         });
@@ -187,13 +187,13 @@ export class OTableStorage {
   }
 
   protected getInitialConfigurationState(): any {
-    let result = {};
-    let initialConfiguration = {};
+    const result = {};
+    const initialConfiguration = {};
 
-    let oColumnsData = [];
+    const oColumnsData = [];
     const self = this;
     Util.parseArray(this.table.originalVisibleColumns, true).forEach((x: string) => {
-      let oCol = self.table.getOColumn(x);
+      const oCol = self.table.getOColumn(x);
       oColumnsData.push({
         attr: oCol.attr,
         visible: true,
@@ -230,7 +230,7 @@ export class OTableStorage {
 
   deleteStoredFilter(filterName: string) {
     const storedFilters = this.table.state[OTableStorage.USER_STORED_FILTERS_KEY] || [];
-    let index = storedFilters.findIndex((item: ITableFiltersStatus) => item.name === filterName);
+    const index = storedFilters.findIndex((item: ITableFiltersStatus) => item.name === filterName);
     if (index >= 0) {
       storedFilters.splice(index, 1);
       this.table.state[OTableStorage.USER_STORED_FILTERS_KEY] = storedFilters;
@@ -238,20 +238,20 @@ export class OTableStorage {
   }
 
   storeFilter(filterArgs: ITableFiltersStatus) {
-    let result = {};
-    let storedFilter = {};
+    const result = {};
+    const storedFilter = {};
     Object.assign(storedFilter, this.getColumnFiltersState());
     Object.assign(storedFilter, this.getColumnsQuickFilterState());
 
     result[OTableStorage.STORED_FILTER_KEY] = storedFilter;
     Object.assign(result, filterArgs);
-    let existingFilters = this.getStoredFilters();
+    const existingFilters = this.getStoredFilters();
     existingFilters.push(result);
     this.table.state[OTableStorage.USER_STORED_FILTERS_KEY] = existingFilters;
   }
 
   getStoredColumnsFilters(arg?: any) {
-    let stateObj = arg || this.table.state;
+    const stateObj = arg || this.table.state;
     return stateObj['column-value-filters'] || [];
   }
 
@@ -264,22 +264,22 @@ export class OTableStorage {
   }
 
   storeConfiguration(configurationAgs: ITableConfiguration, tableProperties: any[]) {
-    let result = {};
+    const result = {};
     this.table.storePaginationState = true;
-    let storedConfiguration = this.getTablePropertiesToStore(tableProperties);
+    const storedConfiguration = this.getTablePropertiesToStore(tableProperties);
     this.table.storePaginationState = false;
 
     result[OTableStorage.STORED_CONFIGURATION_KEY] = storedConfiguration;
     Object.assign(result, configurationAgs);
     result[OTableStorage.STORED_PROPERTIES_KEY] = tableProperties;
-    let existingConfigurations = this.getStoredConfigurations();
+    const existingConfigurations = this.getStoredConfigurations();
     existingConfigurations.push(result);
     this.table.state[OTableStorage.STORED_CONFIGURATIONS_KEY] = existingConfigurations;
   }
 
   deleteStoredConfiguration(configurationName: string) {
     const storedConfigurations = this.getStoredConfigurations();
-    let index = storedConfigurations.findIndex((item: ITableConfiguration) => item.name === configurationName);
+    const index = storedConfigurations.findIndex((item: ITableConfiguration) => item.name === configurationName);
     if (index >= 0) {
       storedConfigurations.splice(index, 1);
       this.table.state[OTableStorage.STORED_CONFIGURATIONS_KEY] = storedConfigurations;

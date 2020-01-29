@@ -301,7 +301,7 @@ export class Util {
   static extractPixelsValue(value: any, defaultValue: number = undefined): number {
     let result: number = typeof value === 'number' ? value : undefined;
     if (Util.checkPixelsValueString(value)) {
-      let parsed = parseFloat(value.substr(0, value.length - 'px'.length));
+      const parsed = parseFloat(value.substr(0, value.length - 'px'.length));
       result = isNaN(parsed) ? defaultValue : parsed;
     }
     return Util.isDefined(result) ? result : defaultValue;
@@ -325,14 +325,14 @@ export class Util {
 
   /**
    *  Return string with escaped special character
-   * */
+   **/
   static escapeSpecialCharacter(S: string): string {
 
-    let str = String(S);
+    const str = String(S);
 
-    let cpList = Array.from(str[Symbol.iterator]());
+    const cpList = Array.from(str[Symbol.iterator]());
 
-    let cuList = [];
+    const cuList = [];
     for (let c of cpList) {
       // i. If c is a SpecialCharacter then do:
       if ('^$\\.*+?()[]{}|'.indexOf(c) !== -1) {
@@ -342,7 +342,7 @@ export class Util {
       // Append c to cpList.
       cuList.push(c);
     }
-    let L = cuList.join('');
+    const L = cuList.join('');
     return L;
 
   }

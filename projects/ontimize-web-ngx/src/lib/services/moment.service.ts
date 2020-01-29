@@ -22,7 +22,7 @@ export class MomentService {
   }
 
   parseDate(value: any, format?: string, locale?: string): any {
-    var result = '';
+    let result = '';
     if (!locale) {
       locale = this._locale;
     }

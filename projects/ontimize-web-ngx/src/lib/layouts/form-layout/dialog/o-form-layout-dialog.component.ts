@@ -50,7 +50,7 @@ export class OFormLayoutDialogComponent implements AfterViewInit {
 
   ngAfterViewInit() {
     if (this.contentDirective && this.componentFactory) {
-      let viewContainerRef = this.contentDirective.viewContainerRef;
+      const viewContainerRef = this.contentDirective.viewContainerRef;
       viewContainerRef.clear();
       viewContainerRef.createComponent(this.componentFactory);
     }
@@ -76,7 +76,7 @@ export class OFormLayoutDialogComponent implements AfterViewInit {
   getRouteOfActiveItem(): any[] {
     const parentRoute = this.formLayoutManager.parentFormLayoutManager.getRouteOfActiveItem();
     const segments = (this.urlSegments || []);
-    let route = [];
+    const route = [];
     segments.forEach((segment, index) => {
       if (parentRoute[index] !== segment.path) {
         route.push(segment.path);

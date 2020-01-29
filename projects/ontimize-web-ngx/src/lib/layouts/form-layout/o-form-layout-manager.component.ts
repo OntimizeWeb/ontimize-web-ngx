@@ -94,7 +94,7 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
   public dialogMaxHeight: string;
   public dialogClass: string = '';
 
-  @ViewChild('tabGroup', {static: false})
+  @ViewChild('tabGroup', { static: false })
   public oTabGroup: OFormLayoutTabGroupComponent;
   public dialogRef: MatDialogRef<OFormLayoutDialogComponent>;
 
@@ -115,10 +115,10 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
   @ContentChildren(OListComponent, { descendants: true })
   protected listComponents: QueryList<OListComponent>;
 
-  @ContentChild(OFormLayoutTabGroupOptionsComponent, {static: false})
+  @ContentChild(OFormLayoutTabGroupOptionsComponent, { static: false })
   protected tabGroupOptions: OFormLayoutTabGroupOptionsComponent;
 
-  @ContentChild(OFormLayoutDialogOptionsComponent, {static: false})
+  @ContentChild(OFormLayoutDialogOptionsComponent, { static: false })
   protected dialogOptions: OFormLayoutDialogOptionsComponent;
 
   protected addingGuard: boolean = false;
@@ -215,7 +215,7 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
   }
 
   public getFormDataFromLabelColumns(data: any) {
-    let formData = {};
+    const formData = {};
     Object.keys(data).map(x => {
       if (this.labelColsArray.indexOf(x) > -1) {
         formData[x] = data[x];

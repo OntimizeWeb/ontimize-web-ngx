@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, EventEmitter, Injector, NgModule, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Injector, NgModule, OnInit, ViewEncapsulation, AfterViewInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { FloatLabelType, MatCheckboxChange, MatFormFieldAppearance } from '@angular/material';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
@@ -44,7 +44,7 @@ declare type ColumnObject = {
     '[class.o-search-input]': 'true'
   }
 })
-export class OSearchInputComponent implements OnInit {
+export class OSearchInputComponent implements OnInit, AfterViewInit {
 
   public static DEFAULT_INPUTS_O_SEARCH_INPUT = DEFAULT_INPUTS_O_SEARCH_INPUT;
   public static DEFAULT_OUTPUTS_O_SEARCH_INPUT = DEFAULT_OUTPUTS_O_SEARCH_INPUT;
@@ -223,7 +223,6 @@ export class OSearchInputComponent implements OnInit {
   }
 
   get filterExpression(): IExpression {
-    let result: IExpression;
     const termValue = this.getValue();
     if (Util.isDefined(termValue) && termValue.length > 0) {
       const filterCols = this.getActiveColumns();
@@ -231,7 +230,7 @@ export class OSearchInputComponent implements OnInit {
         return FilterExpressionUtils.buildArrayExpressionLike(filterCols, termValue);
       }
     }
-    return result;
+    return undefined;
   }
 }
 

@@ -160,7 +160,7 @@ export class OServiceComponent extends OServiceBaseComponent {
 
   protected tabsSubscriptions: any;
   public quickFilterComponent: OSearchInputComponent;
-  @ViewChild((forwardRef(() => OSearchInputComponent)), {static: false})
+  @ViewChild((forwardRef(() => OSearchInputComponent)), { static: false })
   protected searchInputComponent: OSearchInputComponent;
   protected quickFilterColArray: string[];
 
@@ -276,11 +276,11 @@ export class OServiceComponent extends OServiceBaseComponent {
       console.warn('Navigation is not available yet in a form layout manager with mode="dialog"');
       return;
     }
-    let route = this.getInsertRoute();
+    const route = this.getInsertRoute();
     this.addFormLayoutManagerRoute(route);
     if (route.length > 0) {
       const relativeTo = this.recursiveInsert ? this.actRoute.parent : this.actRoute;
-      let qParams = {};
+      const qParams = {};
       this.navigateToDetail(route, qParams, relativeTo);
     }
   }
@@ -290,10 +290,10 @@ export class OServiceComponent extends OServiceBaseComponent {
       console.warn('Navigation is not available yet in a form layout manager with mode="dialog"');
       return;
     }
-    let route = this.getItemModeRoute(item, 'detailFormRoute');
+    const route = this.getItemModeRoute(item, 'detailFormRoute');
     this.addFormLayoutManagerRoute(route);
     if (route.length > 0) {
-      let qParams = Codes.getIsDetailObject();
+      const qParams = Codes.getIsDetailObject();
       const relativeTo = this.recursiveDetail ? this.actRoute.parent : this.actRoute;
       this.navigateToDetail(route, qParams, relativeTo);
     }
@@ -304,10 +304,10 @@ export class OServiceComponent extends OServiceBaseComponent {
       console.warn('Navigation is not available yet in a form layout manager with mode="dialog"');
       return;
     }
-    let route = this.getItemModeRoute(item, 'editFormRoute');
+    const route = this.getItemModeRoute(item, 'editFormRoute');
     this.addFormLayoutManagerRoute(route);
     if (route.length > 0) {
-      let qParams = Codes.getIsDetailObject();
+      const qParams = Codes.getIsDetailObject();
       const relativeTo = this.recursiveEdit ? this.actRoute.parent : this.actRoute;
       this.navigateToDetail(route, qParams, relativeTo);
     }
@@ -334,16 +334,16 @@ export class OServiceComponent extends OServiceBaseComponent {
   }
 
   public getInsertRoute(): any[] {
-    let route = [];
+    const route = [];
     if (Util.isDefined(this.detailFormRoute)) {
       route.push(this.detailFormRoute);
     }
-    let insertRoute = Util.isDefined(this.insertFormRoute) ? this.insertFormRoute : Codes.DEFAULT_INSERT_ROUTE;
+    const insertRoute = Util.isDefined(this.insertFormRoute) ? this.insertFormRoute : Codes.DEFAULT_INSERT_ROUTE;
     route.push(insertRoute);
     // adding parent-keys info...
     const encodedParentKeys = this.getEncodedParentKeys();
     if (Util.isDefined(encodedParentKeys)) {
-      let routeObj = {};
+      const routeObj = {};
       routeObj[Codes.PARENT_KEYS_KEY] = encodedParentKeys;
       route.push(routeObj);
     }
@@ -354,7 +354,7 @@ export class OServiceComponent extends OServiceBaseComponent {
   }
 
   public getItemModeRoute(item: any, modeRoute: string): any[] {
-    let result = this.getRouteOfSelectedRow(item);
+    const result = this.getRouteOfSelectedRow(item);
     if (result.length > 0) {
       if (Util.isDefined(this.detailFormRoute)) {
         result.unshift(this.detailFormRoute);
@@ -389,7 +389,7 @@ export class OServiceComponent extends OServiceBaseComponent {
   }
 
   public getRouteOfSelectedRow(item: any): any[] {
-    let route = [];
+    const route = [];
     if (Util.isObject(item)) {
       this.keysArray.forEach(key => {
         if (Util.isDefined(item[key])) {
@@ -406,7 +406,7 @@ export class OServiceComponent extends OServiceBaseComponent {
       const selectedItem = selectedItems[i];
       const selectedItemKv = {};
       for (let k = 0; k < this.keysArray.length; ++k) {
-        let key = this.keysArray[k];
+        const key = this.keysArray[k];
         selectedItemKv[key] = selectedItem[key];
       }
       for (let j = this.dataArray.length - 1; j >= 0; --j) {
@@ -433,7 +433,7 @@ export class OServiceComponent extends OServiceBaseComponent {
 
   public reinitialize(options: OListInitializationOptions | OTableInitializationOptions): void {
     if (options && Object.keys(options).length) {
-      let clonedOpts = Object.assign({}, options);
+      const clonedOpts = Object.assign({}, options);
       if (clonedOpts.hasOwnProperty('entity')) {
         this.entity = clonedOpts.entity;
         if (this.oattrFromEntity) {
@@ -441,7 +441,7 @@ export class OServiceComponent extends OServiceBaseComponent {
         }
         delete clonedOpts.entity;
       }
-      for (var prop in clonedOpts) {
+      for (const prop in clonedOpts) {
         if (clonedOpts.hasOwnProperty(prop)) {
           this[prop] = clonedOpts[prop];
         }
@@ -460,7 +460,7 @@ export class OServiceComponent extends OServiceBaseComponent {
   }
 
   public getComponentFilter(existingFilter: any = {}): any {
-    let filter = super.getComponentFilter(existingFilter);
+    const filter = super.getComponentFilter(existingFilter);
 
     const quickFilterExpr = this.getQuickFilterExpression();
     const filterBuilderExpr = this.getFilterBuilderExpression();

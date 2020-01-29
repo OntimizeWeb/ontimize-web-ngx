@@ -258,10 +258,10 @@ export class OTableMenuComponent implements OnInit, AfterViewInit, OnDestroy {
 
   onExportButtonClicked() {
     const tableOptions = this.table.oTableOptions;
-    let exportCnfg: OTableExportConfiguration = new OTableExportConfiguration();
+    const exportCnfg: OTableExportConfiguration = new OTableExportConfiguration();
 
     // get column's attr whose renderer is OTableCellRendererImageComponent
-    let colsNotIncluded: string[] = tableOptions.columns.filter(c => void 0 !== c.renderer && c.renderer instanceof OTableCellRendererImageComponent).map(c => c.attr);
+    const colsNotIncluded: string[] = tableOptions.columns.filter(c => void 0 !== c.renderer && c.renderer instanceof OTableCellRendererImageComponent).map(c => c.attr);
     colsNotIncluded.push(OTableComponent.NAME_COLUMN_SELECT);
 
     // Table data/filters
@@ -284,7 +284,7 @@ export class OTableMenuComponent implements OnInit, AfterViewInit, OnDestroy {
     // Table columns
     exportCnfg.columns = tableOptions.visibleColumns.filter(c => colsNotIncluded.indexOf(c) === -1);
     // Table column names
-    let tableColumnNames = {};
+    const tableColumnNames = {};
     tableOptions.visibleColumns.filter(c => colsNotIncluded.indexOf(c) === -1).forEach(c => {
       const oColumn = tableOptions.columns.find(oc => oc.attr === c);
       tableColumnNames[c] = this.translateService.get(oColumn.title ? oColumn.title : oColumn.attr);
@@ -296,7 +296,7 @@ export class OTableMenuComponent implements OnInit, AfterViewInit, OnDestroy {
     exportCnfg.service = this.table.service;
     exportCnfg.options = this.table.exportOptsTemplate;
 
-    let dialogRef = this.dialog.open(OTableExportDialogComponent, {
+    const dialogRef = this.dialog.open(OTableExportDialogComponent, {
       data: exportCnfg,
       disableClose: true,
       panelClass: ['o-dialog-class', 'o-table-dialog']
@@ -306,7 +306,7 @@ export class OTableMenuComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   onChangeColumnsVisibilityClicked() {
-    let dialogRef = this.dialog.open(OTableVisibleColumnsDialogComponent, {
+    const dialogRef = this.dialog.open(OTableVisibleColumnsDialogComponent, {
       data: {
         originalVisibleColumns: Util.parseArray(this.table.originalVisibleColumns, true),
         columnsData: this.table.oTableOptions.columns,
@@ -319,7 +319,7 @@ export class OTableMenuComponent implements OnInit, AfterViewInit, OnDestroy {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.table.visibleColArray = dialogRef.componentInstance.getVisibleColumns();
-        let columnsOrder = dialogRef.componentInstance.getColumnsOrder();
+        const columnsOrder = dialogRef.componentInstance.getColumnsOrder();
         this.table.oTableOptions.columns.sort((a: OColumn, b: OColumn) => columnsOrder.indexOf(a.attr) - columnsOrder.indexOf(b.attr));
         this.table.refreshColumnsWidth();
       }

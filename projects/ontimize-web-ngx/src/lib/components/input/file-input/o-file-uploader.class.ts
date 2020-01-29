@@ -44,8 +44,8 @@ export class OFileUploader {
    * @param value the file to remove
    */
   removeFile(value: any): void {
-    let index = this.getIndexOfItem(value);
-    let item = this.files[index];
+    const index = this.getIndexOfItem(value);
+    const item = this.files[index];
     if (item) {
       if (item.isUploading) {
         item.cancel();
@@ -94,11 +94,11 @@ export class OFileUploader {
       this._uploadSuscription.unsubscribe();
     }
 
-    var self = this;
+    const self = this;
     this._uploadSuscription = item._uploadSuscription = this.service.upload([item], this.entity, this.data).subscribe(
       resp => {
         if (resp.loaded && resp.total) {
-          let progress = Math.round(resp.loaded * 100 / resp.total);
+          const progress = Math.round(resp.loaded * 100 / resp.total);
           self._onProgressItem(item, progress);
         } else if (resp.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) {
           self._onSuccessItem(item, resp);
@@ -132,10 +132,10 @@ export class OFileUploader {
       this._uploadSuscription.unsubscribe();
     }
 
-    var self = this;
+    const self = this;
     this._uploadSuscription = this.service.upload(items, this.entity, this.data).subscribe(resp => {
       if (resp.loaded && resp.total) {
-        let progress = Math.round(resp.loaded * 100 / resp.total);
+        const progress = Math.round(resp.loaded * 100 / resp.total);
         self._onProgressAll(progress);
       } else if (resp.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) {
         self._onSuccessAll(resp);
@@ -168,8 +168,8 @@ export class OFileUploader {
    * @param value the file to cancel its upload
    */
   public cancelItem(value: OFileItem): void {
-    let index = this.getIndexOfItem(value);
-    let item = this.files[index];
+    const index = this.getIndexOfItem(value);
+    const item = this.files[index];
     if (item && item.isUploading && this.splitUpload) {
       item._uploadSuscription.unsubscribe();
     }
@@ -244,7 +244,7 @@ export class OFileUploader {
   }
 
   protected _onProgressItem(item: OFileItem, progress: number): void {
-    let total = this._getTotalProgress(progress);
+    const total = this._getTotalProgress(progress);
     this.progress = total;
     item._onProgress(progress);
     this.onProgressItem(item, progress);
@@ -252,7 +252,7 @@ export class OFileUploader {
   }
 
   protected _onProgressAll(progress: number): void {
-    let total = this._getTotalProgress(progress);
+    const total = this._getTotalProgress(progress);
     this.progress = total;
     this.onProgressAll(total);
   }
@@ -290,7 +290,7 @@ export class OFileUploader {
   protected _onCompleteItem(item: OFileItem): void {
     item._onComplete();
     this.onCompleteItem(item);
-    let nextItem = this._getReadyItems()[0];
+    const nextItem = this._getReadyItems()[0];
     this.isUploading = false;
     if (nextItem) {
       nextItem.upload();
@@ -314,10 +314,10 @@ export class OFileUploader {
   }
 
   protected _getTotalProgress(value: number = 0): number {
-    let notUploaded = this.getNotUploadedItems().length;
-    let uploaded = notUploaded ? this.files.length - notUploaded : this.files.length;
-    let ratio = this.splitUpload ? 100 / this.files.length : 100;
-    let current = value * ratio / 100;
+    const notUploaded = this.getNotUploadedItems().length;
+    const uploaded = notUploaded ? this.files.length - notUploaded : this.files.length;
+    const ratio = this.splitUpload ? 100 / this.files.length : 100;
+    const current = value * ratio / 100;
     return Math.round(uploaded * ratio + current);
   }
 

@@ -21,10 +21,10 @@ export class OTranslateService {
   protected momentService: MomentService;
   protected httpClient: HttpClient;
 
-  protected notFoundLang: Array<String> = [];
+  protected notFoundLang: Array<string> = [];
   protected appConfig: AppConfig;
 
-  protected existingLangFiles: Array<String> = [];
+  protected existingLangFiles: Array<string> = [];
 
   constructor(protected injector: Injector) {
     this.ngxTranslateService = this.injector.get(TranslateService);
@@ -34,21 +34,21 @@ export class OTranslateService {
   }
 
   protected checkExistingLangFile(lang: string): Promise<any> {
-    var self = this;
+    const self = this;
     return new Promise((resolve) => {
       if (self.existingLangFiles.indexOf(lang) !== -1) {
         resolve(true);
         return;
       }
-      let localeAssetsPath = (this.ngxTranslateService.currentLoader as any).prefix;
-      let localeAssetsExtension = (this.ngxTranslateService.currentLoader as any).suffix;
-      self.httpClient.get(localeAssetsPath + lang + localeAssetsExtension).subscribe(function () {
+      const localeAssetsPath = (this.ngxTranslateService.currentLoader as any).prefix;
+      const localeAssetsExtension = (this.ngxTranslateService.currentLoader as any).suffix;
+      self.httpClient.get(localeAssetsPath + lang + localeAssetsExtension).subscribe(() => {
         if (self.existingLangFiles.indexOf(lang) === -1) {
           self.existingLangFiles.push(lang);
         }
         // I18N File loaded successfully
         resolve(true);
-      }, function () {
+      }, () => {
         // I18N File failed to load
         if (self.notFoundLang.indexOf(lang) === -1) {
           self.notFoundLang.push(lang);
@@ -68,9 +68,9 @@ export class OTranslateService {
   }
 
   public get(text: string, values: any[] = []): string {
-    let textTranslated = undefined;
+    let textTranslated;
     try {
-      let bundle = this.ngxTranslateService.get(text, values);
+      const bundle = this.ngxTranslateService.get(text, values);
       if (bundle && bundle['value']) {
         textTranslated = bundle['value'];
       }
@@ -79,7 +79,7 @@ export class OTranslateService {
       textTranslated = undefined;
     }
     if (!textTranslated) {
-      let bundle = CORE_TRANSLATIONS.MAP[this.ngxTranslateService.currentLang] || CORE_TRANSLATIONS.MAP[this.DEFAULT_LANG];
+      const bundle = CORE_TRANSLATIONS.MAP[this.ngxTranslateService.currentLang] || CORE_TRANSLATIONS.MAP[this.DEFAULT_LANG];
       if (bundle && bundle[text]) {
         textTranslated = bundle[text];
       } else {
@@ -90,7 +90,7 @@ export class OTranslateService {
   }
 
   public setAppLang(lang: string): Observable<any> {
-    var observable = new Observable(observer => {
+    const observable = new Observable(observer => {
       this.use(lang, observer);
     });
     return observable;
@@ -98,8 +98,8 @@ export class OTranslateService {
 
   public use(lang: string, observer?: Subscriber<any>): void {
     if (lang === undefined) {
-      let newLang = lang || this.DEFAULT_LANG;
-      //setting lang for initializING moment and other components
+      const newLang = lang || this.DEFAULT_LANG;
+      // setting lang for initializING moment and other components
       this.propagateLang(newLang, {}, observer);
     } else {
       this.checkExistingLangFile(lang).then((exists) => {
@@ -143,7 +143,7 @@ export class OTranslateService {
       return undefined;
     }
     const navigator: any = window.navigator;
-    var browserLang = navigator.languages ? navigator.languages[0] : null;
+    let browserLang = navigator.languages ? navigator.languages[0] : null;
     browserLang = navigator.language || browserLang || navigator.browserLanguage || navigator.userLanguage;
     if (browserLang.indexOf('-') !== -1) {
       browserLang = browserLang.split('-')[0];

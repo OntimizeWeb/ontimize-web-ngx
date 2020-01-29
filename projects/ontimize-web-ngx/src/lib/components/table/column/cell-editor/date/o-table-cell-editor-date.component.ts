@@ -94,8 +94,8 @@ export class OTableCellEditorDateComponent extends OBaseTableCellEditor implemen
     }
 
     if (this.min) {
-      let date = new Date(this.min);
-      let momentD = moment(date);
+      const date = new Date(this.min);
+      const momentD = moment(date);
       if (momentD.isValid()) {
         this.oMinDate = date;
         this.minDateString = momentD.format(this.format);
@@ -103,8 +103,8 @@ export class OTableCellEditorDateComponent extends OBaseTableCellEditor implemen
     }
 
     if (this.max) {
-      let date = new Date(this.max);
-      let momentD = moment(date);
+      const date = new Date(this.max);
+      const momentD = moment(date);
       if (momentD.isValid()) {
         this.oMaxDate = date;
         this.maxDateString = momentD.format(this.format);
@@ -132,7 +132,7 @@ export class OTableCellEditorDateComponent extends OBaseTableCellEditor implemen
   }
 
   getCellData(): any {
-    let value = super.getCellData();
+    const value = super.getCellData();
     if (Util.isDefined(value)) {
       let result = value;
       let m;

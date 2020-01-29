@@ -2,8 +2,7 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { NgModuleRef } from '@angular/core';
 
 export function ontimizeBootstrap(appModule: any, config?: any): Promise<NgModuleRef<any>> {
-
-  var promise = platformBrowserDynamic().bootstrapModule(appModule);
+  const promise = platformBrowserDynamic().bootstrapModule(appModule);
   promise.then(moduleRef => {
     console.log('Bootstrap Successful');
     return ontimizePostBootstrap(moduleRef);
@@ -16,7 +15,7 @@ export function ontimizeBootstrap(appModule: any, config?: any): Promise<NgModul
 
 export function ontimizePostBootstrap(ngModuleRef: NgModuleRef<any>): NgModuleRef<any> {
   // Hiding loader...
-  let loader: HTMLElement = document && document.getElementById('loader-wrapper');
+  const loader: HTMLElement = document && document.getElementById('loader-wrapper');
   if (loader && loader.parentNode) {
     loader.parentNode.removeChild(loader);
   }

@@ -223,7 +223,7 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
 
   /* input renderer translate */
   protected translateArgsFn: (rowData: any) => any[];
-  /**input time */
+  /* input time */
   oDateFormat = 'L';
   oHourFormat = 24;
 
@@ -309,7 +309,7 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
   }
 
   parseTitleAlign(): string {
-    let align = (this.titleAlign || '').toLowerCase();
+    const align = (this.titleAlign || '').toLowerCase();
     return Codes.AVAILABLE_COLUMN_TITLE_ALIGNS.indexOf(align) !== -1 ? align : undefined;
   }
 
@@ -401,14 +401,14 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
   }
 
   buildCellEditor(type: string, resolver: ComponentFactoryResolver, container: ViewContainerRef, propsOrigin: any) {
-    let editor = undefined;
+    let editor;
     const componentRef = OTableColumnComponent.editorsMapping[type] || OTableColumnComponent.editorsMapping['text'];
     if (componentRef === undefined) {
       return editor;
     }
-    let factory: ComponentFactory<any> = resolver.resolveComponentFactory(componentRef);
+    const factory: ComponentFactory<any> = resolver.resolveComponentFactory(componentRef);
     if (factory) {
-      let ref = container.createComponent(factory);
+      const ref = container.createComponent(factory);
       editor = ref.instance;
       if (propsOrigin !== undefined) {
         switch (type) {
@@ -469,7 +469,7 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
 
   protected createEditor() {
     if (!Util.isDefined(this.editor) && this.editable) {
-      let newEditor = this.buildCellEditor(this.type, this.resolver, this.container, this);
+      const newEditor = this.buildCellEditor(this.type, this.resolver, this.container, this);
       if (newEditor) {
         newEditor.orequired = this.orequired;
         newEditor.showPlaceHolder = this.showPlaceHolder;
@@ -567,7 +567,7 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
           break;
       }
     }
-    let sqlt = this.sqlType && this.sqlType.length > 0 ? this.sqlType : this._defaultSQLTypeKey;
+    const sqlt = this.sqlType && this.sqlType.length > 0 ? this.sqlType : this._defaultSQLTypeKey;
     this._SQLType = SQLTypes.getSQLTypeValue(sqlt);
     return this._SQLType;
   }

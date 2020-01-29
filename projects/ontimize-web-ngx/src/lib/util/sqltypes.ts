@@ -533,6 +533,7 @@ export class SQLTypes {
         case 'NUMERIC':
         case 'DECIMAL':
           value = parseFloat(arg);
+          break;
         default:
           break;
       }

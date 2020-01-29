@@ -40,13 +40,13 @@ export class OTableCellEditorRealComponent extends OBaseTableCellEditor {
   }
 
   getCellData() {
-    let cellData = super.getCellData();
-    let floatValue = parseFloat(cellData);
+    const cellData = super.getCellData();
+    const floatValue = parseFloat(cellData);
     return isNaN(floatValue) ? undefined : floatValue;
   }
 
   resolveValidators(): ValidatorFn[] {
-    let validators: ValidatorFn[] = super.resolveValidators();
+    const validators: ValidatorFn[] = super.resolveValidators();
     if (typeof (this.min) !== 'undefined') {
       validators.push(this.minValidator.bind(this));
     }
@@ -59,8 +59,8 @@ export class OTableCellEditorRealComponent extends OBaseTableCellEditor {
   protected minValidator(control: FormControl) {
     if ((typeof (control.value) === 'number') && (control.value < this.min)) {
       return {
-        'min': {
-          'requiredMin': this.min
+        min: {
+          requiredMin: this.min
         }
       };
     }
@@ -70,8 +70,8 @@ export class OTableCellEditorRealComponent extends OBaseTableCellEditor {
   protected maxValidator(control: FormControl) {
     if ((typeof (control.value) === 'number') && (this.max < control.value)) {
       return {
-        'max': {
-          'requiredMax': this.max
+        max: {
+          requiredMax: this.max
         }
       };
     }

@@ -44,8 +44,8 @@ export class OEmailInputComponent extends OTextInputComponent implements OnInit 
   }
 
   resolveValidators(): ValidatorFn[] {
-    let validators: ValidatorFn[] = super.resolveValidators();
-    //Inject email validator
+    const validators: ValidatorFn[] = super.resolveValidators();
+    // Inject email validator
     validators.push(OValidators.emailValidator);
     return validators;
   }

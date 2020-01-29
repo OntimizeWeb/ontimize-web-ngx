@@ -13,11 +13,16 @@
     "allowSyntheticDefaultImports": true,
     "target": "es5",
     "module": "es2015",
+    "types": [
+      "jasmine",
+      "node"
+    ],
     "typeRoots": [
       "node_modules/@types"
     ],
     "lib": [
-      "es2015"
+      "es2016",
+      "dom"
     ],
     "paths": {
       "ontimize-web-ngx": [
@@ -25,9 +30,6 @@
       ],
       "ontimize-web-ngx/*": [
         "dist/ontimize-web-ngx/*"
-      ],
-      "@ontimize/*": [
-        "projects/ontimize-web-ngx/src/lib/*"
       ]
     }
   },

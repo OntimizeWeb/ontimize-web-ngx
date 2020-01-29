@@ -69,10 +69,10 @@ export class OBreadcrumbComponent implements AfterViewInit, OnDestroy, OnInit {
 
   ngAfterViewInit() {
     if (this._formRef && this.labelColsArray.length) {
-      let self = this;
+      const self = this;
       this.onDataLoadedSubscription = this._formRef.onDataLoaded.subscribe((value: any) => {
         if (self.breadcrumbs.length) {
-          let displayText = self.labelColsArray.map(element => value[element]).join(self.separator);
+          const displayText = self.labelColsArray.map(element => value[element]).join(self.separator);
           self.breadcrumbs[self.breadcrumbs.length - 1].displayText = displayText;
           self.displayTextloaded = true;
         }
@@ -103,7 +103,7 @@ export class OBreadcrumbComponent implements AfterViewInit, OnDestroy, OnInit {
   }
 
   onRouteClick(route) {
-    let extras = {};
+    const extras = {};
     if (route.queryParams) {
       extras[Codes.QUERY_PARAMS] = route.queryParams;
     }

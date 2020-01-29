@@ -88,7 +88,7 @@ export class OAppLayoutComponent {
   }
 
   set mode(val: OAppLayoutMode) {
-    let m = Codes.OAppLayoutModes.find(e => e === val);
+    const m = Codes.OAppLayoutModes.find(e => e === val);
     if (Util.isDefined(m)) {
       this._mode = m;
       if (this._mode === 'mobile' && !Util.isDefined(this.showHeader)) {
@@ -104,7 +104,7 @@ export class OAppLayoutComponent {
   }
 
   set sidenavMode(val: OSidenavMode) {
-    let m = Codes.OSidenavModes.find(e => e === val);
+    const m = Codes.OSidenavModes.find(e => e === val);
     if (Util.isDefined(m)) {
       this._sidenavMode = m;
     } else {

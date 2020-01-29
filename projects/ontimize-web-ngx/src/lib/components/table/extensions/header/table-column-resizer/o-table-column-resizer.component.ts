@@ -137,7 +137,7 @@ export class OTableColumnResizerComponent implements OnInit, OnDestroy {
     if (movementX === 0) {
       return;
     }
-    let newColumnWidth = this.startWidth + movementX;
+    const newColumnWidth = this.startWidth + movementX;
 
     const lessThanMin = newColumnWidth < this.minWidth;
     const moreThanMax = newColumnWidth > this.maxWidth;
@@ -167,7 +167,7 @@ export class OTableColumnResizerComponent implements OnInit, OnDestroy {
   }
 
   protected getFollowingOColumns(): OColumn[] {
-    let result: OColumn[] = [];
+    const result: OColumn[] = [];
     let nextTh: any = this.headerEl.nextSibling;
     const self = this;
     while (nextTh) {
@@ -210,11 +210,11 @@ export class OTableColumnResizerComponent implements OnInit, OnDestroy {
     if (availableCols <= 0) {
       return;
     }
-    let widthRatio = movementX / availableCols;
-    let cols = this.nextOColumns.filter((oCol: OColumn) => this.blockedMinCols.indexOf(oCol.attr) === -1);
+    const widthRatio = movementX / availableCols;
+    const cols = this.nextOColumns.filter((oCol: OColumn) => this.blockedMinCols.indexOf(oCol.attr) === -1);
     cols.forEach(oCol => {
       let newWidth = (this.columnsStartWidth[oCol.attr] - widthRatio);
-      let minWidth = oCol.getMinWidthValue();
+      const minWidth = oCol.getMinWidthValue();
       if (newWidth <= minWidth) {
         newWidth = minWidth;
         this.blockedMinCols.push(oCol.attr);
@@ -228,19 +228,19 @@ export class OTableColumnResizerComponent implements OnInit, OnDestroy {
     let widthRatio = Math.abs(movementX) / this.nextOColumns.length;
     let widthDifference = 0;
     if (widthRatio > 0 && this.blockedMaxCols.length < this.nextOColumns.length) {
-      let cols = this.nextOColumns.filter((oCol: OColumn) => this.blockedMaxCols.indexOf(oCol.attr) === -1);
+      const cols = this.nextOColumns.filter((oCol: OColumn) => this.blockedMaxCols.indexOf(oCol.attr) === -1);
       cols.forEach(oCol => {
-        let newWidth = (this.columnsStartWidth[oCol.attr] + widthRatio);
-        let maxWidth = oCol.getMaxWidthValue();
-        if (maxWidth && newWidth > maxWidth) {
-          const diff = newWidth - maxWidth;
-          newWidth = maxWidth;
+        let newWidthValue = (this.columnsStartWidth[oCol.attr] + widthRatio);
+        const maxWidth = oCol.getMaxWidthValue();
+        if (maxWidth && newWidthValue > maxWidth) {
+          const diff = newWidthValue - maxWidth;
+          newWidthValue = maxWidth;
           this.blockedMaxCols.push(oCol.attr);
           const notBlocked = this.nextOColumns.length - this.blockedMaxCols.length;
           widthRatio += notBlocked > 0 ? Math.floor(diff / notBlocked) : 0;
         }
-        widthDifference += newWidth - oCol.DOMWidth;
-        oCol.setWidth(newWidth);
+        widthDifference += newWidthValue - oCol.DOMWidth;
+        oCol.setWidth(newWidthValue);
       });
     }
     const newWidth = Math.min(this.startWidth - widthDifference, newColumnWidth);

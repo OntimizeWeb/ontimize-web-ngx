@@ -34,7 +34,7 @@ export class OTableVisibleColumnsDialogComponent {
       // no parent form
     }
     if (Util.isArray(data.columnsData) && Util.isArray(data.originalVisibleColumns)) {
-      let originalCols = data.originalVisibleColumns;
+      const originalCols = data.originalVisibleColumns;
       data.columnsData.forEach((oCol: OColumn) => {
         this.columns.push({
           attr: oCol.attr,

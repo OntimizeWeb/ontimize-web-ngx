@@ -19,6 +19,7 @@ import { Error403Component } from './components/error403/o-error-403.component';
 import { ODialogComponent } from './components/dialog/o-dialog.component';
 import { OValidatorComponent } from './components/validation/o-validator.component';
 import { OSnackBarComponent } from './components/snackbar/o-snackbar.component';
+import { OErrorComponent } from './components/validation/o-error.component';
 
 @NgModule({
   imports: [
@@ -39,6 +40,7 @@ import { OSnackBarComponent } from './components/snackbar/o-snackbar.component';
     ONTIMIZE_DIRECTIVES,
     Error403Component,
     ODialogComponent,
+    OErrorComponent,
     OValidatorComponent,
     OSnackBarComponent
   ],
@@ -58,6 +60,7 @@ import { OSnackBarComponent } from './components/snackbar/o-snackbar.component';
     ONTIMIZE_DIRECTIVES,
     OCustomMaterialModule,
     Error403Component,
+    OErrorComponent,
     OValidatorComponent,
     OSnackBarComponent
   ],

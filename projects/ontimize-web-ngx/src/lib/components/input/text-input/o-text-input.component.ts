@@ -52,7 +52,7 @@ export class OTextInputComponent extends OFormDataComponent {
   }
 
   resolveValidators(): ValidatorFn[] {
-    let validators: ValidatorFn[] = super.resolveValidators();
+    const validators: ValidatorFn[] = super.resolveValidators();
 
     if (this.minLength >= 0) {
       validators.push(Validators.minLength(this.minLength));

@@ -27,7 +27,7 @@ export class Error403Component {
   }
 
   onNavigateBackClick() {
-    let extras: NavigationExtras = {};
+    const extras: NavigationExtras = {};
     let route: string = '';
     if (this.lastPageData) {
       extras[Codes.QUERY_PARAMS] = this.lastPageData.queryParams;

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, forwardRef, Inject, Injector, NgModule, OnDestroy, OnInit, ViewChild, ViewContainerRef, ViewEncapsulation } from '@angular/core';
+import { Component, ElementRef, forwardRef, Inject, Injector, NgModule, OnDestroy, OnInit, ViewChild, ViewContainerRef, ViewEncapsulation, AfterViewInit } from '@angular/core';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { InputConverter } from '../../../decorators/input-converter';
 import { OSharedModule } from '../../../shared/shared.module';
@@ -36,7 +36,7 @@ export const DEFAULT_INPUTS_O_FORM_TOOLBAR = [
   }
   // providers: [{ provide: OFormComponent, useExisting: forwardRef(() => OFormComponent) }]
 })
-export class OFormToolbarComponent implements OnInit, OnDestroy {
+export class OFormToolbarComponent implements OnInit, OnDestroy, AfterViewInit {
 
   public static DEFAULT_INPUTS_O_FORM_TOOLBAR = DEFAULT_INPUTS_O_FORM_TOOLBAR;
 

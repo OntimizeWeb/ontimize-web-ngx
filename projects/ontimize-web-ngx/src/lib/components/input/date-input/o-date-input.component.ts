@@ -52,10 +52,10 @@ export type DateFilterFunction = (date: Date) => boolean;
 })
 export class ODateInputComponent extends OFormDataComponent implements AfterViewChecked, OnDestroy, OnInit {
 
-  @ViewChild(MatDatepicker, {static: false})
+  @ViewChild(MatDatepicker, { static: false })
   public datepicker: MatDatepicker<Date>;
 
-  @ViewChild(MatDatepickerInput, {static: false})
+  @ViewChild(MatDatepickerInput, { static: false })
   public datepickerInput: MatDatepickerInput<Date>;
 
   @InputConverter()
@@ -80,7 +80,7 @@ export class ODateInputComponent extends OFormDataComponent implements AfterView
   protected onLanguageChangeSubscription: Subscription;
   protected dateValue: Date;
 
-  @ViewChild('matInputRef', {static: false})
+  @ViewChild('matInputRef', { static: false })
   private matInputRef: ElementRef;
 
   private momentSrv: MomentService;
@@ -157,11 +157,11 @@ export class ODateInputComponent extends OFormDataComponent implements AfterView
   }
 
   public ngAfterViewChecked(): void {
-    this.mediaSubscription = this.media.media$.subscribe((change: MediaChange) => {
-      if (['xs', 'sm'].indexOf(change.mqAlias) !== -1) {
+    this.mediaSubscription = this.media.asObservable().subscribe((change: MediaChange[]) => {
+      if (['xs', 'sm'].indexOf(change[0].mqAlias) !== -1) {
         this.touchUi = Util.isDefined(this.oTouchUi) ? this.oTouchUi : true;
       }
-      if (['md', 'lg', 'xl'].indexOf(change.mqAlias) !== -1) {
+      if (['md', 'lg', 'xl'].indexOf(change[0].mqAlias) !== -1) {
         this.touchUi = Util.isDefined(this.oTouchUi) ? this.oTouchUi : false;
       }
     });

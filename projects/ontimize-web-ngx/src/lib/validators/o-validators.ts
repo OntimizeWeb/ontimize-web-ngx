@@ -53,7 +53,7 @@ export class OValidators {
 
     // removing dashes
     let valueWithoutDashes = '';
-    for (let i in newValue) {
+    for (const i in newValue) {
       if (newValue[i] !== '-') {
         valueWithoutDashes = valueWithoutDashes + newValue[i];
       }

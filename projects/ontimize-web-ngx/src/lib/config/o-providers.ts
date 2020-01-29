@@ -10,7 +10,6 @@ import { OFormLayoutManagerService } from '../services/o-form-layout-manager.ser
 import { ORemoteConfigurationService } from '../services/remote-config.service';
 import { ShareCanActivateChildService } from '../services/share-can-activate-child.service';
 import { Codes } from '../util/codes';
-import { Events } from '../util/events';
 import { OHttp } from '../util/http/OHttp';
 import { SnackBarService } from '../services/snackbar.service';
 import { OTranslateService } from '../services/translate/o-translate.service';
@@ -36,7 +35,7 @@ import { Error403Component } from '../shared/components/error403/o-error-403.com
 
 function addPermissionsRouteGuard(injector: Injector) {
   const route = injector.get(Router);
-  const exists403 = route.config.find(route => route.path === Codes.FORBIDDEN_ROUTE);
+  const exists403 = route.config.find(r => r.path === Codes.FORBIDDEN_ROUTE);
   if (!exists403) {
     route.config.push({ path: Codes.FORBIDDEN_ROUTE, component: Error403Component });
   }
@@ -45,7 +44,7 @@ function addPermissionsRouteGuard(injector: Injector) {
 
 export function appInitializerFactory(injector: Injector, config: Config, oTranslate: OTranslateService) {
   return () => new Promise<any>((resolve: any) => {
-    let observableArray = [];
+    const observableArray = [];
     const locationInitialized = injector.get(LOCATION_INITIALIZED, Promise.resolve(null));
     locationInitialized.then(() => {
       oTranslate.setDefaultLang('en');
@@ -81,34 +80,6 @@ export function appInitializerFactory(injector: Injector, config: Config, oTrans
       });
     });
   });
-}
-
-/**
- * Bind some global events and publish on the 'app' channel
- */
-export function bindEvents(window: Window) {
-  const events = new Events();
-  function publishEventWrapper(channel: string): EventListenerObject {
-    return {
-      handleEvent: function (ev: Event) {
-        events.publish(channel, ev);
-      }
-    };
-  }
-  window.addEventListener('online', publishEventWrapper('app:online'), false);
-  window.addEventListener('offline', publishEventWrapper('app:offline'), false);
-  window.addEventListener('orientationchange', publishEventWrapper('app:rotated'));
-  // When that status taps, we respond
-  window.addEventListener('statusTap', publishEventWrapper('app:statusTap'));
-  // start listening for resizes XXms after the app starts
-  setTimeout(function () {
-    window.addEventListener('resize', publishEventWrapper('app:resize'));
-  }, 2000);
-  return events;
-}
-
-export function getEvents() {
-  return bindEvents(window);
 }
 
 export function getOntimizeServiceProvider(backend: XHRBackend, defaultOptions: BaseRequestOptions) {
@@ -181,8 +152,6 @@ export function getORemoteConfigurationService(injector: Injector): ORemoteConfi
 
 export const ONTIMIZE_PROVIDERS: Provider[] = [
 
-  { provide: Events, useValue: getEvents },
-
   {
     provide: AppConfig,
     useFactory: appConfigFactory,
@@ -222,7 +191,7 @@ export const ONTIMIZE_PROVIDERS: Provider[] = [
     useFactory: getLoginServiceProvider,
     deps: [Injector]
   },
-  //getNavigationServiceProvider
+  // getNavigationServiceProvider
   {
     provide: NavigationService,
     useFactory: getNavigationServiceProvider,
@@ -240,7 +209,7 @@ export const ONTIMIZE_PROVIDERS: Provider[] = [
     useFactory: getCurrencyServiceProvider,
     deps: [Injector]
   },
-  //getNumberServiceProvider
+  // getNumberServiceProvider
   {
     provide: NumberService,
     useFactory: getNumberServiceProvider,
