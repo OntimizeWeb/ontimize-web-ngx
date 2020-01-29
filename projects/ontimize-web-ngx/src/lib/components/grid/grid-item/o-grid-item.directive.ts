@@ -15,7 +15,7 @@ export class OGridItemDirective {
 
   mdClick: EventEmitter<any> = new EventEmitter();
   mdDoubleClick: EventEmitter<any> = new EventEmitter();
-  modelData: Object;
+  modelData: object;
 
   protected grid: OGridComponent;
 
@@ -31,11 +31,11 @@ export class OGridItemDirective {
     private renderer: Renderer2
   ) { }
 
-  public onClick(onNext: (item: OGridItemDirective) => void): Object {
+  public onClick(onNext: (item: OGridItemDirective) => void): object {
     return ObservableWrapper.subscribe(this.mdClick, onNext);
   }
 
-  public onDoubleClick(onNext: (item: OGridItemDirective) => void): Object {
+  public onDoubleClick(onNext: (item: OGridItemDirective) => void): object {
     return ObservableWrapper.subscribe(this.mdDoubleClick, onNext);
   }
 
@@ -47,13 +47,13 @@ export class OGridItemDirective {
     ObservableWrapper.callEmit(this.mdDoubleClick, this);
   }
 
-  setItemData(data: Object): void {
+  setItemData(data: object): void {
     if (!this.modelData) {
       this.modelData = data;
     }
   }
 
-  getItemData(): Object {
+  getItemData(): object {
     return this.modelData;
   }
 

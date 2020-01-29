@@ -36,7 +36,7 @@ export class OTableButtonComponent implements OnInit {
   public static DEFAULT_INPUTS_O_TABLE_BUTTON = DEFAULT_INPUTS_O_TABLE_BUTTON;
   public static DEFAULT_OUTPUTS_O_TABLE_BUTTON = DEFAULT_OUTPUTS_O_TABLE_BUTTON;
 
-  public onClick: EventEmitter<Object> = new EventEmitter<Object>();
+  public onClick: EventEmitter<object> = new EventEmitter<object>();
 
   public oattr: string;
   @InputConverter()

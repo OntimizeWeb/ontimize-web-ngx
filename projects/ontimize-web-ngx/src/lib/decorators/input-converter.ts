@@ -20,9 +20,9 @@ export function NumberConverter(value: any) {
 }
 
 export function InputConverter(converter?: Function) {
-  function InputConverterInner(target: Object, key: string) {
+  function InputConverterInner(target: object, key: string) {
     if (converter === undefined) {
-      const metadata = (<any>Reflect).getMetadata('design:type', target, key);
+      const metadata = (Reflect as any).getMetadata('design:type', target, key);
       if (metadata === undefined || metadata === null) {
         throw new Error('The reflection metadata could not be found.');
       }

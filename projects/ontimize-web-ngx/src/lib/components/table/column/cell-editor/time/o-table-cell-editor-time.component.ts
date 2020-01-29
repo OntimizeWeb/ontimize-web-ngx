@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ElementRef, HostListener, Injector, OnInit, TemplateRef, ViewChild, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, HostListener, Injector, OnInit, TemplateRef, ViewChild, ViewEncapsulation, AfterViewChecked } from '@angular/core';
 import { FormControl, ValidatorFn } from '@angular/forms';
 import { DateAdapter, MatDatepicker, MatDatepickerInput, MatDatepickerInputEvent, MAT_DATE_LOCALE } from '@angular/material';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
@@ -43,25 +43,25 @@ export const DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_TIME = [
   ],
 })
 
-export class OTableCellEditorTimeComponent extends OBaseTableCellEditor implements OnInit {
+export class OTableCellEditorTimeComponent extends OBaseTableCellEditor implements OnInit, AfterViewChecked {
 
   public static DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_TIME = DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_TIME;
   public static DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_TIME = DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_TIME;
 
   @ViewChild('templateref', { read: TemplateRef, static: false }) public templateref: TemplateRef<any>;
 
-  @ViewChild('dateInput', {static: false})
+  @ViewChild('dateInput', { static: false })
   protected dateInput: ElementRef;
 
-  @ViewChild('hourInput', {static: false})
+  @ViewChild('hourInput', { static: false })
   protected hourInput: ElementRef;
 
-  @ViewChild('picker', {static: false})
+  @ViewChild('picker', { static: false })
   private picker: any; // NgxMaterialTimepickerComponent from ngx-material-timepicker
 
   oStartView: 'month' | 'year' = 'month';
 
-  @ViewChild(MatDatepickerInput, {static: false})
+  @ViewChild(MatDatepickerInput, { static: false })
   public datepickerInput: MatDatepickerInput<Date>;
 
   formControlHour: FormControl;
@@ -85,7 +85,7 @@ export class OTableCellEditorTimeComponent extends OBaseTableCellEditor implemen
 
   // only true when hour input is focused
   public enabledCommitOnTabPress: boolean = false;
-  protected activeKeys: Object = {};
+  protected activeKeys: object = {};
 
   @HostListener('document:keydown', ['$event'])
   onDocumentKeydown(event: KeyboardEvent) {
@@ -187,7 +187,7 @@ export class OTableCellEditorTimeComponent extends OBaseTableCellEditor implemen
 
     if (Codes.TWELVE_FOUR_HOUR_FORMAT === this.oHourFormat) {
       if (hour) {
-        hour = parseInt(hour);
+        hour = parseInt(hour, 10);
         const period = hour <= 12 ? ' AM' : ' PM';
         if (hour > 12) {
           hour = hour - 12;
@@ -228,7 +228,7 @@ export class OTableCellEditorTimeComponent extends OBaseTableCellEditor implemen
       return value;
     }
     const formatStr = this.oHourFormat === Codes.TWENTY_FOUR_HOUR_FORMAT ? 'HH:mm' : 'hh:mm a';
-    let result = value;
+    let result;
     if (typeof value === 'number') {
       result = moment(value).format(formatStr);
     } else {

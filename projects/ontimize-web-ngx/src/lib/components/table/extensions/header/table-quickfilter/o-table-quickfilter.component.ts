@@ -43,7 +43,7 @@ export class OTableQuickfilterComponent implements OnInit, AfterViewInit, OnDest
   public matMenu: MatMenu;
 
   public value: string;
-  public onChange: EventEmitter<Object> = new EventEmitter<Object>();
+  public onChange: EventEmitter<string> = new EventEmitter<string>();
 
   public formControl;
 

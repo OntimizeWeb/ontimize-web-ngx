@@ -16,7 +16,7 @@ import { OFormLayoutManagerComponent } from '../../../layouts/form-layout/o-form
 export class OFormLayoutDialogComponent implements AfterViewInit {
   formLayoutManager: OFormLayoutManagerComponent;
   queryParams: any;
-  params: Object;
+  params: object;
   urlSegments: any[];
   label: string;
   title: string;

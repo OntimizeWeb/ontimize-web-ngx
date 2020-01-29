@@ -283,7 +283,7 @@ export class OFormLayoutTabGroupComponent implements AfterViewInit, OnDestroy {
     }
   }
 
-  getDataToStore(): Object {
+  getDataToStore(): object {
     const tabsData = [];
     this.data.map((data: IDetailComponentData) => {
       tabsData.push({

@@ -161,7 +161,7 @@ export class OServiceBaseComponent implements ILocalStorageComponent, OnChanges 
   protected alreadyStored: boolean = false;
 
   protected queryOnEventSubscription: Subscription;
-  public cd: ChangeDetectorRef; //borrar
+  public cd: ChangeDetectorRef; // borrar
   protected queryArguments: any[];
 
   protected router: Router;
@@ -291,7 +291,7 @@ export class OServiceBaseComponent implements ILocalStorageComponent, OnChanges 
     return this.getAttribute();
   }
 
-  getDataToStore(): Object {
+  getDataToStore(): object {
     return this.state;
   }
 
@@ -443,7 +443,7 @@ export class OServiceBaseComponent implements ILocalStorageComponent, OnChanges 
    * @param item record object
    * @returns object containing item object properties contained in keysArray
    */
-  extractKeysFromRecord(item: any): Object {
+  extractKeysFromRecord(item: any): object {
     const result = {};
     if (Util.isObject(item)) {
       this.keysArray.forEach(key => {
@@ -465,7 +465,7 @@ export class OServiceBaseComponent implements ILocalStorageComponent, OnChanges 
     return result;
   }
 
-  getQueryArguments(filter: Object, ovrrArgs?: OQueryDataArgs): Array<any> {
+  getQueryArguments(filter: object, ovrrArgs?: OQueryDataArgs): Array<any> {
     const compFilter = this.getComponentFilter(filter);
     const queryCols = this.getAttributesValuesToQuery();
     const sqlTypes = (ovrrArgs && ovrrArgs.hasOwnProperty('sqltypes')) ? ovrrArgs.sqltypes : this.form ? this.form.getAttributesSQLTypes() : {};

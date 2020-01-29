@@ -18,7 +18,7 @@ export type ONavigationRoutes = {
 
 export class ONavigationItem {
   url: string;
-  queryParams: Object;
+  queryParams: object;
   text: string;
   displayText: string;
   terminal: boolean;
@@ -28,7 +28,7 @@ export class ONavigationItem {
   keysValues: any;
   queryConfiguration: any;
 
-  constructor(value: Object) {
+  constructor(value: object) {
     this.url = value['url'] ? value['url'] : '';
     this.queryParams = value[Codes.QUERY_PARAMS] ? value[Codes.QUERY_PARAMS] : {};
     this.text = value['text'] ? value['text'] : '';
@@ -251,7 +251,7 @@ export class NavigationService implements ILocalStorageComponent {
     this.navigationEventsSource.next(navigationItems);
   }
 
-  public getDataToStore(): Object {
+  public getDataToStore(): object {
     return this.navigationItems;
   }
 
@@ -286,15 +286,15 @@ export class NavigationService implements ILocalStorageComponent {
   /**
    * Subscribe to title updates
    */
-  public onTitleChange(onNext: (value: any) => void): Object {
+  public onTitleChange(onNext: (value: any) => void): object {
     return ObservableWrapper.subscribe(this._titleEmitter, onNext);
   }
 
-  public onVisibleChange(onNext: (value: boolean) => void): Object {
+  public onVisibleChange(onNext: (value: boolean) => void): object {
     return ObservableWrapper.subscribe(this._visibleEmitter, onNext);
   }
 
-  public onSidenavChange(onNext: (value: any) => void): Object {
+  public onSidenavChange(onNext: (value: any) => void): object {
     return ObservableWrapper.subscribe(this._sidenavEmitter, onNext);
   }
 

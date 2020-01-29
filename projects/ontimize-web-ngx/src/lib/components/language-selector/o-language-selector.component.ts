@@ -35,7 +35,7 @@ export class OLanguageSelectorComponent {
   @InputConverter()
   useFlagIcons: boolean = false;
 
-  onChange: EventEmitter<Object> = new EventEmitter<Object>();
+  onChange: EventEmitter<object> = new EventEmitter<object>();
 
   protected translateService: OTranslateService;
   protected appConfig: AppConfig;

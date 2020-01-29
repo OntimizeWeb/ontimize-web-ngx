@@ -44,7 +44,7 @@ export class OTableCellEditorIntegerComponent extends OBaseTableCellEditor {
 
   getCellData() {
     const cellData = super.getCellData();
-    const intValue = parseInt(cellData);
+    const intValue = parseInt(cellData, 10);
     return isNaN(intValue) ? undefined : intValue;
   }
 

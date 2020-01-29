@@ -56,7 +56,7 @@ export class LoginService implements ILoginService {
     return this._localStorageKey;
   }
 
-  public configureOntimizeAuthService(config: Object): void {
+  public configureOntimizeAuthService(config: object): void {
     this.ontService = this.injector.get(OntimizeService);
     const servConf = {};
     servConf[Codes.SESSION_KEY] = this.getSessionInfo();

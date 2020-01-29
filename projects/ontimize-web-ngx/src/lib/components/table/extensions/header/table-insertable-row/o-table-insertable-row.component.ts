@@ -200,7 +200,7 @@ export class OTableInsertableRowComponent implements OnInit {
     return valid;
   }
 
-  protected getAttributesValuesToInsert(): Object {
+  protected getAttributesValuesToInsert(): object {
     let attrValues = {};
     if (this.includeParentKeys) {
       attrValues = this.table.getParentKeysValues();

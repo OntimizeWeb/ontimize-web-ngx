@@ -56,7 +56,7 @@ export class OCardMenuItemComponent implements AfterViewInit, OnDestroy {
   route: string;
   action: () => void;
   detailComponent: any;
-  detailComponentInputs: Object;
+  detailComponentInputs: object;
 
   protected _detailComponentContainer: ViewContainerRef;
 

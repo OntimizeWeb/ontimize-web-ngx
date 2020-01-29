@@ -25,7 +25,7 @@ export class OListItemTextRenderer {
   protected _secondaryText: string;
   protected _icon: string;
 
-  onIconClick: EventEmitter<Object> = new EventEmitter<Object>();
+  onIconClick: EventEmitter<object> = new EventEmitter<object>();
 
   constructor(
     public elRef: ElementRef,
@@ -36,7 +36,7 @@ export class OListItemTextRenderer {
 
   modifyMatListItemElement() {
     if (this.elRef.nativeElement && this.elRef.nativeElement.parentElement) {
-      let listItem = this.elRef.nativeElement.parentElement.parentElement;
+      const listItem = this.elRef.nativeElement.parentElement.parentElement;
       if (listItem && listItem.nodeName === 'MAT-LIST-ITEM') {
         let linesNo = 3;
         if (this.title === undefined) {

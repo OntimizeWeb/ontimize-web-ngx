@@ -24,7 +24,7 @@ export class OBarMenuNestedComponent {
     this.appMenuService = this.injector.get(AppMenuService);
   }
 
-  getValueOfAttr(menu: Object, attr: string) {
+  getValueOfAttr(menu: object, attr: string) {
     let valAttr = '';
     if (menu.hasOwnProperty(attr)) {
       valAttr = menu[attr];

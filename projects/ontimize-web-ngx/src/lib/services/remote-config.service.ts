@@ -126,7 +126,7 @@ export class ORemoteConfigurationService {
       const body: any = { filter: {}, data: {} };
       body.filter[self._columns.user] = sessionInfo.user;
       body.filter[self._columns.appId] = self._uuid;
-      let userData = self.localStorageService.getSessionUserComponentsData() || {};
+      let userData = self.localStorageService.getSessionUserComponentsData() || '';
       try {
         userData = btoa(JSON.stringify(userData));
       } catch (e) {

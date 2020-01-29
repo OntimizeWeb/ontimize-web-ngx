@@ -76,11 +76,11 @@ export class OTableCellRendererBooleanComponent extends OBaseTableCellRenderer i
   }
 
   protected parseNumberInputs() {
-    this.trueValue = parseInt(this.trueValue);
+    this.trueValue = parseInt(this.trueValue, 10);
     if (isNaN(this.trueValue)) {
       this.trueValue = 1;
     }
-    this.falseValue = parseInt(this.falseValue);
+    this.falseValue = parseInt(this.falseValue, 10);
     if (isNaN(this.falseValue)) {
       this.falseValue = 0;
     }

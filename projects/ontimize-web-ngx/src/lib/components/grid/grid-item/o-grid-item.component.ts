@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, EventEmitter, forwardRef, HostListener, Inject, NgModule, Optional, Renderer, TemplateRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, NgModule, TemplateRef, ViewChild, Renderer2 } from '@angular/core';
 import { OSharedModule } from '../../../shared/shared.module';
-// import { OGridComponent } from '../../grid/o-grid.component';
 import { InputConverter } from '../../../decorators/input-converter';
 import { ObservableWrapper } from '../../../util/async';
 
@@ -24,11 +23,11 @@ export const DEFAULT_INPUTS_O_GRID_ITEM = [
 })
 export class OGridItemComponent {
 
-  modelData: Object;
+  modelData: object;
   mdClick: EventEmitter<any> = new EventEmitter();
   mdDoubleClick: EventEmitter<any> = new EventEmitter();
 
-  @ViewChild(TemplateRef, {static: false}) public template: TemplateRef<any>;
+  @ViewChild(TemplateRef, { static: false }) public template: TemplateRef<any>;
   @InputConverter()
   colspan: number = 1;
   @InputConverter()
@@ -37,10 +36,10 @@ export class OGridItemComponent {
 
   constructor(
     public _el: ElementRef,
-    private renderer: Renderer) {
+    private renderer: Renderer2) {
 
-    }
-    // @Inject(forwardRef(() => OGridComponent)) public _grid: OGridComponent) { }
+  }
+  // @Inject(forwardRef(() => OGridComponent)) public _grid: OGridComponent) { }
 
 
   // @HostListener('mouseenter')
@@ -58,11 +57,11 @@ export class OGridItemComponent {
     ObservableWrapper.callEmit(this.mdDoubleClick, this);
   }
 
-  public onClick(onNext: (item: OGridItemComponent) => void): Object {
+  public onClick(onNext: (item: OGridItemComponent) => void): object {
     return ObservableWrapper.subscribe(this.mdClick, onNext);
   }
 
-  public onDoubleClick(onNext: (item: OGridItemComponent) => void): Object {
+  public onDoubleClick(onNext: (item: OGridItemComponent) => void): object {
     return ObservableWrapper.subscribe(this.mdDoubleClick, onNext);
   }
 

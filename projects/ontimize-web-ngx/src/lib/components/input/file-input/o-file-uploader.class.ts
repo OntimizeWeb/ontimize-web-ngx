@@ -12,7 +12,7 @@ export class OFileUploader {
   public progress: number = 0;
   public nextIndex: number = 0;
   public splitUpload: boolean = true;
-  public data: Object;
+  public data: object;
 
   protected _uploadSuscription: Subscription;
 
@@ -56,13 +56,13 @@ export class OFileUploader {
   }
 
   public upload(): void {
-    this.files.map((item: OFileItem) => {
+    this.files.forEach((item: OFileItem) => {
       if (item.pendingUpload) {
         item.prepareToUpload();
       }
     });
     if (this.splitUpload) {
-      this.files.map((item: OFileItem) => {
+      this.files.forEach((item: OFileItem) => {
         if (item.pendingUpload) {
           this.uploadItem(item);
         }
@@ -153,7 +153,7 @@ export class OFileUploader {
    */
   public cancel(): void {
     if (this.splitUpload) {
-      this.files.map(item => item.cancel());
+      this.files.forEach(item => item.cancel());
     } else {
       if (this._uploadSuscription) {
         this._uploadSuscription.unsubscribe();
@@ -239,7 +239,7 @@ export class OFileUploader {
   }
 
   protected _onBeforeUploadAll(): void {
-    this.files.map(item => item._onBeforeUpload(false));
+    this.files.forEach(item => item._onBeforeUpload(false));
     this.onBeforeUploadAll();
   }
 
@@ -263,7 +263,7 @@ export class OFileUploader {
   }
 
   protected _onSuccessAll(response: any): void {
-    this.files.map(item => item._onSuccess(response, false));
+    this.files.forEach(item => item._onSuccess(response, false));
     this.onSuccessAll(response);
   }
 
@@ -273,7 +273,7 @@ export class OFileUploader {
   }
 
   protected _onErrorAll(error: any): void {
-    this.files.map(item => item._onError(error, false));
+    this.files.forEach(item => item._onError(error, false));
     this.onErrorAll(error);
   }
 
@@ -283,7 +283,7 @@ export class OFileUploader {
   }
 
   protected _onCancelAll(): void {
-    this.files.map(item => item._onCancel(false));
+    this.files.forEach(item => item._onCancel(false));
     this.onCancelAll();
   }
 
@@ -301,7 +301,7 @@ export class OFileUploader {
   }
 
   protected _onCompleteAll(): void {
-    this.files.map(item => item._onComplete(false));
+    this.files.forEach(item => item._onComplete(false));
     this.isUploading = false;
     this.onCompleteAll();
     this.progress = this._getTotalProgress();

@@ -31,7 +31,7 @@ export class OTableCellRendererActionComponent extends OBaseTableCellRenderer im
   public static DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_ACTION = DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_ACTION;
   public static DEFAULT_OUTPUTS_O_TABLE_CELL_RENDERER_ACTION = DEFAULT_OUTPUTS_O_TABLE_CELL_RENDERER_ACTION;
 
-  onClick: EventEmitter<Object> = new EventEmitter<Object>();
+  onClick: EventEmitter<object> = new EventEmitter<object>();
   action: string;
   _icon: string;
   text: string;

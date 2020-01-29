@@ -434,7 +434,7 @@ export class OTableOptions {
   }
 }
 
-export type QuickFilterFunction = (filter: string) => IExpression | Object;
+export type QuickFilterFunction = (filter: string) => IExpression | object;
 
 export interface OTableInitializationOptions {
   entity?: string;
@@ -642,7 +642,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   protected setStaticData: boolean = false;
   protected avoidQueryColumns: Array<any> = [];
   protected asyncLoadColumns: Array<any> = [];
-  protected asyncLoadSubscriptions: Object = {};
+  protected asyncLoadSubscriptions: object = {};
 
   protected querySubscription: Subscription;
   protected contextMenuSubscription: Subscription;
@@ -1496,7 +1496,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     return columns;
   }
 
-  getQueryArguments(filter: Object, ovrrArgs?: OQueryDataArgs): Array<any> {
+  getQueryArguments(filter: object, ovrrArgs?: OQueryDataArgs): Array<any> {
     const queryArguments = super.getQueryArguments(filter, ovrrArgs);
     queryArguments[3] = this.getSqlTypesForFilter(queryArguments[1]);
     Object.assign(queryArguments[3], ovrrArgs ? ovrrArgs.sqltypes || {} : {});
@@ -1507,7 +1507,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     return queryArguments;
   }
 
-  getSqlTypesForFilter(filter): Object {
+  getSqlTypesForFilter(filter): object {
     const allSqlTypes = {};
     this._oTableOptions.columns.forEach((col: OColumn) => {
       if (col.sqlType) {
@@ -2141,7 +2141,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     return this._oTableOptions ? this._oTableOptions.columns.find(item => item.name === attr) : undefined;
   }
 
-  insertRecord(recordData: any, sqlTypes?: Object): Observable<any> {
+  insertRecord(recordData: any, sqlTypes?: object): Observable<any> {
     if (!this.checkEnabledActionPermission(PermissionsUtils.ACTION_INSERT)) {
       return undefined;
     }
@@ -2155,7 +2155,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     return this.daoTable.insertQuery(recordData, sqlTypes);
   }
 
-  updateRecord(filter: any, updateData: any, sqlTypes?: Object): Observable<any> {
+  updateRecord(filter: any, updateData: any, sqlTypes?: object): Observable<any> {
     if (!this.checkEnabledActionPermission(PermissionsUtils.ACTION_UPDATE)) {
       return of(this.dataSource.data);
     }

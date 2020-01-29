@@ -22,7 +22,7 @@ export interface MenuItem {
   image?: string;
   component?: any;
   class?: string;
-  'component-inputs'?: Object;
+  'component-inputs'?: object;
   'show-in-card-menu'?: boolean;
 }
 

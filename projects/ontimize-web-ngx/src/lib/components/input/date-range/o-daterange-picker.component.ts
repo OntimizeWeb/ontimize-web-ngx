@@ -117,9 +117,9 @@ export class DaterangepickerComponent implements OnInit {
   options: any = {}; // should get some opt from user
   @Input() drops: string;
   @Input() opens: string;
-  @Output('choosedDate') choosedDate: EventEmitter<Object>;
-  @Output('rangeClicked') rangeClicked: EventEmitter<Object>;
-  @Output('datesUpdated') datesUpdated: EventEmitter<Object>;
+  @Output('choosedDate') choosedDate: EventEmitter<object>;
+  @Output('rangeClicked') rangeClicked: EventEmitter<object>;
+  @Output('datesUpdated') datesUpdated: EventEmitter<object>;
   @ViewChild('pickerContainer', { static: false }) pickerContainer: ElementRef;
 
   constructor(

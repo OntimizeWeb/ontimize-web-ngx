@@ -7,10 +7,10 @@ import { Util } from '../util/util';
 export class OKeyboardListenerDirective implements OnInit {
 
   @Input() keyboardKeys: string;
-  @Output() onKeysPressed: EventEmitter<Object> = new EventEmitter<Object>();
+  @Output() onKeysPressed: EventEmitter<object> = new EventEmitter<object>();
 
   protected keyboardNumberKeysArray: Array<number> = [];
-  protected activeKeys: Object = {};
+  protected activeKeys: object = {};
 
   @HostListener('keydown', ['$event'])
   keyDown(e: KeyboardEvent) {
@@ -37,7 +37,7 @@ export class OKeyboardListenerDirective implements OnInit {
     const keysAsStringArray = Util.parseArray(this.keyboardKeys);
     keysAsStringArray.forEach(key => {
       try {
-        this.keyboardNumberKeysArray.push(parseInt(key));
+        this.keyboardNumberKeysArray.push(parseInt(key, 10));
       } catch (e) {
         console.error(e);
       }

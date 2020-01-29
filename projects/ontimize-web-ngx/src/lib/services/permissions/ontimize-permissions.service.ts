@@ -56,7 +56,7 @@ export class OntimizePermissionsService implements IPermissionsService {
   }
 
   loadPermissions(): Observable<any> {
-    const kv: Object = {};
+    const kv: object = {};
     kv[this.keyColumn] = this._user;
 
     const av = [this.valueColumn];

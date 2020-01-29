@@ -17,7 +17,7 @@ export class ObservableWrapper {
     emitter: any, onNext: (value: T) => void, onError?: (exception: any) => void,
     onComplete: () => void = () => {
       // nothing to do
-    }): Object {
+    }): object {
     onError = (typeof onError === 'function') && onError || noop;
     onComplete = (typeof onComplete === 'function') && onComplete || noop;
     return emitter.subscribe({ next: onNext, error: onError, complete: onComplete });

@@ -30,8 +30,8 @@ export class OListItemCardRenderer {
   protected _action1Text: string;
   protected _action2Text: string;
 
-  onAction1Click: EventEmitter<Object> = new EventEmitter<Object>();
-  onAction2Click: EventEmitter<Object> = new EventEmitter<Object>();
+  onAction1Click: EventEmitter<object> = new EventEmitter<object>();
+  onAction2Click: EventEmitter<object> = new EventEmitter<object>();
   /* end of inputs variables */
 
   constructor(
@@ -43,7 +43,7 @@ export class OListItemCardRenderer {
 
   modifyMatListItemElement() {
     if (this.elRef.nativeElement && this.elRef.nativeElement.parentElement) {
-      let matListItem = this.elRef.nativeElement.parentElement.parentElement;
+      const matListItem = this.elRef.nativeElement.parentElement.parentElement;
       matListItem.querySelector('.mat-list-text').remove();
       matListItem.classList.add('o-card-item');
     }

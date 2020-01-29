@@ -32,7 +32,7 @@ export interface IFormControlComponent extends IComponent {
 }
 
 export interface IFormDataComponent extends IFormControlComponent {
-  onChange: EventEmitter<Object>;
+  onChange: EventEmitter<object>;
   onValueChange: EventEmitter<OValueChangeEvent>;
 
   data(value: any): void;
@@ -118,10 +118,10 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   public labelVisible: boolean = true;
 
   /* Outputs */
-  public onChange: EventEmitter<Object> = new EventEmitter<Object>();
+  public onChange: EventEmitter<object> = new EventEmitter<object>();
   public onValueChange: EventEmitter<OValueChangeEvent> = new EventEmitter<OValueChangeEvent>();
-  public onFocus: EventEmitter<Object> = new EventEmitter<Object>();
-  public onBlur: EventEmitter<Object> = new EventEmitter<Object>();
+  public onFocus: EventEmitter<object> = new EventEmitter<object>();
+  public onBlur: EventEmitter<object> = new EventEmitter<object>();
 
   @HostBinding('style.width')
   get hostWidth(): string {
@@ -350,7 +350,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
       const previousValue = this.oldValue;
       this.setFormValue(val, options, setDirty);
       if (options && options.emitModelToViewValueChange !== false) {
-        const changeType: number = (options && options.hasOwnProperty('changeType')) ? options.changeType : OValueChangeEvent.PROGRAMMATIC_CHANGE;
+        const changeType: number = (options.hasOwnProperty('changeType')) ? options.changeType : OValueChangeEvent.PROGRAMMATIC_CHANGE;
         this.emitOnValueChange(changeType, newValue, previousValue);
       }
     }

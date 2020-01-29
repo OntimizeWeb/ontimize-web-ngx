@@ -14,11 +14,11 @@ import { OTableExportButtonService } from '../../export-button/o-table-export-bu
 
 export class OTableExportConfiguration {
   columns: Array<any>;
-  columnNames: Object;
-  sqlTypes: Object;
+  columnNames: object;
+  sqlTypes: object;
   service: string;
   data?: any[];
-  filter?: Object;
+  filter?: object;
   mode: string;
   entity: string;
   options?: any;
@@ -114,7 +114,7 @@ export class OTableExportDialogComponent implements OnInit, OnDestroy {
     );
   }
 
-  proccessExportData(data: Object[], sqlTypes: Object): void {
+  proccessExportData(data: object[], sqlTypes: object): void {
     // Parse boolean
     Object.keys(sqlTypes).forEach(key => {
       if (SQLTypes.BOOLEAN === sqlTypes[key]) {

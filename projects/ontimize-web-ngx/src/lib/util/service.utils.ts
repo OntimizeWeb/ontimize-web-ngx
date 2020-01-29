@@ -8,7 +8,7 @@ import { SQLTypes } from './sqltypes';
 
 export type OQueryDataArgs = {
   replace?: boolean; // Used in the list component for replacing data in setValue method when reloadData method is called
-  sqltypes?: Object;
+  sqltypes?: object;
   offset?: number;
   length?: number;
 };
@@ -20,7 +20,7 @@ export interface ISQLOrder {
 
 export class ServiceUtils {
 
-  static getParentKeysFromForm(parentKeysObject: Object, form: OFormComponent) {
+  static getParentKeysFromForm(parentKeysObject: object, form: OFormComponent) {
     const result = {};
     const ownKeys = Object.keys(parentKeysObject || {});
 
@@ -89,7 +89,7 @@ export class ServiceUtils {
     return true;
   }
 
-  static getFilterUsingParentKeys(parentItem: any, parentKeysObject: Object) {
+  static getFilterUsingParentKeys(parentItem: any, parentKeysObject: object) {
     const filter = {};
     const ownKeys = Object.keys(parentKeysObject);
     if (ownKeys.length > 0 && Util.isDefined(parentItem)) {

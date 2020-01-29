@@ -8,7 +8,7 @@ import { Util } from '../util/util';
 
 export interface ILocalStorageComponent {
   storeState?: boolean;
-  getDataToStore(): Object;
+  getDataToStore(): object;
   getComponentKey(): string;
   getRouteKey?(): string;
 }
@@ -38,7 +38,7 @@ export class LocalStorageService {
     });
   }
 
-  getComponentStorage(comp: ILocalStorageComponent, routeKey?: string): Object {
+  getComponentStorage(comp: ILocalStorageComponent, routeKey?: string): object {
     const componentKey = comp.getComponentKey();
     let completeKey = componentKey;
     if (routeKey) {
@@ -66,9 +66,9 @@ export class LocalStorageService {
     this.updateAppComponentStorage(completeKey, storedObject);
   }
 
-  private getAppComponentData(key: string): Object {
+  private getAppComponentData(key: string): object {
     let componentData;
-    const storedComponents: Object = this.getSessionUserComponentsData() || {};
+    const storedComponents: object = this.getSessionUserComponentsData() || {};
     if (storedComponents[key]) {
       const decoded = atob(storedComponents[key]);
       try {
@@ -80,8 +80,8 @@ export class LocalStorageService {
     return componentData;
   }
 
-  updateAppComponentStorage(componentKey: string, componentData: Object) {
-    let componentDataB64: Object;
+  updateAppComponentStorage(componentKey: string, componentData: object) {
+    let componentDataB64;
     try {
       componentDataB64 = btoa(JSON.stringify(componentData));
     } catch (e) {
@@ -90,7 +90,7 @@ export class LocalStorageService {
     this.storeComponentInSessionUser(componentKey, componentDataB64);
   }
 
-  public getSessionUserComponentsData(): Object {
+  public getSessionUserComponentsData(): object {
     let storedComponentsByUser = {};
     const appData = this.getStoredData();
     const session: SessionInfo = appData[LocalStorageService.SESSION_STORAGE_KEY] || {};
@@ -134,7 +134,7 @@ export class LocalStorageService {
     this.setLocalStorage(appData);
   }
 
-  public getStoredData(): Object {
+  public getStoredData(): object {
     let appData = {};
     const appStoredData = localStorage.getItem(this._config['uuid']);
     if (appStoredData) {

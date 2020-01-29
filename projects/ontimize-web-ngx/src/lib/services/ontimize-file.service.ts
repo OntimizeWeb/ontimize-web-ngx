@@ -57,7 +57,7 @@ export class OntimizeFileService {
    * @param files the array of files to upload
    * @param entity the entity
    */
-  public upload(files: any[], entity: string, data?: Object): Observable<any> {
+  public upload(files: any[], entity: string, data?: object): Observable<any> {
     const url = this._urlBase + this.path + '/' + entity;
 
     const headers: HttpHeaders = new HttpHeaders({

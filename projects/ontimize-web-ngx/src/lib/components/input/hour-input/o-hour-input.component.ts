@@ -211,7 +211,7 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
 
     if (Codes.TWELVE_FOUR_HOUR_FORMAT === this.format) {
       if (hour) {
-        hour = parseInt(hour);
+        hour = parseInt(hour, 10);
         const period = hour <= 12 ? ' AM' : ' PM';
         if (hour > 12) {
           hour = hour - 12;

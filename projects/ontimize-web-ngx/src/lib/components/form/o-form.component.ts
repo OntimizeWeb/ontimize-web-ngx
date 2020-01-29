@@ -225,17 +225,17 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   /* end of parsed inputs variables */
 
   formGroup: FormGroup;
-  onDataLoaded: EventEmitter<Object> = new EventEmitter<Object>();
+  onDataLoaded: EventEmitter<object> = new EventEmitter<object>();
   beforeCloseDetail: EventEmitter<any> = new EventEmitter<any>();
   beforeGoEditMode: EventEmitter<any> = new EventEmitter<any>();
-  onFormModeChange: EventEmitter<Object> = new EventEmitter<Object>();
+  onFormModeChange: EventEmitter<number> = new EventEmitter<number>();
   public onInsert: EventEmitter<any> = new EventEmitter();
   public onUpdate: EventEmitter<any> = new EventEmitter();
   public onDelete: EventEmitter<any> = new EventEmitter();
 
   protected loadingSubject = new BehaviorSubject<boolean>(false);
   public loading: Observable<boolean> = this.loadingSubject.asObservable();
-  public formData: Object = {};
+  public formData: object = {};
   public navigationData: Array<any> = [];
   public currentIndex = 0;
   public mode: number = OFormComponent.Mode().INITIAL;
@@ -247,11 +247,11 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   protected _formToolbar: OFormToolbarComponent;
 
   protected _components: IFormDataComponentHash = {};
-  protected _compSQLTypes: Object = {};
+  protected _compSQLTypes: object = {};
 
-  formParentKeysValues: Object;
+  formParentKeysValues: object;
 
-  public onFormInitStream: EventEmitter<Object> = new EventEmitter<Object>();
+  public onFormInitStream: EventEmitter<boolean> = new EventEmitter<boolean>();
   protected reloadStream: Observable<any>;
   protected reloadStreamSubscription: Subscription;
 
@@ -760,7 +760,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     this.formNavigation.closeDetailAction(options);
   }
 
-  _stayInRecordAfterInsert(insertedKeys: Object) {
+  _stayInRecordAfterInsert(insertedKeys: object) {
     this.formNavigation.stayInRecordAfterInsert(insertedKeys);
   }
 
@@ -944,7 +944,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     return attributes;
   }
 
-  insertData(values, sqlTypes?: Object): Observable<any> {
+  insertData(values, sqlTypes?: object): Observable<any> {
     if (this.loaderSubscription) {
       this.loaderSubscription.unsubscribe();
     }
@@ -969,7 +969,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     return observable;
   }
 
-  getAttributesValuesToInsert(): Object {
+  getAttributesValuesToInsert(): object {
     const attrValues = {};
     if (this.formParentKeysValues) {
       Object.assign(attrValues, this.formParentKeysValues);
@@ -980,8 +980,8 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   /**
    * Returns an object with the sql types from the form components and the form keys
    */
-  public getAttributesSQLTypes(): Object {
-    const types: Object = {};
+  public getAttributesSQLTypes(): object {
+    const types: object = {};
     // Add form keys sql types
     this.keysSqlTypesArray.forEach((kst, i) => types[this.keysArray[i]] = SQLTypes.getSQLTypeValue(kst));
     // Add form components sql types
@@ -991,7 +991,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     return types;
   }
 
-  updateData(filter, values, sqlTypes?: Object): Observable<any> {
+  updateData(filter, values, sqlTypes?: object): Observable<any> {
     if (this.loaderSubscription) {
       this.loaderSubscription.unsubscribe();
     }
@@ -1016,7 +1016,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     return observable;
   }
 
-  getAttributesValuesToUpdate(): Object {
+  getAttributesValuesToUpdate(): object {
     const values = {};
     const self = this;
     const changedAttrs = this.formCache.getChangedFormControlsAttr();
@@ -1081,7 +1081,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
 
   toFormValueData(data) {
     if (data && Util.isArray(data)) {
-      const valueData: Array<Object> = [];
+      const valueData: Array<object> = [];
       const self = this;
       data.forEach(item => {
         valueData.push(self.objectToFormValueData(item));
@@ -1176,8 +1176,8 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     }
   }
 
-  getRequiredComponents(): Object {
-    const requiredCompontents: Object = {};
+  getRequiredComponents(): object {
+    const requiredCompontents: object = {};
     const components = this.getComponents();
     if (components) {
       Object.keys(components).forEach(key => {
@@ -1262,7 +1262,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     return this.getFormNavigation().getUrlParams();
   }
 
-  setUrlParamsAndReload(val: Object) {
+  setUrlParamsAndReload(val: object) {
     this.formNavigation.setUrlParams(val);
     this._reloadAction(true);
   }
@@ -1415,7 +1415,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     }
   }
 
-  protected _updateFormData(newFormData: Object): void {
+  protected _updateFormData(newFormData: object): void {
     const self = this;
     this.zone.run(() => {
       this.formData = newFormData;
@@ -1491,7 +1491,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     }
   }
 
-  protected objectToFormValueData(data: Object = {}): Object {
+  protected objectToFormValueData(data: object = {}): object {
     const valueData = {};
     Object.keys(data).forEach((item) => {
       valueData[item] = new OFormValue(data[item]);
@@ -1499,7 +1499,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     return valueData;
   }
 
-  protected getCurrentKeysValues(): Object {
+  protected getCurrentKeysValues(): object {
     return this.formNavigation.getCurrentKeysValues();
   }
 

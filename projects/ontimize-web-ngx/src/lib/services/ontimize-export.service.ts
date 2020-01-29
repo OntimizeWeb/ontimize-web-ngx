@@ -30,7 +30,7 @@ export class OntimizeExportService {
     this._appConfig = this._config.getConfiguration();
   }
 
-  public getDefaultServiceConfiguration(serviceName?: string): Object {
+  public getDefaultServiceConfiguration(serviceName?: string): object {
     const loginService: LoginService = this.injector.get(LoginService);
     const configuration = this._config.getServiceConfiguration();
 

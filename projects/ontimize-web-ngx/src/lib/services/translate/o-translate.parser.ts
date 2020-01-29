@@ -12,7 +12,7 @@ export class OTranslateParser extends TranslateDefaultParser {
     }
     return expr.replace(this.templateMatcher, (substring: string, index: string) => {
       const argValue = Util.isDefined(params[index]) ? params[index] : '';
-      return !isNaN(parseInt(index)) ? argValue : substring;
+      return !isNaN(parseInt(index, 10)) ? argValue : substring;
     });
   }
 }

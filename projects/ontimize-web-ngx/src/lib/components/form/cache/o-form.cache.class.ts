@@ -7,8 +7,8 @@ import { OFormComponent } from '../o-form.component';
 
 export class OFormCacheClass {
 
-  protected initialDataCache: Object = {};
-  protected formDataCache: Object;
+  protected initialDataCache: object = {};
+  protected formDataCache: object;
   protected valueChangesStack: Array<any> = [];
   protected _componentsSubscritpions: any = {};
   protected blockCaching: boolean = false;

@@ -163,9 +163,9 @@ export class ODaterangepickerDirective implements OnDestroy {
     this._onChange(val);
     this._changeDetectorRef.markForCheck();
   }
-  @Output('change') onChange: EventEmitter<Object> = new EventEmitter();
-  @Output('rangeClicked') rangeClicked: EventEmitter<Object> = new EventEmitter();
-  @Output('datesUpdated') datesUpdated: EventEmitter<Object> = new EventEmitter();
+  @Output() onChange: EventEmitter<object> = new EventEmitter();
+  @Output() rangeClicked: EventEmitter<object> = new EventEmitter();
+  @Output() datesUpdated: EventEmitter<object> = new EventEmitter();
 
   private _popupComponentRef: ComponentRef<DaterangepickerComponent> | null;
   private _calendarPortal: ComponentPortal<DaterangepickerComponent>;

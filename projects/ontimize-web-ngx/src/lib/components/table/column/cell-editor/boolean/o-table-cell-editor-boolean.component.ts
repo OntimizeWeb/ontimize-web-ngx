@@ -88,11 +88,11 @@ export class OTableCellEditorBooleanComponent extends OBaseTableCellEditor {
   }
 
   protected parseNumberInputs() {
-    this.trueValue = parseInt(this.trueValue);
+    this.trueValue = parseInt(this.trueValue, 10);
     if (isNaN(this.trueValue)) {
       this.trueValue = 1;
     }
-    this.falseValue = parseInt(this.falseValue);
+    this.falseValue = parseInt(this.falseValue, 10);
     if (isNaN(this.falseValue)) {
       this.falseValue = 0;
     }
@@ -143,7 +143,7 @@ export class OTableCellEditorBooleanComponent extends OBaseTableCellEditor {
         result = this.translateService.get(value);
         break;
       case 'number':
-        result = parseInt(value);
+        result = parseInt(value, 10);
         break;
       default:
         break;

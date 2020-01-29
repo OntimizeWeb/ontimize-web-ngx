@@ -83,8 +83,8 @@ export class OFormServiceComponent extends OFormDataComponent {
   public setValueOnValueChange: string;
 
   /* Outputs */
-  public onSetValueOnValueChange: EventEmitter<Object> = new EventEmitter<Object>();
-  public onDataLoaded: EventEmitter<Object> = new EventEmitter<Object>();
+  public onSetValueOnValueChange: EventEmitter<object> = new EventEmitter<object>();
+  public onDataLoaded: EventEmitter<object> = new EventEmitter<object>();
 
   /* Internal variables */
   protected dataArray: any[] = [];
@@ -318,7 +318,7 @@ export class OFormServiceComponent extends OFormDataComponent {
     let value = val;
 
     if (this.valueColumnType === Codes.TYPE_INT) {
-      const parsed = parseInt(value);
+      const parsed = parseInt(value, 10);
       if (!isNaN(parsed)) {
         value = parsed;
       }

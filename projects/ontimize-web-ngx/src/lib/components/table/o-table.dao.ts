@@ -10,9 +10,9 @@ export class OTableDao {
 
   /** Stream that emits whenever the data has been modified. */
   dataChange = new BehaviorSubject<any[]>([]);
-  sqlTypesChange = new BehaviorSubject<Object>({});
+  sqlTypesChange = new BehaviorSubject<object>({});
   get data(): any[] { return this.dataChange.value; }
-  get sqlTypes(): Object { return this.sqlTypesChange.value; }
+  get sqlTypes(): object { return this.sqlTypesChange.value; }
 
   constructor(
     private dataService: any,
@@ -32,7 +32,7 @@ export class OTableDao {
     return merge(...filters.map((kv => this.dataService[this.methods.delete](kv, this.entity))));
   }
 
-  insertQuery(av: Object, sqlTypes?: Object): Observable<any> {
+  insertQuery(av: object, sqlTypes?: object): Observable<any> {
     if (this.usingStaticData) {
       this.data.push(av);
       return of(this.data);
@@ -41,7 +41,7 @@ export class OTableDao {
     }
   }
 
-  updateQuery(kv: Object, av: Object, sqlTypes?: Object): Observable<any> {
+  updateQuery(kv: object, av: object, sqlTypes?: object): Observable<any> {
     if (this.usingStaticData) {
       return of(this.data);
     } else {

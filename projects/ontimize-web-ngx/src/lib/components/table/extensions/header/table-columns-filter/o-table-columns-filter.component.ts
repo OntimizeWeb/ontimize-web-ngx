@@ -64,7 +64,7 @@ export class OTableColumnsFilterComponent implements OnInit {
   }
 
   protected _columnsArray: Array<string> = [];
-  protected columnsComparisonProperty: Object = {};
+  protected columnsComparisonProperty: object = {};
 
   constructor(
     protected injector: Injector,

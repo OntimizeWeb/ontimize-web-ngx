@@ -192,7 +192,7 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
     return 'OFormLayoutManagerComponent_' + this.oattr;
   }
 
-  public getDataToStore(): Object {
+  public getDataToStore(): object {
     // only storing in tab mode
     if (this.isTabMode() && Util.isDefined(this.oTabGroup)) {
       return this.oTabGroup.getDataToStore();
@@ -205,7 +205,7 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
     this.updateStateStorage();
   }
 
-  public getLabelFromUrlParams(urlParams: Object): string {
+  public getLabelFromUrlParams(urlParams: object): string {
     let label = '';
     const keys = Object.keys(urlParams);
     keys.forEach((param, i) => {
@@ -216,7 +216,7 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
 
   public getFormDataFromLabelColumns(data: any) {
     const formData = {};
-    Object.keys(data).map(x => {
+    Object.keys(data).forEach(x => {
       if (this.labelColsArray.indexOf(x) > -1) {
         formData[x] = data[x];
       }

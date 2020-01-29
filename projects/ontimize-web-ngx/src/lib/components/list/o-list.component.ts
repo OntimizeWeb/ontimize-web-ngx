@@ -220,7 +220,7 @@ export class OListComponent extends OServiceComponent implements AfterContentIni
     return this.odense;
   }
 
-  public onListItemClicked(onNext: (item: OListItemDirective) => void): Object {
+  public onListItemClicked(onNext: (item: OListItemDirective) => void): object {
     return ObservableWrapper.subscribe(this.onClick, onNext);
   }
 
@@ -242,7 +242,7 @@ export class OListComponent extends OServiceComponent implements AfterContentIni
     ObservableWrapper.callEmit(this.onDoubleClick, data);
   }
 
-  public getDataToStore(): Object {
+  public getDataToStore(): object {
     const dataToStore = super.getDataToStore();
     if (!this.storePaginationState) {
       delete dataToStore['queryRecordOffset'];
@@ -310,7 +310,7 @@ export class OListComponent extends OServiceComponent implements AfterContentIni
     return this.selection.isSelected(item);
   }
 
-  public updateSelectedState(item: Object, isSelected: boolean): void {
+  public updateSelectedState(item: object, isSelected: boolean): void {
     const selectedIndexes = this.state.selectedIndexes || [];
     const itemIndex = this.dataResponseArray.indexOf(item);
     if (isSelected && selectedIndexes.indexOf(itemIndex) === -1) {
@@ -371,7 +371,7 @@ export class OListComponent extends OServiceComponent implements AfterContentIni
     this.sortColArray = ServiceUtils.parseSortColumns(sortColumnsParam);
   }
 
-  public getQueryArguments(filter: Object, ovrrArgs?: OQueryDataArgs): any[] {
+  public getQueryArguments(filter: object, ovrrArgs?: OQueryDataArgs): any[] {
     const queryArguments = super.getQueryArguments(filter, ovrrArgs);
     if (this.pageable) {
       queryArguments[6] = this.sortColArray;

@@ -20,7 +20,7 @@ export class OListItemDirective implements OnInit, OnDestroy {
   public mdDoubleClick: EventEmitter<any> = new EventEmitter();
 
   @Input('o-list-item')
-  public modelData: Object;
+  public modelData: object;
 
   @Input('selectable')
   public selectable: boolean = false;
@@ -83,7 +83,7 @@ export class OListItemDirective implements OnInit, OnDestroy {
     }
   }
 
-  public onClick(onNext: (item: OListItemDirective) => void): Object {
+  public onClick(onNext: (item: OListItemDirective) => void): object {
     return ObservableWrapper.subscribe(this.mdClick, onNext);
   }
 
@@ -93,7 +93,7 @@ export class OListItemDirective implements OnInit, OnDestroy {
     }
   }
 
-  public onDoubleClick(onNext: (item: OListItemDirective) => void): Object {
+  public onDoubleClick(onNext: (item: OListItemDirective) => void): object {
     return ObservableWrapper.subscribe(this.mdDoubleClick, onNext);
   }
 

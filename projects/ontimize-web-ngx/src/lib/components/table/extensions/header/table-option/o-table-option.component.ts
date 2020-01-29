@@ -36,7 +36,7 @@ export class OTableOptionComponent {
   public static DEFAULT_OUTPUTS_O_TABLE_OPTION = DEFAULT_OUTPUTS_O_TABLE_OPTION;
   public static O_TABLE_OPTION_ACTIVE_CLASS = 'o-table-option-active';
 
-  onClick: EventEmitter<Object> = new EventEmitter<Object>();
+  onClick: EventEmitter<object> = new EventEmitter<object>();
 
   oattr: string;
   @InputConverter()

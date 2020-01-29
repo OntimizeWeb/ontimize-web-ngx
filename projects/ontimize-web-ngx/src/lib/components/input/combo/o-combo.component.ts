@@ -311,7 +311,7 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
     const valueArr: any[] = this.multiple ? val : [val];
     if (this.valueColumnType === Codes.TYPE_INT) {
       valueArr.forEach((item, index) => {
-        const parsed = parseInt(item);
+        const parsed = parseInt(item, 10);
         if (!isNaN(parsed)) {
           valueArr[index] = parsed;
         }

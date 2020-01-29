@@ -68,7 +68,7 @@
     "no-input-rename": true,
     "no-inputs-metadata-property": false,
     "no-output-native": true,
-    "no-output-on-prefix": true,
+    "no-output-on-prefix": false,
     "no-output-rename": true,
     "no-outputs-metadata-property": false,
     "template-banana-in-box": true,
@@ -76,6 +76,7 @@
     "use-lifecycle-interface": true,
     "use-pipe-transform-interface": true,
     "variable-name": false,
-    "object-literal-shorthand": false
+    "object-literal-shorthand": false,
+    "align": false
   }
 }

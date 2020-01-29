@@ -115,7 +115,7 @@ export class OGridComponent extends OServiceComponent implements AfterViewChecke
   }
   set pageSizeOptions(val: number[]) {
     if (!(val instanceof Array)) {
-      val = Util.parseArray(String(val)).map(a => parseInt(a));
+      val = Util.parseArray(String(val)).map(a => parseInt(a, 10));
     }
     this._pageSizeOptions = val;
   }
@@ -415,7 +415,7 @@ export class OGridComponent extends OServiceComponent implements AfterViewChecke
     return this.dataResponseArray.length;
   }
 
-  public getQueryArguments(filter: Object, ovrrArgs?: OQueryDataArgs): any[] {
+  public getQueryArguments(filter: object, ovrrArgs?: OQueryDataArgs): any[] {
     const queryArguments = super.getQueryArguments(filter, ovrrArgs);
     // queryArguments[3] = this.getSqlTypesForFilter(queryArguments[1]);
     if (this.pageable && Util.isDefined(this.sortColumn)) {
@@ -486,7 +486,7 @@ export class OGridComponent extends OServiceComponent implements AfterViewChecke
     this.queryData(void 0, queryArgs);
   }
 
-  public getDataToStore(): Object {
+  public getDataToStore(): object {
     const dataToStore = super.getDataToStore();
     dataToStore['currentPage'] = this.currentPage;
 

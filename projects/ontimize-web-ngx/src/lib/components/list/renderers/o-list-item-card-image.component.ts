@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, forwardRef, Inject, Injector, NgModule, Optional, Renderer2, ViewEncapsulation } from '@angular/core';
+import { Component, ElementRef, EventEmitter, forwardRef, Inject, Injector, NgModule, Optional, Renderer2, ViewEncapsulation, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { Util } from '../../../util/util';
@@ -39,7 +39,7 @@ export const DEFAULT_OUTPUTS_O_LIST_ITEM_CARD_IMAGE = [
     '[class.o-list-item-card-image]': 'true'
   }
 })
-export class OListItemCardImageComponent extends OListItemCardRenderer {
+export class OListItemCardImageComponent extends OListItemCardRenderer implements AfterViewInit {
 
   protected _content: string;
   protected _avatar: string;
@@ -49,7 +49,7 @@ export class OListItemCardImageComponent extends OListItemCardRenderer {
   @InputConverter()
   protected _collapsed: boolean = true;
 
-  onIconClick: EventEmitter<Object> = new EventEmitter<Object>();
+  onIconClick: EventEmitter<object> = new EventEmitter<object>();
 
   constructor(
     elRef: ElementRef,

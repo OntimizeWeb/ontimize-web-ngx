@@ -5,13 +5,13 @@ import { Codes } from './codes';
 
 
 export interface IDataService {
-  getDefaultServiceConfiguration(serviceName?: string): Object;
+  getDefaultServiceConfiguration(serviceName?: string): object;
   configureService(config: any): void;
-  query(kv?: Object, av?: Array<string>, entity?: string, sqltypes?: Object): Observable<any>;
-  advancedQuery(kv?: Object, av?: Array<string>, entity?: string, sqltypes?: Object, offset?: number, pagesize?: number, orderby?: Array<Object>): Observable<any>;
-  insert(av: Object, entity?: string, sqltypes?: Object): Observable<any>;
-  update(kv: Object, av: Object, entity?: string, sqltypes?: Object): Observable<any>;
-  'delete'(kv: Object, entity?: string, sqltypes?: Object): Observable<any>;
+  query(kv?: object, av?: Array<string>, entity?: string, sqltypes?: object): Observable<any>;
+  advancedQuery(kv?: object, av?: Array<string>, entity?: string, sqltypes?: object, offset?: number, pagesize?: number, orderby?: Array<object>): Observable<any>;
+  insert(av: object, entity?: string, sqltypes?: object): Observable<any>;
+  update(kv: object, av: object, entity?: string, sqltypes?: object): Observable<any>;
+  'delete'(kv: object, entity?: string, sqltypes?: object): Observable<any>;
 }
 
 export interface IPermissionsService {
@@ -62,7 +62,7 @@ export class Util {
    * @param  pKeysArray Array of strings. Accepted format: key | key:alias
    * @returns Object
    */
-  static parseParentKeysEquivalences(pKeysArray: Array<string>, separator: string = ':'): Object {
+  static parseParentKeysEquivalences(pKeysArray: Array<string>, separator: string = ':'): object {
     const equivalences = {};
     if (pKeysArray && pKeysArray.length > 0) {
       pKeysArray.forEach(item => {
@@ -85,7 +85,7 @@ export class Util {
     return equivalences;
   }
 
-  static encodeParentKeys(parentKeys: Object): string {
+  static encodeParentKeys(parentKeys: object): string {
     let encoded: string = '';
     if (parentKeys) {
       encoded = Base64.encode(JSON.stringify(parentKeys));
@@ -93,7 +93,7 @@ export class Util {
     return encoded;
   }
 
-  static decodeParentKeys(parentKeys: string): Object {
+  static decodeParentKeys(parentKeys: string): object {
     let decoded = {};
     if (parentKeys && parentKeys.length > 0) {
       const d = Base64.decode(parentKeys);
@@ -162,12 +162,12 @@ export class Util {
       return false;
     }
 
-    for (var i = 0; i < aProps.length; i++) {
+    for (let i = 0; i < aProps.length; i++) {
       const propName = aProps[i];
       // If values of same property are not equal, objects are not equivalent
       let bValue = b[propName];
       if (typeof a[propName] === 'number') {
-        const intB = parseInt(bValue);
+        const intB = parseInt(bValue, 10);
         bValue = isNaN(intB) ? bValue : intB;
       }
       if (a[propName] !== bValue) {
@@ -262,7 +262,7 @@ export class Util {
    * Returns a list with all the values from the provided object.
    * @param obj the object
    */
-  static getValuesFromObject(obj: Object = {}): Array<any> {
+  static getValuesFromObject(obj: object = {}): Array<any> {
     const array: Array<any> = [];
     Object.keys(obj).forEach(key => {
       if (typeof obj[key] === 'object') {
@@ -298,7 +298,7 @@ export class Util {
     return typeof value === 'string' ? value.toLowerCase().endsWith('px') : false;
   }
 
-  static extractPixelsValue(value: any, defaultValue: number = undefined): number {
+  static extractPixelsValue(value: any, defaultValue?: number): number {
     let result: number = typeof value === 'number' ? value : undefined;
     if (Util.checkPixelsValueString(value)) {
       const parsed = parseFloat(value.substr(0, value.length - 'px'.length));
@@ -325,7 +325,7 @@ export class Util {
 
   /**
    *  Return string with escaped special character
-   **/
+   */
   static escapeSpecialCharacter(S: string): string {
 
     const str = String(S);
@@ -333,7 +333,7 @@ export class Util {
     const cpList = Array.from(str[Symbol.iterator]());
 
     const cuList = [];
-    for (let c of cpList) {
+    for (const c of cpList) {
       // i. If c is a SpecialCharacter then do:
       if ('^$\\.*+?()[]{}|'.indexOf(c) !== -1) {
         // a. Append "\" to cuList.

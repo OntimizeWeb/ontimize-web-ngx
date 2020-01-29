@@ -25,16 +25,16 @@ export class OFormNavigationClass {
   protected queryParams: any;
 
   protected urlParamSub: Subscription;
-  protected urlParams: Object;
+  protected urlParams: object;
 
   protected urlSub: Subscription;
   protected urlSegments: any = [];
 
   protected combinedNavigationStream: Observable<any>;
   protected combinedNavigationStreamSubscription: Subscription;
-  protected onUrlParamChangedStream: EventEmitter<Object> = new EventEmitter<Object>();
+  protected onUrlParamChangedStream: EventEmitter<boolean> = new EventEmitter<boolean>();
 
-  public navigationStream: EventEmitter<Object> = new EventEmitter<Object>();
+  public navigationStream: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   protected onCloseTabSubscription: Subscription;
   protected cacheStateSubscription: Subscription;
@@ -166,7 +166,7 @@ export class OFormNavigationClass {
     });
   }
 
-  getCurrentKeysValues(): Object {
+  getCurrentKeysValues(): object {
     let filter = {};
     if (this.urlParams) {
       filter = this.getFilterFromObject(this.urlParams);
@@ -217,7 +217,7 @@ export class OFormNavigationClass {
     return this.queryParams;
   }
 
-  setUrlParams(val: Object) {
+  setUrlParams(val: object) {
     this.urlParams = val;
   }
 
@@ -281,7 +281,7 @@ export class OFormNavigationClass {
     }
   }
 
-  stayInRecordAfterInsert(insertedKeys: Object) {
+  stayInRecordAfterInsert(insertedKeys: object) {
     if (this.formLayoutManager) {
       this.form.setInitialMode();
       const self = this;

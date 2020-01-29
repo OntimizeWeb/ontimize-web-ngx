@@ -73,7 +73,7 @@ export interface Config {
   serviceType?: any;
 
   // servicesConfiguration: [Object]: Configuration parameters of application services.
-  servicesConfiguration?: Object;
+  servicesConfiguration?: object;
 
   // appMenuConfiguration?: MenuGroup[];
   appMenuConfiguration?: MenuRootItem[];

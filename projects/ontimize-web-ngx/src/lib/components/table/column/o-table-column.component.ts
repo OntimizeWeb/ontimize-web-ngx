@@ -268,13 +268,13 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
   autoCommit: boolean;
 
   /* output cell renderer action */
-  onClick: EventEmitter<Object> = new EventEmitter<Object>();
+  onClick: EventEmitter<object> = new EventEmitter<object>();
 
   /* output cell editor */
-  editionStarted: EventEmitter<Object> = new EventEmitter<Object>();
-  editionCancelled: EventEmitter<Object> = new EventEmitter<Object>();
-  editionCommitted: EventEmitter<Object> = new EventEmitter<Object>();
-  onPostUpdateRecord: EventEmitter<Object> = new EventEmitter<Object>();
+  editionStarted: EventEmitter<object> = new EventEmitter<object>();
+  editionCancelled: EventEmitter<object> = new EventEmitter<object>();
+  editionCommitted: EventEmitter<object> = new EventEmitter<object>();
+  onPostUpdateRecord: EventEmitter<object> = new EventEmitter<object>();
 
   @InputConverter()
   asyncLoad: boolean = false;

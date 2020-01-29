@@ -14,12 +14,12 @@ import { OntimizeServiceResponseParser } from './parser/o-service-response.parse
 export class OntimizeService implements IAuthService, IDataService {
 
   public entity: string = '';
-  public kv: Object = {};
+  public kv: object = {};
   public av: Array<string> = [];
-  public sqltypes: Object = {};
+  public sqltypes: object = {};
   public pagesize: number = 10;
   public offset: number = 0;
-  public orderby: Array<Object> = [];
+  public orderby: Array<object> = [];
   public totalsize: number = -1;
 
   protected httpClient: HttpClient;
@@ -38,7 +38,7 @@ export class OntimizeService implements IAuthService, IDataService {
     this.responseParser = this.injector.get(OntimizeServiceResponseParser);
   }
 
-  public getDefaultServiceConfiguration(serviceName?: string): Object {
+  public getDefaultServiceConfiguration(serviceName?: string): object {
     const loginService = this.injector.get(LoginService);
     const configuration = this._config.getServiceConfiguration();
 
@@ -114,7 +114,7 @@ export class OntimizeService implements IAuthService, IDataService {
     return dataObservable.pipe(share());
   }
 
-  public query(kv?: Object, av?: Array<string>, entity?: string, sqltypes?: Object): Observable<any> {
+  public query(kv?: object, av?: Array<string>, entity?: string, sqltypes?: object): Observable<any> {
     entity = (Util.isDefined(entity)) ? entity : this.entity;
     // TODO improve this -> merge between global conf and specific params of method calling
     kv = (Util.isDefined(kv)) ? kv : this.kv;
@@ -145,8 +145,8 @@ export class OntimizeService implements IAuthService, IDataService {
     return dataObservable.pipe(share());
   }
 
-  public advancedQuery(kv?: Object, av?: Array<string>, entity?: string, sqltypes?: Object,
-    offset?: number, pagesize?: number, orderby?: Array<Object>): Observable<any> {
+  public advancedQuery(kv?: object, av?: Array<string>, entity?: string, sqltypes?: object,
+    offset?: number, pagesize?: number, orderby?: Array<object>): Observable<any> {
 
     entity = (Util.isDefined(entity)) ? entity : this.entity;
     // TODO improve this -> merge between global conf and specific params of method calling
@@ -184,7 +184,7 @@ export class OntimizeService implements IAuthService, IDataService {
     return dataObservable.pipe(share());
   }
 
-  public insert(av: Object = {}, entity?: string, sqltypes?: Object): Observable<any> {
+  public insert(av: object = {}, entity?: string, sqltypes?: object): Observable<any> {
     entity = (Util.isDefined(entity)) ? entity : this.entity;
     av = (Util.isDefined(av)) ? av : this.av;
     sqltypes = (Util.isDefined(sqltypes)) ? sqltypes : this.sqltypes;
@@ -211,7 +211,7 @@ export class OntimizeService implements IAuthService, IDataService {
     return dataObservable.pipe(share());
   }
 
-  public update(kv: Object = {}, av: Object = {}, entity?: string, sqltypes?: Object): Observable<any> {
+  public update(kv: object = {}, av: object = {}, entity?: string, sqltypes?: object): Observable<any> {
     entity = (Util.isDefined(entity)) ? entity : this.entity;
     kv = (Util.isDefined(kv)) ? kv : this.kv;
     av = (Util.isDefined(av)) ? av : this.av;
@@ -240,7 +240,7 @@ export class OntimizeService implements IAuthService, IDataService {
     return dataObservable.pipe(share());
   }
 
-  public delete(kv: Object = {}, entity?: string, sqltypes?: Object): Observable<any> {
+  public delete(kv: object = {}, entity?: string, sqltypes?: object): Observable<any> {
     entity = (Util.isDefined(entity)) ? entity : this.entity;
     kv = (Util.isDefined(kv)) ? kv : this.kv;
     sqltypes = (Util.isDefined(sqltypes)) ? sqltypes : this.sqltypes;

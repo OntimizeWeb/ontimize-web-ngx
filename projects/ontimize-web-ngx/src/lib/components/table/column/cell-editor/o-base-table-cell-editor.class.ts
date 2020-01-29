@@ -50,13 +50,13 @@ export class OBaseTableCellEditor implements OnInit {
 
   formGroup: FormGroup = new FormGroup({});
 
-  editionStarted: EventEmitter<Object> = new EventEmitter<Object>();
-  editionCancelled: EventEmitter<Object> = new EventEmitter<Object>();
-  editionCommitted: EventEmitter<Object> = new EventEmitter<Object>();
+  editionStarted: EventEmitter<object> = new EventEmitter<object>();
+  editionCancelled: EventEmitter<object> = new EventEmitter<object>();
+  editionCommitted: EventEmitter<object> = new EventEmitter<object>();
 
-  onPostUpdateRecord: EventEmitter<Object> = new EventEmitter<Object>();
+  onPostUpdateRecord: EventEmitter<object> = new EventEmitter<object>();
 
-  public editorCreated: EventEmitter<Object> = new EventEmitter<Object>();
+  public editorCreated: EventEmitter<object> = new EventEmitter<object>();
 
   inputRef: any;
 
