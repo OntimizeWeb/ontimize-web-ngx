@@ -8,7 +8,8 @@
       "ngx-material-timepicker": "ngx-material-timepicker",
       "@ngx-translate/http-loader": "@ngx-translate/http-loader",
       "@churchs19/ng2-dnd": "@churchs19/ng2-dnd",
-      "@ngx-translate/core": "@ngx-translate/core"
+      "@ngx-translate/core": "@ngx-translate/core",
+      "@angular/core": "@angular/core"
     }
   }
 }

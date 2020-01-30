@@ -1,9 +1,14 @@
 import { async, TestBed } from '@angular/core/testing';
-import { OTableColumnComponent, O_TABLE_CELL_EDITORS, O_TABLE_CELL_RENDERERS, O_TABLE_DIALOGS, O_TABLE_FOOTER_COMPONENTS, O_TABLE_HEADER_COMPONENTS } from '../../ontimize-web-ngx.module';
+import { OTableColumnComponent } from '../table/column/o-table-column.component';
+import { O_TABLE_CELL_EDITORS } from '../table/column/cell-editor/cell-editor';
+import { O_TABLE_CELL_RENDERERS } from '../table/column/cell-renderer/cell-renderer';
+import { O_TABLE_DIALOGS } from '../table/extensions/dialog/o-table-dialog-components';
+import { O_TABLE_FOOTER_COMPONENTS } from '../table/extensions/footer/o-table-footer-components';
+import { O_TABLE_HEADER_COMPONENTS } from '../table/extensions/header/o-table-header-components';
 import { OTableColumnCalculatedComponent } from './column/calculated/o-table-column-calculated.component';
 import { OTableContextMenuComponent } from './extensions/contextmenu/o-table-context-menu.component';
 import { OTableRowDirective } from './extensions/row/o-table-row.directive';
-import { OTableExpandedFooter } from './o-table-expanded-footer.directive';
+import { OTableExpandedFooterDirective } from '../table/o-table-expanded-footer.directive';
 import { OTableComponent } from './o-table.component';
 
 
@@ -17,7 +22,7 @@ describe('OTableComponent', () => {
         OTableColumnCalculatedComponent,
         OTableContextMenuComponent,
         OTableRowDirective,
-        OTableExpandedFooter,
+        OTableExpandedFooterDirective,
         ...O_TABLE_CELL_RENDERERS,
         ...O_TABLE_CELL_EDITORS,
         ...O_TABLE_DIALOGS,

@@ -11,7 +11,7 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
   styleUrls: ['../../ontimize.scss', '../../theme.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class OntimizeWebNgxComponent implements OnInit {
+export class OntimizeWebComponent implements OnInit {
 
   constructor() { }
 

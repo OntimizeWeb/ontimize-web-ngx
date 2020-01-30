@@ -12,6 +12,8 @@
     "importHelpers": true,
     "allowSyntheticDefaultImports": true,
     "target": "es5",
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
     "module": "es2015",
     "types": [
       "jasmine",

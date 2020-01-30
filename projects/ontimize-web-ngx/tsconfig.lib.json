@@ -15,6 +15,7 @@
     "pretty": true,
     "stripInternal": true,
     "outDir": "dist",
+    "noUnusedLocals": false,
     "noUnusedParameters": false,
     "allowSyntheticDefaultImports": true,
     "types": [
