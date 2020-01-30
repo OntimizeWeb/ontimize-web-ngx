@@ -1,4 +1,4 @@
-# OntimizeWebNgx Angular 8 Beta :+1:
+# OntimizeWebNgx Angular 8 Beta
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.3.21.
 
