@@ -10,6 +10,14 @@ Run `ng generate component component-name` to generate a new component. You can 
 
 Run `npm run build` to build the project. The build artifacts will be stored in the `dist/` directory. It will create the distribution folder, copy the styles and pack this to use it as a npm package in a .tgz file.
 
+The npm script `build` executes the following commands:
+
+- ng build
+- scss-bundle -p scss-bundle-ontimize.config.json (Bundles all scss linked files in one file that will be the one we import in our project)
+- scss-bundle -p scss-bundle-theme.config.json (With this 2 tasks we will be able to use variables, mixins, keyframes ... in our project)
+- copyfiles -u 3 ./projects/ontimize-web-ngx/assets/svg/ontimize-icon-set.svg ./dist/ontimize-web-ngx/assets (Copy the assets folder to distribution folder)
+- cd dist/ontimize-web-ngx && npm pack (From the distribution folder we create a .tgz file to import in our project)
+
 ## Running unit tests
 
 Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
