@@ -1,4 +1,4 @@
-# OntimizeWebNgx
+# OntimizeWebNgx Angular 8 Beta
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.3.21.
 
@@ -17,6 +17,8 @@ The npm script `build` executes the following commands:
     - scss-bundle -p scss-bundle-theme.config.json (With this 2 tasks we will be able to use variables, mixins, keyframes ... in our project)
     - copyfiles -u 3 ./projects/ontimize-web-ngx/assets/svg/ontimize-icon-set.svg ./dist/ontimize-web-ngx/assets (Copy the assets folder to distribution folder)
     - cd dist/ontimize-web-ngx && npm pack (From the distribution folder we create a .tgz file to import in our project)
+
+We are working on solve those warning messages.
 
 ## Running unit tests
 
