@@ -8,7 +8,7 @@ Run `ng generate component component-name` to generate a new component. You can 
 
 ## Build
 
-Run `npm run build` to build the project. The build artifacts will be stored in the `dist/` directory. It will create the distribution folder, copy the styles and pack this to use it as a npm package in a .tgz file.
+Run `npm run build` to build the library. It will create the distribution folder, copy the styles and pack this to use it as a npm package in a .tgz file but you can run those tasks separately. 
 
 The npm script `build` executes the following commands:
 
