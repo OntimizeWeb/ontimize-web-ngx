@@ -5,7 +5,7 @@
     "baseUrl": "./",
     "target": "es5",
     "module": "es2015",
-    "moduleResolution": "classic",
+    "moduleResolution": "node",
     "removeComments": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": false,
@@ -14,7 +14,7 @@
     "listFiles": true,
     "pretty": true,
     "stripInternal": true,
-    "outDir": "dist",
+    "outDir": "dist",    
     "noUnusedLocals": false,
     "noUnusedParameters": false,
     "allowSyntheticDefaultImports": true,
@@ -30,14 +30,14 @@
     "lib": [
       "dom",
       "es2015"
-    ]
+    ],
   },
   "exclude": [
     "node_modules",
     "dist"
   ],
   "include": [
-    "src/lib/ontimize-web-ngx.module.ts"   
+    "src/lib/ontimize-web-ngx.module.ts"
   ],
   "angularCompilerOptions": {
     "skipMetadataEmit": false,

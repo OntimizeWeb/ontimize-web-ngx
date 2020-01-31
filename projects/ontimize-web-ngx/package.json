@@ -43,7 +43,7 @@
     "@angular/compiler": "^8.2.14",
     "@angular/compiler-cli": "^8.2.14",
     "@angular/forms": "^8.2.14",
-    "@angular/http": "^8.2.14",
+    "@angular/http": "7.2.0-rc.0",
     "@angular/platform-browser": "^8.2.14",
     "@angular/platform-browser-dynamic": "^8.2.14",
     "@angular/platform-server": "^8.2.14",
@@ -70,7 +70,7 @@
     "@angular/core": "^8.2.14",
     "@angular/flex-layout": "8.0.0-beta.27",
     "@angular/forms": "^8.2.14",
-    "@angular/http": "^8.2.14",
+    "@angular/http": "7.2.0-rc.0",
     "@angular/material": "^8.2.3",
     "@angular/material-moment-adapter": "^8.2.3",
     "@angular/platform-browser": "^8.2.14",
@@ -130,5 +130,6 @@
     "webpack": "^4.41.5",
     "ws": "^7.2.1",
     "zone.js": "^0.10.2"
-  }
+  },
+  "sideEffects": false
 }
