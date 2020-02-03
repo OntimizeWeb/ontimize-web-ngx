@@ -1,6 +1,17 @@
-import { Component, Inject, forwardRef, EventEmitter, Injector, ViewEncapsulation, ElementRef, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
-import { OTableComponent } from '../../../o-table.component';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  EventEmitter,
+  forwardRef,
+  Inject,
+  Injector,
+  ViewEncapsulation,
+} from '@angular/core';
+
 import { InputConverter } from '../../../../../decorators/input-converter';
+import { OTableComponent } from '../../../o-table.component';
 
 export const DEFAULT_INPUTS_O_TABLE_OPTION = [
   'oattr: attr',

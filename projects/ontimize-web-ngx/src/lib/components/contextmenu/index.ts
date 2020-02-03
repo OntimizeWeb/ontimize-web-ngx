@@ -7,3 +7,5 @@ export * from './context-menu-item/o-context-menu-item.component';
 export * from './context-menu-group/o-context-menu-group.component';
 export * from './context-menu-separator/o-context-menu-separator.component';
 export * from './o-content-menu.class';
+
+export * from './o-context-menu.module';

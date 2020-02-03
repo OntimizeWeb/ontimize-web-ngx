@@ -6,3 +6,6 @@ export * from './form-layout/o-form-layout-manager.component';
 export * from './form-layout/tabgroup/options/o-form-layout-tabgroup-options.component';
 export * from './form-layout/dialog/options/o-form-layout-dialog-options.component';
 
+export * from './app-layout/o-app-layout.module';
+export * from './card-menu-layout/o-card-menu-layout.module';
+export * from './form-layout/o-form-layout-manager.module';

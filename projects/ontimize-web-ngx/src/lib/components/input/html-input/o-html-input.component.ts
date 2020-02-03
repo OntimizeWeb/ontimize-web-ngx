@@ -1,14 +1,12 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Injector, NgModule, ViewChild, OnInit } from '@angular/core';
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { CommonModule } from '@angular/common';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Injector, OnInit, ViewChild } from '@angular/core';
 import { ValidatorFn, Validators } from '@angular/forms';
 import { MatTab, MatTabGroup } from '@angular/material';
 
-import { OSharedModule } from '../../../shared/shared.module';
 import { NumberConverter } from '../../../decorators/input-converter';
 import { OFormComponent } from '../../form/o-form.component';
-import { CKEditorComponent, CKEditorModule } from '../../material/ckeditor/ck-editor.component';
-import { OFormDataComponent, DEFAULT_INPUTS_O_FORM_DATA_COMPONENT } from '../../o-form-data-component.class';
+import { CKEditorComponent } from '../../material/ckeditor/ck-editor.component';
+import { DEFAULT_INPUTS_O_FORM_DATA_COMPONENT, OFormDataComponent } from '../../o-form-data-component.class';
 
 export const DEFAULT_INPUTS_O_HTML_INPUT = [
   'oattr: attr',
@@ -180,10 +178,3 @@ export class OHTMLInputComponent extends OFormDataComponent implements OnInit, A
     return this._maxLength;
   }
 }
-
-@NgModule({
-  declarations: [OHTMLInputComponent],
-  imports: [CKEditorModule, CommonModule, OSharedModule],
-  exports: [OHTMLInputComponent]
-})
-export class OHTMLInputModule { }

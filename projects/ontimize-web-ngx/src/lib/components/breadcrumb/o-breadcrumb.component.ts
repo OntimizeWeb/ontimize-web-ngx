@@ -1,12 +1,10 @@
-import { AfterViewInit, Component, Injector, NgModule, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { ActivatedRouteSnapshot, Router, RouterModule } from '@angular/router';
+import { AfterViewInit, Component, Injector, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { Util } from '../../util/util';
-import { Codes } from '../../util/codes';
-import { OSharedModule } from '../../shared/shared.module';
-// import { NavigationService, OFormComponent, ONavigationItem, Util } from '../../ontimize-web-ngx.module';
+
 import { NavigationService, ONavigationItem } from '../../services/navigation.service';
+import { Codes } from '../../util/codes';
+import { Util } from '../../util/util';
 import { OFormComponent } from '../form/o-form.component';
 
 export const DEFAULT_INPUTS_O_BREADCRUMB = [
@@ -118,10 +116,3 @@ export class OBreadcrumbComponent implements AfterViewInit, OnDestroy, OnInit {
     this._displayTextloaded = arg;
   }
 }
-
-@NgModule({
-  imports: [CommonModule, OSharedModule, RouterModule],
-  exports: [OBreadcrumbComponent],
-  declarations: [OBreadcrumbComponent]
-})
-export class OBreadcrumbModule { }

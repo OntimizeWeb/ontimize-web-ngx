@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, EventEmitter, Injector, ModuleWithProviders, NgModule, OnDestroy, Pipe, PipeTransform } from '@angular/core';
+import { ChangeDetectorRef, Injector, ModuleWithProviders, NgModule, OnDestroy, Pipe, PipeTransform } from '@angular/core';
 
 import { OTranslateService } from '../services/translate/o-translate.service';
 import { Util } from '../util/util';

@@ -1,7 +1,8 @@
-import { NgModule, Injector } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { PermissionsGuardService } from './permissions-can-activate.guard';
+import { Injector, NgModule } from '@angular/core';
+
 import { OntimizePermissionsService } from './ontimize-permissions.service';
+import { PermissionsGuardService } from './permissions-can-activate.guard';
 import { permissionsServiceFactory } from './permissions-service.provider';
 import { PermissionsService } from './permissions.service';
 

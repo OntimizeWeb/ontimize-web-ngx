@@ -1,15 +1,22 @@
 import { CommonModule } from '@angular/common';
-import { Router, RouterModule } from '@angular/router';
-import { OAppSidenavImageModule } from './image/o-app-sidenav-image.component';
-import { OSharedModule } from '../../shared/shared.module';
-import { OAppSidenavComponent } from './o-app-sidenav.component';
-import { OAppSidenavMenuItemModule } from './menu-item/o-app-sidenav-menu-item.module';
-import { OAppSidenavMenuGroupModule } from './menu-group/o-app-sidenav-menu-group.component';
 import { NgModule } from '@angular/core';
+import { RouterModule } from '@angular/router';
+
+import { OSharedModule } from '../../shared/shared.module';
+import { OLanguageSelectorModule } from '../language-selector/o-language-selector.module';
+import { OAppSidenavImageComponent } from './image/o-app-sidenav-image.component';
+import { OAppSidenavMenuGroupComponent } from './menu-group/o-app-sidenav-menu-group.component';
+import { OAppSidenavMenuItemComponent } from './menu-item/o-app-sidenav-menu-item.component';
+import { OAppSidenavComponent } from './o-app-sidenav.component';
 
 @NgModule({
-    imports: [CommonModule, OAppSidenavMenuGroupModule, OAppSidenavImageModule, OAppSidenavMenuItemModule, OSharedModule, RouterModule],
-    declarations: [OAppSidenavComponent],
+    imports: [CommonModule, OSharedModule, RouterModule, OLanguageSelectorModule],
+    declarations: [
+        OAppSidenavComponent,
+        OAppSidenavMenuGroupComponent,
+        OAppSidenavImageComponent,
+        OAppSidenavMenuItemComponent
+    ],
     exports: [OAppSidenavComponent]
 })
 export class OAppSidenavModule { }

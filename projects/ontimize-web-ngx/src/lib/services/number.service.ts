@@ -1,6 +1,7 @@
 import { Injector } from '@angular/core';
-import { Util } from '../util/util';
+
 import { AppConfig, Config } from '../config/app-config';
+import { Util } from '../util/util';
 
 export class NumberService {
 
@@ -67,7 +68,7 @@ export class NumberService {
       return void 0;
     }
     // Format value
-    let formattedIntValue = intValue;
+    let formattedIntValue;
     if (Util.isDefined(locale)) {
       formattedIntValue = new Intl.NumberFormat(locale).format(intValue);
     } else if (!Util.isDefined(thousandSeparator)) {

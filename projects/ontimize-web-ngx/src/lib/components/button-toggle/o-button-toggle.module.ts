@@ -1,9 +1,9 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 
 import { OSharedModule } from '../../shared/shared.module';
-import { OButtonToggleComponent } from './o-button-toggle.component';
 import { OButtonToggleGroupComponent } from './o-button-toggle-group/o-button-toggle-group.component';
+import { OButtonToggleComponent } from './o-button-toggle.component';
 
 @NgModule({
   declarations: [

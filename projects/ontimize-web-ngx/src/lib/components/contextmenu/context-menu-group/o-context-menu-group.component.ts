@@ -1,7 +1,10 @@
-import { Component, ContentChildren, forwardRef, OnInit, QueryList, AfterContentInit } from '@angular/core';
+import { AfterContentInit, Component, ContentChildren, forwardRef, OnInit, QueryList } from '@angular/core';
 
+import {
+  DEFAULT_INPUTS_O_CONTEXT_MENU_ITEM,
+  OContextMenuItemComponent,
+} from '../context-menu-item/o-context-menu-item.component';
 import { OComponentMenuItems } from '../o-content-menu.class';
-import { DEFAULT_INPUTS_O_CONTEXT_MENU_ITEM, OContextMenuItemComponent } from '../context-menu-item/o-context-menu-item.component';
 
 export const DEFAULT_CONTEXT_MENU_GROUP_INPUTS = [
   ...DEFAULT_INPUTS_O_CONTEXT_MENU_ITEM,

@@ -1,13 +1,23 @@
-import { ChangeDetectionStrategy, Component, ComponentFactoryResolver, EventEmitter, Inject, Injector, OnInit, forwardRef } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ComponentFactoryResolver,
+  EventEmitter,
+  forwardRef,
+  Inject,
+  Injector,
+  OnInit,
+} from '@angular/core';
 import { FormControl, ValidatorFn, Validators } from '@angular/forms';
-import { OColumn, OTableComponent } from '../../../o-table.component';
+
+import { InputConverter } from '../../../../../decorators/input-converter';
 import { OPermissions } from '../../../../../services/permissions/permissions.service';
-import { OTranslateService } from '../../../../../services/translate/o-translate.service';
 import { SnackBarService } from '../../../../../services/snackbar.service';
+import { OTranslateService } from '../../../../../services/translate/o-translate.service';
 import { Observable, ObservableWrapper } from '../../../../../util/async';
 import { Util } from '../../../../../util/util';
-import { InputConverter } from '../../../../../decorators/input-converter';
 import { OBaseTableCellEditor } from '../../../column/cell-editor/o-base-table-cell-editor.class';
+import { OColumn, OTableComponent } from '../../../o-table.component';
 
 export const DEFAULT_INPUTS_O_TABLE_INSERTABLE_ROW = [
   // columns [string]: columns that can be inserted, separated by ';'. Default: all visible columns.

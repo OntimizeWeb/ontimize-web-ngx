@@ -1,15 +1,9 @@
-import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, NgModule, ViewChild, ViewEncapsulation, InjectionToken, Injectable } from '@angular/core';
-import { RouterModule } from '@angular/router';
-import { OAppHeaderModule } from '../../components/app-header/o-app-header.component';
-import { InputConverter } from '../../decorators/input-converter';
-import { OSharedModule } from '../../shared/shared.module';
-import { Util } from '../../util/util';
-import { Codes, OAppLayoutMode, OSidenavMode } from '../../util/codes';
-import { OAppLayoutHeaderComponent } from './app-layout-header/o-app-layout-header.component';
-import { OAppLayoutSidenavComponent } from './app-layout-sidenav/o-app-layout-sidenav.component';
+import { Component, EventEmitter, ViewChild, ViewEncapsulation } from '@angular/core';
+
 import { OAppSidenavComponent } from '../../components/app-sidenav/o-app-sidenav.component';
-import { OAppSidenavModule } from '../../components/app-sidenav/o-app-sidenav.module';
+import { InputConverter } from '../../decorators/input-converter';
+import { Codes, OAppLayoutMode, OSidenavMode } from '../../util/codes';
+import { Util } from '../../util/util';
 
 export const DEFAULT_INPUTS_O_APP_LAYOUT = [
   'mode',
@@ -120,10 +114,3 @@ export class OAppLayoutComponent {
     opened ? this.afterOpenSidenav.emit() : this.afterCloseSidenav.emit();
   }
 }
-
-@NgModule({
-  imports: [CommonModule, OSharedModule, RouterModule, OAppSidenavModule, OAppHeaderModule],
-  declarations: [OAppLayoutComponent, OAppLayoutHeaderComponent, OAppLayoutSidenavComponent],
-  exports: [OAppLayoutComponent, OAppLayoutHeaderComponent, OAppLayoutSidenavComponent]
-})
-export class OAppLayoutModule { }

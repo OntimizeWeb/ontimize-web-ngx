@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { MatIconRegistry } from '@angular/material';
 import { DomSanitizer } from '@angular/platform-browser';
-import { Observer, Observable } from 'rxjs';
+import { Observable, Observer } from 'rxjs';
 
 @Injectable()
 export class OntimizeMatIconRegistry {

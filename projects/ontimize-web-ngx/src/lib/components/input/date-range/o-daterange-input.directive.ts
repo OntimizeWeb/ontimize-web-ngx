@@ -51,9 +51,9 @@ export class ODaterangepickerDirective implements OnDestroy {
   @Input()
   showDropdowns: boolean;
   @Input()
-  isInvalidDate: Function;
+  isInvalidDate: () => boolean;
   @Input()
-  isCustomDate: Function;
+  isCustomDate: () => boolean;
   // @Input()
   // showClearButton: boolean;
 

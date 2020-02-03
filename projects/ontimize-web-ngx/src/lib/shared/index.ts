@@ -1,5 +1,6 @@
 export * from './material/custom.material.module';
 export * from './material/o-mat-error/o-mat-error';
+export * from './material/o-mat-error/o-mat-error.module';
 export * from './components/dialog/o-dialog.component';
 export * from './components/dialog/o-dialog.config';
 export * from './components/error403/o-error-403.component';

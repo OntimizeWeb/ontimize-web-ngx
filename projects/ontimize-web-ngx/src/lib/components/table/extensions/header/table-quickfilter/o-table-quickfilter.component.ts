@@ -1,16 +1,29 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Inject, Injector, OnDestroy, OnInit, ViewChild, ViewEncapsulation, forwardRef } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  EventEmitter,
+  forwardRef,
+  Inject,
+  Injector,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+  ViewEncapsulation,
+} from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { MatCheckboxChange, MatMenu } from '@angular/material';
-import { OColumn, OTableComponent, OTableOptions } from '../../../o-table.component';
-import { OInputsOptions, O_INPUTS_OPTIONS } from '../../../../../config/app-config';
-import { Subscription, fromEvent } from 'rxjs';
+import { fromEvent, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
-import { FormControl } from '@angular/forms';
-import { SQLTypes } from '../../../../../util/sqltypes';
-
-import { IExpression, FilterExpressionUtils } from '../../../../../util/filter-expression.utils';
+import { O_INPUTS_OPTIONS, OInputsOptions } from '../../../../../config/app-config';
+import { FilterExpressionUtils, IExpression } from '../../../../../util/filter-expression.utils';
 import { Util } from '../../../../../util/util';
-import { OTableCellRendererServiceComponent } from '../../../column/cell-renderer/service/o-table-cell-renderer-service.component';
+import {
+  OTableCellRendererServiceComponent,
+} from '../../../column/cell-renderer/service/o-table-cell-renderer-service.component';
+import { OColumn, OTableComponent, OTableOptions } from '../../../o-table.component';
 
 export const DEFAULT_INPUTS_O_TABLE_QUICKFILTER = [];
 

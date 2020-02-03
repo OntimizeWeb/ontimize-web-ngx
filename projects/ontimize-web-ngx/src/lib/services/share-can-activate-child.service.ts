@@ -1,7 +1,8 @@
-import { Injector, Injectable } from '@angular/core';
-import { Router, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
-import { PermissionsService } from './permissions/permissions.service';
+import { Injectable, Injector } from '@angular/core';
+import { ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/router';
+
 import { PermissionsGuardService } from './permissions/permissions-can-activate.guard';
+import { PermissionsService } from './permissions/permissions.service';
 
 @Injectable()
 export class ShareCanActivateChildService {

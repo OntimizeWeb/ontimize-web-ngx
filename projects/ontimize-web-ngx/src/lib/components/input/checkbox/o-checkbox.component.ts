@@ -1,13 +1,15 @@
-import { CommonModule } from '@angular/common';
-import { Component, ElementRef, forwardRef, Inject, Injector, NgModule, Optional, ViewEncapsulation } from '@angular/core';
+import { Component, ElementRef, forwardRef, Inject, Injector, Optional, ViewEncapsulation } from '@angular/core';
 import { ThemePalette } from '@angular/material';
-import { OSharedModule } from '../../../shared/shared.module';
+
 import { Util } from '../../../util/util';
 import { OFormComponent } from '../../form/o-form.component';
 import { OFormValue } from '../../form/OFormValue';
-import { DEFAULT_INPUTS_O_FORM_DATA_COMPONENT, DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT, OFormDataComponent } from '../../o-form-data-component.class';
+import {
+  DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,
+  DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT,
+  OFormDataComponent,
+} from '../../o-form-data-component.class';
 import { OFormControl } from '../o-form-control.class';
-
 
 export const DEFAULT_INPUTS_O_CHECKBOX = [
   // true-value: true value. Default: true.
@@ -153,10 +155,3 @@ export class OCheckboxComponent extends OFormDataComponent {
   }
 
 }
-
-@NgModule({
-  declarations: [OCheckboxComponent],
-  imports: [CommonModule, OSharedModule],
-  exports: [OCheckboxComponent]
-})
-export class OCheckboxModule { }

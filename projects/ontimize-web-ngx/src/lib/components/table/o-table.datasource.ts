@@ -312,13 +312,7 @@ export class OTableDataSource extends DataSource<any> {
     const tableColumns = this._tableOptions.columns.filter((oCol) => {
       return oCol.visible && oCol.renderer && oCol.renderer.getCellData;
     });
-    return data.map((row) => {
-      const obj = Object.assign({}, row);
-      tableColumns.forEach((oCol: OColumn) => {
-        obj[oCol.attr] = oCol.renderer.getCellData(row[oCol.attr], row);
-      });
-      return obj;
-    });
+    return this.getRenderersData(data, tableColumns);
   }
 
   protected getAllData(render?: boolean, onlyVisibleColumns?: boolean) {
@@ -326,7 +320,11 @@ export class OTableDataSource extends DataSource<any> {
     if (onlyVisibleColumns) {
       tableColumns = this._tableOptions.columns.filter((oCol) => oCol.visible);
     }
-    return this.filteredData.map((row) => {
+    return this.getRenderersData(this.filteredData, tableColumns);
+  }
+
+  private getRenderersData(data: any[], tableColumns: OColumn[]): any[] {
+    return data.map((row) => {
       // render each column
       const obj = Object.assign({}, row);
       tableColumns.forEach((oCol: OColumn) => {

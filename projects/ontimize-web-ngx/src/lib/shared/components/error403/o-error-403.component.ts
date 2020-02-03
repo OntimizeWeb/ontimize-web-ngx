@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation, Injector } from '@angular/core';
+import { Component, Injector, ViewEncapsulation } from '@angular/core';
 import { NavigationExtras, Router } from '@angular/router';
 
 import { NavigationService, ONavigationItem } from '../../../services/navigation.service';

@@ -1,15 +1,28 @@
-import { CommonModule } from '@angular/common';
-import { Component, ElementRef, forwardRef, HostBinding, Inject, Injector, NgModule, Optional, ViewChild, ViewEncapsulation } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  forwardRef,
+  HostBinding,
+  Inject,
+  Injector,
+  Optional,
+  ViewChild,
+  ViewEncapsulation,
+} from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material';
 import { DomSanitizer } from '@angular/platform-browser';
+
 import { InputConverter } from '../../decorators/input-converter';
-import { OSharedModule } from '../../shared/shared.module';
 import { Util } from '../../util/util';
 import { OFormComponent } from '../form/o-form.component';
 import { OFormValue } from '../form/OFormValue';
 import { OFormControl } from '../input/o-form-control.class';
-import { DEFAULT_INPUTS_O_FORM_DATA_COMPONENT, DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT, OFormDataComponent } from '../o-form-data-component.class';
+import {
+  DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,
+  DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT,
+  OFormDataComponent,
+} from '../o-form-data-component.class';
 import { OFullScreenDialogComponent } from './fullscreen/fullscreen-dialog.component';
 
 
@@ -258,11 +271,3 @@ export class OImageComponent extends OFormDataComponent {
   }
 
 }
-
-@NgModule({
-  declarations: [OImageComponent, OFullScreenDialogComponent],
-  imports: [CommonModule, OSharedModule],
-  exports: [OImageComponent, OFullScreenDialogComponent],
-  entryComponents: [OFullScreenDialogComponent]
-})
-export class OImageModule { }

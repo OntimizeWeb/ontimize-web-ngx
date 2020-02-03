@@ -1,4 +1,5 @@
 import { AbstractControlOptions, AsyncValidatorFn, FormControl, ValidatorFn } from '@angular/forms';
+
 import { OFormDataComponent } from '../o-form-data-component.class';
 
 export class OFormControl extends FormControl {

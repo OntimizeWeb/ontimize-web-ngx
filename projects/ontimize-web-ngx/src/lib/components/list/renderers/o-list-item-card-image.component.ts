@@ -1,9 +1,18 @@
-import { Component, ElementRef, EventEmitter, forwardRef, Inject, Injector, NgModule, Optional, Renderer2, ViewEncapsulation, AfterViewInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  EventEmitter,
+  forwardRef,
+  Inject,
+  Injector,
+  Optional,
+  Renderer2,
+  ViewEncapsulation,
+} from '@angular/core';
 
-import { Util } from '../../../util/util';
-import { OSharedModule } from '../../../shared/shared.module';
 import { InputConverter } from '../../../decorators/input-converter';
+import { Util } from '../../../util/util';
 import { OListItemComponent } from '../list-item/o-list-item.component';
 import { OListItemCardRenderer } from './o-list-item-card-renderer.class';
 
@@ -113,9 +122,3 @@ export class OListItemCardImageComponent extends OListItemCardRenderer implement
 
 }
 
-@NgModule({
-  declarations: [OListItemCardImageComponent],
-  imports: [CommonModule, OSharedModule],
-  exports: [OListItemCardImageComponent]
-})
-export class OListItemCardImageModule { }

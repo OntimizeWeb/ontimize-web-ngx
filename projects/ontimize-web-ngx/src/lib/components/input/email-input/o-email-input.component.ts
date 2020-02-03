@@ -1,18 +1,13 @@
-import {
-  Component, Inject, Injector, forwardRef, ElementRef, OnInit,
-  Optional,
-  NgModule,
-  ViewEncapsulation
-} from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, ElementRef, forwardRef, Inject, Injector, OnInit, Optional, ViewEncapsulation } from '@angular/core';
 import { ValidatorFn } from '@angular/forms';
-import { OSharedModule } from '../../../shared/shared.module';
+
+import { OValidators } from '../../../validators/o-validators';
 import { OFormComponent } from '../../form/o-form.component';
 import {
-  OTextInputModule, OTextInputComponent, DEFAULT_INPUTS_O_TEXT_INPUT,
-  DEFAULT_OUTPUTS_O_TEXT_INPUT
+  DEFAULT_INPUTS_O_TEXT_INPUT,
+  DEFAULT_OUTPUTS_O_TEXT_INPUT,
+  OTextInputComponent,
 } from '../text-input/o-text-input.component';
-import { OValidators } from '../../../validators/o-validators';
 
 export const DEFAULT_INPUTS_O_EMAIL_INPUT = [
   ...DEFAULT_INPUTS_O_TEXT_INPUT
@@ -50,12 +45,4 @@ export class OEmailInputComponent extends OTextInputComponent implements OnInit 
     return validators;
   }
 
-}
-
-@NgModule({
-  declarations: [OEmailInputComponent],
-  imports: [OSharedModule, CommonModule, OTextInputModule],
-  exports: [OEmailInputComponent, OTextInputModule]
-})
-export class OEmailInputModule {
 }

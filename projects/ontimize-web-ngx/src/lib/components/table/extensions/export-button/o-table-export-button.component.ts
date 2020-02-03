@@ -20,7 +20,7 @@ export const DEFAULT_OUTPUTS_O_TABLE_EXPORT_BUTTON = [
   inputs: DEFAULT_INPUTS_O_TABLE_EXPORT_BUTTON,
   outputs: DEFAULT_OUTPUTS_O_TABLE_EXPORT_BUTTON
 })
-export class OTableExportButton {
+export class OTableExportButtonComponent {
 
   public icon: string;
   public svgIcon: string;

@@ -2,15 +2,16 @@ import { EventEmitter, Injectable, Injector } from '@angular/core';
 import { Router } from '@angular/router';
 import { combineLatest, Observable } from 'rxjs';
 import { share } from 'rxjs/operators';
+
 import { AppConfig, Config } from '../config/app-config';
 import { DialogService } from '../services/dialog.service';
 import { OntimizeService } from '../services/ontimize.service';
-import { ORemoteConfigurationService } from '../services/remote-config.service';
 import { PermissionsService } from '../services/permissions/permissions.service';
-import { Codes } from '../util/codes';
-import { IAuthService } from '../util/util';
+import { ORemoteConfigurationService } from '../services/remote-config.service';
 import { ObservableWrapper } from '../util/async';
+import { Codes } from '../util/codes';
 import { ServiceUtils } from '../util/service.utils';
+import { IAuthService } from '../util/util';
 
 export interface SessionInfo {
   id?: number;

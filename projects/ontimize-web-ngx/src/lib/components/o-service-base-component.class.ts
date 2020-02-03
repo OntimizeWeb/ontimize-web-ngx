@@ -1,15 +1,15 @@
-import { ChangeDetectorRef, HostListener, Injector, NgZone, SimpleChange, OnChanges } from '@angular/core';
+import { ChangeDetectorRef, HostListener, Injector, NgZone, OnChanges, SimpleChange } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+
 import { InputConverter } from '../decorators/input-converter';
 import { DialogService } from '../services/dialog.service';
 import { ILocalStorageComponent, LocalStorageService } from '../services/local-storage.service';
 import { OntimizeService } from '../services/ontimize.service';
-import { Util } from '../util/util';
 import { Codes } from '../util/codes';
-import { OFormComponent } from './form/o-form.component';
 import { OQueryDataArgs, ServiceUtils } from '../util/service.utils';
-
+import { Util } from '../util/util';
+import { OFormComponent } from './form/o-form.component';
 
 export const DEFAULT_INPUTS_O_SERVICE_BASE_COMPONENT = [
   // attr [string]: list identifier. It is mandatory if data are provided through the data attribute. Default: entity (if set).
@@ -132,10 +132,10 @@ export class OServiceBaseComponent implements ILocalStorageComponent, OnChanges 
   storeState: boolean = true;
   @InputConverter()
   queryWithNullParentKeys: boolean = false;
-  queryFallbackFunction: Function;
-  // insertFallbackFunction: Function;
-  // updateFallbackFunction: Function;
-  // deleteFallbackFunction: Function;
+  queryFallbackFunction: (err: any) => void;
+  // insertFallbackFunction: (err: any) => void;
+  // updateFallbackFunction: (err: any) => void;
+  // deleteFallbackFunction: (err: any) => void;
   /* end of inputs variables */
 
   /* parsed inputs variables */

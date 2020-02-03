@@ -1,4 +1,3 @@
-
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({ name: 'orderBy', pure: false })

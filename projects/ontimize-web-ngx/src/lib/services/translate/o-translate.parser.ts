@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { TranslateDefaultParser } from '@ngx-translate/core';
+
 import { Util } from '../../util/util';
 
 @Injectable()
@@ -16,5 +17,3 @@ export class OTranslateParser extends TranslateDefaultParser {
     });
   }
 }
-
-

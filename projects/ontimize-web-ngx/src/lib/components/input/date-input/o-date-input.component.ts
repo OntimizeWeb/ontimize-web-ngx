@@ -1,21 +1,30 @@
-import { AfterViewChecked, Component, ElementRef, Inject, Injector, NgModule, OnDestroy, OnInit, Optional, ViewChild, forwardRef } from '@angular/core';
-import { DEFAULT_INPUTS_O_TEXT_INPUT, DEFAULT_OUTPUTS_O_TEXT_INPUT } from '../text-input/o-text-input.component';
-import { DateAdapter, MAT_DATE_LOCALE, MatDatepicker, MatDatepickerInput, MatDatepickerInputEvent } from '@angular/material';
-import { IFormValueOptions, OFormValue } from '../../form/OFormValue';
+import {
+  AfterViewChecked,
+  Component,
+  ElementRef,
+  forwardRef,
+  Inject,
+  Injector,
+  OnDestroy,
+  OnInit,
+  Optional,
+  ViewChild,
+} from '@angular/core';
 import { MediaChange, MediaObserver } from '@angular/flex-layout';
-import { OFormDataComponent, OValueChangeEvent } from '../../o-form-data-component.class';
-import { OSharedModule } from '../../../shared/shared.module';
-import { OntimizeMomentDateAdapter } from '../../../shared/material/custom.material.module';
-
-import { CommonModule } from '@angular/common';
-import { InputConverter } from '../../../decorators/input-converter';
+import { DateAdapter, MAT_DATE_LOCALE, MatDatepicker, MatDatepickerInput, MatDatepickerInputEvent } from '@angular/material';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
-import { MomentService } from '../../../services/moment.service';
-import { OFormComponent } from '../../form/o-form.component';
-import { SQLTypes } from '../../../util/sqltypes';
-import { Subscription } from 'rxjs';
-import { Util } from '../../../util/util';
 import moment from 'moment';
+import { Subscription } from 'rxjs';
+
+import { InputConverter } from '../../../decorators/input-converter';
+import { MomentService } from '../../../services/moment.service';
+import { OntimizeMomentDateAdapter } from '../../../shared/material/custom.material.module';
+import { SQLTypes } from '../../../util/sqltypes';
+import { Util } from '../../../util/util';
+import { OFormComponent } from '../../form/o-form.component';
+import { IFormValueOptions, OFormValue } from '../../form/OFormValue';
+import { OFormDataComponent, OValueChangeEvent } from '../../o-form-data-component.class';
+import { DEFAULT_INPUTS_O_TEXT_INPUT, DEFAULT_OUTPUTS_O_TEXT_INPUT } from '../text-input/o-text-input.component';
 
 export type ODateValueType = 'string' | 'date' | 'timestamp' | 'iso-8601';
 
@@ -334,7 +343,7 @@ export class ODateInputComponent extends OFormDataComponent implements AfterView
     if (val instanceof OFormValue) {
       value = val.value;
     }
-    value = this.ensureODateValueType(value);
+    this.ensureODateValueType(value);
     super.setFormValue(value, options, setDirty);
   }
 
@@ -347,10 +356,3 @@ export class ODateInputComponent extends OFormDataComponent implements AfterView
   }
 
 }
-
-@NgModule({
-  declarations: [ODateInputComponent],
-  imports: [CommonModule, OSharedModule],
-  exports: [ODateInputComponent]
-})
-export class ODateInputModule { }

@@ -9,7 +9,6 @@ import { LoginService } from '../services/login.service';
 import { Codes } from '../util/codes';
 import { ServiceUtils } from '../util/service.utils';
 
-
 @Injectable()
 export class OntimizeExportService {
 

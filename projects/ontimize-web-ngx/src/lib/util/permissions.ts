@@ -24,7 +24,7 @@ export class PermissionsUtils {
 
   static registerDisabledChangesInDom(nativeElement: any, args?: any): MutationObserver {
     const callback: Function = args && args.callback ? args.callback : PermissionsUtils.setDisabledDOMElement;
-    const checkStringValue: boolean = args && args.checkStringValue ? true : false;
+    const checkStringValue: boolean = !!(args && args.checkStringValue);
     if (!Util.isDefined(nativeElement)) {
       return undefined;
     }

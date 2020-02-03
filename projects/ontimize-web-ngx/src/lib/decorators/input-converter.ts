@@ -19,7 +19,7 @@ export function NumberConverter(value: any) {
   return parseFloat(value.toString());
 }
 
-export function InputConverter(converter?: Function) {
+export function InputConverter(converter?: (value: any) => any) {
   function InputConverterInner(target: object, key: string) {
     if (converter === undefined) {
       const metadata = (Reflect as any).getMetadata('design:type', target, key);

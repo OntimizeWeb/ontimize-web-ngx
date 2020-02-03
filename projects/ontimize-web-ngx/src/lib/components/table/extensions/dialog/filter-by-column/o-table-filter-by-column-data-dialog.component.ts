@@ -1,12 +1,23 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, Inject, ViewChild, ViewEncapsulation } from '@angular/core';
-import { BehaviorSubject, Observable, fromEvent } from 'rxjs';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  Inject,
+  ViewChild,
+  ViewEncapsulation,
+} from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatCheckboxChange, MatDialogRef, MatSelectionList, MatSlideToggleChange } from '@angular/material';
+import { BehaviorSubject, fromEvent, Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
-import { FormControl } from '@angular/forms';
-import { OColumn } from '../../../o-table.component';
 import { Util } from '../../../../../util/util';
-import { IColumnValueFilter, ColumnValueFilterOperator } from '../../header/table-columns-filter/o-table-columns-filter.component';
+import { OColumn } from '../../../o-table.component';
+import {
+  ColumnValueFilterOperator,
+  IColumnValueFilter,
+} from '../../header/table-columns-filter/o-table-columns-filter.component';
 
 export interface ITableFilterByColumnDataInterface {
   value: any;

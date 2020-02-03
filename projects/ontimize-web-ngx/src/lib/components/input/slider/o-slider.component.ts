@@ -1,10 +1,12 @@
-import { CommonModule } from '@angular/common';
-import { Component, ElementRef, forwardRef, Inject, Injector, NgModule, Optional, ViewEncapsulation } from '@angular/core';
+import { Component, ElementRef, forwardRef, Inject, Injector, Optional, ViewEncapsulation } from '@angular/core';
+
 import { OFormComponent } from '../../../components/form/o-form.component';
 import { InputConverter } from '../../../decorators/input-converter';
-import { OSharedModule } from '../../../shared/shared.module';
-import { DEFAULT_INPUTS_O_FORM_DATA_COMPONENT, DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT, OFormDataComponent } from '../../o-form-data-component.class';
-
+import {
+  DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,
+  DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT,
+  OFormDataComponent,
+} from '../../o-form-data-component.class';
 
 export const DEFAULT_INPUTS_O_SLIDER_INPUT = [
   ...DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,
@@ -86,10 +88,3 @@ export class OSliderComponent extends OFormDataComponent {
   }
 
 }
-
-@NgModule({
-  declarations: [OSliderComponent],
-  imports: [CommonModule, OSharedModule],
-  exports: [OSliderComponent]
-})
-export class OSliderModule { }

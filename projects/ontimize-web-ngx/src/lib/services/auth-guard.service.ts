@@ -1,5 +1,6 @@
-import { Injector, Injectable } from '@angular/core';
-import { CanActivate, Router, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import { Injectable, Injector } from '@angular/core';
+import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
+
 import { LoginService } from '../services/login.service';
 import { OUserInfoService } from '../services/o-user-info.service';
 import { Codes } from '../util/codes';

@@ -1,7 +1,7 @@
 import { Component, forwardRef, OnInit } from '@angular/core';
 
-import { DEFAULT_INPUTS_O_CONTEXT_MENU_ITEMS, OComponentMenuItems } from '../o-content-menu.class';
 import { OContextMenuItemComponent } from '../context-menu-item/o-context-menu-item.component';
+import { DEFAULT_INPUTS_O_CONTEXT_MENU_ITEMS, OComponentMenuItems } from '../o-content-menu.class';
 
 export const DEFAULT_CONTEXT_MENU_ITEM_INPUTS = [...DEFAULT_INPUTS_O_CONTEXT_MENU_ITEMS];
 

@@ -1,4 +1,5 @@
-import { Component, Inject, Injector, forwardRef, ElementRef, ViewEncapsulation } from '@angular/core';
+import { Component, ElementRef, forwardRef, Inject, Injector, ViewEncapsulation } from '@angular/core';
+
 import { OBarMenuComponent } from '../o-bar-menu.component';
 import { OBaseMenuItemClass } from '../o-base-menu-item.class';
 

@@ -1,23 +1,41 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, forwardRef, Inject, Injector, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  forwardRef,
+  Inject,
+  Injector,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+  ViewEncapsulation,
+} from '@angular/core';
 import { MatDialog, MatMenu } from '@angular/material';
+import { Observable } from 'rxjs';
+
 import { InputConverter } from '../../../../../decorators/input-converter';
 import { DialogService } from '../../../../../services/dialog.service';
 import { OPermissions, OTableMenuPermissions } from '../../../../../services/permissions/permissions.service';
-import { OTranslateService } from '../../../../../services/translate/o-translate.service';
 import { SnackBarService } from '../../../../../services/snackbar.service';
-import { PermissionsUtils } from '../../../../../util/permissions';
+import { OTranslateService } from '../../../../../services/translate/o-translate.service';
 import { Codes } from '../../../../../util/codes';
+import { PermissionsUtils } from '../../../../../util/permissions';
 import { Util } from '../../../../../util/util';
-import { OColumn, OTableComponent } from '../../../o-table.component';
 import { OTableCellRendererImageComponent } from '../../../column/cell-renderer/image/o-table-cell-renderer-image.component';
-import { OTableOptionComponent } from '../table-option/o-table-option.component';
-import { Observable } from 'rxjs';
+import { OColumn, OTableComponent } from '../../../o-table.component';
+import {
+  OTableApplyConfigurationDialogComponent,
+} from '../../dialog/apply-configuration/o-table-apply-configuration-dialog.component';
 import { OTableExportConfiguration, OTableExportDialogComponent } from '../../dialog/export/o-table-export-dialog.component';
-import { OTableVisibleColumnsDialogComponent } from '../../dialog/visible-columns/o-table-visible-columns-dialog.component';
-import { OTableStoreFilterDialogComponent } from '../../dialog/store-filter/o-table-store-filter-dialog.component';
 import { OTableLoadFilterDialogComponent } from '../../dialog/load-filter/o-table-load-filter-dialog.component';
-import { OTableStoreConfigurationDialogComponent } from '../../dialog/store-configuration/o-table-store-configuration-dialog.component';
-import { OTableApplyConfigurationDialogComponent } from '../../dialog/apply-configuration/o-table-apply-configuration-dialog.component';
+import {
+  OTableStoreConfigurationDialogComponent,
+} from '../../dialog/store-configuration/o-table-store-configuration-dialog.component';
+import { OTableStoreFilterDialogComponent } from '../../dialog/store-filter/o-table-store-filter-dialog.component';
+import { OTableVisibleColumnsDialogComponent } from '../../dialog/visible-columns/o-table-visible-columns-dialog.component';
+import { OTableOptionComponent } from '../table-option/o-table-option.component';
 
 
 export const DEFAULT_INPUTS_O_TABLE_MENU = [

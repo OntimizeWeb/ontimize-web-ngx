@@ -1,14 +1,14 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable, Injector, HostListener } from '@angular/core';
-import { Observable, Subscriber, timer, Subscription } from 'rxjs';
+import { HostListener, Injectable, Injector } from '@angular/core';
+import { Observable, Subscriber, Subscription, timer } from 'rxjs';
 
 import { AppConfig } from '../config/app-config';
-import { ORemoteConfiguration, ORemoteConfigurationColumns } from '../types/remote-configuration.type';
 import { OntimizeServiceResponse } from '../types/ontimize-service-config.type';
+import { ORemoteConfiguration, ORemoteConfigurationColumns } from '../types/remote-configuration.type';
 import { Codes } from '../util/codes';
-import { LoginService, SessionInfo } from './login.service';
-import { LocalStorageService } from './local-storage.service';
 import { Util } from '../util/util';
+import { LocalStorageService } from './local-storage.service';
+import { LoginService, SessionInfo } from './login.service';
 
 @Injectable()
 export class ORemoteConfigurationService {

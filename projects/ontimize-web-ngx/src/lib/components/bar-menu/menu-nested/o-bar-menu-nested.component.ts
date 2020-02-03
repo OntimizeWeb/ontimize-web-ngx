@@ -1,4 +1,5 @@
 import { Component, Injector, ViewEncapsulation } from '@angular/core';
+
 import { AppMenuService, MenuRootItem } from '../../../services/app-menu.service';
 
 export const DEFAULT_INPUTS_O_BAR_MENU_NESTED = [

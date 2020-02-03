@@ -1,9 +1,14 @@
-
 import { Injector, QueryList, ViewChildren } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
+
+import {
+  O_MAT_ERROR_OPTIONS,
+  OMatErrorComponent,
+  OMatErrorOptions,
+} from '../../../../shared/material/o-mat-error/o-mat-error';
 import { Codes } from '../../../../util/codes';
 import { Util } from '../../../../util/util';
-import { O_MAT_ERROR_OPTIONS, OMatErrorComponent, OMatErrorOptions } from '../../../../shared/material/o-mat-error/o-mat-error';
+
 
 export class OTableBaseDialogClass {
 

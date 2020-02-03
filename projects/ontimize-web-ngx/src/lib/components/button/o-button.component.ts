@@ -1,7 +1,4 @@
-import { CommonModule } from '@angular/common';
-import { Component, NgModule, OnInit, ViewEncapsulation } from '@angular/core';
-import { OSharedModule } from '../../shared/shared.module';
-
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 
 export const DEFAULT_INPUTS_O_BUTTON = [
   'oattr: attr',
@@ -82,10 +79,3 @@ export class OButtonComponent implements OnInit {
     return this.otype === 'ICON';
   }
 }
-
-@NgModule({
-  declarations: [OButtonComponent],
-  imports: [CommonModule, OSharedModule],
-  exports: [OButtonComponent]
-})
-export class OButtonModule { }

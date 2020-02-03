@@ -1,16 +1,16 @@
 import {
+  AfterViewInit,
   Component,
+  ElementRef,
+  forwardRef,
   Inject,
   Injector,
-  forwardRef,
-  ViewEncapsulation,
-  ElementRef,
-  Renderer2,
+  OnInit,
   Optional,
-  NgModule
+  Renderer2,
+  ViewEncapsulation,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { OSharedModule } from '../../../shared/shared.module';
+
 import { OListItemComponent } from '../list-item/o-list-item.component';
 import { OListItemTextRenderer } from './o-list-item-text-renderer.class';
 
@@ -35,7 +35,7 @@ export const DEFAULT_OUTPUTS_O_LIST_ITEM_TEXT = [
     '[class.o-custom-list-item]': 'true'
   }
 })
-export class OListItemTextComponent extends OListItemTextRenderer {
+export class OListItemTextComponent extends OListItemTextRenderer implements OnInit, AfterViewInit {
 
   public ICON_POSITION_LEFT = 'left';
   public ICON_POSITION_RIGHT = 'right';
@@ -70,10 +70,3 @@ export class OListItemTextComponent extends OListItemTextRenderer {
     this._iconPosition = val;
   }
 }
-
-@NgModule({
-  declarations: [OListItemTextComponent],
-  imports: [CommonModule, OSharedModule],
-  exports: [OListItemTextComponent]
-})
-export class OListItemTextModule { }

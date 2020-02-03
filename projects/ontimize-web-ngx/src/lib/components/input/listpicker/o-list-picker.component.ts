@@ -1,13 +1,24 @@
-import { CommonModule } from '@angular/common';
-import { AfterViewInit, Component, ElementRef, EventEmitter, forwardRef, Inject, Injector, NgModule, OnChanges, OnInit, Optional, SimpleChange, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  EventEmitter,
+  forwardRef,
+  Inject,
+  Injector,
+  OnChanges,
+  OnInit,
+  Optional,
+  SimpleChange,
+  ViewChild,
+} from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatDialog, MatDialogConfig, MatDialogRef, MatInput } from '@angular/material';
+
 import { InputConverter } from '../../../decorators/input-converter';
 import { OntimizeService } from '../../../services/ontimize.service';
-import { OSharedModule } from '../../../shared/shared.module';
-import { IFormValueOptions } from '../../form/oFormValue';
 import { OFormComponent } from '../../form/o-form.component';
-import { OSearchInputModule } from '../../input/search-input/o-search-input.component';
+import { IFormValueOptions } from '../../form/oFormValue';
 import { OValueChangeEvent } from '../../o-form-data-component.class';
 import { OFormControl } from '../o-form-control.class';
 import { OFormServiceComponent } from '../o-form-service-component.class';
@@ -277,11 +288,3 @@ export class OListPickerComponent extends OFormServiceComponent implements After
   }
 
 }
-
-@NgModule({
-  declarations: [OListPickerDialogComponent, OListPickerComponent],
-  imports: [CommonModule, OSharedModule, OSearchInputModule],
-  exports: [OListPickerComponent],
-  entryComponents: [OListPickerDialogComponent]
-})
-export class OListPickerModule { }

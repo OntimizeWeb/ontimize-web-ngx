@@ -1,11 +1,21 @@
 import { OverlayRef } from '@angular/cdk/overlay';
-import { AfterViewInit, Component, ContentChildren, EventEmitter, HostListener, Injector, OnInit, QueryList, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ContentChildren,
+  EventEmitter,
+  HostListener,
+  Injector,
+  OnInit,
+  QueryList,
+  ViewChild,
+} from '@angular/core';
 import { MatMenuTrigger } from '@angular/material';
 
+import { OContextMenuItemComponent } from '../context-menu-item/o-context-menu-item.component';
 import { OComponentMenuItems } from '../o-content-menu.class';
 import { OContextMenuService } from '../o-context-menu.service';
 import { OWrapperContentMenuComponent } from './o-wrapper-content-menu/o-wrapper-content-menu.component';
-import { OContextMenuItemComponent } from '../context-menu-item/o-context-menu-item.component';
 
 export const DEFAULT_CONTEXT_MENU_CONTENT_INPUTS = [
   'menuItems',

@@ -1,5 +1,16 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, forwardRef, Input, NgModule, NgZone, OnDestroy, Output, ViewChild } from '@angular/core';
-import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  EventEmitter,
+  forwardRef,
+  Input,
+  NgZone,
+  OnDestroy,
+  Output,
+  ViewChild,
+} from '@angular/core';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { Util } from '../../../util/util';
 
@@ -12,6 +23,7 @@ const defaults = {
 
 @Component({
   moduleId: module.id,
+  // tslint:disable-next-line: component-selector
   selector: 'ck-editor',
   template: `<textarea #ck></textarea>`,
   providers: [{
@@ -175,12 +187,3 @@ export class CKEditorComponent implements AfterViewInit, OnDestroy, ControlValue
   }
 
 }
-
-@NgModule({
-  exports: [
-    FormsModule,
-    CKEditorComponent
-  ],
-  declarations: [CKEditorComponent]
-})
-export class CKEditorModule { }

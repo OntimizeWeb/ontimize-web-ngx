@@ -1,7 +1,22 @@
-import { CommonModule } from '@angular/common';
-import { AfterViewInit, Component, ContentChild, ContentChildren, CUSTOM_ELEMENTS_SCHEMA, ElementRef, EventEmitter, HostListener, Injector, NgModule, OnDestroy, OnInit, Optional, QueryList, SkipSelf, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ContentChild,
+  ContentChildren,
+  ElementRef,
+  EventEmitter,
+  HostListener,
+  Injector,
+  OnDestroy,
+  OnInit,
+  Optional,
+  QueryList,
+  SkipSelf,
+  ViewChild,
+} from '@angular/core';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material';
-import { ActivatedRoute, ActivatedRouteSnapshot, Route, Router, RouterModule } from '@angular/router';
+import { ActivatedRoute, ActivatedRouteSnapshot, Route, Router } from '@angular/router';
+
 import { OListComponent } from '../../components/list/o-list.component';
 import { OServiceComponent } from '../../components/o-service-component.class';
 import { OTableComponent } from '../../components/table/o-table.component';
@@ -10,15 +25,12 @@ import { ILocalStorageComponent, LocalStorageService } from '../../services/loca
 import { NavigationService } from '../../services/navigation.service';
 import { OFormLayoutManagerService } from '../../services/o-form-layout-manager.service';
 import { OTranslateService } from '../../services/translate/o-translate.service';
-import { OSharedModule } from '../../shared/shared.module';
 import { Util } from '../../util/util';
 import { OFormLayoutDialogComponent } from './dialog/o-form-layout-dialog.component';
 import { OFormLayoutDialogOptionsComponent } from './dialog/options/o-form-layout-dialog-options.component';
-import { OFormLayoutManagerContentDirective } from './directives/o-form-layout-manager-content.directive';
 import { CanActivateFormLayoutChildGuard } from './guards/o-form-layout-can-activate-child.guard';
 import { OFormLayoutTabGroupComponent } from './tabgroup/o-form-layout-tabgroup.component';
 import { OFormLayoutTabGroupOptionsComponent } from './tabgroup/options/o-form-layout-tabgroup-options.component';
-
 
 export interface IDetailComponentData {
   params: any;
@@ -471,27 +483,3 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
     return data;
   }
 }
-
-@NgModule({
-  imports: [CommonModule, OSharedModule, RouterModule],
-  declarations: [
-    OFormLayoutDialogComponent,
-    OFormLayoutManagerComponent,
-    OFormLayoutTabGroupComponent,
-    OFormLayoutManagerContentDirective,
-    OFormLayoutDialogOptionsComponent,
-    OFormLayoutTabGroupOptionsComponent
-  ],
-  exports: [
-    OFormLayoutManagerComponent,
-    OFormLayoutDialogOptionsComponent,
-    OFormLayoutTabGroupOptionsComponent
-  ],
-  entryComponents: [OFormLayoutDialogComponent],
-  providers: [{
-    provide: CanActivateFormLayoutChildGuard,
-    useClass: CanActivateFormLayoutChildGuard
-  }],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
-})
-export class OFormLayoutManagerModule { }

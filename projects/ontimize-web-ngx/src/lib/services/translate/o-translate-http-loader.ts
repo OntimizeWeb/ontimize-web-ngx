@@ -1,7 +1,7 @@
-import { Injector } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Injector } from '@angular/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { Observable, combineLatest } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
 import { share } from 'rxjs/operators';
 
 import { AppConfig } from '../../config/app-config';
@@ -61,7 +61,7 @@ export class OTranslateHttpLoader extends TranslateHttpLoader {
     let innerObserver: any;
     const dataObservable = new Observable(observer => innerObserver = observer).pipe(share());
 
-    combineLatest(...translationOrigins).subscribe((res: any[]) => {
+    combineLatest(translationOrigins).subscribe((res: any[]) => {
       const staticBundle = res[0] || {};
       const remoteBundle = res[1] || {};
       const allBundles = Object.assign(staticBundle, remoteBundle);

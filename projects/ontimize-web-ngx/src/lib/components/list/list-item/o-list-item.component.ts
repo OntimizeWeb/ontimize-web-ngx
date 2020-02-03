@@ -1,8 +1,20 @@
-import { CommonModule } from '@angular/common';
-import { AfterContentInit, Component, ContentChild, ContentChildren, ElementRef, forwardRef, Inject, Injector, NgModule, Optional, QueryList, Renderer2, ViewChild, ViewEncapsulation } from '@angular/core';
+import {
+  AfterContentInit,
+  Component,
+  ContentChild,
+  ContentChildren,
+  ElementRef,
+  forwardRef,
+  Inject,
+  Injector,
+  Optional,
+  QueryList,
+  Renderer2,
+  ViewChild,
+  ViewEncapsulation,
+} from '@angular/core';
 import { MatLine, MatListAvatarCssMatStyler, MatListItem } from '@angular/material';
 
-import { OSharedModule } from '../../../shared/shared.module';
 import { Util } from '../../../util/util';
 import { OListComponent } from '../o-list.component';
 
@@ -24,10 +36,10 @@ export class OListItemComponent implements AfterContentInit {
   @ContentChildren(MatLine)
   protected _lines: QueryList<MatLine>;
 
-  @ViewChild('innerListItem', {static: false})
+  @ViewChild('innerListItem', { static: false })
   protected _innerListItem: MatListItem;
 
-  @ContentChild(MatListAvatarCssMatStyler, {static: false})
+  @ContentChild(MatListAvatarCssMatStyler, { static: false })
   set _hasAvatar(avatar: MatListAvatarCssMatStyler) {
     const listItemNativeEl = this.elRef.nativeElement.getElementsByTagName('mat-list-item');
     if (listItemNativeEl && listItemNativeEl.length === 1) {
@@ -49,7 +61,7 @@ export class OListItemComponent implements AfterContentInit {
   public ngAfterContentInit(): void {
     const matLinesRef = this._lines;
     const ngAfterContentInitOriginal = this._innerListItem.ngAfterContentInit;
-    this._innerListItem.ngAfterContentInit = function () {
+    this._innerListItem.ngAfterContentInit = function() {
       const emptyDiv = this._element.nativeElement.querySelector('.mat-list-text:empty');
       if (emptyDiv) {
         emptyDiv.remove();
@@ -106,10 +118,3 @@ export class OListItemComponent implements AfterContentInit {
   }
 
 }
-
-@NgModule({
-  declarations: [OListItemComponent],
-  imports: [CommonModule, OSharedModule],
-  exports: [OListItemComponent]
-})
-export class OListItemModule { }

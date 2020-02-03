@@ -1,4 +1,4 @@
-import { Directive, ViewContainerRef, Input } from '@angular/core';
+import { Directive, Input, ViewContainerRef } from '@angular/core';
 
 @Directive({
   selector: '[o-form-layout-manager-content]',

@@ -1,6 +1,3 @@
-
-
-
 export type AlertType = 'info' | 'warn' | 'error';
 
 export class ODialogConfig {

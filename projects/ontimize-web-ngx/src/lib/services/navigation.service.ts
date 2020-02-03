@@ -1,12 +1,12 @@
-import { Injectable, Injector, EventEmitter } from '@angular/core';
-import { ActivatedRoute, NavigationEnd, Router, ActivatedRouteSnapshot, UrlSegment } from '@angular/router';
 import { Location } from '@angular/common';
+import { EventEmitter, Injectable, Injector } from '@angular/core';
+import { ActivatedRoute, ActivatedRouteSnapshot, NavigationEnd, Router, UrlSegment } from '@angular/router';
 import { Observable, ReplaySubject } from 'rxjs';
-import { map, filter } from 'rxjs/operators';
+import { filter, map } from 'rxjs/operators';
 
+import { ObservableWrapper } from '../util/async';
 import { Codes } from '../util/codes';
 import { Util } from '../util/util';
-import { ObservableWrapper } from '../util/async';
 import { ILocalStorageComponent, LocalStorageService } from './local-storage.service';
 
 export type ONavigationRoutes = {

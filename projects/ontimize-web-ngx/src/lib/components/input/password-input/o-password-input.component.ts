@@ -1,18 +1,10 @@
-import {
-  Component, Inject, Injector, forwardRef, ElementRef, OnInit,
-  Optional,
-  NgModule,
-  ViewEncapsulation
-} from '@angular/core';
+import { Component, ElementRef, forwardRef, Inject, Injector, OnInit, Optional, ViewEncapsulation } from '@angular/core';
 
-import { CommonModule } from '@angular/common';
-import { OSharedModule } from '../../../shared/shared.module';
 import { OFormComponent } from '../../form/o-form.component';
 import {
-  OTextInputModule,
-  OTextInputComponent,
   DEFAULT_INPUTS_O_TEXT_INPUT,
-  DEFAULT_OUTPUTS_O_TEXT_INPUT
+  DEFAULT_OUTPUTS_O_TEXT_INPUT,
+  OTextInputComponent,
 } from '../text-input/o-text-input.component';
 
 export const DEFAULT_INPUTS_O_PASSWORD_INPUT = [
@@ -44,12 +36,4 @@ export class OPasswordInputComponent extends OTextInputComponent implements OnIn
     super(form, elRef, injector);
   }
 
-}
-
-@NgModule({
-  declarations: [OPasswordInputComponent],
-  imports: [OSharedModule, CommonModule, OTextInputModule],
-  exports: [OPasswordInputComponent, OTextInputModule]
-})
-export class OPasswordInputModule {
 }

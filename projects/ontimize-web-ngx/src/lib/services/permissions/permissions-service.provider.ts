@@ -1,4 +1,5 @@
-import { Injector, Injectable } from '@angular/core';
+import { Injectable, Injector } from '@angular/core';
+
 import { AppConfig, Config } from '../../config/app-config';
 import { Util } from '../../util/util';
 import { OntimizeEEPermissionsService } from './ontimize-ee-permissions.service';

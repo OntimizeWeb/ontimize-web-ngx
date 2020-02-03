@@ -1,8 +1,9 @@
-import { OnInit, Injector, ElementRef, HostListener, OnDestroy } from '@angular/core';
+import { ElementRef, HostListener, Injector, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { PermissionsUtils } from '../../util/permissions';
+
 import { OPermissions } from '../../services/permissions/permissions.service';
 import { OTranslateService } from '../../services/translate/o-translate.service';
+import { PermissionsUtils } from '../../util/permissions';
 import { Util } from '../../util/util';
 import { OBarMenuComponent } from './o-bar-menu.component';
 
@@ -26,6 +27,9 @@ export class OBaseMenuItemClass implements OnInit, OnDestroy {
   protected translateService: OTranslateService;
   protected onLanguageChangeSubscription: Subscription;
 
+  protected permissions: OPermissions;
+  protected mutationObserver: MutationObserver;
+
   title: string;
   tooltip: string;
   icon: string;
@@ -36,9 +40,6 @@ export class OBaseMenuItemClass implements OnInit, OnDestroy {
 
   @HostListener('mouseover') onMouseover = () => this.isHovered = true;
   @HostListener('mouseout') onMouseout = () => this.isHovered = false;
-
-  protected permissions: OPermissions;
-  protected mutationObserver: MutationObserver;
 
   constructor(
     protected menu: OBarMenuComponent,
@@ -71,7 +72,7 @@ export class OBaseMenuItemClass implements OnInit, OnDestroy {
   }
 
   setDOMTitle() {
-    let tooltip = this.translateService.get(this.tooltip);
+    const tooltip = this.translateService.get(this.tooltip);
     this.elRef.nativeElement.setAttribute('title', tooltip);
   }
 

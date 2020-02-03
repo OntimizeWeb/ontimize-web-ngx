@@ -5,6 +5,7 @@
  * Code copied from '@angular/core/src/facade/async of RC4. On RC5 this classes are removed!!
  */
 import { EventEmitter } from '@angular/core';
+
 export { Observable, Subject } from 'rxjs';
 
 export function noop() {

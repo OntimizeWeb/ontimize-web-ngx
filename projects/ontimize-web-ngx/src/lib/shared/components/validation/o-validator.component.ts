@@ -1,8 +1,9 @@
 import { Component, Injector } from '@angular/core';
 import { ValidatorFn } from '@angular/forms';
+
+import { IErrorData } from '../../../components/o-form-data-component.class';
 import { Util } from '../../../util/util';
 import { OErrorComponent } from './o-error.component';
-import { IErrorData } from '../../../components/o-form-data-component.class';
 
 export const DEFAULT_INPUTS_O_VALIDATOR = [
   'validatorFn: validator-function',

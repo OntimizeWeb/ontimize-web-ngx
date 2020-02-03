@@ -1,9 +1,18 @@
-import { Component, EventEmitter, Inject, Injector, OnInit, ViewChild, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef, MatListOption, MatSelectionList } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Inject,
+  Injector,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef, MatListOption, MatSelectionList } from '@angular/material';
 
-import { ITableFiltersStatus } from '../../o-table-storage.class';
 import { DialogService } from '../../../../../services/dialog.service';
+import { ITableFiltersStatus } from '../../o-table-storage.class';
 
 @Component({
   moduleId: module.id,

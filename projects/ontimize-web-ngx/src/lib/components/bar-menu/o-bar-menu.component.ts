@@ -1,15 +1,8 @@
-import { Component, Injector, NgModule, ElementRef, ViewEncapsulation } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, ElementRef, Injector, OnInit, ViewEncapsulation } from '@angular/core';
+
+import { AppMenuService, MenuRootItem } from '../../services/app-menu.service';
 import { PermissionsService } from '../../services/permissions/permissions.service';
 import { OTranslateService } from '../../services/translate/o-translate.service';
-import { OSharedModule } from '../../shared/shared.module';
-import { AppMenuService, MenuRootItem } from '../../services/app-menu.service';
-import { OLocaleBarMenuItemComponent } from './locale-menu-item/o-locale-bar-menu-item.component';
-import { OBarMenuItemComponent } from './menu-item/o-bar-menu-item.component';
-import { OBarMenuNestedComponent } from './menu-nested/o-bar-menu-nested.component';
-import { OBarMenuSeparatorComponent } from './menu-separator/o-bar-menu-separator.component';
-import { OBarMenuGroupComponent } from './menu-group/o-bar-menu-group.component';
-import { RouterModule } from '@angular/router';
 
 export const DEFAULT_INPUTS_O_BAR_MENU = [
   // title [string]: menu title. Default: no value.
@@ -29,7 +22,7 @@ export const DEFAULT_INPUTS_O_BAR_MENU = [
     '[class.o-bar-menu]': 'true'
   }
 })
-export class OBarMenuComponent {
+export class OBarMenuComponent implements OnInit {
 
   public static DEFAULT_INPUTS_O_BAR_MENU = DEFAULT_INPUTS_O_BAR_MENU;
   protected permissionsService: PermissionsService;
@@ -65,18 +58,18 @@ export class OBarMenuComponent {
   }
 
   setDOMTitle() {
-    let tooltip = this.translateService.get(this.tooltip);
+    const tooltip = this.translateService.get(this.tooltip);
     this.elRef.nativeElement.setAttribute('title', tooltip);
   }
 
   collapseAll() {
-    let inputs = this.elRef.nativeElement.querySelectorAll('input');
+    const inputs = this.elRef.nativeElement.querySelectorAll('input');
     if (inputs) {
       inputs.forEach(element => {
         element.checked = false;
       });
     }
-    let fakeLis = this.elRef.nativeElement.querySelectorAll('.fake-li-hover');
+    const fakeLis = this.elRef.nativeElement.querySelectorAll('.fake-li-hover');
     if (fakeLis) {
       fakeLis.forEach(element => {
         element.classList.remove('fake-li-hover');
@@ -115,23 +108,4 @@ export class OBarMenuComponent {
   get menuItems(): MenuRootItem[] {
     return this.menuRoots;
   }
-}
-
-@NgModule({
-  declarations: [
-    OBarMenuComponent,
-    OBarMenuItemComponent,
-    OBarMenuGroupComponent,
-    OLocaleBarMenuItemComponent,
-    OBarMenuSeparatorComponent,
-    OBarMenuNestedComponent
-  ],
-  imports: [
-    CommonModule,
-    OSharedModule,
-    RouterModule
-  ],
-  exports: [OBarMenuComponent]
-})
-export class OBarMenuModule {
 }

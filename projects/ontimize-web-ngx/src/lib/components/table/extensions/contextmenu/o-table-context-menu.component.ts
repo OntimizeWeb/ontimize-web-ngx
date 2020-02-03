@@ -1,11 +1,24 @@
-import { ChangeDetectionStrategy, Component, forwardRef, Inject, Injector, OnInit, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  forwardRef,
+  Inject,
+  Injector,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { BehaviorSubject, Subscription } from 'rxjs';
+
 import { InputConverter } from '../../../../decorators/input-converter';
 import { OTranslateService } from '../../../../services/translate/o-translate.service';
 import { Util } from '../../../../util/util';
-import { OColumn, OTableComponent } from '../../o-table.component';
 import { OContextMenuComponent } from '../../../contextmenu/o-context-menu.component';
-import { IColumnValueFilter, ColumnValueFilterOperator } from '../header/table-columns-filter/o-table-columns-filter.component';
+import { OColumn, OTableComponent } from '../../o-table.component';
+import {
+  ColumnValueFilterOperator,
+  IColumnValueFilter,
+} from '../header/table-columns-filter/o-table-columns-filter.component';
 
 export const DEFAULT_TABLE_CONTEXT_MENU_INPUTS = [
   'contextMenu: context-menu',
@@ -26,7 +39,7 @@ export const DEFAULT_TABLE_CONTEXT_MENU_INPUTS = [
   changeDetection: ChangeDetectionStrategy.OnPush,
   inputs: DEFAULT_TABLE_CONTEXT_MENU_INPUTS
 })
-export class OTableContextMenuComponent implements OnInit {
+export class OTableContextMenuComponent implements OnInit, AfterViewInit {
 
   public contextMenu: OContextMenuComponent;
   public isVisibleInsert: BehaviorSubject<boolean> = new BehaviorSubject(true);
@@ -119,7 +132,7 @@ export class OTableContextMenuComponent implements OnInit {
     return this.isVisibleFilter.getValue();
   }
 
-  @ViewChild('defaultContextMenu', {static: false})
+  @ViewChild('defaultContextMenu', { static: false })
   protected defaultContextMenu: OContextMenuComponent;
   protected row: any;
   protected column: OColumn;

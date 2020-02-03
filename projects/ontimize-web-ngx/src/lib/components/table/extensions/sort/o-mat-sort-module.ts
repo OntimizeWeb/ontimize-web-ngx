@@ -1,6 +1,7 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 import { MAT_SORT_HEADER_INTL_PROVIDER } from '@angular/material';
+
 import { OMatSort } from './o-mat-sort';
 import { OMatSortHeader } from './o-mat-sort-header';
 

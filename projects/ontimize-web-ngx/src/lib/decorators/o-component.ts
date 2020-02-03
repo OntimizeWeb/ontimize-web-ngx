@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
 import 'reflect-metadata';
+
+import { Component } from '@angular/core';
 
 export function OComponent(newCompAnnotations: any) {
 

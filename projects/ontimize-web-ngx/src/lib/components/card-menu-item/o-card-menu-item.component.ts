@@ -1,9 +1,22 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ComponentFactory, ComponentFactoryResolver, ContentChildren, ElementRef, Injector, NgModule, OnDestroy, QueryList, ViewChild, ViewContainerRef, ViewEncapsulation } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  ComponentFactory,
+  ComponentFactoryResolver,
+  ContentChildren,
+  ElementRef,
+  Injector,
+  OnDestroy,
+  QueryList,
+  ViewChild,
+  ViewContainerRef,
+  ViewEncapsulation,
+} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
-import { OSharedModule } from '../../shared/shared.module';
 import { InputConverter } from '../../decorators/input-converter';
 import { OTranslateService } from '../../services/translate/o-translate.service';
 
@@ -150,10 +163,3 @@ export class OCardMenuItemComponent implements AfterViewInit, OnDestroy {
   }
 
 }
-
-@NgModule({
-  declarations: [OCardMenuItemComponent],
-  imports: [CommonModule, OSharedModule],
-  exports: [OCardMenuItemComponent]
-})
-export class OCardMenuItemModule { }

@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, forwardRef, Inject, Injector, ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectionStrategy, Component, forwardRef, Inject, Injector, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { OTableComponent } from '../../../o-table.component';

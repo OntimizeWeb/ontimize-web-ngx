@@ -1,5 +1,6 @@
-import { Component, Inject, Injector, forwardRef, ElementRef, ViewEncapsulation } from '@angular/core';
+import { Component, ElementRef, forwardRef, Inject, Injector, OnInit, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
+
 import { Util } from '../../../util/util';
 import { OBarMenuComponent } from '../o-bar-menu.component';
 import { OBaseMenuItemClass } from '../o-base-menu-item.class';
@@ -25,12 +26,12 @@ export const DEFAULT_INPUTS_O_BAR_MENU_ITEM = [
     '[attr.disabled]': 'disabled'
   }
 })
-export class OBarMenuItemComponent extends OBaseMenuItemClass {
+export class OBarMenuItemComponent extends OBaseMenuItemClass implements OnInit {
 
   public static DEFAULT_INPUTS_O_BAR_MENU_ITEM = DEFAULT_INPUTS_O_BAR_MENU_ITEM;
   protected router: Router;
   route: string;
-  action: Function;
+  action: () => void;
 
   constructor(
     @Inject(forwardRef(() => OBarMenuComponent)) protected menu: OBarMenuComponent,

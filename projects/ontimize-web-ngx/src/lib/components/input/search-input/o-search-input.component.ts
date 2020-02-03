@@ -1,5 +1,4 @@
-import { CommonModule } from '@angular/common';
-import { Component, ElementRef, EventEmitter, Injector, NgModule, OnInit, ViewEncapsulation, AfterViewInit } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Injector, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { FloatLabelType, MatCheckboxChange, MatFormFieldAppearance } from '@angular/material';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
@@ -8,9 +7,8 @@ import { O_INPUTS_OPTIONS, OInputsOptions } from '../../../config/app-config';
 import { InputConverter } from '../../../decorators/input-converter';
 import { SnackBarService } from '../../../services/snackbar.service';
 import { OTranslateService } from '../../../services/translate/o-translate.service';
-import { OSharedModule } from '../../../shared/shared.module';
+import { FilterExpressionUtils, IExpression } from '../../../util/filter-expression.utils';
 import { Util } from '../../../util/util';
-import { IExpression, FilterExpressionUtils } from '../../../util/filter-expression.utils';
 
 export const DEFAULT_INPUTS_O_SEARCH_INPUT = [
   'placeholder',
@@ -233,10 +231,3 @@ export class OSearchInputComponent implements OnInit, AfterViewInit {
     return undefined;
   }
 }
-
-@NgModule({
-  declarations: [OSearchInputComponent],
-  imports: [CommonModule, OSharedModule],
-  exports: [OSearchInputComponent]
-})
-export class OSearchInputModule { }

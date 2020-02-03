@@ -1,19 +1,25 @@
-import { CommonModule } from '@angular/common';
-import { Component, ElementRef, forwardRef, Inject, Injector, NgModule, OnDestroy, OnInit, ViewChild, ViewContainerRef, ViewEncapsulation, AfterViewInit } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  Injector,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+  ViewContainerRef,
+  ViewEncapsulation,
+} from '@angular/core';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+
 import { InputConverter } from '../../../decorators/input-converter';
-import { OSharedModule } from '../../../shared/shared.module';
-import { PermissionsUtils } from '../../../util/permissions';
-import { Util } from '../../../util/util';
-import { Codes } from '../../../util/codes';
-import { OFormNavigationComponent } from '../navigation/o-form-navigation.component';
-import { OFormComponent } from '../o-form.component';
-import { OPermissions } from '../../../services/permissions/permissions.service';
 import { DialogService } from '../../../services/dialog.service';
 import { NavigationService } from '../../../services/navigation.service';
+import { OPermissions } from '../../../services/permissions/permissions.service';
 import { SnackBarService } from '../../../services/snackbar.service';
-// import { OFormService } from '../../../services/forms/o-form.service';
-
+import { Codes } from '../../../util/codes';
+import { PermissionsUtils } from '../../../util/permissions';
+import { Util } from '../../../util/util';
+import { OFormComponent } from '../o-form.component';
 
 export const DEFAULT_INPUTS_O_FORM_TOOLBAR = [
   'labelHeader: label-header',
@@ -411,10 +417,3 @@ export class OFormToolbarComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
 }
-
-@NgModule({
-  declarations: [OFormNavigationComponent, OFormToolbarComponent],
-  imports: [CommonModule, OSharedModule],
-  exports: [OFormNavigationComponent, OFormToolbarComponent]
-})
-export class OFormToolbarModule { }

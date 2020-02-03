@@ -1,6 +1,5 @@
-import { CommonModule } from '@angular/common';
-import { Component, ElementRef, EventEmitter, NgModule, TemplateRef, ViewChild, Renderer2 } from '@angular/core';
-import { OSharedModule } from '../../../shared/shared.module';
+import { Component, ElementRef, EventEmitter, Renderer2, TemplateRef, ViewChild } from '@angular/core';
+
 import { InputConverter } from '../../../decorators/input-converter';
 import { ObservableWrapper } from '../../../util/async';
 
@@ -74,16 +73,5 @@ export class OGridItemComponent {
   getItemData() {
     return this.modelData;
   }
-
-}
-
-
-@NgModule({
-  declarations: [OGridItemComponent],
-  imports: [CommonModule, OSharedModule],
-  exports: [OGridItemComponent]
-})
-
-export class OGridItemModule {
 
 }

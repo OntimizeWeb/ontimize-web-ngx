@@ -1,17 +1,25 @@
-import { AfterViewInit, ChangeDetectorRef, ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Injector, NgModule, OnDestroy, ViewEncapsulation, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { trigger, state, style, transition, animate } from '@angular/animations';
+import { animate, state, style, transition, trigger } from '@angular/animations';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  EventEmitter,
+  Injector,
+  OnDestroy,
+  OnInit,
+  ViewEncapsulation,
+} from '@angular/core';
 import { Subscription } from 'rxjs';
 
-import { Util } from '../../../util/util';
-import { OSharedModule } from '../../../shared/shared.module';
 import { InputConverter } from '../../../decorators/input-converter';
-import { PermissionsUtils } from '../../../util/permissions';
-import { OAppSidenavComponent } from '../o-app-sidenav.component';
-import { OAppSidenavMenuItemModule } from '../menu-item/o-app-sidenav-menu-item.module';
-import { OTranslateService } from '../../../services/translate/o-translate.service';
 import { AppMenuService, MenuGroup } from '../../../services/app-menu.service';
 import { OPermissions, PermissionsService } from '../../../services/permissions/permissions.service';
+import { OTranslateService } from '../../../services/translate/o-translate.service';
+import { PermissionsUtils } from '../../../util/permissions';
+import { Util } from '../../../util/util';
+import { OAppSidenavComponent } from '../o-app-sidenav.component';
 
 export const DEFAULT_INPUTS_O_APP_SIDENAV_MENU_GROUP = [
   'menuGroup : menu-group',
@@ -164,10 +172,3 @@ export class OAppSidenavMenuGroupComponent implements OnInit, AfterViewInit, OnD
     return className;
   }
 }
-
-@NgModule({
-  imports: [CommonModule, OAppSidenavMenuItemModule, OSharedModule],
-  declarations: [OAppSidenavMenuGroupComponent],
-  exports: [OAppSidenavMenuGroupComponent]
-})
-export class OAppSidenavMenuGroupModule { }

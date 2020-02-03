@@ -1,23 +1,34 @@
 import { SelectionModel } from '@angular/cdk/collections';
-import { CommonModule } from '@angular/common';
-import { AfterContentInit, AfterViewInit, Component, ContentChildren, ElementRef, EventEmitter, forwardRef, Inject, Injector, NgModule, OnChanges, OnDestroy, OnInit, Optional, QueryList, SimpleChange, ViewEncapsulation } from '@angular/core';
-import { MatCheckbox } from '@angular/material';
-import { RouterModule } from '@angular/router';
+import {
+  AfterContentInit,
+  AfterViewInit,
+  Component,
+  ContentChildren,
+  ElementRef,
+  EventEmitter,
+  forwardRef,
+  Inject,
+  Injector,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  Optional,
+  QueryList,
+  SimpleChange,
+  ViewEncapsulation,
+} from '@angular/core';
 import { merge, Subscription } from 'rxjs';
+
 import { InputConverter } from '../../decorators/input-converter';
 import { OntimizeService } from '../../services/ontimize.service';
-import { dataServiceFactory } from '../../services/data-service.provider';
-import { OSharedModule } from '../../shared/shared.module';
 import { ObservableWrapper } from '../../util/async';
-import { Util } from '../../util/util';
 import { Codes } from '../../util/codes';
-import { OFormComponent } from '../form/o-form.component';
-import { OSearchInputModule } from '../input/search-input/o-search-input.component';
-import { OServiceComponent } from '../o-service-component.class';
 import { ISQLOrder, OQueryDataArgs, ServiceUtils } from '../../util/service.utils';
-import { OListItemComponent, OListItemModule } from './list-item/o-list-item.component';
+import { Util } from '../../util/util';
+import { OFormComponent } from '../form/o-form.component';
+import { OServiceComponent } from '../o-service-component.class';
+import { OListItemComponent } from './list-item/o-list-item.component';
 import { OListItemDirective } from './list-item/o-list-item.directive';
-
 
 export interface IList {
   detailMode: string;
@@ -431,11 +442,3 @@ export class OListComponent extends OServiceComponent implements AfterContentIni
   }
 
 }
-
-@NgModule({
-  declarations: [OListComponent],
-  imports: [CommonModule, OListItemModule, OSearchInputModule, OSharedModule, RouterModule],
-  exports: [OListComponent],
-  entryComponents: [MatCheckbox]
-})
-export class OListModule { }

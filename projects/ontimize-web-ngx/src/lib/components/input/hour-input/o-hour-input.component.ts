@@ -1,17 +1,30 @@
-import { CommonModule } from '@angular/common';
-import { AfterViewInit, Component, ElementRef, forwardRef, Inject, Injector, NgModule, OnInit, Optional, ViewChild, ViewEncapsulation } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  forwardRef,
+  Inject,
+  Injector,
+  OnInit,
+  Optional,
+  ViewChild,
+  ViewEncapsulation,
+} from '@angular/core';
 import { ValidatorFn } from '@angular/forms';
 import moment from 'moment';
-import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
-import { NumberConverter, InputConverter } from '../../../decorators/input-converter';
-import { OSharedModule } from '../../../shared/shared.module';
-import { Util } from '../../../util/util';
+
+import { InputConverter, NumberConverter } from '../../../decorators/input-converter';
 import { Codes } from '../../../util/codes';
+import { Util } from '../../../util/util';
 import { OValidators } from '../../../validators/o-validators';
 import { OFormComponent } from '../../form/o-form.component';
 import { IFormValueOptions } from '../../form/OFormValue';
-import { DEFAULT_INPUTS_O_FORM_DATA_COMPONENT, DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT, OFormDataComponent, OValueChangeEvent } from '../../o-form-data-component.class';
-
+import {
+  DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,
+  DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT,
+  OFormDataComponent,
+  OValueChangeEvent,
+} from '../../o-form-data-component.class';
 
 export type OHourValueType = 'string' | 'timestamp';
 
@@ -168,7 +181,7 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
   }
 
   public onTimepickerChange(event: string): void {
-    let value: any = event;
+    let value;
     if (this.valueType === 'timestamp') {
       value = moment(event, this.formatString).valueOf();
     } else {
@@ -219,7 +232,7 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
         strArray[0] = hour;
         value = strArray.join(':') + period;
       }
-    } else if (Codes.TWELVE_FOUR_HOUR_FORMAT === this.format) {
+    } else if (Codes.TWENTY_FOUR_HOUR_FORMAT === this.format) {
       // do nothing
     }
     return value;
@@ -235,7 +248,7 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
       return value;
     }
     const formatStr = this.format === Codes.TWENTY_FOUR_HOUR_FORMAT ? 'HH:mm' : 'hh:mm a';
-    let result = value;
+    let result;
     if (typeof value === 'number') {
       result = moment(value).format(formatStr);
     } else {
@@ -245,10 +258,3 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
   }
 
 }
-
-@NgModule({
-  declarations: [OHourInputComponent],
-  imports: [OSharedModule, CommonModule, NgxMaterialTimepickerModule],
-  exports: [OHourInputComponent]
-})
-export class OHourInputModule { }

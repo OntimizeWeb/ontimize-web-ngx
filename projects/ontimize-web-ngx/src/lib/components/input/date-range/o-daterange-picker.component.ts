@@ -1,6 +1,18 @@
-import { ChangeDetectorRef, Component, ElementRef, EventEmitter, forwardRef, Input, OnInit, Output, ViewChild, ViewEncapsulation } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  EventEmitter,
+  forwardRef,
+  Input,
+  OnInit,
+  Output,
+  ViewChild,
+  ViewEncapsulation,
+} from '@angular/core';
 import { FormControl, NG_VALUE_ACCESSOR } from '@angular/forms';
 import * as _moment from 'moment';
+
 import { InputConverter } from '../../../decorators/input-converter';
 
 const moment = _moment;
@@ -214,8 +226,8 @@ export class DaterangepickerComponent implements OnInit {
         this.autoApply = false;
       }
     }
-
   }
+
   renderTimePicker(side: SideEnum) {
     if (side === SideEnum.right && !this.endDate) {
       return;
@@ -224,11 +236,11 @@ export class DaterangepickerComponent implements OnInit {
     let minDate;
     const maxDate = this.maxDate;
     if (side === SideEnum.left) {
-      selected = this.startDate.clone(),
-        minDate = this.minDate;
+      selected = this.startDate.clone();
+      minDate = this.minDate;
     } else if (side === SideEnum.right) {
-      selected = this.endDate.clone(),
-        minDate = this.startDate;
+      selected = this.endDate.clone();
+      minDate = this.startDate;
     }
     const start = this.timePicker24Hour ? 0 : 1;
     const end = this.timePicker24Hour ? 23 : 12;
@@ -329,6 +341,7 @@ export class DaterangepickerComponent implements OnInit {
     }
     this.timepickerVariables[side].selected = selected;
   }
+  
   renderCalendar(side: SideEnum) { // side enum
     const mainCalendar: any = (side === SideEnum.left) ? this.leftCalendar : this.rightCalendar;
     const month = mainCalendar.month.month();

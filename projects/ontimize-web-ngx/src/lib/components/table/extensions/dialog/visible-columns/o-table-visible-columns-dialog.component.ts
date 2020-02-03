@@ -1,9 +1,10 @@
-import { Component, Inject, ViewEncapsulation, ChangeDetectionStrategy, ChangeDetectorRef, Injector } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, Injector, ViewEncapsulation } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import { DragDropService } from '@churchs19/ng2-dnd';
+
 import { Codes } from '../../../../../util/codes';
 import { Util } from '../../../../../util/util';
 import { OColumn } from '../../../o-table.component';
-import { DragDropService } from '@churchs19/ng2-dnd';
 
 @Component({
   moduleId: module.id,

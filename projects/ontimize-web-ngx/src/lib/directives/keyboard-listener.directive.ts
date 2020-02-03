@@ -1,4 +1,5 @@
-import { Directive, Input, Output, EventEmitter, OnInit, HostListener } from '@angular/core';
+import { Directive, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
+
 import { Util } from '../util/util';
 
 @Directive({

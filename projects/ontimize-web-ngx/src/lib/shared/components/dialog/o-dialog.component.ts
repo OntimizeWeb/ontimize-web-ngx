@@ -1,5 +1,6 @@
 import { Component, ViewEncapsulation } from '@angular/core';
 import { MatDialogRef } from '@angular/material';
+
 import { ODialogConfig } from './o-dialog.config';
 
 @Component({

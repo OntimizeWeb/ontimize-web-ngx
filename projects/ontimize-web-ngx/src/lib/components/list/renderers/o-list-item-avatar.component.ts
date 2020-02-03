@@ -1,8 +1,17 @@
-import { AfterViewInit, Component, ElementRef, forwardRef, Inject, Injector, NgModule, OnInit, Optional, Renderer2, ViewEncapsulation } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  forwardRef,
+  Inject,
+  Injector,
+  OnInit,
+  Optional,
+  Renderer2,
+  ViewEncapsulation,
+} from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
-import { OSharedModule } from '../../../shared/shared.module';
 import { OListItemComponent } from '../list-item/o-list-item.component';
 import { OListItemTextRenderer } from './o-list-item-text-renderer.class';
 
@@ -79,10 +88,3 @@ export class OListItemAvatarComponent extends OListItemTextRenderer implements A
   }
 
 }
-
-@NgModule({
-  declarations: [OListItemAvatarComponent],
-  imports: [CommonModule, OSharedModule],
-  exports: [OListItemAvatarComponent]
-})
-export class OListItemAvatarModule { }

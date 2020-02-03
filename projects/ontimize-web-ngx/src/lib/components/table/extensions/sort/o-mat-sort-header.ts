@@ -1,10 +1,12 @@
-import { Component, ViewEncapsulation, ChangeDetectionStrategy, ChangeDetectorRef, Optional } from '@angular/core';
-import { matSortAnimations, MatSortHeader, MatSortHeaderIntl, ArrowViewStateTransition } from '@angular/material';
 import { CdkColumnDef } from '@angular/cdk/table';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Optional, ViewEncapsulation } from '@angular/core';
+import { ArrowViewStateTransition, matSortAnimations, MatSortHeader, MatSortHeaderIntl } from '@angular/material';
+
 import { OMatSort } from './o-mat-sort';
 
 @Component({
   moduleId: module.id,
+  // tslint:disable-next-line: component-selector
   selector: '[o-mat-sort-header]',
   exportAs: 'oMatSortHeader',
   templateUrl: './sort-header.html',
@@ -29,6 +31,7 @@ import { OMatSort } from './o-mat-sort';
     matSortAnimations.allowChildren,
   ]
 })
+// tslint:disable-next-line: component-class-suffix
 export class OMatSortHeader extends MatSortHeader {
 
   constructor(public _intl: MatSortHeaderIntl,

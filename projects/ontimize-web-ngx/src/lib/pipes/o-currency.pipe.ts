@@ -1,4 +1,5 @@
-import { Pipe, PipeTransform, Injector } from '@angular/core';
+import { Injector, Pipe, PipeTransform } from '@angular/core';
+
 import { CurrencyService } from '../services/currency.service';
 
 export interface ICurrencyPipeArgument {

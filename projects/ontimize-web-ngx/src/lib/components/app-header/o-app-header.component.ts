@@ -1,15 +1,11 @@
-import { Component, ElementRef, EventEmitter, Injector, NgModule, OnDestroy, ViewEncapsulation } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Injector, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
-import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
 
-import { ServiceUtils } from '../../util/service.utils';
-import { OSharedModule } from '../../shared/shared.module';
 import { InputConverter } from '../../decorators/input-converter';
-import { OUserInfoModule } from '../../components/user-info/o-user-info.component';
-import { OLanguageSelectorModule } from '../language-selector/o-language-selector.component';
 import { DialogService } from '../../services/dialog.service';
 import { OModulesInfoService } from '../../services/o-modules-info.service';
+import { ServiceUtils } from '../../util/service.utils';
 
 export const DEFAULT_INPUTS_O_APP_HEADER = [
   'showUserInfo: show-user-info',
@@ -91,10 +87,3 @@ export class OAppHeaderComponent implements OnDestroy {
   }
 
 }
-
-@NgModule({
-  imports: [CommonModule, OLanguageSelectorModule, OUserInfoModule, OSharedModule],
-  declarations: [OAppHeaderComponent],
-  exports: [OAppHeaderComponent]
-})
-export class OAppHeaderModule { }

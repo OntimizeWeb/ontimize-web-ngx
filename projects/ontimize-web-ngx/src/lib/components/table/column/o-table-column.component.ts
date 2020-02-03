@@ -26,10 +26,9 @@ import { OTableCellRendererPercentageComponent } from './cell-renderer/percentag
 import { OTableCellRendererRealComponent } from './cell-renderer/real/o-table-cell-renderer-real.component';
 import { OTableCellRendererTimeComponent } from './cell-renderer/time/o-table-cell-renderer-time.component';
 
-
 export interface OColumnTooltip {
   value?: string;
-  function?: Function;
+  function?: (rowData: any) => any;
 }
 
 export const DEFAULT_INPUTS_O_TABLE_COLUMN = [
@@ -165,7 +164,7 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
   @InputConverter()
   public tooltip: boolean = false;
   tooltipValue: string;
-  tooltipFunction: Function;
+  tooltipFunction: (rowData: any) => any;
 
   set multiline(val: boolean) {
     val = Util.parseBoolean(String(val));
@@ -290,6 +289,12 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
     protected injector: Injector
   ) {
     this.table = table;
+  }
+
+  static addEditor(type: string, editorClassReference: any) {
+    if (!OTableColumnComponent.editorsMapping.hasOwnProperty(type) && Util.isDefined(editorClassReference)) {
+      OTableColumnComponent.editorsMapping[type] = editorClassReference;
+    }
   }
 
   ngOnInit() {
@@ -503,12 +508,6 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
     }
     if (this.editor.ngOnInit) {
       this.editor.ngOnInit();
-    }
-  }
-
-  static addEditor(type: string, editorClassReference: any) {
-    if (!OTableColumnComponent.editorsMapping.hasOwnProperty(type) && Util.isDefined(editorClassReference)) {
-      OTableColumnComponent.editorsMapping[type] = editorClassReference;
     }
   }
 

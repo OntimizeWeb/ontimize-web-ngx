@@ -1,33 +1,40 @@
-import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, CUSTOM_ELEMENTS_SCHEMA, ElementRef, EventEmitter, Injector, NgModule, NgZone, OnDestroy, OnInit, ViewChild, ViewEncapsulation, AfterViewInit } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  EventEmitter,
+  Injector,
+  NgZone,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+  ViewEncapsulation,
+} from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router, UrlSegment } from '@angular/router';
 import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
+
 import { InputConverter } from '../../decorators/input-converter';
 import { OFormLayoutManagerComponent } from '../../layouts/form-layout/o-form-layout-manager.component';
-
 import { DialogService } from '../../services/dialog.service';
-import { NavigationService, ONavigationItem } from '../../services/navigation.service';
-import { OFormPermissions, OPermissions, PermissionsService } from '../../services/permissions/permissions.service';
-import { OntimizeService } from '../../services/ontimize.service';
-import { SnackBarService } from '../../services/snackbar.service';
 import { OFormService } from '../../services/forms/o-form.service';
-
-import { dataServiceFactory } from '../../services/data-service.provider';
-import { OSharedModule } from '../../shared/shared.module';
-import { Util } from '../../util/util';
+import { NavigationService, ONavigationItem } from '../../services/navigation.service';
+import { OntimizeService } from '../../services/ontimize.service';
+import { OFormPermissions, OPermissions, PermissionsService } from '../../services/permissions/permissions.service';
+import { SnackBarService } from '../../services/snackbar.service';
 import { Codes } from '../../util/codes';
 import { SQLTypes } from '../../util/sqltypes';
+import { Util } from '../../util/util';
+import { OFormContainerComponent } from '../form-container/o-form-container.component';
 import { OFormControl } from '../input/o-form-control.class';
 import { IComponent } from '../o-component.class';
 import { IFormDataComponent, IFormDataTypeComponent } from '../o-form-data-component.class';
 import { OFormCacheClass } from './cache/o-form.cache.class';
 import { CanComponentDeactivate, CanDeactivateFormGuard } from './guards/o-form-can-deactivate.guard';
 import { OFormNavigationClass } from './navigation/o-form.navigation.class';
-import { OFormContainerComponent } from './o-form-container.component';
 import { IFormValueOptions, OFormValue } from './OFormValue';
-import { OFormToolbarComponent, OFormToolbarModule } from './toolbar/o-form-toolbar.component';
-
+import { OFormToolbarComponent } from './toolbar/o-form-toolbar.component';
 
 export interface IFormDataComponentHash {
   [attr: string]: IFormDataComponent;
@@ -1323,8 +1330,10 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
    * @param values
    */
   setFieldValues(values: any, options?: IFormValueOptions) {
-    for (let key in values) {
-      this.setFieldValue(key, values[key], options);
+    for (const key in values) {
+      if (values.hasOwnProperty(key)) {
+        this.setFieldValue(key, values[key], options);
+      }
     }
   }
 
@@ -1545,12 +1554,3 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   }
 
 }
-
-@NgModule({
-  declarations: [OFormComponent],
-  imports: [CommonModule, OFormToolbarModule, OSharedModule],
-  exports: [OFormComponent, OFormToolbarModule],
-  providers: [{ provide: CanDeactivateFormGuard, useClass: CanDeactivateFormGuard }],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
-})
-export class OFormModule { }

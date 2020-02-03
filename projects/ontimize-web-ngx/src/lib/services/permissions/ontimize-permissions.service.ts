@@ -1,13 +1,12 @@
-
-import { share } from 'rxjs/operators';
-import { Injector, Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Injectable, Injector } from '@angular/core';
 import { Observable } from 'rxjs';
+import { share } from 'rxjs/operators';
 
-import { LoginService } from '../../services/login.service';
 import { AppConfig, Config, OntimizePermissionsConfig } from '../../config/app-config';
-import { Util, IPermissionsService } from '../../util/util';
+import { LoginService } from '../../services/login.service';
 import { Codes } from '../../util/codes';
+import { IPermissionsService, Util } from '../../util/util';
 
 @Injectable()
 export class OntimizePermissionsService implements IPermissionsService {

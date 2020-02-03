@@ -1,21 +1,37 @@
-import { CommonModule } from '@angular/common';
-import { AfterViewChecked, AfterViewInit, Component, ContentChildren, ElementRef, EventEmitter, forwardRef, Inject, Injector, NgModule, OnChanges, OnDestroy, OnInit, Optional, QueryList, SimpleChange, ViewChild, ViewChildren, HostListener, Renderer2, AfterContentInit } from '@angular/core';
+import {
+  AfterContentInit,
+  AfterViewChecked,
+  AfterViewInit,
+  Component,
+  ContentChildren,
+  ElementRef,
+  EventEmitter,
+  forwardRef,
+  HostListener,
+  Inject,
+  Injector,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  QueryList,
+  Renderer2,
+  SimpleChange,
+  ViewChild,
+  ViewChildren,
+} from '@angular/core';
 import { MediaChange, MediaObserver } from '@angular/flex-layout';
 import { MatPaginator, PageEvent } from '@angular/material';
-import { RouterModule } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { OSearchInputModule } from '../../components/input/search-input/o-search-input.component';
+
 import { InputConverter } from '../../decorators/input-converter';
 import { OntimizeService } from '../../services/ontimize.service';
-import { dataServiceFactory } from '../../services/data-service.provider';
-import { OSharedModule } from '../../shared/shared.module';
-import { Util } from '../../util/util';
-import { Codes } from '../../util/codes';
 import { ObservableWrapper } from '../../util/async';
+import { Codes } from '../../util/codes';
+import { ISQLOrder, OQueryDataArgs, ServiceUtils } from '../../util/service.utils';
+import { Util } from '../../util/util';
 import { OFormComponent } from '../form/o-form.component';
 import { OServiceComponent } from '../o-service-component.class';
-import { ISQLOrder, OQueryDataArgs, ServiceUtils } from '../../util/service.utils';
-import { OGridItemComponent, OGridItemModule } from './grid-item/o-grid-item.component';
+import { OGridItemComponent } from './grid-item/o-grid-item.component';
 import { OGridItemDirective } from './grid-item/o-grid-item.directive';
 
 export const DEFAULT_INPUTS_O_GRID = [
@@ -566,11 +582,3 @@ export class OGridComponent extends OServiceComponent implements AfterViewChecke
   }
 
 }
-
-@NgModule({
-  declarations: [OGridComponent, OGridItemDirective],
-  imports: [CommonModule, OGridItemModule, OSearchInputModule, OSharedModule, RouterModule],
-  exports: [OGridComponent, OGridItemComponent, OGridItemDirective],
-  entryComponents: [OGridItemComponent]
-})
-export class OGridModule { }

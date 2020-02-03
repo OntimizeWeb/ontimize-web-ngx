@@ -1,15 +1,22 @@
-import { AfterViewInit, Component, ElementRef, forwardRef, Inject, Injector, NgModule, Optional, ViewEncapsulation } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  forwardRef,
+  Inject,
+  Injector,
+  Optional,
+  ViewEncapsulation,
+} from '@angular/core';
 import { MatRadioChange } from '@angular/material';
 
-import { Util } from '../../../util/util';
-import { OFormValue } from '../../form/OFormValue';
-import { OFormComponent } from '../../form/o-form.component';
-import { OSharedModule } from '../../../shared/shared.module';
 import { InputConverter } from '../../../decorators/input-converter';
 import { OntimizeService } from '../../../services/ontimize.service';
-import { OFormServiceComponent } from '../o-form-service-component.class';
+import { Util } from '../../../util/util';
+import { OFormComponent } from '../../form/o-form.component';
+import { OFormValue } from '../../form/OFormValue';
 import { OValueChangeEvent } from '../../o-form-data-component.class';
+import { OFormServiceComponent } from '../o-form-service-component.class';
 
 export const DEFAULT_INPUTS_O_RADIO = [
   ...OFormServiceComponent.DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT,
@@ -116,10 +123,3 @@ export class ORadioComponent extends OFormServiceComponent implements AfterViewI
   }
 
 }
-
-@NgModule({
-  declarations: [ORadioComponent],
-  imports: [CommonModule, OSharedModule],
-  exports: [ORadioComponent]
-})
-export class ORadioModule { }

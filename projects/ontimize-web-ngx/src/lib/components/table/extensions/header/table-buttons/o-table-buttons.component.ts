@@ -1,4 +1,13 @@
-import { ChangeDetectionStrategy, Component, forwardRef, Inject, Injector, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  forwardRef,
+  Inject,
+  Injector,
+  OnDestroy,
+  OnInit,
+  ViewEncapsulation,
+} from '@angular/core';
 import { BehaviorSubject, Subscription } from 'rxjs';
 
 import { InputConverter } from '../../../../../decorators/input-converter';

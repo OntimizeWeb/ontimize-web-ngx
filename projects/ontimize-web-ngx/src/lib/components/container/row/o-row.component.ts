@@ -1,8 +1,6 @@
-import { CommonModule } from '@angular/common';
-import { Component, ElementRef, forwardRef, Inject, Injector, NgModule, Optional, ViewEncapsulation } from '@angular/core';
+import { Component, ElementRef, forwardRef, Inject, Injector, Optional, ViewEncapsulation } from '@angular/core';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material';
 
-import { OSharedModule } from '../../../shared/shared.module';
 import { OFormComponent } from '../../form/o-form.component';
 import { DEFAULT_INPUTS_O_CONTAINER, OContainerComponent } from '../o-container-component.class';
 
@@ -37,10 +35,3 @@ export class ORowComponent extends OContainerComponent {
   }
 
 }
-
-@NgModule({
-  declarations: [ORowComponent],
-  imports: [CommonModule, OSharedModule],
-  exports: [ORowComponent]
-})
-export class ORowModule { }

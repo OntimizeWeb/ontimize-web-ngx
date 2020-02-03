@@ -1,8 +1,8 @@
-
 import { EventEmitter, Injector } from '@angular/core';
 import { NavigationStart, Router } from '@angular/router';
+
 import { AppConfig, Config } from '../config/app-config';
-import { SessionInfo, LoginService } from '../services/login.service';
+import { LoginService, SessionInfo } from '../services/login.service';
 import { ObservableWrapper } from '../util/async';
 import { Util } from '../util/util';
 

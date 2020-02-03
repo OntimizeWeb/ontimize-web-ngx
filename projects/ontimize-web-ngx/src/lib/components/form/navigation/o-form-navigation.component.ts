@@ -10,7 +10,6 @@ import { Util } from '../../../util/util';
 import { OFormComponent } from '../o-form.component';
 import { OFormNavigationClass } from './o-form.navigation.class';
 
-
 export type QueryConfiguration = {
   serviceType: string;
   queryArguments: any[];
@@ -83,7 +82,7 @@ export class OFormNavigationComponent implements OnDestroy {
     try {
       this.dataService = this.injector.get(loadingService);
       if (Util.isDataService(this.dataService)) {
-        let serviceCfg = this.dataService.getDefaultServiceConfiguration(this.queryConf.service);
+        const serviceCfg = this.dataService.getDefaultServiceConfiguration(this.queryConf.service);
         if (this.queryConf.entity) {
           serviceCfg['entity'] = this.queryConf.entity;
         }
@@ -94,11 +93,11 @@ export class OFormNavigationComponent implements OnDestroy {
     }
   }
 
-  protected queryNavigationData(offset: number, length: number = undefined): Promise<any> {
+  protected queryNavigationData(offset: number, length?: number): Promise<any> {
     const self = this;
     return new Promise<any>((resolve: any, reject: any) => {
       const conf = self.queryConf;
-      let queryArgs = conf.queryArguments;
+      const queryArgs = conf.queryArguments;
 
       queryArgs[1] = self.getKeysArray();
       queryArgs[4] = offset;
@@ -125,7 +124,7 @@ export class OFormNavigationComponent implements OnDestroy {
   protected getKeysArray(): string[] {
     // getting available navigationData keys
     const navData = this.navigationData ? (this.navigationData[0] || {}) : {};
-    let keysArray = [];
+    const keysArray = [];
     this._form.keysArray.forEach(key => {
       if (navData.hasOwnProperty(key)) {
         keysArray.push(key);
@@ -137,13 +136,13 @@ export class OFormNavigationComponent implements OnDestroy {
   getCurrentIndex(): number {
     const keysArray = this.getKeysArray();
     // current url keys object
-    let currentKeys = {};
+    const currentKeys = {};
     const currentItem = this.formNavigation.getUrlParams();
     keysArray.forEach(key => {
       currentKeys[key] = currentItem[key];
     });
-    let index: number = (this.navigationData || []).findIndex((item: any) => {
-      let itemKeys = {};
+    const index: number = (this.navigationData || []).findIndex((item: any) => {
+      const itemKeys = {};
       keysArray.forEach(key => {
         itemKeys[key] = item[key];
       });
@@ -153,8 +152,8 @@ export class OFormNavigationComponent implements OnDestroy {
   }
 
   next() {
-    let total = this.navigationData.length;
-    let index = this.currentIndex + 1;
+    const total = this.navigationData.length;
+    const index = this.currentIndex + 1;
     if (total > index) {
       this.move(index);
     } else if (this.queryConf) {
@@ -168,7 +167,7 @@ export class OFormNavigationComponent implements OnDestroy {
   }
 
   previous() {
-    let index = this.currentIndex - 1;
+    const index = this.currentIndex - 1;
     if (index >= 0) {
       this.move(index);
     } else if (this.queryConf) {
@@ -193,7 +192,7 @@ export class OFormNavigationComponent implements OnDestroy {
 
   last() {
     if (!this.queryConf || this.isLast()) {
-      let index = this.navigationData.length - 1;
+      const index = this.navigationData.length - 1;
       this.move(index);
     } else {
       const offset = this.queryConf.totalRecordsNumber - this.queryConf.queryRows;
@@ -234,12 +233,12 @@ export class OFormNavigationComponent implements OnDestroy {
   }
 
   private moveWithoutManager(index: number) {
-    let route = this.getRouteOfSelectedRow(this.navigationData[index]);
+    const route = this.getRouteOfSelectedRow(this.navigationData[index]);
     if (route.length > 0) {
       this.navigationService.removeLastItem();
       const navData: ONavigationItem = this.navigationService.getLastItem();
       if (navData) {
-        let extras: NavigationExtras = {};
+        const extras: NavigationExtras = {};
         extras[Codes.QUERY_PARAMS] = Codes.getIsDetailObject();
         const detailRoute = navData.getDetailFormRoute();
         if (Util.isDefined(detailRoute)) {
@@ -262,7 +261,7 @@ export class OFormNavigationComponent implements OnDestroy {
   }
 
   getRouteOfSelectedRow(item: any) {
-    let route = [];
+    const route = [];
     if (Util.isObject(item)) {
       this._form.keysArray.forEach(key => {
         if (Util.isDefined(item[key])) {

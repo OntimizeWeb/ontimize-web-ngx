@@ -1,8 +1,8 @@
 import { Observable } from 'rxjs';
+
 import { IFormDataComponent } from '../components/o-form-data-component.class';
 import { Base64 } from './base64';
 import { Codes } from './codes';
-
 
 export interface IDataService {
   getDefaultServiceConfiguration(serviceName?: string): object;

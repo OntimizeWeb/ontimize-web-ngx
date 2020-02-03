@@ -1,5 +1,6 @@
-import { AfterViewInit, forwardRef, Inject, ElementRef, OnDestroy, Renderer2, Directive } from '@angular/core';
+import { AfterViewInit, Directive, ElementRef, forwardRef, Inject, OnDestroy, Renderer2 } from '@angular/core';
 import { Subscription } from 'rxjs';
+
 import { OTableComponent } from '../../o-table.component';
 
 @Directive({

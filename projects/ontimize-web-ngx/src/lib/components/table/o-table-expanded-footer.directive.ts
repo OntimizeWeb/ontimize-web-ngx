@@ -1,9 +1,8 @@
-import { Directive, ElementRef, Inject, Renderer2, forwardRef, AfterViewInit } from '@angular/core';
-
-import { Injector } from '@angular/core';
-import { OTableComponent } from './o-table.component';
-import { OTranslateService } from '../../services/translate/o-translate.service';
+import { AfterViewInit, Directive, ElementRef, forwardRef, Inject, Injector, Renderer2 } from '@angular/core';
 import { Subscription } from 'rxjs';
+
+import { OTranslateService } from '../../services/translate/o-translate.service';
+import { OTableComponent } from './o-table.component';
 
 @Directive({
   selector: '[oTableExpandedFooter]'

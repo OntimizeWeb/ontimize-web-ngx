@@ -1,14 +1,26 @@
-import { CommonModule } from '@angular/common';
-import { AfterViewInit, Component, ElementRef, forwardRef, Inject, Injector, NgModule, OnInit, Optional, ViewEncapsulation } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  forwardRef,
+  Inject,
+  Injector,
+  OnInit,
+  Optional,
+  ViewEncapsulation,
+} from '@angular/core';
 import { FormControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 
 import { InputConverter } from '../../../decorators/input-converter';
 import { IIntegerPipeArgument, OIntegerPipe } from '../../../pipes/o-integer.pipe';
-import { OSharedModule } from '../../../shared/shared.module';
 import { Util } from '../../../util/util';
 import { OFormComponent } from '../../form/o-form.component';
 import { IFormValueOptions, OFormValue } from '../../form/OFormValue';
-import { DEFAULT_INPUTS_O_TEXT_INPUT, DEFAULT_OUTPUTS_O_TEXT_INPUT, OTextInputComponent, OTextInputModule } from '../text-input/o-text-input.component';
+import {
+  DEFAULT_INPUTS_O_TEXT_INPUT,
+  DEFAULT_OUTPUTS_O_TEXT_INPUT,
+  OTextInputComponent,
+} from '../text-input/o-text-input.component';
 
 export const DEFAULT_INPUTS_O_INTEGER_INPUT = [
   ...DEFAULT_INPUTS_O_TEXT_INPUT,
@@ -225,10 +237,3 @@ export class OIntegerInputComponent extends OTextInputComponent implements After
   }
 
 }
-
-@NgModule({
-  declarations: [OIntegerInputComponent],
-  imports: [CommonModule, OSharedModule, OTextInputModule],
-  exports: [OIntegerInputComponent, OTextInputModule]
-})
-export class OIntegerInputModule { }

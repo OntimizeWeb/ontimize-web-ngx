@@ -1,7 +1,7 @@
-import { Component, forwardRef, Inject, ViewEncapsulation } from '@angular/core';
+import { Component, ViewEncapsulation } from '@angular/core';
 import { DialogPosition } from '@angular/material';
+
 import { InputConverter } from '../../../../decorators/input-converter';
-// import { OFormLayoutManagerComponent } from '../../o-form-layout-manager.component';
 
 export const DEFAULT_INPUTS_O_FORM_LAYOUT_DIALOG_OPTIONS = [
   'width',
@@ -16,7 +16,6 @@ export const DEFAULT_INPUTS_O_FORM_LAYOUT_DIALOG_OPTIONS = [
   'closeOnNavigation: close-on-navigation',
   'disableClose:disable-close'
 ];
-
 
 @Component({
   moduleId: module.id,

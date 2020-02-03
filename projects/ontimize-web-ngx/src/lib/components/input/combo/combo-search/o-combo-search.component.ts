@@ -1,4 +1,15 @@
-import { ChangeDetectorRef, Component, ElementRef, EventEmitter, forwardRef, Inject, OnDestroy, OnInit, QueryList, ViewChild } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  EventEmitter,
+  forwardRef,
+  Inject,
+  OnDestroy,
+  OnInit,
+  QueryList,
+  ViewChild,
+} from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import { MatOption, MatSelect } from '@angular/material';
 import { Subject } from 'rxjs';

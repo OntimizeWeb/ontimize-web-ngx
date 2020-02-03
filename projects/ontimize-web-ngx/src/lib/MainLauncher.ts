@@ -1,5 +1,5 @@
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { NgModuleRef } from '@angular/core';
+import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
 export function ontimizeBootstrap(appModule: any): Promise<NgModuleRef<any>> {
   const promise = platformBrowserDynamic().bootstrapModule(appModule);

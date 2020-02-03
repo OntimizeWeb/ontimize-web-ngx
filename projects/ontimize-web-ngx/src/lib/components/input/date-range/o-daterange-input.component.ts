@@ -1,11 +1,10 @@
-import { CommonModule } from '@angular/common';
-import { Component, ElementRef, forwardRef, Inject, Injector, NgModule, OnDestroy, OnInit, Optional, ViewChild } from '@angular/core';
+import { Component, ElementRef, forwardRef, Inject, Injector, OnDestroy, OnInit, Optional, ViewChild } from '@angular/core';
 import { FormControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import * as _moment from 'moment';
+
 import { InputConverter } from '../../../decorators/input-converter';
 import { MomentService } from '../../../services/moment.service';
 import { OTranslateService } from '../../../services/translate/o-translate.service';
-import { OSharedModule } from '../../../shared/shared.module';
 import { Util } from '../../../util/util';
 import { OFormComponent } from '../../form/o-form.component';
 import { IFormValueOptions } from '../../form/OFormValue';
@@ -295,14 +294,3 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
     return {};
   }
 }
-
-@NgModule({
-  declarations: [DaterangepickerComponent, ODateRangeInputComponent, ODaterangepickerDirective],
-  imports: [CommonModule, OSharedModule],
-  exports: [ODateRangeInputComponent],
-  entryComponents: [
-    DaterangepickerComponent
-  ],
-  providers: []
-})
-export class ODateRangeInputModule { }

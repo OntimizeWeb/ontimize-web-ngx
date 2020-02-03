@@ -1,8 +1,7 @@
-// import { Component, ContentChild, forwardRef, Inject, TemplateRef, ViewEncapsulation } from '@angular/core';
 import { Component, ContentChild, TemplateRef, ViewEncapsulation } from '@angular/core';
 import { MatTabHeaderPosition } from '@angular/material';
+
 import { InputConverter } from '../../../../decorators/input-converter';
-// import { OFormLayoutManagerComponent } from '../../o-form-layout-manager.component';
 
 export const DEFAULT_INPUTS_O_FORM_LAYOUT_TABGROUP_OPTIONS = [
   'backgroundColor:background-color',

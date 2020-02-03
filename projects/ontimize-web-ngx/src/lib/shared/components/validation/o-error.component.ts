@@ -1,4 +1,5 @@
-import { Component, Injector, OnInit, Optional, Inject, forwardRef, NgModule } from '@angular/core';
+import { Component, forwardRef, Inject, Injector, OnInit, Optional } from '@angular/core';
+
 import { OValidatorComponent } from './o-validator.component';
 
 export const DEFAULT_INPUTS_O_ERROR = [

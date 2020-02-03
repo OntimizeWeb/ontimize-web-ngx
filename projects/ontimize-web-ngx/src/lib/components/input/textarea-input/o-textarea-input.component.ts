@@ -1,10 +1,12 @@
-import { CommonModule } from '@angular/common';
-import { Component, ElementRef, forwardRef, Inject, Injector, NgModule, Optional, ViewEncapsulation } from '@angular/core';
+import { Component, ElementRef, forwardRef, Inject, Injector, Optional, ViewEncapsulation } from '@angular/core';
 
 import { InputConverter } from '../../../decorators/input-converter';
-import { OSharedModule } from '../../../shared/shared.module';
 import { OFormComponent } from '../../form/o-form.component';
-import { DEFAULT_INPUTS_O_TEXT_INPUT, DEFAULT_OUTPUTS_O_TEXT_INPUT, OTextInputComponent } from '../text-input/o-text-input.component';
+import {
+  DEFAULT_INPUTS_O_TEXT_INPUT,
+  DEFAULT_OUTPUTS_O_TEXT_INPUT,
+  OTextInputComponent,
+} from '../text-input/o-text-input.component';
 
 export const DEFAULT_INPUTS_O_TEXTAREA_INPUT = [
   ...DEFAULT_INPUTS_O_TEXT_INPUT,
@@ -51,10 +53,3 @@ export class OTextareaInputComponent extends OTextInputComponent {
   }
 
 }
-
-@NgModule({
-  declarations: [OTextareaInputComponent],
-  imports: [CommonModule, OSharedModule],
-  exports: [OTextareaInputComponent]
-})
-export class OTextareaInputModule { }

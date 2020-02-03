@@ -1,13 +1,24 @@
-import { Component, Inject, Injector, forwardRef, ElementRef, Optional, ViewChild, NgModule, ViewEncapsulation } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { Validators } from '@angular/forms';
-import { ValidatorFn } from '@angular/forms';
+import {
+  Component,
+  ElementRef,
+  forwardRef,
+  Inject,
+  Injector,
+  OnInit,
+  Optional,
+  ViewChild,
+  ViewEncapsulation,
+} from '@angular/core';
+import { ValidatorFn, Validators } from '@angular/forms';
 import { MatInput } from '@angular/material';
 
-import { OSharedModule } from '../../../shared/shared.module';
 import { NumberConverter } from '../../../decorators/input-converter';
 import { OFormComponent } from '../../form/o-form.component';
-import { OFormDataComponent, DEFAULT_INPUTS_O_FORM_DATA_COMPONENT, DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT } from '../../o-form-data-component.class';
+import {
+  DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,
+  DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT,
+  OFormDataComponent,
+} from '../../o-form-data-component.class';
 
 export const DEFAULT_INPUTS_O_TEXT_INPUT = [
   ...DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,
@@ -29,7 +40,7 @@ export const DEFAULT_OUTPUTS_O_TEXT_INPUT = [
   encapsulation: ViewEncapsulation.None
 })
 
-export class OTextInputComponent extends OFormDataComponent {
+export class OTextInputComponent extends OFormDataComponent implements OnInit {
 
   public static DEFAULT_INPUTS_O_TEXT_INPUT = DEFAULT_INPUTS_O_TEXT_INPUT;
   public static DEFAULT_OUTPUTS_O_TEXT_INPUT = DEFAULT_OUTPUTS_O_TEXT_INPUT;
@@ -37,7 +48,7 @@ export class OTextInputComponent extends OFormDataComponent {
   protected _minLength: number = -1;
   protected _maxLength: number = -1;
 
-  @ViewChild('matInputRef', {static: false})
+  @ViewChild('matInputRef', { static: false })
   protected matInputRef: MatInput;
 
   constructor(
@@ -87,12 +98,4 @@ export class OTextInputComponent extends OFormDataComponent {
   get maxLength(): number {
     return this._maxLength;
   }
-}
-
-@NgModule({
-  declarations: [OTextInputComponent],
-  imports: [OSharedModule, CommonModule],
-  exports: [OTextInputComponent]
-})
-export class OTextInputModule {
 }

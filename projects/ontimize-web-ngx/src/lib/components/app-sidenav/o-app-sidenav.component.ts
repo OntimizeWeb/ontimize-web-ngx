@@ -1,15 +1,27 @@
-import { AfterViewInit, ChangeDetectorRef, ChangeDetectionStrategy, Component, ElementRef, EventEmitter, HostListener, Injector, OnDestroy, OnInit, ViewEncapsulation, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  EventEmitter,
+  HostListener,
+  Injector,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+  ViewEncapsulation,
+} from '@angular/core';
+import { MediaObserver } from '@angular/flex-layout';
 import { MatSidenav } from '@angular/material';
 import { Router } from '@angular/router';
-import { MediaObserver } from '@angular/flex-layout';
 import { Subscription } from 'rxjs';
 
-import { Util } from '../../util/util';
 import { InputConverter } from '../../decorators/input-converter';
-import { AppMenuService, MenuRootItem, MenuItemUserInfo, MenuGroup } from '../../services/app-menu.service';
+import { AppMenuService, MenuGroup, MenuItemUserInfo, MenuRootItem } from '../../services/app-menu.service';
 import { OUserInfoService, UserInfo } from '../../services/o-user-info.service';
-
 import { Codes, OAppLayoutMode, OSidenavMode } from '../../util/codes';
+import { Util } from '../../util/util';
 
 export const DEFAULT_INPUTS_O_APP_SIDENAV = [
   'opened',

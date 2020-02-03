@@ -1,9 +1,9 @@
-import { ElementRef, forwardRef, Inject, Injector, Optional, ViewChild } from '@angular/core';
-import { MatExpansionPanel, MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material';
+import { AfterViewInit, ElementRef, forwardRef, Inject, Injector, Optional, ViewChild } from '@angular/core';
+import { MAT_FORM_FIELD_DEFAULT_OPTIONS, MatExpansionPanel } from '@angular/material';
+
 import { InputConverter } from '../../decorators/input-converter';
 import { OFormComponent } from '../form/o-form.component';
 import { OContainerComponent } from './o-container-component.class';
-
 
 export const DEFAULT_INPUTS_O_CONTAINER_COLLAPSIBLE = [
   ...OContainerComponent.DEFAULT_INPUTS_O_CONTAINER,
@@ -13,7 +13,7 @@ export const DEFAULT_INPUTS_O_CONTAINER_COLLAPSIBLE = [
   'expandedHeight:expanded-height'
 ];
 
-export class OContainerCollapsibleComponent extends OContainerComponent {
+export class OContainerCollapsibleComponent extends OContainerComponent implements AfterViewInit {
 
   public static DEFAULT_INPUTS_O_CONTAINER_COLLAPSIBLE = DEFAULT_INPUTS_O_CONTAINER_COLLAPSIBLE;
 
@@ -24,7 +24,7 @@ export class OContainerCollapsibleComponent extends OContainerComponent {
   public description: string;
 
   protected contentObserver = new MutationObserver(() => this.updateHeightExpansionPanelContent());
-  @ViewChild('expPanel', {static: false}) expPanel: MatExpansionPanel;
+  @ViewChild('expPanel', { static: false }) expPanel: MatExpansionPanel;
   protected _containerCollapsibleRef: ElementRef<HTMLElement>;
 
 

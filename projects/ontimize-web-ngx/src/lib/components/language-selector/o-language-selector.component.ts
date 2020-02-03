@@ -1,9 +1,8 @@
-import { Component, Injector, EventEmitter, NgModule, ViewEncapsulation } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { OSharedModule } from '../../shared/shared.module';
-import { OTranslateService } from '../../services/translate/o-translate.service';
+import { Component, EventEmitter, Injector, ViewEncapsulation } from '@angular/core';
+
 import { AppConfig } from '../../config/app-config';
 import { InputConverter } from '../../decorators/input-converter';
+import { OTranslateService } from '../../services/translate/o-translate.service';
 import LocaleCode from '../../util/locale';
 
 export const DEFAULT_INPUTS_O_LANGUAGE_SELECTOR = [
@@ -71,12 +70,4 @@ export class OLanguageSelectorComponent {
     return LocaleCode.getCountryCode(this.getCurrentLang());
   }
 
-}
-
-@NgModule({
-  declarations: [OLanguageSelectorComponent],
-  imports: [OSharedModule, CommonModule],
-  exports: [OLanguageSelectorComponent]
-})
-export class OLanguageSelectorModule {
 }

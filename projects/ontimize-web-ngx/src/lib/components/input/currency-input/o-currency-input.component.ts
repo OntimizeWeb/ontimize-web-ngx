@@ -1,7 +1,10 @@
-import { Component, NgModule, OnInit, ViewEncapsulation } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { OSharedModule } from '../../../shared/shared.module';
-import { DEFAULT_INPUTS_O_REAL_INPUT, DEFAULT_OUTPUTS_O_REAL_INPUT, ORealInputModule, ORealInputComponent } from '../real-input/o-real-input.component';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+
+import {
+  DEFAULT_INPUTS_O_REAL_INPUT,
+  DEFAULT_OUTPUTS_O_REAL_INPUT,
+  ORealInputComponent,
+} from '../real-input/o-real-input.component';
 
 export const DEFAULT_INPUTS_O_CURRENCY_INPUT = [
   ...DEFAULT_INPUTS_O_REAL_INPUT,
@@ -54,10 +57,3 @@ export class OCurrencyInputComponent extends ORealInputComponent implements OnIn
     return this.currency_symbols.hasOwnProperty(this.currencySymbol) && this.currencySymbolPosition === position;
   }
 }
-
-@NgModule({
-  declarations: [OCurrencyInputComponent],
-  imports: [CommonModule, OSharedModule, ORealInputModule],
-  exports: [OCurrencyInputComponent, ORealInputModule]
-})
-export class OCurrencyInputModule { }

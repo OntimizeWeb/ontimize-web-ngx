@@ -1,5 +1,5 @@
+import { Injector, Pipe, PipeTransform } from '@angular/core';
 
-import { Pipe, PipeTransform, Injector } from '@angular/core';
 import { MomentService } from '../services/moment.service';
 
 export interface IMomentPipeArgument {

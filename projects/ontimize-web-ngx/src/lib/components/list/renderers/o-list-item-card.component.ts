@@ -1,7 +1,15 @@
-import { Component, ElementRef, forwardRef, Inject, Injector, NgModule, Optional, Renderer2, ViewEncapsulation } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  forwardRef,
+  Inject,
+  Injector,
+  Optional,
+  Renderer2,
+  ViewEncapsulation,
+} from '@angular/core';
 
-import { OSharedModule } from '../../../shared/shared.module';
 import { OListItemComponent } from '../list-item/o-list-item.component';
 import { OListItemCardRenderer } from './o-list-item-card-renderer.class';
 
@@ -26,7 +34,7 @@ export const DEFAULT_OUTPUTS_O_LIST_ITEM_CARD = [
     '[class.o-list-item-card]': 'true'
   }
 })
-export class OListItemCardComponent extends OListItemCardRenderer {
+export class OListItemCardComponent extends OListItemCardRenderer implements AfterViewInit {
 
   constructor(
     elRef: ElementRef,
@@ -43,9 +51,3 @@ export class OListItemCardComponent extends OListItemCardRenderer {
 
 }
 
-@NgModule({
-  declarations: [OListItemCardComponent],
-  imports: [CommonModule, OSharedModule],
-  exports: [OListItemCardComponent]
-})
-export class OListItemCardModule { }

@@ -4,3 +4,8 @@ export * from './column/o-column.component';
 export * from './column-collapsible/o-column-collapsible.component';
 export * from './row/o-row.component';
 export * from './row-collapsible/o-row-collapsible.component';
+
+export * from './column/o-column.module';
+export * from './column-collapsible/o-column-collapsible.module';
+export * from './row/o-row.module';
+export * from './row-collapsible/o-row-collapsible.module';

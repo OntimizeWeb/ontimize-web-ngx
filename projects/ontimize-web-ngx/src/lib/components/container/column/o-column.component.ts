@@ -1,8 +1,6 @@
-import { CommonModule } from '@angular/common';
-import { Component, ElementRef, forwardRef, Inject, Injector, NgModule, Optional, ViewEncapsulation } from '@angular/core';
+import { Component, ElementRef, forwardRef, Inject, Injector, Optional, ViewEncapsulation } from '@angular/core';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material';
 
-import { OSharedModule } from '../../../shared/shared.module';
 import { OFormComponent } from '../../form/o-form.component';
 import { DEFAULT_INPUTS_O_CONTAINER, OContainerComponent } from '../o-container-component.class';
 
@@ -37,10 +35,3 @@ export class OColumnComponent extends OContainerComponent {
   }
 
 }
-
-@NgModule({
-  declarations: [OColumnComponent],
-  imports: [CommonModule, OSharedModule],
-  exports: [OColumnComponent]
-})
-export class OColumnModule { }

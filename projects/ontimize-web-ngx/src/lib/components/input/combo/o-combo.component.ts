@@ -1,19 +1,28 @@
-import { CommonModule } from '@angular/common';
-import { AfterViewInit, Component, ElementRef, forwardRef, Inject, Injector, NgModule, OnDestroy, OnInit, Optional, ViewChild, ViewEncapsulation } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  forwardRef,
+  Inject,
+  Injector,
+  OnDestroy,
+  OnInit,
+  Optional,
+  ViewChild,
+  ViewEncapsulation,
+} from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatSelect, MatSelectChange } from '@angular/material';
 import { Subscription } from 'rxjs';
+
 import { InputConverter } from '../../../decorators/input-converter';
 import { OntimizeService } from '../../../services/ontimize.service';
-import { OSharedModule } from '../../../shared/shared.module';
 import { Codes } from '../../../util/codes';
 import { Util } from '../../../util/util';
 import { OFormComponent } from '../../form/o-form.component';
 import { IFormValueOptions, OFormValue } from '../../form/OFormValue';
 import { OValueChangeEvent } from '../../o-form-data-component.class';
 import { OFormServiceComponent } from '../o-form-service-component.class';
-import { OComboSearchComponent } from './combo-search/o-combo-search.component';
-
 
 export const DEFAULT_INPUTS_O_COMBO = [
   ...OFormServiceComponent.DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT,
@@ -65,13 +74,14 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
   protected nullSelection: boolean = true;
   /* End inputs*/
 
-  @ViewChild('inputModel', {static: false})
+  @ViewChild('inputModel', { static: false })
   protected inputModel: ElementRef;
 
-  @ViewChild('selectModel', {static: false})
+  @ViewChild('selectModel', { static: false })
   protected selectModel: MatSelect;
 
   protected _filteredDataArray: any[] = [];
+
   set filteredDataArray(data: any) {
     if (Util.isArray(data)) {
       this._filteredDataArray = data;
@@ -82,6 +92,7 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
       this._filteredDataArray = [];
     }
   }
+
   get filteredDataArray(): any {
     return this._filteredDataArray;
   }
@@ -149,7 +160,7 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
   }
 
   public getFilteredDataArray(): any[] {
-    return this.filteredDataArray;
+    return this._filteredDataArray;
   }
 
   public hasNullSelection(): boolean {
@@ -338,10 +349,3 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
   }
 
 }
-
-@NgModule({
-  declarations: [OComboComponent, OComboSearchComponent],
-  imports: [CommonModule, OSharedModule],
-  exports: [OComboComponent, OComboSearchComponent]
-})
-export class OComboModule { }

@@ -1,6 +1,15 @@
-import { Component, Input, InjectionToken, ElementRef, ChangeDetectorRef, Optional, Inject, ChangeDetectionStrategy, Injector, NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { MatFormFieldModule, MatTooltipModule } from '@angular/material';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  Inject,
+  InjectionToken,
+  Injector,
+  Input,
+  Optional,
+} from '@angular/core';
+
 import { Codes } from '../../../util/codes';
 
 export const O_MAT_ERROR_OPTIONS =
@@ -45,12 +54,4 @@ export class OMatErrorComponent {
   get isStandardError(): boolean {
     return this.errorType === Codes.O_MAT_ERROR_STANDARD;
   }
-}
-
-@NgModule({
-  declarations: [OMatErrorComponent],
-  imports: [MatTooltipModule, MatFormFieldModule, CommonModule],
-  exports: [OMatErrorComponent]
-})
-export class OMatErrorModule {
 }

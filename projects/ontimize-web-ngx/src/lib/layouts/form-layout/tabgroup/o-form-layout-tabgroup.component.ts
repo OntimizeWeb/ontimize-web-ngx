@@ -1,7 +1,21 @@
-import { AfterViewInit, Component, ComponentFactoryResolver, ElementRef, EventEmitter, Injector, OnDestroy, QueryList, ViewChild, ViewChildren, ViewContainerRef, ViewEncapsulation } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ComponentFactoryResolver,
+  ElementRef,
+  EventEmitter,
+  Injector,
+  OnDestroy,
+  QueryList,
+  ViewChild,
+  ViewChildren,
+  ViewContainerRef,
+  ViewEncapsulation,
+} from '@angular/core';
 import { MatTabChangeEvent, MatTabGroup } from '@angular/material';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Subscription } from 'rxjs';
+
 import { DialogService } from '../../../services/dialog.service';
 import { ONavigationItem } from '../../../services/navigation.service';
 import { Codes } from '../../../util/codes';

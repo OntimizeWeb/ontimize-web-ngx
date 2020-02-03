@@ -1,9 +1,7 @@
-import { Component, ElementRef, Injector, NgModule, OnDestroy, ViewEncapsulation } from '@angular/core';
-import { Router, RouterModule } from '@angular/router';
-import { CommonModule } from '@angular/common';
+import { Component, ElementRef, Injector, OnDestroy, ViewEncapsulation } from '@angular/core';
+import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
-import { OSharedModule } from '../../shared/shared.module';
 import { DialogService } from '../../services/dialog.service';
 import { LoginService } from '../../services/login.service';
 import { OUserInfoService, UserInfo } from '../../services/o-user-info.service';
@@ -76,10 +74,3 @@ export class OUserInfoComponent implements OnDestroy {
   }
 
 }
-
-@NgModule({
-  declarations: [OUserInfoComponent],
-  imports: [CommonModule, OSharedModule, RouterModule],
-  exports: [OUserInfoComponent]
-})
-export class OUserInfoModule { }

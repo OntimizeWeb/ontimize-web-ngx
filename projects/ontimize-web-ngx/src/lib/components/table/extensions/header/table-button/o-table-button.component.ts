@@ -1,4 +1,14 @@
-import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, forwardRef, Inject, Injector, OnInit, ViewEncapsulation } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  EventEmitter,
+  forwardRef,
+  Inject,
+  Injector,
+  OnInit,
+  ViewEncapsulation,
+} from '@angular/core';
 
 import { InputConverter } from '../../../../../decorators/input-converter';
 import { Codes } from '../../../../../util/codes';
