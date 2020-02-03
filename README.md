@@ -41,12 +41,12 @@ The script `build` executes the following commands:
     - copyfiles -u 3 ./projects/ontimize-web-ngx/assets/svg/ontimize-icon-set.svg ./dist/ontimize-web-ngx/assets (Copy the assets folder to distribution folder)
     - cd dist/ontimize-web-ngx && npm pack (From the distribution folder we create a .tgz file to import in our project)
 
-
 We are working on solve those warning messages that appear on building the library.
 
 ## Code scaffolding
 
 Run `ng generate component component-name` to generate a new component.
+
 You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
 ## Running unit tests
