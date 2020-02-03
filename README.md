@@ -14,15 +14,9 @@ Follow the next steps:
 
 We have to scripts to build the application. One of them is for production and the other is for development.
 
-Production
+Production -> 'npm run prodbuild'
 
-    >> npm run prodbuild
-
-
-Development
-
-    >> npm run build
-
+Development -> 'npm run build'
 
 Run `npm run build` to build the library from the root folder.
 It will create the distribution folder, copy the styles and pack this to use it as a npm package in a .tgz file but you can run those tasks separately.
