@@ -14,10 +14,23 @@ Follow the next steps:
 
 We have to scripts to build the application. One of them is for production and the other is for development.
 
-Production -> `npm run prodbuild`
+### Production
+
+`npm run prodbuild`
+
 It will create the distribution folder, copy the styles
 
-Development -> `npm run build`
+The script `prodbuild` executes the following commands:
+
+    - ng build
+    - scss-bundle -p scss-bundle-ontimize.config.json (Bundles all scss linked files in one file that will be the one we import in our project)
+    - scss-bundle -p scss-bundle-theme.config.json (With this 2 tasks we will be able to use variables, mixins, keyframes ... in our project)
+    - copyfiles -u 3 ./projects/ontimize-web-ngx/assets/svg/ontimize-icon-set.svg ./dist/ontimize-web-ngx/assets (Copy the assets folder to distribution folder)
+
+### Development
+
+`npm run build`
+
 It will create the distribution folder, copy the styles and pack this to use it as a npm package in a .tgz file but you can run those tasks separately.
 
 The script `build` executes the following commands:
@@ -28,12 +41,6 @@ The script `build` executes the following commands:
     - copyfiles -u 3 ./projects/ontimize-web-ngx/assets/svg/ontimize-icon-set.svg ./dist/ontimize-web-ngx/assets (Copy the assets folder to distribution folder)
     - cd dist/ontimize-web-ngx && npm pack (From the distribution folder we create a .tgz file to import in our project)
 
-The script `prodbuild` executes the following commands:
-
-    - ng build
-    - scss-bundle -p scss-bundle-ontimize.config.json (Bundles all scss linked files in one file that will be the one we import in our project)
-    - scss-bundle -p scss-bundle-theme.config.json (With this 2 tasks we will be able to use variables, mixins, keyframes ... in our project)
-    - copyfiles -u 3 ./projects/ontimize-web-ngx/assets/svg/ontimize-icon-set.svg ./dist/ontimize-web-ngx/assets (Copy the assets folder to distribution folder)
 
 
 We are working on solve those warning messages that appear on building the library.
