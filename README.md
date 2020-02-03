@@ -15,9 +15,12 @@ Follow the next steps:
 We have to scripts to build the application. One of them is for production and the other is for development.
 
 Production
+
     >> npm run prodbuild
 
+
 Development
+
     >> npm run build
 
 
