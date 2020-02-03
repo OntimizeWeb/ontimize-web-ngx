@@ -18,7 +18,7 @@ We have to scripts to build the application. One of them is for production and t
 
 `npm run prodbuild`
 
-It will create the distribution folder, copy the styles
+It will create the distribution folder, copy the styles and copy the assets.
 
 The script `prodbuild` executes the following commands:
 
@@ -42,12 +42,12 @@ The script `build` executes the following commands:
     - cd dist/ontimize-web-ngx && npm pack (From the distribution folder we create a .tgz file to import in our project)
 
 
-
 We are working on solve those warning messages that appear on building the library.
 
 ## Code scaffolding
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+Run `ng generate component component-name` to generate a new component.
+You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
 ## Running unit tests
 
