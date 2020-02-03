@@ -2,13 +2,18 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.3.21.
 
-## Code scaffolding
+## Installation
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+Follow the next steps:
+
+    - npm install
+    - cd projects/ontimize-web-ngx
+    - npm install
 
 ## Build
 
-Run `npm run build` to build the library. It will create the distribution folder, copy the styles and pack this to use it as a npm package in a .tgz file but you can run those tasks separately. 
+Run `npm run build` to build the library from the root folder.
+It will create the distribution folder, copy the styles and pack this to use it as a npm package in a .tgz file but you can run those tasks separately. 
 
 The npm script `build` executes the following commands:
 
@@ -19,6 +24,10 @@ The npm script `build` executes the following commands:
     - cd dist/ontimize-web-ngx && npm pack (From the distribution folder we create a .tgz file to import in our project)
 
 We are working on solve those warning messages.
+
+## Code scaffolding
+
+Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
 ## Running unit tests
 
@@ -31,3 +40,9 @@ Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protrac
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+
+## Notes
+
+Notes of the project:
+
+    - @angular/http module has been deprecated in angular 8. The replacement is @angular/common/http -> TODO

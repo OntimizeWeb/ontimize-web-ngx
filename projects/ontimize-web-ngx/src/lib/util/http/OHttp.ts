@@ -1,13 +1,6 @@
-import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
-import {
-  Http,
-  RequestOptionsArgs,
-  RequestOptions,
-  Headers,
-  Response,
-  ConnectionBackend
-} from '@angular/http';
+import { ConnectionBackend, Headers, Http, RequestOptions, RequestOptionsArgs, Response } from '@angular/http';
+import { Observable } from 'rxjs';
 
 
 const mergeAuthToken = (options: RequestOptionsArgs) => {
