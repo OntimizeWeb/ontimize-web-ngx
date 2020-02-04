@@ -1,6 +1,10 @@
+## 4.1.1
+### Bug Fixes
+* **o-table**: use independent editor for column edition a insertable row ([10af3c6](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/10af3c6)) Closes [#299](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/299)
+
 ## 4.1.0 (2019-12-19)
 ### Features
-* **o-table**: 
+* **o-table**:
   * new value `local` for `export-mode` input
   * new `o-table-export-button` component ([3258fe6](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3258fe6))
   * allowing to define custom `o-table-quickfilter` ([e964043a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e964043a))
