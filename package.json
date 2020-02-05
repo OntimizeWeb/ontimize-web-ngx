@@ -19,15 +19,15 @@
     "@angular/compiler": "~8.2.14",
     "@angular/core": "~8.2.14",
     "@angular/forms": "~8.2.14",
+    "@angular/http": "^7.2.16",
     "@angular/platform-browser": "~8.2.14",
     "@angular/platform-browser-dynamic": "~8.2.14",
     "@angular/router": "~8.2.14",
     "rxjs": "~6.4.0",
     "tslib": "^1.10.0",
-    "zone.js": "0.10.2"
+    "zone.js": "0.9.1"
   },
   "devDependencies": {
-    "@angular/core": "~8.2.14",
     "@angular-devkit/build-angular": "~0.803.22",
     "@angular-devkit/build-ng-packagr": "~0.803.22",
     "@angular/cli": "~8.3.21",
@@ -45,7 +45,7 @@
     "karma-coverage-istanbul-reporter": "~2.0.1",
     "karma-jasmine": "~2.0.1",
     "karma-jasmine-html-reporter": "^1.4.0",
-    "ng-packagr": "4.7.1",
+    "ng-packagr": "5.7.1",
     "node-sass": "^4.13.1",
     "protractor": "~5.4.0",
     "scss-bundle": "^3.0.2",
