@@ -2,6 +2,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { ElementRef, forwardRef, Injector, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { BehaviorSubject, Observable } from 'rxjs';
+
 import { OFilterBuilderComponent, OSearchInputComponent } from '../components';
 import { InputConverter } from '../decorators';
 import { OFormLayoutDialogComponent } from '../layouts/form-layout/dialog/o-form-layout-dialog.component';
@@ -13,6 +14,7 @@ import { OFormComponent } from './form/o-form.component';
 import { OListInitializationOptions } from './list/o-list.component';
 import { DEFAULT_INPUTS_O_SERVICE_BASE_COMPONENT, OServiceBaseComponent } from './o-service-base-component.class';
 import { OTableInitializationOptions } from './table/o-table.component';
+
 export const DEFAULT_INPUTS_O_SERVICE_COMPONENT = [
   ...DEFAULT_INPUTS_O_SERVICE_BASE_COMPONENT,
 
