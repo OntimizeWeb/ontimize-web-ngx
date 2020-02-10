@@ -1,11 +1,34 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, CUSTOM_ELEMENTS_SCHEMA, ElementRef, EventEmitter, Injector, NgModule, NgZone, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  CUSTOM_ELEMENTS_SCHEMA,
+  ElementRef,
+  EventEmitter,
+  Injector,
+  NgModule,
+  NgZone,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+  ViewEncapsulation,
+} from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router, UrlSegment } from '@angular/router';
 import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
+
 import { InputConverter } from '../../decorators';
 import { OFormLayoutManagerComponent } from '../../layouts';
-import { DialogService, NavigationService, OFormPermissions, ONavigationItem, OntimizeService, OPermissions, PermissionsService, SnackBarService } from '../../services';
+import {
+  DialogService,
+  NavigationService,
+  OFormPermissions,
+  ONavigationItem,
+  OntimizeService,
+  OPermissions,
+  PermissionsService,
+  SnackBarService,
+} from '../../services';
 import { dataServiceFactory } from '../../services/data-service.provider';
 import { OSharedModule } from '../../shared';
 import { Codes, SQLTypes, Util } from '../../utils';
@@ -63,6 +86,9 @@ export const DEFAULT_INPUTS_O_FORM = [
 
   // stay-in-record-after-edit [string][yes|no|true|false]: shows edit form after edit a record. Default: false;
   'stayInRecordAfterEdit: stay-in-record-after-edit',
+
+  // stay-in-insert-mode [string][yes|no|true|false]: shows reseted form after insert a new record to continue inserting
+  'stayInInsertMode: stay-in-insert-mode',
 
   'serviceType : service-type',
 
@@ -181,6 +207,8 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   stayInRecordAfterInsert: boolean = false;
   @InputConverter()
   stayInRecordAfterEdit: boolean = false;
+  @InputConverter()
+  stayInInsertMode: boolean = false;
   serviceType: string;
   @InputConverter()
   protected queryOnInit: boolean = true;
@@ -791,7 +819,12 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
       if (self.stayInRecordAfterInsert) {
         self._stayInRecordAfterInsert(resp);
       } else {
-        self._closeDetailAction();
+        if (self.stayInInsertMode) {
+          let form = <HTMLFormElement>this.elRef.nativeElement.getElementsByTagName('form')[0];
+          form.reset();
+        } else {
+          self._closeDetailAction();
+        }
       }
     }, error => {
       self.postIncorrectInsert(error);

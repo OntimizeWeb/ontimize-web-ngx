@@ -58,7 +58,6 @@ export const DEFAULT_INPUTS_O_FORM_LAYOUT_MANAGER = [
   'labelColumns: label-columns',
   'separator',
   'title',
-  'insertMode: insert-mode',
   'storeState: store-state',
   // attr of the child form from which the data for building the tab title will be obtained
   'titleDataOrigin: title-data-origin',
@@ -100,7 +99,6 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
   public oattr: string;
   public mode: string;
   public labelColumns: string;
-  public insertMode: string;
   public separator: string = ' ';
   public title: string;
   @InputConverter()
@@ -309,12 +307,7 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
     if (this.isTabMode() && Util.isDefined(this.oTabGroup)) {
       this.oTabGroup.closeTab(id);
     } else if (this.isDialogMode() && Util.isDefined(this.dialogRef)) {
-      if (this.insertMode && this.insertMode === 'repeat') {
-        let form: any = <HTMLFormElement>document.getElementById(this.dialogRef.componentInstance.dialogRef.id).getElementsByTagName("form")[0];        
-        form.reset();
-      } else {
-        this.dialogRef.close();
-      }
+      this.dialogRef.close();
       this.reloadMainComponents();
     }
   }
