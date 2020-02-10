@@ -314,14 +314,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   /*parsed inputs variables */
   protected _visibleColArray: Array<string> = [];
 
-  get originalVisibleColumns(): string {
-    return this.visibleColumns;
-  }
-
-  get originalSortColumns(): string {
-    return this.sortColumns;
-  }
-
   get visibleColArray(): Array<any> {
     return this._visibleColArray;
   }
@@ -554,6 +546,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   initialize(): any {
     super.initialize();
 
+    this._oTableOptions = new OTableOptions();
+
     if (this.tabGroupContainer && this.tabContainer) {
       this.registerTabListener();
     }
@@ -615,6 +609,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
     this.destroy();
     this.initialize();
+    this.oTableStorage.reset();
     this.initTableAfterViewInit();
     this.onReinitialize.emit(null);
   }
@@ -818,7 +813,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
             return x.attr;
           }
         });
-        const visibleColArray = Util.parseArray(this.originalVisibleColumns, true);
+        const visibleColArray = Util.parseArray(this.visibleColumns, true);
 
         // Find values in visible-columns that they arent in original-visible-columns in localstorage
         // in this case you have to add this column to this.visibleColArray

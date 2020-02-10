@@ -330,7 +330,7 @@ export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, O
   onChangeColumnsVisibilityClicked() {
     const dialogRef = this.dialog.open(OTableVisibleColumnsDialogComponent, {
       data: {
-        originalVisibleColumns: Util.parseArray(this.table.originalVisibleColumns, true),
+        visibleColumns: Util.parseArray(this.table.visibleColumns, true),
         columnsData: this.table.oTableOptions.columns,
         rowHeight: this.table.rowHeight
       },
