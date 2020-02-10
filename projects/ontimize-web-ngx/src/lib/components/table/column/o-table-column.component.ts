@@ -30,6 +30,7 @@ import {
   O_TABLE_CELL_RENDERERS_OUTPUTS,
   renderersMapping,
 } from './cell-renderer/cell-renderer';
+import { OPercentageValueBaseType } from '../../../pipes/o-percentage.pipe';
 
 export const DEFAULT_INPUTS_O_TABLE_COLUMN = [
 
@@ -186,6 +187,9 @@ export class OTableColumnComponent implements OTableColumn, OnDestroy, OnInit, A
   oDateFormat = 'L';
   oHourFormat = 24;
 
+  /* input renderer percentage */
+  valueBase: OPercentageValueBaseType = 1;
+
   /* input editor */
   @InputConverter()
   protected orequired: boolean = false;
@@ -325,8 +329,9 @@ export class OTableColumnComponent implements OTableColumn, OnDestroy, OnInit, A
               newRenderer.renderType = this.renderType;
               newRenderer.booleanType = this.booleanType;
               break;
-            case 'real':
             case 'percentage':
+              newRenderer.valueBase = this.valueBase;
+            case 'real':
               newRenderer.decimalSeparator = this.decimalSeparator;
               newRenderer.minDecimalDigits = this.minDecimalDigits;
               newRenderer.maxDecimalDigits = this.maxDecimalDigits;
