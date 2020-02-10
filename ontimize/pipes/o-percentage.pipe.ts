@@ -23,7 +23,16 @@ export class OPercentPipe extends ORealPipe implements PipeTransform {
   }
 
   transform(text: string, args: IPercentPipeArgument): string {
+    args.valueBase = this.parseValueBase(args.valueBase);
     return this.numberService.getPercentValue(text, args);
+  }
+
+  protected parseValueBase(value: OPercentageValueBaseType): OPercentageValueBaseType {
+    const parsed = parseInt(value as any, 10);
+    if (parsed === 1 || parsed === 100) {
+      return parsed;
+    }
+    return 1;
   }
 
 }
