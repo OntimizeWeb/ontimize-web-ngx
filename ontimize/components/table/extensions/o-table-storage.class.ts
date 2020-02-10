@@ -191,7 +191,7 @@ export class OTableStorage {
 
     let oColumnsData = [];
     const self = this;
-    Util.parseArray(this.table.originalVisibleColumns, true).forEach((x: string) => {
+    Util.parseArray(this.table.visibleColumns, true).forEach((x: string) => {
       let oCol = self.table.getOColumn(x);
       oColumnsData.push({
         attr: oCol.attr,
@@ -201,7 +201,7 @@ export class OTableStorage {
     });
 
     initialConfiguration['oColumns-display'] = oColumnsData;
-    initialConfiguration['sort-columns'] = this.table.originalSortColumns;
+    initialConfiguration['sort-columns'] = this.table.sortColumns;
     initialConfiguration['select-column-visible'] = this.table.oTableOptions.selectColumn.visible;
     initialConfiguration['filter-case-sensitive'] = this.table.filterCaseSensitive;
     initialConfiguration['query-rows'] = this.table.originalQueryRows;

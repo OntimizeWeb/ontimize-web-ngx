@@ -32,14 +32,13 @@ export class OTableVisibleColumnsDialogComponent {
     } catch (e) {
       // no parent form
     }
-    if (Util.isArray(data.columnsData) && Util.isArray(data.originalVisibleColumns)) {
-      let originalCols = data.originalVisibleColumns;
+    if (Util.isArray(data.columnsData) && Util.isArray(data.visibleColumns)) {
       data.columnsData.forEach((oCol: OColumn) => {
         this.columns.push({
           attr: oCol.attr,
           title: oCol.title,
           visible: oCol.visible,
-          showInList: (oCol.definition !== undefined || oCol.visible || originalCols.indexOf(oCol.attr) !== -1)
+          showInList: data.visibleColumns.indexOf(oCol.attr) !== -1
         });
       });
     }
