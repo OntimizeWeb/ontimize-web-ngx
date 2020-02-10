@@ -20,10 +20,10 @@ export class OTableCellRendererPercentageComponent extends OTableCellRendererRea
 
   public static DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_PERCENTAGE = DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_PERCENTAGE;
 
-  protected decimalSeparator: string = '.';
+  decimalSeparator: string = '.';
   minDecimalDigits = 0;
   maxDecimalDigits = 0;
-  protected valueBase: OPercentageValueBaseType = 1;
+  valueBase: OPercentageValueBaseType = 1;
 
   protected numberService: NumberService;
 
@@ -34,7 +34,7 @@ export class OTableCellRendererPercentageComponent extends OTableCellRendererRea
 
   constructor(protected injector: Injector) {
     super(injector);
-    this.tableColumn.type = 'real';
+    this.tableColumn.type = 'percentage';
     this.numberService = this.injector.get(NumberService);
 
     this.setComponentPipe();

@@ -10,6 +10,7 @@ import { OTableCellEditorBooleanComponent, OTableCellEditorDateComponent, OTable
 import { OTableCellRendererActionComponent, OTableCellRendererBooleanComponent, OTableCellRendererCurrencyComponent, OTableCellRendererDateComponent, OTableCellRendererImageComponent, OTableCellRendererIntegerComponent, OTableCellRendererPercentageComponent, OTableCellRendererRealComponent, OTableCellRendererServiceComponent, OTableCellRendererTimeComponent } from './cell-renderer/cell-renderer';
 import { OTableCellRendererTranslateComponent } from './cell-renderer/translate/o-table-cell-renderer-translate.component';
 import { IExpression } from '../../filter-expression.utils';
+import { OPercentageValueBaseType } from '../../../pipes/o-percentage.pipe';
 
 
 export interface OColumnTooltip {
@@ -75,7 +76,9 @@ export const DEFAULT_INPUTS_O_TABLE_COLUMN = [
   ...OTableCellRendererImageComponent.DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_IMAGE,
   ...OTableCellRendererActionComponent.DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_ACTION,
   ...OTableCellRendererServiceComponent.DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_SERVICE,
-  ...OTableCellRendererTranslateComponent.DEFAULT_IPUTS_O_TABLE_CELL_RENDERER_TRANSLATE,
+  ...OTableCellRendererTranslateComponent.DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_TRANSLATE,
+  ...OTableCellRendererPercentageComponent.DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_PERCENTAGE,
+  ...OTableCellRendererTimeComponent.DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_TIME,
 
   ...OTableCellEditorBooleanComponent.DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_BOOLEAN,
   ...OTableCellEditorDateComponent.DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_DATE,
@@ -208,9 +211,9 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
 
   /* input renderer translate */
   protected translateArgsFn: (rowData: any) => any[];
-  /**input time */
-  oDateFormat = 'L';
-  oHourFormat = 24;
+
+  /* input renderer percentage */
+  valueBase: OPercentageValueBaseType = 1;
 
   /* input editor */
   @InputConverter()
@@ -251,6 +254,10 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
   indeterminateOnNull: boolean = false;
   @InputConverter()
   autoCommit: boolean;
+
+  /**input editor time */
+  oDateFormat = 'L';
+  oHourFormat = 24;
 
   /* output cell renderer action */
   onClick: EventEmitter<Object> = new EventEmitter<Object>();
@@ -346,8 +353,9 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
               newRenderer.renderType = this.renderType;
               newRenderer.booleanType = this.booleanType;
               break;
-            case 'real':
             case 'percentage':
+              newRenderer.valueBase = this.valueBase;
+            case 'real':
               newRenderer.decimalSeparator = this.decimalSeparator;
               newRenderer.minDecimalDigits = this.minDecimalDigits;
               newRenderer.maxDecimalDigits = this.maxDecimalDigits;

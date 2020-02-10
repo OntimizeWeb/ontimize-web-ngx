@@ -18,7 +18,7 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_TRANSLATE = [
 })
 export class OTableCellRendererTranslateComponent extends OBaseTableCellRenderer {
 
-  public static DEFAULT_IPUTS_O_TABLE_CELL_RENDERER_TRANSLATE = DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_TRANSLATE;
+  public static DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_TRANSLATE = DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_TRANSLATE;
 
   @ViewChild('templateref', { read: TemplateRef })
   public templateref: TemplateRef<any>;
