@@ -821,7 +821,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
       self.postCorrectInsert(resp);
       self.formCache.setCacheSnapshot();
       self.markFormLayoutManagerToUpdate();
-      if (self.stayInRecordAfterInsert || self.afterInsertMode === 'edit') {
+      if (self.stayInRecordAfterInsert || self.afterInsertMode === 'detail') {
         self._stayInRecordAfterInsert(resp);
         if (self.stayInInsertMode || self.afterInsertMode === 'new') {
           let form = <HTMLFormElement>this.elRef.nativeElement.getElementsByTagName('form')[0];
@@ -836,7 +836,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
         }
       }
       if(self.stayInRecordAfterInsert || self.stayInInsertMode) {
-        console.warn("WARNING -> The attributes stay-in-record-after-insert and stay-in-insert-mode will be deprecated in version 8.x.x and you will be only able to use after-insert-mode with 'new' or 'edit' value.")
+        console.warn("WARNING -> The attributes stay-in-record-after-insert and stay-in-insert-mode will be deprecated in version 8.x.x and you will be only able to use after-insert-mode with 'new' or 'detail' value.")
       }
     }, error => {
       self.postIncorrectInsert(error);
