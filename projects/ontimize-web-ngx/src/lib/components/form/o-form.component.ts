@@ -80,6 +80,12 @@ export const DEFAULT_INPUTS_O_FORM = [
   // stay-in-record-after-edit [string][yes|no|true|false]: shows edit form after edit a record. Default: false;
   'stayInRecordAfterEdit: stay-in-record-after-edit',
 
+  // stay-in-insert-mode [string][yes|no|true|false]: shows reseted form after insert a new record to continue inserting
+  'stayInInsertMode: stay-in-insert-mode',
+
+  // [string][new | detail]: shows reseted form after insert a new record (new) or shows the inserted record after (detail)
+  'afterInsertMode: after-insert-mode',
+
   'serviceType : service-type',
 
   'queryOnInit : query-on-init',
@@ -196,6 +202,10 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   stayInRecordAfterInsert: boolean = false;
   @InputConverter()
   stayInRecordAfterEdit: boolean = false;
+  @InputConverter()
+  stayInInsertMode: boolean = false;
+  @InputConverter()
+  afterInsertMode: string = '';
   serviceType: string;
   @InputConverter()
   protected queryOnInit: boolean = true;
@@ -800,16 +810,28 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     }
 
     const self = this;
-    const values = this.getAttributesValuesToInsert();
-    const sqlTypes = this.getAttributesSQLTypes();
+    let values = this.getAttributesValuesToInsert();
+    let sqlTypes = this.getAttributesSQLTypes();
     this.insertData(values, sqlTypes).subscribe(resp => {
       self.postCorrectInsert(resp);
       self.formCache.setCacheSnapshot();
       self.markFormLayoutManagerToUpdate();
-      if (self.stayInRecordAfterInsert) {
+      if (self.stayInRecordAfterInsert || self.afterInsertMode === 'detail') {
         self._stayInRecordAfterInsert(resp);
+        if (self.stayInInsertMode || self.afterInsertMode === 'new') {
+          let form = <HTMLFormElement>this.elRef.nativeElement.getElementsByTagName('form')[0];
+          form.reset();
+        }
       } else {
-        self._closeDetailAction();
+        if (self.stayInInsertMode || self.afterInsertMode === 'new') {
+          let form = <HTMLFormElement>this.elRef.nativeElement.getElementsByTagName('form')[0];
+          form.reset();
+        } else {
+          self._closeDetailAction();
+        }
+      }
+      if(self.stayInRecordAfterInsert || self.stayInInsertMode) {
+        console.warn("WARNING -> The attributes stay-in-record-after-insert and stay-in-insert-mode will be deprecated in version 8.x.x and you will be only able to use after-insert-mode with 'new' or 'detail' value.")
       }
     }, error => {
       self.postIncorrectInsert(error);
