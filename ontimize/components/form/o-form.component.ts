@@ -90,6 +90,9 @@ export const DEFAULT_INPUTS_O_FORM = [
   // stay-in-insert-mode [string][yes|no|true|false]: shows reseted form after insert a new record to continue inserting
   'stayInInsertMode: stay-in-insert-mode',
 
+  // [string][new | detail]: shows reseted form after insert a new record (new) or shows the inserted record after (detail)
+  'afterInsertMode: after-insert-mode',
+
   'serviceType : service-type',
 
   'queryOnInit : query-on-init',
@@ -209,6 +212,8 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   stayInRecordAfterEdit: boolean = false;
   @InputConverter()
   stayInInsertMode: boolean = false;
+  @InputConverter()
+  afterInsertMode: string = '';
   serviceType: string;
   @InputConverter()
   protected queryOnInit: boolean = true;
@@ -816,15 +821,22 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
       self.postCorrectInsert(resp);
       self.formCache.setCacheSnapshot();
       self.markFormLayoutManagerToUpdate();
-      if (self.stayInRecordAfterInsert) {
+      if (self.stayInRecordAfterInsert || self.afterInsertMode === 'edit') {
         self._stayInRecordAfterInsert(resp);
+        if (self.stayInInsertMode || self.afterInsertMode === 'new') {
+          let form = <HTMLFormElement>this.elRef.nativeElement.getElementsByTagName('form')[0];
+          form.reset();
+        }
       } else {
-        if (self.stayInInsertMode) {
+        if (self.stayInInsertMode || self.afterInsertMode === 'new') {
           let form = <HTMLFormElement>this.elRef.nativeElement.getElementsByTagName('form')[0];
           form.reset();
         } else {
           self._closeDetailAction();
         }
+      }
+      if(self.stayInRecordAfterInsert || self.stayInInsertMode) {
+        console.warn("WARNING -> The attributes stay-in-record-after-insert and stay-in-insert-mode will be deprecated in version 8.x.x and you will be only able to use after-insert-mode with 'new' or 'edit' value.")
       }
     }, error => {
       self.postIncorrectInsert(error);
