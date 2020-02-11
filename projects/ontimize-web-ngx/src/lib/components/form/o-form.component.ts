@@ -78,10 +78,7 @@ export const DEFAULT_INPUTS_O_FORM = [
   'stayInRecordAfterInsert: stay-in-record-after-insert',
 
   // stay-in-record-after-edit [string][yes|no|true|false]: shows edit form after edit a record. Default: false;
-  'stayInRecordAfterEdit: stay-in-record-after-edit',
-
-  // stay-in-insert-mode [string][yes|no|true|false]: shows reseted form after insert a new record to continue inserting
-  'stayInInsertMode: stay-in-insert-mode',
+  'stayInRecordAfterEdit: stay-in-record-after-edit',  
 
   // [string][new | detail]: shows reseted form after insert a new record (new) or shows the inserted record after (detail)
   'afterInsertMode: after-insert-mode',
@@ -201,9 +198,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   @InputConverter()
   stayInRecordAfterInsert: boolean = false;
   @InputConverter()
-  stayInRecordAfterEdit: boolean = false;
-  @InputConverter()
-  stayInInsertMode: boolean = false;
+  stayInRecordAfterEdit: boolean = false;  
   @InputConverter()
   afterInsertMode: string = '';
   serviceType: string;
@@ -818,20 +813,20 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
       self.markFormLayoutManagerToUpdate();
       if (self.stayInRecordAfterInsert || self.afterInsertMode === 'detail') {
         self._stayInRecordAfterInsert(resp);
-        if (self.stayInInsertMode || self.afterInsertMode === 'new') {
+        if (self.afterInsertMode === 'new') {
           let form = <HTMLFormElement>this.elRef.nativeElement.getElementsByTagName('form')[0];
           form.reset();
         }
       } else {
-        if (self.stayInInsertMode || self.afterInsertMode === 'new') {
+        if (self.afterInsertMode === 'new') {
           let form = <HTMLFormElement>this.elRef.nativeElement.getElementsByTagName('form')[0];
           form.reset();
         } else {
           self._closeDetailAction();
         }
       }
-      if(self.stayInRecordAfterInsert || self.stayInInsertMode) {
-        console.warn("WARNING -> The attributes stay-in-record-after-insert and stay-in-insert-mode will be deprecated in version 8.x.x and you will be only able to use after-insert-mode with 'new' or 'detail' value.")
+      if(self.stayInRecordAfterInsert) {
+        console.warn("WARNING -> The attribute stay-in-record-after-insert will be deprecated in version 8.x.x and you will be only able to use after-insert-mode with 'new' or 'detail' value.")
       }
     }, error => {
       self.postIncorrectInsert(error);
