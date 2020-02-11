@@ -95,11 +95,12 @@ export class OTableInsertableRowComponent implements OnInit {
 
   initializeEditors(): void {
     const self = this;
-    this.table.oTableOptions.columns.forEach((col, i, array) => {
+    this.table.oTableOptions.columns.forEach(col => {
       if (self.isColumnInsertable(col)) {
         const columnEditorType = col.editor ? col.editor.type : col.type;
         if (col.definition) {
           const editor: OBaseTableCellEditor = col.definition.buildCellEditor(columnEditorType, this.resolver, col.definition.container, col.definition);
+          editor.registerInColumn = false; // Do not register insertable row fields in table columns
           this.columnEditors[col.attr] = editor;
           let disabledCol = !this.enabled;
           if (!disabledCol) {
@@ -116,10 +117,8 @@ export class OTableInsertableRowComponent implements OnInit {
           editor.rowData = self.rowData;
           editor.startEdition(self.rowData);
           editor.formControl.markAsUntouched();
-          col.editor = editor;
         }
       }
-      array[i] = col;
     });
   }
 

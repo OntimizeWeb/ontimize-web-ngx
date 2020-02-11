@@ -576,7 +576,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   protected _selectAllCheckboxVisible: boolean;
   set selectAllCheckboxVisible(value: boolean) {
     this._selectAllCheckboxVisible = BooleanConverter(this.state['select-column-visible']) || BooleanConverter(value);
-    this.oTableOptions.selectColumn.visible = this._selectAllCheckboxVisible;
+    this._oTableOptions.selectColumn.visible = this._selectAllCheckboxVisible;
     this.initializeCheckboxColumn();
   }
 
@@ -590,19 +590,11 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   public exportMode: string = Codes.EXPORT_MODE_VISIBLE;
   public daoTable: OTableDao | null;
   public dataSource: OTableDataSource | null;
-  protected visibleColumns: string;
-  protected sortColumns: string;
+  public visibleColumns: string;
+  public sortColumns: string;
 
   /*parsed inputs variables */
   protected _visibleColArray: Array<string> = [];
-
-  get originalVisibleColumns(): string {
-    return this.visibleColumns;
-  }
-
-  get originalSortColumns(): string {
-    return this.sortColumns;
-  }
 
   get visibleColArray(): Array<any> {
     return this._visibleColArray;
@@ -837,6 +829,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   initialize(): any {
     super.initialize();
 
+    this._oTableOptions = new OTableOptions();
+
     if (this.tabGroupContainer && this.tabContainer) {
       this.registerTabListener();
     }
@@ -898,6 +892,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
     this.destroy();
     this.initialize();
+    this.oTableStorage.reset();
     this.initTableAfterViewInit();
     this.onReinitialize.emit(null);
   }
@@ -1057,7 +1052,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     if (this.editionMode !== Codes.DETAIL_MODE_NONE) {
       return;
     }
-    const editableColumns = this.oTableOptions.columns.filter(col => {
+    const editableColumns = this._oTableOptions.columns.filter(col => {
       return Util.isDefined(col.editor);
     });
     if (editableColumns.length > 0) {
@@ -1105,7 +1100,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
             return x.attr;
           }
         });
-        const visibleColArray = Util.parseArray(this.originalVisibleColumns, true);
+        const visibleColArray = Util.parseArray(this.visibleColumns, true);
 
         // Find values in visible-columns that they arent in original-visible-columns in localstorage
         // in this case you have to add this column to this.visibleColArray
@@ -1159,7 +1154,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     if (this.state['sort-columns'] && this.state['initial-configuration']['sort-columns']) {
 
       const initialConfigSortColumnsArray = ServiceUtils.parseSortColumns(this.state['initial-configuration']['sort-columns']);
-      const originalSortColumnsArray = ServiceUtils.parseSortColumns(this.originalSortColumns);
+      const originalSortColumnsArray = ServiceUtils.parseSortColumns(this.sortColumns);
       const self = this;
       // Find values in visible-columns that they arent in original-visible-columns in localstorage
       // in this case you have to add this column to this.visibleColArray
@@ -1797,7 +1792,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   initializeCheckboxColumn() {
     // Initializing row selection listener
-    if (!this.selectionChangeSubscription && this.oTableOptions.selectColumn.visible) {
+    if (!this.selectionChangeSubscription && this._oTableOptions.selectColumn.visible) {
       this.selectionChangeSubscription = this.selection.onChange.subscribe((selectionData: SelectionChange<any>) => {
         if (selectionData && selectionData.added.length > 0) {
           ObservableWrapper.callEmit(this.onRowSelected, selectionData.added);
@@ -2469,13 +2464,13 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   refreshColumnsWidth() {
-    this.oTableOptions.columns.filter(c => c.visible).forEach((c) => {
+    this._oTableOptions.columns.filter(c => c.visible).forEach((c) => {
       c.DOMWidth = undefined;
     });
     this.cd.detectChanges();
     setTimeout(() => {
       this.getColumnsWidthFromDOM();
-      this.oTableOptions.columns.filter(c => c.visible).forEach(c => {
+      this._oTableOptions.columns.filter(c => c.visible).forEach(c => {
         if (Util.isDefined(c.definition) && Util.isDefined(c.definition.width)) {
           c.width = c.definition.width;
         }
