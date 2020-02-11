@@ -1,6 +1,9 @@
-## 4.1.1
+## 4.1.1 (2020-02-11)
 ### Bug Fixes
-* **o-table**: use independent editor for column edition a insertable row ([10af3c6](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/10af3c6)) Closes [#299](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/299)
+* **o-table**:
+  * use independent editor for column edition a insertable row ([10af3c6](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/10af3c6)) Closes [#299](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/299)
+  * reinitialize table resets table dialogs configuration ([3763caf](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3763caf)) Closes [#298](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/298)
+  * use correct type for `value-base` attribute value on `o-table-cell-renderer-percentage` and include it in `o-table-column` attributes ([054c324](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/054c324))
 
 ## 4.1.0 (2019-12-19)
 ### Features
