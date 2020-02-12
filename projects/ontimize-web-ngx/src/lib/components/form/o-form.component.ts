@@ -200,7 +200,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   @InputConverter()
   stayInRecordAfterEdit: boolean = false;  
   @InputConverter()
-  afterInsertMode: string = '';
+  afterInsertMode: 'new' | 'detail' = null;
   serviceType: string;
   @InputConverter()
   protected queryOnInit: boolean = true;
@@ -790,6 +790,11 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   _goInsertMode(options?: any) {
     this.formNavigation.goInsertMode(options);
   }
+  
+  _clearFormAfterInsert() {
+    this.clearData();
+    this._setComponentsEditable(true);
+  }
 
   /**
    * Performs insert action.
@@ -814,19 +819,17 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
       if (self.stayInRecordAfterInsert || self.afterInsertMode === 'detail') {
         self._stayInRecordAfterInsert(resp);
         if (self.afterInsertMode === 'new') {
-          let form = <HTMLFormElement>this.elRef.nativeElement.getElementsByTagName('form')[0];
-          form.reset();
+          this._clearFormAfterInsert();
         }
       } else {
         if (self.afterInsertMode === 'new') {
-          let form = <HTMLFormElement>this.elRef.nativeElement.getElementsByTagName('form')[0];
-          form.reset();
+          this._clearFormAfterInsert();
         } else {
           self._closeDetailAction();
         }
       }
       if(self.stayInRecordAfterInsert) {
-        console.warn("WARNING -> The attribute stay-in-record-after-insert will be deprecated in version 8.x.x and you will be only able to use after-insert-mode with 'new' or 'detail' value.")
+        console.warn('WARNING -> The attribute stay-in-record-after-insert will be deprecated in version 8.x.x and you will be only able to use after-insert-mode with "new" or "detail" value.');
       }
     }, error => {
       self.postIncorrectInsert(error);
