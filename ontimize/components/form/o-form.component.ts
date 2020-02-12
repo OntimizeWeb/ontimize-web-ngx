@@ -823,7 +823,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
       if (self.stayInRecordAfterInsert || self.afterInsertMode === 'detail') {
         self._stayInRecordAfterInsert(resp);
         if (self.afterInsertMode === 'new') {
-          this._clearFormAfterInsert();
+          console.warn('WARNING -> The attribute stay-in-record-after-insert will be deprecated in version 8.x.x and you will be only able to use after-insert-mode with "new" or "detail" value.');
         }
       } else {
         if (self.afterInsertMode === 'new') {
