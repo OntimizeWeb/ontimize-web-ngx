@@ -207,7 +207,6 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   stayInRecordAfterInsert: boolean = false;
   @InputConverter()
   stayInRecordAfterEdit: boolean = false;
-  @InputConverter()
   afterInsertMode: 'new' | 'detail' = null;
   serviceType: string;
   @InputConverter()
