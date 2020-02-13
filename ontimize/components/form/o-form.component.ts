@@ -798,6 +798,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   _clearFormAfterInsert() {
     this.clearData();
     this._setComponentsEditable(true);
+    this.onFormModeChange.emit(this.mode);
   }
 
   /**
