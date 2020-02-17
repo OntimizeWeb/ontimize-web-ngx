@@ -49,8 +49,8 @@ export const DEFAULT_INPUTS_O_TABLE_MENU = [
   // columns-visibility-button [no|yes]: show columns visibility button. Default: yes.
   'columnsVisibilityButton: columns-visibility-button',
 
-  // show-configuration-button [yes|no|true|false]: show configuration button. Default: yes.
-  'showConfigurationButton: show-configuration-button'
+  // show-configuration-option [yes|no|true|false]: show configuration option in header. Default: yes.
+  'showConfigurationOption: show-configuration-option'
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE_MENU = [];
@@ -79,7 +79,7 @@ export class OTableMenuComponent implements OnInit, AfterViewInit, OnDestroy {
   @InputConverter()
   exportButton: boolean = true;
   @InputConverter()
-  showConfigurationButton: boolean = true;
+  showConfigurationOption: boolean = true;
   @InputConverter()
   columnsVisibilityButton: boolean = true;
   /* End of inputs */
@@ -266,7 +266,7 @@ export class OTableMenuComponent implements OnInit, AfterViewInit, OnDestroy {
 
   get showConfigurationMenu(): boolean {        
     const perm: OPermissions = this.getPermissionByAttr('configuration');
-    return this.showConfigurationButton && !(perm && perm.visible === false);
+    return this.showConfigurationOption && !(perm && perm.visible === false);
   }
 
   get enabledConfigurationMenu(): boolean {
