@@ -99,6 +99,9 @@ export const DEFAULT_INPUTS_O_TABLE = [
   // export-button [no|yes]: show export button. Default: yes.
   'exportButton: export-button',
 
+  // show-configuration-button [yes|no|true|false]: show configuration button. Default: yes.
+  'showConfigurationButton: show-configuration-button',
+
   // show-buttons-text [yes|no|true|false]: show text of header buttons. Default: yes.
   'showButtonsText: show-buttons-text',
 
@@ -495,6 +498,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   selectAllCheckbox: boolean = false;
   @InputConverter()
   exportButton: boolean = true;
+  @InputConverter()
+  showConfigurationButton: boolean = true;
   @InputConverter()
   columnsVisibilityButton: boolean = true;
   @InputConverter()
@@ -2010,7 +2015,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     if (permissionHidden) {
       return false;
     }
-    const staticOpt = this.selectAllCheckbox || this.exportButton || this.columnsVisibilityButton || this.oTableColumnsFilterComponent !== undefined;
+    const staticOpt = this.selectAllCheckbox || this.exportButton || this.showConfigurationButton || this.columnsVisibilityButton || this.oTableColumnsFilterComponent !== undefined;
     return staticOpt || this.tableOptions.length > 0;
   }
 
