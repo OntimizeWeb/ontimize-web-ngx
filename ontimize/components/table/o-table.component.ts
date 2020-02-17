@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
+  ContentChild,
   ContentChildren,
   ElementRef,
   EventEmitter,
@@ -21,9 +22,17 @@ import {
   ViewChild,
   ViewChildren,
   ViewEncapsulation,
-  ContentChild
 } from '@angular/core';
-import { MatCheckboxChange, MatDialog, MatMenu, MatPaginator, MatPaginatorIntl, MatTab, MatTabGroup, PageEvent } from '@angular/material';
+import {
+  MatCheckboxChange,
+  MatDialog,
+  MatMenu,
+  MatPaginator,
+  MatPaginatorIntl,
+  MatTab,
+  MatTabGroup,
+  PageEvent,
+} from '@angular/material';
 import { DndModule } from '@churchs19/ng2-dnd';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { BehaviorSubject, combineLatest, Observable, of, Subscription } from 'rxjs';
@@ -54,7 +63,7 @@ import {
   OColumnAggregate,
   OTableColumnAggregateComponent,
   OTableMatPaginatorIntl,
-  OTablePaginatorComponent
+  OTablePaginatorComponent,
 } from './extensions/footer/o-table-footer-components';
 import {
   ColumnValueFilterOperator,
@@ -66,7 +75,7 @@ import {
   OTableInsertableRowComponent,
   OTableMenuComponent,
   OTableOptionComponent,
-  OTableQuickfilterComponent
+  OTableQuickfilterComponent,
 } from './extensions/header/o-table-header-components';
 import { OTableStorage } from './extensions/o-table-storage.class';
 import { OTableRowDirective } from './extensions/row/o-table-row.directive';
@@ -110,6 +119,9 @@ export const DEFAULT_INPUTS_O_TABLE = [
 
   // export-button [no|yes]: show export button. Default: yes.
   'exportButton: export-button',
+
+  // show-configuration-button [yes|no|true|false]: show configuration button. Default: yes.
+  'showConfigurationButton: show-configuration-button',
 
   // show-buttons-text [yes|no|true|false]: show text of header buttons. Default: yes.
   'showButtonsText: show-buttons-text',
@@ -502,6 +514,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   selectAllCheckbox: boolean = false;
   @InputConverter()
   exportButton: boolean = true;
+  @InputConverter()
+  showConfigurationButton: boolean = true;
   @InputConverter()
   columnsVisibilityButton: boolean = true;
   @InputConverter()
@@ -2012,7 +2026,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     if (permissionHidden) {
       return false;
     }
-    const staticOpt = this.selectAllCheckbox || this.exportButton || this.columnsVisibilityButton || this.oTableColumnsFilterComponent !== undefined;
+    const staticOpt = this.selectAllCheckbox || this.exportButton || this.showConfigurationButton || this.columnsVisibilityButton || this.oTableColumnsFilterComponent !== undefined;
     return staticOpt || this.tableOptions.length > 0;
   }
 
