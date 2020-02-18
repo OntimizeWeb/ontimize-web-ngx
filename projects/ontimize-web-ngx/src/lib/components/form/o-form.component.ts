@@ -75,7 +75,7 @@ export const DEFAULT_INPUTS_O_FORM = [
   'service',
 
   // stay-in-record-after-insert [string][yes|no|true|false]: shows detail form after insert new record. Default: false;
-  'stayInRecordAfterInsert: stay-in-record-after-insert',
+  // 'stayInRecordAfterInsert: stay-in-record-after-insert',
 
   // stay-in-record-after-edit [string][yes|no|true|false]: shows edit form after edit a record. Default: false;
   'stayInRecordAfterEdit: stay-in-record-after-edit',  
@@ -195,8 +195,8 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   keys: string = '';
   columns: string = '';
   service: string;
-  @InputConverter()
-  stayInRecordAfterInsert: boolean = false;
+  // @InputConverter()
+  // stayInRecordAfterInsert: boolean = false;
   @InputConverter()
   stayInRecordAfterEdit: boolean = false;  
   afterInsertMode: 'new' | 'detail' = null;
@@ -815,20 +815,12 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
       self.postCorrectInsert(resp);
       self.formCache.setCacheSnapshot();
       self.markFormLayoutManagerToUpdate();
-      if (self.stayInRecordAfterInsert || self.afterInsertMode === 'detail') {
-        self._stayInRecordAfterInsert(resp);
-        if (self.afterInsertMode === 'new') {
+      if (self.afterInsertMode === 'detail') {
+        self._stayInRecordAfterInsert(resp);        
+      } else if (self.afterInsertMode === 'new') {
           this._clearFormAfterInsert();
-        }
       } else {
-        if (self.afterInsertMode === 'new') {
-          this._clearFormAfterInsert();
-        } else {
-          self._closeDetailAction();
-        }
-      }
-      if(self.stayInRecordAfterInsert) {
-        console.warn('WARNING -> The attribute stay-in-record-after-insert will be deprecated in version 8.x.x and you will be only able to use after-insert-mode with "new" or "detail" value.');
+        self._closeDetailAction();
       }
     }, error => {
       self.postIncorrectInsert(error);

@@ -46,10 +46,10 @@ export const DEFAULT_INPUTS_O_TABLE_MENU = [
   'exportButton: export-button',
 
   // columns-visibility-button [no|yes]: show columns visibility button. Default: yes.
-  'columnsVisibilityButton: columns-visibility-button'
+  'columnsVisibilityButton: columns-visibility-button',
 
   // show-configuration-option [yes|no|true|false]: show configuration button in header. Default: yes.
-  'showConfigurationOption: show-configuration-option',
+  'showConfigurationOption: show-configuration-option'
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE_MENU = [];
