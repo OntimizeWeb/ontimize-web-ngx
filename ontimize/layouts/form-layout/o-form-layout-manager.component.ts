@@ -1,7 +1,25 @@
 import { CommonModule } from '@angular/common';
-import { AfterViewInit, Component, ContentChild, ContentChildren, CUSTOM_ELEMENTS_SCHEMA, ElementRef, EventEmitter, HostListener, Injector, NgModule, OnDestroy, OnInit, Optional, QueryList, SkipSelf, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ContentChild,
+  ContentChildren,
+  CUSTOM_ELEMENTS_SCHEMA,
+  ElementRef,
+  EventEmitter,
+  HostListener,
+  Injector,
+  NgModule,
+  OnDestroy,
+  OnInit,
+  Optional,
+  QueryList,
+  SkipSelf,
+  ViewChild,
+} from '@angular/core';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material';
 import { ActivatedRoute, ActivatedRouteSnapshot, Route, Router, RouterModule } from '@angular/router';
+
 import { OListComponent } from '../../components/list/o-list.component';
 import { OServiceComponent } from '../../components/o-service-component.class';
 import { OTableComponent } from '../../components/table/o-table.component';

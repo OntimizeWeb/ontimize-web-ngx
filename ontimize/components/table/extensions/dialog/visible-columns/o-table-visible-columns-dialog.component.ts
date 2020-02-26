@@ -38,7 +38,7 @@ export class OTableVisibleColumnsDialogComponent {
           attr: oCol.attr,
           title: oCol.title,
           visible: oCol.visible,
-          showInList: data.visibleColumns.indexOf(oCol.attr) !== -1
+          showInList: data.visibleColumns.indexOf(oCol.attr) !== -1 || oCol.definition !== undefined
         });
       });
     }

@@ -1,11 +1,34 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, CUSTOM_ELEMENTS_SCHEMA, ElementRef, EventEmitter, Injector, NgModule, NgZone, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  CUSTOM_ELEMENTS_SCHEMA,
+  ElementRef,
+  EventEmitter,
+  Injector,
+  NgModule,
+  NgZone,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+  ViewEncapsulation,
+} from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router, UrlSegment } from '@angular/router';
 import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
+
 import { InputConverter } from '../../decorators';
 import { OFormLayoutManagerComponent } from '../../layouts';
-import { DialogService, NavigationService, OFormPermissions, ONavigationItem, OntimizeService, OPermissions, PermissionsService, SnackBarService } from '../../services';
+import {
+  DialogService,
+  NavigationService,
+  OFormPermissions,
+  ONavigationItem,
+  OntimizeService,
+  OPermissions,
+  PermissionsService,
+  SnackBarService,
+} from '../../services';
 import { dataServiceFactory } from '../../services/data-service.provider';
 import { OSharedModule } from '../../shared';
 import { Codes, SQLTypes, Util } from '../../utils';
@@ -63,6 +86,9 @@ export const DEFAULT_INPUTS_O_FORM = [
 
   // stay-in-record-after-edit [string][yes|no|true|false]: shows edit form after edit a record. Default: false;
   'stayInRecordAfterEdit: stay-in-record-after-edit',
+
+  // [string][new | detail]: shows reseted form after insert a new record (new) or shows the inserted record after (detail)
+  'afterInsertMode: after-insert-mode',
 
   'serviceType : service-type',
 
@@ -181,6 +207,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   stayInRecordAfterInsert: boolean = false;
   @InputConverter()
   stayInRecordAfterEdit: boolean = false;
+  afterInsertMode: 'new' | 'detail' = null;
   serviceType: string;
   @InputConverter()
   protected queryOnInit: boolean = true;
@@ -768,6 +795,12 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     this.formNavigation.goInsertMode(options);
   }
 
+  _clearFormAfterInsert() {
+    this.clearData();
+    this._setComponentsEditable(true);
+    this.onFormModeChange.emit(this.mode);
+  }
+
   /**
    * Performs insert action.
    */
@@ -788,10 +821,20 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
       self.postCorrectInsert(resp);
       self.formCache.setCacheSnapshot();
       self.markFormLayoutManagerToUpdate();
-      if (self.stayInRecordAfterInsert) {
+      if (self.stayInRecordAfterInsert || self.afterInsertMode === 'detail') {
         self._stayInRecordAfterInsert(resp);
+        if (self.afterInsertMode === 'new') {
+          console.warn('WARNING -> The attribute stay-in-record-after-insert will be deprecated in version 8.x.x and you will be only able to use after-insert-mode with "new" or "detail" value.');
+        }
       } else {
-        self._closeDetailAction();
+        if (self.afterInsertMode === 'new') {
+          this._clearFormAfterInsert();
+        } else {
+          self._closeDetailAction();
+        }
+      }
+      if(self.stayInRecordAfterInsert) {
+        console.warn('WARNING -> The attribute stay-in-record-after-insert will be deprecated in version 8.x.x and you will be only able to use after-insert-mode with "new" or "detail" value.');
       }
     }, error => {
       self.postIncorrectInsert(error);

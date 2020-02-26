@@ -1,14 +1,42 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, forwardRef, Inject, Injector, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  forwardRef,
+  Inject,
+  Injector,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+  ViewEncapsulation,
+} from '@angular/core';
 import { MatDialog, MatMenu } from '@angular/material';
+import { Observable } from 'rxjs';
+
 import { InputConverter } from '../../../../../decorators';
-import { DialogService, OPermissions, OTableMenuPermissions, OTranslateService, SnackBarService } from '../../../../../services';
+import {
+  DialogService,
+  OPermissions,
+  OTableMenuPermissions,
+  OTranslateService,
+  SnackBarService,
+} from '../../../../../services';
 import { PermissionsUtils } from '../../../../../util/permissions';
 import { Codes, Util } from '../../../../../utils';
 import { OColumn, OTableComponent } from '../../../o-table.component';
 import { OTableCellRendererImageComponent } from '../../../table-components';
-import { OTableApplyConfigurationDialogComponent, OTableExportConfiguration, OTableExportDialogComponent, OTableLoadFilterDialogComponent, OTableStoreConfigurationDialogComponent, OTableStoreFilterDialogComponent, OTableVisibleColumnsDialogComponent } from '../../dialog/o-table-dialog-components';
+import {
+  OTableApplyConfigurationDialogComponent,
+  OTableExportConfiguration,
+  OTableExportDialogComponent,
+  OTableLoadFilterDialogComponent,
+  OTableStoreConfigurationDialogComponent,
+  OTableStoreFilterDialogComponent,
+  OTableVisibleColumnsDialogComponent,
+} from '../../dialog/o-table-dialog-components';
 import { OTableOptionComponent } from '../table-option/o-table-option.component';
-import { Observable } from 'rxjs';
 
 
 export const DEFAULT_INPUTS_O_TABLE_MENU = [
@@ -19,7 +47,10 @@ export const DEFAULT_INPUTS_O_TABLE_MENU = [
   'exportButton: export-button',
 
   // columns-visibility-button [no|yes]: show columns visibility button. Default: yes.
-  'columnsVisibilityButton: columns-visibility-button'
+  'columnsVisibilityButton: columns-visibility-button',
+
+  // show-configuration-option [yes|no|true|false]: show configuration option in header. Default: yes.
+  'showConfigurationOption: show-configuration-option'
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE_MENU = [];
@@ -47,6 +78,8 @@ export class OTableMenuComponent implements OnInit, AfterViewInit, OnDestroy {
   selectAllCheckbox: boolean = false;
   @InputConverter()
   exportButton: boolean = true;
+  @InputConverter()
+  showConfigurationOption: boolean = true;
   @InputConverter()
   columnsVisibilityButton: boolean = true;
   /* End of inputs */
@@ -231,9 +264,9 @@ export class OTableMenuComponent implements OnInit, AfterViewInit, OnDestroy {
     return !(perm && perm.enabled === false);
   }
 
-  get showConfigurationMenu(): boolean {
+  get showConfigurationMenu(): boolean {        
     const perm: OPermissions = this.getPermissionByAttr('configuration');
-    return !(perm && perm.visible === false);
+    return this.showConfigurationOption && !(perm && perm.visible === false);
   }
 
   get enabledConfigurationMenu(): boolean {
