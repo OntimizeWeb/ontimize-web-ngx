@@ -121,6 +121,7 @@
     "rimraf": "2.6.2",
     "rxjs": "6.3.3",
     "rxjs-compat": "6.3.3",
+    "serialize-javascript": ">=2.1.1",
     "source-map-loader": "0.2.3",
     "tar": "2.2.2",
     "ts-helpers": "1.1.2",
