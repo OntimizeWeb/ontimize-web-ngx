@@ -1,3 +1,10 @@
+## 4.1.2 (2020-02-26)
+### Features
+* **o-table**: new `show-configuration-option` input ([5450798](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5450798)) ([863b1ae](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/863b1ae)) Closes [#306](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/306)   
+
+### Bug Fixes
+* **o-table**: fixing bug in table visible columns edition dialog ([03ba4a1](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/03ba4a1)) Closes [#298](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/298)  
+
 ## 4.1.1 (2020-02-11)
 ### Bug Fixes
 * **o-table**:
