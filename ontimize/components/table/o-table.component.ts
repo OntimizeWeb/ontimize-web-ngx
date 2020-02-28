@@ -1606,7 +1606,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       return;
     }
     Object.assign(this.state, this.oTableStorage.getTablePropertyToStore('selection'));
-    this.clearSelection();    
+    this.clearSelection();
     this.finishQuerySubscription = false;
     this.pendingQuery = true;
     //this.pageScrollVirtual = 1;
@@ -1754,7 +1754,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     this.keysArray.forEach((key) => {
       rowData[key] = row[key];
     });
-    rowData[column.attr] = row[column.attr];    
+    rowData[column.attr] = row[column.attr];
     this.editingRow = row;
     column.editing = true;
     column.editor.startEdition(rowData);
