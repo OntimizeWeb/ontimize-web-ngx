@@ -306,11 +306,18 @@ export class OFormNavigationClass {
       let route = [];
       const navData: ONavigationItem = this.navigationService.getPreviousRouteData();
       if (navData) {
-        route.push(navData.url);
+        let url = navData.url;
         const detailRoute = navData.getDetailFormRoute();
         if (Util.isDefined(detailRoute)) {
           route.push(detailRoute);
+          const detailIndex = url.lastIndexOf('/' + detailRoute);
+          if (detailIndex !== -1) {
+            url = url.substring(0, detailIndex);
+          }
+          // } else {
+          // TODO: remove detail ids url segments when navigate to insert form from a detail form
         }
+        route.unshift(url);
         route.push(...params);
         // deleting insertFormRoute as active mode (because stayInRecordAfterInsert changes it)
         this.navigationService.deleteActiveFormMode(navData);
