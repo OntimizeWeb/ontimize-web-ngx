@@ -444,10 +444,11 @@ export class OFormNavigationClass {
   }
 
   protected storeNavigationFormRoutes(activeMode: string) {
+    const formRoutes = this.navigationService.getPreviousRouteData().formRoutes;
     this.navigationService.storeFormRoutes({
-      detailFormRoute: Codes.DEFAULT_DETAIL_ROUTE,
-      editFormRoute: Codes.DEFAULT_EDIT_ROUTE,
-      insertFormRoute: Codes.DEFAULT_INSERT_ROUTE
+      detailFormRoute: formRoutes ? formRoutes.detailFormRoute : Codes.DEFAULT_DETAIL_ROUTE,
+      editFormRoute: formRoutes ? formRoutes.editFormRoute : Codes.DEFAULT_EDIT_ROUTE,
+      insertFormRoute: formRoutes ? formRoutes.insertFormRoute : Codes.DEFAULT_INSERT_ROUTE
     }, activeMode);
   }
 
