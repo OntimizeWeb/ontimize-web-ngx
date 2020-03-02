@@ -31,7 +31,6 @@ declare type ColumnObject = {
 };
 
 @Component({
-  moduleId: module.id,
   selector: 'o-search-input',
   templateUrl: './o-search-input.component.html',
   styleUrls: ['./o-search-input.component.scss'],

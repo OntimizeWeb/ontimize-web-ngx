@@ -31,7 +31,6 @@ export const DEFAULT_INPUTS_O_FORM_TOOLBAR = [
 ];
 
 @Component({
-  moduleId: module.id,
   selector: 'o-form-toolbar',
   templateUrl: './o-form-toolbar.component.html',
   styleUrls: ['./o-form-toolbar.component.scss'],
@@ -240,22 +239,21 @@ export class OFormToolbarComponent implements OnInit, OnDestroy, AfterViewInit {
     });
   }
 
-  public onDelete(evt: any): void {
+  public onDelete(): void {
     if (!this.checkEnabledPermission(PermissionsUtils.ACTION_DELETE)) {
       return;
     }
 
-    this.showConfirmDelete(evt);
+    this.showConfirmDelete();
   }
 
-  public onSave(evt: any): void {
+  public onSave(): void {
     if (!this.checkEnabledPermission(PermissionsUtils.ACTION_UPDATE)) {
       return;
     }
 
     this.handleAcceptEditOperation();
   }
-
 
   public cancelOperation(): void {
     if (this.isDetail) {
@@ -290,7 +288,7 @@ export class OFormToolbarComponent implements OnInit, OnDestroy, AfterViewInit {
     this._form.executeToolbarAction(Codes.EDIT_ACTION);
   }
 
-  public showConfirmDelete(evt: any): void {
+  public showConfirmDelete(): void {
     this._dialogService.confirm('CONFIRM', 'MESSAGES.CONFIRM_DELETE').then(res => {
       if (res === true) {
         this._form.executeToolbarAction(Codes.DELETE_ACTION).subscribe(resp => {

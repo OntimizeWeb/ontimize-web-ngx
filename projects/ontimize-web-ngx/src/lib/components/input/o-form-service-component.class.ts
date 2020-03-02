@@ -203,12 +203,12 @@ export class OFormServiceComponent extends OFormDataComponent {
       loadingService = this.serviceType;
     }
     try {
-      this.dataService = this.injector.get(loadingService);
+      this.dataService = this.injector.get<any>(loadingService);
 
       if (Util.isDataService(this.dataService)) {
         const serviceCfg = this.dataService.getDefaultServiceConfiguration(this.service);
         if (this.entity) {
-          serviceCfg['entity'] = this.entity;
+          serviceCfg.entity = this.entity;
         }
         this.dataService.configureService(serviceCfg);
       }
@@ -222,7 +222,6 @@ export class OFormServiceComponent extends OFormDataComponent {
     if (result.indexOf(this.valueColumn) === -1) {
       result.push(this.valueColumn);
     }
-    return result;
   }
 
   queryData(filter?: any) {

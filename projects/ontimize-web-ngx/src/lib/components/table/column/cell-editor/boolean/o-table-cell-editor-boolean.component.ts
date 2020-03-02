@@ -1,9 +1,17 @@
-import { ChangeDetectionStrategy, Component, Injector, TemplateRef, ViewChild, ViewEncapsulation } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Injector,
+  OnInit,
+  TemplateRef,
+  ViewChild,
+  ViewEncapsulation,
+} from '@angular/core';
+import { MatCheckboxChange } from '@angular/material';
 
 import { InputConverter } from '../../../../../decorators/input-converter';
-import { MatCheckboxChange } from '@angular/material';
-import { OBaseTableCellEditor } from '../o-base-table-cell-editor.class';
 import { Util } from '../../../../../util/util';
+import { OBaseTableCellEditor } from '../o-base-table-cell-editor.class';
 
 export const DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_BOOLEAN = [
   ...OBaseTableCellEditor.DEFAULT_INPUTS_O_TABLE_CELL_EDITOR,
@@ -22,7 +30,6 @@ export const DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_BOOLEAN = [
 ];
 
 @Component({
-  moduleId: module.id,
   selector: 'o-table-cell-editor-boolean',
   templateUrl: './o-table-cell-editor-boolean.component.html',
   styleUrls: ['./o-table-cell-editor-boolean.component.scss'],
@@ -35,7 +42,7 @@ export const DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_BOOLEAN = [
   }
 })
 
-export class OTableCellEditorBooleanComponent extends OBaseTableCellEditor {
+export class OTableCellEditorBooleanComponent extends OBaseTableCellEditor implements OnInit {
 
   public static DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_BOOLEAN = DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_BOOLEAN;
   public static DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_BOOLEAN = DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_BOOLEAN;

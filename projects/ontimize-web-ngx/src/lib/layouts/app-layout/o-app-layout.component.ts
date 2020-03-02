@@ -28,7 +28,6 @@ export const DEFAULT_OUTPUTS_O_APP_LAYOUT: any[] = [
 // export type OSidenavMode = 'over' | 'push' | 'side';
 
 @Component({
-  moduleId: module.id,
   selector: 'o-app-layout',
   inputs: DEFAULT_INPUTS_O_APP_LAYOUT,
   outputs: DEFAULT_OUTPUTS_O_APP_LAYOUT,
@@ -55,7 +54,7 @@ export class OAppLayoutComponent {
   @InputConverter()
   protected _showHeader: boolean;
 
-  @ViewChild('appSidenav', {static: false})
+  @ViewChild('appSidenav', { static: false })
   public appSidenav: OAppSidenavComponent;
 
   protected _mode: OAppLayoutMode;

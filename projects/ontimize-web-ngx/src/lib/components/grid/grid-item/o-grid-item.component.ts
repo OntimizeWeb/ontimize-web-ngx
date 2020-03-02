@@ -9,7 +9,6 @@ export const DEFAULT_INPUTS_O_GRID_ITEM = [
 ];
 
 @Component({
-  moduleId: module.id,
   selector: 'o-grid-item',
   templateUrl: './o-grid-item.component.html',
   inputs: DEFAULT_INPUTS_O_GRID_ITEM,

@@ -10,7 +10,6 @@ export const DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_TEXT = [
 ];
 
 @Component({
-  moduleId: module.id,
   selector: 'o-table-cell-editor-text',
   templateUrl: './o-table-cell-editor-text.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -24,7 +23,7 @@ export class OTableCellEditorTextComponent extends OBaseTableCellEditor {
   public static DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_TEXT = DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_TEXT;
 
   @ViewChild('templateref', { read: TemplateRef, static: false }) public templateref: TemplateRef<any>;
-  @ViewChild('input', {static: false}) inputRef: ElementRef;
+  @ViewChild('input', { static: false }) inputRef: ElementRef;
 
   constructor(protected injector: Injector) {
     super(injector);

@@ -14,7 +14,6 @@ import { OFormLayoutManagerComponent } from '../../../layouts/form-layout/o-form
 import { OFormLayoutManagerContentDirective } from '../directives/o-form-layout-manager-content.directive';
 
 @Component({
-  moduleId: module.id,
   selector: 'o-form-layout-dialog',
   templateUrl: 'o-form-layout-dialog.component.html',
   styleUrls: ['o-form-layout-dialog.component.scss'],
@@ -34,7 +33,7 @@ export class OFormLayoutDialogComponent implements AfterViewInit {
 
   protected componentFactory: ComponentFactory<any>;
 
-  @ViewChild(OFormLayoutManagerContentDirective, {static: false}) contentDirective: OFormLayoutManagerContentDirective;
+  @ViewChild(OFormLayoutManagerContentDirective, { static: false }) contentDirective: OFormLayoutManagerContentDirective;
 
   constructor(
     public dialogRef: MatDialogRef<OFormLayoutDialogComponent>,

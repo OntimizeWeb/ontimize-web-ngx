@@ -16,7 +16,6 @@ export const DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_INTEGER = [
 ];
 
 @Component({
-  moduleId: module.id,
   selector: 'o-table-cell-editor-integer',
   templateUrl: './o-table-cell-editor-integer.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -14,7 +14,6 @@ export const DEFAULT_OUTPUTS_O_TABLE_EXPORT_BUTTON = [
 ];
 
 @Component({
-  moduleId: module.id,
   selector: 'o-table-export-button',
   templateUrl: './o-table-export-button.component.html',
   inputs: DEFAULT_INPUTS_O_TABLE_EXPORT_BUTTON,

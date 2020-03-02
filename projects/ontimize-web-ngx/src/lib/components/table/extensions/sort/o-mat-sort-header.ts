@@ -5,8 +5,6 @@ import { ArrowViewStateTransition, matSortAnimations, MatSortHeader, MatSortHead
 import { OMatSort } from './o-mat-sort';
 
 @Component({
-  moduleId: module.id,
-  // tslint:disable-next-line: component-selector
   selector: '[o-mat-sort-header]',
   exportAs: 'oMatSortHeader',
   templateUrl: './sort-header.html',

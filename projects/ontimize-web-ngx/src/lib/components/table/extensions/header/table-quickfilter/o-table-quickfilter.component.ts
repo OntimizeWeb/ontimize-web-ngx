@@ -32,7 +32,6 @@ export const DEFAULT_OUTPUTS_O_TABLE_QUICKFILTER = [
 ];
 
 @Component({
-  moduleId: module.id,
   selector: 'o-table-quickfilter',
   templateUrl: './o-table-quickfilter.component.html',
   styleUrls: ['./o-table-quickfilter.component.scss'],
@@ -62,7 +61,6 @@ export class OTableQuickfilterComponent implements OnInit, AfterViewInit, OnDest
 
   protected oInputsOptions: OInputsOptions;
   protected quickFilterObservable: Subscription;
-
   constructor(
     protected injector: Injector,
     protected elRef: ElementRef,

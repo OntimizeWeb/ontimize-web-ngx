@@ -13,7 +13,7 @@ const moment = _moment;
 @Directive({
   selector: 'input[o-daterange-input]',
   host: {
-    '(keyup.esc)': 'hide()',
+    '(keyup.esc)': 'close()',
     '(blur)': 'onBlur()'
   },
   providers: [

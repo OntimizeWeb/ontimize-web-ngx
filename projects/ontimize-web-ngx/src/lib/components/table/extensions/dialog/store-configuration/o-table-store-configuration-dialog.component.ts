@@ -5,7 +5,6 @@ import { MatCheckboxChange, MatDialogRef, MatListOption, MatSelectionList } from
 import { OTableBaseDialogClass } from '../o-table-base-dialog.class';
 
 @Component({
-  moduleId: module.id,
   selector: 'o-table-store-configuration-dialog',
   templateUrl: './o-table-store-configuration-dialog.component.html',
   styleUrls: ['./o-table-store-configuration-dialog.component.scss'],
@@ -13,7 +12,7 @@ import { OTableBaseDialogClass } from '../o-table-base-dialog.class';
 })
 export class OTableStoreConfigurationDialogComponent extends OTableBaseDialogClass implements AfterViewInit {
 
-  @ViewChild('propertiesList', {static: false})
+  @ViewChild('propertiesList', { static: false })
   public propertiesList: MatSelectionList;
 
   public properties: any[] = [{

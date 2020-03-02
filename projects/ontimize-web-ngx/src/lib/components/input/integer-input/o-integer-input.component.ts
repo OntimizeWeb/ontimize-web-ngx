@@ -37,7 +37,6 @@ export const DEFAULT_OUTPUTS_O_INTEGER_INPUT = [
 ];
 
 @Component({
-  moduleId: module.id,
   selector: 'o-integer-input',
   templateUrl: './o-integer-input.component.html',
   styleUrls: ['./o-integer-input.component.scss'],

@@ -13,7 +13,6 @@ export const DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_REAL = [
 ];
 
 @Component({
-  moduleId: module.id,
   selector: 'o-table-cell-editor-real',
   templateUrl: './o-table-cell-editor-real.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

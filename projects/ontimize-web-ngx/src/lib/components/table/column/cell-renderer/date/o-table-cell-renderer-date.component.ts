@@ -9,7 +9,6 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_DATE = [
 ];
 
 @Component({
-  moduleId: module.id,
   selector: 'o-table-cell-renderer-date',
   templateUrl: './o-table-cell-renderer-date.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

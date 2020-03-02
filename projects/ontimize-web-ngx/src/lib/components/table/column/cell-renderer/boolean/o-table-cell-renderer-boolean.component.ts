@@ -19,7 +19,6 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_BOOLEAN = [
 ];
 
 @Component({
-  moduleId: module.id,
   selector: 'o-table-cell-renderer-boolean',
   templateUrl: './o-table-cell-renderer-boolean.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

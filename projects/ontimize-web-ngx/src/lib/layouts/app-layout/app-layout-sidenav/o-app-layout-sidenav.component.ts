@@ -5,7 +5,6 @@ export const DEFAULT_INPUTS_O_APP_LAYOUT_SIDENAV = [
 ];
 
 @Component({
-  moduleId: module.id,
   selector: 'o-app-layout-sidenav',
   templateUrl: './o-app-layout-sidenav.component.html',
   inputs: DEFAULT_INPUTS_O_APP_LAYOUT_SIDENAV

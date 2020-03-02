@@ -15,7 +15,6 @@ import { DialogService } from '../../../../../services/dialog.service';
 import { ITableFiltersStatus } from '../../o-table-storage.class';
 
 @Component({
-  moduleId: module.id,
   selector: 'o-table-load-filter-dialog',
   templateUrl: './o-table-load-filter-dialog.component.html',
   styleUrls: ['./o-table-load-filter-dialog.component.scss'],
@@ -23,7 +22,7 @@ import { ITableFiltersStatus } from '../../o-table-storage.class';
 })
 export class OTableLoadFilterDialogComponent implements OnInit {
 
-  @ViewChild(MatSelectionList, {static: false}) filterList: MatSelectionList;
+  @ViewChild(MatSelectionList, { static: false }) filterList: MatSelectionList;
 
   filters: Array<ITableFiltersStatus> = [];
 

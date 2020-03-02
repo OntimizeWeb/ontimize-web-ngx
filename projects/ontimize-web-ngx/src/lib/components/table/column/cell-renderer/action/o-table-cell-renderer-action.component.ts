@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { Codes} from '../../../../../util/codes';
+import { Codes } from '../../../../../util/codes';
 import { Util } from '../../../../../util/util';
 import { DEFAULT_INPUTS_O_BASE_TABLE_CELL_RENDERER, OBaseTableCellRenderer } from '../o-base-table-cell-renderer.class';
 
@@ -18,7 +18,6 @@ export const DEFAULT_OUTPUTS_O_TABLE_CELL_RENDERER_ACTION = [
 ];
 
 @Component({
-  moduleId: module.id,
   selector: 'o-table-cell-renderer-action',
   templateUrl: './o-table-cell-renderer-action.component.html',
   styleUrls: ['./o-table-cell-renderer-action.component.scss'],

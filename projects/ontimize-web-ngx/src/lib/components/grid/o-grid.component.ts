@@ -74,7 +74,6 @@ export const DEFAULT_OUTPUTS_O_GRID = [
 const PAGE_SIZE_OPTIONS = [8, 16, 24, 32, 64];
 
 @Component({
-  moduleId: module.id,
   selector: 'o-grid',
   providers: [
     OntimizeService

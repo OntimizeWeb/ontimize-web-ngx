@@ -11,7 +11,6 @@ export const DEFAULT_INPUTS_O_LIST_PICKER_DIALOG = [
 ];
 
 @Component({
-  moduleId: module.id,
   selector: 'o-list-picker-dialog',
   templateUrl: './o-list-picker-dialog.component.html',
   styleUrls: ['./o-list-picker-dialog.component.scss'],
@@ -31,7 +30,7 @@ export class OListPickerDialogComponent implements AfterViewInit {
   public searchInput: OSearchInputComponent;
 
   protected data: any[] = [];
-  protected menuColumns: string;
+  public menuColumns: string;
   protected visibleColsArray: string[];
 
   protected _startIndex: number = 0;

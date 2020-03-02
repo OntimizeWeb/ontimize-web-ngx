@@ -6,7 +6,6 @@ import { ITableFiltersStatus } from '../../o-table-storage.class';
 import { OTableBaseDialogClass } from '../o-table-base-dialog.class';
 
 @Component({
-  moduleId: module.id,
   selector: 'o-table-store-filter-dialog',
   templateUrl: './o-table-store-filter-dialog.component.html',
   styleUrls: ['./o-table-store-filter-dialog.component.scss'],

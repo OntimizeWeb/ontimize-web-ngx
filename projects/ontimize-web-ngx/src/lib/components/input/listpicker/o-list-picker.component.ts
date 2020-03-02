@@ -42,7 +42,6 @@ export const DEFAULT_OUTPUTS_O_LIST_PICKER = [
 ];
 
 @Component({
-  moduleId: module.id,
   selector: 'o-list-picker',
   templateUrl: './o-list-picker.component.html',
   styleUrls: ['./o-list-picker.component.scss'],
@@ -99,7 +98,7 @@ export class OListPickerComponent extends OFormServiceComponent implements After
     elRef: ElementRef,
     injector: Injector) {
     super(form, elRef, injector);
-    this.matDialog = this.injector.get(MatDialog);
+    this.matDialog = this.injector.get<MatDialog>(MatDialog);
     this.stateCtrl = new FormControl();
     /* overwritte clearButton to true */
     this.clearButton = true;
@@ -111,9 +110,9 @@ export class OListPickerComponent extends OFormServiceComponent implements After
 
   public ngOnChanges(changes: { [propName: string]: SimpleChange }): void {
     super.ngOnChanges(changes);
-    if (typeof (changes['staticData']) !== 'undefined') {
+    if (typeof (changes.staticData) !== 'undefined') {
       this.cacheQueried = true;
-      this.setDataArray(changes['staticData'].currentValue);
+      this.setDataArray(changes.staticData.currentValue);
     }
   }
 
@@ -280,8 +279,8 @@ export class OListPickerComponent extends OFormServiceComponent implements After
         }
       });
       const newItem = Object.assign({}, item);
-      newItem['_parsedVisibleColumnText'] = element;
-      newItem['_parsedIndex'] = itemIndex;
+      newItem._parsedVisibleColumnText = element;
+      newItem._parsedIndex = itemIndex;
       result.push(newItem);
     });
     return result;

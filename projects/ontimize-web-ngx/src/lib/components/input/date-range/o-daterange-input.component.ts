@@ -31,7 +31,6 @@ export const DEFAULT_INPUTS_O_DATERANGE_INPUT = [
 
 const moment = _moment;
 @Component({
-  moduleId: module.id,
   selector: 'o-daterange-input',
   templateUrl: './o-daterange-input.component.html',
   styles: ['./o-daterange-input.component.scss'],
@@ -41,10 +40,10 @@ const moment = _moment;
 
 export class ODateRangeInputComponent extends OFormDataComponent implements OnDestroy, OnInit {
 
-  @ViewChild(ODaterangepickerDirective, {static: false}) pickerDirective: ODaterangepickerDirective;
+  @ViewChild(ODaterangepickerDirective, { static: false }) pickerDirective: ODaterangepickerDirective;
   picker: DaterangepickerComponent;
 
-  @ViewChild('matInputRef', {static: false})
+  @ViewChild('matInputRef', { static: false })
   private matInputRef: ElementRef;
 
   @InputConverter()

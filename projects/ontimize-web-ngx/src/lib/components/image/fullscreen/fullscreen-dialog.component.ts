@@ -4,7 +4,6 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { Util } from '../../../util/util';
 
 @Component({
-  moduleId: module.id,
   selector: 'o-fullscreen-dialog',
   templateUrl: './fullscreen-dialog.component.html',
   styleUrls: ['./fullscreen-dialog.component.scss'],

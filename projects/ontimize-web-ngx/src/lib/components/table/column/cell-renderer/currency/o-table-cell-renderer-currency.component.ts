@@ -19,7 +19,6 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_CURRENCY = [
 ];
 
 @Component({
-  moduleId: module.id,
   selector: 'o-table-cell-renderer-currency',
   templateUrl: './o-table-cell-renderer-currency.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

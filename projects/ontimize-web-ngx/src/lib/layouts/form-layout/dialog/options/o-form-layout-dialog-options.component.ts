@@ -18,7 +18,6 @@ export const DEFAULT_INPUTS_O_FORM_LAYOUT_DIALOG_OPTIONS = [
 ];
 
 @Component({
-  moduleId: module.id,
   selector: 'o-form-layout-dialog-options',
   template: ' ',
   inputs: DEFAULT_INPUTS_O_FORM_LAYOUT_DIALOG_OPTIONS,

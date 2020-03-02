@@ -18,7 +18,6 @@ export const DEFAULT_OUTPUTS_O_TABLE_CELL_RENDERER_IMAGE = [
 ];
 
 @Component({
-  moduleId: module.id,
   selector: 'o-table-cell-renderer-image',
   templateUrl: './o-table-cell-renderer-image.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

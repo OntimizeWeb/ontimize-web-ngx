@@ -8,6 +8,6 @@ import { OIntegerInputComponent } from './o-integer-input.component';
 @NgModule({
   declarations: [OIntegerInputComponent],
   imports: [CommonModule, OSharedModule, OTextInputModule],
-  exports: [OIntegerInputComponent, OTextInputModule]
+  exports: [OIntegerInputComponent]
 })
 export class OIntegerInputModule { }
