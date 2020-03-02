@@ -5,7 +5,6 @@ import { NavigationService, ONavigationItem } from '../../../services/navigation
 import { Codes } from '../../../util/codes';
 
 @Component({
-  moduleId: module.id,
   selector: 'o-error-403',
   templateUrl: './o-error-403.component.html',
   styleUrls: ['./o-error-403.component.scss'],

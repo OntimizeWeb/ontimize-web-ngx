@@ -6,7 +6,6 @@ import { DialogService } from '../../../../../services/dialog.service';
 import { ITableConfiguration } from '../../o-table-storage.class';
 
 @Component({
-  moduleId: module.id,
   selector: 'o-table-apply-configuration-dialog',
   templateUrl: './o-table-apply-configuration-dialog.component.html',
   styleUrls: ['./o-table-apply-configuration-dialog.component.scss']
@@ -18,7 +17,7 @@ export class OTableApplyConfigurationDialogComponent implements OnInit {
 
   public onDelete: EventEmitter<string> = new EventEmitter();
 
-  @ViewChild(MatSelectionList, {static: false})
+  @ViewChild(MatSelectionList, { static: false })
   protected configurationList: MatSelectionList;
 
   protected dialogService: DialogService;

@@ -22,7 +22,6 @@ export type QueryConfiguration = {
 };
 
 @Component({
-  moduleId: module.id,
   selector: 'o-form-navigation',
   templateUrl: './o-form-navigation.component.html',
   styleUrls: ['./o-form-navigation.component.scss'],
@@ -84,7 +83,7 @@ export class OFormNavigationComponent implements OnDestroy {
       if (Util.isDataService(this.dataService)) {
         const serviceCfg = this.dataService.getDefaultServiceConfiguration(this.queryConf.service);
         if (this.queryConf.entity) {
-          serviceCfg['entity'] = this.queryConf.entity;
+          serviceCfg.entity = this.queryConf.entity;
         }
         this.dataService.configureService(serviceCfg);
       }

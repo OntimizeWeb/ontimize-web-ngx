@@ -1,9 +1,12 @@
-import { Component, Injector, TemplateRef, ViewChild, ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
 
-import { NumberService } from '../../../../../services/number.service';
-import { IRealPipeArgument, ORealPipe } from '../../../../../pipes/o-real.pipe';
-import { DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_INTEGER, OTableCellRendererIntegerComponent } from '../integer/o-table-cell-renderer-integer.component';
 import { InputConverter } from '../../../../../decorators/input-converter';
+import { IRealPipeArgument, ORealPipe } from '../../../../../pipes/o-real.pipe';
+import { NumberService } from '../../../../../services/number.service';
+import {
+  DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_INTEGER,
+  OTableCellRendererIntegerComponent,
+} from '../integer/o-table-cell-renderer-integer.component';
 
 export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_REAL = [
   ...DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_INTEGER,
@@ -14,13 +17,12 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_REAL = [
 ];
 
 @Component({
-  moduleId: module.id,
   selector: 'o-table-cell-renderer-real',
   templateUrl: './o-table-cell-renderer-real.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   inputs: DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_REAL
 })
-export class OTableCellRendererRealComponent extends OTableCellRendererIntegerComponent {
+export class OTableCellRendererRealComponent extends OTableCellRendererIntegerComponent implements OnInit {
 
   public static DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_REAL = DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_REAL;
 

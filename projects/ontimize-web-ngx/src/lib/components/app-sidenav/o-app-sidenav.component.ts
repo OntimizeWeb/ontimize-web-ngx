@@ -42,7 +42,6 @@ export const DEFAULT_OUTPUTS_O_APP_SIDENAV = [
 ];
 
 @Component({
-  moduleId: module.id,
   selector: 'o-app-sidenav',
   inputs: DEFAULT_INPUTS_O_APP_SIDENAV,
   outputs: DEFAULT_OUTPUTS_O_APP_SIDENAV,
@@ -104,8 +103,8 @@ export class OAppSidenavComponent implements OnInit, OnDestroy, AfterViewInit {
     });
   }
 
-  @HostListener('window:resize', ['$event'])
-  onResize(event) {
+  @HostListener('window:resize', [])
+  onResize() {
     if (!this.manuallyClosed && !this.isScreenSmall() && !this.isMobileMode()) {
       this.sidenav.open();
     }

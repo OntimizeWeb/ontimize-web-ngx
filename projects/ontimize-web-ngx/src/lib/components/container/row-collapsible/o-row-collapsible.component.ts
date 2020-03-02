@@ -9,7 +9,6 @@ export const DEFAULT_INPUTS_O_ROW_COLLAPSIBLE = [
 ];
 
 @Component({
-  moduleId: module.id,
   selector: 'o-row-collapsible',
   templateUrl: './o-row-collapsible.component.html',
   styleUrls: ['./o-row-collapsible.component.scss'],

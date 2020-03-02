@@ -10,9 +10,6 @@ import { DaterangepickerComponent } from './o-daterange-picker.component';
   declarations: [DaterangepickerComponent, ODateRangeInputComponent, ODaterangepickerDirective],
   imports: [CommonModule, OSharedModule],
   exports: [ODateRangeInputComponent],
-  entryComponents: [
-    DaterangepickerComponent
-  ],
-  providers: []
+  entryComponents: [DaterangepickerComponent]
 })
 export class ODateRangeInputModule { }

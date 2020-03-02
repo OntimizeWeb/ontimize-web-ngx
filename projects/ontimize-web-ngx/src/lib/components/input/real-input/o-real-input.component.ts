@@ -23,7 +23,6 @@ export const DEFAULT_OUTPUTS_O_REAL_INPUT = [
 ];
 
 @Component({
-  moduleId: module.id,
   selector: 'o-real-input',
   templateUrl: './o-real-input.component.html',
   styleUrls: ['./o-real-input.component.scss'],

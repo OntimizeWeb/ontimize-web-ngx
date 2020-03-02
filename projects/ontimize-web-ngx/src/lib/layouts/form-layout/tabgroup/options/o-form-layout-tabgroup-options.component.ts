@@ -13,7 +13,6 @@ export const DEFAULT_INPUTS_O_FORM_LAYOUT_TABGROUP_OPTIONS = [
 ];
 
 @Component({
-  moduleId: module.id,
   selector: 'o-form-layout-tabgroup-options',
   template: ' ',
   encapsulation: ViewEncapsulation.None,
@@ -34,7 +33,7 @@ export class OFormLayoutTabGroupOptionsComponent {
 
   public headerPosition: MatTabHeaderPosition;
 
-  @ContentChild(TemplateRef, {static: false})
+  @ContentChild(TemplateRef, { static: false })
   templateMatTabLabel: TemplateRef<any>;
 
   public icon: string;

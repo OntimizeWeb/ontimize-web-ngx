@@ -148,7 +148,6 @@ export interface OFormInitializationOptions {
 }
 
 @Component({
-  moduleId: module.id,
   selector: 'o-form',
   providers: [
     OntimizeService,
@@ -655,7 +654,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
       if (Util.isDataService(this.dataService)) {
         const serviceCfg = this.dataService.getDefaultServiceConfiguration(this.service);
         if (this.entity) {
-          serviceCfg['entity'] = this.entity;
+          serviceCfg.entity = this.entity;
         }
         this.dataService.configureService(serviceCfg);
       }
@@ -1413,7 +1412,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   }
 
   protected determinateModeFromUrlSegment(segment: UrlSegment): void {
-    const _path = segment ? segment['path'] : '';
+    const _path = segment ? segment.path : '';
     if (this.isInsertModePath(_path)) {
       this.setInsertMode();
       return;

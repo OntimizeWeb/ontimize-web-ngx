@@ -34,7 +34,7 @@ export class OBaseComponent implements IComponent {
   constructor(injector: Injector) {
     this.injector = injector;
     if (this.injector) {
-      this.translateService = this.injector.get(OTranslateService);
+      this.translateService = this.injector.get<OTranslateService>(OTranslateService);
     }
   }
 

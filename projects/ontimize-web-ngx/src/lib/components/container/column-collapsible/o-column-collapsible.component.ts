@@ -9,7 +9,6 @@ export const DEFAULT_INPUTS_O_COLUMN_COLLAPSIBLE = [
 ];
 
 @Component({
-  moduleId: module.id,
   selector: 'o-column-collapsible',
   templateUrl: './o-column-collapsible.component.html',
   styleUrls: ['./o-column-collapsible.component.scss'],

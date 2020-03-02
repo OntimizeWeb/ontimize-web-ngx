@@ -8,6 +8,6 @@ import { OCurrencyInputComponent } from './o-currency-input.component';
 @NgModule({
   declarations: [OCurrencyInputComponent],
   imports: [CommonModule, OSharedModule, ORealInputModule],
-  exports: [OCurrencyInputComponent, ORealInputModule]
+  exports: [OCurrencyInputComponent]
 })
 export class OCurrencyInputModule { }

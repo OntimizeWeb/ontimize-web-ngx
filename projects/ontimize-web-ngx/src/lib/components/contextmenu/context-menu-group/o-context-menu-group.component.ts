@@ -12,7 +12,6 @@ export const DEFAULT_CONTEXT_MENU_GROUP_INPUTS = [
 ];
 
 @Component({
-  moduleId: module.id,
   selector: 'o-context-menu-group',
   template: ' ',
   inputs: DEFAULT_CONTEXT_MENU_GROUP_INPUTS,

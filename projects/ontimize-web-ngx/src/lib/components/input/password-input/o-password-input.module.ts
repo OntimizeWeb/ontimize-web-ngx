@@ -8,7 +8,7 @@ import { OPasswordInputComponent } from './o-password-input.component';
 @NgModule({
   declarations: [OPasswordInputComponent],
   imports: [OSharedModule, CommonModule, OTextInputModule],
-  exports: [OPasswordInputComponent, OTextInputModule]
+  exports: [OPasswordInputComponent]
 })
 export class OPasswordInputModule {
 }

@@ -8,6 +8,6 @@ import { ORealInputComponent } from './o-real-input.component';
 @NgModule({
   declarations: [ORealInputComponent],
   imports: [CommonModule, OSharedModule, OIntegerInputModule],
-  exports: [OIntegerInputModule, ORealInputComponent]
+  exports: [ORealInputComponent]
 })
 export class ORealInputModule { }

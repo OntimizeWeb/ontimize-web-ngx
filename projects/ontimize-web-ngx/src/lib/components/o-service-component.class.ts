@@ -162,7 +162,7 @@ export class OServiceComponent extends OServiceBaseComponent {
   protected tabsSubscriptions: any;
   public quickFilterComponent: OSearchInputComponent;
   @ViewChild((forwardRef(() => OSearchInputComponent)), { static: false })
-  protected searchInputComponent: OSearchInputComponent;
+  public searchInputComponent: OSearchInputComponent;
   protected quickFilterColArray: string[];
 
   constructor(

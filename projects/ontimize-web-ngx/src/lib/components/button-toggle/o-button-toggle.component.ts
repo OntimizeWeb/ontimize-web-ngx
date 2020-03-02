@@ -20,7 +20,6 @@ export const DEFAULT_OUTPUTS_O_BUTTON_TOGGLE = [
 ];
 
 @Component({
-  moduleId: module.id,
   selector: 'o-button-toggle',
   templateUrl: './o-button-toggle.component.html',
   styleUrls: ['./o-button-toggle.component.scss'],
@@ -70,7 +69,7 @@ export class OButtonToggleComponent {
   public onChange: EventEmitter<MatButtonToggleChange> = new EventEmitter();
   /* End outputs */
 
-  @ViewChild('bt', {static: false}) public _innerButtonToggle: MatButtonToggle;
+  @ViewChild('bt', { static: false }) public _innerButtonToggle: MatButtonToggle;
 
   constructor(public viewContainerRef: ViewContainerRef) { }
 

@@ -273,13 +273,13 @@ export class OServiceBaseComponent implements ILocalStorageComponent, OnChanges 
   }
 
   ngOnChanges(changes: { [propName: string]: SimpleChange }) {
-    if (Util.isDefined(changes['staticData'])) {
-      this.setDataArray(changes['staticData'].currentValue);
+    if (Util.isDefined(changes.staticData)) {
+      this.setDataArray(changes.staticData.currentValue);
     }
   }
 
-  @HostListener('window:beforeunload', ['$event'])
-  beforeunloadHandler(event) {
+  @HostListener('window:beforeunload', [])
+  beforeunloadHandler() {
     this.updateStateStorage();
   }
 
@@ -315,11 +315,11 @@ export class OServiceBaseComponent implements ILocalStorageComponent, OnChanges 
       loadingService = this.serviceType;
     }
     try {
-      this.dataService = this.injector.get(loadingService);
+      this.dataService = this.injector.get<any>(loadingService);
       if (Util.isDataService(this.dataService)) {
         const serviceCfg = this.dataService.getDefaultServiceConfiguration(this.service);
         if (this.entity) {
-          serviceCfg['entity'] = this.entity;
+          serviceCfg.entity = this.entity;
         }
         this.dataService.configureService(serviceCfg);
       }

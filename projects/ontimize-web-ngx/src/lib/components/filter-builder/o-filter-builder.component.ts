@@ -42,7 +42,6 @@ export interface IFilterBuilderCmpTarget {
 }
 
 @Component({
-  moduleId: module.id,
   selector: 'o-filter-builder',
   templateUrl: './o-filter-builder.component.html',
   inputs: DEFAULT_INPUTS_O_FILTER_BUILDER,

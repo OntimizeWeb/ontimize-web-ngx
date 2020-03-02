@@ -85,7 +85,6 @@ export interface OListInitializationOptions {
 }
 
 @Component({
-  moduleId: module.id,
   selector: 'o-list',
   providers: [
     OntimizeService
@@ -178,8 +177,8 @@ export class OListComponent extends OServiceComponent implements AfterContentIni
   }
 
   public ngOnChanges(changes: { [propName: string]: SimpleChange }): void {
-    if (typeof (changes['staticData']) !== 'undefined') {
-      this.dataResponseArray = changes['staticData'].currentValue;
+    if (changes.staticData !== undefined) {
+      this.dataResponseArray = changes.staticData.currentValue;
       const filter = (this.state && this.state.filterValue) ? this.state.filterValue : undefined;
       this.filterData(filter);
     }

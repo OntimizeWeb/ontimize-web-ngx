@@ -8,6 +8,6 @@ import { OPercentInputComponent } from './o-percent-input.component';
 @NgModule({
   declarations: [OPercentInputComponent],
   imports: [CommonModule, OSharedModule, ORealInputModule],
-  exports: [OPercentInputComponent, ORealInputModule]
+  exports: [OPercentInputComponent]
 })
 export class OPercentInputModule { }

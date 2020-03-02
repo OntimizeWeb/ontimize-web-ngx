@@ -15,7 +15,6 @@ export const DEFAULT_INPUTS_O_CONTEXT_MENU_ITEM = [
   'svgIcon: svg-icon'];
 
 @Component({
-  moduleId: module.id,
   selector: 'o-context-menu-item',
   template: ' ',
   inputs: DEFAULT_INPUTS_O_CONTEXT_MENU_ITEM,

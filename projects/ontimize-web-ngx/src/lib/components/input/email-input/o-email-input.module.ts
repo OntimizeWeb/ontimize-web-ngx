@@ -8,7 +8,7 @@ import { OEmailInputComponent } from './o-email-input.component';
 @NgModule({
   declarations: [OEmailInputComponent],
   imports: [OSharedModule, CommonModule, OTextInputModule],
-  exports: [OEmailInputComponent, OTextInputModule]
+  exports: [OEmailInputComponent]
 })
 export class OEmailInputModule {
 }

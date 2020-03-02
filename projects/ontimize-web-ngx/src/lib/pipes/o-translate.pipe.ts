@@ -31,7 +31,7 @@ export class OTranslatePipe implements PipeTransform, OnDestroy {
     this._dispose();
   }
 
-  public transform(text: string, args: ITranslatePipeArgument): string {
+  public transform(text: string, args?: ITranslatePipeArgument): string {
     if (!text || text.length === 0) {
       return text;
     }

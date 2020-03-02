@@ -16,7 +16,6 @@ export const DEFAULT_OUTPUTS_O_PASSWORD_INPUT = [
 ];
 
 @Component({
-  moduleId: module.id,
   selector: 'o-password-input',
   templateUrl: './o-password-input.component.html',
   styleUrls: ['./o-password-input.component.scss'],

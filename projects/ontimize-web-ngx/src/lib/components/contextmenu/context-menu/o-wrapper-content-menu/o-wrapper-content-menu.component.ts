@@ -2,7 +2,6 @@ import { Component, Injector, Input, ViewChild } from '@angular/core';
 import { MatMenu } from '@angular/material/menu';
 
 import { OComponentMenuItems } from '../../o-content-menu.class';
-import { OContextMenuService } from '../../o-context-menu.service';
 
 export const DEFAULT_CONTEXT_MENU_CONTENT_ITEM_INPUTS = [
   'items',
@@ -10,7 +9,6 @@ export const DEFAULT_CONTEXT_MENU_CONTENT_ITEM_INPUTS = [
 ];
 
 @Component({
-  moduleId: module.id,
   selector: 'o-wrapper-content-menu',
   templateUrl: 'o-wrapper-content-menu.component.html',
   styleUrls: ['./o-wrapper-content-menu.component.scss'],
@@ -21,14 +19,13 @@ export class OWrapperContentMenuComponent {
   public class: string;
   @Input()
   public items: any[];
-  @ViewChild('childMenu', {static: false})
+  @ViewChild('childMenu', { static: false })
   public childMenu: MatMenu;
-  @ViewChild(OWrapperContentMenuComponent, {static: false})
+  @ViewChild(OWrapperContentMenuComponent, { static: false })
   public menu: OWrapperContentMenuComponent;
 
   constructor(
-    protected injector: Injector,
-    protected menuService: OContextMenuService
+    protected injector: Injector
   ) { }
 
   public onClick(item, event?): void {

@@ -54,7 +54,6 @@ export const DEFAULT_OUTPUTS_O_TIME_INPUT = [
 ];
 
 @Component({
-  moduleId: module.id,
   selector: 'o-time-input',
   templateUrl: './o-time-input.component.html',
   styleUrls: ['./o-time-input.component.scss'],
@@ -92,10 +91,10 @@ export class OTimeInputComponent extends OFormDataComponent implements OnInit, A
   protected blockGroupValueChanges: boolean;
   protected formGroup: FormGroup = new FormGroup({});
 
-  @ViewChild('dateInput', {static: false})
+  @ViewChild('dateInput', { static: false })
   protected dateInput: ODateInputComponent;
 
-  @ViewChild('hourInput', {static: false})
+  @ViewChild('hourInput', { static: false })
   protected hourInput: OHourInputComponent;
 
   protected subscription: Subscription = new Subscription();

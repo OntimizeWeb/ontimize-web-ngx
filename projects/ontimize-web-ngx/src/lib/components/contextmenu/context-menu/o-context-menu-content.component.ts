@@ -14,7 +14,6 @@ import { MatMenuTrigger } from '@angular/material';
 
 import { OContextMenuItemComponent } from '../context-menu-item/o-context-menu-item.component';
 import { OComponentMenuItems } from '../o-content-menu.class';
-import { OContextMenuService } from '../o-context-menu.service';
 import { OWrapperContentMenuComponent } from './o-wrapper-content-menu/o-wrapper-content-menu.component';
 
 export const DEFAULT_CONTEXT_MENU_CONTENT_INPUTS = [
@@ -30,7 +29,6 @@ export const DEFAULT_CONTEXT_MENU_CONTENT_OUTPUTS = [
 ];
 
 @Component({
-  moduleId: module.id,
   selector: 'o-context-menu-content',
   templateUrl: 'o-context-menu-content.component.html',
   inputs: DEFAULT_CONTEXT_MENU_CONTENT_INPUTS,
@@ -46,22 +44,22 @@ export class OContextMenuContentComponent implements AfterViewInit, OnInit {
   public data: any;
   public menuClass: string;
   public execute: EventEmitter<{ event: Event, data: any, menuItem: OContextMenuItemComponent }> = new EventEmitter();
+  public close: EventEmitter<any> = new EventEmitter();
 
   @ContentChildren(OComponentMenuItems)
   public oContextMenuItems: QueryList<OComponentMenuItems>;
-  @ViewChild(MatMenuTrigger, {static: false})
+  @ViewChild(MatMenuTrigger, { static: false })
   public trigger: MatMenuTrigger;
-  @ViewChild(OWrapperContentMenuComponent, {static: false})
+  @ViewChild(OWrapperContentMenuComponent, { static: false })
   public menu: OWrapperContentMenuComponent;
 
   constructor(
-    protected injector: Injector,
-    protected menuService: OContextMenuService
+    protected injector: Injector
   ) { }
 
   @HostListener('document:click')
   public click(): void {
-    this.close();
+    this.closeContent();
   }
 
   public ngOnInit(): void {
@@ -88,12 +86,12 @@ export class OContextMenuContentComponent implements AfterViewInit, OnInit {
   }
 
   public onMenuClosed(e: Event): void {
-    this.close();
+    this.closeContent();
   }
 
-  public close(): void {
+  public closeContent(): void {
     this.trigger.closeMenu();
-    this.menuService.closeContextMenu.next();
+    this.close.emit();
   }
 
 }

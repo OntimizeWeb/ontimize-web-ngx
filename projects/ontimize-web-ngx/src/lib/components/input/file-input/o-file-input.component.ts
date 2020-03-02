@@ -83,7 +83,6 @@ export const DEFAULT_OUTPUTS_O_FILE_INPUT = [
 ];
 
 @Component({
-  moduleId: module.id,
   selector: 'o-file-input',
   templateUrl: './o-file-input.component.html',
   styleUrls: ['./o-file-input.component.scss'],
@@ -97,7 +96,7 @@ export class OFileInputComponent extends OFormDataComponent implements OnInit {
 
   public uploader: OFileUploader;
   public fileService: OntimizeFileService;
-  @ViewChild('inputFile', {static: false})
+  @ViewChild('inputFile', { static: false })
   public inputFile: ElementRef;
 
   public autoBinding: boolean = false;
@@ -178,8 +177,7 @@ export class OFileInputComponent extends OFormDataComponent implements OnInit {
       loadingService = this.serviceType;
     }
     try {
-      this.fileService = this.injector.get(loadingService);
-
+      this.fileService = this.injector.get<OntimizeFileService>(loadingService);
       if (this.fileService) {
         const serviceCfg: any = this.fileService.getDefaultServiceConfiguration(this.service);
         if (this.entity) {

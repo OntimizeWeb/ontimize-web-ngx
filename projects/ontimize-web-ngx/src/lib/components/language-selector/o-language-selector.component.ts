@@ -14,7 +14,6 @@ export const DEFAULT_OUTPUTS_LANGUAGE_SELECTOR = [
 ];
 
 @Component({
-  moduleId: module.id,
   selector: 'o-language-selector',
   inputs: DEFAULT_INPUTS_O_LANGUAGE_SELECTOR,
   outputs: DEFAULT_OUTPUTS_LANGUAGE_SELECTOR,

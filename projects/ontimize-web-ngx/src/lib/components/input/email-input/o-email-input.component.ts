@@ -18,7 +18,6 @@ export const DEFAULT_OUTPUTS_O_EMAIL_INPUT = [
 ];
 
 @Component({
-  moduleId: module.id,
   selector: 'o-email-input',
   templateUrl: './o-email-input.component.html',
   styleUrls: ['./o-email-input.component.scss'],

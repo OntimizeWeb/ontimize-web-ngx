@@ -8,7 +8,7 @@ import { ONIFInputComponent } from './o-nif-input.component';
 @NgModule({
   declarations: [ONIFInputComponent],
   imports: [OSharedModule, CommonModule, OTextInputModule],
-  exports: [ONIFInputComponent, OTextInputModule]
+  exports: [ONIFInputComponent]
 })
 export class ONIFInputModule {
 }

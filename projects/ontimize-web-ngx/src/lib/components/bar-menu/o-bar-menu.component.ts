@@ -12,7 +12,6 @@ export const DEFAULT_INPUTS_O_BAR_MENU = [
 ];
 
 @Component({
-  moduleId: module.id,
   selector: 'o-bar-menu',
   templateUrl: './o-bar-menu.component.html',
   styleUrls: ['./o-bar-menu.component.scss'],

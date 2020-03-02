@@ -10,7 +10,6 @@ export const DEFAULT_INPUTS_O_LOCALE_BAR_MENU_ITEM = [
 ];
 
 @Component({
-  moduleId: module.id,
   selector: 'o-locale-bar-menu-item',
   templateUrl: './o-locale-bar-menu-item.component.html',
   styleUrls: ['./o-locale-bar-menu-item.component.scss'],

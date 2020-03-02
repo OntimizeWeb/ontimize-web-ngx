@@ -6,7 +6,6 @@ import { DEFAULT_INPUTS_O_CONTEXT_MENU_ITEMS, OComponentMenuItems } from '../o-c
 export const DEFAULT_CONTEXT_MENU_ITEM_INPUTS = [...DEFAULT_INPUTS_O_CONTEXT_MENU_ITEMS];
 
 @Component({
-  moduleId: module.id,
   selector: 'o-context-menu-separator',
   template: ' ',
   inputs: DEFAULT_CONTEXT_MENU_ITEM_INPUTS,

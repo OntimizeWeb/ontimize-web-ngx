@@ -183,7 +183,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     super(injector);
     this.form = form;
     this.elRef = elRef;
-    this.permissionsService = this.injector.get(PermissionsService);
+    this.permissionsService = this.injector.get<PermissionsService>(PermissionsService);
     try {
       this.errorOptions = this.injector.get(O_MAT_ERROR_OPTIONS) || {};
     } catch (e) {
@@ -232,7 +232,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   }
 
   public ngOnChanges(changes: { [propName: string]: SimpleChange }): void {
-    if (Util.isDefined(changes['angularValidatorsFn'])) {
+    if (Util.isDefined(changes.angularValidatorsFn)) {
       this.updateValidators();
     }
   }

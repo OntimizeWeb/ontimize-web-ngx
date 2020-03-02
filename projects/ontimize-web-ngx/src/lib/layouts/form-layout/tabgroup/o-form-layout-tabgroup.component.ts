@@ -4,6 +4,8 @@ import {
   ComponentFactoryResolver,
   ElementRef,
   EventEmitter,
+  forwardRef,
+  Inject,
   Injector,
   OnDestroy,
   QueryList,
@@ -21,7 +23,8 @@ import { ONavigationItem } from '../../../services/navigation.service';
 import { Codes } from '../../../util/codes';
 import { Util } from '../../../util/util';
 import { OFormLayoutManagerContentDirective } from '../directives/o-form-layout-manager-content.directive';
-import { IDetailComponentData, OFormLayoutManagerComponent } from '../o-form-layout-manager.component';
+import { IDetailComponentData } from '../IDetailComponentData';
+import { OFormLayoutManagerComponent } from '../o-form-layout-manager.component';
 
 export const DEFAULT_INPUTS_O_FORM_LAYOUT_TABGROUP = [
   'title',
@@ -35,7 +38,6 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_TABGROUP = [
 ];
 
 @Component({
-  moduleId: module.id,
   selector: 'o-form-layout-tabgroup',
   inputs: DEFAULT_INPUTS_O_FORM_LAYOUT_TABGROUP,
   outputs: DEFAULT_OUTPUTS_O_FORM_LAYOUT_TABGROUP,
@@ -51,7 +53,6 @@ export class OFormLayoutTabGroupComponent implements AfterViewInit, OnDestroy {
   public static DEFAULT_INPUTS_O_FORM_LAYOUT_TABGROUP = DEFAULT_INPUTS_O_FORM_LAYOUT_TABGROUP;
   public static DEFAULT_OUTPUTS_O_FORM_LAYOUT_TABGROUP = DEFAULT_OUTPUTS_O_FORM_LAYOUT_TABGROUP;
 
-  protected formLayoutManager: OFormLayoutManagerComponent;
   public data: IDetailComponentData[] = [];
   public selectedTabIndex: number | null;
   public title: string;
@@ -76,10 +77,10 @@ export class OFormLayoutTabGroupComponent implements AfterViewInit, OnDestroy {
     protected injector: Injector,
     protected componentFactoryResolver: ComponentFactoryResolver,
     protected location: ViewContainerRef,
-    protected elRef: ElementRef
+    protected elRef: ElementRef,
+    @Inject(forwardRef(() => OFormLayoutManagerComponent)) protected formLayoutManager: OFormLayoutManagerComponent
   ) {
     this.dialogService = injector.get(DialogService);
-    this.formLayoutManager = this.injector.get(OFormLayoutManagerComponent);
     this.router = this.injector.get(Router);
   }
 
@@ -299,7 +300,7 @@ export class OFormLayoutTabGroupComponent implements AfterViewInit, OnDestroy {
 
   getDataToStore(): object {
     const tabsData = [];
-    this.data.map((data: IDetailComponentData) => {
+    this.data.forEach((data: IDetailComponentData) => {
       tabsData.push({
         params: data.params,
         queryParams: data.queryParams,

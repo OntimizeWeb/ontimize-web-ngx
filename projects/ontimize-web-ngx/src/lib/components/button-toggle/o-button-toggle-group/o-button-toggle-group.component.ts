@@ -19,7 +19,6 @@ export const DEFAULT_OUTPUTS_O_BUTTON_TOGGLE_GROUP = [
 ];
 
 @Component({
-  moduleId: module.id,
   selector: 'o-button-toggle-group',
   templateUrl: './o-button-toggle-group.component.html',
   styleUrls: ['./o-button-toggle-group.component.scss'],

@@ -5,7 +5,7 @@ import { Base64 } from './base64';
 import { Codes } from './codes';
 
 export interface IDataService {
-  getDefaultServiceConfiguration(serviceName?: string): object;
+  getDefaultServiceConfiguration(serviceName?: string): any;
   configureService(config: any): void;
   query(kv?: object, av?: Array<string>, entity?: string, sqltypes?: object): Observable<any>;
   advancedQuery(kv?: object, av?: Array<string>, entity?: string, sqltypes?: object, offset?: number, pagesize?: number, orderby?: Array<object>): Observable<any>;

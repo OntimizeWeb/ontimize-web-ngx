@@ -9,7 +9,6 @@ export const DEFAULT_INPUTS_O_COLUMN = [
 ];
 
 @Component({
-  moduleId: module.id,
   selector: 'o-column',
   templateUrl: './o-column.component.html',
   styleUrls: ['./o-column.component.scss'],
