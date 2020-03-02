@@ -64,7 +64,7 @@ export class OListItemCardRenderer {
   }
 
   compareListHeight(height: string) {
-    return (height === this._listItem.list.rowHeight) || undefined;
+    return (height === this._listItem._list.rowHeight) || undefined;
   }
 
   get title(): string {

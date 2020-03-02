@@ -29,7 +29,6 @@ export const DEFAULT_OUTPUTS_O_TABLE_BUTTON = [
 ];
 
 @Component({
-  moduleId: module.id,
   selector: 'o-table-button',
   templateUrl: './o-table-button.component.html',
   styleUrls: ['./o-table-button.component.scss'],

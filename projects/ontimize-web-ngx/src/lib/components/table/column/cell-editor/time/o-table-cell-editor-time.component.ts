@@ -1,8 +1,21 @@
-import { ChangeDetectionStrategy, Component, ElementRef, HostListener, Injector, OnInit, TemplateRef, ViewChild, ViewEncapsulation, AfterViewChecked } from '@angular/core';
+import {
+  AfterViewChecked,
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  HostListener,
+  Injector,
+  OnInit,
+  TemplateRef,
+  ViewChild,
+  ViewEncapsulation,
+} from '@angular/core';
 import { FormControl, ValidatorFn } from '@angular/forms';
-import { DateAdapter, MatDatepicker, MatDatepickerInput, MatDatepickerInputEvent, MAT_DATE_LOCALE } from '@angular/material';
+import { DateAdapter, MAT_DATE_LOCALE, MatDatepicker, MatDatepickerInput, MatDatepickerInputEvent } from '@angular/material';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import moment from 'moment';
+
+import { InputConverter } from '../../../../../decorators/input-converter';
 import { MomentService } from '../../../../../services/moment.service';
 import { Codes } from '../../../../../util/codes';
 import { Util } from '../../../../../util/util';
@@ -30,7 +43,6 @@ export const DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_TIME = [
 ];
 
 @Component({
-  moduleId: module.id,
   selector: 'o-table-cell-editor-time',
   templateUrl: './o-table-cell-editor-time.component.html',
   styleUrls: ['./o-table-cell-editor-time.component.scss'],
@@ -57,7 +69,7 @@ export class OTableCellEditorTimeComponent extends OBaseTableCellEditor implemen
   protected hourInput: ElementRef;
 
   @ViewChild('picker', { static: false })
-  private picker: any; // NgxMaterialTimepickerComponent from ngx-material-timepicker
+  public picker: any; // NgxMaterialTimepickerComponent from ngx-material-timepicker
 
   oStartView: 'month' | 'year' = 'month';
 
@@ -70,11 +82,14 @@ export class OTableCellEditorTimeComponent extends OBaseTableCellEditor implemen
   public oDateFormat: string = 'L';
   public oHourMax: string;
   public oHourMin: string;
+  @InputConverter()
+  public oDateTouchUi: boolean;
+  public oDateStartAt: string;
 
   private _oDateLocale;
   protected oHourPlaceholder: string;
   protected oDatePlaceholder: string;
-  protected oHourFormat: number = Codes.TWENTY_FOUR_HOUR_FORMAT;
+  public oHourFormat: number = Codes.TWENTY_FOUR_HOUR_FORMAT;
   protected onKeyboardInputDone = false;
   protected oMinDate: string;
   protected oMaxDate: string;
@@ -87,9 +102,9 @@ export class OTableCellEditorTimeComponent extends OBaseTableCellEditor implemen
   public enabledCommitOnTabPress: boolean = false;
   protected activeKeys: object = {};
 
-  @HostListener('document:keydown', ['$event'])
-  onDocumentKeydown(event: KeyboardEvent) {
-    this.handleKeydown(event);
+  @HostListener('document:keydown', [/*'$event'*/])
+  onDocumentKeydown(/*event: KeyboardEvent*/) {
+    this.handleKeydown(/*event*/);
   }
 
   constructor(
@@ -271,25 +286,25 @@ export class OTableCellEditorTimeComponent extends OBaseTableCellEditor implemen
     }
   }
 
-  protected handleKeydown(e: KeyboardEvent) {
-    this.activeKeys[e.keyCode] = true;
+  protected handleKeydown(/*e: KeyboardEvent*/) {
+    // this.activeKeys[e.keyCode] = true;
   }
 
-  protected handleKeyup(e: KeyboardEvent) {
-    this.activeKeys[e.keyCode] = false;
-    const oColumn = this.table.getOColumn(this.tableColumn.attr);
-    if (!oColumn) {
-      return;
-    }
-    if (e.keyCode === 9 && (this.activeKeys[16] || !this.enabledCommitOnTabPress)) {
-      // tab + shift or tab pressed with focus in the date component
-      return;
-    }
-    if (!oColumn.editing && this.datepicker && this.datepicker.opened) {
-      this.datepicker.close();
-    } else {
-      super.handleKeyup(e);
-    }
+  protected handleKeyup(/*e: KeyboardEvent*/) {
+    // this.activeKeys[e.keyCode] = false;
+    // const oColumn = this.table.getOColumn(this.tableColumn.attr);
+    // if (!oColumn) {
+    //   return;
+    // }
+    // if (e.keyCode === 9 && (this.activeKeys[16] || !this.enabledCommitOnTabPress)) {
+    //   // tab + shift or tab pressed with focus in the date component
+    //   return;
+    // }
+    // if (!oColumn.editing && this.datepicker && this.datepicker.opened) {
+    //   this.datepicker.close();
+    // } else {
+    //   super.handleKeyup(e);
+    // }
   }
 
   protected updateComponentValue(): void {
@@ -431,10 +446,14 @@ export class OTableCellEditorTimeComponent extends OBaseTableCellEditor implemen
     }
   }
 
-  public onKeyDown(e: KeyboardEvent): void {
-    if (!Codes.isHourInputAllowed(e)) {
-      e.preventDefault();
-    }
+  // public onKeyDown(e: KeyboardEvent): void {
+  //   if (!Codes.isHourInputAllowed(e)) {
+  //     e.preventDefault();
+  //   }
+  // }
+
+  public onKeyDown(): void {
+
   }
 
 }

@@ -83,16 +83,16 @@
           matTooltipClass="o-table-cell-tooltip" [class.o-mat-cell-multiline]="(column.isMultiline | async)"
           [oContextMenu]="tableContextMenu" [oContextMenuData]="{ cellName:column.name, rowValue:row}" [style.width]="column.getRenderWidth()">
             <div class="content">            
-              <ng-container *ngIf="usePlainRender(column, row); else cellRender">
+              <ng-container [ngIf]="usePlainRender(column, row)" [ngIfElse]="cellRender">
                 {{ row[column.name] }}
               </ng-container>
 
-              <ng-template #cellRender *ngIf="useCellRenderer(column, row); else cellEditor"
+              <ng-template #cellRender [ngIf]="useCellRenderer(column, row)" [ngIfElse]="cellEditor"
                 [ngTemplateOutlet]="column.renderer.templateref"
                 [ngTemplateOutletContext]="{ cellvalue: row[column.name], rowvalue:row }">
               </ng-template>
 
-              <ng-template #cellEditor *ngIf="useCellEditor(column, row)" [ngTemplateOutlet]="column.editor.templateref"
+              <ng-template #cellEditor [ngIf]="useCellEditor(column, row)" [ngTemplateOutlet]="column.editor.templateref"
                 [ngTemplateOutletContext]="{ cellvalue: row[column.name], rowvalue:row }">
               </ng-template>
 

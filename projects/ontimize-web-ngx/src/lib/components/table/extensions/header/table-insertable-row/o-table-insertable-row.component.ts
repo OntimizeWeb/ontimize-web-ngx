@@ -34,7 +34,6 @@ export const DEFAULT_OUTPUTS_O_TABLE_INSERTABLE_ROW = [
 ];
 
 @Component({
-  moduleId: module.id,
   selector: 'o-table-insertable-row',
   template: ' ',
   changeDetection: ChangeDetectionStrategy.OnPush,

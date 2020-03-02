@@ -33,7 +33,6 @@ export const DEFAULT_TABLE_CONTEXT_MENU_INPUTS = [
 ];
 
 @Component({
-  moduleId: module.id,
   selector: 'o-table-context-menu',
   templateUrl: './o-table-context-menu.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -24,7 +24,7 @@ import { Codes } from '../../../../../util/codes';
 import { PermissionsUtils } from '../../../../../util/permissions';
 import { Util } from '../../../../../util/util';
 import { OTableCellRendererImageComponent } from '../../../column/cell-renderer/image/o-table-cell-renderer-image.component';
-import { OColumn, OTableComponent } from '../../../o-table.component';
+import { OTableComponent, OColumn } from '../../../o-table.component';
 import {
   OTableApplyConfigurationDialogComponent,
 } from '../../dialog/apply-configuration/o-table-apply-configuration-dialog.component';
@@ -36,7 +36,6 @@ import {
 import { OTableStoreFilterDialogComponent } from '../../dialog/store-filter/o-table-store-filter-dialog.component';
 import { OTableVisibleColumnsDialogComponent } from '../../dialog/visible-columns/o-table-visible-columns-dialog.component';
 import { OTableOptionComponent } from '../table-option/o-table-option.component';
-
 
 export const DEFAULT_INPUTS_O_TABLE_MENU = [
   // select-all-checkbox [yes|no|true|false]: show selection check boxes. Default: no.
@@ -52,7 +51,6 @@ export const DEFAULT_INPUTS_O_TABLE_MENU = [
 export const DEFAULT_OUTPUTS_O_TABLE_MENU = [];
 
 @Component({
-  moduleId: module.id,
   selector: 'o-table-menu',
   templateUrl: './o-table-menu.component.html',
   styleUrls: ['./o-table-menu.component.scss'],

@@ -27,7 +27,6 @@ export interface ITableFilterByColumnDataInterface {
 }
 
 @Component({
-  moduleId: module.id,
   selector: 'o-table-filter-by-column-data-dialog',
   templateUrl: 'o-table-filter-by-column-data-dialog.component.html',
   styleUrls: ['o-table-filter-by-column-data-dialog.component.scss'],

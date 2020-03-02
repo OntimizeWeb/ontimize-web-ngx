@@ -63,10 +63,6 @@ export class OContextMenuService implements OnDestroy {
       });
     }
     this.overlays = [];
-
-    if (this.activeMenu) {
-      this.activeMenu.close();
-    }
   }
 
   // Create overlay and attach `o-context-menu-content` to it in order to trigger the menu click, the menu opens in a new overlay
@@ -110,6 +106,9 @@ export class OContextMenuService implements OnDestroy {
     contextMenuContent.instance.menuItems = context.menuItems;
     contextMenuContent.instance.data = context.data;
     contextMenuContent.instance.menuClass = context.class;
+    this.subscription.add(contextMenuContent.instance.close.subscribe(() => {
+      this.closeContextMenu.next();
+    }));
   }
 
 }

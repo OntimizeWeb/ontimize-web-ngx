@@ -25,7 +25,6 @@ export class OTableExportConfiguration {
 }
 
 @Component({
-  moduleId: module.id,
   selector: 'o-table-export-dialog',
   templateUrl: 'o-table-export-dialog.component.html',
   styleUrls: ['o-table-export-dialog.component.scss'],
@@ -84,7 +83,7 @@ export class OTableExportDialogComponent implements OnInit, OnDestroy {
     }
   }
 
-  export(exportType: string, button?: MatButton): void {
+  export(exportType: string, button?: any): void {
     if (button) {
       button.disabled = true;
     }

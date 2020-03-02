@@ -42,7 +42,6 @@ export const DEFAULT_OUTPUTS_O_HOUR_INPUT = [
 ];
 
 @Component({
-  moduleId: module.id,
   selector: 'o-hour-input',
   templateUrl: './o-hour-input.component.html',
   styleUrls: ['./o-hour-input.component.scss'],
@@ -66,8 +65,8 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
   protected onKeyboardInputDone = false;
   protected _valueType: OHourValueType = 'timestamp';
 
-  @ViewChild('picker', {static: false})
-  private picker: any; // NgxMaterialTimepickerComponent from ngx-material-timepicker
+  @ViewChild('picker', { static: false })
+  public picker: any; // NgxMaterialTimepickerComponent from ngx-material-timepicker
 
   constructor(
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,

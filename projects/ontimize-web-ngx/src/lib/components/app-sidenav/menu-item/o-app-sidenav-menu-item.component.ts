@@ -44,7 +44,6 @@ export const DEFAULT_OUTPUTS_O_APP_SIDENAV_MENU_ITEM = [
 ];
 
 @Component({
-  moduleId: module.id,
   selector: 'o-app-sidenav-menu-item',
   inputs: DEFAULT_INPUTS_O_APP_SIDENAV_MENU_ITEM,
   outputs: DEFAULT_OUTPUTS_O_APP_SIDENAV_MENU_ITEM,
@@ -74,7 +73,7 @@ export class OAppSidenavMenuItemComponent implements OnInit, AfterViewInit, OnDe
   protected sidenav: OAppSidenavComponent;
   protected router: Router;
 
-  menuItem: MenuRootItem;
+  menuItem: any; // TODO MenuRootItem;
   menuItemType: string;
   @InputConverter()
   sidenavOpened: boolean = true;

@@ -22,6 +22,7 @@ import {
 } from '@angular/core';
 import { MatCheckboxChange, MatDialog, MatMenu, MatPaginator, MatTab, MatTabGroup, PageEvent } from '@angular/material';
 import { BehaviorSubject, combineLatest, Observable, of, Subscription } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { BooleanConverter, InputConverter } from '../../decorators/input-converter';
 import { OntimizeService } from '../../services/ontimize.service';
@@ -435,7 +436,6 @@ export interface OTableInitializationOptions {
 }
 
 @Component({
-  moduleId: module.id,
   selector: 'o-table',
   templateUrl: './o-table.component.html',
   styleUrls: ['./o-table.component.scss'],
@@ -728,7 +728,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   @ViewChild('exportOptsTemplate', { static: false })
   exportOptsTemplate: TemplateRef<any>;
 
-  @HostListener('window:resize', ['$event'])
+  @HostListener('window:resize', [])
   updateScrolledState(): void {
     if (this.horizontalScroll) {
       const self = this;
@@ -1318,7 +1318,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   get showLoading() {
     return combineLatest([this.loading, this.loadingSorting, this.loadingScroll])
-      .subscribe((res: any[]) => (res[0] || res[1] || res[2]));
+      .pipe(map((res: any[]) => (res[0] || res[1] || res[2])));
   }
 
 

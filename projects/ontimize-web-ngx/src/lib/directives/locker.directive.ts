@@ -1,4 +1,4 @@
-import { Directive, ElementRef, Host, Input, Optional, Renderer2 } from '@angular/core';
+import { Directive, ElementRef, Host, Input, OnDestroy, Optional, Renderer2 } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { OFormServiceComponent } from '../components/input/o-form-service-component.class';
@@ -14,7 +14,7 @@ export const DEFAULT_INPUTS_O_LOCKER = [
   inputs: DEFAULT_INPUTS_O_LOCKER
 })
 
-export class OLockerDirective {
+export class OLockerDirective implements OnDestroy {
 
   public static DEFAULT_INPUTS_O_LOCKER = DEFAULT_INPUTS_O_LOCKER;
 

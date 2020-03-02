@@ -1,7 +1,7 @@
 <span mat-dialog-title>{{ 'TABLE.BUTTONS.COLVIS' | oTranslate }}</span>
 
 <mat-dialog-content>
-  <mat-list dnd-sortable-container [sortableData]="columns" [ngClass]="rowHeight">
+  <!-- <mat-list dnd-sortable-container [sortableData]="columns" [ngClass]="rowHeight">
     <ng-container *ngFor="let column of columns; let x = index">
       <mat-list-item *ngIf="column.showInList" (click)="onClickColumn(column)" dnd-sortable [sortableIndex]="x"
         [dragData]="column" [dragEnabled]="true" (onDragSuccess)="onDragSuccess($event)">
@@ -11,7 +11,7 @@
         <mat-icon *ngIf="!column.visible" svgIcon="ontimize:visibility_off"></mat-icon>
       </mat-list-item>
     </ng-container>
-  </mat-list>
+  </mat-list> -->
 </mat-dialog-content>
 
 <mat-dialog-actions fxLayoutAlign="end center">

@@ -30,7 +30,6 @@ export const DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_DATE = [
 ];
 
 @Component({
-  moduleId: module.id,
   selector: 'o-table-cell-editor-date',
   templateUrl: './o-table-cell-editor-date.component.html',
   styleUrls: ['./o-table-cell-editor-date.component.scss'],
@@ -49,7 +48,7 @@ export class OTableCellEditorDateComponent extends OBaseTableCellEditor implemen
   public static DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_DATE = DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_DATE;
 
   @ViewChild('templateref', { read: TemplateRef, static: false }) public templateref: TemplateRef<any>;
-  @ViewChild('input', {static: false}) inputRef: ElementRef;
+  @ViewChild('input', { static: false }) inputRef: ElementRef;
 
   format: string = 'L';
   protected locale: string;

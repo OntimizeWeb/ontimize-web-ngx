@@ -1,18 +1,17 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, Injector, ViewEncapsulation } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
-import { DragDropService } from '@churchs19/ng2-dnd';
+// import { DragDropService } from '@churchs19/ng2-dnd';
 
 import { Codes } from '../../../../../util/codes';
 import { Util } from '../../../../../util/util';
 import { OColumn } from '../../../o-table.component';
 
 @Component({
-  moduleId: module.id,
   selector: 'o-table-visible-columns-dialog',
   templateUrl: 'o-table-visible-columns-dialog.component.html',
   styleUrls: ['o-table-visible-columns-dialog.component.scss'],
   encapsulation: ViewEncapsulation.None,
-  providers: [DragDropService],
+  // providers: [DragDropService],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     '[class.o-table-visible-columns-dialog]': 'true'

@@ -27,7 +27,6 @@ export interface IColumnValueFilter {
 
 export type OTableColumnsFilterMode = 'default' | 'selection' | 'custom';
 @Component({
-  moduleId: module.id,
   selector: 'o-table-columns-filter',
   template: ' ',
   changeDetection: ChangeDetectionStrategy.OnPush,
