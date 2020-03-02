@@ -2,7 +2,6 @@ import {
   AfterViewInit,
   Component,
   ContentChild,
-  ContentChildren,
   ElementRef,
   EventEmitter,
   HostListener,
@@ -10,41 +9,25 @@ import {
   OnDestroy,
   OnInit,
   Optional,
-  QueryList,
   SkipSelf,
   ViewChild,
 } from '@angular/core';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material';
 import { ActivatedRoute, ActivatedRouteSnapshot, Route, Router } from '@angular/router';
 
-import { OListComponent } from '../../components/list/o-list.component';
 import { OServiceComponent } from '../../components/o-service-component.class';
-import { OTableComponent } from '../../components/table/o-table.component';
 import { InputConverter } from '../../decorators/input-converter';
 import { ILocalStorageComponent, LocalStorageService } from '../../services/local-storage.service';
 import { NavigationService } from '../../services/navigation.service';
 import { OFormLayoutManagerService } from '../../services/o-form-layout-manager.service';
 import { OTranslateService } from '../../services/translate/o-translate.service';
+import { FormLayoutDetailComponentData } from '../../types/form-layout-detail-component-data.type';
 import { Util } from '../../util/util';
 import { OFormLayoutDialogComponent } from './dialog/o-form-layout-dialog.component';
 import { OFormLayoutDialogOptionsComponent } from './dialog/options/o-form-layout-dialog-options.component';
 import { CanActivateFormLayoutChildGuard } from './guards/o-form-layout-can-activate-child.guard';
 import { OFormLayoutTabGroupComponent } from './tabgroup/o-form-layout-tabgroup.component';
 import { OFormLayoutTabGroupOptionsComponent } from './tabgroup/options/o-form-layout-tabgroup-options.component';
-
-export interface IDetailComponentData {
-  params: any;
-  queryParams: any;
-  urlSegments: any;
-  id: string;
-  component: any;
-  label: string;
-  modified: boolean;
-  url: string;
-  rendered?: boolean;
-  insertionMode?: boolean;
-  formDataByLabelColumns?: any;
-}
 
 export const DEFAULT_INPUTS_O_FORM_LAYOUT_MANAGER = [
   'oattr: attr',
@@ -71,7 +54,6 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
 ];
 
 @Component({
-  moduleId: module.id,
   selector: 'o-form-layout-manager',
   inputs: DEFAULT_INPUTS_O_FORM_LAYOUT_MANAGER,
   outputs: DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER,
@@ -121,17 +103,17 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
   protected localStorageService: LocalStorageService;
   protected onRouteChangeStorageSubscription: any;
 
-  @ContentChildren(OTableComponent, { descendants: true })
-  protected tableComponents: QueryList<OTableComponent>;
+  // @ContentChildren(OTableComponent, { descendants: true })
+  // protected tableComponents: QueryList<OTableComponent>;
 
-  @ContentChildren(OListComponent, { descendants: true })
-  protected listComponents: QueryList<OListComponent>;
+  // @ContentChildren(OListComponent, { descendants: true })
+  // protected listComponents: QueryList<OListComponent>;
 
   @ContentChild(OFormLayoutTabGroupOptionsComponent, { static: false })
-  protected tabGroupOptions: OFormLayoutTabGroupOptionsComponent;
+  public tabGroupOptions: OFormLayoutTabGroupOptionsComponent;
 
   @ContentChild(OFormLayoutDialogOptionsComponent, { static: false })
-  protected dialogOptions: OFormLayoutDialogOptionsComponent;
+  public dialogOptions: OFormLayoutDialogOptionsComponent;
 
   protected addingGuard: boolean = false;
 
@@ -212,8 +194,8 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
     return {};
   }
 
-  @HostListener('window:beforeunload', ['$event'])
-  public beforeunloadHandler(event): void {
+  @HostListener('window:beforeunload', [])
+  public beforeunloadHandler(): void {
     this.updateStateStorage();
   }
 
@@ -279,7 +261,7 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
   }
 
   public addDetailComponent(childRoute: ActivatedRouteSnapshot, url: string): void {
-    const newDetailComp: IDetailComponentData = {
+    const newDetailComp: FormLayoutDetailComponentData = {
       params: childRoute.params,
       queryParams: childRoute.queryParams,
       urlSegments: childRoute.url,
@@ -306,7 +288,7 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
     }
   }
 
-  public openFormLayoutDialog(detailComp: IDetailComponentData): void {
+  public openFormLayoutDialog(detailComp: FormLayoutDetailComponentData): void {
     const cssclass = ['o-form-layout-dialog-overlay'];
     if (this.dialogClass) {
       cssclass.push(this.dialogClass);
@@ -342,7 +324,7 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
     });
   }
 
-  public getFormCacheData(formId: string): IDetailComponentData {
+  public getFormCacheData(formId: string): FormLayoutDetailComponentData {
     if (this.isTabMode() && Util.isDefined(this.oTabGroup)) {
       return this.oTabGroup.getFormCacheData(formId);
     } else if (this.isDialogMode() && Util.isDefined(this.dialogRef)) {
@@ -368,7 +350,7 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
     let label = '';
     const isDataDefined = Util.isDefined(data);
     if (isDataDefined && data.hasOwnProperty('new_tab_title')) {
-      label = this.translateService.get(data['new_tab_title']);
+      label = this.translateService.get(data.new_tab_title);
     } else if (isDataDefined && this.labelColsArray.length !== 0) {
       this.labelColsArray.forEach((col, idx) => {
         if (data[col] !== undefined) {

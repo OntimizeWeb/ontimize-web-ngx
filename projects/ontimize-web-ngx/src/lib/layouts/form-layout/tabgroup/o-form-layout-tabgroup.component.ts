@@ -20,10 +20,10 @@ import { BehaviorSubject, Subscription } from 'rxjs';
 
 import { DialogService } from '../../../services/dialog.service';
 import { ONavigationItem } from '../../../services/navigation.service';
+import { FormLayoutDetailComponentData } from '../../../types/form-layout-detail-component-data.type';
 import { Codes } from '../../../util/codes';
 import { Util } from '../../../util/util';
 import { OFormLayoutManagerContentDirective } from '../directives/o-form-layout-manager-content.directive';
-import { IDetailComponentData } from '../IDetailComponentData';
 import { OFormLayoutManagerComponent } from '../o-form-layout-manager.component';
 
 export const DEFAULT_INPUTS_O_FORM_LAYOUT_TABGROUP = [
@@ -53,7 +53,7 @@ export class OFormLayoutTabGroupComponent implements AfterViewInit, OnDestroy {
   public static DEFAULT_INPUTS_O_FORM_LAYOUT_TABGROUP = DEFAULT_INPUTS_O_FORM_LAYOUT_TABGROUP;
   public static DEFAULT_OUTPUTS_O_FORM_LAYOUT_TABGROUP = DEFAULT_OUTPUTS_O_FORM_LAYOUT_TABGROUP;
 
-  public data: IDetailComponentData[] = [];
+  public data: FormLayoutDetailComponentData[] = [];
   public selectedTabIndex: number | null;
   public title: string;
   public options: any;
@@ -155,7 +155,7 @@ export class OFormLayoutTabGroupComponent implements AfterViewInit, OnDestroy {
     return this.options && this.options.iconPosition === 'left';
   }
 
-  addTab(compData: IDetailComponentData) {
+  addTab(compData: FormLayoutDetailComponentData) {
     let addNewComp = true;
     const navData: ONavigationItem = this.formLayoutManager.navigationService.getLastItem();
     if (navData.isInsertFormRoute()) {
@@ -178,7 +178,7 @@ export class OFormLayoutTabGroupComponent implements AfterViewInit, OnDestroy {
     }
   }
 
-  reloadTab(compData: IDetailComponentData) {
+  reloadTab(compData: FormLayoutDetailComponentData) {
     let compIndex = -1;
     const compParams = compData.params;
     this.data.forEach((comp, i) => {
@@ -229,7 +229,7 @@ export class OFormLayoutTabGroupComponent implements AfterViewInit, OnDestroy {
         self.onCloseTab.emit(closedTabData);
       }
     });
-    const tabData = this.data.find((item: IDetailComponentData) => item.id === id);
+    const tabData = this.data.find((item: FormLayoutDetailComponentData) => item.id === id);
     if (Util.isDefined(tabData) && tabData.modified) {
       this.dialogService.confirm('CONFIRM', 'MESSAGES.FORM_CHANGES_WILL_BE_LOST').then(res => {
         onCloseTabAccepted.emit(res);
@@ -239,7 +239,7 @@ export class OFormLayoutTabGroupComponent implements AfterViewInit, OnDestroy {
     }
   }
 
-  createTabComponent(tabData: IDetailComponentData, content: OFormLayoutManagerContentDirective) {
+  createTabComponent(tabData: FormLayoutDetailComponentData, content: OFormLayoutManagerContentDirective) {
     const component = tabData.component;
     const componentFactory = this.componentFactoryResolver.resolveComponentFactory(component);
     const viewContainerRef: ViewContainerRef = content.viewContainerRef;
@@ -248,7 +248,7 @@ export class OFormLayoutTabGroupComponent implements AfterViewInit, OnDestroy {
     tabData.rendered = true;
   }
 
-  getFormCacheData(idArg: string): IDetailComponentData {
+  getFormCacheData(idArg: string): FormLayoutDetailComponentData {
     return this.data.filter(cacheItem => cacheItem.id === idArg)[0];
   }
 
@@ -300,7 +300,7 @@ export class OFormLayoutTabGroupComponent implements AfterViewInit, OnDestroy {
 
   getDataToStore(): object {
     const tabsData = [];
-    this.data.forEach((data: IDetailComponentData) => {
+    this.data.forEach((data: FormLayoutDetailComponentData) => {
       tabsData.push({
         params: data.params,
         queryParams: data.queryParams,
@@ -347,7 +347,7 @@ export class OFormLayoutTabGroupComponent implements AfterViewInit, OnDestroy {
   }
 
   protected createDetailComponent(component: any, paramsObj: any) {
-    const newDetailComp: IDetailComponentData = {
+    const newDetailComp: FormLayoutDetailComponentData = {
       params: paramsObj.params,
       queryParams: paramsObj.queryParams,
       urlSegments: paramsObj.urlSegments,
