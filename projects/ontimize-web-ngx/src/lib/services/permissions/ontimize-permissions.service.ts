@@ -4,9 +4,9 @@ import { Observable } from 'rxjs';
 import { share } from 'rxjs/operators';
 
 import { AppConfig, Config, OntimizePermissionsConfig } from '../../config/app-config';
-import { LoginService } from '../../services/login.service';
 import { Codes } from '../../util/codes';
 import { IPermissionsService, Util } from '../../util/util';
+import { LoginStorageService } from '../login-storage.service';
 
 @Injectable()
 export class OntimizePermissionsService implements IPermissionsService {
@@ -29,15 +29,15 @@ export class OntimizePermissionsService implements IPermissionsService {
   }
 
   getDefaultServiceConfiguration(): any {
-    const loginService = this.injector.get(LoginService);
+    const loginStorageService = this.injector.get(LoginStorageService);
     const servConfig = {};
-    servConfig[Codes.SESSION_KEY] = loginService.getSessionInfo();
+    servConfig[Codes.SESSION_KEY] = loginStorageService.getSessionInfo();
     return servConfig;
   }
 
   configureService(permissionsConfig: OntimizePermissionsConfig): void {
     const config = this.getDefaultServiceConfiguration();
-    this._urlBase = config.urlBase ? config.urlBase : this._appConfig['apiEndpoint'];
+    this._urlBase = config.urlBase ? config.urlBase : this._appConfig.apiEndpoint;
     this._sessionid = config.session ? config.session.id : -1;
     this._user = config.session ? config.session.user : '';
 

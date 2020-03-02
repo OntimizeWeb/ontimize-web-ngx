@@ -2,9 +2,10 @@ import { EventEmitter, Injector } from '@angular/core';
 import { NavigationStart, Router } from '@angular/router';
 
 import { AppConfig, Config } from '../config/app-config';
-import { LoginService, SessionInfo } from '../services/login.service';
+import { SessionInfo } from '../types/session-info.type';
 import { ObservableWrapper } from '../util/async';
 import { Util } from '../util/util';
+import { LoginStorageService } from './login-storage.service';
 
 export interface ILocalStorageComponent {
   storeState?: boolean;
@@ -23,12 +24,12 @@ export class LocalStorageService {
 
   private _config: Config;
   private _router: Router;
-  private loginService: LoginService;
+  private loginStorageService: LoginStorageService;
 
   constructor(protected injector: Injector) {
     this._config = this.injector.get(AppConfig).getConfiguration();
     this._router = this.injector.get(Router);
-    this.loginService = this.injector.get(LoginService);
+    this.loginStorageService = this.injector.get(LoginStorageService);
 
     const self = this;
     this._router.events.subscribe(event => {
@@ -118,7 +119,7 @@ export class LocalStorageService {
       return;
     }
     const users = appData[LocalStorageService.USERS_STORAGE_KEY] || {}; // uuid -> users
-    const idUser = session.user || this.loginService.getSessionInfo().user;
+    const idUser = session.user || this.loginStorageService.getSessionInfo().user;
     const user = users[idUser] || {}; // uuid -> users-> user
 
     let componentData = {};
@@ -136,7 +137,7 @@ export class LocalStorageService {
 
   public getStoredData(): object {
     let appData = {};
-    const appStoredData = localStorage.getItem(this._config['uuid']);
+    const appStoredData = localStorage.getItem(this._config.uuid);
     if (appStoredData) {
       try {
         appData = JSON.parse(appStoredData);
@@ -166,13 +167,13 @@ export class LocalStorageService {
       usersObject[session.user][LocalStorageService.COMPONENTS_STORAGE_KEY] = componentsInfo;
 
       appData[LocalStorageService.USERS_STORAGE_KEY] = usersObject;
-      localStorage.setItem(this._config['uuid'], JSON.stringify(appData));
+      localStorage.setItem(this._config.uuid, JSON.stringify(appData));
     }
   }
 
   protected setLocalStorage(appData: any) {
     this.onSetLocalStorage.emit();
-    localStorage.setItem(this._config['uuid'], JSON.stringify(appData));
+    localStorage.setItem(this._config.uuid, JSON.stringify(appData));
   }
 }
 

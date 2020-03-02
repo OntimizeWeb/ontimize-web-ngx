@@ -3,12 +3,13 @@ import { HostListener, Injectable, Injector } from '@angular/core';
 import { Observable, Subscriber, Subscription, timer } from 'rxjs';
 
 import { AppConfig } from '../config/app-config';
-import { OntimizeServiceResponse } from '../types/ontimize-service-config.type';
+import { OntimizeServiceResponse } from '../types/ontimize-service-response.type';
 import { ORemoteConfiguration, ORemoteConfigurationColumns } from '../types/remote-configuration.type';
+import { SessionInfo } from '../types/session-info.type';
 import { Codes } from '../util/codes';
 import { Util } from '../util/util';
 import { LocalStorageService } from './local-storage.service';
-import { LoginService, SessionInfo } from './login.service';
+import { LoginStorageService } from './login-storage.service';
 
 @Injectable()
 export class ORemoteConfigurationService {
@@ -19,7 +20,7 @@ export class ORemoteConfigurationService {
   public static DEFAULT_STORAGE_TIMEOUT = 60000;
 
   protected localStorageService: LocalStorageService;
-  protected loginService: LoginService;
+  protected loginStorageService: LoginStorageService;
   protected httpClient: HttpClient;
   protected _appConfig: AppConfig;
   protected _url: string;
@@ -34,7 +35,7 @@ export class ORemoteConfigurationService {
     configuration: ORemoteConfigurationService.DEFAULT_COLUMN_CONFIG
   };
 
-  @HostListener('window:beforeunload', ['$event'])
+  @HostListener('window:beforeunload', [])
   beforeunloadHandler() {
     this.finalize().subscribe(() => {
       //
@@ -44,7 +45,7 @@ export class ORemoteConfigurationService {
   constructor(protected injector: Injector) {
     this.httpClient = this.injector.get(HttpClient);
     this._appConfig = this.injector.get(AppConfig);
-    this.loginService = this.injector.get(LoginService);
+    this.loginStorageService = this.injector.get(LoginStorageService);
     this.localStorageService = this.injector.get(LocalStorageService);
 
     this.httpClient = this.injector.get(HttpClient);
@@ -69,7 +70,7 @@ export class ORemoteConfigurationService {
   public getUserConfiguration(): Observable<any> {
     const self = this;
     const observable = new Observable((observer: Subscriber<OntimizeServiceResponse>) => {
-      const sessionInfo = self.loginService.getSessionInfo();
+      const sessionInfo = self.loginStorageService.getSessionInfo();
       if (!self.hasSession(sessionInfo)) {
         observer.error();
         return;
@@ -116,7 +117,7 @@ export class ORemoteConfigurationService {
       self.storeSubscription.unsubscribe();
     }
     const observable = new Observable((observer: Subscriber<OntimizeServiceResponse>) => {
-      const sessionInfo = self.loginService.getSessionInfo();
+      const sessionInfo = self.loginStorageService.getSessionInfo();
       if (!self._appConfig.useRemoteConfiguration() || !self.hasSession(sessionInfo)) {
         observer.next();
         observer.complete();
@@ -181,7 +182,7 @@ export class ORemoteConfigurationService {
   }
 
   protected buildHeaders(): HttpHeaders {
-    const sessionInfo = this.loginService.getSessionInfo();
+    const sessionInfo = this.loginStorageService.getSessionInfo();
     return new HttpHeaders({
       'Access-Control-Allow-Origin': '*',
       'Content-Type': 'application/json;charset=UTF-8',

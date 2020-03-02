@@ -4,12 +4,12 @@ import { AppConfig, Config } from '../config/app-config';
 import { OntimizeEEService } from './ontimize-ee.service';
 import { OntimizeService } from './ontimize.service';
 
-class DataServiceFactory {
+export class DataServiceFactory {
 
   protected config: Config;
 
   constructor(protected injector: Injector) {
-    this.config = this.injector.get(AppConfig).getConfiguration();
+    this.config = this.injector.get<AppConfig>(AppConfig).getConfiguration();
   }
 
   public factory(): any {

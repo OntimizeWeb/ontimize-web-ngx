@@ -12,11 +12,7 @@ import { ObservableWrapper } from '../util/async';
 import { Codes } from '../util/codes';
 import { ServiceUtils } from '../util/service.utils';
 import { IAuthService } from '../util/util';
-
-export interface SessionInfo {
-  id?: number;
-  user?: string;
-}
+import { LoginStorageService } from './login-storage.service';
 
 export interface ILoginService {
   login(user: string, password: string): Observable<any>;
@@ -32,17 +28,17 @@ export class LoginService implements ILoginService {
   public onLogout: EventEmitter<any> = new EventEmitter();
 
   private _user: string;
-  private _localStorageKey: string;
   private _config: Config;
   private router: Router;
   private ontService: OntimizeService;
   private dialogService: DialogService;
+  private loginStorageService: LoginStorageService;
 
   constructor(protected injector: Injector) {
     this._config = this.injector.get(AppConfig).getConfiguration();
     this.router = this.injector.get(Router);
-    this._localStorageKey = this._config['uuid'];
-    const sessionInfo = this.getSessionInfo();
+    this.loginStorageService = this.injector.get(LoginStorageService);
+    const sessionInfo = this.loginStorageService.getSessionInfo();
     if (sessionInfo && sessionInfo.id && sessionInfo.user && sessionInfo.user.length > 0) {
       this._user = sessionInfo.user;
     }
@@ -54,13 +50,13 @@ export class LoginService implements ILoginService {
   }
 
   public get localStorageKey(): string {
-    return this._localStorageKey;
+    return this.loginStorageService._localStorageKey;
   }
 
   public configureOntimizeAuthService(config: object): void {
     this.ontService = this.injector.get(OntimizeService);
     const servConf = {};
-    servConf[Codes.SESSION_KEY] = this.getSessionInfo();
+    servConf[Codes.SESSION_KEY] = this.loginStorageService.getSessionInfo();
     this.ontService.configureService(servConf);
   }
 
@@ -108,7 +104,7 @@ export class LoginService implements ILoginService {
       user: this._user,
       id: sessionId
     };
-    this.storeSessionInfo(session);
+    this.loginStorageService.storeSessionInfo(session);
     ObservableWrapper.callEmit(this.onLogin, session);
   }
 
@@ -119,7 +115,7 @@ export class LoginService implements ILoginService {
   public logout(): Observable<any> {
     ObservableWrapper.callEmit(this.onLogout, null);
     const self = this;
-    const sessionInfo = this.getSessionInfo();
+    const sessionInfo = this.loginStorageService.getSessionInfo();
     const dataObservable: Observable<any> = new Observable(innerObserver => {
       self.retrieveAuthService().then(service => {
         service.endsession(sessionInfo.user, sessionInfo.id).subscribe(resp => {
@@ -149,44 +145,11 @@ export class LoginService implements ILoginService {
   }
 
   public sessionExpired(): void {
-    const sessionInfo = this.getSessionInfo();
-    delete sessionInfo.id;
-    delete sessionInfo.user;
-    this.storeSessionInfo(sessionInfo);
+    this.loginStorageService.sessionExpired();
   }
 
   public isLoggedIn(): boolean {
-    const sessionInfo = this.getSessionInfo();
-    if (sessionInfo && sessionInfo.id && sessionInfo.user && sessionInfo.user.length > 0) {
-      if (isNaN(sessionInfo.id) && sessionInfo.id < 0) {
-        return false;
-      }
-      return true;
-    }
-    return false;
-  }
-
-  public storeSessionInfo(sessionInfo: SessionInfo): void {
-    if (sessionInfo !== undefined) {
-      const info = localStorage.getItem(this._localStorageKey);
-      let stored = null;
-      if (info && info.length > 0) {
-        stored = JSON.parse(info);
-      } else {
-        stored = {};
-      }
-      stored[Codes.SESSION_KEY] = sessionInfo;
-      localStorage.setItem(this._localStorageKey, JSON.stringify(stored));
-    }
-  }
-
-  public getSessionInfo(): SessionInfo {
-    const info = localStorage.getItem(this._localStorageKey);
-    if (!info) {
-      return {};
-    }
-    const stored = JSON.parse(info);
-    return stored[Codes.SESSION_KEY] || {};
+    return this.loginStorageService.isLoggedIn();
   }
 
   public logoutAndRedirect(): void {

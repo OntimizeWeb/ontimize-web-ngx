@@ -5,9 +5,9 @@ import { Observable } from 'rxjs';
 import { share } from 'rxjs/operators';
 
 import { AppConfig, Config } from '../config/app-config';
-import { LoginService } from '../services/login.service';
 import { Codes } from '../util/codes';
 import { ServiceUtils } from '../util/service.utils';
+import { LoginStorageService } from './login-storage.service';
 
 @Injectable()
 export class OntimizeExportService {
@@ -30,20 +30,20 @@ export class OntimizeExportService {
   }
 
   public getDefaultServiceConfiguration(serviceName?: string): object {
-    const loginService: LoginService = this.injector.get(LoginService);
+    const loginStorageService: LoginStorageService = this.injector.get(LoginStorageService);
     const configuration = this._config.getServiceConfiguration();
 
     let servConfig = {};
     if (serviceName && configuration.hasOwnProperty(serviceName)) {
       servConfig = configuration[serviceName];
     }
-    servConfig[Codes.SESSION_KEY] = loginService.getSessionInfo();
+    servConfig[Codes.SESSION_KEY] = loginStorageService.getSessionInfo();
     return servConfig;
   }
 
   public configureService(config: any, modeAll = false): void {
     this.exportAll = modeAll;
-    this._urlBase = config.urlBase ? config.urlBase : this._appConfig['apiEndpoint'];
+    this._urlBase = config.urlBase ? config.urlBase : this._appConfig.apiEndpoint;
     this._sessionid = config.session ? config.session.id : -1;
     if (config.exportPath) {
       this.exportPath = config.exportPath;
@@ -130,9 +130,9 @@ export class OntimizeExportService {
 
   protected redirectLogin(sessionExpired: boolean = false): void {
     const router = this.injector.get(Router);
-    const loginService = this.injector.get(LoginService);
+    const loginStorageService = this.injector.get(LoginStorageService);
     if (sessionExpired) {
-      loginService.sessionExpired();
+      loginStorageService.sessionExpired();
     }
     ServiceUtils.redirectLogin(router, sessionExpired);
   }

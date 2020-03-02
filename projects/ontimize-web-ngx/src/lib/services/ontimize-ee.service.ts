@@ -5,10 +5,10 @@ import { Observable } from 'rxjs';
 import { share } from 'rxjs/operators';
 
 import { AppConfig, Config } from '../config/app-config';
-import { LoginService } from '../services/login.service';
 import { Codes } from '../util/codes';
 import { ServiceUtils } from '../util/service.utils';
 import { IAuthService, IDataService, Util } from '../util/util';
+import { LoginStorageService } from './login-storage.service';
 import { OntimizeServiceResponseParser } from './parser/o-service-response.parser';
 
 @Injectable()
@@ -30,31 +30,32 @@ export class OntimizeEEService implements IAuthService, IDataService {
   protected _config: AppConfig;
   protected _startSessionPath: string;
   protected responseParser: OntimizeServiceResponseParser;
+  protected loginStorageService: LoginStorageService;
 
   constructor(protected injector: Injector) {
     this.httpClient = this.injector.get(HttpClient);
     this._config = this.injector.get(AppConfig);
     this._appConfig = this._config.getConfiguration();
     this.responseParser = this.injector.get(OntimizeServiceResponseParser);
+    this.loginStorageService = this.injector.get(LoginStorageService);
   }
 
   public getDefaultServiceConfiguration(serviceName?: string) {
-    const loginService = this.injector.get(LoginService);
     const configuration = this._config.getServiceConfiguration();
 
     let servConfig = {};
     if (serviceName && configuration.hasOwnProperty(serviceName)) {
       servConfig = configuration[serviceName];
     }
-    servConfig[Codes.SESSION_KEY] = loginService.getSessionInfo();
+    servConfig[Codes.SESSION_KEY] = this.loginStorageService.getSessionInfo();
     return servConfig;
   }
 
   public configureService(config: any): void {
-    this._urlBase = config.urlBase ? config.urlBase : this._appConfig['apiEndpoint'];
+    this._urlBase = config.urlBase ? config.urlBase : this._appConfig.apiEndpoint;
     this._sessionid = config.session ? config.session.id : -1;
     this.path = config.path;
-    this._startSessionPath = this._appConfig['startSessionPath'] ? this._appConfig['startSessionPath'] : '/users/login';
+    this._startSessionPath = this._appConfig.startSessionPath ? this._appConfig.startSessionPath : '/users/login';
     // TODO init other params
   }
 
@@ -228,9 +229,8 @@ export class OntimizeEEService implements IAuthService, IDataService {
 
   redirectLogin(sessionExpired: boolean = false) {
     const router = this.injector.get(Router);
-    const loginService = this.injector.get(LoginService);
     if (sessionExpired) {
-      loginService.sessionExpired();
+      this.loginStorageService.sessionExpired();
     }
     ServiceUtils.redirectLogin(router, sessionExpired);
   }

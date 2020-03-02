@@ -4,9 +4,9 @@ import { Observable } from 'rxjs';
 import { share } from 'rxjs/operators';
 
 import { AppConfig, Config, OntimizeEEPermissionsConfig } from '../../config/app-config';
-import { LoginService } from '../../services/login.service';
 import { Codes } from '../../util/codes';
 import { IPermissionsService, Util } from '../../util/util';
+import { LoginStorageService } from '../login-storage.service';
 
 @Injectable()
 export class OntimizeEEPermissionsService implements IPermissionsService {
@@ -31,20 +31,20 @@ export class OntimizeEEPermissionsService implements IPermissionsService {
   getDefaultServiceConfiguration(permissionsConfig: OntimizeEEPermissionsConfig): any {
     const serviceName: string = permissionsConfig ? permissionsConfig.service : undefined;
 
-    const loginService = this.injector.get(LoginService);
+    const loginStorageService = this.injector.get(LoginStorageService);
     const configuration = this._config.getServiceConfiguration();
 
     let servConfig = {};
     if (serviceName && configuration.hasOwnProperty(serviceName)) {
       servConfig = configuration[serviceName];
     }
-    servConfig[Codes.SESSION_KEY] = loginService.getSessionInfo();
+    servConfig[Codes.SESSION_KEY] = loginStorageService.getSessionInfo();
     return servConfig;
   }
 
   configureService(permissionsConfig: OntimizeEEPermissionsConfig): void {
     const config = this.getDefaultServiceConfiguration(permissionsConfig);
-    this._urlBase = config.urlBase ? config.urlBase : this._appConfig['apiEndpoint'];
+    this._urlBase = config.urlBase ? config.urlBase : this._appConfig.apiEndpoint;
     this._sessionid = config.session ? config.session.id : -1;
     this._user = config.session ? config.session.user : '';
     this.path = config.path ? config.path : OntimizeEEPermissionsService.DEFAULT_PERMISSIONS_PATH;

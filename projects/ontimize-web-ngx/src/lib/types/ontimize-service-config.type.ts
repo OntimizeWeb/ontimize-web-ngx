@@ -1,4 +1,4 @@
-import { SessionInfo } from '../services/login.service';
+import { SessionInfo } from './session-info.type';
 
 /** Ontimize Service Configuration */
 export type OntimizeServiceConfig = {
@@ -6,12 +6,4 @@ export type OntimizeServiceConfig = {
   urlBase?: string;
   /** Session information */
   session?: SessionInfo;
-};
-
-/** Ontimize Service Response Type */
-export type OntimizeServiceResponse = {
-  code: number;
-  data: any;
-  message: string;
-  sqlTypes: {}
 };
