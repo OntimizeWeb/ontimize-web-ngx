@@ -21,7 +21,6 @@ export * from './slider/o-slider.component';
 export * from './text-input/o-text-input.component';
 export * from './textarea-input/o-textarea-input.component';
 export * from './time-input/o-time-input.component';
-export * from './o-form-service-component.class';
 
 export * from './checkbox/o-checkbox.module';
 export * from './combo/o-combo.module';

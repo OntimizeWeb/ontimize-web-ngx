@@ -24,7 +24,6 @@ export const DEFAULT_OUTPUTS_O_LIST_ITEM_TEXT = [
 ];
 
 @Component({
-  moduleId: module.id,
   selector: 'o-list-item-text',
   templateUrl: './o-list-item-text.component.html',
   styleUrls: ['./o-list-item-text.component.scss'],

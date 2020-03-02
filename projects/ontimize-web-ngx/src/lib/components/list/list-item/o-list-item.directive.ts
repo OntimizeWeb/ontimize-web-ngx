@@ -22,7 +22,7 @@ export class OListItemDirective implements OnInit, OnDestroy {
   @Input('o-list-item')
   public modelData: object;
 
-  @Input('selectable')
+  @Input()
   public selectable: boolean = false;
 
   protected _list: IList;

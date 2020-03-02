@@ -20,7 +20,6 @@ export class OSnackBarConfig {
 }
 
 @Component({
-  moduleId: module.id,
   selector: 'o-snackbar',
   templateUrl: 'o-snackbar.component.html',
   styleUrls: ['o-snackbar.component.scss'],
@@ -58,7 +57,7 @@ export class OSnackBarComponent {
     }
   }
 
-  public onAction(e: Event): void {
+  public onAction(): void {
     this.snackBarRef.dismissWithAction();
   }
 

@@ -22,7 +22,6 @@ const defaults = {
 };
 
 @Component({
-  moduleId: module.id,
   // tslint:disable-next-line: component-selector
   selector: 'ck-editor',
   template: `<textarea #ck></textarea>`,
@@ -71,7 +70,7 @@ export class CKEditorComponent implements AfterViewInit, OnDestroy, ControlValue
   @Output() blur = new EventEmitter();
   @Output() focus = new EventEmitter();
 
-  @ViewChild('ck', {static: false}) public ck: ElementRef;
+  @ViewChild('ck', { static: false }) public ck: ElementRef;
 
   constructor(
     protected ngZone: NgZone

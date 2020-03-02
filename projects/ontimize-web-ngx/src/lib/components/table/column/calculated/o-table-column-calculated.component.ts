@@ -1,6 +1,7 @@
-import { Component, Inject, forwardRef, Injector, ComponentFactoryResolver, ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ComponentFactoryResolver, forwardRef, Inject, Injector } from '@angular/core';
+
 import { OTableComponent } from '../../o-table.component';
-import { OTableColumnComponent, DEFAULT_INPUTS_O_TABLE_COLUMN } from '../o-table-column.component';
+import { DEFAULT_INPUTS_O_TABLE_COLUMN, OTableColumnComponent } from '../o-table-column.component';
 
 export const DEFAULT_INPUTS_O_TABLE_COLUMN_CALCULATED = [
   ...DEFAULT_INPUTS_O_TABLE_COLUMN,
@@ -17,7 +18,6 @@ export class OColumnCalculated {
 }
 
 @Component({
-  moduleId: module.id,
   selector: 'o-table-column-calculated',
   templateUrl: './o-table-column-calculated.component.html',
   inputs: DEFAULT_INPUTS_O_TABLE_COLUMN_CALCULATED,

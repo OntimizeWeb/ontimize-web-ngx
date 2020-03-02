@@ -1,30 +1,46 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, ComponentFactory, ComponentFactoryResolver, EventEmitter, forwardRef, Inject, Injector, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  ComponentFactory,
+  ComponentFactoryResolver,
+  EventEmitter,
+  forwardRef,
+  Inject,
+  Injector,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+  ViewContainerRef,
+} from '@angular/core';
 import { Subscription } from 'rxjs';
+
 import { DateFilterFunction, ODateValueType } from '../../../components/input/date-input/o-date-input.component';
 import { InputConverter } from '../../../decorators/input-converter';
 import { Codes } from '../../../util/codes';
+import { IExpression } from '../../../util/filter-expression.utils';
 import { SQLTypes } from '../../../util/sqltypes';
 import { Util } from '../../../util/util';
 import { OTableComponent } from '../o-table.component';
-import { IExpression } from '../../../util/filter-expression.utils';
-
 import { OTableCellEditorBooleanComponent } from './cell-editor/boolean/o-table-cell-editor-boolean.component';
 import { OTableCellEditorDateComponent } from './cell-editor/date/o-table-cell-editor-date.component';
+import { OTableCellEditorIntegerComponent } from './cell-editor/integer/o-table-cell-editor-integer.component';
 import { OTableCellEditorRealComponent } from './cell-editor/real/o-table-cell-editor-real.component';
 import { OTableCellEditorTextComponent } from './cell-editor/text/o-table-cell-editor-text.component';
 import { OTableCellEditorTimeComponent } from './cell-editor/time/o-table-cell-editor-time.component';
-import { OTableCellEditorIntegerComponent } from './cell-editor/integer/o-table-cell-editor-integer.component';
+import { OTableCellRendererActionComponent } from './cell-renderer/action/o-table-cell-renderer-action.component';
 import { OTableCellRendererBooleanComponent } from './cell-renderer/boolean/o-table-cell-renderer-boolean.component';
 import { OTableCellRendererCurrencyComponent } from './cell-renderer/currency/o-table-cell-renderer-currency.component';
 import { OTableCellRendererDateComponent } from './cell-renderer/date/o-table-cell-renderer-date.component';
 import { OTableCellRendererImageComponent } from './cell-renderer/image/o-table-cell-renderer-image.component';
-import { OTableCellRendererActionComponent } from './cell-renderer/action/o-table-cell-renderer-action.component';
-import { OTableCellRendererServiceComponent } from './cell-renderer/service/o-table-cell-renderer-service.component';
-import { OTableCellRendererTranslateComponent } from './cell-renderer/translate/o-table-cell-renderer-translate.component';
 import { OTableCellRendererIntegerComponent } from './cell-renderer/integer/o-table-cell-renderer-integer.component';
-import { OTableCellRendererPercentageComponent } from './cell-renderer/percentage/o-table-cell-renderer-percentage.component';
+import {
+  OTableCellRendererPercentageComponent,
+} from './cell-renderer/percentage/o-table-cell-renderer-percentage.component';
 import { OTableCellRendererRealComponent } from './cell-renderer/real/o-table-cell-renderer-real.component';
+import { OTableCellRendererServiceComponent } from './cell-renderer/service/o-table-cell-renderer-service.component';
 import { OTableCellRendererTimeComponent } from './cell-renderer/time/o-table-cell-renderer-time.component';
+import { OTableCellRendererTranslateComponent } from './cell-renderer/translate/o-table-cell-renderer-translate.component';
 
 export interface OColumnTooltip {
   value?: string;
@@ -104,7 +120,6 @@ export const DEFAULT_OUTPUTS_O_TABLE_COLUMN = [
 ];
 
 @Component({
-  moduleId: module.id,
   selector: 'o-table-column',
   templateUrl: './o-table-column.component.html',
   styleUrls: ['./o-table-column.component.scss'],
@@ -288,7 +303,6 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
     protected resolver: ComponentFactoryResolver,
     protected injector: Injector
   ) {
-    this.table = table;
   }
 
   static addEditor(type: string, editorClassReference: any) {

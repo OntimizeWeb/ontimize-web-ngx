@@ -30,7 +30,6 @@ export const DEFAULT_OUTPUTS_O_CHECKBOX = [
 ];
 
 @Component({
-  moduleId: module.id,
   selector: 'o-checkbox',
   inputs: DEFAULT_INPUTS_O_CHECKBOX,
   outputs: DEFAULT_OUTPUTS_O_CHECKBOX,
@@ -101,7 +100,6 @@ export class OCheckboxComponent extends OFormDataComponent {
   onClickBlocker(evt: Event) {
     evt.stopPropagation();
   }
-
 
   parseValueByType(value: any) {
     let result: any;

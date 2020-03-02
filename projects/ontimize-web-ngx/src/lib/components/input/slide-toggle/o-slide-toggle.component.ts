@@ -29,7 +29,6 @@ export const DEFAULT_OUTPUTS_O_SLIDETOGGLE = [
 ];
 
 @Component({
-  moduleId: module.id,
   selector: 'o-slide-toggle',
   inputs: DEFAULT_INPUTS_O_SLIDETOGGLE,
   outputs: DEFAULT_OUTPUTS_O_SLIDETOGGLE,

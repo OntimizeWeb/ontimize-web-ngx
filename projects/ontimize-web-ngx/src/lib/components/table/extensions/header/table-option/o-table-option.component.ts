@@ -4,14 +4,11 @@ import {
   Component,
   ElementRef,
   EventEmitter,
-  forwardRef,
-  Inject,
   Injector,
   ViewEncapsulation,
 } from '@angular/core';
 
 import { InputConverter } from '../../../../../decorators/input-converter';
-import { OTableComponent } from '../../../o-table.component';
 
 export const DEFAULT_INPUTS_O_TABLE_OPTION = [
   'oattr: attr',
@@ -28,7 +25,6 @@ export const DEFAULT_OUTPUTS_O_TABLE_OPTION = [
 ];
 
 @Component({
-  moduleId: module.id,
   selector: 'o-table-option',
   templateUrl: './o-table-option.component.html',
   styleUrls: ['./o-table-option.component.scss'],
@@ -63,13 +59,11 @@ export class OTableOptionComponent {
 
   constructor(
     protected injector: Injector,
-    public elRef: ElementRef,
-    @Inject(forwardRef(() => OTableComponent)) protected table: OTableComponent
+    public elRef: ElementRef
   ) {
     try {
       this.cd = this.injector.get(ChangeDetectorRef);
     } catch (e) {
-      // no parent form
     }
   }
 

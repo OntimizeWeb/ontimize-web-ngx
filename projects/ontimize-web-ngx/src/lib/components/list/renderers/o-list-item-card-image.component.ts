@@ -26,7 +26,6 @@ export const DEFAULT_OUTPUTS_O_LIST_ITEM_CARD_IMAGE = [
 ];
 
 @Component({
-  moduleId: module.id,
   selector: 'o-list-item-card-image',
   templateUrl: './o-list-item-card-image.component.html',
   styleUrls: ['./o-list-item-card-image.component.scss'],
@@ -77,7 +76,7 @@ export class OListItemCardImageComponent extends OListItemCardRenderer implement
     if (Util.isDefined(e)) {
       e.stopPropagation();
     }
-    this.onIconClick.emit(event);
+    this.onIconClick.emit(e);
   }
 
   get content(): string {

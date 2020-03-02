@@ -53,18 +53,18 @@ export class OListItemCardRenderer {
     if (Util.isDefined(e)) {
       e.stopPropagation();
     }
-    this.onAction1Click.emit(event);
+    this.onAction1Click.emit(e);
   }
 
   onAction2ButtonClick(e?: Event) {
     if (Util.isDefined(e)) {
       e.stopPropagation();
     }
-    this.onAction2Click.emit(event);
+    this.onAction2Click.emit(e);
   }
 
   compareListHeight(height: string) {
-    return (height === this._listItem._list.rowHeight) || undefined;
+    return (height === this._listItem.list.rowHeight) || undefined;
   }
 
   get title(): string {

@@ -28,7 +28,6 @@ export const DEFAULT_OUTPUTS_O_SLIDER_INPUT = [
 export type SliderDisplayFunction = (value: number | null) => string | number;
 
 @Component({
-  moduleId: module.id,
   selector: 'o-slider',
   host: {
     class: 'o-slider'

@@ -5,6 +5,8 @@ import {
   HostBinding,
   Inject,
   Injector,
+  OnDestroy,
+  OnInit,
   Optional,
   ViewChild,
   ViewEncapsulation,
@@ -48,7 +50,6 @@ export const DEFAULT_OUTPUTS_O_IMAGE = [
 ];
 
 @Component({
-  moduleId: module.id,
   selector: 'o-image',
   templateUrl: './o-image.component.html',
   styleUrls: ['./o-image.component.scss'],
@@ -59,7 +60,7 @@ export const DEFAULT_OUTPUTS_O_IMAGE = [
     '[class.o-image]': 'true'
   }
 })
-export class OImageComponent extends OFormDataComponent {
+export class OImageComponent extends OFormDataComponent implements OnInit, OnDestroy {
 
   public static DEFAULT_INPUTS_O_IMAGE = DEFAULT_INPUTS_O_IMAGE;
   public static DEFAULT_OUTPUTS_O_IMAGE = DEFAULT_OUTPUTS_O_IMAGE;
@@ -82,7 +83,7 @@ export class OImageComponent extends OFormDataComponent {
   }
   protected _fullScreenButton = false;
 
-  @ViewChild('input', {static: false})
+  @ViewChild('input', { static: false })
   protected fileInput: ElementRef;
   protected _useEmptyIcon: boolean = true;
   protected _useEmptyImage: boolean = false;

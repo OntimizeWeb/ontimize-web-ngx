@@ -16,6 +16,7 @@ import { MatSelect, MatSelectChange } from '@angular/material';
 import { Subscription } from 'rxjs';
 
 import { InputConverter } from '../../../decorators/input-converter';
+import { dataServiceFactory } from '../../../services/data-service.provider';
 import { OntimizeService } from '../../../services/ontimize.service';
 import { Codes } from '../../../util/codes';
 import { Util } from '../../../util/util';
@@ -38,10 +39,9 @@ export const DEFAULT_OUTPUTS_O_COMBO = [
 ];
 
 @Component({
-  moduleId: module.id,
   selector: 'o-combo',
   providers: [
-    OntimizeService,
+    { provide: OntimizeService, useFactory: dataServiceFactory, deps: [Injector] },
     { provide: OFormServiceComponent, useExisting: forwardRef(() => OComboComponent) }
   ],
   inputs: DEFAULT_INPUTS_O_COMBO,

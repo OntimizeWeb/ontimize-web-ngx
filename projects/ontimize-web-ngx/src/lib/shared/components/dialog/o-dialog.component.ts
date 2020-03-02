@@ -4,7 +4,6 @@ import { MatDialogRef } from '@angular/material';
 import { ODialogConfig } from './o-dialog.config';
 
 @Component({
-  moduleId: module.id,
   selector: 'o-dialog',
   templateUrl: './o-dialog.component.html',
   styleUrls: ['./o-dialog.component.scss'],
@@ -31,7 +30,7 @@ export class ODialogComponent {
     public dialogRef: MatDialogRef<ODialogComponent>) {
   }
 
-  onOkClick(evt: any) {
+  onOkClick() {
     if (this.dialogRef) {
       this.dialogRef.close(true);
     }

@@ -84,7 +84,7 @@ export class Codes {
     TWENTY_FOUR: 'HH:mm a',
   };
 
-  //FormComponent
+  // FormComponent
   public static CLOSE_DETAIL_ACTION: string = 'CLOSE';
   public static BACK_ACTION: string = 'BACK';
   public static RELOAD_ACTION: string = 'RELOAD';
@@ -113,7 +113,7 @@ export class Codes {
   }
 
   static getIsDetailObject(): any {
-    let res = {};
+    const res = {};
     res[Codes.IS_DETAIL] = 'true';
     return res;
   }
@@ -121,7 +121,6 @@ export class Codes {
   static formatString(format: number) {
     return (format === Codes.TWENTY_FOUR_HOUR_FORMAT ? Codes.HourFormat.TWENTY_FOUR : Codes.HourFormat.TWELVE);
   }
-
 
   static isHourInputAllowed(e: KeyboardEvent): boolean {
     // Allow: backspace, delete, tab, escape, enter
