@@ -45,7 +45,10 @@ export const DEFAULT_INPUTS_O_TABLE_MENU = [
   'exportButton: export-button',
 
   // columns-visibility-button [no|yes]: show columns visibility button. Default: yes.
-  'columnsVisibilityButton: columns-visibility-button'
+  'columnsVisibilityButton: columns-visibility-button',
+
+  // show-configuration-option [yes|no|true|false]: show configuration button in header. Default: yes.
+  'showConfigurationOption: show-configuration-option'
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE_MENU = [];
@@ -72,6 +75,8 @@ export class OTableMenuComponent implements OnInit, AfterViewInit, OnDestroy {
   selectAllCheckbox: boolean = false;
   @InputConverter()
   exportButton: boolean = true;
+  @InputConverter()
+  showConfigurationOption: boolean = true;
   @InputConverter()
   columnsVisibilityButton: boolean = true;
   /* End of inputs */
@@ -258,7 +263,7 @@ export class OTableMenuComponent implements OnInit, AfterViewInit, OnDestroy {
 
   get showConfigurationMenu(): boolean {
     const perm: OPermissions = this.getPermissionByAttr('configuration');
-    return !(perm && perm.visible === false);
+    return this.showConfigurationOption && !(perm && perm.visible === false);
   }
 
   get enabledConfigurationMenu(): boolean {

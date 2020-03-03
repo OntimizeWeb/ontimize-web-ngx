@@ -25,7 +25,7 @@
         <mat-icon svgIcon="ontimize:more_vert"></mat-icon>
       </button>
       <o-table-menu #tableMenu [select-all-checkbox]="selectAllCheckbox" [export-button]="exportButton"
-        [columns-visibility-button]="columnsVisibilityButton">
+        [columns-visibility-button]="columnsVisibilityButton" [show-configuration-option]="showConfigurationOption">
         <ng-content select="o-table-option"></ng-content>
       </o-table-menu>
       <ng-template #exportOptsTemplate>

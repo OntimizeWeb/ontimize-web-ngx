@@ -100,6 +100,9 @@ export const DEFAULT_INPUTS_O_TABLE = [
   // export-button [no|yes]: show export button. Default: yes.
   'exportButton: export-button',
 
+  // show-configuration-option [yes|no|true|false]: show configuration button in header. Default: yes.
+  'showConfigurationOption: show-configuration-option',
+
   // show-buttons-text [yes|no|true|false]: show text of header buttons. Default: yes.
   'showButtonsText: show-buttons-text',
 
@@ -495,6 +498,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   selectAllCheckbox: boolean = false;
   @InputConverter()
   exportButton: boolean = true;
+  @InputConverter()
+  showConfigurationOption: boolean = true;
   @InputConverter()
   columnsVisibilityButton: boolean = true;
   @InputConverter()
@@ -1601,6 +1606,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
         length: this.queryRows
       };
     }
+    this.editingCell = undefined;
     this.queryData(void 0, queryArgs);
   }
 
@@ -2010,7 +2016,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     if (permissionHidden) {
       return false;
     }
-    const staticOpt = this.selectAllCheckbox || this.exportButton || this.columnsVisibilityButton || this.oTableColumnsFilterComponent !== undefined;
+    const staticOpt = this.selectAllCheckbox || this.exportButton || this.showConfigurationOption || this.columnsVisibilityButton || this.oTableColumnsFilterComponent !== undefined;
     return staticOpt || this.tableOptions.length > 0;
   }
 

@@ -75,10 +75,13 @@ export const DEFAULT_INPUTS_O_FORM = [
   'service',
 
   // stay-in-record-after-insert [string][yes|no|true|false]: shows detail form after insert new record. Default: false;
-  'stayInRecordAfterInsert: stay-in-record-after-insert',
+  // 'stayInRecordAfterInsert: stay-in-record-after-insert',
 
   // stay-in-record-after-edit [string][yes|no|true|false]: shows edit form after edit a record. Default: false;
-  'stayInRecordAfterEdit: stay-in-record-after-edit',
+  'stayInRecordAfterEdit: stay-in-record-after-edit',  
+
+  // [string][new | detail]: shows reseted form after insert a new record (new) or shows the inserted record after (detail)
+  'afterInsertMode: after-insert-mode',
 
   'serviceType : service-type',
 
@@ -191,10 +194,11 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   keys: string = '';
   columns: string = '';
   service: string;
+  // @InputConverter()
+  // stayInRecordAfterInsert: boolean = false;
   @InputConverter()
-  stayInRecordAfterInsert: boolean = false;
-  @InputConverter()
-  stayInRecordAfterEdit: boolean = false;
+  stayInRecordAfterEdit: boolean = false;  
+  afterInsertMode: 'new' | 'detail' = null;
   serviceType: string;
   @InputConverter()
   protected queryOnInit: boolean = true;
@@ -784,6 +788,11 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   _goInsertMode(options?: any) {
     this.formNavigation.goInsertMode(options);
   }
+  
+  _clearFormAfterInsert() {
+    this.clearData();
+    this._setComponentsEditable(true);
+  }
 
   /**
    * Performs insert action.
@@ -799,14 +808,16 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     }
 
     const self = this;
-    const values = this.getAttributesValuesToInsert();
-    const sqlTypes = this.getAttributesSQLTypes();
+    let values = this.getAttributesValuesToInsert();
+    let sqlTypes = this.getAttributesSQLTypes();
     this.insertData(values, sqlTypes).subscribe(resp => {
       self.postCorrectInsert(resp);
       self.formCache.setCacheSnapshot();
       self.markFormLayoutManagerToUpdate();
-      if (self.stayInRecordAfterInsert) {
-        self._stayInRecordAfterInsert(resp);
+      if (self.afterInsertMode === 'detail') {
+        self._stayInRecordAfterInsert(resp);        
+      } else if (self.afterInsertMode === 'new') {
+          this._clearFormAfterInsert();
       } else {
         self._closeDetailAction();
       }
