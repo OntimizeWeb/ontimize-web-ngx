@@ -16,7 +16,7 @@ import {
 import { MatLine, MatListAvatarCssMatStyler, MatListItem } from '@angular/material';
 
 import { Util } from '../../../util/util';
-import { OListComponent } from '../o-list.component';
+// import { OListComponent } from '../o-list.component';
 
 @Component({
   moduleId: module.id,
@@ -55,13 +55,13 @@ export class OListItemComponent implements AfterContentInit {
     public elRef: ElementRef,
     protected _renderer: Renderer2,
     protected _injector: Injector,
-    @Optional() @Inject(forwardRef(() => OListComponent)) public _list: OListComponent
+    // @Optional() @Inject(forwardRef(() => OListComponent)) public _list: OListComponent
   ) { }
 
   public ngAfterContentInit(): void {
     const matLinesRef = this._lines;
     const ngAfterContentInitOriginal = this._innerListItem.ngAfterContentInit;
-    this._innerListItem.ngAfterContentInit = function() {
+    this._innerListItem.ngAfterContentInit = function () {
       const emptyDiv = this._element.nativeElement.querySelector('.mat-list-text:empty');
       if (emptyDiv) {
         emptyDiv.remove();
@@ -72,29 +72,29 @@ export class OListItemComponent implements AfterContentInit {
   }
 
   public onClick(e?: Event): void {
-    if (!this._list.detailButtonInRow) {
-      this._list.onItemDetailClick(this);
-    }
+    // if (!this._list.detailButtonInRow) {
+    //   this._list.onItemDetailClick(this);
+    // }
   }
 
   public onDoubleClick(e?: Event): void {
-    if (!this._list.detailButtonInRow) {
-      this._list.onItemDetailDoubleClick(this);
-    }
+    // if (!this._list.detailButtonInRow) {
+    //   this._list.onItemDetailDoubleClick(this);
+    // }
   }
 
   public onDetailIconClicked(e?: Event): void {
     if (Util.isDefined(e)) {
       e.stopPropagation();
     }
-    this._list.viewDetail(this.modelData);
+    // this._list.viewDetail(this.modelData);
   }
 
   public onEditIconClicked(e?: Event): void {
     if (Util.isDefined(e)) {
       e.stopPropagation();
     }
-    this._list.editDetail(this.modelData);
+    // this._list.editDetail(this.modelData);
   }
 
   public setItemData(data: any): void {
@@ -108,13 +108,14 @@ export class OListItemComponent implements AfterContentInit {
   }
 
   public onCheckboxChange(e?: Event): void {
-    if (this._list.selectable) {
-      this._list.setSelected(this.modelData);
-    }
+    // if (this._list.selectable) {
+    // this._list.setSelected(this.modelData);
+    // }
   }
 
   get isSelected(): boolean {
-    return this._list.selection.isSelected(this.modelData);
+    // return this._list.selection.isSelected(this.modelData);
+    return false;
   }
 
 }
