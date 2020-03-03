@@ -1,10 +1,9 @@
 {
-  "compileOnSave": false,
-  "buildOnSave": false,
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
     "baseUrl": "./",
-    "target": "es5",
-    "module": "es2015",
+    "target": "es2015",
+    "module": "esnext",
     "moduleResolution": "node",
     "removeComments": true,
     "emitDecoratorMetadata": true,
@@ -14,19 +13,10 @@
     "listFiles": true,
     "pretty": true,
     "stripInternal": true,
-    "outDir": "dist",    
+    "outDir": "dist",
     "noUnusedLocals": false,
     "noUnusedParameters": false,
     "allowSyntheticDefaultImports": true,
-    "types": [
-      "moment",
-      "hammerjs",
-      "jasmine",
-      "node"
-    ],
-    "typeRoots": [
-      "node_modules/@types"
-    ],
     "lib": [
       "dom",
       "es2015"

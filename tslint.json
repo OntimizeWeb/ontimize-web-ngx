@@ -77,6 +77,7 @@
     "use-pipe-transform-interface": true,
     "variable-name": false,
     "object-literal-shorthand": false,
-    "align": false
+    "align": false,
+    "interface-over-type-literal": false
   }
 }

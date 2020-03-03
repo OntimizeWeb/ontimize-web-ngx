@@ -1,21 +1,19 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "baseUrl": "./",
-    "outDir": "./dist/out-tsc",
-    "sourceMap": true,
-    "declaration": false,
-    "downlevelIteration": true,
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
-    "moduleResolution": "node",
-    "importHelpers": true,
-    "allowSyntheticDefaultImports": true,
-    "target": "es5",
-    "noUnusedLocals": false,
-    "noUnusedParameters": false,
+    "outDir": "../../out-tsc/lib",
+    "target": "es2015",
     "module": "es2015",
+    "moduleResolution": "node",
+    "declaration": true,
+    "sourceMap": true,
+    "inlineSources": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
     "types": [
+      "moment",
+      "hammerjs",
       "jasmine",
       "node"
     ],
@@ -23,20 +21,20 @@
       "node_modules/@types"
     ],
     "lib": [
-      "es2016",
-      "dom"
-    ],
-    "paths": {
-      "ontimize-web-ngx": [
-        "dist/ontimize-web-ngx"
-      ],
-      "ontimize-web-ngx/*": [
-        "dist/ontimize-web-ngx/*"
-      ]
-    }
+      "dom",
+      "es2018"
+    ]
   },
   "angularCompilerOptions": {
-    "fullTemplateTypeCheck": false,
-    "strictInjectionParameters": false
-  }
+    "annotateForClosureCompiler": false,
+    "skipTemplateCodegen": true,
+    "strictMetadataEmit": true,
+    "fullTemplateTypeCheck": true,
+    "strictInjectionParameters": true,
+    "enableResourceInlining": true
+  },
+  "exclude": [
+    "src/test.ts",
+    "**/*.spec.ts"
+  ]
 }
