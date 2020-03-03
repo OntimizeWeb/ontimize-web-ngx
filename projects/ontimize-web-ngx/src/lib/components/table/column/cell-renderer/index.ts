@@ -7,6 +7,6 @@ export * from './integer/o-table-cell-renderer-integer.component';
 export * from './percentage/o-table-cell-renderer-percentage.component';
 export * from './real/o-table-cell-renderer-real.component';
 export * from './service/o-table-cell-renderer-service.component';
+export * from './time/o-table-cell-renderer-time.component';
 
 export * from './o-base-table-cell-renderer.class';
-export * from './time/o-table-cell-renderer-time.component';
