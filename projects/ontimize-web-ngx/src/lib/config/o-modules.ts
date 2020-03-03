@@ -1,11 +1,11 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { APP_INITIALIZER, Injector, NgModule } from '@angular/core';
-import { HttpModule } from '@angular/http';
+// import { HttpModule } from '@angular/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { DndModule } from '@churchs19/ng2-dnd';
+// import { DndModule } from '@churchs19/ng2-dnd';
 import { TranslateLoader, TranslateModule, TranslateParser } from '@ngx-translate/core';
-import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
+// import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 
 import { OBarMenuModule } from '../components/bar-menu/o-bar-menu.module';
 import { OBreadcrumbModule } from '../components/breadcrumb/o-breadcrumb.module';
@@ -62,7 +62,7 @@ import { appInitializerFactory } from './o-providers';
 
 export const INTERNAL_ONTIMIZE_MODULES_EXPORTED: any = [
   // Standard modules
-  HttpModule,
+  // HttpModule,
   HttpClientModule,
   OSharedModule,
 
@@ -97,7 +97,7 @@ export const INTERNAL_ONTIMIZE_MODULES_EXPORTED: any = [
   OTextareaInputModule,
   OListModule,
   OSearchInputModule,
-  OTableModule,
+  // OTableModule,
   OAppLayoutModule,
   OFormLayoutManagerModule,
   OUserInfoModule,
@@ -134,10 +134,9 @@ export function OTranslateParserFactory() {
 }
 
 export const INTERNAL_ONTIMIZE_MODULES: any = [
-  HttpModule,
   HttpClientModule,
 
-  // Ngx-translate
+  // // Ngx-translate
   TranslateModule.forRoot({
     loader: {
       provide: TranslateLoader,
@@ -149,8 +148,8 @@ export const INTERNAL_ONTIMIZE_MODULES: any = [
       useFactory: OTranslateParserFactory
     }
   }),
-  DndModule.forRoot(),
-  NgxMaterialTimepickerModule, // Removed forRoot()
+  // DndModule.forRoot(),
+  // NgxMaterialTimepickerModule, // Removed forRoot()
   OSharedModule,
 
   // Ontimize modules
@@ -158,45 +157,48 @@ export const INTERNAL_ONTIMIZE_MODULES: any = [
   OBreadcrumbModule,
   OButtonModule,
   OButtonToggleModule,
-  OCheckboxModule,
-  OComboModule,
+  OCardMenuItemModule,
   OColumnModule,
   OColumnCollapsibleModule,
-  OContextMenuModule,
   ORowModule,
   ORowCollapsibleModule,
+  OContextMenuModule,
   OFilterBuilderModule,
   OFormModule,
   OFormContainerModule,
+  OGridModule,
   OImageModule,
+
+  OCheckboxModule,
+  OComboModule,
   OCurrencyInputModule,
   ODateInputModule,
+  ODateRangeInputModule,
   OEmailInputModule,
   OFileInputModule,
+  OHourInputModule,
   OHTMLInputModule,
   OIntegerInputModule,
   OListPickerModule,
   ONIFInputModule,
   OPasswordInputModule,
   OPercentInputModule,
+  ORadioModule,
   ORealInputModule,
+  OSearchInputModule,
+  OSlideToggleModule,
   OTextInputModule,
   OTextareaInputModule,
-  OListModule,
-  OSearchInputModule,
-  OTableModule,
-  OAppLayoutModule,
-  OFormLayoutManagerModule,
-  OUserInfoModule,
-  OLanguageSelectorModule,
-  OCardMenuItemModule,
-  OCardMenuLayoutModule,
-  OHourInputModule,
   OTimeInputModule,
-  OGridModule,
-  ORadioModule,
-  OSlideToggleModule,
-  ODateRangeInputModule
+
+  OLanguageSelectorModule,
+  OListModule,
+  // OTableModule,
+  OUserInfoModule,
+
+  OAppLayoutModule,
+  OCardMenuLayoutModule,
+  OFormLayoutManagerModule
 ];
 
 @NgModule({

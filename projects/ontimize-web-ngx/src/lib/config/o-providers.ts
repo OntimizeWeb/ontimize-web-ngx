@@ -1,6 +1,5 @@
 import { LOCATION_INITIALIZED } from '@angular/common';
 import { Injector, Provider } from '@angular/core';
-import { BaseRequestOptions, XHRBackend } from '@angular/http';
 import { MAT_RIPPLE_GLOBAL_OPTIONS } from '@angular/material';
 import { Router } from '@angular/router';
 import { combineLatest } from 'rxjs';
@@ -14,6 +13,7 @@ import { CurrencyService } from '../services/currency.service';
 import { dataServiceFactory } from '../services/data-service.provider';
 import { DialogService } from '../services/dialog.service';
 import { LocalStorageService } from '../services/local-storage.service';
+import { LoginStorageService } from '../services/login-storage.service';
 import { LoginService } from '../services/login.service';
 import { MomentService } from '../services/moment.service';
 import { NavigationService } from '../services/navigation.service';
@@ -32,7 +32,6 @@ import { SnackBarService } from '../services/snackbar.service';
 import { OTranslateService } from '../services/translate/o-translate.service';
 import { Error403Component } from '../shared/components/error403/o-error-403.component';
 import { Codes } from '../util/codes';
-import { OHttp } from '../util/http/OHttp';
 
 function addPermissionsRouteGuard(injector: Injector) {
   const route = injector.get(Router);
@@ -41,7 +40,6 @@ function addPermissionsRouteGuard(injector: Injector) {
     route.config.push({ path: Codes.FORBIDDEN_ROUTE, component: Error403Component });
   }
 }
-
 
 export function appInitializerFactory(injector: Injector, config: Config, oTranslate: OTranslateService) {
   return () => new Promise<any>((resolve: any) => {
@@ -83,10 +81,6 @@ export function appInitializerFactory(injector: Injector, config: Config, oTrans
   });
 }
 
-export function getOntimizeServiceProvider(backend: XHRBackend, defaultOptions: BaseRequestOptions) {
-  return new OHttp(backend, defaultOptions);
-}
-
 export function getOntimizeFileServiceProvider(injector: Injector) {
   return new OntimizeFileService(injector);
 }
@@ -97,6 +91,10 @@ export function getOntimizeExportServiceProvider(injector: Injector) {
 
 export function getLoginServiceProvider(injector: Injector) {
   return new LoginService(injector);
+}
+
+export function getLoginStorageServiceProvider(injector: Injector) {
+  return new LoginStorageService(injector);
 }
 
 export function getNavigationServiceProvider(injector: Injector) {
@@ -159,13 +157,8 @@ export const ONTIMIZE_PROVIDERS: Provider[] = [
     deps: [Injector]
   },
   // getOntimizeServiceProvider
-  XHRBackend,
-  BaseRequestOptions,
-  {
-    provide: OHttp,
-    useFactory: getOntimizeServiceProvider,
-    deps: [XHRBackend, BaseRequestOptions]
-  },
+  // XHRBackend,
+  // BaseRequestOptions,
   {
     provide: OntimizeService,
     useFactory: dataServiceFactory,
@@ -190,6 +183,12 @@ export const ONTIMIZE_PROVIDERS: Provider[] = [
   {
     provide: LoginService,
     useFactory: getLoginServiceProvider,
+    deps: [Injector]
+  },
+  // getLoginStorageService
+  {
+    provide: LoginStorageService,
+    useFactory: getLoginStorageServiceProvider,
     deps: [Injector]
   },
   // getNavigationServiceProvider
