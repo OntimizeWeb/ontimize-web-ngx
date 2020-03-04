@@ -25,17 +25,17 @@ export const O_TABLE_CELL_RENDERERS = [
 ];
 
 export const O_TABLE_CELL_RENDERERS_INPUTS = [
-  ...OTableCellRendererBooleanComponent.DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_BOOLEAN,
-  ...OTableCellRendererCurrencyComponent.DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_CURRENCY, // includes Integer and Real
-  ...OTableCellRendererDateComponent.DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_DATE,
-  ...OTableCellRendererImageComponent.DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_IMAGE,
-  ...OTableCellRendererActionComponent.DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_ACTION,
-  ...OTableCellRendererServiceComponent.DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_SERVICE,
-  ...OTableCellRendererTranslateComponent.DEFAULT_IPUTS_O_TABLE_CELL_RENDERER_TRANSLATE,
+  ...OTableCellRendererBooleanComponent.INPUTS_ARRAY,
+  ...OTableCellRendererCurrencyComponent.INPUTS_ARRAY, // includes Integer and Real
+  ...OTableCellRendererDateComponent.INPUTS_ARRAY,
+  ...OTableCellRendererImageComponent.INPUTS_ARRAY,
+  ...OTableCellRendererActionComponent.INPUTS_ARRAY,
+  ...OTableCellRendererServiceComponent.INPUTS_ARRAY,
+  ...OTableCellRendererTranslateComponent.INPUTS_ARRAY,
 ];
 
 export const O_TABLE_CELL_RENDERERS_OUTPUTS = [
-  ...OTableCellRendererActionComponent.DEFAULT_OUTPUTS_O_TABLE_CELL_RENDERER_ACTION
+  ...OTableCellRendererActionComponent.OUTPUTS_ARRAY
 ];
 
 export const renderersMapping = {

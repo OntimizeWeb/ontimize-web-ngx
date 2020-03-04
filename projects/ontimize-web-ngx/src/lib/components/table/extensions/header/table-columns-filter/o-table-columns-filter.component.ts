@@ -6,7 +6,7 @@ import { Util } from '../../../../../util/util';
 import { OTableComponent } from '../../../o-table.component';
 import { OColumn } from '../../../../../interfaces/o-column.interface';
 
-export const DEFAULT_INPUTS_O_TABLE_COLUMN_FILTER = [
+const INPUTS_ARRAY = [
   // columns [string]: columns that might be filtered, separated by ';'. Default: all visible columns.
   'columns',
   // preloadValues [true|false|yes|no]: indicates whether or not to show the list values when the filter dialog is opened. Default: true.
@@ -15,21 +15,21 @@ export const DEFAULT_INPUTS_O_TABLE_COLUMN_FILTER = [
   'mode'
 ];
 
-export const DEFAULT_OUTPUTS_O_TABLE_COLUMN_FILTER = [
+const OUTPUTS_ARRAY = [
 ];
 
 @Component({
   selector: 'o-table-columns-filter',
   template: ' ',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  inputs: DEFAULT_INPUTS_O_TABLE_COLUMN_FILTER,
-  outputs: DEFAULT_OUTPUTS_O_TABLE_COLUMN_FILTER
+  inputs: INPUTS_ARRAY,
+  outputs: OUTPUTS_ARRAY
 })
 
 export class OTableColumnsFilterComponent implements OnInit {
 
-  public static DEFAULT_INPUTS_O_TABLE_COLUMN_FILTER = DEFAULT_INPUTS_O_TABLE_COLUMN_FILTER;
-  public static DEFAULT_OUTPUTS_O_TABLE_COLUMN_FILTER = DEFAULT_OUTPUTS_O_TABLE_COLUMN_FILTER;
+  public static INPUTS_ARRAY = INPUTS_ARRAY;
+  public static OUTPUTS_ARRAY = OUTPUTS_ARRAY;
 
   public static DEFAULT_COMPARISON_TYPE = 'VIEW';
   public static MODEL_COMPARISON_TYPE = 'MODEL';

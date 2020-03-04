@@ -1,10 +1,10 @@
 import { ChangeDetectionStrategy, Component, Injector, TemplateRef, ViewChild } from '@angular/core';
 
 import { ITranslatePipeArgument, OTranslatePipe } from '../../../../../pipes/o-translate.pipe';
-import { OBaseTableCellRenderer, /*DEFAULT_INPUTS_O_BASE_TABLE_CELL_RENDERER*/ } from '../o-base-table-cell-renderer.class';
+import { OBaseTableCellRenderer } from '../o-base-table-cell-renderer.class';
 
-export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_TRANSLATE = [
-  //...DEFAULT_INPUTS_O_BASE_TABLE_CELL_RENDERER,
+const INPUTS_ARRAY = [
+  ...OBaseTableCellRenderer.INPUTS_ARRAY,
   // translate-params [(rowData: any) => any[]]: function that receives the row data and return the parameters for the translate pipe.
   'translateArgsFn: translate-params'
 ];
@@ -13,11 +13,11 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_TRANSLATE = [
   selector: 'o-table-cell-renderer-translate',
   templateUrl: './o-table-cell-renderer-translate.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  inputs: DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_TRANSLATE
+  inputs: INPUTS_ARRAY
 })
 export class OTableCellRendererTranslateComponent extends OBaseTableCellRenderer {
 
-  public static DEFAULT_IPUTS_O_TABLE_CELL_RENDERER_TRANSLATE = DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_TRANSLATE;
+  public static INPUTS_ARRAY = INPUTS_ARRAY;
 
   @ViewChild('templateref', { read: TemplateRef, static: false })
   public templateref: TemplateRef<any>;

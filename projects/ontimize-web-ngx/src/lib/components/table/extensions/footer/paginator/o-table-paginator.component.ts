@@ -6,7 +6,7 @@ import { OTablePaginator } from '../../../../../interfaces/o-table-paginator.int
 import { OTranslateService } from '../../../../../services/translate/o-translate.service';
 import { OTableComponent } from '../../../o-table.component';
 
-export const DEFAULT_PAGINATOR_TABLE = [
+const INPUTS_ARRAY = [
   // page-size [number]: Number of items to display on a page. By default set to 50.
   'pageSize: page-size',
   'showFirstLastButtons: show-first-last-buttons'
@@ -15,10 +15,12 @@ export const DEFAULT_PAGINATOR_TABLE = [
 @Component({
   selector: 'o-table-paginator',
   template: ' ',
-  inputs: DEFAULT_PAGINATOR_TABLE,
+  inputs: INPUTS_ARRAY,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class OTablePaginatorComponent implements OTablePaginator, OnInit {
+
+  public static INPUTS_ARRAY = INPUTS_ARRAY;
 
   protected _pageIndex: number = 0;
   protected _pageSize: number = 10;

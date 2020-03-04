@@ -1,26 +1,27 @@
-import { Component, Injector, ViewChild, TemplateRef, ElementRef, ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, Injector, TemplateRef, ViewChild } from '@angular/core';
+
 import { OBaseTableCellEditor } from '../o-base-table-cell-editor.class';
 
-export const DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_TEXT = [
-  // ...OBaseTableCellEditor.DEFAULT_INPUTS_O_TABLE_CELL_EDITOR
+const INPUTS_ARRAY = [
+  ...OBaseTableCellEditor.INPUTS_ARRAY
 ];
 
-export const DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_TEXT = [
-  // ...OBaseTableCellEditor.DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR
+const OUTPUTS_ARRAY = [
+  ...OBaseTableCellEditor.OUTPUTS_ARRAY
 ];
 
 @Component({
   selector: 'o-table-cell-editor-text',
   templateUrl: './o-table-cell-editor-text.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  inputs: DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_TEXT,
-  outputs: DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_TEXT
+  inputs: INPUTS_ARRAY,
+  outputs: OUTPUTS_ARRAY
 })
 
 export class OTableCellEditorTextComponent extends OBaseTableCellEditor {
 
-  public static DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_TEXT = DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_TEXT;
-  public static DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_TEXT = DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_TEXT;
+  public static INPUTS_ARRAY = INPUTS_ARRAY;
+  public static OUTPUTS_ARRAY = OUTPUTS_ARRAY;
 
   @ViewChild('templateref', { read: TemplateRef, static: false }) public templateref: TemplateRef<any>;
   @ViewChild('input', { static: false }) inputRef: ElementRef;

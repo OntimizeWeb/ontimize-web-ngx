@@ -60,14 +60,14 @@ import { OTableColumnsFilterComponent } from './extensions/header/table-columns-
 import { OTableInsertableRowComponent } from './extensions/header/table-insertable-row/o-table-insertable-row.component';
 import { OTableOptionComponent } from './extensions/header/table-option/o-table-option.component';
 import { OTableStorage } from './extensions/o-table-storage.class';
+import { OTableDao } from './extensions/o-table.dao';
 import { OMatSort } from './extensions/sort/o-mat-sort';
 import { OMatSortHeader } from './extensions/sort/o-mat-sort-header';
-import { OTableDao } from './extensions/o-table.dao';
 
 const NAME_COLUMN_SELECT = 'select';
 const SUFFIX_COLUMN_INSERTABLE = '_insertable';
 
-export const DEFAULT_INPUTS_O_TABLE = [
+const INPUTS_ARRAY = [
   // ...OServiceComponent.DEFAULT_INPUTS_O_SERVICE_COMPONENT,
 
   // visible-columns [string]: visible columns, separated by ';'. Default: no value.
@@ -149,7 +149,7 @@ export const DEFAULT_INPUTS_O_TABLE = [
   'autoAdjust: auto-adjust'
 ];
 
-export const DEFAULT_OUTPUTS_O_TABLE = [
+const OUTPUTS_ARRAY = [
   'onClick',
   'onDoubleClick',
   'onRowSelected',
@@ -166,8 +166,8 @@ export const DEFAULT_OUTPUTS_O_TABLE = [
   providers: [
     OntimizeService
   ],
-  inputs: DEFAULT_INPUTS_O_TABLE,
-  outputs: DEFAULT_OUTPUTS_O_TABLE,
+  inputs: INPUTS_ARRAY,
+  outputs: OUTPUTS_ARRAY,
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
@@ -180,8 +180,8 @@ export const DEFAULT_OUTPUTS_O_TABLE = [
 })
 export class OTableComponent extends OServiceComponent implements OnInit, OnDestroy, AfterViewInit {
 
-  public static DEFAULT_INPUTS_O_TABLE = DEFAULT_INPUTS_O_TABLE;
-  public static DEFAULT_OUTPUTS_O_TABLE = DEFAULT_OUTPUTS_O_TABLE;
+  public static INPUTS_ARRAY = INPUTS_ARRAY;
+  public static OUTPUTS_ARRAY = OUTPUTS_ARRAY;
   public static DEFAULT_BASE_SIZE_SPINNER = 100;
   public static FIRST_LAST_CELL_PADDING = 24;
   public static DEFAULT_COLUMN_MIN_WIDTH = 80;
@@ -227,7 +227,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   @InputConverter()
   showButtonsText: boolean = true;
 
-  protected _oTableOptions: OTableOptions; 
+  protected _oTableOptions: OTableOptions;
 
   get oTableOptions(): OTableOptions {
     return this._oTableOptions;

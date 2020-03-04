@@ -13,23 +13,23 @@ import {
 } from '@angular/core';
 
 import { InputConverter } from '../../../../../decorators/input-converter';
+import { OColumn } from '../../../../../interfaces/o-column.interface';
 import { Util } from '../../../../../util/util';
 import { OTableComponent } from '../../../o-table.component';
-import { OColumn } from '../../../../../interfaces/o-column.interface';
 
-export const DEFAULT_INPUTS_O_TABLE_COLUMN_RESIZER = [
+const INPUTS_ARRAY = [
   'column'
 ];
 
-export const DEFAULT_OUTPUTS_O_TABLE_COLUMN_RESIZER = [
+const OUTPUTS_ARRAY = [
   // 'resizing',
   // 'resized'
 ];
 
 @Component({
   selector: 'o-table-column-resizer',
-  inputs: DEFAULT_INPUTS_O_TABLE_COLUMN_RESIZER,
-  outputs: DEFAULT_OUTPUTS_O_TABLE_COLUMN_RESIZER,
+  inputs: INPUTS_ARRAY,
+  outputs: OUTPUTS_ARRAY,
   templateUrl: './o-table-column-resizer.component.html',
   styleUrls: ['./o-table-column-resizer.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -40,8 +40,8 @@ export const DEFAULT_OUTPUTS_O_TABLE_COLUMN_RESIZER = [
   }
 })
 export class OTableColumnResizerComponent implements OnInit, OnDestroy {
-  public static DEFAULT_INPUTS_O_TABLE_COLUMN_RESIZER = DEFAULT_INPUTS_O_TABLE_COLUMN_RESIZER;
-  public static DEFAULT_OUTPUTS_O_TABLE_COLUMN_RESIZER = DEFAULT_OUTPUTS_O_TABLE_COLUMN_RESIZER;
+  public static INPUTS_ARRAY = INPUTS_ARRAY;
+  public static OUTPUTS_ARRAY = OUTPUTS_ARRAY;
 
   column: OColumn;
   @InputConverter()

@@ -1,16 +1,29 @@
-import { ChangeDetectionStrategy, Component, ElementRef, Injector, OnInit, TemplateRef, ViewChild, ViewEncapsulation } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  Injector,
+  OnInit,
+  TemplateRef,
+  ViewChild,
+  ViewEncapsulation,
+} from '@angular/core';
 import { DateAdapter, MAT_DATE_LOCALE, MatDatepicker, MatDatepickerInputEvent } from '@angular/material';
-import { DateFilterFunction, ODateInputComponent, ODateValueType } from '../../../../input/date-input/o-date-input.component';
+import moment from 'moment';
 
 import { InputConverter } from '../../../../../decorators/input-converter';
 import { MomentService } from '../../../../../services/moment.service';
-import { OBaseTableCellEditor } from '../o-base-table-cell-editor.class';
 import { OntimizeMomentDateAdapter } from '../../../../../shared/material/custom.material.module';
 import { Util } from '../../../../../util/util';
-import moment from 'moment';
+import {
+  DateFilterFunction,
+  ODateInputComponent,
+  ODateValueType,
+} from '../../../../input/date-input/o-date-input.component';
+import { OBaseTableCellEditor } from '../o-base-table-cell-editor.class';
 
-export const DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_DATE = [
-  // ...OBaseTableCellEditor.DEFAULT_INPUTS_O_TABLE_CELL_EDITOR,
+const INPUTS_ARRAY = [
+  ...OBaseTableCellEditor.INPUTS_ARRAY,
   'format',
   'locale',
   'oStartView: start-view',
@@ -25,16 +38,16 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_DATE = [
   'dateValueType: date-value-type'
 ];
 
-export const DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_DATE = [
-  // ...OBaseTableCellEditor.DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR
+const OUTPUTS_ARRAY = [
+  ...OBaseTableCellEditor.OUTPUTS_ARRAY
 ];
 
 @Component({
   selector: 'o-table-cell-editor-date',
   templateUrl: './o-table-cell-editor-date.component.html',
   styleUrls: ['./o-table-cell-editor-date.component.scss'],
-  inputs: DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_DATE,
-  outputs: DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_DATE,
+  inputs: INPUTS_ARRAY,
+  outputs: OUTPUTS_ARRAY,
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
@@ -44,8 +57,8 @@ export const DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_DATE = [
 
 export class OTableCellEditorDateComponent extends OBaseTableCellEditor implements OnInit {
 
-  public static DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_DATE = DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_DATE;
-  public static DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_DATE = DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_DATE;
+  public static INPUTS_ARRAY = INPUTS_ARRAY;
+  public static OUTPUTS_ARRAY = OUTPUTS_ARRAY;
 
   @ViewChild('templateref', { read: TemplateRef, static: false }) public templateref: TemplateRef<any>;
   @ViewChild('input', { static: false }) inputRef: ElementRef;

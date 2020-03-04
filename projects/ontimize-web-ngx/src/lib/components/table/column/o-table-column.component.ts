@@ -23,11 +23,10 @@ import { IExpression } from '../../../util/filter-expression.utils';
 import { SQLTypes } from '../../../util/sqltypes';
 import { Util } from '../../../util/util';
 import { OTableComponent } from '../o-table.component';
-import { editorsMapping } from './cell-editor/cell-editor';
-import { renderersMapping } from './cell-renderer/cell-renderer';
+import { editorsMapping, O_TABLE_CELL_EDITORS_OUTPUTS } from './cell-editor/cell-editor';
+import { O_TABLE_CELL_RENDERERS_OUTPUTS, renderersMapping } from './cell-renderer/cell-renderer';
 
-export const DEFAULT_INPUTS_O_TABLE_COLUMN = [
-
+const INPUTS_ARRAY = [
   // attr [string]: column name.
   'attr',
 
@@ -82,9 +81,9 @@ export const DEFAULT_INPUTS_O_TABLE_COLUMN = [
   // ...O_TABLE_CELL_EDITORS_INPUTS
 ];
 
-export const DEFAULT_OUTPUTS_O_TABLE_COLUMN = [
-  // ...O_TABLE_CELL_RENDERERS_OUTPUTS,
-  // ...O_TABLE_CELL_EDITORS_OUTPUTS
+const OUTPUTS_ARRAY = [
+  ...O_TABLE_CELL_RENDERERS_OUTPUTS,
+  ...O_TABLE_CELL_EDITORS_OUTPUTS
 ];
 
 @Component({
@@ -92,13 +91,13 @@ export const DEFAULT_OUTPUTS_O_TABLE_COLUMN = [
   templateUrl: './o-table-column.component.html',
   styleUrls: ['./o-table-column.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  inputs: DEFAULT_INPUTS_O_TABLE_COLUMN,
-  outputs: DEFAULT_OUTPUTS_O_TABLE_COLUMN
+  inputs: INPUTS_ARRAY,
+  outputs: OUTPUTS_ARRAY
 })
 export class OTableColumnComponent implements OTableColumn, OnDestroy, OnInit, AfterViewInit {
 
-  public static DEFAULT_INPUTS_O_TABLE_COLUMN = DEFAULT_INPUTS_O_TABLE_COLUMN;
-  public static DEFAULT_OUTPUTS_O_TABLE_COLUMN = DEFAULT_OUTPUTS_O_TABLE_COLUMN;
+  public static INPUTS_ARRAY = INPUTS_ARRAY;
+  public static OUTPUTS_ARRAY = OUTPUTS_ARRAY;
 
   public renderer: any;
   public editor: any;

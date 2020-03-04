@@ -4,29 +4,29 @@ import { FormControl, ValidatorFn } from '@angular/forms';
 import { InputConverter } from '../../../../../decorators/input-converter';
 import { OBaseTableCellEditor } from '../o-base-table-cell-editor.class';
 
-export const DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_INTEGER = [
-  // ...OBaseTableCellEditor.DEFAULT_INPUTS_O_TABLE_CELL_EDITOR,
+const INPUTS_ARRAY = [
+  ...OBaseTableCellEditor.INPUTS_ARRAY,
   'min',
   'max',
   'step'
 ];
 
-export const DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_INTEGER = [
-  // ...OBaseTableCellEditor.DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR
+const OUTPUTS_ARRAY = [
+  ...OBaseTableCellEditor.OUTPUTS_ARRAY
 ];
 
 @Component({
   selector: 'o-table-cell-editor-integer',
   templateUrl: './o-table-cell-editor-integer.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  inputs: DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_INTEGER,
-  outputs: DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_INTEGER
+  inputs: INPUTS_ARRAY,
+  outputs: OUTPUTS_ARRAY
 })
 
 export class OTableCellEditorIntegerComponent extends OBaseTableCellEditor {
 
-  public static DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_INTEGER = DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_INTEGER;
-  public static DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_INTEGER = DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_INTEGER;
+  public static INPUTS_ARRAY = INPUTS_ARRAY;
+  public static OUTPUTS_ARRAY = OUTPUTS_ARRAY;
 
   @ViewChild('templateref', { read: TemplateRef, static: false }) public templateref: TemplateRef<any>;
 

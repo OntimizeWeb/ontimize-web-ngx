@@ -2,18 +2,17 @@ import { EventEmitter, HostListener, Injector, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 
 import { InputConverter } from '../../../../decorators/input-converter';
+import { OColumn } from '../../../../interfaces/o-column.interface';
+import { OTableColumn } from '../../../../interfaces/o-table-column.interface';
 import { SnackBarService } from '../../../../services/snackbar.service';
 import { OTranslateService } from '../../../../services/translate/o-translate.service';
 import { ObservableWrapper } from '../../../../util/async';
 import { Util } from '../../../../util/util';
 import { OTableComponent } from '../../o-table.component';
-// import { OTableColumnComponent } from '../o-table-column.component';
-import { OColumn } from '../../../../interfaces/o-column.interface';
-import { OTableColumn } from '../../../../interfaces/o-table-column.interface';
 
 export class OBaseTableCellEditor implements OnInit {
 
-  public static DEFAULT_INPUTS_O_TABLE_CELL_EDITOR = [
+  public static INPUTS_ARRAY = [
     'orequired: required',
     'showPlaceHolder: show-placeholder',
     'olabel: label',
@@ -22,7 +21,7 @@ export class OBaseTableCellEditor implements OnInit {
     'enabled'
   ];
 
-  public static DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR = [
+  public static OUTPUTS_ARRAY = [
     'editionStarted',
     'editionCancelled',
     'editionCommitted',

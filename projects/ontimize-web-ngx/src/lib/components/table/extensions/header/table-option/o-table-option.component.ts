@@ -10,7 +10,7 @@ import {
 
 import { InputConverter } from '../../../../../decorators/input-converter';
 
-export const DEFAULT_INPUTS_O_TABLE_OPTION = [
+const INPUTS_ARRAY = [
   'oattr: attr',
   'enabled',
   'icon',
@@ -20,7 +20,7 @@ export const DEFAULT_INPUTS_O_TABLE_OPTION = [
   'active'
 ];
 
-export const DEFAULT_OUTPUTS_O_TABLE_OPTION = [
+const OUTPUTS_ARRAY = [
   'onClick'
 ];
 
@@ -28,8 +28,8 @@ export const DEFAULT_OUTPUTS_O_TABLE_OPTION = [
   selector: 'o-table-option',
   templateUrl: './o-table-option.component.html',
   styleUrls: ['./o-table-option.component.scss'],
-  inputs: DEFAULT_INPUTS_O_TABLE_OPTION,
-  outputs: DEFAULT_OUTPUTS_O_TABLE_OPTION,
+  inputs: INPUTS_ARRAY,
+  outputs: OUTPUTS_ARRAY,
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
@@ -39,8 +39,8 @@ export const DEFAULT_OUTPUTS_O_TABLE_OPTION = [
 
 export class OTableOptionComponent {
 
-  public static DEFAULT_INPUTS_O_TABLE_OPTION = DEFAULT_INPUTS_O_TABLE_OPTION;
-  public static DEFAULT_OUTPUTS_O_TABLE_OPTION = DEFAULT_OUTPUTS_O_TABLE_OPTION;
+  public static INPUTS_ARRAY = INPUTS_ARRAY;
+  public static OUTPUTS_ARRAY = OUTPUTS_ARRAY;
   public static O_TABLE_OPTION_ACTIVE_CLASS = 'o-table-option-active';
 
   onClick: EventEmitter<object> = new EventEmitter<object>();

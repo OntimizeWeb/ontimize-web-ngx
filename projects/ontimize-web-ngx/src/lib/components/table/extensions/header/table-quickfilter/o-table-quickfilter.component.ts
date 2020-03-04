@@ -1,20 +1,36 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, EventEmitter, forwardRef, Inject, Injector, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  EventEmitter,
+  forwardRef,
+  Inject,
+  Injector,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+  ViewEncapsulation,
+} from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatCheckboxChange, MatMenu } from '@angular/material';
 import { fromEvent, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
-import { OInputsOptions, O_INPUTS_OPTIONS } from '../../../../../config/app-config';
+
+import { O_INPUTS_OPTIONS, OInputsOptions } from '../../../../../config/app-config';
+import { OColumn } from '../../../../../interfaces/o-column.interface';
 import { OTableOptions } from '../../../../../interfaces/o-table-options.interface';
 import { OTableQuickfilter } from '../../../../../interfaces/o-table-quickfilter.interface';
 import { FilterExpressionUtils, IExpression } from '../../../../../util/filter-expression.utils';
 import { Util } from '../../../../../util/util';
-import { OTableCellRendererServiceComponent } from '../../../column/cell-renderer/service/o-table-cell-renderer-service.component';
+import {
+  OTableCellRendererServiceComponent,
+} from '../../../column/cell-renderer/service/o-table-cell-renderer-service.component';
 import { OTableComponent } from '../../../o-table.component';
-import { OColumn } from '../../../../../interfaces/o-column.interface';
 
-export const DEFAULT_INPUTS_O_TABLE_QUICKFILTER = [];
+const INPUTS_ARRAY = [];
 
-export const DEFAULT_OUTPUTS_O_TABLE_QUICKFILTER = [
+const OUTPUTS_ARRAY = [
   'onChange'
 ];
 
@@ -22,8 +38,8 @@ export const DEFAULT_OUTPUTS_O_TABLE_QUICKFILTER = [
   selector: 'o-table-quickfilter',
   templateUrl: './o-table-quickfilter.component.html',
   styleUrls: ['./o-table-quickfilter.component.scss'],
-  inputs: DEFAULT_INPUTS_O_TABLE_QUICKFILTER,
-  outputs: DEFAULT_OUTPUTS_O_TABLE_QUICKFILTER,
+  inputs: INPUTS_ARRAY,
+  outputs: OUTPUTS_ARRAY,
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
@@ -32,8 +48,8 @@ export const DEFAULT_OUTPUTS_O_TABLE_QUICKFILTER = [
 })
 export class OTableQuickfilterComponent implements OTableQuickfilter, OnInit, AfterViewInit, OnDestroy {
 
-  public static DEFAULT_INPUTS_O_TABLE_QUICKFILTER = DEFAULT_INPUTS_O_TABLE_QUICKFILTER;
-  public static DEFAULT_OUTPUTS_O_TABLE_QUICKFILTER = DEFAULT_OUTPUTS_O_TABLE_QUICKFILTER;
+  public static INPUTS_ARRAY = INPUTS_ARRAY;
+  public static OUTPUTS_ARRAY = OUTPUTS_ARRAY;
 
   @ViewChild('filter', { static: false })
   public filter: ElementRef;

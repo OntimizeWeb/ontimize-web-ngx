@@ -1,11 +1,19 @@
-import { AfterContentInit, Component, Injector, OnInit, TemplateRef, ViewChild, ChangeDetectionStrategy } from '@angular/core';
+import {
+  AfterContentInit,
+  ChangeDetectionStrategy,
+  Component,
+  Injector,
+  OnInit,
+  TemplateRef,
+  ViewChild,
+} from '@angular/core';
 
 import { InputConverter } from '../../../../../decorators/input-converter';
 import { IIntegerPipeArgument, OIntegerPipe } from '../../../../../pipes/o-integer.pipe';
-import { OBaseTableCellRenderer, /*DEFAULT_INPUTS_O_BASE_TABLE_CELL_RENDERER*/ } from '../o-base-table-cell-renderer.class';
+import { OBaseTableCellRenderer } from '../o-base-table-cell-renderer.class';
 
-export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_INTEGER = [
-  //...DEFAULT_INPUTS_O_BASE_TABLE_CELL_RENDERER,
+const INPUTS_ARRAY = [
+  ...OBaseTableCellRenderer.INPUTS_ARRAY,
   // grouping [no|yes]: grouping thousands. Default: yes.
   'grouping',
   // thousand-separator [string]: thousands separator when grouping. Default: comma (,).
@@ -16,11 +24,11 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_INTEGER = [
   selector: 'o-table-cell-renderer-integer',
   templateUrl: './o-table-cell-renderer-integer.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  inputs: DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_INTEGER
+  inputs: INPUTS_ARRAY
 })
 export class OTableCellRendererIntegerComponent extends OBaseTableCellRenderer implements AfterContentInit, OnInit {
 
-  public static DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_INTEGER = DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_INTEGER;
+  public static INPUTS_ARRAY = INPUTS_ARRAY;
 
   @InputConverter()
   protected grouping: boolean = true;

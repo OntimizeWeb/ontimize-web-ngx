@@ -11,6 +11,7 @@ import {
 import { FormControl, ValidatorFn, Validators } from '@angular/forms';
 
 import { InputConverter } from '../../../../../decorators/input-converter';
+import { OColumn } from '../../../../../interfaces/o-column.interface';
 import { OPermissions } from '../../../../../services/permissions/permissions.service';
 import { SnackBarService } from '../../../../../services/snackbar.service';
 import { OTranslateService } from '../../../../../services/translate/o-translate.service';
@@ -18,9 +19,8 @@ import { Observable, ObservableWrapper } from '../../../../../util/async';
 import { Util } from '../../../../../util/util';
 import { OBaseTableCellEditor } from '../../../column/cell-editor/o-base-table-cell-editor.class';
 import { OTableComponent } from '../../../o-table.component';
-import { OColumn } from '../../../../../interfaces/o-column.interface';
 
-export const DEFAULT_INPUTS_O_TABLE_INSERTABLE_ROW = [
+const INPUTS_ARRAY = [
   // columns [string]: columns that can be inserted, separated by ';'. Default: all visible columns.
   'columns',
   'requiredColumns : required-columns',
@@ -30,7 +30,7 @@ export const DEFAULT_INPUTS_O_TABLE_INSERTABLE_ROW = [
   'includeParentKeys: include-parent-keys'
 ];
 
-export const DEFAULT_OUTPUTS_O_TABLE_INSERTABLE_ROW = [
+const OUTPUTS_ARRAY = [
   'onPostInsertRecord'
 ];
 
@@ -38,14 +38,14 @@ export const DEFAULT_OUTPUTS_O_TABLE_INSERTABLE_ROW = [
   selector: 'o-table-insertable-row',
   template: ' ',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  inputs: DEFAULT_INPUTS_O_TABLE_INSERTABLE_ROW,
-  outputs: DEFAULT_OUTPUTS_O_TABLE_INSERTABLE_ROW
+  inputs: INPUTS_ARRAY,
+  outputs: OUTPUTS_ARRAY
 })
 
 export class OTableInsertableRowComponent implements OnInit {
 
-  public static DEFAULT_INPUTS_O_TABLE_INSERTABLE_ROW = DEFAULT_INPUTS_O_TABLE_INSERTABLE_ROW;
-  public static DEFAULT_OUTPUTS_O_TABLE_INSERTABLE_ROW = DEFAULT_OUTPUTS_O_TABLE_INSERTABLE_ROW;
+  public static INPUTS_ARRAY = INPUTS_ARRAY;
+  public static OUTPUTS_ARRAY = OUTPUTS_ARRAY;
   public static AVAILABLE_ROW_POSITIONS = ['first', 'last'];
   public static DEFAULT_ROW_POSITION = 'last';
 

@@ -16,7 +16,7 @@ import { Util } from '../../../../../util/util';
 import { OTableComponent } from '../../../o-table.component';
 import { OTableButton } from '../../../../../interfaces/o-table-button.interface';
 
-export const DEFAULT_INPUTS_O_TABLE_BUTTON = [
+const INPUTS_ARRAY = [
   'oattr: attr',
   'enabled',
   'icon',
@@ -25,7 +25,7 @@ export const DEFAULT_INPUTS_O_TABLE_BUTTON = [
   'olabel: label'
 ];
 
-export const DEFAULT_OUTPUTS_O_TABLE_BUTTON = [
+const OUTPUTS_ARRAY = [
   'onClick'
 ];
 
@@ -33,8 +33,8 @@ export const DEFAULT_OUTPUTS_O_TABLE_BUTTON = [
   selector: 'o-table-button',
   templateUrl: './o-table-button.component.html',
   styleUrls: ['./o-table-button.component.scss'],
-  inputs: DEFAULT_INPUTS_O_TABLE_BUTTON,
-  outputs: DEFAULT_OUTPUTS_O_TABLE_BUTTON,
+  inputs: INPUTS_ARRAY,
+  outputs: OUTPUTS_ARRAY,
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
@@ -43,8 +43,8 @@ export const DEFAULT_OUTPUTS_O_TABLE_BUTTON = [
 })
 export class OTableButtonComponent implements OTableButton, OnInit {
 
-  public static DEFAULT_INPUTS_O_TABLE_BUTTON = DEFAULT_INPUTS_O_TABLE_BUTTON;
-  public static DEFAULT_OUTPUTS_O_TABLE_BUTTON = DEFAULT_OUTPUTS_O_TABLE_BUTTON;
+  public static INPUTS_ARRAY = INPUTS_ARRAY;
+  public static OUTPUTS_ARRAY = OUTPUTS_ARRAY;
 
   public onClick: EventEmitter<object> = new EventEmitter<object>();
 

@@ -11,14 +11,14 @@ import {
 import { BehaviorSubject, Subscription } from 'rxjs';
 
 import { InputConverter } from '../../../../decorators/input-converter';
+import { OColumn } from '../../../../interfaces/o-column.interface';
 import { OTranslateService } from '../../../../services/translate/o-translate.service';
 import { ColumnValueFilterOperator, OColumnValueFilter } from '../../../../types/o-column-value-filter.type';
 import { Util } from '../../../../util/util';
 import { OContextMenuComponent } from '../../../contextmenu/o-context-menu.component';
 import { OTableComponent } from '../../o-table.component';
-import { OColumn } from '../../../../interfaces/o-column.interface';
 
-export const DEFAULT_TABLE_CONTEXT_MENU_INPUTS = [
+const INPUTS_ARRAY = [
   'contextMenu: context-menu',
   'showInsert: insert',
   'showEdit: edit',
@@ -34,9 +34,11 @@ export const DEFAULT_TABLE_CONTEXT_MENU_INPUTS = [
   selector: 'o-table-context-menu',
   templateUrl: './o-table-context-menu.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  inputs: DEFAULT_TABLE_CONTEXT_MENU_INPUTS
+  inputs: INPUTS_ARRAY
 })
 export class OTableContextMenuComponent implements OnInit, AfterViewInit {
+
+  public static INPUTS_ARRAY = INPUTS_ARRAY;
 
   public contextMenu: OContextMenuComponent;
   public isVisibleInsert: BehaviorSubject<boolean> = new BehaviorSubject(true);

@@ -1,11 +1,11 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
+
 import { Codes } from '../../../../../util/codes';
 import { Util } from '../../../../../util/util';
-import { /*DEFAULT_INPUTS_O_BASE_TABLE_CELL_RENDERER*/ OBaseTableCellRenderer } from '../o-base-table-cell-renderer.class';
+import { OBaseTableCellRenderer } from '../o-base-table-cell-renderer.class';
 
-
-export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_ACTION = [
-  //...DEFAULT_INPUTS_O_BASE_TABLE_CELL_RENDERER,
+const INPUTS_ARRAY = [
+  ...OBaseTableCellRenderer.INPUTS_ARRAY,
   'icon',
   'svgIcon:svg-icon',
   'action',
@@ -13,7 +13,7 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_ACTION = [
   'iconPosition: icon-position'
 ];
 
-export const DEFAULT_OUTPUTS_O_TABLE_CELL_RENDERER_ACTION = [
+const OUTPUTS_ARRAY = [
   'onClick'
 ];
 
@@ -22,13 +22,13 @@ export const DEFAULT_OUTPUTS_O_TABLE_CELL_RENDERER_ACTION = [
   templateUrl: './o-table-cell-renderer-action.component.html',
   styleUrls: ['./o-table-cell-renderer-action.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  inputs: DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_ACTION,
-  outputs: DEFAULT_OUTPUTS_O_TABLE_CELL_RENDERER_ACTION
+  inputs: INPUTS_ARRAY,
+  outputs: OUTPUTS_ARRAY
 })
 export class OTableCellRendererActionComponent extends OBaseTableCellRenderer implements OnInit {
 
-  public static DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_ACTION = DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_ACTION;
-  public static DEFAULT_OUTPUTS_O_TABLE_CELL_RENDERER_ACTION = DEFAULT_OUTPUTS_O_TABLE_CELL_RENDERER_ACTION;
+  public static INPUTS_ARRAY = INPUTS_ARRAY;
+  public static OUTPUTS_ARRAY = OUTPUTS_ARRAY;
 
   onClick: EventEmitter<object> = new EventEmitter<object>();
   action: string;

@@ -1,29 +1,30 @@
-import { Component, Injector, ViewChild, TemplateRef, ChangeDetectionStrategy } from '@angular/core';
-import { ValidatorFn, FormControl } from '@angular/forms';
+import { ChangeDetectionStrategy, Component, Injector, TemplateRef, ViewChild } from '@angular/core';
+import { FormControl, ValidatorFn } from '@angular/forms';
+
 import { InputConverter } from '../../../../../decorators/input-converter';
 import { OTableCellEditorIntegerComponent } from '../integer/o-table-cell-editor-integer.component';
 import { OBaseTableCellEditor } from '../o-base-table-cell-editor.class';
 
-export const DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_REAL = [
-  ...OTableCellEditorIntegerComponent.DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_INTEGER
+const INPUTS_ARRAY = [
+  ...OTableCellEditorIntegerComponent.INPUTS_ARRAY
 ];
 
-export const DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_REAL = [
-  ...OTableCellEditorIntegerComponent.DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_INTEGER
+const OUTPUTS_ARRAY = [
+  ...OTableCellEditorIntegerComponent.OUTPUTS_ARRAY
 ];
 
 @Component({
   selector: 'o-table-cell-editor-real',
   templateUrl: './o-table-cell-editor-real.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  inputs: DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_REAL,
-  outputs: DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_REAL
+  inputs: INPUTS_ARRAY,
+  outputs: OUTPUTS_ARRAY
 })
 
 export class OTableCellEditorRealComponent extends OBaseTableCellEditor {
 
-  public static DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_REAL = DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_REAL;
-  public static DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_REAL = DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_REAL;
+  public static INPUTS_ARRAY = INPUTS_ARRAY;
+  public static OUTPUTS_ARRAY = OUTPUTS_ARRAY;
 
   @ViewChild('templateref', { read: TemplateRef, static: false }) public templateref: TemplateRef<any>;
 
