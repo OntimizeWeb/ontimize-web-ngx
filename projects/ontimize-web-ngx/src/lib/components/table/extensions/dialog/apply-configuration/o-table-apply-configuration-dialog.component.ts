@@ -3,7 +3,7 @@ import { Component, EventEmitter, Inject, Injector, OnInit, ViewChild } from '@a
 import { MAT_DIALOG_DATA, MatDialogRef, MatListOption, MatSelectionList } from '@angular/material';
 
 import { DialogService } from '../../../../../services/dialog.service';
-import { ITableConfiguration } from '../../o-table-storage.class';
+import { OTableConfiguration } from '../../../../../types/o-table-configuration.type';
 
 @Component({
   selector: 'o-table-apply-configuration-dialog',
@@ -13,7 +13,7 @@ import { ITableConfiguration } from '../../o-table-storage.class';
 export class OTableApplyConfigurationDialogComponent implements OnInit {
 
   public default_configuration = 'OTableApplyConfigurationDialogComponent-default';
-  public configurations: ITableConfiguration[] = [];
+  public configurations: OTableConfiguration[] = [];
 
   public onDelete: EventEmitter<string> = new EventEmitter();
 
@@ -24,7 +24,7 @@ export class OTableApplyConfigurationDialogComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<OTableApplyConfigurationDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) data: ITableConfiguration[],
+    @Inject(MAT_DIALOG_DATA) data: OTableConfiguration[],
     protected injector: Injector
   ) {
     this.loadConfigurations(data);
@@ -35,7 +35,7 @@ export class OTableApplyConfigurationDialogComponent implements OnInit {
     this.configurationList.selectedOptions = new SelectionModel<MatListOption>(false);
   }
 
-  public loadConfigurations(configurations: ITableConfiguration[]): void {
+  public loadConfigurations(configurations: OTableConfiguration[]): void {
     this.configurations = configurations;
   }
 

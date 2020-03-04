@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, forwardRef, Inject, Injectable, Inj
 import { MatPaginatorIntl } from '@angular/material';
 
 import { InputConverter } from '../../../../../decorators/input-converter';
+import { OTablePaginator } from '../../../../../interfaces/o-table-paginator.interface';
 import { OTranslateService } from '../../../../../services/translate/o-translate.service';
 import { OTableComponent } from '../../../o-table.component';
 
@@ -17,7 +18,7 @@ export const DEFAULT_PAGINATOR_TABLE = [
   inputs: DEFAULT_PAGINATOR_TABLE,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class OTablePaginatorComponent implements OnInit {
+export class OTablePaginatorComponent implements OTablePaginator, OnInit {
 
   protected _pageIndex: number = 0;
   protected _pageSize: number = 10;

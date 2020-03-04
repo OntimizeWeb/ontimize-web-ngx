@@ -4,10 +4,9 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "echo 'DEVELOPMENT SCRIPT' && ng build && scss-bundle -p scss-bundle-ontimize.config.json && scss-bundle -p scss-bundle-theme.config.json",
+    "aaa": "ng build",
+    "build": "ng build && scss-bundle -p scss-bundle-ontimize.config.json && scss-bundle -p scss-bundle-theme.config.json",
     "postbuild": "copyfiles -u 3 ./projects/ontimize-web-ngx/assets/svg/ontimize-icon-set.svg ./dist/ontimize-web-ngx/assets && echo '----¡Assets copied!----'  && cd dist/ontimize-web-ngx && npm pack",
-    "prodbuild": "echo '----PRODUCTION SCRIPT----' && ng build && scss-bundle -p scss-bundle-ontimize.config.json && scss-bundle -p scss-bundle-theme.config.json",
-    "postprodbuild": "copyfiles -u 3 ./projects/ontimize-web-ngx/assets/svg/ontimize-icon-set.svg ./dist/ontimize-web-ngx/assets && echo '----¡Assets copied!----'",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"

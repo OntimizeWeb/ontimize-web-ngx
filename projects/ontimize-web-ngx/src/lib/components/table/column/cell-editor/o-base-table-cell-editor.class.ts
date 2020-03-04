@@ -1,13 +1,15 @@
 import { EventEmitter, HostListener, Injector, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
+
 import { InputConverter } from '../../../../decorators/input-converter';
-import { OTranslateService } from '../../../../services/translate/o-translate.service';
 import { SnackBarService } from '../../../../services/snackbar.service';
+import { OTranslateService } from '../../../../services/translate/o-translate.service';
 import { ObservableWrapper } from '../../../../util/async';
 import { Util } from '../../../../util/util';
-import { OColumn, OTableComponent } from '../../o-table.component';
-import { OTableColumnComponent } from '../o-table-column.component';
-
+import { OTableComponent } from '../../o-table.component';
+// import { OTableColumnComponent } from '../o-table-column.component';
+import { OColumn } from '../../../../interfaces/o-column.interface';
+import { OTableColumn } from '../../../../interfaces/o-table-column.interface';
 
 export class OBaseTableCellEditor implements OnInit {
 
@@ -40,7 +42,7 @@ export class OBaseTableCellEditor implements OnInit {
   showNotificationOnEdit: boolean = true;
   protected _enabled: boolean = true;
 
-  protected _tableColumn: OTableColumnComponent;
+  protected _tableColumn: OTableColumn;
   protected _table: OTableComponent;
 
   protected _rowData: any;
@@ -73,7 +75,7 @@ export class OBaseTableCellEditor implements OnInit {
 
   constructor(protected injector: Injector) {
     this.snackBarService = this.injector.get(SnackBarService);
-    this.tableColumn = this.injector.get(OTableColumnComponent);
+    // this.tableColumn = this.injector.get(OTableColumnComponent);
     this.translateService = this.injector.get(OTranslateService);
   }
 
@@ -162,11 +164,11 @@ export class OBaseTableCellEditor implements OnInit {
     }
   }
 
-  get tableColumn(): OTableColumnComponent {
+  get tableColumn(): OTableColumn {
     return this._tableColumn;
   }
 
-  set tableColumn(arg: OTableColumnComponent) {
+  set tableColumn(arg: OTableColumn) {
     this._tableColumn = arg;
     if (arg) {
       this._table = arg.table;

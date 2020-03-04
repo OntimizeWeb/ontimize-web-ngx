@@ -17,35 +17,14 @@ import { Subscription } from 'rxjs';
 
 import { DateFilterFunction, ODateValueType } from '../../../components/input/date-input/o-date-input.component';
 import { InputConverter } from '../../../decorators/input-converter';
+import { OTableColumn } from '../../../interfaces/o-table-column.interface';
 import { Codes } from '../../../util/codes';
 import { IExpression } from '../../../util/filter-expression.utils';
 import { SQLTypes } from '../../../util/sqltypes';
 import { Util } from '../../../util/util';
 import { OTableComponent } from '../o-table.component';
-import { OTableCellEditorBooleanComponent } from './cell-editor/boolean/o-table-cell-editor-boolean.component';
-import { OTableCellEditorDateComponent } from './cell-editor/date/o-table-cell-editor-date.component';
-import { OTableCellEditorIntegerComponent } from './cell-editor/integer/o-table-cell-editor-integer.component';
-import { OTableCellEditorRealComponent } from './cell-editor/real/o-table-cell-editor-real.component';
-import { OTableCellEditorTextComponent } from './cell-editor/text/o-table-cell-editor-text.component';
-import { OTableCellEditorTimeComponent } from './cell-editor/time/o-table-cell-editor-time.component';
-import { OTableCellRendererActionComponent } from './cell-renderer/action/o-table-cell-renderer-action.component';
-import { OTableCellRendererBooleanComponent } from './cell-renderer/boolean/o-table-cell-renderer-boolean.component';
-import { OTableCellRendererCurrencyComponent } from './cell-renderer/currency/o-table-cell-renderer-currency.component';
-import { OTableCellRendererDateComponent } from './cell-renderer/date/o-table-cell-renderer-date.component';
-import { OTableCellRendererImageComponent } from './cell-renderer/image/o-table-cell-renderer-image.component';
-import { OTableCellRendererIntegerComponent } from './cell-renderer/integer/o-table-cell-renderer-integer.component';
-import {
-  OTableCellRendererPercentageComponent,
-} from './cell-renderer/percentage/o-table-cell-renderer-percentage.component';
-import { OTableCellRendererRealComponent } from './cell-renderer/real/o-table-cell-renderer-real.component';
-import { OTableCellRendererServiceComponent } from './cell-renderer/service/o-table-cell-renderer-service.component';
-import { OTableCellRendererTimeComponent } from './cell-renderer/time/o-table-cell-renderer-time.component';
-import { OTableCellRendererTranslateComponent } from './cell-renderer/translate/o-table-cell-renderer-translate.component';
-
-export interface OColumnTooltip {
-  value?: string;
-  function?: (rowData: any) => any;
-}
+import { editorsMapping } from './cell-editor/cell-editor';
+import { renderersMapping } from './cell-renderer/cell-renderer';
 
 export const DEFAULT_INPUTS_O_TABLE_COLUMN = [
 
@@ -99,24 +78,13 @@ export const DEFAULT_INPUTS_O_TABLE_COLUMN = [
 
   'filterExpressionFunction: filter-expression-function',
 
-  ...OTableCellRendererBooleanComponent.DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_BOOLEAN,
-  ...OTableCellRendererCurrencyComponent.DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_CURRENCY, // includes Integer and Real
-  ...OTableCellRendererDateComponent.DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_DATE,
-  ...OTableCellRendererImageComponent.DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_IMAGE,
-  ...OTableCellRendererActionComponent.DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_ACTION,
-  ...OTableCellRendererServiceComponent.DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_SERVICE,
-  ...OTableCellRendererTranslateComponent.DEFAULT_IPUTS_O_TABLE_CELL_RENDERER_TRANSLATE,
-
-  ...OTableCellEditorBooleanComponent.DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_BOOLEAN,
-  ...OTableCellEditorDateComponent.DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_DATE,
-  ...OTableCellEditorRealComponent.DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_REAL, // includes Integer
-  ...OTableCellEditorTextComponent.DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_TEXT,
-  ...OTableCellEditorTimeComponent.DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_TIME,
+  // ...O_TABLE_CELL_RENDERERS_INPUTS,
+  // ...O_TABLE_CELL_EDITORS_INPUTS
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE_COLUMN = [
-  ...OTableCellRendererActionComponent.DEFAULT_OUTPUTS_O_TABLE_CELL_RENDERER_ACTION,
-  ...OTableCellEditorTextComponent.DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_TEXT
+  // ...O_TABLE_CELL_RENDERERS_OUTPUTS,
+  // ...O_TABLE_CELL_EDITORS_OUTPUTS
 ];
 
 @Component({
@@ -127,35 +95,10 @@ export const DEFAULT_OUTPUTS_O_TABLE_COLUMN = [
   inputs: DEFAULT_INPUTS_O_TABLE_COLUMN,
   outputs: DEFAULT_OUTPUTS_O_TABLE_COLUMN
 })
-export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
+export class OTableColumnComponent implements OTableColumn, OnDestroy, OnInit, AfterViewInit {
 
   public static DEFAULT_INPUTS_O_TABLE_COLUMN = DEFAULT_INPUTS_O_TABLE_COLUMN;
   public static DEFAULT_OUTPUTS_O_TABLE_COLUMN = DEFAULT_OUTPUTS_O_TABLE_COLUMN;
-
-  protected static renderersMapping = {
-    action: OTableCellRendererActionComponent,
-    boolean: OTableCellRendererBooleanComponent,
-    currency: OTableCellRendererCurrencyComponent,
-    date: OTableCellRendererDateComponent,
-    image: OTableCellRendererImageComponent,
-    integer: OTableCellRendererIntegerComponent,
-    percentage: OTableCellRendererPercentageComponent,
-    real: OTableCellRendererRealComponent,
-    service: OTableCellRendererServiceComponent,
-    translate: OTableCellRendererTranslateComponent,
-    time: OTableCellRendererTimeComponent
-  };
-
-  protected static editorsMapping = {
-    boolean: OTableCellEditorBooleanComponent,
-    date: OTableCellEditorDateComponent,
-    integer: OTableCellEditorIntegerComponent,
-    real: OTableCellEditorRealComponent,
-    percentage: OTableCellEditorRealComponent,
-    currency: OTableCellEditorRealComponent,
-    text: OTableCellEditorTextComponent,
-    time: OTableCellEditorTimeComponent
-  };
 
   public renderer: any;
   public editor: any;
@@ -306,8 +249,8 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
   }
 
   static addEditor(type: string, editorClassReference: any) {
-    if (!OTableColumnComponent.editorsMapping.hasOwnProperty(type) && Util.isDefined(editorClassReference)) {
-      OTableColumnComponent.editorsMapping[type] = editorClassReference;
+    if (!editorsMapping.hasOwnProperty(type) && Util.isDefined(editorClassReference)) {
+      editorsMapping[type] = editorClassReference;
     }
   }
 
@@ -344,7 +287,7 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
 
   protected createRenderer(): void {
     if (!Util.isDefined(this.renderer) && Util.isDefined(this.type)) {
-      const componentRef = OTableColumnComponent.renderersMapping[this.type];
+      const componentRef = renderersMapping[this.type];
       if (componentRef !== undefined) {
         const factory: ComponentFactory<any> = this.resolver.resolveComponentFactory(componentRef);
         if (factory) {
@@ -421,7 +364,7 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
 
   buildCellEditor(type: string, resolver: ComponentFactoryResolver, container: ViewContainerRef, propsOrigin: any) {
     let editor;
-    const componentRef = OTableColumnComponent.editorsMapping[type] || OTableColumnComponent.editorsMapping['text'];
+    const componentRef = editorsMapping[type] || editorsMapping.text;
     if (componentRef === undefined) {
       return editor;
     }

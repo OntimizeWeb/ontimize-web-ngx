@@ -1,10 +1,11 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, Injector, ViewEncapsulation } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
-// import { DragDropService } from '@churchs19/ng2-dnd';
 
 import { Codes } from '../../../../../util/codes';
 import { Util } from '../../../../../util/util';
-import { OColumn } from '../../../o-table.component';
+import { OColumn } from '../../../../../interfaces/o-column.interface';
+
+// import { DragDropService } from '@churchs19/ng2-dnd';
 
 @Component({
   selector: 'o-table-visible-columns-dialog',

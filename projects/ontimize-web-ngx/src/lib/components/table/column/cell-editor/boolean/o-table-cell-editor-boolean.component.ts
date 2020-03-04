@@ -14,7 +14,7 @@ import { Util } from '../../../../../util/util';
 import { OBaseTableCellEditor } from '../o-base-table-cell-editor.class';
 
 export const DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_BOOLEAN = [
-  ...OBaseTableCellEditor.DEFAULT_INPUTS_O_TABLE_CELL_EDITOR,
+  // ...OBaseTableCellEditor.DEFAULT_INPUTS_O_TABLE_CELL_EDITOR,
   'indeterminateOnNull: indeterminate-on-null',
   // true-value: true value. Default: true.
   'trueValue: true-value',
@@ -26,7 +26,7 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_BOOLEAN = [
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_BOOLEAN = [
-  ...OBaseTableCellEditor.DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR
+  // ...OBaseTableCellEditor.DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR
 ];
 
 @Component({

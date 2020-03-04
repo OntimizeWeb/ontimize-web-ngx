@@ -97,7 +97,7 @@ export const INTERNAL_ONTIMIZE_MODULES_EXPORTED: any = [
   OTextareaInputModule,
   OListModule,
   OSearchInputModule,
-  // OTableModule,
+  OTableModule,
   OAppLayoutModule,
   OFormLayoutManagerModule,
   OUserInfoModule,
@@ -193,7 +193,7 @@ export const INTERNAL_ONTIMIZE_MODULES: any = [
 
   OLanguageSelectorModule,
   OListModule,
-  // OTableModule,
+  OTableModule,
   OUserInfoModule,
 
   OAppLayoutModule,

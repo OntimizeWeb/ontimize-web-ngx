@@ -14,6 +14,7 @@ import { InputConverter } from '../../../../../decorators/input-converter';
 import { Codes } from '../../../../../util/codes';
 import { Util } from '../../../../../util/util';
 import { OTableComponent } from '../../../o-table.component';
+import { OTableButton } from '../../../../../interfaces/o-table-button.interface';
 
 export const DEFAULT_INPUTS_O_TABLE_BUTTON = [
   'oattr: attr',
@@ -40,7 +41,7 @@ export const DEFAULT_OUTPUTS_O_TABLE_BUTTON = [
     '[class.o-table-button]': 'true',
   }
 })
-export class OTableButtonComponent implements OnInit {
+export class OTableButtonComponent implements OTableButton, OnInit {
 
   public static DEFAULT_INPUTS_O_TABLE_BUTTON = DEFAULT_INPUTS_O_TABLE_BUTTON;
   public static DEFAULT_OUTPUTS_O_TABLE_BUTTON = DEFAULT_OUTPUTS_O_TABLE_BUTTON;

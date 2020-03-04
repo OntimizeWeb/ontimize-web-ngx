@@ -2,11 +2,11 @@ import { Component, Injector, ViewChild, TemplateRef, ElementRef, ChangeDetectio
 import { OBaseTableCellEditor } from '../o-base-table-cell-editor.class';
 
 export const DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_TEXT = [
-  ...OBaseTableCellEditor.DEFAULT_INPUTS_O_TABLE_CELL_EDITOR
+  // ...OBaseTableCellEditor.DEFAULT_INPUTS_O_TABLE_CELL_EDITOR
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_TEXT = [
-  ...OBaseTableCellEditor.DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR
+  // ...OBaseTableCellEditor.DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR
 ];
 
 @Component({

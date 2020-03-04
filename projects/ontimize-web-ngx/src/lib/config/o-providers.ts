@@ -47,7 +47,7 @@ export function appInitializerFactory(injector: Injector, config: Config, oTrans
     const locationInitialized = injector.get(LOCATION_INITIALIZED, Promise.resolve(null));
     locationInitialized.then(() => {
       oTranslate.setDefaultLang('en');
-      let userLang = config['locale'];
+      let userLang = config.locale;
       if (!userLang) {
         // use navigator lang if available
         userLang = oTranslate.getBrowserLang();
@@ -63,7 +63,7 @@ export function appInitializerFactory(injector: Injector, config: Config, oTrans
       if (userLang && config.applicationLocales.indexOf(userLang) === -1) {
         config.applicationLocales.push(userLang);
       }
-      if (config['uuid'] === undefined || config['uuid'] === null || config['uuid'] === '') {
+      if (config.uuid == null || config.uuid === '') {
         console.error('Your app must have an \'uuid\' property defined on your app.config file. Otherwise, your application will not work correctly.');
         alert('Your app must have an \'uuid\' property defined on your app.config file. Otherwise, your application will not work correctly.');
       }

@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { ChangeDetectionStrategy, Component, Inject, Injector, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
-import { MAT_DIALOG_DATA, MatButton, MatDialogRef } from '@angular/material';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
@@ -11,18 +11,7 @@ import { Codes } from '../../../../../util/codes';
 import { SQLTypes } from '../../../../../util/sqltypes';
 import { Util } from '../../../../../util/util';
 import { OTableExportButtonService } from '../../export-button/o-table-export-button.service';
-
-export class OTableExportConfiguration {
-  columns: Array<any>;
-  columnNames: object;
-  sqlTypes: object;
-  service: string;
-  data?: any[];
-  filter?: object;
-  mode: string;
-  entity: string;
-  options?: any;
-}
+import { OTableExportConfiguration } from '../../header/table-menu/o-table-export-configuration.class';
 
 @Component({
   selector: 'o-table-export-dialog',

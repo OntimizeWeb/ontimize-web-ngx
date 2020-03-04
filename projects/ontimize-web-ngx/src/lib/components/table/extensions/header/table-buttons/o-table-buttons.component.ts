@@ -15,6 +15,7 @@ import { OPermissions } from '../../../../../services/permissions/permissions.se
 import { PermissionsUtils } from '../../../../../util/permissions';
 import { OTableComponent } from '../../../o-table.component';
 import { OTableButtonComponent } from '../table-button/o-table-button.component';
+import { OTableButtons } from '../../../../../interfaces/o-table-buttons.interface';
 
 export const DEFAULT_INPUTS_O_TABLE_BUTTONS = [
   // insert-button [no|yes]: show insert button. Default: yes.
@@ -39,7 +40,7 @@ export const DEFAULT_OUTPUTS_O_TABLE_BUTTONS = [];
     '[class.o-table-buttons]': 'true',
   }
 })
-export class OTableButtonsComponent implements OnInit, OnDestroy {
+export class OTableButtonsComponent implements OTableButtons, OnInit, OnDestroy {
 
   public static DEFAULT_INPUTS_O_TABLE_BUTTONS = DEFAULT_INPUTS_O_TABLE_BUTTONS;
   public static DEFAULT_OUTPUTS_O_TABLE_BUTTONS = DEFAULT_OUTPUTS_O_TABLE_BUTTONS;

@@ -9,4 +9,4 @@ export * from './real/o-table-cell-renderer-real.component';
 export * from './service/o-table-cell-renderer-service.component';
 export * from './time/o-table-cell-renderer-time.component';
 
-export * from './o-base-table-cell-renderer.class';
+// export * from './o-base-table-cell-renderer.class';

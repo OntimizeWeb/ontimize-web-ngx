@@ -28,15 +28,15 @@ export class ONavigationItem {
   keysValues: any;
   queryConfiguration: any;
 
-  constructor(value: object) {
-    this.url = value['url'] ? value['url'] : '';
+  constructor(value: any) {
+    this.url = value.url ? value.url : '';
     this.queryParams = value[Codes.QUERY_PARAMS] ? value[Codes.QUERY_PARAMS] : {};
-    this.text = value['text'] ? value['text'] : '';
-    this.displayText = value['displayText'] ? value['displayText'] : '';
-    this.formRoutes = value['formRoutes'];
-    this.activeFormMode = value['activeFormMode'];
-    this.keysValues = value['keysValues'];
-    this.queryConfiguration = value['queryConfiguration'];
+    this.text = value.text ? value.text : '';
+    this.displayText = value.displayText ? value.displayText : '';
+    this.formRoutes = value.formRoutes;
+    this.activeFormMode = value.activeFormMode;
+    this.keysValues = value.keysValues;
+    this.queryConfiguration = value.queryConfiguration;
   }
 
   getActiveModePath(): string {

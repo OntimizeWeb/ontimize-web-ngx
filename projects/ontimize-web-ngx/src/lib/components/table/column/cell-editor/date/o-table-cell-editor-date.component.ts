@@ -10,7 +10,7 @@ import { Util } from '../../../../../util/util';
 import moment from 'moment';
 
 export const DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_DATE = [
-  ...OBaseTableCellEditor.DEFAULT_INPUTS_O_TABLE_CELL_EDITOR,
+  // ...OBaseTableCellEditor.DEFAULT_INPUTS_O_TABLE_CELL_EDITOR,
   'format',
   'locale',
   'oStartView: start-view',
@@ -26,7 +26,7 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_DATE = [
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_DATE = [
-  ...OBaseTableCellEditor.DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR
+  // ...OBaseTableCellEditor.DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR
 ];
 
 @Component({

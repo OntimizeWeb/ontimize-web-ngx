@@ -1,11 +1,11 @@
 import { ChangeDetectionStrategy, Component, Injector, TemplateRef, ViewChild, OnInit } from '@angular/core';
 import { IMomentPipeArgument, OMomentPipe } from '../../../../../pipes/o-moment.pipe';
 
-import { OBaseTableCellRenderer, DEFAULT_INPUTS_O_BASE_TABLE_CELL_RENDERER } from '../o-base-table-cell-renderer.class';
+import { OBaseTableCellRenderer, /*DEFAULT_INPUTS_O_BASE_TABLE_CELL_RENDERER*/ } from '../o-base-table-cell-renderer.class';
 import { Util } from '../../../../../util/util';
 
 export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_TIME = [
-  ...DEFAULT_INPUTS_O_BASE_TABLE_CELL_RENDERER,
+  //...DEFAULT_INPUTS_O_BASE_TABLE_CELL_RENDERER,
   'format'
 ];
 

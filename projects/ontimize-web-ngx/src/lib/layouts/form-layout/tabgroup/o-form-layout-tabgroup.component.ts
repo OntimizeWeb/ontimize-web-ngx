@@ -25,6 +25,7 @@ import { Codes } from '../../../util/codes';
 import { Util } from '../../../util/util';
 import { OFormLayoutManagerContentDirective } from '../directives/o-form-layout-manager-content.directive';
 import { OFormLayoutManagerComponent } from '../o-form-layout-manager.component';
+import { OFormLayoutTabGroup } from '../../../interfaces/o-form-layout-tab-group.interface';
 
 export const DEFAULT_INPUTS_O_FORM_LAYOUT_TABGROUP = [
   'title',
@@ -48,7 +49,7 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_TABGROUP = [
     '[class.o-form-layout-tabgroup]': 'true'
   }
 })
-export class OFormLayoutTabGroupComponent implements AfterViewInit, OnDestroy {
+export class OFormLayoutTabGroupComponent implements OFormLayoutTabGroup, AfterViewInit, OnDestroy {
 
   public static DEFAULT_INPUTS_O_FORM_LAYOUT_TABGROUP = DEFAULT_INPUTS_O_FORM_LAYOUT_TABGROUP;
   public static DEFAULT_OUTPUTS_O_FORM_LAYOUT_TABGROUP = DEFAULT_OUTPUTS_O_FORM_LAYOUT_TABGROUP;

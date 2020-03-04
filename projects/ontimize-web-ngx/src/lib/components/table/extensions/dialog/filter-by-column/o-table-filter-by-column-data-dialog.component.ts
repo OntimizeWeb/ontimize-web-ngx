@@ -12,19 +12,10 @@ import { MAT_DIALOG_DATA, MatCheckboxChange, MatDialogRef, MatSelectionList, Mat
 import { BehaviorSubject, fromEvent, Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
+import { ColumnValueFilterOperator, OColumnValueFilter } from '../../../../../types/o-column-value-filter.type';
+import { TableFilterByColumnData } from '../../../../../types/o-table-filter-by-column-data.type';
 import { Util } from '../../../../../util/util';
-import { OColumn } from '../../../o-table.component';
-import {
-  ColumnValueFilterOperator,
-  IColumnValueFilter,
-} from '../../header/table-columns-filter/o-table-columns-filter.component';
-
-export interface ITableFilterByColumnDataInterface {
-  value: any;
-  selected: boolean;
-  renderedValue?: any;
-  tableIndex?: number;
-}
+import { OColumn } from '../../../../../interfaces/o-column.interface';
 
 @Component({
   selector: 'o-table-filter-by-column-data-dialog',
@@ -51,9 +42,9 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
   fcFrom = new FormControl();
   fcTo = new FormControl();
 
-  protected columnData: Array<ITableFilterByColumnDataInterface> = [];
+  protected columnData: Array<TableFilterByColumnData> = [];
   protected tableData: Array<any> = [];
-  protected _listData: Array<ITableFilterByColumnDataInterface>;
+  protected _listData: Array<TableFilterByColumnData>;
 
   @ViewChild('filter', { static: false }) filter: ElementRef;
   @ViewChild('filterValueList', { static: false }) filterValueList: MatSelectionList;
@@ -65,7 +56,7 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
     if (data.column) {
       this.column = data.column;
     }
-    let previousFilter: IColumnValueFilter = {
+    let previousFilter: OColumnValueFilter = {
       attr: undefined,
       operator: undefined,
       values: undefined
@@ -98,15 +89,15 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
     this.initializeFilterEvent();
   }
 
-  get listData(): Array<ITableFilterByColumnDataInterface> {
+  get listData(): Array<TableFilterByColumnData> {
     return this._listData;
   }
 
-  set listData(arg: Array<ITableFilterByColumnDataInterface>) {
+  set listData(arg: Array<TableFilterByColumnData>) {
     this._listData = arg;
   }
 
-  initializeDataList(filter?: IColumnValueFilter): void {
+  initializeDataList(filter?: OColumnValueFilter): void {
     if (this.preloadValues || (filter && filter.operator === ColumnValueFilterOperator.IN)) {
       this.listData = this.columnData.slice();
     }
@@ -130,7 +121,7 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
     }
   }
 
-  initializeCustomFilterValues(filter: IColumnValueFilter): void {
+  initializeCustomFilterValues(filter: OColumnValueFilter): void {
     if (filter.operator !== ColumnValueFilterOperator.IN) {
       if (ColumnValueFilterOperator.EQUAL === filter.operator) {
         if (this.isTextType()) {
@@ -164,7 +155,7 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
     }
   }
 
-  get selectedValues(): Array<ITableFilterByColumnDataInterface> {
+  get selectedValues(): Array<TableFilterByColumnData> {
     return this.filterValueList ? this.filterValueList.selectedOptions.selected : [];
   }
 
@@ -184,7 +175,7 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
     }
   }
 
-  getDistinctValues(data: Array<any>, filter: IColumnValueFilter): void {
+  getDistinctValues(data: Array<any>, filter: OColumnValueFilter): void {
     const colRenderedValues = this.getColumnDataUsingRenderer();
     const colValues: any[] = data.map(elem => elem[this.column.attr]);
 
@@ -202,7 +193,7 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
     });
   }
 
-  getColumnValuesFilter(): IColumnValueFilter {
+  getColumnValuesFilter(): OColumnValueFilter {
     const filter = {
       attr: this.column.attr,
       operator: undefined,

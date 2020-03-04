@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, Inject, Injector } from '@angular/c
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 
-import { ITableFiltersStatus } from '../../o-table-storage.class';
+import { OTableFiltersStatus } from '../../../../../types/o-table-filter-status.type';
 import { OTableBaseDialogClass } from '../o-table-base-dialog.class';
 
 @Component({
@@ -36,7 +36,7 @@ export class OTableStoreFilterDialogComponent extends OTableBaseDialogClass {
     this.filterNames = filterNames;
   }
 
-  getFilterAttributes(): ITableFiltersStatus {
+  getFilterAttributes(): OTableFiltersStatus {
     return this.formGroup.value;
   }
 

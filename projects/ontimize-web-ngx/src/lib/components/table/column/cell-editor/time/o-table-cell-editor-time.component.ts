@@ -23,7 +23,7 @@ import { IFormValueOptions } from '../../../../form/OFormValue';
 import { OBaseTableCellEditor } from '../o-base-table-cell-editor.class';
 
 export const DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_TIME = [
-  ...OBaseTableCellEditor.DEFAULT_INPUTS_O_TABLE_CELL_EDITOR,
+  // ...OBaseTableCellEditor.DEFAULT_INPUTS_O_TABLE_CELL_EDITOR,
   'oDateFormat: date-format',
   'oDateLocale: date-locale',
   'oDateStartView: date-start-view',
@@ -39,7 +39,7 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_TIME = [
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_TIME = [
-  ...OBaseTableCellEditor.DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR
+  // ...OBaseTableCellEditor.DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR
 ];
 
 @Component({

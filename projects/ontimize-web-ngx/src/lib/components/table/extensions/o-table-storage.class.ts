@@ -1,17 +1,9 @@
+import { OTableConfiguration } from '../../../types/o-table-configuration.type';
+import { OTableFiltersStatus } from '../../../types/o-table-filter-status.type';
 import { Codes } from '../../../util/codes';
 import { Util } from '../../../util/util';
-import { OColumn, OTableComponent } from '../o-table.component';
-
-export interface ITableFiltersStatus {
-  name: string;
-  description?: string;
-  filter?: any;
-}
-
-export interface ITableConfiguration {
-  name: string;
-  description?: string;
-}
+import { OTableComponent } from '../o-table.component';
+import { OColumn } from '../../../interfaces/o-column.interface';
 
 export class OTableStorage {
 
@@ -84,13 +76,13 @@ export class OTableStorage {
   }
 
   reset() {
-    const state = {};
+    const state: any = {};
     state[OTableStorage.USER_STORED_FILTERS_KEY] = this.table.state[OTableStorage.USER_STORED_FILTERS_KEY];
     state[OTableStorage.STORED_CONFIGURATIONS_KEY] = this.table.state[OTableStorage.STORED_CONFIGURATIONS_KEY];
     if (this.table.pageable) {
-      state['totalQueryRecordsNumber'] = this.table.state.totalQueryRecordsNumber;
+      state.totalQueryRecordsNumber = this.table.state.totalQueryRecordsNumber;
     }
-    state['currentPage'] = 0;
+    state.currentPage = 0;
     this.table.state = state;
   }
 
@@ -134,7 +126,7 @@ export class OTableStorage {
   }
 
   protected getColumnsQuickFilterState() {
-    const result = {};
+    const result: any = {};
     const tableOptions = this.table.oTableOptions;
     const oColumnsData = [];
     tableOptions.columns.forEach((oCol: OColumn) => {
@@ -144,7 +136,7 @@ export class OTableStorage {
         searching: oCol.searching
       });
     });
-    result['oColumns'] = oColumnsData;
+    result.oColumns = oColumnsData;
     result['filter-case-sensitive'] = tableOptions.filterCaseSensitive;
     return result;
   }
@@ -154,12 +146,12 @@ export class OTableStorage {
       'query-rows': this.table.matpaginator ? this.table.matpaginator.pageSize : ''
     };
     if (this.table.currentPage > 0 && this.table.storePaginationState) {
-      result['currentPage'] = this.table.currentPage;
+      result.currentPage = this.table.currentPage;
     }
     if (this.table.pageable && this.table.storePaginationState) {
       const state = this.table.state;
-      result['totalQueryRecordsNumber'] = state.totalQueryRecordsNumber;
-      result['queryRecordOffset'] = Math.max(
+      result.totalQueryRecordsNumber = state.totalQueryRecordsNumber;
+      result.queryRecordOffset = Math.max(
         (state.queryRecordOffset - this.table.dataSource.renderedData.length),
         (state.queryRecordOffset - this.table.queryRows)
       );
@@ -212,7 +204,7 @@ export class OTableStorage {
     return result;
   }
 
-  setStoredFilters(filters: Array<ITableFiltersStatus>) {
+  setStoredFilters(filters: Array<OTableFiltersStatus>) {
     return this.table.state[OTableStorage.USER_STORED_FILTERS_KEY] = filters;
   }
 
@@ -221,7 +213,7 @@ export class OTableStorage {
   }
 
   getStoredFilter(filterName: string) {
-    return this.getStoredFilters().find((item: ITableFiltersStatus) => item.name === filterName);
+    return this.getStoredFilters().find((item: OTableFiltersStatus) => item.name === filterName);
   }
 
   getStoredFilterConf(filterName: string) {
@@ -230,14 +222,14 @@ export class OTableStorage {
 
   deleteStoredFilter(filterName: string) {
     const storedFilters = this.table.state[OTableStorage.USER_STORED_FILTERS_KEY] || [];
-    const index = storedFilters.findIndex((item: ITableFiltersStatus) => item.name === filterName);
+    const index = storedFilters.findIndex((item: OTableFiltersStatus) => item.name === filterName);
     if (index >= 0) {
       storedFilters.splice(index, 1);
       this.table.state[OTableStorage.USER_STORED_FILTERS_KEY] = storedFilters;
     }
   }
 
-  storeFilter(filterArgs: ITableFiltersStatus) {
+  storeFilter(filterArgs: OTableFiltersStatus) {
     const result = {};
     const storedFilter = {};
     Object.assign(storedFilter, this.getColumnFiltersState());
@@ -260,10 +252,10 @@ export class OTableStorage {
   }
 
   getStoredConfiguration(configurationName: string) {
-    return this.getStoredConfigurations().find((item: ITableConfiguration) => item.name === configurationName);
+    return this.getStoredConfigurations().find((item: OTableConfiguration) => item.name === configurationName);
   }
 
-  storeConfiguration(configurationAgs: ITableConfiguration, tableProperties: any[]) {
+  storeConfiguration(configurationAgs: OTableConfiguration, tableProperties: any[]) {
     const result = {};
     this.table.storePaginationState = true;
     const storedConfiguration = this.getTablePropertiesToStore(tableProperties);
@@ -279,7 +271,7 @@ export class OTableStorage {
 
   deleteStoredConfiguration(configurationName: string) {
     const storedConfigurations = this.getStoredConfigurations();
-    const index = storedConfigurations.findIndex((item: ITableConfiguration) => item.name === configurationName);
+    const index = storedConfigurations.findIndex((item: OTableConfiguration) => item.name === configurationName);
     if (index >= 0) {
       storedConfigurations.splice(index, 1);
       this.table.state[OTableStorage.STORED_CONFIGURATIONS_KEY] = storedConfigurations;

@@ -17,6 +17,7 @@ import { ActivatedRoute, ActivatedRouteSnapshot, Route, Router } from '@angular/
 
 import { OServiceComponent } from '../../components/o-service-component.class';
 import { InputConverter } from '../../decorators/input-converter';
+import { OFormLayoutTabGroup } from '../../interfaces/o-form-layout-tab-group.interface';
 import { ILocalStorageComponent, LocalStorageService } from '../../services/local-storage.service';
 import { NavigationService } from '../../services/navigation.service';
 import { OFormLayoutManagerService } from '../../services/o-form-layout-manager.service';
@@ -26,7 +27,6 @@ import { Util } from '../../util/util';
 import { OFormLayoutDialogComponent } from './dialog/o-form-layout-dialog.component';
 import { OFormLayoutDialogOptionsComponent } from './dialog/options/o-form-layout-dialog-options.component';
 import { CanActivateFormLayoutChildGuard } from './guards/o-form-layout-can-activate-child.guard';
-import { OFormLayoutTabGroupComponent } from './tabgroup/o-form-layout-tabgroup.component';
 import { OFormLayoutTabGroupOptionsComponent } from './tabgroup/options/o-form-layout-tabgroup-options.component';
 
 export const DEFAULT_INPUTS_O_FORM_LAYOUT_MANAGER = [
@@ -89,7 +89,7 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
   public dialogClass: string = '';
 
   @ViewChild('tabGroup', { static: false })
-  public oTabGroup: OFormLayoutTabGroupComponent;
+  public oTabGroup: OFormLayoutTabGroup;
   public dialogRef: MatDialogRef<OFormLayoutDialogComponent>;
 
   public onMainTabSelected: EventEmitter<any> = new EventEmitter<any>();

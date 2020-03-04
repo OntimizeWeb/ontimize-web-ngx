@@ -3,7 +3,8 @@ import { ChangeDetectionStrategy, Component, forwardRef, Inject, Injector, OnIni
 import { InputConverter } from '../../../../../decorators/input-converter';
 import { Codes } from '../../../../../util/codes';
 import { Util } from '../../../../../util/util';
-import { OColumn, OTableComponent } from '../../../o-table.component';
+import { OTableComponent } from '../../../o-table.component';
+import { OColumn } from '../../../../../interfaces/o-column.interface';
 
 export const DEFAULT_INPUTS_O_TABLE_COLUMN_FILTER = [
   // columns [string]: columns that might be filtered, separated by ';'. Default: all visible columns.
@@ -17,15 +18,6 @@ export const DEFAULT_INPUTS_O_TABLE_COLUMN_FILTER = [
 export const DEFAULT_OUTPUTS_O_TABLE_COLUMN_FILTER = [
 ];
 
-export enum ColumnValueFilterOperator { IN, LESS_EQUAL, MORE_EQUAL, BETWEEN, EQUAL }
-
-export interface IColumnValueFilter {
-  attr: string;
-  operator: ColumnValueFilterOperator;
-  values: any;
-}
-
-export type OTableColumnsFilterMode = 'default' | 'selection' | 'custom';
 @Component({
   selector: 'o-table-columns-filter',
   template: ' ',

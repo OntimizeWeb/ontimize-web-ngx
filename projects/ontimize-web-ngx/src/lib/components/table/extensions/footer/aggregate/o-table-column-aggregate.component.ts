@@ -1,15 +1,9 @@
 import { ChangeDetectionStrategy, Component, forwardRef, Inject, Injector, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 
+import { AggregateFunction } from '../../../../../types/aggregate-function.type';
+import { OColumnAggregate } from '../../../../../types/o-column-aggregate.type';
 import { OTableComponent } from '../../../o-table.component';
-
-export class OColumnAggregate {
-  title: string;
-  attr: string;
-  operator: string | AggregateFunction;
-}
-
-export type AggregateFunction = (value: any[]) => number;
 
 export const DEFAULT_TABLE_COLUMN_AGGREGATE = [
   // attr [string]: column name.
@@ -70,7 +64,7 @@ export class OTableColumnAggregateComponent implements OnDestroy, OnInit {
       return;
     }
 
-    const ocolumnaggregate: OColumnAggregate = new OColumnAggregate();
+    const ocolumnaggregate: OColumnAggregate = {};
     ocolumnaggregate.attr = this.attr;
     if (this.title) {
       ocolumnaggregate.title = this.title;

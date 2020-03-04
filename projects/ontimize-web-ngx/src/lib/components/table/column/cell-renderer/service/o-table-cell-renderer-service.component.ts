@@ -1,19 +1,27 @@
-import { ChangeDetectionStrategy, Component, Injector, OnInit, TemplateRef, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  Injector,
+  OnDestroy,
+  OnInit,
+  TemplateRef,
+  ViewChild,
+} from '@angular/core';
 import { Subscription } from 'rxjs';
+
 import { DialogService } from '../../../../../services/dialog.service';
 import { OntimizeService } from '../../../../../services/ontimize.service';
-import { dataServiceFactory } from '../../../../../services/data-service.provider';
 import { Codes } from '../../../../../util/codes';
-import { Util } from '../../../../../util/util';
-import { SQLTypes } from '../../../../../util/sqltypes';
-import { IExpression, FilterExpressionUtils } from '../../../../../util/filter-expression.utils';
-
+import { FilterExpressionUtils, IExpression } from '../../../../../util/filter-expression.utils';
 import { ServiceUtils } from '../../../../../util/service.utils';
-import { OColumn } from '../../../o-table.component';
-import { OBaseTableCellRenderer, DEFAULT_INPUTS_O_BASE_TABLE_CELL_RENDERER } from '../o-base-table-cell-renderer.class';
+import { SQLTypes } from '../../../../../util/sqltypes';
+import { Util } from '../../../../../util/util';
+import { /*DEFAULT_INPUTS_O_BASE_TABLE_CELL_RENDERER*/ OBaseTableCellRenderer } from '../o-base-table-cell-renderer.class';
+import { OColumn } from '../../../../../interfaces/o-column.interface';
 
 export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_SERVICE = [
-  ...DEFAULT_INPUTS_O_BASE_TABLE_CELL_RENDERER,
+  //...DEFAULT_INPUTS_O_BASE_TABLE_CELL_RENDERER,
   'entity',
   'service',
   'columns',

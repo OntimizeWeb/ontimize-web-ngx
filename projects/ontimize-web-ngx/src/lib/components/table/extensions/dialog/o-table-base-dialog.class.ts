@@ -9,7 +9,6 @@ import {
 import { Codes } from '../../../../util/codes';
 import { Util } from '../../../../util/util';
 
-
 export class OTableBaseDialogClass {
 
   protected errorOptions: OMatErrorOptions;

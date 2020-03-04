@@ -12,13 +12,11 @@ import { BehaviorSubject, Subscription } from 'rxjs';
 
 import { InputConverter } from '../../../../decorators/input-converter';
 import { OTranslateService } from '../../../../services/translate/o-translate.service';
+import { ColumnValueFilterOperator, OColumnValueFilter } from '../../../../types/o-column-value-filter.type';
 import { Util } from '../../../../util/util';
 import { OContextMenuComponent } from '../../../contextmenu/o-context-menu.component';
-import { OColumn, OTableComponent } from '../../o-table.component';
-import {
-  ColumnValueFilterOperator,
-  IColumnValueFilter,
-} from '../header/table-columns-filter/o-table-columns-filter.component';
+import { OTableComponent } from '../../o-table.component';
+import { OColumn } from '../../../../interfaces/o-column.interface';
 
 export const DEFAULT_TABLE_CONTEXT_MENU_INPUTS = [
   'contextMenu: context-menu',
@@ -222,7 +220,7 @@ export class OTableContextMenuComponent implements OnInit, AfterViewInit {
 
   public filterByValue(event): void {
     this.table.showFilterByColumnIcon = true;
-    const columValueFilter: IColumnValueFilter = {
+    const columValueFilter: OColumnValueFilter = {
       attr: this.column.attr,
       operator: ColumnValueFilterOperator.IN,
       values: [this.row[this.column.attr]]

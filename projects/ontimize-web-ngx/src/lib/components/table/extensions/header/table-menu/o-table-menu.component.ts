@@ -16,6 +16,7 @@ import { MatDialog, MatMenu } from '@angular/material';
 import { Observable } from 'rxjs';
 
 import { InputConverter } from '../../../../../decorators/input-converter';
+import { OTableMenu } from '../../../../../interfaces/o-table-menu.interface';
 import { DialogService } from '../../../../../services/dialog.service';
 import { OPermissions, OTableMenuPermissions } from '../../../../../services/permissions/permissions.service';
 import { SnackBarService } from '../../../../../services/snackbar.service';
@@ -24,11 +25,11 @@ import { Codes } from '../../../../../util/codes';
 import { PermissionsUtils } from '../../../../../util/permissions';
 import { Util } from '../../../../../util/util';
 import { OTableCellRendererImageComponent } from '../../../column/cell-renderer/image/o-table-cell-renderer-image.component';
-import { OTableComponent, OColumn } from '../../../o-table.component';
+import { OTableComponent } from '../../../o-table.component';
 import {
   OTableApplyConfigurationDialogComponent,
 } from '../../dialog/apply-configuration/o-table-apply-configuration-dialog.component';
-import { OTableExportConfiguration, OTableExportDialogComponent } from '../../dialog/export/o-table-export-dialog.component';
+import { OTableExportDialogComponent } from '../../dialog/export/o-table-export-dialog.component';
 import { OTableLoadFilterDialogComponent } from '../../dialog/load-filter/o-table-load-filter-dialog.component';
 import {
   OTableStoreConfigurationDialogComponent,
@@ -36,6 +37,8 @@ import {
 import { OTableStoreFilterDialogComponent } from '../../dialog/store-filter/o-table-store-filter-dialog.component';
 import { OTableVisibleColumnsDialogComponent } from '../../dialog/visible-columns/o-table-visible-columns-dialog.component';
 import { OTableOptionComponent } from '../table-option/o-table-option.component';
+import { OTableExportConfiguration } from './o-table-export-configuration.class';
+import { OColumn } from '../../../../../interfaces/o-column.interface';
 
 export const DEFAULT_INPUTS_O_TABLE_MENU = [
   // select-all-checkbox [yes|no|true|false]: show selection check boxes. Default: no.
@@ -65,7 +68,7 @@ export const DEFAULT_OUTPUTS_O_TABLE_MENU = [];
   },
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class OTableMenuComponent implements OnInit, AfterViewInit, OnDestroy {
+export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, OnDestroy {
 
   public static DEFAULT_INPUTS_O_TABLE_MENU = DEFAULT_INPUTS_O_TABLE_MENU;
   public static DEFAULT_OUTPUTS_O_TABLE_MENU = DEFAULT_OUTPUTS_O_TABLE_MENU;
@@ -271,7 +274,7 @@ export class OTableMenuComponent implements OnInit, AfterViewInit, OnDestroy {
     return !(perm && perm.enabled === false);
   }
 
-  onShowsSelects(event?: any) {
+  onShowsSelects() {
     const tableOptions = this.table.oTableOptions;
     tableOptions.selectColumn.visible = !tableOptions.selectColumn.visible;
     this.table.initializeCheckboxColumn();

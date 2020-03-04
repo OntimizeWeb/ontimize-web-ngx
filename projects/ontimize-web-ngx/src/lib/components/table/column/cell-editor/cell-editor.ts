@@ -13,3 +13,26 @@ export const O_TABLE_CELL_EDITORS = [
   OTableCellEditorTextComponent,
   OTableCellEditorTimeComponent
 ];
+
+export const O_TABLE_CELL_EDITORS_INPUTS = [
+  ...OTableCellEditorBooleanComponent.DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_BOOLEAN,
+  ...OTableCellEditorDateComponent.DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_DATE,
+  ...OTableCellEditorRealComponent.DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_REAL, // includes Integer
+  ...OTableCellEditorTextComponent.DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_TEXT,
+  ...OTableCellEditorTimeComponent.DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_TIME,
+];
+
+export const O_TABLE_CELL_EDITORS_OUTPUTS = [
+  ...OTableCellEditorTextComponent.DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_TEXT
+];
+
+export const editorsMapping = {
+  boolean: OTableCellEditorBooleanComponent,
+  date: OTableCellEditorDateComponent,
+  integer: OTableCellEditorIntegerComponent,
+  real: OTableCellEditorRealComponent,
+  percentage: OTableCellEditorRealComponent,
+  currency: OTableCellEditorRealComponent,
+  text: OTableCellEditorTextComponent,
+  time: OTableCellEditorTimeComponent
+};

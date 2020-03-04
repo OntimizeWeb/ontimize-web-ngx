@@ -2,7 +2,8 @@ import { AfterContentInit, Injector, PipeTransform, TemplateRef } from '@angular
 
 import { Util } from '../../../../util/util';
 import { OTableComponent } from '../../o-table.component';
-import { OTableColumnComponent } from '../o-table-column.component';
+import { OTableColumn } from '../../../../interfaces/o-table-column.interface';
+// import { OTableColumnComponent } from '../o-table-column.component';
 
 export const DEFAULT_INPUTS_O_BASE_TABLE_CELL_RENDERER = [
   'filterSource: filter-source',
@@ -12,7 +13,7 @@ export const DEFAULT_INPUTS_O_BASE_TABLE_CELL_RENDERER = [
 export class OBaseTableCellRenderer implements AfterContentInit {
 
   public templateref: TemplateRef<any>;
-  public tableColumn: OTableColumnComponent;
+  public tableColumn: OTableColumn;
   public _filterSource: 'render' | 'data' | 'both' = 'render';
   public filterFunction: (cellValue: any, rowValue: any, quickFilter?: string) => boolean;
 
@@ -21,7 +22,7 @@ export class OBaseTableCellRenderer implements AfterContentInit {
   protected componentPipe: PipeTransform;
 
   constructor(protected injector: Injector) {
-    this.tableColumn = this.injector.get(OTableColumnComponent);
+    // this.tableColumn = this.injector.get(OTableColumnComponent);
   }
 
   public ngAfterContentInit(): void {
