@@ -4,16 +4,23 @@ import { InputConverter } from '../../../../../decorators/input-converter';
 import { ICurrencyPipeArgument, OCurrencyPipe } from '../../../../../pipes/o-currency.pipe';
 import { CurrencyService } from '../../../../../services/currency.service';
 import { OBaseTableCellRenderer } from '../o-base-table-cell-renderer.class';
-import { OTableCellRendererRealComponent } from '../real/o-table-cell-renderer-real.component';
 
 const INPUTS_ARRAY = [
-  ...OTableCellRendererRealComponent.INPUTS_ARRAY,
-
+  ...OBaseTableCellRenderer.INPUTS_ARRAY,
   // currency-symbol [string]: currency symbol. Default: dollar ($).
   'currencySymbol: currency-symbol',
 
   // currency-symbol-position [left|right]: position of the currency symbol. Default: left.
-  'currencySymbolPosition: currency-symbol-position'
+  'currencySymbolPosition: currency-symbol-position',
+
+  // also existing in OTableCellRendererRealComponent
+  'decimalSeparator: decimal-separator',
+  'minDecimalDigits: min-decimal-digits',
+  'maxDecimalDigits: max-decimal-digits',
+
+  // also existing in OTableCellRendererIntegerComponent
+  'grouping',
+  'thousandSeparator: thousand-separator'
 ];
 
 @Component({

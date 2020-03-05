@@ -1,16 +1,16 @@
 import { async, TestBed } from '@angular/core/testing';
-import { OTableColumnComponent } from '../table/column/o-table-column.component';
+
 import { O_TABLE_CELL_EDITORS } from '../table/column/cell-editor/cell-editor';
 import { O_TABLE_CELL_RENDERERS } from '../table/column/cell-renderer/cell-renderer';
+import { OTableColumnComponent } from '../table/column/o-table-column.component';
 import { O_TABLE_DIALOGS } from '../table/extensions/dialog/o-table-dialog-components';
 import { O_TABLE_FOOTER_COMPONENTS } from '../table/extensions/footer/o-table-footer-components';
 import { O_TABLE_HEADER_COMPONENTS } from '../table/extensions/header/o-table-header-components';
 import { OTableColumnCalculatedComponent } from './column/calculated/o-table-column-calculated.component';
 import { OTableContextMenuComponent } from './extensions/contextmenu/o-table-context-menu.component';
+import { OTableExpandedFooterDirective } from './extensions/footer/expanded/o-table-expanded-footer.directive';
 import { OTableRowDirective } from './extensions/row/o-table-row.directive';
-import { OTableExpandedFooterDirective } from '../table/o-table-expanded-footer.directive';
 import { OTableComponent } from './o-table.component';
-
 
 describe('OTableComponent', () => {
   beforeEach(async(() => {

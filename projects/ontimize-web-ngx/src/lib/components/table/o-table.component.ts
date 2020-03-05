@@ -270,8 +270,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   fixedHeader: boolean = false;
   @InputConverter()
   showTitle: boolean = false;
-  protected editionMode: string = Codes.DETAIL_MODE_NONE;
-  protected selectionMode: string = Codes.SELECTION_MODE_MULTIPLE;
+  editionMode: string = Codes.DETAIL_MODE_NONE;
+  selectionMode: string = Codes.SELECTION_MODE_MULTIPLE;
   @InputConverter()
   horizontalScroll: boolean = false;
   @InputConverter()
@@ -310,11 +310,11 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   @InputConverter()
   keepSelectedItems: boolean = true;
 
-  public exportMode: string = Codes.EXPORT_MODE_VISIBLE;
-  public daoTable: OTableDao;
-  public dataSource: OTableDataSource;
-  protected visibleColumns: string;
-  protected sortColumns: string;
+  exportMode: string = Codes.EXPORT_MODE_VISIBLE;
+  daoTable: OTableDao;
+  dataSource: OTableDataSource;
+  visibleColumns: string;
+  sortColumns: string;
 
   /*parsed inputs variables */
   protected _visibleColArray: Array<string> = [];
@@ -344,7 +344,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
   }
 
-  public sortColArray: Array<ISQLOrder> = [];
+  sortColArray: Array<ISQLOrder> = [];
   /*end of parsed inputs variables */
 
   protected tabGroupContainer: MatTabGroup;

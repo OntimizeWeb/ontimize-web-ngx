@@ -3,14 +3,19 @@ import { ChangeDetectionStrategy, Component, Injector, OnInit, TemplateRef, View
 import { InputConverter } from '../../../../../decorators/input-converter';
 import { IRealPipeArgument, ORealPipe } from '../../../../../pipes/o-real.pipe';
 import { NumberService } from '../../../../../services/number.service';
-import { OTableCellRendererIntegerComponent } from '../integer/o-table-cell-renderer-integer.component';
+import { OBaseTableCellRenderer } from '../o-base-table-cell-renderer.class';
 
 const INPUTS_ARRAY = [
-  ...OTableCellRendererIntegerComponent.INPUTS_ARRAY,
+  ...OBaseTableCellRenderer.INPUTS_ARRAY,
+
   // decimal-separator [string]: decimal separator. Default: dot (.).
   'decimalSeparator: decimal-separator',
   'minDecimalDigits: min-decimal-digits',
-  'maxDecimalDigits: max-decimal-digits'
+  'maxDecimalDigits: max-decimal-digits',
+
+  // also existing in OTableCellRendererIntegerComponent
+  'grouping',
+  'thousandSeparator: thousand-separator'
 ];
 
 @Component({
@@ -19,7 +24,7 @@ const INPUTS_ARRAY = [
   changeDetection: ChangeDetectionStrategy.OnPush,
   inputs: INPUTS_ARRAY
 })
-export class OTableCellRendererRealComponent extends OTableCellRendererIntegerComponent implements OnInit {
+export class OTableCellRendererRealComponent extends OBaseTableCellRenderer implements OnInit {
 
   public static INPUTS_ARRAY = INPUTS_ARRAY;
 
@@ -27,6 +32,11 @@ export class OTableCellRendererRealComponent extends OTableCellRendererIntegerCo
   minDecimalDigits: number = 2;
   @InputConverter()
   maxDecimalDigits: number = 2;
+
+  // also existing in OTableCellRendererIntegerComponent
+  @InputConverter()
+  protected grouping: boolean = true;
+  protected thousandSeparator: string = ',';
 
   protected decimalSeparator: string = '.';
   protected numberService: NumberService;
@@ -48,7 +58,6 @@ export class OTableCellRendererRealComponent extends OTableCellRendererIntegerCo
   }
 
   ngOnInit() {
-    super.ngOnInit();
     this.pipeArguments = {
       minDecimalDigits: this.minDecimalDigits,
       maxDecimalDigits: this.maxDecimalDigits,

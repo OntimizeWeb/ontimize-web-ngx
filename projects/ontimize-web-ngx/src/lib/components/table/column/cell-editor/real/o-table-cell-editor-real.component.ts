@@ -2,15 +2,17 @@ import { ChangeDetectionStrategy, Component, Injector, TemplateRef, ViewChild } 
 import { FormControl, ValidatorFn } from '@angular/forms';
 
 import { InputConverter } from '../../../../../decorators/input-converter';
-import { OTableCellEditorIntegerComponent } from '../integer/o-table-cell-editor-integer.component';
 import { OBaseTableCellEditor } from '../o-base-table-cell-editor.class';
 
 const INPUTS_ARRAY = [
-  ...OTableCellEditorIntegerComponent.INPUTS_ARRAY
+  ...OBaseTableCellEditor.INPUTS_ARRAY,
+  'min',
+  'max',
+  'step'
 ];
 
 const OUTPUTS_ARRAY = [
-  ...OTableCellEditorIntegerComponent.OUTPUTS_ARRAY
+  ...OBaseTableCellEditor.OUTPUTS_ARRAY
 ];
 
 @Component({

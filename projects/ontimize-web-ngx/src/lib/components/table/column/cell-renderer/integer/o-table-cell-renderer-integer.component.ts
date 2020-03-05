@@ -55,8 +55,4 @@ export class OTableCellRendererIntegerComponent extends OBaseTableCellRenderer i
     };
   }
 
-  ngAfterContentInit() {
-    super.ngAfterContentInit();
-  }
-
 }

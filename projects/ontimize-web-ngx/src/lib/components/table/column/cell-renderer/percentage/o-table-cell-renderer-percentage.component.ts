@@ -2,11 +2,20 @@ import { ChangeDetectionStrategy, Component, Injector, OnInit, TemplateRef, View
 
 import { IPercentPipeArgument, OPercentageValueBaseType, OPercentPipe } from '../../../../../pipes/o-percentage.pipe';
 import { NumberService } from '../../../../../services/number.service';
-import { OTableCellRendererRealComponent } from '../real/o-table-cell-renderer-real.component';
+import { OBaseTableCellRenderer } from '../o-base-table-cell-renderer.class';
+import { InputConverter } from '../../../../../decorators/input-converter';
 
 const INPUTS_ARRAY = [
-  ...OTableCellRendererRealComponent.INPUTS_ARRAY,
-  'valueBase: value-base'
+  ...OBaseTableCellRenderer.INPUTS_ARRAY,
+
+  'valueBase: value-base',
+
+  // also existing in OTableCellRendererRealComponent
+  'decimalSeparator: decimal-separator',
+  'minDecimalDigits: min-decimal-digits',
+  'maxDecimalDigits: max-decimal-digits',
+  'grouping',
+  'thousandSeparator: thousand-separator'
 ];
 
 @Component({
@@ -15,7 +24,7 @@ const INPUTS_ARRAY = [
   changeDetection: ChangeDetectionStrategy.OnPush,
   inputs: INPUTS_ARRAY
 })
-export class OTableCellRendererPercentageComponent extends OTableCellRendererRealComponent implements OnInit {
+export class OTableCellRendererPercentageComponent extends OBaseTableCellRenderer implements OnInit {
 
   public static INPUTS_ARRAY = INPUTS_ARRAY;
 
@@ -23,6 +32,11 @@ export class OTableCellRendererPercentageComponent extends OTableCellRendererRea
   minDecimalDigits = 0;
   maxDecimalDigits = 0;
   protected valueBase: OPercentageValueBaseType = 1;
+
+  // also existing in OTableCellRendererIntegerComponent
+  @InputConverter()
+  protected grouping: boolean = true;
+  protected thousandSeparator: string = ',';
 
   protected numberService: NumberService;
 
@@ -33,7 +47,7 @@ export class OTableCellRendererPercentageComponent extends OTableCellRendererRea
 
   constructor(protected injector: Injector) {
     super(injector);
-    this.tableColumn.type = 'real';
+    this.tableColumn.type = 'percentage';
     this.numberService = this.injector.get(NumberService);
 
     this.setComponentPipe();
