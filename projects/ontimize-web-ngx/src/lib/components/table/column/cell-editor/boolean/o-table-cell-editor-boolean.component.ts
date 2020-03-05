@@ -13,8 +13,8 @@ import { InputConverter } from '../../../../../decorators/input-converter';
 import { Util } from '../../../../../util/util';
 import { OBaseTableCellEditor } from '../o-base-table-cell-editor.class';
 
-const INPUTS_ARRAY = [
-  ...OBaseTableCellEditor.INPUTS_ARRAY,
+export const DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_BOOLEAN = [
+  // ...OBaseTableCellEditor.DEFAULT_INPUTS_O_TABLE_CELL_EDITOR,
   'indeterminateOnNull: indeterminate-on-null',
   // true-value: true value. Default: true.
   'trueValue: true-value',
@@ -25,16 +25,16 @@ const INPUTS_ARRAY = [
   'autoCommit: auto-commit'
 ];
 
-const OUTPUTS_ARRAY = [
-  ...OBaseTableCellEditor.OUTPUTS_ARRAY
+export const DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_BOOLEAN = [
+  // ...OBaseTableCellEditor.DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR
 ];
 
 @Component({
   selector: 'o-table-cell-editor-boolean',
   templateUrl: './o-table-cell-editor-boolean.component.html',
   styleUrls: ['./o-table-cell-editor-boolean.component.scss'],
-  inputs: INPUTS_ARRAY,
-  outputs: OUTPUTS_ARRAY,
+  inputs: DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_BOOLEAN,
+  outputs: DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_BOOLEAN,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
@@ -44,8 +44,8 @@ const OUTPUTS_ARRAY = [
 
 export class OTableCellEditorBooleanComponent extends OBaseTableCellEditor implements OnInit {
 
-  public static INPUTS_ARRAY = INPUTS_ARRAY;
-  public static OUTPUTS_ARRAY = OUTPUTS_ARRAY;
+  public static DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_BOOLEAN = DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_BOOLEAN;
+  public static DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_BOOLEAN = DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_BOOLEAN;
 
   @ViewChild('templateref', { read: TemplateRef, static: false }) public templateref: TemplateRef<any>;
 

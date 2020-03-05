@@ -2,27 +2,24 @@ import { Component, EventEmitter, Injector } from '@angular/core';
 
 import { OTableExportButtonService } from './o-table-export-button.service';
 
-const INPUTS_ARRAY = [
+export const DEFAULT_INPUTS_O_TABLE_EXPORT_BUTTON = [
   'icon',
   'svgIcon : svg-icon',
   'olabel: label',
   'exportType: export-type'
 ];
 
-const OUTPUTS_ARRAY = [
+export const DEFAULT_OUTPUTS_O_TABLE_EXPORT_BUTTON = [
   'onClick'
 ];
 
 @Component({
   selector: 'o-table-export-button',
   templateUrl: './o-table-export-button.component.html',
-  inputs: INPUTS_ARRAY,
-  outputs: OUTPUTS_ARRAY
+  inputs: DEFAULT_INPUTS_O_TABLE_EXPORT_BUTTON,
+  outputs: DEFAULT_OUTPUTS_O_TABLE_EXPORT_BUTTON
 })
 export class OTableExportButtonComponent {
-
-  public static INPUTS_ARRAY = INPUTS_ARRAY;
-  public staticOUTPUTS_ARRAY = OUTPUTS_ARRAY;
 
   public icon: string;
   public svgIcon: string;

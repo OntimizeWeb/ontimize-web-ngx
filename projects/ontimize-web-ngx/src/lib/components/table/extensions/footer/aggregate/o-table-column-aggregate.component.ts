@@ -5,7 +5,7 @@ import { AggregateFunction } from '../../../../../types/aggregate-function.type'
 import { OColumnAggregate } from '../../../../../types/o-column-aggregate.type';
 import { OTableComponent } from '../../../o-table.component';
 
-const INPUTS_ARRAY = [
+export const DEFAULT_TABLE_COLUMN_AGGREGATE = [
   // attr [string]: column name.
   'attr',
 
@@ -23,10 +23,10 @@ const INPUTS_ARRAY = [
   selector: 'o-table-column-aggregate',
   templateUrl: './o-table-column-aggregate.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  inputs: INPUTS_ARRAY
+  inputs: DEFAULT_TABLE_COLUMN_AGGREGATE
+
 })
 export class OTableColumnAggregateComponent implements OnDestroy, OnInit {
-  public static INPUTS_ARRAY = INPUTS_ARRAY;
   public static DEFAULT_AGGREGATE = 'SUM';
 
   public attr: string;

@@ -15,15 +15,15 @@ export const O_TABLE_CELL_EDITORS = [
 ];
 
 export const O_TABLE_CELL_EDITORS_INPUTS = [
-  ...OTableCellEditorBooleanComponent.INPUTS_ARRAY,
-  ...OTableCellEditorDateComponent.INPUTS_ARRAY,
-  ...OTableCellEditorRealComponent.INPUTS_ARRAY, // includes Integer
-  ...OTableCellEditorTextComponent.INPUTS_ARRAY,
-  ...OTableCellEditorTimeComponent.INPUTS_ARRAY,
+  ...OTableCellEditorBooleanComponent.DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_BOOLEAN,
+  ...OTableCellEditorDateComponent.DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_DATE,
+  ...OTableCellEditorRealComponent.DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_REAL, // includes Integer
+  ...OTableCellEditorTextComponent.DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_TEXT,
+  ...OTableCellEditorTimeComponent.DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_TIME,
 ];
 
 export const O_TABLE_CELL_EDITORS_OUTPUTS = [
-  ...OTableCellEditorTextComponent.OUTPUTS_ARRAY
+  ...OTableCellEditorTextComponent.DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_TEXT
 ];
 
 export const editorsMapping = {

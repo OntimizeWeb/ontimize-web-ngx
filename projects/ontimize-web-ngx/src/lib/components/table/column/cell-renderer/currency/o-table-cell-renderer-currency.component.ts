@@ -1,12 +1,16 @@
-import { ChangeDetectionStrategy, Component, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
 
-import { InputConverter } from '../../../../../decorators/input-converter';
-import { ICurrencyPipeArgument, OCurrencyPipe } from '../../../../../pipes/o-currency.pipe';
+import { Component, Injector, OnInit, TemplateRef, ViewChild, ChangeDetectionStrategy } from '@angular/core';
+
 import { CurrencyService } from '../../../../../services/currency.service';
+import { ICurrencyPipeArgument, OCurrencyPipe } from '../../../../../pipes/o-currency.pipe';
 import { OBaseTableCellRenderer } from '../o-base-table-cell-renderer.class';
+import { OTableCellRendererRealComponent } from '../real/o-table-cell-renderer-real.component';
+import { InputConverter } from '../../../../../decorators/input-converter';
 
-const INPUTS_ARRAY = [
-  ...OBaseTableCellRenderer.INPUTS_ARRAY,
+
+export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_CURRENCY = [
+  ...OTableCellRendererRealComponent.DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_REAL,
+
   // currency-symbol [string]: currency symbol. Default: dollar ($).
   'currencySymbol: currency-symbol',
 
@@ -27,11 +31,11 @@ const INPUTS_ARRAY = [
   selector: 'o-table-cell-renderer-currency',
   templateUrl: './o-table-cell-renderer-currency.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  inputs: INPUTS_ARRAY
+  inputs: DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_CURRENCY
 })
 export class OTableCellRendererCurrencyComponent extends OBaseTableCellRenderer implements OnInit {
 
-  public static INPUTS_ARRAY = INPUTS_ARRAY;
+  public static DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_CURRENCY = DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_CURRENCY;
 
   @InputConverter()
   minDecimalDigits: number = 2;

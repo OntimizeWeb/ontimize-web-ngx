@@ -40,7 +40,7 @@ import { OTableOptionComponent } from '../table-option/o-table-option.component'
 import { OTableExportConfiguration } from './o-table-export-configuration.class';
 import { OColumn } from '../../../../../interfaces/o-column.interface';
 
-const INPUTS_ARRAY = [
+export const DEFAULT_INPUTS_O_TABLE_MENU = [
   // select-all-checkbox [yes|no|true|false]: show selection check boxes. Default: no.
   'selectAllCheckbox: select-all-checkbox',
 
@@ -54,14 +54,14 @@ const INPUTS_ARRAY = [
   'showConfigurationOption: show-configuration-option'
 ];
 
-const OUTPUTS_ARRAY = [];
+export const DEFAULT_OUTPUTS_O_TABLE_MENU = [];
 
 @Component({
   selector: 'o-table-menu',
   templateUrl: './o-table-menu.component.html',
   styleUrls: ['./o-table-menu.component.scss'],
-  inputs: INPUTS_ARRAY,
-  outputs: OUTPUTS_ARRAY,
+  inputs: DEFAULT_INPUTS_O_TABLE_MENU,
+  outputs: DEFAULT_OUTPUTS_O_TABLE_MENU,
   encapsulation: ViewEncapsulation.None,
   host: {
     '[class.o-table-menu]': 'true'
@@ -70,8 +70,8 @@ const OUTPUTS_ARRAY = [];
 })
 export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, OnDestroy {
 
-  public static INPUTS_ARRAY = INPUTS_ARRAY;
-  public static OUTPUTS_ARRAY = OUTPUTS_ARRAY;
+  public static DEFAULT_INPUTS_O_TABLE_MENU = DEFAULT_INPUTS_O_TABLE_MENU;
+  public static DEFAULT_OUTPUTS_O_TABLE_MENU = DEFAULT_OUTPUTS_O_TABLE_MENU;
 
   /* Inputs */
   @InputConverter()

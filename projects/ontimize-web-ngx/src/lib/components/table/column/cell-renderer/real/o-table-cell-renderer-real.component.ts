@@ -3,11 +3,13 @@ import { ChangeDetectionStrategy, Component, Injector, OnInit, TemplateRef, View
 import { InputConverter } from '../../../../../decorators/input-converter';
 import { IRealPipeArgument, ORealPipe } from '../../../../../pipes/o-real.pipe';
 import { NumberService } from '../../../../../services/number.service';
-import { OBaseTableCellRenderer } from '../o-base-table-cell-renderer.class';
+import {
+  DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_INTEGER,
+  OTableCellRendererIntegerComponent,
+} from '../integer/o-table-cell-renderer-integer.component';
 
-const INPUTS_ARRAY = [
-  ...OBaseTableCellRenderer.INPUTS_ARRAY,
-
+export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_REAL = [
+  ...DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_INTEGER,
   // decimal-separator [string]: decimal separator. Default: dot (.).
   'decimalSeparator: decimal-separator',
   'minDecimalDigits: min-decimal-digits',
@@ -22,11 +24,11 @@ const INPUTS_ARRAY = [
   selector: 'o-table-cell-renderer-real',
   templateUrl: './o-table-cell-renderer-real.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  inputs: INPUTS_ARRAY
+  inputs: DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_REAL
 })
 export class OTableCellRendererRealComponent extends OBaseTableCellRenderer implements OnInit {
 
-  public static INPUTS_ARRAY = INPUTS_ARRAY;
+  public static DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_REAL = DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_REAL;
 
   @InputConverter()
   minDecimalDigits: number = 2;

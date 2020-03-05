@@ -11,13 +11,13 @@ import {
 import { BehaviorSubject, Subscription } from 'rxjs';
 
 import { InputConverter } from '../../../../../decorators/input-converter';
-import { OTableButtons } from '../../../../../interfaces/o-table-buttons.interface';
 import { OPermissions } from '../../../../../services/permissions/permissions.service';
 import { PermissionsUtils } from '../../../../../util/permissions';
 import { OTableComponent } from '../../../o-table.component';
 import { OTableButtonComponent } from '../table-button/o-table-button.component';
+import { OTableButtons } from '../../../../../interfaces/o-table-buttons.interface';
 
-const INPUTS_ARRAY = [
+export const DEFAULT_INPUTS_O_TABLE_BUTTONS = [
   // insert-button [no|yes]: show insert button. Default: yes.
   'insertButton: insert-button',
   // refresh-button [no|yes]: show refresh button. Default: yes.
@@ -26,14 +26,14 @@ const INPUTS_ARRAY = [
   'deleteButton: delete-button'
 ];
 
-const OUTPUTS_ARRAY = [];
+export const DEFAULT_OUTPUTS_O_TABLE_BUTTONS = [];
 
 @Component({
   selector: 'o-table-buttons',
   templateUrl: './o-table-buttons.component.html',
   styleUrls: ['./o-table-buttons.component.scss'],
-  inputs: INPUTS_ARRAY,
-  outputs: OUTPUTS_ARRAY,
+  inputs: DEFAULT_INPUTS_O_TABLE_BUTTONS,
+  outputs: DEFAULT_OUTPUTS_O_TABLE_BUTTONS,
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
@@ -42,8 +42,8 @@ const OUTPUTS_ARRAY = [];
 })
 export class OTableButtonsComponent implements OTableButtons, OnInit, OnDestroy {
 
-  public static INPUTS_ARRAY = INPUTS_ARRAY;
-  public static OUTPUTS_ARRAY = OUTPUTS_ARRAY;
+  public static DEFAULT_INPUTS_O_TABLE_BUTTONS = DEFAULT_INPUTS_O_TABLE_BUTTONS;
+  public static DEFAULT_OUTPUTS_O_TABLE_BUTTONS = DEFAULT_OUTPUTS_O_TABLE_BUTTONS;
 
   /* Inputs */
   @InputConverter()

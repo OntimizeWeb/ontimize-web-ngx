@@ -10,7 +10,7 @@ import {
 
 import { InputConverter } from '../../../../../decorators/input-converter';
 
-const INPUTS_ARRAY = [
+export const DEFAULT_INPUTS_O_TABLE_OPTION = [
   'oattr: attr',
   'enabled',
   'icon',
@@ -20,7 +20,7 @@ const INPUTS_ARRAY = [
   'active'
 ];
 
-const OUTPUTS_ARRAY = [
+export const DEFAULT_OUTPUTS_O_TABLE_OPTION = [
   'onClick'
 ];
 
@@ -28,8 +28,8 @@ const OUTPUTS_ARRAY = [
   selector: 'o-table-option',
   templateUrl: './o-table-option.component.html',
   styleUrls: ['./o-table-option.component.scss'],
-  inputs: INPUTS_ARRAY,
-  outputs: OUTPUTS_ARRAY,
+  inputs: DEFAULT_INPUTS_O_TABLE_OPTION,
+  outputs: DEFAULT_OUTPUTS_O_TABLE_OPTION,
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
@@ -39,8 +39,8 @@ const OUTPUTS_ARRAY = [
 
 export class OTableOptionComponent {
 
-  public static INPUTS_ARRAY = INPUTS_ARRAY;
-  public static OUTPUTS_ARRAY = OUTPUTS_ARRAY;
+  public static DEFAULT_INPUTS_O_TABLE_OPTION = DEFAULT_INPUTS_O_TABLE_OPTION;
+  public static DEFAULT_OUTPUTS_O_TABLE_OPTION = DEFAULT_OUTPUTS_O_TABLE_OPTION;
   public static O_TABLE_OPTION_ACTIVE_CLASS = 'o-table-option-active';
 
   onClick: EventEmitter<object> = new EventEmitter<object>();

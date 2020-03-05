@@ -10,7 +10,6 @@ import {
 } from '@angular/core';
 import { Subscription } from 'rxjs';
 
-import { OColumn } from '../../../../../interfaces/o-column.interface';
 import { DialogService } from '../../../../../services/dialog.service';
 import { OntimizeService } from '../../../../../services/ontimize.service';
 import { Codes } from '../../../../../util/codes';
@@ -18,10 +17,11 @@ import { FilterExpressionUtils, IExpression } from '../../../../../util/filter-e
 import { ServiceUtils } from '../../../../../util/service.utils';
 import { SQLTypes } from '../../../../../util/sqltypes';
 import { Util } from '../../../../../util/util';
-import { OBaseTableCellRenderer } from '../o-base-table-cell-renderer.class';
+import { /*DEFAULT_INPUTS_O_BASE_TABLE_CELL_RENDERER*/ OBaseTableCellRenderer } from '../o-base-table-cell-renderer.class';
+import { OColumn } from '../../../../../interfaces/o-column.interface';
 
-const INPUTS_ARRAY = [
-  ...OBaseTableCellRenderer.INPUTS_ARRAY,
+export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_SERVICE = [
+  //...DEFAULT_INPUTS_O_BASE_TABLE_CELL_RENDERER,
   'entity',
   'service',
   'columns',
@@ -34,7 +34,7 @@ const INPUTS_ARRAY = [
 @Component({
   selector: 'o-table-cell-renderer-service',
   templateUrl: './o-table-cell-renderer-service.component.html',
-  inputs: INPUTS_ARRAY,
+  inputs: DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_SERVICE,
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     // Service renderer must have its own service instance in order to avoid overriding table service configuration
@@ -43,7 +43,7 @@ const INPUTS_ARRAY = [
 })
 export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer implements OnInit, AfterViewInit, OnDestroy {
 
-  public static INPUTS_ARRAY = INPUTS_ARRAY;
+  public static DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_SERVICE = DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_SERVICE;
 
   @ViewChild('templateref', { read: TemplateRef, static: false }) public templateref: TemplateRef<any>;
 

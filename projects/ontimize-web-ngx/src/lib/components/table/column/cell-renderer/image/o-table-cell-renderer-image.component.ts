@@ -1,11 +1,11 @@
 import { ChangeDetectionStrategy, Component, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
 
-import { OColumn } from '../../../../../interfaces/o-column.interface';
 import { Util } from '../../../../../util/util';
-import { OBaseTableCellRenderer } from '../o-base-table-cell-renderer.class';
+import { /*DEFAULT_INPUTS_O_BASE_TABLE_CELL_RENDERER*/ OBaseTableCellRenderer } from '../o-base-table-cell-renderer.class';
+import { OColumn } from '../../../../../interfaces/o-column.interface';
 
-const INPUTS_ARRAY = [
-  ...OBaseTableCellRenderer.INPUTS_ARRAY,
+export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_IMAGE = [
+  //...DEFAULT_INPUTS_O_BASE_TABLE_CELL_RENDERER,
   // image-type [base64|url]: image type (extern url or base64). Default: no value.
   'imageType: image-type',
   // empty-image [string]: url of the image to be shown if the column has not any value. Default: no value.
@@ -14,7 +14,7 @@ const INPUTS_ARRAY = [
   'avatar'
 ];
 
-const OUTPUTS_ARRAY = [
+export const DEFAULT_OUTPUTS_O_TABLE_CELL_RENDERER_IMAGE = [
   'onClick'
 ];
 
@@ -22,13 +22,12 @@ const OUTPUTS_ARRAY = [
   selector: 'o-table-cell-renderer-image',
   templateUrl: './o-table-cell-renderer-image.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  inputs: INPUTS_ARRAY,
-  outputs: OUTPUTS_ARRAY
+  inputs: DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_IMAGE
 })
 export class OTableCellRendererImageComponent extends OBaseTableCellRenderer implements OnInit {
 
-  public static INPUTS_ARRAY = INPUTS_ARRAY;
-  public static OUTPUTS_ARRAY = OUTPUTS_ARRAY;
+  public static DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_IMAGE = DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_IMAGE;
+  public static DEFAULT_OUTPUTS_O_TABLE_CELL_RENDERER_IMAGE = DEFAULT_OUTPUTS_O_TABLE_CELL_RENDERER_IMAGE;
 
   public imageType: string;
   public emptyImage: string;

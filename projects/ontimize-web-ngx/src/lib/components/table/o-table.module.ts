@@ -9,7 +9,6 @@ import { OContextMenuModule } from '../contextmenu/o-context-menu.module';
 import { OTableColumnCalculatedComponent } from './column/calculated/o-table-column-calculated.component';
 import { O_TABLE_CELL_EDITORS } from './column/cell-editor/cell-editor';
 import { O_TABLE_CELL_RENDERERS } from './column/cell-renderer/cell-renderer';
-import { DefaultOColumn } from './column/o-column.class';
 import { OTableColumnComponent } from './column/o-table-column.component';
 import { OTableContextMenuComponent } from './extensions/contextmenu/o-table-context-menu.component';
 import { O_TABLE_DIALOGS } from './extensions/dialog/o-table-dialog-components';
@@ -20,11 +19,12 @@ import { OTableExpandedFooterDirective } from './extensions/footer/expanded/o-ta
 import { O_TABLE_FOOTER_COMPONENTS } from './extensions/footer/o-table-footer-components';
 import { OTableMatPaginatorIntl } from './extensions/footer/paginator/o-table-paginator.component';
 import { O_TABLE_HEADER_COMPONENTS } from './extensions/header/o-table-header-components';
-import { DefaultOTableOptions } from './extensions/o-table-options.class';
-import { DefaultOTableDataSource } from './extensions/o-table.datasource';
 import { OTableRowDirective } from './extensions/row/o-table-row.directive';
 import { OMatSortModule } from './extensions/sort/o-mat-sort-module';
 import { OTableComponent } from './o-table.component';
+import { DefaultOTableDataSource } from './extensions/o-table.datasource';
+import { DefaultOTableOptions } from './extensions/o-table-options.class';
+import { DefaultOColumn } from './column/o-column.class';
 
 @NgModule({
   declarations: [

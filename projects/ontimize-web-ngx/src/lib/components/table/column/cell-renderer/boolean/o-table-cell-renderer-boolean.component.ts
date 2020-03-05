@@ -1,11 +1,10 @@
-import { ChangeDetectionStrategy, Component, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
-
+import { Component, Injector, ViewChild, TemplateRef, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { OTranslateService } from '../../../../../services/translate/o-translate.service';
 import { Util } from '../../../../../util/util';
-import { OBaseTableCellRenderer } from '../o-base-table-cell-renderer.class';
+import { OBaseTableCellRenderer, /*DEFAULT_INPUTS_O_BASE_TABLE_CELL_RENDERER*/ } from '../o-base-table-cell-renderer.class';
 
-const INPUTS_ARRAY = [
-  ...OBaseTableCellRenderer.INPUTS_ARRAY,
+export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_BOOLEAN = [
+  //...DEFAULT_INPUTS_O_BASE_TABLE_CELL_RENDERER,
   // true-value [string]: true value. Default: no value.
   'trueValue: true-value',
   // false-value [string]: false value. Default: no value.
@@ -23,11 +22,11 @@ const INPUTS_ARRAY = [
   selector: 'o-table-cell-renderer-boolean',
   templateUrl: './o-table-cell-renderer-boolean.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  inputs: INPUTS_ARRAY
+  inputs: DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_BOOLEAN
 })
 export class OTableCellRendererBooleanComponent extends OBaseTableCellRenderer implements OnInit {
 
-  public static INPUTS_ARRAY = INPUTS_ARRAY;
+  public static DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_BOOLEAN = DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_BOOLEAN;
 
   trueValue: any;
   falseValue: any;

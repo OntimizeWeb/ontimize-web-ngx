@@ -1,17 +1,16 @@
 import { AfterContentInit, Injector, PipeTransform, TemplateRef } from '@angular/core';
 
-import { OTableColumn } from '../../../../interfaces/o-table-column.interface';
 import { Util } from '../../../../util/util';
 import { OTableComponent } from '../../o-table.component';
-
+import { OTableColumn } from '../../../../interfaces/o-table-column.interface';
 // import { OTableColumnComponent } from '../o-table-column.component';
 
-export class OBaseTableCellRenderer implements AfterContentInit {
+export const DEFAULT_INPUTS_O_BASE_TABLE_CELL_RENDERER = [
+  'filterSource: filter-source',
+  'filterFunction: filter-function'
+];
 
-  public static INPUTS_ARRAY = [
-    'filterSource: filter-source',
-    'filterFunction: filter-function'
-  ];
+export class OBaseTableCellRenderer implements AfterContentInit {
 
   public templateref: TemplateRef<any>;
   public tableColumn: OTableColumn;

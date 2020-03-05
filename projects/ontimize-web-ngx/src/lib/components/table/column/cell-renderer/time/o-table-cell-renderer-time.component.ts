@@ -1,11 +1,11 @@
-import { ChangeDetectionStrategy, Component, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
-
+import { ChangeDetectionStrategy, Component, Injector, TemplateRef, ViewChild, OnInit } from '@angular/core';
 import { IMomentPipeArgument, OMomentPipe } from '../../../../../pipes/o-moment.pipe';
-import { Util } from '../../../../../util/util';
-import { OBaseTableCellRenderer } from '../o-base-table-cell-renderer.class';
 
-const INPUTS_ARRAY = [
-  ...OBaseTableCellRenderer.INPUTS_ARRAY,
+import { OBaseTableCellRenderer, /*DEFAULT_INPUTS_O_BASE_TABLE_CELL_RENDERER*/ } from '../o-base-table-cell-renderer.class';
+import { Util } from '../../../../../util/util';
+
+export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_TIME = [
+  //...DEFAULT_INPUTS_O_BASE_TABLE_CELL_RENDERER,
   'format'
 ];
 
@@ -13,11 +13,11 @@ const INPUTS_ARRAY = [
   selector: 'o-table-cell-renderer-time',
   templateUrl: './o-table-cell-renderer-time.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  inputs: INPUTS_ARRAY
+  inputs: DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_TIME
 })
 export class OTableCellRendererTimeComponent extends OBaseTableCellRenderer implements OnInit {
 
-  public static INPUTS_ARRAY = INPUTS_ARRAY;
+  public static DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_TIME = DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_TIME;
 
   protected componentPipe: OMomentPipe;
   protected pipeArguments: IMomentPipeArgument;

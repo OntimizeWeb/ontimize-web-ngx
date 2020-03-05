@@ -22,8 +22,8 @@ import { Util } from '../../../../../util/util';
 import { IFormValueOptions } from '../../../../form/OFormValue';
 import { OBaseTableCellEditor } from '../o-base-table-cell-editor.class';
 
-const INPUTS_ARRAY = [
-  ...OBaseTableCellEditor.INPUTS_ARRAY,
+export const DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_TIME = [
+  // ...OBaseTableCellEditor.DEFAULT_INPUTS_O_TABLE_CELL_EDITOR,
   'oDateFormat: date-format',
   'oDateLocale: date-locale',
   'oDateStartView: date-start-view',
@@ -38,16 +38,16 @@ const INPUTS_ARRAY = [
   'oDatePlaceholder: date-placeholder'
 ];
 
-const OUTPUTS_ARRAY = [
-  ...OBaseTableCellEditor.OUTPUTS_ARRAY
+export const DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_TIME = [
+  // ...OBaseTableCellEditor.DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR
 ];
 
 @Component({
   selector: 'o-table-cell-editor-time',
   templateUrl: './o-table-cell-editor-time.component.html',
   styleUrls: ['./o-table-cell-editor-time.component.scss'],
-  inputs: INPUTS_ARRAY,
-  outputs: OUTPUTS_ARRAY,
+  inputs: DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_TIME,
+  outputs: DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_TIME,
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
@@ -57,8 +57,8 @@ const OUTPUTS_ARRAY = [
 
 export class OTableCellEditorTimeComponent extends OBaseTableCellEditor implements OnInit, AfterViewChecked {
 
-  public static INPUTS_ARRAY = INPUTS_ARRAY;
-  public static OUTPUTS_ARRAY = OUTPUTS_ARRAY;
+  public static DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_TIME = DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_TIME;
+  public static DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_TIME = DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_TIME;
 
   @ViewChild('templateref', { read: TemplateRef, static: false }) public templateref: TemplateRef<any>;
 
