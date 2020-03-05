@@ -39,7 +39,7 @@ import {
 import { MatMomentDateModule, MomentDateAdapter } from '@angular/material-moment-adapter';
 import moment, { Moment } from 'moment';
 
-import { dateFormatFactory } from '../../services/mat-date-formats.factory';
+import { dateFormatFactory } from './mat-date-formats.factory';
 import { OntimizeMatIconRegistry } from '../../services/ontimize-icon-registry.service';
 
 const MATERIAL_MODULES = [

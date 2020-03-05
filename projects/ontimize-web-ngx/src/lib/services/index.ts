@@ -8,7 +8,6 @@ export * from './forms/o-form.service';
 export * from './local-storage.service';
 export * from './login-storage.service';
 export * from './login.service';
-export * from './mat-date-formats.factory';
 export * from './moment.service';
 export * from './navigation.service';
 export * from './number.service';

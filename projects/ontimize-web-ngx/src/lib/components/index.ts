@@ -33,11 +33,11 @@ export * from './language-selector/o-language-selector.module';
 export * from './list/index';
 export * from './material/ckeditor/ck-editor.component';
 export * from './material/ckeditor/ck-editor.module';
-export * from './table/index';
-export * from './user-info/o-user-info.component';
-export * from './user-info/o-user-info.module';
-
 export * from './o-component.class';
 export * from './o-form-data-component.class';
 export * from './o-service-base-component.class';
 export * from './o-service-component.class';
+export * from './table/index';
+export * from './user-info/o-user-info.component';
+export * from './user-info/o-user-info.module';
+
