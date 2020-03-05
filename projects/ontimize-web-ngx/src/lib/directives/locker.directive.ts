@@ -16,8 +16,6 @@ export const DEFAULT_INPUTS_O_LOCKER = [
 
 export class OLockerDirective implements OnDestroy {
 
-  public static DEFAULT_INPUTS_O_LOCKER = DEFAULT_INPUTS_O_LOCKER;
-
   private loadingParentDiv;
   private componentDiv;
 

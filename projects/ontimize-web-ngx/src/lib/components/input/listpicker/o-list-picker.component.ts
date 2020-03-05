@@ -21,11 +21,15 @@ import { OFormComponent } from '../../form/o-form.component';
 import { IFormValueOptions } from '../../form/oFormValue';
 import { OValueChangeEvent } from '../../o-form-data-component.class';
 import { OFormControl } from '../o-form-control.class';
-import { OFormServiceComponent } from '../o-form-service-component.class';
+import {
+  DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT,
+  DEFAULT_OUTPUTS_O_FORM_SERVICE_COMPONENT,
+  OFormServiceComponent,
+} from '../o-form-service-component.class';
 import { OListPickerDialogComponent } from './o-list-picker-dialog.component';
 
 export const DEFAULT_INPUTS_O_LIST_PICKER = [
-  ...OFormServiceComponent.DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT,
+  ...DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT,
   'filter',
   'dialogWidth : dialog-width',
   'dialogHeight : dialog-height',
@@ -36,7 +40,7 @@ export const DEFAULT_INPUTS_O_LIST_PICKER = [
 ];
 
 export const DEFAULT_OUTPUTS_O_LIST_PICKER = [
-  ...OFormServiceComponent.DEFAULT_OUTPUTS_O_FORM_SERVICE_COMPONENT,
+  ...DEFAULT_OUTPUTS_O_FORM_SERVICE_COMPONENT,
   'onDialogAccept',
   'onDialogCancel'
 ];
@@ -53,9 +57,6 @@ export const DEFAULT_OUTPUTS_O_LIST_PICKER = [
   outputs: DEFAULT_OUTPUTS_O_LIST_PICKER
 })
 export class OListPickerComponent extends OFormServiceComponent implements AfterViewInit, OnChanges, OnInit {
-
-  public static DEFAULT_INPUTS_O_LIST_PICKER = DEFAULT_INPUTS_O_LIST_PICKER;
-  public static DEFAULT_OUTPUTS_O_LIST_PICKER = DEFAULT_OUTPUTS_O_LIST_PICKER;
 
   /* Outputs */
   public onDialogAccept: EventEmitter<any> = new EventEmitter();

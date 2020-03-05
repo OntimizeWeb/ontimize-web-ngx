@@ -2,10 +2,13 @@ import { Component, ElementRef, forwardRef, Inject, Injector, Optional, ViewEnca
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material';
 
 import { OFormComponent } from '../../form/o-form.component';
-import { OContainerCollapsibleComponent } from '../o-container-collapsible-component.class';
+import {
+  DEFAULT_INPUTS_O_CONTAINER_COLLAPSIBLE,
+  OContainerCollapsibleComponent,
+} from '../o-container-collapsible-component.class';
 
 export const DEFAULT_INPUTS_O_COLUMN_COLLAPSIBLE = [
-  ...OContainerCollapsibleComponent.DEFAULT_INPUTS_O_CONTAINER_COLLAPSIBLE
+  ...DEFAULT_INPUTS_O_CONTAINER_COLLAPSIBLE
 ];
 
 @Component({
@@ -21,8 +24,6 @@ export const DEFAULT_INPUTS_O_COLUMN_COLLAPSIBLE = [
   }
 })
 export class OColumnCollapsibleComponent extends OContainerCollapsibleComponent {
-
-  public static DEFAULT_INPUTS_O_COLUMN_COLLAPSIBLE = DEFAULT_INPUTS_O_COLUMN_COLLAPSIBLE;
 
   constructor(
     @Optional() @Inject(forwardRef(() => OFormComponent)) protected form: OFormComponent,

@@ -23,9 +23,6 @@ export const DEFAULT_OUTPUTS_O_USER_INFO = [];
 })
 export class OUserInfoComponent implements OnDestroy {
 
-  public static DEFAULT_INPUTS_O_USER_INFO = DEFAULT_INPUTS_O_USER_INFO;
-  public static DEFAULT_OUTPUTS_O_USER_INFO = DEFAULT_OUTPUTS_O_USER_INFO;
-
   protected dialogService: DialogService;
   protected loginService: LoginService;
   protected oUserInfoService: OUserInfoService;

@@ -39,8 +39,6 @@ export type SliderDisplayFunction = (value: number | null) => string | number;
   encapsulation: ViewEncapsulation.None
 })
 export class OSliderComponent extends OFormDataComponent {
-  public static DEFAULT_INPUTS_O_SLIDER_INPUT = DEFAULT_INPUTS_O_SLIDER_INPUT;
-  public static DEFAULT_OUTPUTS_O_SLIDER_INPUT = DEFAULT_OUTPUTS_O_SLIDER_INPUT;
 
   public color: string;
   public layout: 'row' | 'column' = 'row';

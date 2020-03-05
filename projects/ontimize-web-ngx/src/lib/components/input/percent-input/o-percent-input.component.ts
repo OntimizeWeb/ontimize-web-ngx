@@ -25,9 +25,6 @@ export const DEFAULT_OUTPUTS_O_PERCENT_INPUT = [
 })
 export class OPercentInputComponent extends ORealInputComponent implements OnInit {
 
-  public static DEFAULT_INPUTS_O_PERCENT_INPUT = DEFAULT_INPUTS_O_PERCENT_INPUT;
-  public static DEFAULT_OUTPUTS_O_PERCENT_INPUT = DEFAULT_OUTPUTS_O_PERCENT_INPUT;
-
   @InputConverter()
   grouping: boolean = true;
 

@@ -16,17 +16,21 @@ import { Util } from '../../../util/util';
 import { OFormComponent } from '../../form/o-form.component';
 import { OFormValue } from '../../form/OFormValue';
 import { OValueChangeEvent } from '../../o-form-data-component.class';
-import { OFormServiceComponent } from '../o-form-service-component.class';
+import {
+  DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT,
+  DEFAULT_OUTPUTS_O_FORM_SERVICE_COMPONENT,
+  OFormServiceComponent,
+} from '../o-form-service-component.class';
 
 export const DEFAULT_INPUTS_O_RADIO = [
-  ...OFormServiceComponent.DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT,
+  ...DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT,
   'translate',
   'layout',
   'labelPosition: label-position'
 ];
 
 export const DEFAULT_OUTPUTS_O_RADIO = [
-  ...OFormServiceComponent.DEFAULT_OUTPUTS_O_FORM_SERVICE_COMPONENT
+  ...DEFAULT_OUTPUTS_O_FORM_SERVICE_COMPONENT
 ];
 
 @Component({
@@ -44,9 +48,6 @@ export const DEFAULT_OUTPUTS_O_RADIO = [
   }
 })
 export class ORadioComponent extends OFormServiceComponent implements AfterViewInit {
-
-  public static DEFAULT_INPUTS_O_RADIO = DEFAULT_INPUTS_O_RADIO;
-  public static DEFAULT_OUTPUTS_O_RADIO = DEFAULT_OUTPUTS_O_RADIO;
 
   /* Inputs */
   @InputConverter()

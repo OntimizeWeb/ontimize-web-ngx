@@ -101,9 +101,6 @@ export const DEFAULT_OUTPUTS_O_TABLE_COLUMN = [
 })
 export class OTableColumnComponent implements OTableColumn, OnDestroy, OnInit, AfterViewInit {
 
-  public static DEFAULT_INPUTS_O_TABLE_COLUMN = DEFAULT_INPUTS_O_TABLE_COLUMN;
-  public static DEFAULT_OUTPUTS_O_TABLE_COLUMN = DEFAULT_OUTPUTS_O_TABLE_COLUMN;
-
   public renderer: any;
   public editor: any;
 

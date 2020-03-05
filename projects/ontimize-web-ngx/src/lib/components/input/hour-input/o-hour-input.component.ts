@@ -54,9 +54,6 @@ export const DEFAULT_OUTPUTS_O_HOUR_INPUT = [
 })
 export class OHourInputComponent extends OFormDataComponent implements OnInit, AfterViewInit {
 
-  public static DEFAULT_INPUTS_O_HOUR_INPUT = DEFAULT_INPUTS_O_HOUR_INPUT;
-  public static DEFAULT_OUTPUTS_O_HOUR_INPUT = DEFAULT_OUTPUTS_O_HOUR_INPUT;
-
   @InputConverter()
   public textInputEnabled: boolean = true;
   public min: string;

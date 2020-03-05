@@ -66,9 +66,6 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
 
   public static guardClassName = 'CanActivateFormLayoutChildGuard';
 
-  public static DEFAULT_INPUTS_O_FORM_LAYOUT_MANAGER = DEFAULT_INPUTS_O_FORM_LAYOUT_MANAGER;
-  public static DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER;
-
   public static DIALOG_MODE = 'dialog';
   public static TAB_MODE = 'tab';
 

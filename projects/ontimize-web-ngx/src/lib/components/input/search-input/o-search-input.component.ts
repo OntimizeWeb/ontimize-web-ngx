@@ -43,9 +43,6 @@ declare type ColumnObject = {
 })
 export class OSearchInputComponent implements OnInit, AfterViewInit {
 
-  public static DEFAULT_INPUTS_O_SEARCH_INPUT = DEFAULT_INPUTS_O_SEARCH_INPUT;
-  public static DEFAULT_OUTPUTS_O_SEARCH_INPUT = DEFAULT_OUTPUTS_O_SEARCH_INPUT;
-
   public onSearch: EventEmitter<any> = new EventEmitter<any>();
 
   public colArray: ColumnObject[] = [];

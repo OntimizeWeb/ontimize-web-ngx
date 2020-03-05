@@ -38,8 +38,6 @@ export const DEFAULT_OUTPUTS_O_APP_LAYOUT: any[] = [
 
 export class OAppLayoutComponent {
 
-  public static DEFAULT_INPUTS_O_APP_LAYOUT = DEFAULT_INPUTS_O_APP_LAYOUT;
-  public static DEFAULT_OUTPUTS_O_APP_LAYOUT = DEFAULT_OUTPUTS_O_APP_LAYOUT;
   // public static OAppLayoutModes: OAppLayoutMode[] = ['mobile', 'desktop'];
   // public static OSidenavModes: OSidenavMode[] = ['over', 'push', 'side'];
 

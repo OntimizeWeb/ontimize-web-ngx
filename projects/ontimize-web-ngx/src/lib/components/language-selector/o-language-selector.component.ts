@@ -27,9 +27,6 @@ export const DEFAULT_OUTPUTS_LANGUAGE_SELECTOR = [
 
 export class OLanguageSelectorComponent {
 
-  public static DEFAULT_INPUTS_O_LANGUAGE_SELECTOR = DEFAULT_INPUTS_O_LANGUAGE_SELECTOR;
-  public static DEFAULT_OUTPUTS_LANGUAGE_SELECTOR = DEFAULT_OUTPUTS_LANGUAGE_SELECTOR;
-
   @InputConverter()
   useFlagIcons: boolean = false;
 

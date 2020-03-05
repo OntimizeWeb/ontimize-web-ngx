@@ -1,7 +1,7 @@
 ## 8.0.0
 
 ### BREAKING CHANGES
-* All components inputs/outputs are now only exported as `INPUTS_ARRAY`/`OUTPUTS_ARRAY` static properties. 
+* All components inputs/outputs arrays are no longer exported as static variables, they are only exported as independent arrays. 
 
 ## 4.1.2 (2020-02-26)
 ### Features

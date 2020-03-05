@@ -81,8 +81,6 @@ export const DEFAULT_INPUTS_O_SERVICE_COMPONENT = [
 
 export class OServiceComponent extends OServiceBaseComponent {
 
-  public static DEFAULT_INPUTS_O_SERVICE_COMPONENT = DEFAULT_INPUTS_O_SERVICE_COMPONENT;
-
   protected permissionsService: PermissionsService;
   protected translateService: OTranslateService;
   protected navigationService: NavigationService;

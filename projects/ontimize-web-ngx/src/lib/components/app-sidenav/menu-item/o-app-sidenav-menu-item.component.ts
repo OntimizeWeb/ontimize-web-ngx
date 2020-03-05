@@ -58,9 +58,6 @@ export const DEFAULT_OUTPUTS_O_APP_SIDENAV_MENU_ITEM = [
 })
 export class OAppSidenavMenuItemComponent implements OnInit, AfterViewInit, OnDestroy {
 
-  public static DEFAULT_INPUTS_O_APP_SIDENAV_MENU_ITEM = DEFAULT_INPUTS_O_APP_SIDENAV_MENU_ITEM;
-  public static DEFAULT_OUTPUTS_O_APP_SIDENAV_MENU_ITEM = DEFAULT_OUTPUTS_O_APP_SIDENAV_MENU_ITEM;
-
   public onClick: EventEmitter<any> = new EventEmitter<any>();
 
   protected translateService: OTranslateService;

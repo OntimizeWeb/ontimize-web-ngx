@@ -24,9 +24,6 @@ export const DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_TEXT = [
 
 export class OTableCellEditorTextComponent extends OBaseTableCellEditor {
 
-  public static DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_TEXT = DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_TEXT;
-  public static DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_TEXT = DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_TEXT;
-
   @ViewChild('templateref', { read: TemplateRef, static: false }) public templateref: TemplateRef<any>;
   @ViewChild('input', { static: false }) inputRef: ElementRef;
 

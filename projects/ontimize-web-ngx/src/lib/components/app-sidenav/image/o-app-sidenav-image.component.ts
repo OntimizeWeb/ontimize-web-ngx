@@ -33,9 +33,6 @@ export const DEFAULT_OUTPUTS_O_APP_SIDENAV_IMAGE = [
 })
 export class OAppSidenavImageComponent implements OnInit, OnDestroy {
 
-  public static DEFAULT_INPUTS_O_APP_SIDENAV_IMAGE = DEFAULT_INPUTS_O_APP_SIDENAV_IMAGE;
-  public static DEFAULT_OUTPUTS_O_APP_SIDENAV_IMAGE = DEFAULT_OUTPUTS_O_APP_SIDENAV_IMAGE;
-
   protected sidenav: OAppSidenavComponent;
   protected openedSrc: string;
   protected closedSrc: string;

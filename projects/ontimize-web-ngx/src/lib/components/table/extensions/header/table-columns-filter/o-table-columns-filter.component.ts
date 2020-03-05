@@ -28,9 +28,6 @@ export const DEFAULT_OUTPUTS_O_TABLE_COLUMN_FILTER = [
 
 export class OTableColumnsFilterComponent implements OnInit {
 
-  public static DEFAULT_INPUTS_O_TABLE_COLUMN_FILTER = DEFAULT_INPUTS_O_TABLE_COLUMN_FILTER;
-  public static DEFAULT_OUTPUTS_O_TABLE_COLUMN_FILTER = DEFAULT_OUTPUTS_O_TABLE_COLUMN_FILTER;
-
   public static DEFAULT_COMPARISON_TYPE = 'VIEW';
   public static MODEL_COMPARISON_TYPE = 'MODEL';
   public static OTableColumnsFilterModes = ['default', 'selection', 'custom'];

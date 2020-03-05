@@ -30,12 +30,12 @@ import { Codes } from '../../util/codes';
 import { ISQLOrder, OQueryDataArgs, ServiceUtils } from '../../util/service.utils';
 import { Util } from '../../util/util';
 import { OFormComponent } from '../form/o-form.component';
-import { OServiceComponent } from '../o-service-component.class';
+import { DEFAULT_INPUTS_O_SERVICE_COMPONENT, OServiceComponent } from '../o-service-component.class';
 import { OGridItemComponent } from './grid-item/o-grid-item.component';
 import { OGridItemDirective } from './grid-item/o-grid-item.directive';
 
 export const DEFAULT_INPUTS_O_GRID = [
-  ...OServiceComponent.DEFAULT_INPUTS_O_SERVICE_COMPONENT,
+  ...DEFAULT_INPUTS_O_SERVICE_COMPONENT,
   // cols: Amount of columns in the grid list. Default in extra small and small screen is 1, in medium screen is 2, in large screen is 3 and extra large screen is 4.
   'cols',
   // page-size-options [string]: Page size options separated by ';'.
@@ -88,9 +88,6 @@ const PAGE_SIZE_OPTIONS = [8, 16, 24, 32, 64];
   }
 })
 export class OGridComponent extends OServiceComponent implements AfterViewChecked, AfterViewInit, OnChanges, OnDestroy, OnInit, AfterContentInit {
-
-  public static DEFAULT_INPUTS_O_GRID = DEFAULT_INPUTS_O_GRID;
-  public static DEFAULT_OUTPUTS_O_GRID = DEFAULT_OUTPUTS_O_GRID;
 
   /* Inputs */
   @InputConverter()

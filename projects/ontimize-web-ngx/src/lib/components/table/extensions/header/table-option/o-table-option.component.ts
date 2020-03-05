@@ -39,8 +39,6 @@ export const DEFAULT_OUTPUTS_O_TABLE_OPTION = [
 
 export class OTableOptionComponent {
 
-  public static DEFAULT_INPUTS_O_TABLE_OPTION = DEFAULT_INPUTS_O_TABLE_OPTION;
-  public static DEFAULT_OUTPUTS_O_TABLE_OPTION = DEFAULT_OUTPUTS_O_TABLE_OPTION;
   public static O_TABLE_OPTION_ACTIVE_CLASS = 'o-table-option-active';
 
   onClick: EventEmitter<object> = new EventEmitter<object>();

@@ -91,9 +91,6 @@ export const DEFAULT_OUTPUTS_O_FILE_INPUT = [
 })
 export class OFileInputComponent extends OFormDataComponent implements OnInit {
 
-  public static DEFAULT_INPUTS_O_FILE_INPUT = DEFAULT_INPUTS_O_FILE_INPUT;
-  public static DEFAULT_OUTPUTS_O_FILE_INPUT = DEFAULT_OUTPUTS_O_FILE_INPUT;
-
   public uploader: OFileUploader;
   public fileService: OntimizeFileService;
   @ViewChild('inputFile', { static: false })

@@ -43,8 +43,6 @@ export const DEFAULT_INPUTS_O_FORM_TOOLBAR = [
 })
 export class OFormToolbarComponent implements OnInit, OnDestroy, AfterViewInit {
 
-  public static DEFAULT_INPUTS_O_FORM_TOOLBAR = DEFAULT_INPUTS_O_FORM_TOOLBAR;
-
   /* Bindings */
   public labelHeader: string = '';
   public headeractions: string = '';

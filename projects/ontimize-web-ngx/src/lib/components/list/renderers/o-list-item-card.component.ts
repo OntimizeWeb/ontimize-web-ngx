@@ -11,14 +11,18 @@ import {
 } from '@angular/core';
 
 import { OListItemComponent } from '../list-item/o-list-item.component';
-import { OListItemCardRenderer } from './o-list-item-card-renderer.class';
+import {
+  DEFAULT_INPUTS_O_CARD_RENDERER,
+  DEFAULT_OUTPUTS_O_CARD_RENDERER,
+  OListItemCardRenderer,
+} from './o-list-item-card-renderer.class';
 
 export const DEFAULT_INPUTS_O_LIST_ITEM_CARD = [
-  ...OListItemCardRenderer.DEFAULT_INPUTS_O_CARD_RENDERER
+  ...DEFAULT_INPUTS_O_CARD_RENDERER
 ];
 
 export const DEFAULT_OUTPUTS_O_LIST_ITEM_CARD = [
-  ...OListItemCardRenderer.DEFAULT_OUTPUTS_O_CARD_RENDERER
+  ...DEFAULT_OUTPUTS_O_CARD_RENDERER
 ];
 
 @Component({

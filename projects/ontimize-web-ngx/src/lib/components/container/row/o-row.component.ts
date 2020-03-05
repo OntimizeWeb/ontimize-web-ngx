@@ -22,8 +22,6 @@ export const DEFAULT_INPUTS_O_ROW = [
 })
 export class ORowComponent extends OContainerComponent {
 
-  public static DEFAULT_INPUTS_O_ROW = DEFAULT_INPUTS_O_ROW;
-
   constructor(
     @Optional() @Inject(forwardRef(() => OFormComponent)) protected form: OFormComponent,
     protected elRef: ElementRef,

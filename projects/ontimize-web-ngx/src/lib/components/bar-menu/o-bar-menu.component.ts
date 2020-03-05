@@ -23,7 +23,6 @@ export const DEFAULT_INPUTS_O_BAR_MENU = [
 })
 export class OBarMenuComponent implements OnInit {
 
-  public static DEFAULT_INPUTS_O_BAR_MENU = DEFAULT_INPUTS_O_BAR_MENU;
   protected permissionsService: PermissionsService;
   protected translateService: OTranslateService;
   private appMenuService: AppMenuService;

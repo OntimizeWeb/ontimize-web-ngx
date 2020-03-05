@@ -14,8 +14,6 @@ export const DEFAULT_INPUTS_O_BAR_MENU_NESTED = [
 })
 export class OBarMenuNestedComponent {
 
-  public static DEFAULT_INPUTS_O_BAR_MENU = DEFAULT_INPUTS_O_BAR_MENU_NESTED;
-
   private appMenuService: AppMenuService;
   public items: MenuRootItem[];
 

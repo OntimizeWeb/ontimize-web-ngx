@@ -20,8 +20,6 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_PERCENTAGE = [
 })
 export class OTableCellRendererPercentageComponent extends OTableCellRendererRealComponent implements OnInit {
 
-  public static DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_PERCENTAGE = DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_PERCENTAGE;
-
   protected decimalSeparator: string = '.';
   minDecimalDigits = 0;
   maxDecimalDigits = 0;

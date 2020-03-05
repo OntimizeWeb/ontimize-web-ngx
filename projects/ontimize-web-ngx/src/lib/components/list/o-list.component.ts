@@ -26,7 +26,7 @@ import { Codes } from '../../util/codes';
 import { ISQLOrder, OQueryDataArgs, ServiceUtils } from '../../util/service.utils';
 import { Util } from '../../util/util';
 import { OFormComponent } from '../form/o-form.component';
-import { OServiceComponent } from '../o-service-component.class';
+import { DEFAULT_INPUTS_O_SERVICE_COMPONENT, OServiceComponent } from '../o-service-component.class';
 import { OListItemComponent } from './list-item/o-list-item.component';
 import { OListItemDirective } from './list-item/o-list-item.directive';
 
@@ -39,7 +39,7 @@ export interface IList {
 }
 
 export const DEFAULT_INPUTS_O_LIST = [
-  ...OServiceComponent.DEFAULT_INPUTS_O_SERVICE_COMPONENT,
+  ...DEFAULT_INPUTS_O_SERVICE_COMPONENT,
 
   // quick-filter-columns [string]: columns of the filter, separated by ';'. Default: no value.
   'quickFilterColumns: quick-filter-columns',
@@ -99,9 +99,6 @@ export interface OListInitializationOptions {
   }
 })
 export class OListComponent extends OServiceComponent implements AfterContentInit, AfterViewInit, IList, OnDestroy, OnInit, OnChanges {
-
-  public static DEFAULT_INPUTS_O_LIST = DEFAULT_INPUTS_O_LIST;
-  public static DEFAULT_OUTPUTS_O_LIST = DEFAULT_OUTPUTS_O_LIST;
 
   @ContentChildren(OListItemComponent)
   public listItemComponents: QueryList<OListItemComponent>;

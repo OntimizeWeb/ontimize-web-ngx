@@ -24,8 +24,6 @@ export const DEFAULT_INPUTS_O_BUTTON = [
 })
 export class OButtonComponent implements OnInit {
 
-  public static DEFAULT_INPUTS_O_BUTTON = DEFAULT_INPUTS_O_BUTTON;
-
   protected static DEFAULT_TYPE = 'STROKED';
 
   protected oattr: string;

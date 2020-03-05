@@ -3,10 +3,10 @@ import { Router } from '@angular/router';
 
 import { Util } from '../../../util/util';
 import { OBarMenuComponent } from '../o-bar-menu.component';
-import { OBaseMenuItemClass } from '../o-base-menu-item.class';
+import { DEFAULT_INPUTS_O_BASE_MENU_ITEM, OBaseMenuItemClass } from '../o-base-menu-item.class';
 
 export const DEFAULT_INPUTS_O_BAR_MENU_ITEM = [
-  ...OBaseMenuItemClass.DEFAULT_INPUTS_O_BASE_MENU_ITEM,
+  ...DEFAULT_INPUTS_O_BASE_MENU_ITEM,
   // route [string]: name of the state to navigate. Default: no value.
   'route',
 
@@ -27,7 +27,6 @@ export const DEFAULT_INPUTS_O_BAR_MENU_ITEM = [
 })
 export class OBarMenuItemComponent extends OBaseMenuItemClass implements OnInit {
 
-  public static DEFAULT_INPUTS_O_BAR_MENU_ITEM = DEFAULT_INPUTS_O_BAR_MENU_ITEM;
   protected router: Router;
   route: string;
   action: () => void;

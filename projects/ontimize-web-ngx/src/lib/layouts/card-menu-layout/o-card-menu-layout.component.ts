@@ -33,9 +33,6 @@ export const DEFAULT_OUTPUTS_O_MENU_LAYOUT = [
 })
 export class OCardMenuLayoutComponent implements AfterViewInit, OnDestroy {
 
-  public static DEFAULT_INPUTS_O_MENU_LAYOUT = DEFAULT_INPUTS_O_MENU_LAYOUT;
-  public static DEFAULT_OUTPUTS_O_MENU_LAYOUT = DEFAULT_OUTPUTS_O_MENU_LAYOUT;
-
   protected translateService: OTranslateService;
   protected translateServiceSubscription: Subscription;
   protected appMenuService: AppMenuService;

@@ -55,9 +55,6 @@ export const DEFAULT_OUTPUTS_O_APP_SIDENAV = [
 })
 export class OAppSidenavComponent implements OnInit, OnDestroy, AfterViewInit {
 
-  public static DEFAULT_INPUTS_O_APP_LAYOUT = DEFAULT_INPUTS_O_APP_SIDENAV;
-  public static DEFAULT_OUTPUTS_O_APP_LAYOUT = DEFAULT_OUTPUTS_O_APP_SIDENAV;
-
   @ViewChild(MatSidenav, { static: false })
   sidenav: MatSidenav;
 

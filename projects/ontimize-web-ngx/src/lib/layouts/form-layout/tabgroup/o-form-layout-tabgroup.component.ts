@@ -51,9 +51,6 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_TABGROUP = [
 })
 export class OFormLayoutTabGroupComponent implements OFormLayoutTabGroup, AfterViewInit, OnDestroy {
 
-  public static DEFAULT_INPUTS_O_FORM_LAYOUT_TABGROUP = DEFAULT_INPUTS_O_FORM_LAYOUT_TABGROUP;
-  public static DEFAULT_OUTPUTS_O_FORM_LAYOUT_TABGROUP = DEFAULT_OUTPUTS_O_FORM_LAYOUT_TABGROUP;
-
   public data: FormLayoutDetailComponentData[] = [];
   public selectedTabIndex: number | null;
   public title: string;

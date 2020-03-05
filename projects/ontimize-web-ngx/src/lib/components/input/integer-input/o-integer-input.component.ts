@@ -46,9 +46,6 @@ export const DEFAULT_OUTPUTS_O_INTEGER_INPUT = [
 })
 export class OIntegerInputComponent extends OTextInputComponent implements AfterViewInit, OnInit {
 
-  public static DEFAULT_INPUTS_O_INTEGER_INPUT = DEFAULT_INPUTS_O_INTEGER_INPUT;
-  public static DEFAULT_OUTPUTS_O_INTEGER_INPUT = DEFAULT_OUTPUTS_O_INTEGER_INPUT;
-
   inputType: string = 'number';
 
   @InputConverter()

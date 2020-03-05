@@ -66,9 +66,6 @@ export const DEFAULT_OUTPUTS_O_TIME_INPUT = [
 })
 export class OTimeInputComponent extends OFormDataComponent implements OnInit, AfterViewInit, OnDestroy {
 
-  public static DEFAULT_INPUTS_O_TIME_INPUT = DEFAULT_INPUTS_O_TIME_INPUT;
-  public static DEFAULT_OUTPUTS_O_TIME_INPUT = DEFAULT_OUTPUTS_O_TIME_INPUT;
-
   public oDateFormat: string = 'L';
   public oDateLocale: any;
   public oDateStartView: 'month' | 'year' = 'month';

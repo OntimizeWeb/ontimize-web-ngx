@@ -14,8 +14,6 @@ export const DEFAULT_INPUTS_O_ERROR = [
 })
 export class OErrorComponent implements OnInit {
 
-  public static DEFAULT_INPUTS_O_ERROR = DEFAULT_INPUTS_O_ERROR;
-
   name: string;
   text: string;
 

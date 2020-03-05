@@ -81,8 +81,6 @@ export const DEFAULT_INPUTS_O_SERVICE_BASE_COMPONENT = [
 
 export class OServiceBaseComponent implements ILocalStorageComponent, OnChanges {
 
-  public static DEFAULT_INPUTS_O_SERVICE_BASE_COMPONENT = DEFAULT_INPUTS_O_SERVICE_BASE_COMPONENT;
-
   protected localStorageService: LocalStorageService;
   protected dialogService: DialogService;
 

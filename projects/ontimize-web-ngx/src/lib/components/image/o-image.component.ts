@@ -62,9 +62,6 @@ export const DEFAULT_OUTPUTS_O_IMAGE = [
 })
 export class OImageComponent extends OFormDataComponent implements OnInit, OnDestroy {
 
-  public static DEFAULT_INPUTS_O_IMAGE = DEFAULT_INPUTS_O_IMAGE;
-  public static DEFAULT_OUTPUTS_O_IMAGE = DEFAULT_OUTPUTS_O_IMAGE;
-
   public acceptFileType: string = 'image/*';
   public emptyimage: string;
   public emptyicon: string;

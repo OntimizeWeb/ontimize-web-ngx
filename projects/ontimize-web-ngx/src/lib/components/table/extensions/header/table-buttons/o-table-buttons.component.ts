@@ -42,9 +42,6 @@ export const DEFAULT_OUTPUTS_O_TABLE_BUTTONS = [];
 })
 export class OTableButtonsComponent implements OTableButtons, OnInit, OnDestroy {
 
-  public static DEFAULT_INPUTS_O_TABLE_BUTTONS = DEFAULT_INPUTS_O_TABLE_BUTTONS;
-  public static DEFAULT_OUTPUTS_O_TABLE_BUTTONS = DEFAULT_OUTPUTS_O_TABLE_BUTTONS;
-
   /* Inputs */
   @InputConverter()
   public insertButton: boolean = true;

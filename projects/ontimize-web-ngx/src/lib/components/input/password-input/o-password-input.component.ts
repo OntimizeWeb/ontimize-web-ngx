@@ -25,9 +25,6 @@ export const DEFAULT_OUTPUTS_O_PASSWORD_INPUT = [
 })
 export class OPasswordInputComponent extends OTextInputComponent implements OnInit {
 
-  public static DEFAULT_INPUTS_O_PASSWORD_INPUT = DEFAULT_INPUTS_O_PASSWORD_INPUT;
-  public static DEFAULT_OUTPUTS_O_PASSWORD_INPUT = DEFAULT_OUTPUTS_O_PASSWORD_INPUT;
-
   constructor(
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
     elRef: ElementRef,

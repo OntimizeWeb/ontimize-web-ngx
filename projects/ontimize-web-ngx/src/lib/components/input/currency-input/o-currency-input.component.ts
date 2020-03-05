@@ -26,8 +26,6 @@ export const DEFAULT_OUTPUTS_O_CURRENCY_INPUT = [
 })
 export class OCurrencyInputComponent extends ORealInputComponent implements OnInit {
 
-  public static DEFAULT_INPUTS_O_CURRENCY_INPUT = DEFAULT_INPUTS_O_CURRENCY_INPUT;
-  public static DEFAULT_OUTPUTS_O_CURRENCY_INPUT = DEFAULT_OUTPUTS_O_CURRENCY_INPUT;
   static currency_icons = ['USD', 'EUR', 'GBP', 'ILS', 'INR', 'JPY', 'KRW', 'BTC'];
 
   currency_symbols = {

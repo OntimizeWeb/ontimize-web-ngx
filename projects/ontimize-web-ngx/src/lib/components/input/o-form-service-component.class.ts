@@ -56,9 +56,6 @@ export const DEFAULT_OUTPUTS_O_FORM_SERVICE_COMPONENT = [
 
 export class OFormServiceComponent extends OFormDataComponent {
 
-  public static DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT = DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT;
-  public static DEFAULT_OUTPUTS_O_FORM_SERVICE_COMPONENT = DEFAULT_OUTPUTS_O_FORM_SERVICE_COMPONENT;
-
   /* Inputs */
   protected staticData: Array<any>;
   protected entity: string;

@@ -42,9 +42,6 @@ export const DEFAULT_OUTPUTS_O_CHECKBOX = [
 })
 export class OCheckboxComponent extends OFormDataComponent {
 
-  public static DEFAULT_INPUTS_O_CHECKBOX = DEFAULT_INPUTS_O_CHECKBOX;
-  public static DEFAULT_OUTPUTS_O_CHECKBOX = DEFAULT_OUTPUTS_O_CHECKBOX;
-
   public trueValue: any = true;
   public falseValue: any = false;
   public booleanType: 'number' | 'boolean' | 'string' = 'boolean';

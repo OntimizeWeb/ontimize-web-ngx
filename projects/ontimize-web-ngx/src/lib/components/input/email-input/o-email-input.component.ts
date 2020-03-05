@@ -27,9 +27,6 @@ export const DEFAULT_OUTPUTS_O_EMAIL_INPUT = [
 })
 export class OEmailInputComponent extends OTextInputComponent implements OnInit {
 
-  public static DEFAULT_INPUTS_O_EMAIL_INPUT = DEFAULT_INPUTS_O_EMAIL_INPUT;
-  public static DEFAULT_OUTPUTS_O_EMAIL_INPUT = DEFAULT_OUTPUTS_O_EMAIL_INPUT;
-
   constructor(
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
     elRef: ElementRef,

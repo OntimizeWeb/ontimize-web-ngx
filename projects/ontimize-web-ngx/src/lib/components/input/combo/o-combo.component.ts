@@ -22,10 +22,14 @@ import { Util } from '../../../util/util';
 import { OFormComponent } from '../../form/o-form.component';
 import { IFormValueOptions, OFormValue } from '../../form/OFormValue';
 import { OValueChangeEvent } from '../../o-form-data-component.class';
-import { OFormServiceComponent } from '../o-form-service-component.class';
+import {
+  DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT,
+  DEFAULT_OUTPUTS_O_FORM_SERVICE_COMPONENT,
+  OFormServiceComponent,
+} from '../o-form-service-component.class';
 
 export const DEFAULT_INPUTS_O_COMBO = [
-  ...OFormServiceComponent.DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT,
+  ...DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT,
   'translate',
   'multiple',
   'nullSelection: null-selection',
@@ -34,7 +38,7 @@ export const DEFAULT_INPUTS_O_COMBO = [
 ];
 
 export const DEFAULT_OUTPUTS_O_COMBO = [
-  ...OFormServiceComponent.DEFAULT_OUTPUTS_O_FORM_SERVICE_COMPONENT
+  ...DEFAULT_OUTPUTS_O_FORM_SERVICE_COMPONENT
 ];
 
 @Component({
@@ -53,9 +57,6 @@ export const DEFAULT_OUTPUTS_O_COMBO = [
   }
 })
 export class OComboComponent extends OFormServiceComponent implements OnInit, AfterViewInit, OnDestroy {
-
-  public static DEFAULT_INPUTS_O_COMBO = DEFAULT_INPUTS_O_COMBO;
-  public static DEFAULT_OUTPUTS_O_COMBO = DEFAULT_OUTPUTS_O_COMBO;
 
   public value: OFormValue;
   public searchControl: FormControl = new FormControl();

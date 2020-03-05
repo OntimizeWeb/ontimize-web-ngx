@@ -18,8 +18,6 @@ export const DEFAULT_INPUTS_O_VALIDATOR = [
 })
 export class OValidatorComponent {
 
-  public static DEFAULT_INPUTS_O_VALIDATOR = DEFAULT_INPUTS_O_VALIDATOR;
-
   validatorFn: ValidatorFn = null;
   errorName: string;
   errorText: string;

@@ -44,8 +44,6 @@ export const DEFAULT_OUTPUTS_O_TABLE_INSERTABLE_ROW = [
 
 export class OTableInsertableRowComponent implements OnInit {
 
-  public static DEFAULT_INPUTS_O_TABLE_INSERTABLE_ROW = DEFAULT_INPUTS_O_TABLE_INSERTABLE_ROW;
-  public static DEFAULT_OUTPUTS_O_TABLE_INSERTABLE_ROW = DEFAULT_OUTPUTS_O_TABLE_INSERTABLE_ROW;
   public static AVAILABLE_ROW_POSITIONS = ['first', 'last'];
   public static DEFAULT_ROW_POSITION = 'last';
 

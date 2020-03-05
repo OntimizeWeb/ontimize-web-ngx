@@ -167,9 +167,6 @@ export interface OFormInitializationOptions {
 })
 export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate, AfterViewInit {
 
-  public static DEFAULT_INPUTS_O_FORM = DEFAULT_INPUTS_O_FORM;
-  public static DEFAULT_OUTPUTS_O_FORM = DEFAULT_OUTPUTS_O_FORM;
-
   // public static RELOAD_ACTION: string = 'RELOAD';
   // public static GO_EDIT_ACTION: string = 'GO_EDIT';
   // public static EDIT_ACTION: string = 'EDIT';

@@ -17,7 +17,6 @@ export const DEFAULT_INPUTS_O_CONTAINER = [
 export class OContainerComponent implements AfterViewInit, OnDestroy, AfterContentChecked {
 
   public static APPEARANCE_OUTLINE = 'outline';
-  public static DEFAULT_INPUTS_O_CONTAINER = DEFAULT_INPUTS_O_CONTAINER;
 
   public oattr: string;
 

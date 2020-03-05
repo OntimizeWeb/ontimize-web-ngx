@@ -3,10 +3,10 @@ import { MAT_FORM_FIELD_DEFAULT_OPTIONS, MatExpansionPanel } from '@angular/mate
 
 import { InputConverter } from '../../decorators/input-converter';
 import { OFormComponent } from '../form/o-form.component';
-import { OContainerComponent } from './o-container-component.class';
+import { DEFAULT_INPUTS_O_CONTAINER, OContainerComponent } from './o-container-component.class';
 
 export const DEFAULT_INPUTS_O_CONTAINER_COLLAPSIBLE = [
-  ...OContainerComponent.DEFAULT_INPUTS_O_CONTAINER,
+  ...DEFAULT_INPUTS_O_CONTAINER,
   'expanded',
   'description',
   'collapsedHeight:collapsed-height',
@@ -14,8 +14,6 @@ export const DEFAULT_INPUTS_O_CONTAINER_COLLAPSIBLE = [
 ];
 
 export class OContainerCollapsibleComponent extends OContainerComponent implements AfterViewInit {
-
-  public static DEFAULT_INPUTS_O_CONTAINER_COLLAPSIBLE = DEFAULT_INPUTS_O_CONTAINER_COLLAPSIBLE;
 
   @InputConverter()
   public expanded: boolean = true;

@@ -22,8 +22,6 @@ export const DEFAULT_INPUTS_O_COLUMN = [
 })
 export class OColumnComponent extends OContainerComponent {
 
-  public static DEFAULT_INPUTS_O_COLUMN = DEFAULT_INPUTS_O_COLUMN;
-
   constructor(
     @Optional() @Inject(forwardRef(() => OFormComponent)) protected form: OFormComponent,
     protected elRef: ElementRef,

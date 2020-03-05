@@ -70,9 +70,6 @@ export const DEFAULT_OUTPUTS_O_TABLE_MENU = [];
 })
 export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, OnDestroy {
 
-  public static DEFAULT_INPUTS_O_TABLE_MENU = DEFAULT_INPUTS_O_TABLE_MENU;
-  public static DEFAULT_OUTPUTS_O_TABLE_MENU = DEFAULT_OUTPUTS_O_TABLE_MENU;
-
   /* Inputs */
   @InputConverter()
   selectAllCheckbox: boolean = false;

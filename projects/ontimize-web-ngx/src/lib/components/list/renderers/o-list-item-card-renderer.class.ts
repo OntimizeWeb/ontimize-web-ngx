@@ -19,9 +19,6 @@ export const DEFAULT_OUTPUTS_O_CARD_RENDERER = [
 
 export class OListItemCardRenderer {
 
-  public static DEFAULT_INPUTS_O_CARD_RENDERER = DEFAULT_INPUTS_O_CARD_RENDERER;
-  public static DEFAULT_OUTPUTS_O_CARD_RENDERER = DEFAULT_OUTPUTS_O_CARD_RENDERER;
-
   /* inputs variables */
   protected _title: string;
   protected _subtitle: string;

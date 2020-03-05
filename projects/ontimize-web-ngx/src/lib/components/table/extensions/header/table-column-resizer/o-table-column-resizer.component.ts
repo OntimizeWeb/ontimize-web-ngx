@@ -40,8 +40,6 @@ export const DEFAULT_OUTPUTS_O_TABLE_COLUMN_RESIZER = [
   }
 })
 export class OTableColumnResizerComponent implements OnInit, OnDestroy {
-  public static DEFAULT_INPUTS_O_TABLE_COLUMN_RESIZER = DEFAULT_INPUTS_O_TABLE_COLUMN_RESIZER;
-  public static DEFAULT_OUTPUTS_O_TABLE_COLUMN_RESIZER = DEFAULT_OUTPUTS_O_TABLE_COLUMN_RESIZER;
 
   column: OColumn;
   @InputConverter()

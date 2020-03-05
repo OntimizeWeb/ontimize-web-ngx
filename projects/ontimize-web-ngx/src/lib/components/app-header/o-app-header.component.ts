@@ -30,9 +30,6 @@ export const DEFAULT_OUTPUTS_O_APP_HEADER = [
 })
 export class OAppHeaderComponent implements OnDestroy {
 
-  public static DEFAULT_INPUTS_O_APP_HEADER = DEFAULT_INPUTS_O_APP_HEADER;
-  public static DEFAULT_OUTPUTS_O_APP_HEADER = DEFAULT_OUTPUTS_O_APP_HEADER;
-
   protected dialogService: DialogService;
   protected modulesInfoService: OModulesInfoService;
   protected _headerTitle = '';

@@ -28,9 +28,6 @@ export const DEFAULT_OUTPUTS_O_TEXTAREA_INPUT = [
 })
 export class OTextareaInputComponent extends OTextInputComponent {
 
-  public static DEFAULT_INPUTS_O_TEXTAREA_INPUT = DEFAULT_INPUTS_O_TEXTAREA_INPUT;
-  public static DEFAULT_OUTPUTS_O_TEXTAREA_INPUT = DEFAULT_OUTPUTS_O_TEXTAREA_INPUT;
-
   @InputConverter()
   public rows: number = 5;
   @InputConverter()

@@ -13,10 +13,14 @@ import {
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 import { OListItemComponent } from '../list-item/o-list-item.component';
-import { OListItemTextRenderer } from './o-list-item-text-renderer.class';
+import {
+  DEFAULT_INPUTS_O_TEXT_RENDERER,
+  DEFAULT_OUTPUTS_O_TEXT_RENDERER,
+  OListItemTextRenderer,
+} from './o-list-item-text-renderer.class';
 
 export const DEFAULT_INPUTS_O_LIST_ITEM_AVATAR = [
-  ...OListItemTextRenderer.DEFAULT_INPUTS_O_TEXT_RENDERER,
+  ...DEFAULT_INPUTS_O_TEXT_RENDERER,
   'avatar',
   'emptyAvatar: empty-avatar',
   // avatar-type [base64|url]: avatar type (extern url or base64). Default: no value.
@@ -24,7 +28,7 @@ export const DEFAULT_INPUTS_O_LIST_ITEM_AVATAR = [
 ];
 
 export const DEFAULT_OUTPUTS_O_LIST_ITEM_AVATAR = [
-  ...OListItemTextRenderer.DEFAULT_OUTPUTS_O_TEXT_RENDERER
+  ...DEFAULT_OUTPUTS_O_TEXT_RENDERER
 ];
 
 @Component({

@@ -16,9 +16,6 @@ export const DEFAULT_OUTPUTS_O_TEXT_RENDERER = [
 
 export class OListItemTextRenderer {
 
-  public static DEFAULT_INPUTS_O_TEXT_RENDERER = DEFAULT_INPUTS_O_TEXT_RENDERER;
-  public static DEFAULT_OUTPUTS_O_TEXT_RENDERER = DEFAULT_OUTPUTS_O_TEXT_RENDERER;
-
   /* inputs variables */
   protected _title: string;
   protected _primaryText: string;

@@ -22,8 +22,6 @@ export const DEFAULT_INPUTS_O_BASE_MENU_ITEM = [
 
 export class OBaseMenuItemClass implements OnInit, OnDestroy {
 
-  public static DEFAULT_INPUTS_O_BASE_MENU_ITEM = DEFAULT_INPUTS_O_BASE_MENU_ITEM;
-
   protected translateService: OTranslateService;
   protected onLanguageChangeSubscription: Subscription;
 

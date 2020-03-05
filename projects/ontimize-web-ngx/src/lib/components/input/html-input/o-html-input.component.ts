@@ -44,9 +44,6 @@ export const DEFAULT_OUTPUTS_O_HTML_INPUT = [
 })
 export class OHTMLInputComponent extends OFormDataComponent implements OnInit, AfterViewInit {
 
-  public static DEFAULT_INPUTS_O_HTML_INPUT = DEFAULT_INPUTS_O_HTML_INPUT;
-  public static DEFAULT_OUTPUTS_O_HTML_INPUT = DEFAULT_OUTPUTS_O_HTML_INPUT;
-
   protected _minLength: number = -1;
   protected _maxLength: number = -1;
 

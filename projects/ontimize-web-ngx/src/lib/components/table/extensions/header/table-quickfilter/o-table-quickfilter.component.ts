@@ -32,9 +32,6 @@ export const DEFAULT_OUTPUTS_O_TABLE_QUICKFILTER = [
 })
 export class OTableQuickfilterComponent implements OTableQuickfilter, OnInit, AfterViewInit, OnDestroy {
 
-  public static DEFAULT_INPUTS_O_TABLE_QUICKFILTER = DEFAULT_INPUTS_O_TABLE_QUICKFILTER;
-  public static DEFAULT_OUTPUTS_O_TABLE_QUICKFILTER = DEFAULT_OUTPUTS_O_TABLE_QUICKFILTER;
-
   @ViewChild('filter', { static: false })
   public filter: ElementRef;
 

@@ -32,9 +32,6 @@ export const DEFAULT_OUTPUTS_O_REAL_INPUT = [
 })
 export class ORealInputComponent extends OIntegerInputComponent implements OnInit {
 
-  public static DEFAULT_INPUTS_O_REAL_INPUT = DEFAULT_INPUTS_O_REAL_INPUT;
-  public static DEFAULT_OUTPUTS_O_REAL_INPUT = DEFAULT_OUTPUTS_O_REAL_INPUT;
-
   @InputConverter()
   minDecimalDigits: number = 2;
 

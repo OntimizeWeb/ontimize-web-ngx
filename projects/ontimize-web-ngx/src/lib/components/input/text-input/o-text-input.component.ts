@@ -41,9 +41,6 @@ export const DEFAULT_OUTPUTS_O_TEXT_INPUT = [
 
 export class OTextInputComponent extends OFormDataComponent implements OnInit {
 
-  public static DEFAULT_INPUTS_O_TEXT_INPUT = DEFAULT_INPUTS_O_TEXT_INPUT;
-  public static DEFAULT_OUTPUTS_O_TEXT_INPUT = DEFAULT_OUTPUTS_O_TEXT_INPUT;
-
   protected _minLength: number = -1;
   protected _maxLength: number = -1;
 

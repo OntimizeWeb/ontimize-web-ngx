@@ -53,9 +53,6 @@ export const DEFAULT_OUTPUTS_O_MENU_CARD = [];
 })
 export class OCardMenuItemComponent implements AfterViewInit, OnDestroy {
 
-  public static DEFAULT_INPUTS_O_MENU_CARD = DEFAULT_INPUTS_O_MENU_CARD;
-  public static DEFAULT_OUTPUTS_O_MENU_CARD = DEFAULT_OUTPUTS_O_MENU_CARD;
-
   title: string;
   image: string;
   icon: string;

@@ -12,15 +12,19 @@ import {
 } from '@angular/core';
 
 import { OListItemComponent } from '../list-item/o-list-item.component';
-import { OListItemTextRenderer } from './o-list-item-text-renderer.class';
+import {
+  DEFAULT_INPUTS_O_TEXT_RENDERER,
+  DEFAULT_OUTPUTS_O_TEXT_RENDERER,
+  OListItemTextRenderer,
+} from './o-list-item-text-renderer.class';
 
 export const DEFAULT_INPUTS_O_LIST_ITEM_TEXT = [
-  ...OListItemTextRenderer.DEFAULT_INPUTS_O_TEXT_RENDERER,
+  ...DEFAULT_INPUTS_O_TEXT_RENDERER,
   'iconPosition : icon-position'
 ];
 
 export const DEFAULT_OUTPUTS_O_LIST_ITEM_TEXT = [
-  ...OListItemTextRenderer.DEFAULT_OUTPUTS_O_TEXT_RENDERER
+  ...DEFAULT_OUTPUTS_O_TEXT_RENDERER
 ];
 
 @Component({

@@ -41,9 +41,6 @@ export const DEFAULT_OUTPUTS_O_SLIDETOGGLE = [
 })
 export class OSlideToggleComponent extends OFormDataComponent {
 
-  public static DEFAULT_INPUTS_O_CHECKBOX = DEFAULT_INPUTS_O_SLIDETOGGLE;
-  public static DEFAULT_OUTPUTS_O_CHECKBOX = DEFAULT_OUTPUTS_O_SLIDETOGGLE;
-
   public trueValue: number | boolean | string = true;
   public falseValue: number | boolean | string = false;
   public booleanType: 'number' | 'boolean' | 'string' = 'boolean';
