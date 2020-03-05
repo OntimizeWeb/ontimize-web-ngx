@@ -16,39 +16,31 @@ export * from './lib/decorators/index';
 export * from './lib/directives/index';
 export * from './lib/interfaces/index';
 
+export * from './lib/components/index';
+
 // Basic components files
-export * from './lib/components/o-component.class';
-export * from './lib/components/o-form-data-component.class';
-export * from './lib/components/o-service-base-component.class';
-export * from './lib/components/o-service-component.class';
+// export * from './lib/components/o-component.class';
+// export * from './lib/components/o-form-data-component.class';
+// export * from './lib/components/o-service-base-component.class';
+// export * from './lib/components/o-service-component.class';
 
-export * from './lib/components/input/o-form-service-component.class';
+// export * from './lib/components/input/o-form-service-component.class';
 
-export * from './lib/components/container/o-container-component.class';
-export * from './lib/components/container/o-container-collapsible-component.class';
+// export * from './lib/components/container/o-container-component.class';
+// export * from './lib/components/container/o-container-collapsible-component.class';
 
-export * from './lib/components/bar-menu/o-base-menu-item.class';
-export * from './lib/components/contextmenu/o-content-menu.class';
+// export * from './lib/components/bar-menu/o-base-menu-item.class';
+// export * from './lib/components/contextmenu/o-content-menu.class';
 
-export * from './lib/components/list/renderers/o-list-item-card-renderer.class';
-export * from './lib/components/list/renderers/o-list-item-text-renderer.class';
+// export * from './lib/components/list/renderers/o-list-item-card-renderer.class';
+// export * from './lib/components/list/renderers/o-list-item-text-renderer.class';
 
-// export * from './lib/components/table/column/o-column.class';
-// export * from './lib/components/table/column/cell-editor/index';
-// export * from './lib/components/table/column/cell-renderer/index';
-// export * from './lib/components/table/extensions/header/table-menu/o-table-export-configuration.class';
-// export * from './lib/components/table/extensions/dialog/o-table-base-dialog.class';
-// export * from './lib/components/table/extensions/o-table-storage.class';
-// export * from './lib/components/table/extensions/o-table.datasource';
-// export * from './lib/components/table/extensions/o-table.dao';
-// export * from './lib/components/table/extensions/o-table-options.class';
 
-export * from './lib/components/table/index';
-// export * from './lib/components/table/extensions/dialog/o-table-base-dialog.class';
-// export * from './lib/components/table/column/cell-editor/o-base-table-cell-editor.class';
-// export * from './lib/components/table/column/cell-renderer/o-base-table-cell-renderer.class';
 
-// export * from './lib/components/index';
+// export * from './lib/components/table/index';
+
+
+
 
 export * from './lib/layouts/index';
 export * from './lib/util/index';
