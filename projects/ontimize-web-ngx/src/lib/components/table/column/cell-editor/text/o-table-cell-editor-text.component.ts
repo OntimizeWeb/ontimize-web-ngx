@@ -1,12 +1,17 @@
-import { Component, Injector, ViewChild, TemplateRef, ElementRef, ChangeDetectionStrategy } from '@angular/core';
-import { OBaseTableCellEditor } from '../o-base-table-cell-editor.class';
+import { ChangeDetectionStrategy, Component, ElementRef, Injector, TemplateRef, ViewChild } from '@angular/core';
+
+import {
+  DEFAULT_INPUTS_O_TABLE_CELL_EDITOR,
+  DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR,
+  OBaseTableCellEditor,
+} from '../o-base-table-cell-editor.class';
 
 export const DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_TEXT = [
-  // ...OBaseTableCellEditor.DEFAULT_INPUTS_O_TABLE_CELL_EDITOR
+  ...DEFAULT_INPUTS_O_TABLE_CELL_EDITOR
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_TEXT = [
-  // ...OBaseTableCellEditor.DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR
+  ...DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR
 ];
 
 @Component({

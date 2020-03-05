@@ -1,14 +1,19 @@
-import { Component, Injector, ViewChild, TemplateRef, ChangeDetectionStrategy } from '@angular/core';
-import { ValidatorFn, FormControl } from '@angular/forms';
+import { ChangeDetectionStrategy, Component, Injector, TemplateRef, ViewChild } from '@angular/core';
+import { FormControl, ValidatorFn } from '@angular/forms';
+
 import { InputConverter } from '../../../../../decorators/input-converter';
+import {
+  DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_INTEGER,
+  DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_INTEGER,
+} from '../integer/o-table-cell-editor-integer.component';
 import { OBaseTableCellEditor } from '../o-base-table-cell-editor.class';
 
 export const DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_REAL = [
-  ...OTableCellEditorIntegerComponent.DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_INTEGER
+  ...DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_INTEGER
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_REAL = [
-  ...OTableCellEditorIntegerComponent.DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_INTEGER
+  ...DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_INTEGER
 ];
 
 @Component({

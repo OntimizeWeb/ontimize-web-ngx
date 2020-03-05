@@ -13,11 +13,7 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_REAL = [
   // decimal-separator [string]: decimal separator. Default: dot (.).
   'decimalSeparator: decimal-separator',
   'minDecimalDigits: min-decimal-digits',
-  'maxDecimalDigits: max-decimal-digits',
-
-  // also existing in OTableCellRendererIntegerComponent
-  'grouping',
-  'thousandSeparator: thousand-separator'
+  'maxDecimalDigits: max-decimal-digits'
 ];
 
 @Component({
@@ -26,19 +22,12 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_REAL = [
   changeDetection: ChangeDetectionStrategy.OnPush,
   inputs: DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_REAL
 })
-export class OTableCellRendererRealComponent extends OBaseTableCellRenderer implements OnInit {
-
-  public static DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_REAL = DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_REAL;
+export class OTableCellRendererRealComponent extends OTableCellRendererIntegerComponent implements OnInit {
 
   @InputConverter()
   minDecimalDigits: number = 2;
   @InputConverter()
   maxDecimalDigits: number = 2;
-
-  // also existing in OTableCellRendererIntegerComponent
-  @InputConverter()
-  protected grouping: boolean = true;
-  protected thousandSeparator: string = ',';
 
   protected decimalSeparator: string = '.';
   protected numberService: NumberService;

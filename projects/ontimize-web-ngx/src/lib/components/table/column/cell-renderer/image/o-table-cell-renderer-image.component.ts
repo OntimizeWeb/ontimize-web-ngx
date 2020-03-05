@@ -1,11 +1,11 @@
 import { ChangeDetectionStrategy, Component, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
 
-import { Util } from '../../../../../util/util';
-import { /*DEFAULT_INPUTS_O_BASE_TABLE_CELL_RENDERER*/ OBaseTableCellRenderer } from '../o-base-table-cell-renderer.class';
 import { OColumn } from '../../../../../interfaces/o-column.interface';
+import { Util } from '../../../../../util/util';
+import { DEFAULT_INPUTS_O_BASE_TABLE_CELL_RENDERER, OBaseTableCellRenderer } from '../o-base-table-cell-renderer.class';
 
 export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_IMAGE = [
-  //...DEFAULT_INPUTS_O_BASE_TABLE_CELL_RENDERER,
+  ...DEFAULT_INPUTS_O_BASE_TABLE_CELL_RENDERER,
   // image-type [base64|url]: image type (extern url or base64). Default: no value.
   'imageType: image-type',
   // empty-image [string]: url of the image to be shown if the column has not any value. Default: no value.
@@ -25,9 +25,6 @@ export const DEFAULT_OUTPUTS_O_TABLE_CELL_RENDERER_IMAGE = [
   inputs: DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_IMAGE
 })
 export class OTableCellRendererImageComponent extends OBaseTableCellRenderer implements OnInit {
-
-  public static DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_IMAGE = DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_IMAGE;
-  public static DEFAULT_OUTPUTS_O_TABLE_CELL_RENDERER_IMAGE = DEFAULT_OUTPUTS_O_TABLE_CELL_RENDERER_IMAGE;
 
   public imageType: string;
   public emptyImage: string;

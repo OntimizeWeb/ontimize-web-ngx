@@ -1,11 +1,11 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
+
 import { Codes } from '../../../../../util/codes';
 import { Util } from '../../../../../util/util';
-import { /*DEFAULT_INPUTS_O_BASE_TABLE_CELL_RENDERER*/ OBaseTableCellRenderer } from '../o-base-table-cell-renderer.class';
-
+import { DEFAULT_INPUTS_O_BASE_TABLE_CELL_RENDERER, OBaseTableCellRenderer } from '../o-base-table-cell-renderer.class';
 
 export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_ACTION = [
-  //...DEFAULT_INPUTS_O_BASE_TABLE_CELL_RENDERER,
+  ...DEFAULT_INPUTS_O_BASE_TABLE_CELL_RENDERER,
   'icon',
   'svgIcon:svg-icon',
   'action',
@@ -26,9 +26,6 @@ export const DEFAULT_OUTPUTS_O_TABLE_CELL_RENDERER_ACTION = [
   outputs: DEFAULT_OUTPUTS_O_TABLE_CELL_RENDERER_ACTION
 })
 export class OTableCellRendererActionComponent extends OBaseTableCellRenderer implements OnInit {
-
-  public static DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_ACTION = DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_ACTION;
-  public static DEFAULT_OUTPUTS_O_TABLE_CELL_RENDERER_ACTION = DEFAULT_OUTPUTS_O_TABLE_CELL_RENDERER_ACTION;
 
   onClick: EventEmitter<object> = new EventEmitter<object>();
   action: string;

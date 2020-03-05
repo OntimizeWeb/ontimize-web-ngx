@@ -24,7 +24,6 @@ export const DEFAULT_TABLE_COLUMN_AGGREGATE = [
   templateUrl: './o-table-column-aggregate.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   inputs: DEFAULT_TABLE_COLUMN_AGGREGATE
-
 })
 export class OTableColumnAggregateComponent implements OnDestroy, OnInit {
   public static DEFAULT_AGGREGATE = 'SUM';

@@ -1,18 +1,22 @@
-import { Component, Injector, ViewChild, TemplateRef, ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Injector, TemplateRef, ViewChild } from '@angular/core';
 import { FormControl, ValidatorFn } from '@angular/forms';
 
 import { InputConverter } from '../../../../../decorators/input-converter';
-import { OBaseTableCellEditor } from '../o-base-table-cell-editor.class';
+import {
+  DEFAULT_INPUTS_O_TABLE_CELL_EDITOR,
+  DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR,
+  OBaseTableCellEditor,
+} from '../o-base-table-cell-editor.class';
 
 export const DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_INTEGER = [
-  // ...OBaseTableCellEditor.DEFAULT_INPUTS_O_TABLE_CELL_EDITOR,
+  ...DEFAULT_INPUTS_O_TABLE_CELL_EDITOR,
   'min',
   'max',
   'step'
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_INTEGER = [
-  // ...OBaseTableCellEditor.DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR
+  ...DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR
 ];
 
 @Component({
@@ -24,9 +28,6 @@ export const DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_INTEGER = [
 })
 
 export class OTableCellEditorIntegerComponent extends OBaseTableCellEditor {
-
-  public static DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_INTEGER = DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_INTEGER;
-  public static DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_INTEGER = DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_INTEGER;
 
   @ViewChild('templateref', { read: TemplateRef, static: false }) public templateref: TemplateRef<any>;
 

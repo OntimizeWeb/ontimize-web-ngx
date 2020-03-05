@@ -1,8 +1,11 @@
-import { Component, Injector, OnInit, TemplateRef, ViewChild, ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
 
+import { IPercentPipeArgument, OPercentageValueBaseType, OPercentPipe } from '../../../../../pipes/o-percentage.pipe';
 import { NumberService } from '../../../../../services/number.service';
-import { IPercentPipeArgument, OPercentPipe, OPercentageValueBaseType } from '../../../../../pipes/o-percentage.pipe';
-import { DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_REAL, OTableCellRendererRealComponent } from '../real/o-table-cell-renderer-real.component';
+import {
+  DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_REAL,
+  OTableCellRendererRealComponent,
+} from '../real/o-table-cell-renderer-real.component';
 
 export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_PERCENTAGE = [
   ...DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_REAL,
@@ -15,7 +18,7 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_PERCENTAGE = [
   changeDetection: ChangeDetectionStrategy.OnPush,
   inputs: DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_PERCENTAGE
 })
-export class OTableCellRendererPercentageComponent extends OBaseTableCellRenderer implements OnInit {
+export class OTableCellRendererPercentageComponent extends OTableCellRendererRealComponent implements OnInit {
 
   public static DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_PERCENTAGE = DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_PERCENTAGE;
 
@@ -23,11 +26,6 @@ export class OTableCellRendererPercentageComponent extends OBaseTableCellRendere
   minDecimalDigits = 0;
   maxDecimalDigits = 0;
   protected valueBase: OPercentageValueBaseType = 1;
-
-  // also existing in OTableCellRendererIntegerComponent
-  @InputConverter()
-  protected grouping: boolean = true;
-  protected thousandSeparator: string = ',';
 
   protected numberService: NumberService;
 

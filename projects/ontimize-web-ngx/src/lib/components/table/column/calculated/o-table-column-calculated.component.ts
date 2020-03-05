@@ -4,7 +4,7 @@ import { OTableComponent } from '../../o-table.component';
 import { DEFAULT_INPUTS_O_TABLE_COLUMN, OTableColumnComponent } from '../o-table-column.component';
 
 export const DEFAULT_INPUTS_O_TABLE_COLUMN_CALCULATED = [
-  // ...DEFAULT_INPUTS_O_TABLE_COLUMN,
+  ...DEFAULT_INPUTS_O_TABLE_COLUMN,
   // operation [string]: operation .
   'operation',
   // operation-function [funtion]: callback title. Default: no value.

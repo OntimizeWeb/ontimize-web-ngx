@@ -23,8 +23,12 @@ import { IExpression } from '../../../util/filter-expression.utils';
 import { SQLTypes } from '../../../util/sqltypes';
 import { Util } from '../../../util/util';
 import { OTableComponent } from '../o-table.component';
-import { editorsMapping } from './cell-editor/cell-editor';
-import { renderersMapping } from './cell-renderer/cell-renderer';
+import { editorsMapping, O_TABLE_CELL_EDITORS_INPUTS, O_TABLE_CELL_EDITORS_OUTPUTS } from './cell-editor/cell-editor';
+import {
+  O_TABLE_CELL_RENDERERS_INPUTS,
+  O_TABLE_CELL_RENDERERS_OUTPUTS,
+  renderersMapping,
+} from './cell-renderer/cell-renderer';
 
 export const DEFAULT_INPUTS_O_TABLE_COLUMN = [
 
@@ -78,13 +82,13 @@ export const DEFAULT_INPUTS_O_TABLE_COLUMN = [
 
   'filterExpressionFunction: filter-expression-function',
 
-  // ...O_TABLE_CELL_RENDERERS_INPUTS,
-  // ...O_TABLE_CELL_EDITORS_INPUTS
+  ...O_TABLE_CELL_RENDERERS_INPUTS,
+  ...O_TABLE_CELL_EDITORS_INPUTS
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE_COLUMN = [
-  // ...O_TABLE_CELL_RENDERERS_OUTPUTS,
-  // ...O_TABLE_CELL_EDITORS_OUTPUTS
+  ...O_TABLE_CELL_RENDERERS_OUTPUTS,
+  ...O_TABLE_CELL_EDITORS_OUTPUTS
 ];
 
 @Component({

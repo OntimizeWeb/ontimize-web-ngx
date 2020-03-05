@@ -1,9 +1,10 @@
-import { Component, Injector, ViewChild, TemplateRef, ChangeDetectionStrategy, OnInit } from '@angular/core';
-import { OMomentPipe, IMomentPipeArgument } from '../../../../../pipes/o-moment.pipe';
-import { OBaseTableCellRenderer, /*DEFAULT_INPUTS_O_BASE_TABLE_CELL_RENDERER*/ } from '../o-base-table-cell-renderer.class';
+import { ChangeDetectionStrategy, Component, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
+
+import { IMomentPipeArgument, OMomentPipe } from '../../../../../pipes/o-moment.pipe';
+import { DEFAULT_INPUTS_O_BASE_TABLE_CELL_RENDERER, OBaseTableCellRenderer } from '../o-base-table-cell-renderer.class';
 
 export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_DATE = [
-  //...DEFAULT_INPUTS_O_BASE_TABLE_CELL_RENDERER,
+  ...DEFAULT_INPUTS_O_BASE_TABLE_CELL_RENDERER,
   // format [string]: date format. See MomentJS (http://momentjs.com/).
   'format'
 ];
@@ -15,8 +16,6 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_DATE = [
   inputs: DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_DATE
 })
 export class OTableCellRendererDateComponent extends OBaseTableCellRenderer implements OnInit {
-
-  public static DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_DATE = DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_DATE;
 
   protected componentPipe: OMomentPipe;
   protected pipeArguments: IMomentPipeArgument;

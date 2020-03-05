@@ -10,6 +10,7 @@ import {
 } from '@angular/core';
 import { Subscription } from 'rxjs';
 
+import { OColumn } from '../../../../../interfaces/o-column.interface';
 import { DialogService } from '../../../../../services/dialog.service';
 import { OntimizeService } from '../../../../../services/ontimize.service';
 import { Codes } from '../../../../../util/codes';
@@ -17,11 +18,10 @@ import { FilterExpressionUtils, IExpression } from '../../../../../util/filter-e
 import { ServiceUtils } from '../../../../../util/service.utils';
 import { SQLTypes } from '../../../../../util/sqltypes';
 import { Util } from '../../../../../util/util';
-import { /*DEFAULT_INPUTS_O_BASE_TABLE_CELL_RENDERER*/ OBaseTableCellRenderer } from '../o-base-table-cell-renderer.class';
-import { OColumn } from '../../../../../interfaces/o-column.interface';
+import { DEFAULT_INPUTS_O_BASE_TABLE_CELL_RENDERER, OBaseTableCellRenderer } from '../o-base-table-cell-renderer.class';
 
 export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_SERVICE = [
-  //...DEFAULT_INPUTS_O_BASE_TABLE_CELL_RENDERER,
+  ...DEFAULT_INPUTS_O_BASE_TABLE_CELL_RENDERER,
   'entity',
   'service',
   'columns',
@@ -42,8 +42,6 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_SERVICE = [
   ]
 })
 export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer implements OnInit, AfterViewInit, OnDestroy {
-
-  public static DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_SERVICE = DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_SERVICE;
 
   @ViewChild('templateref', { read: TemplateRef, static: false }) public templateref: TemplateRef<any>;
 

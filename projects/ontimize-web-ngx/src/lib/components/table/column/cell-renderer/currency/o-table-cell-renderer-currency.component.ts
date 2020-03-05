@@ -1,30 +1,19 @@
+import { ChangeDetectionStrategy, Component, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
 
-import { Component, Injector, OnInit, TemplateRef, ViewChild, ChangeDetectionStrategy } from '@angular/core';
-
-import { CurrencyService } from '../../../../../services/currency.service';
-import { ICurrencyPipeArgument, OCurrencyPipe } from '../../../../../pipes/o-currency.pipe';
-import { OBaseTableCellRenderer } from '../o-base-table-cell-renderer.class';
-import { OTableCellRendererRealComponent } from '../real/o-table-cell-renderer-real.component';
 import { InputConverter } from '../../../../../decorators/input-converter';
-
+import { ICurrencyPipeArgument, OCurrencyPipe } from '../../../../../pipes/o-currency.pipe';
+import { CurrencyService } from '../../../../../services/currency.service';
+import { OBaseTableCellRenderer } from '../o-base-table-cell-renderer.class';
+import { DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_REAL } from '../real/o-table-cell-renderer-real.component';
 
 export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_CURRENCY = [
-  ...OTableCellRendererRealComponent.DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_REAL,
+  ...DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_REAL,
 
   // currency-symbol [string]: currency symbol. Default: dollar ($).
   'currencySymbol: currency-symbol',
 
   // currency-symbol-position [left|right]: position of the currency symbol. Default: left.
-  'currencySymbolPosition: currency-symbol-position',
-
-  // also existing in OTableCellRendererRealComponent
-  'decimalSeparator: decimal-separator',
-  'minDecimalDigits: min-decimal-digits',
-  'maxDecimalDigits: max-decimal-digits',
-
-  // also existing in OTableCellRendererIntegerComponent
-  'grouping',
-  'thousandSeparator: thousand-separator'
+  'currencySymbolPosition: currency-symbol-position'
 ];
 
 @Component({
@@ -34,8 +23,6 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_CURRENCY = [
   inputs: DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_CURRENCY
 })
 export class OTableCellRendererCurrencyComponent extends OBaseTableCellRenderer implements OnInit {
-
-  public static DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_CURRENCY = DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_CURRENCY;
 
   @InputConverter()
   minDecimalDigits: number = 2;
