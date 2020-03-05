@@ -1,14 +1,11 @@
-import { Injectable, Injector } from '@angular/core';
+import { Injector } from '@angular/core';
 
 import { AppConfig, Config } from '../../config/app-config';
 import { Util } from '../../util/util';
 import { OntimizeEEPermissionsService } from './ontimize-ee-permissions.service';
 import { OntimizePermissionsService } from './ontimize-permissions.service';
 
-@Injectable({
-  providedIn: 'root'
-})
-export class PermissionsServiceFactory {
+class PermissionsServiceFactory {
 
   protected config: Config;
 
