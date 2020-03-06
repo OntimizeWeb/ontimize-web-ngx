@@ -74,11 +74,8 @@ export const DEFAULT_INPUTS_O_FORM = [
   // service [string]: JEE service path. Default: no value.
   'service',
 
-  // stay-in-record-after-insert [string][yes|no|true|false]: shows detail form after insert new record. Default: false;
-  // 'stayInRecordAfterInsert: stay-in-record-after-insert',
-
   // stay-in-record-after-edit [string][yes|no|true|false]: shows edit form after edit a record. Default: false;
-  'stayInRecordAfterEdit: stay-in-record-after-edit',  
+  'stayInRecordAfterEdit: stay-in-record-after-edit',
 
   // [string][new | detail]: shows reseted form after insert a new record (new) or shows the inserted record after (detail)
   'afterInsertMode: after-insert-mode',
@@ -191,10 +188,8 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   keys: string = '';
   columns: string = '';
   service: string;
-  // @InputConverter()
-  // stayInRecordAfterInsert: boolean = false;
   @InputConverter()
-  stayInRecordAfterEdit: boolean = false;  
+  stayInRecordAfterEdit: boolean = false;
   afterInsertMode: 'new' | 'detail' = null;
   serviceType: string;
   @InputConverter()
@@ -785,7 +780,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   _goInsertMode(options?: any) {
     this.formNavigation.goInsertMode(options);
   }
-  
+
   _clearFormAfterInsert() {
     this.clearData();
     this._setComponentsEditable(true);
@@ -805,16 +800,16 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     }
 
     const self = this;
-    let values = this.getAttributesValuesToInsert();
-    let sqlTypes = this.getAttributesSQLTypes();
+    const values = this.getAttributesValuesToInsert();
+    const sqlTypes = this.getAttributesSQLTypes();
     this.insertData(values, sqlTypes).subscribe(resp => {
       self.postCorrectInsert(resp);
       self.formCache.setCacheSnapshot();
       self.markFormLayoutManagerToUpdate();
       if (self.afterInsertMode === 'detail') {
-        self._stayInRecordAfterInsert(resp);        
+        self._stayInRecordAfterInsert(resp);
       } else if (self.afterInsertMode === 'new') {
-          this._clearFormAfterInsert();
+        this._clearFormAfterInsert();
       } else {
         self._closeDetailAction();
       }
