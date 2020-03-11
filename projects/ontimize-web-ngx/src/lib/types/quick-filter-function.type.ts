@@ -1,3 +1,3 @@
-import { IExpression } from '../util/filter-expression.utils';
+import { Expression } from './expression.type';
 
-export type QuickFilterFunction = (filter: string) => IExpression | object;
+export type QuickFilterFunction = (filter: string) => Expression | object;

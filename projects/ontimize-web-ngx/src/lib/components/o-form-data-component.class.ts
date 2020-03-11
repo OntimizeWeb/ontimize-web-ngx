@@ -16,70 +16,26 @@ import { FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms'
 import { FloatLabelType, MatFormFieldAppearance, MatSuffix } from '@angular/material';
 import { Subscription } from 'rxjs';
 
-import { O_INPUTS_OPTIONS, OInputsOptions } from '../config/app-config';
+import { O_INPUTS_OPTIONS } from '../config/app-config';
 import { BooleanConverter, InputConverter } from '../decorators/input-converter';
+import { IFormDataComponent } from '../interfaces/form-data-component.interface';
+import { IFormDataTypeComponent } from '../interfaces/form-data-type-component.interface';
 import { OPermissions, PermissionsService } from '../services/permissions/permissions.service';
 import { OValidatorComponent } from '../shared/components/validation/o-validator.component';
-import { O_MAT_ERROR_OPTIONS, OMatErrorComponent, OMatErrorOptions } from '../shared/material/o-mat-error/o-mat-error';
+import { O_MAT_ERROR_OPTIONS, OMatErrorComponent } from '../shared/material/o-mat-error/o-mat-error';
+import { ErrorData } from '../types/error-data.type';
+import { FormValueOptions } from '../types/form-value-options.type';
+import { OInputsOptions } from '../types/o-inputs-options.type';
+import { OMatErrorOptions } from '../types/o-mat-error.type';
 import { Codes } from '../util/codes';
 import { PermissionsUtils } from '../util/permissions';
 import { SQLTypes } from '../util/sqltypes';
 import { Util } from '../util/util';
 import { OFormComponent } from './form/o-form.component';
-import { IFormValueOptions, OFormValue } from './form/OFormValue';
+import { OFormValue } from './form/OFormValue';
 import { OFormControl } from './input/o-form-control.class';
-import { IComponent, OBaseComponent } from './o-component.class';
-
-export interface IMultipleSelection extends IComponent {
-  getSelectedItems(): any[];
-  setSelectedItems(values: any[]): void;
-}
-
-export interface IFormDataTypeComponent extends IComponent {
-  getSQLType(): number;
-}
-
-export interface IFormControlComponent extends IComponent {
-  getControl(): FormControl;
-  getFormControl(): FormControl;
-  hasError(error: string): boolean;
-}
-
-export interface IFormDataComponent extends IFormControlComponent {
-  onChange: EventEmitter<object>;
-  onValueChange: EventEmitter<OValueChangeEvent>;
-
-  data(value: any): void;
-  isAutomaticBinding(): boolean;
-  isAutomaticRegistering(): boolean;
-  setValue(val: any, options?: IFormValueOptions): void;
-  clearValue(options?: IFormValueOptions): void;
-  getValue(): any;
-}
-
-export interface IErrorData {
-  name: string;
-  text: string;
-}
-
-export class OValueChangeEvent {
-  public static USER_CHANGE = 0;
-  public static PROGRAMMATIC_CHANGE = 1;
-
-  constructor(
-    public type: number,
-    public newValue: any,
-    public oldValue: any,
-    public target: any) { }
-
-  public isUserChange(): boolean {
-    return this.type === OValueChangeEvent.USER_CHANGE;
-  }
-
-  public isProgrammaticChange(): boolean {
-    return this.type === OValueChangeEvent.PROGRAMMATIC_CHANGE;
-  }
-}
+import { OBaseComponent } from './o-component.class';
+import { OValueChangeEvent } from './o-value-change-event.class';
 
 export const DEFAULT_INPUTS_O_FORM_DATA_COMPONENT = [
   'oattr: attr',
@@ -161,7 +117,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   @ViewChildren(MatSuffix)
   protected _matSuffixList: QueryList<MatSuffix>;
 
-  protected errorsData: IErrorData[] = [];
+  protected errorsData: ErrorData[] = [];
   protected validatorsSubscription: Subscription;
   @ContentChildren(OValidatorComponent)
   protected validatorChildren: QueryList<OValidatorComponent>;
@@ -271,8 +227,8 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     return this._fControl && this._fControl.hasError(error) ? this._fControl.getError(error)[prop] || '' : '';
   }
 
-  public getActiveOErrors(): IErrorData[] {
-    return this.errorsData.filter((item: IErrorData) => this.hasError(item.name));
+  public getActiveOErrors(): ErrorData[] {
+    return this.errorsData.filter((item: ErrorData) => this.hasError(item.name));
   }
 
   public initialize(): void {
@@ -355,7 +311,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     return this.defaultValue;
   }
 
-  public setValue(val: any, options: IFormValueOptions = {}, setDirty: boolean = false): void {
+  public setValue(val: any, options: FormValueOptions = {}, setDirty: boolean = false): void {
     if (!PermissionsUtils.checkEnabledPermission(this.permissions)) {
       return;
     }
@@ -373,7 +329,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   /**
    * Clears the component value.
    */
-  public clearValue(options?: IFormValueOptions, setDirty: boolean = false): void {
+  public clearValue(options?: FormValueOptions, setDirty: boolean = false): void {
     if (!PermissionsUtils.checkEnabledPermission(this.permissions)) {
       return;
     }
@@ -560,7 +516,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     this.onValueChange.emit(event);
   }
 
-  protected setFormValue(val: any, options?: IFormValueOptions, setDirty: boolean = false): void {
+  protected setFormValue(val: any, options?: FormValueOptions, setDirty: boolean = false): void {
     this.ensureOFormValue(val);
     if (this._fControl) {
       this._fControl.setValue(this.value.value, options);
@@ -588,7 +544,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
         if (validatorFunction) {
           validators.push(validatorFunction);
         }
-        const errorsData: IErrorData[] = oValidator.getErrorsData();
+        const errorsData: ErrorData[] = oValidator.getErrorsData();
         self.errorsData.push(...errorsData);
       });
     }

@@ -1,18 +1,13 @@
 import { EventEmitter, Injector } from '@angular/core';
 import { NavigationStart, Router } from '@angular/router';
 
-import { AppConfig, Config } from '../config/app-config';
+import { AppConfig } from '../config/app-config';
+import { ILocalStorageComponent } from '../interfaces/local-storage-component.interface';
+import { Config } from '../types/config.type';
 import { SessionInfo } from '../types/session-info.type';
 import { ObservableWrapper } from '../util/async';
 import { Util } from '../util/util';
 import { LoginStorageService } from './login-storage.service';
-
-export interface ILocalStorageComponent {
-  storeState?: boolean;
-  getDataToStore(): object;
-  getComponentKey(): string;
-  getRouteKey?(): string;
-}
 
 export class LocalStorageService {
   static COMPONENTS_STORAGE_KEY: string = 'components';
@@ -59,7 +54,7 @@ export class LocalStorageService {
       completeKey += '_' + routeKey;
     }
     const storedObject = {};
-    for (let prop in dataToStore) {
+    for (const prop in dataToStore) {
       if (dataToStore.hasOwnProperty(prop)) {
         storedObject[prop] = dataToStore[prop];
       }

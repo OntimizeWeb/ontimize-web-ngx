@@ -1,10 +1,13 @@
-import { OColumnTooltip } from '../types/o-column-tooltip.type';
-import { OColumnAggregate } from '../types/o-column-aggregate.type';
-import { OperatorFunction, OTableColumnCalculatedComponent } from '../components/table/column/calculated/o-table-column-calculated.component';
-import { OTableColumnComponent } from '../components/table/column/o-table-column.component';
+import {
+  OperatorFunction,
+  OTableColumnCalculatedComponent,
+} from '../components/table/column/calculated/o-table-column-calculated.component';
 import { OBaseTableCellRenderer } from '../components/table/column/cell-renderer/o-base-table-cell-renderer.class';
-import { IExpression } from '../util/filter-expression.utils';
+import { OTableColumnComponent } from '../components/table/column/o-table-column.component';
 import { OTableComponent } from '../components/table/o-table.component';
+import { Expression } from '../types/expression.type';
+import { OColumnAggregate } from '../types/o-column-aggregate.type';
+import { OColumnTooltip } from '../types/o-column-tooltip.type';
 
 export interface OColumn {
   attr: string;
@@ -31,7 +34,7 @@ export interface OColumn {
   DOMWidth: number;
   setDefaultProperties: (table: OTableComponent) => void;
   setColumnProperties: (column: OTableColumnComponent | OTableColumnCalculatedComponent | any) => void;
-  filterExpressionFunction: (columnAttr: string, quickFilter?: string) => IExpression;
+  filterExpressionFunction: (columnAttr: string, quickFilter?: string) => Expression;
   getMinWidthValue: () => any;
   getMaxWidthValue: () => any;
   getRenderWidth: () => any;

@@ -1,28 +1,9 @@
-import { Observable } from 'rxjs';
-
-import { IFormDataComponent } from '../components/o-form-data-component.class';
+import { IDataService } from '../interfaces/data-service.interface';
+import { IFormDataComponent } from '../interfaces/form-data-component.interface';
+import { IPermissionsService } from '../interfaces/permissions-service.interface';
+import { ODateValueType } from '../types/o-date-value.type';
 import { Base64 } from './base64';
 import { Codes } from './codes';
-
-export interface IDataService {
-  getDefaultServiceConfiguration(serviceName?: string): any;
-  configureService(config: any): void;
-  query(kv?: object, av?: Array<string>, entity?: string, sqltypes?: object): Observable<any>;
-  advancedQuery(kv?: object, av?: Array<string>, entity?: string, sqltypes?: object, offset?: number, pagesize?: number, orderby?: Array<object>): Observable<any>;
-  insert(av: object, entity?: string, sqltypes?: object): Observable<any>;
-  update(kv: object, av: object, entity?: string, sqltypes?: object): Observable<any>;
-  'delete'(kv: object, entity?: string, sqltypes?: object): Observable<any>;
-}
-
-export interface IPermissionsService {
-  loadPermissions();
-}
-
-export interface IAuthService {
-  startsession(user: string, password: string): Observable<any>;
-  endsession(user: string, sessionId: number): Observable<any>;
-  redirectLogin?(sessionExpired?: boolean);
-}
 
 export class Util {
 
@@ -354,5 +335,14 @@ export class Util {
       });
     });
     return difference;
+  }
+
+  static convertToODateValueType(val: any): ODateValueType {
+    let result: ODateValueType = 'timestamp';
+    const lowerVal = (val || '').toLowerCase();
+    if (lowerVal === 'string' || lowerVal === 'date' || lowerVal === 'timestamp' || lowerVal === 'iso-8601') {
+      result = lowerVal;
+    }
+    return result;
   }
 }

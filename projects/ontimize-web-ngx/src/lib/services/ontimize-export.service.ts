@@ -4,7 +4,8 @@ import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { share } from 'rxjs/operators';
 
-import { AppConfig, Config } from '../config/app-config';
+import { AppConfig } from '../config/app-config';
+import { Config } from '../types/config.type';
 import { Codes } from '../util/codes';
 import { ServiceUtils } from '../util/service.utils';
 import { LoginStorageService } from './login-storage.service';

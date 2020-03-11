@@ -10,16 +10,10 @@ import {
   Optional,
 } from '@angular/core';
 
+import { OMatErrorOptions, OMatErrorType } from '../../../types/o-mat-error.type';
 import { Codes } from '../../../util/codes';
 
-export const O_MAT_ERROR_OPTIONS =
-  new InjectionToken<OMatErrorOptions>('o-mat-error-options');
-
-export type OMatErrorType = 'standard' | 'lite';
-
-export interface OMatErrorOptions {
-  type?: OMatErrorType;
-}
+export const O_MAT_ERROR_OPTIONS = new InjectionToken<OMatErrorOptions>('o-mat-error-options');
 
 let nextUniqueId = 0;
 

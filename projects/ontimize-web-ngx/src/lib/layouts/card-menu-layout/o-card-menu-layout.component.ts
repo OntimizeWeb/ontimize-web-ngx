@@ -9,8 +9,10 @@ import {
 } from '@angular/core';
 import { Subscription } from 'rxjs';
 
-import { AppMenuService, MenuGroup, MenuRootItem } from '../../services/app-menu.service';
+import { MenuGroup } from '../../interfaces/app-menu.interface';
+import { AppMenuService } from '../../services/app-menu.service';
 import { OTranslateService } from '../../services/translate/o-translate.service';
+import { MenuRootItem } from '../../types/menu-root-item.type';
 
 export const DEFAULT_INPUTS_O_MENU_LAYOUT = [
   'parentMenuId : parent-menu-id'

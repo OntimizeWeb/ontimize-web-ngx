@@ -11,12 +11,13 @@ import { OFormLayoutManagerComponent } from '../layouts/form-layout/o-form-layou
 import { NavigationService } from '../services/navigation.service';
 import { PermissionsService } from '../services/permissions/permissions.service';
 import { OTranslateService } from '../services/translate/o-translate.service';
+import { Expression } from '../types/expression.type';
+import { OListInitializationOptions } from '../types/o-list-initialization-options.type';
 import { OTableInitializationOptions } from '../types/o-table-initialization-options.type';
 import { Codes } from '../util/codes';
-import { FilterExpressionUtils, IExpression } from '../util/filter-expression.utils';
+import { FilterExpressionUtils } from '../util/filter-expression.utils';
 import { Util } from '../util/util';
 import { OFormComponent } from './form/o-form.component';
-import { OListInitializationOptions } from './list/o-list.component';
 import { DEFAULT_INPUTS_O_SERVICE_BASE_COMPONENT, OServiceBaseComponent } from './o-service-base-component.class';
 
 export const DEFAULT_INPUTS_O_SERVICE_COMPONENT = [
@@ -478,14 +479,14 @@ export class OServiceComponent extends OServiceBaseComponent {
     return filter;
   }
 
-  protected getQuickFilterExpression(): IExpression {
+  protected getQuickFilterExpression(): Expression {
     if (this.pageable && Util.isDefined(this.quickFilterComponent)) {
       return this.quickFilterComponent.filterExpression;
     }
     return undefined;
   }
 
-  protected getFilterBuilderExpression(): IExpression {
+  protected getFilterBuilderExpression(): Expression {
     // Add filter from o-filter-builder component
     if (Util.isDefined(this.filterBuilder)) {
       return this.filterBuilder.getExpression();

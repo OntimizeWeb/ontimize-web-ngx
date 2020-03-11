@@ -1,11 +1,8 @@
 import { Injector, QueryList, ViewChildren } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
 
-import {
-  O_MAT_ERROR_OPTIONS,
-  OMatErrorComponent,
-  OMatErrorOptions,
-} from '../../../../shared/material/o-mat-error/o-mat-error';
+import { O_MAT_ERROR_OPTIONS, OMatErrorComponent } from '../../../../shared/material/o-mat-error/o-mat-error';
+import { OMatErrorOptions } from '../../../../types/o-mat-error.type';
 import { Codes } from '../../../../util/codes';
 import { Util } from '../../../../util/util';
 

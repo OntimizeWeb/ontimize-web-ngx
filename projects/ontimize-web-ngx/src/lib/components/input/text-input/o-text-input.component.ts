@@ -44,9 +44,6 @@ export class OTextInputComponent extends OFormDataComponent implements OnInit {
   protected _minLength: number = -1;
   protected _maxLength: number = -1;
 
-  @ViewChild('matInputRef', { static: false })
-  protected matInputRef: MatInput;
-
   constructor(
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
     elRef: ElementRef,

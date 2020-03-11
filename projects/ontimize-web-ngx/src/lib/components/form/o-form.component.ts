@@ -16,6 +16,9 @@ import { ActivatedRoute, Router, UrlSegment } from '@angular/router';
 import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
 
 import { InputConverter } from '../../decorators/input-converter';
+import { IComponent } from '../../interfaces/component.interface';
+import { IFormDataComponent } from '../../interfaces/form-data-component.interface';
+import { IFormDataTypeComponent } from '../../interfaces/form-data-type-component.interface';
 import { OFormLayoutManagerComponent } from '../../layouts/form-layout/o-form-layout-manager.component';
 import { DialogService } from '../../services/dialog.service';
 import { OFormService } from '../../services/forms/o-form.service';
@@ -23,20 +26,20 @@ import { NavigationService, ONavigationItem } from '../../services/navigation.se
 import { OntimizeService } from '../../services/ontimize.service';
 import { OFormPermissions, OPermissions, PermissionsService } from '../../services/permissions/permissions.service';
 import { SnackBarService } from '../../services/snackbar.service';
+import { FormValueOptions } from '../../types/form-value-options.type';
 import { Codes } from '../../util/codes';
 import { SQLTypes } from '../../util/sqltypes';
 import { Util } from '../../util/util';
 import { OFormContainerComponent } from '../form-container/o-form-container.component';
 import { OFormControl } from '../input/o-form-control.class';
-import { IComponent } from '../o-component.class';
-import { IFormDataComponent, IFormDataTypeComponent } from '../o-form-data-component.class';
 import { OFormCacheClass } from './cache/o-form.cache.class';
 import { CanComponentDeactivate, CanDeactivateFormGuard } from './guards/o-form-can-deactivate.guard';
 import { OFormNavigationClass } from './navigation/o-form.navigation.class';
-import { IFormValueOptions, OFormValue } from './OFormValue';
+import { OFormValue } from './OFormValue';
 import { OFormToolbarComponent } from './toolbar/o-form-toolbar.component';
+import { OFormInitializationOptions } from '../../types/o-form-initialization-options.type';
 
-export interface IFormDataComponentHash {
+interface IFormDataComponentHash {
   [attr: string]: IFormDataComponent;
 }
 
@@ -135,18 +138,6 @@ export const DEFAULT_OUTPUTS_O_FORM = [
   'onUpdate',
   'onDelete'
 ];
-
-export interface OFormInitializationOptions {
-  entity?: string;
-  service?: string;
-  columns?: string;
-  visibleColumns?: string;
-  keys?: string;
-  sortColumns?: string;
-  editableColumns?: string;
-  parentKeys?: string;
-}
-
 @Component({
   selector: 'o-form',
   providers: [
@@ -1320,7 +1311,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
    * @param attr attribute of control
    * @param value value
    */
-  setFieldValue(attr: string, value: any, options?: IFormValueOptions) {
+  setFieldValue(attr: string, value: any, options?: FormValueOptions) {
     const comp = this.getFieldReference(attr);
     if (comp) {
       comp.setValue(value, options);
@@ -1331,7 +1322,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
    * Sets the value of each control in the form.
    * @param values
    */
-  setFieldValues(values: any, options?: IFormValueOptions) {
+  setFieldValues(values: any, options?: FormValueOptions) {
     for (const key in values) {
       if (values.hasOwnProperty(key)) {
         this.setFieldValue(key, values[key], options);
@@ -1343,7 +1334,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
    * Clear the value of each control in the form
    * @param attr
    */
-  clearFieldValue(attr: string, options?: IFormValueOptions) {
+  clearFieldValue(attr: string, options?: FormValueOptions) {
     const comp = this.getFieldReference(attr);
     if (comp) {
       comp.clearValue(options);
@@ -1354,7 +1345,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
    * Reset the value of each control in the form
    * @param attrs
    */
-  clearFieldValues(attrs: string[], options?: IFormValueOptions) {
+  clearFieldValues(attrs: string[], options?: FormValueOptions) {
     const self = this;
     attrs.forEach((key) => {
       self.clearFieldValue(key, options);

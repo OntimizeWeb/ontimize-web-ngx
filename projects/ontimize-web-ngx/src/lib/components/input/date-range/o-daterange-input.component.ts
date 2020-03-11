@@ -5,10 +5,11 @@ import * as _moment from 'moment';
 import { InputConverter } from '../../../decorators/input-converter';
 import { MomentService } from '../../../services/moment.service';
 import { OTranslateService } from '../../../services/translate/o-translate.service';
+import { FormValueOptions } from '../../../types/form-value-options.type';
 import { Util } from '../../../util/util';
 import { OFormComponent } from '../../form/o-form.component';
-import { IFormValueOptions } from '../../form/OFormValue';
-import { OFormDataComponent, OValueChangeEvent } from '../../o-form-data-component.class';
+import { OFormDataComponent } from '../../o-form-data-component.class';
+import { OValueChangeEvent } from '../../o-value-change-event.class';
 import { DEFAULT_INPUTS_O_DATE_INPUT } from '../date-input/o-date-input.component';
 import { DEFAULT_OUTPUTS_O_TEXT_INPUT } from '../text-input/o-text-input.component';
 import { ODaterangepickerDirective } from './o-daterange-input.directive';
@@ -40,11 +41,11 @@ const moment = _moment;
 
 export class ODateRangeInputComponent extends OFormDataComponent implements OnDestroy, OnInit {
 
-  @ViewChild(ODaterangepickerDirective, { static: false }) pickerDirective: ODaterangepickerDirective;
-  picker: DaterangepickerComponent;
+  @ViewChild(ODaterangepickerDirective, { static: true }) pickerDirective: ODaterangepickerDirective;
+  picker!: DaterangepickerComponent;
 
-  @ViewChild('matInputRef', { static: false })
-  private matInputRef: ElementRef;
+  @ViewChild('matInputRef', { read: ElementRef, static: true })
+  private matInputRef!: ElementRef;
 
   @InputConverter()
   public textInputEnabled: boolean = true;
@@ -153,7 +154,6 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
     }
   }
 
-
   public openPicker() {
     this.pickerDirective.open();
   }
@@ -177,7 +177,7 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
 
   }
 
-  public setValue(val: any, options: IFormValueOptions = {}, setDirty: boolean = false) {
+  public setValue(val: any, options: FormValueOptions = {}, setDirty: boolean = false) {
     super.setValue(val, options, setDirty);
     this.updateElement();
   }
@@ -185,11 +185,10 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
   public onClickClearValue(e: Event): void {
     super.onClickClearValue(e);
     this.pickerDirective.value = undefined;
-    this.pickerDirective.datesUpdated.emit(undefined);
+    this.pickerDirective.datesUpdated.emit();
   }
 
   datesUpdated(range) {
-
     this.pickerDirective.close();
     this.setValue(range,
       {

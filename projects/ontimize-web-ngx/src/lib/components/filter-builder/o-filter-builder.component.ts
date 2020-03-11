@@ -5,11 +5,12 @@ import { debounceTime } from 'rxjs/operators';
 import { OFormComponent } from '../../components/form/o-form.component';
 import { OServiceComponent } from '../../components/o-service-component.class';
 import { InputConverter } from '../../decorators/input-converter';
+import { IFormDataComponent } from '../../interfaces/form-data-component.interface';
+import { BasicExpression } from '../../types/basic-expression.type';
+import { Expression } from '../../types/expression.type';
 import { Codes } from '../../util/codes';
-import { FilterExpressionUtils, IBasicExpression, IExpression } from '../../util/filter-expression.utils';
+import { FilterExpressionUtils } from '../../util/filter-expression.utils';
 import { Util } from '../../util/util';
-import { IFormDataComponent } from '../o-form-data-component.class';
-
 
 export const DEFAULT_INPUTS_O_FILTER_BUILDER = [
   // filters: [string] List of pairs of form component attributes and target component colums (targetColumn1:componentAttr1;targetColumn2:componentAttr2;...). Separated by ';'.
@@ -57,7 +58,7 @@ export class OFilterBuilderComponent implements AfterViewInit, OnDestroy, OnInit
 
   public filters: string;
   public targetCmp: OServiceComponent;
-  public expressionBuilder: (values: Array<{ attr, value }>) => IExpression;
+  public expressionBuilder: (values: Array<{ attr, value }>) => Expression;
   @InputConverter()
   public queryOnChange: boolean = false;
   @InputConverter()
@@ -119,10 +120,10 @@ export class OFilterBuilderComponent implements AfterViewInit, OnDestroy, OnInit
   }
 
   /**
-   * Returns an `IExpression` object with the filter.
-   * @returns the `IExpression` object with the filter.
+   * Returns an `Expression` object with the filter.
+   * @returns the `Expression` object with the filter.
    */
-  getExpression(): IExpression {
+  getExpression(): Expression {
     // Prepare form filter values [... { attr, value }]
     const formComponents = this.form.getComponents();
     const params: Array<{ attr, value }> = [];
@@ -141,7 +142,7 @@ export class OFilterBuilderComponent implements AfterViewInit, OnDestroy, OnInit
     }
 
     // Generate desfault expression
-    const expressions: Array<IExpression> = [];
+    const expressions: Array<Expression> = [];
     params.forEach(elem => {
       if (Util.isDefined(elem.value)) {
         expressions.push(FilterExpressionUtils.buildExpressionEquals(elem.attr, elem.value));
@@ -152,10 +153,10 @@ export class OFilterBuilderComponent implements AfterViewInit, OnDestroy, OnInit
   }
 
   /**
-   * Returns an `IBasicExpression` object with the filter.
-   * @returns the `IBasicExpression` object with the filter.
+   * Returns an `BasicExpression` object with the filter.
+   * @returns the `BasicExpression` object with the filter.
    */
-  getBasicExpression(): IBasicExpression {
+  getBasicExpression(): BasicExpression {
     return FilterExpressionUtils.buildBasicExpression(this.getExpression());
   }
 

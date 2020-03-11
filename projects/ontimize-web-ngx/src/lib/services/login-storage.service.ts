@@ -1,6 +1,7 @@
 import { Injectable, Injector } from '@angular/core';
 
-import { AppConfig, Config } from '../config/app-config';
+import { AppConfig } from '../config/app-config';
+import { Config } from '../types/config.type';
 import { SessionInfo } from '../types/session-info.type';
 import { Codes } from '../util/codes';
 

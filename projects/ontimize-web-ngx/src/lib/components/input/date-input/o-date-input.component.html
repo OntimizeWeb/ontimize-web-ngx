@@ -4,7 +4,7 @@
   <mat-form-field [appearance]="appearance" [floatLabel]="floatLabel" [hideRequiredMarker]="hideRequiredMarker"
     [class.custom-width]="hasCustomWidth" class="icon-field" fxFlexFill>
     <mat-label *ngIf="labelVisible">{{ olabel | oTranslate }}</mat-label>
-    <input matInput #matInputRef [matDatepicker]="d" [id]="getAttribute()" [formControlName]="getAttribute()"
+    <input matInput #matInputRef [matDatepicker]="picker" [id]="getAttribute()" [formControlName]="getAttribute()"
       [placeholder]="placeHolder" [readonly]="isReadOnly || !textInputEnabled" (focus)="innerOnFocus($event)"
       (blur)="innerOnBlur($event)" [matDatepickerFilter]="filterDate" (dateChange)="onChangeEvent($event)"
       [required]="isRequired" [value]="getValueAsDate()">
@@ -12,10 +12,10 @@
     <button type="button" *ngIf="showClearButton" matSuffix mat-icon-button (click)="onClickClearValue($event)">
       <mat-icon svgIcon="ontimize:close"></mat-icon>
     </button>
-    <mat-datepicker-toggle matSuffix [disabled]="isReadOnly || !enabled" [class.read-only]="isReadOnly" [for]="d">
+    <mat-datepicker-toggle matSuffix [disabled]="isReadOnly || !enabled" [class.read-only]="isReadOnly" [for]="picker">
       <mat-icon matDatepickerToggleIcon>today</mat-icon>
     </mat-datepicker-toggle>
-    <mat-datepicker #d [disabled]="isReadOnly || !enabled"></mat-datepicker>
+    <mat-datepicker #picker [disabled]="isReadOnly || !enabled"></mat-datepicker>
     <mat-error *ngIf="hasError('required')" text="{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}"></mat-error>
     <mat-error *ngIf="hasError('matDatepickerParse')"
       text="{{ 'FORM_VALIDATION.DATE_PARSE' | oTranslate }} {{ oformat }}"></mat-error>

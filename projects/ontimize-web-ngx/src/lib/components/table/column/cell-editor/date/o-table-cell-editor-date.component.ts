@@ -13,13 +13,10 @@ import moment from 'moment';
 
 import { InputConverter } from '../../../../../decorators/input-converter';
 import { MomentService } from '../../../../../services/moment.service';
-import { OntimizeMomentDateAdapter } from '../../../../../shared/material/custom.material.module';
+import { OntimizeMomentDateAdapter } from '../../../../../shared/material/date/ontimize-moment-date-adapter';
+import { DateFilterFunction } from '../../../../../types/date-filter-function.type';
+import { ODateValueType } from '../../../../../types/o-date-value.type';
 import { Util } from '../../../../../util/util';
-import {
-  DateFilterFunction,
-  ODateInputComponent,
-  ODateValueType,
-} from '../../../../input/date-input/o-date-input.component';
 import {
   DEFAULT_INPUTS_O_TABLE_CELL_EDITOR,
   DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR,
@@ -235,7 +232,7 @@ export class OTableCellEditorDateComponent extends OBaseTableCellEditor implemen
   }
 
   set dateValueType(val: any) {
-    this._dateValueType = ODateInputComponent.convertToODateValueType(val);
+    this._dateValueType = Util.convertToODateValueType(val);
   }
 
   get dateValueType(): any {

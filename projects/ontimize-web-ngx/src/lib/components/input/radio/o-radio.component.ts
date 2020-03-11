@@ -15,7 +15,7 @@ import { OntimizeService } from '../../../services/ontimize.service';
 import { Util } from '../../../util/util';
 import { OFormComponent } from '../../form/o-form.component';
 import { OFormValue } from '../../form/OFormValue';
-import { OValueChangeEvent } from '../../o-form-data-component.class';
+import { OValueChangeEvent } from '../../o-value-change-event.class';
 import {
   DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT,
   DEFAULT_OUTPUTS_O_FORM_SERVICE_COMPONENT,

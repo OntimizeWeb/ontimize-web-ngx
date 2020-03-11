@@ -3,23 +3,18 @@ import { Router } from '@angular/router';
 import { combineLatest, Observable } from 'rxjs';
 import { share } from 'rxjs/operators';
 
-import { AppConfig, Config } from '../config/app-config';
+import { AppConfig } from '../config/app-config';
+import { IAuthService } from '../interfaces/auth-service.interface';
+import { ILoginService } from '../interfaces/login-service.interface';
 import { DialogService } from '../services/dialog.service';
 import { OntimizeService } from '../services/ontimize.service';
 import { PermissionsService } from '../services/permissions/permissions.service';
 import { ORemoteConfigurationService } from '../services/remote-config.service';
+import { Config } from '../types/config.type';
 import { ObservableWrapper } from '../util/async';
 import { Codes } from '../util/codes';
 import { ServiceUtils } from '../util/service.utils';
-import { IAuthService } from '../util/util';
 import { LoginStorageService } from './login-storage.service';
-
-export interface ILoginService {
-  login(user: string, password: string): Observable<any>;
-  logout(): void;
-  sessionExpired(): void;
-  isLoggedIn(): boolean;
-}
 
 @Injectable()
 export class LoginService implements ILoginService {

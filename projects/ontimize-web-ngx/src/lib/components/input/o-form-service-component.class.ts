@@ -8,12 +8,12 @@ import { Codes } from '../../util/codes';
 import { ServiceUtils } from '../../util/service.utils';
 import { Util } from '../../util/util';
 import { OFormComponent } from '../form/o-form.component';
-import { IFormValueOptions } from '../form/OFormValue';
 import {
   DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,
   DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT,
   OFormDataComponent,
 } from '../o-form-data-component.class';
+import { FormValueOptions } from '../../types/form-value-options.type';
 
 export const DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT = [
   ...DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,
@@ -219,6 +219,7 @@ export class OFormServiceComponent extends OFormDataComponent {
     if (result.indexOf(this.valueColumn) === -1) {
       result.push(this.valueColumn);
     }
+    return result;
   }
 
   queryData(filter?: any) {
@@ -321,7 +322,7 @@ export class OFormServiceComponent extends OFormDataComponent {
     return value;
   }
 
-  setValue(val: any, options?: IFormValueOptions) {
+  setValue(val: any, options?: FormValueOptions) {
     const value = this.parseByValueColumnType(val);
     super.setValue(value, options);
   }

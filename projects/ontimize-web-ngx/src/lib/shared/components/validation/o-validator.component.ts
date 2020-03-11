@@ -1,7 +1,7 @@
 import { Component, Injector } from '@angular/core';
 import { ValidatorFn } from '@angular/forms';
 
-import { IErrorData } from '../../../components/o-form-data-component.class';
+import { ErrorData } from '../../../types/error-data.type';
 import { Util } from '../../../util/util';
 import { OErrorComponent } from './o-error.component';
 
@@ -22,7 +22,7 @@ export class OValidatorComponent {
   errorName: string;
   errorText: string;
 
-  protected errorsData: IErrorData[] = [];
+  protected errorsData: ErrorData[] = [];
 
   constructor(
     protected injector: Injector
@@ -41,8 +41,8 @@ export class OValidatorComponent {
     return this.validatorFn;
   }
 
-  getErrorsData(): IErrorData[] {
-    let result: IErrorData[] = [];
+  getErrorsData(): ErrorData[] {
+    let result: ErrorData[] = [];
     if (this.errorsData.length > 0) {
       result = this.errorsData;
     } else if (Util.isDefined(this.errorName) && Util.isDefined(this.errorText)) {

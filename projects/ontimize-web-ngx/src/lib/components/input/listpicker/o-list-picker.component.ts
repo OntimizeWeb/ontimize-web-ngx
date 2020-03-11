@@ -17,9 +17,9 @@ import { MatDialog, MatDialogConfig, MatDialogRef, MatInput } from '@angular/mat
 
 import { InputConverter } from '../../../decorators/input-converter';
 import { OntimizeService } from '../../../services/ontimize.service';
+import { FormValueOptions } from '../../../types/form-value-options.type';
 import { OFormComponent } from '../../form/o-form.component';
-import { IFormValueOptions } from '../../form/oFormValue';
-import { OValueChangeEvent } from '../../o-form-data-component.class';
+import { OValueChangeEvent } from '../../o-value-change-event.class';
 import { OFormControl } from '../o-form-control.class';
 import {
   DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT,
@@ -236,7 +236,7 @@ export class OListPickerComponent extends OFormServiceComponent implements After
     this.openDialog();
   }
 
-  protected setFormValue(val: any, options?: IFormValueOptions, setDirty: boolean = false): void {
+  protected setFormValue(val: any, options?: FormValueOptions, setDirty: boolean = false): void {
     super.setFormValue(val, options, setDirty);
     this.stateCtrl.setValue(this.getDescriptionValue());
   }

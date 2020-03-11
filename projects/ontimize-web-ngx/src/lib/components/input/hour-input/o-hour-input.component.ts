@@ -14,17 +14,17 @@ import { ValidatorFn } from '@angular/forms';
 import moment from 'moment';
 
 import { InputConverter, NumberConverter } from '../../../decorators/input-converter';
+import { FormValueOptions } from '../../../types/form-value-options.type';
 import { Codes } from '../../../util/codes';
 import { Util } from '../../../util/util';
 import { OValidators } from '../../../validators/o-validators';
 import { OFormComponent } from '../../form/o-form.component';
-import { IFormValueOptions } from '../../form/OFormValue';
 import {
   DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,
   DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT,
   OFormDataComponent,
-  OValueChangeEvent,
 } from '../../o-form-data-component.class';
+import { OValueChangeEvent } from '../../o-value-change-event.class';
 
 export type OHourValueType = 'string' | 'timestamp';
 
@@ -113,7 +113,7 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
     }
   }
 
-  public setTimestampValue(value: any, options?: IFormValueOptions): void {
+  public setTimestampValue(value: any, options?: FormValueOptions): void {
     let parsedValue;
     const momentV = Util.isDefined(value) ? moment(value) : value;
     if (momentV && momentV.isValid()) {

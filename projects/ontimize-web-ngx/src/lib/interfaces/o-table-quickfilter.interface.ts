@@ -1,7 +1,7 @@
-import { IExpression } from '../util/filter-expression.utils';
+import { Expression } from '../types/expression.type';
 
 export interface OTableQuickfilter {
-  filterExpression: IExpression;
+  filterExpression: Expression;
   setValue: (value: any, trigger?: boolean) => void;
   value: string;
 }

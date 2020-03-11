@@ -1,5 +1,5 @@
 import {
-  AfterViewChecked,
+  AfterViewInit,
   Component,
   ElementRef,
   forwardRef,
@@ -18,21 +18,24 @@ import { Subscription } from 'rxjs';
 
 import { InputConverter } from '../../../decorators/input-converter';
 import { MomentService } from '../../../services/moment.service';
-import { OntimizeMomentDateAdapter } from '../../../shared/material/custom.material.module';
+import { OntimizeMomentDateAdapter } from '../../../shared/material/date/ontimize-moment-date-adapter';
+import { DateFilterFunction } from '../../../types/date-filter-function.type';
+import { FormValueOptions } from '../../../types/form-value-options.type';
+import { ODateValueType } from '../../../types/o-date-value.type';
 import { SQLTypes } from '../../../util/sqltypes';
 import { Util } from '../../../util/util';
 import { OFormComponent } from '../../form/o-form.component';
-import { IFormValueOptions, OFormValue } from '../../form/OFormValue';
-import { OFormDataComponent, OValueChangeEvent } from '../../o-form-data-component.class';
+import { OFormValue } from '../../form/OFormValue';
+import { OFormDataComponent } from '../../o-form-data-component.class';
+import { OValueChangeEvent } from '../../o-value-change-event.class';
 import { DEFAULT_INPUTS_O_TEXT_INPUT, DEFAULT_OUTPUTS_O_TEXT_INPUT } from '../text-input/o-text-input.component';
-
-export type ODateValueType = 'string' | 'date' | 'timestamp' | 'iso-8601';
 
 export const DEFAULT_OUTPUTS_O_DATE_INPUT = [
   ...DEFAULT_OUTPUTS_O_TEXT_INPUT
 ];
 
 export const DEFAULT_INPUTS_O_DATE_INPUT = [
+  ...DEFAULT_INPUTS_O_TEXT_INPUT,
   'oformat: format',
   'olocale: locale',
   'oStartView: start-view',
@@ -42,11 +45,8 @@ export const DEFAULT_INPUTS_O_DATE_INPUT = [
   'oStartAt: start-at',
   'filterDate: filter-date',
   'textInputEnabled: text-input-enabled',
-  'valueType: value-type',
-  ...DEFAULT_INPUTS_O_TEXT_INPUT
+  'valueType: value-type'
 ];
-
-export type DateFilterFunction = (date: Date) => boolean;
 
 @Component({
   selector: 'o-date-input',
@@ -58,13 +58,7 @@ export type DateFilterFunction = (date: Date) => boolean;
     { provide: DateAdapter, useClass: OntimizeMomentDateAdapter, deps: [MAT_DATE_LOCALE] }
   ]
 })
-export class ODateInputComponent extends OFormDataComponent implements AfterViewChecked, OnDestroy, OnInit {
-
-  @ViewChild(MatDatepicker, { static: false })
-  public datepicker: MatDatepicker<Date>;
-
-  @ViewChild(MatDatepickerInput, { static: false })
-  public datepickerInput: MatDatepickerInput<Date>;
+export class ODateInputComponent extends OFormDataComponent implements OnDestroy, OnInit, AfterViewInit {
 
   @InputConverter()
   public textInputEnabled: boolean = true;
@@ -88,8 +82,14 @@ export class ODateInputComponent extends OFormDataComponent implements AfterView
   protected onLanguageChangeSubscription: Subscription;
   protected dateValue: Date;
 
-  @ViewChild('matInputRef', { static: false })
-  private matInputRef: ElementRef;
+  @ViewChild('picker', { static: false })
+  public datepicker: MatDatepicker<Date>;
+
+  @ViewChild(MatDatepickerInput, { static: false })
+  public datepickerInput: MatDatepickerInput<Date>;
+
+  @ViewChild('matInputRef', { read: ElementRef, static: true })
+  private matInputRef!: ElementRef;
 
   private momentSrv: MomentService;
   private momentDateAdapter: DateAdapter<MomentDateAdapter>;
@@ -107,15 +107,6 @@ export class ODateInputComponent extends OFormDataComponent implements AfterView
     this.media = this.injector.get(MediaObserver);
   }
 
-  public static convertToODateValueType(val: any): ODateValueType {
-    let result: ODateValueType = 'timestamp';
-    const lowerVal = (val || '').toLowerCase();
-    if (lowerVal === 'string' || lowerVal === 'date' || lowerVal === 'timestamp' || lowerVal === 'iso-8601') {
-      result = lowerVal;
-    }
-    return result;
-  }
-
   public ngOnInit(): void {
     this.initialize();
 
@@ -130,6 +121,15 @@ export class ODateInputComponent extends OFormDataComponent implements AfterView
 
     this.momentDateAdapter.setLocale(this.olocale);
 
+    if (this.updateLocaleOnChange) {
+      this.onLanguageChangeSubscription = this.translateService.onLanguageChanged.subscribe(() => {
+        this.momentDateAdapter.setLocale(this.translateService.getCurrentLang());
+        this.setValue(this.getValue());
+      });
+    }
+  }
+
+  public ngAfterViewInit() {
     if (this.oStartView) {
       this.datepicker.startView = this.oStartView;
     }
@@ -155,16 +155,10 @@ export class ODateInputComponent extends OFormDataComponent implements AfterView
         this.maxDateString = momentD.format(this.oformat);
       }
     }
-
-    if (this.updateLocaleOnChange) {
-      this.onLanguageChangeSubscription = this.translateService.onLanguageChanged.subscribe(() => {
-        this.momentDateAdapter.setLocale(this.translateService.getCurrentLang());
-        this.setValue(this.getValue());
-      });
-    }
+    this.subscribeToMediaChanges();
   }
 
-  public ngAfterViewChecked(): void {
+  public subscribeToMediaChanges(): void {
     this.mediaSubscription = this.media.asObservable().subscribe((change: MediaChange[]) => {
       if (['xs', 'sm'].indexOf(change[0].mqAlias) !== -1) {
         this.touchUi = Util.isDefined(this.oTouchUi) ? this.oTouchUi : true;
@@ -337,7 +331,7 @@ export class ODateInputComponent extends OFormDataComponent implements AfterView
     return result;
   }
 
-  protected setFormValue(val: any, options?: IFormValueOptions, setDirty: boolean = false): void {
+  protected setFormValue(val: any, options?: FormValueOptions, setDirty: boolean = false): void {
     let value = val;
     if (val instanceof OFormValue) {
       value = val.value;
@@ -347,7 +341,7 @@ export class ODateInputComponent extends OFormDataComponent implements AfterView
   }
 
   set valueType(val: any) {
-    this._valueType = ODateInputComponent.convertToODateValueType(val);
+    this._valueType = Util.convertToODateValueType(val);
   }
 
   get valueType(): any {

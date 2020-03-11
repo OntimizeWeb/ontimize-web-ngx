@@ -4,10 +4,13 @@ import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { share } from 'rxjs/operators';
 
-import { AppConfig, Config } from '../config/app-config';
+import { AppConfig } from '../config/app-config';
+import { IAuthService } from '../interfaces/auth-service.interface';
+import { IDataService } from '../interfaces/data-service.interface';
+import { Config } from '../types/config.type';
 import { Codes } from '../util/codes';
 import { ServiceUtils } from '../util/service.utils';
-import { IAuthService, IDataService, Util } from '../util/util';
+import { Util } from '../util/util';
 import { LoginStorageService } from './login-storage.service';
 import { OntimizeServiceResponseParser } from './parser/o-service-response.parser';
 

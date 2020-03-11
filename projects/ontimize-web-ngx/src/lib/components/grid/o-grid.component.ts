@@ -25,9 +25,11 @@ import { Subscription } from 'rxjs';
 
 import { InputConverter } from '../../decorators/input-converter';
 import { OntimizeService } from '../../services/ontimize.service';
+import { OQueryDataArgs } from '../../types/query-data-args.type';
+import { SQLOrder } from '../../types/sql-order.type';
 import { ObservableWrapper } from '../../util/async';
 import { Codes } from '../../util/codes';
-import { ISQLOrder, OQueryDataArgs, ServiceUtils } from '../../util/service.utils';
+import { ServiceUtils } from '../../util/service.utils';
 import { Util } from '../../util/util';
 import { OFormComponent } from '../form/o-form.component';
 import { DEFAULT_INPUTS_O_SERVICE_COMPONENT, OServiceComponent } from '../o-service-component.class';
@@ -132,7 +134,7 @@ export class OGridComponent extends OServiceComponent implements AfterViewChecke
     this._pageSizeOptions = val;
   }
 
-  get sortableColumns(): ISQLOrder[] {
+  get sortableColumns(): SQLOrder[] {
     return this._sortableColumns;
   }
   set sortableColumns(val) {
@@ -159,8 +161,8 @@ export class OGridComponent extends OServiceComponent implements AfterViewChecke
   public matpaginator: MatPaginator;
 
   /* Parsed Inputs */
-  protected _sortableColumns: ISQLOrder[] = [];
-  protected sortColumnOrder: ISQLOrder;
+  protected _sortableColumns: SQLOrder[] = [];
+  protected sortColumnOrder: SQLOrder;
   /* End parsed Inputs */
 
   protected _cols;
@@ -438,7 +440,7 @@ export class OGridComponent extends OServiceComponent implements AfterViewChecke
 
   public parseSortColumn(): void {
     const parsed = (ServiceUtils.parseSortColumns(this.sortColumn) || [])[0];
-    const exists = parsed ? this.sortableColumns.find((item: ISQLOrder) => (item.columnName === parsed.columnName) && (item.ascendent === parsed.ascendent)) : false;
+    const exists = parsed ? this.sortableColumns.find((item: SQLOrder) => (item.columnName === parsed.columnName) && (item.ascendent === parsed.ascendent)) : false;
     if (exists) {
       this.sortColumnOrder = parsed;
     }
@@ -449,7 +451,7 @@ export class OGridComponent extends OServiceComponent implements AfterViewChecke
       return undefined;
     }
     let index;
-    this.sortableColumns.forEach((item: ISQLOrder, i: number) => {
+    this.sortableColumns.forEach((item: SQLOrder, i: number) => {
       if ((item.columnName === this.sortColumnOrder.columnName) &&
         (item.ascendent === this.sortColumnOrder.ascendent)) {
         index = i;
@@ -518,7 +520,7 @@ export class OGridComponent extends OServiceComponent implements AfterViewChecke
     return dataToStore;
   }
 
-  public getSortOptionText(col: ISQLOrder): string {
+  public getSortOptionText(col: SQLOrder): string {
     let result;
     let colTextKey = `GRID.SORT_BY_${col.columnName.toUpperCase()}_` + (col.ascendent ? 'ASC' : 'DESC');
     result = this.translateService.get(colTextKey);

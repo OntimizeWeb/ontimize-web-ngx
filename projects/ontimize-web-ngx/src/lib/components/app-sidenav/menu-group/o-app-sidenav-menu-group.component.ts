@@ -14,7 +14,8 @@ import {
 import { Subscription } from 'rxjs';
 
 import { InputConverter } from '../../../decorators/input-converter';
-import { AppMenuService, MenuGroup } from '../../../services/app-menu.service';
+import { MenuGroup } from '../../../interfaces/app-menu.interface';
+import { AppMenuService } from '../../../services/app-menu.service';
 import { OPermissions, PermissionsService } from '../../../services/permissions/permissions.service';
 import { OTranslateService } from '../../../services/translate/o-translate.service';
 import { PermissionsUtils } from '../../../util/permissions';

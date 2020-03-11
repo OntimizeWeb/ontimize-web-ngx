@@ -3,9 +3,12 @@ import { Injectable, Injector } from '@angular/core';
 import { Observable } from 'rxjs';
 import { share } from 'rxjs/operators';
 
-import { AppConfig, Config, OntimizePermissionsConfig } from '../../config/app-config';
+import { AppConfig } from '../../config/app-config';
+import { IPermissionsService } from '../../interfaces/permissions-service.interface';
+import { Config } from '../../types/config.type';
+import { OntimizePermissionsConfig } from '../../types/ontimize-permissions-config.type';
 import { Codes } from '../../util/codes';
-import { IPermissionsService, Util } from '../../util/util';
+import { Util } from '../../util/util';
 import { LoginStorageService } from '../login-storage.service';
 
 @Injectable()

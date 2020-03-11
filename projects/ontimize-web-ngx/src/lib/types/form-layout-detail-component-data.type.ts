@@ -1,4 +1,4 @@
-export interface FormLayoutDetailComponentData {
+export type FormLayoutDetailComponentData = {
   params: any;
   queryParams: any;
   urlSegments: any;
@@ -10,4 +10,4 @@ export interface FormLayoutDetailComponentData {
   rendered?: boolean;
   insertionMode?: boolean;
   formDataByLabelColumns?: any;
-}
+};

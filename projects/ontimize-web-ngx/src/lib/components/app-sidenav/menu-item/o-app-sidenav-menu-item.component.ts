@@ -14,15 +14,14 @@ import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 import { InputConverter } from '../../../decorators/input-converter';
-import { OAppLayoutComponent } from '../../../layouts/app-layout/o-app-layout.component';
 import {
   MenuItemAction,
   MenuItemLocale,
   MenuItemLogout,
   MenuItemRoute,
   MenuItemUserInfo,
-  MenuRootItem,
-} from '../../../services/app-menu.service';
+} from '../../../interfaces/app-menu.interface';
+import { OAppLayoutComponent } from '../../../layouts/app-layout/o-app-layout.component';
 import { DialogService } from '../../../services/dialog.service';
 import { LoginService } from '../../../services/login.service';
 import { OUserInfoService } from '../../../services/o-user-info.service';

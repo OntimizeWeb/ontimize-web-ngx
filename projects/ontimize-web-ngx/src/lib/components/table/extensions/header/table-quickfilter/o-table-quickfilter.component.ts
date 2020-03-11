@@ -1,16 +1,34 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, EventEmitter, forwardRef, Inject, Injector, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  EventEmitter,
+  forwardRef,
+  Inject,
+  Injector,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+  ViewEncapsulation,
+} from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatCheckboxChange, MatMenu } from '@angular/material';
 import { fromEvent, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
-import { OInputsOptions, O_INPUTS_OPTIONS } from '../../../../../config/app-config';
+
+import { O_INPUTS_OPTIONS } from '../../../../../config/app-config';
+import { OColumn } from '../../../../../interfaces/o-column.interface';
 import { OTableOptions } from '../../../../../interfaces/o-table-options.interface';
 import { OTableQuickfilter } from '../../../../../interfaces/o-table-quickfilter.interface';
-import { FilterExpressionUtils, IExpression } from '../../../../../util/filter-expression.utils';
+import { Expression } from '../../../../../types/expression.type';
+import { OInputsOptions } from '../../../../../types/o-inputs-options.type';
+import { FilterExpressionUtils } from '../../../../../util/filter-expression.utils';
 import { Util } from '../../../../../util/util';
-import { OTableCellRendererServiceComponent } from '../../../column/cell-renderer/service/o-table-cell-renderer-service.component';
+import {
+  OTableCellRendererServiceComponent,
+} from '../../../column/cell-renderer/service/o-table-cell-renderer-service.component';
 import { OTableComponent } from '../../../o-table.component';
-import { OColumn } from '../../../../../interfaces/o-column.interface';
 
 export const DEFAULT_INPUTS_O_TABLE_QUICKFILTER = [];
 
@@ -88,10 +106,10 @@ export class OTableQuickfilterComponent implements OTableQuickfilter, OnInit, Af
     });
   }
 
-  get filterExpression(): IExpression {
-    let result: IExpression = this.getUserFilter();
+  get filterExpression(): Expression {
+    let result: Expression = this.getUserFilter();
     if (!Util.isDefined(result) && Util.isDefined(this.value) && this.value.length > 0) {
-      const expressions: IExpression[] = [];
+      const expressions: Expression[] = [];
       this.oTableOptions.columns
         .filter((oCol: OColumn) => oCol.searching && oCol.visible && this.isFilterableColumn(oCol))
         .forEach((oCol: OColumn) => {
@@ -124,12 +142,12 @@ export class OTableQuickfilterComponent implements OTableQuickfilter, OnInit, Af
     return result;
   }
 
-  public getUserFilter(): IExpression {
-    let result: IExpression;
+  public getUserFilter(): Expression {
+    let result: Expression;
     if (this.table.quickFilterCallback instanceof Function) {
       const userFilter = this.table.quickFilterCallback(this.value);
       if (Util.isDefined(userFilter) && FilterExpressionUtils.instanceofExpression(userFilter)) {
-        result = (userFilter as IExpression);
+        result = (userFilter as Expression);
       } else if (Util.isDefined(userFilter)) {
         result = FilterExpressionUtils.buildExpressionFromObject(userFilter);
       }

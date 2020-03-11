@@ -3,11 +3,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 
 import { InputConverter } from '../decorators/input-converter';
+import { ILocalStorageComponent } from '../interfaces/local-storage-component.interface';
 import { DialogService } from '../services/dialog.service';
-import { ILocalStorageComponent, LocalStorageService } from '../services/local-storage.service';
+import { LocalStorageService } from '../services/local-storage.service';
 import { OntimizeService } from '../services/ontimize.service';
+import { OQueryDataArgs } from '../types/query-data-args.type';
 import { Codes } from '../util/codes';
-import { OQueryDataArgs, ServiceUtils } from '../util/service.utils';
+import { ServiceUtils } from '../util/service.utils';
 import { Util } from '../util/util';
 import { OFormComponent } from './form/o-form.component';
 

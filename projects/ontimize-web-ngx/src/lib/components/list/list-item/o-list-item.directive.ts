@@ -1,9 +1,9 @@
 import { Directive, ElementRef, EventEmitter, HostListener, Input, OnDestroy, OnInit, Renderer2 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
+import { IList } from '../../../interfaces/o-list.interface';
 import { ObservableWrapper } from '../../../util/async';
 import { Codes } from '../../../util/codes';
-import { IList } from '../o-list.component';
 
 @Directive({
   selector: 'o-list-item, mat-list-item[o-list-item], mat-card[o-list-item]',

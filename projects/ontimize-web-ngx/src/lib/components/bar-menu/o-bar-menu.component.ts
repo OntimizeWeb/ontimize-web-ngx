@@ -1,8 +1,9 @@
 import { Component, ElementRef, Injector, OnInit, ViewEncapsulation } from '@angular/core';
 
-import { AppMenuService, MenuRootItem } from '../../services/app-menu.service';
+import { AppMenuService } from '../../services/app-menu.service';
 import { PermissionsService } from '../../services/permissions/permissions.service';
 import { OTranslateService } from '../../services/translate/o-translate.service';
+import { MenuRootItem } from '../../types/menu-root-item.type';
 
 export const DEFAULT_INPUTS_O_BAR_MENU = [
   // title [string]: menu title. Default: no value.

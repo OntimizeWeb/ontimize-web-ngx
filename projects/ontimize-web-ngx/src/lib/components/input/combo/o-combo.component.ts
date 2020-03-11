@@ -17,11 +17,12 @@ import { Subscription } from 'rxjs';
 
 import { InputConverter } from '../../../decorators/input-converter';
 import { OntimizeService } from '../../../services/ontimize.service';
+import { FormValueOptions } from '../../../types/form-value-options.type';
 import { Codes } from '../../../util/codes';
 import { Util } from '../../../util/util';
 import { OFormComponent } from '../../form/o-form.component';
-import { IFormValueOptions, OFormValue } from '../../form/OFormValue';
-import { OValueChangeEvent } from '../../o-form-data-component.class';
+import { OFormValue } from '../../form/OFormValue';
+import { OValueChangeEvent } from '../../o-value-change-event.class';
 import {
   DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT,
   DEFAULT_OUTPUTS_O_FORM_SERVICE_COMPONENT,
@@ -265,7 +266,7 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
     return selected;
   }
 
-  public setValue(val: any, options?: IFormValueOptions): void {
+  public setValue(val: any, options?: FormValueOptions): void {
     if (!this.dataArray) {
       return;
     }

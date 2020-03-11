@@ -1,8 +1,8 @@
 import { Injectable, Injector } from '@angular/core';
 import { Subscriber } from 'rxjs';
 
+import { IAuthService } from '../../interfaces/auth-service.interface';
 import { Codes } from '../../util/codes';
-import { IAuthService } from '../../util/util';
 
 @Injectable()
 export class OntimizeServiceResponseParser {

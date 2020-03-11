@@ -1,8 +1,8 @@
 import { Directive, EventEmitter, Output } from '@angular/core';
 import { MatSort, MatSortable } from '@angular/material';
 
+import { SQLOrder } from '../../../../types/sql-order.type';
 import { Codes } from '../../../../util/codes';
-import { ISQLOrder } from '../../../../util/service.utils';
 import { Util } from '../../../../util/util';
 
 export type OMatSortGroupedData = {
@@ -41,8 +41,8 @@ export class OMatSort extends MatSort {
     return activeData;
   }
 
-  setTableInfo(sortColArray: Array<ISQLOrder>) {
-    sortColArray.forEach((colData: ISQLOrder) => {
+  setTableInfo(sortColArray: Array<SQLOrder>) {
+    sortColArray.forEach((colData: SQLOrder) => {
       const sortDirection: any = colData.ascendent ? Codes.ASC_SORT : Codes.DESC_SORT;
       this.activeArray.push({
         id: colData.columnName,

@@ -1,10 +1,8 @@
 import { OverlayModule } from '@angular/cdk/overlay';
 import { CommonModule } from '@angular/common';
-import { Inject, Injectable, NgModule, Optional } from '@angular/core';
+import { NgModule } from '@angular/core';
 import {
-  DateAdapter,
   MAT_DATE_FORMATS,
-  MAT_DATE_LOCALE,
   MatAutocompleteModule,
   MatButtonModule,
   MatButtonToggleModule,
@@ -36,11 +34,10 @@ import {
   MatToolbarModule,
   MatTooltipModule,
 } from '@angular/material';
-import { MatMomentDateModule, MomentDateAdapter } from '@angular/material-moment-adapter';
-import moment, { Moment } from 'moment';
+import { MatMomentDateModule } from '@angular/material-moment-adapter';
 
-import { dateFormatFactory } from './mat-date-formats.factory';
 import { OntimizeMatIconRegistry } from '../../services/ontimize-icon-registry.service';
+import { dateFormatFactory } from './date/mat-date-formats.factory';
 
 const MATERIAL_MODULES = [
   MatAutocompleteModule,
@@ -85,51 +82,18 @@ const MATERIAL_MODULES = [
   // ObserveContentModule
 ];
 
-@Injectable()
-export class OntimizeMomentDateAdapter extends MomentDateAdapter {
-
-  oFormat: string;
-
-  constructor(@Optional() @Inject(MAT_DATE_LOCALE) dateLocale: string) {
-    super(dateLocale);
-  }
-
-  format(date: any, displayFormat: string): string {
-    return super.format(date, this.oFormat || displayFormat);
-  }
-
-  parse(value: any, parseFormat: string | string[]): any | null {
-    return super.parse(value, this.oFormat || parseFormat);
-  }
-
-  deserialize(value: any): Moment | null {
-    let date;
-    if (typeof value === 'number') {
-      date = moment(value);
-    }
-    if (typeof value === 'string') {
-      if (!value) {
-        return null;
-      }
-      date = moment(value, this.oFormat).locale(this.locale);
-    }
-    if (date && this.isValid(date)) {
-      return date;
-    }
-    return super.deserialize(value);
-  }
-}
-
 @NgModule({
   imports: [
     CommonModule
   ],
   exports: MATERIAL_MODULES,
-  providers: [{
-    provide: DateAdapter,
-    useClass: OntimizeMomentDateAdapter,
-    deps: [MAT_DATE_LOCALE]
-  }, {
+  providers: [
+  //   {
+  //   provide: DateAdapter,
+  //   useClass: OntimizeMomentDateAdapter,
+  //   deps: [MAT_DATE_LOCALE]
+  // },
+   {
     provide: MAT_DATE_FORMATS,
     useFactory: dateFormatFactory
   }, {

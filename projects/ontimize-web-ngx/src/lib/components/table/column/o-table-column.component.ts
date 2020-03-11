@@ -15,11 +15,12 @@ import {
 } from '@angular/core';
 import { Subscription } from 'rxjs';
 
-import { DateFilterFunction, ODateValueType } from '../../../components/input/date-input/o-date-input.component';
 import { InputConverter } from '../../../decorators/input-converter';
 import { OTableColumn } from '../../../interfaces/o-table-column.interface';
+import { DateFilterFunction } from '../../../types/date-filter-function.type';
+import { Expression } from '../../../types/expression.type';
+import { ODateValueType } from '../../../types/o-date-value.type';
 import { Codes } from '../../../util/codes';
-import { IExpression } from '../../../util/filter-expression.utils';
 import { SQLTypes } from '../../../util/sqltypes';
 import { Util } from '../../../util/util';
 import { OTableComponent } from '../o-table.component';
@@ -134,7 +135,7 @@ export class OTableColumnComponent implements OTableColumn, OnDestroy, OnInit, A
   }
   protected _multiline: boolean = false;
 
-  filterExpressionFunction: (columnAttr: string, quickFilter?: string) => IExpression;
+  filterExpressionFunction: (columnAttr: string, quickFilter?: string) => Expression;
 
   /* input renderer base */
   public _filterSource: 'render' | 'data' | 'both' = 'render';

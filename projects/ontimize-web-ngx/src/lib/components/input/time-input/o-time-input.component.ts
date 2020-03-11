@@ -17,16 +17,18 @@ import moment from 'moment';
 import { merge, Subscription } from 'rxjs';
 
 import { InputConverter } from '../../../decorators/input-converter';
+import { DateFilterFunction } from '../../../types/date-filter-function.type';
+import { FormValueOptions } from '../../../types/form-value-options.type';
 import { Util } from '../../../util/util';
 import { OFormComponent } from '../../form/o-form.component';
-import { IFormValueOptions, OFormValue } from '../../form/OFormValue';
+import { OFormValue } from '../../form/OFormValue';
 import {
   DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,
   DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT,
   OFormDataComponent,
-  OValueChangeEvent,
 } from '../../o-form-data-component.class';
-import { DateFilterFunction, ODateInputComponent } from '../date-input/o-date-input.component';
+import { OValueChangeEvent } from '../../o-value-change-event.class';
+import { ODateInputComponent } from '../date-input/o-date-input.component';
 import { OHourInputComponent } from '../hour-input/o-hour-input.component';
 import { OFormControl } from '../o-form-control.class';
 
@@ -105,26 +107,19 @@ export class OTimeInputComponent extends OFormDataComponent implements OnInit, A
     this._defaultSQLTypeKey = 'DATE';
   }
 
-  public ngOnInit(): void {
-    super.ngOnInit();
-    const self = this;
-    const mergeSubscription = merge(this.dateInput.onValueChange, this.hourInput.onValueChange).subscribe((event: OValueChangeEvent) => {
-      if (event.isUserChange()) {
-        self.updateComponentValue();
-        const newValue = self._fControl.value;
-        self.emitOnValueChange(OValueChangeEvent.USER_CHANGE, newValue, self.oldValue);
-        self.oldValue = newValue;
-      }
-    });
-
-    this.subscription.add(mergeSubscription);
-  }
-
   public ngAfterViewInit(): void {
     this.modifyFormControls();
     super.ngAfterViewInit();
     this.registerFormControls();
     this.setInnerComponentsData();
+    this.subscription.add(merge(this.dateInput.onValueChange, this.hourInput.onValueChange).subscribe((event: OValueChangeEvent) => {
+      if (event.isUserChange()) {
+        this.updateComponentValue();
+        const newValue = this._fControl.value;
+        this.emitOnValueChange(OValueChangeEvent.USER_CHANGE, newValue, this.oldValue);
+        this.oldValue = newValue;
+      }
+    }));
   }
 
   public ngOnDestroy(): void {
@@ -142,7 +137,7 @@ export class OTimeInputComponent extends OFormDataComponent implements OnInit, A
     this.setInnerComponentsData();
   }
 
-  public setValue(newValue: any, options?: IFormValueOptions): void {
+  public setValue(newValue: any, options?: FormValueOptions): void {
     const changed = this.oldValue !== newValue;
     super.setValue(newValue, options);
     if (changed) {
@@ -187,8 +182,8 @@ export class OTimeInputComponent extends OFormDataComponent implements OnInit, A
     }
     let timeValue: number;
     const values = this.formGroup.getRawValue();
-    const mDate = (values['dateInput'] ? moment(values['dateInput']) : moment()).startOf('day');
-    const mHour = this.hourInput.valueType === 'timestamp' ? moment(values['hourInput']) : moment(values['hourInput'], this.hourInput.formatString);
+    const mDate = (values.dateInput ? moment(values.dateInput) : moment()).startOf('day');
+    const mHour = this.hourInput.valueType === 'timestamp' ? moment(values.hourInput) : moment(values.hourInput, this.hourInput.formatString);
     timeValue = mDate.clone()
       .set('hour', mHour.get('hour'))
       .set('minute', mHour.get('minutes'))

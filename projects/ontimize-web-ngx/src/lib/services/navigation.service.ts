@@ -4,10 +4,11 @@ import { ActivatedRoute, ActivatedRouteSnapshot, NavigationEnd, Router, UrlSegme
 import { Observable, ReplaySubject } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 
+import { ILocalStorageComponent } from '../interfaces/local-storage-component.interface';
 import { ObservableWrapper } from '../util/async';
 import { Codes } from '../util/codes';
 import { Util } from '../util/util';
-import { ILocalStorageComponent, LocalStorageService } from './local-storage.service';
+import { LocalStorageService } from './local-storage.service';
 
 export type ONavigationRoutes = {
   mainFormLayoutManagerComponent?: boolean;

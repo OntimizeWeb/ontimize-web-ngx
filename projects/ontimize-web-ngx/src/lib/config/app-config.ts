@@ -1,6 +1,8 @@
 import { InjectionToken } from '@angular/core';
 
-import { MenuRootItem } from '../services/app-menu.service';
+import { Config } from '../types/config.type';
+import { MenuRootItem } from '../types/menu-root-item.type';
+import { OInputsOptions } from '../types/o-inputs-options.type';
 import { ORemoteConfiguration } from '../types/remote-configuration.type';
 import { Util } from '../util/util';
 
@@ -12,78 +14,7 @@ const DEFAULT_CONFIG: Config = {
 
 export const O_INPUTS_OPTIONS = new InjectionToken<OInputsOptions>('o-inputs-options');
 
-export type OInputsColor = 'primary' | 'accent';
-
-export interface OInputsOptions {
-  iconColor?: OInputsColor;
-}
-
 export const APP_CONFIG = new InjectionToken<Config>('app.config');
-
-export type OntimizePermissionsConfig = {
-  entity: string;
-  keyColumn: string;
-  valueColumn: string;
-};
-
-export type OntimizeEEPermissionsConfig = {
-  service?: string;
-};
-
-export interface Config {
-  // apiEndpoint [string]: The base path of the URL used by app services.
-  apiEndpoint?: string;
-
-  bundle?: {
-    // endpoint [string]: The base path of the URL used by bundle service.
-    endpoint?: string;
-    // path [string]: The path of the URL to remote bundle method.
-    path?: string;
-  };
-
-  /** Remote configuration storage parameter */
-  remoteConfig?: ORemoteConfiguration;
-
-  // startSessionPath [string]: The path of the URL to startsession method.
-  startSessionPath?: string;
-
-  // uuid [string]: Application identifier. Is the unique package identifier of the app. It is used when storing or managing temporal data related with the app. By default is set as 'ontimize-web-uuid'./
-  uuid?: string;
-
-  // title [string]: Title of the app. By default 'Ontimize Web App'.
-  title: string;
-
-  // locale [string][en|es]: Language of the application. By default 'en'
-  locale?: string;
-
-  // locale [string]: Location of application translation assets. Default 'assets/i18n/'
-  assets?: {
-    i18n?: {
-      path?: string;
-      extension?: string;
-    }
-    css?: string;
-    images?: string;
-    js?: string;
-  };
-
-  applicationLocales?: string[];
-
-  // serviceType [ undefined | '' | class ]: The service type used (Ontimize REST standart, Ontimize REST JEE or custom implementation) in the whole application. By default 'undefined', that is, Ontimize REST standard service.
-  serviceType?: any;
-
-  // servicesConfiguration: [Object]: Configuration parameters of application services.
-  servicesConfiguration?: object;
-
-  // appMenuConfiguration?: MenuGroup[];
-  appMenuConfiguration?: MenuRootItem[];
-
-  // permissionsConfiguration [Object]: Configuration parameters of application permissions.
-  permissionsConfiguration?: OntimizePermissionsConfig | OntimizeEEPermissionsConfig;
-
-  // permissionsServiceType [ undefined | '' | class ]: The permissions service type used (Ontimize REST standart 'OntimizePermissions', Ontimize REST JEE 'OntimizeEEPermissions' or custom implementation) in the whole application. By default 'OntimizePermissions'.
-  permissionsServiceType?: any;
-}
 
 export class AppConfig {
   private _config: Config;

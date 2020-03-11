@@ -3,11 +3,13 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { FloatLabelType, MatCheckboxChange, MatFormFieldAppearance } from '@angular/material';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
-import { O_INPUTS_OPTIONS, OInputsOptions } from '../../../config/app-config';
+import { O_INPUTS_OPTIONS } from '../../../config/app-config';
 import { InputConverter } from '../../../decorators/input-converter';
 import { SnackBarService } from '../../../services/snackbar.service';
 import { OTranslateService } from '../../../services/translate/o-translate.service';
-import { FilterExpressionUtils, IExpression } from '../../../util/filter-expression.utils';
+import { Expression } from '../../../types/expression.type';
+import { OInputsOptions } from '../../../types/o-inputs-options.type';
+import { FilterExpressionUtils } from '../../../util/filter-expression.utils';
 import { Util } from '../../../util/util';
 
 export const DEFAULT_INPUTS_O_SEARCH_INPUT = [
@@ -216,7 +218,7 @@ export class OSearchInputComponent implements OnInit, AfterViewInit {
     this.triggerOnSearch();
   }
 
-  get filterExpression(): IExpression {
+  get filterExpression(): Expression {
     const termValue = this.getValue();
     if (Util.isDefined(termValue) && termValue.length > 0) {
       const filterCols = this.getActiveColumns();

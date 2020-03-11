@@ -13,9 +13,10 @@ import { FormControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 
 import { InputConverter } from '../../../decorators/input-converter';
 import { IIntegerPipeArgument, OIntegerPipe } from '../../../pipes/o-integer.pipe';
+import { FormValueOptions } from '../../../types/form-value-options.type';
 import { Util } from '../../../util/util';
 import { OFormComponent } from '../../form/o-form.component';
-import { IFormValueOptions, OFormValue } from '../../form/OFormValue';
+import { OFormValue } from '../../form/OFormValue';
 import {
   DEFAULT_INPUTS_O_TEXT_INPUT,
   DEFAULT_OUTPUTS_O_TEXT_INPUT,
@@ -113,7 +114,7 @@ export class OIntegerInputComponent extends OTextInputComponent implements After
     }, 0);
   }
 
-  setValue(val: any, options?: IFormValueOptions) {
+  setValue(val: any, options?: FormValueOptions) {
     super.setValue(val, options);
     this.setPipeValue();
   }

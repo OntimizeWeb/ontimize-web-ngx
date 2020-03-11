@@ -17,9 +17,9 @@ import moment from 'moment';
 
 import { InputConverter } from '../../../../../decorators/input-converter';
 import { MomentService } from '../../../../../services/moment.service';
+import { FormValueOptions } from '../../../../../types/form-value-options.type';
 import { Codes } from '../../../../../util/codes';
 import { Util } from '../../../../../util/util';
-import { IFormValueOptions } from '../../../../form/OFormValue';
 import {
   DEFAULT_INPUTS_O_TABLE_CELL_EDITOR,
   DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR,
@@ -230,7 +230,7 @@ export class OTableCellEditorTimeComponent extends OBaseTableCellEditor implemen
     this.updateComponentValue();
   }
 
-  public setTimestampValue(value: any, options?: IFormValueOptions): void {
+  public setTimestampValue(value: any, options?: FormValueOptions): void {
     let parsedValue;
     const momentV = Util.isDefined(value) ? moment(value) : value;
     if (momentV && momentV.isValid()) {

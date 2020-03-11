@@ -129,9 +129,9 @@ export class DaterangepickerComponent implements OnInit {
   options: any = {}; // should get some opt from user
   @Input() drops: string;
   @Input() opens: string;
-  @Output('choosedDate') choosedDate: EventEmitter<object>;
-  @Output('rangeClicked') rangeClicked: EventEmitter<object>;
-  @Output('datesUpdated') datesUpdated: EventEmitter<object>;
+  @Output() choosedDate: EventEmitter<object>;
+  @Output() rangeClicked: EventEmitter<object>;
+  @Output() datesUpdated: EventEmitter<object>;
   @ViewChild('pickerContainer', { static: false }) pickerContainer: ElementRef;
 
   constructor(
@@ -303,8 +303,8 @@ export class DaterangepickerComponent implements OnInit {
     // generate seconds
     if (this.timePickerSeconds) {
       for (let i = 0; i < 60; i++) {
-        let padded = i < 10 ? '0' + i : i;
-        let time = selected.clone().second(i);
+        const padded = i < 10 ? '0' + i : i;
+        const time = selected.clone().second(i);
 
         let disabled = false;
         if (minDate && time.isBefore(minDate)) {
@@ -341,7 +341,7 @@ export class DaterangepickerComponent implements OnInit {
     }
     this.timepickerVariables[side].selected = selected;
   }
-  
+
   renderCalendar(side: SideEnum) { // side enum
     const mainCalendar: any = (side === SideEnum.left) ? this.leftCalendar : this.rightCalendar;
     const month = mainCalendar.month.month();

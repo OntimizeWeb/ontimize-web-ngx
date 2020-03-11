@@ -1,22 +1,6 @@
-/**
- * Defines an operation between two operands.
- */
-export interface IExpression {
-  /** The left operand. */
-  lop: string | IExpression;
-  /** The operator. */
-  op: string;
-  /** The right operand. */
-  rop?: string | any[] | IExpression;
-}
-
-export interface IBasicExpression {
-  '@basic_expression': IExpression;
-}
-
-export interface IFilterExpression {
-  '@filter_expression': IExpression;
-}
+import { BasicExpression } from '../types/basic-expression.type';
+import { Expression } from '../types/expression.type';
+import { FilterExpression } from '../types/filter-expression.type';
 
 /**
  * Utility class for building basic and filter expressions.
@@ -99,9 +83,9 @@ export class FilterExpressionUtils {
   static OP_IN: string = 'IN';
 
   /**
-   * Evaluates if the the expression provided is an instance of `IBasicExpression`..
+   * Evaluates if the the expression provided is an instance of `BasicExpression`..
    * @param arg the expression to evaluate.
-   * @returns `true` if the provided expression is an instance of `IBasicExpression`, `false` otherwise.
+   * @returns `true` if the provided expression is an instance of `BasicExpression`, `false` otherwise.
    */
   static instanceofBasicExpression(arg: any): boolean {
     return arg.hasOwnProperty(FilterExpressionUtils.BASIC_EXPRESSION_KEY)
@@ -109,16 +93,16 @@ export class FilterExpressionUtils {
   }
 
   /**
-   * Builds a `BasicExpression` instance from the filtering expression (`IExpression`) provided.
+   * Builds a `BasicExpression` instance from the filtering expression (`Expression`) provided.
    * @param exp the filtering expression.
    * @returns the basic expression.
    */
-  static buildBasicExpression(exp: IExpression): IBasicExpression {
+  static buildBasicExpression(exp: Expression): BasicExpression {
     if (exp) {
       if (!FilterExpressionUtils.instanceofExpression(exp)) {
-        console.error('The expression provided is not an instance of \'IExpression\'');
+        console.error('The expression provided is not an instance of \'Expression\'');
       }
-      const be: IBasicExpression = {
+      const be: BasicExpression = {
         '@basic_expression': exp
       };
       return be;
@@ -127,9 +111,9 @@ export class FilterExpressionUtils {
   }
 
   /**
-   * Evaluates if an expresion is instance of `IFilterExpression`.
+   * Evaluates if an expresion is instance of `FilterExpression`.
    * @param exp the expression to evaluate.
-   * @returns `true` if the provided expression is an instance of `IFilterExpression`, `false` otherwise.
+   * @returns `true` if the provided expression is an instance of `FilterExpression`, `false` otherwise.
    */
   static instanceofFilterExpression(exp: any): boolean {
     return exp.hasOwnProperty(FilterExpressionUtils.FILTER_EXPRESSION_KEY)
@@ -137,16 +121,16 @@ export class FilterExpressionUtils {
   }
 
   /**
-   * Builds an `IFilterExpression` instance from the filtering expression (`IExpression`) provided.
+   * Builds an `FilterExpression` instance from the filtering expression (`Expression`) provided.
    * @param exp the filtering expression.
-   * @returns the `IFilterExpression`.
+   * @returns the `FilterExpression`.
    */
-  static buildFilterExpression(exp: IExpression): IFilterExpression {
+  static buildFilterExpression(exp: Expression): FilterExpression {
     if (exp) {
       if (!FilterExpressionUtils.instanceofExpression(exp)) {
-        console.error('The expression provided is not an instance of \'IExpression\'');
+        console.error('The expression provided is not an instance of \'Expression\'');
       }
-      const be: IFilterExpression = {
+      const be: FilterExpression = {
         '@filter_expression': exp
       };
       return be;
@@ -155,29 +139,29 @@ export class FilterExpressionUtils {
   }
 
   /**
-   * Evaluates if an expresion is instance of `IExpression`.
+   * Evaluates if an expresion is instance of `Expression`.
    * @param exp the expression to evaluate.
-   * @returns `true` if the provided expression is an instance of `IExpression`, `false` otherwise.
+   * @returns `true` if the provided expression is an instance of `Expression`, `false` otherwise.
    */
   static instanceofExpression(exp: any): boolean {
     return exp.hasOwnProperty('lop') && exp.hasOwnProperty('op');
   }
 
   /**
-   * Builds a complex `IExpression` instance joining two expressions with the provided operator.
-   * @param expr1 the first `IExpression` to join.
-   * @param expr2 the second `IExpression` to join.
+   * Builds a complex `Expression` instance joining two expressions with the provided operator.
+   * @param expr1 the first `Expression` to join.
+   * @param expr2 the second `Expression` to join.
    * @param op the joining operator.
-   * @returns the complex `IExpression`.
+   * @returns the complex `Expression`.
    */
-  static buildComplexExpression(expr1: IExpression, expr2: IExpression, op: string): IExpression {
+  static buildComplexExpression(expr1: Expression, expr2: Expression, op: string): Expression {
     if (expr1.lop === undefined && expr1.op === undefined) {
       return expr2;
     }
     if (expr2.lop === undefined && expr2.op === undefined) {
       return expr1;
     }
-    const expr: IExpression = {
+    const expr: Expression = {
       lop: expr1,
       op: op,
       rop: expr2
@@ -186,13 +170,13 @@ export class FilterExpressionUtils {
   }
 
   /**
-   * Builds an `IExpression` instance for filtering the provided key EQUAL to the provided value.
+   * Builds an `Expression` instance for filtering the provided key EQUAL to the provided value.
    * @param key the key.
    * @param value the value.
-   * @returns the `IExpression`.
+   * @returns the `Expression`.
    */
-  static buildExpressionEquals(key: string, value: any): IExpression {
-    const expr: IExpression = {
+  static buildExpressionEquals(key: string, value: any): Expression {
+    const expr: Expression = {
       lop: key,
       op: FilterExpressionUtils.OP_EQUAL,
       rop: value
@@ -201,12 +185,12 @@ export class FilterExpressionUtils {
   }
 
   /**
-   * Builds an `IExpression` instance for filtering the provided key with a NOT NULL value.
+   * Builds an `Expression` instance for filtering the provided key with a NOT NULL value.
    * @param key the key.
-   * @returns the `IExpression`.
+   * @returns the `Expression`.
    */
-  static buildExpressionIsNotNull(key: string): IExpression {
-    const expr: IExpression = {
+  static buildExpressionIsNotNull(key: string): Expression {
+    const expr: Expression = {
       lop: key,
       op: FilterExpressionUtils.OP_NOT_NULL
     };
@@ -214,12 +198,12 @@ export class FilterExpressionUtils {
   }
 
   /**
-   * Builds an `IExpression` instance for filtering the provided key with a NULL value.
+   * Builds an `Expression` instance for filtering the provided key with a NULL value.
    * @param key the key.
-   * @returns the `IExpression`.
+   * @returns the `Expression`.
    */
-  static buildExpressionIsNull(key: string): IExpression {
-    const expr: IExpression = {
+  static buildExpressionIsNull(key: string): Expression {
+    const expr: Expression = {
       lop: key,
       op: FilterExpressionUtils.OP_NULL
     };
@@ -227,13 +211,13 @@ export class FilterExpressionUtils {
   }
 
   /**
-   * Builds an `IExpression` instance for filtering the provided key LESS than the provided value.
+   * Builds an `Expression` instance for filtering the provided key LESS than the provided value.
    * @param key the key.
    * @param value the value.
-   * @returns the `IExpression`.
+   * @returns the `Expression`.
    */
-  static buildExpressionLess(key: string, value: any): IExpression {
-    const expr: IExpression = {
+  static buildExpressionLess(key: string, value: any): Expression {
+    const expr: Expression = {
       lop: key,
       op: FilterExpressionUtils.OP_LESS,
       rop: value
@@ -242,13 +226,13 @@ export class FilterExpressionUtils {
   }
 
   /**
-   * Builds an `IExpression` instance for filtering the provided key LESS OR EQUAL to the provided value.
+   * Builds an `Expression` instance for filtering the provided key LESS OR EQUAL to the provided value.
    * @param key the key.
    * @param value the value.
-   * @returns the `IExpression`.
+   * @returns the `Expression`.
    */
-  static buildExpressionLessEqual(key: string, value: any): IExpression {
-    const expr: IExpression = {
+  static buildExpressionLessEqual(key: string, value: any): Expression {
+    const expr: Expression = {
       lop: key,
       op: FilterExpressionUtils.OP_LESS_EQUAL,
       rop: value
@@ -257,13 +241,13 @@ export class FilterExpressionUtils {
   }
 
   /**
-   * Builds an `IExpression` instance for filtering the provided key MORE than the provided value.
+   * Builds an `Expression` instance for filtering the provided key MORE than the provided value.
    * @param key the key.
    * @param value the value.
-   * @returns the `IExpression`.
+   * @returns the `Expression`.
    */
-  static buildExpressionMore(key: string, value: any): IExpression {
-    const expr: IExpression = {
+  static buildExpressionMore(key: string, value: any): Expression {
+    const expr: Expression = {
       lop: key,
       op: FilterExpressionUtils.OP_MORE,
       rop: value
@@ -272,13 +256,13 @@ export class FilterExpressionUtils {
   }
 
   /**
-   * Builds an `IExpression` instance for filtering the provided key MORE OR EQUAL to the provided value.
+   * Builds an `Expression` instance for filtering the provided key MORE OR EQUAL to the provided value.
    * @param key the key.
    * @param value the value.
-   * @returns the `IExpression`.
+   * @returns the `Expression`.
    */
-  static buildExpressionMoreEqual(key: string, value: any): IExpression {
-    const expr: IExpression = {
+  static buildExpressionMoreEqual(key: string, value: any): Expression {
+    const expr: Expression = {
       lop: key,
       op: FilterExpressionUtils.OP_MORE_EQUAL,
       rop: value
@@ -286,8 +270,8 @@ export class FilterExpressionUtils {
     return expr;
   }
 
-  static buildExpressionIn(key: string, values: any[]): IExpression {
-    const expr: IExpression = {
+  static buildExpressionIn(key: string, values: any[]): Expression {
+    const expr: Expression = {
       lop: key,
       op: FilterExpressionUtils.OP_IN,
       rop: values
@@ -296,19 +280,19 @@ export class FilterExpressionUtils {
   }
 
   /**
-   * Builds an `IExpression` instance for filtering the provided key NOT LIKE the provided value.
+   * Builds an `Expression` instance for filtering the provided key NOT LIKE the provided value.
    * @param key the key.
    * @param value the value.
-   * @returns the `IExpression`.
+   * @returns the `Expression`.
    */
-  static buildExpressionNotLike(key: string, value: string): IExpression {
+  static buildExpressionNotLike(key: string, value: string): Expression {
     if (value !== undefined) {
       value = value.replace(new RegExp('\\*', 'g'), '%');
       if (value.indexOf('%') === -1) {
         value = '%' + value + '%';
       }
     }
-    const expr: IExpression = {
+    const expr: Expression = {
       lop: key,
       op: FilterExpressionUtils.OP_NOT_LIKE,
       rop: value
@@ -317,19 +301,19 @@ export class FilterExpressionUtils {
   }
 
   /**
-   * Builds an `IExpression` instance for filtering the provided key LIKE the provided value.
+   * Builds an `Expression` instance for filtering the provided key LIKE the provided value.
    * @param key the key.
    * @param value the value.
-   * @returns the `IExpression`.
+   * @returns the `Expression`.
    */
-  static buildExpressionLike(key: string, value: string): IExpression {
+  static buildExpressionLike(key: string, value: string): Expression {
     if (value !== undefined) {
       value = value.replace(new RegExp('\\*', 'g'), '%');
       if (value.indexOf('%') === -1) {
         value = '%' + value + '%';
       }
     }
-    const expr: IExpression = {
+    const expr: Expression = {
       lop: key,
       op: FilterExpressionUtils.OP_LIKE,
       rop: value
@@ -338,16 +322,16 @@ export class FilterExpressionUtils {
   }
 
   /**
-   * Builds an `IExpression` instance for filtering the provided key ENDS LIKE the provided value.
+   * Builds an `Expression` instance for filtering the provided key ENDS LIKE the provided value.
    * @param key the key.
    * @param value the value.
-   * @returns the `IExpression`.
+   * @returns the `Expression`.
    */
-  static buildExpressionLikeEnd(key: string, value: string): IExpression {
+  static buildExpressionLikeEnd(key: string, value: string): Expression {
     if (value !== undefined) {
       value = '%' + value;
     }
-    const expr: IExpression = {
+    const expr: Expression = {
       lop: key,
       op: FilterExpressionUtils.OP_LIKE,
       rop: value
@@ -356,16 +340,16 @@ export class FilterExpressionUtils {
   }
 
   /**
-   * Builds an `IExpression` instance for filtering the provided key STARTS LIKE the provided value.
+   * Builds an `Expression` instance for filtering the provided key STARTS LIKE the provided value.
    * @param key the key.
    * @param value the value.
-   * @returns the `IExpression`.
+   * @returns the `Expression`.
    */
-  static buildExpressionLikeStart(key: string, value: string): IExpression {
+  static buildExpressionLikeStart(key: string, value: string): Expression {
     if (value !== undefined) {
       value = value + '%';
     }
-    const expr: IExpression = {
+    const expr: Expression = {
       lop: key,
       op: FilterExpressionUtils.OP_LIKE,
       rop: value
@@ -374,13 +358,13 @@ export class FilterExpressionUtils {
   }
 
   /**
-   * Builds an `IExpression` instance for filtering the provided key NOT EQUAL the provided value.
+   * Builds an `Expression` instance for filtering the provided key NOT EQUAL the provided value.
    * @param key the key.
    * @param value the value.
-   * @returns the `IExpression`.
+   * @returns the `Expression`.
    */
-  static buildExpressionNotEquals(key: string, value: any): IExpression {
-    const expr: IExpression = {
+  static buildExpressionNotEquals(key: string, value: any): Expression {
+    const expr: Expression = {
       lop: key,
       op: FilterExpressionUtils.OP_NOT_EQUAL,
       rop: value
@@ -389,7 +373,7 @@ export class FilterExpressionUtils {
   }
 
   /**
-   * Builds a complex `IExpression` for filtering the provided key with two conditions:
+   * Builds a complex `Expression` for filtering the provided key with two conditions:
    * * The first filter the provided key with a NULL value.
    * * The second filter the provided key EQUAL to the provided value.
    *
@@ -397,12 +381,12 @@ export class FilterExpressionUtils {
    * @param key the key.
    * @param value the value.
    * @param op the operator.
-   * @returns the `IExpression`.
+   * @returns the `Expression`.
    */
-  static buildExpressionNullAndValue(key: string, value: any, op: string): IExpression {
-    const isNull: IExpression = FilterExpressionUtils.buildExpressionIsNull(key);
-    const equals: IExpression = FilterExpressionUtils.buildExpressionEquals(key, value);
-    const expr: IExpression = {
+  static buildExpressionNullAndValue(key: string, value: any, op: string): Expression {
+    const isNull: Expression = FilterExpressionUtils.buildExpressionIsNull(key);
+    const equals: Expression = FilterExpressionUtils.buildExpressionEquals(key, value);
+    const expr: Expression = {
       lop: isNull,
       op: op,
       rop: equals
@@ -411,13 +395,13 @@ export class FilterExpressionUtils {
   }
 
   /**
-   * Builds a complex `IExpression` for filtering the provided keys LIKE the value provided.
+   * Builds a complex `Expression` for filtering the provided keys LIKE the value provided.
    * @param keys the keys.
    * @param value the value.
-   * @returns the `IExpression`.
+   * @returns the `Expression`.
    */
-  static buildArrayExpressionLike(keys: any[], value: any): IExpression {
-    let result: IExpression = {
+  static buildArrayExpressionLike(keys: any[], value: any): Expression {
+    let result: Expression = {
       lop: undefined,
       op: undefined
     };
@@ -428,12 +412,12 @@ export class FilterExpressionUtils {
   }
 
   /**
-   * Builds an `IExpression` instance from the provided object.
+   * Builds an `Expression` instance from the provided object.
    * @param obj the object.
-   * @returns the `IExpression`.
+   * @returns the `Expression`.
    */
-  static buildExpressionFromObject(obj: any): IExpression {
-    let result: IExpression = {
+  static buildExpressionFromObject(obj: any): Expression {
+    let result: Expression = {
       lop: undefined,
       op: undefined
     };
@@ -443,7 +427,7 @@ export class FilterExpressionUtils {
     return result;
   }
 
-  private static stackExpressionLikeOR(key: string, value: any, expr: IExpression): IExpression {
+  private static stackExpressionLikeOR(key: string, value: any, expr: Expression): Expression {
     const likeExpr = FilterExpressionUtils.buildExpressionLike(key, value);
     if (expr.lop === undefined && expr.op === undefined) {
       return likeExpr;
@@ -453,7 +437,7 @@ export class FilterExpressionUtils {
     return expr;
   }
 
-  private static stackExpressionEqualsAND(key: string, value: any, expr: IExpression): IExpression {
+  private static stackExpressionEqualsAND(key: string, value: any, expr: Expression): Expression {
     const equalsExpr = FilterExpressionUtils.buildExpressionEquals(key, value);
     if (expr.lop === undefined && expr.op === undefined) {
       return equalsExpr;

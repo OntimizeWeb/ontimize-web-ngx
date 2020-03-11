@@ -2,21 +2,10 @@ import { Router } from '@angular/router';
 
 import { OFormComponent } from '../components/form/o-form.component';
 import { OFormValue } from '../components/form/OFormValue';
+import { SQLOrder } from '../types/sql-order.type';
 import { Codes } from './codes';
 import { SQLTypes } from './sqltypes';
 import { Util } from './util';
-
-export type OQueryDataArgs = {
-  replace?: boolean; // Used in the list component for replacing data in setValue method when reloadData method is called
-  sqltypes?: object;
-  offset?: number;
-  length?: number;
-};
-
-export interface ISQLOrder {
-  columnName: string;
-  ascendent: boolean;
-}
 
 export class ServiceUtils {
 
@@ -122,7 +111,7 @@ export class ServiceUtils {
     return objectProperties;
   }
 
-  static parseSortColumns(sortColumns: string): Array<ISQLOrder> {
+  static parseSortColumns(sortColumns: string): Array<SQLOrder> {
     const sortColArray = [];
     if (sortColumns) {
       const cols = Util.parseArray(sortColumns);

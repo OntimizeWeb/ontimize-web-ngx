@@ -1,14 +1,11 @@
 import { Injector } from '@angular/core';
 
 import { BooleanConverter } from '../decorators/input-converter';
+import { IComponent } from '../interfaces/component.interface';
 import { OPermissions } from '../services/permissions';
 import { OTranslateService } from '../services/translate/o-translate.service';
 import { PermissionsUtils } from '../util/permissions';
 import { Util } from '../util/util';
-
-export interface IComponent {
-  getAttribute(): string;
-}
 
 export class OBaseComponent implements IComponent {
 

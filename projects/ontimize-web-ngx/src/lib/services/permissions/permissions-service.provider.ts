@@ -1,6 +1,7 @@
 import { Injector } from '@angular/core';
 
-import { AppConfig, Config } from '../../config/app-config';
+import { AppConfig } from '../../config/app-config';
+import { Config } from '../../types/config.type';
 import { Util } from '../../util/util';
 import { OntimizeEEPermissionsService } from './ontimize-ee-permissions.service';
 import { OntimizePermissionsService } from './ontimize-permissions.service';

@@ -20,23 +20,19 @@ import {
 import { merge, Subscription } from 'rxjs';
 
 import { InputConverter } from '../../decorators/input-converter';
+import { IList } from '../../interfaces/o-list.interface';
 import { OntimizeService } from '../../services/ontimize.service';
+import { OListInitializationOptions } from '../../types/o-list-initialization-options.type';
+import { OQueryDataArgs } from '../../types/query-data-args.type';
+import { SQLOrder } from '../../types/sql-order.type';
 import { ObservableWrapper } from '../../util/async';
 import { Codes } from '../../util/codes';
-import { ISQLOrder, OQueryDataArgs, ServiceUtils } from '../../util/service.utils';
+import { ServiceUtils } from '../../util/service.utils';
 import { Util } from '../../util/util';
 import { OFormComponent } from '../form/o-form.component';
 import { DEFAULT_INPUTS_O_SERVICE_COMPONENT, OServiceComponent } from '../o-service-component.class';
 import { OListItemComponent } from './list-item/o-list-item.component';
 import { OListItemDirective } from './list-item/o-list-item.directive';
-
-export interface IList {
-  detailMode: string;
-  registerListItemDirective(item: OListItemDirective): void;
-  getKeys(): string[];
-  setSelected(item: any): void;
-  isItemSelected(item: any): boolean;
-}
 
 export const DEFAULT_INPUTS_O_LIST = [
   ...DEFAULT_INPUTS_O_SERVICE_COMPONENT,
@@ -75,15 +71,6 @@ export const DEFAULT_OUTPUTS_O_LIST = [
   'onPaginatedDataLoaded'
 ];
 
-export interface OListInitializationOptions {
-  entity?: string;
-  service?: string;
-  columns?: string;
-  quickFilterColumns?: string;
-  keys?: string;
-  parentKeys?: string;
-}
-
 @Component({
   selector: 'o-list',
   providers: [
@@ -98,7 +85,7 @@ export interface OListInitializationOptions {
     '[class.o-list]': 'true'
   }
 })
-export class OListComponent extends OServiceComponent implements AfterContentInit, AfterViewInit, IList, OnDestroy, OnInit, OnChanges {
+export class OListComponent extends OServiceComponent implements IList, AfterContentInit, AfterViewInit, OnDestroy, OnInit, OnChanges {
 
   @ContentChildren(OListItemComponent)
   public listItemComponents: QueryList<OListItemComponent>;
@@ -122,7 +109,7 @@ export class OListComponent extends OServiceComponent implements AfterContentIni
   public sortColumns: string;
   /* End Inputs */
 
-  public sortColArray: ISQLOrder[] = [];
+  public sortColArray: SQLOrder[] = [];
 
   public onClick: EventEmitter<any> = new EventEmitter();
   public onDoubleClick: EventEmitter<any> = new EventEmitter();

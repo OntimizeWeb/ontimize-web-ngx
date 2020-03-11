@@ -17,8 +17,9 @@ import { ActivatedRoute, ActivatedRouteSnapshot, Route, Router } from '@angular/
 
 import { OServiceComponent } from '../../components/o-service-component.class';
 import { InputConverter } from '../../decorators/input-converter';
+import { ILocalStorageComponent } from '../../interfaces/local-storage-component.interface';
 import { OFormLayoutTabGroup } from '../../interfaces/o-form-layout-tab-group.interface';
-import { ILocalStorageComponent, LocalStorageService } from '../../services/local-storage.service';
+import { LocalStorageService } from '../../services/local-storage.service';
 import { NavigationService } from '../../services/navigation.service';
 import { OFormLayoutManagerService } from '../../services/o-form-layout-manager.service';
 import { OTranslateService } from '../../services/translate/o-translate.service';

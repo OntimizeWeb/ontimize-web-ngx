@@ -13,8 +13,9 @@ import { Subscription } from 'rxjs';
 import { OColumn } from '../../../../../interfaces/o-column.interface';
 import { DialogService } from '../../../../../services/dialog.service';
 import { OntimizeService } from '../../../../../services/ontimize.service';
+import { Expression } from '../../../../../types/expression.type';
 import { Codes } from '../../../../../util/codes';
-import { FilterExpressionUtils, IExpression } from '../../../../../util/filter-expression.utils';
+import { FilterExpressionUtils } from '../../../../../util/filter-expression.utils';
 import { ServiceUtils } from '../../../../../util/service.utils';
 import { SQLTypes } from '../../../../../util/sqltypes';
 import { Util } from '../../../../../util/util';
@@ -162,9 +163,9 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
     return this.responseMap[cellvalue];
   }
 
-  public getFilterExpression(quickFilter: string): IExpression {
+  public getFilterExpression(quickFilter: string): Expression {
     const oCol: OColumn = this.table.getOColumn(this.column);
-    let result: IExpression;
+    let result: Expression;
     const cacheValue = Object.keys(this.responseMap).find(key => Util.normalizeString(this.responseMap[key]).indexOf(Util.normalizeString(quickFilter)) !== -1);
     if (cacheValue) {
       result = FilterExpressionUtils.buildExpressionEquals(this.column, SQLTypes.parseUsingSQLType(cacheValue, SQLTypes.getSQLTypeKey(oCol.sqlType)));

@@ -37,6 +37,7 @@ export * from './o-component.class';
 export * from './o-form-data-component.class';
 export * from './o-service-base-component.class';
 export * from './o-service-component.class';
+export * from './o-value-change-event.class';
 export * from './table/index';
 export * from './user-info/o-user-info.component';
 export * from './user-info/o-user-info.module';

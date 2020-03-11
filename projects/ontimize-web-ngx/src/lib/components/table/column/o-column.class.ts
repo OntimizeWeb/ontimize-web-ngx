@@ -1,14 +1,14 @@
 import { BehaviorSubject, Observable } from 'rxjs';
 
+import { OColumn } from '../../../interfaces/o-column.interface';
+import { Expression } from '../../../types/expression.type';
 import { OColumnAggregate } from '../../../types/o-column-aggregate.type';
 import { OColumnTooltip } from '../../../types/o-column-tooltip.type';
 import { Codes, Util } from '../../../util';
-import { IExpression } from '../../../util/filter-expression.utils';
 import { OTableComponent } from '../o-table.component';
 import { OperatorFunction, OTableColumnCalculatedComponent } from './calculated/o-table-column-calculated.component';
 import { OBaseTableCellRenderer } from './cell-renderer/o-base-table-cell-renderer.class';
 import { OTableColumnComponent } from './o-table-column.component';
-import { OColumn } from '../../../interfaces/o-column.interface';
 
 export class DefaultOColumn implements OColumn {
   attr: string;
@@ -33,7 +33,7 @@ export class DefaultOColumn implements OColumn {
   tooltip: OColumnTooltip;
   resizable: boolean;
   DOMWidth: number;
-  filterExpressionFunction: (columnAttr: string, quickFilter?: string) => IExpression;
+  filterExpressionFunction: (columnAttr: string, quickFilter?: string) => Expression;
 
   private multilineSubject: BehaviorSubject<boolean> = new BehaviorSubject(this.multiline);
   public isMultiline: Observable<boolean> = this.multilineSubject.asObservable();

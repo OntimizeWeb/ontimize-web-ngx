@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { combineLatest } from 'rxjs';
 
 import { OContextMenuService } from '../components/contextmenu/o-context-menu.service';
-import { AppConfig, Config } from '../config/app-config';
+import { AppConfig } from '../config/app-config';
 import { appConfigFactory } from '../services/app-config.provider';
 import { AppMenuService } from '../services/app-menu.service';
 import { AuthGuardService } from '../services/auth-guard.service';
@@ -31,6 +31,7 @@ import { ShareCanActivateChildService } from '../services/share-can-activate-chi
 import { SnackBarService } from '../services/snackbar.service';
 import { OTranslateService } from '../services/translate/o-translate.service';
 import { Error403Component } from '../shared/components/error403/o-error-403.component';
+import { Config } from '../types/config.type';
 import { Codes } from '../util/codes';
 
 function addPermissionsRouteGuard(injector: Injector) {

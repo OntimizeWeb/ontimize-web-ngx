@@ -18,8 +18,10 @@ import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 import { InputConverter } from '../../decorators/input-converter';
-import { AppMenuService, MenuGroup, MenuItemUserInfo, MenuRootItem } from '../../services/app-menu.service';
+import { MenuGroup, MenuItemUserInfo } from '../../interfaces/app-menu.interface';
+import { AppMenuService } from '../../services/app-menu.service';
 import { OUserInfoService, UserInfo } from '../../services/o-user-info.service';
+import { MenuRootItem } from '../../types/menu-root-item.type';
 import { Codes, OAppLayoutMode, OSidenavMode } from '../../util/codes';
 import { Util } from '../../util/util';
 

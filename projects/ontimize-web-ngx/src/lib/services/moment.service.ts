@@ -1,7 +1,8 @@
 import { Injector } from '@angular/core';
 import moment from 'moment';
 
-import { AppConfig, Config } from '../config/app-config';
+import { AppConfig } from '../config/app-config';
+import { Config } from '../types/config.type';
 
 export class MomentService {
 

@@ -36,15 +36,18 @@ import { OTableQuickfilter } from '../../interfaces/o-table-quickfilter.interfac
 import { OntimizeService } from '../../services/ontimize.service';
 import { OPermissions, OTableMenuPermissions, OTablePermissions } from '../../services/permissions/permissions.service';
 import { SnackBarService } from '../../services/snackbar.service';
+import { Expression } from '../../types/expression.type';
 import { OColumnAggregate } from '../../types/o-column-aggregate.type';
 import { ColumnValueFilterOperator, OColumnValueFilter } from '../../types/o-column-value-filter.type';
 import { OTableInitializationOptions } from '../../types/o-table-initialization-options.type';
+import { OQueryDataArgs } from '../../types/query-data-args.type';
 import { QuickFilterFunction } from '../../types/quick-filter-function.type';
+import { SQLOrder } from '../../types/sql-order.type';
 import { ObservableWrapper } from '../../util/async';
 import { Codes } from '../../util/codes';
-import { FilterExpressionUtils, IExpression } from '../../util/filter-expression.utils';
+import { FilterExpressionUtils } from '../../util/filter-expression.utils';
 import { PermissionsUtils } from '../../util/permissions';
-import { ISQLOrder, OQueryDataArgs, ServiceUtils } from '../../util/service.utils';
+import { ServiceUtils } from '../../util/service.utils';
 import { SQLTypes } from '../../util/sqltypes';
 import { Util } from '../../util/util';
 import { OContextMenuComponent } from '../contextmenu/o-context-menu.component';
@@ -225,7 +228,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   @InputConverter()
   showButtonsText: boolean = true;
 
-  protected _oTableOptions: OTableOptions; 
+  protected _oTableOptions: OTableOptions;
 
   get oTableOptions(): OTableOptions {
     return this._oTableOptions;
@@ -342,7 +345,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
   }
 
-  sortColArray: Array<ISQLOrder> = [];
+  sortColArray: Array<SQLOrder> = [];
   /*end of parsed inputs variables */
 
   protected tabGroupContainer: MatTabGroup;
@@ -1096,24 +1099,24 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     return super.getComponentFilter(filter);
   }
 
-  protected getQuickFilterExpression(): IExpression {
+  protected getQuickFilterExpression(): Expression {
     if (Util.isDefined(this.oTableQuickFilterComponent) && this.pageable) {
       return this.oTableQuickFilterComponent.filterExpression;
     }
     return undefined;
   }
 
-  protected getColumnFiltersExpression(): IExpression {
+  protected getColumnFiltersExpression(): Expression {
     // Apply column filters
     const columnFilters: OColumnValueFilter[] = this.dataSource.getColumnValueFilters();
-    const beColumnFilters: Array<IExpression> = [];
+    const beColumnFilters: Array<Expression> = [];
     columnFilters.forEach(colFilter => {
       // Prepare basic expressions
       switch (colFilter.operator) {
         case ColumnValueFilterOperator.IN:
           if (Util.isArray(colFilter.values)) {
-            const besIn: Array<IExpression> = colFilter.values.map(value => FilterExpressionUtils.buildExpressionEquals(colFilter.attr, value));
-            let beIn: IExpression = besIn.pop();
+            const besIn: Array<Expression> = colFilter.values.map(value => FilterExpressionUtils.buildExpressionEquals(colFilter.attr, value));
+            let beIn: Expression = besIn.pop();
             besIn.forEach(be => {
               beIn = FilterExpressionUtils.buildComplexExpression(beIn, be, FilterExpressionUtils.OP_OR);
             });
@@ -1140,7 +1143,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
     });
     // Build complete column filters basic expression
-    let beColFilter: IExpression = beColumnFilters.pop();
+    let beColFilter: Expression = beColumnFilters.pop();
     beColumnFilters.forEach(be => {
       beColFilter = FilterExpressionUtils.buildComplexExpression(beColFilter, be, FilterExpressionUtils.OP_AND);
     });
