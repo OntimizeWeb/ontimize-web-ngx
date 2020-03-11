@@ -52,7 +52,7 @@ export const DEFAULT_OUTPUTS_O_APP_SIDENAV_MENU_GROUP = [
     '[attr.disabled]': 'disabled'
   }
 })
-export class OAppSidenavMenuGroupComponent implements OnInit, AfterViewInit, OnDestroy {
+export class OAppSidenavMenuGroupComponent implements OnInit, AfterViewInit, OnDestroy {  
 
   public onItemClick: EventEmitter<any> = new EventEmitter<any>();
 
@@ -94,7 +94,7 @@ export class OAppSidenavMenuGroupComponent implements OnInit, AfterViewInit, OnD
     if (this.menuGroup.id === 'user-info' && this.sidenav) {
       const self = this;
       this.sidenavSubscription = this.sidenav.onSidenavOpenedChange.subscribe((opened) => {
-        self.disabled = !!(!opened || (self.permissions && self.permissions.enabled === false));
+        self.disabled = ((!opened && Util.isDefined(opened)) || (Util.isDefined(self.permissions) && self.permissions && self.permissions.enabled === false));
         self.updateContentExpansion();
         self.cd.markForCheck();
       });

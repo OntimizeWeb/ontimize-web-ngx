@@ -109,8 +109,9 @@ export class OAppSidenavMenuItemComponent implements OnInit, AfterViewInit, OnDe
   ngAfterViewInit() {
     if (this.isUserInfoItem() && this.sidenav) {
       this.setUserInfoImage();
-      this.appSidenavToggleSubscription = this.sidenav.onSidenavOpenedChange.subscribe((opened) => {
-        if (opened) {
+      this.appSidenavToggleSubscription = this.sidenav.onSidenavOpenedChange.subscribe(() => {
+        if (this.sidenav.sidenav.opened) {
+          this.setUserInfoImage();
           this.setUserInfoImage();
         }
       });
@@ -157,7 +158,7 @@ export class OAppSidenavMenuItemComponent implements OnInit, AfterViewInit, OnDe
     }
   }
 
-  protected setUserInfoImage() {
+  public setUserInfoImage() {
     const imgEl = this.elRef.nativeElement.getElementsByClassName('o-user-info-image')[0];
     if (imgEl !== undefined) {
       const item = this.menuItem as MenuItemUserInfo;
