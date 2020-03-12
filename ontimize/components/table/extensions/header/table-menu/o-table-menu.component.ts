@@ -264,7 +264,7 @@ export class OTableMenuComponent implements OnInit, AfterViewInit, OnDestroy {
     return !(perm && perm.enabled === false);
   }
 
-  get showConfigurationMenu(): boolean {        
+  get showConfigurationMenu(): boolean {
     const perm: OPermissions = this.getPermissionByAttr('configuration');
     return this.showConfigurationOption && !(perm && perm.visible === false);
   }

@@ -1,11 +1,25 @@
-import { AfterViewInit, ContentChildren, ElementRef, EventEmitter, HostBinding, Injector, OnChanges, OnDestroy, OnInit, QueryList, SimpleChange, ViewChildren } from '@angular/core';
+import {
+  AfterViewInit,
+  ContentChildren,
+  ElementRef,
+  EventEmitter,
+  HostBinding,
+  Injector,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  QueryList,
+  SimpleChange,
+  ViewChildren,
+} from '@angular/core';
 import { FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { FloatLabelType, MatFormFieldAppearance, MatSuffix } from '@angular/material';
 import { Subscription } from 'rxjs';
-import { OInputsOptions, O_INPUTS_OPTIONS } from '../config/app-config';
+
+import { O_INPUTS_OPTIONS, OInputsOptions } from '../config/app-config';
 import { BooleanConverter, InputConverter } from '../decorators';
 import { OPermissions, PermissionsService } from '../services';
-import { OMatErrorComponent, OMatErrorOptions, O_MAT_ERROR_OPTIONS } from '../shared/material/o-mat-error/o-mat-error';
+import { O_MAT_ERROR_OPTIONS, OMatErrorComponent, OMatErrorOptions } from '../shared/material/o-mat-error/o-mat-error';
 import { PermissionsUtils } from '../util/permissions';
 import { Codes, SQLTypes, Util } from '../utils';
 import { OFormComponent } from './form/o-form.component';
