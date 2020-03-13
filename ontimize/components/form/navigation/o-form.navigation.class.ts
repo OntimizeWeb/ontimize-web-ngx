@@ -335,6 +335,10 @@ export class OFormNavigationClass {
     if (this.formLayoutManager && this.formLayoutManager.isDialogMode()) {
       this.form.setInsertMode();
     } else if (this.navigationService) {
+      if (this.formLayoutManager && this.formLayoutManager.isTabMode()) {
+        this.formLayoutManager.setAsActiveFormLayoutManager();
+      }
+
       let route = [];
       let extras: NavigationExtras = {};
       const navData: ONavigationItem = this.navigationService.getLastMainNavigationRouteData();
