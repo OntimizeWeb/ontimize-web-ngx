@@ -3,7 +3,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 
 import { Codes } from '../../../../../util/codes';
 import { Util } from '../../../../../util/util';
-import { OColumn } from '../../../../../interfaces/o-column.interface';
+import { OColumn } from '../../../column/o-column.class';
 
 // import { DragDropService } from '@churchs19/ng2-dnd';
 

@@ -66,8 +66,7 @@ export class OTableCellEditorBooleanComponent extends OBaseTableCellEditor imple
     super(injector);
   }
 
-  ngOnInit() {
-    super.ngOnInit();
+  initialize() {
     this.parseInputs();
   }
 

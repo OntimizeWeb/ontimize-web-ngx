@@ -45,7 +45,7 @@ export class OTableCellRendererBooleanComponent extends OBaseTableCellRenderer i
     this.translateService = this.injector.get(OTranslateService);
   }
 
-  ngOnInit() {
+  initialize() {
     this.parseInputs();
   }
 

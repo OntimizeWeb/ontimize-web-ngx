@@ -116,8 +116,7 @@ export class OTableCellEditorTimeComponent extends OBaseTableCellEditor implemen
     this.momentSrv = this.injector.get(MomentService);
   }
 
-  ngOnInit(): void {
-    super.ngOnInit();
+  initialize(): void {
     this.createInternalFormControl();
     if (!this._oDateLocale) {
       this.oDateLocale = this.momentSrv.getLocale();

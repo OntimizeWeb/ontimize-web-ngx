@@ -5,6 +5,7 @@ import { debounceTime } from 'rxjs/operators';
 import { OFormComponent } from '../../components/form/o-form.component';
 import { OServiceComponent } from '../../components/o-service-component.class';
 import { InputConverter } from '../../decorators/input-converter';
+import { IFilterBuilderCmpTarget } from '../../interfaces/filter-builder-component-target.interface';
 import { IFormDataComponent } from '../../interfaces/form-data-component.interface';
 import { BasicExpression } from '../../types/basic-expression.type';
 import { Expression } from '../../types/expression.type';
@@ -36,11 +37,6 @@ export const DEFAULT_OUTPUTS_O_FILTER_BUILDER = [
   // Event triggered when the clear action is excuted.
   'onClear'
 ];
-
-export interface IFilterBuilderCmpTarget {
-  formComponentAttr: string;
-  targetAttr: string;
-}
 
 @Component({
   selector: 'o-filter-builder',

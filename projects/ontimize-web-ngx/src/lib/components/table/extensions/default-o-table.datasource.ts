@@ -5,13 +5,13 @@ import { BehaviorSubject, merge, Observable, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { OTableDataSource } from '../../../interfaces/o-table-datasource.interface';
+import { OTableOptions } from '../../../interfaces/o-table-options.interface';
 import { ColumnValueFilterOperator, OColumnValueFilter } from '../../../types/o-column-value-filter.type';
 import { Util } from '../../../util/util';
-import { OMatSort } from './sort/o-mat-sort';
+import { OColumn } from '../column/o-column.class';
 import { OTableComponent } from '../o-table.component';
 import { OTableDao } from './o-table.dao';
-import { OTableOptions } from '../../../interfaces/o-table-options.interface';
-import { OColumn } from '../../../interfaces/o-column.interface';
+import { OMatSort } from './sort/o-mat-sort';
 
 export const SCROLLVIRTUAL = 'scroll';
 
@@ -63,7 +63,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
   }
 
   private columnValueFilters: Array<OColumnValueFilter> = [];
-
+  protected _table: OTableComponent;
   // constructor(protected table: OTableComponent) {
   //   super();
   //   this._database = table.daoTable;
@@ -74,7 +74,12 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
   //   this._sort = table.sort;
   // }
 
+  get table(): OTableComponent {
+    return this._table;
+  }
+
   set table(table: OTableComponent) {
+    this._table = table;
     this._database = table.daoTable;
     if (table.paginator) {
       this._paginator = table.matpaginator;

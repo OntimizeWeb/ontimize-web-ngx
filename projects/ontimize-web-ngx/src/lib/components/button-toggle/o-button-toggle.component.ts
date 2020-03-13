@@ -40,28 +40,9 @@ export class OButtonToggleComponent {
   public label: string;
   public icon: string;
   public iconPosition: 'before' | 'after' = 'before';
-  get checked(): boolean {
-    return this._innerButtonToggle.checked;
-  }
-  set checked(val: boolean) {
-    val = Util.parseBoolean(String(val));
-    this._innerButtonToggle.checked = val;
-  }
+
   protected _checked: boolean = false;
-  get enabled(): boolean {
-    return !this._innerButtonToggle.disabled;
-  }
-  set enabled(val: boolean) {
-    val = Util.parseBoolean(String(val));
-    this._innerButtonToggle.disabled = !val;
-  }
   protected _enabled: boolean = true;
-  get value(): any {
-    return this._innerButtonToggle.value;
-  }
-  set value(val: any) {
-    this._innerButtonToggle.value = val;
-  }
   public name: string;
   /* End inputs */
 
@@ -69,8 +50,33 @@ export class OButtonToggleComponent {
   public onChange: EventEmitter<MatButtonToggleChange> = new EventEmitter();
   /* End outputs */
 
-  @ViewChild('bt', { static: false }) public _innerButtonToggle: MatButtonToggle;
+  @ViewChild('bt', { static: true }) public _innerButtonToggle: MatButtonToggle;
 
   constructor(public viewContainerRef: ViewContainerRef) { }
 
+  get checked(): boolean {
+    return this._innerButtonToggle.checked;
+  }
+
+  set checked(val: boolean) {
+    val = Util.parseBoolean(String(val));
+    this._innerButtonToggle.checked = val;
+  }
+
+  get enabled(): boolean {
+    return !this._innerButtonToggle.disabled;
+  }
+
+  set enabled(val: boolean) {
+    val = Util.parseBoolean(String(val));
+    this._innerButtonToggle.disabled = !val;
+  }
+
+  get value(): any {
+    return this._innerButtonToggle.value;
+  }
+
+  set value(val: any) {
+    this._innerButtonToggle.value = val;
+  }
 }

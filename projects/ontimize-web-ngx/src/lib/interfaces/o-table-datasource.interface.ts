@@ -1,7 +1,8 @@
 import { EventEmitter } from '@angular/core';
-import { OColumnValueFilter } from '../types/o-column-value-filter.type';
-import { OColumn } from './o-column.interface';
+
+import { OColumn } from '../components/table/column/o-column.class';
 import { OTableComponent } from '../components/table/o-table.component';
+import { OColumnValueFilter } from '../types/o-column-value-filter.type';
 
 export interface OTableDataSource {
 

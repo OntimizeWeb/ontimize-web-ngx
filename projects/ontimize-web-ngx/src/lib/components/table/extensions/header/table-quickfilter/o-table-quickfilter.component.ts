@@ -18,7 +18,6 @@ import { fromEvent, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 import { O_INPUTS_OPTIONS } from '../../../../../config/app-config';
-import { OColumn } from '../../../../../interfaces/o-column.interface';
 import { OTableOptions } from '../../../../../interfaces/o-table-options.interface';
 import { OTableQuickfilter } from '../../../../../interfaces/o-table-quickfilter.interface';
 import { Expression } from '../../../../../types/expression.type';
@@ -28,6 +27,7 @@ import { Util } from '../../../../../util/util';
 import {
   OTableCellRendererServiceComponent,
 } from '../../../column/cell-renderer/service/o-table-cell-renderer-service.component';
+import { OColumn } from '../../../column/o-column.class';
 import { OTableComponent } from '../../../o-table.component';
 
 export const DEFAULT_INPUTS_O_TABLE_QUICKFILTER = [];

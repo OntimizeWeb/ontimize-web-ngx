@@ -3,8 +3,8 @@ import { ChangeDetectionStrategy, Component, forwardRef, Inject, Injector, OnIni
 import { InputConverter } from '../../../../../decorators/input-converter';
 import { Codes } from '../../../../../util/codes';
 import { Util } from '../../../../../util/util';
+import { OColumn } from '../../../column/o-column.class';
 import { OTableComponent } from '../../../o-table.component';
-import { OColumn } from '../../../../../interfaces/o-column.interface';
 
 export const DEFAULT_INPUTS_O_TABLE_COLUMN_FILTER = [
   // columns [string]: columns that might be filtered, separated by ';'. Default: all visible columns.

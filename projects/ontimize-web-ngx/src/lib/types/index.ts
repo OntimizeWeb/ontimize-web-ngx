@@ -24,6 +24,7 @@ export * from './ontimize-ee-permissions-config.type';
 export * from './ontimize-permissions-config.type';
 export * from './ontimize-service-config.type';
 export * from './ontimize-service-response.type';
+export * from './operation-function.type';
 export * from './query-data-args.type';
 export * from './quick-filter-function.type';
 export * from './remote-configuration.type';

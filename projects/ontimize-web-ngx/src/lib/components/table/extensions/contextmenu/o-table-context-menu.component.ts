@@ -15,8 +15,8 @@ import { OTranslateService } from '../../../../services/translate/o-translate.se
 import { ColumnValueFilterOperator, OColumnValueFilter } from '../../../../types/o-column-value-filter.type';
 import { Util } from '../../../../util/util';
 import { OContextMenuComponent } from '../../../contextmenu/o-context-menu.component';
+import { OColumn } from '../../column/o-column.class';
 import { OTableComponent } from '../../o-table.component';
-import { OColumn } from '../../../../interfaces/o-column.interface';
 
 export const DEFAULT_TABLE_CONTEXT_MENU_INPUTS = [
   'contextMenu: context-menu',
@@ -36,8 +36,7 @@ export const DEFAULT_TABLE_CONTEXT_MENU_INPUTS = [
   changeDetection: ChangeDetectionStrategy.OnPush,
   inputs: DEFAULT_TABLE_CONTEXT_MENU_INPUTS
 })
-export class OTableContextMenuComponent implements OnInit, AfterViewInit {
-
+export class OTableContextMenuComponent implements AfterViewInit {
   public contextMenu: OContextMenuComponent;
   public isVisibleInsert: BehaviorSubject<boolean> = new BehaviorSubject(true);
   public isVisibleEdit: BehaviorSubject<boolean> = new BehaviorSubject(true);
@@ -54,6 +53,7 @@ export class OTableContextMenuComponent implements OnInit, AfterViewInit {
     }
     this.isVisibleInsert.next(value);
   }
+
   get showInsert(): boolean {
     return this.isVisibleInsert.getValue();
   }
@@ -64,6 +64,7 @@ export class OTableContextMenuComponent implements OnInit, AfterViewInit {
     }
     this.isVisibleEdit.next(value);
   }
+
   get showEdit(): boolean {
     return this.isVisibleEdit.getValue();
   }
@@ -74,6 +75,7 @@ export class OTableContextMenuComponent implements OnInit, AfterViewInit {
     }
     this.isVisibleDetail.next(value);
   }
+
   get showViewDetail(): boolean {
     return this.isVisibleDetail.getValue();
   }
@@ -84,6 +86,7 @@ export class OTableContextMenuComponent implements OnInit, AfterViewInit {
     }
     this.isVisibleCopy.next(value);
   }
+
   get showCopy(): boolean {
     return this.isVisibleCopy.getValue();
   }
@@ -95,6 +98,7 @@ export class OTableContextMenuComponent implements OnInit, AfterViewInit {
     }
     this.table.isSelectionModeNone() ? this.isVisibleSelectAll.next(false) : this.isVisibleSelectAll.next(value);
   }
+
   get showSelectAll(): boolean {
     return this.isVisibleSelectAll.getValue();
   }
@@ -105,6 +109,7 @@ export class OTableContextMenuComponent implements OnInit, AfterViewInit {
     }
     this.isVisibleRefresh.next(value);
   }
+
   get showRefresh(): boolean {
     return this.isVisibleRefresh.getValue();
   }
@@ -115,6 +120,7 @@ export class OTableContextMenuComponent implements OnInit, AfterViewInit {
     }
     this.isVisibleDelete.next(value);
   }
+
   get showDelete(): boolean {
     return this.isVisibleDelete.getValue();
   }
@@ -125,6 +131,7 @@ export class OTableContextMenuComponent implements OnInit, AfterViewInit {
     }
     this.isVisibleFilter.next(value);
   }
+
   get showFilter(): boolean {
     return this.isVisibleFilter.getValue();
   }
@@ -143,19 +150,6 @@ export class OTableContextMenuComponent implements OnInit, AfterViewInit {
     this.translateService = this.injector.get(OTranslateService);
   }
 
-  public ngOnInit(): void {
-    this.contextMenuSubscription.add(this.defaultContextMenu.onClose.subscribe((param: any) => {
-      if (!this.table.isSelectionModeMultiple()) {
-        this.table.clearSelection();
-      }
-    }));
-
-    this.contextMenuSubscription.add(this.defaultContextMenu.onShow.subscribe((param: any) => {
-      this.initProperties(param);
-    }));
-
-  }
-
   public ngAfterViewInit(): void {
     const itemsParsed = this.defaultContextMenu.oContextMenuItems.toArray();
     if (this.contextMenu) {
@@ -168,6 +162,19 @@ export class OTableContextMenuComponent implements OnInit, AfterViewInit {
       this.isVisibleSelectAll.next(this.table.selectAllCheckbox);
     }
     this.table.registerContextMenu(this.defaultContextMenu);
+    this.registerContextMenuListeners();
+  }
+
+  public registerContextMenuListeners() {
+    this.contextMenuSubscription.add(this.defaultContextMenu.onClose.subscribe((param: any) => {
+      if (!this.table.isSelectionModeMultiple()) {
+        this.table.clearSelection();
+      }
+    }));
+
+    this.contextMenuSubscription.add(this.defaultContextMenu.onShow.subscribe((param: any) => {
+      this.initProperties(param);
+    }));
   }
 
   public gotoDetails(event): void {

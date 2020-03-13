@@ -1,17 +1,16 @@
-import { AfterContentInit, Injector, PipeTransform, TemplateRef } from '@angular/core';
+import { AfterContentInit, Injector, PipeTransform, TemplateRef, OnInit } from '@angular/core';
 
 import { OTableColumn } from '../../../../interfaces/o-table-column.interface';
 import { Util } from '../../../../util/util';
 import { OTableComponent } from '../../o-table.component';
-
-// import { OTableColumnComponent } from '../o-table-column.component';
+import { OTableColumnComponent } from '../o-table-column.component';
 
 export const DEFAULT_INPUTS_O_BASE_TABLE_CELL_RENDERER = [
   'filterSource: filter-source',
   'filterFunction: filter-function'
 ];
 
-export class OBaseTableCellRenderer implements AfterContentInit {
+export class OBaseTableCellRenderer implements OnInit, AfterContentInit {
 
   public templateref: TemplateRef<any>;
   public tableColumn: OTableColumn;
@@ -23,7 +22,15 @@ export class OBaseTableCellRenderer implements AfterContentInit {
   protected componentPipe: PipeTransform;
 
   constructor(protected injector: Injector) {
-    // this.tableColumn = this.injector.get(OTableColumnComponent);
+    this.tableColumn = this.injector.get(OTableColumnComponent);
+  }
+
+  public ngOnInit() {
+    this.initialize();
+  }
+
+  public initialize(): void {
+
   }
 
   public ngAfterContentInit(): void {

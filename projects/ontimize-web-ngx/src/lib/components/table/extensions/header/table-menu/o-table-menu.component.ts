@@ -25,6 +25,7 @@ import { Codes } from '../../../../../util/codes';
 import { PermissionsUtils } from '../../../../../util/permissions';
 import { Util } from '../../../../../util/util';
 import { OTableCellRendererImageComponent } from '../../../column/cell-renderer/image/o-table-cell-renderer-image.component';
+import { OColumn } from '../../../column/o-column.class';
 import { OTableComponent } from '../../../o-table.component';
 import {
   OTableApplyConfigurationDialogComponent,
@@ -38,7 +39,6 @@ import { OTableStoreFilterDialogComponent } from '../../dialog/store-filter/o-ta
 import { OTableVisibleColumnsDialogComponent } from '../../dialog/visible-columns/o-table-visible-columns-dialog.component';
 import { OTableOptionComponent } from '../table-option/o-table-option.component';
 import { OTableExportConfiguration } from './o-table-export-configuration.class';
-import { OColumn } from '../../../../../interfaces/o-column.interface';
 
 export const DEFAULT_INPUTS_O_TABLE_MENU = [
   // select-all-checkbox [yes|no|true|false]: show selection check boxes. Default: no.
@@ -84,8 +84,9 @@ export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, O
   protected dialogService: DialogService;
   protected translateService: OTranslateService;
   protected snackBarService: SnackBarService;
-  @ViewChild('menu', { static: false }) matMenu: MatMenu;
 
+  @ViewChild('menu', { static: true })
+  matMenu: MatMenu;
   @ViewChild('selectAllCheckboxOption', { static: false })
   selectAllCheckboxOption: OTableOptionComponent;
   @ViewChild('exportButtonOption', { static: false })

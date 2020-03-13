@@ -9,7 +9,6 @@ import {
   forwardRef,
   HostListener,
   Inject,
-  InjectionToken,
   Injector,
   OnDestroy,
   OnInit,
@@ -25,7 +24,8 @@ import { BehaviorSubject, combineLatest, Observable, of, Subscription } from 'rx
 import { map } from 'rxjs/operators';
 
 import { BooleanConverter, InputConverter } from '../../decorators/input-converter';
-import { OColumn } from '../../interfaces/o-column.interface';
+import { O_TABLE_DATASOURCE } from '../../injection-tokens/o-table-datasource.injection-token';
+import { O_TABLE_OPTIONS } from '../../injection-tokens/o-table-options.injection-token';
 import { OTableButton } from '../../interfaces/o-table-button.interface';
 import { OTableButtons } from '../../interfaces/o-table-buttons.interface';
 import { OTableDataSource } from '../../interfaces/o-table-datasource.interface';
@@ -55,6 +55,7 @@ import { IOContextMenuContext } from '../contextmenu/o-context-menu.service';
 import { OFormComponent } from '../form/o-form.component';
 import { DEFAULT_INPUTS_O_SERVICE_COMPONENT, OServiceComponent } from '../o-service-component.class';
 import { OTableColumnCalculatedComponent } from './column/calculated/o-table-column-calculated.component';
+import { OColumn } from './column/o-column.class';
 import { OTableColumnComponent } from './column/o-table-column.component';
 import {
   OTableFilterByColumnDataDialogComponent,
@@ -185,7 +186,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   public static DEFAULT_BASE_SIZE_SPINNER = 100;
   public static FIRST_LAST_CELL_PADDING = 24;
-  public static DEFAULT_COLUMN_MIN_WIDTH = 80;
 
   public static NAME_COLUMN_SELECT = NAME_COLUMN_SELECT;
   public static SUFFIX_COLUMN_INSERTABLE = SUFFIX_COLUMN_INSERTABLE;
@@ -195,7 +195,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   public paginator: OTablePaginator;
   @ViewChild(MatPaginator, { static: false }) matpaginator: MatPaginator;
-  @ViewChild(OMatSort, { static: false }) sort: OMatSort;
+  @ViewChild(OMatSort, { static: true }) sort: OMatSort;
 
   // only for insideTabBugWorkaround
   @ViewChildren(OMatSortHeader) protected sortHeaders: QueryList<OMatSortHeader>;
@@ -300,7 +300,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   protected _selectAllCheckboxVisible: boolean;
   set selectAllCheckboxVisible(value: boolean) {
     this._selectAllCheckboxVisible = BooleanConverter(this.state['select-column-visible']) || BooleanConverter(value);
-    this.oTableOptions.selectColumn.visible = this._selectAllCheckboxVisible;
+    this._oTableOptions.selectColumn.visible = this._selectAllCheckboxVisible;
     this.initializeCheckboxColumn();
   }
 
@@ -456,14 +456,13 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   @HostListener('window:resize', [])
   updateScrolledState(): void {
     if (this.horizontalScroll) {
-      const self = this;
       setTimeout(() => {
-        const bodyWidth = self.tableBodyEl.nativeElement.clientWidth;
-        const scrollWidth = self.tableBodyEl.nativeElement.scrollWidth;
-        const previousState = self.horizontalScrolled;
-        self.horizontalScrolled = scrollWidth > bodyWidth;
-        if (previousState !== self.horizontalScrolled) {
-          self.onUpdateScrolledState.emit(self.horizontalScrolled);
+        const bodyWidth = this.tableBodyEl.nativeElement.clientWidth;
+        const scrollWidth = this.tableBodyEl.nativeElement.scrollWidth;
+        const previousState = this.horizontalScrolled;
+        this.horizontalScrolled = scrollWidth > bodyWidth;
+        if (previousState !== this.horizontalScrolled) {
+          this.onUpdateScrolledState.emit(this.horizontalScrolled);
         }
       }, 0);
     }
@@ -480,8 +479,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   ) {
     super(injector, elRef, form);
 
-    const tableOptionsToken = new InjectionToken<string>('OTableOptions');
-    this._oTableOptions = this.injector.get<OTableOptions>(tableOptionsToken);
+    this._oTableOptions = this.injector.get<OTableOptions>(O_TABLE_OPTIONS);
     this._oTableOptions.selectColumn = this.createOColumn();
 
     try {
@@ -571,6 +569,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
     this.initializeDao();
 
+    this.setDatasource();
+
     this.permissions = this.permissionsService.getTablePermissions(this.oattr, this.actRoute);
   }
 
@@ -629,7 +629,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   protected initTableAfterViewInit() {
     this.parseVisibleColumns();
-    this.setDatasource();
     this.registerDataSourceListeners();
     this.parseSortColumns();
     this.registerSortListener();
@@ -689,13 +688,11 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   registerContextMenu(value: OContextMenuComponent): void {
     this.tableContextMenu = value;
-    const self = this;
     this.contextMenuSubscription = this.tableContextMenu.onShow.subscribe((params: IOContextMenuContext) => {
       params.class = 'o-table-context-menu ' + this.rowHeight;
-
-      if (params.data && !self.selection.isSelected(params.data.rowValue)) {
-        self.clearSelection();
-        self.selectedRow(params.data.rowValue);
+      if (params.data && !this.selection.isSelected(params.data.rowValue)) {
+        this.clearSelection();
+        this.selectedRow(params.data.rowValue);
       }
     });
   }
@@ -782,7 +779,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     if (this.editionMode !== Codes.DETAIL_MODE_NONE) {
       return;
     }
-    const editableColumns = this.oTableOptions.columns.filter(col => {
+    const editableColumns = this._oTableOptions.columns.filter(col => {
       return Util.isDefined(col.editor);
     });
     if (editableColumns.length > 0) {
@@ -803,9 +800,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     if (this.state.hasOwnProperty('oColumns-display')) {
       // filtering columns that might be in state storage but not in the actual table definition
       let stateCols = [];
-      const self = this;
       this.state['oColumns-display'].forEach((oCol, index) => {
-        const isVisibleColInColumns = self._oTableOptions.columns.find(col => col.attr === oCol.attr) !== undefined;
+        const isVisibleColInColumns = this._oTableOptions.columns.find(col => col.attr === oCol.attr) !== undefined;
         if (isVisibleColInColumns) {
           stateCols.push(oCol);
         } else {
@@ -821,7 +817,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   checkChangesVisibleColummnsInInitialConfiguration(stateCols) {
-    const self = this;
     if (this.state.hasOwnProperty('initial-configuration')) {
       if (this.state['initial-configuration'].hasOwnProperty('oColumns-display')) {
 
@@ -845,7 +840,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
                 return col;
               });
             } else {
-              self.colArray.forEach((element, i) => {
+              this.colArray.forEach((element, i) => {
                 if (element === colAdd) {
                   stateCols.splice(i + 1, 0,
                     {
@@ -885,22 +880,21 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
       const initialConfigSortColumnsArray = ServiceUtils.parseSortColumns(this.state['initial-configuration']['sort-columns']);
       const originalSortColumnsArray = ServiceUtils.parseSortColumns(this.originalSortColumns);
-      const self = this;
       // Find values in visible-columns that they arent in original-visible-columns in localstorage
       // in this case you have to add this column to this.visibleColArray
       const colToAddInVisibleCol = Util.differenceArrays(originalSortColumnsArray, initialConfigSortColumnsArray);
       if (colToAddInVisibleCol.length > 0) {
         colToAddInVisibleCol.forEach(colAdd => {
-          self.sortColArray.push(colAdd);
+          this.sortColArray.push(colAdd);
         });
       }
 
       const colToDelInVisibleCol = Util.differenceArrays(initialConfigSortColumnsArray, originalSortColumnsArray);
       if (colToDelInVisibleCol.length > 0) {
         colToDelInVisibleCol.forEach((colDel) => {
-          self.sortColArray.forEach((col, i) => {
+          this.sortColArray.forEach((col, i) => {
             if (col.columnName === colDel.columnName) {
-              self.sortColArray.splice(i, 1);
+              this.sortColArray.splice(i, 1);
             }
           });
         });
@@ -974,16 +968,15 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   registerTabListener() {
     // When table is contained into tab component, it is necessary to init table component when attached to DOM.
-    const self = this;
     this.tabGroupChangeSubscription = this.tabGroupContainer.selectedTabChange.subscribe((evt) => {
       let interval;
       const timerCallback = (tab: MatTab) => {
         if (tab && tab.content.isAttached) {
           clearInterval(interval);
-          if (tab === self.tabContainer) {
-            self.insideTabBugWorkaround();
-            if (self.pendingQuery) {
-              self.queryData(self.pendingQueryFilter);
+          if (tab === this.tabContainer) {
+            this.insideTabBugWorkaround();
+            if (this.pendingQuery) {
+              this.queryData(this.pendingQueryFilter);
             }
           }
         }
@@ -999,7 +992,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   registerSortListener() {
-    console.log(this._oTableOptions.columns);
     if (Util.isDefined(this.sort)) {
       this.sortSubscription = this.sort.oSortChange.subscribe(this.onSortChange.bind(this));
       this.sort.setMultipleSort(this.multipleSort);
@@ -1028,21 +1020,17 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   setDatasource() {
-    const dataSourceToken = new InjectionToken<string>('OTableDataSource');
-    this.dataSource = this.injector.get<OTableDataSource>(dataSourceToken);
-    // this.dataSource = OTableFactory.getTableDataSource(this);
+    this.dataSource = this.injector.get<OTableDataSource>(O_TABLE_DATASOURCE);
     if (this.daoTable) {
       this.dataSource.table = this;
-      // this.dataSource.resultsLength = this.daoTable.data.length;
     }
   }
 
   protected registerDataSourceListeners() {
     if (!this.pageable) {
-      const self = this;
       this.onRenderedDataChange = this.dataSource.onRenderedDataChange.subscribe(() => {
         setTimeout(() => {
-          self.loadingSortingSubject.next(false);
+          this.loadingSortingSubject.next(false);
         }, 500);
       });
     }
@@ -1173,9 +1161,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   projectContentChanged() {
-    const self = this;
     setTimeout(() => {
-      self.loadingSortingSubject.next(false);
+      this.loadingSortingSubject.next(false);
     }, 500);
     this.loadingScrollSubject.next(false);
 
@@ -1338,12 +1325,11 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   handleClick(item: any, $event?) {
-    const self = this;
     this.clickTimer = setTimeout(() => {
-      if (!self.clickPrevent) {
-        self.doHandleClick(item, $event);
+      if (!this.clickPrevent) {
+        this.doHandleClick(item, $event);
       }
-      self.clickPrevent = false;
+      this.clickPrevent = false;
     }, this.clickDelay);
   }
 
@@ -1502,10 +1488,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   protected getKeysValues(): any[] {
     const data = this.getAllValues();
-    const _self = this;
     return data.map((row) => {
       const obj = {};
-      _self.keysArray.forEach((key) => {
+      this.keysArray.forEach((key) => {
         if (row[key] !== undefined) {
           obj[key] = row[key];
         }
@@ -1523,7 +1508,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   initializeCheckboxColumn() {
     // Initializing row selection listener
-    if (!this.selectionChangeSubscription && this.oTableOptions.selectColumn.visible) {
+    if (!this.selectionChangeSubscription && this._oTableOptions.selectColumn.visible) {
       this.selectionChangeSubscription = this.selection.changed.subscribe((selectionData: SelectionChange<any>) => {
         if (selectionData && selectionData.added.length > 0) {
           ObservableWrapper.callEmit(this.onRowSelected, selectionData.added);
@@ -1724,12 +1709,11 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       disableClose: true,
       panelClass: ['o-dialog-class', 'o-table-dialog']
     });
-    const self = this;
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         const columnValueFilter = dialogRef.componentInstance.getColumnValuesFilter();
-        self.dataSource.addColumnFilter(columnValueFilter);
-        self.reloadPaginatedDataFromStart();
+        this.dataSource.addColumnFilter(columnValueFilter);
+        this.reloadPaginatedDataFromStart();
       }
     });
   }
@@ -2194,13 +2178,13 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   refreshColumnsWidth() {
-    this.oTableOptions.columns.filter(c => c.visible).forEach((c) => {
+    this._oTableOptions.columns.filter(c => c.visible).forEach((c) => {
       c.DOMWidth = undefined;
     });
     this.cd.detectChanges();
     setTimeout(() => {
       this.getColumnsWidthFromDOM();
-      this.oTableOptions.columns.filter(c => c.visible).forEach(c => {
+      this._oTableOptions.columns.filter(c => c.visible).forEach(c => {
         if (Util.isDefined(c.definition) && Util.isDefined(c.definition.width)) {
           c.width = c.definition.width;
         }
@@ -2211,13 +2195,15 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   createOColumn(attr?: string, table?: OTableComponent, column?: OTableColumnComponent | OTableColumnCalculatedComponent | any): OColumn {
-    const tableColumnToken = new InjectionToken<string>('OColumn');
-    const instance = this.injector.get<OColumn>(tableColumnToken);
+    const instance = new OColumn();
     if (attr) {
       instance.attr = attr;
     }
     if (table) {
-      instance.setDefaultProperties(table);
+      instance.setDefaultProperties({
+        orderable: this.orderable,
+        resizable: this.resizable
+      });
     }
     if (column) {
       instance.setColumnProperties(column);

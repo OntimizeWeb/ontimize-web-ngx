@@ -48,7 +48,7 @@ export class OTableCellRendererRealComponent extends OTableCellRendererIntegerCo
     this.componentPipe = new ORealPipe(this.injector);
   }
 
-  ngOnInit() {
+  initialize() {
     this.pipeArguments = {
       minDecimalDigits: this.minDecimalDigits,
       maxDecimalDigits: this.maxDecimalDigits,

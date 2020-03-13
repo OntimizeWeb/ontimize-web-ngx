@@ -15,7 +15,7 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { ColumnValueFilterOperator, OColumnValueFilter } from '../../../../../types/o-column-value-filter.type';
 import { TableFilterByColumnData } from '../../../../../types/o-table-filter-by-column-data.type';
 import { Util } from '../../../../../util/util';
-import { OColumn } from '../../../../../interfaces/o-column.interface';
+import { OColumn } from '../../../column/o-column.class';
 
 @Component({
   selector: 'o-table-filter-by-column-data-dialog',

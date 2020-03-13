@@ -454,9 +454,7 @@ export class OTableColumnComponent implements OTableColumn, OnDestroy, OnInit, A
     if (oCol !== undefined) {
       oCol.renderer = this.renderer;
     }
-    if (this.renderer.ngOnInit) {
-      this.renderer.ngOnInit();
-    }
+    this.renderer.initialize();
   }
 
   public registerEditor(editor: any) {
@@ -465,9 +463,7 @@ export class OTableColumnComponent implements OTableColumn, OnDestroy, OnInit, A
     if (oCol !== undefined) {
       oCol.editor = this.editor;
     }
-    if (this.editor.ngOnInit) {
-      this.editor.ngOnInit();
-    }
+    this.editor.initialize();
   }
 
   set orderable(val: any) {

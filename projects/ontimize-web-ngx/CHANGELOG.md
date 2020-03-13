@@ -10,6 +10,9 @@ IBasicExpression -> BasicExpression
 IFilterExpression -> FilterExpression
 ISQLOrder -> SQLOrder
 
+ * editors and renderers:
+    * '*initialize*' method added always called in base class ngOnInit method
+
 ## 4.1.2 (2020-02-26)
 ### Features
 * **o-table**: new `show-configuration-option` input ([5450798](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5450798)) ([863b1ae](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/863b1ae)) Closes [#306](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/306)   

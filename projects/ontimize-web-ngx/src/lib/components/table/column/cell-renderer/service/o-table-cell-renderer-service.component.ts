@@ -10,7 +10,6 @@ import {
 } from '@angular/core';
 import { Subscription } from 'rxjs';
 
-import { OColumn } from '../../../../../interfaces/o-column.interface';
 import { DialogService } from '../../../../../services/dialog.service';
 import { OntimizeService } from '../../../../../services/ontimize.service';
 import { Expression } from '../../../../../types/expression.type';
@@ -19,6 +18,7 @@ import { FilterExpressionUtils } from '../../../../../util/filter-expression.uti
 import { ServiceUtils } from '../../../../../util/service.utils';
 import { SQLTypes } from '../../../../../util/sqltypes';
 import { Util } from '../../../../../util/util';
+import { OColumn } from '../../o-column.class';
 import { DEFAULT_INPUTS_O_BASE_TABLE_CELL_RENDERER, OBaseTableCellRenderer } from '../o-base-table-cell-renderer.class';
 
 export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_SERVICE = [
@@ -75,7 +75,7 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
     this.dialogService = injector.get(DialogService);
   }
 
-  public ngOnInit(): void {
+  public initialize(): void {
     if (this.table) {
       const oCol: OColumn = this.table.getOColumn(this.column);
       oCol.definition.contentAlign = oCol.definition.contentAlign ? oCol.definition.contentAlign : 'center';

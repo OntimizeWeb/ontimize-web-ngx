@@ -84,7 +84,7 @@ export class Codes {
     TWENTY_FOUR: 'HH:mm a',
   };
 
-  // FormComponent
+  // OFormComponent
   public static CLOSE_DETAIL_ACTION: string = 'CLOSE';
   public static BACK_ACTION: string = 'BACK';
   public static RELOAD_ACTION: string = 'RELOAD';
@@ -94,6 +94,9 @@ export class Codes {
   public static GO_INSERT_ACTION: string = 'GO_INSERT';
   public static DELETE_ACTION: string = 'DELETE';
   public static UNDO_LAST_CHANGE_ACTION: string = 'UNDO_LAST_CHANGE';
+
+  // OTableComponent
+  public static DEFAULT_COLUMN_MIN_WIDTH = 80;
 
   public static TWENTY_FOUR_HOUR_FORMAT = 24;
   public static TWELVE_FOUR_HOUR_FORMAT = 12;

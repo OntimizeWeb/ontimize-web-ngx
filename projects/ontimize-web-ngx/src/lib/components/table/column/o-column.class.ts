@@ -1,16 +1,15 @@
 import { BehaviorSubject, Observable } from 'rxjs';
 
-import { OColumn } from '../../../interfaces/o-column.interface';
+import { OTableColumnCalculated } from '../../../interfaces/o-table-column-calculated.interface';
+import { OTableColumn } from '../../../interfaces/o-table-column.interface';
 import { Expression } from '../../../types/expression.type';
 import { OColumnAggregate } from '../../../types/o-column-aggregate.type';
 import { OColumnTooltip } from '../../../types/o-column-tooltip.type';
+import { OperatorFunction } from '../../../types/operation-function.type';
 import { Codes, Util } from '../../../util';
-import { OTableComponent } from '../o-table.component';
-import { OperatorFunction, OTableColumnCalculatedComponent } from './calculated/o-table-column-calculated.component';
 import { OBaseTableCellRenderer } from './cell-renderer/o-base-table-cell-renderer.class';
-import { OTableColumnComponent } from './o-table-column.component';
 
-export class DefaultOColumn implements OColumn {
+export class OColumn {
   attr: string;
   name: string;
   title: string;
@@ -29,7 +28,7 @@ export class DefaultOColumn implements OColumn {
   maxWidth: string;
   aggregate: OColumnAggregate;
   calculate: string | OperatorFunction;
-  definition: OTableColumnComponent;
+  definition: OTableColumn;
   tooltip: OColumnTooltip;
   resizable: boolean;
   DOMWidth: number;
@@ -39,25 +38,11 @@ export class DefaultOColumn implements OColumn {
   public isMultiline: Observable<boolean> = this.multilineSubject.asObservable();
   private _multiline: boolean;
 
-  // constructor(
-  //   attr?: string,
-  //   table?: OTableComponent,
-  //   column?: OTableColumnComponent | OTableColumnCalculatedComponent
-  // ) {
-  //   this.attr = attr;
-  //   if (Util.isDefined(table)) {
-  //     this.setDefaultProperties(table);
-  //   }
-  //   if (Util.isDefined(column)) {
-  //     this.setColumnProperties(column);
-  //   }
-  // }
-
-  setDefaultProperties(table: OTableComponent) {
+  setDefaultProperties(args: any) {
     this.type = 'string';
     this.className = 'o-column-' + (this.type) + ' ';
-    this.orderable = table.orderable;
-    this.resizable = table.resizable;
+    this.orderable = args.orderable;
+    this.resizable = args.resizable;
     this.searchable = true;
     this.searching = true;
     // column without 'attr' should contain only renderers that do not depend on cell data, but row data (e.g. actions)
@@ -66,7 +51,7 @@ export class DefaultOColumn implements OColumn {
     this.multiline = false;
   }
 
-  setColumnProperties(column: OTableColumnComponent | OTableColumnCalculatedComponent | any) {
+  setColumnProperties(column: OTableColumn | OTableColumnCalculated | any) {
     this.title = Util.isDefined(column.title) ? column.title : column.attr;
     this.definition = column;
     this.multiline = column.multiline;
@@ -102,11 +87,11 @@ export class DefaultOColumn implements OColumn {
     if (Util.isDefined(column.class)) {
       this.className = Util.isDefined(this.className) ? (this.className + ' ' + column.class) : column.class;
     }
-    if (column instanceof OTableColumnCalculatedComponent) {
-      if (Util.isDefined(column.operation) || Util.isDefined(column.functionOperation)) {
-        this.calculate = column.operation ? column.operation : column.functionOperation;
-      }
+    // if (column instanceof OTableColumnCalculatedComponent) {
+    if (Util.isDefined(column.operation) || Util.isDefined(column.functionOperation)) {
+      this.calculate = column.operation ? column.operation : column.functionOperation;
     }
+    // }
     if (Util.isDefined(column.tooltip) && column.tooltip) {
       this.tooltip = {
         value: column.tooltipValue,
@@ -168,7 +153,7 @@ export class DefaultOColumn implements OColumn {
   }
 
   getMinWidthValue() {
-    return Util.extractPixelsValue(this.minWidth, OTableComponent.DEFAULT_COLUMN_MIN_WIDTH);
+    return Util.extractPixelsValue(this.minWidth, Codes.DEFAULT_COLUMN_MIN_WIDTH);
   }
 
   getMaxWidthValue() {
@@ -177,11 +162,10 @@ export class DefaultOColumn implements OColumn {
   }
 
   getRenderWidth() {
-    console.log(this);
     if (Util.isDefined(this.width)) {
       return this.width;
     }
-    const minValue = Util.extractPixelsValue(this.minWidth, OTableComponent.DEFAULT_COLUMN_MIN_WIDTH);
+    const minValue = Util.extractPixelsValue(this.minWidth, Codes.DEFAULT_COLUMN_MIN_WIDTH);
     if (Util.isDefined(minValue) && this.DOMWidth < minValue) {
       this.DOMWidth = minValue;
     }

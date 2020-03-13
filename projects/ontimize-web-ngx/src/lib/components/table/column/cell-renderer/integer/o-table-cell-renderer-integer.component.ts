@@ -46,7 +46,7 @@ export class OTableCellRendererIntegerComponent extends OBaseTableCellRenderer i
     this.componentPipe = new OIntegerPipe(this.injector);
   }
 
-  ngOnInit() {
+  initialize() {
     this.pipeArguments = {
       grouping: this.grouping,
       thousandSeparator: this.thousandSeparator

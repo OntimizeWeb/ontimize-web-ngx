@@ -2,13 +2,14 @@ import { EventEmitter, HostListener, Injector, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 
 import { InputConverter } from '../../../../decorators/input-converter';
-import { OColumn } from '../../../../interfaces/o-column.interface';
 import { OTableColumn } from '../../../../interfaces/o-table-column.interface';
 import { SnackBarService } from '../../../../services/snackbar.service';
 import { OTranslateService } from '../../../../services/translate/o-translate.service';
 import { ObservableWrapper } from '../../../../util/async';
 import { Util } from '../../../../util/util';
 import { OTableComponent } from '../../o-table.component';
+import { OColumn } from '../o-column.class';
+import { OTableColumnComponent } from '../o-table-column.component';
 
 // import { OTableColumnComponent } from '../o-table-column.component';
 
@@ -76,7 +77,7 @@ export class OBaseTableCellEditor implements OnInit {
 
   constructor(protected injector: Injector) {
     this.snackBarService = this.injector.get(SnackBarService);
-    // this.tableColumn = this.injector.get(OTableColumnComponent);
+    this.tableColumn = this.injector.get(OTableColumnComponent);
     this.translateService = this.injector.get(OTranslateService);
   }
 
@@ -84,6 +85,11 @@ export class OBaseTableCellEditor implements OnInit {
     this.createFormControl();
     this.registerEditor();
     this.editorCreated.emit(this);
+    this.initialize();
+  }
+
+  public initialize(): void {
+
   }
 
   protected handleKeyup(event: KeyboardEvent) {

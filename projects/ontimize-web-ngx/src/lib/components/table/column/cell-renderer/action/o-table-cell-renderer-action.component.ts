@@ -43,7 +43,7 @@ export class OTableCellRendererActionComponent extends OBaseTableCellRenderer im
     this.tableColumn.searchable = false;
   }
 
-  ngOnInit() {
+  initialize() {
     if (this.table) {
       const oCol = this.table.getOColumn(this.tableColumn.attr);
       oCol.title = Util.isDefined(this.tableColumn.title) ? this.tableColumn.title : undefined;

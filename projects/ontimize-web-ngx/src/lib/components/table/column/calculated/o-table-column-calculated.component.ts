@@ -1,5 +1,7 @@
 import { ChangeDetectionStrategy, Component, ComponentFactoryResolver, forwardRef, Inject, Injector } from '@angular/core';
 
+import { OTableColumnCalculated } from '../../../../interfaces/o-table-column-calculated.interface';
+import { OperatorFunction } from '../../../../types/operation-function.type';
 import { OTableComponent } from '../../o-table.component';
 import { DEFAULT_INPUTS_O_TABLE_COLUMN, OTableColumnComponent } from '../o-table-column.component';
 
@@ -10,12 +12,6 @@ export const DEFAULT_INPUTS_O_TABLE_COLUMN_CALCULATED = [
   // operation-function [funtion]: callback title. Default: no value.
   'functionOperation: operation-function'
 ];
-
-export type OperatorFunction = (value: any[]) => number;
-
-export class OColumnCalculated {
-  operator: string | OperatorFunction;
-}
 
 @Component({
   selector: 'o-table-column-calculated',
@@ -30,7 +26,7 @@ export class OColumnCalculated {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 
-export class OTableColumnCalculatedComponent extends OTableColumnComponent {
+export class OTableColumnCalculatedComponent extends OTableColumnComponent implements OTableColumnCalculated {
 
   public operation: string;
   public functionOperation: OperatorFunction;

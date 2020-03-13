@@ -17,11 +17,14 @@ export const DEFAULT_CONTEXT_MENU_CONTENT_ITEM_INPUTS = [
 export class OWrapperContentMenuComponent {
 
   public class: string;
+
   @Input()
   public items: any[];
-  @ViewChild('childMenu', { static: false })
+
+  @ViewChild('childMenu', { static: true })
   public childMenu: MatMenu;
-  @ViewChild(OWrapperContentMenuComponent, { static: false })
+
+  @ViewChild(OWrapperContentMenuComponent, { static: true })
   public menu: OWrapperContentMenuComponent;
 
   constructor(

@@ -53,7 +53,7 @@ export class OTableCellRendererCurrencyComponent extends OBaseTableCellRenderer 
     this.componentPipe = new OCurrencyPipe(this.injector);
   }
 
-  ngOnInit() {
+  initialize() {
     if (typeof this.currencySymbol === 'undefined') {
       this.currencySymbol = this.currencyService.symbol;
     }

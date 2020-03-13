@@ -14,7 +14,7 @@
       <ng-container #quickfilterRef>
         <ng-content select="o-table-quickfilter"></ng-content>
       </ng-container>
-      <ng-container *ngIf="quickFilter && quickfilterRef.nativeElement.childNodes.length === 0">
+      <ng-container *ngIf="quickFilter && quickfilterRef.nativeElement && quickfilterRef.nativeElement.childNodes.length === 0">
         <o-table-quickfilter (onChange)="reloadPaginatedDataFromStart()"></o-table-quickfilter>
       </ng-container>
 
@@ -83,17 +83,17 @@
             [oContextMenu]="tableContextMenu" [oContextMenuData]="{ cellName:column.name, rowValue:row}"
             [style.width]="column.getRenderWidth()">
             <div class="content">
-              <ng-container [ngIf]="usePlainRender(column, row)" [ngIfElse]="cellRender">
+              <ng-template [ngIf]="usePlainRender(column, row)" [ngIfElse]="cellRender">
                 {{ row[column.name] }}
-              </ng-container>
+              </ng-template>
 
               <ng-template #cellRender [ngIf]="useCellRenderer(column, row)" [ngIfElse]="cellEditor"
-                [ngTemplateOutlet]="column.renderer.templateref"
+                [ngTemplateOutlet]="column.renderer?.templateref"
                 [ngTemplateOutletContext]="{ cellvalue: row[column.name], rowvalue:row }">
               </ng-template>
 
               <ng-template #cellEditor [ngIf]="useCellEditor(column, row)"
-                [ngTemplateOutlet]="column.editor.templateref"
+                [ngTemplateOutlet]="column.editor?.templateref"
                 [ngTemplateOutletContext]="{ cellvalue: row[column.name], rowvalue:row }">
               </ng-template>
 

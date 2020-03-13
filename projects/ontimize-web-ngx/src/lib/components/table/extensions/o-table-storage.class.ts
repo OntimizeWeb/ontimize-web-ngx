@@ -2,8 +2,8 @@ import { OTableConfiguration } from '../../../types/o-table-configuration.type';
 import { OTableFiltersStatus } from '../../../types/o-table-filter-status.type';
 import { Codes } from '../../../util/codes';
 import { Util } from '../../../util/util';
+import { OColumn } from '../column/o-column.class';
 import { OTableComponent } from '../o-table.component';
-import { OColumn } from '../../../interfaces/o-column.interface';
 
 export class OTableStorage {
 
@@ -181,11 +181,9 @@ export class OTableStorage {
   protected getInitialConfigurationState(): any {
     const result = {};
     const initialConfiguration = {};
-
     const oColumnsData = [];
-    const self = this;
     Util.parseArray(this.table.originalVisibleColumns, true).forEach((x: string) => {
-      const oCol = self.table.getOColumn(x);
+      const oCol = this.table.getOColumn(x);
       oColumnsData.push({
         attr: oCol.attr,
         visible: true,

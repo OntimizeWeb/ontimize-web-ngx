@@ -17,8 +17,8 @@ import { OTranslateService } from '../../../../../services/translate/o-translate
 import { Observable, ObservableWrapper } from '../../../../../util/async';
 import { Util } from '../../../../../util/util';
 import { OBaseTableCellEditor } from '../../../column/cell-editor/o-base-table-cell-editor.class';
+import { OColumn } from '../../../column/o-column.class';
 import { OTableComponent } from '../../../o-table.component';
-import { OColumn } from '../../../../../interfaces/o-column.interface';
 
 export const DEFAULT_INPUTS_O_TABLE_INSERTABLE_ROW = [
   // columns [string]: columns that can be inserted, separated by ';'. Default: all visible columns.

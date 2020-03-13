@@ -40,8 +40,7 @@ export class OTableCellRendererTimeComponent extends OBaseTableCellRenderer impl
     this.componentPipe = new OMomentPipe(this.injector);
   }
 
-  ngOnInit() {
-    // Called after the constructor, initializing input properties, and the first call to ngOnChanges.
+  initialize() {
     this.pipeArguments = {
       format: this._format
     };

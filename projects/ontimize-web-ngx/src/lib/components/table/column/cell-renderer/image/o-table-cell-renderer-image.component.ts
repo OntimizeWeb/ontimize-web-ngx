@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
 
-import { OColumn } from '../../../../../interfaces/o-column.interface';
 import { Util } from '../../../../../util/util';
+import { OColumn } from '../../o-column.class';
 import { DEFAULT_INPUTS_O_BASE_TABLE_CELL_RENDERER, OBaseTableCellRenderer } from '../o-base-table-cell-renderer.class';
 
 export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_IMAGE = [
@@ -39,7 +39,7 @@ export class OTableCellRendererImageComponent extends OBaseTableCellRenderer imp
     this.tableColumn.searchable = false;
   }
 
-  ngOnInit() {
+  initialize() {
     if (this.table) {
       const oCol: OColumn = this.table.getOColumn(this.tableColumn.attr);
       oCol.title = Util.isDefined(this.tableColumn.title) ? this.tableColumn.title : undefined;
