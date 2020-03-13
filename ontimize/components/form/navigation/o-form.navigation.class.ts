@@ -1,6 +1,7 @@
 import { EventEmitter, Injector } from '@angular/core';
 import { ActivatedRoute, NavigationExtras, Router, UrlSegmentGroup } from '@angular/router';
 import { combineLatest, Observable, Subscription } from 'rxjs';
+
 import { OFormLayoutDialogComponent } from '../../../layouts/form-layout/dialog/o-form-layout-dialog.component';
 import { IDetailComponentData, OFormLayoutManagerComponent } from '../../../layouts/form-layout/o-form-layout-manager.component';
 import { DialogService, NavigationService, ONavigationItem } from '../../../services';
@@ -265,7 +266,7 @@ export class OFormNavigationClass {
       this.formLayoutManager.closeDetail(this.id);
     } else if (this.navigationService) {
       this.form.beforeCloseDetail.emit();
-      this.navigationService.removeLastItem();
+      this.navigationService.removeLastItemsUntilMain();
       const navData: ONavigationItem = this.navigationService.getLastItem();
       if (navData) {
         let extras: NavigationExtras = {};
@@ -304,7 +305,7 @@ export class OFormNavigationClass {
       let qParams: any = Object.assign({}, this.getQueryParams(), Codes.getIsDetailObject());
       extras[Codes.QUERY_PARAMS] = qParams;
       let route = [];
-      const navData: ONavigationItem = this.navigationService.getPreviousRouteData();
+      const navData: ONavigationItem = this.navigationService.getLastMainNavigationRouteData();
       if (navData) {
         let url = navData.url;
         const detailRoute = navData.getDetailFormRoute();
@@ -314,8 +315,6 @@ export class OFormNavigationClass {
           if (detailIndex !== -1) {
             url = url.substring(0, detailIndex);
           }
-          // } else {
-          // TODO: remove detail ids url segments when navigate to insert form from a detail form
         }
         route.unshift(url);
         route.push(...params);
@@ -338,7 +337,7 @@ export class OFormNavigationClass {
     } else if (this.navigationService) {
       let route = [];
       let extras: NavigationExtras = {};
-      const navData: ONavigationItem = this.navigationService.getPreviousRouteData();
+      const navData: ONavigationItem = this.navigationService.getLastMainNavigationRouteData();
       if (!this.formLayoutManager && navData) {
         route.push(navData.url);
         const detailRoute = navData.getDetailFormRoute();
