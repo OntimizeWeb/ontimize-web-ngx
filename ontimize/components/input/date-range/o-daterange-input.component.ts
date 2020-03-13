@@ -1,7 +1,19 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, forwardRef, Inject, Injector, NgModule, OnDestroy, OnInit, Optional, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  forwardRef,
+  Inject,
+  Injector,
+  NgModule,
+  OnDestroy,
+  OnInit,
+  Optional,
+  ViewChild,
+} from '@angular/core';
 import { FormControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import * as _moment from 'moment';
+
 import { InputConverter } from '../../../decorators/input-converter';
 import { MomentService } from '../../../services/moment.service';
 import { OTranslateService } from '../../../services/translate/o-translate.service';
@@ -190,7 +202,6 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
   }
 
   datesUpdated(range) {
-
     this.pickerDirective.close();
     this.setValue(range,
       {
@@ -207,8 +218,17 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
   }
 
   updateElement() {
-    let chosenLabel = (!this.isObjectDataRangeNull(this.value)) ? this.value.value[this.pickerDirective.startKey].format(this.oformat) +
-      this.separator + this.value.value[this.pickerDirective.endKey].format(this.oformat) : null;
+    let chosenLabel:any;
+    if( Util.isDefined(this.value.value) && !this.isObjectDataRangeNull(this.value) ) {
+      if (this.value.value[this.pickerDirective.startKey]) {
+        chosenLabel = this.value.value[this.pickerDirective.startKey].format(this.oformat) +
+        this.separator + this.value.value[this.pickerDirective.endKey].format(this.oformat);
+      } else {
+        chosenLabel = null;
+      }
+    } else {
+      chosenLabel = null;
+    }
     this.pickerDirective._el.nativeElement.value = chosenLabel;
   }
 
@@ -241,6 +261,7 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
     return objectValue !== null && objectValue.value !== null &&
       !Util.isDefined(objectValue.value[this.pickerDirective.startKey]) &&
       !Util.isDefined(objectValue.value[this.pickerDirective.endKey]);
+    return false;
   }
 
 
