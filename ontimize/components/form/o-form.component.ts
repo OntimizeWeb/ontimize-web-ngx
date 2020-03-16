@@ -11,7 +11,7 @@ import {
   OnDestroy,
   OnInit,
   ViewChild,
-  ViewEncapsulation,
+  ViewEncapsulation
 } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router, UrlSegment } from '@angular/router';
@@ -27,7 +27,7 @@ import {
   OntimizeService,
   OPermissions,
   PermissionsService,
-  SnackBarService,
+  SnackBarService
 } from '../../services';
 import { dataServiceFactory } from '../../services/data-service.provider';
 import { OSharedModule } from '../../shared';
@@ -833,7 +833,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
           self._closeDetailAction();
         }
       }
-      if(self.stayInRecordAfterInsert) {
+      if (self.stayInRecordAfterInsert) {
         console.warn('WARNING -> The attribute stay-in-record-after-insert will be deprecated in version 8.x.x and you will be only able to use after-insert-mode with "new" or "detail" value.');
       }
     }, error => {
@@ -1549,7 +1549,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   }
 
   protected isInsertModePath(path: string): boolean {
-    const navData: ONavigationItem = this.navigationService.getPreviousRouteData();
+    const navData: ONavigationItem = this.navigationService.getLastMainNavigationRouteData();
     return Util.isDefined(navData) && path === navData.getInsertFormRoute();
   }
 
