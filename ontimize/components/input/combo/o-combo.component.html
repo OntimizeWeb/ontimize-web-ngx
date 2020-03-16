@@ -13,7 +13,7 @@
         <span *ngIf="getFormControl().value.length > 1">
           {{ 'INPUT.COMBO.MESSAGE_TRIGGER' | oTranslate: { values: [getFormControl().value.length -1] } }}
         </span>
-      </mat-select-trigger>
+      </mat-select-trigger>      
 
       <div class="o-combo-options-container">
         <mat-option *ngIf="hasNullSelection()" [value]="null"></mat-option>
@@ -22,6 +22,10 @@
         </mat-option>
       </div>
     </mat-select>
+    
+    <button type="button" *ngIf="showClearButton" matSuffix mat-icon-button (click)="clearValue($event)">
+      <mat-icon svgIcon="ontimize:close"></mat-icon>
+    </button>
 
     <mat-error *ngIf="hasError('required')" text="{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}"></mat-error>
     <mat-error *ngFor="let oError of getActiveOErrors()" text="{{ oError.text | oTranslate }}"></mat-error>
