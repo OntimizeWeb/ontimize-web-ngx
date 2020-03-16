@@ -261,7 +261,6 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
     return objectValue !== null && objectValue.value !== null &&
       !Util.isDefined(objectValue.value[this.pickerDirective.startKey]) &&
       !Util.isDefined(objectValue.value[this.pickerDirective.endKey]);
-    return false;
   }
 
 

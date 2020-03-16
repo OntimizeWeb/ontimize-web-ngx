@@ -279,7 +279,7 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
     if (!this.dataArray) {
       return;
     }
-    const isDefinedVal = Util.isDefined(val);    
+    const isDefinedVal = Util.isDefined(val);
     if (this.multiple && !isDefinedVal) {
       return;
     }
