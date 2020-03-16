@@ -203,17 +203,17 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
   }
 
   public clearValue(event): void {
+    event.stopPropagation()
     if (this.multiple) {
-      event.stopPropagation()
       this.setValue(this.defaultValue);
-      this.value.value = [];
+      this.value.value = undefined;
     } else {
       super.clearValue();
     }
   }
 
-  get showClearButton(): boolean {
-    return this.clearButton && !this.isReadOnly && this.enabled;
+  get showClearButton(): boolean {    
+    return this.clearButton && !this.isReadOnly && this.enabled && Util.isDefined(this.value.value);
   }
 
   public getMultiple(): boolean {
