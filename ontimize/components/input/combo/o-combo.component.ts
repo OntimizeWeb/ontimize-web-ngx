@@ -202,18 +202,18 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
     }
   }
 
-  public clearValue(event): void {
-    event.stopPropagation()
+  public clearValue(): void {
     if (this.multiple) {
-      this.setValue(this.defaultValue);
-      this.value.value = undefined;
+      this.setValue(this.value.value);
+      this.value.value = [];
     } else {
       super.clearValue();
     }
   }
 
-  get showClearButton(): boolean {    
-    return this.clearButton && !this.isReadOnly && this.enabled && Util.isDefined(this.value.value);
+  get showClearButton(): boolean {
+    let emptyValue = this.multiple ? this.value.value.length : Util.isDefined(this.value.value);
+    return this.clearButton && !this.isReadOnly && this.enabled && emptyValue;
   }
 
   public getMultiple(): boolean {
