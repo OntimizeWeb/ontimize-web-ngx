@@ -202,18 +202,19 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
     }
   }
 
-  public clearValue(): void {
+  public clearValue(options?: IFormValueOptions, setDirty: boolean = false): void {
     if (this.multiple) {
-      this.setValue(this.defaultValue);
+      this.setValue(this.defaultValue, options, setDirty);
       this.value.value = [];
     } else {
-      super.clearValue();
+      super.clearValue(options, setDirty);
     }
   }
 
   get showClearButton(): boolean {
     let isEmptyValue = this.multiple ? this.value.value.length : Util.isDefined(this.value.value);
     return this.clearButton && !this.isReadOnly && this.enabled && isEmptyValue;
+
   }
 
   public getMultiple(): boolean {
@@ -275,7 +276,7 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
     return selected;
   }
 
-  public setValue(val: any, options?: IFormValueOptions): void {
+  public setValue(val: any, options?: IFormValueOptions, setDirty: boolean = false): void {
     if (!this.dataArray) {
       return;
     }
