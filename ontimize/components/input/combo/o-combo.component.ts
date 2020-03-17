@@ -204,7 +204,7 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
 
   public clearValue(): void {
     if (this.multiple) {
-      this.setValue(this.value.value);
+      this.setValue(this.defaultValue);
       this.value.value = [];
     } else {
       super.clearValue();
