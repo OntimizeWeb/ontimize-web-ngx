@@ -269,8 +269,9 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
   public getValue(): any {
     let value = super.getValue();
     if (this.valueType === 'timestamp') {
-      if ( !isNaN(moment(value, this.formatString).valueOf()) ) {
-        value = moment(value, this.formatString).valueOf();
+      let valueInMs = moment(value, this.formatString).valueOf();
+      if ( !isNaN(valueInMs) ) {
+        value = valueInMs;
       }
     }
     return value;

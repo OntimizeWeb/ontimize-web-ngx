@@ -212,8 +212,8 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
   }
 
   get showClearButton(): boolean {
-    let emptyValue = this.multiple ? this.value.value.length : Util.isDefined(this.value.value);
-    return this.clearButton && !this.isReadOnly && this.enabled && emptyValue;
+    let isEmptyValue = this.multiple ? this.value.value.length : Util.isDefined(this.value.value);
+    return this.clearButton && !this.isReadOnly && this.enabled && isEmptyValue;
   }
 
   public getMultiple(): boolean {
