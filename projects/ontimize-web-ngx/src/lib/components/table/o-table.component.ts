@@ -62,11 +62,11 @@ import {
 import { OTableColumnsFilterComponent } from './extensions/header/table-columns-filter/o-table-columns-filter.component';
 import { OTableInsertableRowComponent } from './extensions/header/table-insertable-row/o-table-insertable-row.component';
 import { OTableOptionComponent } from './extensions/header/table-option/o-table-option.component';
+import { OTableDataSourceService } from './extensions/o-table-datasource.service';
 import { OTableStorage } from './extensions/o-table-storage.class';
 import { OTableDao } from './extensions/o-table.dao';
 import { OMatSort } from './extensions/sort/o-mat-sort';
 import { OMatSortHeader } from './extensions/sort/o-mat-sort-header';
-import { OTableDataSourceService } from './extensions/o-table-datasource.service';
 
 export const DEFAULT_INPUTS_O_TABLE = [
   ...DEFAULT_INPUTS_O_SERVICE_COMPONENT,
@@ -563,8 +563,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
     this.initializeDao();
 
-    this.setDatasource();
-
     this.permissions = this.permissionsService.getTablePermissions(this.oattr, this.actRoute);
   }
 
@@ -623,6 +621,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   protected initTableAfterViewInit() {
     this.parseVisibleColumns();
+    this.setDatasource();
     this.registerDataSourceListeners();
     this.parseSortColumns();
     this.registerSortListener();
@@ -1015,10 +1014,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   setDatasource() {
     const dataSourceService = this.injector.get(OTableDataSourceService);
-    this.dataSource = dataSourceService.getInstance();
-    if (this.daoTable) {
-      this.dataSource.table = this;
-    }
+    this.dataSource = dataSourceService.getInstance(this);
   }
 
   protected registerDataSourceListeners() {

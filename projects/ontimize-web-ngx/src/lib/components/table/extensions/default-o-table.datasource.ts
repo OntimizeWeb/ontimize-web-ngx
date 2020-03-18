@@ -64,22 +64,37 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
   }
 
   private columnValueFilters: Array<OColumnValueFilter> = [];
-  protected _table: OTableComponent;
 
-  get table(): OTableComponent {
-    return this._table;
-  }
-
-  set table(table: OTableComponent) {
-    this._table = table;
+  constructor(protected table: OTableComponent) {
+    super();
     this._database = table.daoTable;
+    if (this._database) {
+      this.resultsLength = this._database.data.length;
+    }
     if (table.paginator) {
       this._paginator = table.matpaginator;
     }
     this._tableOptions = table.oTableOptions;
     this._sort = table.sort;
-    this.resultsLength = this._database.data.length;
   }
+  // protected _table: OTableComponent;
+
+  // get table(): OTableComponent {
+  //   return this._table;
+  // }
+
+  // set table(table: OTableComponent) {
+  //   this._table = table;
+  //   this._database = table.daoTable;
+  //   if (table.paginator) {
+  //     this._paginator = table.matpaginator;
+  //   }
+  //   this._tableOptions = table.oTableOptions;
+  //   this._sort = table.sort;
+  //   if (this._database) {
+  //     this.resultsLength = this._database.data.length;
+  //   }
+  // }
 
   sortFunction(a: any, b: any): number {
     return this._sort.sortFunction(a, b);

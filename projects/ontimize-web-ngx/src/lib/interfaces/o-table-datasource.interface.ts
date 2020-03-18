@@ -1,12 +1,10 @@
 import { EventEmitter } from '@angular/core';
 
 import { OColumn } from '../components/table/column/o-column.class';
-import { OTableComponent } from '../components/table/o-table.component';
 import { OColumnValueFilter } from '../types/o-column-value-filter.type';
 
 export interface OTableDataSource {
 
-  table: OTableComponent;
   onRenderedDataChange: EventEmitter<any>;
   renderedData: any[];
   resultsLength: number;
