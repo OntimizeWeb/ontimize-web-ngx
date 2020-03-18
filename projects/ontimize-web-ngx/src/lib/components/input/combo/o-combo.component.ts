@@ -199,7 +199,7 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
     }
   }
 
-  public clearValue(options?: IFormValueOptions, setDirty: boolean = false): void {
+  public clearValue(options?: FormValueOptions, setDirty: boolean = false): void {
     if (this.multiple) {
       this.setValue(this.defaultValue, options, setDirty);
       this.value.value = [];
@@ -209,7 +209,7 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
   }
 
   get showClearButton(): boolean {
-    let isEmptyValue = this.multiple ? this.value.value.length : Util.isDefined(this.value.value);
+    const isEmptyValue = this.multiple ? this.value.value.length : Util.isDefined(this.value.value);
     return this.clearButton && !this.isReadOnly && this.enabled && isEmptyValue;
   }
 
