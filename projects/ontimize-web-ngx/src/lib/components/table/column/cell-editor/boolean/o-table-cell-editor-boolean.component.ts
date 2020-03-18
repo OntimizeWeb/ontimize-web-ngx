@@ -48,7 +48,7 @@ export const DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_BOOLEAN = [
 
 export class OTableCellEditorBooleanComponent extends OBaseTableCellEditor implements OnInit {
 
-  @ViewChild('templateref', { read: TemplateRef, static: false }) public templateref: TemplateRef<any>;
+  @ViewChild('templateref', { read: TemplateRef, static: true }) public templateref: TemplateRef<any>;
 
   indeterminate: boolean = false;
 

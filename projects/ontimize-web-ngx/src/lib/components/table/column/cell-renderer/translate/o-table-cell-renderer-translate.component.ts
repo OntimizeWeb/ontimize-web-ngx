@@ -17,7 +17,7 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_TRANSLATE = [
 })
 export class OTableCellRendererTranslateComponent extends OBaseTableCellRenderer {
 
-  @ViewChild('templateref', { read: TemplateRef, static: false })
+  @ViewChild('templateref', { read: TemplateRef, static: true })
   public templateref: TemplateRef<any>;
 
   public translateArgsFn: (rowData: any) => any[];

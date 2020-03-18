@@ -23,7 +23,7 @@ export class OTableCellRendererTimeComponent extends OBaseTableCellRenderer impl
   protected _format: string = 'L HH:mm a';
   protected locale: string;
 
-  @ViewChild('templateref', { read: TemplateRef, static: false }) public templateref: TemplateRef<any>;
+  @ViewChild('templateref', { read: TemplateRef, static: true }) public templateref: TemplateRef<any>;
 
   constructor(protected injector: Injector) {
     super(injector);

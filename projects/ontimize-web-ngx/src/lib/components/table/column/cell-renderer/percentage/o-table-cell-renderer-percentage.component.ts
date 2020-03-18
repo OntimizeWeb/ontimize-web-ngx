@@ -30,7 +30,7 @@ export class OTableCellRendererPercentageComponent extends OTableCellRendererRea
   protected componentPipe: OPercentPipe;
   protected pipeArguments: IPercentPipeArgument;
 
-  @ViewChild('templateref', { read: TemplateRef, static: false }) public templateref: TemplateRef<any>;
+  @ViewChild('templateref', { read: TemplateRef, static: true }) public templateref: TemplateRef<any>;
 
   constructor(protected injector: Injector) {
     super(injector);

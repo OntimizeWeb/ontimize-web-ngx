@@ -61,7 +61,7 @@ export const DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_TIME = [
 
 export class OTableCellEditorTimeComponent extends OBaseTableCellEditor implements OnInit, AfterViewChecked {
 
-  @ViewChild('templateref', { read: TemplateRef, static: false }) public templateref: TemplateRef<any>;
+  @ViewChild('templateref', { read: TemplateRef, static: true }) public templateref: TemplateRef<any>;
 
   @ViewChild('dateInput', { static: false })
   protected dateInput: ElementRef;

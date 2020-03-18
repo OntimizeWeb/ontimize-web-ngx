@@ -29,7 +29,7 @@ export const DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_INTEGER = [
 
 export class OTableCellEditorIntegerComponent extends OBaseTableCellEditor {
 
-  @ViewChild('templateref', { read: TemplateRef, static: false }) public templateref: TemplateRef<any>;
+  @ViewChild('templateref', { read: TemplateRef, static: true }) public templateref: TemplateRef<any>;
 
   @InputConverter()
   min: number;

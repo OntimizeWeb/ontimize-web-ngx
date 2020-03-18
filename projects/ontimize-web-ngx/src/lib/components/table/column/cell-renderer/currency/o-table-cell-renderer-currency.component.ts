@@ -40,7 +40,7 @@ export class OTableCellRendererCurrencyComponent extends OBaseTableCellRenderer 
 
   protected componentPipe: OCurrencyPipe;
   protected pipeArguments: ICurrencyPipeArgument;
-  @ViewChild('templateref', { read: TemplateRef, static: false }) public templateref: TemplateRef<any>;
+  @ViewChild('templateref', { read: TemplateRef, static: true }) public templateref: TemplateRef<any>;
 
   constructor(protected injector: Injector) {
     super(injector);

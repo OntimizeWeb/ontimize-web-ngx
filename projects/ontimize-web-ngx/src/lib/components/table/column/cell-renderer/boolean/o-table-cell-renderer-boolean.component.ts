@@ -36,7 +36,7 @@ export class OTableCellRendererBooleanComponent extends OBaseTableCellRenderer i
   protected _booleanType: string = 'boolean';
   protected translateService: OTranslateService;
 
-  @ViewChild('templateref', { read: TemplateRef, static: false })
+  @ViewChild('templateref', { read: TemplateRef, static: true })
   templateref: TemplateRef<any>;
 
   constructor(protected injector: Injector) {
