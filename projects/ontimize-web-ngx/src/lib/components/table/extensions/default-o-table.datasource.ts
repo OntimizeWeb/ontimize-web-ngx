@@ -7,6 +7,7 @@ import { map } from 'rxjs/operators';
 import { OTableDataSource } from '../../../interfaces/o-table-datasource.interface';
 import { OTableOptions } from '../../../interfaces/o-table-options.interface';
 import { ColumnValueFilterOperator, OColumnValueFilter } from '../../../types/o-column-value-filter.type';
+import { Codes } from '../../../util/codes';
 import { Util } from '../../../util/util';
 import { OColumn } from '../column/o-column.class';
 import { OTableComponent } from '../o-table.component';
@@ -64,15 +65,6 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
 
   private columnValueFilters: Array<OColumnValueFilter> = [];
   protected _table: OTableComponent;
-  // constructor(protected table: OTableComponent) {
-  //   super();
-  //   this._database = table.daoTable;
-  //   if (table.paginator) {
-  //     this._paginator = table.matpaginator;
-  //   }
-  //   this._tableOptions = table.oTableOptions;
-  //   this._sort = table.sort;
-  // }
 
   get table(): OTableComponent {
     return this._table;
@@ -138,7 +130,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
         then filter and sort the data
       */
       if (x instanceof OTableScrollEvent) {
-        // this.renderedData = data.slice(0, (x.data * OTableComponent.LIMIT_SCROLLVIRTUAL) - 1);
+        this.renderedData = data.slice(0, (x.data * Codes.LIMIT_SCROLLVIRTUAL) - 1);
       } else {
         if (this.existsAnyCalculatedColumn()) {
           data = this.getColumnCalculatedData(data);
@@ -161,10 +153,10 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
         }
 
         /** in pagination virtual only show OTableComponent.LIMIT items for better performance of the table */
-        // if (!this.table.pageable && !this.table.paginationControls && data.length > OTableComponent.LIMIT_SCROLLVIRTUAL) {
-        //   const datapaginate = data.slice(0, (this.table.pageScrollVirtual * OTableComponent.LIMIT_SCROLLVIRTUAL) - 1);
-        //   data = datapaginate;
-        // }
+        if (!this.table.pageable && !this.table.paginationControls && data.length > Codes.LIMIT_SCROLLVIRTUAL) {
+          const datapaginate = data.slice(0, (this.table.pageScrollVirtual * Codes.LIMIT_SCROLLVIRTUAL) - 1);
+          data = datapaginate;
+        }
 
         this.renderedData = data;
         // If a o-table-column-aggregate exists then emit observable

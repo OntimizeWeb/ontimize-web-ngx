@@ -4,8 +4,6 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { MatPaginatorIntl } from '@angular/material';
 
-import { O_TABLE_DATASOURCE } from '../../injection-tokens/o-table-datasource.injection-token';
-import { O_TABLE_OPTIONS } from '../../injection-tokens/o-table-options.injection-token';
 import { OSharedModule } from '../../shared/shared.module';
 import { OContextMenuModule } from '../contextmenu/o-context-menu.module';
 import { OTableColumnCalculatedComponent } from './column/calculated/o-table-column-calculated.component';
@@ -13,8 +11,6 @@ import { O_TABLE_CELL_EDITORS } from './column/cell-editor/cell-editor';
 import { O_TABLE_CELL_RENDERERS } from './column/cell-renderer/cell-renderer';
 import { OTableColumnComponent } from './column/o-table-column.component';
 import { OTableContextMenuComponent } from './extensions/contextmenu/o-table-context-menu.component';
-import { DefaultOTableOptions } from './extensions/default-o-table-options.class';
-import { DefaultOTableDataSource } from './extensions/default-o-table.datasource';
 import { O_TABLE_DIALOGS } from './extensions/dialog/o-table-dialog-components';
 import { OTableExportButtonComponent } from './extensions/export-button/o-table-export-button.component';
 import { OTableExportButtonService } from './extensions/export-button/o-table-export-button.service';
@@ -77,18 +73,7 @@ import { OTableComponent } from './o-table.component';
   ],
   providers: [
     OTableExportButtonService,
-    {
-      provide: MatPaginatorIntl,
-      useClass: OTableMatPaginatorIntl
-    },
-    {
-      provide: O_TABLE_DATASOURCE,
-      useClass: DefaultOTableDataSource
-    },
-    {
-      provide: O_TABLE_OPTIONS,
-      useClass: DefaultOTableOptions
-    }
+    { provide: MatPaginatorIntl, useClass: OTableMatPaginatorIntl }
   ]
 })
 export class OTableModule { }

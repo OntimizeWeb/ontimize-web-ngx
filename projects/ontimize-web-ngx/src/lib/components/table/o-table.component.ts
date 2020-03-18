@@ -24,8 +24,6 @@ import { BehaviorSubject, combineLatest, Observable, of, Subscription } from 'rx
 import { map } from 'rxjs/operators';
 
 import { BooleanConverter, InputConverter } from '../../decorators/input-converter';
-import { O_TABLE_DATASOURCE } from '../../injection-tokens/o-table-datasource.injection-token';
-import { O_TABLE_OPTIONS } from '../../injection-tokens/o-table-options.injection-token';
 import { OTableButton } from '../../interfaces/o-table-button.interface';
 import { OTableButtons } from '../../interfaces/o-table-buttons.interface';
 import { OTableDataSource } from '../../interfaces/o-table-datasource.interface';
@@ -57,6 +55,7 @@ import { DEFAULT_INPUTS_O_SERVICE_COMPONENT, OServiceComponent } from '../o-serv
 import { OTableColumnCalculatedComponent } from './column/calculated/o-table-column-calculated.component';
 import { OColumn } from './column/o-column.class';
 import { OTableColumnComponent } from './column/o-table-column.component';
+import { DefaultOTableOptions } from './extensions/default-o-table-options.class';
 import {
   OTableFilterByColumnDataDialogComponent,
 } from './extensions/dialog/filter-by-column/o-table-filter-by-column-data-dialog.component';
@@ -67,9 +66,7 @@ import { OTableStorage } from './extensions/o-table-storage.class';
 import { OTableDao } from './extensions/o-table.dao';
 import { OMatSort } from './extensions/sort/o-mat-sort';
 import { OMatSortHeader } from './extensions/sort/o-mat-sort-header';
-
-const NAME_COLUMN_SELECT = 'select';
-const SUFFIX_COLUMN_INSERTABLE = '_insertable';
+import { OTableDataSourceService } from './extensions/o-table-datasource.service';
 
 export const DEFAULT_INPUTS_O_TABLE = [
   ...DEFAULT_INPUTS_O_SERVICE_COMPONENT,
@@ -168,7 +165,8 @@ export const DEFAULT_OUTPUTS_O_TABLE = [
   templateUrl: './o-table.component.html',
   styleUrls: ['./o-table.component.scss'],
   providers: [
-    OntimizeService
+    OntimizeService,
+    OTableDataSourceService
   ],
   inputs: DEFAULT_INPUTS_O_TABLE,
   outputs: DEFAULT_OUTPUTS_O_TABLE,
@@ -186,10 +184,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   public static DEFAULT_BASE_SIZE_SPINNER = 100;
   public static FIRST_LAST_CELL_PADDING = 24;
-
-  public static NAME_COLUMN_SELECT = NAME_COLUMN_SELECT;
-  public static SUFFIX_COLUMN_INSERTABLE = SUFFIX_COLUMN_INSERTABLE;
-  public static LIMIT_SCROLLVIRTUAL = 50;
 
   protected snackBarService: SnackBarService;
 
@@ -337,9 +331,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     const permissionsChecked = arg.filter(value => permissionsBlocked.indexOf(value) === -1);
     this._visibleColArray = permissionsChecked;
     if (this._oTableOptions) {
-      const containsSelectionCol = this._oTableOptions.visibleColumns.indexOf(OTableComponent.NAME_COLUMN_SELECT) !== -1;
+      const containsSelectionCol = this._oTableOptions.visibleColumns.indexOf(Codes.NAME_COLUMN_SELECT) !== -1;
       if (containsSelectionCol) {
-        this._visibleColArray.unshift(OTableComponent.NAME_COLUMN_SELECT);
+        this._visibleColArray.unshift(Codes.NAME_COLUMN_SELECT);
       }
       this._oTableOptions.visibleColumns = this._visibleColArray;
     }
@@ -479,7 +473,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   ) {
     super(injector, elRef, form);
 
-    this._oTableOptions = this.injector.get<OTableOptions>(O_TABLE_OPTIONS);
+    this._oTableOptions = new DefaultOTableOptions();
     this._oTableOptions.selectColumn = this.createOColumn();
 
     try {
@@ -513,7 +507,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   getSuffixColumnInsertable() {
-    return SUFFIX_COLUMN_INSERTABLE;
+    return Codes.SUFFIX_COLUMN_INSERTABLE;
   }
 
   getActionsPermissions(): OPermissions[] {
@@ -1020,7 +1014,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   setDatasource() {
-    this.dataSource = this.injector.get<OTableDataSource>(O_TABLE_DATASOURCE);
+    const dataSourceService = this.injector.get(OTableDataSourceService);
+    this.dataSource = dataSourceService.getInstance();
     if (this.daoTable) {
       this.dataSource.table = this;
     }
@@ -1525,9 +1520,11 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     if (!this._oTableOptions.selectColumn.visible) {
       this.clearSelection();
     }
-    if (this._oTableOptions.visibleColumns && this._oTableOptions.selectColumn.visible && this._oTableOptions.visibleColumns[0] !== OTableComponent.NAME_COLUMN_SELECT) {
-      this._oTableOptions.visibleColumns.unshift(OTableComponent.NAME_COLUMN_SELECT);
-    } else if (this._oTableOptions.visibleColumns && !this._oTableOptions.selectColumn.visible && this._oTableOptions.visibleColumns[0] === OTableComponent.NAME_COLUMN_SELECT) {
+    if (this._oTableOptions.visibleColumns && this._oTableOptions.selectColumn.visible
+      && this._oTableOptions.visibleColumns[0] !== Codes.NAME_COLUMN_SELECT) {
+      this._oTableOptions.visibleColumns.unshift(Codes.NAME_COLUMN_SELECT);
+    } else if (this._oTableOptions.visibleColumns && !this._oTableOptions.selectColumn.visible
+      && this._oTableOptions.visibleColumns[0] === Codes.NAME_COLUMN_SELECT) {
       this._oTableOptions.visibleColumns.shift();
     }
   }
@@ -1566,7 +1563,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     const self = this;
 
     return (index: number, item: any) => {
-      if (self.hasScrollableContainer() && index < (self.pageScrollVirtual - 1) * OTableComponent.LIMIT_SCROLLVIRTUAL) {
+      if (self.hasScrollableContainer() && index < (self.pageScrollVirtual - 1) * Codes.LIMIT_SCROLLVIRTUAL) {
         return null;
       }
 
@@ -2070,7 +2067,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   getDataScrollable(): any {
     const pageVirtualBefore = this.pageScrollVirtual;
-    const pageVirtualEnd = Math.ceil(this.dataSource.resultsLength / OTableComponent.LIMIT_SCROLLVIRTUAL);
+    const pageVirtualEnd = Math.ceil(this.dataSource.resultsLength / Codes.LIMIT_SCROLLVIRTUAL);
 
     if (pageVirtualEnd !== this.pageScrollVirtual) {
       this.pageScrollVirtual++;

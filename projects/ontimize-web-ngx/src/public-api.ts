@@ -14,7 +14,6 @@ export * from './lib/pipes/index';
 export * from './lib/services/index';
 export * from './lib/decorators/index';
 export * from './lib/directives/index';
-export * from './lib/injection-tokens/index';
 export * from './lib/interfaces/index';
 export * from './lib/components/index';
 export * from './lib/layouts/index';

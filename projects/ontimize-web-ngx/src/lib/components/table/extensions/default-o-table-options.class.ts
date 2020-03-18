@@ -1,6 +1,6 @@
 import { OTableOptions } from '../../../interfaces/o-table-options.interface';
+import { Codes } from '../../../util/codes';
 import { OColumn } from '../column/o-column.class';
-import { OTableComponent } from '../o-table.component';
 
 export class DefaultOTableOptions implements OTableOptions {
 
@@ -24,7 +24,7 @@ export class DefaultOTableOptions implements OTableOptions {
 
   get columnsInsertables(): Array<string> {
     return this._visibleColumns.map((col: string) => {
-      return col + OTableComponent.SUFFIX_COLUMN_INSERTABLE;
+      return col + Codes.SUFFIX_COLUMN_INSERTABLE;
     });
   }
 
@@ -34,7 +34,7 @@ export class DefaultOTableOptions implements OTableOptions {
 
   set selectColumn(val: OColumn) {
     this._selectColumn = val;
-    this.selectColumn.name = OTableComponent.NAME_COLUMN_SELECT;
+    this.selectColumn.name = Codes.NAME_COLUMN_SELECT;
     this.selectColumn.title = '';
     this.selectColumn.visible = false;
   }

@@ -97,6 +97,9 @@ export class Codes {
 
   // OTableComponent
   public static DEFAULT_COLUMN_MIN_WIDTH = 80;
+  public static NAME_COLUMN_SELECT = 'select';
+  public static SUFFIX_COLUMN_INSERTABLE = '_insertable';
+  public static LIMIT_SCROLLVIRTUAL = 50;
 
   public static TWENTY_FOUR_HOUR_FORMAT = 24;
   public static TWELVE_FOUR_HOUR_FORMAT = 12;
