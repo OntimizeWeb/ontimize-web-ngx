@@ -546,8 +546,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   initialize(): any {
     super.initialize();
 
-    this._oTableOptions = new OTableOptions();
-
     if (this.tabGroupContainer && this.tabContainer) {
       this.registerTabListener();
     }
@@ -867,7 +865,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     if (this.state['sort-columns'] && this.state['initial-configuration']['sort-columns']) {
 
       const initialConfigSortColumnsArray = ServiceUtils.parseSortColumns(this.state['initial-configuration']['sort-columns']);
-      const originalSortColumnsArray = ServiceUtils.parseSortColumns(this.originalSortColumns);
+      const originalSortColumnsArray = ServiceUtils.parseSortColumns(this.sortColumns);
       // Find values in visible-columns that they arent in original-visible-columns in localstorage
       // in this case you have to add this column to this.visibleColArray
       const colToAddInVisibleCol = Util.differenceArrays(originalSortColumnsArray, initialConfigSortColumnsArray);
