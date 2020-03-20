@@ -21,18 +21,9 @@ import {
   TemplateRef,
   ViewChild,
   ViewChildren,
-  ViewEncapsulation,
+  ViewEncapsulation
 } from '@angular/core';
-import {
-  MatCheckboxChange,
-  MatDialog,
-  MatMenu,
-  MatPaginator,
-  MatPaginatorIntl,
-  MatTab,
-  MatTabGroup,
-  PageEvent,
-} from '@angular/material';
+import { MatCheckboxChange, MatDialog, MatMenu, MatPaginator, MatPaginatorIntl, MatTab, MatTabGroup, PageEvent } from '@angular/material';
 import { DndModule } from '@churchs19/ng2-dnd';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { BehaviorSubject, combineLatest, Observable, of, Subscription } from 'rxjs';
@@ -63,7 +54,7 @@ import {
   OColumnAggregate,
   OTableColumnAggregateComponent,
   OTableMatPaginatorIntl,
-  OTablePaginatorComponent,
+  OTablePaginatorComponent
 } from './extensions/footer/o-table-footer-components';
 import {
   ColumnValueFilterOperator,
@@ -75,7 +66,7 @@ import {
   OTableInsertableRowComponent,
   OTableMenuComponent,
   OTableOptionComponent,
-  OTableQuickfilterComponent,
+  OTableQuickfilterComponent
 } from './extensions/header/o-table-header-components';
 import { OTableStorage } from './extensions/o-table-storage.class';
 import { OTableRowDirective } from './extensions/row/o-table-row.directive';
@@ -164,7 +155,10 @@ export const DEFAULT_INPUTS_O_TABLE = [
   'keepSelectedItems: keep-selected-items',
 
   // export-mode ['visible'|'local'|'all']: sets the mode to export data. Default: 'visible'
-  'exportMode: export-mode'
+  'exportMode: export-mode',
+
+  // show-filter-option [yes|no|true|false]: show filter menu option in the header menu. Default: yes.
+  'showFilterOption: show-filter-option'
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE = [
@@ -518,6 +512,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   showConfigurationOption: boolean = true;
   @InputConverter()
   columnsVisibilityButton: boolean = true;
+  @InputConverter()
+  showFilterOption: boolean = true;
   @InputConverter()
   showButtonsText: boolean = true;
 
@@ -2026,7 +2022,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     if (permissionHidden) {
       return false;
     }
-    const staticOpt = this.selectAllCheckbox || this.exportButton || this.showConfigurationOption || this.columnsVisibilityButton || this.oTableColumnsFilterComponent !== undefined;
+    const staticOpt = this.selectAllCheckbox || this.exportButton || this.showConfigurationOption || this.columnsVisibilityButton || (this.showFilterOption && this.oTableColumnsFilterComponent !== undefined);
     return staticOpt || this.tableOptions.length > 0;
   }
 
