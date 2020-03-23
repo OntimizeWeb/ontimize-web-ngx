@@ -1,8 +1,22 @@
 import { CommonModule } from '@angular/common';
-import { AfterViewInit, Component, ElementRef, forwardRef, Inject, Injector, NgModule, OnDestroy, OnInit, Optional, ViewChild, ViewEncapsulation } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  forwardRef,
+  Inject,
+  Injector,
+  NgModule,
+  OnDestroy,
+  OnInit,
+  Optional,
+  ViewChild,
+  ViewEncapsulation,
+} from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatSelect, MatSelectChange } from '@angular/material';
 import { Subscription } from 'rxjs';
+
 import { InputConverter } from '../../../decorators/input-converter';
 import { dataServiceFactory } from '../../../services/data-service.provider';
 import { OntimizeService } from '../../../services/ontimize.service';
@@ -188,12 +202,19 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
     }
   }
 
-  public clearValue(): void {
+  public clearValue(options?: IFormValueOptions, setDirty: boolean = false): void {
     if (this.multiple) {
-      this.setValue(this.defaultValue);
+      this.setValue(this.defaultValue, options, setDirty);
+      this.value.value = [];
     } else {
-      super.clearValue();
+      super.clearValue(options, setDirty);
     }
+  }
+
+  get showClearButton(): boolean {
+    let isEmptyValue = this.multiple ? this.value.value.length : Util.isDefined(this.value.value);
+    return this.clearButton && !this.isReadOnly && this.enabled && isEmptyValue;
+
   }
 
   public getMultiple(): boolean {
@@ -255,7 +276,7 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
     return selected;
   }
 
-  public setValue(val: any, options?: IFormValueOptions): void {
+  public setValue(val: any, options?: IFormValueOptions, setDirty: boolean = false): void {
     if (!this.dataArray) {
       return;
     }
@@ -263,7 +284,6 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
     if (this.multiple && !isDefinedVal) {
       return;
     }
-
     if (!isDefinedVal && !this.nullSelection) {
       console.warn('`o-combo` with attr ' + this.oattr + ' cannot be set. `null-selection` attribute is false.');
       return;
