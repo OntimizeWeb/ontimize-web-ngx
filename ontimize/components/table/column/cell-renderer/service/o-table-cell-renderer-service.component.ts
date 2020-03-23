@@ -1,12 +1,13 @@
 import { ChangeDetectionStrategy, Component, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
+
 import { DialogService, OntimizeService } from '../../../../../services';
 import { dataServiceFactory } from '../../../../../services/data-service.provider';
-import { Codes, Util, SQLTypes, FilterExpressionUtils } from '../../../../../utils';
+import { Codes, FilterExpressionUtils, SQLTypes, Util } from '../../../../../utils';
+import { IExpression } from '../../../../filter-expression.utils';
 import { ServiceUtils } from '../../../../service.utils';
 import { OColumn } from '../../../o-table.component';
-import { OBaseTableCellRenderer, DEFAULT_INPUTS_O_BASE_TABLE_CELL_RENDERER } from '../o-base-table-cell-renderer.class';
-import { IExpression } from '../../../../filter-expression.utils';
+import { DEFAULT_INPUTS_O_BASE_TABLE_CELL_RENDERER, OBaseTableCellRenderer } from '../o-base-table-cell-renderer.class';
 
 export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_SERVICE = [
   ...DEFAULT_INPUTS_O_BASE_TABLE_CELL_RENDERER,
