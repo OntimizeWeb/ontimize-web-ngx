@@ -10,12 +10,12 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 
-import { OListItemComponent } from '../list-item/o-list-item.component';
+import { OListItemComponent } from '../../list-item/o-list-item.component';
 import {
   DEFAULT_INPUTS_O_CARD_RENDERER,
   DEFAULT_OUTPUTS_O_CARD_RENDERER,
   OListItemCardRenderer,
-} from './o-list-item-card-renderer.class';
+} from '../o-list-item-card-renderer.class';
 
 export const DEFAULT_INPUTS_O_LIST_ITEM_CARD = [
   ...DEFAULT_INPUTS_O_CARD_RENDERER

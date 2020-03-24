@@ -10,6 +10,7 @@ export * from './local-storage-component.interface';
 export * from './login-service.interface';
 export * from './multiple-selection.interface';
 export * from './o-form-layout-tab-group.interface';
+export * from './o-list-item.interface';
 export * from './o-list.interface';
 export * from './o-table-button.interface';
 export * from './o-table-buttons.interface';

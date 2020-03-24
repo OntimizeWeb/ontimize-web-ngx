@@ -55,7 +55,7 @@ export class OListItemTextRenderer {
     if (Util.isDefined(e)) {
       e.stopPropagation();
     }
-    this.onIconClick.emit(event);
+    this.onIconClick.emit(e);
   }
 
   get title(): string {

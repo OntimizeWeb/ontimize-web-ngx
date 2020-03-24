@@ -20,6 +20,7 @@ import {
 import { merge, Subscription } from 'rxjs';
 
 import { InputConverter } from '../../decorators/input-converter';
+import { IListItem } from '../../interfaces/o-list-item.interface';
 import { IList } from '../../interfaces/o-list.interface';
 import { OntimizeService } from '../../services/ontimize.service';
 import { OListInitializationOptions } from '../../types/o-list-initialization-options.type';
@@ -31,7 +32,6 @@ import { ServiceUtils } from '../../util/service.utils';
 import { Util } from '../../util/util';
 import { OFormComponent } from '../form/o-form.component';
 import { DEFAULT_INPUTS_O_SERVICE_COMPONENT, OServiceComponent } from '../o-service-component.class';
-import { OListItemComponent } from './list-item/o-list-item.component';
 import { OListItemDirective } from './list-item/o-list-item.directive';
 
 export const DEFAULT_INPUTS_O_LIST = [
@@ -87,8 +87,8 @@ export const DEFAULT_OUTPUTS_O_LIST = [
 })
 export class OListComponent extends OServiceComponent implements IList, AfterContentInit, AfterViewInit, OnDestroy, OnInit, OnChanges {
 
-  @ContentChildren(OListItemComponent)
-  public listItemComponents: QueryList<OListItemComponent>;
+  @ContentChildren('o-list-item')
+  public listItemComponents: QueryList<IListItem>;
 
   @ContentChildren(OListItemDirective)
   public listItemDirectives: QueryList<OListItemDirective>;
@@ -218,7 +218,7 @@ export class OListComponent extends OServiceComponent implements IList, AfterCon
     return ObservableWrapper.subscribe(this.onClick, onNext);
   }
 
-  public onItemDetailClick(item: OListItemDirective | OListItemComponent): void {
+  public onItemDetailClick(item: OListItemDirective | IListItem): void {
     const data = item.getItemData();
     if (this.oenabled && this.detailMode === Codes.DETAIL_MODE_CLICK) {
       this.saveDataNavigationInLocalStorage();
@@ -227,7 +227,7 @@ export class OListComponent extends OServiceComponent implements IList, AfterCon
     ObservableWrapper.callEmit(this.onClick, data);
   }
 
-  public onItemDetailDoubleClick(item: OListItemDirective | OListItemComponent): void {
+  public onItemDetailDoubleClick(item: OListItemDirective | IListItem): void {
     const data = item.getItemData();
     if (this.oenabled && Codes.isDoubleClickMode(this.detailMode)) {
       this.saveDataNavigationInLocalStorage();
@@ -374,7 +374,7 @@ export class OListComponent extends OServiceComponent implements IList, AfterCon
   }
 
   protected setListItemsData(): void {
-    this.listItemComponents.forEach((element: OListItemComponent, index) => element.setItemData(this.dataResponseArray[index]));
+    this.listItemComponents.forEach((element: IListItem, index) => element.setItemData(this.dataResponseArray[index]));
   }
 
   protected setListItemDirectivesData(): void {
