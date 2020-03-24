@@ -15,6 +15,8 @@ ISQLOrder -> SQLOrder
  * editors and renderers:
     * '*initialize*' method added always called in base class ngOnInit method
  * `usePlainRender`, `useCellRenderer`, `useCellEditor` and `useDetailButton` no longer exists (used for template purposes) ([e56c736b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e56c736b)) ([47c0714e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/47c0714e))  
+* **o-grid**: adding `registerGridItem` and `registerGridItemDirective` methods ([39117e8d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/39117e8d)) 
+
 
 ## 4.1.2 (2020-02-26)
 ### Features
