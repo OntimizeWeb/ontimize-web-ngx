@@ -17,6 +17,7 @@ import { MatLine, MatListAvatarCssMatStyler, MatListItem } from '@angular/materi
 
 import { Util } from '../../../util/util';
 import { OListComponent } from '../o-list.component';
+import { IListItem } from '../../../interfaces/o-list-item.interface';
 
 @Component({
   moduleId: module.id,
@@ -28,7 +29,7 @@ import { OListComponent } from '../o-list.component';
     '[class.o-list-item]': 'true'
   }
 })
-export class OListItemComponent implements AfterContentInit {
+export class OListItemComponent implements IListItem, AfterContentInit {
 
   public modelData: any;
   protected _isSelected: boolean = false;
