@@ -84,6 +84,8 @@ export const DEFAULT_INPUTS_O_TABLE_COLUMN = [
 
   'filterExpressionFunction: filter-expression-function',
 
+  'class',
+
   ...O_TABLE_CELL_RENDERERS_INPUTS,
   ...O_TABLE_CELL_EDITORS_INPUTS
 ];
@@ -126,6 +128,7 @@ export class OTableColumnComponent implements OTableColumn, OnDestroy, OnInit, A
   public tooltip: boolean = false;
   tooltipValue: string;
   tooltipFunction: (rowData: any) => any;
+  public class: string;
 
   set multiline(val: boolean) {
     val = Util.parseBoolean(String(val));
@@ -242,7 +245,7 @@ export class OTableColumnComponent implements OTableColumn, OnDestroy, OnInit, A
   @InputConverter()
   asyncLoad: boolean = false;
 
-  @ViewChild('container', { read: ViewContainerRef, static: false })
+  @ViewChild('container', { read: ViewContainerRef, static: true })
   container: ViewContainerRef;
 
   private subscriptions = new Subscription();
@@ -331,6 +334,7 @@ export class OTableColumnComponent implements OTableColumn, OnDestroy, OnInit, A
               break;
             case 'percentage':
               newRenderer.valueBase = this.valueBase;
+            // tslint:disable-next-line:no-switch-case-fall-through
             case 'real':
               newRenderer.decimalSeparator = this.decimalSeparator;
               newRenderer.minDecimalDigits = this.minDecimalDigits;

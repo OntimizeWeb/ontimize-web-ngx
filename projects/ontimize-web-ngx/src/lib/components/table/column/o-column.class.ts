@@ -22,7 +22,7 @@ export class OColumn {
   visible: boolean;
   renderer: OBaseTableCellRenderer;
   editor: any;
-  editing: boolean;
+  protected _editing: boolean = false;
   _width: string;
   minWidth: string;
   maxWidth: string;
@@ -38,6 +38,17 @@ export class OColumn {
   public isMultiline: Observable<boolean> = this.multilineSubject.asObservable();
   private _multiline: boolean;
 
+  get editing(): boolean {
+    return this._editing;
+  }
+
+  set editing(val: boolean) {
+    if (this.type === 'boolean' && this.editor && this.editor.autoCommit) {
+      this._editing = false;
+    }
+    this._editing = this.editor != null && val;
+  }
+
   setDefaultProperties(args: any) {
     this.type = 'string';
     this.className = 'o-column-' + (this.type) + ' ';
@@ -51,7 +62,8 @@ export class OColumn {
     this.multiline = false;
   }
 
-  setColumnProperties(column: OTableColumn | OTableColumnCalculated | any) {
+  setColumnProperties(column: OTableColumn & OTableColumnCalculated) {
+    // OTableColumnCalculated interface extends OTableColumn
     this.title = Util.isDefined(column.title) ? column.title : column.attr;
     this.definition = column;
     this.multiline = column.multiline;
@@ -219,10 +231,11 @@ export class OColumn {
   }
 
   useCustomFilterFunction(): boolean {
-    return this.searching && this.visible && this.renderer !== undefined && this.renderer.filterFunction !== undefined;
+    return this.searching && this.visible && this.renderer != null && this.renderer.filterFunction != null;
   }
 
   useQuickfilterFunction(): boolean {
-    return this.searching && this.visible && !(this.renderer !== undefined && this.renderer.filterFunction !== undefined);
+    return this.searching && this.visible && !(this.renderer != null && this.renderer.filterFunction != null);
   }
+
 }

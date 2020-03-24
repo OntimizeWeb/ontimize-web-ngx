@@ -1777,7 +1777,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     if (column.editor && column.type === 'boolean' /*column.editor instanceof OTableCellEditorBooleanComponent */ && column.editor.autoCommit) {
       return false;
     }
-    return column.editor && column.editing && this.selection.isSelected(row);
+    const result = column.editor != null && column.editing && this.selection.isSelected(row);
+    console.log(column.attr + '  ' + result);
+    return result;
   }
 
   isSelectionModeMultiple(): boolean {
@@ -2180,7 +2182,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }, 0);
   }
 
-  createOColumn(attr?: string, table?: OTableComponent, column?: OTableColumnComponent | OTableColumnCalculatedComponent | any): OColumn {
+  private createOColumn(attr?: string, table?: OTableComponent, column?: OTableColumnComponent & OTableColumnCalculatedComponent): OColumn {
     const instance = new OColumn();
     if (attr) {
       instance.attr = attr;

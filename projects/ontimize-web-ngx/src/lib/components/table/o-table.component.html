@@ -14,7 +14,8 @@
       <ng-container #quickfilterRef>
         <ng-content select="o-table-quickfilter"></ng-content>
       </ng-container>
-      <ng-container *ngIf="quickFilter && quickfilterRef.nativeElement && quickfilterRef.nativeElement.childNodes.length === 0">
+      <ng-container
+        *ngIf="quickFilter && quickfilterRef.nativeElement && quickfilterRef.nativeElement.childNodes.length === 0">
         <o-table-quickfilter (onChange)="reloadPaginatedDataFromStart()"></o-table-quickfilter>
       </ng-container>
 
@@ -83,26 +84,29 @@
             [oContextMenu]="tableContextMenu" [oContextMenuData]="{ cellName:column.name, rowValue:row}"
             [style.width]="column.getRenderWidth()">
             <div class="content">
-              <ng-template [ngIf]="usePlainRender(column, row)" [ngIfElse]="cellRender">
-                {{ row[column.name] }}
-              </ng-template>
 
-              <ng-template #cellRender [ngIf]="useCellRenderer(column, row)" [ngIfElse]="cellEditor"
-                [ngTemplateOutlet]="column.renderer?.templateref"
-                [ngTemplateOutletContext]="{ cellvalue: row[column.name], rowvalue:row }">
-              </ng-template>
+              <ng-container [ngSwitch]="true">
+                <ng-container
+                  *ngSwitchCase="column.renderer != null && (!column.editing || column.editing && !selection.isSelected(row))">
+                  <ng-template
+                    *ngTemplateOutlet="column.renderer?.templateref; context:{ cellvalue: row[column.name], rowvalue:row }">
+                  </ng-template>
+                </ng-container>
+                <ng-container *ngSwitchCase="selection.isSelected(row) && column.editing">
+                  <ng-template
+                    *ngTemplateOutlet="column.editor?.templateref; context:{ cellvalue: row[column.name], rowvalue:row }">
+                  </ng-template>
+                </ng-container>
 
-              <ng-template #cellEditor [ngIf]="useCellEditor(column, row)"
-                [ngTemplateOutlet]="column.editor?.templateref"
-                [ngTemplateOutletContext]="{ cellvalue: row[column.name], rowvalue:row }">
-              </ng-template>
-
-              <ng-container *ngIf="useDetailButton(column)">
-                <div fxLayoutAlign="center center" class="o-action-cell-renderer"
-                  (click)="onDetailButtonClick(column, row, $event)">
-                  <mat-icon>{{ getDetailButtonIcon(column) }}</mat-icon>
-                </div>
+                <ng-container *ngSwitchCase="column.type === 'editButtonInRow' || column.type === 'detailButtonInRow'">
+                  <div fxLayoutAlign="center center" class="o-action-cell-renderer"
+                    (click)="onDetailButtonClick(column, row, $event)">
+                    <mat-icon>{{ getDetailButtonIcon(column) }}</mat-icon>
+                  </div>
+                </ng-container>
+                <ng-container *ngSwitchDefault>{{ row[column.name] }}</ng-container>
               </ng-container>
+
             </div>
           </td>
           <!--Define mat-footer-cell-->
