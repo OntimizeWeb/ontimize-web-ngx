@@ -10,6 +10,7 @@ import {
 } from '@angular/core';
 import { Subscription } from 'rxjs';
 
+import { ITranslatePipeArgument, OTranslatePipe } from '../../../../../pipes/o-translate.pipe';
 import { DialogService } from '../../../../../services/dialog.service';
 import { OntimizeService } from '../../../../../services/ontimize.service';
 import { Expression } from '../../../../../types/expression.type';
@@ -26,10 +27,12 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_SERVICE = [
   'entity',
   'service',
   'columns',
+  'translate',
   'valueColumn: value-column',
   'parentKeys: parent-keys',
   'queryMethod: query-method',
-  'serviceType : service-type'
+  'serviceType : service-type',
+  'translateArgsFn: translate-params'
 ];
 
 @Component({
@@ -44,6 +47,8 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_SERVICE = [
 })
 export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer implements OnInit, AfterViewInit, OnDestroy {
 
+  public static DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_SERVICE = DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_SERVICE;
+
   @ViewChild('templateref', { read: TemplateRef, static: true }) public templateref: TemplateRef<any>;
 
   public rowData: any;
@@ -55,6 +60,7 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
   protected entity: string;
   protected service: string;
   protected columns: string;
+  protected translate: boolean = false;
   protected valueColumn: string;
   protected parentKeys: string;
   protected queryMethod: string = Codes.QUERY_METHOD;
@@ -66,6 +72,10 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
   protected _pKeysEquiv = {};
   protected querySubscription: Subscription;
   protected dialogService: DialogService;
+
+  public translateArgsFn: (rowData: any) => any[];
+  protected componentPipe: OTranslatePipe;
+  protected pipeArguments: ITranslatePipeArgument = {};
 
   protected editorSuscription: Subscription;
 
@@ -171,5 +181,18 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
       result = FilterExpressionUtils.buildExpressionEquals(this.column, SQLTypes.parseUsingSQLType(cacheValue, SQLTypes.getSQLTypeKey(oCol.sqlType)));
     }
     return result;
+  }
+
+  public setComponentPipe(): void {
+    this.componentPipe = new OTranslatePipe(this.injector);
+  }
+
+  public responseValue(cellvalue: any, rowvalue?: any): string {
+    if(this.translate) {
+      this.pipeArguments = this.translateArgsFn ? { values: this.translateArgsFn(rowvalue) } : {};
+      return super.getCellData(cellvalue, rowvalue);
+    } else {
+      return cellvalue;
+    }
   }
 }
