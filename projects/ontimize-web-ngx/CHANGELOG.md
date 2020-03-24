@@ -10,8 +10,11 @@ IBasicExpression -> BasicExpression
 IFilterExpression -> FilterExpression
 ISQLOrder -> SQLOrder
 
+* **o-table**: 
+ * `NAME_COLUMN_SELECT`, `SUFFIX_COLUMN_INSERTABLE`, `LIMIT_SCROLLVIRTUAL` and `DEFAULT_COLUMN_MIN_WIDTH` static variables no longer exists. Now they are located in `Codes` utility class.
  * editors and renderers:
     * '*initialize*' method added always called in base class ngOnInit method
+ * `usePlainRender`, `useCellRenderer`, `useCellEditor` and `useDetailButton` no longer exists (used for template purposes) ([e56c736b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e56c736b)) ([47c0714e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/47c0714e))  
 
 ## 4.1.2 (2020-02-26)
 ### Features
