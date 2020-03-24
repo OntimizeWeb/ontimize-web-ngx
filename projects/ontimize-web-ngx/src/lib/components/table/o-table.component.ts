@@ -1375,7 +1375,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   get editionEnabled(): boolean {
-    return (this._oTableOptions.columns.find(item => item.editing) !== undefined);
+    return this._oTableOptions.columns.some(item => item.editing);
   }
 
   handleDOMClick(event) {
@@ -1383,8 +1383,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       return;
     }
 
-    const activeEditingColumns = this._oTableOptions.columns.filter(item => item.editing);
-    if (activeEditingColumns && activeEditingColumns.length > 0) {
+    if (this.editionEnabled) {
       return;
     }
 
@@ -1735,10 +1734,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     });
   }
 
-  useDetailButton(column: OColumn): boolean {
-    return column.type === 'editButtonInRow' || column.type === 'detailButtonInRow';
-  }
-
   onDetailButtonClick(column: OColumn, row: any, event: any) {
     event.preventDefault();
     event.stopPropagation();
@@ -1762,23 +1757,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
         result = this.detailButtonInRowIcon;
         break;
     }
-    return result;
-  }
-
-  usePlainRender(column: OColumn, row: any): boolean {
-    return !this.useDetailButton(column) && !column.renderer && (!column.editor || (!column.editing || !this.selection.isSelected(row)));
-  }
-
-  useCellRenderer(column: OColumn, row: any): boolean {
-    return column.renderer && (!column.editing || column.editing && !this.selection.isSelected(row));
-  }
-
-  useCellEditor(column: OColumn, row: any): boolean {
-    if (column.editor && column.type === 'boolean' /*column.editor instanceof OTableCellEditorBooleanComponent */ && column.editor.autoCommit) {
-      return false;
-    }
-    const result = column.editor != null && column.editing && this.selection.isSelected(row);
-    console.log(column.attr + '  ' + result);
     return result;
   }
 

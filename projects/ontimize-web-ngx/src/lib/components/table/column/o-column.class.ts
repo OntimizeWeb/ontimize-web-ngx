@@ -63,7 +63,6 @@ export class OColumn {
   }
 
   setColumnProperties(column: OTableColumn & OTableColumnCalculated) {
-    // OTableColumnCalculated interface extends OTableColumn
     this.title = Util.isDefined(column.title) ? column.title : column.attr;
     this.definition = column;
     this.multiline = column.multiline;
