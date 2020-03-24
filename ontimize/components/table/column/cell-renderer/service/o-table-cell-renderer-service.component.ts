@@ -20,7 +20,8 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_SERVICE = [
   'valueColumn: value-column',
   'parentKeys: parent-keys',
   'queryMethod: query-method',
-  'serviceType : service-type'
+  'serviceType : service-type',
+  'translateArgsFn: translate-params'
 ];
 
 @Component({
@@ -50,7 +51,7 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
   protected service: string;
   protected columns: string;
   @InputConverter()
-  protected translate: boolean;
+  protected translate: boolean = false;
   protected valueColumn: string;
   protected parentKeys: string;
   protected queryMethod: string = Codes.QUERY_METHOD;
