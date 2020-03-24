@@ -1,8 +1,7 @@
-import { AfterViewInit, ElementRef, forwardRef, Inject, Injector, Optional, ViewChild } from '@angular/core';
+import { AfterViewInit, ElementRef, Inject, Injector, Optional, ViewChild } from '@angular/core';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS, MatExpansionPanel } from '@angular/material';
 
 import { InputConverter } from '../../decorators/input-converter';
-import { OFormComponent } from '../form/o-form.component';
 import { DEFAULT_INPUTS_O_CONTAINER, OContainerComponent } from './o-container-component.class';
 
 export const DEFAULT_INPUTS_O_CONTAINER_COLLAPSIBLE = [
@@ -27,12 +26,11 @@ export class OContainerCollapsibleComponent extends OContainerComponent implemen
 
 
   constructor(
-    @Optional() @Inject(forwardRef(() => OFormComponent)) protected form: OFormComponent,
     protected elRef: ElementRef,
     protected injector: Injector,
     @Optional() @Inject(MAT_FORM_FIELD_DEFAULT_OPTIONS) protected matFormDefaultOption
   ) {
-    super(form, elRef, injector, matFormDefaultOption);
+    super(elRef, injector, matFormDefaultOption);
   }
 
   ngAfterViewInit(): void {

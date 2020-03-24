@@ -1,7 +1,15 @@
-import { AfterViewInit, ElementRef, forwardRef, Inject, Injector, OnDestroy, Optional, ViewChild, AfterContentChecked } from '@angular/core';
+import {
+  AfterContentChecked,
+  AfterViewInit,
+  ElementRef,
+  Inject,
+  Injector,
+  OnDestroy,
+  Optional,
+  ViewChild,
+} from '@angular/core';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material';
 
-import { OFormComponent } from '../form/o-form.component';
 import { Util } from '../../util/util';
 
 export const DEFAULT_INPUTS_O_CONTAINER = [
@@ -44,7 +52,6 @@ export class OContainerComponent implements AfterViewInit, OnDestroy, AfterConte
   @ViewChild('container', { static: false }) protected _containerRef: ElementRef;
 
   constructor(
-    @Optional() @Inject(forwardRef(() => OFormComponent)) protected form: OFormComponent,
     protected elRef: ElementRef,
     protected injector: Injector,
     @Optional() @Inject(MAT_FORM_FIELD_DEFAULT_OPTIONS) protected matFormDefaultOption
@@ -70,8 +77,8 @@ export class OContainerComponent implements AfterViewInit, OnDestroy, AfterConte
   public getAttribute() {
     if (this.oattr) {
       return this.oattr;
-    } else if (this.elRef && this.elRef.nativeElement.attributes['attr']) {
-      return this.elRef.nativeElement.attributes['attr'].value;
+    } else if (this.elRef && this.elRef.nativeElement.attributes.attr) {
+      return this.elRef.nativeElement.attributes.attr.value;
     }
   }
 
@@ -153,7 +160,7 @@ export class OContainerComponent implements AfterViewInit, OnDestroy, AfterConte
       if (!this._containerRef) {
         return;
       }
-      if (!document.documentElement!.contains(this.elRef.nativeElement)) {
+      if (document.documentElement && !document.documentElement.contains(this.elRef.nativeElement)) {
         this._outlineGapCalculationNeededImmediately = true;
         return;
       }
