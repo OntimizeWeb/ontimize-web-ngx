@@ -39,7 +39,7 @@
     </div>
   </mat-toolbar>
 
-  <!--not results-->
+  <!--no results-->
   <div class="o-grid-no-results fill-remaining" *ngIf="gridItems.length === 0" fxLayoutAlign="center start" layout-padding>
     {{'GRID.EMPTY' | oTranslate}}
     <ng-container *ngIf="quickFilter && searchInputComponent && searchInputComponent.getValue() && searchInputComponent.getValue().length > 0">

@@ -1,21 +1,16 @@
 import {
-  AfterContentInit,
-  AfterViewChecked,
   AfterViewInit,
   Component,
-  ContentChildren,
   ElementRef,
   EventEmitter,
   forwardRef,
-  HostListener,
   Inject,
   Injector,
   OnChanges,
   OnDestroy,
   OnInit,
+  Optional,
   QueryList,
-  Renderer2,
-  SimpleChange,
   ViewChild,
   ViewChildren,
 } from '@angular/core';
@@ -24,6 +19,7 @@ import { MatPaginator, PageEvent } from '@angular/material';
 import { Subscription } from 'rxjs';
 
 import { InputConverter } from '../../decorators/input-converter';
+import { IGridItem } from '../../interfaces/o-grid-item.interface';
 import { OntimizeService } from '../../services/ontimize.service';
 import { OQueryDataArgs } from '../../types/query-data-args.type';
 import { SQLOrder } from '../../types/sql-order.type';
@@ -33,7 +29,6 @@ import { ServiceUtils } from '../../util/service.utils';
 import { Util } from '../../util/util';
 import { OFormComponent } from '../form/o-form.component';
 import { DEFAULT_INPUTS_O_SERVICE_COMPONENT, OServiceComponent } from '../o-service-component.class';
-import { OGridItemComponent } from './grid-item/o-grid-item.component';
 import { OGridItemDirective } from './grid-item/o-grid-item.directive';
 
 export const DEFAULT_INPUTS_O_GRID = [
@@ -89,7 +84,7 @@ const PAGE_SIZE_OPTIONS = [8, 16, 24, 32, 64];
     '[class.o-grid-fixed]': 'fixedHeader',
   }
 })
-export class OGridComponent extends OServiceComponent implements AfterViewChecked, AfterViewInit, OnChanges, OnDestroy, OnInit, AfterContentInit {
+export class OGridComponent extends OServiceComponent implements AfterViewInit, OnChanges, OnDestroy, OnInit {
 
   /* Inputs */
   @InputConverter()
@@ -153,8 +148,6 @@ export class OGridComponent extends OServiceComponent implements AfterViewChecke
   public onDataLoaded: EventEmitter<any> = new EventEmitter();
   public onPaginatedDataLoaded: EventEmitter<any> = new EventEmitter();
 
-  @ContentChildren(OGridItemComponent)
-  public inputGridItems: QueryList<OGridItemComponent>;
   @ViewChildren(OGridItemDirective)
   public gridItemDirectives: QueryList<OGridItemDirective>;
   @ViewChild(MatPaginator, { static: false })
@@ -172,20 +165,24 @@ export class OGridComponent extends OServiceComponent implements AfterViewChecke
   protected dataResponseArray: any[] = [];
   protected storePaginationState: boolean = false;
 
-  set gridItems(value: OGridItemComponent[]) {
+  set gridItems(value: IGridItem[]) {
     this._gridItems = value;
   }
-  get gridItems(): OGridItemComponent[] {
+
+  get gridItems(): IGridItem[] {
     return this._gridItems;
   }
-  protected _gridItems: OGridItemComponent[];
+
+  protected _gridItems: IGridItem[] = [];
 
   set currentPage(val: number) {
     this._currentPage = val;
   }
+
   get currentPage(): number {
     return this._currentPage;
   }
+
   protected _currentPage: number = 0;
 
   protected subscription: Subscription = new Subscription();
@@ -194,9 +191,7 @@ export class OGridComponent extends OServiceComponent implements AfterViewChecke
   constructor(
     injector: Injector,
     elRef: ElementRef,
-    public _el: ElementRef,
-    private render: Renderer2,
-    @Inject(forwardRef(() => OFormComponent)) form: OFormComponent
+    @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent
   ) {
     super(injector, elRef, form);
     this.media = this.injector.get(MediaObserver);
@@ -235,32 +230,16 @@ export class OGridComponent extends OServiceComponent implements AfterViewChecke
     }
   }
 
-  @HostListener('mouseenter')
-  // TODO->Aqui deberia tirar el mouseEnter desde el Grid-Item
-  onMouseEnter() {
-    if (this.detailMode !== Codes.DETAIL_MODE_NONE) {
-      this.gridItems.forEach(element => {
-        element.render.setElementStyle(this._el.nativeElement, 'cursor', 'pointer');
-      });
-    }
-  }
-
-  public ngAfterContentInit(): void {
-    this.gridItems = this.inputGridItems.toArray();
-    this.subscription.add(this.inputGridItems.changes.subscribe(queryChanges => {
-      this.gridItems = queryChanges._results;
-    }));
-  }
-
   public ngAfterViewInit(): void {
     super.afterViewInit();
     this.setGridItemDirectivesData();
     if (this.searchInputComponent) {
       this.registerQuickFilter(this.searchInputComponent);
     }
+    this.subscribeToMediaChanges();
   }
 
-  public ngAfterViewChecked(): void {
+  public subscribeToMediaChanges(): void {
     this.subscription.add(this.media.asObservable().subscribe((change: MediaChange[]) => {
       if (change && change[0]) {
         switch (change[0].mqAlias) {
@@ -277,10 +256,6 @@ export class OGridComponent extends OServiceComponent implements AfterViewChecke
         }
       }
     }));
-  }
-
-  public ngOnChanges(changes: { [propName: string]: SimpleChange }): void {
-    super.ngOnChanges(changes);
   }
 
   public reloadData(): void {
@@ -370,7 +345,11 @@ export class OGridComponent extends OServiceComponent implements AfterViewChecke
     }
   }
 
-  public registerGridItem(item: OGridItemDirective): void {
+  public registerGridItem(item: IGridItem): void {
+    this.gridItems.push(item);
+  }
+
+  public registerGridItemDirective(item: OGridItemDirective): void {
     if (item) {
       const self = this;
       if (self.detailMode === Codes.DETAIL_MODE_CLICK) {
@@ -574,7 +553,7 @@ export class OGridComponent extends OServiceComponent implements AfterViewChecke
       this.gridItemDirectives.toArray().forEach((element: OGridItemDirective, index) => {
         element.setItemData(self.dataArray[index]);
         element.setGridComponent(self);
-        self.registerGridItem(element);
+        self.registerGridItemDirective(element);
       });
     });
   }
