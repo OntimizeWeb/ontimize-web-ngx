@@ -1,6 +1,8 @@
 import { ChangeDetectionStrategy, Component, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 
+import { InputConverter } from '../../../../../decorators/input-converter';
+import { ITranslatePipeArgument, OTranslatePipe } from '../../../../../pipes';
 import { DialogService, OntimizeService } from '../../../../../services';
 import { dataServiceFactory } from '../../../../../services/data-service.provider';
 import { Codes, FilterExpressionUtils, SQLTypes, Util } from '../../../../../utils';
@@ -14,6 +16,7 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_SERVICE = [
   'entity',
   'service',
   'columns',
+  'translate',
   'valueColumn: value-column',
   'parentKeys: parent-keys',
   'queryMethod: query-method',
@@ -46,6 +49,8 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
   protected entity: string;
   protected service: string;
   protected columns: string;
+  @InputConverter()
+  protected translate: boolean;
   protected valueColumn: string;
   protected parentKeys: string;
   protected queryMethod: string = Codes.QUERY_METHOD;
@@ -58,11 +63,16 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
   protected querySubscription: Subscription;
   protected dialogService: DialogService;
 
+  public translateArgsFn: (rowData: any) => any[];
+  protected componentPipe: OTranslatePipe;
+  protected pipeArguments: ITranslatePipeArgument = {};
+
   protected editorSuscription: Subscription;
 
   constructor(protected injector: Injector) {
     super(injector);
     this.tableColumn.type = 'service';
+    this.setComponentPipe();
     this.dialogService = injector.get(DialogService);
   }
 
@@ -162,5 +172,18 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
       result = FilterExpressionUtils.buildExpressionEquals(this.column, SQLTypes.parseUsingSQLType(cacheValue, SQLTypes.getSQLTypeKey(oCol.sqlType)));
     }
     return result;
+  }
+
+  public setComponentPipe(): void {
+    this.componentPipe = new OTranslatePipe(this.injector);
+  }
+
+  public responseValue(cellvalue: any, rowvalue?: any): string {
+    if(this.translate) {
+      this.pipeArguments = this.translateArgsFn ? { values: this.translateArgsFn(rowvalue) } : {};
+      return super.getCellData(cellvalue, rowvalue);
+    } else {
+      return cellvalue;
+    }
   }
 }
