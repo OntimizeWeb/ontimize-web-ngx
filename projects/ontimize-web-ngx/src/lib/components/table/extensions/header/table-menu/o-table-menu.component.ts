@@ -10,7 +10,7 @@ import {
   OnDestroy,
   OnInit,
   ViewChild,
-  ViewEncapsulation,
+  ViewEncapsulation
 } from '@angular/core';
 import { MatDialog, MatMenu } from '@angular/material';
 import { Observable } from 'rxjs';
@@ -27,14 +27,10 @@ import { Util } from '../../../../../util/util';
 import { OTableCellRendererImageComponent } from '../../../column/cell-renderer/image/o-table-cell-renderer-image.component';
 import { OColumn } from '../../../column/o-column.class';
 import { OTableComponent } from '../../../o-table.component';
-import {
-  OTableApplyConfigurationDialogComponent,
-} from '../../dialog/apply-configuration/o-table-apply-configuration-dialog.component';
+import { OTableApplyConfigurationDialogComponent } from '../../dialog/apply-configuration/o-table-apply-configuration-dialog.component';
 import { OTableExportDialogComponent } from '../../dialog/export/o-table-export-dialog.component';
 import { OTableLoadFilterDialogComponent } from '../../dialog/load-filter/o-table-load-filter-dialog.component';
-import {
-  OTableStoreConfigurationDialogComponent,
-} from '../../dialog/store-configuration/o-table-store-configuration-dialog.component';
+import { OTableStoreConfigurationDialogComponent } from '../../dialog/store-configuration/o-table-store-configuration-dialog.component';
 import { OTableStoreFilterDialogComponent } from '../../dialog/store-filter/o-table-store-filter-dialog.component';
 import { OTableVisibleColumnsDialogComponent } from '../../dialog/visible-columns/o-table-visible-columns-dialog.component';
 import { OTableOptionComponent } from '../table-option/o-table-option.component';
@@ -51,7 +47,10 @@ export const DEFAULT_INPUTS_O_TABLE_MENU = [
   'columnsVisibilityButton: columns-visibility-button',
 
   // show-configuration-option [yes|no|true|false]: show configuration button in header. Default: yes.
-  'showConfigurationOption: show-configuration-option'
+  'showConfigurationOption: show-configuration-option',
+
+  // show-filter-option [yes|no|true|false]: show filter menu option in the header menu
+  'showFilterOption: show-filter-option'
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE_MENU = [];
@@ -77,6 +76,8 @@ export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, O
   exportButton: boolean = true;
   @InputConverter()
   showConfigurationOption: boolean = true;
+  @InputConverter()
+  showFilterOption: boolean = true;
   @InputConverter()
   columnsVisibilityButton: boolean = true;
   /* End of inputs */
@@ -215,7 +216,7 @@ export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, O
       return false;
     }
     const perm: OPermissions = this.getPermissionByAttr('select-all-checkbox');
-    return !(perm && perm.visible === false);
+    return this.showFilterOption && !(perm && perm.visible === false);
   }
 
   get rowHeightObservable(): Observable<string> {
@@ -254,7 +255,7 @@ export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, O
 
   get showFilterMenu(): boolean {
     const perm: OPermissions = this.getPermissionByAttr('filter');
-    return !(perm && perm.visible === false);
+    return this.showFilterOption && !(perm && perm.visible === false);
   }
 
   get enabledFilterMenu(): boolean {
