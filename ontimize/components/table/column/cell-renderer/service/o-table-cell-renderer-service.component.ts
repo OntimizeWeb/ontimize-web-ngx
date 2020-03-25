@@ -1,22 +1,27 @@
 import { ChangeDetectionStrategy, Component, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
+
+import { InputConverter } from '../../../../../decorators/input-converter';
+import { ITranslatePipeArgument, OTranslatePipe } from '../../../../../pipes';
 import { DialogService, OntimizeService } from '../../../../../services';
 import { dataServiceFactory } from '../../../../../services/data-service.provider';
-import { Codes, Util, SQLTypes, FilterExpressionUtils } from '../../../../../utils';
+import { Codes, FilterExpressionUtils, SQLTypes, Util } from '../../../../../utils';
+import { IExpression } from '../../../../filter-expression.utils';
 import { ServiceUtils } from '../../../../service.utils';
 import { OColumn } from '../../../o-table.component';
-import { OBaseTableCellRenderer, DEFAULT_INPUTS_O_BASE_TABLE_CELL_RENDERER } from '../o-base-table-cell-renderer.class';
-import { IExpression } from '../../../../filter-expression.utils';
+import { DEFAULT_INPUTS_O_BASE_TABLE_CELL_RENDERER, OBaseTableCellRenderer } from '../o-base-table-cell-renderer.class';
 
 export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_SERVICE = [
   ...DEFAULT_INPUTS_O_BASE_TABLE_CELL_RENDERER,
   'entity',
   'service',
   'columns',
+  'translate',
   'valueColumn: value-column',
   'parentKeys: parent-keys',
   'queryMethod: query-method',
-  'serviceType : service-type'
+  'serviceType : service-type',
+  'translateArgsFn: translate-params'
 ];
 
 @Component({
@@ -45,6 +50,8 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
   protected entity: string;
   protected service: string;
   protected columns: string;
+  @InputConverter()
+  protected translate: boolean = false;
   protected valueColumn: string;
   protected parentKeys: string;
   protected queryMethod: string = Codes.QUERY_METHOD;
@@ -57,11 +64,16 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
   protected querySubscription: Subscription;
   protected dialogService: DialogService;
 
+  public translateArgsFn: (rowData: any) => any[];
+  protected componentPipe: OTranslatePipe;
+  protected pipeArguments: ITranslatePipeArgument = {};
+
   protected editorSuscription: Subscription;
 
   constructor(protected injector: Injector) {
     super(injector);
     this.tableColumn.type = 'service';
+    this.setComponentPipe();
     this.dialogService = injector.get(DialogService);
   }
 
@@ -161,5 +173,18 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
       result = FilterExpressionUtils.buildExpressionEquals(this.column, SQLTypes.parseUsingSQLType(cacheValue, SQLTypes.getSQLTypeKey(oCol.sqlType)));
     }
     return result;
+  }
+
+  public setComponentPipe(): void {
+    this.componentPipe = new OTranslatePipe(this.injector);
+  }
+
+  public responseValue(cellvalue: any, rowvalue?: any): string {
+    if(this.translate) {
+      this.pipeArguments = this.translateArgsFn ? { values: this.translateArgsFn(rowvalue) } : {};
+      return super.getCellData(cellvalue, rowvalue);
+    } else {
+      return cellvalue;
+    }
   }
 }
