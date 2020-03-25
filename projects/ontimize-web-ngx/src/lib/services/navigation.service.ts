@@ -12,6 +12,7 @@ import { LocalStorageService } from './local-storage.service';
 
 export type ONavigationRoutes = {
   mainFormLayoutManagerComponent?: boolean;
+  isMainNavigationComponent?: boolean;
   detailFormRoute: string;
   editFormRoute: string;
   insertFormRoute: string;
@@ -82,6 +83,10 @@ export class ONavigationItem {
 
   isMainFormLayoutManagerComponent(): boolean {
     return Util.isDefined(this.formLayoutRoutes);
+  }
+
+  isMainNavigationComponent(): boolean {
+    return Util.isDefined(this.formRoutes) && this.formRoutes.isMainNavigationComponent;
   }
 
   getFormRoutes(): ONavigationRoutes {
@@ -214,14 +219,6 @@ export class NavigationService implements ILocalStorageComponent {
   protected parseRoute(url: string, routeSegments: UrlSegment[], navData: ONavigationItem): any {
     let text = '';
     let modePathArr = [];
-    const modePath = navData ? navData.getActiveModePath() : undefined;
-    if (modePath && modePath.length > 0) {
-      modePathArr = modePath.split('/');
-      const detailRoute = navData.getDetailFormRoute();
-      if (Util.isDefined(detailRoute)) {
-        url += url.length > 0 ? ('/' + detailRoute) : detailRoute;
-      }
-    }
     const routeArr = [];
     for (let i = 0, len = routeSegments.length; i < len; i++) {
       const s: UrlSegment = routeSegments[i];
@@ -234,10 +231,6 @@ export class NavigationService implements ILocalStorageComponent {
       } else {
         routeArr.push(s);
       }
-    }
-    const activeMode = navData ? navData.activeFormMode : undefined;
-    if (modePath && modePath.length > 0 && (activeMode === 'editFormRoute') || (activeMode === 'insertFormRoute')) {
-      url += url.length > 0 ? ('/' + modePath) : modePath;
     }
     return {
       url: url,
@@ -352,8 +345,51 @@ export class NavigationService implements ILocalStorageComponent {
     return result;
   }
 
+  /**
+   * Return the main navigation route data that matches the most with the current route
+   */
+  getLastMainNavigationRouteData(): ONavigationItem {
+    const routeMatches = [];
+    const items = this.navigationItems.slice().reverse()
+      .map((item, i) => {
+        let currentLocation = this.location.path().substr(1);
+        if (currentLocation.includes('?')) {
+          currentLocation = currentLocation.substring(0, currentLocation.indexOf('?'));
+        }
+
+        // Compare current route with item route and count segment matches
+        const arr1 = item.url.split('/');
+        const arr2 = currentLocation.split('/');
+        let result = 0;
+        let index = -1;
+        while (++index <= arr1.length && index <= arr2.length) {
+          routeMatches[i] = (arr1[index] === arr2[index]) ? result++ : result;
+        }
+
+        return item;
+      });
+
+    let maxMatches = routeMatches.reduce((a, b) => Math.max(a, b));
+    const lastNavItem = this.navigationItems[this.navigationItems.length - 1];
+    if (!lastNavItem.isMainNavigationComponent() && !lastNavItem.isMainFormLayoutManagerComponent()) {
+      maxMatches--;
+    }
+    let item = void 0;
+    while (!item && maxMatches >= 0) {
+      item = items.find((item, i) => (item.isMainNavigationComponent() || item.isMainFormLayoutManagerComponent()) && routeMatches[i] === maxMatches);
+      maxMatches--;
+    }
+    return item;
+  }
+
   removeLastItem() {
     this.navigationItems.pop();
+    this.storeNavigation();
+  }
+
+  removeLastItemsUntilMain() {
+    const index = this.navigationItems.indexOf(this.getLastMainNavigationRouteData());
+    this.navigationItems = this.navigationItems.slice(0, index + 1);
     this.storeNavigation();
   }
 
