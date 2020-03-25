@@ -1,12 +1,12 @@
 .o-table-visible-columns-dialog {
-  .mat-dialog-content.mat-dialog-content, .cdk-drag-preview {
+  .mat-dialog-content.mat-dialog-content {
     overflow: auto;
     padding-top: 0;
     margin-top: 24px;
 
-    .mat-list,.cdk-drag-preview {
+    .mat-list {
 
-      .mat-list-item {
+      .mat-list-item, .cdk-drag-preview {
         cursor: pointer;
         height: auto;
 
