@@ -5,7 +5,6 @@
 ### Bug Fixes
 * **o-time-input**: Fix bad behaviour when there is more than one component in the same form ([fc1dd47](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/fc1dd47))
 
-
 ## 4.1.2 (2020-02-26)
 ### Features
 * **o-table**: new `show-configuration-option` input ([5450798](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5450798)) ([863b1ae](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/863b1ae)) Closes [#306](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/306)
@@ -153,7 +152,7 @@
 * **o-button**:
   * Type `FLOATING` has been renamed to `FAB`.
 
-## 4.0.0 (2018-02-19)
+## 4.0.0 (2019-02-19)
 ### Features
 * **o-form-data-component**: new `tooltip-hide-delay` input ([18733ef](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/18733ef]))
 * New classes  **layout-padding-vertical**,**layout-padding-horizontal**,**layout-padding-left**,**layout-padding-right**,**layout-padding-top**, **layout-padding-bottom**, **layout-margin-vertical**,**layout-margin-horizontal**,**layout-margin-left**,**layout-margin-right**,**layout-margin-top**, **layout-margin-bottom** ([6901980](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6901980]))
@@ -175,7 +174,7 @@
   * Internal CSS class `input-image-container` has been removed.
 * Components styles: there are some minor changes in components styles.
 
-## 4.0.0-rc.1 (2018-01-16)
+## 4.0.0-rc.1 (2019-01-16)
 ### Features
 * New components `o-button-toggle` and `o-button-toggle-group` ([311a2ac](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/311a2ac)) ([415f8b0](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/415f8b0))
 * New components `o-slider` ([a885043](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a885043))
