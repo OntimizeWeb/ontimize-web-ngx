@@ -1,14 +1,14 @@
 .o-table-visible-columns-dialog {
-  .mat-dialog-content.mat-dialog-content {
+  .mat-dialog-content.mat-dialog-content, .cdk-drag-preview {
     overflow: auto;
     padding-top: 0;
     margin-top: 24px;
 
-    .mat-list {
-      padding-top: 24px;
+    .mat-list,.cdk-drag-preview {
 
       .mat-list-item {
         cursor: pointer;
+        height: auto;
 
         .mat-list-item-content {
           padding: 0;
@@ -28,5 +28,5 @@
     .mat-icon[svgicon="ontimize:visibility_off"] {
       width: 32px;
     }
-  }
+  }  
 }
