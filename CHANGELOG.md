@@ -1,9 +1,17 @@
-## 4.1.2 (2020-02-26)
+## 4.1.3
 ### Features
-* **o-table**: new `show-configuration-option` input ([5450798](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5450798)) ([863b1ae](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/863b1ae)) Closes [#306](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/306)   
+* **o-table**: new attribute `show-filter-option` [#318](https://github.com/OntimizeWeb/ontimize-web-ngx/pull/318)
 
 ### Bug Fixes
-* **o-table**: fixing bug in table visible columns edition dialog ([03ba4a1](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/03ba4a1)) Closes [#298](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/298)  
+* **o-time-input**: Fix bad behaviour when there is more than one component in the same form ([fc1dd47](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/fc1dd47))
+
+
+## 4.1.2 (2020-02-26)
+### Features
+* **o-table**: new `show-configuration-option` input ([5450798](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5450798)) ([863b1ae](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/863b1ae)) Closes [#306](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/306)
+
+### Bug Fixes
+* **o-table**: fixing bug in table visible columns edition dialog ([03ba4a1](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/03ba4a1)) Closes [#298](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/298)
 
 ## 4.1.1 (2020-02-11)
 ### Bug Fixes
