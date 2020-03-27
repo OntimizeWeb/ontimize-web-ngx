@@ -22,7 +22,7 @@ import { OTableFiltersStatus } from '../../../../../types/o-table-filter-status.
 })
 export class OTableLoadFilterDialogComponent implements OnInit {
 
-  @ViewChild(MatSelectionList, { static: false }) filterList: MatSelectionList;
+  @ViewChild(MatSelectionList, { static: true }) filterList: MatSelectionList;
 
   filters: Array<OTableFiltersStatus> = [];
 

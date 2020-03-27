@@ -35,7 +35,7 @@ export const DEFAULT_OUTPUTS_O_DATE_INPUT = [
 ];
 
 export const DEFAULT_INPUTS_O_DATE_INPUT = [
-  ...DEFAULT_INPUTS_O_TEXT_INPUT,
+  'valueType: value-type',
   'oformat: format',
   'olocale: locale',
   'oStartView: start-view',
@@ -45,7 +45,7 @@ export const DEFAULT_INPUTS_O_DATE_INPUT = [
   'oStartAt: start-at',
   'filterDate: filter-date',
   'textInputEnabled: text-input-enabled',
-  'valueType: value-type'
+  ...DEFAULT_INPUTS_O_TEXT_INPUT
 ];
 
 @Component({
@@ -58,7 +58,7 @@ export const DEFAULT_INPUTS_O_DATE_INPUT = [
     { provide: DateAdapter, useClass: OntimizeMomentDateAdapter, deps: [MAT_DATE_LOCALE] }
   ]
 })
-export class ODateInputComponent extends OFormDataComponent implements OnDestroy, OnInit, AfterViewInit {
+export class ODateInputComponent extends OFormDataComponent implements OnDestroy, OnInit {
 
   @InputConverter()
   public textInputEnabled: boolean = true;
@@ -82,10 +82,10 @@ export class ODateInputComponent extends OFormDataComponent implements OnDestroy
   protected onLanguageChangeSubscription: Subscription;
   protected dateValue: Date;
 
-  @ViewChild('picker', { static: false })
+  @ViewChild('picker', { static: true })
   public datepicker: MatDatepicker<Date>;
 
-  @ViewChild(MatDatepickerInput, { static: false })
+  @ViewChild(MatDatepickerInput, { static: true })
   public datepickerInput: MatDatepickerInput<Date>;
 
   @ViewChild('matInputRef', { read: ElementRef, static: true })
@@ -121,15 +121,6 @@ export class ODateInputComponent extends OFormDataComponent implements OnDestroy
 
     this.momentDateAdapter.setLocale(this.olocale);
 
-    if (this.updateLocaleOnChange) {
-      this.onLanguageChangeSubscription = this.translateService.onLanguageChanged.subscribe(() => {
-        this.momentDateAdapter.setLocale(this.translateService.getCurrentLang());
-        this.setValue(this.getValue());
-      });
-    }
-  }
-
-  public ngAfterViewInit() {
     if (this.oStartView) {
       this.datepicker.startView = this.oStartView;
     }
@@ -155,6 +146,14 @@ export class ODateInputComponent extends OFormDataComponent implements OnDestroy
         this.maxDateString = momentD.format(this.oformat);
       }
     }
+
+    if (this.updateLocaleOnChange) {
+      this.onLanguageChangeSubscription = this.translateService.onLanguageChanged.subscribe(() => {
+        this.momentDateAdapter.setLocale(this.translateService.getCurrentLang());
+        this.setValue(this.getValue());
+      });
+    }
+
     this.subscribeToMediaChanges();
   }
 

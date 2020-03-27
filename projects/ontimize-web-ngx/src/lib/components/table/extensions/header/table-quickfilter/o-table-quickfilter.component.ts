@@ -53,7 +53,7 @@ export class OTableQuickfilterComponent implements OTableQuickfilter, OnInit, Af
   @ViewChild('filter', { static: false })
   public filter: ElementRef;
 
-  @ViewChild('menu', { static: false })
+  @ViewChild('menu', { static: true })
   public matMenu: MatMenu;
 
   public value: string;

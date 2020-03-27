@@ -17,7 +17,7 @@ export class OTableApplyConfigurationDialogComponent implements OnInit {
 
   public onDelete: EventEmitter<string> = new EventEmitter();
 
-  @ViewChild(MatSelectionList, { static: false })
+  @ViewChild(MatSelectionList, { static: true })
   protected configurationList: MatSelectionList;
 
   protected dialogService: DialogService;
