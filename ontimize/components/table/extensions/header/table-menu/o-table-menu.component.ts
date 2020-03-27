@@ -317,6 +317,7 @@ export class OTableMenuComponent implements OnInit, AfterViewInit, OnDestroy {
     exportCnfg.sqlTypes = this.table.getSqlTypes();
     // Table service, needed for configuring ontimize export service with table service configuration
     exportCnfg.service = this.table.service;
+    exportCnfg.visibleButtons = this.table.visibleExportDialogButtons;
     exportCnfg.options = this.table.exportOptsTemplate;
 
     let dialogRef = this.dialog.open(OTableExportDialogComponent, {
