@@ -5,10 +5,10 @@
     margin-top: 24px;
 
     .mat-list {
-      padding-top: 24px;
 
-      .mat-list-item {
+      .mat-list-item, .cdk-drag-preview {
         cursor: pointer;
+        height: auto;
 
         .mat-list-item-content {
           padding: 0;
@@ -28,5 +28,5 @@
     .mat-icon[svgicon="ontimize:visibility_off"] {
       width: 32px;
     }
-  }
+  }  
 }

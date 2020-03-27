@@ -1,3 +1,4 @@
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, Injector, ViewEncapsulation } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 
@@ -5,14 +6,11 @@ import { Codes } from '../../../../../util/codes';
 import { Util } from '../../../../../util/util';
 import { OColumn } from '../../../column/o-column.class';
 
-// import { DragDropService } from '@churchs19/ng2-dnd';
-
 @Component({
   selector: 'o-table-visible-columns-dialog',
   templateUrl: 'o-table-visible-columns-dialog.component.html',
   styleUrls: ['o-table-visible-columns-dialog.component.scss'],
   encapsulation: ViewEncapsulation.None,
-  // providers: [DragDropService],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     '[class.o-table-visible-columns-dialog]': 'true'
@@ -30,11 +28,11 @@ export class OTableVisibleColumnsDialogComponent {
     @Inject(MAT_DIALOG_DATA) data: any
   ) {
     try {
-      this.cd = this.injector.get(ChangeDetectorRef);
+      this.cd = this.injector.get(ChangeDetectorRef);      
     } catch (e) {
       // no parent form
     }
-    if (Util.isArray(data.columnsData) && Util.isArray(data.visibleColumns)) {
+    if (Util.isArray(data.columnsData) && Util.isArray(data.visibleColumns)) {      
       data.columnsData.forEach((oCol: OColumn) => {
         this.columns.push({
           attr: oCol.attr,
@@ -58,10 +56,11 @@ export class OTableVisibleColumnsDialogComponent {
   }
 
   onClickColumn(col: OColumn): void {
+    console.log(col);
     col.visible = !col.visible;
   }
 
-  onDragSuccess(arg: any) {
-    this.cd.detectChanges();
+  drop(event: CdkDragDrop<string[]>) {
+    moveItemInArray(this.columns, event.previousIndex, event.currentIndex);
   }
 }

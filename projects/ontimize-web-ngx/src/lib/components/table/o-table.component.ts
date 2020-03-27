@@ -147,7 +147,10 @@ export const DEFAULT_INPUTS_O_TABLE = [
   'exportMode: export-mode',
 
   // auto-adjust [true|false]: Auto adjust column width to fit its content. Default: true
-  'autoAdjust: auto-adjust'
+  'autoAdjust: auto-adjust',
+
+  // show-filter-option [yes|no|true|false]: show filter menu option in the header menu. Default: yes.
+  'showFilterOption: show-filter-option'
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE = [
@@ -219,6 +222,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   showConfigurationOption: boolean = true;
   @InputConverter()
   columnsVisibilityButton: boolean = true;
+  @InputConverter()
+  showFilterOption: boolean = true;
   @InputConverter()
   showButtonsText: boolean = true;
 
@@ -1712,7 +1717,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     if (permissionHidden) {
       return false;
     }
-    const staticOpt = this.selectAllCheckbox || this.exportButton || this.showConfigurationOption || this.columnsVisibilityButton || this.oTableColumnsFilterComponent !== undefined;
+    const staticOpt = this.selectAllCheckbox || this.exportButton || this.showConfigurationOption || this.columnsVisibilityButton || (this.showFilterOption && this.oTableColumnsFilterComponent !== undefined);
     return staticOpt || this.tableOptions.length > 0;
   }
 

@@ -1,3 +1,4 @@
+import { DragDropModule } from '@angular/cdk/drag-drop';
 import { ObserversModule } from '@angular/cdk/observers';
 import { CdkTableModule } from '@angular/cdk/table';
 import { CommonModule } from '@angular/common';
@@ -43,7 +44,7 @@ import { OTableComponent } from './o-table.component';
     CommonModule,
     OSharedModule,
     CdkTableModule,
-    // DndModule,
+    DragDropModule,
     OContextMenuModule,
     ObserversModule,
     OMatSortModule,

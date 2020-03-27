@@ -9,7 +9,7 @@ import {
   OnDestroy,
   OnInit,
   ViewChild,
-  ViewEncapsulation,
+  ViewEncapsulation
 } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router, UrlSegment } from '@angular/router';
@@ -27,6 +27,7 @@ import { OntimizeService } from '../../services/ontimize.service';
 import { OFormPermissions, OPermissions, PermissionsService } from '../../services/permissions/permissions.service';
 import { SnackBarService } from '../../services/snackbar.service';
 import { FormValueOptions } from '../../types/form-value-options.type';
+import { OFormInitializationOptions } from '../../types/o-form-initialization-options.type';
 import { Codes } from '../../util/codes';
 import { SQLTypes } from '../../util/sqltypes';
 import { Util } from '../../util/util';
@@ -37,7 +38,6 @@ import { CanComponentDeactivate, CanDeactivateFormGuard } from './guards/o-form-
 import { OFormNavigationClass } from './navigation/o-form.navigation.class';
 import { OFormValue } from './OFormValue';
 import { OFormToolbarComponent } from './toolbar/o-form-toolbar.component';
-import { OFormInitializationOptions } from '../../types/o-form-initialization-options.type';
 
 interface IFormDataComponentHash {
   [attr: string]: IFormDataComponent;
@@ -1520,7 +1520,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   }
 
   protected isInsertModePath(path: string): boolean {
-    const navData: ONavigationItem = this.navigationService.getPreviousRouteData();
+    const navData: ONavigationItem = this.navigationService.getLastMainNavigationRouteData();
     return Util.isDefined(navData) && path === navData.getInsertFormRoute();
   }
 

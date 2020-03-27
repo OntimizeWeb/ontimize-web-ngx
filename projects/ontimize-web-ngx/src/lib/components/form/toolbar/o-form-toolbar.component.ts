@@ -1,14 +1,4 @@
-import {
-  AfterViewInit,
-  Component,
-  ElementRef,
-  Injector,
-  OnDestroy,
-  OnInit,
-  ViewChild,
-  ViewContainerRef,
-  ViewEncapsulation,
-} from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Injector, OnDestroy, OnInit, ViewChild, ViewContainerRef, ViewEncapsulation } from '@angular/core';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 
 import { InputConverter } from '../../../decorators/input-converter';
@@ -254,9 +244,7 @@ export class OFormToolbarComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public cancelOperation(): void {
-    if (this.isDetail) {
-      this.onCloseDetail();
-    } else if (!this.isDetail && this.insertMode) {
+    if (this.isDetail || this.insertMode) {
       this.onCloseDetail();
     } else {
       this.onReload();

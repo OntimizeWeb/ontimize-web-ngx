@@ -267,7 +267,7 @@ export class OFormNavigationClass {
       this.formLayoutManager.closeDetail(this.id);
     } else if (this.navigationService) {
       this.form.beforeCloseDetail.emit();
-      this.navigationService.removeLastItem();
+      this.navigationService.removeLastItemsUntilMain();
       const navData: ONavigationItem = this.navigationService.getLastItem();
       if (navData) {
         const extras: NavigationExtras = {};
@@ -306,13 +306,18 @@ export class OFormNavigationClass {
       const qParams: any = Object.assign({}, this.getQueryParams(), Codes.getIsDetailObject());
       extras[Codes.QUERY_PARAMS] = qParams;
       let route = [];
-      const navData: ONavigationItem = this.navigationService.getPreviousRouteData();
+      const navData: ONavigationItem = this.navigationService.getLastMainNavigationRouteData();
       if (navData) {
-        route.push(navData.url);
+        let url = navData.url;
         const detailRoute = navData.getDetailFormRoute();
         if (Util.isDefined(detailRoute)) {
           route.push(detailRoute);
+          const detailIndex = url.lastIndexOf('/' + detailRoute);
+          if (detailIndex !== -1) {
+            url = url.substring(0, detailIndex);
+          }
         }
+        route.unshift(url);
         route.push(...params);
         // deleting insertFormRoute as active mode (because stayInRecordAfterInsert changes it)
         this.navigationService.deleteActiveFormMode(navData);
@@ -331,9 +336,13 @@ export class OFormNavigationClass {
     if (this.formLayoutManager && this.formLayoutManager.isDialogMode()) {
       this.form.setInsertMode();
     } else if (this.navigationService) {
+      if (this.formLayoutManager && this.formLayoutManager.isTabMode()) {
+        this.formLayoutManager.setAsActiveFormLayoutManager();
+      }
+
       let route = [];
       const extras: NavigationExtras = {};
-      const navData: ONavigationItem = this.navigationService.getPreviousRouteData();
+      const navData: ONavigationItem = this.navigationService.getLastMainNavigationRouteData();
       if (!this.formLayoutManager && navData) {
         route.push(navData.url);
         const detailRoute = navData.getDetailFormRoute();
@@ -446,10 +455,11 @@ export class OFormNavigationClass {
   }
 
   protected storeNavigationFormRoutes(activeMode: string) {
+    const formRoutes = this.navigationService.getPreviousRouteData().formRoutes;
     this.navigationService.storeFormRoutes({
-      detailFormRoute: Codes.DEFAULT_DETAIL_ROUTE,
-      editFormRoute: Codes.DEFAULT_EDIT_ROUTE,
-      insertFormRoute: Codes.DEFAULT_INSERT_ROUTE
+      detailFormRoute: formRoutes ? formRoutes.detailFormRoute : Codes.DEFAULT_DETAIL_ROUTE,
+      editFormRoute: formRoutes ? formRoutes.editFormRoute : Codes.DEFAULT_EDIT_ROUTE,
+      insertFormRoute: formRoutes ? formRoutes.insertFormRoute : Codes.DEFAULT_INSERT_ROUTE
     }, activeMode);
   }
 
