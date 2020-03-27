@@ -7,13 +7,12 @@ $_mat-checkbox-mark-stroke-size-small: 2 / 15 * $mat-checkbox-size-small !defaul
 $o_table_row_padding: 24px;
 
 .o-table {
-
   height: 100%;
   max-height: 100%;
   width: 100%;
 
   &.o-table-disabled {
-    opacity: .4;
+    opacity: 0.4;
   }
 
   .o-table-container {
@@ -42,17 +41,20 @@ $o_table_row_padding: 24px;
     &.block-events {
       pointer-events: none;
 
-       > .toolbar,
+      > .toolbar,
       > .o-table-body .mat-header-row {
-        opacity: .75;
+        opacity: 0.75;
       }
     }
 
     position: relative;
-    margin: 0 .5%;
+    margin: 0 0.5%;
 
     .toolbar {
       height: 40px;
+      > div {
+        max-height: 100%;
+      }
 
       .buttons {
         margin: 0 10px 0 4px;
@@ -63,7 +65,6 @@ $o_table_row_padding: 24px;
         font-weight: 400;
         text-align: center;
       }
-
     }
 
     .o-table-body {
@@ -91,10 +92,9 @@ $o_table_row_padding: 24px;
         z-index: 500;
         visibility: visible;
         opacity: 1;
-        -moz-transition: opacity .25s linear;
-        -webkit-transition: opacity .25s linear;
-        transition: opacity .25s linear;
-
+        -moz-transition: opacity 0.25s linear;
+        -webkit-transition: opacity 0.25s linear;
+        transition: opacity 0.25s linear;
       }
 
       &.horizontal-scroll {
@@ -109,8 +109,8 @@ $o_table_row_padding: 24px;
       .o-table-no-results {
         cursor: default;
         text-align: center;
-        td{
-          text-align: center
+        td {
+          text-align: center;
         }
       }
     }
@@ -121,7 +121,8 @@ $o_table_row_padding: 24px;
       &.autoadjusted {
         overflow: auto;
         height: auto;
-        td .content, th .content {
+        td .content,
+        th .content {
           overflow: hidden;
           white-space: nowrap;
           text-overflow: ellipsis;
@@ -156,7 +157,6 @@ $o_table_row_padding: 24px;
               width: 22px;
               height: 22px;
             }
-
           }
         }
       }
@@ -204,7 +204,7 @@ $o_table_row_padding: 24px;
 
       .mat-row {
         box-sizing: border-box;
-        transition: background-color .2s;
+        transition: background-color 0.2s;
 
         /* iOS Safari */
         -webkit-touch-callout: none;
@@ -396,7 +396,6 @@ $o_table_row_padding: 24px;
         .mat-sort-header-container {
           padding-top: 4px;
         }
-
       }
 
       .mat-cell,
@@ -407,7 +406,6 @@ $o_table_row_padding: 24px;
           padding: 0 0 0 $o_table_row_padding;
           overflow: initial;
         }
-
       }
     }
 
@@ -430,10 +428,9 @@ $o_table_row_padding: 24px;
     z-index: 500;
     visibility: visible;
     opacity: 1;
-    -moz-transition: opacity .25s linear;
-    -webkit-transition: opacity .25s linear;
-    transition: opacity .25s linear;
-
+    -moz-transition: opacity 0.25s linear;
+    -webkit-transition: opacity 0.25s linear;
+    transition: opacity 0.25s linear;
   }
 
   .spinner-container-scrollable {

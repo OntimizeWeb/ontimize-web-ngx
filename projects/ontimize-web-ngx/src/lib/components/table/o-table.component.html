@@ -11,13 +11,14 @@
         <span *ngIf="showTitle" class="table-title" fxFlex>{{ title | oTranslate }}</span>
       </div>
 
-      <ng-container #quickfilterRef>
+      <ng-container *ngIf="quickfilterContentChild; else defaultQuickFilter">
         <ng-content select="o-table-quickfilter"></ng-content>
       </ng-container>
-      <ng-container
-        *ngIf="quickFilter && quickfilterRef.nativeElement && quickfilterRef.nativeElement.childNodes.length === 0">
-        <o-table-quickfilter (onChange)="reloadPaginatedDataFromStart()"></o-table-quickfilter>
-      </ng-container>
+      <ng-template #defaultQuickFilter>
+        <ng-container *ngIf="quickFilter">
+          <o-table-quickfilter (onChange)="reloadPaginatedDataFromStart()"></o-table-quickfilter>
+        </ng-container>
+      </ng-template>
 
       <button type="button" *ngIf="showTableMenuButton" mat-icon-button class="o-table-menu-button"
         [matMenuTriggerFor]="tableMenu.matMenu" (click)="$event.stopPropagation()">

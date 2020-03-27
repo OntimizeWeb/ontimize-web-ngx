@@ -18,6 +18,7 @@ import {
   ViewChild,
   ViewChildren,
   ViewEncapsulation,
+  ContentChild,
 } from '@angular/core';
 import { MatCheckboxChange, MatDialog, MatMenu, MatPaginator, MatTab, MatTabGroup, PageEvent } from '@angular/material';
 import { BehaviorSubject, combineLatest, Observable, of, Subscription } from 'rxjs';
@@ -440,6 +441,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   @ContentChildren('o-table-button')
   tableButtons: QueryList<OTableButton>;
+
+  @ContentChild('o-table-quickfilter', { static: true })
+  quickfilterContentChild: OTableQuickfilter;
 
   @ViewChild('exportOptsTemplate', { static: false })
   exportOptsTemplate: TemplateRef<any>;
