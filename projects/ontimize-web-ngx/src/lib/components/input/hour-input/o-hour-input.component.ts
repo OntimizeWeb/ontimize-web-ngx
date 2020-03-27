@@ -12,6 +12,7 @@ import {
 } from '@angular/core';
 import { ValidatorFn } from '@angular/forms';
 import moment from 'moment';
+import { NgxMaterialTimepickerComponent } from 'ngx-material-timepicker';
 
 import { InputConverter, NumberConverter } from '../../../decorators/input-converter';
 import { FormValueOptions } from '../../../types/form-value-options.type';
@@ -19,6 +20,7 @@ import { Codes } from '../../../util/codes';
 import { Util } from '../../../util/util';
 import { OValidators } from '../../../validators/o-validators';
 import { OFormComponent } from '../../form/o-form.component';
+import { OFormValue } from '../../form/OFormValue';
 import {
   DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,
   DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT,
@@ -63,7 +65,7 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
   protected _valueType: OHourValueType = 'timestamp';
 
   @ViewChild('picker', { static: false })
-  public picker: any; // NgxMaterialTimepickerComponent from ngx-material-timepicker
+  public picker: NgxMaterialTimepickerComponent;
 
   constructor(
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
@@ -72,10 +74,6 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
   ) {
     super(form, elRef, injector);
     this._defaultSQLTypeKey = 'TIMESTAMP';
-  }
-
-  public ngOnInit(): void {
-    super.ngOnInit();
   }
 
   public ngAfterViewInit(): void {
@@ -100,6 +98,18 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
     // This component does not need this subscription
   }
 
+  public ensureOFormValue(arg: any): void {
+    if (arg != null) {
+      // because of the ngx-material-timepicker especification, its stored value must be always a string
+      if (arg instanceof OFormValue) {
+        arg.value = this.getValueAsString(arg.value);
+      } else {
+        arg = this.getValueAsString(arg);
+      }
+    }
+    super.ensureOFormValue(arg);
+  }
+
   get formatString(): string {
     return (this.format === Codes.TWENTY_FOUR_HOUR_FORMAT ? Codes.HourFormat.TWENTY_FOUR : Codes.HourFormat.TWELVE);
   }
@@ -111,6 +121,14 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
     if (this.picker) {
       this.picker.open();
     }
+  }
+
+  setTime(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    // getting value from super so we can always get a string value
+    const value = super.getValue();
+    this.picker.updateTime(value);
   }
 
   public setTimestampValue(value: any, options?: FormValueOptions): void {
@@ -177,12 +195,7 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
   }
 
   public onTimepickerChange(event: string): void {
-    let value;
-    if (this.valueType === 'timestamp') {
-      value = moment(event, this.formatString).valueOf();
-    } else {
-      value = this.convertToFormatString(event);
-    }
+    const value = this.getValueAsString(event);
     /** emitModelToViewChange: false  because onChange event is trigger in ngModelChange */
     this.setValue(value, {
       changeType: OValueChangeEvent.USER_CHANGE,
@@ -192,24 +205,17 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
   }
 
   protected modifyPickerMethods(): void {
-    if (this.picker) {
-      const ngxTimepicker = this.picker.timepickerInput;
-      if (ngxTimepicker && ngxTimepicker.onInput) {
-        ngxTimepicker.onInput = (value: string) => this.onKeyboardInputDone = true;
-      }
+    if (this.picker && this.picker.inputElement) {
+      this.picker.inputElement.addEventListener('change', () => {
+        this.onKeyboardInputDone = true;
+      });
     }
   }
 
   protected updateValeOnInputChange(blurEvent: any): void {
     if (this.onKeyboardInputDone) {
-      let value: any = blurEvent.currentTarget.value;
       // ngx-material-timepicker does not allow writing characters on input, so we add 'AM/PM' in order to make validation work properly
-      if (this.valueType === 'timestamp') {
-        value = this.onTimepickerChange(value);
-      } else {
-        this.setValue(value);
-      }
-      value = this.parseHour(value);
+      const value = this.parseHour(blurEvent.currentTarget.value);
       this.setValue(value);
     }
     this.onKeyboardInputDone = false;
@@ -244,6 +250,27 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
     super.emitOnValueChange(type, newValue, oldValue);
   }
 
+  public getValue(): any {
+    let value = super.getValue();
+    if (this.valueType === 'timestamp') {
+      const valueTimestamp = moment(value, this.formatString).valueOf();
+      if (!isNaN(valueTimestamp)) {
+        value = valueTimestamp;
+      }
+    }
+    return value;
+  }
+
+  protected getValueAsString(val: any): string {
+    let value;
+    if (this.valueType === 'timestamp') {
+      value = moment(val).format(this.formatString);
+    } else {
+      value = this.convertToFormatString(val);
+    }
+    return value;
+  }
+
   protected convertToFormatString(value): string {
     if (value === '00:00' || !Util.isDefined(value)) {
       return value;
@@ -257,16 +284,4 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
     }
     return result;
   }
-
-  public getValue(): any {
-    let value = super.getValue();
-    if (this.valueType === 'timestamp') {
-      let valueTimestamp = moment(value, this.formatString).valueOf();
-      if ( !isNaN(valueTimestamp) ) {
-        value = valueTimestamp;
-      }
-    }
-    return value;
-  }
-
 }

@@ -3,6 +3,7 @@ import { CdkTableModule } from '@angular/cdk/table';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { MatPaginatorIntl } from '@angular/material';
+import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 
 import { OSharedModule } from '../../shared/shared.module';
 import { OContextMenuModule } from '../contextmenu/o-context-menu.module';
@@ -45,9 +46,8 @@ import { OTableComponent } from './o-table.component';
     // DndModule,
     OContextMenuModule,
     ObserversModule,
-    OMatSortModule
-    // ,
-    // NgxMaterialTimepickerModule
+    OMatSortModule,
+    NgxMaterialTimepickerModule
   ],
   exports: [
     OTableComponent,

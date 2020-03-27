@@ -5,7 +5,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform-browser/animations';
 // import { DndModule } from '@churchs19/ng2-dnd';
 import { TranslateLoader, TranslateModule, TranslateParser } from '@ngx-translate/core';
-// import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
+import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 
 import { OBarMenuModule } from '../components/bar-menu/o-bar-menu.module';
 import { OBreadcrumbModule } from '../components/breadcrumb/o-breadcrumb.module';
@@ -149,7 +149,7 @@ export const INTERNAL_ONTIMIZE_MODULES: any = [
     }
   }),
   // DndModule.forRoot(),
-  // NgxMaterialTimepickerModule, // Removed forRoot()
+  NgxMaterialTimepickerModule,
   OSharedModule,
 
   // Ontimize modules

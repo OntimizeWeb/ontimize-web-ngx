@@ -90,10 +90,10 @@ export class OTimeInputComponent extends OFormDataComponent implements OnInit, A
   protected blockGroupValueChanges: boolean;
   protected formGroup: FormGroup = new FormGroup({});
 
-  @ViewChild('dateInput', { static: false })
+  @ViewChild('dateInput', { static: true })
   protected dateInput: ODateInputComponent;
 
-  @ViewChild('hourInput', { static: false })
+  @ViewChild('hourInput', { static: true })
   protected hourInput: OHourInputComponent;
 
   protected subscription: Subscription = new Subscription();
@@ -145,14 +145,10 @@ export class OTimeInputComponent extends OFormDataComponent implements OnInit, A
     }
   }
 
-  public onClickClearValue(): void {
+  public onClickClearValue(event: Event): void {
+    event.stopPropagation();
+    event.preventDefault();
     this.blockGroupValueChanges = true;
-    if (this.dateInput) {
-      this.dateInput.clearValue();
-    }
-    if (this.hourInput) {
-      this.hourInput.clearValue();
-    }
     this.clearValue();
     this.blockGroupValueChanges = false;
   }
@@ -171,7 +167,7 @@ export class OTimeInputComponent extends OFormDataComponent implements OnInit, A
       this.dateInput.setValue(dateValue);
     }
     if (this.hourInput) {
-      this.hourInput.setTimestampValue(hourValue);
+      this.hourInput.setValue(hourValue);
     }
     this.cd.detectChanges();
   }

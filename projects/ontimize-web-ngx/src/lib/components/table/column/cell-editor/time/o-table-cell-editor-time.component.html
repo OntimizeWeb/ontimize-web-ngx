@@ -32,7 +32,7 @@
 
     <span class="separator">&ndash;</span>
 
-    <!-- <mat-form-field floatLabel="never">
+    <mat-form-field floatLabel="never">
 
       <input #hourInput matInput [ngxTimepicker]="picker" [placeholder]="getPlaceholderHour()"
         [formControl]="formControlHour" [required]="orequired" (change)="onHourChange($event)" [min]="oHourMin"
@@ -46,10 +46,10 @@
       <mat-error *ngIf="hasErrorHour('invalidFormatHour')"
         text="{{ 'FORM_VALIDATION.HOUR_FORMAT' | oTranslate }} {{ formatString }}"></mat-error>
 
-    </mat-form-field> -->
+    </mat-form-field>
 
-    <!-- <ngx-material-timepicker #picker (timeSet)="onHourChange($event)" [confirmBtnTmpl]="confirmBtn"
-      [cancelBtnTmpl]="cancelBtn" (closed)="onTimepickerClosed($event)"></ngx-material-timepicker> -->
+    <ngx-material-timepicker #picker (timeSet)="onHourChange($event)" [confirmBtnTmpl]="confirmBtn"
+      [cancelBtnTmpl]="cancelBtn" (closed)="onTimepickerClosed()"></ngx-material-timepicker>
     <ng-template #confirmBtn>
       <button mat-stroked-button type="button" (click)="setTime($event)"><span>{{'OK' | oTranslate}}</span></button>
     </ng-template>

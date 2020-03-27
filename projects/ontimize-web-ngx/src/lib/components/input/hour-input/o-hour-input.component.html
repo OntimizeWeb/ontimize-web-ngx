@@ -3,10 +3,10 @@
   [matTooltipHideDelay]="tooltipHideDelay">
   <mat-form-field [appearance]="appearance" [floatLabel]="floatLabel" fxFill [hideRequiredMarker]="hideRequiredMarker">
     <mat-label *ngIf="labelVisible">{{ olabel | oTranslate }}</mat-label>
-    <!-- <input matInput [ngxTimepicker]="picker" [id]="getAttribute()" [placeholder]="placeHolder"
+    <input matInput [ngxTimepicker]="picker" [id]="getAttribute()" [placeholder]="placeHolder"
       [formControlName]="getAttribute()" [readonly]="isReadOnly || !textInputEnabled" (focus)="innerOnFocus($event)"
       (blur)="innerOnBlur($event)" [required]="isRequired" (change)="onChangeEvent($event)" [min]="min" [max]="max"
-      (keydown)="onKeyDown($event)" [format]="format" [disableClick]="true"> -->
+      (keydown)="onKeyDown($event)" [format]="format" [disableClick]="true">
 
     <button type="button" *ngIf="showClearButton" matSuffix mat-icon-button (click)="onClickClearValue($event)">
       <mat-icon svgIcon="ontimize:close"></mat-icon>
@@ -22,12 +22,12 @@
   </mat-form-field>
 </div>
 
-<!-- <ngx-material-timepicker #picker (timeSet)="onTimepickerChange($event)" [confirmBtnTmpl]="confirmBtn"
-  [cancelBtnTmpl]="cancelBtn"></ngx-material-timepicker> -->
-  
+<ngx-material-timepicker #picker (timeSet)="onTimepickerChange($event)" [confirmBtnTmpl]="confirmBtn"
+  [cancelBtnTmpl]="cancelBtn"></ngx-material-timepicker>
+
 <ng-template #confirmBtn>
-  <button mat-stroked-button type="button" (click)="picker.setTime($event)"><span>{{'OK' | oTranslate}}</span></button>
+  <button mat-stroked-button type="button" (click)="setTime($event)"><span>{{'OK' | oTranslate}}</span></button>
 </ng-template>
 <ng-template #cancelBtn>
-  <button mat-stroked-button type="button" (click)="picker.close()"><span>{{'CANCEL' | oTranslate}}</span></button>
+  <button mat-stroked-button type=" button" (click)="picker.close()"><span>{{'CANCEL' | oTranslate}}</span></button>
 </ng-template>

@@ -14,6 +14,7 @@ import { FormControl, ValidatorFn } from '@angular/forms';
 import { DateAdapter, MAT_DATE_LOCALE, MatDatepicker, MatDatepickerInput, MatDatepickerInputEvent } from '@angular/material';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import moment from 'moment';
+import { NgxMaterialTimepickerComponent } from 'ngx-material-timepicker';
 
 import { InputConverter } from '../../../../../decorators/input-converter';
 import { MomentService } from '../../../../../services/moment.service';
@@ -70,7 +71,7 @@ export class OTableCellEditorTimeComponent extends OBaseTableCellEditor implemen
   protected hourInput: ElementRef;
 
   @ViewChild('picker', { static: false })
-  public picker: any; // NgxMaterialTimepickerComponent from ngx-material-timepicker
+  public picker: NgxMaterialTimepickerComponent;
 
   oStartView: 'month' | 'year' = 'month';
 
@@ -103,9 +104,9 @@ export class OTableCellEditorTimeComponent extends OBaseTableCellEditor implemen
   public enabledCommitOnTabPress: boolean = false;
   protected activeKeys: object = {};
 
-  @HostListener('document:keydown', [/*'$event'*/])
-  onDocumentKeydown(/*event: KeyboardEvent*/) {
-    this.handleKeydown(/*event*/);
+  @HostListener('document:keydown', ['$event'])
+  onDocumentKeydown(event: KeyboardEvent) {
+    this.handleKeydown(event);
   }
 
   constructor(
@@ -168,7 +169,7 @@ export class OTableCellEditorTimeComponent extends OBaseTableCellEditor implemen
   setTime(event) {
     event.preventDefault();
     event.stopPropagation();
-    this.picker.setTime();
+    this.picker.updateTime(this.formControlHour.value);
   }
 
   onDateChange(event: MatDatepickerInputEvent<any>) {
@@ -286,25 +287,25 @@ export class OTableCellEditorTimeComponent extends OBaseTableCellEditor implemen
     }
   }
 
-  protected handleKeydown(/*e: KeyboardEvent*/) {
-    // this.activeKeys[e.keyCode] = true;
+  protected handleKeydown(e: KeyboardEvent) {
+    this.activeKeys[e.keyCode] = true;
   }
 
-  protected handleKeyup(/*e: KeyboardEvent*/) {
-    // this.activeKeys[e.keyCode] = false;
-    // const oColumn = this.table.getOColumn(this.tableColumn.attr);
-    // if (!oColumn) {
-    //   return;
-    // }
-    // if (e.keyCode === 9 && (this.activeKeys[16] || !this.enabledCommitOnTabPress)) {
-    //   // tab + shift or tab pressed with focus in the date component
-    //   return;
-    // }
-    // if (!oColumn.editing && this.datepicker && this.datepicker.opened) {
-    //   this.datepicker.close();
-    // } else {
-    //   super.handleKeyup(e);
-    // }
+  protected handleKeyup(e: KeyboardEvent) {
+    this.activeKeys[e.keyCode] = false;
+    const oColumn = this.table.getOColumn(this.tableColumn.attr);
+    if (!oColumn) {
+      return;
+    }
+    if (e.keyCode === 9 && (this.activeKeys[16] || !this.enabledCommitOnTabPress)) {
+      // tab + shift or tab pressed with focus in the date component
+      return;
+    }
+    if (!oColumn.editing && this.datepicker && this.datepicker.opened) {
+      this.datepicker.close();
+    } else {
+      super.handleKeyup(e);
+    }
   }
 
   protected updateComponentValue(): void {
@@ -326,12 +327,17 @@ export class OTableCellEditorTimeComponent extends OBaseTableCellEditor implemen
   }
 
   protected modifyPickerMethods(): void {
-    if (this.picker) {
-      const ngxTimepicker = this.picker.timepickerInput;
-      if (ngxTimepicker && ngxTimepicker.onInput) {
-        ngxTimepicker.onInput = (value: string) => this.onKeyboardInputDone = true;
-      }
+    if (this.picker && this.picker.inputElement) {
+      this.picker.inputElement.addEventListener('change', () => {
+        this.onKeyboardInputDone = true;
+      });
     }
+    // if (this.picker) {
+    //   const ngxTimepicker = this.picker.timepickerInput;
+    //   if (ngxTimepicker && ngxTimepicker.onInput) {
+    //     ngxTimepicker.onInput = (value: string) => this.onKeyboardInputDone = true;
+    //   }
+    // }
   }
 
   hasErrorDate(error: string): boolean {
@@ -446,14 +452,10 @@ export class OTableCellEditorTimeComponent extends OBaseTableCellEditor implemen
     }
   }
 
-  // public onKeyDown(e: KeyboardEvent): void {
-  //   if (!Codes.isHourInputAllowed(e)) {
-  //     e.preventDefault();
-  //   }
-  // }
-
-  public onKeyDown(): void {
-
+  onKeyDown(e: KeyboardEvent): void {
+    if (!Codes.isHourInputAllowed(e)) {
+      e.preventDefault();
+    }
   }
 
 }
