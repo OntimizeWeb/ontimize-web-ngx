@@ -1,6 +1,8 @@
 ## 4.1.3
 ### Features
-* **o-table**: new attribute `show-filter-option` [#318](https://github.com/OntimizeWeb/ontimize-web-ngx/pull/318)
+* **o-table**:
+  * new attribute `show-filter-option` ([#318](https://github.com/OntimizeWeb/ontimize-web-ngx/pull/318))
+  * new attribute `visible-export-dialog-buttons` ([#320](https://github.com/OntimizeWeb/ontimize-web-ngx/pull/320)). Closes [#316](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/316)
 
 ### Bug Fixes
 * **o-time-input**: Fix bad behaviour when there is more than one component in the same form ([fc1dd47](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/fc1dd47))
