@@ -67,6 +67,7 @@ export class OTableCellEditorBooleanComponent extends OBaseTableCellEditor imple
   }
 
   initialize() {
+    super.initialize();
     this.parseInputs();
   }
 

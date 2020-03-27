@@ -54,6 +54,7 @@ export class OTableCellRendererCurrencyComponent extends OBaseTableCellRenderer 
   }
 
   initialize() {
+    super.initialize();
     if (typeof this.currencySymbol === 'undefined') {
       this.currencySymbol = this.currencyService.symbol;
     }

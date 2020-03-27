@@ -82,14 +82,13 @@ export class OBaseTableCellEditor implements OnInit {
   }
 
   ngOnInit(): void {
-    this.createFormControl();
-    this.registerEditor();
-    this.editorCreated.emit(this);
     this.initialize();
   }
 
   public initialize(): void {
-
+    this.createFormControl();
+    this.registerEditor();
+    this.editorCreated.emit(this);
   }
 
   protected handleKeyup(event: KeyboardEvent) {

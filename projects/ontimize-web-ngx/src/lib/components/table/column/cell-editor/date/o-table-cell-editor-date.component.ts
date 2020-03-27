@@ -90,6 +90,7 @@ export class OTableCellEditorDateComponent extends OBaseTableCellEditor implemen
   }
 
   initialize(): void {
+    super.initialize();
     if (!this.locale) {
       this.locale = this.momentSrv.getLocale();
     }

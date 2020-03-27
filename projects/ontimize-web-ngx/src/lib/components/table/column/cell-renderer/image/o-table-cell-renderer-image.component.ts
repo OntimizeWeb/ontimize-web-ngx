@@ -40,6 +40,7 @@ export class OTableCellRendererImageComponent extends OBaseTableCellRenderer imp
   }
 
   initialize() {
+    super.initialize();
     if (this.table) {
       const oCol: OColumn = this.table.getOColumn(this.tableColumn.attr);
       oCol.title = Util.isDefined(this.tableColumn.title) ? this.tableColumn.title : undefined;

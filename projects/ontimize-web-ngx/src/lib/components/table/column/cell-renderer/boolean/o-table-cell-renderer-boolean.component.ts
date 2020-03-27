@@ -46,6 +46,7 @@ export class OTableCellRendererBooleanComponent extends OBaseTableCellRenderer i
   }
 
   initialize() {
+    super.initialize();
     this.parseInputs();
   }
 

@@ -47,6 +47,7 @@ export class OTableCellRendererIntegerComponent extends OBaseTableCellRenderer i
   }
 
   initialize() {
+    super.initialize();
     this.pipeArguments = {
       grouping: this.grouping,
       thousandSeparator: this.thousandSeparator

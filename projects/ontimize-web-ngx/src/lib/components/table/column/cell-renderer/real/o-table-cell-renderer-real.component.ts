@@ -49,6 +49,7 @@ export class OTableCellRendererRealComponent extends OTableCellRendererIntegerCo
   }
 
   initialize() {
+    super.initialize();
     this.pipeArguments = {
       minDecimalDigits: this.minDecimalDigits,
       maxDecimalDigits: this.maxDecimalDigits,

@@ -41,6 +41,7 @@ export class OTableCellRendererTimeComponent extends OBaseTableCellRenderer impl
   }
 
   initialize() {
+    super.initialize();
     this.pipeArguments = {
       format: this._format
     };

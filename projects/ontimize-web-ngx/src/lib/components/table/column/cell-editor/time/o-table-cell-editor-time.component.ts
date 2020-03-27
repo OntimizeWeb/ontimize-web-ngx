@@ -118,6 +118,7 @@ export class OTableCellEditorTimeComponent extends OBaseTableCellEditor implemen
   }
 
   initialize(): void {
+    super.initialize();
     this.createInternalFormControl();
     if (!this._oDateLocale) {
       this.oDateLocale = this.momentSrv.getLocale();
