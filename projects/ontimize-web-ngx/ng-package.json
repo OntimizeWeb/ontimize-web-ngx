@@ -7,7 +7,11 @@
       "moment": "moment",
       "@ngx-translate/http-loader": "@ngx-translate/http-loader",
       "@ngx-translate/core": "@ngx-translate/core",
-      "@angular/core": "@angular/core"
-    }
+      "@angular/core": "@angular/core",
+      "ngx-material-timepicker": "ngx-material-timepicker"
+    },
+    "whitelistedNonPeerDependencies": [
+        "ngx-material-timepicker"
+    ]
   }
 }

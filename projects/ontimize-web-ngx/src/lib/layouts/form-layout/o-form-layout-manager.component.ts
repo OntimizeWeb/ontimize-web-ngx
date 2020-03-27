@@ -101,12 +101,6 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
   protected localStorageService: LocalStorageService;
   protected onRouteChangeStorageSubscription: any;
 
-  // @ContentChildren(OTableComponent, { descendants: true })
-  // protected tableComponents: QueryList<OTableComponent>;
-
-  // @ContentChildren(OListComponent, { descendants: true })
-  // protected listComponents: QueryList<OListComponent>;
-
   @ContentChild(OFormLayoutTabGroupOptionsComponent, { static: false })
   public tabGroupOptions: OFormLayoutTabGroupOptionsComponent;
 

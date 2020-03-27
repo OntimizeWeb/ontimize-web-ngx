@@ -142,7 +142,7 @@ export class OServiceBaseComponent implements ILocalStorageComponent, OnChanges 
   protected colArray: Array<string> = [];
   protected keysArray: Array<string> = [];
   protected _pKeysEquiv = {};
-  protected dataArray: Array<any> = [];
+  dataArray: Array<any> = [];
   protected oattrFromEntity: boolean = false;
   /* end of parsed inputs variables */
 

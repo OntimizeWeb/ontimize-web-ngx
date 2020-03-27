@@ -21,11 +21,8 @@ export class OFormControl extends FormControl {
     this.fControlChildren.forEach(x => {
       if (x instanceof FormControl) {
         x.markAsTouched(opts);
-      } else {
-        if (x.getFormControl()) {
-
-          x.getFormControl().markAsTouched();
-        }
+      } else if (x.getFormControl()) {
+        x.getFormControl().markAsTouched();
       }
     });
   }
@@ -38,10 +35,8 @@ export class OFormControl extends FormControl {
     this.fControlChildren.forEach(x => {
       if (x instanceof FormControl) {
         x.markAsDirty(opts);
-      } else {
-        if (x.getFormControl()) {
-          x.getFormControl().markAsDirty();
-        }
+      } else if (x.getFormControl()) {
+        x.getFormControl().markAsDirty();
       }
     });
   }
@@ -54,10 +49,8 @@ export class OFormControl extends FormControl {
     this.fControlChildren.forEach(x => {
       if (x instanceof FormControl) {
         x.markAsPristine(opts);
-      } else {
-        if (x.getFormControl()) {
-          x.getFormControl().markAsPristine();
-        }
+      } else if (x.getFormControl()) {
+        x.getFormControl().markAsPristine();
       }
     });
   }
