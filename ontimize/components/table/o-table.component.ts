@@ -160,7 +160,7 @@ export const DEFAULT_INPUTS_O_TABLE = [
   // show-filter-option [yes|no|true|false]: show filter menu option in the header menu. Default: yes.
   'showFilterOption: show-filter-option',
 
-  // visible-export-dialog-buttons [string]: visible buttons in export dialog, separated by ';'. Default: 'pdf;excel;html'.
+  // visible-export-dialog-buttons [string]: visible buttons in export dialog, separated by ';'. Default/no configured: show all. Empty value: hide all.
   'visibleExportDialogButtons: visible-export-dialog-buttons'
 ];
 
