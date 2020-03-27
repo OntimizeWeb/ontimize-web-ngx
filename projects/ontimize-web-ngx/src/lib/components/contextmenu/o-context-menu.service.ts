@@ -1,23 +1,10 @@
 import { Overlay, OverlayRef, ScrollStrategyOptions } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
-import { ComponentRef, ElementRef, Injectable, OnDestroy, QueryList } from '@angular/core';
+import { ComponentRef, ElementRef, Injectable, OnDestroy } from '@angular/core';
 import { Subject, Subscription } from 'rxjs';
 
+import { IOContextMenuClickEvent, IOContextMenuContext } from '../../interfaces/o-context-menu.interface';
 import { OContextMenuContentComponent } from './context-menu/o-context-menu-content.component';
-import { OComponentMenuItems } from './o-content-menu.class';
-import { OContextMenuComponent } from './o-context-menu.component';
-
-export interface IOContextMenuClickEvent {
-  anchorElement?: ElementRef;
-  contextMenu?: OContextMenuComponent;
-  event?: MouseEvent;
-  data?: any;
-}
-
-export interface IOContextMenuContext extends IOContextMenuClickEvent {
-  menuItems?: QueryList<OComponentMenuItems>;
-  class?: string;
-}
 
 @Injectable()
 export class OContextMenuService implements OnDestroy {
@@ -27,16 +14,7 @@ export class OContextMenuService implements OnDestroy {
   public activeMenu: OContextMenuContentComponent;
 
   protected overlays: OverlayRef[] = [];
-  protected fakeElement: any = {
-    getBoundingClientRect: (): ClientRect => ({
-      bottom: 0,
-      height: 0,
-      left: 0,
-      right: 0,
-      top: 0,
-      width: 0,
-    })
-  };
+  protected fakeElement: ElementRef = new ElementRef({ nativeElement: '' });
   protected subscription: Subscription = new Subscription();
 
   constructor(
@@ -57,7 +35,7 @@ export class OContextMenuService implements OnDestroy {
 
   public destroyOverlays(): void {
     if (this.overlays) {
-      this.overlays.forEach((overlay, index) => {
+      this.overlays.forEach((overlay) => {
         overlay.detach();
         overlay.dispose();
       });
@@ -71,7 +49,7 @@ export class OContextMenuService implements OnDestroy {
     context.event.preventDefault();
     context.event.stopPropagation();
 
-    this.fakeElement.getBoundingClientRect = (): ClientRect => ({
+    this.fakeElement.nativeElement.getBoundingClientRect = (): ClientRect => ({
       bottom: context.event.clientY,
       height: 0,
       left: context.event.clientX,
@@ -79,6 +57,7 @@ export class OContextMenuService implements OnDestroy {
       top: context.event.clientY,
       width: 0,
     });
+
     const positionStrategy = this.overlay.position()
       .flexibleConnectedTo(context.anchorElement || this.fakeElement)
       .withPositions([{

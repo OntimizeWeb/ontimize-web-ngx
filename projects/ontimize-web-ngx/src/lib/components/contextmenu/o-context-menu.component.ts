@@ -1,8 +1,9 @@
 import { Component, ContentChildren, EventEmitter, Injector, OnDestroy, OnInit, QueryList } from '@angular/core';
 import { Subscription } from 'rxjs';
 
+import { IOContextMenuContext } from '../../interfaces/o-context-menu.interface';
 import { OComponentMenuItems } from './o-content-menu.class';
-import { IOContextMenuContext, OContextMenuService } from './o-context-menu.service';
+import { OContextMenuService } from './o-context-menu.service';
 
 export const DEFAULT_OUTPUTS_O_CONTEXT_MENU = [
   'onShow',
