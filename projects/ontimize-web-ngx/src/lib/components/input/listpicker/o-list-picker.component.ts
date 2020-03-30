@@ -16,6 +16,7 @@ import { FormControl } from '@angular/forms';
 import { MatDialog, MatDialogConfig, MatDialogRef, MatInput } from '@angular/material';
 
 import { InputConverter } from '../../../decorators/input-converter';
+import { dataServiceFactory } from '../../../services/data-service.provider';
 import { OntimizeService } from '../../../services/ontimize.service';
 import { FormValueOptions } from '../../../types/form-value-options.type';
 import { OFormComponent } from '../../form/o-form.component';
@@ -50,7 +51,7 @@ export const DEFAULT_OUTPUTS_O_LIST_PICKER = [
   templateUrl: './o-list-picker.component.html',
   styleUrls: ['./o-list-picker.component.scss'],
   providers: [
-    OntimizeService,
+    { provide: OntimizeService, useFactory: dataServiceFactory, deps: [Injector] },
     { provide: OFormServiceComponent, useExisting: forwardRef(() => OListPickerComponent) }
   ],
   inputs: DEFAULT_INPUTS_O_LIST_PICKER,

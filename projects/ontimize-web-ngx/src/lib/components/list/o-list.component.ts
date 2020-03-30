@@ -22,6 +22,7 @@ import { merge, Subscription } from 'rxjs';
 import { InputConverter } from '../../decorators/input-converter';
 import { IListItem } from '../../interfaces/o-list-item.interface';
 import { IList } from '../../interfaces/o-list.interface';
+import { dataServiceFactory } from '../../services/data-service.provider';
 import { OntimizeService } from '../../services/ontimize.service';
 import { OListInitializationOptions } from '../../types/o-list-initialization-options.type';
 import { OQueryDataArgs } from '../../types/query-data-args.type';
@@ -74,7 +75,7 @@ export const DEFAULT_OUTPUTS_O_LIST = [
 @Component({
   selector: 'o-list',
   providers: [
-    OntimizeService
+    { provide: OntimizeService, useFactory: dataServiceFactory, deps: [Injector] }
   ],
   inputs: DEFAULT_INPUTS_O_LIST,
   outputs: DEFAULT_OUTPUTS_O_LIST,

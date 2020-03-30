@@ -20,6 +20,7 @@ import { Subscription } from 'rxjs';
 
 import { InputConverter } from '../../decorators/input-converter';
 import { IGridItem } from '../../interfaces/o-grid-item.interface';
+import { dataServiceFactory } from '../../services/data-service.provider';
 import { OntimizeService } from '../../services/ontimize.service';
 import { OQueryDataArgs } from '../../types/query-data-args.type';
 import { SQLOrder } from '../../types/sql-order.type';
@@ -73,7 +74,7 @@ const PAGE_SIZE_OPTIONS = [8, 16, 24, 32, 64];
 @Component({
   selector: 'o-grid',
   providers: [
-    OntimizeService
+    { provide: OntimizeService, useFactory: dataServiceFactory, deps: [Injector] }
   ],
   inputs: DEFAULT_INPUTS_O_GRID,
   outputs: DEFAULT_OUTPUTS_O_GRID,

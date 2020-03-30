@@ -9,7 +9,7 @@ import {
   OnDestroy,
   OnInit,
   ViewChild,
-  ViewEncapsulation
+  ViewEncapsulation,
 } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router, UrlSegment } from '@angular/router';
@@ -20,6 +20,7 @@ import { IComponent } from '../../interfaces/component.interface';
 import { IFormDataComponent } from '../../interfaces/form-data-component.interface';
 import { IFormDataTypeComponent } from '../../interfaces/form-data-type-component.interface';
 import { OFormLayoutManagerComponent } from '../../layouts/form-layout/o-form-layout-manager.component';
+import { dataServiceFactory } from '../../services/data-service.provider';
 import { DialogService } from '../../services/dialog.service';
 import { OFormService } from '../../services/forms/o-form.service';
 import { NavigationService, ONavigationItem } from '../../services/navigation.service';
@@ -141,7 +142,7 @@ export const DEFAULT_OUTPUTS_O_FORM = [
 @Component({
   selector: 'o-form',
   providers: [
-    OntimizeService,
+    { provide: OntimizeService, useFactory: dataServiceFactory, deps: [Injector] },
     OFormService,
   ],
   templateUrl: './o-form.component.html',
