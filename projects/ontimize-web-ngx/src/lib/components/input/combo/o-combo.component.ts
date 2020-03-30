@@ -16,6 +16,7 @@ import { MatSelect, MatSelectChange } from '@angular/material';
 import { Subscription } from 'rxjs';
 
 import { InputConverter } from '../../../decorators/input-converter';
+import { dataServiceFactory } from '../../../services/data-service.provider';
 import { OntimizeService } from '../../../services/ontimize.service';
 import { FormValueOptions } from '../../../types/form-value-options.type';
 import { Codes } from '../../../util/codes';
@@ -45,7 +46,7 @@ export const DEFAULT_OUTPUTS_O_COMBO = [
 @Component({
   selector: 'o-combo',
   providers: [
-    OntimizeService,
+    { provide: OntimizeService, useFactory: dataServiceFactory, deps: [Injector] },
     { provide: OFormServiceComponent, useExisting: forwardRef(() => OComboComponent) }
   ],
   inputs: DEFAULT_INPUTS_O_COMBO,
@@ -199,6 +200,13 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
     }
   }
 
+  public isEmpty(): boolean {
+    if (!(this.value instanceof OFormValue)) {
+      return true;
+    }
+    return this.value.value === undefined || (this.multiple && this.value.value.length === 0);
+  }
+
   public clearValue(options?: FormValueOptions, setDirty: boolean = false): void {
     if (this.multiple) {
       this.setValue(this.defaultValue, options, setDirty);
@@ -209,8 +217,7 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
   }
 
   get showClearButton(): boolean {
-    const isEmptyValue = this.multiple ? this.value.value.length : Util.isDefined(this.value.value);
-    return this.clearButton && !this.isReadOnly && this.enabled && isEmptyValue;
+    return this.clearButton && !this.isReadOnly && this.enabled && this.isEmpty();
   }
 
   public getMultiple(): boolean {
