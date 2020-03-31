@@ -19,7 +19,7 @@ import { OTableExportButtonService } from './extensions/export-button/o-table-ex
 import { OTableColumnAggregateComponent } from './extensions/footer/aggregate/o-table-column-aggregate.component';
 import { OTableExpandedFooterDirective } from './extensions/footer/expanded/o-table-expanded-footer.directive';
 import { O_TABLE_FOOTER_COMPONENTS } from './extensions/footer/o-table-footer-components';
-import { OTableMatPaginatorIntl } from './extensions/footer/paginator/o-table-paginator.component';
+import { OTableMatPaginatorIntl } from './extensions/footer/paginator/o-table-mat-paginator-intl';
 import { O_TABLE_HEADER_COMPONENTS } from './extensions/header/o-table-header-components';
 import { OTableRowDirective } from './extensions/row/o-table-row.directive';
 import { OMatSortModule } from './extensions/sort/o-mat-sort-module';

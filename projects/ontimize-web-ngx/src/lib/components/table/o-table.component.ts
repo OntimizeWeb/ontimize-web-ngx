@@ -3,6 +3,7 @@ import {
   AfterViewInit,
   ChangeDetectionStrategy,
   Component,
+  ContentChild,
   ContentChildren,
   ElementRef,
   EventEmitter,
@@ -18,7 +19,6 @@ import {
   ViewChild,
   ViewChildren,
   ViewEncapsulation,
-  ContentChild,
 } from '@angular/core';
 import { MatCheckboxChange, MatDialog, MatMenu, MatPaginator, MatTab, MatTabGroup, PageEvent } from '@angular/material';
 import { BehaviorSubject, combineLatest, Observable, of, Subscription } from 'rxjs';
@@ -33,6 +33,7 @@ import { OTableMenu } from '../../interfaces/o-table-menu.interface';
 import { OTableOptions } from '../../interfaces/o-table-options.interface';
 import { OTablePaginator } from '../../interfaces/o-table-paginator.interface';
 import { OTableQuickfilter } from '../../interfaces/o-table-quickfilter.interface';
+import { dataServiceFactory } from '../../services/data-service.provider';
 import { OntimizeService } from '../../services/ontimize.service';
 import { OPermissions, OTableMenuPermissions, OTablePermissions } from '../../services/permissions/permissions.service';
 import { SnackBarService } from '../../services/snackbar.service';
@@ -60,6 +61,7 @@ import { DefaultOTableOptions } from './extensions/default-o-table-options.class
 import {
   OTableFilterByColumnDataDialogComponent,
 } from './extensions/dialog/filter-by-column/o-table-filter-by-column-data-dialog.component';
+import { OBaseTablePaginator } from './extensions/footer/paginator/o-base-table-paginator.class';
 import { OTableColumnsFilterComponent } from './extensions/header/table-columns-filter/o-table-columns-filter.component';
 import { OTableInsertableRowComponent } from './extensions/header/table-insertable-row/o-table-insertable-row.component';
 import { OTableOptionComponent } from './extensions/header/table-option/o-table-option.component';
@@ -169,7 +171,7 @@ export const DEFAULT_OUTPUTS_O_TABLE = [
   templateUrl: './o-table.component.html',
   styleUrls: ['./o-table.component.scss'],
   providers: [
-    OntimizeService,
+    { provide: OntimizeService, useFactory: dataServiceFactory, deps: [Injector] },
     OTableDataSourceService
   ],
   inputs: DEFAULT_INPUTS_O_TABLE,
@@ -390,12 +392,15 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   protected editingCell: any;
   protected editingRow: any;
 
-
   protected _currentPage: number = 0;
+
   set currentPage(val: number) {
     this._currentPage = val;
     if (this.paginator) {
       this.paginator.pageIndex = val;
+      if (this.matpaginator) {
+        this.matpaginator.pageIndex = val;
+      }
     }
   }
 
@@ -943,7 +948,10 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
     // Initialize paginator
     if (!this.paginator && this.paginationControls) {
-      // this.paginator = OTableFactory.getTablePaginator(this.injector, this);
+      this.paginator = new OBaseTablePaginator();
+      this.paginator.pageSize = this.queryRows;
+      this.paginator.pageIndex = this.currentPage;
+      this.paginator.showFirstLastButtons = this.showPaginatorFirstLastButtons;
     }
 
     if (!Util.isDefined(this.selectAllCheckboxVisible)) {
