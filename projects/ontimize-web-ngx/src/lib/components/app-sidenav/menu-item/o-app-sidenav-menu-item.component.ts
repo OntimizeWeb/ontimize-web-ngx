@@ -25,8 +25,9 @@ import { OAppLayoutComponent } from '../../../layouts/app-layout/o-app-layout.co
 import { DialogService } from '../../../services/dialog.service';
 import { LoginService } from '../../../services/login.service';
 import { OUserInfoService } from '../../../services/o-user-info.service';
-import { OPermissions, PermissionsService } from '../../../services/permissions/permissions.service';
+import { PermissionsService } from '../../../services/permissions/permissions.service';
 import { OTranslateService } from '../../../services/translate/o-translate.service';
+import { OPermissions } from '../../../types/o-permissions.type';
 import { PermissionsUtils } from '../../../util/permissions';
 import { Util } from '../../../util/util';
 import { OAppSidenavComponent } from '../o-app-sidenav.component';

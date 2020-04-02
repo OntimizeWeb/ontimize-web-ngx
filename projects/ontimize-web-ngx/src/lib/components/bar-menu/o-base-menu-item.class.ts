@@ -1,8 +1,8 @@
 import { ElementRef, HostListener, Injector, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 
-import { OPermissions } from '../../services/permissions/permissions.service';
 import { OTranslateService } from '../../services/translate/o-translate.service';
+import { OPermissions } from '../../types/o-permissions.type';
 import { PermissionsUtils } from '../../util/permissions';
 import { Util } from '../../util/util';
 import { OBarMenuComponent } from './o-bar-menu.component';

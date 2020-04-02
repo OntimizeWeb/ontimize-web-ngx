@@ -16,8 +16,9 @@ import { Subscription } from 'rxjs';
 import { InputConverter } from '../../../decorators/input-converter';
 import { MenuGroup } from '../../../interfaces/app-menu.interface';
 import { AppMenuService } from '../../../services/app-menu.service';
-import { OPermissions, PermissionsService } from '../../../services/permissions/permissions.service';
+import { PermissionsService } from '../../../services/permissions/permissions.service';
 import { OTranslateService } from '../../../services/translate/o-translate.service';
+import { OPermissions } from '../../../types/o-permissions.type';
 import { PermissionsUtils } from '../../../util/permissions';
 import { Util } from '../../../util/util';
 import { OAppSidenavComponent } from '../o-app-sidenav.component';
@@ -52,7 +53,7 @@ export const DEFAULT_OUTPUTS_O_APP_SIDENAV_MENU_GROUP = [
     '[attr.disabled]': 'disabled'
   }
 })
-export class OAppSidenavMenuGroupComponent implements OnInit, AfterViewInit, OnDestroy {  
+export class OAppSidenavMenuGroupComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public onItemClick: EventEmitter<any> = new EventEmitter<any>();
 

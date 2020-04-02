@@ -1,11 +1,21 @@
-import { AfterViewInit, Component, ElementRef, Injector, OnDestroy, OnInit, ViewChild, ViewContainerRef, ViewEncapsulation } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  Injector,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+  ViewContainerRef,
+  ViewEncapsulation,
+} from '@angular/core';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 
 import { InputConverter } from '../../../decorators/input-converter';
 import { DialogService } from '../../../services/dialog.service';
 import { NavigationService } from '../../../services/navigation.service';
-import { OPermissions } from '../../../services/permissions/permissions.service';
 import { SnackBarService } from '../../../services/snackbar.service';
+import { OPermissions } from '../../../types/o-permissions.type';
 import { Codes } from '../../../util/codes';
 import { PermissionsUtils } from '../../../util/permissions';
 import { Util } from '../../../util/util';

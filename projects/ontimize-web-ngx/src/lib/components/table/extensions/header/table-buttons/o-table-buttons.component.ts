@@ -11,11 +11,11 @@ import {
 import { BehaviorSubject, Subscription } from 'rxjs';
 
 import { InputConverter } from '../../../../../decorators/input-converter';
-import { OPermissions } from '../../../../../services/permissions/permissions.service';
+import { OTableButtons } from '../../../../../interfaces/o-table-buttons.interface';
+import { OPermissions } from '../../../../../types/o-permissions.type';
 import { PermissionsUtils } from '../../../../../util/permissions';
 import { OTableComponent } from '../../../o-table.component';
 import { OTableButtonComponent } from '../table-button/o-table-button.component';
-import { OTableButtons } from '../../../../../interfaces/o-table-buttons.interface';
 
 export const DEFAULT_INPUTS_O_TABLE_BUTTONS = [
   // insert-button [no|yes]: show insert button. Default: yes.

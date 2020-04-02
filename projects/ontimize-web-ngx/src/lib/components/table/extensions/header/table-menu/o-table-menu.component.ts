@@ -10,7 +10,7 @@ import {
   OnDestroy,
   OnInit,
   ViewChild,
-  ViewEncapsulation
+  ViewEncapsulation,
 } from '@angular/core';
 import { MatDialog, MatMenu } from '@angular/material';
 import { Observable } from 'rxjs';
@@ -18,19 +18,24 @@ import { Observable } from 'rxjs';
 import { InputConverter } from '../../../../../decorators/input-converter';
 import { OTableMenu } from '../../../../../interfaces/o-table-menu.interface';
 import { DialogService } from '../../../../../services/dialog.service';
-import { OPermissions, OTableMenuPermissions } from '../../../../../services/permissions/permissions.service';
 import { SnackBarService } from '../../../../../services/snackbar.service';
 import { OTranslateService } from '../../../../../services/translate/o-translate.service';
+import { OPermissions } from '../../../../../types/o-permissions.type';
+import { OTableMenuPermissions } from '../../../../../types/o-table-menu-permissions.type';
 import { Codes } from '../../../../../util/codes';
 import { PermissionsUtils } from '../../../../../util/permissions';
 import { Util } from '../../../../../util/util';
 import { OTableCellRendererImageComponent } from '../../../column/cell-renderer/image/o-table-cell-renderer-image.component';
 import { OColumn } from '../../../column/o-column.class';
 import { OTableComponent } from '../../../o-table.component';
-import { OTableApplyConfigurationDialogComponent } from '../../dialog/apply-configuration/o-table-apply-configuration-dialog.component';
+import {
+  OTableApplyConfigurationDialogComponent,
+} from '../../dialog/apply-configuration/o-table-apply-configuration-dialog.component';
 import { OTableExportDialogComponent } from '../../dialog/export/o-table-export-dialog.component';
 import { OTableLoadFilterDialogComponent } from '../../dialog/load-filter/o-table-load-filter-dialog.component';
-import { OTableStoreConfigurationDialogComponent } from '../../dialog/store-configuration/o-table-store-configuration-dialog.component';
+import {
+  OTableStoreConfigurationDialogComponent,
+} from '../../dialog/store-configuration/o-table-store-configuration-dialog.component';
 import { OTableStoreFilterDialogComponent } from '../../dialog/store-filter/o-table-store-filter-dialog.component';
 import { OTableVisibleColumnsDialogComponent } from '../../dialog/visible-columns/o-table-visible-columns-dialog.component';
 import { OTableOptionComponent } from '../table-option/o-table-option.component';

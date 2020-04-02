@@ -1,4 +1,4 @@
-import { OPermissions } from '../services/permissions/permissions.service';
+import { OPermissions } from '../types/o-permissions.type';
 import { Util } from './util';
 
 export class PermissionsUtils {

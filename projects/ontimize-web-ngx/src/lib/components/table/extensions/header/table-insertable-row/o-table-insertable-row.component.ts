@@ -11,9 +11,9 @@ import {
 import { FormControl, ValidatorFn, Validators } from '@angular/forms';
 
 import { InputConverter } from '../../../../../decorators/input-converter';
-import { OPermissions } from '../../../../../services/permissions/permissions.service';
 import { SnackBarService } from '../../../../../services/snackbar.service';
 import { OTranslateService } from '../../../../../services/translate/o-translate.service';
+import { OPermissions } from '../../../../../types/o-permissions.type';
 import { Observable, ObservableWrapper } from '../../../../../util/async';
 import { Util } from '../../../../../util/util';
 import { OBaseTableCellEditor } from '../../../column/cell-editor/o-base-table-cell-editor.class';

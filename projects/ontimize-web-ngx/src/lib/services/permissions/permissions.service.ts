@@ -4,51 +4,16 @@ import { Observable } from 'rxjs';
 import { share } from 'rxjs/operators';
 
 import { AppConfig } from '../../config/app-config';
+import { OComponentPermissions } from '../../types/o-component-permissions.type';
+import { OFormPermissions } from '../../types/o-form-permissions.type';
+import { OPermissionsDefinition } from '../../types/o-permissions-definition.type';
+import { OPermissions } from '../../types/o-permissions.type';
+import { ORoutePermissions } from '../../types/o-route-permissions.type';
+import { OTableMenuPermissions } from '../../types/o-table-menu-permissions.type';
+import { OTablePermissions } from '../../types/o-table-permissions.type';
 import { Util } from '../../util/util';
 import { OntimizeEEPermissionsService } from './ontimize-ee-permissions.service';
 import { OntimizePermissionsService } from './ontimize-permissions.service';
-
-export type OPermissions = {
-  attr: string;
-  visible: boolean;
-  enabled: boolean;
-};
-
-export type OFormPermissions = {
-  attr: string;
-  selector: string;
-  components?: OPermissions[];
-  actions?: OPermissions[];
-};
-
-export type OTableMenuPermissions = {
-  visible: boolean;
-  enabled: boolean;
-  items?: OPermissions[];
-};
-
-export type OTablePermissions = {
-  attr: string;
-  selector: string;
-  menu?: OTableMenuPermissions;
-  columns?: OPermissions[];
-  actions?: OPermissions[];
-  contextMenu?: OPermissions[];
-};
-
-export type OComponentPermissions = OFormPermissions | OTablePermissions;
-
-export type ORoutePermissions = {
-  permissionId: string;
-  enabled?: boolean;
-  components?: OComponentPermissions[];
-};
-
-export type OPermissionsDefinition = {
-  routes?: ORoutePermissions[];
-  components?: OComponentPermissions[];
-  menu?: OPermissions[];
-};
 
 @Injectable()
 export class PermissionsService {

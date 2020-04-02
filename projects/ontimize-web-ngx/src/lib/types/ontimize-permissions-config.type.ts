@@ -1,5 +1,5 @@
 export type OntimizePermissionsConfig = {
-    entity: string;
-    keyColumn: string;
-    valueColumn: string;
+  entity: string;
+  keyColumn: string;
+  valueColumn: string;
 };
