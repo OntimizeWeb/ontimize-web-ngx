@@ -1,17 +1,22 @@
 {
   "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
+  "deleteDestPath": true,
   "dest": "../../dist/ontimize-web-ngx",
   "lib": {
     "entryFile": "src/public-api.ts",
     "umdModuleIds": {
-      "moment": "moment",
-      "@ngx-translate/http-loader": "@ngx-translate/http-loader",
       "@ngx-translate/core": "@ngx-translate/core",
-      "@angular/core": "@angular/core",
+      "@ngx-translate/http-loader": "@ngx-translate/http-loader",
+      "moment": "moment",
       "ngx-material-timepicker": "ngx-material-timepicker"
-    },
-    "whitelistedNonPeerDependencies": [
-        "ngx-material-timepicker"
-    ]
-  }
+    }
+  },
+  "whitelistedNonPeerDependencies": [
+    "@ngx-translate/core",
+    "@ngx-translate/http-loader",
+    "moment",
+    "ngx-material-timepicker",
+    "reflect-metadata",
+    "tslib"
+  ]
 }

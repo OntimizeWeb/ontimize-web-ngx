@@ -18,7 +18,7 @@
           "builder": "@angular-devkit/build-ng-packagr:build",
           "options": {
             "tsConfig": "projects/ontimize-web-ngx/tsconfig.lib.json",
-            "project": "projects/ontimize-web-ngx/ng-package.json",
+            "project": "projects/ontimize-web-ngx/ng-package.json"
           }
         },
         "test": {
@@ -45,6 +45,7 @@
           "extractCss": true
         }
       }
-    }},
+    }
+  },
   "defaultProject": "ontimize-web-ngx"
 }
