@@ -29,16 +29,15 @@ export const DEFAULT_INPUTS_O_DATERANGE_INPUT = [
   ...DEFAULT_INPUTS_O_DATE_INPUT
 ];
 
-
 const moment = _moment;
+
 @Component({
   selector: 'o-daterange-input',
   templateUrl: './o-daterange-input.component.html',
-  styles: ['./o-daterange-input.component.scss'],
+  styleUrls: ['./o-daterange-input.component.scss'],
   outputs: DEFAULT_OUTPUTS_O_DATERANGE_INPUT,
   inputs: DEFAULT_INPUTS_O_DATERANGE_INPUT
 })
-
 export class ODateRangeInputComponent extends OFormDataComponent implements OnDestroy, OnInit {
 
   @ViewChild(ODaterangepickerDirective, { static: true }) pickerDirective: ODaterangepickerDirective;
@@ -205,12 +204,12 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
   }
 
   updateElement() {
-    let chosenLabel:any;
-    
-    if( Util.isDefined(this.value.value) && !this.isObjectDataRangeNull(this.value) ) {
+    let chosenLabel: any;
+
+    if (Util.isDefined(this.value.value) && !this.isObjectDataRangeNull(this.value)) {
       if (this.value.value[this.pickerDirective.startKey]) {
         chosenLabel = this.value.value[this.pickerDirective.startKey].format(this.oformat) +
-        this.separator + this.value.value[this.pickerDirective.endKey].format(this.oformat);
+          this.separator + this.value.value[this.pickerDirective.endKey].format(this.oformat);
       } else {
         chosenLabel = null;
       }

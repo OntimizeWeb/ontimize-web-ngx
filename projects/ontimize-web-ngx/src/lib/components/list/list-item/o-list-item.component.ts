@@ -11,16 +11,15 @@ import {
   QueryList,
   Renderer2,
   ViewChild,
-  ViewEncapsulation,
+  ViewEncapsulation
 } from '@angular/core';
 import { MatLine, MatListAvatarCssMatStyler, MatListItem } from '@angular/material';
 
+import { IListItem } from '../../../interfaces/o-list-item.interface';
 import { Util } from '../../../util/util';
 import { OListComponent } from '../o-list.component';
-import { IListItem } from '../../../interfaces/o-list-item.interface';
 
 @Component({
-  moduleId: module.id,
   selector: 'o-list-item',
   templateUrl: './o-list-item.component.html',
   styleUrls: ['./o-list-item.component.scss'],

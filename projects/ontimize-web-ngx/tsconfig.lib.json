@@ -16,6 +16,12 @@
     "outDir": "dist",
     "noUnusedLocals": false,
     "noUnusedParameters": false,
+    "types": [
+      "moment"
+    ],
+    "typeRoots": [
+      "node_modules/moment"
+    ],
     "lib": [
       "dom",
       "es2015"
