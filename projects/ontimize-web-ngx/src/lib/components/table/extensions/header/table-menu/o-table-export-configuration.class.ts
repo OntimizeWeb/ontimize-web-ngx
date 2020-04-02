@@ -7,5 +7,6 @@ export class OTableExportConfiguration {
   filter?: object;
   mode: string;
   entity: string;
+  visibleButtons: string;
   options?: any;
 }

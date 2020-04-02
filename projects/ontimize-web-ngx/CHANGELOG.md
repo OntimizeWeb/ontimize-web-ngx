@@ -16,7 +16,9 @@
 
 ## 4.1.3
 ### Features
-* **o-table**: new attribute `show-filter-option` [#318](https://github.com/OntimizeWeb/ontimize-web-ngx/pull/318)
+* **o-table**:
+  * new attribute `show-filter-option` ([#318](https://github.com/OntimizeWeb/ontimize-web-ngx/pull/318))
+  * new attribute `visible-export-dialog-buttons` ([#320](https://github.com/OntimizeWeb/ontimize-web-ngx/pull/320)). Closes [#316](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/316)
 
 * **o-table**: 
  * `NAME_COLUMN_SELECT`, `SUFFIX_COLUMN_INSERTABLE`, `LIMIT_SCROLLVIRTUAL` and `DEFAULT_COLUMN_MIN_WIDTH` static variables no longer exists. Now they are located in `Codes` utility class.

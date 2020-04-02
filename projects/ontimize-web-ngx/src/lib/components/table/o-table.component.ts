@@ -154,7 +154,10 @@ export const DEFAULT_INPUTS_O_TABLE = [
   'autoAdjust: auto-adjust',
 
   // show-filter-option [yes|no|true|false]: show filter menu option in the header menu. Default: yes.
-  'showFilterOption: show-filter-option'
+  'showFilterOption: show-filter-option',
+
+  // visible-export-dialog-buttons [string]: visible buttons in export dialog, separated by ';'. Default/no configured: show all. Empty value: hide all.
+  'visibleExportDialogButtons: visible-export-dialog-buttons'
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE = [
@@ -315,6 +318,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   keepSelectedItems: boolean = true;
 
   exportMode: string = Codes.EXPORT_MODE_VISIBLE;
+  public visibleExportDialogButtons: string;
   daoTable: OTableDao;
   dataSource: OTableDataSource;
   visibleColumns: string;

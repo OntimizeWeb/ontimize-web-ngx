@@ -322,6 +322,7 @@ export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, O
     exportCnfg.sqlTypes = this.table.getSqlTypes();
     // Table service, needed for configuring ontimize export service with table service configuration
     exportCnfg.service = this.table.service;
+    exportCnfg.visibleButtons = this.table.visibleExportDialogButtons;
     exportCnfg.options = this.table.exportOptsTemplate;
 
     const dialogRef = this.dialog.open(OTableExportDialogComponent, {
