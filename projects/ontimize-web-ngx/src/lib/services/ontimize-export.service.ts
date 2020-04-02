@@ -10,7 +10,9 @@ import { Codes } from '../util/codes';
 import { ServiceUtils } from '../util/service.utils';
 import { LoginStorageService } from './login-storage.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class OntimizeExportService {
 
   public exportPath: string;

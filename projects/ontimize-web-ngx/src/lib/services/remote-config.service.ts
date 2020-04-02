@@ -11,7 +11,9 @@ import { Util } from '../util/util';
 import { LocalStorageService } from './local-storage.service';
 import { LoginStorageService } from './login-storage.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class ORemoteConfigurationService {
 
   public static DEFAULT_COLUMN_USER = 'USER_';

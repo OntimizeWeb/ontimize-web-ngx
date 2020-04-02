@@ -1,8 +1,11 @@
-import { Injector } from '@angular/core';
+import { Injectable, Injector } from '@angular/core';
 
 import { Util } from '../util/util';
 import { NumberService } from './number.service';
 
+@Injectable({
+  providedIn: 'root'
+})
 export class CurrencyService {
 
   public static DEFAULT_CURRENCY_SYMBOL = '$';

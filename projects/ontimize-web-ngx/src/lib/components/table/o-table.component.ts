@@ -33,14 +33,15 @@ import { OTableMenu } from '../../interfaces/o-table-menu.interface';
 import { OTableOptions } from '../../interfaces/o-table-options.interface';
 import { OTablePaginator } from '../../interfaces/o-table-paginator.interface';
 import { OTableQuickfilter } from '../../interfaces/o-table-quickfilter.interface';
-import { dataServiceFactory } from '../../services/data-service.provider';
-import { OntimizeService } from '../../services/ontimize.service';
-import { OPermissions, OTableMenuPermissions, OTablePermissions } from '../../services/permissions/permissions.service';
+import { OntimizeServiceProvider } from '../../services/data-service.provider';
 import { SnackBarService } from '../../services/snackbar.service';
 import { Expression } from '../../types/expression.type';
 import { OColumnAggregate } from '../../types/o-column-aggregate.type';
 import { ColumnValueFilterOperator, OColumnValueFilter } from '../../types/o-column-value-filter.type';
+import { OPermissions } from '../../types/o-permissions.type';
 import { OTableInitializationOptions } from '../../types/o-table-initialization-options.type';
+import { OTableMenuPermissions } from '../../types/o-table-menu-permissions.type';
+import { OTablePermissions } from '../../types/o-table-permissions.type';
 import { OQueryDataArgs } from '../../types/query-data-args.type';
 import { QuickFilterFunction } from '../../types/quick-filter-function.type';
 import { SQLOrder } from '../../types/sql-order.type';
@@ -171,7 +172,7 @@ export const DEFAULT_OUTPUTS_O_TABLE = [
   templateUrl: './o-table.component.html',
   styleUrls: ['./o-table.component.scss'],
   providers: [
-    { provide: OntimizeService, useFactory: dataServiceFactory, deps: [Injector] },
+    OntimizeServiceProvider,
     OTableDataSourceService
   ],
   inputs: DEFAULT_INPUTS_O_TABLE,

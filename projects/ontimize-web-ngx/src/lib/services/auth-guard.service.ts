@@ -6,7 +6,9 @@ import { Codes } from '../util/codes';
 import { LoginStorageService } from './login-storage.service';
 import { PermissionsService } from './permissions/permissions.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class AuthGuardService implements CanActivate {
 
   protected router: Router;

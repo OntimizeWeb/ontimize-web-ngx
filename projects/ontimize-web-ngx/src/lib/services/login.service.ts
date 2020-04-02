@@ -16,7 +16,9 @@ import { Codes } from '../util/codes';
 import { ServiceUtils } from '../util/service.utils';
 import { LoginStorageService } from './login-storage.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class LoginService implements ILoginService {
 
   public onLogin: EventEmitter<any> = new EventEmitter();

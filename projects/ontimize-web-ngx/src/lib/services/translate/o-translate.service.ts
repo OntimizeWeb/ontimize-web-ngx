@@ -9,7 +9,9 @@ import { MomentService } from '../../services/moment.service';
 import { SnackBarService } from '../../services/snackbar.service';
 import { ObservableWrapper } from '../../util/async';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class OTranslateService {
 
   public static ASSETS_PATH = './assets/i18n/';

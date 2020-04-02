@@ -6,6 +6,12 @@ import { Util } from '../../util/util';
 import { OntimizeEEPermissionsService } from './ontimize-ee-permissions.service';
 import { OntimizePermissionsService } from './ontimize-permissions.service';
 
+export let OntimizePermissionsServiceProvider = {
+  provide: OntimizePermissionsService,
+  useFactory: permissionsServiceFactory,
+  deps: [Injector]
+};
+
 class PermissionsServiceFactory {
 
   protected config: Config;

@@ -11,8 +11,7 @@ import {
 import { MatRadioChange } from '@angular/material';
 
 import { InputConverter } from '../../../decorators/input-converter';
-import { dataServiceFactory } from '../../../services/data-service.provider';
-import { OntimizeService } from '../../../services/ontimize.service';
+import { OntimizeServiceProvider } from '../../../services/data-service.provider';
 import { Util } from '../../../util/util';
 import { OFormComponent } from '../../form/o-form.component';
 import { OFormValue } from '../../form/OFormValue';
@@ -41,7 +40,7 @@ export const DEFAULT_OUTPUTS_O_RADIO = [
   inputs: DEFAULT_INPUTS_O_RADIO,
   outputs: DEFAULT_OUTPUTS_O_RADIO,
   providers: [
-    { provide: OntimizeService, useFactory: dataServiceFactory, deps: [Injector] }
+    OntimizeServiceProvider
   ],
   encapsulation: ViewEncapsulation.None,
   host: {

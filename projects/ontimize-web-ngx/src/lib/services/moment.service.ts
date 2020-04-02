@@ -1,9 +1,12 @@
-import { Injector } from '@angular/core';
+import { Injectable, Injector } from '@angular/core';
 import moment from 'moment';
 
 import { AppConfig } from '../config/app-config';
 import { Config } from '../types/config.type';
 
+@Injectable({
+  providedIn: 'root'
+})
 export class MomentService {
 
   // HTML5 input date: YYYY-MM-DD // locale ES-es: DD-MM-YYYY // locale EN-en: MM-DD-YYYY // ISO 8601:

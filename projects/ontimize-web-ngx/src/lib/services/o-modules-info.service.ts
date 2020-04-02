@@ -9,7 +9,9 @@ export interface ModuleInfo {
   route?: string;
 }
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class OModulesInfoService {
   protected storedInfo: ModuleInfo;
   protected actRoute: ActivatedRoute;

@@ -20,15 +20,17 @@ import { IComponent } from '../../interfaces/component.interface';
 import { IFormDataComponent } from '../../interfaces/form-data-component.interface';
 import { IFormDataTypeComponent } from '../../interfaces/form-data-type-component.interface';
 import { OFormLayoutManagerComponent } from '../../layouts/form-layout/o-form-layout-manager.component';
-import { dataServiceFactory } from '../../services/data-service.provider';
+import { OntimizeServiceProvider } from '../../services/data-service.provider';
 import { DialogService } from '../../services/dialog.service';
 import { OFormService } from '../../services/forms/o-form.service';
 import { NavigationService, ONavigationItem } from '../../services/navigation.service';
 import { OntimizeService } from '../../services/ontimize.service';
-import { OFormPermissions, OPermissions, PermissionsService } from '../../services/permissions/permissions.service';
+import { PermissionsService } from '../../services/permissions/permissions.service';
 import { SnackBarService } from '../../services/snackbar.service';
 import { FormValueOptions } from '../../types/form-value-options.type';
 import { OFormInitializationOptions } from '../../types/o-form-initialization-options.type';
+import { OFormPermissions } from '../../types/o-form-permissions.type';
+import { OPermissions } from '../../types/o-permissions.type';
 import { Codes } from '../../util/codes';
 import { SQLTypes } from '../../util/sqltypes';
 import { Util } from '../../util/util';
@@ -142,8 +144,8 @@ export const DEFAULT_OUTPUTS_O_FORM = [
 @Component({
   selector: 'o-form',
   providers: [
-    { provide: OntimizeService, useFactory: dataServiceFactory, deps: [Injector] },
-    OFormService,
+    OntimizeServiceProvider,
+    OFormService
   ],
   templateUrl: './o-form.component.html',
   styleUrls: ['./o-form.component.scss'],

@@ -108,7 +108,9 @@ export class ONavigationItem {
 
 const MAXIMIUM_NAVIGATION_HEAP_SIZE = 15;
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class NavigationService implements ILocalStorageComponent {
 
   public static NAVIGATION_STORAGE_KEY: string = 'nav_service';

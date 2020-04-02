@@ -5,7 +5,9 @@ import { Observable } from 'rxjs';
 import { ODialogComponent } from '../shared/components/dialog/o-dialog.component';
 import { ODialogConfig } from '../shared/components/dialog/o-dialog.config';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class DialogService {
 
   protected ng2Dialog: MatDialog;

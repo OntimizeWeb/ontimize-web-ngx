@@ -11,7 +11,7 @@ import {
 import { Subscription } from 'rxjs';
 
 import { ITranslatePipeArgument, OTranslatePipe } from '../../../../../pipes/o-translate.pipe';
-import { dataServiceFactory } from '../../../../../services/data-service.provider';
+import { OntimizeServiceProvider } from '../../../../../services/data-service.provider';
 import { DialogService } from '../../../../../services/dialog.service';
 import { OntimizeService } from '../../../../../services/ontimize.service';
 import { Expression } from '../../../../../types/expression.type';
@@ -43,7 +43,7 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_SERVICE = [
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     // Service renderer must have its own service instance in order to avoid overriding table service configuration
-    { provide: OntimizeService, useFactory: dataServiceFactory, deps: [Injector] }
+    OntimizeServiceProvider
   ]
 })
 export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer implements OnInit, AfterViewInit, OnDestroy {

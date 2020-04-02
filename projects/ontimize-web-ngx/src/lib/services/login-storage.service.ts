@@ -5,7 +5,9 @@ import { Config } from '../types/config.type';
 import { SessionInfo } from '../types/session-info.type';
 import { Codes } from '../util/codes';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class LoginStorageService {
   private _config: Config;
   public _localStorageKey: string;

@@ -4,7 +4,9 @@ import { Observable } from 'rxjs';
 
 import { OSnackBarComponent, OSnackBarConfig } from '../shared/components/snackbar/o-snackbar.component';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class SnackBarService {
 
   protected static DEFAULT_DURATION: number = 2000;

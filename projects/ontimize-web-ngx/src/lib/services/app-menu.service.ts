@@ -13,7 +13,9 @@ import {
 import { MenuRootItem } from '../types/menu-root-item.type';
 import { Codes } from '../util/codes';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class AppMenuService {
 
   protected _config: AppConfig;

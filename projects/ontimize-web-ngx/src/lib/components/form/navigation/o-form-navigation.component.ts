@@ -3,7 +3,7 @@ import { NavigationExtras, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 import { OFormLayoutManagerComponent } from '../../../layouts/form-layout/o-form-layout-manager.component';
-import { dataServiceFactory } from '../../../services/data-service.provider';
+import { OntimizeServiceProvider } from '../../../services/data-service.provider';
 import { NavigationService, ONavigationItem } from '../../../services/navigation.service';
 import { OntimizeService } from '../../../services/ontimize.service';
 import { Codes } from '../../../util/codes';
@@ -31,7 +31,7 @@ export type QueryConfiguration = {
     '[class.o-form-navigation]': 'true'
   },
   providers: [
-    { provide: OntimizeService, useFactory: dataServiceFactory, deps: [Injector] }
+    OntimizeServiceProvider
   ]
 })
 export class OFormNavigationComponent implements OnDestroy {

@@ -1,9 +1,12 @@
-import { Injector } from '@angular/core';
+import { Injectable, Injector } from '@angular/core';
 
 import { AppConfig } from '../config/app-config';
 import { Config } from '../types/config.type';
 import { Util } from '../util/util';
 
+@Injectable({
+  providedIn: 'root'
+})
 export class NumberService {
 
   public static DEFAULT_DECIMAL_DIGITS = 2;

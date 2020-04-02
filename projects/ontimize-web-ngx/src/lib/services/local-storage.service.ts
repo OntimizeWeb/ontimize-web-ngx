@@ -1,4 +1,4 @@
-import { EventEmitter, Injector } from '@angular/core';
+import { EventEmitter, Injectable, Injector } from '@angular/core';
 import { NavigationStart, Router } from '@angular/router';
 
 import { AppConfig } from '../config/app-config';
@@ -9,6 +9,9 @@ import { ObservableWrapper } from '../util/async';
 import { Util } from '../util/util';
 import { LoginStorageService } from './login-storage.service';
 
+@Injectable({
+  providedIn: 'root'
+})
 export class LocalStorageService {
   static COMPONENTS_STORAGE_KEY: string = 'components';
   static USERS_STORAGE_KEY: string = 'users';

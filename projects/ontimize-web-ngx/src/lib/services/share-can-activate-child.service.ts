@@ -4,7 +4,9 @@ import { ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/ro
 import { PermissionsGuardService } from './permissions/permissions-can-activate.guard';
 import { PermissionsService } from './permissions/permissions.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class ShareCanActivateChildService {
 
   protected router: Router;

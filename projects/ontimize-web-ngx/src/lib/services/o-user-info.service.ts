@@ -6,7 +6,9 @@ export interface UserInfo {
   avatar?: string;
 }
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class OUserInfoService {
   protected storedInfo: UserInfo;
   private subject = new Subject<any>();

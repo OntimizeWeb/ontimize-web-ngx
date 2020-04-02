@@ -4,7 +4,9 @@ import { Subscriber } from 'rxjs';
 import { IAuthService } from '../../interfaces/auth-service.interface';
 import { Codes } from '../../util/codes';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class OntimizeServiceResponseParser {
 
   constructor(
