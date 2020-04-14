@@ -1,7 +1,7 @@
-@import 'src/lib/components/material/styles.scss';
-@import 'src/lib/components/container/o-container.component.scss';
-@import 'src/lib/components/container/o-container-collapsible.component.scss';
-@import 'src/lib/components/input/input.scss';
+@import "src/lib/components/material/styles.scss";
+@import "src/lib/components/container/o-container.component.scss";
+@import "src/lib/components/container/o-container-collapsible.component.scss";
+@import "src/lib/components/input/input.scss";
 
 .relative {
   position: relative;
@@ -88,7 +88,7 @@
 
 $steps: 6;
 @mixin padding-margin-x {
-   @for $i from 1 through $steps{
+  @for $i from 1 through $steps {
     $val: $i * 4;
 
     .vertical-padding-#{$val} {
@@ -113,3 +113,12 @@ $steps: 6;
   }
 }
 @include padding-margin-x();
+
+button {
+  &.mat-button,
+  &.mat-flat-button,
+  &.mat-icon-button,
+  &.mat-stroked-button {
+    min-width: 88px;
+  }
+}
