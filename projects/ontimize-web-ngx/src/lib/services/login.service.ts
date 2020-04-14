@@ -11,6 +11,7 @@ import { OntimizeService } from '../services/ontimize.service';
 import { PermissionsService } from '../services/permissions/permissions.service';
 import { ORemoteConfigurationService } from '../services/remote-config.service';
 import { Config } from '../types/config.type';
+import { SessionInfo } from '../types/session-info.type';
 import { ObservableWrapper } from '../util/async';
 import { Codes } from '../util/codes';
 import { ServiceUtils } from '../util/service.utils';
@@ -163,4 +164,7 @@ export class LoginService implements ILoginService {
     });
   }
 
+  public getSessionInfo(): SessionInfo {
+    return this.loginStorageService.getSessionInfo();
+  }
 }
