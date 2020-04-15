@@ -1,23 +1,47 @@
-# Ontimize Web
+# OntimizeWeb
 
-Ontimize Web is web application framework that provides to you an environment for solving the problematic situation of building aplications that require a browser-based user interface. Ontimize Web allows developing data management applications quickly and agile.
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.1
 
-Ontimize Web is based on the [6.x version of Angular](https://v6.angular.io/docs), and comes with many significant performance, usability, and feature improvements.
+## Installation
 
+Follow the next steps:
 
-### Try Ontimize Web
+    - npm install ontimize-web-ngx
 
-To try Ontimize Web today, visit the [Ontimize Web Docs](https://ontimizeweb.github.io/docs/). We would love any feedback you have or to know when you encounter issues, by filing an issue report on this repo.
+## Build
 
+Follow the next steps:
 
-### Ontimize Web Examples
+`npm install`
 
-View all the examples in action at [Ontimize Web](https://try.imatia.com/ontimizeweb/).
+`npm run build`
 
-### Ontimize Web Getting Started
+It will create the distribution folder, copy the styles and lint the code.
 
-There is a practical [Getting Started](https://github.com/OntimizeWeb/ontimize-web-ngx-quickstart), a perfect starting point for building your own Ontimize Web app.
+## Local Development
 
-### Versions and dependencies
-Each version of the Addons is compatible with a version of the framework, you can check the dependencies between Angular, Ontimize web and Addons [here](https://ontimizeweb.github.io/docs/versions/).
+Follow the next steps:
 
+    - npm run build
+    - cd dist
+    - npm pack
+
+This will create a .tgz file which you can use in your project.
+
+## Code scaffolding
+
+Run `ng generate component component-name` to generate a new component.
+
+You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+
+## Running unit tests
+
+Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+
+## Running end-to-end tests
+
+Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+
+## Further help
+
+To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
