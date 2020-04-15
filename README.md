@@ -6,9 +6,13 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 Follow the next steps:
 
-    - npm install
+    - npm install ontimize-web-ngx
 
 ## Build
+
+Follow the next steps:
+
+`npm install`
 
 `npm run build`
 
