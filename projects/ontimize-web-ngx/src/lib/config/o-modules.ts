@@ -1,9 +1,7 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { APP_INITIALIZER, Injector, NgModule } from '@angular/core';
-// import { HttpModule } from '@angular/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform-browser/animations';
-// import { DndModule } from '@churchs19/ng2-dnd';
 import { TranslateLoader, TranslateModule, TranslateParser } from '@ngx-translate/core';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 
@@ -62,7 +60,6 @@ import { appInitializerFactory } from './o-providers';
 
 export const INTERNAL_ONTIMIZE_MODULES_EXPORTED: any = [
   // Standard modules
-  // HttpModule,
   HttpClientModule,
   OSharedModule,
 
