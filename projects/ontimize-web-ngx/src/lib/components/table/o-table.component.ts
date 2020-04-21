@@ -1796,7 +1796,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   useCellEditor(column: OColumn, row: any): boolean {
-    // column.editor instanceof OTableCellEditorBooleanComponent &&
+    // TODO Add column.editor instanceof OTableCellEditorBooleanComponent to condition
     if (column.editor && column.editor.autoCommit) {
       return false;
     }
