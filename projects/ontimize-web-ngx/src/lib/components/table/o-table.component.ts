@@ -72,6 +72,7 @@ import { OTableDao } from './extensions/o-table.dao';
 import { OMatSort } from './extensions/sort/o-mat-sort';
 import { OMatSortHeader } from './extensions/sort/o-mat-sort-header';
 
+
 export const DEFAULT_INPUTS_O_TABLE = [
   ...DEFAULT_INPUTS_O_SERVICE_COMPONENT,
 
@@ -1756,6 +1757,10 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     });
   }
 
+  useDetailButton(column: OColumn): boolean {
+    return column.type === 'editButtonInRow' || column.type === 'detailButtonInRow';
+  }
+
   onDetailButtonClick(column: OColumn, row: any, event: any) {
     event.preventDefault();
     event.stopPropagation();
@@ -1780,6 +1785,22 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
         break;
     }
     return result;
+  }
+
+  usePlainRender(column: OColumn, row: any): boolean {
+    return !this.useDetailButton(column) && !column.renderer && (!column.editor || (!column.editing || !this.selection.isSelected(row)));
+  }
+
+  useCellRenderer(column: OColumn, row: any): boolean {
+    return column.renderer && (!column.editing || column.editing && !this.selection.isSelected(row));
+  }
+
+  useCellEditor(column: OColumn, row: any): boolean {
+    // column.editor instanceof OTableCellEditorBooleanComponent &&
+    if (column.editor && column.editor.autoCommit) {
+      return false;
+    }
+    return column.editor && column.editing && this.selection.isSelected(row);
   }
 
   isSelectionModeMultiple(): boolean {
