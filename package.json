@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build && npm run build-styles && npm copy-files",
+    "build": "ng build && npm run build-styles && npm run copy-files",
     "build-styles": "scss-bundle -c scss-bundle-ontimize.config.json && scss-bundle -c scss-bundle-theme.config.json",
     "copy-files": "copyfiles -u 3 ./projects/ontimize-web-ngx/assets/svg/ontimize-icon-set.svg ./dist/ontimize-web-ngx/assets && echo '----¡Assets copied!----'  ",
     "postbuild": "cd dist/ontimize-web-ngx && npm pack",
