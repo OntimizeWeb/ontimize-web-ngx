@@ -56,7 +56,6 @@ export class OTableVisibleColumnsDialogComponent {
   }
 
   onClickColumn(col: OColumn): void {
-    console.log(col);
     col.visible = !col.visible;
   }
 

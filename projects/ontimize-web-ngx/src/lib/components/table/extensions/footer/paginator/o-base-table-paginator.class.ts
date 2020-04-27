@@ -33,16 +33,15 @@ export class OBaseTablePaginator implements OTablePaginator {
   }
 
   set pageSize(value: number) {
-    if (value < 0) {
+    const parsedValue = parseInt(`${value}`, 10);
+    if (isNaN(parsedValue) || parsedValue < 0) {
       this._pageSize = this._pageSizeOptions[0];
     } else {
-      this._pageSize = value;
+      this._pageSize = parsedValue;
     }
-
-    /* Modify === by == because they option and this._pageSize types  can be diferents (number == string) */
-    const result: any[] = this.pageSizeOptions.filter(option => option === this._pageSize);
-    if (result.length === 0) {
-      this._pageSizeOptions.push(value);
+    const result = this.pageSizeOptions.find(option => option === this._pageSize);
+    if (!result) {
+      this._pageSizeOptions.push(this._pageSize);
       this._pageSizeOptions.sort((i: number, j: number) => i - j);
     }
   }
