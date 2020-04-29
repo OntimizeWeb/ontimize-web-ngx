@@ -1,4 +1,4 @@
 export type SessionInfo = {
-  id?: number;
+  id?: string | number;
   user?: string;
 };

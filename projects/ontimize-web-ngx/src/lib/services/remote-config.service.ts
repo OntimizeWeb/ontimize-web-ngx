@@ -69,7 +69,7 @@ export class ORemoteConfigurationService {
     }
   }
 
-  public getUserConfiguration(): Observable<any> {
+  public getUserConfiguration(): Observable<OntimizeServiceResponse> {
     const self = this;
     const observable = new Observable((observer: Subscriber<OntimizeServiceResponse>) => {
       const sessionInfo = self.loginStorageService.getSessionInfo();
@@ -86,22 +86,6 @@ export class ORemoteConfigurationService {
       };
       self.httpClient.post(url, body, options).subscribe((resp: OntimizeServiceResponse) => {
         if (resp && resp.code === Codes.ONTIMIZE_SUCCESSFUL_CODE && Util.isDefined(resp.data)) {
-          let storedConf;
-          if (Util.isArray(resp.data)) {
-            storedConf = resp.data[0][self._columns.configuration];
-          } else {
-            storedConf = resp.data;
-          }
-          if (Util.isDefined(storedConf)) {
-            let componentsData;
-            try {
-              const decoded = atob(storedConf);
-              componentsData = JSON.parse(decoded);
-            } catch (e) {
-              componentsData = {};
-            }
-            self.localStorageService.storeSessionUserComponentsData(componentsData);
-          }
           observer.next(resp);
         } else {
           observer.error();
@@ -160,8 +144,23 @@ export class ORemoteConfigurationService {
             //
           });
         });
-
-        self.getUserConfiguration().subscribe(() => {
+        self.getUserConfiguration().subscribe((resp: OntimizeServiceResponse) => {
+          let storedConf;
+          if (Util.isArray(resp.data)) {
+            storedConf = resp.data[0][self._columns.configuration];
+          } else {
+            storedConf = resp.data;
+          }
+          if (Util.isDefined(storedConf)) {
+            let componentsData;
+            try {
+              const decoded = atob(storedConf);
+              componentsData = JSON.parse(decoded);
+            } catch (e) {
+              componentsData = {};
+            }
+            self.localStorageService.storeSessionUserComponentsData(componentsData);
+          }
           observer.next();
         }, () => {
           observer.next();

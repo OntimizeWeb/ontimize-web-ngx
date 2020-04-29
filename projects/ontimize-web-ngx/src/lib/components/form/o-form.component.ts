@@ -22,9 +22,8 @@ import { IFormDataTypeComponent } from '../../interfaces/form-data-type-componen
 import { OFormLayoutManagerComponent } from '../../layouts/form-layout/o-form-layout-manager.component';
 import { OntimizeServiceProvider } from '../../services/data-service.provider';
 import { DialogService } from '../../services/dialog.service';
-import { OFormService } from '../../services/forms/o-form.service';
 import { NavigationService, ONavigationItem } from '../../services/navigation.service';
-import { OntimizeService } from '../../services/ontimize.service';
+import { OntimizeService } from '../../services/ontimize/ontimize.service';
 import { PermissionsService } from '../../services/permissions/permissions.service';
 import { SnackBarService } from '../../services/snackbar.service';
 import { FormValueOptions } from '../../types/form-value-options.type';
@@ -144,8 +143,7 @@ export const DEFAULT_OUTPUTS_O_FORM = [
 @Component({
   selector: 'o-form',
   providers: [
-    OntimizeServiceProvider,
-    OFormService
+    OntimizeServiceProvider
   ],
   templateUrl: './o-form.component.html',
   styleUrls: ['./o-form.component.scss'],
@@ -285,8 +283,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     protected zone: NgZone,
     protected cd: ChangeDetectorRef,
     protected injector: Injector,
-    protected elRef: ElementRef,
-    private oformService: OFormService
+    protected elRef: ElementRef
   ) {
 
     this.formCache = new OFormCacheClass(this);

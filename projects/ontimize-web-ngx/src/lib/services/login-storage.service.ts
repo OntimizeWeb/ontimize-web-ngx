@@ -50,7 +50,7 @@ export class LoginStorageService {
   public isLoggedIn(): boolean {
     const sessionInfo = this.getSessionInfo();
     if (sessionInfo && sessionInfo.id && sessionInfo.user && sessionInfo.user.length > 0) {
-      if (isNaN(sessionInfo.id) && sessionInfo.id < 0) {
+      if (typeof sessionInfo.id === 'number' && (isNaN(sessionInfo.id) || sessionInfo.id < 0)) {
         return false;
       }
       return true;

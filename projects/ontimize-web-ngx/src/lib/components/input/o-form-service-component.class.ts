@@ -3,7 +3,8 @@ import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 
 import { InputConverter } from '../../decorators/input-converter';
 import { DialogService } from '../../services/dialog.service';
-import { OntimizeService } from '../../services/ontimize.service';
+import { OntimizeService } from '../../services/ontimize/ontimize.service';
+import { FormValueOptions } from '../../types/form-value-options.type';
 import { Codes } from '../../util/codes';
 import { ServiceUtils } from '../../util/service.utils';
 import { Util } from '../../util/util';
@@ -13,7 +14,6 @@ import {
   DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT,
   OFormDataComponent,
 } from '../o-form-data-component.class';
-import { FormValueOptions } from '../../types/form-value-options.type';
 
 export const DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT = [
   ...DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,

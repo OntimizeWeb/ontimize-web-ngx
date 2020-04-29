@@ -1,6 +1,6 @@
 import { Subscription } from 'rxjs';
 
-import { OntimizeFileService } from '../../../services/ontimize-file.service';
+import { OntimizeFileService } from '../../../services/ontimize/ontimize-file.service';
 import { Codes } from '../../../util/codes';
 import { OFileItem } from './o-file-item.class';
 

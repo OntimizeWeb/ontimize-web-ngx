@@ -2,6 +2,7 @@ import { Injectable, Injector } from '@angular/core';
 import { Subscriber } from 'rxjs';
 
 import { IAuthService } from '../../interfaces/auth-service.interface';
+import { OntimizeServiceResponse } from '../../types/ontimize-service-response.type';
 import { Codes } from '../../util/codes';
 
 @Injectable({
@@ -13,7 +14,7 @@ export class OntimizeServiceResponseParser {
     protected injector: Injector
   ) { }
 
-  parseSuccessfulResponse(resp, subscriber: Subscriber<any>, service: IAuthService) {
+  parseSuccessfulResponse(resp: OntimizeServiceResponse, subscriber: Subscriber<OntimizeServiceResponse>, service: IAuthService) {
     if (resp && resp.code === Codes.ONTIMIZE_UNAUTHORIZED_CODE) {
       service.redirectLogin(true);
     } else if (resp && resp.code === Codes.ONTIMIZE_FAILED_CODE) {
@@ -26,7 +27,7 @@ export class OntimizeServiceResponseParser {
     }
   }
 
-  parseUnsuccessfulResponse(error, subscriber: Subscriber<any>, service: IAuthService) {
+  parseUnsuccessfulResponse(error, subscriber: Subscriber<OntimizeServiceResponse>, service: IAuthService) {
     if (error.status !== 500 && (error.status === 401 || error.status === 0) && !error.ok) {
       service.redirectLogin(true);
     } else {

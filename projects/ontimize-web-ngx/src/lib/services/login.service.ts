@@ -7,7 +7,6 @@ import { AppConfig } from '../config/app-config';
 import { IAuthService } from '../interfaces/auth-service.interface';
 import { ILoginService } from '../interfaces/login-service.interface';
 import { DialogService } from '../services/dialog.service';
-import { OntimizeService } from '../services/ontimize.service';
 import { PermissionsService } from '../services/permissions/permissions.service';
 import { ORemoteConfigurationService } from '../services/remote-config.service';
 import { Config } from '../types/config.type';
@@ -16,6 +15,7 @@ import { ObservableWrapper } from '../util/async';
 import { Codes } from '../util/codes';
 import { ServiceUtils } from '../util/service.utils';
 import { LoginStorageService } from './login-storage.service';
+import { OntimizeService } from './ontimize/ontimize.service';
 
 @Injectable({
   providedIn: 'root'
@@ -71,32 +71,29 @@ export class LoginService implements ILoginService {
 
   public login(user: string, password: string): Observable<any> {
     this._user = user;
-    const self = this;
-    let innerObserver: any;
-    const dataObservable = new Observable(observer => innerObserver = observer).pipe(share());
-
-    this.retrieveAuthService().then(service => {
-      service.startsession(user, password).subscribe(resp => {
-        self.onLoginSuccess(resp);
-        const permissionsService = self.injector.get(PermissionsService);
-        const remoteConfigService = self.injector.get(ORemoteConfigurationService);
-        const pendingArray = [];
-        pendingArray.push(permissionsService.getUserPermissionsAsPromise());
-        pendingArray.push(remoteConfigService.initialize());
-        combineLatest(pendingArray).subscribe(() => {
-          innerObserver.next();
-          innerObserver.complete();
+    const dataObservable: Observable<any> = new Observable(observer => {
+      this.retrieveAuthService().then(service => {
+        service.startsession(user, password).subscribe(resp => {
+          this.onLoginSuccess(resp);
+          const permissionsService = this.injector.get(PermissionsService);
+          const remoteConfigService = this.injector.get(ORemoteConfigurationService);
+          const pendingArray = [];
+          pendingArray.push(permissionsService.getUserPermissionsAsPromise());
+          pendingArray.push(remoteConfigService.initialize());
+          combineLatest(pendingArray).subscribe(() => {
+            observer.next();
+            observer.complete();
+          });
+        }, error => {
+          this.onLoginError(error);
+          observer.error(error);
         });
-      }, error => {
-        self.onLoginError(error);
-        innerObserver.error(error);
       });
     });
-
     return dataObservable.pipe(share());
   }
 
-  public onLoginSuccess(sessionId: number): void {
+  public onLoginSuccess(sessionId: string | number): void {
     // save user and sessionid into local storage
     const session = {
       user: this._user,
@@ -112,19 +109,18 @@ export class LoginService implements ILoginService {
 
   public logout(): Observable<any> {
     ObservableWrapper.callEmit(this.onLogout, null);
-    const self = this;
     const sessionInfo = this.loginStorageService.getSessionInfo();
     const dataObservable: Observable<any> = new Observable(innerObserver => {
-      self.retrieveAuthService().then(service => {
+      this.retrieveAuthService().then(service => {
         service.endsession(sessionInfo.user, sessionInfo.id).subscribe(resp => {
-          const remoteConfigService = self.injector.get(ORemoteConfigurationService);
+          const remoteConfigService = this.injector.get(ORemoteConfigurationService);
           remoteConfigService.finalize().subscribe(() => {
-            self.onLogoutSuccess(resp);
+            this.onLogoutSuccess(resp);
             innerObserver.next();
             innerObserver.complete();
           });
         }, error => {
-          self.onLogoutError(error);
+          this.onLogoutError(error);
           innerObserver.error(error);
         });
       });

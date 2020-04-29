@@ -5,7 +5,7 @@ import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
 import { DialogService } from '../../../../../services/dialog.service';
-import { OntimizeExportService } from '../../../../../services/ontimize-export.service';
+import { OntimizeExportService } from '../../../../../services/ontimize/ontimize-export.service';
 import { OTranslateService } from '../../../../../services/translate/o-translate.service';
 import { Codes } from '../../../../../util/codes';
 import { SQLTypes } from '../../../../../util/sqltypes';

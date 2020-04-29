@@ -2,8 +2,8 @@ import { Injector } from '@angular/core';
 
 import { AppConfig } from '../config/app-config';
 import { Config } from '../types/config.type';
-import { OntimizeEEService } from './ontimize-ee.service';
-import { OntimizeService } from './ontimize.service';
+import { OntimizeEEService } from './ontimize/ontimize-ee.service';
+import { OntimizeService } from './ontimize/ontimize.service';
 
 export let OntimizeServiceProvider = {
   provide: OntimizeService,

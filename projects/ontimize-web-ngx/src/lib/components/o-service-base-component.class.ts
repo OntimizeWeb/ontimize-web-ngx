@@ -6,7 +6,7 @@ import { InputConverter } from '../decorators/input-converter';
 import { ILocalStorageComponent } from '../interfaces/local-storage-component.interface';
 import { DialogService } from '../services/dialog.service';
 import { LocalStorageService } from '../services/local-storage.service';
-import { OntimizeService } from '../services/ontimize.service';
+import { OntimizeService } from '../services/ontimize/ontimize.service';
 import { OQueryDataArgs } from '../types/query-data-args.type';
 import { Codes } from '../util/codes';
 import { ServiceUtils } from '../util/service.utils';

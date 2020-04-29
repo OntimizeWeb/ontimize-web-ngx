@@ -13,7 +13,7 @@ import { Subscription } from 'rxjs';
 import { ITranslatePipeArgument, OTranslatePipe } from '../../../../../pipes/o-translate.pipe';
 import { OntimizeServiceProvider } from '../../../../../services/data-service.provider';
 import { DialogService } from '../../../../../services/dialog.service';
-import { OntimizeService } from '../../../../../services/ontimize.service';
+import { OntimizeService } from '../../../../../services/ontimize/ontimize.service';
 import { Expression } from '../../../../../types/expression.type';
 import { Codes } from '../../../../../util/codes';
 import { FilterExpressionUtils } from '../../../../../util/filter-expression.utils';
