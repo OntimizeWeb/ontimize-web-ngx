@@ -3,7 +3,7 @@ import { HostListener, Injectable, Injector } from '@angular/core';
 import { Observable, Subscriber, Subscription, timer } from 'rxjs';
 
 import { AppConfig } from '../config/app-config';
-import { OntimizeServiceResponse } from '../types/ontimize-service-response.type';
+import { ServiceResponse } from '../interfaces/service-response.interface';
 import { ORemoteConfiguration, ORemoteConfigurationColumns } from '../types/remote-configuration.type';
 import { SessionInfo } from '../types/session-info.type';
 import { Codes } from '../util/codes';
@@ -69,9 +69,9 @@ export class ORemoteConfigurationService {
     }
   }
 
-  public getUserConfiguration(): Observable<OntimizeServiceResponse> {
+  public getUserConfiguration(): Observable<ServiceResponse> {
     const self = this;
-    const observable = new Observable((observer: Subscriber<OntimizeServiceResponse>) => {
+    const observable = new Observable((observer: Subscriber<ServiceResponse>) => {
       const sessionInfo = self.loginStorageService.getSessionInfo();
       if (!self.hasSession(sessionInfo)) {
         observer.error();
@@ -84,7 +84,7 @@ export class ORemoteConfigurationService {
       const options = {
         headers: self.buildHeaders()
       };
-      self.httpClient.post(url, body, options).subscribe((resp: OntimizeServiceResponse) => {
+      self.httpClient.post(url, body, options).subscribe((resp: ServiceResponse) => {
         if (resp && resp.code === Codes.ONTIMIZE_SUCCESSFUL_CODE && Util.isDefined(resp.data)) {
           observer.next(resp);
         } else {
@@ -102,7 +102,7 @@ export class ORemoteConfigurationService {
     if (self.storeSubscription) {
       self.storeSubscription.unsubscribe();
     }
-    const observable = new Observable((observer: Subscriber<OntimizeServiceResponse>) => {
+    const observable = new Observable((observer: Subscriber<ServiceResponse>) => {
       const sessionInfo = self.loginStorageService.getSessionInfo();
       if (!self._appConfig.useRemoteConfiguration() || !self.hasSession(sessionInfo)) {
         observer.next();
@@ -123,7 +123,7 @@ export class ORemoteConfigurationService {
       const options = {
         headers: self.buildHeaders()
       };
-      self.httpClient.put(url, body, options).subscribe((resp: OntimizeServiceResponse) => {
+      self.httpClient.put(url, body, options).subscribe((resp: ServiceResponse) => {
         if (resp && resp.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) {
           observer.next(resp);
         } else {
@@ -144,7 +144,7 @@ export class ORemoteConfigurationService {
             //
           });
         });
-        self.getUserConfiguration().subscribe((resp: OntimizeServiceResponse) => {
+        self.getUserConfiguration().subscribe((resp: ServiceResponse) => {
           let storedConf;
           if (Util.isArray(resp.data)) {
             storedConf = resp.data[0][self._columns.configuration];

@@ -19,6 +19,7 @@ import { InputConverter } from '../../decorators/input-converter';
 import { IComponent } from '../../interfaces/component.interface';
 import { IFormDataComponent } from '../../interfaces/form-data-component.interface';
 import { IFormDataTypeComponent } from '../../interfaces/form-data-type-component.interface';
+import { ServiceResponse } from '../../interfaces/service-response.interface';
 import { OFormLayoutManagerComponent } from '../../layouts/form-layout/o-form-layout-manager.component';
 import { OntimizeServiceProvider } from '../../services/data-service.provider';
 import { DialogService } from '../../services/dialog.service';
@@ -893,8 +894,8 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     this.loaderSubscription = this.load();
     const av = this.getAttributesToQuery();
     const sqlTypes = this.getAttributesSQLTypes();
-    this.querySubscription = this.dataService[this.queryMethod](filter, av, this.entity, sqlTypes).subscribe(
-      resp => {
+    this.querySubscription = this.dataService[this.queryMethod](filter, av, this.entity, sqlTypes)
+      .subscribe((resp: ServiceResponse) => {
         if (resp.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) {
           self._setData(resp.data);
         } else {
@@ -903,8 +904,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
           console.error('ERROR: ' + resp.message);
         }
         self.loaderSubscription.unsubscribe();
-      },
-      err => {
+      }, err => {
         console.error(err);
         self._updateFormData({});
         if (err && err.statusText) {

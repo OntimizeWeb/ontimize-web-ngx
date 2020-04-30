@@ -86,7 +86,7 @@ export class OntimizeService extends OntimizeBaseService implements IAuthService
     });
 
     return this.doRequest({
-      method: 'PUT',
+      method: 'POST',
       url: url,
       body: body,
       successCallback: this.parseSuccessfulQueryResponse,
@@ -122,7 +122,7 @@ export class OntimizeService extends OntimizeBaseService implements IAuthService
     });
 
     return this.doRequest({
-      method: 'PUT',
+      method: 'POST',
       url: url,
       body: body,
       successCallback: this.parseSuccessfulAdvancedQueryResponse,

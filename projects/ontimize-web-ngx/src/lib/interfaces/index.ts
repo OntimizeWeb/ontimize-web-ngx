@@ -24,3 +24,5 @@ export * from './o-table-options.interface';
 export * from './o-table-paginator.interface';
 export * from './o-table-quickfilter.interface';
 export * from './permissions-service.interface';
+export * from './service-response-adapter.interface';
+export * from './service-response.interface';

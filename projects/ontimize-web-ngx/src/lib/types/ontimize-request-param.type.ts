@@ -1,13 +1,13 @@
 import { Subscriber } from 'rxjs';
 
+import { ServiceResponse } from '../interfaces/service-response.interface';
 import { HttpRequestOptions } from './http-request-options.type';
-import { OntimizeServiceResponse } from './ontimize-service-response.type';
 
 export type OntimizeRequestParam = {
   method: 'POST' | 'PUT' | 'DELETE',
   url: string,
   body: any,
   options?: HttpRequestOptions,
-  successCallback?: (resp: OntimizeServiceResponse, observer: Subscriber<OntimizeServiceResponse>) => void,
-  errorCallBack?: (resp: OntimizeServiceResponse, observer: Subscriber<OntimizeServiceResponse>) => void
+  successCallback?: (resp: ServiceResponse, observer: Subscriber<ServiceResponse>) => void,
+  errorCallBack?: (resp: ServiceResponse, observer: Subscriber<ServiceResponse>) => void
 };

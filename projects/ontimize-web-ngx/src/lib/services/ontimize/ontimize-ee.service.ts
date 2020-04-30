@@ -5,7 +5,7 @@ import { share } from 'rxjs/operators';
 
 import { IAuthService } from '../../interfaces/auth-service.interface';
 import { IDataService } from '../../interfaces/data-service.interface';
-import { OntimizeServiceResponse } from '../../types/ontimize-service-response.type';
+import { ServiceResponse } from '../../interfaces/service-response.interface';
 import { Util } from '../../util/util';
 import { OntimizeBaseService } from './ontimize-base.service.class';
 
@@ -58,7 +58,7 @@ export class OntimizeEEService extends OntimizeBaseService implements IAuthServi
     return dataObservable.pipe(share());
   }
 
-  public query(kv?: object, av?: Array<string>, entity?: string, sqltypes?: object): Observable<OntimizeServiceResponse> {
+  public query(kv?: object, av?: Array<string>, entity?: string, sqltypes?: object): Observable<ServiceResponse> {
     // TODO improve this -> merge between global conf and specific params of method calling
     kv = (Util.isDefined(kv)) ? kv : this.kv;
     av = (Util.isDefined(av)) ? av : this.av;
@@ -73,7 +73,7 @@ export class OntimizeEEService extends OntimizeBaseService implements IAuthServi
     });
 
     return this.doRequest({
-      method: 'PUT',
+      method: 'POST',
       url: url,
       body: body,
       successCallback: this.parseSuccessfulQueryResponse,
@@ -82,7 +82,7 @@ export class OntimizeEEService extends OntimizeBaseService implements IAuthServi
   }
 
   public advancedQuery(kv?: object, av?: Array<string>, entity?: string, sqltypes?: object,
-    offset?: number, pagesize?: number, orderby?: Array<object>): Observable<OntimizeServiceResponse> {
+    offset?: number, pagesize?: number, orderby?: Array<object>): Observable<ServiceResponse> {
 
     // TODO improve this -> merge between global conf and specific params of method calling
     kv = (Util.isDefined(kv)) ? kv : this.kv;
@@ -104,7 +104,7 @@ export class OntimizeEEService extends OntimizeBaseService implements IAuthServi
     });
 
     return this.doRequest({
-      method: 'PUT',
+      method: 'POST',
       url: url,
       body: body,
       successCallback: this.parseSuccessfulAdvancedQueryResponse,
@@ -112,7 +112,7 @@ export class OntimizeEEService extends OntimizeBaseService implements IAuthServi
     });
   }
 
-  public insert(av: object = {}, entity: string, sqltypes?: object): Observable<OntimizeServiceResponse> {
+  public insert(av: object = {}, entity: string, sqltypes?: object): Observable<ServiceResponse> {
 
     const url = `${this.urlBase}${this.path}/${entity}`;
 
@@ -122,7 +122,7 @@ export class OntimizeEEService extends OntimizeBaseService implements IAuthServi
     });
 
     return this.doRequest({
-      method: 'PUT',
+      method: 'POST',
       url: url,
       body: body,
       successCallback: this.parseSuccessfulInsertResponse,
@@ -130,7 +130,7 @@ export class OntimizeEEService extends OntimizeBaseService implements IAuthServi
     });
   }
 
-  public update(kv: object = {}, av: object = {}, entity?: string, sqltypes?: object): Observable<OntimizeServiceResponse> {
+  public update(kv: object = {}, av: object = {}, entity?: string, sqltypes?: object): Observable<ServiceResponse> {
 
     const url = `${this.urlBase}${this.path}/${entity}`;
 
@@ -149,7 +149,7 @@ export class OntimizeEEService extends OntimizeBaseService implements IAuthServi
     });
   }
 
-  public delete(kv: object = {}, entity?: string, sqltypes?: object): Observable<OntimizeServiceResponse> {
+  public delete(kv: object = {}, entity?: string, sqltypes?: object): Observable<ServiceResponse> {
 
     const url = `${this.urlBase}${this.path}/${entity}`;
 

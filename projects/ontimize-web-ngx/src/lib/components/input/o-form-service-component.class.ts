@@ -2,6 +2,7 @@ import { ElementRef, EventEmitter, Injector, NgZone } from '@angular/core';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 
 import { InputConverter } from '../../decorators/input-converter';
+import { ServiceResponse } from '../../interfaces/service-response.interface';
 import { DialogService } from '../../services/dialog.service';
 import { OntimizeService } from '../../services/ontimize/ontimize.service';
 import { FormValueOptions } from '../../types/form-value-options.type';
@@ -242,24 +243,25 @@ export class OFormServiceComponent extends OFormDataComponent {
       const queryCols = this.getAttributesValuesToQuery();
 
       this.loaderSubscription = this.load();
-      this.querySuscription = this.dataService[this.queryMethod](filter, queryCols, this.entity).subscribe(resp => {
-        if (resp.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) {
-          self.cacheQueried = true;
-          self.setDataArray(resp.data);
-        }
-        // window.setTimeout(() => { this.loading = false; self.loadingSubject.next(false); self.loaderSubscription.unsubscribe(); }, 10000);
-        self.loadingSubject.next(false);
-        self.loaderSubscription.unsubscribe();
-      }, err => {
-        console.error(err);
-        self.loadingSubject.next(false);
-        self.loaderSubscription.unsubscribe();
-        if (err && !Util.isObject(err)) {
-          this.dialogService.alert('ERROR', err);
-        } else {
-          this.dialogService.alert('ERROR', 'MESSAGES.ERROR_QUERY');
-        }
-      });
+      this.querySuscription = this.dataService[this.queryMethod](filter, queryCols, this.entity)
+        .subscribe((resp: ServiceResponse) => {
+          if (resp.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) {
+            self.cacheQueried = true;
+            self.setDataArray(resp.data);
+          }
+          // window.setTimeout(() => { this.loading = false; self.loadingSubject.next(false); self.loaderSubscription.unsubscribe(); }, 10000);
+          self.loadingSubject.next(false);
+          self.loaderSubscription.unsubscribe();
+        }, err => {
+          console.error(err);
+          self.loadingSubject.next(false);
+          self.loaderSubscription.unsubscribe();
+          if (err && !Util.isObject(err)) {
+            this.dialogService.alert('ERROR', err);
+          } else {
+            this.dialogService.alert('ERROR', 'MESSAGES.ERROR_QUERY');
+          }
+        });
     }
   }
 
