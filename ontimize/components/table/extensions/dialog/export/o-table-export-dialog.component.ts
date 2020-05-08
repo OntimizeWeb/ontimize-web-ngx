@@ -1,8 +1,9 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { ChangeDetectionStrategy, Component, Inject, Injector, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
-import { MatButton, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { MAT_DIALOG_DATA, MatButton, MatDialogRef } from '@angular/material';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
+
 import { DialogService, OntimizeExportService, OTranslateService } from '../../../../../services';
 import { Codes, SQLTypes, Util } from '../../../../../utils';
 import { OTableExportButtonService } from '../../export-button/o-table-export-button.service';
@@ -93,21 +94,11 @@ export class OTableExportDialogComponent implements OnInit, OnDestroy {
     };
     let self = this;
     this.proccessExportData(exportData.data, exportData.sqlTypes);
-    this.exportService.exportData(exportData, exportType, this.config.entity).subscribe((resp) => {
-      if (resp.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) {
-        self.exportService.downloadFile(resp.data[0][exportType + 'Id'], exportType).subscribe(
-          () => self.dialogRef.close(true),
-          downloadError => {
-            console.error(downloadError);
-            self.dialogService.alert('ERROR', downloadError.message).then(() => self.dialogRef.close(false));
-          }
-        );
-      } else {
-        self.dialogService.alert('ERROR', resp.message).then(() => self.dialogRef.close(false));
-      }
-    },
-      (err) => self.handleError(err)
-    );
+    this.exportService.exportData(exportData, exportType, this.config.entity)
+      .subscribe(
+        res => self.dialogRef.close(true),
+        err => self.handleError(err)
+      );
   }
 
   proccessExportData(data: Object[], sqlTypes: Object): void {
