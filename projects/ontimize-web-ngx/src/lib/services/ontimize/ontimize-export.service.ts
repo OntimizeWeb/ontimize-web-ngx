@@ -3,13 +3,11 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { share } from 'rxjs/operators';
 
-import { OntimizeServiceResponse } from '../../types/ontimize-service-response.type';
-import { OntimizeBaseService } from './ontimize-base.service.class';
+import { ServiceResponse } from '../../interfaces/service-response.interface';
+import { BaseService } from '../base-service.class';
 
-@Injectable({
-  providedIn: 'root'
-})
-export class OntimizeExportService extends OntimizeBaseService {
+@Injectable()
+export class OntimizeExportService extends BaseService {
 
   public exportPath: string;
   public downloadPath: string;
@@ -31,7 +29,7 @@ export class OntimizeExportService extends OntimizeBaseService {
     }
   }
 
-  public exportData(data: any, format: string, entity?: string): Observable<OntimizeServiceResponse> {
+  public exportData(data: any, format: string, entity?: string): Observable<ServiceResponse> {
     const url = `${this.urlBase}${this.exportPath ? this.exportPath : ''}${this.servicePath}/${entity}/${format}`;
 
     const options = {
@@ -79,7 +77,7 @@ export class OntimizeExportService extends OntimizeBaseService {
   protected buildHeaders(): HttpHeaders {
     return new HttpHeaders({
       'Access-Control-Allow-Origin': '*',
-      Authorization: 'Bearer ' + this.sessionid
+      Authorization: 'Bearer ' + this._sessionid
     });
   }
 

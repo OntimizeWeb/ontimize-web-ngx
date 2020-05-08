@@ -245,7 +245,7 @@ export class OFormServiceComponent extends OFormDataComponent {
       this.loaderSubscription = this.load();
       this.querySuscription = this.dataService[this.queryMethod](filter, queryCols, this.entity)
         .subscribe((resp: ServiceResponse) => {
-          if (resp.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) {
+          if (resp.isSuccessful()) {
             self.cacheQueried = true;
             self.setDataArray(resp.data);
           }

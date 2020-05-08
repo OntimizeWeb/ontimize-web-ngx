@@ -7,22 +7,22 @@ import { IAuthService } from '../../interfaces/auth-service.interface';
 import { IDataService } from '../../interfaces/data-service.interface';
 import { ServiceResponse } from '../../interfaces/service-response.interface';
 import { Util } from '../../util/util';
-import { OntimizeBaseService } from './ontimize-base.service.class';
+import { BaseService } from '../base-service.class';
 
 @Injectable()
-export class OntimizeEEService extends OntimizeBaseService implements IAuthService, IDataService {
+export class OntimizeEEService extends BaseService implements IAuthService, IDataService {
 
   public path: string = '';
 
   public configureService(config: any): void {
     super.configureService(config);
-    this.startSessionPath = this.appConfig.startSessionPath ? this.appConfig.startSessionPath : '/users/login';
+    this._startSessionPath = this._appConfig.startSessionPath ? this._appConfig.startSessionPath : '/users/login';
     this.path = config.path;
     // TODO init other params
   }
 
   public startsession(user: string, password: string): Observable<string | number> {
-    const url = this.urlBase + this.startSessionPath;
+    const url = this.urlBase + this._startSessionPath;
     const options: any = {
       headers: new HttpHeaders({
         Authorization: 'Basic ' + btoa(user + ':' + password)
@@ -169,7 +169,7 @@ export class OntimizeEEService extends OntimizeBaseService implements IAuthServi
 
   protected buildHeaders(): HttpHeaders {
     const headers = super.buildHeaders();
-    return headers.append('Authorization', 'Bearer ' + this.sessionid);
+    return headers.append('Authorization', 'Bearer ' + this._sessionid);
   }
 
 }

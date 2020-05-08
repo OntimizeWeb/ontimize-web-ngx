@@ -3,7 +3,6 @@ import { Subscriber } from 'rxjs';
 
 import { IAuthService } from '../../interfaces/auth-service.interface';
 import { ServiceResponse } from '../../interfaces/service-response.interface';
-import { Codes } from '../../util/codes';
 
 @Injectable({
   providedIn: 'root'
@@ -15,11 +14,11 @@ export class OntimizeServiceResponseParser {
   ) { }
 
   parseSuccessfulResponse(resp: ServiceResponse, subscriber: Subscriber<ServiceResponse>, service: IAuthService) {
-    if (resp && resp.code === Codes.ONTIMIZE_UNAUTHORIZED_CODE) {
+    if (resp && resp.isUnauthorized()) {
       service.redirectLogin(true);
-    } else if (resp && resp.code === Codes.ONTIMIZE_FAILED_CODE) {
+    } else if (resp && resp.isFailed()) {
       subscriber.error(resp.message);
-    } else if (resp && resp.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) {
+    } else if (resp && resp.isSuccessful()) {
       subscriber.next(resp);
     } else {
       // Unknow state -> error

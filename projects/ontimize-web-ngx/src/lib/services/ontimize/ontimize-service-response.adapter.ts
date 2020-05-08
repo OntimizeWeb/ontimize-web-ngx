@@ -16,5 +16,4 @@ export class OntimizeServiceResponseAdapter implements ServiceResponseAdapter<On
       res.body.sqlTypes
     );
   }
-
 }

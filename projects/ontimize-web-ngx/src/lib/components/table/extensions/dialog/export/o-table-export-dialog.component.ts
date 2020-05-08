@@ -4,6 +4,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
+import { ServiceResponse } from '../../../../../interfaces/service-response.interface';
 import { DialogService } from '../../../../../services/dialog.service';
 import { OntimizeExportService } from '../../../../../services/ontimize/ontimize-export.service';
 import { OTranslateService } from '../../../../../services/translate/o-translate.service';
@@ -17,7 +18,11 @@ import { OTableExportConfiguration } from '../../header/table-menu/o-table-expor
   selector: 'o-table-export-dialog',
   templateUrl: 'o-table-export-dialog.component.html',
   styleUrls: ['o-table-export-dialog.component.scss'],
-  providers: [OntimizeExportService],
+  providers: [{
+    provide: OntimizeExportService,
+    useClass: OntimizeExportService,
+    deps: [Injector]
+  }],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     class: 'o-table-export-dialog'
@@ -90,8 +95,8 @@ export class OTableExportDialogComponent implements OnInit, OnDestroy {
     };
     const self = this;
     this.proccessExportData(exportData.data, exportData.sqlTypes);
-    this.exportService.exportData(exportData, exportType, this.config.entity).subscribe((resp) => {
-      if (resp.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) {
+    this.exportService.exportData(exportData, exportType, this.config.entity).subscribe((resp: ServiceResponse) => {
+      if (resp.isSuccessful()) {
         self.exportService.downloadFile(resp.data[0][exportType + 'Id'], exportType).subscribe(
           () => self.dialogRef.close(true),
           downloadError => {

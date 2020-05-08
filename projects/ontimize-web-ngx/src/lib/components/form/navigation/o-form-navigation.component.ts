@@ -104,7 +104,7 @@ export class OFormNavigationComponent implements OnDestroy {
       queryArgs[5] = length ? length : conf.queryRows;
 
       self.querySubscription = self.dataService[conf.queryMethod].apply(self.dataService, queryArgs).subscribe(res => {
-        if (res.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) {
+        if (res.isSuccessful()) {
           self.navigationData = res.data;
           self.queryConf.queryRecordOffset = offset;
         }

@@ -3,12 +3,12 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { share } from 'rxjs/operators';
 
-import { OntimizeBaseService } from './ontimize-base.service.class';
+import { BaseService } from '../base-service.class';
 
 @Injectable({
   providedIn: 'root'
 })
-export class OntimizeFileService extends OntimizeBaseService {
+export class OntimizeFileService extends BaseService {
 
   public path: string = '';
 
@@ -88,7 +88,7 @@ export class OntimizeFileService extends OntimizeBaseService {
   protected buildHeaders(): HttpHeaders {
     return new HttpHeaders({
       'Access-Control-Allow-Origin': '*',
-      Authorization: 'Bearer ' + this.sessionid
+      Authorization: 'Bearer ' + this._sessionid
     });
   }
 

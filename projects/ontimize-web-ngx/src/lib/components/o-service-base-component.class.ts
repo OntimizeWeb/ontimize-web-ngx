@@ -382,7 +382,7 @@ export class OServiceBaseComponent implements ILocalStorageComponent, OnChanges 
           if (Util.isArray(res)) {
             data = res;
             this.sqlTypes = {};
-          } else if ((res.code === Codes.ONTIMIZE_SUCCESSFUL_CODE)) {
+          } else if (res.isSuccessful()) {
             const arrData = (res.data !== undefined) ? res.data : [];
             data = Util.isArray(arrData) ? arrData : [];
             this.sqlTypes = res.sqlTypes;

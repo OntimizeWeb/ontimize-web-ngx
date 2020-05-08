@@ -896,7 +896,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     const sqlTypes = this.getAttributesSQLTypes();
     this.querySubscription = this.dataService[this.queryMethod](filter, av, this.entity, sqlTypes)
       .subscribe((resp: ServiceResponse) => {
-        if (resp.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) {
+        if (resp.isSuccessful()) {
           self._setData(resp.data);
         } else {
           self._updateFormData({});
@@ -953,7 +953,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     const observable = new Observable(observer => {
       this.dataService[this.insertMethod](values, this.entity, sqlTypes).subscribe(
         resp => {
-          if (resp.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) {
+          if (resp.isSuccessful()) {
             observer.next(resp.data);
             observer.complete();
           } else {
@@ -1000,7 +1000,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     const observable = new Observable(observer => {
       this.dataService[this.updateMethod](filter, values, this.entity, sqlTypes).subscribe(
         resp => {
-          if (resp.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) {
+          if (resp.isSuccessful()) {
             observer.next(resp.data);
             observer.complete();
           } else {
@@ -1047,7 +1047,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
       this.canDiscardChanges = true;
       this.dataService[this.deleteMethod](filter, this.entity).subscribe(
         resp => {
-          if (resp.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) {
+          if (resp.isSuccessful()) {
             self.formCache.setCacheSnapshot();
             self.markFormLayoutManagerToUpdate();
             self.postCorrectDelete(resp);

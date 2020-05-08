@@ -5,10 +5,10 @@ import { share } from 'rxjs/operators';
 import { IAuthService } from '../../interfaces/auth-service.interface';
 import { IDataService } from '../../interfaces/data-service.interface';
 import { Util } from '../../util/util';
-import { OntimizeBaseService } from './ontimize-base.service.class';
+import { BaseService } from '../base-service.class';
 
 @Injectable()
-export class OntimizeService extends OntimizeBaseService implements IAuthService, IDataService {
+export class OntimizeService extends BaseService implements IAuthService, IDataService {
 
   public entity: string = '';
 
@@ -16,7 +16,7 @@ export class OntimizeService extends OntimizeBaseService implements IAuthService
 
   public configureService(config: any): void {
     super.configureService(config);
-    this.startSessionPath = this.appConfig.startSessionPath ? this.appConfig.startSessionPath : '/startsession';
+    this._startSessionPath = this._appConfig.startSessionPath ? this._appConfig.startSessionPath : '/startsession';
     this.user = config.session ? config.session.user : '';
     if (config.entity !== undefined) {
       this.entity = config.entity;
@@ -26,7 +26,7 @@ export class OntimizeService extends OntimizeBaseService implements IAuthService
 
   public startsession(user: string, password: string): Observable<string | number> {
     const encodedPassword = encodeURIComponent(password);
-    const url = this.urlBase + this.startSessionPath + '?user=' + user + '&password=' + encodedPassword;
+    const url = this.urlBase + this._startSessionPath + '?user=' + user + '&password=' + encodedPassword;
     const dataObservable: Observable<string | number> = new Observable(_startSessionObserver => {
       this.httpClient.get(url).subscribe((resp: number) => {
         if (resp >= 0) {
@@ -77,7 +77,7 @@ export class OntimizeService extends OntimizeBaseService implements IAuthService
 
     const body = JSON.stringify({
       user: this.user,
-      sessionid: this.sessionid,
+      sessionid: this._sessionid,
       type: 1,
       entity: entity,
       kv: kv,
@@ -110,7 +110,7 @@ export class OntimizeService extends OntimizeBaseService implements IAuthService
 
     const body = JSON.stringify({
       user: this.user,
-      sessionid: this.sessionid,
+      sessionid: this._sessionid,
       type: 1,
       entity: entity,
       kv: kv,
@@ -139,7 +139,7 @@ export class OntimizeService extends OntimizeBaseService implements IAuthService
 
     const body = JSON.stringify({
       user: this.user,
-      sessionid: this.sessionid,
+      sessionid: this._sessionid,
       entity: entity,
       av: av,
       sqltypes: sqltypes
@@ -165,7 +165,7 @@ export class OntimizeService extends OntimizeBaseService implements IAuthService
 
     const body = JSON.stringify({
       user: this.user,
-      sessionid: this.sessionid,
+      sessionid: this._sessionid,
       entity: entity,
       kv: kv,
       av: av,
@@ -190,7 +190,7 @@ export class OntimizeService extends OntimizeBaseService implements IAuthService
 
     const body = JSON.stringify({
       user: this.user,
-      sessionid: this.sessionid,
+      sessionid: this._sessionid,
       entity: entity,
       kv: kv,
       sqltypes: sqltypes
