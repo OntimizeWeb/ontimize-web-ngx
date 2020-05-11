@@ -102,7 +102,11 @@ export class OCheckboxComponent extends OFormDataComponent {
   }
 
   getValue() :any {
-    return this.value.value ? this.trueValue : this.falseValue;
+    if (this.value.value !== undefined) {
+      return this.value.value ? this.trueValue : this.falseValue;
+    } else {
+      return this.defaultValue;
+    }
   }
 
   onClickBlocker(evt: Event) {
