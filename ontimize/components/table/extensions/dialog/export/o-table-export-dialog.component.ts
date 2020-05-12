@@ -1,8 +1,9 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { ChangeDetectionStrategy, Component, Inject, Injector, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
-import { MatButton, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { MAT_DIALOG_DATA, MatButton, MatDialogRef } from '@angular/material';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
+
 import { DialogService, OntimizeExportService, OTranslateService } from '../../../../../services';
 import { Codes, SQLTypes, Util } from '../../../../../utils';
 import { OTableExportButtonService } from '../../export-button/o-table-export-button.service';
@@ -17,6 +18,7 @@ export class OTableExportConfiguration {
   filter?: Object;
   mode: string;
   entity: string;
+  visibleButtons: string;
   options?: any;
 }
 
@@ -38,6 +40,7 @@ export class OTableExportDialogComponent implements OnInit, OnDestroy {
   protected exportService: OntimizeExportService;
   protected translateService: OTranslateService;
   protected oTableExportButtonService: OTableExportButtonService;
+  protected visibleButtons: string[];
   private subscription: Subscription = new Subscription();
 
   constructor(
@@ -48,6 +51,10 @@ export class OTableExportDialogComponent implements OnInit, OnDestroy {
     this.dialogService = injector.get(DialogService);
     this.translateService = this.injector.get(OTranslateService);
     this.oTableExportButtonService = this.injector.get(OTableExportButtonService);
+
+    if (config && Util.isDefined(config.visibleButtons)) {
+      this.visibleButtons = Util.parseArray(config.visibleButtons.toLowerCase(), true);
+    }
   }
 
   ngOnInit() {
@@ -123,6 +130,10 @@ export class OTableExportDialogComponent implements OnInit, OnDestroy {
         });
       }
     });
+  }
+
+  isButtonVisible(btn: string): boolean {
+    return !this.visibleButtons || (this.visibleButtons.indexOf(btn) !== -1);
   }
 
   protected handleError(err): void {
