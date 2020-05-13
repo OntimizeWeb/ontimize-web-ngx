@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
 import { DialogService, OntimizeExportService, OTranslateService } from '../../../../../services';
+import { exportServiceFactory } from '../../../../../services/export-service.provider';
 import { IExportService } from '../../../../../types/export-service.interface';
 import { Codes, SQLTypes, Util } from '../../../../../utils';
 import { OTableExportButtonService } from '../../export-button/o-table-export-button.service';
@@ -28,7 +29,9 @@ export class OTableExportConfiguration {
   selector: 'o-table-export-dialog',
   templateUrl: 'o-table-export-dialog.component.html',
   styleUrls: ['o-table-export-dialog.component.scss'],
-  providers: [OntimizeExportService],
+  providers: [
+    { provide: OntimizeExportService, useFactory: exportServiceFactory, deps: [Injector] }
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     'class': 'o-table-export-dialog'
