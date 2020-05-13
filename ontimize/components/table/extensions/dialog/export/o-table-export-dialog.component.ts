@@ -5,15 +5,16 @@ import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
 import { DialogService, OntimizeExportService, OTranslateService } from '../../../../../services';
+import { IExportService } from '../../../../../types/export-service.interface';
 import { Codes, SQLTypes, Util } from '../../../../../utils';
 import { OTableExportButtonService } from '../../export-button/o-table-export-button.service';
-
 
 export class OTableExportConfiguration {
   columns: Array<any>;
   columnNames: Object;
   sqlTypes: Object;
   service: string;
+  serviceType: string;
   data?: any[];
   filter?: Object;
   mode: string;
@@ -36,7 +37,7 @@ export class OTableExportConfiguration {
 export class OTableExportDialogComponent implements OnInit, OnDestroy {
 
   protected dialogService: DialogService;
-  protected exportService: OntimizeExportService;
+  protected exportService: IExportService;
   protected translateService: OTranslateService;
   protected oTableExportButtonService: OTableExportButtonService;
   private subscription: Subscription = new Subscription();
@@ -68,17 +69,12 @@ export class OTableExportDialogComponent implements OnInit, OnDestroy {
 
   configureService(): void {
     let loadingService: any = OntimizeExportService;
-    // TODO: allow service type selection (extension)
-    // if (this.serviceType) {
-    //   loadingService = this.serviceType;
-    // }
-    try {
-      this.exportService = this.injector.get(loadingService);
-      let serviceCfg = this.exportService.getDefaultServiceConfiguration(this.config.service);
-      this.exportService.configureService(serviceCfg, Codes.EXPORT_MODE_ALL === this.config.mode);
-    } catch (e) {
-      console.error(e);
+    if (this.config.serviceType) {
+      loadingService = this.config.serviceType;
     }
+    this.exportService = this.injector.get(loadingService);
+    let serviceCfg = this.exportService.getDefaultServiceConfiguration(this.config.service);
+    this.exportService.configureService(serviceCfg, Codes.EXPORT_MODE_ALL === this.config.mode);
   }
 
   export(exportType: string, button?: MatButton): void {

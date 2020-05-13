@@ -6,10 +6,11 @@ import { share } from 'rxjs/operators';
 
 import { AppConfig, Config } from '../config/app-config';
 import { LoginService } from '../services';
+import { IExportService } from '../types/export-service.interface';
 import { Codes, ServiceUtils } from '../utils';
 
 @Injectable()
-export class OntimizeExportService {
+export class OntimizeExportService implements IExportService {
 
   public exportPath: string;
   public downloadPath: string;
