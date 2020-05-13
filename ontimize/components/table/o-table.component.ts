@@ -157,6 +157,9 @@ export const DEFAULT_INPUTS_O_TABLE = [
   // export-mode ['visible'|'local'|'all']: sets the mode to export data. Default: 'visible'
   'exportMode: export-mode',
 
+  // exportServiceType [ string ]: The service used by the table for exporting it's data, it must implement 'IExportService' interface. Default: 'OntimizeExportService'
+  'exportServiceType: export-service-type',
+
   // show-filter-option [yes|no|true|false]: show filter menu option in the header menu. Default: yes.
   'showFilterOption: show-filter-option',
 
@@ -601,6 +604,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   keepSelectedItems: boolean = true;
 
   public exportMode: string = Codes.EXPORT_MODE_VISIBLE;
+  public exportServiceType: string;
   public visibleExportDialogButtons: string;
   public daoTable: OTableDao | null;
   public dataSource: OTableDataSource | null;

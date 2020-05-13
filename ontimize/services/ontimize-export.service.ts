@@ -6,10 +6,11 @@ import { share } from 'rxjs/operators';
 
 import { AppConfig, Config } from '../config/app-config';
 import { LoginService } from '../services';
+import { IExportService } from '../types/export-service.interface';
 import { Codes, ServiceUtils } from '../utils';
 
 @Injectable()
-export class OntimizeExportService {
+export class OntimizeExportService implements IExportService {
 
   public exportPath: string;
   public downloadPath: string;
@@ -79,19 +80,26 @@ export class OntimizeExportService {
 
     const self = this;
     // TODO: try multipart
-    this.httpClient.post(url, body, options).subscribe((resp: any) => {
-      if (resp && resp.code === Codes.ONTIMIZE_UNAUTHORIZED_CODE) {
-        self.redirectLogin(true);
-      } else if (resp.code === Codes.ONTIMIZE_FAILED_CODE) {
-        _innerObserver.error(resp.message);
-      } else if (resp.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) {
-        _innerObserver.next(resp);
-      } else {
-        // Unknow state -> error
-        _innerObserver.error('Service unavailable');
-      }
-    }, error => _innerObserver.error(error),
-      () => _innerObserver.complete());
+    this.httpClient.post(url, body, options).subscribe(
+      (resp: any) => {
+        if (resp && resp.code === Codes.ONTIMIZE_UNAUTHORIZED_CODE) {
+          self.redirectLogin(true);
+        } else if (resp.code === Codes.ONTIMIZE_FAILED_CODE) {
+          _innerObserver.error(resp.message);
+        } else if (resp.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) {
+          self.downloadFile(resp.data[0][format + 'Id'], format)
+            .subscribe(
+              r => _innerObserver.next(r),
+              e => _innerObserver.error(e),
+              () => _innerObserver.complete()
+            );
+        } else {
+          // Unknow state -> error
+          _innerObserver.error('Service unavailable');
+        }
+      },
+      error => _innerObserver.error(error)
+    );
 
     return dataObservable;
   }
@@ -110,19 +118,21 @@ export class OntimizeExportService {
       'responseType': 'blob'
     };
     // .map((res: any) => new Blob([res.blob()], { type: responseType }))
-    this.httpClient.get(url, options).subscribe((resp: any) => {
-      let fileData = resp.body;
-      let fileURL = URL.createObjectURL(fileData);
-      let a = document.createElement('a');
-      document.body.appendChild(a);
-      a.href = fileURL;
-      a.download = fileId + '.' + fileExtension;
-      a.click();
-      document.body.removeChild(a);
-      _innerObserver.next(fileData);
-      URL.revokeObjectURL(fileURL);
-    }, error => _innerObserver.error(error),
-      () => _innerObserver.complete());
+    this.httpClient.get(url, options).subscribe(
+      (resp: any) => {
+        let fileData = resp.body;
+        let fileURL = URL.createObjectURL(fileData);
+        let a = document.createElement('a');
+        document.body.appendChild(a);
+        a.href = fileURL;
+        a.download = fileId + '.' + fileExtension;
+        a.click();
+        document.body.removeChild(a);
+        _innerObserver.next(fileData);
+        URL.revokeObjectURL(fileURL);
+      }, error => _innerObserver.error(error),
+      () => _innerObserver.complete()
+    );
 
     return dataObservable;
   }
