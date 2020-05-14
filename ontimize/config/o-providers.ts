@@ -4,9 +4,30 @@ import { BaseRequestOptions, XHRBackend } from '@angular/http';
 import { MAT_RIPPLE_GLOBAL_OPTIONS } from '@angular/material';
 import { Router } from '@angular/router';
 import { combineLatest } from 'rxjs';
+
 import { OContextMenuService } from '../components/contextmenu/o-context-menu.service';
 import { AppConfig, Config } from '../config/app-config';
-import { appConfigFactory, AppMenuService, AuthGuardService, CurrencyService, dataServiceFactory, DialogService, LocalStorageService, LoginService, MomentService, NavigationService, NumberService, OModulesInfoService, OntimizeExportService, OntimizeFileService, OntimizeMatIconRegistry, OntimizeService, OntimizeServiceResponseParser, OTranslateService, OUserInfoService, SnackBarService } from '../services';
+import {
+  appConfigFactory,
+  AppMenuService,
+  AuthGuardService,
+  CurrencyService,
+  dataServiceFactory,
+  DialogService,
+  LocalStorageService,
+  LoginService,
+  MomentService,
+  NavigationService,
+  NumberService,
+  OModulesInfoService,
+  OntimizeFileService,
+  OntimizeMatIconRegistry,
+  OntimizeService,
+  OntimizeServiceResponseParser,
+  OTranslateService,
+  OUserInfoService,
+  SnackBarService
+} from '../services';
 import { OFormLayoutManagerService } from '../services/o-form-layout-manager.service';
 import { Error403Component } from '../services/permissions/error403/o-error-403.component';
 import { ORemoteConfigurationService } from '../services/remote-config.service';
@@ -100,10 +121,6 @@ export function getOntimizeFileServiceProvider(injector: Injector) {
   return new OntimizeFileService(injector);
 }
 
-export function getOntimizeExportServiceProvider(injector: Injector) {
-  return new OntimizeExportService(injector);
-}
-
 export function getLoginServiceProvider(injector: Injector) {
   return new LoginService(injector);
 }
@@ -190,11 +207,6 @@ export const ONTIMIZE_PROVIDERS: Provider[] = [
   {
     provide: OntimizeFileService,
     useFactory: getOntimizeFileServiceProvider,
-    deps: [Injector]
-  },
-  {
-    provide: OntimizeExportService,
-    useFactory: getOntimizeExportServiceProvider,
     deps: [Injector]
   },
   // getLoginServiceProvider
