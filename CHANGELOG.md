@@ -5,6 +5,8 @@
   * new attribute `visible-export-dialog-buttons` ([#320](https://github.com/OntimizeWeb/ontimize-web-ngx/pull/320)). Closes [#316](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/316)
   * new attribute `export-service-type` ([0f2db1c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0f2db1c))
 * **App configuration**: new attribute `exportServiceType` allows configuring the service used for exportation in the whole application ([c785371](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c785371))
+* **OFormServiceComponent**: new `query-fallback-function` input ([089338f3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/089338f3))
+* **o-form**: new `query-fallback-function` input ([089338f3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/089338f3))
 
 ### Bug Fixes
 * **o-time-input**: Fix bad behaviour when there is more than one component in the same form ([fc1dd47](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/fc1dd47))
