@@ -8,6 +8,7 @@
 
 ### Bug Fixes
 * **o-time-input**: Fix bad behaviour when there is more than one component in the same form ([fc1dd47](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/fc1dd47))
+* **o-language-selector**: emit `onChange` event ([231c1d4](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/231c1d4))
 
 ## 4.1.2 (2020-02-26)
 ### Features
