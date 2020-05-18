@@ -1621,6 +1621,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
         length: this.queryRows
       };
     }
+    this.editingCell = undefined;
     this.queryData(void 0, queryArgs);
   }
 
@@ -1748,7 +1749,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       console.warn(`${column.attr} edition not allowed due to permissions`);
       return;
     }
-
     this.clearSelectionAndEditing();
     this.selectedRow(row);
     if (event) {
