@@ -1,23 +1,7 @@
-import {
-  AfterViewInit,
-  Component,
-  ElementRef,
-  EventEmitter,
-  forwardRef,
-  Inject,
-  Injector,
-  OnChanges,
-  OnDestroy,
-  OnInit,
-  Optional,
-  QueryList,
-  ViewChild,
-  ViewChildren,
-} from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, forwardRef, Inject, Injector, OnChanges, OnDestroy, OnInit, Optional, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { MediaChange, MediaObserver } from '@angular/flex-layout';
 import { MatPaginator, PageEvent } from '@angular/material';
 import { Subscription } from 'rxjs';
-
 import { InputConverter } from '../../decorators/input-converter';
 import { IGridItem } from '../../interfaces/o-grid-item.interface';
 import { OntimizeServiceProvider } from '../../services/data-service.provider';
@@ -512,6 +496,7 @@ export class OGridComponent extends OServiceComponent implements AfterViewInit, 
   }
 
   protected setData(data: any, sqlTypes?: any, replace?: boolean): void {
+    this.gridItems = [];
     if (Util.isArray(data)) {
       let dataArray = data;
       let respDataArray = data;
