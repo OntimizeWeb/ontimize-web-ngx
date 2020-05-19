@@ -50,23 +50,34 @@ export function appInitializerFactory(injector: Injector, config: Config, oTrans
     let observableArray = [];
     const locationInitialized = injector.get(LOCATION_INITIALIZED, Promise.resolve(null));
     locationInitialized.then(() => {
-      oTranslate.setDefaultLang('en');
-      let userLang = config['locale'];
-      if (!userLang) {
-        // use navigator lang if available
-        userLang = oTranslate.getBrowserLang();
+      const storedLang = oTranslate.getStoredLanguage();
+      const configLang = config['locale'];
+      const browserLang = oTranslate.getBrowserLang();
+      let userLang = 'en';
+      let defaultLang = 'en';
+      if (storedLang) {
+        userLang = storedLang;
+      } else if (configLang) {
+        userLang = configLang;
+        defaultLang = configLang;
+      } else if (browserLang) {
+        userLang = browserLang;
+        defaultLang = browserLang;
       }
+      oTranslate.setDefaultLang(defaultLang);
+
+      const locales = new Set(config.applicationLocales || []);
+      locales.add('en');
+      locales.add(userLang);
+
+      const localseArray = [];
+      locales.forEach((val1, val2, self) => localseArray.push(val1));
 
       // initialize available locales array if needed
       if (!config.applicationLocales) {
-        config.applicationLocales = [];
+        config.applicationLocales = localseArray; // use [...locales] with es6
       }
-      if (config.applicationLocales.indexOf('en') === -1) {
-        config.applicationLocales.push('en');
-      }
-      if (userLang && config.applicationLocales.indexOf(userLang) === -1) {
-        config.applicationLocales.push(userLang);
-      }
+
       if (config['uuid'] === undefined || config['uuid'] === null || config['uuid'] === '') {
         console.error('Your app must have an \'uuid\' property defined on your app.config file. Otherwise, your application will not work correctly.');
         alert('Your app must have an \'uuid\' property defined on your app.config file. Otherwise, your application will not work correctly.');
