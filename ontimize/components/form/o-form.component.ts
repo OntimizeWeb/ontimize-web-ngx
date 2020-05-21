@@ -589,11 +589,12 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     let canDeactivateArray = (this.actRoute.routeConfig.canDeactivate || []);
     let previouslyAdded = false;
     for (let i = 0, len = canDeactivateArray.length; i < len; i++) {
-      previouslyAdded = (canDeactivateArray[i].name === OFormComponent.guardClassName);
+      previouslyAdded = ((canDeactivateArray[i].hasOwnProperty('CLASSNAME') && canDeactivateArray[i].CLASSNAME) === OFormComponent.guardClassName);
       if (previouslyAdded) {
         break;
       }
     }
+
     if (!previouslyAdded) {
       canDeactivateArray.push(this.deactivateGuard.constructor);
       this.actRoute.routeConfig.canDeactivate = canDeactivateArray;
