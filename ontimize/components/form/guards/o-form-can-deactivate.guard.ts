@@ -11,6 +11,7 @@ export interface CanComponentDeactivate {
 @Injectable()
 export class CanDeactivateFormGuard implements CanDeactivate<CanComponentDeactivate> {
   oForm: OFormComponent;
+  public static CLASSNAME = 'CanDeactivateFormGuard';
 
   canDeactivate(component: CanComponentDeactivate, curr: ActivatedRouteSnapshot, state: RouterStateSnapshot, future: RouterStateSnapshot) {
     const futureQueryParams = future.root.queryParams;
