@@ -1,37 +1,18 @@
 import { CommonModule } from '@angular/common';
-import {
-  AfterViewInit,
-  ChangeDetectorRef,
-  Component,
-  ElementRef,
-  forwardRef,
-  Inject,
-  Injector,
-  NgModule,
-  OnDestroy,
-  OnInit,
-  Optional,
-  ViewChild,
-  ViewEncapsulation
-} from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, forwardRef, Inject, Injector, NgModule, OnDestroy, OnInit, Optional, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import moment from 'moment';
 import { merge, Subscription } from 'rxjs';
-
 import { InputConverter } from '../../../decorators';
 import { OSharedModule } from '../../../shared';
 import { Util } from '../../../utils';
 import { OFormComponent } from '../../form/o-form.component';
 import { IFormValueOptions, OFormValue } from '../../form/OFormValue';
-import {
-  DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,
-  DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT,
-  OFormDataComponent,
-  OValueChangeEvent
-} from '../../o-form-data-component.class';
+import { DEFAULT_INPUTS_O_FORM_DATA_COMPONENT, DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT, OFormDataComponent, OValueChangeEvent } from '../../o-form-data-component.class';
 import { DateFilterFunction, ODateInputComponent, ODateInputModule } from '../date-input/o-date-input.component';
 import { OHourInputComponent, OHourInputModule } from '../hour-input/o-hour-input.component';
 import { OFormControl } from '../o-form-control.class';
+
 
 export const DEFAULT_INPUTS_O_TIME_INPUT = [
   ...DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,
@@ -103,8 +84,8 @@ export class OTimeInputComponent extends OFormDataComponent implements OnInit, A
 
   protected subscription: Subscription = new Subscription();
 
-  private dateAttr = 'dateInput';
-  private hourAttr = 'hourInput';
+  public dateAttr = 'dateInput';
+  public hourAttr = 'hourInput';
 
   constructor(
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
