@@ -2,19 +2,12 @@ import {
   Component,
   ElementRef,
   EventEmitter,
-  forwardRef,
-  HostListener,
-  Inject,
-  Renderer2,
   TemplateRef,
   ViewChild,
-  OnInit,
 } from '@angular/core';
 
 import { InputConverter } from '../../../decorators/input-converter';
-import { Codes } from '../../../util';
 import { ObservableWrapper } from '../../../util/async';
-import { OGridComponent } from '../o-grid.component';
 import { IGridItem } from '../../../interfaces/o-grid-item.interface';
 
 export const DEFAULT_INPUTS_O_GRID_ITEM = [
@@ -33,7 +26,7 @@ export const DEFAULT_INPUTS_O_GRID_ITEM = [
   },
 
 })
-export class OGridItemComponent implements IGridItem, OnInit {
+export class OGridItemComponent implements IGridItem {
 
   modelData: object;
   mdClick: EventEmitter<any> = new EventEmitter();
@@ -45,23 +38,7 @@ export class OGridItemComponent implements IGridItem, OnInit {
   @InputConverter()
   rowspan: number = 1;
 
-  @HostListener('mouseenter')
-  onMouseEnter() {
-    if (this._grid.detailMode !== Codes.DETAIL_MODE_NONE) {
-      this.renderer.setStyle(this._el.nativeElement, 'cursor', 'pointer');
-    }
-  }
-
-  constructor(
-    public _el: ElementRef,
-    private renderer: Renderer2,
-    @Inject(forwardRef(() => OGridComponent)) public _grid: OGridComponent) {
-
-  }
-
-  ngOnInit(): void {
-    this._grid.registerGridItem(this);
-  }
+  constructor(public _el: ElementRef) { }
 
   onItemClicked(e?: Event) {
     ObservableWrapper.callEmit(this.mdClick, this);
@@ -79,13 +56,13 @@ export class OGridItemComponent implements IGridItem, OnInit {
     return ObservableWrapper.subscribe(this.mdDoubleClick, onNext);
   }
 
-  setItemData(data) {
+  setItemData(data: object): void {
     if (!this.modelData) {
       this.modelData = data;
     }
   }
 
-  getItemData() {
+  getItemData(): object {
     return this.modelData;
   }
 
