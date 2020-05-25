@@ -1,12 +1,10 @@
-<div fxLayout="row" fxLayoutAlign="space-between center" [formGroup]="getFormGroup()" [matTooltip]="tooltip"
-  [matTooltipClass]="tooltipClass" [matTooltipPosition]="tooltipPosition" [matTooltipShowDelay]="tooltipShowDelay"
-  [matTooltipHideDelay]="tooltipHideDelay">
+<div fxLayout="row" fxLayoutAlign="space-between center" [formGroup]="getFormGroup()" [matTooltip]="tooltip" [matTooltipClass]="tooltipClass"
+  [matTooltipPosition]="tooltipPosition" [matTooltipShowDelay]="tooltipShowDelay" [matTooltipHideDelay]="tooltipHideDelay">
   <mat-form-field [appearance]="appearance" [floatLabel]="floatLabel" fxFill [hideRequiredMarker]="hideRequiredMarker">
     <mat-label *ngIf="labelVisible">{{ olabel | oTranslate }}</mat-label>
-    <input matInput [ngxTimepicker]="picker" [id]="getAttribute()" [placeholder]="placeHolder"
-      [formControlName]="getAttribute()" [readonly]="isReadOnly || !textInputEnabled" (focus)="innerOnFocus($event)"
-      (blur)="innerOnBlur($event)" [required]="isRequired" (change)="onChangeEvent($event)" [min]="min" [max]="max"
-      (keydown)="onKeyDown($event)" [format]="format" [disableClick]="true">
+    <input matInput [ngxTimepicker]="picker" [id]="getAttribute()" [placeholder]="placeHolder" [formControlName]="getAttribute()"
+      [readonly]="isReadOnly || !textInputEnabled" (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)" [required]="isRequired"
+      (change)="onChangeEvent($event)" [min]="min" [max]="max" (keydown)="onKeyDown($event)" [format]="format" [disableClick]="true">
 
     <button type="button" *ngIf="showClearButton" matSuffix mat-icon-button (click)="onClickClearValue($event)">
       <mat-icon svgIcon="ontimize:close"></mat-icon>
@@ -16,18 +14,18 @@
     </button>
 
     <mat-error *ngIf="hasError('required')" text="{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }} "></mat-error>
-    <mat-error *ngIf="hasError('invalidFormatHour')"
-      text="{{ 'FORM_VALIDATION.HOUR_FORMAT' | oTranslate }} {{ formatString }}"></mat-error>
+    <mat-error *ngIf="hasError('invalidFormatHour')" text="{{ 'FORM_VALIDATION.HOUR_FORMAT' | oTranslate }} {{ formatString }}"></mat-error>
     <mat-error *ngFor="let oError of getActiveOErrors()" text="{{ oError.text | oTranslate }}"></mat-error>
   </mat-form-field>
 </div>
 
-<ngx-material-timepicker #picker (timeSet)="onTimepickerChange($event)" [confirmBtnTmpl]="confirmBtn"
-  [cancelBtnTmpl]="cancelBtn"></ngx-material-timepicker>
+<ngx-material-timepicker #picker (timeSet)="onTimepickerChange($event)" [confirmBtnTmpl]="confirmBtn" [cancelBtnTmpl]="cancelBtn">
+</ngx-material-timepicker>
 
 <ng-template #confirmBtn>
-  <button mat-stroked-button type="button" (click)="setTime($event)"><span>{{'OK' | oTranslate}}</span></button>
+  <button mat-stroked-button type="button"><span>{{'OK' | oTranslate}}</span></button>
 </ng-template>
+
 <ng-template #cancelBtn>
-  <button mat-stroked-button type=" button" (click)="picker.close()"><span>{{'CANCEL' | oTranslate}}</span></button>
+  <button mat-stroked-button type="button"><span>{{'CANCEL' | oTranslate}}</span></button>
 </ng-template>
