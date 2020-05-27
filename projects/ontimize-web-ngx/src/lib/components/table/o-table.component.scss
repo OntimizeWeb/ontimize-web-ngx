@@ -12,10 +12,11 @@ $o_table_row_padding: 24px;
   width: 100%;
 
   &.o-table-disabled {
-    opacity: 0.4;
+    opacity: .4;
   }
 
   .o-table-container {
+    height: 100%;
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
@@ -41,17 +42,18 @@ $o_table_row_padding: 24px;
     &.block-events {
       pointer-events: none;
 
-      > .toolbar,
-      > .o-table-body .mat-header-row {
-        opacity: 0.75;
+       > .o-table-body .mat-header-row,
+      > .toolbar {
+        opacity: .75;
       }
     }
 
     position: relative;
-    padding: 0 0.5%;
+    padding: 0 .5%;
 
     .toolbar {
       height: 40px;
+
       > div {
         max-height: 100%;
       }
@@ -92,9 +94,9 @@ $o_table_row_padding: 24px;
         z-index: 500;
         visibility: visible;
         opacity: 1;
-        -moz-transition: opacity 0.25s linear;
-        -webkit-transition: opacity 0.25s linear;
-        transition: opacity 0.25s linear;
+        -moz-transition: opacity .25s linear;
+        -webkit-transition: opacity .25s linear;
+        transition: opacity .25s linear;
       }
 
       &.horizontal-scroll {
@@ -109,6 +111,7 @@ $o_table_row_padding: 24px;
       .o-table-no-results {
         cursor: default;
         text-align: center;
+
         td {
           text-align: center;
         }
@@ -118,9 +121,11 @@ $o_table_row_padding: 24px;
     .mat-table {
       table-layout: fixed;
       width: 100%;
+
       &.autoadjusted {
         overflow: auto;
         height: auto;
+
         td .content,
         th .content {
           overflow: hidden;
@@ -204,7 +209,7 @@ $o_table_row_padding: 24px;
 
       .mat-row {
         box-sizing: border-box;
-        transition: background-color 0.2s;
+        transition: background-color .2s;
 
         /* iOS Safari */
         -webkit-touch-callout: none;
@@ -428,9 +433,9 @@ $o_table_row_padding: 24px;
     z-index: 500;
     visibility: visible;
     opacity: 1;
-    -moz-transition: opacity 0.25s linear;
-    -webkit-transition: opacity 0.25s linear;
-    transition: opacity 0.25s linear;
+    -moz-transition: opacity .25s linear;
+    -webkit-transition: opacity .25s linear;
+    transition: opacity .25s linear;
   }
 
   .spinner-container-scrollable {
