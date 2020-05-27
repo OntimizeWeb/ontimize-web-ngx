@@ -98,18 +98,6 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
     // This component does not need this subscription
   }
 
-  public ensureOFormValue(arg: any): void {
-    if (arg != null) {
-      // because of the ngx-material-timepicker especification, its stored value must be always a string
-      if (arg instanceof OFormValue) {
-        arg.value = this.getValueAsString(arg.value);
-      } else {
-        arg = this.getValueAsString(arg);
-      }
-    }
-    super.ensureOFormValue(arg);
-  }
-
   get formatString(): string {
     return (this.format === Codes.TWENTY_FOUR_HOUR_FORMAT ? Codes.HourFormat.TWENTY_FOUR : Codes.HourFormat.TWELVE);
   }
@@ -264,7 +252,7 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
   protected getValueAsString(val: any): string {
     let value;
     if (this.valueType === 'timestamp') {
-      value = moment(val).format(this.formatString);
+      value = moment(val, this.formatString).valueOf();
     } else {
       value = this.convertToFormatString(val);
     }
