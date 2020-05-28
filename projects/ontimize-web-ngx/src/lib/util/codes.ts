@@ -50,6 +50,7 @@ export class Codes {
   public static QUERY_PARAMS = 'queryParams';
   public static IS_DETAIL = 'isdetail';
 
+  public static LANGUAGE_KEY = 'lang';
   public static SESSION_KEY = 'session';
   public static SESSION_EXPIRED_KEY = 'session-expired';
 
