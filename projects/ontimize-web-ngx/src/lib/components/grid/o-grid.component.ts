@@ -1,23 +1,7 @@
-import {
-  AfterViewInit,
-  Component,
-  ElementRef,
-  EventEmitter,
-  forwardRef,
-  Inject,
-  Injector,
-  OnChanges,
-  OnDestroy,
-  OnInit,
-  Optional,
-  QueryList,
-  ViewChild,
-  ViewChildren,
-} from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, forwardRef, Inject, Injector, OnChanges, OnDestroy, OnInit, Optional, QueryList, ViewChild, ViewChildren, ContentChildren } from '@angular/core';
 import { MediaChange, MediaObserver } from '@angular/flex-layout';
 import { MatPaginator, PageEvent } from '@angular/material';
 import { Subscription } from 'rxjs';
-
 import { InputConverter } from '../../decorators/input-converter';
 import { IGridItem } from '../../interfaces/o-grid-item.interface';
 import { OntimizeServiceProvider } from '../../services/data-service.provider';
@@ -30,6 +14,7 @@ import { Util } from '../../util/util';
 import { OFormComponent } from '../form/o-form.component';
 import { DEFAULT_INPUTS_O_SERVICE_COMPONENT, OServiceComponent } from '../o-service-component.class';
 import { OGridItemDirective } from './grid-item/o-grid-item.directive';
+import { OGridItemComponent } from './grid-item/o-grid-item.component';
 
 export const DEFAULT_INPUTS_O_GRID = [
   ...DEFAULT_INPUTS_O_SERVICE_COMPONENT,
@@ -148,6 +133,8 @@ export class OGridComponent extends OServiceComponent implements AfterViewInit, 
   public onDataLoaded: EventEmitter<any> = new EventEmitter();
   public onPaginatedDataLoaded: EventEmitter<any> = new EventEmitter();
 
+  @ContentChildren(forwardRef(() => OGridItemComponent))
+  public inputGridItems: QueryList<OGridItemComponent>;
   @ViewChildren(OGridItemDirective)
   public gridItemDirectives: QueryList<OGridItemDirective>;
   @ViewChild(MatPaginator, { static: false })
@@ -237,6 +224,13 @@ export class OGridComponent extends OServiceComponent implements AfterViewInit, 
       this.registerQuickFilter(this.searchInputComponent);
     }
     this.subscribeToMediaChanges();
+  }
+
+  public ngAfterContentInit(): void {
+    this.gridItems = this.inputGridItems.toArray();
+    this.subscription.add(this.inputGridItems.changes.subscribe(queryChanges => {
+      this.gridItems = queryChanges._results;
+    }));
   }
 
   public subscribeToMediaChanges(): void {
@@ -343,10 +337,6 @@ export class OGridComponent extends OServiceComponent implements AfterViewInit, 
     } else {
       this.dataArray = this.dataResponseArray;
     }
-  }
-
-  public registerGridItem(item: IGridItem): void {
-    this.gridItems.push(item);
   }
 
   public registerGridItemDirective(item: OGridItemDirective): void {

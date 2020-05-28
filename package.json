@@ -1,13 +1,12 @@
 {
   "name": "ontimize-web-ngx",
-  "version": "8.0.0",
+  "version": "8.0.0-SNAPSHOT-0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build && npm run build-styles && npm run copy-files",
     "build-styles": "scss-bundle -c scss-bundle-ontimize.config.json && scss-bundle -c scss-bundle-theme.config.json",
-    "copy-files": "copyfiles -u 3 ./projects/ontimize-web-ngx/assets/svg/ontimize-icon-set.svg ./dist/ontimize-web-ngx/assets && echo '----¡Assets copied!----'  ",
-    "postbuild": "cd dist/ontimize-web-ngx && npm pack",
+    "copy-files": "copyfiles -u 3 ./projects/ontimize-web-ngx/assets/svg/ontimize-icon-set.svg ./dist/assets && echo '----¡Assets copied!----'  ",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"

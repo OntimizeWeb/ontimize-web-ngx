@@ -94,8 +94,8 @@ export class OTimeInputComponent extends OFormDataComponent implements OnInit, A
 
   protected subscription: Subscription = new Subscription();
 
-  private dateAttr = 'dateInput';
-  private hourAttr = 'hourInput';
+  public dateAttr = 'dateInput';
+  public hourAttr = 'hourInput';
 
   constructor(
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
