@@ -3,12 +3,12 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { share } from 'rxjs/operators';
 
-import { BaseService } from '../base-service.class';
+import { OntimizeBaseService } from './ontimize-base-service.class';
 
 @Injectable({
   providedIn: 'root'
 })
-export class OntimizeFileService extends BaseService {
+export class OntimizeFileService extends OntimizeBaseService {
 
   public path: string = '';
 

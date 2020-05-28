@@ -2,13 +2,12 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { share } from 'rxjs/operators';
 
-import { IAuthService } from '../../interfaces/auth-service.interface';
 import { IDataService } from '../../interfaces/data-service.interface';
 import { Util } from '../../util/util';
-import { BaseService } from '../base-service.class';
+import { OntimizeBaseService } from './ontimize-base-service.class';
 
 @Injectable()
-export class OntimizeService extends BaseService implements IAuthService, IDataService {
+export class OntimizeService extends OntimizeBaseService implements IDataService {
 
   public entity: string = '';
 

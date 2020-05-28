@@ -5,35 +5,24 @@ import { Observable, Subscriber } from 'rxjs';
 import { map, share } from 'rxjs/operators';
 
 import { AppConfig } from '../config/app-config';
-import { IAuthService } from '../interfaces/auth-service.interface';
 import { ServiceResponseAdapter } from '../interfaces/service-response-adapter.interface';
 import { ServiceResponse } from '../interfaces/service-response.interface';
 import { Config } from '../types/config.type';
 import { ServiceRequestParam } from '../types/service-request-param.type';
 import { Codes } from '../util/codes';
-import { ServiceUtils } from '../util/service.utils';
 import { BaseServiceResponse } from './base-service-response.class';
 import { LoginStorageService } from './login-storage.service';
 import { OntimizeServiceResponseAdapter } from './ontimize/ontimize-service-response.adapter';
 import { OntimizeServiceResponseParser } from './parser/o-service-response.parser';
 
-export class BaseService implements IAuthService {
-
-  public kv = {};
-  public av: string[] = [];
-  public sqltypes = {};
-  public pagesize: number = 10;
-  public offset: number = 0;
-  public orderby: Array<object> = [];
-  public totalsize: number = -1;
+export class BaseService {
 
   protected httpClient: HttpClient;
   protected router: Router;
-  protected _sessionid: string;
+
   protected _urlBase: string;
   protected _appConfig: Config;
   protected _config: AppConfig;
-  protected _startSessionPath: string;
   protected responseParser: OntimizeServiceResponseParser;
   protected loginStorageService: LoginStorageService;
   protected adapter: ServiceResponseAdapter<BaseServiceResponse>;
@@ -54,7 +43,6 @@ export class BaseService implements IAuthService {
 
   public configureService(config: any): void {
     this._urlBase = config.urlBase ? config.urlBase : this._appConfig.apiEndpoint;
-    this._sessionid = config.session ? config.session.id : -1;
   }
 
   public getDefaultServiceConfiguration(serviceName?: string): any {
@@ -73,25 +61,6 @@ export class BaseService implements IAuthService {
 
   public set urlBase(value: string) {
     this._urlBase = value;
-  }
-
-  public startsession(user: string, password: string): Observable<any> {
-    return null;
-  }
-
-  public endsession(user: string, sessionId: number): Observable<any> {
-    return null;
-  }
-
-  public hassession(user: string, sessionId: string | number): Observable<boolean> {
-    return null;
-  }
-
-  public redirectLogin(sessionExpired: boolean = false) {
-    if (sessionExpired) {
-      this.loginStorageService.sessionExpired();
-    }
-    ServiceUtils.redirectLogin(this.router, sessionExpired);
   }
 
   public doRequest(param: ServiceRequestParam): Observable<ServiceResponse> {
@@ -138,6 +107,14 @@ export class BaseService implements IAuthService {
       'Access-Control-Allow-Origin': '*',
       'Content-Type': 'application/json;charset=UTF-8'
     });
+  }
+
+  public clientErrorFallback(errorCode: number) {
+
+  }
+
+  public serverErrorFallback(errorCode: number) {
+
   }
 
   /*

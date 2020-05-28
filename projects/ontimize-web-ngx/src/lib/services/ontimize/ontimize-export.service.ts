@@ -4,10 +4,10 @@ import { Observable } from 'rxjs';
 import { share } from 'rxjs/operators';
 
 import { ServiceResponse } from '../../interfaces/service-response.interface';
-import { BaseService } from '../base-service.class';
+import { OntimizeBaseService } from './ontimize-base-service.class';
 
 @Injectable()
-export class OntimizeExportService extends BaseService {
+export class OntimizeExportService extends OntimizeBaseService {
 
   public exportPath: string;
   public downloadPath: string;
