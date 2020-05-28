@@ -200,6 +200,21 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
     }
   }
 
+  public ensureOFormValue(arg: any): void {
+
+    if (arg != null) {
+      if (this.valueType === 'timestamp') {
+        // because of the ngx-material-timepicker especification, its stored value must be always a string
+        if (arg instanceof OFormValue) {
+          arg.value = this.getValueAsString(arg.value);
+        } else {
+          arg = this.getValueAsString(arg);
+        }
+      }
+    }
+    super.ensureOFormValue(arg);
+  }
+
   protected updateValeOnInputChange(blurEvent: any): void {
     if (this.onKeyboardInputDone) {
       // ngx-material-timepicker does not allow writing characters on input, so we add 'AM/PM' in order to make validation work properly
@@ -251,8 +266,8 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
 
   protected getValueAsString(val: any): string {
     let value;
-    if (this.valueType === 'timestamp') {
-      value = moment(val, this.formatString).valueOf();
+    if (typeof val === 'number') {
+      value = moment(val).format(this.formatString);
     } else {
       value = this.convertToFormatString(val);
     }
