@@ -1,7 +1,6 @@
 import { Injectable, Injector } from '@angular/core';
 import { Subscriber } from 'rxjs';
 
-import { IAuthService } from '../../interfaces/auth-service.interface';
 import { ServiceResponse } from '../../interfaces/service-response.interface';
 import { BaseService } from '../base-service.class';
 
