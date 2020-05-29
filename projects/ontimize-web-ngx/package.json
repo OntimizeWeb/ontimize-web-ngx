@@ -52,7 +52,7 @@
     "zone.js": "0.9.1"
   },
   "dependencies": {
-    "@ngx-translate/core": "~11.0.1",
+    "@ngx-translate/core": "~12.1.2",
     "@ngx-translate/http-loader": "~4.0.0",
     "moment": "2.24.0",
     "ngx-material-timepicker": "5.4.3",
