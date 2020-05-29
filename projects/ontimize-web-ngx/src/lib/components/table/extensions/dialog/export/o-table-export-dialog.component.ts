@@ -7,13 +7,13 @@ import { filter } from 'rxjs/operators';
 import { IExportService } from '../../../../../interfaces/export-service.interface';
 import { DialogService } from '../../../../../services/dialog.service';
 import { exportServiceFactory } from '../../../../../services/export-service.provider';
-import { OntimizeExportService } from '../../../../../services/ontimize-export.service';
 import { OTranslateService } from '../../../../../services/translate/o-translate.service';
 import { Codes } from '../../../../../util/codes';
 import { SQLTypes } from '../../../../../util/sqltypes';
 import { Util } from '../../../../../util/util';
 import { OTableExportButtonService } from '../../export-button/o-table-export-button.service';
 import { OTableExportConfiguration } from '../../header/table-menu/o-table-export-configuration.class';
+import { OntimizeExportService } from '../../../../../services/ontimize/ontimize-export.service';
 
 @Component({
   selector: 'o-table-export-dialog',
