@@ -10,10 +10,11 @@ import {
 } from '@angular/core';
 import { Subscription } from 'rxjs';
 
+import { ServiceResponse } from '../../../../../interfaces/service-response.interface';
 import { ITranslatePipeArgument, OTranslatePipe } from '../../../../../pipes/o-translate.pipe';
 import { OntimizeServiceProvider } from '../../../../../services/data-service.provider';
 import { DialogService } from '../../../../../services/dialog.service';
-import { OntimizeService } from '../../../../../services/ontimize.service';
+import { OntimizeService } from '../../../../../services/ontimize/ontimize.service';
 import { Expression } from '../../../../../types/expression.type';
 import { Codes } from '../../../../../util/codes';
 import { FilterExpressionUtils } from '../../../../../util/filter-expression.utils';
@@ -102,9 +103,8 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
   public ngAfterViewInit(): void {
     const oCol: OColumn = this.table.getOColumn(this.column);
     if (Util.isDefined(oCol.editor)) {
-      const self = this;
       this.editorSuscription = oCol.editor.onPostUpdateRecord.subscribe((data: any) => {
-        self.queryData(data[self.tableColumn.attr], data);
+        this.queryData(data[this.tableColumn.attr], data);
       });
     }
   }
@@ -138,18 +138,19 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
     } else {
       filter[this.column] = cellvalue;
     }
-    this.querySubscription = this.dataService[this.queryMethod](filter, this.colArray, this.entity).subscribe(resp => {
-      if (resp.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) {
-        self.responseMap[cellvalue] = resp.data[0][self.valueColumn];
-      }
-    }, err => {
-      console.error(err);
-      if (err && typeof err !== 'object') {
-        this.dialogService.alert('ERROR', err);
-      } else {
-        this.dialogService.alert('ERROR', 'MESSAGES.ERROR_QUERY');
-      }
-    });
+    this.querySubscription = this.dataService[this.queryMethod](filter, this.colArray, this.entity)
+      .subscribe((resp: ServiceResponse) => {
+        if (resp.isSuccessful()) {
+          self.responseMap[cellvalue] = resp.data[0][self.valueColumn];
+        }
+      }, err => {
+        console.error(err);
+        if (err && typeof err !== 'object') {
+          this.dialogService.alert('ERROR', err);
+        } else {
+          this.dialogService.alert('ERROR', 'MESSAGES.ERROR_QUERY');
+        }
+      });
   }
 
   public configureService(): void {
@@ -190,7 +191,7 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
   }
 
   public responseValue(cellvalue: any, rowvalue?: any): string {
-    if(this.translate) {
+    if (this.translate) {
       this.pipeArguments = this.translateArgsFn ? { values: this.translateArgsFn(rowvalue) } : {};
       return super.getCellData(cellvalue, rowvalue);
     } else {

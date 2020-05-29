@@ -10,6 +10,7 @@ import { OntimizeServiceProvider } from '../services/data-service.provider';
 import { LocalStorageService } from '../services/local-storage.service';
 import { NavigationService } from '../services/navigation.service';
 import { OntimizeMatIconRegistry } from '../services/ontimize-icon-registry.service';
+import { OntimizeServiceResponseAdapter } from '../services/ontimize/ontimize-service-response.adapter';
 import { ORemoteConfigurationService } from '../services/remote-config.service';
 import { OTranslateService } from '../services/translate/o-translate.service';
 import { Error403Component } from '../shared/components/error403/o-error-403.component';
@@ -77,6 +78,7 @@ export function appInitializerFactory(injector: Injector, config: Config, oTrans
 export const ONTIMIZE_PROVIDERS: Provider[] = [
   { provide: AppConfig, useFactory: appConfigFactory, deps: [Injector] },
   OntimizeServiceProvider,
+  OntimizeServiceResponseAdapter,
   // disabled global ripple
   { provide: MAT_RIPPLE_GLOBAL_OPTIONS, useValue: { disabled: true } },
   { provide: O_MAT_ERROR_OPTIONS, useValue: {} },

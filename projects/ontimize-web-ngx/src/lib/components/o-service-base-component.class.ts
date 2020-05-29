@@ -4,9 +4,10 @@ import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 
 import { InputConverter } from '../decorators/input-converter';
 import { ILocalStorageComponent } from '../interfaces/local-storage-component.interface';
+import { ServiceResponse } from '../interfaces/service-response.interface';
 import { DialogService } from '../services/dialog.service';
 import { LocalStorageService } from '../services/local-storage.service';
-import { OntimizeService } from '../services/ontimize.service';
+import { OntimizeService } from '../services/ontimize/ontimize.service';
 import { OQueryDataArgs } from '../types/query-data-args.type';
 import { Codes } from '../util/codes';
 import { ServiceUtils } from '../util/service.utils';
@@ -373,33 +374,35 @@ export class OServiceBaseComponent implements ILocalStorageComponent, OnChanges 
       this.loaderSubscription = this.load();
       const self = this;
       this.queryArguments = queryArguments;
-      this.querySubscription = this.dataService[queryMethodName].apply(this.dataService, queryArguments).subscribe(res => {
-        let data;
-        this.sqlTypes = undefined;
-        if (Util.isArray(res)) {
-          data = res;
-          this.sqlTypes = {};
-        } else if ((res.code === Codes.ONTIMIZE_SUCCESSFUL_CODE)) {
-          const arrData = (res.data !== undefined) ? res.data : [];
-          data = Util.isArray(arrData) ? arrData : [];
-          this.sqlTypes = res.sqlTypes;
-          if (this.pageable) {
-            this.updatePaginationInfo(res);
+      this.querySubscription = this.dataService[queryMethodName]
+        .apply(this.dataService, queryArguments)
+        .subscribe((res: ServiceResponse) => {
+          let data;
+          this.sqlTypes = undefined;
+          if (Util.isArray(res)) {
+            data = res;
+            this.sqlTypes = {};
+          } else if (res.isSuccessful()) {
+            const arrData = (res.data !== undefined) ? res.data : [];
+            data = Util.isArray(arrData) ? arrData : [];
+            this.sqlTypes = res.sqlTypes;
+            if (this.pageable) {
+              this.updatePaginationInfo(res);
+            }
           }
-        }
-        self.setData(data, this.sqlTypes, (ovrrArgs && ovrrArgs.replace));
-        self.loaderSubscription.unsubscribe();
-      }, err => {
-        self.setData([], []);
-        self.loaderSubscription.unsubscribe();
-        if (Util.isDefined(self.queryFallbackFunction)) {
-          self.queryFallbackFunction(err);
-        } else if (err && typeof err !== 'object') {
-          self.dialogService.alert('ERROR', err);
-        } else {
-          self.dialogService.alert('ERROR', 'MESSAGES.ERROR_QUERY');
-        }
-      });
+          self.setData(data, this.sqlTypes, (ovrrArgs && ovrrArgs.replace));
+          self.loaderSubscription.unsubscribe();
+        }, err => {
+          self.setData([], []);
+          self.loaderSubscription.unsubscribe();
+          if (Util.isDefined(self.queryFallbackFunction)) {
+            self.queryFallbackFunction(err);
+          } else if (err && typeof err !== 'object') {
+            self.dialogService.alert('ERROR', err);
+          } else {
+            self.dialogService.alert('ERROR', 'MESSAGES.ERROR_QUERY');
+          }
+        });
     }
   }
 
@@ -479,7 +482,7 @@ export class OServiceBaseComponent implements ILocalStorageComponent, OnChanges 
     return queryArguments;
   }
 
-  updatePaginationInfo(queryRes: any) {
+  updatePaginationInfo(queryRes: ServiceResponse) {
     const resultEndIndex = queryRes.startRecordIndex + (queryRes.data ? queryRes.data.length : 0);
     if (queryRes.startRecordIndex !== undefined) {
       this.state.queryRecordOffset = resultEndIndex;

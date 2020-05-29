@@ -25,6 +25,7 @@ import { BehaviorSubject, combineLatest, Observable, of, Subscription } from 'rx
 import { map } from 'rxjs/operators';
 
 import { BooleanConverter, InputConverter } from '../../decorators/input-converter';
+import { ServiceResponse } from '../../interfaces';
 import { IOContextMenuContext } from '../../interfaces/o-context-menu.interface';
 import { OTableButton } from '../../interfaces/o-table-button.interface';
 import { OTableButtons } from '../../interfaces/o-table-buttons.interface';
@@ -69,7 +70,6 @@ import { OTableStorage } from './extensions/o-table-storage.class';
 import { OTableDao } from './extensions/o-table.dao';
 import { OMatSort } from './extensions/sort/o-mat-sort';
 import { OMatSortHeader } from './extensions/sort/o-mat-sort-header';
-
 
 export const DEFAULT_INPUTS_O_TABLE = [
   ...DEFAULT_INPUTS_O_SERVICE_COMPONENT,
@@ -1615,17 +1615,19 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       if (this.asyncLoadSubscriptions[rowIndex]) {
         this.asyncLoadSubscriptions[rowIndex].unsubscribe();
       }
-      this.asyncLoadSubscriptions[rowIndex] = this.dataService[queryMethodName].apply(this.dataService, columnQueryArgs).subscribe(res => {
-        if (res.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) {
-          let data;
-          if (Util.isArray(res.data) && res.data.length === 1) {
-            data = res.data[0];
-          } else if (Util.isObject(res.data)) {
-            data = res.data;
+      this.asyncLoadSubscriptions[rowIndex] = this.dataService[queryMethodName]
+        .apply(this.dataService, columnQueryArgs)
+        .subscribe((res: ServiceResponse) => {
+          if (res.isSuccessful()) {
+            let data;
+            if (Util.isArray(res.data) && res.data.length === 1) {
+              data = res.data[0];
+            } else if (Util.isObject(res.data)) {
+              data = res.data;
+            }
+            this.daoTable.setAsynchronousColumn(data, rowData);
           }
-          this.daoTable.setAsynchronousColumn(data, rowData);
-        }
-      });
+        });
     }
   }
 

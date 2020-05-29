@@ -5,7 +5,7 @@ import { Subscription } from 'rxjs';
 import { OFormLayoutManagerComponent } from '../../../layouts/form-layout/o-form-layout-manager.component';
 import { OntimizeServiceProvider } from '../../../services/data-service.provider';
 import { NavigationService, ONavigationItem } from '../../../services/navigation.service';
-import { OntimizeService } from '../../../services/ontimize.service';
+import { OntimizeService } from '../../../services/ontimize/ontimize.service';
 import { Codes } from '../../../util/codes';
 import { Util } from '../../../util/util';
 import { OFormComponent } from '../o-form.component';
@@ -104,7 +104,7 @@ export class OFormNavigationComponent implements OnDestroy {
       queryArgs[5] = length ? length : conf.queryRows;
 
       self.querySubscription = self.dataService[conf.queryMethod].apply(self.dataService, queryArgs).subscribe(res => {
-        if (res.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) {
+        if (res.isSuccessful()) {
           self.navigationData = res.data;
           self.queryConf.queryRecordOffset = offset;
         }

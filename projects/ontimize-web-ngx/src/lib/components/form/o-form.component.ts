@@ -19,12 +19,12 @@ import { InputConverter } from '../../decorators/input-converter';
 import { IComponent } from '../../interfaces/component.interface';
 import { IFormDataComponent } from '../../interfaces/form-data-component.interface';
 import { IFormDataTypeComponent } from '../../interfaces/form-data-type-component.interface';
+import { ServiceResponse } from '../../interfaces/service-response.interface';
 import { OFormLayoutManagerComponent } from '../../layouts/form-layout/o-form-layout-manager.component';
 import { OntimizeServiceProvider } from '../../services/data-service.provider';
 import { DialogService } from '../../services/dialog.service';
-import { OFormService } from '../../services/forms/o-form.service';
 import { NavigationService, ONavigationItem } from '../../services/navigation.service';
-import { OntimizeService } from '../../services/ontimize.service';
+import { OntimizeService } from '../../services/ontimize/ontimize.service';
 import { PermissionsService } from '../../services/permissions/permissions.service';
 import { SnackBarService } from '../../services/snackbar.service';
 import { FormValueOptions } from '../../types/form-value-options.type';
@@ -144,8 +144,7 @@ export const DEFAULT_OUTPUTS_O_FORM = [
 @Component({
   selector: 'o-form',
   providers: [
-    OntimizeServiceProvider,
-    OFormService
+    OntimizeServiceProvider
   ],
   templateUrl: './o-form.component.html',
   styleUrls: ['./o-form.component.scss'],
@@ -285,8 +284,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     protected zone: NgZone,
     protected cd: ChangeDetectorRef,
     protected injector: Injector,
-    protected elRef: ElementRef,
-    private oformService: OFormService
+    protected elRef: ElementRef
   ) {
 
     this.formCache = new OFormCacheClass(this);
@@ -896,9 +894,9 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     this.loaderSubscription = this.load();
     const av = this.getAttributesToQuery();
     const sqlTypes = this.getAttributesSQLTypes();
-    this.querySubscription = this.dataService[this.queryMethod](filter, av, this.entity, sqlTypes).subscribe(
-      resp => {
-        if (resp.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) {
+    this.querySubscription = this.dataService[this.queryMethod](filter, av, this.entity, sqlTypes)
+      .subscribe((resp: ServiceResponse) => {
+        if (resp.isSuccessful()) {
           self._setData(resp.data);
         } else {
           self._updateFormData({});
@@ -906,8 +904,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
           console.error('ERROR: ' + resp.message);
         }
         self.loaderSubscription.unsubscribe();
-      },
-      err => {
+      }, err => {
         console.error(err);
         self._updateFormData({});
         if (err && err.statusText) {
@@ -956,7 +953,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     const observable = new Observable(observer => {
       this.dataService[this.insertMethod](values, this.entity, sqlTypes).subscribe(
         resp => {
-          if (resp.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) {
+          if (resp.isSuccessful()) {
             observer.next(resp.data);
             observer.complete();
           } else {
@@ -1003,7 +1000,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     const observable = new Observable(observer => {
       this.dataService[this.updateMethod](filter, values, this.entity, sqlTypes).subscribe(
         resp => {
-          if (resp.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) {
+          if (resp.isSuccessful()) {
             observer.next(resp.data);
             observer.complete();
           } else {
@@ -1050,7 +1047,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
       this.canDiscardChanges = true;
       this.dataService[this.deleteMethod](filter, this.entity).subscribe(
         resp => {
-          if (resp.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) {
+          if (resp.isSuccessful()) {
             self.formCache.setCacheSnapshot();
             self.markFormLayoutManagerToUpdate();
             self.postCorrectDelete(resp);

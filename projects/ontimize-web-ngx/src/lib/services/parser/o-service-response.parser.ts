@@ -1,8 +1,8 @@
 import { Injectable, Injector } from '@angular/core';
 import { Subscriber } from 'rxjs';
 
-import { IAuthService } from '../../interfaces/auth-service.interface';
-import { Codes } from '../../util/codes';
+import { ServiceResponse } from '../../interfaces/service-response.interface';
+import { BaseService } from '../base-service.class';
 
 @Injectable({
   providedIn: 'root'
@@ -13,12 +13,12 @@ export class OntimizeServiceResponseParser {
     protected injector: Injector
   ) { }
 
-  parseSuccessfulResponse(resp, subscriber: Subscriber<any>, service: IAuthService) {
-    if (resp && resp.code === Codes.ONTIMIZE_UNAUTHORIZED_CODE) {
-      service.redirectLogin(true);
-    } else if (resp && resp.code === Codes.ONTIMIZE_FAILED_CODE) {
+  parseSuccessfulResponse(resp: ServiceResponse, subscriber: Subscriber<ServiceResponse>, service: BaseService) {
+    if (resp && resp.isUnauthorized()) {
+      service.clientErrorFallback(401);
+    } else if (resp && resp.isFailed()) {
       subscriber.error(resp.message);
-    } else if (resp && resp.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) {
+    } else if (resp && resp.isSuccessful()) {
       subscriber.next(resp);
     } else {
       // Unknow state -> error
@@ -26,9 +26,25 @@ export class OntimizeServiceResponseParser {
     }
   }
 
-  parseUnsuccessfulResponse(error, subscriber: Subscriber<any>, service: IAuthService) {
-    if (error.status !== 500 && (error.status === 401 || error.status === 0) && !error.ok) {
-      service.redirectLogin(true);
+  parseUnsuccessfulResponse(error, subscriber: Subscriber<ServiceResponse>, service: BaseService) {
+    if (error) {
+      switch (error.status) {
+        case 401:
+        case 403:
+        case 404:
+        case 405:
+          service.clientErrorFallback(error.status);
+          break;
+        case 500:
+        case 501:
+        case 502:
+        case 503:
+        case 504:
+        default:
+          subscriber.error(error);
+          service.serverErrorFallback(error.status);
+          break;
+      }
     } else {
       subscriber.error(error);
     }
