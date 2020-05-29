@@ -55,6 +55,7 @@ export class OLanguageSelectorComponent {
   configureI18n(lang: any) {
     if (this.translateService && this.translateService.getCurrentLang() !== lang) {
       this.translateService.use(lang);
+      this.onChange.emit(lang);
     }
   }
 

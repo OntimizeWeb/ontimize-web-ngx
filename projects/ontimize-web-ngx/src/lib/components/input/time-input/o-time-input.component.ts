@@ -177,7 +177,7 @@ export class OTimeInputComponent extends OFormDataComponent implements OnInit, A
       this.dateInput.setValue(dateValue);
     }
     if (this.hourInput) {
-      this.hourInput.setValue(hourValue);
+      this.hourInput.setTimestampValue(hourValue);
     }
     this.cd.detectChanges();
   }
@@ -189,7 +189,7 @@ export class OTimeInputComponent extends OFormDataComponent implements OnInit, A
     let timeValue: number;
     const values = this.formGroup.getRawValue();
     const mDate = (values[this.dateAttr] ? moment(values[this.dateAttr]) : moment()).startOf('day');
-    const mHour = this.hourInput.valueType === 'timestamp' ? moment(values[this.hourAttr]) : moment(values[this.hourAttr], this.hourInput.formatString);
+    const mHour = moment(values[this.hourAttr], this.hourInput.formatString);
     timeValue = mDate.clone()
       .set('hour', mHour.get('hour'))
       .set('minute', mHour.get('minutes'))

@@ -7,6 +7,7 @@ import { AppConfig } from '../../config/app-config';
 import * as CORE_TRANSLATIONS from '../../i18n/i18n';
 import { MomentService } from '../../services/moment.service';
 import { SnackBarService } from '../../services/snackbar.service';
+import { Codes } from '../../util';
 import { ObservableWrapper } from '../../util/async';
 
 @Injectable({
@@ -24,6 +25,7 @@ export class OTranslateService {
   protected momentService: MomentService;
   protected httpClient: HttpClient;
 
+  protected localStorageKey: string;
   protected notFoundLang: Array<string> = [];
   protected appConfig: AppConfig;
 
@@ -34,6 +36,21 @@ export class OTranslateService {
     this.momentService = this.injector.get(MomentService);
     this.httpClient = this.injector.get(HttpClient);
     this.appConfig = this.injector.get(AppConfig);
+    this.localStorageKey = this.appConfig.getConfiguration().uuid;
+  }
+
+  public storeLanguage(language: string): void {
+    if (language) {
+      const dataStr = localStorage.getItem(this.localStorageKey);
+      const data = (dataStr && dataStr.length > 0) ? JSON.parse(dataStr) : {};
+      data[Codes.LANGUAGE_KEY] = language;
+      localStorage.setItem(this.localStorageKey, JSON.stringify(data));
+    }
+  }
+
+  public getStoredLanguage(): string {
+    const dataStr = localStorage.getItem(this.localStorageKey);
+    return dataStr ? JSON.parse(dataStr)[Codes.LANGUAGE_KEY] : void 0;
   }
 
   protected checkExistingLangFile(lang: string): Promise<any> {
@@ -116,6 +133,7 @@ export class OTranslateService {
         }
         this.ngxTranslateService.use(newLang).subscribe(
           res => {
+            this.storeLanguage(newLang);
             this.propagateLang(newLang, res, observer);
           }
         );

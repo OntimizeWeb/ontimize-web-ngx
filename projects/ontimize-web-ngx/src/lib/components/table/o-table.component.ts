@@ -18,7 +18,7 @@ import {
   TemplateRef,
   ViewChild,
   ViewChildren,
-  ViewEncapsulation,
+  ViewEncapsulation
 } from '@angular/core';
 import { MatCheckboxChange, MatDialog, MatMenu, MatPaginator, MatTab, MatTabGroup, PageEvent } from '@angular/material';
 import { BehaviorSubject, combineLatest, Observable, of, Subscription } from 'rxjs';
@@ -60,9 +60,7 @@ import { OTableColumnCalculatedComponent } from './column/calculated/o-table-col
 import { OColumn } from './column/o-column.class';
 import { OTableColumnComponent } from './column/o-table-column.component';
 import { DefaultOTableOptions } from './extensions/default-o-table-options.class';
-import {
-  OTableFilterByColumnDataDialogComponent,
-} from './extensions/dialog/filter-by-column/o-table-filter-by-column-data-dialog.component';
+import { OTableFilterByColumnDataDialogComponent } from './extensions/dialog/filter-by-column/o-table-filter-by-column-data-dialog.component';
 import { OBaseTablePaginator } from './extensions/footer/paginator/o-base-table-paginator.class';
 import { OTableColumnsFilterComponent } from './extensions/header/table-columns-filter/o-table-columns-filter.component';
 import { OTableInsertableRowComponent } from './extensions/header/table-insertable-row/o-table-insertable-row.component';
@@ -150,6 +148,9 @@ export const DEFAULT_INPUTS_O_TABLE = [
 
   // export-mode ['visible'|'local'|'all']: sets the mode to export data. Default: 'visible'
   'exportMode: export-mode',
+
+  // exportServiceType [ string ]: The service used by the table for exporting it's data, it must implement 'IExportService' interface. Default: 'OntimizeExportService'
+  'exportServiceType: export-service-type',
 
   // auto-adjust [true|false]: Auto adjust column width to fit its content. Default: true
   'autoAdjust: auto-adjust',
@@ -318,12 +319,13 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   @InputConverter()
   keepSelectedItems: boolean = true;
 
-  exportMode: string = Codes.EXPORT_MODE_VISIBLE;
+  public exportMode: string = Codes.EXPORT_MODE_VISIBLE;
+  public exportServiceType: string;
   public visibleExportDialogButtons: string;
-  daoTable: OTableDao;
-  dataSource: OTableDataSource;
-  visibleColumns: string;
-  sortColumns: string;
+  public daoTable: OTableDao | null;
+  public dataSource: OTableDataSource | null;
+  public visibleColumns: string;
+  public sortColumns: string;
 
   /*parsed inputs variables */
   protected _visibleColArray: Array<string> = [];
