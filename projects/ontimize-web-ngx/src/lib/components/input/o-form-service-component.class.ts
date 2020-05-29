@@ -46,7 +46,17 @@ export const DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT = [
   'queryWithNullParentKeys: query-with-null-parent-keys',
 
   // set-value-on-value-change [string]: Form component attributes whose value will be set when the value of the current component changes due to user interaction. Separated by ';'. Accepted format: attr | columnName:attr
-  'setValueOnValueChange: set-value-on-value-change'
+  'setValueOnValueChange: set-value-on-value-change',
+
+  // [function]: function to execute on query error. Default: no value.
+  'queryFallbackFunction: query-fallback-function'
+  // ,
+
+  // 'insertFallbackFunction: insert-fallback-function',
+
+  // 'updateFallbackFunction: update-fallback-function',
+
+  // 'deleteFallbackFunction: delete-fallback-function'
 ];
 
 export const DEFAULT_OUTPUTS_O_FORM_SERVICE_COMPONENT = [
@@ -78,6 +88,10 @@ export class OFormServiceComponent extends OFormDataComponent {
   @InputConverter()
   queryWithNullParentKeys: boolean = false;
   public setValueOnValueChange: string;
+  public queryFallbackFunction: (error: any) => void;
+  // public insertFallbackFunction: Function;
+  // public updateFallbackFunction: Function;
+  // public deleteFallbackFunction: Function;
 
   /* Outputs */
   public onSetValueOnValueChange: EventEmitter<object> = new EventEmitter<object>();
@@ -160,6 +174,19 @@ export class OFormServiceComponent extends OFormDataComponent {
         }
       });
     }
+
+    if (typeof this.queryFallbackFunction !== 'function') {
+      this.queryFallbackFunction = undefined;
+    }
+    // if (typeof this.insertFallbackFunction !== 'function') {
+    //   this.insertFallbackFunction = undefined;
+    // }
+    // if (typeof this.updateFallbackFunction !== 'function') {
+    //   this.updateFallbackFunction = undefined;
+    // }
+    // if (typeof this.deleteFallbackFunction !== 'function') {
+    //   this.deleteFallbackFunction = undefined;
+    // }
   }
 
   destroy() {
@@ -224,7 +251,6 @@ export class OFormServiceComponent extends OFormDataComponent {
   }
 
   queryData(filter?: any) {
-    const self = this;
     if (!this.dataService || !(this.queryMethod in this.dataService) || !this.entity) {
       console.warn('Service not properly configured! aborting query');
       return;
@@ -246,17 +272,19 @@ export class OFormServiceComponent extends OFormDataComponent {
       this.querySuscription = this.dataService[this.queryMethod](filter, queryCols, this.entity)
         .subscribe((resp: ServiceResponse) => {
           if (resp.isSuccessful()) {
-            self.cacheQueried = true;
-            self.setDataArray(resp.data);
+            this.cacheQueried = true;
+            this.setDataArray(resp.data);
           }
           // window.setTimeout(() => { this.loading = false; self.loadingSubject.next(false); self.loaderSubscription.unsubscribe(); }, 10000);
-          self.loadingSubject.next(false);
-          self.loaderSubscription.unsubscribe();
+          this.loadingSubject.next(false);
+          this.loaderSubscription.unsubscribe();
         }, err => {
           console.error(err);
-          self.loadingSubject.next(false);
-          self.loaderSubscription.unsubscribe();
-          if (err && !Util.isObject(err)) {
+          this.loadingSubject.next(false);
+          this.loaderSubscription.unsubscribe();
+          if (Util.isDefined(this.queryFallbackFunction)) {
+            this.queryFallbackFunction(err);
+          } else if (err && !Util.isObject(err)) {
             this.dialogService.alert('ERROR', err);
           } else {
             this.dialogService.alert('ERROR', 'MESSAGES.ERROR_QUERY');
