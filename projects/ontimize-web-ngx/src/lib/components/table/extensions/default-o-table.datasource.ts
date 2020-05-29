@@ -315,19 +315,31 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
     return this.renderedData;
   }
 
-  public getRenderedData(data) {
-    const tableColumns = this._tableOptions.columns.filter((oCol) => {
-      return oCol.visible && oCol.renderer && oCol.renderer.getCellData;
+  public getRenderedData(data: any[]) {
+    const visibleColumns = this._tableOptions.columns.filter(oCol => oCol.visible);
+    return data.map((row) => {
+      const obj = {};
+      visibleColumns.forEach((oCol: OColumn) => {
+        const useRenderer = oCol.renderer && oCol.renderer.getCellData;
+        obj[oCol.attr] = useRenderer ? oCol.renderer.getCellData(row[oCol.attr], row) : row[oCol.attr];
+      });
+      return obj;
     });
-    return this.getRenderersData(data, tableColumns);
   }
 
-  protected getAllData(render?: boolean, onlyVisibleColumns?: boolean) {
-    let tableColumns = this._tableOptions.columns.filter((oCol) => render && oCol.renderer && oCol.renderer.getCellData);
+  protected getAllData(usingRendererers?: boolean, onlyVisibleColumns?: boolean) {
+    let tableColumns = this._tableOptions.columns;
     if (onlyVisibleColumns) {
-      tableColumns = this._tableOptions.columns.filter((oCol) => oCol.visible);
+      tableColumns = this._tableOptions.columns.filter(oCol => oCol.visible);
     }
-    return this.getRenderersData(this.filteredData, tableColumns);
+    return this.filteredData.map((row) => {
+      const obj = {};
+      tableColumns.forEach((oCol: OColumn) => {
+        const useRenderer = usingRendererers && oCol.renderer && oCol.renderer.getCellData;
+        obj[oCol.attr] = useRenderer ? oCol.renderer.getCellData(row[oCol.attr], row) : row[oCol.attr];
+      });
+      return obj;
+    });
   }
 
   private getRenderersData(data: any[], tableColumns: OColumn[]): any[] {
