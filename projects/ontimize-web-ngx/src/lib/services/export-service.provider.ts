@@ -4,6 +4,12 @@ import { AppConfig } from '../config/app-config';
 import { Config } from '../types';
 import { OntimizeExportService } from './ontimize/ontimize-export.service';
 
+export let OntimizeExportServiceProvider = {
+  provide: OntimizeExportService,
+  useFactory: exportServiceFactory,
+  deps: [Injector]
+};
+
 export class ExportServiceFactory {
 
   protected config: Config;
