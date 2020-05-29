@@ -1,4 +1,4 @@
-## 8.0.0
+## 8.0.0-rc.0 (2020-05-29)
 
 ### BREAKING CHANGES
 * All components inputs/outputs arrays are no longer exported as static variables, they are only exported as independent arrays.
