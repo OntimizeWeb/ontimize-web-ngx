@@ -163,4 +163,8 @@ export class LoginService implements ILoginService {
   public getSessionInfo(): SessionInfo {
     return this.loginStorageService.getSessionInfo();
   }
+
+  public storeSessionInfo(info: SessionInfo): void {
+    this.loginStorageService.storeSessionInfo(info);
+  }
 }
