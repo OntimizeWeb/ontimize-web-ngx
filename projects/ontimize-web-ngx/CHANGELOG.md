@@ -13,6 +13,8 @@
   * editors and renderers:
     * '*initialize*' method added always called in base class ngOnInit method
   * `usePlainRender`, `useCellRenderer`, `useCellEditor` and `useDetailButton` no longer exists (used for template purposes) ([e56c736b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e56c736b)) ([47c0714e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/47c0714e))
+* **o-form**:
+  * `RELOAD_ACTION`, `GO_EDIT_ACTION`, `EDIT_ACTION`, `INSERT_ACTION`, `GO_INSERT_ACTION`, `DELETE_ACTION` and `UNDO_LAST_CHANGE_ACTION` static variables not longer exists, now they are defined in the `Codes` static class.
 
 ## 4.1.3
 ### Features
