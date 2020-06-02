@@ -167,14 +167,6 @@ export const DEFAULT_OUTPUTS_O_FORM = [
 })
 export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate, AfterViewInit {
 
-  // public static RELOAD_ACTION: string = 'RELOAD';
-  // public static GO_EDIT_ACTION: string = 'GO_EDIT';
-  // public static EDIT_ACTION: string = 'EDIT';
-  // public static INSERT_ACTION: string = 'INSERT';
-  // public static GO_INSERT_ACTION: string = 'GO_INSERT';
-  // public static DELETE_ACTION: string = 'DELETE';
-  // public static UNDO_LAST_CHANGE_ACTION: string = 'UNDO_LAST_CHANGE';
-
   public static DEFAULT_LAYOUT_DIRECTION = 'column';
   public static guardClassName = 'CanDeactivateFormGuard';
 
