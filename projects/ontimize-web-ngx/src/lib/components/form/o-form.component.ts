@@ -915,7 +915,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     const sqlTypes = this.getAttributesSQLTypes();
     this.querySubscription = this.dataService[this.queryMethod](filter, av, this.entity, sqlTypes)
       .subscribe((resp: ServiceResponse) => {
-        if (resp.isSuccessful()) {
+        if (resp.data) {
           this._setData(resp.data);
         } else {
           this._updateFormData({});
