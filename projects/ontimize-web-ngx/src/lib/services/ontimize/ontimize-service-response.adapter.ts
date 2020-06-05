@@ -13,7 +13,9 @@ export class OntimizeServiceResponseAdapter implements ServiceResponseAdapter<On
       res.body.code,
       res.body.data,
       res.body.message,
-      res.body.sqlTypes
+      res.body.sqlTypes,
+      res.body.startRecordIndex,
+      res.body.totalQueryRecordsNumber
     );
   }
 }
