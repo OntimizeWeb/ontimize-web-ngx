@@ -36,7 +36,6 @@ export class ONavigationItem {
     this.text = value.text ? value.text : '';
     this.displayText = value.displayText ? value.displayText : '';
     this.formRoutes = value.formRoutes;
-    this.formLayoutRoutes = value.formLayoutRoutes;
     this.activeFormMode = value.activeFormMode;
     this.keysValues = value.keysValues;
     this.queryConfiguration = value.queryConfiguration;
