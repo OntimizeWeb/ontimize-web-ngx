@@ -1,4 +1,8 @@
-## 8.0.0 (2020-05-18)
+## 8.0.0
+### Features
+* **o-date-input**: new attribute `date-class` ([039da18](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/039da18))
+
+## 8.0.0.rc-0 (2020-05-18)
 ### Features
 * **angular8:** adapt code to Angular 8.
 
