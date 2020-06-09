@@ -1,4 +1,4 @@
 import { MatCalendarCellCssClasses } from '@angular/material';
-import moment from 'moment';
+import { Moment } from 'moment';
 
-export type DateCustomClassFunction = (date: moment.Moment) => MatCalendarCellCssClasses;
+export type DateCustomClassFunction = (date: Moment) => MatCalendarCellCssClasses;
