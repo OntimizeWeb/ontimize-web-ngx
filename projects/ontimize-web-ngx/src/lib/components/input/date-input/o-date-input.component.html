@@ -15,7 +15,7 @@
     <mat-datepicker-toggle matSuffix [disabled]="isReadOnly || !enabled" [class.read-only]="isReadOnly" [for]="picker">
       <mat-icon matDatepickerToggleIcon>today</mat-icon>
     </mat-datepicker-toggle>
-    <mat-datepicker #picker [disabled]="isReadOnly || !enabled"></mat-datepicker>
+    <mat-datepicker #picker [disabled]="isReadOnly || !enabled" [dateClass]="dateClass"></mat-datepicker>
     <mat-error *ngIf="hasError('required')" text="{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}"></mat-error>
     <mat-error *ngIf="hasError('matDatepickerParse')"
       text="{{ 'FORM_VALIDATION.DATE_PARSE' | oTranslate }} {{ oformat }}"></mat-error>

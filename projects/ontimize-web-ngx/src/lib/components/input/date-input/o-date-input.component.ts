@@ -18,6 +18,7 @@ import { OFormValue } from '../../form/OFormValue';
 import { OFormDataComponent } from '../../o-form-data-component.class';
 import { OValueChangeEvent } from '../../o-value-change-event.class';
 import { DEFAULT_INPUTS_O_TEXT_INPUT, DEFAULT_OUTPUTS_O_TEXT_INPUT } from '../text-input/o-text-input.component';
+import { DateCustomClassFunction } from '../../../types/date-custom-class.type';
 
 export const DEFAULT_OUTPUTS_O_DATE_INPUT = [
   ...DEFAULT_OUTPUTS_O_TEXT_INPUT
@@ -34,6 +35,7 @@ export const DEFAULT_INPUTS_O_DATE_INPUT = [
   'oStartAt: start-at',
   'filterDate: filter-date',
   'textInputEnabled: text-input-enabled',
+  'dateClass: date-class',
   ...DEFAULT_INPUTS_O_TEXT_INPUT
 ];
 
@@ -61,6 +63,7 @@ export class ODateInputComponent extends OFormDataComponent implements OnDestroy
   protected oTouchUi: boolean;
   protected oStartAt: string;
   protected _filterDate: DateFilterFunction;
+  protected _dateClass: DateCustomClassFunction
   protected _valueType: ODateValueType = 'timestamp';
 
   protected _minDateString: string;
@@ -230,6 +233,13 @@ export class ODateInputComponent extends OFormDataComponent implements OnDestroy
     this._filterDate = val;
   }
 
+  get dateClass(): DateCustomClassFunction {
+    return this._dateClass;
+  }
+
+  set dateClass(val: DateCustomClassFunction) {
+    this._dateClass = val;
+  }
   get oformat(): string {
     return this._oformat;
   }
