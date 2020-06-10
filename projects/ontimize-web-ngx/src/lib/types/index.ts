@@ -2,6 +2,7 @@ export * from './aggregate-function.type';
 export * from './basic-expression.type';
 export * from './config.type';
 export * from './date-filter-function.type';
+export * from './date-custom-class.type';
 export * from './error-data.type';
 export * from './expression.type';
 export * from './filter-expression.type';
