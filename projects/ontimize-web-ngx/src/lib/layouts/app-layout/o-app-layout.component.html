@@ -1,7 +1,6 @@
-<o-app-sidenav #appSidenav [sidenav-mode]="sidenavMode" [opened]="sidenavOpened" [show-user-info]="showUserInfo"
-  [show-toggle-button]="!showHeader" [opened-sidenav-image]="openedSidenavImg" [closed-sidenav-image]="closedSidenavImg"
-  [layout-mode]="mode" [class.header-layout]="showHeader" (onSidenavToggle)="sidenavToggle($event)"
-  (afterSidenavToggle)="afterToggle($event)">
+<o-app-sidenav #appSidenav [sidenav-mode]="sidenavMode" [opened]="sidenavOpened" [show-user-info]="showUserInfo" [show-toggle-button]="!showHeader"
+  [opened-sidenav-image]="openedSidenavImg" [closed-sidenav-image]="closedSidenavImg" [layout-mode]="mode" [class.header-layout]="showHeader"
+  (onSidenavToggle)="sidenavToggle($event)" (afterSidenavToggle)="afterToggle($event)">
 
   <ng-content select="o-app-layout-sidenav[position=start]" ngProjectAs="o-app-layout-sidenav-projection-start">
   </ng-content>
@@ -9,12 +8,10 @@
   </ng-content>
   <ng-content select="o-app-layout-sidenav" ngProjectAs="o-app-layout-sidenav-projection-end"></ng-content>
 
-  <o-app-header #appHeader *ngIf="showHeader" [show-user-info]="showUserInfo"
-    [show-language-selector]="showLanguageSelector" [use-flag-icons]="useFlagIcons"
-    (onSidenavToggle)="appSidenav.toggleSidenav()">
-
+  <o-app-header #appHeader *ngIf="showHeader" [show-user-info]="showUserInfo" [show-language-selector]="showLanguageSelector"
+    [use-flag-icons]="useFlagIcons" (onSidenavToggle)="appSidenav.toggleSidenav()">
+    <mat-icon class="sidenav-toggle" svgIcon="ontimize:menu" (click)="appSidenav.toggleSidenav()" *ngIf="appSidenav.isMobileMode()"></mat-icon>
     <ng-content select="o-app-layout-header"></ng-content>
-
   </o-app-header>
 
   <div class="application-layout-content-wrapper" [class.header-layout]="showHeader">

@@ -24,9 +24,6 @@ export const DEFAULT_OUTPUTS_O_APP_LAYOUT: any[] = [
   'afterCloseSidenav'
 ];
 
-// export type OAppLayoutMode = 'mobile' | 'desktop';
-// export type OSidenavMode = 'over' | 'push' | 'side';
-
 @Component({
   selector: 'o-app-layout',
   inputs: DEFAULT_INPUTS_O_APP_LAYOUT,
@@ -37,9 +34,6 @@ export const DEFAULT_OUTPUTS_O_APP_LAYOUT: any[] = [
 })
 
 export class OAppLayoutComponent {
-
-  // public static OAppLayoutModes: OAppLayoutMode[] = ['mobile', 'desktop'];
-  // public static OSidenavModes: OSidenavMode[] = ['over', 'push', 'side'];
 
   @InputConverter()
   sidenavOpened: boolean = true;

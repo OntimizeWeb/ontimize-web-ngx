@@ -2,6 +2,9 @@
 ### Features
 * **o-date-input**: new attribute `date-class` ([039da18](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/039da18))
 
+### BREAKING CHANGES
+* **o-app-layout**: the menu icon appears in sidenav when mode="desktop" and show-header="yes". ([#364](https://github.com/OntimizeWeb/ontimize-web-ngx/pull/364)) Closes [#316](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/363)
+
 ## 8.0.0.rc-0 (2020-05-18)
 ### Features
 * **angular8:** adapt code to Angular 8.

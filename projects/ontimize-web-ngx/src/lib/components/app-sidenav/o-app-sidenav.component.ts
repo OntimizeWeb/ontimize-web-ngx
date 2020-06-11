@@ -63,7 +63,7 @@ export class OAppSidenavComponent implements OnInit, OnDestroy, AfterViewInit {
   protected routerSubscription: Subscription;
   appMenuService: AppMenuService;
   protected _menuRootArray: MenuRootItem[] = [];
-  protected _layoutMode: OAppLayoutMode;
+  protected _layoutMode: OAppLayoutMode = Codes.APP_LAYOUT_MODE_DESKTOP;
   protected _sidenavMode: OSidenavMode;
   @InputConverter()
   protected opened: boolean = true;
@@ -193,7 +193,11 @@ export class OAppSidenavComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   isMobileMode(): boolean {
-    return this._layoutMode === 'mobile';
+    return this._layoutMode === Codes.APP_LAYOUT_MODE_MOBILE;
+  }
+
+  isDesktopMode(): boolean {
+    return this._layoutMode === Codes.APP_LAYOUT_MODE_DESKTOP;
   }
 
   isSidenavOpened(): boolean {
