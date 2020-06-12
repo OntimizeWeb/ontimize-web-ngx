@@ -7,6 +7,7 @@ import { map, share } from 'rxjs/operators';
 import { AppConfig } from '../config/app-config';
 import { ServiceResponseAdapter } from '../interfaces/service-response-adapter.interface';
 import { ServiceResponse } from '../interfaces/service-response.interface';
+import { HttpRequestOptions } from '../types';
 import { Config } from '../types/config.type';
 import { ServiceRequestParam } from '../types/service-request-param.type';
 import { Codes } from '../util/codes';
@@ -79,10 +80,11 @@ export class BaseService {
           requestObs = this.httpClient.put<ServiceResponse>(param.url, param.body, options);
           break;
         case 'DELETE':
-          const deleteOptions = {
+          const deleteOptions: HttpRequestOptions = {
             headers: options.headers,
             body: param.body
           };
+          deleteOptions.observe = 'response';
           requestObs = this.httpClient.delete<ServiceResponse>(param.url, deleteOptions);
           break;
         case 'POST':
