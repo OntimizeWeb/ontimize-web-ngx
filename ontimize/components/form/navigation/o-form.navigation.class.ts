@@ -267,8 +267,13 @@ export class OFormNavigationClass {
     } else if (this.navigationService) {
       this.form.beforeCloseDetail.emit();
       this.navigationService.removeLastItemsUntilMain();
-      const navData: ONavigationItem = this.navigationService.getLastItem();
+      let navData: ONavigationItem = this.navigationService.getLastItem();
       if (navData) {
+        // if navData route is the same as the current route, remove last item
+        if (this.navigationService.isCurrentRoute(navData.url)) {
+          this.navigationService.removeLastItem();
+          navData = this.navigationService.getLastItem();
+        }
         let extras: NavigationExtras = {};
         extras[Codes.QUERY_PARAMS] = navData.queryParams;
         this.router.navigate([navData.url], extras).then(val => {
