@@ -396,6 +396,16 @@ export class NavigationService implements ILocalStorageComponent {
     this.storeNavigation();
   }
 
+  isCurrentRoute(route: string): boolean {
+    let currentRoute = this.router.routerState.snapshot.url;
+    if (currentRoute.startsWith('/')) {
+      currentRoute = currentRoute.substr(1);
+    }
+    currentRoute = currentRoute.split('?')[0];
+
+    return route === currentRoute;
+  }
+
   getLastItem(): ONavigationItem {
     let result;
     if (this.navigationItems.length > 0) {
