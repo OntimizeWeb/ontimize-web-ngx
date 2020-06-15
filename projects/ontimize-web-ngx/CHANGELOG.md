@@ -1,7 +1,12 @@
 ## 8.0.0-rc.1
+### Features
+* **o-date-input**: new attribute `date-class` ([039da18](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/039da18))
 
 ### Bug Fixes
 * **base-service.class**: fixing bug in delete method headers ([d4065cdd](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d4065cdd)) ([#361](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/361))
+
+### BREAKING CHANGES
+* **o-app-layout**: the menu icon appears in sidenav when mode="desktop" and show-header="yes". ([#364](https://github.com/OntimizeWeb/ontimize-web-ngx/pull/364)) Closes [#316](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/363)
 
 ## 8.0.0-rc.0 (2020-05-29)
 
@@ -30,12 +35,12 @@
 * **App configuration**: new attribute `exportServiceType` allows configuring the service used for exportation in the whole application ([c785371](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c785371))
 * **OFormServiceComponent**: new `query-fallback-function` input ([089338f3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/089338f3))
 * **o-form**: new `query-fallback-function` input ([089338f3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/089338f3))
-* **o-table**: 
+* **o-table**:
  * `NAME_COLUMN_SELECT`, `SUFFIX_COLUMN_INSERTABLE`, `LIMIT_SCROLLVIRTUAL` and `DEFAULT_COLUMN_MIN_WIDTH` static variables no longer exists. Now they are located in `Codes` utility class.
  * editors and renderers:
     * '*initialize*' method added always called in base class ngOnInit method
- * `usePlainRender`, `useCellRenderer`, `useCellEditor` and `useDetailButton` no longer exists (used for template purposes) ([e56c736b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e56c736b)) ([47c0714e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/47c0714e))  
-* **o-grid**: adding `registerGridItem` and `registerGridItemDirective` methods ([39117e8d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/39117e8d)) 
+ * `usePlainRender`, `useCellRenderer`, `useCellEditor` and `useDetailButton` no longer exists (used for template purposes) ([e56c736b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e56c736b)) ([47c0714e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/47c0714e))
+* **o-grid**: adding `registerGridItem` and `registerGridItemDirective` methods ([39117e8d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/39117e8d))
 
 ### Bug Fixes
 * **o-time-input**: Fix bad behaviour when there is more than one component in the same form ([fc1dd47](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/fc1dd47))
