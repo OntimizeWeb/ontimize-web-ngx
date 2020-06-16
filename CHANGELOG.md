@@ -1,13 +1,33 @@
-## 8.0.0
+## 8.0.0-rc.1
 ### Features
 * **o-date-input**: new attribute `date-class` ([039da18](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/039da18))
+
+### Bug Fixes
+* **base-service.class**: fixing bug in delete method headers ([d4065cdd](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d4065cdd)) ([#361](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/361))
+* **o-combo**: scroll not worked when searchable="yes" ([b70b2a1](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b70b2a1)) Closes [#365](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/365)
 
 ### BREAKING CHANGES
 * **o-app-layout**: the menu icon appears in sidenav when mode="desktop" and show-header="yes". ([#364](https://github.com/OntimizeWeb/ontimize-web-ngx/pull/364)) Closes [#316](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/363)
 
-## 8.0.0.rc-0 (2020-05-18)
+## 8.0.0.rc-0 (2020-05-29)
 ### Features
 * **angular8:** adapt code to Angular 8.
+
+### BREAKING CHANGES
+* All components inputs/outputs arrays are no longer exported as static variables, they are only exported as independent arrays.
+* Some interfaces has been replaced by types and their names has changed:
+  * interface **IFormValueOptions** has been replaced by type `FormValueOptions`.
+  * interface **IExpression** has been replaced by type `Expression`.
+  * interface **IBasicExpression** has been replaced by type `BasicExpression`.
+  * interface **IFilterExpression** has been replaced by type `FilterExpression`.
+  * interface **ISQLOrder** has been replaced by type `SQLOrder`.
+* **o-table**:
+  * `NAME_COLUMN_SELECT`, `SUFFIX_COLUMN_INSERTABLE`, `LIMIT_SCROLLVIRTUAL` and `DEFAULT_COLUMN_MIN_WIDTH` static variables no longer exists. Now they are located in `Codes` utility class.
+  * editors and renderers:
+    * '*initialize*' method added always called in base class ngOnInit method
+  * `usePlainRender`, `useCellRenderer`, `useCellEditor` and `useDetailButton` no longer exists (used for template purposes) ([e56c736b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e56c736b)) ([47c0714e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/47c0714e))
+* **o-form**:
+  * `RELOAD_ACTION`, `GO_EDIT_ACTION`, `EDIT_ACTION`, `INSERT_ACTION`, `GO_INSERT_ACTION`, `DELETE_ACTION` and `UNDO_LAST_CHANGE_ACTION` static variables not longer exists, now they are defined in the `Codes` static class.
 
 ## 4.1.3
 ### Features
