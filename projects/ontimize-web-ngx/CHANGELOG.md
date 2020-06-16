@@ -35,6 +35,7 @@
 * **App configuration**: new attribute `exportServiceType` allows configuring the service used for exportation in the whole application ([c785371](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c785371))
 * **OFormServiceComponent**: new `query-fallback-function` input ([089338f3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/089338f3))
 * **o-form**: new `query-fallback-function` input ([089338f3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/089338f3))
+* Now the application language is stored in the browser and loaded on application startup ([e9b9535](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e9b9535))
 * **o-table**:
  * `NAME_COLUMN_SELECT`, `SUFFIX_COLUMN_INSERTABLE`, `LIMIT_SCROLLVIRTUAL` and `DEFAULT_COLUMN_MIN_WIDTH` static variables no longer exists. Now they are located in `Codes` utility class.
  * editors and renderers:
@@ -44,6 +45,7 @@
 
 ### Bug Fixes
 * **o-time-input**: Fix bad behaviour when there is more than one component in the same form ([fc1dd47](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/fc1dd47))
+* **o-language-selector**: emit `onChange` event ([231c1d4](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/231c1d4))
 
 ## 4.1.2 (2020-02-26)
 ### Features
