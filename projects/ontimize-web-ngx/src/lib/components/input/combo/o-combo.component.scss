@@ -13,14 +13,11 @@
 }
 
 .o-combo-panel.o-combo-panel-search {
-  overflow: hidden;
+  height: 100%;
 
-  .mat-select-content {
-    height: 100%;
+  .o-combo-options-container {
+    height: calc(100% - 3em);
+    overflow: auto;
 
-    .o-combo-options-container {
-      height: calc(100% - 3em);
-      overflow: auto;
-    }
   }
 }
