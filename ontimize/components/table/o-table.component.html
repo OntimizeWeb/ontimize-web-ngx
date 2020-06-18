@@ -190,9 +190,9 @@
 
         <tr #tableHeader mat-header-row *matHeaderRowDef="oTableOptions.visibleColumns; sticky: fixedHeader"></tr>
 
-        <tr mat-row oTableRow *matRowDef="let row; columns: oTableOptions.visibleColumns;"
+        <tr mat-row oTableRow *matRowDef="let row; columns: oTableOptions.visibleColumns;let i = index;"
           (click)="handleClick(row, $event)" (dblclick)="handleDoubleClick(row, $event)"
-          [class.selected]="isRowSelected(row)" [ngClass]="row | oTableRowClass: rowClass">
+          [class.selected]="isRowSelected(row)" [ngClass]="row | oTableRowClass: i: rowClass">
         </tr>
         <ng-container *ngIf="showLastInsertableRow">
           <tr mat-footer-row *matFooterRowDef="oTableOptions.columnsInsertables; sticky: true"
