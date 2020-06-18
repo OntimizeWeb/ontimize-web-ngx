@@ -21,6 +21,7 @@ import { OTableExpandedFooterDirective } from './extensions/footer/expanded/o-ta
 import { O_TABLE_FOOTER_COMPONENTS } from './extensions/footer/o-table-footer-components';
 import { OTableMatPaginatorIntl } from './extensions/footer/paginator/o-table-mat-paginator-intl';
 import { O_TABLE_HEADER_COMPONENTS } from './extensions/header/o-table-header-components';
+import { OTableRowClassPipe } from './extensions/pipes/o-table-row-class.pipe';
 import { OTableRowDirective } from './extensions/row/o-table-row.directive';
 import { OMatSortModule } from './extensions/sort/o-mat-sort-module';
 import { OTableComponent } from './o-table.component';
@@ -34,6 +35,7 @@ import { OTableComponent } from './o-table.component';
     OTableRowDirective,
     OTableExpandedFooterDirective,
     OTableExportButtonComponent,
+    OTableRowClassPipe,
     ...O_TABLE_CELL_RENDERERS,
     ...O_TABLE_CELL_EDITORS,
     ...O_TABLE_DIALOGS,
