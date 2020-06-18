@@ -159,7 +159,10 @@ export const DEFAULT_INPUTS_O_TABLE = [
   'showFilterOption: show-filter-option',
 
   // visible-export-dialog-buttons [string]: visible buttons in export dialog, separated by ';'. Default/no configured: show all. Empty value: hide all.
-  'visibleExportDialogButtons: visible-export-dialog-buttons'
+  'visibleExportDialogButtons: visible-export-dialog-buttons',
+
+  // row-class [function, (rowData: any, rowIndex: number) => string | string[]]: adds the class or classes returned by the provided function to the table rows.
+  'rowClass: row-class'
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE = [
@@ -326,6 +329,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   public dataSource: OTableDataSource | null;
   public visibleColumns: string;
   public sortColumns: string;
+  public rowClass: (rowData: any, rowIndex: number) => string | string[];
 
   /*parsed inputs variables */
   protected _visibleColArray: Array<string> = [];
