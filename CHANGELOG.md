@@ -115,6 +115,8 @@
 ### Features
 * **o-combo**: new `searchable` input ([2ae599d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2ae599d))
 * **o-table**: new cell renderer `o-table-cell-renderer-translate` ([2763c47](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2763c47)).
+* **o-form**: new `after-insert-mode` input ([4378201](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/437820185e7f9da538b309d2b97577e0e0b32dd2)).
+  * Note: `stay-in-record-after-insert` attribute will be deprecated in 8.x.x
 
 ### Bug Fixes
 * **o-context-menu**: remove overlay when context menu is removed ([a2bf383](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a2bf383))
