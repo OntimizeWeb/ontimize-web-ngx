@@ -65,12 +65,12 @@ export class OTableExpandedFooter {
       if (this.table.quickFilter && this.table.oTableQuickFilterComponent &&
         this.table.oTableQuickFilterComponent.value && this.table.oTableQuickFilterComponent.value.length > 0) {
         result += this.translateService.get('TABLE.EMPTY_USING_FILTER', [(this.table.oTableQuickFilterComponent.value)]);
-        this.spanMessageNotResults = this.renderer.createElement('span');
-        let messageNotResults = this.renderer.createText(result);
-        this.tdTableWithMessage.setAttribute('colspan', this.tableHeader.querySelectorAll('th').length);
-        this.renderer.appendChild(this.spanMessageNotResults, messageNotResults);
-        this.renderer.appendChild(this.tdTableWithMessage, this.spanMessageNotResults);
       }
+      this.spanMessageNotResults = this.renderer.createElement('span');
+      let messageNotResults = this.renderer.createText(result);
+      this.tdTableWithMessage.setAttribute('colspan', this.tableHeader.querySelectorAll('th').length);
+      this.renderer.appendChild(this.spanMessageNotResults, messageNotResults);
+      this.renderer.appendChild(this.tdTableWithMessage, this.spanMessageNotResults);
     }
   }
 
