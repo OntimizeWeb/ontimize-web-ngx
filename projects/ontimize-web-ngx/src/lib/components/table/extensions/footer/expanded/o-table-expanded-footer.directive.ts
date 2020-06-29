@@ -9,12 +9,13 @@ import { OTableComponent } from './../../../o-table.component';
 })
 export class OTableExpandedFooterDirective implements AfterViewInit {
 
-  spanMessageNotResults;
-  translateService: OTranslateService;
-  tableBody: any;
-  tableHeader: any;
-  tdTableWithMessage;
-  protected onContentChangeSubscription: Subscription;
+  private spanMessageNotResults: any;
+  private translateService: OTranslateService;
+  private tableBody: any;
+  private tableHeader: any;
+  private tdTableWithMessage: any;
+  private onContentChangeSubscription: Subscription;
+  private onVisibleColumnsChangeSubscription: Subscription;
 
   constructor(
     @Inject(forwardRef(() => OTableComponent)) public table: OTableComponent,
@@ -32,13 +33,14 @@ export class OTableExpandedFooterDirective implements AfterViewInit {
       this.tableHeader = this.element.nativeElement.childNodes[0];
     }
     this.registerContentChange();
+    this.registerVisibleColumnsChange();
   }
 
   registerContentChange() {
-    /**Create a tr with a td and inside put the message and add to tbody
-     * <tr><td><span> {message}</span><td><tr>
-     */
-    const tr = this.renderer.createElement('tr');
+    /** Create a tr with a td and inside put the message and add to tbody
+    * <tr><td><span> {message}</span><td><tr>
+    */
+    let tr = this.renderer.createElement('tr');
     this.tdTableWithMessage = this.renderer.createElement('td');
     this.renderer.addClass(tr, 'o-table-no-results');
     tr.appendChild(this.tdTableWithMessage);
@@ -47,6 +49,14 @@ export class OTableExpandedFooterDirective implements AfterViewInit {
     const self = this;
     this.onContentChangeSubscription = this.table.onContentChange.subscribe((data) => {
       self.updateMessageNotResults(data);
+      self.table.cd.detectChanges();
+    });
+  }
+
+  registerVisibleColumnsChange() {
+    const self = this;
+    this.onVisibleColumnsChangeSubscription = this.table.onVisibleColumnsChange.subscribe(() => {
+      self.updateColspanTd();
     });
 
   }
@@ -56,9 +66,9 @@ export class OTableExpandedFooterDirective implements AfterViewInit {
     if (this.spanMessageNotResults) {
       this.renderer.removeChild(this.element.nativeElement, this.spanMessageNotResults);
     }
-
-    // generate new message
+    //generate new message
     if (data.length === 0) {
+
       let result = '';
       result = this.translateService.get('TABLE.EMPTY');
       if (this.table.quickFilter && this.table.oTableQuickFilterComponent &&
@@ -73,18 +83,20 @@ export class OTableExpandedFooterDirective implements AfterViewInit {
     }
   }
 
-  // updateColspanTr() {
-  // TODO
-  // LAUNCH  WHEN HAVE OBSERVER OVER VISIBLE COLUMNS
-  //   if (this.spanMessageNotResults) {
-  //     this.td.setAttribute('colspan', this.tableHeader.querySelectorAll('th').length);
-  //     this.renderer.appendChild(this.td, this.spanMessageNotResults);
-  //   }
-  // }
+  /* Update colspan in td that show message not results */
+  updateColspanTd() {
+    if (this.tdTableWithMessage) {
+      this.tdTableWithMessage.setAttribute('colspan', this.tableHeader.querySelectorAll('th').length);
+    }
+  }
 
   destroy() {
     if (this.onContentChangeSubscription) {
       this.onContentChangeSubscription.unsubscribe();
+    }
+
+    if (this.onVisibleColumnsChangeSubscription) {
+      this.onVisibleColumnsChangeSubscription.unsubscribe();
     }
   }
 }
