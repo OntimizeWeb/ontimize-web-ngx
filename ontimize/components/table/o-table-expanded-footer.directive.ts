@@ -10,12 +10,13 @@ import { Subscription } from 'rxjs';
 })
 export class OTableExpandedFooter {
 
-  spanMessageNotResults;
-  translateService: OTranslateService;
-  tableBody: any;
-  tableHeader: any;
-  tdTableWithMessage;
-  protected onContentChangeSubscription: Subscription;
+  private spanMessageNotResults: any;
+  private translateService: OTranslateService;
+  private tableBody: any;
+  private tableHeader: any;
+  private tdTableWithMessage: any;
+  private onContentChangeSubscription: Subscription;
+  private onVisibleColumnsChangeSubscription: Subscription;
 
   constructor(
     @Inject(forwardRef(() => OTableComponent)) public table: OTableComponent,
@@ -33,21 +34,30 @@ export class OTableExpandedFooter {
       this.tableHeader = this.element.nativeElement.childNodes[0];
     }
     this.registerContentChange();
+    this.registerVisibleColumnsChange();
   }
 
   registerContentChange() {
-    /**Create a tr with a td and inside put the message and add to tbody
-     * <tr><td><span> {message}</span><td><tr>
+    /** Create a tr with a td and inside put the message and add to tbody
+    * <tr><td><span> {message}</span><td><tr>
     */
     let tr = this.renderer.createElement('tr');
     this.tdTableWithMessage = this.renderer.createElement('td');
     this.renderer.addClass(tr, 'o-table-no-results');
+    this.spanMessageNotResults = this.renderer.createElement('span');
     tr.appendChild(this.tdTableWithMessage);
     this.renderer.appendChild(this.tableBody, tr);
 
     const self = this;
     this.onContentChangeSubscription = this.table.onContentChange.subscribe((data) => {
       self.updateMessageNotResults(data);
+    });
+  }
+
+  registerVisibleColumnsChange() {
+    const self = this;
+    this.onVisibleColumnsChangeSubscription = this.table.onVisibleColumnsChange.subscribe(() => {
+      self.updateColspanTd();
     });
 
   }
@@ -57,16 +67,16 @@ export class OTableExpandedFooter {
     if (this.spanMessageNotResults) {
       this.renderer.removeChild(this.element.nativeElement, this.spanMessageNotResults);
     }
-
     //generate new message
     if (data.length === 0) {
+
       let result = '';
       result = this.translateService.get('TABLE.EMPTY');
       if (this.table.quickFilter && this.table.oTableQuickFilterComponent &&
         this.table.oTableQuickFilterComponent.value && this.table.oTableQuickFilterComponent.value.length > 0) {
         result += this.translateService.get('TABLE.EMPTY_USING_FILTER', [(this.table.oTableQuickFilterComponent.value)]);
       }
-      this.spanMessageNotResults = this.renderer.createElement('span');
+
       let messageNotResults = this.renderer.createText(result);
       this.tdTableWithMessage.setAttribute('colspan', this.tableHeader.querySelectorAll('th').length);
       this.renderer.appendChild(this.spanMessageNotResults, messageNotResults);
@@ -74,18 +84,20 @@ export class OTableExpandedFooter {
     }
   }
 
-  // updateColspanTr() {
-  // TODO
-  //LAUNCH  WHEN HAVE OBSERVER OVER VISIBLE COLUMNS
-  //   if (this.spanMessageNotResults) {
-  //     this.td.setAttribute('colspan', this.tableHeader.querySelectorAll('th').length);
-  //     this.renderer.appendChild(this.td, this.spanMessageNotResults);
-  //   }
-  // }
+  /* Update colspan in td that show message not results */
+  updateColspanTd() {
+    if (this.tdTableWithMessage) {
+      this.tdTableWithMessage.setAttribute('colspan', this.tableHeader.querySelectorAll('th').length);
+    }
+  }
 
   destroy() {
     if (this.onContentChangeSubscription) {
       this.onContentChangeSubscription.unsubscribe();
+    }
+
+    if (this.onVisibleColumnsChangeSubscription) {
+      this.onVisibleColumnsChangeSubscription.unsubscribe();
     }
   }
 }
