@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 import { IDataService } from '../interfaces/data-service.interface';
 import { IFormDataComponent } from '../interfaces/form-data-component.interface';
 import { IPermissionsService } from '../interfaces/permissions-service.interface';
@@ -342,6 +344,59 @@ export class Util {
     const lowerVal = (val || '').toLowerCase();
     if (lowerVal === 'string' || lowerVal === 'date' || lowerVal === 'timestamp' || lowerVal === 'iso-8601') {
       result = lowerVal;
+    }
+    return result;
+  }
+
+  static ensureDateValue(val: any, valueType: any, oformat: any): void {
+    if (!Util.isDefined(val)) {
+      return val;
+    }
+    let result = val;
+    switch (valueType) {
+      case 'object':
+        if (typeof val === 'object') {
+          result = val;
+        } else {
+          result = undefined;
+        }
+        break;
+      case 'string':
+        if (typeof val === 'string') {
+          const m = moment(val, oformat);
+        } else {
+          result = undefined;
+        }
+        break;
+      case 'date':
+        if ((val instanceof Date)) {
+          result = moment(val, oformat);
+        } else {
+          result = undefined;
+        }
+        break;
+      case 'timestamp':
+        if ( typeof val == 'number') {
+          var dateString = moment.unix(val).format("YYYY-MM-DDThh:mm")+'Z'
+          const t = moment(dateString);
+          result = t;
+        } else {
+          result = val;
+        }
+        break;
+      case 'iso-8601':
+        const m = moment(val, oformat);
+        if (m.isValid()) {
+          result = new Date(m.valueOf());
+        } else {
+          result = undefined;
+        }
+        break;
+      default:
+        break;
+    }
+    if (!Util.isDefined(result)) {
+      console.warn(`ODateRangeInputComponent value (${val}) is not consistent with value-type (${valueType})`);
     }
     return result;
   }

@@ -8,6 +8,7 @@ import { Subscription } from 'rxjs';
 import { InputConverter } from '../../../decorators/input-converter';
 import { MomentService } from '../../../services/moment.service';
 import { OntimizeMomentDateAdapter } from '../../../shared/material/date/ontimize-moment-date-adapter';
+import { DateCustomClassFunction } from '../../../types/date-custom-class.type';
 import { DateFilterFunction } from '../../../types/date-filter-function.type';
 import { FormValueOptions } from '../../../types/form-value-options.type';
 import { ODateValueType } from '../../../types/o-date-value.type';
@@ -18,7 +19,6 @@ import { OFormValue } from '../../form/OFormValue';
 import { OFormDataComponent } from '../../o-form-data-component.class';
 import { OValueChangeEvent } from '../../o-value-change-event.class';
 import { DEFAULT_INPUTS_O_TEXT_INPUT, DEFAULT_OUTPUTS_O_TEXT_INPUT } from '../text-input/o-text-input.component';
-import { DateCustomClassFunction } from '../../../types/date-custom-class.type';
 
 export const DEFAULT_OUTPUTS_O_DATE_INPUT = [
   ...DEFAULT_OUTPUTS_O_TEXT_INPUT

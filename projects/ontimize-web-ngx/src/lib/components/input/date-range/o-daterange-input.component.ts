@@ -1,11 +1,15 @@
 import { Component, ElementRef, forwardRef, Inject, Injector, OnDestroy, OnInit, Optional, ViewChild } from '@angular/core';
 import { FormControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { DateAdapter } from '@angular/material';
+import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import * as _moment from 'moment';
 
 import { InputConverter } from '../../../decorators/input-converter';
 import { MomentService } from '../../../services/moment.service';
 import { OTranslateService } from '../../../services/translate/o-translate.service';
+import { OntimizeMomentDateAdapter } from '../../../shared/material/date/ontimize-moment-date-adapter';
 import { FormValueOptions } from '../../../types/form-value-options.type';
+import { ODateValueType } from '../../../types/o-date-value.type';
 import { Util } from '../../../util/util';
 import { OFormComponent } from '../../form/o-form.component';
 import { OFormDataComponent } from '../../o-form-data-component.class';
@@ -26,6 +30,7 @@ export const DEFAULT_INPUTS_O_DATERANGE_INPUT = [
   'olocale:locale',
   'startKey',
   'endKey',
+  'valueType: value-type',
   ...DEFAULT_INPUTS_O_DATE_INPUT
 ];
 
@@ -90,6 +95,8 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
     this._endKey = value;
   }
 
+  protected _valueType: ODateValueType = 'timestamp';
+
   protected _separator = ' - ';
   get separator() {
     return this._separator;
@@ -116,12 +123,14 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
 
   private momentSrv: MomentService;
   private oTranslate: OTranslateService;
+  private momentDateAdapter: DateAdapter<MomentDateAdapter>;
 
 
   constructor(
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
     elRef: ElementRef,
-    injector: Injector
+    injector: Injector,
+    dateAdapter: DateAdapter<OntimizeMomentDateAdapter>
   ) {
     super(form, elRef, injector);
     this.oTranslate = this.injector.get(OTranslateService);
@@ -198,6 +207,7 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
   }
 
   public setData(newValue: any): void {
+    console.log(newValue);
     super.setData(newValue);
     this.pickerDirective.datesUpdated.emit(newValue);
     this.updateElement();
@@ -207,7 +217,13 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
     let chosenLabel: any;
 
     if (Util.isDefined(this.value.value) && !this.isObjectDataRangeNull(this.value)) {
-      if (this.value.value[this.pickerDirective.startKey]) {
+      if (this.value.value[this.pickerDirective.startKey] && typeof this.value.value[this.pickerDirective.startKey]==='object'
+       && this.value.value[this.pickerDirective.endKey] && typeof this.value.value[this.pickerDirective.endKey]==='object') {
+        chosenLabel = this.value.value[this.pickerDirective.startKey].format(this.oformat) +
+          this.separator + this.value.value[this.pickerDirective.endKey].format(this.oformat);
+      } else if (this.value.value[this.pickerDirective.startKey]) {
+        this.value.value[this.pickerDirective.startKey] = Util.ensureDateValue(this.value.value[this.pickerDirective.startKey], this._valueType, this.oformat);
+        this.value.value[this.pickerDirective.endKey]  = Util.ensureDateValue(this.value.value[this.pickerDirective.endKey], this._valueType, this.oformat);
         chosenLabel = this.value.value[this.pickerDirective.startKey].format(this.oformat) +
           this.separator + this.value.value[this.pickerDirective.endKey].format(this.oformat);
       } else {
@@ -218,6 +234,8 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
     }
     this.pickerDirective._el.nativeElement.value = chosenLabel;
   }
+
+  
 
 
   getDateRangeToString(valueToString: string) {

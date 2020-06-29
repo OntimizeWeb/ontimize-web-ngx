@@ -9,7 +9,7 @@
       [required]="isRequired" [placeholder]="placeHolder" [readonly]="isReadOnly || !textInputEnabled"
       showDropdowns="true" showCancel="true" [showRanges]="showRanges" 
       (datesUpdated)="datesUpdated($event)" [oTouchUi]="oTouchUi" [minDate]="oMinDate" [maxDate]="oMaxDate"
-      (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)" (change)="onChangeEvent($event)" [locale]="localeOptions"   [separator]="separator"
+      (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)" (change)="onChangeEvent($event)" [locale]="localeOptions"  [separator]="separator"
       [startKey]="startKey" [endKey]="endKey" [showWeekNumbers]="showWeekNumbers">
     <button type="button" matSuffix mat-icon-button (click)="openPicker()" [disabled]="isReadOnly || !enabled">
       <mat-icon>today</mat-icon>
