@@ -379,6 +379,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   public onPaginatedDataLoaded: EventEmitter<any> = new EventEmitter();
   public onReinitialize: EventEmitter<any> = new EventEmitter();
   public onContentChange: EventEmitter<any> = new EventEmitter();
+  public onVisibleColumnsChange: EventEmitter<any> = new EventEmitter();
 
   protected selectionChangeSubscription: Subscription;
 
