@@ -348,12 +348,12 @@ export class Util {
     return result;
   }
 
-  static ensureDateRangeValue(val: any, valueType: any, oformat: any): void {
+  static ensureDateRangeValue(val: any, valueType: any): void {
     if (!Util.isDefined(val)) {
       return val;
     }
     let result = val;
-    if(typeof result !== 'object') {
+    if(typeof result !== 'object' || valueType === 'date') {
       switch (valueType) {
         case 'string':
           if (typeof val === 'string') {
@@ -365,7 +365,13 @@ export class Util {
           break;
         case 'date':
           if ((val instanceof Date)) {
-            result = moment(val, oformat);
+            const dateString = moment(result).format("YYYY-MM-DDThh:mm")+'Z';
+            const q = moment(dateString);
+            if (q.isValid()) {
+              result = q;
+            } else {
+              result = undefined;
+            }
           } else {
             result = undefined;
           }
@@ -380,9 +386,9 @@ export class Util {
           }
           break;
         case 'iso-8601':
-          const m = moment(val, oformat);
+          const m = moment(val);
           if (m.isValid()) {
-            result = new Date(m.valueOf());
+            result = m;
           } else {
             result = undefined;
           }
