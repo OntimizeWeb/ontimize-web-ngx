@@ -348,52 +348,48 @@ export class Util {
     return result;
   }
 
-  static ensureDateValue(val: any, valueType: any, oformat: any): void {
+  static ensureDateRangeValue(val: any, valueType: any, oformat: any): void {
     if (!Util.isDefined(val)) {
       return val;
     }
     let result = val;
-    switch (valueType) {
-      case 'object':
-        if (typeof val === 'object') {
-          result = val;
-        } else {
-          result = undefined;
-        }
-        break;
-      case 'string':
-        if (typeof val === 'string') {
+    if(typeof result !== 'object') {
+      switch (valueType) {
+        case 'string':
+          if (typeof val === 'string') {
+            const dateString = moment(val).format("YYYY-MM-DDThh:mm")+'Z';
+            const m = moment(dateString);
+          } else {
+            result = undefined;
+          }
+          break;
+        case 'date':
+          if ((val instanceof Date)) {
+            result = moment(val, oformat);
+          } else {
+            result = undefined;
+          }
+          break;
+        case 'timestamp':
+          if ( typeof val == 'number') {
+            const dateString = moment.unix(val).format("YYYY-MM-DDThh:mm")+'Z';
+            const t = moment(dateString);
+            result = t;
+          } else {
+            result = val;
+          }
+          break;
+        case 'iso-8601':
           const m = moment(val, oformat);
-        } else {
-          result = undefined;
-        }
-        break;
-      case 'date':
-        if ((val instanceof Date)) {
-          result = moment(val, oformat);
-        } else {
-          result = undefined;
-        }
-        break;
-      case 'timestamp':
-        if ( typeof val == 'number') {
-          var dateString = moment.unix(val).format("YYYY-MM-DDThh:mm")+'Z'
-          const t = moment(dateString);
-          result = t;
-        } else {
-          result = val;
-        }
-        break;
-      case 'iso-8601':
-        const m = moment(val, oformat);
-        if (m.isValid()) {
-          result = new Date(m.valueOf());
-        } else {
-          result = undefined;
-        }
-        break;
-      default:
-        break;
+          if (m.isValid()) {
+            result = new Date(m.valueOf());
+          } else {
+            result = undefined;
+          }
+          break;
+        default:
+          break;
+      }
     }
     if (!Util.isDefined(result)) {
       console.warn(`ODateRangeInputComponent value (${val}) is not consistent with value-type (${valueType})`);

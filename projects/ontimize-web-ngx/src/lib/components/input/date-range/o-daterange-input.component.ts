@@ -207,7 +207,6 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
   }
 
   public setData(newValue: any): void {
-    console.log(newValue);
     super.setData(newValue);
     this.pickerDirective.datesUpdated.emit(newValue);
     this.updateElement();
@@ -215,15 +214,10 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
 
   updateElement() {
     let chosenLabel: any;
-
     if (Util.isDefined(this.value.value) && !this.isObjectDataRangeNull(this.value)) {
-      if (this.value.value[this.pickerDirective.startKey] && typeof this.value.value[this.pickerDirective.startKey]==='object'
-       && this.value.value[this.pickerDirective.endKey] && typeof this.value.value[this.pickerDirective.endKey]==='object') {
-        chosenLabel = this.value.value[this.pickerDirective.startKey].format(this.oformat) +
-          this.separator + this.value.value[this.pickerDirective.endKey].format(this.oformat);
-      } else if (this.value.value[this.pickerDirective.startKey]) {
-        this.value.value[this.pickerDirective.startKey] = Util.ensureDateValue(this.value.value[this.pickerDirective.startKey], this._valueType, this.oformat);
-        this.value.value[this.pickerDirective.endKey]  = Util.ensureDateValue(this.value.value[this.pickerDirective.endKey], this._valueType, this.oformat);
+      if (this.value.value[this.pickerDirective.startKey] && this.value.value[this.pickerDirective.endKey]) {
+        this.value.value[this.pickerDirective.startKey] = Util.ensureDateRangeValue(this.value.value[this.pickerDirective.startKey], this._valueType, this.oformat);
+        this.value.value[this.pickerDirective.endKey]  = Util.ensureDateRangeValue(this.value.value[this.pickerDirective.endKey], this._valueType, this.oformat);
         chosenLabel = this.value.value[this.pickerDirective.startKey].format(this.oformat) +
           this.separator + this.value.value[this.pickerDirective.endKey].format(this.oformat);
       } else {
@@ -234,8 +228,6 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
     }
     this.pickerDirective._el.nativeElement.value = chosenLabel;
   }
-
-  
 
 
   getDateRangeToString(valueToString: string) {
@@ -317,5 +309,13 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
       };
     }
     return {};
+  }
+
+  set valueType(val: any) {
+    this._valueType = Util.convertToODateValueType(val);
+  }
+
+  get valueType(): any {
+    return this._valueType;
   }
 }
