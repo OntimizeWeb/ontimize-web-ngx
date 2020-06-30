@@ -353,19 +353,12 @@ export class Util {
       return val;
     }
     let result = val;
-    if(typeof result !== 'object' || valueType === 'date') {
+    if(!moment.isMoment(val)) {
       switch (valueType) {
         case 'string':
-          if (typeof val === 'string') {
-            const dateString = moment(val).format("YYYY-MM-DDThh:mm")+'Z';
-            const m = moment(dateString);
-          } else {
-            result = undefined;
-          }
-          break;
         case 'date':
-          if ((val instanceof Date)) {
-            const dateString = moment(result).format("YYYY-MM-DDThh:mm")+'Z';
+          if ( (val instanceof Date) || typeof val ==='string' ) {
+            const dateString = moment(val).format('YYYY-MM-DDThh:mm') + 'Z';
             const q = moment(dateString);
             if (q.isValid()) {
               result = q;
@@ -377,10 +370,14 @@ export class Util {
           }
           break;
         case 'timestamp':
-          if ( typeof val == 'number') {
-            const dateString = moment.unix(val).format("YYYY-MM-DDThh:mm")+'Z';
+          if ( typeof val === 'number') {
+            const dateString = moment.unix(val).format('YYYY-MM-DDThh:mm') + 'Z';
             const t = moment(dateString);
-            result = t;
+            if (t.isValid()) {
+              result = t;
+            } else {
+              result = undefined;
+            }
           } else {
             result = val;
           }
