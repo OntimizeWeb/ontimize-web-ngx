@@ -7,7 +7,6 @@ import * as _moment from 'moment';
 import { InputConverter } from '../../../decorators/input-converter';
 import { MomentService } from '../../../services/moment.service';
 import { OTranslateService } from '../../../services/translate/o-translate.service';
-import { OntimizeMomentDateAdapter } from '../../../shared/material/date/ontimize-moment-date-adapter';
 import { FormValueOptions } from '../../../types/form-value-options.type';
 import { ODateValueType } from '../../../types/o-date-value.type';
 import { Util } from '../../../util/util';
@@ -129,8 +128,7 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
   constructor(
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
     elRef: ElementRef,
-    injector: Injector,
-    dateAdapter: DateAdapter<OntimizeMomentDateAdapter>
+    injector: Injector
   ) {
     super(form, elRef, injector);
     this.oTranslate = this.injector.get(OTranslateService);
