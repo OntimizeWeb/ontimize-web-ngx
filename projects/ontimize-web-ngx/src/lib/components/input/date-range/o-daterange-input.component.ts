@@ -216,8 +216,8 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
     let chosenLabel: any;
     if (Util.isDefined(this.value.value) && !this.isObjectDataRangeNull(this.value)) {
       if (this.value.value[this.pickerDirective.startKey] && this.value.value[this.pickerDirective.endKey]) {
-        this.value.value[this.pickerDirective.startKey] = Util.ensureDateRangeValue(this.value.value[this.pickerDirective.startKey], this._valueType);
-        this.value.value[this.pickerDirective.endKey]  = Util.ensureDateRangeValue(this.value.value[this.pickerDirective.endKey], this._valueType);
+        this.value.value[this.pickerDirective.startKey] = this.ensureDateRangeValue(this.value.value[this.pickerDirective.startKey], this._valueType);
+        this.value.value[this.pickerDirective.endKey]  = this.ensureDateRangeValue(this.value.value[this.pickerDirective.endKey], this._valueType);
         chosenLabel = this.value.value[this.pickerDirective.startKey].format(this.oformat) +
           this.separator + this.value.value[this.pickerDirective.endKey].format(this.oformat);
       } else {
@@ -309,6 +309,58 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
       };
     }
     return {};
+  }
+
+  ensureDateRangeValue(val: any, valueType: any): void {
+    if (!Util.isDefined(val)) {
+      return val;
+    }
+    let result = val;
+    if(!moment.isMoment(val)) {
+      switch (valueType) {
+        case 'string':
+        case 'date':
+          if ( (val instanceof Date) || typeof val ==='string' ) {
+            const dateString = moment(val).format('YYYY-MM-DDThh:mm') + 'Z';
+            const q = moment(dateString);
+            if (q.isValid()) {
+              result = q;
+            } else {
+              result = undefined;
+            }
+          } else {
+            result = undefined;
+          }
+          break;
+        case 'timestamp':
+          if ( typeof val === 'number') {
+            const dateString = moment.unix(val).format('YYYY-MM-DDThh:mm') + 'Z';
+            const t = moment(dateString);
+            if (t.isValid()) {
+              result = t;
+            } else {
+              result = undefined;
+            }
+          } else {
+            result = val;
+          }
+          break;
+        case 'iso-8601':
+          const m = moment(val);
+          if (m.isValid()) {
+            result = m;
+          } else {
+            result = undefined;
+          }
+          break;
+        default:
+          break;
+      }
+    }
+    if (!Util.isDefined(result)) {
+      console.warn(`ODateRangeInputComponent value (${val}) is not consistent with value-type (${valueType})`);
+    }
+    return result;
   }
 
   set valueType(val: any) {
