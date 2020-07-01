@@ -1,7 +1,5 @@
 import { Component, ElementRef, forwardRef, Inject, Injector, OnDestroy, OnInit, Optional, ViewChild } from '@angular/core';
 import { FormControl, ValidationErrors, ValidatorFn } from '@angular/forms';
-import { DateAdapter } from '@angular/material';
-import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import * as _moment from 'moment';
 
 import { InputConverter } from '../../../decorators/input-converter';
@@ -122,7 +120,6 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
 
   private momentSrv: MomentService;
   private oTranslate: OTranslateService;
-  private momentDateAdapter: DateAdapter<MomentDateAdapter>;
 
 
   constructor(
