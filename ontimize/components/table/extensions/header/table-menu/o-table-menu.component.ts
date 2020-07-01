@@ -317,6 +317,8 @@ export class OTableMenuComponent implements OnInit, AfterViewInit, OnDestroy {
     exportCnfg.sqlTypes = this.table.getSqlTypes();
     // Table service, needed for configuring ontimize export service with table service configuration
     exportCnfg.service = this.table.service;
+    exportCnfg.serviceType = this.table.exportServiceType;
+    exportCnfg.visibleButtons = this.table.visibleExportDialogButtons;
     exportCnfg.options = this.table.exportOptsTemplate;
 
     let dialogRef = this.dialog.open(OTableExportDialogComponent, {
@@ -345,6 +347,7 @@ export class OTableMenuComponent implements OnInit, AfterViewInit, OnDestroy {
         let columnsOrder = dialogRef.componentInstance.getColumnsOrder();
         this.table.oTableOptions.columns.sort((a: OColumn, b: OColumn) => columnsOrder.indexOf(a.attr) - columnsOrder.indexOf(b.attr));
         this.table.refreshColumnsWidth();
+        this.table.onVisibleColumnsChange.emit(this.table.visibleColArray);
       }
     });
   }

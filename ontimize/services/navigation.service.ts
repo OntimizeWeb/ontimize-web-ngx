@@ -34,6 +34,7 @@ export class ONavigationItem {
     this.text = value['text'] ? value['text'] : '';
     this.displayText = value['displayText'] ? value['displayText'] : '';
     this.formRoutes = value['formRoutes'];
+    this.formLayoutRoutes = value['formLayoutRoutes'];
     this.activeFormMode = value['activeFormMode'];
     this.keysValues = value['keysValues'];
     this.queryConfiguration = value['queryConfiguration'];
@@ -389,6 +390,16 @@ export class NavigationService implements ILocalStorageComponent {
     const index = this.navigationItems.indexOf(this.getLastMainNavigationRouteData());
     this.navigationItems = this.navigationItems.slice(0, index + 1);
     this.storeNavigation();
+  }
+
+  isCurrentRoute(route: string): boolean {
+    let currentRoute = this.router.routerState.snapshot.url;
+    if (currentRoute.startsWith('/')) {
+      currentRoute = currentRoute.substr(1);
+    }
+    currentRoute = currentRoute.split('?')[0];
+
+    return route === currentRoute;
   }
 
   getLastItem(): ONavigationItem {

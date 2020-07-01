@@ -69,6 +69,7 @@ import {
   OTableQuickfilterComponent
 } from './extensions/header/o-table-header-components';
 import { OTableStorage } from './extensions/o-table-storage.class';
+import { OTableRowClassPipe } from './extensions/pipes/o-table-row-class.pipe';
 import { OTableRowDirective } from './extensions/row/o-table-row.directive';
 import { OMatSort } from './extensions/sort/o-mat-sort';
 import { OMatSortHeader } from './extensions/sort/o-mat-sort-header';
@@ -157,8 +158,17 @@ export const DEFAULT_INPUTS_O_TABLE = [
   // export-mode ['visible'|'local'|'all']: sets the mode to export data. Default: 'visible'
   'exportMode: export-mode',
 
+  // exportServiceType [ string ]: The service used by the table for exporting it's data, it must implement 'IExportService' interface. Default: 'OntimizeExportService'
+  'exportServiceType: export-service-type',
+
   // show-filter-option [yes|no|true|false]: show filter menu option in the header menu. Default: yes.
-  'showFilterOption: show-filter-option'
+  'showFilterOption: show-filter-option',
+
+  // visible-export-dialog-buttons [string]: visible buttons in export dialog, separated by ';'. Default/no configured: show all. Empty value: hide all.
+  'visibleExportDialogButtons: visible-export-dialog-buttons',
+
+  // row-class [function, (rowData: any, rowIndex: number) => string | string[]]: adds the class or classes returned by the provided function to the table rows.
+  'rowClass: row-class'
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE = [
@@ -598,10 +608,13 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   keepSelectedItems: boolean = true;
 
   public exportMode: string = Codes.EXPORT_MODE_VISIBLE;
+  public exportServiceType: string;
+  public visibleExportDialogButtons: string;
   public daoTable: OTableDao | null;
   public dataSource: OTableDataSource | null;
   public visibleColumns: string;
   public sortColumns: string;
+  public rowClass: (rowData: any, rowIndex: number) => string | string[];
 
   /*parsed inputs variables */
   protected _visibleColArray: Array<string> = [];
@@ -651,13 +664,13 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   public onPaginatedDataLoaded: EventEmitter<any> = new EventEmitter();
   public onReinitialize: EventEmitter<any> = new EventEmitter();
   public onContentChange: EventEmitter<any> = new EventEmitter();
+  public onVisibleColumnsChange: EventEmitter<any> = new EventEmitter();
 
   protected selectionChangeSubscription: Subscription;
 
   public oTableFilterByColumnDataDialogComponent: OTableFilterByColumnDataDialogComponent;
   public oTableColumnsFilterComponent: OTableColumnsFilterComponent;
   public showFilterByColumnIcon: boolean = false;
-
 
   private showTotalsSubject = new BehaviorSubject<boolean>(false);
   public showTotals: Observable<boolean> = this.showTotalsSubject.asObservable();
@@ -675,7 +688,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   protected clickPrevent = false;
   protected editingCell: any;
   protected editingRow: any;
-
 
   protected _currentPage: number = 0;
   set currentPage(val: number) {
@@ -1613,6 +1625,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
         length: this.queryRows
       };
     }
+    this.editingCell = undefined;
     this.queryData(void 0, queryArgs);
   }
 
@@ -1740,7 +1753,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       console.warn(`${column.attr} edition not allowed due to permissions`);
       return;
     }
-
     this.clearSelectionAndEditing();
     this.selectedRow(row);
     if (event) {
@@ -2500,6 +2512,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     OTableRowDirective,
     OTableExpandedFooter,
     OTableExportButton,
+    OTableRowClassPipe,
     ...O_TABLE_CELL_RENDERERS,
     ...O_TABLE_CELL_EDITORS,
     ...O_TABLE_DIALOGS,
