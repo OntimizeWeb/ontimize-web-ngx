@@ -1417,8 +1417,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
           break;
         case ColumnValueFilterOperator.BETWEEN:
           if (Util.isArray(colFilter.values) && colFilter.values.length === 2) {
-            let beFrom = FilterExpressionUtils.buildExpressionLessEqual(colFilter.attr, colFilter.values[0]);
-            let beTo = FilterExpressionUtils.buildExpressionMoreEqual(colFilter.attr, colFilter.values[1]);
+            let beFrom = FilterExpressionUtils.buildExpressionMoreEqual(colFilter.attr, colFilter.values[0]);
+            let beTo = FilterExpressionUtils.buildExpressionLessEqual(colFilter.attr, colFilter.values[1]);
             beColumnFilters.push(FilterExpressionUtils.buildComplexExpression(beFrom, beTo, FilterExpressionUtils.OP_AND));
           }
           break;

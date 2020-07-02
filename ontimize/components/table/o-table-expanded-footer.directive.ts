@@ -44,7 +44,7 @@ export class OTableExpandedFooter {
     let tr = this.renderer.createElement('tr');
     this.tdTableWithMessage = this.renderer.createElement('td');
     this.renderer.addClass(tr, 'o-table-no-results');
-    this.spanMessageNotResults = this.renderer.createElement('span');
+
     tr.appendChild(this.tdTableWithMessage);
     this.renderer.appendChild(this.tableBody, tr);
 
@@ -76,7 +76,7 @@ export class OTableExpandedFooter {
         this.table.oTableQuickFilterComponent.value && this.table.oTableQuickFilterComponent.value.length > 0) {
         result += this.translateService.get('TABLE.EMPTY_USING_FILTER', [(this.table.oTableQuickFilterComponent.value)]);
       }
-
+      this.spanMessageNotResults = this.renderer.createElement('span');
       let messageNotResults = this.renderer.createText(result);
       this.tdTableWithMessage.setAttribute('colspan', this.tableHeader.querySelectorAll('th').length);
       this.renderer.appendChild(this.spanMessageNotResults, messageNotResults);
