@@ -363,7 +363,6 @@ export class OServiceBaseComponent implements ILocalStorageComponent, OnChanges 
     if (!ServiceUtils.filterContainsAllParentKeys(filterParentKeys, this._pKeysEquiv) && !this.queryWithNullParentKeys) {
       this.setData([], []);
     } else {
-      filter = Object.assign(filter || {}, filterParentKeys);
       const queryArguments = this.getQueryArguments(filter, ovrrArgs);
       if (this.querySubscription) {
         this.querySubscription.unsubscribe();
@@ -497,6 +496,8 @@ export class OServiceBaseComponent implements ILocalStorageComponent, OnChanges 
   }
 
   getComponentFilter(existingFilter: any = {}): any {
+    const filterParentKeys = ServiceUtils.getParentKeysFromForm(this._pKeysEquiv, this.form);
+    existingFilter = Object.assign(existingFilter || {}, filterParentKeys);
     return existingFilter;
   }
 
