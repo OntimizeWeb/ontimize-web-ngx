@@ -113,9 +113,9 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
           let filterValue: string = self.filter.nativeElement.value;
           filterValue = Util.normalizeString(filterValue);
           if (filterValue.indexOf('*') !== -1) {
-            self.listData = self.columnData.filter(item => new RegExp('^' + Util.normalizeString(filterValue).split('*').join('.*') + '$').test(Util.normalizeString(item.value)));
+            self.listData = self.columnData.filter(item => new RegExp('^' + Util.normalizeString(filterValue).split('*').join('.*') + '$').test(Util.normalizeString(item.renderedValue)));
           } else {
-            self.listData = self.columnData.filter(item => (Util.normalizeString(item.value).indexOf(filterValue) !== -1));
+            self.listData = self.columnData.filter(item => (Util.normalizeString(item.renderedValue).indexOf(filterValue) !== -1));
           }
         });
     }
