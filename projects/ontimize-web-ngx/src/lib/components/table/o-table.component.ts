@@ -572,6 +572,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   initialize(): any {
     super.initialize();
 
+    this._oTableOptions = new DefaultOTableOptions();
     if (this.tabGroupContainer && this.tabContainer) {
       this.registerTabListener();
     }

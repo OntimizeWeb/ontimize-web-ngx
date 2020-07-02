@@ -11,6 +11,13 @@ export class DefaultOTableOptions implements OTableOptions {
   protected _visibleColumns: Array<any> = [];
   protected _selectColumn: OColumn;
 
+  constructor() {
+    this.selectColumn = new OColumn();
+    this.selectColumn.name = Codes.NAME_COLUMN_SELECT;
+    this.selectColumn.title = '';
+    this.selectColumn.visible = false;
+  }
+
   get visibleColumns(): Array<any> {
     return this._visibleColumns;
   }
