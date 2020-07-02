@@ -44,7 +44,10 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
 
   protected columnData: Array<TableFilterByColumnData> = [];
   protected tableData: Array<any> = [];
-  protected _listData: Array<TableFilterByColumnData>;
+
+  private listDataSubject = new BehaviorSubject<Array<TableFilterByColumnData>>([]);
+  protected _listData: Observable<Array<TableFilterByColumnData>> = this.listDataSubject.asObservable();
+
 
   @ViewChild('filter', { static: false }) filter: ElementRef;
   @ViewChild('filterValueList', { static: false }) filterValueList: MatSelectionList;
@@ -89,17 +92,17 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
     this.initializeFilterEvent();
   }
 
-  get listData(): Array<TableFilterByColumnData> {
+  get listData(): Observable<Array<TableFilterByColumnData>> {
     return this._listData;
   }
 
-  set listData(arg: Array<TableFilterByColumnData>) {
+  set listData(arg: Observable<Array<TableFilterByColumnData>>) {
     this._listData = arg;
   }
 
   initializeDataList(filter?: OColumnValueFilter): void {
     if (this.preloadValues || (filter && filter.operator === ColumnValueFilterOperator.IN)) {
-      this.listData = this.columnData.slice();
+      this.listDataSubject.next(this.columnData.slice());
     }
   }
 
@@ -113,9 +116,9 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
           let filterValue: string = self.filter.nativeElement.value;
           filterValue = Util.normalizeString(filterValue);
           if (filterValue.indexOf('*') !== -1) {
-            self.listData = self.columnData.filter(item => new RegExp('^' + Util.normalizeString(filterValue).split('*').join('.*') + '$').test(Util.normalizeString(item.value)));
+            self.listDataSubject.next(self.columnData.filter(item => new RegExp('^' + Util.normalizeString(filterValue).split('*').join('.*') + '$').test(Util.normalizeString(item.renderedValue))));
           } else {
-            self.listData = self.columnData.filter(item => (Util.normalizeString(item.value).indexOf(filterValue) !== -1));
+            self.listDataSubject.next(self.columnData.filter(item => (Util.normalizeString(item.renderedValue).indexOf(filterValue) !== -1)));
           }
         });
     }
