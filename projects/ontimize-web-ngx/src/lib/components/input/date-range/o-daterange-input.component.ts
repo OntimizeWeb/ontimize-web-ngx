@@ -6,6 +6,7 @@ import { InputConverter } from '../../../decorators/input-converter';
 import { MomentService } from '../../../services/moment.service';
 import { OTranslateService } from '../../../services/translate/o-translate.service';
 import { FormValueOptions } from '../../../types/form-value-options.type';
+import { ODateValueType } from '../../../types/o-date-value.type';
 import { Util } from '../../../util/util';
 import { OFormComponent } from '../../form/o-form.component';
 import { OFormDataComponent } from '../../o-form-data-component.class';
@@ -26,6 +27,7 @@ export const DEFAULT_INPUTS_O_DATERANGE_INPUT = [
   'olocale:locale',
   'startKey',
   'endKey',
+  'valueType: value-type',
   ...DEFAULT_INPUTS_O_DATE_INPUT
 ];
 
@@ -89,6 +91,8 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
   set endKey(value) {
     this._endKey = value;
   }
+
+  protected _valueType: ODateValueType = 'timestamp';
 
   protected _separator = ' - ';
   get separator() {
@@ -205,9 +209,10 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
 
   updateElement() {
     let chosenLabel: any;
-
     if (Util.isDefined(this.value.value) && !this.isObjectDataRangeNull(this.value)) {
-      if (this.value.value[this.pickerDirective.startKey]) {
+      if (this.value.value[this.pickerDirective.startKey] && this.value.value[this.pickerDirective.endKey]) {
+        this.value.value[this.pickerDirective.startKey] = this.ensureDateRangeValue(this.value.value[this.pickerDirective.startKey], this._valueType);
+        this.value.value[this.pickerDirective.endKey]  = this.ensureDateRangeValue(this.value.value[this.pickerDirective.endKey], this._valueType);
         chosenLabel = this.value.value[this.pickerDirective.startKey].format(this.oformat) +
           this.separator + this.value.value[this.pickerDirective.endKey].format(this.oformat);
       } else {
@@ -299,5 +304,65 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
       };
     }
     return {};
+  }
+
+  ensureDateRangeValue(val: any, valueType: any): void {
+    if (!Util.isDefined(val)) {
+      return val;
+    }
+    let result = val;
+    if(!moment.isMoment(val)) {
+      switch (valueType) {
+        case 'string':
+        case 'date':
+          if ( (val instanceof Date) || typeof val ==='string' ) {
+            const dateString = moment(val).format('YYYY-MM-DDThh:mm') + 'Z';
+            const q = moment(dateString);
+            if (q.isValid()) {
+              result = q;
+            } else {
+              result = undefined;
+            }
+          } else {
+            result = undefined;
+          }
+          break;
+        case 'timestamp':
+          if ( typeof val === 'number') {
+            const dateString = moment.unix(val).format('YYYY-MM-DDThh:mm') + 'Z';
+            const t = moment(dateString);
+            if (t.isValid()) {
+              result = t;
+            } else {
+              result = undefined;
+            }
+          } else {
+            result = val;
+          }
+          break;
+        case 'iso-8601':
+          const m = moment(val);
+          if (m.isValid()) {
+            result = m;
+          } else {
+            result = undefined;
+          }
+          break;
+        default:
+          break;
+      }
+    }
+    if (!Util.isDefined(result)) {
+      console.warn(`ODateRangeInputComponent value (${val}) is not consistent with value-type (${valueType})`);
+    }
+    return result;
+  }
+
+  set valueType(val: any) {
+    this._valueType = Util.convertToODateValueType(val);
+  }
+
+  get valueType(): any {
+    return this._valueType;
   }
 }
