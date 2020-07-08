@@ -16,6 +16,7 @@ import { OTranslateService } from '../services/translate/o-translate.service';
 import { Error403Component } from '../shared/components/error403/o-error-403.component';
 import { O_MAT_ERROR_OPTIONS } from '../shared/material/o-mat-error/o-mat-error';
 import { Config } from '../types/config.type';
+import { Util } from '../util';
 import { Codes } from '../util/codes';
 
 function addPermissionsRouteGuard(injector: Injector) {
@@ -32,7 +33,7 @@ export function appInitializerFactory(injector: Injector, config: Config, oTrans
     const locationInitialized = injector.get(LOCATION_INITIALIZED, Promise.resolve(null));
     locationInitialized.then(() => {
       const storedLang = oTranslate.getStoredLanguage();
-      const configLang = config['locale'];
+      const configLang = Util.isDefined(config['locale']) ? config['locale'] : config['defaultLocale'];
       const browserLang = oTranslate.getBrowserLang();
       let userLang = 'en';
       let defaultLang = 'en';
@@ -52,7 +53,7 @@ export function appInitializerFactory(injector: Injector, config: Config, oTrans
       locales.add('en');
       locales.add(userLang);
 
-      // initialize available locales array if needed
+      // initialize available locales array if needed 
       if (!config.applicationLocales) {
         config.applicationLocales = [...locales];
       }
