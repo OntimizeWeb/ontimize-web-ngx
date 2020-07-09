@@ -26,7 +26,7 @@ import {
   OntimizeServiceResponseParser,
   OTranslateService,
   OUserInfoService,
-  SnackBarService
+  SnackBarService,
 } from '../services';
 import { OFormLayoutManagerService } from '../services/o-form-layout-manager.service';
 import { Error403Component } from '../services/permissions/error403/o-error-403.component';
@@ -35,6 +35,7 @@ import { ShareCanActivateChildService } from '../services/share-can-activate-chi
 import { Codes } from '../util/codes';
 import { Events } from '../util/events';
 import { OHttp } from '../util/http/OHttp';
+import { Util } from '../utils';
 
 function addPermissionsRouteGuard(injector: Injector) {
   const route = injector.get(Router);
@@ -51,7 +52,7 @@ export function appInitializerFactory(injector: Injector, config: Config, oTrans
     const locationInitialized = injector.get(LOCATION_INITIALIZED, Promise.resolve(null));
     locationInitialized.then(() => {
       const storedLang = oTranslate.getStoredLanguage();
-      const configLang = config['locale'];
+      const configLang = Util.isDefined(config['locale']) ? config['locale'] : config['defaultLocale'];
       const browserLang = oTranslate.getBrowserLang();
       let userLang = 'en';
       let defaultLang = 'en';
