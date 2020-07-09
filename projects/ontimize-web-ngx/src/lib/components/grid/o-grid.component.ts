@@ -253,17 +253,16 @@ export class OGridComponent extends OServiceComponent implements AfterViewInit, 
   }
 
   public reloadData(): void {
-    if (!this.pageable) {
-      this.filterData();
-    } else {
-      let queryArgs: OQueryDataArgs = {};
+    let queryArgs: OQueryDataArgs = {};
+    if (this.pageable) {
+      this.state.queryRecordOffset = 0;
       queryArgs = {
         offset: this.paginationControls ? (this.currentPage * this.queryRows) : 0,
         length: Math.max(this.queryRows, this.dataResponseArray.length),
         replace: true
       };
-      this.queryData(void 0, queryArgs);
     }
+    this.queryData(void 0, queryArgs);
   }
 
   public reloadPaginatedDataFromStart(): void {
