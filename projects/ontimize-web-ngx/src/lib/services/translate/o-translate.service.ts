@@ -61,11 +61,7 @@ export class OTranslateService {
       }
       const localeAssetsPath = (this.ngxTranslateService.currentLoader as any).prefix;
       const localeAssetsExtension = (this.ngxTranslateService.currentLoader as any).suffix;
-      console.log("Buscando el archivo da un 404-1");
-      console.log(localeAssetsPath + lang + localeAssetsExtension);
       self.httpClient.get(localeAssetsPath + lang + localeAssetsExtension).subscribe(() => {
-        console.log("Buscando el archivo da un 404-2");
-        console.log(this);
         if (self.existingLangFiles.indexOf(lang) === -1) {
           self.existingLangFiles.push(lang);
         }
