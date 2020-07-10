@@ -35,7 +35,7 @@ import { ShareCanActivateChildService } from '../services/share-can-activate-chi
 import { Codes } from '../util/codes';
 import { Events } from '../util/events';
 import { OHttp } from '../util/http/OHttp';
-import { Util } from '../utils';
+import { Util } from '../util/util';
 
 function addPermissionsRouteGuard(injector: Injector) {
   const route = injector.get(Router);
@@ -52,10 +52,10 @@ export function appInitializerFactory(injector: Injector, config: Config, oTrans
     const locationInitialized = injector.get(LOCATION_INITIALIZED, Promise.resolve(null));
     locationInitialized.then(() => {
       const storedLang = oTranslate.getStoredLanguage();
-      const configLang = Util.isDefined(config['locale']) ? config['locale'] : config['defaultLocale'];
+      const configLang = config['locale'];
       const browserLang = oTranslate.getBrowserLang();
-      let userLang = 'en';
-      let defaultLang = 'en';
+      let userLang = Util.isDefined(config['defaultLocale']) ? config['defaultLocale'] : 'en';
+      let defaultLang = Util.isDefined(config['defaultLocale']) ? config['defaultLocale'] : 'en';
       if (storedLang) {
         userLang = storedLang;
       } else if (configLang) {

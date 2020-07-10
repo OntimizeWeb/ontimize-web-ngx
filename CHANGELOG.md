@@ -14,6 +14,7 @@
 * **o-time-input**: Fix bad behaviour when there is more than one component in the same form ([fc1dd47](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/fc1dd47))
 * **o-language-selector**: emit `onChange` event ([231c1d4](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/231c1d4))
 * **OServiceBaseComponent**: fixing bug including parent-keys value in filter when exporting data ([78877d8](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/78877d8b4d01710a3a1d4353a8b293d795adc6e6)) Closes [#373](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/373)
+* **defaultLocale**: added new parameter in app.config to set a defaultLocale when language.json file is not found ([5783afc](https://github.com/OntimizeWeb/ontimize-web-ngx/pull/387)) Closes [#383](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/383)
 
 ## 4.1.2 (2020-02-26)
 ### Features
