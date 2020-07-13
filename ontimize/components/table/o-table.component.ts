@@ -30,7 +30,7 @@ import { BehaviorSubject, combineLatest, Observable, of, Subscription } from 'rx
 
 import { BooleanConverter, InputConverter } from '../../decorators/input-converter';
 import { OntimizeService, OPermissions, OTableMenuPermissions, OTablePermissions, SnackBarService } from '../../services';
-import { dataServiceFactory } from '../../services/data-service.provider';
+import { dataServiceFactory } from '../../services/factories';
 import { OSharedModule } from '../../shared';
 import { PermissionsUtils } from '../../util/permissions';
 import { Codes, ObservableWrapper, SQLTypes, Util } from '../../utils';

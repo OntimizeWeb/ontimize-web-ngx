@@ -20,7 +20,6 @@ import {
   NavigationService,
   NumberService,
   OModulesInfoService,
-  OntimizeFileService,
   OntimizeMatIconRegistry,
   OntimizeService,
   OntimizeServiceResponseParser,
@@ -28,6 +27,7 @@ import {
   OUserInfoService,
   SnackBarService
 } from '../services';
+import { translateServiceFactory } from '../services/factories';
 import { OFormLayoutManagerService } from '../services/o-form-layout-manager.service';
 import { Error403Component } from '../services/permissions/error403/o-error-403.component';
 import { ORemoteConfigurationService } from '../services/remote-config.service';
@@ -128,10 +128,6 @@ export function getOntimizeServiceProvider(backend: XHRBackend, defaultOptions: 
   return new OHttp(backend, defaultOptions);
 }
 
-export function getOntimizeFileServiceProvider(injector: Injector) {
-  return new OntimizeFileService(injector);
-}
-
 export function getLoginServiceProvider(injector: Injector) {
   return new LoginService(injector);
 }
@@ -158,10 +154,6 @@ export function getDialogServiceProvider(injector: Injector) {
 
 export function getSnackBarServiceProvider(injector: Injector) {
   return new SnackBarService(injector);
-}
-
-export function getTranslateServiceProvider(injector: Injector) {
-  return new OTranslateService(injector);
 }
 
 export function getLocalStorageServiceProvider(injector: Injector) {
@@ -215,11 +207,6 @@ export const ONTIMIZE_PROVIDERS: Provider[] = [
     useFactory: getOntimizeServiceResponseParser,
     deps: [Injector]
   },
-  {
-    provide: OntimizeFileService,
-    useFactory: getOntimizeFileServiceProvider,
-    deps: [Injector]
-  },
   // getLoginServiceProvider
   {
     provide: LoginService,
@@ -265,7 +252,7 @@ export const ONTIMIZE_PROVIDERS: Provider[] = [
   // getTranslateServiceProvider
   {
     provide: OTranslateService,
-    useFactory: getTranslateServiceProvider,
+    useFactory: translateServiceFactory,
     deps: [Injector]
   },
   // getLocalStorageServiceProvider

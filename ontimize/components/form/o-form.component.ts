@@ -29,7 +29,7 @@ import {
   PermissionsService,
   SnackBarService
 } from '../../services';
-import { dataServiceFactory } from '../../services/data-service.provider';
+import { dataServiceFactory } from '../../services/factories';
 import { OSharedModule } from '../../shared';
 import { Codes, SQLTypes, Util } from '../../utils';
 import { OFormControl } from '../input/o-form-control.class';
