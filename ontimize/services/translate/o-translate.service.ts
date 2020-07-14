@@ -8,6 +8,7 @@ import * as CORE_TRANSLATIONS from '../../i18n/i18n';
 import { MomentService, SnackBarService } from '../../services';
 import { ObservableWrapper } from '../../util/async';
 import { Codes } from '../../util/codes';
+import { Util } from '../../util/util';
 
 @Injectable()
 export class OTranslateService {
@@ -121,7 +122,7 @@ export class OTranslateService {
       this.checkExistingLangFile(lang).then((exists) => {
         let newLang = lang;
         if (!exists) {
-          newLang = this.ngxTranslateService.getDefaultLang();
+          newLang = Util.isDefined(this.appConfig['_config']['defaultLocale']) ? this.appConfig['_config']['defaultLocale'] : this.ngxTranslateService.getDefaultLang();
           const msg = CORE_TRANSLATIONS.MAP[newLang || this.DEFAULT_LANG]['MESSAGES.ERROR_MISSING_LANG'];
           this.injector.get(SnackBarService).open(msg, {
             milliseconds: 2500
