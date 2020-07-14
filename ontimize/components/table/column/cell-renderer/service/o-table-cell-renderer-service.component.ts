@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs';
 import { InputConverter } from '../../../../../decorators/input-converter';
 import { ITranslatePipeArgument, OTranslatePipe } from '../../../../../pipes';
 import { DialogService, OntimizeService } from '../../../../../services';
-import { dataServiceFactory } from '../../../../../services/data-service.provider';
+import { dataServiceFactory } from '../../../../../services/factories';
 import { Codes, FilterExpressionUtils, SQLTypes, Util } from '../../../../../utils';
 import { IExpression } from '../../../../filter-expression.utils';
 import { ServiceUtils } from '../../../../service.utils';

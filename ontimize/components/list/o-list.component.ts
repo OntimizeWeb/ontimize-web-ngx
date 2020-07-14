@@ -6,7 +6,7 @@ import { RouterModule } from '@angular/router';
 import { merge, Subscription } from 'rxjs';
 import { InputConverter } from '../../decorators';
 import { OntimizeService } from '../../services';
-import { dataServiceFactory } from '../../services/data-service.provider';
+import { dataServiceFactory } from '../../services/factories';
 import { OSharedModule } from '../../shared';
 import { ObservableWrapper } from '../../util/async';
 import { Codes, Util } from '../../utils';

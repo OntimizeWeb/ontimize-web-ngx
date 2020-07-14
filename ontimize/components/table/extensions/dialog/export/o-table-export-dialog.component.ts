@@ -5,7 +5,7 @@ import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
 import { DialogService, OntimizeExportService, OTranslateService } from '../../../../../services';
-import { exportServiceFactory } from '../../../../../services/export-service.provider';
+import { exportServiceFactory } from '../../../../../services/factories';
 import { IExportService } from '../../../../../types/export-service.interface';
 import { Codes, SQLTypes, Util } from '../../../../../utils';
 import { OTableExportButtonService } from '../../export-button/o-table-export-button.service';

@@ -9,7 +9,7 @@ import { OSharedModule } from '../../../shared/shared.module';
 import { InputConverter } from '../../../decorators/input-converter';
 import { OntimizeService } from '../../../services/ontimize.service';
 import { OFormServiceComponent } from '../o-form-service-component.class';
-import { dataServiceFactory } from '../../../services/data-service.provider';
+import { dataServiceFactory } from '../../../services/factories';
 import { OValueChangeEvent } from '../../o-form-data-component.class';
 
 export const DEFAULT_INPUTS_O_RADIO = [

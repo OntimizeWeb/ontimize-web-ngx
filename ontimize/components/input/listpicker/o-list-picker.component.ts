@@ -4,7 +4,7 @@ import { FormControl } from '@angular/forms';
 import { MatDialog, MatDialogConfig, MatDialogRef, MatInput } from '@angular/material';
 import { InputConverter } from '../../../decorators';
 import { OntimizeService } from '../../../services';
-import { dataServiceFactory } from '../../../services/data-service.provider';
+import { dataServiceFactory } from '../../../services/factories';
 import { OSharedModule } from '../../../shared';
 import { ODialogModule } from '../../dialog/o-dialog.component';
 import { IFormValueOptions } from '../../form/form-components';

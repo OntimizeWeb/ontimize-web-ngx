@@ -18,7 +18,7 @@ import { MatSelect, MatSelectChange } from '@angular/material';
 import { Subscription } from 'rxjs';
 
 import { InputConverter } from '../../../decorators/input-converter';
-import { dataServiceFactory } from '../../../services/data-service.provider';
+import { dataServiceFactory } from '../../../services/factories';
 import { OntimizeService } from '../../../services/ontimize.service';
 import { OSharedModule } from '../../../shared/shared.module';
 import { Codes } from '../../../util/codes';

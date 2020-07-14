@@ -7,7 +7,7 @@ import { Subscription } from 'rxjs';
 import { OSearchInputModule } from '../../components';
 import { InputConverter } from '../../decorators';
 import { OntimizeService } from '../../services';
-import { dataServiceFactory } from '../../services/data-service.provider';
+import { dataServiceFactory } from '../../services/factories';
 import { OSharedModule } from '../../shared';
 import { Codes, ObservableWrapper, Util } from '../../utils';
 import { OFormComponent } from '../form/form-components';
