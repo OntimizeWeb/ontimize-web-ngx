@@ -7,7 +7,7 @@ import { AppConfig } from '../../config/app-config';
 import * as CORE_TRANSLATIONS from '../../i18n/i18n';
 import { MomentService } from '../../services/moment.service';
 import { SnackBarService } from '../../services/snackbar.service';
-import { Codes } from '../../util';
+import { Codes, Util } from '../../util';
 import { ObservableWrapper } from '../../util/async';
 
 @Injectable({
@@ -17,7 +17,6 @@ export class OTranslateService {
 
   public static ASSETS_PATH = './assets/i18n/';
   public static ASSETS_EXTENSION = '.json';
-
   public DEFAULT_LANG = 'en';
   public onLanguageChanged: EventEmitter<any> = new EventEmitter();
 
@@ -125,7 +124,7 @@ export class OTranslateService {
       this.checkExistingLangFile(lang).then((exists) => {
         let newLang = lang;
         if (!exists) {
-          newLang = this.ngxTranslateService.getDefaultLang();
+          newLang = Util.isDefined(this.appConfig['_config']['defaultLocale']) ? this.appConfig['_config']['defaultLocale'] : this.ngxTranslateService.getDefaultLang();
           const msg = CORE_TRANSLATIONS.MAP[newLang || this.DEFAULT_LANG]['MESSAGES.ERROR_MISSING_LANG'];
           this.injector.get(SnackBarService).open(msg, {
             milliseconds: 2500
