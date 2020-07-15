@@ -6,12 +6,12 @@
     position: relative;
     width: 100%;
 
+    .o-image-form-field-hidden {
+      display: none;
+    }
+
     .o-image-form-field {
       width: 100%;
-
-      .o-image-form-field-hidden {
-        display: none !important;
-      }
 
       .o-image-form-field-input {
         opacity: 0;
