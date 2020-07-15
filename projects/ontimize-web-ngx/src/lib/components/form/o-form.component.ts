@@ -9,7 +9,7 @@ import {
   OnDestroy,
   OnInit,
   ViewChild,
-  ViewEncapsulation,
+  ViewEncapsulation
 } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router, UrlSegment } from '@angular/router';
@@ -21,8 +21,8 @@ import { IFormDataComponent } from '../../interfaces/form-data-component.interfa
 import { IFormDataTypeComponent } from '../../interfaces/form-data-type-component.interface';
 import { ServiceResponse } from '../../interfaces/service-response.interface';
 import { OFormLayoutManagerComponent } from '../../layouts/form-layout/o-form-layout-manager.component';
-import { OntimizeServiceProvider } from '../../services/data-service.provider';
 import { DialogService } from '../../services/dialog.service';
+import { OntimizeServiceProvider } from '../../services/factories';
 import { NavigationService, ONavigationItem } from '../../services/navigation.service';
 import { OntimizeService } from '../../services/ontimize/ontimize.service';
 import { PermissionsService } from '../../services/permissions/permissions.service';

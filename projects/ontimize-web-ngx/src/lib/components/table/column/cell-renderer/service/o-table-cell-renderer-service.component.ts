@@ -1,19 +1,10 @@
-import {
-  AfterViewInit,
-  ChangeDetectionStrategy,
-  Component,
-  Injector,
-  OnDestroy,
-  OnInit,
-  TemplateRef,
-  ViewChild,
-} from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, Injector, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { ServiceResponse } from '../../../../../interfaces/service-response.interface';
 import { ITranslatePipeArgument, OTranslatePipe } from '../../../../../pipes/o-translate.pipe';
-import { OntimizeServiceProvider } from '../../../../../services/data-service.provider';
 import { DialogService } from '../../../../../services/dialog.service';
+import { OntimizeServiceProvider } from '../../../../../services/factories';
 import { OntimizeService } from '../../../../../services/ontimize/ontimize.service';
 import { Expression } from '../../../../../types/expression.type';
 import { Codes } from '../../../../../util/codes';

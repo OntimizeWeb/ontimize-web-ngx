@@ -1,6 +1,6 @@
 import { Subscription } from 'rxjs';
 
-import { OntimizeFileService } from '../../../services/ontimize/ontimize-file.service';
+import { IFileService } from '../../../interfaces';
 import { Codes } from '../../../util/codes';
 import { OFileItem } from './o-file-item.class';
 
@@ -17,7 +17,7 @@ export class OFileUploader {
   protected _uploadSuscription: Subscription;
 
   constructor(
-    protected service: OntimizeFileService,
+    protected service: IFileService,
     entity: string
   ) {
     this.entity = entity;

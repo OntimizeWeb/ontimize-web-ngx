@@ -2,6 +2,7 @@ export * from './app-menu.interface';
 export * from './auth-service.interface';
 export * from './component.interface';
 export * from './data-service.interface';
+export * from './file-service.interface';
 export * from './export-service.interface';
 export * from './filter-builder-component-target.interface';
 export * from './form-control-component.interface';

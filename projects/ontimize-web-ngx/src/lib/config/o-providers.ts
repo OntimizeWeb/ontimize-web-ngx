@@ -5,8 +5,8 @@ import { Router } from '@angular/router';
 import { combineLatest } from 'rxjs';
 
 import { AppConfig, O_INPUTS_OPTIONS } from '../config/app-config';
+import { OntimizeServiceProvider } from '../services';
 import { appConfigFactory } from '../services/app-config.provider';
-import { OntimizeServiceProvider } from '../services/data-service.provider';
 import { LocalStorageService } from '../services/local-storage.service';
 import { NavigationService } from '../services/navigation.service';
 import { OntimizeMatIconRegistry } from '../services/ontimize-icon-registry.service';
@@ -52,7 +52,7 @@ export function appInitializerFactory(injector: Injector, config: Config, oTrans
       locales.add('en');
       locales.add(userLang);
 
-      // initialize available locales array if needed 
+      // initialize available locales array if needed
       if (!config.applicationLocales) {
         config.applicationLocales = [...locales];
       }

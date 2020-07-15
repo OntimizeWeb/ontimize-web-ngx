@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Injector, NgModule } from '@angular/core';
 
+import { permissionsServiceFactory } from '../factories';
+import { OntimizePermissionsService } from './ontimize-permissions.service';
 import { PermissionsGuardService } from './permissions-can-activate.guard';
-import { OntimizePermissionsServiceProvider } from './permissions-service.provider';
 import { PermissionsService } from './permissions.service';
 
 export function getPermissionsServiceProvider(injector: Injector) {
@@ -11,15 +12,10 @@ export function getPermissionsServiceProvider(injector: Injector) {
 
 @NgModule({
   imports: [CommonModule],
-  providers: [{
-    provide: PermissionsGuardService,
-    useClass: PermissionsGuardService
-  }, {
-    provide: PermissionsService,
-    useFactory: getPermissionsServiceProvider,
-    deps: [Injector]
-  },
-    OntimizePermissionsServiceProvider
+  providers: [
+    { provide: PermissionsGuardService, useClass: PermissionsGuardService },
+    { provide: PermissionsService, useFactory: getPermissionsServiceProvider, deps: [Injector] },
+    { provide: OntimizePermissionsService, useFactory: permissionsServiceFactory, deps: [Injector] }
   ]
 })
 export class OPermissionsModule { }
