@@ -5,8 +5,8 @@ import { Router } from '@angular/router';
 import { combineLatest } from 'rxjs';
 
 import { AppConfig, O_INPUTS_OPTIONS } from '../config/app-config';
-import { OntimizeServiceProvider } from '../services';
 import { appConfigFactory } from '../services/app-config.provider';
+import { OntimizeServiceProvider } from '../services/factories';
 import { LocalStorageService } from '../services/local-storage.service';
 import { NavigationService } from '../services/navigation.service';
 import { OntimizeMatIconRegistry } from '../services/ontimize-icon-registry.service';

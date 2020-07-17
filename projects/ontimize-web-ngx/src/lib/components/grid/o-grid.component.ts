@@ -1,5 +1,4 @@
 import {
-  AfterContentInit,
   AfterViewInit,
   Component,
   ContentChildren,
@@ -22,7 +21,7 @@ import { Subscription } from 'rxjs';
 
 import { InputConverter } from '../../decorators/input-converter';
 import { IGridItem } from '../../interfaces/o-grid-item.interface';
-import { OntimizeServiceProvider } from '../../services';
+import { OntimizeServiceProvider } from '../../services/factories';
 import { OQueryDataArgs } from '../../types/query-data-args.type';
 import { SQLOrder } from '../../types/sql-order.type';
 import { ObservableWrapper } from '../../util/async';

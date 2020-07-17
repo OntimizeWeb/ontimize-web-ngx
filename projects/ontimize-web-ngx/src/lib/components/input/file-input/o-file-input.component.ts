@@ -2,7 +2,7 @@ import { Component, ElementRef, EventEmitter, forwardRef, Inject, Injector, OnIn
 import { FormControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 
 import { InputConverter } from '../../../decorators/input-converter';
-import { IFileService } from '../../../interfaces';
+import { IFileService } from '../../../interfaces/file-service.interface';
 import { fileServiceFactory } from '../../../services/factories';
 import { OntimizeFileService } from '../../../services/ontimize/ontimize-file.service';
 import { OFormComponent } from '../../form/o-form.component';

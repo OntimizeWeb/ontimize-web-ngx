@@ -1,6 +1,6 @@
 import { Subscription } from 'rxjs';
 
-import { IFileService } from '../../../interfaces';
+import { IFileService } from '../../../interfaces/file-service.interface';
 import { Codes } from '../../../util/codes';
 import { OFileItem } from './o-file-item.class';
 

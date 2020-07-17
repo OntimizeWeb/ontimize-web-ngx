@@ -34,7 +34,7 @@ import { OTableMenu } from '../../interfaces/o-table-menu.interface';
 import { OTableOptions } from '../../interfaces/o-table-options.interface';
 import { OTablePaginator } from '../../interfaces/o-table-paginator.interface';
 import { OTableQuickfilter } from '../../interfaces/o-table-quickfilter.interface';
-import { OntimizeServiceProvider } from '../../services';
+import { OntimizeServiceProvider } from '../../services/factories';
 import { SnackBarService } from '../../services/snackbar.service';
 import { Expression } from '../../types/expression.type';
 import { OColumnAggregate } from '../../types/o-column-aggregate.type';
