@@ -172,6 +172,13 @@ export class OImageComponent extends OFormDataComponent implements OnInit, OnDes
     }
   }
 
+  public imageExists(image_url): boolean {
+    const http = new XMLHttpRequest();
+    http.open('HEAD', image_url, false);
+    http.send();
+    return http.status !== 404;
+  }
+
   public getSrcValue(): any {
     if (this.value && this.value.value) {
       if (this.value.value instanceof Object && this.value.value.bytes) {
@@ -192,7 +199,11 @@ export class OImageComponent extends OFormDataComponent implements OnInit, OnDes
         }
         return this._domSanitizer.bypassSecurityTrustUrl(src);
       }
-      return this.value.value ? this.value.value : this.emptyimage;
+      if(this.imageExists(this.value.value)) {
+        return this.value.value;
+      } else {
+        return this.emptyimage;
+      }
     } else if (this.emptyimage) {
       return this.emptyimage;
     }
