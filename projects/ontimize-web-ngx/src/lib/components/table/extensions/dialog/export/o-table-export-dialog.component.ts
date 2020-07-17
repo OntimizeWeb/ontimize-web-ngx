@@ -6,7 +6,7 @@ import { filter } from 'rxjs/operators';
 
 import { IExportService } from '../../../../../interfaces/export-service.interface';
 import { DialogService } from '../../../../../services/dialog.service';
-import { OntimizeExportServiceProvider } from '../../../../../services/export-service.provider';
+import { OntimizeExportServiceProvider } from '../../../../../services/factories';
 import { OntimizeExportService } from '../../../../../services/ontimize/ontimize-export.service';
 import { OTranslateService } from '../../../../../services/translate/o-translate.service';
 import { Codes } from '../../../../../util/codes';

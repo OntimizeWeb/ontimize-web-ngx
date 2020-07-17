@@ -1,17 +1,9 @@
-import {
-  Component,
-  ElementRef,
-  EventEmitter,
-  forwardRef,
-  Inject,
-  Injector,
-  OnInit,
-  Optional,
-  ViewChild,
-} from '@angular/core';
+import { Component, ElementRef, EventEmitter, forwardRef, Inject, Injector, OnInit, Optional, ViewChild } from '@angular/core';
 import { FormControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 
 import { InputConverter } from '../../../decorators/input-converter';
+import { IFileService } from '../../../interfaces';
+import { fileServiceFactory } from '../../../services/factories';
 import { OntimizeFileService } from '../../../services/ontimize/ontimize-file.service';
 import { OFormComponent } from '../../form/o-form.component';
 import { DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT, OFormDataComponent } from '../../o-form-data-component.class';
@@ -84,12 +76,15 @@ export const DEFAULT_OUTPUTS_O_FILE_INPUT = [
   templateUrl: './o-file-input.component.html',
   styleUrls: ['./o-file-input.component.scss'],
   inputs: DEFAULT_INPUTS_O_FILE_INPUT,
-  outputs: DEFAULT_OUTPUTS_O_FILE_INPUT
+  outputs: DEFAULT_OUTPUTS_O_FILE_INPUT,
+  providers: [
+    { provide: OntimizeFileService, useFactory: fileServiceFactory, deps: [Injector] }
+  ]
 })
 export class OFileInputComponent extends OFormDataComponent implements OnInit {
 
   public uploader: OFileUploader;
-  public fileService: OntimizeFileService;
+  public fileService: IFileService;
   @ViewChild('inputFile', { static: false })
   public inputFile: ElementRef;
 

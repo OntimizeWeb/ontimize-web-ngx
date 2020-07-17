@@ -1,10 +1,28 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, forwardRef, Inject, Injector, OnChanges, OnDestroy, OnInit, Optional, QueryList, ViewChild, ViewChildren, ContentChildren } from '@angular/core';
+import {
+  AfterContentInit,
+  AfterViewInit,
+  Component,
+  ContentChildren,
+  ElementRef,
+  EventEmitter,
+  forwardRef,
+  Inject,
+  Injector,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  Optional,
+  QueryList,
+  ViewChild,
+  ViewChildren
+} from '@angular/core';
 import { MediaChange, MediaObserver } from '@angular/flex-layout';
 import { MatPaginator, PageEvent } from '@angular/material';
 import { Subscription } from 'rxjs';
+
 import { InputConverter } from '../../decorators/input-converter';
 import { IGridItem } from '../../interfaces/o-grid-item.interface';
-import { OntimizeServiceProvider } from '../../services/data-service.provider';
+import { OntimizeServiceProvider } from '../../services';
 import { OQueryDataArgs } from '../../types/query-data-args.type';
 import { SQLOrder } from '../../types/sql-order.type';
 import { ObservableWrapper } from '../../util/async';
@@ -13,8 +31,8 @@ import { ServiceUtils } from '../../util/service.utils';
 import { Util } from '../../util/util';
 import { OFormComponent } from '../form/o-form.component';
 import { DEFAULT_INPUTS_O_SERVICE_COMPONENT, OServiceComponent } from '../o-service-component.class';
-import { OGridItemDirective } from './grid-item/o-grid-item.directive';
 import { OGridItemComponent } from './grid-item/o-grid-item.component';
+import { OGridItemDirective } from './grid-item/o-grid-item.directive';
 
 export const DEFAULT_INPUTS_O_GRID = [
   ...DEFAULT_INPUTS_O_SERVICE_COMPONENT,

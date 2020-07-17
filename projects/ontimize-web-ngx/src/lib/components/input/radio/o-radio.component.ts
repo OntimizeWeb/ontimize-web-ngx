@@ -1,26 +1,13 @@
-import {
-  AfterViewInit,
-  Component,
-  ElementRef,
-  forwardRef,
-  Inject,
-  Injector,
-  Optional,
-  ViewEncapsulation,
-} from '@angular/core';
+import { AfterViewInit, Component, ElementRef, forwardRef, Inject, Injector, Optional, ViewEncapsulation } from '@angular/core';
 import { MatRadioChange } from '@angular/material';
 
 import { InputConverter } from '../../../decorators/input-converter';
-import { OntimizeServiceProvider } from '../../../services/data-service.provider';
+import { OntimizeServiceProvider } from '../../../services';
 import { Util } from '../../../util/util';
 import { OFormComponent } from '../../form/o-form.component';
 import { OFormValue } from '../../form/OFormValue';
 import { OValueChangeEvent } from '../../o-value-change-event.class';
-import {
-  DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT,
-  DEFAULT_OUTPUTS_O_FORM_SERVICE_COMPONENT,
-  OFormServiceComponent,
-} from '../o-form-service-component.class';
+import { DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT, DEFAULT_OUTPUTS_O_FORM_SERVICE_COMPONENT, OFormServiceComponent } from '../o-form-service-component.class';
 
 export const DEFAULT_INPUTS_O_RADIO = [
   ...DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT,

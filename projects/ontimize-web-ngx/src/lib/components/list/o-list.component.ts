@@ -15,14 +15,14 @@ import {
   Optional,
   QueryList,
   SimpleChange,
-  ViewEncapsulation,
+  ViewEncapsulation
 } from '@angular/core';
 import { merge, Subscription } from 'rxjs';
 
 import { InputConverter } from '../../decorators/input-converter';
 import { IListItem } from '../../interfaces/o-list-item.interface';
 import { IList } from '../../interfaces/o-list.interface';
-import { OntimizeServiceProvider } from '../../services/data-service.provider';
+import { OntimizeServiceProvider } from '../../services';
 import { OListInitializationOptions } from '../../types/o-list-initialization-options.type';
 import { OQueryDataArgs } from '../../types/query-data-args.type';
 import { SQLOrder } from '../../types/sql-order.type';

@@ -10,22 +10,18 @@ import {
   OnInit,
   Optional,
   SimpleChange,
-  ViewChild,
+  ViewChild
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatDialog, MatDialogConfig, MatDialogRef, MatInput } from '@angular/material';
 
 import { InputConverter } from '../../../decorators/input-converter';
-import { OntimizeServiceProvider } from '../../../services/data-service.provider';
+import { OntimizeServiceProvider } from '../../../services';
 import { FormValueOptions } from '../../../types/form-value-options.type';
 import { OFormComponent } from '../../form/o-form.component';
 import { OValueChangeEvent } from '../../o-value-change-event.class';
 import { OFormControl } from '../o-form-control.class';
-import {
-  DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT,
-  DEFAULT_OUTPUTS_O_FORM_SERVICE_COMPONENT,
-  OFormServiceComponent,
-} from '../o-form-service-component.class';
+import { DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT, DEFAULT_OUTPUTS_O_FORM_SERVICE_COMPONENT, OFormServiceComponent } from '../o-form-service-component.class';
 import { OListPickerDialogComponent } from './o-list-picker-dialog.component';
 
 export const DEFAULT_INPUTS_O_LIST_PICKER = [

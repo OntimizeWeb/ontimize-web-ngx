@@ -3,7 +3,7 @@ import { NavigationExtras, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 import { OFormLayoutManagerComponent } from '../../../layouts/form-layout/o-form-layout-manager.component';
-import { OntimizeServiceProvider } from '../../../services/data-service.provider';
+import { OntimizeServiceProvider } from '../../../services/factories';
 import { NavigationService, ONavigationItem } from '../../../services/navigation.service';
 import { OntimizeService } from '../../../services/ontimize/ontimize.service';
 import { Codes } from '../../../util/codes';

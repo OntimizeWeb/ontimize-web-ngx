@@ -9,10 +9,19 @@ import { MomentService } from '../../services/moment.service';
 import { SnackBarService } from '../../services/snackbar.service';
 import { Codes, Util } from '../../util';
 import { ObservableWrapper } from '../../util/async';
+import { _createServiceInstance, _getInjectionTokenValue, O_TRANSLATE_SERVICE } from '../factories';
 
-@Injectable({
-  providedIn: 'root'
-})
+/**
+ * `OTranslateService` factory.
+ * Creates a new instance of the translate service.
+ */
+export function translateServiceFactory(injector: Injector): any {
+  const serviceClass = _getInjectionTokenValue(O_TRANSLATE_SERVICE, injector);
+  const service = _createServiceInstance(serviceClass, injector);
+  return Util.isDefined(service) ? service : new OTranslateService(injector);
+}
+
+@Injectable({ providedIn: 'root', useFactory: translateServiceFactory, deps: [Injector] })
 export class OTranslateService {
 
   public static ASSETS_PATH = './assets/i18n/';
