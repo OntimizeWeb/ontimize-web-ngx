@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { share } from 'rxjs/operators';
 
-import { IFileService } from '../../interfaces';
+import { IFileService } from '../../interfaces/file-service.interface';
 import { OntimizeBaseService } from './ontimize-base-service.class';
 
 @Injectable()

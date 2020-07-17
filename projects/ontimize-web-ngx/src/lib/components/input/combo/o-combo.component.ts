@@ -4,7 +4,7 @@ import { MatSelect, MatSelectChange } from '@angular/material';
 import { Subscription } from 'rxjs';
 
 import { InputConverter } from '../../../decorators/input-converter';
-import { OntimizeServiceProvider } from '../../../services';
+import { OntimizeServiceProvider } from '../../../services/factories';
 import { FormValueOptions } from '../../../types/form-value-options.type';
 import { Codes } from '../../../util/codes';
 import { Util } from '../../../util/util';

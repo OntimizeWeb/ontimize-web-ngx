@@ -1,9 +1,14 @@
 import { InjectionToken, Injector } from '@angular/core';
 
 import { AppConfig } from '../config/app-config';
-import { IExportService, IFileService, IPermissionsService } from '../interfaces';
+import { IExportService } from '../interfaces/export-service.interface';
+import { IFileService } from '../interfaces/file-service.interface';
+import { IPermissionsService } from '../interfaces/permissions-service.interface';
 import { Util } from '../util/util';
-import { OntimizeEEService, OntimizeExportService, OntimizeFileService, OntimizeService } from './ontimize';
+import { OntimizeEEService } from './ontimize/ontimize-ee.service';
+import { OntimizeExportService } from './ontimize/ontimize-export.service';
+import { OntimizeFileService } from './ontimize/ontimize-file.service';
+import { OntimizeService } from './ontimize/ontimize.service';
 import { OntimizeEEPermissionsService } from './permissions/ontimize-ee-permissions.service';
 import { OntimizePermissionsService } from './permissions/ontimize-permissions.service';
 

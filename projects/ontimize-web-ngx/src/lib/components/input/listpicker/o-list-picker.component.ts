@@ -16,7 +16,7 @@ import { FormControl } from '@angular/forms';
 import { MatDialog, MatDialogConfig, MatDialogRef, MatInput } from '@angular/material';
 
 import { InputConverter } from '../../../decorators/input-converter';
-import { OntimizeServiceProvider } from '../../../services';
+import { OntimizeServiceProvider } from '../../../services/factories';
 import { FormValueOptions } from '../../../types/form-value-options.type';
 import { OFormComponent } from '../../form/o-form.component';
 import { OValueChangeEvent } from '../../o-value-change-event.class';

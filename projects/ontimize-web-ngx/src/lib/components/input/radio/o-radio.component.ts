@@ -2,7 +2,7 @@ import { AfterViewInit, Component, ElementRef, forwardRef, Inject, Injector, Opt
 import { MatRadioChange } from '@angular/material';
 
 import { InputConverter } from '../../../decorators/input-converter';
-import { OntimizeServiceProvider } from '../../../services';
+import { OntimizeServiceProvider } from '../../../services/factories';
 import { Util } from '../../../util/util';
 import { OFormComponent } from '../../form/o-form.component';
 import { OFormValue } from '../../form/OFormValue';
