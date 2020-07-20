@@ -70,6 +70,7 @@ export class OImageComponent extends OFormDataComponent {
   public static DEFAULT_OUTPUTS_O_IMAGE = DEFAULT_OUTPUTS_O_IMAGE;
 
   public acceptFileType: string = 'image/*';
+  public notfoundimage: string;
   public emptyimage: string;
   public emptyicon: string;
   public height: string;
