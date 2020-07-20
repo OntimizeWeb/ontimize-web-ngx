@@ -1,21 +1,39 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, forwardRef, HostBinding, Inject, Injector, NgModule, Optional, ViewChild, ViewEncapsulation } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  forwardRef,
+  HostBinding,
+  Inject,
+  Injector,
+  NgModule,
+  Optional,
+  ViewChild,
+  ViewEncapsulation,
+} from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material';
 import { DomSanitizer } from '@angular/platform-browser';
+
 import { InputConverter } from '../../decorators';
 import { OSharedModule } from '../../shared';
 import { Util } from '../../util/util';
 import { OFormComponent } from '../form/o-form.component';
 import { OFormValue } from '../form/OFormValue';
 import { OFormControl } from '../input/o-form-control.class';
-import { DEFAULT_INPUTS_O_FORM_DATA_COMPONENT, DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT, OFormDataComponent } from '../o-form-data-component.class';
+import {
+  DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,
+  DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT,
+  OFormDataComponent,
+} from '../o-form-data-component.class';
 import { OFullScreenDialogComponent } from './fullscreen/fullscreen-dialog.component';
 
 
 export const DEFAULT_INPUTS_O_IMAGE = [
   ...DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,
   'emptyimage: empty-image',
+  // not-found-image [string]: Default image for 404 error.
+  'notfoundimage: not-found-image',
   // empty-icon [string]: material icon. Default: photo.
   'emptyicon: empty-icon',
   // show-controls [yes|no true|false]: Shows or hides selection controls. Default: true.
@@ -163,6 +181,10 @@ export class OImageComponent extends OFormDataComponent {
       this.currentFileName = input.files[0].name;
       this.stateCtrl.setValue(this.currentFileName);
     }
+  }
+
+  public notFoundImageUrl(event): any {
+    event.target.src = Util.isDefined(this.notfoundimage) ? this.notfoundimage : '';
   }
 
   public getSrcValue(): any {
