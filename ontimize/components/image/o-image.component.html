@@ -2,11 +2,16 @@
   [matTooltipShowDelay]="tooltipShowDelay" [matTooltipHideDelay]="tooltipHideDelay" [class.o-image-auto-fit]="autoFit"
   class="o-image-content" fxFill>
 
+  <input #input type="file" [disabled]="!enabled"
+    [accept]="acceptFileType ? acceptFileType.replace(';',',') : 'image/*'" (change)="fileChange(input)"
+    class="o-image-form-field-hidden" fxFlex />
+
   <mat-form-field *ngIf="hasControls()" class="o-image-form-field">
-    <input matInput readonly (click)="input.click()" [placeholder]="olabel | oTranslate" [required]="isRequired" [formControl]="stateCtrl" />
-    <input matInput [formControlName]="getAttribute()" type="text" [id]="getAttribute()" class="o-image-form-field-input" [required]="isRequired" />
-    <input #input type="file" [disabled]="!enabled" [accept]="acceptFileType ? acceptFileType.replace(';',',') : 'image/*'" (change)="fileChange(input)"
-      class="o-image-form-field-hidden" fxFlex />
+    <input matInput readonly (click)="input.click()" [placeholder]="olabel | oTranslate" [required]="isRequired"
+      [formControl]="stateCtrl" />
+    <input matInput [formControlName]="getAttribute()" type="text" [id]="getAttribute()"
+      class="o-image-form-field-input" [required]="isRequired" />
+
 
     <button type="button" *ngIf="fullScreenButton" [disabled]="!enabled" matSuffix mat-icon-button
       (click)="openFullScreen($event)">
@@ -23,7 +28,8 @@
 
   <div fxLayout="column" fxLayoutAlign="center center" fxFlex="grow" class="o-image-display-container">
     <img *ngIf="!(isEmpty())" [src]="getSrcValue()" alt="" (click)="openFileSelector()" (error)="notFoundImageUrl($event)"/>
-    <mat-icon class="empty-icon" [class.mat-disabled]="!enabled" aria-label="empty image" *ngIf="useEmptyIcon()" (click)="openFileSelector()">
+    <mat-icon class="empty-icon" [class.mat-disabled]="!enabled" aria-label="empty image" *ngIf="useEmptyIcon()"
+      (click)="openFileSelector()">
       {{ emptyicon }}</mat-icon>
     <img [src]="getSrcValue()" alt="empty image" *ngIf="useEmptyImage()" (click)="openFileSelector()" />
   </div>
