@@ -31,6 +31,8 @@ import { OFullScreenDialogComponent } from './fullscreen/fullscreen-dialog.compo
 export const DEFAULT_INPUTS_O_IMAGE = [
   ...DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,
   'emptyimage: empty-image',
+  // not-found-image [string]: Default image for 404 error.
+  'notfoundimage: not-found-image',
   // empty-icon [string]: material icon. Default: photo.
   'emptyicon: empty-icon',
   // show-controls [yes|no true|false]: Shows or hides selection controls. Default: true.
@@ -64,6 +66,7 @@ export class OImageComponent extends OFormDataComponent implements OnInit, OnDes
 
   public acceptFileType: string = 'image/*';
   public emptyimage: string;
+  public notfoundimage: string;
   public emptyicon: string;
   public height: string;
   @InputConverter()
@@ -172,6 +175,10 @@ export class OImageComponent extends OFormDataComponent implements OnInit, OnDes
     }
   }
 
+  public notFoundImageUrl(event): any {
+    event.target.src = Util.isDefined(this.notfoundimage) ? this.notfoundimage : '';
+  }
+
   public getSrcValue(): any {
     if (this.value && this.value.value) {
       if (this.value.value instanceof Object && this.value.value.bytes) {
@@ -192,7 +199,11 @@ export class OImageComponent extends OFormDataComponent implements OnInit, OnDes
         }
         return this._domSanitizer.bypassSecurityTrustUrl(src);
       }
-      return this.value.value ? this.value.value : this.emptyimage;
+      if(this.value.value) {
+        return this.value.value;
+      } else {
+        return this.emptyimage;
+      } 
     } else if (this.emptyimage) {
       return this.emptyimage;
     }

@@ -7,6 +7,7 @@
 * **o-combo**: scroll not worked when searchable="yes" ([b70b2a1](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b70b2a1)) Closes [#365](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/365)
 * **OServiceBaseComponent**: fixing bug including parent-keys value in filter when exporting data ([d34280f](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d34280f9086ef8e2107367327e6724fd0c666501)) Closes [#373](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/373)
 * **defaultLocale**: added new parameter in app.config to set a defaultLocale when language.json file is not found ([5783afc](https://github.com/OntimizeWeb/ontimize-web-ngx/pull/386)) Closes [#383](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/383)
+* **o-image**: added new parameter(not-found-image) in o-image component to manage not found images. ([cdaaf7b](https://github.com/OntimizeWeb/ontimize-web-ngx/pull/396))
 
 ### BREAKING CHANGES
 * **o-app-layout**: the menu icon appears in sidenav when mode="desktop" and show-header="yes". ([#364](https://github.com/OntimizeWeb/ontimize-web-ngx/pull/364)) Closes [#316](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/363)
