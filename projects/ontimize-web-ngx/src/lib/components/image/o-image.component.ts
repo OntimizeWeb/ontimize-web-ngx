@@ -118,6 +118,10 @@ export class OImageComponent extends OFormDataComponent implements OnInit, OnDes
     }
   }
 
+  public ngOnDestroy(): void {	
+    super.ngOnDestroy();	
+  }
+
   public ensureOFormValue(val: any): void {
     if (val instanceof OFormValue) {
       if (val.value && val.value.bytes !== undefined) {
