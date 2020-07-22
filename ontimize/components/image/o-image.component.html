@@ -27,7 +27,7 @@
   </mat-form-field>
 
   <div fxLayout="column" fxLayoutAlign="center center" fxFlex="grow" class="o-image-display-container">
-    <img *ngIf="!(isEmpty())" [src]="getSrcValue()" alt="" (click)="openFileSelector()" />
+    <img *ngIf="!(isEmpty())" [src]="getSrcValue()" alt="" (click)="openFileSelector()" (error)="notFoundImageUrl($event)"/>
     <mat-icon class="empty-icon" [class.mat-disabled]="!enabled" aria-label="empty image" *ngIf="useEmptyIcon()"
       (click)="openFileSelector()">
       {{ emptyicon }}</mat-icon>
