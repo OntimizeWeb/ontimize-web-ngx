@@ -3,7 +3,10 @@ import { ActivatedRoute, NavigationExtras, Router, UrlSegmentGroup } from '@angu
 import { combineLatest, Observable, Subscription } from 'rxjs';
 
 import { OFormLayoutDialogComponent } from '../../../layouts/form-layout/dialog/o-form-layout-dialog.component';
-import { IDetailComponentData, OFormLayoutManagerComponent } from '../../../layouts/form-layout/o-form-layout-manager.component';
+import {
+  IDetailComponentData,
+  OFormLayoutManagerComponent,
+} from '../../../layouts/form-layout/o-form-layout-manager.component';
 import { DialogService, NavigationService, ONavigationItem } from '../../../services';
 import { Codes, SQLTypes, Util } from '../../../utils';
 import { OFormComponent } from '../o-form.component';
@@ -286,20 +289,7 @@ export class OFormNavigationClass {
   }
 
   stayInRecordAfterInsert(insertedKeys: Object) {
-    if (this.formLayoutManager) {
-      this.form.setInitialMode();
-      const self = this;
-      const subscription = this.form.onDataLoaded.subscribe(() => {
-        const keys = self.form.getKeysValues();
-        self.formLayoutManager.updateActiveData({ params: keys });
-        const cacheData: IDetailComponentData = self.formLayoutManager.getFormCacheData(self.id);
-        if (Util.isDefined(cacheData)) {
-          self.urlParams = cacheData.params;
-        }
-        subscription.unsubscribe();
-      });
-      this.form.queryData(insertedKeys);
-    } else if (this.navigationService && this.form.keysArray && insertedKeys) {
+    if (this.navigationService && this.form.keysArray && insertedKeys) {
       let params: any[] = [];
       this.form.keysArray.forEach((current, index) => {
         if (insertedKeys[current]) {
@@ -330,6 +320,19 @@ export class OFormNavigationClass {
         route = ['../', ...params];
       }
       this.router.navigate(route, extras);
+    } else if (this.formLayoutManager) {
+      this.form.setInitialMode();
+      const self = this;
+      const subscription = this.form.onDataLoaded.subscribe(() => {
+        const keys = self.form.getKeysValues();
+        self.formLayoutManager.updateActiveData({ params: keys });
+        const cacheData: IDetailComponentData = self.formLayoutManager.getFormCacheData(self.id);
+        if (Util.isDefined(cacheData)) {
+          self.urlParams = cacheData.params;
+        }
+        subscription.unsubscribe();
+      });
+      this.form.queryData(insertedKeys);
     }
   }
 
