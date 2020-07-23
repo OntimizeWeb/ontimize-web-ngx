@@ -11,7 +11,7 @@ import {
   QueryList,
   Renderer2,
   ViewChild,
-  ViewEncapsulation
+  ViewEncapsulation,
 } from '@angular/core';
 import { MatLine, MatListAvatarCssMatStyler, MatListItem } from '@angular/material';
 
@@ -110,7 +110,8 @@ export class OListItemComponent implements IListItem, AfterContentInit {
 
   public onCheckboxChange(e?: Event): void {
     if (this._list.selectable) {
-      this._list.setSelected(this.modelData);
+      const model = Util.isDefined(this.modelData) ? this.modelData : e['source']['_elementRef'];
+      this._list.setSelected(model);
     }
   }
 
