@@ -4,7 +4,7 @@
   <ng-template *ngIf="includeBreadcrumb" #breadcrumb></ng-template>
 
   <div class="mat-toolbar-tools" fxLayout="row" fxLayoutAlign="space-between center">
-    <button type="button" mat-icon-button (click)="onCloseDetail()" *ngIf="isDetail" class="o-form-toolbar-button o-form-toolbar-back">
+    <button type="button" mat-icon-button (click)="onBack()" *ngIf="isDetail" class="o-form-toolbar-button o-form-toolbar-back">
       <mat-icon svgIcon="ontimize:arrow_back"></mat-icon>
     </button>
 

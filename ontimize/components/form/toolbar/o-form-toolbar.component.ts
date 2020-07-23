@@ -1,6 +1,19 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, forwardRef, Inject, Injector, NgModule, OnDestroy, OnInit, ViewChild, ViewContainerRef, ViewEncapsulation } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  forwardRef,
+  Inject,
+  Injector,
+  NgModule,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+  ViewContainerRef,
+  ViewEncapsulation
+} from '@angular/core';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+
 import { InputConverter } from '../../../decorators';
 import { DialogService, NavigationService, OPermissions, SnackBarService } from '../../../services';
 import { OSharedModule } from '../../../shared';
@@ -245,8 +258,10 @@ export class OFormToolbarComponent implements OnInit, OnDestroy {
   }
 
   public cancelOperation(): void {
-    if (this.isDetail || this.insertMode) {
+    if (this.isDetail) {
       this.onCloseDetail();
+    } else if (this.insertMode) {
+      this.onBack();
     } else {
       this.onReload();
       this._form.setInitialMode();

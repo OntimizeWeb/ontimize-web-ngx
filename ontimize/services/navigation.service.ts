@@ -154,65 +154,79 @@ export class NavigationService implements ILocalStorageComponent {
   }
 
   initialize(): void {
-    const self = this;
-    const navEndEvents = this.router.events.pipe(filter(event => event instanceof NavigationEnd));
-    navEndEvents
-      .pipe(map(() => this.router.routerState.root))
-      .pipe(map(route => {
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd),
+      map(() => this.router.routerState.root),
+      map(route => {
         while (route.firstChild) {
           route = route.firstChild;
         }
         return route;
-      }))
-      .pipe(filter(route => route.outlet === 'primary'))
-      .subscribe(self.parseNavigationItems.bind(self));
+      }),
+      filter(route => route.outlet === 'primary')
+    ).subscribe(this.parseNavigationItems.bind(this));
   }
 
   protected parseNavigationItems(activatedRoute: ActivatedRoute) {
     let storedNavigation: ONavigationItem[] = this.getStoredData();
     let route: ActivatedRouteSnapshot = this.router.routerState.root.snapshot;
-    let url = '';
-    let navigationItems: Array<ONavigationItem> = [];
-    while (Util.isDefined(route.firstChild)) {
-      route = route.firstChild;
-      if (!route || !route.url || route.routeConfig === null || !route.routeConfig.path) {
-        continue;
-      }
-      const lastNavData: ONavigationItem = navigationItems[navigationItems.length - 1];
-      const parsedRoute: any = this.parseRoute(url, route.url, lastNavData);
-      url = parsedRoute.url;
-      if (storedNavigation.length > 1 && parsedRoute.routeArr.length > 0) {
-        const lastStored: any = storedNavigation[storedNavigation.length - 1];
-        if (lastStored.url === url) {
-          const newItem = new ONavigationItem(lastStored);
-          const newItemActivePath = newItem.getActiveModePath();
-          if (!newItemActivePath || parsedRoute.routeArr.length > newItemActivePath.split('/').length) {
-            navigationItems.push(newItem);
-            const parsed: any = this.parseRoute(url, parsedRoute.routeArr, newItem);
-            url = parsed.url;
-            parsedRoute.text = parsed.text;
-          }
-        }
-      }
-      let formRoutes = undefined;
-      if (lastNavData && lastNavData.formLayoutRoutes) {
-        formRoutes = Object.assign({}, lastNavData.formLayoutRoutes);
-      }
+    let url = this.router.routerState.snapshot.url.split('?')[0];
+    // let navigationItems: Array<ONavigationItem> = [];
+    // while (Util.isDefined(route.firstChild)) {
+    //   route = route.firstChild;
+    //   if (!route || !route.url || route.routeConfig === null || !route.routeConfig.path) {
+    //     continue;
+    //   }
+    //   const lastNavData: ONavigationItem = navigationItems[navigationItems.length - 1];
+    //   const parsedRoute: any = this.parseRoute(url, route.url, lastNavData);
+    //   url = parsedRoute.url;
+    //   if (storedNavigation.length > 1 && parsedRoute.routeArr.length > 0) {
+    //     const lastStored: any = storedNavigation[storedNavigation.length - 1];
+    //     if (lastStored.url === url) {
+    //       const newItem = new ONavigationItem(lastStored);
+    //       const newItemActivePath = newItem.getActiveModePath();
+    //       if (!newItemActivePath || parsedRoute.routeArr.length > newItemActivePath.split('/').length) {
+    //         navigationItems.push(newItem);
+    //         const parsed: any = this.parseRoute(url, parsedRoute.routeArr, newItem);
+    //         url = parsed.url;
+    //         parsedRoute.text = parsed.text;
+    //       }
+    //     }
+    //   }
+    //   let formRoutes = undefined;
+    //   if (lastNavData && lastNavData.formLayoutRoutes) {
+    //     formRoutes = Object.assign({}, lastNavData.formLayoutRoutes);
+    //   }
+    //   const navigationItem = new ONavigationItem({
+    //     url: url,
+    //     queryParams: route.queryParams,
+    //     text: parsedRoute.text,
+    //     formRoutes: formRoutes,
+    //     activeFormMode: formRoutes ? (lastNavData && lastNavData.activeFormMode) : undefined
+    //   });
+    //   navigationItem.findAndMergeNavigationItem(storedNavigation);
+    //   navigationItems.push(navigationItem);
+    // }
+    // if (navigationItems.length > 1) {
+    //   navigationItems[navigationItems.length - 1].terminal = true;
+    // }
+    // const mergedNavigation = this.mergeNavigationItems(navigationItems, storedNavigation);
+    // this.setNavigationItems(navigationItems, mergedNavigation);
+
+
+    const lastStored: any = storedNavigation[storedNavigation.length - 1];
+    if (!lastStored || lastStored.url !== url) {
       const navigationItem = new ONavigationItem({
-        url: url,
+        url,
         queryParams: route.queryParams,
-        text: parsedRoute.text,
-        formRoutes: formRoutes,
-        activeFormMode: formRoutes ? (lastNavData && lastNavData.activeFormMode) : undefined
+        // text: parsedRoute.text,
+        // formRoutes: formRoutes,
+        // activeFormMode: formRoutes ? (lastNavData && lastNavData.activeFormMode) : undefined
       });
-      navigationItem.findAndMergeNavigationItem(storedNavigation);
-      navigationItems.push(navigationItem);
+
+      this.navigationItems.push(navigationItem);
+      this.storeNavigation();
     }
-    if (navigationItems.length > 1) {
-      navigationItems[navigationItems.length - 1].terminal = true;
-    }
-    const mergedNavigation = this.mergeNavigationItems(navigationItems, storedNavigation);
-    this.setNavigationItems(navigationItems, mergedNavigation);
   }
 
   protected parseRoute(url: string, routeSegments: UrlSegment[], navData: ONavigationItem): any {
@@ -357,7 +371,7 @@ export class NavigationService implements ILocalStorageComponent {
         }
 
         // Compare current route with item route and count segment matches
-        const arr1 = item.url.split('/');
+        const arr1 = item.url.substr(1).split('/');
         const arr2 = currentLocation.split('/');
         let result = 0;
         let index = -1;
@@ -387,18 +401,19 @@ export class NavigationService implements ILocalStorageComponent {
   }
 
   removeLastItemsUntilMain() {
-    const index = this.navigationItems.indexOf(this.getLastMainNavigationRouteData());
+    const lastMain = this.getLastMainNavigationRouteData();
+    if (!Util.isDefined(lastMain)) {
+      return false;
+    }
+    const index = this.navigationItems.indexOf(lastMain);
     this.navigationItems = this.navigationItems.slice(0, index + 1);
     this.storeNavigation();
+    return true;
   }
 
   isCurrentRoute(route: string): boolean {
     let currentRoute = this.router.routerState.snapshot.url;
-    if (currentRoute.startsWith('/')) {
-      currentRoute = currentRoute.substr(1);
-    }
     currentRoute = currentRoute.split('?')[0];
-
     return route === currentRoute;
   }
 
