@@ -11,7 +11,7 @@ import {
   QueryList,
   Renderer2,
   ViewChild,
-  ViewEncapsulation,
+  ViewEncapsulation
 } from '@angular/core';
 import { MatLine, MatListAvatarCssMatStyler, MatListItem } from '@angular/material';
 
