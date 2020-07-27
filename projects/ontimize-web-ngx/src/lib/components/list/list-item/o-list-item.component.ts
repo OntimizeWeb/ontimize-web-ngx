@@ -60,6 +60,7 @@ export class OListItemComponent implements IListItem, AfterContentInit {
 
   public ngAfterContentInit(): void {
     const matLinesRef = this._lines;
+    this.modelData = this._innerListItem;
     const ngAfterContentInitOriginal = this._innerListItem.ngAfterContentInit;
     // tslint:disable-next-line: space-before-function-paren
     this._innerListItem.ngAfterContentInit = function () {
@@ -110,8 +111,7 @@ export class OListItemComponent implements IListItem, AfterContentInit {
 
   public onCheckboxChange(e?: Event): void {
     if (this._list.selectable) {
-      const model = Util.isDefined(this.modelData) ? this.modelData : e['source']['_elementRef'];
-      this._list.setSelected(model);
+      this._list.setSelected(this.modelData);
     }
   }
 
