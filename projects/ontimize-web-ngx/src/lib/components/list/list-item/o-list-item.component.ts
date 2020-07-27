@@ -30,7 +30,7 @@ import { OListComponent } from '../o-list.component';
 })
 export class OListItemComponent implements IListItem, AfterContentInit {
 
-  public modelData: any;
+  modelData: any;
   protected _isSelected: boolean = false;
 
   @ContentChildren(MatLine)
@@ -60,7 +60,11 @@ export class OListItemComponent implements IListItem, AfterContentInit {
 
   public ngAfterContentInit(): void {
     const matLinesRef = this._lines;
-    this.modelData = this._innerListItem;
+
+    if(!Util.isDefined(this.modelData)) {
+      this.modelData = this._innerListItem;
+    }
+
     const ngAfterContentInitOriginal = this._innerListItem.ngAfterContentInit;
     // tslint:disable-next-line: space-before-function-paren
     this._innerListItem.ngAfterContentInit = function () {
