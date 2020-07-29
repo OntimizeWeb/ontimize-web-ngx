@@ -1,8 +1,10 @@
 import { AfterViewInit, Component, Injector, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
-import { ActivatedRouteSnapshot, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Router } from '@angular/router';
+import { BehaviorSubject, Subscription } from 'rxjs';
 
-import { NavigationService, ONavigationItem } from '../../services/navigation.service';
+import { NavigationService } from '../../services/navigation.service';
+import { OBreadcrumbService } from '../../services/o-breadcrumb.service';
+import { OBreadcrumb } from '../../types/o-breadcrumb-item.type';
 import { Codes } from '../../util/codes';
 import { Util } from '../../util/util';
 import { OFormComponent } from '../form/o-form.component';
@@ -32,86 +34,61 @@ export class OBreadcrumbComponent implements AfterViewInit, OnDestroy, OnInit {
 
   public labelColumns: string;
   public separator: string = ' ';
-  public breadcrumbs: Array<ONavigationItem>;
+  public breadcrumbs: BehaviorSubject<OBreadcrumb[]> = new BehaviorSubject([]);
 
   protected router: Router;
+  set form(value: OFormComponent) {
+    this._formRef = value;
+  }
   protected _formRef: OFormComponent;
   protected labelColsArray: Array<string> = [];
   protected navigationService: NavigationService;
-  protected onDataLoadedSubscription: Subscription;
-  protected navigationServiceSubscription: Subscription;
-
-  protected _displayTextloaded: boolean = false;
+  protected subscription: Subscription = new Subscription();
+  protected oBreadcrumService: OBreadcrumbService;
 
   constructor(
     protected injector: Injector
   ) {
     this.router = this.injector.get(Router);
-    this.navigationService = this.injector.get(NavigationService);
+    this.oBreadcrumService = this.injector.get(OBreadcrumbService);
   }
 
   ngOnInit() {
-    const self = this;
-
     this.labelColsArray = Util.parseArray(this.labelColumns);
 
-    if (this.navigationService && this.navigationService.navigationEvents$) {
-      this.navigationServiceSubscription = this.navigationService.navigationEvents$.subscribe(e => {
-        // setting loaded to false if the breadcrumb is inside a form (and later it will find its displayText)
-        self.displayTextloaded = !(self._formRef && self.labelColsArray.length);
-        self.breadcrumbs = e;
-      });
-    }
+    this.subscription.add(
+      this.oBreadcrumService.breadcrumbs$.subscribe(bs => this.breadcrumbs.next(bs))
+    );
   }
 
   ngAfterViewInit() {
     if (this._formRef && this.labelColsArray.length) {
       const self = this;
-      this.onDataLoadedSubscription = this._formRef.onDataLoaded.subscribe((value: any) => {
-        if (self.breadcrumbs.length) {
+      this.subscription.add(this._formRef.onDataLoaded.subscribe((value: any) => {
+        if (self.breadcrumbs.value.length) {
           const displayText = self.labelColsArray.map(element => value[element]).join(self.separator);
-          self.breadcrumbs[self.breadcrumbs.length - 1].displayText = displayText;
-          self.displayTextloaded = true;
+          self.breadcrumbs.value[self.breadcrumbs.value.length - 1].displayText = displayText;
         }
-      });
+      }));
     }
-  }
-
-  showBreadcrumbItem(item: ONavigationItem): boolean {
-    return this.displayTextloaded && item.terminal;
-  }
-
-  isNotInsideFormLayoutManager(item: ONavigationItem, index: number): boolean {
-    const previousItem: ONavigationItem = this.breadcrumbs[index - 1];
-    return (previousItem && previousItem.isMainFormLayoutManagerComponent());
-  }
-
-  protected isTerminal(route: ActivatedRouteSnapshot) {
-    return route.firstChild === null || route.firstChild.routeConfig === null;
   }
 
   ngOnDestroy() {
-    if (this.onDataLoadedSubscription) {
-      this.onDataLoadedSubscription.unsubscribe();
-    }
-    if (this.navigationServiceSubscription) {
-      this.navigationServiceSubscription.unsubscribe();
+    if (this.subscription) {
+      this.subscription.unsubscribe();
     }
   }
 
-  onRouteClick(route) {
+  isCurrentRoute(route: OBreadcrumb): boolean {
+    return route.route === this.router.routerState.snapshot.url.split('?')[0];
+  }
+
+  onRouteClick(route: OBreadcrumb) {
     const extras = {};
     if (route.queryParams) {
       extras[Codes.QUERY_PARAMS] = route.queryParams;
     }
-    this.router.navigate([route.url], extras);
+    this.router.navigate([route.route], extras);
   }
 
-  get displayTextloaded(): boolean {
-    return this._displayTextloaded;
-  }
-
-  set displayTextloaded(arg: boolean) {
-    this._displayTextloaded = arg;
-  }
 }

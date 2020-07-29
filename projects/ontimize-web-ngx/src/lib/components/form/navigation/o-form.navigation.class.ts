@@ -252,8 +252,11 @@ export class OFormNavigationClass {
   }
 
   navigateBack() {
-    if (!this.formLayoutManager && this.navigationService) {
-      const navData: ONavigationItem = this.navigationService.getPreviousRouteData();
+    if (this.formLayoutManager) {
+      this.formLayoutManager.closeDetail(this.id);
+    } else if (this.navigationService) {
+      this.navigationService.removeLastItem();
+      const navData: ONavigationItem = this.navigationService.getLastItem();
       if (navData) {
         const extras = {};
         extras[Codes.QUERY_PARAMS] = navData.queryParams;
@@ -267,7 +270,11 @@ export class OFormNavigationClass {
       this.formLayoutManager.closeDetail(this.id);
     } else if (this.navigationService) {
       this.form.beforeCloseDetail.emit();
-      this.navigationService.removeLastItemsUntilMain();
+      // `removeLastItemsUntilMain` may not remove all necessary items so current route will be checked below
+      if (!this.navigationService.removeLastItemsUntilMain()) {
+        // `removeLastItemsUntilMain` didn't find the main navigation item
+        this.navigationService.removeLastItem();
+      }
       let navData: ONavigationItem = this.navigationService.getLastItem();
       if (navData) {
         // if navData route is the same as the current route, remove last item
@@ -301,14 +308,17 @@ export class OFormNavigationClass {
       });
       this.form.queryData(insertedKeys);
     } else if (this.navigationService && this.form.keysArray && insertedKeys) {
-      const params: any[] = [];
+      // Remove 'new' navigation item from history
+      this.navigationService.removeLastItem();
+
+      let params: any[] = [];
       this.form.keysArray.forEach((current, index) => {
         if (insertedKeys[current]) {
           params.push(insertedKeys[current]);
         }
       });
-      const extras: NavigationExtras = {};
-      const qParams: any = Object.assign({}, this.getQueryParams(), Codes.getIsDetailObject());
+      let extras: NavigationExtras = {};
+      let qParams: any = Object.assign({}, this.getQueryParams(), Codes.getIsDetailObject());
       extras[Codes.QUERY_PARAMS] = qParams;
       let route = [];
       const navData: ONavigationItem = this.navigationService.getLastMainNavigationRouteData();
