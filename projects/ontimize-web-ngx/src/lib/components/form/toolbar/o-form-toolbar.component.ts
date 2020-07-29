@@ -254,8 +254,10 @@ export class OFormToolbarComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public cancelOperation(): void {
-    if (this.isDetail || this.insertMode) {
+    if (this.isDetail) {
       this.onCloseDetail();
+    } else if (this.insertMode) {
+      this.onBack();
     } else {
       this.onReload();
       this._form.setInitialMode();

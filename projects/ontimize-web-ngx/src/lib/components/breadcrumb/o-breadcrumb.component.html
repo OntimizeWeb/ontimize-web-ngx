@@ -1,13 +1,13 @@
 <mat-toolbar class="toolbar-breadcrumb">
-  <ng-template ngFor let-route let-i="index" [ngForOf]="breadcrumbs">
-    <ng-container *ngIf="!isNotInsideFormLayoutManager(route, i)">
-      <a *ngIf="!route.terminal" class="breadcrumb-item" (click)="onRouteClick(route)" layout-padding>
-        {{ route.displayText ? route.displayText : route.text | uppercase | oTranslate }}
+  <ng-container *ngFor="let route of breadcrumbs | async; index as i; last as isLast">
+    <span *ngIf="isCurrentRoute(route); else bredcrumItem" class="breadcrumb-item active" layout-padding>
+      {{ route.displayText ? route.displayText : route.label | uppercase | oTranslate }}
+    </span>
+    <ng-template #bredcrumItem>
+      <a (click)="onRouteClick(route)" class="breadcrumb-item" layout-padding>
+        {{ route.displayText ? route.displayText : route.label | uppercase | oTranslate }}
       </a>
-      <span *ngIf="showBreadcrumbItem(route)" class="breadcrumb-item active" layout-padding>
-        {{ route.displayText ? route.displayText : route.text | uppercase | oTranslate }}
-      </span>
-      <mat-icon *ngIf="!route.terminal" svgIcon="ontimize:keyboard_arrow_right"></mat-icon>
-    </ng-container>
-  </ng-template>
+    </ng-template>
+    <mat-icon *ngIf="!isLast" svgIcon="ontimize:keyboard_arrow_right"></mat-icon>
+  </ng-container>
 </mat-toolbar>
