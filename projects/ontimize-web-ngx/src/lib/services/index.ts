@@ -12,6 +12,7 @@ export * from './login.service';
 export * from './moment.service';
 export * from './navigation.service';
 export * from './number.service';
+export * from './o-breadcrumb.service';
 export * from './o-form-layout-manager.service';
 export * from './o-modules-info.service';
 export * from './o-user-info.service';

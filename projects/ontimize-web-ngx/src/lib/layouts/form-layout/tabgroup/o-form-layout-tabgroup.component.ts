@@ -156,7 +156,7 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutTabGroup, AfterV
   addTab(compData: FormLayoutDetailComponentData) {
     let addNewComp = true;
     const navData: ONavigationItem = this.formLayoutManager.navigationService.getLastItem();
-    if (navData.isInsertFormRoute()) {
+    if (navData && navData.isInsertFormRoute()) {
       const existingData = this.data.find(item => item.insertionMode);
       addNewComp = !existingData;
     }

@@ -10,6 +10,7 @@ export * from './form-layout-detail-component-data.type';
 export * from './form-value-options.type';
 export * from './http-request-options.type';
 export * from './menu-root-item.type';
+export * from './o-breadcrumb-item.type';
 export * from './o-column-aggregate.type';
 export * from './o-column-tooltip.type';
 export * from './o-column-value-filter.type';
