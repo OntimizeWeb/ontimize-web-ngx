@@ -12,7 +12,7 @@ import {
   QueryList,
   Renderer2,
   ViewChild,
-  ViewEncapsulation,
+  ViewEncapsulation
 } from '@angular/core';
 import { MatLine, MatListAvatarCssMatStyler, MatListItem } from '@angular/material';
 
@@ -65,10 +65,6 @@ export class OListItemComponent implements OnInit, IListItem, AfterContentInit {
 
   public ngAfterContentInit(): void {
     const matLinesRef = this._lines;
-
-    if (!Util.isDefined(this.modelData)) {
-      this.modelData = this._innerListItem;
-    }
 
     const ngAfterContentInitOriginal = this._innerListItem.ngAfterContentInit;
     // tslint:disable-next-line: space-before-function-paren
