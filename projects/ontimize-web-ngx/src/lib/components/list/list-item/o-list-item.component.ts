@@ -31,7 +31,7 @@ import { OListComponent } from '../o-list.component';
 })
 export class OListItemComponent implements OnInit, IListItem, AfterContentInit {
 
-  modelData: any;
+  public modelData: any;
   protected _isSelected: boolean = false;
 
   @ContentChildren(MatLine)
