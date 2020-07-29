@@ -1,5 +1,5 @@
 <div class="quickFilter" fxLayout="row">
-  <mat-form-field floatLabel="never">
+  <mat-form-field floatLabel="never" appearance="standard">
     <input matInput #filter placeholder="{{ 'TABLE.FILTER' | oTranslate}}" [formControl]="formControl" (click)="$event.stopPropagation()">
     <span class="icon-btn search-icon" matPrefix fxFlexLayout="flex-end" (menuClosed)="onMenuClosed()"
       [matMenuTriggerFor]="menu" (click)="$event.stopPropagation()">
