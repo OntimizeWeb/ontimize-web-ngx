@@ -7,11 +7,12 @@ import {
   forwardRef,
   Inject,
   Injector,
+  OnInit,
   Optional,
   QueryList,
   Renderer2,
   ViewChild,
-  ViewEncapsulation
+  ViewEncapsulation,
 } from '@angular/core';
 import { MatLine, MatListAvatarCssMatStyler, MatListItem } from '@angular/material';
 
@@ -28,7 +29,7 @@ import { OListComponent } from '../o-list.component';
     '[class.o-list-item]': 'true'
   }
 })
-export class OListItemComponent implements IListItem, AfterContentInit {
+export class OListItemComponent implements OnInit, IListItem, AfterContentInit {
 
   modelData: any;
   protected _isSelected: boolean = false;
@@ -58,10 +59,14 @@ export class OListItemComponent implements IListItem, AfterContentInit {
     @Optional() @Inject(forwardRef(() => OListComponent)) public _list: OListComponent
   ) { }
 
+  public ngOnInit() {
+    this._list.registerItem(this);
+  }
+
   public ngAfterContentInit(): void {
     const matLinesRef = this._lines;
 
-    if(!Util.isDefined(this.modelData)) {
+    if (!Util.isDefined(this.modelData)) {
       this.modelData = this._innerListItem;
     }
 
