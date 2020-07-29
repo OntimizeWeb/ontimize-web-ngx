@@ -1,12 +1,14 @@
 import { Location } from '@angular/common';
 import { EventEmitter, Injectable, Injector } from '@angular/core';
-import { ActivatedRoute, ActivatedRouteSnapshot, NavigationEnd, Router, UrlSegment } from '@angular/router';
-import { Observable, ReplaySubject } from 'rxjs';
+import { ActivatedRouteSnapshot, NavigationEnd, Router, UrlSegment } from '@angular/router';
+import { ReplaySubject } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 
+import { OBreadcrumb } from '../types/o-breadcrumb-item.interface';
 import { ObservableWrapper } from '../util/async';
 import { Codes, Util } from '../utils';
 import { ILocalStorageComponent, LocalStorageService } from './local-storage.service';
+import { OBreadcrumbService } from './o-breadcrumb.service';
 
 export type ONavigationRoutes = {
   mainFormLayoutManagerComponent?: boolean;
@@ -21,7 +23,6 @@ export class ONavigationItem {
   queryParams: Object;
   text: string;
   displayText: string;
-  terminal: boolean;
   activeFormMode: string;
   formRoutes: ONavigationRoutes;
   formLayoutRoutes: ONavigationRoutes;
@@ -120,11 +121,11 @@ export class NavigationService implements ILocalStorageComponent {
 
   protected router: Router;
 
+  protected oBreadcrumbService: OBreadcrumbService;
   protected localStorageService: LocalStorageService;
   protected location: Location;
 
-  private navigationEventsSource: ReplaySubject<Array<ONavigationItem>> = new ReplaySubject<Array<ONavigationItem>>(1);
-  public navigationEvents$: Observable<Array<ONavigationItem>> = this.navigationEventsSource.asObservable();
+  public navigationEvents$: ReplaySubject<Array<ONavigationItem>> = new ReplaySubject<Array<ONavigationItem>>(1);
 
   private _titleEmitter: EventEmitter<any> = new EventEmitter();
   private _visibleEmitter: EventEmitter<boolean> = new EventEmitter<boolean>();
@@ -134,6 +135,7 @@ export class NavigationService implements ILocalStorageComponent {
     protected injector: Injector
   ) {
     this.router = this.injector.get(Router);
+    this.oBreadcrumbService = this.injector.get(OBreadcrumbService);
     this.localStorageService = this.injector.get(LocalStorageService);
     this.location = this.injector.get(Location);
     this.location.subscribe(val => {
@@ -154,94 +156,67 @@ export class NavigationService implements ILocalStorageComponent {
   }
 
   initialize(): void {
-    const self = this;
-    const navEndEvents = this.router.events.pipe(filter(event => event instanceof NavigationEnd));
-    navEndEvents
-      .pipe(map(() => this.router.routerState.root))
-      .pipe(map(route => {
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd),
+      map(() => this.router.routerState.root),
+      map(route => {
         while (route.firstChild) {
           route = route.firstChild;
         }
         return route;
-      }))
-      .pipe(filter(route => route.outlet === 'primary'))
-      .subscribe(self.parseNavigationItems.bind(self));
+      }),
+      filter(route => route.outlet === 'primary')
+    ).subscribe(this.parseNavigationItems.bind(this));
   }
 
-  protected parseNavigationItems(activatedRoute: ActivatedRoute) {
+  protected buildBreadcrumbsForRoute(activatedRoute: ActivatedRouteSnapshot) {
+    const breadcrumbs: OBreadcrumb[] = [];
+    let url = '';
+    let route = activatedRoute.firstChild;
+    while (route.firstChild) {
+      if (route.url.length) {
+        const parsedRoute = this.parseRoute(url, route);
+        breadcrumbs.push(parsedRoute);
+        url = parsedRoute.route;
+      }
+      route = route.firstChild;
+    }
+    const parsedRoute = this.parseRoute(url, route);
+    breadcrumbs.push(parsedRoute);
+
+    this.oBreadcrumbService.breadcrumbs$.next(breadcrumbs);
+  }
+
+  protected parseRoute(route: string, activatedRoute: ActivatedRouteSnapshot): OBreadcrumb {
+    let label = '';
+    for (let i = 0, len = activatedRoute.url.length; i < len; i++) {
+      const segment: UrlSegment = activatedRoute.url[i];
+      if (label.length === 0) {
+        label = label.length > 0 ? ('/' + segment.path) : segment.path;
+        route += '/' + segment.path;
+      }
+    }
+    return { route, label, queryParams: activatedRoute.queryParams };
+  }
+
+  protected parseNavigationItems() {
     let storedNavigation: ONavigationItem[] = this.getStoredData();
     let route: ActivatedRouteSnapshot = this.router.routerState.root.snapshot;
-    let url = '';
-    let navigationItems: Array<ONavigationItem> = [];
-    while (Util.isDefined(route.firstChild)) {
-      route = route.firstChild;
-      if (!route || !route.url || route.routeConfig === null || !route.routeConfig.path) {
-        continue;
-      }
-      const lastNavData: ONavigationItem = navigationItems[navigationItems.length - 1];
-      const parsedRoute: any = this.parseRoute(url, route.url, lastNavData);
-      url = parsedRoute.url;
-      if (storedNavigation.length > 1 && parsedRoute.routeArr.length > 0) {
-        const lastStored: any = storedNavigation[storedNavigation.length - 1];
-        if (lastStored.url === url) {
-          const newItem = new ONavigationItem(lastStored);
-          const newItemActivePath = newItem.getActiveModePath();
-          if (!newItemActivePath || parsedRoute.routeArr.length > newItemActivePath.split('/').length) {
-            navigationItems.push(newItem);
-            const parsed: any = this.parseRoute(url, parsedRoute.routeArr, newItem);
-            url = parsed.url;
-            parsedRoute.text = parsed.text;
-          }
-        }
-      }
-      let formRoutes = undefined;
-      if (lastNavData && lastNavData.formLayoutRoutes) {
-        formRoutes = Object.assign({}, lastNavData.formLayoutRoutes);
-      }
-      const navigationItem = new ONavigationItem({
-        url: url,
-        queryParams: route.queryParams,
-        text: parsedRoute.text,
-        formRoutes: formRoutes,
-        activeFormMode: formRoutes ? (lastNavData && lastNavData.activeFormMode) : undefined
-      });
-      navigationItem.findAndMergeNavigationItem(storedNavigation);
-      navigationItems.push(navigationItem);
+    let url = this.router.routerState.snapshot.url.split('?')[0];
+    this.buildBreadcrumbsForRoute(route);
+    const lastStored: any = storedNavigation[storedNavigation.length - 1];
+    if (!lastStored || lastStored.url !== url) {
+      const navigationItem = new ONavigationItem({ url, queryParams: route.queryParams });
+
+      this.navigationItems.push(navigationItem);
+      this.setNavigationItems(this.navigationItems);
     }
-    if (navigationItems.length > 1) {
-      navigationItems[navigationItems.length - 1].terminal = true;
-    }
-    const mergedNavigation = this.mergeNavigationItems(navigationItems, storedNavigation);
-    this.setNavigationItems(navigationItems, mergedNavigation);
   }
 
-  protected parseRoute(url: string, routeSegments: UrlSegment[], navData: ONavigationItem): any {
-    let text = '';
-    let modePathArr = [];
-    let routeArr = [];
-    for (let i = 0, len = routeSegments.length; i < len; i++) {
-      const s: UrlSegment = routeSegments[i];
-      const notModePath: boolean = modePathArr.indexOf(s.path) === -1;
-      if (notModePath && text.length === 0) {
-        text = text.length > 0 ? ('/' + s.path) : s.path;
-        url += url.length > 0 ? ('/' + s.path) : s.path;
-      } else if (notModePath) {
-        url += url.length > 0 ? ('/' + s.path) : s.path;
-      } else {
-        routeArr.push(s);
-      }
-    }
-    return {
-      url: url,
-      text: text,
-      routeArr: routeArr
-    };
-  }
-
-  public setNavigationItems(navigationItems: ONavigationItem[], mergedNavigationItems: ONavigationItem[]) {
-    this.navigationItems = mergedNavigationItems;
+  public setNavigationItems(navigationItems: ONavigationItem[]) {
+    this.navigationItems = navigationItems;
     this.storeNavigation();
-    this.navigationEventsSource.next(navigationItems);
+    this.navigationEvents$.next(navigationItems);
   }
 
   public getDataToStore(): Object {
@@ -277,8 +252,8 @@ export class NavigationService implements ILocalStorageComponent {
   }
 
   /**
- * Subscribe to title updates
- */
+   * Subscribe to title updates
+   */
   public onTitleChange(onNext: (value: any) => void): Object {
     return ObservableWrapper.subscribe(this._titleEmitter, onNext);
   }
@@ -357,7 +332,7 @@ export class NavigationService implements ILocalStorageComponent {
         }
 
         // Compare current route with item route and count segment matches
-        const arr1 = item.url.split('/');
+        const arr1 = item.url.substr(1).split('/');
         const arr2 = currentLocation.split('/');
         let result = 0;
         let index = -1;
@@ -387,18 +362,19 @@ export class NavigationService implements ILocalStorageComponent {
   }
 
   removeLastItemsUntilMain() {
-    const index = this.navigationItems.indexOf(this.getLastMainNavigationRouteData());
+    const lastMain = this.getLastMainNavigationRouteData();
+    if (!Util.isDefined(lastMain)) {
+      return false;
+    }
+    const index = this.navigationItems.indexOf(lastMain);
     this.navigationItems = this.navigationItems.slice(0, index + 1);
     this.storeNavigation();
+    return true;
   }
 
   isCurrentRoute(route: string): boolean {
     let currentRoute = this.router.routerState.snapshot.url;
-    if (currentRoute.startsWith('/')) {
-      currentRoute = currentRoute.substr(1);
-    }
     currentRoute = currentRoute.split('?')[0];
-
     return route === currentRoute;
   }
 

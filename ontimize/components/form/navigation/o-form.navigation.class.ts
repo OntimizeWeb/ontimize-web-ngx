@@ -3,10 +3,7 @@ import { ActivatedRoute, NavigationExtras, Router, UrlSegmentGroup } from '@angu
 import { combineLatest, Observable, Subscription } from 'rxjs';
 
 import { OFormLayoutDialogComponent } from '../../../layouts/form-layout/dialog/o-form-layout-dialog.component';
-import {
-  IDetailComponentData,
-  OFormLayoutManagerComponent,
-} from '../../../layouts/form-layout/o-form-layout-manager.component';
+import { IDetailComponentData, OFormLayoutManagerComponent } from '../../../layouts/form-layout/o-form-layout-manager.component';
 import { DialogService, NavigationService, ONavigationItem } from '../../../services';
 import { Codes, SQLTypes, Util } from '../../../utils';
 import { OFormComponent } from '../o-form.component';
@@ -254,8 +251,11 @@ export class OFormNavigationClass {
   }
 
   navigateBack() {
-    if (!this.formLayoutManager && this.navigationService) {
-      const navData: ONavigationItem = this.navigationService.getPreviousRouteData();
+    if (this.formLayoutManager) {
+      this.formLayoutManager.closeDetail(this.id);
+    } else if (this.navigationService) {
+      this.navigationService.removeLastItem();
+      const navData: ONavigationItem = this.navigationService.getLastItem();
       if (navData) {
         let extras = {};
         extras[Codes.QUERY_PARAMS] = navData.queryParams;
@@ -269,7 +269,11 @@ export class OFormNavigationClass {
       this.formLayoutManager.closeDetail(this.id);
     } else if (this.navigationService) {
       this.form.beforeCloseDetail.emit();
-      this.navigationService.removeLastItemsUntilMain();
+      // `removeLastItemsUntilMain` may not remove all necessary items so current route will be checked below
+      if (!this.navigationService.removeLastItemsUntilMain()) {
+        // `removeLastItemsUntilMain` didn't find the main navigation item
+        this.navigationService.removeLastItem();
+      }
       let navData: ONavigationItem = this.navigationService.getLastItem();
       if (navData) {
         // if navData route is the same as the current route, remove last item
@@ -289,7 +293,23 @@ export class OFormNavigationClass {
   }
 
   stayInRecordAfterInsert(insertedKeys: Object) {
-    if (this.navigationService && this.form.keysArray && insertedKeys) {
+    if (this.formLayoutManager) {
+      this.form.setInitialMode();
+      const self = this;
+      const subscription = this.form.onDataLoaded.subscribe(() => {
+        const keys = self.form.getKeysValues();
+        self.formLayoutManager.updateActiveData({ params: keys });
+        const cacheData: IDetailComponentData = self.formLayoutManager.getFormCacheData(self.id);
+        if (Util.isDefined(cacheData)) {
+          self.urlParams = cacheData.params;
+        }
+        subscription.unsubscribe();
+      });
+      this.form.queryData(insertedKeys);
+    } else if (this.navigationService && this.form.keysArray && insertedKeys) {
+      // Remove 'new' navigation item from history
+      this.navigationService.removeLastItem();
+
       let params: any[] = [];
       this.form.keysArray.forEach((current, index) => {
         if (insertedKeys[current]) {
@@ -320,19 +340,6 @@ export class OFormNavigationClass {
         route = ['../', ...params];
       }
       this.router.navigate(route, extras);
-    } else if (this.formLayoutManager) {
-      this.form.setInitialMode();
-      const self = this;
-      const subscription = this.form.onDataLoaded.subscribe(() => {
-        const keys = self.form.getKeysValues();
-        self.formLayoutManager.updateActiveData({ params: keys });
-        const cacheData: IDetailComponentData = self.formLayoutManager.getFormCacheData(self.id);
-        if (Util.isDefined(cacheData)) {
-          self.urlParams = cacheData.params;
-        }
-        subscription.unsubscribe();
-      });
-      this.form.queryData(insertedKeys);
     }
   }
 
