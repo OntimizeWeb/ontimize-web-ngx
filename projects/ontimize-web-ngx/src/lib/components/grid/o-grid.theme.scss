@@ -7,6 +7,9 @@
   $foreground: map-get($theme, foreground);
 
   .o-grid {
+    .mat-toolbar {
+      background: transparent;
+    }
     .o-grid-container {
       .o-loading-blocker .o-spinner-container {
         background-color: mat-color($background, background);

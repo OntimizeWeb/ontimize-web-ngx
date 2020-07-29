@@ -7,6 +7,7 @@ import {
   forwardRef,
   Inject,
   Injector,
+  OnInit,
   Optional,
   QueryList,
   Renderer2,
@@ -28,7 +29,7 @@ import { OListComponent } from '../o-list.component';
     '[class.o-list-item]': 'true'
   }
 })
-export class OListItemComponent implements IListItem, AfterContentInit {
+export class OListItemComponent implements OnInit, IListItem, AfterContentInit {
 
   public modelData: any;
   protected _isSelected: boolean = false;
@@ -58,8 +59,13 @@ export class OListItemComponent implements IListItem, AfterContentInit {
     @Optional() @Inject(forwardRef(() => OListComponent)) public _list: OListComponent
   ) { }
 
+  public ngOnInit() {
+    this._list.registerItem(this);
+  }
+
   public ngAfterContentInit(): void {
     const matLinesRef = this._lines;
+
     const ngAfterContentInitOriginal = this._innerListItem.ngAfterContentInit;
     // tslint:disable-next-line: space-before-function-paren
     this._innerListItem.ngAfterContentInit = function () {

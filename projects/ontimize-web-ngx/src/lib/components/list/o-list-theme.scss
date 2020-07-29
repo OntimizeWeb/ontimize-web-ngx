@@ -5,6 +5,10 @@
 
   .o-list-container {
 
+    .mat-toolbar {
+      background: transparent;
+    }
+
     .primary-text {
       color: mat-color($foreground, text);
     }
