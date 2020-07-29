@@ -1632,6 +1632,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
               data = res.data;
             }
             this.daoTable.setAsynchronousColumn(data, rowData);
+            this.cd.detectChanges();
           }
         });
     }
