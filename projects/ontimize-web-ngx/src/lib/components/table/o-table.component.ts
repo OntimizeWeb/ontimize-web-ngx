@@ -1033,6 +1033,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       this.reloadData();
     } else {
       this.loadingSortingSubject.next(true);
+      this.cd.detectChanges();
     }
   }
 
@@ -1046,6 +1047,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       this.onRenderedDataChange = this.dataSource.onRenderedDataChange.subscribe(() => {
         setTimeout(() => {
           this.loadingSortingSubject.next(false);
+          this.cd.detectChanges();
         }, 500);
       });
     }
@@ -1178,6 +1180,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   projectContentChanged() {
     setTimeout(() => {
       this.loadingSortingSubject.next(false);
+      this.cd.detectChanges();
     }, 500);
     this.loadingScrollSubject.next(false);
 
