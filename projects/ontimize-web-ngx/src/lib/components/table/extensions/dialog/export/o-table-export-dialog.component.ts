@@ -5,9 +5,9 @@ import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
 import { IExportService } from '../../../../../interfaces/export-service.interface';
-import { DialogService } from '../../../../../services/dialog.service';
 import { OntimizeExportServiceProvider } from '../../../../../services/factories';
 import { OntimizeExportService } from '../../../../../services/ontimize/ontimize-export.service';
+import { SnackBarService } from '../../../../../services/snackbar.service';
 import { OTranslateService } from '../../../../../services/translate/o-translate.service';
 import { Codes } from '../../../../../util/codes';
 import { SQLTypes } from '../../../../../util/sqltypes';
@@ -30,7 +30,7 @@ import { OTableExportConfiguration } from '../../header/table-menu/o-table-expor
 })
 export class OTableExportDialogComponent implements OnInit, OnDestroy {
 
-  protected dialogService: DialogService;
+  protected snackBarService: SnackBarService;
   protected exportService: IExportService;
   protected translateService: OTranslateService;
   protected oTableExportButtonService: OTableExportButtonService;
@@ -42,7 +42,7 @@ export class OTableExportDialogComponent implements OnInit, OnDestroy {
     protected injector: Injector,
     @Inject(MAT_DIALOG_DATA) public config: OTableExportConfiguration
   ) {
-    this.dialogService = injector.get(DialogService);
+    this.snackBarService = injector.get(SnackBarService);
     this.translateService = this.injector.get(OTranslateService);
     this.oTableExportButtonService = this.injector.get(OTableExportButtonService);
 
@@ -87,13 +87,17 @@ export class OTableExportDialogComponent implements OnInit, OnDestroy {
       sqlTypes: this.config.sqlTypes,
       filter: this.config.filter
     };
-    const self = this;
+
     this.proccessExportData(exportData.data, exportData.sqlTypes);
-    this.exportService.exportData(exportData, exportType, this.config.entity)
-      .subscribe(
-        res => self.dialogRef.close(true),
-        err => self.handleError(err)
-      );
+    this.dialogRef.close(true);
+    this.exportService.exportData(exportData, exportType, this.config.entity).subscribe(
+      res => {
+        this.snackBarService.open('MESSAGES.SUCCESS_EXPORT_TABLE_DATA', { icon: 'check_circle' });
+      },
+      err => {
+        this.handleError(err);
+      }
+    );
   }
 
   proccessExportData(data: object[], sqlTypes: object): void {
@@ -116,13 +120,10 @@ export class OTableExportDialogComponent implements OnInit, OnDestroy {
   }
 
   protected handleError(err): void {
-    console.error(err);
-    const self = this;
     if (err instanceof HttpErrorResponse) {
-      this.dialogService.alert('ERROR', err.message).then(() => self.dialogRef.close(false));
+      this.snackBarService.open(err.message, { icon: 'error' });
     } else {
-      this.dialogService.alert('ERROR', 'MESSAGES.ERROR_EXPORT_TABLE_DATA').then(() => self.dialogRef.close(false));
+      this.snackBarService.open('MESSAGES.ERROR_EXPORT_TABLE_DATA', { icon: 'error' });
     }
   }
-
 }

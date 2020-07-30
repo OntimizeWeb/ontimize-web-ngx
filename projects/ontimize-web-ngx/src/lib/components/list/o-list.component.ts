@@ -87,8 +87,7 @@ export const DEFAULT_OUTPUTS_O_LIST = [
 })
 export class OListComponent extends OServiceComponent implements IList, AfterContentInit, AfterViewInit, OnDestroy, OnInit, OnChanges {
 
-  @ContentChildren('o-list-item')
-  public listItemComponents: QueryList<IListItem>;
+  public listItemComponents: IListItem[];
 
   @ContentChildren(OListItemDirective)
   public listItemDirectives: QueryList<OListItemDirective>;
@@ -149,8 +148,6 @@ export class OListComponent extends OServiceComponent implements IList, AfterCon
   }
 
   public ngAfterContentInit(): void {
-    this.setListItemsData();
-    this.listItemComponents.changes.subscribe(() => this.setListItemsData());
     this.setListItemDirectivesData();
     this.listItemDirectives.changes.subscribe(() => this.setListItemDirectivesData());
   }
@@ -373,16 +370,18 @@ export class OListComponent extends OServiceComponent implements IList, AfterCon
     return queryArguments;
   }
 
-  protected setListItemsData(): void {
-    this.listItemComponents.forEach((element: IListItem, index) => element.setItemData(this.dataResponseArray[index]));
+  registerItem(item: IListItem): void {
+    this.listItemComponents.push(item);
+    if (this.dataResponseArray.length > 0) {
+      item.setItemData(this.dataResponseArray[this.listItemComponents.length - 1]);
+    }
   }
 
   protected setListItemDirectivesData(): void {
-    const self = this;
     this.listItemDirectives.forEach((element: OListItemDirective, index) => {
-      element.setItemData(self.dataResponseArray[index]);
-      element.setListComponent(self);
-      self.registerListItemDirective(element);
+      element.setItemData(this.dataResponseArray[index]);
+      element.setListComponent(this);
+      this.registerListItemDirective(element);
     });
   }
 
@@ -400,9 +399,7 @@ export class OListComponent extends OServiceComponent implements IList, AfterCon
 
       const selectedIndexes = this.state.selectedIndexes || [];
       for (const selIndex of selectedIndexes) {
-        // for (let i = 0; i < selectedIndexes.length; i++) {
         if (selIndex < this.dataResponseArray.length) {
-          // this.selectedItems.push(this.dataResponseArray[selIndex]);
           this.selection.select(this.dataResponseArray[selIndex]);
         }
       }
