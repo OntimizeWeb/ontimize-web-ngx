@@ -87,7 +87,7 @@ export const DEFAULT_OUTPUTS_O_LIST = [
 })
 export class OListComponent extends OServiceComponent implements IList, AfterContentInit, AfterViewInit, OnDestroy, OnInit, OnChanges {
 
-  public listItemComponents: IListItem[];
+  public listItemComponents: IListItem[] = [];
 
   @ContentChildren(OListItemDirective)
   public listItemDirectives: QueryList<OListItemDirective>;
