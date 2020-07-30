@@ -1,6 +1,7 @@
 ## 8.0.0-rc.1
 ### Features
 * **o-date-input**: new attribute `date-class` ([039da18](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/039da18))
+* **o-form-container**: new attribute `form` ([5cba909](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5cba909))
 
 ### Bug Fixes
 * **base-service.class**: fixing bug in delete method headers ([d4065cdd](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d4065cdd)) ([#361](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/361))
