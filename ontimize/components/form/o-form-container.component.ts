@@ -11,7 +11,8 @@ export const DEFAULT_INPUTS_O_FORM_CONTAINER = [
   // breadcrumb [boolean]: show breadscrum of the form. Default: no.
   'breadcrumb',
   'breadcrumbSeparator : breadcrumb-separator',
-  'breadcrumbLabelColumns : breadcrumb-label-columns'
+  'breadcrumbLabelColumns : breadcrumb-label-columns',
+  'form'
 ];
 
 @Component({

@@ -12,6 +12,7 @@
 * Now the application language is stored in the browser and loaded on application startup ([e9b9535](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e9b9535))
 * We have developed a new mechanism for overriding/extending servicies. From now on, you can use one of the following Injection Tokens for indicating the service class you want to use in your application for the different services: `O_DATA_SERVICE`, `O_TRANSLATE_SERVICE`, `O_FILE_SERVICE`, `O_EXPORT_SERVICE`, `O_PERMISSION_SERVICE` ([ade651e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ade651e))
   * Attributes `serviceType`, `exportServiceType`, `permissionsServiceType` from application configuration will be deprecated and removed in future versions.
+* **o-form-container**: new attribute `form` ([5cba909](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5cba909))
 
 ### Bug Fixes
 * **o-time-input**: Fix bad behaviour when there is more than one component in the same form ([fc1dd47](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/fc1dd47))
