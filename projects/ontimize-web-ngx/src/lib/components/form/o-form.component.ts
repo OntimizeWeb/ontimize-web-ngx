@@ -107,7 +107,7 @@ export const DEFAULT_INPUTS_O_FORM = [
   // layout-direction [string][column|row]: Default: column
   'layoutDirection: layout-direction',
 
-  // fxLayoutAlign value
+  // fxLayoutAlign value. Default: 'start start'
   'layoutAlign: layout-align',
 
   // editable-detail [string][yes|no|true|false]: Default: true;
@@ -195,7 +195,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   protected updateMethod: string = Codes.UPDATE_METHOD;
   protected deleteMethod: string = Codes.DELETE_METHOD;
   protected _layoutDirection: string = OFormComponent.DEFAULT_LAYOUT_DIRECTION;
-  protected _layoutAlign: string;
+  protected _layoutAlign: string = 'start start';
   @InputConverter()
   protected editableDetail: boolean = true;
   protected keysSqlTypes: string;
