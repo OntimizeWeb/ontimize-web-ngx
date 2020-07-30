@@ -1182,8 +1182,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     this.loadingScrollSubject.next(false);
 
     if (this.previousRendererData !== this.dataSource.renderedData) {
-      ObservableWrapper.callEmit(this.onContentChange, this.dataSource.renderedData);
       this.previousRendererData = this.dataSource.renderedData;
+      ObservableWrapper.callEmit(this.onContentChange, this.dataSource.renderedData);
     }
 
     this.getColumnsWidthFromDOM();
