@@ -172,7 +172,7 @@ export class OColumn {
     return value ? value : undefined;
   }
 
-  getRenderWidth() {
+  getRenderWidth(horizontalScrolled?: boolean) {
     if (Util.isDefined(this.width)) {
       return this.width;
     }
@@ -187,7 +187,8 @@ export class OColumn {
         this.DOMWidth = maxValue;
       }
     }
-    return Util.isDefined(this.DOMWidth) ? (this.DOMWidth + 'px') : undefined;
+    const defaultWidth = (horizontalScrolled) ? undefined : 'auto';
+    return Util.isDefined(this.DOMWidth) ? (this.DOMWidth + 'px') : defaultWidth;
   }
 
   set width(val: string) {

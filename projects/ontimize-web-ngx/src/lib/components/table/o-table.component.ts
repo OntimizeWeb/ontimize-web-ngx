@@ -60,7 +60,9 @@ import { OTableColumnCalculatedComponent } from './column/calculated/o-table-col
 import { OColumn } from './column/o-column.class';
 import { OTableColumnComponent } from './column/o-table-column.component';
 import { DefaultOTableOptions } from './extensions/default-o-table-options.class';
-import { OTableFilterByColumnDataDialogComponent } from './extensions/dialog/filter-by-column/o-table-filter-by-column-data-dialog.component';
+import {
+  OTableFilterByColumnDataDialogComponent
+} from './extensions/dialog/filter-by-column/o-table-filter-by-column-data-dialog.component';
 import { OBaseTablePaginator } from './extensions/footer/paginator/o-base-table-paginator.class';
 import { OTableColumnsFilterComponent } from './extensions/header/table-columns-filter/o-table-columns-filter.component';
 import { OTableInsertableRowComponent } from './extensions/header/table-insertable-row/o-table-insertable-row.component';
@@ -468,6 +470,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   @HostListener('window:resize', [])
   updateScrolledState(): void {
+    console.log("Esta pasando por aqui");
+    console.log(this.horizontalScroll);
     if (this.horizontalScroll) {
       setTimeout(() => {
         const bodyWidth = this.tableBodyEl.nativeElement.clientWidth;
@@ -479,6 +483,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
         }
       }, 0);
     }
+    this.refreshColumnsWidth();
     // if (this.resizable) {
 
     // }
@@ -2208,10 +2213,10 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     setTimeout(() => {
       this.getColumnsWidthFromDOM();
       this._oTableOptions.columns.filter(c => c.visible).forEach(c => {
-        if (Util.isDefined(c.definition) && Util.isDefined(c.definition.width)) {
+        if (Util.isDefined(c.definition) && Util.isDefined(c.definition.width) && this.horizontalScroll) {
           c.width = c.definition.width;
         }
-        c.getRenderWidth();
+        c.getRenderWidth(this.horizontalScroll);
       });
       this.cd.detectChanges();
     }, 0);
