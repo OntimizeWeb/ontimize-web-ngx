@@ -470,8 +470,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   @HostListener('window:resize', [])
   updateScrolledState(): void {
-    console.log("Esta pasando por aqui");
-    console.log(this.horizontalScroll);
     if (this.horizontalScroll) {
       setTimeout(() => {
         const bodyWidth = this.tableBodyEl.nativeElement.clientWidth;
