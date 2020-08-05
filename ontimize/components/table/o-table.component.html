@@ -59,7 +59,7 @@
           <!--Define header-cell-->
 
           <th mat-header-cell *matHeaderCellDef [ngClass]="getTitleAlignClass(column)"
-            [style.width]="column.getRenderWidth()" [class.resizable]="resizable">
+            [style.width]="column.getRenderWidth(horizontalScroll)" [class.resizable]="resizable">
 
             <mat-icon *ngIf="isModeColumnFilterable(column)" class="column-filter-icon"
               [class.active]="isColumnFilterActive(column)" (click)="openColumnFilterDialog(column, $event)"

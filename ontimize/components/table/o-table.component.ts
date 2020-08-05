@@ -23,7 +23,16 @@ import {
   ViewChildren,
   ViewEncapsulation
 } from '@angular/core';
-import { MatCheckboxChange, MatDialog, MatMenu, MatPaginator, MatPaginatorIntl, MatTab, MatTabGroup, PageEvent } from '@angular/material';
+import {
+  MatCheckboxChange,
+  MatDialog,
+  MatMenu,
+  MatPaginator,
+  MatPaginatorIntl,
+  MatTab,
+  MatTabGroup,
+  PageEvent
+} from '@angular/material';
 import { DndModule } from '@churchs19/ng2-dnd';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { BehaviorSubject, combineLatest, Observable, of, Subscription } from 'rxjs';
@@ -347,7 +356,7 @@ export class OColumn {
     return value ? value : undefined;
   }
 
-  getRenderWidth() {
+  getRenderWidth(horizontalScrolled?: boolean) {
     if (Util.isDefined(this.width)) {
       return this.width;
     }
@@ -362,7 +371,8 @@ export class OColumn {
         this.DOMWidth = maxValue;
       }
     }
-    return Util.isDefined(this.DOMWidth) ? (this.DOMWidth + 'px') : undefined;
+    const defaultWidth = (horizontalScrolled) ? undefined : 'auto';
+    return Util.isDefined(this.DOMWidth) ? (this.DOMWidth + 'px') : defaultWidth;
   }
 
   set width(val: string) {
@@ -740,6 +750,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
         }
       }, 0);
     }
+    this.refreshColumnsWidth();
     // if (this.resizable) {
 
     // }
@@ -2493,10 +2504,10 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     setTimeout(() => {
       this.getColumnsWidthFromDOM();
       this._oTableOptions.columns.filter(c => c.visible).forEach(c => {
-        if (Util.isDefined(c.definition) && Util.isDefined(c.definition.width)) {
+        if (Util.isDefined(c.definition) && Util.isDefined(c.definition.width) && this.horizontalScroll) {
           c.width = c.definition.width;
         }
-        c.getRenderWidth();
+        c.getRenderWidth(this.horizontalScroll);
       });
       this.cd.detectChanges();
     }, 0);
