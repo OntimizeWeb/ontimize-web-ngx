@@ -1,7 +1,17 @@
-import { Component, Inject, ViewEncapsulation, AfterViewInit, ComponentFactoryResolver, ViewChild, ComponentFactory, Injector } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { OFormLayoutManagerContentDirective } from '../directives/o-form-layout-manager-content.directive';
+import {
+  AfterViewInit,
+  Component,
+  ComponentFactory,
+  ComponentFactoryResolver,
+  Inject,
+  Injector,
+  ViewChild,
+  ViewEncapsulation,
+} from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+
 import { OFormLayoutManagerComponent } from '../../../layouts/form-layout/o-form-layout-manager.component';
+import { OFormLayoutManagerContentDirective } from '../directives/o-form-layout-manager-content.directive';
 
 @Component({
   moduleId: module.id,
@@ -58,7 +68,6 @@ export class OFormLayoutDialogComponent implements AfterViewInit {
 
   updateNavigation(data: any, id: string) {
     let label = this.formLayoutManager.getLabelFromData(data);
-    label = label.length ? label : this.formLayoutManager.getLabelFromUrlParams(this.params);
     if (label && label.length) {
       label = ': ' + label;
     }

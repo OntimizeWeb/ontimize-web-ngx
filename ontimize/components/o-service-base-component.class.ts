@@ -204,7 +204,7 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
       // if query-rows in initial configuration is equals to original query-rows input
       // query_rows will be the value in local storage
       if (this.state.hasOwnProperty('query-rows')) {
-        if (this.state.hasOwnProperty('initial-configuration') && this.state['initial-configuration'].hasOwnProperty['query-rows']
+        if (this.state.hasOwnProperty('initial-configuration') && this.state['initial-configuration'].hasOwnProperty('query-rows')
           && this.state['initial-configuration']['query-rows'] === this.originalQueryRows) {
           this.queryRows = this.state['query-rows'];
         }
@@ -359,7 +359,6 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
     if (!ServiceUtils.filterContainsAllParentKeys(filterParentKeys, this._pKeysEquiv) && !this.queryWithNullParentKeys) {
       this.setData([], []);
     } else {
-      filter = Object.assign(filter || {}, filterParentKeys);
       let queryArguments = this.getQueryArguments(filter, ovrrArgs);
       if (this.querySubscription) {
         this.querySubscription.unsubscribe();
@@ -491,6 +490,8 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
   }
 
   getComponentFilter(existingFilter: any = {}): any {
+    const filterParentKeys = ServiceUtils.getParentKeysFromForm(this._pKeysEquiv, this.form);
+    existingFilter = Object.assign(existingFilter || {}, filterParentKeys);
     return existingFilter;
   }
 

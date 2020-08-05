@@ -4,7 +4,10 @@ import { MAT_DIALOG_DATA, MatButton, MatDialogRef } from '@angular/material';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
-import { OntimizeExportService, OTranslateService, SnackBarService } from '../../../../../services';
+import { exportServiceFactory } from '../../../../../services/factories';
+import { OntimizeExportService } from '../../../../../services/ontimize-export.service';
+import { SnackBarService } from '../../../../../services/snackbar.service';
+import { OTranslateService } from '../../../../../services/translate/o-translate.service';
 import { Codes, SQLTypes, Util } from '../../../../../utils';
 import { OTableExportButtonService } from '../../export-button/o-table-export-button.service';
 
@@ -13,10 +16,12 @@ export class OTableExportConfiguration {
   columnNames: Object;
   sqlTypes: Object;
   service: string;
+  serviceType: string;
   data?: any[];
   filter?: Object;
   mode: string;
   entity: string;
+  visibleButtons: string;
   options?: any;
 }
 
@@ -25,7 +30,9 @@ export class OTableExportConfiguration {
   selector: 'o-table-export-dialog',
   templateUrl: 'o-table-export-dialog.component.html',
   styleUrls: ['o-table-export-dialog.component.scss'],
-  providers: [OntimizeExportService],
+  providers: [
+    { provide: OntimizeExportService, useFactory: exportServiceFactory, deps: [Injector] }
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     'class': 'o-table-export-dialog'
@@ -38,6 +45,7 @@ export class OTableExportDialogComponent implements OnInit, OnDestroy {
   protected exportService: OntimizeExportService;
   protected translateService: OTranslateService;
   protected oTableExportButtonService: OTableExportButtonService;
+  protected visibleButtons: string[];
   private subscription: Subscription = new Subscription();
 
   constructor(
@@ -48,6 +56,10 @@ export class OTableExportDialogComponent implements OnInit, OnDestroy {
     this.snackBarService = injector.get(SnackBarService);
     this.translateService = this.injector.get(OTranslateService);
     this.oTableExportButtonService = this.injector.get(OTableExportButtonService);
+
+    if (config && Util.isDefined(config.visibleButtons)) {
+      this.visibleButtons = Util.parseArray(config.visibleButtons.toLowerCase(), true);
+    }
   }
 
   ngOnInit() {
@@ -67,17 +79,12 @@ export class OTableExportDialogComponent implements OnInit, OnDestroy {
 
   configureService(): void {
     let loadingService: any = OntimizeExportService;
-    // TODO: allow service type selection (extension)
-    // if (this.serviceType) {
-    //   loadingService = this.serviceType;
-    // }
-    try {
-      this.exportService = this.injector.get(loadingService);
-      let serviceCfg = this.exportService.getDefaultServiceConfiguration(this.config.service);
-      this.exportService.configureService(serviceCfg, Codes.EXPORT_MODE_ALL === this.config.mode);
-    } catch (e) {
-      console.error(e);
+    if (this.config.serviceType) {
+      loadingService = this.config.serviceType;
     }
+    this.exportService = this.injector.get(loadingService);
+    let serviceCfg = this.exportService.getDefaultServiceConfiguration(this.config.service);
+    this.exportService.configureService(serviceCfg, Codes.EXPORT_MODE_ALL === this.config.mode);
   }
 
   export(exportType: string, button?: MatButton): void {
@@ -93,22 +100,13 @@ export class OTableExportDialogComponent implements OnInit, OnDestroy {
     };
     this.proccessExportData(exportData.data, exportData.sqlTypes);
     this.dialogRef.close(true);
-    this.exportService.exportData(exportData, exportType, this.config.entity).subscribe((resp) => {
-      if (resp.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) {
-        this.exportService.downloadFile(resp.data[0][exportType + 'Id'], exportType).subscribe(
-          () => {
-            this.snackBarService.open('MESSAGES.SUCCESS_EXPORT_TABLE_DATA', { icon: 'check_circle' });
-          },
-          downloadError => {
-            this.snackBarService.open(downloadError.message, { icon: 'error' });
-          }
-        );
-      } else {
-        this.snackBarService.open(resp.message, { icon: 'error' });
-      }
-    },
-      (err) => this.handleError(err)
-    );
+    this.exportService.exportData(exportData, exportType, this.config.entity)
+      .subscribe(
+        res => {
+          this.snackBarService.open('MESSAGES.SUCCESS_EXPORT_TABLE_DATA', { icon: 'check_circle' });
+        },
+        err => this.handleError(err)
+      );
   }
 
   proccessExportData(data: Object[], sqlTypes: Object): void {
@@ -124,6 +122,10 @@ export class OTableExportDialogComponent implements OnInit, OnDestroy {
         });
       }
     });
+  }
+
+  isButtonVisible(btn: string): boolean {
+    return !this.visibleButtons || (this.visibleButtons.indexOf(btn) !== -1);
   }
 
   protected handleError(err): void {

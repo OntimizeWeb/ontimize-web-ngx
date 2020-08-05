@@ -1,17 +1,18 @@
-import { Component, ViewEncapsulation, ViewContainerRef, ViewChild, ComponentFactoryResolver, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { AfterViewInit, Component, ComponentFactoryResolver, NgModule, ViewChild, ViewContainerRef, ViewEncapsulation } from '@angular/core';
 
-import { OSharedModule } from '../../shared';
 import { OBreadcrumbComponent } from '../../components';
 import { InputConverter } from '../../decorators';
 import { OFormLayoutManagerComponent } from '../../layouts';
+import { OSharedModule } from '../../shared';
 import { OFormComponent } from './o-form.component';
 
 export const DEFAULT_INPUTS_O_FORM_CONTAINER = [
-  // breadcrumb [boolean]: show breadscrum of the form. Default: yes.
+  // breadcrumb [boolean]: show breadscrum of the form. Default: no.
   'breadcrumb',
   'breadcrumbSeparator : breadcrumb-separator',
-  'breadcrumbLabelColumns : breadcrumb-label-columns'
+  'breadcrumbLabelColumns : breadcrumb-label-columns',
+  'form'
 ];
 
 @Component({
@@ -26,10 +27,9 @@ export const DEFAULT_INPUTS_O_FORM_CONTAINER = [
     '[class.breadcrumb]': 'breadcrumb'
   }
 })
+export class OFormContainerComponent implements AfterViewInit {
 
-export class OFormContainerComponent {
-
-  @ViewChild('breadcrumb', { read: ViewContainerRef }) breadContainer;
+  @ViewChild('breadcrumb', { read: ViewContainerRef }) breadContainer: ViewContainerRef;
 
   @InputConverter()
   breadcrumb: boolean = false;
@@ -39,8 +39,7 @@ export class OFormContainerComponent {
   protected form: OFormComponent;
   protected formMananger: OFormLayoutManagerComponent;
 
-  constructor(private resolver: ComponentFactoryResolver) {
-  }
+  constructor(private resolver: ComponentFactoryResolver) { }
 
   ngAfterViewInit() {
     this.breadcrumb = this.breadcrumb && this.form && !this.formMananger;
@@ -54,10 +53,10 @@ export class OFormContainerComponent {
     this.formMananger = form.getFormManager();
   }
 
-  createBreadcrumb(container: any) {
+  createBreadcrumb(container: ViewContainerRef) {
     const factory = this.resolver.resolveComponentFactory(OBreadcrumbComponent);
     const ref = container.createComponent(factory);
-    ref.instance._formRef = this.form;
+    ref.instance.form = this.form;
     ref.instance.labelColumns = this.breadcrumbLabelColumns;
     ref.instance.separator = this.breadcrumbSeparator;
   }
@@ -69,5 +68,4 @@ export class OFormContainerComponent {
   entryComponents: [OBreadcrumbComponent],
   exports: [OFormContainerComponent]
 })
-export class OFormContainerModule {
-}
+export class OFormContainerModule { }

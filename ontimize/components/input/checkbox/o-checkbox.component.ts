@@ -1,11 +1,16 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, forwardRef, Inject, Injector, NgModule, Optional, ViewEncapsulation } from '@angular/core';
 import { ThemePalette } from '@angular/material';
+
 import { OSharedModule } from '../../../shared';
 import { Util } from '../../../util/util';
 import { OFormComponent } from '../../form/o-form.component';
 import { OFormValue } from '../../form/OFormValue';
-import { DEFAULT_INPUTS_O_FORM_DATA_COMPONENT, DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT, OFormDataComponent } from '../../o-form-data-component.class';
+import {
+  DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,
+  DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT,
+  OFormDataComponent,
+} from '../../o-form-data-component.class';
 import { OFormControl } from '../o-form-control.class';
 
 
@@ -93,6 +98,14 @@ export class OCheckboxComponent extends OFormDataComponent {
       this.value = new OFormValue(value);
     } else {
       this.value = new OFormValue(this.parseValueByType(value) === this.trueValue);
+    }
+  }
+
+  getValue() :any {
+    if (this.value.value !== undefined) {
+      return this.value.value ? this.trueValue : this.falseValue;
+    } else {
+      return this.defaultValue;
     }
   }
 

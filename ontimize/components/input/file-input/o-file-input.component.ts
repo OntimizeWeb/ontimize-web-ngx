@@ -1,9 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, EventEmitter, forwardRef, Inject, Injector, NgModule, OnInit, Optional, ViewChild } from '@angular/core';
 import { FormControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+
 import { InputConverter } from '../../../decorators';
 import { OntimizeFileService } from '../../../services';
+import { fileServiceFactory } from '../../../services/factories';
 import { OSharedModule } from '../../../shared';
+import { IFileService } from '../../../types/file-service.interface';
 import { OFormComponent } from '../../form/o-form.component';
 import { DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT, OFormDataComponent, OValueChangeEvent } from '../../o-form-data-component.class';
 import { OFileItem } from './o-file-item.class';
@@ -76,7 +79,10 @@ export const DEFAULT_OUTPUTS_O_FILE_INPUT = [
   templateUrl: './o-file-input.component.html',
   styleUrls: ['./o-file-input.component.scss'],
   inputs: DEFAULT_INPUTS_O_FILE_INPUT,
-  outputs: DEFAULT_OUTPUTS_O_FILE_INPUT
+  outputs: DEFAULT_OUTPUTS_O_FILE_INPUT,
+  providers: [
+    { provide: OntimizeFileService, useFactory: fileServiceFactory, deps: [Injector] }
+  ]
 })
 export class OFileInputComponent extends OFormDataComponent implements OnInit {
 
@@ -84,7 +90,7 @@ export class OFileInputComponent extends OFormDataComponent implements OnInit {
   public static DEFAULT_OUTPUTS_O_FILE_INPUT = DEFAULT_OUTPUTS_O_FILE_INPUT;
 
   public uploader: OFileUploader;
-  public fileService: OntimizeFileService;
+  public fileService: IFileService;
   @ViewChild('inputFile')
   public inputFile: ElementRef;
 

@@ -1,8 +1,21 @@
 import { CommonModule } from '@angular/common';
-import { AfterViewInit, Component, ElementRef, forwardRef, Inject, Injector, NgModule, OnInit, Optional, ViewChild, ViewEncapsulation } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  forwardRef,
+  Inject,
+  Injector,
+  NgModule,
+  OnInit,
+  Optional,
+  ViewChild,
+  ViewEncapsulation,
+} from '@angular/core';
 import { ValidatorFn } from '@angular/forms';
 import moment from 'moment';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
+
 import { NumberConverter } from '../../../decorators';
 import { InputConverter } from '../../../decorators/input-converter';
 import { OSharedModule } from '../../../shared';
@@ -10,7 +23,12 @@ import { Codes, Util } from '../../../utils';
 import { OValidators } from '../../../validators/o-validators';
 import { OFormComponent } from '../../form/form-components';
 import { IFormValueOptions } from '../../form/OFormValue';
-import { DEFAULT_INPUTS_O_FORM_DATA_COMPONENT, DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT, OFormDataComponent, OValueChangeEvent } from '../../o-form-data-component.class';
+import {
+  DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,
+  DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT,
+  OFormDataComponent,
+  OValueChangeEvent,
+} from '../../o-form-data-component.class';
 
 
 export type OHourValueType = 'string' | 'timestamp';
@@ -193,10 +211,14 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
 
   protected updateValeOnInputChange(blurEvent: any): void {
     if (this.onKeyboardInputDone) {
-      let value: string = blurEvent.currentTarget.value;
+      let value: any = blurEvent.currentTarget.value;
       // ngx-material-timepicker does not allow writing characters on input, so we add 'AM/PM' in order to make validation work properly
       value = this.parseHour(value);
-      this.setValue(value);
+      if (this.valueType === 'timestamp') {
+        value = this.onTimepickerChange(value);
+      } else {
+        this.setValue(value);
+      }
     }
     this.onKeyboardInputDone = false;
   }
@@ -242,6 +264,17 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
       result = value ? moment(value, 'h:mm A').format(formatStr) : value;
     }
     return result;
+  }
+
+  public getValue(): any {
+    let value = super.getValue();
+    if (this.valueType === 'timestamp') {
+      let valueTimestamp = moment(value, this.formatString).valueOf();
+      if ( !isNaN(valueTimestamp) ) {
+        value = valueTimestamp;
+      }
+    }
+    return value;
   }
 
 }

@@ -11,7 +11,7 @@ import {
   OnDestroy,
   OnInit,
   ViewChild,
-  ViewEncapsulation,
+  ViewEncapsulation
 } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router, UrlSegment } from '@angular/router';
@@ -27,9 +27,9 @@ import {
   OntimizeService,
   OPermissions,
   PermissionsService,
-  SnackBarService,
+  SnackBarService
 } from '../../services';
-import { dataServiceFactory } from '../../services/data-service.provider';
+import { dataServiceFactory } from '../../services/factories';
 import { OSharedModule } from '../../shared';
 import { Codes, SQLTypes, Util } from '../../utils';
 import { OFormControl } from '../input/o-form-control.class';
@@ -133,7 +133,17 @@ export const DEFAULT_INPUTS_O_FORM = [
 
   'detectChangesOnBlur: detect-changes-on-blur',
 
-  'confirmExit: confirm-exit'
+  'confirmExit: confirm-exit',
+
+  // [function]: function to execute on query error. Default: no value.
+  'queryFallbackFunction: query-fallback-function'
+  // ,
+
+  // 'insertFallbackFunction: insert-fallback-function',
+
+  // 'updateFallbackFunction: update-fallback-function',
+
+  // 'deleteFallbackFunction: delete-fallback-function'
 ];
 
 export const DEFAULT_OUTPUTS_O_FORM = [
@@ -232,6 +242,11 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   detectChangesOnBlur: boolean = true;
   @InputConverter()
   confirmExit: boolean = true;
+  public queryFallbackFunction: Function;
+  // public insertFallbackFunction: Function;
+  // public updateFallbackFunction: Function;
+  // public deleteFallbackFunction: Function;
+
   /* end of inputs variables */
 
   /*parsed inputs variables */
@@ -574,11 +589,12 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     let canDeactivateArray = (this.actRoute.routeConfig.canDeactivate || []);
     let previouslyAdded = false;
     for (let i = 0, len = canDeactivateArray.length; i < len; i++) {
-      previouslyAdded = (canDeactivateArray[i].name === OFormComponent.guardClassName);
+      previouslyAdded = ((canDeactivateArray[i].hasOwnProperty('CLASSNAME') && canDeactivateArray[i].CLASSNAME) === OFormComponent.guardClassName);
       if (previouslyAdded) {
         break;
       }
     }
+
     if (!previouslyAdded) {
       canDeactivateArray.push(this.deactivateGuard.constructor);
       this.actRoute.routeConfig.canDeactivate = canDeactivateArray;
@@ -640,6 +656,19 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     this.mode = OFormComponent.Mode().INITIAL;
 
     this.permissions = this.permissionsService.getFormPermissions(this.oattr, this.actRoute);
+
+    if (typeof this.queryFallbackFunction !== 'function') {
+      this.queryFallbackFunction = undefined;
+    }
+    // if (typeof this.insertFallbackFunction !== 'function') {
+    //   this.insertFallbackFunction = undefined;
+    // }
+    // if (typeof this.updateFallbackFunction !== 'function') {
+    //   this.updateFallbackFunction = undefined;
+    // }
+    // if (typeof this.deleteFallbackFunction !== 'function') {
+    //   this.deleteFallbackFunction = undefined;
+    // }
   }
 
   reinitialize(options: OFormInitializationOptions) {
@@ -749,7 +778,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
 
   _setData(data) {
     if (Util.isArray(data)) {
-      if (data.lenght > 1) {
+      if (data.length > 1) {
         console.warn('[OFormComponent] Form data has more than a single record. Storing empty data');
       }
       let currentData = data.length === 1 ? data[0] : {};
@@ -833,7 +862,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
           self._closeDetailAction();
         }
       }
-      if(self.stayInRecordAfterInsert) {
+      if (self.stayInRecordAfterInsert) {
         console.warn('WARNING -> The attribute stay-in-record-after-insert will be deprecated in version 8.x.x and you will be only able to use after-insert-mode with "new" or "detail" value.');
       }
     }, error => {
@@ -921,30 +950,31 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     if (this.loaderSubscription) {
       this.loaderSubscription.unsubscribe();
     }
-    const self = this;
     this.loaderSubscription = this.load();
     let av = this.getAttributesToQuery();
     let sqlTypes = this.getAttributesSQLTypes();
     this.querySubscription = this.dataService[this.queryMethod](filter, av, this.entity, sqlTypes).subscribe(
       resp => {
         if (resp.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) {
-          self._setData(resp.data);
+          this._setData(resp.data);
         } else {
-          self._updateFormData({});
-          self.dialogService.alert('ERROR', 'MESSAGES.ERROR_QUERY');
+          this._updateFormData({});
+          this.dialogService.alert('ERROR', 'MESSAGES.ERROR_QUERY');
           console.error('ERROR: ' + resp.message);
         }
-        self.loaderSubscription.unsubscribe();
+        this.loaderSubscription.unsubscribe();
       },
       err => {
         console.error(err);
-        self._updateFormData({});
-        if (err && err.statusText) {
-          self.dialogService.alert('ERROR', err.statusText);
+        this._updateFormData({});
+        if (Util.isDefined(this.queryFallbackFunction)) {
+          this.queryFallbackFunction(err);
+        } else if (err && err.statusText) {
+          this.dialogService.alert('ERROR', err.statusText);
         } else {
-          self.dialogService.alert('ERROR', 'MESSAGES.ERROR_QUERY');
+          this.dialogService.alert('ERROR', 'MESSAGES.ERROR_QUERY');
         }
-        self.loaderSubscription.unsubscribe();
+        this.loaderSubscription.unsubscribe();
       });
   }
 
@@ -1549,7 +1579,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   }
 
   protected isInsertModePath(path: string): boolean {
-    const navData: ONavigationItem = this.navigationService.getPreviousRouteData();
+    const navData: ONavigationItem = this.navigationService.getLastItem();
     return Util.isDefined(navData) && path === navData.getInsertFormRoute();
   }
 

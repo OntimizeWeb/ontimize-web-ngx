@@ -1,9 +1,31 @@
-## 4.1.2 (2020-02-26)
+## 4.1.3
 ### Features
-* **o-table**: new `show-configuration-option` input ([5450798](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5450798)) ([863b1ae](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/863b1ae)) Closes [#306](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/306)   
+* **o-table**:
+  * new attribute `show-filter-option` ([#318](https://github.com/OntimizeWeb/ontimize-web-ngx/pull/318))
+  * new attribute `visible-export-dialog-buttons` ([#320](https://github.com/OntimizeWeb/ontimize-web-ngx/pull/320)). Closes [#316](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/316)
+  * new attribute `export-service-type` ([0f2db1c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0f2db1c))
+  * new attribute `row-class` ([b0de94d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b0de94d)). Closes [#367](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/367)
+  * new-attribute `not-found-image` added new parameter(not-found-image) in o-image component to manage not found images. ([2cefbfe](https://github.com/OntimizeWeb/ontimize-web-ngx/pull/397))
+* **App configuration**: new attribute `exportServiceType` allows configuring the service used for exportation in the whole application ([c785371](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c785371))
+* **OFormServiceComponent**: new `query-fallback-function` input ([089338f3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/089338f3))
+* **o-form**: new `query-fallback-function` input ([089338f3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/089338f3))
+* Now the application language is stored in the browser and loaded on application startup ([e9b9535](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e9b9535))
+* We have developed a new mechanism for overriding/extending servicies. From now on, you can use one of the following Injection Tokens for indicating the service class you want to use in your application for the different services: `O_DATA_SERVICE`, `O_TRANSLATE_SERVICE`, `O_FILE_SERVICE`, `O_EXPORT_SERVICE`, `O_PERMISSION_SERVICE` ([ade651e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ade651e))
+  * Attributes `serviceType`, `exportServiceType`, `permissionsServiceType` from application configuration will be deprecated and removed in future versions.
+* **o-form-container**: new attribute `form` ([5cba909](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5cba909))
 
 ### Bug Fixes
-* **o-table**: fixing bug in table visible columns edition dialog ([03ba4a1](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/03ba4a1)) Closes [#298](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/298)  
+* **o-time-input**: Fix bad behaviour when there is more than one component in the same form ([fc1dd47](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/fc1dd47))
+* **o-language-selector**: emit `onChange` event ([231c1d4](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/231c1d4))
+* **OServiceBaseComponent**: fixing bug including parent-keys value in filter when exporting data ([78877d8](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/78877d8b4d01710a3a1d4353a8b293d795adc6e6)) Closes [#373](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/373)
+* **defaultLocale**: added new parameter in app.config to set a defaultLocale when language.json file is not found ([7fd088d](https://github.com/OntimizeWeb/ontimize-web-ngx/pull/387)) Closes [#383](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/383)
+
+## 4.1.2 (2020-02-26)
+### Features
+* **o-table**: new `show-configuration-option` input ([5450798](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5450798)) ([863b1ae](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/863b1ae)) Closes [#306](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/306)
+
+### Bug Fixes
+* **o-table**: fixing bug in table visible columns edition dialog ([03ba4a1](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/03ba4a1)) Closes [#298](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/298)
 
 ## 4.1.1 (2020-02-11)
 ### Bug Fixes
@@ -99,6 +121,8 @@
 ### Features
 * **o-combo**: new `searchable` input ([2ae599d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2ae599d))
 * **o-table**: new cell renderer `o-table-cell-renderer-translate` ([2763c47](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2763c47)).
+* **o-form**: new `after-insert-mode` input ([4378201](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/437820185e7f9da538b309d2b97577e0e0b32dd2)).
+  * Note: `stay-in-record-after-insert` attribute will be deprecated in 8.x.x
 
 ### Bug Fixes
 * **o-context-menu**: remove overlay when context menu is removed ([a2bf383](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a2bf383))

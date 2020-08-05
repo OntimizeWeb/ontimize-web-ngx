@@ -1,6 +1,7 @@
 import { EventEmitter, Injector } from '@angular/core';
 import { ActivatedRoute, NavigationExtras, Router, UrlSegmentGroup } from '@angular/router';
 import { combineLatest, Observable, Subscription } from 'rxjs';
+
 import { OFormLayoutDialogComponent } from '../../../layouts/form-layout/dialog/o-form-layout-dialog.component';
 import { IDetailComponentData, OFormLayoutManagerComponent } from '../../../layouts/form-layout/o-form-layout-manager.component';
 import { DialogService, NavigationService, ONavigationItem } from '../../../services';
@@ -250,8 +251,11 @@ export class OFormNavigationClass {
   }
 
   navigateBack() {
-    if (!this.formLayoutManager && this.navigationService) {
-      const navData: ONavigationItem = this.navigationService.getPreviousRouteData();
+    if (this.formLayoutManager) {
+      this.formLayoutManager.closeDetail(this.id);
+    } else if (this.navigationService) {
+      this.navigationService.removeLastItem();
+      const navData: ONavigationItem = this.navigationService.getLastItem();
       if (navData) {
         let extras = {};
         extras[Codes.QUERY_PARAMS] = navData.queryParams;
@@ -265,9 +269,18 @@ export class OFormNavigationClass {
       this.formLayoutManager.closeDetail(this.id);
     } else if (this.navigationService) {
       this.form.beforeCloseDetail.emit();
-      this.navigationService.removeLastItem();
-      const navData: ONavigationItem = this.navigationService.getLastItem();
+      // `removeLastItemsUntilMain` may not remove all necessary items so current route will be checked below
+      if (!this.navigationService.removeLastItemsUntilMain()) {
+        // `removeLastItemsUntilMain` didn't find the main navigation item
+        this.navigationService.removeLastItem();
+      }
+      let navData: ONavigationItem = this.navigationService.getLastItem();
       if (navData) {
+        // if navData route is the same as the current route, remove last item
+        if (this.navigationService.isCurrentRoute(navData.url)) {
+          this.navigationService.removeLastItem();
+          navData = this.navigationService.getLastItem();
+        }
         let extras: NavigationExtras = {};
         extras[Codes.QUERY_PARAMS] = navData.queryParams;
         this.router.navigate([navData.url], extras).then(val => {
@@ -294,6 +307,9 @@ export class OFormNavigationClass {
       });
       this.form.queryData(insertedKeys);
     } else if (this.navigationService && this.form.keysArray && insertedKeys) {
+      // Remove 'new' navigation item from history
+      this.navigationService.removeLastItem();
+
       let params: any[] = [];
       this.form.keysArray.forEach((current, index) => {
         if (insertedKeys[current]) {
@@ -304,13 +320,18 @@ export class OFormNavigationClass {
       let qParams: any = Object.assign({}, this.getQueryParams(), Codes.getIsDetailObject());
       extras[Codes.QUERY_PARAMS] = qParams;
       let route = [];
-      const navData: ONavigationItem = this.navigationService.getPreviousRouteData();
+      const navData: ONavigationItem = this.navigationService.getLastMainNavigationRouteData();
       if (navData) {
-        route.push(navData.url);
+        let url = navData.url;
         const detailRoute = navData.getDetailFormRoute();
         if (Util.isDefined(detailRoute)) {
           route.push(detailRoute);
+          const detailIndex = url.lastIndexOf('/' + detailRoute);
+          if (detailIndex !== -1) {
+            url = url.substring(0, detailIndex);
+          }
         }
+        route.unshift(url);
         route.push(...params);
         // deleting insertFormRoute as active mode (because stayInRecordAfterInsert changes it)
         this.navigationService.deleteActiveFormMode(navData);
@@ -329,9 +350,13 @@ export class OFormNavigationClass {
     if (this.formLayoutManager && this.formLayoutManager.isDialogMode()) {
       this.form.setInsertMode();
     } else if (this.navigationService) {
+      if (this.formLayoutManager && this.formLayoutManager.isTabMode()) {
+        this.formLayoutManager.setAsActiveFormLayoutManager();
+      }
+
       let route = [];
       let extras: NavigationExtras = {};
-      const navData: ONavigationItem = this.navigationService.getPreviousRouteData();
+      const navData: ONavigationItem = this.navigationService.getLastMainNavigationRouteData();
       if (!this.formLayoutManager && navData) {
         route.push(navData.url);
         const detailRoute = navData.getDetailFormRoute();
@@ -444,10 +469,11 @@ export class OFormNavigationClass {
   }
 
   protected storeNavigationFormRoutes(activeMode: string) {
+    const formRoutes = this.navigationService.getPreviousRouteData().formRoutes;
     this.navigationService.storeFormRoutes({
-      detailFormRoute: Codes.DEFAULT_DETAIL_ROUTE,
-      editFormRoute: Codes.DEFAULT_EDIT_ROUTE,
-      insertFormRoute: Codes.DEFAULT_INSERT_ROUTE
+      detailFormRoute: formRoutes ? formRoutes.detailFormRoute : Codes.DEFAULT_DETAIL_ROUTE,
+      editFormRoute: formRoutes ? formRoutes.editFormRoute : Codes.DEFAULT_EDIT_ROUTE,
+      insertFormRoute: formRoutes ? formRoutes.insertFormRoute : Codes.DEFAULT_INSERT_ROUTE
     }, activeMode);
   }
 

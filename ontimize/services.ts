@@ -13,7 +13,7 @@ export * from './services/number.service';
 export * from './services/dialog.service';
 export * from './services/snackbar.service';
 export * from './services/translate/o-translate.service';
-export * from './services/data-service.provider';
+export * from './services/factories';
 export * from './services/auth-guard.service';
 
 export * from './services/local-storage.service';
