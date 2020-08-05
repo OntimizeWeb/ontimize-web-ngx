@@ -1,12 +1,12 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { ChangeDetectionStrategy, Component, Inject, Injector, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
-import { MatButton, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { MAT_DIALOG_DATA, MatButton, MatDialogRef } from '@angular/material';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { DialogService, OntimizeExportService, OTranslateService } from '../../../../../services';
+
+import { OntimizeExportService, OTranslateService, SnackBarService } from '../../../../../services';
 import { Codes, SQLTypes, Util } from '../../../../../utils';
 import { OTableExportButtonService } from '../../export-button/o-table-export-button.service';
-
 
 export class OTableExportConfiguration {
   columns: Array<any>;
@@ -34,7 +34,7 @@ export class OTableExportConfiguration {
 })
 export class OTableExportDialogComponent implements OnInit, OnDestroy {
 
-  protected dialogService: DialogService;
+  protected snackBarService: SnackBarService;
   protected exportService: OntimizeExportService;
   protected translateService: OTranslateService;
   protected oTableExportButtonService: OTableExportButtonService;
@@ -45,7 +45,7 @@ export class OTableExportDialogComponent implements OnInit, OnDestroy {
     protected injector: Injector,
     @Inject(MAT_DIALOG_DATA) public config: OTableExportConfiguration
   ) {
-    this.dialogService = injector.get(DialogService);
+    this.snackBarService = injector.get(SnackBarService);
     this.translateService = this.injector.get(OTranslateService);
     this.oTableExportButtonService = this.injector.get(OTableExportButtonService);
   }
@@ -91,22 +91,23 @@ export class OTableExportDialogComponent implements OnInit, OnDestroy {
       sqlTypes: this.config.sqlTypes,
       filter: this.config.filter
     };
-    let self = this;
     this.proccessExportData(exportData.data, exportData.sqlTypes);
+    this.dialogRef.close(true);
     this.exportService.exportData(exportData, exportType, this.config.entity).subscribe((resp) => {
       if (resp.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) {
-        self.exportService.downloadFile(resp.data[0][exportType + 'Id'], exportType).subscribe(
-          () => self.dialogRef.close(true),
+        this.exportService.downloadFile(resp.data[0][exportType + 'Id'], exportType).subscribe(
+          () => {
+            this.snackBarService.open('MESSAGES.SUCCESS_EXPORT_TABLE_DATA', { icon: 'check_circle' });
+          },
           downloadError => {
-            console.error(downloadError);
-            self.dialogService.alert('ERROR', downloadError.message).then(() => self.dialogRef.close(false));
+            this.snackBarService.open(downloadError.message, { icon: 'error' });
           }
         );
       } else {
-        self.dialogService.alert('ERROR', resp.message).then(() => self.dialogRef.close(false));
+        this.snackBarService.open(resp.message, { icon: 'error' });
       }
     },
-      (err) => self.handleError(err)
+      (err) => this.handleError(err)
     );
   }
 
@@ -126,12 +127,10 @@ export class OTableExportDialogComponent implements OnInit, OnDestroy {
   }
 
   protected handleError(err): void {
-    console.error(err);
-    const self = this;
     if (err instanceof HttpErrorResponse) {
-      this.dialogService.alert('ERROR', err.message).then(() => self.dialogRef.close(false));
+      this.snackBarService.open(err.message, { icon: 'error' });
     } else {
-      this.dialogService.alert('ERROR', 'MESSAGES.ERROR_EXPORT_TABLE_DATA').then(() => self.dialogRef.close(false));
+      this.snackBarService.open('MESSAGES.ERROR_EXPORT_TABLE_DATA', { icon: 'error' });
     }
   }
 
