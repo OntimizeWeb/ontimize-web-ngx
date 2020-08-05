@@ -8,6 +8,7 @@ import { exportServiceFactory } from '../../../../../services/factories';
 import { OntimizeExportService } from '../../../../../services/ontimize-export.service';
 import { SnackBarService } from '../../../../../services/snackbar.service';
 import { OTranslateService } from '../../../../../services/translate/o-translate.service';
+import { IExportService } from '../../../../../types/export-service.interface';
 import { Codes, SQLTypes, Util } from '../../../../../utils';
 import { OTableExportButtonService } from '../../export-button/o-table-export-button.service';
 
@@ -42,7 +43,7 @@ export class OTableExportConfiguration {
 export class OTableExportDialogComponent implements OnInit, OnDestroy {
 
   protected snackBarService: SnackBarService;
-  protected exportService: OntimizeExportService;
+  protected exportService: IExportService;
   protected translateService: OTranslateService;
   protected oTableExportButtonService: OTableExportButtonService;
   protected visibleButtons: string[];
