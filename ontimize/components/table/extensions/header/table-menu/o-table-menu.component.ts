@@ -321,13 +321,11 @@ export class OTableMenuComponent implements OnInit, AfterViewInit, OnDestroy {
     exportCnfg.visibleButtons = this.table.visibleExportDialogButtons;
     exportCnfg.options = this.table.exportOptsTemplate;
 
-    let dialogRef = this.dialog.open(OTableExportDialogComponent, {
+    this.dialog.open(OTableExportDialogComponent, {
       data: exportCnfg,
       disableClose: true,
       panelClass: ['o-dialog-class', 'o-table-dialog']
     });
-
-    dialogRef.afterClosed().subscribe(result => result ? this.snackBarService.open('MESSAGES.SUCCESS_EXPORT_TABLE_DATA', { icon: 'check_circle' }) : null);
   }
 
   onChangeColumnsVisibilityClicked() {
