@@ -224,7 +224,7 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
   @InputConverter()
   updateRecordOnEdit: boolean = true;
   @InputConverter()
-  showToastOnEdit: boolean = false;
+  showNotificationOnEdit: boolean = false;
 
   /* input editor date */
   protected locale: string;
@@ -467,7 +467,7 @@ export class OTableColumnComponent implements OnDestroy, OnInit, AfterViewInit {
         newEditor.orequired = this.orequired;
         newEditor.showPlaceHolder = this.showPlaceHolder;
         newEditor.updateRecordOnEdit = this.updateRecordOnEdit;
-        newEditor.showToastOnEdit = this.showToastOnEdit;
+        newEditor.showNotificationOnEdit = this.showNotificationOnEdit;
         newEditor.editionStarted = this.editionStarted;
         newEditor.editionCancelled = this.editionCancelled;
         newEditor.editionCommitted = this.editionCommitted;

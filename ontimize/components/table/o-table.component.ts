@@ -1316,6 +1316,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       this.reloadData();
     } else {
       this.loadingSortingSubject.next(true);
+      this.cd.detectChanges();
     }
   }
 
@@ -1328,10 +1329,10 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   protected registerDataSourceListeners() {
     if (!this.pageable) {
-      const self = this;
       this.onRenderedDataChange = this.dataSource.onRenderedDataChange.subscribe(() => {
         setTimeout(() => {
-          self.loadingSortingSubject.next(false);
+          this.loadingSortingSubject.next(false);
+          this.cd.detectChanges();
         }, 500);
       });
     }
@@ -1465,9 +1466,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   projectContentChanged() {
-    const self = this;
     setTimeout(function () {
-      self.loadingSortingSubject.next(false);
+      this.loadingSortingSubject.next(false);
+      this.cd.detectChanges();
     }, 500);
     this.loadingScrollSubject.next(false);
 
@@ -1920,6 +1921,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
             data = res.data;
           }
           this.daoTable.setAsynchronousColumn(data, rowData);
+          this.cd.detectChanges();
         }
       });
     }
