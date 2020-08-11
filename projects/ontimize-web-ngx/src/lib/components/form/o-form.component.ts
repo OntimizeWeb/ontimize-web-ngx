@@ -195,7 +195,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   protected updateMethod: string = Codes.UPDATE_METHOD;
   protected deleteMethod: string = Codes.DELETE_METHOD;
   protected _layoutDirection: string = OFormComponent.DEFAULT_LAYOUT_DIRECTION;
-  protected _layoutAlign: string = 'start start';
+  protected _layoutAlign: string = 'start stretch';
   @InputConverter()
   protected editableDetail: boolean = true;
   protected keysSqlTypes: string;
