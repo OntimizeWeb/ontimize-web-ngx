@@ -58,7 +58,7 @@ export class OSlideToggleComponent extends OFormDataComponent {
   }
 
   initialize() {
-    super.initialize();
+    //First, the sqlType must be initialized  before calling super.initialize because it overwritte the value
     if (!Util.isDefined(this.sqlType)) {
       switch (this.booleanType) {
         case 'number':
@@ -73,6 +73,7 @@ export class OSlideToggleComponent extends OFormDataComponent {
       }
     }
     this.defaultValue = this.falseValue;
+    super.initialize();
   }
 
   ensureOFormValue(value: any) {
