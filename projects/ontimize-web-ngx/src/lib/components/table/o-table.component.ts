@@ -1050,7 +1050,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       this.onRenderedDataChange = this.dataSource.onRenderedDataChange.subscribe(() => {
         setTimeout(() => {
           this.loadingSortingSubject.next(false);
-          this.cd.detectChanges();
         }, 500);
       });
     }
