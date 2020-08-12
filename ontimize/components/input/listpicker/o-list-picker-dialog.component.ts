@@ -66,6 +66,8 @@ export class OListPickerDialogComponent {
       this.searchInput.getFormControl().setValue(this.searchVal, {
         emitEvent: false
       });
+
+      //TODO improve: Added setTimeout for resolving ExpressionChangedAfterItHasBeenCheckedError error because the observables dont work
       setTimeout(() => this.searchInput.onSearch.emit(this.searchVal));
     }
   }
