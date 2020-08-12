@@ -1478,7 +1478,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   projectContentChanged() {
     setTimeout(() => {
       this.loadingSortingSubject.next(false);
-      this.cd.detectChanges();
     }, 500);
     this.loadingScrollSubject.next(false);
 
