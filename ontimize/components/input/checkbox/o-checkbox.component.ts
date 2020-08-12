@@ -65,7 +65,7 @@ export class OCheckboxComponent extends OFormDataComponent {
   }
 
   initialize() {
-    super.initialize();
+    //First, the sqlType must be initialized  before calling super.initialize because it overwritte the value
     if (!Util.isDefined(this.sqlType)) {
       switch (this.booleanType) {
         case 'number':
@@ -80,6 +80,7 @@ export class OCheckboxComponent extends OFormDataComponent {
       }
     }
 
+    super.initialize();
     const context = this;
     (this.getFormControl() as OFormControl).getValue.bind(context);
     (this.getFormControl() as OFormControl).getValue = function () {
@@ -101,7 +102,7 @@ export class OCheckboxComponent extends OFormDataComponent {
     }
   }
 
-  getValue() :any {
+  getValue(): any {
     if (this.value.value !== undefined) {
       return this.value.value ? this.trueValue : this.falseValue;
     } else {
