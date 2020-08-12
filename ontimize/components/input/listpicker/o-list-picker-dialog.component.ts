@@ -33,7 +33,6 @@ export class OListPickerDialogComponent {
   protected data: any[] = [];
   protected menuColumns: string;
   protected visibleColsArray: string[];
-
   protected _startIndex: number = 0;
   protected recordsNumber: number = 100;
   protected scrollThreshold: number = 200;
@@ -59,6 +58,7 @@ export class OListPickerDialogComponent {
       this.menuColumns = data.menuColumns;
     }
     this.searchVal = data.searchVal;
+    this.startIndex = 0;
   }
 
   public ngAfterViewInit(): void {
@@ -66,9 +66,9 @@ export class OListPickerDialogComponent {
       this.searchInput.getFormControl().setValue(this.searchVal, {
         emitEvent: false
       });
-      this.onFilterList(this.searchVal);
-    } else {
-      this.startIndex = 0;
+
+      //TODO improve: Added setTimeout for resolving ExpressionChangedAfterItHasBeenCheckedError error because the observables dont work
+      setTimeout(() => this.searchInput.onSearch.emit(this.searchVal));
     }
   }
 
@@ -113,12 +113,12 @@ export class OListPickerDialogComponent {
   }
 
   public onFilterList(searchVal: any): void {
-    this.visibleData = this.transform(this.data, {
+    let transformData = this.transform(this.data, {
       filtervalue: searchVal,
       filtercolumns: this.visibleColsArray
     });
     this._startIndex = 0;
-    this.visibleData = this.visibleData.slice(this.startIndex, this.recordsNumber);
+    this.visibleData = transformData.slice(this.startIndex, this.recordsNumber);
   }
 
   public isEmptyData(): boolean {
