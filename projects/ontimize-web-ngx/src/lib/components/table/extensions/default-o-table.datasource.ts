@@ -258,7 +258,11 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
   }
 
   disconnect() {
-    // TODO
+    this.onRenderedDataChange.complete();
+    this.dataTotalsChange.complete();
+    this._quickFilterChange.complete();
+    this._columnValueFilterChange.complete();
+    this._loadDataScrollableChange.complete();
   }
 
   protected fulfillsCustomFilterFunctions(filter: string, item: any) {

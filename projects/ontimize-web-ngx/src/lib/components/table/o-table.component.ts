@@ -18,7 +18,8 @@ import {
   TemplateRef,
   ViewChild,
   ViewChildren,
-  ViewEncapsulation
+  ViewEncapsulation,
+  ViewRef
 } from '@angular/core';
 import { MatCheckboxChange, MatDialog, MatMenu, MatPaginator, MatTab, MatTabGroup, PageEvent } from '@angular/material';
 import { BehaviorSubject, combineLatest, Observable, of, Subscription } from 'rxjs';
@@ -1050,6 +1051,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       this.onRenderedDataChange = this.dataSource.onRenderedDataChange.subscribe(() => {
         setTimeout(() => {
           this.loadingSortingSubject.next(false);
+          if (this.cd && !(this.cd as ViewRef).destroyed) {
+            this.cd.detectChanges();
+          }
         }, 500);
       });
     }
