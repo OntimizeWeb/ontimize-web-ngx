@@ -1,4 +1,4 @@
-## 4.1.3
+## 4.1.3 (2020-08-18)
 ### Features
 * **o-table**:
   * new attribute `show-filter-option` ([#318](https://github.com/OntimizeWeb/ontimize-web-ngx/pull/318))
