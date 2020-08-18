@@ -3,21 +3,16 @@ import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, forwardRef, In
 import { FormGroup } from '@angular/forms';
 import moment from 'moment';
 import { merge, Subscription } from 'rxjs';
-
 import { InputConverter } from '../../../decorators';
 import { OSharedModule } from '../../../shared';
 import { Util } from '../../../utils';
 import { OFormComponent } from '../../form/o-form.component';
 import { IFormValueOptions, OFormValue } from '../../form/OFormValue';
-import {
-  DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,
-  DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT,
-  OFormDataComponent,
-  OValueChangeEvent
-} from '../../o-form-data-component.class';
+import { DEFAULT_INPUTS_O_FORM_DATA_COMPONENT, DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT, OFormDataComponent, OValueChangeEvent } from '../../o-form-data-component.class';
 import { DateFilterFunction, ODateInputComponent, ODateInputModule } from '../date-input/o-date-input.component';
 import { OHourInputComponent, OHourInputModule } from '../hour-input/o-hour-input.component';
 import { OFormControl } from '../o-form-control.class';
+
 
 export const DEFAULT_INPUTS_O_TIME_INPUT = [
   ...DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,
@@ -89,6 +84,9 @@ export class OTimeInputComponent extends OFormDataComponent implements OnInit, A
 
   protected subscription: Subscription = new Subscription();
 
+  public dateAttr = 'dateInput';
+  public hourAttr = 'hourInput';
+
   constructor(
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
     elRef: ElementRef,
@@ -100,6 +98,10 @@ export class OTimeInputComponent extends OFormDataComponent implements OnInit, A
 
   public ngOnInit(): void {
     super.ngOnInit();
+
+    this.dateAttr += '_' + this.oattr;
+    this.hourAttr += '_' + this.oattr;
+
     const self = this;
     const mergeSubscription = merge(this.dateInput.onValueChange, this.hourInput.onValueChange).subscribe((event: OValueChangeEvent) => {
       if (event.isUserChange()) {
@@ -180,8 +182,8 @@ export class OTimeInputComponent extends OFormDataComponent implements OnInit, A
     }
     let timeValue: number;
     const values = this.formGroup.getRawValue();
-    const mDate = (values['dateInput'] ? moment(values['dateInput']) : moment()).startOf('day');
-    const mHour = this.hourInput.valueType === 'timestamp' ? moment(values['hourInput']) : moment(values['hourInput'], this.hourInput.formatString);
+    const mDate = (values[this.dateAttr] ? moment(values[this.dateAttr]) : moment()).startOf('day');
+    const mHour = this.hourInput.valueType === 'timestamp' ? moment(values[this.hourAttr]) : moment(values[this.hourAttr], this.hourInput.formatString);
     timeValue = mDate.clone()
       .set('hour', mHour.get('hour'))
       .set('minute', mHour.get('minutes'))
@@ -209,18 +211,18 @@ export class OTimeInputComponent extends OFormDataComponent implements OnInit, A
     }
 
     if (this.form) {
-      this.form.formGroup.removeControl('dateInput');
-      this.form.formGroup.removeControl('hourInput');
+      this.form.formGroup.removeControl(this.dateAttr);
+      this.form.formGroup.removeControl(this.hourAttr);
     }
   }
 
   protected registerFormControls(): void {
     if (this.dateInput && this.dateInput.getFormControl()) {
-      this.formGroup.registerControl('dateInput', this.dateInput.getFormControl());
+      this.formGroup.registerControl(this.dateAttr, this.dateInput.getFormControl());
     }
     if (this.hourInput) {
       if (this.hourInput.getFormControl()) {
-        this.formGroup.registerControl('hourInput', this.hourInput.getFormControl());
+        this.formGroup.registerControl(this.hourAttr, this.hourInput.getFormControl());
       }
     }
   }

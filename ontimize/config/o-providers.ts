@@ -4,9 +4,30 @@ import { BaseRequestOptions, XHRBackend } from '@angular/http';
 import { MAT_RIPPLE_GLOBAL_OPTIONS } from '@angular/material';
 import { Router } from '@angular/router';
 import { combineLatest } from 'rxjs';
+
 import { OContextMenuService } from '../components/contextmenu/o-context-menu.service';
 import { AppConfig, Config } from '../config/app-config';
-import { appConfigFactory, AppMenuService, AuthGuardService, CurrencyService, dataServiceFactory, DialogService, LocalStorageService, LoginService, MomentService, NavigationService, NumberService, OModulesInfoService, OntimizeExportService, OntimizeFileService, OntimizeMatIconRegistry, OntimizeService, OntimizeServiceResponseParser, OTranslateService, OUserInfoService, SnackBarService } from '../services';
+import {
+  appConfigFactory,
+  AppMenuService,
+  AuthGuardService,
+  CurrencyService,
+  dataServiceFactory,
+  DialogService,
+  LocalStorageService,
+  LoginService,
+  MomentService,
+  NavigationService,
+  NumberService,
+  OModulesInfoService,
+  OntimizeMatIconRegistry,
+  OntimizeService,
+  OntimizeServiceResponseParser,
+  OTranslateService,
+  OUserInfoService,
+  SnackBarService,
+} from '../services';
+import { translateServiceFactory } from '../services/factories';
 import { OFormLayoutManagerService } from '../services/o-form-layout-manager.service';
 import { Error403Component } from '../services/permissions/error403/o-error-403.component';
 import { ORemoteConfigurationService } from '../services/remote-config.service';
@@ -14,6 +35,7 @@ import { ShareCanActivateChildService } from '../services/share-can-activate-chi
 import { Codes } from '../util/codes';
 import { Events } from '../util/events';
 import { OHttp } from '../util/http/OHttp';
+import { Util } from '../util/util';
 
 function addPermissionsRouteGuard(injector: Injector) {
   const route = injector.get(Router);
@@ -29,23 +51,34 @@ export function appInitializerFactory(injector: Injector, config: Config, oTrans
     let observableArray = [];
     const locationInitialized = injector.get(LOCATION_INITIALIZED, Promise.resolve(null));
     locationInitialized.then(() => {
-      oTranslate.setDefaultLang('en');
-      let userLang = config['locale'];
-      if (!userLang) {
-        // use navigator lang if available
-        userLang = oTranslate.getBrowserLang();
+      const storedLang = oTranslate.getStoredLanguage();
+      const configLang = config['locale'];
+      const browserLang = oTranslate.getBrowserLang();
+      let userLang = Util.isDefined(config['defaultLocale']) ? config['defaultLocale'] : 'en';
+      let defaultLang = Util.isDefined(config['defaultLocale']) ? config['defaultLocale'] : 'en';
+      if (storedLang) {
+        userLang = storedLang;
+      } else if (configLang) {
+        userLang = configLang;
+        defaultLang = configLang;
+      } else if (browserLang) {
+        userLang = browserLang;
+        defaultLang = browserLang;
       }
+      oTranslate.setDefaultLang(defaultLang);
+
+      const locales = new Set(config.applicationLocales || []);
+      locales.add('en');
+      locales.add(userLang);
+
+      const localseArray = [];
+      locales.forEach((val1, val2, self) => localseArray.push(val1));
 
       // initialize available locales array if needed
       if (!config.applicationLocales) {
-        config.applicationLocales = [];
+        config.applicationLocales = localseArray; // use [...locales] with es6
       }
-      if (config.applicationLocales.indexOf('en') === -1) {
-        config.applicationLocales.push('en');
-      }
-      if (userLang && config.applicationLocales.indexOf(userLang) === -1) {
-        config.applicationLocales.push(userLang);
-      }
+
       if (config['uuid'] === undefined || config['uuid'] === null || config['uuid'] === '') {
         console.error('Your app must have an \'uuid\' property defined on your app.config file. Otherwise, your application will not work correctly.');
         alert('Your app must have an \'uuid\' property defined on your app.config file. Otherwise, your application will not work correctly.');
@@ -96,14 +129,6 @@ export function getOntimizeServiceProvider(backend: XHRBackend, defaultOptions: 
   return new OHttp(backend, defaultOptions);
 }
 
-export function getOntimizeFileServiceProvider(injector: Injector) {
-  return new OntimizeFileService(injector);
-}
-
-export function getOntimizeExportServiceProvider(injector: Injector) {
-  return new OntimizeExportService(injector);
-}
-
 export function getLoginServiceProvider(injector: Injector) {
   return new LoginService(injector);
 }
@@ -130,10 +155,6 @@ export function getDialogServiceProvider(injector: Injector) {
 
 export function getSnackBarServiceProvider(injector: Injector) {
   return new SnackBarService(injector);
-}
-
-export function getTranslateServiceProvider(injector: Injector) {
-  return new OTranslateService(injector);
 }
 
 export function getLocalStorageServiceProvider(injector: Injector) {
@@ -187,16 +208,6 @@ export const ONTIMIZE_PROVIDERS: Provider[] = [
     useFactory: getOntimizeServiceResponseParser,
     deps: [Injector]
   },
-  {
-    provide: OntimizeFileService,
-    useFactory: getOntimizeFileServiceProvider,
-    deps: [Injector]
-  },
-  {
-    provide: OntimizeExportService,
-    useFactory: getOntimizeExportServiceProvider,
-    deps: [Injector]
-  },
   // getLoginServiceProvider
   {
     provide: LoginService,
@@ -242,7 +253,7 @@ export const ONTIMIZE_PROVIDERS: Provider[] = [
   // getTranslateServiceProvider
   {
     provide: OTranslateService,
-    useFactory: getTranslateServiceProvider,
+    useFactory: translateServiceFactory,
     deps: [Injector]
   },
   // getLocalStorageServiceProvider

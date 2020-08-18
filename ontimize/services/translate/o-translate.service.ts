@@ -2,10 +2,13 @@ import { HttpClient } from '@angular/common/http';
 import { EventEmitter, Injectable, Injector } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { Observable, Subscriber } from 'rxjs';
+
 import { AppConfig } from '../../config/app-config';
 import * as CORE_TRANSLATIONS from '../../i18n/i18n';
 import { MomentService, SnackBarService } from '../../services';
 import { ObservableWrapper } from '../../util/async';
+import { Codes } from '../../util/codes';
+import { Util } from '../../util/util';
 
 @Injectable()
 export class OTranslateService {
@@ -20,9 +23,9 @@ export class OTranslateService {
   protected momentService: MomentService;
   protected httpClient: HttpClient;
 
+  protected localStorageKey: string;
   protected notFoundLang: Array<String> = [];
   protected appConfig: AppConfig;
-
   protected existingLangFiles: Array<String> = [];
 
   constructor(protected injector: Injector) {
@@ -30,6 +33,21 @@ export class OTranslateService {
     this.momentService = this.injector.get(MomentService);
     this.httpClient = this.injector.get(HttpClient);
     this.appConfig = this.injector.get(AppConfig);
+    this.localStorageKey = this.appConfig.getConfiguration()['uuid'];
+  }
+
+  public storeLanguage(language: string): void {
+    if (language) {
+      const dataStr = localStorage.getItem(this.localStorageKey);
+      let data = (dataStr && dataStr.length > 0) ? JSON.parse(dataStr) : {};
+      data[Codes.LANGUAGE_KEY] = language;
+      localStorage.setItem(this.localStorageKey, JSON.stringify(data));
+    }
+  }
+
+  public getStoredLanguage(): string {
+    const dataStr = localStorage.getItem(this.localStorageKey);
+    return dataStr ? JSON.parse(dataStr)[Codes.LANGUAGE_KEY] : void 0;
   }
 
   protected checkExistingLangFile(lang: string): Promise<any> {
@@ -104,7 +122,7 @@ export class OTranslateService {
       this.checkExistingLangFile(lang).then((exists) => {
         let newLang = lang;
         if (!exists) {
-          newLang = this.ngxTranslateService.getDefaultLang();
+          newLang = Util.isDefined(this.appConfig['_config']['defaultLocale']) ? this.appConfig['_config']['defaultLocale'] : this.ngxTranslateService.getDefaultLang();
           const msg = CORE_TRANSLATIONS.MAP[newLang || this.DEFAULT_LANG]['MESSAGES.ERROR_MISSING_LANG'];
           this.injector.get(SnackBarService).open(msg, {
             milliseconds: 2500
@@ -112,6 +130,7 @@ export class OTranslateService {
         }
         this.ngxTranslateService.use(newLang).subscribe(
           res => {
+            this.storeLanguage(newLang);
             this.propagateLang(newLang, res, observer);
           }
         );

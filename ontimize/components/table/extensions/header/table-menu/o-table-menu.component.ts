@@ -10,19 +10,13 @@ import {
   OnDestroy,
   OnInit,
   ViewChild,
-  ViewEncapsulation,
+  ViewEncapsulation
 } from '@angular/core';
 import { MatDialog, MatMenu } from '@angular/material';
 import { Observable } from 'rxjs';
 
 import { InputConverter } from '../../../../../decorators';
-import {
-  DialogService,
-  OPermissions,
-  OTableMenuPermissions,
-  OTranslateService,
-  SnackBarService,
-} from '../../../../../services';
+import { DialogService, OPermissions, OTableMenuPermissions, OTranslateService, SnackBarService } from '../../../../../services';
 import { PermissionsUtils } from '../../../../../util/permissions';
 import { Codes, Util } from '../../../../../utils';
 import { OColumn, OTableComponent } from '../../../o-table.component';
@@ -34,7 +28,7 @@ import {
   OTableLoadFilterDialogComponent,
   OTableStoreConfigurationDialogComponent,
   OTableStoreFilterDialogComponent,
-  OTableVisibleColumnsDialogComponent,
+  OTableVisibleColumnsDialogComponent
 } from '../../dialog/o-table-dialog-components';
 import { OTableOptionComponent } from '../table-option/o-table-option.component';
 
@@ -50,7 +44,10 @@ export const DEFAULT_INPUTS_O_TABLE_MENU = [
   'columnsVisibilityButton: columns-visibility-button',
 
   // show-configuration-option [yes|no|true|false]: show configuration option in header. Default: yes.
-  'showConfigurationOption: show-configuration-option'
+  'showConfigurationOption: show-configuration-option',
+
+  // show-filter-option [yes|no|true|false]: show filter menu option in the header menu
+  'showFilterOption: show-filter-option'
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE_MENU = [];
@@ -80,6 +77,8 @@ export class OTableMenuComponent implements OnInit, AfterViewInit, OnDestroy {
   exportButton: boolean = true;
   @InputConverter()
   showConfigurationOption: boolean = true;
+  @InputConverter()
+  showFilterOption: boolean = true;
   @InputConverter()
   columnsVisibilityButton: boolean = true;
   /* End of inputs */
@@ -256,7 +255,7 @@ export class OTableMenuComponent implements OnInit, AfterViewInit, OnDestroy {
 
   get showFilterMenu(): boolean {
     const perm: OPermissions = this.getPermissionByAttr('filter');
-    return !(perm && perm.visible === false);
+    return this.showFilterOption && !(perm && perm.visible === false);
   }
 
   get enabledFilterMenu(): boolean {
@@ -264,7 +263,7 @@ export class OTableMenuComponent implements OnInit, AfterViewInit, OnDestroy {
     return !(perm && perm.enabled === false);
   }
 
-  get showConfigurationMenu(): boolean {        
+  get showConfigurationMenu(): boolean {
     const perm: OPermissions = this.getPermissionByAttr('configuration');
     return this.showConfigurationOption && !(perm && perm.visible === false);
   }
@@ -318,6 +317,8 @@ export class OTableMenuComponent implements OnInit, AfterViewInit, OnDestroy {
     exportCnfg.sqlTypes = this.table.getSqlTypes();
     // Table service, needed for configuring ontimize export service with table service configuration
     exportCnfg.service = this.table.service;
+    exportCnfg.serviceType = this.table.exportServiceType;
+    exportCnfg.visibleButtons = this.table.visibleExportDialogButtons;
     exportCnfg.options = this.table.exportOptsTemplate;
 
     let dialogRef = this.dialog.open(OTableExportDialogComponent, {
@@ -346,6 +347,7 @@ export class OTableMenuComponent implements OnInit, AfterViewInit, OnDestroy {
         let columnsOrder = dialogRef.componentInstance.getColumnsOrder();
         this.table.oTableOptions.columns.sort((a: OColumn, b: OColumn) => columnsOrder.indexOf(a.attr) - columnsOrder.indexOf(b.attr));
         this.table.refreshColumnsWidth();
+        this.table.onVisibleColumnsChange.emit(this.table.visibleColArray);
       }
     });
   }

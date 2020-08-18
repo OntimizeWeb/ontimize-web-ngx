@@ -1,10 +1,24 @@
 import { CommonModule } from '@angular/common';
-import { AfterViewInit, Component, ElementRef, forwardRef, Inject, Injector, NgModule, OnDestroy, OnInit, Optional, ViewChild, ViewEncapsulation } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  forwardRef,
+  Inject,
+  Injector,
+  NgModule,
+  OnDestroy,
+  OnInit,
+  Optional,
+  ViewChild,
+  ViewEncapsulation,
+} from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatSelect, MatSelectChange } from '@angular/material';
 import { Subscription } from 'rxjs';
+
 import { InputConverter } from '../../../decorators/input-converter';
-import { dataServiceFactory } from '../../../services/data-service.provider';
+import { dataServiceFactory } from '../../../services/factories';
 import { OntimizeService } from '../../../services/ontimize.service';
 import { OSharedModule } from '../../../shared/shared.module';
 import { Codes } from '../../../util/codes';
@@ -188,12 +202,25 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
     }
   }
 
-  public clearValue(): void {
-    if (this.multiple) {
-      this.setValue(this.defaultValue);
-    } else {
-      super.clearValue();
+  public isEmpty(): boolean {
+    if (!(this.value instanceof OFormValue)) {
+      return true;
     }
+    return this.value.value === undefined || (this.multiple && this.value.value.length === 0);
+  }
+
+  public clearValue(options?: IFormValueOptions, setDirty: boolean = false): void {
+    if (this.multiple) {
+      this.setValue(this.defaultValue, options, setDirty);
+      this.value.value = [];
+    } else {
+      super.clearValue(options, setDirty);
+    }
+  }
+
+  get showClearButton(): boolean {
+    return this.clearButton && !this.isReadOnly && this.enabled && this.isEmpty();
+
   }
 
   public getMultiple(): boolean {
@@ -255,7 +282,7 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
     return selected;
   }
 
-  public setValue(val: any, options?: IFormValueOptions): void {
+  public setValue(val: any, options?: IFormValueOptions, setDirty: boolean = false): void {
     if (!this.dataArray) {
       return;
     }
@@ -263,7 +290,6 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
     if (this.multiple && !isDefinedVal) {
       return;
     }
-
     if (!isDefinedVal && !this.nullSelection) {
       console.warn('`o-combo` with attr ' + this.oattr + ' cannot be set. `null-selection` attribute is false.');
       return;

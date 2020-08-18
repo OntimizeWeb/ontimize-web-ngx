@@ -3,12 +3,14 @@ import { Injectable, Injector } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { share } from 'rxjs/operators';
+
 import { AppConfig, Config } from '../config/app-config';
 import { LoginService } from '../services';
+import { IFileService } from '../types/file-service.interface';
 import { Codes, ServiceUtils } from '../utils';
 
 @Injectable()
-export class OntimizeFileService {
+export class OntimizeFileService implements IFileService {
 
   public path: string = '';
 
