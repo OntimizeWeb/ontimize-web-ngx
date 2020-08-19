@@ -235,17 +235,18 @@ export class OFormNavigationComponent implements OnDestroy {
   private moveWithoutManager(index: number) {
     const route = this.getRouteOfSelectedRow(this.navigationData[index]);
     if (route.length > 0) {
-      this.navigationService.removeLastItem();
       const navData: ONavigationItem = this.navigationService.getLastItem();
       if (navData) {
+        this.navigationService.removeLastItem();
+        this._form.canDiscardChanges = true;
+
         const extras: NavigationExtras = {};
         extras[Codes.QUERY_PARAMS] = Codes.getIsDetailObject();
-        const detailRoute = navData.getDetailFormRoute();
-        if (Util.isDefined(detailRoute)) {
-          route.unshift(detailRoute);
-        }
-        route.unshift(navData.url);
-        this._form.canDiscardChanges = true;
+
+        const urlArray = navData.url.split(Codes.ROUTE_SEPARATOR);
+        const url = urlArray.splice(0, urlArray.length - route.length).join(Codes.ROUTE_SEPARATOR);
+        route.unshift(url);
+
         this.router.navigate(route, extras).then((navigationDone: boolean) => {
           if (navigationDone) {
             this.currentIndex = index;
