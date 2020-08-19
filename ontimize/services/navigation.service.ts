@@ -391,35 +391,4 @@ export class NavigationService implements ILocalStorageComponent {
     this.storeNavigation();
   }
 
-  protected mergeNavigationItems(navigationItems: ONavigationItem[], storedNavigation: ONavigationItem[]): ONavigationItem[] {
-    if (storedNavigation.length === 0 || storedNavigation.length > MAXIMIUM_NAVIGATION_HEAP_SIZE) {
-      return navigationItems;
-    }
-    let result: ONavigationItem[] = [];
-
-    let lastCommonIndex;
-    for (let i = navigationItems.length - 1; i >= 0; i--) {
-      for (let j = storedNavigation.length - 1; j >= 0; j--) {
-        if (storedNavigation[j].url === navigationItems[i].url && i !== navigationItems.length - 1) {
-          lastCommonIndex = i;
-          break;
-        }
-      }
-      if (lastCommonIndex !== undefined) {
-        break;
-      }
-    }
-
-    storedNavigation.forEach(s => result.push(s));
-
-    if (lastCommonIndex !== undefined) {
-      for (let j = lastCommonIndex + 1, len = navigationItems.length; j < len; j++) {
-        if (storedNavigation[storedNavigation.length - 1].url !== navigationItems[j].url) {
-          result.push(navigationItems[j]);
-        }
-      }
-    }
-    return result;
-  }
-
 }
