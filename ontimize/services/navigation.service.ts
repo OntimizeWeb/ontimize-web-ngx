@@ -289,9 +289,7 @@ export class NavigationService implements ILocalStorageComponent {
       if (queryConf) {
         this.navigationItems[this.navigationItems.length - 1].keysValues = queryConf.keysValues;
         delete queryConf.keysValues;
-        if (Object.keys(queryConf).length > 0) {
-          this.navigationItems[this.navigationItems.length - 1].queryConfiguration = queryConf;
-        }
+        this.navigationItems[this.navigationItems.length - 1].queryConfiguration = Object.keys(queryConf).length > 0 ? queryConf : null;
       }
       this.storeNavigation();
     }
