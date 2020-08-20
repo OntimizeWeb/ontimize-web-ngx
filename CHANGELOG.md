@@ -1,7 +1,7 @@
 ## 8.0.0 (2020-08-20)
 ### Bug Fixes
 * **o-checkbox** : fixing bug in sql-type value was always overwritted by VARCHAR ([b9f6cbb](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b9f6cbb))
-* **o-form-navigation **:
+* **o-form-navigation**:
   * fixing form header navigation ([29f5bd9](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/29f5bd9))
   * fixing navigation through form details ([8da33c5](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/8da33c5))
 * **o-form**: setting layoutAling= 'start stretch' instead of 'start start'([008c78c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/008c78c))
