@@ -58,4 +58,4 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 
 Notes of the project:
 
-    -http: The deprecated @angular/http package has been removed, the @angular/common/http package should be used instead. For details on how to migrate, please refer to the [deprecations guide](https://angular.io/guide/deprecations#angularhttp)
+* **http**: The deprecated @angular/http package has been removed, the @angular/common/http package should be used instead. For details on how to migrate, please refer to the [deprecations guide](https://angular.io/guide/deprecations#angularhttp)
