@@ -1,11 +1,11 @@
 ## 8.0.0 (2020-08-20)
 ### Bug Fixes
-* **o-checkbox** : fixing bug in sql-type value was always overwritted by VARCHAR ([b9f6cbb])(https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b9f6cbb))
+* **o-checkbox** : fixing bug in sql-type value was always overwritted by VARCHAR ([b9f6cbb](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b9f6cbb))
 * **o-form-navigation ***:
-  * fixing form header navigation ([29f5bd9])(https://github.com/OntimizeWeb/ontimize-web-ngx/commit/29f5bd9))
-  * fixing navigation through form details ([8da33c5])(https://github.com/OntimizeWeb/ontimize-web-ngx/commit/8da33c5))
-* **o-form**: setting layoutAling= 'start stretch' instead of 'start start'([008c78c])(https://github.com/OntimizeWeb/ontimize-web-ngx/commit/008c78c))
-* **o-table**: fixing bug in horizontal scroll ([eef29b4])(https://github.com/OntimizeWeb/ontimize-web-ngx/commit/eef29b4))
+  * fixing form header navigation ([29f5bd9](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/29f5bd9))
+  * fixing navigation through form details ([8da33c5](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/8da33c5))
+* **o-form**: setting layoutAling= 'start stretch' instead of 'start start'([008c78c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/008c78c))
+* **o-table**: fixing bug in horizontal scroll ([eef29b4](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/eef29b4))
 
 ## 8.0.0-rc.1 (2020-07-30)
 ### Features
@@ -135,8 +135,8 @@
 ### Features
 * **o-list-picker**: new `dialog-class` input ([321fd4b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/321fd4b))
 * **o-table**: new cell render `o-table-cell-renderer-time` and cell editor `o-table-cell-editor-time` ([399cdbc](https://github.com/OntimizeWeb/ontimize-web-ngx/
-* **o-form**: new `confirm-exit` input ([01d0d29]](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/01d0d29]))
-* **IFormValueOptions**: adding new `emitModelToViewValueChange` property ([4d11cd8]](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4d11cd8]))
+* **o-form**: new `confirm-exit` input ([01d0d29](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/01d0d29]))
+* **IFormValueOptions**: adding new `emitModelToViewValueChange` property ([4d11cd8](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4d11cd8]))
 
 ## 4.0.4 (2019-05-22)
 ### Features
