@@ -1,8 +1,33 @@
-# OntimizeWebNgx Angular 8
+# Ontimize Web
+
+Ontimize Web is web application framework that provides to you an environment for solving the problematic situation of building aplications that require a browser-based user interface. Ontimize Web allows developing data management applications quickly and agile.
+
+Ontimize Web is based on the [8.x version of Angular](https://v8.angular.io/docs), and comes with many significant performance, usability, and feature improvements.
+
+
+### Try Ontimize Web
+
+To try Ontimize Web today, visit the [Ontimize Web Docs](https://ontimizeweb.github.io/docs/). We would love any feedback you have or to know when you encounter issues, by filing an issue report on this repo.
+
+
+### Ontimize Web Examples
+
+View all the examples in action at [Ontimize Web](https://try.imatia.com/ontimizeweb/).
+
+### Ontimize Web Getting Started
+
+There is a practical [Getting Started](https://github.com/OntimizeWeb/ontimize-web-ngx-quickstart), a perfect starting point for building your own Ontimize Web app.
+
+### Versions and dependencies
+Each version of the Addons is compatible with a version of the framework, you can check the dependencies between Angular, Ontimize web and Addons [here](https://ontimizeweb.github.io/docs/versions/).
+
+
+
+## Development
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.3.21.
 
-## Installation
+### Installation
 
 Follow the next steps:
 
@@ -10,11 +35,11 @@ Follow the next steps:
     - cd projects/ontimize-web-ngx
     - npm install
 
-## Build
+### Build
 
 We have to scripts to build the application. One of them is for production and the other is for development.
 
-### Production
+#### Production
 
 `npm run prodbuild`
 
@@ -27,7 +52,7 @@ The script `prodbuild` executes the following commands:
     - scss-bundle -p scss-bundle-theme.config.json (With this 2 tasks we will be able to use variables, mixins, keyframes ... in our project)
     - copyfiles -u 3 ./projects/ontimize-web-ngx/assets/svg/ontimize-icon-set.svg ./dist/ontimize-web-ngx/assets (Copy the assets folder to distribution folder)
 
-### Development
+#### Development
 
 `npm run build`
 
@@ -42,20 +67,3 @@ The script `build` executes the following commands:
     - cd dist/ontimize-web-ngx && npm pack (From the distribution folder we create a .tgz file to import in our project)
 
 We are working on solve those warning messages that appear on building the library.
-
-## Code scaffolding
-
-Run `ng generate component component-name` to generate a new component.
-
-You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
-
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
-
-## Notes
-
-Notes of the project:
-
-* **http**: The deprecated @angular/http package has been removed, the @angular/common/http package should be used instead. For details on how to migrate, please refer to the [deprecations guide](https://angular.io/guide/deprecations#angularhttp)
