@@ -466,6 +466,7 @@ export interface OTableInitializationOptions {
   keys?: string;
   sortColumns?: string;
   parentKeys?: string;
+  filterColumns?: string;
 }
 
 @Component({
@@ -920,6 +921,13 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       }
       if (clonedOpts.hasOwnProperty('parentKeys')) {
         this.parentKeys = clonedOpts.parentKeys;
+      }
+
+      if (clonedOpts.hasOwnProperty('filterColumns')) {
+        if (!this.oTableColumnsFilterComponent) {
+          this.oTableColumnsFilterComponent = new OTableColumnsFilterComponent(this.injector,this);
+        }
+        this.oTableColumnsFilterComponent.columns = clonedOpts.filterColumns;
       }
     }
 
