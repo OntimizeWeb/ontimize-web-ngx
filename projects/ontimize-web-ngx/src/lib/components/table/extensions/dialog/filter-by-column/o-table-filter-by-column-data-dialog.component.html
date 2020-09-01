@@ -23,9 +23,7 @@
         oTranslate }}</span>
         </div>
         <button type="button" mat-icon-button (click)="sortValues()">
-          <mat-icon *ngIf="activeSortDirection==='desc'">arrow_downward</mat-icon>
-          <mat-icon *ngIf="activeSortDirection==='asc'">arrow_upward</mat-icon>
-          <mat-icon>sort_by_alpha</mat-icon>
+          <mat-icon [svgIcon]="getSortByAlphaIcon()"></mat-icon>
         </button>
       </div>
       <mat-selection-list *ngIf="preloadValues || listData" #filterValueList fxFlex fxLayout="column" class="select-values-list">

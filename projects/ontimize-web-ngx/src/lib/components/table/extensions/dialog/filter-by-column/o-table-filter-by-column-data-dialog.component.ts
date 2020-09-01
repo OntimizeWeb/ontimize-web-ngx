@@ -313,6 +313,13 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
     return this.mode === 'selection' || this.mode === 'default';
   }
 
+  getSortByAlphaIcon() {
+    let icon ='ontimize:sort_by_alpha'
+    if (this.activeSortDirection !== '') {
+      icon += '_'+this.activeSortDirection
+    }
+    return icon;
+  }
   protected getTypedValue(control: FormControl): any {
     let value = control.value;
     if (this.isNumericType()) {
