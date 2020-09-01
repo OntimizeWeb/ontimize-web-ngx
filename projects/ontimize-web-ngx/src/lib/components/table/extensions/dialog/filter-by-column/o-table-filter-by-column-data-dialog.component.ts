@@ -51,6 +51,7 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
 
   @ViewChild('filter', { static: false }) filter: ElementRef;
   @ViewChild('filterValueList', { static: false }) filterValueList: MatSelectionList;
+  public activeSortDirection: 'asc' | 'desc' | '' = '';
 
   constructor(
     public dialogRef: MatDialogRef<OTableFilterByColumnDataDialogComponent>,
@@ -230,6 +231,53 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
       }
     }
     return filter;
+  }
+
+  clearValues() {
+    if (this.isTextType()) {
+      this.fcText.setValue(undefined);
+    }
+    if (this.isDateType()) {
+      this.fcFrom.setValue(undefined);
+      this.fcTo.setValue(undefined);
+    } else {
+      this.fcFrom.setValue(undefined);
+      this.fcTo.setValue(undefined);
+    }
+  }
+
+  sortValues() {
+    switch (this.activeSortDirection) {
+      case '':
+        this.activeSortDirection = 'asc';
+        break;
+      case 'asc':
+        this.activeSortDirection = 'desc';
+        break;
+      case 'desc':
+        this.activeSortDirection = '';
+        break;
+    }
+
+    let sortData = Object.assign([], this.columnData);
+    if (this.activeSortDirection !== '') {
+      this.listDataSubject.next(sortData.sort(this.sortFunction.bind(this)));
+    } else {
+      this.listDataSubject.next(sortData);
+    }
+
+
+  }
+
+  sortFunction(a: any, b: any): number {
+    //sortFunction(propertyA: any, propertyB: any): number {
+    let propertyA: number | string = '';
+    let propertyB: number | string = '';
+    [propertyA, propertyB] = [a['renderedValue'], b['renderedValue']];
+
+    const valueA = typeof propertyA === 'undefined' ? '' : propertyA === '' ? propertyA : isNaN(+propertyA) ? propertyA.toString().trim().toLowerCase() : +propertyA;
+    const valueB = typeof propertyB === 'undefined' ? '' : propertyB === '' ? propertyB : isNaN(+propertyB) ? propertyB.toString().trim().toLowerCase() : +propertyB;
+    return (valueA <= valueB ? -1 : 1) * (this.activeSortDirection === 'asc' ? 1 : -1);
   }
 
   onSlideChange(e: MatSlideToggleChange): void {
