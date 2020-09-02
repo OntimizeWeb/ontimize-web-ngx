@@ -248,14 +248,14 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
 
   sortValues() {
     switch (this.activeSortDirection) {
-      case '':
-        this.activeSortDirection = 'asc';
-        break;
       case 'asc':
         this.activeSortDirection = 'desc';
         break;
       case 'desc':
         this.activeSortDirection = '';
+        break;
+      default:
+        this.activeSortDirection = 'asc';
         break;
     }
 
@@ -270,7 +270,6 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
   }
 
   sortFunction(a: any, b: any): number {
-    //sortFunction(propertyA: any, propertyB: any): number {
     let propertyA: number | string = '';
     let propertyB: number | string = '';
     [propertyA, propertyB] = [a['renderedValue'], b['renderedValue']];
