@@ -235,6 +235,9 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   formGroup: FormGroup;
   onDataLoaded: EventEmitter<object> = new EventEmitter<object>();
   beforeCloseDetail: EventEmitter<any> = new EventEmitter<any>();
+  /**
+   * @deprecated Use `beforeUpdateMode` instead
+   */
   beforeGoEditMode: EventEmitter<any> = new EventEmitter<any>();
   beforeInsertMode = new EventEmitter<null>();
   beforeUpdateMode = new EventEmitter<null>();
