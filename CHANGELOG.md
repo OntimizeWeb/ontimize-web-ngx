@@ -1,3 +1,9 @@
+## 8.0.1
+### Features
+* **o-form**:
+  * new public methods `back`, `closeDetail`, `reload`, `goInsertMode`, `insert`, `goEditMode`, `update`, `undo` and `delete` ([e5c899d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e5c899d)).
+  * The following methods has been deprecated and will be removed in the future: `_backAction`, `_closeDetailAction`, `_reloadAction`, `_goInsertMode`, `_insertAction`, `_goEditMode`, `_editAction`, `_undoLastChangeAction` and `_deleteAction` ([e5c899d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e5c899d)).
+
 ## 8.0.0 (2020-08-20)
 ### Bug Fixes
 * **o-checkbox** : fixing bug in sql-type value was always overwritted by VARCHAR ([b9f6cbb](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b9f6cbb))
