@@ -1,10 +1,11 @@
-import { ChangeDetectionStrategy, Component, forwardRef, Inject, Injector, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, forwardRef, Inject, Injector, OnInit, ContentChildren, QueryList } from '@angular/core';
 
 import { InputConverter } from '../../../../../decorators/input-converter';
 import { Codes } from '../../../../../util/codes';
 import { Util } from '../../../../../util/util';
 import { OColumn } from '../../../column/o-column.class';
 import { OTableComponent } from '../../../o-table.component';
+import { OTableColumnsFilterColumnComponent } from './columns/o-table-columns-filter-columns.component';
 
 export const DEFAULT_INPUTS_O_TABLE_COLUMN_FILTER = [
   // columns [string]: columns that might be filtered, separated by ';'. Default: all visible columns.
@@ -54,6 +55,8 @@ export class OTableColumnsFilterComponent implements OnInit {
   protected _columnsArray: Array<string> = [];
   protected columnsComparisonProperty: object = {};
 
+  @ContentChildren(OTableColumnsFilterColumnComponent, { descendants: true }) filterColumns: QueryList<OTableColumnsFilterColumnComponent>;
+
   constructor(
     protected injector: Injector,
     @Inject(forwardRef(() => OTableComponent)) protected table: OTableComponent
@@ -77,8 +80,17 @@ export class OTableColumnsFilterComponent implements OnInit {
     this.table.setOTableColumnsFilter(this);
   }
 
-  isColumnFilterable(attr: string) {
-    return (this.columnsArray.indexOf(attr) !== -1);
+
+  isColumnFilterable(attr: string): boolean {
+    return (this.columnsArray.indexOf(attr) !== -1) || Util.isDefined(this.filterColumns.find(x => x.attr === attr));
+  }
+
+  getColumnSortValue(attr: string): string {
+    let sortValue = '';
+    if (this.filterColumns.find(x => x.attr === attr)) {
+      sortValue = this.filterColumns.find(x => x.attr === attr).sort;
+    }
+    return sortValue;
   }
 
   getColumnComparisonValue(column: OColumn, val: any): any {
