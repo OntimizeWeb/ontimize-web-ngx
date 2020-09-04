@@ -2019,6 +2019,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       data: {
         previousFilter: this.dataSource.getColumnValueFilterByAttr(column.attr),
         column: column,
+        activeSortDirection: this.getSortFilterColumn(column),
         tableData: this.dataSource.getTableData(),
         preloadValues: this.oTableColumnsFilterComponent.preloadValues,
         mode: this.oTableColumnsFilterComponent.mode
@@ -2034,6 +2035,19 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
         self.reloadPaginatedDataFromStart();
       }
     });
+  }
+
+  getSortFilterColumn(column: OColumn): string {
+    let sortColumn = '';
+
+    if (this.sortColArray.find(x => x.columnName === column.attr)) {
+      sortColumn = this.isColumnSortActive(column) ? 'asc':'desc'
+    }
+    if (this.oTableColumnsFilterComponent) {
+      sortColumn = this.oTableColumnsFilterComponent.getColumnSortValue(column.attr);
+    }
+
+    return sortColumn;
   }
 
   get disableTableMenuButton(): boolean {

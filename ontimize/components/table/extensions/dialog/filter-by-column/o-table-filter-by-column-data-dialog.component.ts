@@ -7,6 +7,7 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { FormControl } from '@angular/forms';
 import { OColumn } from '../../../o-table.component';
 import { Util } from '../../../../../util/util';
+import { Codes } from '../../../../../util/codes';
 
 export interface ITableFilterByColumnDataInterface {
   value: any;
@@ -74,9 +75,14 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
       previousFilter = data.previousFilter;
       this.isCustomFilterSubject.next([ColumnValueFilterOperator.LESS_EQUAL, ColumnValueFilterOperator.MORE_EQUAL, ColumnValueFilterOperator.BETWEEN, ColumnValueFilterOperator.EQUAL].indexOf(previousFilter.operator) !== -1);
     }
+
     if (data.hasOwnProperty('preloadValues')) {
       this.preloadValues = data.preloadValues;
     }
+    if (data.activeSortDirection) {
+      this.activeSortDirection = data.activeSortDirection;
+    }
+
     if (data.tableData && Array.isArray(data.tableData)) {
       this.tableData = data.tableData;
       this.getDistinctValues(data.tableData, previousFilter);
@@ -102,7 +108,11 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
 
   initializeDataList(filter?: IColumnValueFilter): void {
     if (this.preloadValues || (filter && filter.operator === ColumnValueFilterOperator.IN)) {
-      this.listDataSubject.next(this.columnData.slice());
+      if (this.activeSortDirection === Codes.ASC_SORT || this.activeSortDirection === Codes.DESC_SORT) {
+        this.sortData();
+      } else {
+        this.listDataSubject.next(this.columnData.slice());
+      }
     }
   }
 
@@ -245,7 +255,7 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
     }
   }
 
-  sortValues() {
+  onClickSortValues() {
     switch (this.activeSortDirection) {
       case 'asc':
         this.activeSortDirection = 'desc';
@@ -257,21 +267,24 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
         this.activeSortDirection = 'asc';
         break;
     }
+    this.sortData();
+  }
 
-    let sortData = Object.assign([], this.columnData);
+  sortData() {
+    let sortedData = Object.assign([], this.columnData);
     if (this.activeSortDirection !== '') {
-      this.listDataSubject.next(sortData.sort(this.sortFunction.bind(this)));
+      this.listDataSubject.next(sortedData.sort(this.sortFunction.bind(this)));
+      console.log('ordena ', this.activeSortDirection, sortedData);
     } else {
-      this.listDataSubject.next(sortData);
+      this.listDataSubject.next(sortedData);
     }
-
 
   }
 
   sortFunction(a: any, b: any): number {
     let propertyA: number | string = '';
     let propertyB: number | string = '';
-    [propertyA, propertyB] = [a['renderedValue'], b['renderedValue']];
+    [propertyA, propertyB] = [a['value'], b['value']];
 
     const valueA = typeof propertyA === 'undefined' ? '' : propertyA === '' ? propertyA : isNaN(+propertyA) ? propertyA.toString().trim().toLowerCase() : +propertyA;
     const valueB = typeof propertyB === 'undefined' ? '' : propertyB === '' ? propertyB : isNaN(+propertyB) ? propertyB.toString().trim().toLowerCase() : +propertyB;

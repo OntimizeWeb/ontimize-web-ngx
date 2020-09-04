@@ -22,7 +22,7 @@
           <span *ngIf="(listData | async).length === 0" class="column-filter-empty-list">{{ 'TABLE.FILTER_BY_COLUMN.LIST_EMPTY' |
               oTranslate }}</span>
         </div>
-        <button type="button" mat-icon-button (click)="sortValues()">
+        <button type="button" mat-icon-button (click)="onClickSortValues()">
           <mat-icon [svgIcon]="getSortByAlphaIcon()"></mat-icon>
         </button>
       </div>
