@@ -114,7 +114,4 @@ export class OTableColumnsFilterComponent implements OnInit {
     return this._columnsArray;
   }
 
-  getSortedFilterableColumns() {
-    return this.filterColumns;
-  }
 }

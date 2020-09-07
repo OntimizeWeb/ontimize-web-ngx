@@ -1691,7 +1691,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   get originalFilterColumns(): Array<OFilterColumn> {
     let sortColumnsFilter = [];
     if (this.oTableColumnsFilterComponent) {
-      sortColumnsFilter = this.oTableColumnsFilterComponent.getSortedFilterableColumns()
+      sortColumnsFilter = this.oTableColumnsFilterComponent.filterColumns
         .map(x => {
           let obj: OFilterColumn = { attr: '', sort: '' };
           obj.attr = x.attr;
