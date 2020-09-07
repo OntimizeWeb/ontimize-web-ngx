@@ -73,6 +73,7 @@ import { OTableStorage } from './extensions/o-table-storage.class';
 import { OTableDao } from './extensions/o-table.dao';
 import { OMatSort } from './extensions/sort/o-mat-sort';
 import { OMatSortHeader } from './extensions/sort/o-mat-sort-header';
+import { OFilterColumn } from './extensions/header/table-columns-filter/columns/o-table-columns-filter-columns.component';
 
 export const DEFAULT_INPUTS_O_TABLE = [
   ...DEFAULT_INPUTS_O_SERVICE_COMPONENT,
@@ -214,6 +215,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   @ViewChild('spinnerContainer', { read: ElementRef, static: false })
   spinnerContainer: ElementRef;
+
+  _filterColumns: Array<OFilterColumn>;
+
   get diameterSpinner() {
     const minHeight = OTableComponent.DEFAULT_BASE_SIZE_SPINNER;
     let height = 0;
@@ -1670,6 +1674,34 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     this.oTableColumnsFilterComponent = tableColumnsFilter;
   }
 
+  get filterColumns() {
+
+    if (this.state.hasOwnProperty('initial-configuration') &&
+      this.state['initial-configuration'].hasOwnProperty('filter-columns') &&
+      this.state.hasOwnProperty('filter-columns') &&
+      this.state['initial-configuration']['filter-columns'] === this.originalFilterColumns) {
+      if (this.state.hasOwnProperty('filter-columns')) {
+        return this.state['filter-columns'];
+      }
+    }
+
+    return this.originalFilterColumns;
+  }
+
+  get originalFilterColumns(): Array<OFilterColumn> {
+    let sortColumnsFilter = [];
+    if (this.oTableColumnsFilterComponent) {
+      sortColumnsFilter = this.oTableColumnsFilterComponent.getSortedFilterableColumns()
+        .map(x => {
+          let obj: OFilterColumn = { attr: '', sort: '' };
+          obj.attr = x.attr;
+          obj.sort = x.sort;
+          return obj;
+        });
+    }
+    return sortColumnsFilter;
+  }
+
   getStoredColumnsFilters() {
     return this.oTableStorage.getStoredColumnsFilters();
   }
@@ -1740,24 +1772,64 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         const columnValueFilter = dialogRef.componentInstance.getColumnValuesFilter();
+        //guardar en localstorage el cambio
+        const sortedFilterableColumn = dialogRef.componentInstance.getFilterColumn();
+        this.storeFilterColumns(sortedFilterableColumn);
         this.dataSource.addColumnFilter(columnValueFilter);
         this.reloadPaginatedDataFromStart();
       }
     });
   }
 
-  getSortFilterColumn(column: OColumn): string {
-    let sortColumn = '';
-
-    if (this.sortColArray.find(x => x.columnName === column.attr)) {
-      sortColumn = this.isColumnSortActive(column) ? 'asc':'desc'
+  storeFilterColumns(sortColumnFilter: OFilterColumn) {
+    if (this.state.hasOwnProperty('filter-columns') && this.state['filter-columns']) {
+      let storeSortColumnsFilterState = this.oTableStorage.getFilterColumnsState();
+      //if exists in state then updated sort value
+      if (storeSortColumnsFilterState['filter-columns'].filter(x => x.attr === sortColumnFilter.attr).length > 0) {
+        storeSortColumnsFilterState['filter-columns'].forEach(element => {
+          if (element.attr === sortColumnFilter.attr) {
+            element.sort = sortColumnFilter.sort;
+          }
+        });
+      } else {
+        //else exists in state then added filter column
+        storeSortColumnsFilterState['filter-columns'].push(sortColumnFilter);
+      }
+      this.state['filter-columns'] = storeSortColumnsFilterState['filter-columns'];
+    } else {
+      this.state['filter-columns'] = this.filterColumns;
     }
-    if (this.oTableColumnsFilterComponent) {
-      sortColumn = this.oTableColumnsFilterComponent.getColumnSortValue(column.attr);
+
+  }
+
+
+  getSortFilterColumn(column: OColumn): string {
+    let sortColumn;
+
+    if (this.state.hasOwnProperty('filter-columns')) {
+      this.state['filter-columns'].forEach((element: OFilterColumn) => {
+        if (element.attr === column.attr) {
+          sortColumn = element.sort;
+        }
+      });
+    }
+
+    if (!Util.isDefined(sortColumn)) {
+      if (this.sortColArray.find(x => x.columnName === column.attr)) {
+        sortColumn = this.isColumnSortActive(column) ? 'asc' : 'desc'
+      }
+    }
+
+    if (!Util.isDefined(sortColumn) && this.oTableColumnsFilterComponent) {
+      sortColumn = this.oTableColumnsFilterComponent.getSortValueOfFilterColumn(column.attr);
     }
 
     return sortColumn;
   }
+
+  // getColumnSortFilters() {
+  //   this.oTableColumnsFilterComponent.getSortedColumns();
+  // }
 
   get disableTableMenuButton(): boolean {
     return !!(this.permissions && this.permissions.menu && this.permissions.menu.enabled === false);
