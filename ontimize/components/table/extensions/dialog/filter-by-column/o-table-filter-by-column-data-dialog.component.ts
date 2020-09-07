@@ -7,14 +7,13 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { FormControl } from '@angular/forms';
 import { OColumn } from '../../../o-table.component';
 import { Util } from '../../../../../util/util';
-import { Codes } from '../../../../../util';
-import { OFilterColumn } from '../../header/table-columns-filter/columns/o-table-columns-filter-columns.component';
-
+import { OFilterColumn } from '../../header/table-columns-filter/columns/o-table-columns-filter-column.component';
+import { Codes } from '../../../../../util/codes';
 export interface ITableFilterByColumnDataInterface {
   value: any;
   selected: boolean;
   renderedValue?: any;
-  tableIndex?:number;
+  tableIndex?: number;
 }
 
 @Component({
@@ -325,9 +324,9 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
   }
 
   getSortByAlphaIcon() {
-    let icon = 'ontimize:sort_by_alpha'
+    let icon = 'ontimize:sort_by_alpha';
     if (this.activeSortDirection !== '') {
-      icon += '_' + this.activeSortDirection
+      icon += '_' + this.activeSortDirection;
     }
     return icon;
   }
