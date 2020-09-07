@@ -1802,7 +1802,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   }
 
-
   getSortFilterColumn(column: OColumn): string {
     let sortColumn;
 
@@ -1826,10 +1825,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
     return sortColumn;
   }
-
-  // getColumnSortFilters() {
-  //   this.oTableColumnsFilterComponent.getSortedColumns();
-  // }
 
   get disableTableMenuButton(): boolean {
     return !!(this.permissions && this.permissions.menu && this.permissions.menu.enabled === false);
