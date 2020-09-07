@@ -4,6 +4,8 @@
 * **table**:
   * o-table-filter-by-column: added clear button in customized filters  ([6fe1e33](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6fe1e33))
   * reinitialize method: added new option 'filterColumns' ([361b8c1](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/361b8c1))
+  * o-table-columns-filter-column: added clear button in customized filters  ([6fe1e33](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6fe1e33))
+  * new component `o-table-columns-filter-column` ([f395b82](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f395b82))
 
 ## 8.0.0 (2020-08-20)
 ### Bug Fixes
