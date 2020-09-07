@@ -86,7 +86,7 @@ import { OMatSortModule } from './extensions/sort/o-mat-sort-module';
 import { OTableExpandedFooter } from './o-table-expanded-footer.directive';
 import { OTableDao } from './o-table.dao';
 import { OTableDataSource } from './o-table.datasource';
-import { OFilterColumn } from './extensions/header/table-columns-filter/columns/o-table-columns-filter-columns.component';
+import { OFilterColumn } from './extensions/header/table-columns-filter/columns/o-table-columns-filter-column.component';
 
 export const NAME_COLUMN_SELECT = 'select';
 
@@ -1981,7 +1981,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   get originalFilterColumns(): Array<OFilterColumn> {
     let sortColumnsFilter = [];
     if (this.oTableColumnsFilterComponent) {
-      sortColumnsFilter = this.oTableColumnsFilterComponent.getSortedFilterableColumns()
+      sortColumnsFilter = this.oTableColumnsFilterComponent.filterColumns
         .map(x => {
           let obj: OFilterColumn = { attr: '', sort: '' };
           obj.attr = x.attr;
@@ -2118,11 +2118,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     return sortColumn;
   }
 
-  // getColumnSortFilters() {
-  //   this.oTableColumnsFilterComponent.getSortedColumns();
-  // }
-
-  get disableTableMenuButton(): boolean {
+   get disableTableMenuButton(): boolean {
     return !!(this.permissions && this.permissions.menu && this.permissions.menu.enabled === false);
   }
 

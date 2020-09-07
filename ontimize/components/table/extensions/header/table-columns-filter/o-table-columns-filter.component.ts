@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, Inject, Injector, OnInit, forwardRe
 import { Codes, Util } from '../../../../../utils';
 import { OColumn, OTableComponent } from '../../../o-table.component';
 import { InputConverter } from '../../../../../decorators';
-import { OTableColumnsFilterColumnComponent } from './columns/o-table-columns-filter-columns.component';
+import { OTableColumnsFilterColumnComponent } from './columns/o-table-columns-filter-column.component';
 
 export const DEFAULT_INPUTS_O_TABLE_COLUMN_FILTER = [
   // columns [string]: columns that might be filtered, separated by ';'. Default: all visible columns.
@@ -124,7 +124,4 @@ export class OTableColumnsFilterComponent implements OnInit {
     return this._columnsArray;
   }
 
-  getSortedFilterableColumns() {
-    return this.filterColumns;
-  }
 }
