@@ -7,7 +7,8 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { FormControl } from '@angular/forms';
 import { OColumn } from '../../../o-table.component';
 import { Util } from '../../../../../util/util';
-import { Codes } from '../../../../../util/codes';
+import { Codes } from '../../../../../util';
+import { OFilterColumn } from '../../header/table-columns-filter/columns/o-table-columns-filter-columns.component';
 
 export interface ITableFilterByColumnDataInterface {
   value: any;
@@ -197,7 +198,7 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
         this.columnData.push({
           renderedValue: renderedValue,
           value: colValues[i],
-          selected: filter.operator === ColumnValueFilterOperator.IN && (filter.values || []).indexOf(renderedValue) !== -1,
+          selected: filter.operator === ColumnValueFilterOperator.IN && (filter.values || []).indexOf(colValues[i]) !== -1,
           // storing the first index where this renderedValue is obtained. In the template of this component the column renderer will obtain the
           // row value of this index
           tableIndex: i
@@ -274,7 +275,6 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
     let sortedData = Object.assign([], this.columnData);
     if (this.activeSortDirection !== '') {
       this.listDataSubject.next(sortedData.sort(this.sortFunction.bind(this)));
-      console.log('ordena ', this.activeSortDirection, sortedData);
     } else {
       this.listDataSubject.next(sortedData);
     }
@@ -330,6 +330,13 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
       icon += '_' + this.activeSortDirection
     }
     return icon;
+  }
+
+  getFilterColumn(): OFilterColumn {
+    let obj: OFilterColumn = { attr: '', sort: '' };
+    obj.attr = this.column.attr;
+    obj.sort = this.activeSortDirection;
+    return obj;
   }
 
   protected getTypedValue(control: FormControl): any {

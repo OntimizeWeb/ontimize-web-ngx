@@ -95,7 +95,7 @@ export class OTableColumnsFilterComponent implements OnInit {
     return (this.columnsArray.indexOf(attr) !== -1) || Util.isDefined(this.filterColumns.find(x => x.attr === attr));
   }
 
-  getColumnSortValue(attr: string): string {
+  getSortValueOfFilterColumn(attr: string): string {
     let sortValue = '';
     if (this.filterColumns.find(x => x.attr === attr)) {
       sortValue = this.filterColumns.find(x => x.attr === attr).sort;
@@ -124,4 +124,7 @@ export class OTableColumnsFilterComponent implements OnInit {
     return this._columnsArray;
   }
 
+  getSortedFilterableColumns() {
+    return this.filterColumns;
+  }
 }
