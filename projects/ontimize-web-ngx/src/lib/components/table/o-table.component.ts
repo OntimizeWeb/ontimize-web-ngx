@@ -73,7 +73,7 @@ import { OTableStorage } from './extensions/o-table-storage.class';
 import { OTableDao } from './extensions/o-table.dao';
 import { OMatSort } from './extensions/sort/o-mat-sort';
 import { OMatSortHeader } from './extensions/sort/o-mat-sort-header';
-import { OFilterColumn } from './extensions/header/table-columns-filter/columns/o-table-columns-filter-columns.component';
+import { OFilterColumn } from './extensions/header/table-columns-filter/columns/o-table-columns-filter-column.component';
 
 export const DEFAULT_INPUTS_O_TABLE = [
   ...DEFAULT_INPUTS_O_SERVICE_COMPONENT,

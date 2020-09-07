@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component, forwardRef, Inject, Injector, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
 export type OFilterColumn = {
   attr: string;
   sort: 'asc' | 'desc' | '';
@@ -18,12 +19,9 @@ export const DEFAULT_INPUTS_O_TABLE_COLUMN_FILTER_COLUMN = [
   inputs: DEFAULT_INPUTS_O_TABLE_COLUMN_FILTER_COLUMN
 })
 
-export class OTableColumnsFilterColumnComponent implements OnInit {
+export class OTableColumnsFilterColumnComponent {
 
   public attr: string = '';
   public sort: 'asc' | 'desc' | '' = '';
-  constructor() { }
-
-  ngOnInit() { }
 
 }

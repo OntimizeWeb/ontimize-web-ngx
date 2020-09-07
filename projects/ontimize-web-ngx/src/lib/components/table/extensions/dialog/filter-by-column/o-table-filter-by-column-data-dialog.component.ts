@@ -17,7 +17,7 @@ import { TableFilterByColumnData } from '../../../../../types/o-table-filter-by-
 import { Util } from '../../../../../util/util';
 import { OColumn } from '../../../column/o-column.class';
 import { Codes } from '../../../../../util';
-import { OFilterColumn } from '../../header/table-columns-filter/columns/o-table-columns-filter-columns.component';
+import { OFilterColumn } from '../../header/table-columns-filter/columns/o-table-columns-filter-column.component';
 
 @Component({
   selector: 'o-table-filter-by-column-data-dialog',
@@ -326,9 +326,9 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
   }
 
   getSortByAlphaIcon() {
-    let icon = 'ontimize:sort_by_alpha'
+    let icon = 'ontimize:sort_by_alpha';
     if (this.activeSortDirection !== '') {
-      icon += '_' + this.activeSortDirection
+      icon += '_' + this.activeSortDirection;
     }
     return icon;
   }
