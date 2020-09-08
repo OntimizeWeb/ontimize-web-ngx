@@ -20,6 +20,8 @@
         </ng-container>
       </ng-template>
 
+      <ng-content select="[o-table-custom-toolbar]"></ng-content>
+
       <button type="button" *ngIf="showTableMenuButton" mat-icon-button class="o-table-menu-button"
         [matMenuTriggerFor]="tableMenu.matMenu" (click)="$event.stopPropagation()">
         <mat-icon svgIcon="ontimize:more_vert"></mat-icon>
