@@ -3,6 +3,7 @@
 * **o-form**:
   * new public methods `back`, `closeDetail`, `reload`, `goInsertMode`, `insert`, `goEditMode`, `update`, `undo` and `delete` ([e5c899d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e5c899d)).
   * The following methods has been deprecated and will be removed in the future: `_backAction`, `_closeDetailAction`, `_reloadAction`, `_goInsertMode`, `_insertAction`, `_goEditMode`, `_editAction`, `_undoLastChangeAction` and `_deleteAction` ([e5c899d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e5c899d)).
+* **o-table**: new directive `o-table-custom-toolbar` for adding custom content to the table toolbar ([0fb3793](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0fb3793)).
 
 ## 8.0.0 (2020-08-20)
 ### Bug Fixes
