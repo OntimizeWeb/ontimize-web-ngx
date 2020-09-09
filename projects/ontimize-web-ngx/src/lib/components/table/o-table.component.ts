@@ -1008,7 +1008,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
 
     //Initialize show filter by column icon
-    this.showFilterByColumnIcon = this.filterColumnActiveByDefault;
+    this.showFilterByColumnIcon = this.originalFilterColumnActiveByDefault;
 
     this.initializeCheckboxColumn();
   }
