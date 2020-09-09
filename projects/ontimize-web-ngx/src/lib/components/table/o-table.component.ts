@@ -1715,6 +1715,11 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
   }
 
+  clearColumnFilters(triggerDatasourceUpdate: boolean = true): void {
+    this.dataSource.clearColumnFilters(triggerDatasourceUpdate);
+    this.reloadPaginatedDataFromStart();
+  }
+
   isColumnFilterable(column: OColumn): boolean {
     return (this.oTableColumnsFilterComponent && this.oTableColumnsFilterComponent.isColumnFilterable(column.attr));
   }
