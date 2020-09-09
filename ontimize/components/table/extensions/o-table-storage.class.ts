@@ -217,7 +217,7 @@ export class OTableStorage {
     initialConfiguration['select-column-visible'] = this.table.oTableOptions.selectColumn.visible;
     initialConfiguration['filter-case-sensitive'] = this.table.filterCaseSensitive;
     initialConfiguration['query-rows'] = this.table.originalQueryRows;
-    initialConfiguration['showFilterByColumnIcon'] = this.table.originalFilterColumnActiveByDefault;
+    initialConfiguration['filter-column-active-by-default'] = this.table.originalFilterColumnActiveByDefault;
 
     result['initial-configuration'] = initialConfiguration;
 
