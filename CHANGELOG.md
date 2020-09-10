@@ -1,9 +1,14 @@
 ## 4.2.0
-* **o-table**:
- * new attribute `filter-column-active-by-default`([fccc41a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/fccc41a))
- * new internal class `column-filter-icon-active` ([e94e465](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e94e465))
+### Features
+* **icons**: Added sort_by_alpha, sort_by_alpha_asc and sort_by_alpha_desc icons in Ontimize Web ([19a6e48](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/19a6e48))
+* **table**:
+  * o-table-filter-by-column: added clear button in customized filters  ([c7fd07e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c7fd07e))
+  * reinitialize method: added new option 'filterColumns' ([b74b3d5](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b74b3d5))
+  * new component `o-table-columns-filter-column` ([f395b82](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f395b82))
+  * new attribute `filter-column-active-by-default`([fccc41a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/fccc41a))
+  * new internal class `column-filter-icon-active` ([e94e465](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e94e465))
 
-## 4.1.3
+## 4.1.3 (2020-08-18)
 ### Features
 * **o-table**:
   * new attribute `show-filter-option` ([#318](https://github.com/OntimizeWeb/ontimize-web-ngx/pull/318))
