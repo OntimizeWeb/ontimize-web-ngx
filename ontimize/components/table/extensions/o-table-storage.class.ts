@@ -30,7 +30,7 @@ export class OTableStorage {
       'filter': this.table.oTableQuickFilterComponent ? this.table.oTableQuickFilterComponent.value : ''
     };
 
-    const properties = ['sort', 'columns-display', 'columns-filter', 'quick-filter', 'page', 'selection', 'initial-configuration','filter-columns'];
+    const properties = ['sort', 'columns-display', 'columns-filter', 'quick-filter', 'page', 'selection', 'initial-configuration','filter-columns','filter-column-active-by-default'];
 
     Object.assign(dataToStore, this.getTablePropertiesToStore(properties));
 
@@ -81,6 +81,9 @@ export class OTableStorage {
       case 'filter-columns':
         result = this.getFilterColumnsState();
         break;
+      case 'filter-column-active-by-default':
+        result = this.getFilterColumnActiveByDefaultState();
+        break;
     }
     return result;
   }
@@ -116,6 +119,14 @@ export class OTableStorage {
         sortColumns.push(sortData.id + Codes.COLUMNS_ALIAS_SEPARATOR + sortData.direction);
       });
       result['sort-columns'] = sortColumns.join(Codes.ARRAY_INPUT_SEPARATOR);
+    }
+    return result;
+  }
+
+  protected getFilterColumnActiveByDefaultState() {
+    const result = {};
+    if (this.table.oTableColumnsFilterComponent) {
+      result['filter-column-active-by-default'] = this.table.showFilterByColumnIcon;
     }
     return result;
   }
@@ -221,6 +232,7 @@ export class OTableStorage {
     initialConfiguration['filter-case-sensitive'] = this.table.filterCaseSensitive;
     initialConfiguration['query-rows'] = this.table.originalQueryRows;
     initialConfiguration['filter-columns'] = this.table.originalFilterColumns;
+    initialConfiguration['filter-column-active-by-default'] = this.table.originalFilterColumnActiveByDefault;
 
     result['initial-configuration'] = initialConfiguration;
 

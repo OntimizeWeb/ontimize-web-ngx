@@ -178,7 +178,10 @@ export const DEFAULT_INPUTS_O_TABLE = [
   'visibleExportDialogButtons: visible-export-dialog-buttons',
 
   // row-class [function, (rowData: any, rowIndex: number) => string | string[]]: adds the class or classes returned by the provided function to the table rows.
-  'rowClass: row-class'
+  'rowClass: row-class',
+
+  //filter-column-active-by-default [yes|no|true|false]: show icon filter by default in the table
+  'filterColumnActiveByDefault:filter-column-active-by-default'
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE = [
@@ -467,6 +470,7 @@ export interface OTableInitializationOptions {
   keys?: string;
   sortColumns?: string;
   parentKeys?: string;
+  filterColumns?: string;
 }
 
 @Component({
@@ -541,7 +545,20 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   @InputConverter()
   showButtonsText: boolean = true;
 
+
   protected _oTableOptions: OTableOptions = new OTableOptions();
+
+  originalFilterColumnActiveByDefault: boolean = false;
+  @InputConverter()
+  set filterColumnActiveByDefault(value: boolean) {
+    const result = BooleanConverter(value);
+    this.originalFilterColumnActiveByDefault = value;
+    this.showFilterByColumnIcon = result;
+  }
+
+  get filterColumnActiveByDefault(): boolean {
+    return this.showFilterByColumnIcon;
+  }
 
   get oTableOptions(): OTableOptions {
     return this._oTableOptions;
@@ -925,6 +942,13 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       if (clonedOpts.hasOwnProperty('parentKeys')) {
         this.parentKeys = clonedOpts.parentKeys;
       }
+
+      if (clonedOpts.hasOwnProperty('filterColumns')) {
+        if (!this.oTableColumnsFilterComponent) {
+          this.oTableColumnsFilterComponent = new OTableColumnsFilterComponent(this.injector, this);
+        }
+        this.oTableColumnsFilterComponent.columns = clonedOpts.filterColumns;
+      }
     }
 
     this.destroy();
@@ -1276,6 +1300,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
         this._oTableOptions.selectColumn.visible = this.selectAllCheckboxVisible;
       }
     }
+
+    //Initialize show filter by column icon
+    this.showFilterByColumnIcon = this.originalFilterColumnActiveByDefault;
 
     this.initializeCheckboxColumn();
   }
@@ -2030,6 +2057,11 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
   }
 
+  clearColumnFilters(triggerDatasourceUpdate: boolean = true): void {
+    this.dataSource.clearColumnFilters(triggerDatasourceUpdate);
+    this.reloadPaginatedDataFromStart();
+  }
+
   isColumnFilterable(column: OColumn): boolean {
     return (this.oTableColumnsFilterComponent && this.oTableColumnsFilterComponent.isColumnFilterable(column.attr));
   }
@@ -2340,7 +2372,17 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
 
     const storedColumnFilters = this.oTableStorage.getStoredColumnsFilters(conf);
-    this.showFilterByColumnIcon = storedColumnFilters.length > 0;
+
+
+    if (Util.isDefined(this.filterColumnActiveByDefault) && this.state.hasOwnProperty('initial-configuration') &&
+      this.state['initial-configuration'].hasOwnProperty('filter-column-active-by-default') &&
+      this.originalFilterColumnActiveByDefault !== conf['initial-configuration']['filter-column-active-by-default']) {
+      this.showFilterByColumnIcon = this.originalFilterColumnActiveByDefault;
+    } else {
+      const filterColumnActiveByDefaultState = conf.hasOwnProperty('filter-column-active-by-default') ? conf['filter-column-active-by-default'] : this.filterColumnActiveByDefault;
+      this.showFilterByColumnIcon = filterColumnActiveByDefaultState || storedColumnFilters.length > 0;
+    }
+
     if (this.oTableMenu && this.oTableMenu.columnFilterOption) {
       this.oTableMenu.columnFilterOption.setActive(this.showFilterByColumnIcon);
     }

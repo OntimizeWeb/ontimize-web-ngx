@@ -62,8 +62,8 @@
             [style.width]="column.getRenderWidth(horizontalScroll)" [class.resizable]="resizable">
 
             <mat-icon *ngIf="isModeColumnFilterable(column)" class="column-filter-icon"
-              [class.active]="isColumnFilterActive(column)" (click)="openColumnFilterDialog(column, $event)"
-              svgIcon="ontimize:filter_list">
+              [ngClass]="{'active column-filter-icon-active':isColumnFilterActive(column)}" (click)="openColumnFilterDialog(column, $event)">
+              filter_alt
             </mat-icon>
 
             <ng-container *ngIf="column.orderable">
