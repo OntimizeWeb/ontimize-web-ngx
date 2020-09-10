@@ -1,3 +1,8 @@
+## 4.2.0
+* **o-table**:
+ * new attribute `filter-column-active-by-default`([fccc41a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/fccc41a))
+ * new internal class `column-filter-icon-active` ([e94e465](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e94e465))
+
 ## 4.1.3
 ### Features
 * **o-table**:
