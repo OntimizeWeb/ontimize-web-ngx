@@ -23,8 +23,8 @@ export class OTableStorage {
       filter: this.table.oTableQuickFilterComponent ? this.table.oTableQuickFilterComponent.value : ''
     };
 
-    const properties = ['sort', 'columns-display', 'columns-filter', 'quick-filter', 'page', 'selection', 'initial-configuration', 'filter-column-active-by-default'];
-
+    const properties = ['sort', 'columns-display', 'columns-filter', 'quick-filter', 'page', 'selection', 'initial-configuration', 'filter-columns', 'filter-column-active-by-default'];
+    
     Object.assign(dataToStore, this.getTablePropertiesToStore(properties));
 
     const storedFiltersArr = this.getStoredFilters();
@@ -74,10 +74,23 @@ export class OTableStorage {
       case 'filter-column-active-by-default':
         result = this.getFilterColumnActiveByDefaultState();
         break;
+      case 'filter-columns':
+        result = this.getFilterColumnsState();
+        break;
     }
     return result;
   }
 
+  getFilterColumnsState(): any {
+    const result = {};
+    if (this.table.state.hasOwnProperty('filter-columns') && this.table.state['filter-columns']) {
+      result['filter-columns'] = this.table.state['filter-columns'];
+    } else if (this.table.filterColumns) {
+      result['filter-columns'] = this.table.filterColumns;
+    }
+
+    return result;
+  }
 
   reset() {
     const state: any = {};
@@ -121,6 +134,7 @@ export class OTableStorage {
     }
     return result;
   }
+
 
   protected getColumnsDisplayState() {
     const result = {};
@@ -211,6 +225,7 @@ export class OTableStorage {
     initialConfiguration['filter-case-sensitive'] = this.table.filterCaseSensitive;
     initialConfiguration['query-rows'] = this.table.originalQueryRows;
     initialConfiguration['filter-column-active-by-default'] = this.table.originalFilterColumnActiveByDefault;
+    initialConfiguration['filter-columns'] = this.table.originalFilterColumns;
 
     result['initial-configuration'] = initialConfiguration;
 
@@ -258,6 +273,11 @@ export class OTableStorage {
   getStoredColumnsFilters(arg?: any) {
     const stateObj = arg || this.table.state;
     return stateObj['column-value-filters'] || [];
+  }
+
+  getStoredFiltersColumns(arg?: any) {
+    const stateObj = arg || this.table.state;
+    return stateObj['filter-columns'] || [];
   }
 
   getStoredConfigurations() {
