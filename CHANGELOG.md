@@ -7,6 +7,9 @@
   * new component `o-table-columns-filter-column` ([f395b82](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f395b82))
   * new attribute `filter-column-active-by-default`([fccc41a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/fccc41a))
   * new internal class `column-filter-icon-active` ([e94e465](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e94e465))
+* **o-form**:
+  * new public methods `back`, `closeDetail`, `reload`, `goInsertMode`, `insert`, `goEditMode`, `update`, `undo` and `delete` ([c5be92c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c5be92c)).
+  * The following methods has been deprecated and will be removed in the future: `_backAction`, `_closeDetailAction`, `_reloadAction`, `_goInsertMode`, `_insertAction`, `_goEditMode`, `_editAction`, `_undoLastChangeAction` and `_deleteAction` ([5a15c4f](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5a15c4f)).
 
 ## 4.1.3 (2020-08-18)
 ### Features
