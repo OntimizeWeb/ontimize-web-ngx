@@ -153,7 +153,13 @@ export const DEFAULT_OUTPUTS_O_FORM = [
   'onFormModeChange',
   'onInsert',
   'onUpdate',
-  'onDelete'
+  'onDelete',
+  'beforeInsertMode',
+  'beforeUpdateMode',
+  'beforeInitialMode',
+  'onInsertMode',
+  'onUpdateMode',
+  'onInitialMode'
 ];
 
 export interface OFormInitializationOptions {
@@ -262,6 +268,12 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   onDataLoaded: EventEmitter<Object> = new EventEmitter<Object>();
   beforeCloseDetail: EventEmitter<any> = new EventEmitter<any>();
   beforeGoEditMode: EventEmitter<any> = new EventEmitter<any>();
+  beforeInsertMode = new EventEmitter<null>();
+  beforeUpdateMode = new EventEmitter<null>();
+  beforeInitialMode = new EventEmitter<null>();
+  onInsertMode = new EventEmitter<null>();
+  onUpdateMode = new EventEmitter<null>();
+  onInitialMode = new EventEmitter<null>();
   onFormModeChange: EventEmitter<Object> = new EventEmitter<Object>();
   public onInsert: EventEmitter<any> = new EventEmitter();
   public onUpdate: EventEmitter<any> = new EventEmitter();
@@ -748,14 +760,17 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   setFormMode(mode: number) {
     switch (mode) {
       case OFormComponent.Mode().INITIAL:
+        this.beforeInitialMode.emit();
         this.mode = mode;
         if (this._formToolbar) {
           this._formToolbar.setInitialMode();
         }
         this._setComponentsEditable(this.isEditableDetail());
         this.onFormModeChange.emit(this.mode);
+        this.onInitialMode.emit();
         break;
       case OFormComponent.Mode().INSERT:
+        this.beforeInsertMode.emit();
         this.mode = mode;
         if (this._formToolbar) {
           this._formToolbar.setInsertMode();
@@ -763,14 +778,20 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
         this.clearData();
         this._setComponentsEditable(true);
         this.onFormModeChange.emit(this.mode);
+        this.onInsertMode.emit();
         break;
       case OFormComponent.Mode().UPDATE:
+        this.beforeUpdateMode.emit();
         this.mode = mode;
         if (this._formToolbar) {
           this._formToolbar.setEditMode();
         }
         this._setComponentsEditable(true);
         this.onFormModeChange.emit(this.mode);
+        this.onUpdateMode.emit();
+        break;
+      case OFormComponent.Mode().QUERY:
+        console.error('Form QUERY mode is not implemented');
       default:
         break;
     }
