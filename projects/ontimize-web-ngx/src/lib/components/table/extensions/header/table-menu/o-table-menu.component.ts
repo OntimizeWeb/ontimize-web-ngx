@@ -356,14 +356,12 @@ export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, O
       const self = this;
       this.dialogService.confirm('CONFIRM', 'MESSAGES.CONFIRM_DISCARD_FILTER_BY_COLUMN').then(res => {
         if (res) {
-          self.table.dataSource.clearColumnFilters();
+          self.table.clearColumnFilters();
         }
         self.table.showFilterByColumnIcon = !res;
-        self.table.cd.detectChanges();
       });
     } else {
       this.table.showFilterByColumnIcon = !this.table.showFilterByColumnIcon;
-      this.table.cd.detectChanges();
     }
   }
 
