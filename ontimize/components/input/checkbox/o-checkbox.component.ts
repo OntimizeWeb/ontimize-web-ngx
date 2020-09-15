@@ -9,7 +9,7 @@ import { OFormValue } from '../../form/OFormValue';
 import {
   DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,
   DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT,
-  OFormDataComponent,
+  OFormDataComponent
 } from '../../o-form-data-component.class';
 import { OFormControl } from '../o-form-control.class';
 
@@ -103,7 +103,7 @@ export class OCheckboxComponent extends OFormDataComponent {
   }
 
   getValue(): any {
-    if (this.value.value !== undefined) {
+    if (Util.isDefined(this.value) && this.value.value !== undefined) {
       return this.value.value ? this.trueValue : this.falseValue;
     } else {
       return this.defaultValue;
