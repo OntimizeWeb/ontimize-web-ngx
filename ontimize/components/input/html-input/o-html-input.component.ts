@@ -1,14 +1,14 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Injector, NgModule, ViewChild } from '@angular/core';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { CommonModule } from '@angular/common';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Injector, NgModule, ViewChild } from '@angular/core';
 import { ValidatorFn, Validators } from '@angular/forms';
 import { MatTab, MatTabGroup } from '@angular/material';
 
-import { OSharedModule } from '../../../shared/shared.module';
 import { NumberConverter } from '../../../decorators';
+import { OSharedModule } from '../../../shared/shared.module';
 import { OFormComponent } from '../../form/form-components';
 import { CKEditorComponent, CKEditorModule } from '../../material/ckeditor/ck-editor.component';
-import { OFormDataComponent, DEFAULT_INPUTS_O_FORM_DATA_COMPONENT } from '../../o-form-data-component.class';
+import { DEFAULT_INPUTS_O_FORM_DATA_COMPONENT, OFormDataComponent } from '../../o-form-data-component.class';
 
 export const DEFAULT_INPUTS_O_HTML_INPUT = [
   'oattr: attr',
@@ -84,12 +84,8 @@ export class OHTMLInputComponent extends OFormDataComponent implements AfterView
     super.ngOnInit();
     if (this.form) {
       var self = this;
-      this.form.beforeCloseDetail.subscribe((evt: any) => {
-        self.destroyCKEditor();
-      });
-      this.form.beforeGoEditMode.subscribe((evt: any) => {
-        self.destroyCKEditor();
-      });
+      this.form.beforeCloseDetail.subscribe(() => this.destroyCKEditor());
+      this.form.beforeUpdateMode.subscribe(() => this.destroyCKEditor());
     }
 
     if (this.tabGroupContainer) {
