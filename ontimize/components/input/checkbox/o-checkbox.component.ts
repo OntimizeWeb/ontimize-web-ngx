@@ -9,7 +9,7 @@ import { OFormValue } from '../../form/OFormValue';
 import {
   DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,
   DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT,
-  OFormDataComponent
+  OFormDataComponent,
 } from '../../o-form-data-component.class';
 import { OFormControl } from '../o-form-control.class';
 
